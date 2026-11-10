@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794306108;
-	b=GqsUyILdkfU1qDV0rkJnfQJmwspaLBTU2lX+5wW3KsMYC2oZWDnH79UlrQ9yu/dzoOHP
-	 v4jKc1boGa2STvHt/4FPYrJW7xM/3UCfFlwFIMYgb0mjNeNTgm+DXyBMCemZnf0PVCTNs
-	 V8k9boRqR9n/KZr6m+ls1PvcO6EdqEy+AFiU3UyTusd9YcF6eLEIeD8CXT/ruVOeVytHq
-	 NrMx2WvsHietHmybi7KOki1f60oa3hiP5Bpz3olrn4eSZX5cLS2BBauJTEOAnTQ6wfuPv
-	 rBLGc4E3//4tNq6nznH5qmh9RzU+WMBueJRNaTuwL+VcIUEYXEkKArclr9osFrkpopQ==
+	t=1794306117;
+	b=c5poWv1q0qyge9ZKC2j2YYAz7gO0mognrC6LuzYA/ITp/LGD0od7d3wNIoP/s9smg9f2
+	 SdErgqLixwFT9s23/pSpRcCH7q1X9Jj2jhpoWKnhpoZorESI5utjNUWeSQkotfwvLL9je
+	 1NwFxJTedfShVQQ58yAjNpmlvodInWlfH11R04bjGoM4YnUdJbM+S0mo8rAJpN99yNj7B
+	 8Wbf84kS6sK+5rBk6gF1zxlo+aBwyP/dvik2NxWusN0+MhWPQWxM+0i0Hgoib7BZELJ83
+	 PQ2Ofvc6eXlZlTzE70m7VkhiCBQIF4b6TjaeOIUrnmY+OF1Nz+DlOAmQ1OqTnYVrc+A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794306108;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794306117;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=66CVXLPdSuOq1X5AAPjRfsou8hH5OizS/Qalj5QJ79M=;
-	b=qm3mjlRxm0UEUpEAJrSZqnAdL8yBAUyicTSRpWwOP5VbEEUCHe1nWUIIDZmIodxjwIIB
-	 jnUyxYqw4ZCVpKAdVjAMnGsv3FgBFmWh8PZTdqC+hhy+YtFDsWeLPDEJfRNaOIOEK+6hX
-	 wUmhpPBxDA9Zv3qFk5ZTgod82JsKGmniEDK9wsq185wd/df8ZzeM8jY7SK7Zk0jL5wxDZ
-	 N6MF0f9ZSYs89Wv67KMVwwEBZxIhGlrz1HZ5S7leDZrCPZHKqCQwhCOJWQThI4k0IG1yL
-	 +5/6EZlpMFS1RkUo5VAjn65IBapDCdUmd9RENXu36jkUblrXKoCdmlnCg50NBYvlnZg==
+	bh=G5gbx2f9v0sLZlMcF2z3zyvFJHQx55cXMBAXIFVMQfs=;
+	b=wX2GyZZG/KuaY+gvTISoXYNosMp3pdbeWQKRczeYga3pRhBGYziZzmi1Viyo9ijrZ6QG
+	 bxu+WVi/oN7qxIB4IbyySY9W5dJDB1Ce7btlfK9VrL/ciUdWB7NQCjB+fBdRfULBi65Yq
+	 O9kxGxgUhycO56zyX/1baaplLAjnODo3YF5lvk+wtfhhdVDR4zn/rxuEVCOSEJ9VmzpTf
+	 jRLYACHC4UBtCn3nfxWc6NXNfNsh8295JjxoBXRgAEt6Rm11kohNp3sD1zA2T9IXOkEGC
+	 FH05YNN/zP7hDOMfT5xCQz9Q5h6tbZvhAOhKbT/DVBtUGY1kZXnbpzAEZYjklBoddJA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Tat1ud0r;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=U98rnkEu;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4A4E606B9B8;
-	Tue, 10 Nov 2026 10:21:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49E6660A382D;
+	Tue, 10 Nov 2026 10:21:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Tat1ud0r
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A21DA1F0089F;
-	Tue, 10 Nov 2026 10:21:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=U98rnkEu
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F33171F008A1;
+	Tue, 10 Nov 2026 10:21:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794306107;
-	bh=66CVXLPdSuOq1X5AAPjRfsou8hH5OizS/Qalj5QJ79M=;
+	s=k20260515; t=1794306117;
+	bh=G5gbx2f9v0sLZlMcF2z3zyvFJHQx55cXMBAXIFVMQfs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Tat1ud0rt0l5W7U3hDBcHTuuP/pqwFUemjcq182xdCMj2JKor4k1DWhzm2nb6iNr3
-	 JqNFb3OK0xs6y8x5ePSTXmk1JK/Rv8mygXdm9FQVflgqSRbYhjMrMag9seNsBrKRZq
-	 L6pYY8bzgnk0RDielX+HPlk7OCPCKVWIBcGllw8n0r8/P6Him8gx2SUBfm7UCdD0UP
-	 hqJ1AWgwmClj4CKO56yr+N7JzkxzQkGtqdZgYmQx1NCR2EA+LXm8VCB6/x7eDon4ap
-	 7YYmIUEcNXzcOZW6P+0gWssz6BQhPRPPiYYxU7T3YRi8uE9LpDOgHFLPGpig++Kn99
-	 V5AYm5jJOMQmw==
+	b=U98rnkEu7VUsF2oVyCoCB33S9xKUpN+ACPanqJ2EFEJxo8c+A3dVSkQPAZQkDsLlZ
+	 gStx2nX9mc2cSFIKY73BAooEnQ77+R1b2k5K3hOvgQoiuclFSC2pn/Wm3WSQnh3J1U
+	 xePowUdFkEFmP9KY4Jt0LSeimljPbY6/J3sCFek8Oc0lSj7bPBEcldaDHAK+E972hM
+	 8UzXC0nKkz4nCrjBgcOGn1Qs+V6IFwpfoh3bNcFdyDRO2vxO1RrMiWX8ZqEPBvjn10
+	 tAW4OdqoP6Q1Oz3S38Vz2++35g9ujAwoEm25nYOX9KmVPbvLP8+x4gQng8j7j86ILL
+	 TcNnAoQGwXEEA==
 From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
 To: Magnus Karlsson <magnus.karlsson@intel.com>,
 	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
@@ -84,9 +84,9 @@ Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Stuart Clark <stuclar@meta.com>
-Subject: [PATCH net-next v1 06/11] page_pool: Coordinate refill with memory providers
-Date: Tue, 10 Nov 2026 11:20:27 +0100
-Message-ID: <20261110102039.1002605-7-bjorn@kernel.org>
+Subject: [PATCH net-next v1 07/11] xsk: Deliver provider chunks without copying
+Date: Tue, 10 Nov 2026 11:20:28 +0100
+Message-ID: <20261110102039.1002605-8-bjorn@kernel.org>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261110102039.1002605-1-bjorn@kernel.org>
 References: <20261110102039.1002605-1-bjorn@kernel.org>
@@ -102,500 +102,515 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-A UMEM has a fixed number of chunks. When a refill finds none, and the
-chunks come back later, nothing schedules the queue again: RX stalls.
-Kicks after each queue operation are easy to miss.
+A provider socket still receives through the copy path, which takes
+FILL entries without the provider's ownership checks: a chunk that a
+page pool holds could be handed out twice. No driver opts in yet.
 
-Drivers report the end of each refill with page_pool_refill_done().
-The provider then asks for another poll, or wakes the queue later
-through the NAPI that the core publishes while the queue runs. Socket
-wakeups use that NAPI too, so such drivers need no ndo_xsk_wakeup.
+Put packets whose buffers all belong to the socket's provider on the
+RX ring as they are, and copy others into chunks the provider claims.
+Only the queue NAPI may produce to such a socket, so generic XDP and
+CPUMAP redirects to it are dropped.
 
-With XDP_USE_NEED_WAKEUP, the FILL flag stays set: a flag set only
-when starved can miss an entry posted at the same time.
+A device may place payload at chunk offset 0, as fbnic does, so only
+the first buffer of a packet keeps the UMEM headroom. Such buffers may
+be sent back as they are, so only descriptors with XDP_TX_METADATA
+need room for TX metadata in front.
 
 Signed-off-by: Björn Töpel <bjorn@kernel.org>
 ---
- Documentation/networking/netmem.rst     | 10 +++
- include/net/netdev_rx_queue.h           |  6 ++
- include/net/page_pool/helpers.h         | 24 ++++++
- include/net/page_pool/memory_provider.h |  2 +
- include/net/page_pool/types.h           |  6 ++
- net/core/dev.c                          |  4 +
- net/core/dev.h                          |  4 +
- net/core/netdev_rx_queue.c              | 97 ++++++++++++++++++++++++-
- net/xdp/xsk.c                           |  4 +
- net/xdp/xsk.h                           |  1 +
- net/xdp/xsk_pp.c                        | 73 ++++++++++++++++++-
- 11 files changed, 226 insertions(+), 5 deletions(-)
+ Documentation/networking/af_xdp.rst          |   6 +-
+ Documentation/networking/xsk-tx-metadata.rst |   3 +-
+ include/net/page_pool/memory_provider.h      |   2 +
+ net/core/page_pool.c                         |  34 +++-
+ net/xdp/xsk.c                                |  82 ++++++++-
+ net/xdp/xsk.h                                |   5 +
+ net/xdp/xsk_pp.c                             | 165 +++++++++++++++++++
+ net/xdp/xsk_queue.h                          |  18 +-
+ 8 files changed, 304 insertions(+), 11 deletions(-)
 
-diff --git a/Documentation/networking/netmem.rst b/Documentation/networking/netmem.rst
-index 39cb75339704..74c73d7d126e 100644
---- a/Documentation/networking/netmem.rst
-+++ b/Documentation/networking/netmem.rst
-@@ -136,6 +136,16 @@ Driver RX Requirements
-    circulation times, such as when userspace holds a reference in zerocopy
-    scenarios.
+diff --git a/Documentation/networking/af_xdp.rst b/Documentation/networking/af_xdp.rst
+index cc3f0d16b28f..e73a0005e169 100644
+--- a/Documentation/networking/af_xdp.rst
++++ b/Documentation/networking/af_xdp.rst
+@@ -428,8 +428,10 @@ area and that your largest packet size can be 2K.
+ There is also an option to set the headroom of each single buffer in
+ the UMEM. If you set this to N bytes, it means that the packet will
+ start N bytes into the buffer leaving the first N bytes for the
+-application to use. The final option is the flags field, but it will
+-be dealt with in separate sections for each UMEM flag.
++application to use. In a multi-buffer packet, only the first buffer is
++guaranteed this headroom; the others may start at offset 0 of their
++chunk. The final option is the flags field, but it will be dealt with
++in separate sections for each UMEM flag.
  
-+8. After each RX ring refill, call page_pool_refill_done() once per page
-+   pool, with PP_REFILL_FULL only if all rings that use the pool are full.
-+   Rings of a queue that take buffers from one such provider share one
-+   page pool. Keep buffers in each of them, first in a ring that every
-+   packet needs, like a header ring, so that a provider with few buffers
-+   does not leave them all in one ring. If the call returns false, poll
-+   again soon, for example by returning the full NAPI budget. Register the
-+   NAPI of each RX queue with netif_queue_set_napi(); the core schedules
-+   it when provider buffers become available.
-+
- Driver TX Requirements
- ======================
+ SO_BINDTODEVICE setsockopt
+ --------------------------
+diff --git a/Documentation/networking/xsk-tx-metadata.rst b/Documentation/networking/xsk-tx-metadata.rst
+index f240930ca1df..8bb74a569c26 100644
+--- a/Documentation/networking/xsk-tx-metadata.rst
++++ b/Documentation/networking/xsk-tx-metadata.rst
+@@ -59,7 +59,8 @@ The flags field enables the particular offload:
+ Besides the flags above, in order to trigger the offloads, the first
+ packet's ``struct xdp_desc`` descriptor should set ``XDP_TX_METADATA``
+ bit in the ``options`` field. Also note that in a multi-buffer packet
+-only the first chunk should carry the metadata.
++only the first chunk should carry the metadata. Only a descriptor with
++``XDP_TX_METADATA`` needs ``tx_metadata_len`` bytes in front of it.
  
-diff --git a/include/net/netdev_rx_queue.h b/include/net/netdev_rx_queue.h
-index 989120cbf452..ca12cbf7b825 100644
---- a/include/net/netdev_rx_queue.h
-+++ b/include/net/netdev_rx_queue.h
-@@ -33,6 +33,12 @@ struct netdev_rx_queue {
- 	struct pp_memory_provider_params mp_params;
- 	/* stamps the page pools of each queue allocation */
- 	u32				mp_gen;
-+	/* NAPI of the running queue, for memory provider wakeups. Set while
-+	 * mp_armed, and if the provider has a refill_done op. Written under
-+	 * the ops lock, read under RCU, see netif_mp_wake().
-+	 */
-+	struct napi_struct __rcu	*mp_napi;
-+	bool				mp_armed;
- 
- 	/* If a queue is leased, then the lease pointer is always
- 	 * valid. From the physical device it points to the virtual
-diff --git a/include/net/page_pool/helpers.h b/include/net/page_pool/helpers.h
-index 96e6b62cdebb..245a904e0b2b 100644
---- a/include/net/page_pool/helpers.h
-+++ b/include/net/page_pool/helpers.h
-@@ -523,6 +523,30 @@ static inline bool page_pool_is_unreadable(struct page_pool *pool)
- 	return pool->mp_ops && !(pool->mp_ops->caps & MP_CAP_READABLE);
- }
- 
-+/**
-+ * page_pool_refill_done() - report the end of an RX ring refill
-+ * @pool: page pool of the rings
-+ * @state: whether all rings that take buffers from @pool are full
-+ *
-+ * A memory provider with a fixed set of buffers must know when the rings
-+ * are full, and when they wait for buffers. Call this once per page pool
-+ * after each refill, also when the rings were full already.
-+ *
-+ * Context: the NAPI poll that allocates from @pool, or the driver while that
-+ * NAPI is disabled, with IRQs enabled.
-+ * Return: true if the refill is done, false if NAPI should retry it soon.
-+ */
-+static inline bool page_pool_refill_done(struct page_pool *pool,
-+					 enum pp_refill state)
-+{
-+	const struct memory_provider_ops *ops = pool->mp_ops;
-+
-+	if (ops && ops->refill_done)
-+		return ops->refill_done(pool, state);
-+
-+	return true;
-+}
-+
- /**
-  * page_pool_supports_frag() - may page pool buffers be split
-  * @pool: queried page pool
+ Software TX Checksum
+ ====================
 diff --git a/include/net/page_pool/memory_provider.h b/include/net/page_pool/memory_provider.h
-index e732b21be9a2..daec73c9dcee 100644
+index daec73c9dcee..849db08513b8 100644
 --- a/include/net/page_pool/memory_provider.h
 +++ b/include/net/page_pool/memory_provider.h
-@@ -42,6 +42,7 @@ struct memory_provider_ops {
- 	int (*nl_fill)(void *mp_priv, struct sk_buff *rsp,
- 		       struct netdev_rx_queue *rxq);
- 	void (*uninstall)(void *mp_priv, struct netdev_rx_queue *rxq);
-+	bool (*refill_done)(struct page_pool *pool, enum pp_refill state);
- 	u32 caps;
- };
+@@ -49,6 +49,8 @@ struct memory_provider_ops {
+ bool net_mp_niov_set_dma_addr(struct net_iov *niov, dma_addr_t addr);
+ void net_mp_niov_set_page_pool(struct page_pool *pool, struct net_iov *niov);
+ void net_mp_niov_clear_page_pool(struct net_iov *niov);
++void net_mp_release_page_pool_bulk(struct page_pool *pool,
++				   netmem_ref *netmems, u32 count);
  
-@@ -55,6 +56,7 @@ int netif_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
- int netif_mp_close_rxq(struct net_device *dev, unsigned int rxq_idx,
- 		       const struct pp_memory_provider_params *old_p);
- bool netif_all_mps_have_cap(struct net_device *dev, u32 cap);
-+bool netif_mp_wake(struct netdev_rx_queue *rxq);
- 
- /**
-   * net_mp_netmem_place_in_cache() - give a netmem to a page pool
-diff --git a/include/net/page_pool/types.h b/include/net/page_pool/types.h
-index e9f3af91e305..58ca414fa3d2 100644
---- a/include/net/page_pool/types.h
-+++ b/include/net/page_pool/types.h
-@@ -40,6 +40,12 @@
-  */
- #define PP_FLAG_MEM_PROVIDER	BIT(4)
- 
-+/* Ring state after a refill, see page_pool_refill_done() */
-+enum pp_refill {
-+	PP_REFILL_PARTIAL,	/* some ring of the pool has room left */
-+	PP_REFILL_FULL,		/* all rings of the pool are full */
-+};
-+
- /* RX buffers a page pool supplies, see page_pool_params.rx_roles */
- enum pp_rx_role {
- 	PP_RX_ROLE_HEAD		= BIT(0),	/* packet headers */
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 7e985fb82488..6033fc61a666 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -1771,6 +1771,7 @@ static int __dev_open(struct net_device *dev, struct netlink_ext_ack *extack)
- 		dev_set_rx_mode(dev);
- 		dev_activate(dev);
- 		add_device_randomness(dev->dev_addr, dev->addr_len);
-+		netif_mp_arm_dev(dev);
- 	}
- 
- 	return ret;
-@@ -1833,6 +1834,7 @@ static void __dev_close_many(struct list_head *head)
- 
- 		netdev_assert_locked_ops_compat(dev);
- 
-+		netif_mp_disarm_dev(dev);
- 		if (ops->ndo_stop)
- 			ops->ndo_stop(dev);
- 
-@@ -7559,6 +7561,7 @@ void netif_queue_set_napi(struct net_device *dev, unsigned int queue_index,
- 	case NETDEV_QUEUE_TYPE_RX:
- 		rxq = __netif_get_rx_queue(dev, queue_index);
- 		rxq->napi = napi;
-+		netif_mp_update_napi(rxq);
- 		return;
- 	case NETDEV_QUEUE_TYPE_TX:
- 		txq = netdev_get_tx_queue(dev, queue_index);
-@@ -7960,6 +7963,7 @@ void __netif_napi_del_locked(struct napi_struct *napi)
- 	}
- 
- 	list_del_rcu(&napi->dev_list);
-+	netif_mp_napi_del(napi);
- 	napi_free_frags(napi);
- 
- 	gro_cleanup(&napi->gro);
-diff --git a/net/core/dev.h b/net/core/dev.h
-index e3337013ffc8..56386fd8c767 100644
---- a/net/core/dev.h
-+++ b/net/core/dev.h
-@@ -125,6 +125,10 @@ bool netif_is_queue_leasee(const struct net_device *dev);
- 
- void __netif_mp_uninstall_rxq(struct netdev_rx_queue *rxq,
- 			      const struct pp_memory_provider_params *p);
-+void netif_mp_update_napi(struct netdev_rx_queue *rxq);
-+void netif_mp_arm_dev(struct net_device *dev);
-+void netif_mp_disarm_dev(struct net_device *dev);
-+void netif_mp_napi_del(struct napi_struct *napi);
- 
- void netif_rxq_cleanup_unlease(struct netdev_rx_queue *phys_rxq,
- 			       struct netdev_rx_queue *virt_rxq);
-diff --git a/net/core/netdev_rx_queue.c b/net/core/netdev_rx_queue.c
-index 4e2f906fbc73..3fe904b56791 100644
---- a/net/core/netdev_rx_queue.c
-+++ b/net/core/netdev_rx_queue.c
-@@ -116,6 +116,94 @@ bool netif_all_mps_have_cap(struct net_device *dev, u32 cap)
- 	return true;
+ int netif_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
+ 		      const struct pp_memory_provider_params *p,
+diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+index e897e79d31f1..56c299f2280d 100644
+--- a/net/core/page_pool.c
++++ b/net/core/page_pool.c
+@@ -1401,7 +1401,7 @@ bool net_mp_niov_set_dma_addr(struct net_iov *niov, dma_addr_t addr)
  }
  
+ /* Associate a niov with a page pool. Should follow with a matching
+- * net_mp_niov_clear_page_pool()
++ * net_mp_niov_clear_page_pool() or net_mp_release_page_pool_bulk()
+  */
+ void net_mp_niov_set_page_pool(struct page_pool *pool, struct net_iov *niov)
+ {
+@@ -1422,3 +1422,35 @@ void net_mp_niov_clear_page_pool(struct net_iov *niov)
+ 
+ 	page_pool_clear_pp_info(netmem);
+ }
++
 +/**
-+ * netif_mp_wake - schedule the NAPI that refills a memory provider queue
-+ * @rxq: physical RX queue of the provider
++ * net_mp_release_page_pool_bulk() - take net_iovs back from a page pool
++ * @pool: page pool that holds one reference to each net_iov
++ * @netmems: net_iovs of the memory provider of @pool
++ * @count: number of entries in @netmems
 + *
-+ * Context: IRQs enabled, not in hardirq. The caller keeps the device of
-+ * @rxq alive.
-+ *
-+ * Return: false if no NAPI refills the queue.
++ * A memory provider takes net_iovs out of a page pool without
++ * ->release_netmem(), for example to give them to userspace. @pool may be
++ * freed on return.
 + */
-+bool netif_mp_wake(struct netdev_rx_queue *rxq)
++void net_mp_release_page_pool_bulk(struct page_pool *pool,
++				   netmem_ref *netmems, u32 count)
 +{
-+	struct napi_struct *napi;
-+	bool running = false;
++	bool trace = trace_page_pool_state_release_enabled();
++	atomic_t *release_cnt = &pool->pages_state_release_cnt;
++	int released;
++	u32 i;
 +
-+	rcu_read_lock();
-+	napi = rcu_dereference(rxq->mp_napi);
-+	if (napi) {
-+		local_bh_disable();
-+		napi_schedule(napi);
-+		local_bh_enable();
-+		running = true;
++	for (i = 0; i < count; i++) {
++		DEBUG_NET_WARN_ON_ONCE(netmem_get_pp(netmems[i]) != pool);
++		page_pool_clear_pp_info(netmems[i]);
++		if (!trace)
++			continue;
++
++		released = atomic_inc_return_relaxed(release_cnt);
++		trace_page_pool_state_release(pool, netmems[i], released);
 +	}
-+	rcu_read_unlock();
 +
-+	return running;
++	if (!trace)
++		atomic_add(count, release_cnt);
 +}
-+
-+/* Point wakeups at the NAPI of the running queue, and schedule it once: a
-+ * refill during the start may have found no buffers.
-+ */
-+void netif_mp_update_napi(struct netdev_rx_queue *rxq)
-+{
-+	const struct memory_provider_ops *ops = rxq->mp_params.mp_ops;
-+	struct napi_struct *napi = NULL;
-+
-+	if (rxq->mp_armed && ops && ops->refill_done)
-+		napi = rxq->napi;
-+	if (rcu_access_pointer(rxq->mp_napi) == napi)
-+		return;
-+
-+	rcu_assign_pointer(rxq->mp_napi, napi);
-+	if (napi)
-+		netif_mp_wake(rxq);
-+}
-+
-+static void netif_mp_arm_napi(struct netdev_rx_queue *rxq)
-+{
-+	rxq->mp_armed = true;
-+	netif_mp_update_napi(rxq);
-+}
-+
-+static void netif_mp_disarm_napi(struct netdev_rx_queue *rxq)
-+{
-+	rxq->mp_armed = false;
-+	RCU_INIT_POINTER(rxq->mp_napi, NULL);
-+}
-+
-+void netif_mp_arm_dev(struct net_device *dev)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < dev->real_num_rx_queues; i++)
-+		netif_mp_arm_napi(__netif_get_rx_queue(dev, i));
-+}
-+
-+void netif_mp_disarm_dev(struct net_device *dev)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < dev->num_rx_queues; i++)
-+		netif_mp_disarm_napi(&dev->_rx[i]);
-+}
-+
-+/* The grace period of netif_napi_del() covers wakeups that found @napi. */
-+void netif_mp_napi_del(struct napi_struct *napi)
-+{
-+	struct net_device *dev = napi->dev;
-+	unsigned int i;
-+
-+	/* free_netdev() frees the queues before it deletes the last NAPIs */
-+	if (dev->reg_state != NETREG_REGISTERED)
-+		return;
-+
-+	for (i = 0; i < dev->num_rx_queues; i++)
-+		if (rcu_access_pointer(dev->_rx[i].mp_napi) == napi)
-+			RCU_INIT_POINTER(dev->_rx[i].mp_napi, NULL);
-+}
-+
- static int netdev_rx_queue_reconfig(struct net_device *dev,
- 				    unsigned int rxq_idx,
- 				    struct netdev_queue_config *qcfg_old,
-@@ -152,13 +240,15 @@ static int netdev_rx_queue_reconfig(struct net_device *dev,
- 		goto err_free_new_queue_mem;
- 
- 	if (netif_running(dev)) {
-+		netif_mp_disarm_napi(rxq);
- 		err = qops->ndo_queue_stop(dev, old_mem, rxq_idx);
- 		if (err)
--			goto err_free_new_queue_mem;
-+			goto err_arm_old_queue;
- 
- 		err = qops->ndo_queue_start(dev, qcfg_new, new_mem, rxq_idx);
- 		if (err)
- 			goto err_start_queue;
-+		netif_mp_arm_napi(rxq);
- 	} else {
- 		swap(new_mem, old_mem);
- 	}
-@@ -183,8 +273,13 @@ static int netdev_rx_queue_reconfig(struct net_device *dev,
- 		     "Failed to restart old queue in error path. RX queue %d may be unhealthy.",
- 		     rxq_idx);
- 		qops->ndo_queue_mem_free(dev, old_mem);
-+		goto err_free_new_queue_mem;
- 	}
- 
-+err_arm_old_queue:
-+	/* The old queue may run */
-+	netif_mp_arm_napi(rxq);
-+
- err_free_new_queue_mem:
- 	qops->ndo_queue_mem_free(dev, new_mem);
- 
 diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 781ba46eb152..113b0b08356d 100644
+index 113b0b08356d..b419c673e3f1 100644
 --- a/net/xdp/xsk.c
 +++ b/net/xdp/xsk.c
-@@ -794,6 +794,10 @@ static int xsk_wakeup(struct xdp_sock *xs, u8 flags)
- {
- 	struct net_device *dev = xs->dev;
- 
-+	/* The core wakes the queue for both RX and TX. */
-+	if (xs->pool->pp)
-+		return xsk_pp_wakeup(xs->pool->pp);
-+
- 	return dev->netdev_ops->ndo_xsk_wakeup(dev, xs->queue_id, flags);
+@@ -386,6 +386,54 @@ static int __xsk_rcv(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
+ 	return -ENOMEM;
  }
  
++static int xsk_pp_rcv_copy(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
++{
++	u32 frame_size = __xsk_pool_get_rx_frame_size(xs->pool);
++	u32 headroom = xsk_pool_get_headroom(xs->pool);
++	void *copy_from = xsk_copy_xdp_start(xdp);
++	u32 from_len, meta_len, rem, num_desc, i;
++	u64 addrs[MAX_SKB_FRAGS + 1];
++	skb_frag_t *frag = NULL;
++	u32 to_len, copied;
++	void *to;
++
++	from_len = xdp->data_end - copy_from;
++	meta_len = xdp->data - copy_from;
++	rem = len + meta_len;
++
++	num_desc = (len - 1) / frame_size + 1;
++	if (num_desc > ARRAY_SIZE(addrs)) {
++		xs->rx_dropped++;
++		return -ENOSPC;
++	}
++	if (xskq_prod_nb_free(xs->rx, num_desc) < num_desc) {
++		xs->rx_queue_full++;
++		return -ENOBUFS;
++	}
++	if (!xsk_pp_claim_copy(xs->pool->pp, addrs, num_desc)) {
++		xs->rx_dropped++;
++		return -ENOMEM;
++	}
++
++	if (xdp_buff_has_frags(xdp))
++		frag = &xdp_get_shared_info_from_buff(xdp)->frags[0];
++
++	for (i = 0; rem && i < num_desc; i++) {
++		to = xp_raw_get_data(xs->pool, addrs[i] + headroom) - meta_len;
++		to_len = frame_size + meta_len;
++		copied = xsk_copy_xdp(to, &copy_from, to_len, &from_len, &frag,
++				      rem);
++		rem -= copied;
++
++		__xskq_prod_reserve_desc(xs->rx, addrs[i] + headroom,
++					 copied - meta_len,
++					 rem ? XDP_PKT_CONTD : 0);
++		meta_len = 0;
++	}
++
++	return 0;
++}
++
+ static bool xsk_tx_writeable(struct xdp_sock *xs)
+ {
+ 	if (xskq_cons_present_entries(xs->tx) > xs->tx->nentries / 2)
+@@ -453,8 +501,14 @@ static int xsk_rcv_check(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
+ 
+ static void xsk_flush(struct xdp_sock *xs)
+ {
++	struct xsk_pp *pp = xs->pool->pp;
++
++	if (pp)
++		xsk_pp_flush(pp);
+ 	xskq_prod_submit(xs->rx);
+-	__xskq_cons_release(xs->pool->fq);
++	/* A provider releases FILL entries under its lock. */
++	if (!pp)
++		__xskq_cons_release(xs->pool->fq);
+ 	sock_def_readable(&xs->sk);
+ }
+ 
+@@ -464,6 +518,11 @@ int xsk_generic_rcv(struct xdp_sock *xs, struct xdp_buff *xdp)
+ 	int err;
+ 
+ 	err = xsk_rcv_check(xs, xdp, len);
++	/* Only the NAPI of the queue feeds a memory provider socket. */
++	if (!err && xs->pool->pp) {
++		xs->rx_dropped++;
++		err = -EOPNOTSUPP;
++	}
+ 	if (!err) {
+ 		spin_lock_bh(&xs->pool->rx_lock);
+ 		err = __xsk_rcv(xs, xdp, len);
+@@ -488,7 +547,26 @@ static int xsk_rcv(struct xdp_sock *xs, struct xdp_buff *xdp)
+ 		return xsk_rcv_zc(xs, xdp, len);
+ 	}
+ 
+-	err = __xsk_rcv(xs, xdp, len);
++	if (!xs->pool->pp) {
++		err = __xsk_rcv(xs, xdp, len);
++	} else {
++		/* A CPUMAP program runs XDP on another CPU, not in NAPI. */
++		if (unlikely(!xdp_rxq_info_is_reg(xdp->rxq))) {
++			xs->rx_dropped++;
++			return -EINVAL;
++		}
++
++		err = xsk_pp_rcv_zc(xs->pool->pp, xs, xdp);
++		if (err != -EXDEV)
++			return err;
++
++		/* Copy only packets of the queue, from its NAPI */
++		if (unlikely(!xsk_pp_queue_buf(xs->pool->pp, xdp))) {
++			xs->rx_dropped++;
++			return -EINVAL;
++		}
++		err = xsk_pp_rcv_copy(xs, xdp, len);
++	}
+ 	if (!err)
+ 		xdp_return_buff(xdp);
+ 	return err;
 diff --git a/net/xdp/xsk.h b/net/xdp/xsk.h
-index 9699e9a499a3..d7d6bcf0a893 100644
+index d7d6bcf0a893..a5f52ef382a6 100644
 --- a/net/xdp/xsk.h
 +++ b/net/xdp/xsk.h
-@@ -42,6 +42,7 @@ bool xsk_pp_supported(struct net_device *dev);
- int xsk_pp_bind(struct xsk_buff_pool *pool, struct net_device *dev,
+@@ -43,6 +43,11 @@ int xsk_pp_bind(struct xsk_buff_pool *pool, struct net_device *dev,
  		u16 queue_id);
  void xsk_pp_unbind(struct xsk_buff_pool *pool);
-+int xsk_pp_wakeup(struct xsk_pp *pp);
+ int xsk_pp_wakeup(struct xsk_pp *pp);
++void xsk_pp_flush(struct xsk_pp *pp);
++bool xsk_pp_queue_buf(struct xsk_pp *pp, struct xdp_buff *xdp);
++int xsk_pp_rcv_zc(struct xsk_pp *pp, struct xdp_sock *xs,
++		  struct xdp_buff *xdp);
++bool xsk_pp_claim_copy(struct xsk_pp *pp, u64 *addrs, u32 n);
  int xp_alloc_heads(struct xsk_buff_pool *pool);
  void xsk_clear_pool_at_qid(struct net_device *dev, u16 queue_id);
  int xsk_reg_pool_at_qid(struct net_device *dev, struct xsk_buff_pool *pool,
 diff --git a/net/xdp/xsk_pp.c b/net/xdp/xsk_pp.c
-index c2214e718cdb..a77213f7fef6 100644
+index a77213f7fef6..a1c2ca00f016 100644
 --- a/net/xdp/xsk_pp.c
 +++ b/net/xdp/xsk_pp.c
-@@ -36,7 +36,8 @@ struct xsk_pp {
- 	u32 nr_pools;
- 	bool dma_need_sync;
+@@ -19,11 +19,13 @@
+ #include "xsk_queue.h"
+ 
+ #define XSK_PP_DMA_ATTR	(DMA_ATTR_WEAK_ORDERING | DMA_ATTR_SKIP_CPU_SYNC)
++#define XSK_PP_BATCH	64
+ 
+ enum xsk_pp_chunk {
+ 	XSK_PP_USER,	/* owned by userspace */
+ 	XSK_PP_POOL,	/* owned by a page pool */
+ 	XSK_PP_REUSE,	/* on the reuse stack */
++	XSK_PP_COPY,	/* copied into, not yet on the RX ring */
+ };
+ 
+ struct xsk_pp {
+@@ -38,6 +40,9 @@ struct xsk_pp {
  	/* RX queue of the provider, NULL once it is removed */
--	struct netdev_rx_queue *rxq;
-+	struct netdev_rx_queue __rcu *rxq;
-+	bool starved;
+ 	struct netdev_rx_queue __rcu *rxq;
+ 	bool starved;
++	/* Chunks of unpublished RX descriptors, NAPI only */
++	u32 pending_cnt;
++	netmem_ref pending[XSK_PP_BATCH];
  	u8 *state;
  	u32 reuse_cnt;
  	u32 reuse[];
-@@ -219,11 +220,31 @@ static netmem_ref xsk_pp_alloc_netmems(struct page_pool *pool, gfp_t gfp)
- 	return netmems[n - 1];
+@@ -294,6 +299,166 @@ static bool xsk_pp_refill_done(struct page_pool *pool, enum pp_refill state)
+ 	return !more && wait;
  }
  
-+static bool xsk_pp_wake(struct xsk_pp *pp)
++static u32 xsk_pp_chunk_idx(netmem_ref netmem)
 +{
-+	struct netdev_rx_queue *rxq;
-+	bool running = false;
-+
-+	rcu_read_lock();
-+	rxq = rcu_dereference(pp->rxq);
-+	if (rxq)
-+		running = netif_mp_wake(rxq);
-+	rcu_read_unlock();
-+
-+	return running;
++	return net_iov_idx(netmem_to_net_iov(netmem));
 +}
 +
-+int xsk_pp_wakeup(struct xsk_pp *pp)
++/* Called from the queue NAPI, before the RX ring publishes the descriptors */
++void xsk_pp_flush(struct xsk_pp *pp)
 +{
-+	return xsk_pp_wake(pp) ? 0 : -ENETDOWN;
-+}
++	struct page_pool *pool;
++	u32 i, j, n = 0;
++	u32 idx;
 +
- static bool xsk_pp_release_netmem(struct page_pool *pool, netmem_ref netmem)
- {
- 	struct net_iov *niov = netmem_to_net_iov(netmem);
- 	struct xsk_pp *pp = pool->mp_priv;
- 	u32 idx = net_iov_idx(niov);
-+	bool starved;
- 
- 	spin_lock_bh(&pp->lock);
- 	net_mp_niov_clear_page_pool(niov);
-@@ -232,11 +253,47 @@ static bool xsk_pp_release_netmem(struct page_pool *pool, netmem_ref netmem)
- 		pp->state[idx] = XSK_PP_REUSE;
- 		pp->reuse[pp->reuse_cnt++] = idx;
- 	}
-+	starved = pp->starved;
-+	WRITE_ONCE(pp->starved, false);
- 	spin_unlock_bh(&pp->lock);
- 
-+	/* A starved queue may wait for this release */
-+	if (starved)
-+		xsk_pp_wake(pp);
-+
- 	return false;
- }
- 
-+static bool xsk_pp_refill_done(struct page_pool *pool, enum pp_refill state)
-+{
-+	struct xsk_pp *pp = pool->mp_priv;
-+	struct xsk_buff_pool *xp = pp->pool;
-+	bool wait = xp->uses_need_wakeup;
-+	bool more;
-+
-+	if (state == PP_REFILL_FULL && !READ_ONCE(pp->starved))
-+		return true;
++	if (!pp->pending_cnt)
++		return;
 +
 +	spin_lock_bh(&pp->lock);
-+	if (!pp->fq) {
-+		spin_unlock_bh(&pp->lock);
-+		return true;
++	for (i = 0; i < pp->pending_cnt; i++) {
++		idx = xsk_pp_chunk_idx(pp->pending[i]);
++		if (pp->state[idx] == XSK_PP_COPY) {
++			pp->state[idx] = XSK_PP_USER;
++			continue;
++		}
++
++		DEBUG_NET_WARN_ON_ONCE(pp->state[idx] != XSK_PP_POOL);
++		pp->pending[n++] = pp->pending[i];
 +	}
 +
-+	if (state == PP_REFILL_FULL) {
-+		WRITE_ONCE(pp->starved, false);
-+		spin_unlock_bh(&pp->lock);
-+		return true;
++	/* A queue restart may change the page pool within a batch. */
++	for (i = 0; i < n; i = j) {
++		pool = netmem_get_pp(pp->pending[i]);
++		for (j = i + 1; j < n; j++)
++			if (netmem_get_pp(pp->pending[j]) != pool)
++				break;
++
++		net_mp_release_page_pool_bulk(pool, pp->pending + i, j - i);
++		while (i < j) {
++			idx = xsk_pp_chunk_idx(pp->pending[i++]);
++			pp->state[idx] = XSK_PP_USER;
++		}
++	}
++	pp->pending_cnt = 0;
++	spin_unlock_bh(&pp->lock);
++}
++
++bool xsk_pp_queue_buf(struct xsk_pp *pp, struct xdp_buff *xdp)
++{
++	netmem_ref head = xdp_buff_head_netmem(xdp);
++	struct netdev_rx_queue *rxq;
++	struct page_pool *pool;
++	bool ours = false;
++
++	/* An XDP test run for the queue brings buffers of its own */
++	if (!netmem_is_net_iov(head))
++		return false;
++
++	pool = netmem_get_pp(head);
++	rcu_read_lock();
++	rxq = rcu_dereference(pp->rxq);
++	if (pool && rxq)
++		ours = pool->slow.netdev == rxq->dev &&
++		       pool->slow.queue_idx == get_netdev_rx_queue_index(rxq);
++	rcu_read_unlock();
++
++	return ours;
++}
++
++static bool xsk_pp_owns(struct xsk_pp *pp, netmem_ref netmem)
++{
++	struct page_pool *pool;
++
++	if (!netmem_is_net_iov(netmem))
++		return false;
++
++	pool = netmem_get_pp(netmem);
++	return pool && pool->mp_priv == pp;
++}
++
++/* Returns -EXDEV for a packet that must be copied. Called from the NAPI. */
++int xsk_pp_rcv_zc(struct xsk_pp *pp, struct xdp_sock *xs,
++		  struct xdp_buff *xdp)
++{
++	struct skb_shared_info *sinfo = NULL;
++	void *umem = xs->pool->addrs;
++	u32 i, nr_frags = 0, num_desc;
++	netmem_ref head;
++	skb_frag_t *frag;
++
++	head = xdp_buff_head_netmem(xdp);
++	if (!xsk_pp_owns(pp, head))
++		return -EXDEV;
++
++	if (unlikely(xdp_buff_has_frags(xdp))) {
++		if (!xs->sg)
++			return -EXDEV;
++
++		sinfo = xdp_get_shared_info_from_buff(xdp);
++		nr_frags = sinfo->nr_frags;
++		for (i = 0; i < nr_frags; i++)
++			if (!xsk_pp_owns(pp, skb_frag_netmem(&sinfo->frags[i])))
++				return -EXDEV;
 +	}
 +
-+	/* With need_wakeup, userspace wakes the queue after it posts FILL */
-+	more = pp->reuse_cnt || xskq_cons_nb_entries(pp->fq, 1);
-+	WRITE_ONCE(pp->starved, !more);
++	num_desc = nr_frags + 1;
++	if (xskq_prod_nb_free(xs->rx, num_desc) < num_desc) {
++		xs->rx_queue_full++;
++		return -ENOBUFS;
++	}
++	if (pp->pending_cnt + num_desc > XSK_PP_BATCH)
++		xsk_pp_flush(pp);
++
++	__xskq_prod_reserve_desc(xs->rx, xdp->data - umem,
++				 xdp->data_end - xdp->data,
++				 nr_frags ? XDP_PKT_CONTD : 0);
++	pp->pending[pp->pending_cnt++] = head;
++
++	for (i = 0; i < nr_frags; i++) {
++		frag = &sinfo->frags[i];
++		__xskq_prod_reserve_desc(xs->rx, skb_frag_address(frag) - umem,
++					 skb_frag_size(frag),
++					 i + 1 < nr_frags ? XDP_PKT_CONTD : 0);
++		pp->pending[pp->pending_cnt++] = skb_frag_netmem(frag);
++	}
++
++	return 0;
++}
++
++/* The chunks go to userspace with the next xsk_pp_flush(). Called from the
++ * NAPI. On failure the chunks taken from FILL stay with the provider.
++ */
++bool xsk_pp_claim_copy(struct xsk_pp *pp, u64 *addrs, u32 n)
++{
++	netmem_ref *netmems;
++	u32 i, got, idx;
++
++	BUILD_BUG_ON(MAX_SKB_FRAGS + 1 > XSK_PP_BATCH);
++	if (pp->pending_cnt + n > XSK_PP_BATCH)
++		xsk_pp_flush(pp);
++
++	netmems = pp->pending + pp->pending_cnt;
++	spin_lock_bh(&pp->lock);
++	got = xsk_pp_alloc_reuse(pp, netmems, n);
++	got += xsk_pp_alloc_fill(pp, netmems + got, n - got);
++	for (i = 0; i < got; i++) {
++		idx = xsk_pp_chunk_idx(netmems[i]);
++		if (got < n) {
++			pp->state[idx] = XSK_PP_REUSE;
++			pp->reuse[pp->reuse_cnt++] = idx;
++			continue;
++		}
++
++		pp->state[idx] = XSK_PP_COPY;
++		addrs[i] = (u64)idx << pp->area.niov_shift;
++	}
++	if (got == n)
++		pp->pending_cnt += n;
 +	spin_unlock_bh(&pp->lock);
 +
-+	return !more && wait;
++	return got == n;
 +}
 +
  static int xsk_pp_nl_fill(void *mp_priv, struct sk_buff *rsp,
  			  struct netdev_rx_queue *rxq)
  {
-@@ -246,10 +303,12 @@ static int xsk_pp_nl_fill(void *mp_priv, struct sk_buff *rsp,
- /* The queue no longer uses the provider, and its DMA stopped */
- static void xsk_pp_detach(struct xsk_pp *pp)
- {
--	pp->rxq = NULL;
-+	RCU_INIT_POINTER(pp->rxq, NULL);
- 	spin_lock_bh(&pp->lock);
- 	pp->fq = NULL;
- 	spin_unlock_bh(&pp->lock);
-+	/* Wait for wakeups that found the queue */
-+	synchronize_net();
- 	xp_dma_unmap(pp->pool, XSK_PP_DMA_ATTR);
+diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
+index 1bc42c8902f4..b9464b917a88 100644
+--- a/net/xdp/xsk_queue.h
++++ b/net/xdp/xsk_queue.h
+@@ -156,17 +156,24 @@ static inline bool xp_unused_options_set(u32 options)
+ 	return options & ~(XDP_PKT_CONTD | XDP_TX_METADATA);
  }
  
-@@ -266,6 +325,7 @@ const struct memory_provider_ops xsk_pp_ops = {
- 	.release_netmem	= xsk_pp_release_netmem,
- 	.nl_fill	= xsk_pp_nl_fill,
- 	.uninstall	= xsk_pp_uninstall,
-+	.refill_done	= xsk_pp_refill_done,
- 	.caps		= MP_CAP_READABLE,
- };
++static inline u32 xp_desc_meta_len(struct xsk_buff_pool *pool,
++				   struct xdp_desc *desc)
++{
++	return desc->options & XDP_TX_METADATA ? pool->tx_metadata_len : 0;
++}
++
+ static inline bool xp_aligned_validate_desc(struct xsk_buff_pool *pool,
+ 					    struct xdp_desc *desc)
+ {
++	u32 meta = xp_desc_meta_len(pool, desc);
+ 	u64 len = desc->len;
+ 	u64 addr, offset;
  
-@@ -428,17 +488,22 @@ int xsk_pp_bind(struct xsk_buff_pool *pool, struct net_device *dev,
- 		return PTR_ERR(pp);
- 	}
+ 	if (!len)
+ 		return false;
  
-+	rcu_assign_pointer(pp->rxq, __netif_get_rx_queue(dev, queue_id));
- 	mp.mp_priv = pp;
- 	mp.rx_page_size = pool->chunk_size;
- 	mp.rx_headroom = xsk_pool_get_headroom(pool);
- 	err = netif_mp_open_rxq(dev, queue_id, &mp, NULL);
- 	if (!err) {
--		pp->rxq = __netif_get_rx_queue(dev, queue_id);
- 		pool->pp = pp;
- 		pool->xdp_zc_max_segs = dev->xdp_zc_max_segs;
-+		/* See xsk_pp_refill_done() */
-+		if (pool->uses_need_wakeup)
-+			xsk_set_rx_need_wakeup(pool);
- 		return 0;
- 	}
+-	/* Can overflow if desc->addr < pool->tx_metadata_len */
+-	if (check_sub_overflow(desc->addr, pool->tx_metadata_len, &addr))
++	/* Can overflow if desc->addr < meta */
++	if (check_sub_overflow(desc->addr, meta, &addr))
+ 		return false;
  
-+	RCU_INIT_POINTER(pp->rxq, NULL);
-+	synchronize_net();
- 	xp_dma_unmap(pool, XSK_PP_DMA_ATTR);
- 	/* Copy mode takes the chunks that the provider holds */
- 	if (!xp_alloc_heads(pool) && xsk_pp_abandon(pp))
-@@ -459,7 +524,7 @@ void xsk_pp_unbind(struct xsk_buff_pool *pool)
- 	};
+ 	offset = addr & (pool->chunk_size - 1);
+@@ -176,7 +183,7 @@ static inline bool xp_aligned_validate_desc(struct xsk_buff_pool *pool,
+ 	 * (pool->chunk_size is ``u32``), @len is guaranteed
+ 	 * to be <= ``U32_MAX``.
+ 	 */
+-	if (offset + len + pool->tx_metadata_len > pool->chunk_size)
++	if (offset + len + meta > pool->chunk_size)
+ 		return false;
  
- 	/* Unregister removed the provider already */
--	if (!pp->rxq)
-+	if (!rcu_access_pointer(pp->rxq))
- 		return;
+ 	if (addr >= pool->addrs_cnt)
+@@ -191,6 +198,7 @@ static inline bool xp_aligned_validate_desc(struct xsk_buff_pool *pool,
+ static inline bool xp_unaligned_validate_desc(struct xsk_buff_pool *pool,
+ 					      struct xdp_desc *desc)
+ {
++	u32 meta = xp_desc_meta_len(pool, desc);
+ 	u64 len = desc->len;
+ 	u64 addr, end;
  
- 	netif_mp_close_rxq(pool->netdev, pool->queue_id, &mp);
+@@ -198,13 +206,13 @@ static inline bool xp_unaligned_validate_desc(struct xsk_buff_pool *pool,
+ 		return false;
+ 
+ 	/* Can't overflow: @len is guaranteed to be <= ``U32_MAX`` */
+-	len += pool->tx_metadata_len;
++	len += meta;
+ 	if (len > pool->chunk_size)
+ 		return false;
+ 
+ 	/* Can overflow if desc->addr is close to 0 */
+ 	if (check_sub_overflow(xp_unaligned_add_offset_to_addr(desc->addr),
+-			       pool->tx_metadata_len, &addr))
++			       meta, &addr))
+ 		return false;
+ 
+ 	if (addr >= pool->addrs_cnt)
 -- 
 2.56.0
 
