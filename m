@@ -1,99 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794318540;
-	b=1Wbw4LBy8DkGEP4DIiwM+BSZ1kV6ODkT5Y8pUelubByIzxx8xoJ4H2gmPrPs1XluQgAx
-	 AT0GPiddmoL/qLm4yLwNdsGN1ojG4joI/r5g2znShyAuCIYHFGLgWROcfqVXrniB1xo6V
-	 xaD8LEg55326asqp+ND+AHgF+7+OpBtxEfdum91Ng4Wzvu4UfuvG+3EGJrr235d9fdWNe
-	 NcvGFMoQ2zK5khuj9PMqpU4Rj5xssZkepm9GoTIusUAtR0vJVOVLAO6b166OJn0keuCP8
-	 xJwgzCZGlkqhb012bxI8QedAcuz0lWC8tclIS+1TfMpV3myL+3rP2Y+MF34FClh38Fg==
+	t=1794318682;
+	b=IWglqn7eq7scToMsjmYbAVBX1F3ot6w9p4lqUTYpJFknbIaQJLVMmwq+maJZlTB5Qzor
+	 uO3GHoZz0FimshZvmhHPH41JrJ9QVO+v6Vtdl7erthkr6EjDUJU4QBo4D6Xg/CFfe9IIY
+	 0eyqlA0vjFPMlriUxAdU9A7j5pqqudp8iyQSY6GHpdFjuq2nGmRuMr8X5cXsTF1C9BFkl
+	 0k2OHSKm2aadNNyzl0+CVL32D6LQtP34wQsbA/Sa+K1OsCEGAvQel+rXG0rQEPEeB5o2e
+	 VRM+AtiiPFwEpvgcGvQya6dzrdGBTTkO92HM6QZ/9yMv3aQTralk/h+J7R/U62CgZcA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794318540;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794318682;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=q+YMVvkEa8uaOBbexYkxUBo5dx74+xkphIFCSV1U0i8=;
-	b=ChLTYMc/pmDhxu1F65V1VlHco0Ni7Je3PuSnvCqu4InRbj7lDtM8CZBTH+qt9VNtqV1Y
-	 4wRwYVA8/VO5HOZ1k2lkLpIu8yPMvt9TCYo0VSw9+B8KwP+vGkpm2XdjdmFWqpKK3u8j6
-	 CklRH4lM4CSTnB8XNgzHWzQf+qJ+90pWROCrH2hFOTCshvz0Fgtj3Y+InAB62xQjmOKSl
-	 /XCSwfV0f9hLKhyTotradcNl41XrCFIubm3qudaQbMHwu8lkVY/jJajcJ6F2j9F9MiBZD
-	 37GCYPT7SfbBQRA3GK4nACPWr20VGx4/X4VhipwFi7lRGNa0Tx12mnz8d/Ho9BboTsQ==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To;
+	bh=x1qBW8RoYHIsd8MuKQz0jzwuZbI8dPJ3tz/udwg6UjY=;
+	b=X2LIVe6km8RfnytmJRAmtm/Ct10mp/fm/ZYSMEPZzkUFetm70++tZgQviiNeklMeP+nD
+	 jS7OPVtOI1pnQtCvnQTY7t5V3y6OGfiBnOJWssc4//cfziNkmwNOE6s+9zMMUFMSt0mZM
+	 TZLplemBBGJYtGM1QT7YEr8p6Nz353T1c3GQZzRg7HEmPAVJ05k0xdwwa4L64dojzDTm+
+	 qSzEybLc3ZZBZVZ2ntOryqDryAeZBz+umDX+cxynfdlrpWwTxZuD3tgYaajPinxRVgu+e
+	 PYyg+7KbCk9BEaKmr5HNPXPEQsVQFdUZhsU9S6DkLnD4FGpWTSrV1syxmZGSSiLU7sA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=U3pZ+JWc;
-	arc=none smtp.remote-ip=209.85.221.49
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WKjaivIt;
+	arc=none smtp.remote-ip=209.85.128.54
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 616D860A260A
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 13:48:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 616D860A260A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D990606A321
+	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 13:51:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6D990606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=U3pZ+JWc
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-492f563d1c6so754391f8f.3
-        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 05:48:59 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WKjaivIt
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4a5087a5348so17394375e9.0
+        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 05:51:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794318538; x=1794923338; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=q+YMVvkEa8uaOBbexYkxUBo5dx74+xkphIFCSV1U0i8=;
-        b=U3pZ+JWcNB+aUIQUkCWa/CoRrIxZottPyQ/U/RqEIHU8QvhFvxBkH2cALjw59mxU2S
-         tt+WKohbj4ODaJ5yG3Ju4uUFACHMACrWvr0q3gyxNuzowYiagaIFfTSnDtuoIuKM6LaB
-         jczTSMfVDYtSHUEIbpgykRs/LmEJWXIFOjVa8MPeUGbUP04K57Aos0p8ZvnVM/kOZNPp
-         ShalNlCmNFobzlT+72+oz4RhDF8dNTyzRnITgCQBaKgmQ55R9vDev1chitgL2HL94v/V
-         hM/daagI3jOeMww1OHmdvFVyF3i3oaviGDjg9IIbkWu4TNd1/31arkBsq1H5nOp08y+l
-         0e3Q==
+        d=gmail.com; s=20260707; t=1794318680; x=1794923480; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=x1qBW8RoYHIsd8MuKQz0jzwuZbI8dPJ3tz/udwg6UjY=;
+        b=WKjaivItfPGf1vLYiZe1ufT9ND8ivobVNmmgJ9QSpL6M71YrFIdQrEZSC873reDfUy
+         lbcISDgE0nzps2hmXEDQ31Ld8KKepHFTWeby8GK0bKKWO/sPXbyRIfReJxh9NVhEA4W8
+         ylccNGSgZoEC2DNFIbM1opNxTIzooxaIZte9FU3RQMpBTlwbp6Iham7UM84RPxmJimVv
+         2svlzvXdCziWbS1/6Huqi0VbsXsvfwpD0W2vjZZJIUGmpiT39kiNFT/YJEYgbrtpCb5u
+         ZNkLgbs+NAAGtXag1cAku8dO+ZEQNtVgWm4ZUmG7najz3WCtCoH0VldDuAoHRgIQkVid
+         1Yhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794318538; x=1794923338;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=q+YMVvkEa8uaOBbexYkxUBo5dx74+xkphIFCSV1U0i8=;
-        b=paBJg/zSV1hj+GbD4MO6qDrSmxG16a/LEn3BBg1PW1w8MNcMDAIA2rg16FZE30f2VJ
-         XBvRmpHKIpYzL56RbnUucosxx2aR0rzE4Q8dsFtzUO4qRu+ktIuJCkfeyVrR19+C6FgT
-         TjULZ60RPiUWjODyCJFT3D1k8cT1IRfntqBpTjHw6vTYViIXCJCseX/JjTsawY/QT6Qr
-         DNh6Td9HIfGGwuSt91gtCq4/gdsz5aD+z1mQB41pX8Gle+qhQTQu/xyemEe6M1+puY7+
-         fxgnjQv9WLg8SGaRSJLyZmsV9qnU4cci85G4W1s/jTLJ7im+6d096RFIXu0JJXbMlPzV
-         /OoQ==
-X-Forwarded-Encrypted: i=1; AL+hErGj8g6WzSAfkWg1vGvwUxglAG3PzKz7dJbXf6GNneZ7MsjxL7aUrN6DEnnoYmbyrz6AbLQ=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9qPZGQXCy7X+6CHoQv67umYRwpbm0d1ALgSzUbjZlmNOxGmilG
-	CWK/n2hZrQZZhhsFvKpxGFOa8aVwHX+ezodicKvPYl/wUx/QEZvgnyk3
-X-Gm-Gg: AYBFou0QFJnNlwhFpF8QW19BmVLjMfeOXrb3TcDycWgcKEOIuxiau11eZi2Z8f0rCDQ
-	79X4zL2E/78mc01u0wu5dCeRuB9PZZOiZAaVwXcIT0cjRqe3vymAOMJlVvaF4a/KF+8lxpO75Ap
-	IOANvtRebB1ODKxonm8rv0cEmE9gWzFdfXw1WhSuvKeOYuI4ILhsQCCjxIh4zx+6i77+/79hq47
-	xtzekXpxNWMaFNjNhGks/vTLBYb2qytTmvK72Apw7YjIkZJJHaaE7TAd03Cm1l7aA6ynvC9x/m2
-	n17CM030nHMULglo0TmvgZAVIr8Gbfk2IT8jnfHAouGjNBHyz7W7+LCCK6sbvJUH7AhLm8maGJl
-	ypdTnFdAjebEISXQmeCAocCC/46t+KPjgKfeZntoNJ1sswn6B06hEyJTOxhYuP4N0jtaxl2rqLu
-	CquNAf3MrPIG2Mc02zENICotaoxWFDCm7+/StgYMf/R7EtSSs/D/INshbcfSKr6NjTL6cZ+kO+1
-	0YxhWdChOHXP24no0qwnwuTOlEckNFSYpzqMyCaT3emcV7xxBCA/xg6EvtwN+DSPhQpogwU9hEy
-	VhcescI1RAnzY8nClCivBFxctlG6cjchvC+A5A==
-X-Received: by 2002:a05:6000:4006:b0:498:a72d:c097 with SMTP id ffacd0b85a97d-498a73d0414mr3856529f8f.19.1794318537546;
-        Tue, 10 Nov 2026 05:48:57 -0800 (PST)
+        d=1e100.net; s=20260707; t=1794318680; x=1794923480;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=x1qBW8RoYHIsd8MuKQz0jzwuZbI8dPJ3tz/udwg6UjY=;
+        b=kl0JseVlJyg5G7C8UFzy61F04+CCwGNriUrv8G3aXk6HNX31b2k4x9sQcbf2UKxrVo
+         0bgGNScDX0+eWWsMYtLKUtZX8JXTmIP0jnAY9yDB1k9FfZVOSGhSMDOHvVVU1ndr4edw
+         ABTREnSd1iqBtv/5oI1KWj6KwTMiXjJm7Cnr8GGeM6M/SCjyF62oG1auItBzbn6KxiwE
+         8abgr9gmOi8djYnEzttKUeNDCiKGKtH+bkRF+yiGzIl2Cl9NTRquGtHtOa6gCzS32gx2
+         fRFvboKAlUW96h98Y04fDgWrzgOR4jgJCCHcBCi6Dfia96qmNhQ4uoNbv/AZjl4LiPXg
+         Bt+A==
+X-Gm-Message-State: APuU4Z/tX8g8UKvrFgSp1O7sm0qYiVAoMmKyIc7yJS929IWGrstvrou6
+	GWPAlRBXTbPxW+8kqDeYJzpXmGCyyWOpjfIGLsQklnkrODKmqhnLTSst
+X-Gm-Gg: AYBFou2UwUjDvxyieTpSICa5qDsM5iedi5dO0D2pyZ9ACrRv6LHjAP2iBkYkksTBfKM
+	cgOK/ofq46YpAPyGPaIzW9rzKZ9R30i0NFtIOz5ZtpA36Oa1WJe+upSeLtpxnm90pTIIU3aNqpm
+	/Qu6O2zqUoPtnNV+SVJ+SLaztTsq2L51kciNFQywBQgRBVGVmRBp3bQHSZvHwqq12rcoXNP56yS
+	dN4UT5jlLwAmrOK4ZfUZjsRr9lbZJklmh3yDn04Bz/rqYFbSLFcy8A2x9GP29q3tKcwLMa0N+aO
+	4qFfe7zLx+w4UBgTIxvSkzHR/GkcJt7DuWNf/1Q/OKhMiwJQS0/Uoz3h3d2zzsn5P5SAKj/xcRT
+	7DrTtA2cCDktn4dkiS6twP0lU/LQABZKJmrsVLx2Wg4KAt3OFipC1ZdCRfkJDt0oOuKlhOfr8+l
+	+3UGe1MD2Hb9KL5PbXApt61WdifofLYnOT6pXsxSqiKqYq+1Ztpf7HhO6TSp3DUtnIXlqwZZ9pj
+	G/ftx+BbkMnuq3Z1B3fJPre/nOvLoHxIQlO5PXdhXt6tCzH7sUqKMayfuqOxDtk30dqjcLHR9/M
+	hFUpMh5zMTYOfxi438nD/uowAHJ65+giAkTFPQ==
+X-Received: by 2002:a05:600c:3e1a:b0:4a1:de8a:603a with SMTP id 5b1f17b1804b1-4ba0233a429mr47496295e9.6.1794318679654;
+        Tue, 10 Nov 2026 05:51:19 -0800 (PST)
 Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4984e26f8e3sm4483376f8f.1.2026.11.10.05.48.55
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba01fef1d0sm64488975e9.13.2026.11.10.05.51.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 05:48:56 -0800 (PST)
-Date: Tue, 10 Nov 2026 14:00:27 +0000
+        Tue, 10 Nov 2026 05:51:18 -0800 (PST)
+Date: Tue, 10 Nov 2026 14:02:50 +0000
 From: Anton Protopopov <a.s.protopopov@gmail.com>
-To: bot+bpf-ci@kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	eddyz87@gmail.com, memxor@gmail.com, almagui@kernel.org,
-	john.fastabend@gmail.com, qmo@kernel.org, brauner@kernel.org,
-	kpsingh@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
-	emil@etsalapatis.com, ihor.solodrai@linux.dev, sashal@kernel.org,
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-	martin.lau@kernel.org, mason@kernel.org
-Subject: Re: [PATCH v2 bpf-next 01/18] bpf: Add BTF ID sets for fmod_ret
- targets
-Message-ID: <avMje16UShiO3bH1@mail.gmail.com>
-References: <20261109170550.141443-2-a.s.protopopov@gmail.com>
- <4bd4574839415920b87e63fe2c5340ec54df15620210a2aad053ea7d7be14b94@mail.kernel.org>
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Subject: Re: [PATCH v2 bpf-next 07/18] scripts: Add LLVM plugin infrastructure
+Message-ID: <avMkCh9LLezKS151@mail.gmail.com>
+References: <20261109170550.141443-1-a.s.protopopov@gmail.com>
+ <20261109170550.141443-8-a.s.protopopov@gmail.com>
+ <sashiko-outbox-205331@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,70 +96,79 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <4bd4574839415920b87e63fe2c5340ec54df15620210a2aad053ea7d7be14b94@mail.kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <sashiko-outbox-205331@kernel.org>
 
-On 26/11/09 05:42PM, bot+bpf-ci@kernel.org wrote:
-> > bpf: Add BTF ID sets for fmod_ret targets
+On 26/11/09 05:45PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential
+> issues to consider:
+> - [Low] riscv: pi: filter out LLVM_PLUGINS_CFLAGS from KBUILD_CFLAGS
+> - [Low] vdso: avoid stripping LLVM_PLUGINS_CFLAGS from kernel objects
+> --
+
+no, riscv is not supported yet, vdso is not target for fmodret
+
+> commit 072fb07f8d2d07b80e87b0ea8e05cc60c466504e
+> Author: Anton Protopopov <a.s.protopopov@gmail.com>
 > 
-> TL;DR: Nits only in resolve_btfids: a comment may misleadingly suggest entries
-> with a missing function are rejected (they only warn), and a new outer "off"
-> is shadowed by the inner one.
-
-Will fix both nits (will be resending series in any case, as verifier changed
-again since then)
-
-> > diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
-> > --- a/tools/bpf/resolve_btfids/main.c
-> > +++ b/tools/bpf/resolve_btfids/main.c
+> scripts: Add LLVM plugin infrastructure
+> 
+> This commit adds Kbuild and Kconfig infrastructure for building and loading
+> LLVM IR pass plugins with -fpass-plugin, and excludes LLVM_PLUGINS_CFLAGS
+> from vDSO, EFI stub, and early boot builds.
+> 
+> > diff --git a/arch/arm64/kernel/pi/Makefile b/arch/arm64/kernel/pi/Makefile
+> > index a273ab5af805c..5813bb75c9925 100644
+> > --- a/arch/arm64/kernel/pi/Makefile
+> > +++ b/arch/arm64/kernel/pi/Makefile
+> > @@ -10,6 +10,7 @@ KBUILD_CFLAGS	:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) -fpie \
+> >  		   -D__DISABLE_EXPORTS -ffreestanding -D__NO_FORTIFY \
+> >  		   -fno-asynchronous-unwind-tables -fno-unwind-tables \
+> >  		   $(CONFIG_CC_OPT_NO_ADDRSIG)
+> > +KBUILD_CFLAGS	:= $(filter-out $(LLVM_PLUGINS_CFLAGS),$(KBUILD_CFLAGS))
+> 
+> [Severity: Low]
+> Should arch/riscv/kernel/pi/Makefile also filter out $(LLVM_PLUGINS_CFLAGS)
+> from KBUILD_CFLAGS?
+> 
+> Like arch/arm64/kernel/pi/Makefile, it compiles pre-MMU position-independent
+> early boot objects with -fpie and -ffreestanding, filters out
+> CC_FLAGS_FTRACE and CC_FLAGS_LTO, and prefixes symbols with __pi_ via
+> objcopy.  Leaving LLVM_PLUGINS_CFLAGS enabled there can break symbol
+> confinement or introduce absolute addresses before the MMU and relocations
+> are active.
 > 
 > [ ... ]
 > 
-> > @@ -1344,7 +1355,16 @@ static bool is_arena_param(const struct btf *btf, const struct btf_param *param)
-> >  	       param_name_has_suffix(name, PARAM_SUFFIX_ARENA_NULLABLE);
-> >  }
+> > diff --git a/lib/vdso/Makefile.include b/lib/vdso/Makefile.include
+> > index cedbf15f80874..848d58296ba23 100644
+> > --- a/lib/vdso/Makefile.include
+> > +++ b/lib/vdso/Makefile.include
+> > @@ -1,5 +1,8 @@
+> >  # SPDX-License-Identifier: GPL-2.0
 > >  
-> > -static int collect_kfuncs(struct object *obj, struct btf2btf_context *ctx)
-> > +typedef int (*set_func_fn)(struct btf2btf_context *ctx, const char *name,
-> > +			   u32 btf_id, u32 flags);
+> > +# vDSO code executes outside the kernel.
+> > +KBUILD_CFLAGS := $(filter-out $(LLVM_PLUGINS_CFLAGS),$(KBUILD_CFLAGS))
 > > +
-> > +/*
-> > + * Call FN for each function in the BTF ID sets which have SET_FLAG set. Reject
-> > + * an entry with flags other than ALLOWED_FLAGS, also if its function is missing.
-> > + */
+> >  GENERIC_VDSO_MK_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
+> >  GENERIC_VDSO_DIR := $(dir $(GENERIC_VDSO_MK_PATH))
 > 
-> This isn't a bug, but could this read "even if its function is missing"?
-> As written it can suggest that entries with a missing function are
-> rejected, while collect_set_funcs() only prints a WARN, increments
-> warnings and continues to the next entry.
+> [Severity: Low]
+> Does stripping $(LLVM_PLUGINS_CFLAGS) from the directory-wide KBUILD_CFLAGS
+> here also drop LLVM plugins from standard in-kernel objects built in those
+> directories?
 > 
-> [ ... ]
+> Makefiles that include lib/vdso/Makefile.include also build obj-y kernel
+> objects linked into vmlinux, such as arch/sparc/vdso/vma.o and the
+> vdso*-image.o targets in arch/x86/entry/vdso/common/Makefile.include,
+> arch/sparc/vdso/Makefile, and arch/mips/vdso/Makefile.  Those Makefiles
+> scope $(GCC_PLUGINS_CFLAGS) removal to $(vobjs) (as this patch does for
+> arch/x86/um/vdso/Makefile), whereas modifying KBUILD_CFLAGS unconditionally
+> in lib/vdso/Makefile.include prevents enabled LLVM plugins from running on
+> the in-kernel objects and drops their <generated/llvm-plugins.h> rebuild
+> dependency.
 > 
-> > @@ -1356,24 +1376,39 @@ static int collect_kfuncs(struct object *obj, struct btf2btf_context *ctx)
-> >  	for (next = rb_first(&obj->sets); next; next = rb_next(next)) {
-> >  		struct btf_id_set8 *set8;
-> >  		struct btf_id *set_id;
-> > -		u64 set_addr;
-> > +		u64 set_addr, off;
-> 
-> [ ... ]
-> 
-> >  		for (u32 i = 0; i < set_id->cnt; i++) {
-> >  			size_t off = (char *)&set8->pairs[i] - (char *)set8;
-> >  			const char *name = find_name_by_addr(obj, set_addr + off);
-> 
-> This isn't a bug, but would a distinct name for the new outer offset, for
-> example set_off, make it clearer which offset "set_addr + off" uses here?
-> 
-> The inner "size_t off" (offset of a pair within the set) now shadows the
-> outer "off" (offset of the set within .BTF_ids), and the inner declaration
-> would trigger -Wshadow.
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42662799554
-
+> -- 
+> Sashiko AI review · https://sashiko.dev/#/patchset/20261109170550.141443-1-a.s.protopopov@gmail.com?part=7
