@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794286273;
-	b=BbBG9nCmMfEdXPOMR0ZziL5u37Gtjp+bjY2v+PHnEjwNgdcs4BSMRg6bz3asBQ/f416L
-	 B/d1dwkSeT9TGzc03AL8B5e3lM89oKA1pUGysbCTDLOu0JK1zCioOWINx0eDMQ0pSHyJf
-	 g6jZtBFvChsJ4y9Ye7/eQB9PONUygeqFEuJbyOaX/3g3tOX5Qwzq112KuNf1oIsjocJJg
-	 ubiGmT01OsY18Gae55wW02SZM/+XiSiQW4QyP9pASS7ogwNVbwFv/r7o23S/f3GqPCHvm
-	 qsqWPPOgMumWZJsrgdtQPLHvI083+ub67GtDJZyFvLN1ewwti00s+i2cD3A78F0npPw==
+	t=1794286275;
+	b=PHwTHzbWO1Sgf6Kqrc1IIizV9ViD5qOHg3RXKxROtN3nHFwaADwiUBVYKjk9mAt67Pbg
+	 Qn43ZXsJ9kXj0tguZfdTDooh8ASyIq1TVGGk8di2TDmGWjotyfCDG+euvfvb+t8YfKlYs
+	 aBDX+6QkWtvLiLoqzfgcTlQFYhsNspiDn1CwI8ItsSd0l9UDSfQf3dPRHJoQTGstOswIg
+	 5pPoVy4XTallyS+m+XEgvcTdnIjrXC1RBrlfdh+e7r5q2dpv2Fo0ysal21c3THm8FRlwK
+	 syCxfBs9FWIwl6WynhXEgbeaMWFRt6DD0ap5UoVm/x5tzLBQ6RiGx1YGCJ34sB9cJng==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794286273;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794286275;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=qbTSDQArvOD3jGjg04T2wFGTvQcaHANFC2X8ZHcjKuE=;
-	b=hSES6fJEMLIwsS3d+Tu4K5qgChbii0/Moyqhs33c0GUGVynTOo4zUrdPo1BCHmqtkIy2
-	 r034gLE8MsmTHWd7jwIeVdJpsHqmxUQ0Ms1PAqfFBC6A1/iTyUOOBY+qlodY9EXRjvkLB
-	 OSVC4IUXpOPDt2VQrmpNDiszahDfSSVAYqk8aB6FnUhkYmQBS0mZQ3OtwM3rXnXWHt5uV
-	 LC0Ek3BfEvkMA6Z/vSmeHUnD6tJjrNjwiAzQ8jNG54FZbNMV8gkw6wfE3QhHMaPnnFtlS
-	 H8Qt5KLxlUY5paJgd/koPJWu/wtPzvpiooykgzLl5C3jI03T62geYUVvWXpZ7HboSEg==
+	bh=szESm3sydnu6tGXxhtwJ3Uszu+ynDxhOJRPZ5qVcTt0=;
+	b=drdO2lHsWCl+cCcVf9zFIa9/fYRVdQsEDvzZyF+clTaj2+/K8V24XATfFcfdjgClFcrE
+	 rGAPuC1d/mVpgS7za1f9eh4GAol8twa0RMd6CSvmmmyjKXBkx7o5/4RqxoqytlHy2NSkH
+	 EItXx7n4bNrmXW8BkxrccOTOUCjBni3Iv16uHchk0hmFu/Wha7sftXDBMq9kIAZcPKOtK
+	 H8/QRWEie3to22l2TicWjQER8YDPr4gS2EBobGDjnPOL0ZwnHYgop/YIRTxFv2yj4N2AZ
+	 KZeK3C6XxffppjRJ/uN3o9G/k3DJr+WgNXckeGkp1fKqZMGvDnJTujjgMOVDGmLtAgg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nJ265U8I;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IElSsEtW;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36A2D606A31C
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 04:51:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CC29606A31C
+	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 04:51:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nJ265U8I
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8B2C1F0089F;
-	Tue, 10 Nov 2026 04:51:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IElSsEtW
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0D871F0089F;
+	Tue, 10 Nov 2026 04:51:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794286273;
-	bh=qbTSDQArvOD3jGjg04T2wFGTvQcaHANFC2X8ZHcjKuE=;
+	s=k20260515; t=1794286274;
+	bh=szESm3sydnu6tGXxhtwJ3Uszu+ynDxhOJRPZ5qVcTt0=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=nJ265U8IJy0a0l+jT63eGTKMM9Th9JPUC17685QMOud1MBaGQfIKHuZq01om1C+r6
-	 6yI8xQt7FhZQlAd4szhklUTE4ccverPmM8erqj1LKQThwK8WJ/BP6+b3uatI/UOryL
-	 024QQAc7p4MD2w10NQFmEMMsGIhN25djzK5i5+k0ZADSixUzs+HIBHEEO/7ZPBVseL
-	 Mfami/UBxyCtYBeyGGEyk4+2naG5ML+11kYLkPZjvvSTnF+iKDisIjOvWP+lSFS5tD
-	 24cEDb2IVCf+HcN7NVRsrZ0vpl+b07bWlawezGUP0yOU0ceiJjpoJtpdszgJxOvyqj
-	 vwEu5Qp8t7McA==
-Content-Type: multipart/mixed; boundary="===============6173208538127033609=="
+	b=IElSsEtWPE3ppod7B+ylrA9q0z9tICJlQaPBJFy+Bm/aThcqJ6oKsYWWA8RlC/iN1
+	 rLeMrFXFSs7XpGuLKwxV6h7l2nvg2OS2s15FVNRYbc3jKWBL/cbKtVoFHlUc3wk0i8
+	 kfH5uFCHGy2K9heiOTnrSHVk5LFC6+RprugB0T28KPfB/pgSVLgGOrUISH0KfDtt/P
+	 YrA0I0JexQnv+vyNCIVEpLbkR+YgE6uR5094JLND7A/Pev8l2oNuid8yj14QYPl4dP
+	 q8SXVraFS6LvRhYKx9JWU/sNfBdi9PXyRsBYBUkkV5WfiFmNGcOIiI+HzxJZZo7JiB
+	 vaMi/cQ5XfTjQ==
+Content-Type: multipart/mixed; boundary="===============6021103609634742832=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,62 +49,63 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <cb445da2a17f6123fc8e8b29c5cb8030424d521611d7ee6fbed73a90709c7eb7@mail.kernel.org>
-In-Reply-To: <20261110003838.8739-3-emil@etsalapatis.com>
-References: <20261110003838.8739-3-emil@etsalapatis.com>
-Subject: Re: [PATCH bpf-next v5 2/9] selftests/bpf: Add a parallel buddy allocator benchmark
+Message-Id: <f03cef10c23b8fee04cb99ae8ea90f9e65a0bc8c06c0a4e405d1d9d205e3b502@mail.kernel.org>
+In-Reply-To: <20261110003838.8739-8-emil@etsalapatis.com>
+References: <20261110003838.8739-8-emil@etsalapatis.com>
+Subject: Re: [PATCH bpf-next v5 7/9] selftests/bpf: libarena: Refill local caches in batches
 From: bot+bpf-ci@kernel.org
 To: emil@etsalapatis.com,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,daniel@iogearbox.net,emil@etsalapatis.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 10 Nov 2026 04:51:12 +0000 (UTC)
+Date: Tue, 10 Nov 2026 04:51:14 +0000 (UTC)
 
---===============6173208538127033609==
+--===============6021103609634742832==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> selftests/bpf: Add a parallel buddy allocator benchmark
+> selftests/bpf: libarena: Refill local caches in batches
 
-TL;DR: Nit only: the cross-CPU benchmark's cmpxchg() retry loop could be a
-single atomic exchange, and its "free our own list" fallback comment seems
-wrong, since can_loop expiry would skip the free.
+TL;DR: Nit only: the new comment in buddy_cache_alloc() saying NMIs only use
+cached objects looks inaccurate, since NMIs can still trylock the buddy lock
+on miss or spill; the commit message omits the NMI exclusion.
 
-> diff --git a/tools/testing/selftests/bpf/libarena/benchs/bench_malloc.bpf.c b/tools/testing/selftests/bpf/libarena/benchs/bench_malloc.bpf.c
-> --- a/tools/testing/selftests/bpf/libarena/benchs/bench_malloc.bpf.c
-> +++ b/tools/testing/selftests/bpf/libarena/benchs/bench_malloc.bpf.c
+> diff --git a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c b/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
 
 [ ... ]
 
-> +	/*
-> +	 * Publish this list and take the one left by the previous invocation,
-> +	 * usually allocated by a worker on another CPU. If the exchange does
-> +	 * not complete, free our own list instead.
-> +	 */
-> +	old = READ_ONCE(bench_xfree_head);
-> +	while (can_loop) {
-> +		cur = cmpxchg(&bench_xfree_head, old, head);
-> +		if (cur == old) {
-> +			head = old;
-> +			break;
-> +		}
-> +		old = cur;
-> +	}
+> @@ -140,7 +158,11 @@ static void __arena *buddy_cache_alloc(struct buddy __arena *buddy, size_t size, size_t order)
+>  	if (!cache)
+>  		return NULL;
+>  
+> +	/* NMIs cannot take the buddy lock, so they only use what is already cached. */
+>  	address = buddy_cache_pop(cache, order);
+> +	if (!address && !bpf_in_nmi())
+> +		address = buddy_cache_refill(buddy, cache, size, order);
 > +
-> +	for (i = zero; head && can_loop; i++) {
+>  	buddy_cache_exit(cache);
 
-This isn't a bug, but could this cmpxchg() retry loop be a single atomic
-exchange, for example:
+This isn't a bug, but is this comment accurate?  buddy_lock() uses a trylock
+in NMI context rather than refusing the lock:
 
-    head = __atomic_exchange_n(&bench_xfree_head, head, __ATOMIC_SEQ_CST);
+    #define buddy_lock(buddy, flags) \
+        (bpf_in_nmi() ? arena_spin_trylock_irqsave(&(buddy)->lock, (flags)) : \
+                        arena_spin_lock_irqsave(&(buddy)->lock, (flags)))
 
-The new value of bench_xfree_head does not depend on the old one, so the
-loop always ends up storing head.
+On an NMI cache miss, buddy_cache_alloc() returns NULL and buddy_alloc()
+goes on to buddy_alloc_memory(), which calls buddy_lock().  An NMI free into
+a full cache also reaches the lock:
 
-That would also drop the fallback path.  The comment says "free our own list
-instead" if the exchange does not complete, but the loop only exits without
-swapping once can_loop has expired.  At that point the following free loop,
-"head && can_loop", is already false on its first check, so the list would
-not be freed anyway.
+    buddy_free() -> buddy_cache_free() -> buddy_cache_spill() ->
+    buddy_free_bulk() -> buddy_lock()
+
+So NMIs do not only use what is already cached, and skipping the refill does
+not keep NMIs off the buddy lock.  Would something like "NMIs may only
+trylock the buddy lock, so do not refill the cache from NMI context" describe
+the intent better?
+
+The commit message does not mention the NMI exclusion either.  The later
+commit 74ddd93cc764 ("selftests/bpf: libarena: Add a transfer cache") removes
+this comment and the !bpf_in_nmi() check.
 
 
 ---
@@ -112,4 +113,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42755638928
---===============6173208538127033609==--
+--===============6021103609634742832==--
