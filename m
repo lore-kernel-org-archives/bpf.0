@@ -1,57 +1,81 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794283821;
-	b=DCcSln2YHvgbk5KYlUA1whyVOQaOpsEw2eQgsgD3y5ttUohTGYO7QA6ry/vEziavvaI1
-	 xHLAmjxnTENXqn0nIRQs4J07m06y5MDgbCOzwzIMLnDx8aGf/aEDZkQkJ5Db3SqI0Es30
-	 YbYb17O2RggOYAl9pX6Kgc2B7KxpbxNrZPJITq1lGhEISGn+mM0daP4LJfRjmkoUOjfYe
-	 Ys7gswLw0cmAi5O27UyohrI6EEM8WB6i009kgOidm4iee04S9Sew73fGxsjqdSIAc5hw5
-	 /TTJ8EVPeiCwzKaTMdTi2kRzm+WB5dWiHiN4a5ajz3XThWJrqBbyY2qvKzCTx7+hylw==
+	t=1794283900;
+	b=RRuh7EkRTKz8bCb3uNHifMIVLMI+yC1m1wDy2wJxFnwYNzBHynBaMgPC8JcLALI2FsL0
+	 cGDqnc/qcs+sn2E7HhCLCQzrm4e7hQ9Lvmla3cWFwrNbjQ/sPUedNtVp3GEVV7GFZe+Sh
+	 8zjvvdpi8T/oe2CqOdg5kzKcBlYrHahQhFV1cpT/42nbEngdlrjUaIRCQNNfkXDsmZ7Io
+	 ISmQ/RISbl3TO2e7GwQT0663O4oAsi2EGqcnRCF2gzTPnN4oD0AlRG/pdFZ2ltEtmdtwu
+	 JyTs9hRwKbHguXLzzsZo73OQka+P63N2pCNOON7PUq3zvfTq0cBREabFY/YNOzoQb/A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794283821;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=miTH91FU73AzmU2Fuek8eqWk6PC6BVPMe1SNLQf3Dv0=;
-	b=iG4JOPJ6uR+ar9W7lfcxmPtslw/OCzhDuQsF15C/4Cq8K103m8RTCelrLws7L1T/c4Ur
-	 xIEFvtLXOIBLIEPKXZZaJLhfmFozRy8pAttZvHTSerhKXNuu5wHtQ3lvNdHF8eNAZ8pG6
-	 stszOjCnxt1YyE5hD2/D344oKJHCwtqtzN6yRslaqiKzZpcmVH/NJSXuO10LTJbwRTACE
-	 44B+4OVnu1PCif63a9KN+hyiQNqOSO5jjTyCQB5IVOLhUm4bpA9dGiCLouHgWibr9nktu
-	 RGIP764mQKNe70UdMNjF63DY9g84WtChKhKlolKPw7kvYpsGdfumoz0m8XvG4sIIS3g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794283900;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=YHXidAFNXoaiLO002WziYhPSP8qLeOfv4lUIVNDDdBI=;
+	b=zZbfNqsCbS71AXew91uoTA487l739649zCR7omzUKOwV+CcmXxbhTDDawl8t73bVW8Lx
+	 n0yMUWfytHRVYJGVZjItdlSTxkpBRy9BwpcKEw9uXDHj7DwpL7eQkdTiV5Nz9iefd06Qe
+	 bcd3VBshPYFK8mgzu1A2Mv6ZHVLVG2YafsZctmkYjuMKNevn/MZ+AYX9oOsZFIESA6zlB
+	 /HHIuKN6jGEuckVfBUm1u5XqL2FjKKQVCgnJi6YUK9kRbhm+6oNhIHMXo63CXaI/0iRQg
+	 z6XRO7ojgOquAhkL+w/6mdDpYnLxkYtFFdgNUx+Yddu7JGRtykiAP/RTMftz5BYypEQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IIDb4p9A;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XDQgoYhz;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2E3D606CF08
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 04:10:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 6AC2C606AA08;
+	Tue, 10 Nov 2026 04:11:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IIDb4p9A
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66AC81F00921;
-	Tue, 10 Nov 2026 04:10:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XDQgoYhz
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 482C61F0092B;
+	Tue, 10 Nov 2026 04:11:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794283820;
-	bh=miTH91FU73AzmU2Fuek8eqWk6PC6BVPMe1SNLQf3Dv0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=IIDb4p9ABoTBZlbesk2GEWzOSmQ4ZaquEP1t1jtKRawps/67ga0LA0aVwBlgpQfY1
-	 UwjCGKK0cXP4A8OcLzOkjttq+sOS9r2rG1ovZCdVl5SkpWv99hZJUwRtNfqqwKEiIL
-	 BxoOse/Sfc43T0E9Xa++2FbQ39TbxPgaamM6Rk8iA4hxlqtn2wy4h30BYourN0zkUc
-	 5n49vUSBbKhdML3ZPXhSaVGSTMMI4LYsTaNcigDrCdM5KSm1a1jrDE6wZ3vbB7O6yX
-	 m8Bb2eKcH3ViaCQL5DV9jury7RLI5kyIvOzPuPbQk4um4ehwDkJVRJZRdB8PeyfgTc
-	 w9tEr1PEBp1LA==
-Message-ID: <sashiko-outbox-206173@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 10/15] xdp: warn on XDP_PASS with stored values
- when XDP runs on an skb
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Tianyi Gao" <tianyi@cloudflare.com>, bpf@vger.kernel.org
-Cc: intel-wired-lan@lists.osuosl.org
-In-Reply-To: <15f830924c4d06d3d8c7e41fb8a9f8c29b63d9a7.1794281983.git.tianyi@cloudflare.com>
-References: <cover.1794281983.git.tianyi@cloudflare.com>
- <15f830924c4d06d3d8c7e41fb8a9f8c29b63d9a7.1794281983.git.tianyi@cloudflare.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 10 Nov 2026 04:10:19 +0000
+	s=k20260515; t=1794283900;
+	bh=YHXidAFNXoaiLO002WziYhPSP8qLeOfv4lUIVNDDdBI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=XDQgoYhzLB1XsKLafILGmqd0YGsnN0nbPJHcJvNgo0e9h6urfd8eONU8I1fRsk9vZ
+	 t8KRELDKpo0U/YkqQ15tASfqFXYWezQ/kFtwjshV5bXG8s7NS2s5frdw26wLdn0wri
+	 4L+4v7faS0/1zWMMF/aqzaT5dam9UzUGCRp8jFyiEn1ylnSW5dmpsOvV4arI3xm6qe
+	 jQHfiWibd4x2jh6cEbk1ATEYt0rgydieaU4aAfuqaeLFt/BAPaL5JwFuKCK3txZdZf
+	 a8besfPzisZ9qNerp1H29SsSAYGosVacDRo9Hf7G6ThpnCs31+2XF6GYd397dPVLOq
+	 NGI0Dd2AU2CdQ==
+Date: Tue, 10 Nov 2026 06:11:36 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: sashiko-reviews@lists.linux.dev
+Cc: David Howells <dhowells@redhat.com>, bpf@vger.kernel.org,
+	dm-devel@lists.linux.dev, fsverity@lists.linux.dev,
+	keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+	Alasdair Kergon <agk@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>, Alex Shi <alexs@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Benjamin Marzinski <bmarzins@redhat.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Dongliang Mu <dzm91@hust.edu.cn>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Ignat Korchagin <ignat@linux.win>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	James Morris <jmorris@namei.org>, Jiri Olsa <jolsa@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Shuah Khan <skhan@linuxfoundation.org>, Song Liu <song@kernel.org>,
+	"Theodore Y. Ts'o" <tytso@mit.edu>,
+	Yanteng Si <si.yanteng@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v7 2/3] KEYS: Replace assoc_array with rhashtable
+Message-ID: <avKZeB9VH0cavfr4@kernel.org>
+References: <20261110033738.2495880-1-jarkko@kernel.org>
+ <20261110033738.2495880-3-jarkko@kernel.org>
+ <sashiko-outbox-206155@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,78 +84,32 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <sashiko-outbox-206155@kernel.org>
 
-Thank you for your contribution! Sashiko AI review found no new issues
-in this patch, but noticed 1 related pre-existing issue it does not
-introduce:
-- [Critical] veth: race on rq->xdp_rxq in veth_disable_xdp() [1]
---
+On Tue, Nov 10, 2026 at 03:56:03AM +0000, sashiko-bot@kernel.org wrote:
+> [Severity: Medium]
+> As reported by Eric Biggers on v5 [1], should keyring_link_params set
+> .insecure_elasticity = true instead of looping on -EBUSY here?
+> 
+> Without .insecure_elasticity, rhashtable_insert_fast() enforces the
+> 16-entry bucket chain limit (RHT_ELASTICITY) and returns -EBUSY to trigger
+> a rehash.  Because keyring_obj_hashfn() only hashes the 32-bit link->hash
+> via jhash_1word(), entries with colliding 32-bit SipHash digests cannot be
+> split by rehashing with a new seed, so __key_link_begin() can spin
+> indefinitely in this loop while holding keyring->sem.  This was fixed in
+> v6 by setting .insecure_elasticity = true and dropping the retry loop, but
+> appears to have been lost in v7.
 
-commit 7b602275436247ecf1d76650c01ef17cdab5904b
-Author: Tianyi Gao <tianyi@cloudflare.com>
+Ugh, I fixed this already.
 
-xdp: warn on XDP_PASS with stored values when XDP runs on an skb
+Clearly something went wrong with the rebase :-/
 
-This commit adds xdp_skb_ext_warn_skb() to warn when an XDP program running
-on an existing skb returns XDP_PASS after storing skb extension metadata,
-and skips generic XDP in xdp_skb_ext_warn_pass() to avoid warning twice.
+I'll manually apply v6 patches and send v8.
 
-> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-> index b402f8ed50966..f0d279e2da6a4 100644
-> --- a/drivers/net/veth.c
-> +++ b/drivers/net/veth.c
-> @@ -826,6 +826,8 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_r=
-q *rq,
-> =20
->  	switch (act) {
->  	case XDP_PASS:
-> +		if (unlikely(xdp_buff_has_skb_ext(xdp)))
-> +			xdp_skb_ext_warn_skb(xdp_prog, xdp);
->  		break;
->  	case XDP_TX:
->  		veth_xdp_get(xdp);
+I honestly don't know what happened (likely the branch was not up to
+date in the first place). Sorry.
 
-[Severity: Critical]
-This problem wasn't introduced by this patch, but can veth_disable_xdp()
-unregister rq->xdp_rxq [1] while veth_xdp_rcv_skb() or
-veth_xdp_rcv_one() is still using it?
-
-drivers/net/veth.c:veth_disable_xdp() {
-	for (i =3D 0; i < dev->real_num_rx_queues; i++)
-		rcu_assign_pointer(priv->rq[i].xdp_prog, NULL);
-
-	if (!netif_running(dev) || !veth_gro_requested(dev))
-		veth_napi_del(dev);
-
-	veth_disable_xdp_range(dev, 0, dev->real_num_rx_queues, false);
-}
-
-When detaching an XDP program on a running veth device with GRO enabled,
-veth_disable_xdp() skips veth_napi_del(), so neither napi_disable() nor
-synchronize_net() runs after clearing rq->xdp_prog:
-
-CPU0                                CPU1 (NAPI)
-veth_disable_xdp()                  veth_xdp_rcv_skb()
-                                      rcu_read_lock()
-                                      xdp_prog =3D rcu_dereference(rq->xdp_=
-prog)
-  rcu_assign_pointer(rq->xdp_prog, NULL)
-  veth_disable_xdp_range()
-    rq->xdp_rxq.mem =3D rq->xdp_mem
-    xdp_rxq_info_unreg(&rq->xdp_rxq)
-                                      bpf_prog_run_xdp(xdp_prog, xdp)
-                                      xdp_skb_ext_warn_skb(xdp_prog, xdp)
-                                        xdp->rxq->dev->name <-- NULL deref
-
-xdp_rxq_info_unreg() clears rq->xdp_rxq.dev to NULL and resets
-rq->xdp_rxq.mem.type while the NAPI poll is still running with xdp->rxq
-pointing to rq->xdp_rxq.  Beyond the NULL pointer dereference on
-xdp->rxq->dev (here or when the BPF program reads ingress_ifindex), this
-also causes page_pool leaks or use-after-free when frames are redirected,
-transmitted, or freed.
-
-[1] https://sashiko.dev/#/bug/linux-717ec225-ebb9-408c-a2e0-a2698846ef4a
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1794281983.gi=
-t.tianyi@cloudflare.com?part=3D10
+Br, Jarkko
