@@ -1,83 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.242.206.163
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794273782;
-	b=QriT5xZiHvDSKF4bSkuYaoBHPIECiphvjGnlvCBFRjyZzBqrSjQYfR4bTTfEz7d71XAs
-	 ipQXPEX6Cw7LJBbH5677/j2vUtLS/kOOhgG+jLRGsiU8ov8HD4qXALoBxWmL9r1wrtkri
-	 cIW/tBYblLxtaZ+KkhQ85NDzQOVCkOyUS3XgvEEtq6dQdwR43urQNaIzRCpZALFplNXfC
-	 7xGmvKGSqJVDIrodGjithMkH0nPxAMwxoqySxHhOS+bbV3xpqoe+J/xrPoa/9oxlaMyKK
-	 CSd0Q/s1EZYEvWmuLjhgSP8fIWxRMcpu24KiQ3AV2mXUZxV6JOWhPTKwlmIlSg268qg==
+	t=1794274156;
+	b=UziY3EFTBYM+O2wNqXXp0RNwxvLeHduOL45DnQP6VGmXnQHhFNMc+rZuY1EL1/+s5kXM
+	 ziHHbdE0mMKBWNI8yBPv/RXC0I7Fa1YIiu9gImU/0cOBYKD31aGNTUgLy66yCaAAsppeE
+	 IyxW5L3OiRzUPrcIfX8M1KYy/g1V/XqzkCspOENlXbaB8vgm/0lrXYZ8zs7G2ouUjm32X
+	 fyUrrkt+qBVai3RQbPZonFoaCrK0WybN4bo61kdnkEznu5aYCsL9R6viWZ0/mgQWhTMaH
+	 6BehMviLVT2R+ARjULXInChrAjvtkk8EjNt7wMRmpNe/pY62I0GPsk/L6FUe9t+A0dw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794273782;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=zDcWjEiuTeWEvpP/9tc/MwWduB+JGfUQadQax8dMPQY=;
-	b=Uk9mO58VhH0lRPs6EodSMIZj73z/p6wzLEfopGDLxGxc3KdZwQtENnWpc/gsaet7PJ/F
-	 88mvakm+83GVVgy5s7o7Jlc2uhbwduSvarecg09mamMORIwUeIrLc1BBY2nns/kJiv11N
-	 WQcQQvpywSRQyVmr95BFXg7ER2nP43d6H6PEh0qPyldzBTy5p8Pe+u2TmYf3yBN0LSJxv
-	 aLig0hnEpuiJufE8lEjF8CAljr3dDqrpUzY9CJOiIHEXhzcKr2JV9YnpnIlop6y+CuzS+
-	 mfRj6UB1KQHD/3Kgt5obCillBAr+3+3m1YRgEzmYF6RTN4R6SNt6dasrWebrdf4YTIw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794274156;
+	h=DMARC-Filter:Received:Received:Subject:To:Cc:References:From:
+	 Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:Content-Type:
+	 Content-Language:Content-Transfer-Encoding:X-CM-TRANSID:
+	 X-CM-SenderInfo:X-Coremail-Antispam;
+	bh=aVUk5KNfoVM/ifJWEbEfsYize+Uhc5V1gasZQZSUIGY=;
+	b=QvFlxPoJhuEV8qe/bUeFzuMSRAdzwkTTzM2JomgJUfrFzYFqluf00AfrUo20DUsvxI3X
+	 HqL42ooaPCNRQWY9dtOeIL/g81Nyq837LWS7oJ+lMo0CZZJoKSm30jlHvkgTfeEpkMQ+p
+	 KSn7fBbGn4L1ZgQS6+oukbbYjNdlYEn+dFl2+4hcb+A1kLQttvORBw7UiKzcxc2ih6kJO
+	 /zD78somK1CVjxz1UMXXzN0uqmBkiMvNL9ZLYA/vRyZCxz737dz+Yo8w17qY+S5kmCyEK
+	 6bJ4xpOFw+cWG1/5t1CmYjv/R1tIJkwhqyiHe5t/EglESH2EJFArlN4pfry2b4VmF9A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Cs29LN2V;
-	arc=none smtp.remote-ip=95.215.58.18
-Received: from mta1.migadu.com (out-18.mta1.migadu.com [95.215.58.18])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C070960A382B
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 01:23:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C070960A382B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Cs29LN2V
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=B8IHCXgmRdg1OYPmSUOl1x4rvW8jBb9fhzbRGWNLTsM=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794273779; v=1; x=1794878579;
- b=Cs29LN2VHlAOEjnMd3Gru4jSkSiDLqmKvlECKk9+WEUqQTAxpk0Ydjl1qntxQHcq0ojBh7R/
- GdkG3PuyxOiBui1dNP3zOp26WWCyg9Jvd2KNk4s1kGbOfXKMeUU9O/2VQajlimu98U7glguSp/A
- QUL3lHHpNQ+dAWDBtCFWHSOw=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 492985442f232e3a;
-	Tue, 10 Nov 2026 01:22:58 +0000
-X-Mizu-Trace-ID: 492985442f232e3a
-X-Migadu-Flow: FLOW_OUT
-From: Vineet Gupta <vineet.gupta@linux.dev>
-To: dennis@kernel.org,
-	tj@kernel.org,
-	cl@gentwo.org,
-	peterz@infradead.org,
-	mingo@redhat.com,
-	will@kernel.org,
-	boqun@kernel.org
-Cc: longman@redhat.com,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	ast@kernel.org,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	acme@kernel.org,
-	yonghong.song@linux.dev,
-	eddyz87@gmail.com,
-	martin.lau@linux.dev,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	morbo@google.com,
-	justinstitt@google.com,
-	llvm@lists.linux.dev,
-	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [RFC PATCH 2/2] local_lock: do not put btf_type_tag on the lock guard type
-Date: Mon,  9 Nov 2026 17:22:35 -0800
-Message-ID: <20261110012235.1024461-3-vineet.gupta@linux.dev>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261110012235.1024461-1-vineet.gupta@linux.dev>
-References: <20261110012235.1024461-1-vineet.gupta@linux.dev>
+	dmarc=none header.from=loongson.cn;
+	spf=pass smtp.mailfrom=loongson.cn;
+	arc=none smtp.remote-ip=114.242.206.163
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69431606A321;
+	Tue, 10 Nov 2026 01:29:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 69431606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [123.138.236.242])
+	by gateway (Coremail) with SMTP id _____8DxUNFic_JqZQQeAA--.21498S3;
+	Tue, 10 Nov 2026 09:29:06 +0800 (CST)
+Received: from [127.0.0.1] (unknown [123.138.236.242])
+	by front1 (Coremail) with SMTP id qMiowJDxTs9gc_Jq7l0zAA--.39359S2;
+	Tue, 10 Nov 2026 09:29:05 +0800 (CST)
+Subject: Re: [PATCH v2] mm/slub: Genericize x86-specific cmpxchg16b comment
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Vlastimil Babka <vbabka@kernel.org>, Harry Yoo <harry@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>
+Cc: linux-mm@kvack.org, loongarch@lists.linux.dev, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20261109035906.10857-1-yangtiezhu@loongson.cn>
+ <DMQW32TTNOPX.24GN6Q7VI6QJR@gmail.com>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <145c23ea-bc4d-b235-c822-df94b00a647a@loongson.cn>
+Date: Tue, 10 Nov 2026 09:29:04 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -87,91 +58,51 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <DMQW32TTNOPX.24GN6Q7VI6QJR@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:qMiowJDxTs9gc_Jq7l0zAA--.39359S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj9xXoWruryxJF1kWr43AFykXF43urX_yoWfGFb_Cw
+	n8GF1vkw18XFnayF10kF12vryUuws2qrs7ZrZ8JFyYy34kt3s5CFs5Cr4fGr15XFsayrs3
+	Kw4DXF9xZFZxCosvyTuYvTs0mTUanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvT
+	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+	cSsGvfJTRUUUbDkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+	vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	WUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8
+	JVW8Jr1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2
+	x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1D
+	McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7
+	I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCF
+	x2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r
+	1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij
+	64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
+	0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+	0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Dl1DUUUUU==
 
-local_lock.h applies __percpu the same way the per-cpu declarations do,
-and hits the same problem as the previous patch:
+On 11/10/26 2:25 AM, Alexei Starovoitov wrote:
+> On Sun, Nov 08, 2026 at 07:59 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>> atomic primitive is satisfied by different hardware implementations:
+>> (1) arm64: satisfies it via LSE atomics ('casp' instruction)
+> [...]
+>> Update the comment to "double-width atomic cmpxchg", which provides the
+>> following advantages:
+>> (1) Accurately describes the cross-platform hardware invariant.
+> 
+> You ignored Hao's point about shorter commit logs.
 
-	DEFINE_LOCK_GUARD_1(local_lock, local_lock_t __percpu,
-			    local_lock(_T->lock),
-			    local_unlock(_T->lock))
+If the following shorter commit message is preferred:
 
-	local_lock.h:86:1: warning: ignoring attributes applied to
-	'struct local_lock' after definition [-Wattributes]
+   mm/slub: Genericize x86-specific cmpxchg16b comment
 
-which -Werror turns into a build failure, four times over: the same
-pattern is repeated for local_lock_irq, local_lock_irqsave and
-local_lock_nested_bh.
+   In __kmalloc_nolock_noprof(), update the comment from x86-specific
+   "cmpxchg16b" to generic "double-width atomic cmpxchg".
 
-local_lock_t is a typedef of struct local_lock, and DEFINE_LOCK_GUARD_1()
-hands its second argument to cleanup.h, which forms a typedef of it and a
-guard struct holding a pointer to it. An x86 defconfig preprocesses the
-line above to
+I will wait for a while for more feedback from mm maintainers and send
+v3 if necessary.
 
-	typedef local_lock_t __seg_gs
-	__attribute__((btf_type_tag("percpu"))) lock_local_lock_t;
-
-	typedef struct { local_lock_t __seg_gs
-	__attribute__((btf_type_tag("percpu"))) *lock; } class_local_lock_t;
-
-Both put the tag on local_lock_t, an aggregate: the first on a typedef of
-it, the second on the pointee of the guard's member. Every variant of an
-aggregate shares one DIE, so there is nowhere to record it, exactly as for
-DECLARE_PER_CPU() of a struct. clang writes the annotation into DWARF
-without complaint, but pahole does not translate it from that position,
-so with today's toolchains it reaches BTF from neither compiler.
-
-Use __percpu_var here too, which leaves
-
-	typedef local_lock_t __seg_gs lock_local_lock_t;
-	typedef struct { local_lock_t __seg_gs *lock; } class_local_lock_t;
-
-Sparse keeps the __percpu address space, and the __releases() casts to
-"local_lock_t __percpu **" further down are unchanged, so the pointer
-spelling the tag exists for keeps it.
-
-Unlike the per-cpu declarations this changes no BTF at all. A tag in that
-position was never recorded, so there is nothing to remove, and the one
-percpu TYPE_TAG that does reach a local_lock type comes from those casts,
-which keep it. An x86 defconfig built with clang is identical with and
-without this patch: 152551 BTF types and a 6828300 byte .BTF either way,
-and .text is unchanged. The patch removes a GCC diagnostic and no more.
-
-Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
----
- include/linux/local_lock.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/include/linux/local_lock.h b/include/linux/local_lock.h
-index b8830148a859..9d3d62e46007 100644
---- a/include/linux/local_lock.h
-+++ b/include/linux/local_lock.h
-@@ -83,13 +83,13 @@
- #define local_trylock_irqsave(lock, flags)			\
- 	__local_trylock_irqsave(__this_cpu_local_lock(lock), flags)
- 
--DEFINE_LOCK_GUARD_1(local_lock, local_lock_t __percpu,
-+DEFINE_LOCK_GUARD_1(local_lock, local_lock_t __percpu_var,
- 		    local_lock(_T->lock),
- 		    local_unlock(_T->lock))
--DEFINE_LOCK_GUARD_1(local_lock_irq, local_lock_t __percpu,
-+DEFINE_LOCK_GUARD_1(local_lock_irq, local_lock_t __percpu_var,
- 		    local_lock_irq(_T->lock),
- 		    local_unlock_irq(_T->lock))
--DEFINE_LOCK_GUARD_1(local_lock_irqsave, local_lock_t __percpu,
-+DEFINE_LOCK_GUARD_1(local_lock_irqsave, local_lock_t __percpu_var,
- 		    local_lock_irqsave(_T->lock, _T->flags),
- 		    local_unlock_irqrestore(_T->lock, _T->flags),
- 		    unsigned long flags)
-@@ -100,7 +100,7 @@ DEFINE_LOCK_GUARD_1(local_lock_irqsave, local_lock_t __percpu,
- #define local_unlock_nested_bh(_lock)				\
- 	__local_unlock_nested_bh(__this_cpu_local_lock(_lock))
- 
--DEFINE_LOCK_GUARD_1(local_lock_nested_bh, local_lock_t __percpu,
-+DEFINE_LOCK_GUARD_1(local_lock_nested_bh, local_lock_t __percpu_var,
- 		    local_lock_nested_bh(_T->lock),
- 		    local_unlock_nested_bh(_T->lock))
- 
--- 
-2.53.0-Meta
+Thanks,
+Tiezhu
 
