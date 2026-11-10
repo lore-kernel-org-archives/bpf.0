@@ -1,75 +1,69 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=45.157.188.13
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794342660;
-	b=WmaLMxUTgibGsKOzCIxn15Vf1pY88EPoBTXD8tDpTbeIBaYnbtSYYakd3FX3YMl0rem+
-	 eB0N0hRfOEWgY3sr/ffGYTB6ItSgnL28A5TslfqehaEHrhBJZOdXL/7Nzmbf4ywzgzEaG
-	 UpxU/SxNRuWz6OWtaxx0E8zzn0oepCMkgNKcriFneit+wRo3OTFf5lmDOOcOKUkjVpdW4
-	 xqRhq6mxf4w4MxwusO/XRVCqII2kJECvIC1q+ulYJYnTefYhoGhzSQf+mNBv1Uh7tCQLm
-	 062Hu8tT/jhq1RdxP9hEB6eJ1/adhk0rRAbVEQu1dF3Ada4NwI8GttLjt9t0v1FXJHA==
+	t=1794342815;
+	b=oUNN2nMJVZoKWZ2dmuAauReyvPXnKPt42HC5kYPsoNG/2gh+ZDlMP0BMmWXbvEDWpWs9
+	 1DR77QRpwB/6f9ofVDMWE/kypCLn77BlGncRsDZMOd46bLRtK+AAFko2qxhaDXWikQmtf
+	 eWFGTeLJOT8ctk5dnxU9kirj5wYRaoo0O/PsTVRw03m+bvGV7wZAYaInP8sBjHpcepngX
+	 ZiofJChXo4ZR1m58VRr4BdTz724N5xM1BS7Ar66HsLszVw+cVseDYdKIJkqplM0ehoJ8t
+	 CDNkUxJ6lxPFmUf0vsbcgA6uV7tG4X1mJB/Z4/GloCMfxOl8nKM8zd8JXQ+kbJiN5rA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794342660;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:From:To:Cc:Subject:
-	 Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-Infomaniak-Routing;
-	bh=xyJt/IA562jYSqS9g8xyRoMMlRr+/oArZPwne7/nZrs=;
-	b=HJ1UtlvcK4EUhNJZd8Na1i02jFNaQsKyKCmi+saMQKdqYMN1doLryFIwGwY/jV4Uwf2e
-	 y14A0asYYOASaHhOU+Of0PrnyFSiakCuhUrmw/ZhEGevV/h3UTe4Xq/T227biabvmQ1MI
-	 83fpNIDZZORB+R05/l6849YbExfqCXGOU44GmWXBMjNTLmhHsHiN1TLWTOoNtYBkIhUbx
-	 NqRPt0fxgCVSAhUmjTqlcNCx7qg0w5XZSTpyZWSxxg1YlwGBP4Qv4BPGi+El+jjZTp7Lq
-	 pJI5wI2ZtFEvXFMKxf0lDSc2AQ8TyEqdSH5kFfNTC1iwt7GLwKfN/X4HV0Cf/SX5N7A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794342815;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=/8ocYQBe3YFFmUUoCd3DPsEeCobQ/m4s1lpafYEhyRg=;
+	b=X9EOAID8DdGFcoeil1CTesvIx6/NGwxE6dflt97+Z0VKmpetc+6DIbfpgrHZKOu9i1zN
+	 SR25xOiiUkhoegxd3mUv6eB5qUihRvM0MPYjNyDChC3SU6RT7wAjGTJpBN8JRe9dRmKr8
+	 p7INRaVBAEJfrw6Dtw6PiMfxM1ciJFb6IgrNUr/L1DekIRg+zOHykE0B0rrCjW/ohcwJK
+	 H6no8N7Bvb0fhHQ8U8GYP563LOJuNlkDprmc6Q6onK2LQgVj7KhMZBcSfV2Bi+iK12eNk
+	 B2LeRHoQgNQqD8rKPSRCA3810IIz6r7ejgPNs0Jpu53SjWUmLGjoXxBhH24zIkVbPag==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=digikod.net;
-	spf=pass smtp.mailfrom=digikod.net;
-	dkim=pass header.d=digikod.net header.i=@digikod.net header.a=rsa-sha256 header.s=20191114 header.b=RkE1Cx9q;
-	arc=none smtp.remote-ip=45.157.188.13
-Received: from smtp-bc0d.mail.infomaniak.ch (smtp-bc0d.mail.infomaniak.ch [45.157.188.13])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Mi6pzJbm;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98E8A607252C
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 20:30:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 98E8A607252C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97D03606AD47;
+	Tue, 10 Nov 2026 20:33:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.a=rsa-sha256 header.s=20191114 header.b=RkE1Cx9q
-Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4jPJFS1k6pzGDf;
-	Tue, 10 Nov 2026 21:30:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1794342651;
-	bh=xyJt/IA562jYSqS9g8xyRoMMlRr+/oArZPwne7/nZrs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=RkE1Cx9qAQvpLdQzufswkGl40o1xzLZO7MgdBSyik5rHM8qNAiJPlA8vGIBKwww83
-	 LihVFyDjCuxZMjCA7a9IlSXv1N1WxZe5d74TNG5vf5RQAc6wqA6j9pylHHNVdyS67t
-	 YS/A735saKW0Di89c3fbbOx50xtBb6wBqs5HuEiI=
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4jPJFQ52LqzyHT;
-	Tue, 10 Nov 2026 21:30:50 +0100 (CET)
-From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To: Casey Schaufler <casey@schaufler-ca.com>,
-	Georgia Garcia <georgia.garcia@canonical.com>,
-	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
-	James Morris <jmorris@namei.org>,
-	John Johansen <john.johansen@canonical.com>,
-	=?UTF-8?q?Ondrej=20Mosn=C3=A1=C4=8Dek?= <omosnacek@gmail.com>,
-	Paul Moore <paul@paul-moore.com>,
-	Serge Hallyn <serge@hallyn.com>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>
-Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	Christian Brauner <brauner@kernel.org>,
-	KP Singh <kpsingh@kernel.org>,
-	Matt Bobrowski <matt@bobrowski.net>,
-	apparmor@lists.ubuntu.com,
-	bpf@vger.kernel.org,
-	kernel-team@cloudflare.com,
-	linux-kernel@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	selinux@vger.kernel.org
-Subject: [PATCH 3/6] apparmor: Use security_capable_lsm() for policy capabilities
-Date: Tue, 10 Nov 2026 21:30:37 +0100
-Message-ID: <20261110203042.2410140-4-mic@digikod.net>
-In-Reply-To: <20261110203042.2410140-1-mic@digikod.net>
-References: <20261110203042.2410140-1-mic@digikod.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Mi6pzJbm
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9FAE1F0089F;
+	Tue, 10 Nov 2026 20:33:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794342815;
+	bh=/8ocYQBe3YFFmUUoCd3DPsEeCobQ/m4s1lpafYEhyRg=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Mi6pzJbmGbk+Y7lwP1y+fgu4twMGHVAMHHT1GHNSzeJCGFPvQY06WGUh0F8gG2d9B
+	 /46tdmMsmHUyjAa5hnJT820kJxQZpxX3Op1/JyjtNwjI1DdQs62lE+2EBrNXcaitWH
+	 voiG/bXJV3FyiQ3xLYvqu8YrDTYvbmT6E3mNzNYEfh1ZGZyOJPFQ5SN3KXspVAvYbe
+	 C8VwynMbJH3tkME+dSdl17rZ1/txeiLoBCXe9GCVQQ6+b7Q/MFDHi+WSvNvKCLJfOW
+	 EvgMKyHovR3fJ2W47FvmVHz8977Xi3TqMnyedOdXiIFANjpHXT33kCvtB1UL1Epsw/
+	 PIkgit8f9BXUg==
+Message-ID: <sashiko-outbox-207712@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [RFC PATCH v3 1/6] docs: security: Describe the Kernel
+ Assurance Plane design
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "HARIHARA SUDHAN. R" <harisudhan@armoriq.io>, linux-security-module@vger.kernel.org, "Paul
+ Moore" <paul@paul-moore.com>, "Kees Cook" <kees@kernel.org>, "James Morris" <jmorris@namei.org>, "Serge
+ E . Hallyn" <serge@hallyn.com>
+Cc: "Andrew Morton" <akpm@linux-foundation.org>, "Jonathan Corbet" <corbet@lwn.net>, "Randy
+ Dunlap" <rdunlap@infradead.org>, "Peter Zijlstra" <peterz@infradead.org>, "Ingo
+ Molnar" <mingo@redhat.com>, "Steven Rostedt" <rostedt@goodmis.org>, "Liam R
+ . Howlett" <liam@infradead.org>, "Lorenzo Stoakes" <ljs@kernel.org>, "Vlastimil
+ Babka" <vbabka@kernel.org>, "David Hildenbrand" <david@kernel.org>, "Mike
+ Rapoport" <rppt@kernel.org>, "Michal Hocko" <mhocko@suse.com>, "Mel Gorman" <mgorman@suse.de>, "Suren
+ Baghdasaryan" <surenb@google.com>, "Ben Segall" <bsegall@google.com>, "Dietmar
+ Eggemann" <dietmar.eggemann@arm.com>, "Juri Lelli" <juri.lelli@redhat.com>, "K
+ Prateek Nayak" <kprateek.nayak@amd.com>, "Valentin Schneider" <vschneid@redhat.com>, "Vincent
+ Guittot" <vincent.guittot@linaro.org>, "Shuah Khan" <skhan@linuxfoundation.org>, "Ketan
+ Bhardwaj" <ketan@armoriq.io>, bpf@vger.kernel.org, linux-mm@kvack.org
+In-Reply-To: <20261110202246.274-2-harisudhan@armoriq.io>
+References: <20261110202246.274-1-harisudhan@armoriq.io>
+ <20261110202246.274-2-harisudhan@armoriq.io>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 10 Nov 2026 20:33:30 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -78,83 +72,63 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
 
-AppArmor checks CAP_MAC_ADMIN for policy management and CAP_MAC_OVERRIDE
-for unconfined stacking with cap_capable() instead of capable(), so that
-other stacked LSMs do not have to authorize them.  This also lets a
-process in a Landlock domain that denies CAP_MAC_ADMIN manage AppArmor
-policy, and one that denies CAP_MAC_OVERRIDE avoid the stacking
-restriction on unconfined profile changes.
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Low] docs: security: kap: contradictory epoch semantics for bound
+  tasks
+--
 
-Commit 31ec99e13346 ("apparmor: switch to apparmor to internal capable
-check for policy management") made this choice for CAP_MAC_ADMIN.
+commit 77da64268c0c9921ecf4f2c4a0222c86b4687cb2
+Author: HARIHARA SUDHAN. R <harisudhan@armoriq.io>
 
-Switch these checks to security_capable_lsm(), which keeps this choice
-for LSMs that only implement the capable hook.  policy_ns_capable()
-still makes its own aa_capable() check.  Update the comments that
-described these checks.
+docs: security: Describe the Kernel Assurance Plane design
 
-Cc: Georgia Garcia <georgia.garcia@canonical.com>
-Cc: Günther Noack <gnoack@google.com>
-Cc: John Johansen <john.johansen@canonical.com>
-Cc: Paul Moore <paul@paul-moore.com>
-Fixes: 97c8386f1d74 ("landlock: Enforce capability restrictions")
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
----
- security/apparmor/domain.c | 9 +++++----
- security/apparmor/policy.c | 7 ++++---
- 2 files changed, 9 insertions(+), 7 deletions(-)
+This commit adds security documentation and securityfs ABI documentation
+describing the Kernel Assurance Plane (KAP) design, Intent Lineage Groups,
+and control plane files.
 
-diff --git a/security/apparmor/domain.c b/security/apparmor/domain.c
-index af9e8431e3ea..d2c111783457 100644
---- a/security/apparmor/domain.c
-+++ b/security/apparmor/domain.c
-@@ -884,11 +884,12 @@ static bool is_profile_priv_restricted_to_stack(const struct cred *subj_cred,
- {
- 	if (profile_unconfined(profile) && profile == profile->ns->unconfined &&
- 	    aa_unprivileged_unconfined_restricted &&
--	    /* cap_capable returns false (0) if true, hence true here means
--	     * doesn't have capability and the stack will be restricted
-+	    /* security_capable_lsm() returns 0 if CAP_MAC_OVERRIDE is granted,
-+	     * otherwise the stack will be restricted
- 	     */
--	    cap_capable(current_cred(), &init_user_ns, CAP_MAC_OVERRIDE,
--			CAP_OPT_NOAUDIT))
-+	    security_capable_lsm(current_cred(), &init_user_ns,
-+				 CAP_MAC_OVERRIDE, CAP_OPT_NOAUDIT,
-+				 LSM_ID_APPARMOR))
- 		return true;
- 	return false;
- }
-diff --git a/security/apparmor/policy.c b/security/apparmor/policy.c
-index 63f7821b4dff..ba162d921805 100644
---- a/security/apparmor/policy.c
-+++ b/security/apparmor/policy.c
-@@ -876,8 +876,8 @@ static int audit_policy(struct aa_label *subj_label, const char *op,
- 	return error;
- }
- 
--/* don't call out to other LSMs in the stack for apparmor policy admin
-- * permissions
-+/* don't ask other LSMs' capable hooks about apparmor policy admin
-+ * permissions, only LSMs restricting capability use through capable_lsm
-  */
- static int policy_ns_capable(const struct cred *subj_cred,
- 			     struct aa_label *label,
-@@ -886,7 +886,8 @@ static int policy_ns_capable(const struct cred *subj_cred,
- 	int err;
- 
- 	/* check for MAC_ADMIN cap in cred */
--	err = cap_capable(subj_cred, userns, cap, CAP_OPT_NONE);
-+	err = security_capable_lsm(subj_cred, userns, cap, CAP_OPT_NONE,
-+				   LSM_ID_APPARMOR);
- 	if (!err)
- 		err = aa_capable(subj_cred, label, cap, CAP_OPT_NONE);
- 
--- 
-2.56.0
+> diff --git a/Documentation/security/kap.rst b/Documentation/security/kap.=
+rst
+> new file mode 100644
+> index 0000000000000..e002a081c6607
+> --- /dev/null
+> +++ b/Documentation/security/kap.rst
 
+[ ... ]
+
+> +O1 finishes its first stage. The controller advances O1 to a new authori=
+ty
+> +generation that is narrower: no package cache, no network. It writes the=
+ new
+> +authority and a higher epoch to O1's igroup. O2's igroup is untouched.
+> +
+> +From its next check, an already running O1 worker is held to the new aut=
+hority.
+> +It cannot reach the cache or the network even though it could a moment a=
+go, it
+> +was not asked to drop anything, it was not restarted, and O2 is unaffect=
+ed. If
+> +instead the controller revokes O1, the next O1 check fails closed.
+
+[ ... ]
+
+> +``epoch``
+> +  Monotonic authority generation. Installing a higher epoch fails every =
+task
+> +  still bound to an older one closed from its next check.
+
+[Severity: Low]
+Does advancing an igroup's authority_epoch hold already-bound tasks to the
+new authority, or does it cause them to fail every check closed?
+
+The motivating example above states that writing a new authority and a
+higher epoch to O1's igroup holds an already-running O1 worker to the
+narrower authority, whereas the epoch definition here and the
+kap.authority_epoch entry in Documentation/ABI/testing/securityfs-kap say
+that installing a higher epoch causes tasks bound to an older epoch to
+fail KAP checks closed.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261110202246.274-=
+1-harisudhan@armoriq.io?part=3D1
