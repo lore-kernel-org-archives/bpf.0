@@ -1,83 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.71
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.132
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794270471;
-	b=MT3r+94urhtKeTYOnJFIZcDYN8Fls8249bjC9gn8Mj0F4byeuhHCs6sHIayC/IrYJt4d
-	 2OxXQiEKb4UPngaAoUvBxgD9R4Lv8rctRGA+TLglEz36KDHTYPOa/VCC/hqMzDdE9agRn
-	 iWZBQxy8FbdIAMGmL/VHTj1Q5trbPOMh64R7u8KYoX70cJL+tMNL3C4B8KqQk5qejb3VD
-	 Ebioxbu9DfiqxMRuL4XntqVRc8ytYFwtBOQmZtvPEU9WL1lZiTi83iwSr6qd4XY49v5Mb
-	 c0ANf9D7mSSzXekRwNf9D9xNKdDTjKZ9HN9SoSM0eQqhANCAzXEs+pDTRaNf9xnBGgA==
+	t=1794270472;
+	b=PQ+wV5Y7ce1vNW1ymBz2z230n0+26U4IOu0Qot9dSGu/w4WCToEtEzhPfJjNJPn/2zx3
+	 vFd2dsWeOlaG+oY3QIL6Bd6NbbI574a7Q5J+KS2Q4r28GsyCCD1p0v1/Qschgc1/vQzHf
+	 vTtSCb30HMJ3ppr2SL4JZJIj3Nyiy8KdocUXs9R47Zss1YOPoc0Xll1QICZ9ib7iJ/y+p
+	 +pVUI+NhDxYZOU/WzpxOaYW0Y1iMX7olvZi7B9TPweADBQIwRauirOxjEy+Ssy9w9OZVo
+	 Cj+bUc5mtIaGZmyUKQ3Y2pbASaMI4ljWq+mAIdQPk5AGEDBUtCx5J0W48YLgC6hr0AA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794270471;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794270472;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
-	bh=CU3d0XcQLaaaWfi9UjENTKg67/NQ2TiAHdQitHJ2eYs=;
-	b=X3jz9r/Z2GIepBEteRGGqqazMVTYrYP0TdJfZltZmgmhe1cLALCEs30XuT5jrF7w/3su
-	 BBbAOb0T5wLKlQl+4HSMvdAV51sRzZK7E4vzmJ81W64DGiSo3m5uK1jkKEyUKxiuW1SLn
-	 mHF4hca0nMo4a8o/anKoKyW2Fe6+OFe/SsVcqNJt0zcSQIRvHksWZfIo94Kw80qM2gzmY
-	 kwcMNlVkUYu42ZXGJTwDhVIIuAhjDzsJxMwb2fV4f5jchSIWzsNSs9n3zo7zQSi42hLiq
-	 aih3oJooAS5/xCvXuHskVBAxapn75WGwZluEHhevGR9OCqu9MAhybP2CBHKwzjsOcVA==
+	bh=jVH95qnGG3MbLgLBbbehZ/2MDmDQXwPdlXtnNIx2msc=;
+	b=t/LyJLLtQBiPy9VlMJpZcfAhwll6e4Pv6L/qwzxzwrFDamJwpwnkRJ+xaLb1zOBr6PAr
+	 p8UZ9/lLGrEUs8rAINVeAlpjTcAsse0Yp07hDnSi+ourSQhtgo6CUmGGwaseQU7YE3/OZ
+	 wPAX9GQzO5nG7IIDaZiifWMA56MU0HpCSIk+JHJmTY3E+jWA2OVv6urde2XcpkU2LtmGp
+	 DD/GHuHJ3PKjAdN+FWex3WuyToO5ujespnCQx4V87NDBETaoCQ5YdMXB9ttiMq2NPcDj1
+	 ey7UJAvcYlwuIRnKuRNIGVEudDXu9XEqL7oqLe3sImA0/FYhC0oPXpe7nQmP1CpiIvA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jW9N+mU9;
-	arc=none smtp.remote-ip=74.125.225.71
-Received: from mail-wr2-f7.google.com (mail-wr2-f7.google.com [74.125.225.71])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=LiFXZHfx;
+	arc=none smtp.remote-ip=74.125.225.132
+Received: from mail-wm2-f4.google.com (mail-wm2-f4.google.com [74.125.225.132])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E9BC606A321
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 00:27:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5E9BC606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4B95606A332
+	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 00:27:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C4B95606A332
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jW9N+mU9
-Received: by mail-wr2-f7.google.com with SMTP id ffacd0b85a97d-48e0c9bc8f9so661364f8f.1
-        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 16:27:50 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=LiFXZHfx
+Received: by mail-wm2-f4.google.com with SMTP id 5b1f17b1804b1-4a20fcb3e9aso1648665e9.1
+        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 16:27:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794270469; x=1794875269; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794270470; x=1794875270; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=CU3d0XcQLaaaWfi9UjENTKg67/NQ2TiAHdQitHJ2eYs=;
-        b=jW9N+mU9xxqq47mxDYCVPHVKKa1A4AAcu36Utz8KZGRAvGn+H3h+mvkzrl+yaJwVPv
-         17tkrvuR/dPpV2km0vYUOO/Bq/qlUb0MN8+vUYXWVIB9ixPMWfrt+T/4KXqQ6LsZ+LuA
-         +J8znO7PgpiY8iDNswlbCtMbLIaatI22T6HEq/nRD0sZFYLlknradpMNSRXogIfexiM/
-         rtirkpUO86XOsdb6XHENNMhplC4yriIW/2UFR21gQau2AwpGJIFZ3alKj26pOcEQFWEz
-         nKS3z9vtFW+NpEiquGGp4iV68p2eznSX6R3nr1idMCwtI59KEnliDkApkpLKappdpOZp
-         VbyQ==
+        bh=jVH95qnGG3MbLgLBbbehZ/2MDmDQXwPdlXtnNIx2msc=;
+        b=LiFXZHfxWKDHyhM0lBP/apxUD3ppUYLQHE7xDPBEYljIw8M4tczXnjdiaEp8OQ1ndt
+         Ba+DOY3hzw+OQY64aoF5cDODTBoiXSICzkOnc1xjoWw8ueT3j8Mp3lItvFcN3GJKYhwB
+         Hbsfy8Vu2p0eToRoeaRKXmWqYL7VHAVvGfvbpnFofE1K7pbWmUSCEKp+JwcDUdbYV3lv
+         GFFhQo9akFdUbfkousUx0zx8Tcpsb3SKQlr02QQnH1SaDEhHAi405zJCJYYDeitYim/q
+         9asUnp0V3w1XyyE0gFDogPdc0wtvkF+0tihgPZdvGejfvUaRFEMeN/70/zi0+gxTIMqF
+         1Z2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794270469; x=1794875269;
+        d=1e100.net; s=20260707; t=1794270470; x=1794875270;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=CU3d0XcQLaaaWfi9UjENTKg67/NQ2TiAHdQitHJ2eYs=;
-        b=q95jpkfmv83+Nt5gmJ1l/8I6VhFeFSYTcB7Nm20jyqrfogwc7hNFqrah6jLlB5v41d
-         vZcSmiJcGtIpj0ROr6VIfoMQhn70R8BupOxwBmENC69Ia4RCR/XKyeTxpl8f58s2HXpX
-         r4oLMStyU6xdU6HziV3kjjeXAzQvza1TNYXwjidmUP+UWrkNcCXdX1TJUhuz0Gl9sfrL
-         uAy4KvCgKTzRjRO4VQL5eu6OU4CFcmENafJyZwhk91gIbg9vggNRUBMCcfJa7sljhRax
-         SLXKp//lsay4CQyqrNybEAr+1KTNhjtTzKttlORDdBnJEi7IVS2cDyG2h3iqc7KpbPR2
-         qJUw==
-X-Gm-Message-State: APuU4Z+mlxts4QfHI8QK/DZEk/obdN07jWBWpClDkzs0iDN/Ff9gnbrl
-	23Kf/gQ1/sx89vcTDZO10UbZZSHyUBgjnhmhrWtgetPAIQaK6OuEkRAN8t1Ms0QJ
-X-Gm-Gg: AYBFou2mXAw25CcmvfNX63b23oujnwfK4XtRwdtokQz+T94Gelowjc8TizADBurwUmt
-	X39k5vfW6UYjmOUtdS+j+8y85mlZ/Rbw1nk5AtUuihCngYhnFLyOQbChxbv7PAau6qIQ1XIk5++
-	Ulmh5cEOqIUrGylC2kMNjn9vTSLulf8WMhxdRsfcC89ikejvUjp3Xr78yZGucV7vTHZTzshtGTG
-	g9tNeLs9xJSb0qYBszoriaC8Wa3ujMRzDcZGh2kTEBkBOWcaPjlJFbXCkLJAvbroD0Pjm5lezyk
-	Rflxq1xHuWQLMU6DcGYV8AzXnEpJC5/HxeP9YxfURJLwoB3O/k3mvJyTPOoFRWjMgl76z3eSvun
-	etvmCuKmKP8L2Fq3eM6x+LiMCDzWfgVbAZpPXJ3leC8oJXPDqxLV2GcU+k7wls3Dfr+1WRAeIk9
-	RXs12+K+rc0Aw5jqvoUFoNTnyUdHjZF7j8WnZ2742XikZDs4GgX6nTo7WKplso27EUjvkbFiG0F
-	2T9iRDDOsPQrfbtLLQUPSNhSTUUlhDaAOCImeIljZMGLZnx5qzJXzODHrJ9k2nEV6gQJKG9YVPz
-	JZeJHUbhnJynLSophVG3ALxOrvPO37lzK/1lkGQVo7rG00iTrmuMc6NUUWG4Du6ItAZFqKtu/R5
-	s0yUJLjQmkUMuY1zzAN5AW/wxH51UC2GMWYPWBorXZHsOs9wFngvo5tASPk+Jrg/ILlxC
-X-Received: by 2002:a05:6000:4006:b0:48b:9d2:1a6a with SMTP id ffacd0b85a97d-4982b289bd0mr2121512f8f.1.1794270468465;
-        Mon, 09 Nov 2026 16:27:48 -0800 (PST)
+        bh=jVH95qnGG3MbLgLBbbehZ/2MDmDQXwPdlXtnNIx2msc=;
+        b=x/3vWnedPi34GFlxu2278GN//cFzWvraL748REnF7qf/BFFczMUwNDmodO1IDnvWes
+         OcQdwUI2Lfxncc1LqFfq9R3A301ZBP9MIVO+LB/lw0cVvyuFXODTeDC4UawBPUduUC7Q
+         10QT78CT6gOwi0yYNmKCfRB2VS3zjdYbc4YrMSSFH1YLswHMaXIy2fVfmb3mUJ1KX1wg
+         PI8KVpM8qVX7Q7K9AoeNcczBDNMQucDn2veRz0M97mt4J2f0xJVQF6XqNbSdK+/xJ9js
+         I14MZOT1NtWITDbobNZh8/B3l6ePWsq8vR4ahmsYb2BVngHqCCTOdrDMEFCIkjTLU6ZP
+         t2GA==
+X-Gm-Message-State: APuU4Z8vaQSoOKoByAu/VeHnB55NkOW5jFBKr3mJdAcK0Rmk41Rx4LWX
+	O7OlxUBfYswE25b0W6w9chIIU1RHUInqOSWzYihih5fIkaIac2iMkaWTgtjy99EW
+X-Gm-Gg: AYBFou1pKeyVh8NhLU2PnEXjYeyK8TIICkwmeVPyY0ghogp9I8lhppFtGJ4pL2xirad
+	CVHzgRy62QHayVmmwBooVhCtko8M7xHXI9jSDBOqiqQsy3O1+cLayfw0x/fSIbVtcLqokBzk/8h
+	br3wDJWATzIVsdQ1D75nht6GtosIUg8YNjYE78rsRXyLZFxAcx93jp67kUHP8Tvjr0RZcrpKY+L
+	ejE9BeW+Olt4OBSASvSY56cqq5PWFlaZurZOfES52iv6hOGr7txarARSfOPSjxMyJ9GmqlT8nBT
+	r9/VKKDcZt9+GrOjeKq7H1Gkcf4EoXZ7Y/bE7Agdz81WXSIQBpb7Q1G11vgU+8JYviJNZ8vlZq8
+	9/FWUhmnyvJjIf+dXpjNAudAVs4q9mY2DUcrPnpxvZzfL9C34lBGGrf0rZQVL2R66qSUTjpqd40
+	5q2mOM51CRqV6vVeznGuHG3pPfBI3wPdq4Z/rUltOlWpTlSTpzMe66d1d6skNcJ+oweXqls+1k+
+	LJK5VyOeIqDCwKYZh5KpUw+IkA+cSPq4q6FJHEwAtQFRpPwqk2fRNVCq3/eXSqpPQzClC98B8rt
+	UorFjCKVzdeSPOPWIUUW+NON6EAbbCgbN+Z4LEyyqSvIIkIj9b6zCaaMHaoUAi86yYjj6tW+m3e
+	uS9CyWFlVsAAe25yB/xp3DV2tCFjiAvvfXPdninBvq7r/0HsK9fHhllzqzCcD7HI4tR+Nt/VKiy
+	ofTwli+SfQsb3RgQ==
+X-Received: by 2002:a05:600c:5249:b0:4a1:88df:8a2a with SMTP id 5b1f17b1804b1-4ba0234d88amr13676095e9.13.1794270469991;
+        Mon, 09 Nov 2026 16:27:49 -0800 (PST)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4983284c990sm1752680f8f.3.2026.11.09.16.27.47
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba02387ad9sm26347705e9.5.2026.11.09.16.27.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2026 16:27:47 -0800 (PST)
+        Mon, 09 Nov 2026 16:27:49 -0800 (PST)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -90,9 +91,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Shakeel Butt <shakeel.butt@linux.dev>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 01/20] bpf: Add bpf_task_park() and bpf_task_wake()
-Date: Tue, 10 Nov 2026 01:27:23 +0100
-Message-ID: <1828a732fe7602f8d93fd972b3e3bb6b366a2a45.1794269506.git.memxor@gmail.com>
+Subject: [PATCH bpf-next v1 02/20] bpf: Invalidate what a bpf_task_park() sleep may free
+Date: Tue, 10 Nov 2026 01:27:24 +0100
+Message-ID: <6751e6b26413cb4ea40aa63fd6bbb211e54cae49.1794269506.git.memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1794269506.git.memxor@gmail.com>
 References: <cover.1794269506.git.memxor@gmail.com>
@@ -105,380 +106,261 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=17296; i=memxor@gmail.com; h=from:subject:message-id; bh=yHrK/3W+G59iK3hLAIBv7c/VrmFujAeS/7qF11NY7WY=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetTonOnscKrR+dfPHpV7LDpnrh1KnP9jaitVnOWPU9vV rKeeSuzo5SFQYyLQVZMkaXk/z4m4xOVvwNtl3HDzGFlAhnCwMUpABOJ1Wf4Z/R0V7hid/XFS2d7 F6gxFxxQ62qdzml95ZPcB375qjbdLoZ/Knp2GXu2iy3U33TNIPli3Z7Ebxsb3jzetdh81ds1xtK /mQE=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=11151; i=memxor@gmail.com; h=from:subject:message-id; bh=/Gibn7SGi56lxtjJhWE7PG6yPHUP1a8xjRaGb/HJMQs=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetTonOSAndOPPu2RR91r/qfvv1L6gDv5+XflQTWv3o39 6ZLna5lRykLgxgXg6yYIkvJ/31MxicqfwfaLuOGmcPKBDKEgYtTACZSv5WRYcbRn6+5555/E1Ht +XLP5eYr7OfWPLDkW5mtqsgkMDGlKIrhD0f3nXtTfm83WJ/9Q2Pb1E/GW+s/eDYHHBRZvLbXiXV KJQsA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Currently, there is no BPF primitive for a program to sleep for
-arbitrary lengths of time while waiting for a wake up controlled by
-another program to happen. Several BPF programs run in contexts where
-such unbounded sleeping can be harmful.
+bpf_task_park() drops the Tasks Trace RCU read section and the disabled
+migration that a sleepable program runs under, for the length of its
+sleep. Anything the program holds whose lifetime rested on either is
+not safe to touch afterwards. Teach the verifier which registers and
+stack objects those are and treat the call accordingly.
 
-Moreover, unbounded sleeps can be problematic, since a sleepable BPF
-program runs with migration disabled under a Tasks Trace RCU read
-section, and neither may be held across a sleep of unbounded length: the
-read section would stall every Tasks Trace grace period in the system,
-and a migration-disabled sleeper keeps rq->nr_pinned raised, which
-blocks CPU offline in balance_hotplug_wait() and pins its wakeup to the
-CPU it slept on.
+A pointer register, direct or spilled, is kept only when something other
+than the dropped protection holds its target:
 
-Introduce low-level primitives that let BPF programs construct such
-patterns. bpf_task_park() puts the current task to sleep and
-bpf_task_wake() makes a task runnable. The program keeps its own queue
-of waiters and its own condition for when the event has arrived, in
-arena memory, in graph nodes holding a task kptr, or in a map value, and
-checks the condition in a loop around the park:
+ - the stack, function and instruction pointers, which describe the
+   invocation itself;
+ - the context and the maps the program references directly, which the
+   runner holds for the whole invocation;
+ - the values of the program's own array maps. An array allocates its
+   values with the map and frees them only with the map, and the program
+   holds the map, so nothing can free such a value during the sleep.
+   The program's global variables are values of its .data, .bss and
+   .rodata arrays, and the compiler hoists their address out of a loop;
+   without this rule no loop around a park could read a global;
+ - arena memory, which the arena map holds and whose accesses tolerate
+   faults;
+ - pointers backed by a verifier-tracked reference, found through their
+   own id or through their parent's id, since the reference keeps the
+   object alive regardless of grace periods.
 
-	waiter				waker
+Everything else is marked invalid:
 
-	while (!cond)			cond = true;
-		bpf_task_park(...);	bpf_task_wake(task, 0);
+ - values of every other map type. A concurrent delete, an LRU eviction
+   or the teardown of the owning socket, task or inode frees their
+   elements after a grace period the sleeper no longer delays, or hands
+   them straight back to a preallocated map's free list;
+ - RCU and trusted pointers without a reference, including the task
+   pointer from bpf_get_current_task_btf();
+ - per-CPU pointers, since the task may resume on another CPU;
+ - inner maps found through a map-in-map lookup, together with their
+   values, which only the outer element holds. A map or value with
+   map_uid set came from such a lookup, so the array and map pointer
+   exemptions apply only when map_uid is zero.
 
-The kernel owns nothing per queue: there is no object to allocate,
-initialize, tear down, or synchronize against the map value going away.
-It keeps one word per task, bpf_wake_pending, which has to make that
-loop work.
+Dynptrs and iterators need a different treatment. They live in stack
+slots, and the program is obliged to release or destroy them later. The
+verifier cannot invalidate them the way it invalidates a register, and
+neither way of dropping them is sound:
 
-No wake is lost between the check and the sleep. The check is made in
-the program, so something has to carry a wake across the gap between it
-and the sleep, and the word does, the way the stop bit does for
-kthread_should_stop(). bpf_task_wake() stores the word and calls
-wake_up_state(); bpf_task_park() sets the task state, reads the word
-again, and sleeps only if it is clear. The barrier in
-set_current_state() pairs with the one in try_to_wake_up() that follows
-the waker's store, so either the waiter sees the pending wake or the
-waker sees it sleeping. A wake that finds its task running is kept until
-that task's next park, which then returns at once; a stale one costs a
-spurious turn of the loop.
+ - Marking the slot's register state invalid would keep the slots typed
+   STACK_DYNPTR or STACK_ITER while zeroing the state that describes
+   them. That breaks the invariants destroy_if_dynptr_stack_slot()
+   relies on: with first_slot cleared, a later store to the slot
+   repositions to the slot above and releases whatever reference id it
+   finds there, or reads past the end of the stack array when the dynptr
+   was the topmost object.
+ - Releasing their reference on the program's behalf instead would leave
+   the runtime object, a ringbuf reservation or an iterator's kernel
+   state, without the destroy the program can no longer issue.
 
-The waiter sees the condition once the park has returned. The pairing
-above covers the sleep, but it does not order the word against the
-program's own condition, and the loop depends on that order: the waker
-stores the condition and then wakes, the waiter returns from the park
-and then reads the condition, and the read must see the store. Two
-things provide it. bpf_task_wake() stores the word with xchg(), which is
-fully ordered, so the condition stores before the call are visible to
-whoever observes the word. bpf_task_park() consumes the word with xchg()
-on every return, so the condition loads after the return cannot be
-satisfied before the word was observed. On a weakly ordered architecture
-a plain store and a plain load would let the waiter observe the wake,
-read a stale condition, park again with the word already cleared, and
-sleep with no one left to wake it.
+The park is therefore refused while any dynptr or iterator is live in
+any frame, naming the frame and stack offset. The one exception is
+bpf_iter_num: its state is two integers on the stack and its next and
+destroy touch nothing else, so an open-coded bpf_for() loop may contain
+a park.
 
-A release is not enough for the store, because wakers race with each
-other. Of two wakers' stores one overwrites the other, and the waiter
-observes only the later one. A release orders a waker's condition before
-its own store of the word, for whoever reads that store; nobody reads
-the store that was overwritten, so nothing orders that waker's condition
-before the waiter's read of it. The waiter then consumes both wakes,
-misses one condition, and parks again while the waker saw it running.
-The kernel memory model allows that outcome with a release and forbids
-it with xchg().
+The invalidation runs in check_kfunc_call() after the arguments are
+checked and before the caller-saved registers are clobbered and R0 is
+set up, so the kfunc's return value is unaffected. Each scrub is
+recorded for the diagnostics layer under a new reason, so a later access
+through an invalidated pointer explains that the park invalidated it.
 
-The xchg() also makes the consume atomic. A wake that lands after the
-park observed the word but before it cleared it is not lost: the
-exchange returns the value at the instant of the reset, so the wake is
-either consumed by this park or still pending for the next one.
-
-bpf_task_park() returns:
-
- - 0 when it consumed a wake, or when the sleep ended for no recorded
-   reason. The program tells a wake from such a spurious return by its
-   own condition.
- - -ESHUTDOWN when a stop or park request for a kthread is pending.
-   Nothing clears the request while the thread's function runs, so
-   every later park that finds no wake pending fails the same way and
-   the caller has to return, which is why it is not reported as a signal
-   is.
- - -EINTR when a signal is pending. The signal and the request are both
-   checked for every caller, since a kthread that called allow_signal()
-   has signals too, and both before the sleep and after it.
- - -ETIMEDOUT when the timeout passed. A timeout of 0 polls and U64_MAX
-   sleeps without a timer.
-
-When more than one of these applies, a wake wins over a stop request, a
-stop request over a signal, and either over the timeout. The wake wins
-because the waker may have dequeued or accounted for the sleeper on the
-strength of its wake having been delivered, and the sleeper's return
-value should agree, the way a futex that was woken returns 0 even if its
-timer also fired. The consuming xchg() is what makes it win: a wake that
-arrives while the timeout expires or a signal is noticed is reported
-rather than discarded with the word. A signal or a stop request wins
-over a timer that fired at the same time because the request stays
-pending and the timeout does not. schedule_hrtimeout() tells an expiry
-from an early return but not a wake from a signal, so the flags are read
-again after it and decide first.
-
-bpf_task_wake() returns 1 when the task was asleep and 0 when it was
-not.
-
-The sleep is interruptible for every caller. A kthread normally has no
-signals, so TASK_INTERRUPTIBLE is harmless there, avoids the load
-average and the hung task detector, and lets bpf_task_wake() use a
-TASK_INTERRUPTIBLE mask, which can never disturb an uninterruptible
-sleeper elsewhere in the kernel.
-
-The word is an int rather than a byte so that the exchange is a plain
-4-byte xchg() on every architecture. dup_task_struct() clears it: a
-child inherits nothing from a wake addressed to its parent.
-
-The park drops migration and the Tasks Trace RCU section around the
-sleep. That is sound only where the invocation's runner holds the
-program, its maps and its context for the whole invocation, so that the
-program's own memory needs no grace period, and where nothing on the run
-path keeps per-CPU state across the program. The kfunc comment states
-that contract, and the verifier patches that follow confine the call to
-such contexts and invalidate what the sleep may free.
-
-Both kfuncs take a flags argument that must be 0. Only the two functions
-and the word they share are added here: later patches register the
-kfuncs, and until then nothing can call them.
+The invalidation walks every frame of the current state, which covers
+the callers of the function that parks when they are in the state. They
+are not when the function is verified without them, as a global function
+is, and a static function that is verified on its own; later patches
+handle the two.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/sched.h  |   2 +
- kernel/bpf/Makefile    |   2 +-
- kernel/bpf/task_park.c | 192 +++++++++++++++++++++++++++++++++++++++++
- kernel/fork.c          |   1 +
- 4 files changed, 196 insertions(+), 1 deletion(-)
- create mode 100644 kernel/bpf/task_park.c
+ kernel/bpf/diagnostics.c |   3 ++
+ kernel/bpf/diagnostics.h |   1 +
+ kernel/bpf/verifier.c    | 106 +++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 110 insertions(+)
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 1c93da75226e..43222c34fab8 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1630,6 +1630,8 @@ struct task_struct {
- 	struct bpf_local_storage __rcu	*bpf_storage;
- 	/* Used for BPF run context */
- 	struct bpf_run_ctx		*bpf_ctx;
-+	/* Set by bpf_task_wake(), consumed by bpf_task_park() */
-+	int				bpf_wake_pending;
- #endif
- 	/* Used by BPF for per-TASK xdp storage */
- 	struct bpf_net_context		*bpf_net_context;
-diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-index d26c62326e58..34357665c34c 100644
---- a/kernel/bpf/Makefile
-+++ b/kernel/bpf/Makefile
-@@ -15,7 +15,7 @@ obj-$(CONFIG_BPF_SYSCALL) += fixups.o cfg.o states.o check_btf.o flow.o join.o
- obj-${CONFIG_BPF_LSM}	  += bpf_inode_storage.o
- obj-$(CONFIG_BPF_SYSCALL) += disasm.o mprog.o
- obj-$(CONFIG_BPF_JIT) += trampoline.o
--obj-$(CONFIG_BPF_SYSCALL) += btf.o memalloc.o rqspinlock.o stream.o
-+obj-$(CONFIG_BPF_SYSCALL) += btf.o memalloc.o rqspinlock.o stream.o task_park.o
- ifeq ($(CONFIG_MMU)$(CONFIG_64BIT),yy)
- obj-$(CONFIG_BPF_SYSCALL) += arena.o range_tree.o
- endif
-diff --git a/kernel/bpf/task_park.c b/kernel/bpf/task_park.c
-new file mode 100644
-index 000000000000..39c9f085f7a9
---- /dev/null
-+++ b/kernel/bpf/task_park.c
-@@ -0,0 +1,192 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <linux/bpf.h>
-+#include <linux/btf.h>
-+#include <linux/btf_ids.h>
-+#include <linux/hrtimer.h>
-+#include <linux/kthread.h>
-+#include <linux/rcupdate_trace.h>
-+#include <linux/sched.h>
-+#include <linux/sched/signal.h>
-+
+diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
+index 3de3e1486bbd..33788d6f6155 100644
+--- a/kernel/bpf/diagnostics.c
++++ b/kernel/bpf/diagnostics.c
+@@ -2231,6 +2231,9 @@ static void diag_print_mod(struct bpf_verifier_env *env, const struct bpf_diag_h
+ 	case BPF_DIAG_MOD_NON_OWN_REF:
+ 		reason = "leaving the protected region invalidated this borrowed pointer";
+ 		break;
++	case BPF_DIAG_MOD_TASK_PARK:
++		reason = "the sleep in bpf_task_park() invalidated this pointer";
++		break;
+ 	case BPF_DIAG_MOD_CALLER_SAVED:
+ 		reason = target->kind == BPF_DIAG_MOD_TARGET_STACK_ARG ?
+ 			 "call invalidated this outgoing stack argument" :
+diff --git a/kernel/bpf/diagnostics.h b/kernel/bpf/diagnostics.h
+index e155d2588a51..656c0430f013 100644
+--- a/kernel/bpf/diagnostics.h
++++ b/kernel/bpf/diagnostics.h
+@@ -26,6 +26,7 @@ enum bpf_diag_mod_reason {
+ 	BPF_DIAG_MOD_SLICE_BUF,
+ 	BPF_DIAG_MOD_NON_OWN_REF,
+ 	BPF_DIAG_MOD_CALLER_SAVED,
++	BPF_DIAG_MOD_TASK_PARK,
+ };
+ 
+ enum bpf_diag_context_kind {
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 20b1b9ff574c..e90cc127aedb 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -11222,6 +11222,98 @@ static void invalidate_non_owning_refs(struct bpf_verifier_env *env)
+ 	}));
+ }
+ 
 +/*
-+ * A BPF program that blocks for an event keeps its own queue of waiters and
-+ * its own notion of when the event has arrived. The kernel contributes two
-+ * operations over the task: bpf_task_park() puts the current task to sleep
-+ * and bpf_task_wake() makes a task runnable. The only shared state is one
-+ * word in the task, bpf_wake_pending, which lets the program check its
-+ * condition outside the kernel without losing a wake that lands between
-+ * the check and the sleep: the waker sets the word before it wakes the
-+ * task, and a park that finds it set returns instead of sleeping.
-+ *
-+ * The word also carries the ordering the program relies on. A waker
-+ * publishes its condition and then calls bpf_task_wake(); a waiter reads
-+ * the condition, finds it unmet, calls bpf_task_park(), and reads the
-+ * condition again after the return. The second read must see the waker's
-+ * condition whenever the park returned because of that wake, so the store
-+ * of the word and the load that consumes it are both an xchg(): the store
-+ * is fully ordered after the waker's condition stores, the load before the
-+ * waiter's later condition loads. A release would not do for the store. Of
-+ * two wakers' stores one overwrites the other, the waiter observes only the
-+ * later one, and nothing would order the earlier waker's condition before
-+ * the waiter's read of it. The xchg() also makes the consume atomic: a wake
-+ * that lands between the waiter's observation of the word and its reset is
-+ * not erased but stays pending for the next park.
++ * bpf_task_park() sleeps without the Tasks Trace RCU read section and the
++ * disabled migration that a sleepable program otherwise runs under. A dynptr
++ * or an iterator on the stack cannot simply be invalidated across such a
++ * sleep: the program must still release or destroy it, and an object that
++ * stays usable may point at memory the sleep lets go. Refuse the park while
++ * any is live, except a bpf_iter_num, whose state lives entirely on the stack
++ * and whose next and destroy touch nothing else.
 + */
-+
-+/*
-+ * What ends a park besides a wake and the timeout: a stop or park request for
-+ * a kthread, or a signal. Both are checked for every caller, since a kthread
-+ * that allowed signals has them too, and the kthread checks are false for a
-+ * user task. The request is reported apart from a signal because nothing
-+ * clears it while the thread's function runs: every later park that finds no
-+ * wake pending fails the same way, so the caller has to return.
-+ */
-+static int bpf_task_park_interrupted(void)
++static int check_park_stack_objects(struct bpf_verifier_env *env, int insn_idx)
 +{
-+	if (kthread_should_stop_or_park())
-+		return -ESHUTDOWN;
-+	if (signal_pending(current))
-+		return -EINTR;
++	struct bpf_verifier_state *vstate = env->cur_state;
++	int i, spi;
++
++	for (i = 0; i <= vstate->curframe; i++) {
++		struct bpf_func_state *frame = vstate->frame[i];
++
++		for (spi = 0; spi < bpf_stack_nr_slots(frame); spi++) {
++			struct bpf_stack_state *slot = bpf_stack_slot(frame, spi);
++			struct bpf_reg_state *st = &slot->spilled_ptr;
++
++			switch (slot->slot_type[BPF_REG_SIZE - 1]) {
++			case STACK_DYNPTR:
++				/* Report the slot the program named, not the second half. */
++				if (!st->dynptr.first_slot)
++					continue;
++				verbose(env, "bpf_task_park() with a live dynptr at frame %d fp%d\n",
++					i, -(spi + 1) * BPF_REG_SIZE);
++				break;
++			case STACK_ITER:
++				if (!st->id)
++					continue;
++				if (st->iter.btf == btf_vmlinux &&
++				    !strcmp(iter_type_str(st->iter.btf, st->iter.btf_id), "num"))
++					continue;
++				verbose(env, "bpf_task_park() with a live %s iterator at frame %d fp%d\n",
++					iter_type_str(st->iter.btf, st->iter.btf_id), i,
++					-(spi + 1) * BPF_REG_SIZE);
++				break;
++			default:
++				continue;
++			}
++			bpf_diag_res(env, insn_idx, "live stack object across bpf_task_park()",
++				     "A dynptr or iterator on the stack may refer to memory that the sleep in bpf_task_park() lets go, and the verifier cannot invalidate it without losing the path that releases its reference.",
++				     "Release or destroy the dynptr or iterator before calling bpf_task_park(), or move the park out of the loop that uses it.");
++			return -EINVAL;
++		}
++	}
 +	return 0;
 +}
 +
-+__bpf_kfunc_start_defs();
-+
-+/**
-+ * bpf_task_park - Sleep until bpf_task_wake() is called for the current task
-+ * @timeout_ns: relative timeout, or U64_MAX for none
-+ * @flags: must be 0
-+ *
-+ * Returns at once if a wake is pending from a bpf_task_wake() that found the
-+ * task running. Otherwise sleeps interruptibly until a wake, the timeout, a
-+ * signal, or a stop or park request for a kthread. Every return past the
-+ * argument check consumes the pending wake, and a wake takes precedence over
-+ * a timeout, a signal or a stop request noticed at the same time, since the
-+ * waker may already have accounted for it. Any return hands control back to
-+ * the program's own check of its condition, and spurious returns are
-+ * possible. A @timeout_ns of 0 polls: it reports a pending wake,
-+ * then a stop or park request as -ESHUTDOWN, a pending signal as -EINTR, and
-+ * otherwise -ETIMEDOUT, without sleeping.
-+ *
-+ * Return: 0 when a wake was consumed or the sleep ended for no recorded
-+ * reason, -ETIMEDOUT when the timeout passed, -ESHUTDOWN when a stop or park
-+ * request for a kthread is pending and -EINTR when a signal is, whether it
-+ * was found before the sleep or ended it, even if the timeout passed
-+ * meanwhile, -EINVAL when @flags is not 0. Nothing clears a stop or park
-+ * request while the thread's function runs, so once a call has returned
-+ * -ESHUTDOWN, every later one that finds no wake pending does too.
++/*
++ * Invalidate what the sleep in bpf_task_park() may free. Keep only pointers
++ * whose lifetime does not rest on the dropped protection: the stack and
++ * instruction metadata; the context and the maps the program references
++ * directly, which the invocation holds; the values of its array maps, which
++ * the map allocates and frees with itself, and which hold the program's
++ * global variables; arena memory, which the arena map holds and whose
++ * accesses tolerate faults; and pointers backed by an explicit
++ * verifier-tracked reference, found through their own id or the id of their
++ * parent. An inner map found through a map-in-map lookup is not kept, nor
++ * are its values: the outer map's element alone holds it, and its deletion
++ * frees it after a grace period the sleeping program no longer delays.
++ * Everything else, values of maps that free elements on delete or on their
++ * owner's teardown, RCU and trusted pointers without a reference, per-CPU
++ * and local storage pointers, is gone after the call.
 + */
-+__bpf_kfunc int bpf_task_park(u64 timeout_ns, u64 flags)
++static void invalidate_regs_across_park(struct bpf_verifier_env *env)
 +{
-+	ktime_t expires = min_t(u64, timeout_ns, KTIME_MAX);
-+	bool expired;
-+	int ret = 0;
++	struct bpf_stack_state *stack;
++	struct bpf_func_state *state;
++	struct bpf_reg_state *reg;
 +
-+	if (flags)
-+		return -EINVAL;
-+	if (READ_ONCE(current->bpf_wake_pending))
-+		goto out;
++	bpf_for_each_reg_in_vstate_mask(env->cur_state, state, reg, stack, 1 << STACK_SPILL, ({
++		enum bpf_reg_type type = base_type(reg->type);
 +
-+	/*
-+	 * set_current_state() is a full barrier that pairs with the one in
-+	 * try_to_wake_up() after the waker's store of bpf_wake_pending:
-+	 * either this task observes the pending wake below or the waker
-+	 * observes it sleeping and wakes it.
-+	 */
-+	set_current_state(TASK_INTERRUPTIBLE);
-+	if (READ_ONCE(current->bpf_wake_pending)) {
-+		__set_current_state(TASK_RUNNING);
-+		goto out;
-+	}
-+	/*
-+	 * kthread_stop(), kthread_park() and signal delivery set their flag
-+	 * and wake the task in the same way, so the same ordering covers
-+	 * them.
-+	 */
-+	ret = bpf_task_park_interrupted();
-+	if (ret) {
-+		__set_current_state(TASK_RUNNING);
-+		goto out;
-+	}
-+
-+	/*
-+	 * Sleepable programs run with migration disabled under a Tasks Trace
-+	 * RCU read section. Neither may be held across a sleep of unbounded
-+	 * length: the read section would stall every Tasks Trace grace period
-+	 * in the system, and a migration-disabled sleeper keeps rq->nr_pinned
-+	 * raised, which blocks CPU offline in balance_hotplug_wait() and pins
-+	 * the wakeup to the CPU it slept on.
-+	 *
-+	 * Dropping both is correct only where the caller's runner holds the
-+	 * program, and with it its maps and context, for the whole
-+	 * invocation, so that the program's own memory needs no grace period,
-+	 * and where nothing on the run path keeps per-CPU state across the
-+	 * program. The verifier confines the call to such contexts: the main
-+	 * body of a syscall program and the functions it calls directly, never
-+	 * a callback, and never a region that pins the CPU, a lock, a saved
-+	 * IRQ state or an RCU read section. It also invalidates every pointer
-+	 * the program holds across the call except its stack, its context,
-+	 * maps it references directly and the values of its arrays, arena
-+	 * memory and verifier-tracked references. What remains is that the
-+	 * program may resume on another CPU, which is part of the contract.
-+	 */
-+	migrate_enable();
-+	rcu_read_unlock_trace();
-+	/*
-+	 * A NULL expiry sleeps without a timer; a zero one returns at once.
-+	 * schedule_hrtimeout() tells an expiry from an early return, but not
-+	 * a wake from a signal or a stop or park request, so read the flags
-+	 * again, as before the sleep. They win over an expiry that fired at
-+	 * the same time, since the request stays pending and the timeout
-+	 * does not; a wake, consumed below, wins over both.
-+	 */
-+	expired = !schedule_hrtimeout(timeout_ns == U64_MAX ? NULL : &expires, HRTIMER_MODE_REL);
-+	ret = bpf_task_park_interrupted();
-+	if (!ret && expired)
-+		ret = -ETIMEDOUT;
-+	rcu_read_lock_trace();
-+	migrate_disable();
-+out:
-+	/*
-+	 * Consume the wake. xchg() is fully ordered, so the condition loads
-+	 * the program makes after the return see the stores the waker made
-+	 * before its bpf_task_wake(). A wake that raced with the timeout, the
-+	 * signal or the stop request wins: the waker may have accounted for it.
-+	 */
-+	if (xchg(&current->bpf_wake_pending, 0))
-+		ret = 0;
-+	return ret;
++		if (!is_pointer_regtype(reg->type))
++			continue;
++		if ((reg->id && find_reference_state(env->cur_state, reg->id)) ||
++		    (reg->parent_id && find_reference_state(env->cur_state, reg->parent_id)))
++			continue;
++		if ((type == CONST_PTR_TO_MAP || type == PTR_TO_MAP_VALUE) && !reg->map_uid &&
++		    (type == CONST_PTR_TO_MAP || reg->map_ptr->map_type == BPF_MAP_TYPE_ARRAY))
++			continue;
++		if (type == PTR_TO_STACK || type == PTR_TO_FUNC || type == PTR_TO_INSN ||
++		    type == PTR_TO_CTX || type == PTR_TO_ARENA)
++			continue;
++		bpf_diag_record_scrub(env, reg, BPF_DIAG_MOD_TASK_PARK);
++		mark_reg_invalid(env, reg);
++	}));
 +}
 +
-+/**
-+ * bpf_task_wake - Wake a task parked in bpf_task_park()
-+ * @task: task to wake
-+ * @flags: must be 0
-+ *
-+ * Marks a wake pending for @task and wakes it if it sleeps interruptibly.
-+ * A task that is not parked keeps the pending wake until its next
-+ * bpf_task_park(), which then returns at once.
-+ *
-+ * Return: 1 when @task was asleep and is now runnable, 0 when it was not,
-+ * -EINVAL when @flags is not 0.
-+ */
-+__bpf_kfunc int bpf_task_wake(struct task_struct *task, u64 flags)
-+{
-+	if (flags)
-+		return -EINVAL;
-+
-+	/*
-+	 * xchg() is a full barrier. It orders the program's stores before this
-+	 * call, its condition, before the word, so a park that consumes the
-+	 * word sees them, also when what it consumes is another waker's store
-+	 * that overwrote this one. try_to_wake_up() then orders the store
-+	 * before its load of the task state, pairing with set_current_state()
-+	 * in bpf_task_park().
-+	 */
-+	xchg(&task->bpf_wake_pending, 1);
-+	return wake_up_state(task, TASK_INTERRUPTIBLE);
-+}
-+
-+__bpf_kfunc_end_defs();
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 8b108ed37152..b66eb25626c9 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -1019,6 +1019,7 @@ static struct task_struct *dup_task_struct(struct task_struct *orig, int node)
- #ifdef CONFIG_BPF_SYSCALL
- 	RCU_INIT_POINTER(tsk->bpf_storage, NULL);
- 	tsk->bpf_ctx = NULL;
-+	tsk->bpf_wake_pending = 0;
- #endif
- 	return tsk;
+ static void invalidate_rcu_protected_refs(struct bpf_verifier_env *env)
+ {
+ 	struct bpf_stack_state *stack;
+@@ -14173,6 +14265,7 @@ enum special_kfunc_type {
+ 	KF_bpf_arena_alloc_pages,
+ 	KF_bpf_arena_free_pages,
+ 	KF_bpf_session_is_return,
++	KF_bpf_task_park,
+ };
  
+ BTF_ID_LIST(special_kfunc_list)
+@@ -14274,6 +14367,7 @@ BTF_ID(func, bpf_session_is_return)
+ #else
+ BTF_ID_UNUSED
+ #endif
++BTF_ID(func, bpf_task_park)
+ 
+ static bool is_bpf_cast_to_kern_ctx_kfunc(const struct bpf_call_arg_meta *meta)
+ {
+@@ -14297,6 +14391,11 @@ static bool is_bpf_iter_css_task_new_kfunc(const struct bpf_call_arg_meta *meta)
+ 	return is_kfunc_call(meta, special_kfunc_list[KF_bpf_iter_css_task_new]);
+ }
+ 
++static bool is_bpf_task_park_kfunc(u32 btf_id)
++{
++	return btf_id == special_kfunc_list[KF_bpf_task_park];
++}
++
+ static bool is_bpf_obj_new_kfunc(u32 func_id)
+ {
+ 	return func_id == special_kfunc_list[KF_bpf_obj_new] ||
+@@ -16266,6 +16365,13 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		}
+ 	}
+ 
++	if (is_bpf_task_park_kfunc(meta.func_id)) {
++		err = check_park_stack_objects(env, insn_idx);
++		if (err)
++			return err;
++		invalidate_regs_across_park(env);
++	}
++
+ 	bpf_diag_record_caller_saved(env, regs);
+ 	bpf_diag_mod_begin(env, &regs[BPF_REG_0], NULL, BPF_DIAG_MOD_WRITE);
+ 	for (i = 0; i < CALLER_SAVED_REGS; i++) {
 -- 
 2.53.0
 
