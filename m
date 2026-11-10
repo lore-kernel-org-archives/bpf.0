@@ -1,74 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=18.194.254.142
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794315115;
-	b=e+7obEkHLA8L92iEUVCC3Mb1C8QIw5yGGpsS6sUTnkLq3KNXfYC8qfONfTb+K4e3wH03
-	 bLd0b3ar8duvMJXWvFrewoIsBHdHMWCkwErhtIXapMGAbAxn140sqcplFJ4KU41EU2YBQ
-	 jSH9uAA+ibXY1Z1R8ZSIuYhXtHuvCq5KQeH5ENEsd3dJlgnAEk3MwYW+WoPZhNt0YMZio
-	 V0SbJC7E/KNyG4meKQY8i8JsaixusjNJpfwnl0+5j0o13icxRDpGXcSVyoHXQ24P07VLR
-	 SJYY8yEdMo9GfVKqq/L12ocikX3etEx28Avk6zhG2hDlm3UQ7TXomGJQ1gz/Dz1rccA==
+	t=1794315128;
+	b=b+PD+s68IEQdmKJDxA9gvOYExeSR9zS5m/PG90iVCS7Z7c2+viUtAuUL3d02s2t0B3Cx
+	 zDBB6P7Om7r6V2w/ac+xZ9j32Tje5nH1CxEoIlkhybcPwlkJ1Eg2AsZ8oLopMmYyAAXg5
+	 K8h24kIby5A060X9E9cyZARiHNb27e72blnUP9wthNuSFTAG/I2nvO3uu9T7Qf8W1MIaC
+	 IM1FRfCHD4jreo24AddSJUclnAuuGaaNxpsQPlWBQPSTHtF4OU+1hoi9U013T5ycJrlo0
+	 PirABT+kfAnDIZv2Z3391OsP85K7x8pvQfO5/fy2HNtesvFsL+OWnRKVdSHCzt7cM5Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794315115;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=NTyrgE/NhXynhM9E29qnV24j4tJQyNRVjWGGUarqaBw=;
-	b=ptb2eTtEa+Yb3NnXtyBQQttORR+1NAzciVf7fshI65UVcBJC85uAhwNq22RisAFDUDvf
-	 f/InZtHgcR41x8oND9ofWORo4s3MmZAhYMbL5XwLqvU1W5Vih7LsECmFmQG32elX5e3GK
-	 dvBrhfH+eVKMRFNkl4Lf2M+umbmEQl6UMCiZBwUt2qYLIZDxhb+2tGoH2aVG91c8eDY3G
-	 2tz3OCmP71GI1OasN0vaAMl2HW1/OPsc8B8xJcM1Ecwe8nJON/8pvpGGH/SsabSS8/h87
-	 nwuuBG5+PuPbNIlJxvri4L/viRoOb68kFhfDUnCFDwnupTcPVorixlmT13U0BouYq8g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794315128;
+	h=DMARC-Filter:DKIM-Signature:X-QQ-mid:X-QQ-Originating-IP:Received:
+	 X-QQ-SSF:X-QQ-GoodBg:X-BIZMAIL-ID:From:To:Cc:Subject:Date:Message-Id:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding:X-QQ-SENDSIZE:
+	 Feedback-ID:X-QQ-XMAILINFO:X-QQ-XMRINFO:X-QQ-RECHKSPAM;
+	bh=pnvsCaZarFR934HQcBQJbElxQDjkJzNi2diqewrEMhg=;
+	b=2NQWEUYL5gWPjNAayI0WnSbzTIK8jqRMs0pIKjZypSLL3wr/+108nOnstx+lgsBdCE2b
+	 kcTNGhSiv7GAaKrhf1olAfSyth7NkudOre9CqlI7+CLRXsyXHh4wPFrkyC6hUJwkvGQS3
+	 6QK50acZ0VR8NcOBtpCpks4ekilsrqH41ZM41BFOVPQaT+dOKPr3gOf94+wDuTEdL2lEQ
+	 ph9wtBQwkfW3SKRG46VQBH/nC2cep1yU4MMitzgI8LH9efO0zgmBYiEdTdH5d0L3oESlK
+	 kT+zrNhdVh/4gjmVL1YggOHsdMVXt8WziNxHgSmTOh+74P2Buw3ThCFxgCRM/9Ktl2A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=hFpWf8yL;
-	arc=none smtp.remote-ip=91.218.175.178
-Received: from mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=smail.nju.edu.cn;
+	spf=pass smtp.mailfrom=smail.nju.edu.cn;
+	dkim=pass header.d=smail.nju.edu.cn header.i=@smail.nju.edu.cn header.a=rsa-sha256 header.s=iohv2404 header.b=ixawTO8b;
+	arc=none smtp.remote-ip=18.194.254.142
+Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A92E560A2603
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 12:51:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A92E560A2603
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C2FD606A334;
+	Tue, 10 Nov 2026 12:52:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0C2FD606A334
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=smail.nju.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=smail.nju.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=hFpWf8yL
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=RSQqPLCzjXzhj+yupFqjdMSCPLeZDniTWxY3yX5md4k=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794315112; v=1; x=1794919912;
- b=hFpWf8yL6oDW6NM8mtVSFMeRx7ackcDZIx2TXPgmfnP7JapwXw8H7ZJnu7sdJ3iMvZ9hGaAa
- 7wkZMbsiH22HGm+8PcCw/yrkJWPxXtl1gI1mQ/FkTmK2abJ4JhAZW49r5eflssC9OL2SxaKYaIs
- 1P5UA4418lmP3F0DfPoqZPLI=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 47c838edafd7a544;
-	Tue, 10 Nov 2026 12:51:52 +0000
-X-Mizu-Trace-ID: 47c838edafd7a544
-X-Migadu-Flow: FLOW_OUT
-From: Tao Cui <cui.tao@linux.dev>
-To: tj@kernel.org
-Cc: void@manifault.com,
-	arighi@nvidia.com,
-	changwoo@igalia.com,
-	liwanwu@kylinos.cn,
-	devnexen@gmail.com,
-	zhaomengmeng@kylinos.cn,
-	emil@etsalapatis.com,
-	yphbchou0911@gmail.com,
-	mingo@redhat.com,
-	sched-ext@lists.linux.dev,
+	dkim=pass (1024-bit key) header.d=smail.nju.edu.cn header.i=@smail.nju.edu.cn header.a=rsa-sha256 header.s=iohv2404 header.b=ixawTO8b
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=smail.nju.edu.cn;
+	s=iohv2404; t=1794315080;
+	bh=pnvsCaZarFR934HQcBQJbElxQDjkJzNi2diqewrEMhg=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version;
+	b=ixawTO8byEIq2YYHy1lSYuF6NvK8R3YntTnrGkSIK9aBFuYvPjHkX2ulGaJz8VzAz
+	 IOo897Y6XpXrZCYGoKpSyK1I6la+o44VXISJ6ZWjfTZW29UIwhoKe1WVHFRFGVM1di
+	 sxiYK5RSizlzV7QxbJSCU58kAj4RKdoDceT5oun4=
+X-QQ-mid: zesmtpip2t1794315075t461bbcd2
+X-QQ-Originating-IP: zChssD5jjodbbDQewedjB0i9rLy8xA/BmneST00wK9U=
+Received: from workstation-Precision-7920-Towe ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Tue, 10 Nov 2026 20:51:14 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 13638721071040344329
+From: Kang Chen <k.chen@smail.nju.edu.cn>
+To: Tejun Heo <tj@kernel.org>,
+	David Vernet <void@manifault.com>,
+	Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>
+Cc: sched-ext@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	cui.tao@linux.dev,
-	Tao Cui <cuitao@kylinos.cn>
-Subject: [PATCH 9/9] tools/sched_ext: scx_userland: Reject batch size 0
-Date: Tue, 10 Nov 2026 20:50:01 +0800
-Message-ID: <20261110125001.4167503-10-cui.tao@linux.dev>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261110125001.4167503-1-cui.tao@linux.dev>
-References: <20261110125001.4167503-1-cui.tao@linux.dev>
+	bpf@vger.kernel.org
+Subject: [PATCH] sched_ext: make DSQ iterator stay drained after NULL
+Date: Tue, 10 Nov 2026 20:51:13 +0800
+Message-Id: <20261110125113.2935742-1-k.chen@smail.nju.edu.cn>
+X-Mailer: git-send-email 2.34.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -79,41 +70,94 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:smail.nju.edu.cn:qybglogicsvrgz:qybglogicsvrgz5b-1
+X-QQ-XMAILINFO: MACXe2l6e7j9GH6PDCqUC4TKYU4Iuhqytqh0o8dj2C6gMOY0DQ6j7l4E
+	IYw+RgPPGU0Bbg0V8QjWPOh62J82yLbWEcXw33OR/tSj0CLZq9WidHLkhinpFkPvV/g9jBZ
+	XFiaqCAOYEahsLlbrC5KjIv893bEiMo68s8twJA1xIF0B3MHqNuaj+8UuMN/6mDbH/DjMJU
+	QrzfXxLUEkSbl8K48WohlZ4WF4UBZK91SlAmegQZN5t5JLU7DqRDXjpHT+TFH0TCIjUc7E3
+	6l84HACX6X6vseoQTHhRaLeU6FIg2vyjeN7/AVamv1Hh7Cmt/fjiFUI7i1BdH9Y82WJrcR0
+	bFbK/Qf64uvfupw+8d0SwN2i8MDD7y46Np2f0RaBlq/oYVSoP7kj3JD865VIWuxhmT4wmSc
+	bdBkw5vavKUiSml9aVFzlkst/ndyDqXa5p/CRXUxMIRGJ2foU9PQO8CghSNCUveUAaPqaZk
+	KAZG+1DWBHLwvTcw2mulidq4PDHQXyjtqal+RQ1lPJ+0zmQC/bPgspijnnYhkK1NswEMtoC
+	GF90poezJJ1StRGcQ0TXHDn9m0ns1LyV4xpgy6jrB+IzKAOSwPw5zoUvB2BXvlTsBASIDCx
+	dd2vm46Hnz8jffjhfohse3mhUQG1RnAbtVxA3ZhJXCA80cnB28Jw46aBk4agqEWwgFktbw8
+	YNR7uAt2HO4nPFlSxa4+NV0Kx83W/cfKPYaSWGFdOmNA/3Y1Mb0ccmDSL8pom1eQChKFF92
+	+2q+A1K61WXgbrRsTOXbfzLYtQARZIk+WmRv0nDZDn60iTwaJO6jS9k9RQMLG8r4updxayR
+	TdS71H3s/d7ICmL0efYFZbCNIfe0diRCbZ92UiM+TwSrjJppMo2zyTYek9uytwWPEkfPXdE
+	ZFkBWd4OuvHWvDMkU4dDr7icwTorvKG6vn4Hm5s4FXCrwUnpNfeO7siFBEePS4nnIMNG8KV
+	xoIylEIsf0U/Q6VY9fatehA4BhDTbzheQ0MoE/zGdtzA1Fft/lLjh+n1WhN0jWI3bZplSlf
+	IYafDugg==
+X-QQ-XMRINFO: OD9hHCdaPRBwH5bRRRw8tsiH4UAatJqXfg==
+X-QQ-RECHKSPAM: 0
 
-From: Tao Cui <cuitao@kylinos.cn>
+nldsq_cursor_next_task() unlinks the iteration cursor when it reaches the
+end of the DSQ.  A later call sees list_empty(&cursor->node), starts
+from the DSQ head again, and returns the first task of the same
+iteration.
 
--b 0 is accepted silently and leaves batch_size at zero, so
-dispatch_batch() never moves a task out of the vruntime list into the
-dispatched queue: tasks pile up on the vruntime list while
-nr_scheduled stays positive and ops.update_idle() keeps kicking cpus;
-the system-wide livelock ends when the stall watchdog kills the
-scheduler.
+The verifier relies on the iterator contract that once next() returns
+NULL it keeps returning NULL: process_iter_next_call() marks the
+iterator DRAINED and treats the result of later next() calls as the
+constant zero.  A restarted DSQ iteration therefore hands the BPF
+program a task pointer while the verifier believes R0 == 0.
 
-Reject a zero batch size at option parsing.
+Remember the drained state in the cursor flags and return NULL on every
+later next() call.  The cursor has spare flag bits and the BPF-visible
+iterator layout is unchanged.
 
-Fixes: cc4448d0856d ("tools/sched_ext: add scx_userland scheduler")
-Signed-off-by: Tao Cui <cuitao@kylinos.cn>
+Fixes: 650ba21b131e ("sched_ext: Implement DSQ iterator")
+Signed-off-by: Kang Chen <k.chen@smail.nju.edu.cn>
 ---
- tools/sched_ext/scx_userland.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ kernel/sched/ext/ext.c | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/tools/sched_ext/scx_userland.c b/tools/sched_ext/scx_userland.c
-index b16b6db5f365..cbd511685449 100644
---- a/tools/sched_ext/scx_userland.c
-+++ b/tools/sched_ext/scx_userland.c
-@@ -364,6 +364,11 @@ static void pre_bootstrap(int argc, char **argv)
- 		}
- 	}
+diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
+index 9bae826d69f9..03e0fbf17011 100644
+--- a/kernel/sched/ext/ext.c
++++ b/kernel/sched/ext/ext.c
+@@ -555,12 +555,14 @@ enum scx_dsq_iter_flags {
+ 	/* iterate in the reverse dispatch order */
+ 	SCX_DSQ_ITER_REV		= 1U << 16,
  
-+	if (!batch_size) {
-+		fprintf(stderr, "Invalid batch size %s\n", optarg);
-+		exit(1);
-+	}
++	__SCX_DSQ_ITER_DRAINED		= 1U << 28,
+ 	__SCX_DSQ_ITER_HAS_REENQ	= 1U << 29,
+ 	__SCX_DSQ_ITER_HAS_SLICE	= 1U << 30,
+ 	__SCX_DSQ_ITER_HAS_VTIME	= 1U << 31,
+ 
+ 	__SCX_DSQ_ITER_USER_FLAGS	= SCX_DSQ_ITER_REV,
+ 	__SCX_DSQ_ITER_ALL_FLAGS	= __SCX_DSQ_ITER_USER_FLAGS |
++					  __SCX_DSQ_ITER_DRAINED |
+ 					  __SCX_DSQ_ITER_HAS_REENQ |
+ 					  __SCX_DSQ_ITER_HAS_SLICE |
+ 					  __SCX_DSQ_ITER_HAS_VTIME,
+@@ -10615,13 +10617,24 @@ __bpf_kfunc int bpf_iter_scx_dsq_new(struct bpf_iter_scx_dsq *it, u64 dsq_id,
+ __bpf_kfunc struct task_struct *bpf_iter_scx_dsq_next(struct bpf_iter_scx_dsq *it)
+ {
+ 	struct bpf_iter_scx_dsq_kern *kit = (void *)it;
++	struct task_struct *p;
+ 
+-	if (!kit->dsq)
++	if (!kit->dsq || (kit->cursor.flags & __SCX_DSQ_ITER_DRAINED))
+ 		return NULL;
+ 
+ 	guard(raw_spinlock_irqsave)(&kit->dsq->lock);
+ 
+-	return nldsq_cursor_next_task(&kit->cursor, kit->dsq);
++	p = nldsq_cursor_next_task(&kit->cursor, kit->dsq);
++	/*
++	 * nldsq_cursor_next_task() unlinks the cursor and starts from the DSQ
++	 * head when it is called again.  The verifier relies on an iterator
++	 * which returned NULL to keep returning NULL (see
++	 * process_iter_next_call()), so remember the drained state.
++	 */
++	if (!p)
++		kit->cursor.flags |= __SCX_DSQ_ITER_DRAINED;
 +
- 	/*
- 	 * It's not always safe to allocate in a user space scheduler, as an
- 	 * enqueued task could hold a lock that we require in order to be able
++	return p;
+ }
+ 
+ /**
 -- 
-2.53.0
+2.34.1
 
-base-commit: 5b740a72b55c4267ba4d8010f17dde26b26f52d3
