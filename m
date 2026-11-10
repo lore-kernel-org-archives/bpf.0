@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794306080;
-	b=RcUjlPx49fZjanoklkWXYjCkjJ4Klhs3d9uW5klwy5L2cWsswMu37sYzlJwEvCb6pG9X
-	 zomFsIflqdfkn2zLwHpsXwn/KgXMhfF3Uc5Up9ItC5kGfagkM+EKEWOZ7tjJRQe3ZRT/I
-	 a9XXiC6JKpwA2voCfmeupWzvxJHTvjUfb0SFbyDB/vIAcaBBXTqsu7rckRfyyJnFXPxyg
-	 zPFtU8xXX1zzFwAbyrV/H4KtYt4Nbn7wvQSxwvaRxkFDPGZnfq3dhCpqVNfvQG8tyPL+B
-	 0cm8WkoelxTFaox0VTHdfNgwTOmboF8ZLDLaKuKGrN3I2H++ezxH08JIguw1UKmrK+Q==
+	t=1794306089;
+	b=Zc9tltpbz3mKCHMTXYK69xCrMm15AuxUkQ7zGnu3vw7H4deRNnjqrz233JHymljeU5pe
+	 qwNVM0RSItqh3VVbu5qwf+qYyb+I5UXz1c1B9JWWpI11jUXTpbSZjGLAPJ8a/SXd4V6yY
+	 tj8fZ81GgLJdj3OMdUmPo3dI/dJZrekm2NopeZl2nuZzXn5OpIag3xrcKX5AR5hPRMN3V
+	 nUsMzCr/8qIdh7lw6rSa0/aQaDTPagBmTvGnlB4TvxQWmLOOy8rZ10WpFAu3+hq1sVnJt
+	 Zcf8I7PRp8axwNho8VUi4MxxDJt51ix73uDXfYU/nbkRs2f8BpZmCxjpVSfTaslfvWw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794306080;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794306089;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=EaAIf8n2DBcmDMPnjlNQguK6bcLA3FkltOpZdxk7m0Q=;
-	b=axeeje0x4wzzSVZheFSViE0k8ss/Ek/a3D2aNjgfOlOW+ShBSjMzpar0gpzAcolEw6+J
-	 6BqvlBI64RdPM9WvkodL8ykfC3LApv/VemUHBzu1wcbv/xIagdmitlCzbpvgwdaSLybHa
-	 0La4cZHgvwCZxbnRs0FvuK4sTp0LnF5wIQePm7qHmd4YyW1Ir2nOqSB0rzKXQCpGuZazc
-	 eeL8DBACXwlrm5Kw3S28zt6a8KdRPae4h01+fh2Gfo8hkDo1yXkOQqgjZ+n4vyHF7B7+T
-	 Z5wIzsLMdvQgWHxYxCCbU5cHmVS410X5bI3pXjXGqFr2dhTHefHaIcFl+OvwFeJk8dA==
+	bh=3EhYz0LV+XgzV+iKzAI6YUF5VDNk4UHaeAjsQNOiOZE=;
+	b=21La4xrd+kKfW4Q+LEIscgylTs61k/3fKVazyJS0hEiY0d9NBrKDuFNynZ57sP4k2+wD
+	 r3NTWLwJgMTgSQ6H1YmkOLjDGyvboY1PcpxFZTyUTdptDjuJ4lODqroEM6oTqocL/i+/4
+	 9YQxudSdIpr/JlShbr/H5o45sINitR6vCWMsbE3WuT03h8/7dlLOELwGDuIwNbsO7QgUb
+	 Z6xC2CPPvlMAQFhK5PGusVnI8ZmZgUDhBKrNawyf9XT/Q+kqlmldQphPncW6w8fCW4IhB
+	 iwGwvROsdX6Fg6hGHr6S7ggPjvPUW/Ux0JEo948y02KGEoa0hn2wz2RQg4dFkH+G6ww==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=K+ZTS4eS;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WfSQTExS;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F69960710E9;
-	Tue, 10 Nov 2026 10:21:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 890B2606A436;
+	Tue, 10 Nov 2026 10:21:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=K+ZTS4eS
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B2C61F008A4;
-	Tue, 10 Nov 2026 10:21:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WfSQTExS
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 565561F008A1;
+	Tue, 10 Nov 2026 10:21:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794306079;
-	bh=EaAIf8n2DBcmDMPnjlNQguK6bcLA3FkltOpZdxk7m0Q=;
+	s=k20260515; t=1794306089;
+	bh=3EhYz0LV+XgzV+iKzAI6YUF5VDNk4UHaeAjsQNOiOZE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=K+ZTS4eSGLUvL2Kc9T/xrqONpdzyJK9J4ur4Rb7tdF9Z73rkNMEv6GU/t+gGDyfXo
-	 vvu5pHwNLGYpMTXIiXIsVz9Xqi/8B7KCLpEIkD3YUt7j6l1WQXFGGH5h1epwZ7l9wa
-	 iZHkMD8vafYswymUXoFgtMowiUMvv8vqyKlKFnPH8+Vuzz0jKV4hRfRaSeqYcYnHvi
-	 pgjgYPEvHkx1FqADBIQZ5/CEUHD5hcyTAWxSm2bYDr1VPJP7xmTWXcB+xRx4o4SKR0
-	 oRoObaantJqNuht5h8LwoOlFJfW6BQguvGPc3lO930qstWRodUVknojhXFlL5FNQnm
-	 I73uzqdZaDRRw==
+	b=WfSQTExSq8Y+L4DPs4x0KIcmf45/g8mXQgth7hFvHK9zO/r28+ogycIQvR2KqdLFn
+	 1te8S7qzO6Sx5cC7fkni3AyemNQ7ToMsfzD3yROLs+CgfBJRgBOmCn5lRw5sK0tfWm
+	 YAALXaGDA1tszJb35SUlRuYRmhV2twlZ8RYfc7A8gXauRUEhqSRjkIhAaeIsNv8mp2
+	 MKx+p6yTr1cnRs/7CexrSX+EZXljouzjDg6LguxyOA5BiAtCiQyTQGc7bpsDSVBwTP
+	 aDkqBoKGtsD//7EIhui9KXhJccbsmIYAP6CuFHqPrCC6giKvXtLv/fjlxMb8j2Pssw
+	 rLjc82cz8YI+g==
 From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
 To: Magnus Karlsson <magnus.karlsson@intel.com>,
 	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
@@ -84,9 +84,9 @@ Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Stuart Clark <stuclar@meta.com>
-Subject: [PATCH net-next v1 03/11] xdp: Copy buffers with restricted lifetime
-Date: Tue, 10 Nov 2026 11:20:24 +0100
-Message-ID: <20261110102039.1002605-4-bjorn@kernel.org>
+Subject: [PATCH net-next v1 04/11] xsk: Allocate UMEM chunks through page_pool
+Date: Tue, 10 Nov 2026 11:20:25 +0100
+Message-ID: <20261110102039.1002605-5-bjorn@kernel.org>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261110102039.1002605-1-bjorn@kernel.org>
 References: <20261110102039.1002605-1-bjorn@kernel.org>
@@ -102,552 +102,391 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-UMEM stays mapped writable in userspace, and it has a fixed number of
-chunks. The stack must not keep its chunks in an skb or an xdp_frame.
-Mark the providers whose buffers the stack may keep with
-MP_CAP_RETAIN, and copy packets of the others on XDP_PASS, on
-conversion to a frame, and on redirects other than XSKMAP.
+AF_XDP zero copy needs a second RX allocator in every driver. A
+page_pool driver can take UMEM chunks from a memory provider instead,
+and keep its refill, recycling and DMA sync code.
 
-The head chunk is writable by userspace, so it cannot hold
-skb_shared_info, and virt_to_netmem() cannot find a net_iov head.
-Drivers pass kernel memory for both to xdp_init_buff_netmem().
-
-A static key keeps the check off while no such page pool exists. A
-frame copy is linear, so a multi-buffer packet of such a provider
-cannot go to a device or CPU map.
+Each aligned chunk becomes a net_iov, whose address netmem_address()
+finds without calling the provider. Userspace may post a chunk that
+the kernel still owns, so the provider tracks the owner of each chunk
+and drops such FILL entries. Chunks that a page pool releases stay in
+the kernel for reuse. Nothing installs the provider yet.
 
 Signed-off-by: Björn Töpel <bjorn@kernel.org>
 ---
- include/linux/skbuff.h                  |  1 +
- include/net/netmem.h                    | 10 +++
- include/net/page_pool/memory_provider.h |  3 +
- include/net/xdp.h                       | 92 +++++++++++++++++++++++--
- io_uring/zcrx.c                         |  2 +-
- net/core/dev.h                          |  4 ++
- net/core/devmem.c                       |  2 +-
- net/core/filter.c                       | 20 +++++-
- net/core/page_pool.c                    | 30 ++++++++
- net/core/xdp.c                          | 78 +++++++++++++++++----
- 10 files changed, 221 insertions(+), 21 deletions(-)
+ include/net/netmem.h |  25 ++++-
+ include/net/xdp.h    |   2 +-
+ net/xdp/Kconfig      |   1 +
+ net/xdp/Makefile     |   2 +-
+ net/xdp/xsk.h        |   6 ++
+ net/xdp/xsk_pp.c     | 246 +++++++++++++++++++++++++++++++++++++++++++
+ 6 files changed, 279 insertions(+), 3 deletions(-)
+ create mode 100644 net/xdp/xsk_pp.c
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 8b0039d49905..a9cc5dd0211a 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -2691,6 +2691,7 @@ static inline void skb_add_rx_frag_netmem(struct sk_buff *skb, int i,
- 					  int size, unsigned int truesize)
- {
- 	DEBUG_NET_WARN_ON_ONCE(size > truesize);
-+	DEBUG_NET_WARN_ON_ONCE(!netmem_can_retain(netmem));
- 
- 	skb_fill_netmem_desc(skb, i, netmem, off, size);
- 	skb->len += size;
 diff --git a/include/net/netmem.h b/include/net/netmem.h
-index f196b014184c..b986ad616334 100644
+index b986ad616334..a3b67ef32b21 100644
 --- a/include/net/netmem.h
 +++ b/include/net/netmem.h
-@@ -59,6 +59,7 @@ static_assert(sizeof(struct netmem_desc) <= offsetof(struct page, _refcount));
- /* net_iov */
- 
- DECLARE_STATIC_KEY_FALSE(page_pool_mem_providers);
-+DECLARE_STATIC_KEY_FALSE(page_pool_restricted);
- 
- /*  We overload the LSB of the struct page pointer to indicate whether it's
-  *  a page or net_iov.
-@@ -414,6 +415,15 @@ static inline bool net_is_devmem_iov(const struct net_iov *niov)
- void net_iov_inc_ref(struct net_iov *niov);
- void net_iov_dec_ref(struct net_iov *niov);
- 
-+#if IS_ENABLED(CONFIG_PAGE_POOL)
-+bool netmem_can_retain(netmem_ref netmem);
-+#else
-+static inline bool netmem_can_retain(netmem_ref netmem)
-+{
-+	return true;
-+}
-+#endif
-+
- /**
-  * netmem_inc_ref - acquire a non-page_pool reference on a netmem
-  * @netmem: netmem to reference
-diff --git a/include/net/page_pool/memory_provider.h b/include/net/page_pool/memory_provider.h
-index 4417e54a0f81..e732b21be9a2 100644
---- a/include/net/page_pool/memory_provider.h
-+++ b/include/net/page_pool/memory_provider.h
-@@ -25,10 +25,13 @@ struct sk_buff;
-  * @MP_CAP_READABLE: The CPU can access provider memory. It may back header
-  *	page pools, and XDP programs may run on it.
-  * @MP_CAP_FRAG: Page pool fragments may split provider buffers.
-+ * @MP_CAP_RETAIN: The stack may keep page pool references to provider
-+ *	buffers after the RX poll, for example in an skb or an xdp_frame.
-  */
- enum mp_caps {
- 	MP_CAP_READABLE		= BIT(0),
- 	MP_CAP_FRAG		= BIT(1),
-+	MP_CAP_RETAIN		= BIT(2),
+@@ -69,6 +69,7 @@ DECLARE_STATIC_KEY_FALSE(page_pool_restricted);
+ enum net_iov_type {
+ 	NET_IOV_DMABUF,
+ 	NET_IOV_IOURING,
++	NET_IOV_XSK,
  };
  
- struct memory_provider_ops {
+ /* A memory descriptor representing abstract networking I/O vectors.
+@@ -107,6 +108,10 @@ struct net_iov_area {
+ 	size_t num_niovs;
+ 	/* Each net_iov covers 1 << niov_shift bytes. */
+ 	unsigned int niov_shift;
++	/* CPU address of the first net_iov, or NULL if the CPU cannot read
++	 * the area.
++	 */
++	void *vaddr;
+ };
+ 
+ static inline struct net_iov_area *net_iov_owner(const struct net_iov *niov)
+@@ -119,6 +124,18 @@ static inline unsigned int net_iov_idx(const struct net_iov *niov)
+ 	return niov - net_iov_owner(niov)->niovs;
+ }
+ 
++static inline void *net_iov_address(const struct net_iov *niov)
++{
++	const struct net_iov_area *area = net_iov_owner(niov);
++	unsigned long off;
++
++	if (!area->vaddr)
++		return NULL;
++
++	off = (unsigned long)net_iov_idx(niov) << area->niov_shift;
++	return area->vaddr + off;
++}
++
+ /* Initialize a niov: stamp the owning area, the memory provider type.
+  */
+ static inline void net_iov_init(struct net_iov *niov,
+@@ -345,10 +362,16 @@ static inline void *__netmem_address(netmem_ref netmem)
+ 	return page_address(__netmem_to_page(netmem));
+ }
+ 
++/**
++ * netmem_address - get the CPU address of the memory behind @netmem
++ * @netmem: netmem to get the address of
++ *
++ * Return: the address, or NULL if the CPU cannot read @netmem.
++ */
+ static inline void *netmem_address(netmem_ref netmem)
+ {
+ 	if (netmem_is_net_iov(netmem))
+-		return NULL;
++		return net_iov_address(netmem_to_net_iov(netmem));
+ 
+ 	return __netmem_address(netmem);
+ }
 diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 07231adfb5f8..1105bb9e3292 100644
+index 1105bb9e3292..5ab7802ac4e1 100644
 --- a/include/net/xdp.h
 +++ b/include/net/xdp.h
-@@ -81,6 +81,16 @@ enum xdp_buff_flags {
- 	 * XDP program is not attached.
- 	 */
- 	XDP_FLAGS_FRAGS_UNREADABLE	= BIT(2),
-+	/* Internal: the head netmem and the shared info are in &xdp_buff.ext.
-+	 * Not copied to xdp_frames or skbs.
-+	 */
-+	XDP_FLAGS_EXT			= BIT(3),
+@@ -368,7 +368,7 @@ static inline bool xdp_buff_add_frag(struct xdp_buff *xdp, netmem_ref netmem,
+ 
+ 	if (unlikely(netmem_is_pfmemalloc(netmem)))
+ 		xdp_buff_set_frag_pfmemalloc(xdp);
+-	if (unlikely(netmem_is_net_iov(netmem)))
++	if (unlikely(netmem_is_net_iov(netmem) && !netmem_address(netmem)))
+ 		xdp_buff_set_frag_unreadable(xdp);
+ 
+ 	return true;
+diff --git a/net/xdp/Kconfig b/net/xdp/Kconfig
+index 71af2febe72a..c9c68d3b3712 100644
+--- a/net/xdp/Kconfig
++++ b/net/xdp/Kconfig
+@@ -2,6 +2,7 @@
+ config XDP_SOCKETS
+ 	bool "XDP sockets"
+ 	depends on BPF_SYSCALL
++	select PAGE_POOL
+ 	default n
+ 	help
+ 	  XDP sockets allows a channel between XDP programs and
+diff --git a/net/xdp/Makefile b/net/xdp/Makefile
+index 30cdc4315f42..6e9d60f9f7f1 100644
+--- a/net/xdp/Makefile
++++ b/net/xdp/Makefile
+@@ -1,4 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ obj-$(CONFIG_XDP_SOCKETS) += xsk.o xdp_umem.o xsk_queue.o xskmap.o
+-obj-$(CONFIG_XDP_SOCKETS) += xsk_buff_pool.o
++obj-$(CONFIG_XDP_SOCKETS) += xsk_buff_pool.o xsk_pp.o
+ obj-$(CONFIG_XDP_SOCKETS_DIAG) += xsk_diag.o
+diff --git a/net/xdp/xsk.h b/net/xdp/xsk.h
+index 7c811b5cce76..4dab7b9a1487 100644
+--- a/net/xdp/xsk.h
++++ b/net/xdp/xsk.h
+@@ -34,6 +34,12 @@ static inline struct xdp_sock *xdp_sk(struct sock *sk)
+ 
+ void xsk_map_try_sock_delete(struct xsk_map *map, struct xdp_sock *xs,
+ 			     struct xdp_sock __rcu **map_entry);
++struct xsk_pp;
++
++extern const struct memory_provider_ops xsk_pp_ops;
++
++struct xsk_pp *xsk_pp_create(struct xsk_buff_pool *pool);
++void xsk_pp_put(struct xsk_pp *pp);
+ void xsk_clear_pool_at_qid(struct net_device *dev, u16 queue_id);
+ int xsk_reg_pool_at_qid(struct net_device *dev, struct xsk_buff_pool *pool,
+ 			u16 queue_id);
+diff --git a/net/xdp/xsk_pp.c b/net/xdp/xsk_pp.c
+new file mode 100644
+index 000000000000..fdd55265a6cd
+--- /dev/null
++++ b/net/xdp/xsk_pp.c
+@@ -0,0 +1,246 @@
++// SPDX-License-Identifier: GPL-2.0
++/* AF_XDP UMEM as a page pool memory provider
++ *
++ * Each aligned UMEM chunk is a readable net_iov with one owner at a time:
++ *
++ *   userspace --FILL--> page pool --release--> reuse --alloc--> page pool
++ *       ^                   |
++ *       +-----RX ring-------+
++ */
++
++#include <net/page_pool/helpers.h>
++#include <net/page_pool/memory_provider.h>
++#include <net/xdp_sock_drv.h>
++
++#include "xsk.h"
++#include "xsk_queue.h"
++
++enum xsk_pp_chunk {
++	XSK_PP_USER,	/* owned by userspace */
++	XSK_PP_POOL,	/* owned by a page pool */
++	XSK_PP_REUSE,	/* on the reuse stack */
 +};
 +
-+/* For a head buffer that cannot hold kernel data, see xdp_init_buff_netmem() */
-+struct xdp_buff_ext {
-+	netmem_ref netmem;
-+	struct skb_shared_info sinfo;
- };
- 
- struct xdp_buff {
-@@ -89,7 +99,12 @@ struct xdp_buff {
- 	void *data_meta;
- 	void *data_hard_start;
- 	struct xdp_rxq_info *rxq;
--	struct xdp_txq_info *txq;
-+	union {
-+		/* DEVMAP egress programs only */
-+		struct xdp_txq_info *txq;
-+		/* RX buffers with XDP_FLAGS_EXT */
-+		struct xdp_buff_ext *ext;
-+	};
- 
- 	union {
- 		struct {
-@@ -138,7 +153,7 @@ static __always_inline void xdp_buff_set_frag_unreadable(struct xdp_buff *xdp)
- 
- static __always_inline u32 xdp_buff_get_skb_flags(const struct xdp_buff *xdp)
- {
--	return xdp->flags;
-+	return xdp->flags & ~XDP_FLAGS_EXT;
- }
- 
- static __always_inline void xdp_buff_clear_frag_pfmemalloc(struct xdp_buff *xdp)
-@@ -176,6 +191,50 @@ xdp_prepare_buff(struct xdp_buff *xdp, unsigned char *hard_start,
- 	xdp->data_meta = meta_valid ? data : data + 1;
- }
- 
-+/* See MP_CAP_RETAIN */
-+static __always_inline bool xdp_netmem_restricted(netmem_ref netmem)
++struct xsk_pp {
++	struct net_iov_area area;
++	struct xsk_buff_pool *pool;
++	/* Protects fq, state and reuse */
++	spinlock_t lock;
++	struct xsk_queue *fq;
++	refcount_t refs;
++	u32 nr_pools;
++	bool dma_need_sync;
++	u8 *state;
++	u32 reuse_cnt;
++	u32 reuse[];
++};
++
++static void xsk_pp_free(struct xsk_pp *pp)
 +{
-+	return IS_ENABLED(CONFIG_PAGE_POOL) &&
-+	       static_branch_unlikely(&page_pool_restricted) &&
-+	       !netmem_can_retain(netmem);
++	kvfree(pp->state);
++	kvfree(pp->area.niovs);
++	kvfree(pp);
 +}
 +
-+/**
-+ * xdp_init_buff_netmem - initialize an &xdp_buff for a netmem head buffer
-+ * @xdp: &xdp_buff to initialize
-+ * @frame_sz: frame size
-+ * @rxq: RX queue info
-+ * @netmem: head buffer
-+ * @ext: kernel memory used if @netmem cannot hold the shared info, or the
-+ *	stack must not keep it. It must live as long as @xdp.
-+ *
-+ * A driver that may receive into memory provider buffers uses this instead
-+ * of xdp_init_buff().
++void xsk_pp_put(struct xsk_pp *pp)
++{
++	if (refcount_dec_and_test(&pp->refs))
++		xsk_pp_free(pp);
++}
++
++/* @pool must be DMA mapped and have aligned chunks. The provider must be
++ * the only consumer of its FILL ring.
 + */
-+static __always_inline void
-+xdp_init_buff_netmem(struct xdp_buff *xdp, u32 frame_sz,
-+		     struct xdp_rxq_info *rxq, netmem_ref netmem,
-+		     struct xdp_buff_ext *ext)
++struct xsk_pp *xsk_pp_create(struct xsk_buff_pool *pool)
 +{
-+	xdp_init_buff(xdp, frame_sz, rxq);
-+	if (likely(!netmem_is_net_iov(netmem) &&
-+		   !xdp_netmem_restricted(netmem)))
-+		return;
-+
-+	ext->netmem = netmem;
-+	xdp->ext = ext;
-+	xdp->flags |= XDP_FLAGS_EXT;
-+}
-+
-+static __always_inline netmem_ref
-+xdp_buff_head_netmem(const struct xdp_buff *xdp)
-+{
-+	if (unlikely(xdp->flags & XDP_FLAGS_EXT))
-+		return xdp->ext->netmem;
-+
-+	return virt_to_netmem(xdp->data);
-+}
-+
- /* Reserve memory area at end-of data area.
-  *
-  * This macro reserves tailroom in the XDP buffer by limiting the
-@@ -189,9 +248,28 @@ xdp_prepare_buff(struct xdp_buff *xdp, unsigned char *hard_start,
- static inline struct skb_shared_info *
- xdp_get_shared_info_from_buff(const struct xdp_buff *xdp)
- {
-+	if (unlikely(xdp->flags & XDP_FLAGS_EXT))
-+		return &xdp->ext->sinfo;
-+
- 	return (struct skb_shared_info *)xdp_data_hard_end(xdp);
- }
- 
-+bool __xdp_buff_needs_copy(const struct xdp_buff *xdp);
-+
-+/* Must the stack copy a buffer of @xdp before it keeps it? XSK buffers are
-+ * copied by their own conversion.
-+ */
-+static __always_inline bool xdp_buff_needs_copy(const struct xdp_buff *xdp)
-+{
-+	if (unlikely(xdp->flags & XDP_FLAGS_EXT))
-+		return true;
-+	if (!IS_ENABLED(CONFIG_PAGE_POOL) ||
-+	    !static_branch_unlikely(&page_pool_restricted))
-+		return false;
-+
-+	return __xdp_buff_needs_copy(xdp);
-+}
-+
- static __always_inline unsigned int
- xdp_get_buff_len(const struct xdp_buff *xdp)
- {
-@@ -379,7 +457,7 @@ xdp_update_skb_frags_info(struct sk_buff *skb, u8 nr_frags,
- void xdp_warn(const char *msg, const char *func, const int line);
- #define XDP_WARN(msg) xdp_warn(msg, __func__, __LINE__)
- 
--struct sk_buff *xdp_build_skb_from_buff(const struct xdp_buff *xdp);
-+struct sk_buff *xdp_build_skb_from_buff(struct xdp_buff *xdp);
- struct sk_buff *xdp_build_skb_from_zc(struct xdp_buff *xdp);
- struct xdp_frame *xdp_convert_zc_to_xdp_frame(struct xdp_buff *xdp);
- struct sk_buff *__xdp_build_skb_from_frame(struct xdp_frame *xdpf,
-@@ -420,12 +498,15 @@ int xdp_update_frame_from_buff(const struct xdp_buff *xdp,
- 		return -ENOSPC;
- 	}
- 
-+	/* The stack may keep the frame, see xdp_buff_needs_copy(). */
-+	DEBUG_NET_WARN_ON_ONCE(xdp_buff_needs_copy(xdp));
-+
- 	xdp_frame->data = xdp->data;
- 	xdp_frame->len  = xdp->data_end - xdp->data;
- 	xdp_frame->headroom = headroom - sizeof(*xdp_frame);
- 	xdp_frame->metasize = metasize;
- 	xdp_frame->frame_sz = xdp->frame_sz;
--	xdp_frame->flags = xdp->flags;
-+	xdp_frame->flags = xdp_buff_get_skb_flags(xdp);
- 
- 	return 0;
- }
-@@ -436,7 +517,8 @@ struct xdp_frame *xdp_convert_buff_to_frame(struct xdp_buff *xdp)
- {
- 	struct xdp_frame *xdp_frame;
- 
--	if (xdp->rxq->mem.type == MEM_TYPE_XSK_BUFF_POOL)
-+	if (xdp->rxq->mem.type == MEM_TYPE_XSK_BUFF_POOL ||
-+	    xdp_buff_needs_copy(xdp))
- 		return xdp_convert_zc_to_xdp_frame(xdp);
- 
- 	/* Store info in top of packet */
-diff --git a/io_uring/zcrx.c b/io_uring/zcrx.c
-index 3b5bf97aa203..98d83a8e45e4 100644
---- a/io_uring/zcrx.c
-+++ b/io_uring/zcrx.c
-@@ -1478,7 +1478,7 @@ static const struct memory_provider_ops io_uring_pp_zc_ops = {
- 	.destroy		= io_pp_zc_destroy,
- 	.nl_fill		= io_pp_nl_fill,
- 	.uninstall		= io_pp_uninstall,
--	.caps			= MP_CAP_FRAG,
-+	.caps			= MP_CAP_FRAG | MP_CAP_RETAIN,
- };
- 
- static unsigned zcrx_parse_rq(netmem_ref *netmem_array, unsigned nr,
-diff --git a/net/core/dev.h b/net/core/dev.h
-index 4e9e8cd15697..e3337013ffc8 100644
---- a/net/core/dev.h
-+++ b/net/core/dev.h
-@@ -13,6 +13,10 @@ struct netlink_ext_ack;
- struct netdev_queue_config;
- struct cpumask;
- struct pp_memory_provider_params;
-+struct xdp_buff;
-+struct xdp_frame;
-+
-+struct xdp_frame *xdp_copy_buff_to_frame(const struct xdp_buff *xdp);
- 
- /* Random bits of netdevice that don't need to be exposed */
- #define FLOW_LIMIT_HISTORY	(1 << 7)  /* must be ^2 and !overflow buckets */
-diff --git a/net/core/devmem.c b/net/core/devmem.c
-index 8f190b574beb..dea4a4a17e86 100644
---- a/net/core/devmem.c
-+++ b/net/core/devmem.c
-@@ -698,5 +698,5 @@ static const struct memory_provider_ops dmabuf_devmem_ops = {
- 	.release_netmem		= mp_dmabuf_devmem_release_page,
- 	.nl_fill		= mp_dmabuf_devmem_nl_fill,
- 	.uninstall		= mp_dmabuf_devmem_uninstall,
--	.caps			= MP_CAP_FRAG,
-+	.caps			= MP_CAP_FRAG | MP_CAP_RETAIN,
- };
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 80380f89adf9..f93839b493b2 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -4774,12 +4774,28 @@ int xdp_do_redirect(struct net_device *dev, struct xdp_buff *xdp,
- {
- 	struct bpf_redirect_info *ri = bpf_net_ctx_get_ri();
- 	enum bpf_map_type map_type = ri->map_type;
-+	struct xdp_frame *xdpf;
-+	int err;
- 
- 	if (map_type == BPF_MAP_TYPE_XSKMAP)
- 		return __xdp_do_redirect_xsk(ri, dev, xdp, xdp_prog);
- 
--	return __xdp_do_redirect_frame(ri, dev, xdp_convert_buff_to_frame(xdp),
--				       xdp_prog);
-+	if (likely(!xdp_buff_needs_copy(xdp)))
-+		return __xdp_do_redirect_frame(ri, dev,
-+					       xdp_convert_buff_to_frame(xdp),
-+					       xdp_prog);
-+
-+	/* Release the source only after the target took the copy. */
-+	xdpf = xdp_copy_buff_to_frame(xdp);
-+	err = __xdp_do_redirect_frame(ri, dev, xdpf, xdp_prog);
-+	if (unlikely(err)) {
-+		if (xdpf)
-+			xdp_return_frame(xdpf);
-+		return err;
-+	}
-+
-+	xdp_return_buff(xdp);
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(xdp_do_redirect);
- 
-diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-index d88a3ea528d4..8237fda598ab 100644
---- a/net/core/page_pool.c
-+++ b/net/core/page_pool.c
-@@ -34,6 +34,10 @@
- 
- DEFINE_STATIC_KEY_FALSE(page_pool_mem_providers);
- 
-+/* Enabled while a pool of a provider without MP_CAP_RETAIN exists. */
-+DEFINE_STATIC_KEY_FALSE(page_pool_restricted);
-+EXPORT_SYMBOL(page_pool_restricted);
-+
- #define DEFER_TIME (msecs_to_jiffies(1000))
- #define DEFER_WARN_INTERVAL (60 * HZ)
- 
-@@ -188,6 +192,28 @@ static void page_pool_struct_check(void)
- 				    PAGE_POOL_FRAG_GROUP_ALIGN);
- }
- 
-+/**
-+ * netmem_can_retain() - may the stack keep @netmem after the RX poll
-+ * @netmem: netmem to check
-+ *
-+ * Context: the caller holds @netmem through its page pool. A plain page
-+ * reference does not keep the page in its pool.
-+ * Return: false if @netmem belongs to a memory provider without
-+ * MP_CAP_RETAIN.
-+ */
-+bool netmem_can_retain(netmem_ref netmem)
-+{
-+	const struct memory_provider_ops *ops;
-+
-+	netmem = netmem_compound_head(netmem);
-+	if (!netmem_is_pp(netmem))
-+		return true;
-+
-+	ops = netmem_get_pp(netmem)->mp_ops;
-+	return !ops || ops->caps & MP_CAP_RETAIN;
-+}
-+EXPORT_SYMBOL(netmem_can_retain);
-+
- static int page_pool_select_mp(struct page_pool *pool,
- 			       const struct pp_memory_provider_params *mpp)
- {
-@@ -324,6 +350,8 @@ static int page_pool_init(struct page_pool *pool,
- 		}
- 
- 		static_branch_inc(&page_pool_mem_providers);
-+		if (!(pool->mp_ops->caps & MP_CAP_RETAIN))
-+			static_branch_inc(&page_pool_restricted);
- 	} else if (pool->p.order > MAX_PAGE_ORDER) {
- 		err = -EINVAL;
- 		goto free_ptr_ring;
-@@ -352,6 +380,8 @@ static void page_pool_uninit(struct page_pool *pool)
- #endif
- 
- 	if (pool->mp_ops) {
-+		if (!(pool->mp_ops->caps & MP_CAP_RETAIN))
-+			static_branch_dec(&page_pool_restricted);
- 		pool->mp_ops->destroy(pool);
- 		static_branch_dec(&page_pool_mem_providers);
- 	}
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index 1d679e8fd649..0cf46d492d91 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -23,6 +23,8 @@
- #include <trace/events/xdp.h>
- #include <net/xdp_sock_drv.h>
- 
-+#include "dev.h"
-+
- #define REG_STATE_NEW		0x0
- #define REG_STATE_REGISTERED	0x1
- #define REG_STATE_UNREGISTERED	0x2
-@@ -559,10 +561,41 @@ void xdp_return_buff(struct xdp_buff *xdp)
- 			     xdp->rxq->mem.type, true, xdp);
- 
- out:
--	__xdp_return(virt_to_netmem(xdp->data), xdp->rxq->mem.type, true, xdp);
-+	__xdp_return(xdp_buff_head_netmem(xdp), xdp->rxq->mem.type, true, xdp);
- }
- EXPORT_SYMBOL_GPL(xdp_return_buff);
- 
-+bool __xdp_buff_needs_copy(const struct xdp_buff *xdp)
-+{
-+	const struct skb_shared_info *sinfo;
++	struct net_iov *niov;
++	struct xsk_pp *pp;
++	dma_addr_t dma;
 +	u32 i;
 +
-+	/* Provider buffers come only from page pool queues */
-+	if (xdp->rxq->mem.type != MEM_TYPE_PAGE_POOL)
-+		return false;
-+	if (!netmem_can_retain(xdp_buff_head_netmem(xdp)))
-+		return true;
-+	if (likely(!xdp_buff_has_frags(xdp)))
++	pp = kvzalloc_flex(*pp, reuse, pool->heads_cnt, GFP_KERNEL_ACCOUNT);
++	if (!pp)
++		return ERR_PTR(-ENOMEM);
++
++	pp->area.niovs = kvzalloc_objs(*pp->area.niovs, pool->heads_cnt,
++				       GFP_KERNEL_ACCOUNT);
++	pp->state = kvzalloc(pool->heads_cnt, GFP_KERNEL_ACCOUNT);
++	if (!pp->area.niovs || !pp->state) {
++		xsk_pp_free(pp);
++		return ERR_PTR(-ENOMEM);
++	}
++
++	pp->area.num_niovs = pool->heads_cnt;
++	pp->area.niov_shift = pool->chunk_shift;
++	pp->area.vaddr = pool->addrs;
++	pp->pool = pool;
++	pp->fq = pool->fq;
++	pp->dma_need_sync = dma_dev_need_sync(pool->dev);
++	spin_lock_init(&pp->lock);
++	refcount_set(&pp->refs, 1);
++
++	for (i = 0; i < pp->area.num_niovs; i++) {
++		niov = &pp->area.niovs[i];
++		dma = xp_raw_get_dma(pool, (u64)i << pool->chunk_shift);
++		net_iov_init(niov, &pp->area, NET_IOV_XSK);
++		if (net_mp_niov_set_dma_addr(niov, dma)) {
++			xsk_pp_free(pp);
++			return ERR_PTR(-ERANGE);
++		}
++	}
++
++	return pp;
++}
++
++static int xsk_pp_init(struct page_pool *pool)
++{
++	struct xsk_pp *pp = pool->mp_priv;
++
++	if (pool->p.order || pool->p.dma_dir != DMA_BIDIRECTIONAL ||
++	    pool->p.dev != pp->pool->dev)
++		return -EINVAL;
++	if (pool->p.max_len > pp->pool->chunk_size ||
++	    pool->p.offset > pp->pool->chunk_size - pool->p.max_len)
++		return -EINVAL;
++
++	refcount_inc(&pp->refs);
++	spin_lock_bh(&pp->lock);
++	pp->nr_pools++;
++	spin_unlock_bh(&pp->lock);
++	return 0;
++}
++
++static void xsk_pp_destroy(struct page_pool *pool)
++{
++	struct xsk_pp *pp = pool->mp_priv;
++
++	spin_lock_bh(&pp->lock);
++	pp->nr_pools--;
++	spin_unlock_bh(&pp->lock);
++	xsk_pp_put(pp);
++}
++
++static bool xsk_pp_claim(struct xsk_pp *pp, u32 idx, enum xsk_pp_chunk from)
++{
++	lockdep_assert_held(&pp->lock);
++
++	if (pp->state[idx] != from)
 +		return false;
 +
-+	sinfo = xdp_get_shared_info_from_buff(xdp);
-+	for (i = 0; i < sinfo->nr_frags; i++) {
-+		if (!netmem_can_retain(skb_frag_netmem(&sinfo->frags[i])))
-+			return true;
++	pp->state[idx] = XSK_PP_POOL;
++	return true;
++}
++
++static u32 xsk_pp_alloc_reuse(struct xsk_pp *pp, netmem_ref *netmems, u32 max)
++{
++	u32 idx, n = 0;
++
++	while (n < max && pp->reuse_cnt) {
++		idx = pp->reuse[--pp->reuse_cnt];
++		if (WARN_ON_ONCE(!xsk_pp_claim(pp, idx, XSK_PP_REUSE)))
++			continue;
++		netmems[n++] = net_iov_to_netmem(&pp->area.niovs[idx]);
 +	}
++
++	return n;
++}
++
++static u32 xsk_pp_alloc_fill(struct xsk_pp *pp, netmem_ref *netmems, u32 max)
++{
++	struct xsk_buff_pool *pool = pp->pool;
++	struct xsk_queue *fq = pp->fq;
++	u32 i, entries, cons, idx, n = 0;
++	u64 addr;
++
++	if (!fq || !max)
++		return 0;
++
++	entries = xskq_cons_nb_entries(fq, max);
++	if (!entries) {
++		fq->queue_empty_descs++;
++		return 0;
++	}
++
++	cons = fq->cached_cons;
++	for (i = 0; i < entries; i++) {
++		__xskq_cons_read_addr_unchecked(fq, cons++, &addr);
++		addr &= pool->chunk_mask;
++		idx = addr >> pp->area.niov_shift;
++		if (unlikely(addr >= pool->addrs_cnt ||
++			     !xsk_pp_claim(pp, idx, XSK_PP_USER))) {
++			fq->invalid_descs++;
++			continue;
++		}
++		netmems[n++] = net_iov_to_netmem(&pp->area.niovs[idx]);
++	}
++
++	xskq_cons_release_n(fq, entries);
++	__xskq_cons_release(fq);
++	return n;
++}
++
++static netmem_ref xsk_pp_alloc_netmems(struct page_pool *pool, gfp_t gfp)
++{
++	netmem_ref *netmems = pool->alloc.cache;
++	struct xsk_pp *pp = pool->mp_priv;
++	struct net_iov *niov;
++	dma_addr_t dma;
++	u32 i, n;
++
++	if (WARN_ON_ONCE(pool->alloc.count))
++		return 0;
++
++	spin_lock_bh(&pp->lock);
++	n = xsk_pp_alloc_reuse(pp, netmems, PP_ALLOC_CACHE_REFILL);
++	n += xsk_pp_alloc_fill(pp, netmems + n, PP_ALLOC_CACHE_REFILL - n);
++	spin_unlock_bh(&pp->lock);
++	if (!n)
++		return 0;
++
++	for (i = 0; i < n; i++) {
++		niov = netmem_to_net_iov(netmems[i]);
++		dma = page_pool_get_dma_addr_netmem(netmems[i]);
++		if (pp->dma_need_sync)
++			dma_sync_single_range_for_device(pool->p.dev, dma,
++							 pool->p.offset,
++							 pool->p.max_len,
++							 pool->p.dma_dir);
++		net_mp_niov_set_page_pool(pool, niov);
++	}
++
++	pool->alloc.count = n - 1;
++	return netmems[n - 1];
++}
++
++static bool xsk_pp_release_netmem(struct page_pool *pool, netmem_ref netmem)
++{
++	struct net_iov *niov = netmem_to_net_iov(netmem);
++	struct xsk_pp *pp = pool->mp_priv;
++	u32 idx = net_iov_idx(niov);
++
++	spin_lock_bh(&pp->lock);
++	net_mp_niov_clear_page_pool(niov);
++	if (!WARN_ON_ONCE(pp->state[idx] != XSK_PP_POOL ||
++			  pp->reuse_cnt == pp->area.num_niovs)) {
++		pp->state[idx] = XSK_PP_REUSE;
++		pp->reuse[pp->reuse_cnt++] = idx;
++	}
++	spin_unlock_bh(&pp->lock);
 +
 +	return false;
 +}
-+EXPORT_SYMBOL_GPL(__xdp_buff_needs_copy);
 +
-+static void xdp_release_copied(struct xdp_buff *xdp)
++static int xsk_pp_nl_fill(void *mp_priv, struct sk_buff *rsp,
++			  struct netdev_rx_queue *rxq)
 +{
-+	if (xdp->rxq->mem.type == MEM_TYPE_XSK_BUFF_POOL)
-+		xsk_buff_free(xdp);
-+	else
-+		xdp_return_buff(xdp);
++	return 0;
 +}
 +
- void xdp_attachment_setup(struct xdp_attachment_info *info,
- 			  struct netdev_bpf *bpf)
- {
-@@ -573,13 +606,19 @@ void xdp_attachment_setup(struct xdp_attachment_info *info,
- }
- EXPORT_SYMBOL_GPL(xdp_attachment_setup);
- 
--struct xdp_frame *xdp_convert_zc_to_xdp_frame(struct xdp_buff *xdp)
-+/* @xdp stays with the caller, also on success */
-+struct xdp_frame *xdp_copy_buff_to_frame(const struct xdp_buff *xdp)
- {
- 	unsigned int metasize, totsize;
- 	void *addr, *data_to_copy;
- 	struct xdp_frame *xdpf;
- 	struct page *page;
- 
-+	/* Copies are linear. XSK frames lose their frags, as before. */
-+	if (unlikely(xdp_buff_has_frags(xdp)) &&
-+	    xdp->rxq->mem.type != MEM_TYPE_XSK_BUFF_POOL)
-+		return NULL;
-+
- 	/* Clone into a MEM_TYPE_PAGE_ORDER0 xdp_frame. */
- 	metasize = xdp_data_meta_unsupported(xdp) ? 0 :
- 		   xdp->data - xdp->data_meta;
-@@ -607,7 +646,17 @@ struct xdp_frame *xdp_convert_zc_to_xdp_frame(struct xdp_buff *xdp)
- 	xdpf->frame_sz = PAGE_SIZE;
- 	xdpf->mem_type = MEM_TYPE_PAGE_ORDER0;
- 
--	xsk_buff_free(xdp);
-+	return xdpf;
-+}
-+
-+struct xdp_frame *xdp_convert_zc_to_xdp_frame(struct xdp_buff *xdp)
-+{
-+	struct xdp_frame *xdpf;
-+
-+	xdpf = xdp_copy_buff_to_frame(xdp);
-+	if (xdpf)
-+		xdp_release_copied(xdp);
-+
- 	return xdpf;
- }
- EXPORT_SYMBOL_GPL(xdp_convert_zc_to_xdp_frame);
-@@ -627,10 +676,12 @@ EXPORT_SYMBOL_GPL(xdp_warn);
-  * &xdp_buff: allocate an skb head from the NAPI percpu cache, initialize
-  * skb data pointers and offsets, set the recycle bit if the buff is
-  * PP-backed, Rx queue index, protocol and update frags info.
-+ * A buffer that the stack must not keep is copied and released, see
-+ * xdp_buff_needs_copy(). On error, @xdp is not released.
-  *
-  * Return: new &sk_buff on success, %NULL on error.
-  */
--struct sk_buff *xdp_build_skb_from_buff(const struct xdp_buff *xdp)
-+struct sk_buff *xdp_build_skb_from_buff(struct xdp_buff *xdp)
- {
- 	const struct xdp_rxq_info *rxq = xdp->rxq;
- 	const struct skb_shared_info *sinfo;
-@@ -638,6 +689,9 @@ struct sk_buff *xdp_build_skb_from_buff(const struct xdp_buff *xdp)
- 	u32 nr_frags = 0;
- 	int metalen;
- 
-+	if (unlikely(xdp_buff_needs_copy(xdp)))
-+		return xdp_build_skb_from_zc(xdp);
-+
- 	if (unlikely(xdp_buff_has_frags(xdp))) {
- 		sinfo = xdp_get_shared_info_from_buff(xdp);
- 		nr_frags = sinfo->nr_frags;
-@@ -674,12 +728,12 @@ struct sk_buff *xdp_build_skb_from_buff(const struct xdp_buff *xdp)
- EXPORT_SYMBOL_GPL(xdp_build_skb_from_buff);
- 
- /**
-- * xdp_copy_frags_from_zc - copy frags from XSk buff to skb
-+ * xdp_copy_frags_from_zc - copy frags from an &xdp_buff to an skb
-  * @skb: skb to copy frags to
-- * @xdp: XSk &xdp_buff from which the frags will be copied
-+ * @xdp: XSk buff, or buffer that the stack must not keep
-  * @pp: &page_pool backing page allocation, if available
-  *
-- * Copy all frags from XSk &xdp_buff to the skb to pass it up the stack.
-+ * Copy all frags from @xdp to the skb to pass it up the stack.
-  * Allocate a new buffer for each frag, copy it and attach to the skb.
-  *
-  * Return: true on success, false on netmem allocation fail.
-@@ -724,14 +778,14 @@ static noinline bool xdp_copy_frags_from_zc(struct sk_buff *skb,
- }
- 
- /**
-- * xdp_build_skb_from_zc - create an skb from XSk &xdp_buff
-- * @xdp: source XSk buff
-+ * xdp_build_skb_from_zc - create an skb from a copy of an &xdp_buff
-+ * @xdp: source XSk buff, or buffer that the stack must not keep
-  *
-- * Similar to xdp_build_skb_from_buff(), but for XSk frames. Allocate an skb
-+ * Similar to xdp_build_skb_from_buff(), but copies @xdp. Allocate an skb
-  * head, new buffer for the head, copy the data and initialize the skb fields.
-  * If there are frags, allocate new buffers for them and copy.
-  * Buffers are allocated from the system percpu pools to try recycling them.
-- * If new skb was built successfully, @xdp is returned to XSk pool's freelist.
-+ * If new skb was built successfully, @xdp is released to its owner.
-  * On error, it remains untouched and the caller must take care of this.
-  *
-  * Return: new &sk_buff on success, %NULL on error.
-@@ -781,7 +835,7 @@ struct sk_buff *xdp_build_skb_from_zc(struct xdp_buff *xdp)
- 		goto out;
- 	}
- 
--	xsk_buff_free(xdp);
-+	xdp_release_copied(xdp);
- 
- 	skb->protocol = eth_type_trans(skb, rxq->dev);
- 
++const struct memory_provider_ops xsk_pp_ops = {
++	.init		= xsk_pp_init,
++	.destroy	= xsk_pp_destroy,
++	.alloc_netmems	= xsk_pp_alloc_netmems,
++	.release_netmem	= xsk_pp_release_netmem,
++	.nl_fill	= xsk_pp_nl_fill,
++	.caps		= MP_CAP_READABLE,
++};
 -- 
 2.56.0
 
