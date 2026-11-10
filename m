@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794328190;
-	b=r1VJcbJTXcERPNcb3M2njfNAP6cSAglmCikIoiHA2qvMxBjb4OLodcCYQIiE4Zd3Wunr
-	 O+J//VjZE/LMnpc27Uwr9LU+MjX4chR+16UkT68PSrGNlEy92pda1eUAqkyXBGrGlqx3f
-	 xNfd5CVg+62fHzBEuBDmDpmUwNHUnlL2jo9XEpr6deoEdlh2Jo5b5q56LvvgoNbVPzfNI
-	 SS3p04VhEv2UUj5S1iufEW/rbEZvCSMidquIe6S29M6QwTMHIQsunzt37E0yN/AYqV0LB
-	 7XeN1ykX+hPztxv8Ky4Cd4nnjf+P6H2JO4ujIW467LyHOsv+A9HHfrB5WiKwCBTwUKw==
+	t=1794328192;
+	b=lagm+YkeEk6L0atBGDOSSTfOgwu8ZrzDM3Ccg5+hjm+mRWkbXlK4FeYRVEgFLYkFvveS
+	 /vsZfD1R1g9o5eFARfLriqu71T0YV3nzDM1xMF0VlMnLlIK7ShjrA+2YbYQt/G4d3eAT5
+	 S37Wpfd4ofpucDK/zjHJG//gqmfq4TPSaPb+yXPZz25ffcNqRZTIgkx2eNOKxPMTkF89R
+	 9SPZk8bpJo7jXXbimcf4dUPGK6/PDm+CiJQgTpElrJVjT6IPcHLMlj9VY6jSOx37bG+vd
+	 JYHDKUFMp0s+pTNkJQjEBrBOsGJ5rGDa5SvMO6vERZCXPaAEx5gYN4hmv54BtLanFQg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794328190;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794328192;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=qF9V9qGClJ+0xFAoPEUTPADxVU8ZMZN4y4qUsliZHdU=;
-	b=ZDyW+LUa7lQ61FocVZG7qtEVnfRyhnSYZa/hdQrENu43A8WuZsdUIXABtt11ibQ1wKOI
-	 PaCqOQfccUpDq1l38Y6ncvmewdcgof69NCMpCwjzLZkVsXVKSvgWcMyeHf7b81p9RpRe2
-	 pqszfubNIpoz4odE9SdBjd03p6VcScv3UkCWFh9BGp0WpQuA51RViPt2l/yHxXrU4T2tg
-	 UZLo9tV5zz+5i1xWXc7djUVMBl10WxSSnf2z+HbLnbo6ytVWIQnEppgsitG7ut+ksBs+j
-	 DCt1niKPryidG0dg0u2zNv2MwEe2PNorm7/N5PDaPPCwQ5RoU2ZnOtfaCo6z9UaUEiA==
+	bh=qV+5I3xoJxRujdrwMOK1g18t57cqNvStai8Z7cSzRSw=;
+	b=jk0O57C3e3HOXZHYeexLj6+OKlr+GiLGh5OKLNUSrdw1svNieOMVYWLgMOjIMxra2rpF
+	 zzsktV76Lq18RGfbPnt8Ah+QWXbaQIQXAc3R/9sEa/zoJa2MN1Q34Nx8qjmVo26ScEUWB
+	 XHX5uQZCE/7rX/G4XQTGgvqvYZYhgr5SvtecGhj/8EwCF04paSF2X1ASzqNDGJ0mH09sU
+	 /9zXKx2AIZNooK+eNEbHadfx15nfoXEXrJj7n+O+Hk0rLrtYXg8p97yX7dFDt2oZt/KrW
+	 kBSHqSDC5K0jrk8b7cMlQc8V3mcLUtHQxjPVSuCFA4m9CN3bLJNfgDdcmLy9zTrkbMA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="dpTZ/42y";
-	arc=none smtp.remote-ip=209.85.128.41
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=dOhF3tW9;
+	arc=none smtp.remote-ip=209.85.128.49
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C20C606C6EB
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 16:29:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1C20C606C6EB
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0E6D60A6F75
+	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 16:29:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C0E6D60A6F75
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=dpTZ/42y
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4a3517554f7so23550045e9.2
-        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 08:29:48 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=dOhF3tW9
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4a208d93758so23701705e9.3
+        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 08:29:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794328187; x=1794932987; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794328190; x=1794932990; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=qF9V9qGClJ+0xFAoPEUTPADxVU8ZMZN4y4qUsliZHdU=;
-        b=dpTZ/42ywLce6ZNNroRqLZW1tk9I22e6p3rZti82/UphqXsJDIJnPnFp/DjfCLiiHZ
-         lp0fb0zgtFYgcUeVwm1vCSSGNdiupkut0jI7QWr3qkaJ0+KF30DR3StkM7VInPOhl+KV
-         Ir5CtDcMLnbWOPoY+W1qmbahIkzHULJHj3tVvL8QO36/1isjjdkhEg1YHGfppWfoecg+
-         iAtkDHexH+ONONMAOC90h5MtqnrVcFcDjfWEnhGZ8I9Xth6J2fsz2aEvZ2VbPioUA465
-         QbPUvcHFAnrbSuzMVkUzlIm7cl/MJHOgZkw1pbHL3FMq0asKFFjw0FTR42alpuyFv0n9
-         6NFg==
+        bh=qV+5I3xoJxRujdrwMOK1g18t57cqNvStai8Z7cSzRSw=;
+        b=dOhF3tW9XRoWZIe/fuWGapLwyhNMUf7h7bPQLUWj0hsH2E0zZDxkXn4jwGhsjH66je
+         xoUNJxv5j2e9R7jEDbwRBJmVqJOaCpV4JJSrcA7p8u0X/s1UX2q0GSTQjQJCC7cuuJoP
+         vjZjhRZxOd9Bve1nOiLHYjsS4D3FHncc6qGMVfWuzgJv+Bi9RxDkTHmmeSGFXRvBv4OI
+         y5Yba4iHAbJ1NLwt7yDVRDKIUXCBjhgSjSFXrSSI/PBjr0EonNuBvxPQsNE8fo0PJTz/
+         ibrTVHm1aQl22g/UI320d/RZt6EzJET/kfNz03c/popygqIJGinRwM6F+ED0Q0zs77X8
+         QeSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794328187; x=1794932987;
+        d=1e100.net; s=20260707; t=1794328190; x=1794932990;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=qF9V9qGClJ+0xFAoPEUTPADxVU8ZMZN4y4qUsliZHdU=;
-        b=Xk1KDGFeQOEF470GxN7g2HvlDVlKOsp0tjutKGR7MmUJrosPFkVbezVrjQjUlHren3
-         +xNU8lv3RPe1UcPX/dKalqvsWgvaz4UNspmIGzjDpvMWQ+iXttfo3cb/RSR0CWFl32HM
-         OnvEXNMn7afrBwCnujzZBVg99d0yfC0J50cLspU3FzU295anGR0ejOASanPKSXzHtDxA
-         FG9Tlg9QWFbZxraRaf3qJF5RGuCYcSKyVuEo4emjI1dCcKDoXdj9GMFyMwZUanFhBj33
-         Dx2gKrVAdZXfHwRv+ZR14MWuSIHPSU8WeaMoxHW6x6scrygvvPlsTyDhdg47+nWoHtth
-         ZDDA==
-X-Forwarded-Encrypted: i=1; AL+hErE3LMAYqiqcp50P+x/s+2SsgBlY2n/wy5nCbBv8nO6/AbrdWwMmruhPvd2OBOVwuGck7L4=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9D/H5zKSqum89ZyntWBRR/Ybil7Oc3iKU8SvTriqyfcAoSCEO9
-	iU0NWkPOM8XIOf/yKa7YYlhkkImriFis+JvLbr8LFbi3JOPZcx50sSHPl35koA==
-X-Gm-Gg: AYBFou1M9NvzGxytmHwbTcpZQGEYsUUNZ0JNNz3SAYSjZupVEwgQ1kyL6fnX3+dbfLe
-	d4XULO6qL3qygjxOYQUzNFLokdIPEbfWOChxsQzyCxEH4OZtEgQZw6IQR9nZEi7heG4Ecqn2t8E
-	s79HOgg1hEQyLaQXwI0XN19MkKyO2l30pwHyxxKOyJw5SLjy6+L4AQgB5qIEqIQP8Gk1CYHVKzl
-	i5JCr9s7hQK+JUCJRtFj65JNJc0fTZhzkUowyN+OiP1tA1lUH/aPGeoCmYl/KEgaztSiLz2EQZx
-	min0Qgo8s5Vq30dafA2KwKO2qHbpoaAqAIrmv6ioOmx1mCCUG4L0fT3gWik8gglaO6KjzVCD5nb
-	5Z0yH2mdYEhw4Om+PinZ/XeAtJ7bwilu80xqcZzfxzF3MLlkEd5seD4VBhvxU1SQgTJQu4cMd4n
-	7MlJkiK3BzjuIkv1/DoByYMU66KU4qa87Kozzei5IKvlRTi1P9CVYb+wXQiu5991UfimwW5Od4X
-	Wr1tg0N+xwrrivwMcP9cd+BAwUm8Jxw4ZwBwdwQRIRNHKCpa+7/fimABxLvDq9SIgyjKvS/S6gb
-	EWXaEwU7XI1+yWzhFrgC13MDkXv75br8/neyQXdSdiRH5F4=
-X-Received: by 2002:a05:600c:1d18:b0:4a6:eca1:7d5c with SMTP id 5b1f17b1804b1-4ba023580demr49816375e9.32.1794328187124;
-        Tue, 10 Nov 2026 08:29:47 -0800 (PST)
+        bh=qV+5I3xoJxRujdrwMOK1g18t57cqNvStai8Z7cSzRSw=;
+        b=uYz721+5a+mMwjoJLMFEqZFaurL5v5k6OwU3IxpS4FZHS8elog004UXT75DTSkEd71
+         DSV1nyA3DoSq1xyK8sJu/7B1yIgZ7uuOvTjd5FnehyYo5HaQmjA5zZF3ni/W2sj8ihYV
+         nXwUbgcJwc/k0xk6ud9sRc4ZOrTufgjVtzLVuGuOuVzRnXzTKXvtvLWUATlHkg1aTcOA
+         GCODXWrsh4PITfufe67esF9YuZ8gc4tP5jJLYX1SCoHsXV87avXqc4khWF1ctg8OmDvX
+         Zy1jLukLV7H9WcGvSq+2nRZRqKpuaAZwr0EX0FBNwjxq0lLppz+1hzoDK55054K2LRiN
+         TWVw==
+X-Forwarded-Encrypted: i=1; AL+hErEWIHq0WQfs6jHQyragJLIc9sS9CKdsBaEJ0THtQVJlTRPmMp+OwQM1SIS7vSJDiL5xzjA=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/HLOCFVWeTWAHR1IJUwcTV9bm+G5jsOham2A9h4GuMPDHViYZx
+	EbRpZwz+ac2/2h19nRH38eiwd+5QmpVJnJUIisg9rxK3wsJasJcXDtxk
+X-Gm-Gg: AYBFou2zEbv1rL63GpCqW1U0oFlI8gO52Lj1N9qxjEh3uBbubkg5ULLwJfhsLxY+cs5
+	ULuqtBICqNqt/nx599p0Nw0lbaFQwv6b98VaU/NBPQP/7Np14Kx9bLGkgmuI7SUzXFtdJcpSfoa
+	lZc8fhl4Yw3pE6j5O2DQiYBkiRzeyml61zKrRbMqZuA8lRrGVIuRq2SqXYzN03fbENJi1d+o6a2
+	kZRsDKJi5lGArcD80wyB154qMb3AU1Mp/7aZNoFuLzpLZ8e2cscB7cfydMiqFK6KlEig22A2w1I
+	g4JTPcGLGxGmR3RJdCXd5C9kvKEMXZ8tFYN1zlBR/GM3Nwhcs9h2EtI3qW54Fte2hHA2l2MmDF8
+	4Na7igDTU6iLHx+bbCnyR7uwQZkQMsT8VClI3TNX8yTJI3XYD8JtLAsvwzNVutXTRp2W5FCRe0T
+	smQpA+vB0lgnuJr6IfWZlNMxA7yxEcHJiGZhtR9UoRJmQS4oDh5pJ96hM683U+janyzP0WTFrbR
+	4pGsvOnEd2EKNOSbRKbkpL9kKLR3frKoW8Z/Hct8FLF7PkTyJ28OjZD9nBpaDALJlimuWNo9edG
+	uzvMsPALASMqma9lbCfMe1fMPSAujufJaQGChCZOOqkoQSpIvUpujn6cFJWTAMiWBs3v
+X-Received: by 2002:a05:600c:468f:b0:4a3:12fb:1ee7 with SMTP id 5b1f17b1804b1-4ba0234cd58mr56150515e9.25.1794328189995;
+        Tue, 10 Nov 2026 08:29:49 -0800 (PST)
 Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba01fea745sm71287485e9.10.2026.11.10.08.29.44
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba01fea745sm71287485e9.10.2026.11.10.08.29.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 08:29:45 -0800 (PST)
+        Tue, 10 Nov 2026 08:29:49 -0800 (PST)
 From: Anton Protopopov <a.s.protopopov@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -97,9 +97,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Anton Protopopov <a.s.protopopov@gmail.com>
-Subject: [PATCH v3 bpf-next 16/18] selftests/bpf: Test fmod_ret candidates found by bpf_scan_ir
-Date: Tue, 10 Nov 2026 16:40:36 +0000
-Message-ID: <20261110164046.454431-17-a.s.protopopov@gmail.com>
+Subject: [PATCH v3 bpf-next 17/18] selftests/bpf: Enable bpf_scan_ir in the config
+Date: Tue, 10 Nov 2026 16:40:37 +0000
+Message-ID: <20261110164046.454431-18-a.s.protopopov@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261110164046.454431-1-a.s.protopopov@gmail.com>
 References: <20261110164046.454431-1-a.s.protopopov@gmail.com>
@@ -114,1026 +114,38 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add bpf_testmod_retval.c with functions for bpf_scan_ir to a new module
-bpf_test_retval.ko. The "test_retval:" decl tag of each lists the values
-which bpf_scan_ir must find. An empty list means that the function must
-not become an fmod_ret target. Cover constant errors of both return
-widths, assumptions, private stack writes, PHIs, sign extensions,
-PTR_ERR() of an ERR_PTR() from an inlined helper, which is not
-recognized yet, errors which are not known exactly, observable effects,
-a notrace function, a function on the error injection list, a declared
-target, a weak definition with an error which a strong one without
-errors in bpf_testmod_retval_strong.c replaces and two weak definitions,
-of which the one with an error in bpf_testmod_retval_strong.c loses the
-link.
-
-Build both files only with the plugin: their functions mean nothing
-without it and bpf_testmod_retval.c uses clang extensions such as
-__builtin_assume(). The module itself is always built so the selftests
-can install it.
-
-The functions are not in bpf_testmod.ko because kbuild first links a
-module built from several objects with "ld -r" and GNU ld places
-.data..percpu after .debug_info there. pahole then attributes the
-per-CPU variables of bpf_testmod to .debug_info and drops them from its
-BTF. The functions can be merged back into bpf_testmod.ko once pahole
-looks up variables only in allocated sections.
-
-Check that the tags in the module BTF match. Check that the verifier
-lets fmod_ret programs return only 0 or the listed values on every path,
-in the low 32 bits for an int function and in all 64 bits for an s64
-one. Declared targets and the static rules stay unrestricted. Check that
-an extension cannot replace a function of an fmod_ret program with
-restricted return values, neither at load nor when it is attached later,
-and that such a program cannot use tail calls.
-
-Skip the test when bpf_test_retval has no "test_retval:" tags, that is
-when it is built without the plugin.
+The bpf_scan_ir plugin is off by default. Without it bpf_test_retval has
+no fixtures for the plugin and fmodret_retval skips. Enable the plugin in
+the selftests config, so the CI jobs which build the kernel with clang
+build and test it. Kconfig enables the plugin only on x86 and arm64 with
+clang 19 or newer and a matching llvm-config, so elsewhere
+bpf_test_retval is built without the fixtures and fmodret_retval skips.
 
 Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
 ---
- tools/testing/selftests/bpf/Makefile          |   2 +-
- .../selftests/bpf/prog_tests/fmodret_retval.c | 211 +++++++++++
- .../selftests/bpf/progs/fmodret_retval.c      | 254 ++++++++++++++
- .../selftests/bpf/progs/fmodret_retval_ext.c  |  55 +++
- .../testing/selftests/bpf/test_kmods/Makefile |  15 +-
- .../bpf/test_kmods/bpf_test_retval_main.c     |  12 +
- .../bpf/test_kmods/bpf_testmod_retval.c       | 328 ++++++++++++++++++
- .../test_kmods/bpf_testmod_retval_strong.c    |  28 ++
- 8 files changed, 903 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/fmodret_retval.c
- create mode 100644 tools/testing/selftests/bpf/progs/fmodret_retval.c
- create mode 100644 tools/testing/selftests/bpf/progs/fmodret_retval_ext.c
- create mode 100644 tools/testing/selftests/bpf/test_kmods/bpf_test_retval_main.c
- create mode 100644 tools/testing/selftests/bpf/test_kmods/bpf_testmod_retval.c
- create mode 100644 tools/testing/selftests/bpf/test_kmods/bpf_testmod_retval_strong.c
+ tools/testing/selftests/bpf/config | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 77682bf28c6e..84554a2adfc1 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -47,7 +47,7 @@ TEST_PROGS_EXTENDED := \
- 	ima_setup.sh verify_sig_setup.sh
- 
- TEST_KMODS := bpf_testmod.ko bpf_test_no_cfi.ko bpf_test_modorder_x.ko \
--	bpf_test_modorder_y.ko bpf_test_rqspinlock.ko
-+	bpf_test_modorder_y.ko bpf_test_rqspinlock.ko bpf_test_retval.ko
- TEST_KMOD_TARGETS = $(addprefix $(OUTPUT)/,$(TEST_KMODS))
- 
- # Compile but not part of 'make run_tests'
-diff --git a/tools/testing/selftests/bpf/prog_tests/fmodret_retval.c b/tools/testing/selftests/bpf/prog_tests/fmodret_retval.c
-new file mode 100644
-index 000000000000..7b374fe68130
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/fmodret_retval.c
-@@ -0,0 +1,211 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <test_progs.h>
-+#include <bpf/btf.h>
-+#include "fmodret_retval.skel.h"
-+#include "fmodret_retval_ext.skel.h"
-+
-+#define TAG_FMODRET		"bpf_fmodret"
-+#define TAG_RETVAL		"bpf_fmodret_retval:"
-+#define TAG_TEST_RETVAL		"test_retval:"
-+
-+#define RETVAL_MODULE		"bpf_test_retval"
-+
-+/* The decl tags of a function */
-+struct func_tags {
-+	const char *test_retval;
-+	const char *retval;
-+	bool target;
-+};
-+
-+static bool tag_value(const char *name, const char *key, const char **value)
-+{
-+	size_t len = strlen(key);
-+
-+	if (strncmp(name, key, len))
-+		return false;
-+	*value = name + len;
-+	return true;
-+}
-+
-+/*
-+ * Return the decl tags of the functions of module BTF, indexed by BTF ID. Only
-+ * the types of the module itself are read, not those of its vmlinux base.
-+ */
-+static struct func_tags *collect_tags(const struct btf *btf, int start_id)
-+{
-+	int id, nr_types = btf__type_cnt(btf);
-+	struct func_tags *tags;
-+
-+	tags = calloc(nr_types, sizeof(*tags));
-+	if (!tags)
-+		return NULL;
-+	for (id = start_id; id < nr_types; id++) {
-+		const struct btf_type *t = btf__type_by_id(btf, id);
-+		struct func_tags *f;
-+		const char *name;
-+
-+		if (!btf_is_decl_tag(t) || btf_decl_tag(t)->component_idx != -1 ||
-+		    t->type >= nr_types)
-+			continue;
-+		f = &tags[t->type];
-+		name = btf__name_by_offset(btf, t->name_off);
-+		if (!tag_value(name, TAG_TEST_RETVAL, &f->test_retval) &&
-+		    !tag_value(name, TAG_RETVAL, &f->retval) && !strcmp(name, TAG_FMODRET))
-+			f->target = true;
-+	}
-+
-+	return tags;
-+}
-+
-+/* Compare the tags of every fixture with the values it expects */
-+static void test_tags(const struct btf *btf, const struct func_tags *tags, int start_id)
-+{
-+	int id, nr_types = btf__type_cnt(btf), nr_fixtures = 0;
-+
-+	for (id = start_id; id < nr_types; id++) {
-+		const struct btf_type *t = btf__type_by_id(btf, id);
-+		const char *name;
-+
-+		if (!btf_is_func(t) || !tags[id].test_retval)
-+			continue;
-+		name = btf__name_by_offset(btf, t->name_off);
-+		ASSERT_STREQ(tags[id].retval ?: "", tags[id].test_retval, name);
-+		if (*tags[id].test_retval)
-+			ASSERT_TRUE(tags[id].target, name);
-+		else if (strcmp(name, "bpf_testmod_retval_declared"))
-+			ASSERT_FALSE(tags[id].target, name);
-+		nr_fixtures++;
-+	}
-+	ASSERT_GT(nr_fixtures, 0, "fixtures");
-+
-+	id = btf__find_by_name_kind(btf, "bpf_testmod_retval_declared", BTF_KIND_FUNC);
-+	if (ASSERT_GE(id, start_id, "declared"))
-+		ASSERT_TRUE(tags[id].target, "declared_target");
-+}
-+
-+/* Open the programs again with only the extension, to replace FUNC of TARGET */
-+static struct fmodret_retval_ext *open_extension(struct bpf_program *target,
-+						 const char *func, char *log, size_t log_size)
-+{
-+	struct fmodret_retval_ext *skel;
-+
-+	skel = fmodret_retval_ext__open();
-+	if (!ASSERT_OK_PTR(skel, "fmodret_retval_ext__open"))
-+		return NULL;
-+	bpf_program__set_autoload(skel->progs.restricted, false);
-+	bpf_program__set_autoload(skel->progs.unrestricted, false);
-+	if (!ASSERT_OK(bpf_program__set_attach_target(skel->progs.extension,
-+						      bpf_program__fd(target), func),
-+		       "set_attach_target")) {
-+		fmodret_retval_ext__destroy(skel);
-+		return NULL;
-+	}
-+	bpf_program__set_log_buf(skel->progs.extension, log, log_size);
-+	return skel;
-+}
-+
-+/*
-+ * An extension could return any value for an fmod_ret program, so it must not
-+ * replace one whose return values are restricted, neither at load nor when it
-+ * is attached later to another program.
-+ */
-+static void test_extension(void)
-+{
-+	struct fmodret_retval_ext *targets, *skel = NULL;
-+	struct bpf_link *link;
-+	char log[4096] = {};
-+
-+	if (!is_jit_enabled()) {
-+		printf("%s:SKIP:extensions need the JIT\n", __func__);
-+		test__skip();
-+		return;
-+	}
-+
-+	targets = fmodret_retval_ext__open();
-+	if (!ASSERT_OK_PTR(targets, "fmodret_retval_ext__open"))
-+		return;
-+	bpf_program__set_autoload(targets->progs.extension, false);
-+	if (!ASSERT_OK(fmodret_retval_ext__load(targets), "load_targets"))
-+		goto out;
-+
-+	skel = open_extension(targets->progs.restricted, "restricted_value", log, sizeof(log));
-+	if (!skel)
-+		goto out;
-+	ASSERT_ERR(fmodret_retval_ext__load(skel), "load_restricted");
-+	ASSERT_HAS_SUBSTR(log, "Cannot extend an fmod_ret program with restricted return values",
-+			  "log_restricted");
-+	fmodret_retval_ext__destroy(skel);
-+
-+	skel = open_extension(targets->progs.unrestricted, "unrestricted_value", log, sizeof(log));
-+	if (!skel)
-+		goto out;
-+	if (!ASSERT_OK(fmodret_retval_ext__load(skel), "load_unrestricted"))
-+		goto out;
-+	link = bpf_program__attach_freplace(skel->progs.extension,
-+					    bpf_program__fd(targets->progs.restricted),
-+					    "restricted_value");
-+	if (!ASSERT_ERR_PTR(link, "attach_restricted"))
-+		bpf_link__destroy(link);
-+	link = bpf_program__attach_freplace(skel->progs.extension,
-+					    bpf_program__fd(targets->progs.unrestricted),
-+					    "unrestricted_value");
-+	if (ASSERT_OK_PTR(link, "attach_unrestricted"))
-+		bpf_link__destroy(link);
-+out:
-+	fmodret_retval_ext__destroy(skel);
-+	fmodret_retval_ext__destroy(targets);
-+}
-+
-+void test_fmodret_retval(void)
-+{
-+	struct btf *vmlinux_btf, *btf = NULL;
-+	struct func_tags *tags = NULL;
-+	int id, start_id, nr_types;
-+	bool has_fixtures = false;
-+
-+	if (!env.has_testmod) {
-+		test__skip();
-+		return;
-+	}
-+
-+	if (!ASSERT_OK(load_module(RETVAL_MODULE ".ko", env_verbosity > VERBOSE_NONE),
-+		       "load_module"))
-+		return;
-+	vmlinux_btf = btf__load_vmlinux_btf();
-+	if (!ASSERT_OK_PTR(vmlinux_btf, "btf__load_vmlinux_btf"))
-+		goto out;
-+	btf = btf__load_module_btf(RETVAL_MODULE, vmlinux_btf);
-+	if (!btf && errno == ENOENT) {
-+		printf("%s:SKIP:%s has no BTF\n", __func__, RETVAL_MODULE);
-+		test__skip();
-+		goto out;
-+	}
-+	if (!ASSERT_OK_PTR(btf, "btf__load_module_btf"))
-+		goto out;
-+	start_id = btf__type_cnt(vmlinux_btf);
-+	nr_types = btf__type_cnt(btf);
-+	tags = collect_tags(btf, start_id);
-+	if (!ASSERT_OK_PTR(tags, "collect_tags"))
-+		goto out;
-+
-+	/* The fixtures are built only with the compiler plugin */
-+	for (id = start_id; id < nr_types && !has_fixtures; id++)
-+		has_fixtures = tags[id].test_retval;
-+	if (!has_fixtures) {
-+		printf("%s:SKIP:%s has no %s tags\n", __func__, RETVAL_MODULE, TAG_TEST_RETVAL);
-+		test__skip();
-+		goto out;
-+	}
-+
-+	if (test__start_subtest("tags"))
-+		test_tags(btf, tags, start_id);
-+	if (test__start_subtest("extension"))
-+		test_extension();
-+	RUN_TESTS(fmodret_retval);
-+out:
-+	free(tags);
-+	btf__free(btf);
-+	btf__free(vmlinux_btf);
-+	unload_module(RETVAL_MODULE, env_verbosity > VERBOSE_NONE);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/fmodret_retval.c b/tools/testing/selftests/bpf/progs/fmodret_retval.c
-new file mode 100644
-index 000000000000..eb01185e9efd
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/fmodret_retval.c
-@@ -0,0 +1,254 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * fmod_ret programs on the targets which the LLVM IR scanner finds in
-+ * bpf_test_retval, see test_kmods/bpf_testmod_retval.c. They may return only
-+ * 0 or the values of the "bpf_fmodret_retval:" tag of their target.
-+ */
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+/* bpf_testmod_retval_constant() returns -EINVAL */
-+SEC("fmod_ret/bpf_testmod_retval_constant")
-+__success
-+int BPF_PROG(constant_einval, int ret)
-+{
-+	return -22;
-+}
-+
-+SEC("fmod_ret/bpf_testmod_retval_constant")
-+__success
-+int BPF_PROG(constant_zero, int ret)
-+{
-+	return 0;
-+}
-+
-+SEC("fmod_ret/bpf_testmod_retval_constant")
-+__failure __msg("R0 should be 0 or one of -22")
-+int BPF_PROG(constant_other, int ret)
-+{
-+	return -1;
-+}
-+
-+SEC("fmod_ret/bpf_testmod_retval_constant")
-+__failure __msg("R0 should be 0 or one of -22")
-+__naked void constant_unknown(void)
-+{
-+	asm volatile (
-+	"call %[bpf_get_prandom_u32];"
-+	"exit;"
-+	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/* A privileged program may return a pointer, but not here */
-+SEC("fmod_ret/bpf_testmod_retval_constant")
-+__failure __msg("R0 is not a known value (ctx)")
-+__naked void constant_pointer(void)
-+{
-+	asm volatile (
-+	"r0 = r1;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+/* The function returns int, so only the low 32 bits count */
-+SEC("fmod_ret/bpf_testmod_retval_constant")
-+__success
-+__naked void constant_32bit(void)
-+{
-+	asm volatile (
-+	"w0 = -22;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+/* Not 0, so the function is not called, but the caller would see 0 */
-+SEC("fmod_ret/bpf_testmod_retval_constant")
-+__failure __msg("R0 should be 0 or one of -22")
-+__naked void constant_high_bits(void)
-+{
-+	asm volatile (
-+	"r0 = 1;"
-+	"r0 <<= 32;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+/* bpf_testmod_retval_join() returns -EINVAL or -ERANGE */
-+SEC("fmod_ret/bpf_testmod_retval_join")
-+__success
-+int BPF_PROG(join_einval, int *result, int value, int ret)
-+{
-+	return -22;
-+}
-+
-+SEC("fmod_ret/bpf_testmod_retval_join")
-+__success
-+int BPF_PROG(join_erange, int *result, int value, int ret)
-+{
-+	return -34;
-+}
-+
-+SEC("fmod_ret/bpf_testmod_retval_join")
-+__failure __msg("R0 should be 0 or one of -34,-22")
-+int BPF_PROG(join_other, int *result, int value, int ret)
-+{
-+	return -1;
-+}
-+
-+/* Each path returns an allowed value */
-+SEC("fmod_ret/bpf_testmod_retval_join")
-+__success
-+__naked void join_both_paths(void)
-+{
-+	asm volatile (
-+	"r2 = *(u64 *)(r1 + 8);"
-+	"if r2 s< 0 goto 1f;"
-+	"r0 = -34;"
-+	"exit;"
-+"1:"
-+	"r0 = -22;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+/*
-+ * One of two paths to the same exit returns a forbidden value. The verifier
-+ * checks the allowed one first and must not prune the other.
-+ */
-+SEC("fmod_ret/bpf_testmod_retval_join")
-+__failure __msg("R0 should be 0 or one of -34,-22")
-+__naked void join_one_forbidden(void)
-+{
-+	asm volatile (
-+	"r2 = *(u64 *)(r1 + 8);"
-+	"if r2 s< 0 goto 1f;"
-+	"r0 = -34;"
-+	"goto 2f;"
-+"1:"
-+	"r0 = -1;"
-+"2:"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+/* bpf_testmod_retval_first_errno() returns -1, a join with 0 is a range */
-+SEC("fmod_ret/bpf_testmod_retval_first_errno")
-+__success
-+__naked void first_errno_one_exit(void)
-+{
-+	asm volatile (
-+	"call %[bpf_get_prandom_u32];"
-+	"r1 = r0;"
-+	"r0 = 0;"
-+	"if r1 == 0 goto 1f;"
-+	"r0 = -1;"
-+"1:"
-+	"exit;"
-+	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/* R0 is -1 or 0, both are allowed */
-+SEC("fmod_ret/bpf_testmod_retval_first_errno")
-+__success
-+__naked void first_errno_range(void)
-+{
-+	asm volatile (
-+	"call %[bpf_get_prandom_u32];"
-+	"r0 &= 1;"
-+	"r0 -= 1;"
-+	"exit;"
-+	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/* R0 is 0 or 1, and 1 is not allowed */
-+SEC("fmod_ret/bpf_testmod_retval_first_errno")
-+__failure __msg("R0 should be 0 or one of -1")
-+__naked void first_errno_range_other(void)
-+{
-+	asm volatile (
-+	"call %[bpf_get_prandom_u32];"
-+	"r0 &= 1;"
-+	"exit;"
-+	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/* bpf_testmod_retval_wide() returns s64, so all 64 bits count */
-+SEC("fmod_ret/bpf_testmod_retval_wide")
-+__success
-+__load_if_JITed()
-+__naked void wide_64bit(void)
-+{
-+	asm volatile (
-+	"r0 = -14;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+SEC("fmod_ret/bpf_testmod_retval_wide")
-+__failure __msg("R0 should be 0 or one of -14")
-+__naked void wide_32bit(void)
-+{
-+	asm volatile (
-+	"w0 = -14;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+/* Declared targets are not restricted, in module and vmlinux BTF */
-+SEC("fmod_ret/bpf_testmod_retval_declared")
-+__success
-+int BPF_PROG(declared_module_any, int ret)
-+{
-+	return -1;
-+}
-+
-+SEC("fmod_ret/bpf_modify_return_test")
-+__success
-+int BPF_PROG(declared_vmlinux_any, int a, int *b, int ret)
-+{
-+	return -1;
-+}
-+
-+/* The error injection list allows any value although the target has a tag */
-+SEC("fmod_ret/bpf_testmod_retval_injectable")
-+__success
-+int BPF_PROG(static_rule_tagged, int value, int ret)
-+{
-+	return -1;
-+}
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 1);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(__u32));
-+} jmp_table SEC(".maps");
-+
-+/* A program in a program array may return any value */
-+SEC("fmod_ret/bpf_testmod_retval_constant")
-+__failure __msg("tail calls are not allowed in fmod_ret programs with restricted return values")
-+int BPF_PROG(constant_tail_call, int ret)
-+{
-+	bpf_tail_call(ctx, &jmp_table, 0);
-+	return 0;
-+}
-+
-+SEC("fmod_ret/bpf_testmod_retval_declared")
-+__success
-+int BPF_PROG(declared_tail_call, int ret)
-+{
-+	bpf_tail_call(ctx, &jmp_table, 0);
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/fmodret_retval_ext.c b/tools/testing/selftests/bpf/progs/fmodret_retval_ext.c
-new file mode 100644
-index 000000000000..b9df7055b158
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/fmodret_retval_ext.c
-@@ -0,0 +1,55 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * An extension of fmod_ret programs, see prog_tests/fmodret_retval.c. The
-+ * return values of the program on bpf_testmod_retval_constant() are restricted
-+ * by its "bpf_fmodret_retval:" tag, those of the program on the declared target
-+ * are not. An extension cannot replace the main function of a tracing program,
-+ * so each of them calls a global function which the extension replaces.
-+ */
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+/* Keeps clang from folding the calls */
-+int value_bias;
-+
-+__noinline int restricted_value(int value)
-+{
-+	return value + value_bias;
-+}
-+
-+__noinline int unrestricted_value(int value)
-+{
-+	return value + value_bias;
-+}
-+
-+SEC("fmod_ret/bpf_testmod_retval_constant")
-+int BPF_PROG(restricted, int ret)
-+{
-+	int zero;
-+
-+	if (restricted_value(ret))
-+		return -22;
-+	/*
-+	 * fmodret BPF progs must return only allowed values. If this zero is
-+	 * not forced here, the function, compiled with GCC, will return R0
-+	 * which is a scalar in [S32_MIN, S32_MAX]: a sign-extended copy of the
-+	 * result of restricted_value() made before the result is tested for 0.
-+	 */
-+	asm volatile("%[z] = 0" : [z]"=r"(zero));
-+	return zero;
-+}
-+
-+SEC("fmod_ret/bpf_testmod_retval_declared")
-+int BPF_PROG(unrestricted, int ret)
-+{
-+	return unrestricted_value(ret);
-+}
-+
-+SEC("freplace")
-+int extension(int value)
-+{
-+	return -1;
-+}
-diff --git a/tools/testing/selftests/bpf/test_kmods/Makefile b/tools/testing/selftests/bpf/test_kmods/Makefile
-index 031c7454ce65..f4af3c3ab54c 100644
---- a/tools/testing/selftests/bpf/test_kmods/Makefile
-+++ b/tools/testing/selftests/bpf/test_kmods/Makefile
-@@ -19,10 +19,23 @@ Q = @
- endif
- 
- MODULES = bpf_testmod.ko bpf_test_no_cfi.ko bpf_test_modorder_x.ko \
--	bpf_test_modorder_y.ko bpf_test_rqspinlock.ko
-+	bpf_test_modorder_y.ko bpf_test_rqspinlock.ko bpf_test_retval.ko
- 
- $(foreach m,$(MODULES),$(eval obj-m += $(m:.ko=.o)))
- 
-+bpf_test_retval-y := bpf_test_retval_main.o
-+# The functions for bpf_scan_ir use clang extensions and need the plugin
-+bpf_test_retval-$(CONFIG_CLANG_PLUGIN_BPF_SCAN_IR) += bpf_testmod_retval.o \
-+						      bpf_testmod_retval_strong.o
-+# Instrumentation and branch profiling make every path of the fixtures dirty
-+GCOV_PROFILE_bpf_testmod_retval.o := n
-+KCOV_INSTRUMENT_bpf_testmod_retval.o := n
-+KMSAN_SANITIZE_bpf_testmod_retval.o := n
-+KASAN_SANITIZE_bpf_testmod_retval.o := n
-+KCSAN_SANITIZE_bpf_testmod_retval.o := n
-+UBSAN_SANITIZE_bpf_testmod_retval.o := n
-+CFLAGS_bpf_testmod_retval.o += -DDISABLE_BRANCH_PROFILING
-+
- CFLAGS_bpf_testmod.o = -I$(src)
- 
- # When BPF_STRICT_BUILD != 0, a missing KDIR is fatal (the default).
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_test_retval_main.c b/tools/testing/selftests/bpf/test_kmods/bpf_test_retval_main.c
-new file mode 100644
-index 000000000000..c3a9093fa331
---- /dev/null
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_test_retval_main.c
-@@ -0,0 +1,12 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * A module for the functions of bpf_testmod_retval.c and
-+ * bpf_testmod_retval_strong.c, see prog_tests/fmodret_retval.c. They are not
-+ * in bpf_testmod: pahole drops the per-CPU variables of a module which GNU ld
-+ * links from several objects.
-+ */
-+#include <linux/module.h>
-+
-+MODULE_AUTHOR("Anton Protopopov");
-+MODULE_DESCRIPTION("BPF selftest module for fmod_ret targets found by bpf_scan_ir");
-+MODULE_LICENSE("GPL");
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_retval.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_retval.c
-new file mode 100644
-index 000000000000..6010f43964c2
---- /dev/null
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_retval.c
-@@ -0,0 +1,328 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Functions for the fmod_ret targets which the LLVM IR scanner finds, see
-+ * prog_tests/fmodret_retval.c. The "test_retval:" decl tag of each lists the
-+ * values the scanner must find on paths without side effects. An empty list
-+ * means that the function must not become such a target.
-+ */
-+#include <linux/atomic.h>
-+#include <linux/bpf.h>
-+#include <linux/btf_ids.h>
-+#include <linux/compiler.h>
-+#include <linux/err.h>
-+#include <linux/errno.h>
-+#include <linux/error-injection.h>
-+#include <linux/spinlock.h>
-+#include <linux/types.h>
-+
-+#define RETVAL(values)	__attribute__((btf_decl_tag("test_retval:" values)))
-+
-+static __used int bpf_testmod_retval_state;
-+static __used int *bpf_testmod_retval_captured;
-+
-+static noinline void bpf_testmod_retval_effect(void)
-+{
-+	WRITE_ONCE(bpf_testmod_retval_state, 1);
-+}
-+
-+static noinline void bpf_testmod_retval_capture(int *ptr)
-+{
-+	WRITE_ONCE(bpf_testmod_retval_captured, ptr);
-+}
-+
-+static noinline int bpf_testmod_retval_store(int value)
-+{
-+	WRITE_ONCE(bpf_testmod_retval_state, value);
-+	return value;
-+}
-+
-+static noinline int bpf_testmod_retval_clear(int value)
-+{
-+	WRITE_ONCE(bpf_testmod_retval_state, 0);
-+	return value - 1;
-+}
-+
-+/* Constant errors and both return widths */
-+static __used noinline RETVAL("-22") int bpf_testmod_retval_constant(void)
-+{
-+	return -EINVAL;
-+}
-+
-+static __used noinline RETVAL("-14") s64 bpf_testmod_retval_wide(void)
-+{
-+	return -EFAULT;
-+}
-+
-+static __used noinline RETVAL("-1") int bpf_testmod_retval_first_errno(void)
-+{
-+	return -1;
-+}
-+
-+static __used noinline RETVAL("-4095") int bpf_testmod_retval_last_errno(void)
-+{
-+	return -MAX_ERRNO;
-+}
-+
-+/*
-+ * PTR_ERR() of the ERR_PTR() of an inlined helper. Not recognized yet: the
-+ * error reaches the return through a PHI in an earlier block.
-+ */
-+static __always_inline int *bpf_testmod_retval_slot(int *buf, int idx)
-+{
-+	if (idx < 0)
-+		return ERR_PTR(-EINVAL);
-+	if (idx > 8)
-+		return ERR_PTR(-EFAULT);
-+	return &buf[idx];
-+}
-+
-+static __used noinline RETVAL("") int bpf_testmod_retval_err_ptr(int *buf, int idx)
-+{
-+	int *slot = bpf_testmod_retval_slot(buf, idx);
-+
-+	if (IS_ERR(slot))
-+		return PTR_ERR(slot);
-+	*slot = 1;
-+	return 0;
-+}
-+
-+/* A clean error path may join a dirty success path */
-+static __used noinline RETVAL("-22") int bpf_testmod_retval_before_store(int *result, int value)
-+{
-+	if (value < 0)
-+		return -EINVAL;
-+	*result = value;
-+	return 0;
-+}
-+
-+static __used noinline RETVAL("-34,-22") int bpf_testmod_retval_join(int *result, int value)
-+{
-+	int ret;
-+
-+	if (value < 0)
-+		ret = -EINVAL;
-+	else if (value > 32)
-+		ret = -ERANGE;
-+	else {
-+		*result = value;
-+		ret = 0;
-+	}
-+	return ret;
-+}
-+
-+/*
-+ * An int error which a long function returns: the PHI of the two calls keeps
-+ * the sign extension in the block of the return
-+ */
-+static __used noinline RETVAL("-22") long bpf_testmod_retval_sign_extend(int value)
-+{
-+	int ret;
-+
-+	if (value < 0)
-+		ret = -EINVAL;
-+	else if (value > 32)
-+		ret = bpf_testmod_retval_store(value);
-+	else
-+		ret = bpf_testmod_retval_clear(value);
-+	return ret;
-+}
-+
-+/* An assumption does not make a path dirty */
-+static __used noinline RETVAL("-22") int bpf_testmod_retval_assume(int value)
-+{
-+	__builtin_assume(value > 0);
-+	return -EINVAL;
-+}
-+
-+/* Writes to private stack objects are clean, optnone keeps them in the IR */
-+static __used noinline RETVAL("-22") __attribute__((optnone))
-+int bpf_testmod_retval_private_store(int value)
-+{
-+	int scratch[2];
-+
-+	scratch[0] = value;
-+	scratch[1] = 0;
-+	return -EINVAL;
-+}
-+
-+static __used noinline RETVAL("-22") __attribute__((optnone))
-+int bpf_testmod_retval_private_memset(void)
-+{
-+	char scratch[32];
-+
-+	__builtin_memset(scratch, 0, sizeof(scratch));
-+	return -EINVAL;
-+}
-+
-+/* An error which is not known exactly is not recorded */
-+static __used noinline RETVAL("") int bpf_testmod_retval_masked(unsigned int value)
-+{
-+	return -1 - (value & 31);
-+}
-+
-+static __used noinline RETVAL("") long bpf_testmod_retval_ptr_err(void *ptr, int *state)
-+{
-+	if (IS_ERR(ptr))
-+		return PTR_ERR(ptr);
-+	*state = 1;
-+	return 0;
-+}
-+
-+/* Pointer functions are not targets yet */
-+static __used noinline RETVAL("") void *bpf_testmod_retval_error_pointer(void)
-+{
-+	return ERR_PTR(-ENOMEM);
-+}
-+
-+/* Every error path has an observable effect */
-+static __used noinline RETVAL("") int bpf_testmod_retval_argument_store(int *state)
-+{
-+	*state = 1;
-+	return -EINVAL;
-+}
-+
-+static __used noinline RETVAL("") int bpf_testmod_retval_global_store(void)
-+{
-+	bpf_testmod_retval_state = 1;
-+	return -EINVAL;
-+}
-+
-+static __used noinline RETVAL("") int bpf_testmod_retval_volatile_read(int *state)
-+{
-+	return READ_ONCE(*state) ? -EINVAL : -ERANGE;
-+}
-+
-+static __used noinline RETVAL("") int bpf_testmod_retval_atomic(atomic_t *state)
-+{
-+	atomic_inc(state);
-+	return -EINVAL;
-+}
-+
-+static __used noinline RETVAL("") int bpf_testmod_retval_call(void)
-+{
-+	bpf_testmod_retval_effect();
-+	return -EINVAL;
-+}
-+
-+static __used noinline RETVAL("") int bpf_testmod_retval_barrier(void)
-+{
-+	barrier();
-+	return -EINVAL;
-+}
-+
-+static __used noinline RETVAL("")
-+int bpf_testmod_retval_only_error_is_dirty(int *state, bool reject)
-+{
-+	if (reject) {
-+		*state = 1;
-+		return -EINVAL;
-+	}
-+	return 0;
-+}
-+
-+static __used noinline RETVAL("")
-+int bpf_testmod_retval_lock_held(spinlock_t *lock) __acquires(lock)
-+{
-+	spin_lock(lock);
-+	return -EINVAL;
-+}
-+
-+static __used noinline RETVAL("") int bpf_testmod_retval_stack_escape(void)
-+{
-+	int scratch;
-+
-+	bpf_testmod_retval_capture(&scratch);
-+	scratch = 1;
-+	return -EINVAL;
-+}
-+
-+static __used noinline RETVAL("") int bpf_testmod_retval_external_memset(void *dest)
-+{
-+	__builtin_memset(dest, 0, 32);
-+	return -EINVAL;
-+}
-+
-+/* Not recognized yet, although they have no side effects */
-+static __used noinline RETVAL("") int bpf_testmod_retval_balanced_spinlock(spinlock_t *lock)
-+{
-+	spin_lock(lock);
-+	spin_unlock(lock);
-+	return -EINVAL;
-+}
-+
-+static __used noinline RETVAL("") int bpf_testmod_retval_input_errno(int error)
-+{
-+	if (error >= -MAX_ERRNO && error < 0)
-+		return error;
-+	return 0;
-+}
-+
-+/* No ftrace call site, but call padding in __patchable_function_entries on x86 */
-+static __used noinline RETVAL("") notrace int bpf_testmod_retval_notrace(void)
-+{
-+	return -EINVAL;
-+}
-+
-+/*
-+ * A weak definition with an error, replaced by a strong one without errors in
-+ * bpf_testmod_retval_strong.c
-+ */
-+int bpf_testmod_retval_overridden(void);
-+
-+__weak noinline __attribute__((btf_decl_tag("test_retval:")))
-+int bpf_testmod_retval_overridden(void)
-+{
-+	return -EINVAL;
-+}
-+
-+/*
-+ * Two weak definitions: this one with a side effect is linked first and wins
-+ * over the one with an error in bpf_testmod_retval_strong.c
-+ */
-+int bpf_testmod_retval_two_weak(void);
-+
-+__weak noinline __attribute__((btf_decl_tag("test_retval:")))
-+int bpf_testmod_retval_two_weak(void)
-+{
-+	bpf_testmod_retval_effect();
-+	return 0;
-+}
-+
-+/*
-+ * A function on the error injection list gets its tag, but the static rules let
-+ * programs return any value
-+ */
-+static __used noinline RETVAL("-22") int bpf_testmod_retval_injectable(int value)
-+{
-+	if (value < 0)
-+		return -EINVAL;
-+	bpf_testmod_retval_effect();
-+	return 0;
-+}
-+ALLOW_ERROR_INJECTION(bpf_testmod_retval_injectable, ERRNO);
-+
-+/* A declared target keeps only its own tags */
-+static __used noinline RETVAL("") int bpf_testmod_retval_declared(void)
-+{
-+	return -EINVAL;
-+}
-+
-+BTF_FMODRET_START(bpf_testmod_retval_declared_ids)
-+BTF_ID_FLAGS(func, bpf_testmod_retval_declared)
-+BTF_FMODRET_END(bpf_testmod_retval_declared_ids)
-+
-+/*
-+ * A kfunc with implicit arguments is not tagged,
-+ * because the trampoline would not save them
-+ */
-+static __bpf_kfunc RETVAL("") int bpf_testmod_retval_implicit_arg(int value, struct bpf_prog_aux *aux)
-+{
-+	if (value < 0)
-+		return -EINVAL;
-+	bpf_testmod_retval_effect();
-+	return 0;
-+}
-+
-+BTF_KFUNCS_START(bpf_testmod_retval_kfunc_ids)
-+BTF_ID_FLAGS(func, bpf_testmod_retval_implicit_arg, KF_IMPLICIT_ARGS)
-+BTF_KFUNCS_END(bpf_testmod_retval_kfunc_ids)
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_retval_strong.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_retval_strong.c
-new file mode 100644
-index 000000000000..a246d7f619bc
---- /dev/null
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_retval_strong.c
-@@ -0,0 +1,28 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Replaces the weak bpf_testmod_retval_overridden() of bpf_testmod_retval.c.
-+ * This definition returns no errors, so the function must not become an
-+ * fmod_ret target, see prog_tests/fmodret_retval.c.
-+ *
-+ * The weak bpf_testmod_retval_two_weak() here loses the link to the one of
-+ * bpf_testmod_retval.c, so its error must not make the function a target
-+ * either.
-+ */
-+#include <linux/compiler.h>
-+#include <linux/errno.h>
-+
-+int bpf_testmod_retval_overridden(void);
-+
-+noinline __attribute__((btf_decl_tag("test_retval:")))
-+int bpf_testmod_retval_overridden(void)
-+{
-+	return 0;
-+}
-+
-+int bpf_testmod_retval_two_weak(void);
-+
-+__weak noinline __attribute__((btf_decl_tag("test_retval:")))
-+int bpf_testmod_retval_two_weak(void)
-+{
-+	return -EINVAL;
-+}
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index 49dfe939467c..5461c32cd3cd 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -11,6 +11,7 @@ CONFIG_BPF_STREAM_PARSER=y
+ CONFIG_BPF_SYSCALL=y
+ # CONFIG_BPF_UNPRIV_DEFAULT_OFF is not set
+ CONFIG_CGROUP_BPF=y
++CONFIG_CLANG_PLUGIN_BPF_SCAN_IR=y
+ CONFIG_CRYPTO_HMAC=y
+ CONFIG_CRYPTO_MLDSA=y
+ CONFIG_CRYPTO_SHA256=y
+@@ -56,6 +57,7 @@ CONFIG_IPV6_TUNNEL=y
+ CONFIG_KEYS=y
+ CONFIG_LIRC=y
+ CONFIG_LIVEPATCH=y
++CONFIG_LLVM_PLUGINS=y
+ CONFIG_LWTUNNEL=y
+ CONFIG_LWTUNNEL_BPF=y
+ CONFIG_MEMCG=y
 -- 
 2.43.0
 
