@@ -1,80 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.139
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794296194;
-	b=WAhVGjNzaC4SDYGQeskdmL64W/gSzububTXBQQYSAbg5vJBXEMxy0m5bUBeLksIPxwbn
-	 NIVQ+lKFg3FtjTCNRLjq1oSP3DN3OHzaJfgPM04Geh3uOQzThtSivfOZKAULofConhI+J
-	 2gkDG+LcMn00hFKE0QXzFZk/Lx/bygwJC3o1l04myWQSRXs0/zCM3k0Lm+EyyoZTskr+b
-	 VzSfNKSPoVN7DthOmnHu3LJUvW7YSoKIRlD875G/DCuOpsxRpnYKU7rK2af4UGQ3HfZCG
-	 iRiVE00K64kzBCT5/GeGPp0gQgG9OsjXDxhVP/WizspmEZJK7MzmqczV5tlAY/HepBQ==
+	t=1794298343;
+	b=IRKQ9Y0vsLXgl7e7Iw3Lhn6bgoCFqZ577WFk/GOgNXP8aejoTkEf3fCCMdoScZaR9t2g
+	 PYatqzJUn1ySkvQpbcQs0sN4lTy24uB3O61c6aUWcp3eAcWP1PB0H9L3hR3ROkpCdw+PR
+	 30Ph4NXPmDbHFcLPh8F+LCLil6d4q0C3tqATygSdxHJbd94KCaiQuYxX3NLQDXCcuNUZS
+	 lCoB/C7UV3W2R0PKXaBQmGR2YnsobQY2Wvjt4Q1wgiSPeS2fCAdovH1jN/46ZnqAxQ6dx
+	 /W44OPFy5QG2YK176qFIxjwz+yB549VyCuugvU483ysUz861hobcPLae745rJl51MUg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794296194;
-	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
-	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
-	 To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=QQphr5euVsYvR57wxTaQJrr/VmZFbUsWVLJgzTq93eA=;
-	b=VYbiAZ+zvJuQCaMu37tBlZ20IGF+9+nrCp4lBOlzgJKmT33TD46P13Pe4vdaPYAhZdfd
-	 paI5xxRn/VxVohWOWQRuSvuzfPShSo3tPh/IKXijo+Lvf+EL9vY/atOgwd+Ntd9tL/1ud
-	 gXDHoj+ijn+JGFMDJEfP8UZbGJLQxcwKuImGBsl8AfRKX3cA3EXaKK9sGksVT877hCwpy
-	 IXfQbEY78/grsuGjijhSBU/88LRxHTLT/DbLm81ICaTGgsGlQMZFVVNxdHdy14/0m874p
-	 6KHldrfr0lOOf7akjZegnrimspBLv87BxAhHBwubw9hwKBnrVciXDUnvshrYSUE83gg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794298343;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=kRA/GqoTkmiGWBF4UI1ZfmA1sH4CPsFD6H907heNT18=;
+	b=ewzYIw4xbUNyFg4U3nr32kIl7MjrOuXeC75xI1ojq5EGNGTnfiwM65Xwb4Z1yIxBBIwY
+	 h11aCK9b5jk/9YPoTzY5YFD6hlMdQKPB01yXS6W18yNvPchdCvjE8uFMEI3NuAzKCFv7g
+	 feDpA7aD+nx/FDPKnIuFE+7jfAgQZsnvcf0VRvK2coyLfoS2rRGst4k+m+qJ63Rgi4ZIx
+	 ULa7jkvMBTmjqZ3aRsbNDxYr77ifDY32FJxjhOxYURFMIz6tn+cCxo9WeWMHeuSGF9CGv
+	 wgslr6EmzmLINEh/aeHgC39Nrlr0qvM14nNg1wFcVLPTWEf1wKxaeHqBFaKNeYEFG/A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cmss.chinamobile.com;
-	spf=pass smtp.mailfrom=cmss.chinamobile.com;
-	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=faDfODPK;
-	arc=none smtp.remote-ip=111.22.67.139
-Received: from cmccmta6.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67A5160A260C;
-	Tue, 10 Nov 2026 07:36:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 67A5160A260C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="FNcb/ToF";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3109F606A33E;
+	Tue, 10 Nov 2026 08:12:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=faDfODPK
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=cmss.chinamobile.com; s=default; l=0;
-	h=from:subject:message-id:to:cc:mime-version;
-	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=faDfODPKGCL0NiCe7ruPNzlVNMD4hbQVfyDslV67WGRRk6+leMiHWdWw+tEly6OPTmK/dhHH7G7OV
-	 nVIOcLvwqUg9LPG2v5Oa8vznochR+NlHxAc8+hHC63QDAp7zENIabDM2ooy5HfWEqmS7Zx/QfWWoyf
-	 2Op59Q4aNQ/Z3eKM=
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app01-12001 (RichMail) with SMTP id 2ee16af2c97fc53-a8049;
-	Tue, 10 Nov 2026 15:36:32 +0800 (CST)
-X-RM-TRANSID:2ee16af2c97fc53-a8049
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from  (unknown[74.82.203.40])
-	by rmsmtp-syy-appsvr03-12003 (RichMail) with SMTP id 2ee36af2c970885-ab73e;
-	Tue, 10 Nov 2026 15:36:32 +0800 (CST)
-X-RM-TRANSID:2ee36af2c970885-ab73e
-From: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-To: "Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowangio@gmail.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc: =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	netdev@vger.kernel.org,
-	virtualization@lists.linux.dev,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH net v3 2/2] virtio_net: Disable AF_XDP pools on queues above curr_queue_pairs
-Date: Wed, 11 Nov 2026 00:30:01 +0900
-Message-ID: <20261110153003.23731-3-yanhaishuang@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261110153003.23731-1-yanhaishuang@cmss.chinamobile.com>
-References: <20261110153003.23731-1-yanhaishuang@cmss.chinamobile.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FNcb/ToF
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99BAF1F008A3;
+	Tue, 10 Nov 2026 08:12:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794298342;
+	bh=kRA/GqoTkmiGWBF4UI1ZfmA1sH4CPsFD6H907heNT18=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=FNcb/ToFXBo0a57yLcjgdm4o8ZirlkPo21GdiexYO+SlBCLgc588Oh3Tac0ltq0hX
+	 KuT5Q2ILcIFzvAW7zdRfz+NDpoZc5VhY+879pf0ds5TmB0fIQNfOB2yT24ohrWlz1S
+	 X707895w9JbfCbjYis0blINsCGLhfyDatr04unhbZB6D1HUYaiDRbAGDrI3ErR3sqB
+	 jheP76alzfoGd6yRJtCIiwGkxdEfxnA19cEXkyqjbbUMmUxthIL1DeqhHywjMrl9X/
+	 gZMxS2nagRDnj2MCpXSeeJLwbjCVN2lak++ylTaW+xnAgi1X6XyvoRvo1YhORXRDDo
+	 YDm13MjFAUq0A==
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: Naveen N Rao <naveen@kernel.org>, "David S. Miller" <davem@davemloft.net>, Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>, Jason Baron <jbaron@akamai.com>, Alice Ryhl <aliceryhl@google.com>, Steven Rostedt <rostedt@goodmis.org>, Ard Biesheuvel <ardb@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Alan Maguire <almagui@kernel.org>, x86@kernel.org, linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH 04/13] kprobes: Maintain an rbtree of registered probes
+Date: Tue, 10 Nov 2026 08:12:19 +0000
+Message-ID: <undine-1794298339502831052-1b6960b8f9b38e7d@undined.local>
+X-Mailer: UndineD 0.1
+In-Reply-To: <20261109195517.1090787-1-jolsa@kernel.org>
+References: <20261109194916.1089703-1-jolsa@kernel.org> <20261109195517.1090787-1-jolsa@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -84,64 +58,19 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 
-With an XDP program attached, virtnet_xdp_set() adds nr_cpu_ids queue
-pairs for XDP_TX and raises curr_queue_pairs and real_num_rx_queues to
-match. virtnet_xsk_pool_enable() accepts any queue below
-curr_queue_pairs, so an AF_XDP zero-copy socket can be bound to one of
-them.
+On Mon,  9 Nov 2026 20:55:17 +0100, Jiri Olsa <jolsa@kernel.org> wrote:
+> Add an address-ordered rbtree for registered probes. Keep it synchronized
+> with the hash table when probes are added, removed, or replaced by
+> aggregator probes.
 
-When the program is removed, the queue count goes down again while the
-pool stays bound to the driver. When the socket is closed afterwards,
-virtnet_xsk_pool_disable() rejects the queue with -EINVAL, and the core
-frees the pool anyway:
+Could you tell me why don't you use hlist (get_kprobe) instead?
+I would NOT like 2 different lists which is basically doing the
+same thing.
 
-  WARNING: net/xdp/xsk_buff_pool.c:160 at xp_disable_drv_zc+0x1ee/0x260
-  BUG: KASAN: slab-use-after-free in xp_alloc_batch+0x930/0xb40
-  Read of size 8 at addr ffff8880028eb400 by task ksoftirqd/0/14
-   xp_alloc_batch+0x930/0xb40
-   try_fill_recv+0xb27/0x26e0
+Thanks,
 
-as rq->xsk_pool still points to it and the queue is refilled from it.
-
-The device going away with XDP attached, e.g. on hot-unplug or driver
-unbind, ends the same way without an explicit removal:
-unregister_netdevice_many_notify() removes XDP before the xsk notifier
-unbinds the socket, so the pool is disabled on a queue above
-curr_queue_pairs there as well.
-
-Removing XDP must not fail, so let virtnet_xsk_pool_disable() accept
-any queue the driver has, below max_queue_pairs. The receive and send
-queues above curr_queue_pairs still exist, so they are unbound as usual.
-
-This was pointed out by the Sashiko review of v1 of this series, and
-reproduced in QEMU by binding a socket to an XDP queue and then either
-removing XDP and closing the socket, or unbinding the device from
-virtio_net.
-
-Fixes: 09d2b3182c8e ("virtio_net: xsk: bind/unbind xsk for rx")
-Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
----
- drivers/net/virtio_net.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 4f5d8812f75b..f9d227060375 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -6030,7 +6030,8 @@ static int virtnet_xsk_pool_disable(struct net_device *dev, u16 qid)
- 	struct send_queue *sq;
- 	int err;
- 
--	if (qid >= vi->curr_queue_pairs)
-+	/* Removing XDP can leave the pool on a queue above curr_queue_pairs */
-+	if (qid >= vi->max_queue_pairs)
- 		return -EINVAL;
- 
- 	sq = &vi->sq[qid];
 -- 
-2.43.0
-
-
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
