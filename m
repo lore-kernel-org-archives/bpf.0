@@ -1,48 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794302206;
-	b=PzHYtQcIZ5ezIgnW/O4dRaZF81UmZOT3bMGRA7uloOXLdVminaauZlRv9tChMZKylEkt
-	 GV2aAelj3fnRk1BCLBwatOZezccOVKfyih9s5eC6Kay/6P8irgcCpBMgjEJYDVHco6pJ+
-	 En8byPHrXr375qMTayVQVP+TYceEIBhXlBHlhVLpi1dGVt2/XvJMUeG82D8zrYRskLnsf
-	 V5YWDcep6kEU8ZU7zjFKnAPTqC1hVJckzvRrh8AWYIG1q0FUWW1ccCkN2e42KDNzBoenQ
-	 sxmCB9RY13bx2fY2Cw+TTSAfM2vKJXpVeIu2nYBrB4Drij+jRj50CCV4hvHZNwkdTfg==
+	t=1794302219;
+	b=WRexICK3vYd42nB4lnnGyJ4qQnC8jQFDnxMxDxROPyjtn5umz1eFQYjMXcfGa+d5OR+W
+	 voldUakvITsroHgzNdRcCh3uW6owDXFpZLKjysGW35xlGQiTx7gqb2xQQtWALj6J5HobT
+	 JiUNmNc+VObMtPsQ60kIVcwpsU+e8eRWGdteveY3id9hBoijv8+S1rneXkdsC9h5Rh8Na
+	 3yqsA6/ii61mSUu4rzvRPp32hLkLilkVSOw+2NWVdslZqHe7eUew5xv3vJnUxOCCFNMp7
+	 j0GjD5qe+MLmlCLJdrtISvzTwTLD9QQn45MtpeA2DCHrm5ye702uftl/M73QPgZ6XpA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794302206;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794302219;
 	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
 	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=6iLMVu7/iMBDJai9Frtaq88BtgFpmQIL1GiZqP6G3sI=;
-	b=FIPhEGN7bPAhjfqYq3VjgrSjWOZtXsJRqckNbFQI2bztXHSP0qP80vdgzYPsBy4LWdBd
-	 jWcVxIxv6LHi6qmYghMLXCk92wmHwFNr0+S+lpO9x+/RKpdJWUW6DfENKuw2dpeA4UjKO
-	 u9SeYf0ngePwCeF3j1C5LQ3EX6NjvYeZ33snETFtORd0yfP+Fl/LuUSH5qaQAYtvQjs+g
-	 dotAsP3ToXMkvLjn8NIeG6FCEeBJLiG6H5ky0hJpGrjhkFY/wslmNlYWEIyqqUfBjB0cP
-	 t1RNjSpEgX5rzfjpMjxLsSpK45dRBUc9qkejttSNkw59v4hYhvYB6Em52zwPanSyXXA==
+	bh=WY71Uo54gYhZKR4pKqr/19QlXycB+RRfAfSK6SBkMOo=;
+	b=N/pM4b+lR6q7G6ACk7vki8NrmZCVkCar+YPc1nA97WJFMKgGZ8oOLEURUkie0YSJ09g9
+	 skn3SN+WWobiSbWAtOg0vvbHmXMjtK9acCBJcmlH5W6pswvkchO5rrop6rL0qjji0cfAx
+	 kQOCusyWIrvhQ3rIdEMD4n4Myt5phSqHIz1TqxnJ32MCgvz+jX3Da9oDjdqTQTHXfVfNx
+	 OhIh70wlFcgFEUqz6+aZ+MjvXsK2z7AJD27uOpwAgAfl94n7WXiNkf3xgSYMZ0GV747Ja
+	 7nCU2Ee03Tx/CLsGqXVCE6E4Z9bDXFgmoI5YWnR1VkRl2WpDOYr3e5pYNxkm4Gsta2A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="PK/1xJP3";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LlMaKIGP;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A81A3606B9C6;
-	Tue, 10 Nov 2026 09:16:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D09C60A380C;
+	Tue, 10 Nov 2026 09:16:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PK/1xJP3
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E40961F008A5;
-	Tue, 10 Nov 2026 09:16:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LlMaKIGP
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A02601F008A1;
+	Tue, 10 Nov 2026 09:16:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794302205;
-	bh=6iLMVu7/iMBDJai9Frtaq88BtgFpmQIL1GiZqP6G3sI=;
+	s=k20260515; t=1794302219;
+	bh=WY71Uo54gYhZKR4pKqr/19QlXycB+RRfAfSK6SBkMOo=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=PK/1xJP3LiuE+nt9clqn6XzH1ykuCvGLk3pJedYJU7MenGMVki1YReFMeqHc2zbsn
-	 f172wPMgNRu0JWSTlIgtjrHD4rRAL5eo4520JocrDxATE3L3QlkqPhQ9KQk+e2lr0U
-	 Z36S4rtp/Z53gBsFmJhmg4BkAtm0NXKKNbbu/pQH5R9bFuSUNl6MT1vw2mzIJB+cHB
-	 GEBOatAxu+reiIAHlIkDGmUecEYVk7FAdx3uXRaXJYFCUAdz3m+wvz8PXNcaKaCVki
-	 JtIsqDglq1gfmT2kaiK580I9+CfdeeDheRHydlXbZS6YOU+oHBKlCiswiLTGKFt073
-	 cI6f92QGFv0dg==
+	b=LlMaKIGPglPkcvGNxGDrg7KApXX+gHKG5SrrawRrOpvdcrBWjo8TZvaYC/dVHXPkL
+	 o7Q4vzGLaTH3tPVI6EK6P52H//aWm8LX6LNA9wx7GzZylS8Tm5t7Uihc8gqN/tYIDQ
+	 PP3rUbIEqyxUIjeAdPOxrVHEdBQihQ2084RfxCjhwr5G5bFc0E6zHMFFmmj7AzSVaR
+	 tXO6WvEI79qn/4DPL9toj7+CN6z0DqQ1WOgva9FN1PkhAS1Orh3mr0q9GB2K5qslXC
+	 scXEvlIXqJ5srN3BcqIAjqdwqr7UK9xIGt0dTlwV0MKzMAeX4GxKcYRYlOYndv3UdD
+	 j0+mmKCFyRsXw==
 From: Christian Brauner <brauner@kernel.org>
-Date: Tue, 10 Nov 2026 10:14:23 +0100
-Subject: [PATCH RFC 07/41] binfmt_misc: use fc_init_pseudo()
+Date: Tue, 10 Nov 2026 10:14:25 +0100
+Subject: [PATCH RFC 09/41] bpf: use fc_init_pseudo() for bpffs
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -54,7 +54,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261110-work-loop-pseudo-v1-7-4c998976c6c7@kernel.org>
+Message-Id: <20261110-work-loop-pseudo-v1-9-4c998976c6c7@kernel.org>
 References: <20261110-work-loop-pseudo-v1-0-4c998976c6c7@kernel.org>
 In-Reply-To: <20261110-work-loop-pseudo-v1-0-4c998976c6c7@kernel.org>
 To: linux-fsdevel@vger.kernel.org
@@ -75,51 +75,50 @@ Cc: Jann Horn <jannh@google.com>, Chris Mason <mason@kernel.org>,
  linux-kselftest@vger.kernel.org, 
  "Christian Brauner (Amutable)" <brauner@kernel.org>
 X-Mailer: b4 0.17-dev-ce4c1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1237; i=brauner@kernel.org;
- h=from:subject:message-id; bh=UVUPWAqqIx2djk703y1XHtcvgboItkTJfb/9RmtQVkY=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWR9ejBn84pzm65G6TrPnLRrvZZh1ewlwVPObmlaECUjK
- 7ZLaeoizY5SFgYxLgZZMUUWh3aTcLnlPBWbjTI1YOawMoEMYeDiFICJ/NJl+MPnlu8e4KGSGHCt
- mDNIumRG+SSJIzc+6bMINy6T/Wpmeo6R4ej/ewWKW0xWbLL7tadJ5iOL4pbdcy4cKXfp5/DfHPj
- 1KQ8A
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1203; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=NuPA4jHbua+UQUqvE1NH9WnvUCJeB7nsXYSG49yrfac=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWR9ejBv9qN9iY0qd75n8gck3laXYJGcP/Xvwpp6nhV1l
+ +fz+Fhu7yhlYRDjYpAVU2RxaDcJl1vOU7HZKFMDZg4rE8gQBi5OAZjIHQmGvyJmG6+tnBjH3qJw
+ I1e/7XGpNFv1HyWFz9buJ/bVbr2pzsjIsPmDUI3mIZewOZLzrAJLZy6ad+vu3j8/r72fuW2C0oR
+ /b/kA
 X-Developer-Key: i=brauner@kernel.org; a=openpgp;
  fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-Initialize binfmt_misc as a pseudo filesystem instead of raising
+Initialize bpffs as a pseudo filesystem instead of raising
 SB_I_NOEXEC and SB_I_NODEV by hand. This adds SB_I_PSEUDO.
 
 Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 ---
- fs/binfmt_misc.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ kernel/bpf/inode.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/binfmt_misc.c b/fs/binfmt_misc.c
-index d945b4f6e158..7dc233becd98 100644
---- a/fs/binfmt_misc.c
-+++ b/fs/binfmt_misc.c
-@@ -22,6 +22,7 @@
- #include <linux/file.h>
+diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
+index c6f328e4752e..57cf3775c076 100644
+--- a/kernel/bpf/inode.c
++++ b/kernel/bpf/inode.c
+@@ -15,6 +15,7 @@
+ #include <linux/namei.h>
  #include <linux/fs.h>
  #include <linux/fs_context.h>
 +#include <linux/pseudo_fs.h>
- #include <linux/init.h>
- #include <linux/kstrtox.h>
- #include <linux/limits.h>
-@@ -1575,8 +1576,7 @@ static int bm_fill_super(struct super_block *sb, struct fs_context *fc)
- 	if (user_ns != current_user_ns())
- 		return -EINVAL;
+ #include <linux/fs_parser.h>
+ #include <linux/kdev_t.h>
+ #include <linux/filter.h>
+@@ -1197,8 +1198,6 @@ static int bpf_fill_super(struct super_block *sb, struct fs_context *fc)
+ 	sb->s_magic = BPF_FS_MAGIC;
+ 	sb->s_op = &bpf_super_ops;
+ 	sb->s_xattr = bpf_fs_xattr_handlers;
+-	sb->s_iflags |= SB_I_NOEXEC;
+-	sb->s_iflags |= SB_I_NODEV;
+ 	sb->s_time_gran = 1;
  
--	/* Never exec off this instance and never let anything stack on it. */
--	sb->s_iflags |= SB_I_NOEXEC | SB_I_NODEV;
-+	/* Never let anything stack on this instance. */
- 	sb->s_stack_depth = FILESYSTEM_MAX_STACK_DEPTH;
+ 	inode = bpf_get_inode(sb, NULL, S_IFDIR | 0777);
+@@ -1261,6 +1260,7 @@ static int bpf_init_fs_context(struct fs_context *fc)
+ 	opts->delegate_attachs = 0;
  
- 	/*
-@@ -1660,6 +1660,7 @@ static void bm_kill_sb(struct super_block *sb)
- 
- static int bm_init_fs_context(struct fs_context *fc)
- {
+ 	fc->s_fs_info = opts;
 +	fc_init_pseudo(fc);
- 	fc->ops = &bm_context_ops;
+ 	fc->ops = &bpf_context_ops;
  	return 0;
  }
 
