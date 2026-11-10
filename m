@@ -1,62 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=178.63.66.53
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794318135;
-	b=yBeVJsPc+k9H/XR6IyFimYT8FS4dy9ry7ZI/enVVuKcziekq8Wn6qQ+YPMhBexgzodkh
-	 qS8xyk/1hLkOX/aK6CgWZ5mm7/Nw+XraeJZu8AQiF1I5QYZlhvOTuSCXSZpd4q8ziTYuq
-	 rCMp1Q7Rq0hdeikCx0xafA88hzjg2k9d7e4EQdEZNA8slgsiaTAeXcE3mAmowjmMB/aaV
-	 LJ40EGZ73hrMPzx8ZIv8m7Pg0hSYJsMiINvjtEhp/Vl1101nncNc7MYdo51W52Ez+ickj
-	 Oyhra8F6P0Q97PirGAZ/8VxsYkW+heADxFEXl2mig6gJXl4MtHfsRuqBXV++e98YI8w==
+	t=1794318527;
+	b=P2xvtUu9N7ca38Ceq5RuoqrBFs/FdVC9l9y8RIL/IxZLMkYFsviAeiGXYYmx6XvlrH2q
+	 CbkId4XMhXLD9970YG3l78J1gtmVGXPdDJN9seT7mIALTHxZa+1S5qEE7QlLk3DUJV5I8
+	 3uRHZvN+EBOnX2V8DMWBuFzQJPmgFVAenRn9B73VzUCz8t8VyBecfAQh13S3dM1tFoJ1t
+	 FQ87etKf64iQwN2A1nsxFxB7DmdYdPQLhn+SOJf5X3ffl8RgQl1EgekaOYUdh+14YxLT1
+	 e1dGvWnkE3A7RjbW7spiIjn1IUFDDItngGaJbyaHUvsSkUhANFXl/6sTbyrOlR+iP0g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794318135;
-	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To;
-	bh=eYs+Fegr6eB0PcIdRKpfDtRPaQfHYvt3G6SFzIB7RsU=;
-	b=N+TyVh1choJ7aU0Xe0SgrYliyKlHHlXJ8+f6STu0JZaP+9KRqckzZJEG5RNhj+JF2C9r
-	 z0hESO6KbAxp0J8LJZyRDgcPQlHiRTgotnIO1UpKfm81E4OwWzaQEagqPTXpkUnlUoPiO
-	 UY16l6Kzef2fcB45rcVIciSvbmWOjqZbe3s+YW79n8sjwm0WA9sROex0EjdefBDkopBel
-	 xo9EwldqiOE25sf4f/R3mfn0KIvqEk6t0WiFkxAlREy84LBVMj1GeUU/MYj4NMokw7pEU
-	 y6uVS/RJ1qhNUzUD/uN3JGQtuEgLFOQYBSSgXwJptXnqGyXXopCPxzoxYpQdMSweTYQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794318527;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=PXOumnW9kApZ0xI+3i5ByuI4hNLQiRrA6Srem/lBkIM=;
+	b=TXgqQJBpsAWsRRsHntLbulXT68ZYQXRGdVV76piJXtESQvRD/YrfaicC5/4/7h3OV3FQ
+	 36DmmgUpHkBgGhSQaFoPNJoX/nsr+36JtHh24y+22yZKQY9KmawrBAUdUuZcsIsG4DFqm
+	 fOXptZsM2jaW+TBppDAhu+vFar7cxOCIjKGzZ3G5R2ImMkpK8sLcCh5DUiIW1mcAzVBDb
+	 hy1uSq11eAsRMWUITt5Ol0LWC7WtRRURx0L4jAYAiKYnblor0beU4kJFPDsnHUR/ujW+W
+	 IHEwpN1AcdDKiHVa5/UYFviAUdg9L0HqRUtwBbnb5ig1CoPK1Q5bnzoKhlvNe6aLNOg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=hallyn.com;
-	spf=pass smtp.mailfrom=hallyn.com;
-	dkim=pass header.d=hallyn.com header.i=@hallyn.com header.a=rsa-sha256 header.s=mail header.b="OWss4i/Y";
-	arc=none smtp.remote-ip=178.63.66.53
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nIG4oR31;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E3C8606A31C;
-	Tue, 10 Nov 2026 13:42:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0E3C8606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hallyn.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hallyn.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B6D2606A338
+	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 13:48:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=hallyn.com header.i=@hallyn.com header.a=rsa-sha256 header.s=mail header.b=OWss4i/Y
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=hallyn.com; s=mail;
-	t=1794318130; bh=bcXqt42XRNdswsbMlIOG2xwf1uaEU0fPAUEiWxCSUDU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OWss4i/Yjw9dRrX/LmMsLYgUWxJ+o8/z5DZn9qibpbXXSzkPbDUzYwDYLCIYs1gcx
-	 fEeMyosyxsEliU4a7CKhRtCAgJpAd4xKRfQvdPBogMWiJriO77hH6kNmGuV8+8wL8s
-	 9XYH70cmhye5WlBAdtKFf+mMY7XnwRnE6/u36uVXysk5lebN9EdFUUh0qsPRs9B51m
-	 guCg9DQtsLm29wpsXciDSxRk09AKEV/I+Ta86fX0XjWKs2zNR+Vh1s5chdAoLYrL9b
-	 D0NQ2IzyqjN3e8kjqe2n3NCgFZcewfqvtrEYJRSZr8wdyB5lpuYGUJNtFvUMAK6NKE
-	 qD6nEVIwRnuww==
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-	id E5727B8D; Tue, 10 Nov 2026 07:42:10 -0600 (CST)
-Date: Tue, 10 Nov 2026 07:42:10 -0600
-From: "Serge E. Hallyn" <serge@hallyn.com>
-To: Cai Xinchen <caixinchen1@huawei.com>
-Cc: nicolas.bouchinet@oss.cyber.gouv.fr, xiujianfeng@huawei.com,
-	paul@paul-moore.com, jmorris@namei.org, shuah@kernel.org,
-	kalevi@kolttonen.fi, linux-security-module@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org, lujialin4@huawei.com
-Subject: Re: [PATCH -next -v2 6/8] lockdown: bound the status string with
- scnprintf
-Message-ID: <avMfMnoJUb9bIYbG@hallyn.com>
-References: <20261110132818.2231593-1-caixinchen1@huawei.com>
- <20261110132818.2231593-7-caixinchen1@huawei.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nIG4oR31
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F62E1F0089F;
+	Tue, 10 Nov 2026 13:48:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794318526;
+	bh=PXOumnW9kApZ0xI+3i5ByuI4hNLQiRrA6Srem/lBkIM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=nIG4oR31eWPSSEWsnufOIzslusEBCNcrewGGcdwdCb1fnPjFJT8iPkUl5Wt5kf57Z
+	 vsyaOTOtcxAdtpd/kFovh/GnGUCWlhjNL5dUEi4F16E0E8PrHvibXGpbbfRDFMIgZK
+	 QYpx7uFYv6qi9YNtnlOxVcNZXunTN7YonSz2FuK5TIBfolqHBZHJAtKNFmrrWigylX
+	 okcGSxrPW8g5Dk5370nhuIWJKxlTLGap9WZRQCIL1McDVS1abPz2qJJ2zBq+P7eVxS
+	 QIW64p3q4vhfCefhyvVz1uYbTlllU7mkNmB5TE4Iu9ZWC6UCdeu5iSFBpOtrX5/LHL
+	 Grrpy5LyExO6g==
+Message-ID: <6b893c11-b43f-4fc0-9c35-83066fb5dce3@kernel.org>
+Date: Tue, 10 Nov 2026 13:48:44 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -66,108 +51,200 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261110132818.2231593-7-caixinchen1@huawei.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next] bpftool: Add missing commands to documentation
+ synopses
+To: Dhanush Arivappagari <arivappa.dvorak@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
+References: <20261104183018.30052-1-arivappa.dvorak@gmail.com>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <20261104183018.30052-1-arivappa.dvorak@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Nov 10, 2026 at 09:28:16PM +0800, Cai Xinchen wrote:
-> Use scnprintf() instead of sprintf() when composing the lockdown status
-> string in lockdown_read().  The current set of levels fits well within the
-> 80 byte buffer, but sprintf() provides no protection if more or longer
-> labels are added later.  scnprintf() makes the buffer bounds explicit.
+On 04/11/2026 18:30, Dhanush Arivappagari wrote:
+> Several commands and objects implemented in bpftool are currently missing
+> from the SYNOPSIS sections in the man pages, causing documentation drift.
 > 
-> Store the level label strings in named arrays and point the matching
-> lockdown_reasons[] entries at them.  Their sizes are compile-time
-> constants, so a BUILD_BUG_ON() can verify that the status buffer is large
-> enough for all level labels, their trailing spaces, and the brackets
-> around the active one.
+> Update the documentation across bpftool man pages:
+> - Add the missing 'token' object and its commands to bpftool.rst.
+> - Add missing subcommands to the SYNOPSIS blocks of btf, feature, gen,
+>   link, map, net, and prog man pages to reflect existing implementations.
+
+
+Thanks for this! It looks good, I just have a few minor comments.
+
+Nit: The description is not entirely accurate, there's no change in the
+SYNOPSIS blocks for -net and -cgroup pages. You can keep the mention of
+the objects you add, but I'd just remove the list of updated pages, we
+can look at the diff for that.
+
+
+> - Update help command headings in the cgroup and token documentation
+>   to reference their respective objects instead of prog.
 > 
-> Signed-off-by: Cai Xinchen <caixinchen1@huawei.com>
-
-Reviewed-by: Serge Hallyn <serge@hallyn.com>
-
+> Signed-off-by: Dhanush Arivappagari <arivappa.dvorak@gmail.com>
 > ---
->  security/lockdown/lockdown.c | 28 +++++++++++++++++++++++-----
->  1 file changed, 23 insertions(+), 5 deletions(-)
+>  tools/bpf/bpftool/Documentation/bpftool-btf.rst |  2 +-
+>  .../bpftool/Documentation/bpftool-cgroup.rst    |  2 +-
+>  .../bpftool/Documentation/bpftool-feature.rst   |  2 +-
+>  tools/bpf/bpftool/Documentation/bpftool-gen.rst |  2 +-
+>  .../bpf/bpftool/Documentation/bpftool-link.rst  |  2 +-
+>  tools/bpf/bpftool/Documentation/bpftool-map.rst |  3 ++-
+>  .../bpf/bpftool/Documentation/bpftool-prog.rst  |  2 +-
+>  .../bpf/bpftool/Documentation/bpftool-token.rst |  2 +-
+>  tools/bpf/bpftool/Documentation/bpftool.rst     | 17 ++++++++++-------
+>  9 files changed, 19 insertions(+), 15 deletions(-)
 > 
-> diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
-> index 84efd533fe5a..26cac7628a48 100644
-> --- a/security/lockdown/lockdown.c
-> +++ b/security/lockdown/lockdown.c
-> @@ -14,13 +14,17 @@
->  #include <linux/lsm_hooks.h>
->  #include <uapi/linux/lsm.h>
+> diff --git a/tools/bpf/bpftool/Documentation/bpftool-btf.rst b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
+> index c6dc445cd4a1..e25277260ceb 100644
+> --- a/tools/bpf/bpftool/Documentation/bpftool-btf.rst
+> +++ b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
+> @@ -18,7 +18,7 @@ SYNOPSIS
 >  
-> +static const char lockdown_label_none[] = "none";
-> +static const char lockdown_label_integrity[] = "integrity";
-> +static const char lockdown_label_confidentiality[] = "confidentiality";
-> +
->  /*
->   * These are descriptions of the reasons that can be passed to the
->   * security_locked_down() LSM hook, used for the denial message and the
->   * securityfs status file.
->   */
->  static const char *const lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX + 1] = {
-> -	[LOCKDOWN_NONE] = "none",
-> +	[LOCKDOWN_NONE] = lockdown_label_none,
->  	[LOCKDOWN_MODULE_SIGNATURE] = "unsigned module loading",
->  	[LOCKDOWN_DEV_MEM] = "/dev/mem,kmem,port",
->  	[LOCKDOWN_EFI_TEST] = "/dev/efi_test access",
-> @@ -41,7 +45,7 @@ static const char *const lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX + 1] = {
->  	[LOCKDOWN_DBG_WRITE_KERNEL] = "use of kgdb/kdb to write kernel RAM",
->  	[LOCKDOWN_RTAS_ERROR_INJECTION] = "RTAS error injection",
->  	[LOCKDOWN_XEN_USER_ACTIONS] = "Xen guest user action",
-> -	[LOCKDOWN_INTEGRITY_MAX] = "integrity",
-> +	[LOCKDOWN_INTEGRITY_MAX] = lockdown_label_integrity,
->  	[LOCKDOWN_KCORE] = "/proc/kcore access",
->  	[LOCKDOWN_KPROBES] = "use of kprobes",
->  	[LOCKDOWN_BPF_READ_KERNEL] = "use of bpf to read kernel RAM",
-> @@ -50,7 +54,7 @@ static const char *const lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX + 1] = {
->  	[LOCKDOWN_TRACEFS] = "use of tracefs",
->  	[LOCKDOWN_XMON_RW] = "xmon read and write access",
->  	[LOCKDOWN_XFRM_SECRET] = "xfrm SA secret",
-> -	[LOCKDOWN_CONFIDENTIALITY_MAX] = "confidentiality",
-> +	[LOCKDOWN_CONFIDENTIALITY_MAX] = lockdown_label_confidentiality,
->  };
+>  *OPTIONS* := { |COMMON_OPTIONS| | [{ **-B** | **--base-btf**} *FILE*]...  }
 >  
->  static enum lockdown_reason kernel_locked_down;
-> @@ -137,6 +141,16 @@ static ssize_t lockdown_read(struct file *filp, char __user *buf, size_t count,
->  	char temp[80] = "";
->  	int i, offset = 0;
+> -*COMMANDS* := { **dump** | **help** }
+> +*COMMANDS* := { **show** | **list** | **dump** | **help** }
 >  
-> +	/*
-> +	 * Size the buffer for the worst case: the active level is
-> +	 * confidentiality, with brackets and trailing spaces, plus the
-> +	 * terminating NUL.  The label sizeof() values include their own
-> +	 * NULs, so only three more bytes are needed.
-> +	 */
-> +	BUILD_BUG_ON(sizeof(temp) < sizeof(lockdown_label_none) +
-> +				    sizeof(lockdown_label_integrity) +
-> +				    sizeof(lockdown_label_confidentiality) + 3);
+>  BTF COMMANDS
+>  =============
+> diff --git a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
+> index d1b8193dc576..7633a42b54b0 100644
+> --- a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
+> +++ b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
+> @@ -131,7 +131,7 @@ bpftool cgroup attach *CGROUP* *ATTACH_TYPE* *PROG* [*ATTACH_FLAGS*]
+>  bpftool cgroup detach *CGROUP* *ATTACH_TYPE* *PROG*
+>      Detach *PROG* from the cgroup *CGROUP* and attach type *ATTACH_TYPE*.
+>  
+> -bpftool prog help
+> +bpftool cgroup help
+>      Print short help message.
+>  
+>  OPTIONS
+> diff --git a/tools/bpf/bpftool/Documentation/bpftool-feature.rst b/tools/bpf/bpftool/Documentation/bpftool-feature.rst
+> index c7f837898bc7..9ed5ff93ebdb 100644
+> --- a/tools/bpf/bpftool/Documentation/bpftool-feature.rst
+> +++ b/tools/bpf/bpftool/Documentation/bpftool-feature.rst
+> @@ -18,7 +18,7 @@ SYNOPSIS
+>  
+>  *OPTIONS* := { |COMMON_OPTIONS| }
+>  
+> -*COMMANDS* := { **probe** | **help** }
+> +*COMMANDS* := { **probe** | **list_builtins** | **help** }
+>  
+>  FEATURE COMMANDS
+>  ================
+> diff --git a/tools/bpf/bpftool/Documentation/bpftool-gen.rst b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
+> index d0a36f442db7..0c0f9616f676 100644
+> --- a/tools/bpf/bpftool/Documentation/bpftool-gen.rst
+> +++ b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
+> @@ -18,7 +18,7 @@ SYNOPSIS
+>  
+>  *OPTIONS* := { |COMMON_OPTIONS| | { **-L** | **--use-loader** } | [ { **-S** | **--sign** } {**-k** <private_key.pem>} **-i** <certificate.x509> ] }
+>  
+> -*COMMAND* := { **object** | **skeleton** | **help** }
+> +*COMMAND* := { **object** | **skeleton** | **subskeleton** | **min_core_btf** | **help** }
 
-Awesome, thanks.  It also might be worth it to replace the 80 in temp[80]
-with the calculated size, but this is safe enough.
 
-> +
->  	for (i = 0; i < ARRAY_SIZE(lockdown_levels); i++) {
->  		enum lockdown_reason level = lockdown_levels[i];
+Since you're touching this line, can we please fix the first word to
+make it "COMMANDS" (plural) instead of "COMMAND", for consistency?
+
+
 >  
-> @@ -144,9 +158,13 @@ static ssize_t lockdown_read(struct file *filp, char __user *buf, size_t count,
->  			const char *label = lockdown_reasons[level];
+>  GEN COMMANDS
+>  =============
+> diff --git a/tools/bpf/bpftool/Documentation/bpftool-link.rst b/tools/bpf/bpftool/Documentation/bpftool-link.rst
+> index 6f09d4405ed8..21b22aa70fdc 100644
+> --- a/tools/bpf/bpftool/Documentation/bpftool-link.rst
+> +++ b/tools/bpf/bpftool/Documentation/bpftool-link.rst
+> @@ -18,7 +18,7 @@ SYNOPSIS
 >  
->  			if (kernel_locked_down == level)
-> -				offset += sprintf(temp+offset, "[%s] ", label);
-> +				offset += scnprintf(temp + offset,
-> +						    sizeof(temp) - offset,
-> +						    "[%s] ", label);
->  			else
-> -				offset += sprintf(temp+offset, "%s ", label);
-> +				offset += scnprintf(temp + offset,
-> +						    sizeof(temp) - offset,
-> +						    "%s ", label);
->  		}
->  	}
+>  *OPTIONS* := { |COMMON_OPTIONS| | { **-f** | **--bpffs** } | { **-n** | **--nomount** } }
 >  
-> -- 
-> 2.18.0.huawei.25
-> 
+> -*COMMANDS* := { **show** | **list** | **pin** | **help** }
+> +*COMMANDS* := { **show** | **list** | **pin** | **detach** | **help** }
+>  
+>  LINK COMMANDS
+>  =============
+> diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
+> index e4ed7e701c9e..391b0c6c0c6a 100644
+> --- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
+> +++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
+> @@ -20,7 +20,8 @@ SYNOPSIS
+>  
+>  *COMMANDS* :=
+>  { **show** | **list** | **create** | **dump** | **update** | **lookup** | **getnext** |
+> -**delete** | **pin** | **help** }
+> +**delete** | **pin** | **event_pipe** | **peek** | **push** | **pop** | **enqueue** | **dequeue** |
+> +**freeze** | **help** }
+>  
+>  MAP COMMANDS
+>  =============
+> diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+> index 8dbd34ef3d8b..c239cb506c38 100644
+> --- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+> +++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+> @@ -23,7 +23,7 @@ SYNOPSIS
+>  
+>  *COMMANDS* :=
+>  { **show** | **list** | **dump xlated** | **dump jited** | **pin** | **load** |
+> -**loadall** | **help** }
+> +**loadall** | **attach** | **detach** | **tracelog** | **run** | **profile** | **help** }
+
+
+Another nit: In bpftool.rst's PROG-COMMANDS you add tracelog at the end
+of the list (like in do_help() in prog.c); but here, and in the command
+description in the same bpftool-prog.rst page, it's before run/profile.
+Could you please make it consistent in all four locations ("tracelog" at
+the end, to avoid changing do_help())?
+
+
+>  
+>  PROG COMMANDS
+>  =============
+> diff --git a/tools/bpf/bpftool/Documentation/bpftool-token.rst b/tools/bpf/bpftool/Documentation/bpftool-token.rst
+> index d082c499cfe3..1f4e6f4f64b0 100644
+> --- a/tools/bpf/bpftool/Documentation/bpftool-token.rst
+> +++ b/tools/bpf/bpftool/Documentation/bpftool-token.rst
+> @@ -35,7 +35,7 @@ bpftool token { show | list }
+>      **bpf**\ () system call commands, maps, programs, and attach types for the
+>      token.
+>  
+> -bpftool prog help
+> +bpftool token help
+>      Print short help message.
+>  
+>  OPTIONS
+> diff --git a/tools/bpf/bpftool/Documentation/bpftool.rst b/tools/bpf/bpftool/Documentation/bpftool.rst
+> index f38ae5c40439..a213f7032d8d 100644
+> --- a/tools/bpf/bpftool/Documentation/bpftool.rst
+> +++ b/tools/bpf/bpftool/Documentation/bpftool.rst
+> @@ -21,35 +21,38 @@ SYNOPSIS
+>  **bpftool** **version**
+>  
+>  *OBJECT* := { **map** | **prog** | **link** | **cgroup** | **perf** | **net** | **feature** |
+> -**btf** | **gen** | **struct_ops** | **iter** }
+> +**btf** | **gen** | **struct_ops** | **iter** | **token** }
+>  
+>  *OPTIONS* := { { **-V** | **--version** } | |COMMON_OPTIONS| }
+>  
+>  *MAP-COMMANDS* :=
+>  { **show** | **list** | **create** | **dump** | **update** | **lookup** | **getnext** |
+> -**delete** | **pin** | **event_pipe** | **help** }
+> +**delete** | **pin** | **event_pipe** | **peek** | **push** | **pop** | **enqueue** | **dequeue** |
+> +**freeze** | **help** }
+>  
+>  *PROG-COMMANDS* := { **show** | **list** | **dump jited** | **dump xlated** | **pin** |
+> -**load** | **attach** | **detach** | **help** }
+> +**load** | **loadall** | **attach** | **detach** | **run** | **profile** | **tracelog** | **help** }
+
+
+(This is what I was referring to earlier: run/profile/tracelog)
+
+pw-bot: cr
+
+Thanks,
+Quentin
