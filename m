@@ -1,62 +1,63 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794339621;
-	b=ryaFNcQgQQNdNqiufVk/rJezEC9hwdg33FjMqpX1TIZSkDHotLz4tyY9otrYuDsLxoIm
-	 FEGgYw+168GXoaFT6HvyR1/lImCyUTKdsRkacwLPM87PW7Ac0zY2Ay2CsaqD1xeTGb7BI
-	 TEY7GVRf4ZhKXTBCNuVmDsQ+I5r87MhPX6iDdaiQDtAqcP9URYLaoWyuRpU03bN/pTaJs
-	 vCLxe8d2kEbLUsLSjxhb7Ds076YPWY+F8zoFjhAMUg9CstTSZ1jOTWwleOhIZYVgWWhbt
-	 AHGKf5o7fhkwCX1gBN2ekqHlFWUlG0mWLPqjTZJHP8GGyxzW5dyNPROxYfc9JGjnUZA==
+	t=1794341442;
+	b=SBEvMpYbvuh4dgmPxLnvz0leCNySqUBRNRWRq+uFZAYhHYmsPZEvXdtUkPn4cj56yOne
+	 pQlwFGUamsp1G9iDZy3bqokLakPepKR/oBd17RLGdG5MwwtlaoT3G6JGAqj7dipqkRyPA
+	 JcNKAgPJ9soXLWuY3d1nljkG27XCqkvo+qEcCxuyms/SkZZwNV4tsFfv7uuaPDyX0iStO
+	 8MapeMGDvfd0Otmep1ZoeBRCFETkByURnL2gSZm+MVVdVFq6erpAiPbmGg2UDABQFhSnR
+	 HmN+Aug6/vMdae4mbxRcF7pxQom+VdGqKeSoKmzbFrGgzWNbxr7b5qvTaIZxQRFlNvA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794339621;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794341442;
 	h=Received:DKIM-Signature:Date:Message-ID:From:To:Cc:Subject:
 	 In-Reply-To:References:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=G73EY9C4EDTA4M9pcyoo0q/AnVA2mgjUcIBxeIwlhbg=;
-	b=jxJ4CHR+IAlMwsGqDrujyo/QD9d8WM6/KwcqTf0YWV5iWqb8tCodwjCo0S1SoRsREWbG
-	 59LrmgHlS2PQy7bJDK40dpoAzYxGAXDlq8n+JB1c2qRYPEce6dVtafrcMvfSA5ptaHPWY
-	 VT13uFVlayZBJO2z/7vTz73V08/v3KK7o+NL4m2ew2gamtdXMg57JU+3cyj4SENgFno0D
-	 00Hf7YorQeNes2fV0pVo6FyGE2OSCZP6x0WmD9BmCeXXht5tWOF7zwJ8vHGl2Owcpnnnt
-	 TwsKEFe3Gbvg8ZR9x4sPn1bLLTNsgqrAh2B0kg2m+DCN5WQn6v/POf5XGjunpgRmwkQ==
+	bh=gtnmaNHVD8u8S/tZT9pV39PfX4uefS+LpmURAAKxvqo=;
+	b=eZnAVg5yV4gyc42aPHL38EC8pkN+0ocK9xCa6tHNZ47Vs3xt71gvXnhTk/wnUYgSYIq3
+	 c1zQPeucmA2aEy0Mf1mlTwxB5WifrkbCO7/K38oynMGihmKD2qWfhyBXp6TQAqH9tBjDi
+	 1zL42WlyET7Zzhnw40KcswvIL0/BvhQzPZlRflyaMftRE87w4K9AAAOxR+IPT0vI5owPP
+	 4MfK6Nj2bK8WMK+hUjb520uzPb3zqRO2l1Fwxxo8iIZLNsaZPUj73CzZ9Z+50UAp85R9z
+	 68hK537cj8WMzmV0QiuwjvwNourUmPsTx11+gLEXuH6Gl4yK5Wqj93IrTVD1F6H51xA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jolVrtOH;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="bomzhE/7";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 798BE606A326;
-	Tue, 10 Nov 2026 19:40:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749D5606A31C;
+	Tue, 10 Nov 2026 20:10:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jolVrtOH
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 275BD1F008BC;
-	Tue, 10 Nov 2026 19:40:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bomzhE/7
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DDFE1F0089F;
+	Tue, 10 Nov 2026 20:10:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794339621;
-	bh=G73EY9C4EDTA4M9pcyoo0q/AnVA2mgjUcIBxeIwlhbg=;
+	s=k20260515; t=1794341442;
+	bh=gtnmaNHVD8u8S/tZT9pV39PfX4uefS+LpmURAAKxvqo=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=jolVrtOHWRVXPvbUc7zJiTa26lBRn0uUo4pfZLpn1ofBw4k3knn6PPZIGjAKomBnM
-	 Jjtuqkjy2gC03w7F6uUmaHjyoFKjnnZHDdUNigqu8AQlHxwn7HDJ6n/2MGIy7XZYqo
-	 8SiA14NEo+0ZB+UzDKttkjB/0FMut2AUH80e4M40Ya8wrMKgXDrD2AHoobEXDEb02S
-	 /GVVoip3d/a70LKI+YrzoComxdI7WmE5gxMBldH/s/nmgP6bHuuegr5AvK4ob+NwBk
-	 D1bChjXHIdDGbK4Z/lVqB1BGt4QMOdRkKUNMFkhZIvbPoiLWDVVuwLmxU9l1l9GPrg
-	 PGdbZamv+KIEQ==
-Date: Tue, 10 Nov 2026 09:40:20 -1000
-Message-ID: <d81460af8053a51f9be8a73186025ce7@kernel.org>
+	b=bomzhE/7LLjWceOrHhdKeF98fMwj0iURvnSUMpEqCuyHCQ4lKt3up5gPkPMvdRZQc
+	 o1pz5fYeec5xnKmyMNWHEF8cnXzq6C4QpZYd7AdiVDQeSGyAU1s/YMFFVE57wJvnJz
+	 suGdaHg5favfWCQNT+8g+kYBzLdFNz3qwA1xvxDIeR7oPT5fkGeqy3Q9j1xB4a53q0
+	 dC1jQqMPyFOjvgsaN7wfvyLNtxwb4Yh4xzOTWmMJZwG5owDQD8BHILbb1ot33J9g3T
+	 56luJBSWQNHslCk6qXm/N68VpegtoDvUxXBiONhQtkxwiBW7as+/WTIZvNjbUTC+Ng
+	 THeb7M2Zd9gEQ==
+Date: Tue, 10 Nov 2026 10:10:41 -1000
+Message-ID: <3bdd435fd868ed7ca7ea9061e5966b7b@kernel.org>
 From: Tejun Heo <tj@kernel.org>
-To: Kang Chen <k.chen@smail.nju.edu.cn>
-Cc: Yonghong Song <yonghong.song@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+To: Fernand Sieber <sieberf@amazon.com>
+Cc: mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+ vincent.guittot@linaro.org, bsegall@google.com, dietmar.eggemann@arm.com,
+ rostedt@goodmis.org, mgorman@suse.de, vschneid@redhat.com,
+ kprateek.nayak@amd.com, hannes@cmpxchg.org, mkoutny@suse.com,
+ void@manifault.com, arighi@nvidia.com, changwoo@igalia.com,
+ skhan@linuxfoundation.org, corbet@lwn.net, rdunlap@infradead.org,
+ cgroups@vger.kernel.org, sched-ext@lists.linux.dev,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
  bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- Johannes Weiner <hannes@cmpxchg.org>,
- =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- cgroups@vger.kernel.org
-Subject: Re: [PATCH] bpf: make css iterator stay drained after NULL
-In-Reply-To: <20261110125110.2935707-1-k.chen@smail.nju.edu.cn>
-References: <20261110125110.2935707-1-k.chen@smail.nju.edu.cn>
+ nh-open-source@amazon.com, hborghor@amazon.de, fmubeen@amazon.de,
+ dwmw@amazon.co.uk, karataev@amazon.com
+Subject: Re: [PATCH v2 0/4] sched/fair: cpu.max.runtime and idle refill for CPU credits
+In-Reply-To: <cover.1794303670.git.sieberf@amazon.com>
+References: <cover.1794303670.git.sieberf@amazon.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -69,28 +70,44 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 
-On Tue, Nov 10, 2026 at 08:51:10PM +0800, Kang Chen wrote:
-> The css_next_*() helpers start from @start when given a NULL position.
-> bpf_iter_css_next() leaves kit->pos == NULL after the last element, but
-> keeps kit->start set, so a next() call after exhaustion starts the
-> iteration over from @start again.
->
-> The verifier relies on the iterator contract that once next() returns
-> NULL it keeps returning NULL: process_iter_next_call() marks the
-> iterator DRAINED and treats the result of later next() calls as the
-> constant zero.  A restarted css iteration therefore hands the BPF
-> program a kernel pointer while the verifier believes R0 == 0.
->
-> Clear kit->start when the position becomes NULL.  bpf_iter_css_destroy()
-> is a no-op, so no cleanup depends on @start after exhaustion.
->
-> Fixes: 7251d0905e75 ("bpf: Introduce css open-coded iterator kfuncs")
-> Signed-off-by: Kang Chen <k.chen@smail.nju.edu.cn>
+Hello, Fernand.
 
-Acked-by: Tejun Heo <tj@kernel.org>
+On Tue, Nov 10, 2026 at 01:08:47PM +0200, Fernand Sieber wrote:
+> This series adds cpu.max.runtime, a cgroup v2 file to read and set the
+> runtime the CFS bandwidth controller has for a cgroup, lets
+> cpu.max.burst exceed the quota, and makes an idle group keep earning
+> quota up to quota + burst. Patch 3 passes the writes on to BPF
+> schedulers, and patch 4 lets them charge their tasks to the same
+> runtime.
 
-BPF folks, how do you want to route this? It can go through the bpf
-tree or I can take it through cgroup/for-7.4-fixes.
+I think this patchset is too maximalist. As described, the use case is
+specific to selling burstable CPU budget. Nobody else has asked for
+this. There may be other use cases which haven't been stated yet but the
+description doesn't surface any, so as it stands this is pretty niche.
+
+On top of that, the series integrates into both fair and sched_ext and
+then makes the two work together so that the handoff is seamless. That's
+too much for something which doesn't have a strong use case or an
+established generic need. As with scx_bpf_cgroup_report_throttled(),
+patch 4 modifies fair's internal state from sched_ext, which I don't
+think is a good idea as the cgroup piping is split at the interface
+level:
+
+  https://lore.kernel.org/all/ahdFAZVnb3DTv8Jo@slm.duckdns.org/
+
+Seamlessly switching tasks between the classes in partial mode has a lot
+of other integration problems beyond this one and at least I'm not
+aiming to achieve it. It'd cost a lot more than it'd be useful.
+
+The sched_ext part can just be a feature of your own BPF scheduler,
+which you seem to be using already. There, the credit level is just
+state in your BPF maps which your userspace can read and set, so the
+maximalist version can wait until the need is proven. If you want a
+handover between your scheduler and fair, that can be done from
+userspace.
+
+If a burstable budget is something useful to add to fair, can you do
+that first and separately? It should be able to stand on its own.
 
 Thanks.
 
