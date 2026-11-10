@@ -1,99 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794323163;
-	b=HCxrclYsoaMVyyNP7Hgh+74tnnhQG/mPAd1ASbKVqltunJ/MoHDHj8sFdjKvYe9aHIlJ
-	 pAYPws6DNjTiKjS/0HXKjJFbNQhPGF6o8bpdlWQ1p+RbKS9p213hB9tcyHKK2rwI8Z2Y4
-	 Cpd90AgCEkq+QQUehOkRh1JLaQSrHGrRexkjIVisQUMzPp+EYKbQHFKDKyKwyu7Iy0YHU
-	 4X8zCwbv/QZD7N9W9lzJ8vSGa2gCxKOGp1X8uVGfQSgS2cFwEO1qNaUI/orUEX8p7MQ2d
-	 cVpftvh0rWQLwDgUrEvgeAqYSFO/46UoVnDbQ8PPdkBOHXEzPba6+dV5SkcwZEi85Hw==
+	t=1794323282;
+	b=NE+9hbm07IkGe5UzQ80rN8zSu2p6MYkkOlqiCApSz1IFv90ZIr/cykUhy5gn8TsPxC3n
+	 hXIJidQmwYGyMrr3X5sWH8amOsb20jZWfXgOUXYgwjPMThPlYUVYgEryDgqa1htpZep0J
+	 wDaAwEie31ZOeo+CEoko0fVuasFX3qN019QnB8beTBIhJuU/1YpjR2CX7SWWAKJ7YErlW
+	 uFBxKw+arirHadGZxJxY/oNAAVHzVUpUsQX6yHzk1fwqiaHcxktOOvDH+BcDSqBm6M9cx
+	 9HCnMx7Y61E6C0xbUONzOyAoi9tWn/xWxSXTl+UEiu9RQjkwCzpH0bGefU4RkO0eeqA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794323163;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794323282;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=3saG5HUhHWIluByVMXbKrM1wtI4RFxTnUgkKyi8UGJA=;
-	b=Ys1UH+1deIunxZY4wRwQdqrYIc+cp4dIa0ja76+r9WCxt4sRFPakWIQU2WH0KZPP5i8Q
-	 zEf50i1qF7SViicj7c0EJ2vaFdBKNgxa+3GQx4GmfDW3uftctCA9wjczU/YnfeoWaCkqB
-	 /t4xIgBCxJvAzJY2JwE9aGyztPkAExyzkOajBNPFb7Xd/vDoosC4KzKtB8A+mbTU17+3Q
-	 wzyesU/nDnSIdIqzzyfx98upNX9/pZyRq7a9S/o5jiL8ZxYxWnhriieKOtyyOvZnDNv6B
-	 M4e8jWvnq9KS/ie4uyRWSF3Qz33aqLU8VK2glweT7Ta62ysL58FwfNHhKtnfSOXVKAQ==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To;
+	bh=Bk8Y4+BL8s+d95UH4gi81iT+RNas+yqthU8nmbpM9H0=;
+	b=lx87yNGLIzW133p1cQxr1KMIPRzaaGiBfxakXPEuSDf2kM4bHiSxcRMV5jtNjsi7SuK0
+	 0K96M2b0v0F8+gxoLR1xmBkkkHmq3qlxrFinmUB4RjcqNFkGAQZe3X24BMqI6JOecXvKl
+	 Psiw2OoU+DfBvsVOnqD90k+WI0sG5wXeH4wpyU7afY/hxY/ZiUNd0LZwl69OkKCFJx5Jv
+	 iwMIYHNgtdyeml22WqcilDd+JvtKXBKjT3tKQi/RcSaJQIjnQ7apvfFC8F2D0zIF0nRDY
+	 +1kYbvRiAG84/u2NJOwtCYNDapm6XZiYok5GZs5xBR8LGUPEriq/lZZnDoMv7Ki3b4Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rH6iUK0m;
-	arc=none smtp.remote-ip=209.85.128.54
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=X+KW2DVj;
+	arc=none smtp.remote-ip=209.85.221.45
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F026606A320
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 15:06:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3F026606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3B3660A2631
+	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 15:08:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D3B3660A2631
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rH6iUK0m
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4a549cd7fd2so19761215e9.0
-        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 07:06:03 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=X+KW2DVj
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-4922523d1afso1264761f8f.0
+        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 07:08:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794323162; x=1794927962; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=3saG5HUhHWIluByVMXbKrM1wtI4RFxTnUgkKyi8UGJA=;
-        b=rH6iUK0mFxC5SYg41GzhxuYBZQ8ZRWjcSicU/E/P8m8aSt+h7sTRxPQlU8JTL0Htoa
-         famV4KvT7Ya1jaQwHxAvdsh11CRH8Q/XH9JO5juaj5mz2Evq6ZMk9IgIxAihrMea3Asq
-         sCvgCbdDSpSGwKnDNF3CMg+Tm2RTXJL9oRW1ygHosdHUd2qPHC7/FTPQsMVS7Vy9HBpV
-         0vQrH6aVsOxYbV+Fkt/NuCfarezXqfwaaQhGGv8rqo5fRR23K+6KON7mge4K4FLeSQdd
-         LoGA3Zjxrc95B1/SBVbXyxNmZimu6JyjE5oguXnc0LmmkSOsHCZc/isFlW5A/KyfRF83
-         vvjg==
+        d=gmail.com; s=20260707; t=1794323280; x=1794928080; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Bk8Y4+BL8s+d95UH4gi81iT+RNas+yqthU8nmbpM9H0=;
+        b=X+KW2DVj2U4mmiEDdPK5c5Xk/qEkPTXC6T3VgRz1qhbQ1tJgtj3umWZ4PV/onOc/ko
+         NahWteAa0L14xlDgvE7BWr5gZpDRMB1CyNbLXIsi4U2/JENLwD4v51n7GghDB5WZWosS
+         QXlWtIhza4Ubd7Tybt0/OG8kAPWpPf5YhaEm0Z064LNekl8Z84Xbkm5n5ANBbFHaSDhV
+         FkYMZItqpufbN+ZArYMhyPQf7061oHavlQqONQNA6gwNNBEI5Vl4lWIxmV97l8FSfsnq
+         /W0vVtfm+dpFtIaePP9ibNCgUZXQQC/igr9rZPHP9feSqRplXnh7EwnFk7JUSx7LQQhY
+         /7gA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794323162; x=1794927962;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=3saG5HUhHWIluByVMXbKrM1wtI4RFxTnUgkKyi8UGJA=;
-        b=OeKcyW1pHP8oSYjUXd6KBCZd1XOt0YJP9owoFv1UP42TvQJVfr8CyuQNaY/VQcNoOY
-         02Caa/saSjBCbcDqqinoeUSXapFHweALRbm3AwA6emPuCD/otlVK4RTSntBhNkp+Kn4L
-         Dpji3MF+iBTiY6FoAiFwCsSC3yTMpSgQgBv3MjY4pihAGISNGMWB7Wb3l+88PBRivmIc
-         +Y6P7bydtiDlYlPaw219yHlUKmyQu+xLBokXaf3dULa2InOkyrlR1cXDGX+7sQxdiMdy
-         C+Aqod0Qy/VmkPQCJwi0wQhtUL3PfSR9wJa7Hx9neENza30cmF0JTKhxUnzt5qP0A09G
-         Hbww==
-X-Forwarded-Encrypted: i=1; AL+hErE3txHe3RWYZUO7Rv2Fy7qscOQz1Z24IpoO58MpagWinQtDvYxVeEvfeLXNNjBS9uMSCYw=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9cvjMas0KKnwkKIatef6/lRulFdUMmwYam0JyRwa51bWrhl23M
-	Sy1u3a7zEYqTj7OycY6wyUDGOsKvw+hLGWQqfIuraLucqY60jS7JTxiz
-X-Gm-Gg: AYBFou1afLLXtPGae+0xclzD3GZTz0QELBeer/HUyDSkQxA+5JRz2dzHwA80FTNQH1u
-	SuMcvF/smEhlqX3QTLeYIl7lhYyR61Va0Yv1jDU6hRezLba32QroNrMxUsQYvfm0rPXEa3kTlaG
-	oMmCo8ylYIkD8TABcGFygS8BLizezw7xYaj8w8/S/N8wfpLqlu1qxgskFPnrBMgP7VAq7RQSP+P
-	l5OXb827rIXta17rPPijRoWj59bFINSYbQ86mG8Lqh61UVVN6eEcHJrOXzwP08gRYC+GR/pUOOJ
-	RQOFqJJwf5qBI+QOIIrP7SV1UvLfQQvrC4Tq1vmUg/hHfzZ9pC5BaKDl75Luv+8ci42hg1/bXl5
-	Q5dz2moDPZax2lxiSu6ZEewQ55nM+4dL+tXLNfjL2zRFY2NikCcCbSpQbV27niOyRXDf+F02zYJ
-	jtYxDGut1JoUGqWSU2Bnvn5Tb1tuvd5n9almpsLZSMDHjirnHhTlTr3OXQDRXLfIJ2x/mTafRW/
-	hBzG7/lG+zSgrcuUMfGjYRTpG6jBxlwkUsvkozzHyMKuddOQavOQYINT1nKLAkO6iaGUtBwazWG
-	5SepTzQWVgaq0+qtgidvwinmICuJpoVn/93vGw==
-X-Received: by 2002:a05:600c:a013:b0:4b5:d95c:2380 with SMTP id 5b1f17b1804b1-4ba0234a040mr51183875e9.11.1794323161530;
-        Tue, 10 Nov 2026 07:06:01 -0800 (PST)
+        d=1e100.net; s=20260707; t=1794323280; x=1794928080;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=Bk8Y4+BL8s+d95UH4gi81iT+RNas+yqthU8nmbpM9H0=;
+        b=v3zfo5nmec/WYswR2jZzp9b5d8G4MQeLA62iynKN7TxEwxh92iHWYpdVqIWP9Trlbc
+         /qMLRLOqsuNARjR8W8OFisVElQ9VrKIhlNNdnrKziELl6VyI0sEPfQAEV+WBwxlU246R
+         iMRMRobfzF0+8/I9sFs3vcEvAtyioO/96rmyK/KJiGYjXbIRMC7MBsI/acsW4NkJhddh
+         gvqRUxP4wzxGEwYKM6dzCy7L9uNGo61ZmcQUVwigSZWKus/1ZOkwKSIG9Pa8lacgXMiw
+         O9sa9O447aqATo5wVYyWUWMP7OoTDbZTn4xJBnuDs704bV/KHztGHvEtYrPqMjVFlFLD
+         AQkg==
+X-Gm-Message-State: APuU4Z87+ybuXCYVCyMtWcOQxOuofvt8fvOr48fu+3dcTzozV6lnOmjT
+	/lfOErkze1XB4Zky5KH9kYeLAELnF75ggqgsoBqso2A25Hk115nH4OIZ
+X-Gm-Gg: AYBFou1n24I0nVOlnD730FywixLIm4NXp1HHDGHmiD1ccmLFYcDU0PfKhwRvoFhVW0f
+	I2a2TLoVUxL60hGxWYLTX7pVQwmrksSXjBwiMS23B4xDhEJkFbRG7UNusckUF/dOX+2EHt0eSf+
+	q8qe9pMlrPPgGaQHvDN4rNd2T1vhL9b88uOD3Kr5QroA1+ZZSzzEAf9Rgff20zWeuSDeDxr0GUJ
+	uxulw7k8ns5U+oYdeXAluaeErBV80ja3CSTGdZm0uFSYc1Ad24Tk3x5ZywZrsjaBbl9i1nk5uaO
+	pGyz/JriH58uEew7U79eXrTLJ6uKriMKJKOyYNgNO8C947GudR3O37Y4xyhob4Fhmc9A7gcSK0e
+	7c/svX0FYiqq/7e+MnmsOoMVkmKUmkcHVF/PrXzGVNKZWrt65VrbC41sHpNTYBlLxXKPXDk0T3e
+	Ku2BuaHV4+w/Y3eMU3jVh9TzWCu8JnFcH52pRrFpLgxMR40V9L8yu2pzbz/GEFL3X+LMZqPRZek
+	Csv+uuMsMICUg8Nv8NijvTmSU66O5dIrRjsZDf/daOIBw2LUQ49Wru7ElcNzCN9zduZmdxg8Q07
+	rtf2UJSEb9T3KlO0CGdr37osDXxdZcqYrq6Z6g==
+X-Received: by 2002:adf:e009:0:20b0:48d:f3a4:a6aa with SMTP id ffacd0b85a97d-49830c8ccf6mr3946905f8f.35.1794323280060;
+        Tue, 10 Nov 2026 07:08:00 -0800 (PST)
 Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba0204342asm80488225e9.6.2026.11.10.07.05.59
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49835858f26sm5477228f8f.18.2026.11.10.07.07.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 07:06:00 -0800 (PST)
-Date: Tue, 10 Nov 2026 15:17:30 +0000
+        Tue, 10 Nov 2026 07:07:59 -0800 (PST)
+Date: Tue, 10 Nov 2026 15:19:30 +0000
 From: Anton Protopopov <a.s.protopopov@gmail.com>
-To: bot+bpf-ci@kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	eddyz87@gmail.com, memxor@gmail.com, almagui@kernel.org,
-	john.fastabend@gmail.com, qmo@kernel.org, brauner@kernel.org,
-	kpsingh@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
-	emil@etsalapatis.com, ihor.solodrai@linux.dev, sashal@kernel.org,
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-	martin.lau@kernel.org, mason@kernel.org
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
 Subject: Re: [PATCH v2 bpf-next 15/18] resolve_btfids: Tag fmod_ret
  candidates as targets
-Message-ID: <avM1isGoXgAv47ml@mail.gmail.com>
-References: <20261109170550.141443-16-a.s.protopopov@gmail.com>
- <069d59babf1ed531e1a5c1bd4ec0a943f7e8f12fc1e18f0ccc8b4edd032974a0@mail.kernel.org>
+Message-ID: <avM2ArYor7B6-g63@mail.gmail.com>
+References: <20261109170550.141443-1-a.s.protopopov@gmail.com>
+ <20261109170550.141443-16-a.s.protopopov@gmail.com>
+ <sashiko-outbox-205381@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,90 +97,101 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <069d59babf1ed531e1a5c1bd4ec0a943f7e8f12fc1e18f0ccc8b4edd032974a0@mail.kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <sashiko-outbox-205381@kernel.org>
 
-On 26/11/09 05:42PM, bot+bpf-ci@kernel.org wrote:
-> > resolve_btfids: Tag fmod_ret candidates as targets
+On 26/11/09 06:13PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential
+> issue to consider:
+> - [Low] resolve_btfids: skipped duplicate-named functions in
+>   choose_functions()
+> --
 > 
-> TL;DR: resolve_btfids may tag KF_IMPLICIT_ARGS kfuncs (e.g.
-> bpf_wq_set_callback) as fmod_ret targets; the trampoline may then clobber the
-> implicit argument, and the kfunc could dereference a garbage pointer.
+> commit 51f98882bd7c33a728dede77756350958f73cb62
+> Author: Anton Protopopov <a.s.protopopov@gmail.com>
 > 
-> > diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
-> > --- a/tools/bpf/resolve_btfids/main.c
-> > +++ b/tools/bpf/resolve_btfids/main.c
+> resolve_btfids: Tag fmod_ret candidates as targets
+> 
+> This commit teaches resolve_btfids to parse .BTF_fmodret_candidates
+> records emitted by the bpf_scan_ir plugin and tag eligible functions in
+> BTF with bpf_fmodret and bpf_fmodret_retval:<values>.
+> 
+> > diff --git a/tools/bpf/resolve_btfids/fmodret.c b/tools/bpf/resolve_btfids/fmodret.c
+> > new file mode 100644
+> > index 0000000000000..df44b93eea734
+> > --- /dev/null
+> > +++ b/tools/bpf/resolve_btfids/fmodret.c
 > 
 > [ ... ]
 > 
-> > @@ -1841,6 +1888,16 @@ static int btf2btf(struct object *obj)
-> >  		}
-> >  	}
-> >  
-> > +	for (size_t i = 0; i < obj->fmodret_retvals.cnt; i++) {
-> > +		const struct fmodret_retval *retval = &obj->fmodret_retvals.retvals[i];
+> > +/* Choose the targets among the functions and describe them in RESULT */
+> > +static int choose_functions(struct elf_function_list *functions, const struct btf *btf,
+> > +			    const struct btf_func *btf_funcs, size_t nr_btf_funcs,
+> > +			    const unsigned char *buf, size_t ptr_size,
+> > +			    unsigned int encoding, struct fmodret_retvals *result,
+> > +			    struct fmodret_stats *stats, int verbose)
+> > +{
+> > +	size_t i = 0, j;
 > > +
-> > +		if (has_set_func(&ctx.fmodrets, retval->btf_id))
+> > +	qsort(functions->functions, functions->nr, sizeof(*functions->functions),
+> > +	      cmp_elf_function_name);
+> > +	for (i = 0; i < functions->nr; i = j) {
+> > +		const struct elf_function *f = &functions->functions[i];
+> > +		size_t record = chosen_record(f);
+> > +		const char *reason = NULL;
+> > +		unsigned int flags = 0;
+> > +		struct fmodret_retval *r;
+> > +		__u32 size;
+> > +		int id = 0;
+> > +
+> > +		for (j = i + 1; j < functions->nr; j++)
+> > +			if (strcmp(f->name, functions->functions[j].name))
+> > +				break;
+> > +
+> > +		if (!f->nr_strong && !f->nr_weak)
 > > +			continue;
-> > +		err = add_fmodret_retval_tags(&ctx, retval);
-> > +		if (err)
-> > +			goto out;
-> > +	}
-> > +
+> > +		if (record == NO_FUNCTION) {
+> > +			stats->ambiguous_body++;
+> > +			reason = "ambiguous-body";
+> > +			goto rejected;
+> > +		}
+> > +		/*
+> > +		 * A strong definition without values has no record. If it
+> > +		 * replaced a weak one, only the record of the weak one points
+> > +		 * to its body.
+> > +		 */
+> > +		if (!f->nr_strong && !f->weak_symbol) {
+> > +			stats->overridden++;
+> > +			reason = "overridden-weak";
+> > +			goto rejected;
+> > +		}
+> > +		if (!read_elf_value(buf + record + 16 + ptr_size, 4, encoding))
+> > +			continue;
+> > +		stats->with_values++;
+> > +		flags = read_elf_value(buf + record + 12, 4, encoding);
+> > +		if (j - i != 1) {
+> > +			stats->ambiguous_name++;
+> > +			reason = "ambiguous-name";
+> > +			goto rejected;
+> > +		}
 > 
-> Can this loop tag a kfunc with KF_IMPLICIT_ARGS as an fmod_ret target?
+> [Severity: Low]
+> Does advancing i = j while only inspecting functions->functions[i] skip
+> candidate records on functions->functions[i + 1 .. j - 1] when multiple
+> static functions share a name?
+> 
+> collect_elf_functions() gathers all defined STT_FUNC symbols regardless
+> of whether they have an fmodret record.  If functions->functions[i] has no
+> record (or zero values) while a later function with the same name in
+> [i + 1, j) has a record with values, the continue statement jumps to j
+> without counting the remaining functions in stats (such as
+> stats->with_values and stats->ambiguous_name) or logging the
+> ambiguous-name rejection when verbose > 1.
 
-Yes, looks like you're right, thanks. Will be fixed.
+Yes, you're pointing to this the second time,
+so it will be fixed in v3.
 
-> 
-> The kfunc loop earlier in btf2btf() has already rewritten the BTF
-> prototype of such a kfunc through process_kfunc_with_implicit_args():
-> 
-> 	t = (struct btf_type *)btf__type_by_id(btf, kfunc->btf_id);
-> 	t->type = new_proto_id;
-> 
-> so the BTF FUNC no longer lists the implicit arguments.  fmodret_collect()
-> ran before btf2btf() and compared only the return type
-> (btf_func_int_return_size()), never the argument count.  The only check
-> here is has_set_func(&ctx.fmodrets, ...), which does not consult
-> ctx.kfuncs, so the same btf_id still gets "bpf_fmodret" and
-> "bpf_fmodret_retval:...".
-> 
-> bpf_wq_set_callback() looks like a concrete case.  It is built with the
-> plugin, has an ftrace call site, and starts with a side-effect free
-> error return:
-> 
-> 	if (flags)
-> 		return -EINVAL;
-> 	return __bpf_async_set_callback(async, callback_fn, aux->prog);
-> 
-> so it would get "bpf_fmodret_retval:-22".  The kernel then adds it to
-> BTF_KFUNC_HOOK_FMODRET, and bpf_check_attach_target() accepts
-> BPF_MODIFY_RETURN through btf_kfunc_is_modify_return().
-> 
-> The trampoline model is built from the 3-argument prototype.  On x86,
-> __arch_prepare_bpf_trampoline() runs the fmod_ret programs and then calls:
-> 
-> 	restore_regs(&prog, pos_of_slot, nr_regs, regs_off)
-> 
-> with nr_regs = 3 before calling the original function.  rcx (aux) is
-> caller-saved, so __bpf_prog_enter(), the program and __bpf_prog_exit()
-> may have overwritten it.  If the program returns 0, which the verifier
-> allows, bpf_wq_set_callback() dereferences a garbage aux->prog.
-> 
-> The same seems to apply to the other KF_IMPLICIT_ARGS kfuncs that return
-> int (bpf_task_work_schedule_*, bpf_list_push_*, scx_bpf_*) whenever the
-> analysis finds an error path for them.
-> 
-> Would it make sense to skip retvals whose btf_id is a kfunc with
-> KF_IMPLICIT_ARGS in ctx.kfuncs, or any kfunc whose prototype was
-> rewritten?  No later commit in the series changes resolve_btfids.
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42662799554
-
+> -- 
+> Sashiko AI review · https://sashiko.dev/#/patchset/20261109170550.141443-1-a.s.protopopov@gmail.com?part=15
