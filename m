@@ -1,47 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794318527;
-	b=P2xvtUu9N7ca38Ceq5RuoqrBFs/FdVC9l9y8RIL/IxZLMkYFsviAeiGXYYmx6XvlrH2q
-	 CbkId4XMhXLD9970YG3l78J1gtmVGXPdDJN9seT7mIALTHxZa+1S5qEE7QlLk3DUJV5I8
-	 3uRHZvN+EBOnX2V8DMWBuFzQJPmgFVAenRn9B73VzUCz8t8VyBecfAQh13S3dM1tFoJ1t
-	 FQ87etKf64iQwN2A1nsxFxB7DmdYdPQLhn+SOJf5X3ffl8RgQl1EgekaOYUdh+14YxLT1
-	 e1dGvWnkE3A7RjbW7spiIjn1IUFDDItngGaJbyaHUvsSkUhANFXl/6sTbyrOlR+iP0g==
+	t=1794318540;
+	b=1Wbw4LBy8DkGEP4DIiwM+BSZ1kV6ODkT5Y8pUelubByIzxx8xoJ4H2gmPrPs1XluQgAx
+	 AT0GPiddmoL/qLm4yLwNdsGN1ojG4joI/r5g2znShyAuCIYHFGLgWROcfqVXrniB1xo6V
+	 xaD8LEg55326asqp+ND+AHgF+7+OpBtxEfdum91Ng4Wzvu4UfuvG+3EGJrr235d9fdWNe
+	 NcvGFMoQ2zK5khuj9PMqpU4Rj5xssZkepm9GoTIusUAtR0vJVOVLAO6b166OJn0keuCP8
+	 xJwgzCZGlkqhb012bxI8QedAcuz0lWC8tclIS+1TfMpV3myL+3rP2Y+MF34FClh38Fg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794318527;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=PXOumnW9kApZ0xI+3i5ByuI4hNLQiRrA6Srem/lBkIM=;
-	b=TXgqQJBpsAWsRRsHntLbulXT68ZYQXRGdVV76piJXtESQvRD/YrfaicC5/4/7h3OV3FQ
-	 36DmmgUpHkBgGhSQaFoPNJoX/nsr+36JtHh24y+22yZKQY9KmawrBAUdUuZcsIsG4DFqm
-	 fOXptZsM2jaW+TBppDAhu+vFar7cxOCIjKGzZ3G5R2ImMkpK8sLcCh5DUiIW1mcAzVBDb
-	 hy1uSq11eAsRMWUITt5Ol0LWC7WtRRURx0L4jAYAiKYnblor0beU4kJFPDsnHUR/ujW+W
-	 IHEwpN1AcdDKiHVa5/UYFviAUdg9L0HqRUtwBbnb5ig1CoPK1Q5bnzoKhlvNe6aLNOg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794318540;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=q+YMVvkEa8uaOBbexYkxUBo5dx74+xkphIFCSV1U0i8=;
+	b=ChLTYMc/pmDhxu1F65V1VlHco0Ni7Je3PuSnvCqu4InRbj7lDtM8CZBTH+qt9VNtqV1Y
+	 4wRwYVA8/VO5HOZ1k2lkLpIu8yPMvt9TCYo0VSw9+B8KwP+vGkpm2XdjdmFWqpKK3u8j6
+	 CklRH4lM4CSTnB8XNgzHWzQf+qJ+90pWROCrH2hFOTCshvz0Fgtj3Y+InAB62xQjmOKSl
+	 /XCSwfV0f9hLKhyTotradcNl41XrCFIubm3qudaQbMHwu8lkVY/jJajcJ6F2j9F9MiBZD
+	 37GCYPT7SfbBQRA3GK4nACPWr20VGx4/X4VhipwFi7lRGNa0Tx12mnz8d/Ho9BboTsQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nIG4oR31;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=U3pZ+JWc;
+	arc=none smtp.remote-ip=209.85.221.49
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B6D2606A338
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 13:48:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 616D860A260A
+	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 13:48:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 616D860A260A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nIG4oR31
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F62E1F0089F;
-	Tue, 10 Nov 2026 13:48:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794318526;
-	bh=PXOumnW9kApZ0xI+3i5ByuI4hNLQiRrA6Srem/lBkIM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=nIG4oR31eWPSSEWsnufOIzslusEBCNcrewGGcdwdCb1fnPjFJT8iPkUl5Wt5kf57Z
-	 vsyaOTOtcxAdtpd/kFovh/GnGUCWlhjNL5dUEi4F16E0E8PrHvibXGpbbfRDFMIgZK
-	 QYpx7uFYv6qi9YNtnlOxVcNZXunTN7YonSz2FuK5TIBfolqHBZHJAtKNFmrrWigylX
-	 okcGSxrPW8g5Dk5370nhuIWJKxlTLGap9WZRQCIL1McDVS1abPz2qJJ2zBq+P7eVxS
-	 QIW64p3q4vhfCefhyvVz1uYbTlllU7mkNmB5TE4Iu9ZWC6UCdeu5iSFBpOtrX5/LHL
-	 Grrpy5LyExO6g==
-Message-ID: <6b893c11-b43f-4fc0-9c35-83066fb5dce3@kernel.org>
-Date: Tue, 10 Nov 2026 13:48:44 +0000
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=U3pZ+JWc
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-492f563d1c6so754391f8f.3
+        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 05:48:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794318538; x=1794923338; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=q+YMVvkEa8uaOBbexYkxUBo5dx74+xkphIFCSV1U0i8=;
+        b=U3pZ+JWcNB+aUIQUkCWa/CoRrIxZottPyQ/U/RqEIHU8QvhFvxBkH2cALjw59mxU2S
+         tt+WKohbj4ODaJ5yG3Ju4uUFACHMACrWvr0q3gyxNuzowYiagaIFfTSnDtuoIuKM6LaB
+         jczTSMfVDYtSHUEIbpgykRs/LmEJWXIFOjVa8MPeUGbUP04K57Aos0p8ZvnVM/kOZNPp
+         ShalNlCmNFobzlT+72+oz4RhDF8dNTyzRnITgCQBaKgmQ55R9vDev1chitgL2HL94v/V
+         hM/daagI3jOeMww1OHmdvFVyF3i3oaviGDjg9IIbkWu4TNd1/31arkBsq1H5nOp08y+l
+         0e3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794318538; x=1794923338;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=q+YMVvkEa8uaOBbexYkxUBo5dx74+xkphIFCSV1U0i8=;
+        b=paBJg/zSV1hj+GbD4MO6qDrSmxG16a/LEn3BBg1PW1w8MNcMDAIA2rg16FZE30f2VJ
+         XBvRmpHKIpYzL56RbnUucosxx2aR0rzE4Q8dsFtzUO4qRu+ktIuJCkfeyVrR19+C6FgT
+         TjULZ60RPiUWjODyCJFT3D1k8cT1IRfntqBpTjHw6vTYViIXCJCseX/JjTsawY/QT6Qr
+         DNh6Td9HIfGGwuSt91gtCq4/gdsz5aD+z1mQB41pX8Gle+qhQTQu/xyemEe6M1+puY7+
+         fxgnjQv9WLg8SGaRSJLyZmsV9qnU4cci85G4W1s/jTLJ7im+6d096RFIXu0JJXbMlPzV
+         /OoQ==
+X-Forwarded-Encrypted: i=1; AL+hErGj8g6WzSAfkWg1vGvwUxglAG3PzKz7dJbXf6GNneZ7MsjxL7aUrN6DEnnoYmbyrz6AbLQ=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9qPZGQXCy7X+6CHoQv67umYRwpbm0d1ALgSzUbjZlmNOxGmilG
+	CWK/n2hZrQZZhhsFvKpxGFOa8aVwHX+ezodicKvPYl/wUx/QEZvgnyk3
+X-Gm-Gg: AYBFou0QFJnNlwhFpF8QW19BmVLjMfeOXrb3TcDycWgcKEOIuxiau11eZi2Z8f0rCDQ
+	79X4zL2E/78mc01u0wu5dCeRuB9PZZOiZAaVwXcIT0cjRqe3vymAOMJlVvaF4a/KF+8lxpO75Ap
+	IOANvtRebB1ODKxonm8rv0cEmE9gWzFdfXw1WhSuvKeOYuI4ILhsQCCjxIh4zx+6i77+/79hq47
+	xtzekXpxNWMaFNjNhGks/vTLBYb2qytTmvK72Apw7YjIkZJJHaaE7TAd03Cm1l7aA6ynvC9x/m2
+	n17CM030nHMULglo0TmvgZAVIr8Gbfk2IT8jnfHAouGjNBHyz7W7+LCCK6sbvJUH7AhLm8maGJl
+	ypdTnFdAjebEISXQmeCAocCC/46t+KPjgKfeZntoNJ1sswn6B06hEyJTOxhYuP4N0jtaxl2rqLu
+	CquNAf3MrPIG2Mc02zENICotaoxWFDCm7+/StgYMf/R7EtSSs/D/INshbcfSKr6NjTL6cZ+kO+1
+	0YxhWdChOHXP24no0qwnwuTOlEckNFSYpzqMyCaT3emcV7xxBCA/xg6EvtwN+DSPhQpogwU9hEy
+	VhcescI1RAnzY8nClCivBFxctlG6cjchvC+A5A==
+X-Received: by 2002:a05:6000:4006:b0:498:a72d:c097 with SMTP id ffacd0b85a97d-498a73d0414mr3856529f8f.19.1794318537546;
+        Tue, 10 Nov 2026 05:48:57 -0800 (PST)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4984e26f8e3sm4483376f8f.1.2026.11.10.05.48.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Nov 2026 05:48:56 -0800 (PST)
+Date: Tue, 10 Nov 2026 14:00:27 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: bot+bpf-ci@kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	eddyz87@gmail.com, memxor@gmail.com, almagui@kernel.org,
+	john.fastabend@gmail.com, qmo@kernel.org, brauner@kernel.org,
+	kpsingh@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+	emil@etsalapatis.com, ihor.solodrai@linux.dev, sashal@kernel.org,
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+	martin.lau@kernel.org, mason@kernel.org
+Subject: Re: [PATCH v2 bpf-next 01/18] bpf: Add BTF ID sets for fmod_ret
+ targets
+Message-ID: <avMje16UShiO3bH1@mail.gmail.com>
+References: <20261109170550.141443-2-a.s.protopopov@gmail.com>
+ <4bd4574839415920b87e63fe2c5340ec54df15620210a2aad053ea7d7be14b94@mail.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -51,200 +103,70 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next] bpftool: Add missing commands to documentation
- synopses
-To: Dhanush Arivappagari <arivappa.dvorak@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
-References: <20261104183018.30052-1-arivappa.dvorak@gmail.com>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <20261104183018.30052-1-arivappa.dvorak@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4bd4574839415920b87e63fe2c5340ec54df15620210a2aad053ea7d7be14b94@mail.kernel.org>
 
-On 04/11/2026 18:30, Dhanush Arivappagari wrote:
-> Several commands and objects implemented in bpftool are currently missing
-> from the SYNOPSIS sections in the man pages, causing documentation drift.
+On 26/11/09 05:42PM, bot+bpf-ci@kernel.org wrote:
+> > bpf: Add BTF ID sets for fmod_ret targets
 > 
-> Update the documentation across bpftool man pages:
-> - Add the missing 'token' object and its commands to bpftool.rst.
-> - Add missing subcommands to the SYNOPSIS blocks of btf, feature, gen,
->   link, map, net, and prog man pages to reflect existing implementations.
+> TL;DR: Nits only in resolve_btfids: a comment may misleadingly suggest entries
+> with a missing function are rejected (they only warn), and a new outer "off"
+> is shadowed by the inner one.
 
+Will fix both nits (will be resending series in any case, as verifier changed
+again since then)
 
-Thanks for this! It looks good, I just have a few minor comments.
-
-Nit: The description is not entirely accurate, there's no change in the
-SYNOPSIS blocks for -net and -cgroup pages. You can keep the mention of
-the objects you add, but I'd just remove the list of updated pages, we
-can look at the diff for that.
-
-
-> - Update help command headings in the cgroup and token documentation
->   to reference their respective objects instead of prog.
+> > diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
+> > --- a/tools/bpf/resolve_btfids/main.c
+> > +++ b/tools/bpf/resolve_btfids/main.c
 > 
-> Signed-off-by: Dhanush Arivappagari <arivappa.dvorak@gmail.com>
+> [ ... ]
+> 
+> > @@ -1344,7 +1355,16 @@ static bool is_arena_param(const struct btf *btf, const struct btf_param *param)
+> >  	       param_name_has_suffix(name, PARAM_SUFFIX_ARENA_NULLABLE);
+> >  }
+> >  
+> > -static int collect_kfuncs(struct object *obj, struct btf2btf_context *ctx)
+> > +typedef int (*set_func_fn)(struct btf2btf_context *ctx, const char *name,
+> > +			   u32 btf_id, u32 flags);
+> > +
+> > +/*
+> > + * Call FN for each function in the BTF ID sets which have SET_FLAG set. Reject
+> > + * an entry with flags other than ALLOWED_FLAGS, also if its function is missing.
+> > + */
+> 
+> This isn't a bug, but could this read "even if its function is missing"?
+> As written it can suggest that entries with a missing function are
+> rejected, while collect_set_funcs() only prints a WARN, increments
+> warnings and continues to the next entry.
+> 
+> [ ... ]
+> 
+> > @@ -1356,24 +1376,39 @@ static int collect_kfuncs(struct object *obj, struct btf2btf_context *ctx)
+> >  	for (next = rb_first(&obj->sets); next; next = rb_next(next)) {
+> >  		struct btf_id_set8 *set8;
+> >  		struct btf_id *set_id;
+> > -		u64 set_addr;
+> > +		u64 set_addr, off;
+> 
+> [ ... ]
+> 
+> >  		for (u32 i = 0; i < set_id->cnt; i++) {
+> >  			size_t off = (char *)&set8->pairs[i] - (char *)set8;
+> >  			const char *name = find_name_by_addr(obj, set_addr + off);
+> 
+> This isn't a bug, but would a distinct name for the new outer offset, for
+> example set_off, make it clearer which offset "set_addr + off" uses here?
+> 
+> The inner "size_t off" (offset of a pair within the set) now shadows the
+> outer "off" (offset of the set within .BTF_ids), and the inner declaration
+> would trigger -Wshadow.
+> 
+> 
 > ---
->  tools/bpf/bpftool/Documentation/bpftool-btf.rst |  2 +-
->  .../bpftool/Documentation/bpftool-cgroup.rst    |  2 +-
->  .../bpftool/Documentation/bpftool-feature.rst   |  2 +-
->  tools/bpf/bpftool/Documentation/bpftool-gen.rst |  2 +-
->  .../bpf/bpftool/Documentation/bpftool-link.rst  |  2 +-
->  tools/bpf/bpftool/Documentation/bpftool-map.rst |  3 ++-
->  .../bpf/bpftool/Documentation/bpftool-prog.rst  |  2 +-
->  .../bpf/bpftool/Documentation/bpftool-token.rst |  2 +-
->  tools/bpf/bpftool/Documentation/bpftool.rst     | 17 ++++++++++-------
->  9 files changed, 19 insertions(+), 15 deletions(-)
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 > 
-> diff --git a/tools/bpf/bpftool/Documentation/bpftool-btf.rst b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
-> index c6dc445cd4a1..e25277260ceb 100644
-> --- a/tools/bpf/bpftool/Documentation/bpftool-btf.rst
-> +++ b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
-> @@ -18,7 +18,7 @@ SYNOPSIS
->  
->  *OPTIONS* := { |COMMON_OPTIONS| | [{ **-B** | **--base-btf**} *FILE*]...  }
->  
-> -*COMMANDS* := { **dump** | **help** }
-> +*COMMANDS* := { **show** | **list** | **dump** | **help** }
->  
->  BTF COMMANDS
->  =============
-> diff --git a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-> index d1b8193dc576..7633a42b54b0 100644
-> --- a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-> +++ b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-> @@ -131,7 +131,7 @@ bpftool cgroup attach *CGROUP* *ATTACH_TYPE* *PROG* [*ATTACH_FLAGS*]
->  bpftool cgroup detach *CGROUP* *ATTACH_TYPE* *PROG*
->      Detach *PROG* from the cgroup *CGROUP* and attach type *ATTACH_TYPE*.
->  
-> -bpftool prog help
-> +bpftool cgroup help
->      Print short help message.
->  
->  OPTIONS
-> diff --git a/tools/bpf/bpftool/Documentation/bpftool-feature.rst b/tools/bpf/bpftool/Documentation/bpftool-feature.rst
-> index c7f837898bc7..9ed5ff93ebdb 100644
-> --- a/tools/bpf/bpftool/Documentation/bpftool-feature.rst
-> +++ b/tools/bpf/bpftool/Documentation/bpftool-feature.rst
-> @@ -18,7 +18,7 @@ SYNOPSIS
->  
->  *OPTIONS* := { |COMMON_OPTIONS| }
->  
-> -*COMMANDS* := { **probe** | **help** }
-> +*COMMANDS* := { **probe** | **list_builtins** | **help** }
->  
->  FEATURE COMMANDS
->  ================
-> diff --git a/tools/bpf/bpftool/Documentation/bpftool-gen.rst b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-> index d0a36f442db7..0c0f9616f676 100644
-> --- a/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-> +++ b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-> @@ -18,7 +18,7 @@ SYNOPSIS
->  
->  *OPTIONS* := { |COMMON_OPTIONS| | { **-L** | **--use-loader** } | [ { **-S** | **--sign** } {**-k** <private_key.pem>} **-i** <certificate.x509> ] }
->  
-> -*COMMAND* := { **object** | **skeleton** | **help** }
-> +*COMMAND* := { **object** | **skeleton** | **subskeleton** | **min_core_btf** | **help** }
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42662799554
 
-
-Since you're touching this line, can we please fix the first word to
-make it "COMMANDS" (plural) instead of "COMMAND", for consistency?
-
-
->  
->  GEN COMMANDS
->  =============
-> diff --git a/tools/bpf/bpftool/Documentation/bpftool-link.rst b/tools/bpf/bpftool/Documentation/bpftool-link.rst
-> index 6f09d4405ed8..21b22aa70fdc 100644
-> --- a/tools/bpf/bpftool/Documentation/bpftool-link.rst
-> +++ b/tools/bpf/bpftool/Documentation/bpftool-link.rst
-> @@ -18,7 +18,7 @@ SYNOPSIS
->  
->  *OPTIONS* := { |COMMON_OPTIONS| | { **-f** | **--bpffs** } | { **-n** | **--nomount** } }
->  
-> -*COMMANDS* := { **show** | **list** | **pin** | **help** }
-> +*COMMANDS* := { **show** | **list** | **pin** | **detach** | **help** }
->  
->  LINK COMMANDS
->  =============
-> diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-> index e4ed7e701c9e..391b0c6c0c6a 100644
-> --- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
-> +++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-> @@ -20,7 +20,8 @@ SYNOPSIS
->  
->  *COMMANDS* :=
->  { **show** | **list** | **create** | **dump** | **update** | **lookup** | **getnext** |
-> -**delete** | **pin** | **help** }
-> +**delete** | **pin** | **event_pipe** | **peek** | **push** | **pop** | **enqueue** | **dequeue** |
-> +**freeze** | **help** }
->  
->  MAP COMMANDS
->  =============
-> diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-> index 8dbd34ef3d8b..c239cb506c38 100644
-> --- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-> +++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-> @@ -23,7 +23,7 @@ SYNOPSIS
->  
->  *COMMANDS* :=
->  { **show** | **list** | **dump xlated** | **dump jited** | **pin** | **load** |
-> -**loadall** | **help** }
-> +**loadall** | **attach** | **detach** | **tracelog** | **run** | **profile** | **help** }
-
-
-Another nit: In bpftool.rst's PROG-COMMANDS you add tracelog at the end
-of the list (like in do_help() in prog.c); but here, and in the command
-description in the same bpftool-prog.rst page, it's before run/profile.
-Could you please make it consistent in all four locations ("tracelog" at
-the end, to avoid changing do_help())?
-
-
->  
->  PROG COMMANDS
->  =============
-> diff --git a/tools/bpf/bpftool/Documentation/bpftool-token.rst b/tools/bpf/bpftool/Documentation/bpftool-token.rst
-> index d082c499cfe3..1f4e6f4f64b0 100644
-> --- a/tools/bpf/bpftool/Documentation/bpftool-token.rst
-> +++ b/tools/bpf/bpftool/Documentation/bpftool-token.rst
-> @@ -35,7 +35,7 @@ bpftool token { show | list }
->      **bpf**\ () system call commands, maps, programs, and attach types for the
->      token.
->  
-> -bpftool prog help
-> +bpftool token help
->      Print short help message.
->  
->  OPTIONS
-> diff --git a/tools/bpf/bpftool/Documentation/bpftool.rst b/tools/bpf/bpftool/Documentation/bpftool.rst
-> index f38ae5c40439..a213f7032d8d 100644
-> --- a/tools/bpf/bpftool/Documentation/bpftool.rst
-> +++ b/tools/bpf/bpftool/Documentation/bpftool.rst
-> @@ -21,35 +21,38 @@ SYNOPSIS
->  **bpftool** **version**
->  
->  *OBJECT* := { **map** | **prog** | **link** | **cgroup** | **perf** | **net** | **feature** |
-> -**btf** | **gen** | **struct_ops** | **iter** }
-> +**btf** | **gen** | **struct_ops** | **iter** | **token** }
->  
->  *OPTIONS* := { { **-V** | **--version** } | |COMMON_OPTIONS| }
->  
->  *MAP-COMMANDS* :=
->  { **show** | **list** | **create** | **dump** | **update** | **lookup** | **getnext** |
-> -**delete** | **pin** | **event_pipe** | **help** }
-> +**delete** | **pin** | **event_pipe** | **peek** | **push** | **pop** | **enqueue** | **dequeue** |
-> +**freeze** | **help** }
->  
->  *PROG-COMMANDS* := { **show** | **list** | **dump jited** | **dump xlated** | **pin** |
-> -**load** | **attach** | **detach** | **help** }
-> +**load** | **loadall** | **attach** | **detach** | **run** | **profile** | **tracelog** | **help** }
-
-
-(This is what I was referring to earlier: run/profile/tracelog)
-
-pw-bot: cr
-
-Thanks,
-Quentin
