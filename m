@@ -1,57 +1,75 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794344554;
-	b=oAn1hM16Bm6QNelgSPrLboRLpwIRIF0wbvCM9dYUu7DshRFYPOQYzMPEaTW+tBwo898v
-	 mjlzRRrQJ7Qvb9kwfyg2AMpEoVHWw1+O0k8vkOS+F4d4YzpRwddZcRxYBOvijXs1IySow
-	 Cu51uumFak6PvjAkHqBIZOqIeTdu25N3VXyuSeQrixb8Nge+aaSBmLWP8smteP9VO2pX9
-	 NMFkLs5TVrY4BAJx7sAmg59o3VWlafr21jkoFWKi46Inj4xQG+aVpJ7xk6PXVCsFbi+44
-	 2x1ZsCpbZN7Tz7JWqtGVKgKj1D/Ni5s+nYRH3tPBueCxW0yb/30ahXn9bk8tb1/7J6w==
+	t=1794347143;
+	b=do3XZy9icFCgxE0JP76XCdJUmtgMcagPDyI7CPISjoBeN2lfVKq1DoJHlEis1hwygQku
+	 XgX4KC1ET8cwqsLnid4nZj1J4mvdN9JoupZJdIX8atiVK2uV0ka6BlHTeEC0A2bOBGcGb
+	 CJ+ZdGXed4klNxXlqOYTr5qjH1oIp2NU+2G0ZE8vEYJsIC7AseiBQ02Btto/TaPxrydGY
+	 7M49u/pXs6RNtIwpN9m2OUCiTyxVw6DNmdx9iYp3rDbLSeZpCa78z+27Y2KU9eGXd7J8P
+	 0KW5wplB+eQwt617fvceoJNeYj2wdE+5oI/tcietgbXjHca1JKCCiguKkXrK1TQ3nlw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794344554;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=4UELyMN+egwkqi4+h1uopj37GrqBlJgxQd/MGkoSSAk=;
-	b=j5C/0n10dErQdrUHeWo/dxBD9QGsIdkjXr60Ws/BtbdemGr6LRKLX+Ds4ZiuxWrJlQK4
-	 hwq+aSO++tRkgZWmAuudbF/4QYNrQEquMryaH6GE36WLesnGdDwvrm84qonTOxUuLvWyd
-	 t0VzKbOwvUZ3ER0Q4bhvKqQXklsW/lLSnuPcCA2BUVcARg3dEuLoQxp7eZ8j9p8Z/oM+8
-	 Ls87QOTX0oen91db6TpsDFvW7rcre2r2l9N2uh3Y+c91j/QmN0b2v9k8usD69dut0yyD4
-	 18cYLgnfnuZzbEzC9LrbpEdwAKzCta09nN6FOLnS6Bk9WxOuEZZxoxZA/x8YB0jET4Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794347143;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=35fQk2prx0lBB02/47r4mEUB8fpBOI29YWOfBrE+Kf0=;
+	b=kMaNSjdu44hStqcU+0GE+wmxhODw62KKr+FO3Be+rLExyefVf3YJcE2STcTnpahaKsRh
+	 Owe08Bn89tNsI1FGm9EXZ7jLNLwpOg9Qgm39BJmfBnZrO1Bvs6r03/VNhnjYsUGHbsc07
+	 Jb2pkTtAmogcC/0pG5vghz02GbEz/bsEItTOZYecctCoIMTuHVtA969NSo3fYZ//7E2EA
+	 rzqgQLJl1eMseubAsPz3XtCzUPF3wF099sV/xFodcDr7xUx8BlPGApzve3Amvr6DLgWAw
+	 Z7P2wFiusyrsj7iTrdsNL2UDzAIH25RW7snzROfEYZfuRsO8h1o1nzfG9Yq4y2Km8wg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UIFweq4W;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kymx3Z5Q;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BA9B606A31C;
-	Tue, 10 Nov 2026 21:02:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B85DF606A321;
+	Tue, 10 Nov 2026 21:45:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UIFweq4W
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAABA1F0089F;
-	Tue, 10 Nov 2026 21:02:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kymx3Z5Q
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EBBE1F0089F;
+	Tue, 10 Nov 2026 21:45:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794344554;
-	bh=4UELyMN+egwkqi4+h1uopj37GrqBlJgxQd/MGkoSSAk=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=UIFweq4W2ri1jxRcfOJKg5ZmdzmEOQrGrEsZbdNmyGr0UtcosyTUVzd22ZA/rEyu7
-	 KS6BCZAbfGjjc//5/BLGFU96uo/aVTWyHLwGMLiZbew5h9XY42CNE5QbsMXyuZdMNr
-	 WyIay3TNN4CZHsXPrxfpuo0KtfkBf00ODkoCOIkv+I9O74qvzaBs0PnyK9Emhr5UjM
-	 OwMXbcs/G5Efwsjw7KMeU3A2Al6HKhlZqc//puKPjavBsZ9LTc3wsuumXcWcBymlO1
-	 5b4mLD67PaKNu763DE5OUYHup6EIRYm+vsnOXJHrCDsQAiZCSUsc8/uqdj0kjW30Av
-	 970OL0AbtcAiQ==
-Message-ID: <sashiko-outbox-207760@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 6/6] selftests/landlock: Test capabilities guarding
- other LSMs' policies
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc: bpf@vger.kernel.org, linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-In-Reply-To: <20261110203042.2410140-7-mic@digikod.net>
-References: <20261110203042.2410140-1-mic@digikod.net>
- <20261110203042.2410140-7-mic@digikod.net>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 10 Nov 2026 21:02:33 +0000
+	s=k20260515; t=1794347142;
+	bh=35fQk2prx0lBB02/47r4mEUB8fpBOI29YWOfBrE+Kf0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=kymx3Z5QuLjhVt9c5TXAk+kfoV9+Q69m2rh6gKaY2iciQySjWz776ENyyzO76ntE/
+	 /uzWTdV8hdYbQdh1l4IyeQ5fyyv9r2cCWu0qjO5wH2a+J4S0bzy6nNaTA6trhTE0GW
+	 /L1dwdPvEztraG/h+sVCOy641h7Uk/TMwO2q4hRzVBg/Rkxmb7cReJ+LatfFNQPTkP
+	 6patrVaXaDmYcM/GxuvUQx3acPjDDOm/3QA23frVW+hN4rGRkeHMgbj+Hzf1wrVZRK
+	 Mzim6bafAA11Nz4YojXw6wG9MXECjIaGYV2Ai4JM+kIAL0NrS4PfdlrklEcr67vMyR
+	 y6wV8M99tyxhQ==
+Date: Tue, 10 Nov 2026 13:45:39 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Ding Meng <meng.ding@siemens.com>
+Cc: netdev@vger.kernel.org, Willem de Bruijn
+ <willemdebruijn.kernel@gmail.com>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>, Tony
+ Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel
+ <przemyslaw.kitszel@intel.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, Andrii
+ Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar
+ Kartikeya Dwivedi <memxor@gmail.com>, Richard Cochran
+ <richardcochran@gmail.com>, florian.bezdeka@siemens.com,
+ jan.kiszka@siemens.com, wq.wang@siemens.com, p@1g4.org,
+ gerhard@engleder-embedded.com, Jason Xing <kerneljasonxing@gmail.com>,
+ Simon Horman <horms@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
+ Randy Dunlap <rdunlap@infradead.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Martin KaFai Lau <martin.lau@linux.dev>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri
+ Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Ihor
+ Solodrai <ihor.solodrai@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ intel-wired-lan@lists.osuosl.org, linux-trace-kernel@vger.kernel.org,
+ bpf@vger.kernel.org
+Subject: Re: [PATCH] net: mark skb NAPI IDs independently of busy polling
+Message-ID: <20261110134539.12d860ef@kernel.org>
+In-Reply-To: <20261105071706.7043-1-meng.ding@siemens.com>
+References: <20261105071706.7043-1-meng.ding@siemens.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,80 +78,21 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Low] selftests/landlock: missing set_root_euid() in
-  apparmor_policy_load()
---
+On Thu,  5 Nov 2026 15:16:08 +0800 Ding Meng wrote:
+> +  interface index will be returned only if CONFIG_SKB_MARK_NAPI_ID is
+> +  enabled and the driver is using NAPI. This hidden configuration is
+> +  selected automatically by busy-poll support and by drivers that need
+> +  skb NAPI IDs to resolve deferred hardware timestamps. Drivers that
+> +  use deferred timestamp conversion must select it so the networking
+> +  stack can find the device and call its timestamp callback even when
+> +  busy polling is disabled. The struct contains also two other fields,
+> +  but they are reserved and undefined.
 
-commit 04d94a6e7f98554d70c200b902dd42758c1ea088
-Author: Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>
-
-selftests/landlock: Test capabilities guarding other LSMs' policies
-
-This commit adds selftests verifying that Landlock capability restrictions
-on CAP_MAC_ADMIN and CAP_MAC_OVERRIDE apply to Smack label operations and
-AppArmor policy loading, along with an audit test for Smack capability
-denials.
-
-> diff --git a/tools/testing/selftests/landlock/cap_test.c b/tools/testing/=
-selftests/landlock/cap_test.c
-> index 741567c5ab417..7f9b7fb2bade8 100644
-> --- a/tools/testing/selftests/landlock/cap_test.c
-> +++ b/tools/testing/selftests/landlock/cap_test.c
-[ ... ]
-> @@ -969,6 +974,180 @@ TEST_F(cap_other_hooks, capset_inheritable)
-[ ... ]
-> +/* AppArmor requires CAP_MAC_ADMIN to load policy. */
-> +TEST_F(cap_other_hooks, apparmor_policy_load)
-> +{
-> +	if (!is_lsm_active(_metadata, LSM_ID_APPARMOR))
-> +		SKIP(return, "AppArmor is not active");
-> +
-> +	if (access(APPARMOR_LOAD_PATH, F_OK)) {
-> +		set_cap(_metadata, CAP_SYS_ADMIN);
-> +		ASSERT_EQ(0, unshare(CLONE_NEWNS));
-> +		ASSERT_EQ(0, mount(NULL, "/", NULL, MS_REC | MS_PRIVATE, NULL));
-> +		ASSERT_EQ(0, mount("securityfs", "/sys/kernel/security",
-> +				   "securityfs", 0, NULL));
-> +		clear_cap(_metadata, CAP_SYS_ADMIN);
-> +	}
-> +	ASSERT_EQ(0, access(APPARMOR_LOAD_PATH, F_OK));
-> +
-> +	enforce_cap_variant(_metadata, variant, CAP_MAC_ADMIN);
-> +
-> +	EXPECT_EQ(EACCES, write_apparmor_load(_metadata));
-> +
-> +	set_cap(_metadata, CAP_MAC_ADMIN);
-> +	if (variant->is_allowed) {
-> +		EXPECT_EQ(EPROTONOSUPPORT, write_apparmor_load(_metadata));
-> +	} else {
-> +		EXPECT_EQ(EACCES, write_apparmor_load(_metadata));
-> +	}
-> +	clear_cap(_metadata, CAP_MAC_ADMIN);
-> +}
-
-[Severity: Low]
-Does apparmor_policy_load need to call set_root_euid(_metadata) before
-testing write_apparmor_load()?
-
-Writing to /sys/kernel/security/apparmor/.load reaches
-aa_may_manage_policy() -> aa_policy_admin_capable() ->
-aa_policy_view_capable():
-
-security/apparmor/policy.c:aa_policy_view_capable() {
-	...
-	bool root_in_user_ns =3D uid_eq(current_euid(), make_kuid(user_ns, 0)) ||
-			       in_egroup_p(make_kgid(user_ns, 0));
-	...
-}
-
-When cap_test is run as a non-root user with file capabilities,
-root_in_user_ns is false, so write_apparmor_load() returns EACCES instead
-of EPROTONOSUPPORT in the allowed variants even when CAP_MAC_ADMIN is
-effective.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261110203042.2410=
-140-1-mic@digikod.net?part=3D6
+Just take napi_id from under CONFIG_NET_RX_BUSY_POLL instead of
+complicating everyone's lives.
+-- 
+pw-bot: cr
