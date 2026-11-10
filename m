@@ -1,93 +1,89 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.180
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794323282;
-	b=NE+9hbm07IkGe5UzQ80rN8zSu2p6MYkkOlqiCApSz1IFv90ZIr/cykUhy5gn8TsPxC3n
-	 hXIJidQmwYGyMrr3X5sWH8amOsb20jZWfXgOUXYgwjPMThPlYUVYgEryDgqa1htpZep0J
-	 wDaAwEie31ZOeo+CEoko0fVuasFX3qN019QnB8beTBIhJuU/1YpjR2CX7SWWAKJ7YErlW
-	 uFBxKw+arirHadGZxJxY/oNAAVHzVUpUsQX6yHzk1fwqiaHcxktOOvDH+BcDSqBm6M9cx
-	 9HCnMx7Y61E6C0xbUONzOyAoi9tWn/xWxSXTl+UEiu9RQjkwCzpH0bGefU4RkO0eeqA==
+	t=1794323278;
+	b=LITf58PKH0ONXYtej6CLPi5JZVWavRVJJjgHDJzd5cAPQZu9/x9xCLydhL2jjyF3Hr+S
+	 W2ugViPYcvTnqQQCtfau6kSCdUCC5W6b1kZSIbMeoxSK9BoW1eqH2/8NK9ebSLkkQMCWP
+	 EvO+rM6x6J6OIVjxmGG9ztgSEKpxiBfOsHNY2h93r1OxYsJzWg2rLIz/PSq335qy+WcB2
+	 kp74ULfy2BopLRohVzGSrk3IISy+EcbCIXGoYfc2f+QjvIfUgkfbjmwtZBb3woSoiv6IG
+	 nUnFFgiHftN7eMfrjdoSMHMuznOV2xooTCFcvLojMg9W9cA4/QIE6S/kTi8v5cY5XWQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794323282;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794323278;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To;
-	bh=Bk8Y4+BL8s+d95UH4gi81iT+RNas+yqthU8nmbpM9H0=;
-	b=lx87yNGLIzW133p1cQxr1KMIPRzaaGiBfxakXPEuSDf2kM4bHiSxcRMV5jtNjsi7SuK0
-	 0K96M2b0v0F8+gxoLR1xmBkkkHmq3qlxrFinmUB4RjcqNFkGAQZe3X24BMqI6JOecXvKl
-	 Psiw2OoU+DfBvsVOnqD90k+WI0sG5wXeH4wpyU7afY/hxY/ZiUNd0LZwl69OkKCFJx5Jv
-	 iwMIYHNgtdyeml22WqcilDd+JvtKXBKjT3tKQi/RcSaJQIjnQ7apvfFC8F2D0zIF0nRDY
-	 +1kYbvRiAG84/u2NJOwtCYNDapm6XZiYok5GZs5xBR8LGUPEriq/lZZnDoMv7Ki3b4Q==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=JtM9UtzYhAWCxTCfoBKbcmHIR3U4Wq7tzdw7gboBY64=;
+	b=GRj1dd4Rep8u07BR0FSc1vZoT2wj2ZnWMsgxlPaelpjlNkhjzT4kltxXHCCVWkGaA9EA
+	 Y+aBneSw5NFEGGDihNPgjMLIJrisYQgNl9XIl+DbZlVO+TvjhNf0CRTzEds3oNgOWmD3S
+	 osy92zRwS5wtQDdWXR3/qUadmjoPz0qXtVpoHmDrtTEUiKbyFRsdZes6apODzpGwmXprC
+	 BwV1tGXByxQ8diJgal0Oo874WoVgjX3LYAXK6WeN9ufAcWemxsOkvEHnjHrPWyBJUi2aq
+	 fh30+CMiKuGpXO2OaNOmfWl3ImlGgzEHwYxzagqqYa6vA5IoRUcqfksRu6L1A8153rw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=X+KW2DVj;
-	arc=none smtp.remote-ip=209.85.221.45
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=LHozpx7Z;
+	arc=none smtp.remote-ip=209.85.214.180
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3B3660A2631
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 15:08:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D3B3660A2631
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1631B60A261B
+	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 15:07:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1631B60A261B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=X+KW2DVj
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-4922523d1afso1264761f8f.0
-        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 07:08:01 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=LHozpx7Z
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2e8da6ef7ddso12775845ad.3
+        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 07:07:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794323280; x=1794928080; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Bk8Y4+BL8s+d95UH4gi81iT+RNas+yqthU8nmbpM9H0=;
-        b=X+KW2DVj2U4mmiEDdPK5c5Xk/qEkPTXC6T3VgRz1qhbQ1tJgtj3umWZ4PV/onOc/ko
-         NahWteAa0L14xlDgvE7BWr5gZpDRMB1CyNbLXIsi4U2/JENLwD4v51n7GghDB5WZWosS
-         QXlWtIhza4Ubd7Tybt0/OG8kAPWpPf5YhaEm0Z064LNekl8Z84Xbkm5n5ANBbFHaSDhV
-         FkYMZItqpufbN+ZArYMhyPQf7061oHavlQqONQNA6gwNNBEI5Vl4lWIxmV97l8FSfsnq
-         /W0vVtfm+dpFtIaePP9ibNCgUZXQQC/igr9rZPHP9feSqRplXnh7EwnFk7JUSx7LQQhY
-         /7gA==
+        d=gmail.com; s=20260707; t=1794323277; x=1794928077; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=JtM9UtzYhAWCxTCfoBKbcmHIR3U4Wq7tzdw7gboBY64=;
+        b=LHozpx7ZkQyIUBsAkv4C311vzxfheFN2pzrL9Y/FTHkEXQzaVUkMAz9U9wFUejAOr8
+         YATASi40x9WcOvyF4dkS6SJQ2bBJHO0yE68WsOT8oewufPXMhMYT6O7d4/5H33a+EMHR
+         jjCu1KqktdAA/9c8ZIpbjFjA/3BLyNbgEZc3fS3F9+PTZ5y3jCgkJQ9rhGft5ONP+cJO
+         aTEF5vn9sQP8UWqDXO8UszNcV0yZFTKvtrsUk25y1Sz/3h5njQt9uj1PBQLO+FuWPgpB
+         LsGoLTWDE/iFYFuKD+GJLya2PXFipxPXM8zYDthkWkjgd0549O004Xgoom3qc/ylK84T
+         vykg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794323280; x=1794928080;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=Bk8Y4+BL8s+d95UH4gi81iT+RNas+yqthU8nmbpM9H0=;
-        b=v3zfo5nmec/WYswR2jZzp9b5d8G4MQeLA62iynKN7TxEwxh92iHWYpdVqIWP9Trlbc
-         /qMLRLOqsuNARjR8W8OFisVElQ9VrKIhlNNdnrKziELl6VyI0sEPfQAEV+WBwxlU246R
-         iMRMRobfzF0+8/I9sFs3vcEvAtyioO/96rmyK/KJiGYjXbIRMC7MBsI/acsW4NkJhddh
-         gvqRUxP4wzxGEwYKM6dzCy7L9uNGo61ZmcQUVwigSZWKus/1ZOkwKSIG9Pa8lacgXMiw
-         O9sa9O447aqATo5wVYyWUWMP7OoTDbZTn4xJBnuDs704bV/KHztGHvEtYrPqMjVFlFLD
-         AQkg==
-X-Gm-Message-State: APuU4Z87+ybuXCYVCyMtWcOQxOuofvt8fvOr48fu+3dcTzozV6lnOmjT
-	/lfOErkze1XB4Zky5KH9kYeLAELnF75ggqgsoBqso2A25Hk115nH4OIZ
-X-Gm-Gg: AYBFou1n24I0nVOlnD730FywixLIm4NXp1HHDGHmiD1ccmLFYcDU0PfKhwRvoFhVW0f
-	I2a2TLoVUxL60hGxWYLTX7pVQwmrksSXjBwiMS23B4xDhEJkFbRG7UNusckUF/dOX+2EHt0eSf+
-	q8qe9pMlrPPgGaQHvDN4rNd2T1vhL9b88uOD3Kr5QroA1+ZZSzzEAf9Rgff20zWeuSDeDxr0GUJ
-	uxulw7k8ns5U+oYdeXAluaeErBV80ja3CSTGdZm0uFSYc1Ad24Tk3x5ZywZrsjaBbl9i1nk5uaO
-	pGyz/JriH58uEew7U79eXrTLJ6uKriMKJKOyYNgNO8C947GudR3O37Y4xyhob4Fhmc9A7gcSK0e
-	7c/svX0FYiqq/7e+MnmsOoMVkmKUmkcHVF/PrXzGVNKZWrt65VrbC41sHpNTYBlLxXKPXDk0T3e
-	Ku2BuaHV4+w/Y3eMU3jVh9TzWCu8JnFcH52pRrFpLgxMR40V9L8yu2pzbz/GEFL3X+LMZqPRZek
-	Csv+uuMsMICUg8Nv8NijvTmSU66O5dIrRjsZDf/daOIBw2LUQ49Wru7ElcNzCN9zduZmdxg8Q07
-	rtf2UJSEb9T3KlO0CGdr37osDXxdZcqYrq6Z6g==
-X-Received: by 2002:adf:e009:0:20b0:48d:f3a4:a6aa with SMTP id ffacd0b85a97d-49830c8ccf6mr3946905f8f.35.1794323280060;
-        Tue, 10 Nov 2026 07:08:00 -0800 (PST)
-Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49835858f26sm5477228f8f.18.2026.11.10.07.07.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 07:07:59 -0800 (PST)
-Date: Tue, 10 Nov 2026 15:19:30 +0000
-From: Anton Protopopov <a.s.protopopov@gmail.com>
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Subject: Re: [PATCH v2 bpf-next 15/18] resolve_btfids: Tag fmod_ret
- candidates as targets
-Message-ID: <avM2ArYor7B6-g63@mail.gmail.com>
-References: <20261109170550.141443-1-a.s.protopopov@gmail.com>
- <20261109170550.141443-16-a.s.protopopov@gmail.com>
- <sashiko-outbox-205381@kernel.org>
+        d=1e100.net; s=20260707; t=1794323277; x=1794928077;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=JtM9UtzYhAWCxTCfoBKbcmHIR3U4Wq7tzdw7gboBY64=;
+        b=hDxqfPoxla4z+FzUIi8bCjL/7DSaW/GtL+2PTm6MdL9rSGtDuGVjwZmtDyUfY9Vgyo
+         M2ti+S/CSw+9ovM1K1FmHTOf8LJqJkdNWff/9pHim1++jr3qJRtEz1UFvmf4F80rSBib
+         5bi0Cp8r+IJQ8SGYL3/ixE3SF77MI4qOPss/jwKntUREipHDPnBU0ZwetUJiL64kcTeC
+         q2l8cExgyyUVivZWLHfsgiu0xuMUJd6Ndd/LZQpgIUhDvxaYSgtPlR0+c/cIKZWvaSb1
+         x2GnRb7kcC7UPLwtg75Mp8djqC3UhnqaeEATzwYJMRhmhEVhWAEz30axnB/TCckemjTj
+         V6lw==
+X-Forwarded-Encrypted: i=1; AL+hErHIxrF0WcfOFdzKCUXCG1qePaD+79qIbqR9s/W3lDWBImukyHhIdI3jhYKlr8wY7tVbxkA=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/4bqnWfupJ+EnWZabUZz0k2aTqiCn5coQxUPCqyQ2G9jN8SfZ2
+	4pRn9cGLpKmb5OazOp8G2aZONgY9uMmH0SXAoRYM8fqxO1x7QrQzjFx7
+X-Gm-Gg: AYBFou3SXVKOxUhN14K81/OdPWidC+OoYo7WZvgCc7yhsaJRzo/MTiBNKhx2EzZbKrd
+	vm3bUaG1LKEgtY7qT2yzZ8wWkdu8ncRHi6R8BbfPmZWFLzeCnRkWrQRwVRuWvRZSMjbAHWJVw3N
+	M40Yi8d16n/qbMCHBfnmASRQVrtjZE2dFIPAj+nbPmwY3YcCfZBrUOM78DH+xF0jtoCUP/MWVBh
+	lSrrXpbSsd/W+XzcAyjZEq6GOrfUlORd/bP7P5AI1MDQ6fcxdIpD/iGijI4f3OC+dVYt9CVDgda
+	6x2+ugAZr2Zg0ejKR2rNQytGw/JVb4pie/HfwA8K5VnP+B8sJwKtnAIiG3dLpJSAhOfldolRDpj
+	0XIGMEgknX/NGA4CT711+IphERQk0VWK53l59cmi/HRtC1ZyxOf29AKInuD/4YQURJVcQKpBlRC
+	zQOMPfkyqKMBMb4/ZsKPFB0PtHx2SLjHa77/BBULeF03i9n2J3WNLgn0FgsJZzrXrIPH6BBMuod
+	A6ZZzQhLuBvpN3XcFQI0SyYiA6c26jcf1Tvc3BHL7LFpA0tK9UVoaMisv/OIRqJPSR5t2b0vOff
+	dBhcm0cPHzmo1f0+9jsbeBP71J6C2+xexUzlp/jCCg2pmy6yYyfCDF22uL0w9FGgmDPpY8xkB8W
+	EiCmtj6J5jok=
+X-Received: by 2002:a17:902:d481:b0:2ed:1ef3:9ec with SMTP id d9443c01a7336-2edb9172a2dmr26826345ad.14.1794323276968;
+        Tue, 10 Nov 2026 07:07:56 -0800 (PST)
+Received: from [192.168.2.6] ([27.75.101.24])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2edb6d78dbcsm10397575ad.27.2026.11.10.07.07.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Nov 2026 07:07:56 -0800 (PST)
+Message-ID: <71f76e5e-ce24-4a71-863a-169ad262c510@gmail.com>
+Date: Tue, 10 Nov 2026 22:07:46 +0700
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -97,101 +93,66 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <sashiko-outbox-205381@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 36/41] nvmet: refuse files on pseudo filesystems as
+ namespace backing files
+To: Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org
+Cc: Jann Horn <jannh@google.com>, Chris Mason <mason@kernel.org>,
+ Josef Bacik <josef@toxicpanda.com>, Christoph Hellwig <hch@lst.de>,
+ linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-nvme@lists.infradead.org, Alexander Viro <viro@zeniv.linux.org.uk>,
+ Jan Kara <jack@suse.cz>, linux-scsi@vger.kernel.org,
+ target-devel@vger.kernel.org, driver-core@lists.linux.dev,
+ linux-mm@kvack.org, bpf@vger.kernel.org,
+ linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+ apparmor@lists.ubuntu.com, linux-nfs@vger.kernel.org,
+ netdev@vger.kernel.org, fuse-devel@lists.linux.dev,
+ linux-efi@vger.kernel.org, xen-devel@lists.xenproject.org,
+ ocfs2-devel@lists.linux.dev, linux-s390@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-usb@vger.kernel.org,
+ Amir Goldstein <amir73il@gmail.com>, linux-erofs@lists.ozlabs.org,
+ linux-kselftest@vger.kernel.org
+References: <20261110-work-loop-pseudo-v1-0-4c998976c6c7@kernel.org>
+ <20261110-work-loop-pseudo-v1-36-4c998976c6c7@kernel.org>
+Content-Language: en-US
+From: Bui Nguyen Nhu Quynh <kaylovefoss@gmail.com>
+In-Reply-To: <20261110-work-loop-pseudo-v1-36-4c998976c6c7@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 26/11/09 06:13PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential
-> issue to consider:
-> - [Low] resolve_btfids: skipped duplicate-named functions in
->   choose_functions()
-> --
+On 11/10/2026 4:14 PM, Christian Brauner wrote:
+> The file backend takes any path that isn't a block device. With
+> buffered_io=1 that includes files on procfs or sysfs which then get read
+> and written by a kernel worker on behalf of the host. Refuse files on
+> pseudo filesystems just like loop does.
 > 
-> commit 51f98882bd7c33a728dede77756350958f73cb62
-> Author: Anton Protopopov <a.s.protopopov@gmail.com>
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+> ---
+>  drivers/nvme/target/io-cmd-file.c | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> resolve_btfids: Tag fmod_ret candidates as targets
+> diff --git a/drivers/nvme/target/io-cmd-file.c b/drivers/nvme/target/io-cmd-file.c
+> index dfa8aa46188c..71c69bac5394 100644
+> --- a/drivers/nvme/target/io-cmd-file.c
+> +++ b/drivers/nvme/target/io-cmd-file.c
+> @@ -52,6 +52,11 @@ int nvmet_file_ns_enable(struct nvmet_ns *ns)
+>  		goto err;
+>  	}
+>  
+> +	if (file_is_pseudo(ns->file)) {
+> +		ret = -EINVAL;
+> +		goto err;
+> +	}
+> +
+>  	nvmet_file_ns_revalidate(ns);
+>  
+>  	/*
 > 
-> This commit teaches resolve_btfids to parse .BTF_fmodret_candidates
-> records emitted by the bpf_scan_ir plugin and tag eligible functions in
-> BTF with bpf_fmodret and bpf_fmodret_retval:<values>.
-> 
-> > diff --git a/tools/bpf/resolve_btfids/fmodret.c b/tools/bpf/resolve_btfids/fmodret.c
-> > new file mode 100644
-> > index 0000000000000..df44b93eea734
-> > --- /dev/null
-> > +++ b/tools/bpf/resolve_btfids/fmodret.c
-> 
-> [ ... ]
-> 
-> > +/* Choose the targets among the functions and describe them in RESULT */
-> > +static int choose_functions(struct elf_function_list *functions, const struct btf *btf,
-> > +			    const struct btf_func *btf_funcs, size_t nr_btf_funcs,
-> > +			    const unsigned char *buf, size_t ptr_size,
-> > +			    unsigned int encoding, struct fmodret_retvals *result,
-> > +			    struct fmodret_stats *stats, int verbose)
-> > +{
-> > +	size_t i = 0, j;
-> > +
-> > +	qsort(functions->functions, functions->nr, sizeof(*functions->functions),
-> > +	      cmp_elf_function_name);
-> > +	for (i = 0; i < functions->nr; i = j) {
-> > +		const struct elf_function *f = &functions->functions[i];
-> > +		size_t record = chosen_record(f);
-> > +		const char *reason = NULL;
-> > +		unsigned int flags = 0;
-> > +		struct fmodret_retval *r;
-> > +		__u32 size;
-> > +		int id = 0;
-> > +
-> > +		for (j = i + 1; j < functions->nr; j++)
-> > +			if (strcmp(f->name, functions->functions[j].name))
-> > +				break;
-> > +
-> > +		if (!f->nr_strong && !f->nr_weak)
-> > +			continue;
-> > +		if (record == NO_FUNCTION) {
-> > +			stats->ambiguous_body++;
-> > +			reason = "ambiguous-body";
-> > +			goto rejected;
-> > +		}
-> > +		/*
-> > +		 * A strong definition without values has no record. If it
-> > +		 * replaced a weak one, only the record of the weak one points
-> > +		 * to its body.
-> > +		 */
-> > +		if (!f->nr_strong && !f->weak_symbol) {
-> > +			stats->overridden++;
-> > +			reason = "overridden-weak";
-> > +			goto rejected;
-> > +		}
-> > +		if (!read_elf_value(buf + record + 16 + ptr_size, 4, encoding))
-> > +			continue;
-> > +		stats->with_values++;
-> > +		flags = read_elf_value(buf + record + 12, 4, encoding);
-> > +		if (j - i != 1) {
-> > +			stats->ambiguous_name++;
-> > +			reason = "ambiguous-name";
-> > +			goto rejected;
-> > +		}
-> 
-> [Severity: Low]
-> Does advancing i = j while only inspecting functions->functions[i] skip
-> candidate records on functions->functions[i + 1 .. j - 1] when multiple
-> static functions share a name?
-> 
-> collect_elf_functions() gathers all defined STT_FUNC symbols regardless
-> of whether they have an fmodret record.  If functions->functions[i] has no
-> record (or zero values) while a later function with the same name in
-> [i + 1, j) has a record with values, the continue statement jumps to j
-> without counting the remaining functions in stats (such as
-> stats->with_values and stats->ambiguous_name) or logging the
-> ambiguous-name rejection when verbose > 1.
 
-Yes, you're pointing to this the second time,
-so it will be fixed in v3.
+I noticed patch 41/41 doesn't include a test for nvmet. Would it make
+sense to add one with buffered_io=1? The test would need a pseudo file
+that can be opened with O_RDWR and supports both read_iter and
+write_iter. Otherwise, it could pass without ever reaching the new
+file_is_pseudo() check.
 
-> -- 
-> Sashiko AI review · https://sashiko.dev/#/patchset/20261109170550.141443-1-a.s.protopopov@gmail.com?part=15
+Thanks.
