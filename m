@@ -1,65 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=82.195.75.108
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794312300;
-	b=h3GTYcReOVCEnBgyE3+6sJ6+egGw9ojnmewLWED6H9sS7Zb409jB1tqYFjt3B9/0QQJE
-	 cxUy71GvM+dItstoOHMNQz2bupRD0b8E4SKfte7YxH+0JOrMhlARr8Xep2SPVH6BA/ytX
-	 TsNjVIt+m57pHvchQzb5YbeBLumUm1qqjjUT/esPDodkLPHkQTl3GxqN6E1zfvSw6d/mU
-	 oHC4ehEGLbF8w3e2pEysEtNPO892Dhk+86aek/GRjGEym25DjrpTLy/+kO9Z1gvUrqUnl
-	 u/ReXfyp5mwGu6kEY/30ZSaD7hDAy2r8Tfs/df5OMY0uyDuzbfJyirs/3zZ7SFOLo9A==
+	t=1794313126;
+	b=Ef4CN6pStlQYE5gmRDWLjLKMdb3esVuKYMvOL0Nydv3mbrYohvoh3H6Bq4FKjmfZATkL
+	 4Qv3/4x4UygN/A/AADAaRotv80kr1gvn5+xSqTumAelY/c0dTRpsHyuQRge59QEtzVPcS
+	 YBTQ2gkXSzU65zmw6MQvAK2OPsDaNmSoI83mWKDhkr1YkSgJs24u6hgFpLgiWvZaM+2Na
+	 BIrlalQFzvb715ftW+p/KHCf0ol4Kbp9i4FghjYs+w47sFuLRbbS5egYLgX0tMuojuzlu
+	 ncbdaQaL9b9Yyjlxg+ZXde/IVivaYp5hfRFRT6JBMT0fUEf4iAzSv7oPEBCQ0thxyXg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794312300;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=2qzoTU2V3PL2+1NGWeEx3c05JhHhlLHtfGf2r6hPE0M=;
-	b=PwVQtCm28cBXvSGwrE30OjN2oJ8QYBAnswGZbstP2A2wMt9x81i3mQz0NsBnm6zGYt7f
-	 a8iSLUZ+pAw54WH9KkEOl1CEyCtfWeFZ10lOz+GuFM2X9uIqShTJpLBKMfygJpJOEcK0/
-	 EWFx1opQidTpONoCT+udIMq2MebwOFRw6SYHHpsKxotY1tBW/6HCQgsdbD6Zd22FjzvJw
-	 xB2bp6ragy2a8yQv+ysH0AunhpRMb/AJ5WbjwFVf097KSEHImAdY4VC9yDNxZz3qxtaAt
-	 tQGvXFKDaq7ikZTMb85uTarwiygpHyuaaS1uzs7I0uEgjJggYRMjR0KpeJz3jGP8aUw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794313126;
+	h=DMARC-Filter:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:Message-Id:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
+	 X-Debian-User;
+	bh=PnZdqN7YVfod3XTPPe7pH85dZfOUEl0xdGXQRdrN5P0=;
+	b=hPXKLlhZnEHfy1JqVhsZ9B4E255UngkSoDwuXAZIaZzT7wDToj/uzjFbg58IO2JezXmt
+	 q5x8PkC60wZdffcEbu5bXz3lnzei+D3Jd4S6W6odooWDHzyslzsqcgXz+Xkcfdf7A2H/a
+	 J+biQeD22pj7dr0oLo6FUQM2k0YtkQ7FDCBaI5BTj0e5ouVIRCqc4dlZIessqt98h0tHO
+	 jYvyZaaozNDfQjCZF41+S5iXxG8zzt6cwYeB2zcTc8JfleboxQYo6WFucsdu7kaQ/VAF/
+	 yGm/Yx31UqwaGl6WUFphDFMSc5v7dV2dNjtERts7LEM1X+U3S2/CnEwj+abCu1MULoQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EtbsJ3Sx;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=debian.org;
+	spf=pass smtp.mailfrom=debian.org;
+	dkim=pass header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=ELQZ59BG;
+	arc=none smtp.remote-ip=82.195.75.108
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAC0A606A321;
-	Tue, 10 Nov 2026 12:04:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0CC7606A321;
+	Tue, 10 Nov 2026 12:18:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E0CC7606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EtbsJ3Sx
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1280E1F008A1;
-	Tue, 10 Nov 2026 12:04:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794312299;
-	bh=2qzoTU2V3PL2+1NGWeEx3c05JhHhlLHtfGf2r6hPE0M=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=EtbsJ3SxdC/ckG+wU9hRtJMtS4NlZD9+I8GM4sKfA0M77RKgrVk4eH6D7qDasFtQI
-	 1q3RpvRwG7twOybAs7hWmpdPpgJ8xEKMCBB//Zui6VXAmt3DI2w5vBPIIiLWEq2RLp
-	 bK6olxKMnfwa/vQCqP1zZZFUinZ6+tWAlDKrFxB2jdQCZ1V0VITV/1jEmRP3balK1a
-	 k9ghO6rvQYLscpahahKVWneQUGcbe9ljsumNNw358KqgKIrfCH8I4LikRHpXdwsQQK
-	 UjyzetYvcMf7LxUgScArMN8PEfvVETjOstoZ9xXg/84O0krRrgD5ndOqgvqyn2Eo+E
-	 0Kv9w/shvYk6w==
-Subject: Re: [PATCH net v4 1/2] gve: block XDP on the DQO-QPL queue format
-From: netdev-bot+sashiko@kernel.org
-To: amaan.cheval@gmail.com
-Cc: netdev@vger.kernel.org, joshwash@google.com, hramamurthy@google.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
- kuba@kernel.org, pabeni@redhat.com, bcf@google.com, jordanrhee@google.com,
- przemyslaw.kitszel@intel.com, maciej.fijalkowski@intel.com,
- pkaligineedi@google.com, maolson@google.com, csully@google.com,
- willemb@google.com, yangchun@google.com, npl@google.com,
- awogbemila@google.com, shailend@google.com, nktgrg@google.com,
- maxyuan@google.com, bpf@vger.kernel.org, john.fastabend@gmail.com,
- hawk@kernel.org, sdf@fomichev.me, daniel@iogearbox.net, ast@kernel.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Date: Tue, 10 Nov 2026 12:04:57 +0000
-Message-ID: <179431229760.994134.9605192478932025271@kernel.org>
-In-Reply-To: <20261106114551.212675-2-amaan.cheval@gmail.com>
-References: <20261106114551.212675-2-amaan.cheval@gmail.com>
-X-sashiko-severity: High
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=ELQZ59BG
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:
+	Reply-To:Content-ID:Content-Description:In-Reply-To:References;
+	bh=PnZdqN7YVfod3XTPPe7pH85dZfOUEl0xdGXQRdrN5P0=; b=ELQZ59BGDHyPKNOtS9iVkmf3+b
+	yMQgWP7nx5/NJ7FuTpUHOKQabMJx9NBYZQo3W0iGwgUMy0tfGjZARgTEHmAc9gUepVSu4JKS4pFgg
+	o9N/5UGZxCgJe9+yvhMXvyTljfkUzclCn45BNte1VxDWVmZb7yHKc/AtzNNM6XdwNJQSrA+Zqa7rc
+	f5dhQEozCol2AYbIg/uehfZzQN7LeZ95aFo/f0sfA5y0+UPCrly0XsNTb3QIbiWhWPd+PHpnwjpwU
+	SkH9UgZ01XwPSLR2fTx/qK4h4Ypcc795gOMnjmCHbhFeUhnqe2m6N4Dv4p/ricvr7UCSeD0fTdOk3
+	mkyoRCrg==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1xQkoC-00COW0-2G;
+	Tue, 10 Nov 2026 12:18:40 +0000
+From: Breno Leitao <leitao@debian.org>
+Date: Tue, 10 Nov 2026 04:18:32 -0800
+Subject: [PATCH bpf] bpf: Report RCU-tasks quiescent states in do_check()
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -69,122 +62,100 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261110-bpf-verifier-rcu-tasks-qs-v1-1-99e8f798a6dc@debian.org>
+X-B4-Tracking: v=1; b=H4sIAJcL82oC/x3MQQqDQAxA0atI1gbMFAV7ldKFM2Y0CNYmOhTEu
+ ze4/Iv3TzBWYYNndYJyEZPP6kF1BWke1olRRm8ITeiIqMG4ZSxusrCipgP3wRbDr2GMbXgkyhy
+ 5B/ebcpbf/X6BM3hf1x9kO+LrcAAAAA==
+X-Change-ID: 20261110-bpf-verifier-rcu-tasks-qs-bb523c1febe9
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ "David S. Miller" <davem@davemloft.net>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-team@meta.com, 
+ paulmck@kernel.org, Breno Leitao <leitao@debian.org>
+X-Mailer: b4 0.15-dev-47773
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1998; i=leitao@debian.org;
+ h=from:subject:message-id; bh=njfHvcNv1uYoTbhkRrJyJ5ytQ82fBSWXSapr6BPDnSk=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBq8wudQKG/DG+AgSbgzvbYLgjtdkL3lYMKEkb/T
+ 5qkL3ncjDaJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCavMLnQAKCRA1o5Of/Hh3
+ bTaVD/0awCdqrFDDQHZAptK18QmBaa9NqSONw90EjgEj1fa8q9vabGu6t1TEyzQKlP4l2e0V/U8
+ RfrYeZ9Tm982dJXr0svu6Vr1FlWZrsffB1JHZbUcnZM0eslMx3tmH3nQRwz2DhTWdde4nQGoSvl
+ hNarPoSSwuRw4FCepHzldcKlnri/nx6M4st3QWl3WNywnfA0UL8JcvZXG76Ckt+GLur108mesTq
+ JCIjUw6G+CtgR2WBRQm5/oiUhKnitHJ2bdjOXm+Qc82kssvhaPpbEy1qHicOta/fmtcKYJBSmel
+ m2j4su7o9CHiq4XdBkYy51epwRpNwhEffa6o5LXU012xCylC5YHSLz+p7xlP5Zvj7ydr5gS3oiS
+ +reBR0HtkVW4jaCq8KJIMIZjEEmL2Beco1hn0ESNXD5unBGoJoktmqIDJ5+eCdKfz9givC+Kbm0
+ hkGqLkx/A5gaxjxPjgeKAjth1b+Wkr1J08OgapPwM05i7nAjqvByPptXxDQqoJjutVTt6ebTl2h
+ 8Fpl+BYh8zzu2z+oa6TaYolO2lfpUZab6NWkdYmpZb/EM7VapXR7vERqgVUP0znkTPmAnUPEK4B
+ ul1LPBVF9PXqJkzYKsYuR6+plNnFz6ghJb/bC83Qvp5Bh2UvyuaTn+QudZ8kARb5jyakNm2BJUs
+ 5v+JM2n663ehdrg==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+X-Debian-User: leitao
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+I am seeing rcu_tasks stalls in the Meta fleet on debug kernels (KASAN,
+kmemleak, lockdep), where a task loading a BPF program stays in the
+verifier for over 20 minutes:
 
-Critical: 0 · High: 1 · Medium: 0 · Low: 0
+  INFO: rcu_tasks detected stalls on tasks:
+  000000000cc1a43d: .. nvcsw: 4/4 holdout: 1 idle_cpu: -1/91 task:GlobalCPUThread state:R  running task  pid:175256 tgid:169948 ppid:1
+  Call Trace:
+   __create_object
+   __kmalloc_node_track_caller_noprof
+   krealloc_node_align_noprof
+   copy_array
+   bpf_copy_verifier_state
+   bpf_split_cur_state
+   do_check_common
+   do_check_main
+   bpf_check
+   bpf_prog_load
+   __sys_bpf
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+The main loop in do_check() only calls cond_resched(), which is a no-op
+on PREEMPTION kernels. Involuntary preemption is not a Tasks-RCU
+quiescent state, so the loading task never reports one and stays a
+holdout until bpf_prog_load() returns. Meanwhile every
+synchronize_rcu_tasks() caller waits, e.g. ftrace_shutdown() of a
+dynamic ftrace_ops.
 
-- [High] The patch is incomplete for GVE_GQI_RDA_FORMAT.
+Upgrade it to cond_resched_tasks_rcu_qs(), which reports a quiescent
+state even when cond_resched() does nothing. The need_resched() check
+goes away, as cond_resched() does it already.
 
---
+Fixes: 3c2ce60bdd3d ("bpf: adjust verifier heuristics")
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ kernel/bpf/verifier.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-gve: block XDP on the DQO-QPL queue format
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 5e4700fda66b9f..232551fd7cefdd 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -20627,8 +20627,7 @@ static int do_check(struct bpf_verifier_env *env)
+ 		if (signal_pending(current))
+ 			return -EAGAIN;
+ 
+-		if (need_resched())
+-			cond_resched();
++		cond_resched_tasks_rcu_qs();
+ 
+ 		/* reset current history entry on each new instruction */
+ 		env->cur_hist_ent = NULL;
 
-This patch adds a queue_format check to gve_verify_xdp_configuration()
-that refuses XDP program setup on DQO-QPL. That check was lost when
-d8a8ca14c937 enabled XDP on DQO-RDA. The DQO-QPL RX page accounting can
-free a page that is still DMA-mapped when a redirect target releases the
-buffer synchronously.
+---
+base-commit: 630059a5a632377b9b7b487baccde92b7ae1dd47
+change-id: 20261110-bpf-verifier-rcu-tasks-qs-bb523c1febe9
 
-> diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/ethernet/google/gve/gve_main.c
-> index 2437cd8ba6331..4e9e692a0ed0a 100644
-> --- a/drivers/net/ethernet/google/gve/gve_main.c
-> +++ b/drivers/net/ethernet/google/gve/gve_main.c
-> @@ -1723,6 +1723,12 @@ static int gve_verify_xdp_configuration(struct net_device *dev,
->  	struct gve_priv *priv = netdev_priv(dev);
->  	u16 max_xdp_mtu;
->  
-> +	if (priv->queue_format == GVE_DQO_QPL_FORMAT) {
-> +		NL_SET_ERR_MSG_MOD(extack,
-> +				   "XDP is not supported in DQO QPL queue format.");
-> +		return -EOPNOTSUPP;
-> +	}
-> +
+Best regards,
+--  
+Breno Leitao <leitao@debian.org>
 
-[Severity: High]
-Does this leave GVE_GQI_RDA_FORMAT uncovered? The commit message says the
-check removed by d8a8ca14c937 "refused every format but GQI-QPL", so it
-blocked GQI-RDA as well as DQO-QPL. Only DQO-QPL is added back here.
-
-GQI-RDA also falls into the else branch of gve_set_netdev_xdp_features():
-
-	} else {
-		xdp_features = 0;
-	}
-
-and gve_xdp_xmit() rejects it too:
-
-	if (priv->queue_format == GVE_GQI_QPL_FORMAT)
-		return gve_xdp_xmit_gqi(dev, n, frames, flags);
-	else if (priv->queue_format == GVE_DQO_RDA_FORMAT)
-		return gve_xdp_xmit_dqo(dev, n, frames, flags);
-
-	return -EOPNOTSUPP;
-
-On GQI-RDA, though, every remaining check in this function can pass:
-
-  - GQI has no NETIF_F_GRO_HW.
-  - Header split is DQO-RDA only.
-  - packet_buffer_size defaults to 2K.
-  - GVE_RX_PAD is only subtracted for GQI-QPL.
-  - The rx/tx queue count condition can be met with ethtool -L.
-
-Once verification passes on a running interface, the path is:
-
-gve_xdp()->gve_set_xdp()->gve_configure_rings_xdp()->gve_adjust_config()
-  ->gve_queues_start()->gve_reg_xdp_info()
-
-On GQI-RDA, gve_is_qpl() is false, so gve_reg_xdp_info() takes this
-branch:
-
-		else
-			err = xdp_rxq_info_reg_mem_model(&rx->xdp_rxq,
-							 MEM_TYPE_PAGE_POOL,
-							 rx->dqo.page_pool);
-
-On a GQI ring, rx->dqo.page_pool is NULL because gve_rx_alloc_ring_gqi()
-memsets the ring. __xdp_reg_mem_model() therefore returns -EINVAL. By
-then gve_adjust_config() has already closed the old queues, so it logs
-"!!! DISABLING ALL QUEUES !!!" and turns the device down.
-
-Before that failure, gve_queues_start() has already set:
-
-	priv->tx_cfg.num_xdp_queues = tx_alloc_cfg->num_xdp_rings;
-
-and nothing rolls it back. A later ifdown/ifup goes through
-gve_open()->gve_get_curr_alloc_cfgs(), rebuilds the XDP rings, and fails
-in gve_reg_xdp_info() again. Does the NIC then stay down until a device
-reset? If the interface is already down at attach time, gve_set_xdp()
-installs the program, and every later gve_open() fails with -EINVAL.
-
-There is also a NULL dereference that only this failure hides.
-gve_tx_fill_xdp() uses tx->tx_fifo.base and
-tx->tx_fifo.qpl->page_buses. On raw-addressing GQI TX rings these are
-never set up: gve_tx_alloc_ring_gqi() skips the FIFO/QPL setup, and
-gve_can_tx() skips the FIFO check. That dereference would become
-reachable if GQI-RDA mem model registration ever succeeded.
-
-Would an allowlist (accept only GQI_QPL and DQO_RDA) be a closer match to
-"matching the features the driver advertises"? Checking for
-NETDEV_XDP_ACT_BASIC in dev->xdp_features would also work.
-
-With the Fixes: d8a8ca14c937 and Cc: stable tags, backporters may assume
-that regression is fully closed. The later patch in the series ("gve: fix
-RX page refcount overflow from the pagecnt bias") does not touch
-gve_verify_xdp_configuration().
-
->  	if (dev->features & NETIF_F_GRO_HW) {
->  		NL_SET_ERR_MSG_MOD(extack,
->  				   "XDP is not supported when HW-GRO is on.");
-
-[ ... ]
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261106114551.212675-1-amaan.cheval%40gmail.com
