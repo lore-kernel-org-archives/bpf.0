@@ -1,59 +1,81 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794289229;
-	b=b/IatSOSuhix0JQ7qK5Ynlse1VP6us9TrkzYCIP+KbLSE9YCSAP+9dPc6qrI7eSAjleS
-	 LqGM13lG+vM+ICmBcdkwPSphQ8ecTkSkSQ91gY6LDVaFnDnpz3f5sixADADFqlI7lZP1N
-	 hLSgO94TH/whZFww8O45+D8xNku9x7t+SNnmXsdl+XDR/kHsP87jnhfATHIMiFemNKC8p
-	 AwxY61Qd2qoe1aYKgYp9GOUn4P7txKwBnHsKt8N1NI05XSoS6lvgVhhdRzzVdTUF/y3Nd
-	 LNBcSL65xVLpT9B1g0nrsuvmbfbMmE/j2IlOQiqn/NlejvOs7yeDkTucEi8nOj9kXjg==
+	t=1794290801;
+	b=bvkR+uUGf6/kjKNJcuD2xtW+5MrZzEqwicSArPhBLijiMXem1FgAEr840wm0wiiSc53S
+	 B384iC949ke3PgIkB38eejMt1n/GVt3r2/OQou9+qEuWPdPGGAWk7Y0Y+Tz+8gqgUv0yr
+	 pH7yB5LN8cpIpsHMYS7KmkXdeZK21jFk1iR1w1wRDsABdufINkg/UP4DYnUvljaJe+6nR
+	 qVFFc3/pSWXdCm7cPTPBLnyI2FuzFwSCp9fI9XQ6gv3R+hm0LmZHXQfp6nJ54sdJewAWQ
+	 qBTZ9oQGYrOpdZfyrBbrLlKUmmgdfGW2lupuLrDhwz+xlWmWscALb8K1TWFcROBu6pA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794289229;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=9oHgoMNppljA1v1665oeA7qzNnjE6fLvD9MUAVdurBg=;
-	b=d3DvA8mVy2TRXxKnxmTSieRzlIZX9ZC3r+xrtVr6TvbyKoqYwbhL2Ij5EqWMKl3QDw5s
-	 bxbafAsuhBJ4FVtQHZDRGEIQ/Yop8MOBeMorJWXBVk5ZwUTqdSciRh71qdeN+VDoK9HWA
-	 GBlGHoBIqRwGbx5nBf+3Z4K/RqQ3PATOa04nvbqDbIFy9OHWqvzHCZxspUh6X6QH0nqYH
-	 kH4CLwjek+bX1mLFjsmsqE5zTCsSP5ejiiiaVZ9h6Z5cBPy821TrbBm3DYnRR4P/Fy3dA
-	 nc5tV3XENcIR5zzoEIFdXrS9zVY1aJmQCIYqri/cCsbVvarMGlH7A9U7I/Jb/Wt1d5Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794290801;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=Hnh10F1zQfs5wctp+i2aDmqIYavrqW0fRXfCXxRBWTE=;
+	b=Y+IrpMwTBYWDBW7NLei4ErsrHYLdkaPn1wTv5MvWYoNTpjOxJCeF8JCknAZDgkKU8Dqj
+	 Vu+amg0YiKqlxshfaPjOHb5yMlsrc7H/WMJ08E8KzjW/+5L84AQ7/7TflOFIjD/oYIRlW
+	 YFaSgHJX4WjZrTlsyHygfRJdjTEpP/157ss2ClwKTzxgxL969LL88ueNmleCV0xRfqfX6
+	 hKJDRjWHdnMwLTDqRjCsamNAzcZ1TXz14TjFGNkioiDGRRbhpOaTQ46yQBMLG3ZHgiJ4C
+	 DqWWj8xt9WGuXZVnJY6r3Xise0Au1aGhYHoPCaModqa9pYdqa27BcYWMHOc8zm0TQ7A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ei+Z2eWF;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eb8TtXll;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CDE4606A325;
-	Tue, 10 Nov 2026 05:40:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id DC7CA606A321;
+	Tue, 10 Nov 2026 06:06:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ei+Z2eWF
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25B9F1F0089F;
-	Tue, 10 Nov 2026 05:40:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eb8TtXll
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 9088E1F0089F;
+	Tue, 10 Nov 2026 06:06:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794289228;
-	bh=9oHgoMNppljA1v1665oeA7qzNnjE6fLvD9MUAVdurBg=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=ei+Z2eWFJ9CODTLEDShOv/Pf0yFH6HijCt386QN1f3mFSRC4tlPgZ0OEf518Gs3fQ
-	 6krIKjsElm6RnOZuHz7haXrSpR0oeUy7RoooTHrkViUYv9zcqyFFesgduijzfn7qym
-	 iDolM3/t1xQgcOV5HiURSFdwMfQO/yhz1yZ2xfb1x2p53UR366JmaUJyo8njAjZJnp
-	 QGQtx9OIXBbsSdTdlIr0MYMnDUyZiDrN4a97YyL0Nkcb+U3Zk+UU0mHBoExOM9xeUg
-	 PtVHclxBAGrKGZSgMODhiUrs8b6jlFWji+E7jrKkuNO4ui/xC8aK9kj4x5ejXZzhjY
-	 Sck12fmuO91Zw==
-Subject: Re: [BUG] bpf: tcp: bpf_tcp_ops_set_rcvlowat() missing from BTF with
- clang KCSAN
-From: netdev-bot+sashiko@kernel.org
-To: leitao@debian.org
-Cc: kuniyu@google.com, netdev@vger.kernel.org, llvm@lists.linux.dev,
- ast@kernel.org, yonghong.song@linux.dev, bpf@vger.kernel.org, kuba@kernel.org,
- tj@kernel.org
-Date: Tue, 10 Nov 2026 05:40:27 +0000
-Message-ID: <179428922768.994134.14043808841864559669@kernel.org>
-In-Reply-To: <au27Y9m78_3EH2v1@gmail.com>
-References: <au27Y9m78_3EH2v1@gmail.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20260515; t=1794290800;
+	bh=Hnh10F1zQfs5wctp+i2aDmqIYavrqW0fRXfCXxRBWTE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=eb8TtXllKp/I2wuhSS3q+9ykKbgSIsPs7gk7VfGNWmGNU+WjweUEnFKh9TgZTVkGq
+	 sMrc6PQ+88V8fzudWMldoKc2AVHklkzkYa0+40xfi3AW18Q/K4K9h/OocoZpCsVTc7
+	 P3U7Lk6TDzGXSUBWVX72i99ctq9fxpCEAf7EPOcoxKbQ5HoOJlAOSS9DWUBbMFrSGs
+	 wq0Ih3E/DaXojtDOLNMTToD5a4szza7K5jiOH90rJg25i7q+WgS1YpUPqvG8ck732L
+	 facfIldhFjw/2ZFAetpxsSvQgpdMsJ0r4OYiQPZlv8X139dzSSBMZ5/L3G1OVKmP/B
+	 +37+kwO7JItFQ==
+Date: Tue, 10 Nov 2026 08:06:36 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: David Howells <dhowells@redhat.com>
+Cc: bpf@vger.kernel.org, dm-devel@lists.linux.dev, fsverity@lists.linux.dev,
+	keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	Alasdair Kergon <agk@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>, Alex Shi <alexs@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Benjamin Marzinski <bmarzins@redhat.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Dongliang Mu <dzm91@hust.edu.cn>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Ignat Korchagin <ignat@linux.win>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	James Morris <jmorris@namei.org>, Jiri Olsa <jolsa@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Shuah Khan <skhan@linuxfoundation.org>, Song Liu <song@kernel.org>,
+	"Theodore Y. Ts'o" <tytso@mit.edu>,
+	Yanteng Si <si.yanteng@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v9 2/3] KEYS: Replace assoc_array with rhashtable
+Message-ID: <avK0bC5VmO7LXlfS@kernel.org>
+References: <20261110053323.2936729-1-jarkko@kernel.org>
+ <20261110053323.2936729-3-jarkko@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -63,90 +85,117 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261110053323.2936729-3-jarkko@kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+On Tue, Nov 10, 2026 at 07:33:22AM +0200, Jarkko Sakkinen wrote:
+>  /*
+>   * Preallocate memory so that a key can be linked into to a keyring.
+>   */
+>  int __key_link_begin(struct key *keyring,
+>  		     const struct keyring_index_key *index_key,
+> -		     struct assoc_array_edit **_edit)
+> +		     struct keyring_edit *edit)
+>  {
+> -	struct assoc_array_edit *edit;
+> +	struct keyring_link *link = NULL;
+> +	struct keyring_link *replace;
+> +	struct keyring_index *links;
+>  	int ret;
+>  
+>  	kenter("%d,%s,%s,",
+>  	       keyring->serial, index_key->type->name, index_key->description);
+>  
+> -	BUG_ON(index_key->desc_len == 0);
+> -	BUG_ON(*_edit != NULL);
+> +	if (WARN_ON(index_key->desc_len == 0) || WARN_ON(edit->new)) {
+> +		ret = -EINVAL;
+> +		goto out;
+> +	}
+>  
+> -	*_edit = NULL;
+> +	edit->new = NULL;
+> +	edit->old = NULL;
+>  
+> -	ret = -EKEYREVOKED;
+> -	if (test_bit(KEY_FLAG_REVOKED, &keyring->flags))
+> -		goto error;
+> +	if (test_bit(KEY_FLAG_REVOKED, &keyring->flags)) {
+> +		ret = -EKEYREVOKED;
+> +		goto out;
+> +	}
+>  
+> -	/* Create an edit script that will insert/replace the key in the
+> -	 * keyring tree.
+> -	 */
+> -	edit = assoc_array_insert(&keyring->keys,
+> -				  &keyring_assoc_array_ops,
+> -				  index_key,
+> -				  NULL);
+> -	if (IS_ERR(edit)) {
+> -		ret = PTR_ERR(edit);
+> -		goto error;
+> +	links = keyring_get_index(keyring);
+> +	if (IS_ERR(links)) {
+> +		ret = PTR_ERR(links);
+> +		goto out;
+>  	}
+>  
+> -	/* If we're not replacing a link in-place then we're going to need some
+> +	link = kzalloc_obj(struct keyring_link);
+> +	if (!link) {
+> +		ret = -ENOMEM;
+> +		goto out;
+> +	}
+> +	link->hash = index_key->hash;
+> +
+> +	replace = keyring_find_link(links, index_key);
+> +
+> +	/*
+> +	 * If we're not replacing a link in-place then we're going to need some
+>  	 * extra quota.
+>  	 */
+> -	if (!edit->dead_leaf) {
+> +	if (!replace) {
+>  		ret = key_payload_reserve(keyring,
+>  					  keyring->datalen + KEYQUOTA_LINK_BYTES);
+>  		if (ret < 0)
+> -			goto error_cancel;
+> +			goto out;
+> +
+> +		ret = rhashtable_insert_fast(&links->ht, &link->node,
+> +					     keyring_link_params);
+> +		if (ret < 0) {
+> +			key_payload_reserve(keyring,
+> +					    keyring->datalen - KEYQUOTA_LINK_BYTES);
+> +			goto out;
+> +		}
+>  	}
+>  
+> -	*_edit = edit;
+> -	kleave(" = 0");
+> -	return 0;
+> +	edit->new = link;
+> +	edit->old = replace;
+> +	ret = 0;
+>  
+> -error_cancel:
+> -	assoc_array_cancel_edit(edit);
+> -error:
+> +out:
+> +	if (ret && link)
+> +		kfree(link);
+>  	kleave(" = %d", ret);
+>  	return ret;
+>  }
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+No additional Sashiko complains.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+Despite a few unfortunate extra rounds I'm happy how this shaped in the
+end. It has a sane flow now I think.
 
-- [Medium] The commit message of "bpf: tcp: bpf_tcp_ops_set_rcvlowat()
-  missing from BTF with clang KCSAN" is cut off and missing required…
-- [Low] The patch fixes a regression from 5f549c1e49f3 ("bpf: tcp: Add
-  kfunc to adjust sk->sk_rcvlowat.") but has no Fixes: tag.
+And it definitely made sense to drop cleanup.h shenanigans from
+__key_link_begin().
 
---
-
-bpf: tcp: bpf_tcp_ops_set_rcvlowat() missing from BTF with clang KCSAN
-
-With clang and KCSAN, pahole drops bpf_tcp_ops_set_rcvlowat() from the
-vmlinux BTF. This breaks the build when CONFIG_WERROR is set. When it
-is not set, __bpf_tcp_ops_init() fails at boot. The patch works around
-this by passing the clamped value straight to __tcp_set_rcvlowat()
-instead of reassigning the rcvlowat parameter.
-
-> The kfunc came with 5f549c1e49f3 ("bpf: tcp: Add kfunc to adjust
-> sk->sk_rcvlowat."), and 201a454df948 ("resolve_btfids: Fix the
-> --fatal_warnings exit status") made the missing BTF fatal with
-> CONFIG_WERROR. Without CONFIG_WERROR the kernel builds, but bpf_tcp_ops
-> is never registered:
->
->   initcall __bpf_tcp_ops_init+0x0/0x70 returned -22 after 302 usecs
-
-[Severity: Low]
-Should this carry a Fixes: tag? 5f549c1e49f3 is only named in the prose.
-That commit added the "if (rcvlowat < 0) rcvlowat = INT_MAX;"
-reassignment in bpf_tcp_ops_set_rcvlowat(), which this patch rewrites.
-
-Users can see this regression. When the kfunc set fails to register,
-the chain in __bpf_tcp_ops_init() skips the struct_ops registration:
-
-net/ipv4/bpf_tcp_ops.c:__bpf_tcp_ops_init() {
-    ...
-	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS,
-					       &bpf_tcp_ops_set_rcvlowat_kfunc_id_set);
-	ret = ret ?: register_bpf_struct_ops(&bpf_tcp_ops, bpf_tcp_ops);
-    ...
-}
-
-The sched_ext workaround cited in this message, f2f095c87603, has a
-Fixes: tag too. Would something like this work?
-
-Fixes: 5f549c1e49f3 ("bpf: tcp: Add kfunc to adjust sk->sk_rcvlowat.")
-
-[ ... ]
-
-> This seems similar to pahole behaviour sched_ext hit with a bool
-> argument, discussed in [2] and worked around in f2f095c87603
-> ("sched_ext: Work around pahole 1.32 dropping
-> scx_bpf_task_set_lazy_resched() from BTF").
-
-[ ... ]
-
-> Not reassigning the parameter is a workaround for me, with any pahole: clang
-> then describes @rcvlowat in w1 from the entry, the kfunc is back in BTF,
-> and __bpf_tcp_ops_init() returns 0 (tested in virtme):
-
-[Severity: Medium]
-Was the commit message cut off here? It ends with a colon, and the
-virtme test output it introduces never appears.
-
-The message also says "discussed in [2]", but there is no [1], no
-reference list and no Link: trailer, so the pahole discussion can't be
-found from this commit.
-
-There is also no Signed-off-by: line from the author. The DCO in
-Documentation/process/submitting-patches.rst requires one, so the patch
-can't be applied as posted.
-
-The code change itself looks fine. Passing
-"rcvlowat < 0 ? INT_MAX : rcvlowat" behaves the same as the old
-reassignment.
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/au27Y9m78_3EH2v1%40gmail.com
+Br, Jarkko
