@@ -1,83 +1,83 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.44
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794328179;
-	b=QxhsSKISJgOWKswcQlPVe9pUyZ0i0tatPverSA1VUEj8X/CA+ozSmZQtNQHQ+WxvTG71
-	 ICtHEYEgrkLhDiYtZvxYBlz2ct0qh1wl1i1qflrZqQ07CZ/MT1LBYGvxGzBWJNoWJ3wKh
-	 VlTm/EXG9sHXAfAIF71vrtu+zcQ0cQTIaiG9n+GEeIOarpXESDZoYyjjCN0qsFnVaYxhr
-	 9uSYq90QSO6GbxtKv9YGE/qENTvJBcGHAEvuyYQDaZi6xGS0QXxV86JogCE5UnyTZe82b
-	 7tT2LOMNqX/UY/TC40AKGhNOEOLQ5l2XDSRnQHsEUuqdKkGUnmftIvtCtEzHmHliBBg==
+	t=1794328181;
+	b=Txke4wxDz6F8pKrr4o2TQ2NzaEcXPlYRHdV9o3CUojhRowlwhSVMDOGKhg0gPPPuyn3o
+	 CGGpiffcW7ckx89g8v8MsUysm/j+tTXLbTLkTRdFv+XdK1Txvy/EsxkF0CsNjMTD+8KH3
+	 fnW2FF210du8rG4wOyUvH4zXU8EHs4hLUTdyMemRByrNTichLAZ0x/P+ZvzR/KRmOqeul
+	 Nbnad2wt/5Y67Mc468kg+GOVwq9uzG1998dQsgtZY3R2mh7beQCfirqa0rrNseK21wAkZ
+	 D7U6H3/ba3JabN+hUuDeA2jEZWErhRWprJN8SSuyDK9Fn4fWN/lzLuBZxWsxtSN0Fvw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794328179;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794328181;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=slpIs/HinfX8orW6FfIUeyL7Jch9yZ8MPXuFx7Rx4z4=;
-	b=yVOA/fZLvy9JAcmX6GO5UFl6bRAW+lNG5Tuqj5yFKW9OJGFVlmAXJNve0QlR/rphyFt7
-	 /4id7w+rBZm4ZVvHkZPMEZyqlSvGaoYyo2Werg/GAculaA76j+lVXVAOUQxEzH1CNT/gp
-	 pJYBlB9QR9JAsPSAO4Z/cT70FRnFmdq5DDLN2WPxkuJjpbTOMfQs36SqE8xCwsHzfrPxX
-	 l1enh893dddhsQ7WOXBtMEjQKteAlJ4rWQfT6gzd280aXgGvSQuv/saOkDsWbybPLQxw2
-	 MPbbELVXEh2aaSrXtoiOfx6dq4pmL6sa2XhNs/Y+fRSDdKUUpUNRYdfwtduYXg5u9Kg==
+	bh=Bwd1wdoXEErbMb3reUq96fn7OlYms8ZVerVffjZDvbk=;
+	b=TjnEO9WIRczCHt9b/YtL+dHANHlzPvRDLpyEQTX9mrLgxJU6nY/JZCqRTyjFc0cJ02+F
+	 fmtC8JuwskDBW4+JuaqlHrGK2NuhslXzodvqlulXWb3lw5gDA1DCHJJ7XGRGvwxAjDHEa
+	 qDttoPtOJF0Jlbio+WbSGaMwqoNR8Os1thnLIcVAEKby0ZMpe8AUDT6Jy3qoOTZ+LeVBN
+	 oDoz/rllsDwZy1mgfHtmlN6k8mHELYAD97jDLfIMT+jd30vwsIK4bnx9q7Ot+SkaKOlct
+	 ClsmjJb0P995pO3PiBQUyikGidTXhGiKJyEAXKURmxQ5b0eux6UevqMh0TC0vdgI5AQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=K8z5h8Ww;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Vbu1U9BY;
 	arc=none smtp.remote-ip=209.85.128.44
 Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4060B60A262D
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 16:29:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4060B60A262D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C920860A5BE3
+	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 16:29:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C920860A5BE3
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=K8z5h8Ww
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4a35db1f202so17579765e9.3
-        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 08:29:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Vbu1U9BY
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4a208d93758so23698245e9.3
+        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 08:29:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794328178; x=1794932978; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794328179; x=1794932979; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=slpIs/HinfX8orW6FfIUeyL7Jch9yZ8MPXuFx7Rx4z4=;
-        b=K8z5h8WwIy3qV71SEQiQc/wqoD9AkocZMNSA2AieW/NNac/vbySxOGGBpNLiR1POPx
-         h86zDGtxFYKk0Z+Kpt00xkGNcyJNZXQJ0rh6KmU8ks3uoCK4sJ4Afu64E8BQEQGGj0Of
-         H5oxALxPZb6SjIJlaWG33+tFyDPLKtTSs3CnVA0tl4demd/c/ATXz1Y3bQ4eL2VG3HSf
-         QL7w3VW6MznGDJ9CQyXs509EM2bgrFRzRTGNKtUmXhLr6empvXu9cFYYqjeYCDz5ShIz
-         SSKbC6DzSpwz/KCrDuTblNlmchzSpERkDFsvYTxQTfJfhZhyLRZeRP1b4ESYgFkGhiUz
-         GFHg==
+        bh=Bwd1wdoXEErbMb3reUq96fn7OlYms8ZVerVffjZDvbk=;
+        b=Vbu1U9BYVlhceF6dAQsh7jHPMyrSyJk54jyyIvq/haHs4WBFo493tuqqRPn68DkujA
+         uBnFGQqUMYuOLq/kDRLcIYtfGm77WVyPy6gCArMURg8XVGJquASrcu+yddnVGkei/GuZ
+         QeRE//ZQ4hF2f+rXiqHNFA85StZVmKTaHWqivOV5vaQnA5TlzIDJvnLjBWT5y4Dsycr4
+         rl8HkhntBZ1hkLoc6Xf4fckJtLaV9JgvXQAeqvYXyPH7boXSVkQUWor85HsDudLKijq5
+         E3ya5EHXP3XCTQ+PlJkABrF4gb3Y6wQzDg4WYHVVCh7G7eX/6NrysIzFpj0ERwOtlvqV
+         QNAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794328178; x=1794932978;
+        d=1e100.net; s=20260707; t=1794328179; x=1794932979;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=slpIs/HinfX8orW6FfIUeyL7Jch9yZ8MPXuFx7Rx4z4=;
-        b=A0jidAm8qe4ZPKo/gfJf2R9n6+bHrOIrgMvTxLFgWIthq3RQHRpoN3JUmRsSDA5naE
-         yG7j0dYbh8uO5O6Urbz0y+8KSXBoTyfRE/dWTRet17N+p9nBIe6NIo4NFJykGlHHLmYR
-         GjbtQ1aLb6PWpq4NdOFSspXOce7D2M4O29+mAKO4CoKR9rwNhXxHpeTdsQpwFvOpMHJg
-         o3F4i9EzdeUz76kOq+sEPbTNjndYaQG6wY21rOvRKf6TGhnPLFI1C1LWvFeh5/Ipc2Rd
-         7ZmrmsaP21V9iLzq3w+vy77XKJC9GE5bUV4AA/9tZlXOa5RZnEJ96UPj2k/OpbdAPhgE
-         C1Sw==
-X-Forwarded-Encrypted: i=1; AL+hErHgsqz2UOhzxHIzpgNSm6Bn/tcF551BZhXCFGFuK+JMzZDsjaiEO0wWSRKYIbduAwcBaUk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/aQrLfOUXA0Fe4aEF5Uny0XpXhbpV3nrfSjiLQe+r8S6IOtfWy
-	hXO58AcYaKiAIyxV+UpnKDR4N1HBD0bUrDbWFRRdhkmOAjzihrWCz2em
-X-Gm-Gg: AYBFou2e2d83rVhCCs6AFpuFDIZyIo7p7a4XTcYz/DlIRPjK6kJB90DzNH0mbXB8fLA
-	TVeabKh7wIlTfR7P1jgBByK97X/XC7aXPjYipxqXMsszlQMjjeAVkwPK3Ap1pdQNDPXMVG7C0UL
-	H6tZ2b0PSVkpHJvbe1JHAw1hsTlt3H9kTK0h940t7AF28JGBCxZNvl1vO6gWKiROvfVaV9H+O8j
-	ZIaphThNKPXWvDj3bR91m4NvO8/40wdzwhKtmOQgqPXJ1paNai2i0J9gonBmsVVwHs7fLClS2wa
-	yLMjK0bFqFEEZgs75MNkF4JsSFc6oMXRHoSpk1sJjdHLYp9bvyzPCKUMbzSqRqnyjznYROQ72q0
-	p/hdZ8uQzFHJvVmKXT0VtWdgQ0uo6KiGJrJ2s0wLz9gR42txjaFjxUl9kwcqobnbnz/b1z23HjA
-	Uvq4HXxbq9EpLGz+pOIER64vGQoQsm7d+cmDyr1QzzLJc9EcJR1nkTFnlIRK8Eijq5qJzM6Ul40
-	xK9xI43xU6prEePWlWljvR3WOeLMqDEbBYzDgyggEDnihubd22K6RUzr/LFUyl5xAqEctEgpSvd
-	2MstaEtttpWn0W1UhWeWljYSkSTHNoXRB0ny4s670xPXZOM=
-X-Received: by 2002:a05:600c:3b2a:b0:4a1:d675:b031 with SMTP id 5b1f17b1804b1-4ba02336374mr56174855e9.6.1794328177518;
-        Tue, 10 Nov 2026 08:29:37 -0800 (PST)
+        bh=Bwd1wdoXEErbMb3reUq96fn7OlYms8ZVerVffjZDvbk=;
+        b=UVKhMAIdH9TR4H3L8rPni1VNV+nwoYMzbmTvADN8D2iL33d3LD/u0+vANNXlwFHxBr
+         slPGU+Rl62+tzRIbfZsWSzW/NcOZCJ0oz+lZg6uh45RGIMhKyXFe51ajx3cwdATKS3aY
+         32NDVO+yQ9SO437ZpV0PG7gb7Y4B6Gz2cfCGlaoWTdJOQZSVgNIFidsgCIYTiPn45l/l
+         J6tCjnAKbwqrSYPcicyquhTPra5lK+/2s31buqAHjot1RynjWfwzmzyIHNNw8V2+PJJn
+         iesi0sqHkQ0N7qK77UYqxyFYlrpSNA3tcDtdSH555KXnxb3fiX4SjYx6Y2JEptBk4kvM
+         GcRw==
+X-Forwarded-Encrypted: i=1; AL+hErHIxZwMPxMavcUHVtCR4gsoIVi56jGev99WfOm35gegq2wo4f/tBsoM0kJ0pldJRYF3pOk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+lO7xsn8NE6lK3FqnvG+hR1ia0gkNFsdXx0SjUqLzyMj0e4d29
+	gmEG2EGNAKP1hmW4jz54Dns+6faLJ9EZ69tDT4HIsYE8wuM3zZe3phyr
+X-Gm-Gg: AYBFou1eNwZom428eE4uyAhKNyYhmQ3UK24mhN60UFX+yD5sPkKBIzJ3h9fFFrO1pVv
+	PVRSr3HjxVdICiWoV/Iw77PE7usjqU0YePwo0IKFghs6063Jq5rl4SdWNv3mGlY9VHkWhBB6HeL
+	MImwURfpbaD5+AudtVMxb82TuRXIqJxyA0IDN0LD99tQxHQQvjfEX2vcpkuYJVunZ7VcLRqksQK
+	2U6Y0C3wAvasBCgEz05UQ61rgYReRvC4UbEMD6eu3wNXrmLSw7bNvgN7c2AGHslXrIlFJ784hrg
+	9NX2LadqNbbrrKDa5wh+DmPdEr7VJv0BCr+QaswJJ2mJ0QEXGOfUK8HWsWFKNtbd+JisO2t3XDV
+	U6NNpJxzBbgcObHHw4WcpDwy0rFl2tIzxTQRWuolop1YVnOqkt4hjBLyCGl2xTUMGyA5KzGD1xF
+	Y3kb3gP0B3aP0veLuWFRo42tkNglPIDxqcR/nOB9HHfjZcOn7e1IJL7YtA+gqipSkuZpBMVBn5M
+	5/mCsl373uBYnQ4AsSYIh3Iw3JJury2b7L8tC8rhfAENecBQ1Xio7eegbSbNeEfLcr/bpChzyA3
+	XOHf2KJfzdTGcRnyq/fQlbfyafnK7cIaKK/FarRF8u7nxR4=
+X-Received: by 2002:a05:600c:3e11:b0:4b3:9540:47a6 with SMTP id 5b1f17b1804b1-4ba0234f7a2mr52146255e9.28.1794328179086;
+        Tue, 10 Nov 2026 08:29:39 -0800 (PST)
 Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba01fea745sm71287485e9.10.2026.11.10.08.29.35
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba01fea745sm71287485e9.10.2026.11.10.08.29.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 08:29:36 -0800 (PST)
+        Tue, 10 Nov 2026 08:29:38 -0800 (PST)
 From: Anton Protopopov <a.s.protopopov@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -97,9 +97,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Anton Protopopov <a.s.protopopov@gmail.com>
-Subject: [PATCH v3 bpf-next 10/18] bpf: Allow writes to private stack objects in bpf_scan_ir
-Date: Tue, 10 Nov 2026 16:40:30 +0000
-Message-ID: <20261110164046.454431-11-a.s.protopopov@gmail.com>
+Subject: [PATCH v3 bpf-next 11/18] bpf: Follow PHIs in bpf_scan_ir
+Date: Tue, 10 Nov 2026 16:40:31 +0000
+Message-ID: <20261110164046.454431-12-a.s.protopopov@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261110164046.454431-1-a.s.protopopov@gmail.com>
 References: <20261110164046.454431-1-a.s.protopopov@gmail.com>
@@ -114,172 +114,158 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A write to a stack object of the function is not observable outside of
-it as long as the object has not escaped. Let such writes and memsets
-stay on a clean path. A write after the object may have been captured,
-a volatile or atomic one and a write to other memory still make the
-path dirty.
+An error often reaches the return through a PHI in the block of the
+return which joins it with the results of other paths, some of them
+dirty. Take the incoming values of such a PHI on the edges from the
+blocks which only clean paths reach. Do not follow a PHI in an earlier
+block: a later branch may split its values between clean and dirty
+paths.
+
+Take also the errors which LazyValueInfo knows exactly: an incoming
+value on its edge and a returned value at the return.
 
 Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
 ---
- scripts/llvm-plugins/bpf_scan_ir.cpp | 85 +++++++++++++++++++++-------
- 1 file changed, 64 insertions(+), 21 deletions(-)
+ scripts/llvm-plugins/bpf_scan_ir.cpp | 68 ++++++++++++++++++++++++++--
+ 1 file changed, 63 insertions(+), 5 deletions(-)
 
 diff --git a/scripts/llvm-plugins/bpf_scan_ir.cpp b/scripts/llvm-plugins/bpf_scan_ir.cpp
-index 3684918eb7fa..c45fb97d1b93 100644
+index c45fb97d1b93..249412194766 100644
 --- a/scripts/llvm-plugins/bpf_scan_ir.cpp
 +++ b/scripts/llvm-plugins/bpf_scan_ir.cpp
-@@ -4,13 +4,17 @@
- #include "../bpf/fmodret_metadata.h"
- 
- #include <algorithm>
-+#include "llvm/ADT/DenseMap.h"
+@@ -8,11 +8,13 @@
  #include "llvm/ADT/SmallPtrSet.h"
  #include "llvm/ADT/SmallVector.h"
-+#include "llvm/Analysis/CaptureTracking.h"
-+#include "llvm/Analysis/ValueTracking.h"
+ #include "llvm/Analysis/CaptureTracking.h"
++#include "llvm/Analysis/LazyValueInfo.h"
+ #include "llvm/Analysis/ValueTracking.h"
  #include "llvm/Config/llvm-config.h"
  #include "llvm/IR/Analysis.h"
  #include "llvm/IR/BasicBlock.h"
  #include "llvm/IR/CFG.h"
++#include "llvm/IR/ConstantRange.h"
  #include "llvm/IR/Constants.h"
-+#include "llvm/IR/Dominators.h"
+ #include "llvm/IR/Dominators.h"
  #include "llvm/IR/GlobalVariable.h"
- #include "llvm/IR/Instructions.h"
- #include "llvm/IR/IntrinsicInst.h"
-@@ -50,41 +54,76 @@ static bool errnoConstant(const Value *V, int64_t &N)
+@@ -46,6 +48,21 @@ static bool isErrno(const APInt &C, int64_t &N)
+ 	return N >= -MaxErrno && N < 0;
+ }
+ 
++/* Return true and set N if RANGE holds a single errno */
++static bool singleErrno(const ConstantRange &Range, int64_t &N)
++{
++	const APInt *C = Range.getSingleElement();
++
++	return C && isErrno(*C, N);
++}
++
++/* Return true and set N if the value at use U is a single errno */
++static bool singleErrnoAtUse(const Use &U, LazyValueInfo &LVI, int64_t &N)
++{
++	return U.get()->getType()->isIntegerTy() &&
++	       singleErrno(LVI.getConstantRangeAtUse(U, false), N);
++}
++
+ /* Return true and set N if V is an errno constant */
+ static bool errnoConstant(const Value *V, int64_t &N)
+ {
+@@ -54,6 +71,42 @@ static bool errnoConstant(const Value *V, int64_t &N)
  	return C && isErrno(C->getValue(), N);
  }
  
--static bool cleanInstruction(const Instruction &I)
--{
--	if (auto *Intrinsic = dyn_cast<IntrinsicInst>(&I)) {
--		switch (Intrinsic->getIntrinsicID()) {
--		case Intrinsic::assume:
--		case Intrinsic::lifetime_start:
--		case Intrinsic::lifetime_end:
--		case Intrinsic::invariant_start:
--		case Intrinsic::invariant_end:
--			return true;
--		default:
--			break;
-+class CleanInstructions {
-+	DominatorTree &DT;
-+	DenseMap<const Instruction *, bool> PrivateWrites;
++/*
++ * Add the errors which V, the value returned in RET, is known to be on the
++ * edges to RET from CLEANBBS to VALUES. V may be a PHI in RET. A PHI in an
++ * earlier block is not followed: a later branch may split its values between
++ * clean and dirty paths.
++ */
++static void collectErrnos(Value *V, BasicBlock *Ret, LazyValueInfo &LVI,
++			  const SmallPtrSetImpl<BasicBlock *> &CleanBBs, ReturnValues &Values)
++{
++	int64_t N;
 +
-+	bool privateDestination(const Value *Pointer, const Instruction &I)
-+	{
-+		auto It = PrivateWrites.find(&I);
-+		if (It != PrivateWrites.end())
-+			return It->second;
-+		auto *Allocation = dyn_cast<AllocaInst>(getUnderlyingObject(Pointer));
-+		bool Private = false;
++	auto *Phi = dyn_cast<PHINode>(V);
 +
-+		if (Allocation && Allocation->getFunction() == I.getFunction()) {
-+			// A later call may receive the initialized object. Only captures
-+			// that can precede this write make the write externally visible.
-+#if LLVM_VERSION_MAJOR >= 21
-+			Private = !PointerMayBeCapturedBefore(Allocation, true, &I, &DT, true, 256);
-+#else
-+			Private = !PointerMayBeCapturedBefore(Allocation, true, true, &I, &DT, true, 256);
-+#endif
- 		}
-+		PrivateWrites[&I] = Private;
-+		return Private;
- 	}
--	return !I.mayHaveSideEffects();
--}
- 
--static bool cleanBB(BasicBlock *BB)
-+public:
-+	explicit CleanInstructions(DominatorTree &DT) : DT(DT) {}
++	if (!Phi || Phi->getParent() != Ret)
++		return;
++	for (unsigned i = 0; i < Phi->getNumIncomingValues(); i++) {
++		Value *Incoming = Phi->getIncomingValue(i);
++		BasicBlock *Pred = Phi->getIncomingBlock(i);
 +
-+	bool isClean(const Instruction &I)
-+	{
-+		if (auto *Store = dyn_cast<StoreInst>(&I))
-+			return !Store->isVolatile() && !Store->isAtomic() &&
-+			       privateDestination(Store->getPointerOperand(), I);
-+		if (auto *Memory = dyn_cast<MemIntrinsic>(&I))
-+			return !Memory->isVolatile() &&
-+			       privateDestination(Memory->getRawDest(), I);
-+		if (auto *Intrinsic = dyn_cast<IntrinsicInst>(&I)) {
-+			switch (Intrinsic->getIntrinsicID()) {
-+			case Intrinsic::assume:
-+			case Intrinsic::lifetime_start:
-+			case Intrinsic::lifetime_end:
-+			case Intrinsic::invariant_start:
-+			case Intrinsic::invariant_end:
-+				return true;
-+			default:
-+				break;
-+			}
++		if (!CleanBBs.contains(Pred))
++			continue;
++		if (errnoConstant(Incoming, N)) {
++			Values.push_back(N);
++			continue;
 +		}
-+		return !I.mayHaveSideEffects();
++		/*
++		 * LazyValueInfo knows the ranges of integers only. On an edge it
++		 * also uses the branch condition, as in "if (err == -EINVAL) goto
++		 * out", where err is the error.
++		 */
++		if (Incoming->getType()->isIntegerTy() &&
++		    singleErrno(LVI.getConstantRangeOnEdge(Incoming, Pred, Ret), N))
++			Values.push_back(N);
 +	}
-+};
++}
 +
-+static bool cleanBB(BasicBlock *BB, CleanInstructions &Clean)
- {
- 	for (Instruction &I : *BB) {
--		if (!cleanInstruction(I))
-+		if (!Clean.isClean(I))
- 			return false;
- 	}
- 	return true;
+ class CleanInstructions {
+ 	DominatorTree &DT;
+ 	DenseMap<const Instruction *, bool> PrivateWrites;
+@@ -116,7 +169,8 @@ static bool cleanBB(BasicBlock *BB, CleanInstructions &Clean)
  }
  
  /* Add the errors which clean paths of F are known to return to VALUES */
--static void cleanReturnValues(Function &F, ReturnValues &Values)
-+static void cleanReturnValues(Function &F, CleanInstructions &Clean, ReturnValues &Values)
+-static void cleanReturnValues(Function &F, CleanInstructions &Clean, ReturnValues &Values)
++static void cleanReturnValues(Function &F, LazyValueInfo &LVI, CleanInstructions &Clean,
++			      ReturnValues &Values)
  {
  	SmallPtrSet<BasicBlock *, 32> CleanBBs;
  	SmallVector<BasicBlock *, 32> Worklist;
- 	bool Changed;
+@@ -159,8 +213,7 @@ static void cleanReturnValues(Function &F, CleanInstructions &Clean, ReturnValue
  
- 	/* The clean blocks which the entry reaches through clean blocks */
--	if (cleanBB(&F.getEntryBlock())) {
-+	if (cleanBB(&F.getEntryBlock(), Clean)) {
- 		CleanBBs.insert(&F.getEntryBlock());
- 		Worklist.push_back(&F.getEntryBlock());
- 	}
-@@ -92,7 +131,7 @@ static void cleanReturnValues(Function &F, ReturnValues &Values)
- 		BasicBlock *BB = Worklist.pop_back_val();
- 
- 		for (BasicBlock *Successor : successors(BB)) {
--			if (!CleanBBs.contains(Successor) && cleanBB(Successor)) {
-+			if (!CleanBBs.contains(Successor) && cleanBB(Successor, Clean)) {
- 				CleanBBs.insert(Successor);
- 				Worklist.push_back(Successor);
- 			}
-@@ -128,7 +167,7 @@ static void cleanReturnValues(Function &F, ReturnValues &Values)
- 		bool Entered = CleanBBs.contains(&BB);
- 		int64_t N;
- 
--		if (!Return || !Return->getReturnValue() || !cleanBB(&BB))
-+		if (!Return || !Return->getReturnValue() || !cleanBB(&BB, Clean))
- 			continue;
- 		for (BasicBlock *Pred : predecessors(&BB))
+ 	/*
+ 	 * The returns of the clean blocks which only clean paths reach or which
+-	 * one of them branches to. Dirty paths may also reach the latter, but
+-	 * the returned constant is the same on all paths.
++	 * one of them branches to
+ 	 */
+ 	for (BasicBlock &BB : F) {
+ 		auto *Return = dyn_cast<ReturnInst>(BB.getTerminator());
+@@ -173,8 +226,11 @@ static void cleanReturnValues(Function &F, CleanInstructions &Clean, ReturnValue
  			Entered |= CleanBBs.contains(Pred);
-@@ -188,6 +227,7 @@ public:
- 			return PreservedAnalyses::all();
- 
- 		SmallVector<FunctionDescription, 32> Descriptions;
-+		auto &FAM = MAM.getResult<FunctionAnalysisManagerModuleProxy>(M).getManager();
- 
- 		for (Function &F : M) {
- 			if (F.isIntrinsic() || F.isDeclaration() || F.hasAvailableExternallyLinkage())
-@@ -202,7 +242,10 @@ public:
+ 		if (!Entered)
+ 			continue;
+-		if (errnoConstant(Return->getReturnValue(), N))
++		if (singleErrnoAtUse(Return->getOperandUse(0), LVI, N)) {
+ 			Values.push_back(N);
++			continue;
++		}
++		collectErrnos(Return->getReturnValue(), &BB, LVI, CleanBBs, Values);
+ 	}
+ 	llvm::sort(Values);
+ 	Values.erase(std::unique(Values.begin(), Values.end()), Values.end());
+@@ -242,10 +298,11 @@ public:
  				Flags |= FMODRET_FN_WEAK;
  			if (Ret->isIntegerTy(64))
  				Flags |= FMODRET_FN_RET64;
--			cleanReturnValues(F, Values);
-+			auto &DT = FAM.getResult<DominatorTreeAnalysis>(F);
-+			CleanInstructions Clean(DT);
-+
-+			cleanReturnValues(F, Clean, Values);
++			auto &LVI = FAM.getResult<LazyValueAnalysis>(F);
+ 			auto &DT = FAM.getResult<DominatorTreeAnalysis>(F);
+ 			CleanInstructions Clean(DT);
+ 
+-			cleanReturnValues(F, Clean, Values);
++			cleanReturnValues(F, LVI, Clean, Values);
  			/* A weak definition always has a record, see fmodret_metadata.h */
  			if (!Values.empty() || (Flags & FMODRET_FN_WEAK))
  				Descriptions.push_back({&F, Flags, std::move(Values)});
+@@ -258,6 +315,7 @@ public:
+ 		PreservedAnalyses PA;
+ 		PA.preserve<FunctionAnalysisManagerModuleProxy>();
+ 		PA.preserveSet<CFGAnalyses>();
++		PA.preserve<LazyValueAnalysis>();
+ 		return PA;
+ 	}
+ 
 -- 
 2.43.0
 
