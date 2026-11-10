@@ -1,74 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.150
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=54.204.34.130
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794315087;
-	b=Opb0XsNsi0VgnOaHRzguTjUutmULBwPdDfsyN/xfTmwn4C/+8RMETMp+IoRY+0tW0Jwg
-	 boi9uWivVFgjdC9A84j4tvZLgf6NWEgBG3ez6sxcWA12hulBIxdZn2gBji2Jw6WHw6Gu3
-	 K9fAv6Uxf+bBU2yjYCXpewqT3GkTfMwmweNW5ewjyXA2E1OZ+3DMWVAhVZHU0ae+U8Vno
-	 htMloEySVhqoLLV//Yy1UTXrcEMS/xvKYILKmUppJV+shFIMrTVUaWqDOgozPtqKYEWaz
-	 DuJvudJ65GxinyuZ3BlCLgiFnzqJpT2++/JxOW6iHAZZhJe30Z89xsNLlSFDj8JA3UQ==
+	t=1794315086;
+	b=kLr3K7AIfqkw5wNx7tZGj/ZlCoYWxjDoVu+ZHa2lqsCYd/9scbmH+hwNWb/kr2Yfuz3c
+	 2HaobogN/J4DcXeLqNjaC/OPRd1UbHFgnSQEp19vWyfqL3walB4F2EnasqsxL3oG/XyWj
+	 I8PlAW9HU5OTV8QhWLxOdWmwThaRLlwe7ePysFK1SrgqyOKFhYm//tWi6Jd20yV7U2tpe
+	 5j2BlRm//WPbWOTmJ26gPDFCsuRnKXJYDgm7GmUNYbjMaTGXSeZ0qY+bYLiXbo1GTXwAM
+	 S+Q6KZ9K27AW9dPIlZo+L//WxVNnL04v3Aw9bVmU6EsgjnjpJfvPl/mFiq9gdvV7HGQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794315087;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=YtUog58RhMWjgehHF7aLMPWxr8semA4Q1u+XbhAMUSA=;
-	b=C8YiyZ+vrDbkeVqG6YgK+eNjKZ8xopLrP7kDXbix2bzqZFqLhnPbbIp/aBueG5ScOXfT
-	 MeuZX5MI0ORxgQ9v4ZoWJlXn677poWENHGDvv8CIS/vosNn07idg0Q61Tbwo9jz49klUZ
-	 fdWkmaE+9W1jH31IZ58kfVAfW1qSRh4vlTQBC6kkNlh1ApVJpN7g6T2sxwOXkbN1yHgOI
-	 BS9KSNRNkU8KOVE8I1shlLS8xthBGAYE61i5mjYBytaT7zZFsFPv6ss1dWDyd3louZdlQ
-	 qRc1HoW1oIM4q7GTNwWJubcDZrEQr5nNASBQ6gVyXZBZhRPfnu3+hVhAwlh8X1ZegXg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794315086;
+	h=DMARC-Filter:DKIM-Signature:X-QQ-mid:X-QQ-Originating-IP:Received:
+	 X-QQ-SSF:X-QQ-GoodBg:X-BIZMAIL-ID:From:To:Cc:Subject:Date:Message-Id:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding:X-QQ-SENDSIZE:
+	 Feedback-ID:X-QQ-XMAILINFO:X-QQ-XMRINFO:X-QQ-RECHKSPAM;
+	bh=RxZl6p7PH/ZzZkbb7ep2WA/FeXnjYV/M8ID/0T9gT/Q=;
+	b=LwDyGzNEb/1Wd83dW3PzJavZex7H8CQkGvCt12fbx7VdJ6sYdzbEtJOJ1yNYRgbE54vw
+	 dj6oqiTBdR3DClWnGaoOpM9avbv0yLI+X9kNCrf7c14IbkOfF2WE/BpT6739hoQSUGHsR
+	 gN/VQQTg+Pc4n1Ubaj82P+fDJbNvac+Tb5y4+mDyvZSO+9Q6QNwfY370qYTiXMrQRitsH
+	 vRuh7RECL0YVdGVrd3vdmPBpjtMeWDMXNHV6/SWaVJA3le4a5BeTcd/JeFGaJbKXwR4Qi
+	 iTFj5UHnmduwBjc5b4IJQ72TFAWx6usP+YusVNyw6csHJzVYypXamXZJNg9DF4DX4Zw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=P74bo2ZZ;
-	arc=none smtp.remote-ip=91.218.175.150
-Received: from mta0.migadu.com (out-150.mta0.migadu.com [91.218.175.150])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=smail.nju.edu.cn;
+	spf=pass smtp.mailfrom=smail.nju.edu.cn;
+	dkim=pass header.d=smail.nju.edu.cn header.i=@smail.nju.edu.cn header.a=rsa-sha256 header.s=iohv2404 header.b=5bdoU13O;
+	arc=none smtp.remote-ip=54.204.34.130
+Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B97EB60A2603
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 12:51:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B97EB60A2603
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E3DC606A326;
+	Tue, 10 Nov 2026 12:51:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7E3DC606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=smail.nju.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=smail.nju.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=P74bo2ZZ
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=y+OXQ3R1bQ6Jl5nULn+5Yppe6hOkihdq++4CRdIcUFI=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794315084; v=1; x=1794919884;
- b=P74bo2ZZMEAHqxp2P3Y0AU23JIQa0uaMINXltVUoYy7M6ILA94f7fpuJtESNSh+QxT5e1qaf
- cxDSnisjCkMvtQ8aTUTdOPWBsXGnStGg6QZR7HitLWUe7DGmfgi7Mk8Qr1SrBncipXpilmJJeSV
- EUJdb29gZ9Fq9hpltyV1EjtE=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id dc7b68f0a2315fc4;
-	Tue, 10 Nov 2026 12:51:24 +0000
-X-Mizu-Trace-ID: dc7b68f0a2315fc4
-X-Migadu-Flow: FLOW_OUT
-From: Tao Cui <cui.tao@linux.dev>
-To: tj@kernel.org
-Cc: void@manifault.com,
-	arighi@nvidia.com,
-	changwoo@igalia.com,
-	liwanwu@kylinos.cn,
-	devnexen@gmail.com,
-	zhaomengmeng@kylinos.cn,
-	emil@etsalapatis.com,
-	yphbchou0911@gmail.com,
-	mingo@redhat.com,
-	sched-ext@lists.linux.dev,
+	dkim=pass (1024-bit key) header.d=smail.nju.edu.cn header.i=@smail.nju.edu.cn header.a=rsa-sha256 header.s=iohv2404 header.b=5bdoU13O
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=smail.nju.edu.cn;
+	s=iohv2404; t=1794315073;
+	bh=RxZl6p7PH/ZzZkbb7ep2WA/FeXnjYV/M8ID/0T9gT/Q=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version;
+	b=5bdoU13OhJjaFzk/UuAJm2aB75OBjAaY7TWqMD6y4sPfAWcFVL4mqTyc9SBD6EJbl
+	 rGRYOjsZy00/QxNw3P6mEMTdIuum5/pQ46qNYYjYaakWyiwhCfS9668moIVIb85wkv
+	 /9Gp9Qg40ELwGPCC+N2Yj1iNWmldK19PTs/v07Ck=
+X-QQ-mid: zesmtpip2t1794315069t11fc89a1
+X-QQ-Originating-IP: DOWT+SLXdKkkQCd8sDpgnmX258kipbcc6y7odjw9PsU=
+Received: from workstation-Precision-7920-Towe ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Tue, 10 Nov 2026 20:51:07 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 12170903532052178925
+From: Kang Chen <k.chen@smail.nju.edu.cn>
+To: Yonghong Song <yonghong.song@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	cui.tao@linux.dev,
-	Tao Cui <cuitao@kylinos.cn>
-Subject: [PATCH 6/9] tools/sched_ext: scx_qmap: Add the missing options to the usage synopsis
-Date: Tue, 10 Nov 2026 20:49:58 +0800
-Message-ID: <20261110125001.4167503-7-cui.tao@linux.dev>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261110125001.4167503-1-cui.tao@linux.dev>
-References: <20261110125001.4167503-1-cui.tao@linux.dev>
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	Philipp Stanner <phasta@kernel.org>,
+	linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org
+Subject: [PATCH] bpf: make dmabuf iterator stay drained after NULL
+Date: Tue, 10 Nov 2026 20:51:06 +0800
+Message-Id: <20261110125106.2935677-1-k.chen@smail.nju.edu.cn>
+X-Mailer: git-send-email 2.34.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -79,31 +77,99 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:smail.nju.edu.cn:qybglogicsvrgz:qybglogicsvrgz5b-1
+X-QQ-XMAILINFO: MWxZUaxBV+u3RaK5TkvHNA8gQCfm4CUQUAkd7XR7zg0OxlQA1dsg7vic
+	nxNR/6js4aTsuzNYX6BLi02iCHAfuQM5E0+rycFBciLzi4fuIaWPgDUPuFUhiL86j310D1A
+	cutER53OiSFGN9SZPj2Fwm+azkiti5zwyGf7kJ9Am/aGNNpa+CT2+reH89+qoWDKxdM+UTq
+	m+OeIQYsODX+655wFJC8GsOWuXuw/QUASTTOIqsqExZpZCFVxODhYm9dBYvFyFywo+59QGM
+	2cf1xSJTnvAkDE+IVa9NULrpSPCVKmNGfZKxVsDVlo9oVYGdyPemFwqIZWenCKuCqRvOIYG
+	Ga6VgqHnSA0VUnmUcyy29o8pNkvJ3URWvMy5eh0x5Qu8q8h6jUq3ZxPTbkb9wAFGfDN2ye0
+	t2yUHYLbDDF+5kz/2dQecWk0YpIbKPoDS8n2leJcW4ryhVaWuuiKeb+Jd9TNQlzpX1MMdwT
+	hzGENWGN2+SAyP/h1ZJ8hM4MYaSro5YvhiRVbRwiwYQaP/rq31Fix53DC4s7qHQ9ASL1Xu2
+	3CC27bShbD3VDgzhruEqkS0oxzXbrBHyI9hiogSRIoqasn+9nMW4gzvQ3ROgn8TuIW2V0vs
+	DwBYRjUVFCxkB3rzEWqqWUOSnA10xJgawnqv3MnPnnRQvA/NUuuEezKz9UYV8XaRrMG1251
+	jes556nTem7chi3RKpqGtnsHnGdN7jODre1FjAPiVGTuD//hTjTAsVJFW/1Bf6yZnBDvWAu
+	V571BDHKRHmAbB+PdN0hLIs/iXQjwpILvZ5TzcOw908mCdR8iWNzr6Vfu6+nQM9Qk0T2W/N
+	JUE4u8rcibpYd2P0f7MbjsqjzpaRPS4vowKj3jKVEos7OI4fl13Nu/Jr/dDrzhSR5eAn5se
+	y8NI8tIzy4ZJJGpdOx7l4/AT3HJ3EYghO+P6a6Ogw3f0OLquIDNuyMP/QwcP+cTuYjyvkiv
+	FXz84nuwk62IXVqDRCataltp23nKEBGsH32XqfQdjEnWojXcaeZqehdLwJn22cmAUexszPV
+	WfX0kHMJtC1P+ZugW1MG/ZDlj7i56QlYFT46/wCQ==
+X-QQ-XMRINFO: M/715EihBoGS47X28/vv4NpnfpeBLnr4Qg==
+X-QQ-RECHKSPAM: 0
 
-From: Tao Cui <cuitao@kylinos.cn>
+bpf_iter_dmabuf_next() uses kit->dmabuf == NULL to mean "iteration has
+not started".  dma_buf_iter_next() also returns NULL at the end of the
+list, so a next() call after exhaustion restarts from the list head.
 
--C, -B and -q are described in the option list but missing from the
-usage synopsis. Add them.
+The verifier relies on the iterator contract that once next() returns
+NULL it keeps returning NULL: process_iter_next_call() marks the
+iterator DRAINED and treats the result of later next() calls as the
+constant zero.  A restarted dmabuf iteration therefore hands the BPF
+program a kernel pointer while the verifier believes R0 == 0.
 
-Signed-off-by: Tao Cui <cuitao@kylinos.cn>
+Use an invalid pointer value as the drained sentinel so the iterator
+state keeps its one-pointer ABI, and skip dma_buf_put() for it.
+
+Fixes: 6eab7ac7c5ee ("bpf: Add open coded dmabuf iterator")
+Signed-off-by: Kang Chen <k.chen@smail.nju.edu.cn>
 ---
- tools/sched_ext/scx_qmap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/bpf/dmabuf_iter.c | 23 ++++++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
 
-diff --git a/tools/sched_ext/scx_qmap.c b/tools/sched_ext/scx_qmap.c
-index fe2f206f5c8a..f44802247069 100644
---- a/tools/sched_ext/scx_qmap.c
-+++ b/tools/sched_ext/scx_qmap.c
-@@ -47,7 +47,7 @@ const char help_fmt[] =
- "\n"
- "Usage: %s [-s SLICE_US] [-e COUNT] [-t COUNT] [-T COUNT] [-l COUNT] [-b COUNT]\n"
- "       [-N COUNT] [-P] [-M] [-H] [-c CG_PATH] [-d PID] [-D LEN] [-S] [-p] [-I] [-X]\n"
--"       [-F COUNT] [-i SEC] [-R MS] [-J MODE] [-v]\n"
-+"       [-F COUNT] [-i SEC] [-R MS] [-C MODE] [-B PPT] [-q US] [-J MODE] [-v]\n"
- "\n"
- "  -s SLICE_US   Override slice duration\n"
- "  -e COUNT      Trigger scx_bpf_error() after COUNT enqueues\n"
+diff --git a/kernel/bpf/dmabuf_iter.c b/kernel/bpf/dmabuf_iter.c
+index cd500248abd9..a2b7c38f9ae6 100644
+--- a/kernel/bpf/dmabuf_iter.c
++++ b/kernel/bpf/dmabuf_iter.c
+@@ -156,6 +156,13 @@ struct bpf_iter_dmabuf_kern {
+ 	struct dma_buf *dmabuf;
+ } __aligned(8);
+ 
++/*
++ * The iterator state is one pointer wide because struct bpf_iter_dmabuf is
++ * part of the generated vmlinux.h ABI.  Use an invalid pointer value as the
++ * "drained" sentinel instead of growing the state.
++ */
++#define DMABUF_ITER_DONE	((struct dma_buf *)1L)
++
+ __bpf_kfunc_start_defs();
+ 
+ __bpf_kfunc int bpf_iter_dmabuf_new(struct bpf_iter_dmabuf *it)
+@@ -173,11 +180,25 @@ __bpf_kfunc struct dma_buf *bpf_iter_dmabuf_next(struct bpf_iter_dmabuf *it)
+ {
+ 	struct bpf_iter_dmabuf_kern *kit = (void *)it;
+ 
++	/*
++	 * The verifier assumes that an iterator which returned NULL keeps
++	 * returning NULL (see process_iter_next_call()).  Without this check
++	 * the NULL left by the last dma_buf_iter_next() would be interpreted
++	 * as "not started" and the iteration would restart from the list head.
++	 */
++	if (kit->dmabuf == DMABUF_ITER_DONE)
++		return NULL;
++
+ 	if (kit->dmabuf)
+ 		kit->dmabuf = dma_buf_iter_next(kit->dmabuf);
+ 	else
+ 		kit->dmabuf = dma_buf_iter_begin();
+ 
++	if (!kit->dmabuf) {
++		kit->dmabuf = DMABUF_ITER_DONE;
++		return NULL;
++	}
++
+ 	return kit->dmabuf;
+ }
+ 
+@@ -185,7 +206,7 @@ __bpf_kfunc void bpf_iter_dmabuf_destroy(struct bpf_iter_dmabuf *it)
+ {
+ 	struct bpf_iter_dmabuf_kern *kit = (void *)it;
+ 
+-	if (kit->dmabuf)
++	if (kit->dmabuf && kit->dmabuf != DMABUF_ITER_DONE)
+ 		dma_buf_put(kit->dmabuf);
+ }
+ 
 -- 
-2.53.0
+2.34.1
 
-base-commit: 5b740a72b55c4267ba4d8010f17dde26b26f52d3
