@@ -1,82 +1,83 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.44
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794328161;
-	b=cR5lw4k5HWRii4+DXJdQxMmlxbW9DMj1s8OoOWJ8uTInvvhzuYLADPG9vFsNqxNTAJT7
-	 j1IiPWK4ry1OymH6TOHaNmh0xkMgHvXICdedDjtbYpRLdp9oSvc0AmqBxQHw+6YGxrxUW
-	 VA2UNDkoJZcBrUD6AazuuGdde2V1f/ZGYeJHzft89s/wuxkRX4rfOXGEnEKCrtE/8rGrj
-	 zFZxMgbLIlPp4GQ5s9Xvm8BGxhVrEfZYYJvpiPgYx90giKMK2vHZK2emjr1t8Zlwm+wXa
-	 YBBjQOemkVVrFWEjgme1Yam8dxechr15nt+3euWkCOIw1/n0yXUQN5SyfKdsI/u1BTg==
+	t=1794328163;
+	b=ZvRUuWuunymtZH9dnd0PtWGBaWk0978MhRaoHUiRj1AkjxH9Zjk370D3A+t0PeCkyPLA
+	 CLHtBfqogkK+7nHIATMQG5qMtOMqAt14LyAN0Zknfc+ZmhUewChCtbN4yV8eLyzWl5OA1
+	 OTGksbYckKdHRuBmb22MdPAZq1WBYh2yEvfuJuWWaiOZMPrEkqwzzgWVUGLm153ClMYKQ
+	 CP+1VgNqn/9bzLfOJNtTRfO6miXSUEDEK+e43a2QPTxgXtERTzaX4Zfsy8XmVRiCWINK5
+	 38w4yknHx7H4sCmbemYCkoMeo4Vw6yOU9S2yVMhZ0ytbwn8KBCXBpQoUOtDYYCakOIw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794328161;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794328163;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=156pRIpY6brhI/zqInQk7DLrhtOytpIGDOtBYOeD85w=;
-	b=pikk1H5ybthZCD8A3wjRWtjlB7XqSdO3VqO7zeyjmQoZ4gRIBpxZ8VVbGdWEnjYrN46u
-	 KErnh8sEobyn7h1n+NUUK4EU55KBI8wBjodNXb+R3iRfRpjbbHaW+SOVgQYpWMESigncB
-	 QkVAhYkCQzjqUCIIwb/rdY1uYMlA5PUjL4edQTomyZlzixDgzGwlYgJGk+Gp5QPDsvvvN
-	 i1hpHlUMD37yttL7WqkHvSvkKk+kquomTYP3VfeI7/UhMEXVZPqeRfOJ2IMliAYVJZM7X
-	 vtrfEdkYCoDsD0Kfs2W98chK0UF/3fqPbYVetbEyziBPPq8g7g3hyPHBJa/f1LU+WAg==
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=apFPhDRrKwn7LDhgs0kVeIVX+Zuteuc6EeYoxeR4ri4=;
+	b=T7MX9fZ541AnnC2PPhWCQn1sPiqNREkSFbFWU8rxLBVe8TB//k01ZQ5gm6QdAoj+wlzs
+	 9bYLP7hN6DKCwJkKXvtrAhK2rr4x93676WHkdFwXvi+MKzm+QVPcMDZzVInJbd1sqj871
+	 yFEO5fsVoDDyP6F6Esk8LtLg5G+ufqKTBPfe08V28o40H/PYzTpnKfiLIqCN3FzUIFSn6
+	 VhX5XciX/mqUJo1ywqF8Foi8v+lAJgFUegohyarJcMLMuPxrcSxg7VKDeCyhfSmpJF3ms
+	 rXbZZPRQWNFj7/HoB3HIq0f6yD4n8ejMHWTgvJFyTkr8wLR6IePy4/GlNxf8PSScw0A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pgnAhCHk;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xorpfwcw;
 	arc=none smtp.remote-ip=209.85.128.44
 Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5AA7606A20C
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 16:29:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B5AA7606A20C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3B8D606A233
+	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 16:29:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E3B8D606A233
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pgnAhCHk
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4a20a37703bso16281285e9.1
-        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 08:29:20 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xorpfwcw
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4a2000d5fb1so13009535e9.1
+        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 08:29:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794328159; x=1794932959; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=156pRIpY6brhI/zqInQk7DLrhtOytpIGDOtBYOeD85w=;
-        b=pgnAhCHkR2N6oOrt594HWoFvbgcD/pfHIj7SouCpA9ZqbPxZZuB1w+PhzGGv6D5kxn
-         q/Vj3JcrwNWXH084YbXqO6myqqv/YolKGs4vPwa0g+TxvaKmlB6a4PtnRUyJTLXhzbV8
-         BjvNVCRYWz1Wbb3RBMQTAQUlhyCUoRq36JWmJB+VWwTEHGvNk4IGL9rbadYM/xxPk32h
-         cQk/9yQXy8bUtidO17F8Y4zvuCImBuKBZ6pWvBL5vcXTMAQFm7t1vUMjJsefJ+M7CfYJ
-         lBCK4p27CmZ8/bVjX36Lt9dUqBb7Uiaxlf2d+7YDpAsQQwv3f6bvcyTP+xhB/xGhZF44
-         7AIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794328159; x=1794932959;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20260707; t=1794328161; x=1794932961; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=156pRIpY6brhI/zqInQk7DLrhtOytpIGDOtBYOeD85w=;
-        b=j/Kr7QylyVPCsw/BtFl7CTwHSr6veP5HZP3IVRRTYF2qYHlbNVL+7/VqkwfAjAo/t8
-         /Ufg+sNYofFjxM2ljD0jk22hU7LSi7Kot+22BWI4AQLuqp/qZiGELB8xXN8LTOLX6NYL
-         pGO52pSfRt3fr/KljbHOBeTZzTpZ4ZL12rv+32tviGpsmZkGEwjJobZbcI5CCN9OzXWK
-         Q7cqkseUN2aRN/AM72Y/P+qlQrZhBnF/XOWrRxP4J536QAtgxphFk3jxJrTyix9Ncfu0
-         bCxZa1/l8UNeKtDMZl/a7lQSgVKu5c62SACTz3h91WhcPC3rKx0hH9k1Lp9P5To2Hb+M
-         OWPQ==
-X-Forwarded-Encrypted: i=1; AL+hErFUPEcPo2zPYlI5VrnqdybHhKTD8p49znyCr/LUt6RJi/LyY7wFWIlmyi71CvTuYyvXtYU=@vger.kernel.org
-X-Gm-Message-State: APuU4Z889HfkNfglValI0kNNvuYY/k7zlnsxuCytgqjM4R8J95xYWSPf
-	7Sx8droVFbEXOB1TYU9nAQbHhCgIaneB5MxjP5tH60ygHYSel/r8A+Aw
-X-Gm-Gg: AYBFou2kvoCqP+7rPQYApzGGF9DCtO++9p45KsAWdYLEfR1QR+RnVa9PiONlfoyz8NY
-	GnHiNqOZ29F7ty4X375zx2tuWfSVKs7wVX5v7QCtzmqCDrH4occudolNHjo5c30TLTe2T2UogWx
-	/ueaI5G5twSM4MCoCVJVMltGAGayNgpRL8b1je+QCF+eT8jfQJLDuCpqL03ULV2y0tRs7onRLYf
-	UThQDCf8jyRqNSipmnrwHiq2FUyjceTXpoxnC1kw4VNq+TrjXoURKNAemO99o8QDaZEvmEA3SAh
-	LcPwkuIz+V2U/ZVLzQPxMoJe6jMZQ02AhHUh5UAU/57VRgVHdsh6vwBZtowXulp8aN/fgrTXhBD
-	Mamm16vXfSXofvmsPYVHk/dP3Nx+6g2uKrKQp1dqSxPipCM8VbBt0YxzXK/E1hC9n3Yc26HjITn
-	qEkV9WrX7otnVSJ+m4ypDpadLEYLR5nnZhieiP4Sgafi5yON6Vc37OG87X0GE3W7AAH1M+5CX3F
-	Q9rTJ3/DK47QgjVWHlZxtVGXC8lbVRo2xm4H9/QmQNtxjyPRQ+gsdwXasLCVwY91kJJ/smvfYBu
-	4+LZoohsfO3gw6Z8HV/1DajF9Vzn00BDtWpy40I9msyxaKd435+VvEc7SmtO92dtqU9X
-X-Received: by 2002:a05:600c:6387:b0:49c:fa20:cbfd with SMTP id 5b1f17b1804b1-4ba0234a056mr53477435e9.20.1794328158827;
-        Tue, 10 Nov 2026 08:29:18 -0800 (PST)
+        bh=apFPhDRrKwn7LDhgs0kVeIVX+Zuteuc6EeYoxeR4ri4=;
+        b=xorpfwcwc8soNKqpuVzAGnjF52iGOWdQY9nsqQplNbPB1WXRb56yjoSq5fEKc1DiuB
+         fZLV33WVKzmwRAhh2WvbNHaWok8Y9OYinOzWCgRvXMiVlhfKYeyv+m5KXGXOGXhlyABi
+         YGjFqVYEF4thcxFQAF2abawsq0efL2tIx2IxPRC41v3GwmdbThDr3uvJdR/FBRNC48fG
+         da/m/O31/TlPmyWWZ5klnClNRTW89j0HeMWDT94hRCOF6oZfuvl7bbAdvDHoAm9bulpi
+         UkX7LYiQdhMlWt1QV9A/7wNut2d+W3JdAgbIA6kNNwDggeg1nzEv/op+cM7rqrKhN8Q0
+         nTRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794328161; x=1794932961;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=apFPhDRrKwn7LDhgs0kVeIVX+Zuteuc6EeYoxeR4ri4=;
+        b=ASTptxm0nuDnBvNfLwks/n9fA4OtxnVshUzTnlJjvK9N6uKa3rgYfZ7530Ry7w7uR2
+         r+dT7ukU31oHB/C9zeWBEcQl3nWPd4BE5mM5yaLu0nQnzRUYS8OS3fBLv5kmbnMxFMl6
+         Wk1PeFIbjCz8sFkB0K24jWGHETsBMulicT2T1mIIkNmxDmRYrASIYUP0n+QW2+tlF6qY
+         SMk8FevLPNG7EkGjKb53aN8/Q3atKnxkvo4zv3i5EmeT+rgKdrzg2PgYzjiW1qyOCrF0
+         tNZxLBEd0CYQxRFxU1oP+ZY/ap5xBsStNno2BrbsGPYt3O49n5YY1VDrV3pDl6MbJG4q
+         j/4Q==
+X-Forwarded-Encrypted: i=1; AL+hErHNQKtxt9GD7GYGMJf/406gEglQquuOtBtHC1C5s+SLDwZwAx2tzJcCwSIPmmRrtjdCKm0=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8+kxB0trd12Z+sVi8Wt3iX9QwjmT0EmJlxe/95D+flnwNT0+3L
+	ihBc+ry8UZo2EMRuZ7bbxapKdnagAxvjLRCHUCp2z6ecZeSsb1FdRn7r
+X-Gm-Gg: AYBFou0XXtUDC/PiwuwSUkRhBSclhrS9amoGeADMbbCnrG879ZLbr5tVOQIHfvJo1Lx
+	q7Q2yTsDWEDXTjys+NjZGk7W5rScjUcTJ1QazjQ6t0a42/9J9UmZ5YRH+UeyIXXXtp1LR/fjUij
+	KRGXePDOgITIlRui2IPEaRu78NTe6T1v/JCjjVwx1z9aMm6YHCtfEtMa5MBnbmevQvHVrByb2m4
+	+tq5zb8tQTFLd+sqz2J/ReBXmOMWbkO/UHluzOByuSsKCpMJH6A6QcFaW8BfQSAjSimxMnHMM5F
+	Z9M/6t9WxMKxhhv7aodv+TSff1pN5EdkXpNxHDb/IUyH3i2x3MT0zLFSUVFobPXQAJJojgNeiog
+	Y+cqhYtC90G9eE1WVgQTGr/hLVhAXSfvy+IB2hF3BW2+h4wTqJVFiFGMY2PvFhSiygs/yFvSslM
+	Ik9Q2i/+vQLKPVWthEGzfiLcWynogFk0WVjJyr/hq8befcgYgXdwTCW7zYL5djg2qt3po5kQy90
+	N8jENSNMPDYvupFFfn7IFhiR4XoSIvIGbeFTMBzJ+/BGrv4UIbs3CQ5AkcPpb/O4jdLiX8iV12Z
+	+/B//UecDpx+YweYQ9HKHZYnQw93EtmxTkioWMU8Rd0QHc0=
+X-Received: by 2002:a05:600c:4f10:b0:4a1:992f:d0e7 with SMTP id 5b1f17b1804b1-4ba023410d8mr63941635e9.16.1794328161027;
+        Tue, 10 Nov 2026 08:29:21 -0800 (PST)
 Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba01fea745sm71287485e9.10.2026.11.10.08.29.16
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba01fea745sm71287485e9.10.2026.11.10.08.29.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 08:29:17 -0800 (PST)
+        Tue, 10 Nov 2026 08:29:19 -0800 (PST)
 From: Anton Protopopov <a.s.protopopov@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -96,10 +97,12 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Anton Protopopov <a.s.protopopov@gmail.com>
-Subject: [PATCH v3 bpf-next 00/18] Auto-detect BPF fmodret targets
-Date: Tue, 10 Nov 2026 16:40:20 +0000
-Message-ID: <20261110164046.454431-1-a.s.protopopov@gmail.com>
+Subject: [PATCH v3 bpf-next 01/18] bpf: Add BTF ID sets for fmod_ret targets
+Date: Tue, 10 Nov 2026 16:40:21 +0000
+Message-ID: <20261110164046.454431-2-a.s.protopopov@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261110164046.454431-1-a.s.protopopov@gmail.com>
+References: <20261110164046.454431-1-a.s.protopopov@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -111,217 +114,365 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Due to recent changes in software development, security fixes and attack-surface
-hardening increasingly need to land on production systems _now_. BPF has proven
-really useful for producing mitigations, but its error-injection capabilities
-remain limited: the list of possible fmodret hooks is static, which no longer
-matches reality.
+Add BTF_SET8_FMODRET and the BTF_FMODRET_START() and BTF_FMODRET_END()
+macros to declare the functions BPF fmod_ret programs may attach to.
+They work like kfunc sets: each entry is a BTF_ID_FLAGS() line and
+KF_SLEEPABLE marks targets sleepable programs may attach to.
 
-This series allows more kernel functions to be targeted by fmodret BPF
-programs. New functions are marked as fmodret-attachable _automatically_, if
-CONFIG_CLANG_PLUGIN_BPF_SCAN_IR is on. The latter is off by default, but can be
-enabled with CLANG >= 19 with a matching llvm-config and host C++ compiler.
-Supported archs are x86_64 and arm64. (The existing static lists are, of
-course, still supported.)
+Teach resolve_btfids to find these sets and tag every listed function in
+BTF with a "bpf_fmodret" decl tag, plus "bpf_fmodret_sleepable" when
+KF_SLEEPABLE is set. The sleepable tag never comes without "bpf_fmodret"
+and readers of the tags may rely on that. Share the set walk with the
+kfunc collection. Any other flag is an error. Nothing in the code refers
+to the sets, so keep .BTF_ids in the linker script, or --gc-sections may
+discard them.
 
-The decision on "if this function is safe to inject error" left to BPF program
-writers.  The motivation/discussion can be found in the recent talk [1].  The
-safety/operation model of this new functionality can be briefly stated as
-"a trusted operator can already do this with live patch". However, the BPF
-approach is more flexible. See the recent talk on shirudo [2] for more details
-on how to build a trusted system managing such policies.
+Nothing declares such sets yet and the kernel does not read the tags yet.
 
-The changes introduced are as follows.
+Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
+---
+ include/asm-generic/vmlinux.lds.h |   2 +-
+ include/linux/btf_ids.h           |  14 ++++
+ tools/bpf/resolve_btfids/main.c   | 121 +++++++++++++++++++++++++-----
+ tools/include/linux/btf_ids.h     |  14 ++++
+ 4 files changed, 130 insertions(+), 21 deletions(-)
 
-The first part of the series changes the way the lists of fmodret-attachable
-functions are passed to kernel, namely, now a function is considered as a
-fmodret target if it has a bpf_fmodret BTF tag. This tag is generated by the
-resolve_btfids tool. The sleepable hooks are in addition tagged with
-bpf_fmodret_sleepable. The old-style static hooks, explicitly defined in
-kernel/modules, also get the bpf_fmodret tag. The security_*, syscall, and
-error-injection hooks are _not_ all marked with the tag, and any new rules do
-not apply to them.
-
-Currently static hooks are defined using sets (BTF_FMODRET_START/END).  When
-the minimal versions of GCC and pahole will support tags, the sets will go away
-in favour of just declaring a proper tag.
-
-The second part enables automatic search and usage of fmodret targets:
-
-  * The search is performed by a new compiler pass via a compiler plugin.
-    The candidates are written into a new .BTF_fmodret_candidates section which
-    is dropped later in the final object.  Roughly speaking, a candidate is a
-    function with a clean (side-effectless) path to "return -errno".
-
-  * After the compilation is done, the resolve_btfids tool scans the candidates,
-    drops some of them (redefined weak, non-ftracable, etc.), and assigns proper
-    BTF tags: bpf_fmodret/bpf_fmodret_sleepable and bpf_fmodret_retval. The latter
-    lists all possible return values the analysis found. The verifier rejects
-    the values outside this list. (An alternative approach, maybe a followup,
-    is to auto-convert all negative error values returned by a BPF program with
-    a value from this list.)
-
-The following selftests are added:
-  
-  * Test fmod_ret BTF decl tags and attach permission: the declared targets get
-    the right tags, and fmod_ret programs attach only to tagged functions.
-
-  * Test fmod_ret candidates found by bpf_scan_ir: functions in bpf_testmod
-    annotated with the values the analysis must find, checked against the
-    generated tags. The verifier allows only these values on every path and
-    rejects extensions and tail calls of such programs.
-
-Finally, the last patch adds a new `bpftool fmodret` command to simplify listing
-the functions having bpf_fmodret* tags.
-
-Planned follow ups, more or less in order:
-
-  * LLVM LTO support
-  * GCC support
-  * Allow injecting errors into functions returning pointers
-  * More complex logic to gather more candidates (mainly, error propagation,
-    left out for now to reduce the number of commits in the series)
-
-Build times with and without plugin enabled are nearly the same:
-
-  with:                   without:
-    real    5m48.377s       real    5m47.543s
-    user    136m7.002s      user    135m57.994s
-    sys     10m13.739s      sys     10m12.635s
-
-Links:
-
-  [1] Scaling BPF LSM hooks and error injection across the kernel,
-      https://lpc.events/event/20/contributions/2435/
-
-  [2] Shirudo: BPF live-patching infra for the agentic era,
-      https://lpc.events/event/20/contributions/2437/
-
-v2 -> v3:
-   * verifier: accept a range in R0 at exit if all its values are
-     allowed. Reason: in between v1 and v2 a change was merged:
-     the verifier now joins states, so two allowed constants which
-     meet at one exit, like 0 and -1, became a range and the program
-     was rejected. (bpf-ci bot)
-   * do not tag kfuncs with KF_IMPLICIT_ARGS, because the trampoline
-     is built for the prototype without the implicit arguments and
-     would not save them. (bpf-ci bot)
-   * count and log every function with a shared name (sashiko)
-   * fix a comment and rename a variable (bpf-ci bot)
-   * simplify code in bpf_scan_ir (bpf-ci bot)
-   * bpftool: fix man page (bpf-ci bot)
-
-v1 -> v2: https://lore.kernel.org/bpf/20261109170550.141443-1-a.s.protopopov@gmail.com/
-  * Rebase onto bpf-next, as upstream removed mark_chain_precision()
-  * Move tests into their own bpf_test_retval.ko from bpf_testmod.ko.
-    The problem was with pahole, which can't properly find symbols in
-    modules build from two or more objects (was only prominent with GCC,
-    which reorders sections while linking objects together)
-  * Fix the fmodret/extension test for GCC (force a const return)
-  * resolve_btfids: dedup and cleanup code (bpf-ci bot)
-  * bpftool: drop dead code (bpf-ci bot)
-  * Rename two tests properly, remove dead code (bpf-ci bot)
-  * Exclude KCSAN and UBSAN instrumentation from tests (sashiko)
-
-v1: https://lore.kernel.org/bpf/20261106210314.1767267-1-a.s.protopopov@gmail.com/T/#t
-
-Anton Protopopov (18):
-  bpf: Add BTF ID sets for fmod_ret targets
-  bpf: Add a btf_id_set8_entry helper
-  bpf: Build fmod_ret target sets from BTF decl tags
-  selftests/bpf: Declare bpf_fentry_test1 in tracing tests
-  bpf: Declare fmod_ret targets with BTF_FMODRET sets
-  selftests/bpf: Test fmod_ret BTF decl tags and attach permission
-  scripts: Add LLVM plugin infrastructure
-  bpf: Add the bpf_scan_ir LLVM plugin
-  bpf: Find fmod_ret candidates in bpf_scan_ir
-  bpf: Allow writes to private stack objects in bpf_scan_ir
-  bpf: Follow PHIs in bpf_scan_ir
-  bpf: Follow integer casts in bpf_scan_ir
-  bpf: Check the return values of fmod_ret programs on found targets
-  bpf: Require the JIT for fmod_ret programs on found 64-bit targets
-  resolve_btfids: Tag fmod_ret candidates as targets
-  selftests/bpf: Test fmod_ret candidates found by bpf_scan_ir
-  selftests/bpf: Enable bpf_scan_ir in the config
-  bpftool: List and show fmod_ret targets
-
- MAINTAINERS                                   |   10 +
- Makefile                                      |    6 +-
- arch/Kconfig                                  |    1 +
- arch/arm64/kernel/pi/Makefile                 |    1 +
- arch/x86/boot/startup/Makefile                |    2 +
- arch/x86/um/vdso/Makefile                     |    2 +-
- drivers/firmware/efi/libstub/Makefile         |    2 +-
- include/asm-generic/vmlinux.lds.h             |    7 +-
- include/linux/bpf.h                           |    6 +
- include/linux/btf.h                           |    9 +-
- include/linux/btf_ids.h                       |   24 +-
- include/linux/compiler-version.h              |    5 +
- kernel/bpf/btf.c                              |  124 +-
- kernel/bpf/syscall.c                          |    1 +
- kernel/bpf/verifier.c                         |  151 +++
- lib/vdso/Makefile.include                     |    3 +
- net/bpf/test_run.c                            |   12 +-
- net/mptcp/bpf.c                               |   15 +-
- scripts/Makefile                              |    1 +
- scripts/Makefile.btf                          |    1 +
- scripts/Makefile.llvm-plugins                 |   10 +
- scripts/Makefile.modfinal                     |    1 +
- scripts/Makefile.vmlinux                      |    3 +
- scripts/bpf/fmodret.lds                       |    6 +
- scripts/bpf/fmodret_metadata.h                |   29 +
- scripts/gen-btf.sh                            |    4 +-
- scripts/link-vmlinux.sh                       |    7 +
- scripts/llvm-plugins/Kconfig                  |   33 +
- scripts/llvm-plugins/Makefile                 |   21 +
- scripts/llvm-plugins/bpf_scan_ir.cpp          |  363 +++++
- scripts/mod/modpost.c                         |    1 +
- scripts/module.lds.S                          |    5 +
- .../bpftool/Documentation/bpftool-fmodret.rst |  111 ++
- tools/bpf/bpftool/Documentation/bpftool.rst   |    4 +-
- tools/bpf/bpftool/bash-completion/bpftool     |   31 +
- tools/bpf/bpftool/fmodret.c                   |  896 ++++++++++++
- tools/bpf/bpftool/main.c                      |    3 +-
- tools/bpf/bpftool/main.h                      |    1 +
- tools/bpf/resolve_btfids/Build                |    1 +
- tools/bpf/resolve_btfids/fmodret.c            | 1203 +++++++++++++++++
- tools/bpf/resolve_btfids/fmodret.h            |   28 +
- tools/bpf/resolve_btfids/main.c               |  187 ++-
- tools/include/linux/btf_ids.h                 |   24 +-
- tools/objtool/check.c                         |    1 +
- tools/testing/selftests/bpf/Makefile          |    2 +-
- tools/testing/selftests/bpf/config            |    2 +
- .../selftests/bpf/prog_tests/fmodret_retval.c |  211 +++
- .../selftests/bpf/prog_tests/fmodret_tags.c   |  155 +++
- .../selftests/bpf/progs/fmodret_retval.c      |  254 ++++
- .../selftests/bpf/progs/fmodret_retval_ext.c  |   55 +
- .../selftests/bpf/progs/fsession_test.c       |    2 +
- .../bpf/progs/get_func_ip_fsession_test.c     |    2 +
- .../selftests/bpf/progs/tracing_multi_check.c |    2 +-
- .../testing/selftests/bpf/test_kmods/Makefile |   15 +-
- .../bpf/test_kmods/bpf_test_retval_main.c     |   12 +
- .../selftests/bpf/test_kmods/bpf_testmod.c    |   11 +-
- .../bpf/test_kmods/bpf_testmod_retval.c       |  328 +++++
- .../test_kmods/bpf_testmod_retval_strong.c    |   28 +
- 58 files changed, 4353 insertions(+), 82 deletions(-)
- create mode 100644 scripts/Makefile.llvm-plugins
- create mode 100644 scripts/bpf/fmodret.lds
- create mode 100644 scripts/bpf/fmodret_metadata.h
- create mode 100644 scripts/llvm-plugins/Kconfig
- create mode 100644 scripts/llvm-plugins/Makefile
- create mode 100644 scripts/llvm-plugins/bpf_scan_ir.cpp
- create mode 100644 tools/bpf/bpftool/Documentation/bpftool-fmodret.rst
- create mode 100644 tools/bpf/bpftool/fmodret.c
- create mode 100644 tools/bpf/resolve_btfids/fmodret.c
- create mode 100644 tools/bpf/resolve_btfids/fmodret.h
- create mode 100644 tools/testing/selftests/bpf/prog_tests/fmodret_retval.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/fmodret_tags.c
- create mode 100644 tools/testing/selftests/bpf/progs/fmodret_retval.c
- create mode 100644 tools/testing/selftests/bpf/progs/fmodret_retval_ext.c
- create mode 100644 tools/testing/selftests/bpf/test_kmods/bpf_test_retval_main.c
- create mode 100644 tools/testing/selftests/bpf/test_kmods/bpf_testmod_retval.c
- create mode 100644 tools/testing/selftests/bpf/test_kmods/bpf_testmod_retval_strong.c
-
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index 3eb732942d69..f8254a88e05d 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -714,7 +714,7 @@
+ 	BTF_INLINE_LINK						\
+ 	. = ALIGN(PAGE_SIZE);						\
+ 	.BTF_ids : AT(ADDR(.BTF_ids) - LOAD_OFFSET) {			\
+-		*(.BTF_ids)						\
++		KEEP(*(.BTF_ids))					\
+ 	}
+ #else
+ #define BTF
+diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
+index 8b5a9ee92513..f27b7db81100 100644
+--- a/include/linux/btf_ids.h
++++ b/include/linux/btf_ids.h
+@@ -13,6 +13,12 @@ struct btf_id_set {
+ /* This flag implies BTF_SET8 holds kfunc(s) */
+ #define BTF_SET8_KFUNCS		(1 << 0)
+ 
++/*
++ * This flag implies BTF_SET8 holds functions which BPF fmod_ret, fentry and
++ * fexit programs may attach to. Per-function flags: KF_SLEEPABLE only.
++ */
++#define BTF_SET8_FMODRET	(1 << 1)
++
+ struct btf_id_set8 {
+ 	u32 cnt;
+ 	u32 flags;
+@@ -215,6 +221,12 @@ __BTF_SET8_START(name, local, BTF_SET8_KFUNCS)
+ #define BTF_KFUNCS_END(name)				\
+ BTF_SET8_END(name)
+ 
++#define BTF_FMODRET_START(name)				\
++__BTF_SET8_START(name, local, BTF_SET8_FMODRET)
++
++#define BTF_FMODRET_END(name)				\
++BTF_SET8_END(name)
++
+ #else
+ 
+ #define BTF_ID_LIST(name) static u32 __maybe_unused name[128];
+@@ -231,6 +243,8 @@ BTF_SET8_END(name)
+ #define BTF_SET8_END(name)
+ #define BTF_KFUNCS_START(name) static struct btf_id_set8 __maybe_unused name = { .flags = BTF_SET8_KFUNCS };
+ #define BTF_KFUNCS_END(name)
++#define BTF_FMODRET_START(name) static struct btf_id_set8 __maybe_unused name = { .flags = BTF_SET8_FMODRET };
++#define BTF_FMODRET_END(name)
+ 
+ #endif /* CONFIG_DEBUG_INFO_BTF */
+ 
+diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
+index c16dd93fa6d4..fbdfcb5c8819 100644
+--- a/tools/bpf/resolve_btfids/main.c
++++ b/tools/bpf/resolve_btfids/main.c
+@@ -69,6 +69,12 @@
+  *   - rewrites the prototype of KF_IMPLICIT_ARGS kfuncs.
+  *
+  * These kfunc annotations were historically produced by pahole.
++ *
++ * Functions found in BTF_SET8_FMODRET sets are the targets of BPF fmod_ret
++ * programs. For each of them resolve_btfids emits a "bpf_fmodret" decl tag,
++ * and also "bpf_fmodret_sleepable" when KF_SLEEPABLE is set, so the sleepable
++ * tag never comes alone. The kernel builds the set of fmod_ret targets from
++ * these tags when it loads BTF.
+  */
+ 
+ #define  _GNU_SOURCE
+@@ -197,7 +203,10 @@ struct btf_links {
+ 
+ #define DECL_TAG_FASTCALL "bpf_fastcall"
+ #define DECL_TAG_KFUNC "bpf_kfunc"
++#define DECL_TAG_FMODRET "bpf_fmodret"
++#define DECL_TAG_FMODRET_SLEEPABLE "bpf_fmodret_sleepable"
+ 
++#define KF_SLEEPABLE	(1 << 5)
+ #define KF_FASTCALL	(1 << 12)
+ #define KF_ARENA_RET	(1 << 13)
+ #define KF_ARENA_ARG1	(1 << 14)
+@@ -208,6 +217,7 @@ struct btf_links {
+ #define PARAM_SUFFIX_ARENA "__arena"
+ #define PARAM_SUFFIX_ARENA_NULLABLE "__arena__nullable"
+ 
++/* A function found in a BTF ID set: a kfunc or an fmod_ret target */
+ struct kfunc {
+ 	struct rb_node rb_node;
+ 	const char *name;
+@@ -221,6 +231,7 @@ struct btf2btf_context {
+ 	u32 nr_decl_tags;
+ 	u32 max_decl_tags;
+ 	struct rb_root kfuncs;
++	struct rb_root fmodrets;
+ };
+ 
+ static int verbose;
+@@ -1256,16 +1267,16 @@ static int push_decl_tag_id(struct btf2btf_context *ctx, u32 decl_tag_id)
+ 	return 0;
+ }
+ 
+-static int push_kfunc(struct btf2btf_context *ctx, struct kfunc *kfunc)
++static int push_set_func(struct rb_root *root, const char *kind, struct kfunc *kfunc)
+ {
+-	struct rb_node **p = &ctx->kfuncs.rb_node;
++	struct rb_node **p = &root->rb_node;
+ 	struct rb_node *parent = NULL;
+ 	struct kfunc *k;
+ 
+ 	/*
+-	 * Dedup by BTF ID: collecting the same kfunc twice is a no-op,
+-	 * UNLESS the kfunc flags are inconsistent, in which case we
+-	 * fail hard because it indicates a bug in a kfunc set declaration.
++	 * Dedup by BTF ID: collecting the same function twice is a no-op,
++	 * UNLESS its flags are inconsistent, in which case we fail hard
++	 * because it indicates a bug in a BTF ID set declaration.
+ 	 */
+ 	while (*p) {
+ 		parent = *p;
+@@ -1278,8 +1289,8 @@ static int push_kfunc(struct btf2btf_context *ctx, struct kfunc *kfunc)
+ 		} else if (k->flags == kfunc->flags) {
+ 			return 0;
+ 		} else {
+-			pr_err("ERROR: resolve_btfids: kfunc %s has inconsistent flags across BTF ID sets: 0x%x != 0x%x\n",
+-			       kfunc->name, k->flags, kfunc->flags);
++			pr_err("ERROR: resolve_btfids: %s %s has inconsistent flags across BTF ID sets: 0x%x != 0x%x\n",
++			       kind, kfunc->name, k->flags, kfunc->flags);
+ 			return -EINVAL;
+ 		}
+ 	}
+@@ -1290,7 +1301,7 @@ static int push_kfunc(struct btf2btf_context *ctx, struct kfunc *kfunc)
+ 
+ 	*k = *kfunc;
+ 	rb_link_node(&k->rb_node, parent, p);
+-	rb_insert_color(&k->rb_node, &ctx->kfuncs);
++	rb_insert_color(&k->rb_node, root);
+ 
+ 	return 0;
+ }
+@@ -1344,7 +1355,16 @@ static bool is_arena_param(const struct btf *btf, const struct btf_param *param)
+ 	       param_name_has_suffix(name, PARAM_SUFFIX_ARENA_NULLABLE);
+ }
+ 
+-static int collect_kfuncs(struct object *obj, struct btf2btf_context *ctx)
++typedef int (*set_func_fn)(struct btf2btf_context *ctx, const char *name,
++			   u32 btf_id, u32 flags);
++
++/*
++ * Call FN for each function in the BTF ID sets which have SET_FLAG set. Reject
++ * an entry with flags other than ALLOWED_FLAGS, even if its function is missing.
++ */
++static int collect_set_funcs(struct object *obj, struct btf2btf_context *ctx,
++			     u32 set_flag, u32 allowed_flags, const char *kind,
++			     set_func_fn fn)
+ {
+ 	Elf_Data *idlist = obj->efile.idlist;
+ 	struct btf *btf = ctx->btf;
+@@ -1356,24 +1376,39 @@ static int collect_kfuncs(struct object *obj, struct btf2btf_context *ctx)
+ 	for (next = rb_first(&obj->sets); next; next = rb_next(next)) {
+ 		struct btf_id_set8 *set8;
+ 		struct btf_id *set_id;
+-		u64 set_addr;
++		u64 set_addr, set_off;
+ 
+ 		set_id = rb_entry(next, struct btf_id, rb_node);
+ 		if (set_id->kind != BTF_ID_KIND_SET8 || set_id->addr_cnt != 1)
+ 			continue;
+ 
+ 		set_addr = set_id->addr[0];
+-		set8 = idlist->d_buf + (set_addr - obj->efile.idlist_addr);
+-		if (!(set8->flags & BTF_SET8_KFUNCS))
++		set_off = set_addr - obj->efile.idlist_addr;
++		/* A malformed set must not reach out of the section */
++		if (set_addr < obj->efile.idlist_addr || set_off > idlist->d_size ||
++		    idlist->d_size - set_off < sizeof(*set8) || set_id->cnt < 0 ||
++		    (u64)set_id->cnt > (idlist->d_size - set_off - sizeof(*set8)) /
++				       sizeof(set8->pairs[0])) {
++			pr_err("ERROR: resolve_btfids: set %s is out of %s\n",
++			       set_id->name, BTF_IDS_SECTION);
++			return -EINVAL;
++		}
++		set8 = idlist->d_buf + set_off;
++		if (!(set8->flags & set_flag))
+ 			continue;
+ 
+ 		for (u32 i = 0; i < set_id->cnt; i++) {
+ 			size_t off = (char *)&set8->pairs[i] - (char *)set8;
+ 			const char *name = find_name_by_addr(obj, set_addr + off);
+-			struct kfunc kfunc;
++			u32 flags = set8->pairs[i].flags;
+ 			s32 func_id;
+ 			int err;
+ 
++			if (flags & ~allowed_flags) {
++				pr_err("ERROR: resolve_btfids: %s %s in %s has unsupported flags 0x%x\n",
++				       kind, name ?: "?", set_id->name, flags & ~allowed_flags);
++				return -EINVAL;
++			}
+ 			if (!name) {
+ 				pr_err("WARN: resolve_btfids: no BTF ID symbol for %s entry %u\n",
+ 				       set_id->name, i);
+@@ -1383,18 +1418,15 @@ static int collect_kfuncs(struct object *obj, struct btf2btf_context *ctx)
+ 
+ 			func_id = btf__find_by_name_kind_own(btf, name, BTF_KIND_FUNC);
+ 			if (func_id < 0) {
+-				pr_err("WARN: resolve_btfids: no BTF func for kfunc %s in %s\n",
+-				       name, set_id->name);
++				pr_err("WARN: resolve_btfids: no BTF func for %s %s in %s\n",
++				       kind, name, set_id->name);
+ 				warnings++;
+ 				continue;
+ 			}
+ 
+-			pr_debug("found kfunc %s in %s\n", name, set_id->name);
++			pr_debug("found %s %s in %s\n", kind, name, set_id->name);
+ 
+-			kfunc.name = name;
+-			kfunc.btf_id = func_id;
+-			kfunc.flags = set8->pairs[i].flags;
+-			err = push_kfunc(ctx, &kfunc);
++			err = fn(ctx, name, func_id, flags);
+ 			if (err)
+ 				return err;
+ 		}
+@@ -1403,6 +1435,33 @@ static int collect_kfuncs(struct object *obj, struct btf2btf_context *ctx)
+ 	return 0;
+ }
+ 
++static int push_kfunc(struct btf2btf_context *ctx, const char *name,
++		      u32 btf_id, u32 flags)
++{
++	struct kfunc kfunc = { .name = name, .btf_id = btf_id, .flags = flags };
++
++	return push_set_func(&ctx->kfuncs, "kfunc", &kfunc);
++}
++
++static int push_fmodret(struct btf2btf_context *ctx, const char *name,
++			u32 btf_id, u32 flags)
++{
++	struct kfunc fmodret = { .name = name, .btf_id = btf_id, .flags = flags };
++
++	return push_set_func(&ctx->fmodrets, "fmod_ret target", &fmodret);
++}
++
++static int collect_kfuncs(struct object *obj, struct btf2btf_context *ctx)
++{
++	return collect_set_funcs(obj, ctx, BTF_SET8_KFUNCS, ~0U, "kfunc", push_kfunc);
++}
++
++static int collect_fmodrets(struct object *obj, struct btf2btf_context *ctx)
++{
++	return collect_set_funcs(obj, ctx, BTF_SET8_FMODRET, KF_SLEEPABLE,
++				 "fmod_ret target", push_fmodret);
++}
++
+ static int build_btf2btf_context(struct object *obj, struct btf2btf_context *ctx)
+ {
+ 	int err;
+@@ -1421,6 +1480,12 @@ static int build_btf2btf_context(struct object *obj, struct btf2btf_context *ctx
+ 		return err;
+ 	}
+ 
++	err = collect_fmodrets(obj, ctx);
++	if (err) {
++		pr_err("ERROR: resolve_btfids: failed to collect fmod_ret targets from BTF\n");
++		return err;
++	}
++
+ 	return 0;
+ }
+ 
+@@ -1761,10 +1826,26 @@ static int btf2btf(struct object *obj)
+ 			goto out;
+ 	}
+ 
++	for (next = rb_first(&ctx.fmodrets); next; next = rb_next(next)) {
++		struct kfunc *fmodret = rb_entry(next, struct kfunc, rb_node);
++
++		err = add_decl_tag(&ctx, DECL_TAG_FMODRET, fmodret->btf_id, -1);
++		if (err)
++			goto out;
++
++		if (fmodret->flags & KF_SLEEPABLE) {
++			err = add_decl_tag(&ctx, DECL_TAG_FMODRET_SLEEPABLE,
++					   fmodret->btf_id, -1);
++			if (err)
++				goto out;
++		}
++	}
++
+ 	err = 0;
+ out:
+ 	free(ctx.decl_tags);
+ 	free_kfuncs(&ctx.kfuncs);
++	free_kfuncs(&ctx.fmodrets);
+ 
+ 	return err;
+ }
+diff --git a/tools/include/linux/btf_ids.h b/tools/include/linux/btf_ids.h
+index 4fe5c5f1558c..b371ef7241b9 100644
+--- a/tools/include/linux/btf_ids.h
++++ b/tools/include/linux/btf_ids.h
+@@ -13,6 +13,12 @@ struct btf_id_set {
+ /* This flag implies BTF_SET8 holds kfunc(s) */
+ #define BTF_SET8_KFUNCS		(1 << 0)
+ 
++/*
++ * This flag implies BTF_SET8 holds functions which BPF fmod_ret, fentry and
++ * fexit programs may attach to. Per-function flags: KF_SLEEPABLE only.
++ */
++#define BTF_SET8_FMODRET	(1 << 1)
++
+ struct btf_id_set8 {
+ 	u32 cnt;
+ 	u32 flags;
+@@ -214,6 +220,12 @@ __BTF_SET8_START(name, local, BTF_SET8_KFUNCS)
+ #define BTF_KFUNCS_END(name)				\
+ BTF_SET8_END(name)
+ 
++#define BTF_FMODRET_START(name)				\
++__BTF_SET8_START(name, local, BTF_SET8_FMODRET)
++
++#define BTF_FMODRET_END(name)				\
++BTF_SET8_END(name)
++
+ #else
+ 
+ #define BTF_ID_LIST(name) static u32 __maybe_unused name[128];
+@@ -230,6 +242,8 @@ BTF_SET8_END(name)
+ #define BTF_SET8_END(name)
+ #define BTF_KFUNCS_START(name) static struct btf_id_set8 __maybe_unused name = { .flags = BTF_SET8_KFUNCS };
+ #define BTF_KFUNCS_END(name)
++#define BTF_FMODRET_START(name) static struct btf_id_set8 __maybe_unused name = { .flags = BTF_SET8_FMODRET };
++#define BTF_FMODRET_END(name)
+ 
+ #endif /* CONFIG_DEBUG_INFO_BTF */
+ 
 -- 
 2.43.0
 
