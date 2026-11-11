@@ -1,84 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.133
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.139
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794401896;
-	b=fPOsXr1/8OZd1Q0Qd2QlSeSU4IUwMCMstwHMh86zCmERGvNjb9zMI5euJsIbwBUMrkqi
-	 bjIKv2rgEUQNNu5GBEWED1XIih4QaAIjshicsuaxm7Em5sLsevpxBBo8Seh15lLWzzwQO
-	 o8pYa8wSEPARUwbBbvVwY5wIlzAIyLWSj0+7L87FClUVN1xNlAebgNqCogBE8mbBTMI/4
-	 wyELdtMQgBhKTmqdWFuvYxA5rTeONZac8cvHdlLVVSEju84BHE5BZvu4oT2gdqcC1EVP0
-	 Kd/XBT6iSmlFeE0Gajeya1RjxYKXOwQ5Yg+/iWzJuAdbhvwmjnjMd8a5yi9c70vpC3Q==
+	t=1794401897;
+	b=Pj0zPa79UZ6/tZFb5PYeuLqQTyv8lgoENM88IsAmDL+29X9EpXtyHu8ChL2Mlyj9e+nR
+	 RWVgu3KTQ3/bVnVbklOzHQ1YL/fnNfOvDWPmulH60QWmjWwc2LygHcHNXbvU6S5LqwgpF
+	 vSyjDosHgrvGnp9nBc6UVlB1zkvz12Skn6Xl+VaMflS6UTtxWBzK/G+xgPXzcCjTJM4Uk
+	 m9tgu/VQuixmQoqIA44kJRVoRpZ3aiBkkg/6WMSg3bo28762aSORmdLQ1MwoFjzvsf5PU
+	 xDFbp6VszpVKNZbKJF8L6bUaPQ1rwozwh7AceIOkzBdKR1In/yYeaJv+jdT5Y4vSCMw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794401896;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794401897;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
-	bh=VphZZWM+WjkvL0+jroDxlNG1oqOGJ4FgaS/fS4tJTGQ=;
-	b=ewLkWW8vU0fgWumwrRAxx5O3XxCaYnpZB//kME7m8M5a+HGaA0l+Mk1YKG/aQ7ROxSxM
-	 tx3hYBgkhX3ed3rRefvrxBxCXFk69NallhqMV84yjBa72eQCub7E+OSZGZSfARE9kO/17
-	 bujkAkYUlYFTvALq4XzqzZ6PX4wslJt5Cl1JHnSHKCqJf6PDnkaty/QTr7yUmDjF49EtR
-	 PMgmx42VpyN8tNX4wSVOu60t8u3VeoCzu7gA8MrZuhiRo8vNA43HAtZ4KOusGgli0kFQ2
-	 p2K8ZGgbrMgBSok8cczaqzsB/l8Qi4ydkT6jEu7N+p7hd8i+Q2EikJksaSu+qW4ssAg==
+	bh=4hBvIh9oQq7D6mAOusToYzUJ6Dyllj/MTnnt8Rlp4Rw=;
+	b=t4O3XHt+GMNXq4zbIHSqbRrAt9HoXsfMFCtCekZbm3G8a5DQiv8S3yNXk30Rb5fb4jdN
+	 wmz+eiDGqYYs+Q1x36iUdrYiHiuRWRYPPr5duRGxE4vWw6oHSVqmRwsWtaOO1cI7TakML
+	 KL0GQYX0mKeSiFhDCrhsstyaZMmYAp2wDu1ncN882/cor8ilkvQhV513pg0X4+JxAaxjV
+	 IpdBZ+jp6WCas6EQLAM38nVFNa1IcyakEEcKXGDwAWQa4AxCR289U5mpJr1A5fa9RKHYt
+	 4PUJOf/3IS4P8RWJNEYt3Or0OXdYpok5mpvrXpwgOlIuQX4T8HQ7hGiPEZf4FGTcTXQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ME0GaxAl;
-	arc=none smtp.remote-ip=74.125.225.133
-Received: from mail-wm2-f5.google.com (mail-wm2-f5.google.com [74.125.225.133])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xZc+D3wx;
+	arc=none smtp.remote-ip=74.125.225.139
+Received: from mail-wm2-f11.google.com (mail-wm2-f11.google.com [74.125.225.139])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DFE1606A331
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 12:58:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2DFE1606A331
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F0BE606A32E
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 12:58:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5F0BE606A32E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ME0GaxAl
-Received: by mail-wm2-f5.google.com with SMTP id 5b1f17b1804b1-4a35e178418so12008165e9.0
-        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 04:58:15 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xZc+D3wx
+Received: by mail-wm2-f11.google.com with SMTP id 5b1f17b1804b1-4a611dcb60dso7331735e9.0
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 04:58:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794401894; x=1795006694; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794401896; x=1795006696; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=VphZZWM+WjkvL0+jroDxlNG1oqOGJ4FgaS/fS4tJTGQ=;
-        b=ME0GaxAlnLV4yH5e0H8quZKgJa+SdVNn1V9Ulg7TSC5yTpr9Zvbn82v067HrmX6DNg
-         Y/916zHCHrvvjewBeN0Wpuzz/ze7UulXDsfLfjQDzbudAqADdXSuZ4DWfAGLc0E/hmcf
-         ZlAsmqicwJtz1EsiEe5Zts/aXjQtQwDMKhuFFy1LIZyHqDmiRvVp8ap38gGLaY3zpqe0
-         J9H374QlVo6RLA1clHop0AgMb7rdeNxhmVQd0TGYyZ84OxA2L6c9rB+AnE9l1FY0gHrv
-         hkJmf8sjNIq+EOYG8Hurbu6R6j/PrqSngSfgLxkCcKQ6x/wWNoWBYHFwJr4KGB1z+mvJ
-         ULjQ==
+        bh=4hBvIh9oQq7D6mAOusToYzUJ6Dyllj/MTnnt8Rlp4Rw=;
+        b=xZc+D3wx3XKcmtOJ4Zbrrbz7hSfmqaPs2Nbn4ovkAMOxgLhvDxCBUAxNW41iWXQ0pB
+         pcGgK2lA01hPq4ovqrsUUvn2MgzvF+eWK6tAww5fteFxLUc9FUM37MqoRMuCunkRZSWD
+         W185+p8FCweBjZ/OjpwDWQleZ0SxlMFFJ5V5u5joqxLwInnzAKeuG622TpF2rkiHDYz+
+         Cl2YFWg3X9rdhIUCjTYMX1xoSB/SmacyVHQuRvbe/uMjx9l8YTlt6hACr3cNa8UKBsBs
+         +VPrdbXo8+6XtMfhiED4STnVxQnLedloeMtZH0A1XJTrA7K6YSBenUbWLQ+0cObnow9K
+         r4WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794401894; x=1795006694;
+        d=1e100.net; s=20260707; t=1794401896; x=1795006696;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=VphZZWM+WjkvL0+jroDxlNG1oqOGJ4FgaS/fS4tJTGQ=;
-        b=hkV0Tfgd9QbA24vD07EHVXKQ0lQqLpzAVDPQZ209ek6ZTacch5+GtsNiFTY8s5fp0j
-         +kp7MIXUx/XsmiqZaDL46Sqh5DaTQMyp96OGRx8xZvbBo3+8vOjMNw1Wb+ZmkNGMguCI
-         LcB8CxUnJlDIs5xcRMWBrY6z+fpMUXowt0Jr7jnSrprFn//YtGCMZThq9tlFC+uE+QEv
-         aetRN/5AofCOOLBuLhoDdaXtDvdOfA1QoQlyx2cxeCJgxWqb2udD2aavMQ4dCexioXvs
-         xkq2csDDRAFvpLbaXDOwlMfQgZXlNKbANVQ9OdlIt/sr9VhYUuHbwzgYY/YtFg8AkUcV
-         7o/Q==
-X-Gm-Message-State: APuU4Z8Xmff+MfaXkBkzOUNvgRkR8V+7FPkBYD8kkBE5ZkS9dkjdZ7Up
-	qjoSxKy9Hf80BtTK7ZLHcZDwBdDJQrhC+tTUihbpNdZj2CVTNO2Rac/2vxuaEc4Aw40=
-X-Gm-Gg: AYBFou0FQ5gQ93ZDZZ5AOUw/dBshD5dyUGwefc/9fO7c4NKAS0v3JhwU3b4jqxGQgU5
-	PuesL0KC2/GG00Cjj5hUD4DrwKLBAS31ErErQRQtFWdHd8121AcFNWvJ5yrGnVobZna3DEoZa/U
-	q4XThPUfbsUNyR9e/qXLw5qbgVGCI5qK0xhDM7+iqK6SQO6TF/sp0gL4msDrmV//ackhnKIC1JW
-	kALWYVViohwQdAEhgWVGtDeN+iHLaSuAij/2mJVTjeQ/WCTvST7I8d0NS96n7aHMFMbx8UmZcCM
-	I8q+qFPoHgG1G0AeFTx7bPKzengKOILBOHUK2R9+UPuU73A1R8QmP2Ha0moXmE6p986G5UQZQwu
-	OLEb2C/ssXIuvI/FyadgZnUsjFaw+QCYTheXbutuyK35EgTNLx/oJ3hkZpnncUvK6r6SFt1yjw4
-	y+VvUNRRalUdV9PrrbDBNqrxRRYOq2o9Ph7sgQhjH3bJgex3CyJWkimYwmGS1/2n2fkA4sNS1+q
-	DogbMWeLsjGJPB4mQZWb3YLFd/UpzsOgPvs3JvYuH0dMh26NJnWYH8TyUA4uCGsb02nsu/A4kOE
-	/n4bHTZsvosZGpTCVW9vlRjqkoqgmaagCBEujnQ7rzs7N87iaqSHrnonzAxl9K7QCDrLo1MfgRk
-	E/bjOYupDLCRLiZsJJ4iWFxZQKf6x9f1ueCrsf1jwd+/mN115TvOUEeWBvJ/nxaos0TAJGHqCTE
-	uopVmqjjYCEdE6XA==
-X-Received: by 2002:a05:600c:3baa:b0:4a2:1196:db0e with SMTP id 5b1f17b1804b1-4ba0938a445mr50457965e9.30.1794401894360;
-        Wed, 11 Nov 2026 04:58:14 -0800 (PST)
+        bh=4hBvIh9oQq7D6mAOusToYzUJ6Dyllj/MTnnt8Rlp4Rw=;
+        b=xWPPT1rHVjp0kkcH6uX8/HszZa7EvHigwI3UnHrikS34f1HAu+8qiMhujiUEXSsjpr
+         CoQ2faVfj7P8DvcvzlwbuxpgLUyCQJNWQ0kXdlVINxHJL3JR2tJeW0IXr138b9LKGL//
+         jRNqqoHHZOXRyFiSxb2ryvor2nyCsO0ZQaxyndktLaUtyfJVt+xuhJ9gd8f75MlJoaPk
+         pXmrHtjA56bP4fc1tGxe7NJIh6Hl2HcdYo3133hk3lpQ3+u09Xhvm2HYip9f+2e1iA1v
+         aoEGcHQxfav8juoBhumv9a/g+7IsigXv0L5nC2WwNFEXX+VLTA/s4G/r+wCxhWMU5Hi/
+         +bGw==
+X-Gm-Message-State: APuU4Z8bcwM+OGxLk3hgZH2a+hhl/0edkia5c9Y2Ty3i3WYyk4f7BuKl
+	GjYv0OaAQbDz+nj4NBKisXotYrJrIgkTPhp4MDGcnvxTSKjgMYi4gzt5Aku9IDrLXIo=
+X-Gm-Gg: AYBFou2ehlanYaL+bt7a5f6paVNGX5Mve3Yjn05Be3WhKu4jQI8Vaj2GKb68ViidyUj
+	sUqAgGBeUuQgf3kK/gysUgE9OOpkQ21IZkT7ThSkVbCsNgz/2WyMsnfb+uKMlSFWpdGF+6UVRlX
+	WDO5NxdtkOKfxt0gNQ+6CLAbosj4EfSBWeK9N8SX8gJxbCU+LSGrQ8bDHR88mdQKO961xMuk+T7
+	mRg1DeBvtNc98bGKMP42ZdopQ3oCrJlQcjx/EmMUdrFEmz7CKb/4pa8mJiDHtP9yGFDJcxuY2y+
+	m5ICOA1U4wna/cfTuvLhrwKKD9MYOAiYtFQFBP2xOS80ouVSKU5UnT3JDNOhXfrnHup3mcCmH+5
+	gbjX2GzruAAK8BPOSH3ZWGxNhXNsOD+M37U5kz2Vh4zofZkVKVt5ldnpBkcEMuSMOFnkH0qPo49
+	N69o02FsOuq8M9ntsnDWy1WXBADPaTZU3C+UMV8FNCkQjZ+rzQhQxzpyxd5l/eFmE6uT5+JawaQ
+	DU22d5cBcenSppdO9gumIm4juFSk66yRxbZwN/eDyilvofpYLMPNp71+aZEm/dtJ740eVLfTDej
+	iq8fsn9Gni0L4vdW9WcTHecIcQRBfO2Yd+tekMrvtcnWZTWQVAeQe1CM0jb58cKSURm0vDiqnJU
+	97r3Awd66U9Ct2azxZRAizFdO/49qM05iquS5J69fhbNF+6sE0EbYY/DWZqoUGwHl+4AW
+X-Received: by 2002:a05:600c:871b:b0:4ab:e27d:e241 with SMTP id 5b1f17b1804b1-4ba0938a51cmr42532925e9.15.1794401895672;
+        Wed, 11 Nov 2026 04:58:15 -0800 (PST)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-498369a4238sm11359614f8f.54.2026.11.11.04.58.13
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba0204784esm176603165e9.10.2026.11.11.04.58.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2026 04:58:13 -0800 (PST)
+        Wed, 11 Nov 2026 04:58:15 -0800 (PST)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -89,9 +88,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 27/29] selftests/bpf: Test resources a callee leaves with its caller
-Date: Wed, 11 Nov 2026 13:57:25 +0100
-Message-ID: <caa9ab914f17420cd8c4bb5c960d18a75d30076b.1794399387.git.memxor@gmail.com>
+Subject: [PATCH bpf-next v1 28/29] selftests/bpf: Test cleanup of locks described at sites
+Date: Wed, 11 Nov 2026 13:57:26 +0100
+Message-ID: <edb9c688040eac1600ae4e52c5e0bec54ac79065.1794399387.git.memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1794399387.git.memxor@gmail.com>
 References: <cover.1794399387.git.memxor@gmail.com>
@@ -104,240 +103,186 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7357; i=memxor@gmail.com; h=from:subject:message-id; bh=8hhDTaecXd70XRvkts/3+TI4nGBEqPB6RWSMJA6R0NQ=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetLzNIzjW92LYqru2M35d1XB9U9USd2yMjKLQ0ukVR/1 lZq7L++o5SFQYyLQVZMkaXk/z4m4xOVvwNtl3HDzGFlAhnCwMUpABPJ72dkmPRKfvvV90VreCc8 n2RvrbA9a+Lvnxu3SjJvXhq6LSTzyQGG/ylFDWuOL/PT5Nv7MHKPtViisl6xvoK2vP/JXw1Vn39 z8AMA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5538; i=memxor@gmail.com; h=from:subject:message-id; bh=ndLmkVWA/7V11W4oBDBrM5OzTE2yWQr1+VXm2uo5+PY=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetLzNJ/3a4XZzWsU/G7K8NzSydfb/cRr+OG55zCdJyes c0w38PVUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgIlkRjEyfPN/8sH95dO07B+Z 10y8eAtLj1oem303/b76Jst3E2x3czH80zxsEbjEyvj3zuuHM2dv6CjYNTvnkGW74TXWbxNdfA8 /4wEA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Add programs to exceptions_cleanup where the caller throws while holding
-a resource that a callee acquired for it: an iterator that the callee
-created on the caller's stack, and an RCU read section that the callee
-returned in.
+Add programs to exceptions_cleanup that throw while holding a lock that
+has no hidden slot:
 
-Check in verifier_frame_desc that nothing is kept for resources that no
-throw finds held: a lock that one subprog takes and another drops, a
-section that a subprog returns in, and two records that one instruction
-reserves in a loop. An iterator that a callee creates on its caller's
-stack takes a site descriptor and no slot.
+ - the lock of a global variable, taken by a subprog for its caller,
+   which is at a fixed address;
+ - the lock of a map element, found through the pointer to the element
+   that the frame keeps in R7.
+
+Check in verifier_frame_desc that each takes a site descriptor, no slot,
+and no inserted instruction.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- .../bpf/prog_tests/exceptions_cleanup.c       |   3 +
- .../selftests/bpf/progs/exceptions_cleanup.c  |  43 ++++++
- .../selftests/bpf/progs/verifier_frame_desc.c | 133 +++++++++++++++++-
- 3 files changed, 177 insertions(+), 2 deletions(-)
+ .../bpf/prog_tests/exceptions_cleanup.c       |  3 +
+ .../selftests/bpf/progs/exceptions_cleanup.c  | 63 +++++++++++++++++++
+ .../selftests/bpf/progs/verifier_frame_desc.c | 61 ++++++++++++++++++
+ 3 files changed, 127 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c b/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
-index 55624ba4d992..9ba2cd9c8097 100644
+index 9ba2cd9c8097..5ef5f01a6be1 100644
 --- a/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
 +++ b/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
-@@ -262,6 +262,9 @@ static void run_suite(const char *prefix)
- 	RUN_AS(throw_callee_unlocks, "throw_callee_unlocks_before", THROWN, 1, "0", .param = 1);
- 	RUN_AS(throw_callee_unlocks, "throw_callee_unlocks_after", THROWN, 1, "", .param = 2);
- 	RUN_AS(throw_callee_unlocks, "throw_callee_unlocks_return", 0, 1, "", .param = 0);
-+	/* What a frame holds that a callee acquired for it. */
-+	THROW(throw_iter_from_callee, 1, "0");
-+	THROW(throw_rcu_from_callee, 0, "s");
+@@ -265,6 +265,9 @@ static void run_suite(const char *prefix)
+ 	/* What a frame holds that a callee acquired for it. */
+ 	THROW(throw_iter_from_callee, 1, "0");
+ 	THROW(throw_rcu_from_callee, 0, "s");
++	/* Locks the sites name: at a fixed address, or through a pointer the frame keeps. */
++	THROW(throw_lock_from_callee, 1, "0");
++	THROW(throw_lock_in_value, 1, "0");
  	/* A file and the reader of its dynptr, which goes first. */
  	snprintf(name, sizeof(name), "%sthrow_file_dynptr_held", prefix);
  	if (test__start_subtest(name))
 diff --git a/tools/testing/selftests/bpf/progs/exceptions_cleanup.c b/tools/testing/selftests/bpf/progs/exceptions_cleanup.c
-index 6e16caee66da..8700349a8f9c 100644
+index 8700349a8f9c..d6bb893f9da2 100644
 --- a/tools/testing/selftests/bpf/progs/exceptions_cleanup.c
 +++ b/tools/testing/selftests/bpf/progs/exceptions_cleanup.c
-@@ -1844,4 +1844,47 @@ __naked int throw_callee_unlocks(void)
- 	: __clobber_all);
+@@ -1887,4 +1887,67 @@ int throw_rcu_from_callee(struct __sk_buff *ctx)
+ 	return 0;
  }
  
-+/* ---- what a frame holds that another frame acquired ---- */
++/* ---- locks the sites of a frame name ---- */
 +
-+static __noinline void new_iter_in_caller(struct bpf_iter_num *it)
++static __noinline void take_glock(void)
 +{
-+	bpf_iter_num_new(it, 0, 10);
++	bpf_spin_lock(&glock);
 +}
 +
 +/*
-+ * The callee creates the iterator in the stack of its caller, which holds it
-+ * from then on: the throw of the caller destroys it.
++ * A subprog takes the lock for its caller, which throws holding it: the lock
++ * of a global variable is at a fixed address, which the throw unlocks.
 + */
 +SEC("tc")
-+int throw_iter_from_callee(struct __sk_buff *ctx)
++int throw_lock_from_callee(struct __sk_buff *ctx)
 +{
-+	struct bpf_iter_num it;
-+	int *v;
-+
-+	new_iter_in_caller(&it);
-+	mark_acquired(&it);
-+	while ((v = bpf_iter_num_next(&it))) {
-+		if (*v == 3 && ctx->len)
-+			bpf_throw(0xeB9F);
-+	}
-+	bpf_iter_num_destroy(&it);
-+	return 0;
-+}
-+
-+static __noinline void enter_rcu_in_callee(void)
-+{
-+	bpf_rcu_read_lock();
-+}
-+
-+/* The callee returns in the section it entered, which the throw of its caller leaves. */
-+SEC("tc")
-+int throw_rcu_from_callee(struct __sk_buff *ctx)
-+{
-+	enter_rcu_in_callee();
++	mark_acquired(&glock);
++	take_glock();
 +	if (ctx->len)
 +		bpf_throw(0xeB9F);
-+	bpf_rcu_read_unlock();
++	bpf_spin_unlock(&glock);
 +	return 0;
++}
++
++/*
++ * The lock of a map element is taken through the pointer in R7, which the
++ * frame still has at the throw: the lock is found through it.
++ */
++SEC("tc")
++__naked int throw_lock_in_value(void)
++{
++	asm volatile (
++	"r1 = 0;"
++	"*(u32 *)(r10 - 4) = r1;"
++	"r1 = %[lock_map] ll;"
++	"r2 = r10;"
++	"r2 += -4;"
++	"call %[bpf_map_lookup_elem];"
++	"if r0 == 0 goto 1f;"
++	"r7 = r0;"
++	"r2 = r7;"
++	"r2 += %[lock_off];"
++	"r1 = %[acquired] ll;"
++	"*(u64 *)(r1 + 0) = r2;"
++	"r2 = 1;"
++	"r1 = %[acquired_cnt] ll;"
++	"*(u32 *)(r1 + 0) = r2;"
++	"r1 = r7;"
++	"r1 += %[lock_off];"
++	"call %[bpf_spin_lock];"
++	"r1 = 0xeB9F;"
++	"call %[bpf_throw];"
++	"1: r0 = 0;"
++	"exit;"
++	:
++	: __imm_addr(lock_map),
++	  __imm_addr(acquired),
++	  __imm_addr(acquired_cnt),
++	  __imm(bpf_map_lookup_elem),
++	  __imm(bpf_spin_lock),
++	  __imm(bpf_throw),
++	  [lock_off]"i"(offsetof(struct locked_foo, lock))
++	: __clobber_all);
 +}
 +
  char _license[] SEC("license") = "GPL";
 diff --git a/tools/testing/selftests/bpf/progs/verifier_frame_desc.c b/tools/testing/selftests/bpf/progs/verifier_frame_desc.c
-index e98d1caf27f3..0faf464d113a 100644
+index 0faf464d113a..e0456a929126 100644
 --- a/tools/testing/selftests/bpf/progs/verifier_frame_desc.c
 +++ b/tools/testing/selftests/bpf/progs/verifier_frame_desc.c
-@@ -799,10 +799,139 @@ __naked int callee_unlocks_slot(void)
+@@ -799,6 +799,67 @@ __naked int callee_unlocks_slot(void)
  	: __clobber_all);
  }
  
-+private(C) struct bpf_spin_lock wlock;
-+
-+static __noinline void take_wlock(void)
++static __noinline void take_slock(void)
 +{
-+	bpf_spin_lock(&wlock);
-+}
-+
-+static __noinline void drop_wlock(void)
-+{
-+	bpf_spin_unlock(&wlock);
++	bpf_spin_lock(&slock);
 +}
 +
 +/*
-+ * One subprog takes the lock and returns holding it, another drops it, and no
-+ * throw finds it held: nothing keeps track of it.
++ * A subprog takes the lock and returns holding it, and the throw of its
++ * caller finds it held: the lock is at a fixed address, so no slot has to
++ * follow it out of the frame that took it.
 + */
 +SEC("tc")
-+__description("frame_desc: a lock a subprog returns holding, away from the throw")
-+__arch_x86_64 __arch_arm64
-+__success __log_level(5)
-+__msg("frame descriptors: slots 0 insns 0 sites 0")
-+int lock_wrappers(struct __sk_buff *skb)
-+{
-+	if (skb->len > 1000)
-+		bpf_throw(0);
-+	take_wlock();
-+	drop_wlock();
-+	return 0;
-+}
-+
-+static __noinline void enter_rcu(void)
-+{
-+	bpf_rcu_read_lock();
-+}
-+
-+/*
-+ * The subprog returns in the RCU read section it entered, and no throw finds
-+ * the program in it: nothing counts it.
-+ */
-+SEC("tc")
-+__description("frame_desc: a section a subprog returns in, away from the throw")
-+__arch_x86_64 __arch_arm64
-+__success __log_level(5)
-+__msg("frame descriptors: slots 0 insns 0 sites 0")
-+int rcu_wrapper(struct __sk_buff *skb)
-+{
-+	if (skb->len > 1000)
-+		bpf_throw(0);
-+	enter_rcu();
-+	bpf_rcu_read_unlock();
-+	return 0;
-+}
-+
-+static __noinline void new_iter_for_caller(struct bpf_iter_num *it)
-+{
-+	bpf_iter_num_new(it, 0, 10);
-+}
-+
-+/*
-+ * The callee creates the iterator in the stack of its caller, which holds it
-+ * from then on: the descriptor of the caller's throw names it there.
-+ */
-+SEC("tc")
-+__description("frame_desc: an iterator a callee creates in the stack of its caller")
++__description("frame_desc: a lock a subprog returns holding, held at the throw")
 +__arch_x86_64 __arch_arm64
 +__success __log_level(5)
 +__msg("frame descriptors: slots 0 insns 0 sites 1")
-+int iter_from_callee(struct __sk_buff *skb)
++int lock_wrapper_at_throw(struct __sk_buff *skb)
 +{
-+	struct bpf_iter_num it;
-+	int *v;
-+
-+	new_iter_for_caller(&it);
-+	while ((v = bpf_iter_num_next(&it))) {
-+		if (*v == 3 && skb->len > 100)
-+			bpf_throw(0);
-+	}
-+	bpf_iter_num_destroy(&it);
++	take_slock();
++	if (skb->len > 100)
++		bpf_throw(0);
++	bpf_spin_unlock(&slock);
 +	return 0;
 +}
 +
 +/*
-+ * A loop the verifier walks reserves a record at one insn on each of two
-+ * iterations and holds both at once, where no throw finds them: one slot
-+ * could not hold both, and none is needed.
++ * The lock is in a map value the frame keeps a pointer to in R7: the
++ * descriptor of the throw names the register and how far into the value the
++ * lock is.
 + */
 +SEC("tc")
-+__description("frame_desc: two records reserved at one insn, away from the throw")
++__description("frame_desc: a lock found through a pointer the frame keeps has no slot")
 +__arch_x86_64 __arch_arm64
 +__success __log_level(5)
-+__msg("frame descriptors: slots 0 insns 0 sites 0")
-+__naked int two_from_one_insn(void)
++__msg("frame descriptors: slots 0 insns 0 sites 1")
++__naked int lock_in_value_at_throw(void)
 +{
 +	asm volatile (
-+	"r8 = *(u32 *)(r1 + %[len]);"
-+	"if r8 < 1000 goto +2;"
 +	"r1 = 0;"
-+	"call %[bpf_throw];"
-+	"r7 = 0;"
-+	"r6 = 0;"
-+	"1: r1 = %[ringbuf] ll;"
-+	"r2 = 8;"
-+	"r3 = 0;"
-+	"call %[bpf_ringbuf_reserve];"
-+	"if r0 == 0 goto 4f;"
-+	"if r7 != 0 goto 2f;"
++	"*(u32 *)(r10 - 4) = r1;"
++	"r1 = %[lock_values] ll;"
++	"r2 = r10;"
++	"r2 += -4;"
++	"call %[bpf_map_lookup_elem];"
++	"if r0 == 0 goto 1f;"
 +	"r7 = r0;"
-+	"goto 3f;"
-+	"2: *(u64 *)(r10 - 8) = r0;"
-+	"3: r6 += 1;"
-+	"if r6 < 2 goto 1b;"
-+	"r1 = *(u64 *)(r10 - 8);"
-+	"r2 = 0;"
-+	"call %[bpf_ringbuf_discard];"
-+	"4: if r7 == 0 goto 5f;"
 +	"r1 = r7;"
-+	"r2 = 0;"
-+	"call %[bpf_ringbuf_discard];"
-+	"5: r0 = 0;"
++	"r1 += %[lock_off];"
++	"call %[bpf_spin_lock];"
++	"r1 = 0xeB9F;"
++	"call %[bpf_throw];"
++	"1: r0 = 0;"
 +	"exit;"
 +	:
-+	: __imm_addr(ringbuf),
-+	  __imm(bpf_ringbuf_reserve),
-+	  __imm(bpf_ringbuf_discard),
++	: __imm_addr(lock_values),
++	  __imm(bpf_map_lookup_elem),
++	  __imm(bpf_spin_lock),
 +	  __imm(bpf_throw),
-+	  [len]"i"(offsetof(struct __sk_buff, len))
++	  [lock_off]"i"(offsetof(struct lock_value, lock))
 +	: __clobber_all);
 +}
 +
- /*
-  * A loop the verifier walks reserves a record at one insn on each of two
-- * iterations, the first kept in R7 and the second spilled: the call has one
-- * slot in the frame, which cannot hold both records.
-+ * iterations, the first kept in R7 and the second spilled, and a throw finds
-+ * both held: the call would need a slot, which cannot hold both records.
-  */
- SEC("tc")
- __description("frame_desc: two records reserved at one insn are held at once")
+ private(C) struct bpf_spin_lock wlock;
+ 
+ static __noinline void take_wlock(void)
 -- 
 2.53.0
 
