@@ -1,61 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.17
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794385202;
-	b=H5pR+GKWU4XURoou3GgU56fA7fr7QF5xG2HevW1FqSK9QGtWNOjNDc7N0CF8W48VcaZ3
-	 IEvC580vTgIhtWkkWDIrLUf+QXahUK+Y3igqdpb6dXDYhZkHFokTHYqUkD7b9vZ4f3uzh
-	 OkSZ1ZBIWCbN5AwrR4FtmCfz4AXpKpSuInSrBepnE62NOFrcOM+9A/9HfcHnp1xQG6GNG
-	 aIxRML535xiqGBXJy3sJmweI1dh4630SsB5vi5mu7K83CPsE34x1YSw8HN7nagkJUXMEp
-	 tlvzdNaMUYeiEUE2eaIzrK/nYQKCoNOkmPdOBHF56IcFtU4GfLzkI5KJihXNT3HH10Q==
+	t=1794385304;
+	b=f6IMd9DEfK0oCePD0j2DgiPiXAyx8G5Ov8hqmwag4DRJCXM30i+vEJGKp5tlORpoKGEB
+	 hf6eVl2KjjiV42OSuyZ/6XT4UQubLaJqa9YueUkvsLwKUvaiunKB1ZNuPciz1IVD++cB1
+	 4NEUK/pjEVc9xEs7kC6cDdZnqCHZUuGbmCLgNEQlwo3jCB0P9MtmhNUgwiKbolYGmKlmm
+	 0qk4qnDigI52HFIDFl1Gqr2Yz1GsCNr3QudPc14nJkM8J+rielDrCNQ48W9r7D9Eju56c
+	 6jCCCX2sXDHOx/ROnrKz1b+Nk9awx2wB6XqQg+H1As93BShGH7XkLVJsouUBHqeIbzQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794385202;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=G3d3b2tM519kuIvjkSRexg4H0KkdNZyWkRnjj4rZTd4=;
-	b=Jceix/IREydpoETU1z8xm+fYC/IhKceqHuo5YkT2A6s0i/3ak85D6eSxtEqvMP/ckPuY
-	 nvn+Mzpz+FrdMZaO/Cq1rS0BqB9xUx5CGPA4QzhPyBTrYiA/tvWY/h/PDBscfkvsmyAA1
-	 L26LJm8g05TtDE8rMMCRZr5oh+jNANUs5oB1TkPmio9fXBMXMn30hlt3iS8CzB7kbVTR8
-	 0l7Jt3PNoD1gswWmt5d7qeTTEmc6ah6jmIIWjfOTnTgC0cynrAzi8pbEU52mru2EZzWWd
-	 G+MP3DeTl/IkCIhAKZw4lKsCHwnrqGzoh6GB1LxQIf6nur5lBclvd0czJ/TINbGfglA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794385304;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=MYDngarCQ45mUSeexDEj1Ba5k1M8XVDaHjliIce1Nlg=;
+	b=C0hXcWerzL0wQSg6YWBRwHFt8sE8ain7wumIegLUmfCa5PumfUkKBhq1lRPLEhnHdWO/
+	 koGkDEI3i6qqLSkN9jViCpwT7DQefDVte19yKNU5WaPU276N1I0ClDSV/dQHY3paeKors
+	 wVa59WhM0tbiGQIIGCOOGl8zWHCEMu8dvuY3NvqKfhznCplEX36u9Giwd7mSOyeU/rM27
+	 /a7zhToY+y/NsrQ6styEqbZY/mPl16jC9FxzBPKqkxfPfbja3HFplbS59hiE0Gs0asbR1
+	 QkJ2B44NjY5Yt6+fxKG7c2kCwqRWPp90UpdpWnv3zftyWok+AaNUqJCaN6mP/bAipWg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=iyOp41w6;
-	arc=none smtp.remote-ip=95.215.58.17
-Received: from mta1.migadu.com (out-17.mta1.migadu.com [95.215.58.17])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=J9y0JxFY;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67074606A31C
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 08:20:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 67074606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7628D606A331;
+	Wed, 11 Nov 2026 08:21:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=iyOp41w6
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=01hkxhMvjpH0YwUfWPSVcu2PhKCcNEL9gg0Q0PcG8gI=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794385199; v=1; x=1794989999;
- b=iyOp41w6ePFfiABPcVNymqvnRo7CvaC7mYHYLS9IIcdtQDFFSmovUlyn7TOR60F6UJXjYQHx
- HBdMKlOMlV0Fj9OFgH1bcGEq7R3P7yexH45CjSDoP4/BLlil+pzb4rmq/ZUZgqqgEe0v0YN/1Yc
- B25Xx13HT1EETMUH+9zTErRQ=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 2365b7a9a39834f0;
-	Wed, 11 Nov 2026 08:19:59 +0000
-X-Mizu-Trace-ID: 2365b7a9a39834f0
-X-Migadu-Flow: FLOW_OUT
-Date: Wed, 11 Nov 2026 16:19:49 +0800
-From: Hao Li <hao.li@linux.dev>
-To: Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: Vlastimil Babka <vbabka@kernel.org>, Harry Yoo <harry@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Christoph Lameter <cl@gentwo.org>, 
-	David Rientjes <rientjes@google.com>, Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org, 
-	loongarch@lists.linux.dev, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] mm/slub: Genericize x86-specific cmpxchg16b comment
-Message-ID: <avQkXxpsIdxB5Ye6@fedora>
-References: <20261111011108.29311-1-yangtiezhu@loongson.cn>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=J9y0JxFY
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E42EB1F00A05;
+	Wed, 11 Nov 2026 08:21:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794385304;
+	bh=MYDngarCQ45mUSeexDEj1Ba5k1M8XVDaHjliIce1Nlg=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=J9y0JxFYC2F4SbWlUPdB5tZoOQ+X8kfAOSGy8nJD3QYebJE9ivth0KaRiS84OQ2hT
+	 uZt/QXlPoxtt9K3H4j6MfDxFVXSeaQuR+E2l0lj/QEOOaFfIwz1nuhOhscmIcNI51e
+	 wD+q2X94rxPX14lW6WRhlHBsEV8zlVS1YNwa8d5biuEVbqFBoEMj6KqHNLUKPBTYmQ
+	 YJQYjTa4/hKjTzPI/CiNfesfXRtQvsXhDJSKZtqoVgY/Rn20CpKwXAtlJZN+SZr82d
+	 gNu0zE7sx2oV/MboNQ+fISUEk4GcC6LaJnr3ChUqjghALGicDYS5/+uWR4wJIl4TTj
+	 DJSdSUdzERljQ==
+Content-Type: multipart/mixed; boundary="===============8619726833200934663=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -65,47 +49,80 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261111011108.29311-1-yangtiezhu@loongson.cn>
+Message-Id: <c4f98afcae91b54b30f5e9fdab98125cdccf00b1c7a71afff1b16e931798c314@mail.kernel.org>
+In-Reply-To: <20261110164046.454431-14-a.s.protopopov@gmail.com>
+References: <20261110164046.454431-14-a.s.protopopov@gmail.com>
+Subject: Re: [PATCH v3 bpf-next 13/18] bpf: Check the return values of fmod_ret programs on found targets
+From: bot+bpf-ci@kernel.org
+To: a.s.protopopov@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,almagui@kernel.org,john.fastabend@gmail.com,qmo@kernel.org,brauner@kernel.org,kpsingh@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,sashal@kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org
+Cc: a.s.protopopov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed, 11 Nov 2026 08:21:42 +0000 (UTC)
 
-On Wed, Nov 11, 2026 at 09:11:08AM +0800, Tiezhu Yang wrote:
-> In __kmalloc_nolock_noprof(), update the comment from x86-specific
-> "cmpxchg16b" to generic "double-width atomic cmpxchg".
-> 
-> Suggested-by: Harry Yoo <harry@kernel.org>
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
-> v3:
->   - add missing Suggested-by tag for Harry
->   - use shorter commit message as requested
-> 
->  mm/slub.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 45e077c7526c..090302f1daeb 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -5589,8 +5589,8 @@ static void *__kmalloc_nolock_noprof(DECL_TOKEN_PARAMS(size, token), gfp_t gfp_f
->  	if (!(s->flags & __CMPXCHG_DOUBLE) && !kmem_cache_debug(s))
->  		/*
->  		 * kmalloc_nolock() is not supported on architectures that
-> -		 * don't implement cmpxchg16b and thus need slab_lock()
-> -		 * which could be preempted by a nmi.
-> +		 * don't implement double-width atomic cmpxchg and thus need
-> +		 * slab_lock() which could be preempted by a nmi.
->  		 * But debug caches don't use that and only rely on
->  		 * kmem_cache_node->list_lock, so kmalloc_nolock() can attempt
->  		 * to allocate from debug caches by
-> -- 
-> 2.42.0
-> 
+--===============8619726833200934663==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Looks good to me.
+> bpf: Check the return values of fmod_ret programs on found targets
 
-Reviewed-by: Hao Li <hao.li@linux.dev>
+TL;DR: Possible wrong behaviour: fmod_ret programs on 64-bit found targets
+don't require the JIT, so in the interpreter -14 may reach callers as
+4294967282; a later commit fixes this, leaving a narrow gap here.
 
--- 
-Thanks,
-Hao
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+[ ... ]
+
+> +static int fmodret_retval_init(struct bpf_verifier_env *env, u32 btf_id,
+> +			       unsigned long addr, const char *tname)
+> +{
+
+[ ... ]
+
+> +	if (!cnt)
+> +		goto invalid;
+> +
+> +	aux->fmodret_retvals = retvals;
+> +	aux->fmodret_retval_cnt = cnt;
+> +	return 0;
+
+For a found target that returns a 64-bit integer (size == 8),
+check_fmodret_retval() accepts the full 64-bit R0, so "r0 = -14" is
+accepted as the s64 value -14.  Nothing here makes such a program require
+the JIT.
+
+If the program runs in the interpreter, prog->bpf_func is
+__bpf_prog_runN(), which is declared in kernel/bpf/core.c as:
+
+  static unsigned int PROG_NAME(stack_size)(const void *ctx,
+                                            const struct bpf_insn *insn)
+
+so only the low 32 bits of R0 come back.  The x86 trampoline handles
+interpreted programs, stores all of RAX and returns it to the caller of
+the traced function, so the caller of a long-returning found target would
+see 4294967282 instead of -14.
+
+That value is non-zero, so the function body is skipped, but it is not an
+error value either.  Callers would treat the skipped call as a success
+that returned a large positive value, which is the case the commit message
+says the check is meant to prevent ("Returning such a value instead of
+calling the function looks to the callers like a real failure").
+
+Should fmodret_retval_init() set env->prog->jit_required = 1 when
+size == 8?  A later commit in this series, c4a7eee0c4d7 ("bpf: Require the
+JIT for fmod_ret programs on found 64-bit targets"), adds
+"if (size == 8) env->prog->jit_required = 1;" right after these
+assignments.  No found target carries the tag until 8659bd72073c
+("resolve_btfids: Tag fmod_ret candidates as targets"), which comes after
+that fix, so the window is narrow, but it is still a gap in this commit's
+own logic.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42981885558
+--===============8619726833200934663==--
