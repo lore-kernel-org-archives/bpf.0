@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.44
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794415711;
-	b=vFY7wcOER0BJZc3Uu5m7swR7nIXkK3UIhLrMmYCX67AW8SY4ZmhS7FDwSxJzmJMeN3SR
-	 yRfdmMJhjc3dlLRzteQUbXO9AGWQp/ZAMQwcHxSYuwSTfXytm7UHsyzzIPswBHcu7iHE+
-	 BeHEFoj/uI9AU58IjoKu+c6Ix10AbWryiu8mjZZMtv8Xu2D2Q2mcqeRhQT7dEKFbubgn/
-	 eqnJxpPO9lsoE1r47Bu2HPXHK8IryrAhFUdL9+5R5F1NgmvVuYIVOMB/0jKtqJS8AQm+V
-	 C8vlPvqs5AjUirac/zx35mOseuKZnc0qwghsoljcx4GTbZQRTAUTuMBv/QhCVEM/ezQ==
+	t=1794415717;
+	b=gnyTDX3KrUp/ff1YTVckJzPAMvM1rl5JzB7r/S40vedVw3Ovhayd91PGYx8JDmuWTkA4
+	 apSHJnZlHuz1rl2pRP8fttjvKcS7CWVMmWQOdhmMYnKrjCrCDqwM02X+/aDQDQg0VNFZC
+	 Qg8pjw+EbAzNl1m2fIg6LNzUsZ7CX/hzQaPJsKZR78kVEKfYqABvFmai5milKFPNPS/9r
+	 cdR9pfanKU/OON7L5kJiEn/X88yRu+uza41nARd66Z+HtnuXNFAaIyV+00iZFQFRSho/U
+	 k8DlYnpWrEpNOWHM2ihjvQw8bf4I1jQ/PA6NT8vtdIFg3brT60tVitEhiYXkFjGE7WA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794415711;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794415717;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=SV/TFw71evXCc3On3O5RFN9svtP8CyNH0qk2xPLOXB0=;
-	b=lz+K2GWfjur+tvMVMEA098HGMh9MI0aMlQ6gr5sY+md0n3j5Zu+qkvlL8GWrCrPOVNrH
-	 084fChRjhn2sDCBlmRN544dv2/RSIonZkEik+nzGVMnOEEwaKDboIqaM3bfzFFetpdhMz
-	 LTAqiOJ6MWN75QFEDkCI8BSrdrGXwUri36ng5SRlTRYA+geEVtTvgsz6/s4D+fES83v/V
-	 mrrDQmuOv4V+7efCXtRueVi64yk1PkfyR6RnH/IlEZx6DNHMRLKKiczuGHy02arr1/93j
-	 hXINbuoe96FkvvF25L3+6udVivtaw3Lvwr1XaEVkukmFPVangLdqPNEdrVxbz4bnDlw==
+	bh=CQJbqIBrSK1uzdi9/oqocDydKd1KKZnHFLuOurGyzP8=;
+	b=daHJVx0K1QzBo6nrlrNgswnFRnsqwCEnRsuYU+6V4GilxYvMlZ16koDKjMJ/ySpV2S0C
+	 wAplekbXLrHzVzY4r5lKztusYKzBy4PeK5GQKn7LgO39rgidrEL0ebSSBy+kBuQnzyV8P
+	 4lEpkj2XWTng+/CUY5T9W4Za3YsDYJZxyQn8dcH3JUAvP/oN/1bqHMc8HlIHUz7qcyMtj
+	 /1LthjSQ3ngznabaZO6+/y0ATsQjEbzPGeh5yep5zCeM8QicG4/dkyabKkrijIl7g8DHz
+	 SzTTSoK4UnYEIkvMmmRiJ6EKJv/tVPequnZ/J48JQ3lphw8o8fVe1imQSld5qWRQwEA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ZJAUCMQ0;
-	arc=none smtp.remote-ip=209.85.216.43
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mWoy1Oyk;
+	arc=none smtp.remote-ip=209.85.216.44
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFD49606A88A
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 16:48:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AFD49606A88A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5AFB606A33B
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 16:48:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C5AFB606A33B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ZJAUCMQ0
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3b0d0b80fb9so1967207a91.1
-        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 08:48:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mWoy1Oyk
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3b197cd42b0so9587a91.2
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 08:48:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794415710; x=1795020510; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794415716; x=1795020516; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=SV/TFw71evXCc3On3O5RFN9svtP8CyNH0qk2xPLOXB0=;
-        b=ZJAUCMQ0FYIJWhE2yIB85wpKm6KD7WvPDwbvG4oBj/Dw16Cdg0u9HAb6zy82x6Xo8B
-         VQHSMQD0fsdx3LwOlKVztYqCNZ1zCjFOb+2HWn9kg6yqtoZj3yLZYS12bmw5jJd4spMN
-         +nftb9n9+RMDHztqVNL9B2iq/ZV2VfGBxu9SQJW8LFYbxvjYhHcCBlaeoOBErPsxS6PA
-         tX7UZEM6lFkAucC9dfRcXr8Xibvzegmyeelvl+cV3Ng4TqslZqpMX3403kSEZmbfUT07
-         RPUSV6oqpO7pLdeDiYMjGCRn/HdJccmFoU0y611RSn32/3JX6BY7j5CCneT0+IJg2PB+
-         UoeQ==
+        bh=CQJbqIBrSK1uzdi9/oqocDydKd1KKZnHFLuOurGyzP8=;
+        b=mWoy1OykTwY/6CfCwFn2hsbFeuDV42nUicvRbWyfeaHweE3hqwAy2eT9pplvTZt0gd
+         cXWRgoRtSQPJeliovJWzjD1EGE2dMrp/rRF6jxm3zMsA9uI1mnZVN3Mb75CufrP0g7Ac
+         Zg4MSkBOH8gIoUriThHJ0+70Wkq7rcZXvrS2yGgdtyNQy1GgSVu55X6SQkKvw4zoXJ5g
+         QHxjGh83qFp3/sgYfGtDPtSwEjV0cs5RyG+4/tqPS7oFUofP4CjIn+COR0hvMLYA5JJ+
+         jz1i9hiqxv2264otxkBjqyAsEW12BNfXbWp10UFCaS2slVADAyqtT2e25heVXxeEgtYv
+         cNWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794415710; x=1795020510;
+        d=1e100.net; s=20260707; t=1794415716; x=1795020516;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=SV/TFw71evXCc3On3O5RFN9svtP8CyNH0qk2xPLOXB0=;
-        b=zAIflGjyvZurcT048cqoPyKZPlq7GscPNES8AYdJVsCi6FdkWAiNh0ru9dgZHXTaA/
-         nhKdJRC8QAOQD2oyGZVMmPTJyjstpwAosys9MxB+ahzH5OBh67pPjWtDLozq49jCGBn0
-         mV1aQgqhZvdokztv7C3mnMao3w7MQYj5AqAAHSAlYN24z5Sl+6//+QjfH9uWhccT0RwI
-         e49HBmB/ror5xOYrBTL3hKuFnepkwn994bhPVgqZJJLyG/fRLC6gv6dDw76hK67gX53d
-         yM74EfJ+3103e6LXpd7DJZMcS3t3WhWqS2NSPugxZVAk4amgQZ9osEeRVNCYWTh9I5wh
-         ZE9w==
-X-Gm-Message-State: APuU4Z/0wnNQjoKRVE6wpFAE2V83hq9cB8yl/vP4SoCGWC0Ae9UR8fk5
-	ToK+5HHmiYzSWPmAw0/A+e1Lq8F2OJfrnzMjvb4DVA7r1NfYqQUJi6tATLNHnw==
-X-Gm-Gg: AYBFou0B3690iXRbYegKQ00YB0tX7OVQZGlmhL8XzjvJGB2OykusCgqsxqR30GCrWiX
-	uy3IHDnaQVjoeVQUXCvfSvxQ5A+dE+g21+exnB39b9sqoNU9JBq29ggLnKKZ5Qd88bS5WU41z/e
-	36U5CD9Wpat25aHcLvLCzinjZQTdx7XNkCFnAt7yc8rpsJXmPRuxlbXGteJ0DAmOBgOmeMmcqpK
-	+Y3whG5vWbkkkiotHZu3+/4cvWKWTypUq+J2kH9JYxJ0VtwJa+tCxVXyWmsr6V59r8GOCXabFLf
-	35cR2XX/3Ul/p5v/o7WipD6PhEwMZF9ZsKWuMc55kFfDtPeWgVgDH0wuhfEYpRud/1SW6SS/1pW
-	kyYCbJAvzfSemRkfG4OuwZybPs8YDWFh5mFWYZALWF0eatpvaXUrlI9JqM+lc0Gu2GzCJGl1giZ
-	LguZEvfk3InZ6Wuy1vwQP1CjjezqxLONoYOYy0vTL2gQCl5uZ6KkvYlvIAIjXTHnHvKH/Tk5I2s
-	4TBR0XJy8sVlfcT3yIdMwUdcvqVRGD1bD60Y67FuDIS7yJZfCj8suS544Qr6Gvbqmg39jPMI61N
-	QvbPfN2a2X0SwxxOxbKgaOMa1ZAuEw44e+ZgoKns+C0A6R4HMwQdUe7eDnjIh71qlkjPi4neXc4
-	R9pHn5lfxQsMqnlQ081XSQh0211tg87IvY7DfrJnwvCryF63jnFz8nYh2FwOyJULRwDgALtPz6Q
+        bh=CQJbqIBrSK1uzdi9/oqocDydKd1KKZnHFLuOurGyzP8=;
+        b=FqQO/HcyQ6flYEYd6Lw0tADin9xznV4eLf5LSfyD6RFb6Y7/6kam7iK1GdatvDmN6J
+         2/tbbNo5klx6xuBqEo66Xpwl48h0QJo0CnUhRk0grVPF8+5ZKKWSdatLfmAjENez7ck2
+         57YOe9t8zWwEGRy7l6fXsiGFVHfCCAS+X3CAD9DZ9DRn1312eipDvQl3vorHaF+P9wFo
+         BAaXhk44MP3mQFQFvuvbQgsp0jsieTrQUcdUxg6ECN27ZIilKlHSR5sPW2cdFeocELmk
+         suclrIKLobyQFpaiHWqse8l+gS5UKidm48UMt90DZ6N8FOtYh36mEuJ4hDYIxwos7LMY
+         WLRQ==
+X-Gm-Message-State: APuU4Z+nexgtFWsnlZzrLKXIqtxnXr3s7G0X1SXjo+kmxp6/6gfxXLpy
+	7pFLjrZnyyFvX97onXaBBNosL2uaZ0PtUCO2HVWWajX2xuKQy806qfyoaEhs3g==
+X-Gm-Gg: AYBFou0d6pPIk1m++WPo8g/vRB3rM3bZDEshqKmGxj2Sa8K3xq571udLk8weBkCySIq
+	9JiFXBdYiVmrmC5L5eSvjkYfOeYh/CuCzte+ju2YS404QMUbO5DXkGX/3zuDKeRNtUn2PS6ESlr
+	V93kTeNc34KH0HWdh6wVCqNWKv3IkJwheupqROJiYYutLwBMlQww5Q1z7oF7zeLaHmpQ5iW3HcK
+	SEgcuADTYSDkOhDczKsQVp2JmTLA5Xuc8mfun4JyyWplaT0/aTJoGT4CYQmvcOPlzCgW4C20zpn
+	vDSK0xKZDqsPAV0ksiOGBWMotroOWGV7SPST2RwWEnf+fg5GNiwBd+nBKESdt1vmcsKPD/Yz20D
+	pzU+P3kFb0ChMIQe4k6gsO5JNH9wVa/vF5UM2AmUiclyXRuPT5TLp8VbwrpifTDfgzBIHVoIsiw
+	w+HdDJMKQ/4tOrRbiun01n5gSXwhnYihfYhLcBkq8cHUc578+/OnsnYxA9v/2vubwCXDk+5h14+
+	JbmcUoQTBJv8xHCfLaxDZWLSPT1Lc0JFvUMaGxfNhd2IZbVpPuXGW/+3BpFD6N6qKnIAMNZUFFu
+	7mFApkREf+c5qp1crxX3udjVdEXMxzNRbv8kmhkKbr3HbwfM43oUhb8CMbcw3oweDHuyDgN51Pc
+	oE34BlypchLIa9AIHKeI/4RSD679usnt+7ou0H2esk/pAoD9Z3fedgDywRGblv/6Y8nNo85xJGA
 	==
-X-Received: by 2002:a17:90b:4b92:b0:3a7:bb1d:3688 with SMTP id 98e67ed59e1d1-3b182f26aa1mr3115415a91.27.1794415709504;
-        Wed, 11 Nov 2026 08:48:29 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b197c8b2cdsm57190a91.16.2026.11.11.08.48.28
+X-Received: by 2002:a17:90b:4ac3:b0:3ac:8ee5:e007 with SMTP id 98e67ed59e1d1-3b182eabff1mr2672328a91.20.1794415715699;
+        Wed, 11 Nov 2026 08:48:35 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b197c74bf3sm69845a91.10.2026.11.11.08.48.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2026 08:48:29 -0800 (PST)
+        Wed, 11 Nov 2026 08:48:35 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v3 25/29] bpf: Remove scalar ids from regsafe()
-Date: Wed, 11 Nov 2026 16:45:48 +0000
-Message-ID: <20261111164557.2659679-26-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v3 26/29] bpf: Remove scalar ids from the join of states
+Date: Wed, 11 Nov 2026 16:45:49 +0000
+Message-ID: <20261111164557.2659679-27-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261111164557.2659679-1-alexei.starovoitov@gmail.com>
 References: <20261111164557.2659679-1-alexei.starovoitov@gmail.com>
@@ -104,179 +104,152 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Removal of dead code. Scalars have no ids any more, so every check of
-a scalar id in regsafe() passes. No prog is verified differently.
+Removal of dead code, as in regsafe(). Scalars have no ids any more. No
+prog is verified differently.
 
-	4: r6 = r7
-	5: if r6 > 10 goto ..
-	6: use r7
+Two states are joined in two passes. The first one records which id of one
+state goes with which id of the other: jid_note(). The second one computes
+the registers. A scalar kept its id only if the pair was good: the
+registers that share the id in one state share it in the other one, with
+the same BPF_ADD_CONST and delta, see scalar_link_consistent(). A link
+that one state did not have was dropped.
 
-While a jump refined all scalars with the id of the tested register,
-a state in which r6 and r7 have the same id was stronger than a state with
-the same ranges and two ids: in the first one insn 5 bounds r7. So
-regsafe() did not stop at the ranges. check_scalar_ids() mapped the ids of
-the old state to those of the current one, an id that the current state
-did not have got a temporary one, BPF_ADD_CONST and delta had to be equal.
-
-Now no state says that two scalars hold the same value. What insn 5
-refines are its linked registers. Scalar evolution computes them before the
-main pass, and a link holds on every path to insn 5, whatever state gets
-there. The stack slot of a caller that a jump refines is found through
-a pointer in the state, and regsafe() compares pointers as before. For two
-scalars range_within() and tnum_in() are enough. Remove check_scalar_ids()
-and the table of cases in regsafe().
+Now the join of two scalars is the join of their ranges. Remove
+scalar_link_consistent() and the scalars from jid_note() and jid_good().
+All other callers of jid_note() pass true for 'consistent': the parameter
+goes.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/states.c | 108 ++------------------------------------------
- 1 file changed, 3 insertions(+), 105 deletions(-)
+ kernel/bpf/join.c | 54 ++++++++++++++---------------------------------
+ 1 file changed, 16 insertions(+), 38 deletions(-)
 
-diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index b60676349655..48359e789faa 100644
---- a/kernel/bpf/states.c
-+++ b/kernel/bpf/states.c
-@@ -58,7 +58,7 @@ static bool check_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
- 		return true;
- 
- 	/* a name of what the caller has, see BPF_INHERITED_ID */
--	if (((old_id | cur_id) & ~BPF_ADD_CONST) >= BPF_INHERITED_ID)
-+	if ((old_id | cur_id) >= BPF_INHERITED_ID)
- 		return old_id == cur_id;
- 
- 	for (i = 0; i < idmap->cnt; i++) {
-@@ -85,49 +85,6 @@ static bool check_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
- 	return false;
+diff --git a/kernel/bpf/join.c b/kernel/bpf/join.c
+index cc4494aef187..2b8c94b7dc50 100644
+--- a/kernel/bpf/join.c
++++ b/kernel/bpf/join.c
+@@ -75,18 +75,16 @@ static void jid_mark_bad(struct bpf_join_state *js, u32 a, u32 b)
+ 			js->pairs[i].bad = true;
  }
  
--/*
-- * Compare scalar register IDs for state equivalence.
-- *
-- * When old_id == 0, the old register is independent - not linked to any
-- * other register. Any linking in the current state only adds constraints,
-- * making it more restrictive. Since the old state didn't rely on any ID
-- * relationships for this register, it's always safe to accept cur regardless
-- * of its ID. Hence, return true immediately.
-- *
-- * When old_id != 0 but cur_id == 0, we need to ensure that different
-- * independent registers in cur don't incorrectly satisfy the ID matching
-- * requirements of linked registers in old.
-- *
-- * Example: if old has r6.id=X and r7.id=X (linked), but cur has r6.id=0
-- * and r7.id=0 (both independent), without temp IDs both would map old_id=X
-- * to cur_id=0 and pass. With temp IDs: r6 maps X->temp1, r7 tries to map
-- * X->temp2, but X is already mapped to temp1, so the check fails correctly.
-- *
-- * When old_id has BPF_ADD_CONST set, the compound id (base | flag) and the
-- * base id (flag stripped) must both map consistently. Example: old has
-- * r2.id=A, r3.id=A|flag (r3 = r2 + delta), cur has r2.id=B, r3.id=C|flag
-- * (r3 derived from unrelated r4). Without the base check, idmap gets two
-- * independent entries A->B and A|flag->C|flag, missing that A->C conflicts
-- * with A->B. The base ID cross-check catches this.
-- */
--static bool check_scalar_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
--{
--	if (!old_id)
--		return true;
--
--	cur_id = cur_id ? cur_id : ++idmap->tmp_id_gen;
--
--	if (!check_ids(old_id, cur_id, idmap))
+-static void jid_note(struct bpf_join_state *js, u32 ida, u32 idb, bool consistent)
++static void jid_note(struct bpf_join_state *js, u32 a, u32 b)
+ {
+-	u32 a = ida & ~BPF_ADD_CONST, b = idb & ~BPF_ADD_CONST;
++	bool consistent, other = false;
+ 	struct join_idpair *p;
+-	bool other = false;
+ 	u32 i;
+ 
+ 	if (!a || !b)
+ 		return;
+ 	/* a name of what the caller has, see BPF_INHERITED_ID */
+-	if (a != b && (a | b) >= BPF_INHERITED_ID)
+-		consistent = false;
++	consistent = a == b || (a | b) < BPF_INHERITED_ID;
+ 	for (i = 0; i < js->npairs; i++) {
+ 		p = &js->pairs[i];
+ 		if (p->a == a && p->b == b) {
+@@ -111,15 +109,12 @@ static void jid_note(struct bpf_join_state *js, u32 ida, u32 idb, bool consisten
+ 	p->bad = !consistent;
+ }
+ 
+-static bool jid_good(struct bpf_join_state *js, u32 ida, u32 idb)
++static bool jid_good(struct bpf_join_state *js, u32 a, u32 b)
+ {
+-	u32 a = ida & ~BPF_ADD_CONST, b = idb & ~BPF_ADD_CONST;
+ 	u32 i;
+ 
+ 	if (!a || !b || js->pairs_overflow)
+ 		return false;
+-	if ((ida ^ idb) & BPF_ADD_CONST)
 -		return false;
--	if (old_id & BPF_ADD_CONST) {
--		old_id &= ~BPF_ADD_CONST;
--		cur_id &= ~BPF_ADD_CONST;
--		if (!check_ids(old_id, cur_id, idmap))
--			return false;
--	}
+ 	for (i = 0; i < js->npairs; i++)
+ 		if (js->pairs[i].a == a && js->pairs[i].b == b)
+ 			return !js->pairs[i].bad;
+@@ -199,15 +194,6 @@ static bool reg_value_equal(const struct bpf_reg_state *ra, const struct bpf_reg
+ 	return !memcmp(ra, rb, offsetof(struct bpf_reg_state, id));
+ }
+ 
+-static bool scalar_link_consistent(const struct bpf_reg_state *ra, const struct bpf_reg_state *rb)
+-{
+-	if ((ra->id ^ rb->id) & BPF_ADD_CONST)
+-		return false;
+-	if ((ra->id & BPF_ADD_CONST) && ra->delta != rb->delta)
+-		return false;
 -	return true;
 -}
 -
- static void __clean_func_state(struct bpf_verifier_env *env,
- 			       struct bpf_func_state *st,
- 			       u16 live_regs, int frame)
-@@ -272,65 +229,8 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
- 			/* explore_alu_limits disables tnum_in() and range_within()
- 			 * logic and requires everything to be strict
- 			 */
--			return memcmp(rold, rcur, offsetof(struct bpf_reg_state, id)) == 0 &&
--			       check_scalar_ids(rold->id, rcur->id, idmap);
-+			return memcmp(rold, rcur, offsetof(struct bpf_reg_state, id)) == 0;
- 		}
--		/*
--		 * Linked register tracking uses rold->id to detect relationships.
--		 * When rold->id == 0, the register is independent and any linking
--		 * in rcur only adds constraints. When rold->id != 0, we must verify
--		 * id mapping and (for BPF_ADD_CONST) offset consistency.
--		 *
--		 * +------------------+-----------+------------------+---------------+
--		 * |                  | rold->id  | rold + ADD_CONST | rold->id == 0 |
--		 * |------------------+-----------+------------------+---------------|
--		 * | rcur->id         | range,ids | false            | range         |
--		 * | rcur + ADD_CONST | false     | range,ids,off    | range         |
--		 * | rcur->id == 0    | range,ids | false            | range         |
--		 * +------------------+-----------+------------------+---------------+
--		 *
--		 * Why check_ids() for scalar registers?
--		 *
--		 * Consider the following BPF code:
--		 *   1: r6 = ... unbound scalar, ID=a ...
--		 *   2: r7 = ... unbound scalar, ID=b ...
--		 *   3: if (r6 > r7) goto +1
--		 *   4: r6 = r7
--		 *   5: if (r6 > X) goto ...
--		 *   6: ... memory operation using r7 ...
--		 *
--		 * First verification path is [1-6]:
--		 * - at (4) same bpf_reg_state::id (b) would be assigned to r6 and r7;
--		 * - at (5) r6 would be marked <= X, sync_linked_regs() would also mark
--		 *   r7 <= X, because r6 and r7 share same id.
--		 * Next verification path is [1-4, 6].
--		 *
--		 * Instruction (6) would be reached in two states:
--		 *   I.  r6{.id=b}, r7{.id=b} via path 1-6;
--		 *   II. r6{.id=a}, r7{.id=b} via path 1-4, 6.
--		 *
--		 * Use check_ids() to distinguish these states.
--		 * ---
--		 * Also verify that new value satisfies old value range knowledge.
--		 */
--
--		/*
--		 * ADD_CONST flags must match exactly: BPF_ADD_CONST32 and
--		 * BPF_ADD_CONST64 have different linking semantics in
--		 * sync_linked_regs() (alu32 zero-extends, alu64 does not),
--		 * so one doesn't stand for the other.
--		 */
--		if (rold->id &&
--		    (rold->id & BPF_ADD_CONST) != (rcur->id & BPF_ADD_CONST))
--			return false;
--
--		/* Both have offset linkage: offsets must match */
--		if ((rold->id & BPF_ADD_CONST) && rold->delta != rcur->delta)
--			return false;
--
--		if (!check_scalar_ids(rold->id, rcur->id, idmap))
--			return false;
--
- 		return range_within(rold, rcur) && tnum_in(rold->var_off, rcur->var_off);
+ /*
+  * Join two registers, regsafe() documents what each type needs.
+  * Pass 1 records id pairs, pass 2 computes @dst, which is a copy of @ra on entry.
+@@ -229,16 +215,8 @@ static bool join_reg(struct bpf_join_state *js, struct bpf_reg_state *dst,
+ 	case SCALAR_VALUE:
+ 		if (js->env->explore_alu_limits && !reg_value_equal(ra, rb))
+ 			return false;
+-		if (pass == 1) {
+-			jid_note(js, ra->id, rb->id, scalar_link_consistent(ra, rb));
+-			return true;
+-		}
+-		join_range(js, dst, ra, rb);
+-		/* a link that exists on one side only is dropped */
+-		if (ra->id && !jid_good(js, ra->id, rb->id)) {
+-			dst->id = 0;
+-			dst->delta = 0;
+-		}
++		if (pass == 2)
++			join_range(js, dst, ra, rb);
+ 		return true;
  	case PTR_TO_MAP_KEY:
  	case PTR_TO_MAP_VALUE:
-@@ -468,8 +368,7 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
- 		/*
- 		 * 64 and 32-bit scalar spills vs MISC/INVALID slots and vice versa.
- 		 * Load from MISC/INVALID slots produces unbound scalar.
--		 * Construct a fake register for such stack and call
--		 * regsafe() to ensure scalar ids are compared.
-+		 * Construct a fake register for such stack and call regsafe().
- 		 */
- 		if (im == 0 || im == 4) {
- 			old_reg = scalar_reg_for_stack(env, old_slot, im);
-@@ -736,7 +635,6 @@ static void reset_idmap_scratch(struct bpf_verifier_env *env)
- {
- 	struct bpf_idmap *idmap = &env->idmap_scratch;
+@@ -269,7 +247,7 @@ static bool join_reg(struct bpf_join_state *js, struct bpf_reg_state *dst,
+ 		if (ra->r64.base != rb->r64.base)
+ 			return false;
+ 		if (pass == 1) {
+-			jid_note(js, ra->id, rb->id, true);
++			jid_note(js, ra->id, rb->id);
+ 			return true;
+ 		}
+ 		if (!jid_strict_ok(js, ra->id, rb->id))
+@@ -291,9 +269,9 @@ static bool join_reg(struct bpf_join_state *js, struct bpf_reg_state *dst,
+ 	}
  
--	idmap->tmp_id_gen = env->id_gen;
- 	idmap->cnt = 0;
+ 	if (pass == 1) {
+-		jid_note(js, ra->id, rb->id, true);
+-		jid_note(js, ra->parent_id, rb->parent_id, true);
+-		jid_note(js, ra->map_uid, rb->map_uid, true);
++		jid_note(js, ra->id, rb->id);
++		jid_note(js, ra->parent_id, rb->parent_id);
++		jid_note(js, ra->map_uid, rb->map_uid);
+ 		return true;
+ 	}
+ 	if (!jid_strict_ok(js, ra->id, rb->id) ||
+@@ -350,8 +328,8 @@ static bool join_special_slot(struct bpf_join_state *js, const struct bpf_stack_
+ 		break;
+ 	}
+ 	if (pass == 1) {
+-		jid_note(js, ra->id, rb->id, true);
+-		jid_note(js, ra->parent_id, rb->parent_id, true);
++		jid_note(js, ra->id, rb->id);
++		jid_note(js, ra->parent_id, rb->parent_id);
+ 		return true;
+ 	}
+ 	return jid_strict_ok(js, ra->id, rb->id) &&
+@@ -563,12 +541,12 @@ static void join_refs_note(struct bpf_join_state *js, const struct bpf_verifier_
+ {
+ 	int i;
+ 
+-	jid_note(js, a->active_irq_id, b->active_irq_id, true);
+-	jid_note(js, a->active_lock_id, b->active_lock_id, true);
++	jid_note(js, a->active_irq_id, b->active_irq_id);
++	jid_note(js, a->active_lock_id, b->active_lock_id);
+ 	for (i = 0; i < a->acquired_refs; i++) {
+-		jid_note(js, a->refs[i].id, b->refs[i].id, true);
++		jid_note(js, a->refs[i].id, b->refs[i].id);
+ 		if (a->refs[i].type == REF_TYPE_PTR)
+-			jid_note(js, a->refs[i].parent_id, b->refs[i].parent_id, true);
++			jid_note(js, a->refs[i].parent_id, b->refs[i].parent_id);
+ 	}
  }
  
 -- 
