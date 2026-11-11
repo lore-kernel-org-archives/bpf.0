@@ -1,84 +1,81 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.181
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.226.149.38
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794397062;
-	b=OzAMBI47JQxf0IMsG66lenqXjucprEEHwkg/XWMbvSG0pNpPPyfdRmM2MbQ4exQmF6M+
-	 JJel3rODQ5TSW1YhepzWt6yql6gDKzw61S1Z8t3AZ/0mTaGq2FH2Z9oKvIm44KAu9KXAs
-	 64TfPG15qYkuA6QgtmaKK14GlUc6WE9OizaAMinecuFxHFTy1mVxac2GBl4I9NG4jI+Gq
-	 JdxfbWdgVmPXXbdCXs2pgkgum5yhutYJ74Ckos/DLMl02QPHB9kRI1flmin0BPBzcuaX6
-	 J0p6Cn/SaA2ogtajQ7UkH2fK7BYsXfOACZaklXTiHCjRzk0pwebLQnP5Epk5V+tES6A==
+	t=1794398390;
+	b=2nJO+oD/p4AAmc7xZTrNM755rSdKEVxRMorE6Feax1xy/nTfhNRukg41SfPOsIzOU7oj
+	 0gCLW8y4cp7z0xmAboPJsHifZd2HHbDfwrwTLl22xRYr69eJZYDwDKoc+M+qmxeWopd+Q
+	 HM4EbQ/Zl5kd7vPIde6d3s9LBGd3a43MQvKP9R0hXEeyrl1FW/rMRLGT/JSRli1uUATWW
+	 +Y3qzjnuSfQjOBEA/nntrftfdv1jJBmeGsIeheOvttg/Y3WBT33z0oZJWE+WZq5ntTbjm
+	 ROuGWSLVQ5wKJNDGSpKt39mBPeaoSzeY+2m8mHnW6D6LxbKmH/wXFu/Z1R6r1t4ADhw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794397062;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
-	bh=GWmJbLCR3Z0PWF883WQy0SlXPcx6C4wxGpgsQpGnChg=;
-	b=zSDeNzSO/nwxQSsUCgNhYTrQxghsMSCarQwOFYPr9LXPkcel+rrM3YKnG7vZO4FOXUqj
-	 3neXAjvK8/T6Knlbx5DdB4AnU9sHG4isBSPjd9FpKHgCcV7JVyIPWe4oJGCPH+byfHVLJ
-	 JX0i5ThDEFOcUxjdLPBSkmC54N+H77ZGad4B1QPKSzeG4Pc2YiiwtnkoFnqWL1qY6BZCm
-	 AokSRLMljG5BdQomuClU1I6MOOiD/klBCUmZOzb2+IsqXITW0UzrnpCeOL/ZuldA6DEKP
-	 2Mhk4Sq7OH1vtAAoXpF3VhwFQF97+6w+rNZJzEoJs6598NfJVpgKrqZeB6md2IYuNQA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794398390;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:To:Cc:
+	 Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=K7VIcK6lFGzOdNIg7mC+k69VFfn6tI43RDONyjfUo4w=;
+	b=Dm1+eoyXljF4wd/QeTUC0qZyrWIMva9WK9IAmHfUP0/HPt2fbSWhgXFzCseTnxETZ4Rp
+	 S21Pw/HaeEA0GtzKfjj3Du58+1AGu1JYRP8FgnoysrHm8r3gsfogDoXdUjIHO3+9jhedQ
+	 XZocjQITuib8PbGGVWo6X75Mcau1QU8bX/bTCLiC10woNziiWKYCWGjGz2+U+ZJI3k3M6
+	 2cQYu1dvKxSyGFNF0LhN96hGGV8YInvaOdoGve3ED1/kYKDNKnegrZiKuxSWEAEa2aApU
+	 aeG+yL2YlD0ASs7QF0+k0HM0rdjZVofbANHXaFH6b1Y6c+HpbM0MtHHvY8Jix3Lpqvg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BlC5Gblx;
-	arc=none smtp.remote-ip=209.85.222.181
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=fail header.from=gmail.com;
+	spf=pass smtp.mailfrom=runbox.com;
+	dkim=pass header.d=runbox.com header.i=@runbox.com header.a=rsa-sha256 header.s=selector1 header.b="MMWeo3M/";
+	arc=none smtp.remote-ip=185.226.149.38
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47A90606A31C
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 11:37:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 47A90606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BFFF606A336
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 11:59:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8BFFF606A336
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=runbox.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BlC5Gblx
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-943e8d35f74so266067285a.0
-        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 03:37:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794397060; x=1795001860; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=GWmJbLCR3Z0PWF883WQy0SlXPcx6C4wxGpgsQpGnChg=;
-        b=BlC5GblxeuC6mh7E5mlcHWaa6FbwL7M5zsHQyzNo0ElWDR1HAb/10OXHf4NPTjJrYZ
-         28qVLgXYI0cEYMl1lacrKBU6nz6AUicANfMZJzE7tO5nUNNb/YLGhvSTEHQIGzEOAuHd
-         nVuqyNnNQTSTYCKjeMB9T9GmTGazkGf9pwsNZ07qbwteqNGC2d7g3SsUnHMTDJ/U9yLA
-         UNk/kC7bqqiC/S3ciUXpdExCDcSYSMdftZTBSKD4owXddH4eUYyHOmIyppHH6JwIk37s
-         OAcw2gv8gQOn9dcZudYcQ7SMmXcsyH1a+VEFKbwnhezz+4FwBTNzgzrVoz9I0rpjutiu
-         fZ8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794397060; x=1795001860;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=GWmJbLCR3Z0PWF883WQy0SlXPcx6C4wxGpgsQpGnChg=;
-        b=LMvUyGBRKIVkt8guvZ155Emyeb9A2ufQcOMRmaB4umt0p7xxZdNZnVXXVfn7EM7bIS
-         8QGax7iFSy+fPWYwe0VOve8jwEeMwr6kZ3PMYL03SYLqucjy6Xps87wewDjQBpH1adRH
-         vPVuwGpbXIKdFU7tSPkTiYRSRg6whXsffxPu6ldzQylAxMC4qKTG3kdbp2FLI1zgkzD6
-         Bd901MlV9xIzkSzof0V0jyNWZMfTk/Y0yXio5sC2RFMYfrWkyh0OGEr5U+0KsPSP58bK
-         hoVnJa1taOwY54A2wBWgrLGO3RvVFCzZjQXbc0Hz0bF7m+8qf5hIV0t4sIK/DmKmdMnI
-         mJ8w==
-X-Forwarded-Encrypted: i=1; AL+hErEcJzo9ku/gb/tYpKnlYZFsg0eH6h/72uaQFD7e0HQ9jCOr5qlaH3UQRCYn7z7kO+abG5o=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9pbGUI05vuA182YmqYo7XzRp/cejcV/BIhUqKY/O7C4oueNmJ3
-	QcZLzTVtlVnyx8nnlT6eeLimnpr+yZhdYnxC7PugBY2LrIJYpNeG75t/
-X-Gm-Gg: AYBFou2PTOf6vqoBw7fKTAFGQO30yS0Xntc7bQwq4gmzNsgjT61End3O+9o6grhC24f
-	MpJU2jWZm6VGSklWK2T89ycWJPuXZVknqNtAlao3dvhscWuMXEPqNfczEvG/JlSairIenLmQsTE
-	h0iOl5BqyaZmgs260nLK7LBB6jLD68NBSnHMjSLdgPYIk1E2GUzgW4H1FgG22ZH0F4ZGl2lX1Iy
-	Jsldzu7VSJGgCICi5NSxaDAbskuEOxFzvDWVP76+nR2VbkPxprPtfcdrITQdtb2ZgFofe0rzahG
-	Hr5rGklu9PR8oGTZ9+SKrNRMrEvDzVV15/8Lao5Hn3dvKkOg7dckwvr0LYJ5Y5o467I8gb9QcH/
-	Mjhd9oHEg8lWEAcqWWlr6j9wXs/DR/QlZ5Q/u/D1fIzN/MFLBmubmt1KILPex+HMW6luVkKOb7j
-	We9zxk2UXeKnZBmVE3G+GMT3zyd8DpjXqjvyXic79Y6pEVzsyRoEhdPIR4UZKm9b+67syXZnmAg
-	38DmENld9y8awdiGWI/O+TKcz2tsCNjTk9mSC6s0p4xoeqY8ZxPfu9fJOD+c43XSodYDuY024SJ
-	eXFp836G1TOAHqFOag5wFePLoamPc4J4CE8jzxZMltwdIqjZpKvvq4s=
-X-Received: by 2002:a05:620a:4444:b0:93f:3e45:a419 with SMTP id af79cd13be357-947b002af5bmr318209785a.38.1794397060199;
-        Wed, 11 Nov 2026 03:37:40 -0800 (PST)
-Received: from localhost ([2600:4040:9399:4000:e553:72e5:7d37:c7ef])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-9479e7dc398sm462686385a.35.2026.11.11.03.37.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Nov 2026 03:37:39 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=runbox.com header.i=@runbox.com header.a=rsa-sha256 header.s=selector1 header.b=MMWeo3M/
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <david.laight.linux_spam@runbox.com>)
+	id 1xR6zO-001ryF-2f; Wed, 11 Nov 2026 12:59:42 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
+	 s=selector1; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To
+	:Message-Id:Date:Subject:Cc:To:From;
+	bh=K7VIcK6lFGzOdNIg7mC+k69VFfn6tI43RDONyjfUo4w=; b=MMWeo3M/lAxKqDwbOwOISD3joD
+	dpO+fO0amLSeTK1namu2CTTJJp6bR0lFMwpjRaEl2krCXB/YIgWkdJpBILjchRLKBT1XC2m4sy8v+
+	l+ra8PaF8kWnNscJTXK6RpVlPOZLbh1/wEeoxaNKGQOnHVfx6jWrKEBBl41v0tESNKa9p/ZtzxS6l
+	Y5NmX9Kmp4NulazfHsGJLJLmHjFG90wGZIFFM0VCRnECibRjcS++AIjamuPH7WQ4KVGHOdGJV2aKq
+	qBG8K19BaMXMaJRX5bylExo7LNf2cZyxOMuZLeOZwVcuUxUcnLznUqv/V+iRLaH8hYSWxKcj4PDqj
+	q+8pHZgA==;
+Received: from [10.9.9.73] (helo=submission02.runbox)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <david.laight.linux_spam@runbox.com>)
+	id 1xR6zI-0000Vd-M9; Wed, 11 Nov 2026 12:59:36 +0100
+Received: by submission02.runbox with esmtpsa  [Authenticated ID (1493616)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.95)
+	id 1xR6zB-001mRM-2N;
+	Wed, 11 Nov 2026 12:59:29 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Petr Mladek <pmladek@suse.com>,
+	Kees Cook <kees@kernel.org>,
+	David Laight <david.laight.linux@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Jim Cromie <jim.cromie@gmail.com>,
+	Lorenzo Stoakes <ljs@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>,
+	Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Samuel Wu <wusamuel@google.com>,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v3 next 11/13] scripts/kallsyms: Optimise compress_symbols()
+Date: Wed, 11 Nov 2026 11:59:09 +0000
+Message-Id: <20261111115911.1142000-12-david.laight.linux@gmail.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20261111115911.1142000-1-david.laight.linux@gmail.com>
+References: <20261111115911.1142000-1-david.laight.linux@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -87,81 +84,265 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 11 Nov 2026 06:37:38 -0500
-Message-Id: <DMSCO4I434TK.15MMEZI0V4UZR@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, "Andrew Lunn"
- <andrew+netdev@lunn.ch>, =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?=
- <bjorn@kernel.org>, <bpf@vger.kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Daniel Zahka" <daniel.zahka@gmail.com>, "Donald
- Hunter" <donald.hunter@gmail.com>, "Eric Dumazet" <edumazet@kernel.org>,
- "Jakub Kicinski" <kuba@kernel.org>, "Jamal Hadi Salim" <jhs@mojatatu.com>,
- "Jiri Pirko" <jiri@resnulli.us>, "John Fastabend"
- <john.fastabend@gmail.com>, <linux-doc@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-rdma@vger.kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Paolo Abeni" <pabeni@redhat.com>, "Saeed Mahameed" <saeedm@nvidia.com>,
- "Simon Horman" <horms@kernel.org>, "Tariq Toukan" <tariqt@nvidia.com>, "Wei
- Wang" <weiwan@google.com>, "Willem de Bruijn"
- <willemdebruijn.kernel@gmail.com>
-Subject: Re: [PATCH net-next v1 08/15] psp: only give time-wait sockets of
- psp connections a validator
-From: "Daniel Zahka" <daniel.zahka@gmail.com>
-To: "Todd Freed" <toddfreed@meta.com>, <netdev@vger.kernel.org>
-X-Mailer: aerc 0.21.0-threadmapfix
-References: <20261111005533.6436-1-toddfreed@meta.com>
- <20261111005533.6436-9-toddfreed@meta.com>
-In-Reply-To: <20261111005533.6436-9-toddfreed@meta.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue Nov 10, 2026 at 7:55 PM EST, Todd Freed wrote:
-> psp_twsk_init() sets tw_validate_xmit_skb on tcp time-wait sockets.
-> today, that becomes set whether or not the socket has psp offload, which
-> is not needed but is harmless. psp_validate_xmit() passes such packets.
->
+When (say) axyb is replaced with azb instead of decrementing the
+token_profit[] value for every pair of token in the old string before
+the substitution and then incrementing it afterwards just decrement
+the counts for ax and yb and increment the ones for az and zb.
+Set the count for xy (the number of actual substitions) to zero
+afterwards.
 
-This can get sent as a standalone patch. I would probably tag it as a
-fix too, even though it is benign. I can't remember why we (I) didn't
-put the validation hook under the branch, but looking at it now, it just
-looks like a bug.
+On my system this reduces the execution time for optimize_result()
+from 98ms to 64ms
 
-> but a validator makes a socket look like it has an encryption offload of
-> its own, and the tc psp action, added in the next patch, relies on that:
-> encap refuses the packets of such a socket, and sk_validate_xmit_skb()
-> drops a packet with a psp association whose socket has a validator.
->
-> set the validator only when the socket has a psp association.
->
-> Signed-off-by: Todd Freed <toddfreed@meta.com>
-> ---
->  net/psp/psp_sock.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/net/psp/psp_sock.c b/net/psp/psp_sock.c
-> index 609b06c7af65..664955bfb4fd 100644
-> --- a/net/psp/psp_sock.c
-> +++ b/net/psp/psp_sock.c
-> @@ -330,10 +330,14 @@ void psp_twsk_init(struct inet_timewait_sock *tw, c=
-onst struct sock *sk)
->  {
->  	struct psp_assoc *pas =3D psp_sk_assoc(sk);
-> =20
-> -	if (pas)
-> +	if (pas) {
->  		refcount_inc(&pas->refcnt);
-> +		/* Only for PSP connections: a validator makes the socket
-> +		 * look like it has an encryption offload of its own
-> +		 */
+The gain will be far more for kernels containing very long symbol names.
 
-comment nit: for my taste, having a comment that starts with "Only for
-PSP connections:" two lines under an if (pas) branch feels unnecessary.
+Add a function to verify the compression tables are correct.
+Call before generating the output when 'incbin' isn't being used.
 
-> +		tw->tw_validate_xmit_skb =3D psp_validate_xmit;
-> +	}
->  	rcu_assign_pointer(tw->psp_assoc, pas);
-> -	tw->tw_validate_xmit_skb =3D psp_validate_xmit;
->  }
-> =20
->  void psp_twsk_assoc_free(struct inet_timewait_sock *tw)
+Output file unchanged.
+
+Signed-off-by: David Laight <david.laight.linux@gmail.com>
+---
+
+Formally patch 12, rebased on 7.4-rc1
+
+ scripts/kallsyms.c | 169 ++++++++++++++++++++++++++++-----------------
+ 1 file changed, 105 insertions(+), 64 deletions(-)
+
+diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+index cbf05972043b..4da613e8e728 100644
+--- a/scripts/kallsyms.c
++++ b/scripts/kallsyms.c
+@@ -634,22 +634,79 @@ static unsigned int token_second(unsigned int token)
+ 
+ /* table lookup compression functions */
+ 
+-/* count all the possible tokens in a symbol */
+-static void learn_symbol(const unsigned char *symbol, int len)
++/* Check that the compression data is consistent. */
++static void check_tables(void)
+ {
+-	int i;
++	struct {
++		unsigned int refs;
++		unsigned int idx;
++	} tok_info[NR_TOKENS], *ti;
++	unsigned int sym_idx, token;
++	unsigned char *cp, *end;
++	struct sym_arr *sa;
++	unsigned int i, idx;
++
++	memset(&tok_info, 0, sizeof(tok_info));
++
++	/* Check that token_syms[]->sym_indexes is correctly sorted. */
++	for (token = 0; token < NR_TOKENS; token++) {
++		sa = token_syms + token;
++		for (i = 0; i + 1 < sa->cnt; i++) {
++			if (sa->sym_indexes[i] < sa->sym_indexes[i + 1])
++				continue;
++			errx(EXIT_FAILURE, "sym_indexes[%x (%s/%s)] missorted at %u %u >= %u",
++			     token, best_table[token_first(token)].str,
++			     best_table[token_second(token)].str,
++			     i, sa->sym_indexes[i], sa->sym_indexes[i + 1]);
++		}
++	}
+ 
+-	for (i = 0; i < len - 1; i++)
+-		token_profit[sym_token_index(symbol, i)]++;
++	/* Check that every token pair is in token_syms[]->sym_indexes[]. */
++	for (sym_idx = 0; sym_idx < table_cnt; sym_idx++) {
++		cp = table[sym_idx]->sym;
++		end = cp + table[sym_idx]->len;
++		/* Scan all pairs */
++		while (++cp < end) {
++			token = token_index(cp[-1], cp[0]);
++			ti = tok_info + token;
++			ti->refs++;
++
++			/* token_syms[]->sym_indexes holds symbol numbers in order. */
++			sa = token_syms + token;
++			for (idx = ti->idx; idx < sa->cnt; idx++) {
++				if (sym_idx == sa->sym_indexes[idx])
++					break;
++			}
++			if (idx >= sa->cnt) {
++				char buf[1 + KSYM_NAME_LEN];
++				expand_symbol(table[sym_idx]->sym, table[sym_idx]->len, buf);
++				errx(EXIT_FAILURE,
++				     "symbol %u (%s) not in sym_indexes[] for token %x (%s/%s)",
++				     sym_idx, buf, token, best_table[cp[-1]].str,
++				     best_table[cp[0]].str);
++			}
++			ti->idx = idx;
++		}
++	}
++
++	/* Check the reference counts for all tokens. */
++	for (idx = 0; idx < NR_TOKENS; idx++) {
++		if (tok_info[idx].refs != token_profit[idx]) {
++			errx(EXIT_FAILURE, "profit error for %x (%s/%s) discrepency %u != %u",
++			     idx, best_table[token_first(idx)].str,
++			     best_table[token_second(idx)].str,
++			     tok_info[idx].refs, token_profit[idx]);
++		}
++	}
+ }
+ 
+-/* decrease the count for all the possible tokens in a symbol */
+-static void forget_symbol(const unsigned char *symbol, int len)
++/* count all the possible tokens in a symbol */
++static void learn_symbol(const unsigned char *symbol, int len)
+ {
+ 	int i;
+ 
+ 	for (i = 0; i < len - 1; i++)
+-		token_profit[sym_token_index(symbol, i)]--;
++		token_profit[sym_token_index(symbol, i)]++;
+ }
+ 
+ static void token_add_symbol(unsigned int token_idx, unsigned int sym_idx)
+@@ -675,23 +732,14 @@ static void symbol_index_all_tokens(const unsigned char *symbol, int len,
+ 	}
+ }
+ 
+-/*
+- * The symbol just got compressed. The only parts of the symbol that changed
+- * meaningfully are those containing the newly assigned compressed char, so
+- * index those.
+- */
+-static void symbol_index_new_tokens(const unsigned char *symbol, int len,
+-				    unsigned int sym_idx, int compressed_chr)
++static void adjust_profit(unsigned int sym_idx,
++			  unsigned int old_first, unsigned int new_first,
++			  unsigned int old_second, unsigned int new_second)
+ {
+-	int i;
++	token_profit[token_index(old_first, old_second)]--;
++	token_profit[token_index(new_first, new_second)]++;
+ 
+-	for (i = 0; i < len - 1; i++) {
+-		const unsigned int token_idx = sym_token_index(symbol, i);
+-
+-		if (symbol[i] == compressed_chr ||
+-		    symbol[i + 1] == compressed_chr)
+-			token_add_symbol(token_idx, sym_idx);
+-	}
++	token_add_symbol(token_index(new_first, new_second), sym_idx);
+ }
+ 
+ static void build_initial_token_table(void)
+@@ -721,13 +769,12 @@ static void build_initial_token_table(void)
+ 		symbol_index_all_tokens(table[i]->sym, table[i]->len, i);
+ }
+ 
+-static unsigned char *find_token(unsigned char *str, int len,
++static unsigned char *find_token(unsigned char *str, unsigned char *end,
+ 				 unsigned int want)
+ {
+ 	unsigned int token = token_index(0, *str++);
+-	int i;
+ 
+-	for (i = 0; i < len - 1; i++) {
++	while (str < end) {
+ 		token = token_index(token_second(token), *str++);
+ 		if (token == want)
+ 			return str - 2;
+@@ -736,53 +783,42 @@ static unsigned char *find_token(unsigned char *str, int len,
+ }
+ 
+ /* replace a given token in all the valid symbols. Use the sampled symbols
+- * to update the counts */
+-static void compress_symbols(unsigned int token_idx, int compressed_chr)
++ * to update the counts.
++ * Marked noinline to help register allocation. */
++static __attribute__((noinline)) void
++compress_symbols(unsigned int token_idx, int compressed_chr)
+ {
+ 	struct sym_arr *arr = &token_syms[token_idx];
+-	unsigned int sym_idx, j, len, size;
+-	unsigned char *p1, *p2;
++	unsigned int sym_idx, j, len;
++	unsigned char *sym, *p, *end;
++	struct sym_entry *se;
+ 
+ 	/* Iterate through all symbols this token is found in and compress. */
+ 	for (j = 0; j < arr->cnt; j++) {
+ 		sym_idx = arr->sym_indexes[j];
+ 
+-		len = table[sym_idx]->len;
+-		p1 = table[sym_idx]->sym;
+-
+-		/* find the token on the symbol */
+-		p2 = find_token(p1, len, token_idx);
+-		if (!p2) continue;
+-
+-		/* decrease the counts for this symbol's tokens */
+-		forget_symbol(table[sym_idx]->sym, len);
+-
+-		size = len;
+-
+-		do {
+-			*p2 = compressed_chr;
+-			p2++;
+-			size -= (p2 - p1);
+-			memmove(p2, p2 + 1, size);
+-			p1 = p2;
+-			len--;
+-
+-			if (size < 2) break;
+-
+-			/* find the token on the symbol */
+-			p2 = find_token(p1, size, token_idx);
+-
+-		} while (p2);
+-
+-		table[sym_idx]->len = len;
+-
+-		/* increase the counts for this symbol's new tokens */
+-		learn_symbol(table[sym_idx]->sym, len);
+-		symbol_index_new_tokens(table[sym_idx]->sym, len, sym_idx,
+-					compressed_chr);
++		se = table[sym_idx];
++		sym = se->sym;
++		end = sym + se->len;
++
++		for (p = sym; (p = find_token(p, end, token_idx)); p++) {
++			len = end - p - 2;
++			end--;
++			*p = compressed_chr;
++			if (p != sym)
++				adjust_profit(sym_idx, p[-1], p[-1],
++					      token_first(token_idx), compressed_chr);
++			if (!len)
++				break;
++			adjust_profit(sym_idx, token_second(token_idx), compressed_chr, p[2], p[2]);
++			memmove(p + 1, p + 2, len);
++		}
++		se->len = end - sym;
+ 	}
+ 
+-	sym_arr_free(arr); /* No symbol contains this token any more. */
++	/* No symbol contains this token any more. */
++	token_profit[token_idx] = 0;
++	sym_arr_free(arr);
+ }
+ 
+ /* search the token with the maximum profit */
+@@ -870,6 +906,11 @@ static void optimize_token_table(void)
+ 
+ 	optimize_result();
+ 	stamp("optimize result");
++
++	if (!out_bin_file) {
++		check_tables();
++		stamp("check tables");
++	}
+ }
+ 
+ /* guess for "linker script provide" symbol */
+-- 
+2.39.5
 
