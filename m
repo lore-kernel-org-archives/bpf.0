@@ -1,57 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794356230;
-	b=J7OjpK57rUOtvRUVVyGe0FkG/1SYcLfPG0l8gXa7ahq8iwZR4CbBzxF+J+YpMTrAsOVu
-	 qIgMwjbW3poLR3sU14Y+1652FiKvk2v4iaV9bDmRpRF8kkv/w/2fBuEB/ivuxXESzlbfZ
-	 2maxlotDki0/6Sv+DJuEu9HBDRZTSAgx/Im1n/iLUW1jn5bCbeuTMMnkHqgsUbgPbcgQh
-	 vKtouAKxjbBngnT9NhLMu26sZwrLqAwRjNyIRgLO9bh8xW4hvNDp8Wi56kD7Yhh+FxrVx
-	 Q+c0LDgY4L8fGpKgZ/ROsjb9NyYX48nDMNgr8y3b9i5muRJAdr++H4rkexhb5g1BdJQ==
+	t=1794358161;
+	b=pfma6pRm+ubjcV1OyL/DQKFc88P8Svmu4f5v8TpvBke0j0Is3kqkfZYikkGnheS7ex/5
+	 uc0FMWOTApJLJdiTPgAummTCkt7Rf2Khs1zhft1NESR0y7RMpr7EnqimR8WQfClkvC0tM
+	 ENIdxsVxN/EJ2Nq8rcNUyn88e8O5by4xIoRlYf3p7NS0FTMzkUA6J5MB8TsmY3g6VZlFE
+	 23WnAVBO/BIGuIFErO7x1xyH4tWGBDNc4nCszEPoys5qE3xr8XU8TIXQMufojuV0KYD1V
+	 WSG9XicPnoM7eKPuSLHymAnTHmxHJsC5zmkmIV5H9ZcsuFzxK8rAJ5CA9EV8lRWnr3g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794356230;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794358161;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=QEI6RYweCWWhPP8RTmNYs5FMDGrfA765hw6LGUvJkJg=;
-	b=f7N/A30+cMuUeqKUkKgtCOrqlmmP7khrn2TC56mUujTSZa000qwU5B4Ra6A1Mm8cZ2nM
-	 ZPDnQ1QYV+FD55U2J9DFMdjWLppgTixc7oILRLLei1P6vugyIGXdghSfi2zM5xDvki6pZ
-	 F0q+x1Nu6tbzB81KqV8I3O/lO6HPhLjETvLNl3xA8nY0OPeu9cm/PkS5AQITyCTTK3d64
-	 BK1THrNH/bpAGthtOGrhAf2AEonmJapdwiGsyc5iq/gMAXGOwZ7D2VF4T0uZZEaX9pA1t
-	 P2k4KE6nlUHESdlLFu+5wmr6phRgPG/NTQ4YsF8DOTeFRBekXalVuTXM53ZnkNU0/Cw==
+	bh=swKhZ0AHP3ZQB6LltphbrMRzgm3FUELwdZ0uq2iP66Q=;
+	b=sCpRCcOVnRVPnNmYvHrKuJNlRLHnTEDLPmyjk8StvjYewKmnl/jEWxiw23UWvO6AsHyc
+	 kaCt/Hr/xakqkX6MlSJoJYtZe4NVwL0kkyu/M9ZfJomJ6xvtLqRFdxIV3mHNKlyhtE9jO
+	 PYqQJKuWkH+CW+4D5HlPIZBOjEbqTcWqdf0Uy11QWJo46dqoAZHaphuGqgrQDBdhegfoE
+	 VhfztBaNVHs2r2ohWmoKsWqcdaxygPD3JOk+pMcUKv6UH2M2bF6F+CImpbM9BBdWbpxT+
+	 TTNYvLvT7IPuq3RrVG51lZSRzqUWNLpJS9qlfbA9WawWLo1F3htV659o9jI8JAFOgiA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JXJl55ng;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=R2lzT8vH;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79C9B606A31C;
-	Wed, 11 Nov 2026 00:17:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1560606A31C;
+	Wed, 11 Nov 2026 00:49:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JXJl55ng
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C86801F0089F;
-	Wed, 11 Nov 2026 00:17:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=R2lzT8vH
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 557431F0089F;
+	Wed, 11 Nov 2026 00:49:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794356230;
-	bh=QEI6RYweCWWhPP8RTmNYs5FMDGrfA765hw6LGUvJkJg=;
+	s=k20260515; t=1794358160;
+	bh=swKhZ0AHP3ZQB6LltphbrMRzgm3FUELwdZ0uq2iP66Q=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=JXJl55ngk6vOlBH5eB9ubvBmosURw6LVTXmhzKDZzSgrxhgt95Te8z6Kaf1HE1DbR
-	 dVYaoUIXte9YEIsri3IhYCgaaOTBHi1UImc319PQnwHHaSW47y9XNs+jvqoqr8t0zA
-	 kG6trCn2nQl+Bv1EK1qc96tGp9KTur0aJnRFeUzQTTa3uFaRfm280UBrlXCBk45tIT
-	 PqpE2i4C9jKYBc2whd/MiFXkHg0rIrxqVBLldrvbTXR041CLzrSlPVy7rlFWvlr4yr
-	 cKhwFHLcXO/nm/LwUuDUFRCHZfo0B9uPMueKR9EB0f0G5yhjklkplj+emJwILep9iq
-	 8xViqcqsOqwzw==
-Message-ID: <sashiko-outbox-208007@kernel.org>
+	b=R2lzT8vHM7QXhGg35dYZ8cAVaEsVYRDJ84/HnxRDCPDDEQAWvVRyn5RKUjZyP6CRD
+	 PVIlAQOJOxhxEnT+9b+DWSiAqdFZJjdNIzevIww+7KWsvGlB+gaZ4ut3AIHFGO/LQg
+	 hYThDs2g8SV1bLA3xymMCA/iz+zblTT/YdPH71OyVBtJHyjgVN7soWmmn39oHMCIOH
+	 eAwMusKSqBAQhbAJ2IdmApkLhebs896gsJ9d7FoxA/ES5/4KIGefHP52Gb4dTqR/dd
+	 9dmVd46meJj/8+zRwP6QcQmKbwjDAdKU13O7cHmMaSeQrcrmkwsQw6iYDDFR4Wc+5+
+	 SHBn8q7B2M9sQ==
+Message-ID: <sashiko-outbox-208036@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 09/13] x86/kprobes: Use kprobe iterator in
- arch_check_optimized_kprobe
+Subject: Re: [PATCH 13/13] samples/kprobes: Add batch probe example
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jiri Olsa" <jolsa@kernel.org>
 Cc: linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20261109195731.1091241-1-jolsa@kernel.org>
+In-Reply-To: <20261109195827.1091410-1-jolsa@kernel.org>
 References: <20261109194916.1089703-1-jolsa@kernel.org>
- <20261109195731.1091241-1-jolsa@kernel.org>
+ <20261109195827.1091410-1-jolsa@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 11 Nov 2026 00:17:09 +0000
+Date: Wed, 11 Nov 2026 00:49:19 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -61,74 +60,52 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found no new issues
-in this patch, but noticed 1 related pre-existing issue it does not
-introduce:
-- [Medium] kprobes: sibling re-optimization failure in __disarm_kprobe()
-  [1]
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Low] samples/kprobes: missing ANNOTATE_NOCFI_SYM() on
+  kprobe_many_call_function()
 --
 
-commit 8174a2b0aeefac5511bfa58a9428f79328aae112
+commit 0bb6f0bd88ba358a50c5bd0da72b9a9137c6b243
 Author: Jiri Olsa <jolsa@kernel.org>
 
-x86/kprobes: Use kprobe iterator in arch_check_optimized_kprobe
+samples/kprobes: Add batch probe example
 
-This commit replaces the byte-by-byte get_kprobe() lookups in
-arch_check_optimized_kprobe() with for_each_kprobe() over the optimized
-instruction range.
+This commit adds 50,000 generated x86 functions and a sample module that
+registers kprobes on them in a batch and calls each function to verify
+the probes.
 
-> diff --git a/arch/x86/kernel/kprobes/opt.c b/arch/x86/kernel/kprobes/opt.c
-> index 9da41424be777..cdf69c939631d 100644
-> --- a/arch/x86/kernel/kprobes/opt.c
-> +++ b/arch/x86/kernel/kprobes/opt.c
-> @@ -334,12 +334,13 @@ static int can_optimize(unsigned long paddr)
->  /* Check optimized_kprobe can actually be optimized. */
->  int arch_check_optimized_kprobe(struct optimized_kprobe *op)
->  {
-> -	int i;
-> +	unsigned long start =3D (unsigned long)op->kp.addr;
-> +	unsigned long end =3D start + op->optinsn.size - 1;
-> +	struct kprobe_iter iter;
->  	struct kprobe *p;
-> =20
-> -	for (i =3D 1; i < op->optinsn.size; i++) {
-> -		p =3D get_kprobe(op->kp.addr + i);
-> -		if (p && !kprobe_disarmed(p))
-> +	for_each_kprobe(iter, p, start + 1, end) {
-> +		if (!kprobe_disarmed(p))
->  			return -EEXIST;
->  	}
+> diff --git a/samples/kprobes/kprobe_many_example.c b/samples/kprobes/kpro=
+be_many_example.c
+> new file mode 100644
+> index 0000000000000..5a58908c840c7
+> --- /dev/null
+> +++ b/samples/kprobes/kprobe_many_example.c
 
-[Severity: Medium]
-This problem wasn't introduced by this patch, but can kprobe_disarmed(p)
-here reject sibling re-optimization during __disable_kprobe() [1]?
+[ ... ]
 
-In __disable_kprobe(), disarm_kprobe(orig_p, true) runs before
-KPROBE_FLAG_DISABLED is set on orig_p->flags:
+> +/* The generated assembly functions have no CFI type metadata. */
+> +static noinline __nocfi void
+> +kprobe_many_call_function(char *functions, unsigned int index)
+> +{
+> +	void (*function)(void);
+> +
+> +	function =3D (void (*)(void))(functions + index * KPROBE_MANY_FUNC_SIZE=
+);
+> +	function();
+> +}
 
-kernel/kprobes.c:__disable_kprobe() {
-	...
-		if (!kprobes_all_disarmed && !kprobe_disabled(orig_p)) {
-			ret =3D disarm_kprobe(orig_p, true);
-			if (ret) {
-				p->flags &=3D ~KPROBE_FLAG_DISABLED;
-				return ERR_PTR(ret);
-			}
-		}
-		orig_p->flags |=3D KPROBE_FLAG_DISABLED;
-	...
-}
+[Severity: Low]
+Does kprobe_many_call_function() need
+ANNOTATE_NOCFI_SYM(kprobe_many_call_function)?
 
-When __disarm_kprobe() disarms a probe that overlapped the jump range of a
-sibling optprobe, it calls optimize_kprobe() -> arch_check_optimized_kprobe=
-()
-to re-optimize that sibling.  Because orig_p is still registered and lacks
-KPROBE_FLAG_DISABLED at that point, kprobe_disarmed(orig_p) returns false
-and arch_check_optimized_kprobe() fails with -EEXIST, leaving the sibling
-probe permanently unoptimized.
-
-[1] https://sashiko.dev/#/bug/linux-504cacc5-65e4-4f67-bdd9-fa0c7244bee6
+Because __nocfi omits the kCFI ud2 sequence before the indirect call,
+building with CONFIG_MITIGATION_RETPOLINE=3Dy, CONFIG_CALL_PADDING=3Dy and
+CONFIG_CFI=3Dy causes objtool's validate_retpoline() to emit a "no-cfi
+indirect call!" warning (breaking the build when CONFIG_OBJTOOL_WERROR=3Dy
+is enabled) unless the function symbol is annotated with
+ANNOTATE_NOCFI_SYM().
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261109194916.1089=
-703-1-jolsa@kernel.org?part=3D9
+703-1-jolsa@kernel.org?part=3D13
