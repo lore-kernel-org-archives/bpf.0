@@ -1,100 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.43
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.53
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794395852;
-	b=rLLQiFrz30FexYqJ1qdlXpxG62B4HzGAKPCeoEzF8lcIWMgMmgAU9BlyTDc3hhnCO3SZ
-	 /dkNkhMnBaC67wub6C0g158dTjPp+A3Ld/NoF2Sc81AgEb3XuPGLHXF5LYI7VXpZ9ZQa1
-	 5idpsnFCefDlDFTo3jHM3RNszhw2l0YR9kIhyvH+0BliEHmoaosbdE5xU3+qMaqU05wT8
-	 Fv6noxO1Vb5fJo+GN1sIk8L7Qx/kl3aPduiA88Cm3bhA2qRLDrDmWrjK9Ex7lPuTMoaOO
-	 aHeg3UdXl6Maq04ZkpyccHmCn/c/Jsv8Rg6joujPNj1pjYyWyuRPYPlmK/X6dNlo+Iw==
+	t=1794396330;
+	b=mC8JLQH0gg/i4olCjHCaBuuOdBmXu9YbjV8o2Dz/KQYxZFGsRWFVD5a+sts2X5lY7YMl
+	 ZgKrAtLcAfikw09zHvqaLl3NO42lqK5YV0+hwYjQlcm2Hlxko/379BIqKEtXK9CS0NPL2
+	 JCRxZF29wf3Ve7PPvKxeZJ8i4Bu7ETxmKdLvLNzl52H6YmvRl0VWGFE2oLmk6wf/9koiv
+	 LoTreIg8i8MapQ+z/ubLumpr/4ddU5ntR4KCIEbbqhnOYjSKDB+p4HZNo64x3P6gXnm26
+	 S//5dnVzUq/MANDzDqYZJ5Z8WKMtYtuRg9frcQswu1BnCNO/AEHOefrxcMo1ANpsyFw==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794395852;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794396330;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=ozSf+hL1jldFALEH5fXM+3KXfDAEgs0BjajLN8xbzFA=;
-	b=GL2GImhw8x/LqiKy7X5PR+YElV1X5vQ2ama2W/if6ZQ3N3BE5F6ng8kbifzRXhOkp8IA
-	 gef0nmyec9ad0t1arjgjlLuNoBXkZDxtyLuJJiAbrCC09imlgltsuB3ICWjsI/GInB373
-	 59qmoVrzs4pme9W+wx7UtDygN2ofHLV4I3H9dx0a2aT2L58nd0vemWcO2nxYZbnnhTU7u
-	 /ch3+LfNJDhyx0c2IeFN/4kH+/zXvsmWOpXQG2rOp/GAYXYfMQ16HH/U448QrntBjMMeZ
-	 B38LhQuAcR1gdovhZGLH8gtXC0Ojg3bUirxnhyK5cs9OwtKHoeIX8yQajZU5g05eVow==
+	bh=RQM3vRQ/k65hcNzWHMMmTbRmdgaygzzzb4KWlaKkg/4=;
+	b=3Cn6uynemW1dQXv856PcNU4Wrh9vVbA3UB+gBXzU8Lae59YSSwBBg3YUBNlIXMHYcgty
+	 hjiViVrPWxKuYtaGuZKY8WOOruh8gkkug+ng4O10GyBbIWFyEeIVL2SO6yOg7l6lzetcW
+	 hd53LfphHyGJxMJyKV3oWsCGCulmM19EVA8UGQoVB+HSRaCpkLOgfN6k15y9DL5kdkLj5
+	 VrRv9pNPcdEarsPawmNj6Nq5kUQRdShQWWoiDeRlbboXleGND7/xx94PV9gOBdlLUXUwH
+	 /D0iSGpAM+7c9OdfrH7f1WwkuY0rw/Gv/RyXzDYX/vLPx23kYVvqezv/m/Tsva/YJWw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=uGeU3Xvv;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.43
-Received: from mail-yx1-f43.google.com (mail-yx1-f43.google.com [74.125.224.43])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="iYNPu4/Y";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.53
+Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55C47606A337
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 11:17:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 55C47606A337
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16AE1606A321
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 11:25:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 16AE1606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=uGeU3Xvv
-Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-67be6030c9fso2665962d50.3
-        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 03:17:32 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794395851; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iYNPu4/Y
+Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-1b3a05f8b5bso4403921c88.1
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 03:25:29 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794396329; cv=none;
         d=google.com; s=arc-20260327;
-        b=aTBxw6OTCF649mB3jf1c0EA10lG7EzU+54OOVmdvaBcS2eah0np90n6wOGX7cglDOl
-         NzfQWU49bLc6T/dnvZWsvO1JMz+WEvD1mPS2npvjr4jgwaNNznYTzzKE88ybCJ0bjEfF
-         9ebpA9invrwDpTJ5wRySgNrIqp21RmsHMYF9VMSdsrrvod6ljWev+omPPA9M3O7Tl9aI
-         NPLWKyEjaXopON/0siGuMTIU0oPWj6b3WRL7MsnUPQRYdyDnOXMNCfrrdkkCtLe2jkSh
-         ffaqqFQpq9/NUrtvedYHiotpezsQJWeSDABbA/zQkvHWq8Zg42bxsk3UCviqPcbjHv4o
-         dWDA==
+        b=iflf02v2AFFUWcCotlGjK4GwuxvZ+Zdl6imSPDdcCF0t2pKdkdslfC+SJsMktcN00D
+         yltlTwjI4e7EeWM1FgNeUxsXNRDxYhygkY2cTaIydYDpNlI2Pqx8VqS85khkCAhc50ES
+         MfiVn26ZBFhHuBYL+DQhS0pfeKfnCTDs3LBcDAGh00fcPgnTKVcglMkhgk/PO1WOE2at
+         5lxRVtW/d7CoiBZDHIauRIZMMgM7um10sbkGUlOAsuP0S0k9cJMWyeyLi3oA6tpR0Cn8
+         gW24j2gp5rpZ7QP7bisOJClREmO1ibNq+oqhGZz64fdEOeGzPbKR2SufffiTu8COFn5X
+         zS6Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=ozSf+hL1jldFALEH5fXM+3KXfDAEgs0BjajLN8xbzFA=;
-        fh=tRUSOu27Hngvyia7A3IHP96wnof3ai/n5Q0wTAT/+tA=;
-        b=GIAx3lvyMsHcbu48cIBBQ0+feIUBHy8RlPZggWfXkOxQ18Tzi6zmFeDf4RvPcRvzgL
-         SW0vyzYrHbMWZHUcg6mptl7jiGww/4gT6VyCMjS1DXwYBCdOecHKKXPeS9J22sSDn74+
-         oPJVNJqv0APHhhA2bddBwNmN7MvAmvFTSgMP0VOpYvX2FIor5WVZmVBIQ1FA2uzqW5WQ
-         HGSVkY1rduu6WILcKIGpU0pc8YXcf/j87nTd31bPp98CwsclIbqJqfnhXGragHBbWh4C
-         TLQKYSchz2g5zQEQdYe0/v89qCKUbT6dvD2oeEF3ftNeqN6ZteR7TFg0RrmSLsqapfHW
-         TWnw==;
+        bh=RQM3vRQ/k65hcNzWHMMmTbRmdgaygzzzb4KWlaKkg/4=;
+        fh=iSXAkhtEQcGnpv2sKCdGUcM/4W2HvNX/Uomqz8JwNJo=;
+        b=SkJ3qFhWuNWdX+0CqX+XfJakIzrFTKUdxVnQXaJBRxR0BS9X2NLjTTTARcxb1rnqXd
+         4XzOvPyF8GckJErYKNE9TiT3/PrIGEsMgJ9iu9dqTGe1CJHLCcp1aMgvFUMx+Vg+2GFw
+         kn8EDW32D9XYh1C/IrhqjfyoPjvJbdJwBR5baEClOyXLBGM4Z/GtQ2ymZIpKhhyp01Nr
+         MzHWClQtIpLIZQ09aSFxaI131SueWDZrBmb75R1VtaMgdqkjtWCbxygA7rEpqosyUcyg
+         C7R0yghtkc6n+XRmA84EdVlVJ/8MbGkDqIEiFkQFtzbrb2axy36t+bv05y0owCVpP+6h
+         /1+w==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794395851; x=1795000651; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794396329; x=1795001129; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=ozSf+hL1jldFALEH5fXM+3KXfDAEgs0BjajLN8xbzFA=;
-        b=uGeU3Xvv/E7K4BHv6EBIagPuXvkh/1ouclHKAD7X+55xw3flHGdEAvIEZ1+liX+9Ct
-         OK3eR6JiKmvu/bTADMu/L094pqKMP3JlFDrFkmeEuQL/qbs98nXqNAayfOE6SlLGBy/i
-         5rWPVAMT2vjGduqRBzvKbha2e/14GMcDKrPOPrIZfuUrCLCPxtESkzNMGRAcSRTHGS3g
-         tVxjimEidLB2HovXkax5tEhnhMNl9pI7hJ676R4QBJyp8VcJr6yuwZqzvj7KXnCZnpcr
-         +UsUqY+lE3FVkkVFk8cYp4y/FHG6VlpsAD6kKqVhuqC7Ol1B80XgziGLdVWXkSJReizL
-         HJvw==
+        bh=RQM3vRQ/k65hcNzWHMMmTbRmdgaygzzzb4KWlaKkg/4=;
+        b=iYNPu4/Y3UATDiZVcfYc1q1iLPT7HEFEtYe/u4rgmkeYtcmcNLnVbvlPMWYc3KXGm/
+         eYbr+duIAENzCVxdCUBdTLa3NX6BZhGg5TukCoQAdw4K6BBTfomJeJLvBAtkio5Uyomc
+         7BpCNo/SqlqOAbUTHEm9JkJJGAcYcN7y0VcFDRYx0Yls7BMhs3wqbAdn4VZrGNaKNY9r
+         GPyfHyv0YlIZFwNtxGcW7z6ORzhWRhIPiAX2cdzuQS6uv0+TnAYxe0YXZaCG0chFZi7o
+         k0rbCj8tkKXaY2ywljkvK27BpCJha2zLyWSCpt0/gXtLSI61cd0Daqt/+7AZIkwH0Qer
+         rnrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794395851; x=1795000651;
+        d=1e100.net; s=20260707; t=1794396329; x=1795001129;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ozSf+hL1jldFALEH5fXM+3KXfDAEgs0BjajLN8xbzFA=;
-        b=0SmmntfDRoQpQfKcKvQHp6sHSytKXQ/GC/5bCDfXmc+78Bvz3Ss0cDAhhwjPu4/s1X
-         1/ZO4QwDUxFgmtaiMrNcRsLWwWWWOZ9/uNU3Cy/nyoUkcXl81xhn8yeUEIHcZhfMWNGB
-         9BH45+PwHAazsR6CdIP6qoF/9BDk+hEhlych+oIV3kVGGUTl8sKcH3YK6w572aERFk1d
-         weqAiPy6HTPFQ94FdCcTI5IpZtS0cO5cFYOiOP6GfLc2rkiX+AxFebiG6QJKgasCjfQt
-         DMWHfzAf2kip1p94vHldt/hLndJFL0DmWRDBUs2w4PwBFpATHg6s0S78hQ8IaBoVkmXB
-         WnEQ==
-X-Forwarded-Encrypted: i=1; AL+hErHSgLorez/m2mpSMtVvnGFvrFz7YZiiFlde7ltm/0esiwpbiVA0sbEeGDz0loKa4bEEZrM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+L6w92wSHlVJAIssWn2/13OshZ7o/wUM3BYoQ/RPGAWwcI5FkL
-	N1Ux9D3l+5HChp2n1gVC2t0zvp4FDjES8stflODnNCxy3kkoakDPcTL4L0m/aJeM1anliubPSyZ
-	uqID+suIDKdaM/kzpDuXZvFLR8Vm2KHg=
-X-Gm-Gg: AYBFou2++ZTQWRhGGWEXVe3b/f3gFmIFL91t8J8nYVYstAMl5FPxpzpapvuXCyjBo5O
-	r7k1dAFCS870umEvigtJf3aHMSTgD3VfTkSb77tgJFtWp1xDB2Z09FXdkTxGdHE4Qvw2XdKkVMQ
-	IQC8Cl4Gp4g+1Bb4stLhvcmWOGRO9/prC1Xl38olOD+t1SN28M5idHApUpCehci1hIFVEdzayas
-	5M9fqCvOyEocjrq81pMHAnx944fJbNrK6hcV87KO4iIw4L13HIc69N5v4Rei2dwC1PyWmc/zdwC
-	vDg1+9gu5CNOvr2AqLnJ5YJ0SeA3hSCuzorq+ahjJRrIg3AtH1Lxe740EZgNAFijfBYKZiJxscQ
-	vSoNHpXs1N9ICbcGWB4yD6A8EyBD20l0XPCSSTQ==
-X-Received: by 2002:a53:b852:0:b0:677:dee1:5238 with SMTP id
- 956f58d0204a3-67c6800672fmr1304770d50.88.1794395851255; Wed, 11 Nov 2026
- 03:17:31 -0800 (PST)
+        bh=RQM3vRQ/k65hcNzWHMMmTbRmdgaygzzzb4KWlaKkg/4=;
+        b=ywUxKbCHyEFRzVAminB7GnjfRgiSQYuhiP5ya1RKJ8oI9K2Hka4w8iyxnUBF22T0q7
+         ffH9gQCk4FtYPD9Lg8S4iBcDLvCk5iQnqqRQsKnsBGRquvAn7PqKDgckw7Zq+Fd7k4vN
+         QUnda1TIlCMhxRQUBtXdWla6OlKhaN5E50UShHrjk3ygs4bFePJdoHiyrOGNEk3K+EVi
+         AO/yHOfFkbSyztbNLCiMy4r7HxjOyrs85tflnHHhAdQp/WsToestxczslN1mmtTGTTvo
+         3SSXlZODBaBfNurUlyfR6RdnRfwoPgxuHA4npwJMQJKS8A9dkSaVT29Q0yUxOcVmFO13
+         VIAA==
+X-Forwarded-Encrypted: i=1; AL+hErFM4AUAU6bHfsDzoeHDSlYUruICu15kMyy7HrTza8SxK4E5pfrju+eyEo/rB0Ws52odZBw=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9WOk6Ku3YqwwoP1SSm3WUfaWdQGYzuMeK47HCPK3oHkblLfluG
+	uMhkiRzZ5zQLBLK/+zekiVtd4S0oOzJUdFmoo3q067b2Miuf/Hxfc38cpkoFf6d0m7MMbW1g4EN
+	VVxEnQ8Nvqtf7h9ktvG3XA+7FG/CBYAc=
+X-Gm-Gg: AYBFou3JBq1eYGGqXicQIW2lbfk82X5QwD5xAPOZ4KvOvTVQqM8wBea8DXRlEIPdyu8
+	M91eiKRGQKBxg9OlXGlKCFMs2LbkZaBrOahY2jt+cDgGgCPSr3WoGsXPqqtrFlhbjTtPOdpJ63P
+	eUMaOVtTRcaYQD88JOKB/WCt8Y7A2CpXXPV/mkWykQnAZT5iC9YRkMyeKKiWP86ozMg3psgRPqB
+	tMDKzbG2ryWzUPp1pzB2w5ndog2ThHcwVUV5NpkhpqsYeRhMAmSNVMl1RUX0Y5/Fm/zUn96zh8i
+	ljQeFc7o+KSH0AgUnaMRzIQ81dmhx9LkYgzGcTMPAoMOevm7oYbFfMdGLlC6la30OR2vuErv+zN
+	dL3qJfnobL0jD3XQ7hXOERy+bCfnG/XaCN+aWsQ==
+X-Received: by 2002:a05:701b:4583:10b0:1a6:4679:6cf4 with SMTP id
+ a92af1059eb24-1b3c034aac5mr1833398c88.36.1794396329056; Wed, 11 Nov 2026
+ 03:25:29 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,14 +104,14 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261110164046.454431-14-a.s.protopopov@gmail.com> <c4f98afcae91b54b30f5e9fdab98125cdccf00b1c7a71afff1b16e931798c314@mail.kernel.org>
-In-Reply-To: <c4f98afcae91b54b30f5e9fdab98125cdccf00b1c7a71afff1b16e931798c314@mail.kernel.org>
+References: <20261110164046.454431-16-a.s.protopopov@gmail.com> <f0cac3d0039b840d9e1cab4dffbff15923f87115dda70351043219df57fbd4d8@mail.kernel.org>
+In-Reply-To: <f0cac3d0039b840d9e1cab4dffbff15923f87115dda70351043219df57fbd4d8@mail.kernel.org>
 From: Anton Protopopov <a.s.protopopov@gmail.com>
-Date: Wed, 11 Nov 2026 12:17:19 +0100
-X-Gm-Features: AclHuK-dO1SKaAz8hkch1ydpFF2M6TtEYCVoI-_FOK3-FQcq1UUZ0nYxEBIVVmg
-Message-ID: <CAGn_itydZuGfTHvNMo5VvmvAnXGp60J7MLXDWxBo5rj=aVh+5A@mail.gmail.com>
-Subject: Re: [PATCH v3 bpf-next 13/18] bpf: Check the return values of
- fmod_ret programs on found targets
+Date: Wed, 11 Nov 2026 12:25:16 +0100
+X-Gm-Features: AclHuK-c_MqedBoRZ4SvekPJBUyZVgQfnPd-lx4-godoXQbKoO4ZRLhpAZaTYE8
+Message-ID: <CAGn_ityTsSTiHjh6Mm8QfrhWWoUqm4SiCRYuJdHVwp+dZxk9Uw@mail.gmail.com>
+Subject: Re: [PATCH v3 bpf-next 15/18] resolve_btfids: Tag fmod_ret candidates
+ as targets
 To: bot+bpf-ci@kernel.org
 Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
 	memxor@gmail.com, almagui@kernel.org, john.fastabend@gmail.com, 
@@ -124,68 +124,99 @@ Content-Transfer-Encoding: quoted-printable
 
 On Wed, Nov 11, 2026 at 9:21=E2=80=AFAM <bot+bpf-ci@kernel.org> wrote:
 >
-> > bpf: Check the return values of fmod_ret programs on found targets
+> > resolve_btfids: Tag fmod_ret candidates as targets
 >
-> TL;DR: Possible wrong behaviour: fmod_ret programs on 64-bit found target=
-s
-> don't require the JIT, so in the interpreter -14 may reach callers as
-> 4294967282; a later commit fixes this, leaving a narrow gap here.
+> TL;DR: Nits only in resolve_btfids fmodret.c: the second branch in
+> relocation_offset() looks unreachable or wrong, and record field offsets =
+are
+> hardcoded in three functions. No functional bugs reported.
 
-This won't apply anymore (see jit-related commit before)
+yes to both nits, will fix
 
->
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
+> > diff --git a/tools/bpf/resolve_btfids/fmodret.c b/tools/bpf/resolve_btf=
+ids/fmodret.c
+> > new file mode 100644
+> > --- /dev/null
+> > +++ b/tools/bpf/resolve_btfids/fmodret.c
 >
 > [ ... ]
 >
-> > +static int fmodret_retval_init(struct bpf_verifier_env *env, u32 btf_i=
-d,
-> > +                            unsigned long addr, const char *tname)
+> > +static bool relocation_offset(const GElf_Shdr *target, GElf_Addr offse=
+t,
+> > +                           size_t width, size_t *result)
 > > +{
+> > +     if (target->sh_size < width)
+> > +             return false;
+> > +     if (offset >=3D target->sh_addr &&
+> > +         offset - target->sh_addr <=3D target->sh_size - width) {
+> > +             *result =3D offset - target->sh_addr;
+> > +             return true;
+> > +     }
+> > +     /* ET_REL relocation offsets are relative to their target section=
+. */
+> > +     if (offset <=3D target->sh_size - width) {
+> > +             *result =3D offset;
+> > +             return true;
+> > +     }
+> > +     return false;
+> > +}
+>
+> this isn't a bug, but when is the second branch in relocation_offset() ta=
+ken?
+>
+> For the module sections that use this helper, sh_addr is 0, so the first
+> test already returns the section-relative offset, and with sh_addr =3D=3D=
+ 0 the
+> second condition cannot be true once the first has failed.
+>
+> The second branch is reached only when sh_addr !=3D 0 and offset < sh_add=
+r,
+> which would be a linked image whose r_offset lies below the target sectio=
+n.
+> Treating that address as a section offset would be wrong there.
+>
+> Would it be clearer to pick the interpretation from e_type, or to drop th=
+e
+> fallback?
 >
 > [ ... ]
 >
-> > +     if (!cnt)
-> > +             goto invalid;
-> > +
-> > +     aux->fmodret_retvals =3D retvals;
-> > +     aux->fmodret_retval_cnt =3D cnt;
-> > +     return 0;
+> > +static char *format_values(const unsigned char *buf, size_t offset, si=
+ze_t ptr_size,
+> > +                        unsigned int encoding)
+> > +{
+> > +     unsigned int nr =3D read_elf_value(buf + offset + 16 + ptr_size, =
+4, encoding);
+> > +     const unsigned char *p =3D buf + offset + FMODRET_META_HEADER_SIZ=
+E(ptr_size);
 >
-> For a found target that returns a 64-bit integer (size =3D=3D 8),
-> check_fmodret_retval() accepts the full 64-bit R0, so "r0 =3D -14" is
-> accepted as the s64 value -14.  Nothing here makes such a program require
-> the JIT.
+> [ ... ]
 >
-> If the program runs in the interpreter, prog->bpf_func is
-> __bpf_prog_runN(), which is declared in kernel/bpf/core.c as:
+> > +static int choose_functions(struct elf_function_list *functions, const=
+ struct btf *btf,
 >
->   static unsigned int PROG_NAME(stack_size)(const void *ctx,
->                                             const struct bpf_insn *insn)
+> [ ... ]
 >
-> so only the low 32 bits of R0 come back.  The x86 trampoline handles
-> interpreted programs, stores all of RAX and returns it to the caller of
-> the traced function, so the caller of a long-returning found target would
-> see 4294967282 instead of -14.
+> > +             if (!read_elf_value(buf + record + 16 + ptr_size, 4, enco=
+ding))
+> > +                     continue;
+> > +             stats->with_values++;
+> > +             flags =3D read_elf_value(buf + record + 12, 4, encoding);
 >
-> That value is non-zero, so the function body is skipped, but it is not an
-> error value either.  Callers would treat the skipped call as a success
-> that returned a large positive value, which is the case the commit messag=
-e
-> says the check is meant to prevent ("Returning such a value instead of
-> calling the function looks to the callers like a real failure").
+> this isn't a bug, but the record field offsets (flags at 12, nr_values at
+> 16 + ptr_size) are written out by hand in parse_records(), format_values(=
+)
+> and choose_functions().  parse_records() has already decoded flags and
+> nr_values, and the other two decode them again from the raw buffer at the
+> same offsets.
 >
-> Should fmodret_retval_init() set env->prog->jit_required =3D 1 when
-> size =3D=3D 8?  A later commit in this series, c4a7eee0c4d7 ("bpf: Requir=
-e the
-> JIT for fmod_ret programs on found 64-bit targets"), adds
-> "if (size =3D=3D 8) env->prog->jit_required =3D 1;" right after these
-> assignments.  No found target carries the tag until 8659bd72073c
-> ("resolve_btfids: Tag fmod_ret candidates as targets"), which comes after
-> that fix, so the window is narrow, but it is still a gap in this commit's
-> own logic.
+> fmodret_metadata.h has macros for the magic, the version and the header
+> size, but none for the field offsets.
+>
+> Would it be simpler to put the offsets in fmodret_metadata.h, or to have =
+a
+> small helper return flags and nr_values for a record, so that the three
+> functions do not each repeat 12 and 16 + ptr_size?
 >
 >
 > ---
