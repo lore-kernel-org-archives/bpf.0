@@ -1,61 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794432752;
-	b=b0Bd8XJfqRa9IouB0qFFxs5MHiQZRFbZrgIhIg5cKAJcC/7Ory62SDYQvaGmCwkp8k2J
-	 cBzkce+za/cyPYT42HEQPcIjjOjWRXZapjHvFZ/TUVCiIqD90pclwy6Xi5i0BYLpzs2CT
-	 qsm4RcMOum43meyt1SuzwXG9toAEKUPknKFkVJU8gHlSIqrIn69QkKQLVLG1PHYVifCVw
-	 CEYSTeNSb6U97sB1239Cv0GU9Cs5y6LpbrK6HX3+bgaWOfRHlwqatPZ7fUkpUW2ti3MSG
-	 gVhUZUwPnQ973DBrRXibpojY+D40Uf9w2Sl4q/Jdil4zzAq65XDxtQ98MFA3H0216wg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794432752;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=ik02p+uK2YLh80l4u9gkdlHPsZgpxQf+NuL8GUZ56cc=;
-	b=VFXKZPGQj6wFRzH+H1sK5/9bO/4JKUqtzgQF3DqWzMWt+raGacIOWVVnQS53U33UZ6PA
-	 gDAwGIltwWPWurPG43mFxTnyGz4Bj81rMvPKvCpVtX4zKSk56bIO8wvORWLfciauGWkQq
-	 qJeOfP4bTY3kjMeuWB2NdqYC05gvxOAhFLE+wwlj2C39A4qVJsqWDumFa06KUkZRgHLS4
-	 /rKh/vK6MtPcOdZyZFnOc0Aaj5VeJh1yklL3qqIWHONwB55oaS7SFFCra71w4Ml586Xv7
-	 qi2/fCkU2WPRgxgvLeTw46DF2WIuf72WXbW6mrfLSiVqrNhklHshzDRJMFIkNtEZDLQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=K97nDBnU;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.161.42
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794433305;
+	b=woUZCdKfDa2C0Lt8ACJY9tlHT8Cs4WeB5rWiVfQelgN/aROpVexJ9k+7PbaPP65UpHXH
+	 qxOW6AINCAferOpdrX37boIBlCjA9SnyOaCnMMS2qz4vdjaDmdPC/birRrTnm4l9aNLlx
+	 QJuQkYRRZuG6sAq2FSe6wFSo1BDpIi2mYpCb6BI6gNe15Pc04BRjRmtMBW6NnGtiYHWqI
+	 zRUvTtS1SrLfKFKvSsCISKMECkmV0y5bhIErAXiw6EYu6m8jLFHLihSqfl+l5+wtmAA8H
+	 SF6W+TxwIQanUo4n9vwZUebii3WSg2/ewpcywPYnIZZSRhq+KHx7MLanQlYtZWRrsSg==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794433305;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=I3NsBH7dbDhUWpFoVCuwiBWZEyjMNzIdlKNXXp/dwQk=;
+	b=0My2UAa0aR75QqzyAgV+EPkvUKFdFkVAXp/YOmJI//3nfK2akGU9t9X1Zrs+cA5RvRAv
+	 9eG3HKYZzG/IwPCN/3ehNMa74Pm7jx16aOiU8VO4EKQmezvvekmhNtLHwOFZ9HKQ6J0kJ
+	 U2PLgARhg8fXUFoOITwLSgdunag/Pgn76MuJBKHc1oWKoJb5XVI1uBK2x3o3AivM3VGHE
+	 P0vmtqWxc3zN0Q73+vynwYvZW3OYanIpPGgltmBNxtDT5mZP3Oy0qxWo9abqTtX8056Yb
+	 LkRNy9mTBFFj8n1SnWU/4A+VCDvO0KoZ9f+7W0lARwH03ubaKrx9KUtmDpOWniopzgw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=cloudflare.com;
+	spf=pass smtp.mailfrom=cloudflare.com;
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=UcyXBCV8;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.161.42
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3562606A335;
-	Wed, 11 Nov 2026 21:32:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799D1606A321
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 21:41:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 799D1606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=K97nDBnU
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D19EF1F00A05;
-	Wed, 11 Nov 2026 21:32:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794432751;
-	bh=ik02p+uK2YLh80l4u9gkdlHPsZgpxQf+NuL8GUZ56cc=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=K97nDBnUT5eF2raZIJztqibpydtRYUx0Li7ClBS+37Q7yCRh8Agu8qdi+BBadXgob
-	 Xy9p/XexdfkaZ22/GQQRL8r80+N528rssBmnxMG+u3zMWj3jxWrW872zAz5eNI7BQn
-	 4EfUBH0ASGK+rCLgsdFhFcXyuqJHB/CX1hWtvq78WKHDKUJZIqwcl7dpcacjSDqoY/
-	 g0BUaXpbEWqQg99vxfKJVrtyv9DiNewyF70C1I3pV2wHFs6xBoLKkAGP4agTWQePVT
-	 P1poOba3v6+BIM55K3sQMxRPkNimUobF7oAMflz9SkhLFFiNGDNkqmn53Y6RfB1ZY6
-	 8pUNxTZDzfRTw==
-Subject: Re: [PATCH v21 net-next 2/2] octeontx2: add mqprio bandwidth offload
- for NIX TX schedulers
-From: netdev-bot+sashiko@kernel.org
-To: rkannoth@marvell.com
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- andrew+netdev@lunn.ch, ast@kernel.org, daniel@iogearbox.net,
- davem@davemloft.net, edumazet@kernel.org, hawk@kernel.org,
- john.fastabend@gmail.com, kuba@kernel.org, pabeni@redhat.com, sdf@fomichev.me,
- sgoutham@marvell.com, horms@kernel.org
-Date: Wed, 11 Nov 2026 21:32:30 +0000
-Message-ID: <179443275039.2199510.3340754433806692028@kernel.org>
-In-Reply-To: <20261109033154.2161803-3-rkannoth@marvell.com>
-References: <20261109033154.2161803-3-rkannoth@marvell.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=UcyXBCV8
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-70b875f6f1fso2877219eaf.2
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 13:41:45 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794433304; cv=none;
+        d=google.com; s=arc-20260327;
+        b=BgMlq/8ycBt3E/kR1OjNfbm8blxKm/ifQqZKMbGTN1R6nds303AIlI31xEeL7tIi3w
+         GpSDM6196Zztkz3WisNYISgsaE6BgxLXIhm8+YBTd17zszcTqefs7doPpX/jihkGx1Ru
+         p4baQvfcLfJv/QgpbXPZV1HVEIGENv34mAiTzizTekxp9KeGOqIP2aNIiQJ6rZ2ZLEUy
+         IfzGfUuapA0h5RBTcyi64LEuusmYSPHGbh5+wX9SXNmgJkxcQUpzZrYbQV4y4+7e8egy
+         iBgY8VxIQdgzSHHdZxXBtwY87xUrRaF08Zr866I5SZSJ5SuXum9B6pEot/O9sJFgBW8i
+         GecQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=I3NsBH7dbDhUWpFoVCuwiBWZEyjMNzIdlKNXXp/dwQk=;
+        fh=qXBrqzpcyhxuhGAAE+B0MhtqBxrbfcbNqdHF28lCvME=;
+        b=Yz9M6Zkn8gtMpOVWFtr+JxNR4eof/UjbINKVRHUqLa8IM9HsHxObzMwkOtiJIXIBdW
+         ltDqVGB63/NtKtgbm3/W4/86u05qprH2oLzY311gVuIwbri6MAJbS8i0otyyQNEkZ530
+         JK1lOm/aaIU+UIXgHFAIN3fQVa+df+nObsK12vK3BYHKiJnuU2PUK6QYxYpLQ5x+5Bu7
+         HDvthrE2AGYFuIQ3le+yO3dIF+TOTBjwyeUGvyod5SdBr9y2KjKxS7oetF4tyYDL0lsM
+         iimHfMLNuTrhlTdxFkeuKkFFSAVsKdyPz/TFSZfS7kLe2yO3/EE3bWfogoWsurLQDaFw
+         WHmw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1794433304; x=1795038104; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=I3NsBH7dbDhUWpFoVCuwiBWZEyjMNzIdlKNXXp/dwQk=;
+        b=UcyXBCV8rw5ddDzDbkoaJQUVWsIT6kVT6wFFWaz1WNOTMbtQXHB0ZwAqYFcr23lc/l
+         7Av723/mVkuv1fOQ79N1SNhCfGc2WVDE7cx217hf1YgVFaYMwIN7Q0bLPWoxkBQCpAeA
+         q3vC3GcTxOGHRg8wY+fKEME/WsXwlxDoth3MH8wNkNJnDq5Mldxkv0PeHRBYE7Uuxeko
+         LHd1kyueEJ02RLdSIH/OyvhdIO7gIrV8aGNUYZeuBK4UVS45ZUo2quIU3AVZhRDlZ9at
+         4rr3WJlBr2V4t0HbZicTPu7UluOtwoWSsbYyEJg3lkeg9bNphizDGEc3BEzwiH4a0tfw
+         jWHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794433304; x=1795038104;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=I3NsBH7dbDhUWpFoVCuwiBWZEyjMNzIdlKNXXp/dwQk=;
+        b=ugdGQHXI451AeWAT9VWuFNDV+RGnlMlIYQZCIiRWdZEJyZf3En4xTMC/bKjfQPfeMF
+         GDxk+ra8ly7GnkordYlWM31uAcdNQ1wSTPFvYgSFWqueY6LoKoN9hciy1EqdvLrdEx7l
+         p7CWUj4qSAw+9IdSMK/zpbmlxXEPhFRLPdGAtSnHDLHB9JOB142SbZq0xPUgNewx064R
+         UyI1H6nMv1bpGTbE1AQ5DTl6ipx0F3obDxI3VYx35+JNvXDMgkh9ttCT1BB2cgei4RSk
+         Rgee7BqJzr/iG4f4A4Fl951cIJB2hCz9ELJbsrrPIsuyC0WTBpcJ0DLYL4/tSwCnWfDI
+         Qaiw==
+X-Forwarded-Encrypted: i=1; AL+hErGjhISKLVZQVj53NV8ojLC9BHWXirS29ChQeraEsvjKw2dU4UQ1oUnsWz7d3YkIjVoJLpU=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/hfQHuqQephHNTbI/x7FHa6pMz2G8lcKtPvVpv0x3NAg4vW3AR
+	TySL9gVqrJoseydrP3Dc4pdvMOOpS5dummeVbwC3pJ0WQXHv5Ynp58+q7falqv1uMJ3ZcQzH3+n
+	GioMr6eSzpjC5SOQi+eYU8f8TVWUZIJgVIlBS1GvQhQ==
+X-Gm-Gg: AYBFou31q+1+wt/toXH9xZd/BYefAV4P3n+v2Yb2pQvZ6NEiOPbwta/Bki2MQ7nBbNj
+	hc/8bwPzeE1Lp3zQOxwC3cLfPw7PKIoNrjTZQbFTSxYElUDIVDTCbjp178XmTO5okNm+C7CJqmw
+	+Hf/eeaxC7tKpmCvaUYQx/5ZHklI6kBjcuodn6PN9DtAb2+fdWK5zMALV1cdD7g0708uPuYQD7K
+	ci2TpsaDQXO1u+yV/cE0M3cORp36kU0q10Ez40wjsTu38lRgi6Q87dkxzZoHPOUwnlCZ9EjtVyC
+	TC6ECJP9LTCutl9m7SAHVuZLURoc+QEtlsGbhtaREXRqVSqvK949nCPKrQJBLpbnwBbRknpC6UF
+	biecZ/yxJGaWWpWoF1FxZ8n/nAvEN0PAV9Ng62IifnapcPEL0s/jiGEslohICYODQURnhY1nxn9
+	i6hZIPCSjbHg==
+X-Received: by 2002:a05:6820:441b:b0:6d8:ccbf:a7c2 with SMTP id
+ 006d021491bc7-7191797df4fmr2278556eaf.68.1794433304290; Wed, 11 Nov 2026
+ 13:41:44 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -65,517 +104,74 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-
-Thank you for your contribution! Sashiko AI review found 11 potential
-issue(s) to consider.
-
-Critical: 0 · High: 0 · Medium: 6 · Low: 5
-
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] Replacing an offloaded mqprio with a software taprio stops TX
-  on the interface.
-- [Medium] With mqprio rate limiting active, otx2_txsch_alloc() requests
-  hw.non_qos_queues SMQs but still only one TL4.
-- [Medium] Setup and teardown use different notions of 'offload enabled'.
-- [Medium] When otx2_mqprio_down() fails, otx2_teardown_tc_mqprio()
-  returns immediately and skips otx2_mqprio_restart_netdev(netdev,…
-- [Medium] The new otx2_mqprio_up() failure branch in otx2_open() jumps
-  to the new err_free_hw label.
-- [Medium] octeontx2-pf: premature otx2_mcam_flow_del() in otx2_probe()
-  error path
-- [Low] The commit message leaves out several changes that reach code
-  paths unrelated to mqprio.
-- [Low] otx2_mqprio_restart_netdev(), called from ndo_setup_tc, clears
-  and sets __LINK_STATE_START on netdev->state directly.
-- [Low] The new comment in otx2_config_sched_shaping() calls 65536 'the
-  kernel-side default burst when HTB does not supply an explicit value'.
-- [Low] The comment on otx2_mqprio_keep_netdev_tc() says it detects a new
-  software mqprio that installed its TC layout before the old offloaded…
-- [Low] In otx2_setup_tc_mqprio(), the cleanup path for a failed replace
-  is entered mid-loop when otx2_nix_tm_set_queue_shaper() fails.
-
---
-
-octeontx2: add mqprio bandwidth offload for NIX TX schedulers
-
-This commit adds TC_SETUP_QDISC_MQPRIO offload with the bw_rlimit shaper
-for octeontx2 PF and VF netdevs. It programs per-queue MDQ CIR/PIR through
-the NIX TX scheduler mailbox.
-
-The TX scheduler cannot be reprogrammed live, so every mqprio add, replace
-and delete bounces the netdev through ndo_stop()/ndo_open(). Cached rates
-are restored from otx2_mqprio_up(), and replace operations are staged in
-snapshots.
-
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-> index f4047b0d5d963..b4a738cf9a8b7 100644
-> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-
-[ ... ]
-
-> @@ -651,7 +784,11 @@ int otx2_txschq_config(struct otx2_nic *pfvf, int lvl, int prio, bool txschq_for
->  						(u64)hw->smq_link_type);
->  		req->num_regs++;
->  		/* MDQ config */
-> -		parent = schq_list[NIX_TXSCH_LVL_TL4][prio];
-> +		if (pfvf->mqprio.rate_limit)
-> +			parent = schq_list[NIX_TXSCH_LVL_TL4][0];
-> +		else
-> +			parent = schq_list[NIX_TXSCH_LVL_TL4][prio];
-> +
->  		req->reg[1] = NIX_AF_MDQX_PARENT(schq);
->  		req->regval[1] = parent << 16;
->  		req->num_regs++;
-
-[Severity: Medium]
-With rate_limit set, otx2_txsch_alloc() asks for hw.non_qos_queues SMQs
-but still only one TL4. Every MDQ then becomes a child of TL4[0] with
-MDQ_SCHEDULE = dwrr_val (priority 0).
-
-Is NIX_AF_TL4X_TOPOLOGY for TL4[0] programmed anywhere on this path?
-
-As far as I can tell, TL4X_TOPOLOGY is only written from nic/qos.c. The AF
-reset clears only PARENT and SCHEDULE:
-
-drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c:nix_reset_tx_schedule() {
-	case NIX_TXSCH_LVL_TL4:
-		tlx_parent   = NIX_AF_TL4X_PARENT(schq);
-		tlx_schedule = NIX_AF_TL4X_SCHEDULE(schq);
-}
-
-The HTB teardown in otx2_qos_free_hw_schq() does reset the topology, but
-only best-effort. If the mailbox fails it warns and frees the schq anyway.
-
-TL4[0] may have been last used by another function, or by an HTB teardown
-whose reset failed. Can it then keep a non-zero RR_PRIO/PRIO_ANCHOR? If
-so, the priority-0 MDQ children would not form a single DWRR group, and
-per-queue shaping could behave unexpectedly.
-
-The patch acknowledges this later with:
-
-	netdev_warn_once(netdev,
-			 "mqprio: bandwidth offload uses TL4[0] without explicit topology programming; verify scheduling if limits look wrong\n");
-
-Would it make sense to program TL4[0] TOPOLOGY with an RR_PRIO that
-matches the MDQ priority when several MDQs are attached?
-
-[ ... ]
-
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
-> index 777e7156badb7..f51161e8b5949 100644
-> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
-> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
-> @@ -2008,6 +2008,15 @@ int otx2_open(struct net_device *netdev)
->  	if (err)
->  		goto err_free_mem;
->  
-> +	/* Fail closed: abort open if cached mqprio shapers cannot be restored. */
-> +	err = otx2_mqprio_up(pf);
-> +	if (err) {
-> +		netdev_err(pf->netdev,
-> +			   "mqprio: failed to restore shapers during open: %d\n",
-> +			   err);
-> +		goto err_free_hw;
-> +	}
-
-[Severity: Medium]
-Does this new error path leak pf->refill_wrk?
-
-otx2_init_hw_resources()->otx2_config_nix_queues() has just allocated it:
-
-	pfvf->refill_wrk = devm_kcalloc(pfvf->dev, pfvf->qset.cq_cnt,
-					sizeof(struct refill_work), GFP_KERNEL);
-
-err_free_hw only runs otx2_free_hw_resources() and otx2_free_queue_mem().
-Neither of them frees refill_wrk. The only devm_kfree() of it is in
-otx2_stop().
-
-When the open fails from otx2_mqprio_restart_netdev(), OTX2_FLAG_INTF_DOWN
-is set before netif_close(). otx2_stop() then returns early, so the
-allocation is never released.
-
-With rate_limit active, a persistent shaper mailbox failure would leak
-cq_cnt * sizeof(struct refill_work) on every admin up attempt until the
-driver is unbound.
-
-The older error labels after otx2_init_hw_resources() have the same gap.
-This patch adds a new way to reach it from userspace.
-
-[ ... ]
-
-> @@ -2281,6 +2291,7 @@ int otx2_stop(struct net_device *netdev)
->  	for (qidx = 0; qidx < netdev->num_tx_queues; qidx++)
->  		netdev_tx_reset_queue(netdev_get_tx_queue(netdev, qidx));
->  
-> +	synchronize_net();
->  	otx2_free_queue_mem(qset);
-
-[Severity: Low]
-This isn't a bug, but several changes here affect paths outside mqprio,
-and the commit message does not mention them.
-
-synchronize_net() now runs on every ndo_stop. That covers admin down,
-otx2_change_mtu(), ethtool channel and ring changes, XDP attach/detach,
-and the reset task. Under RTNL it becomes synchronize_rcu_expedited().
-
-What race does it close? If it fixes an existing problem with
-otx2_free_queue_mem(), could it go in a separate patch with a Fixes: tag?
-
-otx2_txschq_stop() now zeroes hw.txschq_cnt[] for every caller. After a
-stop, otx2_get_smq_idx() returns 0 instead of the last SMQ. Existing users
-such as otx2_pfc_update_sq_smq_mapping() and otx2_qos_disable_sq() will
-see this.
-
-The PF and VF probe/remove ordering also changes:
-
-  - otx2_init_tc() and otx2vf_mcam_flow_init() now run before
-    register_netdev()
-  - otx2_shutdown_tc() moves to right after unregister_netdev()
-  - the error labels are rewired
-
-There are also comment-only edits in qos.c and otx2_get_egress_burst_cfg().
-
-Could the commit message describe these changes, or could they be split
-out?
-
-[ ... ]
-
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-> index 8877af348a090..b34a86259e786 100644
-> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-
-[ ... ]
-
-> +static int otx2_mqprio_restore_old(struct otx2_nic *pfvf)
-> +{
-> +	struct mq_offload_snap *snap = pfvf->old_mq_snap;
-> +	struct net_device *netdev = pfvf->netdev;
-> +	u16 num_txq = pfvf->hw.non_qos_queues;
-> +	int tc, txq, err;
-> +
-> +	if (!snap)
-> +		return 0;
-> +
-> +	err = otx2_mqprio_alloc_cache(pfvf, false);
-> +	if (err) {
-> +		netdev_err(netdev,
-> +			   "mqprio: rollback failed to allocate rate cache: %d\n",
-> +			   err);
-> +		return err;
-> +	}
-
-[Severity: Low]
-The replace path in otx2_setup_tc_mqprio() can reach cleanup because
-otx2_nix_tm_set_queue_shaper() failed partway through the loop. At that
-point pfvf->mqprio.min_rate[]/max_rate[] and pfvf->mqprio.flags already
-hold part of the new config, and rate_limit is true.
-
-If otx2_mqprio_alloc_cache() fails here, we return before refilling the
-cache from old_mq_snap. Does that leave the partially-new rates cached
-with rate_limit still set, while the old qdisc stays root?
-
-The same applies if otx2_nix_tm_clear_queue_shaper() fails further down.
-The cache is restored, but the hardware keeps the partially-new shapers.
-
-On the restore_err branch in otx2_setup_tc_mqprio(), no deferred TC
-restore is scheduled. num_tc therefore stays 0 after mqprio_destroy() of
-the failed qdisc. From then on, otx2_mqprio_up() would re-apply the mixed
-rate set on every ndo_open().
-
-[ ... ]
-
-> +/* Offloaded mqprio replaced by software mqprio installs netdev TC layout in
-> + * mqprio_init() before the old offload instance is destroyed during graft.
-> + */
-> +static bool otx2_mqprio_keep_netdev_tc(struct otx2_nic *pfvf)
-> +{
-> +	struct Qdisc *qdisc = rtnl_dereference(pfvf->netdev->qdisc);
-> +
-> +	return qdisc && qdisc->ops && !strcmp(qdisc->ops->id, "mqprio");
-> +}
-
-[Severity: Low]
-Can this match the offloaded mqprio that is being destroyed, and not only
-a new software mqprio?
-
-dev_shutdown() puts the root qdisc while dev->qdisc still points at it:
-
-net/sched/sch_generic.c:dev_shutdown() {
-	qdisc_put(rtnl_dereference(dev->qdisc));
-	rcu_assign_pointer(dev->qdisc, &noop_qdisc);
-}
-
-When offload is active, mqprio_destroy() leaves num_tc to the driver:
-
-net/sched/sch_mqprio.c:mqprio_destroy() {
-	if (priv->hw_offload && dev->netdev_ops->ndo_setup_tc)
-		mqprio_disable_offload(sch);
-	else
-		netdev_set_num_tc(dev, 0);
-}
-
-This happens on unregister, and in __dev_change_net_namespace(), which
-calls netif_close() and then dev_shutdown(). In both cases
-otx2_mqprio_clear_sw() would see "mqprio" and skip
-netdev_set_num_tc(netdev, 0).
-
-After a netns move, the stale TC layout would stay while only the default
-mq is attached. skb_tx_hash() would keep limiting queue selection to the
-old TC offset/count until a new mqprio is installed.
-
-> +static void otx2_mqprio_clear_sw(struct otx2_nic *pfvf)
-> +{
-> +	struct net_device *netdev = pfvf->netdev;
-> +
-> +	pfvf->mqprio.rate_limit = false;
-> +	otx2_mqprio_clear_replace_state(pfvf);
-> +	if (!otx2_mqprio_keep_netdev_tc(pfvf)) {
-> +		struct Qdisc *root = rtnl_dereference(netdev->qdisc);
-> +
-> +		if (root && root->ops && !strcmp(root->ops->id, "taprio"))
-> +			netdev_warn(netdev,
-> +				    "mqprio: offload teardown cleared the TC layout of the new %s\n",
-> +				    root->ops->id);
-> +		netdev_set_num_tc(netdev, 0);
-> +	}
-
-[Severity: Medium]
-Does replacing an offloaded mqprio with a software taprio stop TX on the
-interface?
-
-Consider "tc qdisc replace dev X root taprio ..." without full offload:
-
-  1. taprio_change() installs its layout with netdev_set_num_tc() and
-     netdev_set_tc_queue().
-  2. qdisc_graft() publishes taprio as dev->qdisc and destroys the old
-     mqprio.
-  3. Because hw_offload is set, mqprio_destroy() calls ndo_setup_tc()
-     with hw=0.
-  4. otx2_teardown_tc_mqprio() reaches otx2_mqprio_clear_sw(), either
-     directly or through otx2_mqprio_down()/otx2_mqprio_restart_netdev().
-
-Here the root is detected as "taprio" and the warning is printed, but
-netdev_set_num_tc(netdev, 0) still runs.
-
-otx2 returns -EOPNOTSUPP for TAPRIO caps, so taprio uses
-taprio_dequeue_tc_priority():
-
-net/sched/sch_taprio.c:taprio_dequeue_tc_priority() {
-	int num_tc = netdev_get_num_tc(dev);
-	...
-	for (tc = num_tc - 1; tc >= 0; tc--) {
-}
-
-With num_tc == 0 this loop never runs, so dequeue always returns NULL.
-
-Should the TC layout also be kept for taprio, or for any new root that
-owns it?
-
-[ ... ]
-
-> +static int otx2_mqprio_restart_netdev(struct net_device *netdev, bool rate_limit)
-> +{
-
-[ ... ]
-
-> +	if (running) {
-> +		clear_bit(__LINK_STATE_START, &netdev->state);
-> +		smp_mb__after_atomic(); /* Commit netif_running(). */
-> +	}
-
-[ ... ]
-
-> +		otx2_set_flag(pfvf, OTX2_FLAG_INTF_DOWN);
-> +		/* visible to otx2_stop() on other cpus */
-> +		smp_wmb();
-> +		netif_close(netdev);
-> +	}
-
-[Severity: Low]
-Is it ok for a driver to clear and set __LINK_STATE_START directly from
-ndo_setup_tc()? I couldn't find another driver under drivers/net that
-does this. The bit is owned by the core open/close helpers.
-
-When ndo_open() fails, netif_close() is also called from inside the qdisc
-operation. A failed "tc qdisc add/replace/del ... mqprio" can then take
-the interface administratively down. That includes a delete, which the
-core cannot veto. IFF_UP is cleared and NETDEV_GOING_DOWN/NETDEV_DOWN are
-sent.
-
-The commit message only says the netdev is bounced through
-ndo_stop()/ndo_open(). Could it mention that a tc command can close the
-interface?
-
-[ ... ]
-
-> +static bool otx2_tc_can_offload(struct net_device *netdev)
-> +{
-> +	return !!(netdev->hw_features & NETIF_F_HW_TC);
-> +}
-> +
-> +static int otx2_teardown_tc_mqprio(struct otx2_nic *pfvf,
-> +				   struct tc_mqprio_qopt_offload *mqprio)
-> +{
-
-[ ... ]
-
-> +	if (pfvf->mqprio.replace_setup_done && pfvf->cur_mq_snap) {
-> +		err = 0;
-> +		if (pfvf->mqprio.replace_graft_done || !tc_can_offload(netdev)) {
-> +			otx2_mqprio_snap_commit(pfvf);
-> +		} else {
-
-[Severity: Medium]
-otx2_tc_can_offload() checks netdev->hw_features. This check uses the
-core tc_can_offload(), which checks netdev->features. Can the two
-disagree in the default configuration?
-
-Both otx2_probe() and otx2vf_probe() add NETIF_F_HW_TC to hw_features
-after "netdev->features |= netdev->hw_features". So hw-tc-offload is off
-by default, and qdisc_offload_graft_helper() never sends TC_ROOT_GRAFT:
-
-net/sched/sch_api.c:qdisc_offload_graft_helper() {
-	if (!tc_can_offload(dev) || !dev->netdev_ops->ndo_setup_tc)
-		return;
-}
-
-As a result, this branch always commits.
-
-Suppose a replacement mqprio passes otx2_setup_tc_mqprio() and then fails
-later in qdisc_create(). For example, an estimator on a TCQ_F_MQROOT
-qdisc goes to err_out4 and ->destroy().
-
-Wouldn't the rejected config be committed as old_mq_snap? The hardware
-shapers and netdev TC layout would keep enforcing it while the old qdisc
-stays root.
-
-Separately, on the PF NETIF_F_HW_TC is only in hw_features when
-OTX2_FLAG_TC_FLOWER_SUPPORT is set. Is it intended that MDQ shaping is
-refused on PFs without flower/MCAM support? The commit message says the
-feature applies to PF and VF netdevs, without that qualification.
-
-[ ... ]
-
-> +	if (if_up) {
-> +		err = otx2_mqprio_down(pfvf);
-> +		if (err) {
-> +			if (extack)
-> +				NL_SET_ERR_MSG_FMT_MOD(extack,
-> +						       "mqprio: teardown incomplete (%d)",
-> +						       err);
-> +			netdev_err(netdev,
-> +				   "mqprio: offload teardown incomplete (%d); driver state may not match removed qdisc\n",
-> +				   err);
-> +			return err;
-> +		}
-> +
-> +		err = otx2_mqprio_restart_netdev(netdev, false);
-
-[Severity: Medium]
-If otx2_nix_tm_clear_queue_shaper() fails inside otx2_mqprio_down(), the
-software state has already been released through otx2_mqprio_clear_sw().
-otx2_mqprio_down() explains this as:
-
-	/* The core cannot veto qdisc teardown, so always release software
-	 * state.  The netdev restart that follows reallocates the TX
-	 * scheduler, which drops any shaper left programmed.
-	 */
-
-On this error path, though, we return before otx2_mqprio_restart_netdev(),
-so no restart follows. Doesn't that leave the MDQ CIR/PIR limits and the
-widened SMQ allocation in place, with rate_limit false and num_tc 0?
-
-mqprio_disable_offload() is void, so "tc qdisc del" looks successful to
-the user. The stale limits would remain until an unrelated
-ndo_stop()/ndo_open().
-
-Should the restart still happen when the clear fails?
-
-[ ... ]
-
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/qos.c b/drivers/net/ethernet/marvell/octeontx2/nic/qos.c
-> index 2ede0b84e5f52..732fff75ab0be 100644
-> --- a/drivers/net/ethernet/marvell/octeontx2/nic/qos.c
-> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/qos.c
-> @@ -118,6 +118,9 @@ static void otx2_config_sched_shaping(struct otx2_nic *pfvf,
->  	/* configure PIR */
->  	maxrate = (node->rate > node->ceil) ? node->rate : node->ceil;
->  
-> +	/* 65536 is the kernel-side default burst when HTB does not supply an
-> +	 * explicit value, not the NIX hardware maximum (CN10K_MAX_BURST_SIZE).
-> +	 */
->  	cfg->regval[*num_regs] =
->  		otx2_get_txschq_rate_regval(pfvf, maxrate, 65536);
-
-[Severity: Low]
-This isn't a bug, but is this comment accurate? struct tc_htb_qopt_offload
-has no burst member, so HTB offload can never supply an explicit burst,
-and 65536 is always used.
-
-The comment in otx2_nix_tm_set_queue_shaper() ("Use the same 65536 byte
-default as the HTB shaper path") repeats the same idea.
-
-[ ... ]
-
-> @@ -3420,11 +3437,13 @@ static int otx2_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  	otx2_sriov_vfcfg_cleanup(pf);
->  err_pf_sriov_init:
->  	otx2_unregister_dl(pf);
-> -	otx2_shutdown_tc(pf);
->  err_mcam_flow_del:
->  	otx2_mcam_flow_del(pf);
->  err_unreg_netdev:
-> +	otx2_shutdown_tc_mqprio(pf);
->  	unregister_netdev(netdev);
-> +err_shutdown_tc:
-> +	otx2_shutdown_tc(pf);
->  err_ipsec_clean:
->  	cn10k_ipsec_clean(pf);
->  err_mcs_free:
-
-[Severity: Medium]
-Does the new label ordering stop otx2_shutdown_tc() from doing
-anything on the late probe error paths?
-
-Before this patch, err_pf_sriov_init ran otx2_shutdown_tc() and only
-then fell through to otx2_mcam_flow_del(). With this patch, a failure
-in otx2_register_dl(), otx2_sriov_vfcfg_init(), the af_xdp_zc_qidx
-bitmap_zalloc() or otx2_dcbnl_set_ops() unwinds like this:
-
-  err_mcam_flow_del:  otx2_mcam_flow_del()
-  err_unreg_netdev:   otx2_shutdown_tc_mqprio(), unregister_netdev()
-  err_shutdown_tc:    otx2_shutdown_tc()
-
-otx2_mcam_flow_del() goes through otx2_destroy_mcam_flows(), which
-clears OTX2_FLAG_MCAM_ENTRIES_ALLOC.
-
-otx2_shutdown_tc() then calls otx2_destroy_tc_flow_list(). That
-function returns early when OTX2_FLAG_MCAM_ENTRIES_ALLOC is clear, so
-it no longer walks flow_cfg->flow_list_tc.
-
-Any otx2_tc_flow nodes added while the netdev was registered are
-therefore never freed. The window is small, and installing flower
-rules needs CAP_NET_ADMIN.
-
-The ordering is also now the reverse of otx2_remove() after this
-patch. There, otx2_shutdown_tc() runs right after unregister_netdev(),
-and otx2_mcam_flow_del() runs later.
-
-The unwind already reaches err_del_mcam_entries by fallthrough from
-err_shutdown_tc/err_ipsec_clean/err_mcs_free. err_del_mcam_entries
-calls otx2_mcam_flow_del() again, so the call at err_mcam_flow_del
-looks redundant.
-
-Could that first call be dropped, with the labels folded, so the probe
-error path mirrors otx2_remove()? Or is there a reason the MCAM flows
-have to be deleted before unregister_netdev() here?
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261109033154.2161803-1-rkannoth%40marvell.com
+References: <cover.1794020868.git.tianyi@cloudflare.com> <e90e748e0aefa7cbe1c2b31b8c7902ccf135c3f2.1794020868.git.tianyi@cloudflare.com>
+ <willemdebruijn.kernel.1d64e7848503b@gmail.com> <20261107182526.69543-1-tianyi@cloudflare.com>
+ <willemdebruijn.kernel.2c6a653eb65fa@gmail.com> <20261108190831.3f991a13@phoenix.local>
+ <20261109154909.32748-1-tianyi@cloudflare.com> <avTOvr+yy+2j8xrQ@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
+ <avTSBFpR2t7PO9tx@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
+In-Reply-To: <avTSBFpR2t7PO9tx@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
+From: Tianyi Gao <tianyi@cloudflare.com>
+Date: Wed, 11 Nov 2026 21:41:32 +0000
+X-Gm-Features: AclHuK9Lzd82c8LN3lRJw2ClwKtYPqt-3w9VlW5CxKeZCzjufsRqZ2sayCWq8TY
+Message-ID: <CAG4wq-d+LtEi-omGwzgqx14rCp_4J9HztGMpa8ioMsviaPw+ZQ@mail.gmail.com>
+Subject: Re: [PATCH net-next 1/8] net: add tx_extra_headroom and LL_ALLOC_SPACE()
+To: David Keogh <dkeogh@amazon.com>
+Cc: Stephen Hemminger <stephen@networkplumber.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, netdev@vger.kernel.org, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Eric Dumazet <edumazet@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Simon Horman <horms@kernel.org>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	David Woodhouse <dwmw2@infradead.org>, Dragos Tatulea <dtatulea@nvidia.com>, 
+	Nimrod Oren <noren@nvidia.com>, Alasdair McWilliam <alasdair@mcwilliam.dev>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Magnus Karlsson <magnus.karlsson@intel.com>, David Ahern <dsahern@kernel.org>, 
+	Ido Schimmel <idosch@nvidia.com>, Alexei Starovoitov <ast@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Donald Hunter <donald.hunter@gmail.com>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Breno Leitao <leitao@debian.org>, 
+	=?UTF-8?B?QXNiasO4cm4gU2xvdGggVMO4bm5lc2Vu?= <ast@fiberby.net>, 
+	Danielle Ratson <danieller@nvidia.com>, Kuniyuki Iwashima <kuniyu@google.com>, bpf@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kernel-team@cloudflare.com, nh-open-source@amazon.com
+Content-Type: text/plain; charset="UTF-8"
+
+On Wed, Nov 11, 2026 at 08:37:24PM +0000, David Keogh wrote:
+> Our TC egress programs are not attached individually. A loader keeps
+> a chain: only the head is attached to the NIC, and the rest, including
+> the program that encapsulates, are reached by bpf_tail_call through a
+> prog array. The head can change as programs are added and removed.
+[...]
+> For the BPF-side declaration to cover the TC egress case, it needs to
+> account for tail call targets. Tianyi, how were you planning to handle
+> a program that is only reached by tail call?
+
+Thanks for checking how your hosts run the program.
+
+My current plan is that the kernel reads the tag only from the program
+that is attached with tcx. One way to use it is for the loader to tag
+the head with the largest headroom that any program in the chain can
+push. The tag describes the whole chain, so it does not matter that
+the head pushes no headers itself. When the loader replaces the head,
+the new head carries the tag and the kernel reads it again.
+
+- The value can be larger than needed for some packets, because the
+  tail call targets push headers of different lengths.
+- Auto-tuning has its own problems, as stated in my previous reply
+  [1].
+
+I cannot find a solution where the value is always set correctly and
+no UAPI is needed. What I can do is keep this UAPI minimal.
+
+By the way, I plan to support tcx only in this series. A tcx program
+is attached to one device, so the kernel knows which device to update
+on attach. A cls_bpf filter can sit in a tc block that is shared by
+several devices, which is harder to handle.
+
+Let me know if this plan does not work for you. I plan to post v2
+around next Monday.
+
+[1] https://lore.kernel.org/all/20261108214356.95406-1-tianyi@cloudflare.com/
+
+Thanks,
+Tianyi
