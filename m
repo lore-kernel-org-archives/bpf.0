@@ -1,87 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.5
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794363682;
-	b=Bx895vBOb9m1pFgfUYcuVcwdhLu1Sv80M0tEbWncj9VVD0xooSle3XnqoT9zq4QrfSqY
-	 1H20cjjpnBogctm03Of+gwhjeANWqv7xRpEYGWeBgOfVzM9iS6U+j1LjX0Hvo86TscBcf
-	 MK/DrdkhcZaqUH+gq73nnC5S/Bx5K9+DoBcxI9vOvr1+m8XB9K8WjO9LPEa+s8LtXHm9s
-	 gU2/eDCfcozUAYl9F1qlB22vsch5wmo8yUiceMTSmktvHvilbHm+1AUaiF+oaBLB9AYif
-	 abLKNlSXhVp76UeZAt4VjJIJvbJXW+fTHn1s8PpYRNZsm/MevDPpUnKWZ4ug86dS4hA==
+	t=1794365086;
+	b=PUV5ojb+GoUO0ZwQ5IcbXDWZ+LV7pVkFrRF3MVlIKJ48osK06jJpErbVo7FzyeGq2RQb
+	 uecktO1of8JqV3x2QIpgkpNN8G1ckA5muZlSlSujHQ9opyuqm2GdtHxyrcAcC2U5gVqLV
+	 ihQkt3/X2+l//QvmKtmB3q0H0TWwsFpUT+myoGnLGLChyMWyVfCLeBYwpOjy12fgu/vo3
+	 ars+/jso5rKvttE72fmxskImyijad/kSMFgqP0QuB9qmCb1OU4BYs8wehbgh2rb+e612w
+	 fwbAKqJDYKtxUAoe3P/FgYQLdD+WsAEPZZMAUtF9c0H44Q055R5GP2z6aL0urzS9pfw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794363682;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=WJbesFIYlpH1gBWGhFnOLKrK8EWw7z9yvLVG93BvJhk=;
-	b=Nb0n1lfJhZVhwfDY+cxH3LJobUHFfJEm1sIDThr8rPlc+xiT+41l47CvLGOKoU3LPmdd
-	 NFvV+Y+GDPnHZ/EYSitZ/ICWDtKCGflqetCxuEUeUIn9hZaRpqueY11mdWteqaM1vz/pR
-	 esK7Z7gHTroxsn8d2i6wBqzZnOuEe9771SpH1fh+8wOqilxQSVTidwz1J6UyGfhbCsSPr
-	 7aT0GgfcTGUVt6cjcyD1c/86CRs2+M2PZYN4UmWrwTIlRQbCC0CIuzw7IAJUNbp3/AnXK
-	 4MySP2djriFAUGZGuKgrhBYT9VPYO7leagncadnRWskYXY4y1sp7hVJGsZbZAq8Uo6Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794365086;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:
+	 X-CM-SenderInfo;
+	bh=o1Zupg0C/vtuMuangz4WqN01bqC46l3g05DbKVABnMk=;
+	b=l+5cP9g8DCUA1gBzY6WTR3XKdMGITQOPcjaamQFlshHVtlEIesep5Q+Xq97Ew1wvSkuV
+	 +7KzVBYm7sg05p7tdrHLE7nQC/wVh6k4HfsKJ13mDgZk2pE8/rVHInjgRAXhRXBhVKyAr
+	 r6UaU/Ovn32HRZsWJ0BbYZZy8HvALKccCJU1tNDOPoZi3GqLNkBb8QkqrDZIibueN9mlQ
+	 sdGrwNfr2vwHY4ADNDTUII9UsIy7CB92PBm7ysLEIMyimS03aK00QdtENhGV2namauHdH
+	 f++TAu2Qqgo1yyNR2ZWLxqLKeMcJrkewz4B32WOjl5JA6rdBkCmI9zkt5Y8Kemq2X2A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=H1BAPK3e;
-	arc=none smtp.remote-ip=198.175.65.17
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=163.com;
+	spf=pass smtp.mailfrom=163.com;
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=B6K42RyG;
+	arc=none smtp.remote-ip=220.197.31.5
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72137606A335;
-	Wed, 11 Nov 2026 02:21:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 72137606A335
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D795606A31C
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 02:44:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0D795606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=H1BAPK3e
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794363682; x=1825899682;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=w+Xr+QzMFDzwse/PNcCw0jqlWFmK5mh/TodzvCIlmX4=;
-  b=H1BAPK3ezf6vDifk0ZEN4Nv8DsUPZbBi4Hjs4SjKd6sI2Viaw4NKpFHy
-   4lquMYBTFn+GwCUHVoTz/5P61s2mISQxn3Aed0myBYkv304taYIoYNaFZ
-   hJDHJZMVXF20nxuq9VsPtND7E2TSCJ1hCFmGQRhs1NWgv7NOujQjr6lre
-   dGoE3vFN2Ar1VUe3k8Yh3vjPldxEaH3Z2xieXaB9EG0zFahndHG2z7DKs
-   7qBQvGo7USaPyMeSM3y9rBaUB7y0Mraw/mOX+efylOU5WpNcH3lpFTebp
-   zg2CljP0DbI6qKgokrazDEQ4Ng/Mlo3I6osLG/Dwd6MWyznvsowL3jZpA
-   A==;
-X-CSE-ConnectionGUID: BH/mHbQyQlmqkf/7OWh6uw==
-X-CSE-MsgGUID: eYgbRsIBRD2htPutqLnAwQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11962"; a="3153920"
-X-IronPort-AV: E=Sophos;i="6.27,207,1787036400"; 
-   d="scan'208";a="3153920"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2026 18:21:22 -0800
-X-CSE-ConnectionGUID: /Psi1CagQMSAizsJ6rTKlA==
-X-CSE-MsgGUID: jhs4LrhCQpuiSFsIXmJsnw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,207,1787036400"; 
-   d="scan'208";a="8643043"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 10 Nov 2026 18:21:18 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xQxxa-00000000xtr-2qFM;
-	Wed, 11 Nov 2026 02:21:14 +0000
-Date: Wed, 11 Nov 2026 10:20:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jiri Olsa <jolsa@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
-	Naveen N Rao <naveen@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jason Baron <jbaron@akamai.com>, Alice Ryhl <aliceryhl@google.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ard Biesheuvel <ardb@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Alan Maguire <almagui@kernel.org>,
-	x86@kernel.org, linux-trace-kernel@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH 13/13] samples/kprobes: Add batch probe example
-Message-ID: <202611110929.bmBlvfbY-lkp@intel.com>
-References: <20261109195827.1091410-1-jolsa@kernel.org>
+	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=B6K42RyG
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=o1
+	Zupg0C/vtuMuangz4WqN01bqC46l3g05DbKVABnMk=; b=B6K42RyGT71IttzpQx
+	9sbVHbzncPUtCw9yRdbAqkMqhC1f4VDuy7zipVWNrYadAeGMXESYt5jzgCqdoiPV
+	LxoP46kXl0b6RxMeA0zhw8eWMdv2xkXkeWB49AbTC7rXXUFMVJj2/wApVcYnPIAT
+	WtUZL0dIKOMCG9M6L51FRB3qY=
+Received: from kylin-ERAZER-H610M.. (unknown [])
+	by gzsmtp2 (Coremail) with SMTP id PSgvCgBXCgpq1vNqdIGjEw--.26036S3;
+	Wed, 11 Nov 2026 10:43:56 +0800 (CST)
+From: Yun Lu <luyun_611@163.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev
+Cc: yatsenko@meta.com,
+	bpf@vger.kernel.org
+Subject: [PATCH bpf-next v3 1/6] bpf: Mark task work FREED before detaching it
+Date: Wed, 11 Nov 2026 10:43:28 +0800
+Message-ID: <20261111024333.228633-2-luyun_611@163.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261111024333.228633-1-luyun_611@163.com>
+References: <20261111024333.228633-1-luyun_611@163.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -91,39 +72,75 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261109195827.1091410-1-jolsa@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PSgvCgBXCgpq1vNqdIGjEw--.26036S3
+X-Coremail-Antispam: 1Uf129KBjvJXoW7KFy3uF1rXF18WrW7WFW8tFb_yoW8tryUpr
+	Z8Kayjkrs8XFZ2y3ZFvws2vFy5uws3twsxGFyv9ryavr45XrsFqr1kKFyagFWDtrZ5JF4Y
+	vr4YgrWIvw4UuFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UlNtsUUUUU=
+X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbC6wxoN2rz1mxYegAA35
 
-Hi Jiri,
+From: Yun Lu <luyun@kylinos.cn>
 
-kernel test robot noticed the following build warnings:
+bpf_task_work_cancel_and_free() clears the value's context slot before
+marking the context FREED. A concurrent deletion can observe the empty
+slot and return while the detached context can still enter RUNNING:
 
-[auto build test WARNING on trace/for-next]
-[also build test WARNING on linus/master v7.4-rc2 next-20261109]
-[cannot apply to tip/x86/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+  uref cleanup                 delete                  target task
+  xchg(slot, NULL) gets C
+                               unlink E
+                               cancel sees NULL
+                               return
+                                                       C -> RUNNING
+  xchg(C->state, FREED)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jiri-Olsa/static_call-Index-code-text-reservation-lookups/20261109-204904
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace for-next
-patch link:    https://lore.kernel.org/r/20261109195827.1091410-1-jolsa%40kernel.org
-patch subject: [PATCH 13/13] samples/kprobes: Add batch probe example
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20261111/202611110929.bmBlvfbY-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261111/202611110929.bmBlvfbY-lkp@intel.com/reproduce)
+A preallocated HASH uref walk racing with deletion allows this missed
+cancellation. This deletion does not itself free the element.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611110929.bmBlvfbY-lkp@intel.com/
+Mark FREED before clearing the slot. Only the first FREED transition
+clears the slot and drops or transfers its map-owned context reference.
+Until that canceller clears the slot, no replacement can be published,
+so a plain slot store cannot overwrite a new context.
 
-All warnings (new ones prefixed by >>):
+Reading the slot no longer acquires exclusive ownership of C. Protect
+that access with regular RCU while another canceller can release C, and
+preserve unlink-to-slot ordering with a full barrier, including when the
+slot is NULL.
 
->> samples/kprobes/kprobe_many_example.o: warning: objtool: kprobe_many_call_function+0x1f: no-cfi indirect call!
+Fixes: 38aa7003e369 ("bpf: task work scheduling kfuncs")
+Signed-off-by: Yun Lu <luyun@kylinos.cn>
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+---
+ kernel/bpf/helpers.c |  12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 937a0d7d6839..4b252ca61166 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -5174,11 +5174,21 @@ void bpf_task_work_cancel_and_free(void *val)
+ 	struct bpf_task_work_ctx *ctx;
+ 	enum bpf_task_work_state state;
+ 
+-	ctx = xchg(&twk->ctx, NULL);
++	/* Another canceller can release the map-owned context reference. */
++	guard(rcu)();
++	/* Order a preceding unlink before observing an empty slot. */
++	smp_mb();
++	ctx = READ_ONCE(twk->ctx);
+ 	if (!ctx)
+ 		return;
+ 
++	/* Stop callbacks before making the context invisible to deletion. */
+ 	state = xchg(&ctx->state, BPF_TW_FREED);
++	/* Only the first FREED transition detaches ctx and owns the map's ref. */
++	if (state == BPF_TW_FREED)
++		return;
++	WRITE_ONCE(twk->ctx, NULL);
++
+ 	if (state == BPF_TW_SCHEDULED) {
+ 		/* run in irq_work to avoid locks in NMI */
+ 		init_irq_work(&ctx->irq_work, bpf_task_work_cancel_scheduled);
+-- 
+2.43.0
+
