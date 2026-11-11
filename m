@@ -1,57 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.170
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794423116;
-	b=evuqMpWtHQI/MZn9LUWeFRj2E7V+J6plJDqbZeDJC3+KFjb2HyaTH+k4JBrv95w7PVWO
-	 qO30vZUGYV+1lxOF9UcXe8iKSeD1ll4nkrn/ftvuGM8vj1lYWPYjSbBQ70ENylHXOT17u
-	 QN5e2dMBM7tWDjUuvyDF3nOwBD+jqzVY7cHzb8evulG8GdKb7a3jQAqOytcGRgV+/o26E
-	 iTXtG5O+DOb2LiD5OL7TwNPqJNUFDij3Tsl91neXa2mqIV3ujklO/ndbn2HqI5lkVag3C
-	 /y+2M+OLHB95HUdXEvjpH+V5bxYv4PyqCXxf/K5rTCU1TGRS3s1O+IAnO85Bd4pQ2LQ==
+	t=1794423678;
+	b=bggyEObQ4RmfnsKgioqRWhZkX7mHM8GnG00/QEikd437v5yjtefM9zLpB+9VF0OW9Luh
+	 FErLNbQNu5CAvudsHMGRqzyIXvxsCmsBoYULxWk/CfU0ZAzEm89swbVtGVh4SbN8rlyfb
+	 uQDq/ETMN1r245uyxc/eXzBaL2+aVk9NDFPMih9HKwSNniEe98/aBDlk4eMzGDsNSmRoO
+	 Hy8ofcFZV3USsEjMQ8bXRe22xMGFyamrbq+2+caF+CiGrxfjWzER24ZvFCKQrBXjQ12+I
+	 ZUd1MENq1V/gDR1CKE4L3XTdT5MeW5kOii/C+yIdEE8UQNjkYc05KtmCDCMH2zDslXg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794423116;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=cXy90lB9ier5/0rOFar7kwJ0LRRMvTBhXN8p7YdUqkM=;
-	b=jlamaS2VcC8pi+Sv7Vq4Ze+6JC2Mgg/weRuAp64kKSPrJSrYjgRGPISBQm5/O9EWujfp
-	 goV61BAmvHRqEJqru1dAgErSx8TNsCp8i3vn7l6VE+1sxve75heyXu0Qu2KiITjerAKxE
-	 TJ2cJydYtGCQjLqsLLI1Yq3cl+yw9Ll0g+yVesnNUgB+faIE0nYo7vWgKjEnTBrRsZW5s
-	 H911YFMUEjOaoNyWtepXRgeZsHABe7JZolYl7/GiQVSzT0E1hhPr110lRcWi6F5RD7KP7
-	 dcwMVops3U4icqNBsUpuQXl93QTQPvLiTJg7gcNRuY96mYTkRoyLuUhFmiN03RmsHtg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794423678;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
+	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
+	bh=3mcdsvysa9luSuezEbeTLmuh15u7mjwAepQLZ7oOKD4=;
+	b=jsdNaulrzGY6Ahrh3dRf3zYMq/DOPz8trd0ILA44Pe9AmgGWKm0M9U1zSQA4yat7s+Rh
+	 qdg1vOMR/qK240yjRH5VwtZaP4qU47nL5ISBJD5GCAFsQhe4fB9LW0YKItltMOfnCO0Tn
+	 qpG9GGI+7O3Kq/KtL9juguOn7gER5dQ4G0eCX/Qqzn1YpSGQkBq4muNSGhdeH/kiLuX74
+	 wC47VU2t/HQDHwxlGmmvCwbHsyoFtLWmf3qEsgQFYLLtgGtan3YacRQpKUPZuDbn6yIj4
+	 jUPb/eTxM6Uw2CdLfw4L56YeOIU7E29sZa5GkJanTVVgR/Cehs6LG+BGfaW070npe/Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=X3NDFFJe;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=LHkRigWs;
+	arc=none smtp.remote-ip=209.85.222.170
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8748606A31C;
-	Wed, 11 Nov 2026 18:51:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4487B606A31C
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 19:01:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4487B606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=X3NDFFJe
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1917E1F00A05;
-	Wed, 11 Nov 2026 18:51:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794423116;
-	bh=cXy90lB9ier5/0rOFar7kwJ0LRRMvTBhXN8p7YdUqkM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=X3NDFFJeIELCWrEDwGqaUq3LbXCmhJdDkSLWt8DBivn5Bk1u2S/CvFNUCdykxXYdh
-	 dhhvMbm8yN/rPsZsTgrkWAj4ZkjVhJiBnpVODLxI2VuWSCZe0INntPP2s/wFXtDmr/
-	 YjeiLI4WzJc+pXZsMN5RyNWlAhUmEvdIWD+acvQLq3BZvGKNmsIsvfpKyj2pTiKjvt
-	 oogQDuv8W0c40dmuxDhl33stQs/ZjgsCljbRlCDoQDvDLJax3ycxgFXAIMXdbx+NEg
-	 u0HWrA4q8kBvFGKEeVgb3mHVCWblAD2+zst2HYwhaU/ldINXi+ODVqhU1rStho6Xzq
-	 l9VZvV/SQk/IQ==
-Message-ID: <sashiko-outbox-209498@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next V2 1/2] net/mlx5e: Batch NAPI RCU grace periods
- on channel close
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Tariq Toukan" <tariqt@nvidia.com>
-Cc: bpf@vger.kernel.org, linux-rdma@vger.kernel.org
-In-Reply-To: <20261110185005.2932568-2-tariqt@nvidia.com>
-References: <20261110185005.2932568-1-tariqt@nvidia.com>
- <20261110185005.2932568-2-tariqt@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 11 Nov 2026 18:51:55 +0000
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=LHkRigWs
+Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-93e63ee7b4cso315172585a.2
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 11:01:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794423677; x=1795028477; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=3mcdsvysa9luSuezEbeTLmuh15u7mjwAepQLZ7oOKD4=;
+        b=LHkRigWscoO1IXIQFs6/S7w1FUhRnu66lP+me1F9tp+woQK1t61v4UNNSyggqb4mOX
+         hkOb5/IVXmfs4ZveeHLDMgbH2NVuzIEY/J/WPy/shFxDKAiXJz6IbXyPUV4ckFZ+CsC+
+         c9gkmXH6qx8NuT+7knfat6nN41LKdJI5AqHmXOuhg18s+O76DdTa+1UL8roEbcvId/Ns
+         kTG/VWDpa7xwT+xoPmwPqh3uf6iTwuE9zBLajqn7CgcAuA/eMNIzXPPLnoO373jqfflo
+         BWXGJsKWiNERilvEBM6NM78A4lF9eT8HO6VECVYKCKap11URDX6Ewiu7J/Bp2B4VyeQc
+         r7RQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794423677; x=1795028477;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=3mcdsvysa9luSuezEbeTLmuh15u7mjwAepQLZ7oOKD4=;
+        b=nuyxCsdTqN6Cz0g1C9L3eKTFFd4ZBec4UkTuzcd+RG4C+sCZHmnZY4uCoXrNUIlD77
+         CzV9Gmzb7qiNdhc7Oy6MTMLqeAZ9daI3JpG08PsQlQ/fd2PtO/UkHta9SAgcqI1DVN0T
+         DqobQhWOU6GbYE95GLCN6erQqzK0JULzM3PFEH5odbW+pc2LVahBfejvrb9LmvIP4i37
+         ZJfPcjK+q+1bHpdcrSSaSsqQIH4BiRH1Y9C1L/F9QflHfE9FigGwkRCrwzM5lgPrTSqv
+         4GZL2E5pE+Uil4E9PNVcYh0wN+NlmKVRDQn+hB8LxhxR3Rljp3/eypuEcKHeKVaj+SYz
+         KqZQ==
+X-Forwarded-Encrypted: i=1; AL+hErG0Ks1f+q4WSf6yXdGDentMGswAduu7gUr5nvW49RW7aiJ3Obs0RJDMcWGK9A56/KZ2EbI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/KDnwDovgefNm26fPRfhIit6c/p5JuCzf8oDRdYN6/a8AxSJhV
+	BFQ4JHAZDPMeUfAsysoojkJv9VJx/VRGqs5nzp9GpQspnvHyWA6O6W2M
+X-Gm-Gg: AYBFou1YmpD6Cc2F/5DTLpbWwjop9kE3HQmeHlG7zqu0gFcejS1LKnVKMPVZzGiy8t8
+	YqBSzMo/eP12wT8xtmupPW4S6dEf3k+6B12b5NZGj4laaI0gVnR1X7nXrANo0KxGYxKStCGFbI0
+	3LMeEKUkjyH1zveDq1iZlskOQ5mmG407BAITiRQGTknZp5vOaiZGlN0PenJYqYdjv16DwyrH+kE
+	gBxpNmxPRJT3YLlaX8sAz7XoKz1loNk32vROmh8fpb9jm28o6+0oZvscI6zS0R2gFFd3ThuP+ge
+	PwN0SxsMqjhmgPZDRP5XJwnObpkVqt5Is0iiOOry89j2Zviebr0+zKP5bjhuHUQ2UtfsOcwKuPi
+	M7CSlRSmKNNV61+HeKQCNY8IUINvHfs5qXmDvprvfXhLcA2wsw0jUThOjVKI+lAcY5jfnwwwN4j
+	9wEyBs0/8QuuP88xtyDRG/M4OoHLaGqG8mTBiTJTar8jfrUo6ddkLvjRZDWo8Z+6E7U3m4nRd6r
+	4uS0sUqHGAdOvxG4Kut2YU0/vf3XM5eaS4omB7MwS5S3nbL1nf0hAxgiUK9M/SCc4gfatXW/hpe
+	PXNoEZcRvcnyVIafJxOlWFrIHwFKMd3BWYUA00jMRzR3KaU0MuJk6yI=
+X-Received: by 2002:a05:620a:2b96:b0:93f:53d1:54c7 with SMTP id af79cd13be357-947b00d141dmr521152085a.70.1794423676923;
+        Wed, 11 Nov 2026 11:01:16 -0800 (PST)
+Received: from localhost ([2600:4040:9399:4000:e553:72e5:7d37:c7ef])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-9479e73b2d2sm545314185a.10.2026.11.11.11.01.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Nov 2026 11:01:15 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,178 +87,104 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 11 Nov 2026 14:01:14 -0500
+Message-Id: <DMSM3RNRY412.1GXB07F4KGJYR@gmail.com>
+Cc: <netdev@vger.kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ "Andrew Lunn" <andrew+netdev@lunn.ch>, =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?=
+ <bjorn@kernel.org>, <bpf@vger.kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Donald Hunter" <donald.hunter@gmail.com>, "Eric
+ Dumazet" <edumazet@kernel.org>, "Jakub Kicinski" <kuba@kernel.org>, "Jamal
+ Hadi Salim" <jhs@mojatatu.com>, "Jiri Pirko" <jiri@resnulli.us>, "John
+ Fastabend" <john.fastabend@gmail.com>, <linux-doc@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-rdma@vger.kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Paolo Abeni" <pabeni@redhat.com>, "Saeed Mahameed" <saeedm@nvidia.com>,
+ "Simon Horman" <horms@kernel.org>, "Tariq Toukan" <tariqt@nvidia.com>, "Wei
+ Wang" <weiwan@google.com>, "Willem de Bruijn"
+ <willemdebruijn.kernel@gmail.com>
+Subject: Re: [PATCH net-next v1 04/15] psp: add support for socket-less psp
+ associations
+From: "Daniel Zahka" <daniel.zahka@gmail.com>
+To: "Todd Bert Freed" <toddfreed@meta.com>, "Daniel Zahka"
+ <daniel.zahka@gmail.com>
+X-Mailer: aerc 0.21.0-threadmapfix
+References: <20261111005533.6436-1-toddfreed@meta.com>
+ <20261111005533.6436-5-toddfreed@meta.com>
+ <DMSJB8MZZCXK.MCEBRZQDAM5Q@gmail.com>
+ <CADh2yMx8MPjcH7Bpj72rNNd_tT=6uSC5Ow9JyGjTMjFgs499Pw@mail.gmail.com>
+In-Reply-To: <CADh2yMx8MPjcH7Bpj72rNNd_tT=6uSC5Ow9JyGjTMjFgs499Pw@mail.gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issues to consider:
-- [High] net/mlx5e: missing grace period after page_pool_destroy() in
-  channel close
-- [Low] net/mlx5e: redundant pre/post_sync open-coding and duplicated
-  queue teardown
---
+On Wed Nov 11, 2026 at 1:23 PM EST, Todd Bert Freed wrote:
+>> I'm not sure the kernel actually needs any bookkeeping at all for these
+>> generic rx spi allocations. You could probably just pass the spi, dev
+>> id, key, and probably rotation count (as a device key generation of
+>> sorts) to the user without creating a kernel object. For socket
+>> psp_assocs, the rx state is consulted on the datapath before queueing to
+>> the socket. For tx state in all psp_assocs, there is the possibility
+>> that an SADB handle needs to be cleaned up. Neither of those apply here
+>> or in the rest of the series as I understand it.
+>>
+>> I figure the tc ingress rule can just take the spi and dev id by value
+>> rather than needing a reference to an object that we create here.
+>
+> That is how it works in this series. The tc psp decap rule (ingress) does=
+ not
+> make reference to an rx assoc ; instead, it should have flower matches on
+> psp_spi, psp_ver, and psp_dev. That effectively ties it to packets from j=
+ust
+> one rx assoc.
+>
+> So why keep track of rx assoc objects at all? Two considerations.
+>
+> 1/ don't accept packets that correspond to a stale association. That is, =
+even
+> if the device decrypted the packet, it should be dropped if the device ke=
+y
+> which minted the assoc's SPI is two rotations behind. For psp socket offl=
+oad
+> that is enforced in __psp_sk_rx_policy_check() with the pas->generation
+> check.
+>
 
-commit 2f06177c661abed7fd45e14fc9a588083535c8b2
-Author: Carolina Jubran <cjubran@nvidia.com>
+I asked why we needed to keep track of socketless rx assoc objects. The
+above applies to the existing transport mode code, which is my point.
+The rx state from the assoc is looked up from the datapath. It doesn't
+seem like that is the case in this series.
 
-net/mlx5e: Batch NAPI RCU grace periods on channel close
+> The spec permits SPIs to be reused immediately after two rotations. So th=
+e
+> device could decrypt a packet with a SPI that is more than two rotations =
+old
+> in that case, or if a previous packet is being replayed, for example.
+>
 
-This commit splits channel deactivation and teardown into pre_sync and
-post_sync phases so that synchronize_net() grace periods are batched
-across all channels during channel close.
+A SPI that is two generations old will cause and auth error on rx. The
+hazard is that an old tc rule with a SPI from two generations ago can
+alias a different SPI from this generation. Userspace can just flush old
+rules before doing a key rotation. That is why I suggested including a
+'rotations' attribute, although that is probably not even necessary to
+keep track of which rules need to be flushed.
 
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/=
-net/ethernet/mellanox/mlx5/core/en_main.c
-> index c3c2c5720c6f3..73b504ba8c8c6 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> 2/ hardware offload. the solution to #1 should be able to be fully offloa=
+ded
+> to the device. psp tunnel mode will be hw offload only, and is implemente=
+d
+> in the eswitch with connect-x.
+>
+> We could add a psp_gen flower match to replicate the pas->generation
+> check, but the device has no access to the pas and can't offload that.
+>
+> Keeping track of the rx assoc means that the kernel can take action on th=
+e
+> "this assoc is now stale" event. Possibly by enumerating the tc rules and
+> either deleting them, or marking them stale for userspace to reap.
+>
 
-[ ... ]
+I think it makes more sense for userspace to just get rid of the rules
+before rotating the keys.=20
 
-> @@ -2749,6 +2785,27 @@ static void mlx5e_close_queues(struct mlx5e_channe=
-l *c)
->  	mlx5e_close_cq(&c->icosq.cq);
->  }
-> =20
-> +static void mlx5e_close_queues_post_sync(struct mlx5e_channel *c)
-> +{
-> +	if (c->xdp)
-> +		mlx5e_close_xdpsq_post_sync(&c->rq_xdpsq);
-> +	/* The same ICOSQ is used for UMRs for both RQ and XSKRQ. */
-> +	cancel_work_sync(&c->icosq.recover_work);
-> +	mlx5e_close_rq(&c->rq);
-> +	mlx5e_close_sqs(c);
-> +	mlx5e_close_icosq(&c->icosq);
-> +	mutex_destroy(&c->icosq_recovery_lock);
-> +	if (c->async_icosq)
-> +		mlx5e_close_async_icosq(c->async_icosq);
-> +	if (c->xdp)
-> +		mlx5e_close_cq(&c->rq_xdpsq.cq);
-> +	mlx5e_close_cq(&c->rq.cq);
-> +	if (c->xdpsq)
-> +		mlx5e_close_xdpredirect_sq_post_sync(c->xdpsq);
-> +	mlx5e_close_tx_cqs(c);
-> +	mlx5e_close_cq(&c->icosq.cq);
-> +}
+> -Todd
 
-[ ... ]
-
-> @@ -3060,32 +3144,67 @@ static int mlx5e_wait_channels_min_rx_wqes(struct=
- mlx5e_channels *chs)
-
-[ ... ]
-
-> +static void mlx5e_close_channels_pre_sync(struct mlx5e_channels *chs)
-> +{
-> +	int i;
-> +
-> +	if (chs->ptp)
-> +		__netif_napi_del_locked(&chs->ptp->napi);
-> +
-> +	for (i =3D 0; i < chs->num; i++) {
-> +		mlx5e_close_channel_pre_sync(chs->c[i]);
-> +		__netif_napi_del_locked(&chs->c[i]->napi);
-> +	}
-> +}
-> +
-> +static void mlx5e_close_channels_post_sync(struct mlx5e_channels *chs)
-> +{
-> +	int i;
-> +
-> +	if (chs->ptp) {
-> +		mlx5e_ptp_close_queues(chs->ptp);
-> +		kvfree(chs->ptp);
-> +		chs->ptp =3D NULL;
-> +	}
-> +
-> +	for (i =3D 0; i < chs->num; i++) {
-> +		mlx5e_close_channel_post_sync(chs->c[i]);
-> +		kvfree(chs->c[i]);
-> +	}
-> =20
->  	kfree(chs->c);
->  	chs->num =3D 0;
->  }
-> =20
-> +void mlx5e_close_channels(struct mlx5e_channels *chs)
-> +{
-> +	mlx5e_close_channels_pre_sync(chs);
-> +	synchronize_net();
-> +	mlx5e_close_channels_post_sync(chs);
-> +}
-
-[Severity: High]
-Can freeing chs->ptp and chs->c[i] in mlx5e_close_channels_post_sync()
-cause a use-after-free on &c->napi (or &ptp->napi) in
-page_pool_napi_local()?
-
-rq->page_pool is created with pool->p.napi pointing to the NAPI struct
-embedded in struct mlx5e_channel or struct mlx5e_ptp.  That pointer is
-only cleared when mlx5e_close_rq() -> mlx5e_free_rq() ->
-xdp_rxq_info_unreg() calls page_pool_destroy():
-
-net/core/page_pool.c:page_pool_disable_direct_recycling() {
-	...
-	WRITE_ONCE(pool->p.napi, NULL);
-}
-
-Before this patch, mlx5e_close_queues() and mlx5e_ptp_close_queues() ran
-before netif_napi_del_locked(), so synchronize_net() waited for any
-concurrent softirq running page_pool_napi_local() to finish before
-kvfree() freed the channel.  Moving queue teardown into
-mlx5e_close_channels_post_sync() places page_pool_destroy() after
-synchronize_net(), and page_pool_scrub() skips its own synchronize_net()
-when dma_dev_need_sync() is false:
-
-CPU0                                  CPU1 (<softirq>)
-mlx5e_close_channels()
-  mlx5e_close_channels_pre_sync()
-  synchronize_net()
-  mlx5e_close_channels_post_sync()
-    mlx5e_close_channel_post_sync()
-      ...
-                                      napi_consume_skb()
-                                        ...
-                                          page_pool_napi_local()
-                                            napi =3D READ_ONCE(pool->p.napi=
-);
-        page_pool_destroy()
-          WRITE_ONCE(pool->p.napi, NULL);
-    kvfree(chs->c[i])
-                                            READ_ONCE(napi->list_owner)
-                                              <-- use-after-free
-
-Closing the queues before synchronize_net() (or waiting for a grace period
-after page_pool_destroy() before kvfree()) would avoid freeing the channel
-while a softirq still holds the NAPI pointer.
-
-[ ... ]
-
-> @@ -3610,8 +3742,14 @@ int mlx5e_close_locked(struct net_device *netdev)
->  	clear_bit(MLX5E_STATE_OPENED, &priv->state);
-> =20
->  	netif_carrier_off(priv->netdev);
-> -	mlx5e_deactivate_priv_channels(priv);
-> -	mlx5e_close_channels(&priv->channels);
-> +
-> +	mlx5e_deactivate_priv_channels_pre_sync(priv);
-> +	synchronize_net();
-> +	mlx5e_deactivate_priv_channels_post_sync(priv);
-> +
-> +	mlx5e_close_channels_pre_sync(&priv->channels);
-> +	synchronize_net();
-> +	mlx5e_close_channels_post_sync(&priv->channels);
-> =20
->  	return 0;
->  }
-
-[Severity: Low]
-This isn't a bug, but mlx5e_close_locked() open-codes the exact bodies of
-mlx5e_deactivate_priv_channels() and mlx5e_close_channels() without
-combining their synchronize_net() calls, so it could keep calling those
-two helpers directly.  Similarly, mlx5e_close_queues_post_sync()
-duplicates mlx5e_close_queues(); mlx5e_close_queues() could run the
-pre_sync steps, call synchronize_net(), and call
-mlx5e_close_queues_post_sync() like mlx5e_close_channel() does.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261110185005.2932=
-568-1-tariqt@nvidia.com?part=3D1
