@@ -1,96 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.219.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794415799;
-	b=lkH545CrvIKpuRErNdxhspRdwVD4h5bthGkhtMmIgeFmmAi6hnKsSgER6sdBlMRq11yd
-	 7gDHvv3+dD4krq4YmZdEATYEH2a0wSAThb3GCW0e4BKmvI6llNGlZh8AAgxI9rXyZlXkn
-	 z40yyzk95v6mqfN5a8kK0gYXjkE9RB2TOA8i4oPy2tx2ENgI80iObnYgM/qusG37Wu6pd
-	 kDkKr/PTE5bGnQLVGjz48DfPh0zU+Aa3Hm1Ly2Zs3SUNxsDDE8LUtWIdcC3I08piqpG7l
-	 /UA680EmtCTNfXaDngOrZdlqa8qHDiAViru42eGj4rEdQs1f+t6jagM61TsJ8T9R1gQ==
+	t=1794415800;
+	b=VTV7J/riM6phhKQouLtKjMg/02jTPhzgM9i/DhLNMz0Ynk76oNygdniiwMJRhwBBZitt
+	 /1D/4r0iBJUJ5RRLsOuP8suQSeXGiceWEL5kRky4+/rG/zXbIVegpupCIzGg29OGMNYft
+	 Je8nWrSi2mBg7ky7kU7jpC7hpyHWma9LJugLXz2ROrluKbhVSihCj9oNXm02fe9PetsOY
+	 rawxS7GhS/bCIxL4hcSMlYJcUOUaZtgfpsR6A17V4woHkWycaqYRIWW/yG/D92p3JU97H
+	 4ogvra31wT6xNJpq9Tak/l2D4Ui20o3+drWnhrYIHrsbSu4mnKGFte+AVYyyLWWq6hQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794415799;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794415800;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=SUPrvo+OaH+RHfTGTJPCOBR9G5qXoPE8egpdr1XclPY=;
-	b=S9/h+uTeRUf9HRFRKzexmePJaqBiUUBBGWMLDlQychYna+RK5jxoGER52CPbeGdDiO3U
-	 aCcFHjgvuYwCN2ZmUY1rC7NQgu0lX9GxR0TSG7XbSnTpB4Lg0HUsQl/n9hRJ++47lx99I
-	 8K0o9c+n+zIPk/oSVbObVX3BJ9wZ8iov4X1qaGMWYje57HSVej1PhMmkI5bOjnFYt7K7A
-	 kXAEZXy71whHixr8U0Y3Wpnk+K0YXQTpcU5092rSxX0nlIf2mlKeLmw9QlpkC+ssrJbKm
-	 llrxKm3Ev2cZXI6CBXJeuKmKgfTEDRsytLeQdS4MxWTfT6vrrDA/zJiLDJPVP9xlpCw==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
+	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
+	bh=rFud020d6ZqbAIZTEaEuXG8erb5QVVdBjItcD5kJ9qU=;
+	b=0cGA5M5nrZzR91GUzkcDIuOvXv1p4w5+gRa3UmURxby1Rm704eVj41iM/pao3ZQtr6Wr
+	 DsIhHugNYsDRrq38JhmrARSh2sXipRzlRcHrYHR/l1vIIHSCr8kJcHK6i6FxaNQU/mjRU
+	 LSgrp0PjiPImgI4el56Wp696cXuA/SpdGxte2av81hjimV6PDxsE4zCMY0dXBIiQc9j6C
+	 FtifsILlVhl9osQQOW2zDq1I+0cLyRsxfdTvoPw8ABpYND0j/SRrN4KMa4ez1gTYexokp
+	 jU09r7FzBAzo+z3dwud1VCmBfuG1boKGrUpKMDAYNdZq7SsD45kAQWarhpzlM/3yiuw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=w+ksYvCb;
-	arc=none smtp.remote-ip=209.85.210.178
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=HJL1TZqY;
+	arc=none smtp.remote-ip=209.85.219.54
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E337606A335
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A6FE606A333
 	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 16:49:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4E337606A335
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2A6FE606A333
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=w+ksYvCb
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-8b66d1a08ccso72132b3a.1
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=HJL1TZqY
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-91ea0c05c92so34110296d6.0
         for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 08:49:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794415799; x=1795020599; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=SUPrvo+OaH+RHfTGTJPCOBR9G5qXoPE8egpdr1XclPY=;
-        b=w+ksYvCb6tvNhLb+h+tPgOPx1BL6ls01G7rj3ku0GELiHZQhfCROV5Uee58cELfBa8
-         9GyF2JR0fTLLZiREmsenK8b3dU8z6lIRRv31xWUgLAZxf7Rn8g4Ye0huMaCHvDDPXe38
-         nszQYxiQM73l3UVhl8L/Ll94NgwZGvJOG6xO8Z3ds9TzSu0WjnKkexdv85qRTW16xJs2
-         s9SFVYTlcGMMKecRkah2zo6HsZnM5HMm0UzYry5jt3yMQPcR7YBrPpXE5UuxepwISbXY
-         4BhNka7Bf3NzGSw0UwoVxOri+Em8dPWk4EdfLRIV/oM1kwxscHE1YMQwpQoMpLwBaKkz
-         j7ZA==
+        d=gmail.com; s=20260707; t=1794415798; x=1795020598; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=rFud020d6ZqbAIZTEaEuXG8erb5QVVdBjItcD5kJ9qU=;
+        b=HJL1TZqY3pycAyt7sUA767m90KqajI8zY0xT1ZfuAA/QfImIGgMx+vAqH5Imyi/a6+
+         aMEZPSuWC0VKrlzb13m1Nrwk3QQ1wPZefNNmLRBLCtq5cxDePjkDtwTpye0fVTiEcWB6
+         aQ5mmiFm7UHTtv3f/HgmSB/WAizRAoppvvJqsmn96SgIn97pqx1oC1BFwsrGLw8pgc3I
+         Zt2pBuE1m63/KLFVCv993l8Nq/ZcD/Q9G+j++A6DU9uB42JKnPgnXP5fvqJ5tv1540yF
+         pMvXIlsts3LByVlAX0I2AnxgbnLfwxfrlIL0MQSTx9vfi1sV4y8WMcWGj2UrnyRyZjKB
+         Frcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794415799; x=1795020599;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=SUPrvo+OaH+RHfTGTJPCOBR9G5qXoPE8egpdr1XclPY=;
-        b=Lb4kI8V7EahImi4ZJy2YJ+5VSwuBCYWzklamkcNZZqp+qTI1qA3xHaCQx7J5su9Q86
-         Rp3f1glARZF6ww5nLnU8iAn4NcnistRaoiG5zIaPp+1JYVjZq3N79JwG2+X5Y17Z34gh
-         T4IWxR7RcZEcIswmvHEtq06ZfbTF0oBWoEgi2yF0Ide6lwszBKUcnf3L6WyvNDFAA6TS
-         OkL7YoVaK0NoIOukLbiepndDMxJiU/BbeyrgjhtNXAOf89AV2HtKgc/QwNpQuWJBE9uP
-         i8M70FPq08z3K05A1O0I5H2X8oFIucHxF06ZTAYGW9mhsBLdRqiudxUk+mYpbpgfCTah
-         QJCQ==
-X-Gm-Message-State: APuU4Z/rYn6yjaNCY39HP1DYCGnApiylhxunGQcPdXxAeoBkHOTWj2mm
-	g3LbkSxMgrHxBCdGQdV4eYywI7NslvQqvY8j+g4d1AMBixE/dSHbNeTFTe8g0w==
-X-Gm-Gg: AYBFou3CGLkD7tsAd3BG9ghFJFxxASP/JnTziIxxVjPl1mPF0yEk9x1Ouh8FyO8u8NV
-	bDPAIGrjfMQb/8gpxsZ1OuqWpFYOHqniKJM4B3oihU2b1LCcwpOZ+ecK8cn3M4kzoYtv3+9ru9O
-	dv902uZCQVo/+7jyWMDmYsCMDiKTNeNGmxSB1H3KVTXQQc1bVIv+5ntwqhe9B3oeDEFl/Ny9BHx
-	YLy7HOeVhGHoFz1PuGnwWH0rP20ZxJDQxF/HcqVwVmiKwyrtHjadAKXI4GEv+1YAg0U01PONwHa
-	jdZPFJI3VrcfL2p14MSvXh9ZnscPamTeK7LcWz+7QiXPPAyL57MymVVamW9cXtC7z7UzUvvadcs
-	mmBN6139PzwTn9MJKtVhWI6yI1ODka7Q3S2T0WYkqL+Ns4frCT42p/6ZmC56fLr2eD5/b6uPa2b
-	lnMOBw2nvnp3YCZ8aZYMNAwihz/5IrMmhDqO/+M8HpDg1+XUvgNIfgHUEmfnQqlGIADPVcSpTS5
-	YYrqI+QnZiAqCPmdZ/Lhwxw7oiM/CwBxixGmwU1jEf6zsYA45VAP1O7nYpHdF3yGLvBaXxjtFzK
-	c2gx9ot/JN/pShbXFf/Ao+q8IJMIv7BnNHWlYRBln/JMOOBXHKaEaB8FJTG2m8lix1szy1aaTvD
-	SR8z6JqMs4Ezee/356riErNS7Ubj+Xw2VPv45MLHzsZdko4VGqNawBa4TKiwfQ3WSEavX7CDQca
-	B2
-X-Received: by 2002:a05:6a00:2e1c:b0:8a0:7ba9:939c with SMTP id d2e1a72fcca58-8bc1b8face0mr3166660b3a.11.1794415798393;
-        Wed, 11 Nov 2026 08:49:58 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8baab21835fsm2356422b3a.42.2026.11.11.08.49.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        d=1e100.net; s=20260707; t=1794415798; x=1795020598;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=rFud020d6ZqbAIZTEaEuXG8erb5QVVdBjItcD5kJ9qU=;
+        b=JAGgGenyPXa/scdMDwrWVEJioONdvkM511hNK2tajX6yAlBJ+sS7r/kwb3qEihgftW
+         fRxUBNs+4A9Ax1LTXe3p31hwQ96VjPI1vh3xWNAL1QE78jEtOJrSDFFraVpmLijEDc7j
+         wXl/wAMdTvG5kTb0szXDLL+ScQxAUKVJIZUX5xsocl6nRDEZE4J0V8gSsZiz/DL3Auf8
+         uBtAxP9VCetTZH7s1c6lgHPsruOh9ZiPbZu9VaYScZmL4vth6iOiLxUEN9cv0ZG0Zg7s
+         dZyCVqTgMGqkk2lv9kPFweJJ+Ja9uow3GqwDg11XhnCC8cJqHqk9Re5a9kUEVF3Cxg5+
+         z1SA==
+X-Forwarded-Encrypted: i=1; AL+hErHX00T5QesxfVcJhMm2/xen3lZlZucq0PdDj3G2iyzRC8FWSGPPhXUi7yzutA/15mwLW9M=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+rBArzIKD2dPu90ZKN/GVwn5GXQSeqNb7QdERSbiAp6vyct+d7
+	xr9eYg+1oDPCbIsJWLeZTE32vBi+HwJmlpJyU/Zu4kteIhljWsWFIotv
+X-Gm-Gg: AYBFou2BndmwTo+xJhYYJFraJWyvXdNX8DnxFIQgmPBggdDs0Rt0ZRv1HFKx8xd2l3b
+	OOSVeZDPaAsVvmPX5JkcSnI9IZQ8LUkPrqdeb7Q/pr4nxraaHY3vZvhk2dzMEbz7BkdjBqt/8Mk
+	ZSSbzAlYFk+z4WoBIvVC2Xb9ja+Jdt/fUZwHinD8o+iLbOct0Qgq9TFs5N4tx/cQY+xhSSjPzUy
+	VokIo2suujAwFG9H+4n+CwnQMIq0mHjMhcQNVY1FZ/9C8bM6EwRru9UqK2gVXsmDreNnABsKHZv
+	ulpLyOcxAHLfPjnRAIWOxtCUIKaMUyJadQ1GzDeFdyUR0crT7TzwP+O9oMTwZH2+tK379+R1s92
+	vYi9QNWz9g4VA1UmxPybUZQsPO8y4LZn3QrxkV6Gx60Aj5wAYrIIBPn54pxnH4YWLAf1uIb8srG
+	tmerYH+SHrEAmbPL49uURKrTSE4YB/UY70I/v/54ZMEK6r7WcmMEAs984LQKg/kTg0cCuIkxYSd
+	T+ltYWaAXvHgCWFfZWi65YLiULJVOkumTrJVq480+Y5leAD7lHqUdAsmVlTwjCGxAf/vMrF8/gw
+	9r/GAnsgvAbidY4V
+X-Received: by 2002:a05:6214:398d:b0:91e:aa6d:d408 with SMTP id 6a1803df08f44-91f03e88ff2mr51627976d6.7.1794415797982;
         Wed, 11 Nov 2026 08:49:57 -0800 (PST)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com
-Subject: [PATCH bpf-next 1/6] bpf: Add const, sub, zext32 and sext32 operations to cnum
-Date: Wed, 11 Nov 2026 16:49:44 +0000
-Message-ID: <20261111164950.2674588-2-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261111164950.2674588-1-alexei.starovoitov@gmail.com>
-References: <20261111164950.2674588-1-alexei.starovoitov@gmail.com>
+Received: from localhost ([2620:10d:c091:500::6:868a])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91ef04ab626sm51981516d6.15.2026.11.11.08.49.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Nov 2026 08:49:57 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -99,210 +87,187 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 11 Nov 2026 11:49:56 -0500
+Message-Id: <DMSJB8MZZCXK.MCEBRZQDAM5Q@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, "Andrew Lunn"
+ <andrew+netdev@lunn.ch>, =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?=
+ <bjorn@kernel.org>, <bpf@vger.kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Daniel Zahka" <daniel.zahka@gmail.com>, "Donald
+ Hunter" <donald.hunter@gmail.com>, "Eric Dumazet" <edumazet@kernel.org>,
+ "Jakub Kicinski" <kuba@kernel.org>, "Jamal Hadi Salim" <jhs@mojatatu.com>,
+ "Jiri Pirko" <jiri@resnulli.us>, "John Fastabend"
+ <john.fastabend@gmail.com>, <linux-doc@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-rdma@vger.kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Paolo Abeni" <pabeni@redhat.com>, "Saeed Mahameed" <saeedm@nvidia.com>,
+ "Simon Horman" <horms@kernel.org>, "Tariq Toukan" <tariqt@nvidia.com>, "Wei
+ Wang" <weiwan@google.com>, "Willem de Bruijn"
+ <willemdebruijn.kernel@gmail.com>
+Subject: Re: [PATCH net-next v1 04/15] psp: add support for socket-less psp
+ associations
+From: "Daniel Zahka" <daniel.zahka@gmail.com>
+To: "Todd Freed" <toddfreed@meta.com>, <netdev@vger.kernel.org>
+X-Mailer: aerc 0.21.0-threadmapfix
+References: <20261111005533.6436-1-toddfreed@meta.com>
+ <20261111005533.6436-5-toddfreed@meta.com>
+In-Reply-To: <20261111005533.6436-5-toddfreed@meta.com>
 
-From: Alexei Starovoitov <ast@kernel.org>
+On Tue Nov 10, 2026 at 7:55 PM EST, Todd Freed wrote:
+> currently, a psp association is bound to a tcp socket when it is
+> created, and can hold both an rx and a tx key.
+>
+> add a small registry of un-bound associations. These have either an rx
+> or tx flavor, and are referenced by an id. other parts of the stack can
+> then attach them to packets. see the subsequent patches, where the tc
+> psp action does just this.
+>
+> an rx association records the spi, version, and device key generation,
+> primarily for describe (assoc-get). a tc filter matches these fields
+> with the flower keys psp_spi, psp_ver, and psp_dev instead of
+> referencing the association by id, to facilitate hw offload. these
+> matches are added in a subsequent patch.
+>
+> adds the following new netlink commands for managing these associations.
+> note, these are admin-only and restricted to the netns of the psp device
+>
+>   rx-spi-alloc  allocate an rx spi + derived key, and publish an rx
+>                 association for it, returns its id. the key is
+>                 delivered to the peer out of band
+>   assoc-add     create a tx association and install a tx key, returns
+>                 its id
+>   assoc-del     drop the registry's reference to an association
+>   assoc-get     get / dump associations ; only the spi is reported
+>
+> assoc-get and assoc-del operate on both rx and tx associations.
+>
+> socket associations do not go into the registry, and these apis do not
+> address them. so for example, assoc-get does not list them.
+>
+> socket-less associations are on the device's association lists, like
+> socket associations. they are therefore marked stale by key rotation in
+> the same way, except tx ones: they hold the peer's key, which the
+> rotation of the device key doesn't affect. assoc-get reports it
+> (stale), so that user space can identify such entries.
+>
+> key material enters through netlink and is never reported back. no key
+> is stored for rx associations, and users reference associations by id
+> and never handle keys
+>
+> published associations are dropped from the registry when their psp
+> device is unregistered.
+>
 
-A register is a cnum64 and a cnum32. scev.c does not compute with them:
-struct scev_value has the eight bounds umin .. s32_max and adds them by
-hand, with four checks for wrap-around. [-1, 0] + 1 is 'any number' as
-an unsigned range, and [0, 1] as a cnum. A later patch moves scev.c to
-cnum. These operations are missing or open coded:
+I think the design could be improved by not reusing struct psp_assoc for
+the socketless rx spi accounting, and by not placing the socketless tx
+assoc on the active, prev, and stale lists next to the socket
+associations. I'll try to comment inline to give you a better idea of
+what I'm talking about.
 
- - cnum{32,64}_const(v). verifier.c has cnum{32,64}_from_urange(imm, imm)
-   in three functions.
- - cnum{32,64}_sub(a, b). verifier.c has
-   cnum{32,64}_add(a, cnum{32,64}_negate(b)) in three functions.
- - cnum64_zext32(), cnum64_sext32(). They move from scev.c to cnum.c.
+In general, what I'd like to minimize is having one object used for
+three different things, where each usecase has its own subset of fields
+active, and then having a bunch of glue in places like
+psp_assocs_key_rotated(), where you have to check if the assoc is
+socketless, followed by if it is tx or rx.
 
-Convert the users. ___mark_reg_known() follows when it moves to struct
-scalar.
+[...]
 
-Like add, negate and intersect the two extensions now give an empty range
-for an empty range. They gave [0, U32_MAX] and all of s64. Their user,
-linear_bounds(), has no empty range to pass. No other functional change.
+> +int psp_nl_rx_spi_alloc_doit(struct sk_buff *skb, struct genl_info *info=
+)
+> +{
+> +	struct psp_dev *psd =3D info->user_ptr[0];
+> +	struct psp_key_parsed key;
+> +	struct psp_assoc *pas;
+> +	struct sk_buff *rsp;
+> +	u32 version;
+> +	int err;
+> +
+> +	if (GENL_REQ_ATTR_CHECK(info, PSP_A_ASSOC_VERSION))
+> +		return -EINVAL;
+> +
+> +	version =3D nla_get_u32(info->attrs[PSP_A_ASSOC_VERSION]);
+> +	if (!(psd->caps->versions & (1 << version))) {
+> +		NL_SET_BAD_ATTR(info->extack, info->attrs[PSP_A_ASSOC_VERSION]);
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	rsp =3D psp_nl_reply_new(info);
+> +	if (!rsp)
+> +		return -ENOMEM;
+> +
+> +	err =3D psd->ops->rx_spi_alloc(psd, version, &key, info->extack);
+> +	if (err)
+> +		goto err_free_rsp;
+> +
+> +	pas =3D psp_assoc_create(psd);
 
-Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
----
- include/linux/cnum.h   |  6 ++++++
- kernel/bpf/cnum.c      | 19 +++++++++++++++++++
- kernel/bpf/cnum_defs.h | 11 +++++++++++
- kernel/bpf/scev.c      | 10 ----------
- kernel/bpf/verifier.c  | 12 ++++++------
- 5 files changed, 42 insertions(+), 16 deletions(-)
+I'm not sure the kernel actually needs any bookkeeping at all for these
+generic rx spi allocations. You could probably just pass the spi, dev
+id, key, and probably rotation count (as a device key generation of
+sorts) to the user without creating a kernel object. For socket
+psp_assocs, the rx state is consulted on the datapath before queueing to
+the socket. For tx state in all psp_assocs, there is the possibility
+that an SADB handle needs to be cleaned up. Neither of those apply here
+or in the rest of the series as I understand it.
 
-diff --git a/include/linux/cnum.h b/include/linux/cnum.h
-index 49160318adf9..bf514cc0a098 100644
---- a/include/linux/cnum.h
-+++ b/include/linux/cnum.h
-@@ -33,6 +33,7 @@ struct cnum32 {
- #define CNUM32_UNBOUNDED ((struct cnum32){ .base = 0, .size = U32_MAX })
- #define CNUM32_EMPTY ((struct cnum32){ .base = U32_MAX, .size = U32_MAX })
- 
-+struct cnum32 cnum32_const(u32 v);
- struct cnum32 cnum32_from_urange(u32 min, u32 max);
- struct cnum32 cnum32_from_srange(s32 min, s32 max);
- u32 cnum32_umin(struct cnum32 cnum);
-@@ -49,6 +50,7 @@ bool cnum32_is_const(struct cnum32 cnum);
- bool cnum32_is_empty(struct cnum32 cnum);
- struct cnum32 cnum32_add(struct cnum32 a, struct cnum32 b);
- struct cnum32 cnum32_negate(struct cnum32 a);
-+struct cnum32 cnum32_sub(struct cnum32 a, struct cnum32 b);
- bool cnum32_is_subset(struct cnum32 outer, struct cnum32 inner);
- 
- /* Same as cnum32 but for 64-bit ranges */
-@@ -60,6 +62,7 @@ struct cnum64 {
- #define CNUM64_UNBOUNDED ((struct cnum64){ .base = 0, .size = U64_MAX })
- #define CNUM64_EMPTY ((struct cnum64){ .base = U64_MAX, .size = U64_MAX })
- 
-+struct cnum64 cnum64_const(u64 v);
- struct cnum64 cnum64_from_urange(u64 min, u64 max);
- struct cnum64 cnum64_from_srange(s64 min, s64 max);
- u64 cnum64_umin(struct cnum64 cnum);
-@@ -76,9 +79,12 @@ bool cnum64_is_const(struct cnum64 cnum);
- bool cnum64_is_empty(struct cnum64 cnum);
- struct cnum64 cnum64_add(struct cnum64 a, struct cnum64 b);
- struct cnum64 cnum64_negate(struct cnum64 a);
-+struct cnum64 cnum64_sub(struct cnum64 a, struct cnum64 b);
- bool cnum64_is_subset(struct cnum64 outer, struct cnum64 inner);
- 
- struct cnum32 cnum32_from_cnum64(struct cnum64 cnum);
-+struct cnum64 cnum64_zext32(struct cnum32 cnum);
-+struct cnum64 cnum64_sext32(struct cnum32 cnum);
- struct cnum64 cnum64_cnum32_intersect(struct cnum64 a, struct cnum32 b);
- struct cnum64 cnum64_intersect_linear(struct cnum64 in, u16 base, u16 step);
- 
-diff --git a/kernel/bpf/cnum.c b/kernel/bpf/cnum.c
-index 8ec5187d7c75..21bb6411cfb8 100644
---- a/kernel/bpf/cnum.c
-+++ b/kernel/bpf/cnum.c
-@@ -23,6 +23,25 @@ struct cnum32 cnum32_from_cnum64(struct cnum64 cnum)
- 		return (struct cnum32){ .base = (u32)cnum.base, .size = cnum.size };
- }
- 
-+/* The zero extension of each value of 'cnum'. An arc that crosses U32_MAX/0 gives [0, U32_MAX]. */
-+struct cnum64 cnum64_zext32(struct cnum32 cnum)
-+{
-+	if (cnum32_is_empty(cnum))
-+		return CNUM64_EMPTY;
-+	return cnum64_from_urange(cnum32_umin(cnum), cnum32_umax(cnum));
-+}
-+
-+/*
-+ * The sign extension of each value of 'cnum'.
-+ * An arc that crosses S32_MAX/S32_MIN gives [S32_MIN, S32_MAX].
-+ */
-+struct cnum64 cnum64_sext32(struct cnum32 cnum)
-+{
-+	if (cnum32_is_empty(cnum))
-+		return CNUM64_EMPTY;
-+	return cnum64_from_srange(cnum32_smin(cnum), cnum32_smax(cnum));
-+}
-+
- /*
-  * Suppose 'a' and 'b' are laid out as follows:
-  *
-diff --git a/kernel/bpf/cnum_defs.h b/kernel/bpf/cnum_defs.h
-index 05b17a8b4814..56d0c6f555a8 100644
---- a/kernel/bpf/cnum_defs.h
-+++ b/kernel/bpf/cnum_defs.h
-@@ -20,6 +20,11 @@
- #define EMPTY    __PASTE(__PASTE(CNUM, T), _EMPTY)
- #define FN(name) __PASTE(__PASTE(cnum, T), __PASTE(_, name))
- 
-+struct cnum_t FN(const)(ut v)
-+{
-+	return (struct cnum_t){ .base = v, .size = 0 };
-+}
-+
- struct cnum_t FN(from_urange)(ut min, ut max)
- {
- 	return (struct cnum_t){ .base = min, .size = (ut)max - min };
-@@ -259,6 +264,12 @@ struct cnum_t FN(negate)(struct cnum_t a)
- 	return FN(normalize)((struct cnum_t){ -((ut)a.base + a.size), a.size });
- }
- 
-+/* { x - y : x in 'a', y in 'b' } */
-+struct cnum_t FN(sub)(struct cnum_t a, struct cnum_t b)
-+{
-+	return FN(add)(a, FN(negate)(b));
-+}
-+
- bool FN(is_empty)(struct cnum_t cnum)
- {
- 	return cnum.base == EMPTY.base && cnum.size == EMPTY.size;
-diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-index 8438313e7b4a..a477a3029baa 100644
---- a/kernel/bpf/scev.c
-+++ b/kernel/bpf/scev.c
-@@ -4453,16 +4453,6 @@ static struct bpf_reg_state *spill32_counter(struct scev *scev, struct bpf_func_
- 	return scev_reg_for_spill32(st, r);
- }
- 
--static struct cnum64 cnum64_zext32(struct cnum32 r32)
--{
--	return cnum64_from_urange(cnum32_umin(r32), cnum32_umax(r32));
--}
--
--static struct cnum64 cnum64_sext32(struct cnum32 r32)
--{
--	return cnum64_from_srange(cnum32_smin(r32), cnum32_smax(r32));
--}
--
- /* Compute the range an induction variable in `reg` spans over the loop. */
- static void linear_bounds(struct bpf_reg_state *reg, u32 max_header_count,
- 			  struct linear_coefs *coefs, struct bounds *out)
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index c9c6b1367a0b..1f33e69b4aee 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -2020,7 +2020,7 @@ void bpf_mark_reg_known_scalar(struct bpf_reg_state *reg, u64 imm)
- static void __mark_reg32_known(struct bpf_reg_state *reg, u64 imm)
- {
- 	reg->var_off = tnum_const_subreg(reg->var_off, imm);
--	reg->r32 = cnum32_from_urange((u32)imm, (u32)imm);
-+	reg->r32 = cnum32_const(imm);
- }
- 
- /* Mark the 'variable offset' part of a register as zero.  This should be
-@@ -6345,8 +6345,8 @@ static void coerce_reg_to_size_sx(struct bpf_reg_state *reg, int size)
- 			reg->var_off = tnum_const((s32)u64_cval);
- 
- 		u64_cval = reg->var_off.value;
--		reg->r64 = cnum64_from_urange(u64_cval, u64_cval);
--		reg->r32 = cnum32_from_urange((u32)u64_cval, (u32)u64_cval);
-+		reg->r64 = cnum64_const(u64_cval);
-+		reg->r32 = cnum32_const(u64_cval);
- 		return;
- 	}
- 
-@@ -17077,7 +17077,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env, struct bpf_insn
- 				"Use addition from R10 to form stack addresses within the tracked stack frame.");
- 			return -EACCES;
- 		}
--		dst_reg->r64 = cnum64_add(ptr_reg->r64, cnum64_negate(off_reg->r64));
-+		dst_reg->r64 = cnum64_sub(ptr_reg->r64, off_reg->r64);
- 		dst_reg->var_off = tnum_sub(ptr_reg->var_off, off_reg->var_off);
- 		dst_reg->raw = ptr_reg->raw;
- 		if (reg_is_pkt_pointer(ptr_reg)) {
-@@ -17184,13 +17184,13 @@ static void scalar_min_max_add(struct bpf_reg_state *dst_reg,
- static void scalar32_min_max_sub(struct bpf_reg_state *dst_reg,
- 				 struct bpf_reg_state *src_reg)
- {
--	dst_reg->r32 = cnum32_add(dst_reg->r32, cnum32_negate(src_reg->r32));
-+	dst_reg->r32 = cnum32_sub(dst_reg->r32, src_reg->r32);
- }
- 
- static void scalar_min_max_sub(struct bpf_reg_state *dst_reg,
- 			       struct bpf_reg_state *src_reg)
- {
--	dst_reg->r64 = cnum64_add(dst_reg->r64, cnum64_negate(src_reg->r64));
-+	dst_reg->r64 = cnum64_sub(dst_reg->r64, src_reg->r64);
- }
- 
- static void scalar32_min_max_mul(struct bpf_reg_state *dst_reg,
--- 
-2.55.0
+I figure the tc ingress rule can just take the spi and dev id by value
+rather than needing a reference to an object that we create here.
 
+> +	if (!pas) {
+> +		err =3D -ENOMEM;
+> +		goto err_free_rsp;
+> +	}
+> +	pas->version =3D version;
+> +	pas->rx.spi =3D key.spi;
+> +
+> +	err =3D psp_assoc_publish(pas);
+> +	if (err)
+> +		goto err_put_pas;
+> +
+> +	if (nla_put_u32(rsp, PSP_A_ASSOC_ID, pas->id) ||
+> +	    nla_put_u32(rsp, PSP_A_ASSOC_DEV_ID, psd->id) ||
+> +	    psp_nl_put_key(rsp, PSP_A_ASSOC_RX_KEY, version, &key)) {
+> +		psp_assoc_unpublish(pas);
+> +		err =3D -EMSGSIZE;
+> +		goto err_put_pas;
+> +	}
+> +
+> +	psp_assoc_put(pas);
+> +	memzero_explicit(&key, sizeof(key));
+> +
+> +	return psp_nl_reply_send(rsp, info);
+> +
+> +err_put_pas:
+> +	psp_assoc_put(pas);
+> +err_free_rsp:
+> +	memzero_explicit(&key, sizeof(key));
+> +	nlmsg_free(rsp);
+> +	return err;
+> +}
+> +
+
+[...]
+
+> @@ -310,7 +311,13 @@ void psp_assocs_key_rotated(struct psp_dev *psd)
+>  	 * be able to Rx any traffic.
+>  	 */
+>  	list_for_each_entry_safe(pas, next, &psd->prev_assocs, assocs_list) {
+> -		pas->generation |=3D ~PSP_GEN_VALID_MASK;
+> +		/* A socket-less Tx association holds the peer's key, which
+> +		 * the rotation of the device key doesn't affect
+> +		 */
+> +		if (pas->id && psp_assoc_is_tx(pas))
+> +			continue;
+> +		WRITE_ONCE(pas->generation,
+> +			   pas->generation | ~PSP_GEN_VALID_MASK);
+>  		psd->stats.stales++;
+>  	}
+>  	list_splice_init(&psd->prev_assocs, &psd->stale_assocs);
+
+I would create a separate list for the socketless tx assocs, so that
+SADB handles can be flushed on psp_dev_unregister(). Then you can just
+leave this function untouched, because invalidating the generation is
+only for __psp_sk_rx_policy_check(), which isn't used by the socketless
+rx assocs.
