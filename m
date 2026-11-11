@@ -1,79 +1,80 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794425993;
-	b=tZsQH83TciTffkU6sALC9ljov20LcgBEjgRE/n2lU4BSV/ii138XS8SA2fIjcsDIi0/h
-	 I7F8al8USQYF6fewwMdULDKWZltiOCn5T3iHRfj7KqHmrohZqC1uDitKg2pUUAazGhYUr
-	 GVsD3yjFjpo1Ac6NFcpA2Nd0rU84fakwBvKjDW9Wg/0dfL6LaOZ91gSZKz6kiwYI5mv5e
-	 pgz7VYxrQRH0vJ9pFF4wTOWojUbslpYbG/VotG4AwkfIrEx04GMZD1nyZllX3cqMsvTZf
-	 pRNgdqa90A8il5QPspv6BtrO1OOWfbm/4m7lix61wuBQ/SXWGKIGaL4BliMOmiJXl4w==
+	t=1794425991;
+	b=FqCe+XgplwMMcY+5fUr60wykhnmKPfDvqdELu75b4aV3pmyC8wBa8nbcnrfLpQpdNkfz
+	 E+cwf+XA08X0TP9dXpgLDqltMRmkJwTqMOzoC9CLNxxuJ/iIG/OU4rmLsxiBP18x8eNex
+	 fHIWG+FR+GbWSMEL7dmuFCh1utB3ga1Kj9V7hAw4uBV5+9WgHSGennoKB81JzO8wjd1rj
+	 StK2B9XmzvJxseduE3+KLeMXKKJzOEDQvajah/cqi8YDiIasWDkbnAJ4R8dKqMHnwOGpq
+	 60HKv8S3XJ6BVT+QMYmqK6do53FJ0ziWvygJQxYZCpJIxfT1dRzP9HeMQlL40LWLIBA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794425993;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=ijzHD4xJZ8Z5LuWRGTJbu77iH/ZNmgkdR3asZcVvThY=;
-	b=GAWkfgaV0/Pd2NJK4Qbb20EIsg06mxdIQp8vMkrQagO4+TjxK2QcG8C4DCeVSfvn2mfu
-	 SbDPAEjGkFz287uox4Rq/NlljFoq5dUgO65GJK2yMAW0P8htzrTx8cX1HSQQEPiZcKc7B
-	 tWpuJQJyhDfjDEbZ2yeovRhk2KWbnTpWjgZKjn1nGveX4KDUNq4EDCaaklxakfQiDt7Q/
-	 LTYO4ZAzYSzf4BsgOuhW05zbuoNl0gNz2/O1TOA6KUFlsZYigb+PDVMkN5wzhhHb0DqyI
-	 sfhk1MM1v8zIoRprrHiEDGo+YVWuIyqsfIToRKZ/2Llo7PmnP1Wb6g/JEGPUB0PKz4w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794425991;
+	h=Received:DKIM-Signature:Received:From:Subject:Date:Message-Id:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:To:
+	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To;
+	bh=FEQamrsPo6urht7cJ67TRsra9oOnDxC/CoYlG8i+IMU=;
+	b=sLlTYQcgGrQlWurPb+SmMcqn8/wnaBV3aet339P54wZJ9LAvWlF82NfCnrNNJnTQRKbH
+	 iWPJLRKnyydqUGKAMLJlEVhbXhFFry9XicB42wCebUfv8BIM6sqglHSHL6BfnNbVr1gW5
+	 CcZ4RRJh+UwSU4smJKKfZDqQ8OumPQ1CGTp0qxvbrdcIBLQpCnW5COll87nNpGv/zHEo2
+	 smFwCh3qylPuGaOsCZQnK3el0puQWSDhR6lvmHHK3nVJ7OCohfNUgEdH/knUST9Xwsk2R
+	 uDvRca32N3F5J4E7yp0uF/p4Q7gYI+igGqtfcsJI7wZGQ5ERmvdd0YGv5GF3QV+okvA==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=V8mPTulY;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oyhm0Qjq;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A692606A885;
-	Wed, 11 Nov 2026 19:39:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC7A0606A32A;
+	Wed, 11 Nov 2026 19:39:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=V8mPTulY
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oyhm0Qjq
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1794425993;
-	b=WQRSDCINIcHrBJCVJzwiCHuavJES61kP8KgY6sz2Mmk4GrTaATsvzqymleByS/GmfQjC
-	 Z8sr+UDMQx5z2Gd1Yao55UXUajHJK9NsHbadM4ll+MZMk4TSL2wqAfZ5p2VpINGdYMsZp
-	 dMxz7wFiwLroc5Y9vUMKwgKwuRbyKMGayOyCibTStWik8dMScz6MLutPunWkj1set+0u6
-	 mg7YBE5RGDoIV3IkgK1Wt0DyC5txf+UuP4wwH9u2scTUamoEN3yzhhx8rY/HWXrObSn1Q
-	 J9GCoOtvnyNsVyi4PBlvycGpxEQ+CMArjPpPPOWPQeuhcEvW8UGWfBXvaw84Pp3aKyA==
+	t=1794425991;
+	b=g24p0YPxV8xO+RpwEsyaGthXbZ+IiV5gs+hHdxWZhAPAy9+55nJjNLefFGuIJ+YHM4V0
+	 SXZAPEQ+HXpPqsiz6LTouImxl3DSdXE1lREpPAV/IjeonqSnryROh8dfMW+MdBm0ewAYZ
+	 qph3Rndo7jquec5bBw3MjNOp42wn2Kdkkf5WneNzVGnQuJdDgXnu2vTvvafIPN+h402s7
+	 bZlEfU2j88JbgURK6dDsdioDpk/qM1ZsDmznhDuB4K++sWtgy0TngJXIUmXO4FxaHjRo2
+	 8usib6lL6UpY/G6gr1ctj9Sh5zy5+u6Q/EIxZ1hUNAMSdqD4a2orcPvBRUMHYfuh3NQ==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794425993;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	c=relaxed/relaxed; t=1794425991;
+	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=ijzHD4xJZ8Z5LuWRGTJbu77iH/ZNmgkdR3asZcVvThY=;
-	b=gVClTJIs0TVLG+pfAcPRGUxIvbKCO7FyyFAjRvb570gxStvWQt/Cz3TKZuQ3Da+/ZfA9
-	 /aejbp9pSyLVOX/tdwT3WmQxrf9cIDSce2RI/95UPZnCM5qSrH/axU3iuoF8hzLiG4m/8
-	 N8UdsiWYF7WDDRKVqPk9PREl/xm7hGSBL0MlIEWmEyu0Pb42MmmlJt3MaeCGQMounMYWW
-	 TZLuXleoLkQkibnWPJbGzztoVI5c/896M7HgHEERfk4tLgHCo6I6lOKyU5ZPSt/IRotzX
-	 wEpF5xauBjgbAzFjSxbo6tkKmufVDclhFd5p1yuOYVQ5LnZHH4yUCdiTc479RpEjmqw==
+	 X-Original-From:Reply-To;
+	bh=FEQamrsPo6urht7cJ67TRsra9oOnDxC/CoYlG8i+IMU=;
+	b=DHWJziBb76vt2OJ4rSX6BHpT2iPkpeRLQqCHPvo3gGjONm+zuLSseJOUqj+8nrBvM1P+
+	 8bEgxzl3RKSinhuWRhzURCNXdOIcZt7Kim8Y6hz6ZfinOGDqd/jkQy3VKBSV4YrSlQlDy
+	 vU+n8Kh1NB8QM6keuHPGMpSkoTr01tqyyz9GMlia8F5R/RZqdYmEBG9/WdMljameu9Sw+
+	 QS4IeLy2FAFRV2dXcmpSbVS2KW882pZbgFMrov3VlqKUI8H6pGOeER9GRcGOkn2Rf7uJe
+	 jDLhK4c1Br126Itkf/wIiysQ1zACqkb/KSy45BggwuUK79aVfyjInjbEx3OdoXkCU0w==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 202281F00A10;
-	Wed, 11 Nov 2026 19:39:52 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id BA1601F00A06;
+	Wed, 11 Nov 2026 19:39:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794425993;
-	bh=ijzHD4xJZ8Z5LuWRGTJbu77iH/ZNmgkdR3asZcVvThY=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=V8mPTulYcrFaKklCLqx7I23cE/Qmr8dxUGmqGpSTKUrZf1D13vu6GarIzV37VQGwb
-	 PVJHQUXGgL+6X9hYKWyXLHUutKoQs3S1uZaETwUgJKrT22mt5UQ230FRVthAgsOUWu
-	 5NoqzLG89blG5ltfxrKJ93O9C+Ik3Z5avqr8NQfjgYPlHNOm6XEOm8xN8RbcopTT/t
-	 +uxPNPZ/UKrM3s1Pl/oewOPP6/RwjwEJSQZ7kI9gSSdOekDEwGbH/GVXsQPP+/VpLj
-	 hIjl9e/axV2JFoPbn7T+nItQViqY7QLEHw4D1g+BAgmqZYhzx08DWKQuqWFr3xzwtY
-	 aDbHp3ykSm50A==
+	s=k20260515; t=1794425991;
+	bh=FEQamrsPo6urht7cJ67TRsra9oOnDxC/CoYlG8i+IMU=;
+	h=From:Subject:Date:To:Cc:Reply-To;
+	b=oyhm0Qjqbr4EGrx8e025NMs2iHvXqJmXdkifm86oz4nTkhqezQuflI3npRwEi9rSj
+	 T8nWMd2MWlwu4aaKnEYoyqapT6b6LaybVKR55MFWmoK8Zd17ZuJfO6KZQskzpiT9og
+	 lCCwiUEAwsilr/ENGTuXdW9gL2joqDb9HwnBZPAw/C+JzKO/heDjl/HkDTbe90Pmdm
+	 nBBwHZSD9a5qBDoVuRvNrr62UT6XI7ro2PmQMFrH+Sf5mzXSa32+WCg/znLM9P0RGK
+	 IcH0rhW9dvp45Zpb87pWb7iNJiG3OMu1iJAEOGrB5YlUqDQegnQFhzwoe1X6DIW5gX
+	 sVCUAP4HELFXQ==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 00DF5490CA;
-	Wed, 11 Nov 2026 19:39:51 +0000 (UTC)
+	by lkml.kernel.org (Postfix) with ESMTP id 457E3490BA;
+	Wed, 11 Nov 2026 19:39:50 +0000 (UTC)
 From: Mike Bazov via B4 Relay <devnull+mikeba.sentinelone.com@kernel.org>
-Date: Wed, 11 Nov 2026 21:39:51 +0200
-Subject: [PATCH bpf-next v2 5/5] selftests/bpf: Test syscall tracepoint
- programs under preemption
+Subject: [PATCH bpf-next v2 0/5] bpf: Check recursion per task for
+ preemptible programs
+Date: Wed, 11 Nov 2026 21:39:46 +0200
+Message-Id: <20261111-bpf-preempt-v2-r2-v2-0-9d8f6b952ad2@sentinelone.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -84,9 +85,10 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261111-bpf-preempt-v2-r2-v2-5-9d8f6b952ad2@sentinelone.com>
-References: <20261111-bpf-preempt-v2-r2-v2-0-9d8f6b952ad2@sentinelone.com>
-In-Reply-To: <20261111-bpf-preempt-v2-r2-v2-0-9d8f6b952ad2@sentinelone.com>
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAILE9GoC/x2MwQqEMAxEf0VyNqBhXXB/RTy0NtUctltSEUH8d
+ 9Od28ybmQsKq3CBT3OB8iFFfskMtQ0sm0srowTzQB29exP6HDEr8zfveBAqYRzj6LrgwxBeYDu
+ jUc7/5wS1nvjcYTbiXWH06tKy1U+b1wTu+wEeWWynhwAAAA==
 To: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
 Cc: Martin KaFai Lau <martin.lau@linux.dev>, 
@@ -102,211 +104,159 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
  JP Kobryn <jp.kobryn@linux.dev>, linux-trace-kernel@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Mike Bazov <mikeba@sentinelone.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1794425986; l=5984;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794425986; l=7090;
  i=mikeba@sentinelone.com; s=20261022; h=from:subject:message-id;
- bh=tZ3h3zlk5gZewJOcwTZGC4amQ/qD5S2tjhbroNJXdXY=;
- b=HN1crOzSpxHdzxcK5fDb6DdVngujp0zKQb13Vx/Ms1+8BGezDElI2FaTiIHp2RSDzM+iowa0y
- kcOR0NlmXZ7Cj/JPKgkSJkYeT0id2Msa8Cn7VdaS97m4Hvx2fPlzN9f
+ bh=LnQxenO2766xlJbzVCrrwOOFPUjVzlBWWREwY5b6Gkw=;
+ b=Dn6g7Cnpd+M2gnaHODrGbsuqgZ2AsyoQ16gWyQpXx1aDsAJSq9CUqKtv2Xji2GAVNBv+T7v2u
+ sDmRS2JTvCpCbHDMPiTLMnfiNzstDSRPy7rlzn7vPlCL9ozZ1XzP+MK
 X-Developer-Key: i=mikeba@sentinelone.com; a=ed25519;
  pk=DBXcQ0qoCkgacRsRwT1JU7oOWpWSYuTyLiXMfNLcP+A=
 X-Endpoint-Received: by B4 Relay for mikeba@sentinelone.com/20261022 with
  auth_id=1284
 X-Original-From: Mike Bazov <mikeba@sentinelone.com>
 Reply-To: mikeba@sentinelone.com
-Content-Transfer-Encoding: 7bit
 
-From: Mike Bazov <mikeba@sentinelone.com>
+Tracing programs run preemptibly: trampoline programs only disable
+migration, tracepoint probes run under SRCU-fast, and syscall tracepoint
+and sleepable programs can fault. Their recursion check is a per-CPU
+counter:
 
-Add subtests for classic tracepoint programs on sys_enter_prctl, which
-run preemptibly:
+  CPU N
+  -----
+  task A enters prog -> prog->active on CPU N becomes 1
+  task A is preempted inside prog
+  task B enters prog on CPU N -> prog->active is already raised:
+    the run is dropped and counted as a recursion miss
+  task A resumes and finishes -> prog->active drops to 0
 
-- tp_syscall: the same two-thread scenario as the other subtests.
-- tailcall_tp: a tracepoint dispatcher tail-calls a large-stack handler.
-- tp_dual: one program attached to sys_enter_prctl and to the regular
-  task_rename tracepoint, told apart by their attach cookies. A enters
-  it through the syscall tracepoint, B through task_rename.
+Nothing recursed, but task B's event is lost. Before 7.0 this was mostly
+hidden, because distribution kernels used PREEMPT_VOLUNTARY. Commit
+7dadeaa6e851 ("sched: Further restrict the preemption modes") left only
+lazy and full preemption on x86 and arm64, so 7.0+ distribution kernels
+drop such events in normal operation. Programs can't work around it: the
+counter is checked before their first instruction.
 
-Without the per-task check, every subtest counts recursion misses:
-tp_syscall and tailcall_tp drop B's run, and tp_dual drops B's run
-through sys_enter_prctl. Without the private-stack change, tailcall_tp
-and tp_dual corrupt A's stack.
+In a production security agent with paired fentry/fexit programs on
+inet_sendmsg() and inet_recvmsg(), a dropped half breaks the entry/exit
+pairing and desynchronizes stateful protocol parsing. On a stock 7.0
+kernel, 4,063 of 38.0M runs were dropped under 10 minutes of HTTP load.
+v1 has the detailed analysis and a standalone reproducer.
 
-Signed-off-by: Mike Bazov <mikeba@sentinelone.com>
+This series checks recursion per task instead. Each run already links a
+run context into the task's chain (current->bpf_ctx); the run context
+now records the program, and the check walks the task's chain. Real
+recursion, including through interrupts and NMIs, which run on top of
+the interrupted task's chain, is still rejected; a second task is not.
+Programs that keep a private stack keep the per-CPU check.
+
+Patch 1 comes first and stands on its own. A per-CPU private stack is
+only safe if a program never runs in two tasks at once on one CPU, and
+that already happens on bpf-next today: two raw_tp dispatchers
+tail-calling one handler, or one tracepoint program attached to a
+syscall and a regular tracepoint, let a second task overwrite the
+preempted task's stack. The selftests reproduce both. Patch 1 stops
+giving tracing, raw_tp and tracepoint programs a private stack. Without
+it, the per-task check would let a dispatcher in while its tail-call
+target still uses a per-CPU stack.
+
+  1. bpf: Avoid per-CPU private stack in preemptible tracing progs
+  2. bpf: Check program recursion per task via bpf_ctx
+  3. bpf: Check recursion per task for programs on syscall tracepoints
+  4. selftests/bpf: Add trampoline and raw_tp preemption recursion test
+  5. selftests/bpf: Test syscall tracepoint programs under preemption
+
+Behavior changes worth a look:
+
+- On the kernel stack, the frames of a call chain share one stack
+  budget, while a private stack checks each frame on its own. Programs
+  whose frames only fit separately no longer load, e.g. a raw_tp program
+  with two 2000-byte frames: "combined stack size of 2 calls is 4000.
+  Too large". Is that acceptable, or would an opt-in private stack, which
+  would keep the per-CPU check, be preferred as a follow-up?
+- Raw tracepoint programs were the only ones with a private stack that
+  BPF_PROG_TEST_RUN runs, so unwinding on a private stack is now checked
+  in the generated code only. A run-time test could use bpf_testmod's
+  struct_ops that requests a private stack: wanted in this series or as
+  a follow-up?
+- The same program can now run in two tasks at once on one CPU, so a
+  program using a per-CPU map as scratch space can see another run's
+  data.
+- Timed may_goto keeps its budget per program and CPU, as before: a run
+  in another task can renew the budget of a preempted run.
+
+Testing:
+
+x86-64 VM with 4 vCPUs, full preemption, bpf-next 0fb18ce8a2e9 with and
+without the series.
+
+- The same test_progs binary on both kernels:
+
+                                            bpf-next    series
+  trampoline_preempt, 14 preemption         all fail    all pass
+    subtests (20 rounds each, the
+    overlap is checked in every round)
+  trampoline_preempt, 4 recursion           all pass    all pass
+    subtests
+  verifier_unwind, may_goto_priv_stack,     pass        pass
+    timed_may_goto, test_global_funcs,
+    recursion, task_local_storage
+
+  On bpf-next the second task is dropped in every round of every
+  preemption subtest, and two_dispatchers and tp_dual also corrupt the
+  preempted task's stack.
+
+- HTTP load: nginx -> gunicorn -> Redis on the VM, the production
+  fentry/fexit probe (8 programs on inet[6]_{send,recv}msg()), 4
+  CPU-bound tasks, and 200,000 requests from wrk on each kernel:
+
+                probe runs    recursion misses
+  bpf-next       7,966,760               9,254
+  series         7,976,662                   0
+
+Changes in v2:
+- v1 kept recursion-checked trampoline programs non-preemptible. As
+  discussed on v1, v2 checks recursion per task instead, using the
+  bpf_ctx chain, so programs stay preemptible.
+- Cover raw_tp/tp_btf, sleepable trampoline programs, BPF_PROG_TEST_RUN
+  and syscall tracepoints, not only trampolines.
+- New patch 1: no per-CPU private stack for these program types, which
+  also fixes two existing stack corruptions.
+- New deterministic selftests: every round forces a second task into the
+  program while the first is preempted inside it, proves the overlap,
+  and checks the preempted task's stack; plus true-recursion tests.
+
+v1: https://lore.kernel.org/bpf/20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com/
+
 ---
- .../selftests/bpf/prog_tests/trampoline_preempt.c  | 43 ++++++++++++++++++++--
- .../selftests/bpf/progs/trampoline_preempt.c       | 37 +++++++++++++++++++
- 2 files changed, 76 insertions(+), 4 deletions(-)
+Mike Bazov (5):
+      bpf: Avoid per-CPU private stack in preemptible tracing progs
+      bpf: Check program recursion per task via bpf_ctx
+      bpf: Check recursion per task for programs on syscall tracepoints
+      selftests/bpf: Add trampoline and raw_tp preemption recursion test
+      selftests/bpf: Test syscall tracepoint programs under preemption
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/trampoline_preempt.c b/tools/testing/selftests/bpf/prog_tests/trampoline_preempt.c
-index e01a2ba8916a..a8109290e88d 100644
---- a/tools/testing/selftests/bpf/prog_tests/trampoline_preempt.c
-+++ b/tools/testing/selftests/bpf/prog_tests/trampoline_preempt.c
-@@ -25,8 +25,11 @@ enum subtest_kind {
- 	SUBTEST_RAW_TP_S,
- 	SUBTEST_TP_BTF,
- 	SUBTEST_FSESSION,
-+	SUBTEST_TP_SYSCALL,
- 	SUBTEST_TAILCALL_RAW_TP,
-+	SUBTEST_TAILCALL_TP,
- 	SUBTEST_TWO_DISPATCHERS,
-+	SUBTEST_TP_DUAL,
- 	SUBTEST_NESTED_PROG,
- };
- 
-@@ -158,7 +161,7 @@ static void run_subtest(enum subtest_kind kind)
- 	sigset_t oldset;
- 	pthread_t ta, tb;
- 	bool ta_started = false, tb_started = false, sigmask_set = false;
--	bool via_map;
-+	bool via_map, dual = false;
- 	__u32 zero = 0;
- 	int tail_fd;
- 	char ch;
-@@ -193,17 +196,29 @@ static void run_subtest(enum subtest_kind kind)
- 	case SUBTEST_FSESSION:
- 		prog = c.skel->progs.on_fsession;
- 		break;
-+	case SUBTEST_TP_SYSCALL:
-+		prog = c.skel->progs.on_tp_syscall;
-+		break;
- 	case SUBTEST_TAILCALL_RAW_TP:
- 		prog = c.skel->progs.dispatcher_raw_tp;
- 		tail = c.skel->progs.handler_raw_tp;
- 		jmp = c.skel->maps.jmp_raw_tp;
- 		break;
-+	case SUBTEST_TAILCALL_TP:
-+		prog = c.skel->progs.dispatcher_tp;
-+		tail = c.skel->progs.handler_tp;
-+		jmp = c.skel->maps.jmp_tp;
-+		break;
- 	case SUBTEST_TWO_DISPATCHERS:
- 		prog = c.skel->progs.dispatcher_a;
- 		extra = c.skel->progs.dispatcher_b;
- 		tail = c.skel->progs.handler_raw_tp;
- 		jmp = c.skel->maps.jmp_raw_tp;
- 		break;
-+	case SUBTEST_TP_DUAL:
-+		prog = c.skel->progs.on_tp_dual;
-+		dual = true;
-+		break;
- 	case SUBTEST_NESTED_PROG:
- 		prog = c.skel->progs.on_raw_tp_nested;
- 		break;
-@@ -242,9 +257,23 @@ static void run_subtest(enum subtest_kind kind)
- 		if (!ASSERT_OK_PTR(wakeup_link, "attach_wakeup"))
- 			goto out;
- 	}
--	link = bpf_program__attach(prog);
--	if (!ASSERT_OK_PTR(link, "attach"))
--		goto out;
-+	if (dual) {
-+		LIBBPF_OPTS(bpf_tracepoint_opts, topts, .bpf_cookie = 1);
-+
-+		link = bpf_program__attach_tracepoint_opts(prog, "syscalls",
-+							   "sys_enter_prctl", &topts);
-+		if (!ASSERT_OK_PTR(link, "attach_sys_enter"))
-+			goto out;
-+		topts.bpf_cookie = 2;
-+		link2 = bpf_program__attach_tracepoint_opts(prog, "task",
-+							    "task_rename", &topts);
-+		if (!ASSERT_OK_PTR(link2, "attach_task_rename"))
-+			goto out;
-+	} else {
-+		link = bpf_program__attach(prog);
-+		if (!ASSERT_OK_PTR(link, "attach"))
-+			goto out;
-+	}
- 	if (extra) {
- 		link2 = bpf_program__attach(extra);
- 		if (!ASSERT_OK_PTR(link2, "attach_extra"))
-@@ -412,10 +441,16 @@ void test_trampoline_preempt(void)
- 		run_subtest(SUBTEST_TP_BTF);
- 	if (test__start_subtest("fsession"))
- 		run_subtest(SUBTEST_FSESSION);
-+	if (test__start_subtest("tp_syscall"))
-+		run_subtest(SUBTEST_TP_SYSCALL);
- 	if (test__start_subtest("tailcall_raw_tp"))
- 		run_subtest(SUBTEST_TAILCALL_RAW_TP);
-+	if (test__start_subtest("tailcall_tp"))
-+		run_subtest(SUBTEST_TAILCALL_TP);
- 	if (test__start_subtest("two_dispatchers"))
- 		run_subtest(SUBTEST_TWO_DISPATCHERS);
-+	if (test__start_subtest("tp_dual"))
-+		run_subtest(SUBTEST_TP_DUAL);
- 	if (test__start_subtest("nested_prog"))
- 		run_subtest(SUBTEST_NESTED_PROG);
- 	if (test__start_subtest("recursion_raw_tp"))
-diff --git a/tools/testing/selftests/bpf/progs/trampoline_preempt.c b/tools/testing/selftests/bpf/progs/trampoline_preempt.c
-index 78ed74627a79..e8e610fc885e 100644
---- a/tools/testing/selftests/bpf/progs/trampoline_preempt.c
-+++ b/tools/testing/selftests/bpf/progs/trampoline_preempt.c
-@@ -27,6 +27,13 @@ struct {
- 	__type(value, __u32);
- } jmp_raw_tp SEC(".maps");
- 
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} jmp_tp SEC(".maps");
-+
- int tid_a;
- int tid_b;
- int sig;
-@@ -184,6 +191,12 @@ int BPF_PROG(on_fsession)
- 	return handle_comm(false);
- }
- 
-+SEC("tp/syscalls/sys_enter_prctl")
-+int on_tp_syscall(void *ctx)
-+{
-+	return handle_comm(false);
-+}
-+
- SEC("raw_tp/task_rename")
- int dispatcher_raw_tp(void *ctx)
- {
-@@ -197,6 +210,19 @@ int handler_raw_tp(void *ctx)
- 	return handle_comm(false);
- }
- 
-+SEC("tp/syscalls/sys_enter_prctl")
-+int dispatcher_tp(void *ctx)
-+{
-+	bpf_tail_call(ctx, &jmp_tp, 0);
-+	return 0;
-+}
-+
-+SEC("tp/syscalls/sys_enter_prctl")
-+int handler_tp(void *ctx)
-+{
-+	return handle_comm(false);
-+}
-+
- SEC("raw_tp/task_rename")
- int dispatcher_a(void *ctx)
- {
-@@ -213,6 +239,17 @@ int BPF_PROG(dispatcher_b, struct pt_regs *regs, long id)
- 	return 0;
- }
- 
-+SEC("tp/syscalls/sys_enter_prctl")
-+int on_tp_dual(void *ctx)
-+{
-+	__u32 tid = (__u32)bpf_get_current_pid_tgid();
-+	__u64 cookie = bpf_get_attach_cookie(ctx);
-+
-+	if ((tid == tid_a && cookie != 1) || (tid == tid_b && cookie != 2))
-+		return 0;
-+	return handle_comm(false);
-+}
-+
- SEC("raw_tp/bpf_trace_printk")
- int recur_raw_tp(void *ctx)
- {
+ include/linux/bpf.h                                |  54 ++-
+ kernel/bpf/trampoline.c                            |  28 +-
+ kernel/bpf/verifier.c                              |  43 +-
+ kernel/trace/bpf_trace.c                           |  12 +-
+ net/bpf/test_run.c                                 |   4 +-
+ net/ipv4/bpf_tcp_ops.c                             |   6 +-
+ .../selftests/bpf/prog_tests/may_goto_priv_stack.c |   6 +-
+ .../selftests/bpf/prog_tests/timed_may_goto.c      |   6 +-
+ .../selftests/bpf/prog_tests/trampoline_preempt.c  | 464 +++++++++++++++++++++
+ .../selftests/bpf/progs/may_goto_priv_stack.c      |  14 +-
+ .../selftests/bpf/progs/test_global_func3.c        |   9 +
+ .../selftests/bpf/progs/timed_may_goto_user.c      |  16 +-
+ .../selftests/bpf/progs/trampoline_preempt.c       | 302 ++++++++++++++
+ .../selftests/bpf/progs/verifier_private_stack.c   |  65 +--
+ .../testing/selftests/bpf/progs/verifier_unwind.c  |  33 +-
+ 15 files changed, 975 insertions(+), 87 deletions(-)
+---
+base-commit: 0fb18ce8a2e9de830433923cf65838933d615359
+change-id: 20261111-bpf-preempt-v2-r2-f9f9a0dbd5d4
 
+Best regards,
 -- 
-2.43.0
+Mike Bazov <mikeba@sentinelone.com>
 
 
