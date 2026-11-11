@@ -1,45 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794384538;
-	b=bWwDOkqCO8yQKauMgbSozJKt5UDYgznrovM2H5Bj8tFg38fNdkVmXOi1uHl9RTGYe7Dd
-	 iCJBKH/3AjVdGrEiBg4K+V0R6MXp807alBciaL0J0CkgpsuxhYjEMaketzcb1R3m7oLlw
-	 NLpyqAkuDCcx1b9Q6qExwgudeF+7O/9yJ+0Io9s2sjW4N2Zi5qHwdemUb0JdFEyvrYpgA
-	 5MfFKJ3fjShyLBA2E+3C0twC+YHkA7P0KkQlvgar1lMKGoMFfiAJDjWc6TNY5MM8CfWnt
-	 s3DIeaj21xMvtpzxo5gnQX2CTCHaDplEQrvMMp+r2kgSVp0IPsDwBHoSYfnNq3cb/cA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794384538;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=OMx8DURBi1HKQNsNSde4ObBuj2cCKjyxSIgE906Z6wU=;
-	b=kGoVRNrOz9zjp0XyRR/p8sbFK5B3je+jGAsAO09eJ7qGvr9YD0EaeQx0fBZ+r9urdyxk
-	 OJoZm9/5ZfIF4I623HTxZvhzVlT6UHfpOobrkfIhjiDfGebJ8d6NLTQShhNJoKnf4ROHH
-	 MOX7uGokDETWNgHGrYLATrB7/7WbKhjKOQWBvzLdysD0zz3Zumc+nqXMhPXz9ECkGJtX6
-	 TcYn6MAQURAARJC2E+xuBHix2T9qlT37cfiNaS/ybrfFQtfQ21Q1j+y4Wv7dNYuTkLxRx
-	 nw8OOfxwI83iHryIMDDKj4IORz5D+F0RxKLBvE93+0e0AKRqw3jOUmmeXyt+DUq+SQg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Vj5n5e0S;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.201.3
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794385132;
+	b=NsSprfphVpuwF5yvvTzrc7ihtkfWM3opzRUEPslDRzkrKPFmSvHeul+vnWsAjDkG5fMa
+	 wh1fhHlnx70GIIdTLG/GJewaoITH3XLLSYmbHv8AZmumvId6rlwo/fVwoDLvHXc9hu30M
+	 RDQlHmBOIrVNBocgzAcXYG/RFvjgaaa7tb+n3qrRSgrDTSCFXvlpruU/+l2RYccugzMYC
+	 esncpAZye5ZI8viWaFjldKDa9oM7TsEKAZDlszWYPv4OAf0DPX6jFBa/o6dH+r1/nbRM/
+	 NVLFWt2slXMc2JfAjQ0F2g1UNrGLU5S5ykTg70VY9NU4ocUeOs4GgZyTC9ASXLs5AAQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794385132;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
+	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
+	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
+	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
+	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=lrShLJ88cqiFfMjHf5yF10atqk/pMhGbbvLtXygq+N8=;
+	b=Uco5/nP/RNAfB3JYRLlp1OD7hMUNqHeSJnDzbQYeyzL4Pp3H1DUz1j1MB7aMR3D8FzgV
+	 q2ia6F9/LfAAmvGlmG/JbkAYalTR9dGqwnEi9owSmXcoy4HL17pCbLIYxSf4Ua2k9iarJ
+	 DDeFrnmw6BCGHzNQFveWcU/XJLxfFcXBSh0N915/Hpr7HqeNUXzDyAe6lRvzPlLRvCSjk
+	 iXFHIbtHI0Zp7rXlLg5Wy3P+RG83CnRj9/FGnBmwleimaEnMu23MprqUTyF5o3hOdV0yA
+	 jJNs+GexmLwWqm0e8zm4ezDxREgXqOsA3Q5utpKPg+8X4tAm5hA5kLdpiVgxVaYDPGA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=amd.com;
+	spf=fail smtp.mailfrom=amd.com;
+	dkim=pass header.d=amd.com header.i=@amd.com header.a=rsa-sha256 header.s=selector1 header.b=irDrH+iL;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.201.3
+Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010003.outbound.protection.outlook.com [52.101.201.3])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87AE3606A8D3;
-	Wed, 11 Nov 2026 08:08:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83292606A31C;
+	Wed, 11 Nov 2026 08:18:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 83292606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Vj5n5e0S
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAA231F00A05;
-	Wed, 11 Nov 2026 08:08:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794384538;
-	bh=OMx8DURBi1HKQNsNSde4ObBuj2cCKjyxSIgE906Z6wU=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Vj5n5e0SBFA1j4z0Z15SdCzc4M3OrCLsWJXqhvLQqGwHQKanl350MBfbSz8ARxnFD
-	 jOWJ3MA9OMnNp4iJ2t22+M/1LUETLN++x1e4PQAlu084/gezb1EGPHwXX4AkHLZ9Xe
-	 amH9gwOhhyHIrBsWhaeeuFm8XCfe57IygtxfcZNX6YATAJkMKLeLNvpsUuq2Oa7MeQ
-	 QfAyTDiSl0sVpXOH6ghIFl1wmICmjoaLePNWKQw8Q0Vjkc0RW7jhiS4QEeokPdTnbz
-	 M7Y9tkPjkPDpcplzDhf60pYRsJkFGU8yEqUlPEN3t39trYPzNLA7pz1bc5Spos97Dn
-	 XKUhumL8wOfGA==
-Content-Type: multipart/mixed; boundary="===============5888328363070956270=="
+	dkim=pass (1024-bit key, unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256 header.s=selector1 header.b=irDrH+iL
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ASufgGZPLl1g/rbE/CxqW7swUTep2raswLcEHX5xvq1JOKcNrvKLqfHpkxSbnE/ab9tm/KSo3XUZjj/KL1NYT2qajC07uVSNR/XmMlLITgj/xzlNz9XDuxYzhRVPlMvqMnevR1nAc8dHGae+gz+UcwVsFvLutXXWSyJihed59MeK2Wcak9gPXVZ48KFNtny+Xv3ToXI2nnfndiakx2knnmUGNVsSRGjf920sI0tjokBfveTp1QgU3fhyCman0SelXW0+iHjJ/N0316RXNO1ZO3+PTycD0g9kar74O16FuGkNv7QvWmyGM6BK3Tfm/xjezjvHYoVoJ3moBovfllHDFQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lrShLJ88cqiFfMjHf5yF10atqk/pMhGbbvLtXygq+N8=;
+ b=tdFDJDZ5uXTcLu3q/JroZAhFCcX8fIBzVTRwRRbX6zUBqzw/vLoTjVgWqLaZq0CwYTzoDK3VpKla1lKP+Ha1hz83zb+lqSKlO9EB9u8aiCHnShBNKuoCEOHS1wnnILhpc+G+kj51t58/zQeIxQ1h9/wan5LCQ5a9z1NhIdu5oP105Vgalq7pBjjlMVwcQwYagawRUYVdw7LG1L6wYzluR1ooJW9lNDOkQavJd2+B8kP8F5p2qkTlANUMRD2S3I/HvLKsKpTuByndRAsxKHzwuKdx9va3M/P7e6ZotBcYeloIGlQrLwhnkZEiZCialL+RS8p0tCEnrk4ts661Chl90Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lrShLJ88cqiFfMjHf5yF10atqk/pMhGbbvLtXygq+N8=;
+ b=irDrH+iLGXG5RPPMz1yUavBV9mYuKbvIAhmWO2upuvHiKuEZv6wMTvtiX3ygQNRZgC2TbhDAL1d2iE8JoDZFlAw1Jwcwy/kp7Cup/X36xKGTA/cHNy90tC7IwLCc2TuoCHZF/ilcv1MM+4vHRVAo7kUFwK+cfTa/1YGcwuKyMgI=
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
+ by CH3PR12MB9217.namprd12.prod.outlook.com (2603:10b6:610:195::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.8; Wed, 11 Nov
+ 2026 08:18:48 +0000
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::ce69:cfae:774d:a65c]) by PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::ce69:cfae:774d:a65c%3]) with mapi id 15.21.0615.007; Wed, 11 Nov 2026
+ 08:18:48 +0000
+Message-ID: <1e7fe0eb-2b06-4db0-98b1-3535218847b3@amd.com>
+Date: Wed, 11 Nov 2026 09:18:43 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] bpf: make dmabuf iterator stay drained after NULL
+To: Kang Chen <k.chen@smail.nju.edu.cn>,
+ Yonghong Song <yonghong.song@linux.dev>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ "T.J. Mercier" <tjmercier@google.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Sumit Semwal <sumit.semwal@linaro.org>, Philipp Stanner <phasta@kernel.org>,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linaro-mm-sig@lists.linaro.org
+References: <20261110125106.2935677-1-k.chen@smail.nju.edu.cn>
+Content-Language: en-US
+From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20261110125106.2935677-1-k.chen@smail.nju.edu.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR0P281CA0180.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:b4::10) To PH7PR12MB5685.namprd12.prod.outlook.com
+ (2603:10b6:510:13c::22)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,95 +103,149 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <ab530d93c7383ec9cd5d9fbedc531e933d4b812ddb367bb85c940b870d34c247@mail.kernel.org>
-In-Reply-To: <a07b9717684d5e20d8ff7a778a5f031d1092f18a.1794303670.git.sieberf@amazon.com>
-References: <a07b9717684d5e20d8ff7a778a5f031d1092f18a.1794303670.git.sieberf@amazon.com>
-Subject: Re: [PATCH v2 3/4] sched_ext: add cgroup_set_runtime ops callback
-From: bot+bpf-ci@kernel.org
-To: sieberf@amazon.com,mingo@redhat.com,peterz@infradead.org,juri.lelli@redhat.com,vincent.guittot@linaro.org,tj@kernel.org
-Cc: bsegall@google.com,dietmar.eggemann@arm.com,rostedt@goodmis.org,mgorman@suse.de,vschneid@redhat.com,kprateek.nayak@amd.com,hannes@cmpxchg.org,mkoutny@suse.com,void@manifault.com,arighi@nvidia.com,changwoo@igalia.com,skhan@linuxfoundation.org,corbet@lwn.net,rdunlap@infradead.org,cgroups@vger.kernel.org,sched-ext@lists.linux.dev,linux-doc@vger.kernel.org,linux-kselftest@vger.kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,nh-open-source@amazon.com,hborghor@amazon.de,fmubeen@amazon.de,dwmw@amazon.co.uk,karataev@amazon.com,sieberf@amazon.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 11 Nov 2026 08:08:56 +0000 (UTC)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|CH3PR12MB9217:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2a99bd62-8c6c-44bb-8baf-08df3fcc6939
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|7416014|376014|23010399003|22082099003|18002099003|10067099003|11063799006|261028144727099003|261009223027099003|261026140227099003|261102123227099003|56012099006|261022105027099003|261021121427099003|261022075727099003|261021123027099003|261026121527099003;
+X-Microsoft-Antispam-Message-Info:
+	Y9hFjwbqX1fTJItek3QCl6txaj0c1w1fBXuFTzWCSOa6xHl7lsRzkFeAeBk5S7UXuOqbmIKFstm22SODF5/ZMNsOPrymQLv6EqZvQc66rvaakVzpnZgQnTkrItOfrZ6q6p3ocXjCE/a+aAjJgPyq7MMlughEEhFRQn2L8qOlR+PVhj2CsSglKPzxcuzMq7x+nhWOiYsfzyXAmENpI6S5FK1ZS9CYqrBSzu7XxtpkoLASy1We0NqdYsoB9zXEiaQVSAqe3usYfhiiwHxwa+plWtB+b9g07AdvKSwjLNo3TSfLUzZVtjMG5KkDVT9XO+ApmFnZJ1/7J2SbK6aKJZa6uXIcWwyzrW9Aw8eYTNKz8pSTfSPyCYHEhtv2f84NlYhQi5IFbCQQHaEMzv59IJKdZX8jn7D240T26jdGhlwLZ8eqtaEuL4NOnusfD25PISxx3EMc5FfPnX0w6RZIpEYDnLvykZvc7IdwhA9uPzkum5G/3gHz9S7OGExbBgPjOVwDZDCzTO0XEXMgpmOzSqAryBKNHJsoVB1Giuu6/YU1pMwZ/SpPceGiTCbXx5e0UkFYIoQwUSM/flT/+A4s8v2+BEx5EF45xRnABuP/hbAGaLkD//INSOPTYKrby4/qVbbLaGCnRALmRUq49iyrsk+eJgLzV/k80otS7yGL1O9M/fA=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(23010399003)(22082099003)(18002099003)(10067099003)(11063799006)(261028144727099003)(261009223027099003)(261026140227099003)(261102123227099003)(56012099006)(261022105027099003)(261021121427099003)(261022075727099003)(261021123027099003)(261026121527099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ZlhtWXVtVWdCdk5CbUtmWDVydWl4NWorWmYwcmx6eUxHc01ERFVFYmZXWW81?=
+ =?utf-8?B?Uzk0OUZNVUUzTWNkMHZQNk0rMEt4aENKdTU0R0c1UENnYVdrZ0hDVFZqMmlt?=
+ =?utf-8?B?d1orb08xVG1PQklLL25zUU1PRTIxQ1Y3cGtPU1BteDJlVGlQdWs2WE1adk4r?=
+ =?utf-8?B?N2NYNkFFY2R0Vk0xRVBKWkN3WGJFZFU1VDh3WldpZTFIdzRvM1FZYmRwVjI3?=
+ =?utf-8?B?YTZIbENnQUhORGEra0tkQ2pVN2JIYlE1U0plWWZkdUdsbHZad3ZVRVFtOFMy?=
+ =?utf-8?B?RFBiQXk3cVB5QW5lTXRyRzBNL3doQUEzMUxsS2ZhZWJYVHRqSWlUU3doblZJ?=
+ =?utf-8?B?M2JubnIxWmsrZ1VqN1QzUmhvdlFtUCtWeXh3UnFoQ1Fta3ZxRGoxbEFqVHFl?=
+ =?utf-8?B?T1B0ZDN6RndyRDRack54bkZsNUJodjcwY050RGxIUHBZQTdYM005RnphZERT?=
+ =?utf-8?B?bVFqU1FHOEpZdnpwcTMzdG9mRU56MlMrcVFkMEJzV3JXbTBEaDNxVCtHWjdQ?=
+ =?utf-8?B?dDRNZDZsMS9EMGFNa3dHNkdQaEZxM0JzNSt0UEVqUWlIRmJGdytFcWRISHd5?=
+ =?utf-8?B?NWxaTnowOU9LOXVJUUE4RitwRFdOWTZNMG5LK1EycmEwdlJTeU5HM09GdTRV?=
+ =?utf-8?B?b3ZGTnp3d1QwTWFHRkNac2IvOFhyVWh4bExFZEZXckNjOFdqVm9VakRRdjBz?=
+ =?utf-8?B?SG5DRUVpaTRFeFFrY0dHaVpWREszWk9TWUN1TlhBRytFVDdRY2MvdUUrN2xx?=
+ =?utf-8?B?MGZtaXNySXNpNzVvbytNdjRXYjRPOXpqK0ZwR0F4TXpMeXZMZ050bHBHUVM0?=
+ =?utf-8?B?SFdaOFptWThDZHVET1ExYVliVDUxNzJCbENNcGlYcW13TGQ3T1d1Y05SeXB3?=
+ =?utf-8?B?Q25LWDhKK2tEQ3NiU0R0Y2hKV29HZ2VDRmQzeDhNdFJSWGZhZlBVNTVWaHJ5?=
+ =?utf-8?B?MDVMRXpReEMxM2FFVXlsWHZZcC9sNExDaEJad2dxMkhXYkxLeUE0TXdtN21T?=
+ =?utf-8?B?bmNFeUtUOCtPYzhVbHArVi9OUDN5TmZ5SktHZDhyZWkybXVpSmNlMkZmcXRy?=
+ =?utf-8?B?cmZSV1g5Y3F5MUpUVnFvRzZVSk5FZW1icHY1b2pYQmZaYjdXNHhNdnZSVmdx?=
+ =?utf-8?B?QVNLNEtwVzU0YmZpUlhIZXBTZmxsUFp5VnJPM3V1S3BGbE9FZVEyb3NXWHBv?=
+ =?utf-8?B?eFJBakFsK3ZaMk5Pa0phTUZlMExhU0R5UTJHVjIxQUx4TWpOY0JWcE5kUDBG?=
+ =?utf-8?B?YUczRjlhTVBPM1dxUkpCRHFoY2MvWVUwTDhVR2ZlV0JjWHRLNzM5M3pVUlhu?=
+ =?utf-8?B?cHlsSjJST2lKZFVqTkVzdHdBV2MwcUhySHE2SElVQzlMTG4yL3A0L0tRM1dE?=
+ =?utf-8?B?SzRKL1Q5akRMbGlBOEpEN1UzN2tTczgzeVlyZkpVUEt5cnFrQzIyK0l2a3BF?=
+ =?utf-8?B?MWRDa3dSN1VUNmZFRlg3MzB4QTU0TDljTm5aUkU5eVBQWkh5TlhLeGhDYzBM?=
+ =?utf-8?B?QU9DVmc1dWpLSkhPNTRKNzQyZ05Jd1J2emxIdms4UUpyUmUzNnJKcWtjY2Fy?=
+ =?utf-8?B?ZHY0ZWtjWTRleXZKN3JVVWhob2RRaUFkTEE3QWZFY0ltbTdQbkVqK0RIUUdG?=
+ =?utf-8?B?NGVvenQ5VXFhM09yYUwvZjAwcDFuY25UZWRaeWo3TXc0dDNhYjU1OGViZGk5?=
+ =?utf-8?B?RFN6eWVYN3h3bkRITGxKOXFVdnJwa3lZdlVSVXBSdUdCL0lwSzdBL2xvWTJu?=
+ =?utf-8?B?WFN2QlJPeWkxdFVNVzZ2dk9JOGp0M2VpeHgrSEVyMGY3aWpqWWdhYXZscFVF?=
+ =?utf-8?B?bDVsK0t3SElvcHQ5QUovNTB4VVBKUW01eUMzRkVNZTZWRGtobSswTWxiOUhZ?=
+ =?utf-8?B?WklITi9nRlNxbHhkR3ZGbEJKMUZ0OXhmTGdENzA0SDdaNjZwczdCS0gyVmxL?=
+ =?utf-8?B?dlE0bzZ0UTN6TDZCTU9pYmFvMHkxdVRqTVZMNjVvSTZWSGU5eFFNS2M2MVow?=
+ =?utf-8?B?RWxGT04vd3pFd1pSSzRuVnZ0VGVOUXN4aUwxQTNpL29RTHozK3dwUnBEdndJ?=
+ =?utf-8?B?Znd4WDAyVXhOc1BXSjBDanFVaENlSEE4ZFdUOWNwT1JTZjQ0UGt0bVI0a2kv?=
+ =?utf-8?B?ZVJsTitsVjB5TlJmbnppRmVYaUxySmQ1RUkreGVucmc2VWlWOVRkSGppUEdm?=
+ =?utf-8?B?NUdKSkpoZFdlUWdkc3prcGRDekFmR05Ua2FPaXd4WVM2cFRNM3A3cXMwSlBT?=
+ =?utf-8?B?bE5reUtoL25weGRQYmJwMDF4dU5ZMHNRR3ZWYXFNbEI2NENsR2xuWHkyZFIr?=
+ =?utf-8?Q?ytsMznO05HjUMteTtD?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2a99bd62-8c6c-44bb-8baf-08df3fcc6939
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2026 08:18:48.2942
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xFqbuovGKa1j/mxgfeQJf4x047zHndh2Sihxhj+KTIWmRip5/c9LzhrFwqjDwyuW
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9217
 
---===============5888328363070956270==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Adding T.J. to comment.
 
-> sched_ext: add cgroup_set_runtime ops callback
+Regards,
+Christian.
 
-TL;DR: The documented guarantee that cgroup_set_runtime never exceeds the
-quota the scheduler was last given may not hold for schedulers lacking
-cgroup_init or cgroup_set_bandwidth; comment and commit message may need
-qualifying, or validation tightened.
+On 11/10/26 13:51, Kang Chen wrote:
+> bpf_iter_dmabuf_next() uses kit->dmabuf == NULL to mean "iteration has
+> not started".  dma_buf_iter_next() also returns NULL at the end of the
+> list, so a next() call after exhaustion restarts from the list head.
+> 
+> The verifier relies on the iterator contract that once next() returns
+> NULL it keeps returning NULL: process_iter_next_call() marks the
+> iterator DRAINED and treats the result of later next() calls as the
+> constant zero.  A restarted dmabuf iteration therefore hands the BPF
+> program a kernel pointer while the verifier believes R0 == 0.
+> 
+> Use an invalid pointer value as the drained sentinel so the iterator
+> state keeps its one-pointer ABI, and skip dma_buf_put() for it.
+> 
+> Fixes: 6eab7ac7c5ee ("bpf: Add open coded dmabuf iterator")
+> Signed-off-by: Kang Chen <k.chen@smail.nju.edu.cn>
+> ---
+>  kernel/bpf/dmabuf_iter.c | 23 ++++++++++++++++++++++-
+>  1 file changed, 22 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/bpf/dmabuf_iter.c b/kernel/bpf/dmabuf_iter.c
+> index cd500248abd9..a2b7c38f9ae6 100644
+> --- a/kernel/bpf/dmabuf_iter.c
+> +++ b/kernel/bpf/dmabuf_iter.c
+> @@ -156,6 +156,13 @@ struct bpf_iter_dmabuf_kern {
+>         struct dma_buf *dmabuf;
+>  } __aligned(8);
+> 
+> +/*
+> + * The iterator state is one pointer wide because struct bpf_iter_dmabuf is
+> + * part of the generated vmlinux.h ABI.  Use an invalid pointer value as the
+> + * "drained" sentinel instead of growing the state.
+> + */
+> +#define DMABUF_ITER_DONE       ((struct dma_buf *)1L)
+> +
+>  __bpf_kfunc_start_defs();
+> 
+>  __bpf_kfunc int bpf_iter_dmabuf_new(struct bpf_iter_dmabuf *it)
+> @@ -173,11 +180,25 @@ __bpf_kfunc struct dma_buf *bpf_iter_dmabuf_next(struct bpf_iter_dmabuf *it)
+>  {
+>         struct bpf_iter_dmabuf_kern *kit = (void *)it;
+> 
+> +       /*
+> +        * The verifier assumes that an iterator which returned NULL keeps
+> +        * returning NULL (see process_iter_next_call()).  Without this check
+> +        * the NULL left by the last dma_buf_iter_next() would be interpreted
+> +        * as "not started" and the iteration would restart from the list head.
+> +        */
+> +       if (kit->dmabuf == DMABUF_ITER_DONE)
+> +               return NULL;
+> +
+>         if (kit->dmabuf)
+>                 kit->dmabuf = dma_buf_iter_next(kit->dmabuf);
+>         else
+>                 kit->dmabuf = dma_buf_iter_begin();
+> 
+> +       if (!kit->dmabuf) {
+> +               kit->dmabuf = DMABUF_ITER_DONE;
+> +               return NULL;
+> +       }
+> +
+>         return kit->dmabuf;
+>  }
+> 
+> @@ -185,7 +206,7 @@ __bpf_kfunc void bpf_iter_dmabuf_destroy(struct bpf_iter_dmabuf *it)
+>  {
+>         struct bpf_iter_dmabuf_kern *kit = (void *)it;
+> 
+> -       if (kit->dmabuf)
+> +       if (kit->dmabuf && kit->dmabuf != DMABUF_ITER_DONE)
+>                 dma_buf_put(kit->dmabuf);
+>  }
+> 
+> --
+> 2.34.1
+> 
 
-> diff --git a/kernel/sched/ext/internal.h b/kernel/sched/ext/internal.h
-> --- a/kernel/sched/ext/internal.h
-> +++ b/kernel/sched/ext/internal.h
-
-[ ... ]
-
-> @@ -863,6 +863,26 @@ struct sched_ext_ops {
->  	 */
->  	void (*cgroup_set_idle)(struct cgroup *cgrp, bool idle);
->  
-> +	/**
-> +	 * @cgroup_set_runtime: A cgroup's runtime is being set
-> +	 * @cgrp: cgroup whose runtime is being set
-> +	 * @runtime_us: runtime in microseconds
-
-[ ... ]
-
-> +	 * @cgrp has a quota, and @runtime_us is at most the quota + burst the
-> +	 * scheduler was last given, by @cgroup_init or @cgroup_set_bandwidth:
-> +	 * cpu.max and cpu.max.runtime writes reach the scheduler in the order
-> +	 * the fair class applied them.
-> +	 *
-> +	 * Delivery follows the same rule as cgroup_set_weight().
-> +	 */
-> +	void (*cgroup_set_runtime)(struct cgroup *cgrp, u64 runtime_us);
-
-Does this guarantee hold for a scheduler that implements
-cgroup_set_runtime but not cgroup_init or cgroup_set_bandwidth?  The
-commit message makes the same claim: "The runtime passed is then at most
-the quota + burst the scheduler was last given".
-
-scx_group_set_bandwidth() still updates tg->scx.bw_* when the op is
-missing:
-
-    if (scx_cgroup_enabled && sch && SCX_HAS_OP(sch, cgroup_set_bandwidth) && ...)
-            SCX_CALL_OP(sch, cgroup_set_bandwidth, ...);
-    tg->scx.bw_period_us = period_us;
-    tg->scx.bw_quota_us = quota_us;
-    tg->scx.bw_burst_us = burst_us;
-
-while scx_group_set_runtime() calls the op whenever
-SCX_HAS_OP(sch, cgroup_set_runtime) is true, and the fair class only
-checks the runtime against its own cfs_b->quota + cfs_b->burst in
-cfs_bandwidth_set_runtime().
-
-For example, take a scheduler with cgroup_init and cgroup_set_runtime but
-no cgroup_set_bandwidth.  Cgroup C has cpu.max "10000 100000" at load, so
-ops.cgroup_init() sees bw_quota_us=10000.  Userspace then writes cpu.max
-"50000 100000", which the fair class applies but the scheduler is never
-told about.  A following write of 40000 to cpu.max.runtime passes
-cfs_bandwidth_set_runtime() since 40000 <= 50000, and
-ops.cgroup_set_runtime(C, 40000) runs, four times the quota the scheduler
-was last given.
-
-Similarly, a scheduler without cgroup_init that loads after C's quota was
-set is never given a quota, yet still receives cgroup_set_runtime for that
-cgroup.
-
-Should the comment (and commit message) make the guarantee conditional on
-the scheduler implementing @cgroup_init and @cgroup_set_bandwidth, or
-should validation reject cgroup_set_runtime without cgroup_set_bandwidth?
-The later commit eb360e17b06e ("sched_ext: charge BPF scheduler tasks to
-cpu.max bandwidth") does not change this text.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42982707042
---===============5888328363070956270==--
