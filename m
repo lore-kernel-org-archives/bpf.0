@@ -1,77 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794405675;
-	b=i80j8lCz4j4D6A3lMJGk9zjAh22GZvKibhro68GhTUiH2cZmQhkR6GItbzE1eisdeVsI
-	 kteC7nDPstX5qmL5R/OwMJ/U+tr4vaqiY37MhZGEb/whXSgWh64pXeNDGVD/EE/ddt71o
-	 THO4ZtgKeVGQiRv3wv/FrITukwAyA8MFNJi5VNLQ2DRhT+knx5+Nt1XD8dyVPhXW8SGI2
-	 gQITH+xvBtjbfOSFAbChmnq2HbT86vr3sEpCEjugYJaKAp3AyYzv4tg8MjETTepTramLJ
-	 fVRPj8SGyzxfDWQjujCbnrlYqWwcYGq9UNT40eCvMU1CZSkk9s11NPcgK/DmVMPqxew==
+	t=1794405872;
+	b=ZhY8/vgDWEg9ZbOfotliu5YVgO2nHxJwWL1AfFX/YUQdKmWjuEYcCdjOgv8lRs0khtOd
+	 gThtoAUBl5Dx3UhH7/BE17ktnlx8zG/0SrPa7hoGkUwi6VFrEdYhiGFSWpvKckV1qLKmR
+	 3HmrTv0ay7aAhG3Lc/Ie1ih3ViUkZG2fYzOO7hQSHdKP6FxRB/MsEdWjx/gA/NDT7N6QY
+	 dJ1BVo4tj/rmXXm9JzzlVPnFa09xaLs2uAetxRpbXKC+jBM6Cn+Al0mlVYivq0YJTbM+V
+	 CLGP1GhhxLPrkWf55FRflF9XjFZ5IKx5dJ9Fj4/OmzIVzDCsLGfWBFsbZ43lHl9WaLw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794405675;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
-	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=WoRYdTtLmsDruURquglEQQKEz9H32K7zeMI5A2g+A4g=;
-	b=zowCmhMqlL/YoAi0eGOWRTFwiaei/zmrJcHdpg2mtqkKvOSLdxW90zruBy1wWte+M40m
-	 Ly3bGjUbkvzTW2wYOkN5hH4kdAM96m0Jl9/A5zkisfcPYwZMhgQTi97DcT+8ueGNiQPb9
-	 /1hKbotrSspziMy/HjgQ+wBG5eZieqB2sp0N6Da+PlZIf9XMjD0NZrMjzvTW9XrFoIplL
-	 dX7qYvO9Mi/VtJ8RsvbkQ7PZHiKIPuQembO/qJjfgXNu6K4ZOL8PXEgyu5YT+LCJwg1mp
-	 hYBfg47rxFFLeHF+tdDMiMSsYBbD81SEknyjxzYjdP69MjTS7aRa/+9Y2zUZRpkvXuA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794405872;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=n4Wfp0vkxckNyYWRJ5Ps60ZfoU1fg0Bu+EAZW7zpy3U=;
+	b=S1g43tfKvCDDh7PSUBpPJCUmxXK/gxfzdIExpO+datNJWRR7QV0muUqBkFJMxCsBXAyi
+	 AHHeyrDwcDSwlLYwyqUNfZ9ciDdD4K3wXBTwC3nC5EV2KiATt+5p3tv2gj73ALUrU3i/o
+	 0BoojJQIrYi9tBtqolikAiXlAcPcXzwu/AcS9A4+ZK/dVKifo8yCmZnSyw4P4rdVYTM6e
+	 N92CRPOPxWiU+MkvlTarfpcYKnjnBNeZ7KogP1lje64zEI2glVQHay51ZZRmRRjuoJd7q
+	 QMEW9HCoNwzJaEnFAaymSZtpS6Um6teur+0TidZ9eeDLg4OWbhYC8Kpx8xkpY8Dh27w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KCeaMx2j;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DWZc0OJ9;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A13A606A321;
-	Wed, 11 Nov 2026 14:01:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A4F6606A321
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 14:04:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KCeaMx2j
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A8F61F00A05;
-	Wed, 11 Nov 2026 14:01:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DWZc0OJ9
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 023EB1F00A05;
+	Wed, 11 Nov 2026 14:04:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794405675;
-	bh=WoRYdTtLmsDruURquglEQQKEz9H32K7zeMI5A2g+A4g=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=KCeaMx2jcz3SFAvzP00Exb8N4E2wKRHMxllmAcWBaiCsBZWx/9QT3vL06JI6hylHv
-	 l9sMtpINj3S52VvHmsRqF0On4p115Od/esnTgGsznoV3Yj9yY6d8f3ubORXu8Y++1V
-	 Az02JRKHBCyPPFKQkDtcbYgxTyJUSlA8eSvvSEtqqdycnP+OrFrrD26xxqNv7NnUAJ
-	 6rXKJOkUqBafI1etfhvNfOoXve6m8CGJGWVPDa5IQ9gP6qA7SYSQz9Mx+DPQMcZWPT
-	 iknAS9AEH6AgTu6GjuQ6MKCwLu4VMoGdK9A01LVUKWPIMHSO9r2xDL7qksj7i14KGi
-	 sYe3Zk6iTIXZA==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Stanislav Fomichev <sdf.kernel@gmail.com>
-Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jonathan Corbet
- <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>,
- kernel-team@meta.com, Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard
- Brouer <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Pavel
- Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, Andrii
- Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar
- Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
- <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
- netdev@vger.kernel.org, bpf@vger.kernel.org, io-uring@vger.kernel.org,
- Mina Almasry <almasrymina@google.com>, "Mike Marciniszyn (Meta)"
- <mike.marciniszyn@gmail.com>, Weiming Shi <bestswngs@gmail.com>, Nikolay
- Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, Alexander
- Lobakin <aleksander.lobakin@intel.com>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, Stuart Clark <stuclar@meta.com>
-Subject: Re: [PATCH net-next v1 05/11] xsk: Install UMEM page pool providers
- in the core
-In-Reply-To: <avOtdOaiLFoUgbK9@devvm16445.scu0.facebook.com>
-References: <20261110102039.1002605-1-bjorn@kernel.org>
- <20261110102039.1002605-6-bjorn@kernel.org>
- <avOtdOaiLFoUgbK9@devvm16445.scu0.facebook.com>
-Date: Wed, 11 Nov 2026 06:01:12 -0800
-Message-ID: <87ik238o2f.fsf@all.your.base.are.belong.to.us>
+	s=k20260515; t=1794405871;
+	bh=n4Wfp0vkxckNyYWRJ5Ps60ZfoU1fg0Bu+EAZW7zpy3U=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=DWZc0OJ9e65Miren1Rg5lb0NbPwoXv2hSItMxv7j1pxbiclGA/MAKVgg9eBpmVfPe
+	 cAY64ZqDJyeYo9IeUO44buoNu36BOFJUMzgFK4fbEG7Q3IPV5jCTlh9BiFcbUjX4J/
+	 hFA2r3GCzN4UO1qWrPHRUlbE+7wSznc6aww2AkYQLK97M5RM5+2/2r33iIRH3pzvK/
+	 NJ02YyxZxokrwVLemyns4FsSiY1pjJSGV34qJtgbxu8LZErbQeVISE/V0x2+BQ/fW3
+	 r/+ZliYZw34Sf7xc1BUfz2yeqT4j4Ph6pOunbJF3skCXOCiqNysa449ky2rz+zVJZO
+	 jZtrLTr9CnCDg==
+Content-Type: multipart/mixed; boundary="===============3258431509059997710=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -81,37 +49,78 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <814f5f6551e7b5860adfc34176256bbd8ca6b31b79cf564027613b9a886e7a1e@mail.kernel.org>
+In-Reply-To: <0847523e18df54ccf22c46885001d309841a60c2.1794399387.git.memxor@gmail.com>
+References: <0847523e18df54ccf22c46885001d309841a60c2.1794399387.git.memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v1 21/29] bpf: Support callx when a callee releases resources
+From: bot+bpf-ci@kernel.org
+To: memxor@gmail.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,ihor.solodrai@linux.dev,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed, 11 Nov 2026 14:04:30 +0000 (UTC)
 
-Stanislav Fomichev <sdf.kernel@gmail.com> writes:
+--===============3258431509059997710==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-> On 11/10, Bj=C3=B6rn T=C3=B6pel wrote:
+> bpf: Support callx when a callee releases resources
 
->> diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
->> index 18966bbdb5b7..c620a0c32c17 100644
->> --- a/net/xdp/xsk_buff_pool.c
->> +++ b/net/xdp/xsk_buff_pool.c
->> @@ -104,10 +101,30 @@ struct xsk_buff_pool *xp_create_and_assign_umem(st=
-ruct xdp_sock *xs,
->>  	pool->fq =3D xs->fq_tmp;
->>  	pool->cq =3D xs->cq_tmp;
->>=20=20
->> -	for (i =3D 0; i < pool->free_heads_cnt; i++) {
->> +	return pool;
->> +
->> +out:
->> +	xp_destroy(pool);
->> +	return NULL;
->> +}
->> +
->> +/* Only copy mode and driver zero copy use heads */
->> +int xp_alloc_heads(struct xsk_buff_pool *pool)
->
-> nit: move xp_alloc_heads rework into a separate patch? this one is quite
-> big already
+TL;DR: Comment and commit message only: the stated reason a subprog releasing
+nothing of its callers' leaves everything with the caller (not verified in
+their context) looks inaccurate; the code itself seems correct.
 
-Will do!
+> diff --git a/kernel/bpf/frame_desc.c b/kernel/bpf/frame_desc.c
+> --- a/kernel/bpf/frame_desc.c
+> +++ b/kernel/bpf/frame_desc.c
+
+[ ... ]
+
+> +/*
+> + * The callx at insn @callsite of the current frame calls @subprog, one of the
+> + * subprogs it may call. What the frame puts in front of the callx runs
+> + * whichever it calls: the insns that take what it hands over out of its slot,
+> + * and the one that empties the slot of what a callee releases without being
+> + * handed it, see foreign_cleared(). So note what this subprog leaves with the
+> + * frame:
+> + *
+> + *  - What the frame holds and passes it in an argument that it does not
+> + *    release through. Another subprog may be handed it in that argument, and
+> + *    the slot would be emptied for this one as well, see slot_can_be_kept().
+> + *  - All that the frame holds, when the subprog releases nothing of its
+> + *    callers'. It is not verified in their context then, so its return has
+> + *    no frame to say so, see bpf_frame_desc_record_exit().
+> + */
+
+This isn't a bug, but is the reason given for the second item accurate?  The
+comment above, and the commit message ("Such a subprog is not verified in
+the context of its callers, so its return does not report that the caller
+still holds the resource"), say a subprog that releases nothing of its
+callers' is not verified in their context.
+
+func_is_on_its_own() only looks at sub->releases_inherited to send such a
+subprog to the caller's context.  It still returns false, and
+check_static_func_call() goes through setup_func_entry() and verifies the
+callee in the caller's context, for several cases: changes_pkt_data,
+has_tail_call, has_ld_abs, is_cb, speculative state,
+in_rbtree_lock_required_cb(), more than BPF_ID_MAP_SIZE/2 refs, a live
+PTR_TO_STACK or CONST_PTR_TO_DYNPTR argument, and arg_needs_caller().
+
+The real reason its return reports nothing seems to be the early return in
+bpf_frame_desc_record_exit():
+
+    if (!st->curframe || !env->subprog_info[frame->subprogno].releases_inherited)
+            return 0;
+
+The code looks correct, since bpf_frame_desc_record_callx() sets held_after
+whenever !sub->releases_inherited however the subprog is verified.  Could the
+comment and the commit message say something like "its return does not say
+so, since bpf_frame_desc_record_exit() looks only at subprogs that release
+their callers' resources"?
 
 
-Bj=C3=B6rn
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43027088527
+--===============3258431509059997710==--
