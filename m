@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794405872;
-	b=ZhY8/vgDWEg9ZbOfotliu5YVgO2nHxJwWL1AfFX/YUQdKmWjuEYcCdjOgv8lRs0khtOd
-	 gThtoAUBl5Dx3UhH7/BE17ktnlx8zG/0SrPa7hoGkUwi6VFrEdYhiGFSWpvKckV1qLKmR
-	 3HmrTv0ay7aAhG3Lc/Ie1ih3ViUkZG2fYzOO7hQSHdKP6FxRB/MsEdWjx/gA/NDT7N6QY
-	 dJ1BVo4tj/rmXXm9JzzlVPnFa09xaLs2uAetxRpbXKC+jBM6Cn+Al0mlVYivq0YJTbM+V
-	 CLGP1GhhxLPrkWf55FRflF9XjFZ5IKx5dJ9Fj4/OmzIVzDCsLGfWBFsbZ43lHl9WaLw==
+	t=1794405874;
+	b=KxoAQFD9nZDNZBPhPIq2+mfzG44qOkhykJHWHQxo+VXamxfTVv+bxyeVEwBdLo2Lb0Rt
+	 x2tTGuqvXQ09HTxWQWOlu5LCrOFKEDTD9sr7URE/gd+HQLwY3A4uiQC3Idji+Jid5e/Ib
+	 e0OSD9UfxOH9s/22Bg0bElsZt0OBB/HTVEDci2I4xzCOEWLF7RXYYxxKXo/Ghqth/e5ZU
+	 uk8wVqsS2noA4FSk27w40Mup4oPL3IJp1f30ugKATgzos/Rfwg1o7vzYRAV5+UK1rwzML
+	 /J6R28DZCvtAsBBP62o7WgPpt9pPT1KZZyg6CDid3aGpVd/j7/IyWG6P7Abhpc4f/BQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794405872;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794405874;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=n4Wfp0vkxckNyYWRJ5Ps60ZfoU1fg0Bu+EAZW7zpy3U=;
-	b=S1g43tfKvCDDh7PSUBpPJCUmxXK/gxfzdIExpO+datNJWRR7QV0muUqBkFJMxCsBXAyi
-	 AHHeyrDwcDSwlLYwyqUNfZ9ciDdD4K3wXBTwC3nC5EV2KiATt+5p3tv2gj73ALUrU3i/o
-	 0BoojJQIrYi9tBtqolikAiXlAcPcXzwu/AcS9A4+ZK/dVKifo8yCmZnSyw4P4rdVYTM6e
-	 N92CRPOPxWiU+MkvlTarfpcYKnjnBNeZ7KogP1lje64zEI2glVQHay51ZZRmRRjuoJd7q
-	 QMEW9HCoNwzJaEnFAaymSZtpS6Um6teur+0TidZ9eeDLg4OWbhYC8Kpx8xkpY8Dh27w==
+	bh=DE0b+oFp4FFHOMJ207JgUmO9BEk1COwTNxSX6VVeQLs=;
+	b=xDyllVVdwGnkmFVMKCK2385zBnB2eSfQq9SO29d3qBOw4WxC2igR/994sbar45hlMwRc
+	 CiDC603c4BNVekA5bk30KfmSHkIyI2kIU08fCir7CQY0i8HAVWQc+PEt2qb9JzGNxTcdN
+	 ThAPcP269zbYpij6o7wPKS42tgfge9K2rH61Ns3CDHpPgwSz8JQrw6SsdZK/XTce2lIlB
+	 Ul4Z5b3Ux8soaeWhhmvRYv9k5+cbbpDDMSEfkZeKAGWkVwOwoG4WrCEupHzJa0axtHmu1
+	 mDaL+4aFHsLTYtd/XNdkgc9h9VOwAiBT4azf3hThkCiYfPG0r3McOyjMkuUuGWHOVgQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DWZc0OJ9;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="drfHieY/";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A4F6606A321
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 14:04:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DB2E606A326
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 14:04:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DWZc0OJ9
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 023EB1F00A05;
-	Wed, 11 Nov 2026 14:04:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=drfHieY/
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F2201F00A06;
+	Wed, 11 Nov 2026 14:04:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794405871;
-	bh=n4Wfp0vkxckNyYWRJ5Ps60ZfoU1fg0Bu+EAZW7zpy3U=;
+	s=k20260515; t=1794405874;
+	bh=DE0b+oFp4FFHOMJ207JgUmO9BEk1COwTNxSX6VVeQLs=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=DWZc0OJ9e65Miren1Rg5lb0NbPwoXv2hSItMxv7j1pxbiclGA/MAKVgg9eBpmVfPe
-	 cAY64ZqDJyeYo9IeUO44buoNu36BOFJUMzgFK4fbEG7Q3IPV5jCTlh9BiFcbUjX4J/
-	 hFA2r3GCzN4UO1qWrPHRUlbE+7wSznc6aww2AkYQLK97M5RM5+2/2r33iIRH3pzvK/
-	 NJ02YyxZxokrwVLemyns4FsSiY1pjJSGV34qJtgbxu8LZErbQeVISE/V0x2+BQ/fW3
-	 r/+ZliYZw34Sf7xc1BUfz2yeqT4j4Ph6pOunbJF3skCXOCiqNysa449ky2rz+zVJZO
-	 jZtrLTr9CnCDg==
-Content-Type: multipart/mixed; boundary="===============3258431509059997710=="
+	b=drfHieY/H5wyAqSDUAESDBvwpy0zfFUNLCdx3wYOoDPETVJx7VtYhxGt2jsYH+p5R
+	 F+MIZqAJwMRQOp5t0EsJtk8LToHoH0wOMDlWlAc7qNdBM6mHcBV+NMNEBbzby6TmqI
+	 H/HDC5EgA9WMUDSEUdZnPztW+MiBc2ar1be0MPk6u0tdKuNbB5SjLVsPMU0wNNNTB+
+	 iq1DIbtElTYXGKg/qpn5syIe5k5eH2UPtZOp9m6lb7e6SGvDXUpPIVPtZX9WsBODVu
+	 3LR3bg+zNH46U28YTHy9JuEwcZh+yRRgWyrHYRsYhn6kD7Bm+Sn/5/sjgx+2+KWGV2
+	 e6mXYhQOqsxdQ==
+Content-Type: multipart/mixed; boundary="===============7003638985179180478=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,73 +49,90 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <814f5f6551e7b5860adfc34176256bbd8ca6b31b79cf564027613b9a886e7a1e@mail.kernel.org>
-In-Reply-To: <0847523e18df54ccf22c46885001d309841a60c2.1794399387.git.memxor@gmail.com>
-References: <0847523e18df54ccf22c46885001d309841a60c2.1794399387.git.memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v1 21/29] bpf: Support callx when a callee releases resources
+Message-Id: <5f3e0115bae4a2a4d84b4c39c4da23ac0805b2085b84218c552153f127b91db2@mail.kernel.org>
+In-Reply-To: <552b16f22843843822ccf014138e390ac72909ab.1794399387.git.memxor@gmail.com>
+References: <552b16f22843843822ccf014138e390ac72909ab.1794399387.git.memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v1 09/29] bpf: Register cleanup destructors for more types
 From: bot+bpf-ci@kernel.org
 To: memxor@gmail.com,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,ihor.solodrai@linux.dev,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 11 Nov 2026 14:04:30 +0000 (UTC)
+Date: Wed, 11 Nov 2026 14:04:33 +0000 (UTC)
 
---===============3258431509059997710==
+--===============7003638985179180478==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Support callx when a callee releases resources
+> bpf: Register cleanup destructors for more types
 
-TL;DR: Comment and commit message only: the stated reason a subprog releasing
-nothing of its callers' leaves everything with the caller (not verified in
-their context) looks inaccurate; the code itself seems correct.
+TL;DR: With CONFIG_NF_CONNTRACK=m, the nf_conn cleanup destructor is
+registered in module BTF but btf_find_dtor() may never find it, so XDP/TC
+programs holding nf_conn that can bpf_throw() would be rejected; no selftest
+covers it.
 
-> diff --git a/kernel/bpf/frame_desc.c b/kernel/bpf/frame_desc.c
-> --- a/kernel/bpf/frame_desc.c
-> +++ b/kernel/bpf/frame_desc.c
+> diff --git a/net/netfilter/nf_conntrack_bpf.c b/net/netfilter/nf_conntrack_bpf.c
+> --- a/net/netfilter/nf_conntrack_bpf.c
+> +++ b/net/netfilter/nf_conntrack_bpf.c
 
 [ ... ]
 
-> +/*
-> + * The callx at insn @callsite of the current frame calls @subprog, one of the
-> + * subprogs it may call. What the frame puts in front of the callx runs
-> + * whichever it calls: the insns that take what it hands over out of its slot,
-> + * and the one that empties the slot of what a callee releases without being
-> + * handed it, see foreign_cleared(). So note what this subprog leaves with the
-> + * frame:
-> + *
-> + *  - What the frame holds and passes it in an argument that it does not
-> + *    release through. Another subprog may be handed it in that argument, and
-> + *    the slot would be emptied for this one as well, see slot_can_be_kept().
-> + *  - All that the frame holds, when the subprog releases nothing of its
-> + *    callers'. It is not verified in their context then, so its return has
-> + *    no frame to say so, see bpf_frame_desc_record_exit().
-> + */
+> @@ -537,12 +553,34 @@ static const struct btf_kfunc_id_set nf_conntrack_kfunc_set = {
+>  int register_nf_conntrack_bpf(void)
+>  {
+> +	/* The only kfunc that takes an allocated entry off a program is bpf_ct_insert_entry() */
+> +	const struct btf_id_dtor_kfunc nf_ct_dtors[] = {
+> +		{
+> +			.btf_id         = btf_nf_conn_ids[0],
+> +			.kfunc_btf_id   = nf_ct_dtor_ids[0],
+> +			.release_btf_id = nf_ct_dtor_ids[1],
+> +			.flags          = BPF_DTOR_CLEANUP,
+> +		},
 
-This isn't a bug, but is the reason given for the second item accurate?  The
-comment above, and the commit message ("Such a subprog is not verified in
-the context of its callers, so its return does not report that the caller
-still holds the resource"), say a subprog that releases nothing of its
-callers' is not verified in their context.
+[ ... ]
 
-func_is_on_its_own() only looks at sub->releases_inherited to send such a
-subprog to the caller's context.  It still returns false, and
-check_static_func_call() goes through setup_func_entry() and verifies the
-callee in the caller's context, for several cases: changes_pkt_data,
-has_tail_call, has_ld_abs, is_cb, speculative state,
-in_rbtree_lock_required_cb(), more than BPF_ID_MAP_SIZE/2 refs, a live
-PTR_TO_STACK or CONST_PTR_TO_DYNPTR argument, and arg_needs_caller().
+>  	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &nf_conntrack_kfunc_set);
+>  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &nf_conntrack_kfunc_set);
+> +	ret = ret ?: register_btf_id_dtor_kfuncs(nf_ct_dtors, ARRAY_SIZE(nf_ct_dtors), THIS_MODULE);
 
-The real reason its return reports nothing seems to be the early return in
-bpf_frame_desc_record_exit():
+With CONFIG_NF_CONNTRACK=m, can the nf_conn entry ever be found here?
 
-    if (!st->curframe || !env->subprog_info[frame->subprogno].releases_inherited)
-            return 0;
+struct nf_conn is always in vmlinux BTF when conntrack is enabled, since
+net/core/flow_dissector.o is built in and skb_flow_dissect_ct()
+dereferences a struct nf_conn under IS_ENABLED(CONFIG_NF_CONNTRACK), which
+is also true for =m.  Module BTF is deduplicated against vmlinux, so
+BTF_ID(struct, nf_conn) in nf_conntrack.ko (btf_nf_conn_ids[0]) resolves
+to the vmlinux type id, below the module BTF's start_id.
 
-The code looks correct, since bpf_frame_desc_record_callx() sets held_after
-whenever !sub->releases_inherited however the subprog is verified.  Could the
-comment and the commit message say something like "its return does not say
-so, since bpf_frame_desc_record_exit() looks only at subprogs that release
-their callers' resources"?
+register_btf_id_dtor_kfuncs(..., THIS_MODULE) stores that entry in the
+module BTF's dtor_kfunc_tab.  But btf_find_dtor() does:
+
+	while (btf_id < btf->start_id)
+		btf = btf->base_btf;
+	dtor = btf_dtor_tab_find(btf, btf_id);
+	if (dtor || !btf_is_module(btf)) {
+		*btfp = btf;
+		return dtor;
+	}
+
+The reference returned by bpf_xdp_ct_lookup(), bpf_skb_ct_lookup() or
+bpf_ct_insert_entry() has reg->btf set to the nf_conntrack module BTF and
+reg->btf_id set to the vmlinux id.  The loop moves to vmlinux BTF, finds no
+nf_conn entry there, and returns NULL because vmlinux is not a module.  The
+module table is never searched, which breaks the assumption stated in the
+function's own comment that a type below its first id is vmlinux's, with
+its destructor registered there.
+
+With conntrack built as a module, resource_registry() in
+kernel/bpf/frame_desc.c (added later in the series) would then fail with
+"frame_desc: no cleanup destructor registered for object nf_conn", so an
+XDP or TC program holding a looked-up or inserted nf_conn where it can
+reach bpf_throw() is still rejected.  Only CONFIG_NF_CONNTRACK=y, as the
+selftests use, makes the entry reachable, and no selftest in the series
+covers nf_conn.
+
+The nf_conn___init entry is not affected, since that type exists only in
+the module's BTF.  Should the nf_conn entry be registered against vmlinux
+BTF, or btf_find_dtor() be taught to also search the module's table?
 
 
 ---
@@ -123,4 +140,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43027088527
---===============3258431509059997710==--
+--===============7003638985179180478==--
