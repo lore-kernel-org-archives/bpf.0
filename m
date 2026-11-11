@@ -1,107 +1,115 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.245.243.92
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.137
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794439186;
-	b=vLGjlsN/yLi056IQmFF67Q1GnPEawuOMDFfL8q+IIFpK23m97j7JBqeg1L6p5KGHjqXc
-	 +m18KzkXGKMgeO1IBuS1cYaboCh30jQMNtFjSrJWjeLGuixOk8DbfkdVbwXIjYWXsnQhy
-	 f1n7DdzytwFxU2ndjT5yfiNP95fyyBdJUX7uzNPaFD99R0DKMeVdfUNumpYlFjJiCNPSb
-	 ri1K5YmfkacUOoLZwE8eFjhlclAyZ5pDUUocXqgyJQkcIEiZM5Tv0xvptbYbTRb2EFwPD
-	 xGJsOjdyXnuRBkOEVr5k1ZurAvXIgvRHmI9Ww6R4lL21pmv4gmSNTT+ieuru3/pZtCg==
+	t=1794439264;
+	b=nHnnv03KAs6ZXWHk8/LPZQ6E1ssYrqkwRNEADleOlIHwvCrEMDEoUx796fXohBVr7kss
+	 wnha06i026p7j+y37XB8+/pVJFsErDE+7ILUnl7as7EdKcjZlhQtffolSIaOkdRRvy7Ws
+	 rontPXYqy1Cgm3R4COXrIxQ66K5+owbwoBvOTjvkHJkvCbI+TEZT2X0kUytguyEojY7+M
+	 SIFwJ9TICKjNKxkqO9vv+tAosTIU4dZS0TAbH1oITYj0/+WBe98Q6eFrYZ+YB447uwIGr
+	 eeEpwKIlm5POMR0sl1ebDhPo2NkaBlihXoPtemMVcDQDKbhOqpZCaUInSmiWNXfJHdg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794439186;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
-	 Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To:X-Originating-IP:
-	 X-ClientProxiedBy;
-	bh=NcCiWMGAG/KcYeA/c2y5e8aTtWFVROWmHzpV73vYmEA=;
-	b=hTGs8bVIMzN6bSdj87VOox4hFZzMQizjz0Qz/iVjWAJjiuCXy3EgG1kqG+ycGRWv3HeJ
-	 2ziAl3kbBIKcV02QNvnZgRbuHAlgQ+EuCq0jwohVnEZCpAX5MZo6XR9jllQviU4SJHl4I
-	 087c5A27oznG5sUU0330O1btT/kK6L0OT21IyMRBwiJtep7/DeDkdeHBZj1abuqJF+QXR
-	 H+3WwVdM9ZKQBHdYbV3e7v8z6Z1Bvncdw7THlR+aaJPfOoDZwKXlHMmONfGs4UwVf3rit
-	 hs4YgDB74joX9a3suM6tv6fp32DrmfTfcHUujHW0rKZ73mXGBvtZF0Gu/jHoPAg1PHw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794439264;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:Content-Transfer-Encoding:
+	 In-Reply-To;
+	bh=eE9X9IsI4DGKfcKaEqbUpAyTJeGhuPKiIV6pCis8+mc=;
+	b=WHVLhGlgXFVsJg+Itne8KLX6PiUstePc4ZOmkNydmOdxPsCaaEcUqoH5plNrlrqT4wIo
+	 aazhdczHVzz5i6kF3bFO4U6rQ+aD2Hxj4+mvu5PbWa8Xklb8OCFqIWW/NAMZgF5kuuRsf
+	 vyC+ybz8t04/KNW4RCLz4ZloNG5Lmw/kMCG2kVyuc2Qzv/7fmYARukc0HIT1Tc9J3/WiC
+	 52XpswZ3l11GTolzArq68Y067o4ijLEruSWt561H89lWGb3aY/gkvGUDSscBgOjwiT4IN
+	 kd0ZwoHYc9ait9RlSFYucL/+5wfU5IIAu5bfH6Yx+RIA/dJD8cPED3crvrZ1NHLdKfg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=amazon.com;
-	spf=pass smtp.mailfrom=amazon.com;
-	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=IGyO4tUN;
-	arc=none smtp.remote-ip=44.245.243.92
-Received: from pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.245.243.92])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=AS4FCx2D;
+	arc=none smtp.remote-ip=74.125.229.137
+Received: from mail-dl2-f9.google.com (mail-dl2-f9.google.com [74.125.229.137])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F326F606A321;
-	Wed, 11 Nov 2026 23:19:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F326F606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD133606A8A5
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 23:21:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CD133606A8A5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=IGyO4tUN
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=AS4FCx2D
+Received: by mail-dl2-f9.google.com with SMTP id a92af1059eb24-19305bcb6d5so1264887c88.0
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 15:21:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1794439185; x=1825975185;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NcCiWMGAG/KcYeA/c2y5e8aTtWFVROWmHzpV73vYmEA=;
-  b=IGyO4tUNNamfqJNlGdZY459Ybc1udO70iDVM97rAWz+fhCa2UMfU8x+T
-   rFs4bcLhNIRn6IyQSsFO7y3wvH23hhA7+T6fEBAu9u6Q4QRN4yjmr85b4
-   NBxxgYv1iy3ouAu+m4FGC5oxqNkYq41ebvT1MjyMHse5qABRv+f3RbLal
-   Qg9QVD6TYgFUle/oaKmzCi7OL0Qtqr5Y9tZYjXwn5B2fcrnVn6C6r4h86
-   6fbXD5Xi8SeA/PcKniFYePT7LujIIBDF1sJ5DmWOkVR9Okn9uWdowFL8I
-   cx8UgnDrBUkJrYaPvo9pK7OpwovPFQwCTsl+l0uaxmpFzwKzWWniS9Xmy
-   g==;
-X-CSE-ConnectionGUID: 6zDr3jFwQyKdSmvl3eZr3Q==
-X-CSE-MsgGUID: SFQQkNPQRoqkURot+YmiOw==
-X-IronPort-AV: E=Sophos;i="6.27,208,1787011200"; 
-   d="scan'208";a="33275423"
-Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
-  by internal-pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2026 23:19:43 +0000
-Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.178:7426]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.5.141:2525] with esmtp (Farcaster)
- id 976397fa-12de-4c16-a3e5-30f8dd11ed40; Wed, 11 Nov 2026 23:19:43 +0000 (UTC)
-X-Farcaster-Flow-ID: 976397fa-12de-4c16-a3e5-30f8dd11ed40
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
- Wed, 11 Nov 2026 23:19:42 +0000
-Received: from dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com
- (172.19.55.127) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56; Wed, 11 Nov 2026
- 23:19:42 +0000
-Date: Wed, 11 Nov 2026 23:19:37 +0000
-From: David Keogh <dkeogh@amazon.com>
-To: Tianyi Gao <tianyi@cloudflare.com>
-CC: Stephen Hemminger <stephen@networkplumber.org>, Willem de Bruijn
-	<willemdebruijn.kernel@gmail.com>, <netdev@vger.kernel.org>, Jakub Kicinski
-	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Eric Dumazet
-	<edumazet@kernel.org>, "David S. Miller" <davem@davemloft.net>, Simon Horman
-	<horms@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, David Woodhouse <dwmw2@infradead.org>, Dragos Tatulea
-	<dtatulea@nvidia.com>, Nimrod Oren <noren@nvidia.com>, Alasdair McWilliam
-	<alasdair@mcwilliam.dev>, Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, Magnus Karlsson
-	<magnus.karlsson@intel.com>, David Ahern <dsahern@kernel.org>, Ido Schimmel
-	<idosch@nvidia.com>, Alexei Starovoitov <ast@kernel.org>, John Fastabend
-	<john.fastabend@gmail.com>, Donald Hunter <donald.hunter@gmail.com>, "Andrew
- Lunn" <andrew+netdev@lunn.ch>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
-	<skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, Randy Dunlap
-	<rdunlap@infradead.org>, Breno Leitao <leitao@debian.org>,
-	=?iso-8859-1?Q?Asbj=F8rn_Sloth_T=F8nnesen?= <ast@fiberby.net>, "Danielle
- Ratson" <danieller@nvidia.com>, Kuniyuki Iwashima <kuniyu@google.com>,
-	<bpf@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <kernel-team@cloudflare.com>,
-	<nh-open-source@amazon.com>
-Subject: Re: [PATCH net-next 1/8] net: add tx_extra_headroom and
- LL_ALLOC_SPACE()
-Message-ID: <avT4CezZCiRhvCXw@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
-References: <cover.1794020868.git.tianyi@cloudflare.com>
- <e90e748e0aefa7cbe1c2b31b8c7902ccf135c3f2.1794020868.git.tianyi@cloudflare.com>
- <willemdebruijn.kernel.1d64e7848503b@gmail.com>
- <20261107182526.69543-1-tianyi@cloudflare.com>
- <willemdebruijn.kernel.2c6a653eb65fa@gmail.com>
- <20261108190831.3f991a13@phoenix.local>
- <20261109154909.32748-1-tianyi@cloudflare.com>
- <avTOvr+yy+2j8xrQ@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
- <avTSBFpR2t7PO9tx@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
- <CAG4wq-d+LtEi-omGwzgqx14rCp_4J9HztGMpa8ioMsviaPw+ZQ@mail.gmail.com>
+        d=gmail.com; s=20260707; t=1794439263; x=1795044063; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=eE9X9IsI4DGKfcKaEqbUpAyTJeGhuPKiIV6pCis8+mc=;
+        b=AS4FCx2Dzy3knLqQU0KfBNqF5KUSlkLF7ulR+nDPovTotbPJqyuHWJZbdiqD0hnert
+         Fjrod0191CeZY5GKnOqJQFXEdEHnEc9RnGOSGH5h4p748bHPLDNJ0byXo7dSycqqcU13
+         OyILZU4dK6tcd2Ci05DZ8FF8yEvMkGJErFQBNpoVdDDqtfOvSHLZqPU/NPmpqdQ/5ur1
+         G0ewEQXkjx0av1/XfhNJuB0qBTb2u6LImLfzoX4gBMIL2Eoag2sL2m+gsCjyN778IkpV
+         3mYuBiwwgs25VP7eFbwR1g1h0EZbnCDVpu2l2LNGRuQnz/SV5so618qySg3qt6ExWr2C
+         Jtpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794439263; x=1795044063;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=eE9X9IsI4DGKfcKaEqbUpAyTJeGhuPKiIV6pCis8+mc=;
+        b=H7GD9hiwNaK5zwD08iM0BPo7y0aNgnOUg7xnRcckTo4E6zAAMrO2cSYjdjPtuA2rp4
+         odxkm5Vmr/bOIjFxgPUTaFyMjcI6CbmjFFfTILg+PWHOzOnNzU7+CItu2xtvVADbmFx4
+         1lIVr1N+XNZbKf/6SsqJZRrG/8lUY7DkTll82HbaslSVVKwN9Gl6NzyIjLdANx1zOv3L
+         PzE7tXKWNeuHV0gHqXeyaOmxem8mmuR08YsXI/4OOBbgZn4F7niSLcQa6z8I3/8WWvjy
+         oxNlk6vAT0SBYMyvYd+d6lGjILV7yeO4ogFoiigr4vOjWADR4Nr+IF4KsaGNRpJvmaX7
+         6yjQ==
+X-Forwarded-Encrypted: i=1; AL+hErHe5izaOxDhzraKQXKe49ZBKAP8uaFEUEkBkV7sXvkgIv9hRxIPOJ2jtJiNO4LfeTHok6M=@vger.kernel.org
+X-Gm-Message-State: APuU4Z917y/uQ63F6N/ZpK21cCT/DCFcjXltkHrDvebWoiHc7iQkzjpd
+	4XIKKnXCeoTHGImyWWZtbRKolsh64p9CcCKlm0+EStx4mKio1j7WOOds
+X-Gm-Gg: AYBFou1UuKjlHepLBuks76PjFwA1UChHDU4oDvQ22R9G9Ch8Z5o9fWaOFw8ZAvNoXWC
+	Wn8xfAMncNekveQwohd/GiIDT17gdfrq73yOee4OxkqpLhTmOvyyh/yIglCwcIfc5XYmOQBSsln
+	dtnPOYxQfXBO4IGPohJyi9qhZz+JnrsBm+pt3iowgdQLl7pqivayLokxiMKX/17RVCI79hkDJZG
+	py2gMmZxCkJ9WCW+YZv2NowV0oAyfzu5X66brKk4ejGDTb6DJlo3BJ9YBiCo53VE1sV9BQnlc/I
+	ychA6WaVvWX1jFdZgXevTZ/36ylQkcsFnEcnmwvoi35lXESXLxnIUxH8Bv7bFN4nvQIgQXmCrhQ
+	Xjuc0R/bX2+eoB8MrDKY35XSMz72BNpAsQbFFnnpOuAJHnY8MLBQA3iNTWRAcd3BJ1+qGP5yYrx
+	n3yV5S2SMg1nxIoBTJzOfYowY5fTsGPo5tuoZ/1JuPUcZZzTb1vRuBBOTVCvN8Mtrci1BQdt5F5
+	QW2qN+c0iHPujbbzFN7nDf9HMw8gvSVJ697k6mew1ULCfOLC0yQoO1hp89pmDtu48MIkcelqo/H
+	2xMi+u3fPPZdRlOtvoK8ebI=
+X-Received: by 2002:a05:7300:1899:b0:376:b957:c01 with SMTP id 5a478bee46e88-376b9570fd3mr5155040eec.16.1794439263001;
+        Wed, 11 Nov 2026 15:21:03 -0800 (PST)
+Received: from localhost ([2a03:2880:9ff:66::])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3751fe2ff5dsm19921294eec.5.2026.11.11.15.21.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Nov 2026 15:21:02 -0800 (PST)
+Date: Wed, 11 Nov 2026 15:05:25 -0800
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc: Magnus Karlsson <magnus.karlsson@intel.com>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	io-uring@vger.kernel.org, Mina Almasry <almasrymina@google.com>, 
+	"Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>, Weiming Shi <bestswngs@gmail.com>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, 
+	Alexander Lobakin <aleksander.lobakin@intel.com>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Stuart Clark <stuclar@meta.com>
+Subject: Re: [PATCH net-next v1 03/11] xdp: Copy buffers with restricted
+ lifetime
+Message-ID: <avT0b5T5trWZXAMo@devvm16445.scu0.facebook.com>
+References: <20261110102039.1002605-1-bjorn@kernel.org>
+ <20261110102039.1002605-4-bjorn@kernel.org>
+ <avOZa6jLnmvYkk2H@devvm16445.scu0.facebook.com>
+ <87eccra46g.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -111,48 +119,75 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAG4wq-d+LtEi-omGwzgqx14rCp_4J9HztGMpa8ioMsviaPw+ZQ@mail.gmail.com>
-X-ClientProxiedBy: EX19D031UWA001.ant.amazon.com (10.13.139.88) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87eccra46g.fsf@all.your.base.are.belong.to.us>
 
-On Wed, Nov 11, 2026 at 09:41:32PM +0000, Tianyi Gao wrote:
-> My current plan is that the kernel reads the tag only from the program
-> that is attached with tcx. One way to use it is for the loader to tag
-> the head with the largest headroom that any program in the chain can
-> push. The tag describes the whole chain, so it does not matter that
-> the head pushes no headers itself. When the loader replaces the head,
-> the new head carries the tag and the kernel reads it again.
+On 11/11, Björn Töpel wrote:
+> Stanislav Fomichev <sdf.kernel@gmail.com> writes:
+> 
+> > On 11/10, Björn Töpel wrote:
+> 
+> >> diff --git a/include/net/xdp.h b/include/net/xdp.h
+> >> index 07231adfb5f8..1105bb9e3292 100644
+> >> --- a/include/net/xdp.h
+> >> +++ b/include/net/xdp.h
+> >> @@ -81,6 +81,16 @@ enum xdp_buff_flags {
+> >>  	 * XDP program is not attached.
+> >>  	 */
+> >>  	XDP_FLAGS_FRAGS_UNREADABLE	= BIT(2),
+> >> +	/* Internal: the head netmem and the shared info are in &xdp_buff.ext.
+> >> +	 * Not copied to xdp_frames or skbs.
+> >> +	 */
+> >> +	XDP_FLAGS_EXT			= BIT(3),
+> >> +};
+> >> +
+> >> +/* For a head buffer that cannot hold kernel data, see xdp_init_buff_netmem() */
+> >> +struct xdp_buff_ext {
+> >> +	netmem_ref netmem;
+> >
+> > nit: netmem -> head ? and the same for xdp_init_buff_netmem netmem arg?
+> 
+> Yup, will fix.
+> 
+> >> @@ -138,7 +153,7 @@ static __always_inline void xdp_buff_set_frag_unreadable(struct xdp_buff *xdp)
+> >>  
+> >>  static __always_inline u32 xdp_buff_get_skb_flags(const struct xdp_buff *xdp)
+> >>  {
+> >> -	return xdp->flags;
+> >> +	return xdp->flags & ~XDP_FLAGS_EXT;
+> >
+> > The only consumer is xdp_update_skb_frags_info, so probably not worth
+> > filtering out XDP_FLAGS_EXT here? Or is it for
+> > xdp_update_frame_from_buff? Can we explicitly clear it at the caller? 
+> 
+> It was for xdp_update_frame_from_buff(), but looking closer EXT never
+> gets there...
+> 
+> I'll drop the mask. Thanks!
+> 
+> >> diff --git a/net/core/devmem.c b/net/core/devmem.c
+> >> index 8f190b574beb..dea4a4a17e86 100644
+> >> --- a/net/core/devmem.c
+> >> +++ b/net/core/devmem.c
+> >> @@ -698,5 +698,5 @@ static const struct memory_provider_ops dmabuf_devmem_ops = {
+> >>  	.release_netmem		= mp_dmabuf_devmem_release_page,
+> >>  	.nl_fill		= mp_dmabuf_devmem_nl_fill,
+> >>  	.uninstall		= mp_dmabuf_devmem_uninstall,
+> >> -	.caps			= MP_CAP_FRAG,
+> >> +	.caps			= MP_CAP_FRAG | MP_CAP_RETAIN,
+> >
+> > Not sure I understand this part, can you explain?
+> > These are MP_CAP_RETAIN because they are unreadable?
+> 
+> No, RETAIN is about lifetime: the stack may hold page pool references
+> after the RX poll, e.g. skbs on a TCP receive queue. That's how devmem
+> and zcrx work; without it the stack would try to copy them, and they'd
+> trip the DEBUG_NET check in skb_add_rx_frag_netmem().
+> 
+> A provider without RETAIN gets copied, so it must be readable. I'll try
+> to make that more clear in the kdoc, and probably refuse a provider that
+> is neither.
 
-Thanks, that works for us.
-
-> By the way, I plan to support tcx only in this series. A tcx program
-> is attached to one device, so the kernel knows which device to update
-> on attach. A cls_bpf filter can sit in a tc block that is shared by
-> several devices, which is harder to handle.
-
-tcx only is fine with us. Our chain is attached with cls_bpf today.
-Rather than move it, the simplest option for us is a separate tcx
-program on each device that carries only the tag and returns
-TCX_NEXT, so the existing tc chain still runs after it. A few
-questions so we can check that this works with v2:
-
-1. Is the tag read for programs attached with BPF_PROG_ATTACH as well
-   as with BPF_LINK_CREATE? "bpftool net attach tcx_egress" uses
-   BPF_PROG_ATTACH, so a startup script could do the whole setup
-   without keeping a link pinned.
-
-2. When several programs are attached at the same tcx hook, is the
-   value the largest tag among them, and is it recomputed when one of
-   them is detached or replaced?
-
-3. What is the exact form of the tag: which BTF element it must be
-   attached to, and the string format? It would help to have that
-   documented, since programs will depend on it.
-
-4. Is there an upper bound on the value, and is a larger value
-   rejected at attach time with an error, or clamped?
-
-Thanks,
-David
+Ah, yes, thanks, I did miss that warn in skb_add_rx_frag_netme, makes sense!
