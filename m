@@ -1,92 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.177
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794374026;
-	b=exDLHQGbTHlnQDGQr9xiLbC9jd0fs6yTmp5/BubIFzK5Jci4/u/0mkvA9plNIBUBa8qs
-	 tiIVyvXum5tPDipSHtGpRMRssmK2hZZad9BnlKbfC6GE33hHx1aahjmBboDMjhO8nxypx
-	 QS31BAyed07Cph0wUCF9eKIN5SXcSUybRjePf6rYBlF/4UZCVh22orfV+UKWOEYQNbiDE
-	 Fs61XrgJzHPepqo7HzWzxfOQc2Ce7KUI4lA2EqB7ec/iupuqcPrhLRbEVb9d1eecQvCTW
-	 VaQqOsrXAOhswg4kNzbjHDxsnTSoe+HTLi1DO8MjjmKFoKN0l63Qq5RH93xSzgluNKQ==
+	t=1794374031;
+	b=Hdxu2OHLQVmpCgkYBVFNgRQNOFlpQGc1yRakObvav99qNLDLOe7Vf0b109TziHcmlN8C
+	 ZeCGXdSE+LTWu/coiAVXTxlB6s/hyb9i8bRQ1pIrZrUsYLLJeZjsiJ5qeD0Kf0fP09cGK
+	 j+O9Vw58+Qc1gC4/hSqLNcBr3Li9k3DLLzitoskqyofE4Tfm3lk0qXU9G1XRAJLltCMCF
+	 lFP76x0An4lKhY4SuAc3040J26N0IH+6hoq8skGB+AfzbLYC/JytdwVQpamxhliVNVi/a
+	 V84vrsNABl8d9gK2BxGtLUHjDMns9gQXjphsPRzee4XJFKxbjIiVOX+5PtV5Nh+yzmA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794374026;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794374031;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=R80D8SNIynoGlRHs+Agl69Gil3xPFr7wHKq6bzkb8mQ=;
-	b=b24w1Nl6bxjF01X6FG42WVQDZXNf5yE5j3lmr/cJu2Ps+nzS9UmJkm2Mr2qR6MmnbeEp
-	 qZn7zcN1b7ZbMBPSiMdUpR7nGUmsQ9Z/+aCGXtznH65/XSeejYFXFjb9r7csaEuV9WiFd
-	 Y1FgpPglW4aBI/HwwzesLsxPdooIqrs48J6QucKB7fw2UAuxMAo4urIoAdq6wEkn546/V
-	 4/VUYAMTlue+osAWuTWy4LzzxyYmjFw+MpoagxHOG2XkdrK4gdGx9Rcb71SRhQK8YbF5I
-	 2WoOF0sRoD6Qm1H6jF1+PrwKAF1PQiKGfWf+STD11gvppG+cpWF11bxog0+UTMi6Fag==
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=W+wFrqTn6TpSzq1GtCMNbpHfih/1qK8FVl9ONJGTXVY=;
+	b=w3qyoJAgNisfRseE4hECfDwao4KmjPkPDr5Toxq3knh9CgYIDuks0JJ4l8xnrKc//HAL
+	 +VhwDlOecuEbk5t5cl+6tpy5BYim7lV+KS0Udkos+M60p2Tyty8EKtolWXcTBUXzr+xjp
+	 Xv2mqgEaworigyB9JDnMa+F74dsw6Fysom6DGDGQS5JETGUvWrGudIl/ojEtP91qYHU81
+	 Ar2+Ldy9FlWrpJfKpkP73ilBCRNDNV08drYI3anwZC2ZEfUWPyJNGtUm2nnoD4jXWacFs
+	 vTczkk29aN/GUTl9tM12a9Ut6Te7iAiza3ktoC/yyZeOhTGpXh+l46C9CkgxYVurcTg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WceLGUa7;
-	arc=none smtp.remote-ip=209.85.215.181
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="Y4K/N5xb";
+	arc=none smtp.remote-ip=209.85.214.177
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2F76606A31C
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 05:13:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B2F76606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6659E606A31C
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 05:13:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6659E606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WceLGUa7
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-cd8ba7c2694so1122669a12.1
-        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 21:13:45 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Y4K/N5xb
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2ed1b9e8f43so11889775ad.1
+        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 21:13:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794374025; x=1794978825; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=R80D8SNIynoGlRHs+Agl69Gil3xPFr7wHKq6bzkb8mQ=;
-        b=WceLGUa7ChT/9MwsdrKfU57pLkOHavltU9f7ipckzphICeCiy8h4EyAuFXb5pE8yiM
-         EssUKDG0iUMLhPF3043xJS47nuwgrXwFF47xyzTbtN/WihGrXBEuHtHbZMgD4BxQ3pY6
-         /67WbmElANb0WYiz9h6y4fylq+zG4w5DBWrOeKM8xud/XvwkJ/HAbiiq6oklHleK4hOu
-         iWDXYQav2ThRKxOHe2eLi7YgegR/8z8etYJ4HB3bBlVgaPoQWbAQjUIA+oLp2TZ5t/6N
-         hKnOSFMZiUrusjSqLU+BhXcjQiYLrwKW2aZlQdP03AnW6hFGCYp0yTG4aoDWF5hRn9pY
-         ATdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794374025; x=1794978825;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20260707; t=1794374031; x=1794978831; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=R80D8SNIynoGlRHs+Agl69Gil3xPFr7wHKq6bzkb8mQ=;
-        b=MAb0bheJXiVl1ju3wPcmYnXi28+AssSqQYKw4+3gKP36NRip/GECim/gOp83KUhR9v
-         DOEHFx+Ek/qJ8fEixHnOvlLTGfFfFQ4ySn6Zd3/BmyI32aWL634Rna8MSeAdiusDsYsw
-         0Rbe3Wj67/qNKF2tJbkxispvJ9wPhxBIOMcTUTT7ZmJd86rdyM7GHH4SQdALY8e1nvbU
-         szjfiLtVHdHw4s4rCaC8iWiNKeMLVJVg4CgM7MPP0kKkMfyRCA/s15+TKwgL/MIp9fKP
-         jv0UYBQlS9E42QOnnUluYgQykCMtB1sBI721KGI4KJV9cOqNQy0tr+Wb1OfixUGq80bD
-         9hJA==
-X-Gm-Message-State: APuU4Z+1vTXyapSX0HsVcGs52DXBQZEFImRfLt/I3REI6wbm0tNQgR+d
-	u36CUj7QUA85yU6na9/MS98TV0g1PgEKAEKM59hLWou7I+sOuboaGmuOdCGJvw==
-X-Gm-Gg: AYBFou3dANQ2SDMYaOo7YQ/8HQnShx0TJS6j1w16jOE9CZe2fVTG7WNXXimgGF9R0Mx
-	UnttI/CrzrTrI0cPMwrKfu1/PMQ876b/FrzdMEqkapKdPQQOg9CA5M3SMr4kEFUDWCh+oBDvuft
-	YvcOZrqBFAXVaWgGgyU6mfGjwlmpNE/mv74yCm2nhKGw2rzhjPy9ZIshrE/8Tfk5JKb8imadrmU
-	DdNMgj2+QZU36y475c0hDsrIpQaghlIZcmAtWh0Q1xdoHkhwS+xPvnf0BuLMcrLJ5iiPwA0ycLH
-	b90Xs6i2rJw6bWR0zvZNgBYuRdJopA3AarXUulLDbebvqVVmTU5ZWjYUJqO0evB/dClnDYStCUw
-	lm3XpenLQiFY9f+doKcUTAWZjlYH4w45xN4T6c3Z387zb0aWyhqKrFZTi3OEe3O4afoK3u0Mnni
-	Prxczy/TBD2SSz0KCMv8zxgSp0yU4wqOvWraJEAt8NUUTOKELv1Zn3qbG+kkEBRKL1+7XIESgeo
-	QF2jWeIQQANFwSkn8k9lTP8VbMGmllwoJiPLiY4xUP8jMAU6rPo9nacPZNZMXz0NiDCJaW0cA0D
-	FzgYgIVCP2MxJ/M94hPO+oYxi0MlQmt9FSwux5T/02NOl/50dnUmSPVIzQ07TdKh1C/hgZUiPP1
-	XA52R2RlGp+V7z5CqNPtE0bZ5+ez1kBkr1qWGJXuifIIfw7//fE45ZYBgsZQEgj4I9pwROn/2kQ
-	==
-X-Received: by 2002:a17:90b:4f81:b0:3ac:8741:e2e8 with SMTP id 98e67ed59e1d1-3b182df338amr1389858a91.8.1794374024669;
-        Tue, 10 Nov 2026 21:13:44 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.246])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2edb6a4013csm16921905ad.1.2026.11.10.21.13.43
+        bh=W+wFrqTn6TpSzq1GtCMNbpHfih/1qK8FVl9ONJGTXVY=;
+        b=Y4K/N5xbFodrqUegieXyMTYNSGithYdyM8+6FsD+IomZWa6nY7GrQOOM8cU3MU3k2T
+         119/bp3XwNY9qucMCHaoCeQYM9C3QzTDlb0HXRQcusvaqKsqQCiNXCMjN3l9mFAOmD4C
+         lxQBO9WBubw2t0Z8HGr6jttVHrKW5VKgEv/CGbLuS6rDIEwKDgXqBzcJbmPzy8OHF+r1
+         3R7h5A+tQeSqgQlkPHbPH5WMyl1DOjg8S/T6F1Awz+SqCSibag71OCRsHXAskqLOreNQ
+         i891k+pggWNELrnFjB6pPo62bmwW16Rm2UI7b0125nmPLD20r/9G05NaUf+rPJE5nDcK
+         1TwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794374031; x=1794978831;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=W+wFrqTn6TpSzq1GtCMNbpHfih/1qK8FVl9ONJGTXVY=;
+        b=RZY0GrDB314DsOeu6igaAljDHlhSIUSbcGtD3z6qHmQfbWiYI4VsPHeoYSHTtK4Ar4
+         zpRg5brNjeFAdUFMl3Oj9i8WA9kAa9NNU/68R0xt0g3HEqrxJVjExk3G/+9AEttr7mj2
+         SUVb+UafsdYccUDUpYL3A4YxsPlsrzwQmpUdGzNWxYXa4/AVoWxoYKJDHbsMQ3V1IYds
+         +BXXibEnUF/TMygT3A/2N1HVq41kfBMcMoxqyUy1rIVxYeSXpyu4K1ZOOvVqjDlrfllV
+         rc+P5jv0cY52KcrXFgIsJi+gcGubDrO/j7xplf7ozVICExBR5PRpmBWCxvx2eIOk2DNx
+         x1KA==
+X-Gm-Message-State: APuU4Z/t+R5kqoeNqyAXD/v6bC6m/YX1G5uFa/DwmAChAhpfz4P6n2uq
+	DJG1A9ABGXjctwbvVPf0qYHimYfIjVTasa4zbSi/ObykxqUOqrQffkGBxZw7Mw==
+X-Gm-Gg: AYBFou1+P1fvsLS/YhlfQWjQQd480uLz+5OzAEIMe+Mc1GgRUOEmEVeq4S1++izTld5
+	2PZA/1Dq9ildSepQCOs3CF4bAioi615u48gaAJzcdcrPRY10g+igASVhWxjTpAif0VF7DIjyggp
+	2yChDUpNwQgY9MtSq+tVishx6IVPXNr4/Y7+SRzLZ4+qsPDXi3+vew0e1zVnk6wmvqwgagfSH4A
+	SlmrGgBVTHr5Fa41D/dG4k/7iCNfHJkhaH0puoB3fuDCT7x2WIaW6CuBMK7GbHJDnKCfKJVjTfK
+	g+w6JKufdZS8GyVAC5UIIVb7/yz6mh3Y0fX4jkPQuY4aLP15NYtb6PS9U52qwaXh0vK4EB24giD
+	xhlSOgQNOMbzMgFbIdRMFCMrsaPgMP07xPM2Hiu/G7cRgDPv7Zj9LR4c8aQfIGjhGkgLTmVbiME
+	3s5WGwIDyIf1REFhqT9ZRAsLmAIyYEC1xrqQId05fzhz3moBwWJwJPrQx2Gyhua67jvb1D3+wLD
+	uA3X+lc2nxxlz7BreNDPjp0hsGVyeB5nwcpD7coEK35EpIVJXQfOY+xZ1ckoiaQMUYSidiKYzcQ
+	UPrErv2Vzru7jE9iBewas7l8VVwjt4RmB1B3AX7zta8O+6ebTpAomKzz9rBFu0WM4gpFMQSgtRP
+	A2uvaUiWEbpnld7e4zmi7y/4lJ701T1ZqWJOli9X88YMJDaUGhlMs20GZmMkUiBtdSVweVG+pEd
+	4=
+X-Received: by 2002:a17:903:1b44:b0:2ed:34e2:a997 with SMTP id d9443c01a7336-2edd7a6d8e7mr16521865ad.50.1794374030594;
+        Tue, 10 Nov 2026 21:13:50 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.254])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2edb6d4d773sm16044905ad.20.2026.11.10.21.13.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 21:13:43 -0800 (PST)
+        Tue, 10 Nov 2026 21:13:50 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 00/29] bpf: Find linked registers by scalar evolution, remove scalar ids
-Date: Wed, 11 Nov 2026 05:13:11 +0000
-Message-ID: <20261111051341.2800252-1-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 01/29] bpf: Keep the 32-bit range across a no-op sign extension
+Date: Wed, 11 Nov 2026 05:13:12 +0000
+Message-ID: <20261111051341.2800252-2-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261111051341.2800252-1-alexei.starovoitov@gmail.com>
+References: <20261111051341.2800252-1-alexei.starovoitov@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -98,354 +102,79 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Alexei Starovoitov <ast@kernel.org>
+From: Vineet Gupta <vineet.gupta@linux.dev>
 
-  char *buf = bpf_map_lookup_elem(&map, &key);    /* 128 bytes */
-  ..
-  p = buf + i;                                    /* i is a byte */
-  if (i > 100)
-          return 0;
-  *p = buf[0];
+A fix of precision in the main pass. It stands alone in this series. Its
+tests come with the tests of sign extensions of linked registers.
 
-The jump bounds i. p was computed before:
+	1: w0 &= 63
+	2: w0 -= 63
+	3: w0 = (s8)w0
+	4: if w0 s< 0xffffffc1 goto pc+2
+	..
+	7: w0 /= 0
+	div by zero
 
-  invalid access to map value, value_size=128 off=255 size=1
+w0 is in [-63, 0] before 3. Every value of that range fits in s8, so the
+sign extension is a no-op. The verifier drops the range all the same:
+after 3 w0 is in [-128, 127], is_branch_taken() cannot tell at 4, and 7 is
+verified though that branch is dead.
 
-People do not write that, compilers do. In a loop over strings or records
-in a buffer clang computes 'buf + i' at the end of an iteration and tests
-i at the start of the next one. Patch 16 has such a loop.
+coerce_subreg_to_size_sx() keeps a range if both bounds have the same bits
+above the low 8 or 16 bits. In a range that crosses 0 they differ: all ones
+in -63, all zeros in 0. The check before that one is on umax, which is huge
+when the range has a negative value.
 
-What the verifier knows about two registers is in the state:
+Return early if the 32-bit range fits in s8 or s16. A register that passed
+the check of umax has such a range, so that check goes.
+coerce_reg_to_size_sx() does the same in 64 bits since
+commit 0892ef2a7ef3 ("bpf: Representation for intervals with steps").
 
-  r2 = r1                     r1 and r2 get id 7
-  r2 += 4                     id 7 | BPF_ADD_CONST64, delta 4
-  *(u64 *)(r10 - 8) = r1      fp-8 has id 7
-  if r1 > 100 goto ..         sync_linked_regs() refines all three
+No verdict of the selftests changes.
 
-A scalar id is dropped at the second '+=', at a sign extension, at a 32-bit
-spill of a wider value. A jump refines at most five registers and stack
-slots (LINKED_REGS_MAX), the others lose their id. Nothing links a pointer
-to its index. And scalar ids have a price: every insn that moves or
-changes a scalar assigns, keeps or clears ids, regsafe() maps the ids of
-two states, a join reconciles them. States that differ in nothing but
-scalar ids are verified twice.
-
-That r2 is r1 + 4, and that p is buf + i, is static. It takes no state.
-Scalar evolution has it for loops: every register and stack slot has an
-expression there. This series computes the expressions for whole subprogs,
-before the main pass. A value that no expression describes, such as the
-result of a call or a load, gets an SSA name: %r0.8 is the def of r0 by
-insn 8. The prog above:
-
-   0: call bpf_get_prandom_u32#7     r0 is %r0.0
-   1: r7 = r0
-   2: r7 &= 255                      r7 is (& %r0.0 255)
-   8: call bpf_map_lookup_elem#1     r0 is %r0.8
-  10: r6 = r0
-  11: r2 = r6
-  12: r2 += r7                       r2 is (+ %r0.8 (& %r0.0 255))
-  13: if r7 > 0x64 goto pc+2
-
-r6 is %r0.8 too, so at insn 13 r2 is r6 + r7. For each conditional jump
-scev.c computes the linked registers: the live registers and stack slots
-that are a tested register + a constant (delta) on every path to the jump,
-or a pointer + a tested register + delta. The main pass refines them after
-the jump. Scalar ids go.
-
-Linked registers are static. A link holds on every path to its jump,
-whatever state gets there (intraprocedural: the entry values of a subprog
-are symbols, so a fact holds for every caller). There is no limit of five
-registers and none on the constants that are added. Registers that agree in
-their low 32, 16 or 8 bits only are linked too, which covers extensions and
-partial spills. The types of the registers are read in the state at the
-jump. Nothing is added to struct bpf_reg_state, and delta goes.
-
-One question is left to the state. A subprog or a callback loads a field of
-a struct on the stack of its caller, tests it and loads it again. For
-scev.c that is memory behind a pointer. It is promoted to a SCEV register
-like a stack slot (patch 18): a store defines it, a load gives it its value
-number, a join point has a phi, a call is a may-def. So it is a linked
-register like any other. Which stack slot it is depends on the caller: the
-main pass reads the pointer at the jump, in its state, refines the slot and
-keeps nothing of the answer. There is still nothing in a state that
-regsafe() or a join would have to compare.
-
-Patch 1, by Vineet Gupta, stands alone.
-  1  'w0 = (s8)w0' keeps a 32-bit range that fits in s8 already: the sign
-     extension is a no-op.
-
-Patches 2 - 7 change kernel/bpf/scev.c only. They are prerequisites of
-patch 12: they get the expressions ready for all code. The main pass does
-not use them yet. No verdict changes in the 32913 progs of the second table
-below. Patch 5 gives more loops an iteration count, which can change
-a verdict.
-  2  A fix of the representation. 'w5 >>= w4' and 'r5 >>= r4; w5 = w5' had
-     the same expression, (zext32 (>> r5 r4)). They are distinct values.
-     The operands of 32-bit shifts and divisions are zero or sign
-     extended, a shift amount is masked:
-     (zext32 (>> (zext32 r5) (& r4 31))).
-  3  Cost. Expressions are going to be constructed for all insns of a prog,
-     not only for loops. The hash table allocated for every second
-     expression. It gets chains in an array, it grows, (REG r) has a fixed
-     id. With all code analyzed: 471 -> 6 allocations per load, the time in
-     scev.c per insn goes from 485 to 291 ns. A constant factor, 1.7.
-  4  Cost. No phi for a dead register (pruned SSA). At a join point 25
-     registers and stack slots have two expressions on average, one of
-     them is live. 1.79 -> 0.78 expressions per insn, 291 to 170 ns per
-     insn: 1.7 again.
-  5  Simplify an expression at construction, so that 'r2 is r1 + 3' is at
-     its root however many insns computed it. Patches 12 and 16 compare
-     expressions at every conditional jump.
-  6  What a load or a call returns was '_', one expression for all of
-     them. Such a value gets an SSA name: a def by an insn, %r0.6, or a phi
-     before an insn, %r8.7=phi(1, 2). From here on an expression id can be
-     a value number (struct expr::is_vn): the registers that have it hold
-     the same value.
-  7  Compute the expressions for whole subprogs. A subprog is analyzed as
-     the outermost loop, which runs once. No users yet.
-
-Patches 8 - 9 are about stack slots. A slot keeps its expression across
-a store through a pointer and across a call if that insn cannot write to
-the slot. scev.c takes that from bpf_may_write_mask(). liveness.c computes
-the mask before the main pass: it tracks the values derived from FP and
-looks at the types of the arguments of helpers and kfuncs. Two masks lacked
-slots that are written.
-  8  bpf_sys_bpf() stores log_true_size into the attr of its caller, but
-     arg2_type in bpf_sys_bpf_proto is ARG_PTR_TO_MEM | MEM_RDONLY. Mark it
-     MEM_WRITE.
-  9  A fix of liveness.c. What is loaded through a pointer to the stack of
-     frame 1 or of frame 2 can point to the stack of frame 0.
-     arg_track_deref() lost the older frames, so the mask of the call in
-     frame 0 did not have the slots that are written through it.
-
-Patches 10 - 11 fix what is wrong in the main pass today. The patches
-after them refine more registers and stack slots, so more progs would run
-into both.
- 10  'r0 <<= 3; r0 += 5; if r0 s< -2 goto ..; if r0 s> 1 goto ..'
-     The range [-2, 1] and var_off don't overlap. The verifier goes on with
-     an empty register, up to "verifier bug: REG INVARIANTS VIOLATION".
-     Detect at the jump that the branch is dead.
- 11  On big endian the first half-slot of a 64-bit spill has the upper 32
-     bits of the value. __clean_func_state() and stacksafe() treated it as
-     a 32-bit spill, which has the low 32 bits.
-
-Patches 12 - 19 use the expressions.
- 12  A new ability. find_linked_regs() computes the linked registers of
-     each conditional jump: expressions with a constant difference, modulo
-     2^64, 2^32, 2^16 or 2^8. check_cond_jmp_op() refines them:
-     refine_linked_regs(). sync_linked_regs() still runs.
- 13  A prerequisite of the removal of scalar ids. Phis are value numbered
-     by join point and operands, up to a constant offset (GVN): a copy that
-     is made on each of two paths is linked after the join point.
-     recvfrom_x of Falco depends on such a link.
- 14  Tests for 12 and 13. The tests of scalar ids stay and cover the
-     mechanism. The new ones are for what only a static analysis can get
-     wrong: an arena add that is converted to ALU32, a store through a
-     dynptr slice, an edge that the verifier adds, a link at a loop header,
-     a pointer that is not a scalar, big endian half-slots, an empty
-     intersection, phis.
- 15  More tests, by Vineet Gupta: sign extensions, for 1 and 12.
- 16  A new ability. A linked register can be a pointer: base + the tested
-     register + delta. After the jump the main pass recomputes it, as
-     'p = buf; p += i' would, with the i that the jump refined. The prog at
-     the top loads. A live register or stack slot has to hold buf at the
-     jump: 'buf += i' in place is not found.
- 17  Tests for 16.
- 18  A prerequisite of the removal of scalar ids. Register promotion:
-     memory behind a pointer is a SCEV register, like a stack slot. A jump
-     that tests what was loaded from it or stored to it refines the stack
-     slot of the caller that the pointer points to.
- 19  Tests for 18.
-
-Patches 20 - 27 remove scalar ids: their users (20 - 23), the ids (24),
-dead code (25 - 27).
- 20  scev.c left it to the main pass to check, by scalar ids, that an
-     induction variable and its copy hold the same value at loop entry. It
-     compares their expressions there.
- 21  scev.c does not analyze irreducible loops, so the jumps in them have
-     no linked registers. Compute expressions in their bodies too, with the
-     same worklist and a phi for every live register at a secondary entry.
-     Still no recurrences and no iteration count for such a loop.
- 22  Remove sync_linked_regs(). Jumps refine by scalar evolution only.
- 23  flow_join_makes_up() recognized copies of a scalar by their id. It
-     compares their ranges. A heuristic on which states are joined:
-     soundness does not depend on it.
- 24  Stop assigning ids to scalars. States that differed in scalar ids only
-     are one state.
- 25  Dead code: scalar ids in regsafe().
- 26  Dead code: scalar ids in the join of states.
- 27  Dead code: scalar ids in the log and in bpf_verifier.h.
-
-Patches 28 - 29 are about loops of GCC. scev.c computes the iteration
-count of a loop (header_count: how often the header is executed).
-header_count = backedge-taken count + 1. A loop without it is walked: the
-verifier unrolls the loop, one state per iteration; a counted loop is
-summarized, one state for all iterations. A long loop that is walked ends
-with "more than 1024 states that cannot be joined". Such loops loaded when
-the verifier explored each path.
- 28  A new ability. GCC keeps 'int i' as the sign extension of a 32-bit
-     add: 'w1 += 1; r3 = (s32)r1'. That is a new recurrence,
-     (sext32 (linear r3 1)). A wrap is handled.
- 29  Tests for 28.
-Long loops of GCC that still have no iteration count are rejected as
-before, among them dump_task_sleepable() of bpf_iter_tasks.c, where one of
-two backedges has no linear latch.
-
-Precision that is lost is listed in patches 20, 22 and 28. Most of it:
-a link holds on every path to its jump. A scalar id held on the paths that
-the state took: 'if (n < 0 || n > 16) return 0; return n;' on the result of
-a helper that returns at most 16 does not bound what it returns any more,
-one of its paths is dead in the main pass only. A link that is made in
-a loop does not leave the loop. And but for the memory that a jump tests
-(patch 18) linked registers belong to the frame of the jump. Scalar ids
-also linked the registers of the callers: a subprog that tests its argument
-refined the register that the caller keeps. No program of the two tables
-below depends on one of these but for one selftest. Gated phis and links at
-loop exits, which bring most of it back, are left to a follow-up.
-
-Patches 12 - 27 do what patches 3 - 12 of Vineet Gupta's "bpf: track scalar
-equality across the low 32 bits" v3 [1] do, without a link in the state.
-Patch 1 and the tests of patch 15 are his.
-
-The selftests as GCC builds them gain most. GCC keeps the int that a call
-returned as 'r5 = (s32)r0', tests w0 and returns r5, and no scalar id
-links r5 to r0. "should have been in [0, 1]" is in the log of
-test_progs-bpf_gcc 19 times before the series and never after it,
-83 tests and 303 subtests fail in place of 87 and 320. Of the 220 entries
-of BPF CI's deny list for that flavour 64 pass, 58 did.
-
-kernel/ and include/: 1928 lines added, 1027 removed.
-
-veristat over the BPF programs of Tetragon, Tracee, Falco, the Datadog
-agent and more than 70 other public projects, HEAD and releases, built with
-clang 14 - 20 and 24 for several -mcpu, against the tree before the series.
-Nothing that loads stops loading, 629 more load.
-
-                     progs               load     insns   states
-  Tetragon           81856    78221 ->   78221   +1.71 %  +1.51 %
-  Tracee             35204    32212 ->   32465   -9.06 %  -8.65 %
-  Falco             104434   103665 ->  103691   -5.26 %  -6.68 %
-  Datadog agent     806923   779575 ->  779907   -0.01 %  -0.00 %
-  others             77162    64426 ->   64444   -5.56 %  -7.85 %
-  all              1105579  1058099 -> 1058728   -0.32 %  -0.10 %
-
-veristat over 32913 progs, against the tree before the series. 33 more
-load: 20 of the selftests as GCC builds them, among them profiler1-3,
-test_sk_lookup and setget_sockopt, and four asm tests in their flavours.
-One asm test stops loading in its four flavours, "regalloc in callee".
-Patch 22 changes it.
-
-                     progs           load     insns   states
-  selftests, clang   18810  11750 -> 11757   -0.21 %  -0.43 %
-  selftests, GCC      6011   3651 ->  3673   -3.74 %  -4.28 %
-  Cilium              5193   5189 ->  5189   -0.80 %  -1.76 %
-  sched_ext           1272   1163 ->  1163   +0.05 %  +0.02 %
-  katran, bpfjailer    538    511 ->   511   -0.48 %  -0.66 %
-  Rust                1089   1081 ->  1081   -5.33 %  -6.47 %
-  all                32913  23345 -> 23374   -2.69 %  -4.35 %
-
-To load them the kernel spends 1.9 % more instructions on the C programs
-and 4.1 % fewer on those in Rust (perf stat): scev.c analyzes all code
-(patches 7 and 12), the main pass verifies fewer insns and states
-(patch 24). mem_peak of veristat goes down by 0.8 % and 7.4 %. Load time
-follows the instructions: 2 to 4 % more for the C programs, 5 to 7 % less
-for those in Rust. To load Tetragon, Tracee and Falco it spends 0.5 %,
-3.5 % and 2.1 % more instructions, load time goes up by 0 to 3 %, mem_peak
-goes down by 3.4 %, 0.2 % and 0.1 %.
-
-v1 -> v2:
-v1 rejected programs that load today. Most of them at the removal of
-scalar ids: links that only a state knows. The two that real programs were
-found to depend on are back, without ids:
-- A bpf_loop() callback or a static subprog loads a field of a struct on
-  the stack of its caller, tests it and loads it again. New patch 18.
-- A copy that is made on each of two paths: recvfrom_x of Falco. New
-  patch 13.
-The others are listed in patch 22.
-- A 32-bit jump refines the 32-bit range of a register that is linked in
-  64 bits, a slot that holds a 32-bit spill is linked modulo 2^32
-  (patch 12).
-- 'for (i = n; i > 0; i--) a[i - 1]' (patch 20).
-- v1's patch 9, the check of writes against bpf_may_write_mask(), is
-  dropped. It said "verifier bug" on valid programs with four frames, and
-  it was right: new patch 9 fixes arg_track_deref() in liveness.c.
-- Irreducible loops are analyzed by the worklist of all other loops, not
-  basic block by basic block (patch 21).
-From the review of v1:
-- The operands of a phi have no defs (patch 6).
-- Fixes tags, read-only memory (patch 8).
-- A slice buffer at a variable stack offset, a slice of 0 bytes, var_off
-  that don't overlap, a fill from a slot that a slice may alias (patch 12).
-- No recomputed pointer if the sum is empty (patch 16).
-v1: https://lore.kernel.org/bpf/20261109064715.2382452-1-alexei.starovoitov@gmail.com/
-
-[1] https://lore.kernel.org/bpf/20261020161907.2115379-1-vineet.gupta@linux.dev/
-
+Fixes: 8100928c8814 ("bpf: Support new sign-extension mov insns")
+Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+---
+ kernel/bpf/verifier.c | 20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
-Alexei Starovoitov (27):
-  bpf: Model 32-bit shifts and divisions exactly in scalar evolution
-  bpf: Construct scalar evolution expressions without allocations
-  bpf: Don't join dead registers in scalar evolution
-  bpf: Simplify scalar evolution expressions at construction
-  bpf: Give SSA names to the values that scalar evolution does not track
-  bpf: Compute scalar evolution expressions for whole subprogs
-  bpf: Mark the attr argument of bpf_sys_bpf() as MEM_WRITE
-  bpf: Include older frames in a fill through an imprecise stack pointer
-  bpf: Detect a dead branch when a range and var_off don't overlap
-  bpf: Don't treat half of a 64-bit spill as a 32-bit spill on big
-    endian
-  bpf: Refine registers linked by scalar evolution at conditional jumps
-  bpf: Value number the phis of scalar evolution
-  selftests/bpf: Test registers linked by scalar evolution
-  bpf: Recompute a pointer after the jump that bounds its index
-  selftests/bpf: Test a pointer computed before its index is bounded
-  bpf: Promote memory behind a pointer to SCEV registers
-  selftests/bpf: Test the memory of a caller that a jump tests
-  bpf: Find a copy of an induction variable without scalar ids
-  bpf: Compute scalar evolution expressions in irreducible loops
-  bpf: Remove sync_linked_regs(), refine by scalar evolution only
-  bpf: Recognize copies of a scalar by their ranges in
-    flow_join_makes_up()
-  bpf: Stop assigning ids to scalars
-  bpf: Remove scalar ids from regsafe()
-  bpf: Remove scalar ids from the join of states
-  bpf: Remove scalar ids from the log and from bpf_verifier.h
-  bpf: Support sign-extended 32-bit linear scalar evolution
-  selftests/bpf: Test loops with a sign-extended 32-bit induction
-    variable
-
-Vineet Gupta (2):
-  bpf: Keep the 32-bit range across a no-op sign extension
-  selftests/bpf: Test sign extensions of a range and of a linked
-    register
-
- include/linux/bpf_verifier.h                  |   55 +-
- kernel/bpf/flow.c                             |   15 +-
- kernel/bpf/join.c                             |   54 +-
- kernel/bpf/liveness.c                         |   17 +-
- kernel/bpf/log.c                              |   10 +-
- kernel/bpf/scev.c                             | 2061 +++++++++++++----
- kernel/bpf/states.c                           |  127 +-
- kernel/bpf/syscall.c                          |    2 +-
- kernel/bpf/verifier.c                         |  614 ++---
- .../selftests/bpf/prog_tests/reg_bounds.c     |    5 +-
- .../selftests/bpf/progs/verifier_arena.c      |   70 +
- .../bpf/progs/verifier_array_access.c         |    2 +-
- .../selftests/bpf/progs/verifier_bounds.c     |   37 +-
- .../bpf/progs/verifier_bounds_step.c          |    6 +-
- .../bpf/progs/verifier_direct_packet_access.c |    2 +-
- .../bpf/progs/verifier_linked_scalars.c       |    7 +-
- .../selftests/bpf/progs/verifier_live_stack.c |   60 +
- .../selftests/bpf/progs/verifier_loop_latch.c |   49 +-
- .../selftests/bpf/progs/verifier_movsx.c      |  186 ++
- .../selftests/bpf/progs/verifier_reg_equal.c  |   11 +-
- .../selftests/bpf/progs/verifier_regalloc.c   |    2 +-
- .../selftests/bpf/progs/verifier_scalar_ids.c |   70 +-
- .../selftests/bpf/progs/verifier_scev.c       |  492 +++-
- .../selftests/bpf/progs/verifier_spill_fill.c |   31 +
- 24 files changed, 2802 insertions(+), 1183 deletions(-)
-
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 20b1b9ff574c..5bffc1e288f6 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6441,14 +6441,28 @@ static void set_sext32_default_val(struct bpf_reg_state *reg, int size)
+ static void coerce_subreg_to_size_sx(struct bpf_reg_state *reg, int size)
+ {
+ 	s32 init_s32_max, init_s32_min, s32_max, s32_min, u32_val;
++	s32 field_smin, field_smax;
+ 	u32 top_smax_value, top_smin_value;
+ 	u32 num_bits = size * 8;
+ 
++	if (size == 1) {
++		field_smin = S8_MIN;
++		field_smax = S8_MAX;
++	} else {
++		/* size == 2 */
++		field_smin = S16_MIN;
++		field_smax = S16_MAX;
++	}
++
+ 	/*
+-	 * If value fits the non-negative half of the signed N-bit range,
+-	 * sign extension is a noop.
++	 * The range already fits the signed N-bit range, so (sN)v == v for every
++	 * value of the low 32 bits and the sign extension is a no-op.
++	 *
++	 * This has to precede reg_step_reset() below: the base/step line stays.
++	 * It is about all 64 bits: zext_32_to_64() in the caller discards it
++	 * if the upper 32 bits are not zero.
+ 	 */
+-	if (reg_umax(reg) < (1ULL << (num_bits - 1)))
++	if (reg_s32_min(reg) >= field_smin && reg_s32_max(reg) <= field_smax)
+ 		return;
+ 
+ 	/* See comment at reg_step_check_unsigned(). */
 -- 
 2.55.0
 
