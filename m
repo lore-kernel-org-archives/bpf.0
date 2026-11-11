@@ -1,85 +1,105 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.10.208.40
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794361344;
-	b=QXSP2aQsvDTVfoQQiE/d4n5l4cE3xgrnlABSOVASd0gfXlRCwlunU0BACJDTSnGIqTd3
-	 OXTns+78IyIYq6YlhkFrh9fxgAw46qOgxfulfyC9DOm2wyEFyIFY3Wf2TQME82886PU/B
-	 MK1e0H8XVGcSBC8auhg5w4BYH/oPF2oxeZP1L7ylbdQEruDV+zc6YafnjHxvmRs4RpJMe
-	 QZ328BLuXhKiD+k703k6TNU8pWJOvHrCOMSmk+zXu8Fh28ywEuIOn/XRrykRXOxehFK66
-	 lnzxWSsDqmd1xDodKjUSP/RwIT1KyN44ezZYcY5Hnfki2yDgWUPeZSidm/pj5rZEUxw==
+	t=1794362369;
+	b=HF51/A01s74Gb3qbAyXnmVveIA+P3PpuBoS3X4YhibWRcS/CndB6FPt1MU/DtCxGSLZD
+	 L5F0onC00TIX6Hr2eaTdGlsygG9QuY2Ri6XwWV64PTyIl2qu8TpN4mTeMy8izoxy7+4RZ
+	 IaayZTkaChmmco3SOmn7xX83SwcPLA5vzFMdIGzEUnjIL5jHrN6m7iTHdN133Bf3BCPwK
+	 20ku32yYlGG9R0chc2H5KzHotUSu95EiL4/mRQuy3xWJzrq3SZtsYzeRquNmfcHBxWom1
+	 ptZ6EqPS9U9HsgptPZAHdLtOj9dExv2o/+Jcn3C3olVFCMPNINLwQIqG8uKWxpBEkvA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794361344;
-	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
-	 X-Rspamd-Queue-Id;
-	bh=g3YMKqL7Zig4N1u5uNQ3udwfmaIwcfVBjpYpAiJaW48=;
-	b=k6yfz8TYtO0wu+GP6EM2lIf3heg5EurTOvmyGsCAh340O/eEPpHz0OMeaGy8jZ6Bpy4G
-	 im5zgeRmQmOuhMR/FBqOnDhbf5MqMUlhC3mlnhqVryPfuCExDmlORSEGxQyP3xklO6JxM
-	 9EExIPXXma57Z90p/VqoiKPicyFW+ebLeE5XzI/hJE9NEJ4HD4pMZygF4eEVkQmr59JmT
-	 XigZn1TsjiFWl1ADIVAuzLwvKyGLM8OFomVHs6VwihS4P751tta5TiIhg1Ht6d4OHAQLZ
-	 zDpyf69iM1/E6Ae3v2d2UBnAI8yyAUzFzBrCB9dLjs5+thkCTX8plO9mGMvjGN8/J/g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794362369;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=2ke5kyJBmq0AFCcx3Fu7oLeZm6H/B0W+HhAkyx1DQsI=;
+	b=KY7Nkhz93Ra58RL6uMhPgKYZYyEyOKARHar7pLha2rt/SVm2zbQIA/jTki8OJNaVMkCq
+	 6eOzSQ7iv4pSuUcqj9SBU4gxHNuIBsJbgUJ8x8YdqqHF/Jy/R5NfmJVBWWT8r71LYdLZN
+	 7VBPgUUHwYHrGifbzMxcyIVg+CvdJAfBuEeOoo0Yn1NEiRa+gp7rqklTPA1O+gaIknRH0
+	 0TxpY1Iz9Re6vGyEIRKcOalqNG4M7oF5kD/7nI5pAPRPYS9V+COeTBchJjzwcSDY8F3tM
+	 CCpMmfBZGiWyMsxUAr/8QWhsk54nu54MFmCGkRvV8Ks5iXZ4pWonm8y23T9ylGA89nA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=mandelbit.com;
-	spf=pass smtp.mailfrom=mandelbit.com;
-	dkim=pass header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=jcbc3NCE;
-	arc=none smtp.remote-ip=195.10.208.40
-Received: from mout-b-210.mailbox.org (mout-b-210.mailbox.org [195.10.208.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=cloudflare.com;
+	spf=pass smtp.mailfrom=cloudflare.com;
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=S5gUk4di;
+	arc=none smtp.remote-ip=209.85.208.51
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8941F606A326;
-	Wed, 11 Nov 2026 01:42:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8941F606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mandelbit.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mandelbit.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E493B606A31C
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 01:59:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E493B606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=jcbc3NCE
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-b-210.mailbox.org (Postfix) with ESMTPS id 4jPR8k6g8tzFq3n;
-	Wed, 11 Nov 2026 02:42:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mandelbit.com;
-	s=MBO0001; t=1794361335;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=g3YMKqL7Zig4N1u5uNQ3udwfmaIwcfVBjpYpAiJaW48=;
-	b=jcbc3NCE1+Oc8wULKs2CBF/KuPayvlqKhR4DOPiHiYjyzllL+uijry5Kv8lBl9D4e7MPyi
-	aHXPrkPhtA4dwzBYNPLj3hMQdrOfi1kIfLzr2pjfEW5On/xL8HQQi7qp15Qet7TBtSAXqE
-	UtVe/HzvYMqvlNnd8Wttq5vwshTz3Hsft+HkJHYcATsHZyMuMON2S9MK3tQrDJROpmyQ/+
-	ULdYk5K4VMC1kscFTJmDGJX8Yo6GMOTTAsbXXP0BajQ3y3rJINBpo3RbLT8ETgC7BM5AQQ
-	bGPFJbk72UowPJcNqyHftxU2UGZDueJvrNJFqTRLp5wzMRImKfk6Yvu4o11TdA==
-Authentication-Results: outgoing_mbo_mout;
-	dkim=none;
-	spf=pass (outgoing_mbo_mout: domain of antonio@mandelbit.com designates 2001:67c:2050:b231:465::2 as permitted sender) smtp.mailfrom=antonio@mandelbit.com
-From: Antonio Quartulli <antonio@mandelbit.com>
-To: willemdebruijn.kernel@gmail.com,
-	jasowangio@gmail.com
-Cc: Antonio Quartulli <antonio@mandelbit.com>,
-	andrew+netdev@lunn.ch,
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=S5gUk4di
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-6b56c428212so3612438a12.2
+        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 17:59:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1794362367; x=1794967167; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=2ke5kyJBmq0AFCcx3Fu7oLeZm6H/B0W+HhAkyx1DQsI=;
+        b=S5gUk4dimJhKaLynL3tjG1twjvBv2NBjeIh62CUJ0NqRTEyi+tsShsPrvV1cWhQd4y
+         wgEM5GdyDHpe4DQ3ei6bfZRquKgULlS5MrKWXxNBbD1rPYLIz3DgkDg7hhNwHU0MIs1F
+         MWcaD4YdkKLNipDvkPqD9ebyZOWngy1bQTZlttfDsjCB/3oz2bOMvGHrP73S+G9gfCsr
+         SJhFCiLdBmgu1RoSbdao+CzdhvrIjIGIb6BMbKTxS7LCFFycAvFSLqTx2rmFSVSlHtU+
+         +Pe6DcEHmClnNzPZWVFWkKTjs2PGPK9CGc7loRSucdDS//goGzoobiL5ipSYmBT2MEA8
+         CsFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794362367; x=1794967167;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=2ke5kyJBmq0AFCcx3Fu7oLeZm6H/B0W+HhAkyx1DQsI=;
+        b=GngdIb6JybLcM5vNK6zYxH4H3Lmk+zwC2cd6bNRDC/G+f+tGxT/ReSzAYhRQMaBU6g
+         MlXyQbB5MhooMxNtUccmUgcwif1JFCqnHPpr9rRVfU/wRchf7oCpB2CGqiqB/mRGs47A
+         waB80p4N3FWW75qMUN6a4cCNI1/DBLRvxCAG2jyjOtCjNSjklY8HtpLMDJuuBARvrk1P
+         t9Z/5Abgel9xWgrw04kIIXaA4HVqmVsrnvgrTYDqE0P3UY9j/pepGtHexw6av4KWvmiJ
+         sQ72EAHx0rGQgV79FUXV+6HljfeaeqxGuyk/FDImnKZxCOFtMEzpuLOXRMvZXxDgUPdL
+         cYsw==
+X-Forwarded-Encrypted: i=1; AL+hErHzdHDeA6f4rUSONvfOsM3c5/zEOadWGEeZtJ9JAU82TiTUY8+gczU3PyZIem71Q3pG6wg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z83FUL0Ur5dvjzxtO/ViKpFOFRcxSiQa0MVKeyeydGlyACbhklK
+	99yv0DKNpML+fZtOxCNI2MC8jn4UUv7h+A9DC3YJcymqxtNpfFDMAy4xQBQrc0BIADE=
+X-Gm-Gg: AYBFou3GwyfSk2WskBJAdraY9v58XnZ8YqosPusIdjuRJZlT8saQwhfdV9VaxHZQ0Zl
+	kUkLaaufOzz3kiLQxdHSmCz75TndTeXw0sqktchW669tCDk5n7+6K5xKkgbzOk+aPfnbCjcj0Yt
+	2r6fUnZzHw32NrpTHhBBoSYi61/aI59C57MdxmuT60uyVuzxvT95El2PrErPPebRuYJahgxR/US
+	X0vM3ZuH0HZFldF2LC4G8yBhF6CC5s5mp6TNxGUR9SUT1/EMbmm9Q74O9p0tIHwYyoQXe3rTmZT
+	OTKFC/TR63KXgAKTC7mXRIjIIDgftlnDj2gHJ8wESgMy8sa3YZPKKRcfyzE/Mp5C1bl2qGMz0mN
+	UEQGqkVFEuyfOVhUlCGG3Mn+utKIqjz+muRRo0J0fQi5wDczSQC3I2EtHotbHEeupNMLWs8bA3T
+	oSjZCelOl89VimI+CwORrChp8fv8dmLt758LUMloazyFjvFa/BwKGKtbqUW+eWMJt1iDrcdy1zZ
+	l3uO47hpS2JsBXK2tnTilb2LVR4LQtWUu9ahvavTNqaIM8P/wZFHb/yyphmvbXxrswjvLt1sQtv
+	AGn7LUyM/rcCDiQzhT4CuLHA4NwomXwX4e5lfwxgoQ0+lPjYU3KVHHnPTQ==
+X-Received: by 2002:a05:6402:4005:b0:6b7:8444:a456 with SMTP id 4fb4d7f45d1cf-6b78444a614mr130398a12.0.1794362367268;
+        Tue, 10 Nov 2026 17:59:27 -0800 (PST)
+Received: from L9JK9NPFH9 ([104.28.20.58])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b7834cdc23sm147498a12.12.2026.11.10.17.59.24
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 10 Nov 2026 17:59:25 -0800 (PST)
+From: Tianyi Gao <tianyi@cloudflare.com>
+To: netdev@vger.kernel.org
+Cc: andrew+netdev@lunn.ch,
 	davem@davemloft.net,
 	edumazet@kernel.org,
 	kuba@kernel.org,
 	pabeni@redhat.com,
+	toke@redhat.com,
+	lorenzo@kernel.org,
 	horms@kernel.org,
-	mst@redhat.com,
-	eperezma@redhat.com,
+	bpf@vger.kernel.org,
 	shuah@kernel.org,
+	hawk@kernel.org,
+	kernel-team@cloudflare.com,
 	ast@kernel.org,
 	daniel@iogearbox.net,
-	hawk@kernel.org,
 	john.fastabend@gmail.com,
 	sdf@fomichev.me,
-	maheshb@google.com,
-	peterpenkov96@gmail.com,
-	netdev@vger.kernel.org,
-	virtualization@lists.linux.dev,
 	linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH net v5 0/2] tun: bound the NAPI receive queue
-Date: Wed, 11 Nov 2026 02:42:01 +0100
-Message-ID: <20261111014208.1795777-1-antonio@mandelbit.com>
+	Tianyi Gao <tianyi@cloudflare.com>
+Subject: [PATCH net-next v2 0/3] veth: link RX queues to their NAPI instances
+Date: Wed, 11 Nov 2026 01:59:19 +0000
+Message-ID: <20261111015922.67745-1-tianyi@cloudflare.com>
 X-Mailer: git-send-email 2.56.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -91,77 +111,51 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4jPR8k6g8tzFq3n
 
-With IFF_NAPI, tun queues written packets for NAPI on an unbounded
-list, which an unprivileged user can grow until the system runs out of
-memory. Patch 1 bounds it by netdev_max_backlog; patch 2 adds a
-kselftest for the vhost-net paths into that queue.
+veth does not link its RX queues to their NAPI instances. queue-get
+therefore reports no napi-id for them. napi-get lists the NAPI instances
+of a veth, and their thread PIDs when NAPI is threaded. It does not show
+which RX queue each instance polls. Userspace cannot tell which NAPI
+thread to pin for a given queue, or which NAPI to change with napi-set.
 
-v5:
-- Take at most budget packets in the NAPI poll instead of keeping the
-  leftovers on a separate queue (Willem)
-- Keep only the lockless check, before allocating, also in
-  tun_xdp_one() (Willem)
-- Say that an OOM is still possible with large packets and many queues,
-  if hard to reach in practice (Sashiko)
-- selftest: little-endian ring, buffers returned in any order, lower
-  netdev_max_backlog only after setup and restore it first, any non-zero
-  experimental_zcopytx, .gitignore entry (Sashiko)
-- Rebase on net, which conflicted in selftests/net/config
+There is also no way to busy poll an AF_XDP socket bound to a veth
+queue. xsk_bind() takes the socket's NAPI ID from the RX queue, and a
+veth RX queue has none.
 
-v4: https://lore.kernel.org/netdev/20261103142232.1869185-1-antonio@mandelbit.com/
-- Keep the poll's leftovers on a separate queue, like process_backlog():
-  v3 did not bound the queue when the poll ran on another CPU (Sashiko)
-- Schedule NAPI when dropping: with netdev_max_backlog below
-  NAPI_POLL_WEIGHT, MSG_MORE senders (vhost-net) stalled the queue
-  (Sashiko)
-- Use goto free_skb for the locked drop (Willem)
-- Add a vhost-net kselftest (patch 2); the tun kselftest passes (Willem)
-- Cc vhost, kselftest and XDP maintainers and the Fixes author/acker
+Patch 1 is a cleanup to ease review of patch 2. veth_enable_xdp_range()
+adds the NAPI instances only to pass their napi_id to
+xdp_rxq_info_reg(), which no longer uses it. Patch 1 moves
+netif_napi_add() into the loop that enables the NAPI instances. It also
+removes the arguments and wrappers that came with adding the NAPI
+instances in two places.
 
-v3: https://lore.kernel.org/netdev/20261031231444.1528758-1-antonio@mandelbit.com/
-- Also bound the sendmsg() paths, which share the queue: zerocopy
-  buffers are completed when dropped early, and the batched XDP buffers
-  of tun_xdp_one() are covered too (Willem)
-- Drop the IFF_NAPI_FRAGS exclusion (Willem)
-- Recheck under the queue lock before queueing (Willem)
-- Compare with > like enqueue_to_backlog() (Willem)
-- Keep the includes sorted (Willem)
-- Add the reproducer and a testing statement to the commit message
+Patch 2 calls netif_queue_set_napi() in veth_napi_enable_range(), after
+napi_enable(). In veth_napi_del_range(), it clears the link with NULL
+before napi_disable().
 
-v2: https://lore.kernel.org/netdev/20261030152540.1409884-1-antonio@mandelbit.com/
-- Cc netdev and the maintainers
+Patch 3 adds RX queue NAPI link checks to veth.sh. The napi-id of every
+RX queue must match a NAPI instance of the device. The queues must be
+linked only while NAPI is enabled. The checks run with GRO on and with
+XDP attached, and across RX channel changes and link down/up.
 
-Testing, in an x86-64 VM with 1 and 2 vCPUs, on net ead744fd1ce0:
-- Reproducer from patch 1, 15 seconds, 500 and 3000 iptables rules,
-  1400 to 65000-byte packets: memory use stays flat, no OOM; forwarding
-  rate unchanged (152577 packets in 3 s without the patch, 151277 with
-  it).
-- tun_vhost (patch 2), with vhost_net experimental_zcopytx=0 and =1:
-  passes with patch 1. Without it, every variant fails (nothing is
-  dropped); removing the tun_xdp_one() check fails the batch variant,
-  removing the zerocopy completion fails the zerocopy one, and removing
-  the NAPI scheduling on drop fails the copy and zerocopy ones.
-- tun kselftest: pass:91 fail:0 xfail:12, as without the patch.
+---
+Changes in v2:
+- Rebase on net-next. Patch 3 no longer applied after commit
+  c1f04ea0aa0f ("selftests: net: check veth carrier after changing
+  channel counts"). The conflict is in context only. No code change.
+- v1: https://lore.kernel.org/all/20261105143356.17062-1-tianyi@cloudflare.com/
 
-Notes:
-- Affected since 943170998b20 (v4.15).
-- Mitigation: disallow unprivileged user namespaces or restrict
-  access to /dev/net/tun.
+Tianyi Gao (3):
+  veth: refactor NAPI enable paths
+  veth: link RX queues to their NAPI instances
+  selftests: net: veth: test RX queue NAPI links
 
-Antonio Quartulli (2):
-  tun: bound the NAPI receive queue
-  selftests: net: add a vhost-net test for the tun NAPI queue bound
+ drivers/net/veth.c                  | 83 ++++++++---------------------
+ tools/testing/selftests/net/veth.sh | 79 ++++++++++++++++++++++++++-
+ 2 files changed, 99 insertions(+), 63 deletions(-)
 
- drivers/net/tun.c                       |  59 +++-
- tools/testing/selftests/net/.gitignore  |   1 +
- tools/testing/selftests/net/Makefile    |   1 +
- tools/testing/selftests/net/config      |   1 +
- tools/testing/selftests/net/tun_vhost.c | 409 ++++++++++++++++++++++++
- 5 files changed, 463 insertions(+), 8 deletions(-)
- create mode 100644 tools/testing/selftests/net/tun_vhost.c
 
+base-commit: 79ee9e6768721f337952e9b3edd14cedbbc03030
 -- 
 2.56.0
 
