@@ -1,56 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.215
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794411008;
-	b=sukgrQK8KLNDdotGMsE2FmKLQr+waH5LVANqHhRfhiuloOShbrO3IKL703HgSppn95PV
-	 iVKVrpCd9l4ouqlr4bLn8AKIpXh2EyGh6xlm8OsAJcbM9XNjZliVofVEqwuIDuRlU7/cJ
-	 ouY8sY1L35AAdmn4VaLcSlbUc34q7X1M2Y/PESVKXP1ZmxRHG6TV7MSJSZPlWejHJWQAk
-	 MskdKpMvBnQcV2xcS+rOTGg2u2O5PSFggch109ZOm05N8cglhZxlnLoNDcgQWLR1m3j1f
-	 Ax5JAy06/xsINpN/jZf5ymq6sTRE0lMAb26dxWy3di6cYh/3kPheb+/2ndzoCduvGHg==
+	t=1794411117;
+	b=4eDqCIbYT/pWa/DrbHww+REO+pINAHjaMEWGbaMnVs73hcZ5MsIVUIjWiVQXQpbdwxoK
+	 NGzshJehRSqNMnf9xt2dYQqkaOwNIK83a9iIQ1O9Q6lRtR19pVAbdud0QJl8thIi9k+45
+	 TLdIzQFX1r8YVqCsl3CgnpSjr5ZObseIz/c4H1VXdtPPSvh5os5P9PQtsRM5sSZoZngEf
+	 gJn1AA0QcUeM4B9dkLw8x/yvaHTuz7ifKksM5G785n0Kgy6i+avABtrrenSGSRE5ICH3Q
+	 q/ZIE4F3Y+OgOa/7wNNgNQ6LgFiD+Qd0d2S+ktJoY3EssvC872u/TJZePnG8/0zmQoA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794411008;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=v2iF4eIIgFhNwGjef6kaSNZwlndj5tyzzHo3WQIwyok=;
-	b=o1jT1dyray/L8jJyGEU90Auww07oUzOrYEJh4zZd1sBOuBKrSCF4g0NgYx61kpCwCIdB
-	 u+M9RaS11+7Ef3yjXBI2E3T2qYglA21Z9OuwyzRLKuaAFFqEL1/p+3m5EWWZWP8MiyvEL
-	 npf2c8SWHjWVyqqWOW7lcEr/m2GaV5Llcefy4oy5g/xbi0GqkIzy5gFvTF43ZPBIFBvef
-	 /51qng/9S2SkrUS/WqWsLK9+umkf+TGdbM+QTb73dd77UdejDTkowV+/asafl0rKf7oVx
-	 1L88fWTZsLsyJfJvs+vjLn4m7QUmYpuSrzUmX2vTLMzPOzmNsP8LuTUOCRErHGzGyew==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794411117;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=yEIA6Zmz02BTCzQZDjg7NRu0QFN0RHxgpEwj9oihF+4=;
+	b=tDj7du62ncLKX6Qz/sYpQ3F9bLYNcoy6ixAj6BRpe+Dm1b1fTgwQhMWuoG8oiEvMJR+d
+	 kicnHo5cfjpHNCJPyp4Ciom/Xj+YNJvy6qUIsn/5LyxuKhDGuUjrTyMZNZXJhq+7GI0Ye
+	 puFa2yJy0LqDJt9rcUZxXZqHZBk8Ge/JnQBjgy8vVFSwzyJE6X1Fb4bFBSnNUw87IUtVw
+	 2QJ8I7Aa5/08EoUTFz3TKZorQlkx9XJBaGKhUHtX0S6k8ymvmVjf/Imqs7+Q4Se63xJsz
+	 2NtxlohDAiBii1IJiFOTCDd/pvnFX1hayccK4PqzwjzDopPDWhRrTTAYs+8exM+18Bg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IZOinNzK;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=dBZM5A4l;
+	arc=none smtp.remote-ip=95.215.58.215
+Received: from mta1.migadu.com (out-215.mta1.migadu.com [95.215.58.215])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36EC3606A324
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 15:30:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6C4C606A32A
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 15:31:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D6C4C606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IZOinNzK
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B48341F00A05;
-	Wed, 11 Nov 2026 15:30:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794411007;
-	bh=v2iF4eIIgFhNwGjef6kaSNZwlndj5tyzzHo3WQIwyok=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=IZOinNzKzBuhLDuAQYkmQHxfLpCzeV9YjGeJNCCxdDzyrBuNirvVTqdJfqTl7xrri
-	 0rAJZpWGGLpg0YZy8aeM1quy+b38YJOYIQ66IzKEGVV2kWzqdlRlpC6pbIHG4efy7B
-	 7ElEeHMvwlcx0er5Dm+WH8ayt8vGF0IExBa5ZN2MzchK4qYrsvIXRU7kjDqwzHw7rY
-	 n3smfEKsH88piXXSqSDwkV22lQGvrE8aDZ7MTO+dZ8pkWGXGj0T962KUZYU8GwdedW
-	 nrGpBTa0VJDjnFV/nWqDc3wSbQwdFf+hQeJ62QVsTeZBqNW962PIBRfu7tQfa0YISK
-	 4oZtLCq+nk4WQ==
-Message-ID: <sashiko-outbox-209223@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v1 12/29] bpf: Release resources in hidden
- slots on bpf_throw()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <06579bd381e516e66f97d7b0c00e55d019011a7e.1794399387.git.memxor@gmail.com>
-References: <cover.1794399387.git.memxor@gmail.com>
- <06579bd381e516e66f97d7b0c00e55d019011a7e.1794399387.git.memxor@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 11 Nov 2026 15:30:07 +0000
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=dBZM5A4l
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=NjcZ2vs086wrkeO3l/vjfd5QbHjdbw8ASBFYAH9BBjE=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794411107; v=1; x=1795015907;
+ b=dBZM5A4lIIKKb7ticjEP2eL/HioI0Hp1LgmI4yAus5DfyRQ2BAewrMRWVlfwISZ0fmb5ZrnN
+ vMNRzU8i3WB6GJV3ama9V+u83WeUZTapB9u0P6+zbS9LqJHyYmZlmd2Sk9adM6zZuot1RHI561Y
+ H4C/KL00Vc2UzkOB9/croRyg=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 59aee4a50207fa8f;
+	Wed, 11 Nov 2026 15:31:47 +0000
+X-Mizu-Trace-ID: 59aee4a50207fa8f
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <28d1e284-501f-47f8-b155-bbc2255f7a06@linux.dev>
+Date: Wed, 11 Nov 2026 23:31:35 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,105 +57,83 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 1/9] bpf: Add log support for tracing link_create
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
+ martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ rostedt@goodmis.org, mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
+ kpsingh@kernel.org, matt@bobrowski.net, shuah@kernel.org,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+ martin.lau@kernel.org, mason@kernel.org
+References: <20261109140816.5196-2-leon.hwang@linux.dev>
+ <5ed2ec09ce8a3ce5477a658b68c6315499ef67793014be27de18ee57ec968e12@mail.kernel.org>
+Content-Language: en-US
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <5ed2ec09ce8a3ce5477a658b68c6315499ef67793014be27de18ee57ec968e12@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [High] bpf: broken IRQ state restoration for spinlocks in
-  bpf_unwind_release_frame()
---
+On 2026/11/9 22:47, bot+bpf-ci@kernel.org wrote:
+>> bpf: Add log support for tracing link_create
+> 
+> TL;DR: Logging is incomplete: the freplace max_ctx_offset check in
+> bpf_tracing_prog_attach() still returns -EINVAL with an empty log, and the
+> saved_dst type mismatch may too. No functional regression.
+> 
+>> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+>> --- a/kernel/bpf/syscall.c
+>> +++ b/kernel/bpf/syscall.c
+> 
+> [ ... ]
+> 
+>> @@ -3843,6 +3849,7 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
+>>  	 */
+>>  	if (prog->type == BPF_PROG_TYPE_EXT &&
+>>  	    prog->aux->kprobe_write_ctx != tgt_prog->aux->kprobe_write_ctx) {
+>> +		bpf_log(log, "Invalid kprobe_write_ctx.\n");
+>>  		err = -EINVAL;
+>>  		goto out_unlock;
+>>  	}
+> 
+> The check right after this one still returns -EINVAL without writing
+> anything to the log:
+> 
+> 	if (prog->type == BPF_PROG_TYPE_EXT &&
+> 	    (tgt_prog->type == BPF_PROG_TYPE_RAW_TRACEPOINT ||
+> 	     tgt_prog->type == BPF_PROG_TYPE_TRACEPOINT ||
+> 	     tgt_prog->type == BPF_PROG_TYPE_SYSCALL) &&
+> 	    prog->aux->max_ctx_offset > tgt_prog->aux->max_ctx_offset) {
+> 		err = -EINVAL;
+> 		goto out_unlock;
+> 	}
+> 
+> An freplace program whose max_ctx_offset is larger than that of a
+> RAW_TRACEPOINT, TRACEPOINT or SYSCALL target will get -EINVAL from
+> link_create with an empty log and log_true_size of 0.  That is the same
+> kind of invalid freplace target as the kprobe_write_ctx mismatch above,
+> which now logs.  This isn't a functional regression, but was this check
+> missed?
+> 
+> Would something like this cover it?
+> 
+> 	bpf_log(log, "Extension accesses more ctx than its target.\n");
 
-commit bc130ef20556bd747c8015574438bb24ed4f95b8
-Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Will add such log in the next revision.
 
-bpf: Release resources in hidden slots on bpf_throw()
+> 
+> Also, bpf_check_attach_target() still returns a bare -EINVAL for the
+> saved_dst_prog_type / saved_dst_attach_type mismatch, which is the
+> "freplace attachment to a new target" case the commit message mentions.
+> That code is in verifier.c, so it is outside this patch, but is it intended
+> to be left without a message?
 
-This commit adds runtime support in bpf_throw() to walk discarded BPF
-stack frames and release held locks, IRQ flags, sections, and referenced
-objects recorded in frame descriptors.
+It was intentional to avoid touching bpf_check_attach_target() code.
 
-[ ... ]
+Thanks,
+Leon
 
-> diff --git a/kernel/bpf/unwind.c b/kernel/bpf/unwind.c
-> new file mode 100644
-> index 0000000000000..3b488a4bd7592
-> --- /dev/null
-> +++ b/kernel/bpf/unwind.c
-
-[ ... ]
-
-> +static void bpf_unwind_release_frame(struct bpf_unwind_ctx *ctx, const s=
-truct bpf_prog *prog, u64 bp)
-> +{
-> +	const struct bpf_prog_aux *fn =3D bpf_prog_frame_aux(prog);
-> +	const struct bpf_frame_desc_pool *pool =3D fn->frame_desc_pool;
-> +	int passes =3D ctx->phase =3D=3D BPF_UNWIND_PHASE_LOCKS ? 2 : 1, pass, =
-s;
-> +	const struct bpf_frame_desc *d;
-> +	bool late;
-> +	u64 fp;
-> +	u32 i;
-> +
-> +	if (!fn->frame_desc)
-> +		return;
-> +	d =3D pool->desc[fn->frame_desc - 1];
-> +	fp =3D bpf_unwind_fp(fn, bp);
-> +	for (pass =3D 0; pass < passes; pass++) {
-> +		for (i =3D 0; i < d->nent; i++) {
-> +			const struct bpf_frame_desc_entry *ent =3D &d->ent[i];
-> +			const struct bpf_resource *res =3D &pool->resources[ent->res];
-> +			u64 *slot =3D (u64 *)(long)(fp + ent->off);
-> +			void *handle =3D (void *)(long)*slot;
-> +
-> +			if (ent->flags & BPF_FRAME_ENT_COUNTER) {
-> +				if (ctx->phase !=3D BPF_UNWIND_PHASE_LOCKS || pass)
-> +					continue;
-> +				s =3D section_index(res->kind);
-> +				ctx->section[s] =3D res;
-> +				ctx->nr_sections[s] +=3D (s64)*slot;
-> +				continue;
-> +			}
-> +			if (!handle || release_phase(res) !=3D ctx->phase)
-> +				continue;
-> +			late =3D res->kind =3D=3D BPF_RESOURCE_IRQ_FLAG &&
-> +			       !arch_irqs_disabled_flags(*(unsigned long *)handle);
-> +			if (passes =3D=3D 2 && late !=3D (pass =3D=3D 1))
-> +				continue;
-> +			bpf_unwind_release(res, handle);
-> +		}
-> +	}
-> +}
-
-[Severity: High]
-Does releasing BPF_RESOURCE_SPIN_LOCK in pass 0 corrupt the CPU interrupt
-state when a frame holds both a bpf_spin_lock and a nested
-bpf_res_spin_lock_irqsave()?
-
-bpf_spin_lock() saves interrupt flags in per-CPU irqsave_flags and
-disables local interrupts, and bpf_spin_unlock() restores irqsave_flags:
-
-kernel/bpf/helpers.c:__bpf_spin_unlock_irqrestore() {
-	unsigned long flags;
-
-	flags =3D __this_cpu_read(irqsave_flags);
-	__bpf_spin_unlock(lock);
-	local_irq_restore(flags);
-}
-
-bpf_res_spin_lock() and bpf_res_spin_lock_irqsave() are marked
-KF_SPINLOCK_SAFE and can be acquired while a bpf_spin_lock is held.  When
-a frame acquires bpf_spin_lock() with interrupts enabled and then calls
-bpf_res_spin_lock_irqsave(), irqsave_flags holds the enabled state while
-the stack slot for BPF_RESOURCE_IRQ_FLAG records interrupts as disabled.
-
-Because only BPF_RESOURCE_IRQ_FLAG is checked for late, pass 0 runs
-bpf_spin_unlock() first, re-enabling interrupts while the resilient
-spinlock is still held, and then runs bpf_local_irq_restore() on the
-BPF_RESOURCE_IRQ_FLAG slot, leaving local interrupts permanently disabled
-through sleeping destructors in BPF_UNWIND_PHASE_OBJS and after the BPF
-program returns.  In addition, releasing BPF_RESOURCE_RES_LOCK in pass 0
-calls preempt_enable() in bpf_res_spin_unlock() before pass 1 restores
-the interrupt state.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1794399387.gi=
-t.memxor@gmail.com?part=3D12
