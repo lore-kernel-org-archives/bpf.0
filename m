@@ -1,56 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.217.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794416246;
-	b=FmmllDpMm4eQOjrKh/8LkG07tTXQdHenfI6p1YQmIYpg7otNVJq/eExJ3Ac/Zinachct
-	 F7udMeIPIzDDOFd5I+omVR/Bex5fe/YPfk3fzAi27xnQS98vwEQypqPb8sjAqWw8ZepmW
-	 GfiM+L77+Lqxq9K17V8nCJKrfXKfYgnq+sHedM4Vw5fFUs4lOzRPYveVz4BpPlHu4BrrS
-	 NyVW3nLx5TnUS+hhzBxouxM9hbA5IR/jy1hor2gNG4xLAwiiInjv6n+nzObwy/bsmBEdA
-	 VnTnhXKU+ZbjI3lWBFMcAcs7dt6pRJ5C9YZgFTbdTepYzLVQe/JYrHv0L1HA8OR/Dpg==
+	t=1794416482;
+	b=mq0iiQ/yLdt3aTOt3bQBghb/ZwrmfZrlhN63rxBokNvNc5qve3fqXotuwWKpZoyqlvYl
+	 hVTdE0HL2bZA5FfA20wmRN7ZmCPbb2TCdU3EeEWD0Y6qcjqeWoo0msogpFv84iSeLqHII
+	 cjC/lDglvZ/34aB6/4SgGYZp650EYRX3uHNAIRAaduIXvjKVlcz1gAFjpHWqgiCkOqEzr
+	 JvhmoyOBUEWNWMwTxvGwhl/YJvTJ4uS9uX0i0NZh+8+q1vlxN6/KyPIRXXgE58rVedbOv
+	 4Pz8wj+nNFINiaKwaahwOfOVfRD/OadHhdayy59aY9u8CVZdAP13nv66qbCH0/Nm9Pg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794416246;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=LlBk1/s/45HNGcge7s3+nymhLej8cYXgLl3/Nt5KdiE=;
-	b=YHj3ZVnuZsLN08M8Jk9chU41mRafx/3XTjyLS+KfvC0y0xhvGJZTnBNMT2yetIppHhOg
-	 6fRixaXJdW7V/nacCpmt5yBgjCT+wOqMixSvi1LTK0vxq2N6s9jiIxR2m1hdnVuBPEFfZ
-	 nmzoMiVG3iGsWAa1CY8u1cZ6R3zmMLQxlo0Oy5janZ9aDPPmPA7WQWpeCCFEZuLaMHs7l
-	 UdBDXvMY4ZYm3mTzWuW703k31ESbF8GZItlT+uWp8+UgSR3vQbvWEjR07qPAmI/6+Ish9
-	 i/NjNHQlKK3PGjimrvXi+DAjLNwlvSXtX7/MJQl8Qp4tcYa6fhG+EqU0+LD/Op24vZQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794416482;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
+	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
+	bh=cNJr3c3uqZZVhSfWEr07FcVM+B83XjBK0ipGpurD8/w=;
+	b=YQSU3we1TWJnGYhMM3b3aBKwxP6B+c7PXfIlBfFx7vlgS4kFWgrYuqy/jQVyBjP8Wn/t
+	 FpiWZggvW8l/5nd9NkaAjawy+VshpJtJG0R2/dYdHzKxm8v4Oz8eF2pNXyko+rwz3SyJZ
+	 qO5t7+Cb6OpA1gbZGbUF977ji33Y3n/o1iWyGAXbUnXqqCNRmnulQ75HY/nyF08lR6svd
+	 IilOY7//y/M0wQpFckUsQBWg42On8Wv1G6V+kh7T6/Hc/GvtrNRAmP8hf1IOhNYU0K+dO
+	 vXTQedEpwxU4X0oExMFsFWfBOTXstQn088Zv3OKieUcnaPwlh0jOjry8/VbbIw1D5LA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hkUUMTyN;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eV24wG6k;
+	arc=none smtp.remote-ip=209.85.217.50
+Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com [209.85.217.50])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88AC1606A32D
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 16:57:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74D35606A32A
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 17:01:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 74D35606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hkUUMTyN
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0F381F00A05;
-	Wed, 11 Nov 2026 16:57:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794416246;
-	bh=LlBk1/s/45HNGcge7s3+nymhLej8cYXgLl3/Nt5KdiE=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=hkUUMTyNVQd1LRx/sravcC+uOT1sOzAJt8dzzjEoWu3ILjECxUnS/ZkRWc7dpdwvJ
-	 ErxjfVUgB/Bmu7T3eDqNW1fI/1Yk8cfdaeNvno6s18vpO6s9IQQtn2T729zs+h/0mU
-	 NClbK71szwiop3g25uhiDjXCkPto9JxVP4dwDSN8idREz4QtsFWuLnhDD6G8qBavBz
-	 28b+t9BlLzUzPvMnCcF4UGkfWyfXehPiF77y4lSEuvAunBcY4tjTowsZTC35Pec3pW
-	 Ol++aKkCm53mACHD0qnrs2P6ILzDvTOOeQoC59kdsdgLM1RktIwk86NLzGiYcPSB1D
-	 RXyys3FSkK6dg==
-Message-ID: <sashiko-outbox-209348@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v1 20/29] bpf: Transfer a reference to the
- callee that releases it
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <97453d9e1f65a31c7f6ffbc09a7eb9f89913c5f3.1794399387.git.memxor@gmail.com>
-References: <cover.1794399387.git.memxor@gmail.com>
- <97453d9e1f65a31c7f6ffbc09a7eb9f89913c5f3.1794399387.git.memxor@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 11 Nov 2026 16:57:25 +0000
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eV24wG6k
+Received: by mail-vs1-f50.google.com with SMTP id ada2fe7eead31-7d2e43ff4b4so33054137.0
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 09:01:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794416481; x=1795021281; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=cNJr3c3uqZZVhSfWEr07FcVM+B83XjBK0ipGpurD8/w=;
+        b=eV24wG6kUDKl/1BRzugsFu4O6Q8IMvuBMVX/hw3IwA8m/Qdq9KxFfGNdIwU/1eK/S/
+         ryB9W0aiepskzNkxFtuLuS1B8mDbwU0HwpPUMSHmC1vGEAs3AcwgrIuW2dj/HE+iOpfC
+         c2D/uE7ouHDAkBbJKtQh2hwdmG3Kxw5BCw6dYMAOxlPArZVX8CZnIRFqD41fzK06ZI1q
+         GThZ1b4wU1om1c6zeGKhdtmLDrJKAvlzi1ckauC5O0yIfDFOTVBPJyXqT0g4guj/7j90
+         CH18VtYry2bKaO8SsBtHxaYYhBDJn51m9CKVYwR7LJa5RW9yCa7mGQnRL7KBGekkvjZ2
+         vXMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794416481; x=1795021281;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=cNJr3c3uqZZVhSfWEr07FcVM+B83XjBK0ipGpurD8/w=;
+        b=R2r3YGE+ht9uU8zVgf4CmjmaUazQdbP9hUkIHhodi/UWN7yBhz3MRXrtBG9KDtk2Xs
+         zTpGzwoQzqHqxNwu9KxQ6bJ08+0s7eRIi5oucyDjfSzUPskpn8QNzRuFB7DmlKe+Z+xz
+         CWO2p8H5BKEXbOJP1rjcn3rnbELnNMm/fRuzD7YpvWnCOEWn1uFJc8jEw8FSlrhaCjSp
+         TvfbS5Md3l47oL5Ak8aSNhaHFhSgH3dHPI12xYDNV2CbKC349L3Uouj7WLkxuVJCfRWB
+         LnvsIcdaGLkUMdDI6mG6u4Von0ODzBu5YioB7wrK+SGM2UgXFDqNa0ctxETGb+fux2BC
+         pmfA==
+X-Forwarded-Encrypted: i=1; AL+hErHAuXAXT9A5Blo/2qJTTtqk2F7/3AH51zioblZnl2145b+iRx7UxgKj1rNdklmzpXPIeHI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8SAkFCkq/WfAKwskVhiwHFNn4BYzWKKGWdh1cHXK1fX71WpJ17
+	30v0f2Y9oNpmW2LZDGrMV9x/aT2KIKhuGnuX4WVURL9xCgKx/MsqJ8c/
+X-Gm-Gg: AYBFou39p1SctYqea12IPd2lgzLmtgvrxltPCdTicyqjnqmLW0HfLZntg7RwUCasV22
+	5ReIoZwKTn6K/wfBb1Bl4XtDaJr5CBdFcqr3tqHmATCTDO71oeqwJURN7fdzhWz7l/tRcAxKY+N
+	fFUXY/eVdNur9+mCDrUQ8TdnWMfkMWlCpD8ES8s3WTfoxwvzCeZ/LexdhSm4SoqfDeF7yG3kwnS
+	nPvI2p+dtMbNIaQpNAk0Ba7wD714kOb1WicajXU4xIGDW1Df7U7UV6u5GH7lzUeu+JYpNQbiMCh
+	/I34T1opg36Pdb7g3F5u54XQvnWaDcY7OH2kiPNHYORkDXcwEC/PBCsX8LiEe8hZbJYC8DuGNgv
+	c9/BdZDS7aDh1CqA/LIAZicvbzsg+DsjiSmlZUuDiPlDbOZMnma1WdYyRXOqoUqXCGlGuGR8PsH
+	ZHDrnQl76JZlBb9bB6DQKnm3xhasfMrV7egfjpqg2J+B5k+I1YeNtYO0hQvo2t0xm+RirGagqAu
+	Nk44R7zviGqGu/svgiSaRFNB9BwDnUJ/7dFmYgi94hVnCowuxWMcgNv8tVyIEa1gFqCoABIFs+w
+	KDR9tWmQUKd17ha9
+X-Received: by 2002:a05:6102:a4d:b0:7cc:905a:331a with SMTP id ada2fe7eead31-7d6316c856dmr19138137.14.1794416481052;
+        Wed, 11 Nov 2026 09:01:21 -0800 (PST)
+Received: from localhost ([2620:10d:c091:500::6:868a])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-7d302239188sm4078178137.2.2026.11.11.09.01.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Nov 2026 09:01:20 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,208 +87,90 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 11 Nov 2026 12:01:19 -0500
+Message-Id: <DMSJJY9PLHSR.39PSNUXEC82J4@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, "Andrew Lunn"
+ <andrew+netdev@lunn.ch>, =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?=
+ <bjorn@kernel.org>, <bpf@vger.kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Daniel Zahka" <daniel.zahka@gmail.com>, "Donald
+ Hunter" <donald.hunter@gmail.com>, "Eric Dumazet" <edumazet@kernel.org>,
+ "Jakub Kicinski" <kuba@kernel.org>, "Jamal Hadi Salim" <jhs@mojatatu.com>,
+ "Jiri Pirko" <jiri@resnulli.us>, "John Fastabend"
+ <john.fastabend@gmail.com>, <linux-doc@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-rdma@vger.kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Paolo Abeni" <pabeni@redhat.com>, "Saeed Mahameed" <saeedm@nvidia.com>,
+ "Simon Horman" <horms@kernel.org>, "Tariq Toukan" <tariqt@nvidia.com>, "Wei
+ Wang" <weiwan@google.com>, "Willem de Bruijn"
+ <willemdebruijn.kernel@gmail.com>
+Subject: Re: [PATCH net-next v1 00/15] psp: introduce socket-less
+ associations
+From: "Daniel Zahka" <daniel.zahka@gmail.com>
+To: "Todd Freed" <toddfreed@meta.com>, <netdev@vger.kernel.org>
+X-Mailer: aerc 0.21.0-threadmapfix
+References: <20261111005533.6436-1-toddfreed@meta.com>
+In-Reply-To: <20261111005533.6436-1-toddfreed@meta.com>
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issues to consider:
-- [High] bpf: reference transfer via dead args in
-  bpf_frame_desc_record_call()
-- [Medium] bpf: wrong consumed arg in foreign_release() when regs share
-  ref->id
---
+On Tue Nov 10, 2026 at 7:55 PM EST, Todd Freed wrote:
+> psp associations today are bound to a tcp socket when created. traffic
+> on that socket is encapsulated in transport-mode psp, and encrypted.
+>
 
-commit f7b2132e50e4597119ba4ba7d888e76f32a3bd7e
-Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+You can start sentences with capital letters in cover letters and commit
+messages.
 
-bpf: Transfer a reference to the callee that releases it
+> this series adds associations which aren't bound to a socket, which
+> allows psp encapsulation and encryption to be applied to forwarded
+> traffic. you can use this to transparently apply psp tunnels to flows,
+> with help from userspace to manage the tc rules and orchestrate key
+> exchange.
+>
+> the lifecycle of socket-less associations is managed over the psp
+> netlink family. socket-less associations are stored in a small registry,
+> and are addressable by id. the registry does not contain socket
+> associations.
+>
+> socket-less associations are on the device's association lists, like
+> socket associations. rx ones are therefore marked stale by key rotation
+> in the same way. in this series, nothing acts on socket-less rx
+> associations on key rotation. instead, userspace should replace decap
+> rules for a SPI before its device key has been rotated twice. a
+> follow-up will bring enforcement.
+>
+> series structure,
+>
+> 1, 2/ prepares psp to work with non-tcp packets
+>
+> 3, 4/ adds the netlink commands for managing socket-less associations
+>
+> 5/ adds a METADATA_PSP dst which carries the socket-less psp association
+> on an skb for tx, and the transmit checks for it
+>
+> 6, 7/ keep mirred and bpf from sending decrypted skbs from egress to
+> ingress, since skb->decrypted depends on direction
+>
+> 8/ limit time-wait psp socket validator to sockets actually in
+> time-wait. the new psp actions check for presence of the validator
+>
+> 9/ adds the act_psp tc actions, psp encap and psp decap. in software,
+> encap is egress only.=20
+>
+> 10/ adds flower matches on psp header fields, for rx matching
+>
+> 11, 12/ add drv-net tests (netdevsim and hardware)
+>
+> 13/ makes tc-testing run dependsOn probes outside the test namespace,
+> where they currently always fail
+>
+> 14/ adds tc-testing tests
+>
+> 15/ Documentation for socket-less psp associations
+>
 
-This commit transfers references passed in argument registers from the call=
-er
-to a subprog that releases them, tracking the acquired reference in the
-callee's frame descriptor or hidden stack slot and returning it if unreleas=
-ed.
-
-> diff --git a/kernel/bpf/frame_desc.c b/kernel/bpf/frame_desc.c
-> index d2ad02925f061..6679f134b14ee 100644
-> --- a/kernel/bpf/frame_desc.c
-> +++ b/kernel/bpf/frame_desc.c
-[ ... ]
-> @@ -736,7 +742,7 @@ static int foreign_release(struct bpf_verifier_env *e=
-nv, const struct bpf_verifi
->  	const struct bpf_func_state *below =3D st->frame[ref->frameno + 1];
->  	struct bpf_subprog_info *sub;
->  	struct bpf_res_call *c;
-> -	int f;
-> +	int f, k;
-> =20
->  	for (f =3D ref->frameno + 1; f <=3D st->curframe; f++) {
->  		sub =3D &env->subprog_info[st->frame[f]->subprogno];
-> @@ -745,6 +751,21 @@ static int foreign_release(struct bpf_verifier_env *=
-env, const struct bpf_verifi
->  		sub->releases_inherited =3D true;
->  		env->frame_desc_redo =3D true;
->  	}
-> +	/* every frame it was passed down through in a register is handed it by=
- the one below */
-> +	for (f =3D ref->frameno + 1; f <=3D st->curframe; f++) {
-> +		if (!ref->id || ref->type !=3D REF_TYPE_PTR || (acq->flags & BPF_RES_F=
-_ARG))
-> +			break;
-> +		for (k =3D BPF_REG_1; k <=3D BPF_REG_5; k++)
-> +			if (st->frame[f]->entry_arg_id[k - 1] =3D=3D ref->id)
-> +				break;
-> +		if (k > BPF_REG_5)
-> +			break;
-> +		sub =3D &env->subprog_info[st->frame[f]->subprogno];
-> +		if (sub->consumes & BIT(k))
-> +			continue;
-> +		sub->consumes |=3D BIT(k);
-> +		env->frame_desc_redo =3D true;
-> +	}
-
-[Severity: Medium]
-Can foreign_release() mark the wrong argument register in sub->consumes when
-two arguments at subprog entry share ref->id?
-
-bpf_frame_desc_record_call() records reg->id in callee->entry_arg_id[k - 1]
-for every non-scalar argument without checking reg_ref_off(), and
-foreign_release() picks the lowest register k matching ref->id and breaks. =
-If
-a caller passes a pointer sharing ref->id in R1 that fails reg_ref_off() (s=
-uch
-as a bpf_skc_to_mptcp_sock() result or a variable-offset ringbuf pointer) a=
-nd
-passes the base reference in R2 that the subprog actually releases,
-foreign_release() marks R1 instead of R2. On the next round,
-bpf_frame_desc_record_call() fails reg_ref_off() on R1, sets entry_none on =
-R1,
-and never transfers R2.
-
-Even when reg_ref_off() succeeds on both registers (for example, one call p=
-asses
-(&p1->field, p1) where the subprog releases R2, and another call passes
-(&p2->field, p3) while keeping p2 in a hidden slot), matching R1 first caus=
-es
-the second call to transfer and hand back p2 on R1, and once both R1 and R2
-are in sub->consumes, transferring p1 on R1 at the first call moves
-ref->frameno to the callee so R2 finds no caller reference and sets
-entry_none. bpf_frame_desc_resolve() then rejects the program.
-
-[ ... ]
-> @@ -869,6 +916,71 @@ int bpf_frame_desc_record_exit(struct bpf_verifier_e=
-nv *env)
->  	return 0;
->  }
-> =20
-> +/*
-> + * Frame @callee of @st is entered with its arguments in place, by the c=
-all at
-> + * insn @callsite of the frame below it when @st is given; a callback, a
-> + * callx and a function verified on its own come with none.
-[ ... ]
-> + */
-> +int bpf_frame_desc_record_call(struct bpf_verifier_env *env, struct bpf_=
-verifier_state *st,
-> +			       struct bpf_func_state *callee, int callsite)
-> +{
-> +	struct bpf_subprog_info *sub =3D &env->subprog_info[callee->subprogno];
-> +	struct bpf_reference_state *ref;
-> +	int i, k, acq, err;
-> +	s16 adj;
-> +
-> +	if (!env->describe_frames || (st && st->speculative))
-> +		return 0;
-> +	for (k =3D BPF_REG_1; k <=3D BPF_REG_5; k++) {
-> +		struct bpf_reg_state *reg =3D &callee->regs[k];
-> +
-> +		callee->entry_arg_id[k - 1] =3D 0;
-> +		callee->entry_arg_acq[k - 1] =3D 0;
-> +		if (reg->type =3D=3D SCALAR_VALUE || reg->type =3D=3D NOT_INIT) {
-> +			if ((sub->consumes & BIT(k)) && !bpf_register_is_null(reg))
-> +				sub->entry_none |=3D BIT(k);
-> +			continue;
-> +		}
-> +		callee->entry_arg_id[k - 1] =3D reg->id;
-> +		if (!(sub->consumes & BIT(k)))
-> +			continue;
-> +		for (i =3D 0, ref =3D NULL; st && i < st->acquired_refs; i++) {
-> +			ref =3D &st->refs[i];
-> +			if (ref->frameno =3D=3D callee->frameno - 1 && ref->acq && ref->type =
-=3D=3D REF_TYPE_PTR &&
-> +			    !(env->res_acqs[ref->acq - 1].flags & BPF_RES_F_ARG) &&
-> +			    reg_ref_off(reg, ref->id, &adj))
-> +				break;
-> +			ref =3D NULL;
-> +		}
-> +		if (!ref) {
-> +			sub->entry_none |=3D BIT(k);
-> +			continue;
-> +		}
-> +		err =3D rel_add(env, callsite, ref->acq - 1, k, 0, adj, 0);
-> +		if (err)
-> +			return err;
-> +		acq =3D acq_add(env, sub->start, ref->res - 1, k, BPF_RES_F_ENTRY, adj=
-, 0);
-> +		if (acq < 0)
-> +			return acq;
-> +		callee->entry_arg_acq[k - 1] =3D ref->acq;
-> +		ref->frameno =3D callee->frameno;
-> +		ref->acq =3D acq + 1;
-> +	}
-> +	return 0;
-> +}
-
-[Severity: High]
-Can bpf_frame_desc_record_call() transfer a reference through an argument
-register that is dead at sub->start?
-
-In setup_func_entry(), set_callee_state() copies R1..R5 from the caller to =
-the
-callee without filtering by env->insn_aux_data[sub->start].live_regs_before,
-and bpf_frame_desc_record_call() runs before bpf_clean_verifier_state() scr=
-ubs
-dead registers at sub->start. If an unused argument register Rk still holds=
- a
-copy of the caller's referenced pointer at the callsite (for example, R1 st=
-ill
-holds a copy of the pointer while the subprog only reads and releases R2),
-foreign_release() sees entry_arg_id[k - 1] =3D=3D ref->id and sets BIT(k) in
-sub->consumes. On the next round, bpf_frame_desc_record_call() transfers the
-reference via the dead register Rk, emitting an ITEM_RELEASE before the call
-that reads Rk and an entry store at sub->start that writes Rk into the
-callee's hidden slot.
-
-Because Rk is not in live_regs_before at the callsite or sub->start and is =
-not
-in env->frame_desc_regs, bpf_do_misc_fixups() can pick Rk as a scratch
-register when expanding a preceding timed_may_goto in the caller, overwriti=
-ng
-Rk at runtime with the per-CPU struct bpf_timed_may_goto pointer:
-
-kernel/bpf/fixups.c:bpf_do_misc_fixups() {
-    ...
-			u16 live =3D env->insn_aux_data[i].live_regs_before | env->frame_desc_re=
-gs;
-			int reg, save_off =3D 0;
-
-			/* a register that is dead here holds the address of the count */
-			for (reg =3D BPF_REG_0; reg <=3D BPF_REG_9; reg++)
-				if (!(live & BIT(reg)))
-					break;
-    ...
-}
-
-At runtime, the caller's ITEM_RELEASE compares its hidden slot against the
-clobbered Rk and fails to clear the caller's slot, while the callee's entry
-stores the per-CPU timed_may_goto address into the callee's hidden slot. Wh=
-en
-the callee later releases the real pointer via R2 and throws, the unwinder
-passes the per-CPU timed_may_goto pointer from the callee's slot to the
-resource destructor and then double frees the object from the caller's
-uncleared slot. Checking env->insn_aux_data[sub->start].live_regs_before &
-BIT(k) in bpf_frame_desc_record_call() would ignore registers that the call=
-ee
-never reads.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1794399387.gi=
-t.memxor@gmail.com?part=3D20
+Some of these can probably stand alone like the bpf decrypted, psp encap
+helper, and timewait validation, and be submitted first to shorten the
+series. That's just a suggestion though. If there are dependencies on
+the main series you can ignore.
