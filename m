@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.139
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.71
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794401869;
-	b=odg6bf0tN8UQge4REhbo0UivWMlv1r3yBD30CWh9hr450wS+mO242f4RUdpQyfifwcem
-	 1/ZT7S3Qbp3B1H2WXWq5juEsfZ3romeEJ5Kc5t9MLEuuYHlmzsM+M0ETxaMZh4fNBZVZY
-	 ZELJ94yznTBEw2LdBzwJsy7Uj9HxRrNdf6iNm9imPN8ZZMo+0JgoUH0cgeFrVPdNXzmPF
-	 g44RwqzlzD0ZAwAcHxiH4T46vHXNDA19w8hAaC+6dksTw/P34XFP/VVsgHq6lEkDUIN5o
-	 mQX8iI3OolUxMNOfnj6/mD2BY2rPDF4VYFu1Rv7UnWII4DlmSj5SJ4+Jgo4kMAlKYpg==
+	t=1794401872;
+	b=ES0f9fLJWYPOfphPYO6AV3VUtyCf48zIE7ZK5xfJx+Rox0QTH/CcwlKG4B4Vep06HpII
+	 gHtMx0wFr5yRyGVyDTgaE4/VU46x1wef9Ld7KtkRl6lSZo54ABL0Eio74boyyHEe44vO1
+	 SessheZyh/yPL2QFP4rMhRqmug7xa4S79X4tWuw/mTxo9C6y+jZxXggLpfrrUDlKxyShJ
+	 z8WezAYpRbeZAGeIkG3xoc56neUCYSoSjdc/bsPQ3L/Th36sYZfWoRk2KTWKGy+9t6Rl6
+	 85HZtDnH17chMuvQoshzsto7jpjH4B4W4dn0sZgpAbN8S5SIyiblI6OfPUBITFcbMYQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794401869;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794401872;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
-	bh=5SWpE+MosN932aitlPUXrTTrgaD/Z0rY06hGCJER2xQ=;
-	b=4wQ4X1DvxeDxdoE7mSFSCz9P4D0hpy9ZJg+KDrIgafQsWss3Yy0WVMa1uYo+xj89kBko
-	 6SpE7y1rNY3zhqSxzCLWaynWQhu4h0qAhXrANn/fqnVg/WqKtDNIJH1kjXKeCrRne28aW
-	 BoIpn2XfzxH1MT8PIo2SWNVGvTnaJh9EEmspsB4ichdt9OR4cqT57zNoDFSJXD0yoIZSq
-	 vdnENB9QiSZmp8l6lFF5qblWK/zpAGAqqnQlXu33nCxYYWy+5B7UIfBQ2aZBPUQIpLFq9
-	 QnGuKqlvkGsUuGnQzraICn0O38ZK+pAoZIzTxeeR8APv6LcMPGE1qyeCpf6i0RZR5vQ==
+	bh=XeyXVnJBTlXJG/eAGi296N+kUZY8wzPxrrjfOJju/n8=;
+	b=MUSer8+INMIa1gaNXjfPWfqy5ZI5nydJfM0VsYZf6GYpZ0cxpO9/QjBVOrHR3PuRcoN0
+	 EVj+7Lc+I7WsWZk4dK0NJRnsJ/QH74XQAM0Lbf8otVyxAi1QvkPRCeDLfPqSe/J6BHI9K
+	 wq2ircgIT2xGUOVlMO811AjvnTZ5NgLAmgk54GPMI2yfYJy0c7jhR5BbMI/8a0rKg4A3L
+	 X84TAm9m4nXr9KernxlFLoHHGgyIm4HZhf5oSCYM9cQnW2mnavvNGEPDXeLj8IkfcJqoj
+	 4ztmaSZbwRYcabYnatJNy0k11Ii9X3c/f6upUtYwSH0iVjdrckjqa33FXfPHL7/uK9Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JGKDVNS+;
-	arc=none smtp.remote-ip=74.125.225.139
-Received: from mail-wm2-f11.google.com (mail-wm2-f11.google.com [74.125.225.139])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=oDTznCMy;
+	arc=none smtp.remote-ip=74.125.225.71
+Received: from mail-wr2-f7.google.com (mail-wr2-f7.google.com [74.125.225.71])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79260606A32A
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 12:57:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 79260606A32A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 742DE606A321
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 12:57:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 742DE606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JGKDVNS+
-Received: by mail-wm2-f11.google.com with SMTP id 5b1f17b1804b1-4a5f76661b5so12385565e9.0
-        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 04:57:49 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=oDTznCMy
+Received: by mail-wr2-f7.google.com with SMTP id ffacd0b85a97d-48e0c9bc8f9so1412690f8f.1
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 04:57:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794401868; x=1795006668; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794401870; x=1795006670; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=5SWpE+MosN932aitlPUXrTTrgaD/Z0rY06hGCJER2xQ=;
-        b=JGKDVNS+AFsGDqz6/5froBhhR93JC9i4BikQx7uvMRyKLeZH7dKDHEFnPE6kMUZjVv
-         ev6IJ5id65RieLwt/LBWNR7Bwn/0L7qdJqNyWzTERhPc9qkbhc/PJJhnIW7RXw72AZHv
-         Cr9C4BSV9EudI/FXIkY51By4QkHT3ImYg7HW4beYmUs6nY8ndWMryiSg75ZCEsJ22rWC
-         mnW/kBhAULWN7RTKI1EJw/+YPQRlkPDxpS+oPrE5cs4ruOqqyCNeZq27D5l08QcTOihF
-         3TFPDuJulqrtA11Yn6O8BmtUs6boiy7VCII2lC8w5C1n9RLH8YoxVUKoZ4oaa1jENKuc
-         lT5A==
+        bh=XeyXVnJBTlXJG/eAGi296N+kUZY8wzPxrrjfOJju/n8=;
+        b=oDTznCMyeZCktAXBGTq8A1ze+I7eM4SCtJcDnJ+WhkpVC72dJ2xcAHSq+LYXuj9vPM
+         msy0CqaavgPZSWb0VeWug4nplyjI8YW31PZfOFGlDTMiGSNXPfOPIkmNw6DW1ow8a4Bb
+         TTa9xmoMzlo4tAoJsMVXiwzqrdpTP8XIwKq8L9bXwaIPFxv6r5wGTFQpFZJOvflffHbh
+         lTaX7VJ2aXNbb5DO04iFOTRrtb4FGreivOl6qZetgJ1OffAkqxkC901k02sFcC4BVGqY
+         cJKa8MY/hwTWyxIv9KpIPgHU3OecTZf6SDs26ESUfeaAYVXyU+a6uXvTqVezJ0vTuWc4
+         26xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794401868; x=1795006668;
+        d=1e100.net; s=20260707; t=1794401870; x=1795006670;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=5SWpE+MosN932aitlPUXrTTrgaD/Z0rY06hGCJER2xQ=;
-        b=W11w7r7cNSRxNX8P8AJFUaIuCR9OjlAVYSj9QGj5TpVhItP6vEmWhdCy6O1+Oc37r7
-         C0L4Pt18ospEeZBS2cQ8SUF7vCVdkLp0+il+HOpajRO4CypeKXJhI/GY1S7m3XlelYuH
-         7OtLINilnF915D6GHxyXpb2ihi2QDwFVRK2p8wvyRGnwWMkLOrIVj2jjzoZUrbd+h8dI
-         CePUcAjI+Oadrrtq3KZ2oM5SyT22Otyu9tzAhzGnfmKyCBNFKjgdlO5SFLsLO5IHKgg2
-         jJ2yPgWfj8w9DBQdVCkvKYk1Dk4kyEYOnx/CkSWBc3d5LRvs6tMkbHXYxUs0igC9cL8V
-         ZJiw==
-X-Gm-Message-State: APuU4Z+tNoe9tyJ4MtOJAUNMfKoWsOvrwZzuYW3ebJaW+8cu9M8gDu3V
-	1EWhyf5yfBHICn9RRdD394RH9fcBxfbRvvBLqIxm/ypk60Lj2rZ5n5f0+i4/3NPuUWw=
-X-Gm-Gg: AYBFou36RcUTbJJAU/+T90unqL3hx+wsIGZRf4fZXMW6L/YHxaVnxfCz3vbd24RuZUD
-	20T6xU/6qMV50kfZlD//aDXiaiZAXBbpL+IlXgTtInIM4RZu5Mwf0tqOuViKzqyH+tX5n4LwKDK
-	xw1aUQgs9MrQHX1JnmgG2ZWW49a9rI8P42KrVMg2PI0aN7GnIY7OdJgsL6YzZMO7aqYh1guYJk8
-	Hrcp3tzaumxGIXo18KebpznbgqdTd34wtQGagqsn8kEkhdivrFnPuyvCIB4i0dXz+3lBdOajP/v
-	cNfLaLGkNPxJJJ+bJVGeCcOWmrWYjtkYGhZhX3lDWGTAdtn+IroDOcnnTx1HYx3S3HLVPFGPHmD
-	akAtS3bs9aqgcFsXie7hNfc5Xzk90XAji57WVMXaYt8jrYXN4+rCrQFmhIYcRHKERUFWtkwIute
-	IUs5GfGHEdBEvLcq2V7kX4Idb8Jn+pmS5hqj84OTYJrb0u7qWFehtO5Uh7e9XTk3NonLWH4VKEh
-	/MHTfe3y/wCXp+sHmlOI9AJbzfAfXwLPu8knWpsRnwcqH5iEmYimvY9Regk/gFIHeCwpPuIy3MO
-	DBKJrUkIDD1BZPT6yjIgivvfhEvQ2kEPBsvqSAvZhUagsJKS28cxYOViySVyLuSa9eRERXNgwl9
-	h0jvjn00oLPb21IcEQUwXfqW1ngeVa/wZPbBkQUoGSD7f3gk2gXrABJDivRI+oINBNmza
-X-Received: by 2002:a05:600c:1548:b0:4a7:669c:c988 with SMTP id 5b1f17b1804b1-4ba09383873mr44906595e9.23.1794401867793;
-        Wed, 11 Nov 2026 04:57:47 -0800 (PST)
+        bh=XeyXVnJBTlXJG/eAGi296N+kUZY8wzPxrrjfOJju/n8=;
+        b=Zg4+AeDDWdWNGds+EuDOEyUTX+AwyOYWd6eHlT32S1c3f1v5Be8XVF4BQ8eyza3hf8
+         apQC0rGDlxCfm+JSY30jLDRPRNC+6Ps/MnoneG3OpXjdgwSS71ZiqjCCmbleYz98ym7c
+         +k7WGHAwHULlc4Lj5EqOVqWSBmppjPOG95ftsVMizDT+d2UNCoXjKaDkechZzPdZuo9N
+         Fwb3cJ+cNARDbBxFJifo+rEeYneCb27+fIZo3bdkEtIEq8VNQ7All97d7VC1ftkIkc2e
+         /4s6UR+F6MIQSVG4uZILPkdTEqlVF4HAj4jkNsmO6XbXCqlCmXvr9aU/+v25a6c4eSAu
+         P1DA==
+X-Gm-Message-State: APuU4Z/ogRYxxdQvM62qk55ryREDYn6gALAHD6hG1D64T5SDZom1K9eh
+	VAh1iyfIwTLIyJF+JXw4+oW7O9LD5GkqqBCTjL+HMGg+8vpd5SfUjnVgR73qe4Z/BbA=
+X-Gm-Gg: AYBFou2m2uKiiaYTZJ1h8sfAix/vwGU75DyDTrmbCop+L8MGDvb8MhqPwpdSf26E8f7
+	RAknHG4yQF2LuMlnGcmw3jMwSyHL3t/Oq5gJyPjOEIzoIXQwkQ/EBAA4J1M+eXmiaJnyqvk3VGx
+	J6qW6Jur46caTq1AC5TnUUm4CNfi3sbLyKk0nVhvcqWgXwtGB6pn45jaWtYFCN8PbCCh2S7IK/R
+	DknyCuegQMAHvpl9+xIR9I6IwI4rEHZH0/NbscnvrVgaU1KtIEX/ptK06dg/gZNXpkfD2TVgelX
+	UpUS0ZLYd7amPMRKF7vBIvTol4vDL426l+IQE/USdpzlnF8couJjjcTJ6knJozhLt3wfk9ODvfM
+	PL6I0dNXRQf0IMvB1+tPJDfPtfVrA/9Sf1NI/GHwIjVMoAUbbOP8fW0E14an1Uv385xlB8g0X8E
+	nxdK1B6ekIvQCH8w4ZLxe71f9lHlcZsnYy09MYSkbkDsgs5mdtC0uJCNCtqjPLWhRmb0eFSkY0K
+	pSFAets5ECKQMmgTnlGFrLsGs6zNad3nSi7n7YTT0MMzygn3I3WR5xmjk+X2mJIfsPnyPjVm8Ia
+	dIT20Kb5cF6a4tWo7pUBLdWrYIMn0aAJPk4M3zKAFCj92D5nzKFYEroLP0zALEXTQHFabit5v0q
+	qO4gviyruvs5DxzmP0d6xRWdZ+S7bxL9v4n90UxMFBbwgse/dWykXa0eAVg3DyyjQoQxG
+X-Received: by 2002:a5d:5f05:0:b0:48e:6092:dea1 with SMTP id ffacd0b85a97d-499ca377c20mr3714304f8f.47.1794401869535;
+        Wed, 11 Nov 2026 04:57:49 -0800 (PST)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-498365ccbccsm11219494f8f.44.2026.11.11.04.57.47
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-498365cbeedsm10845473f8f.43.2026.11.11.04.57.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2026 04:57:47 -0800 (PST)
+        Wed, 11 Nov 2026 04:57:48 -0800 (PST)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -88,9 +88,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 11/29] bpf: Give every reference an owner frame
-Date: Wed, 11 Nov 2026 13:57:09 +0100
-Message-ID: <d69e383da887f124f305006c9c0c2d56b39c7145.1794399387.git.memxor@gmail.com>
+Subject: [PATCH bpf-next v1 12/29] bpf: Release resources in hidden slots on bpf_throw()
+Date: Wed, 11 Nov 2026 13:57:10 +0100
+Message-ID: <06579bd381e516e66f97d7b0c00e55d019011a7e.1794399387.git.memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1794399387.git.memxor@gmail.com>
 References: <cover.1794399387.git.memxor@gmail.com>
@@ -103,148 +103,596 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6577; i=memxor@gmail.com; h=from:subject:message-id; bh=Ti0Y4Nbnu1NBxBLsRCmL965V2Yx9mZ28dBYIsFW7k/M=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetLzPwD/2vmMdnqT9ZqrfqdcFh7hu6uzXqh5/W+86TXX 2y2C5ndUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgIm83cfIMP1v9A/Ljw9c3+Qf v/C+TNgm8nS2mI79Z3+2I7ef8his42ZkmCfpJ/tKdtJ+W2dn1t9GjuX3Si0DFMKMpBXfvxYzFVn JAAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=22742; i=memxor@gmail.com; h=from:subject:message-id; bh=PZc5cO6g+ACwoPNDB2ryA22L6iQiqx6su9dUrUkFR8g=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetLzHzjiPjFF+U5LXf8z/iy+rH6+01zBb/v/KlY8nt/2 LzDHAeXdZSyMIhxMciKKbKU/N/HZHyi8neg7TJumDmsTCBDGLg4BWAik+0Y/tfd07qSG+ysLitd 0hY+zWrxDL/9ZRycgluSdA5W+3uf8WZkeJbslS22JPmevxJTMnN7ZAHv7cv2W7m0ZdkWff2ndli SFwA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-The unwinder will release the resources of each frame from that frame's
-own stack slots. Each reference in the verifier state must therefore
-belong to exactly one frame. The verifier has no such notion today: the
-state holds the references, and a frame only knows how many of the
-references held at its entry are still held.
+Currently bpf_throw() is only allowed where the program holds no
+resources. The frames between the throw and the main program are
+discarded without releasing anything, so the verifier rejects a throw
+that is reached with a reference, a lock, or a section held.
 
-Record the owner frame in the reference state:
+Add the runtime half of releasing the resources of these frames. A frame
+will keep the handles of the kernel resources it holds in hidden stack
+slots, which the verifier maintains from the next patch on. A handle is
+the value that the release takes: a pointer to an object, a ringbuf
+record or a lock, or the address of an iterator or of saved IRQ flags on
+the stack.
 
- - The frame that acquires a reference owns it.
- - When a frame returns, the references it still holds pass to its
-   caller, which is the only frame left that can release them.
- - A function that is verified on its own inherits the references of its
-   callers without their frames, see call_func_on_its_own(). No frame of
-   the state owns these inherited references, so their owner is -1.
-   References that the function returns with, beyond the inherited ones,
-   pass to the caller when the call is resumed in bpf_flow_return().
+A frame descriptor lists the hidden slots in the frames of one JITed
+function:
 
-Callbacks release everything they acquire, so nothing changes owner when
-a callback returns, and the transfer in prepare_func_exit() has nothing
-to do for them.
+ - Each entry gives the offset of a slot from the frame's R10 and the
+   resource class of the handle in it. An empty slot holds 0.
+ - A resource class says how to release a handle: the kind of resource,
+   and the destructor or the struct meta of the object.
+ - RCU read and preemption disabled sections have no handle. A frame
+   counts the sections it entered in one slot per kind.
 
-RCU read and preemption disabled sections have no reference state. The
-verifier tracks, per frame, how many of the sections held at its entry
-are still held, and release_context_state() lowers that count on every
-unlock. A frame that left a section of its caller therefore looks like a
-frame that was entered with fewer sections. Also count how many sections
-each frame released below its entry count, so that the exit of the frame
-can tell that it returns with fewer sections than it was called with.
+The descriptors and resource classes of a program live in a pool owned by
+the main program. Each JITed function refers to its descriptor by index,
+and identical descriptors are shared.
+
+bpf_throw() releases the resources in the slots of each frame before it
+walks the stack for the exception callback. The release order is the same
+for all frames, so the frames are walked once per phase:
+
+ 1. locks and IRQ flags;
+ 2. objects whose destructor needs RCU protection;
+ 3. the sections, using counts that the first walk summed over the
+    frames;
+ 4. all other objects.
+
+In the first phase, IRQ flags that a frame saved while interrupts were
+enabled are restored last. Every later save found interrupts disabled, so
+a frame has at most one such set, and the locks and the other flags can
+be released in any order before it.
+
+The unwinder releases a socket with bpf_sk_release(), and the reader of a
+file dynptr with the function that bpf_dynptr_file_discard() frees it
+with. So bpf_sk_release_proto is no longer static, and that function
+becomes bpf_dynptr_file_free().
+
+Nothing generates descriptors yet, so nothing is released and the
+verifier's rules do not change.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/bpf_verifier.h | 13 +++++++++++++
- kernel/bpf/verifier.c        | 22 ++++++++++++++++++++--
- 2 files changed, 33 insertions(+), 2 deletions(-)
+ include/linux/bpf.h          |  91 +++++++++++++
+ include/linux/bpf_verifier.h |   4 +
+ kernel/bpf/Makefile          |   2 +-
+ kernel/bpf/core.c            |   1 +
+ kernel/bpf/fixups.c          |   3 +
+ kernel/bpf/helpers.c         |  17 ++-
+ kernel/bpf/unwind.c          | 243 +++++++++++++++++++++++++++++++++++
+ kernel/bpf/verifier.c        |   5 +
+ net/core/filter.c            |   2 +-
+ 9 files changed, 364 insertions(+), 4 deletions(-)
+ create mode 100644 kernel/bpf/unwind.c
 
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 17b13b16899d..e7cce9080531 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1829,6 +1829,72 @@ struct bpf_jit_poke_descriptor {
+ 	u32 insn_idx;
+ };
+ 
++/*
++ * Frame descriptors: the hidden stack slots in which the frames of a function
++ * keep the handles of what they hold, and how the unwinder releases them, see
++ * kernel/bpf/frame_desc.c.
++ */
++/* Kinds of resources the unwinder can release. */
++enum bpf_resource_kind {
++	BPF_RESOURCE_OBJ,		/* bpf_obj_new() object: bpf_obj_drop_impl(p, meta) */
++	BPF_RESOURCE_PERCPU_OBJ,	/* bpf_percpu_obj_new() object: bpf_percpu_obj_drop_impl() */
++	BPF_RESOURCE_KPTR,		/* referenced kernel object: the BTF registry's dtor(p) */
++	BPF_RESOURCE_SOCK,		/* socket acquired by a helper: bpf_sk_release() */
++	BPF_RESOURCE_RINGBUF,		/* ringbuf record, also of a dynptr: bpf_ringbuf_discard() */
++	BPF_RESOURCE_DYNPTR_FILE,	/* reader of a file dynptr: bpf_dynptr_file_free() */
++	BPF_RESOURCE_ITER,		/* open-coded iterator on the stack: its destroy kfunc */
++	BPF_RESOURCE_SPIN_LOCK,		/* bpf_spin_lock() held: bpf_spin_unlock() */
++	BPF_RESOURCE_RES_LOCK,		/* bpf_res_spin_lock() held: bpf_res_spin_unlock() */
++	BPF_RESOURCE_IRQ_FLAG,		/* saved IRQ flags on the stack: bpf_local_irq_restore() */
++	BPF_RESOURCE_RCU,		/* bpf_rcu_read_lock() sections: unlock each */
++	BPF_RESOURCE_PREEMPT,		/* bpf_preempt_disable() sections: enable each */
++};
++
++/* A resource class of a program; descriptor entries refer to it by index. */
++struct bpf_resource {
++	u8 kind;	/* enum bpf_resource_kind */
++	bool sleeps;	/* the destructor may sleep */
++	bool rcu;	/* the destructor needs RCU protection */
++	u32 btf_id;
++	struct btf *btf;
++	union {
++		void (*dtor)(void *);
++		struct btf_struct_meta *meta;
++	};
++};
++
++/*
++ * The slot holds a count of sections instead of a handle, signed: the
++ * sections the frame entered less those of its callers it left.
++ */
++#define BPF_FRAME_ENT_COUNTER	BIT(0)
++
++/*
++ * One hidden slot of a frame: it holds the handle of a resource of the class
++ * the frame holds, or 0. The handle is what the release takes: the pointer
++ * to an object, to a ringbuf record or to a lock, or the address of an
++ * iterator or of saved IRQ flags on the stack of some frame.
++ */
++struct bpf_frame_desc_entry {
++	u16 res;	/* index into the program's resource classes */
++	s16 off;	/* the slot, relative to the frame pointer */
++	u16 flags;
++};
++
++struct bpf_frame_desc {
++	u32 size;	/* total size in bytes, including this header */
++	u32 nent;	/* number of entries that follow */
++	struct bpf_frame_desc_entry ent[];
++};
++
++/* Owned by the main program and shared by its subprograms. */
++struct bpf_frame_desc_pool {
++	u32 cnt;
++	u32 resource_cnt;
++	struct bpf_resource *resources;
++	struct bpf_frame_desc *desc[];
++};
++
+ /* reg_type info for ctx arguments */
+ struct bpf_ctx_arg_aux {
+ 	u32 offset;
+@@ -2053,6 +2119,14 @@ struct bpf_prog_aux {
+ 	struct module *mod;
+ 	u32 num_exentries;
+ 	struct exception_table_entry *extable;
++	/*
++	 * The frame descriptor of this JITed function in the pool of the main
++	 * program, plus one, or 0: the hidden slots its frames keep the handles
++	 * of their resources in, see frame_desc.c. The main and sub progs share
++	 * the pool, which is freed with the main prog only.
++	 */
++	u32 frame_desc;
++	struct bpf_frame_desc_pool *frame_desc_pool;
+ 	union {
+ 		struct work_struct work;
+ 		struct rcu_head	rcu;
+@@ -2999,6 +3073,12 @@ void bpf_obj_free_task_work(const struct btf_record *rec, void *obj);
+ void bpf_obj_cancel_fields(struct bpf_map *map, void *obj);
+ void bpf_obj_free_fields(const struct btf_record *rec, void *obj);
+ void __bpf_obj_drop_impl(void *p, const struct btf_record *rec, bool percpu);
++void bpf_obj_drop_impl(void *p__alloc, void *meta__ign);
++void bpf_percpu_obj_drop_impl(void *p__alloc, void *meta__ign);
++void bpf_rcu_read_unlock(void);
++void bpf_preempt_enable(void);
++void bpf_local_irq_restore(unsigned long *flags__irq_flag);
++void bpf_res_spin_unlock(struct bpf_res_spin_lock *lock);
+ 
+ struct bpf_map *bpf_map_get(u32 ufd);
+ struct bpf_map *bpf_map_get_with_uref(u32 ufd);
+@@ -4218,6 +4298,7 @@ extern const struct bpf_func_proto bpf_ringbuf_output_proto;
+ extern const struct bpf_func_proto bpf_ringbuf_reserve_proto;
+ extern const struct bpf_func_proto bpf_ringbuf_submit_proto;
+ extern const struct bpf_func_proto bpf_ringbuf_discard_proto;
++extern const struct bpf_func_proto bpf_sk_release_proto;
+ extern const struct bpf_func_proto bpf_ringbuf_query_proto;
+ extern const struct bpf_func_proto bpf_ringbuf_reserve_dynptr_proto;
+ extern const struct bpf_func_proto bpf_ringbuf_submit_dynptr_proto;
+@@ -4508,11 +4589,21 @@ void bpf_insn_array_remap(struct bpf_map *map, const u32 *new_off, const u32 *ne
+ 
+ #ifdef CONFIG_BPF_SYSCALL
+ void bpf_prog_update_insn_ptrs(struct bpf_prog *prog, u32 *offsets, void *image);
++void bpf_unwind_release(const struct bpf_resource *res, void *handle);
++void bpf_dynptr_file_free(void *reader);
++void bpf_unwind_release_frames(void);
++void bpf_frame_desc_pool_free(struct bpf_frame_desc_pool *pool);
+ #else
+ static inline void
+ bpf_prog_update_insn_ptrs(struct bpf_prog *prog, u32 *offsets, void *image)
+ {
+ }
++static inline void bpf_frame_desc_pool_free(struct bpf_frame_desc_pool *pool)
++{
++}
++static inline void bpf_unwind_release_frames(void)
++{
++}
+ #endif
+ 
+ static inline bool bpf_map_is_percpu_map(enum bpf_map_type map_type)
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 7a2b6507f562..c18efe4bd54a 100644
+index c18efe4bd54a..98d26a4c4a91 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -327,6 +327,12 @@ struct bpf_reference_state {
- 	 * is used purely to inform the user of a reference leak.
+@@ -1035,6 +1035,8 @@ struct bpf_subprog_info {
  	 */
- 	int insn_idx;
-+	/*
-+	 * The frame that owns the reference: the one that acquired it, or the
-+	 * caller a returning frame handed it to. -1 for what the callers of a
-+	 * function verified on its own hold, which are not in the state.
-+	 */
-+	s8 frameno;
- 	union {
- 		/* For REF_TYPE_PTR */
- 		int parent_id;
-@@ -503,6 +509,13 @@ struct bpf_func_state {
- 	u32 entry_refs;
- 	u32 entry_rcu_locks;
- 	u32 entry_preempt_locks;
-+	/*
-+	 * How many of the RCU read and preemption disabled sections held when the
-+	 * frame was entered it left, or a callee of it did: a frame that returns
-+	 * after that is in fewer sections than it was called in.
-+	 */
-+	u32 rcu_released_below;
-+	u32 preempt_released_below;
+ 	u32 exit_idx;
+ 	struct bpf_iarray *jt; /* jump table shared by all gotox of this subprogram */
++	/* the frame descriptor of this subprogram in the pool of the program, plus one; see frame_desc.c */
++	u32 frame_desc;
+ 	u16 stack_depth; /* max. stack depth used by this function */
+ 	/* bytes below the verified stack depth reserved for hidden slots, see bpf_reserve_stack_slots() */
+ 	u16 stack_extra;
+@@ -1293,6 +1295,8 @@ struct bpf_verifier_env {
+ 	/* What a pointer that was read from a table of functions may point to. */
+ 	struct bpf_func_set **func_sets;
+ 	u32 func_set_cnt;
++	/* frame descriptors of the subprograms, handed to prog->aux once verification succeeds */
++	struct bpf_frame_desc_pool *frame_desc_pool;
+ 	bool has_callx;
+ 	/*
+ 	 * Call graph edges created by callx instructions. A bitmap of
+diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+index d26c62326e58..2b6b4af882d1 100644
+--- a/kernel/bpf/Makefile
++++ b/kernel/bpf/Makefile
+@@ -11,7 +11,7 @@ obj-$(CONFIG_BPF_SYSCALL) += bpf_iter.o map_iter.o task_iter.o prog_iter.o link_
+ obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o percpu_freelist.o bpf_lru_list.o lpm_trie.o map_in_map.o bloom_filter.o
+ obj-$(CONFIG_BPF_SYSCALL) += local_storage.o queue_stack_maps.o ringbuf.o bpf_insn_array.o
+ obj-$(CONFIG_BPF_SYSCALL) += bpf_local_storage.o bpf_task_storage.o
+-obj-$(CONFIG_BPF_SYSCALL) += fixups.o cfg.o states.o check_btf.o flow.o join.o
++obj-$(CONFIG_BPF_SYSCALL) += fixups.o cfg.o states.o check_btf.o flow.o join.o unwind.o
+ obj-${CONFIG_BPF_LSM}	  += bpf_inode_storage.o
+ obj-$(CONFIG_BPF_SYSCALL) += disasm.o mprog.o
+ obj-$(CONFIG_BPF_JIT) += trampoline.o
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 59478a08b247..80321ab16b32 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -3459,6 +3459,7 @@ static void bpf_prog_free_images(struct work_struct *work)
+ 	int i;
  
- 	/* The following fields should be last. See copy_func_state() */
- 	/* The state of the stack. Each element of the array describes BPF_REG_SIZE
+ 	aux = container_of(to_rcu_work(work), struct bpf_prog_aux, rwork);
++	bpf_frame_desc_pool_free(aux->frame_desc_pool);
+ 	for (i = 0; i < aux->real_func_cnt; i++) {
+ 		/* We can just unlink the subprog poke descriptor table as
+ 		 * it was originally linked to the main program and is also
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index 04d89113e596..4e46f8931775 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -2047,6 +2047,9 @@ static int jit_subprogs(struct bpf_verifier_env *env)
+ 		func[i]->aux->nr_linfo = prog->aux->nr_linfo;
+ 		func[i]->aux->jited_linfo = prog->aux->jited_linfo;
+ 		func[i]->aux->linfo_idx = env->subprog_info[i].linfo_idx;
++		/* The pool is freed with the main prog. */
++		func[i]->aux->frame_desc = env->subprog_info[i].frame_desc;
++		func[i]->aux->frame_desc_pool = env->frame_desc_pool;
+ 		func[i]->aux->arena = prog->aux->arena;
+ 		func[i]->aux->arena_stack_size = prog->aux->arena_stack_size;
+ 		func[i]->aux->arena_stack_entry = env->subprog_info[i].arena_stack_entry;
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index cc6d3a6a4de0..793eb457fb62 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -3492,6 +3492,8 @@ notrace void bpf_throw_unwind(struct bpf_throw_regs *regs, u64 cookie)
+ 	 */
+ 	if (regs)
+ 		memcpy(ctx.saved, &regs->r[BPF_REG_6], sizeof(ctx.saved));
++	/* What the frames about to be discarded hold is released first. */
++	bpf_unwind_release_frames();
+ 	arch_bpf_stack_walk(bpf_stack_walker, &ctx);
+ 	WARN_ON_ONCE(!ctx.aux);
+ 	if (ctx.aux)
+@@ -5136,6 +5138,18 @@ int bpf_dynptr_from_file_sleepable(struct file *file, u32 flags, struct bpf_dynp
+ 	return make_file_dynptr(file, flags, true, (struct bpf_dynptr_kern *)ptr__uninit);
+ }
+ 
++/*
++ * Free the reader of a file dynptr, which the dynptr and its clones point
++ * at: what the unwinder does for a dynptr the program did not discard.
++ */
++void bpf_dynptr_file_free(void *reader)
++{
++	struct bpf_dynptr_file_impl *df = reader;
++
++	freader_cleanup(&df->freader);
++	kfree_nolock(df);
++}
++
+ __bpf_kfunc int bpf_dynptr_file_discard(struct bpf_dynptr *dynptr)
+ {
+ 	struct bpf_dynptr_kern *ptr = (struct bpf_dynptr_kern *)dynptr;
+@@ -5144,8 +5158,7 @@ __bpf_kfunc int bpf_dynptr_file_discard(struct bpf_dynptr *dynptr)
+ 	if (!df)
+ 		return 0;
+ 
+-	freader_cleanup(&df->freader);
+-	kfree_nolock(df);
++	bpf_dynptr_file_free(df);
+ 	bpf_dynptr_set_null(ptr);
+ 	return 0;
+ }
+diff --git a/kernel/bpf/unwind.c b/kernel/bpf/unwind.c
+new file mode 100644
+index 000000000000..3b488a4bd759
+--- /dev/null
++++ b/kernel/bpf/unwind.c
+@@ -0,0 +1,243 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Releasing what the frames of a BPF program hold when bpf_throw() discards
++ * them. Before the exception callback takes over, the frames from the throw
++ * up to the main program are walked once per phase of the release order, and
++ * each frame releases what its frame descriptor says it holds of that phase,
++ * see frame_desc.c.
++ */
++#include <linux/bpf.h>
++#include <linux/bpf_verifier.h>
++#include <linux/filter.h>
++#include <linux/irqflags.h>
++
++void bpf_frame_desc_pool_free(struct bpf_frame_desc_pool *pool)
++{
++	u32 i;
++
++	if (!pool)
++		return;
++	for (i = 0; i < pool->cnt; i++)
++		kvfree(pool->desc[i]);
++	kvfree(pool->resources);
++	kvfree(pool);
++}
++
++static bool resource_is_lock(u8 kind)
++{
++	return kind == BPF_RESOURCE_SPIN_LOCK || kind == BPF_RESOURCE_RES_LOCK;
++}
++
++static bool resource_is_section(u8 kind)
++{
++	return kind == BPF_RESOURCE_RCU || kind == BPF_RESOURCE_PREEMPT;
++}
++
++/*
++ * Release one resource by its handle, at run time: the pointer to an object,
++ * the address of a stack object or of a lock, or nothing for a section. Not
++ * inlined so that every release of an unwind can be observed by attaching to
++ * this function.
++ */
++noinline void bpf_unwind_release(const struct bpf_resource *res, void *handle)
++{
++	/* A destructor that needs RCU protection gets it here, whatever the frames held. */
++	if (res->rcu)
++		rcu_read_lock();
++	switch (res->kind) {
++	case BPF_RESOURCE_OBJ:
++		bpf_obj_drop_impl(handle, res->meta);
++		break;
++	case BPF_RESOURCE_PERCPU_OBJ:
++		bpf_percpu_obj_drop_impl(handle, res->meta);
++		break;
++	case BPF_RESOURCE_KPTR:
++	case BPF_RESOURCE_ITER:
++		res->dtor(handle);
++		break;
++#ifdef CONFIG_NET
++	case BPF_RESOURCE_SOCK:
++		bpf_sk_release_proto.func((u64)(long)handle, 0, 0, 0, 0);
++		break;
++#endif
++	case BPF_RESOURCE_RINGBUF:
++		bpf_ringbuf_discard_proto.func((u64)(long)handle, 0, 0, 0, 0);
++		break;
++	case BPF_RESOURCE_DYNPTR_FILE:
++		bpf_dynptr_file_free(handle);
++		break;
++	case BPF_RESOURCE_SPIN_LOCK:
++		bpf_spin_unlock_proto.func((u64)(long)handle, 0, 0, 0, 0);
++		break;
++	case BPF_RESOURCE_RES_LOCK:
++		bpf_res_spin_unlock(handle);
++		break;
++	case BPF_RESOURCE_IRQ_FLAG:
++		bpf_local_irq_restore(handle);
++		break;
++	case BPF_RESOURCE_RCU:
++		bpf_rcu_read_unlock();
++		break;
++	case BPF_RESOURCE_PREEMPT:
++		bpf_preempt_enable();
++		break;
++	default:
++		WARN_ON_ONCE(1);
++	}
++	if (res->rcu)
++		rcu_read_unlock();
++}
++
++/* The sections of a frame are counted, per kind. */
++enum {
++	BPF_UNWIND_SECTION_RCU,
++	BPF_UNWIND_SECTION_PREEMPT,
++	BPF_UNWIND_NR_SECTIONS,
++};
++
++static int section_index(u8 kind)
++{
++	return kind == BPF_RESOURCE_RCU ? BPF_UNWIND_SECTION_RCU : BPF_UNWIND_SECTION_PREEMPT;
++}
++
++/*
++ * The release order. Objects never run under a lock or with IRQs disabled by
++ * any frame, and a sleeping destructor runs after every section is left; an
++ * RCU-protected object is destroyed before the sections end.
++ */
++enum {
++	BPF_UNWIND_PHASE_LOCKS,		/* locks and IRQ flags */
++	BPF_UNWIND_PHASE_RCU_OBJS,	/* objects whose destructor needs RCU protection */
++	BPF_UNWIND_PHASE_SECTIONS,	/* RCU and preemption sections */
++	BPF_UNWIND_PHASE_OBJS,		/* everything else */
++	BPF_UNWIND_NR_PHASES,
++};
++
++static int release_phase(const struct bpf_resource *res)
++{
++	if (resource_is_lock(res->kind) || res->kind == BPF_RESOURCE_IRQ_FLAG)
++		return BPF_UNWIND_PHASE_LOCKS;
++	if (resource_is_section(res->kind))
++		return BPF_UNWIND_PHASE_SECTIONS;
++	return res->rcu ? BPF_UNWIND_PHASE_RCU_OBJS : BPF_UNWIND_PHASE_OBJS;
++}
++
++struct bpf_unwind_ctx {
++	int phase;	/* BPF_UNWIND_PHASE_*: what this walk releases */
++	int cnt;	/* BPF frames passed */
++	/* The sections the frames hold, per kind, summed by the first walk. */
++	const struct bpf_resource *section[BPF_UNWIND_NR_SECTIONS];
++	s64 nr_sections[BPF_UNWIND_NR_SECTIONS];
++};
++
++/*
++ * The R10 of a frame of the function @fn whose native frame pointer is @bp: a
++ * fixed distance from it, or, with a private stack, this CPU's private frame.
++ */
++static u64 bpf_unwind_fp(const struct bpf_prog_aux *fn, u64 bp)
++{
++	if (fn->priv_stack_ptr)
++		return (u64)(long)this_cpu_ptr(fn->priv_stack_ptr) + fn->priv_frame_off;
++	return bp + fn->frame_fp_off;
++}
++
++/*
++ * Release what the slots of the frame of @prog hold of the phase of this
++ * walk; @bp is its native frame pointer. The first walk sums the frame's
++ * counts of sections for their phase, and releases the locks and IRQ flags
++ * in two passes: the flags a frame saved with interrupts enabled, of which
++ * it can have one at most, since every later save found them disabled, are
++ * restored last, after the locks and the other flags in whatever order the
++ * frame took them.
++ */
++static void bpf_unwind_release_frame(struct bpf_unwind_ctx *ctx, const struct bpf_prog *prog, u64 bp)
++{
++	const struct bpf_prog_aux *fn = bpf_prog_frame_aux(prog);
++	const struct bpf_frame_desc_pool *pool = fn->frame_desc_pool;
++	int passes = ctx->phase == BPF_UNWIND_PHASE_LOCKS ? 2 : 1, pass, s;
++	const struct bpf_frame_desc *d;
++	bool late;
++	u64 fp;
++	u32 i;
++
++	if (!fn->frame_desc)
++		return;
++	d = pool->desc[fn->frame_desc - 1];
++	fp = bpf_unwind_fp(fn, bp);
++	for (pass = 0; pass < passes; pass++) {
++		for (i = 0; i < d->nent; i++) {
++			const struct bpf_frame_desc_entry *ent = &d->ent[i];
++			const struct bpf_resource *res = &pool->resources[ent->res];
++			u64 *slot = (u64 *)(long)(fp + ent->off);
++			void *handle = (void *)(long)*slot;
++
++			if (ent->flags & BPF_FRAME_ENT_COUNTER) {
++				if (ctx->phase != BPF_UNWIND_PHASE_LOCKS || pass)
++					continue;
++				s = section_index(res->kind);
++				ctx->section[s] = res;
++				ctx->nr_sections[s] += (s64)*slot;
++				continue;
++			}
++			if (!handle || release_phase(res) != ctx->phase)
++				continue;
++			late = res->kind == BPF_RESOURCE_IRQ_FLAG &&
++			       !arch_irqs_disabled_flags(*(unsigned long *)handle);
++			if (passes == 2 && late != (pass == 1))
++				continue;
++			bpf_unwind_release(res, handle);
++		}
++	}
++}
++
++static bool bpf_unwind_walker(void *cookie, u64 ip, u64 sp, u64 bp)
++{
++	struct bpf_unwind_ctx *ctx = cookie;
++	struct bpf_prog *prog;
++
++	/*
++	 * The RCU read lock is held to safely traverse the latch tree, but we
++	 * don't need its protection when accessing the prog, since it has an
++	 * active stack frame on the current stack trace, and won't disappear.
++	 */
++	rcu_read_lock();
++	prog = bpf_prog_ksym_find(ip);
++	rcu_read_unlock();
++	/* the frames of bpf_throw() and of the unwinder come first */
++	if (!prog)
++		return !ctx->cnt;
++	ctx->cnt++;
++	bpf_unwind_release_frame(ctx, prog, bp);
++	/* the main program is where the exception callback takes over */
++	return bpf_is_subprog(prog);
++}
++
++/*
++ * Release what the frames between bpf_throw() and the main program hold, the
++ * main program's included, in four phases: locks and IRQ flags,
++ * RCU-protected objects, sections, then the other objects. Each phase but
++ * the sections' is a walk over the frames, innermost first, that releases
++ * each frame's entries of the phase in the order of its descriptor; the
++ * frames are released as the walk passes them, so their number is not
++ * bounded. The sections need no walk of their own: the first one summed
++ * their counts, and sections of one kind are all the same.
++ */
++void bpf_unwind_release_frames(void)
++{
++	struct bpf_unwind_ctx ctx = {};
++	int s;
++
++	for (ctx.phase = 0; ctx.phase < BPF_UNWIND_NR_PHASES; ctx.phase++) {
++		if (ctx.phase != BPF_UNWIND_PHASE_SECTIONS) {
++			ctx.cnt = 0;
++			arch_bpf_stack_walk(bpf_unwind_walker, &ctx);
++			continue;
++		}
++		for (s = 0; s < BPF_UNWIND_NR_SECTIONS; s++) {
++			WARN_ONCE(ctx.nr_sections[s] < 0, "bpf: %lld sections to leave\n",
++				  ctx.nr_sections[s]);
++			while (ctx.nr_sections[s]-- > 0)
++				bpf_unwind_release(ctx.section[s], NULL);
++		}
++	}
++}
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 0684ac1f4f22..6c71ceb1dd4c 100644
+index 6c71ceb1dd4c..cf3cfc734ed4 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -1545,6 +1545,7 @@ static struct bpf_reference_state *acquire_reference_state(struct bpf_verifier_e
- 	if (err)
- 		return NULL;
- 	state->refs[new_ofs].insn_idx = insn_idx;
-+	state->refs[new_ofs].frameno = state->curframe;
+@@ -25695,6 +25695,10 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	if (env->prog->type == BPF_PROG_TYPE_EXT)
+ 		env->prog->expected_attach_type = 0;
  
- 	return &state->refs[new_ofs];
- }
-@@ -1625,7 +1626,11 @@ static void release_reference_state(struct bpf_verifier_state *state, int idx)
- 	return;
- }
- 
--/* bpf_rcu_read_unlock() or bpf_preempt_enable() is done, see release_reference_state() */
-+/*
-+ * bpf_rcu_read_unlock() or bpf_preempt_enable() is done, see release_reference_state().
-+ * A frame that was entered with more sections than are held now has left one of its
-+ * callers', and counts that for its exit to tell.
-+ */
- static void release_context_state(struct bpf_verifier_state *state)
- {
- 	struct bpf_func_state *frame;
-@@ -1633,6 +1638,11 @@ static void release_context_state(struct bpf_verifier_state *state)
- 
- 	for (fr = 0; fr <= state->curframe; fr++) {
- 		frame = state->frame[fr];
-+		if (frame->entry_rcu_locks > state->active_rcu_locks)
-+			frame->rcu_released_below += frame->entry_rcu_locks - state->active_rcu_locks;
-+		if (frame->entry_preempt_locks > state->active_preempt_locks)
-+			frame->preempt_released_below += frame->entry_preempt_locks -
-+							 state->active_preempt_locks;
- 		frame->entry_rcu_locks = min(frame->entry_rcu_locks, state->active_rcu_locks);
- 		frame->entry_preempt_locks = min(frame->entry_preempt_locks,
- 						 state->active_preempt_locks);
-@@ -11709,6 +11719,8 @@ static int call_func_on_its_own(struct bpf_verifier_env *env, int subprog, int i
- 		entry.refs[i].id = inherited_id(state, entry.refs[i].id);
- 		if (entry.refs[i].type == REF_TYPE_PTR)
- 			entry.refs[i].parent_id = inherited_id(state, entry.refs[i].parent_id);
-+		/* the frames that own what is inherited are not in the state */
-+		entry.refs[i].frameno = -1;
- 	}
- 	entry.active_irq_id = inherited_id(state, entry.active_irq_id);
- 	entry.active_lock_id = inherited_id(state, entry.active_lock_id);
-@@ -11878,11 +11890,12 @@ int bpf_flow_return(struct bpf_verifier_env *env, struct bpf_verifier_state *cal
- 		reg->parent_id = fresh_id(env, idmap, reg->parent_id);
- 		reg->map_uid = fresh_id(env, idmap, reg->map_uid);
- 	}
--	/* those that were held are the first */
-+	/* those that were held are the first; what the function took is the caller's now */
- 	for (i = nheld; i < caller->acquired_refs; i++) {
- 		caller->refs[i].id = fresh_id(env, idmap, caller->refs[i].id);
- 		if (caller->refs[i].type == REF_TYPE_PTR)
- 			caller->refs[i].parent_id = fresh_id(env, idmap, caller->refs[i].parent_id);
-+		caller->refs[i].frameno = caller->curframe;
- 	}
- 	caller->active_irq_id = fresh_id(env, idmap, caller->active_irq_id);
- 	caller->active_lock_id = fresh_id(env, idmap, caller->active_lock_id);
-@@ -12688,6 +12701,11 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
- 		return err;
- 	invalidate_stack_slices(env, callee->frameno, INT_MIN, 0);
- 
-+	/* What the frame holds when it returns is the caller's to release. */
-+	for (i = 0; i < state->acquired_refs; i++)
-+		if (state->refs[i].frameno == callee->frameno)
-+			state->refs[i].frameno = caller->frameno;
++	/* The program owns the frame descriptors from here on. */
++	env->prog->aux->frame_desc_pool = env->frame_desc_pool;
++	env->frame_desc_pool = NULL;
 +
- 	/* for callbacks like bpf_loop or bpf_for_each_map_elem go back to callsite,
- 	 * there function call logic would reschedule callback visit.
- 	 */
+ 	env->prog = __bpf_prog_select_runtime(env, env->prog, &ret);
+ 
+ err_release_maps:
+@@ -25731,6 +25735,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	release_btfs(env);
+ err_free_env:
+ 	bpf_free_subprog_jts(env);
++	bpf_frame_desc_pool_free(env->frame_desc_pool);
+ 	if (env->insn_aux_data)
+ 		bpf_clear_insn_aux_data(env, 0, env->insn_aux_data_len);
+ 	vfree(env->insn_aux_data);
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 9245009d9f1e..9f59b1c002d6 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -7577,7 +7577,7 @@ BPF_CALL_1(bpf_sk_release, struct sock *, sk)
+ 	return 0;
+ }
+ 
+-static const struct bpf_func_proto bpf_sk_release_proto = {
++const struct bpf_func_proto bpf_sk_release_proto = {
+ 	.func		= bpf_sk_release,
+ 	.gpl_only	= false,
+ 	.ret_type	= RET_INTEGER,
 -- 
 2.53.0
 
