@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.138
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.139
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794401868;
-	b=1vVWo1K07O8g8HjeWGZZaeM0RuVrxpAhTbR9RpeWC7rtoI4x+PDnCl3ky/vdm8/3g8Et
-	 DgH3u7ROi4/J2Qp4evRAtRD7+2bOK5K+eCRl38slE96RUOuX0c1vbDR4e0b1fzBCiOSs5
-	 Ne+2qkFoy4UNXoXkwQSnmOQce+tW7moKEFU/01fVK1C4y3ff0o2+XTx6F9AA8Kq5D4bVj
-	 6wr+fuZNtrywKfUIojIdhW+q7FRsS9rHb5j6F3Gfxf7UhDy2b0f8Ua+J5sykEczR+ZwGs
-	 TVUfjqzyTk/CT/6Fryozwah5Pvo6p2CRNbNa65wRLXeweo9CjkwNPDtuRM4bbEBxEeg==
+	t=1794401869;
+	b=odg6bf0tN8UQge4REhbo0UivWMlv1r3yBD30CWh9hr450wS+mO242f4RUdpQyfifwcem
+	 1/ZT7S3Qbp3B1H2WXWq5juEsfZ3romeEJ5Kc5t9MLEuuYHlmzsM+M0ETxaMZh4fNBZVZY
+	 ZELJ94yznTBEw2LdBzwJsy7Uj9HxRrNdf6iNm9imPN8ZZMo+0JgoUH0cgeFrVPdNXzmPF
+	 g44RwqzlzD0ZAwAcHxiH4T46vHXNDA19w8hAaC+6dksTw/P34XFP/VVsgHq6lEkDUIN5o
+	 mQX8iI3OolUxMNOfnj6/mD2BY2rPDF4VYFu1Rv7UnWII4DlmSj5SJ4+Jgo4kMAlKYpg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794401868;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794401869;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
-	bh=xMTN3mgG7LpdF0eM6BaFHa8gHHxSmkyxjKGJ5W5Kcvs=;
-	b=UpXUC6JKalrG6pTs5WxbdXJ2Fw2A41EG+F6s5PGr1RXCh8SoxVZ/o7cY482aYXT5Yy8y
-	 kj45mrNFDvI/eUtBzjfrDhLPs49u+p0Uuf0yqqRRsKkRE8LtL3Nmudsv4r3gDyX0132Lo
-	 W+PDs6EJlSXipkmumRbtBpuO963/f6ec6KP3NYfc5TstJBO3pN5gT4ugnSeVXgSLTRlbP
-	 MnvqP0iTUgFojjzsw/U9f04IIfdCA9v2hkmh/vU2S/DJvrpWxnltqpb791yEjqtCD/EBJ
-	 IX47Nr1wqpoYoVPxH+w1zZeGxvWZy+lffNpv9EjqkORJqLDfAG3QB0WBZJAj/pnRUfg==
+	bh=5SWpE+MosN932aitlPUXrTTrgaD/Z0rY06hGCJER2xQ=;
+	b=4wQ4X1DvxeDxdoE7mSFSCz9P4D0hpy9ZJg+KDrIgafQsWss3Yy0WVMa1uYo+xj89kBko
+	 6SpE7y1rNY3zhqSxzCLWaynWQhu4h0qAhXrANn/fqnVg/WqKtDNIJH1kjXKeCrRne28aW
+	 BoIpn2XfzxH1MT8PIo2SWNVGvTnaJh9EEmspsB4ichdt9OR4cqT57zNoDFSJXD0yoIZSq
+	 vdnENB9QiSZmp8l6lFF5qblWK/zpAGAqqnQlXu33nCxYYWy+5B7UIfBQ2aZBPUQIpLFq9
+	 QnGuKqlvkGsUuGnQzraICn0O38ZK+pAoZIzTxeeR8APv6LcMPGE1qyeCpf6i0RZR5vQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=sk3oqeT9;
-	arc=none smtp.remote-ip=74.125.225.138
-Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JGKDVNS+;
+	arc=none smtp.remote-ip=74.125.225.139
+Received: from mail-wm2-f11.google.com (mail-wm2-f11.google.com [74.125.225.139])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1347A606A330
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 12:57:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1347A606A330
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79260606A32A
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 12:57:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 79260606A32A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=sk3oqeT9
-Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-4b76ade741cso12338745e9.0
-        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 04:57:48 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JGKDVNS+
+Received: by mail-wm2-f11.google.com with SMTP id 5b1f17b1804b1-4a5f76661b5so12385565e9.0
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 04:57:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794401866; x=1795006666; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794401868; x=1795006668; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=xMTN3mgG7LpdF0eM6BaFHa8gHHxSmkyxjKGJ5W5Kcvs=;
-        b=sk3oqeT9/nCm2qIAPsVXyu78Mvly4dOqwxgf6gpE92TqH1+28oY0KJbCvMhYr+JlxF
-         4LLaE9tr+rIm1X47l8Uwxp8PmICWG8dSddLdOM1QjvVXImbKhlwpEUmD9bRpm/IZDtVT
-         bXG/MziO42cF/XnXWoYIbHzb8aeDPkoxNiJkWfxP4uxi4AooNhdjgdEWOTRK6Rg62iSM
-         Skbs72AksgevsJ6ze4i4WCzl0DoWGMQ0D0FZH50m8jyUyuO64LQeZaS42eV4m6sfOYJd
-         WpRDSKVgO8ngc4VlfCTHQtT0NCpEfB/bdSVCMjWfQtXiz6v456iMKUSq/WjBpHLb9F49
-         2lNA==
+        bh=5SWpE+MosN932aitlPUXrTTrgaD/Z0rY06hGCJER2xQ=;
+        b=JGKDVNS+AFsGDqz6/5froBhhR93JC9i4BikQx7uvMRyKLeZH7dKDHEFnPE6kMUZjVv
+         ev6IJ5id65RieLwt/LBWNR7Bwn/0L7qdJqNyWzTERhPc9qkbhc/PJJhnIW7RXw72AZHv
+         Cr9C4BSV9EudI/FXIkY51By4QkHT3ImYg7HW4beYmUs6nY8ndWMryiSg75ZCEsJ22rWC
+         mnW/kBhAULWN7RTKI1EJw/+YPQRlkPDxpS+oPrE5cs4ruOqqyCNeZq27D5l08QcTOihF
+         3TFPDuJulqrtA11Yn6O8BmtUs6boiy7VCII2lC8w5C1n9RLH8YoxVUKoZ4oaa1jENKuc
+         lT5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794401866; x=1795006666;
+        d=1e100.net; s=20260707; t=1794401868; x=1795006668;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=xMTN3mgG7LpdF0eM6BaFHa8gHHxSmkyxjKGJ5W5Kcvs=;
-        b=1PP6hJ/U6rrRi/4zSIUXzNTUZIdhuVSAnn/HLtkT+RPqTOs0qWDjGRIENpIUfYrDFY
-         PLFyfMjAFQv6ioG3XdEsfNUhfcGi6MIQK3MArMsJHrZoMtJHK3+Dp6Sw2L5WLMWpEUwK
-         ToM77FXuYtthWLb9KzoKVSaeIKDrouR8irLmAj68f+56TuemNdvgpwUrdt/AQ8OUeUsg
-         wFa20ZE8oZitAKMMLfulJjlXNcYUCB2hSUvJFc5TEzgvM4WqpKCx/emLYqvfVtkq7We2
-         cD8kn/dxe4TYZw5t98d2J8aCO3/+ZXi0XaQYCm++jnu136Ls5bZo4kfudOgna2zNSMb+
-         U9JA==
-X-Gm-Message-State: APuU4Z/t3BTxm06KteGWaIbvw3kMsP5QoqWpNwH/SmD38M5D6jXwdMNi
-	cefonWWNyTLjzcy8O1NdMcIOGf8yL3RofMLt5XbDUanqPU5VOx+CCxJBmGPW14nyRMI=
-X-Gm-Gg: AYBFou32dJq66/BJI09MiuW0WD/xpZOHpvQ+5hjLy1hdZZgx2JYUTh8Pi8UJPFxvx1D
-	aRbBepqDO6lVCOF7mO0klqb73zWnFrJHiNjIDVTBQvHGeza+uoeBXTy2hTAcTECQl9zqB0LZ2Qe
-	2IKykLUNXz6XUgQ6b/RTvskhUcy2s+qhkgsZHU/zOfTu+Nb4vqOfpMmviCzzhkhO2/ZZ3fnMOd3
-	x+sUCuQSifTxpDV2pl2/nUfTlifFRKnjRNMTDdlhmyoj6h1wdvKUy1JQt6vPeGch7Oaulzquffu
-	scF1g5GlGNw8/PaQbRvUVbA2cddeHa69kWv31odlUeJczuijALGDJ+/f7acsG23J77KcHk1khj5
-	tpoDvyje7jI+gqAmBeWnR/vfiPveFQkOmbzGkhpFQv3gV3cZOhDCjQBrNxMQ1wz7KphNd0kL8eg
-	G7HgnGJYdKoZv4E0uHyAHdIA1lA9kor47bz6edY86Y2HexrwdMPpDwV/xQ+na/c7XIK7YyxLlYf
-	t+0RzPkKMr+tuQGgd1F8wSPFEGeS7jJJORjEhUQkcHi/HtLmv7cZ6raD7nW8VcCYhkXWYYczgcB
-	i7EzniQDm8VF4zy3yaVrxA5P+/uC5b+Llc3JYbpYw/p8gbB9JV33ui+DptCzZqeEE6s8b9yPPWN
-	maCNivrPUAqCBBAvrybWhk82A7srGNjJGtgGTNSBKiItYIUCNqHs6blkQcJ7Gk4BPp0Wz
-X-Received: by 2002:a05:6000:2508:b0:48e:6f84:2e8e with SMTP id ffacd0b85a97d-499c6cac68amr4593460f8f.39.1794401866430;
-        Wed, 11 Nov 2026 04:57:46 -0800 (PST)
+        bh=5SWpE+MosN932aitlPUXrTTrgaD/Z0rY06hGCJER2xQ=;
+        b=W11w7r7cNSRxNX8P8AJFUaIuCR9OjlAVYSj9QGj5TpVhItP6vEmWhdCy6O1+Oc37r7
+         C0L4Pt18ospEeZBS2cQ8SUF7vCVdkLp0+il+HOpajRO4CypeKXJhI/GY1S7m3XlelYuH
+         7OtLINilnF915D6GHxyXpb2ihi2QDwFVRK2p8wvyRGnwWMkLOrIVj2jjzoZUrbd+h8dI
+         CePUcAjI+Oadrrtq3KZ2oM5SyT22Otyu9tzAhzGnfmKyCBNFKjgdlO5SFLsLO5IHKgg2
+         jJ2yPgWfj8w9DBQdVCkvKYk1Dk4kyEYOnx/CkSWBc3d5LRvs6tMkbHXYxUs0igC9cL8V
+         ZJiw==
+X-Gm-Message-State: APuU4Z+tNoe9tyJ4MtOJAUNMfKoWsOvrwZzuYW3ebJaW+8cu9M8gDu3V
+	1EWhyf5yfBHICn9RRdD394RH9fcBxfbRvvBLqIxm/ypk60Lj2rZ5n5f0+i4/3NPuUWw=
+X-Gm-Gg: AYBFou36RcUTbJJAU/+T90unqL3hx+wsIGZRf4fZXMW6L/YHxaVnxfCz3vbd24RuZUD
+	20T6xU/6qMV50kfZlD//aDXiaiZAXBbpL+IlXgTtInIM4RZu5Mwf0tqOuViKzqyH+tX5n4LwKDK
+	xw1aUQgs9MrQHX1JnmgG2ZWW49a9rI8P42KrVMg2PI0aN7GnIY7OdJgsL6YzZMO7aqYh1guYJk8
+	Hrcp3tzaumxGIXo18KebpznbgqdTd34wtQGagqsn8kEkhdivrFnPuyvCIB4i0dXz+3lBdOajP/v
+	cNfLaLGkNPxJJJ+bJVGeCcOWmrWYjtkYGhZhX3lDWGTAdtn+IroDOcnnTx1HYx3S3HLVPFGPHmD
+	akAtS3bs9aqgcFsXie7hNfc5Xzk90XAji57WVMXaYt8jrYXN4+rCrQFmhIYcRHKERUFWtkwIute
+	IUs5GfGHEdBEvLcq2V7kX4Idb8Jn+pmS5hqj84OTYJrb0u7qWFehtO5Uh7e9XTk3NonLWH4VKEh
+	/MHTfe3y/wCXp+sHmlOI9AJbzfAfXwLPu8knWpsRnwcqH5iEmYimvY9Regk/gFIHeCwpPuIy3MO
+	DBKJrUkIDD1BZPT6yjIgivvfhEvQ2kEPBsvqSAvZhUagsJKS28cxYOViySVyLuSa9eRERXNgwl9
+	h0jvjn00oLPb21IcEQUwXfqW1ngeVa/wZPbBkQUoGSD7f3gk2gXrABJDivRI+oINBNmza
+X-Received: by 2002:a05:600c:1548:b0:4a7:669c:c988 with SMTP id 5b1f17b1804b1-4ba09383873mr44906595e9.23.1794401867793;
+        Wed, 11 Nov 2026 04:57:47 -0800 (PST)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49835d2c05dsm10747969f8f.25.2026.11.11.04.57.45
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-498365ccbccsm11219494f8f.44.2026.11.11.04.57.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2026 04:57:45 -0800 (PST)
+        Wed, 11 Nov 2026 04:57:47 -0800 (PST)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -88,9 +88,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 10/29] bpf: Record where JITed frames keep the BPF stack
-Date: Wed, 11 Nov 2026 13:57:08 +0100
-Message-ID: <7fa155ff502e01de86f30c53f842c6050a98ac65.1794399387.git.memxor@gmail.com>
+Subject: [PATCH bpf-next v1 11/29] bpf: Give every reference an owner frame
+Date: Wed, 11 Nov 2026 13:57:09 +0100
+Message-ID: <d69e383da887f124f305006c9c0c2d56b39c7145.1794399387.git.memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1794399387.git.memxor@gmail.com>
 References: <cover.1794399387.git.memxor@gmail.com>
@@ -103,150 +103,148 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5413; i=memxor@gmail.com; h=from:subject:message-id; bh=3KSk1hg7TTy8rz/3lC6ZI91MO4XPDiL7aot3vidZyiQ=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetLzPz+Lg6rBQpye8pyn/3bY9J+VbdUUo/9SxznmR8JU wO53zV0lLIwiHExyIopspT838dkfKLyd6DtMm6YOaxMIEMYuDgFYCLMwYwMt/fe5yy803R5yzHl +39i93hETReWFgycZROyzqTapfjBBEaGdt7S1UH7CnuOxdX2pOTW7H+ov6bq6dQiOyeP6RoPl6v wAAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6577; i=memxor@gmail.com; h=from:subject:message-id; bh=Ti0Y4Nbnu1NBxBLsRCmL965V2Yx9mZ28dBYIsFW7k/M=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetLzPwD/2vmMdnqT9ZqrfqdcFh7hu6uzXqh5/W+86TXX 2y2C5ndUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgIm83cfIMP1v9A/Ljw9c3+Qf v/C+TNgm8nS2mI79Z3+2I7ef8his42ZkmCfpJ/tKdtJ+W2dn1t9GjuX3Si0DFMKMpBXfvxYzFVn JAAA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-The unwinder will release resources that a frame keeps on its BPF stack.
-The verifier gives their locations relative to the frame's R10. The stack
-walk reports the native frame pointer of a frame, and the position of R10
-relative to it depends on the architecture and on the stack that the
-frame uses:
+The unwinder will release the resources of each frame from that frame's
+own stack slots. Each reference in the verifier state must therefore
+belong to exactly one frame. The verifier has no such notion today: the
+state holds the references, and a frame only knows how many of the
+references held at its entry are still held.
 
- - On x86-64, R10 is the native frame pointer.
- - On arm64, R10 is the stack pointer after the frame record, the tail
-   call count pair and the callee-saved pairs are pushed. This is
-   -16 - 16 * ceil(pushed / 2) below x29. Record the distance as
-   frame_fp_off in the program's aux data. x86-64 leaves it 0.
- - A frame that uses a private stack keeps its BPF stack in the per-CPU
-   private area, so its R10 is not derived from the frame pointer. The
-   JIT knows that R10 is a fixed distance into the per-CPU private stack
-   of the function. Record the distance as priv_frame_off.
+Record the owner frame in the reference state:
 
-The arm64 JIT sets up R10 only for a program that uses it, but records
-the distances for every program.
+ - The frame that acquires a reference owns it.
+ - When a frame returns, the references it still holds pass to its
+   caller, which is the only frame left that can release them.
+ - A function that is verified on its own inherits the references of its
+   callers without their frames, see call_func_on_its_own(). No frame of
+   the state owns these inherited references, so their owner is -1.
+   References that the function returns with, beyond the inherited ones,
+   pass to the caller when the call is resumed in bpf_flow_return().
 
-Add bpf_jit_supports_exception_cleanup(), which tells the verifier
-whether the JIT records these. The other JITs that support exceptions do
-not record them yet, and keep the rule that bpf_throw() must be reached
-with no resources held.
+Callbacks release everything they acquire, so nothing changes owner when
+a callback returns, and the transfer in prepare_func_exit() has nothing
+to do for them.
+
+RCU read and preemption disabled sections have no reference state. The
+verifier tracks, per frame, how many of the sections held at its entry
+are still held, and release_context_state() lowers that count on every
+unlock. A frame that left a section of its caller therefore looks like a
+frame that was entered with fewer sections. Also count how many sections
+each frame released below its entry count, so that the exit of the frame
+can tell that it returns with fewer sections than it was called with.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- arch/arm64/net/bpf_jit_comp.c | 16 ++++++++++++++++
- arch/x86/net/bpf_jit_comp.c   |  7 +++++++
- include/linux/bpf.h           |  4 ++++
- include/linux/filter.h        |  1 +
- kernel/bpf/core.c             | 10 ++++++++++
- 5 files changed, 38 insertions(+)
+ include/linux/bpf_verifier.h | 13 +++++++++++++
+ kernel/bpf/verifier.c        | 22 ++++++++++++++++++++--
+ 2 files changed, 33 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index c9f851bd5003..418bda24020c 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -1055,6 +1055,16 @@ static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
- 	/* Stack must be multiples of 16B */
- 	ctx->stack_size = round_up(prog->aux->stack_depth, 16);
- 
-+	/*
-+	 * Where the exception unwinder finds this frame's BPF stack: the
-+	 * private stack, or below the frame record, the tail call count pair
-+	 * and the pairs push_callee_regs() pushed.
-+	 */
-+	if (ctx->priv_sp_used)
-+		prog->aux->priv_frame_off = PRIV_STACK_GUARD_SZ + ctx->stack_size;
-+	else
-+		prog->aux->frame_fp_off = -16 - 16 * DIV_ROUND_UP(ctx->nr_used_callee_reg, 2);
-+
- 	if (ctx->fp_used) {
- 		if (ctx->priv_sp_used) {
- 			/* Set up private stack pointer */
-@@ -3904,6 +3914,12 @@ bool bpf_jit_supports_exceptions(void)
- 	return true;
- }
- 
-+/* build_prologue() records where each frame keeps its BPF stack. */
-+bool bpf_jit_supports_exception_cleanup(void)
-+{
-+	return true;
-+}
-+
- bool bpf_jit_supports_arena(void)
- {
- 	return true;
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 9b7466ca1a82..9170cbe3fa16 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -2425,6 +2425,7 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
- 	priv_stack_ptr = bpf_prog->aux->priv_stack_ptr;
- 	if (priv_stack_ptr) {
- 		priv_frame_ptr = priv_stack_ptr + PRIV_STACK_GUARD_SZ + round_up(stack_depth, 8);
-+		bpf_prog->aux->priv_frame_off = PRIV_STACK_GUARD_SZ + round_up(stack_depth, 8);
- 		stack_depth = 0;
- 	}
- 
-@@ -5066,6 +5067,12 @@ bool bpf_jit_supports_exceptions(void)
- 	return IS_ENABLED(CONFIG_UNWINDER_ORC);
- }
- 
-+/* On x86-64 R10 is the frame pointer; do_jit() records where a private stack has it. */
-+bool bpf_jit_supports_exception_cleanup(void)
-+{
-+	return bpf_jit_supports_exceptions();
-+}
-+
- bool bpf_jit_supports_private_stack(void)
- {
- 	return true;
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 7f2db4e9afe0..17b13b16899d 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2010,6 +2010,10 @@ struct bpf_prog_aux {
- 	 * by the JIT; consumed by the exception unwinder.
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 7a2b6507f562..c18efe4bd54a 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -327,6 +327,12 @@ struct bpf_reference_state {
+ 	 * is used purely to inform the user of a reference leak.
  	 */
- 	s16 callee_reg_off[BPF_THROW_NR_CALLEE_SAVED];
-+	/* BPF frame pointer relative to the native frame pointer the stack walker reports */
-+	s16 frame_fp_off;
-+	/* With a private stack, the frame's R10 is this far into this CPU's priv_stack_ptr. */
-+	u32 priv_frame_off;
- #ifdef CONFIG_SECURITY
- 	void *security;
- #endif
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 61448be53f8d..08ad906f649f 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -1391,6 +1391,7 @@ bool bpf_jit_supports_stack_args(void);
- bool bpf_jit_supports_arena_args(void);
- bool bpf_jit_supports_far_kfunc_call(void);
- bool bpf_jit_supports_exceptions(void);
-+bool bpf_jit_supports_exception_cleanup(void);
- bool bpf_jit_supports_ptr_xchg(void);
- bool bpf_jit_supports_arena(void);
- bool bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena);
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 7a25d1cb2c30..59478a08b247 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -3896,6 +3896,16 @@ bool __weak bpf_jit_supports_exceptions(void)
- 	return false;
+ 	int insn_idx;
++	/*
++	 * The frame that owns the reference: the one that acquired it, or the
++	 * caller a returning frame handed it to. -1 for what the callers of a
++	 * function verified on its own hold, which are not in the state.
++	 */
++	s8 frameno;
+ 	union {
+ 		/* For REF_TYPE_PTR */
+ 		int parent_id;
+@@ -503,6 +509,13 @@ struct bpf_func_state {
+ 	u32 entry_refs;
+ 	u32 entry_rcu_locks;
+ 	u32 entry_preempt_locks;
++	/*
++	 * How many of the RCU read and preemption disabled sections held when the
++	 * frame was entered it left, or a callee of it did: a frame that returns
++	 * after that is in fewer sections than it was called in.
++	 */
++	u32 rcu_released_below;
++	u32 preempt_released_below;
+ 
+ 	/* The following fields should be last. See copy_func_state() */
+ 	/* The state of the stack. Each element of the array describes BPF_REG_SIZE
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 0684ac1f4f22..6c71ceb1dd4c 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -1545,6 +1545,7 @@ static struct bpf_reference_state *acquire_reference_state(struct bpf_verifier_e
+ 	if (err)
+ 		return NULL;
+ 	state->refs[new_ofs].insn_idx = insn_idx;
++	state->refs[new_ofs].frameno = state->curframe;
+ 
+ 	return &state->refs[new_ofs];
+ }
+@@ -1625,7 +1626,11 @@ static void release_reference_state(struct bpf_verifier_state *state, int idx)
+ 	return;
  }
  
+-/* bpf_rcu_read_unlock() or bpf_preempt_enable() is done, see release_reference_state() */
 +/*
-+ * Does the JIT record where each frame keeps its BPF stack, see
-+ * bpf_prog_aux::frame_fp_off, so that the unwinder can release what a frame
-+ * holds when bpf_throw() discards it?
++ * bpf_rcu_read_unlock() or bpf_preempt_enable() is done, see release_reference_state().
++ * A frame that was entered with more sections than are held now has left one of its
++ * callers', and counts that for its exit to tell.
 + */
-+bool __weak bpf_jit_supports_exception_cleanup(void)
-+{
-+	return false;
-+}
-+
- bool __weak bpf_jit_supports_private_stack(void)
+ static void release_context_state(struct bpf_verifier_state *state)
  {
- 	return false;
+ 	struct bpf_func_state *frame;
+@@ -1633,6 +1638,11 @@ static void release_context_state(struct bpf_verifier_state *state)
+ 
+ 	for (fr = 0; fr <= state->curframe; fr++) {
+ 		frame = state->frame[fr];
++		if (frame->entry_rcu_locks > state->active_rcu_locks)
++			frame->rcu_released_below += frame->entry_rcu_locks - state->active_rcu_locks;
++		if (frame->entry_preempt_locks > state->active_preempt_locks)
++			frame->preempt_released_below += frame->entry_preempt_locks -
++							 state->active_preempt_locks;
+ 		frame->entry_rcu_locks = min(frame->entry_rcu_locks, state->active_rcu_locks);
+ 		frame->entry_preempt_locks = min(frame->entry_preempt_locks,
+ 						 state->active_preempt_locks);
+@@ -11709,6 +11719,8 @@ static int call_func_on_its_own(struct bpf_verifier_env *env, int subprog, int i
+ 		entry.refs[i].id = inherited_id(state, entry.refs[i].id);
+ 		if (entry.refs[i].type == REF_TYPE_PTR)
+ 			entry.refs[i].parent_id = inherited_id(state, entry.refs[i].parent_id);
++		/* the frames that own what is inherited are not in the state */
++		entry.refs[i].frameno = -1;
+ 	}
+ 	entry.active_irq_id = inherited_id(state, entry.active_irq_id);
+ 	entry.active_lock_id = inherited_id(state, entry.active_lock_id);
+@@ -11878,11 +11890,12 @@ int bpf_flow_return(struct bpf_verifier_env *env, struct bpf_verifier_state *cal
+ 		reg->parent_id = fresh_id(env, idmap, reg->parent_id);
+ 		reg->map_uid = fresh_id(env, idmap, reg->map_uid);
+ 	}
+-	/* those that were held are the first */
++	/* those that were held are the first; what the function took is the caller's now */
+ 	for (i = nheld; i < caller->acquired_refs; i++) {
+ 		caller->refs[i].id = fresh_id(env, idmap, caller->refs[i].id);
+ 		if (caller->refs[i].type == REF_TYPE_PTR)
+ 			caller->refs[i].parent_id = fresh_id(env, idmap, caller->refs[i].parent_id);
++		caller->refs[i].frameno = caller->curframe;
+ 	}
+ 	caller->active_irq_id = fresh_id(env, idmap, caller->active_irq_id);
+ 	caller->active_lock_id = fresh_id(env, idmap, caller->active_lock_id);
+@@ -12688,6 +12701,11 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
+ 		return err;
+ 	invalidate_stack_slices(env, callee->frameno, INT_MIN, 0);
+ 
++	/* What the frame holds when it returns is the caller's to release. */
++	for (i = 0; i < state->acquired_refs; i++)
++		if (state->refs[i].frameno == callee->frameno)
++			state->refs[i].frameno = caller->frameno;
++
+ 	/* for callbacks like bpf_loop or bpf_for_each_map_elem go back to callsite,
+ 	 * there function call logic would reschedule callback visit.
+ 	 */
 -- 
 2.53.0
 
