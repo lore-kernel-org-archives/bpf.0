@@ -1,56 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794392571;
-	b=Zr5OtjGycCV4HIxSHBCq+14XDfZCGo3soDVZP4rt/SQBCtzLI5Fp+PqymbpBhBAWo4lZ
-	 kR6FfVv7EqJwTB045hSgKtTEsrjKp0Lbv+15tuDnHpUeTH8PdVNHlpDKM7+4c/qR0C+su
-	 SeZJFYj48x5GH0zfxWd0gTXRQk1wMlk6PzdwvLuM47RFQc4GnqOZwmoo5Krzi/fgdQhW4
-	 Fgc6ZzwzHCjAf8QidtlEE8XsgQPa91nVWyb1eHtaZULPiRvlFOKvM0hnBv5nlLwZ5NUy1
-	 Gr/QdQQWqdGg5KsnS0+BoEN1Osy03U1lFY+R79ISpEqIrm+s0C0HS2NpXH+18o51+iw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794392571;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=kbeAuwIW5ME/Hs5xII2lumTPBJynIuWfT9t5dT98Jf4=;
-	b=Vd7GyCNo6YYJDtIZhdrXUGIouBkCFExA0J24t7c29cJOtXe3Tf/Zx38+6ajQ3pU1rgUP
-	 iGfeoAUtLVxL1dBGDQLZH+8VXE74vr2JePcxhbcmFcoTW9/uJG9gqN4lEeDPUMB17Y9hy
-	 heL9x/XcGtf7cnwTouL8vozU7lfNrmQMqmWShpPQslgEPlD04OisQ2NbrWLpyLT/sVXdt
-	 kcieR4TM7T1F9qSFxtYGXnWSo0vULyMw0cF/FUbTeH8rOPUGs+aag4U9KaNx3luaDgBEA
-	 kx0YGQLxS1Gb11pFwn7iXee9vCE8gN0z9T/Xwr4vHrMBYxpruLDbfD6Cm/saNqhY0qw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kYiGiHq7;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.41
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794393172;
+	b=Je1J4n5vzDxdOPl8NpWMRSOSy0SlepFq2MQIP80KHjiW2mFyGaI+Wz4SLM9jTPkQp8ax
+	 cjpkxiZLTnPsHCMFldGa3eNdoEhPwWiU+U0Z7RRMQFDOxxLZhXmpzdLWpwt66Gv2kwhrg
+	 GsaSvJJ0BrRVVXavB0QvOEbHl9PZx3J8X2fI7oQz4db5+rWMm3+eUhxsR3Rdto6sa5Lii
+	 bKgmRVfzveYmyfZErTRk+H4j0y/DSO8+K3FfC8QTgtG3DvAaASOJh4pnQxVMtZviVj1Wi
+	 b6U0bqotIoZNvSZ+txTMehQwFuf7o9zZKmRnOPRbAAY4aGz14R44pgeOy3s7ZG/ykoQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794393172;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=02bBnMozli8MiWSGFFGAt1jIgOdeJZMOgr35PuI0WZ8=;
+	b=i03Ptcf5jX4teUvW/I9ZvyUXC0It7dPiNf15CaQRFcEi/9vDc/g4TSw+I+86UZXpGFaa
+	 73KqAhZGHVVoj5WSFathtrWiB/htrYBJIcLtQQAYc/Iuq+dW3BAuog80zqvTqZB2avtCo
+	 4gePndRcpH47LZDhFrdN/20jVWx1OpvjHjBZsJv/lrjJfR3WKR0dFy2zKJUJJkJAjKa75
+	 D8w2v4RT08dx15P7vBMD5iP5VCwGzdpViwUudcubsWcWq5NSqUJxXidbYIGKJMgOF7fBs
+	 Rht7QbrSzc3qT6J4dtsaIOt/pTv3uyRj/KvDfpbjcgNtKE/QdywCk2BLR4Rc6a4a7XQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kOKn4s7s;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.41
+Received: from mail-yx1-f41.google.com (mail-yx1-f41.google.com [74.125.224.41])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C63E6606A332
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 10:22:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 684E6606A31C
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 10:32:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 684E6606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kYiGiHq7
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E14A1F00A07;
-	Wed, 11 Nov 2026 10:22:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794392571;
-	bh=kbeAuwIW5ME/Hs5xII2lumTPBJynIuWfT9t5dT98Jf4=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=kYiGiHq7nV9pLiYtXBP7ZH5gBypNr1wpnLZup/rGF2O5X+Xui+efNzV4L7SKCFMx6
-	 QQtGy1mbnpiWBIEGUCgxlSjI3GtPHX1gieiLnm0aWpBFxALoJ2PPLmU0xbNyxqzECP
-	 LOc9TRt5QEDhBcVeSRJc6kPBNpO+q5Rh89p9y6QDjo0XtUrWYVbxWcHVVyGR2cyI6m
-	 hJPURN3E853oHhC8HjNClXIBK7IRzw6lRiroYPnKnairdL8l6Uw8KmafsCoHaw+WlY
-	 8Ijb+5EAaoRTzbnxaqAPwIYEDV3W5zUl02tDcV0ijojVZj7cSxyJPFmq7VkgN4rCHy
-	 5fjNrNUaPJh0g==
-Message-ID: <sashiko-outbox-208794@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v1 11/11] eth: fbnic: Support AF_XDP page pool
- zero copy
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, bpf@vger.kernel.org
-In-Reply-To: <20261110102039.1002605-12-bjorn@kernel.org>
-References: <20261110102039.1002605-1-bjorn@kernel.org>
- <20261110102039.1002605-12-bjorn@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 11 Nov 2026 10:22:51 +0000
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kOKn4s7s
+Received: by mail-yx1-f41.google.com with SMTP id 956f58d0204a3-67be1e468a8so2284811d50.0
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 02:32:52 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794393171; cv=none;
+        d=google.com; s=arc-20260327;
+        b=fE/QfJbnShxNLY8uY6I8LVuIBtJdcaudbLzl01JbnFaSJnMjOMmQVTi7OldLGLN7T1
+         dhzvF5D/1k5Q8dS0FHYcPfbpMx63zuIcPy+GZsuNKooqlZYFZ0thv58+KUHwwCIK7tvT
+         y9IWhggf3E4RWetIjOI3ZUDr9o2Yr2fwZqiHXs3goQGBKDhGylEWAf2fa8z9GSieWpA4
+         rTkgEeAdf55cc+hXYUuSiUgvfaUVRH5kxYd2wpxocuH9U6qbq6f6hkXW40Bj1loHkFES
+         /o++0F9RypRpa6FJbIqf6q7dDmK8dRgWlACaITP+EW5Nq6YJdlxxZMwEYSRCm/Vqg9iH
+         nTKQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=02bBnMozli8MiWSGFFGAt1jIgOdeJZMOgr35PuI0WZ8=;
+        fh=kGwa9FnHMXRuQISYUMDCO057x2Hh8EtdT7WW9AwFV8I=;
+        b=FwvCT7Wrlr7f4LWSdzKI4BSd73pqb3Na1yuPeoKzmGsO/4+qaC083y/aiNsFoP5pVe
+         dymO8s/yMzFEaFXjw2msWUgwhZPR+bCk5kz3Mk6FHJLZCxFqDudUyvpdnKjDN/fONfV4
+         cOzUgmMNjGhn7xsLUfbJspKNZYxBPq3chmF7779D2MPu/kU0odwAg+wskTpKJKDScUst
+         fpcUZPRZXYiQbksYel628VoePs3A9YpCFsC+eP0eFp7sEDGPqUYcVI/8iTUwHNWKSeT/
+         R4RJlFuULDRpQhfdUxY2cTVeLJZ/DAG9t2q0LTRmu9cp+TEX5kX3FwK9/wZrFPzpvY46
+         jqhQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794393171; x=1794997971; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=02bBnMozli8MiWSGFFGAt1jIgOdeJZMOgr35PuI0WZ8=;
+        b=kOKn4s7st+0UrDWuAYbFD3mtTNdrCVTRR8+85TqjA8fiP4ltJ7AHQigaHvo8xxhwUO
+         nPYpl1wTPtgTKILmEFdpmVyEesy2bAQR2kiEXQNhEGX4UVwhDpNkzPYFQckb74omhcA2
+         X1XNPUzOXuNY9DIuoBxr2mK3379AeWdWkrB3rwjJai5L+BTR7bNMMmYKJlgyXL50pOVg
+         VcbHXMrQrXuiMTtSQdaQiy3Y8VYMfDvwYKyN8CfyttDu0YIPbAoTE5Ly/q+8vZc3chU6
+         pSmsg6om2foGmEAapoyuEf0j8YZfLsxS8KjemDsyhn9rM/BkHNG0PQ5l3ogKQFE8TdNt
+         9KMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794393171; x=1794997971;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=02bBnMozli8MiWSGFFGAt1jIgOdeJZMOgr35PuI0WZ8=;
+        b=YlsrnAC87ypjW3ko3uPNnG1ztQRFD0sOI+d+QcuQGNlHYoCrR56y73JZERGqNUaMZc
+         rf65LMUCL4/eh8bXmkAb5pNky5S6EFdS9miZRuNdgtP/qt/+KORFIak7K46VVJ0C0MB2
+         JjJ9Et4z0F3DYYevzcEPDuozKigCUgS38L4vUpllXatMBEVJfgx7eBL0I4PUzi0IIf0f
+         J7lB27dqPd5cJBjIT1LLZWshwAIy5N63VZyg/TZOFd/Nx9sY9vzLd7KZj+PqU2Tj/FvU
+         Mf74lh8z7+DJmFF+Bf7tYMm7Zrewgdz82aSxqVmQpAtmFg0xkmREjWZ5onKSis1ZIoaZ
+         Tifw==
+X-Forwarded-Encrypted: i=1; AL+hErHm5nW9yUNEpfMjW4b/G4IBytZKLOr25iVwdMIeuwA6JfFIkIGMbnRULi5Phvhd+J2iyY4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8ZUvWQDPVZN5dyOtR/TPXvBH6zZrM61Gp3ks+VupI0MTgMyZYH
+	iR7wY24VKLPL4HLJDQLBLR1GZ4kWXghm4/dsAcowWfzh2Ma9YD8SE5U10Kq3IfRKiJGK84qSvRE
+	boJAdBOwhksFMVcZ/f/SPMc2GrCVrIvk=
+X-Gm-Gg: AYBFou1hh69hYKsbz1tbbSfhyU0kVs1w8ECL/bdGVZsYkaTc7D5eGR4R2yM3mygfV3F
+	MSJKgeCPo3iggbRa+TVG25cZaG0n5SFE2oOhBEWw8IEIo9iY65pjPgmhIWYXKatR6S2rPbqfg4P
+	NYgynVWxX3oQ4TGN5iwvgriT8/4ivbgK+5BTuPs23T9ZZDOcRfRtEqIuHqELMWkHbouygpDvVD6
+	JTGNt6Bu8UB9CAM3JIqGLIqwIB98isDrfr/Uk8yumtfszsKF8gklQbIggzPSvs1EJNBcM+PWWOX
+	o6WnwMeL70MOwiVmv9gukj6r4qS6VWzEaPf4sqCm9JSCNxYCnqy+zA9gzLytdRH8nDw3BSPf4i6
+	ltyO5KKUBggbsqf8iZF7Km3gI9oJZ31vsNBLf0M6FwqfV8FzZJQNSpxQyk4g=
+X-Received: by 2002:a05:690e:d4b:b0:67c:1c64:45e9 with SMTP id
+ 956f58d0204a3-67c680625cdmr1508099d50.101.1794393171367; Wed, 11 Nov 2026
+ 02:32:51 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,65 +103,100 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+References: <20261110164046.454431-2-a.s.protopopov@gmail.com> <08e4851ff6c0fec6c90ae269b9edafedafdc5ed0462802fe1c1dae6aef465696@mail.kernel.org>
+In-Reply-To: <08e4851ff6c0fec6c90ae269b9edafedafdc5ed0462802fe1c1dae6aef465696@mail.kernel.org>
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+Date: Wed, 11 Nov 2026 11:32:40 +0100
+X-Gm-Features: AclHuK_GbxvTdlzc2_hr4epNElrWdws4BUJQsklCjuLESJeU9114xBRiJsDQXd4
+Message-ID: <CAGn_ityGqppNp6AeCH8m38o7k0=+syWpoMQb3s3iQBi+cL0wxg@mail.gmail.com>
+Subject: Re: [PATCH v3 bpf-next 01/18] bpf: Add BTF ID sets for fmod_ret targets
+To: bot+bpf-ci@kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
+	memxor@gmail.com, almagui@kernel.org, john.fastabend@gmail.com, 
+	qmo@kernel.org, brauner@kernel.org, kpsingh@kernel.org, 
+	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
+	ihor.solodrai@linux.dev, sashal@kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, martin.lau@kernel.org, mason@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found no new issues
-in this patch, but noticed 1 related pre-existing issue it does not
-introduce:
-- [Critical] eth: fbnic: wrong Rx queue index used for idle polling in
-  fbnic_queue_stop() [1]
---
+On Wed, Nov 11, 2026 at 9:01=E2=80=AFAM <bot+bpf-ci@kernel.org> wrote:
+>
+> > bpf: Add BTF ID sets for fmod_ret targets
+>
+> TL;DR: Comment nit only: the BTF_SET8_FMODRET comment (also in tools/incl=
+ude)
+> says the set governs fentry/fexit attachment, but non-sleepable fentry/fe=
+xit
+> never consult it. It could mislead readers.
+>
+> > diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
+> > --- a/include/linux/btf_ids.h
+> > +++ b/include/linux/btf_ids.h
+>
+> [ ... ]
+>
+> > @@ -13,6 +13,12 @@ struct btf_id_set {
+> >  /* This flag implies BTF_SET8 holds kfunc(s) */
+> >  #define BTF_SET8_KFUNCS              (1 << 0)
+> >
+> > +/*
+> > + * This flag implies BTF_SET8 holds functions which BPF fmod_ret, fent=
+ry and
+> > + * fexit programs may attach to. Per-function flags: KF_SLEEPABLE only=
+.
+> > + */
+> > +#define BTF_SET8_FMODRET     (1 << 1)
+> > +
+>
+> This isn't a bug, but does this comment describe the set accurately?  It
+> says the set holds functions that fmod_ret, fentry and fexit programs may
+> attach to, which reads as if the set controls fentry/fexit attachment.
+>
+> The set is only read through btf_kfunc_is_modify_return(), which has two
+> callers.  bpf_check_attach_target() uses it for non-sleepable
+> BPF_MODIFY_RETURN only:
+>
+>     } else if (prog->expected_attach_type =3D=3D BPF_MODIFY_RETURN) {
+>         ...
+>         if (btf_kfunc_is_modify_return(btf, btf_id, prog) ||
+>             !check_attach_modify_return(addr, tname))
+>             ret =3D 0;
+>
+> and btf_id_allow_sleepable() uses it for sleepable programs only, and
+> requires KF_SLEEPABLE:
+>
+>     u32 *flags =3D btf_kfunc_is_modify_return(btf, btf_id, prog);
+>     if (flags && (*flags & KF_SLEEPABLE))
+>         return 0;
+>
+> Non-sleepable fentry and fexit programs never look at the set.  This
+> remains true through the end of the series (6dc8474f6891 has the same two
+> callers).
+>
+> The commit message ("the functions BPF fmod_ret programs may attach to ..=
+.
+> KF_SLEEPABLE marks targets sleepable programs may attach to") and the
+> resolve_btfids header comment ("the targets of BPF fmod_ret programs")
+> describe it differently.  Someone could read this comment and add a
+> function to a BTF_FMODRET set to make fentry/fexit attach work, which wou=
+ld
+> also allow fmod_ret programs to override its return value.
+>
+> Could the wording be along the lines of "the set holds fmod_ret targets,
+> and KF_SLEEPABLE additionally lets sleepable fentry, fexit and fmod_ret
+> programs attach"?  The identical comment in tools/include/linux/btf_ids.h
+> has the same problem.
 
-commit 94641017ff155e4aaace7b6d7179917c8e4199a7
-Author: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
+Yes, I will fix it, and send on the next occasion.
 
-eth: fbnic: Support AF_XDP page pool zero copy
-
-This commit adds AF_XDP zero-copy support to fbnic using a page pool
-memory provider shared between header and payload rings, and transmits
-socket descriptors on the XDP TX ring during NAPI polling.
-
-> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c b/drivers/net/e=
-thernet/meta/fbnic/fbnic_txrx.c
-> index d96c957d6fbad..c358003f053b6 100644
-> --- a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-
-[ ... ]
-> @@ -3216,5 +3479,6 @@ const struct netdev_queue_mgmt_ops fbnic_queue_mgmt=
-_ops =3D {
->  	.ndo_queue_stop		=3D fbnic_queue_stop,
->  	.ndo_default_qcfg	=3D fbnic_default_qcfg,
->  	.ndo_validate_qcfg	=3D fbnic_validate_qcfg,
-> -	.supported_params	=3D QCFG_RX_PAGE_SIZE,
-> +	.supported_params	=3D QCFG_RX_PAGE_SIZE | QCFG_RX_HEADROOM,
-> +	.xsk_page_pool		=3D true,
->  };
-
-[Severity: Critical]
-This problem wasn't introduced by this patch, but does fbnic_queue_stop()
-poll the wrong RX hardware queue index for idle state [1] when
-stopping a non-zero RX queue (such as when binding an AF_XDP socket)?
-
-drivers/net/ethernet/meta/fbnic/fbnic_txrx.c:fbnic_queue_stop() {
-	...
-	for (t =3D 0; t < nv->txt_count + nv->rxt_count; t++) {
-		err =3D fbnic_wait_queue_idle(fbn, t >=3D nv->txt_count,
-					    nv->qt[t].sub0.q_idx);
-		if (err)
-			goto err_restart;
-	}
-	...
-}
-
-In fbnic_alloc_napi_vector(), RX queue triads initialize qt->sub0.q_idx to
-0 and store rxq_idx in qt->cmpl.q_idx. Passing sub0.q_idx to
-fbnic_wait_queue_idle() checks RX queue 0 instead of the target RX queue:
-if queue 0 is idle while the target RX queue is still active,
-fbnic_queue_stop() frees the active queue's resources while DMA is still in
-flight, whereas if queue 0 is busy, stopping another RX queue can time out.
-
-[1] https://sashiko.dev/#/bug/linux-197dd65d-fb9f-419a-afba-7621f586ae26
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261110102039.1002=
-605-1-bjorn@kernel.org?part=3D11
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/429818=
+85558
