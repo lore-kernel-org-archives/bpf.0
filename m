@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.139
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.65
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794401897;
-	b=Pj0zPa79UZ6/tZFb5PYeuLqQTyv8lgoENM88IsAmDL+29X9EpXtyHu8ChL2Mlyj9e+nR
-	 RWVgu3KTQ3/bVnVbklOzHQ1YL/fnNfOvDWPmulH60QWmjWwc2LygHcHNXbvU6S5LqwgpF
-	 vSyjDosHgrvGnp9nBc6UVlB1zkvz12Skn6Xl+VaMflS6UTtxWBzK/G+xgPXzcCjTJM4Uk
-	 m9tgu/VQuixmQoqIA44kJRVoRpZ3aiBkkg/6WMSg3bo28762aSORmdLQ1MwoFjzvsf5PU
-	 xDFbp6VszpVKNZbKJF8L6bUaPQ1rwozwh7AceIOkzBdKR1In/yYeaJv+jdT5Y4vSCMw==
+	t=1794401899;
+	b=SFTWplQAyurZAObbUpi6zLEnzxwfgE3TNjQYsC1ozYEaLIet54J+WcqSlUyMH7D/NF+B
+	 A5p7IzcRItAptJJH4ulEVwg6Lz6Jg8dfZ03kXJuH2s+VlcWYiUB9Z6YdtYvTXFwpjjFZS
+	 bV5yhVyb96mL0xnbcs3ZHLcX0vydynQj/sHgqiOVKGKpjpgNT8nE+6SI11LxhUo+8G/dP
+	 VJhmLQBbKLsZ7G+MuoBLHz1o2DdASBbunaoyGXJ7oPzuE0+0kKIbK3rhnqV0AtOfNpHos
+	 tLm0eu8AS6QN4ZdHGic/ikJAlvZsvsN/jQ+K/KXclxHOjM/XSx4kEg1WJvdD2CcXBew==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794401897;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794401899;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
-	bh=4hBvIh9oQq7D6mAOusToYzUJ6Dyllj/MTnnt8Rlp4Rw=;
-	b=t4O3XHt+GMNXq4zbIHSqbRrAt9HoXsfMFCtCekZbm3G8a5DQiv8S3yNXk30Rb5fb4jdN
-	 wmz+eiDGqYYs+Q1x36iUdrYiHiuRWRYPPr5duRGxE4vWw6oHSVqmRwsWtaOO1cI7TakML
-	 KL0GQYX0mKeSiFhDCrhsstyaZMmYAp2wDu1ncN882/cor8ilkvQhV513pg0X4+JxAaxjV
-	 IpdBZ+jp6WCas6EQLAM38nVFNa1IcyakEEcKXGDwAWQa4AxCR289U5mpJr1A5fa9RKHYt
-	 4PUJOf/3IS4P8RWJNEYt3Or0OXdYpok5mpvrXpwgOlIuQX4T8HQ7hGiPEZf4FGTcTXQ==
+	bh=2/TV/FJfcgR36II/jBfRgBHTG+gIro3b5Ad/rPOLJ2g=;
+	b=0Sz1LcQ9jDPwpQAYOvY0v3iNdKFneWnCyxDx74vKSQZRuEDqKUi34IAzjuOaYHQuSefb
+	 qEBl/UXgOlPwe1darpM/Bjxvwy+vnJy+I5Qrqqn7M8Y1V3dBOrKRY4gCPCBWMWuwsObzh
+	 MLhyPZ2aDqJ7JbNeQzEBymowLzRaOYzcJZdeQ5DnQXFn1ubyX7t9vR4FMjzX5QEm+K966
+	 9HQdbRhrTlyKL78aOssD2YIupIofVLtSZvGNyV7QWVGH07RTkSFdj8Ywa4VtXd8Me7KDn
+	 Y6+izRyK60cQD+UnWQ2KfxzE5epsFen+OsXmy8iM43CaC4+WLocp1NP80ucZDIr7c9Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xZc+D3wx;
-	arc=none smtp.remote-ip=74.125.225.139
-Received: from mail-wm2-f11.google.com (mail-wm2-f11.google.com [74.125.225.139])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="cu/wdEqd";
+	arc=none smtp.remote-ip=74.125.225.65
+Received: from mail-wr2-f1.google.com (mail-wr2-f1.google.com [74.125.225.65])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F0BE606A32E
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 12:58:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5F0BE606A32E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC27C606A326
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 12:58:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AC27C606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xZc+D3wx
-Received: by mail-wm2-f11.google.com with SMTP id 5b1f17b1804b1-4a611dcb60dso7331735e9.0
-        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 04:58:17 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cu/wdEqd
+Received: by mail-wr2-f1.google.com with SMTP id ffacd0b85a97d-48e345608cfso928033f8f.0
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 04:58:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794401896; x=1795006696; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794401897; x=1795006697; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=4hBvIh9oQq7D6mAOusToYzUJ6Dyllj/MTnnt8Rlp4Rw=;
-        b=xZc+D3wx3XKcmtOJ4Zbrrbz7hSfmqaPs2Nbn4ovkAMOxgLhvDxCBUAxNW41iWXQ0pB
-         pcGgK2lA01hPq4ovqrsUUvn2MgzvF+eWK6tAww5fteFxLUc9FUM37MqoRMuCunkRZSWD
-         W185+p8FCweBjZ/OjpwDWQleZ0SxlMFFJ5V5u5joqxLwInnzAKeuG622TpF2rkiHDYz+
-         Cl2YFWg3X9rdhIUCjTYMX1xoSB/SmacyVHQuRvbe/uMjx9l8YTlt6hACr3cNa8UKBsBs
-         +VPrdbXo8+6XtMfhiED4STnVxQnLedloeMtZH0A1XJTrA7K6YSBenUbWLQ+0cObnow9K
-         r4WA==
+        bh=2/TV/FJfcgR36II/jBfRgBHTG+gIro3b5Ad/rPOLJ2g=;
+        b=cu/wdEqdsI7V0qf/XJ1KZMJXowwWDR7j+JrvJVaA4P+eWeofrHJ6uY18yIc2rSXmJG
+         bUrEBF+LM87T/hYe4unDpvyHG6vjM5/r7rsjsvEPxzt3HBK13wjpyD1ogX8deK8cLev1
+         g6Bdt+uUynueYTeIPrAroR8XYItOQPOJ6nLVgm43tTtk6g1D6OUnUj2xlmdCgcJyt1Gu
+         JamyNc2TWJGltQsXUCLO6g9GndInQOexRAbqlL2lqiTMtd+LufM5axq0GjAub1nGplGt
+         39rOf/muyUoDVEmbVCeodzsBmEaT4AmEbyKWUQ/uyTgR3g52OL/x+sSdHl8nKNmgWdcq
+         B5iA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794401896; x=1795006696;
+        d=1e100.net; s=20260707; t=1794401897; x=1795006697;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=4hBvIh9oQq7D6mAOusToYzUJ6Dyllj/MTnnt8Rlp4Rw=;
-        b=xWPPT1rHVjp0kkcH6uX8/HszZa7EvHigwI3UnHrikS34f1HAu+8qiMhujiUEXSsjpr
-         CoQ2faVfj7P8DvcvzlwbuxpgLUyCQJNWQ0kXdlVINxHJL3JR2tJeW0IXr138b9LKGL//
-         jRNqqoHHZOXRyFiSxb2ryvor2nyCsO0ZQaxyndktLaUtyfJVt+xuhJ9gd8f75MlJoaPk
-         pXmrHtjA56bP4fc1tGxe7NJIh6Hl2HcdYo3133hk3lpQ3+u09Xhvm2HYip9f+2e1iA1v
-         aoEGcHQxfav8juoBhumv9a/g+7IsigXv0L5nC2WwNFEXX+VLTA/s4G/r+wCxhWMU5Hi/
-         +bGw==
-X-Gm-Message-State: APuU4Z8bcwM+OGxLk3hgZH2a+hhl/0edkia5c9Y2Ty3i3WYyk4f7BuKl
-	GjYv0OaAQbDz+nj4NBKisXotYrJrIgkTPhp4MDGcnvxTSKjgMYi4gzt5Aku9IDrLXIo=
-X-Gm-Gg: AYBFou2ehlanYaL+bt7a5f6paVNGX5Mve3Yjn05Be3WhKu4jQI8Vaj2GKb68ViidyUj
-	sUqAgGBeUuQgf3kK/gysUgE9OOpkQ21IZkT7ThSkVbCsNgz/2WyMsnfb+uKMlSFWpdGF+6UVRlX
-	WDO5NxdtkOKfxt0gNQ+6CLAbosj4EfSBWeK9N8SX8gJxbCU+LSGrQ8bDHR88mdQKO961xMuk+T7
-	mRg1DeBvtNc98bGKMP42ZdopQ3oCrJlQcjx/EmMUdrFEmz7CKb/4pa8mJiDHtP9yGFDJcxuY2y+
-	m5ICOA1U4wna/cfTuvLhrwKKD9MYOAiYtFQFBP2xOS80ouVSKU5UnT3JDNOhXfrnHup3mcCmH+5
-	gbjX2GzruAAK8BPOSH3ZWGxNhXNsOD+M37U5kz2Vh4zofZkVKVt5ldnpBkcEMuSMOFnkH0qPo49
-	N69o02FsOuq8M9ntsnDWy1WXBADPaTZU3C+UMV8FNCkQjZ+rzQhQxzpyxd5l/eFmE6uT5+JawaQ
-	DU22d5cBcenSppdO9gumIm4juFSk66yRxbZwN/eDyilvofpYLMPNp71+aZEm/dtJ740eVLfTDej
-	iq8fsn9Gni0L4vdW9WcTHecIcQRBfO2Yd+tekMrvtcnWZTWQVAeQe1CM0jb58cKSURm0vDiqnJU
-	97r3Awd66U9Ct2azxZRAizFdO/49qM05iquS5J69fhbNF+6sE0EbYY/DWZqoUGwHl+4AW
-X-Received: by 2002:a05:600c:871b:b0:4ab:e27d:e241 with SMTP id 5b1f17b1804b1-4ba0938a51cmr42532925e9.15.1794401895672;
-        Wed, 11 Nov 2026 04:58:15 -0800 (PST)
+        bh=2/TV/FJfcgR36II/jBfRgBHTG+gIro3b5Ad/rPOLJ2g=;
+        b=bXe9ynlpoEWQ30VD1677hfi3BqLOx0n9R5XDS2YPM4RxxcQJ5l/n6wtoGU7iHWloB7
+         THchphVD5u/YZgeNn+cSAWRevKW+SkmsNHkBejYhDYfoKcF8opoxyD6MUUj7RrA0SuQ5
+         i9DwR2YHkhrQ10RAfhh/NV/du6yTz5Icrg2kdjtDp85t8ymwc2ty2wvb76UpSxhx24U4
+         5wRjmIGNbs6qtlaBoTnI17Xcuk2zbECWMkuIq9KtN2tDSX5Jr2C3RYus7dJwNPOMrS7V
+         IBHFrgHuVAI96zmWxt1MM0KuNRM8aUlCI6KAMJc3iIoOSbq5vgvPbUsjBZxEwCCZErTm
+         6vKA==
+X-Gm-Message-State: APuU4Z/CI89xqCjciUz9xhlp3k/+u8TBHTpRUN+Dif/YxEy6MFFQ8z0/
+	FSC0bF/dz5u4rx2fSM0CgB1J2HnqwCMHDmJt0eVcd+FHcEzyft3s6EFBV6q44sUPxnc=
+X-Gm-Gg: AYBFou3OILj62Tn9Aq3xAyqRKePFfMaTOb2GsT8do3JOnbAEKkk+6gqQOYi76t2BvRN
+	fH5H1psvBgnzNTj0b007mZjqZkgsF3dqSM4diKtKa2d7dh+vmMCtUkPqzQlDcn+0dZCGBoaDmah
+	/EI+LlyzDsNDNUstqmS59M/B5QcvHNBYhAzF27K/0IXGmTzvttateXsAPuIgb1drIqeGmKcEMnb
+	9fobVAVaj7Mezs2E3SXowvIneKDLZrW+WLF5pdHGH5jMHXVnJQXlnLM4kKwWM8n3DC8VA363n3N
+	4oqXrVZH2YhABKE5YcFwksfaOUwZ1xNCrP2v3ZM88DJJUdEtqXIWSLFSjrdopHaNJ03S019IBZV
+	HrIzyZ6HnRAVX1bIJy208zS8J3IEBZlT78I7KQSpcSFyrMTZ3Nx4Q9gcHif4V7N+HClV8vbmZ5M
+	M8EDGBtwN+QazmdbLBemmmb6rhcN0x1vffr2KFK+BhVAMJHN9VwB1zZ8UdBw46IIzXiGNTYWsxs
+	QsykedY39i1rVtgwMndp8kn1Neb7KTh5HK7c0CDu/cnoh1PVSXjZ7k8EU8c1Epv+979WkoJYdOB
+	eka1l1QPRspSXTk3YUedAir9CAgYNyWdgIhBqutWA2solBK63taJn7imKmjVn3+DZ9W+WrMcs8V
+	lpl5yvKb7fvN6EPRy5lTWT0JexCfuzzwQrhdDOFcpvQBlWN+tWBpzf17jfTwG1SMzf6O0
+X-Received: by 2002:a5d:5d09:0:b0:499:81db:47a3 with SMTP id ffacd0b85a97d-499c7271480mr4362225f8f.11.1794401896966;
+        Wed, 11 Nov 2026 04:58:16 -0800 (PST)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba0204784esm176603165e9.10.2026.11.11.04.58.15
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-499823761f5sm5858297f8f.2.2026.11.11.04.58.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2026 04:58:15 -0800 (PST)
+        Wed, 11 Nov 2026 04:58:16 -0800 (PST)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -88,9 +88,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 28/29] selftests/bpf: Test cleanup of locks described at sites
-Date: Wed, 11 Nov 2026 13:57:26 +0100
-Message-ID: <edb9c688040eac1600ae4e52c5e0bec54ac79065.1794399387.git.memxor@gmail.com>
+Subject: [PATCH bpf-next v1 29/29] selftests/bpf: Test callee releases through callx
+Date: Wed, 11 Nov 2026 13:57:27 +0100
+Message-ID: <276f6604b7a03c60f723420be77963572472a982.1794399387.git.memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1794399387.git.memxor@gmail.com>
 References: <cover.1794399387.git.memxor@gmail.com>
@@ -103,186 +103,281 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5538; i=memxor@gmail.com; h=from:subject:message-id; bh=ndLmkVWA/7V11W4oBDBrM5OzTE2yWQr1+VXm2uo5+PY=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetLzNJ/3a4XZzWsU/G7K8NzSydfb/cRr+OG55zCdJyes c0w38PVUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgIlkRjEyfPN/8sH95dO07B+Z 10y8eAtLj1oem303/b76Jst3E2x3czH80zxsEbjEyvj3zuuHM2dv6CjYNTvnkGW74TXWbxNdfA8 /4wEA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8719; i=memxor@gmail.com; h=from:subject:message-id; bh=NfDwBjx9nL6W69PR2yV2AZAr7niYlQF51VnRZFp6VhY=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetLzNKHNztnBvK51rO96uook4xan2jnE6Hh3J3+1dtlc X/5fuOOUhYGMS4GWTFFlpL/+5iMT1T+DrRdxg0zh5UJZAgDF6cATET8GCPDBZ9rp+afPVa6p/sj U7Pa3F6J0xlhM9O4/KN8vW7tDL+tysjwXPFh6YWE1M29/e9Tf0lLZUpaGrlaTg5mNJIMPWLy6So LAA==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Add programs to exceptions_cleanup that throw while holding a lock that
-has no hidden slot:
+Add a program to exceptions_cleanup that keeps a record in a hidden slot
+and passes it to a callee through a function pointer. The caller throws
+with the record in its slot, and the callee throws before and after its
+discard, when the slot of the caller is already cleared.
 
- - the lock of a global variable, taken by a subprog for its caller,
-   which is at a fixed address;
- - the lock of a map element, found through the pointer to the element
-   that the frame keeps in R7.
+Check in verifier_frame_desc the slots and instructions that this takes,
+and that the caller clears the hidden slot of a lock before a callx to a
+subprog that unlocks.
 
-Check in verifier_frame_desc that each takes a site descriptor, no slot,
-and no inserted instruction.
+Add a program to exceptions_fail in which a callx can call one subprog
+that discards the record and another that leaves it with the caller,
+which keeps it in a hidden slot.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- .../bpf/prog_tests/exceptions_cleanup.c       |  3 +
- .../selftests/bpf/progs/exceptions_cleanup.c  | 63 +++++++++++++++++++
- .../selftests/bpf/progs/verifier_frame_desc.c | 61 ++++++++++++++++++
- 3 files changed, 127 insertions(+)
+ .../bpf/prog_tests/exceptions_cleanup.c       |  9 ++
+ .../selftests/bpf/progs/exceptions_cleanup.c  | 44 ++++++++++
+ .../selftests/bpf/progs/exceptions_fail.c     | 70 ++++++++++++++++
+ .../selftests/bpf/progs/verifier_frame_desc.c | 83 +++++++++++++++++++
+ 4 files changed, 206 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c b/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
-index 9ba2cd9c8097..5ef5f01a6be1 100644
+index 5ef5f01a6be1..07d3e8cd7046 100644
 --- a/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
 +++ b/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
-@@ -265,6 +265,9 @@ static void run_suite(const char *prefix)
- 	/* What a frame holds that a callee acquired for it. */
- 	THROW(throw_iter_from_callee, 1, "0");
- 	THROW(throw_rcu_from_callee, 0, "s");
-+	/* Locks the sites name: at a fixed address, or through a pointer the frame keeps. */
-+	THROW(throw_lock_from_callee, 1, "0");
-+	THROW(throw_lock_in_value, 1, "0");
- 	/* A file and the reader of its dynptr, which goes first. */
- 	snprintf(name, sizeof(name), "%sthrow_file_dynptr_held", prefix);
- 	if (test__start_subtest(name))
+@@ -253,6 +253,15 @@ static void run_suite(const char *prefix)
+ 	       1, "", .param = 10);
+ 	RUN_AS(throw_callee_consumes_from_slot, "throw_callee_consumes_from_slot_return", 0,
+ 	       1, "", .param = 8);
++	/* a callx hands over like a call, and its caller empties the slot in front of it */
++	RUN_AS(throw_callx_consumes_from_slot, "throw_callx_consumes_from_slot_caller", THROWN,
++	       1, "0", .param = 3);
++	RUN_AS(throw_callx_consumes_from_slot, "throw_callx_consumes_from_slot_callee", THROWN,
++	       1, "0", .param = 1);
++	RUN_AS(throw_callx_consumes_from_slot, "throw_callx_consumes_from_slot_after", THROWN,
++	       1, "", .param = 2);
++	RUN_AS(throw_callx_consumes_from_slot, "throw_callx_consumes_from_slot_return", 0,
++	       1, "", .param = 0);
+ 	/* the callee has it nowhere at its throw and keeps it in a slot of its own */
+ 	RUN_AS(throw_callee_consumes_slot, "throw_callee_consumes_slot_throw", THROWN, 1, "0",
+ 	       .param = 1);
 diff --git a/tools/testing/selftests/bpf/progs/exceptions_cleanup.c b/tools/testing/selftests/bpf/progs/exceptions_cleanup.c
-index 8700349a8f9c..d6bb893f9da2 100644
+index d6bb893f9da2..13cb476dffe6 100644
 --- a/tools/testing/selftests/bpf/progs/exceptions_cleanup.c
 +++ b/tools/testing/selftests/bpf/progs/exceptions_cleanup.c
-@@ -1887,4 +1887,67 @@ int throw_rcu_from_callee(struct __sk_buff *ctx)
- 	return 0;
- }
- 
-+/* ---- locks the sites of a frame name ---- */
-+
-+static __noinline void take_glock(void)
-+{
-+	bpf_spin_lock(&glock);
-+}
-+
-+/*
-+ * A subprog takes the lock for its caller, which throws holding it: the lock
-+ * of a global variable is at a fixed address, which the throw unlocks.
-+ */
-+SEC("tc")
-+int throw_lock_from_callee(struct __sk_buff *ctx)
-+{
-+	mark_acquired(&glock);
-+	take_glock();
-+	if (ctx->len)
-+		bpf_throw(0xeB9F);
-+	bpf_spin_unlock(&glock);
-+	return 0;
-+}
-+
-+/*
-+ * The lock of a map element is taken through the pointer in R7, which the
-+ * frame still has at the throw: the lock is found through it.
-+ */
-+SEC("tc")
-+__naked int throw_lock_in_value(void)
-+{
-+	asm volatile (
-+	"r1 = 0;"
-+	"*(u32 *)(r10 - 4) = r1;"
-+	"r1 = %[lock_map] ll;"
-+	"r2 = r10;"
-+	"r2 += -4;"
-+	"call %[bpf_map_lookup_elem];"
-+	"if r0 == 0 goto 1f;"
-+	"r7 = r0;"
-+	"r2 = r7;"
-+	"r2 += %[lock_off];"
-+	"r1 = %[acquired] ll;"
-+	"*(u64 *)(r1 + 0) = r2;"
-+	"r2 = 1;"
-+	"r1 = %[acquired_cnt] ll;"
-+	"*(u32 *)(r1 + 0) = r2;"
-+	"r1 = r7;"
-+	"r1 += %[lock_off];"
-+	"call %[bpf_spin_lock];"
-+	"r1 = 0xeB9F;"
-+	"call %[bpf_throw];"
-+	"1: r0 = 0;"
-+	"exit;"
-+	:
-+	: __imm_addr(lock_map),
-+	  __imm_addr(acquired),
-+	  __imm_addr(acquired_cnt),
-+	  __imm(bpf_map_lookup_elem),
-+	  __imm(bpf_spin_lock),
-+	  __imm(bpf_throw),
-+	  [lock_off]"i"(offsetof(struct locked_foo, lock))
-+	: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/verifier_frame_desc.c b/tools/testing/selftests/bpf/progs/verifier_frame_desc.c
-index 0faf464d113a..e0456a929126 100644
---- a/tools/testing/selftests/bpf/progs/verifier_frame_desc.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_frame_desc.c
-@@ -799,6 +799,67 @@ __naked int callee_unlocks_slot(void)
+@@ -1730,6 +1730,50 @@ __naked int throw_callee_consumes_from_slot(void)
  	: __clobber_all);
  }
  
-+static __noinline void take_slock(void)
-+{
-+	bpf_spin_lock(&slock);
-+}
-+
 +/*
-+ * A subprog takes the lock and returns holding it, and the throw of its
-+ * caller finds it held: the lock is at a fixed address, so no slot has to
-+ * follow it out of the frame that took it.
++ * The same through the address of the callee, with the record in no register
++ * at the throw of the caller: the insns in front of the callx empty the slot
++ * of the caller, so a throw of the callee in front of its discard releases
++ * the record once.
 + */
 +SEC("tc")
-+__description("frame_desc: a lock a subprog returns holding, held at the throw")
-+__arch_x86_64 __arch_arm64
-+__success __log_level(5)
-+__msg("frame descriptors: slots 0 insns 0 sites 1")
-+int lock_wrapper_at_throw(struct __sk_buff *skb)
-+{
-+	take_slock();
-+	if (skb->len > 100)
-+		bpf_throw(0);
-+	bpf_spin_unlock(&slock);
-+	return 0;
-+}
-+
-+/*
-+ * The lock is in a map value the frame keeps a pointer to in R7: the
-+ * descriptor of the throw names the register and how far into the value the
-+ * lock is.
-+ */
-+SEC("tc")
-+__description("frame_desc: a lock found through a pointer the frame keeps has no slot")
-+__arch_x86_64 __arch_arm64
-+__success __log_level(5)
-+__msg("frame descriptors: slots 0 insns 0 sites 1")
-+__naked int lock_in_value_at_throw(void)
++__naked int throw_callx_consumes_from_slot(void)
 +{
 +	asm volatile (
++	"r1 = %[ringbuf] ll;"
++	"r2 = 8;"
++	"r3 = 0;"
++	"call %[bpf_ringbuf_reserve];"
++	"if r0 == 0 goto 2f;"
++	"r6 = r0;"
++	"r1 = %[acquired] ll;"
++	"*(u64 *)(r1 + 0) = r0;"
++	"r2 = 1;"
++	"r1 = %[acquired_cnt] ll;"
++	"*(u32 *)(r1 + 0) = r2;"
++	"r0 = 0;"
++	"r8 = %[param] ll;"
++	"r8 = *(u32 *)(r8 + 0);"
++	"if r8 != 3 goto 1f;"
++	"r6 = 0;"
++	"r1 = 0xeB9F;"
++	"call %[bpf_throw];"
++	"1: r1 = r6;"
++	"r2 = %[consume_in_callee] ll;"
++	"callx r2;"
++	"2: r0 = 0;"
++	"exit;"
++	:
++	: __imm_addr(ringbuf),
++	  __imm_addr(acquired),
++	  __imm_addr(acquired_cnt),
++	  __imm_addr(param),
++	  __imm_addr(consume_in_callee),
++	  __imm(bpf_ringbuf_reserve),
++	  __imm(bpf_throw)
++	: __clobber_all);
++}
++
+ /*
+  * Discards the record its caller hands it. When it throws instead the record
+  * is in no register: the cookie has taken its place in R1.
+diff --git a/tools/testing/selftests/bpf/progs/exceptions_fail.c b/tools/testing/selftests/bpf/progs/exceptions_fail.c
+index 9b47345d5fd0..630ae7b9e857 100644
+--- a/tools/testing/selftests/bpf/progs/exceptions_fail.c
++++ b/tools/testing/selftests/bpf/progs/exceptions_fail.c
+@@ -561,6 +561,76 @@ __naked int reject_callee_releases_sometimes(void)
+ 	: __clobber_all);
+ }
+ 
++/* Discards the record in R1. */
++__used __naked static __noinline int discard_rec(void)
++{
++	asm volatile (
++	"r2 = 0;"
++	"call %[bpf_ringbuf_discard];"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_ringbuf_discard)
++	: __clobber_all);
++}
++
++/* Leaves the record in R1 with its caller. */
++__used __naked static __noinline int keep_rec(void)
++{
++	asm volatile (
++	"r0 = 0;"
++	"exit;"
++	::: __clobber_all);
++}
++
++/*
++ * The record is in no register at the throw, so it is in a slot. The insns in
++ * front of the callx empty the slot for the subprog that is handed the
++ * record, and would for the one that leaves it with the caller as well, which
++ * discards it after the call.
++ */
++SEC("?tc")
++__arch_x86_64 __arch_arm64
++__failure __msg("to a subprog that releases it and to one that does not")
++__naked int reject_callx_releases_sometimes(void)
++{
++	asm volatile (
++	"r7 = *(u32 *)(r1 + %[len]);"
++	"r1 = %[fail_ringbuf] ll;"
++	"r2 = 8;"
++	"r3 = 0;"
++	"call %[bpf_ringbuf_reserve];"
++	"if r0 == 0 goto 3f;"
++	"r6 = r0;"
++	"r0 = 0;"
++	"if r7 != 3 goto 1f;"
++	"r6 = 0;"
++	"r1 = 0;"
++	"call %[bpf_throw];"
++	"1: r2 = %[discard_rec] ll;"
++	"r8 = 0;"
++	"if r7 != 1 goto 2f;"
++	"r2 = %[keep_rec] ll;"
++	"r8 = 1;"
++	"2: r1 = r6;"
++	"callx r2;"
++	"if r8 == 0 goto 3f;"
++	"r1 = r6;"
++	"r2 = 0;"
++	"call %[bpf_ringbuf_discard];"
++	"3: r0 = 0;"
++	"exit;"
++	:
++	: __imm_addr(fail_ringbuf),
++	  __imm_addr(discard_rec),
++	  __imm_addr(keep_rec),
++	  __imm(bpf_ringbuf_reserve),
++	  __imm(bpf_ringbuf_discard),
++	  __imm(bpf_throw),
++	  [len]"i"(offsetof(struct __sk_buff, len))
++	: __clobber_all);
++}
++
+ __used static __noinline void leave_rcu(void)
+ {
+ 	bpf_rcu_read_unlock();
+diff --git a/tools/testing/selftests/bpf/progs/verifier_frame_desc.c b/tools/testing/selftests/bpf/progs/verifier_frame_desc.c
+index e0456a929126..489cdd897c6c 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_frame_desc.c
++++ b/tools/testing/selftests/bpf/progs/verifier_frame_desc.c
+@@ -799,6 +799,89 @@ __naked int callee_unlocks_slot(void)
+ 	: __clobber_all);
+ }
+ 
++/*
++ * The same through the address of the callee: the callx finds the slot of the
++ * caller emptied as the call does, since the only subprog it calls unlocks.
++ */
++SEC("tc")
++__description("frame_desc: the caller empties the slot of a lock in front of a callx")
++__arch_x86_64 __arch_arm64
++__success __log_level(5)
++__msg("frame descriptors: slots 1 insns 3 sites 0 classes 1")
++__naked int callx_unlocks_slot(void)
++{
++	asm volatile (
++	"r6 = *(u32 *)(r1 + %[len]);"
 +	"r1 = 0;"
 +	"*(u32 *)(r10 - 4) = r1;"
 +	"r1 = %[lock_values] ll;"
 +	"r2 = r10;"
 +	"r2 += -4;"
 +	"call %[bpf_map_lookup_elem];"
-+	"if r0 == 0 goto 1f;"
++	"if r0 == 0 goto 2f;"
 +	"r7 = r0;"
 +	"r1 = r7;"
 +	"r1 += %[lock_off];"
 +	"call %[bpf_spin_lock];"
++	"if r6 != 1 goto 1f;"
++	"r7 = 0;"
 +	"r1 = 0xeB9F;"
 +	"call %[bpf_throw];"
-+	"1: r0 = 0;"
++	"1: r1 = r7;"
++	"r2 = %[unlock_value] ll;"
++	"callx r2;"
++	"2: r0 = 0;"
 +	"exit;"
 +	:
 +	: __imm_addr(lock_values),
++	  __imm_addr(unlock_value),
 +	  __imm(bpf_map_lookup_elem),
 +	  __imm(bpf_spin_lock),
 +	  __imm(bpf_throw),
++	  [len]"i"(offsetof(struct __sk_buff, len)),
 +	  [lock_off]"i"(offsetof(struct lock_value, lock))
 +	: __clobber_all);
 +}
 +
- private(C) struct bpf_spin_lock wlock;
- 
- static __noinline void take_wlock(void)
++/*
++ * The caller has the record nowhere at its throw, so it keeps it in a slot:
++ * filled after the reserve, empty at the entry, and emptied in front of the
++ * callx that hands the record to the callee, which holds it in R6.
++ */
++SEC("tc")
++__description("frame_desc: a callx hands a record over from the slot of the caller")
++__arch_x86_64 __arch_arm64
++__success __log_level(5)
++__msg("frame descriptors: slots 1 insns 5 sites 1 classes 1")
++__naked int callx_consumes_record(void)
++{
++	asm volatile (
++	"r7 = *(u32 *)(r1 + %[len]);"
++	"r1 = %[ringbuf] ll;"
++	"r2 = 8;"
++	"r3 = 0;"
++	"call %[bpf_ringbuf_reserve];"
++	"if r0 == 0 goto 2f;"
++	"r6 = r0;"
++	"r0 = 0;"
++	"if r7 != 3 goto 1f;"
++	"r6 = 0;"
++	"r1 = 0xeB9F;"
++	"call %[bpf_throw];"
++	"1: r1 = r6;"
++	"r2 = %[consume_record] ll;"
++	"callx r2;"
++	"2: r0 = 0;"
++	"exit;"
++	:
++	: __imm_addr(ringbuf),
++	  __imm_addr(consume_record),
++	  __imm(bpf_ringbuf_reserve),
++	  __imm(bpf_throw),
++	  [len]"i"(offsetof(struct __sk_buff, len))
++	: __clobber_all);
++}
++
+ static __noinline void take_slock(void)
+ {
+ 	bpf_spin_lock(&slock);
 -- 
 2.53.0
 
