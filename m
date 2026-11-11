@@ -1,105 +1,61 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=34.218.115.239
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794429454;
-	b=fNEukRASf06Uvp+hpW8QB7uRGOSw4uf/qncCDbiOpFQfOvvW8VOxTIngSPpOEWn1TkS7
-	 sXYu5stPD5iZW+K6UGsRx/ztaLgOAThzFgVCqr5Ei6InIvUBi9MMChnLs/UmFDFWIDmJo
-	 RWoSrmeMS5BEXt+2hPkC9oEbw5lV677iO6PcPYLfCzvNHR1mIA6es9Zns/+pntN2a2Bn/
-	 f3REUD5lgTOoLmW1bCGObtGItYYitl6mNU6y5ZbFH7V0soiQIVMxiOn+MnFQ7DZjTCMDK
-	 CpZq/Nq67QS1V8pI6NIliLIVgHjJHW1EX4LhWr+C29hxEEBjd0+rKbkF6ffPbw3lAyg==
+	t=1794429712;
+	b=kx7WyZrgi1TAqsuS9wC3hvG5RBQC8HJZZoCjR0Qdlk8y6fTIs54/7KNn+TAhZmA7kDeV
+	 fyLpEQ/YJN+pSLkRxk73hogCEBRADAtJ0sshs2BbNj7Cd3syOqJnbe0zfI7Nl10O8b8lg
+	 x+tObNq6UCvlmZtkZldbceG8DVQO1qPdweWMFJWFwRjTCTGSA8Hwygd0YhYd7GscLIGit
+	 38+q4MWzZoL+MAc9+C4W7xMtisflsosYV7FL6+mQyIrSKmZUYsLVDGu9QAnqhXFgyEQNw
+	 IYd5Z+sL3j2xXLi18n3hSF2RxFkJvu6cC0aZW4+he+iE+v8ik+fyBr7ZnEpiKFaEX4A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794429454;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
-	 Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To:X-Originating-IP:
-	 X-ClientProxiedBy;
-	bh=vpIyzJPxRnrClrGT6opul0fGUGxCRQ7iTyzY6dXBUDc=;
-	b=zxAmY3ZOMfYU7j0Ax/EivjCF0hX+8RUtcbG+wH6m+aEyWS2NagOvExHTwK40JM/QlbiN
-	 d4k9swPVOucbFdqgW2pjXxfTesb5rYi1h/j+UXlzpdOMNWGuioJ114vOpcYEhaB4xXLQA
-	 /KaaCFpGUy+wa3AWyHm7xRzJ7xxNCSpceadgWaGcbgq1JDTuu3OSMlYgjKRYrDbQ0fDcr
-	 jFoWe/0ygw3bHHRQUngGjJUDTskzuOK7B1f8eyAW9vl4qT3wmPKbO3xLSfalMHpBIsCx7
-	 F8AsPnpzL7BtiwnuPjyZbJmA9xx8x7E9innHGZFu4PHYnF0QQ7anhMJR6HFhZNac6uQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794429712;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=ThuCb0zPa/jmLlwYql4NA54ZpqHiraRbY9NoIHTv5gw=;
+	b=pVlgiAccQJR7rSLn9vtTMmNQ68SDeMqLYFEnlmub1Rl1UTFMYGaiYLQv70SE35/BOhm0
+	 T85U4Jieuf1eJJp9LxDDvhhpuhuADaDxMDDxvfNCnuMA+Dx5Z6qpc4mMIh23/fg48syl2
+	 bgZyLz6F8spY+FLiNSaksvwcXYrMGPkWnPnzgCRlF4vrP2fGk4EffMBkewhIqoTX1mtXW
+	 KlbNhwTjZBf7fknTKsw778hjQqxqn79IoSxShhpF6/un/rQDE7r3U39OAhxoT20DrOyNC
+	 iTdKaRP9AwF6QKNaXkCgMaxoMLsJVa64zWFrpEn34LJ8eBrHQAuYsVp351ZfnSuj2ww==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=amazon.com;
-	spf=pass smtp.mailfrom=amazon.com;
-	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=YYK+ZnQk;
-	arc=none smtp.remote-ip=34.218.115.239
-Received: from pdx-out-013.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-013.esa.us-west-2.outbound.mail-perimeter.amazon.com [34.218.115.239])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aAplpGBy;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDDD6606A89F;
-	Wed, 11 Nov 2026 20:37:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BDDD6606A89F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ED9E606A31C;
+	Wed, 11 Nov 2026 20:41:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=YYK+ZnQk
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1794429454; x=1825965454;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vpIyzJPxRnrClrGT6opul0fGUGxCRQ7iTyzY6dXBUDc=;
-  b=YYK+ZnQkBuda9ap87dQ89X265NEdYSbOfrslXe+vr4TgOAvKtLF2YWFh
-   pA6hFgDHWeVo72/2XUwFeictRpNtmLjDn9VcZa21pMPhbpsa35xOVGjcn
-   iBoVHonTPHh1awrKgicakSWwvsLqHmMXsVSWx8k0FqVG4jxycVkNFZXJU
-   2j/1u4z4/4B+/qit6fiDCVZxcGZkJGwJ/qLm+UWENRaH84I7jjF8WbzrP
-   x39J6naVHcWAk75aPjEfG7wr8T0GgyftPcU3su3CL3ywyKh7kGzWWn77Y
-   RdJKCu0+40Th3c6s2ixzkwC9BaOB3MLNZsQkEU7JpSvjT5yXs8SD9M/by
-   A==;
-X-CSE-ConnectionGUID: tiE9b2HlQrqB/PDjzj+nRw==
-X-CSE-MsgGUID: GGJF9NIVRMGQ5ByMC+l/mA==
-X-IronPort-AV: E=Sophos;i="6.27,208,1787011200"; 
-   d="scan'208";a="33526248"
-Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
-  by internal-pdx-out-013.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2026 20:37:30 +0000
-Received: from EX19MTAUWB002.ant.amazon.com [205.251.233.111:13310]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.12.127:2525] with esmtp (Farcaster)
- id 389de7d3-cdac-4a03-93bb-a296349c3841; Wed, 11 Nov 2026 20:37:30 +0000 (UTC)
-X-Farcaster-Flow-ID: 389de7d3-cdac-4a03-93bb-a296349c3841
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
- Wed, 11 Nov 2026 20:37:30 +0000
-Received: from dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com
- (172.19.55.127) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56; Wed, 11 Nov 2026
- 20:37:29 +0000
-Date: Wed, 11 Nov 2026 20:37:24 +0000
-From: David Keogh <dkeogh@amazon.com>
-To: Tianyi Gao <tianyi@cloudflare.com>
-CC: Stephen Hemminger <stephen@networkplumber.org>, Willem de Bruijn
-	<willemdebruijn.kernel@gmail.com>, <netdev@vger.kernel.org>, Jakub Kicinski
-	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Eric Dumazet
-	<edumazet@kernel.org>, "David S. Miller" <davem@davemloft.net>, Simon Horman
-	<horms@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, David Woodhouse <dwmw2@infradead.org>, Dragos Tatulea
-	<dtatulea@nvidia.com>, Nimrod Oren <noren@nvidia.com>, Alasdair McWilliam
-	<alasdair@mcwilliam.dev>, Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, Magnus Karlsson
-	<magnus.karlsson@intel.com>, David Ahern <dsahern@kernel.org>, Ido Schimmel
-	<idosch@nvidia.com>, Alexei Starovoitov <ast@kernel.org>, John Fastabend
-	<john.fastabend@gmail.com>, Donald Hunter <donald.hunter@gmail.com>, "Andrew
- Lunn" <andrew+netdev@lunn.ch>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
-	<skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, Randy Dunlap
-	<rdunlap@infradead.org>, Breno Leitao <leitao@debian.org>,
-	=?iso-8859-1?Q?Asbj=F8rn_Sloth_T=F8nnesen?= <ast@fiberby.net>, "Danielle
- Ratson" <danieller@nvidia.com>, Kuniyuki Iwashima <kuniyu@google.com>,
-	<bpf@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <kernel-team@cloudflare.com>,
-	<nh-open-source@amazon.com>
-Subject: Re: [PATCH net-next 1/8] net: add tx_extra_headroom and
- LL_ALLOC_SPACE()
-Message-ID: <avTSBFpR2t7PO9tx@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
-References: <cover.1794020868.git.tianyi@cloudflare.com>
- <e90e748e0aefa7cbe1c2b31b8c7902ccf135c3f2.1794020868.git.tianyi@cloudflare.com>
- <willemdebruijn.kernel.1d64e7848503b@gmail.com>
- <20261107182526.69543-1-tianyi@cloudflare.com>
- <willemdebruijn.kernel.2c6a653eb65fa@gmail.com>
- <20261108190831.3f991a13@phoenix.local>
- <20261109154909.32748-1-tianyi@cloudflare.com>
- <avTOvr+yy+2j8xrQ@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aAplpGBy
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04E961F00A05;
+	Wed, 11 Nov 2026 20:41:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794429711;
+	bh=ThuCb0zPa/jmLlwYql4NA54ZpqHiraRbY9NoIHTv5gw=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=aAplpGByy02Xnjj1E1+EAmbaPsXyI6o0AEk38FDvAH0Z9x5rCd7oSXBGkfyvOUcgD
+	 /BxQzPREBVq3/aUN2ZfIXhYj0808V0Hx4bPq+h30fNTYooi1wxCPT5bvbY9rRxFfK+
+	 /3p79Pc3QK4dTOtptY/8pEFLQ/V0fPlA8rDDCUfmyBvd1bCRqE6hLX6VwxmG4vuloP
+	 7KGkolqAH+WdHr+Dwz6YJB8X8+D85AWovl8ltCSrdDNBjp2Gpk+7US0Q5RLNMnitda
+	 /R/WmjkeBUBIpDuAEQ9c98VineRtw2AIvmlXZrSUE5CxDxU93yqzlTFcNT33zn3732
+	 xkOhFFotRhcfw==
+Subject:
+ Re: [PATCH net v10 1/2] tun: keep a kernel copy of the socket filter program
+From: netdev-bot+sashiko@kernel.org
+To: clementwei90@163.com
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
+ willemdebruijn.kernel@gmail.com, jasowangio@gmail.com, andrew+netdev@lunn.ch,
+ davem@davemloft.net, kuba@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, eddyz87@gmail.com, weirongguang@kylinos.cn,
+ willemb@google.com
+Date: Wed, 11 Nov 2026 20:41:50 +0000
+Message-ID: <179442971051.2199510.17461948089232677295@kernel.org>
+In-Reply-To: <20261109023848.59575-2-clementwei90@163.com>
+References: <20261109023848.59575-2-clementwei90@163.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -109,33 +65,151 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <avTOvr+yy+2j8xrQ@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
-X-ClientProxiedBy: EX19D031UWC002.ant.amazon.com (10.13.139.212) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-On Wed, Nov 11, 2026 at 08:23:26PM +0000, David Keogh wrote:
-> Dropping IFLA_TX_EXTRA_HEADROOM is fine with me. A BPF-side
-> declaration covers the TC egress case, as long as the program is
-> attached to the device the skb is allocated for.
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-One correction to that, after checking how our hosts run the program.
+Critical: 0 · High: 0 · Medium: 2 · Low: 0
 
-Our TC egress programs are not attached individually. A loader keeps
-a chain: only the head is attached to the NIC, and the rest, including
-the program that encapsulates, are reached by bpf_tail_call through a
-prog array. The head can change as programs are added and removed.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-So if the kernel reads the declaration when a program is attached, it
-never sees the encapsulating program, because that program is only
-ever inserted into the prog array. Putting the declaration on the head
-instead does not help either: the head is a different program that
-pushes no headers itself, and it can change.
+- [Medium] TUNATTACHFILTER on a device with zero enabled queues saves a
+  program that has never been built.
+- [Medium] After a partial TUNATTACHFILTER failure, the device's recorded
+  filter state no longer matches what the queues enforce, and the reason…
 
-For the BPF-side declaration to cover the TC egress case, it needs to
-account for tail call targets. Tianyi, how were you planning to handle
-a program that is only reached by tail call?
+--
 
-Thanks,
-David
+tun: keep a kernel copy of the socket filter program
+
+This patch makes TUNATTACHFILTER keep a kernel copy of the classic BPF
+instructions in tun->fprog_kern. Each queue gets its own program, built
+from that copy with the new sk_attach_filter_kern() helper. The patch
+also fixes the inverted error check in tun_attach(), and checks the
+program with the new bpf_prog_validate_classic() before the saved filter
+is replaced.
+
+> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+> index dcec7311e6011..67c8b74d59bde 100644
+> --- a/drivers/net/tun.c
+> +++ b/drivers/net/tun.c
+
+[ ... ]
+
+> @@ -3091,15 +3166,29 @@ static int tun_attach_filter(struct tun_struct *tun)
+>  	for (i = 0; i < tun->numqueues; i++) {
+>  		tfile = rtnl_dereference(tun->tfiles[i]);
+>  		lock_sock(tfile->socket.sk);
+> -		ret = sk_attach_filter(&tun->fprog, tfile->socket.sk);
+> +		ret = sk_attach_filter_kern(fprog_kern, tfile->socket.sk);
+>  		release_sock(tfile->socket.sk);
+> -		if (ret) {
+> -			tun_detach_filter(tun, i);
+> -			return ret;
+> -		}
+> +		if (ret)
+> +			goto out_detach;
+>  	}
+>  
+>  	tun->filter_attached = true;
+> +	return 0;
+
+[Severity: Medium]
+What happens here when tun->numqueues is 0?
+
+The loop body never runs, so bpf_prog_create() is never called on the new
+program. Even so, filter_attached is set, and the TUNATTACHFILTER case in
+__tun_chr_ioctl() commits the program:
+
+	kfree(tun->fprog_kern.filter);
+	tun->fprog_kern = fprog_kern;
+	tun->fprog = fprog;
+
+tun_copy_filter() only runs bpf_prog_validate_classic(). A program can pass
+that check and still be refused later by bpf_convert_filter(), when a
+converted jump offset falls outside the s16 range. It can also be refused
+by bpf_prog_select_runtime(), which returns -ENOTSUPP when a JIT is
+required but cannot be used.
+
+A usable fd with numqueues == 0 looks reachable on a multiqueue TAP.
+tun_set_queue() lets IFF_DETACH_QUEUE detach every queue, and
+__tun_detach(tfile, false) keeps tfile->tun. A detached fd can therefore
+still issue TUNATTACHFILTER.
+
+The inverted check in tun_attach() is now fixed:
+
+	err = sk_attach_filter_kern(&tun->fprog_kern, tfile->socket.sk);
+	release_sock(tfile->socket.sk);
+	if (err)
+		goto out;
+
+With that fix, wouldn't every later IFF_ATTACH_QUEUE on this persistent
+device fail? The same goes for every TUNSETIFF without IFF_NOFILTER.
+Before the patch, a new tfile in this situation still attached.
+
+The commit message says "Such a late failure does not replace the saved
+program". Here, though, the program is saved without ever being built, so
+the late failure happens on every later queue attach instead.
+
+Could the program be built once with bpf_prog_create() even when there
+are no queues to attach it to?
+
+> +
+> +out_detach:
+> +	/* Drop the copies already installed on queues 0..i-1, which leaves
+> +	 * them without a filter: their previous sk_filter, if any, was
+> +	 * already replaced and released. The caller does not replace the
+> +	 * saved program when this fails, so tun->fprog, tun->fprog_kern and
+> +	 * filter_attached keep their previous values.
+> +	 */
+> +	while (i--) {
+> +		tfile = rtnl_dereference(tun->tfiles[i]);
+> +		lock_sock(tfile->socket.sk);
+> +		sk_detach_filter(tfile->socket.sk);
+> +		release_sock(tfile->socket.sk);
+> +	}
+
+[Severity: Medium]
+Does this rollback leave the device's filter state out of sync with what
+the queues actually enforce?
+
+Suppose filter P is attached on every queue, and a new TUNATTACHFILTER
+fails on queue i > 0. On queues 0..i-1, __sk_attach_prog() has already
+replaced and released P. This loop then detaches those queues, so they
+run no filter at all. Queues i..n-1 still run P.
+
+tun->fprog, tun->fprog_kern and filter_attached keep their old values, so
+TUNGETFILTER still reports P. tun_attach() also installs P on queues
+attached later. Meanwhile, queues 0..i-1 pass every packet through
+sk_filter() unfiltered.
+
+Before the patch, tun_detach_filter(tun, i) cleared filter_attached on
+this path. The device therefore did not claim a filter that some of its
+queues lacked.
+
+The commit message says:
+
+    A queue that
+    already took the copy is rolled back, which leaves it without a filter,
+    because the program it ran before was already released; restoring it
+    would need an extra reference per queue.
+
+Is that accurate? P's instructions are still in tun->fprog_kern. It looks
+like sk_attach_filter_kern(&tun->fprog_kern, sk) could rebuild P on queues
+0..i-1, the same way tun_attach() does for new queues. Another option
+would be to clear the saved state when the attach fails partway.
+
+A failure partway through the loop looks reachable in several ways:
+
+  - -ENOMEM from bpf_prog_alloc(), or from kmalloc_obj() in
+    __sk_attach_prog()
+  - the per-socket optmem check in __sk_filter_charge()
+  - under CONFIG_BPF_JIT_ALWAYS_ON, bpf_jit_limit being reached partway
+    through, because each queue JITs its own copy
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261109023848.59575-1-clementwei90%40163.com
