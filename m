@@ -1,82 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.174
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.173
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794367318;
-	b=PVJH/2x6iySJ4UqMBrFqFvGJA+795sc9PMIoBHlk3b9gaQfa0q8drue0u/378XudARGR
-	 7BD0c1o7YnTfKnHrUH+SVRSvhgeW3OwlMG/fxh7zhc5wIcSVmxl/AnU9hPtSbdthKn7Zj
-	 V4dKQfabpRn5egfLoN0ACa8Af+Wmm0ByiaNayWzcrZanva1Qv9aUMjej/NKRCVwcUTlYg
-	 tNl2vhjxZdH2n+0Xl7uMGzwbMc9XeXC3z8qup7yMLhjG6URxbzt9fUz+mEGZRPG7fjgRb
-	 aqQBjT5O3XWXj7rfKnTNUyjytOFStPAyIXSdV4dJcU8YtwQwb0K5KHRVqmOK3Lb46EQ==
+	t=1794367323;
+	b=QtQrhkZO6biXQj6/dibCgO1iBlol/tq6d00LE4qbch7SfXyl/FX3b+y0vgzLSuYTCM8P
+	 n4Ime5W+1H6EKoIsbk+029xY5TfEl0+wmtK7+CLWJ1U73tuT1/FUjpG2tyhFxLPZ4LUQk
+	 8MRgivM/wy8Z5xatAifRq6ySJ6FBiCTBRmOa1QRa33CUsd/u6gRgM7EsVh4nt2dV/2sjr
+	 rZbscQrDlwnvrE9vRMCpmtP4pE3cZen02hbAOXFQr3G6eXOfcl4ZsdGs5Ef+D1CKutmwp
+	 cZVqFeKy9/MiWI+MPHQMjvOs17ELwCBc1dwEwYNMz0B4/svwqxUMaZmJd0tXfQnWMCA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794367318;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794367323;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=Cbkg7m/iOR1aNdjTqRiCC3H1ik4TfAgb+sSh2QTc/OE=;
-	b=EyMkd/6Lz+Dvvrt1Dn3L0CVALvA97n8jmnux80y8tK+jQcPCuFNgNFZDcjx4Xigq2uG8
-	 tltwgfe1/fqY0fmE1qVa1etGEOyyoc8qnxLhUnH7gayt2y51sFV6xCep7yOWuxORNCeeK
-	 oAEGjUP1bvEFthUcmF7xp8BORfW3SHJwosJj5o2uVM5P/53RCl0ZmFEP6poBwE2s6HnbP
-	 28Ex2ImOPvnwobI2yN6O5j5NWscwf3kBkohOCHuKEF6OimiyJZkOXAo1QjemQY8o1XFhD
-	 T2J9LJMGxC895OP8e1WrYDsvARd7lrtp+p3KDAY7fnInqjIunW0zNHxWyOkFMFfwjbA==
+	bh=9hzrCM8HwPB0OkgvQi+cINu2lRLobW5+FEDHZL10osw=;
+	b=cAbehyVP0o1OjMkvYE8Stm4Kzljm4eeCKIIuJvU3u9KbiRJpYqHRAmL6+l7ISoE8u/pc
+	 KQRbnZKSIoEUXw+YtzMOm+TQM7dEqz8/bizQ/T4QGUnTXfWzNSyo6JeQLuQxv37KlmIfo
+	 X9ND0BwGq8hXY4QK4bfYcg0r+VFZNj8g8YxX+t/RUeNYOznton6va4oJ2sH2pJnvLTj6s
+	 Bg6Rod4m7sv0Tq8dwJ6ccJzdm8V65wCdP3oV30B3lvoU1Abbh47mHBqA1aA4I13a8FqvB
+	 8DcTb01V3xmeABOaf3uH9HA5dK1nTBO7A2aTCuk2QUodXIbZ9kcZ5eAsyNfuMAwUfug==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JHEwGgRI;
-	arc=none smtp.remote-ip=74.125.82.174
-Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=nNMrj5MD;
+	arc=none smtp.remote-ip=74.125.82.173
+Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 389F860A2618
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 03:21:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 389F860A2618
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE95C606A33B
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 03:22:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CE95C606A33B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JHEwGgRI
-Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-36a315ed211so3063239eec.0
-        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 19:21:58 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=nNMrj5MD
+Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-36eb1cb7aabso4212111eec.0
+        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 19:22:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794367317; x=1794972117; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794367322; x=1794972122; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Cbkg7m/iOR1aNdjTqRiCC3H1ik4TfAgb+sSh2QTc/OE=;
-        b=JHEwGgRIAr5i60SI2IrifCNsnwa9zoilr4PVo1vCD2gAhza9h1WnlYqnT5epPzpdVR
-         FwiUaNl5lvfdrJ50aIhyBmahLr4XnhILy7J34zfXni/x3WISyy9TVz5pbgUram/+00TV
-         ox/fmtbGEGNRUr3nwzgyYsIrckJBxQwXEwMVnou0K/VVY/dWIq+LeivIakaDLOkpNWeL
-         S/4AHcsSfEGuVMajrFyz5IlRPWQJYX9gO4ET9sJePCl/d4Ow3hX98MDShb/i0ZL2WNkT
-         1UoEWcVPPaPDYi1YU7B8cro796+4KorOVyRYNUBhswuRk6sRl4azptF4od9hcDp7vEbg
-         ZyRg==
+        bh=9hzrCM8HwPB0OkgvQi+cINu2lRLobW5+FEDHZL10osw=;
+        b=nNMrj5MDLexqC8NKUunFtZwR13VzIkOV0WMei5pxF+d6+/hy39gejtLBJckqjCbBnr
+         vsQyvYbTD+naFdWLim3qiQoTDRkSxdlPa1uqgdl/O7Coq3by4vjFvihy54GUuJU7TP6m
+         VLuO0BI+6t1xe4ObQQ+OYzYugtuuh8b3O81Zc+x8ZufCWNDT+5jes4xLID6AzEcWmxm9
+         1NYhO83xJlV2TmPVUHQRVavTFC67oks0OBxKt3YiSEMnl9Lmu8vo22Uhwia5LnjLvL/m
+         SaNI5JGC87ShrlO4Vi7V/oizmJ3djE+vPl4LTZGWmFWIdfUf6o2gMpgV0xjHzdkQvIU7
+         BU3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794367317; x=1794972117;
+        d=1e100.net; s=20260707; t=1794367322; x=1794972122;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Cbkg7m/iOR1aNdjTqRiCC3H1ik4TfAgb+sSh2QTc/OE=;
-        b=YumDjIN4HTn2tIlO+MOgJJxYLgDeL5ruiS5CpPIKJa3tpxgLkZQpr2dQXeP2GCY/Uk
-         wkC6b61EQbO9UGq2e4fQ8NzEi9X/aFF7hwgSAxW9RbXqBFuV4qGtTUvatRIj09wfHBNG
-         /NaPJOjFrRfTOzyu94sboMsl8bcASp/gIoA0lm0VW51vh69WOFfIJMboEF7do3ENxFSo
-         CCGRjvgoA7PAGQzduCYG+82Vldb+/ReZ+1Qgxl2TquiIiAPJD5FtaxjjwF8yNhrFO0tA
-         wMJ/z0lP+c7tiSFxxnNv98/RmNVaGK3GeIOZ9gXE/FYkfB7sjQy3f1wlUbQtZVgoMn4C
-         mHeg==
-X-Gm-Message-State: APuU4Z+CVHwcqcs0gws10YtANU1IrKWPzWfyEYZRlqpvmDVrt8gzkod0
-	Wl6Zz42bZR1PHFnxkJ+QEE5gFOk3hzRbtNFvjs4CykG9S7citLGBR7SDlq3eUA==
-X-Gm-Gg: AYBFou0UKuyMC4ucGMw1QxdoBZ0n0zJMwkfiAFqWDOKWJU85SVQRGNs274tci70irvG
-	9aDEhgqtq7v7mMDQpAI4Yc79981LTxd8VTleO3jhzwJ4ME8ZAO927yUruJij+dhNX3xozz6KUI2
-	ceO4ZdxsbEJ+gvaWVBGMWtTJcddC5cDBigcO08RZSLTdmKycTjtOCBG0VEjiyl/0VCgIHh7yc13
-	1JhPuD3m2ioDJpzYGXByYAxKDnwSMpXM11iuawnTkgPWvhFE3YsuIPB3uPpdXPRJVucPROjc1Vd
-	ay0dYWLWL0TDuaivfiFOP8h+dvv1xm3yDkqEym5OtIttozU0/66dxT3rp4kxfuf4pSQ85croxGk
-	sBupjMuBIsgZJUvl3+5aPoihLmZ24QjyXFW/2YI1w6kTLixM81KOW8epfgOPhwBcfxzFveivS8r
-	QTgE+qjmR7Z5EwyrYpqLkJzHPmb/YIJwQM2AWjm+zAQVE2Mvs2ImijV3OCnZ6u3glEDbwFGeO6N
-	GhHWT241pm3AF8JWQf3tMydzluHhU2VkhwpZD7lqB/p4nbReTyUeX4EDlm3mX4grSYTSSAsXFiG
-	lP3YGftPKDRbD0q++ZNt9hkCIOYl4V8+4NekfVT+0+DslgJBfY/pMvbuP9loU8I=
-X-Received: by 2002:a05:693c:830b:b0:358:c5c9:2661 with SMTP id 5a478bee46e88-37686755b1amr1362827eec.10.1794367317128;
-        Tue, 10 Nov 2026 19:21:57 -0800 (PST)
+        bh=9hzrCM8HwPB0OkgvQi+cINu2lRLobW5+FEDHZL10osw=;
+        b=efjQH6VeI0FEh8haUqSdEXT+R8JYfOx8V2Tr6jDKxToIfLfpIvLX9q8rIAXlOmPgFy
+         H7D4aTEBMvQeIi4ksBt37STb9IQQXrwol6oKJR3UeJA4WRAutep7LnSU75eDZiSFkFJJ
+         TqjUp9pC7KJ9X0z9ptTS6ZWKXm9Wb+Yi7uH/lk6/+bKTx5FUlaoPJhxLlnV1gS5EV+xo
+         Qkoy7MoAz6hgVrUzsS/eH43n+TibrAaOMnkmbzNRJJRhzxGzR6H5z5HAGi7H02/JPohk
+         ADT8RMR286l2B0daQPHYmnq3Nn2S9SyxpjtQn+0OymqZudAmFBRwCg3mqsd88f+zq5Nw
+         PVOw==
+X-Gm-Message-State: APuU4Z/eG12kdtXP+JdnZZTckbS/P1hjABfpZ/r/GXU/HmrEhhaSMO1r
+	xtOa+Dlx63NjgzhdIInR7Cj0EFiG0B8QxRd7VKBBIl7xcZgMaWjwa+hv1Njdng==
+X-Gm-Gg: AYBFou2C9pXzBDULdTtyFKfevrRJ920KnZtvFFuUjCLoO3MZwvPfyO3/V98yKXjFPrH
+	9+LJpGo+seoRs+0BdivWqFQosATtNCv4ZGmVroC0LkAfLvhtcA2FOVkmunWJPFZ5kL/UwB5O0r1
+	zfiJrdQykFauAQoPJEuQzogTiw2omwkv5m5qHQnI6xsSI5/2F0LMavEyk7G02odDqsr0xt9wuwu
+	43JIjnd+hYJGZ28PMRAca7n3+ISNdnnuncyvbk2dMi27J74fOadO/hINrze3YEH8R0KdacJcGj9
+	PJympQQjjszUZs9aQdyvIJqGOUQ9Av0+f5l0K5SQFwduz8XE9GADnxuIDhzWUm4h5NvukqMzyze
+	nF9HECELQ2IALDGwUfu11X1ziO1GHwfyOym5jrnLsC6emHnEpvA9xe7rPTxbchg3NMgYbUP6UFG
+	xoPMiOGNBtIFi9GpN3LkU5N9GWQCKeFYLAXc4jGoxnSRhP3sdrBk70RobvIkh5/D4EkeG8662za
+	LcKiFjWRq6IgnJbZYwFlIGRz8JNUI005FB3iiCa3cbUo1hzZmxx0NOWC2lz7TR21CoW4qwdBdye
+	XDZa1Orh58QPvss4zUAJin4V3PAT0gQkKuzqUfmkE+h1dAVBBgjXh1L8mJz64YY=
+X-Received: by 2002:a05:7300:2d2b:b0:35b:cb8a:8d0e with SMTP id 5a478bee46e88-37686073d42mr2409727eec.16.1794367321780;
+        Tue, 10 Nov 2026 19:22:01 -0800 (PST)
 Received: from build2026.lan (67.230.168.206.16clouds.com. [67.230.168.206])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3751ad6f11csm9801896eec.0.2026.11.10.19.21.53
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3751ad6f11csm9801896eec.0.2026.11.10.19.21.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 19:21:56 -0800 (PST)
+        Tue, 10 Nov 2026 19:22:01 -0800 (PST)
 From: ThisSeanZhang <thisseanzhang@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -88,9 +88,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	netdev@vger.kernel.org,
 	Nick Hudson <nhudson@akamai.com>,
 	Felix Fietkau <nbd@nbd.name>
-Subject: [RFC bpf-next v3 2/3] bpf: Add PPPoE encap/decap kfuncs
-Date: Tue, 10 Nov 2026 22:21:40 -0500
-Message-ID: <20261111032141.525444-3-thisseanzhang@gmail.com>
+Subject: [RFC bpf-next v3 3/3] selftests/bpf: Add a test for the PPPoE encap/decap kfuncs
+Date: Tue, 10 Nov 2026 22:21:41 -0500
+Message-ID: <20261111032141.525444-4-thisseanzhang@gmail.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20261111032141.525444-1-thisseanzhang@gmail.com>
 References: <20261111032141.525444-1-thisseanzhang@gmail.com>
@@ -105,286 +105,438 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add bpf_skb_pppoe_encap() and bpf_skb_pppoe_decap() kfuncs so that a
-TC BPF program can encapsulate an IPv4 or IPv6 packet into a PPPoE
-session frame, and decapsulate one again:
+Add a tc test that exercises the bpf_skb_pppoe_encap() and
+bpf_skb_pppoe_decap() kfuncs.
 
-	bpf_skb_pppoe_encap(skb, sid, flags);
-	bpf_skb_pppoe_decap(skb, flags);
+The encap program is run over plain Ethernet/IPv4 and Ethernet/IPv6
+packets. The test checks that the kernel writes a correct PPPoE
+session header between the Ethernet and network headers (version,
+type, code, session id, length and PPP protocol), that skb->protocol
+becomes ETH_P_PPP_SES, and that the payload is preserved. It then
+runs the decap program and checks that the original packet and
+protocol metadata are restored.
 
-The kfuncs insert or remove the 8 byte PPPoE session header between
-the MAC header and the network header, and update the skb metadata to
-match: skb->protocol is set to ETH_P_PPP_SES on encapsulation, or
-restored from the PPP protocol field on decapsulation, mac_len is
-reset, and the GSO metadata is adjusted like bpf_skb_adjust_room()
-does (gso_size, gso_segs, SKB_GSO_DODGY).
+The rejection paths are driven by the packet input: encapsulation of
+a non-IP packet (ARP), decapsulation of a packet whose protocol is
+not ETH_P_PPP_SES (plain IPv4, and an IPv4 packet whose bytes at the
+PPP protocol offset decode as PPP_IP), decapsulation of a PPPoE
+packet with an unsupported PPP protocol (IPCP), and decapsulation of
+a packet too short to still hold an IP header.
 
-Both kfuncs accept BPF_F_ADJ_ROOM_FIXED_GSO to leave gso_size
-unchanged and only recompute gso_segs, reusing the existing flag
-instead of adding a new one; UDP GSO packets require it, as their
-gso_size is the datagram size. Unknown flags are rejected.
-
-Previously, a TC program could add or remove the header bytes
-manually, but the skb would keep a stale skb->protocol: forwarded GSO
-packets larger than the PPPoE MTU could not reach the PPPoE
-segmentation path registered for ETH_P_PPP_SES and could be dropped.
-bpf_skb_adjust_room() cannot be used for the decapsulation direction
-either, because it only accepts ETH_P_IP or ETH_P_IPV6 in
-skb->protocol.
-
-The encap kfunc fills in the PPPoE header itself from the session id:
-version 1, type 1, code 0, and the PPP protocol derived from
-skb->protocol, mirroring what pppoe_xmit() writes. The ethertype of
-the MAC header remains for the BPF program, like with the existing
-BPF_F_ADJ_ROOM_ENCAP_* flags. skb->encapsulation is deliberately left
-unset, like pppoe_xmit() does: PPPoE is not an IP tunnel, and setting
-it would narrow the device features to hw_enc_features in
-netif_skb_features(). The decap kfunc accepts only PPP_IP and PPP_IPV6
-payloads and requires a full inner L3 header to remain.
-
-The kfuncs are registered for SCHED_CLS and SCHED_ACT with the new
-KF_CHANGES_PKT flag, so the verifier invalidates packet pointers after
-a call, like it does for bpf_skb_adjust_room().
-
-PPPoE GRO/GSO support must be built in or loaded before this path is
-used; loading pppoe.ko is left to user space.
+A separate program that holds a packet pointer across a call to
+bpf_skb_pppoe_encap() must fail verification, covering the
+KF_CHANGES_PKT invalidation from the first patch.
 
 Signed-off-by: ThisSeanZhang <thisseanzhang@gmail.com>
 ---
- net/core/filter.c | 192 ++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 192 insertions(+)
+ .../selftests/bpf/prog_tests/tc_pppoe.c       | 269 ++++++++++++++++++
+ tools/testing/selftests/bpf/progs/tc_pppoe.c  |  77 +++++
+ .../selftests/bpf/progs/tc_pppoe_fail.c       |  36 +++
+ 3 files changed, 382 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/tc_pppoe.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tc_pppoe.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tc_pppoe_fail.c
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 9245009d9..3d9143552 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -47,6 +47,8 @@
- #include <linux/ratelimit.h>
- #include <linux/seccomp.h>
- #include <linux/if_vlan.h>
-+#include <linux/if_pppox.h>
-+#include <linux/ppp_defs.h>
- #include <linux/bpf.h>
- #include <linux/btf.h>
- #include <net/sch_generic.h>
-@@ -12919,6 +12921,184 @@ __bpf_kfunc int bpf_icmp_send(struct __sk_buff *skb_ctx, int type, int code)
- 	return 0;
- }
- 
-+/**
-+ * bpf_skb_pppoe_encap() - Encapsulate an IPv4 or IPv6 packet in a
-+ * PPPoE session header.
-+ *
-+ * Insert an 8 byte PPPoE session header, made of the 6 byte session
-+ * header plus the 2 byte PPP protocol field, between the MAC header
-+ * and the network header, and fill it in for the given session id.
-+ * skb->protocol is set to ETH_P_PPP_SES so the skb reaches the PPPoE
-+ * GRO/GSO support; the ethertype of the MAC header is left to the BPF
-+ * program.
-+ *
-+ * A packet whose VLAN tag is still present in the packet data is
-+ * rejected, as skb->protocol is then the VLAN ethertype.
-+ *
-+ * On GSO skbs, gso_size is reduced by the size of the inserted header
-+ * and gso_segs is recomputed, like bpf_skb_adjust_room() does. With
-+ * BPF_F_ADJ_ROOM_FIXED_GSO, gso_size is left unchanged and only
-+ * gso_segs is recomputed; UDP GSO packets require this, as their
-+ * gso_size is the datagram size.
-+ *
-+ * A call to this kfunc changes packet data. Therefore, at load time,
-+ * all checks on pointers previously done by the verifier are
-+ * invalidated and must be performed again, if the kfunc is used in
-+ * combination with direct packet access.
-+ *
-+ * Parameters:
-+ * @skb_ctx: Pointer to ctx (__sk_buff) in TC program. Cannot be NULL
-+ * @sid: PPPoE session id, in network byte order
-+ * @flags: BPF_F_ADJ_ROOM_FIXED_GSO to leave gso_size unchanged
-+ *
-+ * Return:
-+ * * %0          - success
-+ * * %-EINVAL    - unknown flags
-+ * * %-ENOTSUPP  - skb->protocol is neither ETH_P_IP nor ETH_P_IPV6, the
-+ *                 new length would exceed the maximum skb length, or the
-+ *                 GSO metadata cannot be adjusted
-+ * * %-ENOMEM    - the skb head could not be expanded
-+ */
-+__bpf_kfunc int bpf_skb_pppoe_encap(struct __sk_buff *skb_ctx, __be16 sid,
-+				    u64 flags)
-+{
-+	struct sk_buff *skb = (struct sk_buff *)skb_ctx;
-+	struct pppoe_hdr *ph;
-+	u16 ppp_proto;
-+	u32 off;
-+	int ret;
+diff --git a/tools/testing/selftests/bpf/prog_tests/tc_pppoe.c b/tools/testing/selftests/bpf/prog_tests/tc_pppoe.c
+new file mode 100644
+index 000000000..5420d3bf3
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/tc_pppoe.c
+@@ -0,0 +1,269 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 ThisSeanZhang */
 +
-+	if (flags & ~BPF_F_ADJ_ROOM_FIXED_GSO)
-+		return -EINVAL;
++#include <arpa/inet.h>
++#include <test_progs.h>
++#include "tc_pppoe.skel.h"
++#include "tc_pppoe_fail.skel.h"
 +
-+	if (skb->protocol != htons(ETH_P_IP) &&
-+	    skb->protocol != htons(ETH_P_IPV6))
-+		return -ENOTSUPP;
-+
-+	if (skb->len + PPPOE_SES_HLEN > BPF_SKB_MAX_LEN && !skb_is_gso(skb))
-+		return -ENOTSUPP;
-+
-+	off = skb_mac_header_len(skb);
-+
-+	ret = bpf_skb_net_grow(skb, off, PPPOE_SES_HLEN, flags);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (skb->protocol == htons(ETH_P_IP))
-+		ppp_proto = PPP_IP;
-+	else
-+		ppp_proto = PPP_IPV6;
-+
-+	ph = (struct pppoe_hdr *)(skb->data + off);
-+	ph->ver = 1;
-+	ph->type = 1;
-+	ph->code = 0;
-+	ph->sid = sid;
-+	ph->length = htons(skb->len - off - sizeof(*ph));
-+	put_unaligned_be16(ppp_proto, (u8 *)ph + sizeof(*ph));
-+
-+	skb->protocol = htons(ETH_P_PPP_SES);
-+	skb_reset_mac_len(skb);
-+	if (skb_valid_dst(skb))
-+		skb_dst_drop(skb);
-+
-+	__skb_reset_checksum_unnecessary(skb);
-+	bpf_compute_data_pointers(skb);
-+
-+	return 0;
-+}
-+
-+/**
-+ * bpf_skb_pppoe_decap() - Remove the PPPoE session header from a
-+ * packet.
-+ *
-+ * Remove the 8 byte PPPoE session header between the MAC header and
-+ * the network header. skb->protocol is restored from the PPP protocol
-+ * field; a payload with any other PPP protocol is rejected. The
-+ * ethertype of the MAC header is left to the BPF program.
-+ *
-+ * A packet whose VLAN tag is still present in the packet data is
-+ * rejected, as skb->protocol is then the VLAN ethertype.
-+ *
-+ * On GSO skbs, gso_size is increased by the size of the removed
-+ * header and gso_segs is recomputed, like bpf_skb_adjust_room() does.
-+ * With BPF_F_ADJ_ROOM_FIXED_GSO, gso_size is left unchanged and only
-+ * gso_segs is recomputed.
-+ *
-+ * A call to this kfunc changes packet data. Therefore, at load time,
-+ * all checks on pointers previously done by the verifier are
-+ * invalidated and must be performed again, if the kfunc is used in
-+ * combination with direct packet access.
-+ *
-+ * Parameters:
-+ * @skb_ctx: Pointer to ctx (__sk_buff) in TC program. Cannot be NULL
-+ * @flags: BPF_F_ADJ_ROOM_FIXED_GSO to leave gso_size unchanged
-+ *
-+ * Return:
-+ * * %0          - success
-+ * * %-ENOTSUPP  - skb->protocol is not ETH_P_PPP_SES, or the PPP
-+ *                 protocol is neither PPP_IP nor PPP_IPV6
-+ * * %-EINVAL    - unknown flags, the packet is shorter than the PPPoE
-+ *                 session header, or no full L3 header would remain
-+ *                 after decapsulation
-+ * * %-ENOMEM    - the header is not linearly accessible
-+ */
-+__bpf_kfunc int bpf_skb_pppoe_decap(struct __sk_buff *skb_ctx, u64 flags)
-+{
-+	struct sk_buff *skb = (struct sk_buff *)skb_ctx;
-+	__be16 inner_proto;
-+	u32 inner_len, off;
-+	u16 ppp_proto;
-+	int ret;
-+
-+	if (flags & ~BPF_F_ADJ_ROOM_FIXED_GSO)
-+		return -EINVAL;
-+
-+	if (skb->protocol != htons(ETH_P_PPP_SES))
-+		return -ENOTSUPP;
-+
-+	off = skb_mac_header_len(skb);
-+
-+	if (skb->len < off + PPPOE_SES_HLEN)
-+		return -EINVAL;
-+
-+	if (!pskb_may_pull(skb, off + PPPOE_SES_HLEN))
-+		return -ENOMEM;
-+
-+	ppp_proto = get_unaligned_be16(skb->data + off +
-+				       sizeof(struct pppoe_hdr));
-+	switch (ppp_proto) {
-+	case PPP_IP:
-+		inner_proto = htons(ETH_P_IP);
-+		inner_len = sizeof(struct iphdr);
-+		break;
-+	case PPP_IPV6:
-+		inner_proto = htons(ETH_P_IPV6);
-+		inner_len = sizeof(struct ipv6hdr);
-+		break;
-+	default:
-+		return -ENOTSUPP;
-+	}
-+
-+	/* A full inner L3 header must remain after decapsulation. */
-+	if (skb->len - off - PPPOE_SES_HLEN < inner_len)
-+		return -EINVAL;
-+
-+	ret = bpf_skb_net_shrink(skb, off, PPPOE_SES_HLEN, flags);
-+	if (ret < 0)
-+		return ret;
-+
-+	skb->protocol = inner_proto;
-+	skb_reset_mac_len(skb);
-+	if (skb_valid_dst(skb))
-+		skb_dst_drop(skb);
-+
-+	__skb_reset_checksum_unnecessary(skb);
-+	bpf_compute_data_pointers(skb);
-+
-+	return 0;
-+}
-+
- __bpf_kfunc_end_defs();
- 
- int bpf_dynptr_from_skb_rdonly(struct __sk_buff *skb, u64 flags,
-@@ -12965,6 +13145,11 @@ BTF_KFUNCS_START(bpf_kfunc_check_set_icmp_send)
- BTF_ID_FLAGS(func, bpf_icmp_send)
- BTF_KFUNCS_END(bpf_kfunc_check_set_icmp_send)
- 
-+BTF_KFUNCS_START(bpf_kfunc_check_set_skb_pppoe)
-+BTF_ID_FLAGS(func, bpf_skb_pppoe_encap, KF_CHANGES_PKT)
-+BTF_ID_FLAGS(func, bpf_skb_pppoe_decap, KF_CHANGES_PKT)
-+BTF_KFUNCS_END(bpf_kfunc_check_set_skb_pppoe)
-+
- static const struct btf_kfunc_id_set bpf_kfunc_set_skb = {
- 	.owner = THIS_MODULE,
- 	.set = &bpf_kfunc_check_set_skb,
-@@ -13000,6 +13185,11 @@ static const struct btf_kfunc_id_set bpf_kfunc_set_icmp_send = {
- 	.set = &bpf_kfunc_check_set_icmp_send,
- };
- 
-+static const struct btf_kfunc_id_set bpf_kfunc_set_skb_pppoe = {
-+	.owner = THIS_MODULE,
-+	.set = &bpf_kfunc_check_set_skb_pppoe,
++/* Ethernet + IPv4 + TCP, 54 bytes in total. */
++static const __u8 ip4_pkt[] = {
++	/* Ethernet header. */
++	0x11, 0x22, 0x33, 0x44, 0x55, 0x66,
++	0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff,
++	0x08, 0x00,
++	/* IPv4 header. */
++	0x45, 0x00, 0x00, 0x28,
++	0x12, 0x34, 0x40, 0x00,
++	0x40, 0x06, 0x00, 0x00,
++	0xc0, 0xa8, 0x01, 0x01,
++	0xc0, 0xa8, 0x01, 0x02,
++	/* TCP header. */
++	0x00, 0x50, 0x1f, 0x90,
++	0x00, 0x00, 0x00, 0x01,
++	0x00, 0x00, 0x00, 0x00,
++	0x50, 0x02, 0x10, 0x00,
++	0x00, 0x00, 0x00, 0x00,
 +};
 +
- static int __init bpf_kfunc_init(void)
- {
- 	int ret;
-@@ -13023,6 +13213,8 @@ static int __init bpf_kfunc_init(void)
- 					       &bpf_kfunc_set_sock_addr);
- 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &bpf_kfunc_set_tcp_reqsk);
- 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_CGROUP_SKB, &bpf_kfunc_set_icmp_send);
-+	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &bpf_kfunc_set_skb_pppoe);
-+	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_ACT, &bpf_kfunc_set_skb_pppoe);
- 	return ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SOCK_OPS, &bpf_kfunc_set_sock_ops);
- }
- late_initcall(bpf_kfunc_init);
++/* Ethernet + IPv6 + TCP, 74 bytes in total. */
++static const __u8 ip6_pkt[] = {
++	/* Ethernet header. */
++	0x11, 0x22, 0x33, 0x44, 0x55, 0x66,
++	0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff,
++	0x86, 0xdd,
++	/* IPv6 header. */
++	0x60, 0x00, 0x00, 0x00,
++	0x00, 0x14, 0x06, 0x40,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02,
++	/* TCP header. */
++	0x00, 0x50, 0x1f, 0x90,
++	0x00, 0x00, 0x00, 0x01,
++	0x00, 0x00, 0x00, 0x00,
++	0x50, 0x02, 0x10, 0x00,
++	0x00, 0x00, 0x00, 0x00,
++};
++
++/* Ethernet + ARP request, 42 bytes in total. */
++static const __u8 arp_pkt[] = {
++	/* Ethernet header. */
++	0x11, 0x22, 0x33, 0x44, 0x55, 0x66,
++	0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff,
++	0x08, 0x06,
++	/* ARP payload. */
++	0x00, 0x01,
++	0x08, 0x00,
++	0x06, 0x04, 0x00, 0x01,
++	0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff,
++	0xc0, 0xa8, 0x01, 0x01,
++	0x11, 0x22, 0x33, 0x44, 0x55, 0x66,
++	0xc0, 0xa8, 0x01, 0x02,
++};
++
++#define PPPOE_SES_HLEN	8
++#define TC_ACT_SHOT	2
++
++static int run_prog(int prog_fd, const void *data_in, __u32 size_in,
++		    void *data_out, __u32 size_out, __u32 *retval,
++		    __u32 *size_out_actual)
++{
++	LIBBPF_OPTS(bpf_test_run_opts, opts,
++		    .data_in = (void *)data_in,
++		    .data_size_in = size_in,
++		    .data_out = data_out,
++		    .data_size_out = size_out,
++	);
++	int ret;
++
++	ret = bpf_prog_test_run_opts(prog_fd, &opts);
++	if (!ret && retval)
++		*retval = opts.retval;
++	if (!ret && size_out_actual)
++		*size_out_actual = opts.data_size_out;
++
++	return ret;
++}
++
++static void test_encap_decap(struct tc_pppoe *skel, const char *subtest,
++			     const __u8 *pkt, __u32 pkt_len, int ethertype,
++			     __u8 ppp_proto)
++{
++	__u8 encap_pkt[128];
++	__u8 decap_pkt[128];
++	__u32 retval, out_len;
++	int ret;
++
++	if (!test__start_subtest(subtest))
++		return;
++
++	skel->bss->encap_proto = 0;
++	ret = run_prog(bpf_program__fd(skel->progs.tc_pppoe_encap),
++		       pkt, pkt_len, encap_pkt, sizeof(encap_pkt),
++		       &retval, &out_len);
++	ASSERT_OK(ret, "encap test_run");
++	ASSERT_OK(retval, "encap retval");
++	ASSERT_EQ(out_len, pkt_len + PPPOE_SES_HLEN, "encap pkt len");
++	ASSERT_EQ(skel->bss->encap_proto, htons(0x8864),
++		  "encap skb protocol");
++
++	/* Ethernet header, with the ethertype changed to PPPoE session. */
++	ASSERT_EQ(encap_pkt[12], 0x88, "encap eth h_proto");
++	ASSERT_EQ(encap_pkt[13], 0x64, "encap eth h_proto");
++	/* PPPoE session header written by the kernel. */
++	ASSERT_EQ(encap_pkt[14], 0x11, "encap pppoe ver/type");
++	ASSERT_EQ(encap_pkt[15], 0x00, "encap pppoe code");
++	ASSERT_EQ(encap_pkt[16], 0xde, "encap pppoe sid");
++	ASSERT_EQ(encap_pkt[17], 0xad, "encap pppoe sid");
++	ASSERT_EQ(encap_pkt[18], 0x00, "encap pppoe length");
++	ASSERT_EQ(encap_pkt[19], pkt_len - 14 + 2, "encap pppoe length");
++	ASSERT_EQ(encap_pkt[20], 0x00, "encap ppp proto");
++	ASSERT_EQ(encap_pkt[21], ppp_proto, "encap ppp proto");
++	/* The original packet moves behind the new header unchanged. */
++	ASSERT_MEMEQ(encap_pkt + 14 + PPPOE_SES_HLEN, pkt + 14,
++		     pkt_len - 14, "encap payload");
++
++	skel->bss->decap_proto = 0;
++	ret = run_prog(bpf_program__fd(skel->progs.tc_pppoe_decap),
++		       encap_pkt, pkt_len + PPPOE_SES_HLEN, decap_pkt,
++		       sizeof(decap_pkt), &retval, &out_len);
++	ASSERT_OK(ret, "decap test_run");
++	ASSERT_OK(retval, "decap retval");
++	ASSERT_EQ(out_len, pkt_len, "decap pkt len");
++	ASSERT_EQ(skel->bss->decap_proto, ethertype, "decap skb protocol");
++	ASSERT_MEMEQ(decap_pkt, pkt, pkt_len, "decap packet");
++}
++
++static void test_reject_input(struct tc_pppoe *skel, const char *prog_name,
++			      const __u8 *pkt, __u32 pkt_len,
++			      const char *subtest)
++{
++	struct bpf_program *prog;
++	__u8 out[128];
++	__u32 retval = 0;
++	int ret;
++
++	if (!test__start_subtest(subtest))
++		return;
++
++	prog = bpf_object__find_program_by_name(skel->obj, prog_name);
++	if (!ASSERT_OK_PTR(prog, "find program"))
++		return;
++
++	skel->bss->encap_proto = 0;
++	skel->bss->decap_proto = 0;
++	ret = run_prog(bpf_program__fd(prog), pkt, pkt_len, out,
++		       sizeof(out), &retval, NULL);
++	ASSERT_OK(ret, "reject test_run");
++	ASSERT_EQ(retval, TC_ACT_SHOT, "kfunc rejected the call");
++	ASSERT_EQ(skel->bss->encap_proto, 0, "skb protocol unchanged");
++	ASSERT_EQ(skel->bss->decap_proto, 0, "skb protocol unchanged");
++}
++
++static void test_kfunc_flags(struct tc_pppoe *skel, const char *prog_name,
++			     int expected, const char *subtest)
++{
++	struct bpf_program *prog;
++	__u8 out[128];
++	__u32 retval = 0;
++	int ret;
++
++	if (!test__start_subtest(subtest))
++		return;
++
++	prog = bpf_object__find_program_by_name(skel->obj, prog_name);
++	if (!ASSERT_OK_PTR(prog, "find program"))
++		return;
++
++	ret = run_prog(bpf_program__fd(prog), ip4_pkt, sizeof(ip4_pkt), out,
++		       sizeof(out), &retval, NULL);
++	ASSERT_OK(ret, "flags test_run");
++	ASSERT_EQ((int)retval, expected, "kfunc retval");
++}
++
++void test_tc_pppoe(void)
++{
++	/* PPPoE packet with PPP protocol 0x8021 (IPCP), neither IPv4 nor IPv6. */
++	static const __u8 bad_ppp_pkt[] = {
++		0x11, 0x22, 0x33, 0x44, 0x55, 0x66,
++		0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff,
++		0x88, 0x64,
++		0x11, 0x00, 0x00, 0x00, 0x00, 0x28, 0x80, 0x21,
++		0x45, 0x00, 0x00, 0x28,
++		0x12, 0x34, 0x40, 0x00,
++		0x40, 0x06, 0x00, 0x00,
++		0xc0, 0xa8, 0x01, 0x01,
++		0xc0, 0xa8, 0x01, 0x02,
++		0x00, 0x50, 0x1f, 0x90,
++		0x00, 0x00, 0x00, 0x01,
++		0x00, 0x00, 0x00, 0x00,
++		0x50, 0x02, 0x10, 0x00,
++		0x00, 0x00, 0x00, 0x00,
++	};
++	/* PPPoE packet too short for a full inner IP header. */
++	static const __u8 truncated_pkt[] = {
++		0x11, 0x22, 0x33, 0x44, 0x55, 0x66,
++		0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff,
++		0x88, 0x64,
++		0x11, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x21,
++		0x45, 0x00,
++	};
++	/* Non-PPPoE IPv4 packet whose bytes 20/21 decode as PPP_IP. */
++	static const __u8 fake_ppp_pkt[] = {
++		0x11, 0x22, 0x33, 0x44, 0x55, 0x66,
++		0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff,
++		0x08, 0x00,
++		0x45, 0x00, 0x00, 0x28,
++		0x12, 0x34, 0x00, 0x21,
++		0x40, 0x06, 0x00, 0x00,
++		0xc0, 0xa8, 0x01, 0x01,
++		0xc0, 0xa8, 0x01, 0x02,
++		0x00, 0x50, 0x1f, 0x90,
++		0x00, 0x00, 0x00, 0x01,
++		0x00, 0x00, 0x00, 0x00,
++		0x50, 0x02, 0x10, 0x00,
++		0x00, 0x00, 0x00, 0x00,
++	};
++	struct tc_pppoe_fail *fail_skel;
++	struct tc_pppoe *skel;
++
++	skel = tc_pppoe__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel open_and_load"))
++		return;
++
++	test_encap_decap(skel, "encap-decap-v4", ip4_pkt, sizeof(ip4_pkt),
++			 htons(0x0800), 0x21);
++	test_encap_decap(skel, "encap-decap-v6", ip6_pkt, sizeof(ip6_pkt),
++			 htons(0x86dd), 0x57);
++
++	/* BPF_F_ADJ_ROOM_FIXED_GSO is accepted, unknown flags are not. */
++	test_kfunc_flags(skel, "tc_pppoe_encap_fixed_gso", 0,
++			 "encap-fixed-gso");
++	test_kfunc_flags(skel, "tc_pppoe_encap_bad_flags", -EINVAL,
++			 "encap-bad-flags");
++
++	/* Encapsulation of a non-IP packet must be rejected. */
++	test_reject_input(skel, "tc_pppoe_encap", arp_pkt, sizeof(arp_pkt),
++			  "encap-arp-reject");
++	/* Decapsulation of a packet whose protocol is not PPPoE. */
++	test_reject_input(skel, "tc_pppoe_decap", ip4_pkt, sizeof(ip4_pkt),
++			  "decap-non-pppoe");
++	test_reject_input(skel, "tc_pppoe_decap", bad_ppp_pkt,
++			  sizeof(bad_ppp_pkt), "decap-bad-ppp-proto");
++	test_reject_input(skel, "tc_pppoe_decap", truncated_pkt,
++			  sizeof(truncated_pkt), "decap-truncated");
++	test_reject_input(skel, "tc_pppoe_decap", fake_ppp_pkt,
++			  sizeof(fake_ppp_pkt), "decap-non-pppoe-fake-proto");
++
++	tc_pppoe__destroy(skel);
++
++	/*
++	 * KF_CHANGES_PKT must make the verifier reject a program that
++	 * keeps a packet pointer across the call.
++	 */
++	fail_skel = tc_pppoe_fail__open_and_load();
++	if (!ASSERT_ERR_PTR(fail_skel, "stale packet pointer rejected"))
++		tc_pppoe_fail__destroy(fail_skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/tc_pppoe.c b/tools/testing/selftests/bpf/progs/tc_pppoe.c
+new file mode 100644
+index 000000000..880abfbd5
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/tc_pppoe.c
+@@ -0,0 +1,77 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 ThisSeanZhang */
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_endian.h>
++
++#define ETH_P_PPP_SES_TEST	0x8864
++
++#define TC_ACT_OK_TEST		0
++#define TC_ACT_SHOT_TEST	2
++
++extern int bpf_skb_pppoe_encap(struct __sk_buff *skb,
++			       __be16 sid, u64 flags) __ksym;
++extern int bpf_skb_pppoe_decap(struct __sk_buff *skb, u64 flags) __ksym;
++
++/* skb->protocol as observed after the kfunc call. */
++int encap_proto;
++int decap_proto;
++
++SEC("tc")
++int tc_pppoe_encap(struct __sk_buff *skb)
++{
++	struct ethhdr eth;
++
++	if (bpf_skb_pppoe_encap(skb, bpf_htons(0xdead), 0))
++		return TC_ACT_SHOT_TEST;
++
++	encap_proto = skb->protocol;
++
++	if (bpf_skb_load_bytes(skb, 0, &eth, sizeof(eth)))
++		return TC_ACT_SHOT_TEST;
++	eth.h_proto = bpf_htons(ETH_P_PPP_SES_TEST);
++	if (bpf_skb_store_bytes(skb, 0, &eth, sizeof(eth), 0))
++		return TC_ACT_SHOT_TEST;
++
++	return TC_ACT_OK_TEST;
++}
++
++SEC("tc")
++int tc_pppoe_decap(struct __sk_buff *skb)
++{
++	struct ethhdr eth;
++
++	if (bpf_skb_pppoe_decap(skb, 0))
++		return TC_ACT_SHOT_TEST;
++
++	decap_proto = skb->protocol;
++
++	/*
++	 * Restore the ethertype to the protocol of the decapsulated
++	 * payload, as picked by the kernel from the PPP protocol field.
++	 */
++	if (bpf_skb_load_bytes(skb, 0, &eth, sizeof(eth)))
++		return TC_ACT_SHOT_TEST;
++	eth.h_proto = (__be16)skb->protocol;
++	if (bpf_skb_store_bytes(skb, 0, &eth, sizeof(eth), 0))
++		return TC_ACT_SHOT_TEST;
++
++	return TC_ACT_OK_TEST;
++}
++
++/* BPF_F_ADJ_ROOM_FIXED_GSO is accepted; any other flag is rejected. */
++SEC("tc")
++int tc_pppoe_encap_fixed_gso(struct __sk_buff *skb)
++{
++	return bpf_skb_pppoe_encap(skb, bpf_htons(0xdead),
++				   BPF_F_ADJ_ROOM_FIXED_GSO);
++}
++
++SEC("tc")
++int tc_pppoe_encap_bad_flags(struct __sk_buff *skb)
++{
++	return bpf_skb_pppoe_encap(skb, bpf_htons(0xdead), 1ULL << 32);
++}
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/tc_pppoe_fail.c b/tools/testing/selftests/bpf/progs/tc_pppoe_fail.c
+new file mode 100644
+index 000000000..f816c7169
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/tc_pppoe_fail.c
+@@ -0,0 +1,36 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 ThisSeanZhang */
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_endian.h>
++
++#define TC_ACT_SHOT_TEST	2
++
++extern int bpf_skb_pppoe_encap(struct __sk_buff *skb,
++			       __be16 sid, u64 flags) __ksym;
++
++/*
++ * bpf_skb_pppoe_encap() may reallocate the skb head, so the packet
++ * pointer checked before the call is stale afterwards: this program
++ * has to fail verification.
++ */
++SEC("tc")
++int tc_pppoe_stale_ptr(struct __sk_buff *skb)
++{
++	char *data = (char *)(long)skb->data;
++	char *data_end = (char *)(long)skb->data_end;
++	__u8 b = 0;
++
++	if (data + 1 > data_end)
++		return TC_ACT_SHOT_TEST;
++
++	if (bpf_skb_pppoe_encap(skb, bpf_htons(0xdead), 0))
++		return TC_ACT_SHOT_TEST;
++
++	b = *data;
++
++	return b;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.47.3
 
