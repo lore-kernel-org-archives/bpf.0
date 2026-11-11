@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794431121;
-	b=HGTgD980q9pURAuxCSvs2lSsv75qbSWQNwyU0CmgZsjZkydQWg0UE774Rw7yt7R6HpFU
-	 F5sOj0VlPwpWcw+QkNcMNdPEIGs1iogcvcyvdqh2E0lOzxMLdwKfPUlO1PMfH7IwaIDW6
-	 YPfzhyS6cX1i2E6FLYzWfoHYVdqDyOfQjxdSptxOUn30MvS95WA6DM7cvFb6O0ljVA0FF
-	 weVadRNzPM3IX9r1456nY58bAyp8rBCAqWXV2R58TIVHY5J4ttCEPLTWCOyasEMXMKnbz
-	 P6kZTdjMACistztl44soY98pbWDYv5goa0VbPnkW21QrZOM+2Qp2yXIoboMEeKY8L2w==
+	t=1794431265;
+	b=MwoVdMFBq9ZhLfsrAL4QYXzYUgXuBz+d7AjhM/GyK7940u2sJNPrlScIha2BFG1TkTvo
+	 qmhyA9b+JXdKhGCuTT/VOofUtwUU9X1rn0Gkq97wA2C0f/r671qbpeV0Xtta75DdZRK3B
+	 5vKEuOLskNjDLKZ+CM/ADAPY0KyAHhfkjrlwDAYiaWjKvl+cqaxT2XTfpbpRwCFXU0RlB
+	 ieY4tTlEYKPk9c+m7fVQ8vcJmV2cjrUmheDAKMCEDcIVeh34ltcNdlMZYWEYDcdo+sr8B
+	 CYgYhkFYfJV1DOdK+KCJGJjdn67ReeOuP6Rq6UYQbcY9kGbrlkrYidaG4KKHr7cf9JQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794431121;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794431265;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=tNQqBz5+70EcbhvGfYXqJhYoHMclm4qNDJckCYhqgXk=;
-	b=4+59Fhe9at/SIjQEifKDE3v2v/GqCoBe9Iqz6MBPNt4Sh1U91gFuTceRTtIARLLFBcUt
-	 ekBSL+nFgJbQ055VuCe0T7WmS5whPxHQG8xFmMk7sQUAcdx5tefoBjuQlQbhO+NOp8lCc
-	 WEa4JDRMRqg451eRGnAiJxRKramh0DdXVVY9GoPHPQ4ecccS/S6nJwl++j4kzeQJ0TJek
-	 ar7uxsic9Vmi8tvP/vH4l46980aFtVBWqRYviJNELEOCv3gcy88NE1KyxvWdeEAn6ver7
-	 0kZKeoVvK1Eg9Ix+iQyYp7Rzs1rgra6R4L/0pmfem0b0cWc5IZ7u/K0ngRz+bCUeDFg==
+	bh=iHRfaUMaF9+HPopnCYvBfWB4pSV60uRmTbsTXs8MRao=;
+	b=ZZK3aLZU3SnO0PLNOOqgQ06yZyCgxKyshjI0JK8CgSvsI+ruJVOkFAo7nXDKsxu+2Yqr
+	 Rjg2YzfVK3JSo3rhRAauWrSx8W0a1t5DokKhTrD6FITwRUT8pagTrCdAiXPjsRbqlXg4S
+	 OoF2u6lc0e+GnnMiLrvt2y0A6URdUpVar7tJeFqPxLD1OFntTTqCpJw9qyplGtOiPavzV
+	 F8c0r3NEzuK2dckblKqEY0cxl7WYVX+iLWRaEwXzWGKxHcg/6PZd2+KtEmYeUpMWqEbGI
+	 hiEjVKomsYXz0lUggN7kW/VmAEVknppatjJ4n+xdY3Twxv72Ts4gVR9zrcyyJ+ItWHA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="c2XAXk1/";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NjXFBRZP;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4E47606A321;
-	Wed, 11 Nov 2026 21:05:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBAB0606A321;
+	Wed, 11 Nov 2026 21:07:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=c2XAXk1/
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DD6E1F00A05;
-	Wed, 11 Nov 2026 21:05:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NjXFBRZP
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51D251F00A05;
+	Wed, 11 Nov 2026 21:07:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794431121;
-	bh=tNQqBz5+70EcbhvGfYXqJhYoHMclm4qNDJckCYhqgXk=;
+	s=k20260515; t=1794431265;
+	bh=iHRfaUMaF9+HPopnCYvBfWB4pSV60uRmTbsTXs8MRao=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=c2XAXk1/1FlgcmzpXfA2mwLgpAVBySudM21S5Eky4Xj28kPHbLydAHh32loGW2D8a
-	 AiNWmQBSKEuI8d679u+FUaCA1M+Age94YqR3IK0TU1eOn1czVjbuc0pnSwvhFWbdjW
-	 DN5wjSdCyZx795hFTyZMx92BP8bR1SvYzbNpbAbd1GtNRW0dpeGA60O+c4f7JS7tkk
-	 KAhQZAt7Tf6saoTzFtACDSCw09t1F3Gs7meWuz4VzMYTYdU+ctzuAzZxLL44JU6cGK
-	 Bx5/LiEIijFTXKsvej4SY5GVJuEChrIY8DWX7ROFO4w3aiMI/8IIYVImtSQbcWtyHz
-	 6kq/eRUmej2Cw==
-Content-Type: multipart/mixed; boundary="===============2866188785818237921=="
+	b=NjXFBRZPSz2s/OchCd97iODi1xMLRzQXfq+TyxSt6n4qMD0oTZi0ISzTIvpCgK79W
+	 OJfYlLbNOwHFPDZLJfAjEOVg3am++IeNuzYxsxQKUi9lEWiReabYasEyvmRCdcT2gi
+	 CgSbJBL/M39d7TEZPk9DIgu8R8iIMNzMZDC4I+/u2DTLglBE/UjQpvzXg+iX1ftoGI
+	 c9v6emhTfbffmdrXgfeZKmuxKcXUzcjfddkn5wVP/RF3WYBYax4SRwEUuYwEo9A65S
+	 ZvApQ+qb+0B4qj0xBzH6YzqXwZZqqTfivrT42Sera508UHcBqIBA8iWh18cCpJAl75
+	 +6slKWtFNwXXA==
+Content-Type: multipart/mixed; boundary="===============1657072974706563692=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,72 +49,72 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <8be73886579dc58a6363e72f540c0f28a12e0fe089ebde311b28919a47714ef7@mail.kernel.org>
-In-Reply-To: <20261110125001.4167503-9-cui.tao@linux.dev>
-References: <20261110125001.4167503-9-cui.tao@linux.dev>
-Subject: Re: [PATCH 8/9] tools/sched_ext: scx_userland: Check dispatch buffer slots before inserting
+Message-Id: <c7755fa3015ba1f5aa28207ec05173315ebcae0e662b07d78a084c8aeeb2e26a@mail.kernel.org>
+In-Reply-To: <20261111-bpf-preempt-v2-r2-v2-1-9d8f6b952ad2@sentinelone.com>
+References: <20261111-bpf-preempt-v2-r2-v2-1-9d8f6b952ad2@sentinelone.com>
+Subject: Re: [PATCH bpf-next v2 1/5] bpf: Avoid per-CPU private stack in preemptible tracing progs
 From: bot+bpf-ci@kernel.org
-To: cui.tao@linux.dev,tj@kernel.org
-Cc: void@manifault.com,arighi@nvidia.com,changwoo@igalia.com,liwanwu@kylinos.cn,devnexen@gmail.com,zhaomengmeng@kylinos.cn,emil@etsalapatis.com,yphbchou0911@gmail.com,mingo@redhat.com,sched-ext@lists.linux.dev,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,cui.tao@linux.dev,cuitao@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 11 Nov 2026 21:05:20 +0000 (UTC)
+To: mikeba@sentinelone.com,bpf@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
+Cc: martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,john.fastabend@gmail.com,emil@etsalapatis.com,ihor.solodrai@linux.dev,rostedt@goodmis.org,mhiramat@kernel.org,mathieu.desnoyers@efficios.com,jp.kobryn@linux.dev,linux-trace-kernel@vger.kernel.org,linux-kernel@vger.kernel.org,mikeba@sentinelone.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed, 11 Nov 2026 21:07:44 +0000 (UTC)
 
---===============2866188785818237921==
+--===============1657072974706563692==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> tools/sched_ext: scx_userland: Check dispatch buffer slots before inserting
+> bpf: Avoid per-CPU private stack in preemptible tracing progs
 
-TL;DR: Commit message only: the sentence explaining when the dispatch buffer
-overflows is garbled (two sentences run together, stray indent); the review
-asks for a rewrite. No code issues raised.
+TL;DR: Selftest nits only: renamed "No private stack" tests in
+verifier_private_stack.c keep old "private_stack" function names, and one
+comment still describes the old mixed case.
 
-> tools/sched_ext: scx_userland: Check dispatch buffer slots before inserting
->
-> userland_dispatch() pops up to MAX_ENQUEUED_TASKS pids from the
-> dispatched map and inserts each task into the global DSQ without
-> consulting scx_bpf_dispatch_nr_slots(). The kernel's dispatch buffer
-> holds 32 slots against MAX_ENQUEUED_TASKS (4096), so a single
->    full dispatch round overflows it long before that many tasks
-> pile up between dispatch rounds the insert past the buffer limit aborts
-> the whole scheduler. Every other tools scheduler that loops on
-> scx_bpf_dsq_insert() (scx_central, scx_qmap) checks the remaining slot
-> count; scx_userland is the odd one out.
->
-> Break out when the buffer is exhausted and leave the remaining tasks
-> queued for the next dispatch round.
->
-> Fixes: cc4448d0856d ("tools/sched_ext: add scx_userland scheduler")
-> Signed-off-by: Tao Cui <cuitao@kylinos.cn>
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_private_stack.c b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
+> --- a/tools/testing/selftests/bpf/progs/verifier_private_stack.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
 
-This isn't a bug, but the sentence explaining when the overflow happens
-looks garbled.  It reads as two sentences run together:
+[ ... ]
 
-  "so a single
-     full dispatch round overflows it long before that many tasks
-  pile up between dispatch rounds the insert past the buffer limit aborts
-  the whole scheduler."
+>  SEC("raw_tp")
+> -__description("Private stack, run, exception in main prog")
+> +__description("No private stack, run, exception in main prog")
+>  __success __retval(1)
+>  __arch_x86_64
+> -__jited("	movq	%rdi, -0x200(%r9)")
+> -__jited("	movl	$0x1, %edi")
+> -__jited("	pushq	%r9")
+> -__jited("...")
+> -__jited("	callq")
+> +__jited("	subq	$0x200, %rsp")
+>  __naked void private_stack_run_exception_main_prog(void)
+>  {
 
-The second line also has a stray three-space indent.
+this isn't a bug, but would it be clearer to rename
+private_stack_run_exception_main_prog() to match its new "No private stack"
+description?
 
-From the code, userland_dispatch() pops pids from the dispatched queue and
-calls scx_bpf_dsq_insert() for each one.  Each insert from ops.dispatch()
-goes through scx_dsq_insert_commit(), which calls
-scx_error(sch, "dispatch buffer overflow") once
-dspc->cursor >= sch->dsp_max_batch.  Since scx_userland does not set
-ops.dispatch_max_batch, dsp_max_batch is SCX_DSP_DFL_MAX_BATCH (32).
+The same applies to private_stack_run_exception_sub_prog() and
+private_stack_subprog_throw().  Elsewhere in this file the function name
+follows the description, for example no_private_stack_kprobe(), and
+private_stack_returns() was renamed to big_stack_returns() in
+verifier_unwind.c when its description changed.
 
-So the scheduler aborts once more than 32 pids (31 if
-dispatch_user_scheduler() also inserted the usersched task in the same
-call) have built up in the dispatched queue between two ops.dispatch()
-calls.
+[ ... ]
 
-Could the sentence be rewritten to say that directly?
+>  /* Only the frame of the main prog counts, and it has nothing pushed at the call */
+>  SEC("raw_tp")
+> -__description("Private stack, run, exception in subprog, no private stack in main prog")
+> +__description("No private stack, run, exception in subprog with a large stack")
+>  __success __retval(3)
+
+Also, the comment above no_private_stack_run_exception_sub_prog() still
+describes the old mixed case, a main prog with nothing pushed at the call.
+Now that neither frame has a private stack, should it be dropped or reworded?
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43092548483
---===============2866188785818237921==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43092697553
+--===============1657072974706563692==--
