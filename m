@@ -1,100 +1,116 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.41
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794393172;
-	b=Je1J4n5vzDxdOPl8NpWMRSOSy0SlepFq2MQIP80KHjiW2mFyGaI+Wz4SLM9jTPkQp8ax
-	 cjpkxiZLTnPsHCMFldGa3eNdoEhPwWiU+U0Z7RRMQFDOxxLZhXmpzdLWpwt66Gv2kwhrg
-	 GsaSvJJ0BrRVVXavB0QvOEbHl9PZx3J8X2fI7oQz4db5+rWMm3+eUhxsR3Rdto6sa5Lii
-	 bKgmRVfzveYmyfZErTRk+H4j0y/DSO8+K3FfC8QTgtG3DvAaASOJh4pnQxVMtZviVj1Wi
-	 b6U0bqotIoZNvSZ+txTMehQwFuf7o9zZKmRnOPRbAAY4aGz14R44pgeOy3s7ZG/ykoQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794393172;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=02bBnMozli8MiWSGFFGAt1jIgOdeJZMOgr35PuI0WZ8=;
-	b=i03Ptcf5jX4teUvW/I9ZvyUXC0It7dPiNf15CaQRFcEi/9vDc/g4TSw+I+86UZXpGFaa
-	 73KqAhZGHVVoj5WSFathtrWiB/htrYBJIcLtQQAYc/Iuq+dW3BAuog80zqvTqZB2avtCo
-	 4gePndRcpH47LZDhFrdN/20jVWx1OpvjHjBZsJv/lrjJfR3WKR0dFy2zKJUJJkJAjKa75
-	 D8w2v4RT08dx15P7vBMD5iP5VCwGzdpViwUudcubsWcWq5NSqUJxXidbYIGKJMgOF7fBs
-	 Rht7QbrSzc3qT6J4dtsaIOt/pTv3uyRj/KvDfpbjcgNtKE/QdywCk2BLR4Rc6a4a7XQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kOKn4s7s;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.41
-Received: from mail-yx1-f41.google.com (mail-yx1-f41.google.com [74.125.224.41])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.242
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794393532;
+	b=TXSsQO3nZjArbSUGu4UZ+yaylmfqaTd4r5d2x3zS1C5cficDLdtTuiXfNQ/jr5zkkHpk
+	 23vmdOM0ebNyYKpNiJkSI38GYCl2XHCB7/zoVWXWt4g0kiNSoevVfRbwO4ZGV/ghbuMNb
+	 mD7sYXDok2MS3XLwrk3VJl36XO+YsNFP4S3H2h5sLTRJvWERRsnpsxDs1e/Ov3xH8C+W9
+	 WKZyjRXaOM8L5FSioPYtKczbAXzVpk30RT3iJWkOFJuh5lX5mb16XHwcsqbeRq1hXu1gv
+	 /RHCOaM19LeQMLEl/5Vp0VirGA6FpkU3y4QyjeMvYfVpVanIZdo1aYFLHA8A2HOtD/w==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794393532;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=xDU+VUQuiVqA+errFgpqHKql5l47PsMQESWCLQkI4gc=;
+	b=4WgxlSIC1nt83MT/Sv5X+IiXpy492xlerP7LUyPmmIpAsKALKl+l8fLaovL/+dG2T+YX
+	 FWQ+UxKh8de1lWRlk0uKMrTCLEcICRbRi41RpvXoXFWn5cibQ3rjtEZQfhJ54NHDr9aLJ
+	 sCHUZUAHbKETbY0h4yUEqHLxlQu6kRlbo3jyFybZCJHB8ZoA5kWGfXYXJHHCxJta9C5hP
+	 58iXNKtbdQjdDJ6PX91Q5nWnxiy7hAvlYs1Hxnk+cMeiy0VnN+5kj+cO4cEt6mllCpprA
+	 VfllT+n5MAlM/7xZU22DK/KnkdHBTMYN0G3/bIvcF8VNYtGvFLSEvBYCm5cU/S3ozGg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=bjvfla5w;
+	arc=none smtp.remote-ip=91.218.175.242
+Received: from mta0.migadu.com (out-242.mta0.migadu.com [91.218.175.242])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 684E6606A31C
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 10:32:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 684E6606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69945606A32A
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 10:38:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 69945606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kOKn4s7s
-Received: by mail-yx1-f41.google.com with SMTP id 956f58d0204a3-67be1e468a8so2284811d50.0
-        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 02:32:52 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794393171; cv=none;
-        d=google.com; s=arc-20260327;
-        b=fE/QfJbnShxNLY8uY6I8LVuIBtJdcaudbLzl01JbnFaSJnMjOMmQVTi7OldLGLN7T1
-         dhzvF5D/1k5Q8dS0FHYcPfbpMx63zuIcPy+GZsuNKooqlZYFZ0thv58+KUHwwCIK7tvT
-         y9IWhggf3E4RWetIjOI3ZUDr9o2Yr2fwZqiHXs3goQGBKDhGylEWAf2fa8z9GSieWpA4
-         rTkgEeAdf55cc+hXYUuSiUgvfaUVRH5kxYd2wpxocuH9U6qbq6f6hkXW40Bj1loHkFES
-         /o++0F9RypRpa6FJbIqf6q7dDmK8dRgWlACaITP+EW5Nq6YJdlxxZMwEYSRCm/Vqg9iH
-         nTKQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=02bBnMozli8MiWSGFFGAt1jIgOdeJZMOgr35PuI0WZ8=;
-        fh=kGwa9FnHMXRuQISYUMDCO057x2Hh8EtdT7WW9AwFV8I=;
-        b=FwvCT7Wrlr7f4LWSdzKI4BSd73pqb3Na1yuPeoKzmGsO/4+qaC083y/aiNsFoP5pVe
-         dymO8s/yMzFEaFXjw2msWUgwhZPR+bCk5kz3Mk6FHJLZCxFqDudUyvpdnKjDN/fONfV4
-         cOzUgmMNjGhn7xsLUfbJspKNZYxBPq3chmF7779D2MPu/kU0odwAg+wskTpKJKDScUst
-         fpcUZPRZXYiQbksYel628VoePs3A9YpCFsC+eP0eFp7sEDGPqUYcVI/8iTUwHNWKSeT/
-         R4RJlFuULDRpQhfdUxY2cTVeLJZ/DAG9t2q0LTRmu9cp+TEX5kX3FwK9/wZrFPzpvY46
-         jqhQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794393171; x=1794997971; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=02bBnMozli8MiWSGFFGAt1jIgOdeJZMOgr35PuI0WZ8=;
-        b=kOKn4s7st+0UrDWuAYbFD3mtTNdrCVTRR8+85TqjA8fiP4ltJ7AHQigaHvo8xxhwUO
-         nPYpl1wTPtgTKILmEFdpmVyEesy2bAQR2kiEXQNhEGX4UVwhDpNkzPYFQckb74omhcA2
-         X1XNPUzOXuNY9DIuoBxr2mK3379AeWdWkrB3rwjJai5L+BTR7bNMMmYKJlgyXL50pOVg
-         VcbHXMrQrXuiMTtSQdaQiy3Y8VYMfDvwYKyN8CfyttDu0YIPbAoTE5Ly/q+8vZc3chU6
-         pSmsg6om2foGmEAapoyuEf0j8YZfLsxS8KjemDsyhn9rM/BkHNG0PQ5l3ogKQFE8TdNt
-         9KMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794393171; x=1794997971;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=02bBnMozli8MiWSGFFGAt1jIgOdeJZMOgr35PuI0WZ8=;
-        b=YlsrnAC87ypjW3ko3uPNnG1ztQRFD0sOI+d+QcuQGNlHYoCrR56y73JZERGqNUaMZc
-         rf65LMUCL4/eh8bXmkAb5pNky5S6EFdS9miZRuNdgtP/qt/+KORFIak7K46VVJ0C0MB2
-         JjJ9Et4z0F3DYYevzcEPDuozKigCUgS38L4vUpllXatMBEVJfgx7eBL0I4PUzi0IIf0f
-         J7lB27dqPd5cJBjIT1LLZWshwAIy5N63VZyg/TZOFd/Nx9sY9vzLd7KZj+PqU2Tj/FvU
-         Mf74lh8z7+DJmFF+Bf7tYMm7Zrewgdz82aSxqVmQpAtmFg0xkmREjWZ5onKSis1ZIoaZ
-         Tifw==
-X-Forwarded-Encrypted: i=1; AL+hErHm5nW9yUNEpfMjW4b/G4IBytZKLOr25iVwdMIeuwA6JfFIkIGMbnRULi5Phvhd+J2iyY4=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8ZUvWQDPVZN5dyOtR/TPXvBH6zZrM61Gp3ks+VupI0MTgMyZYH
-	iR7wY24VKLPL4HLJDQLBLR1GZ4kWXghm4/dsAcowWfzh2Ma9YD8SE5U10Kq3IfRKiJGK84qSvRE
-	boJAdBOwhksFMVcZ/f/SPMc2GrCVrIvk=
-X-Gm-Gg: AYBFou1hh69hYKsbz1tbbSfhyU0kVs1w8ECL/bdGVZsYkaTc7D5eGR4R2yM3mygfV3F
-	MSJKgeCPo3iggbRa+TVG25cZaG0n5SFE2oOhBEWw8IEIo9iY65pjPgmhIWYXKatR6S2rPbqfg4P
-	NYgynVWxX3oQ4TGN5iwvgriT8/4ivbgK+5BTuPs23T9ZZDOcRfRtEqIuHqELMWkHbouygpDvVD6
-	JTGNt6Bu8UB9CAM3JIqGLIqwIB98isDrfr/Uk8yumtfszsKF8gklQbIggzPSvs1EJNBcM+PWWOX
-	o6WnwMeL70MOwiVmv9gukj6r4qS6VWzEaPf4sqCm9JSCNxYCnqy+zA9gzLytdRH8nDw3BSPf4i6
-	ltyO5KKUBggbsqf8iZF7Km3gI9oJZ31vsNBLf0M6FwqfV8FzZJQNSpxQyk4g=
-X-Received: by 2002:a05:690e:d4b:b0:67c:1c64:45e9 with SMTP id
- 956f58d0204a3-67c680625cdmr1508099d50.101.1794393171367; Wed, 11 Nov 2026
- 02:32:51 -0800 (PST)
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=bjvfla5w
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Pgs9Rl2H9Mrm9v98ZZj54dqFp+ymM4kJacjilJCmcW0=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794393528; v=1; x=1794998328;
+ b=bjvfla5wO8wtHYY4gSPf478Ha6EcgBkojYdgSSSWnEhPH2JZVAQ33yT1o3xNJVDqUw7YvvH0
+ 3EFHYlF/woFlHpDarnibVMC3p+oYEJxF6nosE0wGj9PNePOfrbD+l/9/tfEvKHC0UVKE/X/jmiB
+ gJmazx4HcncKYSXjLw154HKc=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta12.migadu.com with ESMTPS id 272d3a1a2ff3a6d3;
+	Wed, 11 Nov 2026 10:38:46 +0000
+X-Mizu-Trace-ID: 272d3a1a2ff3a6d3
+X-Migadu-Flow: FLOW_OUT
+From: Hui Zhu <hui.zhu@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	JP Kobryn <jp.kobryn@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	davem@davemloft.net,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	KP Singh <kpsingh@kernel.org>,
+	Tao Chen <chen.dylane@linux.dev>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Tobias Klauser <tklauser@distanz.ch>,
+	Eyal Birger <eyal.birger@gmail.com>,
+	Rong Tao <rongtao@cestc.cn>,
+	Hao Luo <haoluo@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Tejun Heo <tj@kernel.org>,
+	Jeff Xu <jeffxu@chromium.org>,
+	mkoutny@suse.com,
+	Jan Hendrik Farr <kernel@jfarr.cc>,
+	Christian Brauner <brauner@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Brian Gerst <brgerst@gmail.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Willem de Bruijn <willemb@google.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Paul Chaignon <paul.chaignon@gmail.com>,
+	Lance Yang <lance.yang@linux.dev>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Barry Song <baohua@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	cgroups@vger.kernel.org,
+	linux-mm@kvack.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: Hui Zhu <zhuhui@kylinos.cn>
+Subject: [RFC PATCH v2 0/2] memcg_ext: dynamic memory.low protection requests
+Date: Wed, 11 Nov 2026 18:38:14 +0800
+Message-ID: <cover.1794393349.git.zhuhui@kylinos.cn>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,99 +120,204 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261110164046.454431-2-a.s.protopopov@gmail.com> <08e4851ff6c0fec6c90ae269b9edafedafdc5ed0462802fe1c1dae6aef465696@mail.kernel.org>
-In-Reply-To: <08e4851ff6c0fec6c90ae269b9edafedafdc5ed0462802fe1c1dae6aef465696@mail.kernel.org>
-From: Anton Protopopov <a.s.protopopov@gmail.com>
-Date: Wed, 11 Nov 2026 11:32:40 +0100
-X-Gm-Features: AclHuK_GbxvTdlzc2_hr4epNElrWdws4BUJQsklCjuLESJeU9114xBRiJsDQXd4
-Message-ID: <CAGn_ityGqppNp6AeCH8m38o7k0=+syWpoMQb3s3iQBi+cL0wxg@mail.gmail.com>
-Subject: Re: [PATCH v3 bpf-next 01/18] bpf: Add BTF ID sets for fmod_ret targets
-To: bot+bpf-ci@kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
-	memxor@gmail.com, almagui@kernel.org, john.fastabend@gmail.com, 
-	qmo@kernel.org, brauner@kernel.org, kpsingh@kernel.org, 
-	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
-	ihor.solodrai@linux.dev, sashal@kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, martin.lau@kernel.org, mason@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 11, 2026 at 9:01=E2=80=AFAM <bot+bpf-ci@kernel.org> wrote:
->
-> > bpf: Add BTF ID sets for fmod_ret targets
->
-> TL;DR: Comment nit only: the BTF_SET8_FMODRET comment (also in tools/incl=
-ude)
-> says the set governs fentry/fexit attachment, but non-sleepable fentry/fe=
-xit
-> never consult it. It could mislead readers.
->
-> > diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
-> > --- a/include/linux/btf_ids.h
-> > +++ b/include/linux/btf_ids.h
->
-> [ ... ]
->
-> > @@ -13,6 +13,12 @@ struct btf_id_set {
-> >  /* This flag implies BTF_SET8 holds kfunc(s) */
-> >  #define BTF_SET8_KFUNCS              (1 << 0)
-> >
-> > +/*
-> > + * This flag implies BTF_SET8 holds functions which BPF fmod_ret, fent=
-ry and
-> > + * fexit programs may attach to. Per-function flags: KF_SLEEPABLE only=
-.
-> > + */
-> > +#define BTF_SET8_FMODRET     (1 << 1)
-> > +
->
-> This isn't a bug, but does this comment describe the set accurately?  It
-> says the set holds functions that fmod_ret, fentry and fexit programs may
-> attach to, which reads as if the set controls fentry/fexit attachment.
->
-> The set is only read through btf_kfunc_is_modify_return(), which has two
-> callers.  bpf_check_attach_target() uses it for non-sleepable
-> BPF_MODIFY_RETURN only:
->
->     } else if (prog->expected_attach_type =3D=3D BPF_MODIFY_RETURN) {
->         ...
->         if (btf_kfunc_is_modify_return(btf, btf_id, prog) ||
->             !check_attach_modify_return(addr, tname))
->             ret =3D 0;
->
-> and btf_id_allow_sleepable() uses it for sleepable programs only, and
-> requires KF_SLEEPABLE:
->
->     u32 *flags =3D btf_kfunc_is_modify_return(btf, btf_id, prog);
->     if (flags && (*flags & KF_SLEEPABLE))
->         return 0;
->
-> Non-sleepable fentry and fexit programs never look at the set.  This
-> remains true through the end of the series (6dc8474f6891 has the same two
-> callers).
->
-> The commit message ("the functions BPF fmod_ret programs may attach to ..=
-.
-> KF_SLEEPABLE marks targets sleepable programs may attach to") and the
-> resolve_btfids header comment ("the targets of BPF fmod_ret programs")
-> describe it differently.  Someone could read this comment and add a
-> function to a BTF_FMODRET set to make fentry/fexit attach work, which wou=
-ld
-> also allow fmod_ret programs to override its return value.
->
-> Could the wording be along the lines of "the set holds fmod_ret targets,
-> and KF_SLEEPABLE additionally lets sleepable fentry, fexit and fmod_ret
-> programs attach"?  The identical comment in tools/include/linux/btf_ids.h
-> has the same problem.
+From: Hui Zhu <zhuhui@kylinos.cn>
 
-Yes, I will fix it, and send on the next occasion.
+This is v2 of the RFC "memcg_ext: dynamic memory.low and memory.min
+protection" [1].  It sits on the memcg_ext base [2], which adds
+bpf_memcg_ops - a struct_ops type attaching memory controller policy to
+a cgroup - and lets a BPF policy take part in memory.low protection:
+not by deciding whether reclaim skips the cgroup, which is what the RFC
+did and what the review correctly rejected, but by requesting
+protection and going through the same arbitration as a write to
+memory.low.
 
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/429818=
-85558
+Two things changed since the RFC, and both are answers to the review.
+
+THE CEILING
+
+As posted, a policy could make reclaim skip a cgroup whose usage was
+above what its parent affords.  That defeats the cap
+effective_protection() applies at subsequent levels precisely to keep
+delegation safe: a delegated tenant can attach a policy to its own
+cgroup, so it could grant itself protection its parent never gave.
+That was a defect in the interface, not a property to defend.
+
+In v2 the hook no longer decides anything; it requests.  The request is
+collected before the effective value is derived, and what a cgroup
+claims becomes the larger of its memory.low and the request - capped by
+the parent's effective protection and shared out with the siblings by
+the same code, on the same inputs, as a declared value.  A request can
+move protection around inside the parent's budget; it cannot lift the
+subtree above what the parent affords.  Anything a policy can request,
+a write to memory.low can request too.  What is left to the policy is
+when and on what evidence the request is made: every pass, at the point
+where the effective value is about to be derived, rather than between
+passes.
+
+min_policy is dropped rather than converted: this round concentrates on
+memory.low, and the interface goes from two members to one.  A
+memory.min counterpart can be revisited later.
+
+The rework also removes the memcontrol.h change entirely:
+mem_cgroup_below_low() and mem_cgroup_below_min() keep their signatures
+and the series no longer touches the protection checks.
+
+One cost is stated here rather than left to be found: the callback now
+runs for every memcg on every pass - with MGLRU that includes
+lru_gen_age_node() walking every memcg on the node - where the RFC
+asked only about the cgroups reclaim had found unprotected.  With
+nothing attached, a call is a page counter read, a static key check and
+a comparison against the stored request.  Measured under the reclaim
+storm of the demonstration below: ~56k hook calls in a 30s window, 52ns
+average per call, 2.9ms of in-hook CPU in total - 0.01% of one core.
+
+THE MEASUREMENT
+
+The review asked why the same cannot be achieved by changing
+memory.low from userspace - the same question Michal asked on the v7
+thread [3] in May.  This time the answer is a measurement rather than
+an argument.
+
+The claim under test is a window, not a throughput.  Direct reclaim
+runs in the allocating task's own context, and shrink_node_memcgs()
+examines memcgs one at a time, calling mem_cgroup_calculate_protection()
+per memcg.  An agent cannot do anything for the memcgs a pass has
+already examined, and for the ones it has not reached, a concurrent
+write to memory.low is picked up only once the agent has been woken,
+scheduled, read memory.stat or memory.pressure, decided and written -
+in a burst that window holds at least one full pass, which is where the
+working set goes.  After the rework the hook sits at the point where
+the request is collected, so it is asked on that pass.
+
+Method.  Three implementations run the same integer policy on the same
+evidence and differ only in where the decision runs:
+
+  U   userspace agent: preads the victim's memory.current on a 5ms
+      timer and pwrites the sample to memory.low.  Made as strong as
+      I can: pre-opened fds, no allocation in the loop, and its own
+      cgroup with memory.min so it survives the pressure (disclosed).
+      A PSI-poll trigger variant exists and was measured too.
+  B1  a bpf_wq callback on a 5ms timer reads the same counter through
+      bpf_mem_cgroup_usage() and stores the verdict; the low_request
+      hook executes it.  The control for "the action runs in the
+      kernel".
+  B2  the low_request hook decides from ctx->usage - the value the
+      kernel read for this very pass - on every protection pass.  The
+      only arm that claims something userspace cannot do.
+
+The shared evidence is the fall rate of the victim's memory.current:
+reclaim uncharges it synchronously in-pass, so a falling usage means
+"the victim is being stolen from" with no statistics-flush dependency.
+The textbook channels were tried and measured blind: workingset
+refaults need the shadow entry to survive eviction (96M stolen from the
+victim counted as 2 refault pages under the filler's shrinker churn),
+and pgsteal is only readable from flushed counters (a whole burst
+window passed with the in-hook arm seeing zero movement while the
+victim lost 19k pages).  The threshold is a rate - pages per second,
+not a per-sample fall - so the ~10x spread in sampling frequency
+between the arms does not bias the comparison.
+
+Workload.  Under T (memory.max=160M, memory.low=64M, swap off): a
+victim A (32M file working set re-read on a 500ms pace, hooks
+attached), a filler B (112M of file cache rewritten continuously - a
+renewable flow of cold pages that keeps satisfying T's reclaim while A
+is protected), and a one-shot 64M anonymous burst C that is
+unreclaimable without swap and raises A's share of the scan.  Metric:
+A's pgsteal over a 30s window.  Protocol: 15 rounds, arms in rotating
+order, a sanity gate every round that verifies the protection chain
+before any round counts, cache dropped between runs, every knob
+identical across arms and rounds; then a sweep of U's trigger interval
+(1/5/20/100ms timer and PSI poll, five repetitions per point, reported
+as medians).  QEMU VM, 8 GiB, no swap, booted with psi=1.
+
+Results (medians [IQR], 15 rounds per arm):
+
+  stolen from A    B2 452 [339-755]    U 3723 [2825-4730]    B1 3960 [3211-4853]
+
+  - B2's median is 8.2x below U's and 8.8x below B1's, and the IQRs do
+    not overlap (Mann-Whitney p < 1e-4).  In 14 of 15 rounds B2's
+    worst (968 pages) stayed below both other arms' best round
+    (2051 / 2615).
+  - The tails overlap only where the kernel itself broke protection:
+    B2's outlier round logged 920 MEMCG_LOW overrides, and B1's own
+    outlier - 9303 pages, the worst single round in the dataset -
+    logged 352.  That is memory.low's documented soft ceiling: reclaim
+    legally overrides it when T's max cannot be satisfied from
+    unprotected supply.  It applies to every arm and to any policy
+    alike; memory.min is the hard guarantee and is out of scope here.
+  - Overhead: B2's entire in-hook cost is 2.9ms per 30s window (~56k
+    calls at 52ns average, 0.01% of one core); U's agent costs 140ms
+    for ~6.7k decisions and 187 memory.low writes; B1's hook is 1.7ms
+    plus ~7k wq timer callbacks whose CPU is not in that figure.
+  - U and B1 are statistically indistinguishable.  Moving the action
+    into the kernel buys nothing by itself; what makes the difference
+    is deciding at the collection point.
+  - The sweep answers "poll faster".  U at 1ms leaks a median 1308
+    pages at 374ms of agent CPU per window; at 5ms, 5330 at 138ms; at
+    20ms, 7746 at 34ms; at 100ms it engages in only 2 of 5 windows and
+    by then the drain has happened.  B2 beats U's best point (452 vs
+    1308) at 1/129 of that point's CPU.
+  - The PSI-poll trigger never fired in any window - a publishable
+    negative result, not a bug: the victim stalls 0.3-0.6 ms/s, an
+    order of magnitude below the 10 ms/s trigger, while the filler
+    stalls 39-44 ms/s.  The cgroup being stolen from is the last place
+    PSI-on-the-victim can see it.
+  - Time to first protection is statistically identical across the
+    arms (medians 2.1-2.8s): under this pacing it measures when a
+    drain episode happens, not how fast an arm reacts inside one, so
+    I do not rank arms by it.
+
+In short: the same policy, decided at the collection point instead of
+out of band, cut the victim's losses ~8x at 2% of the userspace
+agent's CPU, and beat even the agent's most aggressive polling point
+while costing 129x less CPU.  The scripts and the protocol description
+are in [4]; the raw CSV rows and per-run logs behind the numbers above
+are at [5].
+
+THE PATCHES
+
+1/2 memcg_ext: arbitrate low protection requests like memory.low
+    struct page_counter grows low_req; low_setting() becomes
+    max(low, low_req) everywhere protection is derived; and the
+    bpf_memcg_ops callback moves from mem_cgroup_below_low() to
+    mem_cgroup_calculate_protection(), so the request is collected
+    before elow is computed.  The request is recomputed every pass and
+    reported as none whenever no program can run, so detaching the
+    last program drops what it asked for on the next pass - nothing to
+    clean up.
+
+2/2 selftests/bpf: Add bpf_memcg_ops protection test
+    A three-level tree, a policy on the grandchild requesting its
+    current usage, memory.low on the middle cgroup as the budget, and
+    reclaim from the top.  Three budgets, same request: with 0 the
+    effective value stays 0; with 2M an 8M request comes back capped
+    to 2M and reclaim still goes into the victim; with 16M it is
+    granted in full, reclaim skips the victim and memory.events low
+    moves.  The ctx contents are checked along the way.
+
+[1] https://lore.kernel.org/all/cover.1793086858.git.zhuhui@kylinos.cn/
+[2] https://lore.kernel.org/all/20260921192559.2619635-1-shakeel.butt@linux.dev/
+[3] https://lore.kernel.org/all/cover.1779760876.git.zhuhui@kylinos.cn/
+[4] https://github.com/teawater/memcg-async-reclaim/tree/memcg_ext_20261109
+[5] https://github.com/teawater/memcg-async-reclaim/tree/memcg_ext_20261109/log/run-20261111-071332
+
+Hui Zhu (2):
+  memcg_ext: arbitrate low protection requests like memory.low
+  selftests/bpf: Add bpf_memcg_ops protection test
+
+ include/linux/bpf_memcontrol.h                |  97 +++++-
+ include/linux/page_counter.h                  |   8 +
+ mm/bpf_memcontrol.c                           | 155 ++++++---
+ mm/memcontrol.c                               |  30 ++
+ mm/page_counter.c                             |  51 ++-
+ .../bpf/prog_tests/memcg_ops_protection.c     | 297 ++++++++++++++++++
+ .../bpf/progs/memcg_ops_protection.c          |  82 +++++
+ 7 files changed, 678 insertions(+), 42 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/memcg_ops_protection.c
+ create mode 100644 tools/testing/selftests/bpf/progs/memcg_ops_protection.c
+
+-- 
+2.43.0
+
