@@ -1,73 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794416208;
-	b=D/xAQfX1cjJhk2OKJmQfLRh5ij8gCWU7ivSnd9xTH1kg2Zv768D9NoC0AJV5vKUJmJIU
-	 u6DyoA/ITkpn+3Wlx6j3QX47FfX1vRDeCL8mMibfDdxLOX7FSkizTbirBfUUmIPepqhfd
-	 TxW6eiN0fjfDOD4HRE412R3JDpYmR/AT59wcK1OIyCHONWmmlojmdAdOnlVsqaHGDqzzA
-	 46hF3PJL399Wz9IbQzz5csA1AMoM4nxhWgo6ITvmEs8Uc41AQhC7jamXa81pxlJs/FQnX
-	 FTotRzOn/dc2aMaLwyhXorJFb/P/Dv6Je2oa8mdl/gOuMCSWLVmP7rDBkFpmxBq8sZw==
+	t=1794416246;
+	b=FmmllDpMm4eQOjrKh/8LkG07tTXQdHenfI6p1YQmIYpg7otNVJq/eExJ3Ac/Zinachct
+	 F7udMeIPIzDDOFd5I+omVR/Bex5fe/YPfk3fzAi27xnQS98vwEQypqPb8sjAqWw8ZepmW
+	 GfiM+L77+Lqxq9K17V8nCJKrfXKfYgnq+sHedM4Vw5fFUs4lOzRPYveVz4BpPlHu4BrrS
+	 NyVW3nLx5TnUS+hhzBxouxM9hbA5IR/jy1hor2gNG4xLAwiiInjv6n+nzObwy/bsmBEdA
+	 VnTnhXKU+ZbjI3lWBFMcAcs7dt6pRJ5C9YZgFTbdTepYzLVQe/JYrHv0L1HA8OR/Dpg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794416208;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=479XHjyry+esrWGEqWJa1TbMqWU4kn9HwykCDUTXvDw=;
-	b=htsbjh8Ukz63eG3ESryT3KVcAvru3RDcDf+5NjcIn6zIJmD+6NZkzuZ8eNFEu9XfijGd
-	 1QuQXP63TR4ucU7Tk1DWENSfFFH+Sdi1xMnG6PhOZ4vJ2UdvBJo4eSHmSHlfuCCOQYxHl
-	 2vqLv9pff3pQIq29zn6PrX+EJOhEcwg7WTdD1Tg0EyP0PCyweveptYaIGaK/RYES4odC7
-	 RIgr2DxZqZJexlLaBafUZjrcPlM9WwWltNTrII8GAcM49s5+/jylEcuhDY+mnGLJ3hRmu
-	 JOoj3MutUXrPedJhGgndi6vOYp8KY20NHQkKIa4tXgC8KgdhJ88unZQ4SlUymVQMm/A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794416246;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=LlBk1/s/45HNGcge7s3+nymhLej8cYXgLl3/Nt5KdiE=;
+	b=YHj3ZVnuZsLN08M8Jk9chU41mRafx/3XTjyLS+KfvC0y0xhvGJZTnBNMT2yetIppHhOg
+	 6fRixaXJdW7V/nacCpmt5yBgjCT+wOqMixSvi1LTK0vxq2N6s9jiIxR2m1hdnVuBPEFfZ
+	 nmzoMiVG3iGsWAa1CY8u1cZ6R3zmMLQxlo0Oy5janZ9aDPPmPA7WQWpeCCFEZuLaMHs7l
+	 UdBDXvMY4ZYm3mTzWuW703k31ESbF8GZItlT+uWp8+UgSR3vQbvWEjR07qPAmI/6+Ish9
+	 i/NjNHQlKK3PGjimrvXi+DAjLNwlvSXtX7/MJQl8Qp4tcYa6fhG+EqU0+LD/Op24vZQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=pass smtp.mailfrom=infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=utPeEWqs;
-	arc=none smtp.remote-ip=90.155.50.34
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hkUUMTyN;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE708606A89C;
-	Wed, 11 Nov 2026 16:56:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DE708606A89C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88AC1606A32D
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 16:57:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=utPeEWqs
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=479XHjyry+esrWGEqWJa1TbMqWU4kn9HwykCDUTXvDw=; b=utPeEWqsu11ZRvRHShfJxKmH3b
-	tsE+6dt9AXJKTWJBZDrEyUT2DFK9S8j+8tdtBVEqneXY40w6dkQeHnQ6iLsfCfaodm1Uc7upFM8xb
-	JRzM10Wr/jXLi8cNqMDkhA0Cfp2jMm4H+dmAHXj8f1rDxtM0NXRK57f4fr6Umvq89sl0Wk1FaJNHE
-	7dwaSw9Qh7ZVmQ6v7niM/njBzEFo2DLpIKnNEX5GQy9qcKe24eflIxpFbj2uAWkKX31s3vZ4p+HAV
-	lQV7fXFXCNcBULuVbGMGt8faW2RsSMWbaHiHaiO+peQGlnHu+Ru+a0+laalqDLEPr/wAdLXs5oQv8
-	qmaDGJDw==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xRBcn-0000000BhFe-2jRA;
-	Wed, 11 Nov 2026 16:56:41 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id A9661303154; Wed, 11 Nov 2026 17:56:40 +0100 (CET)
-Date: Wed, 11 Nov 2026 17:56:40 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Frederic Weisbecker <frederic@kernel.org>
-Cc: Radu Toader <radu.m.toader@gmail.com>, mingo@redhat.com,
-	tglx@kernel.org, tglx@linutronix.de, tj@kernel.org,
-	juri.lelli@redhat.com, vincent.guittot@linaro.org,
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-	mgorman@suse.de, vschneid@redhat.com, kprateek.nayak@amd.com,
-	void@manifault.com, arighi@nvidia.com, changwoo@igalia.com,
-	anna-maria@linutronix.de, bigeasy@linutronix.de, joshdon@google.com,
-	haoluo@google.com, brho@google.com, boqun@kernel.org,
-	joelagnelf@nvidia.com, enlin.mu@linux.dev, brads@mainlining.org,
-	kmehltretter@gmail.com, sched-ext@lists.linux.dev,
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] softirq: Treat an interrupted idle task as idle in
- tick_irq_exit()
-Message-ID: <20261111165640.GQ1779021@noisy.programming.kicks-ass.net>
-References: <20261111112944.3868822-1-radu.m.toader@gmail.com>
- <avSTjihu0YXfFNUV@localhost.localdomain>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hkUUMTyN
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0F381F00A05;
+	Wed, 11 Nov 2026 16:57:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794416246;
+	bh=LlBk1/s/45HNGcge7s3+nymhLej8cYXgLl3/Nt5KdiE=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=hkUUMTyNVQd1LRx/sravcC+uOT1sOzAJt8dzzjEoWu3ILjECxUnS/ZkRWc7dpdwvJ
+	 ErxjfVUgB/Bmu7T3eDqNW1fI/1Yk8cfdaeNvno6s18vpO6s9IQQtn2T729zs+h/0mU
+	 NClbK71szwiop3g25uhiDjXCkPto9JxVP4dwDSN8idREz4QtsFWuLnhDD6G8qBavBz
+	 28b+t9BlLzUzPvMnCcF4UGkfWyfXehPiF77y4lSEuvAunBcY4tjTowsZTC35Pec3pW
+	 Ol++aKkCm53mACHD0qnrs2P6ILzDvTOOeQoC59kdsdgLM1RktIwk86NLzGiYcPSB1D
+	 RXyys3FSkK6dg==
+Message-ID: <sashiko-outbox-209348@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v1 20/29] bpf: Transfer a reference to the
+ callee that releases it
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <97453d9e1f65a31c7f6ffbc09a7eb9f89913c5f3.1794399387.git.memxor@gmail.com>
+References: <cover.1794399387.git.memxor@gmail.com>
+ <97453d9e1f65a31c7f6ffbc09a7eb9f89913c5f3.1794399387.git.memxor@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 11 Nov 2026 16:57:25 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -76,41 +59,208 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <avSTjihu0YXfFNUV@localhost.localdomain>
 
-On Wed, Nov 11, 2026 at 05:10:54PM +0100, Frederic Weisbecker wrote:
+Thank you for your contribution! Sashiko AI review found 2 potential
+issues to consider:
+- [High] bpf: reference transfer via dead args in
+  bpf_frame_desc_record_call()
+- [Medium] bpf: wrong consumed arg in foreign_release() when regs share
+  ref->id
+--
 
-> > diff --git a/kernel/softirq.c b/kernel/softirq.c
-> > index 7fc2200392cd..e7d649c29c0c 100644
-> > --- a/kernel/softirq.c
-> > +++ b/kernel/softirq.c
-> > @@ -738,8 +738,16 @@ static inline void tick_irq_exit(void)
-> >  #ifdef CONFIG_NO_HZ_COMMON
-> >  	int cpu = smp_processor_id();
-> >  
-> > -	/* Make sure that timer wheel updates are propagated */
-> > -	if ((sched_core_idle_cpu(cpu) && !need_resched()) || tick_nohz_full_cpu(cpu)) {
-> > +	/*
-> > +	 * Make sure that timer wheel updates are propagated. An interrupted
-> > +	 * idle loop counts as idle even with runnable tasks queued on the
-> > +	 * CPU: forced idle under core scheduling, and the tasks sched_ext
-> > +	 * keeps on a CPU's run queue while its BPF scheduler holds them back.
-> > +	 * idle_cpu() would skip the idle bookkeeping of tick_nohz_irq_exit()
-> > +	 * for those, and with an unstable sched_clock the CPU's clock then
-> > +	 * isn't resynchronized when it leaves the idle loop.
-> > +	 */
-> > +	if ((is_idle_task(current) && !need_resched()) || tick_nohz_full_cpu(cpu)) {
-> >  		if (hardirq_count() == HARDIRQ_OFFSET)
-> >  			tick_nohz_irq_exit();
-> 
-> Works for me, but Peter might find something I haven't.
-> 
-> Acked-by: Frederic Weisbecker <frederic@kernel.org>
+commit f7b2132e50e4597119ba4ba7d888e76f32a3bd7e
+Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-I looked at the previous version and didn't spot anything more than a
-case missed in the verbiage passed around as Changelog. I think I'll
-queue this thing, its simple enough, ableit the changelog is a chore to
-read.
+bpf: Transfer a reference to the callee that releases it
+
+This commit transfers references passed in argument registers from the call=
+er
+to a subprog that releases them, tracking the acquired reference in the
+callee's frame descriptor or hidden stack slot and returning it if unreleas=
+ed.
+
+> diff --git a/kernel/bpf/frame_desc.c b/kernel/bpf/frame_desc.c
+> index d2ad02925f061..6679f134b14ee 100644
+> --- a/kernel/bpf/frame_desc.c
+> +++ b/kernel/bpf/frame_desc.c
+[ ... ]
+> @@ -736,7 +742,7 @@ static int foreign_release(struct bpf_verifier_env *e=
+nv, const struct bpf_verifi
+>  	const struct bpf_func_state *below =3D st->frame[ref->frameno + 1];
+>  	struct bpf_subprog_info *sub;
+>  	struct bpf_res_call *c;
+> -	int f;
+> +	int f, k;
+> =20
+>  	for (f =3D ref->frameno + 1; f <=3D st->curframe; f++) {
+>  		sub =3D &env->subprog_info[st->frame[f]->subprogno];
+> @@ -745,6 +751,21 @@ static int foreign_release(struct bpf_verifier_env *=
+env, const struct bpf_verifi
+>  		sub->releases_inherited =3D true;
+>  		env->frame_desc_redo =3D true;
+>  	}
+> +	/* every frame it was passed down through in a register is handed it by=
+ the one below */
+> +	for (f =3D ref->frameno + 1; f <=3D st->curframe; f++) {
+> +		if (!ref->id || ref->type !=3D REF_TYPE_PTR || (acq->flags & BPF_RES_F=
+_ARG))
+> +			break;
+> +		for (k =3D BPF_REG_1; k <=3D BPF_REG_5; k++)
+> +			if (st->frame[f]->entry_arg_id[k - 1] =3D=3D ref->id)
+> +				break;
+> +		if (k > BPF_REG_5)
+> +			break;
+> +		sub =3D &env->subprog_info[st->frame[f]->subprogno];
+> +		if (sub->consumes & BIT(k))
+> +			continue;
+> +		sub->consumes |=3D BIT(k);
+> +		env->frame_desc_redo =3D true;
+> +	}
+
+[Severity: Medium]
+Can foreign_release() mark the wrong argument register in sub->consumes when
+two arguments at subprog entry share ref->id?
+
+bpf_frame_desc_record_call() records reg->id in callee->entry_arg_id[k - 1]
+for every non-scalar argument without checking reg_ref_off(), and
+foreign_release() picks the lowest register k matching ref->id and breaks. =
+If
+a caller passes a pointer sharing ref->id in R1 that fails reg_ref_off() (s=
+uch
+as a bpf_skc_to_mptcp_sock() result or a variable-offset ringbuf pointer) a=
+nd
+passes the base reference in R2 that the subprog actually releases,
+foreign_release() marks R1 instead of R2. On the next round,
+bpf_frame_desc_record_call() fails reg_ref_off() on R1, sets entry_none on =
+R1,
+and never transfers R2.
+
+Even when reg_ref_off() succeeds on both registers (for example, one call p=
+asses
+(&p1->field, p1) where the subprog releases R2, and another call passes
+(&p2->field, p3) while keeping p2 in a hidden slot), matching R1 first caus=
+es
+the second call to transfer and hand back p2 on R1, and once both R1 and R2
+are in sub->consumes, transferring p1 on R1 at the first call moves
+ref->frameno to the callee so R2 finds no caller reference and sets
+entry_none. bpf_frame_desc_resolve() then rejects the program.
+
+[ ... ]
+> @@ -869,6 +916,71 @@ int bpf_frame_desc_record_exit(struct bpf_verifier_e=
+nv *env)
+>  	return 0;
+>  }
+> =20
+> +/*
+> + * Frame @callee of @st is entered with its arguments in place, by the c=
+all at
+> + * insn @callsite of the frame below it when @st is given; a callback, a
+> + * callx and a function verified on its own come with none.
+[ ... ]
+> + */
+> +int bpf_frame_desc_record_call(struct bpf_verifier_env *env, struct bpf_=
+verifier_state *st,
+> +			       struct bpf_func_state *callee, int callsite)
+> +{
+> +	struct bpf_subprog_info *sub =3D &env->subprog_info[callee->subprogno];
+> +	struct bpf_reference_state *ref;
+> +	int i, k, acq, err;
+> +	s16 adj;
+> +
+> +	if (!env->describe_frames || (st && st->speculative))
+> +		return 0;
+> +	for (k =3D BPF_REG_1; k <=3D BPF_REG_5; k++) {
+> +		struct bpf_reg_state *reg =3D &callee->regs[k];
+> +
+> +		callee->entry_arg_id[k - 1] =3D 0;
+> +		callee->entry_arg_acq[k - 1] =3D 0;
+> +		if (reg->type =3D=3D SCALAR_VALUE || reg->type =3D=3D NOT_INIT) {
+> +			if ((sub->consumes & BIT(k)) && !bpf_register_is_null(reg))
+> +				sub->entry_none |=3D BIT(k);
+> +			continue;
+> +		}
+> +		callee->entry_arg_id[k - 1] =3D reg->id;
+> +		if (!(sub->consumes & BIT(k)))
+> +			continue;
+> +		for (i =3D 0, ref =3D NULL; st && i < st->acquired_refs; i++) {
+> +			ref =3D &st->refs[i];
+> +			if (ref->frameno =3D=3D callee->frameno - 1 && ref->acq && ref->type =
+=3D=3D REF_TYPE_PTR &&
+> +			    !(env->res_acqs[ref->acq - 1].flags & BPF_RES_F_ARG) &&
+> +			    reg_ref_off(reg, ref->id, &adj))
+> +				break;
+> +			ref =3D NULL;
+> +		}
+> +		if (!ref) {
+> +			sub->entry_none |=3D BIT(k);
+> +			continue;
+> +		}
+> +		err =3D rel_add(env, callsite, ref->acq - 1, k, 0, adj, 0);
+> +		if (err)
+> +			return err;
+> +		acq =3D acq_add(env, sub->start, ref->res - 1, k, BPF_RES_F_ENTRY, adj=
+, 0);
+> +		if (acq < 0)
+> +			return acq;
+> +		callee->entry_arg_acq[k - 1] =3D ref->acq;
+> +		ref->frameno =3D callee->frameno;
+> +		ref->acq =3D acq + 1;
+> +	}
+> +	return 0;
+> +}
+
+[Severity: High]
+Can bpf_frame_desc_record_call() transfer a reference through an argument
+register that is dead at sub->start?
+
+In setup_func_entry(), set_callee_state() copies R1..R5 from the caller to =
+the
+callee without filtering by env->insn_aux_data[sub->start].live_regs_before,
+and bpf_frame_desc_record_call() runs before bpf_clean_verifier_state() scr=
+ubs
+dead registers at sub->start. If an unused argument register Rk still holds=
+ a
+copy of the caller's referenced pointer at the callsite (for example, R1 st=
+ill
+holds a copy of the pointer while the subprog only reads and releases R2),
+foreign_release() sees entry_arg_id[k - 1] =3D=3D ref->id and sets BIT(k) in
+sub->consumes. On the next round, bpf_frame_desc_record_call() transfers the
+reference via the dead register Rk, emitting an ITEM_RELEASE before the call
+that reads Rk and an entry store at sub->start that writes Rk into the
+callee's hidden slot.
+
+Because Rk is not in live_regs_before at the callsite or sub->start and is =
+not
+in env->frame_desc_regs, bpf_do_misc_fixups() can pick Rk as a scratch
+register when expanding a preceding timed_may_goto in the caller, overwriti=
+ng
+Rk at runtime with the per-CPU struct bpf_timed_may_goto pointer:
+
+kernel/bpf/fixups.c:bpf_do_misc_fixups() {
+    ...
+			u16 live =3D env->insn_aux_data[i].live_regs_before | env->frame_desc_re=
+gs;
+			int reg, save_off =3D 0;
+
+			/* a register that is dead here holds the address of the count */
+			for (reg =3D BPF_REG_0; reg <=3D BPF_REG_9; reg++)
+				if (!(live & BIT(reg)))
+					break;
+    ...
+}
+
+At runtime, the caller's ITEM_RELEASE compares its hidden slot against the
+clobbered Rk and fails to clear the caller's slot, while the callee's entry
+stores the per-CPU timed_may_goto address into the callee's hidden slot. Wh=
+en
+the callee later releases the real pointer via R2 and throws, the unwinder
+passes the per-CPU timed_may_goto pointer from the callee's slot to the
+resource destructor and then double frees the object from the caller's
+uncleared slot. Checking env->insn_aux_data[sub->start].live_regs_before &
+BIT(k) in bpf_frame_desc_record_call() would ignore registers that the call=
+ee
+never reads.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1794399387.gi=
+t.memxor@gmail.com?part=3D20
