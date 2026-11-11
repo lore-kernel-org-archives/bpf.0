@@ -1,45 +1,107 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.245.243.92
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794439028;
-	b=xnPPkC4d9b9+RBm/RHiaK5f18gpeoihslyYwHNVi3dJdfl1g1ehgaAWtin1N47A2E5AL
-	 oxN/iaEuFr6RiMHWnZ9lZo7DlIy3VWqTxPHfIZ6L+S8u5MCDouc97GxXqQ8ASHeJ36wFF
-	 a2fHHkmW7w1/FRhOeVsGyMPOynWEwt6/qHMRrWPHilC9zDwGLEyzBQBreT2MgmgLyVpRW
-	 tu5EpHaTCP+QXrTmP/ZnkujMyQfATmmGliPh22wDEtNMsJTjqJc0scMr3VHtdZoiN5zoa
-	 tADtmqnvaWhAdmfYTKtKOmYwePCccw60DoHpU+JSr32u4ISne/bHy5YwgFbga/N4FKw==
+	t=1794439186;
+	b=vLGjlsN/yLi056IQmFF67Q1GnPEawuOMDFfL8q+IIFpK23m97j7JBqeg1L6p5KGHjqXc
+	 +m18KzkXGKMgeO1IBuS1cYaboCh30jQMNtFjSrJWjeLGuixOk8DbfkdVbwXIjYWXsnQhy
+	 f1n7DdzytwFxU2ndjT5yfiNP95fyyBdJUX7uzNPaFD99R0DKMeVdfUNumpYlFjJiCNPSb
+	 ri1K5YmfkacUOoLZwE8eFjhlclAyZ5pDUUocXqgyJQkcIEiZM5Tv0xvptbYbTRb2EFwPD
+	 xGJsOjdyXnuRBkOEVr5k1ZurAvXIgvRHmI9Ww6R4lL21pmv4gmSNTT+ieuru3/pZtCg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794439028;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=+TLwaXUoFypgKqCxSI5029UeGIHv1KTyx47LLo41gQg=;
-	b=UKNLPcaxOr1O3kazJmta1u24HmMKVETiOGibNMafhWHYhLTtElWzmR4gNoebYjc/90bh
-	 QjOaCnbtb56XmBPDT047F8a5JHHpb0Fvbo/nUicxtNeIbZdpgn2fWH+D8CjpOzhMR5pRj
-	 3aEApRgHLSafYHy5xe6jAq3+at502jHh+DdJfzUgNfP8EcDJAtgmZeiT4COuT5ck3JiDz
-	 GiOPNRKENxcvC5E9rmbwtJjkbVvX2WXASvhXS1JUwCRtH1P1ncWVauCBCkHIB2o+Q/BtE
-	 onhIBjsQf399xBy8l6WAsgGlPctS8MwZOEjN2lZ6X9xoYaMVR4KZ4kYzKMI5V7Y4RJQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794439186;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
+	 Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To:X-Originating-IP:
+	 X-ClientProxiedBy;
+	bh=NcCiWMGAG/KcYeA/c2y5e8aTtWFVROWmHzpV73vYmEA=;
+	b=hTGs8bVIMzN6bSdj87VOox4hFZzMQizjz0Qz/iVjWAJjiuCXy3EgG1kqG+ycGRWv3HeJ
+	 2ziAl3kbBIKcV02QNvnZgRbuHAlgQ+EuCq0jwohVnEZCpAX5MZo6XR9jllQviU4SJHl4I
+	 087c5A27oznG5sUU0330O1btT/kK6L0OT21IyMRBwiJtep7/DeDkdeHBZj1abuqJF+QXR
+	 H+3WwVdM9ZKQBHdYbV3e7v8z6Z1Bvncdw7THlR+aaJPfOoDZwKXlHMmONfGs4UwVf3rit
+	 hs4YgDB74joX9a3suM6tv6fp32DrmfTfcHUujHW0rKZ73mXGBvtZF0Gu/jHoPAg1PHw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CuaLLmFd;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=amazon.com;
+	spf=pass smtp.mailfrom=amazon.com;
+	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=IGyO4tUN;
+	arc=none smtp.remote-ip=44.245.243.92
+Received: from pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.245.243.92])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43D4D606A335;
-	Wed, 11 Nov 2026 23:17:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F326F606A321;
+	Wed, 11 Nov 2026 23:19:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F326F606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CuaLLmFd
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E53F01F00A06;
-	Wed, 11 Nov 2026 23:17:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794439027;
-	bh=+TLwaXUoFypgKqCxSI5029UeGIHv1KTyx47LLo41gQg=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=CuaLLmFdlotIZ/MQZfwIJdPO1l8LhkY8K8p348uATuGNigv9peV62ilcZoT/cYjCD
-	 TytY1OFXeVVrydyzL0RdCOALiOLm9Y092xnzr+zlNI+QxpqvYEOB3j/0cyB9RLyKg1
-	 uQupBgMLvSaEkNC2dZq4q2ccIKY4Mk2d3c65z+bggUDiSIeXPEeidQsLkP1TMjDXgH
-	 XuXHzjQmTzZySueQ3FTrI1evqrakgG2Qx4f+gWp+Kt09rRkDgRY6uP5U7AVOSaQNW9
-	 novC88weh8eM5EgRypovbZ6/Hn0+X2zg1MIl2+so+FoOeHErcrSHrL9v0Xca/c2EQi
-	 q+7WKO6L7Q28w==
-Content-Type: multipart/mixed; boundary="===============0184974593136184740=="
+	dkim=pass (2048-bit key, unprotected) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=IGyO4tUN
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1794439185; x=1825975185;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NcCiWMGAG/KcYeA/c2y5e8aTtWFVROWmHzpV73vYmEA=;
+  b=IGyO4tUNNamfqJNlGdZY459Ybc1udO70iDVM97rAWz+fhCa2UMfU8x+T
+   rFs4bcLhNIRn6IyQSsFO7y3wvH23hhA7+T6fEBAu9u6Q4QRN4yjmr85b4
+   NBxxgYv1iy3ouAu+m4FGC5oxqNkYq41ebvT1MjyMHse5qABRv+f3RbLal
+   Qg9QVD6TYgFUle/oaKmzCi7OL0Qtqr5Y9tZYjXwn5B2fcrnVn6C6r4h86
+   6fbXD5Xi8SeA/PcKniFYePT7LujIIBDF1sJ5DmWOkVR9Okn9uWdowFL8I
+   cx8UgnDrBUkJrYaPvo9pK7OpwovPFQwCTsl+l0uaxmpFzwKzWWniS9Xmy
+   g==;
+X-CSE-ConnectionGUID: 6zDr3jFwQyKdSmvl3eZr3Q==
+X-CSE-MsgGUID: SFQQkNPQRoqkURot+YmiOw==
+X-IronPort-AV: E=Sophos;i="6.27,208,1787011200"; 
+   d="scan'208";a="33275423"
+Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
+  by internal-pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2026 23:19:43 +0000
+Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.178:7426]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.5.141:2525] with esmtp (Farcaster)
+ id 976397fa-12de-4c16-a3e5-30f8dd11ed40; Wed, 11 Nov 2026 23:19:43 +0000 (UTC)
+X-Farcaster-Flow-ID: 976397fa-12de-4c16-a3e5-30f8dd11ed40
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
+ Wed, 11 Nov 2026 23:19:42 +0000
+Received: from dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com
+ (172.19.55.127) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56; Wed, 11 Nov 2026
+ 23:19:42 +0000
+Date: Wed, 11 Nov 2026 23:19:37 +0000
+From: David Keogh <dkeogh@amazon.com>
+To: Tianyi Gao <tianyi@cloudflare.com>
+CC: Stephen Hemminger <stephen@networkplumber.org>, Willem de Bruijn
+	<willemdebruijn.kernel@gmail.com>, <netdev@vger.kernel.org>, Jakub Kicinski
+	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Eric Dumazet
+	<edumazet@kernel.org>, "David S. Miller" <davem@davemloft.net>, Simon Horman
+	<horms@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, David Woodhouse <dwmw2@infradead.org>, Dragos Tatulea
+	<dtatulea@nvidia.com>, Nimrod Oren <noren@nvidia.com>, Alasdair McWilliam
+	<alasdair@mcwilliam.dev>, Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, Magnus Karlsson
+	<magnus.karlsson@intel.com>, David Ahern <dsahern@kernel.org>, Ido Schimmel
+	<idosch@nvidia.com>, Alexei Starovoitov <ast@kernel.org>, John Fastabend
+	<john.fastabend@gmail.com>, Donald Hunter <donald.hunter@gmail.com>, "Andrew
+ Lunn" <andrew+netdev@lunn.ch>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+	<skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, Randy Dunlap
+	<rdunlap@infradead.org>, Breno Leitao <leitao@debian.org>,
+	=?iso-8859-1?Q?Asbj=F8rn_Sloth_T=F8nnesen?= <ast@fiberby.net>, "Danielle
+ Ratson" <danieller@nvidia.com>, Kuniyuki Iwashima <kuniyu@google.com>,
+	<bpf@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <kernel-team@cloudflare.com>,
+	<nh-open-source@amazon.com>
+Subject: Re: [PATCH net-next 1/8] net: add tx_extra_headroom and
+ LL_ALLOC_SPACE()
+Message-ID: <avT4CezZCiRhvCXw@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
+References: <cover.1794020868.git.tianyi@cloudflare.com>
+ <e90e748e0aefa7cbe1c2b31b8c7902ccf135c3f2.1794020868.git.tianyi@cloudflare.com>
+ <willemdebruijn.kernel.1d64e7848503b@gmail.com>
+ <20261107182526.69543-1-tianyi@cloudflare.com>
+ <willemdebruijn.kernel.2c6a653eb65fa@gmail.com>
+ <20261108190831.3f991a13@phoenix.local>
+ <20261109154909.32748-1-tianyi@cloudflare.com>
+ <avTOvr+yy+2j8xrQ@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
+ <avTSBFpR2t7PO9tx@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
+ <CAG4wq-d+LtEi-omGwzgqx14rCp_4J9HztGMpa8ioMsviaPw+ZQ@mail.gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,84 +111,48 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <54d7eddad4b50bbaa72bc31ea3219ce9a944548da1fef3eabbc1e7337d37e5f2@mail.kernel.org>
-In-Reply-To: <20261111115911.1142000-7-david.laight.linux@gmail.com>
-References: <20261111115911.1142000-7-david.laight.linux@gmail.com>
-Subject: Re: [PATCH v3 next 06/13] kallsyms: Improve selftest test_perf_kallsyms_lookup_name() output
-From: bot+bpf-ci@kernel.org
-To: david.laight.linux@gmail.com,pmladek@suse.com,kees@kernel.org,david.laight.linux@gmail.com,linux-kernel@vger.kernel.org,linux-kbuild@vger.kernel.org,bpf@vger.kernel.org,jim.cromie@gmail.com,ljs@kernel.org
-Cc: mcgrof@kernel.org,andrey.grodzovsky@crowdstrike.com,rostedt@goodmis.org,andrii@kernel.org,wusamuel@google.com,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 11 Nov 2026 23:17:06 +0000 (UTC)
-
---===============0184974593136184740==
 Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <CAG4wq-d+LtEi-omGwzgqx14rCp_4J9HztGMpa8ioMsviaPw+ZQ@mail.gmail.com>
+X-ClientProxiedBy: EX19D031UWA001.ant.amazon.com (10.13.139.88) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-> kallsyms: Improve selftest test_perf_kallsyms_lookup_name() output
+On Wed, Nov 11, 2026 at 09:41:32PM +0000, Tianyi Gao wrote:
+> My current plan is that the kernel reads the tag only from the program
+> that is attached with tcx. One way to use it is for the loader to tag
+> the head with the largest headroom that any program in the chain can
+> push. The tag describes the whole chain, so it does not matter that
+> the head pushes no headers itself. When the loader replaces the head,
+> the new head carries the tag and the kernel reads it again.
 
-TL;DR: Commit message only: it says 4 functions get noinline_for_stack but the
-patch marks 5, and it omits the compression-ratio output format fix; maybe
-split that into a separate patch.
+Thanks, that works for us.
 
-> kallsyms: Improve selftest test_perf_kallsyms_lookup_name() output
->
-> - Improve the test stability/reproducability by taking the faster of
->   two calls to kallsyms_lookup_name().
-> - Check that kallsyms_lookup_name() returns the expected address
->   unless the symbol is duplicated.
-> - Report the names of the min/max symbols.
-> - Output an 8 line 64 entry histogram of the times taken.
-> - This shows there is a reasonably normal distribution with a small
->   number of much slower outliers that don't really affect the average.
->
-> Additionally:
-> - Add a very long symbol to check the handling of two byte lengths.
-> - Do the test_perf_kallsyms_lookup_name() last because it can take long
->   enough that the CPU frequency changes and the times reported by the
->   other tests can change.
-> - Mark the 4 test functions noinline_for_stack since they all have a
->   quite large on-stack structure.
->
-> Example output (after all these patches)
-> kallsyms_on_each_symbol() traverse all: 7742950 ns
-> kallsyms_on_each_match_symbol() traverse all: 951 ns
-> kallsyms_lookup_name() looked up 123312 symbols, average 200 ns
->         fastest 60 ns (_rs.0)
->         slowest 662 ns (The_time_has_come_the_Walrus_said_To_talk_of_many_things_Of_sho)
->         Distribution, 20ns per column, 2916 counts per *:
->         |         **
->         |        ****
->         |        ****
->         |        ****
->         |       ******
->         |       *******
->         |      *********
->         |   ******************  **    * * *
->
-> Signed-off-by: David Laight <david.laight.linux@gmail.com>
->
+> By the way, I plan to support tcx only in this series. A tcx program
+> is attached to one device, so the kernel knows which device to update
+> on attach. A cls_bpf filter can sit in a tc block that is shared by
+> several devices, which is harder to handle.
 
-The changelog says 4 test functions are marked noinline_for_stack "since they
-all have a quite large on-stack structure", but the patch marks five:
-test_kallsyms_compression_ratio(), test_perf_kallsyms_lookup_name(),
-test_perf_kallsyms_on_each_symbol(), test_perf_kallsyms_on_each_match_symbol()
-and test_kallsyms_basic_function().
+tcx only is fine with us. Our chain is attached with cls_bpf today.
+Rather than move it, the simplest option for us is a separate tcx
+program on each device that carries only the tag and returns
+TCX_NEXT, so the existing tc chain still runs after it. A few
+questions so we can check that this works with v2:
 
-test_kallsyms_compression_ratio() has only seven u32 locals and no large
-on-stack structure, so the stated reason does not cover it.
+1. Is the tag read for programs attached with BPF_PROG_ATTACH as well
+   as with BPF_LINK_CREATE? "bpftool net attach tcx_egress" uses
+   BPF_PROG_ATTACH, so a startup script could do the whole setup
+   without keeping a link pinned.
 
-The same function also changes its output format from "%2d.%-2d" to
-"%2d.%02d", which fixes how the fractional part is printed (12.05 used to show
-as "12.5 "). The changelog does not mention this.
+2. When several programs are attached at the same tcx hook, is the
+   value the largest tag among them, and is it recomputed when one of
+   them is detached or replaced?
 
-Could the changelog give the right count and mention the format fix, or should
-the compression-ratio changes go in a separate patch?
+3. What is the exact form of the tag: which BTF element it must be
+   attached to, and the string format? It would help to have that
+   documented, since programs will depend on it.
 
+4. Is there an upper bound on the value, and is a larger value
+   rejected at attach time with an error, or clamped?
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43116767394
---===============0184974593136184740==--
+Thanks,
+David
