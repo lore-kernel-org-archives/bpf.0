@@ -1,89 +1,107 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.169
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794433555;
-	b=XQp8LZknGofbzPA3sCY8CTBcgaBJXjMXZbjFsJPtb5ViUGtwFJkRQMJqtvqcgUZ4Ajc3
-	 qMB5ggFFJjPvW2iB4zlZg6na2PEQxqiL+QUP06yCzSsljF65R4fKf/F8OwhctxtCFX0hd
-	 a8ET5ZwZ5hd6Zlq/Wl/zSfwXSGBRdeLOjF2rs+XsMDXQ8ooo7ppQu3IBmPRl+bZdav9Oi
-	 AxOBzw4KZo94M/2kiFVuGsNm5piOQYfU9G4NIlWCFVQErEF8n6LYaixmSaDuvycg9YzF6
-	 3S5laIBHj1xZrrVeTm02jLLpznEdfESR1ddQk6cuY6eLuxdU8NdscBd+TER1ypGPPtQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794433555;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=uLiiTa/Gb7h1TxDGjxBpe1u+WEWowZlfNkmPxqWemd0=;
-	b=Xjo0cO1tMOtmqguHNzYfXUMme7xjFhCc4ZM3QnszAxDy7Hv8ZDaeQQ8Q5Bdk3ncdI+69
-	 tWiE8KsbaavY6Z6FAcQ28TgKPWFeC/YEcH+xQCFJlI7NBt+pZp0c5QJlMjm570GZzAyVS
-	 WFt6HsSIk20xgIhXIkHuwYDug/5qreS/jbFpWjaVPLlyQtr+Boz580d74IkVQCsJXl4L7
-	 nDwlYKkxK5DDeFduADB/u6ThTfquH+CiYVHMqZAtEcx29awwS1jCB2Gow1oFgMyfxkcD7
-	 hTzaeyAV6kvDRxQSmWPjVIKenkMkqYM+3fUFsBD2b6t1VLt7GgTg140dztGfa1EcfIw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Q3o1yGAM;
-	arc=none smtp.remote-ip=74.125.82.169
-Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=67.231.153.30
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794433789;
+	b=nXBL0we+ZZcWu+gk2Pp65+cgyiLlqNDqD+u20Xfpc5dQQeT525Oqk+1fMBFmDYhD31rJ
+	 QHSJz2KRmrk2EnBa7FFQkoR//r7SYWROFgv3NXvf6XVtu4miY+xzHmVf98tRImTARaCtY
+	 fsYiUQ/LQNMFc75LHxTbt3tkkW8ecHh3exrIIJFhsHwv4Lxk174jcCceReDq6NeAvwPLV
+	 vxXk1ubnN+LxobdTrHOAWpuoJtLQaYwfi6RqBc6ZUiXKgvRL+i6XsHf9hOuV4n8gO4B9e
+	 m2w3GAdyaBZJcz5Rn6G+4Z5YQN6b1Jxioatbw/dSyULbuyFsbFX2B3ZioP0lN6HM5wQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794433789;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
+	 X-Google-DKIM-Signature:X-Forwarded-Encrypted:X-Gm-Message-State:
+	 X-Gm-Gg:X-Received:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type:
+	 X-Authority-Analysis:X-Proofpoint-ORIG-GUID:X-Proofpoint-GUID:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Spam-Info:
+	 X-Proofpoint-Virus-Version;
+	bh=5hjKfboVBJ7OBGDq8Y9w5OdAYwdgZTN1RE/HZ7spSHE=;
+	b=sUb84lNNz0SCspATUzLF4ZTNg4EhikylEEP+Y9Q6HM7URBkIA8+LufcM0FjIb4O6f7Je
+	 YNDikbemw8JZ8j445WHBwgT/SRl0cW6KQafcyPVKfrf46KvI+DyFY9cJZFTjVxRiNj0gk
+	 ZSNYlNuyIUV0k0pFsrtmjVWH0yq4XnMAlheKc1zYJ7rXUgpuGyjfGfu1zlNVQVdDrkrmf
+	 n2tJUEThCvO9wykFKlZit4Sn/I7pfU7F9ACwmC8VTFJiohcuzqyFODZJP8L/49rxlFBxG
+	 BQXFBSVB5DZabkBHX+f02yL+nFSCF9n0cYxAEk4hApzDiZhevyXnUn3DL1ACd1S7kMw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=meta.com;
+	spf=pass smtp.mailfrom=meta.com;
+	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=GeyeUFFi;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=67.231.153.30
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74D26606A327
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 21:45:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 74D26606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C18EA606A335
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 21:49:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C18EA606A335
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Q3o1yGAM
-Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-3700ed8dbe3so6476933eec.0
-        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 13:45:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794433554; x=1795038354; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=uLiiTa/Gb7h1TxDGjxBpe1u+WEWowZlfNkmPxqWemd0=;
-        b=Q3o1yGAMmIMBrIgCVDWk5ZLj3xdQII6hHVqnmtuQqxF30ztQZShfrSaWGPDsxxdTqZ
-         NF7wxW4425xwPino3SFafvANsRF6RpeNzwzIY8MrQ8robbnXnI+4LZskJxLaAMM3AMB9
-         sQG6Cn9vcAEToQ9Qyqeg2tccYh/hkxtK41BaGgXRj4cOHu3iXLo/F3oVJixljU9STury
-         0X1RK0TMK2Qi4v6SRrnM/YApgfD3gpxY8f4LfgMaXRuoog4bqcIwbS0tGnEw0nx4+0XM
-         GqGAwjlevoWNUoYT0pKtPnd4QuhU8e77GwG+nJzG3ZpPjjUpkqi+Wocl1zaTpYoPtW38
-         fX+g==
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=GeyeUFFi
+Received: from pps.filterd (m0528006.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6ABKjx5i285423
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 13:49:47 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pps82601-s2048-2026-q3; bh=5hjKfboVBJ7
+	OBGDq8Y9w5OdAYwdgZTN1RE/HZ7spSHE=; b=GeyeUFFiqCEKPkYZuQ6WCtcJ+ir
+	veBlhkSCp2XR6ZvVC1Xnkgk73qpCo4mRZiSx00pz0ZaPhEttkWlhUPmxfs40TTQ5
+	/X8zBYWeMo5qo2ppLp4+UZMJyHFMoiEX2DHlDDezkJ+ymYQXutBVAG3oQhntG9hM
+	ZVeerH9U4yDTyfZo8k5T3RGORiWlI7Sy4seS228sgPILhH6xhQjGBjjWZwg6qsn8
+	Vlh4ScYyoi1E4wMGavc4pJXl7aCS2fuFIr3busZsxl7CXn30LOVds332fP4+nkTl
+	nDWVNpN6J2Xxb3bHvFuoJ6S2atc4WxsC5TivihwZ04AgSP+XyPVs1XTkmTQ==
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4hvagw0rtc-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 13:49:47 -0800 (PST)
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-490c1867460so2700663f8f.2
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 13:49:47 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794433786; cv=none;
+        d=google.com; s=arc-20260327;
+        b=QN14vqu2k3xV/Axhu5UJDRgVQg1wInlLjqRy8EfSog9EWPgqoBQSZ2lQ9WmiT3d3GX
+         X7w8K6SECAKEDd7HuPYxm5T0RLB/U+aws+9g7bbDMpRW21xYG5IaUiOnzYm7Xq83MDZB
+         ytsD8fSP0kKFKHRBRX4dyj/CGX/zctQM2uUVusQtzkPIgC3v1VkO0rc/BMJ0UBmiDtWU
+         PQ6EXyJTDvv/91ES0nZqIEj534dyobd0tyx+fag+IC3JnuzFhrwiY2wtofwNSwoKl8RQ
+         Wroly/C6b6EhDYR6SyAFXV0J9ysyunRvRnQu11gMdQSkxChoZSKSD/MAh7YiSvpdKrl8
+         17Ww==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version;
+        bh=5hjKfboVBJ7OBGDq8Y9w5OdAYwdgZTN1RE/HZ7spSHE=;
+        fh=C4s7NaN+TQYdcK1q5+1ZVCUxAn7MekAD6d6SVbuEWWI=;
+        b=XsXxzf3SEI9iyl3VxwMz0VWNdE1YDnNpPJU824vMeKu0DnYb2J2/xS4cJdVYLvYMTY
+         z1ynW/D3ki++CXmHC1ocqI0v30DXVBRKZmmOU8/vRxSoUMEjwA5mWWc7+P8GdjPoUPHA
+         OLWXmTryQ2VRpKJ5cVjs0mAxQYIfCzbVxlJ6YxxmCFLFJfctdB12l+bXnSPAkM//9+kU
+         nj0Sb2Ns21SI9PkiKW2t0qKKxJcjLMihmamnkR4frsrhwBRP6SM5B7W8QBd3WwxjNcpn
+         NmofDiLq6TgTOY99Q68jsKD06vihYS1BfLxBVWyNa9+eMbCvQT1tVZzwm0jx90QVmMbT
+         4djg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794433554; x=1795038354;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=uLiiTa/Gb7h1TxDGjxBpe1u+WEWowZlfNkmPxqWemd0=;
-        b=FIogDFioKqO8/eLd52L5BRVgLcNL4m2OMFINtorHWm9/SUbLvSUkhfJivYiY6TASuW
-         sD73dYr6mglv27/xx64Dv2qlUVwbIptuN6vjiC3TH30L5GCo+AXfh7At9W0pgXwFIcX5
-         3DGIJVtSbcVG8KvOOoE+LenDyfPLwM40sfpfPt4lCliWUj0f0AfMJAf4oA7Y7KQAgvrE
-         VcOxuS0MQloPn8qzJyI+gx1XG3bC4GjmpX0kPB/ClRLIOnKkYkAmHgjNVzEGDG8PAEt7
-         y4IScxE4hAwrLSCl6QeOMOTvdd7BZhON8kHi431N0oxorLbwImXSLAfCgWz4WV60dXGP
-         6CYg==
-X-Forwarded-Encrypted: i=1; AL+hErEpBoK02e7FmpQSjpGbg8+nyjnKK7AgaTm5fi4xCO3uYH8imNvwjAlVDvK+jGlBevZAHv8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+0kin3eTsdVpSVPVRvfkSiq+Wdva8aguZP7gbU4qdVTfozKe5d
-	sMuL4bQP9sz6BP6lxOPFZ/FfthMMFcIBVsa10NyrSjqcydbVmg85QKKT
-X-Gm-Gg: AYBFou1CvKxfxYb7IcyfNlO30Nvo6naJvqx9wRuLlm3sh8mzGYfjQzUQ7gNIlspv1zG
-	YQE12MTZUwPc+6eEl+PP/z772IKp8P2X6sc4cfW26sXoP2u+YMZM+usSKPvrpo4lEcTFcxNFnjQ
-	fnj0WvTrxkzXVlt3YNkK6HZERCtKGk6sjBedUTQ4JJNz7z3Ec9/EhizkzC7WOUYQLYAm5KlQ75f
-	Pkw/+mJtXdUilZ4RUC8BhMQiuJqmBomi/Kw6zJ48rwAD8XyIE05ZqPDZn5mKOgbpuWkOrB/qCrc
-	yzJguQZPMJIfr8cwJj+jBhgXJ96iOJBZ05NoVU75VtIqrzkFQenxnKmJ6/AU/IcqOawB2812j5Z
-	IJf7/83AZDAckjKO8Q3qsvin6lY8T2CR4voriliKnI1FrcH2P8d39V7Zkf0HLhJ2/h5wFMFKupP
-	TjQ2RTFpD2j1BvTMtfFAFhZJJKWu2rrlIpxEywgHaFNiEctwDlwvw+Uv0s6wpJ2UMlY5Kt1ptE5
-	mIMeevXdmhNwbJE1vBWO/uc19yXpAS55/8oybGxraYFDVGhcNNpte8CSx4jx6q+BUzQrbvkHT4j
-	cncv3/XpARI70ZxUwq7WqyIsJKmdnhyj8D2xVCI9gfTYizsOmKp0DMlH2SSwB785nyT4BxDoxiE
-	k78YaFcZBT9ZJXCfZa6657xPXXhP9VkQJMIaSrA==
-X-Received: by 2002:a05:7301:3f19:b0:36f:3da8:dbc8 with SMTP id 5a478bee46e88-37686d31fa8mr5532433eec.31.1794433554164;
-        Wed, 11 Nov 2026 13:45:54 -0800 (PST)
-Received: from ?IPV6:2a03:83e0:1151:15:c24:4ad9:f660:1904? ([2620:10d:c090:500::6:1f95])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-375212e9e03sm38006432eec.23.2026.11.11.13.45.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Nov 2026 13:45:53 -0800 (PST)
-Message-ID: <f9979d3b-2a6a-4fa4-ad4d-10e5d4958678@gmail.com>
-Date: Wed, 11 Nov 2026 13:45:51 -0800
+        d=1e100.net; s=20260707; t=1794433786; x=1795038586;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=5hjKfboVBJ7OBGDq8Y9w5OdAYwdgZTN1RE/HZ7spSHE=;
+        b=RmjHEROXsysfOaWL4xGW17miLYObDZDIT/WRvEDpdC+OWHMdiOU0yLvzExMNUs7crB
+         fsoIZxCqk9FC6TA8EJqbDAfjEKctQkQm8LdwMtkcf/7iPs1PBli9Ue04L0yZAezuzSEd
+         nCB1UCvNR16ABgyxzzWBjE6Je5aJilKFLtU3/JlO6X8i2Y/PzUUYrcFwJwx84EkZFPfv
+         HptWrNH8kv/+xihn/O2zEFpQxaDKwWIA2s6b3KROkVINQbSbkdn6CnMvFys/t2lLpaAZ
+         O4oV1hffhTP0HkPQNpdCpvPXPvTDluShgaiGquHIIha2OpKyp7oJpKeN/5KYNk6Vofha
+         +ceQ==
+X-Forwarded-Encrypted: i=1; AL+hErGzZJHo5fYN50+tv6UuNLpxNBcqe7cI9EgZ3YJS9m/G/sxtUKb3lqDxmwoVll0xI6VNgJY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+InHtU/dHrrRDA/K1haA5WqlnobZVR7LPYbLIpoK1M1n7eEDtE
+	p7F0wYIPo4SH4476bPfLl0nwviEn27vT+awaFG5wb9e5sjmy3rrX2MRIK/fCilFzubia3B2IEbt
+	gXeQf89CktM7qs1y5FKFgqamocmKUFxdbEb4bAd6s16f6aFQSnbV2gbRSrExdvsAJWvG8SxOlk3
+	Q+c7yrvfuIBJ7lsiRLHZKJz+NK5Ns=
+X-Gm-Gg: AYBFou0t5ioE7pTPai1B/QbpRZPSxw6n/ZtTyMCQRFimFS/t+3GXYbI6urnGAx9PNcI
+	qzeuM3ii/WOHfdMfliw3NXCOAMfmzgW3x05oy4sXOila0iXBlEAiZfdAeWWlTaMdP4PB5NqwtCB
+	7aAZsS6as/jvikFT8qLoHUrjNKj4OP2IXZV4RKMkVUzSNGGwTvW+JEpfnhAyqEOyMDRf41M1dmn
+	/twgkBKXImwnOm+iYJO7IXkSYuw6Ood
+X-Received: by 2002:a05:600c:34c7:b0:49f:e701:51c8 with SMTP id 5b1f17b1804b1-4ba093583eemr60183805e9.9.1794433786503;
+        Wed, 11 Nov 2026 13:49:46 -0800 (PST)
+X-Received: by 2002:a05:600c:34c7:b0:49f:e701:51c8 with SMTP id
+ 5b1f17b1804b1-4ba093583eemr60183425e9.9.1794433786168; Wed, 11 Nov 2026
+ 13:49:46 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -93,156 +111,57 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v1 10/11] eth: fbnic: Support RX buffers it
- cannot split
-To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
- Magnus Karlsson <magnus.karlsson@intel.com>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
- Stanislav Fomichev <sdf@fomichev.me>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>,
- kernel-team@meta.com, Andrew Lunn <andrew+netdev@lunn.ch>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Pavel Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, netdev@vger.kernel.org,
- bpf@vger.kernel.org, io-uring@vger.kernel.org,
- Mina Almasry <almasrymina@google.com>
-Cc: "Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>,
- Weiming Shi <bestswngs@gmail.com>, Nikolay Aleksandrov
- <razor@blackwall.org>, David Wei <dw@davidwei.uk>,
- Alexander Lobakin <aleksander.lobakin@intel.com>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, Stuart Clark <stuclar@meta.com>
-References: <20261110102039.1002605-1-bjorn@kernel.org>
- <20261110102039.1002605-11-bjorn@kernel.org>
-Content-Language: en-US
-From: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>
-In-Reply-To: <20261110102039.1002605-11-bjorn@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20261111005533.6436-1-toddfreed@meta.com> <20261111005533.6436-5-toddfreed@meta.com>
+ <DMSJB8MZZCXK.MCEBRZQDAM5Q@gmail.com> <CADh2yMx8MPjcH7Bpj72rNNd_tT=6uSC5Ow9JyGjTMjFgs499Pw@mail.gmail.com>
+ <DMSM3RNRY412.1GXB07F4KGJYR@gmail.com>
+In-Reply-To: <DMSM3RNRY412.1GXB07F4KGJYR@gmail.com>
+From: Todd Bert Freed <toddfreed@meta.com>
+Date: Wed, 11 Nov 2026 13:49:33 -0800
+X-Gm-Features: AclHuK_3wPHrs7nAKCIlAv8DB3IRwLLgS4civoUiRATHWDoZevdks1911kjhq28
+Message-ID: <CADh2yMwFu5Gyadm2Y-NHCBtayEvN5H9LUM=Kf-tT69vmjm0DEw@mail.gmail.com>
+Subject: Re: [PATCH net-next v1 04/15] psp: add support for socket-less psp associations
+To: Daniel Zahka <daniel.zahka@gmail.com>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew+netdev@lunn.ch>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        bpf@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
+        Donald Hunter <donald.hunter@gmail.com>,
+        Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+        Jamal Hadi Salim <jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>,
+        John Fastabend <john.fastabend@gmail.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-rdma@vger.kernel.org, Martin KaFai Lau <martin.lau@linux.dev>,
+        Paolo Abeni <pabeni@redhat.com>, Saeed Mahameed <saeedm@nvidia.com>,
+        Simon Horman <horms@kernel.org>, Tariq Toukan <tariqt@nvidia.com>,
+        Wei Wang <weiwan@google.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Authority-Analysis: v=2.4 cv=a5ClZkSF c=1 sm=1 tr=0 ts=6af4e2fb cx=c_pps
+ a=CsXZvLRfiTx/ye2xXAwb9g==:117 a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22 a=kkcUborcUVj0H7zxAXTl:22
+ a=VU9VbmEmTQsFja8ue1gA:9 a=QEXdDO2ut3YA:10 a=F7q00xkr9EfWfQvbdVXI:22
+X-Proofpoint-ORIG-GUID: Ll2SLnFNYFNOG8YXaB9ffMNjl51qc-fo
+X-Proofpoint-GUID: Ll2SLnFNYFNOG8YXaB9ffMNjl51qc-fo
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTExMDA4NiBTYWx0ZWRfXyH97OTpE+iR8
+ 0EIEAyfzUJ2Z9kKhR95hcoLUu1+1vvcp7eLb6GAP8dnJUWSx63CwsYq4clLxN+KtzyJnV1aCi1G
+ 8qIOnC6fYaPb9lT9vgKOAutgIMRTGQGWMKWeP2OCVmQY4Scinrp9rr2kxVEdMXDAJpMeiwYIr2P
+ 84VQVS3UTl9RED6M/lcPCDMGeqWh2OyWODivJ3d3xPEYs9dv9mZQSbTlQasY4sKQpXnoKEbA/wY
+ J+TgIp+EpdaFEO1qjKj9uAiAxD6fAnFToysL1lPVlWd2WMi2viH7Rp0xCe6tRlu2WnVaPhvNWAY
+ wrZbIFq65nvM3aMa3EcvBNb4aLSx7ufBtX5YaA8hn08+NMrlh6N6C051kgFLQ+hpsBoYb8H8VVt
+ cwMx6c1pNOfZ4HNT+RRbDgB9BrYZFIyoUJEl9y6scb/tx1beePH/0kR7ljUpdHW4lRS8zwa1nQ4
+ kNNt0XVoL8EH72F4Ykg==
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTExMDA4NiBTYWx0ZWRfXxpc/eKM9yMwE
+ bfw5hP/dFqZyMHHhGhXqcBBUphbJC+aQyrpoyghfIoHEHewTVjnr1z9MV/CIngPc9RWb0/Q+LxM
+ 6K62k/q/i3FJAFGLKX2+OmAkuSebM50=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-11_05,2026-11-11_03,2025-10-01_01
 
-On 11/10/26 2:20 AM, Björn Töpel wrote:
-> fbnic packs several headers, and several payloads, into one page. A
-> provider without MP_CAP_FRAG needs one descriptor per buffer. Give
-> such a buffer a single reference, program the queue so each header and
-> payload takes a buffer of its own, and drop packets that break this.
-> 
-> Header split is now set per queue, so link up changes only the drop
-> mode.
-> 
-> Signed-off-by: Björn Töpel <bjorn@kernel.org>
-> ---
->  drivers/net/ethernet/meta/fbnic/fbnic_txrx.c | 119 ++++++++++++++++---
->  drivers/net/ethernet/meta/fbnic/fbnic_txrx.h |   2 +
->  2 files changed, 102 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-> index bfaa284e497e..d96c957d6fba 100644
-> --- a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-> @@ -761,8 +761,14 @@ static void fbnic_page_pool_init(struct fbnic_ring *ring, unsigned int idx,
->  {
->  	struct fbnic_rx_buf *rx_buf = &ring->rx_buf[idx];
->  
-> -	page_pool_fragment_netmem(netmem, FBNIC_PAGECNT_BIAS_MAX);
-> -	rx_buf->pagecnt_bias = FBNIC_PAGECNT_BIAS_MAX;
-> +	/* A whole buffer has one reference. The packet takes it, so the buffer
-> +	 * may be reused before its BDQ entry is cleaned.
-> +	 */
-> +	rx_buf->pagecnt_bias = 1;
-> +	if (page_pool_supports_frag(ring->page_pool)) {
-> +		page_pool_fragment_netmem(netmem, FBNIC_PAGECNT_BIAS_MAX);
-> +		rx_buf->pagecnt_bias = FBNIC_PAGECNT_BIAS_MAX;
-> +	}
->  	rx_buf->netmem = netmem;
->  }
->  
-> @@ -792,7 +798,8 @@ static void fbnic_page_pool_drain(struct fbnic_ring *ring, unsigned int idx,
->  	struct fbnic_rx_buf *rx_buf = &ring->rx_buf[idx];
->  	netmem_ref netmem = rx_buf->netmem;
->  
-> -	if (!page_pool_unref_netmem(netmem, rx_buf->pagecnt_bias))
-> +	if (rx_buf->pagecnt_bias &&
-> +	    !page_pool_unref_netmem(netmem, rx_buf->pagecnt_bias))
->  		page_pool_put_unrefed_netmem(ring->page_pool, netmem, -1,
->  					     !!budget);
->  
-> @@ -993,6 +1000,19 @@ static unsigned int fbnic_hdr_pg_end(unsigned int pg_off, unsigned int len)
->  	return ALIGN(pg_off, 128) - FBNIC_RX_HROOM;
->  }
->  
-> +/* A buffer that cannot be split has one reference and takes one descriptor */
-> +static bool fbnic_bd_one_desc(struct fbnic_napi_vector *nv,
-> +			      const struct fbnic_ring *bdq, unsigned int idx,
-> +			      bool ok)
-> +{
-> +	if (likely(page_pool_supports_frag(bdq->page_pool) ||
-> +		   (bdq->rx_buf[idx].pagecnt_bias == 1 && ok)))
-> +		return true;
-> +
-> +	netdev_err_once(nv->napi.dev, "Bad descriptor for a whole RX buffer\n");
-> +	return false;
-> +}
-> +
->  static void fbnic_pkt_prepare(struct fbnic_napi_vector *nv, u64 rcd,
->  			      struct fbnic_pkt_buff *pkt,
->  			      struct fbnic_q_triad *qt)
-> @@ -1007,6 +1027,17 @@ static void fbnic_pkt_prepare(struct fbnic_napi_vector *nv, u64 rcd,
->  	/* data_hard_start should always be NULL when this is called */
->  	WARN_ON_ONCE(pkt->buff.data_hard_start);
->  
-> +	/* MAX_HDR leaves no room for a second header in a whole buffer, so
-> +	 * the device closes it, with PAGE_FIN, after the first.
-> +	 */
-> +	pkt->add_frag_failed = false;
-> +	if (unlikely(!fbnic_bd_one_desc(nv, &qt->sub0, hdr_pg_idx,
-> +					FIELD_GET(FBNIC_RCD_AL_PAGE_FIN,
-> +						  rcd)))) {
-> +		pkt->add_frag_failed = true;
-> +		return;
-> +	}
-> +
->  	netmem = fbnic_page_pool_get_head(qt, hdr_pg_idx);
->  	pkt->head = netmem;
->  
-> @@ -1032,7 +1063,6 @@ static void fbnic_pkt_prepare(struct fbnic_napi_vector *nv, u64 rcd,
->  			 len - FBNIC_RX_PAD, true);
->  
->  	pkt->hwtstamp = 0;
-> -	pkt->add_frag_failed = false;
->  }
->  
->  static void fbnic_add_rx_frag(struct fbnic_napi_vector *nv, u64 rcd,
-> @@ -1046,8 +1076,20 @@ static void fbnic_add_rx_frag(struct fbnic_napi_vector *nv, u64 rcd,
->  	netmem_ref netmem;
->  	bool added;
->  
-> +	if (unlikely(!fbnic_bd_one_desc(nv, &qt->sub1, pg_idx, !pg_off))) {
-> +		pkt->add_frag_failed = true;
-> +		return;
-> +	}
-> +
->  	netmem = fbnic_page_pool_get_data(qt, pg_idx);
->  
-> +	/* Without a header buffer, the packet is dropped. */
-> +	if (unlikely(!pkt->buff.data_hard_start)) {
-> +		page_pool_put_full_netmem(qt->sub1.page_pool, netmem, true);
-> +		pkt->add_frag_failed = true;
-> +		return;
-> +	}
-> +
+> I think it makes more sense for userspace to just get rid of the rules
+> before rotating the keys.
 
-How would we get in this state? Does the device need to misbehave and skip
-the header descriptor?
+Ok. I will drop the rx assoc objects. The robust userspace protocol will
+be some combination of using cookies for state recovery from a rule
+dump, and using chains to flush old-generation rules at once.
 
+-Todd
