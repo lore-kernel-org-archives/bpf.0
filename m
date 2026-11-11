@@ -1,45 +1,61 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794403995;
-	b=BL0pd0NI4sRtRiWmKaVTqfXgSKwQevHi/SPJu250yMulZyMKhTMxP9HEEgqse5ttiAAo
-	 BYuWts0Ks7nBOq9APIgcl5Fd/nKa3kmJu8b7Z4zrFU3Bu8++HF6F3YJ8YNFQu2PGmss2U
-	 aU95yU3qQuJzCBnCiIZQRtrrnQV7kvJFzXS9jshKp1XDdOB8AnW4HKwOl9IxzaMUIpBG8
-	 nqEnw9LGGNRHJg0EESQpsJMxCLruGLFX3fbEjwzCAt1vzuk20aMQ+iECqZeL3+fZ0kimB
-	 VA8mT7+EfuxF9h/nrePMsspVIqQ/rFluBIpOY9zZonmgxUBQ1Ycd/Pgze1SIeg3yFGQ==
+	t=1794404271;
+	b=rwqLQ0yEzbpaeEoV1HARC/MMHh35D8TRnx8LmjD8Q8l+KnzeztdwNy578GE5eKvHmDbf
+	 narFh8wzQUWcyGJ46YZVWN6uy2+6m6JV//DGRClc+yboOxSYYQuBWiWs3u+fGkhSTsV8e
+	 Sr6iz2P1JlC+LjS9QZshy3v9uEq/U7MgPU03ubMl9xvoIiF/E1kf5RA3ervJEMeimBvwG
+	 F3UZo/mwCZjAR/3hkGUjD3e8CFPJDceQFPnjBqFrqBSh/6j2pPVetkk3WUwuvYdfNNzJ4
+	 7NnCp/yKfS/zxWbBHXMdR1nq1Ez4iLMc21ojwApvRNKItkPBSEa4P+nTUvWPs3RP11w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794403995;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=m6Iy8N/aS5DZHpnECoEhMAD0vcbmQ6wNcoZNkW1OkNM=;
-	b=TcJAGEqCgzbek0k3dyg6c5lCWVTjbBbuDcMciZ4go/B8tPiqBaYcGLTJyoGFja63dwPx
-	 F/drROvfElmUX7/80dfdyxxmUdsmH3skmK3+nZC3d0l/d23BojmahswbI994dxtJXxGf0
-	 Q3UYi1q7tvJe3OAF9SYbrxbt0yRA1e5R7zgSFTwaEsuFqpJiyjOKwXnqiVKs6HDDiGTKM
-	 suGoyo59JOm70xxbsm8B1fSDUauqpIOkoOh2/0HA6SUi90Me52G5iwOSzdz0GupN9n4fL
-	 DCM9wZqn7oe/LHH3KmfpT+hCXl9yGZmIqq70e+wyeFWn5CScqNKsY49Y4msgLpdH3OA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794404271;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=AR5YsUUmvUA8tIYtuqC5XeoOdiPG47ht+rYE45AwySc=;
+	b=VpvF2aaYX875bMGsknFcYmSWl797aVNlUs3adT9AIZy7hqx7msJ4mqbx4uZLJOFamSpR
+	 rzHZU5+oq/68I23mYhEx2No+HCwjbgtWZ+JTudqYgucJhE3jhV82iywIHiKrdLjbS7nvm
+	 2lHPqwFS/8Yff7GcQFPrDhcgXwRWB3Pm1lyWkLeyJdcsenf/n2Ow85cGlNonBJh4JvKBj
+	 B2IvKhkIDpYkF2fWBTFigqZ4OJXRj+9VTezI0E6eI/Gem0SVujGVMQmEssjIsfcvk2N98
+	 mreMTY3ICwco5FhMdQ5Z3Ifdi5Dkp82RggBhwLaZjWJrRVVyhqMgaRaoMV3x8rPq1Gg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nvDBJTvY;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TXHTRiN1;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBEF8606A324
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 13:33:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 530B5606A31C;
+	Wed, 11 Nov 2026 13:37:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nvDBJTvY
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F29991F00A0D;
-	Wed, 11 Nov 2026 13:33:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TXHTRiN1
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 686C21F00A06;
+	Wed, 11 Nov 2026 13:37:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794403994;
-	bh=m6Iy8N/aS5DZHpnECoEhMAD0vcbmQ6wNcoZNkW1OkNM=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=nvDBJTvYoExVeEl6y5C/i5YHgTg4LrsnyZ0uVg6aNx/67Fn6q5LKA//14OQdraFJX
-	 d+1tJ5rlyVugf+OwhjbXBAjf2bCpRbv54Az5wflFkivWlHVsh/uzxdK/TLpYpn3OW/
-	 LzYlO8Sf5toMZUmG8mmlXPFY43kyNtx4OVfPnKAXajaIf6kp0Flx3myMsDhzPGA40o
-	 wAOZsU6AbU/Ms7fganzKuju+MP2L+GWWrpACyblkMdG9oCwonNnwduJvQfjKoIEJkK
-	 Fm+dVzaeueLsEEzrejqg5mKR+x476iTlo9UsDjsEYdKsI/OKr41wcFpKmt1JqkChOg
-	 11nCh5u3HfHPA==
-Content-Type: multipart/mixed; boundary="===============4534125352478546491=="
+	s=k20260515; t=1794404271;
+	bh=AR5YsUUmvUA8tIYtuqC5XeoOdiPG47ht+rYE45AwySc=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=TXHTRiN1HAtBNmzusFJ6ayIyK8a0YoucU5ZEF8p1Ki+NJUC5RbbD54/U1rZj3Rg6y
+	 8qjxX38BMXU0kLPoE4XMH2yWCFrfrZiZoxyyEIlCIihlb1J0dXO5E5joSjEbQhI9Ir
+	 TAsfd5ZJZTcis1PvyHqNOYs80LzOqHy0/WbA97Zo4pY0/LSz7LDptBd6kxU35berq7
+	 fY7hh+18P7d8tEEftQEzgTA4nW+sCj4cuFTvmh/m7bCFZm6m/YshHbOmQoaUpLF7Zs
+	 zqNRGUgzOSqCTmN40bfBPlGvrH+e7CveI8fjzbaCsYyywUkofwL7k0hKGHGLBK4Wyb
+	 nC/VC8eZMeTrw==
+Message-ID: <sashiko-outbox-209079@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v3 next 13/13] scripts/kallsyms: Reuse little-used
+ compression tokens
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "David Laight" <david.laight.linux@gmail.com>, "Petr Mladek" <pmladek@suse.com>, "Kees
+ Cook" <kees@kernel.org>, linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, "Jim
+ Cromie" <jim.cromie@gmail.com>, "Lorenzo Stoakes" <ljs@kernel.org>
+Cc: "Luis Chamberlain" <mcgrof@kernel.org>, "Andrey Grodzovsky" <andrey.grodzovsky@crowdstrike.com>, "Steven
+ Rostedt" <rostedt@goodmis.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Samuel
+ Wu" <wusamuel@google.com>, nathan@kernel.org, nsc@kernel.org
+In-Reply-To: <20261111115911.1142000-14-david.laight.linux@gmail.com>
+References: <20261111115911.1142000-1-david.laight.linux@gmail.com>
+ <20261111115911.1142000-14-david.laight.linux@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 11 Nov 2026 13:37:49 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -48,109 +64,178 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Message-Id: <72e51049848235f9b6074025fa2a86471cf5676edd45adb4b756ff2fd61eac55@mail.kernel.org>
-In-Reply-To: <ffc489a9770015068f1fe344435515d9265600be.1794399387.git.memxor@gmail.com>
-References: <ffc489a9770015068f1fe344435515d9265600be.1794399387.git.memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v1 08/29] bpf: Add flags and release kfuncs to the dtor registry
-From: bot+bpf-ci@kernel.org
-To: memxor@gmail.com,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,ihor.solodrai@linux.dev,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 11 Nov 2026 13:33:13 +0000 (UTC)
 
---===============4534125352478546491==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 3 potential
+issues to consider:
+- [Medium] scripts/kallsyms: missing syms update on split in
+  uncompress_symbols()
+- [Low] scripts/kallsyms: premature 3-char token disqualification in
+  split_token()
+- [Low] scripts/kallsyms: unreset syms.cnt and splits in
+  sym_arr_free_all()
+--
 
-> bpf: Add flags and release kfuncs to the dtor registry
+commit f874410df5dfe77ff678c52a66379728c6ebf5ba
+Author: David Laight <david.laight.linux@gmail.com>
 
-TL;DR: btf_find_dtor() may fall back by name to a vmlinux destructor for a
-same-named module struct, so on bpf_throw() the unwinder could run it on an
-object of a different type. Needs a colliding module type.
+scripts/kallsyms: Reuse little-used compression tokens
 
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
+This commit reuses compression tokens that have few remaining references by
+expanding their occurrences in the symbol table back into their component
+tokens when a more common token pair is available.
 
+> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> index 95ccde80359f2..dc69b802478ad 100644
+> --- a/scripts/kallsyms.c
+> +++ b/scripts/kallsyms.c
 [ ... ]
-
-> +/*
-> + * Find the destructor entry of type @btf_id of *@btfp, and set *@btfp to the
-> + * BTF the entry and its kfunc ids belong to. A module's BTF is split on top of
-> + * vmlinux's, so a type below its first id is vmlinux's, with its destructor
-> + * registered there; and a struct a module defines under the name of a vmlinux
-> + * struct is the same type to the verifier, which passes it to vmlinux kfuncs
-> + * by name, so it is destroyed as that type.
-> + */
-> +const struct btf_id_dtor_kfunc *btf_find_dtor(struct btf **btfp, u32 btf_id)
+> @@ -850,6 +894,123 @@ compress_symbols(unsigned int token_idx, int compre=
+ssed_chr)
+>  	return subs;
+>  }
+> =20
+> +/* Change every occurance of idx back to token_pair/triple.
+> + * This extends all the symbol table entries but frees up a token. */
+> +static __attribute__((noinline)) void
+> +uncompress_symbols(unsigned int token_pair, int idx)
 > +{
+> +	struct best_table *bt =3D best_table + idx;
+> +	unsigned int sym_idx, len;
+> +	unsigned char *sym, *p, *end;
+> +	unsigned int substitutions;
+> +	unsigned int third_char;
+> +
+> +	third_char =3D token_pair >> 16;
+> +	token_pair &=3D 0xffff;
+> +
+> +	for (int j =3D 0; j < bt->syms.cnt; j++) {
+> +		sym_idx =3D bt->syms.sym_indexes[j];
+> +
+> +		sym =3D table[sym_idx]->sym;
+> +		len =3D table[sym_idx]->len;
+> +		end =3D sym + len;
+> +
+> +		for (p =3D sym; (p =3D memchr(p, idx, len)); p +=3D 2) {
+> +			len =3D end - p - 1;
+> +			if (len) {
+> +				if (third_char) {
+> +					/* Adding three characters */
+> +					adjust_profit(sym_idx, idx, third_char, p[1], p[1]);
+> +					memmove(p + 3, p + 1, len);
+> +				} else {
+> +					adjust_profit(sym_idx, idx, token_second(token_pair), p[1], p[1]);
+> +					memmove(p + 2, p + 1, len);
+> +				}
+> +			}
+> +			if (p !=3D sym)
+> +				adjust_profit(sym_idx, p[-1], p[-1], idx, token_first(token_pair));
+> +			token_add_symbol(token_pair, sym_idx);
+> +			p[0] =3D token_first(token_pair);
+> +			p[1] =3D token_second(token_pair);
+> +			end++;
 
-[ ... ]
+[Severity: Medium]
+Does uncompress_symbols() need to add sym_idx back to the .syms arrays of
+multi-character component tokens when expanding idx into token_pair?
 
-> +	t = btf_type_by_id(btf, btf_id);
-> +	if (!t || !btf_type_is_struct(t))
-> +		return NULL;
-> +	vmlinux = bpf_get_btf_vmlinux();
-> +	if (IS_ERR_OR_NULL(vmlinux))
-> +		return NULL;
-> +	id = btf_find_by_name_kind(vmlinux, btf_name_by_offset(btf, t->name_off), BTF_KIND_STRUCT);
-> +	if (id < 0)
-> +		return NULL;
-> +	dtor = btf_dtor_tab_find(vmlinux, id);
-> +	if (dtor)
-> +		*btfp = vmlinux;
-> +	return dtor;
+If a multi-character component token was previously split (clearing its
+.syms.cnt) and later re-compressed so that first->str and second->str
+again concatenate to bt->str across a different subset of symbols,
+restoring token_first(token_pair) or token_second(token_pair) into
+table[sym_idx]->sym without adding sym_idx to its best_table[].syms array
+leaves that symbol untracked.  A subsequent split of that component token
+will then miss table[sym_idx]->sym and leave stale token bytes behind when
+the slot is reassigned.
+
+> +			if (third_char) {
+> +				token_add_symbol(token_index(p[1], third_char), sym_idx);
+> +				p[2] =3D third_char;
+> +				end++;
+> +				p++;
+> +			}
+> +		}
+> +		table[sym_idx]->len =3D end - sym;
+> +	}
+> +
+> +	substitutions =3D bt->refs;
+> +
+> +	bt->refs =3D 0;
+> +	bt->syms.cnt =3D 0;
+> +	sym_arr_free_all(idx);
+
+[Severity: Low]
+Should sym_arr_free_all() reset best_table[ch].syms.cnt and
+best_table[ch].splits instead of only clearing bt->syms.cnt here?
+
+When optimize_result() frees a zero-reference token via sym_arr_free_all():
+
+scripts/kallsyms.c:optimize_result() {
+    ...
+		if (!(first->refs -=3D refs) && first->len > 1)
+			/* There are no references left, reuse the token. */
+			to_process[idx++] =3D sym_arr_free_all(token_first(best));
+		if (!(second->refs -=3D refs) && second->len > 1)
+			to_process[idx++] =3D sym_arr_free_all(token_second(best));
+    ...
+}
+
+best_table[ch].syms.cnt and best_table[ch].splits retain their values from
+the old token.  When that slot is reused by compress_symbols(), new symbol
+indices are merged into the stale .syms list (causing uncompress_symbols()
+to scan unrelated symbols if the new token is later split), and the new
+token inherits the prior token's split count (which may already be
+max_splits).
+
+> +
+> +	token_profit[token_pair] +=3D substitutions;
+> +	best_table[token_first(token_pair)].refs +=3D substitutions;
+> +	best_table[token_second(token_pair)].refs +=3D substitutions;
+> +
+> +	if (third_char) {
+> +		best_table[third_char].refs +=3D substitutions;
+> +		token_profit[token_index(token_second(token_pair), third_char)] +=3D s=
+ubstitutions;
+> +	}
 > +}
+> +
+> +static int split_token(unsigned int profit)
+> +{
+> +	struct best_table *bt, *first, *second;
+> +	const unsigned int max_splits =3D 10;
+> +	unsigned int i, best_token;
+> +	int best_ch =3D -1;
+> +
+> +	for (i =3D 0; i < 256; i++) {
+> +		bt =3D best_table + i;
+> +
+> +		if (bt->len =3D=3D 1 || bt->refs >=3D profit || bt->splits >=3D max_sp=
+lits)
+> +			continue;
+> +
+> +		/* Ignore tokens where the original parts have been reused ... */
+> +		first =3D &best_table[token_first(bt->token)];
+> +		second =3D &best_table[token_second(bt->token)];
+> +		if (bt->len !=3D first->len + second->len ||
+> +		    memcmp(bt->str, first->str, first->len) ||
+> +		    memcmp(bt->str + first->len, second->str, second->len)) {
+> +			/* ... unless they are three characters. */
+> +			if (bt->len !=3D 3 || bt->refs * 2 >=3D profit) {
+> +				/* Don't consider again */
+> +				bt->splits =3D max_splits;
+> +				continue;
+> +			}
 
-The comment says a module struct with the name of a vmlinux struct is the
-same type to the verifier and is passed to vmlinux kfuncs by name.  Is that
-accurate?
+[Severity: Low]
+Does setting bt->splits =3D max_splits when bt->len =3D=3D 3 and
+bt->refs * 2 >=3D profit permanently disqualify 3-character tokens that only
+lost to a better candidate in the current scan?
 
-For kfunc pointer arguments, process_arg_ptr_to_btf_id() calls
-btf_struct_ids_match(), which uses btf_types_are_same():
+As the loop iterates, profit is lowered to the best candidate's cost
+(bt->refs or bt->refs * 2).  Any later 3-character token whose original
+components were reused and whose bt->refs * 2 is not strictly less than
+that running minimum gets bt->splits set to max_splits, preventing it from
+being split on subsequent calls to split_token().
 
-    if (id1 != id2)
-        return false;
-    if (btf1 == btf2)
-        return true;
-    return btf_type_by_id(btf1, id1) == btf_type_by_id(btf2, id2);
-
-For a released argument the match is also strict, so the struct is not
-walked.  Matching by name only happens for the __sk_buff/xdp_md projections
-in btf_is_projection_of().
-
-So a program holding a reference to a module's own struct X cannot pass it
-to the vmlinux release kfunc of X, yet btf_find_dtor() returns the vmlinux
-entry for X.  The commit message says the rule is "if the program could
-call the release kfunc there, running the equivalent destructor is
-allowed", and this fallback seems to break that rule.
-
-The later consumer, resource_registry() in kernel/bpf/frame_desc.c, only
-checks btf_kfunc_flags()/btf_kfunc_is_allowed() for dtor->release_btf_id
-against the program.  It does not check that reg->btf and reg->btf_id would
-pass the release kfunc's strict type match.
-
-Suppose a module defines its own struct named like a vmlinux cleanup type
-that is private to a .c file (bpf_cpumask, bpf_crypto_ctx, bpf_ksock or
-prog_test_ref_kfunc), returns it from a KF_ACQUIRE kfunc, and registers no
-destructor for it.  Can a program that holds that reference and calls
-bpf_throw() then have the unwinder run the vmlinux destructor, for example
-bpf_cpumask_release_dtor(), on an object of a different type?
-
-In this patch the fallback is not reachable from btf_parse_kptr(), since
-bpf_find_btf_id() searches vmlinux first by name and kind.  No in-tree
-module defines such a colliding, non-deduplicated struct, so this needs a
-module type to trigger.  The fallback is still present at the end of the
-series.
-
-Could the fallback be dropped, or could it require type identity before
-returning a vmlinux entry for a module type?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43027088527
---===============4534125352478546491==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261111115911.1142=
+000-1-david.laight.linux@gmail.com?part=3D13
