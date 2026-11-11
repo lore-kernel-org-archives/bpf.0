@@ -1,57 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794370971;
-	b=f/G0u3rSpRM9yMU3owSGHWkqRVT/UZUQ0QzeA46vcVIPkmxDwYZUKiuMijxEWuAPEeSo
-	 l5QqEW22D4IiivwzUxt8NBjreF0WHcqzbfYmS3LsWIriy9u9IUIk0PpGW5Uqg4Fmp3lsw
-	 KlNezrwd4vHpBH6OE04A4cAbpfTdoejZaYT+ctXaUyS4avhMkaCUZ5VJElen2TdJdqYTf
-	 WPxyjl5USX3Gmk/nziy/jtsTTxrX6gjehgwbw5YWyJ5bCeS+LsdSPV/jgV+Rd8QAZmp62
-	 l+PJG6CwH5L193PhPOi/mYP4aHuHD9pxPf+wEar9lxC4ulWPSOnJv5c4/10+TvEM3Ig==
+	t=1794371791;
+	b=yMSarFKKnN6GxZPxHUqKWbHZPOv9SsUcRo4DCZudkaCFlYNvaEyntWDs3G7EfmfhtSp2
+	 +HEjQVaU1I6QocFyPk2Qo8/MZamDKUJAux5WGaQ/81QDZMj2ek4WoHkoOrHM/kZeT+6E2
+	 vZOGsH+NftotT9TFdfCPfYSmgSql8grmmTrvHHBwyBsdhxqhTHOhyxnWvvh5QC9cBBooH
+	 NaLtrjlltXsom3Y9s81SKBJb11Ite3ZkvY7jJ7W8L+Yp1P+64RkcSRNpyNR5EAyoERQ/L
+	 NzZvLSTxJo1TEAWeJ585YNu1XSbU9ky0bhd4nfd+zJ7cpRB6e3iTDtLVs5f/T5XRssw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794370971;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	a=rsa-sha256; c=relaxed/relaxed; t=1794371791;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=/5Bxw6ytYLgq+ERu7e6JcggrYWvMSRCcRXq4N71vRMI=;
-	b=TxPq/YqyuSufpm+7mVBuyBcL6UoOq7T3u0UtZKNDroZpXvNilb0qP/k5QvHZI2SFcxb4
-	 yvaJnqaWpUL31stT2TcG5HqVfez0XOc1rkC22Q2uFHKX5rUD4gFPjO5/NyWYmgOnE3wAQ
-	 GQWxttTvFolRJZ8RIz4OWMFSyqLCzbVvGDNvrp6N0C/n62mE7IwMfXvvrGXNf3/VZOZum
-	 iJDT3SzP/4Ml3DaiHLllfLaSKWwa2YXl3Ogkfonus9nlPn+dPjKdJVc+WBUJpmWh68kKa
-	 DXNbE4N+w4fkt+ec3dszd7gYo/+SKujotpkn24004LYIV0UmfHRV2Ru2F/qrCKdMUMQ==
+	bh=nQIsmcJjH2fywb189dLaEmD4dfcBeVxKBhQKAxACyMA=;
+	b=qvjcRPI9+fVTZRuDBdPspjhWGVvZtxzOSXUPvwpkJvOzQB9lYa22fxqQ2DZ9K0sM2IJp
+	 SwPEa6zN0d5yCrt98wu4D6p76M4tMFRKbjvwIBHxCIfs6D13h5LSdHV5VfG7MycFWkQt/
+	 63fU6Wz8d+3Debl+l0vne+V1YmCGG93VgmhI4BoHz4lcnZIUitKDRXj1ReqonRZaTIobj
+	 IxSZ/VFgP/eRniOFw5WiDkYR5O0BL2qp8JImY18yTasmZE4htJSoWhpub7UtW3OCN9f+z
+	 e1TIm//OHQ57sdkAtbvvHIRLVTj84yuLjpf9gACkVS9qj44L427Rs5xGNb22OPzL/kg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="f6/CvfmN";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XnSy5IEE;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E0E4606A31C
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 04:22:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9ACB606A320
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 04:36:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f6/CvfmN
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4A431F0089F;
-	Wed, 11 Nov 2026 04:22:50 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XnSy5IEE
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C1471F0089F;
+	Wed, 11 Nov 2026 04:36:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794370971;
-	bh=/5Bxw6ytYLgq+ERu7e6JcggrYWvMSRCcRXq4N71vRMI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=f6/CvfmNfsdIq5vVhi3o7Y9G83SE8jEJnYsFXKSGLhF32eFeO1HvroW5/XkLsmT1+
-	 pHiB4Nt3wz60JXuZD7H5J9bDfVoWWgPBs/XRz8d80xHJIb4Yl4f9mqkspFvNp1fwAJ
-	 37rIhnSCOjPqpgY6T7ww0ap1nIaSjncPG0QmdNToHLirrSReT5ytuK9JKnMSBF+WR+
-	 t2nZbu4sTuSI6fi55LEe41cPG0FaRkxFiosADJfU14NlL+/NpQQkQwSlajivd0ENzZ
-	 VrEe9CftkVJ9iZcRjuemCzhWrubvwNU+2ArjyN2sVei1KPCUrjmAtwBJ7WnN5VpCBJ
-	 tM8FR0ntat3GA==
-Message-ID: <sashiko-outbox-208275@kernel.org>
+	s=k20260515; t=1794371791;
+	bh=nQIsmcJjH2fywb189dLaEmD4dfcBeVxKBhQKAxACyMA=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=XnSy5IEE7ljIj/bRs4Oif3Ks9fNuZr8NUyrwHLrNopPN5fs/jbTcGRP/Q0HU80vy9
+	 hKCkQJ0Fq40EJ5BhO6YfOQD70SI0cGqT5mNFD0Mj95HRnV2UfZklYEZuoMURk2ovuS
+	 SWrpyYGHcDegqlct0IndL80M36bc45bbjq5LohCyYdXsluvaZ7PNluRuuW1jZGzYLI
+	 Nj6wskHiQBgIajN/u6+PDW9koi2jdNsJhP20y2UuNedyCA+RPO69wnbwv7YjkuBTKC
+	 a/89oziGq1TYRkLaW6Yv8Mfx+0FpEnR/jsTuTos++BXTgKckVe4P28jFWokeJJrrYF
+	 DcMU50EwOwLHw==
+Message-ID: <sashiko-outbox-208301@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 4/6] bpf: Invalidate async callbacks before
- detaching them
+Subject: Re: [RFC bpf-next v3 3/3] selftests/bpf: Add a test for the PPPoE
+ encap/decap kfuncs
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yun Lu" <luyun_611@163.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261111024333.228633-5-luyun_611@163.com>
-References: <20261111024333.228633-1-luyun_611@163.com>
- <20261111024333.228633-5-luyun_611@163.com>
+To: ThisSeanZhang <thisseanzhang@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <20261111032141.525444-4-thisseanzhang@gmail.com>
+References: <20261111032141.525444-1-thisseanzhang@gmail.com>
+ <20261111032141.525444-4-thisseanzhang@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 11 Nov 2026 04:22:50 +0000
+Date: Wed, 11 Nov 2026 04:36:30 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -61,82 +60,134 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Medium] bpf: stale async->cb pointer when losing xchg() race in
-  bpf_async_cancel_and_free()
+Thank you for your contribution! Sashiko AI review found 3 potential
+issues to consider:
+- [High] selftests/bpf: single-word handle used in Signed-off-by trailer
+- [Low] selftests/bpf: missing subtest isolation for tc_pppoe_fail in
+  test_tc_pppoe()
+- [Low] selftests/bpf: uninitialized reads on run_prog() error in
+  test_encap_decap()
 --
 
-commit 686504449c958e635d8414edba153676c8d63adc
-Author: Yun Lu <luyun@kylinos.cn>
+commit 0a18ebb6cc8079a048ec95f72882a33d91363974
+Author: ThisSeanZhang <thisseanzhang@gmail.com>
 
-bpf: Invalidate async callbacks before detaching them
+> selftests/bpf: Add a test for the PPPoE encap/decap kfuncs
+>
+> Add a tc test that exercises the bpf_skb_pppoe_encap() and
+> bpf_skb_pppoe_decap() kfuncs.
+>
+> The encap program is run over plain Ethernet/IPv4 and Ethernet/IPv6
+> packets. The test checks that the kernel writes a correct PPPoE
+> session header between the Ethernet and network headers (version,
+> type, code, session id, length and PPP protocol), that skb->protocol
+> becomes ETH_P_PPP_SES, and that the payload is preserved. It then
+> runs the decap program and checks that the original packet and
+> protocol metadata are restored.
+>
+> The rejection paths are driven by the packet input: encapsulation of
+> a non-IP packet (ARP), decapsulation of a packet whose protocol is
+> not ETH_P_PPP_SES (plain IPv4, and an IPv4 packet whose bytes at the
+> PPP protocol offset decode as PPP_IP), decapsulation of a PPPoE
+> packet with an unsupported PPP protocol (IPCP), and decapsulation of
+> a packet too short to still hold an IP header.
+>
+> A separate program that holds a packet pointer across a call to
+> bpf_skb_pppoe_encap() must fail verification, covering the
+> KF_CHANGES_PKT invalidation from the first patch.
+>
+> Signed-off-by: ThisSeanZhang <thisseanzhang@gmail.com>
 
-This commit changes bpf_async_cancel_and_free() to clear cb->map with xchg()
-under RCU before clearing async->cb, so that a callback object is invalidat=
-ed
-before it is detached from the map value slot.
+[Severity: High]
+The Signed-off-by trailer, commit author, and file copyright headers use
+the single-word handle "ThisSeanZhang".  Per
+Documentation/process/submitting-patches.rst, the Developer's Certificate
+of Origin requires a space-separated real full name.
 
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index a08b2af56ee64..716be7a852b58 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -1747,15 +1747,18 @@ static void bpf_async_cancel_and_free(struct bpf_=
-async_kern *async)
->  {
->  	struct bpf_async_cb *cb;
-> =20
-> -	if (!READ_ONCE(async->cb))
-> +	/* Another canceller can release the map-owned cb reference. */
-> +	guard(rcu)();
-> +	/* Order unlink before reading async->cb, including an empty slot. */
-> +	smp_mb();
-> +	/* Acquire any invalidation published before the slot was cleared. */
-> +	cb =3D smp_load_acquire(&async->cb);
-> +	/* Only the first invalidator detaches cb and drops the map's reference=
-. */
-> +	if (!cb || !xchg(&cb->map, NULL))
->  		return;
-> =20
-> -	cb =3D xchg(&async->cb, NULL);
-> -	if (!cb)
-> -		return;
-> +	WRITE_ONCE(async->cb, NULL);
+> diff --git a/tools/testing/selftests/bpf/prog_tests/tc_pppoe.c b/tools/te=
+sting/selftests/bpf/prog_tests/tc_pppoe.c
+> new file mode 100644
+> index 0000000000000..5420d3bf321ac
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/tc_pppoe.c
+[ ... ]
+> +static int run_prog(int prog_fd, const void *data_in, __u32 size_in,
+> +		    void *data_out, __u32 size_out, __u32 *retval,
+> +		    __u32 *size_out_actual)
+> +{
+> +	LIBBPF_OPTS(bpf_test_run_opts, opts,
+> +		    .data_in =3D (void *)data_in,
+> +		    .data_size_in =3D size_in,
+> +		    .data_out =3D data_out,
+> +		    .data_size_out =3D size_out,
+> +	);
+> +	int ret;
+> +
+> +	ret =3D bpf_prog_test_run_opts(prog_fd, &opts);
+> +	if (!ret && retval)
+> +		*retval =3D opts.retval;
+> +	if (!ret && size_out_actual)
+> +		*size_out_actual =3D opts.data_size_out;
+> +
+> +	return ret;
+> +}
+> +
+> +static void test_encap_decap(struct tc_pppoe *skel, const char *subtest,
+> +			     const __u8 *pkt, __u32 pkt_len, int ethertype,
+> +			     __u8 ppp_proto)
+> +{
+> +	__u8 encap_pkt[128];
+> +	__u8 decap_pkt[128];
+> +	__u32 retval, out_len;
+> +	int ret;
+> +
+> +	if (!test__start_subtest(subtest))
+> +		return;
+> +
+> +	skel->bss->encap_proto =3D 0;
+> +	ret =3D run_prog(bpf_program__fd(skel->progs.tc_pppoe_encap),
+> +		       pkt, pkt_len, encap_pkt, sizeof(encap_pkt),
+> +		       &retval, &out_len);
+> +	ASSERT_OK(ret, "encap test_run");
+> +	ASSERT_OK(retval, "encap retval");
+> +	ASSERT_EQ(out_len, pkt_len + PPPOE_SES_HLEN, "encap pkt len");
 
-[Severity: Medium]
-Can a losing canceller return from bpf_async_cancel_and_free() while
-async->cb is still non-NULL?
+[Severity: Low]
+Can test_encap_decap() read uninitialized stack memory if run_prog()
+fails?
 
-Before this patch, xchg(&async->cb, NULL) guaranteed that async->cb was
-NULL whenever bpf_async_cancel_and_free() returned.  With the split between
-xchg(&cb->map, NULL) and WRITE_ONCE(async->cb, NULL), a second canceller
-can observe the invalidated cb and return early before the slot is cleared:
+run_prog() only populates *retval and *size_out_actual when
+bpf_prog_test_run_opts() returns 0, and ASSERT_OK(ret, ...) does not
+return on failure.  If either run_prog() call fails, execution continues
+to evaluate assertions on uninitialized retval, out_len, encap_pkt, and
+decap_pkt (which can also trigger -Werror=3Dmaybe-uninitialized when
+run_prog() is inlined).  Returning early when !ASSERT_OK(ret, ...) avoids
+this.
 
-CPU0                              CPU1
-array_map_update_elem()           array_map_update_elem()
-  bpf_obj_cancel_fields()           copy_map_value()
-    bpf_async_cancel_and_free()     bpf_obj_cancel_fields()
-      cb =3D smp_load_acquire(...)      bpf_async_cancel_and_free()
-      xchg(&cb->map, NULL)              cb =3D smp_load_acquire(...)
-                                        !xchg(&cb->map, NULL)
-                                        return;
-                                  bpf_timer_init()
-                                    __bpf_async_init()
-                                      READ_ONCE(async->cb) !=3D NULL
-                                      return -EBUSY;  <-- spurious failure
-      WRITE_ONCE(async->cb, NULL)
+[ ... ]
 
-The same race occurs on a single CPU if an interrupt or NMI BPF program
-updates the element and calls bpf_timer_init() or bpf_wq_init() while the
-interrupted task is between xchg(&cb->map, NULL) and
-WRITE_ONCE(async->cb, NULL), or when check_and_cancel_fields() races with
-map_release_uref() before recycling a hash map element.
+> +	/*
+> +	 * KF_CHANGES_PKT must make the verifier reject a program that
+> +	 * keeps a packet pointer across the call.
+> +	 */
+> +	fail_skel =3D tc_pppoe_fail__open_and_load();
+> +	if (!ASSERT_ERR_PTR(fail_skel, "stale packet pointer rejected"))
+> +		tc_pppoe_fail__destroy(fail_skel);
+> +}
 
-Having the losing canceller also clear the slot (for example via
-cmpxchg(&async->cb, cb, NULL)) before returning would preserve the
-guarantee that async->cb is NULL on return without overwriting a newly
-published callback.
+[Severity: Low]
+Does calling tc_pppoe_fail__open_and_load() without starting a subtest
+attach its result to the preceding subtest?
+
+In test_progs, the "decap-non-pppoe-fake-proto" subtest stays active until
+the next test__start_subtest() call or until test_tc_pppoe() returns, and
+filtered runs (such as test_progs -t tc_pppoe/encap-decap-v4) will still
+execute tc_pppoe_fail__open_and_load() outside any subtest.  Using
+RUN_TESTS(tc_pppoe_fail) with __failure and __msg() annotations from
+bpf_misc.h on tc_pppoe_stale_ptr(), or guarding this check with
+test__start_subtest(), would isolate it properly and verify the expected
+verifier error message.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261111024333.2286=
-33-1-luyun_611@163.com?part=3D4
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261111032141.5254=
+44-1-thisseanzhang@gmail.com?part=3D3
