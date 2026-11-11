@@ -1,57 +1,104 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=52.42.203.116
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794427830;
-	b=evBc4a1peaFaBwKLyyzMXfvBhMT1tdb05KvJQntLyYSFKCbIMQUGvMsNJYyEGqSHteI2
-	 bvMSTDZFK2Hf65KpQoTB7dgAonlyoJ4gbRRgxYYvAK2cSk1cb8h1j/Iutr0APe1pcmLhc
-	 SLkSNOhF1/o4bRxCgF0izCz8vSvNFm3H10EaILj/vfXH/ydyW0HKDQkuXiNa1S3N1Giej
-	 t43dZolFWcl0xMRTv3MclR5tm721CKKyIcvFSw+aXPda5VTSVS23L3P40tYwE4X9Tiwhd
-	 9LwqT1N9tAdfmcR7x7IVnqLRMmqwxhNLNFQL/Oe/UcKFnED86koD5W6OLypvRWWwsAw==
+	t=1794428616;
+	b=HQmeDhnrcncKWqxHbJXL4s/MIh7U6EGwQk/2GjIyCXXNlBXINMjQPOScHinj18yLh6Yn
+	 QUnuNijxH60X23BV9aNDaggixl/tuma8Gb1+f7TItiuNJ99frsIcOKpqNN8dJhYmuvOeS
+	 0l0ApJDruFp11+SK75EGqZ6jY/MEJJwPLcOg5QgRmgKHhAPVr1zREBMXMVdAfQu31JHjX
+	 whMxniU+GdZynd4NPYCStkBtlb1IbrEqzNBVllHLrz6ZrruvaFU5HIdkToJz+/PUAkn5z
+	 Qzv5y0loM7wp/6bc2TLcQozUcGzdzZDsYmqgAXwA8Jz8iXI0g1/PlqM3cCfC98lQM5g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794427830;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=3cJo8ZcESNxsZAep8SluVMXLsttaabMAn4YH9ghtoYM=;
-	b=EsYBxeF08dtHJPN1IDuLA/otEPK3xq1Z4d0YOPLlBj3qqr9rRTlJmE8y6wmN2V+C3/WS
-	 KqLPt+vq6eyHZVxQhHRxRr9Irpobmku+t7UllAEM0GIeXgNcQCrChl9ifctz4JjdnIy5w
-	 pzkkLURgUqoX9fBM2A/KgpwLu1b06N3v4HUiI85vFtdU5BPuJseApoOhvIcGUUrB/TvB+
-	 YuMztg5cTvzoDqRICF9MopkPLuaJmgSHC6CR3Tab02rs5dA4kO+j8UWibgsOI+MfcBH0V
-	 eoD4CWqKdzRK21Z4/0D+xTCyQLajtTSCkBW6MV3N8q10ywwX5PPEHSNtyf6joIT8zpA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794428616;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
+	 Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To:X-Originating-IP:
+	 X-ClientProxiedBy;
+	bh=jkJcn8ydDxvyf3lWLXA7GpBEZpUwB/Y6PIOpFmvjCRU=;
+	b=bf2G8JS248pX1tbrUqKkZ4JlsPUS1kyRKnOWLdpaoQgO/MRTVlsewXaLHJL9YZd9KPLX
+	 vyirsKZBPQMVRnQ8X/eMotPFyqQe+cai8r5xNV/DLhua1te5nBvfQ71++KEFtMe2rakO6
+	 B05L1CBPprTKZngToZn9Te+CZwqvz6GWktk7ZSzxAssJBSLsjLmyVavWzrdFX3ar9Z+sT
+	 bwsusJWveg7iFBLaWHtSa43H9ZL8H8/FXoEIJH8mI7g7agGyasIn145teNQT82XkTicTK
+	 RF3lWo67IzjIoiKbMMBu+Kr/zme92Nyw9JmcSc4NN+YuiHEj+N2gRoO1cvGTx14Vnkw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=efy5LHLD;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=amazon.com;
+	spf=pass smtp.mailfrom=amazon.com;
+	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=iMEZvZ9b;
+	arc=none smtp.remote-ip=52.42.203.116
+Received: from pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.42.203.116])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4B16606A31C;
-	Wed, 11 Nov 2026 20:10:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32A91606A31C;
+	Wed, 11 Nov 2026 20:23:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 32A91606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=efy5LHLD
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C8BC1F00A05;
-	Wed, 11 Nov 2026 20:10:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794427830;
-	bh=3cJo8ZcESNxsZAep8SluVMXLsttaabMAn4YH9ghtoYM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=efy5LHLDTh7qPk1pWF59I5VtBweAgvHVfkckHKFfoUt045aQexIROcIBlu01MLGrJ
-	 pU+XmlOAAJhAuBbF7vBgdnUi7xKwH/eGM5lXMG6BUnlhe+3d4nabhoZ0lNISL991lF
-	 leOetLjnH7dkKxPrYWWFObjnmOouuOiv2mlnVFxtnhV5PxZSY9np5FWqHdwkv4B/rg
-	 XMiXXCybeOLjni9eBtCjvngZ6IIMcZHm6sfAVlqzaDtKwtaoj+NElbv0mYfGVgXS9F
-	 uK4dvppr/dYyLw2CVEydHx9RHdgZbLxymsPrjt/hU404RddV1KkZjPgIv+W1QACfOI
-	 HdLmdb8NkvZ4g==
-Message-ID: <sashiko-outbox-209613@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 1/5] bpf: Avoid per-CPU private stack in
- preemptible tracing progs
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Mike Bazov" <mikeba@sentinelone.com>, bpf@vger.kernel.org
-Cc: linux-trace-kernel@vger.kernel.org
-In-Reply-To: <20261111-bpf-preempt-v2-r2-v2-1-9d8f6b952ad2@sentinelone.com>
-References: <20261111-bpf-preempt-v2-r2-v2-0-9d8f6b952ad2@sentinelone.com>
- <20261111-bpf-preempt-v2-r2-v2-1-9d8f6b952ad2@sentinelone.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 11 Nov 2026 20:10:29 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=iMEZvZ9b
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1794428616; x=1825964616;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jkJcn8ydDxvyf3lWLXA7GpBEZpUwB/Y6PIOpFmvjCRU=;
+  b=iMEZvZ9bKPvYu+lyl63NXczZgb9k00IMn6p/B41NF+YSge2JQ78uaWaI
+   3TEwozp7ebCyFqGQJC10YwNyJFTpBT4U3fmu4ddRB2SEvIbFbSVXuqLiW
+   JVhDNg6z2jRzcs0ngJJjtAW8tcy7wgkxhx1R6E8fIvRf2wdkkR6tp1Wxf
+   D2y5arB9O0zx/GF7R/bGfS/yLIOi5HAWKqBDCS8EZkk/T761sHCwXsd4H
+   Gt61dIFcjAFO4DSHsohJvTEKUFf7MHOm1ElAmU8Gbqug0jZ+YyNxqytYv
+   OQ5eO/IOET+up0Oduz50oSqV8UXFOpL9cLD7O9EVeN3k0XujH1PLjG10w
+   A==;
+X-CSE-ConnectionGUID: Qyyc6pHYShOrjNU/eJizYg==
+X-CSE-MsgGUID: Fcia4Cx0S3GdQP0ncOIkSw==
+X-IronPort-AV: E=Sophos;i="6.27,208,1787011200"; 
+   d="scan'208";a="33786501"
+Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
+  by internal-pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2026 20:23:33 +0000
+Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.178:12262]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.46.128:2525] with esmtp (Farcaster)
+ id 16ece643-915b-4807-8d1b-662b366d2515; Wed, 11 Nov 2026 20:23:33 +0000 (UTC)
+X-Farcaster-Flow-ID: 16ece643-915b-4807-8d1b-662b366d2515
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
+ Wed, 11 Nov 2026 20:23:32 +0000
+Received: from dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com
+ (172.19.55.127) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56; Wed, 11 Nov 2026
+ 20:23:32 +0000
+Date: Wed, 11 Nov 2026 20:23:26 +0000
+From: David Keogh <dkeogh@amazon.com>
+To: Tianyi Gao <tianyi@cloudflare.com>
+CC: Stephen Hemminger <stephen@networkplumber.org>, Willem de Bruijn
+	<willemdebruijn.kernel@gmail.com>, <netdev@vger.kernel.org>, Jakub Kicinski
+	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Eric Dumazet
+	<edumazet@kernel.org>, "David S. Miller" <davem@davemloft.net>, Simon Horman
+	<horms@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, David Woodhouse <dwmw2@infradead.org>, Dragos Tatulea
+	<dtatulea@nvidia.com>, Nimrod Oren <noren@nvidia.com>, Alasdair McWilliam
+	<alasdair@mcwilliam.dev>, Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, Magnus Karlsson
+	<magnus.karlsson@intel.com>, David Ahern <dsahern@kernel.org>, Ido Schimmel
+	<idosch@nvidia.com>, Alexei Starovoitov <ast@kernel.org>, John Fastabend
+	<john.fastabend@gmail.com>, Donald Hunter <donald.hunter@gmail.com>, "Andrew
+ Lunn" <andrew+netdev@lunn.ch>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+	<skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, Randy Dunlap
+	<rdunlap@infradead.org>, Breno Leitao <leitao@debian.org>,
+	=?iso-8859-1?Q?Asbj=F8rn_Sloth_T=F8nnesen?= <ast@fiberby.net>, "Danielle
+ Ratson" <danieller@nvidia.com>, Kuniyuki Iwashima <kuniyu@google.com>,
+	<bpf@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <kernel-team@cloudflare.com>,
+	<nh-open-source@amazon.com>
+Subject: Re: [PATCH net-next 1/8] net: add tx_extra_headroom and
+ LL_ALLOC_SPACE()
+Message-ID: <avTOvr+yy+2j8xrQ@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
+References: <cover.1794020868.git.tianyi@cloudflare.com>
+ <e90e748e0aefa7cbe1c2b31b8c7902ccf135c3f2.1794020868.git.tianyi@cloudflare.com>
+ <willemdebruijn.kernel.1d64e7848503b@gmail.com>
+ <20261107182526.69543-1-tianyi@cloudflare.com>
+ <willemdebruijn.kernel.2c6a653eb65fa@gmail.com>
+ <20261108190831.3f991a13@phoenix.local>
+ <20261109154909.32748-1-tianyi@cloudflare.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,78 +107,27 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20261109154909.32748-1-tianyi@cloudflare.com>
+X-ClientProxiedBy: EX19D031UWA001.ant.amazon.com (10.13.139.88) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Low] selftests/bpf: raw_tp tests in verifier_private_stack no longer
-  test priv stack
---
+On Mon, Nov 09, 2026 at 03:49:09PM +0000, Tianyi Gao wrote:
+> To David Keogh: this plan drops the generic device attribute UAPI that
+> your RFC proposed. Your TC egress use case stays in v2, with a BPF-side
+> declaration instead of the device attribute. Before I proceed, please
+> let me know if you are unhappy with this plan.
 
-commit 173ae153d8d266fe351d0833f08f2920b88ec9ce
-Author: Mike Bazov <mikeba@sentinelone.com>
+Sorry for the slow reply. I am happy with the plan, please go ahead.
 
-bpf: Avoid per-CPU private stack in preemptible tracing progs
+Dropping IFLA_TX_EXTRA_HEADROOM is fine with me. A BPF-side
+declaration covers the TC egress case, as long as the program is
+attached to the device the skb is allocated for.
 
-This commit disables per-CPU private stacks for tracing, raw_tp, and
-tracepoint programs because they run preemptibly and can be entered by a
-second task on the same CPU, and updates check_recursion() and the BPF
-selftests accordingly.
+I will rework the TCP test so it sets the value through one of the new
+paths, and send it as a reply to v2.
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_private_stack.c b=
-/tools/testing/selftests/bpf/progs/verifier_private_stack.c
-> index e7f410a74a21b..bebdb0aff23fd 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_private_stack.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
-> @@ -127,6 +127,23 @@ __naked void no_private_stack_kprobe(void)
->  "	::: __clobber_all);
->  }
-> =20
-> +SEC("fentry/bpf_fentry_test9")
-> +__description("No private stack, fentry")
-> +__success
-> +__arch_x86_64
-> +__jited("	subq	$0x100, %rsp")
-> +__arch_arm64
-> +__jited("	sub	sp, sp, #0x100")
-> +__naked void no_private_stack_fentry(void)
-> +{
-> +	asm volatile ("			\
-> +	r1 =3D 42;			\
-> +	*(u64 *)(r10 - 256) =3D r1;	\
-> +	r0 =3D 0;				\
-> +	exit;				\
-> +"	::: __clobber_all);
-> +}
-> +
->  SEC("uprobe")
->  __description("No private stack, uprobe")
->  __success
-
-[Severity: Low]
-Should no_private_stack_nested() and no_private_stack_stack_args() above
-this hunk also be switched from SEC("raw_tp") to a program type that is
-still eligible for a private stack, such as SEC("kprobe.multi") or
-SEC("perf_event")?
-
-With raw_tp returning NO_PRIV_STACK from bpf_enable_priv_stack(),
-check_max_stack_depth() now skips both tests on priv_stack_mode !=3D
-PRIV_STACK_ADAPTIVE before reaching the 64-byte BPF_PRIV_STACK_MIN_SIZE
-threshold or the x86-64 si[s].stack_arg_cnt check they were written to
-cover:
-
-tools/testing/selftests/bpf/progs/verifier_private_stack.c:
-    SEC("raw_tp")
-    __description("No private stack")
-    ...
-    __naked void no_private_stack_nested(void)
-    ...
-    /* x86-64 has one register for the private stack and for the sixth argu=
-ment */
-    SEC("raw_tp")
-    __description("No private stack, stack arguments")
-    ...
-    __naked void no_private_stack_stack_args(void)
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261111-bpf-preemp=
-t-v2-r2-v2-0-9d8f6b952ad2@sentinelone.com?part=3D1
+Thanks,
+David
