@@ -1,47 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794401992;
-	b=bfWToAWe3ftTYuSOuxVB6VNo9tN2+9NX+N82/9ZK5l6Ts9o/gny8EIy8fCrckaBFcurl
-	 U3yqnzSPSBPgklU/wwPWOzoj+8zEjxblcJ7Jy4hTD7czOWuWFekMYo5d1M8bRpFmd3UjH
-	 L1ppm8sC3QtA+SWHvFPh65EfeGfNLCennP3xWV+KG2w29LkfO9RHNTh3mHQIH7T9Uzl5L
-	 Fi2jsG9oAgG2w6kn8XZ9y0c/vk3+PXGhV8NIT2NALk/ZSwmTs/XWSeT9TL502XOBs79VR
-	 kFRJHmcnoF43PFFryPN1UGQ4SwD+KW0qbUQUo9LVudVKysUTYGrESqvittsZ4wKbz0g==
+	t=1794402478;
+	b=nEjF9QmwGGtmTFhb41599tBiOhKfF78kVdt2viFSV2jpcCkL4uljxmgFDTtBXB3yZgYk
+	 xK29JJPQGMbOUEiLtJmrsHWTjp9PvDJbnU+ZuaRYGunFxXXAFpHd7q7aZFWk5tHkjA/MM
+	 G1wsAPwWufESQKU64NIR8kcMSb0w1zcPsps0/IOCnfAsmlsuTu2Uel9UUKjdD57DQMiWL
+	 Udi+uYC8gh2SN3zyNiN3/zZygJVDVy1OUfjkSnzaTNClyTzgj/liAgrebhvUA5V8BHEpK
+	 2l3nHLnysRh8fK5ZjYXyoYWeYPaQ8Tn1BkVhRD4Aykya6BAuxefEUE48ybR+vuUP4sQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794401992;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794402478;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=cq0EbijHimnHd5/JHm1YtAfp5uf1vMCdUbdB6R387fA=;
-	b=0nIRScm+NRTByynVu5hDsqKH0uw2GcGIHQxKzeZP5Pc3+Z5aDrd7BrpVWqhC5TlgmDVt
-	 wM4coYsKUmCEXAVoi4mGdRWF1mR7nmFWTOzRT9h3AQUNBH9C99Fj4KM8QretmQjZOyEML
-	 k7pEFFiAyxRGlrf9tmwxM9GH3/TgCrNkbD0PE4YtrVLD37NmWmULtypuW2IgXh3Ra23Lj
-	 s17ZzFicOuxEra1uFfa1iKq8XhBQZZESwYDcywhMfq126ZSBcEZ+AN+Xq6CmRh2mZ4txk
-	 QunkUCslPo2xLeHZsGtrebet2RMWuEojwTXG5VkOppZn50liJGP/wYwI4jYkX0m5X0A==
+	bh=Cx4bEGE3gLurh951cdWY2VyzPEOPwrScYT+cKpERr+E=;
+	b=b8LfJU37QiS8VYKIUccL1DNcjrV/vI7iKxjjmYCyg0ar4CDpfGOnq5HGD9ygcEO8NDBl
+	 HU9c07UoN8quuCnk5r1el4iVNktlOgDD2wuEIIyaaxaK50xbdAVLA0ro4N7kD63XVxggt
+	 EjCCLMONA8qnW859CYHxllGfhfpblkYMua+eHzMV+jzVsIkVaZ+uCoyS/Kz1DG8JAI2oE
+	 GUpeD4t4PQzJxm+qepgfjStqfUE/hGGakZPo4pLjtDO6WYga1QV6rSEG+7JNZAbJFyR9+
+	 cDbe3zdedY+GJwWGLDg7nFmOk98fFMWcfyjuhsQ92kFLeAKNrnx8sx+eQaNAN3xCeZA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Rs27OMQI;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XwEFlMry;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67BB5606A321;
-	Wed, 11 Nov 2026 12:59:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EDDD606A321;
+	Wed, 11 Nov 2026 13:07:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Rs27OMQI
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 806F91F00A05;
-	Wed, 11 Nov 2026 12:59:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XwEFlMry
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28C6E1F00A05;
+	Wed, 11 Nov 2026 13:07:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794401992;
-	bh=cq0EbijHimnHd5/JHm1YtAfp5uf1vMCdUbdB6R387fA=;
+	s=k20260515; t=1794402477;
+	bh=Cx4bEGE3gLurh951cdWY2VyzPEOPwrScYT+cKpERr+E=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Rs27OMQInlrg6aKPuuon0L2ShvXarHZy6hJygJWRrfQNlTWFL0RCs1Bsf/ljhVs0Z
-	 JSi+PEAfx/69NdxYIUgCt4dZ57CkrZFf2xMMMutv0czCCkauUc0sjXu6kOH89cCDvR
-	 Y+xGQ5AGr1ooIM2KXSZImEcLmdMYO90Qs2m97in7L6/L3/NCGdKT+zMWeu0kptj73E
-	 39SMhj8Gu6unYQyyTcTO5ZFuEfoTF4iin6lkWiqRBCqOKoxeP4E5Fm1HzFROmHO0Pk
-	 xnr1yxjupTilRQnh+Fn7eRIE/HXI13Zs2tC0OZ+uHLvFH7g6fB9VRNl3CP6Z2x8/S4
-	 2LoXr0iBfcirg==
-Message-ID: <sashiko-outbox-209030@kernel.org>
+	b=XwEFlMrysLV05W3S0EtNk4glp5ayE1+1MQaKK71Z7SPQvUI1gNlRgwfMVCIYWMR5N
+	 hkY7uwrWYosFXHITwR+kEiv2ICNn5fHpzZeDGinGmCW8TqPhxQhh852d1qFJQ+vwzI
+	 eBVAljC2pcU2oT97IQ4//IKsxoSXL13qUAo6Egf9cLvpOEdQLXCKPKrTH040U+Wu2M
+	 8OMgXPjwOrk6Pw2dp0ypGNg7EO5nUlhc/OX8Ma7JCb1ucGbHqEXMql3gZO27VVUQFk
+	 UYYXrNkWxp7UN74VCkpEJZCIaW0Sd0p2gAu6nWT7Ha0zHzPSYCHEYHJPWrvHVf7OtV
+	 CGTWXrx7dZG3w==
+Message-ID: <sashiko-outbox-209043@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 next 08/13] kallsyms: Optimise symbol name search
+Subject: Re: [PATCH v3 next 09/13] kallsyms: Add a kernel parameter to
+ change the kallsyms_markers[] density
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "David Laight" <david.laight.linux@gmail.com>, "Petr Mladek" <pmladek@suse.com>, "Kees
  Cook" <kees@kernel.org>, linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, "Jim
@@ -49,12 +50,12 @@ To: "David Laight" <david.laight.linux@gmail.com>, "Petr Mladek" <pmladek@suse.c
 Cc: "Luis Chamberlain" <mcgrof@kernel.org>, "Andrey Grodzovsky" <andrey.grodzovsky@crowdstrike.com>, "Steven
  Rostedt" <rostedt@goodmis.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Samuel
  Wu" <wusamuel@google.com>, nathan@kernel.org, nsc@kernel.org
-In-Reply-To: <20261111115911.1142000-9-david.laight.linux@gmail.com>
+In-Reply-To: <20261111115911.1142000-10-david.laight.linux@gmail.com>
 References: <20261111115911.1142000-1-david.laight.linux@gmail.com>
- <20261111115911.1142000-9-david.laight.linux@gmail.com>
+ <20261111115911.1142000-10-david.laight.linux@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 11 Nov 2026 12:59:51 +0000
+Date: Wed, 11 Nov 2026 13:07:56 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -66,66 +67,51 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue to consider:
-- [High] kallsyms: broken 24-bit big-endian offset calculation in
-  write_src()
+- [High] kallsyms: wrong markers_cnt rounding in write_src() overflows
+  or leaks heap
 --
 
-commit 129df190c855fc8323de3f8129f606cadccd6466
+commit 03c7dad0d75ad1647bb5f932cd21410fa5140c26
 Author: David Laight <david.laight.linux@gmail.com>
 
-kallsyms: Optimise symbol name search
+kallsyms: Add a kernel parameter to change the kallsyms_markers[] density
 
-This commit changes the alphabetically sorted symbol table from indexing
-kallsyms_offsets to indexing the compressed kallsyms_names stream, with the
-low bit indicating duplicate symbol names.
+This commit adds CONFIG_KALLSYMS_MARKER_SHIFT and a --marker-shift option
+to scripts/kallsyms so the interval between kallsyms_markers[] entries is
+configurable rather than fixed at 256 symbols.
 
 > diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-> index 74db751600b4f..930ec27a53c06 100644
+> index 930ec27a53c06..c27aaabccd1b0 100644
 > --- a/scripts/kallsyms.c
 > +++ b/scripts/kallsyms.c
 
 [ ... ]
 
-> @@ -570,23 +571,41 @@ static void write_src(void)
->  	sort_symbols_by_name();
->  	stamp("sort by name");
+> @@ -441,8 +443,8 @@ static void write_src(void)
+>  	stamp("write token table");
 > =20
-> -	output_label("kallsyms_seqs_of_names");
-> -	write_incbin_header("seq_of_names", &bin_offset);
-> +	off_size =3D table_size < (1u << 23) ? 24 : 32;
-> +	output_label("kallsyms_offs_of_names");
-> +	printf("\t.long\t%u\n", off_size);
-> +	write_incbin_header("offs_of_names", &bin_offset);
->  	for (i =3D 0; i < table_cnt; i++) {
->  		se =3D table[i];
-> -		seq =3D se->seq;
-> +		off =3D se->seq << 1;
-> +		if (i && se->len =3D=3D table[i - 1]->len &&
-> +		    !memcmp(se->sym + 1, table[i - 1]->sym + 1, se->len - 1))
-> +			/* Mark that this is a duplicate of the previous symbol */
-> +			off |=3D 1;
->  		if (out_bin_file) {
-> -			unsigned int seq_be =3D htobe32(seq);
-> -			fwrite((char *)&seq_be + 1, 1, 3, out_bin_file);
-> +			unsigned int off_te =3D big_endian ? htobe32(off) >> (32 - off_size):=
- htole32(off);
-> +			fwrite(&off_te, 1, off_size / 8 , out_bin_file);
+>  	/* table of offset markers, that give the offset in the compressed stre=
+am
+> -	 * every 256 symbols */
+> -	markers_cnt =3D (table_cnt + 255) / 256;
+> +	 * every (1 << marker_shift) (typically 64 or 256) symbols */
+> +	markers_cnt =3D (table_cnt + 255) >> marker_shift;
+>  	markers =3D xmalloc(sizeof(*markers) * markers_cnt);
 
 [Severity: High]
-Does this corrupt the 24-bit entries written to out_bin_file when building
-a big-endian kernel on a big-endian host?
+Should markers_cnt round up using (1u << marker_shift) - 1 instead of
+255?
 
-On a big-endian host, htobe32(off) is a no-op, so shifting the result right
-by 8 discards the low byte of off and leaves two leading zero bytes at the
-start of off_te.  fwrite(&off_te, 1, 3, out_bin_file) then emits two zero
-bytes followed by only the most significant byte of the 24-bit entry,
-breaking kallsyms_lookup_name() and kallsyms_on_each_match_symbol() at
-runtime.
-
-Shifting off before byte-swapping, as in htobe32(off << (32 - off_size)),
-places the three big-endian bytes at the start of off_te on both
-little-endian and big-endian hosts.
+The loop below populates markers[i >> marker_shift] up to index
+(table_cnt - 1) >> marker_shift.  With 255 still hardcoded,
+marker_shift > 8 can under-allocate markers[] by one entry, overflowing
+the xmalloc() buffer in write_src() and omitting the final entry from
+kallsyms_markers[] so that get_symbol_offset() and get_name_address()
+read past the end of kallsyms_markers[] at runtime.  Conversely,
+marker_shift < 8 (including the new default of 6) over-allocates
+markers_cnt and writes uninitialized heap memory from xmalloc() into the
+generated kallsyms_markers[] table.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261111115911.1142=
-000-1-david.laight.linux@gmail.com?part=3D8
+000-1-david.laight.linux@gmail.com?part=3D9
