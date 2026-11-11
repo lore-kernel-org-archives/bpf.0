@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794415579;
-	b=lXss0w75IZjzTWpFxnPVx6VftXtCVoS5euZrvSu9zg6EqD/VTlWKY8LDqOX+9Tm9EYRP
-	 8Lb8ldl3KegzmLhYcYPYbVzHg0ZLNoaa+iim0C4L8oLZPLfEKCB+xmrgnCw+4p6QASdJi
-	 9ErmCpsmHqZOTo//xuRX5xevAxzLAeBQqKTuEnpSOY//DD7g0gz6ON3kSQqC0kM4bVBMe
-	 rssmU9KxtESjc7S27N2sON+nFIRy4x5jq9yl/9ZyewK/79WadcwEKzAIP0Kok0tiNIl4s
-	 NZbvynQM+DYnADYSUU8kq/t/u3A/4L0m4FElt5oCJondt3Fex6cysxlz9VIaWQclhQg==
+	t=1794415585;
+	b=DGvUMEpDGNeMCw4FYjyKgMxM6CFjpkemHVj6mQ2OZ+pJrHd5tOoxFBr7Pyr19IqTz8uN
+	 Mdx/sxZDHb2TKK4GmF3mEIfFq7Y01hiF0AGBLpQJ9GavDVk3muoHIpYYihTpHcebynlN6
+	 f8vvau/ZLGyzGAW+jLs2/8oP5P39zu+dT7uGcdZVMhl3hbc2gSB75RKAZBpgY/fdl1vz5
+	 +bwzpvWKngPxlBUj9Pr4rdUoWk9+k2SUCAIV+sh0Be7FkHLvxbOJevUAZHR+mgQSdVvDo
+	 jp5z/qyk8XPoA2nytCD+oufwJHIyoT3xN5kqiQ0G53eFWL2Tl1+TZ0T8cV0TV/BTq/Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794415579;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794415585;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=qZrpLqYxg7j9G9nBlkn/W+YsrzIcvzIAr+qoqAFOCiI=;
-	b=WRsJt0QrUOExLdj6jYIeghyxpvGpGru92c5X3LPFpMdgF/qGMFFFeALw6nVu0pmWd22T
-	 phpdwMcMN39+TzvZzMOpTfb2kZuQ3cJHRfR/PZHjSJGiI9HPok1I2kDAXMWrfgsry287G
-	 tQvhpNVFPDzPZbnxphJtbHSsHtZPraOBcn+ZobXt+v5iuFMdyEmC/gx5DmElhnZeqkS5d
-	 I9mNhJBYIfqReTDsv+bMvg5ofKaibuhkZm+b91bl3PbF8f4UfxpDojE+iQI4X8Cgoo/4q
-	 z5RnwfgNtQ90HqLbqMZj6+EmXo0s+Nvf/NkAuJIKENdUxLdSQvG4nttSvdNgkGukHCw==
+	bh=5x9cz3wjv2ktfOJeR/VcoUxM452LIfGFlOo8GPZAyoI=;
+	b=M6GRguQkEobYDp5wtcWzqQHyk5uGWL4XYN2yPdXDeisHyGrP8vtuvhtlhzGkuxTEpSrq
+	 Pp0vW8IVP7xzSoktUGaeIkW8i1e9xvPP4t6Topn/yTXxdQERVBYPNsJ92xkmL6NJkRIOl
+	 8cv1+YD0gSnZZSVzvPHXqPbBRglwrNXj5FOMwkxukxLsckwcVahkxw+fDDGCH54agc7ib
+	 2fGORKkBn7qwojghgJYJ+fM+VoD9mfYq8OsL0GdlVXtwJpI/5eUs1vOmpQ9dwzj5feWKj
+	 T8Zry8xkoGhwOy9usE2LRL19vdw4ANBOpJCMnOFKD30eqQo0K4mRmgAXtdiwq7egZTQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=lDz6WjsK;
-	arc=none smtp.remote-ip=209.85.210.169
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DztJnW0l;
+	arc=none smtp.remote-ip=209.85.216.48
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF9BB606A31C
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 16:46:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DF9BB606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97DCC606A321
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 16:46:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 97DCC606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=lDz6WjsK
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-8b2382bf051so1943927b3a.3
-        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 08:46:18 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DztJnW0l
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3b179528d56so728088a91.3
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 08:46:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794415578; x=1795020378; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794415584; x=1795020384; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=qZrpLqYxg7j9G9nBlkn/W+YsrzIcvzIAr+qoqAFOCiI=;
-        b=lDz6WjsKOdp2d6L6MVBwgY6oExzOe+d0U7Rd65onhVguyAmpIxvqXiYWIxkrjAPT2P
-         0HEb0b3V8smr91dd0LyXTi9dN/MHNpP6YZPvn05eX4rjqERSd+lR6vdARywLgsjruwhU
-         cbF96E49qlct32jOTbLhWMT0Jb+ZT4UkyysKCIOsTQQlMqWOW5rSu2KWoC2VHBN3N0pN
-         CaUCBA1R7EOGfSH6htqvfVGorBP2blY5uxiS601uFdeRCmKFY356TQA/g9OkK16g/cDq
-         2yE0F2s3Y62tAlXvbrV3TL572KiY8y3Clr/mOSjdaLo7B2gv0R8+Lc0bsvmT/u7RnjHF
-         fecw==
+        bh=5x9cz3wjv2ktfOJeR/VcoUxM452LIfGFlOo8GPZAyoI=;
+        b=DztJnW0lMOKGJ2igOqCY9Czj/1qrHukOyK6gICaKkvnE337FQRuUEXcCl6rHiXZPTS
+         ziK9jAhAeKAZ/rL3PV1glPa2JcuzxS9S1Pa5wjzSTzuvW1cRzGmnZ56muXpOXpWOwCnr
+         WBkpPGoMh5lllF9W90+dQ4TrVOJeZxbdcfqBn0zErC3k+qz/hA1mHy7fOOY+zTjUAhGX
+         d0EnJ26ys4syJX2gxr+xuFKEIDLaWm1COz2GcRyTC5UODMb+30EwJOn8BbTxhYyLjAzD
+         rN283J3l06DFenGXF2Pi6YcIPwJG0+973q4KNYRS513gfd5mYKgNBb7BVEWKWbue36uu
+         +trg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794415578; x=1795020378;
+        d=1e100.net; s=20260707; t=1794415584; x=1795020384;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=qZrpLqYxg7j9G9nBlkn/W+YsrzIcvzIAr+qoqAFOCiI=;
-        b=pAvrVFSGNH5G6c1kXS4csIJHfSlBQRBKjRui2qr+IMzmuh1XMz1EqrX9EVtpCrGGMA
-         cvVAwqZLGNtC3j+3JmS2odCg3Op66eezu8LmdKCCxybAZ0+AmToazn8nYKSbrgAqXrA7
-         9AxrDLAaX9AxYtQR6wKXDQNoWdqiYuZGrHl0WZ9215gqswselrcX6F1S6u+IyHjnCXG6
-         3fPO8GkFRRmTcMJ//oc50KjkLtpv2Q4tMbAFcM65u1YC2rY3O4Qfrw5tyyOF2eOu5iuq
-         8UzPU+RRGN8/8hANOpYUkoowizTU/0j5aj02PXL6Pu+Hj34aUiSdyEfT/s55aqwdcCXl
-         1VRw==
-X-Gm-Message-State: APuU4Z/86g4XXdTdUsP+ycBTETD7OopT2Zu/CDnITwAQsV28wDcSgRIc
-	ykX7xJv4/x0wRSaBxHjIGAkhWYaj8eAK8Bc9nN5mMMGLLnCR9RjV+entMMldxg==
-X-Gm-Gg: AYBFou1gGSvsHI/lokFpcgtq4FfH0Qu0aYjYM2IfAVSqtZOI6BVZEXgB09NDCtfnNU8
-	zwSAX7rC9RAWTUY8eLB15c9NjVcoiTUrXeDFUQeH9iEWzixFRSwcIikYQ4jrl5pHw/y+6C7AiQA
-	3z5vflDWorWir8+Qvojfcm32f9geWQTQkYvrxpjpEFgXr6NaOvCCMwqQ5awnb3wTRcXUrhuAaOS
-	pLWCtxStYYFxy9/MQJThoTMS7jTPEA+xfWWrQIY/3ZSQLU/UzMvPqjB5uIYzrcXMp6Vx51uqP6u
-	uGKoZUnZFpGEkvKmCb5hKcGyMX9fzWXfqDXPvtZMQi52tLIMa7G8eKc+782IMf4xw4+v5E3x9rE
-	6xryu7cUSTckxDgHWsVO1nNEqQgmfAmB69pG04yEAux96rJKddnVTs3YHdJSRczv1okoOGi0L6K
-	gdLVh8TflcSsv/IgIUsi3qTLMeV+X4FEdX1aQ9l4WAmUHlIdzBIh9Myb3g56nzuoO7kxCrrSp0V
-	ot2vRiomk6Q3vNorUV3bLppJrPP9VAAFQORbAE58bSHEJQyQt+2yyXjsy6CzQh0LLkKD9OdqISw
-	HSxW/aNr4xdL9Al47Oix3PwATZlQAZttdbrEkC7G0NacOppfy3+a5Zsa1p2bXm8I/Y07R0ShfOO
-	S89aJF2GHweVgKX1a6LUkt0sJM8QzBKugoAZrW6dvpbwp5XI9AzLxMYxPffX2tgw24vrHhYUhA4
-	o5
-X-Received: by 2002:a05:6a00:3d0c:b0:8a0:237:36fb with SMTP id d2e1a72fcca58-8bc1a493a8fmr3169799b3a.8.1794415577656;
-        Wed, 11 Nov 2026 08:46:17 -0800 (PST)
+        bh=5x9cz3wjv2ktfOJeR/VcoUxM452LIfGFlOo8GPZAyoI=;
+        b=qObV2mg7VRhOtieAC/iAaOIQI0hDkCHTwsVWwhewc2kQPASsaaLXKJ+3ZJHGEXKz9o
+         OM5nVhIEzaYki8e1kJS+u7ZvMtifnI49xZi7eKV9hu8FMq3TjPj6kjgVKJihQbOA/YYH
+         boW1eNQeK/D2jpoTR8h+ofveos//7yghaQB5uLKUSs2Zpvfu6A0nQ+31qFNinrIjRDlb
+         9G+/8Zw8//VTiuxq0e/OBy1wzyscLX4r36mVM/CeA/4hm7d/+WMlu+/UvR8qx2bKcg/1
+         0+X7YfxzmtCyy9iXdtcp4MM1+kvNjw9FxvYvrc8THu6NVpoa7UNnmm85B1Ifbkngx/z1
+         3Ndw==
+X-Gm-Message-State: APuU4Z9C4CRHvN4TPz2INOL/Y/siThxKE0xp+Ow10tNtxULh6zBwE7AC
+	pTPtJROf/U3rLUcwgBfrqyQKZBIAleMxsSZNNnJD3UGqRP79iCUf+n2Gd9zaOQ==
+X-Gm-Gg: AYBFou12GBUjK+YVUVaeY6FnUyGNyahdjSM4pFohD2aZ9RIUjGfYb396NZZb+zJgThz
+	YMBZcViPdf55wctMOz/sbnFLSZDkoeprVL6XFKgawBB3G6CrsdZQbnT7tSMPC9N+N640Zo9jnsj
+	6kYflrPR7JGzQLxRY8ILt52KV6pvTDP3K6yVtTIkHfJ3++QrsLLt7RT3JTOvQ+iy86SbWn8tR0E
+	wgUgkXpUyRpJu5zxMMcZLShtF1LXfp0ShB4GLO/t0x8K6RCy+rMGhjVf+EBA4roULOb4/nWu8Gd
+	spmBTGJ5OyNMY1ampL2YZBx5pPe0mTG8CtKg8CI3nBEpsByNydlZQY3TjWFdFDpYdbVnP447pvp
+	zr5lF8dVTbxMgFeb6hl7E3MRz2y+OoK0tXmxkOBov6yE82sgWGKaTSdII/MEXJ4MdKx0O1u+ks3
+	LFnilyrJef9lGd03GEKVnOUobV8eM88yQN8+VYDZt2IXoPNvLqh3rh+zg28VcKfDpu0abepWMpb
+	yTuQAiaIMab0beqgXe0WO7Ac7gFIkma5FESZqzK5BqVOOsehElxTN02P5RMib3eKUaO9aaaI68+
+	C4GleYtby3/l9rm+r+NcV/RARLOQAFWrJE0KCgpHN3oGHU9osdW9Wguiqm9H8vR6oAq9B4y3oUx
+	PFV6FJPWDhnA1icp3F28wTJ+pyXoWepKbzROvhuA+sS+7IOm43G6WcPNDr4MKTzj7H0vi528Wjc
+	4=
+X-Received: by 2002:a17:90b:4408:b0:3ab:2ad1:f10a with SMTP id 98e67ed59e1d1-3b182d697d7mr2495713a91.0.1794415583675;
+        Wed, 11 Nov 2026 08:46:23 -0800 (PST)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.249])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8baab8ded4dsm2372288b3a.54.2026.11.11.08.46.17
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b197d35525sm11591a91.16.2026.11.11.08.46.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2026 08:46:17 -0800 (PST)
+        Wed, 11 Nov 2026 08:46:23 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v3 03/29] bpf: Construct scalar evolution expressions without allocations
-Date: Wed, 11 Nov 2026 16:45:26 +0000
-Message-ID: <20261111164557.2659679-4-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v3 04/29] bpf: Don't join dead registers in scalar evolution
+Date: Wed, 11 Nov 2026 16:45:27 +0000
+Message-ID: <20261111164557.2659679-5-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261111164557.2659679-1-alexei.starovoitov@gmail.com>
 References: <20261111164557.2659679-1-alexei.starovoitov@gmail.com>
@@ -104,289 +104,101 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-This is about the cost of scalar evolution. The time in scev.c goes down by
-a constant factor: 1.7 per insn, 5 per subprog, 11 for the smallest prog.
-No expression changes, only the way expressions are stored and found.
+This is about the cost of scalar evolution: the work per join point. The
+time in scev.c goes down by a factor of 1.7, the number of expressions
+by 2.3. It is what pruned SSA does: no phi for a dead register.
 
-Scalar evolution analyzes loops only. A later patch computes expressions
-for whole subprogs, to find the registers that are linked at a conditional
-jump:
+Expressions change: a register or stack slot that is dead at a join point
+is '?' there. Nothing reads it before it is written, but
+reset_scevs_at_indirect_writes() leaves '?' alone: a slot that one of two
+branches writes and bpf_probe_read_kernel() then overwrites was '_' after
+the call and is '?' now. The loop around it is unrolled by the verifier, or
+the slot is joined at the header. No verdict, insn count or state count
+changes in the selftests, Cilium, sched_ext, katran, bpfjailer and the
+programs in Rust.
 
-	j = i + 1;
-	if (i > 100)
-		return 0;
-	use(buf[j]);
+join() constructs (any a b), which stands for a phi, for each register and
+stack slot that has distinct expressions on the two edges. That is
+a traversal of both and two or three calls of add_expr(). In loops it is
+rare. A later patch computes expressions for whole subprogs. There
+every 11th insn is a join point, and 25 of the 267 registers and stack
+slots differ. One of them is live. The others:
 
-Then every prog pays for it, with a loop or without, and 1.8 expressions
-are constructed per insn, not 0.13. Two things that a few loops do not feel
-would be a third of that cost:
+- Branches leave temporaries in r0 - r5 and in the slots of their spills
+  and buffers. Where two branches join, 7 of them are dead.
+- A subprog that is out of budget goes to the last exit of the subprog, on
+  an edge that the verifier adds and the CFG does not have. Nothing is
+  known on that edge, so every jump to that exit is joined with '?'
+  in all 267. Only r0 is live there. These are 6 % of the join points and
+  have 72 % of the dead registers and stack slots.
 
-- Per expression: expressions are hash consed, and each bucket of exprs_ht
-  is an array of ids of its own. That is a kvrealloc(), charged to the
-  memcg, and a kvfree() for every second expression. The hash table has
-  max(256, len / 4) buckets and never grows.
-- Per loop: the analysis starts with a lookup of (REG r) for all
-  267 registers and stack slots. Each subprog would do the same. The first
-  one constructs them: 'r0 = 0; exit' would take 180 allocations.
+56 % of all expressions would be constructed for them, by 76 % of the calls
+of add_expr().
 
-Chain the ids of a bucket through exprs_next[], an array next to exprs[].
-exprs_ht[] grows with exprs[]. A load has these three arrays, which double.
-(REG r) has the fixed id 2 + r and is not in the hash table.
+Ask reg_alive_at() first. '?' is the conservative answer: liveness is used
+to lose precision only, never to gain it.
 
 What it would cost to compute expressions for all code of the selftests,
 Cilium, sched_ext, katran, bpfjailer and programs in Rust. The last two
 rows are against loops only:
 
                                            before     after
-  allocations in add_expr() per load          471         6
-  scev.c for 'r0 = 0; exit'               12.1 us    1.1 us
-  scev.c for each more subprog             3.6 us    0.7 us
-  scev.c per insn                          485 ns    291 ns
-  kernel instructions (perf stat)          +6.2 %    +4.2 %
-  load time (veristat)                     +8.5 %    +5.7 %
+  expressions per insn                       1.79      0.78
+  calls of add_expr() per insn                6.4       1.5
+  scev.c per insn                          291 ns    170 ns
+  kernel instructions (perf stat)          +4.2 %    +1.9 %
+  load time (veristat)                     +5.7 %    +3.2 %
 
-The allocations go with the chains, the cost per subprog with the fixed
-ids, the cost of 'r0 = 0; exit' with both: the first lookups of (REG r)
-fill the buckets. Not joining dead registers takes most of what is left.
+mem_peak of veristat is 0.7 % less.
 
-The time in scev.c is linear in the number of insns before and after, so
-small progs gain most: 12 % of the load time up to 100 insns, 3 % from
-1000 to 10000, 2 % above.
+An edge to a join point cost up to 267 calls of mk_any(). It costs one per
+live register that differs. That is a bound per edge: the time in scev.c is
+linear in the number of insns before and after. Progs of 100 to 1000 insns
+gain most, 5 % of the load time. Above 10000 insns it is less than 1 %.
 
-With loops only, as today, the kernel spends 0.3 % fewer instructions on
-loading these progs.
+With loops only, as today, it makes no difference that can be measured.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/scev.c | 125 +++++++++++++++++++++++-----------------------
- 1 file changed, 62 insertions(+), 63 deletions(-)
+ kernel/bpf/scev.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
 diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-index 1cb4bc7c0f96..8f8ca69482ca 100644
+index 8f8ca69482ca..7031ab00a22a 100644
 --- a/kernel/bpf/scev.c
 +++ b/kernel/bpf/scev.c
-@@ -14,6 +14,8 @@
- #define REGS_NUM BPF_SCEV_REGS_NUM
- #define UNKNOWN_EXPR_ID 0
- #define OPAQUE_EXPR_ID  1
-+/* (REG r). UNKNOWN, OPAQUE and (REG r) have fixed ids and are not in the hash table. */
-+#define REG_EXPR_ID(r)  (2 + (r))
- 
- /*
-  * BPF instructions use 'code', 'src_reg', 'off' and 'imm' fields for instruction encoding.
-@@ -58,12 +60,6 @@ struct expr {
- 	};
- };
- 
--struct expr_bucket {
--	u32 cnt;
--	u32 cap;
--	u32 ids[];
--};
--
- struct env {
- 	bool empty;
- 	u32 reg2expr[REGS_NUM];
-@@ -96,8 +92,11 @@ struct scev {
- 	 * Expressions are identified by id, exprs_ht ensures that
- 	 * each expression exists as a unique instance.
- 	 * This allows for fast equivalence check: id1 === id2.
-+	 * exprs_ht[hash] is the first id of a chain, exprs_next[id] is the next one, 0 ends it.
-+	 * Both have exprs_cap elements, like exprs[].
- 	 */
--	struct expr_bucket **exprs_ht;
-+	u32 *exprs_ht;
-+	u32 *exprs_next;
- 	struct scev_worklist worklist;
- 	struct insn_envs **envs;
- 	struct expr *exprs;
-@@ -106,7 +105,6 @@ struct scev {
- 	 * instruction was visited on a current pass.
- 	 */
- 	u32 *discovered;
--	u32 exprs_ht_cnt;
- 	int exprs_cnt;
- 	int exprs_cap;
- 	int envs_cnt;
-@@ -125,44 +123,58 @@ static int expr_eq(struct expr *a, struct expr *b)
- 	return a->op == b->op && a->imm == b->imm;
- }
- 
--static int add_expr(struct scev *scev, struct expr e)
-+static void exprs_ht_add(struct scev *scev, u32 id)
-+{
-+	u32 *bucket = &scev->exprs_ht[expr_hash(&scev->exprs[id]) & (scev->exprs_cap - 1)];
-+
-+	scev->exprs_next[id] = *bucket;
-+	*bucket = id;
-+}
-+
-+/* @cap is a power of two. No warning for a size that kvmalloc() rejects. */
-+static int grow_exprs(struct scev *scev, u32 cap)
- {
--	struct expr_bucket *bucket;
--	u32 i, id, hash, new_cap;
-+	gfp_t gfp = GFP_KERNEL_ACCOUNT | __GFP_NOWARN;
- 	void *tmp;
-+	u32 id;
- 
--	hash = expr_hash(&e) & (scev->exprs_ht_cnt - 1);
--	bucket = scev->exprs_ht[hash];
-+	tmp = kvrealloc(scev->exprs, array_size(cap, sizeof(*scev->exprs)), gfp);
-+	if (!tmp)
-+		return -ENOMEM;
-+	scev->exprs = tmp;
-+	tmp = kvrealloc(scev->exprs_next, array_size(cap, sizeof(u32)), gfp);
-+	if (!tmp)
-+		return -ENOMEM;
-+	scev->exprs_next = tmp;
-+	tmp = kvrealloc(scev->exprs_ht, array_size(cap, sizeof(u32)), gfp);
-+	if (!tmp)
-+		return -ENOMEM;
-+	scev->exprs_ht = tmp;
-+	scev->exprs_cap = cap;
-+	memset(scev->exprs_ht, 0, array_size(cap, sizeof(u32)));
-+	for (id = REG_EXPR_ID(REGS_NUM); id < scev->exprs_cnt; id++)
-+		exprs_ht_add(scev, id);
-+	return 0;
-+}
- 
--	if (bucket) {
--		for (i = 0; i < bucket->cnt; i++) {
--			id = bucket->ids[i];
--			if (expr_eq(&e, &scev->exprs[id]))
--				return id;
--		}
--	}
-+static int add_expr(struct scev *scev, struct expr e)
-+{
-+	u32 id;
- 
--	if (!bucket || bucket->cap == bucket->cnt) {
--		new_cap = bucket ? bucket->cap * 2 : 4;
--		bucket = kvrealloc(bucket, sizeof(*bucket) + sizeof(u32) * new_cap, GFP_KERNEL_ACCOUNT | __GFP_ZERO);
--		if (!bucket)
--			return -ENOMEM;
--		scev->exprs_ht[hash] = bucket;
--		bucket->cap = new_cap;
--	}
-+	if (e.op == REG)
-+		return REG_EXPR_ID(e.params[0]);
- 
--	if (scev->exprs_cnt == scev->exprs_cap) {
--		new_cap = scev->exprs_cap ? scev->exprs_cap * 2 : 256;
--		tmp = kvrealloc(scev->exprs, sizeof(struct expr) * new_cap, GFP_KERNEL_ACCOUNT);
--		if (!tmp)
--			return -ENOMEM;
--		scev->exprs = tmp;
--		scev->exprs_cap = new_cap;
--	}
-+	id = scev->exprs_ht[expr_hash(&e) & (scev->exprs_cap - 1)];
-+	for (; id; id = scev->exprs_next[id])
-+		if (expr_eq(&e, &scev->exprs[id]))
-+			return id;
-+
-+	if (scev->exprs_cnt == scev->exprs_cap && grow_exprs(scev, scev->exprs_cap * 2))
-+		return -ENOMEM;
- 
- 	id = scev->exprs_cnt++;
- 	scev->exprs[id] = e;
--	bucket->ids[bucket->cnt++] = id;
-+	exprs_ht_add(scev, id);
+@@ -989,8 +989,10 @@ next:;
  	return id;
  }
  
-@@ -182,11 +194,6 @@ static int expr1(struct scev *scev, u32 op, int a)
- 	return expr2(scev, op, a, 0);
- }
- 
--static int expr0(struct scev *scev, u32 op)
--{
--	return expr2(scev, op, 0, 0);
--}
--
- static int imm_expr(struct scev *scev, s64 value)
+-static int join(struct scev *scev, struct env *acc, struct env *cur)
++/* @acc is the env before the insn at @idx */
++static int join(struct bpf_verifier_env *env, struct env *acc, struct env *cur, int idx)
  {
- 	return add_expr(scev, (struct expr){ .op = IMM, .imm = value });
-@@ -576,10 +583,9 @@ static int replace_reg(struct scev *scev, struct env *e, u32 reg, int id)
- 	return 0;
- }
++	struct scev *scev = env->scev;
+ 	int i, id;
  
--static int setup_initial_loop_env(struct bpf_verifier_env *env, struct env *e, int insn_idx)
-+static void setup_initial_loop_env(struct env *e)
- {
--	struct scev *scev = env->scev;
--	int i, err;
-+	int i;
+ 	if (acc->empty) {
+@@ -1001,7 +1003,9 @@ static int join(struct scev *scev, struct env *acc, struct env *cur)
  
- 	/*
- 	 * Initial assignments are of form rX -> rX are needed as seeds for subsequent
-@@ -587,12 +593,8 @@ static int setup_initial_loop_env(struct bpf_verifier_env *env, struct env *e, i
- 	 * join() will overwrite the them. compute_header_scevs() accounts for register
- 	 * states at loop entry.
- 	 */
--	for (i = 0; i < REGS_NUM; i++) {
--		err = replace_reg(scev, e, i, expr1(scev, REG, i));
--		if (err)
--			return err;
--	}
--	return 0;
-+	for (i = 0; i < REGS_NUM; i++)
-+		e->reg2expr[i] = REG_EXPR_ID(i);
- }
- 
- static void forget_call_regs(struct env *e)
-@@ -1404,9 +1406,7 @@ static int compute_scev_for_loop(struct bpf_verifier_env *env, int cur_header)
- 	header_env = get_loop_env(scev, cur_header, cur_header);
- 	if (!header_env)
- 		goto nomem;
--	err = setup_initial_loop_env(env, header_env, cur_header);
--	if (err)
--		goto out;
-+	setup_initial_loop_env(header_env);
- 	err = worklist_push(env, cur_header, cur_header);
+ 	for (i = 0; i < REGS_NUM; i++) {
+ 		if (!same_exprs(scev, acc->reg2expr[i], cur->reg2expr[i])) {
+-			id = mk_any(scev, acc->reg2expr[i], cur->reg2expr[i]);
++			/* no phi for a dead register: pruned SSA */
++			id = reg_alive_at(env, i, idx) ?
++			     mk_any(scev, acc->reg2expr[i], cur->reg2expr[i]) : UNKNOWN_EXPR_ID;
+ 			if (id < 0)
+ 				return id;
+ 			acc->reg2expr[i] = id;
+@@ -1339,7 +1343,7 @@ static int join_successor(struct bpf_verifier_env *env, int cur_header, int succ
+ 		return -ENOMEM;
+ 	if (log_level2)
+ 		memcpy(old_env, succ_env, sizeof(*old_env));
+-	err = join(scev, succ_env, cur_env);
++	err = join(env, succ_env, cur_env, succ_idx);
  	if (err)
- 		goto out;
-@@ -1966,10 +1966,8 @@ void bpf_free_scev(struct bpf_verifier_env *env)
- 			kfree(envs->entries[j].env);
- 		kfree(envs);
- 	}
--	if (scev->exprs_ht)
--		for (i = 0; i < scev->exprs_ht_cnt; i++)
--			kvfree(scev->exprs_ht[i]);
- 	kvfree(scev->exprs_ht);
-+	kvfree(scev->exprs_next);
- 	kvfree(scev->worklist.data);
- 	kvfree(scev->envs);
- 	kvfree(scev->exprs);
-@@ -1981,6 +1979,7 @@ void bpf_free_scev(struct bpf_verifier_env *env)
- int bpf_init_scev(struct bpf_verifier_env *env)
- {
- 	struct scev *scev;
-+	u32 r;
- 
- 	scev = kzalloc(sizeof(struct scev), GFP_KERNEL_ACCOUNT);
- 	if (!scev)
-@@ -1988,13 +1987,13 @@ int bpf_init_scev(struct bpf_verifier_env *env)
- 	env->scev = scev;
- 	bpf_mark_reg_known_scalar(&scev->zero_reg, 0);
- 	bpf_mark_reg_unknown(&scev->unknown_reg);
--	/* A power of two for hash & (exprs_ht_cnt - 1)` indexing. */
--	scev->exprs_ht_cnt = roundup_pow_of_two(max(256U, DIV_ROUND_UP(env->prog->len, 4)));
--	scev->exprs_ht = kvcalloc(scev->exprs_ht_cnt, sizeof(*scev->exprs_ht), GFP_KERNEL_ACCOUNT);
--	if (!scev->exprs_ht)
--		goto nomem;
--	if (expr0(scev, UNKNOWN) < 0 || expr0(scev, OPAQUE)  < 0)
-+	if (grow_exprs(scev, roundup_pow_of_two(REG_EXPR_ID(REGS_NUM))))
- 		goto nomem;
-+	scev->exprs[UNKNOWN_EXPR_ID] = (struct expr){ .op = UNKNOWN };
-+	scev->exprs[OPAQUE_EXPR_ID] = (struct expr){ .op = OPAQUE };
-+	for (r = 0; r < REGS_NUM; r++)
-+		scev->exprs[REG_EXPR_ID(r)] = (struct expr){ .op = REG, .params = { r, 0 } };
-+	scev->exprs_cnt = REG_EXPR_ID(REGS_NUM);
- 	scev->envs = kvcalloc(env->prog->len, sizeof(*scev->envs), GFP_KERNEL_ACCOUNT);
- 	scev->discovered = kvcalloc(env->prog->len, sizeof(*scev->discovered), GFP_KERNEL_ACCOUNT);
- 	if (!scev->envs || !scev->discovered)
+ 		return err;
+ 	err = worklist_push(env, cur_header, succ_idx);
 -- 
 2.55.0
 
