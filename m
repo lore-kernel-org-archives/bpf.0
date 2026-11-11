@@ -1,54 +1,69 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.78
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794436158;
-	b=g+SqDgx64ENk0lVk12BI7D4gBqTm0L5DpfK3zb7m7dCAWSvlkrOJmWvCM8gVwHdPbtSr
-	 ARuw2pvso3N9AsrLQS5DhabeVkank1aB8wuc4XsYVfgpp2dF7x18pDK4RfQaYadHZYMru
-	 AWWq3DJr2haqkGfTWhsybH9Q3wmnES3Oj6VvrT8d+fsHA/s6fEVx1o9gZoOJcrYZj6GTK
-	 hbHRGFcHhPag26yuPaKk/CfVMRyP8qtkAQJaLu2Sgcx+LcenHh+hKnBClZuboHBn176SA
-	 VQoEN1c4F+/IwF/j1US6t/Othp/UuzIIXg0Ldn6fS9zD7LMNQuM/5SkpQdnViXLROQg==
+	t=1794436884;
+	b=33Yg3Fc90+hGzWZNNUdKG+iRg4ktvVieQioYkI0EDqjFZ4KZkhveCyhrpwGx7BD2qjor
+	 IE+Q6nHtoEyUTZdkvhqA68/2vuR/78ReHbBJXvtRFK5vnpBsrmyTJz3K6rVYw+lLxytC0
+	 c529b+4Y3xAn4kBoSlKl7j+Sjp+OL67cUI4IUa8aqWJMBrUtcdDYmBfXKPounrEjdku8w
+	 jzEmWkFmc54tvUsh/sbn7GslVHf5jtIJt2WAJ0JyRCkmhTmkltd1tnojHSE0LwZHKxtqF
+	 qXjUhgHqQKvTu4FKsP4EhX09WFDuzQPnFHNf/s8MGz+uuKz4mdyvdgwK9HtjPLNxrPg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794436158;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=swr3Ra0uYYHhVDT8SV7YWQm5snOjPZHE4+u1z3uEAP4=;
-	b=HW7CQ4/JO/1xKrSIalI7NJ2dZ8/5PUV/VnkllcFl4jS6HEfuYC+YeBqiJDVSs+RBq1hU
-	 Bpin9nBVM/VtR6Rwhc+qbI1FvGHNd9XmYQTby3v1D8HwJ+KObGwnQDh6YR/lIONuFG4fH
-	 gaK1+VjNSZbClf2UPXpieAvo/eJncpvk3TXBFncP1wzV+85IEaCSY4Js7DZ/bigQbdBR0
-	 tyIGGVirxVZxC+mK1YhAqH95fU8kfhKNpNmzPL1jNDsEQipS/v3amA4P+ehs+9WMcYdn+
-	 dBTv4Sl17mEQAUP9/o/CLghHW8gDmbbOn6KeeACw7Mq4cTA/hqifltL+MyN5I+5ZiEQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794436884;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=1ZszL408OtVOYhxcADqDXyCFPN2IPKvweH7l3LeJgEc=;
+	b=Kd4AYtacdyeXhjp4jGsydUorxKXwICT8AXlRcmEr5rBzCNsJ1YNPT/kKdyN/RmPi8gAk
+	 mIYXC12hwHIGXU7/P2sKSSAoFSC1EXt8kNx2lK7Y8VLw5ZNZFnKbkQYVdCMgbAp/4un1M
+	 Dar3XvOFzUIjBci9a1aYd0+lzQn2NVuJFp8LHeh5W7B3FvWEU1ct1v79YwDNDzzD5cIdr
+	 wAagb4h0o3GSJBOOlLHuzbpsaMRE05NMlGdVvIbHTihBuW8bQwN54p1QR0E0ak9MPnv9J
+	 UzJ5FNj3Cc7GKK02oxY7tu/Gqovq0mWgSKs7dsxlht/BkTfSppk4i2/4L0N4A3QT0WA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=FHFW1jQ8;
-	arc=none smtp.remote-ip=91.218.175.78
-Received: from mta0.migadu.com (out-78.mta0.migadu.com [91.218.175.78])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VhGYVF1A;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C75F606A338
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 22:29:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0C75F606A338
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4A7B606A336;
+	Wed, 11 Nov 2026 22:41:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=FHFW1jQ8
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=WNeWuH485eW6BnGDu5zKsDsVjpVFn1cXQI2ek2Qhepw=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794436154; v=1; x=1795040954;
- b=FHFW1jQ8gZeq62AyqIat/bVk9+oZJPH+mKkgGwHYatFqvqUcb0jqme3Ckd8RXghvxmEFuymv
- EXnKFgmZpzeJhVQnrdCTsXC8aJbNJvY38EQA7hJs/li1XdYxFrbyl6lBTQG5l25sJHs0Bzfkdgu
- +aqETu4zmziTnVUrlolNq95Y=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id a971d7137a0d0f9f;
-	Wed, 11 Nov 2026 22:29:14 +0000
-X-Mizu-Trace-ID: a971d7137a0d0f9f
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <9ccfc1f1-1214-4374-bac4-f4d91103d149@linux.dev>
-Date: Wed, 11 Nov 2026 14:29:11 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VhGYVF1A
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED6C21F00A05;
+	Wed, 11 Nov 2026 22:41:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794436884;
+	bh=1ZszL408OtVOYhxcADqDXyCFPN2IPKvweH7l3LeJgEc=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=VhGYVF1ACkNkJmWQcgrSe4xq0u7p9IcPv50kYi0r0zkpK9kBgNCeLK5j/JWEIVewS
+	 SYM1BlCdSaKoa1Q8lDng/fxwNyw3HGDnK5lIxS/JkjCjpsng/iaSRridBJUevSX+DZ
+	 HnMAHRW9YMcJQzDvvOMG02pMh4btDUUj1zh8liWLiF9mlwpcdc6DOmEdKpsdho/OYF
+	 2ET5J0xk+iq1mFj+j2/PPi6p8RCK9S1l0GU/2PYech/JAwq7V1P61c8Sv8z7vRV9Fm
+	 OgpP++8N1IrCl6T6jZndpm5cJdtQrapg8uQJ940/ocRUORHk+P3LsAIipcog1dAgC2
+	 sUMFE6ef483Hg==
+Subject: Re: [PATCH net-next v1 02/11] net: Add memory provider capabilities
+From: netdev-bot+sashiko@kernel.org
+To: bjorn@kernel.org
+Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, sdf@fomichev.me,
+ davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+ horms@kernel.org, corbet@lwn.net, skhan@linuxfoundation.org,
+ rdunlap@infradead.org, alexanderduyck@fb.com, kernel-team@meta.com,
+ andrew+netdev@lunn.ch, hawk@kernel.org, ilias.apalodimas@linaro.org,
+ ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ asml.silence@gmail.com, axboe@kernel.dk, andrii@kernel.org, eddyz87@gmail.com,
+ memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, netdev@vger.kernel.org, bpf@vger.kernel.org,
+ io-uring@vger.kernel.org, almasrymina@google.com, mike.marciniszyn@gmail.com,
+ bestswngs@gmail.com, razor@blackwall.org, dw@davidwei.uk,
+ aleksander.lobakin@intel.com, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, stuclar@meta.com
+Date: Wed, 11 Nov 2026 22:41:21 +0000
+Message-ID: <179443688151.2199510.3920075646889577971@kernel.org>
+In-Reply-To: <20261110102039.1002605-3-bjorn@kernel.org>
+References: <20261110102039.1002605-3-bjorn@kernel.org>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,84 +73,77 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [BUG] bpf: tcp: bpf_tcp_ops_set_rcvlowat() missing from BTF with
- clang KCSAN
-To: Breno Leitao <leitao@debian.org>, kuniyu@google.com,
- netdev@vger.kernel.org, llvm@lists.linux.dev
-Cc: ast@kernel.org, bpf@vger.kernel.org, kuba@kernel.org, tj@kernel.org
-References: <au27Y9m78_3EH2v1@gmail.com>
-Content-Language: en-GB
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <au27Y9m78_3EH2v1@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
+Low priority / nit picks for your consideration:
 
-On 11/6/26 3:38 AM, Breno Leitao wrote:
-> My arm64 KCSAN builds of linux-next fail since next-20261015, because
-> bpf_tcp_ops_set_rcvlowat() is missing from the vmlinux BTF:
->
->    WARN: resolve_btfids: no BTF func for kfunc bpf_tcp_ops_set_rcvlowat in bpf_tcp_ops_set_rcvlowat_kfunc_set
->    WARN: resolve_btfids: unresolved symbol bpf_tcp_ops_set_rcvlowat
->    Failed to generate BTF for vmlinux
->    Try to disable CONFIG_DEBUG_INFO_BTF
->    make[4]: *** [scripts/Makefile.vmlinux:72: vmlinux.unstripped] Error 1
->
-> This is clang 22.1.3 and pahole 1.31 (current pahole master behaves the
-> same), with CONFIG_KCSAN=y, CONFIG_DEBUG_INFO_BTF=y and CONFIG_WERROR=y.
-> v7.4-rc1 is affected as well. With pahole 1.31, the same config without
-> KCSAN builds fine.
->
-> The kfunc came with 5f549c1e49f3 ("bpf: tcp: Add kfunc to adjust
-> sk->sk_rcvlowat."), and 201a454df948 ("resolve_btfids: Fix the
-> --fatal_warnings exit status") made the missing BTF fatal with
-> CONFIG_WERROR. Without CONFIG_WERROR the kernel builds, but bpf_tcp_ops
-> is never registered:
->
->    initcall __bpf_tcp_ops_init+0x0/0x70 returned -22 after 302 usecs
->
-> This seems similar to pahole behaviour sched_ext hit with a bool
-> argument, discussed in [2] and worked around in f2f095c87603
-> ("sched_ext: Work around pahole 1.32 dropping
-> scx_bpf_task_set_lazy_resched() from BTF").
->
-> Here the argument is an int that clang reassigns, its location list has
-> no DW_OP_entry_value, and pahole 1.31 drops it as well, so staying on
-> pahole 1.31 does not help.
->
-> Not reassigning the parameter is a workaround for me, with any pahole: clang
-> then describes @rcvlowat in w1 from the entry, the kfunc is back in BTF,
-> and __bpf_tcp_ops_init() returns 0 (tested in virtme):
->
-> diff --git a/net/ipv4/bpf_tcp_ops.c b/net/ipv4/bpf_tcp_ops.c
-> index 2ba73dd6c52cce..1afa6bd7f508ef 100644
-> --- a/net/ipv4/bpf_tcp_ops.c
-> +++ b/net/ipv4/bpf_tcp_ops.c
-> @@ -370,10 +370,9 @@ __bpf_kfunc int bpf_tcp_ops_set_rcvlowat(struct sock *sk, int rcvlowat,
->   	if (moff == offsetof(struct bpf_tcp_ops, dequeue_rcvq))
->   		wakeup = true;
->
-> -	if (rcvlowat < 0)
-> -		rcvlowat = INT_MAX;
-> -
-> -	return __tcp_set_rcvlowat(sk, rcvlowat, wakeup);
-> +	/* Reassigning @rcvlowat can make pahole drop this kfunc from BTF. */
-> +	return __tcp_set_rcvlowat(sk, rcvlowat < 0 ? INT_MAX : rcvlowat,
-> +				  wakeup);
->   }
->
->   __bpf_kfunc_end_defs();
->
-> Would this be acceptable?
+- [Low] Documentation/networking/netmem.rst, 'Driver RX Requirements',
+  disagrees with the readable-provider semantics this patch adds.
 
-I tried and this change should be okay. The below pahole patch
-    https://lore.kernel.org/bpf/20261111222447.322978-1-yonghong.song@linux.dev/
-is to ensure that all kfuncs will have their source BTF. So once
-the patch patch is merged, you can use pahole master branch to build.
+--
 
->
-> [1] https://lore.kernel.org/all/DLRKT5MG6W2P.2V1P0QD4GQEKY@gmail.com/
-> [2] https://lore.kernel.org/all/7c139810be5ffc9764ed4236efc28794@kernel.org/
+net: Add memory provider capabilities
 
+This adds MP_CAP_READABLE and MP_CAP_FRAG memory provider capabilities.
+The header split and XDP restrictions now apply only to unreadable
+providers. A new PP_FLAG_MEM_PROVIDER flag lets a page pool take a
+readable provider from its RX queue. devmem and io_uring are marked
+MP_CAP_FRAG and keep their current behavior.
+
+> diff --git a/Documentation/networking/netmem.rst b/Documentation/networking/netmem.rst
+> index 6871dcdd700cc..39cb75339704d 100644
+> --- a/Documentation/networking/netmem.rst
+> +++ b/Documentation/networking/netmem.rst
+> @@ -103,6 +103,11 @@ Driver RX Requirements
+>       which knows when dma-syncing is (or is not) appropriate.
+>     - PP_FLAG_ALLOW_UNREADABLE_NETMEM. The driver must specify this flag iff
+>       tcp-data-split is enabled.
+> +   - PP_FLAG_MEM_PROVIDER. The page pool takes memory from the memory
+> +     provider of its RX queue, readable or not. Page pool creation fails if
+> +     the provider is unreadable and PP_FLAG_ALLOW_UNREADABLE_NETMEM is not
+> +     set, so do not set it on header page pools of such a queue. Without it,
+> +     PP_FLAG_ALLOW_UNREADABLE_NETMEM selects unreadable providers only.
+
+[Severity: Low]
+This isn't a bug, but does this entry belong under item 4's heading, "The
+driver must use the following PP_FLAGS:"?
+
+PP_FLAG_MEM_PROVIDER is opt-in. The comment in
+include/net/page_pool/types.h says "Take memory from the memory provider
+of the RX queue, if one is installed".
+
+devmem and io_uring pools still get their unreadable provider with only
+PP_FLAG_ALLOW_UNREADABLE_NETMEM set, because page_pool_select_mp() assigns
+unreadable providers without the new flag. The entry itself also says not
+to set the flag on header page pools of a queue with an unreadable
+provider.
+
+Item 2 above is still an unconditional requirement:
+
+    2. The driver must support the tcp-data-split ethtool option.
+
+However, __netif_mp_open_rxq() now checks hds_config and hds_thresh only
+when the provider lacks MP_CAP_READABLE:
+
+    if (unreadable &&
+        dev->cfg->hds_config != ETHTOOL_TCP_DATA_SPLIT_ENABLED) {
+
+The MP_CAP_READABLE kernel-doc also says such a provider "may back header
+page pools".
+
+Could items 2 and 4 be reworded to cover the readable provider case? As
+far as I can tell, this text is still unchanged at the end of the series.
+That leaves af_xdp.rst as the only place that describes the
+readable-provider driver contract.
+
+>  
+>  5. The driver must not assume the netmem is readable and/or backed by pages.
+>     The netmem returned by the page_pool may be unreadable, in which case
+
+[ ... ]
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261110102039.1002605-1-bjorn%40kernel.org
