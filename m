@@ -1,77 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794403675;
-	b=MHUpu2dPnJTpe3pFhfaexDAF/xZgpBk77PH1fNmIepvvkKYhYk4W1dAjDY/mbZly5ov1
-	 TsTtDOfgDvMFQSxjM6+oRQtAlG3o7OVQ/pcCYiISoQK+mfQ1JvpUVCb3ooeyPriqbbE9q
-	 iTrcpHEiAv7c6LGKkrOTzqbwTzxWCBoxSExVV8S8gRggA7KaTLjR1CwhNFNG+cJ5FUyyP
-	 L0FHsF6s6AnhZWRxC7s3e3sIVuGGX7eL44QU91WHQGos/zhPBA3IDmAevoSGf6X0ORuQZ
-	 mPIhjyiEJ45fvzn8TrFX03Bwj557y02FnSZe/eLtN2zfjKci+zaarGqMzhZDr4D7/CA==
+	t=1794403991;
+	b=U4XpOzW8LU3H/opCjjhTMNcW5irx+kbIQa794umnVDiHr4mvLWZl/Rsw0rSvXM1C2NlU
+	 MtvkOubMlzb0qUnMIyqsQ8WOtUQdw0Gm0d1UWWk9PurnQs0liverKlOHTT4QJuLAdU7zC
+	 uCYO+llN8PF/4CweTxYjmuBONO1LVZepls9ZXodCjQtR2xUZd0svQQc3UqCtP7g8l4pFo
+	 n4uYSYTQb/jlXMLGiYJCZJVm3fATFXl96pJObDgNqPZ7Qirr3eIuYaCzn3f6ejMyiATm9
+	 8/ux+2RriNFbOHA+/J4914WNF5GH3PkkTHzlN7B5NLM923Gpzat4Dp+h9Vc3XW02xSw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794403675;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
-	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=5TobANsfNbQPE7bHGqRUO1+IBRipYYGScGTtUnijg5Y=;
-	b=t1rdQ2P5X5f+rf1hlU4xu+mWkN4QUQXQH8jftQrpkzpgyLyEZC9BF34PuAyjyRGViA2s
-	 OFqhcO+IZ/NjKq0LuUpC57dwyGoaFwMXceSp0dTxJ4tpuajomjvac12mpUHD0wrmeTM4b
-	 7HI2cPPPpxsVYBoEB55+rbl/rV1YFCPVf0N0PVpM50wORljxhEJ48DYg50ttdURIXKhyD
-	 WSkjWrQgDnis2nnFRR8oNt0prqdS0iTAHzP3K6gOie1wt4njZ+m+wJPzm3JXD4WQaa9ee
-	 wEo5Zu6VLwVPBaB3IprQDS4mBHx+w8lv9y6ePFcw0/qVFWacT/LzJcbt2EE6Z7PxuBQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794403991;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=Plxo1yGphv/ixoaAaDnR26Ljo6BCiJ0s27jl/IT/8ZU=;
+	b=vYrRGe7VUE0BFx4ws7cTD8Vk/ME+qDJNvn2N+1c9+iJBZ2ZdpDrfCM3SK1DYKWC08ZRd
+	 DvECzdQkzNQuaCyPjsJUaCgHKPDFGUo4rxhAFHP5BvcB6ueUjbptwXUlnl/bKujo4i/MC
+	 +XKWZ6OQcQmLx9o0++ucWphiWjRq/8DH4Y33SSv97gpqnZK7MVUC9s4epAGAWpUgoHhW7
+	 HcrjqEIzepcuMUSUjD42N4mNqn1TNtwHvm95VLZZ4OiY+hiFcOl5PV5nKGe7JxDeDE/9k
+	 Eq+VYV1B5R1zOK5qWbwPZXLMqLR8Zu0i2SpeU484tQPiqST2ZEWt3NUY9xeTEgtPNHg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NEdkPhkE;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ncrt2Dy5;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D8E2606A31C;
-	Wed, 11 Nov 2026 13:27:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0ACD606A32E
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 13:33:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NEdkPhkE
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6368F1F00A05;
-	Wed, 11 Nov 2026 13:27:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ncrt2Dy5
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C79521F00A09;
+	Wed, 11 Nov 2026 13:33:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794403675;
-	bh=5TobANsfNbQPE7bHGqRUO1+IBRipYYGScGTtUnijg5Y=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=NEdkPhkEYUeNthxyHswKlC+LjnE3+C8o+r69jP/kWWwPJmNjwUjX+n+MMVxp86fU3
-	 nRjyHg29mW4zKgB9zMfQeSzMvvHdf2fKf94JxaWhgLL2UNMd7ycqXvlqYBgcx4uhXr
-	 YNd/LCvK63k37DwGXK6b0TQDBrIGUpyAfYnNWJlIJlGu+t2gyajY4rYAs18sR8WJ/x
-	 nMUEA4I988zdXET2E/tBIaZpQ2YcNX39oUAB+DEYSftb5YPfi2iJpdFO8M5uQWpbyh
-	 GauZxaMl/9tkIxRUqgCf6TE/U4Jrnhpnix3hcgOcAIFMfnQHTfRsfI3a89cyrPU9+6
-	 LZg4ZR/DaB6zA==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Stanislav Fomichev <sdf.kernel@gmail.com>
-Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jonathan Corbet
- <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>,
- kernel-team@meta.com, Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard
- Brouer <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Pavel
- Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, Andrii
- Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar
- Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
- <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
- netdev@vger.kernel.org, bpf@vger.kernel.org, io-uring@vger.kernel.org,
- Mina Almasry <almasrymina@google.com>, "Mike Marciniszyn (Meta)"
- <mike.marciniszyn@gmail.com>, Weiming Shi <bestswngs@gmail.com>, Nikolay
- Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, Alexander
- Lobakin <aleksander.lobakin@intel.com>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, Stuart Clark <stuclar@meta.com>
-Subject: Re: [PATCH net-next v1 03/11] xdp: Copy buffers with restricted
- lifetime
-In-Reply-To: <avOZa6jLnmvYkk2H@devvm16445.scu0.facebook.com>
-References: <20261110102039.1002605-1-bjorn@kernel.org>
- <20261110102039.1002605-4-bjorn@kernel.org>
- <avOZa6jLnmvYkk2H@devvm16445.scu0.facebook.com>
-Date: Wed, 11 Nov 2026 05:27:51 -0800
-Message-ID: <87eccra46g.fsf@all.your.base.are.belong.to.us>
+	s=k20260515; t=1794403991;
+	bh=Plxo1yGphv/ixoaAaDnR26Ljo6BCiJ0s27jl/IT/8ZU=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=ncrt2Dy5nbxwJiCRig+wPo3gGMe8cfjpBbSaTl91ciD7SiGXgyJdvsfoKML6cFfDi
+	 4ZfvTQDqVVBufmDqGM+yIusiQJGXL0v6gCTLQXVV/nKcuGf94nAAoOojM1G86m9JwD
+	 4yk7H0SR1DVdh/2JAZWxUGPOcrykGAUfwRMi8KaSQVUAGFnoJOB7zoBPMnWuPM42Ec
+	 eiaiUfD44gVflGSnv55Y7lbGUdASjb0myO1Uc1A1+2r4mKAGnRcARV9QQVLsMFA9Pd
+	 HuxCalfM/diAYxSkVqLe4kWOzT7UHcUQtOOleMgJXHj+kJb5o4KYHCH0RYxHnCLaYc
+	 pVrxMHtGbs7Gg==
+Content-Type: multipart/mixed; boundary="===============4887617662354651281=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -81,122 +49,98 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <b9135e2110157ca4f60e48d324348b7abe57f12f911bdf701971c323fab53bd1@mail.kernel.org>
+In-Reply-To: <d69e383da887f124f305006c9c0c2d56b39c7145.1794399387.git.memxor@gmail.com>
+References: <d69e383da887f124f305006c9c0c2d56b39c7145.1794399387.git.memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v1 11/29] bpf: Give every reference an owner frame
+From: bot+bpf-ci@kernel.org
+To: memxor@gmail.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,ihor.solodrai@linux.dev,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed, 11 Nov 2026 13:33:10 +0000 (UTC)
 
-Stanislav Fomichev <sdf.kernel@gmail.com> writes:
+--===============4887617662354651281==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-> On 11/10, Bj=C3=B6rn T=C3=B6pel wrote:
+> bpf: Give every reference an owner frame
 
->> diff --git a/include/net/xdp.h b/include/net/xdp.h
->> index 07231adfb5f8..1105bb9e3292 100644
->> --- a/include/net/xdp.h
->> +++ b/include/net/xdp.h
->> @@ -81,6 +81,16 @@ enum xdp_buff_flags {
->>  	 * XDP program is not attached.
->>  	 */
->>  	XDP_FLAGS_FRAGS_UNREADABLE	=3D BIT(2),
->> +	/* Internal: the head netmem and the shared info are in &xdp_buff.ext.
->> +	 * Not copied to xdp_frames or skbs.
->> +	 */
->> +	XDP_FLAGS_EXT			=3D BIT(3),
->> +};
->> +
->> +/* For a head buffer that cannot hold kernel data, see xdp_init_buff_ne=
-tmem() */
->> +struct xdp_buff_ext {
->> +	netmem_ref netmem;
+TL;DR: Commit message only: the claim that callbacks release everything they
+acquire may be inaccurate, since IRQ or lock references acquired in a callback
+seem to pass to the caller in prepare_func_exit().
+
+> bpf: Give every reference an owner frame
 >
-> nit: netmem -> head ? and the same for xdp_init_buff_netmem netmem arg?
-
-Yup, will fix.
-
->> @@ -138,7 +153,7 @@ static __always_inline void xdp_buff_set_frag_unread=
-able(struct xdp_buff *xdp)
->>=20=20
->>  static __always_inline u32 xdp_buff_get_skb_flags(const struct xdp_buff=
- *xdp)
->>  {
->> -	return xdp->flags;
->> +	return xdp->flags & ~XDP_FLAGS_EXT;
+> The unwinder will release the resources of each frame from that frame's
+> own stack slots. Each reference in the verifier state must therefore
+> belong to exactly one frame. The verifier has no such notion today: the
+> state holds the references, and a frame only knows how many of the
+> references held at its entry are still held.
 >
-> The only consumer is xdp_update_skb_frags_info, so probably not worth
-> filtering out XDP_FLAGS_EXT here? Or is it for
-> xdp_update_frame_from_buff? Can we explicitly clear it at the caller?=20
-
-It was for xdp_update_frame_from_buff(), but looking closer EXT never
-gets there...
-
-I'll drop the mask. Thanks!
-
->> diff --git a/net/core/devmem.c b/net/core/devmem.c
->> index 8f190b574beb..dea4a4a17e86 100644
->> --- a/net/core/devmem.c
->> +++ b/net/core/devmem.c
->> @@ -698,5 +698,5 @@ static const struct memory_provider_ops dmabuf_devme=
-m_ops =3D {
->>  	.release_netmem		=3D mp_dmabuf_devmem_release_page,
->>  	.nl_fill		=3D mp_dmabuf_devmem_nl_fill,
->>  	.uninstall		=3D mp_dmabuf_devmem_uninstall,
->> -	.caps			=3D MP_CAP_FRAG,
->> +	.caps			=3D MP_CAP_FRAG | MP_CAP_RETAIN,
+> [ ... ]
 >
-> Not sure I understand this part, can you explain?
-> These are MP_CAP_RETAIN because they are unreadable?
-
-No, RETAIN is about lifetime: the stack may hold page pool references
-after the RX poll, e.g. skbs on a TCP receive queue. That's how devmem
-and zcrx work; without it the stack would try to copy them, and they'd
-trip the DEBUG_NET check in skb_add_rx_frag_netmem().
-
-A provider without RETAIN gets copied, so it must be readable. I'll try
-to make that more clear in the kdoc, and probably refuse a provider that
-is neither.
-
->> diff --git a/net/core/xdp.c b/net/core/xdp.c
->> index 1d679e8fd649..0cf46d492d91 100644
->> --- a/net/core/xdp.c
->> +++ b/net/core/xdp.c
->> @@ -23,6 +23,8 @@
->>  #include <trace/events/xdp.h>
->>  #include <net/xdp_sock_drv.h>
->>=20=20
->> +#include "dev.h"
->> +
->>  #define REG_STATE_NEW		0x0
->>  #define REG_STATE_REGISTERED	0x1
->>  #define REG_STATE_UNREGISTERED	0x2
->> @@ -559,10 +561,41 @@ void xdp_return_buff(struct xdp_buff *xdp)
->>  			     xdp->rxq->mem.type, true, xdp);
->>=20=20
->>  out:
->> -	__xdp_return(virt_to_netmem(xdp->data), xdp->rxq->mem.type, true, xdp);
->> +	__xdp_return(xdp_buff_head_netmem(xdp), xdp->rxq->mem.type, true, xdp);
->>  }
->>  EXPORT_SYMBOL_GPL(xdp_return_buff);
->>=20=20
->> +bool __xdp_buff_needs_copy(const struct xdp_buff *xdp)
->> +{
->> +	const struct skb_shared_info *sinfo;
->> +	u32 i;
->> +
->> +	/* Provider buffers come only from page pool queues */
->> +	if (xdp->rxq->mem.type !=3D MEM_TYPE_PAGE_POOL)
->> +		return false;
->> +	if (!netmem_can_retain(xdp_buff_head_netmem(xdp)))
->> +		return true;
->> +	if (likely(!xdp_buff_has_frags(xdp)))
->> +		return false;
->> +
->> +	sinfo =3D xdp_get_shared_info_from_buff(xdp);
->> +	for (i =3D 0; i < sinfo->nr_frags; i++) {
->> +		if (!netmem_can_retain(skb_frag_netmem(&sinfo->frags[i])))
->> +			return true;
+> Callbacks release everything they acquire, so nothing changes owner when
+> a callback returns, and the transfer in prepare_func_exit() has nothing
+> to do for them.
 >
-> Do we want/need to go that deep? Can we have a skb-like assumptions that
-> mixing retain and non-retain in the same shinfo is not allowed?
+> [ ... ]
+>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-Yep, let's make that the rule. I'll remove the deep checks.
+Is the statement that callbacks release everything they acquire accurate
+for every reference type?
+
+At a callback's BPF_EXIT, process_bpf_exit_full() calls check_resource_leak()
+with check_lock = exception_exit || !curframe, which is false in a callback
+frame.  So active_locks and active_irq_id are not checked there, and
+check_reference_leak() returns 0 for frameno != 0.
+
+The only callback-specific check in prepare_func_exit() skips everything
+that is not REF_TYPE_PTR:
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+[ ... ]
+
+> @@ -12688,6 +12701,11 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
+>  		return err;
+>  	invalidate_stack_slices(env, callee->frameno, INT_MIN, 0);
+>
+> +	/* What the frame holds when it returns is the caller's to release. */
+> +	for (i = 0; i < state->acquired_refs; i++)
+> +		if (state->refs[i].frameno == callee->frameno)
+> +			state->refs[i].frameno = caller->frameno;
+> +
+
+A REF_TYPE_IRQ, REF_TYPE_LOCK or REF_TYPE_RES_LOCK* entry acquired by a
+callback survives the callback's exit with frameno == callee->frameno, and
+this loop then reassigns it to the caller.
+
+For example, a bpf_loop() callback can call bpf_local_irq_save() on a flag
+that lives in the caller's stack, since bpf_loop() passes ctx as a
+PTR_TO_STACK of the caller and process_irq_flag()/mark_stack_slot_irq_flag()
+accept a slot in any frame.  The callback returns with IRQs still saved, and
+the caller restores them after the loop.
+
+For a bpf_spin_lock taken in a callback, the transfer runs too, although
+the re-simulated helper call at the callsite later rejects the program.
+
+Handing the IRQ reference to the frame whose stack holds the flag looks like
+a sensible owner.  But the sentence in the changelog does not seem to match
+this, and later patches rely on the ownership model it describes (for
+example, prepare_func_exit() later calls bpf_frame_desc_record_return() for
+every handed reference, including those of callbacks).
+
+Could the changelog say that only REF_TYPE_PTR references are guaranteed to
+be released by a callback, and that IRQ/lock entries can still pass to the
+caller here?
 
 
-Bj=C3=B6rn
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43027088527
+--===============4887617662354651281==--
