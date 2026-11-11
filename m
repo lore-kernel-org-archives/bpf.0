@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794436904;
-	b=VgdmUocqzdGXsjTEIQNd/9525IpOXZ/JpDkDCKj9SGQ8RsYfeDZtfYPPWm3xi/Y78rHq
-	 preXEYiHA1EiDa0TDijvWDdY9zlyaiXGaOOHqfEiAHqhAWBJhMszNGCChQ3PWaaX7xVSL
-	 CF/w+HlyOJB6TyG07b/2I56WWWwOF/E9crskxZcwmJUMPXIUqcL+DtNmtmb3u5kLjYHPV
-	 G7puwwqJNzFwLXKObx3/4G7MJvQcFBqr4RIOkSi6LEB6QP+rtvNT5b5RROsOheceXqLVu
-	 xAQVj6xpEHJioWYDqfjGAaLGfthqFdlWNuOT4hnXn+0UB0w2t67d6EkTN0FLQaTSccw==
+	t=1794436899;
+	b=VRLbN+YSBbEx4ndh2wK+KU4G86B9wX08fGG9JAc21sMSU/847aWsNL06aoA9CZkAw7GK
+	 cSGAAhgP3tgCWkyh2VNlfx26xsE2pHRnqh7d6YyVUX8c64187BcyRk0Zld2E09hJw63A2
+	 clFRwo49J53EoTSpo48C55bqedeQtKVzosnanILhTo+y2NexI9j1Wy/OzslvYySyzkC9M
+	 h4zrPBikH9KHk0oiIhHPTQ5wwYLtd2reV2F+M1i905jDd31+Q1Mi1yH4h4R/epc3k6fCx
+	 hs31p9ZgoCVDWoMCj6tRRsFmEx4n1xCm56TscHHazScHCDH6tLB7IKO7CAGkfdZg/XA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794436904;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794436899;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=1VxYrnk3EGdLlXmWiNcVYysu+JK3YRtT9g9emVyC1Wg=;
-	b=tQnlUgd5Ra3352COzXaEkcehg1RNXQVitGBoKKxDexB80Uexs0KcFMI1aNVt4sxXAiM4
-	 DgvqVH0w7Ee2Amt3sIt8ClAk7gQod+N99aJoFmZH5k1qLxVGPsjddWY1eoUyCy/CidRFB
-	 OwngNq+Gf6cqHlt1ZyjHB7m7IsX0q+9hQpPZwQSxrvYtLvu8D/LBTHRamtJtsP9n9Mp+G
-	 FpcwyrjrE45jKuxNaf3+UgUP/HQ8AsMi5lCDyPQV/r+LEEQNa8VwN5kdFocMyOxyuwoGF
-	 i7+3eHxJ3Sqr9TToSxPfcZHNIoYi+yE+Wc1WOF1VKosEvRkxprQKJdMsESFZsSmqKpQ==
+	bh=/AWuy26j6xO/+PuOcFejOEnfNmeGq9vPqTM+p90YjAc=;
+	b=j4IggsyZZgiFdEOfWgWEXOHl5gmyb4qz/WfHLROPXlh6T2PXrt8+BgH60L1QIMJcQ0PS
+	 PRgoick2pCV3y//UeOcGYLl9g58YKigm8k7XFhs0vnRTQCmEhsTXFNdG4n3Ixz9yOhdhx
+	 p1yhfvz7rvCO0JLZfH0s2Sjj0zcIeiYIk9pBYFq41USRBLAOzUbo2xga7susLL83fKNlO
+	 I4KIaw4IUe1oPNT2lDO2K9nkVdK0JvzewbgBWEvk80rBFsgYWDbNRTC1cSSslUxdEbNxn
+	 n4Vx7TYRVk8+kBeIT43phPgdg6KKaLE2hsTww0Mj8K+VkBtspRi5M7kQyQn5at6sVzw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Nccq3Pbr;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YMvPc8rq;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9727B60A6F55;
-	Wed, 11 Nov 2026 22:41:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AD4760A3820;
+	Wed, 11 Nov 2026 22:41:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Nccq3Pbr
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34CB31F00A07;
-	Wed, 11 Nov 2026 22:41:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YMvPc8rq
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60EAB1F00A09;
+	Wed, 11 Nov 2026 22:41:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794436904;
-	bh=1VxYrnk3EGdLlXmWiNcVYysu+JK3YRtT9g9emVyC1Wg=;
+	s=k20260515; t=1794436898;
+	bh=/AWuy26j6xO/+PuOcFejOEnfNmeGq9vPqTM+p90YjAc=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Nccq3PbrXWNWsFEWSLzMIsLjSSYh7CxcgVNAGHTp+2y++opajMDXxcl4EWuswD3JI
-	 z4dFF1B/KyhSO2Ll0mpYTEECFEkX9twB0vMo2pXWqwmr8SnpsqIrSUZCfNckBYJP8s
-	 GU4qTta3D5wx99z1ioCB62kCwd526KtlcENyU3KWxpXTisBtnI3fWNqn/GNbBovOct
-	 l/vwfvlZunQawTvATN1kdfdK81ZeojHlom/dLB9MMUiH48Y8+jQJTaY15u5cE5/V6e
-	 61ZaLLaPkxe+9J9DbcE1BKQPTkRYMtvlsPcVfY+XyqqWO1Dozvb1PFbNUzFqGTrbAQ
-	 ZLQavktXhQ5WA==
+	b=YMvPc8rqcRjg2+UCtIXYxVtWdwSW1aaeylbH62iXeKnQeRlW+PxRhxHVNrgbDgDQE
+	 6MvnZ2SY6R5G+uU5ZgnzJDSdJHlYyqD7KHAWIOVpGHn+WhGXWm2oEJ/6FMnTe5meYi
+	 iT6OsnvqtRuXD4EQ8gshuiui8OJWvxN8Spl/1HaeruKKVdsczo1ULEwpopI5tm0RnL
+	 ovWS9OvMfEn+qpkfqCSaRlt6cH3LWAQtwLEGkp6Bk0IDhfroVEgXEHCAubAU/Gl6XO
+	 b2fy5QOJJHA899IYxLcmHjCQlm27++rxFd7wFuxT1e7VB1bt8bUQ679Z8khejKLmdf
+	 eyAYdcbd8J4gw==
 Subject:
- Re: [PATCH net-next v1 11/11] eth: fbnic: Support AF_XDP page pool zero copy
+ Re: [PATCH net-next v1 07/11] xsk: Deliver provider chunks without copying
 From: netdev-bot+sashiko@kernel.org
 To: bjorn@kernel.org
 Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, sdf@fomichev.me,
@@ -58,11 +58,11 @@ Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, sdf@fomichev.me,
  bestswngs@gmail.com, razor@blackwall.org, dw@davidwei.uk,
  aleksander.lobakin@intel.com, linux-doc@vger.kernel.org,
  linux-kernel@vger.kernel.org, stuclar@meta.com
-Date: Wed, 11 Nov 2026 22:41:41 +0000
-Message-ID: <179443690174.2199510.10806656670743256191@kernel.org>
-In-Reply-To: <20261110102039.1002605-12-bjorn@kernel.org>
-References: <20261110102039.1002605-12-bjorn@kernel.org>
-X-sashiko-severity: High
+Date: Wed, 11 Nov 2026 22:41:35 +0000
+Message-ID: <179443689590.2199510.9741809616593174859@kernel.org>
+In-Reply-To: <20261110102039.1002605-8-bjorn@kernel.org>
+References: <20261110102039.1002605-8-bjorn@kernel.org>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
@@ -75,10 +75,10 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 5 potential
+Thank you for your contribution! Sashiko AI review found 4 potential
 issue(s) to consider.
 
-Critical: 0 · High: 1 · Medium: 1 · Low: 3
+Critical: 0 · High: 0 · Medium: 1 · Low: 3
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -86,249 +86,246 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [High] Stale, unreferenced xsk_buff_pool pointer is used after a failed
-  queue restart during AF_XDP unbind.
-- [Medium] On an AF_XDP provider queue, an empty FILL ring is normal flow
-  control, but fbnic counts it as a buffer allocation failure.
-- [Low] The commit message presents the balanced header/payload refill as
-  something for the shared provider page pool ("Header and payload rings…
-- [Low] The new "Zero-copy through page pool" section of
-  Documentation/networking/af_xdp.rst says "MTU and XDP program changes…
-- [Low] The new af_xdp.rst text says: "If the device cannot do zero-copy
-  for the socket, a bind with XDP_ZEROCOPY fails with EOPNOTSUPP, while…
+- [Medium] The patch weakens a documented AF_XDP UAPI guarantee, and
+  userspace cannot opt in or detect it.
+- [Low] The commit message gets wrong what the old copy path did.
+- [Low] The patch adds a new core page_pool memory-provider API,
+  net_mp_release_page_pool_bulk(), in net/core/page_pool.c and…
+- [Low] The new drop paths for provider sockets in xsk_rcv() do a plain
+  non-atomic `xs->rx_dropped++` on a u64 from contexts outside the queue…
 
 --
 
-eth: fbnic: Support AF_XDP page pool zero copy
+xsk: Deliver provider chunks without copying
 
-This adds AF_XDP zero-copy support to fbnic through a page pool memory
-provider. The header and payload BDQs share one provider page pool and
-use a new balanced refill policy, and socket TX descriptors go out on
-the XDP TX ring from the RX NAPI after RX processing. It also adds
-per-queue rx_headroom support and documents the page pool zero-copy mode
-in af_xdp.rst.
+This commit puts packets whose buffers all belong to the socket's memory
+provider directly on the AF_XDP RX ring, and copies other packets into
+chunks claimed from the provider. Generic XDP and CPUMAP redirects to
+provider sockets are dropped. TX descriptor validation now reserves
+tx_metadata_len only for descriptors with XDP_TX_METADATA.
 
-> diff --git a/Documentation/networking/af_xdp.rst b/Documentation/networking/af_xdp.rst
-> index e73a0005e169c..f152ae8812d17 100644
-> --- a/Documentation/networking/af_xdp.rst
-> +++ b/Documentation/networking/af_xdp.rst
-> @@ -346,6 +346,64 @@ Note that a UMEM can be shared between sockets on the same queue id
-
-[ ... ]
-
-> +If the device cannot do zero-copy for the socket, a bind with
-> +XDP_ZEROCOPY fails with EOPNOTSUPP, while a bind without it falls back
-> +to copy mode. MTU and XDP program changes that a bound socket cannot
-> +handle are refused.
+> A provider socket still receives through the copy path, which takes
+> FILL entries without the provider's ownership checks: a chunk that a
+> page pool holds could be handed out twice. No driver opts in yet.
 
 [Severity: Low]
-Does the page pool bind path always behave this way?
+Does this describe what the old copy path actually does for a provider
+socket?
 
-xsk_pp_bind() in net/xdp/xsk_pp.c returns -EBUSY when another queue has
-an unreadable memory provider:
+Before this patch, xsk_rcv() calls __xsk_rcv() for provider sockets,
+because their mem.type is MEM_TYPE_PAGE_POOL. That leads to:
 
-    if (!netif_all_mps_have_cap(dev, MP_CAP_READABLE))
-        return -EBUSY;
+xsk_rcv()->__xsk_rcv()->xsk_buff_alloc()->xp_alloc()->__xp_alloc()
+    ->xp_get_xskb()
 
-It also passes on errors from the driver's XDP_VALIDATE_XSK_POOL check,
-xp_dma_map(), xsk_pp_create() (-ENOMEM, -ERANGE) and netif_mp_open_rxq()
-(for example -EEXIST, -EINVAL, -ENOMEM).
+For a provider bind, pool->free_heads_cnt is umem->chunks and pool->fq is
+still set. So __xp_alloc() peeks a FILL entry, and in aligned mode (the
+only mode xsk_pp_bind() accepts) xp_get_xskb() returns &pool->heads[idx].
 
-The copy-mode fallback is also conditional. In xp_assign_dev():
+pool->heads is never allocated here. xp_assign_dev() returns right after
+a successful xsk_pp_bind() and never calls xp_alloc_heads():
 
-    if (!force_zc && !pool->pp)
-        err = xp_alloc_heads(pool); /* fallback to copy mode */
+net/xdp/xsk_buff_pool.c:xp_assign_dev() {
+    ...
+	if (xsk_pp_supported(netdev)) {
+		err = xsk_pp_bind(pool, netdev, queue_id);
+		if (err)
+			goto err_unreg_pool;
 
-Suppose netif_mp_open_rxq() fails, and then either xp_alloc_heads()
-fails or xsk_pp_abandon() finds an old page pool still holding chunks.
-In that case xsk_pp_bind() leaves pool->pp set, and a bind without
-XDP_ZEROCOPY fails instead of falling back to copy mode.
+		pool->umem->zc = true;
+		return 0;
+	}
+    ...
+}
 
-Could the text mention the other errnos, and the case where copy mode is
-not available?
+xp_alloc() then writes xskb->xdp.data through a NULL-based pointer.
 
-[ ... ]
+So the failure would be a NULL or wild pointer dereference in NAPI, not a
+chunk handed out twice. No driver opts in yet, so there is no runtime
+impact. Could the commit message describe the actual failure mode?
 
-> +* advertises NETDEV_XDP_ACT_XSK_ZEROCOPY and xdp_zc_max_segs,
-> +* checks the setup in XDP_VALIDATE_XSK_POOL, and sets xsk_page_pool
-> +  in its netdev_queue_mgmt_ops.
-
-[Severity: Low]
-Should this list also say that the driver must call xsk_validate_dev()
-from its own ndo_change_mtu?
-
-In net/core/dev.c, the only callers of xsk_validate_dev() are the XDP
-program install paths. No core MTU path calls it. fbnic refuses such MTU
-changes only because this patch adds this to fbnic_change_mtu():
-
-    err = xsk_validate_dev(dev, new_mtu, NULL, XDP_MODE_DRV, NULL);
-
-A driver that follows only this list would accept MTU changes that a
-bound socket cannot handle. One example is raising the MTU above the
-header buffer size for a non-SG socket. The statement above that such
-MTU changes are refused would then not hold.
+> diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+> index e897e79d31f19..56c299f2280d7 100644
+> --- a/net/core/page_pool.c
+> +++ b/net/core/page_pool.c
 
 [ ... ]
 
-> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-> index d96c957d6fbad..c358003f053b6 100644
-> --- a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-
-[ ... ]
-
-> @@ -938,66 +969,146 @@ static void fbnic_bd_prep(struct fbnic_ring *bdq, u16 id, netmem_ref netmem)
->  	} while (--i);
->  }
+> @@ -1422,3 +1422,35 @@ void net_mp_niov_clear_page_pool(struct net_iov *niov)
 >  
-> +static bool fbnic_fill_bdq_one(struct fbnic_ring *bdq, unsigned int *tail)
+>  	page_pool_clear_pp_info(netmem);
+>  }
+> +
+> +/**
+> + * net_mp_release_page_pool_bulk() - take net_iovs back from a page pool
+> + * @pool: page pool that holds one reference to each net_iov
+> + * @netmems: net_iovs of the memory provider of @pool
+> + * @count: number of entries in @netmems
+> + *
+> + * A memory provider takes net_iovs out of a page pool without
+> + * ->release_netmem(), for example to give them to userspace. @pool may be
+> + * freed on return.
+> + */
+> +void net_mp_release_page_pool_bulk(struct page_pool *pool,
+> +				   netmem_ref *netmems, u32 count)
 > +{
-> +	netmem_ref netmem;
+
+[Severity: Low]
+This isn't a bug, but this adds a new core page_pool memory provider API,
+declared in include/net/page_pool/memory_provider.h. The xsk commit
+message doesn't mention it.
+
+The helper clears pp_info and advances pool->pages_state_release_cnt.
+That counter feeds the inflight accounting that decides when a destroyed
+pool is freed. The helper also documents that @pool may be freed on
+return.
+
+Other core changes in this series, such as "page_pool: Coordinate refill
+with memory providers", got their own patches. Could this go in a
+separate page_pool patch, so the page_pool maintainers can review the
+new contract?
+
+[ ... ]
+
+> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> index 113b0b08356d5..b419c673e3f14 100644
+> --- a/net/xdp/xsk.c
+> +++ b/net/xdp/xsk.c
+
+[ ... ]
+
+> @@ -488,7 +547,26 @@ static int xsk_rcv(struct xdp_sock *xs, struct xdp_buff *xdp)
+>  		return xsk_rcv_zc(xs, xdp, len);
+>  	}
+>  
+> -	err = __xsk_rcv(xs, xdp, len);
+> +	if (!xs->pool->pp) {
+> +		err = __xsk_rcv(xs, xdp, len);
+> +	} else {
+> +		/* A CPUMAP program runs XDP on another CPU, not in NAPI. */
+> +		if (unlikely(!xdp_rxq_info_is_reg(xdp->rxq))) {
+> +			xs->rx_dropped++;
+> +			return -EINVAL;
+> +		}
 > +
-> +	netmem = page_pool_dev_alloc_netmems(bdq->page_pool);
-> +	if (!netmem) {
-> +		u64_stats_update_begin(&bdq->stats.syncp);
-> +		bdq->stats.bdq.alloc_failed++;
-> +		u64_stats_update_end(&bdq->stats.syncp);
+> +		err = xsk_pp_rcv_zc(xs->pool->pp, xs, xdp);
+> +		if (err != -EXDEV)
+> +			return err;
 > +
-> +		return false;
+> +		/* Copy only packets of the queue, from its NAPI */
+> +		if (unlikely(!xsk_pp_queue_buf(xs->pool->pp, xdp))) {
+> +			xs->rx_dropped++;
+> +			return -EINVAL;
+> +		}
+
+[Severity: Low]
+Can these xs->rx_dropped++ updates race with the queue NAPI?
+
+The CPUMAP kthread reaches the unregistered rxq branch.
+cpu_map_bpf_prog_run_xdp() uses an on-stack rxq:
+
+kernel/bpf/cpumap.c:cpu_map_bpf_prog_run_xdp() {
+    ...
+	struct xdp_rxq_info rxq = {};
+    ...
+}
+
+It sets rxq.dev = xdpf->dev_rx and leaves queue_index at 0, so
+xsk_rcv_check() passes for a socket bound to queue 0.
+
+A BPF_F_TEST_XDP_LIVE_FRAMES test run reaches the xsk_pp_queue_buf()
+branch. xdp_test_run_setup() registers a fake rxq on the real device with
+queue_index 0 and page-backed MEM_TYPE_PAGE_POOL buffers. xsk_pp_rcv_zc()
+returns -EXDEV, then xsk_pp_queue_buf() returns false, all in process
+context.
+
+At the same time, the queue NAPI on another CPU can increment
+xs->rx_dropped and xs->rx_queue_full in xsk_pp_rcv_copy(),
+xsk_pp_rcv_zc() and xsk_rcv_check(). No lock is shared between these
+contexts.
+
+Would concurrent increments get lost, and could the u64 counter tear on
+32-bit, so that XDP_STATISTICS reports wrong drop counts? xsk_rcv_check()
+already has the same unsynchronized pattern, and the effect is limited to
+these counters.
+
+> +		err = xsk_pp_rcv_copy(xs, xdp, len);
 > +	}
+>  	if (!err)
+>  		xdp_return_buff(xdp);
+>  	return err;
+
+[ ... ]
+
+> diff --git a/net/xdp/xsk_pp.c b/net/xdp/xsk_pp.c
+> index a77213f7fef6b..a1c2ca00f0169 100644
+> --- a/net/xdp/xsk_pp.c
+> +++ b/net/xdp/xsk_pp.c
+
+[ ... ]
+
+> @@ -294,6 +299,166 @@ static bool xsk_pp_refill_done(struct page_pool *pool, enum pp_refill state)
+
+[ ... ]
+
+> +/* Returns -EXDEV for a packet that must be copied. Called from the NAPI. */
+> +int xsk_pp_rcv_zc(struct xsk_pp *pp, struct xdp_sock *xs,
+> +		  struct xdp_buff *xdp)
+> +{
+
+[ ... ]
+
+> +	__xskq_prod_reserve_desc(xs->rx, xdp->data - umem,
+> +				 xdp->data_end - xdp->data,
+> +				 nr_frags ? XDP_PKT_CONTD : 0);
+> +	pp->pending[pp->pending_cnt++] = head;
+> +
+> +	for (i = 0; i < nr_frags; i++) {
+> +		frag = &sinfo->frags[i];
+> +		__xskq_prod_reserve_desc(xs->rx, skb_frag_address(frag) - umem,
+> +					 skb_frag_size(frag),
+> +					 i + 1 < nr_frags ? XDP_PKT_CONTD : 0);
 
 [Severity: Medium]
-On an AF_XDP provider queue, xsk_pp_alloc_netmems() returns 0 whenever
-the reuse stack and the FILL ring are empty. That is normal flow control
-for the socket. Is it intended to count it as alloc_failed?
+Does this weaken the documented AF_XDP headroom guarantee for XDP_USE_SG
+applications, with no way to opt in or detect it?
 
-Without XDP_USE_NEED_WAKEUP, xsk_pp_refill_done() returns false in this
-case:
+af_xdp.rst says a UMEM headroom of N means the packet "will start N bytes
+into the buffer leaving the first N bytes for the application to use".
+Before this patch, every RX buffer kept this headroom:
 
-    more = pp->reuse_cnt || xskq_cons_nb_entries(pp->fq, 1);
-    WRITE_ONCE(pp->starved, !more);
-    spin_unlock_bh(&pp->lock);
+- copy mode, in __xsk_rcv()
+- driver zero copy, in xp_alloc()
+- the new xsk_pp_rcv_copy() path, which uses addrs[i] + headroom
 
-    return !more && wait;
+Here the frag descriptors are published at skb_frag_address(frag) - umem,
+wherever the device placed the payload. On fbnic that can be chunk
+offset 0. The device has then DMA-written into the first N bytes of
+those chunks. Any per-chunk application data kept in the headroom is
+overwritten.
 
-fbnic_fill_bdqs() then returns false, fbnic_clean_rcq() returns budget,
-and NAPI polls again at once. Each poll fails the allocation again and
-increments the counter again.
+xp_assign_dev() picks xsk_pp_bind() automatically whenever
+xsk_pp_supported(netdev) is true. That covers both XDP_ZEROCOPY and a
+bind without flags. No bind or UMEM flag lets an application accept or
+refuse the weaker rule. The af_xdp.rst hunk changes the documented rule
+for all drivers:
 
-This counter reaches userspace through the standard queue stats in
-fbnic_netdev.c:
+  In a multi-buffer packet, only the first buffer is guaranteed this
+  headroom; the others may start at offset 0 of their chunk.
 
-    rx->alloc_fail = fbn->rx_stats.rx.alloc_failed +
-        fbn->bdq_stats.bdq.alloc_failed;
+At the end of the series only fbnic opts in, and fbnic had no AF_XDP RX
+before, so no existing deployment changes today. An application that
+relies on per-buffer headroom could still lose it, with no change on its
+side, if another driver later moves to xsk_page_pool.
 
-Won't an idle xsk queue then report a fast-growing alloc_fail count that
-has nothing to do with memory pressure? With need_wakeup, each wakeup
-that finds the FILL ring empty would also be counted.
+Should this be gated by a flag? Or should the commit message describe it
+as a UAPI change rather than as a device property?
 
-[ ... ]
-
-> +static bool fbnic_fill_bdqs(struct fbnic_q_triad *qt)
-> +{
-> +	struct fbnic_ring *hpq = &qt->sub0, *ppq = &qt->sub1;
-> +	enum pp_refill state;
-> +	bool done;
->  
-> -		writel(i * fbnic_bd_page_count(bdq), bdq->doorbell);
-> +	if (hpq->page_pool == ppq->page_pool) {
-> +		fbnic_fill_shared_bdqs(hpq, ppq);
-
-[Severity: Low]
-The commit message says:
-
-    Header and payload rings share one provider page pool, so refills even
-    them out, and a short pool does not starve one of them.
-
-In the default configuration, without AF_XDP, fbnic_alloc_qt_page_pools()
-already shares one regular page pool between sub0 and sub1, through this
-unchanged branch:
-
-    } else {
-        page_pool_get(pp);
-    }
-    qt->sub1.page_pool = pp;
-
-So this test is true for every normal RX queue as well.
-fbnic_fill_shared_bdqs() replaces the old policy, which filled the HPQ
-fully and then filled the PPQ, on the default datapath. The new policy
-interleaves per buffer through fbnic_hpq_takes_next(), which does u64
-multiplications for each buffer. Filling of both rings also stops at the
-first allocation failure.
-
-Should the commit message mention this change to the existing datapath?
-It also does not mention two other changes: QCFG_RX_HEADROOM is now
-accepted, and RDE_CTL0 MIN_HROOM is programmed per queue.
-
-> +		state = fbnic_bdq_state(hpq);
-> +		if (state == PP_REFILL_FULL)
-> +			state = fbnic_bdq_state(ppq);
-> +		return page_pool_refill_done(hpq->page_pool, state);
->  	}
-
-[ ... ]
-
-> @@ -1674,8 +1901,29 @@ fbnic_alloc_qt_page_pools(struct fbnic_net *fbn, struct fbnic_q_triad *qt,
->  		.netdev	= fbn->netdev,
->  		.queue_idx = rxq_idx,
->  	};
-> +	struct xsk_buff_pool *xsk;
->  	struct page_pool *pp;
->  
-
-[ ... ]
-
-> +	/* Payload buffers come from UMEM only for multi-buffer sockets */
-> +	xsk = xsk_rxq_pool(fbn->netdev, rxq_idx);
-> +	qt->xsk_pool = xsk;
-
-[Severity: High]
-This stores the xsk_buff_pool pointer without taking a reference, and
-fbnic_queue_start() copies it into the live triad. What happens to this
-pointer if the queue restart during unbind fails?
-
-On socket close, this chain can fail:
-
-__xp_clear_dev()
-  xsk_pp_unbind()
-    netif_mp_close_rxq()
-      __netif_mp_close_rxq()
-        netdev_rx_queue_reconfig()
-
-Some ways it can fail:
-
-- fbnic_queue_mem_alloc() returns -ENOMEM from page_pool_create(),
-  kvzalloc() or the descriptor ring allocation.
-- fbnic_queue_stop() fails through fbnic_wait_queue_idle().
-- ndo_queue_start() fails and the old queue is restarted.
-
-__netif_mp_close_rxq() only warns:
-
-    err = netdev_rx_queue_reconfig(dev, rxq_idx, &qcfg[0], &qcfg[1]);
-    if (err == -ENETDOWN)
-        return 0;
-    WARN_ON(err);
-    return err;
-
-xsk_pp_unbind() then ignores the result:
-
-    netif_mp_close_rxq(pool->netdev, pool->queue_id, &mp);
-    xsk_pp_detach(pp);
-
-xsk_pp_detach() unmaps the DMA through xp_dma_unmap(), and xp_destroy()
-later frees the pool. Meanwhile the old fbnic triad keeps running with
-qt->xsk_pool still set.
-
-On every poll, fbnic_poll()->fbnic_xsk_tx()->fbnic_xsk_tx_pool() calls
-xsk_set_tx_need_wakeup(), xsk_tx_peek_release_desc_batch() and
-xsk_buff_raw_get_dma() on that pool. Wouldn't these then read and write
-freed memory? In-flight entries in ring->xdp_buf[].xsk would also be
-passed to xsk_tx_completed() from fbnic_clean_twq1().
-
-The xsk_rxq_pool() comment says "The pool stays valid while the queue
-that the caller allocates runs", but that does not seem to hold on this
-failure path. Part of the cause is the core error handling. Still, the
-fbnic TX code added here is what keeps using the raw pointer.
+> +		pp->pending[pp->pending_cnt++] = skb_frag_netmem(frag);
+> +	}
+> +
+> +	return 0;
+> +}
 
 [ ... ]
 
