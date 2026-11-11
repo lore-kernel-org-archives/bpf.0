@@ -1,100 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.45
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794368772;
-	b=CRH17oKFrW8mclQpD5xtpUAQSP6l0Wwbk7bG4Cv2HBBe+gUs/YVvWtPJNt6em03CX2ii
-	 vtZxCXTptny9m3g0UaDSaOAqyTTm6Pw0Hoilh3TWneQ1io758adMrz0K+OK5xJmXenmBf
-	 qLqJ1akwZjlZ9uJtIAgvcQhD4ZmjzL+5PzKGtDASZ7si5e8PXfDjmnxVtTv9XsHrM3CZK
-	 mRTNiQg3KPnaleBtAT07Sbmyycynh2Z1M4m0Svc44+FpihqMHv8j3z50fxRsF6DBUCigI
-	 5kAaRWAWBDmmKwKyLKYJobo21TLD+LmOTXz2V9UohIu7fdxgEHPrmTaHhxPCk8vME9A==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794368772;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=RXpnzG8jc2yYtoFLBv7ZARt98Mz5wOXGm+EBvSjKUfM=;
-	b=Ue6dovxw4ubFdGywjATiRhToBiyBK18sr9YKcOWL0kVPaO1gXv0gZRVRy8NHKDCZDNyX
-	 Ma/DFvNbsFdRRjFV11KEZDVov34x4jbvHpX3pzCW8Rh7PCwgxjWDCq0pYGGbIxu2H54sK
-	 8bgvNatGJOK0LoQsm2Qkqi5pOQxcBbhijB6jsJ/Jpk2dlO0wUMAbF9tl7XAgcgnRDK/Ml
-	 KlqSo/ED6JVdjf9jlbF8stj+aZsVvkvp4/+LLBRPRp9k01uUH/mq2YUDrkkfLNarl3nos
-	 mvIOT4ua5PiV4n+mPFLL0yaYOc9ft4IRuOwOJsSGaXBYvHGHf2pUKboZ5X1+PQJcL6g==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wDmRvi5U;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.45
-Received: from mail-yx1-f45.google.com (mail-yx1-f45.google.com [74.125.224.45])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794370284;
+	b=YnaytxIjGiBecMw8eGrxzTLr97jGWYD5EwZPUwgwOu1m11ZoRqeUuW/AmjZJ4x+Crk7d
+	 EtLa3F03cBbTw/8kLwtD8VxYaLQogdr9vu8kf0R0KbkMH+25+dcMAAt9fm3ZW6BUP0lje
+	 sSwR54IbsgW5V82pWFQnFHs/RYLcJeMxSEJa2sRpOxuCpXHNeCWp4rwRxZWH6mYgeOyM0
+	 GjsITe0rRRT8nLEf9qjQkXRSksTbV/ugycDepx3NhAGropW8tR81cMXvZ0o7CeeJPnEhI
+	 ak4F/6FX2gNRBCsyTq9Ht8IRMCpf9kgxF5NUT8czC6A+MuEX5pcajeOVsyGGcXox0TQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794370284;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=iBHPOQQehxzMlVnUfidaHHS+Q08GcedUh9f66DbuY+o=;
+	b=Cz215sjdN/MALHGX0OqkdCll7ylzbRSiGDqZY8IXDBt6olg29yiq6SjmvchRFdnbc3nx
+	 +Equ9FvoS9KCYrKz1gsnSuh0jATbN+PHYnGWPP33cBoXhPd0c9yZLjhqj0B9DSnVk3kQs
+	 amnvoUQDLWxvjRArgDeP67Q5YFsbZQkOwA41bMs5gE3K/9mamEQdWclblLksyTSADIAH6
+	 YVDQ7lly5QqSj/DfYimdMisc/fHwBfw4KW0Q8mBNXIYTdU1ahvCMBbfIZPwzH0E+zGmKz
+	 OA9s7G0vHTID2zMslXeLFHVT9CAM0th2I+XEGt9+n5ikFND76Ntf0E2jaJuDU8kkuhw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=o2VzFHZV;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94374606A321
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 03:46:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 94374606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80F38606A31C
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 04:11:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wDmRvi5U
-Received: by mail-yx1-f45.google.com with SMTP id 956f58d0204a3-67be4f2f4d4so3518654d50.2
-        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 19:46:11 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794368770; cv=none;
-        d=google.com; s=arc-20260327;
-        b=HanJ8hcCCrDjJFTZg1KBVmdSXVFf+uRaCm7dTI0FQ7+GMbUKQMNBS0+cqb4TW+c1nG
-         38yJhrMWbVGrlKGX0LeQoQqxGkXzFrIHO2AJm7pabdtzLX/dRMxnBXvs1PHubUx7Rl/k
-         c8REpABZWtrnUzNPEybzxEO7JmT7yNr8p14I0DgCF3c/QKd58+1VNCjpir/uAGn6yrjr
-         edi7mwpHO8q3yBuV0u4TIXB76xOr4ahMU/92rYyPcPb7Z5lWXvp5TMtmjKCbtT3amkEv
-         iBMdEhBbI27e7GYJXVylHuZ0hqdpamy/nnQNUDB/UcoK3MQUceeSQFdJU4IMqsZkdebE
-         lZng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=RXpnzG8jc2yYtoFLBv7ZARt98Mz5wOXGm+EBvSjKUfM=;
-        fh=emmQa7NFVvB0rscUNDwP+4iWgQ4OgqGNt7zruvkkjkE=;
-        b=g/dyFAevsWZk9gGlyjWltYSC/8RUgmiAda1HWF0ylln1kGvkwe5Qx/KJwpNmaKXnz/
-         MZhweuiQYuC8YKp5Zbq9szfcp+R+PiCDuvlfqY4lDmf9tECnJdungki/U5zRKLkFDsFU
-         YqqxC+H6SJTVX13QU1+6pOFRKW071cCVecpsMeoZJAJnfk/6c5zG2AusTWLrgSp4rx24
-         dkGV154ykcyFrmTn7RN4r/ykB5nmRVEH6sToFaMGJHsb0ovz9ve7ZZSnJsyLjhbLG0yo
-         omu/D6GbvM1E75IJB1PgcfrVfkZLkaDQswn8XYGO6Kqw5apDN7Q986OCqVity8T843IW
-         RtGA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794368770; x=1794973570; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=RXpnzG8jc2yYtoFLBv7ZARt98Mz5wOXGm+EBvSjKUfM=;
-        b=wDmRvi5UDOHoU7lvv5PYFvNw/6ZCjkQMZd1A9CuYNK61SeWNpUw7SFVHSuXK81Jftx
-         LqFrl+MMeAfNQ1dN4VgAkPSGL4mGMkvB85vU/HldNCWDivRC/cNo4PAavvHG3u6/x6iD
-         NvRqkYXq0KioY9aYKfoeF3x7hZmb4oN/Cqv1MDDJdEPflYm+1hQTIMTqO/hDwl2WXw+g
-         lbD5aDQpTz5+uWMvoBX+3lAEIgoX1bdI53Fov3ccsCW6voIrj/vZlzWrwWwJdofq3w17
-         T8mGbovHjlrnUYPSCtJpVDvopcd/+XZlW3WKBxmeYfVmguC1aytJJ6cwhXCyv3d0lwMT
-         X/zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794368770; x=1794973570;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=RXpnzG8jc2yYtoFLBv7ZARt98Mz5wOXGm+EBvSjKUfM=;
-        b=MqDa5Vq+VcL4dhIztDICYtTsVTf7htKjmfYxiT7ApVmpLiBudKS3q+k0GF6WBxmP8K
-         kZ5q5guI9q42hwUbLI/YLSfYhcpsHOKuITeBTNS3ddvdYaGBEL2LPrK/Wpu3erzLCUIo
-         obDpgu4uP0adUDLv9LWN6+Whuu+4RnGGKWEyMuB7giDgElGClRppvlEWVdSAU/iTeW1l
-         IZdixVkaNVPVjTyQ5EEYfw5DAW8Y1KMDMM5mI98EDfK6z5y/HKNM9iSb1KYbXVWvYrhO
-         h6RURb9PcRGk0nB/xmghYRgO/dK/0Sv+5IfOK3vCvhaj9LpAFInFHTuJWM4xI7VPg0vS
-         aYYg==
-X-Forwarded-Encrypted: i=1; AL+hErEigmno1JTNunCmPfddEKzGmR6pelQH5iReBb9wooNDMe+WxOfSuGnkk0EYwUe/rPuQm3M=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9qOHGcc9KhRCBiAfZjtM75JH0oqnmM17YmoDUTgyxgSshsTZMe
-	E9zp6aK5tRW+BJb+a7SlIyMTTfwWni1FHEGXE9rAvltEPGuz327M3Sny6J5cGgG0XDacKsRBrpv
-	7LCKa3VA63PE8YYSKv5XylwsOtzZiVBY=
-X-Gm-Gg: AYBFou0CN/ij2cTzFQjYQU1gu5tAvW24fvn1H2PHqFB/uEnm8jHJngHOZRC32tD5MrB
-	SprmjM8+xWbULxR6Itm6UrDeUvm7h0dqlhrc71CLqaMxGuJAYYWc0X9who3+7SXqaCuSNVndByz
-	LB4jACVCB4f4hNdCXL3P/J7T0h7cRZVcJjFJbvguyAcZUoW8P99QtdbRwuima1QiSicvxK8DXwe
-	fmM72gUxS/DJHaall2WSrThnZBK6asx0tfZOSf9KfrBd2lcKLvjiCRVs9AfeCkWZ1ZFx9GgqYA0
-	ptooqaH7CAmEOMz/Bucqrjvj8qrYvUn5GxHx/TsIzXxHL/OkGA/0m1gyFb+iVMf/9c2M6rTNZEn
-	ILYYkxylJk213LiZX704mqbu2xCjz1cHggpHH8XZEp7Eow142MkiYIlrpu4H3c7xFkbU=
-X-Received: by 2002:a05:690c:f04:b0:8b1:567c:e7ae with SMTP id
- 00721157ae682-8b3a8114a85mr9107737b3.47.1794368770490; Tue, 10 Nov 2026
- 19:46:10 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=o2VzFHZV
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B6D01F0089F;
+	Wed, 11 Nov 2026 04:11:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794370284;
+	bh=iBHPOQQehxzMlVnUfidaHHS+Q08GcedUh9f66DbuY+o=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=o2VzFHZVe1n+c95IoIbIrbA4ulsmWc8zAH3+kAfgGyRH8/ZgG1Wvo+K5eT49l9js3
+	 eYsq1A5qLSDwIv1XYtTm15eQqR3YBodPY/ekK1Gg+k3dXRkLiEDL++6tUZbTvoPwS/
+	 6XUHaeRbHQpNQwo9OrKXKeMDjcC9gsXiHsQhzATdIoASnN0/6tjMUziUs9vfR8AZ57
+	 nqXSsr8nrfQvqaeH95lF8Rf8OaLn4U4/mRqyLy27I/wmgn2Qh210/EjpqaccQhF86s
+	 ngdjXGPJfJmYf1B6/ObXOPyNExZ7HTEVNXGwm7aJi98L0lS7Ats1im99ng2rPL0pZK
+	 uucDSSQRXGcyg==
+Message-ID: <sashiko-outbox-208264@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [RFC bpf-next v3 2/3] bpf: Add PPPoE encap/decap kfuncs
+Reply-To: sashiko-reviews@lists.linux.dev
+To: ThisSeanZhang <thisseanzhang@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <20261111032141.525444-3-thisseanzhang@gmail.com>
+References: <20261111032141.525444-1-thisseanzhang@gmail.com>
+ <20261111032141.525444-3-thisseanzhang@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 11 Nov 2026 04:11:23 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,115 +58,217 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-References: <20261110032913.71974-1-laoar.shao@gmail.com> <3296ff1ecad6573e1719cb205d9128f7@kernel.org>
-In-Reply-To: <3296ff1ecad6573e1719cb205d9128f7@kernel.org>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Wed, 11 Nov 2026 11:45:33 +0800
-X-Gm-Features: AclHuK_EYuNKM1uN4O291ubvtl6N0s-HDZmJBzZexNtlBKQbnavU5QXTx2HKC3E
-Message-ID: <CALOAHbDqE5qD7y5_A25wxWR603QcGnSVFFoBe6iZ4TH7t4a_Sw@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next v4 0/4] BPF-based per-cgroup NUMA balancing
- mode selection
-To: Tejun Heo <tj@kernel.org>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
-	memxor@gmail.com, mingo@redhat.com, peterz@infradead.org, 
-	juri.lelli@redhat.com, vincent.guittot@linaro.org, akpm@linux-foundation.org, 
-	david@kernel.org, gourry@gourry.net, hannes@cmpxchg.org, mkoutny@suse.com, 
-	shakeel.butt@linux.dev, roman.gushchin@linux.dev, yu.c.chen@intel.com, 
-	zhao1.liu@intel.com, tim.c.chen@linux.intel.com, lizhe.67@bytedance.com, 
-	ziy@nvidia.com, mgorman@suse.de, bpf@vger.kernel.org, linux-mm@kvack.org, 
-	cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 11, 2026 at 2:45=E2=80=AFAM Tejun Heo <tj@kernel.org> wrote:
->
-> Hello, Yafang.
->
-> I'm not going to engage further in this series until the situation
-> changes.
->
-> LLMs have made it much cheaper to produce plausible-looking patchsets
-> for new features. That makes it easy to keep sending iterations of a
-> feature which touches code that the submitter doesn't really understand
-> or hasn't thought through in depth. The reviewer ends up doing much of
-> the developer's work while the submitter sits between the reviewer and
-> whatever the LLM produces. I think this series is an example of that.
-
-Thanks, and I'm sorry for the time this has taken.
-
->
-> Some examples from v4:
->
-> - A folio belongs to a memcg and that memcg decides the policies around
->   it. That's how memcg works for every other memory policy, and tasks
->   belong to a memcg too. The series still splits NUMA balancing into a
->   task side and a folio side with different semantics. DISABLED applies
->   to tasks but not to their memory, and the two sides combine the
->   hierarchy differently.
->
->   On v3, I asked why. v4 moves the storage into memcg and keeps the
->   split, but doesn't give a high-level reason why NUMA balancing should
->   work differently from how memcg handles every other memory policy.
->   More generally, the major design decisions come without the reasoning
->   behind them, and asking didn't produce it. Each iteration only barely
->   updates what was pointed out in the previous one.
-
-The task/folio split was my attempt to avoid defining a single owner
-for shared folios. That was not a principled design choice.
-
-Shared page-cache accounting in memcg is not a clean ownership model:
-pages can remain charged to a memcg after the tasks that used them
-have moved on or exited. That limitation is real, but it does not
-justify giving tasks and folios different policy semantics, and I
-don't currently have a defensible model for the split.
-
->
-> - numab_memcg_mode() walks up to the root memcg and recombines the
->   requests on every call. The callers include every load-balancing
->   candidate in can_migrate_task(), every task migration, every NUMA hint
->   fault and every page migration including compaction. This happens
->   whenever any cgroup has a mode set, although the result changes only
->   when a mode is set or a memcg goes offline.
-
-You're right: the ancestor walk is not an optional optimization. It is
-on hot paths, and leaving it for follow-up measurements is not
-acceptable.
-
->
-> - numab_memcg_active() reads css->flags once and the comment says that
->   this makes the three state bits describe the same moment. However,
->   nothing synchronizes those flags with the mode. In the lookups, the
->   check is redundant anyway because offlining a memcg or disabling its
->   controller already clears the mode.
-
-For numab_memcg_active(): the technical point is that the check is
-only needed where the memcg does not come from a task/folio.
-
-In the task/folio lookups, the memcg is tied to the object being
-examined, So the active check is indeed redundant there, and I'll
-remove it.
-
-bpf_numab_get_mode() is different: it resolves an arbitrary cgroup id.
-There is no task/folio context that pins the policy. So I use
-numab_memcg_active() there to skip an unusable memcg and continue with
-its parent.
-
-I agree the check should not be in the task/folio lookups.
-
->
-> A developer could cost reviewers time before too, but each round took
-> the developer much more effort in comparison. That kept the effort
-> balanced between developer and reviewer in a sustainable way, and it
-> made sure that the developer learned and improved while working through
-> each iteration. LLMs broke that balance.
->
-> I don't know what the right solution is, but at this point shepherding
-> patchsets like this doesn't make sense for me.
-
-Anyway thanks for taking time into it.
-
-
+Thank you for your contribution! Sashiko AI review found 3 potential
+issues to consider:
+- [High] bpf: stale skb->cb data pointers on bpf_skb_pppoe_encap() and
+  decap() error
+- [High] bpf: Signed-off-by trailer uses handle instead of real full
+  name
+- [Medium] bpf: missing skb_postpush_rcsum() in bpf_skb_pppoe_encap()
+  corrupts csum
 --
-Regards
-Yafang
+
+commit 41cc0bc50e47c52d87a2f024362b196725052585
+Author: ThisSeanZhang <thisseanzhang@gmail.com>
+
+> bpf: Add PPPoE encap/decap kfuncs
+>
+> Add bpf_skb_pppoe_encap() and bpf_skb_pppoe_decap() kfuncs so that a
+> TC BPF program can encapsulate an IPv4 or IPv6 packet into a PPPoE
+> session frame, and decapsulate one again:
+>
+>         bpf_skb_pppoe_encap(skb, sid, flags);
+>         bpf_skb_pppoe_decap(skb, flags);
+>
+> The kfuncs insert or remove the 8 byte PPPoE session header between
+> the MAC header and the network header, and update the skb metadata to
+> match: skb->protocol is set to ETH_P_PPP_SES on encapsulation, or
+> restored from the PPP protocol field on decapsulation, mac_len is
+> reset, and the GSO metadata is adjusted like bpf_skb_adjust_room()
+> does (gso_size, gso_segs, SKB_GSO_DODGY).
+>
+> Both kfuncs accept BPF_F_ADJ_ROOM_FIXED_GSO to leave gso_size
+> unchanged and only recompute gso_segs, reusing the existing flag
+> instead of adding a new one; UDP GSO packets require it, as their
+> gso_size is the datagram size. Unknown flags are rejected.
+>
+> Previously, a TC program could add or remove the header bytes
+> manually, but the skb would keep a stale skb->protocol: forwarded GSO
+> packets larger than the PPPoE MTU could not reach the PPPoE
+> segmentation path registered for ETH_P_PPP_SES and could be dropped.
+> bpf_skb_adjust_room() cannot be used for the decapsulation direction
+> either, because it only accepts ETH_P_IP or ETH_P_IPV6 in
+> skb->protocol.
+>
+> The encap kfunc fills in the PPPoE header itself from the session id:
+> version 1, type 1, code 0, and the PPP protocol derived from
+> skb->protocol, mirroring what pppoe_xmit() writes. The ethertype of
+> the MAC header remains for the BPF program, like with the existing
+> BPF_F_ADJ_ROOM_ENCAP_* flags. skb->encapsulation is deliberately left
+> unset, like pppoe_xmit() does: PPPoE is not an IP tunnel, and setting
+> it would narrow the device features to hw_enc_features in
+> netif_skb_features(). The decap kfunc accepts only PPP_IP and PPP_IPV6
+> payloads and requires a full inner L3 header to remain.
+>
+> The kfuncs are registered for SCHED_CLS and SCHED_ACT with the new
+> KF_CHANGES_PKT flag, so the verifier invalidates packet pointers after
+> a call, like it does for bpf_skb_adjust_room().
+>
+> PPPoE GRO/GSO support must be built in or loaded before this path is
+> used; loading pppoe.ko is left to user space.
+>
+> Signed-off-by: ThisSeanZhang <thisseanzhang@gmail.com>
+
+[Severity: High]
+The Signed-off-by trailer and Author header use a single-word handle
+("ThisSeanZhang") rather than a full real name, which does not meet the
+Developer's Certificate of Origin requirements in
+Documentation/process/submitting-patches.rst.
+
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 9245009d9f1eb..3d9143552f0d1 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+
+[ ... ]
+
+> +__bpf_kfunc int bpf_skb_pppoe_encap(struct __sk_buff *skb_ctx, __be16 si=
+d,
+> +				    u64 flags)
+> +{
+> +	struct sk_buff *skb =3D (struct sk_buff *)skb_ctx;
+> +	struct pppoe_hdr *ph;
+> +	u16 ppp_proto;
+> +	u32 off;
+> +	int ret;
+> +
+> +	if (flags & ~BPF_F_ADJ_ROOM_FIXED_GSO)
+> +		return -EINVAL;
+> +
+> +	if (skb->protocol !=3D htons(ETH_P_IP) &&
+> +	    skb->protocol !=3D htons(ETH_P_IPV6))
+> +		return -ENOTSUPP;
+> +
+> +	if (skb->len + PPPOE_SES_HLEN > BPF_SKB_MAX_LEN && !skb_is_gso(skb))
+> +		return -ENOTSUPP;
+> +
+> +	off =3D skb_mac_header_len(skb);
+> +
+> +	ret =3D bpf_skb_net_grow(skb, off, PPPOE_SES_HLEN, flags);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (skb->protocol =3D=3D htons(ETH_P_IP))
+> +		ppp_proto =3D PPP_IP;
+> +	else
+> +		ppp_proto =3D PPP_IPV6;
+> +
+> +	ph =3D (struct pppoe_hdr *)(skb->data + off);
+> +	ph->ver =3D 1;
+> +	ph->type =3D 1;
+> +	ph->code =3D 0;
+> +	ph->sid =3D sid;
+> +	ph->length =3D htons(skb->len - off - sizeof(*ph));
+> +	put_unaligned_be16(ppp_proto, (u8 *)ph + sizeof(*ph));
+> +
+> +	skb->protocol =3D htons(ETH_P_PPP_SES);
+> +	skb_reset_mac_len(skb);
+> +	if (skb_valid_dst(skb))
+> +		skb_dst_drop(skb);
+> +
+> +	__skb_reset_checksum_unnecessary(skb);
+> +	bpf_compute_data_pointers(skb);
+> +
+> +	return 0;
+> +}
+
+[Severity: Medium]
+Does writing the PPPoE header without calling
+skb_postpush_rcsum(skb, ph, PPPOE_SES_HLEN) leave skb->csum stale on
+CHECKSUM_COMPLETE packets?
+
+bpf_skb_net_grow() -> bpf_skb_net_hdr_push() -> bpf_skb_generic_push()
+zeroes the pushed 8 bytes and skips skb_postpush_rcsum() because zeroed
+bytes do not change skb->csum, and __skb_reset_checksum_unnecessary() only
+clears CHECKSUM_UNNECESSARY.  Writing non-zero PPPoE header fields at
+skb_network_header(skb) without updating skb->csum corrupts the checksum on
+ingress packets with hardware CHECKSUM_COMPLETE (and fails
+BPF_PROG_TEST_RUN with BPF_F_TEST_SKB_CHECKSUM_COMPLETE), whereas
+bpf_skb_pppoe_decap() and pppoe_rcv() subtract the 8-byte header from
+skb->csum via skb_postpull_rcsum().
+
+[ ... ]
+
+> +__bpf_kfunc int bpf_skb_pppoe_decap(struct __sk_buff *skb_ctx, u64 flags)
+> +{
+> +	struct sk_buff *skb =3D (struct sk_buff *)skb_ctx;
+> +	__be16 inner_proto;
+> +	u32 inner_len, off;
+> +	u16 ppp_proto;
+> +	int ret;
+> +
+> +	if (flags & ~BPF_F_ADJ_ROOM_FIXED_GSO)
+> +		return -EINVAL;
+> +
+> +	if (skb->protocol !=3D htons(ETH_P_PPP_SES))
+> +		return -ENOTSUPP;
+> +
+> +	off =3D skb_mac_header_len(skb);
+> +
+> +	if (skb->len < off + PPPOE_SES_HLEN)
+> +		return -EINVAL;
+> +
+> +	if (!pskb_may_pull(skb, off + PPPOE_SES_HLEN))
+> +		return -ENOMEM;
+> +
+> +	ppp_proto =3D get_unaligned_be16(skb->data + off +
+> +				       sizeof(struct pppoe_hdr));
+> +	switch (ppp_proto) {
+> +	case PPP_IP:
+> +		inner_proto =3D htons(ETH_P_IP);
+> +		inner_len =3D sizeof(struct iphdr);
+> +		break;
+> +	case PPP_IPV6:
+> +		inner_proto =3D htons(ETH_P_IPV6);
+> +		inner_len =3D sizeof(struct ipv6hdr);
+> +		break;
+> +	default:
+> +		return -ENOTSUPP;
+> +	}
+> +
+> +	/* A full inner L3 header must remain after decapsulation. */
+> +	if (skb->len - off - PPPOE_SES_HLEN < inner_len)
+> +		return -EINVAL;
+> +
+> +	ret =3D bpf_skb_net_shrink(skb, off, PPPOE_SES_HLEN, flags);
+> +	if (ret < 0)
+> +		return ret;
+
+[Severity: High]
+Can error returns in bpf_skb_pppoe_decap() and bpf_skb_pppoe_encap() leave
+stale data_end and data_meta pointers in skb->cb after skb->head is
+reallocated?
+
+In bpf_skb_pppoe_decap(), pskb_may_pull() can reallocate skb->head via
+pskb_expand_head() and free the old buffer when pulling bytes from
+nonlinear fragments or expanding a cloned skb.  If ppp_proto is then
+rejected as unsupported (for example, a PPP LCP/IPCP control frame),
+inner_len is not met, or bpf_skb_net_shrink() fails, the function returns
+without calling bpf_compute_data_pointers(skb).  Similarly, in
+bpf_skb_pppoe_encap(), bpf_skb_net_grow() can reallocate skb->head in
+skb_cow_head() and shift skb->data in bpf_skb_net_hdr_push() before failing
+in pskb_may_pull() or skb_linearize().
+
+Because TC programs read ctx->data from skb->data (now pointing to the new
+buffer) while reading ctx->data_end and ctx->data_meta from skb->cb (still
+pointing into the old freed buffer), a program that continues inspecting
+the packet after an error return can pass verifier bounds checks and
+trigger a kernel heap use-after-free or out-of-bounds access.  Calling
+bpf_compute_data_pointers(skb) on the error paths after any potential
+reallocation, as bpf_skb_adjust_room() does unconditionally, avoids leaving
+dangling pointers.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261111032141.5254=
+44-1-thisseanzhang@gmail.com?part=3D2
