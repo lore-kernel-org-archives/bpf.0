@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794384432;
-	b=mnLGhDDmBpCOADXCeb3pmb7UYmDpdiIK+NJwB+ZnlIsU/mONHTeljG7X4HjTyts+Iy+5
-	 YcBy3PXk6JsSO+VMOpVf4TEXnCFJuArJBwN/0yR537J9xgauEFR6dA3euro81F+6TRUfl
-	 UmfN618HKGv1LmSlAcR8X3EHkWPCUHZ1X6kS6r8igJ1DFoNHenUV6bWtaiRQr5gU3DblC
-	 uWY4AQnYVa26G/EKZIaa5eyE1pAP+HAC1MnrwsBalU/lJlJv5yq3IFtlNYUXq0J7wegVc
-	 cwMhUvmzUHh0ds3G0xapvefHHYHzohYRktz5uEUiKFkGtFNGMupdWBC6ZB6hvmJlA1Q==
+	t=1794384538;
+	b=bWwDOkqCO8yQKauMgbSozJKt5UDYgznrovM2H5Bj8tFg38fNdkVmXOi1uHl9RTGYe7Dd
+	 iCJBKH/3AjVdGrEiBg4K+V0R6MXp807alBciaL0J0CkgpsuxhYjEMaketzcb1R3m7oLlw
+	 NLpyqAkuDCcx1b9Q6qExwgudeF+7O/9yJ+0Io9s2sjW4N2Zi5qHwdemUb0JdFEyvrYpgA
+	 5MfFKJ3fjShyLBA2E+3C0twC+YHkA7P0KkQlvgar1lMKGoMFfiAJDjWc6TNY5MM8CfWnt
+	 s3DIeaj21xMvtpzxo5gnQX2CTCHaDplEQrvMMp+r2kgSVp0IPsDwBHoSYfnNq3cb/cA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794384432;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794384538;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=xLs8ayfHBLqGNIeqNvKdUFFV2ceLPPx5aCzC8uzmT9g=;
-	b=uFXRr14ghh3Xym9ZGk/pNvbvq6pFHyhGMzsJyV0+z/xbwSjdhZVgHVKfo1RBao3vKOvM
-	 v9YqKKflithisuVaiOd+MElpXCYU1UpfnHv14dBsuJQjjeA4QvbxPMMOEzGYKY7anzx58
-	 TorCe3B8AsQejgAWp9j+MzKw9IheaIL3uj9/jjfdfqPAMsiSS0KGa5Kmw8eM7T2oeztxM
-	 wlzi5y6mocJ8I7iu/4U4yiLsvLcnlVqB5b9VsQKepBKr+IKq9ToJC7ZR8AUbIhzXjolsx
-	 5MQ4pVILgah4TRsqb0vAk0L3PmhMiOeXFbREolaOaCdTgK1PZhZpvGpypIt3rZwDwoA==
+	bh=OMx8DURBi1HKQNsNSde4ObBuj2cCKjyxSIgE906Z6wU=;
+	b=kGoVRNrOz9zjp0XyRR/p8sbFK5B3je+jGAsAO09eJ7qGvr9YD0EaeQx0fBZ+r9urdyxk
+	 OJoZm9/5ZfIF4I623HTxZvhzVlT6UHfpOobrkfIhjiDfGebJ8d6NLTQShhNJoKnf4ROHH
+	 MOX7uGokDETWNgHGrYLATrB7/7WbKhjKOQWBvzLdysD0zz3Zumc+nqXMhPXz9ECkGJtX6
+	 TcYn6MAQURAARJC2E+xuBHix2T9qlT37cfiNaS/ybrfFQtfQ21Q1j+y4Wv7dNYuTkLxRx
+	 nw8OOfxwI83iHryIMDDKj4IORz5D+F0RxKLBvE93+0e0AKRqw3jOUmmeXyt+DUq+SQg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eQzzNTqu;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Vj5n5e0S;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3920D606A324;
-	Wed, 11 Nov 2026 08:07:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87AE3606A8D3;
+	Wed, 11 Nov 2026 08:08:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eQzzNTqu
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3DB31F00A05;
-	Wed, 11 Nov 2026 08:07:10 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Vj5n5e0S
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAA231F00A05;
+	Wed, 11 Nov 2026 08:08:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794384431;
-	bh=xLs8ayfHBLqGNIeqNvKdUFFV2ceLPPx5aCzC8uzmT9g=;
+	s=k20260515; t=1794384538;
+	bh=OMx8DURBi1HKQNsNSde4ObBuj2cCKjyxSIgE906Z6wU=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=eQzzNTquYrxYVEFbtJN+AW7DVsuwrXK4utXRDDXQu68G2UP6hmobRWFk/oxYrok78
-	 n/ZLSAzBZwT152UZsyQF1isaMyNL3rCI60+PlIyY4rNlqSRxkIhiHnuLcXHfBrFfRc
-	 MxoP1K4kxhNWxK35nB+Ymko9PjTd2a3fslYG0lbeKBcfZg0vS2fqlIpvfobZlpOzoT
-	 Yb6Tj8whl+dh/8wG2qqwMajZDyHcomUqFQB1oWK7DgXlF8jfJ0FvvH9OAf1imKyVFJ
-	 JckjI2/n+NLBV+Np0KMs9xTVu70cxur5LFtgtR0MBtUPLcfJdplG0VtkYZzx4iQfAT
-	 PpnLUMcI7NJ7Q==
-Content-Type: multipart/mixed; boundary="===============5514991749610700103=="
+	b=Vj5n5e0SBFA1j4z0Z15SdCzc4M3OrCLsWJXqhvLQqGwHQKanl350MBfbSz8ARxnFD
+	 jOWJ3MA9OMnNp4iJ2t22+M/1LUETLN++x1e4PQAlu084/gezb1EGPHwXX4AkHLZ9Xe
+	 amH9gwOhhyHIrBsWhaeeuFm8XCfe57IygtxfcZNX6YATAJkMKLeLNvpsUuq2Oa7MeQ
+	 QfAyTDiSl0sVpXOH6ghIFl1wmICmjoaLePNWKQw8Q0Vjkc0RW7jhiS4QEeokPdTnbz
+	 M7Y9tkPjkPDpcplzDhf60pYRsJkFGU8yEqUlPEN3t39trYPzNLA7pz1bc5Spos97Dn
+	 XKUhumL8wOfGA==
+Content-Type: multipart/mixed; boundary="===============5888328363070956270=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,81 +49,95 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <1c785d97eaac586357e585c4b711076a0df87052bdb135d346c0327d6972fdfb@mail.kernel.org>
-In-Reply-To: <20261111073416.203153-4-changwoo@igalia.com>
-References: <20261111073416.203153-4-changwoo@igalia.com>
-Subject: Re: [PATCH bpf-next v2 3/3] selftests/bpf: libarena: Cache the rbtree's leftmost node and count
+Message-Id: <ab530d93c7383ec9cd5d9fbedc531e933d4b812ddb367bb85c940b870d34c247@mail.kernel.org>
+In-Reply-To: <a07b9717684d5e20d8ff7a778a5f031d1092f18a.1794303670.git.sieberf@amazon.com>
+References: <a07b9717684d5e20d8ff7a778a5f031d1092f18a.1794303670.git.sieberf@amazon.com>
+Subject: Re: [PATCH v2 3/4] sched_ext: add cgroup_set_runtime ops callback
 From: bot+bpf-ci@kernel.org
-To: changwoo@igalia.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,shuah@kernel.org,emil@etsalapatis.com
-Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,ihor.solodrai@linux.dev,david.dai@linux.dev,gavinguo@igalia.com,bpf@vger.kernel.org,sched-ext@lists.linux.dev,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,changwoo@igalia.com,kernel-dev@igalia.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 11 Nov 2026 08:07:10 +0000 (UTC)
+To: sieberf@amazon.com,mingo@redhat.com,peterz@infradead.org,juri.lelli@redhat.com,vincent.guittot@linaro.org,tj@kernel.org
+Cc: bsegall@google.com,dietmar.eggemann@arm.com,rostedt@goodmis.org,mgorman@suse.de,vschneid@redhat.com,kprateek.nayak@amd.com,hannes@cmpxchg.org,mkoutny@suse.com,void@manifault.com,arighi@nvidia.com,changwoo@igalia.com,skhan@linuxfoundation.org,corbet@lwn.net,rdunlap@infradead.org,cgroups@vger.kernel.org,sched-ext@lists.linux.dev,linux-doc@vger.kernel.org,linux-kselftest@vger.kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,nh-open-source@amazon.com,hborghor@amazon.de,fmubeen@amazon.de,dwmw@amazon.co.uk,karataev@amazon.com,sieberf@amazon.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed, 11 Nov 2026 08:08:56 +0000 (UTC)
 
---===============5514991749610700103==
+--===============5888328363070956270==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> selftests/bpf: libarena: Cache the rbtree's leftmost node and count
+> sched_ext: add cgroup_set_runtime ops callback
 
-TL;DR: The three new rbtree lockless helpers in rbtree.h are plain static, not
-static inline. They may trigger -Wunused-function under -Werror and break the
-whole selftests build. Should they be inline?
+TL;DR: The documented guarantee that cgroup_set_runtime never exceeds the
+quota the scheduler was last given may not hold for schedulers lacking
+cgroup_init or cgroup_set_bandwidth; comment and commit message may need
+qualifying, or validation tightened.
 
-> diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h b/tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h
-> index 788e25fcd7fd..e34d5a51ae3d 100644
-> --- a/tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h
-> +++ b/tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h
+> diff --git a/kernel/sched/ext/internal.h b/kernel/sched/ext/internal.h
+> --- a/kernel/sched/ext/internal.h
+> +++ b/kernel/sched/ext/internal.h
 
 [ ... ]
 
-> @@ -81,4 +98,37 @@ void rb_node_free(struct rbnode __arena *rbnode);
->
->  int rb_integrity_check(struct rbtree __arena *rbtree);
->
-> +/*
-> + * Lockless reads of the head and the node count. [ ... ]
-> + */
-> +static struct rbnode __arena *rb_first_lockless(struct rbtree __arena *rbtree)
-> +{
-> +	return READ_ONCE(rbtree->first);
-> +}
-> +
-> +/* -ENOENT if the tree is empty, 0 with the leftmost key in @key otherwise. */
-> +static int rb_first_key_lockless(struct rbtree __arena *rbtree, u64 *key)
-> +{
+> @@ -863,6 +863,26 @@ struct sched_ext_ops {
+>  	 */
+>  	void (*cgroup_set_idle)(struct cgroup *cgrp, bool idle);
+>  
+> +	/**
+> +	 * @cgroup_set_runtime: A cgroup's runtime is being set
+> +	 * @cgrp: cgroup whose runtime is being set
+> +	 * @runtime_us: runtime in microseconds
+
 [ ... ]
-> +static u64 rb_nr_nodes_lockless(struct rbtree __arena *rbtree)
-> +{
-> +	return READ_ONCE(rbtree->nr);
-> +}
-> +
->  #endif /* __BPF__ */
 
-Can these three plain static functions break the libarena build?
+> +	 * @cgrp has a quota, and @runtime_us is at most the quota + burst the
+> +	 * scheduler was last given, by @cgroup_init or @cgroup_set_bandwidth:
+> +	 * cpu.max and cpu.max.runtime writes reach the scheduler in the order
+> +	 * the fair class applied them.
+> +	 *
+> +	 * Delivery follows the same rule as cgroup_set_weight().
+> +	 */
+> +	void (*cgroup_set_runtime)(struct cgroup *cgrp, u64 runtime_us);
 
-src/rbtree.bpf.c includes <libarena/rbtree.h> but calls none of them.
-Clang only exempts unused file-scope functions from -Wunused-function when
-they are declared inline, since static inline functions are assumed to be
-header helpers.  A plain static function defined in a header still gets the
-warning.
+Does this guarantee hold for a scheduler that implements
+cgroup_set_runtime but not cgroup_init or cgroup_set_bandwidth?  The
+commit message makes the same claim: "The runtime passed is then at most
+the quota + burst the scheduler was last given".
 
-The libarena objects are built with the selftests' BPF_CFLAGS, which include
--Wall -Werror, so this would be expected to fail with something like:
+scx_group_set_bandwidth() still updates tg->scx.bw_* when the op is
+missing:
 
-  rbtree.h: error: unused function 'rb_first_lockless' [-Werror,-Wunused-function]
+    if (scx_cgroup_enabled && sch && SCX_HAS_OP(sch, cgroup_set_bandwidth) && ...)
+            SCX_CALL_OP(sch, cgroup_set_bandwidth, ...);
+    tg->scx.bw_period_us = period_us;
+    tg->scx.bw_quota_us = quota_us;
+    tg->scx.bw_burst_us = burst_us;
 
-and, because the libarena skeletons are prerequisites of the test_progs
-build, it would break the whole selftests build rather than only the rbtree
-tests.
+while scx_group_set_runtime() calls the op whenever
+SCX_HAS_OP(sch, cgroup_set_runtime) is true, and the fair class only
+checks the runtime against its own cfs_b->quota + cfs_b->burst in
+cfs_bandwidth_set_runtime().
 
-The other helpers defined in libarena headers use static inline or
-static __always_inline.  Should these three be declared static inline (or
-static __always_inline, as in the earlier revision) as well?
+For example, take a scheduler with cgroup_init and cgroup_set_runtime but
+no cgroup_set_bandwidth.  Cgroup C has cpu.max "10000 100000" at load, so
+ops.cgroup_init() sees bw_quota_us=10000.  Userspace then writes cpu.max
+"50000 100000", which the fair class applies but the scheduler is never
+told about.  A following write of 40000 to cpu.max.runtime passes
+cfs_bandwidth_set_runtime() since 40000 <= 50000, and
+ops.cgroup_set_runtime(C, 40000) runs, four times the quota the scheduler
+was last given.
+
+Similarly, a scheduler without cgroup_init that loads after C's quota was
+set is never given a quota, yet still receives cgroup_set_runtime for that
+cgroup.
+
+Should the comment (and commit message) make the guarantee conditional on
+the scheduler implementing @cgroup_init and @cgroup_set_bandwidth, or
+should validation reject cgroup_set_runtime without cgroup_set_bandwidth?
+The later commit eb360e17b06e ("sched_ext: charge BPF scheduler tasks to
+cpu.max bandwidth") does not change this text.
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42982574960
---===============5514991749610700103==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42982707042
+--===============5888328363070956270==--
