@@ -1,56 +1,61 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794399827;
-	b=HrcqvOVzcbc01kck10WJ7eR/ckF65kZmt7cQElVOWLeYdgj0pHbMNNc2pX6EcngJYsXL
-	 F1tgB5HhQRmCQzeFQqsfOWBMDAAR3U2uVMfnPPsbIfhOqbPqKnyryQ/RRKYAoHzw7EBZ8
-	 MDecUm6y4AusQiWZm3Zi3AawvDmuCd2TH+W3sAx3Ah2JkyZup1Oj7llPW4VNWX7uLYa73
-	 5dxWTBoUrv9rZlLAk5FFmb/e6LvbhiorBXoVVf7y4/XvUFdpb3dBK1Tu8xGAZYnVe7+iY
-	 Wa5pojPesEmYqlYX4BMucqEJEK2o3VUZnyAqZB14HOsneWLxFdS/B7jeWCjDgj/STYw==
+	t=1794400329;
+	b=tgRmxiKLpVT23bcv+Yy1ivNEhkwZyjG9q3ek1o6MakmtNnkQb6P1cwOpg9ufvtIS/JV/
+	 snpll1A7QoEaTeaUXUwxoOzhIjAq9xy7DrvdSMHtf5oZ00QQXlH8K77LzWVRQ7GQe0K/V
+	 GmE9ENulzwhuWluKopgm9wnaD5OejC4+0CaXAVYiHWaYEIB0LFgN1D7nfHtQVBBTHLLuY
+	 d4DJBMH3NM8bYGCNpa9n/PP8SLHWGc1E1fsP+KcWTQnDNIdNVdrdOs85LKz+OONxwLmxC
+	 2dQoo0p3cJUhhr4X0PgzGWwu2ugHhG2ksnxA8KDbAe4alWRTqT0hRUzs12EnHlTmzRw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794399827;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794400329;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=EKhNvnqzPZNXveCLpzlJs+ib4Dylr9jyxyMai4yJUsg=;
-	b=CJbEy6Upb1PDrQ8lXjD6xQhpAUyBTG5aVAht07IKnR0SwY7+kykD+gZty09Y++RQ1EJx
-	 VYdDTDrVyPbmcyazRCD6mKDi/elYM7CNngNmbEqOk6/DdFTN2DLTfoK3XaNMHKAK+AMZY
-	 HgGZNUywOCpJLgPNL4noHMw1ioQ4xzRBHM5lUunPNzmZjIAnRVe6CLn2mY7AAZ2BOw0Sj
-	 Zyik05bol3vG0PpBhA4TagIPowD2j3Y7jP+EdqAFUF88T/Z2Zw3jIXjB+lYmxhFnf3hvL
-	 QAaYwYs+tQZdkmvP1IGOD8tKqrydw9CM3Rdkq6PMge0+VVf6dlLmy5RYusABpWL95Zg==
+	bh=9WsLjvkNNu9s+q1Y30o/mSE0qGBgt1KxnCS2sDzvwyI=;
+	b=1sfnvcp38xX3SyvpEwy5SCVVKRBK+b2WpTjTYsZq1bfcEpYsFYCXaTkfWF7AxAAKfNEC
+	 kwA57gYYdVKszzo/wV1SpHknzM8Zo9v92xd58iT9Mq6wKre1/TgX3VkjvDXESv2PhToO7
+	 6p+Yb2lcLfYsiy8XqG8lCzlTDk/tP7fKu69D/d1zALZPbu6pqhAmxKb4TPEJc0lVJUCG7
+	 xlCZrqaL3mkuuKzCMbkuoYUb9V0LRLt4gLLZwoRYqYBr8KMk81Wsi6oOp1EAOkGOryjWO
+	 MatbuxMDrc0vUPOHAdeeCpEg8bXn4nAA866ZnY9tZHA7CBBTJXIj6whmClVLx6tXnlQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kilZk2ga;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FJh7Xsmz;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A855606A32D
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 12:23:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00F8C606A324;
+	Wed, 11 Nov 2026 12:32:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kilZk2ga
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D18621F00A05;
-	Wed, 11 Nov 2026 12:23:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FJh7Xsmz
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2C041F00A05;
+	Wed, 11 Nov 2026 12:32:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794399827;
-	bh=EKhNvnqzPZNXveCLpzlJs+ib4Dylr9jyxyMai4yJUsg=;
+	s=k20260515; t=1794400328;
+	bh=9WsLjvkNNu9s+q1Y30o/mSE0qGBgt1KxnCS2sDzvwyI=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=kilZk2gaw8Dy9FNWHDLSy6Pu8P71MNb+jyQ+c2k14j7kBD0MMPz/CcHSgyVwIdO5a
-	 71Uu/S48pBLce1rBGAK7gGSF6X1CyHo/cPEt23egT7YT8wmHu/tA29TbHltizu1FTr
-	 KsoUlxQCrV0Xjijcmb8tpJw/6zZYBX+/ILQa0GYrR0UTG7u5g+SJLSc/johnUqU5up
-	 ZbHpxzQjM2GCJFwhQAc1IyajV7g3XzKGNs31ut1b6q6+233aNG89m4HxXDYzpr1Msn
-	 Y+Xzw4mrkdOPtCOAAm30J4giQ0+fCggk9v2I9z2IyN3UhAJwX9D2Ed27ZxXmjsDGFv
-	 L1S6ABq+RdxCg==
-Message-ID: <sashiko-outbox-208972@kernel.org>
+	b=FJh7XsmzJ0ybSFCIeH/im7LKvZlxcvXoOGKD2ZWiWuoJVimz24cVKhd0tXea71BcI
+	 8yGCnnorB2TgHP+gDfMLGm9uCdEQo2e4Vixpbuhqe1hqxY9WBm4DbuJNHq6HvqdA+t
+	 W3pCpCqRyMJPTSnjHTimKREl/oJ2djMO5a9vPGdceQyYQi5C0ZuLS9v5afeQoP/G/+
+	 lEBh5CshkZfNwa+y+ua+JNkEbZ+WO0M66itBmsmi9edcMjoUEnMWAiZD+g6BP1MmB1
+	 HZLGe7mX3dXgjNb8Vz+zBFPc2Fvq6XufSu63OIjGnIH8JfqbPBfDVT34xJzSiWW6Hb
+	 Vp9PgDqkzuWjA==
+Message-ID: <sashiko-outbox-208980@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next] bpf, arm32: build constants inline instead of
- using a literal pool
+Subject: Re: [PATCH v3 next 04/13] scripts/kallsyms: make use of binary data
+ output optional
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ramin Moussavi" <ramin.moussavi@yacoub.de>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261111121621.665533-1-ramin.moussavi@yacoub.de>
-References: <20261111121621.665533-1-ramin.moussavi@yacoub.de>
+To: "David Laight" <david.laight.linux@gmail.com>, "Petr Mladek" <pmladek@suse.com>, "Kees
+ Cook" <kees@kernel.org>, linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, "Jim
+ Cromie" <jim.cromie@gmail.com>, "Lorenzo Stoakes" <ljs@kernel.org>
+Cc: "Luis Chamberlain" <mcgrof@kernel.org>, "Andrey Grodzovsky" <andrey.grodzovsky@crowdstrike.com>, "Steven
+ Rostedt" <rostedt@goodmis.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Samuel
+ Wu" <wusamuel@google.com>, nathan@kernel.org, nsc@kernel.org
+In-Reply-To: <20261111115911.1142000-5-david.laight.linux@gmail.com>
+References: <20261111115911.1142000-1-david.laight.linux@gmail.com>
+ <20261111115911.1142000-5-david.laight.linux@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 11 Nov 2026 12:23:46 +0000
+Date: Wed, 11 Nov 2026 12:32:07 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,70 +65,97 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 2 potential
+Thank you for your contribution! Sashiko AI review found 3 potential
 issues to consider:
-- [Low] bpf, arm32: non-standard multi-line comment style in
-  emit_mov_i_no8m()
-- [Low] bpf, arm32: unused flags field left in struct jit_ctx
+- [Medium] scripts/kallsyms: wrong variable negated for negative offsets
+  in write_src()
+- [Medium] scripts/kallsyms: 9-digit buffer in write_src() clobbers sign
+  on large offsets
+- [Low] scripts/kallsyms: missing endian.h include for htobe32() and
+  htole32()
 --
 
-commit 04b7597139a2756fa5ffbad42747333b65860a8c
-Author: Ramin Moussavi <ramin.moussavi@yacoub.de>
+commit b5cbf4ceba792715bcee0dd6d58ce67f9542a5ad
+Author: David Laight <david.laight.linux@gmail.com>
 
-bpf, arm32: build constants inline instead of using a literal pool
+scripts/kallsyms: make use of binary data output optional
 
-This commit replaces the literal pool used for non-imm8m constants on
-ARMv5 and ARMv6 with inline MVN/MOV/ORR instruction sequences and removes
-the literal pool tracking fields and overflow fallback.
+This commit makes the binary output file and input ELF file optional in
+scripts/kallsyms, writes the markers table in target endianness when using
+binary output, and formats pc-relative offsets into a buffer for fwrite().
 
-> diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
-> index 9ede81afbc50e..d3b5d77450687 100644
-> --- a/arch/arm/net/bpf_jit_32.c
-> +++ b/arch/arm/net/bpf_jit_32.c
-> @@ -130,8 +130,6 @@ enum {
->  #define TMP_REG_2	(MAX_BPF_JIT_REG + 1)	/* TEMP Register 2 */
->  #define TCALL_CNT	(MAX_BPF_JIT_REG + 2)	/* Tail Call Count */
+> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> index aa3a8ec83fbb8..74db751600b4f 100644
+> --- a/scripts/kallsyms.c
+> +++ b/scripts/kallsyms.c
+[ ... ]
+> @@ -406,51 +417,105 @@ static void write_src(FILE *out_bin_file, const ch=
+ar *out_bin_name)
+[ ... ]
+> +		if (out_bin_file) {
+> +			if ((i & 0xFF) =3D=3D 0)
+> +				markers[i >> 8] =3D big_endian ? htobe32(off) : htole32(off);
+
+[Severity: Low]
+Does scripts/kallsyms.c need to include <endian.h> for htobe32() and
+htole32()?  Glibc pulls it in transitively through <stdlib.h>, but on
+musl libc hosts neither scripts/kallsyms.c nor its included headers
+declare these functions, breaking the host tool build.
+
+[ ... ]
+
+> @@ -458,31 +523,15 @@ static void write_src(FILE *out_bin_file, const cha=
+r *out_bin_name)
+[ ... ]
+>  	output_label("kallsyms_offsets");
 > =20
-> -#define FLAG_IMM_OVERFLOW	(1 << 0)
-> -
+>  	for (i =3D 0; i < table_cnt; i++) {
+>  		if (pc_relative) {
+> +			/* All 64 bit builds and (at least) relocatable 32 bit ones */
+> +			static char line[] =3D "\t.long\t_text - . +123456789";
+> +			char *end =3D line + sizeof(line) - 1;
+>  			long long offset =3D table[i]->addr - _text;
+> +			int off32;
+> =20
+>  			if (offset < INT_MIN || offset > INT_MAX) {
+>  				errx(EXIT_FAILURE, "kallsyms failure: "
+> @@ -490,12 +539,28 @@ static void write_src(FILE *out_bin_file, const cha=
+r *out_bin_name)
+>  					table[i]->addr);
+>  				exit(EXIT_FAILURE);
+>  			}
+> -			printf("\t.long\t_text - . + (%d)\t/* %s */\n",
+> -			       (int)offset, table[i]->sym);
+> +
+> +			/* Build the line so the the faster fwrite() can be used */
+> +			*end-- =3D out_bin_file ? '\n' : '\t';
+> +			memset(end - 8, ' ', 8);
+> +			off32 =3D offset;
+> +			if (off32 < 0) {
+> +				end[-9] =3D '-';
+> +				offset =3D -off32;
+> +			} else {
+> +				end[-9] =3D '+';
+> +			}
 
-[ ... ]
+[Severity: Medium]
+Should this negate off32 (or an unsigned magnitude) instead of assigning
+-off32 back to offset?  Because offset is not used after this point,
+off32 stays negative when a symbol lies below _text, so off32 % 10 in the
+digit loop below yields negative remainders and writes non-digit ASCII
+characters into the assembly output (and -off32 overflows if off32 is
+INT_MIN).
 
-> @@ -209,11 +203,6 @@ struct jit_ctx {
->  	u32 *offsets;
->  	u32 *target;
->  	u32 stack_size;
-> -#if __LINUX_ARM_ARCH__ < 7
-> -	u16 epilogue_bytes;
-> -	u16 imm_count;
-> -	u32 *imms;
-> -#endif
->  };
+> +			do
+> +				*end-- =3D '0' + off32 % 10;
+> +			while (off32 /=3D 10);
 
-[Severity: Low]
-With FLAG_IMM_OVERFLOW removed, is struct jit_ctx's flags member now
-unused as well?  Nothing else in arch/arm/net/bpf_jit_32.c reads or writes
-ctx->flags, so it can be dropped alongside epilogue_bytes, imm_count, and
-imms.
-
-[ ... ]
-
-> @@ -469,7 +411,30 @@ static inline int bpf2a32_offset(int bpf_to, int bpf=
-_from,
->  static inline void emit_mov_i_no8m(const u8 rd, u32 val, struct jit_ctx =
-*ctx)
->  {
->  #if __LINUX_ARM_ARCH__ < 7
-> -	emit(ARM_LDR_I(rd, ARM_PC, imm_offset(val, ctx)), ctx);
-> +	/* A single MVN if the inverted value is an imm8m, else one
-> +	 * MOV/ORR per non-zero byte -- a byte is always an imm8m.
-> +	 */
-
-[Severity: Low]
-This isn't a bug, but BPF code uses the multi-line comment style where
-the opening /* sits on its own line and the comment text starts on the
-next line.
+[Severity: Medium]
+Can a 10-digit offset in [INT_MIN, INT_MAX] overwrite the '+' or '-' sign
+in line[]?  The template only reserves 9 digit slots after end[-9], so any
+symbol at least 1,000,000,000 bytes from _text runs 10 iterations of the
+loop and clobbers end[-9], emitting invalid assembly syntax.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261111121621.6655=
-33-1-ramin.moussavi@yacoub.de?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261111115911.1142=
+000-1-david.laight.linux@gmail.com?part=3D4
