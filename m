@@ -1,106 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.54
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794394154;
-	b=lK4uTJ6TChu6Zra89Gr/sy+aohs8XybNWXWSOm3Vf6pKtO8yJcxa5bqPqwp/XIHMQHFd
-	 SKriift9t4hCF8j8jlPSIt6hNMWOzn+f+wGq+JSnCwJcK6JHDgI8LGJePhVPLehy4O31y
-	 kKxk803SNPWmOfUJU600XkA2dgUYVzfMl2wXEx6vPhrttettXRvDJn+gvH8fiJaFIZcTX
-	 p4GixeRJdMCcTCDhuNCdQsK08VSvC+3bp+SYm2UT8WxoziK3aL+4hh1Wx5BrNKMTYcMRf
-	 irD3tXxqg2w+GfAEbq1fh5Skjao11s4/sVWSZ3d2Z1to5fzP/3O7cVAOGzOewsjB5Qw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794394154;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.48
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794394702;
+	b=KpIWUCObPl71wCQTy2tVBwEmuSdhowqvVQSNHE6guP6rPTpUDeZxRbSZ1LM9e9hOu/7h
+	 hJRWoS7p5SQZtFI85BzupK1MlPYH72igIayPK0PFmhbwNDsSmV/MVnMH9unCMPjhqYdvt
+	 U8We6yqgrg/CWcHcxOf5O0rGcQeXvB8WfFP8Kinr3VD4yatGS/u6pgCziJyHjkETNLC64
+	 urrQ1I5M9CLddJjOmOm+xF56r2aSpN2B6tp9GFhdYHsvCZ/WHSYRSQ50lRVdYxaZj/RFt
+	 uf8znz7Cfc5C2RSPU54T9p26B0A904JwFACwVXDdufFM/Q1KeaMxIUWcQ8jNPdphk0g==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794394702;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:X-Google-Original-From:Date:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=fkkdgBcWl/gXMWZL41R2xtfz4IY0JzduuuEbE0bKcow=;
-	b=Koh19Aye8OuiXLogyFV7G3SBxyIEXi0mekGlxMRdjT+0lFxv2Wmo8jTjhqLsDw9MT0Jr
-	 5RR9lC7Pv7YO6TrgWBM20mlTcT5FdunuM1/H0/PNivnqFxdVVhr5iCYG8iwqDsXYvT0NO
-	 MvMsQbYBxXJRPKG/XxsUgNf2r7nHpNL7KfTem9son3QBAH1ZPzxWOh5btCx8vNE6Qk9pH
-	 AjcJmx+pBmTB1RFF1U3JX9e0+zYyDQOvV6yO23RBrB7DCenYB1NmdYQmTLm/rMhrSYIRs
-	 NSX2GTKPmyiMcAwEoS8fpSKhyBFILUSWauc0eZNS6XRAo6n1LVJQyS+l0tOrzHvzqGg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
+	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=jSNboseJHmMbjWA7WKSfZ1vyDpr+PcUdD6zBvgewwJQ=;
+	b=u0ZRamCAfT0CFqYPyRh8r9kCMRIB6YWJ6BfSAXFEGLvXbAeDpk/SWWldFn9JMeRjxyoS
+	 WosE/O4TXjTr66Pudg39MS4iGqlsN6Mkh9sS9FtoEriLlHCAoGAbWYDZBNdYU5cVmlYmH
+	 ty+6X+3FGrwer9jTAOF2wvFzumcGbTH8heBpx28Nqc552XPwLfOygdvpy7Dz/mH3kexbw
+	 uCsb87tJSxEzvPykhHAomI19QN0Wmc6H7xFYplMOG8FWPcuVUWHk1i6Gf8ZnLd/fPbP0G
+	 skDcRAIFA6QqhGwAnDW04yPF3za/gYRtYHWjAOKkZAXzDUJgtFjELZfoQCex9L8X8qA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=oooZo4JY;
-	arc=none smtp.remote-ip=209.85.128.54
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XiiVfPVa;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.48
+Received: from mail-yx1-f48.google.com (mail-yx1-f48.google.com [74.125.224.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84C0E606A89C
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 10:49:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 84C0E606A89C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBC38606A321
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 10:58:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BBC38606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=oooZo4JY
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4a140e7405dso26205855e9.3
-        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 02:49:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XiiVfPVa
+Received: by mail-yx1-f48.google.com with SMTP id 956f58d0204a3-67bef25eb92so4291141d50.0
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 02:58:21 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794394701; cv=none;
+        d=google.com; s=arc-20260327;
+        b=X4wlNL44cpu1ve1aqEgYyLFvzyCouwC4/a1UrUMyDCv3Afg84i1vWdSuqyVYertDAe
+         PukqA9V+Q655XCs8KE4K2/2G4FIcsO3Uiq37PbuJJkM+dpydAJXVIRh3bVMZoaaNKXZH
+         CEgvkvfUeL94V8JhH+22yRB1ek8ufO1h3xvsdcyAZx3o4HACeCuInnxf9sbTRI3N5gvK
+         3v9k+07N6RgHmtLDGbeMLEsRcUJPAvY4NuIFquXJysNVnlcuo/cRuDDJbB0hl/gYA1lC
+         zojVxF7+sr7lz7nehflDJxGoES/XSDgQ1PwzuBEaPjK4DeUmtlOY8eB9GYhIwv8os5kl
+         CfKQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=jSNboseJHmMbjWA7WKSfZ1vyDpr+PcUdD6zBvgewwJQ=;
+        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
+        b=Yn88es8f4pL81sj5Mxa6xFPQUYS6QGMg89CD5Exqy1oiP6th+aj8g2FMVaNMma8Pdt
+         4GL8i6M7pt2IGfYvTebkkGXTn9UG1fgoql/4k5oYNdrB59f2bVsxhd3XBuPCh1DsyMLE
+         +B6cX3ABoe4MH7k67BkkuPlKcrC8n9iVLHBWeypIxCUlXIV5+nnDAG5P7hC/astDDEsc
+         S87q69o3HTrDmj0/SGY+c4+VCOdLgni3/HY0yME9d5vrZhI9IZF5IsnOvXmjwtIPpp25
+         kHo6a+2+rQ5qxF9aKhFwXKuoMvPm/j0Z2ec4fh/JzZepUBb7hENQB4lJUlF0b8TovSS5
+         9B1A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794394153; x=1794998953; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:date
-         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=fkkdgBcWl/gXMWZL41R2xtfz4IY0JzduuuEbE0bKcow=;
-        b=oooZo4JYlJ2CA1rNGsEhbm/Vh1zARDhdjXBHBkBQFL9enJyj+XofgSJLMeZ9+GKxbo
-         xok/3WGW+7zKaDcdDmW6AmGqsymXOQ6yiG/TEMbbbrEyTpuEH96hQdA2JsfLDtw41Eyr
-         Sq2XWmm/XXn4bmWMceYyGu6JBYckHG8RS4VEVfx00q48LCt7osTBKv7fub58aMqyjRoZ
-         nslXmn7Y+YxO6NwpCpCXO3PtFaKh9qhBufe4ceuiQ2H30+4TNUaM/4xKC0tBs6QDF1P7
-         vrmAAtrDs3bzYwahjECqPBoax5ttmw1jsuUmag3V4MtFo5Y25+V2ukVgT+hGMBD5uaJB
-         CsVQ==
+        d=gmail.com; s=20260707; t=1794394701; x=1794999501; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=jSNboseJHmMbjWA7WKSfZ1vyDpr+PcUdD6zBvgewwJQ=;
+        b=XiiVfPVahhelk17uYWlxw6fZUpSloZHukV/mAUIeOTBtwZGHx8XX/kwMA4whQdKiRm
+         L2L4nWPb0aw20E0Teq1I684TcdD4joACV9hotasJ6x4LFLGZJDAvdLIXKTTB9dJoAbgR
+         RuXSnut+vGplROBWdxIzpxFal6fsw+sQXTjcB45sN4KZXGtWIj/gJhg7YmfoMICf8mft
+         uzfPUnXJrtsVJKwMhqjE7EI5QQKU2Ihl/VYy7ShbjZVAYLZMUF0p/kwHyzU8vV8u8oZ8
+         +qutRNJWuW3D0sftzccsvldA5EwIwJhjuewP8Ok3evVFixNqXNM+C2ElG1ukfT9IjWha
+         nFlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794394153; x=1794998953;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:date
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=fkkdgBcWl/gXMWZL41R2xtfz4IY0JzduuuEbE0bKcow=;
-        b=rAUkRf04BvO+XWh4vkBwq1zdHfdTOFcKtmovqjiz1TwXy0Dj6GRw3z/rde9ax286Bl
-         ku3PGBrRCaWn2LD1QAphlH3HMv5EaDI8FIRm4wm2Kg0rNrHp7unAHTrTz2tY4STQsLtc
-         kApVvDbSZjP/rgpmmhz8PeyqmSf7At5rDiYmzM93bJ7dU5d35Sh3IQFDQYMm5bIaa/YG
-         tZu5sO6CRPom4apw3vgBYGR5jC4q/7ZqDswQ/UgUYAXQRxQsFRuxvKsnFB+Ap38o/0kX
-         oXlHjnbRM5UtYZC15LKDesEX32EMLSk/Qt9BYceeFApdLRRKB/INeyPNfV5QEkBDx9td
-         731Q==
-X-Forwarded-Encrypted: i=1; AL+hErEKthICiVdwYddxyxEfp7lvSOmTeooFVkwn/0OIzf2Kn4nDoQnpWwmjqscYrVtSuw1aLoE=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8NLba2Kok4QmVhGFQ+U0YMDjjoe+EZMvT2toQEHSMOtexR4aDl
-	B3NhosRMuzd9VE6ToPXy708X6ZvVIC5ZXUuP+GOdlumW1tWDScvZsw8E
-X-Gm-Gg: AYBFou1nEPLrnRXc/lsY6LQ73DhMP5i6a9nPeMGtOlugZwtqM2mh4mRvxGaNvmvUELU
-	PV7kyNm7cdLZzumDsXKTblgGsjsc/PTjxRCo3uj1opePvBfy45XenJiX7IvvpxwkoqEJ/RZWZDb
-	G4hbpY3l0vzsr5Z2jj9heO0zTQxhhdmWHdqkRBgUr1J8RRBWfm8eBc/P57xpYwF5RPjyLbF333r
-	jTcxDfaHemKlQdA7x5l6fzfV1P10lU+rOZOGTBbF7qJWEhkt/qjkgb9WTgnsAeksFU0AN5sp0gk
-	zUSdb8J1DDFuMnxMnX81KIMjGc+7LMWnCnzcfi+/XcIg/e8ldgg+xoc+UOrUmRypE4MDnio61sQ
-	FNgeVuYATA1uTA+AN9p/KdZFEutvvmgt09WewblUe6Bv85MfCHKIR+JUuh7XuMr/EgbN6cA013D
-	Fd+AGEWakuq3Lr5cFqwV59fN31vrgKqFxOwGy0PN1Ccr1ZK9rXllDbnpyqnVxyy1Twgpd1FLGCg
-	+zDCTDP7XCOn9LuHzoLpYLLbDfpUvCkVoMkpYzErp5gBXBLIWN0ePErMqzJr/foG3t9mknfGmsm
-	c+o=
-X-Received: by 2002:a05:600c:19d0:b0:4ac:aae6:6401 with SMTP id 5b1f17b1804b1-4ba09375031mr37014455e9.12.1794394152548;
-        Wed, 11 Nov 2026 02:49:12 -0800 (PST)
-Received: from krava ([2a02:8308:a00c:e200::25dc])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49835d2c05dsm10153242f8f.25.2026.11.11.02.49.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2026 02:49:12 -0800 (PST)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 11 Nov 2026 11:49:10 +0100
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Jiri Olsa <olsajiri@gmail.com>, Naveen N Rao <naveen@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jason Baron <jbaron@akamai.com>, Alice Ryhl <aliceryhl@google.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ard Biesheuvel <ardb@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Alan Maguire <almagui@kernel.org>,
-	x86@kernel.org, linux-trace-kernel@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH 04/13] kprobes: Maintain an rbtree of registered probes
-Message-ID: <avRIJuSolFTwT_Tk@krava>
-References: <20261109194916.1089703-1-jolsa@kernel.org>
- <20261109195517.1090787-1-jolsa@kernel.org>
- <undine-1794298339502831052-1b6960b8f9b38e7d@undined.local>
- <avLz8k0gdZwYTeA5@krava>
- <undine-1794325083765212173-9c2dd2a4d5c010fe@undined.local>
+        d=1e100.net; s=20260707; t=1794394701; x=1794999501;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=jSNboseJHmMbjWA7WKSfZ1vyDpr+PcUdD6zBvgewwJQ=;
+        b=2YrX3R71qmoRpCkrcalvoaJ5whzq3nlGCDNRIZoUXb4lR/lwcGqzhD+y13gEeC9dIb
+         /R4SDcVd5bm56TMK+HCo8J6vF+zmbUD6QQMplek2yuXYSagU3PGm2LUaMERxzs9rQ6s7
+         rJh2N4gA65bxqrvgrfa24Kl5uYpzN0xZF3pM+v9uhYxQcQx8xdmfFrBXP+kFAoIFLWls
+         67y6fPpQGMNMmEVNJIrImTec1QzHMDmdnLbnUg3nG+8An/jNvAp71mhUgD96AQGCWmDv
+         XV4u/i74/u4Pf7O64gbrDUMYW4vmh6kej+guLXmerKM+vUj/HTc4vmFhENyjy/2QGymE
+         pPBw==
+X-Gm-Message-State: APuU4Z962OWXRCaWrzOPl6fSm+dWHr1khig6r114A0l8SzBkhnT6BKyL
+	uhXO6Nk3eeEHRv2ubI6HV9bfz5wupCcfoPg4LkqYQohhaa5YnbvJHA92iv29fCehKCwEwcxxgbl
+	VJ06/pjjpADXP/1EDvS2drcZFYloOzCvMI80vi60=
+X-Gm-Gg: AYBFou0SFJ782M1sXXscARjDoPCuB+L+JnqQBXOFNnCkfaMZ5hzU6z/8mfQ8lZMJiJB
+	6WWeQLbNdb8OPYO2sekl1k5EI217U94aV+g4QAQzE5RJAlHp/3tVtLIfdSWkNKA5sMY7IMtbmrh
+	2Qy6VnXyCOqfQJeq405IbNb4040BbfbnUUM9fQx0MX4tUY6Cr3iwwXm3YPmUl54s3vfnW1eTmjA
+	aBsJ3nkNehKR9iWZZYtZxkeY9Z9Yzv+g0lmDi76OpuaaHBFHSAhJygMx05enc/Xm1l1gF3mnaUY
+	Q1nH2rzlxwdrIxSCFc8eEcrgC2pl52CptiVljCqHIMyWc2bUHw9jOjs1J1XffxyvDoL2EiKn8o0
+	WFTqSf/t7Njw1ENp1F81XRQwsdmp9aXB9YYEWYg==
+X-Received: by 2002:a05:690e:450c:20b0:677:eb7b:c701 with SMTP id
+ 956f58d0204a3-67c5703859emr2240271d50.39.1794394700644; Wed, 11 Nov 2026
+ 02:58:20 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -110,39 +103,77 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <undine-1794325083765212173-9c2dd2a4d5c010fe@undined.local>
+References: <20261110164046.454431-1-a.s.protopopov@gmail.com>
+ <20261110164046.454431-15-a.s.protopopov@gmail.com> <sashiko-outbox-207493@kernel.org>
+In-Reply-To: <sashiko-outbox-207493@kernel.org>
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+Date: Wed, 11 Nov 2026 11:58:08 +0100
+X-Gm-Features: AclHuK-Q4Eu_FS1-HlF4vKvLEdt8PMH7aN4qBEVYkbkPzJS8znNp5Ggh9wBRWMo
+Message-ID: <CAGn_itzg7de6tt_W6UQ=aHyUCVDU3dOX9T7yv4vNz5-mAXCMMQ@mail.gmail.com>
+Subject: Re: [PATCH v3 bpf-next 14/18] bpf: Require the JIT for fmod_ret
+ programs on found 64-bit targets
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 11, 2026 at 12:38:03AM +0900, Masami Hiramatsu (Google) wrote:
-> On Tue, 10 Nov 2026 11:37:38 +0100, Jiri Olsa <olsajiri@gmail.com> wrote:
-> > On Tue, Nov 10, 2026 at 08:12:19AM +0000, Masami Hiramatsu (Google) wrote:
-> > > On Mon,  9 Nov 2026 20:55:17 +0100, Jiri Olsa <jolsa@kernel.org> wrote:
-> > > > Add an address-ordered rbtree for registered probes. Keep it synchronized
-> > > > with the hash table when probes are added, removed, or replaced by
-> > > > aggregator probes.
-> > > 
-> > > Could you tell me why don't you use hlist (get_kprobe) instead?
-> > > I would NOT like 2 different lists which is basically doing the
-> > > same thing.
-> > 
-> > The speedup comes from finding the first relevant kprobe, then iterating
-> > over the remaining probes in address order. The hash table supports
-> > exact-address lookups, but it doesn’t provide that ordering.
-> > 
-> > I agree that maintaining both indexes is less convenient. What do you think
-> > about centralizing their updates as in the change below? untested
-> 
-> If you can replace the hash table with other faster design, it is OK to me.
-> But I would like to avoid this simple-adding another lookup table for the
-> rare usage case (because of the maintenance cost, and duplicating a list
-> makes it difficult to handle cases where discrepancies arise between the
-> two lists.)
-> 
-> Can you change the size of the hashtable and measure how the performance
-> is changed? I need more options.
+On Tue, Nov 10, 2026 at 6:38=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+>
+> Thank you for your contribution! Sashiko AI review found 1 potential
+> issue to consider:
+> - [Medium] bpf: missing jit_required in fmodret_retval_init() for 32-bit
+>   int on ppc64
+> --
+>
+> commit be8ba9e6d31af4b7ee8b1ec3bc7241dc8e6ff517
+> Author: Anton Protopopov <a.s.protopopov@gmail.com>
+>
+> bpf: Require the JIT for fmod_ret programs on found 64-bit targets
+>
+> This commit sets jit_required for fmod_ret programs attached to found
+> targets with 8-byte return types so the BPF interpreter does not truncate
+> 64-bit return values to 32 bits.
+>
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index b12b57c7403e4..920ff39aac429 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -23883,6 +23883,9 @@ static int fmodret_retval_init(struct bpf_verif=
+ier_env *env, u32 btf_id,
+> >
+> >       aux->fmodret_retvals =3D retvals;
+> >       aux->fmodret_retval_cnt =3D cnt;
+> > +     /* The interpreter returns only 32 bits */
+> > +     if (size =3D=3D 8)
+> > +             env->prog->jit_required =3D 1;
+>
+> [Severity: Medium]
+> Does fmodret_retval_init() also need to set jit_required when size =3D=3D=
+ 4?
+>
+> On 64-bit PowerPC (which supports BPF trampolines without selecting
+> ARCH_WANT_BPF_JIT_ALWAYS_ON), the ELF ABI requires a callee returning a
+> 32-bit signed int to sign-extend r3 to 64 bits, and callers inspect all 6=
+4
+> bits of r3.  DEFINE_BPF_PROG_RUN() defines the interpreter entry points a=
+s
+> returning unsigned int, which zero-extends r3 to 64 bits.
+>
+> In arch/powerpc/net/bpf_jit_comp.c, invoke_bpf_prog() and
+> __arch_prepare_bpf_trampoline() save and restore all 64 bits of r3 withou=
+t
+> sign-extending 32-bit return values, so when the interpreter runs an
+> fmod_ret program on a target returning int, a negative error return value
+> is zero-extended to a positive 64-bit value in r3 while skipping the
+> target function.
 
-yep, I'll check on that
+PowerPC is not part of this patchset. However, in fact, I think I will just
+remove this "if (size) =3D=3D 8" and force jit for all new progs. This does=
+n't
+break any old functionality, only new functions are getting here.
 
-jirka
+Will send it for v4 or as follow-up.
+
+> --
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261110164046.45=
+4431-1-a.s.protopopov@gmail.com?part=3D14
