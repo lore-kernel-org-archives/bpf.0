@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794376092;
-	b=2AhK14UC4X7iJQrqfKnMfx9K3J+Yyu9k4Co6fiUDAQs1FCaK+EfhR+djdPqt8hceQtcc
-	 PH6EdmYgvXcrM+eus4vcwZDu34Ja0DDODnl1BCWaKaX0DyEipxfpNCzOYOCEYq3FGCR0B
-	 JQzXkxrnUKElQf1pDDZoRiBzvEax6PHG5+C2oKtKser0xUphlOMDYGqv77FT98zDbah1E
-	 scePDJBBw6O/nb2DE7X4oGafQ//3QieV8+yHXdreRr50Kab92EPqykUW3XsEgzeW5TPIU
-	 EzB3d5qkxH2Q2ssios5VNaKwsD8h+O7yYiPmK5tOq3RLfRX1VA804SjJSU47QkUAEgA==
+	t=1794376646;
+	b=JH1Z3hXAo+ijGF2Lyi/jicBYG2bAkxsmg6kf9IBjnOA0wRfncn+HThJMeIR3WkK59nTA
+	 cmUhUWdCUBhPOzAX3mcX5M+rb82oKNISyKcBk/YKlkT4ZyJzeM+7aH2TvTE7MbjcAzB2y
+	 DT9nFP4mieEHrma2qLlj35mj8kGjDiw7fJvFswgYGuz9TwbOjubQoM6yOrMCJRq1BAE3s
+	 +kfVS20wath5DpWCvfQLJIK66A1Mos8l6fSFGFueaSc67wbef21Iu7jQlyM9E+0gUCKtG
+	 yHLYbj3FbvukMVaJ0KmjJnkXrqKGpVgfVwV78A5QdolCG2L4fk8ZXcooJ6Qsxm0+aDA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794376092;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794376646;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=+ML24gdrBTLKYC744so9nsTY/8WD8Te28oLZslIJscw=;
-	b=lFJcwitMdCq3NlOZc2XtpxIR1ApYqEFjdzMLhsEDhFNDviP1Yt9nfe9XFy3iyUd741dJ
-	 mfLt8zUWK3XzpFFeNKSUQIdfzLSrFSMWwg607VFrdyDHuS+ieQoAxTQ7XzuF099zmWcky
-	 WVarGOQJrbvTziIEAaqWandeZPihqoGrMpWrSXh8HyVaZf22LVgoPNuAFmjgixUcHuMiw
-	 1R8kjr9AJ+e9p4lEldh/Iu+3Rhav8V571wKU+b6OporO0AZoRS9oX01oXRV65ZKJq63cn
-	 XEJGKMGVrNqg/yoBUyQNvlIVO7fGjSOyiSROD8D2pfFOILpWzC/DC9e9qEO3ZQ2WBZA==
+	bh=zJ3gmAhUG/wHgA+AL57VErPdcaRAFryCOX+lbljQeHs=;
+	b=aeyXmunTHxz1weaHe8nJGrDYks/P8uCTrjv9z4Ug+JHKVdlzg40pCEqRhsHjPdQe/Smi
+	 +yNSJNZ4TwSitn+xFXvYM2H8GfKCT0qKdRPl9dQOiLOrsTrtSWhla45yQ0i8Xc6EQAQBt
+	 iWQkAux+OuVwhtxOv0cK25tR+8ICBUSKvEsEWyQrVYlZr2CoaPS4m18pTDzLZxLZ5cgVL
+	 B+SWncvgaSn/cT0yVngM6a5GEOYYOiIZOBj8pDPF7awiGX3Py8Ab4QitcCNEj1tSOYzdS
+	 9IEs1fO7yLlZLvgELCCXgrqAbvM0L6Up6Nk2W0jnAWT4vWb3nJWciLWbOJzsHPP2YzQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lUTV0EfU;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Ob1/QMJv";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17AA2606A31C
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 05:48:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C61B606A31C
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 05:57:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lUTV0EfU
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 748D01F00A05;
-	Wed, 11 Nov 2026 05:48:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ob1/QMJv
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A44441F00A05;
+	Wed, 11 Nov 2026 05:57:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794376091;
-	bh=+ML24gdrBTLKYC744so9nsTY/8WD8Te28oLZslIJscw=;
+	s=k20260515; t=1794376645;
+	bh=zJ3gmAhUG/wHgA+AL57VErPdcaRAFryCOX+lbljQeHs=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=lUTV0EfUmazWLhY76jctiBfOkmusCmCFANOas/dMW6LDBLvHRFHTWFWJXgWJZETdx
-	 u7ZN9N3hK9uxgwRjfIzfYNLs8Pq2AToKpu7ZulLwouMJiGHW7bWuMktn6cY4BZ/kK5
-	 c/dFu8zvQECbDE4dBN+JuQAPpU9nusdgh0/Wzd7IBUtCMJmH8FBPw2GBi9Lxc+X2ub
-	 y+FgyViX/iEggm4KS3EUnw8lWNDTzQZvD/gf5d9g9rHvFuBWkUYUIoy37XdHkBYgdK
-	 AAHAF1qBMkcszBkaCVpRnbFo0V2rvfWIsT3mHP9Y3mVqv+U2PIAIaZm++eaYplILUN
-	 YInBpVdpr7sig==
-Message-ID: <sashiko-outbox-208365@kernel.org>
+	b=Ob1/QMJv824a2gmnphDUIzRMVhaTtKbNtFt8zY2e45n2K24gdiSaWzK0uJJqq0Kix
+	 kA1br3U09lkC4ulq11NjU/u4UfDJqeZmEwJfGiBOq1H+oOCpADPzqJy/rzCT56PVM0
+	 3+VGf+31NbGr3wBJUjppiluxRaF39TSBpN/b4pxUUuYvdI52dgYM/hfq5XR9Zfa+ii
+	 GD1/MJwKmG8pwXQDueWyFRpJdCVzs+V0WPa4J0feZnnueJEQS4YpF3NyKXVCIrL7Q0
+	 bpW2k1Lq29cVpR04iClk/5ojfnUPNz59j+fj5bSxhXOaXlCb8SBPaUKTZfKOhy7PV/
+	 DLEapzwUajJcg==
+Message-ID: <sashiko-outbox-208372@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 16/29] bpf: Recompute a pointer after the
- jump that bounds its index
+Subject: Re: [PATCH bpf-next v2 20/29] bpf: Find a copy of an induction
+ variable without scalar ids
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261111051341.2800252-17-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261111051341.2800252-21-alexei.starovoitov@gmail.com>
 References: <20261111051341.2800252-1-alexei.starovoitov@gmail.com>
- <20261111051341.2800252-17-alexei.starovoitov@gmail.com>
+ <20261111051341.2800252-21-alexei.starovoitov@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 11 Nov 2026 05:48:10 +0000
+Date: Wed, 11 Nov 2026 05:57:25 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -62,102 +62,122 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue to consider:
-- [High] bpf: missing BPF_MAX_VAR_OFF offset bounds check in
-  recompute_ptr()
+- [High] bpf: type confusion between pointer and scalar bounds in
+  is_iv_at_header()
 --
 
-commit 5f6f31940968145851bf6579a0206e69bee69836
+commit a899486291f489b60aa159499a2316c95dbc938e
 Author: Alexei Starovoitov <ast@kernel.org>
 
-bpf: Recompute a pointer after the jump that bounds its index
+bpf: Find a copy of an induction variable without scalar ids
 
-This commit extends linked-register refinement at conditional jumps to
-recompute a pointer register p =3D x + i once a conditional jump bounds the
-index i.
+This commit replaces COPY_SCEV and scalar ID checks for induction variable
+copies with untyped expression comparisons via const_diff_at_header().
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 138581a759bbb..c2a3f74d441fe 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -19741,6 +19741,43 @@ static struct bpf_reg_state *scev_reg_for_fill(s=
-truct bpf_func_state *frame, u32
->  	return &ss->spilled_ptr;
+> diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
+> index 98a05f97196a6..28fd06c16fe4d 100644
+> --- a/kernel/bpf/scev.c
+> +++ b/kernel/bpf/scev.c
+
+[ ... ]
+
+> @@ -4585,6 +4518,19 @@ static void linear_bounds(struct bpf_reg_state *re=
+g, u32 max_header_count,
+>  	out->r32 =3D r32;
 >  }
 > =20
 > +/*
-> + *	p =3D buf + i; if (i > 100) return 0; *p =3D 0;
-> + * p is @dst_reg, x is @ptr_reg, i is @off_reg. Scalar evolution says th=
-at p =3D=3D x + i. So the insns
-> + * 'p =3D x; p +=3D i' are a no-op at run time, and a state that is soun=
-d before them is sound after
-> + * them: apply their transfer function. Type, object and offset of p are=
- taken from x as it is now;
-> + * how p was computed does not matter.
-> + * The old p is replaced, not intersected: a state does not distinguish =
-two values of one hash map,
-> + * and the intersection of an offset into the one with an offset into th=
-e other holds for neither.
-> + * It is replaced only if the new range is a subset of the old one. An e=
-mpty range is a subset too:
-> + * the path is infeasible, p is left as it is.
+> + * Is @r the induction variable that the latch tests, or congruent to it=
+: equal to it at the header
+> + * of the loop at @h in every iteration? Then the range of the one is th=
+e range of the other.
 > + */
-> +static bool recompute_ptr(struct bpf_verifier_env *env, struct bpf_reg_s=
-tate *dst_reg,
-> +			  const struct bpf_reg_state *ptr_reg, const struct bpf_reg_state *of=
-f_reg)
+> +static bool is_iv_at_header(struct bpf_verifier_env *env, int h, int iv_=
+reg, u32 r)
 > +{
-> +	struct bpf_reg_state sum =3D *ptr_reg;
+> +	s64 delta;
 > +
-> +	/* the cpu can speculate past the jump with an out-of-bounds index */
-> +	if (!env->bypass_spec_v1)
+> +	if (iv_reg < 0)
 > +		return false;
-> +	/* 'p +=3D i' assigns a new id to a packet pointer */
-> +	if (ptr_reg->type =3D=3D SCALAR_VALUE || type_is_pkt_pointer(ptr_reg->t=
-ype) ||
-> +	    !bpf_is_widenable_reg_type(ptr_reg))
-> +		return false;
-> +	__mark_reg32_unbounded(&sum);
-> +	scalar_step_add(&sum, ptr_reg, off_reg);
-> +	sum.r64 =3D cnum64_add(ptr_reg->r64, off_reg->r64);
-> +	sum.var_off =3D tnum_add(ptr_reg->var_off, off_reg->var_off);
-> +	reg_bounds_sync(&sum);
-> +	if (reg_is_empty(&sum) || const_tnum_range_mismatch(&sum) ||
-> +	    const_tnum_range_mismatch_32(&sum))
-> +		return false;
-> +	if (!bpf_reg_union_compatible(dst_reg, &sum) || !cnum64_is_subset(dst_r=
-eg->r64, sum.r64))
-> +		return false;
-> +	*dst_reg =3D sum;
-> +	return true;
+> +	return r =3D=3D iv_reg || (const_diff_at_header(env, h, iv_reg, r, &del=
+ta) && !delta);
 > +}
+> +
+>  static void iv_bounds(struct bounds *bounds, struct cnum64 iv_range)
+>  {
+>  	struct cnum64 r64 =3D cnum64_intersect(bounds->r64, iv_range);
+
+[ ... ]
+
+> @@ -5128,7 +5074,7 @@ int bpf_widen_scev_regs(struct bpf_verifier_env *en=
+v, struct bpf_verifier_state
+>  			if (err)
+>  				return err;
+>  			linear_bounds(reg, iters->max_header_count, &coefs, &bounds);
+> -			if (coefs.base_reg =3D=3D iters->iv_reg)
+> +			if (is_iv_at_header(env, insn_idx, iters->iv_reg, coefs.base_reg))
+>  				iv_bounds(&bounds, iters->iv_range);
+>  			if (log->level & BPF_LOG_LEVEL2) {
+>  				bpf_log(log, "loop header at %d, widening ", insn_idx);
+
+[ ... ]
+
+> @@ -5251,7 +5196,11 @@ int bpf_clamp_scev_regs(struct bpf_verifier_env *e=
+nv, struct bpf_func_state *cur
+>  			continue;
+>  clamp:
+>  		linear_bounds(entry_reg, max_header_count, &coefs, &bounds);
+> -		if (coefs.base_reg =3D=3D entry->iv_reg && !moved)
+> +		/*
+> +		 * iv_range is the range at the header. After the latch @r can be the =
+zero extension
+> +		 * of its header value. @reg went through that insn and has what holds=
+ of the range.
+> +		 */
+> +		if (!behind && is_iv_at_header(env, insn_idx, entry->iv_reg, coefs.bas=
+e_reg))
+>  			iv_bounds(&bounds, entry->iv_range);
+>  		if (moved) {
+>  			/* a sum that can wrap has another residue, see scalar_step_add() */
 
 [Severity: High]
-Can recompute_ptr() overwrite *dst_reg with a pointer offset outside
-(-BPF_MAX_VAR_OFF, BPF_MAX_VAR_OFF)?
+Can is_iv_at_header() apply a pointer induction variable's offset range
+(iv_range) to a congruent SCALAR_VALUE register?
 
-When adjust_ptr_min_max_vals() verifies the earlier p =3D x + i while i is
-not yet constant, check_reg_sane_offset_scalar() and
-check_reg_sane_offset_ptr() only check known constant offsets and smin,
-so dst_reg->r64 can have an smax >=3D BPF_MAX_VAR_OFF (for example
-[-16, 0xfffffff0ULL] on PTR_TO_STACK).  If a subsequent conditional jump
-narrows i to the constant 0xfffffff0ULL, cnum64_is_subset(dst_reg->r64,
-sum.r64) succeeds and recompute_ptr() sets dst_reg->var_off.value to
-0xfffffff0ULL without calling check_reg_sane_offset_scalar() or
-check_reg_sane_offset_ptr().
+const_diff_at_header() compares untyped SCEV expressions without checking
+that iv_reg and r have the same register type in the loop-entry state.  In
+transfer(), a no-op 64-bit BPF_ALU | BPF_END (such as le64 on a
+little-endian host) leaves reg2expr[dst] unchanged:
 
-Downstream callers that assume a constant var_off.value fits in 32 bits
-then truncate it, allowing out-of-bounds kernel memory access at runtime:
+kernel/bpf/scev.c:transfer() {
+    ...
+			need_bswap =3D class =3D=3D BPF_ALU64 || ((x_or_k =3D=3D BPF_TO_LE) !=3D=
+ little_endian);
+			switch (insn->imm) {
+			case 16: op =3D need_bswap ? BSWAP16 : ZEXT16; break;
+			case 32: op =3D need_bswap ? BSWAP32 : ZEXT32; break;
+			case 64: op =3D need_bswap ? BSWAP64 : 0; break;
+    ...
+			id =3D reg2expr[dst];
+			if (op)
+				id =3D expr1(scev, op, reg2expr[dst]);
 
-kernel/bpf/verifier.c:stack_slot_obj_get_spi() {
-	...
-	off =3D reg->var_off.value;
-	if (off >=3D 0 || off % BPF_REG_SIZE) {
-	...
+			return replace_reg(scev, e, dst, id);
 }
 
-Here 0xfffffff0ULL is truncated to int off =3D -16, validating stack slot
-fp-16 while passing r10 + 0xfffffff0ULL to the helper or kfunc.
+When env->allow_ptr_leaks is enabled, check_alu_op() degrades a pointer
+register passed to that instruction to an unknown SCALAR_VALUE while the
+instruction preserves the raw 64-bit pointer value at runtime.
+
+If iv_reg is a pointer induction variable (for example PTR_TO_MAP_VALUE
+with offset in [1, 10]) and r is copied from iv_reg and passed through a
+64-bit no-op BPF_END both before the loop and on the backedge,
+compute_header_scevs() and is_iv_at_header() treat r as congruent to
+iv_reg.  bpf_widen_scev_regs() and bpf_clamp_scev_regs() then intersect
+r's scalar bounds with iv_range, causing the verifier to bound a register
+holding a raw 64-bit kernel pointer to the small scalar range [1, 10] and
+allowing out-of-bounds memory access.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261111051341.2800=
-252-1-alexei.starovoitov@gmail.com?part=3D16
+252-1-alexei.starovoitov@gmail.com?part=3D20
