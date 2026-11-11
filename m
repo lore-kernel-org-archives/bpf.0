@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794415651;
-	b=ZeO/kNWxshLx8cr30bHm5TP2Ubjf7jWGb+YGTuFNxU4Q8mHNUlM8T0GuJlY97f51DvXA
-	 G58A+/XIAzEtS8uytxx2i/2LKIHu+5bl3Q3VE6obt8okHtOcCBGt6tCteq3NqG8diM/YC
-	 0kp53hI90sTI8M7iWOMehBV3zetz3nUqA++BGf4PEII52xCR8wxSkSMTl3nBwmPiaOYGs
-	 FxXoca+MxNVk6/u1DZc5XFdNiDYhUdywTQzDzgjom0faVxRITnErrPnkyiuztUgpND9Bp
-	 CBU9eaeTspyGe3eiqpytE4OnyS34xq/bbNvIqAOWtMDs72+QM7PVQ13TyObJThy4Qgg==
+	t=1794415657;
+	b=mxLMhv6ryPhw2QbZgy7SZ7bZb6XpVh0CYAOJJ7BRKKY8th1ORabqLVnWOgEe9oLkpD+Y
+	 imKtEp/FFblw3tYFPLwluvsWkj7TeswJ/7MSHdj9aB7O6CgBepyIGDh2UfcWs1gQ2gQ3X
+	 V7BgyDMbZt292IO5cji0EtjSa164zb8sl46edeWzKNv2abJ5k9piFPR3PEymvGvBguh/u
+	 hmvLczwYYKJXYl8/R9YUmwUvaiIStEVxdJ3uTWITjWjfE3wzMgiyWkyxpfAGYfAS1eI4H
+	 O0pZztB4SBZr+oCqWfgwlaunOSpSu4mbF7NvU6kqeC4tO65j/XF4rvt/uFUP/51v2iQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794415651;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794415657;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=O2jjMVEd2+veLjBsKlSN8S11lNRJrLDfCaGQ947D4Us=;
-	b=0yDgLASi16TGXs/8KP9fINOKyEJd87Fn1V+hzWYLX/eXluq8FIJ7rDX46sVbj3WqMyqB
-	 oyRfI5bGh7f1L/ZfDbmYmC2rFAV409oTorQtoeqeutgRZHEH4SNVU7Hse9+q8LgNe37hl
-	 rzGxfp83WP1Y4hJdm+HqIeIR+w7V+cwVx/e9Mwdaf1I3VT1+mDJl8zyWGFD4qX0ysgd9L
-	 sadNZ4mFA/G4sC1QLKULzCrI97Xj1fUvj0/R4H5B89yFvmT0DG6cTexunNTQe0jsATJq6
-	 3IcF8jtUylfkchSU/xwEQoj7pUGoocus+5CGjsX0Kpczdrn4/Fl6fawey+WNr3UCm2g==
+	bh=eKFdWEUNriVvX0DNDyRsr1Egs2fz6NXbFrT2C14agqk=;
+	b=s6TxWr9p8dy5BpmaM0bsGVTu+wkeQBuAd6p1tp3gbHJUE8GbcMz2yXTGyPVx6FX9oyRI
+	 38qD0lNgnFkQ01baqMDoo8ekeDppAZ6ugLOJNef993/VDaf+TVbK6e2XZBfog14ojWgRP
+	 7TLHIkSxuk5i18S1VqM3BVg8QUG6j93TYl3axf/9XH5tJLL148pe6nmvYbY3g8qKuhwBF
+	 rsge5ze04d36Keqc7mKOPBSuE6gpUUywvib0+iLvLLDLvijedkTFjLfwl3+KiyIYn07i9
+	 v17ql5I3rpaUY0OmG4RZYhHPPMjT+R+rexYMc5gNVQ27av1aOfIn1QVzsQGFiHaiLnw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=uBukULLK;
-	arc=none smtp.remote-ip=209.85.215.176
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=IQot6vRd;
+	arc=none smtp.remote-ip=209.85.216.50
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7B37606A31C
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 16:47:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D7B37606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AB6B606A33B
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 16:47:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0AB6B606A33B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=uBukULLK
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cdb1199bfd8so1414229a12.1
-        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 08:47:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=IQot6vRd
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3b0d09df973so2613632a91.0
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 08:47:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794415650; x=1795020450; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794415656; x=1795020456; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=O2jjMVEd2+veLjBsKlSN8S11lNRJrLDfCaGQ947D4Us=;
-        b=uBukULLK/zQZb1xwtE6tWXOpQZiZ6unhQAlBJ1yTHLSEssAKCo/mXiQdXN1tRivUdN
-         gMSE9MYLhazNUH7U/mO5ob7YCBOhY9wjv0zS/pIRGptSVVEg5MPtRruoYoDyMWwW+AiI
-         eHxl6SJa7NFWrRURuCur8I5tYMHVD8XxHwwuZ8ZXH+OtJX8+hMlNnecI/IEsrjCbTMof
-         qxWRqpWPbCpuTeGUw6w/MAZgmOSDiEjq6f6M6laddOCkHqvwW9pDgWgfhCrJR9txfyGZ
-         f6fDIjdGMiaaY9TIUV+trWSVFdsFNpnXjVDvqpFOazpuOiXAa0o0KoTk+bNloG0LGqab
-         AX8A==
+        bh=eKFdWEUNriVvX0DNDyRsr1Egs2fz6NXbFrT2C14agqk=;
+        b=IQot6vRdHPrsc6vUJLhyjROJbZiJk6TiYKbmIy7Q0VOrzhFbcd13Fc9zXwCr7oFiid
+         uDMs8EDlUsT5rIMEl4eKwWVVwfnHGEBRXOa9Veb39vqEHFG7Jt4U7Hdf5NnmczfUnk5f
+         J/5zQOp5hv35CDC+o2yOUxic++Bs1QknguyUTqfl+xTJC9Ai1pqi5guYxoAioDCqjZob
+         A8KA6rt4ioH6ydEINUeNQtki5xcygJJCWIXOqVXpfoTAmIlv8QaEz2jQcLlLreMgzK3a
+         If8SQLLjhkJE5FTleHQT2RfD/k/wocBZ6gJRSqUdYHBDYPuJILAeKF1mGaSvbAoiV+E5
+         mlkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794415650; x=1795020450;
+        d=1e100.net; s=20260707; t=1794415656; x=1795020456;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=O2jjMVEd2+veLjBsKlSN8S11lNRJrLDfCaGQ947D4Us=;
-        b=b+nyThoMSKZZxJLFOcXzaSrP5IzUOvACAXRMG7yNwJavTPSk51ZvReAWbivv0tGn6i
-         1nCh9/NUSynMrZSn+op9S1K+QmYr6Qb8NklNJkWEmofxVVU7lq/BW3TcP5pjcImUqOqh
-         j//UHdJriGRlrIlAovSJCMBfUUq4CKaocQq1ZcS3Z/9holEZoQeMirTXScT9O81JRLX0
-         DN2QuWYEDAssVCbUnzXKiusVx0PGUV+b4+fk3QXRQcEG9RSbU737DbNagCRO6VCqcXis
-         Isi2LWv7VX2MP/0aMeGarovQOgFe4OQDgKBHC67yhTN13XZ4Y2h9qDcfTWs69l31bHWl
-         cUXw==
-X-Gm-Message-State: APuU4Z/hTbDBA6apMbOBrmwAwFXmpZwIJGnUVFiENQ+9BUfRoyNAKYtc
-	QsQpIpBqJbL6a8MfUA32hrcor/Mcj8LEQtpwK1juQLz1pvb5MGykvhceqO0jwg==
-X-Gm-Gg: AYBFou25A2X/eAXksV9KmY2PO1EAlnZ8MUC4+aB72SXyTMcxp2kLcNvn8EgvbesQa3h
-	rRE5TrphbRr8LFC1g9ljJV4qximFD6iQ1StSgs6SNZLUYNcEodOnIS8eIdXMibNOxw0l47+Tr9i
-	MneD4xmlT+drch73Rzk2Ftke18yB37fDWiyI3TkPT2ma+7ibV8vQ/NJqhDUDMrKXNA1oyfZFa7B
-	mcoqKa4qmO8Gq6LsoJSS71rzaPsIRlZR9cUXS9vpXzxdxSO2X9eT5fNojZ9zcU1kizDu0UaA96I
-	u+hXV3Mi563QlLdEbc7B9DYxkOyj79PWKpnTeNcMSxiUARiLJDh03JzcFJh/bLIST2Fki7miszc
-	Re2OrUah/vX7AxviKe3QoNy5AApufQVc8nLvOLskxs/UO/M4q8kIpJuEgs6fo7KmW1NS7QCgDFQ
-	FEi630/xtWzDjCUSYcvr6t4k8o30ZFM+EkQJBMvpCPWmbDxjkmmKXE+m3uY4fnGfm44ui+tRjeK
-	ceXCLl64ZDe43iJ/uZTuNuz2zICgC+kiuvYxpP/xj3LI0DeE6B8Y9cKSMNqZgJ2rCNyt904rIa3
-	p3ZelSE8V61s5U0lEKsUj4MlVDg1Lf9Z36euMK6vug+mEkB6EyGyfl8/jBvojkMrc5xu2vXH1mq
-	eG7CxomTphBR6cdSn0aQkPc1Y+D82axhbdco8gfAmJwJY9NeogrWAjdiUCP90CDRoxJD337RWhg
-	==
-X-Received: by 2002:a17:90b:2f07:b0:3b0:a970:caad with SMTP id 98e67ed59e1d1-3b182f26e50mr3052818a91.28.1794415650081;
-        Wed, 11 Nov 2026 08:47:30 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cdd8d67f209sm1944766a12.6.2026.11.11.08.47.29
+        bh=eKFdWEUNriVvX0DNDyRsr1Egs2fz6NXbFrT2C14agqk=;
+        b=Jk6Us1HjkEI6Xr2FkTnfeI//1xwXIfsjJ4Yu9EYuVfr/j00Nl1p5jye3AS2ijPpWfO
+         X+PsF/KatCyGBlG4g5k/qvLn9Lg4O0IFeb2q8SMcegH7hJLx0Z2KvtYbtOJNo0ATIuz1
+         YiEnWoPXRT9nkD5Z8Of4PmzGpPxhIr9YjF0ZN5IhKZr/LIUULBS2ic3RpzDYRJ/K++6Y
+         ngWNLDYzmq1dE3VmRVsVjhJRhjhSC51H1EriwULM2c6pEQs7fLxoiLjv2YtQsaQjKMsp
+         pm45XgFPfJyP0uftspdM0JKUt2cny6GxupTSNqL+t4Cd0tkqql5V6ki8/Hy+s0K73xfX
+         qqZg==
+X-Gm-Message-State: APuU4Z+8UMFR5+/VrdH6xh2AwMBv0jV5364puEl7ELdL+z3PHS9gIOkw
+	8Cg8DgLp75iYHocSRpp6gC13eDd2aOg+uS/pvRIUMX/HqD3/kh58spEAGSgJPQ==
+X-Gm-Gg: AYBFou2N13h0MJL216dDBi3NUvJOwjyZcm20pMBhs0A3zW8/Cbeub4tfhpAbj3oIH/+
+	+dUFyt6FNbM1TqCzAccoed6H7pghpQnCWsb/eLKg3f9aV2aKmxyu8QobhgPgdHN78X3PYGI94rM
+	5Q+rd8YFPwAuzyJJwOjNLsqSIstHpljbXUJ/ElRRo+xdFJsBKLVeYCFj8qrtRLWwXO4SR5WTc0r
+	k+UVfTC2MhwzKVogOY8bgx2881WgwCDJZpczedCYOlaFw/aHT5a/3CKRaEdyQLvPsTz9HvkEWRZ
+	meuZ1NJv/hbPQIy1h6rN0/kSjpggHOIofQ1hbk9NvUS3JlbjG3s7X0lrktksh4c2eVvP9vuUTG6
+	2wqeCb4HMj2QQ50NfSCZ9qgFkDdXGjkeWRDREoKrCsQBobJ/Nxn7kgW84o/cVWvrS6Q1Cx+TMyj
+	pQvYV4I7La5sYglIoG0R/v1I53Kt1NH+EbiekC7zyX84ji2FlbAKlYxV5MSiFXKHubZb1e5G0hC
+	19YebE96pfVBJnyqMAUZ5NjsJYFgnYwBl5SUuZbeNjZlKmY7+EgtvnNhUsu/nHUqW/dfXN9CRyQ
+	wXBTS9zyKtDOUWXn+57ocyq9YiIh0V3XAV5OC6FAUnYfm2FuGfN3UDgBlIKip9ZMIMF/PCnfy0c
+	F19KrEPQ5O5Gow95dn3Sj1BQAgkpaJvgcaVYv9KUfStpTIa1uVPLbaRSKsh9VWAt3Or7eLWcMN7
+	YxIJZSx0QzNRSD98k2cRI=
+X-Received: by 2002:a17:90b:4c49:b0:3ac:9c37:9418 with SMTP id 98e67ed59e1d1-3b182e6f54fmr2916913a91.19.1794415656037;
+        Wed, 11 Nov 2026 08:47:36 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.252])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b197c42c68sm77729a91.3.2026.11.11.08.47.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2026 08:47:29 -0800 (PST)
+        Wed, 11 Nov 2026 08:47:35 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v3 15/29] selftests/bpf: Test sign extensions of a range and of a linked register
-Date: Wed, 11 Nov 2026 16:45:38 +0000
-Message-ID: <20261111164557.2659679-16-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v3 16/29] bpf: Recompute a pointer after the jump that bounds its index
+Date: Wed, 11 Nov 2026 16:45:39 +0000
+Message-ID: <20261111164557.2659679-17-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261111164557.2659679-1-alexei.starovoitov@gmail.com>
 References: <20261111164557.2659679-1-alexei.starovoitov@gmail.com>
@@ -102,238 +102,519 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Vineet Gupta <vineet.gupta@linux.dev>
+From: Alexei Starovoitov <ast@kernel.org>
 
-Tests for two patches of this series. Two progs are for
-coerce_subreg_to_size_sx(), which keeps the 32-bit range across a no-op
-sign extension. Five are for refine_linked_regs(), which refines the linked
-registers of a conditional jump: the live registers and stack slots that
-are a tested register + a constant on every path to the jump, here
-modulo 2^32.
+A new ability. It extends the patch that refines linked registers at
+conditional jumps to 'p = buf + i' that is computed before i is bounded.
+Nothing links a pointer to its index today.
 
-	call bpf_get_prandom_u32
-	r7 = (s32)r0
-	if w0 != -1 goto ..
+	while (buf[i]) {
+		if (i < 0 || i > 32)
+			break;
+		if (bpf_map_lookup_elem(&names, buf + i))
+			return 0;
+		while (buf[i++] && i < 32)
+			;
+	}
 
-GCC keeps an int that a call returned that way. The jump tests the low
-32 bits of r0, the prog goes on with r7.
+Strings are stored back to back in a map value of 64 bytes, a key has 32.
+clang computes 'buf + i' for the load at the end of an iteration and tests
+i at the start of the next one. The jumps bound r8, the offset of r2 stays:
 
-'w0 = (s8)w0' and 'w0 = (s16)w0' keep a 32-bit range that crosses 0 and
-fits in s8 or s16.
+	27: r2 = r6
+	28: r2 += r8
+	30: r1 = *(u8 *)(r2 +0)
+	36: if r8 s> 0x20 goto pc-4
+	38: if r8 s< 0x0 goto pc-6
+	41: call bpf_map_lookup_elem#1
+	invalid access to map value, value_size=64 off=33 size=32
 
-After 'r7 = (s32)r6' r7 == r6 (mod 2^32). A test of the low 32 bits of the
-source refines r7. The source is the def of r0 by a call, or (u32)(r6 + 1),
-which is 'i += 1' of an int as GCC emits it.
+The linked registers of a conditional jump are the live registers and
+stack slots that are a tested register + a constant on every path to the
+jump. bpf_scev_next_linked_reg() gets one more result. A linked register
+can be a pointer: *base_regno + regno + delta. *base_regno is the address
+base, as in store_base_regs. Here r2 == r6 + r8.
 
-Three negative tests get to 'r0 /= 0' and are rejected:
- - A test of r7 does not bound the upper 32 bits of r6 + 3.
- - If r6 is a u32 then 'r7 s<= 100' keeps the values from 2^31 on in r6.
- - If r6 is a multiple of 3 then r7 need not be one: from 2^31 on it is
-   r6 - 2^32.
+So 'r2 = r6; r2 += r8' after the jump would change no value at run time,
+and a state that is sound before two insns is sound after them.
+recompute_ptr() applies their transfer function. Type, object and offset of
+r2 are taken from r6 as it is now; how r2 was computed does not matter. The
+range is that of r8 after the jump.
 
-Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+match_linked_add(): the expression of r2 is (+ x y), y has a constant
+difference from the tested register, and a live register or stack slot has
+one from x. At a loop header r2 is a phi. There ADD_SCEV has its operands:
+
+	scev at header 35:
+	  r2=(+ r6 %r8.21?) / (add r6 r8)
+	  r8=%r8.21?
+
+(add r6 r8): r2 == r6 + r8 at the header in every iteration. It holds at
+loop entry, where r2 is r6 and r8 is 0. Every backedge preserves it: the
+backedge values, before the '/', are r6 + %r8.21? and %r8.21?, the def of
+r8 by the nested loop at 21. r6 and r8 are the header phis here, not the
+entry values as below LINEAR_SCEV.
+
+recompute_ptr() replaces r2 only if
+ - r6 is a pointer that may have a variable offset, and no packet pointer,
+ - type, object and ids of r6 are those of r2,
+ - the new range is a subset of the old one and not empty (an empty range:
+   the path is infeasible),
+ - the new range is within (-BPF_MAX_VAR_OFF, BPF_MAX_VAR_OFF),
+ - the loader has CAP_PERFMON: the cpu can speculate past the jump with an
+   out-of-bounds index.
+The old offset is replaced, not intersected: a state cannot distinguish two
+values of a hash map, so the two offsets may belong to two objects. In
+a prog with an arena the add has a def, %r2.28=(add r6 r8), and is trusted
+once the main pass has verified insn 28 without an arena pointer.
+
+adjust_ptr_min_max_vals() rejects a prog whose add makes a constant offset
+outside of (-BPF_MAX_VAR_OFF, BPF_MAX_VAR_OFF). Code that looks for an
+object at a constant offset relies on that: stack_slot_obj_get_spi(),
+process_kptr_func(), the lookups of list heads, rbtree roots and their
+nodes, btf_struct_ids_match() put the offset in an int or a u32. So does
+check_ptr_to_btf_access() for a store that the btf_struct_access() of the
+prog type checks. Accesses to the stack, to map values and to other memory
+regions check 64 bits first. recompute_ptr() applies the transfer function
+of the add and not its checks, so it checks the new range itself.
+
+Not found: 'buf += i', which overwrites the base, and an add whose base is
+dead at the jump. No register holds buf there.
+
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- .../selftests/bpf/progs/verifier_movsx.c      | 186 ++++++++++++++++++
- 1 file changed, 186 insertions(+)
+ include/linux/bpf_verifier.h |   4 +-
+ kernel/bpf/scev.c            | 174 +++++++++++++++++++++++++++++++----
+ kernel/bpf/verifier.c        |  59 +++++++++++-
+ 3 files changed, 214 insertions(+), 23 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_movsx.c b/tools/testing/selftests/bpf/progs/verifier_movsx.c
-index 2f4a678c31c2..6f90dac78fcd 100644
---- a/tools/testing/selftests/bpf/progs/verifier_movsx.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_movsx.c
-@@ -202,6 +202,192 @@ l0_%=:							\
- 	: __clobber_all);
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index d1841f68437d..11025ed77a7f 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -2226,7 +2226,9 @@ void bpf_free_scev(struct bpf_verifier_env *env);
+ int bpf_compute_scev(struct bpf_verifier_env *env);
+ int bpf_scev_jump_counts(struct bpf_verifier_env *env, int header, int n, bool taken_leaves);
+ bool bpf_scev_next_linked_reg(struct bpf_verifier_env *env, int insn_idx, u32 regno, u32 *pos,
+-			      u32 *linked_regno, u32 *fill_off, s64 *delta, u32 *bits);
++			      u32 *linked_regno, u32 *fill_off, int *base_regno, s64 *delta,
++			      u32 *bits);
++bool bpf_is_widenable_reg_type(const struct bpf_reg_state *reg);
+ bool bpf_scev_in_slice_slots(struct bpf_verifier_env *env, int off, u32 size, bool fixed_off);
+ 
+ int bpf_compute_loop_iters(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
+diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
+index a793a096f646..67ce4b3f6401 100644
+--- a/kernel/bpf/scev.c
++++ b/kernel/bpf/scev.c
+@@ -50,6 +50,11 @@ enum expr_op {
+ 	 * equal when the loop is entered. Not known otherwise.
+ 	 */
+ 	COPY_SCEV,
++	/*
++	 * (add rB rC) is the SCEV of rA: rA == rB + rC at the header in every iteration. rB and rC
++	 * are the header phis here, not the entry values as below LINEAR_SCEV.
++	 */
++	ADD_SCEV,
+ };
+ 
+ /*
+@@ -66,9 +71,9 @@ enum expr_op {
+  * In the env of loop H a phi at H merges the backedge values only, the header phi itself is
+  * (REG r). In the env of the enclosing loop a phi at H merges the entering edges.
+  * Op and params of a def by an insn are what that insn computes, see alu64_with_def():
+- * set_expr_base() looks through such an add, split_const_offset() checks prevent_zext of the insn.
+- * Those of a phi are the shape that its operands share, no insn computes them: nothing looks
+- * through a phi.
++ * set_expr_base() and match_linked_add() look through such an add, split_const_offset() and
++ * match_linked_add() check prevent_zext of the insn. Those of a phi are the shape that its operands
++ * share, no insn computes them: nothing looks through a phi.
+  */
+ struct expr_def {
+ 	u32 set:1;	/* 0: the expression has no def */
+@@ -261,6 +266,8 @@ static bool expr_is_vn(struct scev *scev, struct expr *e)
+ 	/* a function of the iteration number */
+ 	case LINEAR_SCEV:
+ 	case COPY_SCEV:
++	/* a relation between header phis */
++	case ADD_SCEV:
+ 		return false;
+ 	}
+ 	for (i = 0; i < op_params_num(e->op); i++)
+@@ -568,6 +575,7 @@ static const char *op_str(u32 op)
+ 	case ANY:      return "any";
+ 	case LINEAR_SCEV:  return "linear";
+ 	case COPY_SCEV:    return "copy";
++	case ADD_SCEV:     return "add";
+ 	}
+ 	return NULL;
+ }
+@@ -591,6 +599,7 @@ static u32 op_params_num(u32 op)
+ 	case ANY:
+ 	case LINEAR_SCEV:
+ 	case COPY_SCEV:
++	case ADD_SCEV:
+ 		return 2;
+ 	case BPF_NEG:
+ 	case SEXT8:
+@@ -1954,6 +1963,41 @@ static bool const_diff_at_header(struct bpf_verifier_env *env, int h, u32 ra, u3
+ 	       bits_a == 64 && bits == 64;
  }
  
 +/*
-+ * A 32-bit range that already fits the signed N-bit range is unchanged by the sign
-+ * extension. Both of these straddle zero. The guard that follows can only be
-+ * resolved statically if the range survives, and it protects a div by zero.
++ *	p = buf + i; if (i > 100) return 0; *p = 0;
++ * @tested is the expression of the tested register and @id that of p, in one env as for
++ * const_diff(). Is @id an add, and one operand @tested + a constant? Then
++ * @id == *@other + @tested + *@delta (mod 2^*@bits). A header phi can be an add, see ADD_SCEV. For
++ * an add with a def see split_const_offset(). Which operand is the pointer is not known here.
 + */
-+SEC("socket")
-+__description("MOV32SX, S8, negative range is preserved")
-+__success __success_unpriv __retval(0)
-+__naked void mov32sx_s8_negative_range(void)
++static bool match_linked_add(struct bpf_verifier_env *env, int h, u32 tested, u32 id, u32 *other,
++			     s64 *delta, u32 *bits)
 +{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	w0 &= 0x3f;					\
-+	w0 -= 0x3f;					\
-+	/* w0 is [-63, 0], already a valid s8 */	\
-+	w0 = (s8)w0;					\
-+	if w0 s< -0x3f goto l0_%=;			\
-+	w0 = 0;						\
-+	exit;						\
-+l0_%=:							\
-+	/* dead unless the range was widened */		\
-+	w0 /= 0;					\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
++	struct scev *scev = env->scev;
++	u32 reg, r, b, op = BPF_ADD;
++	struct expr_def def;
++	s64 c;
++
++	split_const_offset(env, id, &id, delta, bits);
++	if (h >= 0 && is_reg(scev, id, &reg)) {
++		id = find_header_env(scev, h)->reg2scev[reg];
++		op = ADD_SCEV;
++	}
++	def = scev->exprs[id].def;
++	if (!is_binop(scev, op, id, other, &r) || def.phi)
++		return false;
++	if (def.set && !env->insn_aux_data[def.idx].prevent_zext)
++		*bits = min(*bits, 32);
++	if (!const_diff(env, h, tested, r, &c, &b)) {
++		swap(*other, r);
++		if (!const_diff(env, h, tested, r, &c, &b))
++			return false;
++	}
++	*delta = (u64)*delta + c;
++	*bits = min(*bits, b);
++	return true;
 +}
 +
-+SEC("socket")
-+__description("MOV32SX, S16, negative range is preserved")
-+__success __success_unpriv __retval(0)
-+__naked void mov32sx_s16_negative_range(void)
+ /* The first bytes of a stack slot are its high bits */
+ static bool is_big_endian_slot(u32 reg)
+ {
+@@ -2005,9 +2049,10 @@ static int find_linked_regs(struct bpf_verifier_env *env, struct env *e, int h,
+ 	u32 dst = e->reg2expr[insn->dst_reg], src = dst;
+ 	struct insn_envs *envs = env->scev->envs[idx];
+ 	struct scev *scev = env->scev;
+-	u32 r, id, fill_off, base, base_dst, base_src, bits, cap, tested = 0;
++	u32 r, q, other, id, fill_off, base, base_dst, base_src, bits, cap, tested = 0;
+ 	u32 first = scev->linked_cnt;
+ 	DECLARE_BITMAP(live, REGS_NUM) = {};
++	DECLARE_BITMAP(found, REGS_NUM) = {};
+ 	void *tmp;
+ 	s64 delta;
+ 
+@@ -2024,12 +2069,27 @@ static int find_linked_regs(struct bpf_verifier_env *env, struct env *e, int h,
+ 		id = e->reg2expr[r];
+ 		/* most are not linked */
+ 		split_const_offset(env, id, &base, &delta, &bits);
+-		if (base != base_dst && base != base_src && (h < 0 || !is_op(scev, base, REG)) &&
+-		    !is_big_endian_slot(r))
++		if (base != base_dst && base != base_src && !is_op(scev, base, BPF_ADD) &&
++		    (h < 0 || !is_op(scev, base, REG)) && !is_big_endian_slot(r))
+ 			continue;
+-		if (!const_diff_reg(env, h, dst, r, id, &fill_off, &delta, &bits) &&
+-		    (src == dst || !const_diff_reg(env, h, src, r, id, &fill_off, &delta, &bits)))
++		if (const_diff_reg(env, h, dst, r, id, &fill_off, &delta, &bits) ||
++		    (src != dst && const_diff_reg(env, h, src, r, id, &fill_off, &delta, &bits))) {
++			__set_bit(r, found);
++			continue;
++		}
++		if (!match_linked_add(env, h, dst, id, &other, &delta, &bits) &&
++		    (src == dst || !match_linked_add(env, h, src, id, &other, &delta, &bits)))
+ 			continue;
++		/* an add is of use only with a live register that holds its other operand */
++		for_each_set_bit(q, live, REGS_NUM) {
++			if (q == r || !const_diff(env, h, e->reg2expr[q], other, &delta, &bits))
++				continue;
++			__set_bit(r, found);
++			__set_bit(q, found);
++			break;
++		}
++	}
++	for_each_set_bit(r, found, REGS_NUM) {
+ 		if (scev->linked_cnt == scev->linked_cap) {
+ 			cap = max(scev->linked_cap * 2, 16);
+ 			tmp = kvrealloc(scev->linked, array_size(cap, sizeof(*scev->linked)),
+@@ -2041,7 +2101,7 @@ static int find_linked_regs(struct bpf_verifier_env *env, struct env *e, int h,
+ 		}
+ 		tested += r == insn->dst_reg || (src != dst && r == insn->src_reg);
+ 		scev->linked[scev->linked_cnt].reg = r;
+-		scev->linked[scev->linked_cnt++].id = id;
++		scev->linked[scev->linked_cnt++].id = e->reg2expr[r];
+ 	}
+ 	/* nothing but the tested registers */
+ 	if (scev->linked_cnt - first == tested) {
+@@ -2065,14 +2125,18 @@ static int find_linked_regs(struct bpf_verifier_env *env, struct env *e, int h,
+  * the same frame. It is a register, or MAX_BPF_REG + the index of a stack slot: a fill from byte
+  * *@fill_off of the slot reads these bits. *@pos is the position of the search, 0 at first. False:
+  * no more links are known. Types are not known here: the caller checks them in its state.
++ * A linked register can be a pointer: *base_regno + regno + delta. *base_regno is the address base,
++ * as in store_base_regs. It is -1 for a link without a base.
+  */
+ bool bpf_scev_next_linked_reg(struct bpf_verifier_env *env, int insn_idx, u32 regno, u32 *pos,
+-			      u32 *linked_regno, u32 *fill_off, s64 *delta, u32 *bits)
++			      u32 *linked_regno, u32 *fill_off, int *base_regno, s64 *delta,
++			      u32 *bits)
+ {
+ 	struct insn_envs *envs = env->scev->envs[insn_idx];
+ 	int h = bpf_loop_at_index(env, insn_idx);
+ 	struct scev_linked_reg *linked;
+-	u32 i;
++	u32 i, j, other, b;
++	s64 c;
+ 
+ 	if (!envs || !envs->linked_cnt)
+ 		return false;
+@@ -2083,10 +2147,22 @@ bool bpf_scev_next_linked_reg(struct bpf_verifier_env *env, int insn_idx, u32 re
+ 			return false;
+ 	for (; *pos < envs->linked_cnt; ++*pos) {
+ 		*linked_regno = linked[*pos].reg;
+-		if (*pos != i &&
+-		    const_diff_reg(env, h, linked[i].id, *linked_regno, linked[*pos].id, fill_off,
++		*base_regno = -1;
++		if (*pos == i)
++			continue;
++		if (const_diff_reg(env, h, linked[i].id, *linked_regno, linked[*pos].id, fill_off,
+ 				   delta, bits))
+ 			return true;
++		if (!match_linked_add(env, h, linked[i].id, linked[*pos].id, &other, delta, bits))
++			continue;
++		for (j = 0; j < envs->linked_cnt; j++) {
++			if (j == *pos || !const_diff(env, h, linked[j].id, other, &c, &b))
++				continue;
++			*base_regno = linked[j].reg;
++			*delta = (u64)*delta + c;
++			*bits = min(*bits, b);
++			return true;
++		}
+ 	}
+ 	return false;
+ }
+@@ -2561,6 +2637,64 @@ static int compute_header_scevs(struct bpf_verifier_env *env, struct env *header
+ 	return 0;
+ }
+ 
++/*
++ * Find a SCEV register with the entry value @x and the backedge value @l, and one with @y and @r.
++ * All that match are copies of each other at the header: take the first.
++ */
++static bool find_operands(struct env *entry_env, struct env *header_env, u32 x, u32 y, u32 l, u32 r,
++			  u32 *rb, u32 *rc)
 +{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	w0 &= 0xfff;					\
-+	w0 -= 0xfff;					\
-+	/* w0 is [-4095, 0], already a valid s16 */	\
-+	w0 = (s16)w0;					\
-+	if w0 s< -0xfff goto l0_%=;			\
-+	w0 = 0;						\
-+	exit;						\
-+l0_%=:							\
-+	/* dead unless the range was widened */		\
-+	w0 /= 0;					\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
++	for (*rb = 0; *rb < REGS_NUM; ++*rb)
++		if (entry_env->reg2expr[*rb] == x && header_env->reg2expr[*rb] == l)
++			break;
++	for (*rc = 0; *rc < REGS_NUM; ++*rc)
++		if (entry_env->reg2expr[*rc] == y && header_env->reg2expr[*rc] == r)
++			break;
++	return *rb < REGS_NUM && *rc < REGS_NUM;
 +}
 +
 +/*
-+ * A 32-bit sign extension keeps the low 32 bits, so refining the source
-+ * reaches the destination. The source is a call return, which is the shape
-+ * bpf-gcc builds for "int err = helper(); if (err) ..".
++ *	p = buf; i = 0; while (*p) { if (i > 512) break; use(p); i += len(p); p = buf + i; }
++ * rA == rB + rC holds at the header in every iteration: it holds at loop entry and every backedge
++ * preserves it. The backedge values are rA = (+ l r), rB = l, rC = r. The entry values, by the env
++ * of the enclosing loop at @h, are rA = x, rB = x, rC = 0 or rA = (+ x y), rB = x, rC = y.
++ * (add rB rC) keeps the def of (+ l r), see alu64_with_def().
 + */
-+SEC("socket")
-+__success __retval(0)
-+__naked void sext_mov_unlinked_src(void)
++static int compute_header_adds(struct bpf_verifier_env *env, int h)
 +{
-+	asm volatile ("						\
-+	call %[bpf_get_prandom_u32];				\
-+	r7 = (s32)r0;		/* r0 as the call defines it */	\
-+	if w0 != -1 goto l0_%=;	/* refines r0, propagates to r7 */ \
-+	if r7 == -1 goto l0_%=;	/* sign-extended, not 0xffffffff */ \
-+	r0 /= 0;						\
-+l0_%=:								\
-+	r0 = 0;							\
-+	exit;							\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
++	struct scev *scev = env->scev;
++	struct env *entry_env = find_loop_env(scev, env->insn_aux_data[h].loop_header, h);
++	struct env *header_env = find_header_env(scev, h);
++	u32 ra, rb, rc, l, r, x, y, entry_expr;
++	struct expr_def def;
++	int id, zero = imm_expr(scev, 0);
++
++	if (zero < 0)
++		return zero;
++	for (ra = 0; entry_env && ra < REGS_NUM; ra++) {
++		entry_expr = entry_env->reg2expr[ra];
++		if (header_env->reg2scev[ra] != UNKNOWN_EXPR_ID ||
++		    !is_add(scev, header_env->reg2expr[ra], &l, &r) ||
++		    !scev->exprs[entry_expr].is_vn || !scev->exprs[l].is_vn ||
++		    !scev->exprs[r].is_vn)
++			continue;
++		if (!find_operands(entry_env, header_env, entry_expr, zero, l, r, &rb, &rc) &&
++		    !find_operands(entry_env, header_env, zero, entry_expr, l, r, &rb, &rc) &&
++		    (scev->exprs[entry_expr].def.set || !is_add(scev, entry_expr, &x, &y) ||
++		     (!find_operands(entry_env, header_env, x, y, l, r, &rb, &rc) &&
++		      !find_operands(entry_env, header_env, y, x, l, r, &rb, &rc))))
++			continue;
++		/* expr2() can move exprs[] */
++		def = scev->exprs[header_env->reg2expr[ra]].def;
++		id = expr_with_def(scev, expr2(scev, ADD_SCEV, REG_EXPR_ID(rb), REG_EXPR_ID(rc)),
++				   def);
++		if (id < 0)
++			return id;
++		header_env->reg2scev[ra] = id;
++	}
++	return 0;
 +}
 +
+ /*
+  * 'sum += a[i]', 'if (..) { len -= n; len -= 2; }': is 'id', what an iteration makes of
+  * register 'r', the register plus or minus something, or the register as it was?
+@@ -2729,9 +2863,13 @@ int bpf_compute_scev(struct bpf_verifier_env *env)
+ 					   find_loop_env(scev, header, idx));
+ 		if (err)
+ 			return err;
+-		if (aux[idx].loop)
++		if (aux[idx].loop) {
+ 			scev_compute_linear_regs(scev, aux[idx].loop,
+ 						 find_header_env(scev, header));
++			err = compute_header_adds(env, idx);
++			if (err)
++				return err;
++		}
+ 		err = find_linked_regs(env, aux[idx].loop ? &scev->identity_env :
+ 				       find_loop_env(scev, header, idx), header, idx);
+ 		if (err)
+@@ -3970,7 +4108,7 @@ static bool is_const_scev_reg(struct bpf_verifier_env *env, int insn_idx, u32 r)
+ }
+ 
+ /* Main logic in verifier.c forbids varying offsets for certain register types. */
+-static bool is_widenable_reg_type(const struct bpf_reg_state *reg)
++bool bpf_is_widenable_reg_type(const struct bpf_reg_state *reg)
+ {
+ 	if (type_may_be_null(reg->type))
+ 		return false;
+@@ -4017,7 +4155,7 @@ static bool is_widenable_any(struct bpf_verifier_env *env, struct bpf_func_state
+ 	if (!is_any(scev, id, &l, &rr))
+ 		return false;
+ 	reg = scev_reg_for_read(env, loop_entry, r);
+-	if (!reg || !is_widenable_reg_type(reg))
++	if (!reg || !bpf_is_widenable_reg_type(reg))
+ 		return false;
+ 
+ 	scev->stack_sz = 0;
+@@ -4550,7 +4688,7 @@ int bpf_compute_loop_iters(struct bpf_verifier_env *env, struct bpf_verifier_sta
+ 		}
+ 		/* If SCEV for r is (linear <reg> <slope>) */
+ 		if (reg && is_linear_at_header(scev, cur_func, r_scev, r, &coefs) &&
+-		    is_widenable_reg_type(reg)) {
++		    bpf_is_widenable_reg_type(reg)) {
+ 			/* 32-bit ALU operations on pointers convert them to scalars */
+ 			if (coefs.zext32 && reg->type != SCALAR_VALUE)
+ 				goto cant_widen;
+@@ -4893,7 +5031,7 @@ int bpf_clamp_scev_regs(struct bpf_verifier_env *env, struct bpf_func_state *cur
+ 		 * bpf_compute_loop_iters() gives no range to a pointer to arena that moves, and
+ 		 * it does not look at dead registers. Set a range only where it would.
+ 		 */
+-		if (!is_widenable_reg_type(entry_reg) ||
++		if (!bpf_is_widenable_reg_type(entry_reg) ||
+ 		    (coefs.zext32 && entry_reg->type != SCALAR_VALUE))
+ 			continue;
+ clamp:
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 5c90f41797d9..03c9a8becdde 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -19741,6 +19741,49 @@ static struct bpf_reg_state *scev_reg_for_fill(struct bpf_func_state *frame, u32
+ 	return &ss->spilled_ptr;
+ }
+ 
 +/*
-+ * The propagation must not run backwards over the upper 32 bits: a sign extension
-+ * knows nothing about the upper bits of its source. r8's low 32 bits do become
-+ * 2, r8 == 2 does not follow.
++ *	p = buf + i; if (i > 100) return 0; *p = 0;
++ * p is @dst_reg, x is @ptr_reg, i is @off_reg. Scalar evolution says that p == x + i. So the insns
++ * 'p = x; p += i' are a no-op at run time, and a state that is sound before them is sound after
++ * them: apply their transfer function. Type, object and offset of p are taken from x as it is now;
++ * how p was computed does not matter.
++ * The old p is replaced, not intersected: a state does not distinguish two values of one hash map,
++ * and the intersection of an offset into the one with an offset into the other holds for neither.
++ * It is replaced only if the new range is a subset of the old one. An empty range is a subset too:
++ * the path is infeasible, p is left as it is.
 + */
-+SEC("socket")
-+__failure __msg("div by zero")
-+__naked void sext_no_sync_from_subreg_base(void)
++static bool recompute_ptr(struct bpf_verifier_env *env, struct bpf_reg_state *dst_reg,
++			  const struct bpf_reg_state *ptr_reg, const struct bpf_reg_state *off_reg)
 +{
-+	asm volatile ("						\
-+	call %[bpf_get_prandom_u32];				\
-+	r6 = r0;						\
-+	r7 = (s32)r6;						\
-+	r8 = r6;						\
-+	r8 += 3;						\
-+	if r7 != -1 goto 1f;	/* pins the low 32 bits of r8 only */ \
-+	if r8 == 2 goto 1f;	/* taken only if r8 wrongly refined */	\
-+	r0 /= 0;						\
-+1:								\
-+	r0 = 0;							\
-+	exit;							\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
++	struct bpf_reg_state sum = *ptr_reg;
++
++	/* the cpu can speculate past the jump with an out-of-bounds index */
++	if (!env->bypass_spec_v1)
++		return false;
++	/* 'p += i' assigns a new id to a packet pointer */
++	if (ptr_reg->type == SCALAR_VALUE || type_is_pkt_pointer(ptr_reg->type) ||
++	    !bpf_is_widenable_reg_type(ptr_reg))
++		return false;
++	__mark_reg32_unbounded(&sum);
++	scalar_step_add(&sum, ptr_reg, off_reg);
++	sum.r64 = cnum64_add(ptr_reg->r64, off_reg->r64);
++	sum.var_off = tnum_add(ptr_reg->var_off, off_reg->var_off);
++	reg_bounds_sync(&sum);
++	if (reg_is_empty(&sum) || const_tnum_range_mismatch(&sum) ||
++	    const_tnum_range_mismatch_32(&sum))
++		return false;
++	/*
++	 * 'p += i' refuses a constant offset outside of this range, and a constant offset is put in
++	 * an int, see stack_slot_obj_get_spi().
++	 */
++	if (reg_smin(&sum) <= -BPF_MAX_VAR_OFF || reg_smax(&sum) >= BPF_MAX_VAR_OFF)
++		return false;
++	if (!bpf_reg_union_compatible(dst_reg, &sum) || !cnum64_is_subset(dst_reg->r64, sum.r64))
++		return false;
++	*dst_reg = sum;
++	return true;
 +}
 +
-+/*
-+ * r2 is (u32)(r6 + 1) and r7 is (s32)(r6 + 1), so w2 == 1 means r7 == 1.
-+ * bpf-gcc builds "i += 1" for an int induction variable into exactly this shape.
-+ */
-+SEC("socket")
-+__success __retval(0)
-+__naked void sext_sync_from_zext_sibling(void)
-+{
-+	asm volatile ("						\
-+	call %[bpf_get_prandom_u32];				\
-+	r6 = r0;						\
-+	r6 <<= 32;						\
-+	call %[bpf_get_prandom_u32];				\
-+	r6 |= r0;		/* r6 = full 64-bit unknown */	\
-+	r2 = r6;						\
-+	w2 += 1;		/* r2 = (u32)(r6 + 1) */	\
-+	r7 = (s32)r2;		/* r7 = (s32)(r6 + 1) */	\
-+	if w2 != 1 goto 1f;	/* propagates to r7 */		\
-+	if r7 == 1 goto 1f;					\
-+	r0 /= 0;						\
-+1:								\
-+	r0 = 0;							\
-+	exit;							\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * "w6 = w6" leaves r6 in [0, U32_MAX]. A signed compare on its sign extension
-+ * must not hand r6 the sign-extended value: that drops every r6 >= 2^31 from
-+ * the range and makes the guarded div provably dead.
-+ */
-+SEC("socket")
-+__failure __msg("div by zero")
-+__naked void sext_narrow_base_keeps_high_values(void)
-+{
-+	asm volatile ("						\
-+	call %[bpf_get_prandom_u32];				\
-+	r6 = r0;						\
-+	w6 = w6;		/* r6 in [0, U32_MAX] */	\
-+	r7 = (s32)r6;						\
-+	r8 = 1;							\
-+	r8 <<= 31;		/* 0x80000000 */		\
-+	if r7 s> 100 goto 1f;	/* r6 is [0,100] or >= 2^31 */	\
-+	if r6 < r8 goto 1f;	/* reachable: r6 may be >= 2^31 */ \
-+	r0 /= 0;						\
-+1:								\
-+	r0 = 0;							\
-+	exit;							\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * A base/step line does not survive the sign extension: it subtracts 2^32,
-+ * and 2^32 is not a multiple of 3. r6 = 0x80000007 is a multiple of 3, so
-+ * r7 = -2147483641 is reachable.
-+ */
-+SEC("socket")
-+__failure __msg("div by zero")
-+__naked void sext_drops_stale_step(void)
-+{
-+	asm volatile ("						\
-+	call %[bpf_get_prandom_u32];				\
-+	r6 = r0;						\
-+	w6 = w6;						\
-+	r6 *= 3;		/* base 0, step 3 */		\
-+	r7 = (s32)r6;						\
-+	r8 = 1;							\
-+	r8 <<= 31;						\
-+	r9 = r8;						\
-+	r9 += 7;						\
-+	if r6 < r8 goto 1f;					\
-+	if r6 > r9 goto 1f;	/* r6 in [0x80000000, 0x80000007] */ \
-+	if r7 != -2147483641 goto 1f; /* reachable: r6 == 0x80000007 */ \
-+	r0 /= 0;						\
-+1:								\
-+	r0 = 0;							\
-+	exit;							\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
- SEC("socket")
- __description("MOV64SX, S16, R10 Sign Extension")
- __failure __msg("R1 type=scalar expected=fp, pkt, pkt_meta, map_key, map_value, mem, ringbuf_mem, buf, trusted_ptr_")
+ /*
+  * The jump at @idx refined @regno. A register that scalar evolution links to it holds
+  * @regno + delta on every path to the jump: intersect the two. The intersection is empty: no
+@@ -19750,15 +19793,16 @@ static void refine_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier
+ 			       int idx, u32 regno)
+ {
+ 	struct bpf_func_state *frame = vstate->frame[vstate->curframe];
+-	struct bpf_reg_state *reg, implied, saved;
++	struct bpf_reg_state *reg, *base_reg, implied, saved;
+ 	u32 pos, linked_regno, fill_off, bits;
++	int base_regno;
+ 	s64 delta;
+ 
+ 	if (frame->regs[regno].type != SCALAR_VALUE)
+ 		return;
+ 	for (pos = 0;
+-	     bpf_scev_next_linked_reg(env, idx, regno, &pos, &linked_regno, &fill_off, &delta,
+-				      &bits);
++	     bpf_scev_next_linked_reg(env, idx, regno, &pos, &linked_regno, &fill_off, &base_regno,
++				      &delta, &bits);
+ 	     pos++) {
+ 		reg = scev_reg_for_fill(frame, linked_regno, fill_off, bits);
+ 		/*
+@@ -19770,11 +19814,17 @@ static void refine_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier
+ 			bits = 32;
+ 			reg = scev_reg_for_fill(frame, linked_regno, fill_off, bits);
+ 		}
+-		if (!reg || reg->type != SCALAR_VALUE)
++		if (!reg || (base_regno < 0 && reg->type != SCALAR_VALUE))
+ 			continue;
+ 
+ 		implied = frame->regs[regno];
+ 		add_scalar_to_reg(&implied, delta);
++		if (base_regno >= 0) {
++			base_reg = scev_reg_for_fill(frame, base_regno, 0, 64);
++			if (base_reg && bits == 64 && recompute_ptr(env, reg, base_reg, &implied))
++				goto scratch;
++			continue;
++		}
+ 		if (regs_fit_in_bits(reg, &implied, bits))
+ 			bits = 64;
+ 		if (bits < 32)
+@@ -19797,6 +19847,7 @@ static void refine_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier
+ 			*reg = saved;
+ 			continue;
+ 		}
++scratch:
+ 		if (linked_regno < MAX_BPF_REG)
+ 			mark_reg_scratched(env, linked_regno);
+ 		else
 -- 
 2.55.0
 
