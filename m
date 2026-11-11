@@ -1,54 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.54.127.133
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=63.250.43.97
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1794381535;
-	b=pJ56mCmgYDuQZwvuFj6oRSZAMwPjmGPZn78Cyxp8/Br8a+H2osAo0c/ZCZifzJYXmEll
-	 ALycqaaFnauMc4kMlqc13yoHTP5kjC1Ru+txLTjQ+biIGm6uo71qxRwZTAt6ekP1u44xX
-	 QMc/I/KwthCftDTupn04jQ1LzyuezHh1Q84zC4JppNjVppDeg2yQtGuQA+m0QLP+XmMDR
-	 K4itfeIZ4TSTrZyPGFyuXg/Rj1faRwh+diIccT9bgItR73nW5BxBrw/vvLk1PiuZs90Rw
-	 l5ugeUkKWNUCbBpbZpu+0JBscptKX7tDVNcnOVM1jdtfYHpcNAGE8bzlpLVRUYnwjfA==
+	b=bL4KrxfSAmLEG8OxOqOwuWC2QFJ13z0vk6DGkJurQn95CP3w73SMj8YmA1hIOqzHewll
+	 9b95H2AdDExteEEJIUzDaDVUOCb/IQgMv8UfSFjNMxiWYqEEI4EIkHF1VjdwORq2qsFKH
+	 2PrAalv0visE6nVQLiB6NSdWkxV9ts0Vn8uUBz522dk0A+cRaPFv1glFRdq2UzO/qPO0j
+	 YCwG1Uvs6IG4icaVjjvAQwKTEKFMHn4+NSujvdNN6aEYxbft2AONmbDxmftg90Kx9GtMz
+	 1og/WIWnWROrAFUQt6oGyGhtRvBiHKxddxfrU8u9yoPdjMcqWP/LEQcAEbUvO3ibQXg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1794381535;
 	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-Envelope-From;
-	bh=Kp1Yd4wm29HgwNoJ2gvAcoanCwg0f6KJOD8xxuJfVZY=;
-	b=fZYo/a62RReUxUNCSuIbLY/WO1KiZFrNH+eWQKn5iq7tdYf+IDeATA86DAiY41MpnCzw
-	 wJayflI7L99V04OJtDprJlyuyvo5tP/N3tZloWwgjnW9rokeFQzs6mFOBEp9vMqFj4ioa
-	 qB4B4llARQaNC8crxbO0IZNC7mTbBFIY8JuKFCcXg8SVuNngNj8XwAluLmVcX3dbnRpSj
-	 olcPphI2WR0P0h6G2Vntc/CwnZKSvZml4ZS/XLC/q7i5YbOSbySz5qz1Dyv/YTPTkGf88
-	 rW1rwsOJ345qtu3eI3E0aU0sLuRtPPQXQQmdxuxkWzoqPdlCEeERnXQWlbgZ0DPO5Lw==
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-Envelope-From;
+	bh=FDVYx8yy52ErHGioH23BNSxBVVZYdOQuntf0S9ipsa0=;
+	b=dqPNO2WMOv4KfQbVJZYBiQNhRHjI51nayDDM4FewP9s8mQ/p1UmxjiXHe+nZ8+yEdyn7
+	 oZIkXz/f1zpVExkrWgHz+aWCzBlbWmKTNiIXvGlDRyKesZPsbPH6AJZUxfDJ/A2wZpLME
+	 42wCiQQ7nYCdMN1Y+CVxbWkQXlNvG58wRHFXpgWnCWzSfDg3m9hZtbZSiNZRffqo++7dM
+	 zgCGIl/owPqR4gmLTipE/hGrjCa4dN/ERkBGz9IaRF9RrhnivbdopOo1omFb+8Uig1GVr
+	 hfJQYrKBf5vTQhr0zw10nItvsS0iLG5ip5n8TBtIKpnMOTnY1WxXmBMnF2gaO3521JQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=tychen.cc;
 	spf=pass smtp.mailfrom=tychen.cc;
-	dkim=pass header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=U8XAHHOc;
-	arc=none smtp.remote-ip=198.54.127.133
-Received: from out-2z4y-a133.jellyfish.systems (out-2z4y-a133.jellyfish.systems [198.54.127.133])
+	dkim=pass header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=kXQVO9cc;
+	arc=none smtp.remote-ip=63.250.43.97
+Received: from out-2uec-a97.jellyfish.systems (out-2uec-a97.jellyfish.systems [63.250.43.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4304606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA941606A32A
 	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 07:18:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B4304606A324
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BA941606A32A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=U8XAHHOc
+	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=kXQVO9cc
 Received: from fedora (unknown [151.145.76.168])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4jPZcq6tTzz6tkN;
-	Wed, 11 Nov 2026 07:18:35 +0000 (UTC)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4jPZcm1bzTz6tkL;
+	Wed, 11 Nov 2026 07:18:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
-	s=spacemail; t=1794381520;
-	bh=Kp1Yd4wm29HgwNoJ2gvAcoanCwg0f6KJOD8xxuJfVZY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=U8XAHHOc01gSCV0clQRyXPtQmKBW0w98NKBFPeeARkdUNbxp+VDRRDyEUwqSofrEe
-	 KCSpiqlBxTdqXSzcPZ7tTuvFm0xVnY/I+35Sx0QmMW1aIwGEAHw4xbttfIIeCgJmnW
-	 KC2s+VNusadAM9AggKi1NDKcbUThJ6pgEqw9oMxbFkZMDDWStJrB5OFrojwg0fS71l
-	 0HNTDQ3qHdDta4QCYco6qkQRlWyYuTUg1k9df9jxSgsRDyMfsV6HMpw8X8qNP0mbGE
-	 K/loljwPlGSeHfR7sEDL3FyiHcZs7feDDBWADRCwjs9nt152Aej/8W9b9qRDjdiztP
-	 5Ebv9ravdj5AA==
+	s=spacemail; t=1794381515;
+	bh=FDVYx8yy52ErHGioH23BNSxBVVZYdOQuntf0S9ipsa0=;
+	h=From:To:Cc:Subject:Date:From;
+	b=kXQVO9ccHYWViACQPDpmlLFRWVPV5tx3Wzp1wFQE8lvUGe/Fky8pccpFlySaMwebZ
+	 OOaHF2QabfKCa4jDKyjmPtJ+wLt6J5UjX7/5UXlpsLxuRvmzXZgWIokKpnDVLtL7Kk
+	 Z/GgZwv3U2DRaoQd3VS/16JDypMjGxVqDhYtgEu5KZXzt+gZJocZ9v3EmZGuwj97TV
+	 VN4N2Ts6u4yn92BnAuVu8dX/RKqSkRrKA19q2DTPcuGet+OxMCT+Fv+Q6jJsSVxuOw
+	 CIn6hintx5fDEaMhzrax8MvVQdsbxmcaNjTzZ7UaOk5jWCr+8hvuR6gLu3X6JfQJTU
+	 Y0uyj2IRM9XQQ==
 From: Tianyi Chen <hi@tychen.cc>
 To: bpf@vger.kernel.org
 Cc: Tianyi Chen <hi@tychen.cc>,
@@ -60,12 +60,10 @@ Cc: Tianyi Chen <hi@tychen.cc>,
 	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	yatsenko@meta.com
-Subject: [PATCH bpf v2 1/2] bpf: Report lost RHASH batch traversal keys as EAGAIN
-Date: Wed, 11 Nov 2026 16:18:23 +0900
-Message-ID: <701a92691a4757132218729f99862cfd3b0e6e63.1794379108.git.hi@tychen.cc>
+Subject: [PATCH bpf v2 0/2] bpf: Fix RHASH batch cursor loss
+Date: Wed, 11 Nov 2026 16:18:22 +0900
+Message-ID: <cover.1794379108.git.hi@tychen.cc>
 X-Mailer: git-send-email 2.56.0
-In-Reply-To: <cover.1794379108.git.hi@tychen.cc>
-References: <cover.1794379108.git.hi@tychen.cc>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -78,50 +76,29 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Envelope-From: hi@tychen.cc
 
-If a key is deleted after a batch copies it, rhashtable_next_key()
-returns ERR_PTR(-ENOENT). The batch code treats the missing next cursor
-as end-of-iteration and returns -ENOENT with a partial batch, so callers
-can silently stop before reading keys that are still present.
+Report a lost RHASH traversal key as -EAGAIN rather than end-of-iteration.
+The kernel change is unchanged from v1.
 
-Translate a lost traversal key to -EAGAIN, as for a missing input cursor,
-and preserve other iterator errors. Still copy the collected entries and
-update the count, including for lookup-and-delete batches.
+Changes in v2:
+- Add the batch subtests to the existing rhash.c suite.
+- Carry Mykyta's Acked-by on the fix.
 
-Fixes: 818e00848227 ("bpf: Implement iteration ops for resizable hashtab")
-Link: https://github.com/kernel-patches/bpf/pull/14700#issuecomment-6641291019
-Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
-Assisted-by: LLM
-Signed-off-by: Tianyi Chen <hi@tychen.cc>
----
- kernel/bpf/hashtab.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+All 17 RHASH subtests pass in x86-64 KVM, with five further successful
+runs of the five batch subtests. The concurrent-delete test still fails
+on the unpatched kernel.
 
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index 6e2115477cb9..346a2afb4ad3 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -3556,14 +3556,15 @@ static int __rhtab_map_lookup_and_delete_batch(struct bpf_map *map,
- 
- 	rcu_read_unlock();
- 
--	if (total == 0) {
-+	if (IS_ERR(elem)) {
-+		ret = PTR_ERR(elem);
-+		if (ret == -ENOENT)
-+			ret = -EAGAIN;
-+	} else if (!has_next_cursor) {
- 		ret = -ENOENT;
--		goto free;
- 	}
--
--	/* No more elements after this batch. */
--	if (!has_next_cursor)
--		ret = -ENOENT;
-+	if (!total)
-+		goto free;
- 
- 	if (copy_to_user(ukeys, keys, (size_t)total * key_size) ||
- 	    copy_to_user(uvalues, values, (size_t)total * value_size) ||
+v1: https://lore.kernel.org/r/cover.1794056839.git.hi@tychen.cc
+
+Tianyi Chen (2):
+  bpf: Report lost RHASH batch traversal keys as EAGAIN
+  selftests/bpf: Cover RHASH batch cursor loss
+
+ kernel/bpf/hashtab.c                          |  13 +-
+ .../testing/selftests/bpf/prog_tests/rhash.c  | 177 ++++++++++++++++++
+ 2 files changed, 184 insertions(+), 6 deletions(-)
+
+
+base-commit: 475a0cfd02f14d764023e926ac01fc7597134229
 -- 
 2.56.0
 
