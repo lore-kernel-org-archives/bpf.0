@@ -1,46 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794436884;
-	b=33Yg3Fc90+hGzWZNNUdKG+iRg4ktvVieQioYkI0EDqjFZ4KZkhveCyhrpwGx7BD2qjor
-	 IE+Q6nHtoEyUTZdkvhqA68/2vuR/78ReHbBJXvtRFK5vnpBsrmyTJz3K6rVYw+lLxytC0
-	 c529b+4Y3xAn4kBoSlKl7j+Sjp+OL67cUI4IUa8aqWJMBrUtcdDYmBfXKPounrEjdku8w
-	 jzEmWkFmc54tvUsh/sbn7GslVHf5jtIJt2WAJ0JyRCkmhTmkltd1tnojHSE0LwZHKxtqF
-	 qXjUhgHqQKvTu4FKsP4EhX09WFDuzQPnFHNf/s8MGz+uuKz4mdyvdgwK9HtjPLNxrPg==
+	t=1794436887;
+	b=Od3aQiUJSpuQiT9XnMzBmSI9SIgmlCrYwjgOmmdu3hICA4zdGZfsgJK0bvGAt5LQO2cc
+	 oFDkJCbEzLigZrairvsYrKVc73d5bAkUSjFtRGq3YfI7z/wKf/AKersH1bYCbbcQ3z/hR
+	 vdVmM2sMoPV6JXojquA8no+rxdj0JYfn3fB374wmSTCKQZLjKR1foPm4/Fb96FfHY62E8
+	 UyJIefR2WDa3YTppP7KEaDk/yrwicEklYwokXD1YZCDaK/aN0XSjHEhOTuX3Yn7/s8sHA
+	 DKgmiz439KJ5Lo/rgmUjbCyEvywvEa3B524YgfoVk/c94Sn7+E2SZ7CvFVfXkoAQDXQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794436884;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794436887;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=1ZszL408OtVOYhxcADqDXyCFPN2IPKvweH7l3LeJgEc=;
-	b=Kd4AYtacdyeXhjp4jGsydUorxKXwICT8AXlRcmEr5rBzCNsJ1YNPT/kKdyN/RmPi8gAk
-	 mIYXC12hwHIGXU7/P2sKSSAoFSC1EXt8kNx2lK7Y8VLw5ZNZFnKbkQYVdCMgbAp/4un1M
-	 Dar3XvOFzUIjBci9a1aYd0+lzQn2NVuJFp8LHeh5W7B3FvWEU1ct1v79YwDNDzzD5cIdr
-	 wAagb4h0o3GSJBOOlLHuzbpsaMRE05NMlGdVvIbHTihBuW8bQwN54p1QR0E0ak9MPnv9J
-	 UzJ5FNj3Cc7GKK02oxY7tu/Gqovq0mWgSKs7dsxlht/BkTfSppk4i2/4L0N4A3QT0WA==
+	bh=UY3RMS56DkTiyj0krxa5zBr/mBUw7hLobgrEZX1POGE=;
+	b=zS1slmV6d/mJ2JCkiODo/qU6/nx4wV53Ej2KrhONwyk2zY5DEzrHER7L6ygxDoqO9iSa
+	 O7e6R+cZqWW/6DOgX5l9+gCycxd05UPmtynzIdF/H463oiXNmBHSKrl/7DMW+3wmFkMQH
+	 ZcJ945y3PYzwSe20UhDwNVHo+9wvngseT1NbFe/c8ak55JX13bfdx2MihPZgUuOLNc9im
+	 +xRHKo29yPOQlDFdmsX6o4Ri72jNrS2ORjOwrA29BpgKN5mC66RtoS82C1aLtWZTQiNYR
+	 016a6G2XiIW2KyGKC1rLNBS4caDZ4gm3TApNaBHJk9UqMy24OKduxN0r6S5BdvqBx0A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VhGYVF1A;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iHI+Wm8K;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4A7B606A336;
-	Wed, 11 Nov 2026 22:41:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A47E606A880;
+	Wed, 11 Nov 2026 22:41:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VhGYVF1A
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED6C21F00A05;
-	Wed, 11 Nov 2026 22:41:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iHI+Wm8K
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEDF11F00A0A;
+	Wed, 11 Nov 2026 22:41:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794436884;
-	bh=1ZszL408OtVOYhxcADqDXyCFPN2IPKvweH7l3LeJgEc=;
+	s=k20260515; t=1794436887;
+	bh=UY3RMS56DkTiyj0krxa5zBr/mBUw7hLobgrEZX1POGE=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=VhGYVF1ACkNkJmWQcgrSe4xq0u7p9IcPv50kYi0r0zkpK9kBgNCeLK5j/JWEIVewS
-	 SYM1BlCdSaKoa1Q8lDng/fxwNyw3HGDnK5lIxS/JkjCjpsng/iaSRridBJUevSX+DZ
-	 HnMAHRW9YMcJQzDvvOMG02pMh4btDUUj1zh8liWLiF9mlwpcdc6DOmEdKpsdho/OYF
-	 2ET5J0xk+iq1mFj+j2/PPi6p8RCK9S1l0GU/2PYech/JAwq7V1P61c8Sv8z7vRV9Fm
-	 OgpP++8N1IrCl6T6jZndpm5cJdtQrapg8uQJ940/ocRUORHk+P3LsAIipcog1dAgC2
-	 sUMFE6ef483Hg==
-Subject: Re: [PATCH net-next v1 02/11] net: Add memory provider capabilities
+	b=iHI+Wm8KcSPSvJBFNxNli54Zk3sK/ga3jxTAPM7hgTxGSFX5fqD1gnPhB6596uoN9
+	 i+qy8oDyxvR5IJpgw9Z3Qaq5Q/ln0MSLSRSNsVvheo13lNFSce7r0NmSg0EWq8+Ghx
+	 NFBBkR+X6sKRYrFfHKKnHofhDE53X943wccSU7Q2Ua+yMWcxi4BUSeaMo1mc7fwN3Q
+	 u46+I8fyauv8wQ/lfsgCxqGiA6UWzcNfUuQSbtYVcSLOZ+xLPaHPFF1qYW3BqcPPNY
+	 7MRAfYRR1sl8CW+LP3loUeT+nXi91y+GZPpxdvW/s2dfKOakLnRUbOyo6Ko9NmucZF
+	 IEtCFltIV416g==
+Subject:
+ Re: [PATCH net-next v1 03/11] xdp: Copy buffers with restricted lifetime
 From: netdev-bot+sashiko@kernel.org
 To: bjorn@kernel.org
 Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, sdf@fomichev.me,
@@ -57,11 +58,11 @@ Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, sdf@fomichev.me,
  bestswngs@gmail.com, razor@blackwall.org, dw@davidwei.uk,
  aleksander.lobakin@intel.com, linux-doc@vger.kernel.org,
  linux-kernel@vger.kernel.org, stuclar@meta.com
-Date: Wed, 11 Nov 2026 22:41:21 +0000
-Message-ID: <179443688151.2199510.3920075646889577971@kernel.org>
-In-Reply-To: <20261110102039.1002605-3-bjorn@kernel.org>
-References: <20261110102039.1002605-3-bjorn@kernel.org>
-X-sashiko-severity: Low
+Date: Wed, 11 Nov 2026 22:41:24 +0000
+Message-ID: <179443688445.2199510.2127044982916637399@kernel.org>
+In-Reply-To: <20261110102039.1002605-4-bjorn@kernel.org>
+References: <20261110102039.1002605-4-bjorn@kernel.org>
+X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
@@ -74,76 +75,98 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-Low priority / nit picks for your consideration:
+Critical: 0 · High: 2 · Medium: 0 · Low: 0
 
-- [Low] Documentation/networking/netmem.rst, 'Driver RX Requirements',
-  disagrees with the readable-provider semantics this patch adds.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [High] xdp: missing xdp_data_meta_unsupported() check in
+  xdp_build_skb_from_zc()
+- [High] xdp: skb_shared_info overwrite in xdp_build_skb_from_zc() via
+  aligned memcpy
 
 --
 
-net: Add memory provider capabilities
-
-This adds MP_CAP_READABLE and MP_CAP_FRAG memory provider capabilities.
-The header split and XDP restrictions now apply only to unreadable
-providers. A new PP_FLAG_MEM_PROVIDER flag lets a page pool take a
-readable provider from its RX queue. devmem and io_uring are marked
-MP_CAP_FRAG and keep their current behavior.
-
-> diff --git a/Documentation/networking/netmem.rst b/Documentation/networking/netmem.rst
-> index 6871dcdd700cc..39cb75339704d 100644
-> --- a/Documentation/networking/netmem.rst
-> +++ b/Documentation/networking/netmem.rst
-> @@ -103,6 +103,11 @@ Driver RX Requirements
->       which knows when dma-syncing is (or is not) appropriate.
->     - PP_FLAG_ALLOW_UNREADABLE_NETMEM. The driver must specify this flag iff
->       tcp-data-split is enabled.
-> +   - PP_FLAG_MEM_PROVIDER. The page pool takes memory from the memory
-> +     provider of its RX queue, readable or not. Page pool creation fails if
-> +     the provider is unreadable and PP_FLAG_ALLOW_UNREADABLE_NETMEM is not
-> +     set, so do not set it on header page pools of such a queue. Without it,
-> +     PP_FLAG_ALLOW_UNREADABLE_NETMEM selects unreadable providers only.
-
-[Severity: Low]
-This isn't a bug, but does this entry belong under item 4's heading, "The
-driver must use the following PP_FLAGS:"?
-
-PP_FLAG_MEM_PROVIDER is opt-in. The comment in
-include/net/page_pool/types.h says "Take memory from the memory provider
-of the RX queue, if one is installed".
-
-devmem and io_uring pools still get their unreadable provider with only
-PP_FLAG_ALLOW_UNREADABLE_NETMEM set, because page_pool_select_mp() assigns
-unreadable providers without the new flag. The entry itself also says not
-to set the flag on header page pools of a queue with an unreadable
-provider.
-
-Item 2 above is still an unconditional requirement:
-
-    2. The driver must support the tcp-data-split ethtool option.
-
-However, __netif_mp_open_rxq() now checks hds_config and hds_thresh only
-when the provider lacks MP_CAP_READABLE:
-
-    if (unreadable &&
-        dev->cfg->hds_config != ETHTOOL_TCP_DATA_SPLIT_ENABLED) {
-
-The MP_CAP_READABLE kernel-doc also says such a provider "may back header
-page pools".
-
-Could items 2 and 4 be reworded to cover the readable provider case? As
-far as I can tell, this text is still unchanged at the end of the series.
-That leaves af_xdp.rst as the only place that describes the
-readable-provider driver contract.
-
+> diff --git a/net/core/xdp.c b/net/core/xdp.c
+> --- a/net/core/xdp.c
+> +++ b/net/core/xdp.c
+> @@ -638,6 +689,9 @@ struct sk_buff *xdp_build_skb_from_buff(const struct xdp_buff *xdp)
+>  	u32 nr_frags = 0;
+>  	int metalen;
 >  
->  5. The driver must not assume the netmem is readable and/or backed by pages.
->     The netmem returned by the page_pool may be unreadable, in which case
+> +	if (unlikely(xdp_buff_needs_copy(xdp)))
+> +		return xdp_build_skb_from_zc(xdp);
+> +
+>  	if (unlikely(xdp_buff_has_frags(xdp))) {
+>  		sinfo = xdp_get_shared_info_from_buff(xdp);
+>  		nr_frags = sinfo->nr_frags;
 
-[ ... ]
+[Severity: High]
+This makes xdp_build_skb_from_zc() the XDP_PASS path for restricted
+page pool buffers, and its copy can overrun the new head into the
+skb_shared_info.
+
+The function asks the system page pool for truesize = xdp->frame_sz.
+When that comes back unchanged, napi_build_skb() places
+skb_shared_info at the same offset that xdp_data_hard_end() has in the
+source. The code then copies LARGEST_ALIGN(len) bytes starting at
+offset xdp->data_meta - xdp->data_hard_start.
+
+That offset is often not a multiple of 16, which is normal after
+bpf_xdp_adjust_head() by an Ethernet or VLAN header. If data_end is
+also close to xdp_data_hard_end(), the rounded-up memcpy writes into
+the already initialised skb_shinfo() of the new skb: flags,
+nr_frags, the gso fields and frag_list.
+
+The bytes written come from past data_end in the head chunk, which
+for UMEM is writable by userspace. Freeing or segmenting the skb
+later then walks a bogus nr_frags or frag_list.
+
+With XDP_FLAGS_EXT the head chunk no longer holds the shared info at
+all. Does anything still keep data_end below xdp_data_hard_end() for
+these buffers? If not, len alone can run past skb->end, since
+__skb_put() does not check.
+
+Should the destination size be derived from the copy instead of
+xdp->frame_sz? For example: headroom + LARGEST_ALIGN(len) +
+SKB_DATA_ALIGN(sizeof(struct skb_shared_info)). Or should this path
+copy exactly len bytes?
+
+[Severity: High]
+Restricted buffers on XDP_PASS now go through xdp_build_skb_from_zc(),
+but that function cannot cope with unsupported metadata. If the driver
+called xdp_prepare_buff(..., false), or metadata is otherwise invalid,
+xdp->data_meta is xdp->data + 1.
+
+The non-copy path of xdp_build_skb_from_buff() handles this. It
+reserves and puts from xdp->data and only sets metadata when
+metalen > 0. xdp_copy_buff_to_frame() in this patch also checks
+xdp_data_meta_unsupported().
+
+xdp_build_skb_from_zc() does not. It:
+
+- computes len as data_end - data_meta,
+- reserves data_meta - data_hard_start,
+- copies from data_meta,
+- then sees metalen == -1 and skips the __skb_pull().
+
+The resulting skb starts at the second byte of the Ethernet header and
+is one byte short, so eth_type_trans() and everything above it parse
+shifted data. If data_end == data, len also wraps as a u32.
+
+The XSK callers did not hit this, because the pool sets
+data_meta == data. Page pool drivers without metadata support pass
+meta_valid == false routinely, though.
+
+Could xdp_build_skb_from_zc() compute the metadata size the way
+xdp_copy_buff_to_frame() does? That means treating unsupported
+metadata as zero length and copying from xdp->data.
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261110102039.1002605-1-bjorn%40kernel.org
