@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1794392565;
-	b=gUNcm2qq0y7Dx5sL4RKJsIkATSpwh950ZGlkKC3QHMHqpaufbC06gE6eh9bYybRiOgvi
-	 7tFQaK0mTHb74GpTQB54YnKeVF/GynTOKjTigDtczONVn1kZ+zcsYEkb0gJaqWpqA0dvc
-	 YDkQyVbU3Hqwh0CcvN3xcYVT3+zdKj22xWofKaRfuZNsglm+WLMa9Vx8rK1Y7mcX/i/Ag
-	 l6Xq7vneeEMTefAaPTYyfMKry8a+PDr4ely89JrunFS0pKHjYy74/zwcwUZ2IvIfGhAfI
-	 Hw8BK88Yyyehqhqk+m6as+GIwrhPKXZGLiLQMqAP6ediYSzDVxJgGHEnSMo0YdU3PpQ==
+	b=Fi3Pq7HAcK4ODZp9LM/q6oYnEryfdTdfVxt4qZKoOlwYeG8M/g0kLq+5l+u6DUQkfBHY
+	 QEUkMyRmq0NpEf+xUzAaD3byFXytoel2MQ7GvMHVHvmeT+bS+WgO2FmJ7LfVntgnfcUFm
+	 8ipcLxD5Mg/9kcUT6e4NlAH/8QIM5gxmw1b0d/PzxSQPf1cx+0ThX06JLcQI7OR1RYIhn
+	 JOI3l0hADO+dQ+IxoSO+DZ2Y3vxjl4L6vsVU+by9Nl/q8xCVGqgD9uBqmJjov/BlfqtKk
+	 /nDEp9ERG9NedCHm3/TXhHFcuIPhacbg+l/EYqIaBa2pwJ86M87mOgFvzQMwUYgdQUQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1794392565;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=4qsyGDZo3gvXq56qH0wu6282UMwZaH/flMaAVe2LFMM=;
-	b=ZW+QQPUt5y02aPqByAkkSq8WDB/bKBPTDv8OEiagiyIGGjf9D2dXQ7ADMF6gc9pV79me
-	 O3S7jz148uI35t589Hw/kv/dr+iR7ZFDH3xD5PKybf/02ZD6IUfEIFulIJBe0Gf8Zekt4
-	 dz32nov2gKMQIL8e/GliQF6XjKbHxPkqz3PstUL5ytTaYf5UcW2ZOP4/2cKpRDLcvsytq
-	 FBfJKMJMu7fXt55VSZmiZxqFPxS2WOBjgc+4kHbVB4jkpDJpt8dLlRtIY+itUtt0xnMyC
-	 Hc9ZyuChyQhJmO3ONQxqqsSnqgo/YIo4BzlxINYErtff1bUoJy6K21/HNItU8WXzOdg==
+	bh=6/HE7IdVmiMYZ+bhf/b1/CnpEathHyRVggQU6qwBUy4=;
+	b=PtN5xXIhdQ5Ks4s7JTOYrb2VydEXanThdWq75gwOZA63pVARO8VmjiFnTS67VwHZhVqR
+	 CCKRolhRBW+T/SnHUZdNbH9u3xcUwsGbyGq2UgQ+MzAGrq6OEYSSFwlPkkAWieyHXDF0m
+	 9quiH2EH+LAxeiUG4lEl5Rbb/L9xYO35quStsv0j86S4RyFen+1jVoz5TuUEwEDvp91wu
+	 xsyOjCQs4X9lI0qgdqCM0UBKR3q+BcNd0FbcX2LeirCpqnRmAV5CtsHw91M55O2/ZrKv4
+	 Cwbnazc9X69l7HOmcLRmC7S/f8i3GJyresy4eYGPyGg0HJPaBbafQG2F97ElPre6EIQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OiWUSzv3;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="PD/lT6ko";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A160606A32E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C17CB606A334
 	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 10:22:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OiWUSzv3
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D625D1F00A06;
-	Wed, 11 Nov 2026 10:22:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PD/lT6ko
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 816A51F00A05;
+	Wed, 11 Nov 2026 10:22:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1794392565;
-	bh=4qsyGDZo3gvXq56qH0wu6282UMwZaH/flMaAVe2LFMM=;
+	bh=6/HE7IdVmiMYZ+bhf/b1/CnpEathHyRVggQU6qwBUy4=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=OiWUSzv3gdd8xoG70dfcmICBOGLv4jnKhJ1Js9EE5qDmi/mMqwauIWXOezS646FXo
-	 rV4b1sh8IwRNjTgJI4a95wd6JovvCTd697PtWTSJIRwuhX9YCqjBWG5HT76KXMIAc4
-	 yNyLR3laXObmn+k0/frlnJ3J28kaIyJnebcgq6d0YDNj7rfkjF5noyqkpdp9xe9RWC
-	 5Wxcw9evdItw74jiZGXIRR5PGj95/JWkdO7NDRehgWDCxbmCroWS31uipracNnSOkg
-	 7Nh48vutHM8eFKrlzEyCkwTCttCh4GK1hyilTLk484rL9rSgkrm54UqTyUS7YX44B/
-	 JnjwKvCsHTNDQ==
-Message-ID: <sashiko-outbox-208788@kernel.org>
+	b=PD/lT6koWUybdu8gBB3rI1arPX3ohtbAT3CauMAtV2Feqx5dOgNpxx6xKHEKCSwno
+	 qhv6UJlVNAvHKNDdM/hgrK+rGjE6rS6MrnM1vbKeEEN44kG2KSQgLAnxfRHaIX451t
+	 rRhDN5oCSg2bUxFGukSKuGlw1yJ/o04GcsaG8onvma937PK2Q1hsa9gjGV66Odg3qm
+	 8/bAGgrKycLZxHKXLit2bkpts9IC4rPV1JavNDq5Jty1mVL47G+/NfRsygimXBenWJ
+	 L4T63mhnErAOy1Ls5nfSbQMfy83Gdu/VHL1wEtOQn8n3/87hqI17Gj9PrfXBFmejd2
+	 KXlYU2rsdwjjg==
+Message-ID: <sashiko-outbox-208789@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v1 05/11] xsk: Install UMEM page pool providers
- in the core
+Subject: Re: [PATCH net-next v1 06/11] page_pool: Coordinate refill with
+ memory providers
 Reply-To: sashiko-reviews@lists.linux.dev
 To: =?utf-8?b?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, bpf@vger.kernel.org
-In-Reply-To: <20261110102039.1002605-6-bjorn@kernel.org>
+In-Reply-To: <20261110102039.1002605-7-bjorn@kernel.org>
 References: <20261110102039.1002605-1-bjorn@kernel.org>
- <20261110102039.1002605-6-bjorn@kernel.org>
+ <20261110102039.1002605-7-bjorn@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 11 Nov 2026 10:22:44 +0000
+Date: Wed, 11 Nov 2026 10:22:45 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,164 +60,260 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 2 potential
+Thank you for your contribution! Sashiko AI review found 3 potential
 issues to consider:
-- [High] xsk: UAF of pool and UMEM on xsk_pp_bind() failure with active
-  page_pool
-- [High] xsk: unconditional DMA unmap and UMEM release in
-  xsk_pp_unbind()
-It also noticed 1 related pre-existing issue this patch does not
-introduce:
-- [Critical] net: null pointer dereference in __netdev_queue_config()
-  [1]
+- [High] xsk: use-after-free of pp->pool in xsk_pp_refill_done() after
+  detach
+- [Medium] net: wrong mp_napi state after netdev_rx_queue_reconfig()
+  error recovery
+- [Medium] net: dangling rxq->napi left by netif_mp_napi_del() and
+  republished
 --
 
-commit 34e15c1f4828114e9aaedcfa55376bd7c379c9a3
+commit 3fe1ff48cc345ebc097d0481e784047c7126ab42
 Author: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
 
-xsk: Install UMEM page pool providers in the core
+page_pool: Coordinate refill with memory providers
 
-This commit installs AF_XDP UMEM memory providers through the netdev RX
-queue API for drivers setting netdev_queue_mgmt_ops.xsk_page_pool, and
-defers allocating pool->heads to copy mode and driver zero-copy.
+This commit adds page_pool_refill_done() and NAPI wakeup tracking on RX
+queues so that memory providers such as AF_XDP can re-poll or wake queues
+when buffers return.
 
-> diff --git a/net/core/netdev_config.c b/net/core/netdev_config.c
-> index 1975de42a60d9..97e33764737bd 100644
-> --- a/net/core/netdev_config.c
-> +++ b/net/core/netdev_config.c
-> @@ -88,6 +88,8 @@ static int __netdev_queue_config(struct net_device *dev=
-, int rxq_idx,
->  	mpp =3D &__netif_get_rx_queue(dev, rxq_idx)->mp_params;
->  	if (mpp->rx_page_size)
->  		qcfg->rx_page_size =3D mpp->rx_page_size;
-> +	if (mpp->rx_headroom)
-> +		qcfg->rx_headroom =3D mpp->rx_headroom;
->  	err =3D validate_cb(dev, qcfg, extack);
->  	if (err)
->  		return err;
+> diff --git a/net/core/netdev_rx_queue.c b/net/core/netdev_rx_queue.c
+> index 4e2f906fbc735..3fe904b56791b 100644
+> --- a/net/core/netdev_rx_queue.c
+> +++ b/net/core/netdev_rx_queue.c
+> @@ -116,6 +116,94 @@ bool netif_all_mps_have_cap(struct net_device *dev, =
+u32 cap)
+>  	return true;
+>  }
+> =20
+> +/**
+> + * netif_mp_wake - schedule the NAPI that refills a memory provider queue
+> + * @rxq: physical RX queue of the provider
+> + *
+> + * Context: IRQs enabled, not in hardirq. The caller keeps the device of
+> + * @rxq alive.
+> + *
+> + * Return: false if no NAPI refills the queue.
+> + */
+> +bool netif_mp_wake(struct netdev_rx_queue *rxq)
+> +{
+> +	struct napi_struct *napi;
+> +	bool running =3D false;
+> +
+> +	rcu_read_lock();
+> +	napi =3D rcu_dereference(rxq->mp_napi);
+> +	if (napi) {
+> +		local_bh_disable();
+> +		napi_schedule(napi);
+> +		local_bh_enable();
+> +		running =3D true;
+> +	}
+> +	rcu_read_unlock();
+> +
+> +	return running;
+> +}
+> +
+> +/* Point wakeups at the NAPI of the running queue, and schedule it once:=
+ a
+> + * refill during the start may have found no buffers.
+> + */
+> +void netif_mp_update_napi(struct netdev_rx_queue *rxq)
+> +{
+> +	const struct memory_provider_ops *ops =3D rxq->mp_params.mp_ops;
+> +	struct napi_struct *napi =3D NULL;
+> +
+> +	if (rxq->mp_armed && ops && ops->refill_done)
+> +		napi =3D rxq->napi;
+> +	if (rcu_access_pointer(rxq->mp_napi) =3D=3D napi)
+> +		return;
+> +
+> +	rcu_assign_pointer(rxq->mp_napi, napi);
+> +	if (napi)
+> +		netif_mp_wake(rxq);
+> +}
+> +
+> +static void netif_mp_arm_napi(struct netdev_rx_queue *rxq)
+> +{
+> +	rxq->mp_armed =3D true;
+> +	netif_mp_update_napi(rxq);
+> +}
+> +
+> +static void netif_mp_disarm_napi(struct netdev_rx_queue *rxq)
+> +{
+> +	rxq->mp_armed =3D false;
+> +	RCU_INIT_POINTER(rxq->mp_napi, NULL);
+> +}
+> +
+> +void netif_mp_arm_dev(struct net_device *dev)
+> +{
+> +	unsigned int i;
+> +
+> +	for (i =3D 0; i < dev->real_num_rx_queues; i++)
+> +		netif_mp_arm_napi(__netif_get_rx_queue(dev, i));
+> +}
+> +
+> +void netif_mp_disarm_dev(struct net_device *dev)
+> +{
+> +	unsigned int i;
+> +
+> +	for (i =3D 0; i < dev->num_rx_queues; i++)
+> +		netif_mp_disarm_napi(&dev->_rx[i]);
+> +}
+> +
+> +/* The grace period of netif_napi_del() covers wakeups that found @napi.=
+ */
+> +void netif_mp_napi_del(struct napi_struct *napi)
+> +{
+> +	struct net_device *dev =3D napi->dev;
+> +	unsigned int i;
+> +
+> +	/* free_netdev() frees the queues before it deletes the last NAPIs */
+> +	if (dev->reg_state !=3D NETREG_REGISTERED)
+> +		return;
+> +
+> +	for (i =3D 0; i < dev->num_rx_queues; i++)
+> +		if (rcu_access_pointer(dev->_rx[i].mp_napi) =3D=3D napi)
+> +			RCU_INIT_POINTER(dev->_rx[i].mp_napi, NULL);
+> +}
 
-[Severity: Critical]
-This problem wasn't introduced by this patch, but can __netdev_queue_config=
-()
-dereference a NULL dev->queue_mgmt_ops pointer [1] when called on a
-device without queue management ops?
+[Severity: Medium]
+Does netif_mp_napi_del() leave a dangling pointer in dev->_rx[i].napi?
 
-Earlier in __netdev_queue_config(), dev->queue_mgmt_ops is dereferenced
-without a NULL check:
+__netif_napi_del_locked() calls netif_mp_napi_del(), which clears
+dev->_rx[i].mp_napi, including when mp_napi is already NULL because
+__dev_close_many() or netdev_rx_queue_reconfig() disarmed the queue first.
+Because dev->_rx[i].napi is left pointing to @napi, if a driver deletes a
+NAPI without calling netif_queue_set_napi(..., NULL), the next
+netif_mp_update_napi() copies the freed dev->_rx[i].napi back into
+rxq->mp_napi and calls napi_schedule() on it, causing a use-after-free.
 
-net/core/netdev_config.c:__netdev_queue_config() {
+> @@ -152,13 +240,15 @@ static int netdev_rx_queue_reconfig(struct net_devi=
+ce *dev,
+>  		goto err_free_new_queue_mem;
+> =20
+>  	if (netif_running(dev)) {
+> +		netif_mp_disarm_napi(rxq);
+>  		err =3D qops->ndo_queue_stop(dev, old_mem, rxq_idx);
+>  		if (err)
+> -			goto err_free_new_queue_mem;
+> +			goto err_arm_old_queue;
+> =20
+>  		err =3D qops->ndo_queue_start(dev, qcfg_new, new_mem, rxq_idx);
+>  		if (err)
+>  			goto err_start_queue;
+> +		netif_mp_arm_napi(rxq);
+>  	} else {
+>  		swap(new_mem, old_mem);
+>  	}
+> @@ -183,8 +273,13 @@ static int netdev_rx_queue_reconfig(struct net_devic=
+e *dev,
+>  		     "Failed to restart old queue in error path. RX queue %d may be un=
+healthy.",
+>  		     rxq_idx);
+>  		qops->ndo_queue_mem_free(dev, old_mem);
+> +		goto err_free_new_queue_mem;
+>  	}
+> =20
+> +err_arm_old_queue:
+> +	/* The old queue may run */
+> +	netif_mp_arm_napi(rxq);
+> +
+>  err_free_new_queue_mem:
+>  	qops->ndo_queue_mem_free(dev, new_mem);
+
+[Severity: Medium]
+Does err_arm_old_queue arm rxq->mp_napi using the target rxq->mp_params
+instead of the running old queue's provider state?
+
+Both __netif_mp_open_rxq() and __netif_mp_close_rxq() mutate rxq->mp_params
+before calling netdev_rx_queue_reconfig():
+
+net/core/netdev_rx_queue.c:__netif_mp_open_rxq() {
 	...
-	validate_cb =3D netdev_nop_validate_qcfg;
-	if (validate && dev->queue_mgmt_ops->ndo_validate_qcfg)
-		validate_cb =3D dev->queue_mgmt_ops->ndo_validate_qcfg;
-
-	memset(qcfg, 0, sizeof(*qcfg));
-
-	/* Get defaults from the driver, in case user config not set */
-	if (dev->queue_mgmt_ops->ndo_default_qcfg)
-		dev->queue_mgmt_ops->ndo_default_qcfg(dev, qcfg);
+	rxq->mp_params =3D *p;
 	...
+	ret =3D netdev_rx_queue_reconfig(dev, rxq_idx, &qcfg[0], &qcfg[1]);
+	if (ret)
+		goto err_clear_mp;
+
+	return 0;
+
+err_clear_mp:
+	memset(&rxq->mp_params, 0, sizeof(rxq->mp_params));
+	return ret;
 }
 
-Calling netdev_queue_config() or netdev_queue_config_validate() on a device
-where dev->queue_mgmt_ops is NULL will panic.
+When ndo_queue_stop() or ndo_queue_start() fails during __netif_mp_open_rxq=
+(),
+err_arm_old_queue sees the new provider in rxq->mp_params, sets rxq->mp_napi
+to rxq->napi, and wakes NAPI before err_clear_mp zeroes rxq->mp_params,
+leaving rxq->mp_napi set with no provider installed.  Conversely,
+__netif_mp_close_rxq() zeroes rxq->mp_params before calling
+netdev_rx_queue_reconfig(), so on failure err_arm_old_queue sees NULL mp_ops
+and leaves rxq->mp_napi NULL even though the old provider-backed queue is
+still running.
 
 > diff --git a/net/xdp/xsk_pp.c b/net/xdp/xsk_pp.c
-> index fdd55265a6cdc..c2214e718cdb3 100644
+> index c2214e718cdb3..a77213f7fef6b 100644
 > --- a/net/xdp/xsk_pp.c
 > +++ b/net/xdp/xsk_pp.c
 
 [ ... ]
 
-> +	mp.mp_priv =3D pp;
-> +	mp.rx_page_size =3D pool->chunk_size;
-> +	mp.rx_headroom =3D xsk_pool_get_headroom(pool);
-> +	err =3D netif_mp_open_rxq(dev, queue_id, &mp, NULL);
-> +	if (!err) {
-> +		pp->rxq =3D __netif_get_rx_queue(dev, queue_id);
-> +		pool->pp =3D pp;
-> +		pool->xdp_zc_max_segs =3D dev->xdp_zc_max_segs;
-> +		return 0;
-> +	}
+> @@ -232,11 +253,47 @@ static bool xsk_pp_release_netmem(struct page_pool =
+*pool, netmem_ref netmem)
+>  		pp->state[idx] =3D XSK_PP_REUSE;
+>  		pp->reuse[pp->reuse_cnt++] =3D idx;
+>  	}
+> +	starved =3D pp->starved;
+> +	WRITE_ONCE(pp->starved, false);
+>  	spin_unlock_bh(&pp->lock);
+> =20
+> +	/* A starved queue may wait for this release */
+> +	if (starved)
+> +		xsk_pp_wake(pp);
 > +
-> +	xp_dma_unmap(pool, XSK_PP_DMA_ATTR);
-> +	/* Copy mode takes the chunks that the provider holds */
-> +	if (!xp_alloc_heads(pool) && xsk_pp_abandon(pp))
-> +		xsk_pp_put(pp);
-> +	else
-> +		pool->pp =3D pp;
-> +
-> +	return err;
-> +}
-
-[Severity: High]
-If netif_mp_open_rxq() fails after ndo_queue_mem_alloc() has created a
-page_pool that attached to pp, can this error path cause a use-after-free of
-pool and UMEM?
-
-When page_pool_destroy() defers destruction because chunks are still held
-(pp->nr_pools > 0), or when xp_alloc_heads(pool) fails:
-
-1. xp_dma_unmap() runs unconditionally before xsk_pp_abandon(), unmapping
-   DMA pages while the lingering page_pool still owns chunks.
-2. xsk_pp_bind() sets pool->pp =3D pp without clearing pp->fq, and
-   xp_assign_dev() skips the copy-mode fallback because pool->pp is set,
-   returning err to xsk_bind().
-3. xsk_bind() calls xp_destroy(xs->pool), which drops only pool's reference
-   on pp via xsk_pp_put(pool->pp) and immediately kvfree()s pool:
-
-net/xdp/xsk.c:xsk_bind() {
-	...
-		err =3D xp_assign_dev(xs->pool, dev, qid, flags);
-		if (err) {
-			xp_destroy(xs->pool);
-			xs->pool =3D NULL;
-			goto out_unlock;
-		}
-	...
-}
-
-The lingering page_pool still holds its reference to pp, leaving pp->pool
-dangling (dereferenced in xsk_pp_alloc_fill() and xsk_pp_refill_done()) and
-pp->fq pointing to xs->fq_tmp. Because xs->pool is now NULL and xs->state
-remains XSK_READY, closing the socket frees xs->fq_tmp and calls
-xdp_put_umem(xs->umem, true), which vunmaps umem->addrs and unpins umem->pgs
-while the page_pool still holds chunks.
-
-> +/* Called with RTNL and the instance lock of the device */
-> +void xsk_pp_unbind(struct xsk_buff_pool *pool)
+>  	return false;
+>  }
+> =20
+> +static bool xsk_pp_refill_done(struct page_pool *pool, enum pp_refill st=
+ate)
 > +{
-> +	struct xsk_pp *pp =3D pool->pp;
-> +	struct pp_memory_provider_params mp =3D {
-> +		.mp_ops =3D &xsk_pp_ops,
-> +		.mp_priv =3D pp,
-> +	};
+> +	struct xsk_pp *pp =3D pool->mp_priv;
+> +	struct xsk_buff_pool *xp =3D pp->pool;
+> +	bool wait =3D xp->uses_need_wakeup;
+> +	bool more;
 > +
-> +	/* Unregister removed the provider already */
-> +	if (!pp->rxq)
-> +		return;
+> +	if (state =3D=3D PP_REFILL_FULL && !READ_ONCE(pp->starved))
+> +		return true;
 > +
-> +	netif_mp_close_rxq(pool->netdev, pool->queue_id, &mp);
-> +	xsk_pp_detach(pp);
-> +}
+> +	spin_lock_bh(&pp->lock);
+> +	if (!pp->fq) {
+> +		spin_unlock_bh(&pp->lock);
+> +		return true;
+> +	}
 
 [Severity: High]
-Can xsk_pp_unbind() and xp_release_deferred() unmap DMA and free the pool
-and UMEM while the RX queue or page_pool is still using them?
+Can xsk_pp_refill_done() dereference pp->pool after xp_destroy() has freed
+it?
 
-xsk_pp_unbind() ignores the return value of netif_mp_close_rxq() and
-unconditionally calls xsk_pp_detach(pp) -> xp_dma_unmap(). If
-netif_mp_close_rxq() fails (for example, -ENOMEM when allocating replacement
-queue memory in netdev_rx_queue_reconfig()), the hardware RX queue remains
-active on the unmapped UMEM pages.
+A page_pool holds its own reference on struct xsk_pp via pp->refs, while
+pp->pool is an uncounted backpointer to struct xsk_buff_pool.  When
+xp_release_deferred() tears down the pool, xsk_pp_unbind() calls
+netif_mp_close_rxq() and unconditionally calls xsk_pp_detach(pp) (which sets
+pp->fq =3D NULL under pp->lock and unmaps DMA), and xp_release_deferred() t=
+hen
+frees pp->pool in xp_destroy().  If netif_mp_close_rxq() fails in
+netdev_rx_queue_reconfig(), the old queue and its page_pool keep running and
+calling xsk_pp_refill_done(), which reads xp->uses_need_wakeup before taking
+pp->lock and checking pp->fq, causing a use-after-free.
 
-Furthermore, right after xp_clear_dev() returns in xp_release_deferred(),
-xdp_put_umem(pool->umem, false) unpins and vunmaps the UMEM and
-xp_destroy(pool) frees pool, even if netif_mp_close_rxq() failed or
-page_pool_destroy() deferred releasing in-flight netmems (pp->refs > 0).
-
-[1] https://sashiko.dev/#/bug/linux-47dd1618-68d7-4419-9441-df54e8f32d4d
+In addition, if netif_mp_open_rxq() fails in xsk_pp_bind() while a page_pool
+still holds a reference on pp (so xsk_pp_abandon(pp) returns false),
+xsk_pp_bind() leaves pp->fq non-NULL when xsk_bind() calls xp_destroy().
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261110102039.1002=
-605-1-bjorn@kernel.org?part=3D5
+605-1-bjorn@kernel.org?part=3D6
