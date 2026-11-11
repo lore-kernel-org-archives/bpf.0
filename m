@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794405876;
-	b=jrD5HS0L+qPUYgB317Ne+iU2vvkGT5AWBlX8QanQdKojdynLV+BEfXsFue7upY5KGcGL
-	 Bt+s24SyU8rJ4bVGxI+mTgbSNGvbXqM0s5tpYxBkFw4JYB7KWr4fJNU6UCwH3BdHsr/8i
-	 ZgiPDTo6u2fQZzsi3/ymlwAVt+lmfOm0hsqobKznpzu6Z6ClSA05xSmcy0GtcsFdssTF7
-	 UdT6K/ptOhg5ZvksPSaJXNomb3DDTtS+RfzXUVcTc52neGyi3KUqVcoBjRZOKzrAjUkAV
-	 eSYbV68lpX14mSoNl4idk51xisF+8RENfpOQ7/XM/vHh3mgXkCOVwuPiGGnXIzcq06A==
+	t=1794405879;
+	b=XjHCFRBbqXLL4xy9xAWa14NWJpFzSUaJJkKQQtmsacB8zpcBcYRpStymcwb1Zdv6IlVh
+	 5BHzYeDNI1sy18/arqh74g2+b+/8wPex31h34XV9VD6SuVAYNAkx+A5dSyh9oe4Q+DCi+
+	 Yc1/LkT+g9sk+6zPBvmvFwVzpXexAyoyvbOH2d9RkZ+u+cP2gjTsjsFWAAPjuzYpp+PbM
+	 mIN8Tveo+oiSNjEGskqzewSk8RvXn0axhHicEbz2Guudta6qUeFPbcBJsEpWZ4Y6EtaOW
+	 +c+slW0wyNU4SfLogZLc5JzacRyywwP+coDmVUyBynoYa6M8a1HYQoJQGFtkBykr9uw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794405876;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794405879;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=5lQ/t/zARYjafKJoSYPIQgPZAeqOyvYOrAaTzkSG08I=;
-	b=IopGnXHiDlvr30iDWp1/VeN0XHtf2wVLd6c6YwFfIZAlFyDGBfKKDZTCrDDy6j7pUyPP
-	 STQrf/BkrY9YhEbf89tKWQosDwkb9RrGdFsNFGd8O65rSPZdsXNG2qLbMVrH0rF3nMq8y
-	 PqxaqW5EZszSrIwK2pBIytwLgxOAykzMyxb+q7K21GM9oSjgmfSlDemV63Pr1uGomYUWj
-	 ApTzEPWcUMqk+vP99roCBzJ4z73pgyDnxs2JmRySqjCa5HligAKu/4+yZDg/U8DuS1IYL
-	 uiG3HfHh+1cWA9ZA8EugX3TBV8DzccFqHSaZrcAgC/Ei4SC9dX+O2uGQfzWN4wOUGOw==
+	bh=aKNWF8jW5eTRiS7jioKU0pNn54GoocEL1UHYgBIru9I=;
+	b=gK9KoMg7DzjtLVqWT46jvgqQk8gLdnSkXiXszBvDxdtvvAqM9/KMdO6tuX8+TnoIupTj
+	 JLo91UZy8HA6j9wnVphHaIJdzNDOj+doeWQkubME7wUJ6pMcvaHT7f7d6JVQ/0c939dwS
+	 KAHub0vRn1Lo67xyR3V3GY12QJ9IK/W8pzwPDigVTi3dOYwCCmFVugERD2OqPWX0Z2zEO
+	 b1aY0vY8NLQnT3B5goRBn92kzyh9koDHw5glrgkKRkpMJNy4TFMTq/qnQ51sg3bvnQOoe
+	 N2BUqRjwRuSQuzOOCKSd/cWNFEubDFI/b1io05u4GlySb68anUyLB9b1svUEpkZpEBQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZUz5HKLd;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mfuQvqWa;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7B7D606A327
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 14:04:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58F65606A327
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 14:04:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZUz5HKLd
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E21781F00A07;
-	Wed, 11 Nov 2026 14:04:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mfuQvqWa
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A3B81F00A06;
+	Wed, 11 Nov 2026 14:04:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794405876;
-	bh=5lQ/t/zARYjafKJoSYPIQgPZAeqOyvYOrAaTzkSG08I=;
+	s=k20260515; t=1794405878;
+	bh=aKNWF8jW5eTRiS7jioKU0pNn54GoocEL1UHYgBIru9I=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=ZUz5HKLd3HWoO9CfKnpNNs+ujhRhku5LqdI17pCDVjbTIfdbPIJQ1bt7UnY7Bhp6+
-	 p8gEVI2IcIQOXtd2+nX5Ur6zc5AxzFs3+gnXAw+2NIfgf2REli8ho5FxSvsRUl6weT
-	 8hclRtBNr4H9iD6DgLY3cYfR/33IDQgMQaIxDP0sC2imA8ydOjo0R6iJXCFfc3Tq5r
-	 dV3asQZlOtMgqDTQI78f6xJoEh+JBp9XGsxyES3zGLVQZD+Er1ONlSrSrREAebHCQw
-	 8r8X5GpTw3BY6g+Oqv943Frj83H59Ufh6CVyJ8Wt7OhY9YN0ZdCs1x805r6glDaNWl
-	 TBAzjVKABk6Pg==
-Content-Type: multipart/mixed; boundary="===============7858795348474572264=="
+	b=mfuQvqWa9Rdn0ikrYBYWlYwx7Jk62cKULaE58lomptNXoXen7S0lJJdkgcYjummZ5
+	 ipmC0vwIH6LoNmfoh/CcgfCF3Bm53SmYtsLKQahcXXT2ZjUxN1gH2i5VoMuF7NSwBy
+	 HstcE63X9yTkMgF/k5XHy5gpsR7QOOsFUqY8zNQPO6AefeyDt1Y+ojquYOnpovSjbU
+	 zpJQ99lDSThf42Mdqc2YwZLsAf8IUaLXzIAe1ivg/dlqZbSxsYv9btFmEaah4hKTXP
+	 n81b+TEbKoEnlM1W+nTIakwa3ponVsTJbamuqykfKmyKZS8myF+4uG50mM1eh/E+p5
+	 nJu3dlFoPEchg==
+Content-Type: multipart/mixed; boundary="===============3868269184810280649=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,141 +49,129 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <94bfc3f871d97eba10491fc8532211aea73ba38cea13a7b17c4f37579ebb2d0b@mail.kernel.org>
-In-Reply-To: <9d074f026dcb520b11bb1365d7116b95e0b789c6.1794399387.git.memxor@gmail.com>
-References: <9d074f026dcb520b11bb1365d7116b95e0b789c6.1794399387.git.memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v1 07/29] bpf: Add one allocator for hidden stack slots
+Message-Id: <84a4fee779825fcc73abafe131d55ad4f657cafe4805928da92e3133d7c1a4b0@mail.kernel.org>
+In-Reply-To: <06579bd381e516e66f97d7b0c00e55d019011a7e.1794399387.git.memxor@gmail.com>
+References: <06579bd381e516e66f97d7b0c00e55d019011a7e.1794399387.git.memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v1 12/29] bpf: Release resources in hidden slots on bpf_throw()
 From: bot+bpf-ci@kernel.org
 To: memxor@gmail.com,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,ihor.solodrai@linux.dev,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 11 Nov 2026 14:04:35 +0000 (UTC)
+Date: Wed, 11 Nov 2026 14:04:38 +0000 (UTC)
 
---===============7858795348474572264==
+--===============3868269184810280649==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Add one allocator for hidden stack slots
+> bpf: Release resources in hidden slots on bpf_throw()
 
 TL;DR:
-- Stack slot allocator only caps JITed frames at 32 KiB, so later patches in
-  the series may overgrow stack limits
-- insert_arena_stack_get() bypasses the allocator, contradicting comments
-- Misplaced struct comment (nit)
+- Possible link failure with CONFIG_NET=y, INET=n: bpf_sk_release_proto is
+  guarded by INET, not NET
+- bpf_throw() unwind may release spin locks and IRQ flags out of order,
+  leaving IRQs disabled or the held-lock table wrong
 
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
+> diff --git a/kernel/bpf/unwind.c b/kernel/bpf/unwind.c
+> new file mode 100644
+> index 000000000000..3b488a4bd759
+> --- /dev/null
+> +++ b/kernel/bpf/unwind.c
 
 [ ... ]
 
-> @@ -1208,6 +1209,13 @@ void bpf_patch_image_install(struct bpf_prog *prog, const struct bpf_patch_image
->  /* single container for all structs
->   * one verifier_env per bpf_check() call
->   */
-> +/* Initialization of a hidden stack slot, emitted in the subprogram's prologue. */
-> +struct bpf_stack_init {
-> +	u32 subprog;
-> +	s16 off;
-> +	s32 imm;
-> +};
-> +
->  struct bpf_verifier_env {
-
-This isn't a bug, but struct bpf_stack_init now sits between the comment that
-describes struct bpf_verifier_env ("single container for all structs / one
-verifier_env per bpf_check() call") and the struct itself.  Two comment
-blocks are stacked on struct bpf_stack_init, and struct bpf_verifier_env has
-lost its comment.
-
-Could struct bpf_stack_init go above the bpf_verifier_env comment instead?
-
-> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> --- a/kernel/bpf/fixups.c
-> +++ b/kernel/bpf/fixups.c
-> @@ -918,6 +918,87 @@ int bpf_insert_recursion_checks(struct bpf_verifier_env *env)
->  	return 0;
->  }
->  
-> +/*
-> + * Hidden stack slots. Post-verification rewrites need stack space the program
-> + * does not know about: may_goto counters, the spill area of an inlined
-> + * bpf_loop(), the context pointer a generated epilogue reads back. Such slots
-> + * are reserved below the stack depth verification established for a
-> + * subprogram, after bpf_remove_fastcall_spills_fills() has shrunk it, so that
-> + * they sit directly under the program's own frame. Slots are 8 bytes, 8-byte
-> + * aligned and handed out top down: the first slot of a subprogram lies right
-> + * below its verified depth rounded up to 8 bytes.
-> + */
-> +static s16 next_stack_slot_off(const struct bpf_subprog_info *info)
-
-The comment and the commit message describe this as the one allocator, with
-the first slot lying right below the verified depth rounded up to 8 bytes,
-and say the stack size check "covers every user".
-
-insert_arena_stack_get() still works the old way.  It runs between
-bpf_optimize_bpf_loop() and bpf_do_misc_fixups() and bumps stack_depth by
-hand:
-
-    if (s) {
-        spill = round_up(sub->stack_depth, BPF_REG_SIZE);
-        sub->stack_depth = spill + MAX_BPF_FUNC_REG_ARGS * BPF_REG_SIZE;
-        ...
-    *patch++ = BPF_STX_MEM(BPF_DW, BPF_REG_FP, i, -(spill + i * BPF_REG_SIZE));
-
-For an arena_stack_entry callback that has a may_goto, may_goto_stack_slot()
--> bpf_reserve_stack_slots() puts its slot below the arena spill area, not
-right below the verified depth.  Those arena bytes are also not counted in
-stack_extra, so the "stack size %d(extra %d)" message under-reports them.
-
-Nothing functional breaks today, since the arena pass checks env->stack_limit
-itself.  Should insert_arena_stack_get() reserve its area through
-bpf_reserve_stack_slots(), or should the comment and commit message drop the
-"right below its verified depth" and "every user" claims?
-
+> +noinline void bpf_unwind_release(const struct bpf_resource *res, void *handle)
 > +{
-> +	return -(s32)(round_up(info->stack_depth, BPF_REG_SIZE) + BPF_REG_SIZE);
+
+[ ... ]
+
+> +#ifdef CONFIG_NET
+> +	case BPF_RESOURCE_SOCK:
+> +		bpf_sk_release_proto.func((u64)(long)handle, 0, 0, 0, 0);
+> +		break;
+> +#endif
+
+Can this fail to link with CONFIG_NET=y, CONFIG_INET=n and
+CONFIG_BPF_SYSCALL=y?
+
+unwind.o is built whenever CONFIG_BPF_SYSCALL is set, and this case is
+compiled under CONFIG_NET.  But bpf_sk_release_proto is defined in
+net/core/filter.c inside the CONFIG_INET block:
+
+net/core/filter.c:
+    #ifdef CONFIG_INET
+    ...
+    const struct bpf_func_proto bpf_sk_release_proto = {
+    ...
+    #endif /* CONFIG_INET */
+
+INET is a separate bool under NET and BPF_SYSCALL does not select it, so
+vmlinux would end up with an undefined reference to bpf_sk_release_proto.
+
+Should the guard here be CONFIG_INET, matching the definition (as
+kernel/bpf/cgroup.c does for bpf_tcp_sock_proto)?
+
+[ ... ]
+
+> +static void bpf_unwind_release_frame(struct bpf_unwind_ctx *ctx, const struct bpf_prog *prog, u64 bp)
+> +{
+
+[ ... ]
+
+> +			if (!handle || release_phase(res) != ctx->phase)
+> +				continue;
+> +			late = res->kind == BPF_RESOURCE_IRQ_FLAG &&
+> +			       !arch_irqs_disabled_flags(*(unsigned long *)handle);
+> +			if (passes == 2 && late != (pass == 1))
+> +				continue;
+> +			bpf_unwind_release(res, handle);
+> +		}
+> +	}
 > +}
-> +
-> +/* Reserve @nr slots in @subprog; @off receives the offset of the topmost one. */
-> +int bpf_reserve_stack_slots(struct bpf_verifier_env *env, int subprog, int nr, s16 *off)
-> +{
-> +	struct bpf_subprog_info *info = &env->subprog_info[subprog];
-> +	u32 depth = round_up(info->stack_depth, BPF_REG_SIZE) + nr * BPF_REG_SIZE;
-> +	u32 extra = depth - info->stack_depth;
-> +
-> +	if ((depth > MAX_BPF_STACK && !env->prog->jit_requested) || depth > S16_MAX + 1U) {
 
-For a JITed program the only limit applied here is S16_MAX + 1, and
-check_max_stack_depth() has already run by the time this is called.  It is
-not compared against env->stack_limit or MAX_BPF_STACK_JIT.
+Only BPF_RESOURCE_IRQ_FLAG entries can be "late" here, but doesn't
+bpf_spin_lock() also save and restore IRQ state?  The commit message says
+"Every later save found interrupts disabled ... the locks and the other
+flags can be released in any order before it."
 
-In this commit that is harmless, since every caller adds a small constant per
-subprog (3 slots for bpf_loop(), 1 for the epilogue, 1 for may_goto, plus at
-most 7 bytes of alignment).
+__bpf_spin_lock_irqsave() does local_irq_save() into the per-CPU
+irqsave_flags, and bpf_spin_unlock() ends up in
+__bpf_spin_unlock_irqrestore(), which does local_irq_restore() of that
+value.
 
-The commit message says the allocator is meant for later patches that need
-more hidden slots.  In this series, cd4657cd0e50 ("bpf: Track held resources
-in hidden stack slots") calls it once per acquiring instruction from
-bpf_frame_desc_resolve():
+Consider a frame that does:
 
-    ret = bpf_reserve_stack_slots(env, acq_subprog(env, a, new_of), 1, &a->off);
+    bpf_spin_lock(&v->lock);                       /* IRQs on -> off */
+    if (bpf_res_spin_lock_irqsave(&v->rl, &flags)) /* flags saved: off */
+        ...
+    bpf_throw(0);
 
-026679e2eda5 ("bpf: Describe held resources at throw sites") narrows this to
-acquisitions that need a slot, but there is still no per-subprog cap, and no
-later commit in the series adds a bound.  A subprog with N slot-needing
-acquisitions grows by 8*N bytes after the stack budget was checked, up to
-32 KiB per frame.  The x86 JIT emits that size directly with
-emit_sub_rsp(&prog, round_up(stack_depth, 8)), while
-bpf_jit_supports_large_stack() documents JIT frames only up to
-MAX_BPF_STACK_JIT (2048).
+The IRQ_FLAG for flags is not "late", so pass 0 releases the SPIN_LOCK,
+RES_LOCK and that flag in descriptor order.  If the descriptor lists them in
+acquisition order, bpf_spin_unlock() turns interrupts back on and then
+bpf_local_irq_restore(&flags) turns them off again.  Pass 1 has no late flag
+to restore, so the exception callback runs and the program returns to its
+caller with IRQs disabled, although it was entered with them enabled.
 
-insert_arena_stack_get() rejects a frame that exceeds env->stack_limit.
-Should the allocator also bound JITed frames, for example against
-env->stack_limit plus a small fixed allowance for the constant per-subprog
-users, since it is now the only place that checks?
+Can the same happen when the flags are in this frame's stack but a callee
+saved them under this frame's spin lock?
 
-[ ... ]
+Separately, releasing entries of a frame in acquisition order breaks the
+LIFO assumption of bpf_res_spin_unlock():
+
+    rqh->locks[cnt - 1]
+
+is cleared whichever lock is passed in.  Does the held-lock table then name
+the wrong lock while the unwind runs, so that AA detection is missed or
+misdiagnosed?
+
+Would it work to treat a SPIN_LOCK whose saved irqsave_flags has IRQs
+enabled as "late" too, or to release the lock and IRQ entries of a frame in
+reverse acquisition order?
+
+This commit generates no descriptors, so the path is not reached yet.  It
+gets enabled later in the series by cd4657cd0e50 ("bpf: Track held
+resources in hidden stack slots") and faacef7a1935 ("bpf: Describe locks at
+throw sites"), and no later commit in the series changes this ordering.
 
 
 ---
@@ -191,4 +179,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43027088527
---===============7858795348474572264==--
+--===============3868269184810280649==--
