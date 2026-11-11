@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.136
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.73
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794401878;
-	b=h0aJVS22qO7D5mn6MnYf5/CGK+iHCaE/9p2bfZxgwUZqt8x0Zg62RipTpsmJbuJofWuP
-	 NfZ2TjaDv25SSbtJ/JeW9HcyxkMYZf8ML8zikJCC6SjkIk7ib9e3VLBHfE1qnHjhjhvu+
-	 XT6eT7KDagHeWVDAR28HoRru6mdcnTLKxdhz3n/8/Dez8YF44Cz8Vhhp6QDy1tmvZs3Rq
-	 6+T2umyEZshlcS7uODN8GhnFWmXEDN/3ed/u9BuAhBylgPncX4pBl3XJCHusw9gmpsCRT
-	 qOEM3c27MUZTR1qbY5kE75mSHoGb6lug8O8gVXhlU8BsX7B+QBqASCsaYHlxYdiSbAQ==
+	t=1794401880;
+	b=Oms9bmyVE8yf6rNVTlK/Btu4l/F0YsnjHf9KgRYo7/1h5DlifWuqH0Nzqp9KTsqSEVsL
+	 iHQvAiC5SMtFzNpBYY1L7JVMMjUNDSjiUumasdfQ05KKXxmZcyMyp1+IaEGQtqGpU420B
+	 xGh8LqQwUxTVXSpCfNePk8I8JrLTWTz3/eNCljeHu49kS7hbkjyU5xQY2zN5bf5HXeroB
+	 YGwBDuKNIzTeL/1EwdI0ZevqeR9zWCOneCjiWUoyYp+W4swuO86d+8LiyQiNowQwDwWFf
+	 pwEFl2/avuiaP0n0QsmuhlXCLUWRDj6Gah37tc+cS/qaFsy3m6L0G1MffygkE2NzFqg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794401878;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794401880;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
-	bh=MWY7seNQMY134IxioRIFZnLkDjgMYoaZ9InuNPbSKSg=;
-	b=ydXHoNtcP6RwjlsayeArj0aefz99m4zfaHcF59qU78wH6bLU6c39OQX5/Vcd17i8h7JO
-	 iKtR57tznFa3Tz+b17GPMVSXvNc/c0s07+myU/LaSN9RJj6Yh3qN+g0/C4E95YSyuGPA6
-	 MAEbCj4RZx8doHycBgjPoLpKw3gJ0mogCBPgocP13PHr97ykxQ0WvZqIfoRgWTW8o2L0S
-	 8MaLN5Rny4e7y0T/xpP2kjWmAjzqnM/J3arqkqzHreb1uIIZBOeEtjdMoSej1FelWfYBL
-	 gC5ADb4HddCia750sAEhwQD/RAIFLc0yVUh/gbQVcE3cXCgQHELXTbkQIYiOMHZ7GwQ==
+	bh=PcsKT/4svhkOIFNICex6wK+digTaPoxSwFhPeZgjuAc=;
+	b=jcCAeQEPwWWHOpHfosciU8nC0Hwkhmw9bjHQhB9cg1GeSJ5boQXUgeW5xfwEVQTwSEz8
+	 SodWMvBFuNLU+B6TThljmck3i2fl6xyQGKa7GaDfkLrqvZBdW+21SF4KE7lXyMlXQgRj+
+	 CO65lcpV2mg1/3HWzvPpuCe7248QMPQERWoo7RqFY7gfbsBePOUZ/nxBgVkt1ZzoWzCux
+	 J74j0/tWmHAtd2bnNAJ2uPevjOVe8T5LZj3K8GQ6M01YpWg5fNIRgGeDcKI06okwOInE+
+	 6HYEzD5KgwjKDnL+8GctdHo3z19uE8Dj21qwhQ/z1dHTldx560MC807b/ajnqIbqz6A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=u884T68u;
-	arc=none smtp.remote-ip=74.125.225.136
-Received: from mail-wm2-f8.google.com (mail-wm2-f8.google.com [74.125.225.136])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mzPO5RLf;
+	arc=none smtp.remote-ip=74.125.225.73
+Received: from mail-wr2-f9.google.com (mail-wr2-f9.google.com [74.125.225.73])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4644606A324
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 12:57:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C4644606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B9B2606A324
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 12:58:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2B9B2606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=u884T68u
-Received: by mail-wm2-f8.google.com with SMTP id 5b1f17b1804b1-4a77811be24so10593285e9.0
-        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 04:57:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mzPO5RLf
+Received: by mail-wr2-f9.google.com with SMTP id ffacd0b85a97d-490a95c2353so241596f8f.0
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 04:57:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794401876; x=1795006676; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794401878; x=1795006678; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=MWY7seNQMY134IxioRIFZnLkDjgMYoaZ9InuNPbSKSg=;
-        b=u884T68u8oWZ6VmUj5ee5CLcc9IlMmpmca9BJMU0ZspxebHFHF40PMgOZtWKh5uyZX
-         FRc0L2e2llJWetEc8V2Zm1gC8jZ2ao60Oof5Hfc9pqO28rvuhA5j3acKuo+dMBeEtUzm
-         j8yGMDkWvJY6eIDehOpU+PL8itD7XHyj9qrNfQgo3VNSYZZinnHud56uxHWH6YaDRfJX
-         oTz98ybhXTlEZS5stpAn200pOUQ95hudgiJRx79HsV4OH9y84HqHDkgdjpOM6WuTGfb9
-         0jPd84CKYvL8xVtvBhI8h/feUSesy60Cvul1/0rVc6jWeTXSmXn2/Zu4VU3XRbZdE8hF
-         oWZw==
+        bh=PcsKT/4svhkOIFNICex6wK+digTaPoxSwFhPeZgjuAc=;
+        b=mzPO5RLf+Hrh6zEcQctrMJdi8gZOIEJDXjvaylDonS6wyz6DYkI75ZTIcZis+9U9EQ
+         9y3O8ZHrFmPWWhOV96Ra6GlTUFJ5AHwtmE/ySJojHIOqJRnqvtrGri+4JX7nK+uCnkLy
+         F44UfEUuzmoF4oTXzIQn3B4o0VKHjuJU4i09Y4Y+YTgj0zinkc/iD1KiEiHNkM2ugPLy
+         /22hgs8doef/Px5gcZL2QLw8Dkcb/DJBvz6nVm+XofphKA4XGELOh8eEfD8DQ5ZDuig8
+         +J462nozQm33VLC9YQ4kw6l+KhTJgdoet5CByludvuktIlgoUzZmdV1PffdRFDP6p9Dy
+         YFGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794401876; x=1795006676;
+        d=1e100.net; s=20260707; t=1794401878; x=1795006678;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=MWY7seNQMY134IxioRIFZnLkDjgMYoaZ9InuNPbSKSg=;
-        b=0JjIkguyYLUcIM2DHY7lkJXmkbzEkHjgOAs5ULLl4uYMXO2nm7+87azLZdYUcEqaem
-         KWlnADFTL7raSKfIPZzHNbowqz4sc4vMvK/LbG3v/uSRxS68m0JHRTrVhlgBemw0H/b+
-         7Qycqa3KBFsOMl3jULRzl6XE77TIP6FNm9SWTTENDF0a/WgF4NOrZvTzy02Rem4pThPL
-         +bet+OglUyliBsky/AxDf0GCxFc3wQBSfgqa66MaMZlrL6WObxp4adSBSmuVojdahJq4
-         pEdBjBJ/dG8nUGf7zU/3tzXeRN/4G91meFao/j4ZDuR/qWc2cvsxZyJXAJUf73I4JMsf
-         PUNA==
-X-Gm-Message-State: APuU4Z+x03BTqbC/y3KjW9dkT/0TozvGRo71E0HjhaOezSND0owUvi0Q
-	R39jbfaNwfxxfHMr2r1YIIgQoNh/7IJTQq/g6OOI/FqkMqSP4dhxtCIrKrmfWDrClR0=
-X-Gm-Gg: AYBFou2By0S3vV6eQqB4CedNyLm053Whl9rYspJMNE9T+1VaTbESc63h6nMhFESXtPm
-	AH2D+lANnCjUsGUXMNkbtQYWEeV9M59wEFTnu2fO+fvhzhhmv3AkgVqmXA3S8nv6kWF//pX/+xj
-	jHvkXvV43YiN0vHlqIV6kq7LjT+5zepYJ+abMkB7mc/z06lasgdrN7gGG5Y9uU2I6mMP7g2nA1b
-	hSj6OgVzQDbC4KMINSo2rcV3e+r5swc0UXWdkJZ5BakQ82GBr3Anva5QBOqm6fToLNWa/YeUBYw
-	/qKZ1OanBj/oivTSisNnZQqPAna/oKOkS2plgDf81nYQObn0ds0CItaK4Bl9klomwzSPpIZYqLR
-	PqcgXOTQLfXamz64q0f/JQHdEs/nQgEfK0qkENzdVW7l2mzbkhAMh4a1vUbRDFZ0QfMySkN8Dzf
-	8uwja4JAqs7SAQtX3H5FmDFaqkFUp5owdanT12schkfn+ZA7WKFYqamgH4Su+gm7q5OSvUO/rI8
-	BXE76m5PcsZe+28dmABMG6ZpBV1T3dJyPe6BvFyvLLhNRy5d4uIGwnrAl+XY+Djn2jHImUF9ZIS
-	jIhF0kNda3jOrGOPuf/IhwC3/nbBEPN9llrwMQk9JzVPiTwpRGUWBJaTKYIXs3k7xU6GMwYe/Up
-	GGiDmGKLIY8oQPoSS1COm0f5H/gnV+YcZgcau/mE+bPhFU4OmLMn757sqPH1A2jYmjfjj
-X-Received: by 2002:a05:600c:1986:b0:4a1:f7f4:7cf1 with SMTP id 5b1f17b1804b1-4ba09376d2dmr41272895e9.11.1794401875801;
-        Wed, 11 Nov 2026 04:57:55 -0800 (PST)
+        bh=PcsKT/4svhkOIFNICex6wK+digTaPoxSwFhPeZgjuAc=;
+        b=k1G2F/umat+9PAh4b2n82T/ObLAlIAbEYoMgIz3n/1pOd9fIGqutyjjhUaOftLYR/u
+         JhBkYbdYb5bQnAEJGaCZ1WJQuysGm64STyfwo6tjTCcik7UY7KAEh9v5IPtbyENxBEJa
+         1DBmKWDc18yqiV5qt0v/IIWpwQHMF+Bb4eTn8faVcU3n/EuRRO8eO66aTcCtPWWKfnbL
+         +V/WmGkx4AezTqUtxgmHUAA6ET3Sq6wvSeZ0/IZGmgEsTPPO0Lkzh3WwW4g7Ozq8fQrX
+         NIHYb0Twr5VUyw/ujdDpQeQCV0gAsgi9BughH/J5dnExNp+5vtAmxwSuW1bhfpjZaHxB
+         hZ/g==
+X-Gm-Message-State: APuU4Z+dJiWXEoZ+8gzLtjjZty+7ZEyxMuM70rOIY+bWqsTNM3J01Y8Z
+	BawB6h4wxijOkusR5bjV7vse555BGUkW1qN+0CN7ISoxhb85sgFpsDE1A/uNafkHqyw=
+X-Gm-Gg: AYBFou1hX/enzNonf6J8wO2nfmDzZWSIsiovzb5PSztnSayZ8wXOcrI13s4OBBBSxTQ
+	E6K5H3jrxLJiWHmKcTnoBtYnj9tc//UIUZz9u4BDWzzeb8QBmQuDXupTNkVtuMc8l7LNfLrNNT8
+	Q4rzgEMYb9JbcxYI8GfeFVNg9uhAepHC3IO9ravwydHnsqX/CcQR9/c3xuSOtLltrazAxqCRVHq
+	Eb969zdZUBxz+M6heaMP/pZJqKOlofEheHO2AAoJAcx+J32eOCQgKiMIvV8AXtZB/h//Q0gWbgL
+	/wIOVvHhJBD22sNqdYcgA2Y5feLkhU0PQdn2Nbi7dnqxDmD4ZI0fDtGNjGTAxRmozg8zNCWb780
+	HgQoz+PlwYSOx6rYmeUliEID1qdtdrLDR9FPEwsP0qwTZgSRA2JmUTU+6URLRcRvYh+3D35e3Mm
+	nX8FsLvUyOuGopCTXFs+4uh+PQjVTUREQ0Z3umYN0OezWk6iZKCjKyHdhoh4eo9kVYaH5OIFnFY
+	WUx07BXH/JEhy/Ebo9ot1kN6O6fkclnANtgR/93ENEggAffF26DZ8POv2MwW0SHV9frbScW7O9K
+	YUL9rOR9y/cOyIYc/xSwNxHNE+shb5Zlp774E3QD2IZrZ5KDgz+bbQEOMNP0NHjXDWtH5piwWIT
+	YA5eDZd7l6s/xb1OZPdJa//wJP0kyqcPAF/6Yi/QLSnuqLVZIuAYoL3g6ruPzAYFc9L1q
+X-Received: by 2002:a5d:5f86:0:b0:48e:6669:fefb with SMTP id ffacd0b85a97d-499c8981462mr4714675f8f.22.1794401878335;
+        Wed, 11 Nov 2026 04:57:58 -0800 (PST)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba08ddbfcesm29972475e9.0.2026.11.11.04.57.55
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4983600bc9asm10095884f8f.29.2026.11.11.04.57.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2026 04:57:55 -0800 (PST)
+        Wed, 11 Nov 2026 04:57:56 -0800 (PST)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -88,9 +88,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 16/29] bpf: Describe locks at throw sites
-Date: Wed, 11 Nov 2026 13:57:14 +0100
-Message-ID: <8861d3d06eadcff128742ac81b2ba9c54f71c523.1794399387.git.memxor@gmail.com>
+Subject: [PATCH bpf-next v1 17/29] bpf: Apply hidden slot limits only when a slot is needed
+Date: Wed, 11 Nov 2026 13:57:15 +0100
+Message-ID: <c426b1de0feb20215a1f4290b607509e3c9d0f7a.1794399387.git.memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1794399387.git.memxor@gmail.com>
 References: <cover.1794399387.git.memxor@gmail.com>
@@ -103,263 +103,360 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=11925; i=memxor@gmail.com; h=from:subject:message-id; bh=Xo2H+NwcyFXdTN2zXeNjCIjAQ0a+PVuwPlKgEpelWT8=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetLzEKt0vua99hVv6v+Y+oqf99qovsiL5spNMr5grllW 8xWpvUdpSwMYlwMsmKKLCX/9zEZn6j8HWi7jBtmDisTyBAGLk4BmEjvRkaG+yonhL8cyPp3i3XJ x4Xn6nvulwjvyNx8Ts1qYbH6hYWS3Qz/g1aKXxLbeD789N8Lul4PJ737NGfiPZap150a7Hasi0j 2YQQA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=14304; i=memxor@gmail.com; h=from:subject:message-id; bh=v4C+iJFdE0KR8gqIaFclC344xPQcFvyIQcf+ywzQ7bU=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetLzELvG++jjV47PVn1T/SOrs5nPseri/487L2ertQfc SWVMfNkRykLgxgXg6yYIkvJ/31MxicqfwfaLuOGmcPKBDKEgYtTACbizMrIsOlO+6JGTc7Ngke5 zjJfP/wjrjAvYMbx+hMTJmxL5NpbZ8jIsDvkk1565s8zSf8ic78Ubi+cfqf5uRPT1z1yswRr8jv VuAE=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Currently no site describes a lock, so every lock that a throw finds held
-is kept in a hidden slot. Its address is stored before the call that
-takes the lock, and cleared before the unlock.
+The instructions that maintain a hidden slot are emitted once per call,
+and a slot holds one handle. Currently a program that throws is rejected
+for anything that these instructions cannot handle, as soon as the main
+pass sees it:
 
-A lock does not move, so a site can describe it:
+ - an instruction that acquires resources of different types, or takes
+   their handle in different ways, on different paths;
+ - an acquisition whose handle is not in a register;
+ - a release whose handle is not in an argument register, is in a
+   register that does not point to the released resource, or is taken in
+   different ways on different paths;
+ - a frame that holds two resources acquired by the same instruction.
 
- - The lock of a global variable, or of the only element of any other
-   array map that the program refers to, is at an address known at
-   verification time. Its resource class carries the address. The site
-   entry is marked BPF_FRAME_ENT_FIXED and reads nothing from the frame.
-   This does not apply to an inner map: the map that stands for it
-   during verification has no values.
- - Any other lock is found through a pointer to the map value or
-   allocated object that contains it. Such a pointer has the same id as
-   the lock. The acquisition records the offset of the lock in the
-   object, and the site gives a stack slot or a register that holds such
-   a pointer, with the difference as its adjustment. A lock whose offset
-   does not fit in an adjustment is not found through a pointer.
+None of this matters for a resource that gets no hidden slot, either
+because its sites describe it or because no throw finds it held. Such a
+program loads if it contains no throw, and a throw elsewhere in the
+program is no reason to reject it.
 
-A lock at a fixed address then costs the program nothing when every
-visit to a site finds it held. Any other lock costs nothing when, in
-addition, the frame has a pointer to the containing object in the same
-location on every visit. A lock that some visits to a site find held and
-others do not still takes a hidden slot.
+Record these cases during the pass, and reject them after it, only for
+the resources that need a hidden slot:
+
+ - An instruction gets one acquisition for each way it acquires.
+ - A release records why its handle cannot be cleared from a slot.
+ - An acquisition records that a frame held two of its resources.
+
+Two resources of one instruction that a throw finds held have no
+location that all visits agree on, so they always need a slot. That case
+loads only if no throw finds them held.
+
+The messages do not change.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/bpf.h          |  4 ++
- include/linux/bpf_verifier.h |  2 +
- kernel/bpf/frame_desc.c      | 77 +++++++++++++++++++++++++++++-------
- kernel/bpf/unwind.c          |  2 +
- 4 files changed, 70 insertions(+), 15 deletions(-)
+ include/linux/bpf_verifier.h |   9 ++
+ kernel/bpf/frame_desc.c      | 182 ++++++++++++++++++++++++-----------
+ 2 files changed, 137 insertions(+), 54 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index b157863cb952..cbb0d7a61f98 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1860,6 +1860,7 @@ struct bpf_resource {
- 	union {
- 		void (*dtor)(void *);
- 		struct btf_struct_meta *meta;
-+		void *addr;	/* a lock at a fixed address, in the only element of an array map */
- 	};
- };
- 
-@@ -1880,6 +1881,8 @@ struct bpf_resource {
-  *    bpf_arch_throw_entry();
-  *  - with BPF_FRAME_ENT_OBJ the resource itself, an iterator or saved IRQ
-  *    flags the frame has on its stack whenever it is at the site;
-+ *  - with BPF_FRAME_ENT_FIXED no location: a lock at the address its class
-+ *    gives, which the frame holds whenever it is at the site;
-  *  - with BPF_FRAME_ENT_COUNTER a hidden slot that holds a count of sections,
-  *    signed: the sections the frame entered less those of its callers it left;
-  *  - with BPF_FRAME_ENT_COUNT no location: the count of the sections the frame
-@@ -1891,6 +1894,7 @@ struct bpf_resource {
- /* Released before the other entries of the frame, which it may be using. */
- #define BPF_FRAME_ENT_FIRST	BIT(3)
- #define BPF_FRAME_ENT_REG	BIT(4)
-+#define BPF_FRAME_ENT_FIXED	BIT(5)
- 
- struct bpf_frame_desc_entry {
- 	u16 res;	/* index into the program's resource classes */
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 158e7eddc19f..a7c9b113e071 100644
+index a7c9b113e071..edd6005c32f6 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -1253,6 +1253,7 @@ void bpf_patch_image_install(struct bpf_prog *prog, const struct bpf_patch_image
- #define BPF_RES_F_MAY_FAIL	BIT(1)	/* acquired only when the call returns 0 */
- #define BPF_RES_F_DEREF		BIT(2)	/* the handle is the first word of a dynptr on the stack */
- #define BPF_RES_F_CTX		BIT(3)	/* a __ref argument the kernel passes the main program */
-+#define BPF_RES_F_NO_PTR	BIT(5)	/* a lock that no pointer to what it is in leads to */
+@@ -1272,6 +1272,7 @@ struct bpf_res_acq {
+ 	s16 off;	/* the slot, relative to R10 */
+ 	bool held;	/* some frame holds what it acquired at a site */
+ 	bool slot;	/* and some site cannot say where: the handle is kept in a slot */
++	bool multi;	/* a frame held two of what it acquired at once: one slot cannot */
+ };
  
- /*
-  * A call that acquires a resource, see frame_desc.c. When a frame can be
-@@ -1301,6 +1302,7 @@ struct bpf_res_loc {
- 	u16 acq;	/* index of the acquisition */
- 	u8 cnt;		/* the places left */
- 	bool obj;	/* they are the resource itself, an object on the stack */
-+	bool fixed;	/* it is a lock at the address of its class, and needs no place */
- 	struct {
- 		s16 off;	/* relative to R10, or the number of the register */
- 		s16 adj;	/* the pointer there points that many bytes into the object */
+ /* How many places a site remembers a frame keeping one handle in. */
+@@ -1317,8 +1318,16 @@ struct bpf_res_rel {
+ 	u8 reg;		/* the argument the call releases */
+ 	u8 flags;	/* BPF_RES_F_DEREF */
+ 	s16 adj;	/* the argument points that many bytes into the object */
++	u8 bad;		/* BPF_RES_REL_*: why no insns can clear a slot here */
+ };
+ 
++/* The handle is in no argument register. */
++#define BPF_RES_REL_NO_REG	1
++/* The register does not point to what is released. */
++#define BPF_RES_REL_NOT_PTR	2
++/* The call takes the handle in different ways on different paths. */
++#define BPF_RES_REL_DIFFER	3
++
+ /* A call that enters or leaves a section, for the count of its frame, see frame_desc.c. */
+ struct bpf_section_insn {
+ 	u32 insn;
 diff --git a/kernel/bpf/frame_desc.c b/kernel/bpf/frame_desc.c
-index 5cb837688f90..72dc6597321a 100644
+index 72dc6597321a..0ef7fda410ee 100644
 --- a/kernel/bpf/frame_desc.c
 +++ b/kernel/bpf/frame_desc.c
-@@ -376,6 +376,42 @@ static int resource_of_kind(struct bpf_verifier_env *env, u8 kind)
- 	return resource_intern(env, &res);
+@@ -39,7 +39,11 @@
+  *  - A frame that returns holds nothing but a reference it returns in R0,
+  *    which the call acquires for the caller like the call of a kfunc that
+  *    returns one, and is in the sections it was called in.
+- *  - A frame holds one resource of an acquiring call at a time.
++ *  - A slot holds one handle, so a frame that holds two resources of one
++ *    acquiring call at once can have no slot for them.
++ *
++ * What can have no slot loads when its sites describe it or no throw finds
++ * it held, and is refused otherwise.
+  *
+  * The main pass records every call that acquires or releases, which
+  * acquisition a release may be of, and the visits of the sites. What needs a
+@@ -443,6 +447,8 @@ static int acquired_class(struct bpf_verifier_env *env, struct bpf_verifier_stat
+ 	*adj = 0;
+ 	*obj_off = 0;
+ 	if (after) {
++		if (!in_reg)
++			return -EOPNOTSUPP;
+ 		reg = frame->regs[regno];
+ 		if (!reg_ref_off(&reg, ref->id, adj))
+ 			*adj = 0;
+@@ -473,8 +479,11 @@ static int acquired_class(struct bpf_verifier_env *env, struct bpf_verifier_stat
+ }
+ 
+ /*
+- * The acquisition of insn @insn through R@reg: the same on every visit, since
+- * the insns that keep its slot are emitted once. Returns its index.
++ * The acquisition of insn @insn through R@reg, of a resource of class @res.
++ * An insn that acquires in different ways on different paths has an
++ * acquisition for each: the insns that keep a slot are emitted once per insn,
++ * so none of them may need a slot then, see bpf_frame_desc_resolve(). Returns
++ * its index.
+  */
+ static int acq_add(struct bpf_verifier_env *env, u32 insn, u16 res, u8 reg, u8 flags, s16 adj,
+ 		   s16 obj_off)
+@@ -484,14 +493,9 @@ static int acq_add(struct bpf_verifier_env *env, u32 insn, u16 res, u8 reg, u8 f
+ 
+ 	for (i = 0; i < cnt; i++) {
+ 		a = &env->res_acqs[i];
+-		if (a->insn != insn || a->reg != reg || (a->flags ^ flags) & BPF_RES_F_CTX)
+-			continue;
+-		if (a->res != res || a->flags != flags || a->adj != adj || a->obj_off != obj_off) {
+-			verbose(env, "frame_desc: insn %d acquires resources of different types on different paths\n",
+-				insn);
+-			return -EINVAL;
+-		}
+-		return i;
++		if (a->insn == insn && a->reg == reg && a->res == res && a->flags == flags &&
++		    a->adj == adj && a->obj_off == obj_off)
++			return i;
+ 	}
+ 	if (cnt >= U16_MAX - 1)
+ 		return -E2BIG;
+@@ -507,7 +511,9 @@ static int acq_add(struct bpf_verifier_env *env, u32 insn, u16 res, u8 reg, u8 f
+ 
+ /*
+  * refs[@idx] is what acquisition @acq acquired, held by the frame that owns
+- * it: its handle is in the slot of the acquisition, and the slot holds one.
++ * it. The slot of an acquisition holds one handle: a frame that holds two of
++ * what it acquired at once is fine as long as the acquisition gets no slot,
++ * see bpf_frame_desc_resolve().
+  */
+ static int ref_set_acq(struct bpf_verifier_env *env, struct bpf_verifier_state *st, int idx,
+ 		       int acq)
+@@ -518,9 +524,8 @@ static int ref_set_acq(struct bpf_verifier_env *env, struct bpf_verifier_state *
+ 	for (i = 0; i < st->acquired_refs; i++) {
+ 		if (i == idx || st->refs[i].acq != acq + 1 || st->refs[i].frameno != ref->frameno)
+ 			continue;
+-		verbose(env, "frame_desc: a frame holds two resources of insn %d at once, which is not supported in a program that throws\n",
+-			env->res_acqs[acq].insn);
+-		return -EINVAL;
++		env->res_acqs[acq].multi = true;
++		break;
+ 	}
+ 	ref->res = env->res_acqs[acq].res + 1;
+ 	ref->acq = acq + 1;
+@@ -561,11 +566,9 @@ int bpf_frame_desc_record_acquire(struct bpf_verifier_env *env, int idx, int reg
+ 	}
+ 	if (res < 0)
+ 		return res;
+-	if (regno < BPF_REG_0 || regno > BPF_REG_5) {
+-		verbose(env, "frame_desc: insn %d takes the handle of a resource in no register\n",
+-			env->insn_idx);
+-		return -EINVAL;
+-	}
++	/* no insns can put it into a slot then: R10 stands for no register */
++	if (regno < BPF_REG_0 || regno > BPF_REG_5)
++		regno = BPF_REG_FP;
+ 	acq = acq_add(env, env->insn_idx, res, regno, flags, adj, obj_off);
+ 	return acq < 0 ? acq : ref_set_acq(env, st, idx, acq);
+ }
+@@ -630,6 +633,48 @@ int bpf_frame_desc_record_ctx_arg(struct bpf_verifier_env *env, int idx, int arg
+ 	return ret < 0 ? ret : ref_set_acq(env, st, idx, ret);
  }
  
 +/*
-+ * The class of the lock that the current insn takes through @reg, a pointer
-+ * to it. A lock in the only element of an array map, which every global
-+ * variable is, is at a fixed address: its class says where, and a site needs
-+ * no place for it. That is so for a map the program refers to itself only:
-+ * what stands for the inner maps of a map has no values. Any other lock is
-+ * @off bytes into what the pointer is into, a map value or an object: a site
-+ * finds it through a pointer to that which the frame keeps, unless the offset
-+ * is too large for a site to tell, see BPF_RES_F_NO_PTR.
++ * The call @insn releases through R@reg what acquisition @acq acquired: its
++ * handle leaves the slot of the acquisition in front of the call, when it has
++ * one. @bad says why no insns can do that here. The insns compare the
++ * argument the same way whatever it releases, so releases of one argument
++ * that differ in how they take the handle are bad as well. That matters for
++ * an acquisition that has a slot only, see bpf_frame_desc_resolve().
 + */
-+static int resource_of_lock(struct bpf_verifier_env *env, const struct bpf_reference_state *ref,
-+			    const struct bpf_reg_state *reg, s16 *off, u8 *flags)
++static int rel_add(struct bpf_verifier_env *env, u32 insn, u16 acq, u8 reg, u8 flags, s16 adj,
++		   u8 bad)
 +{
-+	struct bpf_resource res;
-+	const struct bpf_map *map;
-+	u64 base;
-+	u32 i;
++	u32 i, cnt = env->res_rel_cnt;
++	struct bpf_res_rel *r, *same = NULL;
 +
-+	memset(&res, 0, sizeof(res));
-+	res.kind = ref->type == REF_TYPE_LOCK ? BPF_RESOURCE_SPIN_LOCK : BPF_RESOURCE_RES_LOCK;
-+	if (!reg || !tnum_is_const(reg->var_off) ||
-+	    reg->var_off.value != (u64)(s16)reg->var_off.value) {
-+		*flags |= BPF_RES_F_NO_PTR;
-+		return resource_intern(env, &res);
++	for (i = 0; i < cnt; i++) {
++		r = &env->res_rels[i];
++		if (r->insn != insn || r->reg != reg)
++			continue;
++		if (r->flags != flags || r->adj != adj) {
++			if (!r->bad)
++				r->bad = BPF_RES_REL_DIFFER;
++			if (!bad)
++				bad = BPF_RES_REL_DIFFER;
++		} else if (r->acq == acq) {
++			same = r;
++		}
 +	}
-+	*off = reg->var_off.value;
-+	map = reg->type == PTR_TO_MAP_VALUE ? reg->map_ptr : NULL;
-+	for (i = 0; map && i < env->used_map_cnt; i++)
-+		if (env->used_maps[i] == map)
-+			break;
-+	if (map && i < env->used_map_cnt && map->map_type == BPF_MAP_TYPE_ARRAY &&
-+	    map->ops->map_direct_value_addr && !map->ops->map_direct_value_addr(map, &base, *off))
-+		res.addr = (void *)(long)(base + *off);
-+	return resource_intern(env, &res);
++	if (same) {
++		if (!same->bad)
++			same->bad = bad;
++		return 0;
++	}
++	r = kvrealloc(env->res_rels, array_size(cnt + 1, sizeof(*r)), GFP_KERNEL_ACCOUNT);
++	if (!r)
++		return -ENOMEM;
++	r[cnt] = (struct bpf_res_rel) { .insn = insn, .acq = acq, .reg = reg, .flags = flags,
++					.adj = adj, .bad = bad };
++	env->res_rels = r;
++	env->res_rel_cnt = cnt + 1;
++	return 0;
 +}
 +
- /* The offset from R10 of the stack slot @spi of a frame. */
- static s16 spi_off(int spi)
- {
-@@ -397,6 +433,8 @@ static int acquired_class(struct bpf_verifier_env *env, struct bpf_verifier_stat
- 			  s16 *adj, s16 *obj_off)
- {
+ /*
+  * Record that the current insn releases the resource refs[@idx], before it
+  * is released: its handle, in the argument the call releases, see
+@@ -642,11 +687,10 @@ int bpf_frame_desc_record_release(struct bpf_verifier_env *env, int idx)
+ 	struct bpf_verifier_state *st = env->cur_state;
+ 	const struct bpf_reference_state *ref = &st->refs[idx];
  	const struct bpf_func_state *frame = st->frame[st->curframe];
-+	/* a handle that is in no register can only be found by the sites */
-+	bool in_reg = regno >= BPF_REG_0 && regno <= BPF_REG_5;
- 	const struct bpf_stack_state *slot;
- 	struct bpf_resource res;
- 	struct bpf_reg_state reg;
-@@ -414,8 +452,7 @@ static int acquired_class(struct bpf_verifier_env *env, struct bpf_verifier_stat
- 	}
- 	*flags |= BPF_RES_F_ARG;
- 	if (ref->type & REF_TYPE_LOCK_MASK)
--		return resource_of_kind(env, ref->type == REF_TYPE_LOCK ? BPF_RESOURCE_SPIN_LOCK :
--								   BPF_RESOURCE_RES_LOCK);
-+		return resource_of_lock(env, ref, in_reg ? &frame->regs[regno] : NULL, adj, flags);
- 	if (!stack_object_find(st, ref, &objframe, &spi))
- 		return -EOPNOTSUPP;
- 	if (objframe != st->curframe)
-@@ -794,9 +831,11 @@ static const u8 site_regs[] = {
-  * The places of frame @f of @st that hold the handle of @ref, which the frame
-  * owns, in @loc: the stack object the reference is of, or the slots of the
-  * stack a pointer to the object is spilled in and the registers that hold
-- * one, see site_regs; @throws when the frame calls bpf_throw(). A lock has
-- * none. The slots a spill is removed from again, see
-- * bpf_remove_fastcall_spills_fills(), hold nothing at run time.
-+ * one, see site_regs; @throws when the frame calls bpf_throw(). A lock at a
-+ * fixed address needs no place. Any other lock is found like an object,
-+ * through a pointer to what it is in, which has the id of the lock. The slots
-+ * a spill is removed from again, see bpf_remove_fastcall_spills_fills(), hold
-+ * nothing at run time.
-  */
- static void ref_locations(struct bpf_verifier_env *env, const struct bpf_verifier_state *st, int f,
- 			  const struct bpf_reference_state *ref, bool throws,
-@@ -805,42 +844,50 @@ static void ref_locations(struct bpf_verifier_env *env, const struct bpf_verifie
- 	const struct bpf_res_acq *acq = &env->res_acqs[ref->acq - 1];
- 	const struct bpf_func_state *frame = st->frame[f];
- 	s16 adj, lim = env->subprog_info[frame->subprogno].fastcall_stack_end;
-+	bool lock = ref->type & REF_TYPE_LOCK_MASK, ptr;
- 	const struct bpf_stack_state *slot;
- 	int k;
+-	u32 i, cnt = env->res_rel_cnt, insn = env->insn_idx;
++	u32 i, insn = env->insn_idx;
+ 	int regno = env->release_regno;
+ 	const struct bpf_res_acq *acq;
+-	struct bpf_res_rel *r;
+-	u8 flags = 0;
++	u8 flags = 0, bad = 0;
+ 	s16 adj = 0;
  
-+	memset(loc->at, 0, sizeof(loc->at));
- 	loc->cnt = 0;
- 	loc->obj = false;
--	if (ref->type & REF_TYPE_LOCK_MASK)
-+	loc->fixed = lock && env->resources[acq->res].addr;
-+	if (loc->fixed) {
-+		loc->cnt = 1;
- 		return;
-+	}
-+	/* a pointer the frame keeps: to the object, or to what a lock with an id is in */
-+	ptr = lock ? ref->id && !(acq->flags & BPF_RES_F_NO_PTR) :
-+		     ref->type == REF_TYPE_PTR && !(acq->flags & BPF_RES_F_ARG);
- 	for (k = 0; k < bpf_stack_nr_slots(frame) && loc->cnt < BPF_RES_LOC_MAX; k++) {
- 		slot = bpf_stack_slot(frame, k);
- 		adj = 0;
- 		if (spi_off(k) < lim)
- 			break;
--		if (stack_slot_is_object(slot, ref->id)) {
-+		if (!lock && stack_slot_is_object(slot, ref->id)) {
- 			/* the handle of a dynptr is its first word, as when it was created */
- 			if (slot->slot_type[BPF_REG_SIZE - 1] != STACK_DYNPTR) {
- 				loc->obj = true;
- 				loc->cnt = 0;
- 			}
--		} else if (ref->type != REF_TYPE_PTR || (acq->flags & BPF_RES_F_ARG) ||
--			   !bpf_is_spilled_reg(slot) || !reg_ref_off(&slot->spilled_ptr, ref->id, &adj)) {
-+		} else if (!ptr || !bpf_is_spilled_reg(slot) ||
-+			   !reg_ref_off(&slot->spilled_ptr, ref->id, &adj)) {
- 			continue;
- 		}
- 		loc->at[loc->cnt].off = spi_off(k);
--		loc->at[loc->cnt].reg = false;
--		loc->at[loc->cnt++].adj = adj;
-+		/* the acquisition of a lock has how far the lock is into what it is in */
-+		loc->at[loc->cnt++].adj = lock ? adj - acq->adj : adj;
- 		if (loc->obj)
- 			return;
+ 	if (!env->describe_frames || st->speculative)
+@@ -667,40 +711,17 @@ int bpf_frame_desc_record_release(struct bpf_verifier_env *env, int idx)
+ 		return -EINVAL;
  	}
--	if (!env->describe_regs || ref->type != REF_TYPE_PTR || (acq->flags & BPF_RES_F_ARG))
-+	if (!env->describe_regs || !ptr)
- 		return;
- 	for (k = 0; k < (throws ? ARRAY_SIZE(site_regs) : 4) && loc->cnt < BPF_RES_LOC_MAX; k++) {
- 		if (!reg_ref_off(&frame->regs[site_regs[k]], ref->id, &adj))
- 			continue;
- 		loc->at[loc->cnt].off = site_regs[k];
- 		loc->at[loc->cnt].reg = true;
--		loc->at[loc->cnt++].adj = adj;
-+		loc->at[loc->cnt++].adj = lock ? adj - acq->adj : adj;
+ 	acq = &env->res_acqs[ref->acq - 1];
++	/* what insns could not compare with a slot matters when there is a slot only */
+ 	if (regno < BPF_REG_1 || regno > BPF_REG_5) {
+-		verbose(env, "frame_desc: insn %d releases a resource whose handle is in no argument register\n",
+-			insn);
+-		return -EINVAL;
+-	}
+-	if (acq->flags & BPF_RES_F_DEREF) {
++		regno = BPF_REG_FP;
++		bad = BPF_RES_REL_NO_REG;
++	} else if (acq->flags & BPF_RES_F_DEREF) {
+ 		flags = BPF_RES_F_DEREF;
+ 	} else if (!(acq->flags & BPF_RES_F_ARG) &&
+ 		   !reg_ref_off(&frame->regs[regno], ref->id, &adj)) {
+-		verbose(env, "frame_desc: insn %d releases a resource R%d does not point to\n", insn,
+-			regno);
+-		return -EINVAL;
+-	}
+-	for (i = 0; i < cnt; i++) {
+-		r = &env->res_rels[i];
+-		if (r->insn != insn || r->reg != regno)
+-			continue;
+-		/* the argument is taken the same way whatever it releases */
+-		if (r->flags != flags || r->adj != adj) {
+-			verbose(env, "frame_desc: insn %d takes the handle of what it releases differently on different paths\n",
+-				insn);
+-			return -EINVAL;
+-		}
+-		if (r->acq == ref->acq - 1)
+-			return 0;
++		bad = BPF_RES_REL_NOT_PTR;
  	}
+-	r = kvrealloc(env->res_rels, array_size(cnt + 1, sizeof(*r)), GFP_KERNEL_ACCOUNT);
+-	if (!r)
+-		return -ENOMEM;
+-	r[cnt] = (struct bpf_res_rel) { .insn = insn, .acq = ref->acq - 1, .reg = regno,
+-					.flags = flags, .adj = adj };
+-	env->res_rels = r;
+-	env->res_rel_cnt = cnt + 1;
+-	return 0;
++	return rel_add(env, insn, ref->acq - 1, regno, flags, adj, bad);
  }
  
-@@ -908,7 +955,7 @@ static int site_visit(struct bpf_verifier_env *env, const struct bpf_verifier_st
- 				if (cur.at[j].off == loc->at[k].off && cur.at[j].adj == loc->at[k].adj &&
- 				    cur.at[j].reg == loc->at[k].reg)
- 					break;
--			if (j < cur.cnt && cur.obj == loc->obj)
-+			if (j < cur.cnt && cur.obj == loc->obj && cur.fixed == loc->fixed)
- 				loc->at[n++] = loc->at[k];
- 		}
- 		loc->cnt = n;
-@@ -1481,7 +1528,7 @@ static int build_site(struct bpf_verifier_env *env, u32 idx, const u32 *new_of)
- 	for (i = 0; i < env->res_loc_cnt; i++) {
- 		const struct bpf_res_loc *loc = &env->res_locs[i];
- 		const struct bpf_res_acq *a = &env->res_acqs[loc->acq];
--		u16 flags = loc->obj ? BPF_FRAME_ENT_OBJ : 0;
-+		u16 flags = loc->obj ? BPF_FRAME_ENT_OBJ : loc->fixed ? BPF_FRAME_ENT_FIXED : 0;
+ /* The current insn enters (@delta 1) or leaves (-1) a section of @kind: counted by its frame. */
+@@ -1095,6 +1116,50 @@ static int emit_acquire_after(struct bpf_insn *buf, const struct bpf_res_acq *a)
+ 	return cnt;
+ }
  
- 		if (loc->site != idx || a->slot)
++/*
++ * Acquisition @acq needs a slot. Can the insns that keep it be emitted? They
++ * are emitted once per insn, so the insn has to acquire in one way, with the
++ * handle in a register, and every call that releases what it acquired has to
++ * take the handle in one way that insns can compare with the slot.
++ */
++static int slot_can_be_kept(struct bpf_verifier_env *env, u32 acq)
++{
++	const struct bpf_res_acq *a = &env->res_acqs[acq], *b;
++	const struct bpf_res_rel *r;
++	u32 i;
++
++	for (i = 0; i < env->res_acq_cnt; i++) {
++		b = &env->res_acqs[i];
++		if (i == acq || b->insn != a->insn || b->reg != a->reg ||
++		    (a->flags ^ b->flags) & BPF_RES_F_CTX)
++			continue;
++		verbose(env, "frame_desc: insn %d acquires resources of different types on different paths\n",
++			a->insn);
++		return -EINVAL;
++	}
++	if (a->reg == BPF_REG_FP) {
++		verbose(env, "frame_desc: insn %d takes the handle of a resource in no register\n",
++			a->insn);
++		return -EINVAL;
++	}
++	for (i = 0; i < env->res_rel_cnt; i++) {
++		r = &env->res_rels[i];
++		if (r->acq != acq || !r->bad)
++			continue;
++		if (r->bad == BPF_RES_REL_NO_REG)
++			verbose(env, "frame_desc: insn %d releases a resource whose handle is in no argument register\n",
++				r->insn);
++		else if (r->bad == BPF_RES_REL_NOT_PTR)
++			verbose(env, "frame_desc: insn %d releases a resource R%d does not point to\n",
++				r->insn, r->reg);
++		else
++			verbose(env, "frame_desc: insn %d takes the handle of what it releases differently on different paths\n",
++				r->insn);
++		return -EINVAL;
++	}
++	return 0;
++}
++
+ /*
+  * Decide what needs a hidden slot, once the pass has seen every frame, and
+  * reserve it.
+@@ -1149,6 +1214,15 @@ int bpf_frame_desc_resolve(struct bpf_verifier_env *env)
+ 		}
+ 		if (!a->slot)
  			continue;
-diff --git a/kernel/bpf/unwind.c b/kernel/bpf/unwind.c
-index 473897c3aff7..d3cd95f08769 100644
---- a/kernel/bpf/unwind.c
-+++ b/kernel/bpf/unwind.c
-@@ -233,6 +233,8 @@ static void bpf_unwind_release_desc(struct bpf_unwind_ctx *ctx, const struct bpf
- 			continue;
- 		if (ent->flags & BPF_FRAME_ENT_OBJ) {
- 			handle = loc;
-+		} else if (ent->flags & BPF_FRAME_ENT_FIXED) {
-+			handle = res->addr;
- 		} else {
- 			/* no descriptor names a register that was not captured */
- 			if ((ent->flags & BPF_FRAME_ENT_REG) && WARN_ON_ONCE(!ctx->entry))
++		ret = slot_can_be_kept(env, i);
++		if (ret)
++			break;
++		if (a->multi) {
++			verbose(env, "frame_desc: a frame holds two resources of insn %d at once, which is not supported in a program that throws\n",
++				a->insn);
++			ret = -EINVAL;
++			break;
++		}
+ 		/* some visit of the insn has nothing a slot can hold where this one has */
+ 		if (!(a->flags & BPF_RES_F_CTX) && acquires_sometimes(env, new_of[a->insn], a)) {
+ 			verbose(env, "frame_desc: insn %d acquires a resource on some paths only, or one of a type that cannot be released\n",
+@@ -1348,8 +1422,8 @@ int bpf_frame_desc_emit(struct bpf_verifier_env *env)
+ 	if (!env->res_acq_cnt && !env->section_insn_cnt)
+ 		return 0;
+ 	new_of = insns_of_pass(env, &orig_len);
+-	items = kvcalloc(env->res_acq_cnt + env->res_rel_cnt + env->section_insn_cnt, sizeof(*items),
+-			 GFP_KERNEL_ACCOUNT);
++	items = kvcalloc(env->res_acq_cnt + env->res_rel_cnt + env->section_insn_cnt,
++			 sizeof(*items), GFP_KERNEL_ACCOUNT);
+ 	if (!new_of || !items) {
+ 		ret = -ENOMEM;
+ 		goto out;
 -- 
 2.53.0
 
