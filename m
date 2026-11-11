@@ -1,54 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.36
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.87
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794411185;
-	b=ogGvGpAAqJVb4pSEEfYIydaKHfvOLFxFpYmSGFHvoYGwJ27c6vJs7/nRVlDNkeeJnP2k
-	 WF06CJ98eTe7ab/dCHH6l4WVc1eJC65wRoHLF1hnV0suV6JN2DAYagHGKMZP8sG/AG2zV
-	 MUz6/sb1/5AqzTjZmGJ8EFrj6iiDvk1Cb2RP9AkaoMqEURXN5qbBav9BoSDmzgcju9jJA
-	 odzEw0/vzy2Rvd+YfYQROmgJEaL/Sg6tkI7+FaA4ySiHKAxmx19OekoaDjklndLNfAVQB
-	 cIUSke/zQnuNGxWJIyVJiEp2vlIbirqo9PmMIQT6cUsmC1bdukVPiW33Vo2uYOLaoeQ==
+	t=1794411234;
+	b=yv+efdsnmNqyHBml7j3e4JhN4SDJw2L9X39x8RDhYBHVhmcVJFLg97XiY1rgcSs/6wgO
+	 ANcvHfqiccQNuPCXUMzJKXNTVxz2nHf3BaXNXMnIlmwci8JbKlkyY9e+cWrmJKZ5lYbAG
+	 8A5oSH01piIwKiD8ENKBJ2JSfcLCeoTHYq3TqqcQA666qPGvnvGhwzQVgLFyBLM7L7rQy
+	 8RsfeNTQ3SLWE4DtUc/AfPaIoo9JCCu+g+nkOtOoEDyTN6uChErTOsnEjR1o2je79uB5z
+	 1FkR1U9sSjFFPr9uC9sLVDFHkdOELAWlSon3pJn2qhYmhT1hNxZTr19jWW3OiEBdoyw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794411185;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794411234;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
 	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=EGBcdLyH+qWtPFF9G1WLyu068WqshojAGB+pBC2wncc=;
-	b=SrczqYJgAaSRmd3HkpO6R6U6ZMtF3/GSbtYYl4bZzR56qHo5cFjj0p/wM3/Y1bqI0w7q
-	 WSsk3zISCidToJwuABvmXNQ3d1yi4Fr6t1YqUrPCzNB0TTFarMKFlJVBiO+ZyKd9AkOsd
-	 zaDsyQAn8Dvvtx2QZfxvLUGllSZDjQmOeiP7PUI2jhGCrvM4Kiw3fXC9/JmYF4AK2U/71
-	 oaIqM33KZQZ+PyCY5wwkZFbRx+VviHYaeTaRW5GJAQJCtnlXZ+xNO2pjyIB/j/u7ijqYw
-	 NCH00a93ZMmz1Ri9Emy/yd7oThA7N2W94Is1AfBJ9hDFbL0Ub6zDVwDddW3EkNwALgw==
+	bh=BwTjyGbtFLiEfqJNojU1wBEH3l3XXwkDvqFxjFfKBuI=;
+	b=C0o/aDWeO3M5Bkrq1PjH7zOlW3nZIA2jqb6ERHlZhqFgnVHmVw78A1sxNq+p/JOADZgU
+	 NnSufulf2aE+sfAfzkYfbCymWnu4U3HKwqKnlJS6PbcjcEkdba6RMMHTupfb2CLYAnZig
+	 AsKGyDcCmzlVukRxeWIpqX12+zNsDb8gVRjlUi1N61FJWhajOHM4T8csVUY3tormOUQaD
+	 YLWA+lxTDXN4kCU1+kgC5jWDQQdqd58+Q2NyQ5sbWhe39yrugg4HK0hx/+KUnO4NFD3yx
+	 od94CpkHNfn4jsUobyOMTpnJFoRzeFEh7/WwCz+MHE8Fs2m3IGYjrIQ4sbX23Pd8fkw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=r6lIrVDX;
-	arc=none smtp.remote-ip=91.218.175.36
-Received: from mta0.migadu.com (out-36.mta0.migadu.com [91.218.175.36])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=rfwfWMDS;
+	arc=none smtp.remote-ip=95.215.58.87
+Received: from mta1.migadu.com (out-87.mta1.migadu.com [95.215.58.87])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C697C606A321
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 15:33:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C697C606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4232606A321
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 15:33:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E4232606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=r6lIrVDX
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=rfwfWMDS
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=FYJ5fe5bszWYbPmBUf7pMhzfw1+piK655vw2zkho3KU=;
+DKIM-Signature: a=rsa-sha256; bh=gboru3Ec6G1jPwlPZvGIx8shx83LrPwzmsUnld/c0C0=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794411182; v=1; x=1795015982;
- b=r6lIrVDXEIUZJTnUNuZTPE7lGAWD2MIPP3OW59q/JwEaQWADpn8lVr8bZ9pwTV0xillFj7i8
- HCvMH0w1q/anKLrXgcpdvD8hzpDR0KSSPSrticAHTg5XHqbkZPNBWO7wJfz10mHaBcBITf7V9Ym
- nJa39wKvGNWH9Zr9IeC0/nwM=
+ t=1794411232; v=1; x=1795016032;
+ b=rfwfWMDS0ETzicI9TdsQtx5vCj6KU4f2QcLmX1BPodx+vlUwXUhtDletliHH5GErvxgGysOJ
+ a/S0Lw5TWyzv3OAVGEGFsIv06BbWXEQ+Nxya0BohUSl7nWcapBGxW0AygrurSKzIZfn8AtX9bk5
+ sjec4ssQourGBdOWobCHMRfI=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id e7ccb356486f714d;
-	Wed, 11 Nov 2026 15:33:02 +0000
-X-Mizu-Trace-ID: e7ccb356486f714d
+Received: by smtp.migadu.com with ESMTPS id 17a7bba5a94a6255;
+	Wed, 11 Nov 2026 15:32:36 +0000
+X-Mizu-Trace-ID: 17a7bba5a94a6255
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <ab4e5c29-b835-4ea8-853b-57ae7ad2eafe@linux.dev>
-Date: Wed, 11 Nov 2026 23:32:50 +0800
+Message-ID: <9f9f10e5-d9f2-4cac-9376-a5802424de04@linux.dev>
+Date: Wed, 11 Nov 2026 23:32:25 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,8 +59,8 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 5/9] libbpf: Add log_opts support for
- BPF_TRACE_ITER
+Subject: Re: [PATCH bpf-next 4/9] bpf: Add log support for cgroup prog
+ link_create
 To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
 Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
  andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
@@ -71,87 +71,47 @@ Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
  linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
  martin.lau@kernel.org, mason@kernel.org
-References: <20261109140816.5196-6-leon.hwang@linux.dev>
- <8b9e5217cbe9c192e678ce5c8d59f573c80a659d72211f5b91c905ed00ebb799@mail.kernel.org>
+References: <20261109140816.5196-5-leon.hwang@linux.dev>
+ <8a2b570a4d824e7a7acb46464af3318cc99a87ac6b620dc5cb76d9966101fd1d@mail.kernel.org>
 Content-Language: en-US
 From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <8b9e5217cbe9c192e678ce5c8d59f573c80a659d72211f5b91c905ed00ebb799@mail.kernel.org>
+In-Reply-To: <8a2b570a4d824e7a7acb46464af3318cc99a87ac6b620dc5cb76d9966101fd1d@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 2026/11/9 22:47, bot+bpf-ci@kernel.org wrote:
->> libbpf: Add log_opts support for BPF_TRACE_ITER
+>> bpf: Add log support for cgroup prog link_create
 > 
-> TL;DR:
-> - libbpf BPF_TRACE_ITER case may not reject stray bytes after iter.len
->   (missing OPTS_ZEROED check), so unknown fields could be silently ignored
-> - Nit: iter.len test in the legacy branch looks like dead code
+> TL;DR: Nit only: the new <linux/bpf_verifier.h> include in bpf-cgroup.h may be
+> unnecessary, since a forward declaration would likely suffice and avoid
+> pulling it into tcp.h users.
 > 
->> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
->> --- a/tools/lib/bpf/bpf.c
->> +++ b/tools/lib/bpf/bpf.c
-> 
-> [ ... ]
-> 
->> @@ -821,6 +816,16 @@ int bpf_link_create(int prog_fd, int target_fd,
->>  			return libbpf_err(-EINVAL);
->>  	}
+>> diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
+>> --- a/include/linux/bpf-cgroup.h
+>> +++ b/include/linux/bpf-cgroup.h
+>> @@ -4,6 +4,7 @@
 >>  
->> +	if (iter_info_len) {
->> +		if (OPTS_GET(opts, iter.len, 0))
->> +			return libbpf_err(-EINVAL);
->> +		iter_info = OPTS_GET(opts, iter_info, (void *)0);
->> +	} else {
->> +		log_opts = OPTS_GET(opts, log_opts, (void *)0);
->> +		iter_info = OPTS_GET(opts, iter.info, (void *)0);
->> +		iter_info_len = OPTS_GET(opts, iter.len, 0);
->> +	}
->> +
+>>  #include <linux/bpf.h>
+>>  #include <linux/bpf-cgroup-defs.h>
+>> +#include <linux/bpf_verifier.h>
+>>  #include <linux/errno.h>
+>>  #include <linux/jump_label.h>
+>>  #include <linux/percpu.h>
 > 
-> When the legacy iter_info_len is non-zero, the check above already requires
-> OPTS_ZEROED(opts, target_btf_id), which covers every byte from that offset
-> up to sz, including iter.info and iter.len.  Can this OPTS_GET(opts,
-> iter.len, 0) test ever be true?  It looks like dead code.
+> this isn't a bug, but is the <linux/bpf_verifier.h> include needed here?
 > 
+> bpf.h already forward-declares struct bpf_verifier_log, which is all the
+> new cgroup_bpf_link_attach() prototype and its stub need, and cgroup.c
+> already includes bpf_verifier.h for bpf_log().
+> 
+> Since bpf-cgroup.h is included from include/net/tcp.h, would a plain
+> forward declaration (as done for trace_events.h earlier in this series)
+> keep the verifier header out of those translation units?
+> 
+Good catch.
 
-Will drop the iter.len check.
-
-> [ ... ]
-> 
->>  	switch (attach_type) {
->>  	case BPF_TRACE_ITER:
->>  		attr.link_create.iter_info = ptr_to_u64(iter_info);
->>  		attr.link_create.iter_info_len = iter_info_len;
->>  		break;
-> 
-> Every other union member's case ends with a check such as:
-> 
->     if (!OPTS_ZEROED(opts, tracing_multi))
->             return libbpf_err(-EINVAL);
-> 
-> Should the BPF_TRACE_ITER case do the same with OPTS_ZEROED(opts, iter)?
-
-Will add OPTS_ZEROED(opts, iter) check.
+Will drop this include.
 
 Thanks,
 Leon
-
-> 
-> On the new iter.info/iter.len path, nothing checks the bytes after iter.len.
-> A caller that sets opts.iter.info, opts.iter.len and opts.tracing_multi.cnt
-> gets the stray field silently ignored instead of -EINVAL.  Likewise, a
-> later field added to the iter struct after len, built against newer
-> headers, would be silently dropped by this libbpf because sz still equals
-> sizeof() and OPTS_VALID() cannot see it.
-> 
-> Legacy callers would be unaffected, since their union is already zero, and
-> the iter.len test in the legacy branch could then be dropped.  The later
-> commits in this series only touch selftests and do not address this.
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42633880300
 
