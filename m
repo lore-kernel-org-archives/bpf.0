@@ -1,56 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794409245;
-	b=yPAeE2dT6U9vCCqh7gf6gVVLqZdDRkPbLUuyg5GvevT10s8LnYc8EJpJECtk9bHy+N07
-	 FWQ15rzh8iNRWO7xLhJ8LDmq71Zn93VGGr6eoOxjq1+g9ga9cZpsO/pyC4k7i5VBryGpW
-	 qhkzo+1o6kpxmoMcvtVC9uACAiYbL4sEDOCv5uJ7+FGAW7U/IZzRZXhHz7YWmrdWubydA
-	 VKfzVtEmV/2qLhJPgMhbK6+qIeJNOiYzEaJwHXLs3r8If4AciOmfDDmXnszm5uCmRkkZz
-	 m+RIzbbRck+zWXJJgeSN3y7WBca73TSkU7P/6eeAJoJ9winjYbG0Rh2Bu2NvrqFPS6g==
+	t=1794409388;
+	b=04XaTxZdCBt4MDcYEDHd6U3+yxRyRXA2DMNNO1MhadCbDdlqLH8b7SEtMpSqXxiz6xRc
+	 8KKtieMVxlYfGLdHFHrKfWXiDgpKTjud/hBurGnSxFkUAKkBWZB8ENo8nUjYVOWTOlx0M
+	 P6E+34k7BCJwahdqefALTuGtOyz/hiaTJs5DmNgL+Eyjs0PpoILtpwztJ7LXtOtY5j1rE
+	 Nl6fOfB6XYnL9ejelsw1F2l0nzP5OHY2l5yzslBLCe2oU6ytQ+IRZtJLdiviqBks+kZKH
+	 qecpn5V8z49Dw8CxiQHKI9hrRf4scdxveCU9Kowm4h1zseQqBXMklCMXTWiV5EgWgRQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794409245;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=1BusrvtlUeQShABlnJe5VFQ9CjVopb1WAkwVEf1KyXg=;
-	b=UnIt0QM22818RuhfeKVy0GRXI7mCUW3azDl7rBTA7S1qvsCdpt02YvcOvlIHGPnCSKKG
-	 gIIXDzYoScVpm/ClaitH4aFzC/6CTqVuU4dOX0CoIh7wkDjNTuSEDx9pkuiqcqEpfo/Gr
-	 t8UlwdT6WnIKDdWcGcJMtbUMLLKkmeHd8R9JeSbBbAS3kJmj+nz3Ku3UxHiH02Bfzfkww
-	 5knvhEnnIekUUC5ActwjoNBrsRXq1AusE6/FjrueDUMXA8lS+nIU9UUak276B73K8KB8g
-	 Ks1A4TdM2q/MwxDN3oOTBx0mfp2LBX7FHvPlX+QSp9YU9Cd28tP0o0qtTlQlRFqUuNA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794409388;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=zY9qkPq4UWHB4KqiLgHLBILRCHQoafymdwJhzC8Rif8=;
+	b=3PlJJ8LOuAL3WQAf3Z2CoQuB9BX+ldNtAn09fSj+Ov84s0QYOdBzce/+yJWNRdpJBAIK
+	 Ct1N0odKPxy4E0EINThPswHTzIJo7gpRvlGm0F+A46BXxj2vIT9v3bwYzzadMRJqa1Y++
+	 OR4aSNjDpg8WdQ79BWdwlYtAdq+NN6rWwLQfEWFqKrZMKq64B3xvmA/EFFo+iHcuZGj6z
+	 C9jruChbeFAUTM7FMBzJtl+I6kCyasIqJWdz0IPQvM0JjYArlAsw/+dSuIeswZZSn+kiD
+	 ps3UwtVBnV3EgEx74gPRq37Gu1E9+ZxkafaT0Ps/i2ysDxGKdte1ay9yaGFHfHyR3lA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=U3N8i+qD;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hzIqcLoM;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4840606B20B
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 15:00:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C45EB606B201;
+	Wed, 11 Nov 2026 15:03:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=U3N8i+qD
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4996E1F00A05;
-	Wed, 11 Nov 2026 15:00:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hzIqcLoM
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D0601F00A05;
+	Wed, 11 Nov 2026 15:03:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794409245;
-	bh=1BusrvtlUeQShABlnJe5VFQ9CjVopb1WAkwVEf1KyXg=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=U3N8i+qDmEcIr30GcPJC/sjCyPQ/LdvlkgwjOYuDxqxJmyJcRpUAsC+oWNs5AzoJG
-	 cF3gJiRhgeDylPagPApYV02vOOuDRoBoXmpZGJnNHNLgswFflJG563ECR31ja7i4mD
-	 XobFyMjTeXEnW9BRV2noDGWQWrGzUm/+ZGdw8CU0cJcRiTTut9H8HgvSWsClgtNHyN
-	 kqFcz1lXkQ3+3vXKGDeFONp/UDJhuVJP2LyZt+WqkJ9eKIiYYpJoXthD7E12bzXHf/
-	 ZALrTOEDRlEp86mniy5bN4ScqRov1X3Bk2G5SpDDfKaQMLlUTdNDC84kAe/jT2IQws
-	 1/q8geC+575SA==
-Message-ID: <sashiko-outbox-209209@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v1 09/29] bpf: Register cleanup destructors for
- more types
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <552b16f22843843822ccf014138e390ac72909ab.1794399387.git.memxor@gmail.com>
-References: <cover.1794399387.git.memxor@gmail.com>
- <552b16f22843843822ccf014138e390ac72909ab.1794399387.git.memxor@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 11 Nov 2026 15:00:44 +0000
+	s=k20260515; t=1794409388;
+	bh=zY9qkPq4UWHB4KqiLgHLBILRCHQoafymdwJhzC8Rif8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=hzIqcLoMSvWECh5078hr0ZGVTbqsmHqndNPk0MuLRdKZN/CjOsGUi5+p/YCSVpo42
+	 LfDmZf/4Mtfa1tjQapz6Nq3/EFAz1ozTTSU7TgLY5G6ohxcpuNHjlY++ChbLVuCoX3
+	 E4ZBzVldxtVM2JJQxbgx4i9zA2umENJ2QOMP96KyX++jneMqvlNanhZ2CogeDB3aJU
+	 fKBD6YNb2HKiRPBPJHQ1REaWybiv4S/RrdeKVluebON9NP8ZfJWzyJef6U1t5GnSWV
+	 Gp335HFERj5EGlaCa9TzNSwl4h7p7bWTKeFiaTP+WBU7JuPYFEuhcJTSIwimxvKVA9
+	 gbxnoRk+r7N0Q==
+Message-ID: <8963886e-f000-4d25-a5a9-04ad0163e7ac@kernel.org>
+Date: Wed, 11 Nov 2026 15:03:04 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,97 +50,53 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next] bpftool: Skip cgroups removed during cgroup tree
+ walk
+To: thamrinjonathan@gmail.com, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Roman Gushchin <roman.gushchin@linux.dev>, Jakub Kicinski <kuba@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261111-bpftool-cgroup-tree-enoent-v1-1-f3bfcddb4f3d@gmail.com>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <20261111-bpftool-cgroup-tree-enoent-v1-1-f3bfcddb4f3d@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Medium] bpf: btf_find_dtor() misses nf_conn destructors when
-  CONFIG_NF_CONNTRACK=3Dm
---
+2026-11-11 12:17 UTC+0700 ~ Jonathan Bastari Thamrin via B4 Relay
+<devnull+thamrinjonathan.gmail.com@kernel.org>
+> From: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
+> 
+> When a cgroup is removed after being found by nftw(), open() or
+> cgroup_has_attached_progs() in do_show_tree_fn() returns ENOENT.
+> This is treated as a fatal error so the walk stops and the rest of
+> the tree isn't listed. This is common on systemd hosts as
+> transient scopes are created and removed all the time.
+> 
+> With "systemd-run --user --scope true" running in a loop, the walk
+> fails within a few hundred runs:
+> 
+>   Error: can't query bpf programs attached to /sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-p126141-i75408.scope: No such file or directory
+> 
+> Treat ENOENT as the cgroup being gone and continue the walk. With
+> this patch, 2000 runs in a row complete without error.
+> 
+> Link: https://github.com/libbpf/bpftool/issues/159
+> Fixes: 2058b38371d0 ("bpftool: introduce cgroup tree command")
+> Signed-off-by: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
+> ---
+> The ENODEV originally reported in #159 was fixed by 98b303c9bf05
+> ("bpftool: Query only cgroup-related attach types"). This fixes the
+> ENOENT race that still breaks cgroup tree on bpftool v7.6.0.
 
-commit ddb65cf317bc73659c05f7b86c4aa44d5480e3c1
-Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Looks good to me, thank you for the fix.
 
-bpf: Register cleanup destructors for more types
-
-This commit registers BPF_DTOR_CLEANUP destructors and void (*)(void *)
-wrappers for open-coded iterators and referenced types across the kernel
-so that stack unwinding on bpf_throw() can release held references.
-
-> diff --git a/net/netfilter/nf_conntrack_bpf.c b/net/netfilter/nf_conntrac=
-k_bpf.c
-> index c2df7c9482812..9d9d4e97ca4e5 100644
-> --- a/net/netfilter/nf_conntrack_bpf.c
-> +++ b/net/netfilter/nf_conntrack_bpf.c
-[ ... ]
-> @@ -537,12 +553,34 @@ static const struct btf_kfunc_id_set nf_conntrack_k=
-func_set =3D {
->  	.set   =3D &nf_ct_kfunc_set,
->  };
-> =20
-> +BTF_ID_LIST(nf_ct_dtor_ids)
-> +BTF_ID(func, bpf_ct_release_dtor)
-> +BTF_ID(func, bpf_ct_release)
-> +BTF_ID(func, bpf_ct_free_dtor)
-> +BTF_ID(func, bpf_ct_insert_entry)
-> +
->  int register_nf_conntrack_bpf(void)
->  {
-> +	/* The only kfunc that takes an allocated entry off a program is bpf_ct=
-_insert_entry() */
-> +	const struct btf_id_dtor_kfunc nf_ct_dtors[] =3D {
-> +		{
-> +			.btf_id         =3D btf_nf_conn_ids[0],
-> +			.kfunc_btf_id   =3D nf_ct_dtor_ids[0],
-> +			.release_btf_id =3D nf_ct_dtor_ids[1],
-> +			.flags          =3D BPF_DTOR_CLEANUP,
-> +		},
-> +		{
-> +			.btf_id         =3D btf_nf_conn_ids[1],
-> +			.kfunc_btf_id   =3D nf_ct_dtor_ids[2],
-> +			.release_btf_id =3D nf_ct_dtor_ids[3],
-> +			.flags          =3D BPF_DTOR_CLEANUP,
-> +		},
-> +	};
->  	int ret;
-> =20
->  	ret =3D register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &nf_conntrack_kfun=
-c_set);
->  	ret =3D ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &nf_c=
-onntrack_kfunc_set);
-> +	ret =3D ret ?: register_btf_id_dtor_kfuncs(nf_ct_dtors, ARRAY_SIZE(nf_c=
-t_dtors), THIS_MODULE);
-
-[Severity: Medium]
-Can btf_find_dtor() find nf_ct_dtors when CONFIG_NF_CONNTRACK=3Dm?
-
-tc_cls_act_func_proto() in net/core/filter.c executes
-BTF_TYPE_EMIT(struct nf_conn___init), so both struct nf_conn
-(btf_nf_conn_ids[0]) and struct nf_conn___init (btf_nf_conn_ids[1]) are
-emitted into vmlinux base BTF and have BTF IDs below nf_conntrack's module
-btf->start_id.  However, register_btf_id_dtor_kfuncs() stores nf_ct_dtors in
-nf_conntrack's module dtor_kfunc_tab via THIS_MODULE.
-
-When resource_registry() looks up the destructor, btf_find_dtor() walks to
-base_btf before searching the module's table:
-
-kernel/bpf/btf.c:btf_find_dtor() {
-	...
-	while (btf_id < btf->start_id)
-		btf =3D btf->base_btf;
-	dtor =3D btf_dtor_tab_find(btf, btf_id);
-	if (dtor || !btf_is_module(btf)) {
-		*btfp =3D btf;
-		return dtor;
-	}
-	...
-}
-
-Because btf_id < btf->start_id, btf_find_dtor() skips nf_conntrack's
-dtor_kfunc_tab, searches vmlinux's table where nf_ct_dtors was not
-registered, and returns NULL.  As a result, the verifier rejects any XDP or
-sched_cls program that calls bpf_throw() while holding a conntrack reference
-when CONFIG_NF_CONNTRACK=3Dm.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1794399387.gi=
-t.memxor@gmail.com?part=3D9
+Acked-by: Quentin Monnet <qmo@kernel.org>
