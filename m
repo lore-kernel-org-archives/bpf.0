@@ -1,84 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794362372;
-	b=TrRwCoTkzIrjWgz94owFAol+0W1kwTsCuO2poVB+4Wu3tGhRNlyXGY1ifyTDuTBB0wsZ
-	 wPrI/1O0k2Lluce4sD0QkXrQ2DhhFdpwCsayQYDUuZmUG/HYMdcE2aJ87sdApWU42tal7
-	 OeH3qqUo+4WeB2qRpBIfMNZWk6eCAiggLBrGQCRjUPMLfFOcH9hUgO4+3M2zcFaWCvSJ0
-	 qmgXJHR6yiA2Br41p0BLKqXr2yoT4d21es2R99lMuq8/rHLqur+oSOl3r3+OHV0Ma1amt
-	 dGj9qeG5SWBOaFev5AHLWBzPAHvoB0hiYaJfpEE5l+AhYqqS/AVG+4EjqsL9GKpGYeA==
+	t=1794362375;
+	b=jCRBwDhJCCnyBgoNtIamxoz6HFmPdEz8cO10ZM6ZP2huG21zfj3JCYOWzgDkYP5pqbLg
+	 Goh5s1VdLigz6xqWx3REbvfluBAQpV2KA5nRgAguqUpdp9z8SDUTbM3UkEsrOqyhZ0OI3
+	 qxztzEuhFnQmhKQf/DNtSqwDIXthU8iNPqqfphlmRGEfCpqcFvdPwPUw9J1Ssn34DzhDh
+	 0Mj2islUy55dR3eIkr61AKSmu75cW+mcfG3VPCskcbKhxx0TOrqwDcQZIXjBUjBIhadcu
+	 iZyjfmZjGDIG0epffK5kmdBWXMpGO7G6mngdhDm/zkkUtu3QqDqYUX6Lmuy/YWLCYcg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794362372;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794362375;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=HhUr6++cEdzdu7aXmazmu5lx8Sa5k32R+7mO7JewGbg=;
-	b=RXW1JOfSFVza3Em9CbuDcfUWwfMj2JnYh59R8lQTDhhsLidBz166w7yxoKMTUOS5IL+S
-	 cnz3ODTo/t/op85dh/2FQTb5xr5ide5WVH4nUrusb3Kuweo0QZqSMAexESxDKOJIErDbe
-	 lt1a9G/c2uFARz7ulZi1hBP4i8jy9s3Q5//zadxcgC5zYJRkSg51nfI0b+Lh336zOvU/g
-	 VxK/amxPUt+9LOXxiTBeRiFt38adZY9r1GQENHQC/Lgm1VIdSuluTgr3ORrpmkm0E78dy
-	 KQ9Y0wmc0W517ypCaHUbF0YyxBfgNM5siIUcHf18YMWnIzzb1Tif9VTurgDO1+vLpvw==
+	bh=WzryhHStuQlBVjCAYw0PiX7ovDnbv3qfhee+mFhRhaQ=;
+	b=Mme65DfCQwXmmEWQG5Yw+9+1DVNe0VlIRpZd0j4HYfzK4MRGuQUSuskPIOjcYTkTCYwU
+	 Sgx9pgQdQKgNhZRNhUOx6cIcZlPyum3MSL3WJfr3Tt24PhZQRmfE2LDc0wmup2w+ZDKWw
+	 XKyIETr36eGoL+KkaDYOEo4EepDHyrZ+bJ2pPPj6yUAGM3uhsIoA4duttx7dBO2c1EnR3
+	 5p8ZJ/llKb8YFGCumQXGt8GAOCcpxExYbmSEginfhuzk9UVcgga9YFN7+L9qSMSzZaGao
+	 ceNy9silLamTCYHUIhKt3ZTW9AmJVRhybEfl+/PWAMBvWRx8wrTZKRAJ+cRh1kSe+Ow==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=cloudflare.com;
 	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=aOdGraAv;
-	arc=none smtp.remote-ip=209.85.218.43
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=T0VRk9cy;
+	arc=none smtp.remote-ip=209.85.218.49
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7249606A320
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 01:59:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D7249606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CACF8606A326
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 01:59:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CACF8606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=aOdGraAv
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-c505186727fso184061166b.3
-        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 17:59:31 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=T0VRk9cy
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-c4322d310e7so408865166b.0
+        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 17:59:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1794362370; x=1794967170; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1794362373; x=1794967173; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=HhUr6++cEdzdu7aXmazmu5lx8Sa5k32R+7mO7JewGbg=;
-        b=aOdGraAvbilQamH/nwGdpN9DOpt0IvJwwUYwfP2vG0lFw2A4pCCfPdRRBIhH888i/6
-         VknDBNGoqF5+zY+BDQfEY7HjWvblNOzeCZaqjaGF71YSNZKbWC1afWOCBL/pSzObD7/A
-         EK8ll88LQwHE4597BFtvLckQs1U42IrRMvrSBupC6A96xw2MCBn9X5kjVOq6odZ0EvlH
-         3jx1jIOx76ktQcvZO3fccMWavFXKW6BmOe5Zo07JSo1hwbHjtqrcES7GflQvFuL9vS9g
-         /AB6OTtlyO5J0Via92/g2/KBs5VFRb7D5mF60eYRt9YL1NKuCi0Nksf0F59kAOMpHNEH
-         TmTw==
+        bh=WzryhHStuQlBVjCAYw0PiX7ovDnbv3qfhee+mFhRhaQ=;
+        b=T0VRk9cyW5oSeiYyDz+wV5NVJ8rOFF1fugEdBoGMZNcYyTJVuzZdhlSKnDfVTGOkY7
+         WxQ1c4TjxwX/TMvf3XvADgIt1SncBkH8gXxclu47MWVegv8Ds/763QcTVVLQsGvTliiF
+         tSWtnZkGcwJbQu1JOwwFkMFM+HRoDxf9w809+So7raMfWDcKbbVBOntah8IgCv4MvsLd
+         hdkxpovNIpy5NkEsEm9gvLwxHlbhDrQNmbaBvUCxW/S35LCX/3njQc2Z1w1t8779fjUI
+         aq7th/FeAW5qHAFZGXSFfYJfDzyf8aI+gLMLlBrWHKVFmwKeOlim3nnk4hJRG72eULY2
+         qWfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794362370; x=1794967170;
+        d=1e100.net; s=20260707; t=1794362373; x=1794967173;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=HhUr6++cEdzdu7aXmazmu5lx8Sa5k32R+7mO7JewGbg=;
-        b=VbF3cDNyXDLYTL1i2uLdDbm0jYIYvYudjACatWVCsTR2xkHnAFDURB8KrcGLTv68D8
-         eAWHN96C+Z37zQvEhHm3Bxh2DeJsly4TLaHtLGtYceE3c5mX+Uk+Pne97i1/gmgi+Sp5
-         5QOmBCUxONQoAJgPjkonSJF5+PfBnqhIDevVkqoE+5zX/1DfFUelVZViHJZT6s7yHZkG
-         lWfICiRjSx6De2xrT0D26ePBywykhnRQ+yI7l0WX4FOzk9X+Np1ZQftonkzo2tZRgc5W
-         9EmSMScPUA5HzZxizyg8noD7CiULrxMyXPasWh6Q03u+nblbCKIt89SJKFek9d2/Psq4
-         gQrg==
-X-Forwarded-Encrypted: i=1; AL+hErGY+sSCJ5GvzlVd7ONniGccxRA4hYaPQlcW2vdMIcpeonXKXlVavs06fZgjjOXm+FeWjcE=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+4hjicjLn6AysYF0i0VaEXr/HPEb8zvfl4mvrYq4PAHHEKGZF2
-	bDJFcX58+sorrduIIHLYU8Vwbg7GidXLP5x5Z09ypNUsuk5r7RQnd4Zd8zTaMhycYa+wEXZHZtU
-	/AftOaDQ=
-X-Gm-Gg: AYBFou2KfclA+Nb6pEMOAOaT1atM/3kaJ2QnN0N2Os+gYUYCk1Gyl8piOWSZ6CfpmAF
-	KMiyCCaKj2gVo2Rm0zn8SfFQhKeDVzKccS5tlRB9xx8IxgMYDYQ7q/AprOCOGHGDy4mRwS0VRNE
-	WM6eo0mzG54g1kOLBfGkklW5IKsnmjAqzi+gVNK8VHphwBsE4WU7b7QKdDkqix6h01MHaxAsvzS
-	0nvy8oaJW4SrHP5JFtkzb+EibInvb0E2+fd68I1TQrjOtdHHprPizyMTiQwa7Kosed7w7ajXs3h
-	+BY/Wx4KOLw8NlitZco5x8LEhs+IK6KUvH/Emw/dr0OMqGHfxwG8DlIxyu25asCuYgVqgY3LVad
-	yjeDfFEvYXFtJioa7avGGL7Ma+pea/nXtIDlwr/r3IPpSP001NbqWKVMHUBRhSuDtdc3ccnLyb5
-	lccW6sPz1KSH5yCWrFw8EXQqZZUiYT55YzARgOoHGnwtxuLw47ym9elUqBsXfMiLilVMeUDWZg7
-	2Ikr5MJ09qC3NLwqvggpB/c6JU1ixEdCYqCfskAGd+t3ZF3Hj+gDXI4quGJECJ0PB2r+1OCyiq8
-	uZcsNp4VKKSjE/L5Muo5tJd6O7Ap2hgeQwVZnY3o5nEQ3s+HUft+xWFHiQ==
-X-Received: by 2002:a17:906:9c86:b0:c50:5996:5b89 with SMTP id a640c23a62f3a-c5066b3aa67mr65463266b.23.1794362370268;
-        Tue, 10 Nov 2026 17:59:30 -0800 (PST)
+        bh=WzryhHStuQlBVjCAYw0PiX7ovDnbv3qfhee+mFhRhaQ=;
+        b=bT+NTYfngbeCCVEueg45chaqlP4oqVK0pY02Qp5LKXlhQbjOyu7+kc+B0cSJ3ctQur
+         KOq6KFnsc2LDo0Xe6dPQTVTkPgG25E+WXXMZt0SUD1bzjfEs6iqMlKirdFZrRalCXO0Q
+         hMV/4/Dbc2VtDSEG6xN9vG07aka4pkaNT2mGuJZ2aEeRxAE89kGII6NEu+1IDZ08zi7I
+         lKiq4CzKJXX9AIrf/D8DqLipPYsMclkc4uUSxtqZ1ztiOpbsEqQKMl3kiK2VY7BeXczF
+         z3wnSEVw1qoMK5MAMiynJJmZ3tC07+86w6rXp+z1pAZVy8qhTVD1uKH6E4uLLjt+oycg
+         +qsg==
+X-Forwarded-Encrypted: i=1; AL+hErGHAKjQlapubpPOcF6xzCJ4W3saed08RVk9Zv2XmKcqIEZCZAywRxD23CujNANPRAsJfw8=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/96wGYjhYmRAtKClrMIYP0SB8VQX+ik7DV6y5lQjYndJUG35kw
+	ZILkxqqEUvYMvG/b5O+gqXAj5ljnsUWgs/sYKED3dgoskhWs7lNJ/UZUSXg1yFhrzqw=
+X-Gm-Gg: AYBFou1GDpmy8AWOR2oVu82bqjmvZwdPcfEnTfIg4xjhchWP8w5kYITqwY2NJrHKeH6
+	qg0D8kystR0kDvXjkbwdNmbotj9O2DLD+UFjhKrXTuPkh6U9F0albtGHYjazPSRpzmqH/RImjf0
+	k3ikFf39pMkHzPlxbhi/vWGZjofZ/3gv5xWYpIsZap3K07CFqswLY+2cNS+u0i7Ace40VJbA3j8
+	QwYYfil1ZOSkR1VPBBGL/4znpC7FOwqB48iFhzcx3qDJ3kpATevBWKshD5rIhmI2xzpBM5PETi7
+	1cvzS6OZcQua9kyWcB2Aydl4cwfITi0wn0MvZaU4VAFjb7dw143Dgt/m/7kklBK3r7gN+sdIN60
+	oLS8SQfN/WgnMfMi74TQ4ta8ne+Zs/xA/b31UISqt7D/ui/YUmA6tAF+l608lRNJF6fvVQxsck6
+	vPH5fmyT03DXMTsHFrLBo8CP/9PtMSLMm7o54TPMdazGrTlv6H7EkXQqezDA+iIBzpytkLpnHNL
+	HsRZIoTZggP5DECBhyJev5bmPo4ekovO5nyTWrKdhWITX8xuckxhh3hrdsEtSvA3eeY0Y1Vx6c4
+	URrfcDoiRmQ3cfnPwjHSulfzkb0gzgP8NHq9+yJN61vrNyFhIVZ47cF7qg==
+X-Received: by 2002:a17:907:9289:b0:c2b:4142:2db1 with SMTP id a640c23a62f3a-c5066cf5ef5mr59870266b.40.1794362373265;
+        Tue, 10 Nov 2026 17:59:33 -0800 (PST)
 Received: from L9JK9NPFH9 ([104.28.20.58])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b7834cdc23sm147498a12.12.2026.11.10.17.59.27
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b7834cdc23sm147498a12.12.2026.11.10.17.59.30
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 10 Nov 2026 17:59:28 -0800 (PST)
+        Tue, 10 Nov 2026 17:59:31 -0800 (PST)
 From: Tianyi Gao <tianyi@cloudflare.com>
 To: netdev@vger.kernel.org
 Cc: andrew+netdev@lunn.ch,
@@ -99,9 +98,9 @@ Cc: andrew+netdev@lunn.ch,
 	sdf@fomichev.me,
 	linux-kselftest@vger.kernel.org,
 	Tianyi Gao <tianyi@cloudflare.com>
-Subject: [PATCH net-next v2 1/3] veth: refactor NAPI enable paths
-Date: Wed, 11 Nov 2026 01:59:20 +0000
-Message-ID: <20261111015922.67745-2-tianyi@cloudflare.com>
+Subject: [PATCH net-next v2 2/3] veth: link RX queues to their NAPI instances
+Date: Wed, 11 Nov 2026 01:59:21 +0000
+Message-ID: <20261111015922.67745-3-tianyi@cloudflare.com>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261111015922.67745-1-tianyi@cloudflare.com>
 References: <20261111015922.67745-1-tianyi@cloudflare.com>
@@ -116,202 +115,50 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-veth_enable_xdp_range() adds the NAPI instances itself, only to pass
-rq->xdp_napi.napi_id as the napi_id argument of xdp_rxq_info_reg(). That
-argument is unused in __xdp_rxq_info_reg() since commit 5ef44b3cb43b
-("xsk: Bring back busy polling support"). Pass 0 instead, as ena, bnxt
-and fec already do.
+veth does not link its RX queues to their NAPI instances. queue-get
+therefore reports no napi-id for them. napi-get lists the NAPI instances
+of a veth, and their thread PIDs when NAPI is threaded. It does not show
+which RX queue each instance polls. Userspace cannot tell which NAPI
+thread to pin for a given queue, or which NAPI to change with napi-set.
 
-veth_enable_xdp_range() then no longer needs the NAPI instances. Move
-netif_napi_add() from it and from veth_napi_enable_range() into
-__veth_napi_enable_range(). Add each instance in the loop that enables
-it, after the allocations that can fail. Drop the napi_already_on and
-delete_napi arguments.
+There is also no way to busy poll an AF_XDP socket bound to a veth
+queue. Since commit b95ed5517354 ("xsk: Bring back busy polling support
+in XDP_COPY"), xsk_bind() takes the NAPI ID of a copy-mode socket from
+rxq->napi. veth never sets rxq->napi, so the socket gets no NAPI ID.
 
-veth_napi_enable_range() and veth_napi_enable() are then trivial
-wrappers. Remove them, and rename __veth_napi_enable_range() and
-__veth_napi_enable() to veth_napi_enable_range() and veth_napi_enable().
+Call netif_queue_set_napi() after napi_enable(), which assigns the NAPI
+ID. Call it again with NULL before napi_disable(). veth is not ops
+locked, so netif_queue_set_napi() requires RTNL. veth enables and
+disables NAPI only in ndo_open, ndo_stop, ndo_bpf, ndo_set_features and
+ethtool's set_channels. All of them are called under RTNL.
 
+Suggested-by: Jesper Dangaard Brouer <hawk@kernel.org>
 Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
 ---
- drivers/net/veth.c | 80 +++++++++++-----------------------------------
- 1 file changed, 18 insertions(+), 62 deletions(-)
+ drivers/net/veth.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index 0539b3661793..f5097696df15 100644
+index f5097696df15..c04277186405 100644
 --- a/drivers/net/veth.c
 +++ b/drivers/net/veth.c
-@@ -1037,7 +1037,7 @@ static int veth_create_page_pool(struct veth_rq *rq)
- 	return 0;
- }
- 
--static int __veth_napi_enable_range(struct net_device *dev, int start, int end)
-+static int veth_napi_enable_range(struct net_device *dev, int start, int end)
- {
- 	struct veth_priv *priv = netdev_priv(dev);
- 	int err, i;
-@@ -1059,6 +1059,7 @@ static int __veth_napi_enable_range(struct net_device *dev, int start, int end)
- 	for (i = start; i < end; i++) {
- 		struct veth_rq *rq = &priv->rq[i];
- 
-+		netif_napi_add(dev, &rq->xdp_napi, veth_poll);
+@@ -1062,6 +1062,8 @@ static int veth_napi_enable_range(struct net_device *dev, int start, int end)
+ 		netif_napi_add(dev, &rq->xdp_napi, veth_poll);
  		rcu_assign_pointer(rq->xdp_prog, priv->_xdp_prog);
  		napi_enable(&rq->xdp_napi);
++		netif_queue_set_napi(dev, i, NETDEV_QUEUE_TYPE_RX,
++				     &rq->xdp_napi);
  		rcu_assign_pointer(priv->rq[i].napi, &priv->rq[i].xdp_napi);
-@@ -1079,9 +1080,9 @@ static int __veth_napi_enable_range(struct net_device *dev, int start, int end)
- 	return err;
- }
+ 	}
  
--static int __veth_napi_enable(struct net_device *dev)
-+static int veth_napi_enable(struct net_device *dev)
- {
--	return __veth_napi_enable_range(dev, 0, dev->real_num_rx_queues);
-+	return veth_napi_enable_range(dev, 0, dev->real_num_rx_queues);
- }
- 
- static void veth_napi_del_range(struct net_device *dev, int start, int end)
-@@ -1122,8 +1123,7 @@ static bool veth_gro_requested(const struct net_device *dev)
- 	return !!(dev->wanted_features & NETIF_F_GRO);
- }
- 
--static int veth_enable_xdp_range(struct net_device *dev, int start, int end,
--				 bool napi_already_on)
-+static int veth_enable_xdp_range(struct net_device *dev, int start, int end)
- {
- 	struct veth_priv *priv = netdev_priv(dev);
- 	int err, i;
-@@ -1131,9 +1131,7 @@ static int veth_enable_xdp_range(struct net_device *dev, int start, int end,
- 	for (i = start; i < end; i++) {
+@@ -1094,6 +1096,7 @@ static void veth_napi_del_range(struct net_device *dev, int start, int end)
  		struct veth_rq *rq = &priv->rq[i];
  
--		if (!napi_already_on)
--			netif_napi_add(dev, &rq->xdp_napi, veth_poll);
--		err = xdp_rxq_info_reg(&rq->xdp_rxq, dev, i, rq->xdp_napi.napi_id);
-+		err = xdp_rxq_info_reg(&rq->xdp_rxq, dev, i, 0);
- 		if (err < 0)
- 			goto err_rxq_reg;
- 
-@@ -1151,21 +1149,13 @@ static int veth_enable_xdp_range(struct net_device *dev, int start, int end,
- err_reg_mem:
- 	xdp_rxq_info_unreg(&priv->rq[i].xdp_rxq);
- err_rxq_reg:
--	if (!napi_already_on)
--		netif_napi_del(&priv->rq[i].xdp_napi);
--	for (i--; i >= start; i--) {
--		struct veth_rq *rq = &priv->rq[i];
--
--		xdp_rxq_info_unreg(&rq->xdp_rxq);
--		if (!napi_already_on)
--			netif_napi_del(&rq->xdp_napi);
--	}
-+	for (i--; i >= start; i--)
-+		xdp_rxq_info_unreg(&priv->rq[i].xdp_rxq);
- 
- 	return err;
- }
- 
--static void veth_disable_xdp_range(struct net_device *dev, int start, int end,
--				   bool delete_napi)
-+static void veth_disable_xdp_range(struct net_device *dev, int start, int end)
- {
- 	struct veth_priv *priv = netdev_priv(dev);
- 	int i;
-@@ -1175,9 +1165,6 @@ static void veth_disable_xdp_range(struct net_device *dev, int start, int end,
- 
- 		rq->xdp_rxq.mem = rq->xdp_mem;
- 		xdp_rxq_info_unreg(&rq->xdp_rxq);
--
--		if (delete_napi)
--			netif_napi_del(&rq->xdp_napi);
- 	}
- }
- 
-@@ -1188,14 +1175,15 @@ static int veth_enable_xdp(struct net_device *dev)
- 	int err, i;
- 
- 	if (!xdp_rxq_info_is_reg(&priv->rq[0].xdp_rxq)) {
--		err = veth_enable_xdp_range(dev, 0, dev->real_num_rx_queues, napi_already_on);
-+		err = veth_enable_xdp_range(dev, 0, dev->real_num_rx_queues);
- 		if (err)
- 			return err;
- 
- 		if (!napi_already_on) {
--			err = __veth_napi_enable(dev);
-+			err = veth_napi_enable(dev);
- 			if (err) {
--				veth_disable_xdp_range(dev, 0, dev->real_num_rx_queues, true);
-+				veth_disable_xdp_range(dev, 0,
-+						       dev->real_num_rx_queues);
- 				return err;
- 			}
- 		}
-@@ -1220,35 +1208,7 @@ static void veth_disable_xdp(struct net_device *dev)
- 	if (!netif_running(dev) || !veth_gro_requested(dev))
- 		veth_napi_del(dev);
- 
--	veth_disable_xdp_range(dev, 0, dev->real_num_rx_queues, false);
--}
--
--static int veth_napi_enable_range(struct net_device *dev, int start, int end)
--{
--	struct veth_priv *priv = netdev_priv(dev);
--	int err, i;
--
--	for (i = start; i < end; i++) {
--		struct veth_rq *rq = &priv->rq[i];
--
--		netif_napi_add(dev, &rq->xdp_napi, veth_poll);
--	}
--
--	err = __veth_napi_enable_range(dev, start, end);
--	if (err) {
--		for (i = start; i < end; i++) {
--			struct veth_rq *rq = &priv->rq[i];
--
--			netif_napi_del(&rq->xdp_napi);
--		}
--		return err;
--	}
--	return err;
--}
--
--static int veth_napi_enable(struct net_device *dev)
--{
--	return veth_napi_enable_range(dev, 0, dev->real_num_rx_queues);
-+	veth_disable_xdp_range(dev, 0, dev->real_num_rx_queues);
- }
- 
- static void veth_disable_range_safe(struct net_device *dev, int start, int end)
-@@ -1260,7 +1220,7 @@ static void veth_disable_range_safe(struct net_device *dev, int start, int end)
- 
- 	if (priv->_xdp_prog) {
- 		veth_napi_del_range(dev, start, end);
--		veth_disable_xdp_range(dev, start, end, false);
-+		veth_disable_xdp_range(dev, start, end);
- 	} else if (veth_gro_requested(dev)) {
- 		veth_napi_del_range(dev, start, end);
- 	}
-@@ -1275,17 +1235,13 @@ static int veth_enable_range_safe(struct net_device *dev, int start, int end)
- 		return 0;
- 
- 	if (priv->_xdp_prog) {
--		/* these channels are freshly initialized, napi is not on there even
--		 * when GRO is requeste
--		 */
--		err = veth_enable_xdp_range(dev, start, end, false);
-+		err = veth_enable_xdp_range(dev, start, end);
- 		if (err)
- 			return err;
- 
--		err = __veth_napi_enable_range(dev, start, end);
-+		err = veth_napi_enable_range(dev, start, end);
- 		if (err) {
--			/* on error always delete the newly added napis */
--			veth_disable_xdp_range(dev, start, end, true);
-+			veth_disable_xdp_range(dev, start, end);
- 			return err;
- 		}
- 	} else if (veth_gro_requested(dev)) {
+ 		rcu_assign_pointer(priv->rq[i].napi, NULL);
++		netif_queue_set_napi(dev, i, NETDEV_QUEUE_TYPE_RX, NULL);
+ 		napi_disable(&rq->xdp_napi);
+ 		rcu_assign_pointer(rq->xdp_prog, NULL);
+ 		__netif_napi_del(&rq->xdp_napi);
 -- 
 2.56.0
 
