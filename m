@@ -1,54 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.19
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794365908;
-	b=lGVqic17JR4Tl8oOcsf+TQDqi1uCvEcSvAgiV38hZjuV9iJWShPcs4b2131deRsfHWSY
-	 P3jvLcCqc7wvckAIGS+gZkLiV4uRDrnD2gO/zI+Ui9yusrAv0aLvXmWiiQGR6ZBdOOHgS
-	 UVUOo6Xm14ZZy4lKqv9cWE6Ohy1I8UNAPFlLAMQgj2W2vOvwYlxObyAfnOff/pkr4q5YA
-	 ptrSvdokuXPicEEgEBGziHfUJ5JYGgoyfdM7pS29r/udxO5P58jjifKja0YJCZP3k33ir
-	 a2LhsBcyFC/qSCO9MMJHDFuhBQm2NxU+V0wSjj2RzWysyanwXCgQuZZ5CwYn9ukfCeQ==
+	t=1794367311;
+	b=KkpqH9hTHX0qhCRPr8HZD79zRobz8UKWJXvWgkDQCyYT+OTudA78wNPcEEuWmQO8ATsU
+	 YGELEA4yfDezM+QOolj18ewjU4urQHIBUO5QQxB+3inWStQtT+zAJ5eqI+4ZU1pi2g//Z
+	 OJykh3FR4jxS9ivC3/BsYkXHMXa/cJYo1bgpVfHLYYEXkpSTpmrRZszcnZb/7/l9XTVzB
+	 YxMaYEKWHsWaqCJYkOMG3uHg4yXPJJ42uVHmDyURJzSpWsGPl9Uk9MtJLnExpCWG/to+K
+	 4mw49BVXkmhVMOB+JSV3geul95RN0QYf1/ieB+AEhcyyiTC7HEUoI4oGYXQEDNfIHIQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794365908;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=PeWu9qbTDaD6AUYNBe1UHdE6fcYEbMgUzjHngGTPIKc=;
-	b=rn2VlNK1lc3z/s7izIMXQ0f6W6jYe7vxV06Ph1ZcI+8qZemdFkMy4l7UwrTme06AWR/Y
-	 t8DPkOUhjSnxWBw2W+h4MjO4zfGA9AUtMNcDDfVbkF8AWqhImbERgx3f3nbbAsd/dUpIF
-	 nca1YrbOwv5IxeHbs6O1XsrNHyoBEv3NuHnhiv4PjCFxAAGmwBUmELJ/SQGdQvhL+4SxU
-	 d8dOrDuAzXNdej9h/nRSA/WAtuJeBfnHtHGbw2MHwUflEJUQl2lvZX+GuEjRo3fvV4mAp
-	 ruCPrw4DFCDfpgPTsu/UZRSYxRrhunypCKI7B+AAp3leVyWHgN1pzPQcp8FMJN9klfg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794367311;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=HHekPeqyGWTFP/9TlxTpM6xiARKQpfozn60WBx5Zas4=;
+	b=0Yv8j7bdKQouslGXHgnqNUnyHW4IfHpBBlayspH5sNr3CzQsTpu3ND4Z4YhVR85dhQZj
+	 WWPM5AbbVsoLpOBLXLtazJbb15+fVBn0PyhnYwA7BDpfNoXMAcCBzWB2vd5YrRzoU6XJv
+	 nj/lrX2aoCcRXTYuFb8iiy4chDjEpygSxLaE8GA+pvQvDTbRN1DhMt8yZboL3UIfu4Epo
+	 tVkmYxMgJsTyTmoS9+SYxTqc5HrtIBlbbHaq6GHVr+NWgln6e0U6eqYstrC8n9E5TDtMr
+	 9B5nh7BWpRKHXYSEsu5EGmK7Qv+s+hUwoKIBvb6IhDuUL9EV+Uc3GKvFqHM7HAHRVkQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="W1uX4Bt/";
-	arc=none smtp.remote-ip=95.215.58.19
-Received: from mta1.migadu.com (out-19.mta1.migadu.com [95.215.58.19])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=nCxf1X6m;
+	arc=none smtp.remote-ip=74.125.82.169
+Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6EA1606A327
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 02:58:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C6EA1606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 962CD606A31C
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 03:21:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 962CD606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=W1uX4Bt/
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=2xQ14q8i4wn8y+T/i0DeDAU8TKCKRdi8NWCJr0SA9QA=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794365905; v=1; x=1794970705;
- b=W1uX4Bt/nKxQByt1+kVfi/xFRp80Jj48Zqlgq2r52Z1Iv8Kbk9KoDWBvqa6xWY+/ypwUiSHU
- QDcWCjkvgjdx7VBYmqKXTw0Ibrwtok3LD7TGeQd+eZ39i/7AD2X/4bNQUAFBrjoZ8l1bDuGDuhB
- OfYZX7OwHV0GtslsE+6zr9v4=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id cadda0c8b6efabd5;
-	Wed, 11 Nov 2026 02:58:25 +0000
-X-Mizu-Trace-ID: cadda0c8b6efabd5
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <17511044-f7ab-4c9c-af00-1b30554aa938@linux.dev>
-Date: Tue, 10 Nov 2026 18:58:18 -0800
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=nCxf1X6m
+Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-36e99cf7bb3so4266302eec.0
+        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 19:21:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794367310; x=1794972110; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=HHekPeqyGWTFP/9TlxTpM6xiARKQpfozn60WBx5Zas4=;
+        b=nCxf1X6msrsrraBBBnOXfN/6taGnH+s/MLA5+HPoXXI+E7nv+EdZCuCv6bOptJwEhu
+         xClAJvpHsRiq1/Si55X3QH+ntDagSvTeSR49DqvCulozxuL3DdwPB50PVfle1JA1r8k3
+         VyN3DdLRB9NhsFNewq8C9WRuNUbFB/dn8P1xHnQ4InQAMDMX1dmnWmyc2bcKT+/7ZSMk
+         hxtXl6dQdD46KD48dzLer+LvI4sl5M9FZqrEH+INLwS1ZY5LPH4iVQ2eqjDa6Mgk43uM
+         3eLYVRFfNEmhy6X3UaRbDVtyIW7REMyFKCBIMD5xnhjqJBgNOxIAF/qAnjN+P8r7+Ewz
+         i6MQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794367310; x=1794972110;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=HHekPeqyGWTFP/9TlxTpM6xiARKQpfozn60WBx5Zas4=;
+        b=ZDsxMyTuyWByl3SltO8W9s/A/SQdfc1oNLc42PRd6t5ylmDM4xy9pMSeD/jmsxyIYw
+         kW8ItmNlQGYgIy6YhKH7dR8NOcrpeSnmzVYMacbYFP8u6wYYd7ftgKk7bbDuTD0+AqJg
+         Blbx4F/iYYzdKhOWQ9a2gqNTDkYCxTCJZKrmz6MDP5AyCVXE6CEk1xeEjZToKo/pAvzF
+         /DlMMSorD0uGWqAP/wYpv9J/FnpztcFuKWtZ0kvTzIwGnR8Fdl5QQSp5issz24WdkHK7
+         YgoJSnCJ3YMwBHr2bnYq+VSi2hMnXcry4oJ+24dmdHwV7FwYjVodSzBU8ilROhRBm9Qk
+         VtjQ==
+X-Gm-Message-State: APuU4Z9XGvrbrZMCmU+HK5hDFutq5qSg0aZijsZVW2VJKLTntgXlYi2S
+	ptKSLUQPHbDA2KRIpQtst+t9cmNCOYNeQNp6gdZXLnSiTLK3xlHqdfgLE6nqpg==
+X-Gm-Gg: AYBFou1grMIFJQdvzCKcdqL/nCOig6ZBLlx3RIqiiTuWIaFBddANhaVKZCR5oD3Xpld
+	g5+xn8Oop3mUn1EQbN5XvfUt72zjG4mS4oYhlOJmTbT1dUVazVD79egmer9Ns+X77PMgm8F3tDy
+	+rhh2Uf3aKmF+JHQbCQZOAs9X54SrydrvH38/Yh5xckhUw4LkkZZG+aUCcQEcc2PE+MUBDOp8W0
+	YLzjpXbJ9exLQ2XrWFJq1IXyw5jx6jteM7xAF0K7+SFBW6EckTb4hmK72a8wlRbW9WmLXXC1Ihh
+	sQdDX8D53Bxk4se2onDBG5Ux9MDX7q09OnCqQmVap62tQvsj1KXio1JCzDiPZMb4j/0N5FX6YhW
+	f10CEPdc4jCpAmsCfSY5CbZMPp0l7t7Za8ahDEZwXFojj1KRQo9uDu1vFpCkQKIJkkU7JR9+5Ri
+	pAyqCew5K0YV/I98mtH2q5+vAJc2rsyfMHiTjB7HfuK+MuM2e1nmpHYIWT1iuuHNHb5NZfiffRJ
+	Eo0c7geh6BWEAb+snlKFk0Eu4luX58em4lBggiag+5t4Uq2oZIod2JlrV9wOBhAvVmWCP4IUGpk
+	kbH2jtOdoumO8OhXZPK6Gx1TrIjDGSKMQ9QSsiWFsyErbCR0e8pDLYn8QSRqs2Z4KwyOArAJOEq
+	BwAvIV8NF
+X-Received: by 2002:a05:7301:6589:b0:369:e8b0:af85 with SMTP id 5a478bee46e88-3768701ccdfmr2376910eec.36.1794367309538;
+        Tue, 10 Nov 2026 19:21:49 -0800 (PST)
+Received: from build2026.lan (67.230.168.206.16clouds.com. [67.230.168.206])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3751ad6f11csm9801896eec.0.2026.11.10.19.21.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Nov 2026 19:21:49 -0800 (PST)
+From: ThisSeanZhang <thisseanzhang@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	netdev@vger.kernel.org,
+	Nick Hudson <nhudson@akamai.com>,
+	Felix Fietkau <nbd@nbd.name>
+Subject: [RFC bpf-next v3 0/3] bpf: Add PPPoE encap/decap kfuncs
+Date: Tue, 10 Nov 2026 22:21:38 -0500
+Message-ID: <20261111032141.525444-1-thisseanzhang@gmail.com>
+X-Mailer: git-send-email 2.47.3
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,79 +100,87 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [EXT.MSG] Re: [PATCH RFC bpf-next 0/2] bpf: Do not let preemption
- cause false recursion drops in trampoline progs
-To: Mike Bazov <mikeba@sentinelone.com>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
- Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- martin.kelly@crowdstrike.com, andrey.grodzovsky@crowdstrike.com
-References: <20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com>
- <DMIIV9CE0PN4.309YUGIXQUZNF@gmail.com>
- <e3f63654-0f7c-462b-b58d-05f3164fe340@linux.dev>
- <DMM2G9OX9ACV.231CHJEPK0OHU@gmail.com>
- <CAPnbwjpQBR-KHwOMG2bo1uhdp22ZW_O5sUj3=vjazVu=Rdnb7A@mail.gmail.com>
- <DMN0RC27TJRM.3KUSPS9QTBV4G@gmail.com>
- <CAPnbwjrX-ywbcgNQSZKE2jiggEOSVCRVw9OLfaksihiVSCoqvw@mail.gmail.com>
- <CAEf4Bza0XDMTxxZeukwRXjvoOOruY49q66xBXnYnuncbeo_Oiw@mail.gmail.com>
- <95e07cae-85ee-4f14-b5f3-070803ee567e@linux.dev>
- <CAPnbwjqw=uxd8UyhEgNjSrpK1DhbB+dex0mGVW=dwuoygqgRHA@mail.gmail.com>
-Content-Language: en-US
-From: "JP Kobryn (CrowdStrike)" <jp.kobryn@linux.dev>
-In-Reply-To: <CAPnbwjqw=uxd8UyhEgNjSrpK1DhbB+dex0mGVW=dwuoygqgRHA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 11/10/26 12:43 PM, Mike Bazov wrote:
-> On Mon, Nov 9, 2026 at 4:12 PM JP Kobryn wrote:
->> Before moving away from an in-kernel solution, can we consider the
->> direction this patch below takes?
-> 
-> I haven't proposed moving away from an in-kernel solution. Your patch
-> is the same design I proposed earlier in this thread ("This is what I
-> have in mind for v2") with Andrii's bpf_ctx suggestion folded in, and
-> it's what I've been putting together for v2 (unless someone comes up
-> with a better direction), which is nearly ready to
-> post, so let's avoid duplicating the work.
+Hello,
 
-Perhaps I could've replied inline to the mention of reusing bpf_ctx. I
-read it as assuming the chain was already traversable. After
-experimenting with making nesting traversable through the common
-bpf_run_ctx, I shared the RFC to help validate that direction.
+The motivating use case is a TC BPF PPPoE forwarding path. When such a
+path forwards a GSO packet larger than the negotiated PPPoE MTU,
+inserting the PPPoE header manually leaves skb->protocol set to the
+original IP protocol, so the stack cannot select the PPPoE GSO path
+and the packet may be dropped.
 
-> 
-> beyond trampoline progs, v2 also covers raw_tp, tp_btf, syscall
-> tracepoints, and BPF_PROG_TEST_RUN, and disables the per-CPU private
-> stack for preemptible tracing progs since two tasks can now run the
-> same prog concurrently on one CPU.
-> 
-> a couple of notes on your patch:
-> 
-> - Passing prog to bpf_set_run_ctx() churns all callers that don't do
->   recursion checks, and doesn't fit bpf_prog_run_array_sleepable(),
->   which reuses one bpf_run_ctx across all progs in the array. In v2,
->   bpf_set_run_ctx() keeps its signature and initializes prog to NULL,
->   and bpf_prog_enter_recur_ctx() sets it after the walk succeeds.
-> - bpf_io_uring_submit_sqes() calls bpf_set_run_ctx(NULL), so
->   dereferencing new_ctx unconditionally will NULL-deref there.
-> - Cross-task synchronization isn't needed: a task only ever walks its
->   own current->bpf_ctx chain (and any IRQ/NMI on top of it runs on the
->   same CPU and walks the same chain), so compiler barriers around
->   linking and unlinking the frame are sufficient.
+The kernel already supports PPPoE GRO/GSO for ETH_P_PPP_SES
+(introduced by commit 55a5d8fca836 ("net: pppoe: implement GRO/GSO
+support")), but a TC BPF program has no direct way to update
+skb->protocol and the associated skb metadata when adding or removing
+a PPPoE header, and bpf_skb_adjust_room() cannot decapsulate PPPoE
+packets either, as it only accepts ETH_P_IP and ETH_P_IPV6. The
+current workaround uses BPF_F_ADJ_ROOM_ENCAP_L3_IPV4/IPV6, which
+marks the skb as IP-in-IP even though the wire format is PPPoE. The
+BPF program must also adjust gso_size manually [1].
 
-Fair points on 1 & 2. On 3, "cross-task" was originally inaccurate
-wording. The intention was cross-context visibility under
-interrupts.
+This series adds bpf_skb_pppoe_encap() and bpf_skb_pppoe_decap(),
+which insert or remove the PPPoE session header and keep the skb
+metadata consistent with the kernel's PPPoE GRO/GSO handlers; the
+encap kfunc writes the PPPoE session header itself, mirroring
+pppoe_xmit(), and the BPF program sets the MAC header's EtherType, as
+with the existing BPF_F_ADJ_ROOM_ENCAP_* flags:
 
-> 
-> I'll Cc you on v2 once I post it (probably by tomorrow evening UTC).
-> testing and review there would be appreciated.
+    bpf_skb_pppoe_encap(skb, sid, flags);
+    bpf_skb_pppoe_decap(skb, flags);
 
-Sounds good.
+Based on the v1 discussion about whether new UAPI flags were
+warranted, this version uses kfuncs instead, following the existing
+bpf_skb_set_fou_encap() interface. No UAPI changes are needed.
+
+Since the kfuncs may reallocate the skb head, patch 1 adds the
+KF_CHANGES_PKT flag so the verifier invalidates packet pointers after
+calls to packet-modifying kfuncs, analogous to its handling of
+packet-modifying helpers. bpf_xdp_pull_data() and dynptr writes retain
+their existing handling.
+
+The selftests cover IPv4 and IPv6 round trips, the PPPoE header fields
+written by the encap kfunc, rejection of non-IP encapsulation input,
+non-PPPoE decapsulation input, unsupported PPP protocols and truncated
+input, and verifier rejection of packet pointers held across a kfunc
+call. All 9 subtests pass in QEMU/KVM.
+
+[1] https://github.com/ThisSeanZhang/landscape/blob/80bc43eef7143ad029283fe2a8d510718c22af12/landscape-ebpf/src/bpf/tc_chain/tc_pppoe.bpf.c#L38-L47
+
+ThisSeanZhang (3):
+  bpf: Add KF_CHANGES_PKT kfunc flag
+  bpf: Add PPPoE encap/decap kfuncs
+  selftests/bpf: Add a test for the PPPoE encap/decap kfuncs
+
+ include/linux/btf.h                           |   1 +
+ kernel/bpf/verifier.c                         |   1 +
+ net/core/filter.c                             | 192 +++++++++++++
+ .../selftests/bpf/prog_tests/tc_pppoe.c       | 269 ++++++++++++++++++
+ tools/testing/selftests/bpf/progs/tc_pppoe.c  |  77 +++++
+ .../selftests/bpf/progs/tc_pppoe_fail.c       |  36 +++
+ 6 files changed, 576 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/tc_pppoe.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tc_pppoe.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tc_pppoe_fail.c
+
+---
+
+Changes since v2:
+- Replace the proposed BPF_F_ADJ_ROOM_ENCAP_PPPOE and
+  BPF_F_ADJ_ROOM_DECAP_PPPOE UAPI flags with
+  bpf_skb_pppoe_encap() and bpf_skb_pppoe_decap() kfuncs.
+- Add KF_CHANGES_PKT so the verifier invalidates packet pointers
+  across calls to packet-modifying kfuncs. bpf_xdp_pull_data() and
+  dynptr writes retain their existing handling.
+- Make the encap kfunc write the PPPoE session header itself,
+  mirroring pppoe_xmit().
+- Rebase onto the current bpf-next.
+
+v2: https://lore.kernel.org/bpf/20261003193347.1137527-1-thisseanzhang@gmail.com/
+v1: https://lore.kernel.org/bpf/20260926210757.2152159-1-thisseanzhang@gmail.com/
+
+base-commit: 0fb18ce8a2e9de830433923cf65838933d615359
+-- 
+2.47.3
+
