@@ -1,54 +1,54 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1794403245;
-	b=wmGuMKyxxCa+bzNUk0CRoEJn45NVYFSVG41skh8enPFNc3uKL76G4X3Pd9K3AymF+5Yc
-	 1Av2QxMU4z6ahdYtOZgq0iRUrHk/AfGmoO0fXFfRUki2yhUxifLG2udetGtmdeFa1GMoV
-	 +MdJukScCvKalADhLIHc144iLVOm9mcqZqGaLS9UhBsULB/BObEjm7Q7Lo70bouUjq5+A
-	 3HAJNaUXj7tRxwPdmtkpTubcIKaHSm4pnCQaRhZRfrMrvYnY4dbqZxf3VNdg/NOzaRatX
-	 RwzTcHEWhl5JNL4vrRKZQjy0oOX22ZNYe60wJeYjibjJ9VPZ8H5vgYKJfZjR4G9ufWQ==
+	b=lWoS/4JzO6vMNhF9f8MAXTkbge1HBhMaQnkSXlYjhK/5X/sEdrJaX+YHgz4W/OswVqUo
+	 LLvJmZCILHK1k43SVVE+BGR0fApRN+zFaDPk8F2H5+cxljQ80qbk/q7ltmhEf7AROw6/O
+	 GjbGuviLgtiuQXc/8Cpy/IqguAfuTQrFZoy9QjQxRj38/DQsp433At4PYZfCgE7Mkrw9I
+	 GaLBy+TRQODaJQiodZHDGB4NrwqitxnR9UslLN+PR0QNjEe0GRPhz63l8yhLr6ciray02
+	 gE/sU85rnsjkiGNY23OypR2HiWIyG6tx6Q+7okmN5hwIw7Xiyr0508X0hjmaDx/DFZw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1794403245;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=lchSdp2ofnPIGPoe0PPFIPAPR9i120roMsUHERsyqZA=;
-	b=1jcfYE+bIR1C9ZhPrpuTfEp3x+3GfOnoyXdJJG3o0HJfeXBa2TnIuAaFp9x4tuAw6sGr
-	 rGt0BfySS7JsVGluEHFMI2loGp1Au8WmiIMxdBl0fWBB4m8n/hdiX17eu2TedjJ7saBUn
-	 ohwBNQjoVH9lIHjfY3g61s9lGaWrDULpKNE2BgFx60FD0btPcg6J4KhSf05/j6Lx/8f5X
-	 7h40IB0+y2SFlX9KQSlrNrBIH5O8nyaieZ78xhZE+yb46g1heCcxKpWn3KtWbmYRF9SrA
-	 DPm8qyWOLu2RJ8dnjz51/+G17hsozIDb6x49O3MwTFUytOvRncfdZFHGFI9e748GH3w==
+	bh=Nz+lU6NzHkFTzHdV3toDL+lvzJMf2yK9WvWSOpYO6OI=;
+	b=YWJVVXCpb6LQAJTbAuc4C6+A/qtD/hsikhfc5V79ArZ6yJZx6lLVg2NncgyP5hZHH48K
+	 cG67+NvLFcvaIleA5NRIOQe2awaZ7UEWBLbXcg7TvdabDoQV++cHeg5kcIUHfvCk0ZLQt
+	 7hMt6nwykOrv7kAmR69TotanyzCfrlALbbeonWAWbhuTQbXCcMXvG7F7wJygNOkwMxhO2
+	 kMEvlLVkGup8GVuaA1JiSoLfDIRWOwBTYGE1gXzb/qkEw8kyKFCvJZ0cBM+w5drypNlDz
+	 J50QMwNV/M9CasY0g1j6D8OVkXJ8t3m2gbM7FNk10pB9Vxsc4zybFJeFeKNBUmGTHcA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IzSINzS+;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IJzCTCNm;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32928606A321
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 13:20:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 942F6606A324
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 13:20:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IzSINzS+
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A254A1F00A05;
-	Wed, 11 Nov 2026 13:20:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IJzCTCNm
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 481791F00A06;
+	Wed, 11 Nov 2026 13:20:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794403244;
-	bh=lchSdp2ofnPIGPoe0PPFIPAPR9i120roMsUHERsyqZA=;
+	s=k20260515; t=1794403245;
+	bh=Nz+lU6NzHkFTzHdV3toDL+lvzJMf2yK9WvWSOpYO6OI=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=IzSINzS+rH9PWTER2fQsL5MWDRA4lGyg8REmqJQ+xxexmpP2MoECVhW4+S+A9exPH
-	 xqlYq3bH/USoaI1E8t6xdZ5DCFDJTaIvpOWbpbLmBvr+3HWFWPdPiEeWQGCh0/LseQ
-	 YRgDTwrUXhB39IhPKOmlLN0qrYWUewc+QP4Xw10shuP0oxoKNQnfB1yC1dPQjeVvTn
-	 ee1NTr3M/YrCu0QjdLoGssvMMw53Boq51WR0nzE4A13IGqhnKZPkGYMHU40j8Wttc0
-	 tAGaOIT3trjtjk+z3euT2Ok/gaNQzO/Dk1SRh9phjdCRohiifWHdk2DPND03X23TDC
-	 P4/dPFeSjQJ2Q==
-Message-ID: <sashiko-outbox-209058@kernel.org>
+	b=IJzCTCNm1N8K045Edp2WfH3wOW9xGRTeSHfDimdh49oXp56jXvwnOcoXAnE9r4sKR
+	 KmhELwkZXoPRPn917/dprqnDIvYx9UrqLiuCr+A+6y/LKg2PSe2PbG7JQ/z9JjgIEa
+	 jJz5CtxnyAwn8I3/NOohRqUxDHcp71m67COYir6WPx6wrtJA3FPb6e8ORXqzZ2LSEG
+	 PQQS6zjoP/vnm42vEsok+/1Z9RwkjPoLqoZ574VsgfNbTgj2UqNjdwi3OpBeRtCdDa
+	 1q4rA9qYotcjXCkY8xwg9MR3e1J3kNWPGsGKkDn/AeEN5vMyJHbQDQNTmTCfTvBGn1
+	 dA48pDr7wAYVw==
+Message-ID: <sashiko-outbox-209060@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH net-next 01/12] net: add an exclusive TCP receive
- claim
+Subject: Re: [RFC PATCH net-next 03/12] io_uring/opaque: add backing
+ accounting and immutable versions
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alex Markuze" <amarkuze@redhat.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261110132006.3280986-2-amarkuze@redhat.com>
+In-Reply-To: <20261110132006.3280986-4-amarkuze@redhat.com>
 References: <20261110132006.3280986-1-amarkuze@redhat.com>
- <20261110132006.3280986-2-amarkuze@redhat.com>
+ <20261110132006.3280986-4-amarkuze@redhat.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Date: Wed, 11 Nov 2026 13:20:44 +0000
@@ -61,116 +61,70 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issues to consider:
-- [Medium] tcp: returning -EBUSY in tcp_disconnect() breaks internal
-  callers
-- [Medium] net: missing sock_rx_owned() checks in kcm_attach() and
-  ovpn_tcp_socket_attach()
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Medium] io_uring/opaque: wake batch limit bypassed in
+  io_opaque_wake_budget()
 --
 
-commit db5306ce28288ea69fe78b0895ec7be46b42bf0b
+commit 330c6e48123376b4807cfeaa9a7e897d4c81a279
 Author: Alex Markuze <amarkuze@redhat.com>
 
-net: add an exclusive TCP receive claim
+io_uring/opaque: add backing accounting and immutable versions
 
-This commit adds an optional sk_rx_owner pointer to struct sock so a
-tcp_read_sock() consumer can claim exclusive access to a TCP socket's
-receive sequence and reject competing readers or operations that reset the
-receive stream.
+This commit adds backing-byte and extent accounting, immutable payload
+version references, bvec/anchor vector building, and generation handle
+lookup for io_uring opaque TCP payload objects.
 
-> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-> index df385a5a961e8..5c753bcb808c5 100644
-> --- a/net/core/skmsg.c
-> +++ b/net/core/skmsg.c
-> @@ -754,6 +754,10 @@ struct sk_psock *sk_psock_init(struct sock *sk, int =
-node)
-> =20
->  	write_lock_bh(&sk->sk_callback_lock);
-> =20
-> +	if (sock_rx_owned(sk)) {
-> +		psock =3D ERR_PTR(-EBUSY);
-> +		goto out;
-> +	}
->  	if (sk_is_inet(sk) && inet_csk_has_ulp(sk)) {
->  		psock =3D ERR_PTR(-EINVAL);
->  		goto out;
-
-[Severity: Medium]
-Should kcm_attach() and ovpn_tcp_socket_attach() also check
-sock_rx_owned()?
-
-Like sk_psock_init(), both attach to a TCP socket by checking only
-sk->sk_user_data, which remains NULL when sk_rx_owner is set.  Attaching
-via kcm_attach() installs a strparser and replaces sk->sk_state_change
-with psock_state_change(), which sets sk->sk_err =3D EPIPE on a normal peer
-FIN and causes the receive owner to fail with -EPIPE instead of clean EOF.
-Attaching via ovpn_tcp_socket_attach() replaces sk->sk_prot and
-sk->sk_socket->ops with ovpn_tcp_recvmsg(), bypassing the sock_rx_owned()
-checks.
-
-> diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-> index 7677b0343abd4..54c30a59bbce4 100644
-> --- a/net/ipv4/af_inet.c
-> +++ b/net/ipv4/af_inet.c
-> @@ -649,6 +649,8 @@ int __inet_stream_connect(struct socket *sock, struct=
- sockaddr_unsized *uaddr,
->  			return -EINVAL;
-> =20
->  		if (uaddr->sa_family =3D=3D AF_UNSPEC) {
-> +			if (sock_rx_owned(sk))
-> +				return -EBUSY;
->  			sk->sk_disconnects++;
->  			err =3D sk->sk_prot->disconnect(sk, flags);
->  			sock->state =3D err ? SS_DISCONNECTING : SS_UNCONNECTED;
-> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-> index b9de7c302ba83..6de6ce153fda1 100644
-> --- a/net/ipv4/tcp.c
-> +++ b/net/ipv4/tcp.c
+> diff --git a/io_uring/opaque.c b/io_uring/opaque.c
+> new file mode 100644
+> index 0000000000000..2fd9db898e672
+> --- /dev/null
+> +++ b/io_uring/opaque.c
+> @@ -0,0 +1,399 @@
 
 [ ... ]
 
-> @@ -3374,6 +3389,9 @@ int tcp_disconnect(struct sock *sk, int flags)
->  	struct request_sock *req;
->  	u32 seq;
-> =20
-> +	if (sock_rx_owned(sk))
-> +		return -EBUSY;
+> +static bool io_opaque_wake_budget(struct io_opaque_store *store)
+> +{
+> +	struct io_opaque_req *op, *next;
+> +	unsigned long delay =3D MAX_JIFFY_OFFSET;
+> +	unsigned long now =3D jiffies;
+> +	unsigned int woken =3D 0;
+> +	bool stopped, more =3D false;
 > +
->  	if (old_state !=3D TCP_CLOSE)
->  		tcp_set_state(sk, TCP_CLOSE);
-> =20
+> +	guard(spinlock)(&store->wait_lock);
+> +	stopped =3D READ_ONCE(store->dead);
+> +	list_for_each_entry_safe(op, next, &store->budget_waits, wait) {
+> +		struct socket *sock =3D sock_from_file(op->req->file);
+> +
+> +		if (!stopped && !READ_ONCE(op->stream->closed)) {
+> +			if (time_before(now, op->retry_at)) {
+> +				delay =3D min(delay, op->retry_at - now);
+> +				continue;
+> +			}
+> +			if (!io_opaque_budget_ready(op, now))
+> +				continue;
+> +			if (woken =3D=3D IO_OPAQUE_WAKE_BATCH) {
+> +				delay =3D 1;
+> +				more =3D true;
+> +				continue;
+> +			}
+> +		}
+> +		list_del_init(&op->wait);
+> +		/* A wake is not a reservation; the collector rechecks on entry. */
+> +		woken++;
 
 [Severity: Medium]
-Does returning -EBUSY from tcp_disconnect() break internal callers of
-sk->sk_prot->disconnect()?
+Can a closed-stream entry bypass the IO_OPAQUE_WAKE_BATCH limit here?
 
-__inet_stream_connect() already rejects connect(AF_UNSPEC) above before
-calling sk->sk_prot->disconnect().  Other callers expect tcp_disconnect()
-to succeed unconditionally:
-
-net/ipv4/af_inet.c:__inet_stream_connect() {
-    ...
-sock_error:
-	err =3D sock_error(sk) ? : -ECONNABORTED;
-	sock->state =3D SS_UNCONNECTED;
-	sk->sk_disconnects++;
-	if (sk->sk_prot->disconnect(sk, flags))
-		sock->state =3D SS_DISCONNECTING;
-	goto out;
-}
-
-When a socket connects via non-blocking connect(), sock->state stays
-SS_CONNECTING after the handshake reaches TCP_ESTABLISHED.  If a receive
-owner is attached and the connection is then closed by a peer RST or
-timeout (moving sk->sk_state to TCP_CLOSE while sk_rx_owner is still set),
-a subsequent connect() jumps to sock_error:, where disconnect() returns
--EBUSY without cleaning up the socket and leaves sock->state permanently
-wedged in SS_DISCONNECTING even after the owner detaches.
-
-__tcp_close() also ignores the return value of sk->sk_prot->disconnect(sk,
-0) on a zero-linger close and assumes it moves sk->sk_state to TCP_CLOSE.
+Once woken reaches IO_OPAQUE_WAKE_BATCH, any later entry on
+store->budget_waits with op->stream->closed set skips the conditional block
+and increments woken to IO_OPAQUE_WAKE_BATCH + 1.  For all subsequent open,
+budget-ready waiters on the list, woken =3D=3D IO_OPAQUE_WAKE_BATCH is then
+false, so they are all woken under a single store->wait_lock hold instead of
+being deferred with woken >=3D IO_OPAQUE_WAKE_BATCH.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261110132006.3280=
-986-1-amarkuze@redhat.com?part=3D1
+986-1-amarkuze@redhat.com?part=3D3
