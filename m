@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.173
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794415824;
-	b=sBXZu9kRYHvLggeJjY9mAwGGUIsoxbv9arn7NLC4/sKAqUsoTi4/k20SSnuTOm5VH9gf
-	 MO37jFNd9SzL6PObasm8iTvP4IHvQFMeeFednce9v/GLIuwS4OULRkZ7g3gOre968yCEL
-	 /xr0PLtQAy5qc6pwS0a7vevC4cjPDcc7qdNuHNvIo3G3+eVSz+0OGWLBuuKg0Tz8QZocs
-	 zIdK2oZhaD4NupmYePDRArICkNp7QgwVwa5CILX6Uw5ITqzAk+kpxu6HCOY/re5CnSdbm
-	 JSH63xxY10IGMOWWHrSVF4FBCY1sJt8pvb4xdrtYXU0PQfmemxIYxzq5ytgdL7sLrsg==
+	t=1794415829;
+	b=HI8DemdSUQLGMx8bI7QD8JJjQbER1Z9ZxfOUC2BFTAtf1VNG3s7DQ9+5Aeqrd8LYoLT8
+	 znzzPs9S7vu6guAJpyD6VN3CHamNynsRT7ViLaihvDpUkZxbI857FWFvh9cGhP8SWYibk
+	 FRfT0Cg0n6WkM2zfDFlBizeAV5iLoGdbdZh2PO+AF5mx974V2fE0Mbyia/I3nMtM9xEWh
+	 s4kaHpFqz3MRsMg6lrzog/CeQbQXF2UODSbuYbQcCeBce/4m/y2jRWTw0GixSz/88f00r
+	 F6ZrF41O1LWpc+6bQjpRtH14NjcO2A7lMMqvjeo6Q6p46NpsEvUJs+Y8ojruJ0mUzUQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794415824;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794415829;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=kNvj6kcVJpRt8PxB6bNE41GKNiP4GPeeeIaGnrw7BYw=;
-	b=B585ATBxMLInxe9f5wm64PGpXZx37AnYp9sG/7bNgaS2Juy6pvlNO77c7YD1nOgp5kS3
-	 2pQpNUA8ysuR1IakOeHtAey0cEX/J4YTiZGGP6ON0WoMyOZAcQOvCNah+dpEeoZ8i05DF
-	 E1i7pgTHVRH6FXg4yi9a00AkERlaW1jsa3DaBzMDPcPnw5u82/VEyXdhKmvlyTojGp7tq
-	 IgwYdSjEiu+siBd2Dq4rCBgrzfxkDXJGEbKdz4QDhvVSkxyxBV9Du1NPpTGYKOLfp52EW
-	 we3ZTjsEAA4XlTrnQcmV+MM9DDheye9J/0xvOBtnKwJspSiVZitigEZnmUJkbTD5MKw==
+	bh=/lIi5/WPjIRYUf37ZmSX8fO+PfLTJMonmqOWI6gtnPE=;
+	b=2DeO4fAqj9cjHkR5tPm9xywhknnG/jiGt1AYiI/d9iNyY8/jiYBviYOGXmqMqYXlTQnt
+	 ZRpJCA26ya34qWPnnYXQWE3xvDJsKqAupJR72FItdo4gKfuM4hikKds95OvFeQaDM9s6D
+	 IFl7YUaRULKiRYvr7SAXLNOEkMFESWKiXILIjSDzXmNSDa/8+RKqr7FKW4A0Xkb95QjPA
+	 solJ1L3j0O6gV5sVrguIRDTFCPmbKCBwoPM5grT7KLGyA2h3U6T9qTSxpTpC9F58sxzsE
+	 x0cGnHtB227r+2/eAb/FIPvM/xgPJqNmBAjVHOtKFzQfAsdkOE8x6tJ9SkTVJIRCkjw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WSfVR5lZ;
-	arc=none smtp.remote-ip=209.85.210.179
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=sBdd0Mqp;
+	arc=none smtp.remote-ip=209.85.215.173
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91289606A32A
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 16:50:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 91289606A32A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B46A606A321
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 16:50:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6B46A606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WSfVR5lZ
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-8a07078200fso1381265b3a.2
-        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 08:50:23 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=sBdd0Mqp
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-cdb75699c7cso1389715a12.2
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 08:50:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794415823; x=1795020623; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794415829; x=1795020629; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=kNvj6kcVJpRt8PxB6bNE41GKNiP4GPeeeIaGnrw7BYw=;
-        b=WSfVR5lZiTCV5Z6WrPWCRlUDksm3ta0WpAfgb/Ipj8epQzGvktlAJzAScZp56kE3GJ
-         tbAxpEnWWdzRffIyJq9NROlrhsK7VzymnQV3lDhRoCU0s9BSuNBDnMyFw1vsdk2WiOpg
-         oYnFxsANT7JD+uwRBDt9wyjr1v65DitwMCzwwJR7jqltT2VPz/teNaQWHlyidBP96HUM
-         Gh3DhJwtBFHe+HGLhRe1uyJt7gEG2B+5sEUUHebaOdmq6NbHFGWocvanG8bbe3/1x4Ii
-         HI5xb0I6DFpiVydC0iL6r+ghODPotSIwQ1JL5ZTIbSKb6GrDz7rWjV7qtJgAn0QnipDe
-         qY8g==
+        bh=/lIi5/WPjIRYUf37ZmSX8fO+PfLTJMonmqOWI6gtnPE=;
+        b=sBdd0MqpMfqmhXpvIaz5waclTUkiqTzm4VQkBrUN3z0dvDMqcnsAMen4h7TG/P3RZZ
+         qCpv5PyjnZSK6scYkW+uI1IeQ0q0yWvxWvAA+rfL8J0KWMi3JKm60AVGi+reocYxsNYh
+         XYfquXmWXfLF/Yvklko/m5qye5t70ycGWBumKPt+JZNt4lc3doXT6JHVTkvSwgxA94AU
+         j8jxFEaPcUYMJzD7VMfFuOMfZ02OLPaUIA4P0VCaPVcK/hML3DxE2AoeqtbmeUx5gYBE
+         IYJ4x5Z2P9J6HX8rdDcBYxA+AUc6Pl3n1cwjfV76euhOCbodNveBhXTPbYksgY4c8NC8
+         F9hA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794415823; x=1795020623;
+        d=1e100.net; s=20260707; t=1794415829; x=1795020629;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=kNvj6kcVJpRt8PxB6bNE41GKNiP4GPeeeIaGnrw7BYw=;
-        b=khxelHBV4Wg3/W7IXXJMCrcCNc8alMaLmBwdUGOqfo6wvoN7wvx45I59q9TZxSzkBk
-         enZbtCBxe59LM6KemnWOvNMpSdzvy/OOLRBiyYYZsCnTYhV4jCVGAPXG/9WedZQrAeH+
-         KN0nAyHVrZPZWsO/YiMARF3rdmqDQ1Deybe5Vn2IC1igW0hUJBfjQ9yCCwOhjY/AaM8O
-         ugjS46ayrff+5wopNzkqjXTlKS+sKSULQ3oZfzEfWyQSXt/95rUSV+acDgVtVlR/2IMw
-         HBN729LjeVfWoqHyZlI7GOXpZ7ktECjkwiHngjJkwINB7IXer76G6H/g9U/KhBUCLcoO
-         y+gw==
-X-Gm-Message-State: APuU4Z9BXNGYIJH+Q27e/28E5fYFN/x5NqRuN2xgBs1Fx9OFPeausNAC
-	dRbNXq/os2CBZegk96aggObgOStJB9KgJv2vQLv/Gw4XGIajPXYQ5ri/p41ZZQ==
-X-Gm-Gg: AYBFou1vwHFp8rzFTlCinPPgrwzCwHKfiQcqUCSx+q8kL+XqUAJ8z4rUh02vnlmD6ie
-	6lgF3QDJx8auXVUmDgNxltaXfj905nEzayfuBGoJ9nTdmGId3nrQ9iRQfRVSRM1Ptm2KyeynhWw
-	RcyQ5npnURSEW8tbiGeNHNOU/Bb9EfmWqXjAyy6DI+MtAr3kDzWbgZuhfIDTBIzAedTSU9Muojk
-	ujLq4wk+3ErPysa9tS76aFkfJ1BcV6wTA8Xhx3xUPMB9WJpmYcBFwijoRzqaPMzSJbr3TUBZv0I
-	Ighlp7to9a7Y4jKGtKtTnRwQvdT/RyxtGKA+Tw57BDO2MkDmgIFTl42fNCtHKboZL3qXfWT1Q+R
-	G3x/qCtCTmaLn9BTY+m4cIS/b46MUHd5U4gX/ZDyyMnm0fzg3ue/XCkUHnaBN/MKHC0yizeE8ml
-	oq978NBW+kHppG1XAYZQBCk18leN5X1co+yf9nXrMDGYIs1qy3SQHo1H9+OpAYlW1UcdkIFoEZ4
-	mr4Nu5sQTLfV5P7h+8aFaruYGZ2eb53y7O7ob0ly+phcts20GFGVMlbsEqVvzT0YsRu2Z3g0GcH
-	0BYnNrpqSJduIovGet+zmQHYWtvKhFKmtXeJParDHmj72ct21okG3coV3wLknYTrr38XqORfxaZ
-	XJuEOWX50ATqbgh19x/d7879N1aDR7yd7+9l1C0DElvHJvVdaAhqly0NRwMLhU2TUn563Ix7oZV
-	0=
-X-Received: by 2002:a05:6a00:1893:b0:8b6:59a:2aa with SMTP id d2e1a72fcca58-8bc1cf52946mr3126827b3a.54.1794415822409;
-        Wed, 11 Nov 2026 08:50:22 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8baaa86e1c9sm2337639b3a.23.2026.11.11.08.50.21
+        bh=/lIi5/WPjIRYUf37ZmSX8fO+PfLTJMonmqOWI6gtnPE=;
+        b=W/1so7/tA5ZcFqlOMzg0hn1pBqV0G+XGwS+UBKrIaHGN+KimuZnNLD+ZiFcJubgREx
+         /NdeqiPlyP0Zy25z8Dey1oekE24UJVoeJY7raAADuIsxleaSdbN6BNb0Fma6g1qzMJeR
+         17jvdRteT0ySwhJEUpoVlVJprtn4RoQ3u1X4QLwXVhsCjfCGmmD6iWJYsoNn6r1+lOAy
+         c/6qUqV/MOdWsprkFloPcvecjanWJClNTZJl6B7lHt1tkIo+57y6xAlix8JX6BLUPolv
+         vD5yAJ2GhtAMxlzm2TRvqpvB9PjDg1CAAMvWPbMnoKoHCRCfKa74Pe+WNbXmEFTqebKm
+         Y9Qw==
+X-Gm-Message-State: APuU4Z/HbKgYt6sQqT44pQmlhsP1zxIz1Ui2x8ggnzU7SEidDbg4qRkA
+	ksD9xEj69Wb+1jIO6wIkSuhc3jjBhnwdjwHgBzLWs7iYMarFO6x1yJugk5tAaA==
+X-Gm-Gg: AYBFou1BSb5nYmad9io6o/S4ZvGnCdJGkM/VbX7hvQ3RjQ+DceyIuVBNIvQ0/RMMMqU
+	i0QE6UinQdl7hxWI+lHf1ytw1usST1gcyp/D7dg0WLLxVsQxeOFTPqKQEXmfpPQicN3j7Bgm9+T
+	hZTEuG7mxvBHB9JE20d12Wq1uAXuJCPnqiOLDkiYT7cgfFvHKH5rEySMiGL5wxQj+UZ/ICkU+kn
+	w9Ewg2ld+WhtGdInlPyClGMei83aV8Vz2rR+d58lYU7STNHw2PIZGg1kJM1Oe3ayoSbphRLFV8F
+	bUDAs2PtNprf8Z+Rx4aZ/cIMNwp4w0fS58cGsfCL5EPcR7eZlyiUtx0tqgmxBbQSC1H3a/xJX48
+	0xUrJFfvZ95Wcdu/deRM34PWHELqjI2vvrcZSu1Ab4N/KIkLU2N4NZwcfJQKezqPeVtVPZnVqdf
+	+dLz7DHtMMgT9hBqqcdT5RF81wvIsWpvgVYcQcISCXEppAFOl6Vb31/tOB8IhSmq2935JAUq7ju
+	heaBLfMsEt/GAo2laFQZ5FLJ/3mcKf8T7mzPiNAWxKKtQjO1wTZz6/3ojcTzTTgtTZ5zxItX/Oh
+	MA39cSjLyazRJsPOWN6953R64dQWOe8r25ayCnmYn3Lw6hDugouOpOmxrJyvbu0nDEyuSEvtAO2
+	NKu7b7VoNIysePSfcXPGXicVMc1bL2CPgW+0+L9PcaiDOwTaL2rCT0sNYJuZ/3UG/XzDH2KyCMp
+	Q=
+X-Received: by 2002:a17:90b:498d:b0:3b0:9882:9e5e with SMTP id 98e67ed59e1d1-3b182ec1fa7mr3035881a91.18.1794415828576;
+        Wed, 11 Nov 2026 08:50:28 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b197c8b287sm66513a91.15.2026.11.11.08.50.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2026 08:50:21 -0800 (PST)
+        Wed, 11 Nov 2026 08:50:28 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 5/6] bpf: Count a '!=' latch if the step divides the distance
-Date: Wed, 11 Nov 2026 16:49:48 +0000
-Message-ID: <20261111164950.2674588-6-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 6/6] selftests/bpf: Test the backedge-taken count on struct scalar
+Date: Wed, 11 Nov 2026 16:49:49 +0000
+Message-ID: <20261111164950.2674588-7-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261111164950.2674588-1-alexei.starovoitov@gmail.com>
 References: <20261111164950.2674588-1-alexei.starovoitov@gmail.com>
@@ -104,250 +104,225 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-	struct rec recs[16];		/* 12 bytes each, in a map value */
-	u32 n = v->n;			/* if (n > 16) return 0; */
+37 tests in verifier_scev.c.
 
-	for (u32 o = n * sizeof(struct rec); o != 0; ) {
-		o -= sizeof(struct rec);
-		sum += *((u8 *)recs + o);
-	}
+A count or a range that is new: post32_ge_away, range32_ge_away,
+post32_jump_wide, post32_zext_gt_wide, range_post_lt_crosses_0,
+range_lt_near_max, range_lt_dir_any_first, ptr_const_crosses_fp.
 
-	u32 i = n;
-	while (i-- > 0) {		/* clang: '2 * i != 0', step -2 */
-		sum += offs[i];		/* u16 offs[16] */
-		bpf_get_current_comm(data + off, 16);
-		off += 16;
-	}
+No count: post32_ge_away_miss, range_lt_near_max_wrap, range32_ge_min,
+range32_le_max, range32_zext_sgt_neg, range32_zext_slt_wide,
+range_ne_step2_bounds, backedges_away_then_again. range_first_after_bound,
+range32_zext_slt_bit31 and backedges_low32_and_64 fail if the count or the
+range is too small.
 
-Both loops are rejected. The verifier says "can't compute iterations
-count": '!=' of a range has a count only if the step is 1. From 13 the
-first loop steps over 0 and goes on. Without a count nothing bounds o,
-and nothing bounds off in the second loop.
+zext32_copy_*: a 32-bit latch tests a zero-extended copy of a 64-bit
+induction variable. An access that takes the range of the copy for the
+range of the variable is rejected. zext32_iv_below_0 is the same loop with
+a 32-bit induction variable.
 
-But o cannot be 13. n * 12 has reg->step 12, 2 * i and 'len & 0xff8' have
-known zero bits in var_off. A struct scalar carries that to the count.
-
-scalar_stride() sees the values of a scalar as an arithmetic progression
-on the circle: base, base + stride, .. , base + size. The value that ends
-the loop overshoots the end of the arc by a number that is known modulo
-g = gcd(step, stride): by at most
-step - g + 'overshoot of the smallest initial value' % g. It was step - 1.
-For '!=' it has to be 0, and each bound has to be hit: g is the gcd with
-the stride of the bounds too.
-
-The stride is reg->step if r64 does not cross S64_MAX / S64_MIN, for the
-low 32 bits if r32 is r64 moved by a multiple of 1 << 32. Else it comes
-from the known low bits of var_off, and the range is rounded to them:
-1..0xff8 with three zero bits is 8..0xff8. The scalar of a pointer is its
-offset: the distance of the offsets is that of the addresses.
-
-The summary of a loop must not know less than its iterations one by one.
-For a range linear_bounds() kept the power of two that var_off and the
-slope share. The entry value is congruent to base modulo step, so
-'entry + slope * k' is, modulo gcd(step, |slope|). A register has one
-step: the gcd is taken if it is a multiple of that power of two.
-
-What else changes:
- - Like each loop with a count these get no may_goto:
-   'for (i = x & ~1; i != 1ULL << 32; i += 2)' of a u32 x runs up to 2^31
-   iterations.
- - A count can cost insns. 'while (i) { i--; off += ids[i] & 63; }' has one
-   now, off has no linear form, the iterations are kept apart up to the
-   count: 90 -> 247 insns for n up to 32.
- - 'r8 = 8 * x + 17' that goes down by 4 while (u32)r8 > 0xfffffffd is
-   1 modulo 4 now: no such value takes the backedge, and the next insn on
-   that infeasible path trips the WARN of reg_bounds_sanity_check():
-   REG INVARIANTS VIOLATION. Its ranges are forgotten and the prog loads,
-   as today behind other dead branches that the verifier does not see.
+The step divides the distance: range_ne_mul24, range32_ne_mul24,
+ptr_ne_mul21, range_ne_align8, range_ne_shl1_down. It does not, or nothing
+says so: range_ne_mul12, range_ne_first_mul12, range32_ne_mul24_wide,
+range_ne_mul3_plus_range, range_ne_mul3_crosses_s64. range_lt_overshoot,
+range_lt_overshoot_crosses_0 and range_ne_first_mul24 pin the value that
+ends a '<' loop and the step of the induction variable.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/scev.c | 106 ++++++++++++++++++++++++++++++++++++++--------
- 1 file changed, 89 insertions(+), 17 deletions(-)
+ .../selftests/bpf/progs/verifier_scev.c       | 131 ++++++++++++++++++
+ 1 file changed, 131 insertions(+)
 
-diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-index 815a6367555d..b413998d9cf9 100644
---- a/kernel/bpf/scev.c
-+++ b/kernel/bpf/scev.c
-@@ -3,6 +3,7 @@
+diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
+index b1fede94edd8..f7ed39d4b186 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_scev.c
++++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
+@@ -1061,6 +1061,15 @@ POST_COND_TEST32(post32_ne_to_0,    "!=",                   -4,    1,
+ POST_COND_TEST32(post32_ne_to_m1_2, "!=",                    3,  -2u,               -1, "header_count is [0..2] ")
+ POST_COND_TEST32(post32_ne_miss,    "!=",                    4,  -2u,               -1, "can't compute iterations count")
+ POST_COND_TEST32(post32_ne_around,  "!=",                    4,    1,                1, "header_count is [0..4294967293] ")
++/* The variable moves away from the bound and wraps: -6, -4, -2, 0. From -7 it steps over 0. */
++POST_COND_TEST32(post32_ge_away,    ">=",                   -8,    2,                5, "header_count is [0..4] ")
++POST_COND_TEST32(post32_ge_away_miss, ">=",                 -7,    2,                1, "can't compute iterations count")
++/* Only the jump has 32 bits. The upper half of r6 does not count. */
++COND_TEST(post32_jump_wide, 1ULL << 32, 1, 5, "header_count is [0..5] ",
++	  "1: r8 = %[step] ll;" LIMIT_ITERATIONS "r6 += r8; if w6 < w7 goto 1b;")
++/* Only the addition has 32 bits. No zero-extended number is above -42. */
++COND_TEST(post32_zext_gt_wide, 14, -7, -42, "header_count is [0..1] ",
++	  "1: r8 = %[step] ll;" LIMIT_ITERATIONS "w6 += w8; if r6 > r7 goto 1b;")
  
- #include "linux/cnum.h"
- #include <linux/bpf_verifier.h>
-+#include <linux/gcd.h>
- #include <linux/jhash.h>
- #include <linux/log2.h>
- #include <linux/math64.h>
-@@ -3562,6 +3563,59 @@ static struct cnum64 scalar_arc(const struct scalar *v, bool low32)
- 	return low32 ? cnum64_lshift32(v->r32) : v->r64;
- }
+ /* An exit exactly at S32_MAX is accepted as well. */
+ POST_COND_TEST32(post32_slt_max,   "s<",        INT32_MAX - 6,    2,        INT32_MAX, "header_count is [0..3] ")
+@@ -1153,6 +1162,11 @@ RANGE_TEST(range32_slt,    "s", -5,  5,     2,   7,  9,  POST("w6 += w8", "w6 s<
+ /* Only the jump has 32 bits. It bounds the low half of r6, 'first + step * count' the rest. */
+ RANGE_TEST(range32_jump,    "",  3, 10,     2,  13, 15,  POST("r6 += r8", "w6 < w7"),
+ 	   COUNTED(6, "3..14"))
++/* 'first + step' is -1..0 + 1: a range that crosses 0 is a range */
++RANGE_TEST(range_post_lt_crosses_0, "s", -1, 0, 1,   5,  5,  POST("r6 += r8", "r6 < r7"),
++	   COUNTED(6, "-1..4"))
++/* First values for which the latch is false at once are seen at the header too */
++RANGE_TEST(range_first_after_bound, "", 0, 100, 1,   5,  5,  PRE(">="),   COUNTED(6, "0..100"))
  
-+/* Euclid. gcd64(a, 0) is a. gcd() is for unsigned long. */
-+static u64 gcd64(u64 a, u64 b)
-+{
-+	u64 rem;
-+
-+	while (b) {
-+		div64_u64_rem(a, b, &rem);
-+		a = b;
-+		b = rem;
-+	}
-+	return a;
-+}
-+
+ #define COUNTED_2G(range)									\
+ 	__msg("loop header at {{[0-9]+}}, header_count is [0..2147483{{[0-9]+}}] ")		\
+@@ -1181,6 +1195,13 @@ RANGE_TEST(range_lt_wrap,   "", M64 - 9, M64 - 5,  2, M64 - 3, M64,      PRE(">=
+ RANGE_TEST(range_le_wrap,   "", M64 - 9, M64 - 5,  2, M64 - 3, M64 - 1,  PRE(">"),  NO_COUNT)
+ RANGE_TEST(range_gt_wrap,   "",       5,       9, -2,       0,       3,  PRE("<="), NO_COUNT)
+ RANGE_TEST(range_ge_wrap,   "",       5,       9, -2,       1,       3,  PRE("<"),  NO_COUNT)
 +/*
-+ * The values of @v are among the members of an arithmetic progression on the circle:
-+ *
-+ *	arc->base, arc->base + stride, arc->base + 2 * stride, .. , arc->base + arc->size
-+ *
-+ * @arc is scalar_arc() without the values at its ends that @v cannot have.
-+ * Return the stride, 0 if there is one value.
-+ *
-+ * base and step are a congruence of the s64: the distance between two values is a multiple of
-+ * step if r64 does not cross S64_MAX / S64_MIN. The low 32 bits have the same distances if r32
-+ * is r64 moved by a multiple of 1 << 32.
-+ * The known low bits of var_off are a congruence modulo a power of two. That divides 1 << 64 and
-+ * 1 << 32, so it holds wherever the arc is. reg_bounds_sync() does not round a range to them:
-+ * 1..0xff8 with three zero bits is 8..0xff8 here.
++ * It is less than a step after the bound. How far depends on the first value:
++ * M-26, M-25, M-24 end at M-2, M-1, M. M-23 wraps.
 + */
-+static u64 scalar_stride(const struct scalar *v, bool low32, struct cnum64 *arc)
-+{
-+	struct tnum t = low32 ? tnum_lshift(v->var_off, 32) : v->var_off;
-+	s64 smin = cnum64_smin(v->r64), smax = cnum64_smax(v->r64);
-+	u64 low, d;
++RANGE_TEST(range_lt_near_max,      "", M64 - 26, M64 - 24, 8, M64 - 2, M64 - 2, PRE(">="),
++	   COUNTED(4, "-27..-1"))
++RANGE_TEST(range_lt_near_max_wrap, "", M64 - 26, M64 - 23, 8, M64 - 2, M64 - 2, PRE(">="), NO_COUNT)
+ /* a 32-bit addition wraps around at 2^32, also under a 64-bit jump */
+ RANGE_TEST(range32_add_wrap, "", M32 - 9, M32 - 5, 2, M32 - 3, M32,
+ 	   POST("w6 += w8", "r6 < r7"), NO_COUNT)
+@@ -1192,12 +1213,73 @@ RANGE_TEST(range32_first_is_wide, "", 0, M32 + 9,  2,      15,      20,
+ /* An unsigned counter goes down and leaves the range below 0. */
+ RANGE_TEST(range_lt_dir,    "",  3, 10,    -2,  15, 20,  PRE(">="),   COUNTED(7, "-2..10"))
+ RANGE_TEST(range_le_dir,    "",  3, 10,    -2,  15, 20,  PRE(">"),    COUNTED(7, "-2..10"))
++/* 'for (i = n; i < 6; i--)': whatever n is */
++RANGE_TEST(range_lt_dir_any_first, "", 0, M64, -1, 6, 6, PRE(">="),
++	   __retval(1) __msg("header_count is [0..7] "))
++/* Up from 100 while it is '>= 100..103', until it wraps to 84: the smallest bound has the count */
++RANGE_TEST(range32_ge_away, "", 100, 100, 0x0fffffff, 100, 103,
++	   LOOP_HEAD "if w6 < w7 goto 2f; w6 += w8; goto 1b;", __msg("header_count is [0..17] "))
++/* '>= 0' is always true, and so is '<= -1': -4..3 crosses 0 */
++RANGE_TEST(range32_ge_min,  "",  5,  5,     1,   0,  3,  POST("w6 += w8", "w6 >= w7"), NO_COUNT)
++RANGE_TEST(range32_le_max, "s",  0,  0,     2,  -4,  3,  POST("w6 += w8", "w6 <= w7"), NO_COUNT)
++/*
++ * A 64-bit jump tests a zero-extended variable: 's>' a negative bound and 's<' a bound above
++ * U32_MAX are always true. Else it is an unsigned 32-bit jump: 0x7ffffff1 .. 0x80000010.
++ */
++RANGE_TEST(range32_zext_sgt_neg, "s", 100, 100, -1, -3, 4, POST("w6 += w8", "r6 s> r7"), NO_COUNT)
++RANGE_TEST(range32_zext_slt_wide, "", M32 - 15, M32 - 15, 1, M32 - 5, M32 + 2,
++	   POST("w6 += w8", "r6 s< r7"), NO_COUNT)
++RANGE_TEST(range32_zext_slt_bit31, "", M32 / 2 - 15, M32 / 2 - 15, 1, M32 / 2 + 17, M32 / 2 + 17,
++	   POST("w6 += w8", "r6 s< r7"), __msg("header_count is [0..32] "))
+ /* The counter moves away from the exit. */
+ RANGE_TEST(range_gt_dir,    "", 10, 20,     2,   3,  5,  PRE("<="),   NO_COUNT)
+ RANGE_TEST(range_ge_dir,    "", 10, 20,     2,   3,  5,  PRE("<"),    NO_COUNT)
+ /* '!=' can step over the bound, or start behind it. */
+ RANGE_TEST(range_ne_step2,  "",  0,  3,     2,   3,  8,  PRE("=="),   NO_COUNT)
++RANGE_TEST(range_ne_step2_bounds, "", 0, 0, 2,   9, 10,  PRE("=="),   NO_COUNT)
+ RANGE_TEST(range_ne_behind, "",  0,  4,     1,   3,  8,  PRE("=="),   NO_COUNT)
++/*
++ * It does not step over the bound if the step divides the distance: initial value and bound are
++ * congruent modulo the step. 'n * 24' is a multiple of 24. 8 divides the largest 'n * 12', 48,
++ * and is less than 12, but steps over 12.
++ */
++RANGE_TEST(range_ne_mul24,  "",  0,  0,    24,   0,  5,  "r7 *= 24;" PRE("=="),
++	   COUNTED(6, "0..120"))
++RANGE_TEST(range_ne_mul12,  "",  0,  0,     8,   0,  4,  "r7 *= 12;" PRE("=="),   NO_COUNT)
++RANGE_TEST(range_ne_first_mul12, "", 0, 4,  8,  96, 96,  "r6 *= 12;" PRE("=="),   NO_COUNT)
++/* The sum of a multiple of 3 and 0..1 is no multiple of 3 */
++RANGE_TEST(range_ne_mul3_plus_range, "", 0, 3, 3, 0,  1,  "r6 *= 3; r6 += r7; r7 = 12;" PRE("=="),
++	   NO_COUNT)
++/* S64_MAX - 9 + 3k and S64_MIN + 3k are 1 modulo 3. On the circle S64_MAX + 3 is S64_MIN + 2. */
++RANGE_TEST(range_ne_mul3_crosses_s64, "", 0, 3, 3, 0, 1,
++	   "r6 *= 3; if r7 == 0 goto 3f; r1 = 0x7ffffffffffffff6 ll; r6 += r1; goto 4f;"
++	   "3: r1 = 0x8000000000000000 ll; r6 += r1; 4: r7 = 0x800000000000000b ll;" PRE("=="),
++	   NO_COUNT)
++/* 'while (i-- > 0) sum += a[i];' of u16 a[]: the compiler counts 2 * i down to 0 */
++RANGE_TEST(range_ne_shl1_down, "", 1, 5,   -2,   0,  0,  "r6 <<= 1;" POST("r6 += r8", "r6 != r7"),
++	   COUNTED(5, "2..10"))
++/* 20 modulo 24 plus multiples of 8: the induction variable is 4 modulo gcd(24, 8) */
++RANGE_TEST(range_ne_first_mul24, "", 1, 2,  8,  84, 84,  "r6 *= 24; r6 += 20;" PRE("=="),
++	   __retval(6) __msg("header_count is [0..6] ") __msg("widening r6 to 44..84 step 8")
++	   __msg("step=4+8"))
++/* 9, 17, 25 go to 41: each overshoots 40 by 1, not by up to 7. At the header it is 8 less. */
++RANGE_TEST(range_lt_overshoot, "", 0, 2,    8,  40, 40,
++	   "r6 *= 8; r6 += 1;" POST("r6 += r8", "r6 < r7"), COUNTED(5, "1..33"))
++/* -5, -2, 1, 4 cross 0, where the order of '<' begins: 0 is none of them. 1 goes to 22. */
++RANGE_TEST(range_lt_overshoot_crosses_0, "", 0, 3, 3, 20, 20, "r6 *= 3; r6 += -5;" PRE(">="),
++	   __retval(1) __msg("header_count is [0..8] ") __msg("widening r6 to -5..22 "))
++/* Known low bits are a congruence too: 1..40 with three zero bits is 8..40 */
++RANGE_TEST(range_ne_align8, "",  0,  0,     8,   1, 43,
++	   "r7 &= -8; if r7 == 0 goto 2f;" PRE("=="), COUNTED(6, "0..40"))
++/*
++ * The low 32 bits of a multiple of 24 are one as long as it fits in 32 bits.
++ * 24 * 0xaaaaaac is 0x100000020.
++ */
++RANGE_TEST(range32_ne_mul24, "", 0,  0,    24,   1,  5,
++	   "r7 *= 24;" POST("w6 += w8", "w6 != w7"), COUNTED(5, "0..96"))
++RANGE_TEST(range32_ne_mul24_wide, "", 0, 0, 24,  1, 1ULL << 30,
++	   "r7 *= 24; if w7 > 96 goto 2f; if w7 < 24 goto 2f;" POST("w6 += w8", "w6 != w7"),
++	   NO_COUNT)
+ 
+ /*
+  *    char buf[8];
+@@ -1243,6 +1325,38 @@ SEXT32_TEST(sext32_iv_unsigned_bound, 0,
+ 	    "1:" SEXT32_INC "if w1 < w4 goto 1b; if r6 s>= 0 goto 2f; r0 = *(u64 *)(r5 + 0);",
+ 	    __msg("widening r6 to " ALL_OF_S32) OOB)
+ 
++/*
++ *    for (long i = first; (u32)i < 128; i -= 1000)
++ *
++ * r6 is a 64-bit induction variable, the latch tests a zero-extended copy of it. It has the SCEV
++ * of a 32-bit induction variable, and it bounds the low 32 bits of r6 only.
++ */
++#define IV64_TEST(name, first, loop, expect)	SEXT32_TEST(name, first, loop, expect)
++#define HI32_IS_0	"r4 = r6; r4 >>= 32; if r4 == 0 goto +1; r0 = *(u64 *)(r5 + 0);"
++#define ZEXT32_COPY	"w3 = w6;"
++/* r6 is 0..3, then -1000..-997 */
++IV64_TEST(zext32_copy_below_0, 0,
++	  "r8 &= 3; r6 += r8; 1: if r6 <= 3 goto +1; r0 = *(u64 *)(r5 + 0);"
++	  ZEXT32_COPY "if r3 >= 128 goto 2f; r6 += -1000; goto 1b;",
++	  __msg("header_count is [0..2] ") __msg("widening r6 to -1000..3 ") OOB)
++/* A 32-bit induction variable is 0xfffffc18..0xfffffc1b then */
++IV64_TEST(zext32_iv_below_0, 0,
++	  "r8 &= 3; r6 += r8; 1:" HI32_IS_0
++	  ZEXT32_COPY "if r3 >= 128 goto 2f; w6 += -1000; goto 1b;",
++	  __success __retval(0) __msg("header_count is [0..2] "))
++/* r6 gets to 0x100000009 */
++IV64_TEST(zext32_copy_above_u32_max, 0xfffffff0ULL,
++	  "r8 &= 15; r6 += r8; 1:" HI32_IS_0 "r6 += 1;" ZEXT32_COPY "if r3 < 10 goto 1b;",
++	  __msg("header_count is [0..11] ") __msg("widening r6 to 0xfffffff0..0x100000009 ") OOB)
++IV64_TEST(zext32_copy_above_u32_max_const, 0xfffffffeULL,
++	  "1:" HI32_IS_0 "r6 += 1;" ZEXT32_COPY "if r3 != 3 goto 1b;",
++	  __msg("header_count is 5 ") __msg("widening r6 to 0xfffffffe..0x100000002 ") OOB)
++/* The latch sees the low 32 bits of the step */
++IV64_TEST(zext32_copy_wide_step, 0,
++	  "r8 &= 1; r6 += r8; 1: if r6 <= 10 goto +1; r0 = *(u64 *)(r5 + 0);"
++	  "r1 = 0x100000001 ll; r6 += r1;" ZEXT32_COPY "if r3 < 10 goto 1b;",
++	  __msg("header_count is [0..10] ") OOB)
 +
-+	*arc = scalar_arc(v, low32);
-+	if (cnum64_is_empty(*arc) || cnum64_is_const(*arc))
-+		return 0;
-+	if (v->step > 1 && smin == (s64)v->r64.base &&
-+	    imod(smin, v->step) == v->base && imod(smax, v->step) == v->base &&
-+	    (!low32 || (v->r32.base == (u32)v->r64.base && v->r32.size == v->r64.size)))
-+		return (u64)v->step << (low32 ? 32 : 0);
-+
-+	low = t.mask ? BIT_ULL(__ffs64(t.mask)) - 1 : U64_MAX;
-+	d = (t.value - arc->base) & low;
-+	/* range and var_off don't overlap: the path is infeasible */
-+	if (d > arc->size)
-+		return low32 ? BIT_ULL(32) : 1;
-+	arc->base += d;
-+	arc->size -= d;
-+	arc->size -= arc->size & low;
-+	return arc->size ? low + 1 : 0;
-+}
-+
- static bool is_signed_op(u8 op)
- {
- 	switch (op) {
-@@ -3638,17 +3692,21 @@ static void rotated_urange(struct cnum64 a, u64 origin, u64 ut_max, u64 *min, u6
-  * Both bounds of 10..12 have a count and 11 has none. overshoot is -diff modulo step: when the
-  * initial value grows by 1, so does overshoot, modulo step. For the initial values
-  * imin .. imin + size it is at most 'overshoot of imin' + size while that is below step: exact
-- * for a constant. Else it is step - 1, which is what LLVM's canIVOverflowOnLT() assumes.
-+ * for a constant. Else it is known modulo g = gcd(step, @stride), where the initial values are
-+ * imin, imin + @stride, imin + 2 * @stride ..: at most step - g + 'overshoot of imin' % g.
-+ * 10, 12, 14 has a count: the step divides the distance. With a stride of 1 it is step - 1, which
-+ * is what LLVM's canIVOverflowOnLT() assumes.
-  * '!=' has to hit each bound: what holds for initial values holds for its bounds too.
+ /*
+  * Two back edges:
   *
-  * 32-bit numbers are compared on the same circle, in the upper half of a u64: cnum64_lshift32().
-  * @unit is the 1 of the text above, 1 or 1 << 32, and ut_max is the largest number, -unit.
-  */
- static bool compute_backedge_taken_count(u8 op, bool sign, u64 unit, struct cnum64 initial,
--					 u64 step, struct cnum64 bound, struct exit_limit *el)
-+					 u64 step, struct cnum64 bound, u64 stride,
-+					 struct exit_limit *el)
- {
- 	u64 min_value = sign ? (u64)S64_MIN : 0, ut_max = -unit, origin = min_value;
--	u64 imin, imax, emin, emax, bmin, bmax, diff, rem, overshoot, size;
-+	u64 imin, imax, emin, emax, bmin, bmax, diff, rem, overshoot, size, g;
- 	bool down = (s64)step < 0;
- 	struct cnum64 end;
+@@ -1283,6 +1397,17 @@ RANGE_TEST(backedges_wrap_then_end, "", 39, 39, 1, 0, 1,
+ /* The same upwards. The largest first value wraps around first. */
+ RANGE_TEST(backedges_wrap_up_then_end, "", M32 - 55, M32 - 39, 1, 0, 1,
+ 	   AND_R8("w6 += 8", 5, "w6 < -16"), AGAIN(4))
++/*
++ * w6 moves away from the bound: 'w6 < 0x38000000' is false in iterations 3..14, and true again in
++ * iteration 15, in which '!=' is false.
++ */
++RANGE_TEST(backedges_away_then_again, "", 0x30000000, 0x30000000, 1, 0, 1,
++	   BACKEDGES("w5 = -0x10000000; w6 += w5", "r7 == 0",
++		     "w6 < 0x38000000", "w6 != 0x30000000"), AGAIN(15))
++/* One latch bounds the low half of r6, the other r6: together they bound neither */
++RANGE_TEST(backedges_low32_and_64, "", 0, 3, 1, 0, 1,
++	   BACKEDGES("r6 += 1", "r7 == 0", "w6 < 5", "r6 < 7"),
++	   __retval(5) __msg("header_count is [0..7] ") __msg("widening r6 to 0..9 "))
+ /* It's base + offset that wraps around when the variable is a pointer */
+ RANGE_TEST(backedges_pointer_wraps, "", 0, 0, 1, 0, 1, "r4 = r10; r4 += -8; r5 = r10; r5 += -512;"
+ 	   AND_R8("r5 += 8", 100000000, "r5 < r4"), AGAIN(99999999))
+@@ -4146,6 +4271,12 @@ PTR_RANGE_TEST(ptr_first_is_below_or_at_fp, "r0 &= 63;", "r6", 1, "<=", "r7",
+ 	       __msg("loop header at {{[0-9]+}}, header_count is [0..64] "))
+ PTR_RANGE_TEST(ptr_first_offset_is_wide, "r0 >>= 2;", "r6", 1, "<", "r7", NO_COUNT)
+ PTR_RANGE_TEST(ptr_bound_offset_is_wide, "r0 >>= 2;", "r7", -1, ">", "r6", NO_COUNT)
++/* Constants: the offset goes from -55 to 1, across 0 */
++PTR_RANGE_TEST(ptr_const_crosses_fp, "r0 = 0;", "r6", 8, "<", "r7",
++	       __msg("loop header at {{[0-9]+}}, header_count is [0..8] "))
++/* 'for (p = buf; p != end; p += 21)': fp-63 and fp-42 get to fp */
++PTR_RANGE_TEST(ptr_ne_mul21, "r0 &= 1; r0 *= 21;", "r6", 21, "!=", "r7",
++	       __msg("loop header at {{[0-9]+}}, header_count is [0..3] "))
  
-@@ -3717,7 +3775,14 @@ static bool compute_backedge_taken_count(u8 op, bool sign, u64 unit, struct cnum
- 	size = imax - imin;
- 	if (op == BPF_JNE && check_add_overflow(size, emax - emin, &size))
- 		size = ut_max;
--	overshoot = size < step - overshoot ? overshoot + size : step - unit;
-+	if (size < step - overshoot) {
-+		overshoot += size;
-+	} else {
-+		/* Initial values that cross origin are 0 .. ut_max here: imin is none of them. */
-+		g = imin == initial.base - origin ? gcd64(step, stride) : unit;
-+		div64_u64_rem(overshoot, g, &rem);
-+		overshoot = step - g + rem;
-+	}
- 	if (overshoot > ut_max - emax)
- 		return false;
- 
-@@ -3838,7 +3903,7 @@ static bool compute_max_iters(struct bpf_verifier_env *env,
- 	struct scev_value initial_val, step_val, bound_val, reg_val;
- 	bool sign = is_signed_op(latch->op), konst;
- 	struct cnum64 initial, bound, off;
--	u64 step, unit = 1;
-+	u64 step, unit = 1, stride;
- 	struct exit_limit el;
- 	bool low32;
- 	u32 l, r;
-@@ -3884,8 +3949,11 @@ static bool compute_max_iters(struct bpf_verifier_env *env,
- 		sign = false;
- 	}
- 	low32 = initial_val.ptr_reg < 0 && (latch->jmp32 || latch->zext32);
--	initial = scalar_arc(scalar_of(&initial_val), low32);
-+	stride = scalar_stride(scalar_of(&initial_val), low32, &initial);
- 	bound = scalar_arc(scalar_of(&bound_val), low32);
-+	/* '!=' has to hit each bound. For the rest the largest or the smallest bound counts. */
-+	if (latch->op == BPF_JNE)
-+		stride = gcd64(stride, scalar_stride(scalar_of(&bound_val), low32, &bound));
- 	step = step_val.r64.base;
- 	if (initial_val.ptr_reg >= 0) {
- 		/*
-@@ -3906,7 +3974,8 @@ static bool compute_max_iters(struct bpf_verifier_env *env,
- 	/* no bound is left for which the latch can be true */
- 	if (cnum64_is_empty(bound))
- 		el = (struct exit_limit){};
--	else if (!compute_backedge_taken_count(latch->op, sign, unit, initial, step, bound, &el))
-+	else if (!compute_backedge_taken_count(latch->op, sign, unit, initial, step, bound, stride,
-+					       &el))
- 		return false;
- 	/*
- 	 * max_header_count is u32 and U32_MAX means "infinite",
-@@ -4185,7 +4254,8 @@ static void linear_bounds(const struct scalar *reg, u32 max_header_count,
- 	struct cnum64 r64;
- 	struct cnum32 r32;
- 	s64 total_change;
--	bool overflow;
-+	bool overflow, konst;
-+	u16 step;
- 
- 	if (coefs->spill32) {
- 		/* what 'rX = *(u32 *)(r10 - 8)' loads */
-@@ -4225,16 +4295,18 @@ static void linear_bounds(const struct scalar *reg, u32 max_header_count,
- 		r32 = cnum32_union(reg->r32, r32);
- 	}
- 	/*
--	 * If the entry value is a single point the value set is 'v + slope * k',
--	 * so the step is |slope|. Otherwise, only the power-of-two alignment
--	 * shared by the entry value and the slope.
-+	 * The value set is 'v + slope * k'. It has the power-of-two alignment shared by the entry
-+	 * value and the slope. The entry value is congruent to base modulo step, so the sum is,
-+	 * modulo gcd(step, |slope|), unless it wraps. A single point is its own base, its step
-+	 * is 0: every number divides 0. One step is kept: the gcd if it implies the alignment.
- 	 */
--	if (cnum64_is_const(reg->r64) && !overflow) {
--		out->step = slope_abs;
--		out->base = imod(cnum64_smin(reg->r64), out->step);
--	} else {
--		out->step = 1u << min_t(u32, tnum_alignment(reg->var_off), __ffs(slope_abs));
--		out->base = 0;
-+	out->step = 1u << min_t(u32, tnum_alignment(reg->var_off), __ffs(slope_abs));
-+	out->base = 0;
-+	konst = cnum64_is_const(reg->r64);
-+	step = gcd(konst ? 0 : reg->step, slope_abs);
-+	if (!overflow && step > out->step && !(step % out->step)) {
-+		out->step = step;
-+		out->base = konst ? imod(cnum64_smin(reg->r64), step) : reg->base % step;
- 	}
- 	out->var_off = tnum_unknown;
- 	out->r64 = r64;
+ SEC("xdp")
+ __success
 -- 
 2.55.0
 
