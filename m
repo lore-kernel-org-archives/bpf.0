@@ -1,79 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
 	t=1794425993;
-	b=CMO2/ZMXYvq2mLaEjPo9zQAtxTMG2s89MW8/SiKw3RTTNNlgZHITEA76zSE2JF9OhbV7
-	 yTRQ0sMOWxUZwTgVSIs/O02qi002yeeOqURaGir/Eu9mq/54AABUnKwaUrObxUOhCaztu
-	 eO8VFRM7AocMqsFUrHS+DXU4o533+9l+4GNSBfJxCNSDFHuy9QD8alN6ZhbZiTDYhpCbN
-	 5VyM3WsWH6xLyZoFdVgCyZtqKQp6DIKHzYnWDeHTnzfwpQLEaThtGasCalIKbx16tSUmq
-	 ZLYxjQSonP1NsWsaH7yC3kt7XJC+oCROFGU93sJ2RwBeHm/MA5hmbE0GkPYmYGvmoRw==
+	b=OKzOtOJwf7LoL1nmL7habslor8/CVetoBFKe1DLPPeWD94Zj58AjS3LJJcD2FHlTHv12
+	 IBZU7rH6NJzUF0Wb2BQLFEmK/N10jyUWCJyNx5xCwa0uGz0OwnBm78gkpxf39AAQvldZq
+	 tBeBP6MZLS3RxdiOVNsMVRdsXN4GCPl+9liKEkYjcN7SpKMGRfkvNYIPMnEiDsMUNw4LR
+	 MNtj4tb6rZ1UvQI28Maozt76o/ugIHhMSyqZntD7RUAkKOjcCThdo7HG6Xw45YpbUEqEL
+	 enKEgGZlzbavcNZMtdwHn8c/IUmvzfTv4/xGaOrWHByUjx5IfywgOrkLOAmW+NA2+zQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1794425993;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=EL067kTYCvsYwvFH2A3s0KLgNqiZipJ7dihJ4p6lwjQ=;
-	b=N7xIk4yQ+7FLEY3wR+Y1//2sR1GgVHVi6QODjda8s7OHYsL9voJoD6maZI72WB5u4fxE
-	 MyliYIkd+4W9c5C/b0lZGeTaaDNsxpcmnSvRL31wiOawgWpXup4Ft9H2jcF8ct9ch7DrQ
-	 zzTjgGzj6E3cnOp2f4qgrckBD08dcGwpFFZSStTewbcD4hSVAusyUuK2sTnzH+VqGP9lb
-	 Ie7ch/IoQXA9BGxfXYadz2P56PpXNIOWgKil16do9fLPZjbbKChji1wQxws31mg78gtiX
-	 D1gkEQTukKOpkIQuD5XDvAV406TJob+TK4jfp1csMfh9JTDVmJ3wb9FUsLccpOyWI7g==
+	bh=3fLPA+7JUKVPSr8tIdw3kIwpyzx96D3XKn84VPL3i6I=;
+	b=OmGdkqaJXliLM9cnPiMbC1WVPp6lSTiv6AX5lQb14kWk5ihmueKV2IByKHg1xh7iPGqM
+	 u+pNEMTLLdhKM9xGnSP977nxS/8QOrJhr+PA9Q+ce6KJCLxA8eZDqPQvhX9ZOQzpAnlEm
+	 jwmUFR6tsAvFeZhIFRuPNu+KT/t3Q8yhOFXqIJeB8IHCKgT0YA9pobzzNy/gabouRgxn9
+	 Ybye1ntqrHxNSpEV+z+nT3YjJCKFuMbYYcUMuL+X/ezOjc74PBetKxWSEs7yIPBrHBfPq
+	 Sjmf7bWkL5fJTqhDSJYBA0h1Uhi58s+KqV5hzHPp9dSqkrLocPDr+txNOImAbez0NpQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=d5zebM0d;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hlhjtvgg;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 936F0606A891;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1CB9606A89C;
 	Wed, 11 Nov 2026 19:39:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=d5zebM0d
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hlhjtvgg
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
 	t=1794425993;
-	b=InxqAueaZ5BBH5HTBHxB2lDKT5LFuCFUEFYUyg76bHRtihiAV5TKkhczPeFspex5BryK
-	 ZrLVzuhpoow+eeTr076/eJgrPb9qybKZ11aSyWUVsJMAKIrc2YTnV2/cd42mv0ZSUb31H
-	 H4IXAHd3qM3fjZyF9s8QBwdK9tPPIL2KfW3LLxl5RdRySaamkDynmv9vvzY4gke5Mtlbe
-	 Eq6QiyIjYs5O/ct63R7/nPp/3pN5/+95JiVTv4/J1O0ctxnPqjeeGYtQJw2CiFME01w2D
-	 dhZ61VRV8ESL2cUFHqm9QlJrAdqlNHnajaM6cgY54/X/nwVY6e8yX1GYtm7IkWDW2CQ==
+	b=HhuTx45KPRHdsnaHS8ZyDsr3CW0UXT5AljhTRckVJbAYXCtb60D45Y7XeHQmR6dGckJU
+	 OIWBU3J5blmMld+YqNzKiWa5xqYYhuqo56ZbpOSeWdAuAUfCJ3UfRz2/gAhXzO3SOTsUC
+	 oaOg0Ghspjnb7WHCSfaDslLU54u6M5aWPKdSaT7Oh46bJD088OIpkL+n1xEXqguO8SfDr
+	 MLmXg3+Hrssa/2rTim9qb+UAEvVt/nQKSeYTlSYr2xOq/1Z5N7RRFs+tQ7IQO//ecmLui
+	 j6vsmunxCtAzBYuivU1R4BbOaUEV0LuN7bU97nnMslovJWIFde5mN2J5J8QgK0y9mwQ==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
 	c=relaxed/relaxed; t=1794425993;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=EL067kTYCvsYwvFH2A3s0KLgNqiZipJ7dihJ4p6lwjQ=;
-	b=ImvxMP+i0z1knJ09E6JRjvecAAZbE2BwHquk+4EbmZQjzOjH4k6fTpWTkS0MBp/iOHIU
-	 ZJZYvuffCrwKR0xDkKmY2UGbHGp930qIvV7LaeyAywCp1oRmUyD7bFfdT3tQPvXrUqIJO
-	 flvaPJpKlHbAYSHuL9OPZAl57IcTX2zHni1wsO6Efl746ydvmihwDFYGOQuIupTgiizwx
-	 7SsRqO7eF0ys9+uwo2HOOSyL7btf6JAW91rCGbxDIkzyjdHiD/7dEA5GarDSB20/u3hl9
-	 ZPXspbWA4j9stguKIWvwqLeTSXCeOd0HSvKTL3BWocayEBjI4XSBMQrpdzoHeP/pOoQ==
+	bh=3fLPA+7JUKVPSr8tIdw3kIwpyzx96D3XKn84VPL3i6I=;
+	b=Zxb0UxxtXQRpkeUHG2nBLHVS/vvakE4SWeA12gJfd9B3swlUPK4+/h97vERwoNsGJd5h
+	 72qbghEyJVhe8J9xQ2i/G4jtyB/7AqcQutDe4iMyfs//g9oo0GDg3b3LS2DpB+UR23uXf
+	 10NeNdooiMr2VbBdZwKwMnmUvaoZJPjWTx7MIU/8ojjKCi+7BXID/2L82QkZzW+Fk0jo5
+	 dJBpBsFVbF+JOkt7fbUL/DrKf9/DiC3yyuhUoqMdKuFEQFI5mvXM10tjmRD9RrR+FZMDZ
+	 5nnfRwjCxbPLsYc9U1VC7vApZpSK1MwOGgcYuAlOKUuoi+J4HKM2yNAwntYEqYy7fxQ==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4DC3C1F00A0F;
+	by smtp.kernel.org (Postfix) with ESMTPS id 054801F00A08;
 	Wed, 11 Nov 2026 19:39:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1794425993;
-	bh=EL067kTYCvsYwvFH2A3s0KLgNqiZipJ7dihJ4p6lwjQ=;
+	bh=3fLPA+7JUKVPSr8tIdw3kIwpyzx96D3XKn84VPL3i6I=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=d5zebM0dGebVT4mrc2Wk65hAd6bG1ckxkwTmiUiuoYYWDWx4bWDsQ7JKNWdO+wdTq
-	 8EQ3OQJ362qCmZB1jkbY8cPV5f5ie+lSZEjXr+QLsWZTMq53toDY6R8aNVe5AFiCQH
-	 UVxnTygul2qUj+Z/ibygO/qTBFXmrIbGb+JRdwdBhRZr72FIvxFRl4bTD2MPDQf/D7
-	 CtkFPJo/T/zRZSjoe4iv7AbxgHD4jHshwLiA8nUc/873/zmxmnvf37gEUBpfzW3zvj
-	 /y1Omv/zZnFOfJvU79LfwgsIbxhwYWSc7q2VZAAox4I7BXuACNOZ9Sg7hn4O39VuFu
-	 Qlcu2Wvbm3wSw==
+	b=hlhjtvgg1v9eAid+5/zhZPBTGzc57FLe25pJ3rTKZkz4qOCfyEjf4kdA0mHgFiZsZ
+	 REBr95B6vOqwIgdnk/e9zxiZsA2S/wqwYOBJ7f6hI3vANVKxEeFuJ+E46CB7BUmyQ4
+	 /jpxNMdNa0FDiA/LFNqfDnsFctKKxVeQMInd0F3jm8WDMqqd5HaZldMvFnc5Ijk7Eu
+	 zR51HhleMTUg7AMAonKYWN0wmXkI53m6ZUZFN1zC1lcSVpJJSkjBBkseFhvhE7WNAX
+	 8ekC58PWhmNod7dwWbj2ocM7SW9Jgop6oYENbDYF/NJUxOyZNqoBkReK2qnqIcn6x/
+	 +mYR2zftQVCSg==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id CEB1C490C6;
+	by lkml.kernel.org (Postfix) with ESMTP id 868F5490BE;
 	Wed, 11 Nov 2026 19:39:50 +0000 (UTC)
 From: Mike Bazov via B4 Relay <devnull+mikeba.sentinelone.com@kernel.org>
-Date: Wed, 11 Nov 2026 21:39:50 +0200
-Subject: [PATCH bpf-next v2 4/5] selftests/bpf: Add trampoline and raw_tp
- preemption recursion test
+Date: Wed, 11 Nov 2026 21:39:48 +0200
+Subject: [PATCH bpf-next v2 2/5] bpf: Check program recursion per task via
+ bpf_ctx
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -84,7 +84,7 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261111-bpf-preempt-v2-r2-v2-4-9d8f6b952ad2@sentinelone.com>
+Message-Id: <20261111-bpf-preempt-v2-r2-v2-2-9d8f6b952ad2@sentinelone.com>
 References: <20261111-bpf-preempt-v2-r2-v2-0-9d8f6b952ad2@sentinelone.com>
 In-Reply-To: <20261111-bpf-preempt-v2-r2-v2-0-9d8f6b952ad2@sentinelone.com>
 To: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
@@ -102,11 +102,11 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
  JP Kobryn <jp.kobryn@linux.dev>, linux-trace-kernel@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Mike Bazov <mikeba@sentinelone.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1794425986; l=19749;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794425986; l=11813;
  i=mikeba@sentinelone.com; s=20261022; h=from:subject:message-id;
- bh=nRQ8sdr3Hm4v84tuvpJRSRuPYU7hhDZIWTJyLmDlJtI=;
- b=PxcCbc2s03fMRb75uQ7mrJnHH1qIGi7a1cumwMSN8q85+p5OHVCwRHBD8vijP1CEZNTK27d/c
- v7ZwzMY9KjmAUBBhJwImuK4luO5rcCQyWpuSNOsRaD3jqFwY0VpOxcM
+ bh=Fk8rqqs0y7uTUP/pR+dO3Qn8hZPBQ2naNG3kArVqijw=;
+ b=ej6mtqR43DfToEjMNuSU3ySt81M0GkU9XqrrcOXTLI1149nR9m6XdbSdfQ6M2Kx/EsTedAyMA
+ ymvVcSkm929DUKyhW2HiTw2AM/Icwa4k/+H1Y6JB0FJsNdASNjGLdW/
 X-Developer-Key: i=mikeba@sentinelone.com; a=ed25519;
  pk=DBXcQ0qoCkgacRsRwT1JU7oOWpWSYuTyLiXMfNLcP+A=
 X-Endpoint-Received: by B4 Relay for mikeba@sentinelone.com/20261022 with
@@ -117,750 +117,317 @@ Content-Transfer-Encoding: 7bit
 
 From: Mike Bazov <mikeba@sentinelone.com>
 
-Pin two threads to one CPU. Thread A enters the program under test and,
-from inside it, fills a 64-byte stack buffer and wakes thread B, which
-is SCHED_FIFO, so B preempts A in the middle of the program and enters
-the same program on the same CPU. Right before entering, B checks that A
-is still inside the program, and A confirms that B's run ended before A
-checks its buffer. When A resumes, it checks its buffer against its
-thread ID, read again from the kernel. Each subtest runs 20 rounds and
-asserts that B preempted A inside the program in every round, that both
-threads ran every round, that there were no recursion misses, and that
-A's stack is intact. If B never preempted A inside the program, the
-subtest is skipped.
+Trampoline programs (fentry, fexit, fsession, fmod_ret and their
+sleepable variants) and raw tracepoint programs (raw_tp, raw_tp.s,
+tp_btf) run preemptibly: their runners only disable migration, and with
+PREEMPT_RCU the RCU read section doesn't disable preemption either.
+Raw tracepoint programs do so since tracepoints switched to SRCU-fast in
+commit a46023d5616e ("tracing: Guard __DECLARE_TRACE() use of
+__DO_TRACE_CALL() with SRCU-fast").
+Their recursion check is a per-CPU, per-program counter. When a task is
+preempted inside a program on CPU N, the counter stays raised, and every
+other task that enters the same program on CPU N is dropped and counted
+as a recursion miss, although nothing recursed.
 
-Subtests: fentry, fexit, fentry.s, fexit.s, fsession, raw_tp, raw_tp.s
-and tp_btf. Without the per-task recursion check, B is dropped in every
-round.
+Check recursion per task instead. Each of these runners already links a
+stack-allocated bpf_run_ctx into current->bpf_ctx. Move saved_run_ctx
+into struct bpf_run_ctx, so every frame links to the outer one, and
+record in each frame the program it runs. A program is recursing if a
+frame in the current task's chain already runs it. Interrupts and NMIs
+run on top of the interrupted task's chain, so recursion through them is
+still caught; only other tasks are no longer blocked.
 
-tailcall_raw_tp and two_dispatchers enter a large-stack handler through
-tail calls, from one dispatcher and from two dispatchers. Without the
-private-stack change, two_dispatchers corrupts A's stack. nested_prog
-wakes B from a second program that runs nested inside A's.
+bpf_set_run_ctx() initializes the frame before publishing it, and
+bpf_reset_run_ctx() unlinks it before its stack storage can be reused.
+bpf_set_run_ctx() also accepts a NULL ctx, which io_uring passes to hide
+the BPF context while submitting user requests.
 
-recursion_raw_tp, recursion_tp_btf and recursion_test_run check that
-true recursion is still rejected: the program calls bpf_printk(), which
-fires the bpf_trace_printk tracepoint it is attached to, and the nested
-run must be dropped and counted as a recursion miss. recursion_test_run
-starts the outer run with BPF_PROG_TEST_RUN. recursion_two_hops has a
-second program run in between, so the check has to look past the frame
-right below.
+Programs that use a per-CPU private stack keep the per-CPU check, since
+two tasks must never use that stack on one CPU. After the previous
+patch, these are only struct_ops programs that request one.
 
-Each subtest loads only its own programs, and is skipped if the kernel
-doesn't support its program type.
+As a result, the same program can now run in two tasks at once on one
+CPU. Programs that use a per-CPU map as scratch space across helper
+calls may see another run's data, where the run was dropped before.
+And as commit ec274bb4665c ("bpf: One may_goto time slice per prog
+invocation") notes, a second invocation of a program on the same CPU
+gives its may_goto loops more time; that invocation can now come from
+another task, while the first one is preempted.
 
+Link: https://lore.kernel.org/bpf/20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com/
+Fixes: ca06f55b9002 ("bpf: Add per-program recursion prevention mechanism")
+Fixes: a46023d5616e ("tracing: Guard __DECLARE_TRACE() use of __DO_TRACE_CALL() with SRCU-fast")
+Fixes: 439ebd5b5708 ("bpf: Add sleepable support for raw tracepoint programs")
 Signed-off-by: Mike Bazov <mikeba@sentinelone.com>
 ---
- .../selftests/bpf/prog_tests/trampoline_preempt.c  | 429 +++++++++++++++++++++
- .../selftests/bpf/progs/trampoline_preempt.c       | 265 +++++++++++++
- 2 files changed, 694 insertions(+)
+ include/linux/bpf.h      | 48 +++++++++++++++++++++++++++++++++++++++++++-----
+ kernel/bpf/trampoline.c  | 28 ++++++++++++++--------------
+ kernel/trace/bpf_trace.c | 12 +++++-------
+ net/bpf/test_run.c       |  4 ++--
+ net/ipv4/bpf_tcp_ops.c   |  6 +++---
+ 5 files changed, 67 insertions(+), 31 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/trampoline_preempt.c b/tools/testing/selftests/bpf/prog_tests/trampoline_preempt.c
-new file mode 100644
-index 000000000000..e01a2ba8916a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/trampoline_preempt.c
-@@ -0,0 +1,429 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <pthread.h>
-+#include <sched.h>
-+#include <signal.h>
-+#include <sys/prctl.h>
-+#include <sys/syscall.h>
-+#include <unistd.h>
-+#include <test_progs.h>
-+#include "trampoline_preempt.skel.h"
-+
-+#define NR_ROUNDS 20
-+
-+#ifndef ENOTSUPP
-+#define ENOTSUPP 524
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 520fd72e21fd..52e29b374b4a 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2785,7 +2785,10 @@ int bpf_prog_array_copy(struct bpf_prog_array *old_array,
+ 			struct bpf_prog_array **new_array);
+ struct bpf_prog *bpf_prog_dummy(void);
+ 
+-struct bpf_run_ctx {};
++struct bpf_run_ctx {
++	struct bpf_run_ctx *saved_run_ctx;
++	const struct bpf_prog *prog;
++};
+ 
+ struct bpf_cg_run_ctx {
+ 	struct bpf_run_ctx run_ctx;
+@@ -2803,7 +2806,6 @@ struct bpf_tramp_run_ctx {
+ 	struct bpf_run_ctx run_ctx;
+ 	u64 bpf_cookie;
+ 	int retval;
+-	struct bpf_run_ctx *saved_run_ctx;
+ };
+ 
+ static inline struct bpf_run_ctx *bpf_set_run_ctx(struct bpf_run_ctx *new_ctx)
+@@ -2811,8 +2813,17 @@ static inline struct bpf_run_ctx *bpf_set_run_ctx(struct bpf_run_ctx *new_ctx)
+ 	struct bpf_run_ctx *old_ctx = NULL;
+ 
+ #ifdef CONFIG_BPF_SYSCALL
+-	old_ctx = current->bpf_ctx;
+-	current->bpf_ctx = new_ctx;
++	old_ctx = READ_ONCE(current->bpf_ctx);
++	if (new_ctx) {
++		new_ctx->saved_run_ctx = old_ctx;
++		new_ctx->prog = NULL;
++	}
++	/* Initialize the frame before interrupts and NMIs on this CPU see it. */
++	barrier();
++	WRITE_ONCE(current->bpf_ctx, new_ctx);
++#else
++	if (new_ctx)
++		new_ctx->saved_run_ctx = NULL;
+ #endif
+ 	return old_ctx;
+ }
+@@ -2820,10 +2831,37 @@ static inline struct bpf_run_ctx *bpf_set_run_ctx(struct bpf_run_ctx *new_ctx)
+ static inline void bpf_reset_run_ctx(struct bpf_run_ctx *old_ctx)
+ {
+ #ifdef CONFIG_BPF_SYSCALL
+-	current->bpf_ctx = old_ctx;
++	WRITE_ONCE(current->bpf_ctx, old_ctx);
++	/* Unlink the frame before its stack storage can be reused. */
++	barrier();
+ #endif
+ }
+ 
++static __always_inline bool
++bpf_prog_enter_recur_ctx(struct bpf_prog *prog, struct bpf_run_ctx *run_ctx)
++{
++	if (unlikely(prog->aux->jits_use_priv_stack))
++		return bpf_prog_get_recursion_context(prog);
++#ifdef CONFIG_BPF_SYSCALL
++	for (struct bpf_run_ctx *ctx = run_ctx->saved_run_ctx;
++	     ctx; ctx = ctx->saved_run_ctx) {
++		if (READ_ONCE(ctx->prog) == prog)
++			return false;
++	}
++	WRITE_ONCE(run_ctx->prog, prog);
 +#endif
-+
-+enum subtest_kind {
-+	SUBTEST_FENTRY,
-+	SUBTEST_FEXIT,
-+	SUBTEST_FENTRY_S,
-+	SUBTEST_FEXIT_S,
-+	SUBTEST_RAW_TP,
-+	SUBTEST_RAW_TP_S,
-+	SUBTEST_TP_BTF,
-+	SUBTEST_FSESSION,
-+	SUBTEST_TAILCALL_RAW_TP,
-+	SUBTEST_TWO_DISPATCHERS,
-+	SUBTEST_NESTED_PROG,
-+};
-+
-+enum recursion_kind {
-+	RECURSION_RAW_TP,
-+	RECURSION_TP_BTF,
-+	RECURSION_TEST_RUN,
-+	RECURSION_TWO_HOPS,
-+};
-+
-+struct ctx {
-+	struct trampoline_preempt *skel;
-+	int cpu;
-+	int go_pipe[2];
-+	int done_pipe[2];
-+	sigset_t sigset;
-+	int err_a;
-+	int err_b;
-+	int overlaps;
-+};
-+
-+static int pin_to_cpu(int cpu)
-+{
-+	cpu_set_t set;
-+
-+	CPU_ZERO(&set);
-+	CPU_SET(cpu, &set);
-+	if (sched_setaffinity(0, sizeof(set), &set))
-+		return -errno;
-+	return 0;
++	return true;
 +}
 +
-+static void *worker_a(void *arg)
++static __always_inline void
++bpf_prog_exit_recur_ctx(struct bpf_prog *prog, struct bpf_run_ctx *run_ctx)
 +{
-+	struct ctx *c = arg;
-+	char comm[16] = {};
-+	char ch = 'a';
-+
-+	c->err_a = pin_to_cpu(c->cpu);
-+	if (!c->err_a && prctl(PR_GET_NAME, comm, 0, 0, 0))
-+		c->err_a = -errno;
-+	c->skel->bss->tid_a = (int)syscall(SYS_gettid);
-+
-+	if (write(c->done_pipe[1], &ch, 1) != 1 || c->err_a)
-+		goto out;
-+
-+	while (read(c->go_pipe[0], &ch, 1) == 1) {
-+		if (prctl(PR_SET_NAME, comm, 0, 0, 0)) {
-+			c->err_a = -errno;
-+			break;
-+		}
-+		if (write(c->done_pipe[1], &ch, 1) != 1) {
-+			c->err_a = -EIO;
-+			break;
-+		}
-+	}
-+
-+out:
-+	close(c->done_pipe[1]);
-+	c->done_pipe[1] = -1;
-+	return NULL;
++	if (unlikely(prog->aux->jits_use_priv_stack))
++		bpf_prog_put_recursion_context(prog);
++	else
++		WRITE_ONCE(run_ctx->prog, NULL);
 +}
 +
-+static void *worker_b(void *arg)
-+{
-+	struct sched_param sp = { .sched_priority = 1 };
-+	struct timespec ts = { .tv_sec = 5 };
-+	struct ctx *c = arg;
-+	char comm[16] = {};
-+	char ch = 'b';
-+	int i;
-+
-+	c->err_b = pin_to_cpu(c->cpu);
-+	if (c->err_b)
-+		goto out;
-+	if (sched_setscheduler(0, SCHED_FIFO, &sp)) {
-+		c->err_b = -errno;
-+		goto out;
-+	}
-+	if (prctl(PR_GET_NAME, comm, 0, 0, 0)) {
-+		c->err_b = -errno;
-+		goto out;
-+	}
-+	c->skel->bss->tid_b = (int)syscall(SYS_gettid);
-+
-+	for (i = 0; i < NR_ROUNDS; i++) {
-+		if (write(c->go_pipe[1], &ch, 1) != 1) {
-+			c->err_b = -EIO;
-+			break;
-+		}
-+		while (sigtimedwait(&c->sigset, NULL, &ts) < 0) {
-+			if (errno == EINTR)
-+				continue;
-+			c->err_b = -errno;
-+			break;
-+		}
-+		if (c->err_b)
-+			break;
-+		/* B preempted A only if A is still inside the program */
-+		if (*(volatile int *)&c->skel->bss->a_inside)
-+			c->overlaps++;
-+		if (prctl(PR_SET_NAME, comm, 0, 0, 0)) {
-+			c->err_b = -errno;
-+			break;
-+		}
-+		if (read(c->done_pipe[0], &ch, 1) != 1) {
-+			c->err_b = -EIO;
-+			break;
-+		}
-+	}
-+
-+out:
-+	close(c->go_pipe[1]);
-+	c->go_pipe[1] = -1;
-+	return NULL;
-+}
-+
-+static void run_subtest(enum subtest_kind kind)
-+{
-+	struct ctx c = {
-+		.go_pipe = { -1, -1 },
-+		.done_pipe = { -1, -1 },
-+	};
-+	struct bpf_prog_info info = {};
-+	__u32 info_len = sizeof(info);
-+	struct bpf_program *prog = NULL, *extra = NULL, *tail = NULL, *p;
-+	struct bpf_link *link = NULL, *link2 = NULL, *wakeup_link = NULL;
-+	struct bpf_map *jmp = NULL;
-+	sigset_t oldset;
-+	pthread_t ta, tb;
-+	bool ta_started = false, tb_started = false, sigmask_set = false;
-+	bool via_map;
-+	__u32 zero = 0;
-+	int tail_fd;
-+	char ch;
-+	int err;
-+
-+	c.skel = trampoline_preempt__open();
-+	if (!ASSERT_OK_PTR(c.skel, "open"))
-+		return;
-+
-+	switch (kind) {
-+	case SUBTEST_FENTRY:
-+		prog = c.skel->progs.on_fentry;
-+		break;
-+	case SUBTEST_FEXIT:
-+		prog = c.skel->progs.on_fexit;
-+		break;
-+	case SUBTEST_FENTRY_S:
-+		prog = c.skel->progs.on_fentry_s;
-+		break;
-+	case SUBTEST_FEXIT_S:
-+		prog = c.skel->progs.on_fexit_s;
-+		break;
-+	case SUBTEST_RAW_TP:
-+		prog = c.skel->progs.on_raw_tp;
-+		break;
-+	case SUBTEST_RAW_TP_S:
-+		prog = c.skel->progs.on_raw_tp_s;
-+		break;
-+	case SUBTEST_TP_BTF:
-+		prog = c.skel->progs.on_tp_btf;
-+		break;
-+	case SUBTEST_FSESSION:
-+		prog = c.skel->progs.on_fsession;
-+		break;
-+	case SUBTEST_TAILCALL_RAW_TP:
-+		prog = c.skel->progs.dispatcher_raw_tp;
-+		tail = c.skel->progs.handler_raw_tp;
-+		jmp = c.skel->maps.jmp_raw_tp;
-+		break;
-+	case SUBTEST_TWO_DISPATCHERS:
-+		prog = c.skel->progs.dispatcher_a;
-+		extra = c.skel->progs.dispatcher_b;
-+		tail = c.skel->progs.handler_raw_tp;
-+		jmp = c.skel->maps.jmp_raw_tp;
-+		break;
-+	case SUBTEST_NESTED_PROG:
-+		prog = c.skel->progs.on_raw_tp_nested;
-+		break;
-+	}
-+	via_map = kind == SUBTEST_NESTED_PROG;
-+	bpf_object__for_each_program(p, c.skel->obj)
-+		bpf_program__set_autoload(p, p == prog || p == extra || p == tail ||
-+					  (via_map && p == c.skel->progs.on_wakeup_delete));
-+
-+	err = trampoline_preempt__load(c.skel);
-+	if (err == -EOPNOTSUPP || err == -ENOTSUPP) {
-+		test__skip();
-+		goto out;
-+	}
-+	if (!ASSERT_OK(err, "load"))
-+		goto out;
-+
-+	c.cpu = sched_getcpu();
-+	if (!ASSERT_GE(c.cpu, 0, "sched_getcpu"))
-+		goto out;
-+
-+	if (!ASSERT_OK(pipe(c.go_pipe), "go_pipe"))
-+		goto out;
-+	if (!ASSERT_OK(pipe(c.done_pipe), "done_pipe"))
-+		goto out;
-+
-+	sigemptyset(&c.sigset);
-+	sigaddset(&c.sigset, SIGUSR1);
-+	if (!ASSERT_OK(pthread_sigmask(SIG_BLOCK, &c.sigset, &oldset), "sigmask"))
-+		goto out;
-+	sigmask_set = true;
-+
-+	c.skel->bss->sig = SIGUSR1;
-+	if (via_map) {
-+		wakeup_link = bpf_program__attach(c.skel->progs.on_wakeup_delete);
-+		if (!ASSERT_OK_PTR(wakeup_link, "attach_wakeup"))
-+			goto out;
-+	}
-+	link = bpf_program__attach(prog);
-+	if (!ASSERT_OK_PTR(link, "attach"))
-+		goto out;
-+	if (extra) {
-+		link2 = bpf_program__attach(extra);
-+		if (!ASSERT_OK_PTR(link2, "attach_extra"))
-+			goto out;
-+	}
-+	if (tail) {
-+		tail_fd = bpf_program__fd(tail);
-+		if (!ASSERT_OK(bpf_map_update_elem(bpf_map__fd(jmp), &zero, &tail_fd,
-+						   BPF_ANY), "jmp_update"))
-+			goto out;
-+	}
-+
-+	if (!ASSERT_OK(pthread_create(&ta, NULL, worker_a, &c), "pthread_a"))
-+		goto out;
-+	ta_started = true;
-+
-+	if (!ASSERT_EQ(read(c.done_pipe[0], &ch, 1), 1, "ready_a"))
-+		goto out;
-+	if (!ASSERT_OK(c.err_a, "setup_a"))
-+		goto out;
-+
-+	if (!ASSERT_OK(pthread_create(&tb, NULL, worker_b, &c), "pthread_b"))
-+		goto out;
-+	tb_started = true;
-+
-+	pthread_join(tb, NULL);
-+	tb_started = false;
-+	pthread_join(ta, NULL);
-+	ta_started = false;
-+
-+	if (c.err_b == -EPERM || c.err_b == -EACCES) {
-+		test__skip();
-+		goto out;
-+	}
-+
-+	ASSERT_OK(c.err_a, "worker_a_err");
-+	ASSERT_OK(c.err_b, "worker_b_err");
-+	ASSERT_EQ(c.skel->bss->sig_err, 0, "sig_err");
-+	if (!c.overlaps) {
-+		/* B never preempted A inside the program, so nothing was tested */
-+		test__skip();
-+		goto out;
-+	}
-+	ASSERT_EQ(c.overlaps, NR_ROUNDS, "overlaps");
-+	ASSERT_EQ(c.skel->bss->stack_corrupt, 0, "stack_corrupt");
-+	ASSERT_EQ(c.skel->bss->runs_a, NR_ROUNDS, "runs_a");
-+	ASSERT_EQ(c.skel->bss->runs_b, NR_ROUNDS, "runs_b");
-+	ASSERT_EQ(c.skel->bss->b_inside_a, c.skel->bss->runs_b, "b_inside_a");
-+
-+	err = bpf_prog_get_info_by_fd(bpf_program__fd(prog), &info, &info_len);
-+	if (ASSERT_OK(err, "prog_info"))
-+		ASSERT_EQ(info.recursion_misses, 0, "recursion_misses");
-+
-+out:
-+	if (c.go_pipe[1] >= 0)
-+		close(c.go_pipe[1]);
-+	if (tb_started)
-+		pthread_join(tb, NULL);
-+	if (ta_started)
-+		pthread_join(ta, NULL);
-+	if (c.go_pipe[0] >= 0)
-+		close(c.go_pipe[0]);
-+	if (c.done_pipe[0] >= 0)
-+		close(c.done_pipe[0]);
-+	if (c.done_pipe[1] >= 0)
-+		close(c.done_pipe[1]);
-+	if (sigmask_set)
-+		pthread_sigmask(SIG_SETMASK, &oldset, NULL);
-+	bpf_link__destroy(link);
-+	bpf_link__destroy(link2);
-+	bpf_link__destroy(wakeup_link);
-+	trampoline_preempt__destroy(c.skel);
-+}
-+
-+/*
-+ * The program calls bpf_printk(), which fires the bpf_trace_printk tracepoint
-+ * the program is attached to. The nested run must be rejected as recursion.
-+ * With two hops, a second program runs in between, so the check has to look
-+ * past the frame right below.
-+ */
-+static void run_recursion_subtest(enum recursion_kind kind)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, opts);
-+	struct bpf_prog_info info = {};
-+	__u32 info_len = sizeof(info);
-+	struct trampoline_preempt *skel;
-+	struct bpf_program *prog, *hop = NULL, *trigger, *p;
-+	struct bpf_link *link = NULL, *hop_link = NULL;
-+	int err;
-+
-+	skel = trampoline_preempt__open();
-+	if (!ASSERT_OK_PTR(skel, "open"))
-+		return;
-+
-+	switch (kind) {
-+	case RECURSION_TP_BTF:
-+		prog = skel->progs.recur_tp_btf;
-+		break;
-+	case RECURSION_TWO_HOPS:
-+		prog = skel->progs.recur_two_hops;
-+		hop = skel->progs.recur_hop;
-+		break;
-+	default:
-+		prog = skel->progs.recur_raw_tp;
-+		break;
-+	}
-+	trigger = kind == RECURSION_TEST_RUN ? prog : skel->progs.recur_trigger;
-+	bpf_object__for_each_program(p, skel->obj)
-+		bpf_program__set_autoload(p, p == prog || p == hop || p == trigger);
-+
-+	err = trampoline_preempt__load(skel);
-+	if (err == -EOPNOTSUPP || err == -ENOTSUPP) {
-+		test__skip();
-+		goto out;
-+	}
-+	if (!ASSERT_OK(err, "load"))
-+		goto out;
-+	link = bpf_program__attach(prog);
-+	if (!ASSERT_OK_PTR(link, "attach"))
-+		goto out;
-+	if (hop) {
-+		hop_link = bpf_program__attach(hop);
-+		if (!ASSERT_OK_PTR(hop_link, "attach_hop"))
-+			goto out;
-+	}
-+
-+	skel->bss->recur_tid = (int)syscall(SYS_gettid);
-+	err = bpf_prog_test_run_opts(bpf_program__fd(trigger), &opts);
-+	skel->bss->recur_tid = 0;
-+	if (!ASSERT_OK(err, "test_run"))
-+		goto out;
-+
-+	ASSERT_EQ(skel->bss->recur_runs, 1, "recur_runs");
-+	err = bpf_prog_get_info_by_fd(bpf_program__fd(prog), &info, &info_len);
-+	if (ASSERT_OK(err, "prog_info"))
-+		ASSERT_EQ(info.recursion_misses, 1, "recursion_misses");
-+	if (hop) {
-+		ASSERT_EQ(skel->bss->hop_runs, 1, "hop_runs");
-+		memset(&info, 0, sizeof(info));
-+		err = bpf_prog_get_info_by_fd(bpf_program__fd(hop), &info, &info_len);
-+		if (ASSERT_OK(err, "hop_info"))
-+			ASSERT_EQ(info.recursion_misses, 0, "hop_recursion_misses");
-+	}
-+out:
-+	bpf_link__destroy(hop_link);
-+	bpf_link__destroy(link);
-+	trampoline_preempt__destroy(skel);
-+}
-+
-+void test_trampoline_preempt(void)
-+{
-+	if (test__start_subtest("fentry"))
-+		run_subtest(SUBTEST_FENTRY);
-+	if (test__start_subtest("fexit"))
-+		run_subtest(SUBTEST_FEXIT);
-+	if (test__start_subtest("fentry_s"))
-+		run_subtest(SUBTEST_FENTRY_S);
-+	if (test__start_subtest("fexit_s"))
-+		run_subtest(SUBTEST_FEXIT_S);
-+	if (test__start_subtest("raw_tp"))
-+		run_subtest(SUBTEST_RAW_TP);
-+	if (test__start_subtest("raw_tp_s"))
-+		run_subtest(SUBTEST_RAW_TP_S);
-+	if (test__start_subtest("tp_btf"))
-+		run_subtest(SUBTEST_TP_BTF);
-+	if (test__start_subtest("fsession"))
-+		run_subtest(SUBTEST_FSESSION);
-+	if (test__start_subtest("tailcall_raw_tp"))
-+		run_subtest(SUBTEST_TAILCALL_RAW_TP);
-+	if (test__start_subtest("two_dispatchers"))
-+		run_subtest(SUBTEST_TWO_DISPATCHERS);
-+	if (test__start_subtest("nested_prog"))
-+		run_subtest(SUBTEST_NESTED_PROG);
-+	if (test__start_subtest("recursion_raw_tp"))
-+		run_recursion_subtest(RECURSION_RAW_TP);
-+	if (test__start_subtest("recursion_tp_btf"))
-+		run_recursion_subtest(RECURSION_TP_BTF);
-+	if (test__start_subtest("recursion_test_run"))
-+		run_recursion_subtest(RECURSION_TEST_RUN);
-+	if (test__start_subtest("recursion_two_hops"))
-+		run_recursion_subtest(RECURSION_TWO_HOPS);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/trampoline_preempt.c b/tools/testing/selftests/bpf/progs/trampoline_preempt.c
-new file mode 100644
-index 000000000000..78ed74627a79
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/trampoline_preempt.c
-@@ -0,0 +1,265 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <asm/unistd.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct task_struct *bpf_task_from_pid(s32 pid) __ksym;
-+void bpf_task_release(struct task_struct *p) __ksym;
-+int bpf_send_signal_task(struct task_struct *task, int sig, enum pid_type type, u64 value) __ksym;
-+void bpf_rcu_read_lock(void) __ksym;
-+void bpf_rcu_read_unlock(void) __ksym;
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, int);
-+} wakeup_map SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} jmp_raw_tp SEC(".maps");
-+
-+int tid_a;
-+int tid_b;
-+int sig;
-+int runs_a;
-+int runs_b;
-+int sig_err;
-+int stack_corrupt;
-+int a_inside;
-+int b_inside_a;
-+int recur_tid;
-+int recur_runs;
-+
-+static __always_inline void fill_stack(__u64 *buf, __u32 tid)
-+{
-+	#pragma unroll
-+	for (int i = 0; i < 8; i++)
-+		buf[i] = ((__u64)tid << 32) | (0x5a5a0000U + i);
-+}
-+
-+static __always_inline void check_stack(const __u64 *buf, __u32 tid)
-+{
-+	#pragma unroll
-+	for (int i = 0; i < 8; i++) {
-+		if (buf[i] != (((__u64)tid << 32) | (0x5a5a0000U + i)))
-+			stack_corrupt = 1;
-+	}
-+}
-+
-+static void signal_worker_b(void)
-+{
-+	struct task_struct *task;
-+
-+	bpf_rcu_read_lock();
-+	task = bpf_task_from_pid(tid_b);
-+	if (!task) {
-+		sig_err = 1;
-+		bpf_rcu_read_unlock();
-+		return;
-+	}
-+	if (bpf_send_signal_task(task, sig, PIDTYPE_PID, 0))
-+		sig_err = 1;
-+	bpf_task_release(task);
-+	bpf_rcu_read_unlock();
-+}
-+
-+static __always_inline int handle_comm(bool via_map)
-+{
-+	__u32 tid = (__u32)bpf_get_current_pid_tgid();
-+	__u64 stack_buf[8];
-+	int zero = 0;
-+
-+	if (tid != tid_a && tid != tid_b)
-+		return 0;
-+
-+	fill_stack(stack_buf, tid);
-+	asm volatile("" : "+m"(stack_buf));
-+
-+	if (tid == tid_a) {
-+		int runs_b_before = *(volatile int *)&runs_b;
-+
-+		runs_a++;
-+		*(volatile int *)&a_inside = 1;
-+		if (via_map)
-+			bpf_map_delete_elem(&wakeup_map, &zero);
-+		else
-+			signal_worker_b();
-+		/* B's whole run happened after the wakeup and before the stack check */
-+		if (*(volatile int *)&runs_b != runs_b_before)
-+			b_inside_a++;
-+	} else {
-+		runs_b++;
-+	}
-+
-+	asm volatile("" : "+m"(stack_buf));
-+	/* Don't trust a copy of tid that may have been spilled to the stack under test */
-+	tid = (__u32)bpf_get_current_pid_tgid();
-+	check_stack(stack_buf, tid);
-+	if (tid == tid_a)
-+		*(volatile int *)&a_inside = 0;
-+	return 0;
-+}
-+
-+static __always_inline int recur_body(void)
-+{
-+	if ((__u32)bpf_get_current_pid_tgid() != recur_tid)
-+		return 0;
-+	recur_runs++;
-+	bpf_printk("recur");
-+	return 0;
-+}
-+
-+SEC("fentry/__set_task_comm")
-+int BPF_PROG(on_fentry)
-+{
-+	return handle_comm(false);
-+}
-+
-+SEC("fexit/__set_task_comm")
-+int BPF_PROG(on_fexit)
-+{
-+	return handle_comm(false);
-+}
-+
-+SEC("fentry.s/" SYS_PREFIX "sys_prctl")
-+int BPF_PROG(on_fentry_s)
-+{
-+	return handle_comm(false);
-+}
-+
-+SEC("fexit.s/" SYS_PREFIX "sys_prctl")
-+int BPF_PROG(on_fexit_s)
-+{
-+	return handle_comm(false);
-+}
-+
-+SEC("fentry/htab_map_delete_elem")
-+int BPF_PROG(on_wakeup_delete, struct bpf_map *map)
-+{
-+	if (map == (struct bpf_map *)&wakeup_map)
-+		signal_worker_b();
-+	return 0;
-+}
-+
-+SEC("raw_tp/task_rename")
-+int BPF_PROG(on_raw_tp)
-+{
-+	return handle_comm(false);
-+}
-+
-+SEC("raw_tp/task_rename")
-+int BPF_PROG(on_raw_tp_nested)
-+{
-+	return handle_comm(true);
-+}
-+
-+SEC("raw_tp.s/sys_enter")
-+int BPF_PROG(on_raw_tp_s, struct pt_regs *regs, long id)
-+{
-+	if (id != __NR_prctl)
-+		return 0;
-+	return handle_comm(false);
-+}
-+
-+SEC("tp_btf/task_rename")
-+int BPF_PROG(on_tp_btf)
-+{
-+	return handle_comm(false);
-+}
-+
-+SEC("fsession/__set_task_comm")
-+int BPF_PROG(on_fsession)
-+{
-+	if (bpf_session_is_return(ctx))
-+		return 0;
-+	return handle_comm(false);
-+}
-+
-+SEC("raw_tp/task_rename")
-+int dispatcher_raw_tp(void *ctx)
-+{
-+	bpf_tail_call(ctx, &jmp_raw_tp, 0);
-+	return 0;
-+}
-+
-+SEC("raw_tp/task_rename")
-+int handler_raw_tp(void *ctx)
-+{
-+	return handle_comm(false);
-+}
-+
-+SEC("raw_tp/task_rename")
-+int dispatcher_a(void *ctx)
-+{
-+	if ((__u32)bpf_get_current_pid_tgid() == tid_a)
-+		bpf_tail_call(ctx, &jmp_raw_tp, 0);
-+	return 0;
-+}
-+
-+SEC("raw_tp/sys_enter")
-+int BPF_PROG(dispatcher_b, struct pt_regs *regs, long id)
-+{
-+	if (id == __NR_prctl && (__u32)bpf_get_current_pid_tgid() == tid_b)
-+		bpf_tail_call(ctx, &jmp_raw_tp, 0);
-+	return 0;
-+}
-+
-+SEC("raw_tp/bpf_trace_printk")
-+int recur_raw_tp(void *ctx)
-+{
-+	return recur_body();
-+}
-+
-+SEC("tp_btf/bpf_trace_printk")
-+int BPF_PROG(recur_tp_btf)
-+{
-+	return recur_body();
-+}
-+
-+SEC("syscall")
-+int recur_trigger(void *ctx)
-+{
-+	bpf_printk("trigger");
-+	return 0;
-+}
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, int);
-+} recur_map SEC(".maps");
-+
-+int hop_runs;
-+
-+SEC("raw_tp/bpf_trace_printk")
-+int recur_two_hops(void *ctx)
-+{
-+	int zero = 0;
-+
-+	if ((__u32)bpf_get_current_pid_tgid() != recur_tid)
-+		return 0;
-+	recur_runs++;
-+	bpf_map_delete_elem(&recur_map, &zero);
-+	return 0;
-+}
-+
-+SEC("fentry/htab_map_delete_elem")
-+int BPF_PROG(recur_hop, struct bpf_map *map)
-+{
-+	if (map != (struct bpf_map *)&recur_map ||
-+	    (__u32)bpf_get_current_pid_tgid() != recur_tid)
-+		return 0;
-+	hop_runs++;
-+	bpf_printk("hop");
-+	return 0;
-+}
+ /* BPF program asks to bypass CAP_NET_BIND_SERVICE in bind. */
+ #define BPF_RET_BIND_NO_CAP_NET_BIND_SERVICE			(1 << 0)
+ /* BPF program asks to set CN on the packet. */
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index 21d460866dfe..d66aa688688f 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -1342,9 +1342,9 @@ static u64 notrace __bpf_prog_enter_recur(struct bpf_prog *prog, struct bpf_tram
+ {
+ 	rcu_read_lock_dont_migrate();
+ 
+-	run_ctx->saved_run_ctx = bpf_set_run_ctx(&run_ctx->run_ctx);
++	bpf_set_run_ctx(&run_ctx->run_ctx);
+ 
+-	if (unlikely(!bpf_prog_get_recursion_context(prog))) {
++	if (unlikely(!bpf_prog_enter_recur_ctx(prog, &run_ctx->run_ctx))) {
+ 		bpf_prog_inc_misses_counter(prog);
+ 		if (prog->aux->recursion_detected)
+ 			prog->aux->recursion_detected(prog);
+@@ -1385,10 +1385,10 @@ static void notrace __bpf_prog_exit_recur(struct bpf_prog *prog, u64 start,
+ 					  struct bpf_tramp_run_ctx *run_ctx)
+ 	__releases(RCU)
+ {
+-	bpf_reset_run_ctx(run_ctx->saved_run_ctx);
++	bpf_reset_run_ctx(run_ctx->run_ctx.saved_run_ctx);
+ 
+ 	update_prog_stats(prog, start);
+-	bpf_prog_put_recursion_context(prog);
++	bpf_prog_exit_recur_ctx(prog, &run_ctx->run_ctx);
+ 	rcu_read_unlock_migrate();
+ }
+ 
+@@ -1401,7 +1401,7 @@ static u64 notrace __bpf_prog_enter_lsm_cgroup(struct bpf_prog *prog,
+ 	 */
+ 	rcu_read_lock_dont_migrate();
+ 
+-	run_ctx->saved_run_ctx = bpf_set_run_ctx(&run_ctx->run_ctx);
++	bpf_set_run_ctx(&run_ctx->run_ctx);
+ 
+ 	return NO_START_TIME;
+ }
+@@ -1410,7 +1410,7 @@ static void notrace __bpf_prog_exit_lsm_cgroup(struct bpf_prog *prog, u64 start,
+ 					       struct bpf_tramp_run_ctx *run_ctx)
+ 	__releases(RCU)
+ {
+-	bpf_reset_run_ctx(run_ctx->saved_run_ctx);
++	bpf_reset_run_ctx(run_ctx->run_ctx.saved_run_ctx);
+ 
+ 	rcu_read_unlock_migrate();
+ }
+@@ -1422,9 +1422,9 @@ u64 notrace __bpf_prog_enter_sleepable_recur(struct bpf_prog *prog,
+ 	migrate_disable();
+ 	might_fault();
+ 
+-	run_ctx->saved_run_ctx = bpf_set_run_ctx(&run_ctx->run_ctx);
++	bpf_set_run_ctx(&run_ctx->run_ctx);
+ 
+-	if (unlikely(!bpf_prog_get_recursion_context(prog))) {
++	if (unlikely(!bpf_prog_enter_recur_ctx(prog, &run_ctx->run_ctx))) {
+ 		bpf_prog_inc_misses_counter(prog);
+ 		if (prog->aux->recursion_detected)
+ 			prog->aux->recursion_detected(prog);
+@@ -1436,10 +1436,10 @@ u64 notrace __bpf_prog_enter_sleepable_recur(struct bpf_prog *prog,
+ void notrace __bpf_prog_exit_sleepable_recur(struct bpf_prog *prog, u64 start,
+ 					     struct bpf_tramp_run_ctx *run_ctx)
+ {
+-	bpf_reset_run_ctx(run_ctx->saved_run_ctx);
++	bpf_reset_run_ctx(run_ctx->run_ctx.saved_run_ctx);
+ 
+ 	update_prog_stats(prog, start);
+-	bpf_prog_put_recursion_context(prog);
++	bpf_prog_exit_recur_ctx(prog, &run_ctx->run_ctx);
+ 	migrate_enable();
+ 	rcu_read_unlock_trace();
+ }
+@@ -1451,7 +1451,7 @@ static u64 notrace __bpf_prog_enter_sleepable(struct bpf_prog *prog,
+ 	migrate_disable();
+ 	might_fault();
+ 
+-	run_ctx->saved_run_ctx = bpf_set_run_ctx(&run_ctx->run_ctx);
++	bpf_set_run_ctx(&run_ctx->run_ctx);
+ 
+ 	return bpf_prog_start_time();
+ }
+@@ -1459,7 +1459,7 @@ static u64 notrace __bpf_prog_enter_sleepable(struct bpf_prog *prog,
+ static void notrace __bpf_prog_exit_sleepable(struct bpf_prog *prog, u64 start,
+ 					      struct bpf_tramp_run_ctx *run_ctx)
+ {
+-	bpf_reset_run_ctx(run_ctx->saved_run_ctx);
++	bpf_reset_run_ctx(run_ctx->run_ctx.saved_run_ctx);
+ 
+ 	update_prog_stats(prog, start);
+ 	migrate_enable();
+@@ -1472,7 +1472,7 @@ static u64 notrace __bpf_prog_enter(struct bpf_prog *prog,
+ {
+ 	rcu_read_lock_dont_migrate();
+ 
+-	run_ctx->saved_run_ctx = bpf_set_run_ctx(&run_ctx->run_ctx);
++	bpf_set_run_ctx(&run_ctx->run_ctx);
+ 
+ 	return bpf_prog_start_time();
+ }
+@@ -1481,7 +1481,7 @@ static void notrace __bpf_prog_exit(struct bpf_prog *prog, u64 start,
+ 				    struct bpf_tramp_run_ctx *run_ctx)
+ 	__releases(RCU)
+ {
+-	bpf_reset_run_ctx(run_ctx->saved_run_ctx);
++	bpf_reset_run_ctx(run_ctx->run_ctx.saved_run_ctx);
+ 
+ 	update_prog_stats(prog, start);
+ 	rcu_read_unlock_migrate();
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 2aec56d7f3d3..d596c333b7eb 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -2127,19 +2127,17 @@ void __bpf_trace_run(struct bpf_raw_tp_link *link, u64 *args)
+ 		rcu_read_lock_dont_migrate();
+ 	}
+ 
+-	if (unlikely(!bpf_prog_get_recursion_context(prog))) {
++	run_ctx.bpf_cookie = link->cookie;
++	old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
++	if (unlikely(!bpf_prog_enter_recur_ctx(prog, &run_ctx.run_ctx))) {
+ 		bpf_prog_inc_misses_counter(prog);
+ 		goto out;
+ 	}
+ 
+-	run_ctx.bpf_cookie = link->cookie;
+-	old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
+-
+ 	(void)bpf_prog_run(prog, args);
+-
+-	bpf_reset_run_ctx(old_run_ctx);
+ out:
+-	bpf_prog_put_recursion_context(prog);
++	bpf_reset_run_ctx(old_run_ctx);
++	bpf_prog_exit_recur_ctx(prog, &run_ctx.run_ctx);
+ 
+ 	if (sleepable) {
+ 		migrate_enable();
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index d6c9dc62182e..362d9ec0d8f8 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -759,7 +759,7 @@ __bpf_prog_test_run_raw_tp(void *data)
+ 		rcu_read_lock();
+ 	}
+ 
+-	if (unlikely(!bpf_prog_get_recursion_context(info->prog))) {
++	if (unlikely(!bpf_prog_enter_recur_ctx(info->prog, &run_ctx.run_ctx))) {
+ 		bpf_prog_inc_misses_counter(info->prog);
+ 		goto out;
+ 	}
+@@ -767,7 +767,7 @@ __bpf_prog_test_run_raw_tp(void *data)
+ 	info->retval = bpf_prog_run(info->prog, info->ctx);
+ 
+ out:
+-	bpf_prog_put_recursion_context(info->prog);
++	bpf_prog_exit_recur_ctx(info->prog, &run_ctx.run_ctx);
+ 
+ 	if (info->prog->sleepable) {
+ 		migrate_enable();
+diff --git a/net/ipv4/bpf_tcp_ops.c b/net/ipv4/bpf_tcp_ops.c
+index 2ba73dd6c52c..e1ca34e63de0 100644
+--- a/net/ipv4/bpf_tcp_ops.c
++++ b/net/ipv4/bpf_tcp_ops.c
+@@ -207,11 +207,11 @@ BPF_CALL_0(bpf_tcp_ops_get_retval)
+ 	 * return value chained across the bpf_tcp_ops attached to the cgroup
+ 	 * and is this program's saved_run_ctx.
+ 	 */
+-	if (WARN_ON_ONCE(!ctx->saved_run_ctx))
++	if (WARN_ON_ONCE(!ctx->run_ctx.saved_run_ctx))
+ 		return 0;
+ 
+-	return container_of(ctx->saved_run_ctx, struct bpf_tramp_run_ctx,
+-			    run_ctx)->retval;
++	return container_of(ctx->run_ctx.saved_run_ctx,
++			    struct bpf_tramp_run_ctx, run_ctx)->retval;
+ }
+ 
+ const struct bpf_func_proto bpf_tcp_ops_get_retval_proto = {
 
 -- 
 2.43.0
