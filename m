@@ -1,66 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.97.179.56
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794391615;
-	b=XMrEzI83yHCzh30cMmtTpxPlgSuygM2NZLN2JqUshNGnrsBtYgbnRz7RIwTtK9AgmyLV
-	 TBslmcp72bs5HqJGJbWwxGVp9RMsH83pdpIYQkX5o8KEqoaeftLfEszsS2vy5/ckKpMIe
-	 gagZFD6eOk6Trx8P0Hey/a4nR11SPEDwnxlKckrSze2f4i7igIxmPGA5e6uKdflZ+CIcE
-	 Y/VSQ1oM9kV6GrIdqe3ewawKX9/HCc6nQ9TyWoBKWREIDixaP2q3bHH9mzY3+zX6jGGFa
-	 /FreNAfr7gMt6DmA3Ze2D70utV75EPLpDcKqy1TWfsBRmuZiXkvZK/kE5tB4ilHn2aw==
+	t=1794391813;
+	b=air/pOEcVEoYbUqPpia3Oc8iAILt0fKTcPmVjkCW5sZ545HAKxs2w+brJiFyCy34mNEo
+	 KaZLuD7OP8Q8MUmDSW57BAXJoXDBl9m7zhEUA523ccJ3a212Qk+OgVHC3Kh2I24qSgjT5
+	 uFmp2Wkm4kLlPSk527QOhOcsnn/KE1BCOB1iTSTJ8CKRH76MhSbNaUEqZDzsJihvsRzvo
+	 CLqrWKXM6mrP1/YtPLCf5VgAJODRRACwSQzoncLh4S/oGhlNXvTte+1WZ/gHtddVL1pDA
+	 gwn3098BAlfwWNmZrojtm6ybNY1CRUZijnnQ2Fs7mr9eKTrNImok5r0bH1eJpp9aQJg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794391615;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=VlfbgDgQAEitsNSmJqDXQTJdALRr6On/NT0I0OmkIfA=;
-	b=J3jIlMt9+DTOlwyRu76iiU9YMEa5dZlLw+MC3VYu78VIy8jN6mPeIW0iB0f260US4p4F
-	 JgeyWX62Z7Xb4i4yEiidBkGF3vYZ1mBnOUUYmx1igPdJ1qonrlnOtqfN9MqGb8zPtIfh6
-	 r/7DGNWrbZlhiyhdHmtE81IqAsvOHmJeG3WmgbZCmaU6ysMH8OpvhKz/ecsJzzQD/0c/2
-	 MbAZ+Fui2J/o9BSnYRJKoSJA5Zsh2qYCdaNLMJ4uFRgCKbWeUdUrEid1XRXv+47WV6TX+
-	 hvRjTmUka94U0HsFH/osA+944m/PAAy9uQoyK/wPfrgSHpEKRr3HE6RZwYEyGUPbD6A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794391813;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=TKdv7edjmPjExE3RyciVP5KfNQ2HgIujnfELAufwRbY=;
+	b=WG+ybpm5WllPDrKzle+BmlKQ33wYd1JyTB8fE9DNyrFDsGn10PS1Gt+UHeTGt9l7R6C0
+	 eBCehs9Z5bEo+ugGoOZSwQXUHgqtFUmWJ0Gn/z3Dwpgvr85mWbdGKvcRt4Mc7siUn35Fq
+	 TAXKzkAZEXPdbCRRcTemddOtqP93tRapiPCRkOpiV0xXftiComaDkivM7WDXrWhxwZLVT
+	 OhH4C4ke25B5UQBU/3Z/LUXb4NpCxBazwMHiZMtIC+Xn9mMTNQcbX/nxhoDT5AIjqtWI6
+	 vRg5s6kSZ1TGh3a9cDs8KF+6Tw3RMyLdk7817WVDqCC64gW333g6iCOtjJKmvGxbLBw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=e4p588Da;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=igalia.com;
+	spf=pass smtp.mailfrom=igalia.com;
+	dkim=pass header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256 header.s=20170329 header.b=lYMH0dCe;
+	arc=none smtp.remote-ip=213.97.179.56
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F23CB606A333;
-	Wed, 11 Nov 2026 10:06:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6826606A31C;
+	Wed, 11 Nov 2026 10:10:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A6826606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=e4p588Da
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1598C1F00A05;
-	Wed, 11 Nov 2026 10:06:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794391614;
-	bh=VlfbgDgQAEitsNSmJqDXQTJdALRr6On/NT0I0OmkIfA=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=e4p588Da+7AjF2uWURuees2FVLx9OHEFnt6AQUUn5ItfCjASqQlduuuqtghPqvLbf
-	 wtl8MByo8ihpgEWCT1D1I/sHb1uCZ1/kCPfeaPIz7RiB1kYYwfFq8y5kNmkLgQozk0
-	 WtQ9nqzBEuERWQ4hwEoOo/T/SU3+KMDkcGok88Mj+nbLg5kr5tUE57aoTQQbR91WcL
-	 qlc+n91Qdwqgv1EnX3JA5B/KGqtsYfsnrIqBmOzSYjCFs/2QEZt6WHyae4SahsIxEB
-	 yiP9T4qCJhko56XnxlOdxTHwM5tRhHu+snaXEQnhyOmKHdxwWHGMsDGfn6Pyi2Tibn
-	 JWvxrtCyr7q7A==
-Subject:
- Re: [PATCH net v5 1/2] gve: refuse XDP on queue formats without XDP support
-From: netdev-bot+sashiko@kernel.org
-To: amaan.cheval@gmail.com
-Cc: netdev@vger.kernel.org, joshwash@google.com, hramamurthy@google.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
- kuba@kernel.org, pabeni@redhat.com, bcf@google.com, jordanrhee@google.com,
- przemyslaw.kitszel@intel.com, maciej.fijalkowski@intel.com,
- pkaligineedi@google.com, maolson@google.com, csully@google.com,
- willemb@google.com, yangchun@google.com, npl@google.com,
- awogbemila@google.com, shailend@google.com, nktgrg@google.com,
- maxyuan@google.com, bpf@vger.kernel.org, john.fastabend@gmail.com,
- hawk@kernel.org, sdf@fomichev.me, daniel@iogearbox.net, ast@kernel.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Date: Wed, 11 Nov 2026 10:06:52 +0000
-Message-ID: <179439161258.2199510.10096207449822395421@kernel.org>
-In-Reply-To: <20261109100437.331423-2-amaan.cheval@gmail.com>
-References: <20261109100437.331423-2-amaan.cheval@gmail.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256 header.s=20170329 header.b=lYMH0dCe
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
+	Cc:To:From:From:Reply-To; bh=TKdv7edjmPjExE3RyciVP5KfNQ2HgIujnfELAufwRbY=;
+	t=1794391812; x=2109751812; b=lYMH0dCei7pknFhzgRYYfLo8lA58O0s5uUTC30SWtr9j425
+	aivLUSdgS+C2hYgM5fN3LZ5gGxdI6VXf+Yw8tdqpzpCsz0XYo42rBduleTus3xYxpHwAvYqXkVdFV
+	3DWmDOiZLnb2/eFLQLEokrsgZNbUF9eUEIngefQqHs6rM66ZWz3XjEr178id6hcXJyVppgLf3CpUQ
+	wJZgu6fi5ILTC0/Uh72kc9tKU773Vgh4ITlUKLEtvN030MdLj8I9Nz8chX9i2o5o/3hXqIjES9U0S
+	mmcsclOLX7rWIDfkMvGuKLM8GGFUPTDM/IM0MVsk3uPKdMDy+ah2m6X+o7s6ClEQ==;
+Received: from [58.29.145.179] (helo=localhost)
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1xR5HH-008kZF-CK; Wed, 11 Nov 2026 11:10:04 +0100
+From: Changwoo Min <changwoo@igalia.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	david.dai@linux.dev,
+	Gavin Guo <gavinguo@igalia.com>,
+	bpf@vger.kernel.org,
+	sched-ext@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	changwoo@igalia.com,
+	kernel-dev@igalia.com
+Subject: [PATCH bpf-next v3 1/3] selftests/bpf: libarena: Order equal rbtree keys FIFO
+Date: Wed, 11 Nov 2026 19:09:49 +0900
+Message-ID: <20261111100951.230730-2-changwoo@igalia.com>
+X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20261111100951.230730-1-changwoo@igalia.com>
+References: <20261111100951.230730-1-changwoo@igalia.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -70,154 +81,119 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+An RB_DUPLICATE tree links a new key to the left of an equal one, so
+rb_least() and rb_pop() return the newest of several equal keys. A
+queue of tasks keyed by vtime should instead serve equal keys in
+arrival order, as sched_ext's vtime-ordered DSQs do.
 
-Critical: 0 · High: 0 (1) · Medium: 1 · Low: 0
+Send equal keys right on insert, as the kernel's rb_add() does. A new
+node then lands after every node with an equal key. Rotations and
+removals preserve the in-order sequence, so equal keys stay in
+insertion order without a tie-break field.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+Add a selftest that interleaves equal keys while the tree grows and
+checks the pop order.
 
-- [Medium] The commit message misstates which queue formats the new check
-  affects.
+Signed-off-by: Changwoo Min <changwoo@igalia.com>
+Reviewed-by: Alexei Starovoitov <ast@kernel.org>
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+---
+ .../bpf/libarena/include/libarena/rbtree.h    |  6 +--
+ .../bpf/libarena/selftests/test_rbtree.bpf.c  | 37 +++++++++++++++++++
+ .../selftests/bpf/libarena/src/rbtree.bpf.c   |  6 +--
+ 3 files changed, 43 insertions(+), 6 deletions(-)
 
-Pre-existing issues:
-- [High] This problem wasn't introduced by this patch, but the patch
-  extends it.
-
---
-
-gve: refuse XDP on queue formats without XDP support
-
-This patch adds a check to gve_verify_xdp_configuration() that refuses XDP
-setup when dev->xdp_features lacks NETDEV_XDP_ACT_BASIC. It replaces the
-queue format gate dropped by commit d8a8ca14c937. The aim is to keep XDP
-off DQO-QPL, whose RX page accounting can free a page that is still
-DMA-mapped and registered in the QPL.
-
-> Refuse XDP setup in gve_verify_xdp_configuration() whenever the driver
-> advertises no XDP features for the current queue format, which today
-> means DQO-QPL.
-
-[Severity: Medium]
-Is "which today means DQO-QPL" accurate? gve_set_netdev_xdp_features() only
-sets NETDEV_XDP_ACT_BASIC for GQI-QPL and DQO-RDA:
-
-drivers/net/ethernet/google/gve/gve_main.c:gve_set_netdev_xdp_features() {
-	if (priv->queue_format == GVE_GQI_QPL_FORMAT) {
-		xdp_features = NETDEV_XDP_ACT_BASIC;
-		...
-	} else if (priv->queue_format == GVE_DQO_RDA_FORMAT) {
-		xdp_features = NETDEV_XDP_ACT_BASIC;
-		...
-	} else {
-		xdp_features = 0;
-	}
-	...
-}
-
-GQI-RDA also falls into the else branch. gve_adminq.c can still select
-GVE_GQI_RDA_FORMAT from the GQI_RDA and GQI_RAW_ADDRESSING device options,
-so the new check refuses GQI-RDA as well.
-
-The check that d8a8ca14c937 removed (queue_format != GVE_GQI_QPL_FORMAT)
-also refused GQI-RDA. Since that commit, XDP could be attached on GQI-RDA,
-and XDP_TX there takes this path:
-
-gve_rx()
-  gve_xdp_done()
-    gve_xdp_xmit_one()
-      gve_tx_fill_xdp()
-
-gve_tx_fill_xdp() always uses tx->tx_fifo: it calls gve_tx_alloc_fifo(),
-memcpy()s into tx->tx_fifo.base and reads tx->tx_fifo.qpl->page_buses. A
-raw-addressing TX ring never allocates that FIFO. Isn't that a NULL
-dereference that this patch also fixes without saying so?
-
-Could the commit message mention GQI-RDA? Two things are worth stating:
-GQI-RDA now gets -EOPNOTSUPP, and this closes the XDP_TX crash there. That
-would help stable backporters.
-
-The follow-up patch "gve: fix RX page refcount overflow from INT_MAX
-pagecnt_bias" uses the same wording ("The previous patch keeps it that way
-by blocking XDP on DQO-QPL"). Its safety argument also depends on XDP being
-blocked on GQI-RDA.
-
-> diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/ethernet/google/gve/gve_main.c
-> index 2437cd8ba6331..fe560f5c5408c 100644
-> --- a/drivers/net/ethernet/google/gve/gve_main.c
-> +++ b/drivers/net/ethernet/google/gve/gve_main.c
-> @@ -1723,6 +1723,12 @@ static int gve_verify_xdp_configuration(struct net_device *dev,
->  	struct gve_priv *priv = netdev_priv(dev);
->  	u16 max_xdp_mtu;
->  
-> +	if (!(dev->xdp_features & NETDEV_XDP_ACT_BASIC)) {
-> +		NL_SET_ERR_MSG_MOD(extack,
-> +				   "XDP is not supported on this queue format.");
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-
-[Severity: High]
-This is a pre-existing issue that this patch did not introduce, but the
-patch adds another exit to the same gate. gve_xdp() calls
-gve_verify_xdp_configuration() before it looks at the command, so the gate
-also runs for teardown:
-
-drivers/net/ethernet/google/gve/gve_main.c:gve_xdp() {
-	err = gve_verify_xdp_configuration(dev, xdp->extack);
-	if (err)
-		return err;
-	switch (xdp->command) {
-	case XDP_SETUP_PROG:
-		return gve_set_xdp(priv, xdp->prog, xdp->extack);
-	case XDP_SETUP_XSK_POOL:
-		if (xdp->xsk.pool)
-			...
-		else
-			return gve_xsk_pool_disable(dev, xdp->xsk.queue_id);
-	...
-}
-
-Several of the gate's conditions can become true after a successful bind:
-
-- gve has no ndo_change_mtu, so the MTU can be raised above max_xdp_mtu
-  while a zero-copy pool is bound.
-- gve_set_features() refuses HW-GRO only when priv->xdp_prog is set, so
-  HW-GRO can be turned on while only a pool is bound.
-- The queue counts can be changed the same way.
-
-When the AF_XDP socket is then closed:
-
-xp_release_deferred()
-  xp_clear_dev()
-    __xp_clear_dev()
-      xp_disable_drv_zc()
-        gve_xdp()
-          gve_verify_xdp_configuration()   /* returns -EOPNOTSUPP */
-
-On failure, xp_disable_drv_zc() only does WARN(1, "Failed to disable
-zero-copy!\n"). The core then goes on to xsk_clear_pool_at_qid(),
-xdp_put_umem() and xp_destroy().
-
-Because gve_xsk_pool_disable() never runs, clear_bit(qid, priv->xsk_pools),
-xsk_pool_dma_unmap() and gve_unreg_xsk_pool() are all skipped. Won't
-rx->xsk_pool and tx->xsk_pool still point at the freed pool when the RX
-refill and XSK TX NAPI paths use them? The UMEM DMA mappings would also be
-leaked.
-
-dev_xdp_uninstall() follows the same pattern for programs. It does WARN_ON()
-on the failed removal and then calls bpf_prog_put(), which leaves
-priv->xdp_prog dangling.
-
-The new xdp_features check cannot change between setup and teardown by
-itself, since gve_setup_device() computes it only from queue_format. Even
-so, would it be better to run the verification only for XDP_SETUP_PROG with
-a non-NULL prog and for pool enable, so that teardown is never refused?
-
+diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h b/tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h
+index 486428911d96..00e63b12d82e 100644
+--- a/tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h
++++ b/tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h
+@@ -45,9 +45,9 @@ enum rbtree_alloc {
+  * the existing node.
+  *
+  * RB_DUPLICATE: Allow nodes with identical keys in the rbtree.
+- * Finding/popping/removing a key acts on any of the nodes
+- * with the appropriate key - there is no ordering by time
+- * of insertion.
++ * Nodes with identical keys are kept in insertion order, so
++ * rb_least() and rb_pop() return the oldest of them. Finding
++ * or removing by key acts on any of them.
+  */
+ enum rbtree_insert_mode {
+ 	RB_DEFAULT,
+diff --git a/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c
+index 856c484a009a..1e2a0fac1e4f 100644
+--- a/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c
++++ b/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c
+@@ -248,6 +248,43 @@ __weak int test_rbtree_duplicate(void)
+ 	return rb_destroy(rbtree);
+ }
+ 
++#define FIFO_NR_NODES	64
++#define FIFO_NR_KEYS	4
++
++SEC("syscall")
++__weak int test_rbtree_duplicate_fifo(void)
++{
++	const u64 per_key = FIFO_NR_NODES / FIFO_NR_KEYS;
++	struct rbtree __arena *rbtree;
++	u64 key, value;
++	int ret, i;
++
++	rbtree = rb_create(RB_ALLOC, RB_DUPLICATE);
++	if (!rbtree)
++		return 1;
++
++	for (i = 0; i < FIFO_NR_NODES && can_loop; i++) {
++		ret = rb_insert(rbtree, i % FIFO_NR_KEYS, i);
++		if (ret)
++			return 2;
++	}
++
++	for (i = 0; i < FIFO_NR_NODES && can_loop; i++) {
++		ret = rb_pop(rbtree, &key, &value);
++		if (ret)
++			return 3;
++
++		/* All of key 0 in insertion order, then all of key 1, ... */
++		if (key != i / per_key)
++			return 4;
++
++		if (value != key + FIFO_NR_KEYS * (i % per_key))
++			return 5;
++	}
++
++	return rb_destroy(rbtree);
++}
++
+ static inline int
+ clean_up_noalloc_tree(struct rbtree __arena *rbtree)
+ {
+diff --git a/tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c b/tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c
+index 7f0f6dc3e17d..831a1ef1c2a1 100644
+--- a/tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c
++++ b/tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c
+@@ -171,7 +171,7 @@ struct rbnode __arena *rbnode_least_upper_bound(struct rbnode __arena *subtree,
+ 		return NULL;
+ 
+ 	while (can_loop) {
+-		dir = (key <= node->key) ? 0 : 1;
++		dir = (key < node->key) ? 0 : 1;
+ 
+ 		if (!node->child[dir])
+ 			break;
+@@ -278,8 +278,8 @@ int rb_node_insert(struct rbtree __arena *rbtree,
+ 	}
+ 
+ 	node->parent = parent;
+-	/* Also works if key == parent->key. */
+-	if (key <= parent->key)
++	/* An equal key goes right, after the existing ones. */
++	if (key < parent->key)
+ 		parent->left = node;
+ 	else
+ 		parent->right = node;
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261109100437.331423-1-amaan.cheval%40gmail.com
+2.56.0
+
