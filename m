@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.177
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794415598;
-	b=K09SAS7sXsm6XOxAF2YlODNDLPaDay9DT3jMBpD4dL0HarMH1SL+fZvXmVXY3ovUSHBl
-	 Raml8EhEVpKHst1qit4waoCWyGEA/6BefyUVxQWovOBJ/U6zYyX+KTj8xMynbxvfkb2J5
-	 6n9oKxSSbRQgpEySZL2b8ADKeUxNMJw77gWDUR2VxiHHYyp46unM3kri9EvvsTMm40gLe
-	 sfG5qSntawItFxI18JuPekjg2L76d5i6Ht8kr45QepJVUNw6TTgz6XRj3dT+rDsqBK9d1
-	 rZsl9wC7jDflPvDqGTlyq+qi+qv7P3FqYyqPyqtGoZSYfuuxFBg/j9CZYqe4ZpMdW1g==
+	t=1794415603;
+	b=ZNOo/QDLX6Hq3U1z6CpRxNVQxYi0J67rAAyAYjIhEXF0ZlfzsiRFsHNCLOiW5s/9OFvt
+	 /YHPe2VcIFh5vbpI9hpy5GsY+PLOz6dH2qach2i4k9h5tO11OHRxwa94YjNBHb2d78Lxt
+	 Ny5dq+4rOH5hZ2jOx/GPvYuNZsoKOMsKNA9YXga5HwGmn/8wFEtZ4/q/sbovc2liuVfKl
+	 /JF9urP8dCe2Qs6w+T3lgiU3Z+HIspflTdTGjnadLsTl4ZOrRh8tHGkyKLItqtx86Dxtu
+	 p6WnSuWsUwsqz+0XEzAOvDIx1J07QMCUf75guQJ8xkvAMP7voJS2+Qax5i/19pGmlHA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794415598;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794415603;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=QmXHPXgAlxr1zhs7QJAhtcbDQd0I0K4rc/xRF7mdzH0=;
-	b=w/N8hkztQ1gOQbcQ2UlsnIDhd0BZTocS//rOq2QMeK79S8buOCMfkwM+lDB/myJkpJL8
-	 Fj4uaSt1vJVgGwmypll2iuZFQ14MrZvacDtDA/YlnmH9SU+cjs4Naptz/5XcnuxSP0j/j
-	 zC6IQQ8CY2dXTC3nRzsO8ezBwWAO4i558lKrxo3Ym9aL1JIgPUbSBEFXOKcxMiVOgPcJh
-	 gS6l6BP4ywl/w5iD4CxYogTWFCHYWQcFaaqVNkIAfHbnkZiYyZvDGrqQAk09In/yZ1olE
-	 ECWGmjC8+0x65zDxV9iNb0Wb+2b3L1U7nHpukrHHiKJGA3TvjA7Fwjl/6US24vuxksQ==
+	bh=har0By6tZi7yOX3PxMCwY9Y1zNMOXRRHPwbDCEfPXcI=;
+	b=zQFoEXZwR//F5WIB/XsGPaaKYU9rDLuRB22OkxUQYArl9lLUzBC22nTgmLouVFjsx/QO
+	 dxSBeAlfgaMXFWevgAcaW6j6utHF0KUwnSUwIpYI5Mo81njHa6QiuaKn2TURkzACoK9nj
+	 F3uZSNHiJCXiGMHjl+xo1MceJvvClU3+w9CjVla8mz+A1HpeCY5moXCS8K6DS+njQ63SD
+	 a+Z0MZXTGjTXADSRRxeDlFxSGlRUiIQArv308PLr46C6NlNvx/yWUyVABoM6CB4+MKPUt
+	 e3bDc7tnFGOfTQDZZTzGe8MHwixSBkhTHm3XdCw4rz1wagR3VVmsPjdTB3B8h2AyA2Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qoFt0cSi;
-	arc=none smtp.remote-ip=209.85.216.51
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pABtyzRn;
+	arc=none smtp.remote-ip=209.85.214.177
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AF8F606A334
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 16:46:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7AF8F606A334
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24084606A321
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 16:46:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 24084606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qoFt0cSi
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3b17cf2fa0aso1092588a91.0
-        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 08:46:37 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pABtyzRn
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2e9e53d011eso24462165ad.1
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 08:46:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794415597; x=1795020397; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794415602; x=1795020402; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=QmXHPXgAlxr1zhs7QJAhtcbDQd0I0K4rc/xRF7mdzH0=;
-        b=qoFt0cSiiC12M8I2UZRSflOktxISV3aWpz4jwvhSWm2tN2/cXzrZqewS2iQUQKE3aU
-         hQSzRc9NCk8IavPSowHub+e/onXIG3W0pIFI1qMDqv9nqGsAIKFJotUq5Y6FhE8TmaZ9
-         E9202eFdf16ztaydlb8SRNoiNUJgA5lNIuXgyH7T9G32yKgCu7yfWvZYFzHpeSs4eGP4
-         5AbG2wJwjz3uSSFeLWWLq8dXwbxJQDbvSOwvIn58HOaXG8bse55dSFSTj+ctPd6yw0pW
-         zCm9ZXUsFOXFcow097a/iubPBXFaL3IwyAK5bxseGcQXFntmwID5Ajq+Wsl3yPcbB4o8
-         +e/w==
+        bh=har0By6tZi7yOX3PxMCwY9Y1zNMOXRRHPwbDCEfPXcI=;
+        b=pABtyzRn0KCQAmfbIuKnIFlhHDEQ+3jmiGqM9XkPrJkiBV9jWVWQYhg03OWfAiU1/D
+         OHIPGeuwyAUmRXtxU0WvfuT/A6+D4Nz5gG2TpUPnpHLU7cx0IAOGXF3y+JNoVwH7LVE2
+         hvh+lTEDgQetx1iJLbOjvAsKMFKIyUOgFf81imiQqGdyInTRHhDj/5O/bAuepCYMYz9y
+         XqUwAshFvcKwL5LcWRkQYq7opAQwoCuRgcuOY+me0esAPCReB50Er1eNq8DMbfTKpwxp
+         Q5kUUR5zfGhSjox8iOj3nlERtUk7DLqxt0WwVdflZdk56//HxOPyzybwDFxjfsnxkRRe
+         vfJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794415597; x=1795020397;
+        d=1e100.net; s=20260707; t=1794415602; x=1795020402;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=QmXHPXgAlxr1zhs7QJAhtcbDQd0I0K4rc/xRF7mdzH0=;
-        b=EYcP63cZgSxVkGB159ZB5Pr3aOP0PivTzxD5dT6/b5KHd1vUy9Ebm8FQLtB2eRMLso
-         2ukKLDgcpbZkv1+EJ8HY3mCxqYhfy5BoyMVPF05igIgR3U7x6E51n0bh1jP1UxRWwSSu
-         Vm67bBAkWxLo75POqTOFo/HlUWz8ezgYPBo0m4+vIhkHJqrdtXHYTLmWEbfDVWHhDYW2
-         b7tzypsoUEyPSvl+1RYuzU/vLWy1hv9Tuo84bX+JZ/vL5TggT72JACYmvhHSNCemFfof
-         f+vDXboPqw9Db5/a7tuetScuxF5Cq+wQRhTMKMikf3laSON2sFXywJWcwWFQP5jfq74Y
-         KFIA==
-X-Gm-Message-State: APuU4Z+L3u+AW61NOo0eh0IkWn1mcw28c87ZFubdP3drOGRZRf65fDAU
-	M20whoSBOet1e6mCIt4lgJU0rD3UK0fm81qZpG/FrKHGv7y2C7a5OUtqvc0JjA==
-X-Gm-Gg: AYBFou1gZTU2/w4d37nIkuz1hTx8zK90IfeIUA7LDt7mcItMd9wJq6HPKoPdNtUilfV
-	vT5uFbHrBosdck6aRDJz/LXcNYEupnvyz+d1uxNk9nhxZCOcrujNDEaZqfWF2sc3Pna9KsnYZAF
-	FeLMZFNERrihBETMSXGccx9WumeBjmUk53zwekFoYixrh3V8vWfzfChKFHKqbQJllUeXAHe/D63
-	oqZEnddAWcrg+2kM0iuva9j4cPdLfT/F0OM21oCKEHat01HftaTXYr2r50q+gZg3CVErQsQpoib
-	ucE+5UMZSnpCeW4CprePVUvbTBI15cxGvB1PuaFlfW5tSw5su+iJSm0zGSOAs7w02Ohbo+3PQts
-	0JEm1HQQ67XVHcnsD7YKxc4X3R0SWX+jydvAEgGtu5i36O77uHTyVb+yfx5+PNhFHy9owCf3uye
-	Y3ljmTH8ylgM+i0YPH9MN6aJTYGiGDuoh7cdCain9Cl+qw6qLl+rDLCgItGOw4xvHXk5VoVY/hW
-	cSNHEm/BKjka6PdZxDakp0riS5CKDvUr6b3eKqWSxX7sjO6KdPIfkVk8zpFnUCw3GvpbziCMaH3
-	BNitvJ3YfQdRZZgt1VvEdRpuTry2uMae+hsjNyfMabWF/vsZZetNK3D0sKjq21r2YLL25VQ+jSs
-	LRKMEHSWxKMRjHqPutL1JGsXPezJy2nhhSMsB1XFsyyU03KOvGuBXCofpk7F3EGjQxOj3DuAMpA
+        bh=har0By6tZi7yOX3PxMCwY9Y1zNMOXRRHPwbDCEfPXcI=;
+        b=2QctQU4Xed7EGIitQkbqClQnto7yIKuwpkgsjSbpoVRRWDaYFpyzPoqeaaLWA/cDVo
+         bRrnoL4J+htm797yssKBwG8AtnNo25ptGy3VurDgavgOZJItPi384ZHzaiRgMplTlqT3
+         KMU8jtBOqIpP65byg5iGukNQ4MGXMP18vhGqiG0jghQi1Bj6xOZxVCA3TtSARy/I1SVz
+         BZEIYOvZcJrLyCd9jTHfhDmpz+9vUgX+5HheCTZYVyMOGbfgJC3KmHd7D9GQr0r8YBEz
+         YGH7RhLs38N3xRMMNACVfbM0VV59fN6H3bntQtA2FfwY/KUdDMHK5h9CfUAgErfVnCVZ
+         4pVg==
+X-Gm-Message-State: APuU4Z9sH762FZGUhV22jji125ikMqP5ZEAfOtpSBHZkt3Ved3b3ApUz
+	iDuUnjE8rvD0IZknvwSJpOIuqDCA1fuLDuP0M75iaKcQIosQv33v+mO0hNtkyw==
+X-Gm-Gg: AYBFou0oadVjR2tz8QnJVdjME6lmzarw5RNwAOqaMgxu7tiw82w14UYffF03zRVZAPH
+	cgBdefzIGlCOL9T1wTEb+NW5tJecUSaFWaF1iQyvVdHR1qgjJReg+a/h1KuMxPRbsbH6qFNHjd+
+	yz7+CQrwQ/39tC/Tmtvn3hdvMkmiypYbhLZjoKsw2Y83GZE1b91Uxk9U3cubwc3ZzCysgk69yQp
+	cMXm9n4JBBfIERVqixw/KSQhZ/a90PJgS0OcyaoUjZNM+gbTVm2x3tZW1QsKgFoGMPK3w6/q/Tc
+	MnA6djLAj+PWatn9UvN6W0ICIhhMAFIG5DKPoF0+CHPrfCwdOWcMPxYp4hxMnLAftgjGB7fJlHI
+	ZMUo5LZ04r7vRZHnJAQysZf1/I1i8YQTfEtrSwMiN/wyYtTkOiig+2jzZJE+IfPcLdlORkgXcyA
+	BbG83ox4MRoR2YTkcZ6dNzQxJ120v8L7zayEVnq4RegPDeguwLs3t6J4DeUMgMaUheNXORVKx+1
+	6E2aQMzL5cS0BvL02LIWTK7B86SIxsRAoagjmio1OhM+yo5EXUab0wHulwZQJWMtFK/K2c3H5Aa
+	SZB8DD2m9pX5lZ5gabsJ2S35RFjWouOftwAMeXlqqvgmOnhdGw76ljUc2aou0hCGi3mzgE1QyOM
+	sseIFA9MQvsJSo2ko7JP9onIfegFM8COPGmxagNBYEDPVSj6Rkkkq9GLSJ7IY1wOu5TTUsR/0RQ
 	==
-X-Received: by 2002:a17:90b:4c52:b0:3b0:b03b:699f with SMTP id 98e67ed59e1d1-3b182df32e8mr3057447a91.1.1794415596187;
-        Wed, 11 Nov 2026 08:46:36 -0800 (PST)
+X-Received: by 2002:a17:903:28e:b0:2ed:3d88:4c24 with SMTP id d9443c01a7336-2edd7760caamr32695635ad.27.1794415602209;
+        Wed, 11 Nov 2026 08:46:42 -0800 (PST)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.252])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b197d0f6e0sm23808a91.9.2026.11.11.08.46.35
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2edb6a42d89sm22920085ad.8.2026.11.11.08.46.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2026 08:46:35 -0800 (PST)
+        Wed, 11 Nov 2026 08:46:41 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v3 06/29] bpf: Give SSA names to the values that scalar evolution does not track
-Date: Wed, 11 Nov 2026 16:45:29 +0000
-Message-ID: <20261111164557.2659679-7-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v3 07/29] bpf: Compute scalar evolution expressions for whole subprogs
+Date: Wed, 11 Nov 2026 16:45:30 +0000
+Message-ID: <20261111164557.2659679-8-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261111164557.2659679-1-alexei.starovoitov@gmail.com>
 References: <20261111164557.2659679-1-alexei.starovoitov@gmail.com>
@@ -104,958 +104,333 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-A prerequisite of the patch that refines linked registers at conditional
-jumps: it turns the id of an expression into a value number. No users yet,
-no verdict changes.
+A prerequisite of the patches that use scalar evolution at conditional
+jumps. Expressions exist in loops only. Compute them for all code. They
+have no users yet: no verdict changes, the prog below is still rejected.
 
-	i = v->idx;
-	j = i;
+	char *buf = bpf_map_lookup_elem(&map, &key);    /* 128 bytes */
+	..
+	p = buf + i;                                    /* i is a byte */
 	if (i > 100)
 		return 0;
-	use(buf[j]);
+	*p = buf[0];
 
-i and j hold the same value. The verifier knows it from the scalar id that
-'j = i' assigns to both registers in a state. Scalar evolution could decide
-it statically, by comparing two expression ids. But a loaded value is '_',
-the result of a call is '_' too, and a value that is not tracked is '?'.
-All loads have the same id, so the same id in two registers is not the same
-value. Nor at a join point: 'x = c ? 1 : 2' and 'y = d ? 1 : 2' are
-(any 1 2).
+The jump bounds i. p was computed before:
 
-Give such a value an SSA name, struct expr_def: the def of a register or
-stack slot by the insn at idx, or by a phi before the insn at idx, a join
-point. forget_reg() makes the defs, join() the phis. struct expr has four
-bytes of padding for it. The level 2 log prints '%', the register or stack
-slot, '.', idx, and for a phi its operands:
+	invalid access to map value, value_size=128 off=255 size=1
 
-	1: call bpf_get_prandom_u32    r0 is %r0.1
-	2: r6 = r0                     r6 is %r0.1: the same value
-	5: call bpf_get_prandom_u32    r0 is %r0.5
-	7: join point                  r0 is %r0.7=phi(_)
-	                               r8 is %r8.7=phi(1, 2)
+That p is buf + i is a static fact: it holds on every path. Treat the
+subprog as the outermost loop, which runs once: compute_scev_for_loop()
+with -1 for the header. (REG r) is the entry value of r. A loop is a single
+insn for the subprog, as a nested loop is for the enclosing one, so
+join_successor(), topmost_nested_loop(), forget_non_invariants() and the
+worklist work as they are. The body is acyclic: each basic block is visited
+once, and a def is one value per call of the subprog. The prog above, from
+the level 2 log after 'Computing SCEV for subprog at 0:':
 
-The op of %r0.1 is '_', a trailing '?' says that it is '?'. phi(_) joins
-distinct '_', phi(?) distinct '?' or more than 8 values. A def is printed
-in full at every use: 'r0 += r8' at 7 is (+ %r0.7=phi(_) %r8.7=phi(1, 2)).
+	 2: r7 &= 255                      r7 is (& %r0.0 255)
+	 8: call bpf_map_lookup_elem#1     r0 is %r0.8
+	10: r6 = r0
+	11: r2 = r6
+	12: r2 += r7                       r2 is (+ %r0.8 (& %r0.0 255))
+	13: if r7 > 0x64 goto pc+2
 
-Where it differs from SSA in a compiler:
+%r0.8 is the def of r0 by insn 8.
 
-- Only a value that no expression describes gets a name. With a def, '?'
-  and '_' are what LLVM calls SCEVUnknown: a leaf that stands for one
-  value. Without a def '?' is SCEVCouldNotCompute.
-- An insn that may write defines too (may_def in liveness.c, a MemoryDef in
-  MemorySSA): insn 8 may write fp-8, %fp-8.8? is what the slot holds after
-  it. A nested loop defines at its header what it leaves.
-- The operands of a phi are a set, 8 at most, and have no defs:
-  'if (c) sum += a[i]; else sum += b[i];' is %r6.9=phi((+ r6 _)), not
-  phi((+ r6 %r2.4), (+ r6 %r2.7)). Every phi is a value number of its own.
-  A later patch finds the congruent ones.
-- Without its backedges and with nested loops collapsed the body of a loop
-  is acyclic: an insn executes at most once per iteration, so a def is one
-  value per iteration. A name is unique within the env of one loop.
-- In the env of loop H a phi at H merges the backedge values only (the phi
-  of the single latch that LoopSimplify would make). The header phi itself
-  is (REG r). 'r6=%r6.1=phi(r6, (+ r6 1)) / ?' at header 1 is not {r6,+,1}:
-  one backedge keeps r6, the other one adds 1.
+The verifier adds edges that the CFG does not have, see
+bpf_head_guard_target(): from may_goto before a loop header, and from
+a subprog that is out of budget to its last exit. Nothing is known on them:
+join_added_edges() joins '?' at their targets, as bpf_compute_const_regs()
+does. A subprog that has a loop with a truncated exit list is not analyzed:
+the exits are the successors of the loop as a single insn.
 
-def.phi is not only for the log. r0 before an insn and after it are
-distinct values, so it is a part of the name. And later patches look
-through the op of a def, which the insn at idx computed, but not through
-a phi, whose op is what the joined values have in common.
+The worklist is in reverse post-order: all predecessors come first. So the
+env of a basic block, 2140 bytes, is freed when the block is done, unless
+it starts with a header, a latch or an exit. That goes for loops too. Their
+envs stayed until the end of bpf_check(), so memory goes down.
 
-Op and operands stay. A def tells one load from another. The code that
-analyzes loops asks how a value is computed, and that is the same on the
-two paths above. So strip_defs() takes the defs out of the operands of
-a phi, all the way down, and that code matches what it matched.
+To load the selftests, Cilium, sched_ext, katran, bpfjailer and programs in
+Rust the kernel spends 1.9 % more instructions (perf stat), and load time
+goes up by 2 to 3 % (veristat). mem_peak of veristat goes down by 1.1 % for
+the C programs and by 7.3 % for those in Rust.
 
-struct expr::is_vn says that an id is a value number: all registers and
-stack slots of an env that have it hold the same value. That is (REG r),
-a constant, a def, an operation on such.
-
-28 expected messages of verifier_scev.c follow the notation: 'r7=?' becomes
-'r7=%r7.4?', 'r7=(any r7 100)' becomes 'r7=%r7.6=phi(r7, 100)'. The new
-test phi_operands_have_no_defs has the sum above.
+reg_bounds.c looks for '18: (bf) r0 = r6' and ';' in the log. Scalar
+evolution prints that for code outside of loops now, after 't'.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/scev.c                             | 339 ++++++++++++++----
- .../selftests/bpf/progs/verifier_scev.c       |  87 +++--
- 2 files changed, 333 insertions(+), 93 deletions(-)
+ kernel/bpf/scev.c                             | 130 +++++++++++++++---
+ .../selftests/bpf/prog_tests/reg_bounds.c     |   5 +-
+ .../selftests/bpf/progs/verifier_scev.c       |   4 +-
+ 3 files changed, 118 insertions(+), 21 deletions(-)
 
 diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-index 4f02cd62305c..5fb31d6be97e 100644
+index 5fb31d6be97e..a0324fbc875e 100644
 --- a/kernel/bpf/scev.c
 +++ b/kernel/bpf/scev.c
-@@ -52,8 +52,39 @@ enum expr_op {
- 	COPY_SCEV,
- };
+@@ -287,7 +287,8 @@ static int imm_expr(struct scev *scev, s64 value)
  
-+/*
-+ * An SSA name for a value that no expression describes: the def of the SCEV register 'reg'
-+ * - by the insn at 'idx'. An insn that may write defines too (may_def in liveness.c). A nested loop
-+ *   defines at its header what it leaves.
-+ * - by a phi before the insn at 'idx': a join point, a loop header.
-+ * Without its backedges and with nested loops collapsed the body of a loop is acyclic: an insn
-+ * executes at most once per iteration, so a def is one value per iteration. A name is unique within
-+ * the env of one loop.
-+ * The operands of a phi are a set, 8 at most; a phi(a, b) among them is expanded. They have no
-+ * defs, see strip_defs(): (+ r6 %r2.4) and (+ r6 %r2.7) are one operand, (+ r6 _). Every phi is
-+ * a value number of its own.
-+ * In the env of loop H a phi at H merges the backedge values only, the header phi itself is
-+ * (REG r). In the env of the enclosing loop a phi at H merges the entering edges.
-+ */
-+struct expr_def {
-+	u32 set:1;	/* 0: the expression has no def */
-+	u32 phi:1;
-+	u32 reg:9;
-+	u32 idx:21;
-+};
-+static_assert(REGS_NUM <= 1 << 9 && BPF_COMPLEXITY_LIMIT_INSNS <= 1 << 21);
-+
-+static const struct expr_def no_def;
-+
- struct expr {
--	u32 op;
-+	u16 op;
-+	/* A value number: all SCEV registers of an env that have this id hold the same value */
-+	bool is_vn;
-+	/*
-+	 * UNKNOWN, OPAQUE and ANY don't describe a value. With a def the id stands for one value,
-+	 * see struct expr_def. Without a def every use of the id can be another value.
-+	 */
-+	struct expr_def def;
- 	union {
- 		u32 params[2];
- 		s64 imm;
-@@ -116,12 +147,19 @@ struct scev {
- 
- static u32 expr_hash(struct expr *e)
+ /*
+  * The insn at @idx defines @reg. Without its backedges and with nested loops collapsed the body is
+- * acyclic: an insn executes at most once per iteration, so a def is one value per iteration.
++ * acyclic: an insn executes at most once per iteration, so a def is one value per iteration. A
++ * subprog is the outermost loop, which runs once.
+  */
+ static struct expr_def insn_def(int idx, u32 reg)
  {
--	return jhash_3words(e->op, e->params[0], e->params[1], 0);
-+	/* def.phi is not hashed: the def by an insn and the phi before it share a chain */
-+	return jhash_3words(e->op, e->params[0], e->params[1],
-+			    e->def.idx * REGS_NUM + e->def.reg);
-+}
-+
-+static bool same_def(struct expr_def a, struct expr_def b)
+@@ -767,6 +768,25 @@ static struct env *get_loop_env(struct scev *scev, int loop_header, int insn_idx
+ 	return e;
+ }
+ 
++/* The env has no users any more */
++static void free_loop_env(struct scev *scev, int loop_header, int insn_idx)
 +{
-+	return a.set == b.set && a.phi == b.phi && a.reg == b.reg && a.idx == b.idx;
- }
- 
- static int expr_eq(struct expr *a, struct expr *b)
- {
--	return a->op == b->op && a->imm == b->imm;
-+	return a->op == b->op && a->imm == b->imm && same_def(a->def, b->def);
- }
- 
- static void exprs_ht_add(struct scev *scev, u32 id)
-@@ -158,12 +196,41 @@ static int grow_exprs(struct scev *scev, u32 cap)
- 	return 0;
- }
- 
-+static u32 op_params_num(u32 op);
-+
-+static bool expr_is_vn(struct scev *scev, struct expr *e)
-+{
++	struct insn_envs *envs = scev->envs[insn_idx];
 +	u32 i;
 +
-+	if (e->def.set)
-+		return true;
-+	switch (e->op) {
-+	case UNKNOWN:
-+	case OPAQUE:
-+	case ANY:
-+	/* a partial spill: the other bits of the slot are not known */
-+	case SPILL8:
-+	case SPILL16:
-+	case SPILL32:
-+	/* a function of the iteration number */
-+	case LINEAR_SCEV:
-+	case COPY_SCEV:
-+		return false;
++	for (i = 0; i < envs->cnt; i++) {
++		if (envs->entries[i].loop_header != loop_header)
++			continue;
++		kfree(envs->entries[i].env);
++		envs->entries[i] = envs->entries[--envs->cnt];
++		break;
 +	}
-+	for (i = 0; i < op_params_num(e->op); i++)
-+		if (!scev->exprs[e->params[i]].is_vn)
++	if (envs->cnt)
++		return;
++	kfree(envs);
++	scev->envs[insn_idx] = NULL;
++}
++
+ static int replace_reg(struct scev *scev, struct env *e, u32 reg, int id)
+ {
+ 	if (id < 0)
+@@ -1337,7 +1357,7 @@ static int worklist_push(struct bpf_verifier_env *env, int loop_header, int idx)
+ {
+ 	struct scev *scev = env->scev;
+ 	struct scev_worklist *worklist = &scev->worklist;
+-	u32 tag = (u32)loop_header + 1;
++	u32 tag = loop_header + 2; /* -1 is a subprog */
+ 
+ 	if (scev->discovered[idx] == tag)
+ 		return 0;
+@@ -1621,11 +1641,52 @@ static bool can_compute_loop_scev(const struct bpf_loop *loop)
+ 	return !loop->irreducible && !loop->nested_exits_overflow;
+ }
+ 
+-static int compute_scev_for_loop(struct bpf_verifier_env *env, int cur_header)
++/* A loop is a single instruction for the subprog too: no exit list may be truncated. */
++static bool can_compute_subprog_scev(struct bpf_verifier_env *env, struct bpf_subprog_info *sub)
++{
++	struct bpf_loop *loop;
++	int i;
++
++	for (i = sub->start; i < (sub + 1)->start; i++) {
++		loop = env->insn_aux_data[i].loop;
++		if (loop && (loop->exits_overflow || loop->nested_exits_overflow))
 +			return false;
++	}
 +	return true;
 +}
 +
- static int add_expr(struct scev *scev, struct expr e)
- {
- 	u32 id;
- 
- 	if (e.op == REG)
- 		return REG_EXPR_ID(e.params[0]);
-+	if (!e.def.set && !e.imm && (e.op == UNKNOWN || e.op == OPAQUE))
-+		return e.op == UNKNOWN ? UNKNOWN_EXPR_ID : OPAQUE_EXPR_ID;
- 
- 	id = scev->exprs_ht[expr_hash(&e) & (scev->exprs_cap - 1)];
- 	for (; id; id = scev->exprs_next[id])
-@@ -174,6 +241,7 @@ static int add_expr(struct scev *scev, struct expr e)
- 		return -ENOMEM;
- 
- 	id = scev->exprs_cnt++;
-+	e.is_vn = expr_is_vn(scev, &e);
- 	scev->exprs[id] = e;
- 	exprs_ht_add(scev, id);
- 	return id;
-@@ -217,6 +285,33 @@ static int imm_expr(struct scev *scev, s64 value)
- 	return add_expr(scev, (struct expr){ .op = IMM, .imm = value });
- }
- 
 +/*
-+ * The insn at @idx defines @reg. Without its backedges and with nested loops collapsed the body is
-+ * acyclic: an insn executes at most once per iteration, so a def is one value per iteration.
++ * The edges that the verifier adds, see bpf_head_guard_target(): bpf_insn_successors() doesn't have
++ * them. They leave all loops. The env at their source is not known: @cur_env is all '?'. So their
++ * target is a join point with a phi for every live register.
 + */
-+static struct expr_def insn_def(int idx, u32 reg)
++static int join_added_edges(struct bpf_verifier_env *env, struct bpf_subprog_info *sub,
++			    struct env *old_env, struct env *cur_env)
 +{
-+	return (struct expr_def){ .set = 1, .reg = reg, .idx = idx };
-+}
++	int i, t, err;
 +
-+/* The phi of @reg before the insn at @idx. One value per iteration for the same reason. */
-+static struct expr_def phi_def(int idx, u32 reg)
-+{
-+	return (struct expr_def){ .set = 1, .phi = 1, .reg = reg, .idx = idx };
-+}
-+
-+/* @id with another def */
-+static int expr_with_def(struct scev *scev, int id, struct expr_def def)
-+{
-+	struct expr e;
-+
-+	if (id < 0)
-+		return id;
-+	e = scev->exprs[id];
-+	e.def = def;
-+	return add_expr(scev, e);
-+}
-+
- static bool same_exprs(struct scev *scev, int id_a, int id_b)
- {
- 	return id_a == id_b;
-@@ -486,27 +581,69 @@ static bool expr_next(struct scev *scev, u32 *id, u32 *order)
- 	return expr_next(scev, id, order);
- }
- 
-+/*
-+ * An SSA name is printed as '%', the SCEV register, '.', the insn. A def is printed in full at
-+ * every use: (+ %r8.7=phi(1, 2) 4).
-+ *	%r0.6			insn 6 defines r0. The value is OPAQUE, '_' without a def
-+ *	%fp-8.8?		insn 8 may write fp-8. The value is UNKNOWN, '?' without a def
-+ *	%r8.7=phi(1, 2)		the phi of r8 before insn 7
-+ *	%r0.7=phi(_)		a phi of distinct OPAQUE values
-+ *	%r6.9=phi(?)		a phi of distinct UNKNOWN values, or of more than 8 values
-+ * A name is unique within the env of one loop. In the env of loop H a phi at H merges the backedge
-+ * values only, the header phi itself is (REG r): in 'scev at header 1: r6=%r6.1=phi(r6, (+ r6 1))'
-+ * one backedge leaves r6 as it is, the other one adds 1.
-+ * '%' in front of r or fp is a name, followed by a blank it is BPF_MOD.
-+ */
-+static void log_def(struct bpf_verifier_env *env, struct expr_def def)
-+{
-+	if (!def.set)
-+		return;
-+	if (def.reg < MAX_BPF_REG)
-+		bpf_log(&env->log, "%%r%d.%d", def.reg, def.idx);
-+	else
-+		bpf_log(&env->log, "%%fp%d.%d", (MAX_BPF_REG - def.reg - 1) * 8, def.idx);
-+}
-+
- static void log_expr(struct bpf_verifier_env *env, u32 id)
- {
- 	struct bpf_verifier_log *log = &env->log;
-+	bool operand, bare, first = false;
- 	struct scev *scev = env->scev;
-+	u32 order, d, bare_any = 0;
-+	struct expr_def def;
- 	struct expr *expr;
- 	const char *str;
--	u32 order;
- 
- 	scev->stack_sz = 0;
- 	expr_stack_push(scev, id);
- 	while (expr_next(scev, &id, &order)) {
--		if ((order & PRE) && scev->stack_sz > 1)
--			bpf_log(log, " ");
- 		expr = &scev->exprs[id];
-+		def = expr->def;
-+		/* the depth of @id in expr_stack[], expr_next() pops it before POST */
-+		d = order & PRE ? scev->stack_sz - 1 : scev->stack_sz;
-+		operand = d && (bare_any & BIT(d - 1));
-+		/* No '(any' for the operands of phi(a, b). (any a b) among them is expanded. */
-+		if (order & PRE) {
-+			bare_any &= ~BIT(d);
-+			if (expr->op == ANY && (def.set ? def.phi : operand))
-+				bare_any |= BIT(d);
-+		}
-+		bare = bare_any & BIT(d);
-+		if ((order & PRE) && (def.set || !bare)) {
-+			if (d)
-+				bpf_log(log, "%s", !operand ? " " : first ? "" : ", ");
-+			log_def(env, def);
-+			if (def.phi)
-+				bpf_log(log, "=phi(");
-+			first = bare;
-+		}
- 		switch (expr->op) {
- 		case UNKNOWN:
- 			if (order & PRE)
- 				bpf_log(log, "?");
- 			break;
- 		case OPAQUE:
--			if (order & PRE)
-+			if ((order & PRE) && (!def.set || def.phi))
- 				bpf_log(log, "_");
- 			break;
- 		case REG:
-@@ -518,19 +655,23 @@ static void log_expr(struct bpf_verifier_env *env, u32 id)
- 				bpf_log(log, "%lld", expr->imm);
- 			break;
- 		default:
--			if (order & PRE) {
-+			if ((order & PRE) && !bare) {
- 				str = op_str(expr->op);
--				bpf_log(log, "(");
-+				bpf_log(log, def.set && !def.phi ? "=(" : "(");
- 				if (str)
- 					bpf_log(log, "%s", str);
- 				else
- 					bpf_log(log, "bad-expr-op %x", expr->op);
- 			}
--			if (order & DEPTH_LIMIT)
--				bpf_log(log, "...");
--			if (order & POST)
-+			if (order & DEPTH_LIMIT) {
-+				bpf_log(log, bare && !def.set && !first ? ", ..." : "...");
-+				first = false;
-+			}
-+			if ((order & POST) && !bare)
- 				bpf_log(log, ")");
- 		}
-+		if ((order & POST) && def.phi)
-+			bpf_log(log, ")");
- 	}
- }
- 
-@@ -570,7 +711,7 @@ static void print_env(struct bpf_verifier_env *env, struct env *e, u32 insn_idx)
- 		log_reg(env, i);
- 		bpf_log(log, "=");
- 		log_expr(env, e->reg2expr[i]);
--		if (e->reg2expr[i] != UNKNOWN_EXPR_ID) {
-+		if (!is_op(scev, e->reg2expr[i], UNKNOWN)) {
- 			bpf_log(log, " / ");
- 			log_expr(env, e->reg2scev[i]);
- 		}
-@@ -634,6 +775,12 @@ static int replace_reg(struct scev *scev, struct env *e, u32 reg, int id)
- 	return 0;
- }
- 
-+/* The insn at @idx defines @reg. The value is not tracked: @id is UNKNOWN or OPAQUE. */
-+static int forget_reg(struct scev *scev, struct env *e, u32 reg, int id, int idx)
-+{
-+	return replace_reg(scev, e, reg, expr_with_def(scev, id, insn_def(idx, reg)));
-+}
-+
- static void setup_initial_loop_env(struct env *e)
- {
- 	int i;
-@@ -648,12 +795,20 @@ static void setup_initial_loop_env(struct env *e)
- 		e->reg2expr[i] = REG_EXPR_ID(i);
- }
- 
--static void forget_call_regs(struct env *e)
-+/* A subprog can return a pair in r0 and r2: a call defines r1 - r5 too if they are live after it */
-+static int forget_call_regs(struct bpf_verifier_env *env, struct env *e, int idx)
- {
--	int i;
-+	int i, err;
- 
--	for (i = BPF_REG_0; i <= BPF_REG_5; i++)
-+	for (i = BPF_REG_0; i <= BPF_REG_5; i++) {
- 		e->reg2expr[i] = UNKNOWN_EXPR_ID;
-+		if (idx + 1 >= env->prog->len || !reg_alive_at(env, i, idx + 1))
++	for (i = sub->start; i < (sub + 1)->start; i++) {
++		t = bpf_head_guard_target(env, i);
++		if (t < 0)
 +			continue;
-+		err = forget_reg(env->scev, e, i, UNKNOWN_EXPR_ID, idx);
++		err = join_successor(env, -1, t, old_env, cur_env);
 +		if (err)
 +			return err;
 +	}
-+	return 0;
- }
- 
- static u32 spill_spi(struct bpf_insn *insn)
-@@ -673,16 +828,19 @@ static bool is_spill_off(int off)
- 	       off >= -MAX_BPF_STACK_JIT;
- }
- 
--static void mark_opaque(struct env *e, int off, int size)
-+static int mark_opaque(struct scev *scev, struct env *e, int idx, int off, int size)
- {
--	int b, spi;
-+	int b, spi, err;
- 
- 	for (b = off; b < off + size; b++) {
- 		if (b >= 0 || b < -MAX_BPF_STACK_JIT)
- 			continue;
- 		spi = (-b - 1) / BPF_REG_SIZE;
--		e->reg2expr[MAX_BPF_REG + spi] = OPAQUE_EXPR_ID;
-+		err = forget_reg(scev, e, MAX_BPF_REG + spi, OPAQUE_EXPR_ID, idx);
-+		if (err)
-+			return err;
- 	}
-+	return 0;
- }
- 
- static int mk_spill(struct scev *scev, u8 size, int id)
-@@ -716,7 +874,7 @@ static int mk_fill(struct scev *scev, int id, u8 code)
- 	return UNKNOWN_EXPR_ID;
- }
- 
--static int maybe_store_fp(struct scev *scev, struct env *e, struct bpf_insn *insn, int id)
-+static int maybe_store_fp(struct scev *scev, struct env *e, struct bpf_insn *insn, int idx, int id)
- {
- 	u8 size = BPF_SIZE(insn->code);
- 
-@@ -724,19 +882,15 @@ static int maybe_store_fp(struct scev *scev, struct env *e, struct bpf_insn *ins
- 		return 0;
- 	if (is_spill_off(insn->off))
- 		return replace_reg(scev, e, off_to_reg(insn), mk_spill(scev, size, id));
--	mark_opaque(e, insn->off, bpf_size_to_bytes(size));
--	return 0;
-+	return mark_opaque(scev, e, idx, insn->off, bpf_size_to_bytes(size));
- }
- 
--static int maybe_load_fp(struct scev *scev, struct env *e, struct bpf_insn *insn)
-+static int maybe_load_fp(struct scev *scev, struct env *e, struct bpf_insn *insn, int idx)
- {
--	int id;
--
--	if (insn->src_reg == BPF_REG_FP && is_spill_off(insn->off))
--		id = mk_fill(scev, e->reg2expr[off_to_reg(insn)], insn->code);
--	else
--		id = OPAQUE_EXPR_ID;
--	return replace_reg(scev, e, insn->dst_reg, id);
-+	if (insn->src_reg != BPF_REG_FP || !is_spill_off(insn->off))
-+		return forget_reg(scev, e, insn->dst_reg, OPAQUE_EXPR_ID, idx);
-+	return replace_reg(scev, e, insn->dst_reg,
-+			   mk_fill(scev, e->reg2expr[off_to_reg(insn)], insn->code));
- }
- 
- /*
-@@ -912,30 +1066,34 @@ static int transfer(struct bpf_verifier_env *env, struct env *e, int idx)
- 				imm = env->insn_aux_data[idx + 1].const_reg_vals[dst];
- 				return replace_reg(scev, e, dst, imm_expr(scev, imm));
- 			}
--			return maybe_load_fp(scev, e, insn);
-+			return maybe_load_fp(scev, e, insn, idx);
- 		default:
- 			goto mark_dst_unknown;
- 		}
- 	case BPF_STX:
- 		switch (mode) {
- 		case BPF_MEM:
--			return maybe_store_fp(scev, e, insn, reg2expr[src]);
-+			return maybe_store_fp(scev, e, insn, idx, reg2expr[src]);
- 		case BPF_ATOMIC:
- 			if (insn->imm == BPF_LOAD_ACQ)
--				return maybe_load_fp(scev, e, insn);
-+				return maybe_load_fp(scev, e, insn, idx);
- 			if (insn->imm == BPF_STORE_REL) {
--				return maybe_store_fp(scev, e, insn, reg2expr[src]);
-+				return maybe_store_fp(scev, e, insn, idx, reg2expr[src]);
- 			}
- 			/*
- 			 * verifier does not track other atomic ops precisely,
- 			 * hence mark the results as opaque.
- 			 */
--			if (insn->dst_reg == BPF_REG_FP)
--				mark_opaque(e, insn->off, bpf_size_to_bytes(BPF_SIZE(insn->code)));
-+			if (insn->dst_reg == BPF_REG_FP) {
-+				id = mark_opaque(scev, e, idx, insn->off,
-+						 bpf_size_to_bytes(BPF_SIZE(insn->code)));
-+				if (id < 0)
-+					return id;
-+			}
- 			if (insn->imm == BPF_CMPXCHG)
--				return replace_reg(scev, e, BPF_REG_0, OPAQUE_EXPR_ID);
-+				return forget_reg(scev, e, BPF_REG_0, OPAQUE_EXPR_ID, idx);
- 			if (insn->imm & BPF_FETCH)
--				return replace_reg(scev, e, src, OPAQUE_EXPR_ID);
-+				return forget_reg(scev, e, src, OPAQUE_EXPR_ID, idx);
- 			break;
- 		}
- 		break;
-@@ -944,15 +1102,17 @@ static int transfer(struct bpf_verifier_env *env, struct env *e, int idx)
- 			id = imm_expr(scev, insn->imm);
- 			if (id < 0)
- 				return id;
--			return maybe_store_fp(scev, e, insn, id);
-+			return maybe_store_fp(scev, e, insn, idx, id);
- 		}
- 		break;
- 	case BPF_JMP:
- 	case BPF_JMP32:
- 		if (opcode == BPF_CALL) {
--			forget_call_regs(e);
-+			id = forget_call_regs(env, e, idx);
-+			if (id < 0)
-+				return id;
- 			/* made anew, like what is loaded. The parameter tells the two apart. */
--			return replace_reg(scev, e, BPF_REG_0, expr1(scev, OPAQUE, 1));
-+			return forget_reg(scev, e, BPF_REG_0, expr1(scev, OPAQUE, 1), idx);
- 		}
- 		/* for non-CALL there are no changes in register states */
- 		break;
-@@ -966,12 +1126,11 @@ static int transfer(struct bpf_verifier_env *env, struct env *e, int idx)
- 			}
- 			/* map, map value, BTF id, function */
- 			if (BPF_SIZE(insn->code) == BPF_DW)
--				return replace_reg(scev, e, dst, OPAQUE_EXPR_ID);
-+				return forget_reg(scev, e, dst, OPAQUE_EXPR_ID, idx);
- 			goto mark_dst_unknown;
- 		case BPF_ABS:
- 		case BPF_IND:
--			forget_call_regs(e);
--			break;
-+			return forget_call_regs(env, e, idx);
- 		default:
- 			goto mark_dst_unknown;
- 		}
-@@ -985,15 +1144,41 @@ static int transfer(struct bpf_verifier_env *env, struct env *e, int idx)
- 	return 0;
- 
- mark_dst_unknown:
--	reg2expr[dst] = UNKNOWN_EXPR_ID;
--	return 0;
-+	return forget_reg(scev, e, dst, UNKNOWN_EXPR_ID, idx);
++	return sub->bail_insn < 0 ? 0 : join_successor(env, -1, sub->bail_insn, old_env, cur_env);
 +}
 +
 +/*
-+ *	if (c) sum += a[i]; else sum += b[i];
-+ * @id without defs: (+ r6 %r2.4) -> (+ r6 _). A def tells one load from another. The code that
-+ * analyzes loops asks how a value is computed, and that is the same on both paths.
-+ * Beyond depth EXPR_STACK_DEPTH an expression keeps its defs: no user looks there.
++ * @cur_header and @first are a loop header. Or -1 and the first insn of a subprog: the subprog is
++ * the outermost loop, which runs once. (REG r) is the entry value of r, the loops in it are single
++ * instructions.
 + */
-+static int strip_defs(struct scev *scev, u32 id, u32 lvl)
-+{
-+	struct expr e = scev->exprs[id]; /* snapshot the expr before potential realloc */
-+	int a;
-+
-+	switch (op_params_num(e.op)) {
-+	case 0:
-+		return e.def.set ? expr_with_def(scev, id, no_def) : id;
-+	case 1:
-+		if (lvl == EXPR_STACK_DEPTH)
-+			return id;
-+		return expr1(scev, e.op, strip_defs(scev, e.params[0], lvl + 1));
-+	default:
-+		if (lvl == EXPR_STACK_DEPTH)
-+			return id;
-+		a = strip_defs(scev, e.params[0], lvl + 1);
-+		return expr2(scev, e.op, a, strip_defs(scev, e.params[1], lvl + 1));
-+	}
- }
- 
- /*
-  * Construct minimal 'ANY' expression by traversing 'a' and 'b'
-- * and accumulating non-duplicated non-ANY entries.
-+ * and accumulating non-duplicated non-ANY entries, without their defs.
-+ * 'def' is the def of the result, no_def if it has none.
-  */
--static int mk_any(struct scev *scev, int a, int b)
-+static int mk_any(struct scev *scev, int a, int b, struct expr_def def)
++static int compute_scev_for_loop(struct bpf_verifier_env *env, int cur_header, int first)
  {
- 	struct expr_stack_elt *elt;
- 	struct expr *expr;
-@@ -1016,14 +1201,18 @@ static int mk_any(struct scev *scev, int a, int b)
- 			if (expr->op == ANY) {
- 				if (!expr_stack_push(scev, expr->params[1]) ||
- 				    !expr_stack_push(scev, expr->params[0]))
--					return UNKNOWN_EXPR_ID;
-+					return expr_with_def(scev, UNKNOWN_EXPR_ID, def);
- 			} else {
--				for (j = 0; j < ids_buf_sz; j++) {
-+				/* the operands of an ANY have no defs already */
-+				if (id == roots[i])
-+					id = strip_defs(scev, id, 0);
-+				if (id < 0)
-+					return id;
-+				for (j = 0; j < ids_buf_sz; j++)
- 					if (same_exprs(scev, scev->ids_buf[j], id))
- 						goto next;
--				}
- 				if (ids_buf_sz == ARRAY_SIZE(scev->ids_buf))
--					return UNKNOWN_EXPR_ID;
-+					return expr_with_def(scev, UNKNOWN_EXPR_ID, def);
- 				scev->ids_buf[ids_buf_sz++] = id;
- 			}
- next:;
-@@ -1037,7 +1226,7 @@ next:;
- 		if (id < 0)
- 			return id;
- 	}
--	return id;
-+	return expr_with_def(scev, id, def);
- }
- 
- /* @acc is the env before the insn at @idx */
-@@ -1056,7 +1245,8 @@ static int join(struct bpf_verifier_env *env, struct env *acc, struct env *cur,
- 		if (!same_exprs(scev, acc->reg2expr[i], cur->reg2expr[i])) {
- 			/* no phi for a dead register: pruned SSA */
- 			id = reg_alive_at(env, i, idx) ?
--			     mk_any(scev, acc->reg2expr[i], cur->reg2expr[i]) : UNKNOWN_EXPR_ID;
-+			     mk_any(scev, acc->reg2expr[i], cur->reg2expr[i],
-+				    phi_def(idx, i)) : UNKNOWN_EXPR_ID;
- 			if (id < 0)
- 				return id;
- 			acc->reg2expr[i] = id;
-@@ -1078,12 +1268,12 @@ static void forget_modified_regs(struct scev *scev, struct env *acc, struct env
- }
- 
- /* For a loop H at `header`, mark any register modified as a result of H execution as unknown. */
--static void forget_non_invariants(struct bpf_verifier_env *env, struct env *acc, int header)
-+static int forget_non_invariants(struct bpf_verifier_env *env, struct env *acc, int header)
- {
+ 	struct scev_worklist *worklist = &env->scev->worklist;
  	struct bpf_insn_aux_data *aux = env->insn_aux_data;
- 	struct bpf_loop *loop = aux[header].loop;
+-	struct bpf_loop *cur_loop = aux[cur_header].loop;
++	struct bpf_loop *cur_loop = cur_header < 0 ? NULL : aux[cur_header].loop;
++	struct bpf_subprog_info *sub = bpf_find_containing_subprog(env, first);
+ 	struct env *header_env;
  	struct scev *scev = env->scev;
--	int i, idx, h;
-+	int i, idx, h, err;
+ 	struct bpf_loop *nested_loop;
+@@ -1633,17 +1694,21 @@ static int compute_scev_for_loop(struct bpf_verifier_env *env, int cur_header)
+ 	struct env *old_env = NULL;
+ 	struct bpf_iarray *succ;
+ 	bool log_level2 = env->log.level & BPF_LOG_LEVEL2;
+-	int s, i, err, idx, succ_idx;
++	int s, i, err, idx, succ_idx, start;
+ 	u32 r;
  
- 	acc->empty = false;
- 	forget_modified_regs(scev, acc, find_header_env(scev, header));
-@@ -1120,6 +1310,15 @@ static void forget_non_invariants(struct bpf_verifier_env *env, struct env *acc,
- 		 */
- 		forget_modified_regs(scev, acc, find_loop_env(scev, header, idx));
- 	}
-+	/* the nested loop defines them at its header */
-+	for (i = 0; i < REGS_NUM; i++) {
-+		if (acc->reg2expr[i] != UNKNOWN_EXPR_ID)
-+			continue;
-+		err = forget_reg(scev, acc, i, UNKNOWN_EXPR_ID, header);
-+		if (err)
-+			return err;
-+	}
-+	return 0;
- }
- 
- /* Order worklist in reverse post-order. */
-@@ -1236,7 +1435,7 @@ static bool is_probe_read_helper(u32 func_id)
-  * If instruction is an indirect write to stack, invalidate SCEVs for spi's
-  * that this instruction can touch.
-  */
--static void reset_scevs_at_indirect_writes(struct bpf_verifier_env *env, struct env *cur_env, int idx)
-+static int reset_scevs_at_indirect_writes(struct bpf_verifier_env *env, struct env *cur_env, int idx)
- {
- 	struct bpf_insn *insn = &env->prog->insnsi[idx];
- 	struct scev *scev = env->scev;
-@@ -1244,19 +1443,24 @@ static void reset_scevs_at_indirect_writes(struct bpf_verifier_env *env, struct
- 	const unsigned long *mask;
- 	u32 spi, reg;
- 	bool opaque;
-+	int err;
- 
- 	/* Direct fp stores are fine. */
- 	if ((class == BPF_ST || class == BPF_STX) && insn->dst_reg == BPF_REG_FP)
--		return;
+ 	if (log_level2)
+-		bpf_log(&env->log, "Computing SCEV for loop at %d:\n", cur_header);
++		bpf_log(&env->log, "Computing SCEV for %s at %d:\n",
++			cur_loop ? "loop" : "subprog", first);
++
++	if (!cur_loop && !can_compute_subprog_scev(env, sub))
 +		return 0;
  
- 	mask = bpf_may_write_mask(env, idx);
- 	opaque = bpf_helper_call(insn) && is_probe_read_helper(insn->imm);
- 	for_each_set_bit(spi, mask, MAX_BPF_STACK_SLOTS) {
- 		reg = MAX_BPF_REG + spi;
--		if (cur_env->reg2expr[reg] == UNKNOWN_EXPR_ID)
--			continue;
--		replace_reg(scev, cur_env, reg, opaque ? OPAQUE_EXPR_ID : UNKNOWN_EXPR_ID);
-+		/* '?' stays '?' */
-+		err = forget_reg(scev, cur_env, reg,
-+				 opaque && !is_op(scev, cur_env->reg2expr[reg], UNKNOWN) ?
-+				 OPAQUE_EXPR_ID : UNKNOWN_EXPR_ID, idx);
-+		if (err)
-+			return err;
+ 	/*
+ 	 * For irreducible loops, and for loops nesting a loop with a truncated
+ 	 * exit list, just assume that everything is clobbered for now.
+ 	 */
+-	if (!can_compute_loop_scev(cur_loop)) {
++	if (cur_loop && !can_compute_loop_scev(cur_loop)) {
+ 		header_env = get_loop_env(scev, cur_header, cur_header);
+ 		if (!header_env)
+ 			return -ENOMEM;
+@@ -1662,17 +1727,30 @@ static int compute_scev_for_loop(struct bpf_verifier_env *env, int cur_header)
+ 		if (!old_env)
+ 			goto nomem;
  	}
-+	return 0;
- }
+-	header_env = get_loop_env(scev, cur_header, cur_header);
++	header_env = get_loop_env(scev, cur_header, first);
+ 	if (!header_env)
+ 		goto nomem;
+ 	setup_initial_loop_env(header_env);
+-	err = worklist_push(env, cur_header, cur_header);
++	err = worklist_push(env, cur_header, first);
+ 	if (err)
+ 		goto out;
++	if (!cur_loop) {
++		/* no backedge overwrites it */
++		header_env->empty = false;
++		err = join_added_edges(env, sub, old_env, cur_env);
++		if (err)
++			goto out;
++	}
  
- /*
-@@ -1486,7 +1690,9 @@ static int compute_scev_for_loop(struct bpf_verifier_env *env, int cur_header)
- 			/* And what its jumps depend on. */
- 			for_each_set_bit(r, nested_loop->tested_regs, BPF_SCEV_REGS_NUM)
- 				or_expr_regs(env, cur_env->reg2expr[r], cur_loop->tested_regs);
--			forget_non_invariants(env, cur_env, idx);
-+			err = forget_non_invariants(env, cur_env, idx);
-+			if (err)
-+				goto out;
+ 	while (worklist->nr) {
+ 		idx = *min_heap_peek_inline(worklist);
+ 		min_heap_pop_inline(worklist, &worklist_cb, env->cfg.postorder_nums);
++		start = idx;
++		if (signal_pending(current)) {
++			err = -EAGAIN;
++			goto out;
++		}
++		cond_resched();
+ 
+ 		/* join_successor() maps nested-loop entries to their representative header. */
+ 		nested_loop = idx != cur_header ? aux[idx].loop : NULL;
+@@ -1684,12 +1762,16 @@ static int compute_scev_for_loop(struct bpf_verifier_env *env, int cur_header)
+ 			 */
  			if (log_level2)
- 				log_env_changes(env, LOG_AT_TRANSFER, old_env, cur_env, idx);
- 			/*
-@@ -1512,7 +1718,9 @@ static int compute_scev_for_loop(struct bpf_verifier_env *env, int cur_header)
+ 				memcpy(old_env, cur_env, sizeof(*old_env));
+-			/* Pull the nested loop's stack-store base dependencies up. */
+-			for_each_set_bit(r, nested_loop->store_base_regs, BPF_SCEV_REGS_NUM)
+-				or_expr_regs(env, cur_env->reg2expr[r], cur_loop->store_base_regs);
+-			/* And what its jumps depend on. */
+-			for_each_set_bit(r, nested_loop->tested_regs, BPF_SCEV_REGS_NUM)
+-				or_expr_regs(env, cur_env->reg2expr[r], cur_loop->tested_regs);
++			if (cur_loop) {
++				/* Pull the nested loop's stack-store base dependencies up. */
++				for_each_set_bit(r, nested_loop->store_base_regs, BPF_SCEV_REGS_NUM)
++					or_expr_regs(env, cur_env->reg2expr[r],
++						     cur_loop->store_base_regs);
++				/* And what its jumps depend on. */
++				for_each_set_bit(r, nested_loop->tested_regs, BPF_SCEV_REGS_NUM)
++					or_expr_regs(env, cur_env->reg2expr[r],
++						     cur_loop->tested_regs);
++			}
+ 			err = forget_non_invariants(env, cur_env, idx);
+ 			if (err)
+ 				goto out;
+@@ -1713,8 +1795,12 @@ static int compute_scev_for_loop(struct bpf_verifier_env *env, int cur_header)
+ 			for (;;) {
+ 				if (log_level2)
+ 					memcpy(old_env, cur_env, sizeof(*old_env));
+-				collect_store_base_regs(env, cur_env, idx, cur_loop->store_base_regs);
+-				collect_tested_regs(env, cur_env, idx, cur_loop->tested_regs);
++				if (cur_loop) {
++					collect_store_base_regs(env, cur_env, idx,
++								cur_loop->store_base_regs);
++					collect_tested_regs(env, cur_env, idx,
++							    cur_loop->tested_regs);
++				}
  				err = transfer(env, cur_env, idx);
  				if (err)
  					goto out;
--				reset_scevs_at_indirect_writes(env, cur_env, idx);
-+				err = reset_scevs_at_indirect_writes(env, cur_env, idx);
-+				if (err)
-+					goto out;
- 				if (log_level2)
- 					log_env_changes(env, LOG_AT_TRANSFER, old_env, cur_env, idx);
- 				succ = bpf_insn_successors(env, idx);
-@@ -1778,7 +1986,7 @@ static int compute_header_scevs(struct bpf_verifier_env *env, struct env *header
+@@ -1739,6 +1825,9 @@ static int compute_scev_for_loop(struct bpf_verifier_env *env, int cur_header)
+ 					goto out;
+ 			}
  		}
- 		/* rA = (any 1 2 3 4 ...) -> (any rA 1 2 3 4 ...) */
- 		if (is_any_imm_reg_opaque(scev, ra_expr)) {
--			id = mk_any(scev, expr1(scev, REG, ra), ra_expr);
-+			id = mk_any(scev, expr1(scev, REG, ra), ra_expr, no_def);
- 			if (id < 0)
- 				return id;
- 			header_env->reg2scev[ra] = id;
-@@ -2022,7 +2230,8 @@ int bpf_init_scev(struct bpf_verifier_env *env)
- 	scev->exprs[UNKNOWN_EXPR_ID] = (struct expr){ .op = UNKNOWN };
- 	scev->exprs[OPAQUE_EXPR_ID] = (struct expr){ .op = OPAQUE };
- 	for (r = 0; r < REGS_NUM; r++)
--		scev->exprs[REG_EXPR_ID(r)] = (struct expr){ .op = REG, .params = { r, 0 } };
-+		scev->exprs[REG_EXPR_ID(r)] = (struct expr){ .op = REG, .is_vn = true,
-+							     .params = { r, 0 } };
- 	scev->exprs_cnt = REG_EXPR_ID(REGS_NUM);
- 	scev->envs = kvcalloc(env->prog->len, sizeof(*scev->envs), GFP_KERNEL_ACCOUNT);
- 	scev->discovered = kvcalloc(env->prog->len, sizeof(*scev->discovered), GFP_KERNEL_ACCOUNT);
++		/* Reverse post-order: all predecessors came first, the env has no users any more */
++		if (!aux[start].need_scev)
++			free_loop_env(scev, cur_header, start);
+ 	}
+ 
+ 	err = 0;
+@@ -2146,7 +2235,12 @@ int bpf_compute_scev(struct bpf_verifier_env *env)
+ 		idx = postorder[i];
+ 		if (!aux[idx].loop)
+ 			continue;
+-		err = compute_scev_for_loop(env, idx);
++		err = compute_scev_for_loop(env, idx, idx);
++		if (err)
++			return err;
++	}
++	for (i = 0; i < env->subprog_cnt; i++) {
++		err = compute_scev_for_loop(env, -1, env->subprog_info[i].start);
+ 		if (err)
+ 			return err;
+ 	}
+diff --git a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
+index 09f7930733be..c2079eb64201 100644
+--- a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
++++ b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
+@@ -1290,7 +1290,8 @@ static int parse_range_cmp_log(const char *log_buf, struct case_spec spec,
+ 		 *   18: (bf) r0 = r6       ; R0=... R6=...
+ 		 * Different verifier passes may print
+ 		 *   18: (bf) r0 = r6
+-		 * as well, but never followed by ';'.
++		 * as well, but never followed by ';'. Except for scalar evolution:
++		 *   t   18: (bf) r0 = r6   ; r0 ... -> ...
+ 		 * The branches are in the log in the order the verifier looked at them.
+ 		 */
+ 		q = log_buf;
+@@ -1299,7 +1300,7 @@ static int parse_range_cmp_log(const char *log_buf, struct case_spec spec,
+ 
+ 			while (*s == ' ' || *s == '\t')
+ 				s++;
+-			if (*s == ';')
++			if (*s == ';' && (q == log_buf || q[-1] == '\n'))
+ 				break;
+ 			q = s;
+ 		}
 diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
-index 3d73a7107cba..cab2fe974d44 100644
+index cab2fe974d44..6d1b8542f801 100644
 --- a/tools/testing/selftests/bpf/progs/verifier_scev.c
 +++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
-@@ -135,7 +135,7 @@ exit_%=:						\
+@@ -2377,12 +2377,14 @@ __naked __noinline __used static int returns_zero(void)
+  * A loop that the compiler unrolls in part has an exit for every 'break' and 'return' in every
+  * copy of its body. How many there are says nothing about the number of iterations.
+  * Scalar evolution takes a nested loop for one insn, and its exits are the successors of this insn.
+- * The list of exits is not complete: the loop around has no formulas.
++ * The exit list is truncated: the enclosing loop has no SCEVs, the subprog is not analyzed.
+  */
  SEC("xdp")
- __success
- __log_level(2)
--__msg("8: (7b) *(u64 *)(r1 +0) = r0     ; *fp-8 (+ *fp-8 1) -> ?")
-+__msg("8: (7b) *(u64 *)(r1 +0) = r0     ; *fp-8 (+ *fp-8 1) -> %fp-8.8?")
- __naked void indirect_write_invalidates_scev(void)
- {
- 	asm volatile ("					\
-@@ -165,7 +165,7 @@ __noinline int global_noop_counter(__u64 *p)
- SEC("xdp")
- __success
- __log_level(2)
--__msg("8: (85) call pc+{{[0-9]+}} {{.*}}; *fp-8 (+ *fp-8 1) -> ?")
-+__msg("8: (85) call pc+{{[0-9]+}} {{.*}}; *fp-8 (+ *fp-8 1) -> %fp-8.8?")
- __naked void global_call_invalidates_scev(void)
- {
- 	asm volatile (
-@@ -242,7 +242,7 @@ SEC("xdp")
- __success __retval(0)
- __log_level(2)
- __msg_next("scev at header 1:")
--__msg_next("  r6=(any r6 (+ r6 1)) / ?")
-+__msg_next("  r6=%r6.1=phi(r6, (+ r6 1)) / ?")
- __naked void meet_disagrees(void)
- {
- 	asm volatile ("					\
-@@ -261,6 +261,37 @@ __naked void meet_disagrees(void)
- 	: __clobber_all);
- }
- 
-+/* 'if (c) sum += a; else sum += b;': two loads, one way to compute the sum */
-+SEC("socket")
-+__success
-+__log_level(2)
-+__msg("scev at header 3:")
-+__msg_next("  r6=%r6.9=phi((+ r6 _)) / ?")
-+__naked void phi_operands_have_no_defs(void)
-+{
-+	asm volatile ("					\
-+	r9 = r1;					\
-+	r6 = 0;						\
-+	r7 = 0;						\
-+1:							\
-+	if r7 & 1 goto 2f;				\
-+	r2 = *(u32 *)(r9 + %[len]);			\
-+	r6 += r2;					\
-+	goto 3f;					\
-+2:							\
-+	r2 = *(u32 *)(r9 + %[mark]);			\
-+	r6 += r2;					\
-+3:							\
-+	r7 += 1;					\
-+	if r7 < 10 goto 1b;				\
-+	r0 = r6;					\
-+	exit;						\
-+"	:
-+	: __imm_const(len, offsetof(struct __sk_buff, len)),
-+	  __imm_const(mark, offsetof(struct __sk_buff, mark))
-+	: __clobber_all);
-+}
-+
- /* Both entry state values for r1 should be accounted for */
- SEC("xdp")
- __success
-@@ -538,13 +569,13 @@ __msg("store_release((u8 *)(r10 -8), r1) {{.*}}; *fp-8 -8 -> (spill8 1)")
- __msg("store_release((u16 *)(r10 -8), r1) {{.*}}; *fp-8 -8 -> (spill16 1)")
- __msg("store_release((u32 *)(r10 -8), r1) {{.*}}; *fp-8 -8 -> (spill32 1)")
- __msg("store_release((u64 *)(r10 -8), r1) {{.*}}; *fp-8 -8 -> 1")
--__msg("lock *(u64 *)(r10 -8) += r1 {{.*}}; *fp-8 -8 -> _")
--__msg("r1 = atomic64_fetch_add((u64 *)(r10 -8), r1) {{.*}}; r1 1 -> _, *fp-8 -8 -> _")
--__msg("r1 = atomic_fetch_add((u32 *)(r10 -8), r1) {{.*}}; r1 1 -> _, *fp-8 -8 -> _")
--__msg("r1 = atomic64_xchg((u64 *)(r10 -8), r1) {{.*}}; r1 1 -> _, *fp-8 -8 -> _")
--__msg("r0 = atomic64_cmpxchg((u64 *)(r10 -8), r0, r2) {{.*}}; r0 0 -> _, *fp-8 -8 -> _")
-+__msg("lock *(u64 *)(r10 -8) += r1 {{.*}}; *fp-8 -8 -> %fp-8.{{[0-9]+}}")
-+__msg("r1 = atomic64_fetch_add((u64 *)(r10 -8), r1) {{.*}}; r1 1 -> %r1.{{[0-9]+}}, *fp-8 -8 -> %fp-8.{{[0-9]+}}")
-+__msg("r1 = atomic_fetch_add((u32 *)(r10 -8), r1) {{.*}}; r1 1 -> %r1.{{[0-9]+}}, *fp-8 -8 -> %fp-8.{{[0-9]+}}")
-+__msg("r1 = atomic64_xchg((u64 *)(r10 -8), r1) {{.*}}; r1 1 -> %r1.{{[0-9]+}}, *fp-8 -8 -> %fp-8.{{[0-9]+}}")
-+__msg("r0 = atomic64_cmpxchg((u64 *)(r10 -8), r0, r2) {{.*}}; r0 0 -> %r0.{{[0-9]+}}, *fp-8 -8 -> %fp-8.{{[0-9]+}}")
- __msg("*(u64 *)(r10 -8) = 42 {{.*}}; *fp-8 -8 -> 42")
--__msg("*(u8 *)(r10 -7) = r0 {{.*}}; *fp-8 -8 -> _")
-+__msg("*(u8 *)(r10 -7) = r0 {{.*}}; *fp-8 -8 -> %fp-8.{{[0-9]+}}")
- #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
- /* a fill that is not wider than the spill reads what was spilled */
- __msg("r1 = *(s8 *)(r10 -8) {{.*}}; r1 r7 -> (sext8 r7)")
-@@ -617,10 +648,10 @@ __success
- __log_level(2)
- __msg_next("scev at header 1:")
- __msg_next("  r6=(+ r6 1) / (linear r6 1)")
--__msg_next("  r7=?")
-+__msg_next("  r7=%r7.4?")
- __msg_next(" scev at latch 1:")
- __msg_next("  r6=(+ r6 1) / (linear r6 1)")
--__msg_next("  r7=?")
-+__msg_next("  r7=%r7.4?")
- __msg_next("scev at header 4:")
- __msg_next("  r7=(+ r7 1) / (linear r7 1)")
- __msg_next(" scev at latch 4:")
-@@ -657,7 +688,7 @@ __msg_next("  backedge from 6, latch at 4")
- __msg_next("  exit from 4 to 1")
- __msg("scev at header 1:")
- __msg_next("  r6=(+ r6 1) / (linear r6 1)")
--__msg_next("  r7=?")
-+__msg_next("  r7=%r7.4?")
- __msg_next("scev at header 4:")
- __msg_next("  r7=(+ r7 1) / (linear r7 1)")
- __msg_next(" scev at latch 4:")
-@@ -702,7 +733,7 @@ __msg_next("  backedge from 5, latch at 5")
- __msg_next("  exit from 4 to 2")
- __msg_next("  exit from 5 to 6")
- __msg("scev at header 2:")
--__msg_next("  r6=?")
-+__msg_next("  r6=%r6.3?")
- __msg_next("  r7=(+ r7 1) / (linear r7 1)")
- __msg_next("scev at header 3:")
- __msg_next("  r6=(+ r6 1) / (linear r6 1)")
-@@ -737,8 +768,8 @@ __log_level(2)
- __flag(BPF_F_TEST_STATE_FREQ)
- __msg("loop at 3{{$}}")
- __msg("scev at header 3:")
--__msg_next("  r6=(any r6 (+ r6 1)) / ?")
--__msg_next("  r7=(any (+ r7 1) 0) / ?")
-+__msg_next("  r6=%r6.3=phi(r6, (+ r6 1)) / ?")
-+__msg_next("  r7=%r7.3=phi((+ r7 1), 0) / ?")
- __msg_next("  r8=(+ r8 1) / (linear r8 1)")
- __msg("loop header at 3, can't compute iterations count")
- __naked void nested_loops_shared_header(void)
-@@ -1539,7 +1570,7 @@ __success __retval(7)
- __log_level(2)
- __msg("scev at header 1:")
- __msg_next("r6=(+ r6 1) / (linear r6 1)")
--__msg_next("*fp-8=(any *fp-8 7) / (any *fp-8 7)")
-+__msg_next("*fp-8=%fp-8.3=phi(*fp-8, 7) / (any *fp-8 7)")
- __msg("loop header at 1, widening r6 to 0..2 step 1")
- __msg("3: (79) r0 = *(u64 *)(r10 -8)         ; R0=scalar() R10=fp0 loop_stack=1")
- __naked void widen_any_unallocated_slot(void)
-@@ -1580,7 +1611,7 @@ __success __retval(7)
- __log_level(2)
- __msg("scev at header 2:")
- __msg_next("r6=(+ r6 1) / (linear r6 1)")
--__msg_next("*fp-8=(any *fp-8 7) / (any *fp-8 7)")
-+__msg_next("*fp-8=%fp-8.5=phi(*fp-8, 7) / (any *fp-8 7)")
- __msg("loop header at 2, widening r6 to 0..2 step 1")
- __msg("3: (79) r1 = *(u64 *)(r10 -8)         ; R1=scalar() R10=fp0 fp-8=m???????")
- __naked void widen_any_misc_slot(void)
-@@ -1683,7 +1714,7 @@ __success
- __log_level(2)
- __msg("scev at header 4:")
- __msg_next("  r6=(+ r6 1) / (linear r6 1)")
--__msg_next("  *fp-8=?")
-+__msg_next("  *fp-8=%fp-8.7?")
- __msg("loop header at 4, widening r6 to 0..9 step 1")
- __naked void widen_subprog_probe_read(void)
- {
-@@ -2604,7 +2635,7 @@ __msg("loop at 1{{$}}")
- __msg("loop at 5, nested in 1, irreducible")
- __msg("loop at 11, nested in 5")
- __msg("scev at header 1:")
--__msg_next("  r6=?")
-+__msg_next("  r6=%r6.5?")
- __msg("scev at header 11:")
- __msg_next("  r9=(+ r9 1) / (linear r9 1)")
- __msg("loop header at 11, widening r9 to 0..2 step 1")
-@@ -2851,7 +2882,7 @@ __success
- __log_level(2)
- __msg("scev at header 2:")
- __msg_next("  r6=(+ r6 1) / (linear r6 1)")
--__msg_next("  r7=(any r7 100) / (any r7 100)")
-+__msg_next("  r7=%r7.6=phi(r7, 100) / (any r7 100)")
- __msg_next(" scev at latch 3:")
- __msg_next("  r6=(+ r6 1) / (linear (+ r6 1) 1)")
- __msg_next("  r7=r7 / (any r7 100)")
-@@ -3126,12 +3157,12 @@ __naked void name(void)								\
- #define NOT_UNROLLED	"widening r6 to 0..0xf423f step 1"
- 
- /* 'if (...) cnt++' */
--PARTIAL_SPILL_TEST(partial_spill32_inc, u32, 10, "can't widen *fp-8, expr is (any *fp-8 (spill32 ",
-+PARTIAL_SPILL_TEST(partial_spill32_inc, u32, 10, "can't widen *fp-8, expr is %fp-8.{{[0-9]+}}=phi(*fp-8, (spill32 ",
- 	SPILL32_0, "if r6 & 1 goto 2f;" SPILL32_INC "2:")
- PARTIAL_SPILL_TEST(partial_spill16_inc, u16, 10, "can't widen *fp-8, expr is (spill16 ",
- 	"*(u16 *)(r10 - 8) = r1;", "r1 = *(u16 *)(r10 - 8); w1 += 1; *(u16 *)(r10 - 8) = r1;")
- /* A loop in the loop does it */
--PARTIAL_SPILL_TEST(partial_spill32_inc_in_nested_loop, u32, 10, "can't widen *fp-8, expr is ?",
-+PARTIAL_SPILL_TEST(partial_spill32_inc_in_nested_loop, u32, 10, "can't widen *fp-8, expr is %fp-8.{{[0-9]+}}?",
- 	SPILL32_0, "r7 = 0; 2:" SPILL32_INC "r7 += 1; if r7 < 3 goto 2b;")
- /* Two slots feed each other */
- PARTIAL_SPILL_TEST(partial_spill32_two_slots, u32, 10, "can't widen *fp-8, expr is (spill32 ",
-@@ -3296,7 +3327,7 @@ NOT_LINEAR_TEST(zext32_or_nothing, "r7 >>= 8;", "if r8 == 0 goto +1; w7 = w7;",
- NOT_LINEAR_TEST(and_64_to_127, "r7 &= 63; r7 |= 64;", "r7 &= 127;", UNROLLED("(& r7 127)"))
- /* '>>' does not make a number greater, but iterations one by one tell more: 0 after 8 shifts */
- NOT_LINEAR_TEST(rsh_on_one_path, "r7 &= 255;", "if r8 == 0 goto +1; r7 >>= 1;",
--		UNROLLED("(any r7 (>> r7 1))"))
-+		UNROLLED("%r7.8=phi(r7, (>> r7 1))"))
- NOT_LINEAR_TEST(rsh_then_and, "r7 &= 255;", "r7 >>= 1; r7 &= r8;", UNROLLED("(& (>> r7 1) r8)"))
- NOT_LINEAR_TEST(lsh_grows, "r7 &= 15;", "r7 <<= 1;", UNROLLED("(<< r7 1)"))
- 
-@@ -3458,9 +3489,9 @@ __failure
- __log_level(2)
- __flag(BPF_F_TEST_STATE_FREQ)
- __msg("scev at header 9:")
--__msg_next("  r6=(+ ? 1) / ?")
-+__msg_next("  r6=(+ %r6.13? 1) / ?")
- __msg_next(" scev at latch 20:")
--__msg_next("  r6=(+ ? 1) / (+ ? 1)")
-+__msg_next("  r6=(+ %r6.13? 1) / (+ %r6.13? 1)")
- __msg_next("scev at header 13:")
- __msg_next("  r9=(+ r9 1) / (linear r9 1)")
- __msg_next(" scev at latch 16:")
-@@ -3534,7 +3565,7 @@ SEC("xdp")
- __success __retval(3)
- __log_level(2)
- __flag(BPF_F_TEST_STATE_FREQ)
--__msg("r6 = *(u64 *)(r10 -8) {{.*}}; r6 ? -> r6")
-+__msg("r6 = *(u64 *)(r10 -8) {{.*}}; r6 %r6.4? -> r6")
- __msg("scev at header 1:")
- __msg_next("  r6=(+ r6 1) / (linear r6 1)")
- __msg_next(" scev at latch 16:")
-@@ -3655,7 +3686,7 @@ __success
- __log_level(2)
- __flag(BPF_F_TEST_STATE_FREQ)
- __msg("scev at header 4:")
--__msg_next("r7=(any r7 8) / (any r7 8)")
-+__msg_next("r7=%r7.11=phi(r7, 8) / (any r7 8)")
- __msg("loop header at 4, can't widen r7, expr is {{.*}}, requires exact stack-offset tracking")
- __naked void no_widen_stack_fill_any(void)
- {
-@@ -4429,7 +4460,7 @@ SEC("socket")
- __success __retval(0)
- __log_level(2)
- __msg("header_count is 100000 ")
--__msg("can't widen r6, expr is _")
-+__msg("can't widen r6, expr is %r6.13")
- __not_msg("widening r8")
- __msg("clamping r8 to 0..0x1869f step 1")
- __naked void index_loaded_in_previous_iteration(void)
+ __success __log_level(2)
+ __msg("loop at 1, too many exits, too many exits of a nested loop")
+ __msg("loop at 2, nested in 1, too many exits")
++__msg("Computing SCEV for subprog at 0:")
++__msg_next("Computing SCEV for subprog at {{[0-9]+}}:")
+ __msg("loop header at 1, unsupported loop: too many exits of a nested loop")
+ __msg("loop header at 2, header_count is [0..4] ")
+ __naked void loop_around_301_exits(void)
 -- 
 2.55.0
 
