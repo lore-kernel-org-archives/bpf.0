@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794374171;
-	b=duGpxkjZEB2/7B0nouLDIW8pxYTQabaCN6CbRAUOXAl5m5Ebmmq2eS03f6yuijaB23Zm
-	 bb+vpY6mz0hMDIjhxLAEUC4Ah0gC9z3ZhI3GVDH8aD5ADPyuZCJJCzRQYXaIHag5R2EUA
-	 wVWbvvXZ5UWvSS6U5zKF0gAnuZAR1ZzCYm2mxJRJdJ4rCJQsEeJQq6+CbwOQ7eQNAUvYg
-	 gjmJXHF5M7UY7v+f6CWh8QH/+fyA9fUBFcJXhoBbwWeEFRUYbVGkbJDNp1Hb64Y3cndOt
-	 UzOqLiOmmP4bwYWdDkzV8aDRXOEF22xe0na4uTLB4m2tb7XvAYtV8Q38FWg6aEul7zA==
+	t=1794374176;
+	b=WrzQPTm8oj8ZuNJblf/XvsohDIQS9Sy5i+HelDM2w9OzxMmb5EGQsmZan/GKrk3WbJJ5
+	 zCQ3z4Ha+nfODSns7gqbJcXHBxi5enfggIHKAUUnVAbGpNFVzGD4aGnCpOEqfnqbOevnk
+	 DVvyAhOcj/IiE4gFLnC/xfY1AQ4iwiAzD/MA0v6x0m6eE/ElGSNmOtKZ9EWYgpDc/jgOZ
+	 khvkpiEMfGLsfvhP7hQ6rcUf/U8P8JYnoTV17fpwW5LFTuZWCIBP0ZOQ0UJzg+k7vevlR
+	 OhILrnPjwu3jfAhNyYqZtotij6DaIYDIaPrULPoZWn5QMkckYFy2t6mObG4KfQS/yOg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794374171;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794374176;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=ly37fd4AtjDE3kX2y9NrvZjGC8fcSOKOK4k4Ou+KFYA=;
-	b=WjwKKOAFbJtL0wm54V61odfRGLExUWZN/sGAUaCdgkyZ5jkG8EoL/ygnctdo3JNfV7Im
-	 an9DMk9c3m9/2rEQvFXLgKyBXHpfC+z3OWsgp+Uh+iIK5wLXRj8J+LeL4fq/5gTd7fdCt
-	 zwgQtxDEB/AA5Zgu0F2m5WtjCbtqMQxvO1pTLYDeRnBxkzkHtk/joBB3fRl1ZVCay4uFs
-	 //NWhaeM1plUn/qL9L3BV8QEaWPn+8N93iCP8nocARaX8yDL3EfJqcQ6yPfm/8yzDH71G
-	 rRqeXfr/KXWrakFhPY9/DJx1NFlydoncrjZJ7vmZWjp9nXyOAFC+QYdRZhEV799gFRg==
+	bh=SV/TFw71evXCc3On3O5RFN9svtP8CyNH0qk2xPLOXB0=;
+	b=0PSQxSqXFTRzp0BYZmQ3cKevpnYgbBYyWKSRPhw/ouPkyo0sxeCaKx7sn0xO384qAknD
+	 ujYDpcDA3nXU0SB57KyYs5MjjVWlOG3KPyaodj0sRUfbfchAOYmhjWFmQoUsTieWO6xol
+	 X4xkRL6wtJ6DzRnIWiuWsdud9BL8oEHzLFNLvEZ9vtcUPu6Cc5Y4EGcB1czzy4SqMV3ms
+	 MjQpGQabnQh2ffV6VrDj05WfZ6ShvxMM8R0Y8CMTvmVskJtydmbcPsf4G3PAaA8J13EI1
+	 5fv2fHRa6L0sFmcSXZPwDOiDh046SOBra3a4sAIpbKe7SP/+qvVixmzRhugwMvHIS0Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=D8cmYCk7;
-	arc=none smtp.remote-ip=209.85.210.169
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xYIaHw1b;
+	arc=none smtp.remote-ip=209.85.216.43
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E945606A321
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 05:16:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9E945606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62AE5606A31C
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 05:16:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 62AE5606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=D8cmYCk7
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-8a0880a46e7so1644028b3a.1
-        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 21:16:10 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xYIaHw1b
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3b179528d56so471053a91.3
+        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 21:16:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794374170; x=1794978970; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794374176; x=1794978976; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=ly37fd4AtjDE3kX2y9NrvZjGC8fcSOKOK4k4Ou+KFYA=;
-        b=D8cmYCk7TW8CmJRr0y3WcX7pJwVhJSl6SabbHudBTAwBgecGBGTtsEgJ0gyPZaSmyk
-         azjiLfjSZ9j1GmmaczlELV+eei1psu1e6wLAbO+z2UjTsCFu6rtT0WdrTS5tgFG19f7w
-         IKM7LEYYKsI+OfktBly3aJ6Eno5ahlBh2hwE8+3RSXDH8/6KRR8cdnlHDTzPeHPmTw3O
-         b8Sn13cmLdZ+6R15T7FMrxIvr4ghmVnN8kiDOZqdVqAIqDgCX9EAs/l4qXzgyUt9IYdp
-         Up2FTCZ1MEPvWZ24PC4bp2/BtyAfVGN0xL52+T4Jrh9hdr/lyfpb8i7O8XpQg0F+QZP+
-         /1cg==
+        bh=SV/TFw71evXCc3On3O5RFN9svtP8CyNH0qk2xPLOXB0=;
+        b=xYIaHw1bmZZep1eB0NvRUAgNmbr5oU7NwoakBALQP5j9Eses5kR8uMqqNYgDAbSwf+
+         2dl7agoWoOU/5mGcuCses2zPpZBpS9A1kYOX1bRFf4j0lCxnBPshLWT63oEmMMY2MU/e
+         p0GHDrKUNu33/zIMgoW1VAcvhKMItZu/Jy38US0xE3J/1aRpL2zB/IhH6zeNkECII30a
+         tC8lBUws27KRgshr0s0vblxoX7u9N0cTZRhNaY6VDx0Bv7DAWumaL4B7st7iLQuS6rn9
+         yr9fRYITWuZR9HnVUGkGh3E5rsakUkODVDdXc/r66Fl8kAw3ymQmAJ2EjkHiTWvOhq5O
+         E0xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794374170; x=1794978970;
+        d=1e100.net; s=20260707; t=1794374176; x=1794978976;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ly37fd4AtjDE3kX2y9NrvZjGC8fcSOKOK4k4Ou+KFYA=;
-        b=otIbnItoMPdtwBhOlf/C1UrBwlH8ujaD1gizwU84YRO6UadiAIFSBnc0xcpWsbGlqh
-         t8UbCUOoaV6MxieLwXB7lRU3kulVGpWSwM0QqgGbUAOus/JL7/t3dTzhe2A2u8wiAaS9
-         N6fg+/chHJb099gu61OglQepQIvkwAY015Wgg/GngSUS/Ole4o50jApdtq75TFT+Ekyq
-         ZnFD8FhFvcHta9fOkMc6MEJoDNg/dlEr5XvtBd0WV0uZJXHfpUH5qB1LRNiLsAibKLC5
-         odhyDgXWM1wSqVypCrZgZFCw1+tzyZJifrnbeVM5flv+7QWsr/bvcwtWvDPc8wc3jR8r
-         0jmg==
-X-Gm-Message-State: APuU4Z84Ip9c6TEmjlRTTRX7hLa/amQvW4brjLUAPN5/CHzycRg07bkv
-	rZ6kQdlTT6ONDihoQunDK2179vLq+/IPw5Y7VpomCnoZ3kJjVyPZk/OiTBUyZw==
-X-Gm-Gg: AYBFou3AEsugJj1xIthEbkZ0QTcDynhMzCxm0K6zenkPc1yCb8K1C2vS2qrAFwzHWFV
-	E1Wo58T4C0iZNZnpIXhjiKBmJYD68wEPrfHWft3KYzfv+Nq9wlNUl5SvNt+LrW5hbGBK8FCWmBO
-	9tZRY3QeXPn1J/JkSEX07s0TH5AoyGszh7W7+i7+LWtO8Yi5WYb52m4nBxXuqdeQf7gbcx/F58v
-	pqXU3uYryD0HVgRg6C2WR/HQXmfP/trx7XxPvx8g95YFKm1jcZRhlT+kliT1mWnOjWqDW7D++E2
-	qL/aAs1tHa+dGtl8wvx5n8QewAD3/Z1/8N1RRMaU39+epWyJtLCRRIq+mUTDoG7E17gj+cXiHVv
-	5zKgWAJQJLXjrEjGsTFolAwWk2orII1pUmnYkbLmgs5ie44oNT7A3wNELRoqhJWdXAkmcYa7/Xn
-	cFQMjWZFJwGrT/IapF8IbyVOqGowbyVdgA4/10gaOfzd4EJUW/ztIK6/Oahf+cCKsueHL9rrmZ3
-	fe/7IwY38DY0qzkPPJIrtpdF7tNZSoVO9m57HTGoQtZ6nXRyiC4Jn4BKDMjLlTnjnhfLQPEQw1L
-	a2/kIZ+86zz9Cd1nA027Jzfabce2Pot7rsVHf7NLN2is0YlkqKsTETxJ0oWtRJ4zwsyYY8RihTQ
-	/AxsU7NLqn8OrLUhcZKT3BuZDeinZCFCj/Iflfm8W7wqthWeUsKC2CYP9S2oO2rY/LGZsflo71K
-	M=
-X-Received: by 2002:a05:6a00:4605:b0:89b:6041:2348 with SMTP id d2e1a72fcca58-8bc1c2a9089mr1126391b3a.7.1794374169548;
-        Tue, 10 Nov 2026 21:16:09 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.251])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8baa7de3619sm1699754b3a.5.2026.11.10.21.16.08
+        bh=SV/TFw71evXCc3On3O5RFN9svtP8CyNH0qk2xPLOXB0=;
+        b=OYHO2hRvRr0sqXRlbUkDDtVTfxJ///j4BbJSIry9+VH1IF0KM+TfqbhRvQIt47VaPG
+         xjQEhbwaLq1RRnR5aSbpdPgD9/1/2PiQR8SDs9E7tC1VyB2bT5hW+o+DDoJlvblTaqXe
+         BWx+yY1zRnboJ+H4dpuJvy/fEkt+YH89NGOPGhC8n3VDnplOfK7PCDaNZtmIFGen9WhE
+         ixQFw3KwpI56RdSTPqA7GgdKUjCLY6I330cblubhOlMzefDZkKfxPaZn/EuKBomcFcmg
+         oJxo3WyZoxiThz0WMVl9fCPPjZl/GBWn9CvCvJMLwOKcxWxt2Kpba0UMOwiRX/8TtLc1
+         CHAg==
+X-Gm-Message-State: APuU4Z8isj3mH6Ni2Q7uqxafy+mF25QFpMEEwhMGlDkut4kGBzcbI8Yq
+	Aiz0ORfYIB4wQLSikn/aUt4joF+1O4h2Lv92c+sHXqEMnxZJ7z5fWvJfVOVQlQ==
+X-Gm-Gg: AYBFou2Ngl5aS3W4aJ5VyT3snTIM/vV49BvoWvlRpQRgXj8ajuwf4ZBQ5M2d1qNzWrV
+	ixQ1MvfiySQDkTtdU3pQOeYT66iP3rfF17UhpLSnc92dBtGdlevoHboIDh/ieoMwG18EQCyFVYF
+	88ufpmDWH5/FuOdvgyOSNGMpyChJNMAc7Ry+5gJjsmqnTAWS6GSzTS6no/WJ1c40y9uYijtmCiN
+	xhWYxsHVpG14mQODVKDUYOmH6bu8RRlzJsS3ac0Lq9lr6qLuuQpmqXbsNu0xAJsTnJ7ZLB4pU/P
+	uDb5BlzA97FGO2+9uJph4dAdn7xkWtLOvpVBtEVSgRvVPM1BkC7v5s7x9iON09kCls79TqM+BVG
+	9A4EkPlK8znQcSfzG2aV0zPpqdy7rnAXRL5hqiWmS4pwShrbt+BDJz+C9NofgbiW++pFfhZ5o9Q
+	y737pBGv4B/3tkemsG3Q3uv9gr0Te0rHQC9tASiODjf1EWdqtQEcIeW5xkkE/98TkcQ4GA3ZKDj
+	3T/yd3BFBWe6t21Hcp5Wa2kJnS1cpXvBQ7U0Uz4kIcz7IiDeqZ3t7+dDUJJ7TnlKX+9CJFwzc7B
+	ZfdaIkjtwb8zZ/RPS6Io2g6ZE1OUiERgwC0GGPoAPpLdVDeRthfvhPWjL5ahPf355ewo4KytA+U
+	deP3hRGShvCF0iXDxS8WTi6dDQXFpxDwPtjxemZ1bTnvn+7zsynA1MxX6Sbx9vKvtIgk7H78znP
+	8=
+X-Received: by 2002:a17:90b:1e51:b0:3b0:e2a9:345a with SMTP id 98e67ed59e1d1-3b182fcdf84mr1302825a91.64.1794374175331;
+        Tue, 10 Nov 2026 21:16:15 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.255])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b182de1dafsm956279a91.3.2026.11.10.21.16.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 21:16:09 -0800 (PST)
+        Tue, 10 Nov 2026 21:16:15 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 24/29] bpf: Stop assigning ids to scalars
-Date: Wed, 11 Nov 2026 05:13:35 +0000
-Message-ID: <20261111051341.2800252-25-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 25/29] bpf: Remove scalar ids from regsafe()
+Date: Wed, 11 Nov 2026 05:13:36 +0000
+Message-ID: <20261111051341.2800252-26-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261111051341.2800252-1-alexei.starovoitov@gmail.com>
 References: <20261111051341.2800252-1-alexei.starovoitov@gmail.com>
@@ -104,645 +104,181 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-A removal. Nothing learns anything about a prog from a scalar id any more.
-The code that is left only maintains the ids. Stop assigning them. No
-verdict changes, the number of states goes down.
+Removal of dead code. Scalars have no ids any more, so every check of
+a scalar id in regsafe() passes. No prog is verified differently.
 
-	r2 = r1                     r1 and r2 get id 7
-	r2 += 4                     id 7 | BPF_ADD_CONST64, delta 4
-	*(u64 *)(r10 - 8) = r1      fp-8 has id 7
-	if r1 > 100 goto ..         all three were refined
+	4: r6 = r7
+	5: if r6 > 10 goto ..
+	6: use r7
 
-A scalar id in a state said that scalars hold the same value, or differ by
-delta. Each insn that moves or changes a scalar had to assign, keep or
-clear it. regsafe() and the join of states had to map the ids of one state
-to those of the other.
+While a jump refined all scalars with the id of the tested register,
+a state in which r6 and r7 have the same id was stronger than a state with
+the same ranges and two ids: in the first one insn 5 bounds r7. So
+regsafe() did not stop at the ranges. check_scalar_ids() mapped the ids of
+the old state to those of the current one, an id that the current state
+did not have got a temporary one, BPF_ADD_CONST and delta had to be equal.
 
-What does that job now:
- - After a conditional jump refine_linked_regs() refines the linked
-   registers of the jump: the live registers and stack slots that are
-   a tested register + a constant on every path to the jump. Scalar
-   evolution computes them before the main pass.
- - Memory behind a pointer is a linked register too: the stack slot of
-   a caller that the tested register was loaded from is refined.
- - Scalar evolution compares expressions to find a copy of an induction
-   variable: const_diff_at_header().
- - flow_join_makes_up() recognizes copies of a scalar by their ranges.
-
-Remove assign_scalar_id_before_mov(), BPF_ADD_CONST and delta in
-adjust_reg_min_max_vals(), the ids that a spill and a fill keep or clear,
-the callers of clear_scalar_id(), bpf_clear_singular_ids() and its caller.
-get_reg_width() has no user left.
-
-The ids of pointers, references, dynptrs and iterators stay.
-
-States that differed in scalar ids only are one state now. veristat over
-the selftests, Cilium, sched_ext, katran, bpfjailer and programs in Rust:
-2.3 % fewer insns and 3.7 % fewer states, in Rust 5.3 % and 6.3 %. No
-verdict changes. The kernel spends 0.7 % fewer instructions on loading the
-C programs and 4.9 % fewer on those in Rust.
-
-Tests that change:
- - Log lines that pin 'id=' of a scalar lose it. The id of a packet pointer
-   is smaller: ids are assigned less often.
- - two_old_ids_one_cur_id maps the scalar ids of two states: removed.
+Now no state says that two scalars hold the same value. What insn 5
+refines are its linked registers. Scalar evolution computes them before the
+main pass, and a link holds on every path to insn 5, whatever state gets
+there. The stack slot of a caller that a jump refines is found through
+a pointer in the state, and regsafe() compares pointers as before. For two
+scalars range_within() and tnum_in() are enough. Remove check_scalar_ids()
+and the table of cases in regsafe().
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/flow.c                             |   2 -
- kernel/bpf/scev.c                             |   8 +-
- kernel/bpf/verifier.c                         | 247 +-----------------
- .../selftests/bpf/progs/verifier_bounds.c     |   2 +-
- .../bpf/progs/verifier_bounds_step.c          |   6 +-
- .../bpf/progs/verifier_direct_packet_access.c |   2 +-
- .../selftests/bpf/progs/verifier_scalar_ids.c |  55 +---
- 7 files changed, 19 insertions(+), 303 deletions(-)
+ kernel/bpf/states.c | 108 ++------------------------------------------
+ 1 file changed, 3 insertions(+), 105 deletions(-)
 
-diff --git a/kernel/bpf/flow.c b/kernel/bpf/flow.c
-index 778288acb5ba..abbadba1e79f 100644
---- a/kernel/bpf/flow.c
-+++ b/kernel/bpf/flow.c
-@@ -2924,8 +2924,6 @@ static struct flow_state *flow_arrive(struct bpf_verifier_env *env, struct bpf_v
- 		flow_free_state(env, s);
- 		return ERR_PTR(err);
- 	}
--	/* when the registers that it was shared with are dead, or are those of the caller */
--	bpf_clear_singular_ids(env, &s->st);
- 	return s;
+diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+index b60676349655..48359e789faa 100644
+--- a/kernel/bpf/states.c
++++ b/kernel/bpf/states.c
+@@ -58,7 +58,7 @@ static bool check_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
+ 		return true;
+ 
+ 	/* a name of what the caller has, see BPF_INHERITED_ID */
+-	if (((old_id | cur_id) & ~BPF_ADD_CONST) >= BPF_INHERITED_ID)
++	if ((old_id | cur_id) >= BPF_INHERITED_ID)
+ 		return old_id == cur_id;
+ 
+ 	for (i = 0; i < idmap->cnt; i++) {
+@@ -85,49 +85,6 @@ static bool check_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
+ 	return false;
  }
  
-diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-index d95b8d26dc51..b46eb37234a3 100644
---- a/kernel/bpf/scev.c
-+++ b/kernel/bpf/scev.c
-@@ -4237,7 +4237,7 @@ static bool is_unbound_scev_reg(struct bpf_verifier_env *env, const struct bpf_f
- {
- 	const struct bpf_reg_state *reg = scev_reg_for_read(env, st, r);
- 
--	return reg && reg->type == SCALAR_VALUE && !reg->id && reg->step <= 1 &&
-+	return reg && reg->type == SCALAR_VALUE && reg->step <= 1 &&
- 	       tnum_is_unknown(reg->var_off) &&
- 	       reg->r64.size == U64_MAX && reg->r32.size == U32_MAX;
- }
-@@ -4323,9 +4323,6 @@ bool bpf_is_widenable_reg_type(const struct bpf_reg_state *reg)
- static void scratch_widened_reg_id(struct bpf_verifier_env *env, struct bpf_reg_state *reg)
- {
- 	switch (base_type(reg->type)) {
--	case SCALAR_VALUE:
--		clear_scalar_id(reg);
--		break;
- 	case PTR_TO_PACKET:
- 	case PTR_TO_PACKET_META:
- 		reg->id = ++env->id_gen;
-@@ -5056,7 +5053,7 @@ int bpf_widen_scev_regs(struct bpf_verifier_env *env, struct bpf_verifier_state
- 		if (back && (!val || !entry_val || !bpf_reg_union_compatible(val, entry_val)))
- 			continue;
- 		if (test_bit(r, iters->mask_regs)) {
--			/* The range stays. It's no longer equal to the registers with its id. */
-+			/* the range stays */
- 			err = scev_reg_for_write(env, cur_func, r, &reg);
- 			if (!err && back)
- 				err = bpf_reg_union(env, reg, entry_val);
-@@ -5068,7 +5065,6 @@ int bpf_widen_scev_regs(struct bpf_verifier_env *env, struct bpf_verifier_state
- 				bpf_log(log, " stays in 0..%llu, it loses bits only\n",
- 					reg_umax(reg));
- 			}
--			scratch_widened_reg_id(env, reg);
- 			mark_scev_reg_scratched(env, r);
- 			continue;
- 		}
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index db37e5fc6c03..d549644235c5 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3634,27 +3634,6 @@ static bool __is_pointer_value(bool allow_ptr_leaks,
- 	return is_pointer_regtype(reg->type);
- }
- 
--static void assign_scalar_id_before_mov(struct bpf_verifier_env *env,
--					struct bpf_reg_state *src_reg)
+-/*
+- * Compare scalar register IDs for state equivalence.
+- *
+- * When old_id == 0, the old register is independent - not linked to any
+- * other register. Any linking in the current state only adds constraints,
+- * making it more restrictive. Since the old state didn't rely on any ID
+- * relationships for this register, it's always safe to accept cur regardless
+- * of its ID. Hence, return true immediately.
+- *
+- * When old_id != 0 but cur_id == 0, we need to ensure that different
+- * independent registers in cur don't incorrectly satisfy the ID matching
+- * requirements of linked registers in old.
+- *
+- * Example: if old has r6.id=X and r7.id=X (linked), but cur has r6.id=0
+- * and r7.id=0 (both independent), without temp IDs both would map old_id=X
+- * to cur_id=0 and pass. With temp IDs: r6 maps X->temp1, r7 tries to map
+- * X->temp2, but X is already mapped to temp1, so the check fails correctly.
+- *
+- * When old_id has BPF_ADD_CONST set, the compound id (base | flag) and the
+- * base id (flag stripped) must both map consistently. Example: old has
+- * r2.id=A, r3.id=A|flag (r3 = r2 + delta), cur has r2.id=B, r3.id=C|flag
+- * (r3 derived from unrelated r4). Without the base check, idmap gets two
+- * independent entries A->B and A|flag->C|flag, missing that A->C conflicts
+- * with A->B. The base ID cross-check catches this.
+- */
+-static bool check_scalar_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
 -{
--	if (src_reg->type != SCALAR_VALUE)
--		return;
--	/*
--	 * The verifier is processing rX = rY insn and
--	 * rY->id has special linked register already.
--	 * Cleared it, since multiple rX += const are not supported.
--	 */
--	if (src_reg->id & BPF_ADD_CONST)
--		clear_scalar_id(src_reg);
--	/*
--	 * Ensure that src_reg has a valid ID that will be copied to
--	 * dst_reg and then will be used by sync_linked_regs() to
--	 * propagate min/max range.
--	 */
--	if (!src_reg->id && !tnum_is_const(src_reg->var_off))
--		src_reg->id = ++env->id_gen;
+-	if (!old_id)
+-		return true;
+-
+-	cur_id = cur_id ? cur_id : ++idmap->tmp_id_gen;
+-
+-	if (!check_ids(old_id, cur_id, idmap))
+-		return false;
+-	if (old_id & BPF_ADD_CONST) {
+-		old_id &= ~BPF_ADD_CONST;
+-		cur_id &= ~BPF_ADD_CONST;
+-		if (!check_ids(old_id, cur_id, idmap))
+-			return false;
+-	}
+-	return true;
 -}
 -
- static void save_register_state(struct bpf_verifier_env *env,
- 				struct bpf_func_state *state,
- 				int spi, struct bpf_reg_state *reg,
-@@ -3681,11 +3660,6 @@ static bool is_bpf_st_mem(struct bpf_insn *insn)
- 	return BPF_CLASS(insn->code) == BPF_ST && BPF_MODE(insn->code) == BPF_MEM;
- }
- 
--static int get_reg_width(struct bpf_reg_state *reg)
--{
--	return fls64(reg_umax(reg));
--}
--
- /* See comment for mark_fastcall_pattern_for_call() */
- static void check_fastcall_stack_contract(struct bpf_verifier_env *env,
- 					  struct bpf_func_state *state, int insn_idx, int off)
-@@ -3786,16 +3760,7 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
- 
- 	mark_stack_slot_scratched(env, spi);
- 	if (reg && !(off % BPF_REG_SIZE) && reg->type == SCALAR_VALUE && env->bpf_capable) {
--		bool reg_value_fits;
--
--		reg_value_fits = get_reg_width(reg) <= BITS_PER_BYTE * size;
--		/* Make sure that reg had an ID to build a relation on spill. */
--		if (reg_value_fits)
--			assign_scalar_id_before_mov(env, reg);
- 		save_register_state(env, state, spi, reg, size);
--		/* Break the relation on a narrowing spill. */
--		if (!reg_value_fits)
--			clear_scalar_id(&ss->spilled_ptr);
- 	} else if (!reg && !(off % BPF_REG_SIZE) && is_bpf_st_mem(insn) &&
- 		   env->bpf_capable) {
- 		struct bpf_reg_state *tmp_reg = &env->fake_reg[0];
-@@ -4098,19 +4063,8 @@ static int check_stack_read_fixed_off(struct bpf_verifier_env *env,
- 				if (dst_regno < 0)
- 					return 0;
- 
--				if (env->bpf_capable && size == 4 && spill_size == 4 &&
--				    get_reg_width(reg) <= 32)
--					/* Ensure stack slot has an ID to build a relation
--					 * with the destination register on fill.
--					 */
--					assign_scalar_id_before_mov(env, reg);
-+				/* coerce_reg_to_size will adjust the boundaries. */
- 				state->regs[dst_regno] = *reg;
--
--				/* Break the relation on a narrowing fill.
--				 * coerce_reg_to_size will adjust the boundaries.
--				 */
--				if (get_reg_width(reg) > size * BITS_PER_BYTE)
--					clear_scalar_id(&state->regs[dst_regno]);
- 			} else {
- 				int spill_cnt = 0, zero_cnt = 0;
- 
-@@ -4155,11 +4109,6 @@ static int check_stack_read_fixed_off(struct bpf_verifier_env *env,
- 			}
- 		} else if (dst_regno >= 0) {
- 			/* restore register state from stack */
--			if (env->bpf_capable)
--				/* Ensure stack slot has an ID to build a relation
--				 * with the destination register on fill.
--				 */
--				assign_scalar_id_before_mov(env, reg);
- 			state->regs[dst_regno] = *reg;
- 		} else if (__is_pointer_value(env->allow_ptr_leaks, reg)) {
- 			/* If dst_regno==-1, the caller is asking us whether
-@@ -7689,18 +7638,7 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, struct b
- 			/* b/h/w load zero-extends, mark upper bits as known 0 */
- 			coerce_reg_to_size(&regs[value_regno], size);
- 		} else {
--			/*
--			 * Sign-extension can change the register value relative
--			 * to a scalar it is linked with by id (e.g. a zero-
--			 * extending fill of the same spilled stack slot), thus
--			 * drop the shared id in that case.
--			 */
--			bool no_sext = reg_umax(&regs[value_regno]) <
--					(1ULL << (size * BITS_PER_BYTE - 1));
--
- 			coerce_reg_to_size_sx(&regs[value_regno], size);
--			if (!no_sext)
--				clear_scalar_id(&regs[value_regno]);
+ static void __clean_func_state(struct bpf_verifier_env *env,
+ 			       struct bpf_func_state *st,
+ 			       u16 live_regs, int frame)
+@@ -272,65 +229,8 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
+ 			/* explore_alu_limits disables tnum_in() and range_within()
+ 			 * logic and requires everything to be strict
+ 			 */
+-			return memcmp(rold, rcur, offsetof(struct bpf_reg_state, id)) == 0 &&
+-			       check_scalar_ids(rold->id, rcur->id, idmap);
++			return memcmp(rold, rcur, offsetof(struct bpf_reg_state, id)) == 0;
  		}
- 	}
- 
-@@ -11736,16 +11674,11 @@ static int call_func_on_its_own(struct bpf_verifier_env *env, int subprog, int i
- 	callee->entry_rcu_locks = entry.active_rcu_locks;
- 	callee->entry_preempt_locks = entry.active_preempt_locks;
- 	for (i = BPF_REG_1; i <= BPF_REG_5; i++) {
--		/* what a scalar is linked to stays with the caller, so does the delta to it */
--		if (callee->regs[i].type == SCALAR_VALUE)
--			clear_scalar_id(&callee->regs[i]);
- 		callee->regs[i].id = inherited_id(state, callee->regs[i].id);
- 		callee->regs[i].parent_id = inherited_id(state, callee->regs[i].parent_id);
- 		callee->regs[i].map_uid = inherited_id(state, callee->regs[i].map_uid);
- 	}
- 	for (i = 0; i < callee->out_stack_arg_cnt; i++) {
--		if (callee->stack_arg_regs[i].type == SCALAR_VALUE)
--			clear_scalar_id(&callee->stack_arg_regs[i]);
- 		callee->stack_arg_regs[i].id = inherited_id(state, callee->stack_arg_regs[i].id);
- 		callee->stack_arg_regs[i].parent_id =
- 			inherited_id(state, callee->stack_arg_regs[i].parent_id);
-@@ -11791,19 +11724,18 @@ static int exit_func_on_its_own(struct bpf_verifier_env *env)
- 
- static u32 fresh_id(struct bpf_verifier_env *env, struct bpf_idmap *idmap, u32 id)
- {
--	u32 flags = id & BPF_ADD_CONST, i;
-+	u32 i;
- 
--	id &= ~BPF_ADD_CONST;
- 	if (!id)
- 		return 0;
- 	for (i = 0; i < idmap->cnt; i++)
- 		if (idmap->map[i].old == id)
--			return idmap->map[i].cur | flags;
-+			return idmap->map[i].cur;
- 	if (idmap->cnt == BPF_ID_MAP_SIZE)
- 		return 0;
- 	idmap->map[idmap->cnt].old = id;
- 	idmap->map[idmap->cnt].cur = ++env->id_gen;
--	return idmap->map[idmap->cnt++].cur | flags;
-+	return idmap->map[idmap->cnt++].cur;
- }
- 
- /*
-@@ -17876,13 +17808,6 @@ static void scalar_byte_swap(struct bpf_reg_state *dst_reg, struct bpf_insn *ins
- 	/* Apply bswap if alu64 or switch between big-endian and little-endian machines */
- 	bool need_bswap = alu64 || (to_le == is_big_endian);
- 
--	/*
--	 * If the register is mutated, manually reset its scalar ID to break
--	 * any existing ties and avoid incorrect bounds propagation.
--	 */
--	if (need_bswap || insn->imm == 16 || insn->imm == 32)
--		clear_scalar_id(dst_reg);
--
- 	if (need_bswap) {
- 		if (insn->imm == 16)
- 			dst_reg->var_off = tnum_bswap16(dst_reg->var_off);
-@@ -17983,7 +17908,6 @@ static int maybe_fork_scalars(struct bpf_verifier_env *env, struct bpf_insn *ins
- 	 * like any other. At this insn the branch is a part of the state that is looked at:
- 	 * it must not be compared with it.
- 	 */
--	clear_scalar_id(reg);
- 	return adjust_scalar_min_max_vals(env, insn, reg, *src_reg);
- }
- 
-@@ -18193,10 +18117,8 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
- 	struct bpf_func_state *state = vstate->frame[vstate->curframe];
- 	struct bpf_reg_state *regs = state->regs, *dst_reg, *src_reg;
- 	struct bpf_reg_state *ptr_reg = NULL, off_reg = {0};
--	bool alu32 = (BPF_CLASS(insn->code) != BPF_ALU64);
- 	struct bpf_insn_aux_data *aux = cur_aux(env);
- 	u8 opcode = BPF_OP(insn->code);
--	int err;
- 
- 	dst_reg = &regs[insn->dst_reg];
- 	if (BPF_SRC(insn->code) == BPF_X)
-@@ -18303,69 +18225,7 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
- 		verbose(env, "verifier internal error: no src_reg\n");
- 		return -EFAULT;
- 	}
--	/*
--	 * For alu32 linked register tracking, we need to check dst_reg's
--	 * umax_value before the ALU operation. After adjust_scalar_min_max_vals(),
--	 * alu32 ops will have zero-extended the result, making umax_value <= U32_MAX.
--	 */
--	u64 dst_umax = reg_umax(dst_reg);
--
--	err = adjust_scalar_min_max_vals(env, insn, dst_reg, *src_reg);
--	if (err)
--		return err;
--	/*
--	 * Compilers can generate the code
--	 * r1 = r2
--	 * r1 += 0x1
--	 * if r2 < 1000 goto ...
--	 * use r1 in memory access
--	 * So remember constant delta between r2 and r1 and update r1 after
--	 * 'if' condition.
--	 */
--	if (env->bpf_capable &&
--	    (BPF_OP(insn->code) == BPF_ADD || BPF_OP(insn->code) == BPF_SUB) &&
--	    dst_reg->id && is_reg_const(src_reg, alu32) &&
--	    !(BPF_SRC(insn->code) == BPF_X && insn->src_reg == insn->dst_reg)) {
--		u64 val = reg_const_value(src_reg, alu32);
--		s32 off;
--
--		if (!alu32 && ((s64)val < S32_MIN || (s64)val > S32_MAX))
--			goto clear_id;
--
--		if (alu32 && (dst_umax > U32_MAX))
--			goto clear_id;
--
--		off = (s32)val;
--
--		if (BPF_OP(insn->code) == BPF_SUB) {
--			/* Negating S32_MIN would overflow */
--			if (off == S32_MIN)
--				goto clear_id;
--			off = -off;
--		}
--
--		if (dst_reg->id & BPF_ADD_CONST) {
--			/*
--			 * If the register already went through rX += val
--			 * we cannot accumulate another val into rx->off.
--			 */
--clear_id:
--			clear_scalar_id(dst_reg);
--		} else {
--			if (alu32)
--				dst_reg->id |= BPF_ADD_CONST32;
--			else
--				dst_reg->id |= BPF_ADD_CONST64;
--			dst_reg->delta = off;
--		}
--	} else {
 -		/*
--		 * Make sure ID is cleared otherwise dst_reg min/max could be
--		 * incorrectly propagated into other registers by sync_linked_regs()
+-		 * Linked register tracking uses rold->id to detect relationships.
+-		 * When rold->id == 0, the register is independent and any linking
+-		 * in rcur only adds constraints. When rold->id != 0, we must verify
+-		 * id mapping and (for BPF_ADD_CONST) offset consistency.
+-		 *
+-		 * +------------------+-----------+------------------+---------------+
+-		 * |                  | rold->id  | rold + ADD_CONST | rold->id == 0 |
+-		 * |------------------+-----------+------------------+---------------|
+-		 * | rcur->id         | range,ids | false            | range         |
+-		 * | rcur + ADD_CONST | false     | range,ids,off    | range         |
+-		 * | rcur->id == 0    | range,ids | false            | range         |
+-		 * +------------------+-----------+------------------+---------------+
+-		 *
+-		 * Why check_ids() for scalar registers?
+-		 *
+-		 * Consider the following BPF code:
+-		 *   1: r6 = ... unbound scalar, ID=a ...
+-		 *   2: r7 = ... unbound scalar, ID=b ...
+-		 *   3: if (r6 > r7) goto +1
+-		 *   4: r6 = r7
+-		 *   5: if (r6 > X) goto ...
+-		 *   6: ... memory operation using r7 ...
+-		 *
+-		 * First verification path is [1-6]:
+-		 * - at (4) same bpf_reg_state::id (b) would be assigned to r6 and r7;
+-		 * - at (5) r6 would be marked <= X, sync_linked_regs() would also mark
+-		 *   r7 <= X, because r6 and r7 share same id.
+-		 * Next verification path is [1-4, 6].
+-		 *
+-		 * Instruction (6) would be reached in two states:
+-		 *   I.  r6{.id=b}, r7{.id=b} via path 1-6;
+-		 *   II. r6{.id=a}, r7{.id=b} via path 1-4, 6.
+-		 *
+-		 * Use check_ids() to distinguish these states.
+-		 * ---
+-		 * Also verify that new value satisfies old value range knowledge.
 -		 */
--		clear_scalar_id(dst_reg);
--	}
--	return 0;
-+	return adjust_scalar_min_max_vals(env, insn, dst_reg, *src_reg);
+-
+-		/*
+-		 * ADD_CONST flags must match exactly: BPF_ADD_CONST32 and
+-		 * BPF_ADD_CONST64 have different linking semantics in
+-		 * sync_linked_regs() (alu32 zero-extends, alu64 does not),
+-		 * so one doesn't stand for the other.
+-		 */
+-		if (rold->id &&
+-		    (rold->id & BPF_ADD_CONST) != (rcur->id & BPF_ADD_CONST))
+-			return false;
+-
+-		/* Both have offset linkage: offsets must match */
+-		if ((rold->id & BPF_ADD_CONST) && rold->delta != rcur->delta)
+-			return false;
+-
+-		if (!check_scalar_ids(rold->id, rcur->id, idmap))
+-			return false;
+-
+ 		return range_within(rold, rcur) && tnum_in(rold->var_off, rcur->var_off);
+ 	case PTR_TO_MAP_KEY:
+ 	case PTR_TO_MAP_VALUE:
+@@ -468,8 +368,7 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
+ 		/*
+ 		 * 64 and 32-bit scalar spills vs MISC/INVALID slots and vice versa.
+ 		 * Load from MISC/INVALID slots produces unbound scalar.
+-		 * Construct a fake register for such stack and call
+-		 * regsafe() to ensure scalar ids are compared.
++		 * Construct a fake register for such stack and call regsafe().
+ 		 */
+ 		if (im == 0 || im == 4) {
+ 			old_reg = scalar_reg_for_stack(env, old_slot, im);
+@@ -736,7 +635,6 @@ static void reset_idmap_scratch(struct bpf_verifier_env *env)
+ {
+ 	struct bpf_idmap *idmap = &env->idmap_scratch;
+ 
+-	idmap->tmp_id_gen = env->id_gen;
+ 	idmap->cnt = 0;
  }
  
- /*
-@@ -18579,7 +18439,6 @@ void bpf_reg_union_range(struct bpf_reg_state *acc, const struct bpf_reg_state *
- /*
-  * Extends acc's scalar range to include src's scalar range.
-  * Caller must ensure that other kinds of metadata is compatible.
-- * Caller must clear acc's scalar ID.
-  */
- int bpf_reg_union(struct bpf_verifier_env *env, struct bpf_reg_state *acc,
- 		  const struct bpf_reg_state *src)
-@@ -18720,7 +18579,6 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 					/* case: R1 = R2
- 					 * copy register state to dest reg
- 					 */
--					assign_scalar_id_before_mov(env, src_reg);
- 					*dst_reg = *src_reg;
- 				} else {
- 					/* case: R1 = (s8, s16 s32)R2 */
-@@ -18730,14 +18588,7 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 							insn->src_reg);
- 						return -EACCES;
- 					} else if (src_reg->type == SCALAR_VALUE) {
--						bool no_sext;
--
--						no_sext = reg_umax(src_reg) < (1ULL << (insn->off - 1));
--						if (no_sext)
--							assign_scalar_id_before_mov(env, src_reg);
- 						*dst_reg = *src_reg;
--						if (!no_sext)
--							clear_scalar_id(dst_reg);
- 						coerce_reg_to_size_sx(dst_reg, insn->off >> 3);
- 					} else {
- 						mark_reg_unknown(env, regs, insn->dst_reg);
-@@ -18751,29 +18602,10 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 						insn->src_reg);
- 					return -EACCES;
- 				} else if (src_reg->type == SCALAR_VALUE) {
--					if (insn->off == 0) {
--						bool is_src_reg_u32 = get_reg_width(src_reg) <= 32;
--
--						if (is_src_reg_u32)
--							assign_scalar_id_before_mov(env, src_reg);
--						*dst_reg = *src_reg;
--						/* Make sure ID is cleared if src_reg is not in u32
--						 * range otherwise dst_reg min/max could be incorrectly
--						 * propagated into src_reg by sync_linked_regs()
--						 */
--						if (!is_src_reg_u32)
--							clear_scalar_id(dst_reg);
--					} else {
--						/* case: W1 = (s8, s16)W2 */
--						bool no_sext = reg_umax(src_reg) < (1ULL << (insn->off - 1));
--
--						if (no_sext)
--							assign_scalar_id_before_mov(env, src_reg);
--						*dst_reg = *src_reg;
--						if (!no_sext)
--							clear_scalar_id(dst_reg);
-+					*dst_reg = *src_reg;
-+					/* case: W1 = (s8, s16)W2 */
-+					if (insn->off)
- 						coerce_subreg_to_size_sx(dst_reg, insn->off >> 3);
--					}
- 				} else {
- 					mark_reg_unknown(env, regs,
- 							 insn->dst_reg);
-@@ -20755,69 +20587,6 @@ static void adjust_btf_func(struct bpf_verifier_env *env)
- 		aux->func_info[i].insn_off = env->subprog_info[i].start;
- }
- 
--/* Find id in idset and increment its count, or add new entry */
--static void idset_cnt_inc(struct bpf_idset *idset, u32 id)
--{
--	u32 i;
--
--	for (i = 0; i < idset->num_ids; i++) {
--		if (idset->entries[i].id == id) {
--			idset->entries[i].cnt++;
--			return;
--		}
--	}
--	/* New id */
--	if (idset->num_ids < BPF_ID_MAP_SIZE) {
--		idset->entries[idset->num_ids].id = id;
--		idset->entries[idset->num_ids].cnt = 1;
--		idset->num_ids++;
--	}
--}
--
--/* Find id in idset and return its count, or 0 if not found */
--static u32 idset_cnt_get(struct bpf_idset *idset, u32 id)
--{
--	u32 i;
--
--	for (i = 0; i < idset->num_ids; i++) {
--		if (idset->entries[i].id == id)
--			return idset->entries[i].cnt;
--	}
--	return 0;
--}
--
--/*
-- * Clear singular scalar ids in a state.
-- * A register with a non-zero id is called singular if no other register shares
-- * the same base id. Such registers can be treated as independent (id=0).
-- */
--void bpf_clear_singular_ids(struct bpf_verifier_env *env,
--			    struct bpf_verifier_state *st)
--{
--	struct bpf_idset *idset = &env->idset_scratch;
--	struct bpf_func_state *func;
--	struct bpf_reg_state *reg;
--
--	idset->num_ids = 0;
--
--	bpf_for_each_reg_in_vstate(st, func, reg, ({
--		if (reg->type != SCALAR_VALUE)
--			continue;
--		if (!reg->id)
--			continue;
--		idset_cnt_inc(idset, reg->id & ~BPF_ADD_CONST);
--	}));
--
--	bpf_for_each_reg_in_vstate(st, func, reg, ({
--		if (reg->type != SCALAR_VALUE)
--			continue;
--		if (!reg->id)
--			continue;
--		if (idset_cnt_get(idset, reg->id & ~BPF_ADD_CONST) == 1)
--			clear_scalar_id(reg);
--	}));
--}
--
- /* Return true if it's OK to have the same insn return a different type. */
- static bool reg_type_mismatch_ok(enum bpf_reg_type type)
- {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-index 94d52154b0c6..b78e7fc96fa7 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-@@ -1476,7 +1476,7 @@ __naked void sub64_full_overflow(void)
- SEC("socket")
- __description("64-bit subtraction, partial overflow, result in unbounded reg")
- __success __log_level(2)
--__msg("3: (1f) r3 -= r2 {{.*}} R3=scalar(id=1-1)")
-+__msg("3: (1f) r3 -= r2 {{.*}} R3=scalar()")
- __retval(0)
- __naked void sub64_partial_overflow(void)
- {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds_step.c b/tools/testing/selftests/bpf/progs/verifier_bounds_step.c
-index 51b703058cf7..b42717a825c6 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bounds_step.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bounds_step.c
-@@ -299,7 +299,7 @@ SEC("socket")
- __success __log_level(2)
- __msg("r0 += 8 {{.*}}smin=umin=smin32=umin32=8,smax=umax=smax32=umax32=176,{{.*}}step=8+24)")
- __msg("from 4 to 6: R0=scalar(smin=umin=smin32=umin32=32,smax=umax=smax32=umax32=176,{{.*}}step=8+24)")
--__msg("r1 = r0 {{.*}}R1=scalar(id={{[0-9]+}},smin=umin=smin32=umin32=104,smax=umax=smax32=umax32=176,{{.*}}step=8+24)")
-+__msg("r1 = r0 {{.*}}R1=scalar(smin=umin=smin32=umin32=104,smax=umax=smax32=umax32=176,{{.*}}step=8+24)")
- __msg("r1 += 24 {{.*}}R1=scalar({{.*}}smin=umin=smin32=umin32=128,smax=umax=smax32=umax32=200,{{.*}}step=8+24)")
- __naked void step_bounds_resync_after_arith(void)
- {
-@@ -336,10 +336,10 @@ l_out_%=:						\
-  */
- SEC("socket")
- __success __log_level(2)
--__msg("r1 = (s16)r0 {{.*}}R1=scalar(id={{[0-9]+}},smin=smin32=0,smax=umax=smax32=umax32=168,{{.*}}step=0+24)")
-+__msg("r1 = (s16)r0 {{.*}}R1=scalar(smin=smin32=0,smax=umax=smax32=umax32=168,{{.*}}step=0+24)")
- __msg("r2 = (s16)r0 {{.*}}R2=scalar(smin=smin32=-24,smax=smax32=144,{{.*}}step=0+24)")
- __msg("r3 = (s8)r0 {{.*}}R3=scalar(smin=smin32=-128,smax=smax32=127)")
--__msg("w4 = (s16)w1 {{.*}}R4=scalar(id={{[0-9]+}},smin=smin32=0,smax=umax=smax32=umax32=168,{{.*}}step=0+24)")
-+__msg("w4 = (s16)w1 {{.*}}R4=scalar(smin=smin32=0,smax=umax=smax32=umax32=168,{{.*}}step=0+24)")
- __msg("w5 = (s8)w1 {{.*}}R5=scalar({{.*}}smin32=-128,smax32=127,var_off=(0x0; 0xffffffff))")
- __naked void step_movsx_bounds_on_line(void)
- {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c b/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c
-index 6c1d2014b95b..212c08a27058 100644
---- a/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c
-@@ -569,7 +569,7 @@ l0_%=:	r0 = 0;						\
- 
- SEC("tc")
- __description("direct packet access: test23 (x += pkt_ptr, 4)")
--__failure __msg("invalid access to packet, off=31 size=8, R5(id=3,off=31,r=0)")
-+__failure __msg("invalid access to packet, off=31 size=8, R5(id=1,off=31,r=0)")
- __flag(BPF_F_ANY_ALIGNMENT)
- __naked void test23_x_pkt_ptr_4(void)
- {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c b/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c
-index e22120e5858f..56c2412608a5 100644
---- a/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c
-@@ -11,11 +11,10 @@ struct {
- 	__type(value, long long);
- } map_hash_8b SEC(".maps");
- 
--/* scalar in [0, max] that shares id with other registers, as it is in the log */
--#define LINKED(id, max, mask) \
--	"scalar(id=" id ",smin=smin32=0,smax=umax=smax32=umax32=" #max ",var_off=(0x0; " #mask "))"
-+/* scalar in [0, max], as it is in the log. @id: the registers that hold copies of one value. */
- #define ALONE(max, mask) \
- 	"scalar(smin=smin32=0,smax=umax=smax32=umax32=" #max ",var_off=(0x0; " #mask "))"
-+#define LINKED(id, max, mask) ALONE(max, mask)
- 
- /*
-  * Registers r{0,1,2} have the same scalar ID.
-@@ -151,7 +150,7 @@ __naked void linked_regs_broken_link(void)
- SEC("socket")
- __success __log_level(2)
- __msg("13: (25) if r1 > 0x7 goto pc+0        ; R1=" ALONE(7, 0x7))
--__msg("10: R0=0 R6=scalar(id={{.*}}umax32=255,{{.*}} R7=scalar(id={{.*}}umax32=255,")
-+__msg("10: R0=0 R6=scalar({{.*}}umax32=255,{{.*}} R7=scalar({{.*}}umax32=255,")
- __msg("5: R0=0 R6=" ALONE(255, 0xff))
- __naked void precision_many_frames(void)
- {
-@@ -317,7 +316,7 @@ __naked void linked_regs_too_many_regs(void)
- 
- SEC("socket")
- __failure __log_level(2)
--__msg("5: (3d) if r8 >= r0 goto pc+3         ; R0=scalar(umin=1) R7=scalar(id=1,umax=0xfffffffffffffffe) R8=scalar(id=1,umax=0xfffffffffffffffe)")
-+__msg("5: (3d) if r8 >= r0 goto pc+3         ; R0=scalar(umin=1) R7=scalar(umax=0xfffffffffffffffe) R8=scalar(umax=0xfffffffffffffffe)")
- __msg("div by zero")
- __naked void linked_regs_broken_link_2(void)
- {
-@@ -680,52 +679,6 @@ __naked void two_nil_old_ids_one_cur_id(void)
- 	: __clobber_all);
- }
- 
--/*
-- * Check that two different scalar IDs in the state that is there can't be
-- * mapped to the same scalar ID in the state that arrives.
-- */
--SEC("socket")
--__success __log_level(2)
--__not_msg("from 10 to 11: within")
--__msg("11: R0=0 R6=" ALONE(255, 0xff) " R7=" ALONE(255, 0xff))
--__naked void two_old_ids_one_cur_id(void)
--{
--	asm volatile (
--	/* Give unique scalar IDs to r{6,7} */
--	"call %[bpf_ktime_get_ns];"
--	"r0 &= 0xff;"
--	"r6 = r0;"
--	"r8 = r0;"
--	"call %[bpf_ktime_get_ns];"
--	"r0 &= 0xff;"
--	"r7 = r0;"
--	"r9 = r0;"
--	"r0 = 0;"
--	/* Maybe make r{6,7} IDs identical */
--	"if r6 <= r7 goto l1_%=;"
--	"r6 = r7;"
--"l1_%=:"
--	/*
--	 * Get here in two states:
--	 * - first:  r6{.id=A}, r7{.id=B}
--	 * - second: r6{.id=B}, r7{.id=B}
--	 * Currently we don't want to consider the second one to be within
--	 * the first one. Thus they are joined.
--	 */
--	"r2 = r10;"
--	"r2 += r6;"
--	"r2 += r7;"
--	/*
--	 * keep r8 and r9 live, otherwise r6->id and r7->id
--	 * will become singular and reset to zero before if r6 <= r7
--	 */
--	"r9 += r8;"
--	"exit;"
--	:
--	: __imm(bpf_ktime_get_ns)
--	: __clobber_all);
--}
--
- SEC("socket")
- /* Note the flag, see verifier.c:opt_subreg_zext_lo32_rnd_hi32() */
- __flag(BPF_F_TEST_RND_HI32)
 -- 
 2.55.0
 
