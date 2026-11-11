@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.75
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.138
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794401863;
-	b=ydJtajth9pFjcPSPxPj7k+e4IBnc8Ob+5D2T9LYYMswshKRxsiWcLlX06IPplq2u+rpu
-	 iDysMuxDYka1Nd+h0SMYivzPqgftfrAIKlshcbDkoVkpUi/dIC8Cu0Fp6L+jdH7+XvA/7
-	 eX590UDzXNDkK7MuBgV0K+x24CKN15TQDJ2MRpDv15AVVXxZV0eNRytlJrgTJrd21xWUJ
-	 lOcDN97ey58K1LsRFZSppy2zup8kUbcOUFcXgUHYdYWni6bybZVYIrvLU5AbTpI2ucvat
-	 u08a8DVzrmLnWg9S/+A8Skbi4I9WXJit4xfTbv8RAUxNunFktu0cLazxaON7dzdG6Cg==
+	t=1794401865;
+	b=OoqbYJnXqiKqBOiRQEAZ4Iq5JXQxgC6tcAM5N/7DLzYKsr4t3sgnYZemhiWXea+UltMh
+	 vMLyExEWh/St7AWjQ1LZQ5rXZJayCAEHAANoePuztqR0k0brqGNrH4AqJuSt/AvTaxstM
+	 ygihjQWOYhRjrq2utjvsBWmfguOu0X2a2SMeNhjsDvrgREEduGm//lcgM0L9DkiKXtJkD
+	 cur6/pLlrqUnlEKoFWDG+MSxIJ3FoJGBGO+ZOyWhASwUL52wqjE1AqpsB5HB5bEuXvfIC
+	 2jfeu9ZP0fz5F12JPBwi4PIdtTeHhU3wJwQA4y90s530uIKZFXFNwAk0pBe9R4eLZaQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794401863;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794401865;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
-	bh=VD1+rpAxFamZx0j4jy4zHt2HYmwHJlGoMHEZh1ewYJQ=;
-	b=Nn1X8XhJSOGevXnVP7VS8qQRK7G+tasvMWEUJuN1RS245Ol5RUlKIMH9V9tn13sCQhhu
-	 0KqG7ZHWOogW66EAuLXr8z29Zp8pC8Iq2nv1K6qj4DoRcwh1y+AikNIwJrozwO6gzeClF
-	 IMuVf+zeyW2plSGHAuq/H5ruGVuj01ydshaWKysKxnj/b+7Hggy5+ktyLPoA9J4n9Btbj
-	 NxlNAH0GZYgnyvlLgeiNci8hFXxHvt3l7B8g2W6LIazA4ag5VzveIlb1MF3/9PtIECvYt
-	 32GutBW1LKNfrZvwXcNN6lRfQQqxfKEhRPYhgQ+n8cV9BMy+bgCPvm8PcysoPFKb9jw==
+	bh=/GPDE0UURkqH3XQRxXn56jeVhcII8LNZ3dX52s0TeLQ=;
+	b=G6ps6zCKy/iHrYPjz4hFcI0ehO+XQA4t1poH115FR6k/i+sFhzsPbzSIgymzflIdbsFa
+	 prVrGmU4Ilk2oTKjrYOeg8yYtfAQVorrSeHw2/5TF0LqQ4qe+togXox5t/of91loNDJg3
+	 yVRWfeYjzRqEve1R6f8Kd7e7N54fLz3DFdXJ7Bu2DEDpxUCZev12b/fxU0Oo2tVmapjYY
+	 zUHTWusysw1ukty8qsMBlKQRUGPX8ylZT5xif47xLNJBbu7ijVeKjUE4yTB9t3FySBVJY
+	 Fnlbtgg7Cd3blhSDmVWMJjDEj1b63AxfWy9h82HE1bdVwCHSqyBNmlcgbdxEOO8UqQA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=O27Hv7LR;
-	arc=none smtp.remote-ip=74.125.225.75
-Received: from mail-wr2-f11.google.com (mail-wr2-f11.google.com [74.125.225.75])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=c8bZYdpD;
+	arc=none smtp.remote-ip=74.125.225.138
+Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 203AC606A321
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 12:57:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 203AC606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFE6D606A321
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 12:57:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DFE6D606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=O27Hv7LR
-Received: by mail-wr2-f11.google.com with SMTP id ffacd0b85a97d-48fd1deda37so1175630f8f.1
-        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 04:57:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=c8bZYdpD
+Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-4b76b2f6bd9so9315985e9.0
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 04:57:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794401861; x=1795006661; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794401863; x=1795006663; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=VD1+rpAxFamZx0j4jy4zHt2HYmwHJlGoMHEZh1ewYJQ=;
-        b=O27Hv7LRIjetHkZ2HQbRSeVBA3Qp5/KQQqhjCQHDC2DPERDHnDvrrcM8h/2vQhMihf
-         khWNGY2Gnvbh3Eg7GaGgIxrkl0K3nbSABr19B97oE3ugL/fq+MMKAqj9/xHCFkO+FHff
-         GR4PEq+tfNsyw+cbTcnhLSNt4AAwPgwtiDV7mACFxKq8RC/B9ZDZYoEKroa3pedhdC1B
-         j0uzhyD1s0fNVwbFEGVG9iZ+5RhnLgEAdz+WcibI8coSVVZQ9zSwoM473j+MFRYpk/Km
-         acHEdwwLbIYxj0bj9zSRixpfSpU+fRneDkrV8pTtRJsvlCs+t/hSvf16jJTaKKvGZ7Qv
-         GXjQ==
+        bh=/GPDE0UURkqH3XQRxXn56jeVhcII8LNZ3dX52s0TeLQ=;
+        b=c8bZYdpD2I7I60vY1fwKBg8Tao7Q7bd2L52zY4XHVqb/NgIDFrmCgKz/+nUHe6i5Jz
+         9LHBn92mcY5jizLqUVSPcRjgQphn+0MpPRD0Uj6tiAfWaum01ny0MURWTPU0XwYsudmC
+         dx8tRPr+bJml7gLkrT/H3aOnjjyzMvAsXSHnXg6e6MiaQCT8LfVoT2CUItrRvoskZgYb
+         jqYrHmQdnHEzt1XfvIp+aNrC3EDSAPZKkxnDv3YwZLi3yjrUNwarsCSteDm2DgQ30cX5
+         dvdutdz+7Pst/k/yNtPmoL8MDgcq6OoO6ZsVcCyMv3CopFcZQzDOZSvyOeTgZhfbGprX
+         fl4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794401861; x=1795006661;
+        d=1e100.net; s=20260707; t=1794401863; x=1795006663;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=VD1+rpAxFamZx0j4jy4zHt2HYmwHJlGoMHEZh1ewYJQ=;
-        b=rJtSQ38MfomcPiB3OMtvQsBUS9S1Vun1I0X8zlfuELSOHea+wnSUHFsk/MKMD7pgQQ
-         HZjViMVFZsWnj0VI+ZC6AAo2X5wODnhGvvt9CZC5qB2kfHOaSTA/TLsaDRqFY9RRMUlq
-         qk2YlbKZl5vUFroAeYMHVgHQbQZA6gD3ZyhsO2seslZjwcYp8u7zg9O8RpsPypxbTEbO
-         /sOZycwcOwsjfVdeKFQ1v5tpNKwv/YkHyjV63b3zBm9Fl4aLbdENBgCU3UB1avRh7Bfn
-         PKTwTTir4JVvJvm9+Aj2NSAhgwRHZgrjf/RI/RlNc9Un5yCbx7sFM5okxVtxWtVy3rip
-         UAvw==
-X-Gm-Message-State: APuU4Z/TDefTbGlvAHOIA7KA1u9Oq6+v+w9P77KMcsY+Jr8F4C1MdyeM
-	3bbZ/VDdEQzishzzkjFR4aOtZbfNDoGpk56vVY6aRFENpJq1We4qzEYZDEUN1QyKZG0=
-X-Gm-Gg: AYBFou00cqgU9l/ZE9S6jQy4JsgY3GRuI2hXWL3CCQRHCKi3bmhUV4AjUH1nVTBMXkD
-	VwADVErfuxD0qqCW7xc6+uXBOYjb/mgis4RmarPBGkhuwMJ7iiZ92arM8e2TM4TsxR2sm4eychB
-	Kmh0t57jGNekwzoiH51q5iR8jd7BsljU+WEW4JPgtL7ix0GYp8aoonat09+pJtlBSRkGTnih2wf
-	ZuQJjfi+NRLAt3ok3Ld6xR8iwPpkCa7FXA1Gugoaif8AQof8Qp9JYpDRYD58GZO0g4U6mnpupqn
-	HPmyuQ4bYosJO4Dvy6stLpDuFzhd+ZFe2q7JVdbY/g904p5AmhuhFJZ1kQCUv6gaeq6FBnwUuXG
-	krmABj62yqma72Nq958yND82RXP8jKvpG2Z2357fA0cU1tkc9gVHk1QMVcaLgfuJG4SP0zRMd4v
-	VRg5wFoD15tC3khWBSXV/xYqLm3rs7r6goVpgfENfcuyRdfVu4sl612r+AaEDZammzrvtobm8C2
-	mVrY32/TjTeGi2BFGPRltBrtMR+N8bZhx9H+sPsaYVQL50cB5TFEDZVWBMncB0e8Q5luvjQ+cvJ
-	0gkk1dQ5OV8laWYDER9CHXvqvt2eYPFnryp4UajAAum3U5BliVF2rIj2wDt2xzz0cQqzzei3j4D
-	BceNPJ/mTSrRGNcMMlXZecw3XROW04IFMRSXkAFsP0pfqRgQ0P0RQdxgwd8LNgoQ1pF2/
-X-Received: by 2002:a05:6000:26c9:b0:490:b23b:8017 with SMTP id ffacd0b85a97d-499c75529e1mr4125878f8f.34.1794401861181;
-        Wed, 11 Nov 2026 04:57:41 -0800 (PST)
+        bh=/GPDE0UURkqH3XQRxXn56jeVhcII8LNZ3dX52s0TeLQ=;
+        b=jtG0+A40QxAD3lGA7kzRJOHvXUVDKJd30jVOG5dgGMqaOcIvN8NSKtdmL/7LAheTt6
+         3YIkeVRymznbC5OGVtqwCDr8v7jZisZyWxUnBp9RzVCv2i0PdVbO27qg7vWRnGL3elLT
+         h3s6Od4S30Y/kkjNIAKGv1y58CFbEQwU0/2yHgE+p5XoFJ6TCKbCH/qHlkpCofjiVaxf
+         /Nv3liS/zVhPZuQXw2GsOkKgj2jX/hIP7ckXB37KDQvdP7p3tPdcGYQZvN7uzV6qL7HD
+         iPvtVRNzp4dRkJ/JcataH+OfYXEl6IFrjFh4WJ2emZw6dBtRXHh8flRqgmTVGuJNiVDR
+         AN6Q==
+X-Gm-Message-State: APuU4Z8ptrO+k3dUNu3fjpMIdyJEx0Ckhs6jBJWGKxi05bbFm41If2yL
+	fm6k+yuVKPDEAU/oiZiMjTeRxhKxrjD9+4nGyhnJNbG/KdfWPbPBhB9fY4D9ugngwTs=
+X-Gm-Gg: AYBFou2dcjBI+8KTy8mnCCB5hZyO6DTnHfh6V7k759Gmph5n/T1ZgGNkTM1hpHOfmaw
+	CGd1+9nJdtnGlfSMhfkSy4KbJvuO7nYi0XRlNcpNiIzuAA1PTY6iXp+TIt/ApEQzGDMfLDxus/9
+	FHx2ConqiD33q9A0IqJLpkQRD3m6Ec6hv3nLpCdl9gN92/5AvkFctEN7N5yHgZs4n+wPHoajI+i
+	FB4mk43uciAC9SWjWcGN7KlKP5cnY3PVBynhez3t3e1zcISAyT3b89PZzkmQ6P4um1J/9hJjx0O
+	3cHahY6JM18f5W8aGahY8Sv7kjbcB+1v5boHpA0iTr6c5N3A/gOE3/BL2wQ53CpgoBNyc64UEfq
+	+CUDDs3wf7A3OQ9FT49dvn5lIstj10DppCMppO+XEz2rnc9oxAVhy7vhgNYgsXDXzX0WlsUG3fe
+	FPHJHDN/UdeQxSUSc0yUCRTHukvyUa2JxmwLXVGfnwP17sEozm+ojlOiWClGywnPWj/QtQia7f6
+	HYGRzJP/uqDssRFcv/X5tLCt3URUkQAQI61MHVvmrbZ/N2PrJzvcUX5YqMUMPBqnZ8wOZ5I2qVW
+	LlZzNVfzFd58dqO2bQCGMMMvJXK9wE8uHhG/01MToTx+b0skQqltpt85JH7lZO7yg9Qyn5Y8DPn
+	FQL9arkK2OEAiuD219U7FVOpav/Y5Advr3aC+HaUYmHHBKNYqORL3U4auXvnOOsd8e/Or
+X-Received: by 2002:a05:600c:1d03:b0:4b7:6b96:e431 with SMTP id 5b1f17b1804b1-4ba09399711mr48749205e9.28.1794401863209;
+        Wed, 11 Nov 2026 04:57:43 -0800 (PST)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4983585923bsm11163144f8f.11.2026.11.11.04.57.40
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba020485bcsm130912325e9.11.2026.11.11.04.57.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2026 04:57:40 -0800 (PST)
+        Wed, 11 Nov 2026 04:57:42 -0800 (PST)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -88,9 +88,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 07/29] bpf: Add one allocator for hidden stack slots
-Date: Wed, 11 Nov 2026 13:57:05 +0100
-Message-ID: <9d074f026dcb520b11bb1365d7116b95e0b789c6.1794399387.git.memxor@gmail.com>
+Subject: [PATCH bpf-next v1 08/29] bpf: Add flags and release kfuncs to the dtor registry
+Date: Wed, 11 Nov 2026 13:57:06 +0100
+Message-ID: <ffc489a9770015068f1fe344435515d9265600be.1794399387.git.memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1794399387.git.memxor@gmail.com>
 References: <cover.1794399387.git.memxor@gmail.com>
@@ -103,495 +103,444 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=19847; i=memxor@gmail.com; h=from:subject:message-id; bh=eHSr6a7U8O3Gi8UZNuPxdrQhJbH4jiKQrIXEVGWivz0=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetLzDz5lW9cj6k2iHvn3Du262TrVa6uV4GOa6wrtt220 u2eL9rRUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgInYBDAyfLE13aa0n3uW41sx lSNrfX8aMmS3LCnXuDGNd5eSaXn8Pob/WbumXpwQe3LlzZJrTidmpJZ8UHhw8JBcjYhMsyuPYR4 7LwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=16830; i=memxor@gmail.com; h=from:subject:message-id; bh=n8vUYtbTaaZ7L9cWN4NwfUfbUUOerQeb8F8oLToamVk=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetLzLxNLNJ9rJwrhTTDvn49JSnG3nn6RNSNs2sTvj2Zu eqiS8fyjlIWBjEuBlkxRZaS//uYjE9U/g60XcYNM4eVCWQIAxenAEzkfCHD/+rmw5N1grLOtxaU Mz14dE7ESm3+pllRfREVmxtWH/0bac7wz+CIq5fgjs73Jv8mpByQYq99v4nl98KKQC8xvtAnTDf XcwEA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Rewrites after verification need stack space that the program does not
-know about:
+The BTF destructor registry maps a type to the void (*)(void *) function
+that destroys a kptr of that type when a map element is freed. This is
+its only use.
 
- - the may_goto count, or the register that a timed may_goto saves;
- - the spill area of an inlined bpf_loop();
- - the context pointer that a generated epilogue reads back.
+An unwinder that releases the references a program holds when it throws
+needs the same table, with two additions:
 
-Each user computes its own offsets below the verified stack depth and
-bumps stack_depth at a subprogram boundary in its own loop. may_goto also
-keeps stack_extra, so that a prologue patch at the end of
-bpf_do_misc_fixups() knows how many slots to initialize, with a bug check
-that nothing else uses it.
+ - An entry must say whether the unwinder may use it.
+ - An entry must name the kfunc that a program calls to release such a
+   reference. The verifier uses this to decide whether a destructor may
+   run at a given point: if the program could call the release kfunc
+   there, running the equivalent destructor is allowed.
 
-Later patches need more hidden slots, for the handles of resources that
-an unwinder has to find. Add one allocator:
+Add a flags field to struct btf_id_dtor_kfunc:
 
- - bpf_reserve_stack_slots() hands out 8-byte slots, top down, below the
-   verified depth of a subprogram rounded up to 8 bytes. It bumps
-   stack_depth and stack_extra.
- - bpf_stack_slot_init() records the value that a slot must hold on
-   entry.
- - bpf_emit_stack_inits() patches all initializing stores into the
-   subprogram prologues in one place, in chunks that fit the instruction
-   buffer. Jumps to the first instruction are redirected past the stores,
-   as the may_goto patch did.
+ - BPF_DTOR_KPTR keeps today's use. btf_find_dtor_kfunc() takes the
+   flags that an entry must have, so the kptr lookup in btf_parse_kptr()
+   sees the same entries as before.
+ - BPF_DTOR_CLEANUP marks an entry that the unwinder may use. Such an
+   entry carries release_btf_id: the KF_RELEASE kfunc of the type, or the
+   KF_ITER_DESTROY kfunc of an iterator type.
 
-Convert the three users:
+btf_find_dtor() returns the whole entry for the unwinder. For a type of a
+module BTF it also searches the base BTF, and falls back to a vmlinux
+struct of the same name.
 
- - The may_goto slot is reserved at the first may_goto of a subprogram
-   and shared by the rest. The bpf_loop() spill area works the same way.
- - The epilogue slot keeps its offset by asking for the next slot before
-   gen_epilogue() decides whether it is needed.
+Registration rejects an entry without flags, a cleanup entry without a
+release kfunc, and a release kfunc that is not registered with KF_RELEASE
+or KF_ITER_DESTROY in a kfunc id set of the same BTF. The check runs at
+registration time, so a module or initcall must register its kfunc id
+sets before its destructors. Every current registration already does.
 
-The "stack size %d(extra %d) is too large" check for interpreted programs
-moves into the allocator, so it covers every user. Slots now start at an
-8-byte aligned offset. Before, a subprogram with an unaligned depth got
-unaligned may_goto slots.
+Mark the existing entries BPF_DTOR_KPTR. Also mark them BPF_DTOR_CLEANUP,
+with their release kfunc, where the type has one: task_struct, cgroup,
+bpf_cpumask, bpf_crypto_ctx, bpf_ksock, the sk_buff of a qdisc program,
+the two test types in test_run.c, and bpf_testmod_ctx.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/bpf_verifier.h |  12 ++
- kernel/bpf/fixups.c          | 265 +++++++++++++++++++++++------------
- kernel/bpf/verifier.c        |   1 +
- 3 files changed, 190 insertions(+), 88 deletions(-)
+ include/linux/btf.h                           |  23 +++-
+ kernel/bpf/btf.c                              | 101 ++++++++++++++++--
+ kernel/bpf/cpumask.c                          |   7 +-
+ kernel/bpf/crypto.c                           |   7 +-
+ kernel/bpf/helpers.c                          |  14 ++-
+ net/bpf/test_run.c                            |  14 ++-
+ net/core/bpf_ksock.c                          |   3 +
+ net/sched/bpf_qdisc.c                         |  10 +-
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |   5 +-
+ 9 files changed, 155 insertions(+), 29 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 4771c55d8f41..7a2b6507f562 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1023,6 +1023,7 @@ struct bpf_subprog_info {
- 	u32 exit_idx;
- 	struct bpf_iarray *jt; /* jump table shared by all gotox of this subprogram */
- 	u16 stack_depth; /* max. stack depth used by this function */
-+	/* bytes below the verified stack depth reserved for hidden slots, see bpf_reserve_stack_slots() */
- 	u16 stack_extra;
- 	u16 arena_stack_depth; /* size of the frame in the stack in arena */
- 	u32 insns_total;
-@@ -1208,6 +1209,13 @@ void bpf_patch_image_install(struct bpf_prog *prog, const struct bpf_patch_image
- /* single container for all structs
-  * one verifier_env per bpf_check() call
-  */
-+/* Initialization of a hidden stack slot, emitted in the subprogram's prologue. */
-+struct bpf_stack_init {
-+	u32 subprog;
-+	s16 off;
-+	s32 imm;
-+};
-+
- struct bpf_verifier_env {
- 	u32 insn_idx;
- 	u32 prev_insn_idx;
-@@ -1233,6 +1241,8 @@ struct bpf_verifier_env {
- 	u32 insn_array_map_cnt;		/* number of used maps of type BPF_MAP_TYPE_INSN_ARRAY */
- 	u32 id_gen;			/* used to generate unique reg IDs */
- 	u32 hidden_subprog_cnt;		/* number of hidden subprogs */
-+	struct bpf_stack_init *stack_inits; /* hidden slot initializations, see bpf_stack_slot_init() */
-+	u32 stack_init_cnt;
- 	int exception_callback_subprog;
- 	bool explore_alu_limits;
- 	bool allow_ptr_leaks;
-@@ -2174,6 +2184,8 @@ int bpf_check_attach_btf_id_multi(struct btf *btf, struct bpf_prog *prog, u32 bt
+diff --git a/include/linux/btf.h b/include/linux/btf.h
+index 87fad4076f0e..045c48bcf98c 100644
+--- a/include/linux/btf.h
++++ b/include/linux/btf.h
+@@ -141,9 +141,19 @@ struct btf_kfunc_id_set {
+ 	btf_kfunc_filter_t filter;
+ };
  
- /* Functions in fixups.c, called from bpf_check() */
- void bpf_clear_insn_aux_data(struct bpf_verifier_env *env, int start, int len);
-+int bpf_reserve_stack_slots(struct bpf_verifier_env *env, int subprog, int nr, s16 *off);
-+int bpf_stack_slot_init(struct bpf_verifier_env *env, int subprog, s16 off, s32 imm);
- int bpf_remove_fastcall_spills_fills(struct bpf_verifier_env *env);
- int bpf_optimize_bpf_loop(struct bpf_verifier_env *env);
- void bpf_opt_hard_wire_dead_code_branches(struct bpf_verifier_env *env);
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index 8597b443d561..04d89113e596 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -918,6 +918,87 @@ int bpf_insert_recursion_checks(struct bpf_verifier_env *env)
++/*
++ * Flags for struct btf_id_dtor_kfunc::flags: BPF_DTOR_KPTR destroys the kptr fields of a map
++ * element when it is freed, BPF_DTOR_CLEANUP may release a reference held by a program that
++ * is being unwound.
++ */
++#define BPF_DTOR_KPTR		(1U << 0)
++#define BPF_DTOR_CLEANUP	(1U << 1)
++
+ struct btf_id_dtor_kfunc {
+-	u32 btf_id;
+-	u32 kfunc_btf_id;
++	u32 btf_id;		/* type the destructor applies to */
++	u32 kfunc_btf_id;	/* BTF id of the void (*)(void *) destructor */
++	u32 release_btf_id;	/* KF_RELEASE kfunc of the type, required for BPF_DTOR_CLEANUP */
++	u32 flags;
+ };
+ 
+ struct btf_struct_meta {
+@@ -627,7 +637,8 @@ u32 *btf_kfunc_is_modify_return(const struct btf *btf, u32 kfunc_btf_id,
+ int register_btf_kfunc_id_set(enum bpf_prog_type prog_type,
+ 			      const struct btf_kfunc_id_set *s);
+ int register_btf_fmodret_id_set(const struct btf_kfunc_id_set *kset);
+-s32 btf_find_dtor_kfunc(struct btf *btf, u32 btf_id);
++const struct btf_id_dtor_kfunc *btf_find_dtor(struct btf **btfp, u32 btf_id);
++s32 btf_find_dtor_kfunc(struct btf *btf, u32 btf_id, u32 flags);
+ int register_btf_id_dtor_kfuncs(const struct btf_id_dtor_kfunc *dtors, u32 add_cnt,
+ 				struct module *owner);
+ struct btf_struct_meta *btf_find_struct_meta(const struct btf *btf, u32 btf_id);
+@@ -718,7 +729,11 @@ static inline int register_btf_kfunc_id_set(enum bpf_prog_type prog_type,
+ {
  	return 0;
+ }
+-static inline s32 btf_find_dtor_kfunc(struct btf *btf, u32 btf_id)
++static inline const struct btf_id_dtor_kfunc *btf_find_dtor(struct btf **btfp, u32 btf_id)
++{
++	return NULL;
++}
++static inline s32 btf_find_dtor_kfunc(struct btf *btf, u32 btf_id, u32 flags)
+ {
+ 	return -ENOENT;
+ }
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 228b93d4f8c9..6359c5e343bd 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -4073,7 +4073,7 @@ static int btf_parse_kptr(const struct btf *btf, struct btf_field *field,
+ 		 * can be used as a referenced pointer and be stored in a map at
+ 		 * the same time.
+ 		 */
+-		dtor_btf_id = btf_find_dtor_kfunc(kptr_btf, id);
++		dtor_btf_id = btf_find_dtor_kfunc(kptr_btf, id, BPF_DTOR_KPTR);
+ 		if (dtor_btf_id < 0) {
+ 			ret = dtor_btf_id;
+ 			goto end_btf;
+@@ -10190,23 +10190,86 @@ int register_btf_fmodret_id_set(const struct btf_kfunc_id_set *kset)
+ }
+ EXPORT_SYMBOL_GPL(register_btf_fmodret_id_set);
+ 
+-s32 btf_find_dtor_kfunc(struct btf *btf, u32 btf_id)
++static const struct btf_id_dtor_kfunc *btf_dtor_tab_find(const struct btf *btf, u32 btf_id)
+ {
+ 	struct btf_id_dtor_kfunc_tab *tab = btf->dtor_kfunc_tab;
+-	struct btf_id_dtor_kfunc *dtor;
+ 
+ 	if (!tab)
+-		return -ENOENT;
+-	/* Even though the size of tab->dtors[0] is > sizeof(u32), we only need
++		return NULL;
++	/*
++	 * Even though the size of tab->dtors[0] is > sizeof(u32), we only need
+ 	 * to compare the first u32 with btf_id, so we can reuse btf_id_cmp_func.
+ 	 */
+ 	BUILD_BUG_ON(offsetof(struct btf_id_dtor_kfunc, btf_id) != 0);
+-	dtor = bsearch(&btf_id, tab->dtors, tab->cnt, sizeof(tab->dtors[0]), btf_id_cmp_func);
+-	if (!dtor)
++	return bsearch(&btf_id, tab->dtors, tab->cnt, sizeof(tab->dtors[0]), btf_id_cmp_func);
++}
++
++/*
++ * Find the destructor entry of type @btf_id of *@btfp, and set *@btfp to the
++ * BTF the entry and its kfunc ids belong to. A module's BTF is split on top of
++ * vmlinux's, so a type below its first id is vmlinux's, with its destructor
++ * registered there; and a struct a module defines under the name of a vmlinux
++ * struct is the same type to the verifier, which passes it to vmlinux kfuncs
++ * by name, so it is destroyed as that type.
++ */
++const struct btf_id_dtor_kfunc *btf_find_dtor(struct btf **btfp, u32 btf_id)
++{
++	const struct btf_id_dtor_kfunc *dtor;
++	struct btf *btf = *btfp, *vmlinux;
++	const struct btf_type *t;
++	s32 id;
++
++	while (btf_id < btf->start_id)
++		btf = btf->base_btf;
++	dtor = btf_dtor_tab_find(btf, btf_id);
++	if (dtor || !btf_is_module(btf)) {
++		*btfp = btf;
++		return dtor;
++	}
++	t = btf_type_by_id(btf, btf_id);
++	if (!t || !btf_type_is_struct(t))
++		return NULL;
++	vmlinux = bpf_get_btf_vmlinux();
++	if (IS_ERR_OR_NULL(vmlinux))
++		return NULL;
++	id = btf_find_by_name_kind(vmlinux, btf_name_by_offset(btf, t->name_off), BTF_KIND_STRUCT);
++	if (id < 0)
++		return NULL;
++	dtor = btf_dtor_tab_find(vmlinux, id);
++	if (dtor)
++		*btfp = vmlinux;
++	return dtor;
++}
++
++/* Return the destructor of btf_id if its entry has all of the BPF_DTOR_* bits in flags */
++s32 btf_find_dtor_kfunc(struct btf *btf, u32 btf_id, u32 flags)
++{
++	const struct btf_id_dtor_kfunc *dtor = btf_find_dtor(&btf, btf_id);
++
++	if (!dtor || (dtor->flags & flags) != flags)
+ 		return -ENOENT;
+ 	return dtor->kfunc_btf_id;
  }
  
 +/*
-+ * Hidden stack slots. Post-verification rewrites need stack space the program
-+ * does not know about: may_goto counters, the spill area of an inlined
-+ * bpf_loop(), the context pointer a generated epilogue reads back. Such slots
-+ * are reserved below the stack depth verification established for a
-+ * subprogram, after bpf_remove_fastcall_spills_fills() has shrunk it, so that
-+ * they sit directly under the program's own frame. Slots are 8 bytes, 8-byte
-+ * aligned and handed out top down: the first slot of a subprogram lies right
-+ * below its verified depth rounded up to 8 bytes.
++ * The release kfunc of a BPF_DTOR_CLEANUP entry is what a program calls to release a
++ * reference of the type itself, so it must be a KF_RELEASE kfunc, or the KF_ITER_DESTROY
++ * kfunc of an iterator type. The kfunc id sets of the BTF are consulted, so they must be
++ * registered before the destructors.
 + */
-+static s16 next_stack_slot_off(const struct bpf_subprog_info *info)
++static int btf_check_release_kfunc(struct btf *btf, u32 release_btf_id)
 +{
-+	return -(s32)(round_up(info->stack_depth, BPF_REG_SIZE) + BPF_REG_SIZE);
-+}
++	const struct btf_type *t;
 +
-+/* Reserve @nr slots in @subprog; @off receives the offset of the topmost one. */
-+int bpf_reserve_stack_slots(struct bpf_verifier_env *env, int subprog, int nr, s16 *off)
-+{
-+	struct bpf_subprog_info *info = &env->subprog_info[subprog];
-+	u32 depth = round_up(info->stack_depth, BPF_REG_SIZE) + nr * BPF_REG_SIZE;
-+	u32 extra = depth - info->stack_depth;
-+
-+	if ((depth > MAX_BPF_STACK && !env->prog->jit_requested) || depth > S16_MAX + 1U) {
-+		verbose(env, "stack size %d(extra %d) is too large\n", depth, info->stack_extra + extra);
++	t = btf_type_by_id(btf, release_btf_id);
++	if (!t || !btf_type_is_func(t))
 +		return -EINVAL;
-+	}
-+	*off = next_stack_slot_off(info);
-+	info->stack_depth = depth;
-+	info->stack_extra += extra;
-+	return 0;
-+}
-+
-+/* Initialize the hidden slot at @off of @subprog to @imm in its prologue. */
-+int bpf_stack_slot_init(struct bpf_verifier_env *env, int subprog, s16 off, s32 imm)
-+{
-+	struct bpf_stack_init *inits;
-+	u32 cnt = env->stack_init_cnt;
-+
-+	inits = kvrealloc(env->stack_inits, array_size(cnt + 1, sizeof(*inits)),
-+			  GFP_KERNEL_ACCOUNT);
-+	if (!inits)
-+		return -ENOMEM;
-+	inits[cnt] = (struct bpf_stack_init) { .subprog = subprog, .off = off, .imm = imm };
-+	env->stack_inits = inits;
-+	env->stack_init_cnt = cnt + 1;
-+	return 0;
-+}
-+
-+/*
-+ * Emit the stores that initialize hidden slots at the start of each subprogram.
-+ * They go in front of the first instruction, which a jump to it skips, so a
-+ * loop back to the entry does not rerun the initialization. The patch list is
-+ * empty on entry and committed on return.
-+ */
-+static int bpf_emit_stack_inits(struct bpf_verifier_env *env)
-+{
-+	struct bpf_insn *insn_buf = env->insn_buf;
-+	u32 i, j, cnt;
-+	int ret;
-+
-+	for (i = 0; i < env->subprog_cnt; i++) {
-+		j = 0;
-+		do {
-+			cnt = 0;
-+			for (; j < env->stack_init_cnt && cnt < INSN_BUF_SIZE; j++) {
-+				const struct bpf_stack_init *init = &env->stack_inits[j];
-+
-+				if (init->subprog == i)
-+					insn_buf[cnt++] = BPF_ST_MEM(BPF_DW, BPF_REG_FP, init->off,
-+								     init->imm);
-+			}
-+			if (!cnt)
-+				break;
-+			ret = bpf_patch_list_insert(env, env->subprog_info[i].start, insn_buf, cnt);
-+			if (ret)
-+				return ret;
-+		} while (j < env->stack_init_cnt);
-+	}
-+	return bpf_patch_list_commit(env);
-+}
-+
- /* Clean up dynamically allocated fields of aux data for instructions [start, ...] */
- void bpf_clear_insn_aux_data(struct bpf_verifier_env *env, int start, int len)
- {
-@@ -1461,16 +1542,22 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
- 	int epilogue_idx = 0;
- 
- 	if (ops->gen_epilogue) {
--		epilogue_cnt = ops->gen_epilogue(epilogue_buf, env->prog,
--						 -(subprogs[0].stack_depth + 8));
-+		s16 ctx_off = next_stack_slot_off(&subprogs[0]);
-+
-+		epilogue_cnt = ops->gen_epilogue(epilogue_buf, env->prog, ctx_off);
- 		if (epilogue_cnt >= INSN_BUF_SIZE) {
- 			verifier_bug(env, "epilogue is too long");
- 			return -EFAULT;
- 		} else if (epilogue_cnt) {
-+			s16 off;
-+
- 			/* Save the ARG_PTR_TO_CTX for the epilogue to use */
--			subprogs[0].stack_depth += 8;
--			insn_buf[0] = BPF_STX_MEM(BPF_DW, BPF_REG_FP, BPF_REG_1,
--						  -subprogs[0].stack_depth);
-+			ret = bpf_reserve_stack_slots(env, 0, 1, &off);
-+			if (ret)
-+				return ret;
-+			if (verifier_bug_if(off != ctx_off, env, "epilogue context slot moved"))
-+				return -EFAULT;
-+			insn_buf[0] = BPF_STX_MEM(BPF_DW, BPF_REG_FP, BPF_REG_1, off);
- 			ret = bpf_patch_list_insert(env, 0, insn_buf, 1);
- 			if (ret)
- 				return ret;
-@@ -2321,6 +2408,25 @@ static int add_hidden_subprog(struct bpf_verifier_env *env, struct bpf_insn *pat
- 	return 0;
- }
- 
-+/*
-+ * Reserve the hidden slot of the may_goto instructions of @subprog once, and
-+ * @init it: the plain form keeps its count there. The timed form keeps the
-+ * count and the timestamp in per-cpu memory of the prog, see struct
-+ * bpf_timed_may_goto, and needs the slot only to save R0 around its insns
-+ * when every register is live. @off receives the offset of the slot.
-+ */
-+static int may_goto_stack_slot(struct bpf_verifier_env *env, int subprog, bool init, s16 *off)
-+{
-+	int ret;
-+
-+	if (*off)
++	if (btf_kfunc_check_flag(btf, release_btf_id, KF_RELEASE) == 1 ||
++	    btf_kfunc_check_flag(btf, release_btf_id, KF_ITER_DESTROY) == 1)
 +		return 0;
-+	ret = bpf_reserve_stack_slots(env, subprog, 1, off);
-+	if (!ret && init)
-+		ret = bpf_stack_slot_init(env, subprog, *off, BPF_MAX_LOOPS);
-+	return ret;
++	return -EINVAL;
 +}
 +
- /*
-  * Expand may_goto: load the count from the stack, jump to the target of
-  * may_goto when it is zero, then the tail that updates the count.
-@@ -2616,11 +2722,10 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
- 	struct bpf_map *map_ptr;
- 	int i, ret, cnt, cur_subprog = 0;
- 	struct bpf_subprog_info *subprogs = env->subprog_info;
--	u16 stack_depth = subprogs[cur_subprog].stack_depth;
--	u16 stack_depth_extra = 0;
- 	/* arch_bpf_timed_may_goto() takes and returns AX in a cpu register: for JITs only */
- 	bool timed_may_goto = prog->jit_requested && bpf_jit_supports_timed_may_goto();
- 	struct bpf_timed_may_goto __percpu *tmg = NULL;
-+	s16 may_goto_slot = 0;
- 
- 	if (env->seen_exception && !env->exception_callback_subprog) {
- 		struct bpf_insn *patch = insn_buf;
-@@ -2879,9 +2984,12 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
- 				if (!(live & BIT(reg)))
- 					break;
- 			if (reg > BPF_REG_9) {
-+				/* R0 is saved in a hidden slot, shared by the may_goto of the subprog */
-+				ret = may_goto_stack_slot(env, cur_subprog, false, &may_goto_slot);
-+				if (ret)
-+					return ret;
- 				reg = BPF_REG_0;
--				save_off = -stack_depth - 8;
--				stack_depth_extra = 8;
-+				save_off = may_goto_slot;
- 			}
- 			if (!tmg) {
- 				tmg = alloc_percpu_gfp(struct bpf_timed_may_goto,
-@@ -2899,16 +3007,16 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
- 				return PTR_ERR(insn);
- 			goto next_insn;
- 		} else if (bpf_is_may_goto_insn(insn)) {
--			int stack_off = -stack_depth - 8;
--			struct bpf_insn tail[] = {
--				BPF_ALU64_IMM(BPF_SUB, BPF_REG_AX, 1),
--				BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_AX, stack_off),
--			};
-+			struct bpf_insn tail[2];
- 
--			stack_depth_extra = 8;
--			cnt = may_goto_expand(insn_buf, insn->off,
--					      may_goto_off(env, insn, i),
--					      stack_off, tail, ARRAY_SIZE(tail));
-+			/* the count is in a hidden slot, shared by the may_goto of the subprog */
-+			ret = may_goto_stack_slot(env, cur_subprog, true, &may_goto_slot);
-+			if (ret)
-+				return ret;
-+			tail[0] = BPF_ALU64_IMM(BPF_SUB, BPF_REG_AX, 1);
-+			tail[1] = BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_AX, may_goto_slot);
-+			cnt = may_goto_expand(insn_buf, insn->off, may_goto_off(env, insn, i),
-+					      may_goto_slot, tail, ARRAY_SIZE(tail));
- 
- 			insn = bpf_patch_list_add(env, i, insn_buf, cnt);
- 			if (IS_ERR(insn))
-@@ -3431,18 +3539,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
- 		insn->imm = BPF_CALL_IMM(fn->func);
- next_insn:
- 		if (subprogs[cur_subprog + 1].start == i + 1) {
--			subprogs[cur_subprog].stack_depth += stack_depth_extra;
--			subprogs[cur_subprog].stack_extra = stack_depth_extra;
--
--			stack_depth = subprogs[cur_subprog].stack_depth;
--			if (stack_depth > MAX_BPF_STACK && !prog->jit_requested) {
--				verbose(env, "stack size %d(extra %d) is too large\n",
--					stack_depth, stack_depth_extra);
--				return -EINVAL;
--			}
- 			cur_subprog++;
--			stack_depth = subprogs[cur_subprog].stack_depth;
--			stack_depth_extra = 0;
-+			may_goto_slot = 0;
- 		}
- 		i++;
- 		insn = &prog->insnsi[i];
-@@ -3453,57 +3551,43 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
- 		return ret;
- 	prog = env->prog;
- 
--	env->prog->aux->stack_depth = subprogs[0].stack_depth;
--	for (i = 0; i < env->subprog_cnt; i++) {
--		int stack_slots = subprogs[i].stack_extra / 8;
-+	for (i = 0; tmg && i < env->subprog_cnt; i++) {
- 		/* an invocation begins, see bpf_timed_may_goto_save() for async callbacks */
--		bool main_prog = tmg && !i;
-+		bool main_prog = !i;
- 		/* only a helper calls it, in a loop that ends when it returns 1 */
--		bool loop_cb = tmg && i && subprogs[i].is_loop_cb && !subprogs[i].is_called &&
-+		bool loop_cb = i && subprogs[i].is_loop_cb && !subprogs[i].is_called &&
- 			       !subprogs[i].is_other_cb && !subprogs[i].is_async_cb;
--
--		if (timed_may_goto ? !main_prog && !loop_cb : !stack_slots)
-+		struct bpf_insn ld_tmg[] = {
-+			BPF_LD_IMM64(BPF_REG_0, (__force unsigned long)tmg)
-+		};
-+		int count_off = offsetof(struct bpf_timed_may_goto, count);
-+		int timestamp_off = offsetof(struct bpf_timed_may_goto, timestamp);
-+		int owner_off = offsetof(struct bpf_timed_may_goto, owner);
-+
-+		if (!main_prog && !loop_cb)
- 			continue;
--		if (stack_slots > 1) {
--			verifier_bug(env, "stack_slots supports may_goto only");
--			return -EFAULT;
--		}
- 
- 		cnt = 0;
--		stack_depth = subprogs[i].stack_depth;
--		if (timed_may_goto) {
--			struct bpf_insn ld_tmg[] = {
--				BPF_LD_IMM64(BPF_REG_0, (__force unsigned long)tmg)
--			};
--			int count_off = offsetof(struct bpf_timed_may_goto, count);
--			int timestamp_off = offsetof(struct bpf_timed_may_goto, timestamp);
--			int owner_off = offsetof(struct bpf_timed_may_goto, owner);
--
--			/* R0 has nothing at the entry */
--			insn_buf[cnt++] = ld_tmg[0];
--			insn_buf[cnt++] = ld_tmg[1];
--			insn_buf[cnt++] = BPF_MOV64_PERCPU_REG(BPF_REG_0, BPF_REG_0);
--			if (main_prog) {
--				insn_buf[cnt++] = BPF_ST_MEM(BPF_DW, BPF_REG_0, count_off,
--							     BPF_MAX_TIMED_LOOPS);
--				insn_buf[cnt++] = BPF_ST_MEM(BPF_DW, BPF_REG_0, timestamp_off, 0);
--				insn_buf[cnt++] = BPF_ST_MEM(BPF_DW, BPF_REG_0, owner_off, 0);
--			} else {
--				/*
--				 * The time is up, but the helper would call the function again and
--				 * again. End its loop. The verifier has seen that: the loop can end
--				 * after each call.
--				 */
--				insn_buf[cnt++] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_0,
--							      count_off);
--				insn_buf[cnt++] = BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 2);
--				insn_buf[cnt++] = BPF_MOV64_IMM(BPF_REG_0, 1);
--				insn_buf[cnt++] = BPF_EXIT_INSN();
--			}
-+		/* R0 has nothing at the entry */
-+		insn_buf[cnt++] = ld_tmg[0];
-+		insn_buf[cnt++] = ld_tmg[1];
-+		insn_buf[cnt++] = BPF_MOV64_PERCPU_REG(BPF_REG_0, BPF_REG_0);
-+		if (main_prog) {
-+			insn_buf[cnt++] = BPF_ST_MEM(BPF_DW, BPF_REG_0, count_off,
-+						     BPF_MAX_TIMED_LOOPS);
-+			insn_buf[cnt++] = BPF_ST_MEM(BPF_DW, BPF_REG_0, timestamp_off, 0);
-+			insn_buf[cnt++] = BPF_ST_MEM(BPF_DW, BPF_REG_0, owner_off, 0);
- 		} else {
--			/* Add ST insn to subprog prologue to init extra stack */
--			insn_buf[cnt++] = BPF_ST_MEM(BPF_DW, BPF_REG_FP, -stack_depth,
--						     BPF_MAX_LOOPS);
-+			/*
-+			 * The time is up, but the helper would call the function again and
-+			 * again. End its loop. The verifier has seen that: the loop can end
-+			 * after each call.
-+			 */
-+			insn_buf[cnt++] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_0,
-+						      count_off);
-+			insn_buf[cnt++] = BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 2);
-+			insn_buf[cnt++] = BPF_MOV64_IMM(BPF_REG_0, 1);
-+			insn_buf[cnt++] = BPF_EXIT_INSN();
- 		}
- 		/* jumps to the first insn of the subprog skip the setup */
- 		ret = bpf_patch_list_insert(env, subprogs[i].start, insn_buf, cnt);
-@@ -3512,9 +3596,15 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
- 	}
- 
- 	ret = bpf_patch_list_commit(env);
-+	if (ret)
-+		return ret;
-+
-+	/* The hidden slots get their values in the prologues too. */
-+	ret = bpf_emit_stack_inits(env);
- 	if (ret)
- 		return ret;
- 	prog = env->prog;
-+	prog->aux->stack_depth = subprogs[0].stack_depth;
- 
- 	/* Since poke tab is now finalized, publish aux to tracker. */
- 	for (i = 0; i < prog->aux->size_poke_tab; i++) {
-@@ -3613,14 +3703,14 @@ static bool is_bpf_loop_call(struct bpf_insn *insn)
- 		insn->imm == BPF_FUNC_loop;
- }
- 
--/* For all sub-programs in the program (including main) check
-+/*
-+ * For all sub-programs in the program (including main) check
-  * insn_aux_data to see if there are bpf_loop calls that require
-  * inlining. If such calls are found the calls are replaced with a
-  * sequence of instructions produced by `inline_bpf_loop` function and
-- * subprog stack_depth is increased by the size of 3 registers.
-- * This stack space is used to spill values of the R6, R7, R8.  These
-- * registers are used to store the loop bound, counter and context
-- * variables.
-+ * three hidden stack slots are reserved in the subprog to spill the
-+ * values of R6, R7, R8. These registers are used to store the loop
-+ * bound, counter and context variables.
-  */
- int bpf_optimize_bpf_loop(struct bpf_verifier_env *env)
+ static int btf_check_dtor_kfuncs(struct btf *btf, const struct btf_id_dtor_kfunc *dtors, u32 cnt)
  {
-@@ -3628,9 +3718,7 @@ int bpf_optimize_bpf_loop(struct bpf_verifier_env *env)
- 	int i, cur_subprog = 0, err;
- 	struct bpf_insn *insn = env->prog->insnsi;
- 	int insn_cnt = env->prog->len;
--	u16 stack_depth = subprogs[cur_subprog].stack_depth;
--	u16 stack_depth_roundup = round_up(stack_depth, 8) - stack_depth;
--	u16 stack_depth_extra = 0;
-+	s16 loop_off = 0;
+ 	const struct btf_type *dtor_func, *dtor_func_proto, *t;
+@@ -10217,6 +10280,22 @@ static int btf_check_dtor_kfuncs(struct btf *btf, const struct btf_id_dtor_kfunc
+ 	for (i = 0; i < cnt; i++) {
+ 		dtor_btf_id = btf_relocate_id(btf, dtors[i].kfunc_btf_id);
  
- 	for (i = 0; i < insn_cnt; i++, insn++) {
- 		struct bpf_loop_inline_state *inline_state =
-@@ -3639,20 +3727,21 @@ int bpf_optimize_bpf_loop(struct bpf_verifier_env *env)
- 		/* the callback that takes a stack in arena is not for a call from the program */
- 		if (is_bpf_loop_call(insn) && inline_state->fit_for_inline &&
- 		    !subprogs[inline_state->callback_subprogno].arena_stack_entry) {
--			stack_depth_extra = BPF_REG_SIZE * 3 + stack_depth_roundup;
--			err = inline_bpf_loop(env, i,
--					      -(stack_depth + stack_depth_extra),
-+			/* Three slots spill R6, R7 and R8, shared by the subprog's loops. */
-+			if (!loop_off) {
-+				err = bpf_reserve_stack_slots(env, cur_subprog, 3, &loop_off);
-+				if (err)
-+					return err;
-+			}
-+			err = inline_bpf_loop(env, i, loop_off - 2 * BPF_REG_SIZE,
- 					      inline_state->callback_subprogno);
- 			if (err)
- 				return err;
- 		}
++		if (!dtors[i].flags) {
++			pr_err("no flags for the destructor of btf_id %u\n", dtors[i].btf_id);
++			return -EINVAL;
++		}
++		if ((dtors[i].flags & BPF_DTOR_CLEANUP) && !dtors[i].release_btf_id) {
++			pr_err("no release kfunc for the cleanup destructor of btf_id %u\n",
++			       dtors[i].btf_id);
++			return -EINVAL;
++		}
++		if (dtors[i].release_btf_id &&
++		    btf_check_release_kfunc(btf, btf_relocate_id(btf, dtors[i].release_btf_id))) {
++			pr_err("btf_id %u is not a release kfunc for the destructor of btf_id %u\n",
++			       dtors[i].release_btf_id, dtors[i].btf_id);
++			return -EINVAL;
++		}
++
+ 		dtor_func = btf_type_by_id(btf, dtor_btf_id);
+ 		if (!dtor_func || !btf_type_is_func(dtor_func))
+ 			return -EINVAL;
+@@ -10311,8 +10390,12 @@ int register_btf_id_dtor_kfuncs(const struct btf_id_dtor_kfunc *dtors, u32 add_c
  
- 		if (subprogs[cur_subprog + 1].start == i + 1) {
--			subprogs[cur_subprog].stack_depth += stack_depth_extra;
- 			cur_subprog++;
--			stack_depth = subprogs[cur_subprog].stack_depth;
--			stack_depth_roundup = round_up(stack_depth, 8) - stack_depth;
--			stack_depth_extra = 0;
-+			loop_off = 0;
- 		}
+ 	/* remap BTF ids based on BTF relocation (if any) */
+ 	for (i = tab_cnt; i < tab_cnt + add_cnt; i++) {
+-		tab->dtors[i].btf_id = btf_relocate_id(btf, tab->dtors[i].btf_id);
+-		tab->dtors[i].kfunc_btf_id = btf_relocate_id(btf, tab->dtors[i].kfunc_btf_id);
++		struct btf_id_dtor_kfunc *dtor = &tab->dtors[i];
++
++		dtor->btf_id = btf_relocate_id(btf, dtor->btf_id);
++		dtor->kfunc_btf_id = btf_relocate_id(btf, dtor->kfunc_btf_id);
++		if (dtor->release_btf_id)
++			dtor->release_btf_id = btf_relocate_id(btf, dtor->release_btf_id);
  	}
  
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index c5b4025ee222..0684ac1f4f22 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -25732,6 +25732,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	for (i = 0; i < env->func_set_cnt; i++)
- 		kfree(env->func_sets[i]);
- 	kfree(env->func_sets);
-+	kvfree(env->stack_inits);
- 	bpf_diag_free(env);
- 	kvfree(env->idoms);
- 	kvfree(env);
+ 	tab->cnt += add_cnt;
+diff --git a/kernel/bpf/cpumask.c b/kernel/bpf/cpumask.c
+index 1336a4efa755..f552472d69b1 100644
+--- a/kernel/bpf/cpumask.c
++++ b/kernel/bpf/cpumask.c
+@@ -511,14 +511,17 @@ static const struct btf_kfunc_id_set cpumask_kfunc_set = {
+ BTF_ID_LIST(cpumask_dtor_ids)
+ BTF_ID(struct, bpf_cpumask)
+ BTF_ID(func, bpf_cpumask_release_dtor)
++BTF_ID(func, bpf_cpumask_release)
+ 
+ static int __init cpumask_kfunc_init(void)
+ {
+ 	int ret;
+ 	const struct btf_id_dtor_kfunc cpumask_dtors[] = {
+ 		{
+-			.btf_id	      = cpumask_dtor_ids[0],
+-			.kfunc_btf_id = cpumask_dtor_ids[1]
++			.btf_id	        = cpumask_dtor_ids[0],
++			.kfunc_btf_id   = cpumask_dtor_ids[1],
++			.release_btf_id = cpumask_dtor_ids[2],
++			.flags          = BPF_DTOR_KPTR | BPF_DTOR_CLEANUP,
+ 		},
+ 	};
+ 
+diff --git a/kernel/bpf/crypto.c b/kernel/bpf/crypto.c
+index 69bc29d0a4d4..cd65da3dffcf 100644
+--- a/kernel/bpf/crypto.c
++++ b/kernel/bpf/crypto.c
+@@ -336,14 +336,17 @@ static const struct btf_kfunc_id_set crypt_kfunc_set = {
+ BTF_ID_LIST(bpf_crypto_dtor_ids)
+ BTF_ID(struct, bpf_crypto_ctx)
+ BTF_ID(func, bpf_crypto_ctx_release_dtor)
++BTF_ID(func, bpf_crypto_ctx_release)
+ 
+ static int __init crypto_kfunc_init(void)
+ {
+ 	int ret;
+ 	const struct btf_id_dtor_kfunc bpf_crypto_dtors[] = {
+ 		{
+-			.btf_id	      = bpf_crypto_dtor_ids[0],
+-			.kfunc_btf_id = bpf_crypto_dtor_ids[1]
++			.btf_id	        = bpf_crypto_dtor_ids[0],
++			.kfunc_btf_id   = bpf_crypto_dtor_ids[1],
++			.release_btf_id = bpf_crypto_dtor_ids[2],
++			.flags          = BPF_DTOR_KPTR | BPF_DTOR_CLEANUP,
+ 		},
+ 	};
+ 
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 0164f183aade..cbed0c8952a7 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -5317,9 +5317,11 @@ static const struct btf_kfunc_id_set user_mem_kfunc_set = {
+ BTF_ID_LIST(generic_dtor_ids)
+ BTF_ID(struct, task_struct)
+ BTF_ID(func, bpf_task_release_dtor)
++BTF_ID(func, bpf_task_release)
+ #ifdef CONFIG_CGROUPS
+ BTF_ID(struct, cgroup)
+ BTF_ID(func, bpf_cgroup_release_dtor)
++BTF_ID(func, bpf_cgroup_release)
+ #endif
+ 
+ BTF_KFUNCS_START(common_btf_ids)
+@@ -5429,13 +5431,17 @@ static int __init kfunc_init(void)
+ 	int ret;
+ 	const struct btf_id_dtor_kfunc generic_dtors[] = {
+ 		{
+-			.btf_id       = generic_dtor_ids[0],
+-			.kfunc_btf_id = generic_dtor_ids[1]
++			.btf_id         = generic_dtor_ids[0],
++			.kfunc_btf_id   = generic_dtor_ids[1],
++			.release_btf_id = generic_dtor_ids[2],
++			.flags          = BPF_DTOR_KPTR | BPF_DTOR_CLEANUP,
+ 		},
+ #ifdef CONFIG_CGROUPS
+ 		{
+-			.btf_id       = generic_dtor_ids[2],
+-			.kfunc_btf_id = generic_dtor_ids[3]
++			.btf_id         = generic_dtor_ids[3],
++			.kfunc_btf_id   = generic_dtor_ids[4],
++			.release_btf_id = generic_dtor_ids[5],
++			.flags          = BPF_DTOR_KPTR | BPF_DTOR_CLEANUP,
+ 		},
+ #endif
+ 	};
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index d6c9dc62182e..0eb11688aaa4 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -1888,19 +1888,25 @@ static const struct btf_kfunc_id_set bpf_prog_test_kfunc_set = {
+ BTF_ID_LIST(bpf_prog_test_dtor_kfunc_ids)
+ BTF_ID(struct, prog_test_ref_kfunc)
+ BTF_ID(func, bpf_kfunc_call_test_release_dtor)
++BTF_ID(func, bpf_kfunc_call_test_release)
+ BTF_ID(struct, prog_test_member)
+ BTF_ID(func, bpf_kfunc_call_memb_release_dtor)
++BTF_ID(func, bpf_kfunc_call_memb_release)
+ 
+ static int __init bpf_prog_test_run_init(void)
+ {
+ 	const struct btf_id_dtor_kfunc bpf_prog_test_dtor_kfunc[] = {
+ 		{
+-		  .btf_id       = bpf_prog_test_dtor_kfunc_ids[0],
+-		  .kfunc_btf_id = bpf_prog_test_dtor_kfunc_ids[1]
++		  .btf_id         = bpf_prog_test_dtor_kfunc_ids[0],
++		  .kfunc_btf_id   = bpf_prog_test_dtor_kfunc_ids[1],
++		  .release_btf_id = bpf_prog_test_dtor_kfunc_ids[2],
++		  .flags          = BPF_DTOR_KPTR | BPF_DTOR_CLEANUP,
+ 		},
+ 		{
+-		  .btf_id	= bpf_prog_test_dtor_kfunc_ids[2],
+-		  .kfunc_btf_id = bpf_prog_test_dtor_kfunc_ids[3],
++		  .btf_id         = bpf_prog_test_dtor_kfunc_ids[3],
++		  .kfunc_btf_id   = bpf_prog_test_dtor_kfunc_ids[4],
++		  .release_btf_id = bpf_prog_test_dtor_kfunc_ids[5],
++		  .flags          = BPF_DTOR_KPTR | BPF_DTOR_CLEANUP,
+ 		},
+ 	};
+ 	int ret;
+diff --git a/net/core/bpf_ksock.c b/net/core/bpf_ksock.c
+index 25111712b944..e7fba11cdb12 100644
+--- a/net/core/bpf_ksock.c
++++ b/net/core/bpf_ksock.c
+@@ -366,6 +366,7 @@ static const struct btf_kfunc_id_set ksock_kfunc_set = {
+ BTF_ID_LIST(bpf_ksock_dtor_ids)
+ BTF_ID(struct, bpf_ksock)
+ BTF_ID(func, bpf_ksock_release_dtor)
++BTF_ID(func, bpf_ksock_release)
+ 
+ static int __init bpf_ksock_kfunc_init(void)
+ {
+@@ -374,6 +375,8 @@ static int __init bpf_ksock_kfunc_init(void)
+ 		{
+ 			.btf_id = bpf_ksock_dtor_ids[0],
+ 			.kfunc_btf_id = bpf_ksock_dtor_ids[1],
++			.release_btf_id = bpf_ksock_dtor_ids[2],
++			.flags = BPF_DTOR_KPTR | BPF_DTOR_CLEANUP,
+ 		},
+ 	};
+ 
+diff --git a/net/sched/bpf_qdisc.c b/net/sched/bpf_qdisc.c
+index 5691c13781a8..70e7a6dafc58 100644
+--- a/net/sched/bpf_qdisc.c
++++ b/net/sched/bpf_qdisc.c
+@@ -453,15 +453,19 @@ static struct bpf_struct_ops bpf_Qdisc_ops = {
+ 	.owner = THIS_MODULE,
+ };
+ 
+-BTF_ID_LIST_SINGLE(bpf_sk_buff_dtor_ids, func, bpf_kfree_skb_dtor)
++BTF_ID_LIST(bpf_sk_buff_dtor_ids)
++BTF_ID(func, bpf_kfree_skb_dtor)
++BTF_ID(func, bpf_kfree_skb)
+ 
+ static int __init bpf_qdisc_kfunc_init(void)
+ {
+ 	int ret;
+ 	const struct btf_id_dtor_kfunc skb_kfunc_dtors[] = {
+ 		{
+-			.btf_id       = bpf_sk_buff_ids[0],
+-			.kfunc_btf_id = bpf_sk_buff_dtor_ids[0]
++			.btf_id         = bpf_sk_buff_ids[0],
++			.kfunc_btf_id   = bpf_sk_buff_dtor_ids[0],
++			.release_btf_id = bpf_sk_buff_dtor_ids[1],
++			.flags          = BPF_DTOR_KPTR | BPF_DTOR_CLEANUP,
+ 		},
+ 	};
+ 
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+index 41ff36f0ca77..891f777a265a 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+@@ -1084,6 +1084,7 @@ BTF_KFUNCS_END(bpf_testmod_common_kfunc_ids)
+ BTF_ID_LIST(bpf_testmod_dtor_ids)
+ BTF_ID(struct, bpf_testmod_ctx)
+ BTF_ID(func, bpf_testmod_ctx_release_dtor)
++BTF_ID(func, bpf_testmod_ctx_release)
+ 
+ static const struct btf_kfunc_id_set bpf_testmod_common_kfunc_set = {
+ 	.owner = THIS_MODULE,
+@@ -2622,7 +2623,9 @@ static int bpf_testmod_init(void)
+ 	const struct btf_id_dtor_kfunc bpf_testmod_dtors[] = {
+ 		{
+ 			.btf_id		= bpf_testmod_dtor_ids[0],
+-			.kfunc_btf_id	= bpf_testmod_dtor_ids[1]
++			.kfunc_btf_id	= bpf_testmod_dtor_ids[1],
++			.release_btf_id	= bpf_testmod_dtor_ids[2],
++			.flags		= BPF_DTOR_KPTR | BPF_DTOR_CLEANUP,
+ 		},
+ 	};
+ 	void **tramp;
 -- 
 2.53.0
 
