@@ -1,57 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.54.127.133
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794380810;
-	b=vNF4/JQrmtjFtFvO5VVkah7u615Wu+UW8ViGyBYnUnqhdbvqfNwCp7CmqbS4tqQo1D+q
-	 0dc0i7+zMdm3lsWoM1uUPFb31DIAaN0FPzGZAj/9uFzJ2wW1Nr9Vxd2tBu/zZKJG19M6P
-	 8F1zcHVwA1DaNNbD0UOumEwufJqWR51MdgDoDU0otj3CZjhVy0tenq/YMl4JzyTf+LdCJ
-	 uakAeqtvmtZ84F4r2TR77supy2EA2Xko5el5TG8Ap9Cke7NFFdPwDIX27tjFnGIl6YJEP
-	 COAuD8R58S9RTuBr77KFYt/5Vq4Zbahq5CFKRonlWz6KqG2Mtpi2g6hWg/6BTOYKcdA==
+	t=1794381535;
+	b=pJ56mCmgYDuQZwvuFj6oRSZAMwPjmGPZn78Cyxp8/Br8a+H2osAo0c/ZCZifzJYXmEll
+	 ALycqaaFnauMc4kMlqc13yoHTP5kjC1Ru+txLTjQ+biIGm6uo71qxRwZTAt6ekP1u44xX
+	 QMc/I/KwthCftDTupn04jQ1LzyuezHh1Q84zC4JppNjVppDeg2yQtGuQA+m0QLP+XmMDR
+	 K4itfeIZ4TSTrZyPGFyuXg/Rj1faRwh+diIccT9bgItR73nW5BxBrw/vvLk1PiuZs90Rw
+	 l5ugeUkKWNUCbBpbZpu+0JBscptKX7tDVNcnOVM1jdtfYHpcNAGE8bzlpLVRUYnwjfA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794380810;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=FQf3e6UsUEpoKZxpY2J3bbbHAco+jMTuGTbQVKk++Nk=;
-	b=CpWKlFeGY/Z+Fr2/Q+CnYe35QAMEaLJjnIdwESr/RwovnPYrKxsl18pVsSgSjfPLN36+
-	 PclmDKeTR4jyyz9WZsgaKkK0i6tfh5lXOz8wBbMBd6uM4ciOYjf9OxU720eGzPTRf9UP1
-	 yExUfyi10aHYv6hHSf1CF2hE5xfGvaRabUX/AIhFhaYeFNVOAUxNNljSuH+QA48Vi5D+k
-	 LK6NfeqS/KeUfUYLhgx0UKeutFTPGu3eWMmwNLSg1cmJi4SDYfNgCp06z9gd71UIm5nSM
-	 e4zU6dvYFnBnzZM6e9z8oQ91YNWq8yP5MZvu4LlwDS+V2JbCOLoMoSWf7EDBM1MMUHg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794381535;
+	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-Envelope-From;
+	bh=Kp1Yd4wm29HgwNoJ2gvAcoanCwg0f6KJOD8xxuJfVZY=;
+	b=fZYo/a62RReUxUNCSuIbLY/WO1KiZFrNH+eWQKn5iq7tdYf+IDeATA86DAiY41MpnCzw
+	 wJayflI7L99V04OJtDprJlyuyvo5tP/N3tZloWwgjnW9rokeFQzs6mFOBEp9vMqFj4ioa
+	 qB4B4llARQaNC8crxbO0IZNC7mTbBFIY8JuKFCcXg8SVuNngNj8XwAluLmVcX3dbnRpSj
+	 olcPphI2WR0P0h6G2Vntc/CwnZKSvZml4ZS/XLC/q7i5YbOSbySz5qz1Dyv/YTPTkGf88
+	 rW1rwsOJ345qtu3eI3E0aU0sLuRtPPQXQQmdxuxkWzoqPdlCEeERnXQWlbgZ0DPO5Lw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="FK/IMJn8";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=tychen.cc;
+	spf=pass smtp.mailfrom=tychen.cc;
+	dkim=pass header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=U8XAHHOc;
+	arc=none smtp.remote-ip=198.54.127.133
+Received: from out-2z4y-a133.jellyfish.systems (out-2z4y-a133.jellyfish.systems [198.54.127.133])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEDDE606A31C
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 07:06:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4304606A324
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 07:18:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B4304606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FK/IMJn8
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27AD81F00A05;
-	Wed, 11 Nov 2026 07:06:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794380810;
-	bh=FQf3e6UsUEpoKZxpY2J3bbbHAco+jMTuGTbQVKk++Nk=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=FK/IMJn8lfConZmyYNjqr6s8gnK4RucS8AaX6gxeTUSZh3DEXrs380qUoGQUL6LPI
-	 GD0RleVAlpEqK8vCqu7SSgkTqZbL0D79Cif4lujlP/RGXmu3Tsc47zcqUmZnki00Wt
-	 aA9rrA1yZueJRNfMGeUD4Nld855d4B92NGPvPJvk9PA/SPCZDDjG3hwf4FtxM9ZQer
-	 67Tq/idVbfs0Iul/gsv/vnR28NDLDrjHKfmDMSGqCr8rHMod9R4yXk1+Uq0kWJYKPq
-	 yp+GLRpvwn0Mi+gk8+VI+G7z039O4nzRE9yt+/1I20jpu6WHvDqwOyFwJgTg45/yW2
-	 /g2D/bbvuNYLg==
-Message-ID: <sashiko-outbox-208494@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] mm/bpf: Add bpf_mem_cgroup_memory_events_local() kfunc
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Hongfu Li" <hongfu.li@linux.dev>, "Roman Gushchin" <roman.gushchin@linux.dev>, "JP
- Kobryn" <jp.kobryn@linux.dev>, "Shakeel Butt" <shakeel.butt@linux.dev>, "Andrew
- Morton" <akpm@linux-foundation.org>
-Cc: bpf@vger.kernel.org, linux-mm@kvack.org, "Hongfu Li" <lihongfu@kylinos.cn>
-In-Reply-To: <20261111-for-bpf_memctl-1111-v1-1-8b56784d9e5a@kylinos.cn>
-References: <20261111-for-bpf_memctl-1111-v1-1-8b56784d9e5a@kylinos.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 11 Nov 2026 07:06:49 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=U8XAHHOc
+Received: from fedora (unknown [151.145.76.168])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4jPZcq6tTzz6tkN;
+	Wed, 11 Nov 2026 07:18:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
+	s=spacemail; t=1794381520;
+	bh=Kp1Yd4wm29HgwNoJ2gvAcoanCwg0f6KJOD8xxuJfVZY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=U8XAHHOc01gSCV0clQRyXPtQmKBW0w98NKBFPeeARkdUNbxp+VDRRDyEUwqSofrEe
+	 KCSpiqlBxTdqXSzcPZ7tTuvFm0xVnY/I+35Sx0QmMW1aIwGEAHw4xbttfIIeCgJmnW
+	 KC2s+VNusadAM9AggKi1NDKcbUThJ6pgEqw9oMxbFkZMDDWStJrB5OFrojwg0fS71l
+	 0HNTDQ3qHdDta4QCYco6qkQRlWyYuTUg1k9df9jxSgsRDyMfsV6HMpw8X8qNP0mbGE
+	 K/loljwPlGSeHfR7sEDL3FyiHcZs7feDDBWADRCwjs9nt152Aej/8W9b9qRDjdiztP
+	 5Ebv9ravdj5AA==
+From: Tianyi Chen <hi@tychen.cc>
+To: bpf@vger.kernel.org
+Cc: Tianyi Chen <hi@tychen.cc>,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	yatsenko@meta.com
+Subject: [PATCH bpf v2 1/2] bpf: Report lost RHASH batch traversal keys as EAGAIN
+Date: Wed, 11 Nov 2026 16:18:23 +0900
+Message-ID: <701a92691a4757132218729f99862cfd3b0e6e63.1794379108.git.hi@tychen.cc>
+X-Mailer: git-send-email 2.56.0
+In-Reply-To: <cover.1794379108.git.hi@tychen.cc>
+References: <cover.1794379108.git.hi@tychen.cc>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,75 +74,54 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Envelope-From: hi@tychen.cc
 
-Thank you for your contribution! Sashiko AI review found no new issues
-in this patch, but noticed 1 related pre-existing issue it does not
-introduce:
-- [Critical] mm: out-of-bounds read in bpf_mem_cgroup_memory_events()
-  [1]
---
+If a key is deleted after a batch copies it, rhashtable_next_key()
+returns ERR_PTR(-ENOENT). The batch code treats the missing next cursor
+as end-of-iteration and returns -ENOENT with a partial batch, so callers
+can silently stop before reading keys that are still present.
 
-commit 19b0cb61e45dc1f33944548e84f3a699079d3e85
-Author: Hongfu Li <lihongfu@kylinos.cn>
+Translate a lost traversal key to -EAGAIN, as for a missing input cursor,
+and preserve other iterator errors. Still copy the collected entries and
+update the count, including for lookup-and-delete batches.
 
-mm/bpf: Add bpf_mem_cgroup_memory_events_local() kfunc
+Fixes: 818e00848227 ("bpf: Implement iteration ops for resizable hashtab")
+Link: https://github.com/kernel-patches/bpf/pull/14700#issuecomment-6641291019
+Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
+Assisted-by: LLM
+Signed-off-by: Tianyi Chen <hi@tychen.cc>
+---
+ kernel/bpf/hashtab.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-This commit adds the bpf_mem_cgroup_memory_events_local() kfunc to allow BPF
-programs to read a memory cgroup's local memory event counters.
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index 6e2115477cb9..346a2afb4ad3 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -3556,14 +3556,15 @@ static int __rhtab_map_lookup_and_delete_batch(struct bpf_map *map,
+ 
+ 	rcu_read_unlock();
+ 
+-	if (total == 0) {
++	if (IS_ERR(elem)) {
++		ret = PTR_ERR(elem);
++		if (ret == -ENOENT)
++			ret = -EAGAIN;
++	} else if (!has_next_cursor) {
+ 		ret = -ENOENT;
+-		goto free;
+ 	}
+-
+-	/* No more elements after this batch. */
+-	if (!has_next_cursor)
+-		ret = -ENOENT;
++	if (!total)
++		goto free;
+ 
+ 	if (copy_to_user(ukeys, keys, (size_t)total * key_size) ||
+ 	    copy_to_user(uvalues, values, (size_t)total * value_size) ||
+-- 
+2.56.0
 
-> diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
-> index d8f579c285600..826f711718dbe 100644
-> --- a/mm/bpf_memcontrol.c
-> +++ b/mm/bpf_memcontrol.c
-> @@ -133,6 +133,23 @@ __bpf_kfunc unsigned long bpf_mem_cgroup_memory_even=
-ts(struct mem_cgroup *memcg,
->  	return atomic_long_read(&memcg->memory_events[event]);
->  }
-> =20
-> +/**
-> + * bpf_mem_cgroup_memory_events_local - Read memory cgroup's local memor=
-y event
-> + * @memcg: memory cgroup
-> + * @event: memory event id
-> + *
-> + * Return: The current value of the local memory event counter.
-> + */
-> +__bpf_kfunc unsigned long
-> +bpf_mem_cgroup_memory_events_local(struct mem_cgroup *memcg,
-> +				   enum memcg_memory_event event)
-> +{
-> +	if (unlikely(event >=3D MEMCG_NR_MEMORY_EVENTS))
-> +		return (unsigned long)-1;
-> +
-> +	return atomic_long_read(&memcg->memory_events_local[event]);
-> +}
-
-[Severity: Critical]
-This problem wasn't introduced by this patch, but in the existing
-bpf_mem_cgroup_memory_events() right above [1] (and in the new
-bpf_mem_cgroup_memory_events_local() here), can a negative event value pass
-the bounds check and read out of bounds of memory_events[]?
-
-mm/bpf_memcontrol.c:bpf_mem_cgroup_memory_events() {
-	if (unlikely(event >=3D MEMCG_NR_MEMORY_EVENTS))
-		return (unsigned long)-1;
-
-	return atomic_long_read(&memcg->memory_events[event]);
-}
-
-The BPF verifier does not enforce enum bounds on kfunc arguments, so a BPF
-program can pass a negative value for event.  If enum memcg_memory_event is=
- a
-signed type, event >=3D MEMCG_NR_MEMORY_EVENTS performs a signed comparison=
- that
-evaluates to false for negative numbers, indexing before the start of
-memcg->memory_events[] and disclosing adjacent kernel memory or crashing on=
- an
-unmapped page.  Checking event < 0 || event >=3D MEMCG_NR_MEMORY_EVENTS (or
-casting event to unsigned int) would reject negative values.
-
-[1] https://sashiko.dev/#/bug/linux-77d600fe-b74d-4e53-9ee2-707d37cb8052
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261111-for-bpf_me=
-mctl-1111-v1-1-8b56784d9e5a@kylinos.cn?part=3D1
