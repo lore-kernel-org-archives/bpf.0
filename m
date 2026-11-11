@@ -1,93 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794374188;
-	b=xqmojGmZF/0+XpXEd9U7pNMOVhV4OKcgfXKT4yHGeStnVhuX6WJCvTnKNfXcK9yRxHoD
-	 pa2+v3YLvNW7u7t2H4ItZ320JBKpxkQbYhlwkQr+ivrhvrHEglzaaHSdZwSj0QnXq6lX5
-	 t4YU7ASBlYVu4MoeA39NFz+ToSF5C4xBnUVKb2DBBHoF2PQXu6xP65V40cpHjTeusGCYs
-	 Onx1vmmBYyT3SuMFQizdNFC4VEiCwX6ZQetJATRKm6bqhTc5wKNVGkzqbVFW/0Sh7/oX2
-	 xyGaN279qFlAZTENeJunuyoDE6LJ5vsk3lyqT7oYGty15ycXwBdX7dR4FsU4rCPTFOA==
+	t=1794374194;
+	b=1BzNET0mS0UgKSq0hSvJ+TOmT478+xJaiq5SGI9nMLEBftUJC0bwsVTmoP4O8M8osFH2
+	 L7RPqlACUHOuv7b2mio3uZwAOf29gLm7oCIxiYhncmUBKRmtfpypoSxKst3JdKTn7Q1R8
+	 yvDp7qiluPQYKZEJ/B6z7S4rFxp5ikSvdbTRIOqvIZo3Xv5/L1O8k4ukpd10c6R6+3G44
+	 clk754TCSo9Q9IQh3Yp5fnB5qZYqNf4QztWmO++l67S5OgWm1MnWrrZ3PM1HJoo21YzEO
+	 2dKwGXzpvNVgOr244EodWXOwGW2MTuNkQP8p+nluRnzWKedxuj6lmJT+2IjNk/fqZBQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794374188;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794374194;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=Zx06yrQ/Lhtxp8BNtSWBpja/YxxMhH8doRDKJe5Y8Og=;
-	b=2vt9OyvCmdMktiSqX6/klYNBX/u00fND1qvsX0/OCQNM5+sItlIYHQLs5Nm8dR66D7tq
-	 qvSI/6Owp5+icykcMM089wRUido860qsVucMGZbpzJstmDIWEJbSObKge8PmM462crzj/
-	 /btiDZB7c2msYD5x5/lk7j27D7ZsUzuVn/uAzRVNhd5OAtdBFKvPzyoNb/DGHvuRcH6q0
-	 KMj86g0LnMTXcI6XXLS7MPcP2r0N20DBuvYZOIsUFqBZUkiokw/GhCcypbz4oRe1Y/Ddz
-	 di09EaH4TWibVj1Q2McD1J28Tmkf3HSVKjHUnDOouc57wco4MC2nD/x9mTCXGpgVmfA==
+	 Content-Type:Content-Transfer-Encoding;
+	bh=tkWV+L4v/FKc4rxXGryqUB57sR6lPh/CvfnXkCJrOOc=;
+	b=ofubqz0Z64OZdhPsosQYUrRgc2PqmsKX3Rl6dYer90AuFfSeiT5nd0h1R0LIa8EelfHi
+	 WJNHtnzop+jEpGugYnTF24NfSoXefh+oscawruMTIE2OoyXoIV/vO8QITDUyWwQj9HvCc
+	 Dif4qYUucHBVgbhTd2yLe5PcEvfAucipj5+x2fjTNsGRQtjDSA4X0xhnuGdxcuHD1v2hS
+	 azxF2Ullqmfn6RLjKn34p4WKrhkuussj3+/k7sv/Elp8j+2DjTtfuja3O/21ec5PwDod+
+	 ySXGyAyRY0q6TXTPGHxYlH688St4F0lkbHhtr1ed437bb0ePj3d4iWU3wW+tuGNT3kA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KpSIGOoL;
-	arc=none smtp.remote-ip=209.85.214.176
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pQNwQM4a;
+	arc=none smtp.remote-ip=209.85.216.50
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC887606A321
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 05:16:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DC887606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7F14606A31C
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 05:16:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C7F14606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KpSIGOoL
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2e95bd1c14cso25427375ad.2
-        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 21:16:27 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pQNwQM4a
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3b18717a193so35075a91.1
+        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 21:16:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794374187; x=1794978987; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Zx06yrQ/Lhtxp8BNtSWBpja/YxxMhH8doRDKJe5Y8Og=;
-        b=KpSIGOoLTxk/si7HNBQ+XvdcH6jLk6WHRBT6ND/i0jEqdOF1kBpRaLUV3++CG4yAjP
-         sp69AeHwN3tupYc8mQdQ3JjhhEJlD0hkLwXZ0cHDestM/1mUZddo8hL6/Z2NvK0TWqyO
-         yxCR2Hniij2ZiLcHwLVXJMdXg9nL9S3HW/zsBbenMSGtS5C21K8YTi/5akLhRXz1jbFH
-         ULF1WZcHERu8SByM0xLFVZqVI+TjToj2kL7mzQuAvatrY5cqPe4124ClAmuqJZpTAOaL
-         qcWAsTx3dG/QiIYmFNbwDgQYUOWoYb3BCpXn4S4s9Ln0EyWezFNqt7U5Y5zhtejV/5Gr
-         /f3Q==
+        d=gmail.com; s=20260707; t=1794374193; x=1794978993; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=tkWV+L4v/FKc4rxXGryqUB57sR6lPh/CvfnXkCJrOOc=;
+        b=pQNwQM4awZYI2Hpv3EITvpvaq1Zd0kx/pPwWllJSPLPFDF5DtsGriZbRaEL6kjzmQn
+         CIzWL7VmQP55nStizpzHxzjOPQR0ADZJFrZa08l/fpfb23EZ2ZJFXLsxaZeBSzAQZ/4/
+         9aIxU2i+pb/pd50PIxb83LWjo4HDdqXDtgmP6lxY4iB2zCSAIJTjvUlVIC/+fDjFOn93
+         AkucrYLsu5bIjUoOV+GkAnY1PlZ0Qg/TvanRT2/4OnewHYZlto8TxeUIq5sTYwWldvR3
+         0q761H++C1r+cNo4wkJB/6JhO9D8lUnYNklFaDTU3WkGjXEyDDo9x3S5RwJVVLXKUReL
+         p05Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794374187; x=1794978987;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Zx06yrQ/Lhtxp8BNtSWBpja/YxxMhH8doRDKJe5Y8Og=;
-        b=QV0J/lK60CDnKFPmB4HcOFnFd2aKNF5CAJNUwCwIXZa39hlm/E6w8/Z/LFXepUv+No
-         mDD2CvBjgamFnjRRKRBpvhov0aCqGqxcizh6jEG1/JmaZtJwkzD9YeG+HApRacg7i0N1
-         wsXG3Zgd+KdFdnjPYRozlt7WWJcJYn3grLNZOvfWhRBbUmtJN/Ztrd4k5GWPnkpdZzPK
-         PRFt5Q/hq3nZHkFvH6EJFHH4O8Z+xeO5vQ0nxWtplrTE9FtyJR/IGMAbnXkU7Ly3be0h
-         Mq10+gEgrnauuMJjH3r89lApJ5nY7VcH2yAI4pnhT9WCpnYmpTOsWLPPSNtbMaLjIkoQ
-         YjzQ==
-X-Gm-Message-State: APuU4Z8eLaHebQ65qCXpJt75Rv0lzU8bvxsjhyHE+gvknFxAF/E97uTo
-	eGWyeUNb7DR8I8xSAWx7AtlpmWNCfvzvcIJUo79A0dt0qE2sqSeOanf3Z5vKEQ==
-X-Gm-Gg: AYBFou3MFhoUGqpuQtjXMEbnzfQl7s2+ju49mzxn++pbZHDiKCpx9zRx45AJIvusmeL
-	5avuVYsK48Ahw9LksIlqLSQfqV7o1iQT5V2CkQj3tOdJY4U4iEs6dBmb4jR8zSRi7QjdNBS8Q2b
-	zjH2MQ+QiROvI8V3ydfoUItOKyuk0zY/U0FXEe0GLaVk/ABnbqj3WaygfKXMgXraLD1NYOKsLvd
-	B/78EZwGBPPcH1tNgGR1JoHOpXQ+pzJ+g3vB2LefmvB1yxbNJcOZb8ETmQFslxrTD7YjNoJMpHM
-	1fuiC5ljkU8k1ycRhlllnovgC9WbpxMCFtO85KkhFl+S/mKuoxO4Vhwj/JY9IkYDidRPq/a1ZmF
-	UEOW87MqLhCzFRoHXlcVfCx5ilxF8UPF8zhYVcR3NLK5761J3ONMLaCn4IEexJsoiL2h8j5GvG1
-	/IqmpPtDImUYJ9KS9+z330ftk9Fhx3lu8IFlewjVSIv5Kx7Zd8kkL0ie6+YNxjEhiAMgKPxKrA3
-	kL5FnhVgaw1cmd7fxiDuEYv8Zru6h95AM09rpssgT+dM82+gJhG2o9r/2mj1Z8y1ClUnEZxgbIc
-	Zo8o/Pyoxr+qStZheFOJV2J3AHpvrr/8e89Bu3KMWTOuHIlkYURIkWQMXfi/HGZjKumJNJJIjuY
-	Ah3wg73jwJ1lcnhTn+Np5zEZqfmx4Wo0SX5XtK8HYBHsSz23sNaGSJrhI+vmX7xpOQnxEyLHveg
+        d=1e100.net; s=20260707; t=1794374193; x=1794978993;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=tkWV+L4v/FKc4rxXGryqUB57sR6lPh/CvfnXkCJrOOc=;
+        b=wjueSJl2mVUMrpfnlNV+qeW8vSI3JoJxk6ETAHOhc0Urecx8vQWFAl/FLtkxu+eJuR
+         MNUgXFV8Ilc9kbXNPaF8NeTZzAQyyUTvWFCuYUcauaqf9MaEqBfxFjDHVSd2kKp250Co
+         qVSqoyd9bmhRArWvG/2bd1rXyvRnInJubmNg2Igm5KyZFJ3PcDt7tIGkXgEHdxFgH+nH
+         OrJIz30kxTajjtuJiwnkeDUTgdEvqjkZFmmW+kcqWRkmpZkFPmTrS5HGPxhP1dy4MmMn
+         AQ4sYF00jo+7/JhcfSNvQjK0v+se22/kONmAPgFaRLSKlJExqFnmGThJcMMO/mc+Joa0
+         Cu9A==
+X-Gm-Message-State: APuU4Z/hniJ2vZAVW15GYCR/yjlZerrNA5WxuNmIM9uefmgpRnJtiP0d
+	0sGusOXiI0cyjuPkN2Yc0WTLULd50t0lQgJoUxXnNAxyMSD8WRwUpC5sxQiu6w==
+X-Gm-Gg: AYBFou18krJyLo1cbCvXOLglqyozLwC44g0FBhy7Iy99a5NnCq5Z8iq3oixgNy5MZp1
+	T+p4Xn8dicoobzFTlS/YzG+Iou1h8G2x5otGxc0tsyuh+vyexmL45iVPpZa2pbniW3CwfETjQJ8
+	EMemk8gxFFZ5qUM2BHi4XpCz1r20g5rdJ/ER1hBEz2LJDfCNek5taQQXHrtCcTPjY93mxeBf5BJ
+	kHgagm09nplT+4XlucdXx9NjjjhdVnvs1N2ErNPkhu9OWnstnnJCwBY36ymaRU1tyPeL6QoGbZg
+	6lixOfSOlZWvilICTpwFKcpt5/lqhPW/vRFo3XtbzgqCaZGcbBJeVR2kGRpIrJguNLFz3eYbaJM
+	4hWVcMmHmbuUqsWiyI+HFSYT/eeEHQ0wdqAvHRcVoPzjQpyjwgzS3lsxEl5wo0VrFOftS59zG30
+	mjJidwANW3RMXtQKvz5lt+ag9rftXoZwc7hsd15t7nYbgtI3QzWV0hFae+RjtBjXfuyiyIHEwcI
+	ppgp22b++5tgPxfbqveMJLAZL/CUfYoWl/tVIO0FwsKS2hlhD73ePfP38ag8R9RcQ5d7mbLxEHL
+	R/rKqh2Vg+mBos93K4RCMmf5TMT+jVm8nVxXVqgFJCSMgIAlEirqDeMxFV7CEeOyF7MZea1Ov6J
+	qtHWjHRpeByolh0M4RjcDpDGZ4t40ZBbQ/kkj/9CDlm5AWR+3FyjbBy70PP8WN4W9fGmXhW2dLA
 	==
-X-Received: by 2002:a17:90b:37cb:b0:39e:6d82:dca with SMTP id 98e67ed59e1d1-3b182eda92emr1378153a91.30.1794374187021;
-        Tue, 10 Nov 2026 21:16:27 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.251])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b17db321dfsm2750688a91.5.2026.11.10.21.16.26
+X-Received: by 2002:a17:90b:2649:b0:3ac:7749:2f0 with SMTP id 98e67ed59e1d1-3b182f2381fmr1374346a91.44.1794374192819;
+        Tue, 10 Nov 2026 21:16:32 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.255])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b17dba5ed0sm2711706a91.17.2026.11.10.21.16.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 21:16:26 -0800 (PST)
+        Tue, 10 Nov 2026 21:16:32 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 27/29] bpf: Remove scalar ids from the log and from bpf_verifier.h
-Date: Wed, 11 Nov 2026 05:13:38 +0000
-Message-ID: <20261111051341.2800252-28-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 28/29] bpf: Support sign-extended 32-bit linear scalar evolution
+Date: Wed, 11 Nov 2026 05:13:39 +0000
+Message-ID: <20261111051341.2800252-29-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261111051341.2800252-1-alexei.starovoitov@gmail.com>
 References: <20261111051341.2800252-1-alexei.starovoitov@gmail.com>
@@ -100,166 +101,414 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Removal of dead code, the rest of it. Nothing sets the id of a scalar. No
-prog is verified differently, no line of a log changes.
+A new ability: the recurrence (sext32 (linear rA IMM)), next to
+(zext32 (linear ..)) and (spill32 (linear ..)). A loop over 'int i' as GCC
+compiles it becomes a counted loop.
 
-Remove BPF_ADD_CONST*, what prints 'id=N+M', clear_scalar_id(), struct
-bpf_idset, idset_scratch, tmp_id_gen and the declaration of
-bpf_clear_singular_ids().
+test_rhash_update_elements() of rhash.c has 'for (i = 0; i < 128; ++i)'.
+GCC adds to an int in 32 bits and keeps the sign extension of the result:
 
-'delta' was the constant between two scalars with the same id. For
-a pointer it is always 0, and log.c printed it for pointers only if it was
-not. Its four bytes stay, as 'unused': they lie between 'type' and a union
-that is aligned to 8 bytes, and regsafe() and the join compare the bytes
-before var_off with memcmp(). Padding there has no defined content.
+	53: r3 = r7
+	54: w3 += 1
+	55: r7 = (s32)r3
+	56: if w3 == 0x80 goto pc+27
+	scev at header 57:
+	  r7=(sext32 (zext32 (+ r7 1))) / ?
 
+The backedge value of r7, before the '/', has no closed form. No iteration
+count (header_count: how often the header is executed) is computed.
+header_count = backedge-taken count + 1. The loop is walked: the verifier
+unrolls the loop, one state per iteration; a counted loop is summarized,
+one state for all iterations. A long loop that is walked ends with "more
+than 1024 states that cannot be joined". It loaded when the verifier
+explored each path. GCC compiles some 50 loops of the selftests that way,
+most of them with i in a register.
+
+The latch tests the 32-bit add, which is supported. What is missing is to
+look through the extension, and the range of all 64 bits:
+
+ - An extension and a partial spill truncate their operand. How it was
+   extended or spilled before does not matter, below an add too:
+   (sext32 (zext32 a)) is (sext32 a). Two rules of simplify() say so for
+   all widths, in place of six.
+ - The backedge value (sext32 (+ rA IMM)) is (sext32 (linear rA IMM)) at
+   the header. Its range is the sign extension of the range of the low 32
+   bits. A wrap is handled, not excluded: the range is all of s32 then.
+ - iv_range, the range that the latch condition implies, is a range of the
+   zero-extended low 32 bits. iv_bounds() ignores it if bit 31 can be set.
+ - For i in a stack slot, zero or sign extended, little endian only:
+   iterate_wakeupsources() of plain_c_test_wakeup_source.c has a 64-bit
+   spill and a 32-bit fill of i. The half-slot with the upper 32 bits is
+   dead, see the new bpf_half_slot_live_before(), and the states don't
+   have it: 'fp-16=pppp1000'. A recurrence over 64 bits has no entry value
+   there. (spill32 (linear (zext32 rA) IMM)) describes the low 32 bits
+   only, so it holds too: use it.
+
+With the patch:
+
+	  r7=(sext32 (+ r7 1)) / (sext32 (linear r7 1))
+	loop header at 57, header_count is [0..128]
+
+The selftests as GCC builds them: no verdict changes, 2.6 % fewer insns.
+
+	test_rhash_update_elements (rhash.c)                  6074 ->  105
+	iterate_wakeupsources (plain_c_test_wakeup_source.c)  4402 ->  131
+	nested_loops (loop1.c)                                4558 ->  702
+	test1 (timer.c)                                       3973 ->  173
+
+Precision that is lost. With 'size_t off', 'int n' and 'u32 sz' clang
+-mcpu=v4 emits 'r1 = (s32)r0; r1 += r9; w3 = w1' for
+
+	off += n;
+	sz = off <= MAX ? HDR + off : HDR;
+
+r3 was (zext32 (+ (sext32 r0) r9)). Now it is (zext32 (+ r0 r9)), which has
+no base in common with r1: the test of off does not refine sz any more.
+
+Three loops of these selftests keep a sign-extended i in a stack slot. Two
+load before and after with the same insns. The third, in
+dump_task_sleepable() of bpf_iter_tasks.c, is still rejected with the
+message above: one of its two backedges has no linear latch, so the loop
+has no iteration count.
+
+Fixes: 5395aa9bbeb5 ("bpf: Verify programs as a fixpoint over the control flow graph")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h | 46 +++++++-----------------------------
- kernel/bpf/log.c             | 10 ++------
- 2 files changed, 10 insertions(+), 46 deletions(-)
+ include/linux/bpf_verifier.h |   1 +
+ kernel/bpf/liveness.c        |  13 +++
+ kernel/bpf/scev.c            | 154 +++++++++++++++++++----------------
+ 3 files changed, 96 insertions(+), 72 deletions(-)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 5a6bb40310f2..e7bfb2bcd954 100644
+index e7bfb2bcd954..598763d128ab 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -60,10 +60,8 @@ struct bpf_stack_range {
- struct bpf_reg_state {
- 	/* Ordering of fields matters.  See regsafe() */
- 	enum bpf_reg_type type;
--	/*
--	 * Constant delta between "linked" scalars with the same ID.
--	 */
--	s32 delta;
-+	/* 0. regsafe() compares the bytes before var_off: there is no hole among them. */
-+	u32 unused;
- 	union {
- 		/* valid when type == PTR_TO_PACKET */
- 		int range;
-@@ -179,18 +177,9 @@ struct bpf_reg_state {
- 	 * the dynptr to determine proper reference freeing.
- 	 * Similarly to dynptrs, we use ID to track "belonging" of a reference
- 	 * to a specific instance of bpf_iter.
-+	 * A scalar has no id. The scalars that it is linked to are static: computed before the
-+	 * main pass, see bpf_scev_next_linked_reg().
- 	 */
--	/*
--	 * Upper bit of ID is used to remember relationship between "linked"
--	 * registers. Example:
--	 * r1 = r2;    both will have r1->id == r2->id == N
--	 * r1 += 10;   r1->id == N | BPF_ADD_CONST and r1->delta == 10
--	 * r3 = r2;    both will have r3->id == r2->id == N
--	 * w3 += 10;   r3->id == N | BPF_ADD_CONST32 and r3->delta == 10
--	 */
--#define BPF_ADD_CONST64 (1U << 31)
--#define BPF_ADD_CONST32 (1U << 30)
--#define BPF_ADD_CONST (BPF_ADD_CONST64 | BPF_ADD_CONST32)
- 	u32 id;
- 	/*
- 	 * Tracks the parent object this register was derived from.
-@@ -1112,27 +1101,18 @@ struct bpf_id_pair {
-  *   comes out for it, only if the same places have the same names.
-  * - bpf_flow_return() puts the ids of the call that waits back. All other ids get new values.
-  * - What comes out has the ranges of all calls that share the state at the entry. So a name is good
-- *   for what holds whatever the ranges are: the same object. Other ids have no name: a number
-- *   loses its id, any other argument keeps the frames of the caller, see arg_needs_caller().
-- * - env->id_gen stays below BPF_MAX_ID. So no id is a name or has a bit of BPF_ADD_CONST.
-+ *   for what holds whatever the ranges are: the same object. Other ids have no name: such an
-+ *   argument keeps the frames of the caller, see arg_needs_caller().
-+ * - env->id_gen stays below BPF_MAX_ID. So no id is a name.
-  */
- #define BPF_INHERITED_ID	0x20000000
- #define BPF_MAX_ID		(BPF_INHERITED_ID / 2)
+@@ -2049,6 +2049,7 @@ int bpf_live_stack_query_init(struct bpf_verifier_env *env, struct bpf_verifier_
+ const unsigned long *bpf_may_write_mask(struct bpf_verifier_env *env, u32 insn_idx);
+ bool bpf_needs_fixed_stack_off(struct bpf_verifier_env *env, int insn_idx);
+ bool bpf_stack_slot_alive(struct bpf_verifier_env *env, u32 frameno, u32 spi);
++bool bpf_half_slot_live_before(struct bpf_verifier_env *env, u32 insn_idx, u32 half_spi);
+ int bpf_compute_live_registers(struct bpf_verifier_env *env);
  
- struct bpf_idmap {
--	u32 tmp_id_gen;
- 	u32 cnt;
- 	struct bpf_id_pair map[BPF_ID_MAP_SIZE];
- };
+ #define BPF_MAP_KEY_POISON	(1ULL << 63)
+diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+index c52f0435193b..63d23d28f2a5 100644
+--- a/kernel/bpf/liveness.c
++++ b/kernel/bpf/liveness.c
+@@ -760,6 +760,19 @@ static void compute_may_write_masks(struct bpf_verifier_env *env)
+ 	}
+ }
  
--struct bpf_idset {
--	u32 num_ids;
--	struct {
--		u32 id;
--		u32 cnt;
--	} entries[BPF_ID_MAP_SIZE];
--};
--
- struct bpf_liveness;
- struct scev;
++/* live_stack_before of the insn at @insn_idx for one half-slot */
++bool bpf_half_slot_live_before(struct bpf_verifier_env *env, u32 insn_idx, u32 half_spi)
++{
++	struct func_instance *instance;
++	int bkt;
++
++	hash_for_each(env->liveness->func_instances, bkt, instance, hl_node)
++		if (insn_idx - instance->subprog_start < instance->insn_cnt &&
++		    is_live_before(instance, insn_idx, instance->depth, half_spi))
++			return true;
++	return false;
++}
++
+ const unsigned long *bpf_may_write_mask(struct bpf_verifier_env *env, u32 insn_idx)
+ {
+ 	return env->insn_aux_data[insn_idx].may_write_mask;
+diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
+index b46eb37234a3..e36181a00858 100644
+--- a/kernel/bpf/scev.c
++++ b/kernel/bpf/scev.c
+@@ -511,6 +511,23 @@ static bool is_spill32(struct scev *scev, int id, u32 *left)
+ 	return is_spill(scev, id, &bits, left) && bits == 32;
+ }
  
-@@ -1278,10 +1258,7 @@ struct bpf_verifier_env {
- 	 * via callx. Allocated when the first such edge is recorded.
- 	 */
- 	unsigned long *callx_edges;
--	union {
--		struct bpf_idmap idmap_scratch;
--		struct bpf_idset idset_scratch;
--	};
-+	struct bpf_idmap idmap_scratch;
- 	struct {
- 		int *insn_state;
- 		int *insn_stack;
-@@ -1447,12 +1424,6 @@ void bpf_verbose_snum32(struct bpf_verifier_env *env, s32 num);
- 		bpf_log(&env->log, "verifier bug: " fmt "\n", ##args);				\
- 	})
++/* (zextN x), (sextN x) or (spillN x) with N >= @bits: the low @bits bits are those of @left */
++static bool is_low_bits(struct scev *scev, int id, u32 bits, u32 *left)
++{
++	u32 op = scev->exprs[id].op;
++
++#ifdef __BIG_ENDIAN
++	/* see is_spill() */
++	if (op == SPILL8 || op == SPILL16 || op == SPILL32)
++		return false;
++#endif
++	/* nothing looks through a phi, see struct expr_def */
++	if (op_low_bits(op) < bits || scev->exprs[id].def.phi)
++		return false;
++	*left = scev->exprs[id].params[0];
++	return true;
++}
++
+ static bool is_any(struct scev *scev, int id, u32 *left, u32 *right)
+ {
+ 	return is_binop(scev, ANY, id, left, right);
+@@ -792,6 +809,19 @@ static bool reg_alive_at(struct bpf_verifier_env *env, u32 reg, u32 insn_idx)
+ 	       : test_bit(reg - MAX_BPF_REG, aux[insn_idx].live_stack_before);
+ }
  
--static inline void clear_scalar_id(struct bpf_reg_state *reg)
++/* The first bytes of a stack slot are its high bits */
++static bool is_big_endian_slot(u32 reg)
++{
++	return IS_ENABLED(CONFIG_CPU_BIG_ENDIAN) && reg >= MAX_BPF_REG;
++}
++
++/* Are the upper 32 bits of @reg live before the insn at @insn_idx? */
++static bool hi32_alive_at(struct bpf_verifier_env *env, u32 reg, u32 insn_idx)
++{
++	return reg < MAX_BPF_REG || is_big_endian_slot(reg) ||
++	       bpf_half_slot_live_before(env, insn_idx, (reg - MAX_BPF_REG) * 2);
++}
++
+ static void print_env(struct bpf_verifier_env *env, struct env *e, u32 insn_idx)
+ {
+ 	struct bpf_verifier_log *log = &env->log;
+@@ -2157,12 +2187,6 @@ static bool match_linked_add(struct bpf_verifier_env *env, int h, u32 tested, u3
+ 	return true;
+ }
+ 
+-/* The first bytes of a stack slot are its high bits */
+-static bool is_big_endian_slot(u32 reg)
 -{
--	reg->id = 0;
--	reg->delta = 0;
+-	return IS_ENABLED(CONFIG_CPU_BIG_ENDIAN) && reg >= MAX_BPF_REG;
 -}
 -
- static inline void mark_calls_callback(struct bpf_verifier_env *env, int idx)
+ /*
+  * const_diff() for the SCEV register @reg, which has the expression @id_b. A fill from byte
+  * *@fill_off of a slot reads these bits. On big endian the low bytes of a spill are the last ones,
+@@ -2637,7 +2661,7 @@ static int transform_expr_once(struct scev *scev, u32 lvl, u32 root, void *priv,
+ static int simplify(struct scev *scev, u32 id)
  {
- 	env->insn_aux_data[idx].calls_callback = true;
-@@ -1589,7 +1560,6 @@ void bpf_mark_reg_not_init(const struct bpf_verifier_env *env,
- void bpf_mark_reg_known_scalar(struct bpf_reg_state *reg, u64 imm);
- void bpf_mark_reg_unknown(struct bpf_reg_state *reg);
- int bpf_grow_stack_state(struct bpf_verifier_env *env, struct bpf_func_state *state, int size);
--void bpf_clear_singular_ids(struct bpf_verifier_env *env, struct bpf_verifier_state *st);
+ 	int a, b, l, r, t, base, slope;
+-	u32 bits, op = scev->exprs[id].op;
++	u32 op = scev->exprs[id].op, bits = op_low_bits(op);
+ 	s64 imm1, imm2;
  
- static inline int bpf_get_spi(s32 off)
- {
-diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-index 84659a757b43..ffbec587a916 100644
---- a/kernel/bpf/log.c
-+++ b/kernel/bpf/log.c
-@@ -696,7 +696,7 @@ static void print_reg_state(struct bpf_verifier_env *env,
- 		if (state->frameno != reg->frameno)
- 			verbose(env, "[%d]", reg->frameno);
- 		if (tnum_is_const(reg->var_off)) {
--			bpf_verbose_snum(env, reg->var_off.value + reg->delta);
-+			bpf_verbose_snum(env, reg->var_off.value);
- 			return;
- 		}
- 	}
-@@ -704,9 +704,7 @@ static void print_reg_state(struct bpf_verifier_env *env,
- 		verbose(env, "%s", btf_type_name(reg->btf, reg->btf_id));
- 	verbose(env, "(");
- 	if (reg->id)
--		verbose_a("id=%d", reg->id & ~BPF_ADD_CONST);
--	if (reg->id & BPF_ADD_CONST)
--		verbose(env, "%+d", reg->delta);
-+		verbose_a("id=%d", reg->id);
- 	if (reg->parent_id)
- 		verbose_a("parent_id=%d", reg->parent_id);
- 	if (type_is_non_owning_ref(reg->type))
-@@ -720,10 +718,6 @@ static void print_reg_state(struct bpf_verifier_env *env,
- 			  reg->map_ptr->key_size,
- 			  reg->map_ptr->value_size);
- 	}
--	if (t != SCALAR_VALUE && reg->delta) {
--		verbose_a("off=");
--		bpf_verbose_snum(env, reg->delta);
+ 	/* (- x imm) -> (+ x -imm) */
+@@ -2679,50 +2703,22 @@ static int simplify(struct scev *scev, u32 id)
+ 	if (is_zext32(scev, id, &l) && is_imm(scev, l, &imm1))
+ 		return imm_expr(scev, (u64)(u32)imm1);
+ 
+-	/* The rules below look through the operand, not through a phi: see struct expr_def */
+-	if (op_low_bits(op) && scev->exprs[scev->exprs[id].params[0]].def.phi)
+-		return id;
+-
+-	/*
+-	 * (zext32 (+ (zext32 $a) $b)) -> (zext32 (+ $a $b))
+-	 * (zext32 (+ $a (zext32 $b))) -> (zext32 (+ $a $b))
+-	 */
+-	if ((is_zext32(scev, id, &t) && is_add(scev, t, &l, &b) && is_zext32(scev, l, &a) &&
+-	     !scev->exprs[l].def.phi) ||
+-	    (is_zext32(scev, id, &t) && is_add(scev, t, &a, &r) && is_zext32(scev, r, &b) &&
+-	     !scev->exprs[r].def.phi)) {
+-		t = expr2(scev, BPF_ADD, a, b);
+-		t = expr1(scev, ZEXT32, t);
+-		return t;
 -	}
- 	if (type_is_pkt_pointer(t)) {
- 		verbose_a("r=");
- 		verbose_unum(env, reg->range);
+-
+-	/* (zext32 (zext32 X)) -> (zext32 X) */
+-	if (is_zext32(scev, id, &a) && is_zext32(scev, a, &b))
+-		return a;
+-
+-	/*
+-	 * '*(u32 *)(r10 - 8) = rX' stores the low half of rX:
+-	 * (spill32 (zext32 $a)) -> (spill32 $a)
+-	 * (spill32 (+ (zext32 $a) $b)) -> (spill32 (+ $a $b))
+-	 */
+-	if (is_spill32(scev, id, &t) && is_zext32(scev, t, &a))
+-		return expr1(scev, SPILL32, a);
+-	if (is_spill32(scev, id, &t) && is_add(scev, t, &l, &b) && is_zext32(scev, l, &a) &&
+-	    !scev->exprs[l].def.phi)
+-		return expr1(scev, SPILL32, expr2(scev, BPF_ADD, a, b));
+-
+ 	/*
+-	 * 'rX = *(u32 *)(r10 - 8)' fills what was spilled, a narrower fill the low bits of it:
+-	 * (zext32 (spill32 $a)) -> (zext32 $a)
++	 * An extension and a partial spill depend on the low bits of their operand only: look
++	 * through an extension and a partial spill that is not narrower, below an add too:
++	 * (sext32 (zext32 $a)) -> (sext32 $a)
+ 	 * (sext8 (spill16 $a)) -> (sext8 $a)
+-	 * (zext32 (+ (spill32 $a) $b)) -> (zext32 (+ $a $b))
++	 * (zext32 (+ (sext32 $a) $b)) -> (zext32 (+ $a $b))
++	 * (spill32 (+ $a (zext32 $b))) -> (spill32 (+ $a $b))
+ 	 */
+-	if (op_low_bits(op) && is_spill(scev, scev->exprs[id].params[0], &bits, &a) &&
+-	    op_low_bits(op) <= bits)
++	if (!bits)
++		return id;
++	t = scev->exprs[id].params[0];
++	if (is_low_bits(scev, t, bits, &a))
+ 		return expr1(scev, op, a);
+-	if (is_zext32(scev, id, &t) && is_add(scev, t, &l, &b) && is_spill32(scev, l, &a) &&
+-	    !scev->exprs[l].def.phi)
+-		return expr1(scev, ZEXT32, expr2(scev, BPF_ADD, a, b));
++	if (is_add(scev, t, &l, &r) && !scev->exprs[t].def.phi &&
++	    (is_low_bits(scev, l, bits, &l) || is_low_bits(scev, r, bits, &r)))
++		return expr1(scev, op, expr2(scev, BPF_ADD, l, r));
+ 
+ 	return id;
+ }
+@@ -2745,6 +2741,7 @@ static int compute_header_scevs(struct bpf_verifier_env *env, int h)
+ 	int l, r, t, id, ra, rb, ra_expr;
+ 	bool zext32;
+ 	s64 imm;
++	u32 op;
+ 
+ 	/*
+ 	 * Note:
+@@ -2779,30 +2776,24 @@ static int compute_header_scevs(struct bpf_verifier_env *env, int h)
+ 			header_env->reg2scev[ra] = id;
+ 			continue;
+ 		}
+-		/* rA = (is_zext32 (+ rA IMM)) -> (is_zext32 (linear rA IMM)) */
+-		if (is_zext32(scev, ra_expr, &t) &&
+-		    is_add(scev, t, &l, &r) &&
+-		    is_reg(scev, l, &rb) &&
+-		    is_imm(scev, r, &imm) &&
+-		    ra == rb) {
+-			id = expr2(scev, LINEAR_SCEV, l, r);
+-			id = expr1(scev, ZEXT32, id);
+-			if (id < 0)
+-				return id;
+-			header_env->reg2scev[ra] = id;
+-			continue;
+-		}
+ 		/*
++		 * A 32-bit induction variable:
++		 * rA = (zext32 (+ rA IMM)) -> (zext32 (linear rA IMM))
++		 * rA = (sext32 (+ rA IMM)) -> (sext32 (linear rA IMM))
+ 		 * rA = (spill32 (+ rA IMM)) -> (spill32 (linear (zext32 rA) IMM))
+-		 * The low half of the slot counts. Nothing is known about the other half.
++		 * The last SCEV leaves the upper 32 bits of the slot unknown, so it holds for the
++		 * first two as well. They get it if these bits are dead: the states have a
++		 * 32-bit spill then, see bpf_clean_verifier_state().
+ 		 */
+-		if (is_spill32(scev, ra_expr, &t) &&
++		if (is_low_bits(scev, ra_expr, 32, &t) &&
+ 		    is_add(scev, t, &l, &r) &&
+ 		    is_reg(scev, l, &rb) &&
+ 		    is_imm(scev, r, &imm) &&
+ 		    ra == rb) {
+-			id = expr2(scev, LINEAR_SCEV, expr1(scev, ZEXT32, l), r);
+-			id = expr1(scev, SPILL32, id);
++			op = hi32_alive_at(env, ra, h) ? scev->exprs[ra_expr].op : SPILL32;
++			if (op == SPILL32)
++				l = expr1(scev, ZEXT32, l);
++			id = expr1(scev, op, expr2(scev, LINEAR_SCEV, l, r));
+ 			if (id < 0)
+ 				return id;
+ 			header_env->reg2scev[ra] = id;
+@@ -4402,8 +4393,10 @@ struct linear_coefs {
+ 	u32 base_reg;
+ 	s64 slope;
+ 	bool zext32;
+-	/* the low half of a stack slot */
++	/* with zext32: the low 32 bits of a stack slot */
+ 	bool spill32;
++	/* with zext32: the low 32 bits are sign extended */
++	bool sext32;
+ };
+ 
+ static bool is_simple_slope(struct scev *scev, u32 id, s64 *slope)
+@@ -4419,8 +4412,12 @@ static bool is_simple_linear(struct scev *scev, u32 id, struct linear_coefs *out
+ 	u32 base, slope;
+ 
+ 	out->spill32 = false;
+-	return is_linear_or_linear32(scev, id, &base, &slope, &out->zext32) &&
+-	       is_reg(scev, base, &out->base_reg) &&
++	out->sext32 = is_unop(scev, SEXT32, id, &id);
++	if (!is_linear_or_linear32(scev, id, &base, &slope, &out->zext32) ||
++	    (out->sext32 && out->zext32))
++		return false;
++	out->zext32 |= out->sext32;
++	return is_reg(scev, base, &out->base_reg) &&
+ 	       is_simple_slope(scev, slope, &out->slope);
+ }
+ 
+@@ -4452,6 +4449,7 @@ static struct bpf_reg_state *spill32_counter(struct scev *scev, struct bpf_func_
+ 		return NULL;
+ 	out->zext32 = true;
+ 	out->spill32 = true;
++	out->sext32 = false;
+ 	return scev_reg_for_spill32(st, r);
+ }
+ 
+@@ -4460,6 +4458,11 @@ static struct cnum64 cnum64_zext32(struct cnum32 r32)
+ 	return cnum64_from_urange(cnum32_umin(r32), cnum32_umax(r32));
+ }
+ 
++static struct cnum64 cnum64_sext32(struct cnum32 r32)
++{
++	return cnum64_from_srange(cnum32_smin(r32), cnum32_smax(r32));
++}
++
+ /* Compute the range an induction variable in `reg` spans over the loop. */
+ static void linear_bounds(struct bpf_reg_state *reg, u32 max_header_count,
+ 			  struct linear_coefs *coefs, struct bounds *out)
+@@ -4489,12 +4492,14 @@ static void linear_bounds(struct bpf_reg_state *reg, u32 max_header_count,
+ 	r32 = CNUM32_UNBOUNDED;
+ 	if (coefs->zext32) {
+ 		r32 = cnum32_from_cnum64(r64);
+-		r64 = cnum64_zext32(r32);
++		r64 = coefs->sext32 ? cnum64_sext32(r32) : cnum64_zext32(r32);
+ 		/*
+ 		 * 32-bit iteration overflow is equivalent to subtracting N * 2**32:
+ 		 * (base + slope * k) % slope ≠ (base + slope * k - N * 2**32) % slope.
+ 		 */
+-		overflow |= cnum32_contains(r32, 0) && cnum32_contains(r32, U32_MAX);
++		overflow |= coefs->sext32 ?
++			    cnum32_contains(r32, S32_MAX) && cnum32_contains(r32, S32_MIN) :
++			    cnum32_contains(r32, 0) && cnum32_contains(r32, U32_MAX);
+ 		/*
+ 		 * The entry and zero-extended values must agree on how they define `base`,
+ 		 * otherwise `base + slope * k` would define different sets of points between
+@@ -4538,10 +4543,14 @@ static bool is_iv_at_header(struct bpf_verifier_env *env, int h, int iv_reg, u32
+ 	return r == iv_reg || (const_diff_at_header(env, h, iv_reg, r, &delta) && !delta);
+ }
+ 
+-static void iv_bounds(struct bounds *bounds, struct cnum64 iv_range)
++static void iv_bounds(struct bounds *bounds, const struct linear_coefs *coefs,
++		      struct cnum64 iv_range)
+ {
+ 	struct cnum64 r64 = cnum64_intersect(bounds->r64, iv_range);
+ 
++	/* The latch bounds the zero extension. With bit 31 set the sign extension differs. */
++	if (coefs->sext32 && cnum64_umax(iv_range) > S32_MAX)
++		return;
+ 	if (!cnum64_is_empty(r64))
+ 		bounds->r64 = r64;
+ }
+@@ -5081,7 +5090,7 @@ int bpf_widen_scev_regs(struct bpf_verifier_env *env, struct bpf_verifier_state
+ 				return err;
+ 			linear_bounds(reg, iters->max_header_count, &coefs, &bounds);
+ 			if (is_iv_at_header(env, insn_idx, iters->iv_reg, coefs.base_reg))
+-				iv_bounds(&bounds, iters->iv_range);
++				iv_bounds(&bounds, &coefs, iters->iv_range);
+ 			if (log->level & BPF_LOG_LEVEL2) {
+ 				bpf_log(log, "loop header at %d, widening ", insn_idx);
+ 				log_reg(env, r);
+@@ -5127,6 +5136,7 @@ static bool is_moved_linear(struct scev *scev, u32 id, struct linear_coefs *out,
+ 	u32 base, slope, l, r;
+ 
+ 	out->spill32 = false;
++	out->sext32 = false;
+ 	return is_linear_or_linear32(scev, id, &base, &slope, &out->zext32) && !out->zext32 &&
+ 	       is_add(scev, base, &l, &r) && is_reg(scev, l, &out->base_reg) &&
+ 	       is_imm(scev, r, moved) && is_simple_slope(scev, slope, &out->slope);
+@@ -5207,7 +5217,7 @@ int bpf_clamp_scev_regs(struct bpf_verifier_env *env, struct bpf_func_state *cur
+ 		 * of its header value. @reg went through that insn and has what holds of the range.
+ 		 */
+ 		if (!behind && is_iv_at_header(env, insn_idx, entry->iv_reg, coefs.base_reg))
+-			iv_bounds(&bounds, entry->iv_range);
++			iv_bounds(&bounds, &coefs, entry->iv_range);
+ 		if (moved) {
+ 			/* a sum that can wrap has another residue, see scalar_step_add() */
+ 			if (check_add_overflow(cnum64_smin(bounds.r64), moved, &sum) ||
 -- 
 2.55.0
 
