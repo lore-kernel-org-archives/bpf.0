@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.138
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.75
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794401855;
-	b=nFfjM7h6pnPpocJW8KGKS6djIjBgdX+mGZO+/KNOxYb8DKIHp5RxNHb1kmgZgb8qAzOg
-	 kD3xDsU5Dyo7dQgRDkMj6ZtABvjsXUk2WK9yJzvqkDbv2KCZjUJuFKw8Ak+3UBo2qByXf
-	 c6xqHiGqa2Ens2WuvFg0Opg8OCletprXzvL9/B8oIbnq8+SOEX2LfxDketn9OlMzCFS4+
-	 yrVunsHGDmTvsnJ/1FAX8uyx+cdyom0go2tDzMjy84/oiED80opp3zjvRrYcJSMgv2/lz
-	 k/Iruqmmj0eMI9E3lcUNK8MU/XNSuJtf4kVCzzLAnWCOcbu6EXFG/mUt2+K8rcmxc5Q==
+	t=1794401856;
+	b=sBuHGsh+jO28mL6b5evWnyHIm3BBoy3u3VP/Gpi8JwImtAvw5gE/AD1Mnp5PF33Gk0+y
+	 bLdigniFTCDTEcUi0HmfFUjYMqCxIZCdLcVkP5eZPEovxix8l8ty0tH30plGBAxqO8iER
+	 nEUxVXfKM/LlKNBLsfkT8kSnDT+fXZcrkQ2sDx5bdXZsf8Rn0mykvu/q0Jfhv4yM8HVOs
+	 K3auytj4wSwMzxuNtNRFHVF3+ujDqvwso/7AI/qdCDm2COasUK7N7HG3eGc1i3W3yQVjG
+	 M/r+ky8461zibHKb0gIjrY2vfSzKoyShnsVinpWJqjaEna0Bk1yKpATaPjfylrb7rZw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794401855;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794401856;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
-	bh=gN1El3wcrpzhEdJvGKJ56YDJ/R8rYv/FYXbaXKckbwg=;
-	b=HJNGt6QISEnhotCabDQUBKqeMhWExdR2yeSVj2EZkCq/Pr1ecfr50VYDf8LPa7WO9ePB
-	 CeFX08QT+V+DJH0xfucN3fFuZS7nNquL/9ggA3s+cUjYc+SDL2OE1FUGrjnfRw4iUaqGq
-	 3W2A/Z2QYvJhHzPIF6muXiPm/f+G6Jn3bvFxxZRVPTBrvDhIHkzpcHj/UDxmPRFOBJFb5
-	 7FELh2l58MGp53SGqByHxmCJ9GAClq+a/YBO6ZqzbasETJbRkLf2OGbaI3KuIxudcjpma
-	 cillqNebVGsY8Zsaes5bXhTYABEswiKOcCBRXNaWFF1A4gKVJLUpAgbdi6WI5eDyw/w==
+	bh=dXlcPxhwTQERB0NwLk4I8j0eGOFIuVVtNPKKYwAznSI=;
+	b=rQ0hX+bT9oDwmz+Vs7KvFuBlg7H2U2mdRiWhOoDXAax7+owpzETtHC27pvx+DJmaGazX
+	 eXNhajwbU1WlGGWwUGNHNJ4fQl5WG3H+HaUw2wana4OXbl0Tq8pq6HOtT3ZK43t0ZCWd2
+	 5KgTK+X9GA+HHiGv5+cQGUfWwhmI3SoaooAnsHc8jpYMr8WCOHVBs9PKU8CyQylXyuVOt
+	 PyPlaAwPjlfd3/73I2xZZLF/oVhe6t3TMJz8lhplUQxMPiGDWl6c/6CNEcIF/SMYsdxZ/
+	 XC7QWi+aNbuowNxFIaKp9r1tJUcuvdABuetswfFcHvMVz5znOC6qMIuVhVMYSTeItqg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=tNXD0KUg;
-	arc=none smtp.remote-ip=74.125.225.138
-Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BpRJoeMN;
+	arc=none smtp.remote-ip=74.125.225.75
+Received: from mail-wr2-f11.google.com (mail-wr2-f11.google.com [74.125.225.75])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E511606A32D
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 12:57:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4E511606A32D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CD25606A326
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 12:57:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7CD25606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=tNXD0KUg
-Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-4b886ebe069so10203985e9.1
-        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 04:57:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BpRJoeMN
+Received: by mail-wr2-f11.google.com with SMTP id ffacd0b85a97d-48fd1deda37so1175584f8f.1
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 04:57:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794401854; x=1795006654; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794401855; x=1795006655; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=gN1El3wcrpzhEdJvGKJ56YDJ/R8rYv/FYXbaXKckbwg=;
-        b=tNXD0KUgUi53wkwTqYtDW9OohvegTdAZQ+QusyIWsMYs4sKLSuuJfvFzMnExNGj4GM
-         7F02I8CQWMm32UvIO+rHMasriD3eCg76mojRpmbj5dC02i00R4CpqRtzekVAp5QxDMpA
-         E0uWYLOgNozX1MYXEAy5w03wbBE6+H8Vu8RT50qPMY236vDa4xxr+IrPFjvcJv2v6ktB
-         LgN4x0EEe7yWqzkNYGt5r5cEMWom2DTnHU+mzWFQ1kIgxxvKDKX3lPI52T6DegYNR2FQ
-         e2OHkSddo0hHQKpnzk2XjSke0UGeQqO8XPLW9RSLiij2MnBnQC0plK3frpUh+0DfnN4f
-         zkUw==
+        bh=dXlcPxhwTQERB0NwLk4I8j0eGOFIuVVtNPKKYwAznSI=;
+        b=BpRJoeMN/M1GXyoK+LQyRCaKjbsCrr0lIk8oODt3hROvEbzEGDoLdaB/0gmJKQr71g
+         2Bl7KN0sNO2V9zE+EAqux+c0LYLVRjEdNW9QsH6PZIirhYlTRQRxybLu90DluoFEqm0m
+         8PFR7uyy/QJ8ClcpRKYTuTzZo0ABrF5yXK20yDAAyNmLaQocC3KeuwiQAC9dCUTxFY+r
+         kGub872NgKKcJcDzUIe/zZFCtq1oGCRzQwuIpMVu5ozFs/fVj1zDbK0KoYOGIIOTH2Ye
+         D9ox3Rj8dZqbXswo2q25UwwQw/JoQqyt9AP85wp3HOh6xC1KEuH+l93KF1i/HsuObhER
+         /61A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794401854; x=1795006654;
+        d=1e100.net; s=20260707; t=1794401855; x=1795006655;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=gN1El3wcrpzhEdJvGKJ56YDJ/R8rYv/FYXbaXKckbwg=;
-        b=PJB8GIkhuTrzzFuuONLBbJVK7KFNXOgRYNtXRtQJMlGrX2w1xkPHicMcIMFZYtJdnk
-         S99bG6YIWpf8AY3KL5xU0/v8NEBzXUIHWQV+H54+XUg00o1uTudwLvk6nFraBj/Zya7z
-         jFKDAHOpTQJ8z8GA4pAq0ZOI/1LkPv+QqQixYqjdk0rsxAJ+R2CnVIhuugUI6Xj99uXu
-         eDhacpcREb3tRXeYXrjaurZ0TbuOn0v0kG5DuDBRarbcdBKob3nZSTfIjvDribC/veed
-         FA+NWO0Gc3Z/lHV5YLdG+DIX3HpNJjGG2F9vuxfjr8uHDzqyms6XQMv8/eAOY+oHMHDA
-         TN2A==
-X-Gm-Message-State: APuU4Z/MEMIACi/MUyDlyVvzcWGRDceen0JfORjy/j6GYoM+CtquAket
-	/LEx8g6mOCQZC/+SqTJ6/dkT805wdPdL+LVXJ4WI8E8+PQVnghaXp4vmYihHoINZLV4=
-X-Gm-Gg: AYBFou1THy5kzlVcq8RKIS9gL7b2uOe5eGL+NpxQh5tdWtdQpzh9AgijJAdK50Hu3Ti
-	38PJWyVc4MqDEvnKQzTtdvhzvqV+zQahvHbEAQWxLXV2zNIMbqu0fVa4Skyy0t+Ffh9VHPiV9b9
-	gGOL68/mpfHFPBeTxxDV5DjKV17l333yh2TWNbp+OhxMuKWYVAfsJwf9TpWJhv1xt5cDIOxVX4K
-	7NNGALWPv6LXghsdvfNvM8oh+iHMHSdjh0SqbdHKOckpchX76ncYAfC9ATfYBYQsdtycOi+VbSr
-	TnryW9rwTpKjjVMpZifUoauqNaMlC3x4L5rJxXFc7FG3j3ev9MQB5X5Q19pXgO2VZxoRII8oQd0
-	XTHrNTTcGELRyCxvqKhewXZ7ovEeynRf5yF+MRbvwvybp0UgXvVPfs8+vesUzO6fu+9UWP/lrei
-	WcCc/ytAsb3eoBAAj1lbExtRJQ0ISABUbaOz3rgZQ6qY0bu/o108OMiLQRuWwaVlG62HVjL5DS6
-	oA3bcS/WzMXp4lcwxPLbNEjMm6DfXSBaFYv7nXEvw8J/KxdPxxivA1fC9OC1mH/YKWMo1UElz9b
-	5AyFwSOm7+uduQkVDhp0T+GY4oT3zA+QKvb88S3a3ucLLePlDqT2fxNKvFjtNYTace9keDQXFCL
-	CRwsNqmqRKdKEVwU9h7TbH7E5nuMGZJ2Hnmi5V4gvn/ycXnYoIOV+yDcdFfZnfVz05udS
-X-Received: by 2002:a05:600c:4f84:b0:4ac:da92:2bd4 with SMTP id 5b1f17b1804b1-4ba0931d9eamr40035915e9.1.1794401853389;
-        Wed, 11 Nov 2026 04:57:33 -0800 (PST)
+        bh=dXlcPxhwTQERB0NwLk4I8j0eGOFIuVVtNPKKYwAznSI=;
+        b=n4eEyuDaf0UwFiNbzt1DEcggGiS4EGT13VCOhRFuCiyvHOii2gcUx4bR1bXS45jBBd
+         JVw/7kSjrt5+6BjuIflhrIK5kciOviyg3dF9h/EAxoo/lVExmdIwpnP7cQyAsygvgWhN
+         Vfoxh8TCEbZ8xRHjs3sENpln4zXLIUmNKwQ7xI7clQtQO/TZ+Fi77KtMmOtpluWoNORH
+         438uDchuzwhI2SoNZPLgT0juOyFex/WY0NXjPkeIbcQz9RLbRSmERniNl7gaQ8q9k1vf
+         X5rynddeClgOo1yWSqANaFE18fM+sfctuVgazru4vunOtyN8NV473M2HG8PEEJBRgDXW
+         WDpg==
+X-Gm-Message-State: APuU4Z+TvZfiQIA0hnVPK35bXPG/k3EmkSUF5dkr9iEzDPVawlWpL0Rt
+	qIXa4bT2WgB1uvK+OcaLIF+347m2mHD5XwRou/+Otz7qQMK9SW9NkA9b77uJ5vaz3BI=
+X-Gm-Gg: AYBFou0PNXO68FUfQwfi1OQC5ui/IJfFR4AXR12oLHDvMozZDq8ezHr7LojzDnQpQqA
+	xwEZexbdpVwm1NJ+3WiXzJIuu+lfTjKamj72YpTtbo760HnOvgEW/EF7Xh3qfCroq+NjaPAk5fg
+	mL2rcNKL3U9MOb7jX9XCdoWCRwfQ0qCRYQiT8VTvLF4uEQKpZHh1Uw+ew/TUHDBSZxDGIG8wjKe
+	UnQkpzokyXU5i7jH5iEi+r8Xkdf1s2fYk/43iCpUv6fx6krcS3CvxfoM5teOrFx9ZQcglaqzhdB
+	hwiAdC4Cv7bS0r/UJ/llZASxlZxasH1ge1Pe5lzd+KWNOxZ9b/xC5R7bQ9puXIPAbc9F+U4pduc
+	3/CaXgLvqF9DQhYUMwjqlDSDu8+iSQ2lXq/3VK6GwC+dmMbhAAama4YDL/YLP7ecbTrGR0xC9t7
+	W9wKWnPVgGoxpCtvcNLQt01rWgeRvCFycBoyKj3suMpmS6fwv7nqKqtSe4QEFoUrFwlEowOhTAf
+	EAHgN0EkfN4M48mVpEt8q1GqMdPcwHNcMczumU669hV6b8RfAa+4CjG4iYzuF2Fuw/UNCZok6NV
+	BoR3BetCpAxq4Mw7PDfkCpyUQF1QE2JPCCRRCNOhok2E8FNCdev/sCNF0q32Aq1HTSED+1vAWb7
+	IXyCxS/ESIySwbIN/vM4QlCaopemsT13QU0UGz9qF7USINZ75eH3ItEKul2M+9uLKT6p2
+X-Received: by 2002:a05:6000:603:b0:48b:e50:714e with SMTP id ffacd0b85a97d-499c7649685mr3835963f8f.36.1794401854719;
+        Wed, 11 Nov 2026 04:57:34 -0800 (PST)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba0204784esm176553385e9.10.2026.11.11.04.57.32
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-498365ccbccsm11218345f8f.44.2026.11.11.04.57.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2026 04:57:32 -0800 (PST)
+        Wed, 11 Nov 2026 04:57:34 -0800 (PST)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -88,9 +88,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 01/29] bpf: Record where JITs save callee-saved registers
-Date: Wed, 11 Nov 2026 13:56:59 +0100
-Message-ID: <113211473688142e3ef1df6780d35a460a0e7b23.1794399387.git.memxor@gmail.com>
+Subject: [PATCH bpf-next v1 02/29] bpf: Add bpf_throw_unwind() and an arch entry hook
+Date: Wed, 11 Nov 2026 13:57:00 +0100
+Message-ID: <7b56a21a5f2750a8325154d741318a1d451c21ed.1794399387.git.memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1794399387.git.memxor@gmail.com>
 References: <cover.1794399387.git.memxor@gmail.com>
@@ -103,184 +103,219 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6824; i=memxor@gmail.com; h=from:subject:message-id; bh=2xc8Q4NmzqD1okgKGw4aCwebGKJ2P0+pCL10iflpiqQ=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetLzOyy163K9/6xLlTknSOqaSCbquxtuy/vre3deYy82 ZdFZ3p1lLIwiHExyIopspT838dkfKLyd6DtMm6YOaxMIEMYuDgFYCLSmQz//bcXLLN0XWCz6KWA eukLvYp5G9Wn9Vnt/XP/VfeHM/9UPRj+ad5S3qm420vtgLio8sWHSY78FTzxhtJt87+6/fh8b1o xKwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8273; i=memxor@gmail.com; h=from:subject:message-id; bh=7lUzMCft9IFlB8SfkZU124oVy7ikLIXnfGp1q+xxxRc=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetLzJxt25yT99/Q/TLVXFWlvjdwAefELVYcDTVSV97yG nSGrrrYUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgIl4b2X4X/lgy7LO/dMsA+tj j96w2nS7lfOKo+MBo2+FIVciRfz8Ghn+6aj9in6tk9mu98ZHU5E7qdql2/qucNdmqwPMnknt9j7 MAA==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Currently bpf_throw() discards the frames between the throw site and the
-main program without running their epilogues. The main program restores
-the callee-saved registers that these frames clobbered: its prologue
-saves all of them, and the exception callback pops them.
+Currently bpf_throw() is a C function. It walks the stack to the frame of
+the main program and calls its exception callback, which resets the stack
+to that frame and returns from the program. To restore the callee-saved
+registers of the frames it discards, the unwinder needs their values at
+the throw site. By the time C code runs, the compiler may have clobbered
+them.
 
-To restore the registers from the discarded frames instead, the unwinder
-must know where each JITed function saved the R6-R9 of its caller.
-Walking outwards from the throw site, a register is either:
+Move the body of bpf_throw() into bpf_throw_unwind(), which takes the
+callee-saved registers of the throw site, R6-R9, along with the cookie:
 
- - still in the physical register, if no inner frame saved it; or
- - in the prologue save area of the nearest inner frame that saved it.
+ - An architecture can provide a native entry for the kfunc, which
+   captures the registers and then calls bpf_throw_unwind().
+   bpf_arch_throw_entry() returns that entry.
+ - The verifier redirects a call to bpf_throw() to the entry when it
+   specializes the kfunc. The JIT still finds the function model of the
+   call through the specialized descriptor.
+ - Without an entry, bpf_throw() calls bpf_throw_unwind() with NULL, as
+   before.
 
-Add callee_reg_off[4] to struct bpf_prog_aux. Each element is the offset
-of a saved register from the native frame pointer that
-arch_bpf_stack_walk() reports for the frame, or 0 if the register is not
-saved. The x86-64 and arm64 JITs fill it in. Nothing uses it yet.
+Nothing uses the registers yet.
 
-On x86-64 the frame holds, below rbp from high to low addresses:
+bpf_throw_unwind() never returns. It transfers to a JITed callback, which
+returns to the kernel code that called the program. On arm64 with a
+shadow call stack, the function's prologue would push a return address
+that is never popped. The caller of the program would then pop it instead
+of its own return address, and trap when it returns. So:
 
- - the program stack of round_up(stack_depth, 8) bytes, or nothing with a
-   private stack;
- - the tail call count and its pointer, when tail_call_reachable;
- - r12, when the program is an exception boundary or uses an arena;
- - rbx, r13, r14 and r15 in push order, each only if it is pushed. An
-   exception boundary pushes all four.
+ - Mark the function __noscs, which keeps a static shadow call stack out
+   of it.
+ - A dynamic shadow call stack is patched in at boot, in place of the
+   pointer authentication instructions of each function. Under
+   CONFIG_DYNAMIC_SCS, build the function without pointer authentication
+   but with branch target identification, as drivers/misc/lkdtm/cfi.c
+   does for the same reason.
 
-On arm64:
+The function loses nothing by this, since it never returns through its
+return address.
 
- - the frame record is at x29, and the tail call count pair is right
-   below it;
- - the callee-saved registers follow as 16 byte pairs, in the order that
-   find_used_callee_regs() lists them, with the first register of a pair
-   at the lower address. The i-th pushed register is therefore at
-   -32 - 16 * (i / 2) + 8 * (i % 2);
- - an exception boundary pushes x19-x28 in order, so R6-R9 take the first
-   four slots.
+For the same reason, mark bpf_throw_unwind() notrace, and add it and
+bpf_throw() to the functions that an fexit program cannot attach to: a
+function that does not return never leaves the trampoline.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- arch/arm64/net/bpf_jit_comp.c | 37 +++++++++++++++++++++++++++++++++++
- arch/x86/net/bpf_jit_comp.c   | 33 +++++++++++++++++++++++++++++++
- include/linux/bpf.h           |  6 ++++++
- 3 files changed, 76 insertions(+)
+ include/linux/bpf.h       |  1 +
+ include/linux/bpf_throw.h | 52 +++++++++++++++++++++++++++++++++++++++
+ kernel/bpf/core.c         |  9 +++++++
+ kernel/bpf/helpers.c      | 17 ++++++++++---
+ kernel/bpf/verifier.c     |  7 ++++++
+ 5 files changed, 83 insertions(+), 3 deletions(-)
+ create mode 100644 include/linux/bpf_throw.h
 
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index b8d765d6ab07..83a858c6d472 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -854,6 +854,42 @@ static void find_used_callee_regs(struct jit_ctx *ctx)
- 	ctx->nr_used_callee_reg = i;
- }
- 
-+/*
-+ * Offset from the frame pointer of the @idx-th register pushed by push_callee_regs(). The
-+ * frame record sits at the frame pointer, the tail call count pair right below it, and
-+ * then the pushed pairs, each 16 bytes with its first register at the lower address.
-+ */
-+static int callee_reg_slot_off(int idx)
-+{
-+	return -32 - 16 * (idx / 2) + 8 * (idx % 2);
-+}
-+
-+/*
-+ * Record where push_callee_regs() saved the caller's R6..R9, relative to the frame
-+ * pointer that arch_bpf_stack_walk() reports for this frame, for the exception unwinder.
-+ * An exception boundary pushes x19..x28 in order, so R6..R9 take the first four slots.
-+ */
-+static void record_callee_reg_off(struct jit_ctx *ctx)
-+{
-+	struct bpf_prog_aux *aux = ctx->prog->aux;
-+	int i, j;
-+
-+	if (aux->exception_boundary) {
-+		for (i = 0; i < 4; i++)
-+			aux->callee_reg_off[i] = callee_reg_slot_off(i);
-+		return;
-+	}
-+	for (i = 0; i < 4; i++) {
-+		aux->callee_reg_off[i] = 0;
-+		for (j = 0; j < ctx->nr_used_callee_reg; j++) {
-+			if (ctx->used_callee_reg[j] != bpf2a64[BPF_REG_6 + i])
-+				continue;
-+			aux->callee_reg_off[i] = callee_reg_slot_off(j);
-+			break;
-+		}
-+	}
-+}
-+
- /* Save callee-saved registers */
- static void push_callee_regs(struct jit_ctx *ctx)
- {
-@@ -884,6 +920,7 @@ static void push_callee_regs(struct jit_ctx *ctx)
- 			emit(A64_PUSH(reg1, A64_ZR, A64_SP), ctx);
- 		}
- 	}
-+	record_callee_reg_off(ctx);
- }
- 
- /* Restore callee-saved registers */
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 5bc744c42f7f..19fef39f1445 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -382,6 +382,24 @@ static void pop_callee_regs(u8 **pprog, bool *callee_regs_used)
- 	*pprog = prog;
- }
- 
-+/*
-+ * Record where push_callee_regs() saved the caller's R6..R9 relative to rbp, for the
-+ * exception unwinder. @off is the offset of rsp from rbp right before the first push.
-+ */
-+static void record_callee_reg_off(struct bpf_prog *prog, s32 off, bool *callee_regs_used)
-+{
-+	int i;
-+
-+	for (i = 0; i < 4; i++) {
-+		if (!callee_regs_used[i]) {
-+			prog->aux->callee_reg_off[i] = 0;
-+			continue;
-+		}
-+		off -= 8;
-+		prog->aux->callee_reg_off[i] = off;
-+	}
-+}
-+
- /* add rsp, depth */
- static void emit_add_rsp(u8 **pprog, u32 depth)
- {
-@@ -2402,6 +2420,7 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
- 	/* it has to be saved around calls of helpers and kfuncs */
- 	bool arena_sp_save = arena_sp && calls_clobber_arena_sp(bpf_prog);
- 	s32 arena_sp_off = 0;
-+	s32 callee_regs_off;
- 	int err;
- 
- 	stack_depth = bpf_prog->aux->stack_depth;
-@@ -2472,6 +2491,20 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
- 		push_callee_regs(&prog, callee_regs_used);
- 	}
- 
-+	/*
-+	 * Record where the pushes above saved the caller's R6..R9, relative to the
-+	 * rbp that arch_bpf_stack_walk() reports for this frame. Below rbp lie, from
-+	 * high to low addresses: round_up(stack_depth, 8) bytes of program stack
-+	 * (none with a private stack), the tail call count and its pointer (16 bytes)
-+	 * when tail_call_reachable, r12 when exception_boundary or arena_vm_start,
-+	 * and then rbx, r13, r14 and r15 in push order, each only when pushed.
-+	 */
-+	callee_regs_off = -(s32)round_up(stack_depth, 8) - (tail_call_reachable ? 16 : 0);
-+	if (bpf_prog->aux->exception_boundary || arena_vm_start)
-+		callee_regs_off -= 8;
-+	record_callee_reg_off(bpf_prog, callee_regs_off,
-+			      bpf_prog->aux->exception_boundary ? all_callee_regs_used : callee_regs_used);
-+
- 	/* Compute callee-saved register area size. */
- 	callee_saved_size = 0;
- 	if (bpf_prog->aux->exception_boundary || arena_vm_start)
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 520fd72e21fd..da42dbd32fd4 100644
+index da42dbd32fd4..b01820e67795 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -1997,6 +1997,12 @@ struct bpf_prog_aux {
- 	u64 (*bpf_exception_cb)(u64 cookie, u64 sp, u64 bp, u64, u64);
- 	u16 stack_arg_sp_adjust;
- 	u16 freplace_link_cnt; /* counts freplace links extending this prog */
-+	/*
-+	 * Offsets from the native frame pointer of this JITed program at which
-+	 * its prologue saved the caller's R6..R9, or 0 when that register is not
-+	 * saved. Filled by the JIT; consumed by the exception unwinder.
-+	 */
-+	s16 callee_reg_off[4];
- #ifdef CONFIG_SECURITY
- 	void *security;
- #endif
+@@ -7,6 +7,7 @@
+ #include <uapi/linux/bpf.h>
+ #include <uapi/linux/filter.h>
+ #include <linux/bpf_defs.h>
++#include <linux/bpf_throw.h>
+ 
+ #include <crypto/sha2.h>
+ #include <linux/workqueue.h>
+diff --git a/include/linux/bpf_throw.h b/include/linux/bpf_throw.h
+new file mode 100644
+index 000000000000..57d974458750
+--- /dev/null
++++ b/include/linux/bpf_throw.h
+@@ -0,0 +1,52 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * The interface between the architecture entries of bpf_throw() and the
++ * generic unwinder.
++ */
++#ifndef _LINUX_BPF_THROW_H
++#define _LINUX_BPF_THROW_H
++
++/* The callee-saved registers the unwinder tracks: R6..R9. */
++#define BPF_THROW_NR_CALLEE_SAVED	4
++/* The size of struct bpf_throw_regs, for the entries. */
++#define BPF_THROW_REGS_SIZE		(8 * BPF_THROW_NR_CALLEE_SAVED)
++
++#ifndef __ASSEMBLER__
++#include <linux/build_bug.h>
++#include <linux/types.h>
++
++/*
++ * The callee-saved registers captured at a throw site, indexed like
++ * bpf_prog_aux::callee_reg_off.
++ */
++struct bpf_throw_regs {
++	u64 saved[BPF_THROW_NR_CALLEE_SAVED];
++};
++static_assert(sizeof(struct bpf_throw_regs) == BPF_THROW_REGS_SIZE);
++
++/*
++ * bpf_throw_unwind() never returns: it transfers to a JITed callback, which
++ * returns to the kernel code that called the program. With a shadow call
++ * stack the return address its prologue pushed would never be popped, and the
++ * program's caller would pop it in place of its own. __noscs keeps a static
++ * shadow call stack out of the function. A dynamic one is patched in at boot
++ * in place of the pointer authentication of every function that has it, see
++ * UNWIND_PATCH_PAC_INTO_SCS, so the function has to do without that as well,
++ * which costs it nothing, as it never returns through it; the branch target
++ * identification stays.
++ */
++#if defined(CONFIG_DYNAMIC_SCS) && defined(CONFIG_ARM64_BTI_KERNEL)
++#define __bpf_unwind_entry	__noscs __attribute__((__target__("branch-protection=bti")))
++#elif defined(CONFIG_DYNAMIC_SCS)
++#define __bpf_unwind_entry	__noscs __attribute__((__target__("branch-protection=none")))
++#else
++#define __bpf_unwind_entry	__noscs
++#endif
++
++void bpf_throw_unwind(struct bpf_throw_regs *regs, u64 cookie);
++/* The native entry of bpf_throw(), on an architecture that has one. */
++void bpf_throw_entry(void);
++void *bpf_arch_throw_entry(void);
++#endif /* __ASSEMBLER__ */
++
++#endif /* _LINUX_BPF_THROW_H */
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index f88a1c041a7a..7a25d1cb2c30 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -3930,6 +3930,15 @@ void __weak arch_bpf_stack_walk(bool (*consume_fn)(void *cookie, u64 ip, u64 sp,
+ {
+ }
+ 
++/*
++ * The native entry of bpf_throw(), which captures the BPF register file of
++ * the throw site, or NULL when the architecture calls the kfunc directly.
++ */
++void * __weak bpf_arch_throw_entry(void)
++{
++	return NULL;
++}
++
+ bool __weak bpf_jit_supports_timed_may_goto(void)
+ {
+ 	return false;
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 937a0d7d6839..de31fdd18411 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -3460,7 +3460,13 @@ static bool bpf_stack_walker(void *cookie, u64 ip, u64 sp, u64 bp)
+ 	return false;
+ }
+ 
+-__bpf_kfunc void bpf_throw(u64 cookie)
++/*
++ * Unwind the stack to the exception callback of the main program. @regs holds
++ * the callee-saved registers of the throw site, or is NULL when the
++ * architecture has no native entry and the kfunc was called directly.
++ */
++__bpf_unwind_entry
++notrace void bpf_throw_unwind(struct bpf_throw_regs *regs, u64 cookie)
+ {
+ 	struct bpf_throw_ctx ctx = {};
+ 
+@@ -3472,8 +3478,8 @@ __bpf_kfunc void bpf_throw(u64 cookie)
+ 	WARN_ON_ONCE(!ctx.cnt);
+ 	/*
+ 	 * Prevent KASAN false positives for CONFIG_KASAN_STACK by unpoisoning
+-	 * deeper stack depths than ctx.sp as we do not return from bpf_throw,
+-	 * which skips compiler generated instrumentation to do the same. Some
++	 * deeper stack depths than ctx.sp as we do not return from here, which
++	 * skips compiler generated instrumentation to do the same. Some
+ 	 * architectures cannot recover sp while unwinding, so fall back to bp.
+ 	 */
+ 	kasan_unpoison_task_stack_below((void *)(long)(ctx.sp ?: ctx.bp));
+@@ -3481,6 +3487,11 @@ __bpf_kfunc void bpf_throw(u64 cookie)
+ 	WARN(1, "A call to BPF exception callback should never return\n");
+ }
+ 
++__bpf_kfunc void bpf_throw(u64 cookie)
++{
++	bpf_throw_unwind(NULL, cookie);
++}
++
+ __bpf_kfunc int bpf_wq_init(struct bpf_wq *wq, void *p__const_map, unsigned int flags)
+ {
+ 	struct bpf_async_kern *async = (struct bpf_async_kern *)wq;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 20b1b9ff574c..c5b4025ee222 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -24434,6 +24434,8 @@ BTF_ID(func, do_exit)
+ BTF_ID(func, do_group_exit)
+ BTF_ID(func, kthread_complete_and_exit)
+ BTF_ID(func, make_task_dead)
++BTF_ID(func, bpf_throw)
++BTF_ID(func, bpf_throw_unwind)
+ BTF_SET_END(noreturn_deny)
+ 
+ static bool can_be_sleepable(struct bpf_prog *prog)
+@@ -24793,6 +24795,11 @@ static int specialize_kfunc(struct bpf_verifier_env *env, struct bpf_kfunc_desc
+ 	} else if (func_id == special_kfunc_list[KF_bpf_arena_free_pages]) {
+ 		if (env->insn_aux_data[insn_idx].non_sleepable)
+ 			addr = (unsigned long)bpf_arena_free_pages_non_sleepable;
++	} else if (func_id == special_kfunc_list[KF_bpf_throw]) {
++		void *entry = bpf_arch_throw_entry();
++
++		if (entry)
++			addr = (unsigned long)entry;
+ 	}
+ 	desc->addr = addr;
+ 	return 0;
 -- 
 2.53.0
 
