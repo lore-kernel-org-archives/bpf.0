@@ -1,61 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794402478;
-	b=nEjF9QmwGGtmTFhb41599tBiOhKfF78kVdt2viFSV2jpcCkL4uljxmgFDTtBXB3yZgYk
-	 xK29JJPQGMbOUEiLtJmrsHWTjp9PvDJbnU+ZuaRYGunFxXXAFpHd7q7aZFWk5tHkjA/MM
-	 G1wsAPwWufESQKU64NIR8kcMSb0w1zcPsps0/IOCnfAsmlsuTu2Uel9UUKjdD57DQMiWL
-	 Udi+uYC8gh2SN3zyNiN3/zZygJVDVy1OUfjkSnzaTNClyTzgj/liAgrebhvUA5V8BHEpK
-	 2l3nHLnysRh8fK5ZjYXyoYWeYPaQ8Tn1BkVhRD4Aykya6BAuxefEUE48ybR+vuUP4sQ==
+	t=1794403245;
+	b=wmGuMKyxxCa+bzNUk0CRoEJn45NVYFSVG41skh8enPFNc3uKL76G4X3Pd9K3AymF+5Yc
+	 1Av2QxMU4z6ahdYtOZgq0iRUrHk/AfGmoO0fXFfRUki2yhUxifLG2udetGtmdeFa1GMoV
+	 +MdJukScCvKalADhLIHc144iLVOm9mcqZqGaLS9UhBsULB/BObEjm7Q7Lo70bouUjq5+A
+	 3HAJNaUXj7tRxwPdmtkpTubcIKaHSm4pnCQaRhZRfrMrvYnY4dbqZxf3VNdg/NOzaRatX
+	 RwzTcHEWhl5JNL4vrRKZQjy0oOX22ZNYe60wJeYjibjJ9VPZ8H5vgYKJfZjR4G9ufWQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794402478;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794403245;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=Cx4bEGE3gLurh951cdWY2VyzPEOPwrScYT+cKpERr+E=;
-	b=b8LfJU37QiS8VYKIUccL1DNcjrV/vI7iKxjjmYCyg0ar4CDpfGOnq5HGD9ygcEO8NDBl
-	 HU9c07UoN8quuCnk5r1el4iVNktlOgDD2wuEIIyaaxaK50xbdAVLA0ro4N7kD63XVxggt
-	 EjCCLMONA8qnW859CYHxllGfhfpblkYMua+eHzMV+jzVsIkVaZ+uCoyS/Kz1DG8JAI2oE
-	 GUpeD4t4PQzJxm+qepgfjStqfUE/hGGakZPo4pLjtDO6WYga1QV6rSEG+7JNZAbJFyR9+
-	 cDbe3zdedY+GJwWGLDg7nFmOk98fFMWcfyjuhsQ92kFLeAKNrnx8sx+eQaNAN3xCeZA==
+	bh=lchSdp2ofnPIGPoe0PPFIPAPR9i120roMsUHERsyqZA=;
+	b=1jcfYE+bIR1C9ZhPrpuTfEp3x+3GfOnoyXdJJG3o0HJfeXBa2TnIuAaFp9x4tuAw6sGr
+	 rGt0BfySS7JsVGluEHFMI2loGp1Au8WmiIMxdBl0fWBB4m8n/hdiX17eu2TedjJ7saBUn
+	 ohwBNQjoVH9lIHjfY3g61s9lGaWrDULpKNE2BgFx60FD0btPcg6J4KhSf05/j6Lx/8f5X
+	 7h40IB0+y2SFlX9KQSlrNrBIH5O8nyaieZ78xhZE+yb46g1heCcxKpWn3KtWbmYRF9SrA
+	 DPm8qyWOLu2RJ8dnjz51/+G17hsozIDb6x49O3MwTFUytOvRncfdZFHGFI9e748GH3w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XwEFlMry;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IzSINzS+;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EDDD606A321;
-	Wed, 11 Nov 2026 13:07:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32928606A321
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 13:20:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XwEFlMry
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28C6E1F00A05;
-	Wed, 11 Nov 2026 13:07:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IzSINzS+
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A254A1F00A05;
+	Wed, 11 Nov 2026 13:20:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794402477;
-	bh=Cx4bEGE3gLurh951cdWY2VyzPEOPwrScYT+cKpERr+E=;
+	s=k20260515; t=1794403244;
+	bh=lchSdp2ofnPIGPoe0PPFIPAPR9i120roMsUHERsyqZA=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=XwEFlMrysLV05W3S0EtNk4glp5ayE1+1MQaKK71Z7SPQvUI1gNlRgwfMVCIYWMR5N
-	 hkY7uwrWYosFXHITwR+kEiv2ICNn5fHpzZeDGinGmCW8TqPhxQhh852d1qFJQ+vwzI
-	 eBVAljC2pcU2oT97IQ4//IKsxoSXL13qUAo6Egf9cLvpOEdQLXCKPKrTH040U+Wu2M
-	 8OMgXPjwOrk6Pw2dp0ypGNg7EO5nUlhc/OX8Ma7JCb1ucGbHqEXMql3gZO27VVUQFk
-	 UYYXrNkWxp7UN74VCkpEJZCIaW0Sd0p2gAu6nWT7Ha0zHzPSYCHEYHJPWrvHVf7OtV
-	 CGTWXrx7dZG3w==
-Message-ID: <sashiko-outbox-209043@kernel.org>
+	b=IzSINzS+rH9PWTER2fQsL5MWDRA4lGyg8REmqJQ+xxexmpP2MoECVhW4+S+A9exPH
+	 xqlYq3bH/USoaI1E8t6xdZ5DCFDJTaIvpOWbpbLmBvr+3HWFWPdPiEeWQGCh0/LseQ
+	 YRgDTwrUXhB39IhPKOmlLN0qrYWUewc+QP4Xw10shuP0oxoKNQnfB1yC1dPQjeVvTn
+	 ee1NTr3M/YrCu0QjdLoGssvMMw53Boq51WR0nzE4A13IGqhnKZPkGYMHU40j8Wttc0
+	 tAGaOIT3trjtjk+z3euT2Ok/gaNQzO/Dk1SRh9phjdCRohiifWHdk2DPND03X23TDC
+	 P4/dPFeSjQJ2Q==
+Message-ID: <sashiko-outbox-209058@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 next 09/13] kallsyms: Add a kernel parameter to
- change the kallsyms_markers[] density
+Subject: Re: [RFC PATCH net-next 01/12] net: add an exclusive TCP receive
+ claim
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "David Laight" <david.laight.linux@gmail.com>, "Petr Mladek" <pmladek@suse.com>, "Kees
- Cook" <kees@kernel.org>, linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, "Jim
- Cromie" <jim.cromie@gmail.com>, "Lorenzo Stoakes" <ljs@kernel.org>
-Cc: "Luis Chamberlain" <mcgrof@kernel.org>, "Andrey Grodzovsky" <andrey.grodzovsky@crowdstrike.com>, "Steven
- Rostedt" <rostedt@goodmis.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Samuel
- Wu" <wusamuel@google.com>, nathan@kernel.org, nsc@kernel.org
-In-Reply-To: <20261111115911.1142000-10-david.laight.linux@gmail.com>
-References: <20261111115911.1142000-1-david.laight.linux@gmail.com>
- <20261111115911.1142000-10-david.laight.linux@gmail.com>
+To: "Alex Markuze" <amarkuze@redhat.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261110132006.3280986-2-amarkuze@redhat.com>
+References: <20261110132006.3280986-1-amarkuze@redhat.com>
+ <20261110132006.3280986-2-amarkuze@redhat.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 11 Nov 2026 13:07:56 +0000
+Date: Wed, 11 Nov 2026 13:20:44 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -65,53 +61,116 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [High] kallsyms: wrong markers_cnt rounding in write_src() overflows
-  or leaks heap
+Thank you for your contribution! Sashiko AI review found 2 potential
+issues to consider:
+- [Medium] tcp: returning -EBUSY in tcp_disconnect() breaks internal
+  callers
+- [Medium] net: missing sock_rx_owned() checks in kcm_attach() and
+  ovpn_tcp_socket_attach()
 --
 
-commit 03c7dad0d75ad1647bb5f932cd21410fa5140c26
-Author: David Laight <david.laight.linux@gmail.com>
+commit db5306ce28288ea69fe78b0895ec7be46b42bf0b
+Author: Alex Markuze <amarkuze@redhat.com>
 
-kallsyms: Add a kernel parameter to change the kallsyms_markers[] density
+net: add an exclusive TCP receive claim
 
-This commit adds CONFIG_KALLSYMS_MARKER_SHIFT and a --marker-shift option
-to scripts/kallsyms so the interval between kallsyms_markers[] entries is
-configurable rather than fixed at 256 symbols.
+This commit adds an optional sk_rx_owner pointer to struct sock so a
+tcp_read_sock() consumer can claim exclusive access to a TCP socket's
+receive sequence and reject competing readers or operations that reset the
+receive stream.
 
-> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-> index 930ec27a53c06..c27aaabccd1b0 100644
-> --- a/scripts/kallsyms.c
-> +++ b/scripts/kallsyms.c
+> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+> index df385a5a961e8..5c753bcb808c5 100644
+> --- a/net/core/skmsg.c
+> +++ b/net/core/skmsg.c
+> @@ -754,6 +754,10 @@ struct sk_psock *sk_psock_init(struct sock *sk, int =
+node)
+> =20
+>  	write_lock_bh(&sk->sk_callback_lock);
+> =20
+> +	if (sock_rx_owned(sk)) {
+> +		psock =3D ERR_PTR(-EBUSY);
+> +		goto out;
+> +	}
+>  	if (sk_is_inet(sk) && inet_csk_has_ulp(sk)) {
+>  		psock =3D ERR_PTR(-EINVAL);
+>  		goto out;
+
+[Severity: Medium]
+Should kcm_attach() and ovpn_tcp_socket_attach() also check
+sock_rx_owned()?
+
+Like sk_psock_init(), both attach to a TCP socket by checking only
+sk->sk_user_data, which remains NULL when sk_rx_owner is set.  Attaching
+via kcm_attach() installs a strparser and replaces sk->sk_state_change
+with psock_state_change(), which sets sk->sk_err =3D EPIPE on a normal peer
+FIN and causes the receive owner to fail with -EPIPE instead of clean EOF.
+Attaching via ovpn_tcp_socket_attach() replaces sk->sk_prot and
+sk->sk_socket->ops with ovpn_tcp_recvmsg(), bypassing the sock_rx_owned()
+checks.
+
+> diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
+> index 7677b0343abd4..54c30a59bbce4 100644
+> --- a/net/ipv4/af_inet.c
+> +++ b/net/ipv4/af_inet.c
+> @@ -649,6 +649,8 @@ int __inet_stream_connect(struct socket *sock, struct=
+ sockaddr_unsized *uaddr,
+>  			return -EINVAL;
+> =20
+>  		if (uaddr->sa_family =3D=3D AF_UNSPEC) {
+> +			if (sock_rx_owned(sk))
+> +				return -EBUSY;
+>  			sk->sk_disconnects++;
+>  			err =3D sk->sk_prot->disconnect(sk, flags);
+>  			sock->state =3D err ? SS_DISCONNECTING : SS_UNCONNECTED;
+> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+> index b9de7c302ba83..6de6ce153fda1 100644
+> --- a/net/ipv4/tcp.c
+> +++ b/net/ipv4/tcp.c
 
 [ ... ]
 
-> @@ -441,8 +443,8 @@ static void write_src(void)
->  	stamp("write token table");
+> @@ -3374,6 +3389,9 @@ int tcp_disconnect(struct sock *sk, int flags)
+>  	struct request_sock *req;
+>  	u32 seq;
 > =20
->  	/* table of offset markers, that give the offset in the compressed stre=
-am
-> -	 * every 256 symbols */
-> -	markers_cnt =3D (table_cnt + 255) / 256;
-> +	 * every (1 << marker_shift) (typically 64 or 256) symbols */
-> +	markers_cnt =3D (table_cnt + 255) >> marker_shift;
->  	markers =3D xmalloc(sizeof(*markers) * markers_cnt);
+> +	if (sock_rx_owned(sk))
+> +		return -EBUSY;
+> +
+>  	if (old_state !=3D TCP_CLOSE)
+>  		tcp_set_state(sk, TCP_CLOSE);
+> =20
 
-[Severity: High]
-Should markers_cnt round up using (1u << marker_shift) - 1 instead of
-255?
+[Severity: Medium]
+Does returning -EBUSY from tcp_disconnect() break internal callers of
+sk->sk_prot->disconnect()?
 
-The loop below populates markers[i >> marker_shift] up to index
-(table_cnt - 1) >> marker_shift.  With 255 still hardcoded,
-marker_shift > 8 can under-allocate markers[] by one entry, overflowing
-the xmalloc() buffer in write_src() and omitting the final entry from
-kallsyms_markers[] so that get_symbol_offset() and get_name_address()
-read past the end of kallsyms_markers[] at runtime.  Conversely,
-marker_shift < 8 (including the new default of 6) over-allocates
-markers_cnt and writes uninitialized heap memory from xmalloc() into the
-generated kallsyms_markers[] table.
+__inet_stream_connect() already rejects connect(AF_UNSPEC) above before
+calling sk->sk_prot->disconnect().  Other callers expect tcp_disconnect()
+to succeed unconditionally:
+
+net/ipv4/af_inet.c:__inet_stream_connect() {
+    ...
+sock_error:
+	err =3D sock_error(sk) ? : -ECONNABORTED;
+	sock->state =3D SS_UNCONNECTED;
+	sk->sk_disconnects++;
+	if (sk->sk_prot->disconnect(sk, flags))
+		sock->state =3D SS_DISCONNECTING;
+	goto out;
+}
+
+When a socket connects via non-blocking connect(), sock->state stays
+SS_CONNECTING after the handshake reaches TCP_ESTABLISHED.  If a receive
+owner is attached and the connection is then closed by a peer RST or
+timeout (moving sk->sk_state to TCP_CLOSE while sk_rx_owner is still set),
+a subsequent connect() jumps to sock_error:, where disconnect() returns
+-EBUSY without cleaning up the socket and leaves sock->state permanently
+wedged in SS_DISCONNECTING even after the owner detaches.
+
+__tcp_close() also ignores the return value of sk->sk_prot->disconnect(sk,
+0) on a zero-linger close and assumes it moves sk->sk_state to TCP_CLOSE.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261111115911.1142=
-000-1-david.laight.linux@gmail.com?part=3D9
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261110132006.3280=
+986-1-amarkuze@redhat.com?part=3D1
