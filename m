@@ -1,57 +1,77 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794403247;
-	b=K+IDv29hakDmsHTDQAsYhv2mgTDPmofwXZ/c7RhqnQjCF4BPxJatytZ88njK/TgQ/kfv
-	 gdm7E96F8lrKL2ivsikHVxaLKpqPWyipJlH9905jqzS2bgQ6BC3n3SxM4mmt0FLRYOETw
-	 6AJ7tjl01ig5QLep4Mj0ELqdW8FtxffWRJ7Xn8+aZ0vDhJMZEq4HF6jWbaSHdayPsCG7D
-	 gBGJADpqMwK1Ze5Pya3ALKqE49X//uTf5mnVEQzb3nWR9rwU60efJVY1j/8DD5JED1djx
-	 04w8/Uocj/aPzPE8qQ8vfbKfcO8u7c9fXekmmRhNTRoEf8A7w2pvUVs6NOEwWgZYXTA==
+	t=1794403675;
+	b=MHUpu2dPnJTpe3pFhfaexDAF/xZgpBk77PH1fNmIepvvkKYhYk4W1dAjDY/mbZly5ov1
+	 TsTtDOfgDvMFQSxjM6+oRQtAlG3o7OVQ/pcCYiISoQK+mfQ1JvpUVCb3ooeyPriqbbE9q
+	 iTrcpHEiAv7c6LGKkrOTzqbwTzxWCBoxSExVV8S8gRggA7KaTLjR1CwhNFNG+cJ5FUyyP
+	 L0FHsF6s6AnhZWRxC7s3e3sIVuGGX7eL44QU91WHQGos/zhPBA3IDmAevoSGf6X0ORuQZ
+	 mPIhjyiEJ45fvzn8TrFX03Bwj557y02FnSZe/eLtN2zfjKci+zaarGqMzhZDr4D7/CA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794403247;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=PsTusISIfkLb4YmiFCWu5Ncgbjr2BmauNQT+ft6mVr8=;
-	b=wNiBU0b0/J2fiL+oMhq7P5ZHhP6JgaPskAWu+ef9z4RWpASyqwTwawVpG2DycdF83ndu
-	 Mul5pTyAOypbjY/Pp6v555TybG9PzO4m68QOZFof4DA4wq9B7aEa/O4kSiD6PeAnQNg9o
-	 wrcehRzcZr5Dq7vqoYxVYh3LKDYOFpG+inrlOYo5YIFxei4Rp7wbMuSRY1RyfMq6P40kl
-	 IPn8+gYs61JwGxgoC4JyakZVyVfLpDgFXKhWsqi1WGy0hy1HoDSF3naqvuZwkvEfby0Fx
-	 y+C/zc4/3iuslpaUq0FEq+22ykmGhIk5/NE466la6LTZE7dE6n3CYkpqFcu4cJSq3ug==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794403675;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
+	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=5TobANsfNbQPE7bHGqRUO1+IBRipYYGScGTtUnijg5Y=;
+	b=t1rdQ2P5X5f+rf1hlU4xu+mWkN4QUQXQH8jftQrpkzpgyLyEZC9BF34PuAyjyRGViA2s
+	 OFqhcO+IZ/NjKq0LuUpC57dwyGoaFwMXceSp0dTxJ4tpuajomjvac12mpUHD0wrmeTM4b
+	 7HI2cPPPpxsVYBoEB55+rbl/rV1YFCPVf0N0PVpM50wORljxhEJ48DYg50ttdURIXKhyD
+	 WSkjWrQgDnis2nnFRR8oNt0prqdS0iTAHzP3K6gOie1wt4njZ+m+wJPzm3JXD4WQaa9ee
+	 wEo5Zu6VLwVPBaB3IprQDS4mBHx+w8lv9y6ePFcw0/qVFWacT/LzJcbt2EE6Z7PxuBQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FTKw4bDt;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NEdkPhkE;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BDAB606A339
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 13:20:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D8E2606A31C;
+	Wed, 11 Nov 2026 13:27:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FTKw4bDt
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38CDD1F00A05;
-	Wed, 11 Nov 2026 13:20:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NEdkPhkE
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6368F1F00A05;
+	Wed, 11 Nov 2026 13:27:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794403247;
-	bh=PsTusISIfkLb4YmiFCWu5Ncgbjr2BmauNQT+ft6mVr8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=FTKw4bDtImPyC+DoL0/8z5p7nyp5j04S1Rs8dhH/oYNTMEfkpqb6yim535ov+sSKj
-	 zvifzbY7tCdvQ3al4z15ywf9VZpZdbq96mfdiDdkAYBE1qpXSZH1wYNFKu08T5LR8k
-	 GFZXPDgdo6H1m64Na++JbkhkObFisnyiPh7Icy5Y/sEO/Gn52ERA3OkTKQLhmimVlZ
-	 j112KjC/yjkR+C2GV37FRtzN4FhrafFnWC2RQyoWob9LRZA0X4RyBj119DpH5j13Bu
-	 HXOQqFsfGUGYf/flInX1tOwhsSunB+nrQYG0AffADpMzMummQucTgby40guZuVO67w
-	 gndAfRGpU71sQ==
-Message-ID: <sashiko-outbox-209067@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH net-next 10/12] io_uring/opaque: add
- IORING_OPAQUE_CREATE
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alex Markuze" <amarkuze@redhat.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261110132006.3280986-11-amarkuze@redhat.com>
-References: <20261110132006.3280986-1-amarkuze@redhat.com>
- <20261110132006.3280986-11-amarkuze@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 11 Nov 2026 13:20:46 +0000
+	s=k20260515; t=1794403675;
+	bh=5TobANsfNbQPE7bHGqRUO1+IBRipYYGScGTtUnijg5Y=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=NEdkPhkEYUeNthxyHswKlC+LjnE3+C8o+r69jP/kWWwPJmNjwUjX+n+MMVxp86fU3
+	 nRjyHg29mW4zKgB9zMfQeSzMvvHdf2fKf94JxaWhgLL2UNMd7ycqXvlqYBgcx4uhXr
+	 YNd/LCvK63k37DwGXK6b0TQDBrIGUpyAfYnNWJlIJlGu+t2gyajY4rYAs18sR8WJ/x
+	 nMUEA4I988zdXET2E/tBIaZpQ2YcNX39oUAB+DEYSftb5YPfi2iJpdFO8M5uQWpbyh
+	 GauZxaMl/9tkIxRUqgCf6TE/U4Jrnhpnix3hcgOcAIFMfnQHTfRsfI3a89cyrPU9+6
+	 LZg4ZR/DaB6zA==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Stanislav Fomichev <sdf.kernel@gmail.com>
+Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jonathan Corbet
+ <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
+ <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>,
+ kernel-team@meta.com, Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard
+ Brouer <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Pavel
+ Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, Andrii
+ Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar
+ Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
+ <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, io-uring@vger.kernel.org,
+ Mina Almasry <almasrymina@google.com>, "Mike Marciniszyn (Meta)"
+ <mike.marciniszyn@gmail.com>, Weiming Shi <bestswngs@gmail.com>, Nikolay
+ Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, Alexander
+ Lobakin <aleksander.lobakin@intel.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Stuart Clark <stuclar@meta.com>
+Subject: Re: [PATCH net-next v1 03/11] xdp: Copy buffers with restricted
+ lifetime
+In-Reply-To: <avOZa6jLnmvYkk2H@devvm16445.scu0.facebook.com>
+References: <20261110102039.1002605-1-bjorn@kernel.org>
+ <20261110102039.1002605-4-bjorn@kernel.org>
+ <avOZa6jLnmvYkk2H@devvm16445.scu0.facebook.com>
+Date: Wed, 11 Nov 2026 05:27:51 -0800
+Message-ID: <87eccra46g.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,132 +80,123 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issues to consider:
-- [Medium] io_uring/opaque: double fetch of sqe->addr3 in
-  io_opaque_prep()
-- [Medium] io_uring/opaque: active memcg kept for user copy in
-  io_opaque_create_build()
---
+Stanislav Fomichev <sdf.kernel@gmail.com> writes:
 
-commit 990f7cf758f745b1bd5de4e8984b2d7a6df26c8e
-Author: Alex Markuze <amarkuze@redhat.com>
+> On 11/10, Bj=C3=B6rn T=C3=B6pel wrote:
 
-io_uring/opaque: add IORING_OPAQUE_CREATE
+>> diff --git a/include/net/xdp.h b/include/net/xdp.h
+>> index 07231adfb5f8..1105bb9e3292 100644
+>> --- a/include/net/xdp.h
+>> +++ b/include/net/xdp.h
+>> @@ -81,6 +81,16 @@ enum xdp_buff_flags {
+>>  	 * XDP program is not attached.
+>>  	 */
+>>  	XDP_FLAGS_FRAGS_UNREADABLE	=3D BIT(2),
+>> +	/* Internal: the head netmem and the shared info are in &xdp_buff.ext.
+>> +	 * Not copied to xdp_frames or skbs.
+>> +	 */
+>> +	XDP_FLAGS_EXT			=3D BIT(3),
+>> +};
+>> +
+>> +/* For a head buffer that cannot hold kernel data, see xdp_init_buff_ne=
+tmem() */
+>> +struct xdp_buff_ext {
+>> +	netmem_ref netmem;
+>
+> nit: netmem -> head ? and the same for xdp_init_buff_netmem netmem arg?
 
-This commit adds the IORING_OPAQUE_CREATE operation to IORING_OP_OPAQUE_OBJ,
-allowing applications to construct immutable opaque objects synchronously f=
-rom
-userspace memory.
+Yup, will fix.
 
-> diff --git a/io_uring/opaque.c b/io_uring/opaque.c
-> index 4610e212a8005..78ae19a6ad82f 100644
-> --- a/io_uring/opaque.c
-> +++ b/io_uring/opaque.c
-> @@ -1884,7 +1884,6 @@ int io_opaque_prep(struct io_kiocb *req, const stru=
-ct io_uring_sqe *sqe)
->  	    READ_ONCE(sqe->buf_index) || READ_ONCE(sqe->__pad2[0]) ||
->  	    cmd > IORING_OPAQUE_AVAILABLE ||
->  	    cmd =3D=3D IORING_OPAQUE_COMPACT || cmd =3D=3D IORING_OPAQUE_SET_PO=
-LICY ||
-> -	    cmd =3D=3D IORING_OPAQUE_CREATE ||
->  	    (req->flags & (REQ_F_CQE_SKIP | REQ_F_FIXED_FILE)))
->  		return -EINVAL;
->  	op =3D io_opaque_req_alloc(req, store);
-> @@ -1899,6 +1898,21 @@ int io_opaque_prep(struct io_kiocb *req, const str=
-uct io_uring_sqe *sqe)
->  	op->offset =3D READ_ONCE(sqe->off);
->  	op->length =3D READ_ONCE(sqe->len);
->  	op->addr =3D u64_to_user_ptr(READ_ONCE(sqe->addr3));
-> +	if (cmd =3D=3D IORING_OPAQUE_CREATE) {
-> +		u64 pointer =3D READ_ONCE(sqe->addr3);
-> +
-> +		if (op->handle || op->offset || !op->length ||
-> +		    op->length > INT_MAX || !pointer)
-> +			return -EINVAL;
-> +		if (op->length > store->config.max_object_size ||
-> +		    ALIGN((u64)op->length, PAGE_SIZE) > io_opaque_rx_limit(store))
-> +			return -EMSGSIZE;
-> +		if (check_add_overflow(pointer, (u64)op->length, &end) ||
-> +		    pointer > ULONG_MAX || end > ULONG_MAX ||
-> +		    !access_ok(op->addr, op->length))
-> +			return -EFAULT;
-> +		return 0;
-> +	}
+>> @@ -138,7 +153,7 @@ static __always_inline void xdp_buff_set_frag_unread=
+able(struct xdp_buff *xdp)
+>>=20=20
+>>  static __always_inline u32 xdp_buff_get_skb_flags(const struct xdp_buff=
+ *xdp)
+>>  {
+>> -	return xdp->flags;
+>> +	return xdp->flags & ~XDP_FLAGS_EXT;
+>
+> The only consumer is xdp_update_skb_frags_info, so probably not worth
+> filtering out XDP_FLAGS_EXT here? Or is it for
+> xdp_update_frame_from_buff? Can we explicitly clear it at the caller?=20
 
-[Severity: Medium]
-Does reading sqe->addr3 twice from the shared submission ring allow op->addr
-and pointer to diverge if userspace modifies the SQE concurrently?
+It was for xdp_update_frame_from_buff(), but looking closer EXT never
+gets there...
 
-The non-NULL, overflow, and 32-bit truncation checks validate the second re=
-ad
-in pointer, whereas access_ok() and the later copy_from_user() in
-io_opaque_create_build() use op->addr from the first read. Reading sqe->add=
-r3
-once into a local u64 and deriving op->addr from it would keep the checks a=
-nd
-copy consistent.
+I'll drop the mask. Thanks!
 
-> @@ -2046,12 +2060,110 @@ static int io_opaque_stat(struct io_opaque_req *=
-op)
->  	return io_opaque_stat_copy(op, &stat, sizeof(stat));
->  }
-> =20
-> +/* Construction is synchronous under the ring lock, like READ_OBJECT cop=
-ies. */
-> +static int io_opaque_create_build(struct io_opaque_req *op)
-> +{
-> +	struct io_opaque_store *store =3D op->store;
-> +	struct mem_cgroup *old =3D set_active_memcg(store->memcg);
-> +	u64 done =3D 0;
-> +	int ret =3D 0;
-> +
-> +	while (done < op->length) {
-> +		u64 pages_left =3D DIV_ROUND_UP_ULL(op->length - done, PAGE_SIZE);
-> +		struct io_opaque_extent *extent;
-> +		unsigned int order;
-> +		struct page *page;
-> +		u32 chunk, written =3D 0;
-> +
-> +		page =3D io_opaque_dest_page(store, pages_left, &order);
-> +		if (!page) {
-> +			ret =3D -ENOMEM;
-> +			goto out;
-> +		}
-> +		chunk =3D min_t(u64, op->length - done, PAGE_SIZE << order);
-> +		extent =3D io_opaque_extent_new(store, page, 0, chunk, done, true);
-> +		if (IS_ERR(extent)) {
-> +			put_page(page);
-> +			ret =3D PTR_ERR(extent);
-> +			goto out;
-> +		}
-> +		op->create_reserved -=3D page_size(page);
-> +		extent->backing->copied =3D true;
-> +		list_add_tail(&extent->list, &op->data->extents);
-> +		while (written < chunk) {
-> +			u32 bytes =3D min_t(u32, chunk - written, PAGE_SIZE);
-> +			unsigned long left;
-> +			void *mapped;
-> +
-> +			mapped =3D kmap_local_page(page + (written >> PAGE_SHIFT));
-> +			left =3D copy_from_user(mapped, op->addr + done + written, bytes);
-> +			kunmap_local(mapped);
+>> diff --git a/net/core/devmem.c b/net/core/devmem.c
+>> index 8f190b574beb..dea4a4a17e86 100644
+>> --- a/net/core/devmem.c
+>> +++ b/net/core/devmem.c
+>> @@ -698,5 +698,5 @@ static const struct memory_provider_ops dmabuf_devme=
+m_ops =3D {
+>>  	.release_netmem		=3D mp_dmabuf_devmem_release_page,
+>>  	.nl_fill		=3D mp_dmabuf_devmem_nl_fill,
+>>  	.uninstall		=3D mp_dmabuf_devmem_uninstall,
+>> -	.caps			=3D MP_CAP_FRAG,
+>> +	.caps			=3D MP_CAP_FRAG | MP_CAP_RETAIN,
+>
+> Not sure I understand this part, can you explain?
+> These are MP_CAP_RETAIN because they are unreadable?
 
-[Severity: Medium]
-Does keeping store->memcg active across copy_from_user() charge the caller's
-user page faults to store->memcg?
+No, RETAIN is about lifetime: the stack may hold page pool references
+after the RX poll, e.g. skbs on a TCP receive queue. That's how devmem
+and zcrx work; without it the stack would try to copy them, and they'd
+trip the DEBUG_NET check in skb_add_rx_frag_netmem().
 
-If copy_from_user() faults on unpopulated user pages when store->memcg
-differs from the calling task's memcg (for instance on an imported store),
-filemap page-cache allocations and __GFP_ACCOUNT fault allocations such as
-user page tables are charged to active_memcg() (store->memcg) rather than t=
-he
-faulting task's cgroup, and remain charged after the opaque object is freed.
-Scoping set_active_memcg(store->memcg) around the kernel allocations (as
-io_opaque_frame_import() does) would avoid charging user faults to the stor=
-e.
+A provider without RETAIN gets copied, so it must be readable. I'll try
+to make that more clear in the kdoc, and probably refuse a provider that
+is neither.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261110132006.3280=
-986-1-amarkuze@redhat.com?part=3D10
+>> diff --git a/net/core/xdp.c b/net/core/xdp.c
+>> index 1d679e8fd649..0cf46d492d91 100644
+>> --- a/net/core/xdp.c
+>> +++ b/net/core/xdp.c
+>> @@ -23,6 +23,8 @@
+>>  #include <trace/events/xdp.h>
+>>  #include <net/xdp_sock_drv.h>
+>>=20=20
+>> +#include "dev.h"
+>> +
+>>  #define REG_STATE_NEW		0x0
+>>  #define REG_STATE_REGISTERED	0x1
+>>  #define REG_STATE_UNREGISTERED	0x2
+>> @@ -559,10 +561,41 @@ void xdp_return_buff(struct xdp_buff *xdp)
+>>  			     xdp->rxq->mem.type, true, xdp);
+>>=20=20
+>>  out:
+>> -	__xdp_return(virt_to_netmem(xdp->data), xdp->rxq->mem.type, true, xdp);
+>> +	__xdp_return(xdp_buff_head_netmem(xdp), xdp->rxq->mem.type, true, xdp);
+>>  }
+>>  EXPORT_SYMBOL_GPL(xdp_return_buff);
+>>=20=20
+>> +bool __xdp_buff_needs_copy(const struct xdp_buff *xdp)
+>> +{
+>> +	const struct skb_shared_info *sinfo;
+>> +	u32 i;
+>> +
+>> +	/* Provider buffers come only from page pool queues */
+>> +	if (xdp->rxq->mem.type !=3D MEM_TYPE_PAGE_POOL)
+>> +		return false;
+>> +	if (!netmem_can_retain(xdp_buff_head_netmem(xdp)))
+>> +		return true;
+>> +	if (likely(!xdp_buff_has_frags(xdp)))
+>> +		return false;
+>> +
+>> +	sinfo =3D xdp_get_shared_info_from_buff(xdp);
+>> +	for (i =3D 0; i < sinfo->nr_frags; i++) {
+>> +		if (!netmem_can_retain(skb_frag_netmem(&sinfo->frags[i])))
+>> +			return true;
+>
+> Do we want/need to go that deep? Can we have a skb-like assumptions that
+> mixing retain and non-retain in the same shinfo is not allowed?
+
+Yep, let's make that the rule. I'll remove the deep checks.
+
+
+Bj=C3=B6rn
