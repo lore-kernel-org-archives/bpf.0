@@ -1,79 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794425992;
-	b=3q3Z3FHqed6Qvre0bX/h7ei6xPvdIHljBtaO+JMdasHwHwJf1ePhkl7RWzhwCfcp1KFF
-	 V2jvQ6slYc8yT2DHWqikj4UWQgsftLf3iTt+Ke0giRfEYy8cC7+0muE39TfjrH9eHZLhq
-	 Ntbv784pExZPdI1kYXa0l6ORhO4c+rWbQkwPIF6hNcIkg2sftdu0Psc3fQN3+5sL5/5df
-	 4/ApOmmbM9s7dOV481QFPc3+YiLeliT47ZUFtPK4ZX966wDTM8qoWUA+O78MFGJDMg/sG
-	 BY+tSpRlRuXzmD+AErI/PcZiVku79rmiO/Kx10JzDCKmMSKRpCpiK/NJ6Ha/KITVR1g==
+	t=1794425993;
+	b=tZsQH83TciTffkU6sALC9ljov20LcgBEjgRE/n2lU4BSV/ii138XS8SA2fIjcsDIi0/h
+	 I7F8al8USQYF6fewwMdULDKWZltiOCn5T3iHRfj7KqHmrohZqC1uDitKg2pUUAazGhYUr
+	 GVsD3yjFjpo1Ac6NFcpA2Nd0rU84fakwBvKjDW9Wg/0dfL6LaOZ91gSZKz6kiwYI5mv5e
+	 pgz7VYxrQRH0vJ9pFF4wTOWojUbslpYbG/VotG4AwkfIrEx04GMZD1nyZllX3cqMsvTZf
+	 pRNgdqa90A8il5QPspv6BtrO1OOWfbm/4m7lix61wuBQ/SXWGKIGaL4BliMOmiJXl4w==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794425992;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794425993;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=Td0ItVeZwbTzLmxf/12FHVAo66JNI+ERH37EJuCLhYg=;
-	b=aYHgymL3LiLql8NHJQ1eLfj9M8/5PEaOfIuT7E5Rz47HoQyhpuxdjRakRBb11CWLLo8c
-	 tce1pxphSG+k7POEZjC5oM/XsXrpyazc61qk+jgL4RZjP5Wy7+AG7KSUEf8ENhQo4C9zx
-	 eCqMvv0gDYaUWsnrCZ6UigS98jrvTTvq1YkcafY/U8wWR59wUav8dDOiaJu+TLGWtgD9w
-	 0KLRFcPYLC8S34FKkiZTrJsh6Z5RzeERynf0e4HrzEZvv5mipZqWIb28BVJj/zZEFDhEB
-	 y21xerz2UkgC3BhsEtDWjhpyNJ36nfW1UY8wvKmp8h68i8aZUZNJL3L+M6SrzOB1V2w==
+	bh=ijzHD4xJZ8Z5LuWRGTJbu77iH/ZNmgkdR3asZcVvThY=;
+	b=GAWkfgaV0/Pd2NJK4Qbb20EIsg06mxdIQp8vMkrQagO4+TjxK2QcG8C4DCeVSfvn2mfu
+	 SbDPAEjGkFz287uox4Rq/NlljFoq5dUgO65GJK2yMAW0P8htzrTx8cX1HSQQEPiZcKc7B
+	 tWpuJQJyhDfjDEbZ2yeovRhk2KWbnTpWjgZKjn1nGveX4KDUNq4EDCaaklxakfQiDt7Q/
+	 LTYO4ZAzYSzf4BsgOuhW05zbuoNl0gNz2/O1TOA6KUFlsZYigb+PDVMkN5wzhhHb0DqyI
+	 sfhk1MM1v8zIoRprrHiEDGo+YVWuIyqsfIToRKZ/2Llo7PmnP1Wb6g/JEGPUB0PKz4w==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="lX4hg/eR";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=V8mPTulY;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8A99606A33B;
-	Wed, 11 Nov 2026 19:39:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A692606A885;
+	Wed, 11 Nov 2026 19:39:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lX4hg/eR
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=V8mPTulY
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1794425992;
-	b=Jo3BoDv71M35CllZtxeduW/y/qBFwEa8dKWmEzSoL1z3BktSBkj4j7zpbmIiBCKQXDZI
-	 lpqkUTR0W0z3x/k4Wp48YdlglNzcyrNJxacbMHd49pBPk1REoV3LpTC1heSuUKIIFXf8N
-	 ie8yBwjHbnAM3BBtKH+tmQe/DR8ZYK0qqFnsQjMlgO6wB8FAL6YHjA6T7qOAZP3EtCwjo
-	 y46VC/tcQazKH02T4qJluPZjOQ5qfPegq/iWBR1zOjPUxnMXK3KmuiBbJFArwXYnORZqD
-	 k3N6J+0iRwhlRd8spriDSy4btAINmrlz6uttiHJVD4BuhoOGZLsRYbZ1qEAgYOaR+jg==
+	t=1794425993;
+	b=WQRSDCINIcHrBJCVJzwiCHuavJES61kP8KgY6sz2Mmk4GrTaATsvzqymleByS/GmfQjC
+	 Z8sr+UDMQx5z2Gd1Yao55UXUajHJK9NsHbadM4ll+MZMk4TSL2wqAfZ5p2VpINGdYMsZp
+	 dMxz7wFiwLroc5Y9vUMKwgKwuRbyKMGayOyCibTStWik8dMScz6MLutPunWkj1set+0u6
+	 mg7YBE5RGDoIV3IkgK1Wt0DyC5txf+UuP4wwH9u2scTUamoEN3yzhhx8rY/HWXrObSn1Q
+	 J9GCoOtvnyNsVyi4PBlvycGpxEQ+CMArjPpPPOWPQeuhcEvW8UGWfBXvaw84Pp3aKyA==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794425992;
+	c=relaxed/relaxed; t=1794425993;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=Td0ItVeZwbTzLmxf/12FHVAo66JNI+ERH37EJuCLhYg=;
-	b=lG1vY3v2Q1YvTqVfq2Ngi4IvIWPb3iHijSpEpoIwtV1Kk8UzWJo2eSdxkLknMnjqi3hy
-	 aibbyfl7dJ8pNE5AQM/JwgLgSArsJUfsZvqlx8VEvoB+mMFsPQ9KZ03d0AG1Zg968iKJM
-	 VCEvDT2raq7YJqdIy3crx8iuu/G54cnE4IisKXvWZQsKRR7aVHjoX8ZCw/+k4OFh165m9
-	 qgkxhckTUc6Y2MXesP/dfzxjtbdgJyl+4TwNnzy5E1roNStXUWkmLNxTNUd0xA4IRHyoa
-	 EpuMDfoD2DXsWNDSmagQAOiB3Gw3Zy+O/aUV5BCYyEPneet+hPDAbo5ZIJmAmPRLe7g==
+	bh=ijzHD4xJZ8Z5LuWRGTJbu77iH/ZNmgkdR3asZcVvThY=;
+	b=gVClTJIs0TVLG+pfAcPRGUxIvbKCO7FyyFAjRvb570gxStvWQt/Cz3TKZuQ3Da+/ZfA9
+	 /aejbp9pSyLVOX/tdwT3WmQxrf9cIDSce2RI/95UPZnCM5qSrH/axU3iuoF8hzLiG4m/8
+	 N8UdsiWYF7WDDRKVqPk9PREl/xm7hGSBL0MlIEWmEyu0Pb42MmmlJt3MaeCGQMounMYWW
+	 TZLuXleoLkQkibnWPJbGzztoVI5c/896M7HgHEERfk4tLgHCo6I6lOKyU5ZPSt/IRotzX
+	 wEpF5xauBjgbAzFjSxbo6tkKmufVDclhFd5p1yuOYVQ5LnZHH4yUCdiTc479RpEjmqw==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 29DB01F00A0D;
-	Wed, 11 Nov 2026 19:39:51 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 202281F00A10;
+	Wed, 11 Nov 2026 19:39:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794425992;
-	bh=Td0ItVeZwbTzLmxf/12FHVAo66JNI+ERH37EJuCLhYg=;
+	s=k20260515; t=1794425993;
+	bh=ijzHD4xJZ8Z5LuWRGTJbu77iH/ZNmgkdR3asZcVvThY=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=lX4hg/eRyVKeOILm9gvx7Bif0XMHs5bNWNLoU63C4Miww+9DLSAzwcjgSdrhyebTg
-	 7sI3DJXmC5Pnul13+9t7EcH63TkHEEgEP/T/4nEniicLUDuReCxiXrBfWJK5lEs8Rq
-	 pYFYoQaUbsfIdizoKOkohw0A+IP80SxH487CMSz6FIM9tBf0mG0OiorqxwAGWzReaP
-	 RzDJqvUyJw19+OppkhDGvMIUGH/aG22DqsrHLc85aKlXQ5HJzQL2UtgfZiSFGcaXBe
-	 B+O8GJgxRZpQ3GVPOYRDJwT7vLnHjosZ/CLnNTr1FsS0ha7ckchS3cRJtBmOcb6Baw
-	 rCgj+dNOt+TRA==
+	b=V8mPTulYcrFaKklCLqx7I23cE/Qmr8dxUGmqGpSTKUrZf1D13vu6GarIzV37VQGwb
+	 PVJHQUXGgL+6X9hYKWyXLHUutKoQs3S1uZaETwUgJKrT22mt5UQ230FRVthAgsOUWu
+	 5NoqzLG89blG5ltfxrKJ93O9C+Ik3Z5avqr8NQfjgYPlHNOm6XEOm8xN8RbcopTT/t
+	 +uxPNPZ/UKrM3s1Pl/oewOPP6/RwjwEJSQZ7kI9gSSdOekDEwGbH/GVXsQPP+/VpLj
+	 hIjl9e/axV2JFoPbn7T+nItQViqY7QLEHw4D1g+BAgmqZYhzx08DWKQuqWFr3xzwtY
+	 aDbHp3ykSm50A==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id A9CCA490C2;
-	Wed, 11 Nov 2026 19:39:50 +0000 (UTC)
+	by lkml.kernel.org (Postfix) with ESMTP id 00DF5490CA;
+	Wed, 11 Nov 2026 19:39:51 +0000 (UTC)
 From: Mike Bazov via B4 Relay <devnull+mikeba.sentinelone.com@kernel.org>
-Date: Wed, 11 Nov 2026 21:39:49 +0200
-Subject: [PATCH bpf-next v2 3/5] bpf: Check recursion per task for programs
- on syscall tracepoints
+Date: Wed, 11 Nov 2026 21:39:51 +0200
+Subject: [PATCH bpf-next v2 5/5] selftests/bpf: Test syscall tracepoint
+ programs under preemption
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -84,7 +84,7 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261111-bpf-preempt-v2-r2-v2-3-9d8f6b952ad2@sentinelone.com>
+Message-Id: <20261111-bpf-preempt-v2-r2-v2-5-9d8f6b952ad2@sentinelone.com>
 References: <20261111-bpf-preempt-v2-r2-v2-0-9d8f6b952ad2@sentinelone.com>
 In-Reply-To: <20261111-bpf-preempt-v2-r2-v2-0-9d8f6b952ad2@sentinelone.com>
 To: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
@@ -102,11 +102,11 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
  JP Kobryn <jp.kobryn@linux.dev>, linux-trace-kernel@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Mike Bazov <mikeba@sentinelone.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1794425986; l=1799;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794425986; l=5984;
  i=mikeba@sentinelone.com; s=20261022; h=from:subject:message-id;
- bh=+dOmL4KrsoZoGHMSIZ+zYy2Dw+1c2bQCDaNaqZIz4eA=;
- b=ngIG6k9K+uC7fNwJvhNNFFAP1Zl9aFx8bASTNwTXbce+1J8lGwXGxG46cfCbaib1vgWx79Exj
- xE72nTL1eCtAN9dQwGBYhjy6qK9EFAWpDItR5KxcGI13NbnwahyXCNE
+ bh=tZ3h3zlk5gZewJOcwTZGC4amQ/qD5S2tjhbroNJXdXY=;
+ b=HN1crOzSpxHdzxcK5fDb6DdVngujp0zKQb13Vx/Ms1+8BGezDElI2FaTiIHp2RSDzM+iowa0y
+ kcOR0NlmXZ7Cj/JPKgkSJkYeT0id2Msa8Cn7VdaS97m4Hvx2fPlzN9f
 X-Developer-Key: i=mikeba@sentinelone.com; a=ed25519;
  pk=DBXcQ0qoCkgacRsRwT1JU7oOWpWSYuTyLiXMfNLcP+A=
 X-Endpoint-Received: by B4 Relay for mikeba@sentinelone.com/20261022 with
@@ -117,50 +117,194 @@ Content-Transfer-Encoding: 7bit
 
 From: Mike Bazov <mikeba@sentinelone.com>
 
-Since commit 57918341dd19 ("bpf: Add sleepable support for classic
-tracepoint programs"), classic tracepoint programs on syscall
-tracepoints run before perf disables preemption, through
-trace_call_bpf_faultable() and bpf_prog_run_array_sleepable(). That
-runner still checks recursion with the per-CPU counter, so a task
-preempted inside such a program blocks every other task on the same
-CPU, and their runs are dropped as recursion misses. A sleepable
-program that faults keeps the counter raised for the whole sleep.
+Add subtests for classic tracepoint programs on sys_enter_prctl, which
+run preemptibly:
 
-Use the per-task check from the previous patch. The runner publishes one
-frame for the whole program array, so the program is recorded in it per
-item and cleared before the next one.
+- tp_syscall: the same two-thread scenario as the other subtests.
+- tailcall_tp: a tracepoint dispatcher tail-calls a large-stack handler.
+- tp_dual: one program attached to sys_enter_prctl and to the regular
+  task_rename tracepoint, told apart by their attach cookies. A enters
+  it through the syscall tracepoint, B through task_rename.
 
-Fixes: 57918341dd19 ("bpf: Add sleepable support for classic tracepoint programs")
+Without the per-task check, every subtest counts recursion misses:
+tp_syscall and tailcall_tp drop B's run, and tp_dual drops B's run
+through sys_enter_prctl. Without the private-stack change, tailcall_tp
+and tp_dual corrupt A's stack.
+
 Signed-off-by: Mike Bazov <mikeba@sentinelone.com>
 ---
- include/linux/bpf.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ .../selftests/bpf/prog_tests/trampoline_preempt.c  | 43 ++++++++++++++++++++--
+ .../selftests/bpf/progs/trampoline_preempt.c       | 37 +++++++++++++++++++
+ 2 files changed, 76 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 52e29b374b4a..649ff2950fd6 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -3549,9 +3549,9 @@ bpf_prog_run_array_sleepable(const struct bpf_prog_array *array,
- 			continue;
- 		}
+diff --git a/tools/testing/selftests/bpf/prog_tests/trampoline_preempt.c b/tools/testing/selftests/bpf/prog_tests/trampoline_preempt.c
+index e01a2ba8916a..a8109290e88d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/trampoline_preempt.c
++++ b/tools/testing/selftests/bpf/prog_tests/trampoline_preempt.c
+@@ -25,8 +25,11 @@ enum subtest_kind {
+ 	SUBTEST_RAW_TP_S,
+ 	SUBTEST_TP_BTF,
+ 	SUBTEST_FSESSION,
++	SUBTEST_TP_SYSCALL,
+ 	SUBTEST_TAILCALL_RAW_TP,
++	SUBTEST_TAILCALL_TP,
+ 	SUBTEST_TWO_DISPATCHERS,
++	SUBTEST_TP_DUAL,
+ 	SUBTEST_NESTED_PROG,
+ };
  
--		if (unlikely(!bpf_prog_get_recursion_context(prog))) {
-+		if (unlikely(!bpf_prog_enter_recur_ctx(prog, &run_ctx.run_ctx))) {
- 			bpf_prog_inc_misses_counter(prog);
--			bpf_prog_put_recursion_context(prog);
-+			bpf_prog_exit_recur_ctx(prog, &run_ctx.run_ctx);
- 			item++;
- 			continue;
- 		}
-@@ -3565,7 +3565,7 @@ bpf_prog_run_array_sleepable(const struct bpf_prog_array *array,
- 			ret &= run_prog(prog, ctx);
- 		}
- 
--		bpf_prog_put_recursion_context(prog);
-+		bpf_prog_exit_recur_ctx(prog, &run_ctx.run_ctx);
- 		item++;
+@@ -158,7 +161,7 @@ static void run_subtest(enum subtest_kind kind)
+ 	sigset_t oldset;
+ 	pthread_t ta, tb;
+ 	bool ta_started = false, tb_started = false, sigmask_set = false;
+-	bool via_map;
++	bool via_map, dual = false;
+ 	__u32 zero = 0;
+ 	int tail_fd;
+ 	char ch;
+@@ -193,17 +196,29 @@ static void run_subtest(enum subtest_kind kind)
+ 	case SUBTEST_FSESSION:
+ 		prog = c.skel->progs.on_fsession;
+ 		break;
++	case SUBTEST_TP_SYSCALL:
++		prog = c.skel->progs.on_tp_syscall;
++		break;
+ 	case SUBTEST_TAILCALL_RAW_TP:
+ 		prog = c.skel->progs.dispatcher_raw_tp;
+ 		tail = c.skel->progs.handler_raw_tp;
+ 		jmp = c.skel->maps.jmp_raw_tp;
+ 		break;
++	case SUBTEST_TAILCALL_TP:
++		prog = c.skel->progs.dispatcher_tp;
++		tail = c.skel->progs.handler_tp;
++		jmp = c.skel->maps.jmp_tp;
++		break;
+ 	case SUBTEST_TWO_DISPATCHERS:
+ 		prog = c.skel->progs.dispatcher_a;
+ 		extra = c.skel->progs.dispatcher_b;
+ 		tail = c.skel->progs.handler_raw_tp;
+ 		jmp = c.skel->maps.jmp_raw_tp;
+ 		break;
++	case SUBTEST_TP_DUAL:
++		prog = c.skel->progs.on_tp_dual;
++		dual = true;
++		break;
+ 	case SUBTEST_NESTED_PROG:
+ 		prog = c.skel->progs.on_raw_tp_nested;
+ 		break;
+@@ -242,9 +257,23 @@ static void run_subtest(enum subtest_kind kind)
+ 		if (!ASSERT_OK_PTR(wakeup_link, "attach_wakeup"))
+ 			goto out;
  	}
- 	bpf_reset_run_ctx(old_run_ctx);
+-	link = bpf_program__attach(prog);
+-	if (!ASSERT_OK_PTR(link, "attach"))
+-		goto out;
++	if (dual) {
++		LIBBPF_OPTS(bpf_tracepoint_opts, topts, .bpf_cookie = 1);
++
++		link = bpf_program__attach_tracepoint_opts(prog, "syscalls",
++							   "sys_enter_prctl", &topts);
++		if (!ASSERT_OK_PTR(link, "attach_sys_enter"))
++			goto out;
++		topts.bpf_cookie = 2;
++		link2 = bpf_program__attach_tracepoint_opts(prog, "task",
++							    "task_rename", &topts);
++		if (!ASSERT_OK_PTR(link2, "attach_task_rename"))
++			goto out;
++	} else {
++		link = bpf_program__attach(prog);
++		if (!ASSERT_OK_PTR(link, "attach"))
++			goto out;
++	}
+ 	if (extra) {
+ 		link2 = bpf_program__attach(extra);
+ 		if (!ASSERT_OK_PTR(link2, "attach_extra"))
+@@ -412,10 +441,16 @@ void test_trampoline_preempt(void)
+ 		run_subtest(SUBTEST_TP_BTF);
+ 	if (test__start_subtest("fsession"))
+ 		run_subtest(SUBTEST_FSESSION);
++	if (test__start_subtest("tp_syscall"))
++		run_subtest(SUBTEST_TP_SYSCALL);
+ 	if (test__start_subtest("tailcall_raw_tp"))
+ 		run_subtest(SUBTEST_TAILCALL_RAW_TP);
++	if (test__start_subtest("tailcall_tp"))
++		run_subtest(SUBTEST_TAILCALL_TP);
+ 	if (test__start_subtest("two_dispatchers"))
+ 		run_subtest(SUBTEST_TWO_DISPATCHERS);
++	if (test__start_subtest("tp_dual"))
++		run_subtest(SUBTEST_TP_DUAL);
+ 	if (test__start_subtest("nested_prog"))
+ 		run_subtest(SUBTEST_NESTED_PROG);
+ 	if (test__start_subtest("recursion_raw_tp"))
+diff --git a/tools/testing/selftests/bpf/progs/trampoline_preempt.c b/tools/testing/selftests/bpf/progs/trampoline_preempt.c
+index 78ed74627a79..e8e610fc885e 100644
+--- a/tools/testing/selftests/bpf/progs/trampoline_preempt.c
++++ b/tools/testing/selftests/bpf/progs/trampoline_preempt.c
+@@ -27,6 +27,13 @@ struct {
+ 	__type(value, __u32);
+ } jmp_raw_tp SEC(".maps");
+ 
++struct {
++	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u32);
++} jmp_tp SEC(".maps");
++
+ int tid_a;
+ int tid_b;
+ int sig;
+@@ -184,6 +191,12 @@ int BPF_PROG(on_fsession)
+ 	return handle_comm(false);
+ }
+ 
++SEC("tp/syscalls/sys_enter_prctl")
++int on_tp_syscall(void *ctx)
++{
++	return handle_comm(false);
++}
++
+ SEC("raw_tp/task_rename")
+ int dispatcher_raw_tp(void *ctx)
+ {
+@@ -197,6 +210,19 @@ int handler_raw_tp(void *ctx)
+ 	return handle_comm(false);
+ }
+ 
++SEC("tp/syscalls/sys_enter_prctl")
++int dispatcher_tp(void *ctx)
++{
++	bpf_tail_call(ctx, &jmp_tp, 0);
++	return 0;
++}
++
++SEC("tp/syscalls/sys_enter_prctl")
++int handler_tp(void *ctx)
++{
++	return handle_comm(false);
++}
++
+ SEC("raw_tp/task_rename")
+ int dispatcher_a(void *ctx)
+ {
+@@ -213,6 +239,17 @@ int BPF_PROG(dispatcher_b, struct pt_regs *regs, long id)
+ 	return 0;
+ }
+ 
++SEC("tp/syscalls/sys_enter_prctl")
++int on_tp_dual(void *ctx)
++{
++	__u32 tid = (__u32)bpf_get_current_pid_tgid();
++	__u64 cookie = bpf_get_attach_cookie(ctx);
++
++	if ((tid == tid_a && cookie != 1) || (tid == tid_b && cookie != 2))
++		return 0;
++	return handle_comm(false);
++}
++
+ SEC("raw_tp/bpf_trace_printk")
+ int recur_raw_tp(void *ctx)
+ {
 
 -- 
 2.43.0
