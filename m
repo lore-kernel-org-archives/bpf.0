@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.170
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794374080;
-	b=TPfRJyd/vyiZhHMYRvYVCcmUNuwOYlqKyZ2aoPxNjXvg5gqSu/j3jCa+DIo/d2GeofBF
-	 XoaOQPdRS/8g2/vtFDjd4vYmdLBOWSJetXaQB1Z6j3vleFtLJgY7X4G8591MVuHWUugcG
-	 YUFWbDm7cvBheN3D0DlZY0N8U3Ce5oqRUTelr5GdxAeN9r3XprKGXm19lTwomnXYxxpim
-	 iDbrpYOV9HeC4URItqZklU/cK/au6O0X60EpoI6n4ZIJfmXaKfFeCB0M5Z/VqQfKCK8X5
-	 EBxAYJYE1Nqmqd36ijV7Ow2cRMt/yErzwyrvBBOHYrMSdr1Q3M4Cu09/lNM5efMF2Mg==
+	t=1794374086;
+	b=zd4Djd39R227FJbV4LAphbZRj8tbZPYImsW6HOWHPuTwcPWMuF05Vbec6xZt5pP1PN7S
+	 oIK14TGh7cRdlxNFT66tmvaUX7fBxDWy4dJHd0W1Fwj8xJCQzR/0eP6ywcz0sF7xl/zyd
+	 igjszytrl/GCy8jHlKIDz828JFJhVr5OJ0Cqmgq7A4xl3n0QTCKq8VC//mQZgdrDZwJSX
+	 Is3psdJgCEzne2gCAqGJ60+INwdGF4UlW+2LuJ75Ao+geaFTmb28DsQ41dp0XCvAcscVP
+	 owwaIVeg4MP/5S+vQYANXbUMzF5vXN68egWZ3pg96+AwiWkBXEUq5wMf2klqgV1pqqw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794374080;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794374086;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=00H2MiRz9p8eLUkya05BzpmKsGZ1LM4lgngi7LRL8go=;
-	b=2dKaChqCv4US5q14ZBaShzaSnut/CnVK0Sh9Pn+MKiFioX6mNh1V5KufdXtYTbw1xyRu
-	 EzJKkKhiw/MRUL5ioCA4dP+/soTG5sOxuB46OWLsgvPXA4XjMHRSFDknYNZIw9pvGflHM
-	 HUdqLT57xhwXIhNhJzWUnlROHd9dlNa49lOmw6IptAsdab2lvaDqj/idjDo/CRdRdQFNY
-	 O8u3jO8+hEQtj0EwMZkfPX6VLrxDU2Q1+PLMYUFvspAg/3jPPDrkZaOGXXy3WUjNr/hLk
-	 Aw1Yl7Ga3NHVEfLugQj7odExwzgDWIPqfBNCiRWLcqmLWKkqtTCkv2qoP76mr/N4+pA==
+	bh=zP7er+kFb6Pus6Psu8lXgDxOgRS8T9eVaXlKAvh1Oy0=;
+	b=ySWRy5oh5q3iH7vimmTbg5bRhlI00ZQUbbMfaZebLo5mH8EMhCkBLhJWm0Z/U9ZChpJe
+	 oGPm6Iv0KjJ81WC96MUXc9sSbk9DUaF+12SxapqDku5uRsfcAg3gfy4hb3NZWCKd80Gha
+	 4zG3RsTZfK20J7VPpjjb8U2mGhAe/cJX5ZWyW4unLFumUWBVEEgfMEJ4Btjpt6Dy+Z5jQ
+	 UNOW1EruwLOznIz+K4CvGr3hPTuTMcw4L78yJJOsvnqHTSMcdvsSoy2os1oWbUA99ZRML
+	 C6K4SItpVIAR+dZKSScyoknDD0yFp826l+UnGLSmCfmYq8RbzPK3um07IcUkatIeubQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Cn2i8gjd;
-	arc=none smtp.remote-ip=209.85.215.176
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=B++kYN2H;
+	arc=none smtp.remote-ip=209.85.215.170
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6943606A31C
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 05:14:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B6943606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C9BF606A31C
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 05:14:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9C9BF606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Cn2i8gjd
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cdb684859cbso1598283a12.1
-        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 21:14:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=B++kYN2H
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-cdab8873d9dso1194676a12.1
+        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 21:14:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794374079; x=1794978879; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794374085; x=1794978885; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=00H2MiRz9p8eLUkya05BzpmKsGZ1LM4lgngi7LRL8go=;
-        b=Cn2i8gjdhmwAjqgd20ngo8ikqYgldWkukVOKi2B2s6AP+McHuzT3Is+Q9StFNQjP78
-         ppkD8eIIRbFNS2xeC67u/iVsm+2lmlTtT/78QwKxH0H2gmPJJkosVGd9m8tBG2nar/rL
-         7aTGcdAc+Qo2yteO8f51UudAXGlO5YmQDTK2wGil/OROj3LOVpybh87Oj+P0Fh3a7E+A
-         Me8AhSk8rL33R062Un7gNou6XurNPIiqer1UO1HgirB3r6OAjSWlzOTS7fIJYHWWrvDg
-         uvzKXV93i/L74ycz5LW49d5A42zYDKkX90WDRuE/iahbuQnnPXrwgTNGJza2cjHDsnCU
-         ucrw==
+        bh=zP7er+kFb6Pus6Psu8lXgDxOgRS8T9eVaXlKAvh1Oy0=;
+        b=B++kYN2HIgFVIgcQ/hc41ejXQ1xRZMQEwu50k1ZTPJR089Y0HDbCo7pIjxdUaGYRnB
+         xvw4lNxmRtzCEmNkvNpXAcjzPvHWWoUte3yScLO3fQDTIn20IfbuJA8zlH0D/SgVnBuy
+         L/R44FM2jr/Cs9P8+kA0U/zm9k1DpUcZt7DQVUf5zxDfIOt38wU3DbB89NnOBCivK16Z
+         wWVwA8+VZfkdCU1ZetrNWM+TGIKlP4K0dSqb/kfUlurffcoBwZGspTzjgQEhRjrgxzjj
+         C86rs55lrjfaSCMJrNFH7AwF24uOyDu0VqYR1zCJqEe1J36pvwIFyrX2tQDJGD6jetYJ
+         KYzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794374079; x=1794978879;
+        d=1e100.net; s=20260707; t=1794374085; x=1794978885;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=00H2MiRz9p8eLUkya05BzpmKsGZ1LM4lgngi7LRL8go=;
-        b=mACtFNrxfFV3QVJ2frkOhjpARyl7VHxwdWgpUFOInsX7lTC7YUYqOhRYsv50hN+Xxq
-         pmk+aBi9XOjkzrmzwWSNUzCEVlO6j3JO0YRwL7sk492vQlPd3DX8gCPTl9sztjXlmJIi
-         TghnXoZJDPD3a5cPZC757xJljnPg5qCzOmwtwsL/JetDlzBZ9AZY4WWd19uA2OXKrasY
-         Ir6xXmza1RrQOFf52D9Hj5VZhDVNuF5lIPJ7szKiHt3qTrKzid8GRzDhKcDbqaVkX4QC
-         FyM4LclTUJTlLiw+qGDEq9x4nfbD/GShESJklpy0SV1MZKB/hKjHKJbePUN63LsFtZwm
-         LNUQ==
-X-Gm-Message-State: APuU4Z/M/XBvUhRmACCHTHOkjGWYIZ1N0jkmixaqwt3m7zfZkajsCu2a
-	urzXxQCKyTgYQ/S7T5euQi0imvLdC5aVoWazhC87vB0xGv4ZLKEV8VaWUlivAQ==
-X-Gm-Gg: AYBFou37YedBXkt0vRCqExOISQZ3+dwmRHRuBKcwqOBaQZIKOB+qUakrUTDms74OcsS
-	EdHauhNlEk5V4GTG0Blm3vJzivqY2X4199UQsC/khUwE1sUi6RO/hjg1Fz92yUIfPhBkI0Yphuf
-	Ld0fACotZ3MejHE5vH94Pkxz1zr4+iTura102Iv/lFvPSCt1WbVz14FLtr8uyr4E0z4pzYALX3N
-	6Ohq7XTMZe3FUasjYHaVVHfRD8FIzjzmhPqX7sxc0aHbszBJiaIu3glDRN7odExTwCSaG1O5kM2
-	ILwfWZkV1AeIzq11ffUKv5oTQm08DxA91YVo3hFCuj5QXcW0R5Yh4UnUh2hr8mmDc6ZNeM8vfpn
-	Ora2c/7ey2YA6n320SKjnCAFwTLHxW4VH8eewlGqov4as5nsVFBoN9tX7Sz/NbAbQi33bgtB7WR
-	IzQGnG8whx2FBdp+9XuyC5inzu8phpruSeH+kPUwTaCoaI+MBqwjfuw3Dq0CJ1ShZlZ2GMRhehC
-	jNPm6pnhVOL81wFuKuDRkoMYHGxx1HLLA5rY6aDCssqTGp8iu+T99Z9xiGCHrEOJ5uUMWRKwYoB
-	VPLehoHPEhMH5M+edosJmQG2vXKCu48NGdY2h4CtJyM5AyhUfNqE+yBEdOnf46wHL8tvw6YXBO1
-	x/kzJAmjdql9BrvbDsYPCvkMGvvHG6TzSZdnQ0IUAtkxdUVzeHMUgDIgJLznAymGUW6M57bSkiA
+        bh=zP7er+kFb6Pus6Psu8lXgDxOgRS8T9eVaXlKAvh1Oy0=;
+        b=PBdpZS2WmdTkDNuP9dSe5zfsTtw/tZoY0vjLLhtFz4syuK0rrOisfyT6x8Ske+B5St
+         cCzJU4yI0AUpWkUxMlpM3P6lrwRB0MMXI0f+S3UNbVWY5bRD1c+Ew/DjtdZy4Pad0oZZ
+         G9kFmhFg/mt1w484sx6N45XeMzl9rMB7ZqdfiI+uTmN+OUEz6Ctv05UuiudX2ImGEWiB
+         ICy46Ol2U4zIyXcI8oQtcZ3nzutrZ0vV8lcb5UxsTSXL5/0+x/i4HKSRh7xooCnHXRyJ
+         kiLII7QbxGk3noQphfJ6Sq1za+rpEfD11TmMaXfureZSg2nXGwxD0++Eeeo9wc5XkkCN
+         sdDw==
+X-Gm-Message-State: APuU4Z9g0LY2THGD2/ZuRSbDJd06W6sfvNDXLrYcJDaqEksNNt1c5x53
+	xbtuow766iAylD/4d6SpMxPsEsVFGA6VPa46vIBahGFI8rdu/iK7kPDk0GmB1g==
+X-Gm-Gg: AYBFou16uPer55lLcJ0Uph209NX6iZQBTMMwjQS2cpXPjn4itp66KWzW1gjgYx6jquD
+	IvoK6q/ZpU844QaiTSW2PwXiiKJByfL43OFwY/TaUZfDL16YlIUTxJnLLfHXPq7MLSb7YYlb+4V
+	MxYmWApVOM31MZ17PevK6aHje+HVSywbfX+m1iOqYcNdJHnL8kHTeRU1EYm6XeRZib6oAbvrIJI
+	n+lMTCODnZv/e78wJJkL7T6iYQW3tVUFUUif79RWeqv7V9xqlO+Af03OABPbuGOPfvYBn+ZTK6G
+	VNNk36crHJ1XwWnUJ3qXTMDdBch6L5B/2WF2sdwRtTPZCSa/84unX9D2zkq26POrE+y54slMSEH
+	dlF+N0J79mvTRNZspheVEV/NkblvvUNEd1QbWrIWmJnRUF9neaDoNwPVrL238Kq9/amZTNygAgr
+	XAsN0enwAWLCYvLEi8xCOG5q0iTJHd8PZvfyZLjzUrdt3VmOqRkEz/wH97PRpciKHygU4lZ8IlD
+	MMbQorxQSZoMkhxjVDQSoPcU8RWde/u0TsFp7osbqG1bzrBahBlc2fq0sT5Mh51Th0VVV8B5UxG
+	5PTC0v9Kae8gHUuvIx2iRNYmsaG0/y9WNYJbFb5pxCFfmq/Ocu/35BjW+SWtXry/fZG2qgbx6dX
+	ReJPv4ZFpzGdycjgwa/vB8wMAwzhaAVgHKSDPYc+npn5fbMHRHpVNfZVMYVH2KXkrjBF20ffaHA
 	==
-X-Received: by 2002:a17:90b:57e7:b0:3b0:9781:ee8b with SMTP id 98e67ed59e1d1-3b182ebd75bmr1492179a91.26.1794374078803;
-        Tue, 10 Nov 2026 21:14:38 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.249])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b17e2045ddsm2684851a91.15.2026.11.10.21.14.38
+X-Received: by 2002:a17:90b:5604:b0:39e:59a0:46b5 with SMTP id 98e67ed59e1d1-3b182fb20fdmr1373943a91.24.1794374084847;
+        Tue, 10 Nov 2026 21:14:44 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.255])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b17db319bdsm2690599a91.6.2026.11.10.21.14.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 21:14:38 -0800 (PST)
+        Tue, 10 Nov 2026 21:14:44 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 09/29] bpf: Include older frames in a fill through an imprecise stack pointer
-Date: Wed, 11 Nov 2026 05:13:20 +0000
-Message-ID: <20261111051341.2800252-10-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 10/29] bpf: Detect a dead branch when a range and var_off don't overlap
+Date: Wed, 11 Nov 2026 05:13:21 +0000
+Message-ID: <20261111051341.2800252-11-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261111051341.2800252-1-alexei.starovoitov@gmail.com>
 References: <20261111051341.2800252-1-alexei.starovoitov@gmail.com>
@@ -104,140 +104,149 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-A fix of liveness.c. This series needs it: scalar evolution keeps the
-expression of a stack slot across a call unless bpf_may_write_mask() of the
-call has the slot, and this is a write that the mask does not have.
+A fix of the main pass that stands alone. It is also a prerequisite of the
+patch that refines linked registers at conditional jumps: that patch
+intersects the range of one register with var_off of another one and asks
+reg_is_empty() if the intersection is empty.
 
-	struct scope { struct scope *parent; u64 hits; };
+  1: r0 <<= 3
+  2: r0 += 5
+  3: if r0 s< -2 goto pc+2
+  4: if r0 s> 1 goto pc+1
+  5: r0 += 3
+  verifier bug: REG INVARIANTS VIOLATION (alu): range bounds violation
 
-	static __noinline int leaf(struct scope *up)
-	{
-		for (s = up; s && n < 8; s = s->parent, n++)
-			s->hits++;
-		..
-	}
+The low three bits of r0 are 5. No value in [-2, 1] has them: the range and
+var_off don't overlap, the fall-through branch of insn 4 is dead. The
+verifier takes it with an empty register, and the addition at insn 5 trips
+over that.
 
-	static __noinline int level2(struct scope *up)
-	{
-		struct scope me = { .parent = up };
+simulate_both_branches_taken() refines the registers as each branch does
+and drops a branch in which a range is empty. It relies on
+reg_bounds_sync() to empty the range. __update_reg64_bounds() steps through
+var_off from umin to umax, which are 0 and U64_MAX for a range that
+crosses 0. __update_reg32_bounds() uses only the smallest and the largest
+member of var_off.
 
-		return leaf(&me) + me.hits;
-	}
+tnum_step() returns the next member of var_off. reg_is_empty() asks for the
+first one from the start of the range on and compares it with the end, in
+64 and in 32 bits. A range that crosses 0 wraps around at U64_MAX or
+U32_MAX: tnum_overlaps_cnum() splits it there. The test is sufficient, not
+exact: 64 and 32 bits are checked each on its own.
 
-level1() is like level2() and calls it. The program has the first scope and
-calls level1(). In leaf(), frame 3, s points to frame 2, then to frame 1:
-at the loop header struct arg_track is ARG_IMPRECISE with the mask
-BIT(1) | BIT(2). For the load of s->parent arg_track_deref() returns the
-pointer that it was given, so for liveness.c s never points to frame 0. The
-scope of the program gets neither stack_use nor may_def at the call of
-level1(), and the program is rejected:
+Two tests in verifier_bounds.c, with the values above shifted left by 32:
+no member of var_off is in [-2, 1] and the branch is dead, -3 is one in
+[-3, 1] and the branch is verified.
 
-  reading from stack off -16+0 size 8, slot poisoned by dead code elimination
-
-put(cond ? out : &tmp) with out in frame 1, tmp in frame 2 and out->buf in
-frame 0 has such a pointer without a loop. That program loads, but the
-call in frame 0 has no may_def for buf.
-
-A frame holds pointers to its own stack and to the stacks of its callers:
-a pointer to the stack is never spilled into the frame of a caller. So what
-is loaded through a pointer to one of the frames in the mask points to the
-youngest of them or to an older one. fill_from_stack() does the same for
-a known frame and an unknown offset: GENMASK(frame, 0).
-
-Fixes: bf0c571f7feb ("bpf: introduce forward arg-tracking dataflow analysis")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/liveness.c                         |  4 +-
- .../selftests/bpf/progs/verifier_live_stack.c | 60 +++++++++++++++++++
- 2 files changed, 63 insertions(+), 1 deletion(-)
+ kernel/bpf/verifier.c                         | 34 +++++++++++++++++--
+ .../selftests/bpf/progs/verifier_bounds.c     | 33 ++++++++++++++++++
+ 2 files changed, 65 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-index e930d928afa5..c52f0435193b 100644
---- a/kernel/bpf/liveness.c
-+++ b/kernel/bpf/liveness.c
-@@ -1398,8 +1398,10 @@ static struct arg_track arg_track_deref(struct bpf_verifier_env *env, struct bpf
- 
- 		return fill_from_stack(insn, at_out, reg, parent->at, parent->slots, ptr->frame);
- 	}
-+	/* A frame holds pointers to its own stack and to the stacks of its callers */
- 	if (ptr->frame == ARG_IMPRECISE && !(ptr->mask & BIT(depth)) && ptr->mask)
--		return *ptr;
-+		return (struct arg_track){ .mask = GENMASK(fls(ptr->mask) - 1, 0),
-+					   .frame = ARG_IMPRECISE };
- 	return (struct arg_track){ .frame = ARG_NONE };
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 5bffc1e288f6..bc0937b98818 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2325,6 +2325,36 @@ static bool range_bounds_violation(struct bpf_reg_state *reg)
+ 	return cnum32_is_empty(reg->r32) || cnum64_is_empty(reg->r64);
  }
  
-diff --git a/tools/testing/selftests/bpf/progs/verifier_live_stack.c b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
-index 32bab3cb3fcb..d6a6420d219d 100644
---- a/tools/testing/selftests/bpf/progs/verifier_live_stack.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
-@@ -3143,6 +3143,66 @@ static __used __naked void imprecise_fill_cross_frame(void)
++/* Do @t and [min, max] overlap: is a member of @t in the range? */
++static bool tnum_overlaps_urange(struct tnum t, u64 min, u64 max)
++{
++	u64 tnum_next = tnum_step(t, min);
++
++	return (min & ~t.mask) == t.value || (tnum_next > min && tnum_next <= max);
++}
++
++/* The same for the cnum [@base, @base + @size]. It wraps around at @ut_max. */
++static bool tnum_overlaps_cnum(struct tnum t, u64 base, u64 size, u64 ut_max)
++{
++	u64 end = (base + size) & ut_max;
++
++	if (base <= end)
++		return tnum_overlaps_urange(t, base, end);
++	return tnum_overlaps_urange(t, base, ut_max) || tnum_overlaps_urange(t, 0, end);
++}
++
++/*
++ * A range and var_off don't overlap. reg_bounds_sync() compares var_off with umin and umax: it
++ * doesn't see that [-2, 1], which crosses 0, has no member with 5 in its low three bits.
++ */
++static bool reg_is_empty(struct bpf_reg_state *reg)
++{
++	return range_bounds_violation(reg) ||
++	       !tnum_overlaps_cnum(reg->var_off, reg->r64.base, reg->r64.size, U64_MAX) ||
++	       !tnum_overlaps_cnum(tnum_subreg(reg->var_off), reg->r32.base, reg->r32.size,
++				   U32_MAX);
++}
++
+ static int reg_bounds_sanity_check(struct bpf_verifier_env *env,
+ 				   struct bpf_reg_state *reg, const char *ctx)
+ {
+@@ -18916,7 +18946,7 @@ static int simulate_both_branches_taken(struct bpf_verifier_env *env, u8 opcode,
+ 	 * reg_states in the FALSE branch (i.e. reg1, reg2), the FALSE branch must be dead. Only
+ 	 * TRUE branch will be taken.
+ 	 */
+-	if (range_bounds_violation(&env->false_reg1) || range_bounds_violation(&env->false_reg2))
++	if (reg_is_empty(&env->false_reg1) || reg_is_empty(&env->false_reg2))
+ 		return 1;
+ 
+ 	/* Jump (TRUE) branch */
+@@ -18928,7 +18958,7 @@ static int simulate_both_branches_taken(struct bpf_verifier_env *env, u8 opcode,
+ 	 * reg_states in the TRUE branch (i.e. true_reg1, true_reg2), the TRUE branch must be dead.
+ 	 * Only FALSE branch will be taken.
+ 	 */
+-	if (range_bounds_violation(&env->true_reg1) || range_bounds_violation(&env->true_reg2))
++	if (reg_is_empty(&env->true_reg1) || reg_is_empty(&env->true_reg2))
+ 		return 0;
+ 
+ 	/* Both branches are possible, we can't determine which one will be taken. */
+diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+index f55d58af8004..316e9377caa8 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
++++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+@@ -1995,6 +1995,39 @@ __naked void bounds_refinement_multiple_overlaps(void *ctx)
  	: __clobber_all);
  }
  
 +/*
-+ * fill_older_frame_3() loads through a pointer to the stack of frame 1 or of frame 2. Both slots
-+ * hold a pointer to fp-8 of frame 0: the store is a may_def of that slot at the call in frame 0.
++ * r0 is x << 32, the low three bits of x are 5. No such x is in [-2, 1], -3 is in [-3, 1].
++ * umin and umax are unbounded for a range that crosses 0.
 + */
++#define RANGE_CROSSES_0(name, smin)		\
++__naked void name(void *ctx)			\
++{						\
++	asm volatile(				\
++	"call %[bpf_ktime_get_ns];"		\
++	"r0 <<= 35;"				\
++	"r1 = 0x500000000 ll;"			\
++	"r0 += r1;"				\
++	"r1 = " #smin " ll;"			\
++	"if r0 s< r1 goto 1f;"			\
++	"r1 = 0x100000000 ll;"			\
++	"if r0 s> r1 goto 1f;"			\
++	"r10 = 0;"				\
++"1:	exit;"					\
++	:					\
++	: __imm(bpf_ktime_get_ns)		\
++	: __clobber_all);			\
++}
++
 +SEC("socket")
-+__log_level(2)
++__description("dead branch: tnum and a range that crosses 0 don't overlap")
 +__success
-+__msg("3: (85) call pc+2{{ +}}; may_def: fp0-8..-{{[0-9]+}}")
-+__naked void imprecise_parent_fill_loses_older_frame(void)
-+{
-+	asm volatile (
-+	"*(u64 *)(r10 - 8) = 0;"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"call fill_older_frame_1;"
-+	"r0 = *(u64 *)(r10 - 8);"
-+	"exit;"
-+	::: __clobber_all);
-+}
++RANGE_CROSSES_0(range_crossing_0_no_tnum_overlap, -0x200000000)
 +
-+static __used __naked void fill_older_frame_1(void)
-+{
-+	asm volatile (
-+	"*(u64 *)(r10 - 8) = r1;"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"call fill_older_frame_2;"
-+	"exit;"
-+	::: __clobber_all);
-+}
++SEC("socket")
++__description("tnum overlaps the negative part of a range that crosses 0")
++__failure __msg("frame pointer is read only")
++RANGE_CROSSES_0(range_crossing_0_tnum_overlap_below_0, -0x300000000)
 +
-+static __used __naked void fill_older_frame_2(void)
-+{
-+	asm volatile (
-+	"r2 = *(u64 *)(r1 + 0);"
-+	"*(u64 *)(r10 - 8) = r2;"
-+	"r2 = r10;"
-+	"r2 += -8;"
-+	"call fill_older_frame_3;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+static __used __naked void fill_older_frame_3(void)
-+{
-+	asm volatile (
-+	"r6 = r1;"
-+	"r7 = r2;"
-+	"call %[bpf_get_prandom_u32];"
-+	"if r0 == 0 goto +1;"
-+	"r6 = r7;"
-+	/* ARG_IMPRECISE{mask=BIT(1)|BIT(2)} */
-+	"r1 = *(u64 *)(r6 + 0);"
-+	"*(u64 *)(r1 + 0) = 7;"
-+	"r0 = 0;"
-+	"exit;"
-+	:: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
- /* Test that spill_to_stack with multi-offset dst (sz=8) joins instead
-  * of overwriting. r1 has offsets [-8, -16]. Both slots hold FP-derived
-  * pointers. Writing through r1 should join *val with existing values,
+ SEC("socket")
+ __success
+ __naked void signed_unsigned_intersection32_case1(void *ctx)
 -- 
 2.55.0
 
