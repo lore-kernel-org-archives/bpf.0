@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794405891;
-	b=XSyprWcCmgThRMp0mBM70p+CBuIhzTPE5hADGOJXjP5aPppIFrwuy2Fue2f5oI01R2rp
-	 dcx8Fi0ikRQSRUeHortSMM4xjAdtfispSg11RdEv/LlfU4ai+Wl+c4LAdUGpgAySYa2aH
-	 IUZyTwm20UWztIeiu2QFg+UjzRnpVC12EaNG1hjp0aMGztdFP27FagKlzE8ek+HiX5diN
-	 yd6Nguo/id9+HyVxJiaxC1ze0jOLWt/dQHwq9vyfYDAFE0HBDzncr/K+/BgGhpmML/gNp
-	 eN44pI/At2qCX8c7q2R+aezSEyfKmHr3rg3sJP4CQJbfhBTo2qVXaKMhHK+/dZyvCGA==
+	t=1794405893;
+	b=5bt3zNOBEHXCiUyam4kVvmJOGiPdYTMpYlSGaIR35ja6/zfYwsZtxfRZbFfpGgL4pUhZ
+	 TWseLydC1vTEPQDRAMrT9xbijvF9BXkC/5B8DJZDi7+qYP00/ok+sOu8ck+iaagTxpf78
+	 WGMsskdI3q9vT3QUmdde75I6apo/0l+hMqWUQ/JtSmF6g5eCSwn7pl/fhWyjusIKaX3U5
+	 nvz/My0GwTnQySKs2IMnT4QNV4ijopOZ3KOH9FBoielKqTkFzS39NkOPnsQXlOAAqauZy
+	 UZuawtQsOoRR+Kc12Uj/Wv9VLmjO6meyJv5HbCTHJdUqyc89Jpn++6RSBghOKzfJ59w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794405891;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794405893;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=NBpx48/ofTLln6Bio9+r/GKZh+XxioF8/IMWZARj2mY=;
-	b=lXqR27mUZiy4u9uZSNcOZRNo3LW/8e8/xjZSjRU7YtD5w/H4OA8EO4wLZpzntYEcqbqb
-	 yv8C6g18UyPQhCmBKEZQjaUyd1IoKR7u0yaTBsHvHllqa8BHuCPQ5APg0BAZk6NQGwrmi
-	 cCCmLshFunnnMgGs9A/zviOCTlEFgoclVQTzGIeptKgCZNOTTdiL3Vp1Ha63/Y6EZ2hh8
-	 /H0CHdjuS9VUTuE4Jc1ZNkFAK/HUE0TjF+tNOc1nOYZmPZT9UeyIateTKc4K19ZR0Eymq
-	 0lch7DxeVODc+J5fleAuTIgIWE3vd2cMZQljSl4cZ67mJOlmPDJNZCLyb7rLYu54H1Q==
+	bh=jGCIzGKf6N5BKhT0aD7clCQx8nPb+zZuOS4EUZefGGo=;
+	b=H7OEmRrtaINo5aCHiOY/rqXYu5n/jFsk72c48gog3Xu6Keytc3TlrbQJLBjEhAPQSlEM
+	 kwM5HoTPWuv+DaEUXhcLk+Y0J/V7VXoMiM/ZTpXLtLb43Q0yZuiN1Nesr2xrgrMvSokhd
+	 YdHjp5/IZ+IZw2V8wL9HUarMMNUE8NDmTw1DEgnKVjUR+cQSNo30PNquSfkyKgH0jHJDj
+	 ih9xkrPe3Laz5Kl0/qKIoJ+gyApAzisbc065eR+l8njBuZSb6TwuBtVg+cdeJ30rMoFI/
+	 DuoFoXEVdnUKYR78+wjjFHoER5psDeDBdwmkJ8CKIaNCJOMSZKZelJK8FU87xd1UIZw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DGBfMVyk;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mwO7SrwY;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFA78606A326
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 14:04:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9D1D606A331
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 14:04:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DGBfMVyk
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDA841F00A07;
-	Wed, 11 Nov 2026 14:04:50 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mwO7SrwY
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDE281F00A06;
+	Wed, 11 Nov 2026 14:04:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794405891;
-	bh=NBpx48/ofTLln6Bio9+r/GKZh+XxioF8/IMWZARj2mY=;
+	s=k20260515; t=1794405893;
+	bh=jGCIzGKf6N5BKhT0aD7clCQx8nPb+zZuOS4EUZefGGo=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=DGBfMVyknzyT6L4VfmVU9CtBYQP3WjwTN+pNNycuFsEhkEnMrwKXvzLniJzRYNonR
-	 gdKZPV4R8tm029L98KuglPSoJ/eiF1jElbxJ1FHIIMWSRCrtZJgW6ageemt4uAyMoM
-	 YBhLptUFgCVfUQagmCMAGTgqOiaO8XXJv4UiAWU8xpQaZUDqgRiBDhzMbueb4KNhHz
-	 1v84ixu4K/n3q5bSe+SnZHYcZ7OYwWnEPpt8iy1tJw4fbULg/t3KT24FtLKpAU8CaW
-	 kfOsdioU9jkWzKS0fcLiQdUMoiGVJ3yh3+lAPYJu0+NLrKwjzr66As6nGH4zwElH7r
-	 4nVPgDZdlsCGw==
-Content-Type: multipart/mixed; boundary="===============2514789805718188415=="
+	b=mwO7SrwYYtivYzDFs2NhF6fJAWZCi7qhmseHMMhdufQtmrhuiUzgx24/A9jZzZzdL
+	 bNIJ2SpRWCnqd1YokFKCuQnZzJx0Kold2WREszm31wfAVVOred5N94Aw8P5MF6U7g6
+	 N1IBPGV72tUySPfchxv711qR4KYYQHd1vcDIl/2u1JYuFntrT05s6WVsAzqmJKvVeN
+	 Mh0IxL22yHtKlkg8B5L3ReWvr4j+cuUBYPHh+abHwTg3pB9JWAYXE6y8dzJBrNrTBt
+	 WMmp0yB7WIpiZWXOn2oXS+WRxAu/HG9MGyABXyp1ERHveuiYjnv6DQ1T53ZkBeEwoO
+	 KnAYJcjCOIilQ==
+Content-Type: multipart/mixed; boundary="===============9085444904980240592=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,191 +49,298 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <37568838812d9e2fd082f45454744ae493d4d97e83b9c55533e187ab4a6784d5@mail.kernel.org>
-In-Reply-To: <579fd63756665e448169cef577835f8dbef30329.1794399387.git.memxor@gmail.com>
-References: <579fd63756665e448169cef577835f8dbef30329.1794399387.git.memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v1 14/29] bpf: Describe held resources at throw sites
+Message-Id: <f83bc7e57e703e2bc82d01d1f0c8abeaf70c38f41d4b6241e77efa5cf24bea3e@mail.kernel.org>
+In-Reply-To: <0b8d0a69ecb9f74ed3e3645bc7dccbc022a83cc2.1794399387.git.memxor@gmail.com>
+References: <0b8d0a69ecb9f74ed3e3645bc7dccbc022a83cc2.1794399387.git.memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v1 13/29] bpf: Track held resources in hidden stack slots
 From: bot+bpf-ci@kernel.org
 To: memxor@gmail.com,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,ihor.solodrai@linux.dev,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 11 Nov 2026 14:04:50 +0000 (UTC)
+Date: Wed, 11 Nov 2026 14:04:52 +0000 (UTC)
 
---===============2514789805718188415==
+--===============9085444904980240592==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Describe held resources at throw sites
+> bpf: Track held resources in hidden stack slots
 
 TL;DR:
-- s16 section counts may truncate with deep RCU nesting, so unwinding at
-  bpf_throw() could skip bpf_rcu_read_unlock()
-- Two acquisitions of one pointer may leak a reference at throw
-- Per-subprog site tables sized for the whole program
-- Commit message omits a relaxed rejection
-
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-
-[ ... ]
-
-> +struct bpf_res_site {
-> +	u32 insn;		/* the call, as the main pass named it */
-> +	u32 visits;
-> +	s16 sections[2];	/* the sections the frame is in, RCU and preemption */
-> +	bool sections_vary[2];	/* the visits differ: the frame counts them in a slot */
-
-Can the section count overflow sections[] here?  frame_sections() returns an
-int derived from the u32 active_rcu_locks / active_preempt_locks, and
-nothing bounds the nesting depth.
+- Two aliasing references may be double-released by bpf_throw() unwinding
+  (possible refcount underflow/use-after-free)
+- Programs using callx or cross-frame resources may fail to load, breaking
+  bisection
+- Comment and message nits
 
 > diff --git a/kernel/bpf/frame_desc.c b/kernel/bpf/frame_desc.c
-> --- a/kernel/bpf/frame_desc.c
+> new file mode 100644
+> index 000000000000..b0db3feeb9b0
+> --- /dev/null
 > +++ b/kernel/bpf/frame_desc.c
 
 [ ... ]
 
-> +	site = &env->res_sites[s];
-> +	for (k = 0; k < ARRAY_SIZE(site->sections); k++) {
-> +		int cnt = frame_sections(st, f, k);
-> +
-> +		if (!site->visits)
-> +			site->sections[k] = cnt;
-> +		else if (site->sections[k] != cnt)
-> +			site->sections_vary[k] = true;
+> +int bpf_frame_desc_record_release(struct bpf_verifier_env *env, int idx)
+> +{
+
+[ ... ]
+
+> +	for (i = 0; i < cnt; i++) {
+> +		r = &env->res_rels[i];
+> +		if (r->insn != insn || r->reg != regno)
+> +			continue;
+> +		/* the argument is taken the same way whatever it releases */
+> +		if (r->flags != flags || r->adj != adj) {
+> +			verbose(env, "frame_desc: insn %d takes the handle of what it releases differently on different paths\n",
+> +				insn);
+> +			return -EINVAL;
+> +		}
+> +		if (r->acq == ref->acq - 1)
+> +			return 0;
 > +	}
 
-Here the int is stored into an s16 on the first visit, and later visits are
-compared against the truncated value.  Consider:
+Can this lead to a double release of an object that has two references?
 
-	for (i = 0; i < 40000; i++)
-		bpf_rcu_read_lock();
-	bpf_throw(0);
+bpf_frame_desc_record_release() links a releasing insn only to the
+acquisitions it was seen releasing on some verified path, and
+emit_release() compares the handle against those slots in recording order
+and clears only the first slot that matches.  Its comment says this is
+enough because "two references to one object have equal handles in a slot
+each".
 
-The throw site is visited once, so sections[0] becomes -25536 and
-sections_vary stays false.  bpf_frame_desc_resolve() then reserves no
-counter slot.
+That does not hold when one frame holds two references to the same object
+from two different acquiring insns, A and B.  Two acquire kfunc calls on
+the same kernel object do this, and so does bpf_obj_new() followed by
+bpf_refcount_acquire().  Both slots then hold the same pointer.
 
-[ ... ]
+Suppose one release insn Y releases A on one path and B on another, so Y
+has rel entries for both.  At runtime Y can clear A's slot when the
+verifier's path released B, because the handles are equal.  If the
+remaining reference is then released by an insn that was verified only on
+paths releasing A, that insn's rel list contains only A.  It compares A's
+already-cleared slot, finds no match and leaves B's slot holding the
+pointer.
 
-> +		d->ent[d->nent++] = (struct bpf_frame_desc_entry) {
-> +			.res = res, .count = site->sections[k], .flags = BPF_FRAME_ENT_COUNT,
-> +		};
+After that nothing the verifier tracks is still held, but B's hidden slot
+is non-NULL.  bpf_unwind_release_frame() releases every non-NULL slot:
 
-build_site() emits the truncated value in the s16 bpf_frame_desc_entry.count.
-At run time bpf_unwind_release_desc() adds it to ctx->nr_sections[], so the
-unwinder either hits WARN_ONCE for a negative count or, when the depth is
-exactly 65536 (count truncates to 0 and build_site() skips the entry), calls
-no bpf_rcu_read_unlock() at all.  The task then leaves the program with
-rcu_read_lock_nesting still raised.
+    if (!handle || ...) continue;
+    ...
+    bpf_unwind_release(res, handle);
 
-Before this patch the count lived in a 64-bit hidden slot read as
-(s64)*loc, so the same program was unwound correctly.  The s16 fields are
-unchanged at the end of the series.
+so a later bpf_throw() runs the destructor (put_task_struct(),
+bpf_obj_drop_impl(), ...) again for an object whose references were
+already dropped.  That looks like a refcount underflow and a use-after-free.
 
-Could site_visit() set sections_vary[k] when cnt does not fit in an s16, so
-the counter slot is used, or should such a program be rejected?  Widening
-sections[] and count would also work.
+The verifier appears to accept such a program: the two paths keep
+different reference ids at Y, so they are not pruned against each other,
+and a branch whose condition is already known lets each path release the
+remaining reference at a different insn.
 
-[ ... ]
+Would it work for every release insn to compare all acquisitions of the
+same class in the frame, to reject a release insn that may release two
+acquisitions whose handles can alias, or to clear every matching slot
+(which turns the double release into a leak)?
 
-> @@ -1030,13 +1245,19 @@ int bpf_frame_desc_emit(struct bpf_verifier_env *env)
-
-[ ... ]
-
->  	for (i = 0; i < env->res_rel_cnt; i++)
-> -		items[n++] = (struct res_item) { new_of[env->res_rels[i].insn], i, ITEM_RELEASE,
-> -						 env->res_rels[i].reg };
-> +		if (env->res_acqs[env->res_rels[i].acq].slot)
-> +			items[n++] = (struct res_item) { new_of[env->res_rels[i].insn], i, ITEM_RELEASE,
-> +							 env->res_rels[i].reg };
-
-Can this leak a reference when two acquisitions return the same pointer?
-emit_release() clears the first slot whose value equals the released
-handle, and relies on every acquisition released at the insn having a slot.
-Now the release item is dropped for acquisitions without a slot, while
-bpf_frame_desc_resolve() sets slot per acquisition.
-
-	t1 = bpf_task_acquire(task);	/* A1 */
-	t2 = bpf_task_acquire(task);	/* A2, same pointer as t1 */
-	p = cond ? t1 : t2;		/* path 1: A1, path 2: A2 */
-	bpf_task_release(p);		/* insn X */
-	if (cond) { bpf_task_release(t2); return 0; }
-	bpf_throw(0);			/* path 2: t1 held, only in a register */
-
-A1 is held at the bpf_throw() site with no stack location, so A1.slot is
-true.  A2 is never held at a site, so A2.slot is false.  At X only A1's
-slot is checked.  On path 2 the verifier released A2, but at run time
-R1 == t1 == A1's slot, so A1's slot is cleared.  bpf_unwind_release_desc()
-skips an empty slot, and t1 is never dropped at bpf_throw().
-
-Before the patch A2 had a slot too, so whichever equal slot was cleared, the
-other still held the pointer.  The same can happen for any pair of
-acquisitions that can return the same pointer, such as bpf_obj_new() and
-bpf_refcount_acquire(), or two lookups of the same socket, and in the
-opposite direction (A1 without a slot, A2 with one).
-
-Should bpf_frame_desc_resolve() give a slot to every acquisition that shares
-a release insn with an acquisition that has one, iterating to a fixpoint, or
-should such programs be rejected?  The final version of the series still
-filters release items by slot.
+The later commit 026679e2eda5 ("Describe held resources at throw sites")
+keeps hidden slots for resources whose location differs between visits of
+a site, and the unwinder still releases every non-NULL hidden slot, so this
+does not look fixed in the rest of the series.
 
 [ ... ]
 
-> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> --- a/kernel/bpf/fixups.c
-> +++ b/kernel/bpf/fixups.c
-> @@ -2047,9 +2047,15 @@ static int jit_subprogs(struct bpf_verifier_env *env)
+> +int bpf_frame_desc_emit(struct bpf_verifier_env *env)
+> +{
 
 [ ... ]
 
-> +		func[i]->aux->frame_desc_sites = bpf_frame_desc_sites(env, i);
+> +	for (i = 0; i < n && !ret; i = k) {
+> +		u32 idx = items[i].idx;
+> +
+> +		for (k = i; k < n && items[k].idx == idx; k++)
+> +			;
+> +		if (verifier_bug_if(idx >= len || env->prog->insnsi[idx].code != (BPF_JMP | BPF_CALL),
+> +				    env, "resource kept at insn %d, not a call", idx)) {
+> +			ret = -EFAULT;
+> +			break;
+> +		}
 
-Is it intended that every subprog keeps a table sized for the whole
-program?  bpf_frame_desc_sites() counts every site with a descriptor:
+Can a callx reach this check?
 
-	for (i = 0; i < env->res_site_cnt; i++)
-		n += !!env->res_sites[i].desc;
-	...
-	new_of = insns_of_pass(env, &orig_len);
-	tab = kvzalloc(struct_size(tab, site, n), GFP_KERNEL_ACCOUNT);
+bpf_frame_desc_record_return() makes the call site the acquisition of a
+reference that a subprog returns in R0:
 
-but fills only the entries whose idx lies inside the subprog.  The table is
-freed only when tab->cnt is 0, so each subprog with at least one site keeps
-8 + 12 * n bytes, where n is the site count of the whole program.  That is
-up to BPF_MAX_SUBPROGS times the memory the sites need, charged to the
-loader's memcg for the life of the program.
+    acq = acq_add(env, callsite, ref->res - 1, BPF_REG_0, 0, adj, 0);
 
-insns_of_pass() also runs once per subprog, each time doing a kvcalloc() of
-orig_len u32 and a pass over insn_aux_data, so load time grows as
-O(subprog_cnt * prog_len).
+The call site can be a callx.  check_func_callx() ->
+check_func_callx_one() -> check_static_func_call() -> setup_func_entry()
+records the callx insn as callee->callsite, and prepare_func_exit() passes
+that callsite to bpf_frame_desc_record_return().  For a function verified
+on its own, bpf_flow_return() passes call_idx, which is also the callx.
+Nothing in this patch rejects callx when env->describe_frames is set, and a
+static subprog returning an acquired reference is legal because
+check_reference_leak() returns 0 in any frame other than frame 0.
 
-The commit message says "each JITed function has a table of its sites".
-Could the sites in [sub->start, (sub + 1)->start) be counted before the
-allocation, and new_of built once in jit_subprogs()?  The function is
-unchanged at the end of the series.
+A callx has code BPF_JMP | BPF_CALL | BPF_X (see bpf_is_callx()), which is
+not equal to (BPF_JMP | BPF_CALL), so verifier_bug_if() fires and the load
+fails with -EFAULT.  With CONFIG_DEBUG_KERNEL the BPF_WARN_ONCE() also
+produces a WARN, which panics with panic_on_warn.
 
-> bpf: Describe held resources at throw sites
->
->     [ ... ]
->     The rejections for a program that throws do not change, with one
->     exception: an instruction that acquires a resource only on some paths is
->     rejected only if the resource needs a hidden slot.
+The trigger is a program on x86-64 or arm64, where
+bpf_jit_supports_exception_cleanup() and bpf_jit_supports_callx() both
+hold.  Some subprog in it calls bpf_throw(), so describe_frames is set, and
+another place makes a callx through a function pointer to a static subprog
+that returns, say, the result of bpf_task_acquire() or bpf_obj_new().  The
+throw does not need to be reached with anything held.  Such a program
+loaded before this patch and now fails with "verifier bug: resource kept
+at insn N, not a call".
 
-Is this statement complete?  bpf_frame_desc_emit() rejects a call that
-acquires a resource and is followed by an unwind_goto only when 'after' is
-non-zero:
+emit_items() itself handles the callx correctly, since it only emits
+after-insns for an R0 acquisition, so only this check is too narrow.
 
-	if (after && idx + 1 < len && bpf_is_unwind_goto(&env->prog->insnsi[idx + 1])) {
-		verbose(env, "frame_desc: the call at insn %d acquires a resource and may unwind, ...
+This is fixed later in the series by acd08268bd12 ("bpf: Support callx
+when a callee releases resources"), which also accepts
+bpf_is_callx(&env->prog->insnsi[idx]) here.  This commit still breaks
+bisection for such programs.
 
-'after' now counts only ITEM_ACQUIRE items of acquisitions with a slot.
-Before this patch, a call to a static subprog that returns a reference and
-is followed by an unwind_goto was always rejected.  Now it is accepted when
-the acquisition needs no hidden slot.  The relaxation looks consistent with
-the comment in the code, but the commit message names only the
-acquires_sometimes() rejection as changed.
+> +		after = emit_items(env, &items[i], k - i, buf, &before);
+> +		/* the call of a subprog in front of it does not move with the call */
+> +		ret = bpf_adj_moved_insn(&buf[before], before);
+> +		if (ret)
+> +			break;
+> +		/*
+> +		 * A callee that unwound returns right after the call and goes where
+> +		 * the unwind_goto says: nothing may come between the two.
+> +		 */
+> +		if (after && idx + 1 < len && bpf_is_unwind_goto(&env->prog->insnsi[idx + 1])) {
+> +			verbose(env, "frame_desc: the call at insn %d acquires a resource and may unwind, which is not supported in a program that throws\n",
+> +				idx);
+
+Does this message name the insn the user wrote?
+
+idx is an index in the current image.  By this point
+bpf_insert_loop_guards() (and append_budget_exit()) may already have
+inserted insns, such as may_goto guards of 10-14 insns each plus budget
+exits, so idx can be past the insn of the loaded program.  The other
+frame_desc messages in this file print main-pass indices (a->insn,
+env->insn_idx), which equal insn_aux_data[].orig_idx, and
+bpf_patch_list_insert() also translates with
+env->insn_aux_data[off].orig_idx for the same reason.
+
+Should this use env->insn_aux_data[idx].orig_idx so that the -EINVAL
+rejection points at the right call?  The end of the series still prints idx.
+
+[ ... ]
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index cf3cfc734ed4..4d85a42a18d5 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+[ ... ]
+
+> @@ -812,6 +813,10 @@ static int mark_stack_slots_dynptr(struct bpf_verifier_env *env, struct bpf_reg_
+>  	mark_dynptr_stack_regs(env, &bpf_stack_slot(state, spi)->spilled_ptr,
+>  			       &bpf_stack_slot(state, spi - 1)->spilled_ptr, type, parent_id);
+>  
+> +	/* a referenced dynptr is a stack object the unwinder discards at its address */
+> +	if (dynptr->type == BPF_DYNPTR_TYPE_INVALID && dynptr_type_referenced(type))
+> +		return bpf_frame_desc_record_acquire(env, env->cur_state->acquired_refs - 1,
+> +						     reg - cur_regs(env), false, false);
+>  	return 0;
+>  }
+
+This isn't a bug, but is this comment accurate?  It says the unwinder
+discards the referenced dynptr "at its address", while the code does
+something else.
+
+For a STACK_DYNPTR object, acquired_class() sets BPF_RES_F_DEREF and
+obj_off = spi_off(spi).  emit_acquire_after() then emits
+BPF_LDX_MEM(BPF_DW, BPF_REG_AX, BPF_REG_FP, a->obj_off) and stores that
+value in the hidden slot.  That value is the first word of the dynptr, the
+ringbuf record or the file reader, not the dynptr's stack address.
+unwind.c then calls bpf_ringbuf_discard_proto.func((u64)(long)handle, ...)
+on that handle, and the dynptr may even be overwritten later without
+affecting the slot.
+
+The comment looks copied from the iterator and IRQ-flag sites, where "at
+its address, which the call takes" is accurate because the slot holds the
+object's address.  acquired_class() describes the dynptr case correctly
+("The handle of a dynptr is the record or the reader, the first word of the
+dynptr at @obj_off").  Could this comment say that the slot holds the
+record or reader loaded from the dynptr after the call?
+
+[ ... ]
+
+> @@ -12702,9 +12818,26 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
+>  	invalidate_stack_slices(env, callee->frameno, INT_MIN, 0);
+>  
+>  	/* What the frame holds when it returns is the caller's to release. */
+> -	for (i = 0; i < state->acquired_refs; i++)
+> -		if (state->refs[i].frameno == callee->frameno)
+> -			state->refs[i].frameno = caller->frameno;
+> +	err = bpf_frame_desc_record_exit(env);
+> +	if (err)
+> +		return err;
+
+Do programs that load at the parent commit get rejected here even when no
+bpf_throw() can be reached while the resource is held?
+
+On x86-64 with CONFIG_UNWINDER_ORC and on arm64,
+bpf_jit_supports_exception_cleanup() is true, so bpf_check() sets
+env->describe_frames for any program where some subprog has might_throw,
+which includes any program using bpf_assert() anywhere.  The new calls then
+reject cross-frame resources wherever they occur, not only at a throw:
+
+- bpf_frame_desc_record_exit(), called from prepare_func_exit() and
+  exit_func_on_its_own(), fails with "frame_desc: a subprog returns
+  holding what R0 does not carry ..." for any ref owned by the returning
+  frame that is not a single REF_TYPE_PTR carried in R0 (a bpf_spin_lock or
+  res lock, saved IRQ flags, an iterator).  It also fails with "returns in
+  other sections" for a subprog that enters RCU or preempt-disabled
+  sections for its caller.
+
+- bpf_frame_desc_record_release(), reached from process_spin_lock(),
+  unmark_stack_slot_irq_flag() and release_reference_nomark(), fails with
+  "releases what another frame holds" when ref->frameno != st->curframe.
+
+- bpf_frame_desc_record_acquire(), reached from mark_stack_slots_iter(),
+  mark_stack_slot_irq_flag() and mark_stack_slots_dynptr(), returns -EXDEV
+  ("creates an object in the stack of another frame") for an iterator, IRQ
+  flags or a ringbuf/file dynptr created through a pointer to the caller's
+  stack.
+
+For example, this loads before the patch and is rejected after it:
+
+  static __noinline void lock_it(struct val *v) { bpf_spin_lock(&v->lock); }
+  static __noinline void unlock_it(struct val *v) { bpf_spin_unlock(&v->lock); }
+  SEC("tc") int prog(struct __sk_buff *ctx) {
+          struct val *v = bpf_map_lookup_elem(&m, &(int){0});
+          if (!v) return 0;
+          lock_it(v); v->cnt++; unlock_it(v);
+          bpf_assert(ctx->len > 0);
+          return 0;
+  }
+
+In lock_it(), process_spin_lock() -> bpf_frame_desc_record_acquire() gives
+the REF_TYPE_LOCK entry a non-zero ->res with frameno 1.  At its BPF_EXIT,
+bpf_frame_desc_record_exit() returns -EINVAL because the type is not
+REF_TYPE_PTR.  The throw is never reached with the lock held, and the
+verifier guide says a BPF_EXIT from a static subprog with a lock held is
+allowed.
+
+The commit message lists these restrictions and says "Later patches lift
+most of the first five".  The ringbuf/file dynptr case is not in that list.
+The fixes come later in the series: 99e07a877ad7 ("bpf: Allow a callee to
+leave resources with its caller") and 0bbb9cb47a2c ("bpf: Allow a callee to
+release its caller's resources").  99e07a877ad7 itself says "These programs
+are rejected even if no throw can find the resource held, although they
+load today."  This leaves a bisection window in which existing programs
+that use bpf_assert() or bpf_throw() fail to load on x86-64 and arm64.
+
+Could the restriction apply only when a throw is reached with the resource
+held, or could the series be reordered so that no intermediate commit
+rejects programs that load today?
 
 
 ---
@@ -241,4 +348,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43027088527
---===============2514789805718188415==--
+--===============9085444904980240592==--
