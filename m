@@ -1,110 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.17
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794362378;
-	b=2v/pMjVdMRuuFF0jxVMlEetJ20PBne6ppQFrezYJGhpE1McOa9++XfIj15G5rAoSiGGU
-	 LKef4+X5e/kkWRXbNQ+AwZ0ghPE+kyB+zkXo83LBhlv8B9LoWuTZEQEcmjpJxaOcHxT14
-	 92ja0PdUoqowWFqh+F/hhZC2tmnCVsulQLf+Zf4Zts64Rz5GVeyBu+txLu6a0HETTIeYO
-	 dfeRTXvM6fZtGdo4BAEJ4578wdkYAwzlG1NYHmAwR8VLKjAze1lO6ccKY1CzUtkX0wHrO
-	 ofBbkZRMuAiZLF7PpT/+RFy0moSblvlYONs1UxVmcsS5f9L8Rd4Ae0pdq2hMma4oLQA==
+	t=1794363682;
+	b=Bx895vBOb9m1pFgfUYcuVcwdhLu1Sv80M0tEbWncj9VVD0xooSle3XnqoT9zq4QrfSqY
+	 1H20cjjpnBogctm03Of+gwhjeANWqv7xRpEYGWeBgOfVzM9iS6U+j1LjX0Hvo86TscBcf
+	 MK/DrdkhcZaqUH+gq73nnC5S/Bx5K9+DoBcxI9vOvr1+m8XB9K8WjO9LPEa+s8LtXHm9s
+	 gU2/eDCfcozUAYl9F1qlB22vsch5wmo8yUiceMTSmktvHvilbHm+1AUaiF+oaBLB9AYif
+	 abLKNlSXhVp76UeZAt4VjJIJvbJXW+fTHn1s8PpYRNZsm/MevDPpUnKWZ4ug86dS4hA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794362378;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=Jgu962y8cHYH/mees700v1pRhH7ojTrqx1f7sTX+E/8=;
-	b=hT54XwFySNs7OleJj/7lAZNthL2IVMNez8uB5WAOi0Au+BAqpeaJaiBOSlaDdVihTg7D
-	 vZlaLKBARUS+hKSEv9HlOwNSPh3H/a+AjrMHDZ4R7kbyEo2I3e31YUq0O14xd7ndH7w7a
-	 FnuvTnimF7AqYxA5iFDx3v41j7QAv3Ke9A2dDnJho6HBUxPZj7f3cO0GqUKcGqAzlTSXj
-	 fTTpqgAYjizC6wJggRjtDJqFL/OrAv9oJ/fKv/ehzCmoKXEvbsgusQEI3DiY+/yKyRokS
-	 Ie2/lSFc57dqkwYXvM4F7QvxKwmB7lKe3BzuV5mQyMk5cpZ/EXhxNSv5VyfyIAo3IOQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794363682;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=WJbesFIYlpH1gBWGhFnOLKrK8EWw7z9yvLVG93BvJhk=;
+	b=Nb0n1lfJhZVhwfDY+cxH3LJobUHFfJEm1sIDThr8rPlc+xiT+41l47CvLGOKoU3LPmdd
+	 NFvV+Y+GDPnHZ/EYSitZ/ICWDtKCGflqetCxuEUeUIn9hZaRpqueY11mdWteqaM1vz/pR
+	 esK7Z7gHTroxsn8d2i6wBqzZnOuEe9771SpH1fh+8wOqilxQSVTidwz1J6UyGfhbCsSPr
+	 7aT0GgfcTGUVt6cjcyD1c/86CRs2+M2PZYN4UmWrwTIlRQbCC0CIuzw7IAJUNbp3/AnXK
+	 4MySP2djriFAUGZGuKgrhBYT9VPYO7leagncadnRWskYXY4y1sp7hVJGsZbZAq8Uo6Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cloudflare.com;
-	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=NAA8ObNw;
-	arc=none smtp.remote-ip=209.85.208.42
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=H1BAPK3e;
+	arc=none smtp.remote-ip=198.175.65.17
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8CA0606A320
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 01:59:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C8CA0606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72137606A335;
+	Wed, 11 Nov 2026 02:21:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 72137606A335
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=NAA8ObNw
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-6b785ca42ebso13074a12.2
-        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 17:59:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1794362376; x=1794967176; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Jgu962y8cHYH/mees700v1pRhH7ojTrqx1f7sTX+E/8=;
-        b=NAA8ObNw0VFx6zfK7QgM1ZFQMkCGhinaiCGyiEr/B2ayq9IY9lyHmHRK/ZIY952fas
-         U6I0nseO8oXA8WL4i/T4WnssVKG9ZTwFsZq9WnrxFUDQYMOal923XAORXy68UIoj/fp9
-         2o44YAqDd3V7i/wsQHzUoxOAQg2ZWdiVVgVRA78/MtLcuux2t4VWm8sbWXGsIL1CAFa7
-         ppxqerNjc8Ws6DKxXNWki1zOGGGni9XMFP+vgcYS8jQQMS2+0YgvR+yAVrdp0CsweV86
-         ul7lHm3tYS+gVl3leOtAa3t4ZdQOY2s1J6F4dlAkY64FxkLFuxYlLke/N78FKcpd41iX
-         VRag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794362376; x=1794967176;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Jgu962y8cHYH/mees700v1pRhH7ojTrqx1f7sTX+E/8=;
-        b=qGTy86XefkojlHijDBqwDEKBVdBMvLFL6yUUvOWLnUp42nhIFw2K/+kQTpMPWWrTxm
-         nou2H4WJrM72/scaWItNZU5q9aWsnyLxI6RfYseI0UQgazfpUoItdcZZnO4/yjvFXhZ9
-         6TygfbnO1Ms3yZC6lMEVXnprzxHhNB6hOu2Q09WE4v5DUMvpNDEMwTaZ23z9f9KyU9NY
-         ycLlR5+MKUKBIYq0USFRm4xTfv35xFVr56+Gmio14OaKsZEElDzUuYwlY3Kb8AFJzCq3
-         wzvAjGa0CujXNT4dzZ5h8nWFojywEtpyQNO1iyNFeF88hA4On725z1yywaOMETctJcg7
-         HcWg==
-X-Forwarded-Encrypted: i=1; AL+hErFYYc+xnakVNaNrSg3xifjz76KhVtueW/A78fJ9Zo2q1ra6aRCoa+uQ63EkfGyuYDuVthc=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+ncbAGQmaF7Fzl3F9e0GrTZm+WZyEoUPZJwnHZX2JOEo7bY2J9
-	EotfHo438jmxtpwyfVrciz9F6nSqFxRqQauDbzA8UQv0c8UYDKWJnD+I2Ua8yNJknbj7eDa4WLf
-	D1GADAbs=
-X-Gm-Gg: AYBFou0xEbsKY9UkWq78kzqS4XdgzElYcWhEGieafQBMV2i7+w1D5UPOke36Nlo2Tdr
-	zOjSXU27lP06vlwqnFTLicInp87szST7oQGlfh2CL69LEnlo6Ms6XNuJ2r9OvvlK0Jj8ihvZ0E8
-	YkYoMPyGVlq5mNUOrqkDZe1yyXflW+LgAES1uug4Jw7oDkD0gYRQcgm7IOogFI5M0cqsqMstXvI
-	1w4eBzOiPD5IIfFQ9CtOmSZITUEPAaHAVR7nrKuyQEDs/9kqLZWRnHWjN/RTU29MTGToUtNpKSm
-	TAPmbfsvAOZLcIPY88kpIrqEG3WTX3ZqkVrmRtiVhE28qm44X+qXOw1FGu6rZvc6kSWzd764iXh
-	jXnxpvNYKyO+oppctlQv+OW2L+C/JlbCsBGy/qJZxvpe1tH3pNXeYojyLAF1v4YfTFFlNtmWDoS
-	rKFyaQsL9JDTICgJk5hB2hyPjOkMQn/QuuqWd+w+9infOGTk4IPCYxnPsnQ00pBPI1OfMDx3S61
-	LfWK6nWDugYnHHo+ofENsXxfxkrDPkaM3W50KBvf0i+HviDDtpwf0v9PLNs/269o1kkrtmKo41m
-	1BLRAvmpQnrY6C+jidowjwh7MYyGn6pGYIURE7phW4xOBLYWvSaQyY3GSA==
-X-Received: by 2002:aa7:c683:0:b0:6b6:feca:2450 with SMTP id 4fb4d7f45d1cf-6b7775eba49mr531899a12.19.1794362376364;
-        Tue, 10 Nov 2026 17:59:36 -0800 (PST)
-Received: from L9JK9NPFH9 ([104.28.20.58])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b7834cdc23sm147498a12.12.2026.11.10.17.59.33
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 10 Nov 2026 17:59:35 -0800 (PST)
-From: Tianyi Gao <tianyi@cloudflare.com>
-To: netdev@vger.kernel.org
-Cc: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	toke@redhat.com,
-	lorenzo@kernel.org,
-	horms@kernel.org,
-	bpf@vger.kernel.org,
-	shuah@kernel.org,
-	hawk@kernel.org,
-	kernel-team@cloudflare.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	linux-kselftest@vger.kernel.org,
-	Tianyi Gao <tianyi@cloudflare.com>
-Subject: [PATCH net-next v2 3/3] selftests: net: veth: test RX queue NAPI links
-Date: Wed, 11 Nov 2026 01:59:22 +0000
-Message-ID: <20261111015922.67745-4-tianyi@cloudflare.com>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261111015922.67745-1-tianyi@cloudflare.com>
-References: <20261111015922.67745-1-tianyi@cloudflare.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=H1BAPK3e
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794363682; x=1825899682;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=w+Xr+QzMFDzwse/PNcCw0jqlWFmK5mh/TodzvCIlmX4=;
+  b=H1BAPK3ezf6vDifk0ZEN4Nv8DsUPZbBi4Hjs4SjKd6sI2Viaw4NKpFHy
+   4lquMYBTFn+GwCUHVoTz/5P61s2mISQxn3Aed0myBYkv304taYIoYNaFZ
+   hJDHJZMVXF20nxuq9VsPtND7E2TSCJ1hCFmGQRhs1NWgv7NOujQjr6lre
+   dGoE3vFN2Ar1VUe3k8Yh3vjPldxEaH3Z2xieXaB9EG0zFahndHG2z7DKs
+   7qBQvGo7USaPyMeSM3y9rBaUB7y0Mraw/mOX+efylOU5WpNcH3lpFTebp
+   zg2CljP0DbI6qKgokrazDEQ4Ng/Mlo3I6osLG/Dwd6MWyznvsowL3jZpA
+   A==;
+X-CSE-ConnectionGUID: BH/mHbQyQlmqkf/7OWh6uw==
+X-CSE-MsgGUID: eYgbRsIBRD2htPutqLnAwQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11962"; a="3153920"
+X-IronPort-AV: E=Sophos;i="6.27,207,1787036400"; 
+   d="scan'208";a="3153920"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2026 18:21:22 -0800
+X-CSE-ConnectionGUID: /Psi1CagQMSAizsJ6rTKlA==
+X-CSE-MsgGUID: jhs4LrhCQpuiSFsIXmJsnw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,207,1787036400"; 
+   d="scan'208";a="8643043"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 10 Nov 2026 18:21:18 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xQxxa-00000000xtr-2qFM;
+	Wed, 11 Nov 2026 02:21:14 +0000
+Date: Wed, 11 Nov 2026 10:20:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiri Olsa <jolsa@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+	Naveen N Rao <naveen@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Jason Baron <jbaron@akamai.com>, Alice Ryhl <aliceryhl@google.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ard Biesheuvel <ardb@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Alan Maguire <almagui@kernel.org>,
+	x86@kernel.org, linux-trace-kernel@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH 13/13] samples/kprobes: Add batch probe example
+Message-ID: <202611110929.bmBlvfbY-lkp@intel.com>
+References: <20261109195827.1091410-1-jolsa@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -114,126 +91,39 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261109195827.1091410-1-jolsa@kernel.org>
 
-Check that the napi-id of every RX queue matches a NAPI instance of the
-device. Also check that the queues are linked only while NAPI is
-enabled. Run the checks with GRO on and with XDP attached, and across RX
-channel changes and link down/up.
+Hi Jiri,
 
-queue-get and napi-get are only visible through netlink. Read them with
-the ynl CLI, as the ndo-xmit checks do. Compare the results with jq.
-Skip the checks if the ynl CLI or jq is not found.
+kernel test robot noticed the following build warnings:
 
-Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
----
- tools/testing/selftests/net/veth.sh | 79 ++++++++++++++++++++++++++++-
- 1 file changed, 78 insertions(+), 1 deletion(-)
+[auto build test WARNING on trace/for-next]
+[also build test WARNING on linus/master v7.4-rc2 next-20261109]
+[cannot apply to tip/x86/core]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/tools/testing/selftests/net/veth.sh b/tools/testing/selftests/net/veth.sh
-index 64c2a5a59821..685209995485 100755
---- a/tools/testing/selftests/net/veth.sh
-+++ b/tools/testing/selftests/net/veth.sh
-@@ -110,6 +110,44 @@ chk_xdp_feature() {
- 	fi
- }
- 
-+chk_queue_napi() {
-+	local msg="$1"
-+	local target=$2
-+	local expected=$3
-+	local ns=$BASE$target
-+	local ifindex
-+	local queues
-+	local napis
-+	local st
-+	local linked
-+
-+	ifindex=`ip netns exec $ns cat /sys/class/net/veth$target/ifindex`
-+	queues=`ip netns exec $ns "$YNL" --family netdev --dump queue-get \
-+		--output-json --json "{\"ifindex\": $ifindex}" 2>&1`
-+	st=$?
-+	napis=`ip netns exec $ns "$YNL" --family netdev --dump napi-get \
-+		--output-json --json "{\"ifindex\": $ifindex}" 2>&1` || st=$?
-+
-+	printf "%-60s" "$msg"
-+	if [ $st -ne 0 ]; then
-+		echo " fail - ynl cli error: $queues $napis"
-+		ret=1
-+		return
-+	fi
-+
-+	queues=`echo "$queues" | \
-+		jq -c 'map(select(.type == "rx") | ."napi-id" // empty) | sort'`
-+	napis=`echo "$napis" | jq -c 'map(.id) | sort'`
-+	linked=`echo "$queues" | jq length`
-+
-+	if [ "$queues" = "$napis" ] && [ "$linked" = "$expected" ]; then
-+		echo " ok "
-+	else
-+		echo " fail - expected $expected found $queues napis $napis"
-+		ret=1
-+	fi
-+}
-+
- chk_channels() {
- 	local msg="$1"
- 	local target=$2
-@@ -330,7 +368,8 @@ fi
- 
- [ $CPUS -lt 2 ] && echo "Only one CPU available, some tests will be skipped"
- [ $STRESS -gt 0 -a $CPUS -lt 3 ] && echo " stress test will be skipped, too"
--[ ! -f "$YNL" ] && echo "ynl cli not found, ndo-xmit tests will be skipped"
-+[ ! -f "$YNL" ] && echo "ynl cli not found, ndo-xmit/napi tests will be skipped"
-+[ ! -x "$(command -v jq)" ] && echo "jq not found, napi tests will be skipped"
- 
- chk_channels_carrier up up || ret=1
- chk_channels_carrier up down || ret=1
-@@ -443,6 +482,44 @@ else
- fi
- cleanup
- 
-+if [ -f "$YNL" ] && [ -x "$(command -v jq)" ]; then
-+	create_ns
-+	RXQ=1
-+	if [ $CPUS -gt 1 ]; then
-+		ip netns exec $NS_DST ethtool -L veth$DST rx 2
-+		RXQ=2
-+	fi
-+	chk_queue_napi "queue napi - default" $DST 0
-+	ip netns exec $NS_DST ethtool -K veth$DST gro on
-+	chk_queue_napi "           - with gro on" $DST $RXQ
-+	if [ $CPUS -gt 1 ]; then
-+		ip netns exec $NS_DST ethtool -L veth$DST rx 1
-+		chk_queue_napi "           - fewer rx channels with gro" $DST 1
-+		ip netns exec $NS_DST ethtool -L veth$DST rx 2
-+		chk_queue_napi "           - more rx channels with gro" $DST 2
-+	fi
-+	ip -n $NS_DST link set dev veth$DST xdp object ${BPF_FILE} section xdp
-+	chk_queue_napi "           - with gro and xdp on" $DST $RXQ
-+	ip -n $NS_DST link set dev veth$DST xdp off
-+	chk_queue_napi "           - after xdp off with gro on" $DST $RXQ
-+	ip netns exec $NS_DST ethtool -K veth$DST gro off
-+	chk_queue_napi "           - after gro off" $DST 0
-+	ip -n $NS_DST link set dev veth$DST xdp object ${BPF_FILE} section xdp
-+	chk_queue_napi "           - with xdp on" $DST $RXQ
-+	if [ $CPUS -gt 1 ]; then
-+		ip netns exec $NS_DST ethtool -L veth$DST rx 1
-+		chk_queue_napi "           - fewer rx channels with xdp" $DST 1
-+		ip netns exec $NS_DST ethtool -L veth$DST rx 2
-+		chk_queue_napi "           - more rx channels with xdp" $DST 2
-+	fi
-+	ip -n $NS_DST link set dev veth$DST down
-+	ip -n $NS_DST link set dev veth$DST up
-+	chk_queue_napi "           - after down and up" $DST $RXQ
-+	ip -n $NS_DST link set dev veth$DST xdp off
-+	chk_queue_napi "           - after xdp off" $DST 0
-+	cleanup
-+fi
-+
- create_ns
- 
- CUR_TX=1
--- 
-2.56.0
+url:    https://github.com/intel-lab-lkp/linux/commits/Jiri-Olsa/static_call-Index-code-text-reservation-lookups/20261109-204904
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace for-next
+patch link:    https://lore.kernel.org/r/20261109195827.1091410-1-jolsa%40kernel.org
+patch subject: [PATCH 13/13] samples/kprobes: Add batch probe example
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20261111/202611110929.bmBlvfbY-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261111/202611110929.bmBlvfbY-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611110929.bmBlvfbY-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> samples/kprobes/kprobe_many_example.o: warning: objtool: kprobe_many_call_function+0x1f: no-cfi indirect call!
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
