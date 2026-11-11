@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.180
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794374110;
-	b=SnMpkY3KDSpAk7AgFscY0eOus2IHs1zvxIOK3/5EeuwQ0dexesOghPIYvAr43T2MONN5
-	 inAOJCQ+8YCyDRBlZBNdv70D4X2m8UEMQAsN2VGybtJdJQAXNN7++JLjPou6ViOXPkkML
-	 uL3EhslKdyiitW15WxCe8rJ2LjWRXpRW05XxtBCFwKCvfI+Mq78jm9iajXDNp6W3UnoE8
-	 qc/POA/wTpM10dxa7B/vAV6la/c/4YkrUr3EpR2XOiXf70/Ytsmv6A0+Vf2GMJaOUUX35
-	 nwhjyTDoSseqycykB7+YNeLJY7Z7NsB1OEAhGLvKtvzP7/zv+N/woEcm/T8Doth3LUw==
+	t=1794374121;
+	b=vwjqBzyITVZXL0actnHqX7Zemj8iZkJzxAj1CHRYgp+MITjzXqwUbXLtqlipsV7IxpOG
+	 f8E00rcL/opu7Od4umAxoshnYEh8cb8CC+OpYYxErwYn4yHQvAwaYZUuJFRbEoSPVZrh0
+	 q8byNQrsy5WI62hsusNj+TV3JGGWacBYYG8j1XK8STAVsHFvYF1ov5hbVem0BlKPYTH45
+	 JBJ6IUesTkz/aHDRjSFQLvmtG9XOr+bAhduELGtGVrn3HFl0DDmTPaeKlA0x+ZcJVEZzg
+	 CHyCCUFkDAx1Ts0q/0uDljZor3EkebIICu2xJ1pCUBsD28/XAn7/WnYq9L29hOefAsQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794374110;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794374121;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=iDQVhoTmEVtQPZEDedB3vDz3t3eDnK0X/bbpEZfAdes=;
-	b=PCZoMH2WHdTamhvyji19FCFtE+wQYg3jir+P9pSlXVXS5WPbw78/b8dlE7QzLxBir+Jg
-	 SpTtdJL87SvBSCF5Kep0ZLSCgrJfbCFpTjbkRHIve9FiXqJ5LbBRYGQMQqtwTOHagILNh
-	 U8z63LWDzOtnyW7yLqxXdLA/my//uP9QpGxS7oB6+NMOgIHY3K6TI4+P9bW8OpcYFVnd5
-	 VjfYc9+/tYooSXw7NfyPkj/y9jIq2DANszFhysi4u7PUNTE0yFaOBNA6PUx2O1li7m7nb
-	 xrlG7oUn1UT3b3pbC+0PS/q56kdQH+V/ut/xjWSjKZVwu9KUJxVaRk1RM2y+SD40sOA==
+	bh=O2jjMVEd2+veLjBsKlSN8S11lNRJrLDfCaGQ947D4Us=;
+	b=nzoyzE3hcwjiQD5Luq8Nr1EWrY5v12f7mAs4CeYDej4J+imbuCrepOcTaig/cfxPsuIR
+	 /4e7VbsExHPbLb3iLNuJdMpMeI3DG0fyMPPbazku4riKaejdMi4itEqu4KW7nj0jhxCQk
+	 pYNFtB+I09PBqkyMMZnOxjeBnaEilAHBfVbUvr3HUWeAvOhOPFJi9S3NMZA+ObH5W7dDt
+	 GRqXplCkiB+o4R+jvtCxfWJiWc3mGywrroWJ6sZYxbN2R70qNdXP6bL3Hw8tzSifqS5Ye
+	 qU/d2PSjgtKu63FRfxLlbyeuA1GR35a5bgyIIOJQxvoEeIYl29ZP7BEFy4xMqzMBDGQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="Tp/QpmGu";
-	arc=none smtp.remote-ip=209.85.215.170
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=twHrc0r0;
+	arc=none smtp.remote-ip=209.85.214.180
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B292A606A31C
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 05:15:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B292A606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 343A2606A31C
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 05:15:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 343A2606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Tp/QpmGu
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-cdab8873d9dso1194798a12.1
-        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 21:15:09 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=twHrc0r0
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2edd50e36f2so2090755ad.3
+        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 21:15:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794374109; x=1794978909; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794374115; x=1794978915; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=iDQVhoTmEVtQPZEDedB3vDz3t3eDnK0X/bbpEZfAdes=;
-        b=Tp/QpmGubnlzhknHR3yT/Rt1KkbOvXTHY904QyhmAIS5omg7cLRlpGPmuJrdGL9OQM
-         tPWAwyesnpKVz0ipbqe38tybI0NioBe+RjfoxNfsk77/N21fqY/NLnLx8DNoOw4KryVU
-         P6bXjEHoTcQ8IngWFEIIfaOSpd72IBkUstd5qA9rIZ03dgzlIOaROKfVJC49umry4MvK
-         AmgFhtFEpYfOivvavg17JgORFrWWSdK3iwlmJKTHuIZgTi1SB3aLMcYSYwlvGWYr21CH
-         LgYoAfPAByxduNc0pd330gZfD+yd6wuEWxzgjbA/5W4e0jSmSJtq3MpCpgpw8efbZEuF
-         WsKQ==
+        bh=O2jjMVEd2+veLjBsKlSN8S11lNRJrLDfCaGQ947D4Us=;
+        b=twHrc0r0RPJNLfJ1NJg/9xrKR6af7mMeU9WCizXYd82Hccm5UGfgt9c7nUH9hY7A9i
+         cmaEBHwDpPiHfxq49LP2lYgq1FbfjAzWw/SzyTS0bPu4yKdihZvNWPFEzn9VrxOwysUk
+         D4fXRwGMmdsP1rki6QTFbVwgMBjal8tpTxzmNHLfyjhxTS9W4p76JYiWGXGy/Bfx1kMG
+         niy11n4W3HAqf60C9YlcJk00otbz0YgQCpQlLmrlW/vPzuhDXDhUZGLiak2/krBlq7+m
+         ZYiD17uhadXBjuRUQEvmi+FG9s0U4MLY3BKc21cLxjRKlj1mkDUJGor7bzB/JLewI+x7
+         m8sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794374109; x=1794978909;
+        d=1e100.net; s=20260707; t=1794374115; x=1794978915;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=iDQVhoTmEVtQPZEDedB3vDz3t3eDnK0X/bbpEZfAdes=;
-        b=eAf9NKANruhrat9l4WIROMprK9EbS/tRn2aVo0jxPKmmX07iw6oldi0/x6LHE1FRtY
-         qRH/49Cm+BE2x6kjfimsBVW+lrmSLqPHtjRE0d8cUQgiAB6igVsDFxFdnE6qj6M4ELrc
-         Z2/xj2ODH0+n7rsXq//N6y6vRH3N9fHrWXPW6+5YaCbekkw48fV0isPQ/uSjxPHnk+C/
-         e4w8zq3j2I4jftcHuVPbfoXjN+04Qzd2cGnlo5DiihspIH+0t/4QYesblbR7peKhXFRT
-         0WpVxT5xndyNlWAu/dbi4k3uhzdywmrwQZnmmNFaiT4eQZO3tUiLvAwoy3bAljcah0X0
-         XURA==
-X-Gm-Message-State: APuU4Z9oDW3YBnuKahmmySQkzpxMcJYhQrzc/KAgzSOfQwHHzzXTwU8X
-	91VY46gI2TNem1sQ4GoB5Ip2dsRM4KNgdDBgpebM1Uqn6u2RIhLlIgFNT7BMNA==
-X-Gm-Gg: AYBFou0uV1vz/nL01c+vVRSgXb7+RmnAugFzpExv+gUaVrih7S4xudNKjaqsFcH6Izc
-	kPehjH2opGwufF3lCWD+tGmLdUlJ34UrhYxPOaD8kyvd97a+bkOA3lD1Qd1yfYlc2JtPv42MGqH
-	3qIpELsvgHxlEELX701i7j5cWcUKGZN2HZD2HxVczr6oBT8nS6aM2k9wf9DpPE8sjQxWZB3p+Lv
-	x2jhnIpVEZwTyvhE4xp00AP6E32NV6dQLOprHEYA4lDPRF69msp9B7QR2JZGVtBEQMesRipjM32
-	aqC4oADNaMOZo+eZKnNdQaiBL30xOnXBvNCMm7Gf57HUtJCtfE3Cs4ummYLyOkflXRoMbHQcvvH
-	kBaxXx7rk6z7Iz1u+Evz+6EG4P1+t/mLsJX6I9DGVPotY9nJTOLj5uJRvwlLf/0f+Sk+gkx8nj3
-	L9z/hbrcbLgIRls6kSmup6CbNKZVqWDO7ByYWv1ECZAwOD0WOIQr2wdUyzjMLBc5hVHufvGk3hj
-	TXH3zSfVo+B8WweSEIM4TxZhhpLsbSbF47kP+JJOnK2uI/J5BNGnYUf4w36QbSttE8BA5y1sF+P
-	W4ge0yEehGgj/IvRkQ/ijlF6OPiU5BEugwAbV8qi+7FkUFUtmrF/dWtAoROM3iMExzfExvMTNaV
-	fByeeGahtyS3mCwNVjUEdjj2JZj2zuLo+KwVabV+EQDf/7/dYZAgiMngpsq63b0df/Q/u5nBSIw
-	==
-X-Received: by 2002:a17:90a:d643:b0:3ad:43c1:7d41 with SMTP id 98e67ed59e1d1-3b182fbe2e4mr1276856a91.33.1794374108771;
-        Tue, 10 Nov 2026 21:15:08 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.251])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b186234c12sm778834a91.10.2026.11.10.21.15.08
+        bh=O2jjMVEd2+veLjBsKlSN8S11lNRJrLDfCaGQ947D4Us=;
+        b=JgG7T2lwzf3RbzqGmBQ0K6CPBCurKFfe+SviE0z/aONWI4X1tXg0Vg95ujMl5CIvVQ
+         9RzctZARS6tExjLnVz/FnTJx0Jaq2iv7p9rSJfJk8Tb/2QDezRaq7si7W+3e+3KOQOhh
+         wRsRXpIaK7gxhVOpMA2T5FiKtt2hOBRg4Sj4dMrdeu8FJD4UCfCT4g9RROqq25yuUbSt
+         tluzuex9UApRVZ7Hpg07NTltv5huzkfZF3dhWDyX6yJH1IC+Ms4bZGCOgR+y1Ug5sHqz
+         2a56XUt24FZZXUXxieCH/dWKBt0qCv16BJiouOnLHVieh4/0d1JSw3ecsMLmxpXl/pQ2
+         6z8w==
+X-Gm-Message-State: APuU4Z9YZ5kSJ2nw4kPVgx4Ej5RvLj3oibIvdp6WK3VOXkdtdO2jUaiN
+	rlpAtLjsna8w9LObvRbRCts1vUthwcrEdbjZedE5K0qgXKE1NlKFm5YnDRB/Zg==
+X-Gm-Gg: AYBFou3cvgVjzpU8obHeex0NFLQ6JDImpuD6/MjvbU/ih7CidQxQqLv1baJ9Enj02SY
+	kV4yF3ssJot1ioGY5RyXaDdzmYjFOBHigpIg7nXJi5qnv+cYPAk12wJz9XqAon/NJdy1B5mPoDn
+	IQuVf8rz52lkFUqNqscw6Gv2bDNPqtNJE9JykiqB0ayP+BVEltArC5K4JxuRAhZXmILKxYEwYvi
+	SKLHh4Lj4TCqPgwRc4CTbRITeLGf4lyBtfGCS6KTMUJxVMvx+VgM8eMjkib8YpTxMzU749B3JTo
+	kOZlwV0rsrfnqM/clo+HrEJWy4q3oLKhDyJ5wzUktSFmcRpwRqqqFQuAiw6YyT6vsMRCrL9nf14
+	GwoKdoeNGz+yLCpyrf1O3bJI8/wpOh7gu/FsQt9juABz2BWHAIR0UvdC5n6o/2fKOrFs+Orsv/G
+	ZFrc3D6Uoo75Urqi96AuT9ne8cQk3vqbGh5uYJ6C1FzRie/589xM9WTp2ZVPQLI2L4FN5TGIDJU
+	1bsAiBkVXa/7jJcqoKuPjsPR0FE3q+Mb1wE/kzeWsCO1G7qxM2i/7dknzhOiWTqfHRSqLORQw4R
+	c4ngS5SknibxwXGduEC/xD4PDjdcdcSJpLSna3N1ZpfgbGB7zayaqz7OX254JsCOv3fJn3IKpz5
+	4bQ7X5VI4au+Ip7ICn7aTwFJzTLgilIgKUKIJcE3yWm5DBXtxFV112j8lb2HePxRlFcVqNtroGW
+	Q=
+X-Received: by 2002:a17:90b:4b92:b0:3ab:3437:554f with SMTP id 98e67ed59e1d1-3b182f26af0mr1626001a91.29.1794374114801;
+        Tue, 10 Nov 2026 21:15:14 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.249])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1846d5684sm656199a91.2.2026.11.10.21.15.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 21:15:08 -0800 (PST)
+        Tue, 10 Nov 2026 21:15:14 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 14/29] selftests/bpf: Test registers linked by scalar evolution
-Date: Wed, 11 Nov 2026 05:13:25 +0000
-Message-ID: <20261111051341.2800252-15-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 15/29] selftests/bpf: Test sign extensions of a range and of a linked register
+Date: Wed, 11 Nov 2026 05:13:26 +0000
+Message-ID: <20261111051341.2800252-16-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261111051341.2800252-1-alexei.starovoitov@gmail.com>
 References: <20261111051341.2800252-1-alexei.starovoitov@gmail.com>
@@ -102,293 +102,238 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Alexei Starovoitov <ast@kernel.org>
+From: Vineet Gupta <vineet.gupta@linux.dev>
 
-Tests for the patch that refines the linked registers of a conditional
-jump, and for the value numbering of phis. Linked registers are the live
-registers and stack slots that are a tested register + a constant on every
-path to the jump.
+Tests for two patches of this series. Two progs are for
+coerce_subreg_to_size_sx(), which keeps the 32-bit range across a no-op
+sign extension. Five are for refine_linked_regs(), which refines the linked
+registers of a conditional jump: the live registers and stack slots that
+are a tested register + a constant on every path to the jump, here
+modulo 2^32.
 
-The existing tests of linked scalars, spills and loops cover the mechanism:
-a copy, an added constant, the low 32 bits, a spill and its fill, two
-calls, a store through a pointer. These tests are for the hazards that only
-a static analysis has. scev.c computes the links before the main pass, from
-the insns alone, without types and without states.
+	call bpf_get_prandom_u32
+	r7 = (s32)r0
+	if w0 != -1 goto ..
 
-r8 is an unbounded scalar. Each prog computes a second value from it, tests
-one of the two and uses the other one as an offset into a map value of
-64 bytes. What loads is run.
+GCC keeps an int that a call returned that way. The jump tests the low
+32 bits of r0, the prog goes on with r7.
 
- - An add that becomes ALU32: 'r3 += 1' is converted to 'w3 += 1' at fixup
-   if r3 is an arena pointer. r3 == r7 + 1 holds modulo 2^32 only, also
-   after 'r3 = le64 r3; r7 = le64 r7' has turned both into scalars, and
-   also for the phi of two such adds. Rejected. A scalar + two constants
-   in a prog with an arena is linked modulo 2^64: loads.
- - A store through a dynptr slice may alias the buffer on the stack: a fill
-   before the store and a fill after it are not linked. Rejected. One fill
-   and its copy are linked, whatever is stored after the fill. Loads.
- - The buffer of a slice is at one of two stack offsets, a range in the
-   state, with a live slot between them. A slice of 0 bytes has its buffer
-   at a variable offset. Both load.
- - An edge that the verifier adds: each iteration of the outer loop saves
-   r3, which is r8, and restores it. may_goto that the verifier adds before
-   the header of the nested loop leaves both loops while r3 is r7.
-   Rejected.
- - A link at a loop header: two induction variables that are linked at loop
-   entry and have the same step are linked there. Negative test: the steps
-   differ.
- - A pointer is not a scalar: r3 is the address in r1 as a scalar. A bound
-   of r3 does not bound the offset of r1. Rejected.
- - Big endian: a 32-bit spill goes to the first half-slot. The low 32 bits
-   of a 64-bit fill are that spill on little endian only, also if the slot
-   is a phi. Loads there, rejected on big endian. The same for a 64-bit
-   spill of which the first half-slot is filled: the other one is dead, the
-   state has a 32-bit spill at the jump.
- - An empty intersection: the range that the jump implies and the known
-   bits of the linked register don't overlap. The register is left as it
-   is: loads with BPF_F_TEST_REG_INVARIANTS. The same if var_off of the
-   two registers don't overlap.
- - A link modulo 2^8: after 'r2 = (s8)r8; if r8 > 63 goto' both fit in s8,
-   so r2 is refined. Loads.
- - A link in 64 bits and a JMP32: 'if w3 s> 63' refines nothing but the
-   32-bit range of r3. The registers that are equal to r3 get it. Loads.
- - Value numbered phis: a copy + 1 on each of two paths is linked after
-   the join point. Negative tests: another delta on one path, unrelated
-   values on one of three edges. (zext32 x) on both paths is linked in 64
-   bits.
+'w0 = (s8)w0' and 'w0 = (s16)w0' keep a 32-bit range that crosses 0 and
+fits in s8 or s16.
 
-The tests with an arena are in verifier_arena.c, the others in
-verifier_scev.c.
+After 'r7 = (s32)r6' r7 == r6 (mod 2^32). A test of the low 32 bits of the
+source refines r7. The source is the def of r0 by a call, or (u32)(r6 + 1),
+which is 'i += 1' of an int as GCC emits it.
 
+Three negative tests get to 'r0 /= 0' and are rejected:
+ - A test of r7 does not bound the upper 32 bits of r6 + 3.
+ - If r6 is a u32 then 'r7 s<= 100' keeps the values from 2^31 on in r6.
+ - If r6 is a multiple of 3 then r7 need not be one: from 2^31 on it is
+   r6 - 2^32.
+
+Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- .../selftests/bpf/progs/verifier_arena.c      |  39 +++++
- .../selftests/bpf/progs/verifier_scev.c       | 162 ++++++++++++++++++
- 2 files changed, 201 insertions(+)
+ .../selftests/bpf/progs/verifier_movsx.c      | 186 ++++++++++++++++++
+ 1 file changed, 186 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
-index bebb607000a5..bf50413f6c08 100644
---- a/tools/testing/selftests/bpf/progs/verifier_arena.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
-@@ -625,6 +625,45 @@ ARENA_TEST(arena_pointer_moves, "r6 += 8;", __success NOT_UNROLLED100)
- ARENA_TEST(arena_pointer_becomes_a_number, "if r7 != 5 goto +1; r6 = 4096;",
- 	   __failure NOT_UNROLLED100 __msg("R6 invalid mem access 'scalar'"))
+diff --git a/tools/testing/selftests/bpf/progs/verifier_movsx.c b/tools/testing/selftests/bpf/progs/verifier_movsx.c
+index 2f4a678c31c2..6f90dac78fcd 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_movsx.c
++++ b/tools/testing/selftests/bpf/progs/verifier_movsx.c
+@@ -202,6 +202,192 @@ l0_%=:							\
+ 	: __clobber_all);
+ }
  
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, char[64]);
-+} map64 SEC(".maps");
-+
 +/*
-+ * r6: 64 bytes. r8: an unbounded scalar. r3, r7: an arena pointer and a copy of it.
-+ * The test leaves an address in r1.
++ * A 32-bit range that already fits the signed N-bit range is unchanged by the sign
++ * extension. Both of these straddle zero. The guard that follows can only be
++ * resolved statically if the range survives, and it protects a div by zero.
 + */
-+#define ARENA_LINKED(name, expect, body)					\
-+SEC("syscall") expect __load_if_JITed()						\
-+__naked void name(void)								\
-+{										\
-+	asm volatile (								\
-+	"r1 = %[arena] ll; r1 = 0; *(u32 *)(r10 - 4) = r1; r2 = r10; r2 += -4;"	\
-+	"r1 = %[map64] ll; call %[bpf_map_lookup_elem]; if r0 == 0 goto out_%=; r6 = r0;"	\
-+	"call %[bpf_ktime_get_ns]; r8 = r0; r3 = addr_space_cast(r8, 0, 1); r7 = r3;"	\
-+	body									\
-+	"r0 = *(u8 *)(r1 + 0);"							\
-+	"out_%=: r0 = 0; exit;"							\
-+	:									\
-+	: __imm(bpf_map_lookup_elem), __imm(bpf_ktime_get_ns),			\
-+	  __imm_addr(map64), __imm_addr(arena)					\
-+	: __clobber_all);							\
-+}
-+
-+ARENA_LINKED(scalar_plus_two_constants, __success __retval(0),
-+	"r2 = r8; r2 += 1; r2 += 1; if r8 > 61 goto out_%=; r1 = r6; r1 += r2;")
-+/* 'r3 += 1' is converted to 'w3 += 1': r3 is 0 and not 1 << 32 */
-+ARENA_LINKED(arena_ptr_plus_constant, __failure,
-+	"r3 += 1; r3 = le64 r3; r7 = le64 r7; r2 = 0xffffffff ll; if r7 != r2 goto out_%=;"
-+	"r3 >>= 32; r3 -= 1; r1 = r6; r1 += r3;")
-+/* At the join point r3 is phi((+ x 1)). The insn there, an add to a scalar, does not define it. */
-+ARENA_LINKED(arena_ptr_plus_constant_on_two_paths, __failure,
-+	"if r8 == 0 goto 1f; r3 += 1; goto 2f; 1: r3 += 1; 2: r8 += 1; r3 = le64 r3; r7 = le64 r7;"
-+	"r2 = 0xffffffff ll; if r7 != r2 goto out_%=; r3 >>= 32; r3 -= 1; r1 = r6; r1 += r3;")
-+
- SEC("syscall")
- __description("arena: a number is not an address in arena")
- __failure __msg("R6 invalid mem access 'scalar'")
-diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
-index b961a12b5224..1f9aa7e691be 100644
---- a/tools/testing/selftests/bpf/progs/verifier_scev.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
-@@ -3338,6 +3338,168 @@ NOT_LINEAR_TEST(lsh_grows, "r7 &= 15;", "r7 <<= 1;", UNROLLED("(<< r7 1)"))
- NOT_LINEAR_TEST(same_constant, "r7 = 17;", "r7 &= 31;", NOT_CHANGED)
- NOT_LINEAR_TEST(same_wide_constant, "r7 = 0xffffffff00000011 ll;", "r7 &= -239;", NOT_CHANGED)
- 
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, char[64]);
-+} map64 SEC(".maps");
-+
-+/*
-+ * A conditional jump refines the registers and stack slots that are linked to what it tests.
-+ * r6: 64 bytes. r7: a scalar below 256. r8: an unbounded scalar. r9: the context.
-+ * The test leaves an address in r1.
-+ */
-+#define LINKED_SEC(sec, name, expect, body)					\
-+SEC(sec) expect									\
-+__naked void name(void)								\
-+{										\
-+	asm volatile (								\
-+	"r9 = r1; r1 = 0; *(u32 *)(r10 - 4) = r1; r2 = r10; r2 += -4; r1 = %[map64] ll;"	\
-+	"call %[bpf_map_lookup_elem]; if r0 == 0 goto out_%=; r6 = r0;"		\
-+	"call %[bpf_get_prandom_u32]; r7 = r0; r7 &= 255;"			\
-+	"call %[bpf_ktime_get_ns]; r8 = r0;"					\
-+	body									\
-+	"r0 = *(u8 *)(r1 + 0);"							\
-+	"out_%=: r0 = 0; exit;"							\
-+	:									\
-+	: __imm(bpf_map_lookup_elem), __imm(bpf_get_prandom_u32), __imm(bpf_ktime_get_ns),	\
-+	  __imm(bpf_dynptr_from_skb), __imm(bpf_dynptr_slice_rdwr),		\
-+	  __imm(bpf_ringbuf_reserve), __imm(bpf_ringbuf_discard),		\
-+	  __imm_addr(map64), __imm_addr(ringbuf)				\
-+	: __clobber_all);							\
-+}
-+#define LINKED(name, expect, body)	LINKED_SEC("socket", name, expect, body)
-+
-+#define VALID	__success __retval(0)
-+#define UNBOUND	__failure __msg("unbounded min value")
-+
-+/* r3 is the address in r1 as a scalar. It does not bound the offset of r1. */
-+LINKED(pointer_is_not_scalar, __failure,
-+	"r7 &= 127; r1 = r6; r1 += r7; r3 = r1; r3 = le64 r3; if r3 < 64 goto out_%=; r1 += -64;")
-+
-+LINKED(sign_extension_that_fits, VALID, "r2 = (s8)r8; if r8 > 63 goto out_%=; r1 = r6; r1 += r2;")
-+
-+/* 'int n' in three registers. 'if w3 s> 63' refines only 32-bit ranges: those of the copies too. */
-+LINKED(copies_get_the_32_bit_range, VALID,
-+	"w2 = w8; r3 = r2; r4 = r2; if w3 s> 63 goto out_%=; if w4 s< 0 goto out_%=;"
-+	"r1 = r6; r1 += r2;")
-+
-+/* A copy on each of two paths: r2 and r3 are phis with the same operands, up to a constant */
-+#define TWO_PATHS(a, b)								\
-+	"if r7 > 9 goto l_%=; r2 = r8; " a " goto m_%=; l_%=: r2 = r8; r2 >>= 1; " b	\
-+	"m_%=: if r2 > 62 goto out_%=; r1 = r6; r1 += r3;"
-+
-+LINKED(congruent_phis, VALID, TWO_PATHS("r3 = r2; r3 += 1;", "r3 = r2; r3 += 1;"))
-+LINKED(phis_with_other_delta_on_one_path, UNBOUND,
-+       TWO_PATHS("r3 = r2; r3 += 1;", "r3 = r2; r3 += 2;"))
-+/* One of three edges brings unrelated values */
-+LINKED(phis_not_linked_on_one_of_three_edges, UNBOUND,
-+	"r3 = r8; r3 >>= 2; r2 = 0; if r7 == 20 goto m_%=;"
-+	TWO_PATHS("r3 = r2; r3 += 1;", "r3 = r2; r3 += 1;"))
-+/* (zext32 x) on both paths: linked in 64 bits */
-+LINKED(congruent_phis_of_zext32, VALID,
-+	"if r7 > 9 goto l_%=; w2 = w8; r3 = r2; goto m_%=; l_%=: r2 = r8; r2 >>= 1; w2 = w2;"
-+	"r3 = r2; m_%=: r3 += 1; if r2 > 62 goto out_%=; r1 = r6; r1 += r3;")
-+
-+/* The low 3 bits of r3 are 5. It is r8 + 5 once r8 fits in s8: no overlap with [-2, 1]. */
-+LINKED(empty_intersection, VALID __flag(BPF_F_TEST_REG_INVARIANTS),
-+	"r3 = (s8)r8; if r3 & 7 goto out_%=; r3 += 5; if r3 s> 100 goto out_%=;"
-+	"if r3 s< -100 goto out_%=; if r8 s< -7 goto out_%=; if r8 s> -4 goto out_%=;"
-+	"r3 += 3; r1 = r6;")
-+
-+/* r2 is even. It is r8 once r8 fits in s8. r8 is odd after the last jump: var_off don't overlap. */
-+LINKED(var_off_dont_overlap, VALID,
-+	"r2 = (s8)r8; if r2 & 1 goto out_%=; if r2 s> 100 goto out_%=; if r2 s< -100 goto out_%=;"
-+	"if r8 > 5 goto out_%=; if r8 & 1 goto l_%=; goto out_%=;"
-+	"l_%=: r2 &= 1; r2 <<= 6; r1 = r6; r1 += r2;")
-+
-+/* The low bytes of the spill to r10 - 16 come first or last */
-+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-+#define FIRST_BYTES_ARE_LOW	VALID
-+#else
-+#define FIRST_BYTES_ARE_LOW	__failure __msg("R1 unbounded memory access")
-+#endif
-+
-+/* r2 is the low 32 bits of the slot. The 32-bit spill is in its first half-slot. */
-+LINKED(spill_32_bits_fill_64_take_low_half, FIRST_BYTES_ARE_LOW,
-+	"*(u64 *)(r10 - 16) = r7; *(u32 *)(r10 - 16) = r8; r2 = *(u64 *)(r10 - 16); w2 = w2;"
-+	"w3 = w8; if r2 > 63 goto out_%=; r1 = r6; r1 += r3;")
-+/* The slot is a phi: two paths spill distinct values to its first half-slot */
-+LINKED(spill_32_bits_on_two_paths_fill_64_take_low_half, FIRST_BYTES_ARE_LOW,
-+	"*(u64 *)(r10 - 16) = r7; *(u32 *)(r10 - 16) = r8; if r7 > 9 goto l_%=;"
-+	"r3 = r8; r3 >>= 1; *(u32 *)(r10 - 16) = r3;"
-+	"l_%=: r2 = *(u64 *)(r10 - 16); w2 = w2; if r2 > 63 goto out_%=;"
-+	"r3 = *(u32 *)(r10 - 16); r1 = r6; r1 += r3;")
-+/* The half-slot at r10 - 12 is dead: at the second jump the state has a 32-bit spill */
-+LINKED(spill_64_bits_fill_32, FIRST_BYTES_ARE_LOW,
-+	"*(u64 *)(r10 - 16) = r8; if r8 s> 63 goto out_%=; if r8 s< 0 goto out_%=;"
-+	"r2 = *(u32 *)(r10 - 16); r1 = r6; r1 += r2;")
-+
-+/* r0 is r10 - 24 when the first 8 bytes of the packet are not in one piece */
-+LINKED_SEC("tc", slot_written_through_a_slice, UNBOUND,
-+	"r1 = r9; r2 = 0; r3 = r10; r3 += -16; call %[bpf_dynptr_from_skb];"
-+	"r1 = r10; r1 += -16; r2 = 0; r3 = r10; r3 += -24; r4 = 8;"
-+	"call %[bpf_dynptr_slice_rdwr]; if r0 == 0 goto out_%=;"
-+	"r3 = *(u64 *)(r10 - 24); *(u64 *)(r0 + 0) = r8; r2 = *(u64 *)(r10 - 24);"
-+	"if r3 > 63 goto out_%=; r1 = r6; r1 += r2;")
-+/* One fill reads one value: r2 is a copy of r3, whatever is stored through the slice */
-+LINKED_SEC("tc", copy_of_a_fill_from_a_slice_buffer, VALID,
-+	"r1 = r9; r2 = 0; r3 = r10; r3 += -16; call %[bpf_dynptr_from_skb];"
-+	"r1 = r10; r1 += -16; r2 = 0; r3 = r10; r3 += -24; r4 = 8;"
-+	"call %[bpf_dynptr_slice_rdwr]; if r0 == 0 goto out_%=;"
-+	"r3 = *(u64 *)(r10 - 24); r2 = r3; *(u64 *)(r0 + 0) = r8;"
-+	"if r3 > 63 goto out_%=; r1 = r6; r1 += r2;")
-+
-+/* The buffer is r10 - 32 or r10 - 48, a range in the state. The call does not write to r10 - 40. */
-+LINKED_SEC("tc", slice_buffer_at_two_offsets, VALID,
-+	"r1 = r9; r2 = 0; r3 = r10; r3 += -16; call %[bpf_dynptr_from_skb];"
-+	"*(u64 *)(r10 - 32) = r7; *(u64 *)(r10 - 40) = r7; *(u64 *)(r10 - 48) = r7;"
-+	"r8 = r10; r8 += -48; r9 = r10; r9 += -32; r7 = 0;"
-+	"l_%=: call %[bpf_get_prandom_u32]; if r0 == 0 goto s_%=; r9 = r8;"
-+	"s_%=: r7 += 1; if r7 < 64 goto l_%=;"
-+	"r1 = r10; r1 += -16; r2 = 0; r3 = r9; r4 = 8; call %[bpf_dynptr_slice_rdwr];"
-+	"r1 = *(u64 *)(r10 - 40); r1 = r6;")
-+/* No insn stores through a slice of 0 bytes, and the call does not write to the buffer */
-+LINKED_SEC("tc", slice_of_0_bytes_at_variable_offset, VALID,
-+	"r1 = r9; r2 = 0; r3 = r10; r3 += -16; call %[bpf_dynptr_from_skb];"
-+	"*(u64 *)(r10 - 24) = r7; *(u64 *)(r10 - 32) = r7; r7 &= 8;"
-+	"r1 = r10; r1 += -16; r2 = 0; r3 = r10; r3 += -32; r3 += r7; r4 = 0;"
-+	"call %[bpf_dynptr_slice_rdwr]; r1 = r6;")
-+
-+/* BTF of the kfuncs that only asm calls */
-+void __kfunc_btf_root(void)
++SEC("socket")
++__description("MOV32SX, S8, negative range is preserved")
++__success __success_unpriv __retval(0)
++__naked void mov32sx_s8_negative_range(void)
 +{
-+	bpf_dynptr_from_skb(0, 0, 0);
-+	bpf_dynptr_slice_rdwr(0, 0, 0, 0);
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	w0 &= 0x3f;					\
++	w0 -= 0x3f;					\
++	/* w0 is [-63, 0], already a valid s8 */	\
++	w0 = (s8)w0;					\
++	if w0 s< -0x3f goto l0_%=;			\
++	w0 = 0;						\
++	exit;						\
++l0_%=:							\
++	/* dead unless the range was widened */		\
++	w0 /= 0;					\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
 +}
 +
-+/* Linked at the header in every iteration: r2 is r3 + 2 at loop entry, both have the step 1 */
-+#define LOOP_HEADER(enter, step)						\
-+	enter "l_%=: if r3 > 61 goto out_%=; r1 = r6; r1 += r2; r0 = *(u8 *)(r1 + 0);" step	\
-+	"if r0 != 0 goto l_%=;"
-+
-+LINKED(linked_at_loop_header, VALID,
-+	LOOP_HEADER("r3 = r8; r2 = r8; r2 += 1; r2 += 1;", "r2 += 1; r3 += 1;"))
-+LINKED(linked_at_loop_entry_only, __failure,
-+	LOOP_HEADER("r3 = r8; r2 = r8; r2 += 1; r2 += 1;", "r2 += 2; r3 += 1;"))
++SEC("socket")
++__description("MOV32SX, S16, negative range is preserved")
++__success __success_unpriv __retval(0)
++__naked void mov32sx_s16_negative_range(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	w0 &= 0xfff;					\
++	w0 -= 0xfff;					\
++	/* w0 is [-4095, 0], already a valid s16 */	\
++	w0 = (s16)w0;					\
++	if w0 s< -0xfff goto l0_%=;			\
++	w0 = 0;						\
++	exit;						\
++l0_%=:							\
++	/* dead unless the range was widened */		\
++	w0 /= 0;					\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
 +
 +/*
-+ * No exit of the inner loop dominates its backedges: may_goto is added before its header. The prog
-+ * holds a reference, so may_goto goes to the exit of the outer loop: an edge that the verifier
-+ * adds. Every iteration of the outer loop restores r3. At the header of the inner one it is r7.
++ * A 32-bit sign extension keeps the low 32 bits, so refining the source
++ * reaches the destination. The source is a call return, which is the shape
++ * bpf-gcc builds for "int err = helper(); if (err) ..".
 + */
-+LINKED(added_edge, UNBOUND,
-+	"r1 = %[ringbuf] ll; r2 = 8; r3 = 0; call %[bpf_ringbuf_reserve]; if r0 == 0 goto out_%=;"
-+	"*(u64 *)(r10 - 16) = r0; r3 = r8;"
-+	"o_%=: r2 = r3; r3 = r7;"
-+	"i_%=: r1 = *(u8 *)(r6 + 0); if r1 == 1 goto a_%=; if r1 == 2 goto b_%=; goto i_%=;"
-+	"a_%=: goto i_%=;"
-+	"b_%=: r3 = r2; r1 = *(u8 *)(r6 + 1); if r1 == 3 goto o_%=;"
-+	"r4 = r6; if r8 > 63 goto r_%=; r4 += r3;"
-+	"r_%=: *(u64 *)(r10 - 24) = r4; r1 = *(u64 *)(r10 - 16); r2 = 0;"
-+	"call %[bpf_ringbuf_discard]; r1 = *(u64 *)(r10 - 24);")
++SEC("socket")
++__success __retval(0)
++__naked void sext_mov_unlinked_src(void)
++{
++	asm volatile ("						\
++	call %[bpf_get_prandom_u32];				\
++	r7 = (s32)r0;		/* r0 as the call defines it */	\
++	if w0 != -1 goto l0_%=;	/* refines r0, propagates to r7 */ \
++	if r7 == -1 goto l0_%=;	/* sign-extended, not 0xffffffff */ \
++	r0 /= 0;						\
++l0_%=:								\
++	r0 = 0;							\
++	exit;							\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
 +
- /*
-  * r7 = ctx->data;
-  * r8 = r7
++/*
++ * The propagation must not run backwards over the upper 32 bits: a sign extension
++ * knows nothing about the upper bits of its source. r8's low 32 bits do become
++ * 2, r8 == 2 does not follow.
++ */
++SEC("socket")
++__failure __msg("div by zero")
++__naked void sext_no_sync_from_subreg_base(void)
++{
++	asm volatile ("						\
++	call %[bpf_get_prandom_u32];				\
++	r6 = r0;						\
++	r7 = (s32)r6;						\
++	r8 = r6;						\
++	r8 += 3;						\
++	if r7 != -1 goto 1f;	/* pins the low 32 bits of r8 only */ \
++	if r8 == 2 goto 1f;	/* taken only if r8 wrongly refined */	\
++	r0 /= 0;						\
++1:								\
++	r0 = 0;							\
++	exit;							\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/*
++ * r2 is (u32)(r6 + 1) and r7 is (s32)(r6 + 1), so w2 == 1 means r7 == 1.
++ * bpf-gcc builds "i += 1" for an int induction variable into exactly this shape.
++ */
++SEC("socket")
++__success __retval(0)
++__naked void sext_sync_from_zext_sibling(void)
++{
++	asm volatile ("						\
++	call %[bpf_get_prandom_u32];				\
++	r6 = r0;						\
++	r6 <<= 32;						\
++	call %[bpf_get_prandom_u32];				\
++	r6 |= r0;		/* r6 = full 64-bit unknown */	\
++	r2 = r6;						\
++	w2 += 1;		/* r2 = (u32)(r6 + 1) */	\
++	r7 = (s32)r2;		/* r7 = (s32)(r6 + 1) */	\
++	if w2 != 1 goto 1f;	/* propagates to r7 */		\
++	if r7 == 1 goto 1f;					\
++	r0 /= 0;						\
++1:								\
++	r0 = 0;							\
++	exit;							\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/*
++ * "w6 = w6" leaves r6 in [0, U32_MAX]. A signed compare on its sign extension
++ * must not hand r6 the sign-extended value: that drops every r6 >= 2^31 from
++ * the range and makes the guarded div provably dead.
++ */
++SEC("socket")
++__failure __msg("div by zero")
++__naked void sext_narrow_base_keeps_high_values(void)
++{
++	asm volatile ("						\
++	call %[bpf_get_prandom_u32];				\
++	r6 = r0;						\
++	w6 = w6;		/* r6 in [0, U32_MAX] */	\
++	r7 = (s32)r6;						\
++	r8 = 1;							\
++	r8 <<= 31;		/* 0x80000000 */		\
++	if r7 s> 100 goto 1f;	/* r6 is [0,100] or >= 2^31 */	\
++	if r6 < r8 goto 1f;	/* reachable: r6 may be >= 2^31 */ \
++	r0 /= 0;						\
++1:								\
++	r0 = 0;							\
++	exit;							\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/*
++ * A base/step line does not survive the sign extension: it subtracts 2^32,
++ * and 2^32 is not a multiple of 3. r6 = 0x80000007 is a multiple of 3, so
++ * r7 = -2147483641 is reachable.
++ */
++SEC("socket")
++__failure __msg("div by zero")
++__naked void sext_drops_stale_step(void)
++{
++	asm volatile ("						\
++	call %[bpf_get_prandom_u32];				\
++	r6 = r0;						\
++	w6 = w6;						\
++	r6 *= 3;		/* base 0, step 3 */		\
++	r7 = (s32)r6;						\
++	r8 = 1;							\
++	r8 <<= 31;						\
++	r9 = r8;						\
++	r9 += 7;						\
++	if r6 < r8 goto 1f;					\
++	if r6 > r9 goto 1f;	/* r6 in [0x80000000, 0x80000007] */ \
++	if r7 != -2147483641 goto 1f; /* reachable: r6 == 0x80000007 */ \
++	r0 /= 0;						\
++1:								\
++	r0 = 0;							\
++	exit;							\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
+ SEC("socket")
+ __description("MOV64SX, S16, R10 Sign Extension")
+ __failure __msg("R1 type=scalar expected=fp, pkt, pkt_meta, map_key, map_value, mem, ringbuf_mem, buf, trusted_ptr_")
 -- 
 2.55.0
 
