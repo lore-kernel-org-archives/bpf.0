@@ -1,94 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794374147;
-	b=n7zucvmN8BMT6JGorL2OGzdSNZSE6KJYgsW5NAmxNNqWFMcgRqj4XgzyS1nbd7V4a096
-	 EL803W6cajGluhnypw5RI/ebGnz4FEeIx5fV81OASix2V3t1+TN+hZ8CuRWPf7sFY4DST
-	 ZBURNmQz4yFbGqNgBHNXFogY2Mxc6Yb8Qi/XvKo1JiGB0HojJrbOODE2iXY25KtvZU7PU
-	 k61z2ANmJw01c4gDTlUtTKa85bj1F0O6bC+tLXcnKVDANXOkcwGxSLKA1MwHDpIVldoWU
-	 /egjudkAqshpH0igk0EyPMBKWb9CH7rkTSz5ukC8/AYw4VKGsa4HTbDj5YIWB4ih2hA==
+	t=1794374153;
+	b=EU3Y/MNfdZjLRHvKX+W0U3pKwEPBwYNGySgLMHg8DQzXqgKuhSF8WuMzu5oybgLeyj7v
+	 wnaea7zEIBwhjIJ0NVsOwgasZCrtIABz6AxbudHKASaPm754Zt/b3Qvrav3rFWlb9Rnik
+	 dgGnmJrrTKgmp15vtMek20VN36XDfEQ5njULxkXniTjOp+ogBebiGR6Q5ptJmS8DPRRWk
+	 OazJA+/7IvLzjY7ykRrj9pwFmN+rdJxlQAyvYqq1QzpCX1um5KZ3/X5ACnz0nelBqd1F2
+	 M6uGIWXp3QxHZAJ2U9Bj04nKRUTqa9cSf22EZhbU8s9/wF1y68mfpLatuhh5aeso7bA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794374147;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794374153;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=SzsTj0QEoPhFy3iruBUdwE2pbhVxPesGnx2Fd7nCz94=;
-	b=cPZdnc52hikWEvF5uEupoJqYSsy8JIyhNF/yngu0nxDRO9ezfNoiX2g+pwbkbXoOxvOx
-	 lo8KCw3yvzpKskPWaPJUUbsV1ePTIewr9rqxsDDPy+btFS+iiUUi5n2+FTItwNeahIouq
-	 N6eUL0MvVTFUJw4BVq246UpYJRbP+QhruAp5YLgj+wSCiCfh4j5q1xXVkls8dHT0c/EdJ
-	 IyyB7Uzoyh9VsZ7g6PmDUd2t5VlXSxl4JQtZfWKh+MKmhYTKt/W5nyPo70TyWYcGpYm4V
-	 DaSl586xP3ogFcYVyWMJ9bieGKpTiM9sOZK/ReV8qKUB509k+EbVpZONgjFbPi9LUsA==
+	 Content-Transfer-Encoding;
+	bh=3d3EAdWNfrk9hvjoYFgzLoD3Elbkunkuey1uxS+vU/8=;
+	b=U11lkRl0e2NAe9k3qNUV/MXgGMDjGy0vOEyl647XwDX5/+pU6p83PA0FvixFdbyUFSB8
+	 rJcfjPT0zgxy/r5LJDmZxh6F/p3bg90tSqbFymKOmnsJXSXmjMP92Ltdq/tLqVEwz4693
+	 xCmZJaAxpEAJBMpbQEZDeO5MV1a+o5pGVikBI6Zf7h7yEss5sARXB5T3mEpDvZADuVreK
+	 nuewZfysQevFuusGNY3p1Ufhzqy46l/tMPq7yd4OY4T/2UAJiel67w68ymzUpuGpqhYnb
+	 lmnZR6UQx+grz2oky1H2FDJiLnjMKue8XUHPWTMk7lqIucqv2+z5QUlNDaXJq/4FBpg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VrVy57Fk;
-	arc=none smtp.remote-ip=209.85.215.178
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=SNxcXWE3;
+	arc=none smtp.remote-ip=209.85.215.172
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4DCC606A31C
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 05:15:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D4DCC606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD3F5606A31C
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 05:15:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BD3F5606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VrVy57Fk
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-cdac6d19ddaso1061750a12.2
-        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 21:15:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=SNxcXWE3
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-cdba1b5ed8dso1326236a12.1
+        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 21:15:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794374146; x=1794978946; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=SzsTj0QEoPhFy3iruBUdwE2pbhVxPesGnx2Fd7nCz94=;
-        b=VrVy57FkE2IARSo2PsvNmcvTMC4AUj+Qo+e4ISAPu9LniLwwzdcgKHscI5Fysa/wRv
-         4iIMmuWJnnFUXA9o1CvSahY5ryD/FlBk2mC+1pD72d7gYFTc6TlCvCQwsOY9W01UA3ZY
-         STuAw/hGlftM2IH8EqB18Wf/2JL/oRvVAIvSl1eZNdw2QlxRw/QGOSEinnO5YBu7CJQO
-         2wcvkiLBimboQlgDbOZ/lsruCH62zfVY8qCOUk2EWpWQw7AV49zXN2T4ZZOsPe31O2/Y
-         4nvi8EA3FvkaMILhVwqyP1j5dLdrESf9FAjbCnfo+u8HOsV9leAhTe0JEUkBJIEcJYH9
-         3NyQ==
+        d=gmail.com; s=20260707; t=1794374152; x=1794978952; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=3d3EAdWNfrk9hvjoYFgzLoD3Elbkunkuey1uxS+vU/8=;
+        b=SNxcXWE3ldVaMzOiAJo7/8NW0h6iQSM5UMUZ7xWZgysDhQmQ3R/25tyCztFuecFcAc
+         JVAw2aBRv1V3h12psxRsS8rPJgreuE++8LgzxeHrmSIQ+fzbptQQi0lFG5cl2IGiiB3k
+         XKodqVEBpd2kk0iRiPXRjL1JXWJd48frnVrKldu4RoxWCo8qQv1oTLHJ433lBlzPuliW
+         lkmCmkrr1gnvJei+DiD92wur0D7PCA5o06sZ8UD4+g52x2G86lK0zlrF8QY2EyXjQTyY
+         Qv8N/e2UPPacLvFQrBpmg5dXUzCXBtN/f1J8em4t0AdS0UbMxDvlfr3ojS3v46Y7ZTfq
+         YPPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794374146; x=1794978946;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=SzsTj0QEoPhFy3iruBUdwE2pbhVxPesGnx2Fd7nCz94=;
-        b=kDgS2GaKx+LJiFQQSMCVYhvXokB6aCB+zc/SuAPyuZuy6hpQJI6Rdg2ZHwY5p0aiAS
-         mHuj09xcyzuQ+nD8c97qPNEMtLWpIJKgIkI/7XnqL2QqXt6+O0PXfWAfWH8xvdQcAiXE
-         jQUWBT8UGOPWXhZeUJhS4cYB3inPntNlq/xPMbG0Nz5lzWoWEpqb3z1snTuPn4aPPuaf
-         kTQ8AvJiRE04aRmWP/2p4wpHqXMn2iEHCtNHUI/UPZ/r15+jqd/W+AxBfNiM0KcXAsTn
-         5u6uFgesRdnO/jkHmL5QjntYA5gCkOAQR9dNq3Bh5u8AmJJWaFWrRutUb3obFQ2pt/vS
-         yJoQ==
-X-Gm-Message-State: APuU4Z/7dxCWZ0ee+yistxfjszGrMpI3rbJtlrRE6KvLla+vla1cO0ly
-	aePeYLALHoNPMkkZTFuicly+p3STwnTGAQVMjfzF6KfiAHmN+qB0gW1hwKoiJw==
-X-Gm-Gg: AYBFou3zdYqERrSaie/QV8vIayH22HtfuDb/Q3J70eNxOnyRJXVUxWD7LBG5MZGP+ra
-	pmy3g4cMOc4tDT1E3l2kMCV7kGnh7DGJNN7weUDZT5Xd4zdpu4ih/5bciPfnSp8oOmHAmMGIbqF
-	HtMOZ1rIuUwDZy+w5LjIv3xfKEtlyseNEZhPwzoDcFBtSsmfoQbeVIHEvNzo364uH3RZxO3CGOm
-	hBe9VhkC9wZnM59jTNoZTYS7izHxsBfpo/kwarom6eiovz48QhCTYkVKTSXF13IsVOipcG00HdA
-	Q79QHwmqfGFU8LQCdWXtwNRFoMrrBBA50IDVWNFqpPjlw8XIHYcfBzKlxilDqF2ksT6IL+CjU4W
-	kdmpNpX+kD5ZBOoGFEa26hzkZ1jR/r+m7Bh3Y1A+Q7KAy9ojyaP0tc91SPJD/rLKaNC4edBqdgr
-	79pIF6kKGlCPb/xVUr32p+ttgsGlhaKTz1ZlAezEbm4Lbdun0afWFdgUavc9aRw5GZPIHTldiv8
-	SpO5dZ1dAQ+407Q9iRV9ZvrIFrt2YKVJfVIvXDm3Mk5s3HSk7OUcOk/zOUGBajExz7X//R9Kl5v
-	Zgz2vktyrbpX9dl+iU99EFhtbb4FEaEMMT6uOGAcDjiDEqVtDqIMHSKCat6fMYIttcuPUyfMzi9
-	bl8h5fWhNKuuuk9+QYGTc1gm0lSZ5bOokh2YRwmd2cG6UYQeS2sFxfh5+ipNrDpAxddgCe18+a1
-	k=
-X-Received: by 2002:a17:90b:2710:b0:3b0:92b2:2e74 with SMTP id 98e67ed59e1d1-3b182fe0859mr1423696a91.62.1794374145946;
-        Tue, 10 Nov 2026 21:15:45 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.255])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b17db319bdsm2694847a91.6.2026.11.10.21.15.45
+        d=1e100.net; s=20260707; t=1794374152; x=1794978952;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=3d3EAdWNfrk9hvjoYFgzLoD3Elbkunkuey1uxS+vU/8=;
+        b=mWsXrTzihp/Rj5Af4ntymqlPtZo/nK7DjsV2u7psxw1/TJ18hnOk8rQRQYKySaco6W
+         woOdV4PtDvNFt9mqorIjaY/MKQI4E0KnbmXOr4tz6snmDmzaLcqvnBxtMQOFJlvaoo09
+         mZtenk6Md1qmoPhkX6w38O0ADcEZ+i/xyuN29ZYR+0dq9PtUMHPsxjXLrie5khkp2V4t
+         X32DE9Ip3tIqWJSL+2mWwtL576R7V/0HY2nntPxgMLAP2eKJeeX/RbWTc6qFr9dEGZFw
+         tR3fd41Icd8vhwSnJpUyARuFmTOXnlfv9T9k8y+ac2tzjE4ly9qsSMinZa02G6WExaq3
+         Sxfg==
+X-Gm-Message-State: APuU4Z9M227H/gRi/cV6FArv9xf6wLmP+wfrg3lkJAbDc+xM2WvFVz2y
+	hhcZAY5vM3r53oZ62XyYAr5fXnfQvMHEPBNeAx5fWMIb5u0LjbSe+mgG4S43xg==
+X-Gm-Gg: AYBFou18RqugtfEFmOsEZSnNSa/Cgha5LJVrXcj0nD5ywrw1UY7l/EJq2yYi7kkoeJK
+	HwLQAW/I8hGtBJ7gOI/qYwfsV7Z+E4q5LETur7jp57eXeNghMXZ3z4JR8wbqfEEimUmcAGleZ6m
+	cSxoBtHH0q/C0Z66uhEGeH4wtfOhLgmbRcTxoUsZzGWVNKzcF3sUuLihOjg4vVaaTDlx7BJ34wg
+	4r4QCZi+xUC5ierFcR+2AfLrOq0p2+NVsHSAo8Yr9+6asgs3+JDuFOLpKn0n2Y693ZnKe5nx43W
+	m6rJzH5MvI5Da2RFXwj9Lofbcjz6HG8Iaq9xGLI9p7W+Cu3y4AmYaXtjLtS01LvpDYqj9bj5sru
+	mByM81Vwr605pe+wxvEaQP7YT3naMzZgAVQEc5S+L33hid++Xo1Wsj8cYA6B3T7eMMlRUQDKHrg
+	Mpr0SmjtPLyxYH4nttsLNi4ouo1hzvx8SAo2BEhhXqYoMMBsbMvFF7AsPJflk7f7Iuf3nBxImjK
+	FHH6aeYIc0irKHNI+YPFuk+xTnlNrKowMX8I0dWJXZFXGThCEf8tpCNM5s8tMny6SpoHTzu/JNR
+	gVwItoB7DteOUCAwhbVuZdzKgkttr4OvD2mhL51cZ0avYmfyqfu9KwfNHFUQJHOa94paaCkp/6I
+	R92P+d+eaIkGFEA83gW2sFPNFZDRIFNqkuu/v23qJCkXmyBy4yV7qPO3NpR0V+zw+5yI8sfufRv
+	oq03A6Tl8q8lglN/aPXdMB
+X-Received: by 2002:a17:90b:4b8c:b0:3ab:8288:b8ce with SMTP id 98e67ed59e1d1-3b182f25969mr1045045a91.24.1794374151850;
+        Tue, 10 Nov 2026 21:15:51 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.250])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b17db7df7csm2685999a91.11.2026.11.10.21.15.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 21:15:45 -0800 (PST)
+        Tue, 10 Nov 2026 21:15:51 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 20/29] bpf: Find a copy of an induction variable without scalar ids
-Date: Wed, 11 Nov 2026 05:13:31 +0000
-Message-ID: <20261111051341.2800252-21-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 21/29] bpf: Compute scalar evolution expressions in irreducible loops
+Date: Wed, 11 Nov 2026 05:13:32 +0000
+Message-ID: <20261111051341.2800252-22-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261111051341.2800252-1-alexei.starovoitov@gmail.com>
 References: <20261111051341.2800252-1-alexei.starovoitov@gmail.com>
@@ -101,484 +100,224 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-A prerequisite of the removal of scalar ids. scev.c has two users of them:
-scev_regs_equal() reads them, link_copies() assigns them. Both are for
-a loop like this one. It has an iteration count (header_count: how often
-the header is executed) before and after the patch:
+A prerequisite of the removal of scalar ids. bpfj_proc_file_open of
+bpfjailer loads before and after the patch. Today it loads because of
+a scalar id, and scev.c has no replacement for that id in an irreducible
+loop:
 
-	u32 i = 0;
-	while (buf[i++] && i < 1023)
-		;
-	return buf[i];
+	for (int i = BPFJ_MAX_POD_PER_PID - 1; i >= 0; --i) {
+		if (i >= num_pods) {
+			continue;
+		}
+		struct bpfj_pod __arena* pod = actor->pods[i];
 
-clang keeps the value of i from before the increment in r2, and the linear
-latch tests r2:
+That is role_gate.h. i lives on the stack (clang, -mcpu=v4):
 
-	     r2 = 0
-	     r1 = 0
-	l:   r1 += 1
-	     if r2 > 1021 goto out
-	     r2 += r0
-	     w3 = *(u8 *)(r2 + 0)
-	     r2 = r1
-	     if w3 != 0 goto l
-	out: r0 += r1
+	171: r1 = *(u64 *)(r10 -40)
+	172: if w1 > 0x7 goto pc-10
+	173: r1 = *(u64 *)(r10 -40)
+	174: r1 <<= 3
 
-r1 and r2 have the same backedge value. r2 is a copy of the induction
-variable r1 if their entry values are equal too (at the header the two are
-congruent induction variables, LLVM: replaceCongruentIVs()).
-Commit ab5fa7281144 ("bpf: Count a loop whose exit tests a copy of the
-counter") added (copy r2 (linear r1 1)), COPY_SCEV, for that. scev.c
-analyzed loops only then, so it left the entry values to the main pass:
-scev_regs_equal() accepts the same constant or the same scalar id in the
-state at loop entry.
+The loop is entered at 163 and at 171: 'loop at 171, irreducible' in the
+level 2 log. compute_scev_for_loop() gives up on such a loop: nothing is
+known at its header, its body is not analyzed. The linked registers of
+a conditional jump are found while its loop is analyzed, so the jump at 172
+has none. Only the scalar id that r1 and fp-40 share bounds what insn 173
+fills.
 
-By now scev.c computes expressions for whole subprogs, the code before the
-loop included. const_diff_at_header() decides if r2 == r1 holds at the
-header in every iteration: it holds at loop entry and every backedge
-preserves it. Then r2 is an induction variable of its own, (linear r2 1),
-and but for one place no code after compute_header_scevs() has to know that
-it is a copy.
+scev.c has two layers. Expressions for registers and stack slots are value
+numbering, which works on any CFG. Recurrences, latches and iteration
+counts need a natural loop. So analyze the body of an irreducible loop like
+any other body, with the same worklist, and keep the second layer off:
+at the end the header env is set to unknown. For the enclosing loop and for
+the main pass the loop clobbers everything.
 
-It finds more than scev_regs_equal() did: const_diff_at_header() compares
-expressions, it does not know types and needs no id. The copy of a pointer
-induction variable, and a copy that is equal by value number only
-('r1 = r0 & 255; r2 = r0 & 255'), are induction variables too.
-bpf_compute_loop_iters() checks the type of each register that it widens,
-as for any induction variable.
+Why that is correct:
 
-The one place: if the entry value is a range,
-'entry value + step * header_count' is far off.
-'for (i = n; i > 0; i--) a[i - 1]' with n in [1, 4096] gives
-[-4094, 4096]. latch_iv_range() has a better bound for the
-induction variable that the latch tests, and as (copy ..) r2 had the range
-of that one. is_iv_at_header() gives it to every induction variable that is
-congruent to the tested one. It is the range at the header and
-bpf_clamp_scev_regs() takes it there only. After the linear latch
-a register can be the zero extension of its header value, and its state
-has what still holds of the range.
+- The worklist needs a topological order of the body, without backedges
+  and with nested loops collapsed. Reverse post-order is one for every
+  loop: compute_loops_in_subprog() makes the target of every retreating
+  edge of its depth-first search a loop header, and
+  bpf_compute_postorder() does the same search.
 
-link_copies() assigns one scalar id to r1 and r2 at the header, so that the
-test of r2 bounds r1 at 'out'. The linked registers of a conditional jump
-do that without an id: the live registers and stack slots that are a tested
-register + a constant on every path to the jump. At the header, the latches
-and the exits of a loop they include what const_diff_at_header() finds.
+- (REG r) is the value of r at the header, and the header of an
+  irreducible loop does not dominate the body: executions enter at
+  a secondary entry. What they bring is not known here. So an insn
+  of the loop whose immediate dominator is outside of the loop gets a phi
+  for every live register and stack slot and tracks no memory, like
+  the target of an edge that the verifier adds, see join_added_edges().
 
-Remove COPY_SCEV, is_copy(), copy_reg, scev_regs_equal(), link_copies().
+- An edge that the verifier adds goes where an exit of an outermost loop
+  goes. In another loop that is the header or a secondary entry.
 
-Precision that is lost:
- - Two registers enter the loop with the same constant, and only the state
-   knows it, not scev.c. The loop has no iteration count.
- - At a jump of the loop that is no latch and no exit a test of r1 does not
-   refine r2: const_diff_at_header() is not used there. copy_less and
-   copy_more of verifier_loop_latch.c stored at the copy - 1 and + 1 after
-   such a test. They store at the copy now.
- - A short loop that was unrolled because the copy of a pointer had no SCEV
-   is summarized. After the linear latch a packet pointer is not clamped,
-   so the copy has the range of one more iteration there, like the
-   induction variable itself.
-No other verdict changes in the selftests, Cilium, sched_ext, katran,
-bpfjailer and the programs in Rust.
+A natural loop nested in an irreducible one now has an env at loop entry,
+for const_diff_at_header() and compute_header_adds(). A loop that nests
+a loop with more than 256 exits is still not analyzed: the successors of
+the nested loop are not known.
 
-The new test copy_ahead enters the loop with 0 in the induction variable
-and 1 in the copy: no iteration count. copy_of_pointer stores through the
-value of a pointer from before the increment, 14350 -> 21 insns;
-copy_of_pointer_bad is one byte further and is rejected. In
-copy_same_value_number the two registers are computed by the same insns.
-copy_down_from_range is the loop that runs down from n, copy_zext zero
-extends the copy in it. copy_zext_bad zero extends a copy that starts
-below 0, stores at it after the latch and is rejected.
+Tests: a link within a basic block, across basic blocks, at the header of
+a nested natural loop. Each has a negative test that makes the link before
+the secondary entry.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/scev.c                             | 128 +++++-------------
- .../selftests/bpf/progs/verifier_loop_latch.c |  49 ++++++-
- 2 files changed, 84 insertions(+), 93 deletions(-)
+ kernel/bpf/scev.c                             | 50 +++++++++++--------
+ .../selftests/bpf/progs/verifier_scev.c       | 35 +++++++++++++
+ 2 files changed, 65 insertions(+), 20 deletions(-)
 
 diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-index 98a05f97196a..28fd06c16fe4 100644
+index 28fd06c16fe4..d95b8d26dc51 100644
 --- a/kernel/bpf/scev.c
 +++ b/kernel/bpf/scev.c
-@@ -48,11 +48,6 @@ enum expr_op {
- 	 * bpf_loop_at_index().
- 	 */
- 	LINEAR_SCEV,
--	/*
--	 * param[1], given that register param[0] and the register that param[1] starts from are
--	 * equal when the loop is entered. Not known otherwise.
--	 */
--	COPY_SCEV,
- 	/*
- 	 * (add rB rC) is the SCEV of rA: rA == rB + rC at the header in every iteration. rB and rC
- 	 * are the header phis here, not the entry values as below LINEAR_SCEV.
-@@ -285,7 +280,6 @@ static bool expr_is_vn(struct scev *scev, struct expr *e)
- 	case SPILL32:
- 	/* a function of the iteration number */
- 	case LINEAR_SCEV:
--	case COPY_SCEV:
- 	/* a relation between header phis */
- 	case ADD_SCEV:
- 		return false;
-@@ -527,13 +521,6 @@ static bool is_linear(struct scev *scev, int id, u32 *base, u32 *slope)
- 	return is_binop(scev, LINEAR_SCEV, id, base, slope);
- }
- 
--static bool is_copy(struct scev *scev, int id, u32 *reg, u32 *orig)
--{
--	u32 t;
--
--	return is_binop(scev, COPY_SCEV, id, &t, orig) && is_reg(scev, t, reg);
--}
--
- static bool is_linear_or_linear32(struct scev *scev, int id, u32 *base, u32 *slope, bool *zext32)
+@@ -1938,7 +1938,7 @@ static int join_successor(struct bpf_verifier_env *env, int cur_header, int succ
  {
- 	u32 t;
-@@ -596,7 +583,6 @@ static const char *op_str(u32 op)
- 	case SPILL32:  return "spill32";
- 	case ANY:      return "any";
- 	case LINEAR_SCEV:  return "linear";
--	case COPY_SCEV:    return "copy";
- 	case ADD_SCEV:     return "add";
- 	}
- 	return NULL;
-@@ -620,7 +606,6 @@ static u32 op_params_num(u32 op)
- 	case SMOD:
- 	case ANY:
- 	case LINEAR_SCEV:
--	case COPY_SCEV:
- 	case ADD_SCEV:
- 		return 2;
- 	case BPF_NEG:
-@@ -2743,9 +2728,10 @@ static int instantiate_header_scevs(struct scev *scev, u32 id, void *priv)
- 	return id;
- }
- 
--static int compute_header_scevs(struct bpf_verifier_env *env, struct env *header_env)
-+static int compute_header_scevs(struct bpf_verifier_env *env, int h)
- {
+ 	bool log_level2 = env->log.level & BPF_LOG_LEVEL2;
  	struct scev *scev = env->scev;
-+	struct env *header_env = find_header_env(scev, h);
- 	int l, r, t, id, ra, rb, ra_expr;
- 	bool zext32;
- 	s64 imm;
-@@ -2830,7 +2816,7 @@ static int compute_header_scevs(struct bpf_verifier_env *env, struct env *header
+-	int err, nested_header;
++	int err, nested_header, idom;
+ 	struct env *succ_env;
+ 
  	/*
- 	 *	do { i++; if (old > 1021) break; c = buf[old]; old = i; } while (c);
- 	 * rA = (+ rB IMM) and rB = (+ rB IMM): an iteration leaves the same number in both. If
--	 * they are equal when the loop is entered rA is at the header what rB is.
-+	 * they are equal at loop entry too, rA is an induction variable with the same step.
- 	 */
- 	for (ra = 0; ra < REGS_NUM; ra++) {
- 		if (header_env->reg2scev[ra] != UNKNOWN_EXPR_ID ||
-@@ -2840,9 +2826,12 @@ static int compute_header_scevs(struct bpf_verifier_env *env, struct env *header
- 			id = header_env->reg2scev[rb];
- 			if (header_env->reg2expr[rb] != header_env->reg2expr[ra] ||
- 			    !is_linear_or_linear32(scev, id, &l, &r, &zext32) ||
--			    !is_reg(scev, l, &t) || t != rb)
-+			    !is_reg(scev, l, &t) || t != rb ||
-+			    !const_diff_at_header(env, h, rb, ra, &imm) || imm)
- 				continue;
--			id = expr2(scev, COPY_SCEV, expr1(scev, REG, ra), id);
-+			id = expr2(scev, LINEAR_SCEV, expr1(scev, REG, ra), r);
-+			if (zext32)
-+				id = expr1(scev, ZEXT32, id);
- 			if (id < 0)
- 				return id;
- 			header_env->reg2scev[ra] = id;
-@@ -3072,7 +3061,7 @@ int bpf_compute_scev(struct bpf_verifier_env *env)
- 		cond_resched();
- 		header = bpf_loop_at_index(env, idx);
- 		err = aux[idx].loop
--		      ? compute_header_scevs(env, find_header_env(scev, header))
-+		      ? compute_header_scevs(env, header)
- 		      : compute_insn_scevs(env,
- 					   find_header_env(scev, header),
- 					   find_loop_env(scev, header, idx));
-@@ -3219,19 +3208,6 @@ static struct bpf_reg_state *scev_reg_for_linear(struct bpf_func_state *st, u32
- 	return &stack->spilled_ptr;
- }
- 
--/* Do the registers or stack slots @a and @b hold the same number in @st? */
--static bool scev_regs_equal(struct bpf_func_state *st, u32 a, u32 b)
--{
--	const struct bpf_reg_state *ra = scev_reg_for_linear(st, a);
--	const struct bpf_reg_state *rb = scev_reg_for_linear(st, b);
--
--	if (!ra || !rb || ra->type != SCALAR_VALUE || rb->type != SCALAR_VALUE)
--		return false;
--	if (tnum_is_const(ra->var_off) && tnum_is_const(rb->var_off))
--		return ra->var_off.value == rb->var_off.value;
--	return ra->id && ra->id == rb->id && ra->delta == rb->delta;
--}
--
- /* '*(u32 *)(r10 - 8) = rX' left a number in the low half of the slot. */
- static struct bpf_reg_state *scev_reg_for_spill32(struct bpf_func_state *st, u32 r)
- {
-@@ -3349,8 +3325,7 @@ static bool scev_reg_alive(struct bpf_verifier_env *env, struct bpf_verifier_sta
-  * 'i' is the loop iteration number, starting from 0.
-  * 'zext32' indicates the latch is for (zext32 (linear ...)) SCEV.
-  * 'jmp32' indicates that the latch is a JMP32 instruction.
-- * 'base_reg' is the register in <base>. 'copy_reg' is -1, or <reg> is made from that register,
-- * which has to be equal to 'base_reg' at the entry of the loop, see COPY_SCEV.
-+ * 'base_reg' is the register in <base>.
-  */
- struct linear_latch {
- 	u32 insn_idx;
-@@ -3358,7 +3333,6 @@ struct linear_latch {
- 	u32 step_expr;
- 	u32 bound_expr;
- 	u32 base_reg;
--	int copy_reg;
- 	u8 op;
- 	bool zext32;
- 	bool jmp32;
-@@ -3382,7 +3356,7 @@ static int match_linear_latch(struct bpf_verifier_env *env,
- 	struct env *latch_env;
- 	u32 src_reg_scev;
- 	u32 dst_reg_scev;
--	u32 t, l, r, op;
-+	u32 l, r, op;
- 	int id;
- 
- 	op = BPF_OP(insn->code);
-@@ -3412,11 +3386,6 @@ static int match_linear_latch(struct bpf_verifier_env *env,
- 		return -EFAULT;
- 	dst_reg_scev = latch_env->reg2scev[insn->dst_reg];
- 	src_reg_scev = latch_env->reg2scev[insn->src_reg];
--	latch->copy_reg = -1;
--	if (is_copy(scev, dst_reg_scev, &latch->copy_reg, &t))
--		dst_reg_scev = t;
--	else if (BPF_SRC(insn->code) == BPF_X && is_copy(scev, src_reg_scev, &latch->copy_reg, &t))
--		src_reg_scev = t;
- 	/*
- 	 * Make sure (linear ...) is in dst_reg_scev:
- 	 *   'if <invariant> <op> <linear>' ⇔
-@@ -4114,8 +4083,6 @@ static bool compute_max_iters(struct bpf_verifier_env *env,
- 
- 	iters->iv_reg = -1;
- 
--	if (latch->copy_reg >= 0 && !scev_regs_equal(st, latch->copy_reg, latch->base_reg))
--		return false;
- 	if (!eval_expr(env, scev, st, latch->base_expr, &initial_val) ||
- 	    !eval_expr(env, scev, st, latch->step_expr, &step_val) ||
- 	    !eval_expr(env, scev, st, latch->bound_expr, &bound_val))
-@@ -4451,49 +4418,15 @@ static bool is_simple_linear(struct scev *scev, u32 id, struct linear_coefs *out
+@@ -1966,6 +1966,18 @@ static int join_successor(struct bpf_verifier_env *env, int cur_header, int succ
+ 	succ_env = get_loop_env(scev, cur_header, succ_idx);
+ 	if (!succ_env)
+ 		return -ENOMEM;
++	/*
++	 * The header of an irreducible loop does not dominate its body. An insn whose immediate
++	 * dominator is outside of the loop is reached from a secondary entry, without the header.
++	 * The env at the source of an entering edge is not known: all '?', like a new env. So the
++	 * insn is a join point with a phi for every live register, see join_added_edges().
++	 */
++	idom = env->idoms[succ_idx];
++	if (cur_header >= 0 && succ_idx != cur_header &&
++	    env->insn_aux_data[cur_header].loop->irreducible &&
++	    bpf_loop_at_index(env, idom) != cur_header &&
++	    topmost_nested_loop(env, idom, cur_header) < 0)
++		succ_env->empty = false;
+ 	if (log_level2)
+ 		memcpy(old_env, succ_env, sizeof(*old_env));
+ 	err = join(env, succ_env, cur_env, succ_idx);
+@@ -1980,7 +1992,7 @@ static int join_successor(struct bpf_verifier_env *env, int cur_header, int succ
  }
  
  /*
-- * Is @r 'what it is in @st + slope * k' at the header in iteration k? @id is its SCEV there, @st is
-- * the state that entered the loop. At a jump in the loop @id can be what another register was at
-- * the header. @st says nothing about @r then.
-+ * Is @r 'its entry value + slope * k' at the header in iteration k? @id is its SCEV there. At a
-+ * jump in the loop @id can be linear in the entry value of another register: the entry value of @r
-+ * does not bound it then.
+- * Unsupported loops get only an unknown header environment.
++ * Recurrences need a natural loop. Unsupported loops get an unknown header environment.
+  * A nested loop is processed as a single instruction, its exits are the successors: all of
+  * them are needed. No result for the loop itself depends on the list of its own exits:
+  * mark_latches() prepares them for the loop around, and compute_max_iters() asks if there is
+@@ -2371,6 +2383,10 @@ bool bpf_scev_mem_addr(struct bpf_verifier_env *env, int insn_idx, u32 regno, u3
+  * @cur_header and @first are a loop header. Or -1 and the first insn of a subprog: the subprog is
+  * the outermost loop, which runs once. (REG r) is the entry value of r, the loops in it are single
+  * instructions.
++ * Value numbering works on any CFG: the body of an irreducible loop is walked like any other. Every
++ * retreating edge of the depth-first search goes to a loop header, see compute_loops_in_subprog(),
++ * and bpf_compute_postorder() does the same search. So reverse post-order is a topological order of
++ * this body too.
   */
--static bool is_linear_at_header(struct scev *scev, struct bpf_func_state *st, u32 id, u32 r,
--				struct linear_coefs *out)
-+static bool is_linear_at_header(struct scev *scev, u32 id, u32 r, struct linear_coefs *out)
+ static int compute_scev_for_loop(struct bpf_verifier_env *env, int cur_header, int first)
  {
--	u32 copy, orig;
--
--	if (is_copy(scev, id, &copy, &orig))
--		return copy == r && is_simple_linear(scev, orig, out) &&
--		       scev_regs_equal(st, r, out->base_reg);
- 	return is_simple_linear(scev, id, out) && out->base_reg == r;
- }
+@@ -2395,21 +2411,6 @@ static int compute_scev_for_loop(struct bpf_verifier_env *env, int cur_header, i
+ 	if (!cur_loop && !can_compute_subprog_scev(env, sub))
+ 		return 0;
  
--/*
-- * @st is at the header of a loop that @entry entered. A copy of an induction variable is equal to
-- * it there in every iteration. They got their ranges one by one: give them one id, like 'r2 = r1'
-- * does, so that a test of one of them is a test of both.
-- */
--static void link_copies(struct bpf_verifier_env *env, struct env *header_env,
--			struct bpf_func_state *entry, struct bpf_func_state *st)
--{
--	struct bpf_reg_state *reg, *orig;
--	struct linear_coefs coefs;
--	u32 r;
--
--	for (r = 0; r < REGS_NUM; r++) {
--		if (!is_linear_at_header(env->scev, entry, header_env->reg2scev[r], r, &coefs) ||
--		    coefs.base_reg == r)
--			continue;
--		reg = scev_reg_for_linear(st, r);
--		orig = scev_reg_for_linear(st, coefs.base_reg);
--		if (!reg || !orig || reg->type != SCALAR_VALUE || orig->type != SCALAR_VALUE ||
--		    tnum_is_const(orig->var_off))
--			continue;
--		if (!orig->id)
--			orig->id = ++env->id_gen;
--		reg->id = orig->id;
--		reg->delta = orig->delta;
+-	/*
+-	 * For irreducible loops, and for loops nesting a loop with a truncated
+-	 * exit list, just assume that everything is clobbered for now.
+-	 */
+-	if (cur_loop && !can_compute_loop_scev(cur_loop)) {
+-		header_env = get_loop_env(scev, cur_header, cur_header);
+-		if (!header_env)
+-			return -ENOMEM;
+-		/* The freshly allocated environment has all expressions unknown. */
+-		bitmap_fill(cur_loop->store_base_regs, REGS_NUM);
+-		bitmap_fill(cur_loop->tested_regs, REGS_NUM);
+-		header_env->empty = false;
+-		return 0;
 -	}
--}
 -
+ 	cur_env = kzalloc(sizeof(*cur_env), GFP_KERNEL_ACCOUNT);
+ 	if (!cur_env)
+ 		goto nomem;
+@@ -2422,9 +2423,12 @@ static int compute_scev_for_loop(struct bpf_verifier_env *env, int cur_header, i
+ 	if (!header_env)
+ 		goto nomem;
+ 	setup_initial_loop_env(header_env);
+-	err = worklist_push(env, cur_header, first);
+-	if (err)
+-		goto out;
++	/* The successors of a nested loop with a truncated exit list are not known: no walk */
++	if (!cur_loop || !cur_loop->nested_exits_overflow) {
++		err = worklist_push(env, cur_header, first);
++		if (err)
++			goto out;
++	}
+ 	if (!cur_loop) {
+ 		/* no backedge overwrites it */
+ 		header_env->empty = false;
+@@ -2527,6 +2531,12 @@ static int compute_scev_for_loop(struct bpf_verifier_env *env, int cur_header, i
+ 			free_loop_env(scev, cur_header, start);
+ 	}
+ 
++	/* For the enclosing loop and for the main pass it clobbers everything */
++	if (cur_loop && !can_compute_loop_scev(cur_loop)) {
++		memset(header_env, 0, sizeof(*header_env));
++		bitmap_fill(cur_loop->store_base_regs, REGS_NUM);
++		bitmap_fill(cur_loop->tested_regs, REGS_NUM);
++	}
+ 	err = 0;
+ out:
+ 	kfree(cur_env);
+diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
+index 0f737ca6bd07..9b1877a1b5e5 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_scev.c
++++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
+@@ -3574,6 +3574,41 @@ LINKED(linked_at_loop_header, VALID,
+ LINKED(linked_at_loop_entry_only, __failure,
+ 	LOOP_HEADER("r3 = r8; r2 = r8; r2 += 1; r2 += 1;", "r2 += 2; r3 += 1;"))
+ 
++/*
++ * An irreducible loop: 'l' is the header, 'm' is a secondary entry. A link that is made in the loop
++ * holds in the next basic blocks too. Not after 'm' if it is made before 'm': every edge of the
++ * loop to 'm' has it, the edge that enters the loop there does not. That edge can come from
++ * a natural loop 'o' around the irreducible one.
++ * In the last two tests 'o' is the header. The natural loop in it has an env at loop entry. Its
++ * header can be the secondary entry.
++ */
++LINKED(irreducible_loop, VALID,
++	"if r7 > 5 goto m_%=; l_%=: r7 += 1;"
++	"m_%=: r2 = r8; r2 += 1; r2 += 1; if r8 > 61 goto out_%=; r1 = r6; r1 += r2;"
++	"r0 = *(u8 *)(r1 + 0); if r7 < 10 goto l_%=;")
++LINKED(irreducible_loop_fallthrough_pred, UNBOUND,
++	"r2 = r7; if r7 > 5 goto m_%=; l_%=: r7 += 1; r2 = r8;"
++	"m_%=: if r8 > 63 goto out_%=; r1 = r6; r1 += r2;"
++	"r0 = *(u8 *)(r1 + 0); if r7 < 10 goto l_%=;")
++LINKED(irreducible_loop_next_bb, VALID,
++	"if r7 > 5 goto m_%=; l_%=: r7 += 1;"
++	"m_%=: r2 = r8; r2 += 1; r2 += 1; if r7 == 3 goto n_%=; r3 = 0;"
++	"n_%=: if r8 > 61 goto out_%=; r1 = r6; r1 += r2;"
++	"r0 = *(u8 *)(r1 + 0); if r7 < 10 goto l_%=;")
++LINKED(irreducible_loop_secondary_entry, UNBOUND,
++	"r9 = 0; o_%=: r9 += 1; call %[bpf_ktime_get_ns]; r8 = r0; r2 = r7; if r7 > 5 goto m_%=;"
++	"l_%=: r7 += 1; r2 = r8; r2 += 1; r2 += 1; if r7 == 3 goto m_%=; r3 = 0;"
++	"m_%=: if r8 > 61 goto out_%=; r1 = r6; r1 += r2;"
++	"r0 = *(u8 *)(r1 + 0); if r7 < 10 goto l_%=; if r9 < 3 goto o_%=;")
++LINKED(natural_loop_in_irreducible_loop, VALID,
++	"if r7 > 5 goto m_%=; o_%=: r7 += 1; m_%=:"
++	LOOP_HEADER("r3 = r8; r2 = r8; r2 += 1; r2 += 1;", "r2 += 1; r3 += 1;")
++	"if r7 < 10 goto o_%=;")
++LINKED(natural_loop_is_secondary_entry, MAP_OOB,
++	"r3 = r8; r2 = r7; if r7 > 5 goto l_%=; o_%=: r7 += 1;"
++	LOOP_HEADER("r3 = r8; r2 = r8; r2 += 1; r2 += 1;", "r2 += 1; r3 += 1;")
++	"if r7 < 10 goto o_%=;")
++
  /*
-  * A 32-bit counter that lives on the stack: the SCEV of slot @r is
-  * (spill32 (linear (zext32 @r) slope)) and there is a 32-bit number in the slot in @st.
-@@ -4585,6 +4518,19 @@ static void linear_bounds(struct bpf_reg_state *reg, u32 max_header_count,
- 	out->r32 = r32;
- }
- 
-+/*
-+ * Is @r the induction variable that the latch tests, or congruent to it: equal to it at the header
-+ * of the loop at @h in every iteration? Then the range of the one is the range of the other.
-+ */
-+static bool is_iv_at_header(struct bpf_verifier_env *env, int h, int iv_reg, u32 r)
-+{
-+	s64 delta;
-+
-+	if (iv_reg < 0)
-+		return false;
-+	return r == iv_reg || (const_diff_at_header(env, h, iv_reg, r, &delta) && !delta);
-+}
-+
- static void iv_bounds(struct bounds *bounds, struct cnum64 iv_range)
- {
- 	struct cnum64 r64 = cnum64_intersect(bounds->r64, iv_range);
-@@ -4902,7 +4848,7 @@ int bpf_compute_loop_iters(struct bpf_verifier_env *env, struct bpf_verifier_sta
- 			continue;
- 		}
- 		/* If SCEV for r is (linear <reg> <slope>) */
--		if (reg && is_linear_at_header(scev, cur_func, r_scev, r, &coefs) &&
-+		if (reg && is_linear_at_header(scev, r_scev, r, &coefs) &&
- 		    bpf_is_widenable_reg_type(reg)) {
- 			/* 32-bit ALU operations on pointers convert them to scalars */
- 			if (coefs.zext32 && reg->type != SCALAR_VALUE)
-@@ -5118,7 +5064,7 @@ int bpf_widen_scev_regs(struct bpf_verifier_env *env, struct bpf_verifier_state
- 		}
- 
- 		/* If SCEV for r is (linear <reg> <slope>)*/
--		if (spill32 || is_linear_at_header(scev, entry_func, r_expr, r, &coefs)) {
-+		if (spill32 || is_linear_at_header(scev, r_expr, r, &coefs)) {
- 			/* the range is derived from @loop_entry: bpf_clamp_scev_regs() */
- 			if (back)
- 				continue;
-@@ -5128,7 +5074,7 @@ int bpf_widen_scev_regs(struct bpf_verifier_env *env, struct bpf_verifier_state
- 			if (err)
- 				return err;
- 			linear_bounds(reg, iters->max_header_count, &coefs, &bounds);
--			if (coefs.base_reg == iters->iv_reg)
-+			if (is_iv_at_header(env, insn_idx, iters->iv_reg, coefs.base_reg))
- 				iv_bounds(&bounds, iters->iv_range);
- 			if (log->level & BPF_LOG_LEVEL2) {
- 				bpf_log(log, "loop header at %d, widening ", insn_idx);
-@@ -5166,7 +5112,6 @@ int bpf_widen_scev_regs(struct bpf_verifier_env *env, struct bpf_verifier_state
- 			mark_scev_reg_scratched(env, r);
- 		}
- 	}
--	link_copies(env, header_env, entry_func, cur_func);
- 	return 1;
- }
- 
-@@ -5223,7 +5168,7 @@ int bpf_clamp_scev_regs(struct bpf_verifier_env *env, struct bpf_func_state *cur
- 			goto clamp;
- 
- 		/* If SCEV for r is (linear <reg> <slope>)*/
--		if (!is_linear_at_header(scev, entry_st, r_scev, r, &coefs) &&
-+		if (!is_linear_at_header(scev, r_scev, r, &coefs) &&
- 		    !(behind && is_moved_linear(scev, r_scev, &coefs, &moved) &&
- 		      coefs.base_reg == r))
- 			continue;
-@@ -5251,7 +5196,11 @@ int bpf_clamp_scev_regs(struct bpf_verifier_env *env, struct bpf_func_state *cur
- 			continue;
- clamp:
- 		linear_bounds(entry_reg, max_header_count, &coefs, &bounds);
--		if (coefs.base_reg == entry->iv_reg && !moved)
-+		/*
-+		 * iv_range is the range at the header. After the latch @r can be the zero extension
-+		 * of its header value. @reg went through that insn and has what holds of the range.
-+		 */
-+		if (!behind && is_iv_at_header(env, insn_idx, entry->iv_reg, coefs.base_reg))
- 			iv_bounds(&bounds, entry->iv_range);
- 		if (moved) {
- 			/* a sum that can wrap has another residue, see scalar_step_add() */
-@@ -5293,8 +5242,5 @@ int bpf_clamp_scev_regs(struct bpf_verifier_env *env, struct bpf_func_state *cur
- 			return err;
- 		mark_scev_reg_scratched(env, r);
- 	}
--	/* behind the jump the variable may have moved on: its copy is what it was at the head */
--	if (!behind)
--		link_copies(env, header_env, entry_st, cur_func_state);
- 	return 0;
- }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_loop_latch.c b/tools/testing/selftests/bpf/progs/verifier_loop_latch.c
-index 35bb3e16db3d..17222e1332fd 100644
---- a/tools/testing/selftests/bpf/progs/verifier_loop_latch.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_loop_latch.c
-@@ -271,6 +271,51 @@ LOOP(copy_bad, "r8 = 0; r9 = r8;", COPY(2047))
- BAD("a copy of the counter, another number at the entry")
- LOOP(copy_other_const, "r8 = 2047; r9 = 0; r6 += 2047;", COPY(2046))
- 
-+/* the latch exits one iteration later than for an induction variable that starts from 1 */
-+NO_COUNT("a copy of the counter, one more at the entry")
-+LOOP(copy_ahead, "r8 = 0; r9 = 1;", COPY(2047))
-+
-+/* r5 is a copy of the pointer r6 from before the increment: an induction variable too */
-+#define PTR_COPY(off)	"*(u8 *)(r5 + " #off ") = r1; r5 = r6; r8 += 1; if r8 < 2048 goto 1b;"
-+
-+OK("a copy of the pointer", "2048") __msg("widening r5 to 0..2047 step 1")
-+LOOP(copy_of_pointer, "r5 = r6; r8 = 0;", PTR_COPY(0))
-+
-+BAD("a copy of the pointer, one too many")
-+LOOP(copy_of_pointer_bad, "r5 = r6; r8 = 0;", PTR_COPY(1))
-+
-+/* r8 and r9 are computed in the same way from r7: equal by value number, 'r9 = r8' is not needed */
-+OK("a copy of the counter, equal by value number", "[0..2]")
-+LOOP(copy_same_value_number,
-+     "r5 = r6; r8 = r7; r8 &= 1; r8 += 2045; r9 = r7; r9 &= 1; r9 += 2045;", COPY(2045) AT_R8)
-+
-+/*
-+ * 'for (i = n; i > 0; i--) buf[i - 1] = 0;': r9 is i from before the decrement, the latch tests r8.
-+ * r9 gets the range that the latch implies for r8.
-+ */
-+#define DOWN(off)								\
-+	"r8 += -1; r2 = r5; r2 += r9; *(u8 *)(r2 " off ") = r1; r9 = r8; if r8 > 0 goto 1b;"
-+#define FROM_RANGE	"if r7 > 2048 goto 9f; if r7 == 0 goto 9f; r5 = r6; r8 = r7; r9 = r7;"
-+
-+OK("a copy of the counter, down from a range", "[0..2048]")
-+LOOP(copy_down_from_range, FROM_RANGE, DOWN("- 1"))
-+
-+BAD("a copy of the counter, down from a range, one too many")
-+LOOP(copy_down_from_range_bad, FROM_RANGE, DOWN("+ 0"))
-+
-+/*
-+ * r9 is zero extended. [1, 2048], its range at the header, is the range of the zero extension too.
-+ * [-1000, 1001] is not: the first store is 4G behind the value.
-+ */
-+OK("a copy of the counter, zero extended", "[0..2048]")
-+LOOP(copy_zext, FROM_RANGE, "w9 = w9;" DOWN("- 1"))
-+
-+SEC("socket") __description("latch: a copy of the counter, zero extended, from below 0")
-+__failure __msg("R4 unbounded memory access")
-+LOOP(copy_zext_bad, "r5 = r6; r8 = r7; r8 &= 255; r8 += -1000; r9 = r8;",
-+     "w9 = w9; if r8 s> 1000 goto 9f; r4 = r5; r4 += r9; *(u8 *)(r4 + 1000) = r1;"
-+     "r8 += 1; r9 = r8; if r7 != 0 goto 1b;")
-+
- OK("a copy of the counter, a range", "[0..2]")
- LOOP(copy_range, "r5 = r6; r8 = r7; r8 &= 1; r8 += 2045; r9 = r8;", COPY(2045) AT_R8)
- 
-@@ -297,13 +342,13 @@ LOOP(copy_bounds_both, "r5 = r6; if r7 > 2047 goto 9f; r8 = r7; r9 = r8;",
- 	"r4 = r5; r4 += r9; *(u8 *)(r4 " off ") = r1; 2: r9 = r8; if r7 != 0 goto 1b;"
- 
- OK("a copy of the counter, one less behind the jump", "[0..2048]")
--LOOP(copy_less, "r5 = r6; r8 = 0; r9 = r8;", NOT_EQUAL(1, "> 2046", "< 2", "- 1"))
-+LOOP(copy_less, "r5 = r6; r8 = 0; r9 = r8;", NOT_EQUAL(1, "> 2046", "< 2", "+ 0"))
- 
- BAD("a copy of the counter, one less behind the jump, not equal")
- LOOP(copy_less_bad, "r5 = r6; r8 = 0; r9 = r8;", NOT_EQUAL(1, "> 2046", "< 2", "- 2"))
- 
- OK("a copy of the counter, one more behind the jump", "[0..2047]")
--LOOP(copy_more, "r5 = r6; r8 = 2047; r9 = r8;", NOT_EQUAL(-1, "s< 2", "> 2045", "+ 1"))
-+LOOP(copy_more, "r5 = r6; r8 = 2047; r9 = r8;", NOT_EQUAL(-1, "s< 2", "> 2045", "+ 0"))
- 
- BAD("a copy of the counter, one more behind the jump, not equal")
- LOOP(copy_more_bad, "r5 = r6; r8 = 2047; r9 = r8;", NOT_EQUAL(-1, "s< 2", "> 2045", "+ 2"))
+  * No exit of the inner loop dominates its backedges: may_goto is added before its header. The prog
+  * holds a reference, so may_goto goes to the exit of the outer loop: an edge that the verifier
 -- 
 2.55.0
 
