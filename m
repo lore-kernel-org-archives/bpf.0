@@ -1,54 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.87
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.69
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794411234;
-	b=yv+efdsnmNqyHBml7j3e4JhN4SDJw2L9X39x8RDhYBHVhmcVJFLg97XiY1rgcSs/6wgO
-	 ANcvHfqiccQNuPCXUMzJKXNTVxz2nHf3BaXNXMnIlmwci8JbKlkyY9e+cWrmJKZ5lYbAG
-	 8A5oSH01piIwKiD8ENKBJ2JSfcLCeoTHYq3TqqcQA666qPGvnvGhwzQVgLFyBLM7L7rQy
-	 8RsfeNTQ3SLWE4DtUc/AfPaIoo9JCCu+g+nkOtOoEDyTN6uChErTOsnEjR1o2je79uB5z
-	 1FkR1U9sSjFFPr9uC9sLVDFHkdOELAWlSon3pJn2qhYmhT1hNxZTr19jWW3OiEBdoyw==
+	t=1794411236;
+	b=rG6ggcVJoN12UUR4mVzNNiWs5hSvW06KwgWLo0juSQfZ5rnghhRlRSNbrBUgJbVYAujT
+	 Pt+bwiSmxSLncvOltau14f+P6vWU2IHkBDeBxCxm70ngyCOP5jijXboCHTZavMLEJApAn
+	 sokw0V8XPQuzMwHO9j/GM8RRz4Cv5bCTFUVkSulTHrl6WoLYnlzYc0fuI6H/EZmuWtgnj
+	 2yncb/fLkSys3cPcsRqBh3v1JVRQj0F6rcz+yfQ5nULc+uR9yqoEUuawEplz2PDUXvmke
+	 hVlHfncWi+qc9dnA4lJYjtWsGsBZO7B7Khg5ruwRoC8jWS011AzaxL3d2FVaLO1jwKA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794411234;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794411236;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
 	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=BwTjyGbtFLiEfqJNojU1wBEH3l3XXwkDvqFxjFfKBuI=;
-	b=C0o/aDWeO3M5Bkrq1PjH7zOlW3nZIA2jqb6ERHlZhqFgnVHmVw78A1sxNq+p/JOADZgU
-	 NnSufulf2aE+sfAfzkYfbCymWnu4U3HKwqKnlJS6PbcjcEkdba6RMMHTupfb2CLYAnZig
-	 AsKGyDcCmzlVukRxeWIpqX12+zNsDb8gVRjlUi1N61FJWhajOHM4T8csVUY3tormOUQaD
-	 YLWA+lxTDXN4kCU1+kgC5jWDQQdqd58+Q2NyQ5sbWhe39yrugg4HK0hx/+KUnO4NFD3yx
-	 od94CpkHNfn4jsUobyOMTpnJFoRzeFEh7/WwCz+MHE8Fs2m3IGYjrIQ4sbX23Pd8fkw==
+	bh=/QzRHwbFkfbNnZOUmwpP9Tp3Pl7GSNdM2Tkd/OqZeso=;
+	b=4gei2idA2asyz2vboi8y6z2yx0im4uEYhINN7NmVw6GrrCC2Zo7nIjPlkkMEBb6ZXM7n
+	 jFt7xcifhsYyvEL9gtbzJIIUIkKtOEV0ob7iKtcn19skDDDRmRP2DKTOINKrKrrqBYM4X
+	 Fx9whz7T1nGbq0D/rQwefWFFz/YKUO2Xfp+tjGEYHzSkytpr89Z1t9aM83v0ZyK642gBL
+	 G95oqcfVKgUhqjOCWSvY1YxUpa98pokCZSGg4l8R+G0+MCP0DYg1tEiokkm7R1g6muIXa
+	 0jupkRg+22RMNTzKn6GED7Ll4/El58TvpbL+8UbyaJd1D4MKPIEpwxwgAdYeDHj7p5w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=rfwfWMDS;
-	arc=none smtp.remote-ip=95.215.58.87
-Received: from mta1.migadu.com (out-87.mta1.migadu.com [95.215.58.87])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=rUubxQ7f;
+	arc=none smtp.remote-ip=91.218.175.69
+Received: from mta0.migadu.com (out-69.mta0.migadu.com [91.218.175.69])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4232606A321
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 15:33:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E4232606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E76BF606A338
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 15:33:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E76BF606A338
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=rfwfWMDS
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=rUubxQ7f
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=gboru3Ec6G1jPwlPZvGIx8shx83LrPwzmsUnld/c0C0=;
+DKIM-Signature: a=rsa-sha256; bh=p8HknJLppCkWqal251xel/ZGyV7bFk2X8EESci1r2ec=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794411232; v=1; x=1795016032;
- b=rfwfWMDS0ETzicI9TdsQtx5vCj6KU4f2QcLmX1BPodx+vlUwXUhtDletliHH5GErvxgGysOJ
- a/S0Lw5TWyzv3OAVGEGFsIv06BbWXEQ+Nxya0BohUSl7nWcapBGxW0AygrurSKzIZfn8AtX9bk5
- sjec4ssQourGBdOWobCHMRfI=
+ t=1794411233; v=1; x=1795016033;
+ b=rUubxQ7fbkePxaLZ/tPw5HelOCQ35HVbgzV44leadVflYhVaEVjTSKrLXG6gsHEcmFEaIz+X
+ kbJygjfpztvKDVgbNHu3I8WjxNev6K6rjGoVj5GV6nwBoyRT7MZ1PFAYhz9wMbEBVcruVD17HjO
+ VQkhgtLUiTj0IuaAMyj5fA2s=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 17a7bba5a94a6255;
-	Wed, 11 Nov 2026 15:32:36 +0000
-X-Mizu-Trace-ID: 17a7bba5a94a6255
+Received: by smtp.migadu.com with ESMTPS id 31b42524a28fd5cd;
+	Wed, 11 Nov 2026 15:33:53 +0000
+X-Mizu-Trace-ID: 31b42524a28fd5cd
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <9f9f10e5-d9f2-4cac-9376-a5802424de04@linux.dev>
-Date: Wed, 11 Nov 2026 23:32:25 +0800
+Message-ID: <4f3cc2e8-0c38-4350-9f3e-d652655c7b79@linux.dev>
+Date: Wed, 11 Nov 2026 23:33:49 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,59 +59,149 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 4/9] bpf: Add log support for cgroup prog
- link_create
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- rostedt@goodmis.org, mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
- kpsingh@kernel.org, matt@bobrowski.net, shuah@kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
- martin.lau@kernel.org, mason@kernel.org
-References: <20261109140816.5196-5-leon.hwang@linux.dev>
- <8a2b570a4d824e7a7acb46464af3318cc99a87ac6b620dc5cb76d9966101fd1d@mail.kernel.org>
+Subject: Re: [PATCH bpf-next 5/9] libbpf: Add log_opts support for
+ BPF_TRACE_ITER
+To: sashiko-reviews@lists.linux.dev, bpf@vger.kernel.org
+Cc: linux-trace-kernel@vger.kernel.org
+References: <20261109140816.5196-1-leon.hwang@linux.dev>
+ <20261109140816.5196-6-leon.hwang@linux.dev>
+ <sashiko-outbox-205120@kernel.org>
 Content-Language: en-US
 From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <8a2b570a4d824e7a7acb46464af3318cc99a87ac6b620dc5cb76d9966101fd1d@mail.kernel.org>
+In-Reply-To: <sashiko-outbox-205120@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 2026/11/9 22:47, bot+bpf-ci@kernel.org wrote:
->> bpf: Add log support for cgroup prog link_create
+On 2026/11/9 22:36, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 3 potential
+> issues to consider:
+> - [Low] libbpf: missing OPTS_ZEROED() check for BPF_TRACE_ITER in
+>   bpf_link_create()
+> - [Low] libbpf: unreachable iter.len check in bpf_link_create()
+> - [Low] libbpf: deprecated iter_info fields used in
+>   bpf_program__attach_iter()
+> --
 > 
-> TL;DR: Nit only: the new <linux/bpf_verifier.h> include in bpf-cgroup.h may be
-> unnecessary, since a forward declaration would likely suffice and avoid
-> pulling it into tcp.h users.
+> commit 254d03820df80f0d29b270cec3be5cafe9178fe6
+> Author: Leon Hwang <leon.hwang@linux.dev>
 > 
->> diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
->> --- a/include/linux/bpf-cgroup.h
->> +++ b/include/linux/bpf-cgroup.h
->> @@ -4,6 +4,7 @@
+> libbpf: Add log_opts support for BPF_TRACE_ITER
+> 
+> This commit adds iter.info and iter.len to struct bpf_link_create_opts so
+> that BPF_TRACE_ITER link creation can pass iterator parameters alongside
+> log_opts, while keeping the legacy iter_info and iter_info_len fields for
+> callers that do not use log_opts.
+> 
+>> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+>> index 38dcb31e8c0ed..174a8bfaf6638 100644
+>> --- a/tools/lib/bpf/bpf.c
+>> +++ b/tools/lib/bpf/bpf.c
+>> @@ -808,11 +808,6 @@ int bpf_link_create(int prog_fd, int target_fd,
+>>  	if (iter_info_len && attach_type != BPF_TRACE_ITER)
+>>  		return libbpf_err(-EINVAL);
 >>  
->>  #include <linux/bpf.h>
->>  #include <linux/bpf-cgroup-defs.h>
->> +#include <linux/bpf_verifier.h>
->>  #include <linux/errno.h>
->>  #include <linux/jump_label.h>
->>  #include <linux/percpu.h>
+>> -	if (iter_info_len)
+>> -		iter_info = OPTS_GET(opts, iter_info, (void *)0);
+>> -	else
+>> -		log_opts = OPTS_GET(opts, log_opts, (void *)0);
+>> -
+>>  	/* validate we don't have unexpected combinations of non-zero fields */
+>>  	if (iter_info_len || target_btf_id) {
+>>  		if (iter_info_len && target_btf_id)
+>> @@ -821,6 +816,16 @@ int bpf_link_create(int prog_fd, int target_fd,
+>>  			return libbpf_err(-EINVAL);
+>>  	}
+>>  
+>> +	if (iter_info_len) {
+>> +		if (OPTS_GET(opts, iter.len, 0))
+>> +			return libbpf_err(-EINVAL);
 > 
-> this isn't a bug, but is the <linux/bpf_verifier.h> include needed here?
-> 
-> bpf.h already forward-declares struct bpf_verifier_log, which is all the
-> new cgroup_bpf_link_attach() prototype and its stub need, and cgroup.c
-> already includes bpf_verifier.h for bpf_log().
-> 
-> Since bpf-cgroup.h is included from include/net/tcp.h, would a plain
-> forward declaration (as done for trace_events.h earlier in this series)
-> keep the verifier header out of those translation units?
-> 
-Good catch.
+> [Severity: Low]
+> Can OPTS_GET(opts, iter.len, 0) ever be non-zero here?  When iter_info_len
+> is set, the preceding if (iter_info_len || target_btf_id) block has already
+> verified OPTS_ZEROED(opts, target_btf_id), which rejects any non-zero bytes
+> in the union following target_btf_id, including opts->iter.
+Agreed.
 
-Will drop this include.
+Will drop this iter.len check.
+
+> 
+>> +		iter_info = OPTS_GET(opts, iter_info, (void *)0);
+>> +	} else {
+>> +		log_opts = OPTS_GET(opts, log_opts, (void *)0);
+>> +		iter_info = OPTS_GET(opts, iter.info, (void *)0);
+>> +		iter_info_len = OPTS_GET(opts, iter.len, 0);
+>> +	}
+> 
+> [Severity: Low]
+> Should bpf_program__attach_iter() also be updated to populate
+> link_create_opts.iter.info and link_create_opts.iter.len instead of the
+> deprecated iter_info and iter_info_len fields?
+> 
+> tools/lib/bpf/libbpf.c:bpf_program__attach_iter() {
+>     ...
+> 	link_create_opts.iter_info = OPTS_GET(opts, link_info, (void *)0);
+> 	link_create_opts.iter_info_len = OPTS_GET(opts, link_info_len, 0);
+>     ...
+> }
+> 
+> Because iter_info shares a union with log_opts, calling
+> bpf_program__attach_iter() with link_info != NULL and link_info_len == 0
+> causes bpf_link_create() to take the else branch above and dereference the
+> union bpf_iter_link_info pointer as struct bpf_log_opts *log_opts in
+> __sys_bpf_fd().
+> 
+
+Will update bpf_program__attach_iter() to use iter.info and iter.len in
+the next revision. And, will add log_opts for bpf_program__attach_iter()
+btw.
+
+> [ ... ]
+> 
+>> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+>> index fe3b7fd8512bd..2ac143fd1102e 100644
+>> --- a/tools/lib/bpf/bpf.h
+>> +++ b/tools/lib/bpf/bpf.h
+> 
+> [ ... ]
+> 
+>> @@ -478,6 +482,10 @@ struct bpf_link_create_opts {
+>>  			const __u64 *cookies;
+>>  			__u32 cnt;
+>>  		} tracing_multi;
+>> +		struct {
+>> +			union bpf_iter_link_info *info;
+>> +			__u32 len;
+>> +		} iter;
+>>  	};
+>>  	size_t :0;
+>>  };
+> 
+> [Severity: Low]
+> Does case BPF_TRACE_ITER in bpf_link_create() miss an OPTS_ZEROED(opts,
+> iter) check?
+
+Will add OPTS_ZEROED(opts, iter) check.
 
 Thanks,
 Leon
+
+> 
+> tools/lib/bpf/bpf.c:bpf_link_create() {
+>     ...
+> 	switch (attach_type) {
+> 	case BPF_TRACE_ITER:
+> 		attr.link_create.iter_info = ptr_to_u64(iter_info);
+> 		attr.link_create.iter_info_len = iter_info_len;
+> 		break;
+>     ...
+> }
+> 
+> When opts->iter is used (so iter_info_len and target_btf_id are 0),
+> trailing bytes in the anonymous union after opts->iter overlapping larger
+> members such as uprobe_multi are not checked for zero, unlike all other
+> union members in the switch statement.  Also, opts->iter.info and
+> opts->iter.len are read in the !iter_info_len branch even when attach_type
+> is not BPF_TRACE_ITER.
+> 
 
