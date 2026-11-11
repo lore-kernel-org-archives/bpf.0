@@ -1,104 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794416817;
-	b=sFlptAihYYFF7S6ODv58CWgzd/vqv/3NIR6gvF9zWUGInzDv42/PA9aWMDCRxIzvDmMm
-	 2aGJ1G7JD8pII918/WYGxfqSWtqohMYGRTtJ6vnohF0zJnVaObA1wiLjpTA+w8Zq+Qy2i
-	 6mfm/4CeYfosBeIWopg6z6FGKkMtsYuW7Cszle8ObmOmnPFNwq66+ORvxAHPzVyjs1ZWD
-	 PIVcGqUG9m3DgjgRQZ0gBL5xHRS7840KnYa7qXcOahZdU0fZU/GlmVKyBNtc8J2lIZehi
-	 FhCJQRyxFt9CXvCZINytBo0mFrwRru3X0hwVKTu/rLjUZjA/0OxwVrkalE6WkEawJpA==
+	t=1794417206;
+	b=qEh5svH8/m5AqARaTvgTcsNpoeeGpJxMZfbf4SszWRfhWVkjMVAL/HZy37vNqKvj+01V
+	 DBTAqj2wnC8RG2deEvdmqAhP17jLz40hh4FFJ+9rjQEHq3DNaKPZ1N6PrWJXo5xEk8x1T
+	 wnnQSXPFDsKFzP/Pgh2lSpynq9l2lumPUgskPbVmp3nSRQYOoNw99+6d0Hwd1EBoyCtcq
+	 nLt1DvCpAKv2EJzRmqvdmn/a4v7MZMyesalHyi2QwI+Bj3fi/xdNjc3vEP7KqZGygiMGp
+	 S5cVMhPyjJ/9cLQUE8A6P1Xm37B4Wb3MfoXuX3AcgWpaF4FfWYfsjK8/79faPV1IoiA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794416817;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=AwZjNt+AmvnnJlc2JIDYQN6kjA0XRtfGXpIO1xxacwA=;
-	b=IxOZoSg9t3DJONf/x7kW3ofDdJZRNir+Fbr4COA9ZLL8vc1cf/xW7ILrPi4p5t0jT+YT
-	 NFUXFjEPeA+CAdlRJhyxS7Kvd8tiqvw4JX48oqkr7zZa9Fdpc11SOGNrl2ML7NROxzhKf
-	 alsGwa7w0CwKEZOYt/l5iBMVanAqjx/Dd5uweTMw/S5+wwqT7hRUpBsAS1HlHwvHIXq9p
-	 XsBzZH6c5IZ9aHt0lM245/wLXDvxJHlHDoZqn4jVdzge9gqJ1H+iFhLxGdzOxms2cAfkn
-	 le42cAMaIRwcfYpdNeqHFG4XbbLfsL8z6D2f1RgTcoC1GY2eAQmYXreXGaE7MdWNwKA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794417206;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=4urN7bnI+kME9EWfBrwswN9c/1kLV016NFOvuONLt6g=;
+	b=cEKNDtnVgrUawfHnX/giQuYdKk3bbeW0Kl3U765hUSYt/j3E2ljA+JfS5JJkMQ6uUWlP
+	 CYyATfHgKstCDLzWZKw+Y6qlu6DNCAFoGXTzv8kgJtXKiqtRHerhjbPNc5L0KcqiAX5rm
+	 CyZY2rn02pMhCUSdVkmCUYduVoXbElFLg+bu5lulh09wIRhCLWiG35KhkFcyQh5M8F//h
+	 SLofGilBKaBG4mv+PeVusyAa81aFWVNj0ay8ZHTUyVj37Z4TYAJrXqqAFvfC5GqnvjrJM
+	 zXAlWOxLuWCoLIk9HUnN1SkR4cU5fYHlEOWyzKKhJoPthoKHHm9jUFlvzTrmeCrhq3A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=IbmojHWm;
-	arc=none smtp.remote-ip=209.85.210.182
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZZiIDHsD;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 509F8606A88F
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 17:06:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 509F8606A88F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8C62606A321
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 17:13:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=IbmojHWm
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-8a05b210703so1781980b3a.0
-        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 09:06:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794416816; x=1795021616; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=AwZjNt+AmvnnJlc2JIDYQN6kjA0XRtfGXpIO1xxacwA=;
-        b=IbmojHWmWD70omZcaVCBU3b2W6NUiCjIa+IrJtazBOuwzFIQceMskZjfN16dYaqWZ6
-         CxswnpmLBmfzKvCU6kXcO1hbDMh6hzwXXM1hSxZT/vNjrk0O5eZ99M1XDQ/E9KFfaE3k
-         XkfHU/7oBuP4ua0kzM/7hh+lf76behzLaDXzQAUIdBJ30Ay01n8Dl5LpZFhTcBHjz5B6
-         G07uRZMTBpihE03hkQ+eLytZG0lKOF9rN19d3+rpmxWwVNndqrDNk1fHMYnEL6JPsVNv
-         6Zgi2Wm8u619S2db1cNeIkt+txLvd50wKvx4yNIw5QOm0oXTSVdoihymawXrTlM4dbfx
-         ssTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794416816; x=1795021616;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=AwZjNt+AmvnnJlc2JIDYQN6kjA0XRtfGXpIO1xxacwA=;
-        b=efqnRIZXv3sQVAKclBXYnom/24Ox8zkTzTpURX+6UY8RsMHmKXMychEUEtloL1sT0r
-         5N0tg40fgmvHvx4WowDCRzpB0vabO/CkC2PZ7yTQjh/x7S9iODsm+qFMogdhrhLMTmK2
-         0hL3iwmqaR3YTKkOEyBoq6TTzP7SgyczIu7kdiKZHAbiLwkVfrbocHdqZxaGr67/Ozyv
-         /PoLJR8Ak6xqkfcSpMirPrfQtPMchBcucFYKcaWMDeRQ86Dlz/QPI0Li0VXJUcAdNtXS
-         v+6A8K43ggxpgClTPOakd5ekeB+vgBLvg4+xcsIgNBK9B+lITFoUFjKPwng43shD7kte
-         bzhg==
-X-Forwarded-Encrypted: i=1; AL+hErHJzKsqYhoYqvgzzO+2XpqQfpiySTBOwexHJlgLvKlwUCsZdv4YgbM4Cp4FWXeJRFaHw4U=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/G8vaPxwnGt3rpUDKYAXqfRlZYmfqBGnU/SlCu58RQgvx4gOrD
-	MNSQAYnwBj5a/d9JhgBWbGu3/9EVhiz0aCiZKNs9yzp7xI3A5vs154rq9w/AoJAbF+XCXA==
-X-Gm-Gg: AYBFou07a1tLl3CHJEUZs5mL6WKg5OUC4qJXBQa66qyalVqLiY19V+81BoHWS1Xkyhy
-	9nMle4e1NMHAUN9KeoY6K3yz+gOs8aGEa3T16OTwYMy1PS3G/sA14z7isLtV+9zE0r+HKIxtnir
-	fvcg3CJJd/8QqJHsA5O9W2tuA9jhxOZBOyz/JvcrxbIxhVJQxnTvRh8lZBjm91C/61DaWGqh1so
-	18tzIfUilXHlwdhiZ2j6/UUFyAot11/iHqJJrdevoFo/Yzdc3vSRff0YVpA34QGbLRUr4zpTGA/
-	oxqEOxsrjXj4mU3UVNLAz/oK1gpzi0BNJgLrc27uplbmnpLxpAb3s/fCL2ViHNtA6HVzEzxaXt0
-	rod0cYuJhARGOKKbKypg+PcPyBuykngaP+mB3NOClVxHDtcc3tMO4gFXZq0b9zC8AETf7TURY0b
-	BGzeBFoUBOg8rWJzQuUv/PXPKaNjvm1LDFixSl36QY54sHtp8vFDkH6UDuHyOB55Fmr2V7GglnU
-	QjBhn6mtSWyPIwpc8cN5b4j8vTxnVx8vmvD8sIzFbVV9WZL1aoXyE4qCJlVCCouq4cQTGH+nptN
-	wN4s3TsMiTYzXMe2/csaHFLVORbMZwgVUa7+e2CXNNc2kZd3PYieGYH6roRd63oMVDi1SpyGw6V
-	HyQ==
-X-Received: by 2002:a05:6a20:ef01:b0:3e2:4bd9:683e with SMTP id adf61e73a8af0-3f2feedf34emr2685736637.73.1794416816286;
-        Wed, 11 Nov 2026 09:06:56 -0800 (PST)
-Received: from Terra.tail0ac356.ts.net ([198.176.50.208])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8baa7de3619sm2347806b3a.5.2026.11.11.09.06.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2026 09:06:55 -0800 (PST)
-From: Weiming Shi <bestswngs@gmail.com>
-To: "David S . Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Kees Cook <kees@kernel.org>,
-	"Gustavo A . R . Silva" <gustavoars@kernel.org>
-Cc: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Xiang Mei <xmei5@asu.edu>,
-	Weiming Shi <bestswngs@gmail.com>,
-	stable@vger.kernel.org,
-	co+beaa1ed2d7aaec16@bugs.sh
-Subject: [PATCH net] net: initialize ICMP error queue opt_stats
-Date: Wed, 11 Nov 2026 09:05:30 -0800
-Message-ID: <20261111170528.495116-3-bestswngs@gmail.com>
-X-Mailer: git-send-email 2.56.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZZiIDHsD
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 598961F00A06;
+	Wed, 11 Nov 2026 17:13:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794417205;
+	bh=4urN7bnI+kME9EWfBrwswN9c/1kLV016NFOvuONLt6g=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=ZZiIDHsD+JN1l7LfNRHZEc43YinwJHCN9Vg88wYUwRL15JREDanw3l4d5NBjn5DJT
+	 hORlYpSLKN5l8pPPjTmxkiblrR45snGgH3Tr5M7OF+2f2MukJ2QwYsPay/Qxaikyvp
+	 Otl9E99VG5LQzhfNZLiSCD4l1gk7DLLcJXq8DPPlGw32/FCE7lonoQZJhg/D3mk40v
+	 E9xszPmj5ktL1bwhLTECAIZwau7rFlprV8BNFvakXdovH6UtpOpEzxypzf0BkegFVu
+	 yMsFp3/yB1t3T3sr0RrVcn/dLFs4hnT4xX7AuadpCCGCi6rcrWWt1s3LQPOmZwOgEu
+	 /tqg6/3N1/82g==
+Message-ID: <sashiko-outbox-209387@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v1 21/29] bpf: Support callx when a callee
+ releases resources
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <0847523e18df54ccf22c46885001d309841a60c2.1794399387.git.memxor@gmail.com>
+References: <cover.1794399387.git.memxor@gmail.com>
+ <0847523e18df54ccf22c46885001d309841a60c2.1794399387.git.memxor@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 11 Nov 2026 17:13:24 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -107,89 +59,151 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-ip_icmp_error() and ipv6_icmp_error() clone a received ICMP skb before
-building its error queue entry.  skb_clone() preserves the complete control
-buffer, while the IP receive paths initialize only the portion aliased by
-sock_exterr_skb::header.  The two functions initialize ee, addr_offset, and
-port, but leave the final byte containing opt_stats and unused untouched.
-A TCX classifier can leave bpf_skb_data_end::data_end across that byte,
-forging opt_stats and making __sock_recv_timestamp() pass skb->len bytes
-from skb->data to put_cmsg().  For a non-linear ICMP skb, this reads beyond
-its linear head.
+Thank you for your contribution! Sashiko AI review found 2 potential
+issues to consider:
+- [High] bpf: resource leak via bypassed lent check in
+  bpf_frame_desc_record_callx()
+- [Medium] bpf: hidden slot cleared without release in
+  bpf_frame_desc_record_callx()
+--
 
-Initialize both bitfields in the two clone-based producers.  Do not clear
-the whole sock_exterr_skb because the error receive paths consume the saved
-IP control-buffer header.
+commit 10ca45cf5c85b803527fe102c801dcc6b5d2cc99
+Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-  usercopy: Kernel memory exposure attempt detected from SLUB object
-            'skbuff_small_head' (offset 72, size 59964)!
-  kernel BUG at mm/usercopy.c:102!
-  Oops: invalid opcode: 0000 [#1] SMP KASAN NOPTI
-  RIP: usercopy_abort (mm/usercopy.c:102)
-  Call Trace:
-   __check_heap_object (mm/slub.c:8146)
-   __check_object_size (mm/usercopy.c:258)
-   put_cmsg (net/core/scm.c:276)
-   __sock_recv_timestamp (net/socket.c:1061)
-   ip_recv_error (net/ipv4/ip_sockglue.c:550)
-   udp_recvmsg (net/ipv4/udp.c:2034)
-   inet_recvmsg (net/ipv4/af_inet.c:896)
-   sock_recvmsg (net/socket.c:1159)
-   ____sys_recvmsg (net/socket.c:2918)
-   ___sys_recvmsg (net/socket.c:2961)
-   __sys_recvmsg (net/socket.c:2993)
-   do_syscall_64 (arch/x86/entry/syscall_64.c:94)
-   entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:130)
-  Kernel panic - not syncing: Fatal exception
+bpf: Support callx when a callee releases resources
 
-With HARDENED_USERCOPY enabled, the reproducer aborted the unpatched kernel
-on its first packet.  With runtime usercopy checks disabled and KASAN left
-in report mode, the same recvmsg() returned 59,964 control-message data
-bytes sourced past a 704-byte skb head.  Beyond offset 1,024, 58,932 bytes
-differed from the prefilled userspace marker, including 6,288 nonzero
-bytes.  The patched build completed 2,000 packets under both configurations
-without a forged SCM_TIMESTAMPING_OPT_STATS message or sanitizer report.
-Networking selftests were not run.
+This commit extends frame descriptor tracking to support callx instructions
+whose target subprogs transfer or release caller-held resources, rejecting
+programs when targets disagree on whether an argument reference is consumed.
 
-Fixes: 4ef1b2869447 ("tcp: mark skbs with SCM_TIMESTAMPING_OPT_STATS")
-Cc: stable@vger.kernel.org
-Reported-by: <co+beaa1ed2d7aaec16@bugs.sh>
-Signed-off-by: Weiming Shi <bestswngs@gmail.com>
+> diff --git a/kernel/bpf/frame_desc.c b/kernel/bpf/frame_desc.c
+> index 6679f134b14ee..11b2546bc179f 100644
+> --- a/kernel/bpf/frame_desc.c
+> +++ b/kernel/bpf/frame_desc.c
+[ ... ]
+> @@ -981,6 +983,56 @@ int bpf_frame_desc_record_call(struct bpf_verifier_e=
+nv *env, struct bpf_verifier
+>  	return 0;
+>  }
+> =20
+> +/*
+> + * The callx at insn @callsite of the current frame calls @subprog, one =
+of the
+> + * subprogs it may call. What the frame puts in front of the callx runs
+> + * whichever it calls: the insns that take what it hands over out of its=
+ slot,
+> + * and the one that empties the slot of what a callee releases without b=
+eing
+> + * handed it, see foreign_cleared(). So note what this subprog leaves wi=
+th the
+> + * frame:
+> + *
+> + *  - What the frame holds and passes it in an argument that it does not
+> + *    release through. Another subprog may be handed it in that argument=
+, and
+> + *    the slot would be emptied for this one as well, see slot_can_be_ke=
+pt().
+> + *  - All that the frame holds, when the subprog releases nothing of its
+> + *    callers'. It is not verified in their context then, so its return =
+has
+> + *    no frame to say so, see bpf_frame_desc_record_exit().
+> + */
+> +int bpf_frame_desc_record_callx(struct bpf_verifier_env *env, int subpro=
+g, int callsite)
+> +{
+> +	const struct bpf_subprog_info *sub =3D &env->subprog_info[subprog];
+> +	struct bpf_verifier_state *st =3D env->cur_state;
+> +	const struct bpf_func_state *frame =3D st->frame[st->curframe];
+> +	const struct bpf_reference_state *ref;
+> +	struct bpf_res_call *c;
+> +	int i, k;
+> +	u8 lent;
+> +	s16 adj;
+> +
+> +	if (!env->describe_frames || st->speculative)
+> +		return 0;
+> +	for (i =3D 0; i < st->acquired_refs; i++) {
+> +		ref =3D &st->refs[i];
+> +		if (ref->frameno !=3D st->curframe || !ref->acq)
+> +			continue;
+> +		lent =3D 0;
+> +		for (k =3D BPF_REG_1; k <=3D BPF_REG_5; k++)
+> +			if (!(sub->consumes & BIT(k)) && ref->type =3D=3D REF_TYPE_PTR &&
+> +			    !(env->res_acqs[ref->acq - 1].flags & BPF_RES_F_ARG) &&
+> +			    reg_ref_off(&frame->regs[k], ref->id, &adj))
+> +				lent |=3D BIT(k);
 
----
- net/ipv4/ip_sockglue.c | 2 ++
- net/ipv6/datagram.c    | 2 ++
- 2 files changed, 4 insertions(+)
+[Severity: High]
+Can a caller's hidden slot still be cleared before a callx to a subprog that
+does not consume Rk, leaking the reference on a later bpf_throw()?
 
-diff --git a/net/ipv4/ip_sockglue.c b/net/ipv4/ip_sockglue.c
-index a55ef327ec93..3ab84a4c31e5 100644
---- a/net/ipv4/ip_sockglue.c
-+++ b/net/ipv4/ip_sockglue.c
-@@ -429,6 +429,8 @@ void ip_icmp_error(struct sock *sk, struct sk_buff *skb, int err,
- 	serr->addr_offset = (u8 *)&(((struct iphdr *)(icmp_hdr(skb) + 1))->daddr) -
- 				   skb_network_header(skb);
- 	serr->port = port;
-+	serr->opt_stats = 0;
-+	serr->unused = 0;
- 
- 	if (skb_pull(skb, payload - skb->data)) {
- 		if (inet_test_bit(RECVERR_RFC4884, sk))
-diff --git a/net/ipv6/datagram.c b/net/ipv6/datagram.c
-index ca3605acb433..85f646f8d059 100644
---- a/net/ipv6/datagram.c
-+++ b/net/ipv6/datagram.c
-@@ -330,6 +330,8 @@ void ipv6_icmp_error(struct sock *sk, struct sk_buff *skb, int err,
- 	serr->addr_offset = (u8 *)&(((struct ipv6hdr *)(icmph + 1))->daddr) -
- 				  skb_network_header(skb);
- 	serr->port = port;
-+	serr->opt_stats = 0;
-+	serr->unused = 0;
- 
- 	__skb_pull(skb, payload - skb->data);
- 
--- 
-2.56.0
+When one target of a callx consumes Rk, emit_release() emits instructions
+before the callx that compare the 64-bit runtime value of Rk with the calle=
+r's
+hidden slot and zero the slot if they match.  However,
+bpf_frame_desc_record_callx() only sets BIT(k) in lent when reg_ref_off()
+succeeds in the verifier state at the callx.
 
+If another path reaches the same callx to invoke a non-consuming subprog wh=
+ile
+Rk still holds the handle address at runtime, but its verifier state fails
+reg_ref_off() (for instance, Rk is NOT_INIT after merging with a path that =
+did
+not set Rk, or after an earlier call to a no-op subprog cleared caller-saved
+registers in the verifier while leaving Rk intact in hardware), BIT(k) is n=
+ot
+set in c->lent.  slot_can_be_kept() then accepts the program, the pre-callx
+sequence zeroes the caller's hidden slot at runtime before the non-consuming
+subprog runs, and a subsequent bpf_throw() fails to release the resource.
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 1f41095f4f1fa..51896b2001614 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -11451,9 +11451,10 @@ static int setup_func_entry(struct bpf_verifier_=
+env *env, int subprog, int calls
+>  	err =3D set_callee_state_cb(env, caller, callee, callsite);
+>  	if (err)
+>  		goto err_out;
+> -	/* a plain call hands the callee what it releases of the caller's, see =
+frame_desc.c */
+> +	/* the call of a subprog hands it what it releases of the caller's, see=
+ frame_desc.c */
+>  	err =3D bpf_frame_desc_record_call(env, set_callee_state_cb =3D=3D set_=
+callee_state &&
+> -					 bpf_pseudo_call(&env->prog->insnsi[callsite]) ? state : NULL,
+> +					 (bpf_pseudo_call(&env->prog->insnsi[callsite]) ||
+> +					  bpf_is_callx(&env->prog->insnsi[callsite])) ? state : NULL,
+>  					 callee, callsite);
+
+[Severity: Medium]
+What happens if a callx invokes a subprog with sub->consumes & BIT(k) set o=
+n a
+path where Rk holds the runtime address of a caller-held reference without
+satisfying reg_ref_off()?
+
+Because sub->consumes & BIT(k) is set, bpf_frame_desc_record_callx() skips =
+Rk.
+In bpf_frame_desc_record_call(), if one callx path passes the caller's
+reference in Rk (recording rel_add() at callsite, with the callee releasing=
+ it
+without needing its own hidden slot) and a second path passes the same runt=
+ime
+pointer in Rk in a form that fails reg_ref_off() (such as a pointer with a
+variable offset in [0, 1] that is 0 at runtime, or an untrusted pointer from
+bpf_rdonly_cast()) on a branch where the callee does not release it,
+bpf_frame_desc_record_call() only sets sub->entry_none |=3D BIT(k) and leav=
+es
+the reference with the caller.
+
+Because the callee's BPF_RES_F_ENTRY acquisition does not need a hidden slot
+of its own, bpf_frame_desc_resolve() never checks sub->entry_none, and
+handed_back is not set on exit.  The emit_release() instructions placed bef=
+ore
+the callx still zero the caller's hidden slot at runtime on the second path,
+leaking the reference if the caller later throws.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1794399387.gi=
+t.memxor@gmail.com?part=3D21
