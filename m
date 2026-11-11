@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794407892;
-	b=vllhogdCLwB42M8k5uxbHwRBs2iwlVutQ0n4eevK5oHUDx58AAVVB3CLgyQKPKxCoeVs
-	 f3rJhiFsWWVH8VSnWQ4HXPfwfdcv7tYAq16FERFFEQYywOztG97xyHdoLZwTpiu9o8vgn
-	 RwAqqv/e/NufaKuam/pPfmulzSE4M6U+b9NYz4Ppvir+Z8ueXrGtOgNcjxziLC1rdgNS4
-	 IsMKvfYkmL2iVxIf2xhcAK3lPT7wrtHcu8pAb5CWk4ZMxK54K74aY42bcLqUJSeRcCKEJ
-	 Y/UWalvrqVBzcm/fPFuPiv82In5PFaFLMoKliFG0dh5MxYvl1MTr+FEsmy2yLpcjcaw==
+	t=1794408097;
+	b=xNN2+w0rw1Zu43bBirl4t4G1SwLCBmmekciT5EwLijp1M0qT3vt/G0Wvi7/PGw8Zqg4K
+	 a7pEY1HFf2qF9x+uFVqzmV4vUs/0/0q2Ap44VwKX9MVOl28PiP4Vls/oDtOyqFN2LS7Xg
+	 6fZs7yZ4VTrIDOFOM1v9b4PXl0LEX3Vtbb/5VWDSFXZRdkmsZliNIUT/mVYeLez2hxbvt
+	 qzZ0/fiUsaHnN0uOmJMyBX6higH3umKsIeUo4U37Is1F4hD/hc5INKD9h5nrl+U0yu7gG
+	 Ze1PPKyYwj7i1cT16++DpkQkrXZWoRejmt406x7r6mJuB5oeE4f/9ZNPk/KBjKkGIYw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794407892;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794408097;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=U8fhDkCvMLVZ19jT3ksqKdUKXpNfrcfX99iyCDlvcKw=;
-	b=PKZwfsRM7yOlI/9rQMmz3PiOxQ5ACDmS3isur5BXFp3GEYlALa6v2QF8pI3CFLiZD25u
-	 sAWuvO9jLeQ47R3Kxuv0L0S+ooZBx60AH3kuxpW1pe4RL9bu6EZsC5yjmBFHaRGQKayUM
-	 WyGh+AQF6flYMsPooebnHXaTCNxai24z65CXujr2+PgpEi3aqkhuKDUr+NzOpljVpMlSU
-	 +LVy6odzvL7s5fJ5evnpUet/SmvJaCfBYy3cYgITX1AE2GKnqWsFLR3CIddDBj0Z2scN8
-	 nof0gZf6l+ZyVfh4KK8U+XEqkeReJxjBP0D9cXavLOzQD2t5yxaqUbpv9bBSWnUba6w==
+	bh=5Xuc2CRVPr9R3ogkAqIis8h5mqdFPnQQ6NHFF0cDOUE=;
+	b=NXhHdcrJVgUKRbZa2vrxR6v5xhGk/OW/STIUixRki52r1a0VSpJ6HmVvxVeyHK6oVsbq
+	 SlDtxSVF/qa0E7hAPNgapjBC+iRnLYVHMP0qI3ZaGUuF2IMz9DzpaF647E4ZazG5Kz1LD
+	 9YJUKPOXY5nb1tTDiCGX2LG0eiLMpUKKusoIJhkfdKnQpktUAbdNuphupx3VgSxOG9ndn
+	 ZiaTw158/ZMk5rho7lHFcrgh4v//Dyb4BQ3NW36qKIdq6B7+hYgWwZHUh9H00wS2jog+1
+	 xf1UXB+G1+ryUjtOcA4L1mGCj+AaBuUEdrFbUGwHAygtrcRnIDSI/z6+zCaijzL3vLA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IcgXXHmk;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GrNbvgmu;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 182EA606A321
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 14:38:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E48F606A321
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 14:41:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IcgXXHmk
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 914C21F00A07;
-	Wed, 11 Nov 2026 14:38:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GrNbvgmu
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0E071F00A06;
+	Wed, 11 Nov 2026 14:41:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794407891;
-	bh=U8fhDkCvMLVZ19jT3ksqKdUKXpNfrcfX99iyCDlvcKw=;
+	s=k20260515; t=1794408097;
+	bh=5Xuc2CRVPr9R3ogkAqIis8h5mqdFPnQQ6NHFF0cDOUE=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=IcgXXHmkPmGG55X6mQhHcbPlBtZwPbRwRxgtQqsxDthYDfoG5K/aNpAAAFoDLetk8
-	 CoFr2HXVfY3G6eYylG3BqknDK5uHOzYITfHfEjiOMJb7BWFrx5YIxsH6x6X3f+pPrs
-	 hzjAew12gNODbgzbIFfVgTgRDLHo9nrvt1m6JsCopTVs3E5AAjIVL7Gf0YQe2ao4Uy
-	 J8ZVQmyuKBHLSEcWy3xywItB4R7DvY4f7ZDlWAw8pW+ftJGArTiR3LSIdJGtY0VmWM
-	 CtF9NuYxVbouoO/csIyv0qVtbPcVpddFZIxKLA1SOJys0gKEYJO9QI1D0vj+2MJBho
-	 BUS62ElxgS4jA==
-Message-ID: <sashiko-outbox-209175@kernel.org>
+	b=GrNbvgmuG/fCPOMB73jgTTzQ8Lqc6F6+QshNrkhdTkiuccz6TBdPZozAVaqne93Kv
+	 DBOd8oF6X6XvQD4vxLYNSP6N+ICQl5BNu5E7NZS5ocbDefXXE47Wh36TetkDRValFY
+	 gGCLI1zjmqLVJKnQTK1vrxsHsQyLP/dptSeS2vr4BCnVDzt+jxb39GBb9EY948nhcr
+	 f3++eRKhRviGkxdnxsWAAeCCOfMf/Uf59YhnSJ6IUY0vB+TfRnfePgdtMxe4l5yFyh
+	 0hBcMZOg/yuCCSdqsOwz3fA6wK+Dl9L76m+QaWqbgsQL0bCYPpIQ5kKK5okH42u854
+	 xfAzi70Mo+csQ==
+Message-ID: <sashiko-outbox-209179@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v1 06/29] bpf: Keep last insn's aux data in
- add_hidden_subprog()
+Subject: Re: [PATCH bpf-next v1 05/29] bpf: Restore callee-saved registers
+ from unwound frames
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <4e0c5d6d96b2e917ff52effe483ec90daf0e2ac0.1794399387.git.memxor@gmail.com>
+In-Reply-To: <34d17f4e59939c2afb427a69d9f34f61e3dc3343.1794399387.git.memxor@gmail.com>
 References: <cover.1794399387.git.memxor@gmail.com>
- <4e0c5d6d96b2e917ff52effe483ec90daf0e2ac0.1794399387.git.memxor@gmail.com>
+ <34d17f4e59939c2afb427a69d9f34f61e3dc3343.1794399387.git.memxor@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 11 Nov 2026 14:38:11 +0000
+Date: Wed, 11 Nov 2026 14:41:36 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -63,97 +63,78 @@ Precedence: list
 Thank you for your contribution! Sashiko AI review found no new issues
 in this patch, but noticed 1 related pre-existing issue it does not
 introduce:
-- [Critical] bpf: misplaced nospec flag in adjust_insn_aux_data() [1]
+- [Critical] bpf: NULL pointer dereference in bpf_throw() [1]
 --
 
-commit f29fbac112320caad2087aefcfcc0181b977759d
+commit 1abcf2f1b7a0733f9332d1db13a62945d7715633
 Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-bpf: Keep last insn's aux data in add_hidden_subprog()
+bpf: Restore callee-saved registers from unwound frames
 
-This commit swaps the aux data of the original last instruction and the end
-of the patch in add_hidden_subprog() so that the original instruction keeps
-its aux data (while leaving indirect_target on the first instruction).
+This commit restores callee-saved registers from unwound frames during
+bpf_throw() unwinding and passes them to the exception callback instead of
+saving and popping all callee-saved registers in the exception boundary
+prologue.
 
-> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> index eb5a5bca5c8d5..8597b443d5619 100644
-> --- a/kernel/bpf/fixups.c
-> +++ b/kernel/bpf/fixups.c
-> @@ -2280,8 +2280,10 @@ static int add_hidden_subprog(struct bpf_verifier_=
-env *env, struct bpf_insn *pat
->  {
->  	struct bpf_subprog_info *info =3D env->subprog_info;
->  	int err, cnt =3D env->subprog_cnt;
-> +	struct bpf_insn_aux_data *aux;
->  	struct bpf_insn *last;
->  	struct bpf_prog *prog;
-> +	bool indirect;
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index de31fdd18411e..0164f183aade2 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+[ ... ]
+> @@ -3461,15 +3474,24 @@ static bool bpf_stack_walker(void *cookie, u64 ip=
+, u64 sp, u64 bp)
+>  }
 > =20
->  	/* We only reserve one slot for hidden subprogs in subprog_info. */
->  	if (env->hidden_subprog_cnt) {
-> @@ -2299,6 +2301,17 @@ static int add_hidden_subprog(struct bpf_verifier_=
-env *env, struct bpf_insn *pat
->  	if (err)
->  		return err;
->  	prog =3D env->prog;
+>  /*
+> - * Unwind the stack to the exception callback of the main program. @regs=
+ holds
+> - * the callee-saved registers of the throw site, or is NULL when the
+> - * architecture has no native entry and the kfunc was called directly.
+> + * Unwind the stack to the exception callback of the main program. @regs=
+ is the
+> + * register file of the throw site, which the entry of the architecture
+> + * captured: the callee-saved registers of the frames unwound are restor=
+ed from
+> + * it for the callback. It is NULL when the architecture has no native e=
+ntry
+> + * and the kfunc was called directly.
+>   */
+>  __bpf_unwind_entry
+>  notrace void bpf_throw_unwind(struct bpf_throw_regs *regs, u64 cookie)
+>  {
+>  	struct bpf_throw_ctx ctx =3D {};
+> =20
 > +	/*
-> +	 * The patch starts with the original last insn, but the commit moved t=
-hat
-> +	 * insn's aux data to the end of the patch: give it back to the insn. A=
-ll
-> +	 * but indirect_target, which the commit left with the insn, since an
-> +	 * indirect jump to it lands there still, see patch_list_adj_aux().
+> +	 * Without the file, on an architecture that has no native entry, the
+> +	 * prologue of the main program has saved every callee-saved register
+> +	 * and the callback restores them from its frame, not from @saved.
 > +	 */
-> +	aux =3D &env->insn_aux_data[prog->len - len];
-> +	indirect =3D aux->indirect_target;
-> +	swap(aux[0], aux[len - 1]);
-> +	aux[0].indirect_target =3D indirect;
-> +	aux[len - 1].indirect_target =3D false;
->  	info[cnt + 1].start =3D info[cnt].start;
->  	info[cnt].start =3D prog->len - len + 1;
->  	/* The patch ends with the exit. */
+> +	if (regs)
+> +		memcpy(ctx.saved, &regs->r[BPF_REG_6], sizeof(ctx.saved));
+>  	arch_bpf_stack_walk(bpf_stack_walker, &ctx);
+>  	WARN_ON_ONCE(!ctx.aux);
+>  	if (ctx.aux)
+> @@ -3483,7 +3505,7 @@ notrace void bpf_throw_unwind(struct bpf_throw_regs=
+ *regs, u64 cookie)
+>  	 * architectures cannot recover sp while unwinding, so fall back to bp.
+>  	 */
+>  	kasan_unpoison_task_stack_below((void *)(long)(ctx.sp ?: ctx.bp));
+> -	ctx.aux->bpf_exception_cb(cookie, ctx.sp + ctx.aux->stack_arg_sp_adjust=
+, ctx.bp, 0, 0);
+> +	ctx.aux->bpf_exception_cb(cookie, ctx.sp, ctx.bp, (u64)(long)ctx.saved,=
+ 0);
 
 [Severity: Critical]
-This problem wasn't introduced by this patch, but can patch_list_adj_aux()
-misplace the nospec flag [1] when expanding a single instruction into a
-multi-instruction sequence?
+This problem wasn't introduced by this patch, but can this cause a NULL
+pointer dereference [1] on ctx.aux if arch_bpf_stack_walk() fails to
+locate the main BPF program frame?
 
-kernel/bpf/fixups.c:patch_list_adj_aux() {
-	...
-	*last =3D *old;
-	/* Recompute zext_dst: the last insn of the patch need not be the patched =
-one. */
-	last->zext_dst =3D bpf_insn_def32(prog, &patch[p->len - 1]) >=3D 0;
-	memset(slot, 0, sizeof(*slot) * (p->len - 1));
-	...
-	/* indirect jumps to the replaced insn land on p->target */
-	if (last->indirect_target && p->target !=3D p->len - 1) {
-		slot[p->target].indirect_target =3D 1;
-		last->indirect_target =3D 0;
-	}
-}
+Although the code checks whether ctx.aux is non-NULL before testing
+ctx.aux->exception_boundary above, it then dereferences ctx.aux
+unconditionally when invoking bpf_exception_cb().
 
-During verification with Spectre v1 mitigation active, a bpf_loop() call can
-be eligible for inlining on an architectural path while a speculative path =
-to
-the same instruction fails in check_func_args() with -EACCES, causing
-do_check() to set insn_aux->nospec on the call instruction and stop verifyi=
-ng
-that speculative path.
-
-When bpf_optimize_bpf_loop() -> inline_bpf_loop() later replaces the call
-with a 19-instruction sequence, patch_list_adj_aux() moves old aux data to
-last and zeroes the preceding entries while only restoring indirect_target =
-to
-slot[p->target].  As a result, bpf_convert_ctx_accesses() emits BPF_ST_NOSP=
-EC()
-before the last instruction of the inlined loop instead of at its entry,
-allowing speculative execution to enter the loop body and invoke the callba=
-ck
-with unverified state.
-
-[1] https://sashiko.dev/#/bug/linux-9fe39327-eb21-4b95-9330-3ea552a3b9fc
+[1] https://sashiko.dev/#/bug/linux-ba8dbe22-2e39-4c7e-90bf-e30065ad3c90
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1794399387.gi=
-t.memxor@gmail.com?part=3D6
+t.memxor@gmail.com?part=3D5
