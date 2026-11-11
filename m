@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794403991;
-	b=U4XpOzW8LU3H/opCjjhTMNcW5irx+kbIQa794umnVDiHr4mvLWZl/Rsw0rSvXM1C2NlU
-	 MtvkOubMlzb0qUnMIyqsQ8WOtUQdw0Gm0d1UWWk9PurnQs0liverKlOHTT4QJuLAdU7zC
-	 uCYO+llN8PF/4CweTxYjmuBONO1LVZepls9ZXodCjQtR2xUZd0svQQc3UqCtP7g8l4pFo
-	 n4uYSYTQb/jlXMLGiYJCZJVm3fATFXl96pJObDgNqPZ7Qirr3eIuYaCzn3f6ejMyiATm9
-	 8/ux+2RriNFbOHA+/J4914WNF5GH3PkkTHzlN7B5NLM923Gpzat4Dp+h9Vc3XW02xSw==
+	t=1794403995;
+	b=BL0pd0NI4sRtRiWmKaVTqfXgSKwQevHi/SPJu250yMulZyMKhTMxP9HEEgqse5ttiAAo
+	 BYuWts0Ks7nBOq9APIgcl5Fd/nKa3kmJu8b7Z4zrFU3Bu8++HF6F3YJ8YNFQu2PGmss2U
+	 aU95yU3qQuJzCBnCiIZQRtrrnQV7kvJFzXS9jshKp1XDdOB8AnW4HKwOl9IxzaMUIpBG8
+	 nqEnw9LGGNRHJg0EESQpsJMxCLruGLFX3fbEjwzCAt1vzuk20aMQ+iECqZeL3+fZ0kimB
+	 VA8mT7+EfuxF9h/nrePMsspVIqQ/rFluBIpOY9zZonmgxUBQ1Ycd/Pgze1SIeg3yFGQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794403991;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794403995;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=Plxo1yGphv/ixoaAaDnR26Ljo6BCiJ0s27jl/IT/8ZU=;
-	b=vYrRGe7VUE0BFx4ws7cTD8Vk/ME+qDJNvn2N+1c9+iJBZ2ZdpDrfCM3SK1DYKWC08ZRd
-	 DvECzdQkzNQuaCyPjsJUaCgHKPDFGUo4rxhAFHP5BvcB6ueUjbptwXUlnl/bKujo4i/MC
-	 +XKWZ6OQcQmLx9o0++ucWphiWjRq/8DH4Y33SSv97gpqnZK7MVUC9s4epAGAWpUgoHhW7
-	 HcrjqEIzepcuMUSUjD42N4mNqn1TNtwHvm95VLZZ4OiY+hiFcOl5PV5nKGe7JxDeDE/9k
-	 Eq+VYV1B5R1zOK5qWbwPZXLMqLR8Zu0i2SpeU484tQPiqST2ZEWt3NUY9xeTEgtPNHg==
+	bh=m6Iy8N/aS5DZHpnECoEhMAD0vcbmQ6wNcoZNkW1OkNM=;
+	b=TcJAGEqCgzbek0k3dyg6c5lCWVTjbBbuDcMciZ4go/B8tPiqBaYcGLTJyoGFja63dwPx
+	 F/drROvfElmUX7/80dfdyxxmUdsmH3skmK3+nZC3d0l/d23BojmahswbI994dxtJXxGf0
+	 Q3UYi1q7tvJe3OAF9SYbrxbt0yRA1e5R7zgSFTwaEsuFqpJiyjOKwXnqiVKs6HDDiGTKM
+	 suGoyo59JOm70xxbsm8B1fSDUauqpIOkoOh2/0HA6SUi90Me52G5iwOSzdz0GupN9n4fL
+	 DCM9wZqn7oe/LHH3KmfpT+hCXl9yGZmIqq70e+wyeFWn5CScqNKsY49Y4msgLpdH3OA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ncrt2Dy5;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nvDBJTvY;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0ACD606A32E
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 13:33:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBEF8606A324
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 13:33:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ncrt2Dy5
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C79521F00A09;
-	Wed, 11 Nov 2026 13:33:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nvDBJTvY
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F29991F00A0D;
+	Wed, 11 Nov 2026 13:33:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794403991;
-	bh=Plxo1yGphv/ixoaAaDnR26Ljo6BCiJ0s27jl/IT/8ZU=;
+	s=k20260515; t=1794403994;
+	bh=m6Iy8N/aS5DZHpnECoEhMAD0vcbmQ6wNcoZNkW1OkNM=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=ncrt2Dy5nbxwJiCRig+wPo3gGMe8cfjpBbSaTl91ciD7SiGXgyJdvsfoKML6cFfDi
-	 4ZfvTQDqVVBufmDqGM+yIusiQJGXL0v6gCTLQXVV/nKcuGf94nAAoOojM1G86m9JwD
-	 4yk7H0SR1DVdh/2JAZWxUGPOcrykGAUfwRMi8KaSQVUAGFnoJOB7zoBPMnWuPM42Ec
-	 eiaiUfD44gVflGSnv55Y7lbGUdASjb0myO1Uc1A1+2r4mKAGnRcARV9QQVLsMFA9Pd
-	 HuxCalfM/diAYxSkVqLe4kWOzT7UHcUQtOOleMgJXHj+kJb5o4KYHCH0RYxHnCLaYc
-	 pVrxMHtGbs7Gg==
-Content-Type: multipart/mixed; boundary="===============4887617662354651281=="
+	b=nvDBJTvYoExVeEl6y5C/i5YHgTg4LrsnyZ0uVg6aNx/67Fn6q5LKA//14OQdraFJX
+	 d+1tJ5rlyVugf+OwhjbXBAjf2bCpRbv54Az5wflFkivWlHVsh/uzxdK/TLpYpn3OW/
+	 LzYlO8Sf5toMZUmG8mmlXPFY43kyNtx4OVfPnKAXajaIf6kp0Flx3myMsDhzPGA40o
+	 wAOZsU6AbU/Ms7fganzKuju+MP2L+GWWrpACyblkMdG9oCwonNnwduJvQfjKoIEJkK
+	 Fm+dVzaeueLsEEzrejqg5mKR+x476iTlo9UsDjsEYdKsI/OKr41wcFpKmt1JqkChOg
+	 11nCh5u3HfHPA==
+Content-Type: multipart/mixed; boundary="===============4534125352478546491=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,93 +49,103 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <b9135e2110157ca4f60e48d324348b7abe57f12f911bdf701971c323fab53bd1@mail.kernel.org>
-In-Reply-To: <d69e383da887f124f305006c9c0c2d56b39c7145.1794399387.git.memxor@gmail.com>
-References: <d69e383da887f124f305006c9c0c2d56b39c7145.1794399387.git.memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v1 11/29] bpf: Give every reference an owner frame
+Message-Id: <72e51049848235f9b6074025fa2a86471cf5676edd45adb4b756ff2fd61eac55@mail.kernel.org>
+In-Reply-To: <ffc489a9770015068f1fe344435515d9265600be.1794399387.git.memxor@gmail.com>
+References: <ffc489a9770015068f1fe344435515d9265600be.1794399387.git.memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v1 08/29] bpf: Add flags and release kfuncs to the dtor registry
 From: bot+bpf-ci@kernel.org
 To: memxor@gmail.com,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,ihor.solodrai@linux.dev,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 11 Nov 2026 13:33:10 +0000 (UTC)
+Date: Wed, 11 Nov 2026 13:33:13 +0000 (UTC)
 
---===============4887617662354651281==
+--===============4534125352478546491==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Give every reference an owner frame
+> bpf: Add flags and release kfuncs to the dtor registry
 
-TL;DR: Commit message only: the claim that callbacks release everything they
-acquire may be inaccurate, since IRQ or lock references acquired in a callback
-seem to pass to the caller in prepare_func_exit().
+TL;DR: btf_find_dtor() may fall back by name to a vmlinux destructor for a
+same-named module struct, so on bpf_throw() the unwinder could run it on an
+object of a different type. Needs a colliding module type.
 
-> bpf: Give every reference an owner frame
->
-> The unwinder will release the resources of each frame from that frame's
-> own stack slots. Each reference in the verifier state must therefore
-> belong to exactly one frame. The verifier has no such notion today: the
-> state holds the references, and a frame only knows how many of the
-> references held at its entry are still held.
->
-> [ ... ]
->
-> Callbacks release everything they acquire, so nothing changes owner when
-> a callback returns, and the transfer in prepare_func_exit() has nothing
-> to do for them.
->
-> [ ... ]
->
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-
-Is the statement that callbacks release everything they acquire accurate
-for every reference type?
-
-At a callback's BPF_EXIT, process_bpf_exit_full() calls check_resource_leak()
-with check_lock = exception_exit || !curframe, which is false in a callback
-frame.  So active_locks and active_irq_id are not checked there, and
-check_reference_leak() returns 0 for frameno != 0.
-
-The only callback-specific check in prepare_func_exit() skips everything
-that is not REF_TYPE_PTR:
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
 
 [ ... ]
 
-> @@ -12688,6 +12701,11 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
->  		return err;
->  	invalidate_stack_slices(env, callee->frameno, INT_MIN, 0);
->
-> +	/* What the frame holds when it returns is the caller's to release. */
-> +	for (i = 0; i < state->acquired_refs; i++)
-> +		if (state->refs[i].frameno == callee->frameno)
-> +			state->refs[i].frameno = caller->frameno;
-> +
+> +/*
+> + * Find the destructor entry of type @btf_id of *@btfp, and set *@btfp to the
+> + * BTF the entry and its kfunc ids belong to. A module's BTF is split on top of
+> + * vmlinux's, so a type below its first id is vmlinux's, with its destructor
+> + * registered there; and a struct a module defines under the name of a vmlinux
+> + * struct is the same type to the verifier, which passes it to vmlinux kfuncs
+> + * by name, so it is destroyed as that type.
+> + */
+> +const struct btf_id_dtor_kfunc *btf_find_dtor(struct btf **btfp, u32 btf_id)
+> +{
 
-A REF_TYPE_IRQ, REF_TYPE_LOCK or REF_TYPE_RES_LOCK* entry acquired by a
-callback survives the callback's exit with frameno == callee->frameno, and
-this loop then reassigns it to the caller.
+[ ... ]
 
-For example, a bpf_loop() callback can call bpf_local_irq_save() on a flag
-that lives in the caller's stack, since bpf_loop() passes ctx as a
-PTR_TO_STACK of the caller and process_irq_flag()/mark_stack_slot_irq_flag()
-accept a slot in any frame.  The callback returns with IRQs still saved, and
-the caller restores them after the loop.
+> +	t = btf_type_by_id(btf, btf_id);
+> +	if (!t || !btf_type_is_struct(t))
+> +		return NULL;
+> +	vmlinux = bpf_get_btf_vmlinux();
+> +	if (IS_ERR_OR_NULL(vmlinux))
+> +		return NULL;
+> +	id = btf_find_by_name_kind(vmlinux, btf_name_by_offset(btf, t->name_off), BTF_KIND_STRUCT);
+> +	if (id < 0)
+> +		return NULL;
+> +	dtor = btf_dtor_tab_find(vmlinux, id);
+> +	if (dtor)
+> +		*btfp = vmlinux;
+> +	return dtor;
+> +}
 
-For a bpf_spin_lock taken in a callback, the transfer runs too, although
-the re-simulated helper call at the callsite later rejects the program.
+The comment says a module struct with the name of a vmlinux struct is the
+same type to the verifier and is passed to vmlinux kfuncs by name.  Is that
+accurate?
 
-Handing the IRQ reference to the frame whose stack holds the flag looks like
-a sensible owner.  But the sentence in the changelog does not seem to match
-this, and later patches rely on the ownership model it describes (for
-example, prepare_func_exit() later calls bpf_frame_desc_record_return() for
-every handed reference, including those of callbacks).
+For kfunc pointer arguments, process_arg_ptr_to_btf_id() calls
+btf_struct_ids_match(), which uses btf_types_are_same():
 
-Could the changelog say that only REF_TYPE_PTR references are guaranteed to
-be released by a callback, and that IRQ/lock entries can still pass to the
-caller here?
+    if (id1 != id2)
+        return false;
+    if (btf1 == btf2)
+        return true;
+    return btf_type_by_id(btf1, id1) == btf_type_by_id(btf2, id2);
+
+For a released argument the match is also strict, so the struct is not
+walked.  Matching by name only happens for the __sk_buff/xdp_md projections
+in btf_is_projection_of().
+
+So a program holding a reference to a module's own struct X cannot pass it
+to the vmlinux release kfunc of X, yet btf_find_dtor() returns the vmlinux
+entry for X.  The commit message says the rule is "if the program could
+call the release kfunc there, running the equivalent destructor is
+allowed", and this fallback seems to break that rule.
+
+The later consumer, resource_registry() in kernel/bpf/frame_desc.c, only
+checks btf_kfunc_flags()/btf_kfunc_is_allowed() for dtor->release_btf_id
+against the program.  It does not check that reg->btf and reg->btf_id would
+pass the release kfunc's strict type match.
+
+Suppose a module defines its own struct named like a vmlinux cleanup type
+that is private to a .c file (bpf_cpumask, bpf_crypto_ctx, bpf_ksock or
+prog_test_ref_kfunc), returns it from a KF_ACQUIRE kfunc, and registers no
+destructor for it.  Can a program that holds that reference and calls
+bpf_throw() then have the unwinder run the vmlinux destructor, for example
+bpf_cpumask_release_dtor(), on an object of a different type?
+
+In this patch the fallback is not reachable from btf_parse_kptr(), since
+bpf_find_btf_id() searches vmlinux first by name and kind.  No in-tree
+module defines such a colliding, non-deduplicated struct, so this needs a
+module type to trigger.  The fallback is still present at the end of the
+series.
+
+Could the fallback be dropped, or could it require type identity before
+returning a vmlinux entry for a module type?
 
 
 ---
@@ -143,4 +153,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43027088527
---===============4887617662354651281==--
+--===============4534125352478546491==--
