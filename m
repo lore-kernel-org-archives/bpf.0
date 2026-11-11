@@ -1,49 +1,116 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=69.171.232.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.135
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794435904;
-	b=eKGmr7fyS4c25pRU3XrnQwpH48+AGpFrpMb4A6iMSv6ZtUuSTFW31NLeDZbd75UC3JaW
-	 RrKCZXUFc53wkTPqophPhHwcgawPli/DGwGHuOM8uRvwZiz3AfxRNxgnxwoiLnxuSa5PO
-	 ew4yMUobaXaivT7+WjDOifXTuogSwxc83d+mNqk3CPbB0pCjegi++dCFomphB3OROPaZj
-	 b2YTeNuLKoK7Da+IQ7q/i6DOdE3KxSRQyI6iELTbnidWiLs4lFemfWF9+AjTqf+L5BLgQ
-	 ILTjiL/GHRWt/+4bR2qzgQd/U/lCz5wFFj8oVxdadJoU0x1Y/sgWuvCO2CuhYCPtYlw==
+	t=1794435917;
+	b=u+SpvEV1mnxKf8R/VBbA423LqaxjG1PT8B9+rhJE2Kmk7sCMqEvL1E/YxN4WZYUOBrVU
+	 vbz5XFL9pv2xGMw4huxQV7rFlH+jesVW3SkhXw3JbR4nnQftWU8TVIThIWsan98NLD3Em
+	 0c7/SrH/pE3B21goTzIX6Tztre8A6LhVDh0rKYx7vuTx0jB2fdIVk3GnSX7N464uiiOTU
+	 xwTj6jSaSmnCtS4Grtn7bSEk1PagakxwuYpCY02zKxzt0mxmeLFDABZJJ/yOY9efPL7LG
+	 47kEfLx30hoeb8cat/ZtJSnUnSZpgSIDKocl0fO7pFl8Lca359u63RBgLqQA7iLRhLA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794435904;
-	h=DMARC-Filter:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=EYAzxpAXkSep1aSgFztTSqWSbJMTFI9JEhF20reLYNs=;
-	b=k7N02DRbbH3exDZFnw+3qSkhuQyqVGOXnETSpAEdvJLqpzQeM4K7DE6uOHMJHNHkeVRT
-	 SGsjLOf2OwH+DEgPs2/5uTnl/0qqnz6NskVMuuOERuoBZ9Zk7QgPknydIY37SiPlr1q3Y
-	 /UR5T6A9hNgjafHKePCeqhyd+FgPtEImfOLQ76r5egKWNIvsLzcxsYnV7VA1bUDjEL/oi
-	 DqfSNyOcsyUZfucauwaaQm2QzTWSM4tB9rK7rN8Ve/5EA7melTpE8sTmy/5bgesp80OJQ
-	 KVrxFRxaWvVP+A5XVVv/D+UFv/4sajXwGkB6NIauon4anU6FLM53w4FPYSCzzhP1U6g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794435917;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=LcIgSNREManU20T5ds32E1qosC1xbF0e9vbPmoZw/SM=;
+	b=Tf9Ph/zUKgflGKmHZ02f2xz9MXBGVPkpdMsc5RGJeSPe/9EnGoDuCCEGZEP0MUAy1F1m
+	 nSAk7UKhkSgsh569kRQjFPbY/xR7z3WKZaWf7vXheLSLL0+lu4VMl7v24EyYQ7HI5dUu0
+	 ysozZ2N2SLG0lJhYZBrTLkxEk5a+EcbCjrlRyiy5MwxXDO9oGwrwXFPPejiRuqdE3gJ7n
+	 ksA3LwgPTuozgf8K6+bVhuwFsaiwixV09dOjQgj++T0r/czTK8n5dvqgNQ5AWKbEZ8wE6
+	 NScYOFZNIT0PLmajBNSqdaWVzV9SHAhFKMVJwT+2N4ON4K8vGMfrfukcuKEEIHpNN8w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=fail header.from=linux.dev;
-	spf=fail smtp.mailfrom=linux.dev;
-	arc=none smtp.remote-ip=69.171.232.180
-Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="WRxwN8/y";
+	arc=none smtp.remote-ip=74.125.229.135
+Received: from mail-dl2-f7.google.com (mail-dl2-f7.google.com [74.125.229.135])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF1A8606A326
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 22:25:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CF1A8606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm50310.atn0.facebook.com (Postfix, from userid 128203)
-	id 2B3835824EE2C; Wed, 11 Nov 2026 14:24:47 -0800 (PST)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: Alan Maguire <alan.maguire@oracle.com>,
-	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-	dwarves@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	bpf@vger.kernel.org,
-	kernel-team@fb.com,
-	Breno Leitao <leitao@debian.org>
-Subject: [PATCH dwarves] btf_encoder: Keep the source prototype of kfuncs
-Date: Wed, 11 Nov 2026 14:24:47 -0800
-Message-ID: <20261111222447.322978-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.53.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE26A606A326
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 22:25:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CE26A606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WRxwN8/y
+Received: by mail-dl2-f7.google.com with SMTP id a92af1059eb24-13985f8229aso3309006c88.1
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 14:25:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794435916; x=1795040716; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=LcIgSNREManU20T5ds32E1qosC1xbF0e9vbPmoZw/SM=;
+        b=WRxwN8/yRQXnBMs79H4zEYpeGEdBg8BnKhaHIb1pRpEfUeouvtNDop9d5/n4XDIsTE
+         bS+RCTNz2dFaoNvhaPgORvboxzRWa6ylYl/nYhEZ5DewOd9+xQHb3ySenQgqSb3A3aAB
+         EQy827yfXzHAx0VVyQT/26oNznABcK6D66SnLGHhy387O11NbSMNyPxIFHGmHX1Mix2l
+         6mNwh1bPwiaWQ0K4p5tC9qsb/pgi0MigrZTf6G2BFqiTQ/4H1N8FfNfOVZccC6GSxP3g
+         +lo10dqt1ZyMjXI9qhOjp9SauzZgLfWXaLHu1tPrqDh+qWL6hHkpxkqYzy3Mq2Asx7sU
+         qu8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794435916; x=1795040716;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=LcIgSNREManU20T5ds32E1qosC1xbF0e9vbPmoZw/SM=;
+        b=AEkoYrsMbqcOnrpvzTlHdM+7Tzrl+5X+sDmGscCxQK8Z/ypt9GqSGsLUiPTNXwy+OM
+         nZtRahlARj4maL0tL6NpufR6BkQ8K/FrZDEl3J6nlXMQXTkxCjvd/d1fAHZPMrv/Gnkr
+         7kO31o8xebVftSuh7THmnF/6wvf1NXK92/2ZC8Vt1xDHOomKidpIfTr6BLCmbkx47kBd
+         chl2WJw5p5oDEQ4RjzKqoWYi4sj/OWfMvuuRptMMSZjPIeveuDH+ymscuxHqJCm8+p3S
+         7UoaWhsI4m/sO4+9dmJk1WDVTCIx+X/lt6+oDfYT1G8TTMsaHtgiC1R2BudkxhWT5EzN
+         4S0Q==
+X-Gm-Message-State: APuU4Z8sPRuFpa5+hDvP4cT5ZJRm57njVv1j0qlg8RRH7WDcbHZ2YDdE
+	niWO0ak/QNLmptSliwYVqABHu2YnrjtSMwODV6NeSwgridtP/M/hfhnN
+X-Gm-Gg: AYBFou0BfECUW5Vrv1QqHcGTcDzFOCaO8WIm0c7lQWGaTRPQqc8nIepyPnwStXsyML/
+	2zFWEzxm2KSxcWCOokowevgwM5dtig2G4jbmIDzvZIiCgdFu/YQ0i2iP0ZGX1BEX/NjYsqIfDhd
+	fasXboSjljmU/ufEpJs2vcWFXbV7qYEpxzFsE2zBO3i7i0P3hH2wwWsCEKubETpPBdrAhv9RODR
+	xDxcweKj1SggMDgM9ITgHkfFyYeJQGhpR2vTeMI9esWgasQxevKJwEDOLHj3O5z329+LiQabtB2
+	Pnm62wMhlZIuBWKRH56HFUHWyzGWbC2edzeStUCHBH38sOG1aWHKopbmqMxKjsjAYNXyuPumaqn
+	5Q+7bacRa7GPnqkcCYxGr1HzcG9Pj6Cgd+5xgoMkG+8nvbCZYQD8+RLYZO3qkCcQY1miJXcHf7z
+	0LqOHw6uvkUUIQIdC7idYemAcQieEgaDdZupHnjfHR51KcdJy3ZvVOooaZtDV80gV7/us1Wx8hY
+	yjDHPYk9arWhzmlv+Xs/kEyVwMRpyDPjqmQHfchsr15c3TTLHHsJBka5eZd19NLOtSZiMiViEqM
+	xqt4+E27gBpjVyw9z4OPB+o=
+X-Received: by 2002:a05:7022:286:10b0:1b3:a23a:d1f3 with SMTP id a92af1059eb24-1b3c03037a9mr3351998c88.18.1794435915687;
+        Wed, 11 Nov 2026 14:25:15 -0800 (PST)
+Received: from localhost ([2a03:2880:9ff:43::])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b3b5890584sm20682923c88.3.2026.11.11.14.25.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Nov 2026 14:25:15 -0800 (PST)
+Date: Wed, 11 Nov 2026 14:25:09 -0800
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Tianyi Gao <tianyi@cloudflare.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Lorenzo Bianconi <lorenzo@kernel.org>, Vladimir Vdovin <deliran@verdict.gg>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Donald Hunter <donald.hunter@gmail.com>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Tony Nguyen <anthony.l.nguyen@intel.com>, 
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>, Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
+	Alexander Lobakin <aleksander.lobakin@intel.com>, Magnus Karlsson <magnus.karlsson@intel.com>, 
+	Tushar Vyavahare <tushar.vyavahare@intel.com>, Jason Xing <kerneljasonxing@gmail.com>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, Madalin Bucur <madalin.bucur@nxp.com>, 
+	Ioana Ciornei <ioana.ciornei@nxp.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Chris J Arges <carges@cloudflare.com>, 
+	Jakub Sitnicki <jakub@cloudflare.com>, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	intel-wired-lan@lists.osuosl.org, llvm@lists.linux.dev, kernel-team@cloudflare.com
+Subject: Re: [PATCH bpf-next 00/15] xdp: add SKB core extensions to keep RX
+ metadata until skb creation
+Message-ID: <avTqb--WfUNBcEyN@devvm16445.scu0.facebook.com>
+References: <cover.1794281983.git.tianyi@cloudflare.com>
+ <avOvI8xrHI0dwyHj@devvm16445.scu0.facebook.com>
+ <CAG4wq-egD55NZDw+OKVKTKN2tQJ9oKEC504wFv=xoMXyJ-0z4g@mail.gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -53,140 +120,44 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAG4wq-egD55NZDw+OKVKTKN2tQJ9oKEC504wFv=xoMXyJ-0z4g@mail.gmail.com>
 
-The location based checks can drop kfuncs from BTF even though their ABI
-did not change. With the arm64 KCSAN setup in the report, resolve_btfids
-fails with:
+On 11/11, Tianyi Gao wrote:
+> Hi Stanislav,
+> 
+> On 11/10, Stanislav Fomichev wrote:
+> > Awhile ago we discussed the alternative of adding setters for xdp
+> > metadata. Then the veth (or whoever turns xdp frame into an skb) can
+> > apply whatever metadata it needs (and there is some magic behind the
+> > scenes that takes it into account when creating an skb). That keeps
+> > the layout and most of the code outside of kernel. Have we considered
+> > that here?
+> 
+> Thanks for the reminder. Yes, we considered [1] and [2], and took
+> parts of them.
+> 
+> The alternative setter model in [1] requires a program on veth or
+> cpumap to call the setters for the RX metadata. We want to avoid that:
+> 
+> - On veth, an XDP program removes software GSO from the peer, limits
+>   its MTU, and can copy skbs from the peer.
+> - On cpumap, each entry would need a program only for this.
+> 
+> This series achieves the same with only the XDP program on the NIC,
+> which stores the values with kfuncs in the skb core extension area
+> after the xdp_frame. cpumap and veth take this area into account when
+> they create the skb, which is the "magic behind the scenes".
+> 
+> [1] https://lore.kernel.org/all/20250616145523.63bd2577@kernel.org/
+> [2] https://lore.kernel.org/all/aGvcb53APFXR8eJb@mini-arch/
 
-  WARN: resolve_btfids: no BTF func for kfunc bpf_tcp_ops_set_rcvlowat in=
- bpf_tcp_ops_set_rcvlowat_kfunc_set
-  WARN: resolve_btfids: unresolved symbol bpf_tcp_ops_set_rcvlowat
+My main concern is that we are adding a lot of code and one more special
+way to plumb the metadata (and another metadata area), another set
+of kfuncs and slowly creeping more features into xdp making it more
+and more like skb.
 
-The location list of 'rcvlowat' starts after the function entry, in a
-callee-saved register, so the function is marked unexpected_reg and
-skipped. scx_bpf_tid_to_task() hits the same skip through a
-different DWARF pattern.
-
-Kfuncs are defined with __bpf_kfunc ("__used __retain __noclone
-noinline"), so the compiler keeps the calling convention of the C
-prototype. Odd parameter locations of a kfunc are debug info artifacts,
-not ABI changes.
-
-For kfuncs, clear the location derived flags when saving the state,
-keep all source parameters, and skip the location based checks, also in
-btf_encoder__add_saved_funcs() where saved_functions_combine() can merge
-the flags back in. The inconsistent prototype and ambiguous address
-checks still apply.
-
-Kfuncs were only collected with decl_tag_kfuncs, which the kernel no
-longer passes since commit 692393104909 ("resolve_btfids: Emit bpf_kfunc
-and bpf_fastcall decl tags"). Collect them whenever BTF is encoded; the
-decl tags are still only emitted with decl_tag_kfuncs.
-
-With this change, bpf_tcp_ops_set_rcvlowat() and scx_bpf_tid_to_task()
-are encoded again, and no other function in vmlinux BTF changes.
-
-Reported-by: Breno Leitao <leitao@debian.org>
-Closes: https://lore.kernel.org/all/au27Y9m78_3EH2v1@gmail.com/
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- btf_encoder.c | 49 +++++++++++++++++++++++++++++++++++--------------
- 1 file changed, 35 insertions(+), 14 deletions(-)
-
-diff --git a/btf_encoder.c b/btf_encoder.c
-index 05ffe82..4269467 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -1421,16 +1421,30 @@ static int32_t btf_encoder__save_func(struct btf_=
-encoder *encoder, struct functi
- 			}
- 		}
- 	}
-+
-+	/*
-+	 * A kfunc keeps the ABI of its C prototype, so reset the DWARF
-+	 * location based flags: otherwise the kfunc may be treated as
-+	 * optimized and skipped, or lose parameters in BTF.
-+	 */
-+	if (!loc && is_kfunc_state(state)) {
-+		state->unexpected_reg =3D 0;
-+		state->optimized_parms =3D 0;
-+		state->uncertain_parm_loc =3D 0;
-+		state->reordered_parm =3D 0;
-+		state->signature_changed =3D 0;
-+	}
-+
- 	ftype__for_each_parameter(ftype, param) {
- 		const char *name;
- 		char *final_name =3D NULL;
-=20
- 		/* No location info/optimized + reordered means optimized out. */
--		if (!loc && ftype->reordered_parm && (!param->has_loc || param->optimi=
-zed)) {
-+		if (!loc && state->reordered_parm && (!param->has_loc || param->optimi=
-zed)) {
- 			state->nr_parms--;
- 			continue;
- 		}
--		if (!loc && encoder->true_signature && ftype->signature_changed &&
-+		if (!loc && encoder->true_signature && state->signature_changed &&
- 		    param->optimized) {
- 			state->nr_parms--;
- 			continue;
-@@ -1797,17 +1811,20 @@ static int btf_encoder__add_saved_funcs(struct bt=
-f_encoder *encoder, bool skip_e
- 		 * signature; true_signature can rewrite those signatures.
- 		 * Also exclude functions with unexpected register use, multiple
- 		 * inconsistent prototypes or uncertain parameter locations.
-+		 * The location based checks do not apply to kfuncs.
- 		 */
--		if (state->unexpected_reg)
--			skip_reason =3D "unexpected register usage for parameter\n";
-+		if (!is_kfunc_state(state)) {
-+			if (state->unexpected_reg)
-+				skip_reason =3D "unexpected register usage for parameter\n";
-+			if (state->uncertain_parm_loc)
-+				skip_reason =3D "uncertain parameter location\n";
-+			if (state->reordered_parm)
-+				skip_reason =3D "reordered parameters\n";
-+			if (btf_encoder_func_state__skip_optimized_parms(encoder, canonical_s=
-tate))
-+				skip_reason =3D "optimized parameters\n";
-+		}
- 		if (skip_encoding_inconsistent_proto && state->inconsistent_proto)
- 			skip_reason =3D "inconsistet prototype\n";
--		if (state->uncertain_parm_loc)
--			skip_reason =3D "uncertain parameter location\n";
--		if (state->reordered_parm)
--			skip_reason =3D "reordered parameters\n";
--		if (btf_encoder_func_state__skip_optimized_parms(encoder, canonical_st=
-ate))
--			skip_reason =3D "optimized parameters\n";
- 		if (state->elf->ambiguous_addr)
- 			skip_reason =3D "ambiguous address\n";
-=20
-@@ -3056,10 +3073,14 @@ struct btf_encoder *btf_encoder__new(struct cu *c=
-u, const char *detached_filenam
- 		if (!found_percpu && encoder->verbose)
- 			printf("%s: '%s' doesn't have '%s' section\n", __func__, cu->filename=
-, PERCPU_SECTION);
-=20
--		if (encoder->tag_kfuncs) {
--			if (btf_encoder__collect_kfuncs(encoder))
--				goto out_delete;
--		}
-+		/*
-+		 * Mark kfuncs before any function state is saved, so
-+		 * btf_encoder__save_func() keeps their source prototypes.
-+		 * Needed even without decl_tag_kfuncs, which only controls
-+		 * the decl tags.
-+		 */
-+		if (btf_encoder__collect_kfuncs(encoder))
-+			goto out_delete;
-=20
- 		if (encoder->verbose)
- 			printf("File %s:\n", cu->filename);
---=20
-2.53.0-Meta
-
+For containers in general, and for fast af_/xdp, we seem to have been
+moving into netkit with queue leasing. Maybe that's something that
+can help with your veth performance?
