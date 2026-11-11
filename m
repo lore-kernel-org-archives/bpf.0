@@ -1,48 +1,48 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.5
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=117.135.210.3
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1794365086;
-	b=PUV5ojb+GoUO0ZwQ5IcbXDWZ+LV7pVkFrRF3MVlIKJ48osK06jJpErbVo7FzyeGq2RQb
-	 uecktO1of8JqV3x2QIpgkpNN8G1ckA5muZlSlSujHQ9opyuqm2GdtHxyrcAcC2U5gVqLV
-	 ihQkt3/X2+l//QvmKtmB3q0H0TWwsFpUT+myoGnLGLChyMWyVfCLeBYwpOjy12fgu/vo3
-	 ars+/jso5rKvttE72fmxskImyijad/kSMFgqP0QuB9qmCb1OU4BYs8wehbgh2rb+e612w
-	 fwbAKqJDYKtxUAoe3P/FgYQLdD+WsAEPZZMAUtF9c0H44Q055R5GP2z6aL0urzS9pfw==
+	b=4iUkO0OuGnY4KuTLvkZ6MMwjv7Ec85zon/0AYqeGW/KStrlU4qrN5hWsowIC9JqZzCl0
+	 Zk5WNsA3lu/669Qj2kCBBfIT8I3M9Yiq4yHp/YVtObg3z9pKaP0UWdA/aOy2GqJUhNfml
+	 NsVhJenor2QDEHzERrjqsSiTvkM4t7OQKIhcHtf+vlr9DUc/qFAeSQZEtoKoXuw17CqLX
+	 bp+JgSDGtn/xECa0zRHnRVTKFIGaB2VWBEUvl2lWdEmwrfh5n3SntxRCqhXCpXU7wKnMw
+	 VDX8HETZzGxy//LsN85VkoI5pNj3boUEYTnK3orxNRNMm9w+Q2vm5hYAaPJk08ZXPhA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1794365086;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
 	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:
 	 X-CM-SenderInfo;
-	bh=o1Zupg0C/vtuMuangz4WqN01bqC46l3g05DbKVABnMk=;
-	b=l+5cP9g8DCUA1gBzY6WTR3XKdMGITQOPcjaamQFlshHVtlEIesep5Q+Xq97Ew1wvSkuV
-	 +7KzVBYm7sg05p7tdrHLE7nQC/wVh6k4HfsKJ13mDgZk2pE8/rVHInjgRAXhRXBhVKyAr
-	 r6UaU/Ovn32HRZsWJ0BbYZZy8HvALKccCJU1tNDOPoZi3GqLNkBb8QkqrDZIibueN9mlQ
-	 sdGrwNfr2vwHY4ADNDTUII9UsIy7CB92PBm7ysLEIMyimS03aK00QdtENhGV2namauHdH
-	 f++TAu2Qqgo1yyNR2ZWLxqLKeMcJrkewz4B32WOjl5JA6rdBkCmI9zkt5Y8Kemq2X2A==
+	bh=TUYSHL7RUqo6jZfd99xoUSa35O+Vzwg8I7v6n/QNgiE=;
+	b=U9BJnnb2AzP6tf0cbiotIhxCJQyXY/hSVX1rigU1WQDUOl6MwA/hPC8O24+7QkAq+kBY
+	 8ArWPGLB79k5Sqyq+9sVRmy4wXjYTI5GKozjg+fweD6ikTTFqCTfP6u2Oo0LQhYoBKFXw
+	 IaShIVJTGd+tWCd1qehKqH0T+0vLn4x87mPxWuy6OXWthrM/0xYp7a1YLAJdUwBbekvz4
+	 gO1iJvKiEYkKaoyGKaZ+CCrkZfZN6xlq6gNmwc2SeVRkPw0p94Ilr7txzsV2pyK9+pTIe
+	 W5syon5o0GbLhaW+qJEGY5izwmO7KvXpAS2mdqHKZBPCtzBcR4o9U8oJ+q8RcvphfNA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=163.com;
 	spf=pass smtp.mailfrom=163.com;
-	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=B6K42RyG;
-	arc=none smtp.remote-ip=220.197.31.5
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=npd7kjWH;
+	arc=none smtp.remote-ip=117.135.210.3
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D795606A31C
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 02:44:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0D795606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7C34606A320
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 02:44:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A7C34606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=B6K42RyG
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=npd7kjWH
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=o1
-	Zupg0C/vtuMuangz4WqN01bqC46l3g05DbKVABnMk=; b=B6K42RyGT71IttzpQx
-	9sbVHbzncPUtCw9yRdbAqkMqhC1f4VDuy7zipVWNrYadAeGMXESYt5jzgCqdoiPV
-	LxoP46kXl0b6RxMeA0zhw8eWMdv2xkXkeWB49AbTC7rXXUFMVJj2/wApVcYnPIAT
-	WtUZL0dIKOMCG9M6L51FRB3qY=
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=TU
+	YSHL7RUqo6jZfd99xoUSa35O+Vzwg8I7v6n/QNgiE=; b=npd7kjWHSiH0Wl0b2Y
+	njnGwRojlXZw3VVWDCfhdxPBGxaEqV1fBNm40W3SbvJueTzVTm6UzYO8qGY57dnT
+	7ql0CIOFKbmTjPUlRYDnsB8CPGq12h2chiG3qu/gWvVNE9XD1HD1Oa161jpgAzAp
+	vPO8nQRv3xPSfFRhol5fgpLi0=
 Received: from kylin-ERAZER-H610M.. (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id PSgvCgBXCgpq1vNqdIGjEw--.26036S3;
-	Wed, 11 Nov 2026 10:43:56 +0800 (CST)
+	by gzsmtp2 (Coremail) with SMTP id PSgvCgBXCgpq1vNqdIGjEw--.26036S6;
+	Wed, 11 Nov 2026 10:43:57 +0800 (CST)
 From: Yun Lu <luyun_611@163.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -57,9 +57,9 @@ To: ast@kernel.org,
 	ihor.solodrai@linux.dev
 Cc: yatsenko@meta.com,
 	bpf@vger.kernel.org
-Subject: [PATCH bpf-next v3 1/6] bpf: Mark task work FREED before detaching it
-Date: Wed, 11 Nov 2026 10:43:28 +0800
-Message-ID: <20261111024333.228633-2-luyun_611@163.com>
+Subject: [PATCH bpf-next v3 4/6] bpf: Invalidate async callbacks before detaching them
+Date: Wed, 11 Nov 2026 10:43:31 +0800
+Message-ID: <20261111024333.228633-5-luyun_611@163.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261111024333.228633-1-luyun_611@163.com>
 References: <20261111024333.228633-1-luyun_611@163.com>
@@ -73,74 +73,74 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PSgvCgBXCgpq1vNqdIGjEw--.26036S3
-X-Coremail-Antispam: 1Uf129KBjvJXoW7KFy3uF1rXF18WrW7WFW8tFb_yoW8tryUpr
-	Z8Kayjkrs8XFZ2y3ZFvws2vFy5uws3twsxGFyv9ryavr45XrsFqr1kKFyagFWDtrZ5JF4Y
-	vr4YgrWIvw4UuFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UlNtsUUUUU=
-X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbC6wxoN2rz1mxYegAA35
+X-CM-TRANSID:PSgvCgBXCgpq1vNqdIGjEw--.26036S6
+X-Coremail-Antispam: 1Uf129KBjvJXoWxZryDKr1xtF1rArW7KryUKFg_yoW5Jw4rpr
+	4YqFWjkr4DGF4vvw4Iyw48Ga4rA39YqanxGryFgayFvr98Wrn2vrykWFy2vFZxArs5AF1j
+	va1jqFsxXrWUC3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j5dbbUUUUU=
+X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbC6w1oN2rz1m1YyAAA3L
 
 From: Yun Lu <luyun@kylinos.cn>
 
-bpf_task_work_cancel_and_free() clears the value's context slot before
-marking the context FREED. A concurrent deletion can observe the empty
-slot and return while the detached context can still enter RUNNING:
+__bpf_async_init() publishes a callback object C before checking usercnt.
+On a non-preallocated HASH map, a syscall BPF program can pause after
+publication while another CPU configures and queues C on the live value.
+If usercnt then drops to zero, init's failure cleanup can race with uref
+cleanup and deletion. The old code permits this interleaving:
 
-  uref cleanup                 delete                  target task
-  xchg(slot, NULL) gets C
-                               unlink E
-                               cancel sees NULL
-                               return
-                                                       C -> RUNNING
-  xchg(C->state, FREED)
+  1. Init's cleanup detaches C and pauses before clearing C->map.
+  2. Uref cleanup and deletion see an empty slot; deletion retires the
+     element for reclamation.
+  3. C's queued WQ callback enters outside the freeing GP's waiting set
+     and reads a valid map, program and callback function.
+  4. Init's cleanup resumes and invalidates C, but cancel_work() does not
+     wait for the running callback.
+  5. The element is freed while the callback can still access its value.
 
-A preallocated HASH uref walk racing with deletion allows this missed
-cancellation. This deletion does not itself free the element.
+Invalidate C before detaching it. Use xchg() on cb->map to select the only
+canceller that clears the slot and consumes the map-owned reference.
+Until it clears the slot, init cannot publish a replacement, so a plain
+slot store cannot overwrite a new callback object.
 
-Mark FREED before clearing the slot. Only the first FREED transition
-clears the slot and drops or transfers its map-owned context reference.
-Until that canceller clears the slot, no replacement can be published,
-so a plain slot store cannot overwrite a new context.
+Protect the initial access to C with regular RCU. Order unlink before the
+slot load, and acquire prior invalidation when the slot is already empty.
 
-Reading the slot no longer acquires exclusive ownership of C. Protect
-that access with regular RCU while another canceller can release C, and
-preserve unlink-to-slot ordering with a full barrier, including when the
-slot is NULL.
-
-Fixes: 38aa7003e369 ("bpf: task work scheduling kfuncs")
+Fixes: 1bfbc267ec91 ("bpf: Enable bpf_timer and bpf_wq in any context")
 Signed-off-by: Yun Lu <luyun@kylinos.cn>
 
 ---
- kernel/bpf/helpers.c |  12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ kernel/bpf/helpers.c |  15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
 diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 937a0d7d6839..4b252ca61166 100644
+index a08b2af56ee6..716be7a852b5 100644
 --- a/kernel/bpf/helpers.c
 +++ b/kernel/bpf/helpers.c
-@@ -5174,11 +5174,21 @@ void bpf_task_work_cancel_and_free(void *val)
- 	struct bpf_task_work_ctx *ctx;
- 	enum bpf_task_work_state state;
+@@ -1747,15 +1747,18 @@ static void bpf_async_cancel_and_free(struct bpf_async_kern *async)
+ {
+ 	struct bpf_async_cb *cb;
  
--	ctx = xchg(&twk->ctx, NULL);
-+	/* Another canceller can release the map-owned context reference. */
+-	if (!READ_ONCE(async->cb))
++	/* Another canceller can release the map-owned cb reference. */
 +	guard(rcu)();
-+	/* Order a preceding unlink before observing an empty slot. */
++	/* Order unlink before reading async->cb, including an empty slot. */
 +	smp_mb();
-+	ctx = READ_ONCE(twk->ctx);
- 	if (!ctx)
++	/* Acquire any invalidation published before the slot was cleared. */
++	cb = smp_load_acquire(&async->cb);
++	/* Only the first invalidator detaches cb and drops the map's reference. */
++	if (!cb || !xchg(&cb->map, NULL))
  		return;
  
-+	/* Stop callbacks before making the context invisible to deletion. */
- 	state = xchg(&ctx->state, BPF_TW_FREED);
-+	/* Only the first FREED transition detaches ctx and owns the map's ref. */
-+	if (state == BPF_TW_FREED)
-+		return;
-+	WRITE_ONCE(twk->ctx, NULL);
-+
- 	if (state == BPF_TW_SCHEDULED) {
- 		/* run in irq_work to avoid locks in NMI */
- 		init_irq_work(&ctx->irq_work, bpf_task_work_cancel_scheduled);
+-	cb = xchg(&async->cb, NULL);
+-	if (!cb)
+-		return;
++	WRITE_ONCE(async->cb, NULL);
+ 
+-	/* Callbacks that run after this see NULL and return. */
+-	WRITE_ONCE(cb->map, NULL);
+ 	bpf_async_update_prog_callback(cb, NULL, NULL);
+ 	/*
+ 	 * No refcount_inc_not_zero(&cb->refcnt) here. Dropping the last
 -- 
 2.43.0
 
