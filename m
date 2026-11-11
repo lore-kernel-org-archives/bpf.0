@@ -1,104 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=52.42.203.116
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.175
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794428616;
-	b=HQmeDhnrcncKWqxHbJXL4s/MIh7U6EGwQk/2GjIyCXXNlBXINMjQPOScHinj18yLh6Yn
-	 QUnuNijxH60X23BV9aNDaggixl/tuma8Gb1+f7TItiuNJ99frsIcOKpqNN8dJhYmuvOeS
-	 0l0ApJDruFp11+SK75EGqZ6jY/MEJJwPLcOg5QgRmgKHhAPVr1zREBMXMVdAfQu31JHjX
-	 whMxniU+GdZynd4NPYCStkBtlb1IbrEqzNBVllHLrz6ZrruvaFU5HIdkToJz+/PUAkn5z
-	 Qzv5y0loM7wp/6bc2TLcQozUcGzdzZDsYmqgAXwA8Jz8iXI0g1/PlqM3cCfC98lQM5g==
+	t=1794429208;
+	b=ZKPhILFdUwkLTfXHcdLcWsmKeV2R40FS7xPOOjfWEMyFIpaHau8m4pcL26y+rvsSycVO
+	 MeoGX5e7Fh2WkRJjVCMm623Em866dfm8Xwtk+qqCGSPGBAsueerDNj1Nk7SFTpAfALlEc
+	 adr+owf80bTEzeDbP50Kdj9dYqoiImC6TvkdJU22uD8cUR2W9a9b7o1bAf3VwCxPzY3t/
+	 hRsHBCbkiujXD5u2dtzU1QSkTwqNDVaCOmv15CbRhQyGFlgoEvoCRkOL6Qtq91H/AFejS
+	 K+AvKxf0kKTrJTsxPkPeVvrQiv9Ahyq8oNwwlzyeZPAhtsxJbWG/Y1FgYtoU1NlBFZg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794428616;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
-	 Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To:X-Originating-IP:
-	 X-ClientProxiedBy;
-	bh=jkJcn8ydDxvyf3lWLXA7GpBEZpUwB/Y6PIOpFmvjCRU=;
-	b=bf2G8JS248pX1tbrUqKkZ4JlsPUS1kyRKnOWLdpaoQgO/MRTVlsewXaLHJL9YZd9KPLX
-	 vyirsKZBPQMVRnQ8X/eMotPFyqQe+cai8r5xNV/DLhua1te5nBvfQ71++KEFtMe2rakO6
-	 B05L1CBPprTKZngToZn9Te+CZwqvz6GWktk7ZSzxAssJBSLsjLmyVavWzrdFX3ar9Z+sT
-	 bwsusJWveg7iFBLaWHtSa43H9ZL8H8/FXoEIJH8mI7g7agGyasIn145teNQT82XkTicTK
-	 RF3lWo67IzjIoiKbMMBu+Kr/zme92Nyw9JmcSc4NN+YuiHEj+N2gRoO1cvGTx14Vnkw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794429208;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=+jJOft0aO8xzfEBQK88XLI14W0B4GaY5O7q0mxJh6vM=;
+	b=g1lkOHAlBOdhf36UDXCk7rLkPra0HM+WAUFXye2BwxE8JxtkqJIHIqlGWGqEbSTzYABi
+	 3h3b+4/AlfUDaXk36sD6/5Mj0thdvpv2n3I6TagXdREglf5laQANu/OyDdCotNpOOpsj8
+	 bF6gb6R6vTnCBhGj6/UbdQoYGHRVE7xCjGsHNX6Ij1ieC9FHmIi8uEicKw69G76NmToiP
+	 p2n+zlV+YbMEzKy1+Sj72ZMvwlDg03QJaRGZLFcRQhSuT/EQDqHUMYYU4kxpWm+iVIeZZ
+	 +7i5tsL7PORufHYmvIagrdRyn/UhLmZ30TtI0oh3MZ0W7pUGGtCrJXgVdW7TqXmnELA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=amazon.com;
-	spf=pass smtp.mailfrom=amazon.com;
-	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=iMEZvZ9b;
-	arc=none smtp.remote-ip=52.42.203.116
-Received: from pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.42.203.116])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DHeU7es3;
+	arc=none smtp.remote-ip=209.85.214.175
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32A91606A31C;
-	Wed, 11 Nov 2026 20:23:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 32A91606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E679F606A334
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 20:33:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E679F606A334
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=iMEZvZ9b
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DHeU7es3
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2ed08b07213so14506095ad.2
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 12:33:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1794428616; x=1825964616;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jkJcn8ydDxvyf3lWLXA7GpBEZpUwB/Y6PIOpFmvjCRU=;
-  b=iMEZvZ9bKPvYu+lyl63NXczZgb9k00IMn6p/B41NF+YSge2JQ78uaWaI
-   3TEwozp7ebCyFqGQJC10YwNyJFTpBT4U3fmu4ddRB2SEvIbFbSVXuqLiW
-   JVhDNg6z2jRzcs0ngJJjtAW8tcy7wgkxhx1R6E8fIvRf2wdkkR6tp1Wxf
-   D2y5arB9O0zx/GF7R/bGfS/yLIOi5HAWKqBDCS8EZkk/T761sHCwXsd4H
-   Gt61dIFcjAFO4DSHsohJvTEKUFf7MHOm1ElAmU8Gbqug0jZ+YyNxqytYv
-   OQ5eO/IOET+up0Oduz50oSqV8UXFOpL9cLD7O9EVeN3k0XujH1PLjG10w
-   A==;
-X-CSE-ConnectionGUID: Qyyc6pHYShOrjNU/eJizYg==
-X-CSE-MsgGUID: Fcia4Cx0S3GdQP0ncOIkSw==
-X-IronPort-AV: E=Sophos;i="6.27,208,1787011200"; 
-   d="scan'208";a="33786501"
-Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
-  by internal-pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2026 20:23:33 +0000
-Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.178:12262]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.46.128:2525] with esmtp (Farcaster)
- id 16ece643-915b-4807-8d1b-662b366d2515; Wed, 11 Nov 2026 20:23:33 +0000 (UTC)
-X-Farcaster-Flow-ID: 16ece643-915b-4807-8d1b-662b366d2515
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
- Wed, 11 Nov 2026 20:23:32 +0000
-Received: from dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com
- (172.19.55.127) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56; Wed, 11 Nov 2026
- 20:23:32 +0000
-Date: Wed, 11 Nov 2026 20:23:26 +0000
-From: David Keogh <dkeogh@amazon.com>
-To: Tianyi Gao <tianyi@cloudflare.com>
-CC: Stephen Hemminger <stephen@networkplumber.org>, Willem de Bruijn
-	<willemdebruijn.kernel@gmail.com>, <netdev@vger.kernel.org>, Jakub Kicinski
-	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Eric Dumazet
-	<edumazet@kernel.org>, "David S. Miller" <davem@davemloft.net>, Simon Horman
-	<horms@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, David Woodhouse <dwmw2@infradead.org>, Dragos Tatulea
-	<dtatulea@nvidia.com>, Nimrod Oren <noren@nvidia.com>, Alasdair McWilliam
-	<alasdair@mcwilliam.dev>, Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, Magnus Karlsson
-	<magnus.karlsson@intel.com>, David Ahern <dsahern@kernel.org>, Ido Schimmel
-	<idosch@nvidia.com>, Alexei Starovoitov <ast@kernel.org>, John Fastabend
-	<john.fastabend@gmail.com>, Donald Hunter <donald.hunter@gmail.com>, "Andrew
- Lunn" <andrew+netdev@lunn.ch>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
-	<skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, Randy Dunlap
-	<rdunlap@infradead.org>, Breno Leitao <leitao@debian.org>,
-	=?iso-8859-1?Q?Asbj=F8rn_Sloth_T=F8nnesen?= <ast@fiberby.net>, "Danielle
- Ratson" <danieller@nvidia.com>, Kuniyuki Iwashima <kuniyu@google.com>,
-	<bpf@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <kernel-team@cloudflare.com>,
-	<nh-open-source@amazon.com>
-Subject: Re: [PATCH net-next 1/8] net: add tx_extra_headroom and
- LL_ALLOC_SPACE()
-Message-ID: <avTOvr+yy+2j8xrQ@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
-References: <cover.1794020868.git.tianyi@cloudflare.com>
- <e90e748e0aefa7cbe1c2b31b8c7902ccf135c3f2.1794020868.git.tianyi@cloudflare.com>
- <willemdebruijn.kernel.1d64e7848503b@gmail.com>
- <20261107182526.69543-1-tianyi@cloudflare.com>
- <willemdebruijn.kernel.2c6a653eb65fa@gmail.com>
- <20261108190831.3f991a13@phoenix.local>
- <20261109154909.32748-1-tianyi@cloudflare.com>
+        d=gmail.com; s=20260707; t=1794429207; x=1795034007; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=+jJOft0aO8xzfEBQK88XLI14W0B4GaY5O7q0mxJh6vM=;
+        b=DHeU7es3r9dJDGW93d48Jtqg+Dgo9RvltjTQZdK320db0IbDhljvMqVV0TfAMbY5FT
+         7heJ/4QRsUBgs7UmQEL49wfNia5qOwqRSnzrb0HNHSaWmdK+m/nNFd6eYYEeAOMCQJat
+         fuNOXfpmS4Eeh+mq8jZHXUzoswVenJpdG5amIZ+yqi0oUqvzgSp9kb3TC63BAyIGhe2w
+         s8JP2X8tZ0ZnX3g4PqcyUIJhVk25YRj3fIFls2k4Uxu42akb4UjzO8aVomLwA4FSk/xF
+         hMpbfjwOUFUUzJhahFLlQRAJeehOmIYNCFzaLmtgYUtY9dItOoIVBQqSEWvEaf38CicZ
+         ya4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794429207; x=1795034007;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=+jJOft0aO8xzfEBQK88XLI14W0B4GaY5O7q0mxJh6vM=;
+        b=ok6zr/07w3gk2i/Bze8B0MaFsnvZjccJqIMbeslV9CvVV7eQjO9byPGJ1NZvt9LlAF
+         M0cwHra1MhLGtUK3gjWy3XZjt93mmTBHX4SLkMr8V/COOToSP9yFR40wPmjfV4yPjh90
+         48xtK9ZcngXs4XaFtWSoCh8dZegpt90piOPLgqAM/5tIUWZrArT+B3euDpAZB673is1G
+         pcUSVNOYAMGa0ST1FgPPs0QbvsMJiIdxlwku9ft/UeRFbHL3o4NF8Su47ntbYW5/g3ku
+         MGVOFgpZFZxC9SS9h1uWwkb2DDBDnUj+31hKFIWySETQ9lLBv54q7esmLVBVJwwZfygP
+         B27g==
+X-Forwarded-Encrypted: i=1; AL+hErEOYZj2vbjfCtBDWG6ED1bAmeyN4E+4q2jnDSDetVJuz8Zj02uxIN08hZFJ8fKgkrzn4B4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9AjYcebchXViVIZa0b6Bk60OXZj6E8GFT6sqO2n5OGm5SZdpbl
+	qdJgMXKqS5GutDWNiMuSKGo9aEzCl6GT1DWG7h9zV0LMnNnlIdDn/ols
+X-Gm-Gg: AYBFou1W7+sw3De2WwO8MJ6lVulhoGqHhsX2hdyFwztI+ap1b/8j96eLfWqzWzRtdpU
+	SpcZ9YZe7x/dayW2bXEbRbN+n9QYyVuvWZbwGTY2oQ+18H1ugyu0BzL0LhV9+8DFuFUHBNrDNZK
+	/g+9JT4s560QybGMOP/YlPQ6j5db2c8ihxn8PD4cX1RC+mUMLe0DuyADLYFDujMSZViALDS8LOH
+	aPPTZUD35EQCgkbrJ6gY0H3f3RpTPNN7A+/gyj4hb1rLwoSrKKSSRzjdNub3a/xsoveZFrhlrcL
+	lPqZnTKf3gmsh0TSFA2Qrr9hZeig3bLXJqi2N6Al5xK7HY78UEfEuSLl4RIiJIxVR5/UhwA1Krs
+	IG/PcWvScrOFxscKB/nMX60JaPGHBWkwrX7bX8FDBtINrl0hlmueU+lZYfxxC/bHipwXs5Pc7wK
+	kqdKjvajss2zw9a8aBn3o/hzpfS+mBZZQ7NvHRHOXKiYPHnLSdCujqB3VxOusu68tsv9q7Bkcj9
+	PLSuqJzxKRA+Zyy4N9CZw0Zym7lWRAtoVez7AMWdc28ypjOTWU2+7DbrumrTJxjEqDEzOtLS/U6
+	UkkOvlmS+jGn3TkZeaMHSR9yf92Hzuw03X+04wwU3BZrbONgRSUv5B28xXVdLRy76pDm3ZwbhhC
+	MSKjlENtD1Z+A4J0UWnBVbR7nNhSjFrFDpg==
+X-Received: by 2002:a17:902:7615:b0:2ed:ef1:f78 with SMTP id d9443c01a7336-2edd7ab6a4emr26040095ad.21.1794429207072;
+        Wed, 11 Nov 2026 12:33:27 -0800 (PST)
+Received: from localhost ([153.61.198.251])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2edb6dd2225sm24528035ad.56.2026.11.11.12.33.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Nov 2026 12:33:26 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 11 Nov 2026 20:33:26 +0000
+Message-Id: <DMSO2CZRMEUE.LE9RG32M5QBN@gmail.com>
+Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, <kkd@meta.com>, <kernel-team@meta.com>
+Subject: Re: [PATCH bpf-next v1 00/29] Exceptions - Resource Cleanup - Redux
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, <bpf@vger.kernel.org>
+In-Reply-To: <cover.1794399387.git.memxor@gmail.com>
+References: <cover.1794399387.git.memxor@gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -108,26 +102,127 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20261109154909.32748-1-tianyi@cloudflare.com>
-X-ClientProxiedBy: EX19D031UWA001.ant.amazon.com (10.13.139.88) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-On Mon, Nov 09, 2026 at 03:49:09PM +0000, Tianyi Gao wrote:
-> To David Keogh: this plan drops the generic device attribute UAPI that
-> your RFC proposed. Your TC egress use case stays in v2, with a BPF-side
-> declaration instead of the device attribute. Before I proceed, please
-> let me know if you are unhappy with this plan.
+On Wed, Nov 11, 2026 at 04:56 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+> This series allows the main program and its subprogs, static and global,
+> to throw while holding resources. The unwinder releases the resources of
+> every frame it discards.
 
-Sorry for the slow reply. I am happy with the plan, please go ahead.
+Agree that we need bpf_throw() from everywhere.
+Below is an idea for brainstorming. No code yet.
 
-Dropping IFLA_TX_EXTRA_HEADROOM is fine with me. A BPF-side
-declaration covers the TC egress case, as long as the program is
-attached to the device the skb is allocated for.
+Drop elaboration in the verifier. Pads instead of descriptors.
 
-I will rework the TCP test so it sets the value through one of the new
-paths, and send it as a reply to v2.
+Keep the analysis of what a frame holds at a site.
+Change what comes out of it: not tables for a C unwinder, but landing pads.
+A pad is BPF insns that the verifier adds after the main pass, like guards.
+Then throw, cancel and rust panic are one mechanism:
+unwind_goto / unwind_exit.
 
-Thanks,
-David
+1. One unwinder
+
+  site                                 the verifier emits
+  -----------------------------------  ---------------------------------
+  call bpf_throw                       r0 = cookie; goto pad
+  loop guard, recursion check          may_goto pad
+  call / callx of a subprog that may   unwind_goto pad, behind the call
+  unwind, no unwind_goto behind it
+  helper that runs a callback          unwind_goto pad, behind the call
+  (your 'helpers have pads')
+  arena load / store / atomic          unwind_goto pad, behind the access.
+                                       JIT points the extable entry at it
+
+  pad:  release calls
+        r0 = 0
+        unwind_exit          main prog: call exception_cb; exit
+
+Every frame leaves through its epilogue. The frame at the site has R0-R9.
+A frame that waits in a call has R6-R9 and its stack.
+No stack walk, no asm entries, no saved register offsets, no site tables.
+No void (*)(void *) wrappers: a pad calls the release kfunc with its type.
+A frame of rust keeps its own pads. Nothing is skipped by construction.
+Sites that need the same pad share it. Most sites hold nothing.
+
+2. Three questions, answered apart
+
+  WHO        The frame that acquired it since its entry.
+  releases   What a callee returns with is the caller's.
+             Or the callee that it was MOVED into: the caller keeps no
+             live copy behind the call (R6-R9, stack).
+             Decided at the call from the state and liveness.
+             Nothing provisional. Nothing to settle after the pass.
+  WHERE is   The prog's own live place, like your lattice: register,
+  the handle spill, stack object, pointer to what the lock is in + delta,
+             fixed address, load through a live pointer.
+             The prog has to release it later, so the handle is live.
+  WHETHER    The pc, when all states at the site agree.
+  it is held Otherwise a DROP FLAG, as rustc and clang do it.
+
+3. The drop flag
+
+One hidden byte in the frame. The entry of the subprog zeroes the word.
+
+  flag = 1   behind the insn of THIS frame that brought the resource:
+             the acquiring call, the call of a subprog that returns
+             with it, or the entry when it was moved in
+  flag = 0   at the insn of THIS frame that takes it away:
+             the releasing call, or the call that moves it out
+
+        *(u8 *)(r10 - H) = 0
+        if r7 == 0 goto skip
+        call bpf_task_from_pid
+        r6 = r0
+        *(u8 *)(r10 - H) = 1
+  skip: ... arena access, loop, call foo ...          -> pad
+        if r7 == 0 goto out
+        *(u8 *)(r10 - H) = 0
+        r1 = r6
+        call bpf_task_release
+  pad:  r1 = *(u8 *)(r10 - H)
+        if r1 == 0 goto done
+        r1 = r6
+        if r1 == 0 goto done
+        call bpf_task_release
+  done: r0 = 0
+        unwind_exit
+
+The stores are unconditional. bpf_res_spin_lock() needs a test of r0 first.
+The flag has no handle in it. So there is no register to find at the
+acquire, no compare chain at the release, no refresh after a call.
+A flag is emitted only where the states at some site disagree.
+
+Identity: a reference carries its origin, as in your set.
+A join or a subsumption can pair two references with different origins.
+Then the origins go into one set (union-find) and share a flag.
+States are joined as today.
+Sections become entries of refs[], so they have an origin too.
+
+4. What I hope goes away, in your terms
+
+  tables, unwinder, phases, asm entries,   pads
+  registers recovered from prologues
+  mirror                                   flag + the prog's own place
+  NULL in the lattice                      flag. A pad tests for NULL too
+  entry guarded by a scalar                flag
+  descriptor per chain of calls            flag in the callee's frame:
+                                           'differs by chain' is 'held
+                                           on some paths' there
+  provisional listings, transfer           move at the call
+  other origins are not joined             union-find
+
+What stays: classes, type -> release kfunc, the places, helpers have pads,
+the return value of a cancelled prog, the struct_ops hook, the stack in
+arena, bpf_throw() reads all registers and slots for liveness.
+
+5. Where I'm looking for ideas.
+
+ a. Several resources of one origin at once. rbtree_search pops nodes
+    into an array in a loop that is walked. A flag per origin cannot say
+    which.
+ b. A callee releases what the caller keeps live, on some paths only.
+    try_consume(obj). During the call the pc of the callee tells.
+    Behind the call only the callee knows. Maybe: the callee has its own
+    flag and returns it in a scratch register at exit and unwind_exit.
+    R2 survives exit already for 16 byte returns.
+    I think you're doing something like that in your followup patches.
+
