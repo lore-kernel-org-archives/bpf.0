@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.176
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794374031;
-	b=Hdxu2OHLQVmpCgkYBVFNgRQNOFlpQGc1yRakObvav99qNLDLOe7Vf0b109TziHcmlN8C
-	 ZeCGXdSE+LTWu/coiAVXTxlB6s/hyb9i8bRQ1pIrZrUsYLLJeZjsiJ5qeD0Kf0fP09cGK
-	 j+O9Vw58+Qc1gC4/hSqLNcBr3Li9k3DLLzitoskqyofE4Tfm3lk0qXU9G1XRAJLltCMCF
-	 lFP76x0An4lKhY4SuAc3040J26N0IH+6hoq8skGB+AfzbLYC/JytdwVQpamxhliVNVi/a
-	 V84vrsNABl8d9gK2BxGtLUHjDMns9gQXjphsPRzee4XJFKxbjIiVOX+5PtV5Nh+yzmA==
+	t=1794374038;
+	b=Tf2gx8f9NoMfkxQTPP0yfrgEQ3bBhnzDroXDdMLKrtllaZfMQmvxsYP0cK1JEtuZcU++
+	 7Zil5iYt8tjEI5xLBOQbZb0RbgC2lS/rSaBsRnVzQu22VpknsdiDGL0X9T/iTaeV+SCLn
+	 1TUd3zVKMI/V49oPLyboP7RT+df59v9iL1PH0PPOuS0Y1xKhah5Sp6dXQOMHzIW1nv6YA
+	 caMleBDmhtj3yUF1Lnqe/JyK5gg2fMUmg14C2yDV97uNxIvTtsIRjfbzUfSVYcyRWzWjF
+	 7JU8PPU8g1cbwqIc9Vi+mdFskBEh0E/GAPtd5EjRha9Gh/+cVppLoSoJ/M4wwZKK22g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794374031;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794374038;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=W+wFrqTn6TpSzq1GtCMNbpHfih/1qK8FVl9ONJGTXVY=;
-	b=w3qyoJAgNisfRseE4hECfDwao4KmjPkPDr5Toxq3knh9CgYIDuks0JJ4l8xnrKc//HAL
-	 +VhwDlOecuEbk5t5cl+6tpy5BYim7lV+KS0Udkos+M60p2Tyty8EKtolWXcTBUXzr+xjp
-	 Xv2mqgEaworigyB9JDnMa+F74dsw6Fysom6DGDGQS5JETGUvWrGudIl/ojEtP91qYHU81
-	 Ar2+Ldy9FlWrpJfKpkP73ilBCRNDNV08drYI3anwZC2ZEfUWPyJNGtUm2nnoD4jXWacFs
-	 vTczkk29aN/GUTl9tM12a9Ut6Te7iAiza3ktoC/yyZeOhTGpXh+l46C9CkgxYVurcTg==
+	bh=CuQGUO3HgDYryc7TdjxUhpjCaJJIEeYTBw9wB5talj8=;
+	b=cft03hA7A9h8KGXl1KU9F3ZRhfiifFySxpCyPqfkCHfln27qZYHMKbTuPMYQLr5qDblp
+	 BTe26rzsaaH2b82c+WXcZMRC8uybBctglLFjhh+EDO0xPGmioin2QsO89SyafK30kthyi
+	 5/FEQBLqWAWIqdrmSuH6RXb1wrG+WagzeABws8kxSz6RtY+2Dkk5T0epE7wmg6XSPowq8
+	 sqQxgIoLnLAf467wz29miRjmexjZwNsX8acssPt4YhK/s7w7QgRhNU8T9VCNFaR9UKBnq
+	 5+xe5a6Xllz/NvpJKKVMxV3cEGbJVjY54hN7CYE94EUyVL7tWa78CWZxKWVY8YibVdw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="Y4K/N5xb";
-	arc=none smtp.remote-ip=209.85.214.177
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=HogxbxBy;
+	arc=none smtp.remote-ip=209.85.210.176
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6659E606A31C
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 05:13:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6659E606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92052606A31C
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 05:13:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 92052606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Y4K/N5xb
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2ed1b9e8f43so11889775ad.1
-        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 21:13:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=HogxbxBy
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-8a60f90a924so1136335b3a.3
+        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 21:13:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794374031; x=1794978831; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794374037; x=1794978837; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=W+wFrqTn6TpSzq1GtCMNbpHfih/1qK8FVl9ONJGTXVY=;
-        b=Y4K/N5xbFodrqUegieXyMTYNSGithYdyM8+6FsD+IomZWa6nY7GrQOOM8cU3MU3k2T
-         119/bp3XwNY9qucMCHaoCeQYM9C3QzTDlb0HXRQcusvaqKsqQCiNXCMjN3l9mFAOmD4C
-         lxQBO9WBubw2t0Z8HGr6jttVHrKW5VKgEv/CGbLuS6rDIEwKDgXqBzcJbmPzy8OHF+r1
-         3R7h5A+tQeSqgQlkPHbPH5WMyl1DOjg8S/T6F1Awz+SqCSibag71OCRsHXAskqLOreNQ
-         i891k+pggWNELrnFjB6pPo62bmwW16Rm2UI7b0125nmPLD20r/9G05NaUf+rPJE5nDcK
-         1TwQ==
+        bh=CuQGUO3HgDYryc7TdjxUhpjCaJJIEeYTBw9wB5talj8=;
+        b=HogxbxByirWYqsEuY0yvdzDSoqN2aJrPF37fdJBcwfXkow3ZZgvEP54pi/y9sPvmvW
+         DmeHC0WsBtZ/lizyvkao5j0GZ3fV4qH4ERKQMReVq8umdwn09j8W/g2VRmUBaKQgAPUc
+         VVUubEtJL7wgHggFmzEo91CZ8Ehsiif7nAV1xd4ttHX/kVAhOWXR/V5u/piSlkpzoAmc
+         rnokf3Blsj+mL31DTh5xHSvfI52f5JPEFip0rXO6CkuKu0yz4GwVGg5NCejDS5RqlsvJ
+         //fPucynaVmV5LGNxFYWBHMLAsLdyHhSHncmhEZ3AOHRErynhbyF/ao5ZoQc6op/dhlm
+         rOCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794374031; x=1794978831;
+        d=1e100.net; s=20260707; t=1794374037; x=1794978837;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=W+wFrqTn6TpSzq1GtCMNbpHfih/1qK8FVl9ONJGTXVY=;
-        b=RZY0GrDB314DsOeu6igaAljDHlhSIUSbcGtD3z6qHmQfbWiYI4VsPHeoYSHTtK4Ar4
-         zpRg5brNjeFAdUFMl3Oj9i8WA9kAa9NNU/68R0xt0g3HEqrxJVjExk3G/+9AEttr7mj2
-         SUVb+UafsdYccUDUpYL3A4YxsPlsrzwQmpUdGzNWxYXa4/AVoWxoYKJDHbsMQ3V1IYds
-         +BXXibEnUF/TMygT3A/2N1HVq41kfBMcMoxqyUy1rIVxYeSXpyu4K1ZOOvVqjDlrfllV
-         rc+P5jv0cY52KcrXFgIsJi+gcGubDrO/j7xplf7ozVICExBR5PRpmBWCxvx2eIOk2DNx
-         x1KA==
-X-Gm-Message-State: APuU4Z/t+R5kqoeNqyAXD/v6bC6m/YX1G5uFa/DwmAChAhpfz4P6n2uq
-	DJG1A9ABGXjctwbvVPf0qYHimYfIjVTasa4zbSi/ObykxqUOqrQffkGBxZw7Mw==
-X-Gm-Gg: AYBFou1+P1fvsLS/YhlfQWjQQd480uLz+5OzAEIMe+Mc1GgRUOEmEVeq4S1++izTld5
-	2PZA/1Dq9ildSepQCOs3CF4bAioi615u48gaAJzcdcrPRY10g+igASVhWxjTpAif0VF7DIjyggp
-	2yChDUpNwQgY9MtSq+tVishx6IVPXNr4/Y7+SRzLZ4+qsPDXi3+vew0e1zVnk6wmvqwgagfSH4A
-	SlmrGgBVTHr5Fa41D/dG4k/7iCNfHJkhaH0puoB3fuDCT7x2WIaW6CuBMK7GbHJDnKCfKJVjTfK
-	g+w6JKufdZS8GyVAC5UIIVb7/yz6mh3Y0fX4jkPQuY4aLP15NYtb6PS9U52qwaXh0vK4EB24giD
-	xhlSOgQNOMbzMgFbIdRMFCMrsaPgMP07xPM2Hiu/G7cRgDPv7Zj9LR4c8aQfIGjhGkgLTmVbiME
-	3s5WGwIDyIf1REFhqT9ZRAsLmAIyYEC1xrqQId05fzhz3moBwWJwJPrQx2Gyhua67jvb1D3+wLD
-	uA3X+lc2nxxlz7BreNDPjp0hsGVyeB5nwcpD7coEK35EpIVJXQfOY+xZ1ckoiaQMUYSidiKYzcQ
-	UPrErv2Vzru7jE9iBewas7l8VVwjt4RmB1B3AX7zta8O+6ebTpAomKzz9rBFu0WM4gpFMQSgtRP
-	A2uvaUiWEbpnld7e4zmi7y/4lJ701T1ZqWJOli9X88YMJDaUGhlMs20GZmMkUiBtdSVweVG+pEd
-	4=
-X-Received: by 2002:a17:903:1b44:b0:2ed:34e2:a997 with SMTP id d9443c01a7336-2edd7a6d8e7mr16521865ad.50.1794374030594;
-        Tue, 10 Nov 2026 21:13:50 -0800 (PST)
+        bh=CuQGUO3HgDYryc7TdjxUhpjCaJJIEeYTBw9wB5talj8=;
+        b=TCc70HA0BT+8bDwuI99ssGIt86GpIJuicMSC9uaMyNWcHAjqsz27jtoud5fEq3G2l5
+         izQN1hUcBCyjjTjA2EkQI4p9L6rp7uusL4nyKhLBH0cXGE9kx9QGlEFxPuRSTu1rXoQu
+         naz6WnIUQDhbTOdCokZsDs3Py3wdcPHOkFACJOfO8BvQTuJVpsfdIrhKKcKDDeW6Z0wD
+         2h0Ph+I8D99J/2oMuYXnn0yL44SixtYTpO0hUmIz6yIIn1wheULHygHUhRVEoLgpjIhN
+         /4imGCvrk2v//4m5c0RLgunpZoiha+2CkLz5+5vSNmxzYv/IhFRS/VsPsZBKEgPnevNk
+         AYKg==
+X-Gm-Message-State: APuU4Z+O13I8pDbmE+LtsKagEV+hezr61a9CUB01OcrzGtPBmt5BNOsF
+	CrNj4mSRT5N96WLJIZjjwSllnf+FenGhJPbiAid65ldHsT1fUv0FCnktNIeHaw==
+X-Gm-Gg: AYBFou06cH3JkgQ4/oYdeLwIf1uPBBJelJSM4yQWJ1yt2jeRQN79kf8ZczADNdGw9ih
+	+zwfSr6uPXIoXVAVm+l91TtPsgOGJ2kCA/TqwDnPTdD65YZbE9XTq4pCrpKpavOggzkutbVT1gz
+	2F0qk1UhWkUDDA2AURZcCgwaosR9/itWV7StpkINiUURnAiEWZ8GUVWQD2NXxGyNuIZZ6mbcmbP
+	Q98UvA/P+HrgBa/aK6ihk/eMUmcrFDW0FwIa5VKadUKHmMiUMPA7apO3MP1gxOKlFeWIRE+jAkW
+	uL3L+O3RukdDn3kpVVnAuY6/oUdWR/SHqsG6Ar/UC6yV94mT1JrsE7sz6HLv0o/TkiVeB2AU2Ch
+	H8ha4bh09Dcot7U24C4XFGTNkxBTNuEVLiHYJddH1tajZ0MNFQERFN5W5TVd42LHwAThp9kJ97u
+	sPfsdnGDl9/TbAawvM/YzyMBurLw7WGEBLTqAAz3QEd4iQQs6m3Qhr1/na1Y/ShKAMXL2kaEJc7
+	z8DaPPUIHyf7xfRbbJKf3hACVbcQNRiOfZ3+l8+J6bFWQBrDyNlx4R6KAr3ra822jw3W/czUeH/
+	c2S5nrs2/E66HcbkAlL+F72DVWdxSx/vsYf+yvG9ADiiK18K8TgeshkKZb787gmJvwDO8erbPZk
+	e0VotpBAhHx2FzZ1ibyYRgJWKqc12Tjr+ENigRSB2TKLys724vMppmCuWjO55lBxHYf7Sa31gR5
+	k=
+X-Received: by 2002:a05:6a21:692:b0:3e1:e53b:5005 with SMTP id adf61e73a8af0-3f2febde44amr1614684637.65.1794374036621;
+        Tue, 10 Nov 2026 21:13:56 -0800 (PST)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.254])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2edb6d4d773sm16044905ad.20.2026.11.10.21.13.50
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8baab5f1effsm1662545b3a.49.2026.11.10.21.13.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 21:13:50 -0800 (PST)
+        Tue, 10 Nov 2026 21:13:56 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 01/29] bpf: Keep the 32-bit range across a no-op sign extension
-Date: Wed, 11 Nov 2026 05:13:12 +0000
-Message-ID: <20261111051341.2800252-2-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 02/29] bpf: Model 32-bit shifts and divisions exactly in scalar evolution
+Date: Wed, 11 Nov 2026 05:13:13 +0000
+Message-ID: <20261111051341.2800252-3-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261111051341.2800252-1-alexei.starovoitov@gmail.com>
 References: <20261111051341.2800252-1-alexei.starovoitov@gmail.com>
@@ -102,79 +102,188 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Vineet Gupta <vineet.gupta@linux.dev>
+From: Alexei Starovoitov <ast@kernel.org>
 
-A fix of precision in the main pass. It stands alone in this series. Its
-tests come with the tests of sign extensions of linked registers.
+A fix of the representation, for the patches that take two registers with
+the same expression for the same value. Today two insns that compute
+distinct values get the same expression:
 
-	1: w0 &= 63
-	2: w0 -= 63
-	3: w0 = (s8)w0
-	4: if w0 s< 0xffffffc1 goto pc+2
-	..
-	7: w0 /= 0
-	div by zero
+	r5 >>= r4; w5 = w5     (zext32 (>> r5 r4))
+	w5 >>= w4              (zext32 (>> r5 r4))
 
-w0 is in [-63, 0] before 3. Every value of that range fits in s8, so the
-sign extension is a no-op. The verifier drops the range all the same:
-after 3 w0 is in [-128, 127], is_branch_taken() cannot tell at 4, and 7 is
-verified though that branch is dead.
+The second one shifts the low 32 bits of r5, by r4 & 31. Nothing goes wrong
+so far: the code that analyzes loops does not look into a shift or
+a division. cubic_root() of bpf_cubic.c is going to depend on it:
 
-coerce_subreg_to_size_sx() keeps a range if both bounds have the same bits
-above the low 8 or 16 bits. In a range that crosses 0 they differ: all ones
-in -63, all zeros in 0. The check before that one is on umax, which is huge
-when the range has a negative value.
+	shift = (a >> (b * 3));
+	if (shift >= 64)
+		return 0;
+	x = ((__u32)(((__u32)v[shift] + 10) << b)) >> 6;
 
-Return early if the 32-bit range fits in s8 or s16. A register that passed
-the check of umax has such a range, so that check goes.
-coerce_reg_to_size_sx() does the same in 64 bits since
-commit 0892ef2a7ef3 ("bpf: Representation for intervals with steps").
+GCC tests one register and uses another one as the index:
 
-No verdict of the selftests changes.
+	r5 >>= r4
+	w2 = w5
+	if w5 > 0x3f goto ..
+	r4 = v ll
+	r4 += r2
 
-Fixes: 8100928c8814 ("bpf: Support new sign-extension mov insns")
-Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+The prog loads because r5 fits in u32 in the state: 'w2 = w5' assigns one
+scalar id to r2 and r5, so the jump bounds both. Without scalar ids it is
+going to load because r5 is (>> a b) and r2 is (zext32 (>> a b)), which is
+r5 truncated to 32 bits.
+
+An ALU32 insn is (zext32 (op a b)) with the 64-bit expressions of its
+operands. That is exact for + - * | & ^ and for the value that << shifts:
+the low 32 bits of the result depend on the low 32 bits of the operands
+only. It is not exact for a right shift, a division, a modulo and a shift
+amount. Zero or sign extend these operands, mask the shift amount:
+
+	w5 >>= w4     (zext32 (>> (zext32 r5) (& r4 31)))
+	w5 s>>= 3     (zext32 (s>> (sext32 r5) 3))
+	w5 /= w4      (zext32 (/ (zext32 r5) (zext32 r4)))
+	w5 s%= w4     (zext32 (s% (sext32 r5) (sext32 r4)))
+
+Every expression is a 64-bit operation now. (>> x 32) shifts by 32. Before
+the patch it could also be 'w1 >>= w2' with 32 in w2, which shifts by 0.
+
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/verifier.c | 20 +++++++++++++++++---
- 1 file changed, 17 insertions(+), 3 deletions(-)
+ kernel/bpf/scev.c                             | 46 +++++++++++++++----
+ .../selftests/bpf/progs/verifier_scev.c       | 26 +++++------
+ 2 files changed, 51 insertions(+), 21 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 20b1b9ff574c..5bffc1e288f6 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -6441,14 +6441,28 @@ static void set_sext32_default_val(struct bpf_reg_state *reg, int size)
- static void coerce_subreg_to_size_sx(struct bpf_reg_state *reg, int size)
- {
- 	s32 init_s32_max, init_s32_min, s32_max, s32_min, u32_val;
-+	s32 field_smin, field_smax;
- 	u32 top_smax_value, top_smin_value;
- 	u32 num_bits = size * 8;
+diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
+index 4187ce955be9..1cb4bc7c0f96 100644
+--- a/kernel/bpf/scev.c
++++ b/kernel/bpf/scev.c
+@@ -686,6 +686,38 @@ static int maybe_load_fp(struct scev *scev, struct env *e, struct bpf_insn *insn
+ 	return replace_reg(scev, e, insn->dst_reg, id);
+ }
  
-+	if (size == 1) {
-+		field_smin = S8_MIN;
-+		field_smax = S8_MAX;
-+	} else {
-+		/* size == 2 */
-+		field_smin = S16_MIN;
-+		field_smax = S16_MAX;
-+	}
++/*
++ * The low 32 bits of a + b depend on the low 32 bits of a and b only: 'w1 += w2' is
++ * (zext32 (+ a b)). That doesn't hold for a right shift and for a division. Their operands are zero
++ * or sign extended and a shift amount is masked, so that every expression is a 64-bit operation.
++ */
++static void alu32_operands(struct scev *scev, u32 op, int *a, int *b)
++{
++	s64 imm = 0;
++	bool imm_b = *b >= 0 && is_imm(scev, *b, &imm);
 +
- 	/*
--	 * If value fits the non-negative half of the signed N-bit range,
--	 * sign extension is a noop.
-+	 * The range already fits the signed N-bit range, so (sN)v == v for every
-+	 * value of the low 32 bits and the sign extension is a no-op.
-+	 *
-+	 * This has to precede reg_step_reset() below: the base/step line stays.
-+	 * It is about all 64 bits: zext_32_to_64() in the caller discards it
-+	 * if the upper 32 bits are not zero.
- 	 */
--	if (reg_umax(reg) < (1ULL << (num_bits - 1)))
-+	if (reg_s32_min(reg) >= field_smin && reg_s32_max(reg) <= field_smax)
- 		return;
++	switch (op) {
++	case BPF_RSH:
++	case BPF_ARSH:
++		*a = expr1(scev, op == BPF_RSH ? ZEXT32 : SEXT32, *a);
++		fallthrough;
++	case BPF_LSH:
++		*b = imm_b ? imm_expr(scev, imm & 31) :
++			     expr2(scev, BPF_AND, *b, imm_expr(scev, 31));
++		break;
++	case BPF_DIV:
++	case BPF_MOD:
++		*a = expr1(scev, ZEXT32, *a);
++		*b = imm_b ? imm_expr(scev, (u32)imm) : expr1(scev, ZEXT32, *b);
++		break;
++	case SDIV:
++	case SMOD:
++		*a = expr1(scev, SEXT32, *a);
++		*b = imm_b ? imm_expr(scev, (s32)imm) : expr1(scev, SEXT32, *b);
++		break;
++	}
++}
++
+ static int transfer(struct bpf_verifier_env *env, struct env *e, int idx)
+ {
+ 	const bool little_endian = htons(0x3412) == 0x1234;
+@@ -700,7 +732,7 @@ static int transfer(struct bpf_verifier_env *env, struct env *e, int idx)
+ 	u32 src = insn->src_reg;
+ 	u32 op, sext, l, r;
+ 	bool need_bswap;
+-	int i, id;
++	int i, id, a;
+ 	s64 imm;
  
- 	/* See comment at reg_step_check_unsigned(). */
+ 	/* reg2expr[12] is a stack slot, not r12 */
+@@ -764,19 +796,17 @@ static int transfer(struct bpf_verifier_env *env, struct env *e, int idx)
+ 			else
+ 				goto mark_dst_unknown;
+ 
+-			/*
+-			 * 'r1 <<= 32; r1 >>= 32' is (u32)r1 for cpu v1 and v2. Only here both
+-			 * shifts are known to be 64-bit ones: the result of a 32-bit shift is
+-			 * (zext32 ...), and (>> x 32) is 'w1 >>= w2' with 32 in w2 as well,
+-			 * which shifts by 0.
+-			 */
++			/* 'r1 <<= 32; r1 >>= 32' is (u32)r1 for cpu v1 and v2 */
+ 			if (class == BPF_ALU64 && op == BPF_RSH && id >= 0 &&
+ 			    is_imm(scev, id, &imm) && imm == 32 &&
+ 			    is_binop(scev, BPF_LSH, reg2expr[dst], &l, &r) &&
+ 			    is_imm(scev, r, &imm) && imm == 32)
+ 				return replace_reg(scev, e, dst, expr1(scev, ZEXT32, l));
+ 
+-			id = expr2(scev, op, reg2expr[dst], id);
++			a = reg2expr[dst];
++			if (class == BPF_ALU)
++				alu32_operands(scev, op, &a, &id);
++			id = expr2(scev, op, a, id);
+ 
+ 			if (class == BPF_ALU)
+ 				id = expr1(scev, ZEXT32, id);
+diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
+index 5c9c832fbbe0..f2a53fe5f6ad 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_scev.c
++++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
+@@ -334,20 +334,20 @@ __msg("w1 *= 2 {{.*}}; r1 r6 -> (zext32 (* r6 2))")
+ __msg("w1 *= w7 {{.*}}; r1 r6 -> (zext32 (* r6 r7))")
+ __msg("r1 /= 2 {{.*}}; r1 r6 -> (/ r6 2)")
+ __msg("r1 /= r7 {{.*}}; r1 r6 -> (/ r6 r7)")
+-__msg("w1 /= 2 {{.*}}; r1 r6 -> (zext32 (/ r6 2))")
+-__msg("w1 /= w7 {{.*}}; r1 r6 -> (zext32 (/ r6 r7))")
++__msg("w1 /= 2 {{.*}}; r1 r6 -> (zext32 (/ (zext32 r6) 2))")
++__msg("w1 /= w7 {{.*}}; r1 r6 -> (zext32 (/ (zext32 r6) (zext32 r7)))")
+ __msg("r1 s/= 2 {{.*}}; r1 r6 -> (s/ r6 2)")
+ __msg("r1 s/= r7 {{.*}}; r1 r6 -> (s/ r6 r7)")
+-__msg("w1 s/= 2 {{.*}}; r1 r6 -> (zext32 (s/ r6 2))")
+-__msg("w1 s/= w7 {{.*}}; r1 r6 -> (zext32 (s/ r6 r7))")
++__msg("w1 s/= 2 {{.*}}; r1 r6 -> (zext32 (s/ (sext32 r6) 2))")
++__msg("w1 s/= w7 {{.*}}; r1 r6 -> (zext32 (s/ (sext32 r6) (sext32 r7)))")
+ __msg("r1 %= 2 {{.*}}; r1 r6 -> (% r6 2)")
+ __msg("r1 %= r7 {{.*}}; r1 r6 -> (% r6 r7)")
+-__msg("w1 %= 2 {{.*}}; r1 r6 -> (zext32 (% r6 2))")
+-__msg("w1 %= w7 {{.*}}; r1 r6 -> (zext32 (% r6 r7))")
++__msg("w1 %= 2 {{.*}}; r1 r6 -> (zext32 (% (zext32 r6) 2))")
++__msg("w1 %= w7 {{.*}}; r1 r6 -> (zext32 (% (zext32 r6) (zext32 r7)))")
+ __msg("r1 s%= 2 {{.*}}; r1 r6 -> (s% r6 2)")
+ __msg("r1 s%= r7 {{.*}}; r1 r6 -> (s% r6 r7)")
+-__msg("w1 s%= 2 {{.*}}; r1 r6 -> (zext32 (s% r6 2))")
+-__msg("w1 s%= w7 {{.*}}; r1 r6 -> (zext32 (s% r6 r7))")
++__msg("w1 s%= 2 {{.*}}; r1 r6 -> (zext32 (s% (sext32 r6) 2))")
++__msg("w1 s%= w7 {{.*}}; r1 r6 -> (zext32 (s% (sext32 r6) (sext32 r7)))")
+ __msg("r1 |= 2 {{.*}}; r1 r6 -> (| r6 2)")
+ __msg("r1 |= r7 {{.*}}; r1 r6 -> (| r6 r7)")
+ __msg("w1 |= 2 {{.*}}; r1 r6 -> (zext32 (| r6 2))")
+@@ -363,15 +363,15 @@ __msg("w1 ^= w7 {{.*}}; r1 r6 -> (zext32 (^ r6 r7))")
+ __msg("r1 <<= 2 {{.*}}; r1 r6 -> (<< r6 2)")
+ __msg("r1 <<= r7 {{.*}}; r1 r6 -> (<< r6 r7)")
+ __msg("w1 <<= 2 {{.*}}; r1 r6 -> (zext32 (<< r6 2))")
+-__msg("w1 <<= w7 {{.*}}; r1 r6 -> (zext32 (<< r6 r7))")
++__msg("w1 <<= w7 {{.*}}; r1 r6 -> (zext32 (<< r6 (& r7 31)))")
+ __msg("r1 >>= 2 {{.*}}; r1 r6 -> (>> r6 2)")
+ __msg("r1 >>= r7 {{.*}}; r1 r6 -> (>> r6 r7)")
+-__msg("w1 >>= 2 {{.*}}; r1 r6 -> (zext32 (>> r6 2))")
+-__msg("w1 >>= w7 {{.*}}; r1 r6 -> (zext32 (>> r6 r7))")
++__msg("w1 >>= 2 {{.*}}; r1 r6 -> (zext32 (>> (zext32 r6) 2))")
++__msg("w1 >>= w7 {{.*}}; r1 r6 -> (zext32 (>> (zext32 r6) (& r7 31)))")
+ __msg("r1 s>>= 2 {{.*}}; r1 r6 -> (s>> r6 2)")
+ __msg("r1 s>>= r7 {{.*}}; r1 r6 -> (s>> r6 r7)")
+-__msg("w1 s>>= 2 {{.*}}; r1 r6 -> (zext32 (s>> r6 2))")
+-__msg("w1 s>>= w7 {{.*}}; r1 r6 -> (zext32 (s>> r6 r7))")
++__msg("w1 s>>= 2 {{.*}}; r1 r6 -> (zext32 (s>> (sext32 r6) 2))")
++__msg("w1 s>>= w7 {{.*}}; r1 r6 -> (zext32 (s>> (sext32 r6) (& r7 31)))")
+ __msg("r1 = -r1 {{.*}}; r1 r6 -> (- r6)")
+ __msg("w1 = -w1 {{.*}}; r1 r6 -> (zext32 (- r6))")
+ __msg("r1 = 42 {{.*}}; r1 r6 -> 42")
 -- 
 2.55.0
 
