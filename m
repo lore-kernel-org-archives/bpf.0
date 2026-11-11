@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794436895;
-	b=fLJNhZSVMEAvYL5dXKjO/f/kvGSUai2jVHBEcYLywIPB+YKu2EVd8EVqcanYVKnE7EBj
-	 9dGNLtMSXct3Q6hlZN/YZ4flnzP4vszkVfVEoJjXYJ6P8UKnJxtr7I0JcBQAqB0N0tuf0
-	 ey8bub6BkovNK8F2O81Y2JKoGbnhwxyBfI+nxViM2L+FKbLRSRlAf398toBddFnNIgGFn
-	 1n1xIByPdl34QnZBoKHj2Ql9519UPKfQ/EYCVvjA8/2Jjlfnhf6joKKG5bE49ur4kYgGx
-	 8/qmv10JynMIUuzR4s4d8Vaexu0y2iZwGGK9jmLnm09moXWrPv3L+ruXcfkIae9CX4A==
+	t=1794436902;
+	b=tyfneguWVDcS883Pal5capYnvAg8OmNh97o8ABD/io0UEiPUR4atAeoAhHcjeN0IHF4y
+	 +QOTxD2b4VtSq3io8ZnGwvcUaHrNaaMOj0dWpQcjxhv2ujEV70JLfwD7vKzMw63/9H7xa
+	 k4P0CBp5tcE2KICGxW8tPOHMdX/Rx7jltsL3ZU4SfHsNr36+8g7qnhb5Q4OB5MjbQEz3V
+	 AGNhrI40ZWIMHlAdWIZqAAT/gGWDBHhrhJzw5OXmw+vIv6wjHCSoKQJgmjUwsvEAKnIK5
+	 dNo1FJFUN9kP8HNsjEhGvTILC29mlJl5RvtjvjSUIoJ0lE0tQ5AMZyp0RQusDZsNMQw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794436895;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794436902;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=5YG3G017g+DRKcZrjM4aeoqUjwUFGHSzbQrSNzK7C7g=;
-	b=meRGJGP1K59svqrjH8PMLFkxs/xSYlK1Spf2FM+eut4hOUXKoHmS3hEG8vAUM7UC6e86
-	 /ta1iP5nF4Pu+tk3V4e6ACQsP14s/sKRKtcmGWAUOJKbYlzzdRJn5tHBHqjFNQv07Ozrx
-	 4wHz0ZzSxeAhLT5FfhK5iXVilGsnIGObmRalxy4KW1sDAM/sTWbo5bWe9U+ZbMDQ1dNxC
-	 YSVMwb7yw95PmP00/ji8/Xkb5IJUvsZkLLQbkmVsDKHVtA3pJQ4s3sp21I71KOBVb7iQo
-	 9ZmVgqF8ObCWA14JXW0sl2de3iauoxvmE1oDVGNjwxf9nYnPU0J9LesMIWyhoQ2p4XA==
+	bh=YXZE4/JCiF0eACXrRw2VIV6D7SpvemyMj7K6scSqWvc=;
+	b=0g22U73FmauiNgdmH5saOoQ0XJ6ePl3tXBUj2TQbXkIMlKT6nmpvt0rpeGNd15g4fVLp
+	 gMtHL8EN7A6WXl/7pasjx48ZCzJ53Dsg+gc9dY5Ocw67I51wSJ0Jh9keP60gijMxx/em6
+	 Bu+zSTsSCWA9aP5+r1/FFwghdo7EVU8cb39G6YZkGMluU2I5kw8EnOILZSDehq6VwhJfw
+	 WXw+SZV2+AS4eHrKyv6xlMFZKsLRplwBba2Buoq73XrPKkhU/oorLa/MmQ2jOux+jg1xZ
+	 iVi5C42qFieWdOncFVppc+juoYdyxPrAMvfQNFO5Dp96OeG+FWVTRgfgHfD1slwbTxw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OzNaHAfZ;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Bid5kCCS;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8539606A332;
-	Wed, 11 Nov 2026 22:41:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0649360A5BE0;
+	Wed, 11 Nov 2026 22:41:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OzNaHAfZ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A44401F00A05;
-	Wed, 11 Nov 2026 22:41:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Bid5kCCS
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B2321F00ACC;
+	Wed, 11 Nov 2026 22:41:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794436895;
-	bh=5YG3G017g+DRKcZrjM4aeoqUjwUFGHSzbQrSNzK7C7g=;
+	s=k20260515; t=1794436901;
+	bh=YXZE4/JCiF0eACXrRw2VIV6D7SpvemyMj7K6scSqWvc=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=OzNaHAfZgHeFe0kzPfiSABT/lLSgTkJJVUdBa5p3d/BPIpVbjN32lRnNUDYuMU8ci
-	 C9wpB2FSSjTwO68e4BvKfxDc5LR5RA+wnipR78D7Tkffxdz546nDTzs/NI3bWwktwz
-	 4stFrWIxwomQoL3GPw0EIpCEccGFKdphi22dkj8Zjv6uJ71uO6/wgo2Eq6oSIavSEu
-	 6gqef/Z8JsrM5qflOGPO7obcAgAcVyon6PP4qrK2M92ABuPWyRR/oZiCd7t+zrTsdg
-	 AiGTLEQOzyMbJgToSMevfsvi77Y2O25sYI4LqABq4zz3MZ5FxVxag03Hr1+JoT7ehg
-	 fDaCFNO3qnabw==
-Subject: Re: [PATCH net-next v1 06/11] page_pool: Coordinate refill with
- memory providers
+	b=Bid5kCCSu5WypSvc7Yy6AMkIfdUDrJWusTlL6nlybv/UiOv7dlV09KEKfNBGlnJP8
+	 Mo8DovxcVZhczOzVDrvnyRhRfAI6mKNGf4k5MQXl9i2KUjR9F5VhUthV46nUQXx5oy
+	 STo1r6hrkydhg3ZeViNw3zqvmgw7dlrVsfUYk5zaTfKclmxpMN9J8Z8wox2WT7IKsv
+	 osRhc3iDgQbp5YtFlgScoTScFaPYL4heyGJWa9ouZh26p8aSDk5HV1dteEtMysO3T2
+	 x8jITzi8cuxxVCv/Gsk+HL1rUbt2a/M9cq/w4vZu93JIaAHruDGz4yZLzJq29ZqG7T
+	 JrV5qY+YEVpbg==
+Subject:
+ Re: [PATCH net-next v1 10/11] eth: fbnic: Support RX buffers it cannot split
 From: netdev-bot+sashiko@kernel.org
 To: bjorn@kernel.org
 Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, sdf@fomichev.me,
@@ -58,10 +58,10 @@ Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, sdf@fomichev.me,
  bestswngs@gmail.com, razor@blackwall.org, dw@davidwei.uk,
  aleksander.lobakin@intel.com, linux-doc@vger.kernel.org,
  linux-kernel@vger.kernel.org, stuclar@meta.com
-Date: Wed, 11 Nov 2026 22:41:33 +0000
-Message-ID: <179443689325.2199510.6016244708978672874@kernel.org>
-In-Reply-To: <20261110102039.1002605-7-bjorn@kernel.org>
-References: <20261110102039.1002605-7-bjorn@kernel.org>
+Date: Wed, 11 Nov 2026 22:41:39 +0000
+Message-ID: <179443689907.2199510.5966675063900520158@kernel.org>
+In-Reply-To: <20261110102039.1002605-11-bjorn@kernel.org>
+References: <20261110102039.1002605-11-bjorn@kernel.org>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -75,10 +75,10 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 6 potential
+Thank you for your contribution! Sashiko AI review found 3 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 4 · Low: 2
+Critical: 0 · High: 0 · Medium: 2 · Low: 1
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -86,270 +86,207 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] net/xdp/xsk_pp.c: xsk_pp_refill_done() can read freed memory.
-- [Medium] Provider wakeups that land on a disabled NAPI are dropped
-  silently, and xsk_pp_release_netmem() clears pp->starved before it…
-- [Medium] net: wrong mp_napi state after netdev_rx_queue_reconfig()
-  error recovery
-- [Medium] net: dangling rxq->napi left by netif_mp_napi_del() and
-  republished
-- [Low] Not confirmed (baseline: false positive).
-- [Low] Not confirmed (baseline: false positive).
+- [Medium] fbnic_config_drop_mode() in
+  drivers/net/ethernet/meta/fbnic/fbnic_txrx.c changes the drop mode in…
+- [Medium] eth: fbnic: incomplete split-buffer checks in
+  fbnic_bd_one_desc() callers
+- [Low] (Baseline: rejected.) At this commit none of the whole-buffer
+  code can run.
 
 --
 
-page_pool: Coordinate refill with memory providers
+eth: fbnic: Support RX buffers it cannot split
 
-This commit adds a refill_done memory provider op and a
-page_pool_refill_done() helper, so drivers can report the end of each RX
-ring refill. While a queue runs, the core publishes its NAPI in
-rxq->mp_napi, and a provider can use it to wake the queue when buffers
-come back. The xsk provider uses this to track starvation, and AF_XDP
-socket wakeups go through it instead of ndo_xsk_wakeup.
+The patch lets fbnic RX queues use a page pool provider without
+MP_CAP_FRAG. Each such buffer gets a single reference, the queue is
+programmed so each header and payload takes its own buffer, and packets
+that break this are dropped. Header split is now set per queue, and link
+up only modifies the drop mode in RDE_CTL0.
 
-> diff --git a/net/core/netdev_rx_queue.c b/net/core/netdev_rx_queue.c
-> index 4e2f906fbc735..3fe904b56791b 100644
-> --- a/net/core/netdev_rx_queue.c
-> +++ b/net/core/netdev_rx_queue.c
-> @@ -116,6 +116,94 @@ bool netif_all_mps_have_cap(struct net_device *dev, u32 cap)
->  	return true;
+> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
+> index bfaa284e497eb..d96c957d6fbad 100644
+> --- a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
+> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
+
+[ ... ]
+
+> @@ -1644,6 +1693,9 @@ fbnic_alloc_qt_page_pools(struct fbnic_net *fbn, struct fbnic_q_triad *qt,
+>  		return PTR_ERR(pp);
+>  
+>  	qt->sub0.page_pool = pp;
+> +	qt->hdr_max = 0;
+> +	if (!page_pool_supports_frag(pp))
+> +		qt->hdr_max = fbnic_whole_hdr_max(FBNIC_RX_HROOM);
+
+[Severity: Low]
+This isn't a bug, but can this branch be reached at this commit?
+
+Both fbnic page pools are still created without PP_FLAG_MEM_PROVIDER.
+That means no provider without MP_CAP_FRAG can be attached (xsk_pp only
+advertises MP_CAP_READABLE), so page_pool_supports_frag() is always true
+here.
+
+As a result, qt->hdr_max stays 0. The whole-buffer paths in
+fbnic_bd_one_desc(), fbnic_page_pool_init() and fbnic_enable_rcq() are
+not used until the later patch "eth: fbnic: Support AF_XDP page pool zero
+copy" sets PP_FLAG_MEM_PROVIDER.
+
+Could the commit message say that a later patch in the series enables
+this?
+
+>  	if (netif_rxq_has_unreadable_mp(fbn->netdev, rxq_idx)) {
+>  		pp_params.order = get_order(rx_page_size);
+>  		pp_params.max_len = rx_page_size;
+
+[ ... ]
+
+> @@ -2693,20 +2750,32 @@ static void fbnic_config_drop_mode_rcq(struct fbnic_napi_vector *nv,
+>  	fbnic_ring_wr32(rcq, FBNIC_QUEUE_RDE_CTL0, rcq_ctl);
 >  }
 >  
-> +/**
-> + * netif_mp_wake - schedule the NAPI that refills a memory provider queue
-
-[ ... ]
-
-> +bool netif_mp_wake(struct netdev_rx_queue *rxq)
+> +static u32 fbnic_rcq_hds_thresh(const struct fbnic_net *fbn,
+> +				const struct fbnic_ring *rcq)
 > +{
-> +	struct napi_struct *napi;
-> +	bool running = false;
+> +	const struct fbnic_q_triad *qt;
 > +
-> +	rcu_read_lock();
-> +	napi = rcu_dereference(rxq->mp_napi);
-> +	if (napi) {
-> +		local_bh_disable();
-> +		napi_schedule(napi);
-> +		local_bh_enable();
-> +		running = true;
-> +	}
-> +	rcu_read_unlock();
-> +
-> +	return running;
+> +	qt = container_of_const(rcq, struct fbnic_q_triad, cmpl);
+> +	return qt->hdr_max ? : fbn->hds_thresh;
 > +}
 > +
-> +/* Point wakeups at the NAPI of the running queue, and schedule it once: a
-> + * refill during the start may have found no buffers.
-> + */
-> +void netif_mp_update_napi(struct netdev_rx_queue *rxq)
-> +{
-> +	const struct memory_provider_ops *ops = rxq->mp_params.mp_ops;
-> +	struct napi_struct *napi = NULL;
-> +
-> +	if (rxq->mp_armed && ops && ops->refill_done)
-> +		napi = rxq->napi;
-> +	if (rcu_access_pointer(rxq->mp_napi) == napi)
-> +		return;
-> +
-> +	rcu_assign_pointer(rxq->mp_napi, napi);
-> +	if (napi)
-> +		netif_mp_wake(rxq);
-> +}
+> +/* Only the drop mode: a queue start may write the rest of the register */
+>  void fbnic_config_drop_mode(struct fbnic_net *fbn, bool txp)
+>  {
+> -	bool hds;
+> +	struct fbnic_ring *rcq;
+> +	u32 drop_mode, rcq_ctl;
+>  	int i, t;
+>  
+> -	hds = fbn->hds_thresh < FBNIC_HDR_BYTES_MIN;
+> -
+> +	drop_mode = fbnic_drop_mode(fbn, txp);
+>  	for (i = 0; i < fbn->num_napi; i++) {
+>  		struct fbnic_napi_vector *nv = fbn->napi[i];
+>  
+>  		for (t = 0; t < nv->rxt_count; t++) {
+> -			struct fbnic_q_triad *qt = &nv->qt[nv->txt_count + t];
+> -
+> -			fbnic_config_drop_mode_rcq(nv, &qt->cmpl, txp, hds);
+> +			rcq = &nv->qt[nv->txt_count + t].cmpl;
+> +			rcq_ctl = fbnic_ring_rd32(rcq, FBNIC_QUEUE_RDE_CTL0);
+> +			FIELD_MODIFY(FBNIC_QUEUE_RDE_CTL0_DROP_MODE_MASK,
+> +				     &rcq_ctl, drop_mode);
+> +			fbnic_ring_wr32(rcq, FBNIC_QUEUE_RDE_CTL0, rcq_ctl);
 
 [Severity: Medium]
-Can this leave rxq->napi dangling for netif_mp_update_napi() to pick
-up again?
+Does anything serialize this read-modify-write of FBNIC_QUEUE_RDE_CTL0
+against a queue restart?
 
-netif_mp_napi_del() clears dev->_rx[i].mp_napi when it matches the
-NAPI being deleted, but dev->_rx[i].napi still points at it.
-__dev_close_many() and netdev_rx_queue_reconfig() disarm the queue
-around ndo_stop() and ndo_queue_stop(). While it is disarmed, mp_napi
-is already NULL, so this loop does not touch the queue at all.
+fbnic_config_drop_mode() is called from fbnic_phylink_mac_link_up():
 
-Suppose the driver deletes the NAPI without first calling
-netif_queue_set_napi() with a NULL napi. Suppose it also does not
-register another NAPI for that queue before the next
-netif_mp_arm_napi() or netif_mp_arm_dev(). Then
-netif_mp_update_napi() reads the stale rxq->napi and publishes it in
-rxq->mp_napi. It then calls netif_mp_wake(), which does
-napi_schedule() on a deleted napi_struct.
-
-For drivers that free the NAPI together with their queue vectors, this
-is a use-after-free. Every later provider wakeup also goes through the
-same pointer.
-
-Should netif_mp_napi_del() also clear rxq->napi when it matches, or
-should netif_mp_update_napi() only publish a NAPI that is still
-listed? If drivers are expected to clear the association themselves,
-could netmem.rst item 8 say so?
-
-[Severity: Medium]
-Can this kick be lost when it lands on a disabled NAPI?
-
-Drivers often call netif_queue_set_napi() during ring setup, before
-napi_enable(). If the NAPI is disabled, napi_schedule_prep() sees
-NAPIF_STATE_SCHED already set and only sets NAPIF_STATE_MISSED.
-napi_enable_locked() then clears SCHED/NPSVC/DISABLED without acting on
-MISSED, so no poll runs.
-
-netif_mp_wake() still returns true, because it ignores the result of
-napi_schedule().
-
-If the driver reuses the same napi_struct across a restart, the early
-return on rcu_access_pointer(rxq->mp_napi) == napi skips the kick
-entirely.
-
-The core re-kicks only from netif_mp_arm_dev() and netif_mp_arm_napi().
-Driver-internal restarts (ethtool -G/-L, MTU or XDP changes, resets)
-keep mp_armed set, so this kick is the only one they get.
-
-The starved state doesn't recover either. xsk_pp_release_netmem() clears
-pp->starved before it knows whether the wakeup reached an enabled NAPI:
-
-	starved = pp->starved;
-	WRITE_ONCE(pp->starved, false);
-	spin_unlock_bh(&pp->lock);
-
-	/* A starved queue may wait for this release */
-	if (starved)
-		xsk_pp_wake(pp);
-
-Here is one sequence:
-
-- The new rings are filled while the old pool still holds the chunks,
-  so the refill finds nothing and sets starved.
-- The old pool then releases the chunks while mp_napi is NULL or the
-  NAPI is still disabled, so the wakeup is dropped.
-- Later releases don't retry, and the empty ring raises no IRQ.
-
-Wouldn't that leave RX stalled, which is the problem this patch sets out
-to fix?
-
-fbnic avoids this because fbnic_napi_enable() and __fbnic_nv_restart()
-write FBNIC_INTR_SET after napi_enable_locked(). However, netmem.rst item
-8 only says "the core schedules it when provider buffers become
-available", and does not ask drivers to force a poll after napi_enable().
-
-Should the documented contract require that, or should the core handle
-the disabled-NAPI case itself?
-
-[ ... ]
-
-> diff --git a/net/xdp/xsk_pp.c b/net/xdp/xsk_pp.c
-> index c2214e718cdb3..a77213f7fef6b 100644
-> --- a/net/xdp/xsk_pp.c
-> +++ b/net/xdp/xsk_pp.c
-
-[ ... ]
-
-> @@ -232,11 +253,47 @@ static bool xsk_pp_release_netmem(struct page_pool *pool, netmem_ref netmem)
-
-[ ... ]
-
-> +static bool xsk_pp_refill_done(struct page_pool *pool, enum pp_refill state)
-> +{
-> +	struct xsk_pp *pp = pool->mp_priv;
-> +	struct xsk_buff_pool *xp = pp->pool;
-> +	bool wait = xp->uses_need_wakeup;
-
-[Severity: Medium]
-Can this read a freed xsk_buff_pool?
-
-pp->pool is dereferenced in the initializer, before the !pp->fq check
-that handles a detached provider. So the read happens even on the
-PP_REFILL_FULL fast path.
-
-The xsk_pp can outlive the buff pool. Each page pool built on it holds a
-ref taken in xsk_pp_init(), but xp_destroy() drops only the buff pool's
-own ref before freeing it:
-
-net/xdp/xsk_buff_pool.c:xp_destroy() {
+fbnic_phylink.c:fbnic_phylink_mac_link_up() {
     ...
-	if (pool->pp)
-		xsk_pp_put(pool->pp);
-	kvfree(pool->tx_descs);
-	kvfree(pool->heads);
-	kvfree(pool);
+	fbn->tx_pause = tx_pause;
+	fbnic_config_drop_mode(fbn, tx_pause);
+    ...
 }
 
-One way to get there is a failed queue reconfig during unbind, after
-which the old queue keeps running on the provider's page pools. The
-reconfig can fail in kvzalloc() or ndo_queue_mem_alloc(), or in
-ndo_queue_start(), whose error path restarts old_mem:
+That runs from the phylink_resolve() work item. The work item holds
+pl->state_mutex and the phy locks, but not rtnl or the netdev instance
+lock.
 
-xsk_pp_unbind()
-  netif_mp_close_rxq()
-    __netif_mp_close_rxq()
-      netdev_rx_queue_reconfig()   <- fails, only WARNs
-  xsk_pp_detach()                  <- error ignored, fq = NULL
-xp_destroy()                       <- kvfree(pool)
+The queue start path runs under the netdev instance lock and writes the
+whole register from per-queue state:
 
-After that, the old queue's NAPI still calls page_pool_refill_done()
-after each refill. That reaches xsk_pp_refill_done(), which reads
-xp->uses_need_wakeup from the freed pool.
+fbnic_queue_start()
+  __fbnic_nv_restart()
+    fbnic_enable_rcq()
+      fbnic_config_drop_mode_rcq()
+        fbnic_ring_wr32(rcq, FBNIC_QUEUE_RDE_CTL0, rcq_ctl);
 
-Before this patch, the provider callbacks that can run after detach
-either didn't touch pp->pool or checked pp->fq first.
+Suppose the link up worker reads CTL0. A queue start then writes a new
+CTL0 with a different EN_HDR_SPLIT, derived from qt->hdr_max. The worker
+then writes its saved copy back.
 
-Could uses_need_wakeup be cached in struct xsk_pp when it is created, or
-read only after pp->fq is confirmed under pp->lock?
+Wouldn't the restarted queue keep the old EN_HDR_SPLIT, which no longer
+matches the MAX_HDR, PAYLD_OFF and PAYLD_PG_CL values in CTL1? Nothing
+corrects it until the next restart of that queue.
 
-> +	bool more;
-> +
-> +	if (state == PP_REFILL_FULL && !READ_ONCE(pp->starved))
-> +		return true;
-> +
-> +	spin_lock_bh(&pp->lock);
-> +	if (!pp->fq) {
-> +		spin_unlock_bh(&pp->lock);
-> +		return true;
-> +	}
+At this commit qt->hdr_max is always 0, so the written-back value still
+matches. Later in the series, "eth: fbnic: Support AF_XDP page pool zero
+copy" makes hdr_max and MIN_HROOM (from qt->rx_hroom) truly per queue.
+
+After that, an AF_XDP bind or unbind that overlaps a link up event could
+leave the queue misconfigured. For example, a stale EN_HDR_SPLIT on a
+non-SG AF_XDP queue would make every packet multi-buffer, and
+fbnic_run_xdp() would drop it.
+
+>  		}
+>  	}
+>  }
 
 [ ... ]
 
-> @@ -183,8 +273,13 @@ static int netdev_rx_queue_reconfig(struct net_device *dev,
->  		     "Failed to restart old queue in error path. RX queue %d may be unhealthy.",
->  		     rxq_idx);
->  		qops->ndo_queue_mem_free(dev, old_mem);
-> +		goto err_free_new_queue_mem;
->  	}
+> @@ -993,6 +1000,19 @@ static unsigned int fbnic_hdr_pg_end(unsigned int pg_off, unsigned int len)
+>  	return ALIGN(pg_off, 128) - FBNIC_RX_HROOM;
+>  }
 >  
-> +err_arm_old_queue:
-> +	/* The old queue may run */
-> +	netif_mp_arm_napi(rxq);
+> +/* A buffer that cannot be split has one reference and takes one descriptor */
+> +static bool fbnic_bd_one_desc(struct fbnic_napi_vector *nv,
+> +			      const struct fbnic_ring *bdq, unsigned int idx,
+> +			      bool ok)
+> +{
+> +	if (likely(page_pool_supports_frag(bdq->page_pool) ||
+> +		   (bdq->rx_buf[idx].pagecnt_bias == 1 && ok)))
+> +		return true;
 > +
->  err_free_new_queue_mem:
->  	qops->ndo_queue_mem_free(dev, new_mem);
->  
+> +	netdev_err_once(nv->napi.dev, "Bad descriptor for a whole RX buffer\n");
+> +	return false;
+> +}
+> +
+>  static void fbnic_pkt_prepare(struct fbnic_napi_vector *nv, u64 rcd,
+>  			      struct fbnic_pkt_buff *pkt,
+>  			      struct fbnic_q_triad *qt)
 
 [Severity: Medium]
-Does this arm the queue from the right provider state?
+Do the two callers of fbnic_bd_one_desc() check enough to catch a
+whole buffer that the device splits across more than one completion?
 
-When netdev_rx_queue_reconfig() runs, rxq->mp_params already holds the
-target configuration. It does not hold the configuration of the queue
-that is restarted on this error path.
+The commit message says packets that break the one descriptor per
+buffer rule are dropped. Each caller only checks half of that
+condition, though.
 
-In __netif_mp_open_rxq(), rxq->mp_params = *p is written before the
-reconfig. If ndo_queue_stop() fails, or ndo_queue_start() fails and the
-old queue is restarted, netif_mp_arm_napi() here sees the new
-provider's refill_done. It publishes rxq->napi in rxq->mp_napi and
-kicks it. The error then goes back to __netif_mp_open_rxq(), which
-zeroes rxq->mp_params at err_clear_mp but never resyncs mp_napi.
+In fbnic_add_rx_frag() the ok argument is only !pg_off, and
+FBNIC_RCD_AL_PAGE_FIN is not checked. Suppose a payload buffer ends up
+holding more than one payload. The first completion then has
+pg_off == 0 and PAGE_FIN == 0, so it passes. fbnic_page_pool_get_data()
+drops pagecnt_bias from 1 to 0, and the packet takes the only reference
+to the netmem.
 
-That leaves mp_napi published for a queue with no provider installed,
-which breaks the rule documented in struct netdev_rx_queue. A later
-netif_mp_wake() on that rxq would schedule it. The early return in
-netif_mp_update_napi() would also compare against a pointer that
-should not be there.
+That reference can then go back to the pool through
+page_pool_put_full_netmem(), or be handed to the AF_XDP socket. The
+device still has the buffer open at that point and may DMA the next
+payload into it. The next completion for that buffer is rejected
+because pagecnt_bias is now 0, but the buffer has already been
+released by then.
 
-The close direction is the mirror image. __netif_mp_close_rxq() clears
-rxq->mp_params before the reconfig. If the stop or the restart then
-fails, netif_mp_update_napi() sees no mp_ops and leaves mp_napi NULL,
-even though the old queue keeps running on the provider's page pools.
+fbnic_pkt_prepare() has the opposite gap. It checks only PAGE_FIN, not
+where the header sits in the buffer. Suppose two headers land in the
+same header buffer. The first completion has PAGE_FIN == 0 and is
+rejected before fbnic_page_pool_get_head() runs, so pagecnt_bias stays
+at 1.
 
-Should the error path arm from the configuration that is running
-again, or should __netif_mp_open_rxq() and __netif_mp_close_rxq() call
-netif_mp_update_napi() once they have settled rxq->mp_params?
+The second completion has PAGE_FIN == 1 at a non-zero offset. It still
+sees pagecnt_bias == 1 and is accepted. An xdp_buff is then built from
+the middle of a buffer that was meant to hold a single header.
+
+A conforming device should not do either of these with the MAX_HDR,
+PAYLD_OFF and PAYLD_PG_CL values programmed in fbnic_enable_rcq().
+However, these checks exist to catch the case where it does.
+
+Should both callers require that the completion starts the buffer and
+also closes it, i.e. a zero offset and PAGE_FIN set? Passing the rcd
+into fbnic_bd_one_desc() and doing both checks there might keep the
+header and payload paths from drifting apart again.
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261110102039.1002605-1-bjorn%40kernel.org
