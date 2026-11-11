@@ -1,45 +1,61 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.17
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794385155;
-	b=ZhsfGgxMMNGkb/vbjytELAzUtZhSwlhujKRrYOAOyOrpZOodyUR6rm7bljI5YfqUFvKY
-	 UtwffgZ/JOwVoskrJsyqosX/K2oiPtGJ2ERPDqoNKzpGXs2AaS7hoIRjyxaBhPWts/kl6
-	 gL/lwxVQD2x/HN8BJk4VcIgPj9pCRTrDqmehk22HpPd5qPxmqX5cOPIYfeCXfyiWMnsNd
-	 EHPCNSPVAhbUZgRuIb78buq0yHjF6vljiq3PtTHfkwZtTPuIcG97bfyNb6YjBBF85r9B+
-	 GiR8riqb0Y8+CdMZxvsRBr4+GQRoiUHZbuZJTydsVruwskaMoMES9PHHoA018fbGGRQ==
+	t=1794385202;
+	b=H5pR+GKWU4XURoou3GgU56fA7fr7QF5xG2HevW1FqSK9QGtWNOjNDc7N0CF8W48VcaZ3
+	 IEvC580vTgIhtWkkWDIrLUf+QXahUK+Y3igqdpb6dXDYhZkHFokTHYqUkD7b9vZ4f3uzh
+	 OkSZ1ZBIWCbN5AwrR4FtmCfz4AXpKpSuInSrBepnE62NOFrcOM+9A/9HfcHnp1xQG6GNG
+	 aIxRML535xiqGBXJy3sJmweI1dh4630SsB5vi5mu7K83CPsE34x1YSw8HN7nagkJUXMEp
+	 tlvzdNaMUYeiEUE2eaIzrK/nYQKCoNOkmPdOBHF56IcFtU4GfLzkI5KJihXNT3HH10Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794385155;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=R/kVKg5RS0h+n5k1/2I7+Zp+UMXtMdG38C9X4lNBAv0=;
-	b=mKzatrcw+M9NVf6uoT2LDdrgQd0hX4f2+xwjBwIfnU45sb1zk6Cp5wUpwJjiKj6sJren
-	 tadd8+SbJ2GOokDYkWhfnJHt/xsdZ0vLN4L4Ge5neFgD3h/6WMbjMm7bTD1eA475Xb+14
-	 N60h7XVgcKj24XYIryRGenPKt8XGu02N0Yw6808N+vdSXlbbDbJa5S3ugwL7ZKR+xM38d
-	 1jfFp5rzd2OlPO/7/9JAAojFwLOmtN9nq4SIeaZLiht7mZ45/yUU4TowHtviCcd4gRRGX
-	 uU3772QibR3dCpFuXdVHoILjQLDfnE/VPNgtXaIPqW+92OAkBB3Xx+fEXEXsfqy/L8g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794385202;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=G3d3b2tM519kuIvjkSRexg4H0KkdNZyWkRnjj4rZTd4=;
+	b=Jceix/IREydpoETU1z8xm+fYC/IhKceqHuo5YkT2A6s0i/3ak85D6eSxtEqvMP/ckPuY
+	 nvn+Mzpz+FrdMZaO/Cq1rS0BqB9xUx5CGPA4QzhPyBTrYiA/tvWY/h/PDBscfkvsmyAA1
+	 L26LJm8g05TtDE8rMMCRZr5oh+jNANUs5oB1TkPmio9fXBMXMn30hlt3iS8CzB7kbVTR8
+	 0l7Jt3PNoD1gswWmt5d7qeTTEmc6ah6jmIIWjfOTnTgC0cynrAzi8pbEU52mru2EZzWWd
+	 G+MP3DeTl/IkCIhAKZw4lKsCHwnrqGzoh6GB1LxQIf6nur5lBclvd0czJ/TINbGfglA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H2yWkhu+;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=iyOp41w6;
+	arc=none smtp.remote-ip=95.215.58.17
+Received: from mta1.migadu.com (out-17.mta1.migadu.com [95.215.58.17])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8A5B606A31C
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 08:19:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67074606A31C
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 08:20:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 67074606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H2yWkhu+
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D6911F00A05;
-	Wed, 11 Nov 2026 08:19:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794385155;
-	bh=R/kVKg5RS0h+n5k1/2I7+Zp+UMXtMdG38C9X4lNBAv0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=H2yWkhu+PBIR4T7OG4ZKvOvjVzrmLzgfArLj9BqF3eRHLw1tzj4ZB1LKziZS2x4pY
-	 Mvu6qT2JDNFUWuHidZMM/3RMT02hcjyZn8G42j5Me1505DpvP4ARR4VOFT/+z/bEAL
-	 4qu7Gy3mn15AhgV/NqlnNFGiU/U9MHr6PQeIrc9A6WGifOd5cShTqyrc8KIwygK5vr
-	 DTzM+emcyRbvDjQSBJlWVATR2pc0CV5oYSPOUqv96TjdlQawLKD4GfYktK3XFyPnXf
-	 cw9eI5Rm0w+ZtM97QZ13Jl1LhuJogiXcLPkLl+rKZvfPzHK3fJsIKSYhR7+7pzec/W
-	 AsriFIeC3zUuw==
-Content-Type: multipart/mixed; boundary="===============0158783972550198979=="
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=iyOp41w6
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=01hkxhMvjpH0YwUfWPSVcu2PhKCcNEL9gg0Q0PcG8gI=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794385199; v=1; x=1794989999;
+ b=iyOp41w6ePFfiABPcVNymqvnRo7CvaC7mYHYLS9IIcdtQDFFSmovUlyn7TOR60F6UJXjYQHx
+ HBdMKlOMlV0Fj9OFgH1bcGEq7R3P7yexH45CjSDoP4/BLlil+pzb4rmq/ZUZgqqgEe0v0YN/1Yc
+ B25Xx13HT1EETMUH+9zTErRQ=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 2365b7a9a39834f0;
+	Wed, 11 Nov 2026 08:19:59 +0000
+X-Mizu-Trace-ID: 2365b7a9a39834f0
+X-Migadu-Flow: FLOW_OUT
+Date: Wed, 11 Nov 2026 16:19:49 +0800
+From: Hao Li <hao.li@linux.dev>
+To: Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: Vlastimil Babka <vbabka@kernel.org>, Harry Yoo <harry@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Christoph Lameter <cl@gentwo.org>, 
+	David Rientjes <rientjes@google.com>, Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org, 
+	loongarch@lists.linux.dev, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] mm/slub: Genericize x86-specific cmpxchg16b comment
+Message-ID: <avQkXxpsIdxB5Ye6@fedora>
+References: <20261111011108.29311-1-yangtiezhu@loongson.cn>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,66 +65,47 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <5bd21390934bbc2695cee1671c96d225aa0736e0aaabb0a396391a3c180da0b7@mail.kernel.org>
-In-Reply-To: <20261111024333.228633-3-luyun_611@163.com>
-References: <20261111024333.228633-3-luyun_611@163.com>
-Subject: Re: [PATCH bpf-next v3 2/6] bpf: Check task work value membership before scheduling
-From: bot+bpf-ci@kernel.org
-To: luyun_611@163.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev
-Cc: yatsenko@meta.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 11 Nov 2026 08:19:14 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261111011108.29311-1-yangtiezhu@loongson.cn>
 
---===============0158783972550198979==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Wed, Nov 11, 2026 at 09:11:08AM +0800, Tiezhu Yang wrote:
+> In __kmalloc_nolock_noprof(), update the comment from x86-specific
+> "cmpxchg16b" to generic "double-width atomic cmpxchg".
+> 
+> Suggested-by: Harry Yoo <harry@kernel.org>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+> v3:
+>   - add missing Suggested-by tag for Harry
+>   - use shorter commit message as requested
+> 
+>  mm/slub.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/slub.c b/mm/slub.c
+> index 45e077c7526c..090302f1daeb 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -5589,8 +5589,8 @@ static void *__kmalloc_nolock_noprof(DECL_TOKEN_PARAMS(size, token), gfp_t gfp_f
+>  	if (!(s->flags & __CMPXCHG_DOUBLE) && !kmem_cache_debug(s))
+>  		/*
+>  		 * kmalloc_nolock() is not supported on architectures that
+> -		 * don't implement cmpxchg16b and thus need slab_lock()
+> -		 * which could be preempted by a nmi.
+> +		 * don't implement double-width atomic cmpxchg and thus need
+> +		 * slab_lock() which could be preempted by a nmi.
+>  		 * But debug caches don't use that and only rely on
+>  		 * kmem_cache_node->list_lock, so kmalloc_nolock() can attempt
+>  		 * to allocate from debug caches by
+> -- 
+> 2.42.0
+> 
 
-> bpf: Check task work value membership before scheduling
+Looks good to me.
 
-TL;DR: Nit only: the kernel-doc for bpf_task_work_schedule_signal() and
-_resume() describes the return values twice, in the description and in
-Return:. A single concise Return: line may suffice.
+Reviewed-by: Hao Li <hao.li@linux.dev>
 
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-
-[ ... ]
-
-> @@ -4927,7 +4948,16 @@ static int bpf_task_work_schedule(struct task_struct *task, struct bpf_task_work
->   * @callback: pointer to BPF subprogram to call
->   * @aux: pointer to bpf_prog_aux of the caller BPF program, implicitly set by the verifier
->   *
-> - * Return: 0 if task work has been scheduled successfully, negative error code otherwise
-> + * When the membership check is reached, scheduling is rejected with -ENOENT
-> + * if the current map lookup does not return this value; a value inserted
-> + * again at the same address is the current identity. Earlier errors keep
-> + * their own codes. A live value with no user reference or a busy context is
-> + * rejected with -EBUSY. Return 0 only means the scheduling irq_work was
-> + * queued; it does not guarantee that the callback will run.
-> + *
-> + * Return: 0 if the scheduling irq_work was queued, -ENOENT if the value is
-> + * no longer the current map value at the membership check, -EBUSY for a busy
-> + * context or zero usercnt, or another negative error code on failure.
->   */
->  __bpf_kfunc int bpf_task_work_schedule_signal(struct task_struct *task, struct bpf_task_work *tw,
-
-This isn't a bug, but the kernel-doc for bpf_task_work_schedule_signal()
-now describes the -ENOENT, -EBUSY and 0 results twice, once in the
-description paragraph and again in the Return: section.
-
-Would a single Return: line listing 0, -ENOENT (value no longer in the
-map) and -EBUSY be enough here?
-
-The same question applies to bpf_task_work_schedule_resume(), which says
-"See bpf_task_work_schedule_signal() for return semantics." and then
-repeats a Return: line anyway.  The other kfunc docs in
-kernel/bpf/helpers.c use a single concise Return: line.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42981420568
---===============0158783972550198979==--
+-- 
+Thanks,
+Hao
