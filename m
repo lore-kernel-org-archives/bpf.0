@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794415663;
-	b=PNL2mGXzpI68V1CcUhpnpJsr0SaIkPQsJMYM+72Uo9QP5BhnXPnG95kbBOm7chF9/wDF
-	 tWiE0AzXg5hoitD5CVcoxuFy6n9LIznvwPaUwAqH8bcm4+1om36XXGr/ELo5sv3qL87cM
-	 Es0+1uuUPO95DBB8EOYLtTAcIVmGtES1/svgzzKFDXCm+RzNu1BsjuFuuMxpF6fL55r+l
-	 0hysL8QZxUCYEzMCLw4XlvVYqLA5hUTikIjd4uJ5+TwXREs0xufiWqs1d48IoQ8rLAC3X
-	 qkAhR1PIielAmfJHbcHxdkgZIQua9F84LMSDjttyrtBSK4eWfncycoRMmJM0W6M5FMQ==
+	t=1794415669;
+	b=Koi6ZXU9Wnj2/aGurjxZ4qrZNlfCxCQZUbike7oGrxANKdDtHvMJOJw+m74Tm2PABL7i
+	 TnuYN/wwSz4dXQKP4Ipd6RrBcUFGxCjkvPO5af8sgl6kaHh2tgQs40rvIN23NVG18oAaO
+	 u6g4poSrMfQ1um3UTkL/AHv9d5Ki601ufCqps5GD6NS3GxGTK2mk18XrksAxHlAf5B1be
+	 uOkPiBWL4UsxomkjxesG26IAJmAzxFrYUtqyhRJuwcB4YdKN+pMChMkjPU9eGtq5RZHkd
+	 ZrM9Ep7Y+aoOZKx0Y2iuSlc9nr9eFMTsO+XZ7T5FNMnEWDF/1v2P9ZFP40PFbYsgyiQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794415663;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794415669;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=wWqVn44Q0dMNJctPmcxy/k0JvKY5BZy0qZhnwKb1B14=;
-	b=A/W1TcJl36sazxn0RA4d0CrIQd/tN/Z1PkmhSD+8VtrDN0/1PQ33hCHhXZzpbMzMVAv/
-	 SR7a8kzOboornQ6ljMjeiwrGCJfiPcO3Y+ffxBsTf5UPGR8TDUzj1Ur8y5+CXafSxLymw
-	 NoljHiT0d5ZntnOlOoaHEF+5kdt9MP0UbnfGl5nfXl44/ji21GX4jvqPpkBOBUNZclEkZ
-	 H84BucEzheparkKjcgCPrvgHQNAveJJ/x6ULuOisO3uSnezg+Yy5J80bq25msZ7vDyj77
-	 6xcdAne7LdF7jDXuKKiToAQVReKDnyjKv8gxhkoDxJgDeu85KjLWOfmfwiHEwSLH26Q==
+	bh=Ku5+61NmrH43QLt0wmzCbiSGhGp3CYUBVhuyVHbAy7k=;
+	b=rHhVNJYz+11suI0g42jKR+968fj6f1uO3da3a722DbRnkE+Re6Dbwv79Druftd+8O9HU
+	 krVu4xBG2o0ejdse2GEv2jMkXh41SGxJw+3nHMSqNwX9eaj452nGqBqxt+eTILAE0tjSp
+	 z+Ng5In+Lr2Mz2E6R0iDedwrhbKCXvYrF7+g73/VrvD5cOJraVJzf+xqvd1u9odquFF8H
+	 Gwn+O9SE2qcOGmuKzqL/rPfX4vHE8dWDEUxWQzgYF+dj50xDL6wDywUhwZAsXPDo0yJ4q
+	 vcQFsCaApMXQ1vmSCV1wME0W7XZtmQephkxK4Q84gefhBsukxLSAnmEPSIY8TJ+xbEA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=RW5lk2UZ;
-	arc=none smtp.remote-ip=209.85.210.177
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eVf+3DQZ;
+	arc=none smtp.remote-ip=209.85.216.49
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CACA5606A321
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 16:47:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CACA5606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12556606A339
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 16:47:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 12556606A339
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=RW5lk2UZ
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-8b6399ebb41so2938448b3a.0
-        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 08:47:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eVf+3DQZ
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3ad41b47541so2087815a91.1
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 08:47:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794415662; x=1795020462; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794415668; x=1795020468; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=wWqVn44Q0dMNJctPmcxy/k0JvKY5BZy0qZhnwKb1B14=;
-        b=RW5lk2UZtar+OJVnLa2XPqQ/yk5LR2su/pBYlEWYh9Az9m3JU2w8TZUsySA+ZaNOFD
-         jC4l4/5I143qTRwPXtmixTfkMfrGVJJb0/O9wa/2gZHTPwKndSUPQAZk55ARL8z1c6yw
-         Ojrxf7eptqoRtcNRhlSxI3F7CSQL7EYKaBC6Bgaf6CyHoOlg+8kFLEmqoWV07E6WKWon
-         83rOxlRmit1gW94P8jOvrfXZdQruk07VIRLgPGd1N0goOpwBCFc7TYiymnsexiZXGef5
-         yzxVDyX/k1NxBJ2HP/jK0GpwBBcqdbaPYecbFk0zSgt213m/wK1doofHeY9UYPbA8r4J
-         DUDg==
+        bh=Ku5+61NmrH43QLt0wmzCbiSGhGp3CYUBVhuyVHbAy7k=;
+        b=eVf+3DQZ6sxBlrEmPEepXXgccnMUI9RE9PmdnxdY4N9NqRCzq/1tLw34D5GT5shBlv
+         AX2lDPf4UQCuOZT0j9BeAAeH/H/UORhuMynbI4Ja31AixEhINyBz5qUqBaQ8TM4ER1Lo
+         ZrxhGPPwe43n8PQjo0853UQVHomiaOiMji0YPfIy6SVde/2z8hFI/dHbDdWJM+Ctqb3k
+         IR0+PsJ9JNWSnyhAQMSP5H209Xt9K0KFTfmFO9J4qeJwznbK2k/7o3arxU5POv9q7NOn
+         GHamVF8jXAe1fR2m78PgRjmkh89mNQ1Aq98IyBbS96Lq18O7B76Ctsr8yGHG3xwaljg/
+         pZEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794415662; x=1795020462;
+        d=1e100.net; s=20260707; t=1794415668; x=1795020468;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=wWqVn44Q0dMNJctPmcxy/k0JvKY5BZy0qZhnwKb1B14=;
-        b=KTcxnj9bx2VR6c7aNwLu9n4e85d335KWBg8BAFOqCTkdrzr1+nGIcVWeydMzr3ppaq
-         6aJ9YYaUr7Gt1GDW3pBQ4VRfiQxNY0eVnrtKRvGTujgA2dC0lYaS7IbcHg1bQeKYsDot
-         Td96kOWIDFH4nTmy0yRfkfjpAZuHL86M/rMHNq3WK5ivbGKegPADgslOMe/YQ8oAJglt
-         Nh+s3KueBDZhEWovfmJCIPRtsUWjP994uM6muBUep0YxzkeIZ8RgWwFrUKLi0AbnnVZ9
-         rJK4DYtJAnUfxLYe5v0U8BDYUKa8KrPN8tntm6YybrhiMhWXhP0jEiGyjyBfmxw6h0Qc
-         xwmQ==
-X-Gm-Message-State: APuU4Z+gALC+k6QIXGcwM8xyrMpG9+K/+hkzlwRcyeyupgSAkUZjrSYV
-	jwETQGvw2TvisXO/WuQispBu39Ip/hhgbhOL/8IpDFZXQ/iUoI0niFwbHtFIag==
-X-Gm-Gg: AYBFou2yx9Qa4piRXdkuDuMbLP6V96tgOIJt0W4Q89NyOAlaW4HD+7uMgj+85w5yE4c
-	UCyuecA773WQHTQ17m80hLpYQuhblkwj5emrIpd+RlOAn+8Hx9V+2TGPgUsmgXqOOqflQUaHqUY
-	yn95AXJq0TJ30/423T0gNXKQpKlSbsso4c2fwT8QZjusbike4enTrPr+mqpYvZzKg5fCF/HhfQ7
-	0E/jPhGOeavNj0nVze/VNWP0hxohVVNIFOzo6p6xJQdRnhsJqFjNXALSbu7A9bIS82YVeSNY+yl
-	eKgGpyRrlbeM/okUUUGZlY9Lzu6LNxq1CiqabECbaIzhFFX+Xkk2qXwHSojJHkgbIXEcpvmkgEu
-	+mv47x42CZ9QJW6tsYPIvU6SewtDxQoL/GdfoShvwTo7buI/VtTDMECIskavQ6hdo6Nq5kHQrr2
-	i/PkQVAR52oQJ1Iub41P0aVfe4d4ylbhOvy6UEmrKTk2NEsQUQlqfkQxq7od23kVGIHTxmSWGTX
-	am15XUZZbf/zmwxejC2xo+87oAgHB/uU883rAz9bT+Z/mcbW4Qq6jSdCwDfvaXsQpnyaLx5+9Yj
-	AFgxNlveCQIfqUwdxp0Cmnh6ecMxJdDAZQPOvycNvSC8abP3/EEX3YnWVz8AQDvf9FnLVX2JO+8
-	ZVTx0olsl/e50yG9NcIdqLyFyx9Q6Bu2FGoUAIhGJ62NsZhKerHGH1pdcRmZs39ZBpcfL+N0p/g
-	==
-X-Received: by 2002:a05:6a00:429b:b0:890:a995:1f61 with SMTP id d2e1a72fcca58-8bc1c78270cmr3136046b3a.15.1794415662002;
-        Wed, 11 Nov 2026 08:47:42 -0800 (PST)
+        bh=Ku5+61NmrH43QLt0wmzCbiSGhGp3CYUBVhuyVHbAy7k=;
+        b=XPCGr+xZfdxc3P4Co2ESsVV7SUwYqG7YnJ19QsiB3VR6r74YUkwc5MoGIJIpQocsLe
+         cZEuytMlLcPt9wtOiiqIM36CjCmjhd0hzf6FPRf2DQ/JLhMFnUv4lhChOXwd2H5dd8Tk
+         30H6KnbRIpwE+fagdo4mtGJy1JEG5OK+UcC7GgMQ05pv7+20dLCorYD0+h3x1m2GoL+h
+         +PGKeTofb5Esl9TikInV7spBDL9//qq5dsm/d3Uv9XQcyjo90YF76KdquKVbzQDBRhLu
+         YUxoAjLveMU8Tvv3bZ8cO0d0P0FRNwt0+rbcfc3h5kC8Xy4UIidjxR3aj9fg8WOWggMf
+         MAXw==
+X-Gm-Message-State: APuU4Z+xipejyPyEhp6U+Mjp6PXoxI/YJDkhcHr3VPMDQBpUeHKedJQA
+	vqAm8m8wWXA38wuxpmTGcX62vWiXMndTI3isrBzJpcfUlqu+vS8LPH1Wwf9e3A==
+X-Gm-Gg: AYBFou2QymQNGSVy8IQf1Fwo+oy/x7K817SwHz46P9D91KVHrMmbye7ZHp1PuAZ/leD
+	+DUwEIeNPbzKJn10AgNuhJQcF6iYfTkIDjCwo0w/Y8udGW0dR65O7X0bpCqZmAkW1UWvLncrJGl
+	bHwQf+hYyl2hEz7HPd9bXdX2OUn/yyFCiQfhw2+TVl8qLxLOGQtrUoimPq2ruletTtdhfquZRDq
+	7Eso964xkxeGK0SmyBccas36TwS0nm1GjyGHP4jiWoyT3WxGgtfnCCNMOARSDdd8MkXejry/bVx
+	oqI1hI+onoZHdl6OSebtTOMgE5KEwzsJu1lLl+XgxlyQw//egMfKZdOl+B2HfjM0fr2ivGB4GB6
+	rMSj0JfC408+87iDssjB+Iy8HI0+hTo7gz/nh4gI69q9oaqoitSqa858DCtfpLRHqbLUeT0uCif
+	RQ3szFjtw5YJIvZIcAnjzB2sD/h3dlURRgmr60aCAB8ipeXBbeShaaOCOcfhMGffOnMlT9Q5RY3
+	D9esJPcOdroPbBN8Cu6OTONPRB+FZsoMuf3rfTvsaflNMS18oRVAxNFdpjplPIELTZecMaZOnLv
+	wDvm0YtegzmemqDH/r+lcWkrNpg54BcNudXABED0u2uh3NIR1RyelyHxoZKiRi67KT2TobjyVAX
+	UaoesXwQ30/wcu+/wh+krROXolaVDLylD6AjuA020iBAuZ+jugMSR89F/udTddn7DnkQS+Gm1m9
+	fvRAQ4R4CedLWRRFcL7zof
+X-Received: by 2002:a17:90b:3911:b0:3a8:9b79:e6ea with SMTP id 98e67ed59e1d1-3b182f1b110mr3121544a91.59.1794415667953;
+        Wed, 11 Nov 2026 08:47:47 -0800 (PST)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8baab8ded4dsm2373279b3a.54.2026.11.11.08.47.41
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b197ce55c1sm35175a91.3.2026.11.11.08.47.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2026 08:47:41 -0800 (PST)
+        Wed, 11 Nov 2026 08:47:47 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v3 17/29] selftests/bpf: Test a pointer computed before its index is bounded
-Date: Wed, 11 Nov 2026 16:45:40 +0000
-Message-ID: <20261111164557.2659679-18-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v3 18/29] bpf: Promote memory behind a pointer to SCEV registers
+Date: Wed, 11 Nov 2026 16:45:41 +0000
+Message-ID: <20261111164557.2659679-19-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261111164557.2659679-1-alexei.starovoitov@gmail.com>
 References: <20261111164557.2659679-1-alexei.starovoitov@gmail.com>
@@ -104,108 +104,640 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Tests for the patch that recomputes a pointer after the jump that bounds
-its index. Since that patch a linked register of a conditional jump can be
-a pointer: an address base + the tested register + a constant on every path
-to the jump.
+A prerequisite of the removal of scalar ids. Linked registers belong to the
+frame of the jump. A scalar id also links a register to a stack slot of
+a caller, and programs depend on that:
 
-Each prog adds an index to a pointer to 64 bytes, tests the index and reads
-through the result. What loads is run.
+	struct { char *buf; u64 len; } c = { buf, 0 };
+	bpf_loop(100, append, &c, 0);
 
- - The add comes before the jump: loads.
- - Only the low 32 bits of the index are tested. Rejected.
- - A pointer to the stack instead, and the jump makes the index a constant.
-   The result points to a dynptr: loads. The add refuses the constant: the
-   pointer is left as it is. Rejected.
- - The jumps leave no value for the index, base + index is empty: the
-   pointer is left as it is. Loads with BPF_F_TEST_REG_INVARIANTS.
- - base + index at a loop header: the add is at the end of an iteration,
-   the jump at the header. Negative tests: it holds at loop entry only, on
-   the backedge only.
- - In a prog with an arena 'r1 += r2' is trusted once the main pass has
-   verified it without an arena pointer (prevent_zext): loads.
+	static long append(u64 i, void *ctx)
+	{
+		if (c->len > 63)
+			return 1;
+		n = bpf_get_prandom_u32();
+		c->buf[c->len] = n;
+		c->len++;
+		return 0;
+	}
 
-The test with an arena is in verifier_arena.c, the others in
-verifier_scev.c.
+c is on the stack of the caller. The compiler loads c->len again after the
+call. The first load gives the register the id of the stack slot, so the
+jump refines both. Without ids the second load gets the old range:
+
+  R2 unbounded memory access, make sure to bounds check any such access
+
+A program that builds a file path in a bpf_loop() callback has this shape.
+So has a clamp in a static subprog, 'if (b->len > 63) b->len = 0;'.
+
+A stack slot is memory that scev.c promotes to a register: a spill defines
+it, a join point has a phi, an insn that may write is a may-def. Do the
+same behind other pointers. struct env gets 16 more SCEV registers, memory
+locations. The expression of its address names a location:
+
+  29: r6 = r2
+  30: r1 = *(u64 *)(r6 + 8)       r1 is %r1.30, mem0=*(+ r2 8) is %r1.30
+  31: if r1 > 63 goto ..          mem0 is linked to r1
+  32: call bpf_get_prandom_u32    mem0 is '?'
+
+A store defines a location like a spill. A load defines its register as
+before, and the location gets that value number (EarlyCSE, GVN). A call, an
+atomic, a nested loop and a store through a pointer are may-defs of all
+locations. A store spares those with its address base that it does not
+overlap. mk_phi(), find_linked_regs(), const_diff_reg() and the iterator
+take a location like a stack slot.
+
+Which memory it is depends on the caller, so the main pass answers that.
+bpf_scev_mem_addr() names a live register that holds the address,
+scev_mem_to_slot() reads it in the state at the jump. If it points to the
+stack of a caller, refine_linked_regs() goes on with that frame and slot.
+
+Why it is sound:
+- No expression of a register depends on memory: what is not stack can
+  change between two loads. Loop summaries and links between registers
+  stay as they are.
+- 'f(&c, &c)' makes two names for one memory. A store through one address
+  base forgets the locations of all others.
+- A store through r10 is no may-def: no slot of the frame of the jump is
+  taken.
+- Nothing is kept in a state, and only what is live is read there.
+
+Why 16: a location is dead once no live register holds its value, no jump
+can link it any more. Its SCEV register is reused. In the programs of
+Tetragon, Tracee, Falco and the Datadog agent at most 15 are alive at
+a time, while one subprog loads and stores at more than 100 addresses.
+
+Not found: no live register holds the address at the jump, as in
+'c->n = x; if (x >= 16) return -1; return 0;' and in 'if (w->c->n > 63)'.
+A value number of a loop means nothing outside: no location is tracked at
+a header or across a nested loop. Liveness does not follow a pointer to
+the stack through callx: no location is tracked in a subprog that is only
+called through a function pointer.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- .../selftests/bpf/progs/verifier_arena.c      |  3 ++
- .../selftests/bpf/progs/verifier_scev.c       | 41 +++++++++++++++++++
- 2 files changed, 44 insertions(+)
+ include/linux/bpf_verifier.h |   2 +
+ kernel/bpf/scev.c            | 265 +++++++++++++++++++++++++++++++----
+ kernel/bpf/verifier.c        |  43 +++++-
+ 3 files changed, 281 insertions(+), 29 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
-index bf50413f6c08..3931a1d9b6da 100644
---- a/tools/testing/selftests/bpf/progs/verifier_arena.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
-@@ -663,6 +663,9 @@ ARENA_LINKED(arena_ptr_plus_constant, __failure,
- ARENA_LINKED(arena_ptr_plus_constant_on_two_paths, __failure,
- 	"if r8 == 0 goto 1f; r3 += 1; goto 2f; 1: r3 += 1; 2: r8 += 1; r3 = le64 r3; r7 = le64 r7;"
- 	"r2 = 0xffffffff ll; if r7 != r2 goto out_%=; r3 >>= 32; r3 -= 1; r1 = r6; r1 += r3;")
-+/* 'r1 += r2' was verified without a pointer to arena: it stays ALU64 */
-+ARENA_LINKED(index_tested_after_the_add, __success __retval(0),
-+	"r2 = r8; r2 &= 255; r1 = r6; r1 += r2; if r2 > 63 goto out_%=; r0 = *(u8 *)(r6 + 0);")
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 11025ed77a7f..5a6bb40310f2 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -2228,6 +2228,8 @@ int bpf_scev_jump_counts(struct bpf_verifier_env *env, int header, int n, bool t
+ bool bpf_scev_next_linked_reg(struct bpf_verifier_env *env, int insn_idx, u32 regno, u32 *pos,
+ 			      u32 *linked_regno, u32 *fill_off, int *base_regno, s64 *delta,
+ 			      u32 *bits);
++bool bpf_scev_mem_addr(struct bpf_verifier_env *env, int insn_idx, u32 regno, u32 *base_regno,
++		       s64 *off);
+ bool bpf_is_widenable_reg_type(const struct bpf_reg_state *reg);
+ bool bpf_scev_in_slice_slots(struct bpf_verifier_env *env, int off, u32 size, bool fixed_off);
  
- SEC("syscall")
- __description("arena: a number is not an address in arena")
-diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
-index bf526ff1b858..0659ed1bab41 100644
---- a/tools/testing/selftests/bpf/progs/verifier_scev.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
-@@ -3372,12 +3372,53 @@ __naked void name(void)								\
- #define LINKED(name, expect, body)	LINKED_SEC("socket", name, expect, body)
+diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
+index 67ce4b3f6401..b8a2ed49a0dc 100644
+--- a/kernel/bpf/scev.c
++++ b/kernel/bpf/scev.c
+@@ -12,6 +12,9 @@
+ #include <linux/overflow.h>
  
- #define VALID	__success __retval(0)
-+#define MAP_OOB	__failure __msg("invalid access to map value")
- #define UNBOUND	__failure __msg("unbounded min value")
+ #define REGS_NUM BPF_SCEV_REGS_NUM
++/* The SCEV registers of an env: r0 - r10, the stack slots and memory locations, see struct env */
++#define MEM_REGS_NUM 16
++#define ENV_REGS_NUM (REGS_NUM + MEM_REGS_NUM)
+ #define UNKNOWN_EXPR_ID 0
+ #define OPAQUE_EXPR_ID  1
+ /* (REG r). UNKNOWN, OPAQUE and (REG r) have fixed ids and are not in the hash table. */
+@@ -82,7 +85,7 @@ struct expr_def {
+ 	u32 idx:21;
+ };
+ /* def.reg of the phi of two bases, see mk_phi() */
+-#define BASE_REG REGS_NUM
++#define BASE_REG ENV_REGS_NUM
+ static_assert(BASE_REG < 1 << 9 && BPF_COMPLEXITY_LIMIT_INSNS <= 1 << 21);
  
- /* r3 is the address in r1 as a scalar. It does not bound the offset of r1. */
- LINKED(pointer_is_not_scalar, __failure,
- 	"r7 &= 127; r1 = r6; r1 += r7; r3 = r1; r3 = le64 r3; if r3 < 64 goto out_%=; r1 += -64;")
+ static const struct expr_def no_def;
+@@ -113,14 +116,31 @@ struct expr {
+ 
+ struct env {
+ 	bool empty;
+-	u32 reg2expr[REGS_NUM];
++	u32 reg2expr[ENV_REGS_NUM];
+ 	u32 reg2scev[REGS_NUM];
++	/*
++	 * Register promotion of memory that is not behind r10. The SCEV register REGS_NUM + i is
++	 * the memory at the address mem_addr[i], a value number of this env. 0: not in use.
++	 * - A store through a pointer defines it like a spill defines a stack slot.
++	 * - A load defines its register as before, and the memory gets that value number: it holds
++	 *   what a store of the register would leave. No expression of a register depends on
++	 *   memory, which is private only if it is stack. That is not known here.
++	 * - A join point has a phi. An insn that may write is a may-def, see forget_mem_regs().
++	 * - A store through r10 is not: the main pass takes the stack of a caller only.
++	 * A value number of a loop means nothing in the enclosing loop: no memory is tracked at
++	 * a header, a nested loop is a may-def.
++	 */
++	u32 mem_addr[MEM_REGS_NUM];
+ };
+ 
+-/* A SCEV register and the id of its expression before a conditional jump */
++/*
++ * A SCEV register and the id of its expression before a conditional jump. 'addr' is mem_addr[] of
++ * a memory location.
++ */
+ struct scev_linked_reg {
+ 	u32 reg;
+ 	u32 id;
++	u32 addr;
+ };
+ 
+ struct insn_envs {
+@@ -253,7 +273,7 @@ static bool expr_is_vn(struct scev *scev, struct expr *e)
+ 	 * comes from a call that may write to the slot.
+ 	 */
+ 	if (e->def.set)
+-		return reg < MAX_BPF_REG || reg == BASE_REG ||
++		return reg < MAX_BPF_REG || reg >= REGS_NUM ||
+ 		       !test_bit(reg - MAX_BPF_REG, scev->slice_slots);
+ 	switch (e->op) {
+ 	case UNKNOWN:
+@@ -539,8 +559,10 @@ static void log_reg(struct bpf_verifier_env *env, u32 reg)
+ {
+ 	if (reg < MAX_BPF_REG)
+ 		bpf_log(&env->log, "r%d", reg);
+-	else
++	else if (reg < REGS_NUM)
+ 		bpf_log(&env->log, "*fp%d", (MAX_BPF_REG - reg - 1) * 8);
++	else
++		bpf_log(&env->log, "mem%d", reg - REGS_NUM);
+ }
+ 
+ static const char *op_str(u32 op)
+@@ -695,8 +717,10 @@ static void log_def(struct bpf_verifier_env *env, struct expr_def def)
+ 		return;
+ 	if (def.reg < MAX_BPF_REG)
+ 		bpf_log(&env->log, "%%r%d.%d", def.reg, def.idx);
+-	else
++	else if (def.reg < REGS_NUM)
+ 		bpf_log(&env->log, "%%fp%d.%d", (MAX_BPF_REG - def.reg - 1) * 8, def.idx);
++	else
++		bpf_log(&env->log, "%%mem%d.%d", def.reg - REGS_NUM, def.idx);
+ }
+ 
+ static void log_expr(struct bpf_verifier_env *env, u32 id)
+@@ -775,6 +799,9 @@ static bool reg_alive_at(struct bpf_verifier_env *env, u32 reg, u32 insn_idx)
+ 	struct bpf_insn_aux_data *aux = env->insn_aux_data;
+ 	u16 live_regs = aux[insn_idx].live_regs_before;
+ 
++	/* memory */
++	if (reg >= REGS_NUM)
++		return true;
+ 	return reg < MAX_BPF_REG
+ 	       ? (BIT(reg) & live_regs)
+ 	       : test_bit(reg - MAX_BPF_REG, aux[insn_idx].live_stack_before);
+@@ -1040,6 +1067,129 @@ static int maybe_load_fp(struct scev *scev, struct env *e, struct bpf_insn *insn
+ 	return replace_reg(scev, e, insn->dst_reg, id);
+ }
+ 
++static bool const_diff(struct bpf_verifier_env *env, int h, u32 id_a, u32 id_b, s64 *delta,
++		       u32 *bits);
++
++/* The memory location of @e at the address @addr, 0: one that is not in use. MEM_REGS_NUM: none. */
++static u32 find_mem_reg(const struct env *e, u32 addr)
++{
++	u32 i;
++
++	for (i = 0; i < MEM_REGS_NUM && e->mem_addr[i] != addr; i++)
++		;
++	return i;
++}
++
++static void forget_mem_reg(struct env *e, u32 i)
++{
++	e->mem_addr[i] = 0;
++	e->reg2expr[REGS_NUM + i] = UNKNOWN_EXPR_ID;
++}
++
++/*
++ * The insn may write @size bytes at the address @addr, 0: anywhere. A may-def of all memory
++ * locations but those that have the same address base and don't overlap. Two bases can be two names
++ * of one memory, 'f(&c, &c)'.
++ */
++static void forget_mem_regs(struct bpf_verifier_env *env, struct env *e, u32 addr, u32 size)
++{
++	u32 i, x, bits;
++	s64 delta;
++
++	for (i = 0; i < MEM_REGS_NUM; i++) {
++		/* the caller defines it */
++		if (e->mem_addr[i] == addr)
++			continue;
++		if (addr && const_diff(env, -1, addr, e->mem_addr[i], &delta, &bits) &&
++		    bits == 64 && (delta >= size ||
++		    delta + expr_spill_size(env->scev, e->reg2expr[REGS_NUM + i], &x) <= 0))
++			continue;
++		forget_mem_reg(e, i);
++	}
++}
++
++/*
++ * A jump tests a register, and a load makes a new value number. So a memory location is dead once
++ * no register that is live after the insn at @idx has the base of its value: no jump is going to
++ * link it.
++ */
++static void forget_dead_mem_regs(struct bpf_verifier_env *env, struct env *e, int idx)
++{
++	struct expr *exprs = env->scev->exprs;
++	u32 i, r, base;
++
++	for (i = 0; i < MEM_REGS_NUM; i++) {
++		base = exprs[e->reg2expr[REGS_NUM + i]].base;
++		for (r = 0; r < REGS_NUM; r++)
++			if (exprs[e->reg2expr[r]].base == base && reg_alive_at(env, r, idx + 1))
++				break;
++		if (r == REGS_NUM)
++			forget_mem_reg(e, i);
++	}
++}
++
++/*
++ * The address of the load or store at @idx through @reg, 0: the memory is not tracked. r10 has the
++ * stack slots, r11 and r12 are no SCEV registers. The main pass takes nothing but stack.
++ */
++static int mk_mem_addr(struct bpf_verifier_env *env, struct env *e, int idx, u32 reg)
++{
++	struct scev *scev = env->scev;
++
++	if (reg >= BPF_REG_FP || !(env->insn_aux_data[idx].stack_ptrs & BIT(reg)) ||
++	    !scev->exprs[e->reg2expr[reg]].is_vn)
++		return 0;
++	return expr2(scev, BPF_ADD, e->reg2expr[reg], imm_expr(scev, env->prog->insnsi[idx].off));
++}
++
++/*
++ * The insn at @idx stored the low bytes of @id at the address @addr, or it loaded them from there.
++ * The location takes a SCEV register that is not in use, or that of a dead one.
++ */
++static int replace_mem_reg(struct bpf_verifier_env *env, struct env *e, int idx, int addr, int id)
++{
++	u32 i;
++
++	if (addr <= 0)
++		return addr;
++	i = find_mem_reg(e, addr);
++	if (i == MEM_REGS_NUM)
++		i = find_mem_reg(e, 0);
++	if (i == MEM_REGS_NUM) {
++		forget_dead_mem_regs(env, e, idx);
++		i = find_mem_reg(e, 0);
++	}
++	if (i == MEM_REGS_NUM)
++		return 0;
++	e->mem_addr[i] = addr;
++	return replace_reg(env->scev, e, REGS_NUM + i,
++			   mk_spill(env->scev, BPF_SIZE(env->prog->insnsi[idx].code), id));
++}
++
++static int load_mem(struct bpf_verifier_env *env, struct env *e, int idx)
++{
++	struct bpf_insn *insn = &env->prog->insnsi[idx];
++	/* the insn defines dst_reg, which can be src_reg */
++	int addr = mk_mem_addr(env, e, idx, insn->src_reg);
++
++	return maybe_load_fp(env->scev, e, insn, idx) ?:
++	       replace_mem_reg(env, e, idx, addr, e->reg2expr[insn->dst_reg]);
++}
++
++static int store_mem(struct bpf_verifier_env *env, struct env *e, int idx, int id)
++{
++	struct bpf_insn *insn = &env->prog->insnsi[idx];
++	int addr;
++
++	if (insn->dst_reg == BPF_REG_FP)
++		return maybe_store_fp(env->scev, e, insn, idx, id);
++	addr = mk_mem_addr(env, e, idx, insn->dst_reg);
++	if (addr < 0)
++		return addr;
++	forget_mem_regs(env, e, addr, bpf_size_to_bytes(BPF_SIZE(insn->code)));
++	return replace_mem_reg(env, e, idx, addr, id);
++}
++
+ /*
+  * The low 32 bits of a + b depend on the low 32 bits of a and b only: 'w1 += w2' is
+  * (zext32 (+ a b)). That doesn't hold for a right shift and for a division. Their operands are zero
+@@ -1226,19 +1376,19 @@ static int transfer(struct bpf_verifier_env *env, struct env *e, int idx)
+ 				imm = env->insn_aux_data[idx + 1].const_reg_vals[dst];
+ 				return replace_reg(scev, e, dst, imm_expr(scev, imm));
+ 			}
+-			return maybe_load_fp(scev, e, insn, idx);
++			return load_mem(env, e, idx);
+ 		default:
+ 			goto mark_dst_unknown;
+ 		}
+ 	case BPF_STX:
+ 		switch (mode) {
+ 		case BPF_MEM:
+-			return maybe_store_fp(scev, e, insn, idx, reg2expr[src]);
++			return store_mem(env, e, idx, reg2expr[src]);
+ 		case BPF_ATOMIC:
+ 			if (insn->imm == BPF_LOAD_ACQ)
+ 				return maybe_load_fp(scev, e, insn, idx);
+ 			if (insn->imm == BPF_STORE_REL) {
+-				return maybe_store_fp(scev, e, insn, idx, reg2expr[src]);
++				return store_mem(env, e, idx, reg2expr[src]);
+ 			}
+ 			/*
+ 			 * verifier does not track other atomic ops precisely,
+@@ -1249,6 +1399,8 @@ static int transfer(struct bpf_verifier_env *env, struct env *e, int idx)
+ 						 bpf_size_to_bytes(BPF_SIZE(insn->code)));
+ 				if (id < 0)
+ 					return id;
++			} else {
++				forget_mem_regs(env, e, 0, 0);
+ 			}
+ 			if (insn->imm == BPF_CMPXCHG)
+ 				return forget_reg(scev, e, BPF_REG_0, OPAQUE_EXPR_ID, idx);
+@@ -1258,16 +1410,14 @@ static int transfer(struct bpf_verifier_env *env, struct env *e, int idx)
+ 		}
+ 		break;
+ 	case BPF_ST:
+-		if (insn->dst_reg == BPF_REG_FP) {
+-			id = imm_expr(scev, insn->imm);
+-			if (id < 0)
+-				return id;
+-			return maybe_store_fp(scev, e, insn, idx, id);
+-		}
+-		break;
++		id = imm_expr(scev, insn->imm);
++		if (id < 0)
++			return id;
++		return store_mem(env, e, idx, id);
+ 	case BPF_JMP:
+ 	case BPF_JMP32:
+ 		if (opcode == BPF_CALL) {
++			forget_mem_regs(env, e, 0, 0);
+ 			id = forget_call_regs(env, e, idx);
+ 			if (id < 0)
+ 				return id;
+@@ -1299,6 +1449,7 @@ static int transfer(struct bpf_verifier_env *env, struct env *e, int idx)
+ 		/* unknown instruction, nuke state */
+ 		for (i = 0; i < REGS_NUM; i++)
+ 			reg2expr[i] = UNKNOWN_EXPR_ID;
++		forget_mem_regs(env, e, 0, 0);
+ 		break;
+ 	}
+ 	return 0;
+@@ -1456,7 +1607,7 @@ static int mk_phi(struct bpf_verifier_env *env, u32 a, u32 b, int idx, u32 reg)
+ static int join(struct bpf_verifier_env *env, struct env *acc, struct env *cur, int idx)
+ {
+ 	struct scev *scev = env->scev;
+-	int i, id;
++	int i, j, id;
+ 
+ 	if (acc->empty) {
+ 		memcpy(acc, cur, sizeof(*acc));
+@@ -1464,11 +1615,17 @@ static int join(struct bpf_verifier_env *env, struct env *acc, struct env *cur,
+ 		return 0;
+ 	}
+ 
+-	for (i = 0; i < REGS_NUM; i++) {
+-		if (!same_exprs(scev, acc->reg2expr[i], cur->reg2expr[i])) {
++	for (i = 0; i < ENV_REGS_NUM; i++) {
++		/* the address names a memory location. It has a phi if all edges track it. */
++		j = i < REGS_NUM ? i : REGS_NUM + find_mem_reg(cur, acc->mem_addr[i - REGS_NUM]);
++		if (j == ENV_REGS_NUM) {
++			forget_mem_reg(acc, i - REGS_NUM);
++			continue;
++		}
++		if (!same_exprs(scev, acc->reg2expr[i], cur->reg2expr[j])) {
+ 			/* no phi for a dead register: pruned SSA */
+ 			id = reg_alive_at(env, i, idx) ?
+-			     mk_phi(env, acc->reg2expr[i], cur->reg2expr[i], idx, i) :
++			     mk_phi(env, acc->reg2expr[i], cur->reg2expr[j], idx, i) :
+ 			     UNKNOWN_EXPR_ID;
+ 			if (id < 0)
+ 				return id;
+@@ -1499,6 +1656,7 @@ static int forget_non_invariants(struct bpf_verifier_env *env, struct env *acc,
+ 	int i, idx, h, err;
+ 
+ 	acc->empty = false;
++	forget_mem_regs(env, acc, 0, 0);
+ 	forget_modified_regs(scev, acc, find_header_env(scev, header));
+ 	for (i = 0; i < loop->exits_cnt; i++) {
+ 		idx = loop->exits[i].from;
+@@ -1616,7 +1774,7 @@ static void log_env_changes(struct bpf_verifier_env *env, enum changes_at at,
+ 	len = log->end_pos - null_pos;
+ 	bpf_log(log, "%*s", max(37 - (int)len, 1), " ");
+ 	bpf_log(log, " ; ");
+-	for (r = 0; r < REGS_NUM; r++) {
++	for (r = 0; r < ENV_REGS_NUM; r++) {
+ 		old_id = old->reg2expr[r];
+ 		new_id = new->reg2expr[r];
+ 		if (at == LOG_AT_TRANSFER && !reg_alive_at_succ(env, r, insn_idx))
+@@ -1631,6 +1789,10 @@ static void log_env_changes(struct bpf_verifier_env *env, enum changes_at at,
+ 		if (any_changes)
+ 			bpf_log(log, ", ");
+ 		log_reg(env, r);
++		if (r >= REGS_NUM && new->mem_addr[r - REGS_NUM]) {
++			bpf_log(log, "=*");
++			log_expr(env, new->mem_addr[r - REGS_NUM]);
++		}
+ 		bpf_log(log, " ");
+ 		log_expr(env, old_id);
+ 		bpf_log(log, " -> ");
+@@ -2036,6 +2198,19 @@ static bool const_diff_reg(struct bpf_verifier_env *env, int h, u32 id_a, u32 re
+ 	return true;
+ }
+ 
++/* The first of the registers and stack slots @live that holds @id + a constant. REGS_NUM: none. */
++static u32 find_leader(struct bpf_verifier_env *env, struct env *e, int h,
++		       const unsigned long *live, u32 id)
++{
++	u32 r, bits;
++	s64 delta;
++
++	for_each_set_bit(r, live, REGS_NUM)
++		if (const_diff(env, h, e->reg2expr[r], id, &delta, &bits))
++			break;
++	return r;
++}
++
+ /*
+  *	n = bpf_get_stack(..); m = n; if (n < 0) ..; use(m);
+  * The main pass refines the registers that the conditional jump at @idx tests. Find the live SCEV
+@@ -2051,8 +2226,8 @@ static int find_linked_regs(struct bpf_verifier_env *env, struct env *e, int h,
+ 	struct scev *scev = env->scev;
+ 	u32 r, q, other, id, fill_off, base, base_dst, base_src, bits, cap, tested = 0;
+ 	u32 first = scev->linked_cnt;
+-	DECLARE_BITMAP(live, REGS_NUM) = {};
+-	DECLARE_BITMAP(found, REGS_NUM) = {};
++	DECLARE_BITMAP(live, ENV_REGS_NUM) = {};
++	DECLARE_BITMAP(found, ENV_REGS_NUM) = {};
+ 	void *tmp;
+ 	s64 delta;
+ 
+@@ -2063,9 +2238,12 @@ static int find_linked_regs(struct bpf_verifier_env *env, struct env *e, int h,
+ 	bitmap_copy(live, aux->live_stack_before, MAX_BPF_STACK_SLOTS);
+ 	bitmap_shift_left(live, live, MAX_BPF_REG, REGS_NUM);
+ 	live[0] |= aux->live_regs_before;
++	for (r = REGS_NUM; r < ENV_REGS_NUM; r++)
++		if (e->mem_addr[r - REGS_NUM])
++			__set_bit(r, live);
+ 	split_const_offset(env, dst, &base_dst, &delta, &bits);
+ 	split_const_offset(env, src, &base_src, &delta, &bits);
+-	for_each_set_bit(r, live, REGS_NUM) {
++	for_each_set_bit(r, live, ENV_REGS_NUM) {
+ 		id = e->reg2expr[r];
+ 		/* most are not linked */
+ 		split_const_offset(env, id, &base, &delta, &bits);
+@@ -2089,7 +2267,17 @@ static int find_linked_regs(struct bpf_verifier_env *env, struct env *e, int h,
+ 			break;
+ 		}
+ 	}
+-	for_each_set_bit(r, found, REGS_NUM) {
++	/* the main pass finds memory by a live register that holds its address */
++	for (r = REGS_NUM; r < ENV_REGS_NUM; r++) {
++		if (!test_bit(r, found))
++			continue;
++		q = find_leader(env, e, h, live, e->mem_addr[r - REGS_NUM]);
++		if (q < REGS_NUM)
++			__set_bit(q, found);
++		else
++			__clear_bit(r, found);
++	}
++	for_each_set_bit(r, found, ENV_REGS_NUM) {
+ 		if (scev->linked_cnt == scev->linked_cap) {
+ 			cap = max(scev->linked_cap * 2, 16);
+ 			tmp = kvrealloc(scev->linked, array_size(cap, sizeof(*scev->linked)),
+@@ -2101,6 +2289,7 @@ static int find_linked_regs(struct bpf_verifier_env *env, struct env *e, int h,
+ 		}
+ 		tested += r == insn->dst_reg || (src != dst && r == insn->src_reg);
+ 		scev->linked[scev->linked_cnt].reg = r;
++		scev->linked[scev->linked_cnt].addr = r < REGS_NUM ? 0 : e->mem_addr[r - REGS_NUM];
+ 		scev->linked[scev->linked_cnt++].id = e->reg2expr[r];
+ 	}
+ 	/* nothing but the tested registers */
+@@ -2127,6 +2316,7 @@ static int find_linked_regs(struct bpf_verifier_env *env, struct env *e, int h,
+  * no more links are known. Types are not known here: the caller checks them in its state.
+  * A linked register can be a pointer: *base_regno + regno + delta. *base_regno is the address base,
+  * as in store_base_regs. It is -1 for a link without a base.
++ * BPF_SCEV_REGS_NUM and above is a memory location, see struct env and bpf_scev_mem_addr().
+  */
+ bool bpf_scev_next_linked_reg(struct bpf_verifier_env *env, int insn_idx, u32 regno, u32 *pos,
+ 			      u32 *linked_regno, u32 *fill_off, int *base_regno, s64 *delta,
+@@ -2167,6 +2357,31 @@ bool bpf_scev_next_linked_reg(struct bpf_verifier_env *env, int insn_idx, u32 re
+ 	return false;
+ }
  
 +/*
-+ *	p = buf + i; if (i > 63) return 0; c = *p;
-+ * The jump bounds i. r1 is r6 + r7 and r6 is live: r1 is recomputed.
++ * The memory location @regno is a linked register of the conditional jump at @insn_idx. Its address
++ * is *@base_regno + *@off. *@base_regno is a live register or stack slot. Which memory it is
++ * depends on the state.
 + */
-+#define USE_R6	"r0 = *(u8 *)(r6 + 0);"
++bool bpf_scev_mem_addr(struct bpf_verifier_env *env, int insn_idx, u32 regno, u32 *base_regno,
++		       s64 *off)
++{
++	struct insn_envs *envs = env->scev->envs[insn_idx];
++	struct scev_linked_reg *linked = &env->scev->linked[envs->linked_first];
++	int h = bpf_loop_at_index(env, insn_idx);
++	u32 i, j, bits;
 +
-+LINKED(index_tested_after_the_add, VALID, "r1 = r6; r1 += r7; if r7 > 63 goto out_%=;" USE_R6)
-+LINKED(low_32_bits_of_the_index_tested, __failure __msg("R1 unbounded memory access"),
-+	"r2 = 0x1000000ff ll; r2 &= r8; r1 = r6; r1 += r2; w3 = w2; if r3 > 63 goto out_%=;" USE_R6)
-+/*
-+ * A dynptr at r10 - 16. r7 is r10 - 32, r1 is r7 + r8, the jump makes r8 a constant.
-+ * 'r1 += r8' refuses 0x100000010: r1 is left as it is. As an int r10 + 0xfffffff0 is r10 - 16.
-+ */
-+#define DYNPTR_AT(index)							\
-+	"r1 = r9; r2 = 0; r3 = r10; r3 += -16; call %[bpf_dynptr_from_skb];"	\
-+	"r8 >>= 1; r7 = r10; r7 += -32; r1 = r7; r1 += r8; r2 = " index " ll;"	\
-+	"if r8 != r2 goto out_%=; r2 = 0; r3 = r7; r4 = 0; call %[bpf_dynptr_slice_rdwr]; r1 = r6;"
++	for (i = 0; linked[i].reg != regno; i++)
++		if (i + 1 == envs->linked_cnt)
++			return false;
++	for (j = 0; linked[j].reg < REGS_NUM; j++) {
++		if (!const_diff(env, h, linked[j].id, linked[i].addr, off, &bits) || bits != 64)
++			continue;
++		*base_regno = linked[j].reg;
++		return true;
++	}
++	return false;
++}
 +
-+LINKED_SEC("tc", index_is_constant, VALID, DYNPTR_AT("16"))
-+LINKED_SEC("tc", index_is_constant_that_the_add_refuses,
-+	__failure __msg("dynptr has to be at a constant offset"), DYNPTR_AT("0x100000010"))
-+/* r7 is -2 or 5. Its low 2 bits are not 3: the path is infeasible, and r6 + r7 + 2 is empty. */
-+LINKED(index_is_empty, VALID __flag(BPF_F_TEST_REG_INVARIANTS),
-+	"r7 &= 1; r7 *= 7; r7 += -2; r1 = r6; r1 += r7; r1 += 2; if r7 & 1 goto l_%=; goto out_%=;"
-+	"l_%=: if r7 & 2 goto m_%=; goto out_%=; m_%=: r1 += 1;" USE_R6)
-+
-+/*
-+ *	p = buf; i = 0; do { if (i > 62) break; i = *(u16 *)p; p = buf + i; } while (i);
-+ * r1 == r6 + r2 at the header in every iteration: it holds at loop entry, the backedge preserves it
-+ */
-+#define LOOP(add)								\
-+	"l_%=: if r2 > 62 goto out_%=; r2 = *(u16 *)(r1 + 0);" add		\
-+	"if r2 != 0 goto l_%=; r1 = r6;"
-+
-+LINKED(base_plus_index_at_loop_header, VALID, "r1 = r6; r2 = 0;" LOOP("r1 = r6; r1 += r2;"))
-+LINKED(base_plus_index_at_loop_entry_only, MAP_OOB,
-+	"r1 = r6; r2 = 0;" LOOP("r1 = r6; r1 += r2; r2 >>= 1;"))
-+LINKED(base_plus_index_on_backedge_only, MAP_OOB,
-+	"r1 = r6; r1 += r7; r2 = r8; r2 &= 255;" LOOP("r1 = r6; r1 += r2;"))
-+
- LINKED(sign_extension_that_fits, VALID, "r2 = (s8)r8; if r8 > 63 goto out_%=; r1 = r6; r1 += r2;")
+ /*
+  * @cur_header and @first are a loop header. Or -1 and the first insn of a subprog: the subprog is
+  * the outermost loop, which runs once. (REG r) is the entry value of r, the loops in it are single
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 03c9a8becdde..09847c43d84a 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -19741,6 +19741,36 @@ static struct bpf_reg_state *scev_reg_for_fill(struct bpf_func_state *frame, u32
+ 	return &ss->spilled_ptr;
+ }
  
- /* 'int n' in three registers. 'if w3 s> 63' refines only 32-bit ranges: those of the copies too. */
++/*
++ * Scalar evolution promoted memory to the SCEV register *@regno, see struct env there, and names
++ * its address at the jump at @idx. This state knows which memory it is: the frame that is returned,
++ * its stack slot *@regno, *@fill_off counts from the start of the slot. The stack of a caller only:
++ * other memory has no state, and a store through r10 is no def of memory for scalar evolution.
++ * What holds the address is live: it was compared all the way from its def. Every place that
++ * compares, joins or drops states cleans them of what is dead first, see flow_arrive().
++ */
++static struct bpf_func_state *scev_mem_to_slot(struct bpf_verifier_env *env,
++					       struct bpf_verifier_state *vstate, int idx,
++					       u32 *regno, u32 *fill_off)
++{
++	struct bpf_reg_state *ptr;
++	u32 base_regno;
++	s64 addr;
++
++	if (!bpf_scev_mem_addr(env, idx, *regno, &base_regno, &addr))
++		return NULL;
++	ptr = scev_reg_for_fill(vstate->frame[vstate->curframe], base_regno, 0, 64);
++	if (!ptr || ptr->type != PTR_TO_STACK || !tnum_is_const(ptr->var_off) ||
++	    ptr->frameno >= vstate->curframe)
++		return NULL;
++	addr += ptr->var_off.value + *fill_off;
++	if (addr >= 0 || addr < -MAX_BPF_STACK_JIT)
++		return NULL;
++	*regno = MAX_BPF_REG + bpf_get_spi(addr);
++	*fill_off = addr & (BPF_REG_SIZE - 1);
++	return vstate->frame[ptr->frameno];
++}
++
+ /*
+  *	p = buf + i; if (i > 100) return 0; *p = 0;
+  * p is @dst_reg, x is @ptr_reg, i is @off_reg. Scalar evolution says that p == x + i. So the insns
+@@ -19792,7 +19822,7 @@ static bool recompute_ptr(struct bpf_verifier_env *env, struct bpf_reg_state *ds
+ static void refine_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_state *vstate,
+ 			       int idx, u32 regno)
+ {
+-	struct bpf_func_state *frame = vstate->frame[vstate->curframe];
++	struct bpf_func_state *frame = vstate->frame[vstate->curframe], *linked_frame;
+ 	struct bpf_reg_state *reg, *base_reg, implied, saved;
+ 	u32 pos, linked_regno, fill_off, bits;
+ 	int base_regno;
+@@ -19804,7 +19834,12 @@ static void refine_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier
+ 	     bpf_scev_next_linked_reg(env, idx, regno, &pos, &linked_regno, &fill_off, &base_regno,
+ 				      &delta, &bits);
+ 	     pos++) {
+-		reg = scev_reg_for_fill(frame, linked_regno, fill_off, bits);
++		linked_frame = frame;
++		if (linked_regno >= BPF_SCEV_REGS_NUM)
++			linked_frame = scev_mem_to_slot(env, vstate, idx, &linked_regno, &fill_off);
++		if (!linked_frame)
++			continue;
++		reg = scev_reg_for_fill(linked_frame, linked_regno, fill_off, bits);
+ 		/*
+ 		 * The other half-slot of a 64-bit spill is dead: __clean_func_state() left
+ 		 * a 32-bit spill, the low 32 bits of the value.
+@@ -19812,7 +19847,7 @@ static void refine_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier
+ 		if (!reg && bits == 64 &&
+ 		    bpf_stack_narrow_access_ok(fill_off, BPF_REG_SIZE / 2, BPF_REG_SIZE)) {
+ 			bits = 32;
+-			reg = scev_reg_for_fill(frame, linked_regno, fill_off, bits);
++			reg = scev_reg_for_fill(linked_frame, linked_regno, fill_off, bits);
+ 		}
+ 		if (!reg || (base_regno < 0 && reg->type != SCALAR_VALUE))
+ 			continue;
+@@ -19850,7 +19885,7 @@ static void refine_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier
+ scratch:
+ 		if (linked_regno < MAX_BPF_REG)
+ 			mark_reg_scratched(env, linked_regno);
+-		else
++		else if (linked_frame == frame)
+ 			mark_stack_slot_scratched(env, linked_regno - MAX_BPF_REG);
+ 	}
+ }
 -- 
 2.55.0
 
