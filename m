@@ -1,83 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.73
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.138
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794401880;
-	b=Oms9bmyVE8yf6rNVTlK/Btu4l/F0YsnjHf9KgRYo7/1h5DlifWuqH0Nzqp9KTsqSEVsL
-	 iHQvAiC5SMtFzNpBYY1L7JVMMjUNDSjiUumasdfQ05KKXxmZcyMyp1+IaEGQtqGpU420B
-	 xGh8LqQwUxTVXSpCfNePk8I8JrLTWTz3/eNCljeHu49kS7hbkjyU5xQY2zN5bf5HXeroB
-	 YGwBDuKNIzTeL/1EwdI0ZevqeR9zWCOneCjiWUoyYp+W4swuO86d+8LiyQiNowQwDwWFf
-	 pwEFl2/avuiaP0n0QsmuhlXCLUWRDj6Gah37tc+cS/qaFsy3m6L0G1MffygkE2NzFqg==
+	t=1794401882;
+	b=Xn8ZZX5jneY8YrTwKol5qeIF8WeqRksr/TlKLD573g9M8RjTIUIyn1CWlzJCmwvbzcGo
+	 vlurhW7aOVXMl7y0eaZWON6pd9/a3gFVQtIil7l0CwQM+zd7XPKZOFCemhpn/0047zzs7
+	 62rCR11IzfGI3JbYtB/+P4yR/tWlQg7gwHHfCgZY8h9mnYKCANX3D9ny2Qlwg1STtY6Lt
+	 0jYFe50IRC/A8uT7aVANYi6eEJ6SuzwJ3J9wPxVtJ+ag/TzPmuZdY8FmACxtZYPgrvBPU
+	 KOG7BJNM89+WGQSK1QSfHyKK38RsKuSBRGXrJA/Xz/mAsMzzdBCiDId4WqvpurwfS5w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794401880;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794401882;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
-	bh=PcsKT/4svhkOIFNICex6wK+digTaPoxSwFhPeZgjuAc=;
-	b=jcCAeQEPwWWHOpHfosciU8nC0Hwkhmw9bjHQhB9cg1GeSJ5boQXUgeW5xfwEVQTwSEz8
-	 SodWMvBFuNLU+B6TThljmck3i2fl6xyQGKa7GaDfkLrqvZBdW+21SF4KE7lXyMlXQgRj+
-	 CO65lcpV2mg1/3HWzvPpuCe7248QMPQERWoo7RqFY7gfbsBePOUZ/nxBgVkt1ZzoWzCux
-	 J74j0/tWmHAtd2bnNAJ2uPevjOVe8T5LZj3K8GQ6M01YpWg5fNIRgGeDcKI06okwOInE+
-	 6HYEzD5KgwjKDnL+8GctdHo3z19uE8Dj21qwhQ/z1dHTldx560MC807b/ajnqIbqz6A==
+	bh=F219AnXNjFJUcGQ35OTPpP5OaDaLUNr1OxO72UQdz88=;
+	b=CdE9Qcw779w3fH0Yt1UlCEXVYSZ9PMm9XhgpFZ2NoHInM83MYQVoGH3gl7e87VUEYfH8
+	 cDNP7939k/40Ok6nYLRDhTL74Y6RNlvBbvjc7/ANgrznw04gqcQNEs5ALmQxdBKQt4JvA
+	 t9ZNY1oLoO82mol3YlB1b6jNyMnukdcfmjwAWvCurMDjETWNzOagAUAjOZ+dvLGI+OZN4
+	 78i8R08bu3HCGZP69219vyn3U5JEvCfOPnhpFAioz7IKfPdsHgJKv0JqV74rsgh7H0ln0
+	 xMgd1IuvbHo0QU762tjp5qkVc10dPiZ1gUI6lFfuESJBy9YhuYLHc3iPuXiBnYlrwVg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mzPO5RLf;
-	arc=none smtp.remote-ip=74.125.225.73
-Received: from mail-wr2-f9.google.com (mail-wr2-f9.google.com [74.125.225.73])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gpVpAO5O;
+	arc=none smtp.remote-ip=74.125.225.138
+Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B9B2606A324
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 12:58:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2B9B2606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF79F606A324
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 12:58:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BF79F606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mzPO5RLf
-Received: by mail-wr2-f9.google.com with SMTP id ffacd0b85a97d-490a95c2353so241596f8f.0
-        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 04:57:59 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gpVpAO5O
+Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-4b80834ce1aso7466585e9.1
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 04:58:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794401878; x=1795006678; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794401880; x=1795006680; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=PcsKT/4svhkOIFNICex6wK+digTaPoxSwFhPeZgjuAc=;
-        b=mzPO5RLf+Hrh6zEcQctrMJdi8gZOIEJDXjvaylDonS6wyz6DYkI75ZTIcZis+9U9EQ
-         9y3O8ZHrFmPWWhOV96Ra6GlTUFJ5AHwtmE/ySJojHIOqJRnqvtrGri+4JX7nK+uCnkLy
-         F44UfEUuzmoF4oTXzIQn3B4o0VKHjuJU4i09Y4Y+YTgj0zinkc/iD1KiEiHNkM2ugPLy
-         /22hgs8doef/Px5gcZL2QLw8Dkcb/DJBvz6nVm+XofphKA4XGELOh8eEfD8DQ5ZDuig8
-         +J462nozQm33VLC9YQ4kw6l+KhTJgdoet5CByludvuktIlgoUzZmdV1PffdRFDP6p9Dy
-         YFGQ==
+        bh=F219AnXNjFJUcGQ35OTPpP5OaDaLUNr1OxO72UQdz88=;
+        b=gpVpAO5Oqlv24oVqol1uo+yDxeD3X7UMK79bDCUdvwJpMd4HF708LZMGEHOqWMu0H0
+         JGPZ3flVnjgC5GoXM2PTA9RFOM5il7rY5MEnvGDAbN9VFkuOuZoQO3AEeA3oRHTWVaK5
+         WaMLiOatjlpN9vHnDr1Rq48W88q0PiUCozqn6clLFKsybdegTtQqr7z+N7IAGSQIfvS9
+         MExl5IlOqlBMJf2viAufc2iEwFLt2c1KXBcrTgydB6YsdOGw2fWN2e74kgEVwo27BR7e
+         dmf2ekH9MgAQvZ3IgMlaZR+broPxQtJ9Ywfn43zli/OJKskFVPUj+pDWRxFSPivOQXqy
+         05oA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794401878; x=1795006678;
+        d=1e100.net; s=20260707; t=1794401880; x=1795006680;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=PcsKT/4svhkOIFNICex6wK+digTaPoxSwFhPeZgjuAc=;
-        b=k1G2F/umat+9PAh4b2n82T/ObLAlIAbEYoMgIz3n/1pOd9fIGqutyjjhUaOftLYR/u
-         JhBkYbdYb5bQnAEJGaCZ1WJQuysGm64STyfwo6tjTCcik7UY7KAEh9v5IPtbyENxBEJa
-         1DBmKWDc18yqiV5qt0v/IIWpwQHMF+Bb4eTn8faVcU3n/EuRRO8eO66aTcCtPWWKfnbL
-         +V/WmGkx4AezTqUtxgmHUAA6ET3Sq6wvSeZ0/IZGmgEsTPPO0Lkzh3WwW4g7Ozq8fQrX
-         NIHYb0Twr5VUyw/ujdDpQeQCV0gAsgi9BughH/J5dnExNp+5vtAmxwSuW1bhfpjZaHxB
-         hZ/g==
-X-Gm-Message-State: APuU4Z+dJiWXEoZ+8gzLtjjZty+7ZEyxMuM70rOIY+bWqsTNM3J01Y8Z
-	BawB6h4wxijOkusR5bjV7vse555BGUkW1qN+0CN7ISoxhb85sgFpsDE1A/uNafkHqyw=
-X-Gm-Gg: AYBFou1hX/enzNonf6J8wO2nfmDzZWSIsiovzb5PSztnSayZ8wXOcrI13s4OBBBSxTQ
-	E6K5H3jrxLJiWHmKcTnoBtYnj9tc//UIUZz9u4BDWzzeb8QBmQuDXupTNkVtuMc8l7LNfLrNNT8
-	Q4rzgEMYb9JbcxYI8GfeFVNg9uhAepHC3IO9ravwydHnsqX/CcQR9/c3xuSOtLltrazAxqCRVHq
-	Eb969zdZUBxz+M6heaMP/pZJqKOlofEheHO2AAoJAcx+J32eOCQgKiMIvV8AXtZB/h//Q0gWbgL
-	/wIOVvHhJBD22sNqdYcgA2Y5feLkhU0PQdn2Nbi7dnqxDmD4ZI0fDtGNjGTAxRmozg8zNCWb780
-	HgQoz+PlwYSOx6rYmeUliEID1qdtdrLDR9FPEwsP0qwTZgSRA2JmUTU+6URLRcRvYh+3D35e3Mm
-	nX8FsLvUyOuGopCTXFs+4uh+PQjVTUREQ0Z3umYN0OezWk6iZKCjKyHdhoh4eo9kVYaH5OIFnFY
-	WUx07BXH/JEhy/Ebo9ot1kN6O6fkclnANtgR/93ENEggAffF26DZ8POv2MwW0SHV9frbScW7O9K
-	YUL9rOR9y/cOyIYc/xSwNxHNE+shb5Zlp774E3QD2IZrZ5KDgz+bbQEOMNP0NHjXDWtH5piwWIT
-	YA5eDZd7l6s/xb1OZPdJa//wJP0kyqcPAF/6Yi/QLSnuqLVZIuAYoL3g6ruPzAYFc9L1q
-X-Received: by 2002:a5d:5f86:0:b0:48e:6669:fefb with SMTP id ffacd0b85a97d-499c8981462mr4714675f8f.22.1794401878335;
-        Wed, 11 Nov 2026 04:57:58 -0800 (PST)
+        bh=F219AnXNjFJUcGQ35OTPpP5OaDaLUNr1OxO72UQdz88=;
+        b=uKj6v4t3TuF81MSHhw1wQq0OQulw8GnRMMaWl1sZ1+0Gbq7lomuAekBXY6y9dTks1C
+         8dHquPnromC6KEYP069QnFv1ATLAJHswcoArfmc94OIJGRFFpZIgN+kCCzQ+mWx9dbSI
+         M3vejjQ/Wzjox0DsaRzCwYMNoNHppOziahXLrK97e8wPJrsgn3LA5QpJNCHgqy4wu5E0
+         7DDxquonjRmUYbjOpi5OsfQRY/Zp0lJsNR8JGVcsNr9qtWoO3l5Pc89TS5chNFDnMuLt
+         P0WgfkAlsOw0rF/cxpTLmDXiLhGoor3tB1DDZpVx9gMV2LBqQysW8yzq9t2IF7OR9ulb
+         az/w==
+X-Gm-Message-State: APuU4Z/wmXfbQl4yZkvFDAc4eoUAwmmtlmZoNKOvsYGPLV6eSIf8fFer
+	FPDon57U/0skk4T7IcDJo0SSki5qZBvCj5JPSGJQqP/V7AIIPmLnskegTi/749U+7Cs=
+X-Gm-Gg: AYBFou3XZPsKMKz0AXcRGwdYNEWNvVGb8DF/cJcIvHBmqeus43IVlVToVafD58GInDb
+	ec/3m37LILH39iB1u/GG0YG33CFJL4BbaeucQHdUQlqVuJRi7CxOu8oBPfjriTsz8BkiQUTXha7
+	0g75D88RsThXCSkUEH809yOrdg6KON8wLY7MXrrLC0idICGwTYH0TkL5fI4oqoNVx/Ccn+sB0y1
+	/HUSa/sYmh0C3eXAI56W6N5vgQAraN0yZ0O/KSfInq23L6FNqMhK8oPOZYZZI3ncT4295OY9BkC
+	19lgIBHmCdAx1HfvcgZ9hVedgRc4bgFd/ddoFNyACfwhDdNrwFO71dRZnIbk1ei72tqh5gO4E1e
+	Yse9vnnC9Ri3bwybBNQf1qOlvU5JmQZbZ1HKqpzof8ZO9qmgQwdy1jXDjAyTtvUe322qqyEsEzA
+	j7N7RnGNO8XYqesC+201NGJjxwV5iRPpm6D36gVLeGaErkDwxdufYiLkhv55zAFWF8kGl8TDWuM
+	ED0jH807IATa3Oe4XphjM/niYcvvH9r05vG0rJQABBlOd4TBeTy9GDjxNdp8ewH0A19LlJWjfaf
+	A2296T1DdL1CEXzD8kenscbRcy9AaDbFSBxgnhwxHMwEsYZ4BRnTFEDpm61D1hlKrW8BUHK+1iv
+	DrPqnvCvOADYmLGeq4nA7CGf6N0X+w4aUQ2x5ADytg28fEICDA3RPJ0qHZVGutOx4jL/aIZooYL
+	YEyxQmav4IW4z2zQ==
+X-Received: by 2002:a05:600c:5489:b0:4a3:5a98:c279 with SMTP id 5b1f17b1804b1-4ba093582abmr42679425e9.8.1794401879712;
+        Wed, 11 Nov 2026 04:57:59 -0800 (PST)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4983600bc9asm10095884f8f.29.2026.11.11.04.57.56
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba09517bc7sm39344565e9.3.2026.11.11.04.57.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2026 04:57:56 -0800 (PST)
+        Wed, 11 Nov 2026 04:57:59 -0800 (PST)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -88,9 +89,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 17/29] bpf: Apply hidden slot limits only when a slot is needed
-Date: Wed, 11 Nov 2026 13:57:15 +0100
-Message-ID: <c426b1de0feb20215a1f4290b607509e3c9d0f7a.1794399387.git.memxor@gmail.com>
+Subject: [PATCH bpf-next v1 18/29] bpf: Allow a callee to leave resources with its caller
+Date: Wed, 11 Nov 2026 13:57:16 +0100
+Message-ID: <6d427c6ccc0de0dcfa3e0cb95bd66e9d71c2074b.1794399387.git.memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1794399387.git.memxor@gmail.com>
 References: <cover.1794399387.git.memxor@gmail.com>
@@ -103,360 +104,410 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=14304; i=memxor@gmail.com; h=from:subject:message-id; bh=v4C+iJFdE0KR8gqIaFclC344xPQcFvyIQcf+ywzQ7bU=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetLzELvG++jjV47PVn1T/SOrs5nPseri/487L2ertQfc SWVMfNkRykLgxgXg6yYIkvJ/31MxicqfwfaLuOGmcPKBDKEgYtTACbizMrIsOlO+6JGTc7Ngke5 zjJfP/wjrjAvYMbx+hMTJmxL5NpbZ8jIsDvkk1565s8zSf8ic78Ubi+cfqf5uRPT1z1yswRr8jv VuAE=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=19310; i=memxor@gmail.com; h=from:subject:message-id; bh=uEMxdN9TCR9r+1IqmSA7PnQi17iCgz6VxwZaJw1ayI0=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetLzEKOD5P1clgudJx0f9M5wbPh/pceoW5Vl2n1ujkz+ wuXiml2lLIwiHExyIopspT838dkfKLyd6DtMm6YOaxMIEMYuDgFYCIvHBkZXvCIxJf+ffo3VSHn 07Entz0Ugn9t5/HrbOF4NvXIw62ySxn+cNRsOc6dn9HcqvKjeZ7vkTsSHdZbDS5v3K927NwWNa8 DfAA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-The instructions that maintain a hidden slot are emitted once per call,
-and a slot holds one handle. Currently a program that throws is rejected
-for anything that these instructions cannot handle, as soon as the main
-pass sees it:
+A hidden slot belongs to the frame that made the acquiring call.
+Currently a program that throws is rejected whenever a resource ends up
+held by another frame:
 
- - an instruction that acquires resources of different types, or takes
-   their handle in different ways, on different paths;
- - an acquisition whose handle is not in a register;
- - a release whose handle is not in an argument register, is in a
-   register that does not point to the released resource, or is taken in
-   different ways on different paths;
- - a frame that holds two resources acquired by the same instruction.
+ - a subprog returns holding anything other than a reference in R0, for
+   example a lock that it took for its caller;
+ - a subprog returns in more or fewer RCU read or preemption disabled
+   sections than it was called in;
+ - a callee creates an iterator or saves IRQ flags on its caller's stack.
 
-None of this matters for a resource that gets no hidden slot, either
-because its sites describe it or because no throw finds it held. Such a
-program loads if it contains no throw, and a throw elsewhere in the
-program is no reason to reject it.
+These programs are rejected even if no throw can find the resource held,
+although they load today. An example is one subprog that takes a lock and
+another that drops it, with an assertion elsewhere in the program.
 
-Record these cases during the pass, and reject them after it, only for
-the resources that need a hidden slot:
+Reject them only if a hidden slot is needed:
 
- - An instruction gets one acquisition for each way it acquires.
- - A release records why its handle cannot be cleared from a slot.
- - An acquisition records that a frame held two of its resources.
+ - A resource that a subprog returns holding belongs to its caller from
+   then on, under the acquisition that the subprog made. That acquisition
+   cannot have a hidden slot. The program loads if the caller's sites
+   describe the resource, or if no throw finds it held.
+ - A stack object belongs to the frame whose stack contains it, whichever
+   frame created it. Its sites find it there, so it needs no slot unless
+   some visits to a site find it held and others do not.
+ - A callee that returns in different sections than it was called in
+   leaves the difference to its caller, whose sites give the number of
+   sections. The caller then cannot count its sections in a hidden slot.
+   A function verified on its own reports this to its caller in
+   bpf_flow_return().
 
-Two resources of one instruction that a throw finds held have no
-location that all visits agree on, so they always need a slot. That case
-loads only if no throw finds them held.
-
-The messages do not change.
+A lock at a fixed address, an iterator and saved IRQ flags are always
+where a site finds them. Subprogs that take and drop these for their
+callers therefore load if every visit to a throw finds them held, or
+none does.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/bpf_verifier.h |   9 ++
- kernel/bpf/frame_desc.c      | 182 ++++++++++++++++++++++++-----------
- 2 files changed, 137 insertions(+), 54 deletions(-)
+ include/linux/bpf_verifier.h |  15 ++++
+ kernel/bpf/frame_desc.c      | 160 +++++++++++++++++++++++------------
+ kernel/bpf/join.c            |   2 +-
+ kernel/bpf/states.c          |   2 +-
+ kernel/bpf/verifier.c        |   4 +
+ 5 files changed, 125 insertions(+), 58 deletions(-)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index a7c9b113e071..edd6005c32f6 100644
+index edd6005c32f6..9a0ea25ab5c2 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -1272,6 +1272,7 @@ struct bpf_res_acq {
+@@ -1112,6 +1112,12 @@ struct bpf_subprog_info {
+ 	bool stack_args_from_code: 1;
+ 	/* it releases what its caller holds, so it's verified in the context of such caller */
+ 	bool releases_inherited: 1;
++	/*
++	 * The kinds of sections, a bit each, that a callee returned to it in
++	 * more or fewer of than it called the callee in: a count it keeps in a
++	 * slot does not follow that, see frame_desc.c.
++	 */
++	u8 section_delta;
+ 	/* it loads the end of the packet from the context */
+ 	bool loads_pkt_end: 1;
+ 	/* a call of it was verified on its own: its insns are not in insns_total of the caller */
+@@ -1272,6 +1278,13 @@ struct bpf_res_acq {
  	s16 off;	/* the slot, relative to R10 */
  	bool held;	/* some frame holds what it acquired at a site */
  	bool slot;	/* and some site cannot say where: the handle is kept in a slot */
-+	bool multi;	/* a frame held two of what it acquired at once: one slot cannot */
++	/*
++	 * An insn, plus one, that leaves what it acquired with another frame
++	 * than the one that ran the acquisition: the call a subprog returns
++	 * holding it from, or the acquisition itself when it creates a stack
++	 * object in the stack of a caller. A slot cannot follow it there.
++	 */
++	u32 elsewhere;
+ 	bool multi;	/* a frame held two of what it acquired at once: one slot cannot */
  };
  
- /* How many places a site remembers a frame keeping one handle in. */
-@@ -1317,8 +1318,16 @@ struct bpf_res_rel {
- 	u8 reg;		/* the argument the call releases */
- 	u8 flags;	/* BPF_RES_F_DEREF */
- 	s16 adj;	/* the argument points that many bytes into the object */
-+	u8 bad;		/* BPF_RES_REL_*: why no insns can clear a slot here */
- };
- 
-+/* The handle is in no argument register. */
-+#define BPF_RES_REL_NO_REG	1
-+/* The register does not point to what is released. */
-+#define BPF_RES_REL_NOT_PTR	2
-+/* The call takes the handle in different ways on different paths. */
-+#define BPF_RES_REL_DIFFER	3
-+
- /* A call that enters or leaves a section, for the count of its frame, see frame_desc.c. */
- struct bpf_section_insn {
- 	u32 insn;
+@@ -2345,6 +2358,8 @@ int bpf_frame_desc_record_release(struct bpf_verifier_env *env, int idx);
+ int bpf_frame_desc_record_ctx_arg(struct bpf_verifier_env *env, int idx, int argno);
+ int bpf_frame_desc_record_section(struct bpf_verifier_env *env, u8 kind, s8 delta);
+ int bpf_frame_desc_record_exit(struct bpf_verifier_env *env);
++void bpf_frame_desc_record_sections(struct bpf_verifier_env *env, int subprog, bool rcu,
++				    bool preempt);
+ bool bpf_frame_desc_keeps(const struct bpf_verifier_env *env, const struct bpf_verifier_state *st,
+ 			  int f, const struct bpf_reg_state *reg);
+ u16 bpf_frame_desc_kept_regs(const struct bpf_verifier_env *env, const struct bpf_verifier_state *st,
 diff --git a/kernel/bpf/frame_desc.c b/kernel/bpf/frame_desc.c
-index 72dc6597321a..0ef7fda410ee 100644
+index 0ef7fda410ee..9854be9ab478 100644
 --- a/kernel/bpf/frame_desc.c
 +++ b/kernel/bpf/frame_desc.c
-@@ -39,7 +39,11 @@
-  *  - A frame that returns holds nothing but a reference it returns in R0,
-  *    which the call acquires for the caller like the call of a kfunc that
-  *    returns one, and is in the sections it was called in.
-- *  - A frame holds one resource of an acquiring call at a time.
-+ *  - A slot holds one handle, so a frame that holds two resources of one
-+ *    acquiring call at once can have no slot for them.
-+ *
-+ * What can have no slot loads when its sites describe it or no throw finds
-+ * it held, and is refused otherwise.
+@@ -36,9 +36,14 @@
   *
-  * The main pass records every call that acquires or releases, which
-  * acquisition a release may be of, and the visits of the sites. What needs a
-@@ -443,6 +447,8 @@ static int acquired_class(struct bpf_verifier_env *env, struct bpf_verifier_stat
+  *  - A frame releases what it acquired itself. A callee cannot reach the
+  *    slot of its caller, so it may not release what its caller holds.
+- *  - A frame that returns holds nothing but a reference it returns in R0,
+- *    which the call acquires for the caller like the call of a kfunc that
+- *    returns one, and is in the sections it was called in.
++ *  - A slot goes with its frame. A reference a subprog returns in R0 is
++ *    acquired by the call for the caller, like the call of a kfunc that
++ *    returns one.
++ *    Whatever else a frame comes to hold of what another frame acquired can
++ *    have no slot: a lock a subprog returns holding, or a stack object a
++ *    callee creates in the stack of its caller. Likewise a subprog whose
++ *    callee returns in other sections than it was called in cannot count
++ *    its sections in a slot.
+  *  - A slot holds one handle, so a frame that holds two resources of one
+  *    acquiring call at once can have no slot for them.
+  *
+@@ -429,12 +434,13 @@ static s16 spi_off(int spi)
+  * front of it, the pointer the call takes to a lock or to a stack object. The
+  * handle of a dynptr is the record or the reader, the first word of the
+  * dynptr at @obj_off, so that a clone releases it as well as the dynptr it was
+- * created in. -EOPNOTSUPP for a resource the unwinder cannot release, -EXDEV
+- * for a stack object in the stack of another frame.
++ * created in. @owner is the frame that has a stack object in its stack, which
++ * may be a caller of the current one. -EOPNOTSUPP for a resource the unwinder
++ * cannot release.
+  */
+ static int acquired_class(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
+ 			  const struct bpf_reference_state *ref, int regno, bool after, u8 *flags,
+-			  s16 *adj, s16 *obj_off)
++			  s16 *adj, s16 *obj_off, int *owner)
+ {
+ 	const struct bpf_func_state *frame = st->frame[st->curframe];
+ 	/* a handle that is in no register can only be found by the sites */
+@@ -446,6 +452,7 @@ static int acquired_class(struct bpf_verifier_env *env, struct bpf_verifier_stat
+ 
  	*adj = 0;
  	*obj_off = 0;
++	*owner = st->curframe;
  	if (after) {
-+		if (!in_reg)
-+			return -EOPNOTSUPP;
- 		reg = frame->regs[regno];
- 		if (!reg_ref_off(&reg, ref->id, adj))
- 			*adj = 0;
-@@ -473,8 +479,11 @@ static int acquired_class(struct bpf_verifier_env *env, struct bpf_verifier_stat
- }
+ 		if (!in_reg)
+ 			return -EOPNOTSUPP;
+@@ -461,13 +468,13 @@ static int acquired_class(struct bpf_verifier_env *env, struct bpf_verifier_stat
+ 		return resource_of_lock(env, ref, in_reg ? &frame->regs[regno] : NULL, adj, flags);
+ 	if (!stack_object_find(st, ref, &objframe, &spi))
+ 		return -EOPNOTSUPP;
+-	if (objframe != st->curframe)
+-		return -EXDEV;
++	*owner = objframe;
+ 	slot = bpf_stack_slot(st->frame[objframe], spi);
+ 	switch (slot->slot_type[BPF_REG_SIZE - 1]) {
+ 	case STACK_DYNPTR:
+ 		*flags |= BPF_RES_F_DEREF;
+-		*obj_off = spi_off(spi);
++		/* a slot is filled from the stack of the frame that runs the insn only */
++		*obj_off = objframe == st->curframe ? spi_off(spi) : 0;
+ 		return resource_of_kind(env, slot->spilled_ptr.dynptr.type == BPF_DYNPTR_TYPE_FILE ?
+ 					     BPF_RESOURCE_DYNPTR_FILE : BPF_RESOURCE_RINGBUF);
+ 	case STACK_IRQ_FLAG:
+@@ -547,30 +554,37 @@ int bpf_frame_desc_record_acquire(struct bpf_verifier_env *env, int idx, int reg
+ 	struct bpf_reference_state *ref = &st->refs[idx];
+ 	u8 flags = may_fail ? BPF_RES_F_MAY_FAIL : 0;
+ 	s16 adj, obj_off;
+-	int res, acq;
++	int res, acq, owner;
  
- /*
-- * The acquisition of insn @insn through R@reg: the same on every visit, since
-- * the insns that keep its slot are emitted once. Returns its index.
-+ * The acquisition of insn @insn through R@reg, of a resource of class @res.
-+ * An insn that acquires in different ways on different paths has an
-+ * acquisition for each: the insns that keep a slot are emitted once per insn,
-+ * so none of them may need a slot then, see bpf_frame_desc_resolve(). Returns
-+ * its index.
-  */
- static int acq_add(struct bpf_verifier_env *env, u32 insn, u16 res, u8 reg, u8 flags, s16 adj,
- 		   s16 obj_off)
-@@ -484,14 +493,9 @@ static int acq_add(struct bpf_verifier_env *env, u32 insn, u16 res, u8 reg, u8 f
- 
- 	for (i = 0; i < cnt; i++) {
- 		a = &env->res_acqs[i];
--		if (a->insn != insn || a->reg != reg || (a->flags ^ flags) & BPF_RES_F_CTX)
--			continue;
--		if (a->res != res || a->flags != flags || a->adj != adj || a->obj_off != obj_off) {
--			verbose(env, "frame_desc: insn %d acquires resources of different types on different paths\n",
--				insn);
--			return -EINVAL;
--		}
--		return i;
-+		if (a->insn == insn && a->reg == reg && a->res == res && a->flags == flags &&
-+		    a->adj == adj && a->obj_off == obj_off)
-+			return i;
+ 	ref->res = 0;
+ 	ref->acq = 0;
+ 	if (!env->describe_frames || st->speculative)
+ 		return 0;
+-	res = acquired_class(env, st, ref, regno, after, &flags, &adj, &obj_off);
++	res = acquired_class(env, st, ref, regno, after, &flags, &adj, &obj_off, &owner);
+ 	if (res == -EOPNOTSUPP) {
+ 		/* the insns of another visit must not take this for a resource of theirs */
+ 		env->insn_aux_data[env->insn_idx].res_none = true;
+ 		return 0;
  	}
- 	if (cnt >= U16_MAX - 1)
- 		return -E2BIG;
-@@ -507,7 +511,9 @@ static int acq_add(struct bpf_verifier_env *env, u32 insn, u16 res, u8 reg, u8 f
- 
- /*
-  * refs[@idx] is what acquisition @acq acquired, held by the frame that owns
-- * it: its handle is in the slot of the acquisition, and the slot holds one.
-+ * it. The slot of an acquisition holds one handle: a frame that holds two of
-+ * what it acquired at once is fine as long as the acquisition gets no slot,
-+ * see bpf_frame_desc_resolve().
-  */
- static int ref_set_acq(struct bpf_verifier_env *env, struct bpf_verifier_state *st, int idx,
- 		       int acq)
-@@ -518,9 +524,8 @@ static int ref_set_acq(struct bpf_verifier_env *env, struct bpf_verifier_state *
- 	for (i = 0; i < st->acquired_refs; i++) {
- 		if (i == idx || st->refs[i].acq != acq + 1 || st->refs[i].frameno != ref->frameno)
- 			continue;
--		verbose(env, "frame_desc: a frame holds two resources of insn %d at once, which is not supported in a program that throws\n",
--			env->res_acqs[acq].insn);
--		return -EINVAL;
-+		env->res_acqs[acq].multi = true;
-+		break;
- 	}
- 	ref->res = env->res_acqs[acq].res + 1;
- 	ref->acq = acq + 1;
-@@ -561,11 +566,9 @@ int bpf_frame_desc_record_acquire(struct bpf_verifier_env *env, int idx, int reg
- 	}
- 	if (res < 0)
- 		return res;
--	if (regno < BPF_REG_0 || regno > BPF_REG_5) {
--		verbose(env, "frame_desc: insn %d takes the handle of a resource in no register\n",
+-	if (res == -EXDEV) {
+-		verbose(env, "frame_desc: insn %d creates an object in the stack of another frame, which is not supported in a program that throws\n",
 -			env->insn_idx);
 -		return -EINVAL;
 -	}
-+	/* no insns can put it into a slot then: R10 stands for no register */
-+	if (regno < BPF_REG_0 || regno > BPF_REG_5)
-+		regno = BPF_REG_FP;
+ 	if (res < 0)
+ 		return res;
+ 	/* no insns can put it into a slot then: R10 stands for no register */
+ 	if (regno < BPF_REG_0 || regno > BPF_REG_5)
+ 		regno = BPF_REG_FP;
  	acq = acq_add(env, env->insn_idx, res, regno, flags, adj, obj_off);
- 	return acq < 0 ? acq : ref_set_acq(env, st, idx, acq);
- }
-@@ -630,6 +633,48 @@ int bpf_frame_desc_record_ctx_arg(struct bpf_verifier_env *env, int idx, int arg
- 	return ret < 0 ? ret : ref_set_acq(env, st, idx, ret);
+-	return acq < 0 ? acq : ref_set_acq(env, st, idx, acq);
++	if (acq < 0)
++		return acq;
++	/*
++	 * A stack object is held by the frame that has it in its stack, which
++	 * its sites find it in: the slot of a callee that created it there
++	 * would be gone with the callee.
++	 */
++	if (owner != st->curframe) {
++		ref->frameno = owner;
++		if (!env->res_acqs[acq].elsewhere)
++			env->res_acqs[acq].elsewhere = env->insn_idx + 1;
++	}
++	return ref_set_acq(env, st, idx, acq);
  }
  
-+/*
-+ * The call @insn releases through R@reg what acquisition @acq acquired: its
-+ * handle leaves the slot of the acquisition in front of the call, when it has
-+ * one. @bad says why no insns can do that here. The insns compare the
-+ * argument the same way whatever it releases, so releases of one argument
-+ * that differ in how they take the handle are bad as well. That matters for
-+ * an acquisition that has a slot only, see bpf_frame_desc_resolve().
-+ */
-+static int rel_add(struct bpf_verifier_env *env, u32 insn, u16 acq, u8 reg, u8 flags, s16 adj,
-+		   u8 bad)
-+{
-+	u32 i, cnt = env->res_rel_cnt;
-+	struct bpf_res_rel *r, *same = NULL;
-+
-+	for (i = 0; i < cnt; i++) {
-+		r = &env->res_rels[i];
-+		if (r->insn != insn || r->reg != reg)
-+			continue;
-+		if (r->flags != flags || r->adj != adj) {
-+			if (!r->bad)
-+				r->bad = BPF_RES_REL_DIFFER;
-+			if (!bad)
-+				bad = BPF_RES_REL_DIFFER;
-+		} else if (r->acq == acq) {
-+			same = r;
-+		}
-+	}
-+	if (same) {
-+		if (!same->bad)
-+			same->bad = bad;
-+		return 0;
-+	}
-+	r = kvrealloc(env->res_rels, array_size(cnt + 1, sizeof(*r)), GFP_KERNEL_ACCOUNT);
-+	if (!r)
-+		return -ENOMEM;
-+	r[cnt] = (struct bpf_res_rel) { .insn = insn, .acq = acq, .reg = reg, .flags = flags,
-+					.adj = adj, .bad = bad };
-+	env->res_rels = r;
-+	env->res_rel_cnt = cnt + 1;
-+	return 0;
-+}
-+
  /*
-  * Record that the current insn releases the resource refs[@idx], before it
-  * is released: its handle, in the argument the call releases, see
-@@ -642,11 +687,10 @@ int bpf_frame_desc_record_release(struct bpf_verifier_env *env, int idx)
+@@ -748,71 +762,89 @@ int bpf_frame_desc_record_section(struct bpf_verifier_env *env, u8 kind, s8 delt
+ /*
+  * The current frame returns to its caller. Its slots and its counts of
+  * sections go with the frame, and nothing moves them to the frame it returns
+- * to, so it returns holding nothing but a reference in R0, which the call
+- * acquires for the caller, see bpf_frame_desc_record_return(), and in as many
+- * sections as it was called in. The entry counts of the sections are lowered
+- * as the frame leaves its callers' sections, see release_context_state(),
+- * which counts those apart.
++ * to. What it returns holding is its caller's from then on:
++ *
++ *  - A reference in R0 the call acquires for the caller, like the call of a
++ *    kfunc that returns one, see bpf_frame_desc_record_return().
++ *  - Anything else, a lock the frame took for its caller, stays what it was
++ *    acquired as, and can have no slot: the sites of the caller have to say
++ *    where it is, or no throw may find it held, see
++ *    bpf_frame_desc_record_return().
++ *
++ * A frame that returns in more or fewer sections than it was called in leaves
++ * the difference to its caller, whose sites say how many it is in then: a
++ * count the caller keeps in a slot would not know. The entry counts of the
++ * sections are lowered as the frame leaves its callers' sections, see
++ * release_context_state(), which counts those apart.
+  */
+ int bpf_frame_desc_record_exit(struct bpf_verifier_env *env)
+ {
  	struct bpf_verifier_state *st = env->cur_state;
- 	const struct bpf_reference_state *ref = &st->refs[idx];
  	const struct bpf_func_state *frame = st->frame[st->curframe];
--	u32 i, cnt = env->res_rel_cnt, insn = env->insn_idx;
-+	u32 i, insn = env->insn_idx;
- 	int regno = env->release_regno;
- 	const struct bpf_res_acq *acq;
--	struct bpf_res_rel *r;
--	u8 flags = 0;
-+	u8 flags = 0, bad = 0;
- 	s16 adj = 0;
+-	int i, held = 0;
+-	s16 adj;
  
  	if (!env->describe_frames || st->speculative)
-@@ -667,40 +711,17 @@ int bpf_frame_desc_record_release(struct bpf_verifier_env *env, int idx)
- 		return -EINVAL;
- 	}
- 	acq = &env->res_acqs[ref->acq - 1];
-+	/* what insns could not compare with a slot matters when there is a slot only */
- 	if (regno < BPF_REG_1 || regno > BPF_REG_5) {
--		verbose(env, "frame_desc: insn %d releases a resource whose handle is in no argument register\n",
--			insn);
+ 		return 0;
+-	if (st->active_rcu_locks != frame->entry_rcu_locks || frame->rcu_released_below ||
+-	    st->active_preempt_locks != frame->entry_preempt_locks || frame->preempt_released_below) {
+-		verbose(env, "frame_desc: a subprog returns in other sections than it was called in at insn %d, which is not supported in a program that throws\n",
+-			env->insn_idx);
 -		return -EINVAL;
 -	}
--	if (acq->flags & BPF_RES_F_DEREF) {
-+		regno = BPF_REG_FP;
-+		bad = BPF_RES_REL_NO_REG;
-+	} else if (acq->flags & BPF_RES_F_DEREF) {
- 		flags = BPF_RES_F_DEREF;
- 	} else if (!(acq->flags & BPF_RES_F_ARG) &&
- 		   !reg_ref_off(&frame->regs[regno], ref->id, &adj)) {
--		verbose(env, "frame_desc: insn %d releases a resource R%d does not point to\n", insn,
--			regno);
--		return -EINVAL;
--	}
--	for (i = 0; i < cnt; i++) {
--		r = &env->res_rels[i];
--		if (r->insn != insn || r->reg != regno)
+-	for (i = 0; i < st->acquired_refs; i++) {
+-		const struct bpf_reference_state *ref = &st->refs[i];
+-
+-		if (!ref->res || ref->frameno != st->curframe)
 -			continue;
--		/* the argument is taken the same way whatever it releases */
--		if (r->flags != flags || r->adj != adj) {
--			verbose(env, "frame_desc: insn %d takes the handle of what it releases differently on different paths\n",
--				insn);
--			return -EINVAL;
--		}
--		if (r->acq == ref->acq - 1)
--			return 0;
-+		bad = BPF_RES_REL_NOT_PTR;
+-		if (ref->type == REF_TYPE_PTR && !(env->res_acqs[ref->acq - 1].flags & BPF_RES_F_ARG) &&
+-		    reg_ref_off(&frame->regs[BPF_REG_0], ref->id, &adj) && !held++)
+-			continue;
+-		verbose(env, "frame_desc: a subprog returns holding what R0 does not carry at insn %d, which is not supported in a program that throws\n",
+-			env->insn_idx);
+-		return -EINVAL;
+-	}
++	/* a function verified on its own has its caller told in bpf_flow_return() */
++	if (st->curframe)
++		bpf_frame_desc_record_sections(env, st->frame[st->curframe - 1]->subprogno,
++					       st->active_rcu_locks != frame->entry_rcu_locks +
++								       frame->rcu_released_below,
++					       st->active_preempt_locks != frame->entry_preempt_locks +
++									   frame->preempt_released_below);
+ 	return 0;
+ }
+ 
+ /*
+  * A subprog called at insn @callsite returned to the current frame of @st
+- * with @r0. The reference refs[@idx] it returned holding is the caller's
+- * from here on, acquired by the call like the reference a kfunc returns; with
+- * @idx < 0 it returned holding nothing, and what it left in R0 must not be
+- * taken for a reference by the insns another visit has follow the call.
++ * with @r0, holding the reference refs[@idx], which is the caller's from here
++ * on, or nothing with @idx < 0.
++ *
++ * A reference that R0 carries is acquired by the call, like the reference a
++ * kfunc returns. Anything else stays what it was acquired as, in the subprog:
++ * the slot of that acquisition is gone with the frame of the subprog, so it
++ * can have none, see bpf_frame_desc_resolve(). And what the subprog left in
++ * R0 then must not be taken for a reference by the insns another visit has
++ * follow the call.
+  */
+ int bpf_frame_desc_record_return(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
+ 				 int idx, int callsite, const struct bpf_reg_state *r0)
+ {
+ 	struct bpf_reference_state *ref;
++	struct bpf_res_acq *held;
+ 	s16 adj = 0;
+ 	int acq;
+ 
+ 	if (!env->describe_frames || st->speculative)
+ 		return 0;
+ 	ref = idx < 0 ? NULL : &st->refs[idx];
+-	if (!ref || !ref->res) {
+-		if (r0->type != SCALAR_VALUE || !tnum_equals_const(r0->var_off, 0))
+-			env->insn_aux_data[callsite].res_none = true;
+-		return 0;
++	if (ref && !ref->res)
++		ref = NULL;
++	if (ref && ref->type == REF_TYPE_PTR && ref->id &&
++	    !(env->res_acqs[ref->acq - 1].flags & BPF_RES_F_ARG) &&
++	    reg_ref_off(r0, ref->id, &adj)) {
++		acq = acq_add(env, callsite, ref->res - 1, BPF_REG_0, 0, adj, 0);
++		return acq < 0 ? acq : ref_set_acq(env, st, idx, acq);
  	}
--	r = kvrealloc(env->res_rels, array_size(cnt + 1, sizeof(*r)), GFP_KERNEL_ACCOUNT);
--	if (!r)
--		return -ENOMEM;
--	r[cnt] = (struct bpf_res_rel) { .insn = insn, .acq = ref->acq - 1, .reg = regno,
--					.flags = flags, .adj = adj };
--	env->res_rels = r;
--	env->res_rel_cnt = cnt + 1;
--	return 0;
-+	return rel_add(env, insn, ref->acq - 1, regno, flags, adj, bad);
- }
- 
- /* The current insn enters (@delta 1) or leaves (-1) a section of @kind: counted by its frame. */
-@@ -1095,6 +1116,50 @@ static int emit_acquire_after(struct bpf_insn *buf, const struct bpf_res_acq *a)
- 	return cnt;
- }
- 
-+/*
-+ * Acquisition @acq needs a slot. Can the insns that keep it be emitted? They
-+ * are emitted once per insn, so the insn has to acquire in one way, with the
-+ * handle in a register, and every call that releases what it acquired has to
-+ * take the handle in one way that insns can compare with the slot.
-+ */
-+static int slot_can_be_kept(struct bpf_verifier_env *env, u32 acq)
-+{
-+	const struct bpf_res_acq *a = &env->res_acqs[acq], *b;
-+	const struct bpf_res_rel *r;
-+	u32 i;
-+
-+	for (i = 0; i < env->res_acq_cnt; i++) {
-+		b = &env->res_acqs[i];
-+		if (i == acq || b->insn != a->insn || b->reg != a->reg ||
-+		    (a->flags ^ b->flags) & BPF_RES_F_CTX)
-+			continue;
-+		verbose(env, "frame_desc: insn %d acquires resources of different types on different paths\n",
-+			a->insn);
-+		return -EINVAL;
-+	}
-+	if (a->reg == BPF_REG_FP) {
-+		verbose(env, "frame_desc: insn %d takes the handle of a resource in no register\n",
-+			a->insn);
-+		return -EINVAL;
-+	}
-+	for (i = 0; i < env->res_rel_cnt; i++) {
-+		r = &env->res_rels[i];
-+		if (r->acq != acq || !r->bad)
-+			continue;
-+		if (r->bad == BPF_RES_REL_NO_REG)
-+			verbose(env, "frame_desc: insn %d releases a resource whose handle is in no argument register\n",
-+				r->insn);
-+		else if (r->bad == BPF_RES_REL_NOT_PTR)
-+			verbose(env, "frame_desc: insn %d releases a resource R%d does not point to\n",
-+				r->insn, r->reg);
-+		else
-+			verbose(env, "frame_desc: insn %d takes the handle of what it releases differently on different paths\n",
-+				r->insn);
-+		return -EINVAL;
-+	}
+-	if (!reg_ref_off(r0, ref->id, &adj)) {
+-		verbose(env, "frame_desc: the subprog called at insn %d returns holding what R0 does not carry, which is not supported in a program that throws\n",
+-			callsite);
+-		return -EINVAL;
++	if (r0->type != SCALAR_VALUE || !tnum_equals_const(r0->var_off, 0))
++		env->insn_aux_data[callsite].res_none = true;
++	if (ref) {
++		held = &env->res_acqs[ref->acq - 1];
++		if (!held->elsewhere)
++			held->elsewhere = callsite + 1;
+ 	}
+-	acq = acq_add(env, callsite, ref->res - 1, BPF_REG_0, 0, adj, 0);
+-	return acq < 0 ? acq : ref_set_acq(env, st, idx, acq);
 +	return 0;
 +}
 +
++/*
++ * A callee returned to @subprog in more or fewer RCU read or preemption
++ * disabled sections than it was called in, see bpf_frame_desc_record_exit().
++ */
++void bpf_frame_desc_record_sections(struct bpf_verifier_env *env, int subprog, bool rcu,
++				    bool preempt)
++{
++	if (!env->describe_frames)
++		return;
++	env->subprog_info[subprog].section_delta |= (rcu ? BIT(0) : 0) | (preempt ? BIT(1) : 0);
+ }
+ 
  /*
-  * Decide what needs a hidden slot, once the pass has seen every frame, and
-  * reserve it.
-@@ -1149,6 +1214,15 @@ int bpf_frame_desc_resolve(struct bpf_verifier_env *env)
- 		}
- 		if (!a->slot)
- 			continue;
-+		ret = slot_can_be_kept(env, i);
-+		if (ret)
-+			break;
-+		if (a->multi) {
-+			verbose(env, "frame_desc: a frame holds two resources of insn %d at once, which is not supported in a program that throws\n",
-+				a->insn);
+@@ -1020,6 +1052,8 @@ void bpf_frame_desc_reset(struct bpf_verifier_env *env)
+ 	env->section_insn_cnt = 0;
+ 	env->res_site_cnt = 0;
+ 	env->res_loc_cnt = 0;
++	for (i = 0; i < env->subprog_cnt; i++)
++		env->subprog_info[i].section_delta = 0;
+ 	for (i = 0; i < env->prog->len; i++) {
+ 		env->insn_aux_data[i].res_none = false;
+ 		env->insn_aux_data[i].res_none_r0 = false;
+@@ -1217,6 +1251,13 @@ int bpf_frame_desc_resolve(struct bpf_verifier_env *env)
+ 		ret = slot_can_be_kept(env, i);
+ 		if (ret)
+ 			break;
++		/* the slot is in the frame that runs the insn, not in the one that holds this */
++		if (a->elsewhere) {
++			verbose(env, "frame_desc: what insn %d acquires is held by another frame from insn %d on, where a throw finds it in no place its paths agree on, which is not supported in a program that throws\n",
++				a->insn, a->elsewhere - 1);
 +			ret = -EINVAL;
 +			break;
 +		}
- 		/* some visit of the insn has nothing a slot can hold where this one has */
- 		if (!(a->flags & BPF_RES_F_CTX) && acquires_sometimes(env, new_of[a->insn], a)) {
- 			verbose(env, "frame_desc: insn %d acquires a resource on some paths only, or one of a type that cannot be released\n",
-@@ -1348,8 +1422,8 @@ int bpf_frame_desc_emit(struct bpf_verifier_env *env)
- 	if (!env->res_acq_cnt && !env->section_insn_cnt)
- 		return 0;
- 	new_of = insns_of_pass(env, &orig_len);
--	items = kvcalloc(env->res_acq_cnt + env->res_rel_cnt + env->section_insn_cnt, sizeof(*items),
--			 GFP_KERNEL_ACCOUNT);
-+	items = kvcalloc(env->res_acq_cnt + env->res_rel_cnt + env->section_insn_cnt,
-+			 sizeof(*items), GFP_KERNEL_ACCOUNT);
- 	if (!new_of || !items) {
- 		ret = -ENOMEM;
- 		goto out;
+ 		if (a->multi) {
+ 			verbose(env, "frame_desc: a frame holds two resources of insn %d at once, which is not supported in a program that throws\n",
+ 				a->insn);
+@@ -1245,6 +1286,13 @@ int bpf_frame_desc_resolve(struct bpf_verifier_env *env)
+ 		for (k = 0; k < ARRAY_SIZE(sub->section_off) && !ret; k++) {
+ 			if (!site->sections_vary[k] || sub->section_off[k])
+ 				continue;
++			/* the count would miss what a callee returned in and did not leave */
++			if (sub->section_delta & BIT(k)) {
++				verbose(env, "frame_desc: a subprog returns in other sections than it was called in, to one that counts its sections in a hidden slot for insn %d, which is not supported in a program that throws\n",
++					site->insn);
++				ret = -EINVAL;
++				break;
++			}
+ 			ret = bpf_reserve_stack_slots(env, sub - env->subprog_info, 1, &sub->section_off[k]);
+ 			env->frame_desc_slots++;
+ 		}
+diff --git a/kernel/bpf/join.c b/kernel/bpf/join.c
+index 180b0a96029c..87d87d359312 100644
+--- a/kernel/bpf/join.c
++++ b/kernel/bpf/join.c
+@@ -463,7 +463,7 @@ static bool join_func(struct bpf_join_state *js, struct bpf_func_state *fd,
+ 		    fa->entry_rcu_locks != fb->entry_rcu_locks ||
+ 		    fa->entry_preempt_locks != fb->entry_preempt_locks)
+ 			return false;
+-		/* a frame that left a section of its callers hands its count over, see frame_desc.c */
++		/* the sections a frame left of those it was entered in matter to a throw, see frame_desc.c */
+ 		if (env->describe_frames && (fa->rcu_released_below != fb->rcu_released_below ||
+ 					     fa->preempt_released_below != fb->preempt_released_below))
+ 			return false;
+diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+index 5a773bfb9e84..01eb8d9077ef 100644
+--- a/kernel/bpf/states.c
++++ b/kernel/bpf/states.c
+@@ -717,7 +717,7 @@ static bool func_states_equal(struct bpf_verifier_env *env, struct bpf_func_stat
+ 	    old->entry_rcu_locks != cur->entry_rcu_locks ||
+ 	    old->entry_preempt_locks != cur->entry_preempt_locks)
+ 		return false;
+-	/* a frame that left a section of its callers hands its count over, see frame_desc.c */
++	/* the sections a frame left of those it was entered in matter to a throw, see frame_desc.c */
+ 	if (env->describe_frames && (old->rcu_released_below != cur->rcu_released_below ||
+ 				     old->preempt_released_below != cur->preempt_released_below))
+ 		return false;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index b32c5a4f844f..a710da1a15c6 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -12028,6 +12028,10 @@ int bpf_flow_return(struct bpf_verifier_env *env, struct bpf_verifier_state *cal
+ 	}
+ 	caller->active_irq_id = fresh_id(env, idmap, caller->active_irq_id);
+ 	caller->active_lock_id = fresh_id(env, idmap, caller->active_lock_id);
++	/* the sections the function entered and did not leave are the caller's, see frame_desc.c */
++	bpf_frame_desc_record_sections(env, frame->subprogno,
++				       caller->active_rcu_locks != caller_rcu,
++				       caller->active_preempt_locks != caller_preempt);
+ 	/* fresh_id() had no room for an id, or there are no ids left */
+ 	if (idmap->cnt == BPF_ID_MAP_SIZE || env->id_gen >= BPF_MAX_ID) {
+ 		verbose(env, "too many ids at the call at insn %d\n", call_idx);
 -- 
 2.53.0
 
