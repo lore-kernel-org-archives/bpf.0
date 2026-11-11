@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.177
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794415603;
-	b=ZNOo/QDLX6Hq3U1z6CpRxNVQxYi0J67rAAyAYjIhEXF0ZlfzsiRFsHNCLOiW5s/9OFvt
-	 /YHPe2VcIFh5vbpI9hpy5GsY+PLOz6dH2qach2i4k9h5tO11OHRxwa94YjNBHb2d78Lxt
-	 Ny5dq+4rOH5hZ2jOx/GPvYuNZsoKOMsKNA9YXga5HwGmn/8wFEtZ4/q/sbovc2liuVfKl
-	 /JF9urP8dCe2Qs6w+T3lgiU3Z+HIspflTdTGjnadLsTl4ZOrRh8tHGkyKLItqtx86Dxtu
-	 p6WnSuWsUwsqz+0XEzAOvDIx1J07QMCUf75guQJ8xkvAMP7voJS2+Qax5i/19pGmlHA==
+	t=1794415609;
+	b=y5D7nqA/dsNWAp7QrTNVevB/3oCrClE+59xS4TIR4JxhuCw24REN2m6DSZ46WosqXGjq
+	 NtyXTMRfq7IRh89PIk75gYowxbNP9P8CPiyuaAPqp/s8FqsrwbdJuwi+j+bebTSHpXS+u
+	 lLiTAk5pJDuP4cI/0q4XlODwzKy01lRFOVOq9kSGJ4QVfbSA97vtxeG0M9zz/v7W1NECA
+	 DHOmDG+3vfEZ3TqwepItKdPbfymca2kIjm0sHST22cXWeRkDHdd4WxDosOVqDCX5NXIMv
+	 PtOrWShWeSFS12YThAhSzHxVXzRgMIub6RpWmHCuBIWykoOSLmfbdVtv9ZLt33J6P9g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794415603;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794415609;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=har0By6tZi7yOX3PxMCwY9Y1zNMOXRRHPwbDCEfPXcI=;
-	b=zQFoEXZwR//F5WIB/XsGPaaKYU9rDLuRB22OkxUQYArl9lLUzBC22nTgmLouVFjsx/QO
-	 dxSBeAlfgaMXFWevgAcaW6j6utHF0KUwnSUwIpYI5Mo81njHa6QiuaKn2TURkzACoK9nj
-	 F3uZSNHiJCXiGMHjl+xo1MceJvvClU3+w9CjVla8mz+A1HpeCY5moXCS8K6DS+njQ63SD
-	 a+Z0MZXTGjTXADSRRxeDlFxSGlRUiIQArv308PLr46C6NlNvx/yWUyVABoM6CB4+MKPUt
-	 e3bDc7tnFGOfTQDZZTzGe8MHwixSBkhTHm3XdCw4rz1wagR3VVmsPjdTB3B8h2AyA2Q==
+	bh=+NBoOXcaos3ErxZvdIIKho9Gh/ViSTW2Pnfs6yLB/Sg=;
+	b=NlsOHSueM7QrwXTzi6++mMAyPSikCWjpW43+6Qx7GSZxrKhIcb3mWiTlvWTd4NA/Ul+h
+	 TnhkfQ1TvARDEp1wwBgtjzNpYXnHVfxRzWckJ4+kFGM+oMOZc0tRQ4SdBQpKLVUmnXgqb
+	 ksXB7UE5RYyLDgUje0QPI79I91uKUQtenub5Ci9k2HytORA5JIEaFUEJspo30asB4U40E
+	 6HShhu3Dg0pw3BAtmdOBBckTqcMKkBW8sxNm2H0HBznjJwZ2FIeopGYqe8DUOc9FOa/7d
+	 RqfGyHM3OByiZJaI1IKlY7csUBkIh+6upjyP8hg6Wi0Cf6pni83FEXF630/qlqaBh7A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pABtyzRn;
-	arc=none smtp.remote-ip=209.85.214.177
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QiFNmJdP;
+	arc=none smtp.remote-ip=209.85.210.177
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24084606A321
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 16:46:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 24084606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4759D606A31C
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 16:46:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4759D606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pABtyzRn
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2e9e53d011eso24462165ad.1
-        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 08:46:43 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QiFNmJdP
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-8b5efadd183so5786b3a.1
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 08:46:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794415602; x=1795020402; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794415608; x=1795020408; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=har0By6tZi7yOX3PxMCwY9Y1zNMOXRRHPwbDCEfPXcI=;
-        b=pABtyzRn0KCQAmfbIuKnIFlhHDEQ+3jmiGqM9XkPrJkiBV9jWVWQYhg03OWfAiU1/D
-         OHIPGeuwyAUmRXtxU0WvfuT/A6+D4Nz5gG2TpUPnpHLU7cx0IAOGXF3y+JNoVwH7LVE2
-         hvh+lTEDgQetx1iJLbOjvAsKMFKIyUOgFf81imiQqGdyInTRHhDj/5O/bAuepCYMYz9y
-         XqUwAshFvcKwL5LcWRkQYq7opAQwoCuRgcuOY+me0esAPCReB50Er1eNq8DMbfTKpwxp
-         Q5kUUR5zfGhSjox8iOj3nlERtUk7DLqxt0WwVdflZdk56//HxOPyzybwDFxjfsnxkRRe
-         vfJw==
+        bh=+NBoOXcaos3ErxZvdIIKho9Gh/ViSTW2Pnfs6yLB/Sg=;
+        b=QiFNmJdP972NVJJSqhzdxxbnnhQoKdLUu6vJzIUtiV6wnbyxX3zmzobWiKu+j3VLbg
+         LbBLr7/NLejK4cQm9FdlyDn43k+e9fFzw8gcC3foYF7ZZ7uwtc3AngPj52rensSfsH7a
+         LniQB53tNzot5w/eEXMV/HmH+ypiRrxncylr8G4xFBmGPpgAEUgYJLBFWjZdaj2+BRtS
+         AZDy/yF7dCCGggA1DKxLfvE4xXEdYGzN4CGTmhtiA++U6zm7999CIXt+OII255LFbaNh
+         Wsq47oM21ZJYFo/ONt+/fGTfBSYND62tvuCfmFtkU8w5LkhrCNRLOzBncksEld3SvXFc
+         +ikQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794415602; x=1795020402;
+        d=1e100.net; s=20260707; t=1794415608; x=1795020408;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=har0By6tZi7yOX3PxMCwY9Y1zNMOXRRHPwbDCEfPXcI=;
-        b=2QctQU4Xed7EGIitQkbqClQnto7yIKuwpkgsjSbpoVRRWDaYFpyzPoqeaaLWA/cDVo
-         bRrnoL4J+htm797yssKBwG8AtnNo25ptGy3VurDgavgOZJItPi384ZHzaiRgMplTlqT3
-         KMU8jtBOqIpP65byg5iGukNQ4MGXMP18vhGqiG0jghQi1Bj6xOZxVCA3TtSARy/I1SVz
-         BZEIYOvZcJrLyCd9jTHfhDmpz+9vUgX+5HheCTZYVyMOGbfgJC3KmHd7D9GQr0r8YBEz
-         YGH7RhLs38N3xRMMNACVfbM0VV59fN6H3bntQtA2FfwY/KUdDMHK5h9CfUAgErfVnCVZ
-         4pVg==
-X-Gm-Message-State: APuU4Z9sH762FZGUhV22jji125ikMqP5ZEAfOtpSBHZkt3Ved3b3ApUz
-	iDuUnjE8rvD0IZknvwSJpOIuqDCA1fuLDuP0M75iaKcQIosQv33v+mO0hNtkyw==
-X-Gm-Gg: AYBFou0oadVjR2tz8QnJVdjME6lmzarw5RNwAOqaMgxu7tiw82w14UYffF03zRVZAPH
-	cgBdefzIGlCOL9T1wTEb+NW5tJecUSaFWaF1iQyvVdHR1qgjJReg+a/h1KuMxPRbsbH6qFNHjd+
-	yz7+CQrwQ/39tC/Tmtvn3hdvMkmiypYbhLZjoKsw2Y83GZE1b91Uxk9U3cubwc3ZzCysgk69yQp
-	cMXm9n4JBBfIERVqixw/KSQhZ/a90PJgS0OcyaoUjZNM+gbTVm2x3tZW1QsKgFoGMPK3w6/q/Tc
-	MnA6djLAj+PWatn9UvN6W0ICIhhMAFIG5DKPoF0+CHPrfCwdOWcMPxYp4hxMnLAftgjGB7fJlHI
-	ZMUo5LZ04r7vRZHnJAQysZf1/I1i8YQTfEtrSwMiN/wyYtTkOiig+2jzZJE+IfPcLdlORkgXcyA
-	BbG83ox4MRoR2YTkcZ6dNzQxJ120v8L7zayEVnq4RegPDeguwLs3t6J4DeUMgMaUheNXORVKx+1
-	6E2aQMzL5cS0BvL02LIWTK7B86SIxsRAoagjmio1OhM+yo5EXUab0wHulwZQJWMtFK/K2c3H5Aa
-	SZB8DD2m9pX5lZ5gabsJ2S35RFjWouOftwAMeXlqqvgmOnhdGw76ljUc2aou0hCGi3mzgE1QyOM
-	sseIFA9MQvsJSo2ko7JP9onIfegFM8COPGmxagNBYEDPVSj6Rkkkq9GLSJ7IY1wOu5TTUsR/0RQ
+        bh=+NBoOXcaos3ErxZvdIIKho9Gh/ViSTW2Pnfs6yLB/Sg=;
+        b=lBMrVBN+RYbR9QJgyyFysZTMo8M+6JuVCQ+8WOZoPgJZ+F7KcyUXyOWqOWMddFBNFZ
+         mFWaISf1V3E6/NIpU6VaQy8SU90IY2Fz+YYZxX1fmQ/RxXls2JncJvfYXYUzti4AuW90
+         99+krL7ZoxqrSEWQ9GCLydwFThyR4nQYQmZ/Y3R+/kmZ1uKmgMskaHhOR7/ttg5PIXVf
+         EfxoIECwYPtmqlBhYY/BnIJMOiMAKwdjrDDaRW1qbcTgQtKnvi1+Hr4Q4g57FrrYGMFa
+         XeUym5zLQXb0xJ4HG7Vjhcqy5tESfHCKXha00VnpeRKDf4akOogHV+Oshh61n84akDZU
+         Dydg==
+X-Gm-Message-State: APuU4Z9myd0YqynHXl6ymgEN8xODDDLM8gtgm+L/V083jqiIRnRJymUA
+	6MRqwwKkojP+XTHWwVwfCTGY8FFxLjKWZJ546UZCPtviuvRWYzmKbAi2rSTrsQ==
+X-Gm-Gg: AYBFou2FzGYxLSE0CTVQgH+OBZ06Y8Jf8oQYLjr4WoeLfIUu1MV7mkFDjIB9A/WawQq
+	XVCz0+lxOAPfDbfjm0TOXAxURPAEU/B/Nf7ZlQnVWUr2x3f02PtFV/H7EUrGDGAm8RiLPwFpYqZ
+	aBUntTkw13j0SuJoPn4sFXTcvCpAZqDOHhwx4dYPA7ftjm27zHdjA89fgiIdoh/eH8O4smTaeAL
+	cwp3QdZMoHL1XgKi1/Z5uf5YO/h8ohnVtoG04INHEXpNYDKPBcXFeHQ9/301hRry+dRvHkJIkQW
+	04qzYipI+0jCLWSVEtTQ7iucs3eA8tDqNxx9YIX0azH3a3qwL9sQ5hl6um5mRDU1ID9knF75Sf3
+	2EqMXqTtqwNkaTIGvmppd9H0g0C2IQ3wKgqp88AUQK1tzRkH0M6d73w3PpHo7w9qCc/jrQp2vZB
+	+cjVQe9BypGLQBO3flVr5FgMY/wfZIVD2fI2LW4PBXxekQEVxB/9YMNFCRu8WEk2c+2oq0ktxl6
+	GhgsJcTw9uw8l3YeEQh3YRV9tC0w+wfYiC72DVcYU/VeSFpxf26HfBe02vZe5CQxJGqe+L6EA1b
+	+W+3bmsldOtH8a1QNTuxqJAVDEJMEDcMal3Dqnl1yK9YAF6yiGKLEKAmRWbboiSpaHGnFlAJ4Hz
+	BzsTNqwoI35TZz35mrOuh42fe+GhMsQJ6VHZb9Dhu1T1+SoGxUr/wsZqey13P+//fG7wrhvB2fg
 	==
-X-Received: by 2002:a17:903:28e:b0:2ed:3d88:4c24 with SMTP id d9443c01a7336-2edd7760caamr32695635ad.27.1794415602209;
-        Wed, 11 Nov 2026 08:46:42 -0800 (PST)
+X-Received: by 2002:a05:6a00:4612:b0:8a0:550f:bb43 with SMTP id d2e1a72fcca58-8ba98b4c716mr4820507b3a.34.1794415608345;
+        Wed, 11 Nov 2026 08:46:48 -0800 (PST)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.252])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2edb6a42d89sm22920085ad.8.2026.11.11.08.46.41
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8baaae3da61sm2271369b3a.35.2026.11.11.08.46.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2026 08:46:41 -0800 (PST)
+        Wed, 11 Nov 2026 08:46:47 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v3 07/29] bpf: Compute scalar evolution expressions for whole subprogs
-Date: Wed, 11 Nov 2026 16:45:30 +0000
-Message-ID: <20261111164557.2659679-8-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v3 08/29] bpf: Mark the attr argument of bpf_sys_bpf() as MEM_WRITE
+Date: Wed, 11 Nov 2026 16:45:31 +0000
+Message-ID: <20261111164557.2659679-9-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261111164557.2659679-1-alexei.starovoitov@gmail.com>
 References: <20261111164557.2659679-1-alexei.starovoitov@gmail.com>
@@ -104,333 +104,51 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-A prerequisite of the patches that use scalar evolution at conditional
-jumps. Expressions exist in loops only. Compute them for all code. They
-have no users yet: no verdict changes, the prog below is still rejected.
+A fix of the declaration of a helper. This series needs it: scalar
+evolution keeps the expression of a stack slot across a call unless
+bpf_may_write_mask() of the call has the slot, and liveness.c computes that
+mask from the argument types of the helper.
 
-	char *buf = bpf_map_lookup_elem(&map, &key);    /* 128 bytes */
-	..
-	p = buf + i;                                    /* i is a byte */
-	if (i > 100)
-		return 0;
-	*p = buf[0];
+  union bpf_attr attr = { .btf = .., .btf_size = .., .btf_log_level = 1 };
 
-The jump bounds i. p was computed before:
+  bpf_sys_bpf(BPF_BTF_LOAD, &attr, sizeof(attr));
 
-	invalid access to map value, value_size=128 off=255 size=1
+BPF_BTF_LOAD and BPF_PROG_LOAD store log_true_size into the attr of the
+caller. When BPF_PROG_LOAD rejects func_info, line_info or core_relo
+records that are larger than it knows, it stores the record size that it
+expects. For the helper the attr is a kernel pointer, so
+copy_to_bpfptr_offset() writes to the memory of the program.
 
-That p is buf + i is a static fact: it holds on every path. Treat the
-subprog as the outermost loop, which runs once: compute_scev_for_loop()
-with -1 for the header. (REG r) is the entry value of r. A loop is a single
-insn for the subprog, as a nested loop is for the enclosing one, so
-join_successor(), topmost_nested_loop(), forget_non_invariants() and the
-worklist work as they are. The body is acyclic: each basic block is visited
-once, and a def is one value per call of the subprog. The prog above, from
-the level 2 log after 'Computing SCEV for subprog at 0:':
+arg2_type in struct bpf_func_proto bpf_sys_bpf_proto is
+ARG_PTR_TO_MEM | MEM_RDONLY. So the verifier keeps what it knows about an
+attr on the stack across the call: a slot that held 0 is taken for 0 after
+it. bpf_may_write_mask() of the call does not have the slots of the attr.
+And an attr in a map that the program cannot write to is accepted.
 
-	 2: r7 &= 255                      r7 is (& %r0.0 255)
-	 8: call bpf_map_lookup_elem#1     r0 is %r0.8
-	10: r6 = r0
-	11: r2 = r6
-	12: r2 += r7                       r2 is (+ %r0.8 (& %r0.0 255))
-	13: if r7 > 0x64 goto pc+2
+Say MEM_WRITE. An attr in read-only memory, such as
+a 'static const union bpf_attr' in .rodata, is refused now:
+"write into map forbidden".
 
-%r0.8 is the def of r0 by insn 8.
-
-The verifier adds edges that the CFG does not have, see
-bpf_head_guard_target(): from may_goto before a loop header, and from
-a subprog that is out of budget to its last exit. Nothing is known on them:
-join_added_edges() joins '?' at their targets, as bpf_compute_const_regs()
-does. A subprog that has a loop with a truncated exit list is not analyzed:
-the exits are the successors of the loop as a single insn.
-
-The worklist is in reverse post-order: all predecessors come first. So the
-env of a basic block, 2140 bytes, is freed when the block is done, unless
-it starts with a header, a latch or an exit. That goes for loops too. Their
-envs stayed until the end of bpf_check(), so memory goes down.
-
-To load the selftests, Cilium, sched_ext, katran, bpfjailer and programs in
-Rust the kernel spends 1.9 % more instructions (perf stat), and load time
-goes up by 2 to 3 % (veristat). mem_peak of veristat goes down by 1.1 % for
-the C programs and by 7.3 % for those in Rust.
-
-reg_bounds.c looks for '18: (bf) r0 = r6' and ';' in the log. Scalar
-evolution prints that for code outside of loops now, after 't'.
-
+Fixes: 37cce22dbd51 ("bpf: verifier: Refactor helper access type tracking")
+Fixes: 216e3cd2f28d ("bpf: Add MEM_RDONLY for helper args that are pointers to rdonly mem.")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/scev.c                             | 130 +++++++++++++++---
- .../selftests/bpf/prog_tests/reg_bounds.c     |   5 +-
- .../selftests/bpf/progs/verifier_scev.c       |   4 +-
- 3 files changed, 118 insertions(+), 21 deletions(-)
+ kernel/bpf/syscall.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-index 5fb31d6be97e..a0324fbc875e 100644
---- a/kernel/bpf/scev.c
-+++ b/kernel/bpf/scev.c
-@@ -287,7 +287,8 @@ static int imm_expr(struct scev *scev, s64 value)
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 9004f2673ccf..04a3b3c80c74 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -6692,7 +6692,7 @@ static const struct bpf_func_proto bpf_sys_bpf_proto = {
+ 	.might_sleep	= true,
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_ANYTHING,
+-	.arg2_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
++	.arg2_type	= ARG_PTR_TO_MEM | MEM_WRITE,
+ 	.arg3_type	= ARG_MEM_SIZE,
+ };
  
- /*
-  * The insn at @idx defines @reg. Without its backedges and with nested loops collapsed the body is
-- * acyclic: an insn executes at most once per iteration, so a def is one value per iteration.
-+ * acyclic: an insn executes at most once per iteration, so a def is one value per iteration. A
-+ * subprog is the outermost loop, which runs once.
-  */
- static struct expr_def insn_def(int idx, u32 reg)
- {
-@@ -767,6 +768,25 @@ static struct env *get_loop_env(struct scev *scev, int loop_header, int insn_idx
- 	return e;
- }
- 
-+/* The env has no users any more */
-+static void free_loop_env(struct scev *scev, int loop_header, int insn_idx)
-+{
-+	struct insn_envs *envs = scev->envs[insn_idx];
-+	u32 i;
-+
-+	for (i = 0; i < envs->cnt; i++) {
-+		if (envs->entries[i].loop_header != loop_header)
-+			continue;
-+		kfree(envs->entries[i].env);
-+		envs->entries[i] = envs->entries[--envs->cnt];
-+		break;
-+	}
-+	if (envs->cnt)
-+		return;
-+	kfree(envs);
-+	scev->envs[insn_idx] = NULL;
-+}
-+
- static int replace_reg(struct scev *scev, struct env *e, u32 reg, int id)
- {
- 	if (id < 0)
-@@ -1337,7 +1357,7 @@ static int worklist_push(struct bpf_verifier_env *env, int loop_header, int idx)
- {
- 	struct scev *scev = env->scev;
- 	struct scev_worklist *worklist = &scev->worklist;
--	u32 tag = (u32)loop_header + 1;
-+	u32 tag = loop_header + 2; /* -1 is a subprog */
- 
- 	if (scev->discovered[idx] == tag)
- 		return 0;
-@@ -1621,11 +1641,52 @@ static bool can_compute_loop_scev(const struct bpf_loop *loop)
- 	return !loop->irreducible && !loop->nested_exits_overflow;
- }
- 
--static int compute_scev_for_loop(struct bpf_verifier_env *env, int cur_header)
-+/* A loop is a single instruction for the subprog too: no exit list may be truncated. */
-+static bool can_compute_subprog_scev(struct bpf_verifier_env *env, struct bpf_subprog_info *sub)
-+{
-+	struct bpf_loop *loop;
-+	int i;
-+
-+	for (i = sub->start; i < (sub + 1)->start; i++) {
-+		loop = env->insn_aux_data[i].loop;
-+		if (loop && (loop->exits_overflow || loop->nested_exits_overflow))
-+			return false;
-+	}
-+	return true;
-+}
-+
-+/*
-+ * The edges that the verifier adds, see bpf_head_guard_target(): bpf_insn_successors() doesn't have
-+ * them. They leave all loops. The env at their source is not known: @cur_env is all '?'. So their
-+ * target is a join point with a phi for every live register.
-+ */
-+static int join_added_edges(struct bpf_verifier_env *env, struct bpf_subprog_info *sub,
-+			    struct env *old_env, struct env *cur_env)
-+{
-+	int i, t, err;
-+
-+	for (i = sub->start; i < (sub + 1)->start; i++) {
-+		t = bpf_head_guard_target(env, i);
-+		if (t < 0)
-+			continue;
-+		err = join_successor(env, -1, t, old_env, cur_env);
-+		if (err)
-+			return err;
-+	}
-+	return sub->bail_insn < 0 ? 0 : join_successor(env, -1, sub->bail_insn, old_env, cur_env);
-+}
-+
-+/*
-+ * @cur_header and @first are a loop header. Or -1 and the first insn of a subprog: the subprog is
-+ * the outermost loop, which runs once. (REG r) is the entry value of r, the loops in it are single
-+ * instructions.
-+ */
-+static int compute_scev_for_loop(struct bpf_verifier_env *env, int cur_header, int first)
- {
- 	struct scev_worklist *worklist = &env->scev->worklist;
- 	struct bpf_insn_aux_data *aux = env->insn_aux_data;
--	struct bpf_loop *cur_loop = aux[cur_header].loop;
-+	struct bpf_loop *cur_loop = cur_header < 0 ? NULL : aux[cur_header].loop;
-+	struct bpf_subprog_info *sub = bpf_find_containing_subprog(env, first);
- 	struct env *header_env;
- 	struct scev *scev = env->scev;
- 	struct bpf_loop *nested_loop;
-@@ -1633,17 +1694,21 @@ static int compute_scev_for_loop(struct bpf_verifier_env *env, int cur_header)
- 	struct env *old_env = NULL;
- 	struct bpf_iarray *succ;
- 	bool log_level2 = env->log.level & BPF_LOG_LEVEL2;
--	int s, i, err, idx, succ_idx;
-+	int s, i, err, idx, succ_idx, start;
- 	u32 r;
- 
- 	if (log_level2)
--		bpf_log(&env->log, "Computing SCEV for loop at %d:\n", cur_header);
-+		bpf_log(&env->log, "Computing SCEV for %s at %d:\n",
-+			cur_loop ? "loop" : "subprog", first);
-+
-+	if (!cur_loop && !can_compute_subprog_scev(env, sub))
-+		return 0;
- 
- 	/*
- 	 * For irreducible loops, and for loops nesting a loop with a truncated
- 	 * exit list, just assume that everything is clobbered for now.
- 	 */
--	if (!can_compute_loop_scev(cur_loop)) {
-+	if (cur_loop && !can_compute_loop_scev(cur_loop)) {
- 		header_env = get_loop_env(scev, cur_header, cur_header);
- 		if (!header_env)
- 			return -ENOMEM;
-@@ -1662,17 +1727,30 @@ static int compute_scev_for_loop(struct bpf_verifier_env *env, int cur_header)
- 		if (!old_env)
- 			goto nomem;
- 	}
--	header_env = get_loop_env(scev, cur_header, cur_header);
-+	header_env = get_loop_env(scev, cur_header, first);
- 	if (!header_env)
- 		goto nomem;
- 	setup_initial_loop_env(header_env);
--	err = worklist_push(env, cur_header, cur_header);
-+	err = worklist_push(env, cur_header, first);
- 	if (err)
- 		goto out;
-+	if (!cur_loop) {
-+		/* no backedge overwrites it */
-+		header_env->empty = false;
-+		err = join_added_edges(env, sub, old_env, cur_env);
-+		if (err)
-+			goto out;
-+	}
- 
- 	while (worklist->nr) {
- 		idx = *min_heap_peek_inline(worklist);
- 		min_heap_pop_inline(worklist, &worklist_cb, env->cfg.postorder_nums);
-+		start = idx;
-+		if (signal_pending(current)) {
-+			err = -EAGAIN;
-+			goto out;
-+		}
-+		cond_resched();
- 
- 		/* join_successor() maps nested-loop entries to their representative header. */
- 		nested_loop = idx != cur_header ? aux[idx].loop : NULL;
-@@ -1684,12 +1762,16 @@ static int compute_scev_for_loop(struct bpf_verifier_env *env, int cur_header)
- 			 */
- 			if (log_level2)
- 				memcpy(old_env, cur_env, sizeof(*old_env));
--			/* Pull the nested loop's stack-store base dependencies up. */
--			for_each_set_bit(r, nested_loop->store_base_regs, BPF_SCEV_REGS_NUM)
--				or_expr_regs(env, cur_env->reg2expr[r], cur_loop->store_base_regs);
--			/* And what its jumps depend on. */
--			for_each_set_bit(r, nested_loop->tested_regs, BPF_SCEV_REGS_NUM)
--				or_expr_regs(env, cur_env->reg2expr[r], cur_loop->tested_regs);
-+			if (cur_loop) {
-+				/* Pull the nested loop's stack-store base dependencies up. */
-+				for_each_set_bit(r, nested_loop->store_base_regs, BPF_SCEV_REGS_NUM)
-+					or_expr_regs(env, cur_env->reg2expr[r],
-+						     cur_loop->store_base_regs);
-+				/* And what its jumps depend on. */
-+				for_each_set_bit(r, nested_loop->tested_regs, BPF_SCEV_REGS_NUM)
-+					or_expr_regs(env, cur_env->reg2expr[r],
-+						     cur_loop->tested_regs);
-+			}
- 			err = forget_non_invariants(env, cur_env, idx);
- 			if (err)
- 				goto out;
-@@ -1713,8 +1795,12 @@ static int compute_scev_for_loop(struct bpf_verifier_env *env, int cur_header)
- 			for (;;) {
- 				if (log_level2)
- 					memcpy(old_env, cur_env, sizeof(*old_env));
--				collect_store_base_regs(env, cur_env, idx, cur_loop->store_base_regs);
--				collect_tested_regs(env, cur_env, idx, cur_loop->tested_regs);
-+				if (cur_loop) {
-+					collect_store_base_regs(env, cur_env, idx,
-+								cur_loop->store_base_regs);
-+					collect_tested_regs(env, cur_env, idx,
-+							    cur_loop->tested_regs);
-+				}
- 				err = transfer(env, cur_env, idx);
- 				if (err)
- 					goto out;
-@@ -1739,6 +1825,9 @@ static int compute_scev_for_loop(struct bpf_verifier_env *env, int cur_header)
- 					goto out;
- 			}
- 		}
-+		/* Reverse post-order: all predecessors came first, the env has no users any more */
-+		if (!aux[start].need_scev)
-+			free_loop_env(scev, cur_header, start);
- 	}
- 
- 	err = 0;
-@@ -2146,7 +2235,12 @@ int bpf_compute_scev(struct bpf_verifier_env *env)
- 		idx = postorder[i];
- 		if (!aux[idx].loop)
- 			continue;
--		err = compute_scev_for_loop(env, idx);
-+		err = compute_scev_for_loop(env, idx, idx);
-+		if (err)
-+			return err;
-+	}
-+	for (i = 0; i < env->subprog_cnt; i++) {
-+		err = compute_scev_for_loop(env, -1, env->subprog_info[i].start);
- 		if (err)
- 			return err;
- 	}
-diff --git a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-index 09f7930733be..c2079eb64201 100644
---- a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-+++ b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-@@ -1290,7 +1290,8 @@ static int parse_range_cmp_log(const char *log_buf, struct case_spec spec,
- 		 *   18: (bf) r0 = r6       ; R0=... R6=...
- 		 * Different verifier passes may print
- 		 *   18: (bf) r0 = r6
--		 * as well, but never followed by ';'.
-+		 * as well, but never followed by ';'. Except for scalar evolution:
-+		 *   t   18: (bf) r0 = r6   ; r0 ... -> ...
- 		 * The branches are in the log in the order the verifier looked at them.
- 		 */
- 		q = log_buf;
-@@ -1299,7 +1300,7 @@ static int parse_range_cmp_log(const char *log_buf, struct case_spec spec,
- 
- 			while (*s == ' ' || *s == '\t')
- 				s++;
--			if (*s == ';')
-+			if (*s == ';' && (q == log_buf || q[-1] == '\n'))
- 				break;
- 			q = s;
- 		}
-diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
-index cab2fe974d44..6d1b8542f801 100644
---- a/tools/testing/selftests/bpf/progs/verifier_scev.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
-@@ -2377,12 +2377,14 @@ __naked __noinline __used static int returns_zero(void)
-  * A loop that the compiler unrolls in part has an exit for every 'break' and 'return' in every
-  * copy of its body. How many there are says nothing about the number of iterations.
-  * Scalar evolution takes a nested loop for one insn, and its exits are the successors of this insn.
-- * The list of exits is not complete: the loop around has no formulas.
-+ * The exit list is truncated: the enclosing loop has no SCEVs, the subprog is not analyzed.
-  */
- SEC("xdp")
- __success __log_level(2)
- __msg("loop at 1, too many exits, too many exits of a nested loop")
- __msg("loop at 2, nested in 1, too many exits")
-+__msg("Computing SCEV for subprog at 0:")
-+__msg_next("Computing SCEV for subprog at {{[0-9]+}}:")
- __msg("loop header at 1, unsupported loop: too many exits of a nested loop")
- __msg("loop header at 2, header_count is [0..4] ")
- __naked void loop_around_301_exits(void)
 -- 
 2.55.0
 
