@@ -1,50 +1,50 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.97.179.56
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794382487;
-	b=gTZQilMN0RgWbVUeIb+4IIjBnsU82iCia23M9fBVQ4SewhfLN02N76pV46T4aWnFjYOY
-	 ksime0qT90QjLc0SVxUmZ5m0mneXHpLIjz7vLZgDk8oPAxQBDzap36IZ3Y3IDnlK5b3sx
-	 YdsfB51Ucx1XX36u6Oj9/CiEYs+5oPB/5WFQu5IYDPFFnhl5F1yD5/hE/5GCQMPbRMi2T
-	 Lp/tIBvfVcTK6aT37b5yixrgGf7moWPAhDHYTsA2zLI/Jh4AhfLpA7dIyclgUBk2HSDs3
-	 8N8VbKIxetoZymeOuh3EqeNKgMMKkHkcSsezPdOZoqEVBrFO8eP+8IN5V/AQcXQsCog==
+	t=1794382484;
+	b=w+VjJp22Ht5T1KvbSOZyH6IzqvjVmS+ogIJTCo+QPsrwcvYxwnVvUjZ3fTJ7vE/c18PP
+	 fTxUoxI7yFHwavgC1G4c29ioIc+i52FmeU2EJFd7c15ZRwOGahf/lPwQzagbElHR9vp3+
+	 idFZ3uCfpNfc4ul8Jbcl+fBLYIuir+NYVuVpIGyeH0RDzC6cprSij+HV6KTbwEgeiRqyH
+	 XDoV1nFD5Uxj0+rWENefaTP+I893V3rNgiC4UEKYLcN6+KZBEYAISvs0oL4n39wLVjLuZ
+	 qlKtnaCV9nR9QcM3QKgaAUkd0TbbJHENmfHmZOOvwTemWUrPnexH9RyADprj0ye/cew==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794382487;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794382484;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
 	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=Ms9BPHkoaP+qtvZ2CK2xTYT/SNrV2XAl7Rjaysi6YTs=;
-	b=SA0RKtIC0fAGxYRn/Qrp0xE6cnHCz9DZiQKDCvVOq1g/Nar2tMRsNimmjghB4rsT6Spq
-	 DoLy6MdJ2yu9fz00UenvtUKgGi+3Lf7JPfj5pEO9mb1Pg+RyuMd6EvRNK3i5YtaM7KQLq
-	 pTvl3Iw8zev+T1AsVQaFyAP4n+1p6kgHEOYRSRZGBXClm0wYHCUWfdMSpYeWlSOVfMljH
-	 UKHHsD3d9ALoqTosHRzhZL/2m9MjKd55Dbex90gwQK2rpGQd1vRJ1yPhDQB1uGIr0Wd26
-	 z3qkEx5rlysiL6T7lqiDzb3a+yI++xIbDrKxHvKNqapJj2lWTMg7VSeAqAjUFrXO0sQ==
+	bh=TKdv7edjmPjExE3RyciVP5KfNQ2HgIujnfELAufwRbY=;
+	b=FNiUPbcMpnNiDnWnDR6Uu6d7ITDibjKaJLDkG6Q4hT85HJxV9aOBgwT930npXMylT7cZ
+	 erfMSArBXW3ogFwdLqNnhoC6eWQqf96R4sKVC6jF6rTnbQrlGGaY01bU5uMB+1zm4UIwr
+	 WtWlild16cdTmb2eKl6gm1HNrLkQOruWDLMA+LYGFJcvC8nGptnyPCkyR1ShZ4yqrIikf
+	 LDsfU4VEElzgrF8v/4F5fyn83Mr3QacavrQXhqXNr1bLw0IHojk2uRuNEWUtT6WrvPZdx
+	 CB2mnwf0zhVjpBn+TWDPgad1NzqEOL1sYjqsWGGmr1lBIUNVyBeK/lpOrtm0kHadhxw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=igalia.com;
 	spf=pass smtp.mailfrom=igalia.com;
-	dkim=pass header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256 header.s=20170329 header.b=AEPFmlyP;
+	dkim=pass header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256 header.s=20170329 header.b=SirE7b3l;
 	arc=none smtp.remote-ip=213.97.179.56
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52AA160A2610;
-	Wed, 11 Nov 2026 07:34:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 52AA160A2610
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCC46606A326;
+	Wed, 11 Nov 2026 07:34:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CCC46606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256 header.s=20170329 header.b=AEPFmlyP
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256 header.s=20170329 header.b=SirE7b3l
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
 	s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
-	Cc:To:From:From:Reply-To; bh=Ms9BPHkoaP+qtvZ2CK2xTYT/SNrV2XAl7Rjaysi6YTs=;
-	t=1794382487; x=2109742487; b=AEPFmlyPQIpxAS/AV96nXZJXwfZ+yAqJ2Qecv2hztbsFNy6
-	Oy9x5QcL5plhVP/tMryuOZolYMNuLQ67xebXDWbIeW4a4isqbbVK9lBIyWos0Oiav0Od9MNp83Gy7
-	SPpsSTyWQsGuXNVbBBQKaRaTCepMzdmuPJl3XGBKhbxppaF81+yx9AAR2ZYgbPtHkz+3U1WrPpGbJ
-	MKZTPAYt9nx1AgQCHITI6fcXVuTb3sBLI4auUHMYHGasMMIQpli6zEsHAY+uEgO1X5akfUZWHr1Fd
-	/u+hX8GgXOM2C59NRhNT5iCE64JjRkVKX2Ul1XsW8orncp8VoHm4IDQsTFioeb2w==;
+	Cc:To:From:From:Reply-To; bh=TKdv7edjmPjExE3RyciVP5KfNQ2HgIujnfELAufwRbY=;
+	t=1794382483; x=2109742483; b=SirE7b3l0sDQH+gSG9FWmkwD3RuzTkbrz9Qpp3ANlJPLi+T
+	9SBmEKtS6KJMjefWOo4vG4FUVc2PPuqmB0ACaO4rhMUmJnCqsAsBzXRjQQzrpZ56Q8jIXgGomnqfs
+	QQfa7Mqn46j/UgOnNd+9pG4QdUUdIUSuXNdw6wu3o3a9hnHb7Y/LQgFmRoAfRIpvbBot9SHUNrYry
+	LuHCctIwK5yRymkiP9VgqRfBM98fY4OM1v+PjeKiIH6BC+kKJZ52Qty8i16gvtdOGeN7brdBuIsOt
+	tjZa+5g/+/52far52nCvbwKH94tLl7Pr3DJHeoiVeX3FRmkxBCtLnUcKzl36sdZg==;
 Received: from [58.29.145.179] (helo=localhost)
 	by fanzine2.igalia.com with esmtpsa 
 	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1xR2qs-008aYr-8H; Wed, 11 Nov 2026 08:34:39 +0100
+	id 1xR2ql-008aYe-JD; Wed, 11 Nov 2026 08:34:32 +0100
 From: Changwoo Min <changwoo@igalia.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -66,9 +66,9 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	linux-kernel@vger.kernel.org,
 	changwoo@igalia.com,
 	kernel-dev@igalia.com
-Subject: [PATCH bpf-next v2 2/3] selftests/bpf: libarena: Add rb_next()
-Date: Wed, 11 Nov 2026 16:34:15 +0900
-Message-ID: <20261111073416.203153-3-changwoo@igalia.com>
+Subject: [PATCH bpf-next v2 1/3] selftests/bpf: libarena: Order equal rbtree keys FIFO
+Date: Wed, 11 Nov 2026 16:34:14 +0900
+Message-ID: <20261111073416.203153-2-changwoo@igalia.com>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261111073416.203153-1-changwoo@igalia.com>
 References: <20261111073416.203153-1-changwoo@igalia.com>
@@ -83,92 +83,85 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add rb_next(), the in-order successor through parent pointers.
+An RB_DUPLICATE tree links a new key to the left of an equal one, so
+rb_least() and rb_pop() return the newest of several equal keys. A
+queue of tasks keyed by vtime should instead serve equal keys in
+arrival order, as sched_ext's vtime-ordered DSQs do.
 
-Add a selftest that walks a tree with repeated keys and checks the walk
-against the order in which the head leaves the tree.
+Send equal keys right on insert, as the kernel's rb_add() does. A new
+node then lands after every node with an equal key. Rotations and
+removals preserve the in-order sequence, so equal keys stay in
+insertion order without a tie-break field.
+
+Add a selftest that interleaves equal keys while the tree grows and
+checks the pop order.
 
 Signed-off-by: Changwoo Min <changwoo@igalia.com>
 Reviewed-by: Alexei Starovoitov <ast@kernel.org>
 Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 ---
- .../bpf/libarena/include/libarena/rbtree.h    |  1 +
- .../bpf/libarena/selftests/test_rbtree.bpf.c  | 57 +++++++++++++++++++
- .../selftests/bpf/libarena/src/rbtree.bpf.c   | 20 +++++++
- 3 files changed, 78 insertions(+)
+ .../bpf/libarena/include/libarena/rbtree.h    |  6 +--
+ .../bpf/libarena/selftests/test_rbtree.bpf.c  | 37 +++++++++++++++++++
+ .../selftests/bpf/libarena/src/rbtree.bpf.c   |  6 +--
+ 3 files changed, 43 insertions(+), 6 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h b/tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h
-index 00e63b12d82e..788e25fcd7fd 100644
+index 486428911d96..00e63b12d82e 100644
 --- a/tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h
 +++ b/tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h
-@@ -71,6 +71,7 @@ int rb_find(struct rbtree __arena *rbtree, u64 key, u64 *value);
- int rb_print(struct rbtree __arena *rbtree);
- int rb_least(struct rbtree __arena *rbtree, u64 *key, u64 *value);
- int rb_pop(struct rbtree __arena *rbtree, u64 *key, u64 *value);
-+struct rbnode __arena *rb_next(struct rbnode __arena *node);
- 
- int rb_insert_node(struct rbtree __arena *rbtree, struct rbnode __arena *node);
- int rb_remove_node(struct rbtree __arena *rbtree, struct rbnode __arena *node);
+@@ -45,9 +45,9 @@ enum rbtree_alloc {
+  * the existing node.
+  *
+  * RB_DUPLICATE: Allow nodes with identical keys in the rbtree.
+- * Finding/popping/removing a key acts on any of the nodes
+- * with the appropriate key - there is no ordering by time
+- * of insertion.
++ * Nodes with identical keys are kept in insertion order, so
++ * rb_least() and rb_pop() return the oldest of them. Finding
++ * or removing by key acts on any of them.
+  */
+ enum rbtree_insert_mode {
+ 	RB_DEFAULT,
 diff --git a/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c
-index 1e2a0fac1e4f..a92b00f799f8 100644
+index 856c484a009a..1e2a0fac1e4f 100644
 --- a/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c
 +++ b/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c
-@@ -285,6 +285,63 @@ __weak int test_rbtree_duplicate_fifo(void)
+@@ -248,6 +248,43 @@ __weak int test_rbtree_duplicate(void)
  	return rb_destroy(rbtree);
  }
  
-+#define NEXT_NR_NODES	64
-+
-+static struct rbnode __arena *next_nodes[NEXT_NR_NODES];
++#define FIFO_NR_NODES	64
++#define FIFO_NR_KEYS	4
 +
 +SEC("syscall")
-+__weak int test_rbtree_next(void)
++__weak int test_rbtree_duplicate_fifo(void)
 +{
++	const u64 per_key = FIFO_NR_NODES / FIFO_NR_KEYS;
 +	struct rbtree __arena *rbtree;
-+	struct rbnode __arena *node;
-+	u64 seed = 0xcafe, value;
-+	int i;
++	u64 key, value;
++	int ret, i;
 +
-+	rbtree = rb_create(RB_NOALLOC, RB_DUPLICATE);
++	rbtree = rb_create(RB_ALLOC, RB_DUPLICATE);
 +	if (!rbtree)
 +		return 1;
 +
-+	/* Pseudo-random keys with repeats, so the walk crosses equal keys. */
-+	for (i = 0; i < NEXT_NR_NODES && can_loop; i++) {
-+		/* LCG using Knuth's MMIX constants for determinism. */
-+		seed = seed * 6364136223846793005ULL + 1442695040888963407ULL;
-+		node = rb_node_alloc((seed >> 33) % 16, i);
-+		if (!node)
++	for (i = 0; i < FIFO_NR_NODES && can_loop; i++) {
++		ret = rb_insert(rbtree, i % FIFO_NR_KEYS, i);
++		if (ret)
 +			return 2;
-+
-+		if (rb_insert_node(rbtree, node))
-+			return 3;
 +	}
 +
-+	/* Start the walk at the leftmost node. */
-+	node = rbtree->root;
-+	while (node->left && can_loop)
-+		node = node->left;
++	for (i = 0; i < FIFO_NR_NODES && can_loop; i++) {
++		ret = rb_pop(rbtree, &key, &value);
++		if (ret)
++			return 3;
 +
-+	for (i = 0; i < NEXT_NR_NODES && can_loop; i++) {
-+		if (!node)
++		/* All of key 0 in insertion order, then all of key 1, ... */
++		if (key != i / per_key)
 +			return 4;
 +
-+		next_nodes[i] = node;
-+		node = rb_next(node);
-+	}
-+
-+	if (node)
-+		return 5;
-+
-+	for (i = 0; i < NEXT_NR_NODES && can_loop; i++) {
-+		if (rb_least(rbtree, NULL, &value) || value != next_nodes[i]->value)
-+			return 6;
-+
-+		if (rb_remove_node(rbtree, next_nodes[i]))
-+			return 7;
-+
-+		rb_node_free(next_nodes[i]);
++		if (value != key + FIFO_NR_KEYS * (i % per_key))
++			return 5;
 +	}
 +
 +	return rb_destroy(rbtree);
@@ -178,36 +171,29 @@ index 1e2a0fac1e4f..a92b00f799f8 100644
  clean_up_noalloc_tree(struct rbtree __arena *rbtree)
  {
 diff --git a/tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c b/tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c
-index 831a1ef1c2a1..bf39cb2aa751 100644
+index 7f0f6dc3e17d..831a1ef1c2a1 100644
 --- a/tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c
 +++ b/tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c
-@@ -413,6 +413,26 @@ __weak int rb_least(struct rbtree __arena *rbtree, u64 *key, u64 *value)
- 	return 0;
- }
+@@ -171,7 +171,7 @@ struct rbnode __arena *rbnode_least_upper_bound(struct rbnode __arena *subtree,
+ 		return NULL;
  
-+/*
-+ * Return the in-order successor of @node, or NULL if @node is the last one.
-+ * Walking from the leftmost node with it visits the tree in key order, equal
-+ * keys in insertion order. Call it under the writer's lock.
-+ */
-+__weak
-+struct rbnode __arena *rb_next(struct rbnode __arena *node)
-+{
-+	struct rbnode __arena *parent;
-+
-+	if (node->right)
-+		return rbnode_least(node->right);
-+
-+	/* Climb until we leave a left subtree; its parent comes next. */
-+	while ((parent = node->parent) && node == parent->right && can_loop)
-+		node = parent;
-+
-+	return parent;
-+}
-+
+ 	while (can_loop) {
+-		dir = (key <= node->key) ? 0 : 1;
++		dir = (key < node->key) ? 0 : 1;
  
- /*
-  * If we are referencing ourselves, a and b have a parent-child relation,
+ 		if (!node->child[dir])
+ 			break;
+@@ -278,8 +278,8 @@ int rb_node_insert(struct rbtree __arena *rbtree,
+ 	}
+ 
+ 	node->parent = parent;
+-	/* Also works if key == parent->key. */
+-	if (key <= parent->key)
++	/* An equal key goes right, after the existing ones. */
++	if (key < parent->key)
+ 		parent->left = node;
+ 	else
+ 		parent->right = node;
 -- 
 2.56.0
 
