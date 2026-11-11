@@ -1,112 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794406612;
-	b=sCunEUZWnKKmte6RWBKRhO58ftM01ujRyAM7dBCX/QQShDQj4w2bCbyzG9WIOYcH+wA+
-	 N+0qO83sNrp0WZa0PIrIVf8IPCxvlvN57dARcdyxd96iQBNvmg9b4kl1416ZpHEziMoLZ
-	 lkuE12d7SNdV+16j3Xo1QDowcqh0lL1ASCm9JgZ07yr5X/PzyehaF+79OFyeoFNvFYqPz
-	 Wo6AvN8xRUsKWSlGmpn4aTzl6EQ/lG21ROZkfMqIm/Bf2xsZN/Ds0zIC4Ao1dA/pKLy4Z
-	 6AXBZtOtKvQ233mMN5CBVW8eBFlivcDrKzDy0QexloLRT/EIHir/PHPtEmRamcQuPSQ==
+	t=1794407892;
+	b=vllhogdCLwB42M8k5uxbHwRBs2iwlVutQ0n4eevK5oHUDx58AAVVB3CLgyQKPKxCoeVs
+	 f3rJhiFsWWVH8VSnWQ4HXPfwfdcv7tYAq16FERFFEQYywOztG97xyHdoLZwTpiu9o8vgn
+	 RwAqqv/e/NufaKuam/pPfmulzSE4M6U+b9NYz4Ppvir+Z8ueXrGtOgNcjxziLC1rdgNS4
+	 IsMKvfYkmL2iVxIf2xhcAK3lPT7wrtHcu8pAb5CWk4ZMxK54K74aY42bcLqUJSeRcCKEJ
+	 Y/UWalvrqVBzcm/fPFuPiv82In5PFaFLMoKliFG0dh5MxYvl1MTr+FEsmy2yLpcjcaw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794406612;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=rxh6ySQw4OyzmF+zvez+p31cAvwAIQMJM/KeP5k2znw=;
-	b=tB//Q31NbkbtbsAZU5kk2Nhkf9kGjrbMnp/daC9CssXJ3K0YxLUHR5Zn6qrXdsU9dgpd
-	 k3ijy/h6BY/j32ybQaQCZsdBCSQCNxlZ5NyKf60LSRs5hsLiiYocpeDSH1alXcds7RBIJ
-	 FE/xjm2mTVRUtliPzS4EZZGFtFxaLxA1UMSa0LivGJrsBfjdZSq4NvA88009PEnvIYTbj
-	 8MFGAePZtl8Lw/FgfIxTZWgAIl8bJ9KuTTl6j7Fte6WqNbXyeseua3ZB2xlqczg8l+YQL
-	 A6MDQjVhiLQPKM/EDniMj4td+UKI8mCxo0dBEVc4jGP/QRptC1+ddTpiMQCjFtJ+HBw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794407892;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=U8fhDkCvMLVZ19jT3ksqKdUKXpNfrcfX99iyCDlvcKw=;
+	b=PKZwfsRM7yOlI/9rQMmz3PiOxQ5ACDmS3isur5BXFp3GEYlALa6v2QF8pI3CFLiZD25u
+	 sAWuvO9jLeQ47R3Kxuv0L0S+ooZBx60AH3kuxpW1pe4RL9bu6EZsC5yjmBFHaRGQKayUM
+	 WyGh+AQF6flYMsPooebnHXaTCNxai24z65CXujr2+PgpEi3aqkhuKDUr+NzOpljVpMlSU
+	 +LVy6odzvL7s5fJ5evnpUet/SmvJaCfBYy3cYgITX1AE2GKnqWsFLR3CIddDBj0Z2scN8
+	 nof0gZf6l+ZyVfh4KK8U+XEqkeReJxjBP0D9cXavLOzQD2t5yxaqUbpv9bBSWnUba6w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=mojatatu.com;
-	spf=none smtp.mailfrom=mojatatu.com;
-	dkim=pass header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=PkOuAvhP;
-	arc=none smtp.remote-ip=209.85.160.177
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IcgXXHmk;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4009606A324
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 14:16:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E4009606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 182EA606A321
+	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 14:38:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=PkOuAvhP
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-53664b4860bso30918241cf.1
-        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 06:16:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1794406611; x=1795011411; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=rxh6ySQw4OyzmF+zvez+p31cAvwAIQMJM/KeP5k2znw=;
-        b=PkOuAvhPVdtzJ3wJgKaLOTUIfWGW2ZvolzadQnNSWT0uvvZq9KvTMm6jBKhUkb6MaE
-         BCHFnx5z6Bo5mDTJGyI6oPI6IeT7T0KK0DY1aErqz+2uFReDs38ZFl6kgYnPkeVGiKUB
-         whj4ZiaJEzjJNVw8xmStgAv0PsTye5lxa6S2M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794406611; x=1795011411;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=rxh6ySQw4OyzmF+zvez+p31cAvwAIQMJM/KeP5k2znw=;
-        b=lbzQgwa7tkOaBqmSYWLM/4GWH6tp+hK3v5o0n4Amd6vkoCci3wpiD7quvcoTrl43qF
-         P01MLFM07JJyzQBqCZa78C4XTWAzIe43nBzUO0NAqnZp4RjmxPc9zCTedUAGeBwVqn7R
-         4hBRbrWl08hyKjRJVHvuUhJ1DmjI/zjyefYyLJ12Fn5mTBivOadImP25O5NhKBf2mG20
-         5tW3JlQbnh3kjyu1O6vhHQ7m5FqCGLNVpIfiVAFi/YIkKuPARQ4RtbjMPmWGYRx9n3lj
-         ZaOyAKvtFbyC7+LHnLddWMkVScCLLKnhstRUwtIUMnvZ0tlonTajRVDdbdltU7Y5oxgW
-         wFfg==
-X-Forwarded-Encrypted: i=1; AL+hErESDBEEfTtIc55raoyEzT02K6rvd8IPbXNjgIC4jdbH4RmsJ+7Xz18WvVYsDDs00vN4vMM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+Rqe1R98Iitifj5g0fyVulj6L9tt4BD97unLZgKl8maSv5Syvd
-	YWV/Z6KyXbHujX9pMm+UYRPh/zOyLOhYatNuiAk5hYrLH/XOzZLHwqanB4ycLOQONA==
-X-Gm-Gg: AYBFou2bgZmuv515LG+lG3pu1t3T4pwq9DhYJKOz7hDyZBY2y2HkVEmzfY7Rr++qkVW
-	yGXHDxytlWmDw0loNdEiEw+5q6JBNiq42GaM6ht5tdicN0P7a3hA+cqWuxciLey9mMzaZvaN78H
-	Sd6oR8EzCVPRcnYNg2PM1QdZeGsWq8tkVRX7JL0zBrVpf4yMAZ6vi4muqC8O8yE1JS8zWztBLn8
-	TwkLDMUub6tE8FiVB3TD0LhMLYz1/eKSlwxDIJ6f3BHiICUnzpAX5GyNdff7P6o5zOHfIQ5qrbg
-	BuLTqPIr6QQ/Ras3FKNJrZEdJoj+184HdpCA3WnQvyiRJEpHRjEqv0Dc+nZfmruRLEBEz/4o1a5
-	A7cSTFIB8+z8FkWucIhji5vsqsl2t4+xlIQwNd5g6rXwM6zR2cx0d8T6TLpVmo7ls/pPWMuhND6
-	nG4tIqPpkIJFoo8G+l6P4iGB09jFFNP0fNyjmv/9VoQ9YgAqyZ1PSkTKrhqSzl5Y/GoByw5Kmyy
-	C6qplg38ALesbuVkRNZEy5SHKgv7OlL1/eshFprIdbQkfgk93vhdDL9Bo1Ji/DWvV+ZLK5su/jL
-	MI9z0iFY+TCB8ccrAzhLtLDN0EJSLJ0ao74H6xjRsPO8R+R0y8tW+L5Fjsk0IQ+u3twtB/gy33S
-	kOCAG80n1MnbYvg==
-X-Received: by 2002:a05:622a:13d4:b0:532:cacd:e420 with SMTP id d75a77b69052e-556bdbeb543mr38533561cf.6.1794406610942;
-        Wed, 11 Nov 2026 06:16:50 -0800 (PST)
-Received: from localhost.localdomain ([64.203.83.2])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5550be2e592sm51505041cf.24.2026.11.11.06.16.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2026 06:16:49 -0800 (PST)
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-To: netdev@vger.kernel.org
-Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	bpf@vger.kernel.org,
-	Victor Nogueira <victor@mojatatu.com>,
-	Jiri Pirko <jiri@resnulli.us>,
-	sashiko-bot@kernel.org
-Subject: [PATCH net-next 2/2] bpf: drop the stale dst when redirecting to an explicit nexthop
-Date: Wed, 11 Nov 2026 09:16:38 -0500
-Message-Id: <CORE-9NOG.v1.r0.20261111073528-2@mojatatu.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <CORE-9NOG.v1.r0.20261111073528@mojatatu.com>
-References: <CORE-9NOG.v1.r0.20261111073528@mojatatu.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IcgXXHmk
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 914C21F00A07;
+	Wed, 11 Nov 2026 14:38:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794407891;
+	bh=U8fhDkCvMLVZ19jT3ksqKdUKXpNfrcfX99iyCDlvcKw=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=IcgXXHmkPmGG55X6mQhHcbPlBtZwPbRwRxgtQqsxDthYDfoG5K/aNpAAAFoDLetk8
+	 CoFr2HXVfY3G6eYylG3BqknDK5uHOzYITfHfEjiOMJb7BWFrx5YIxsH6x6X3f+pPrs
+	 hzjAew12gNODbgzbIFfVgTgRDLHo9nrvt1m6JsCopTVs3E5AAjIVL7Gf0YQe2ao4Uy
+	 J8ZVQmyuKBHLSEcWy3xywItB4R7DvY4f7ZDlWAw8pW+ftJGArTiR3LSIdJGtY0VmWM
+	 CtF9NuYxVbouoO/csIyv0qVtbPcVpddFZIxKLA1SOJys0gKEYJO9QI1D0vj+2MJBho
+	 BUS62ElxgS4jA==
+Message-ID: <sashiko-outbox-209175@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v1 06/29] bpf: Keep last insn's aux data in
+ add_hidden_subprog()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <4e0c5d6d96b2e917ff52effe483ec90daf0e2ac0.1794399387.git.memxor@gmail.com>
+References: <cover.1794399387.git.memxor@gmail.com>
+ <4e0c5d6d96b2e917ff52effe483ec90daf0e2ac0.1794399387.git.memxor@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 11 Nov 2026 14:38:11 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -115,73 +59,101 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-This is a followup of the review of the teql arp-queue fix as reported
-by Sashiko.
+Thank you for your contribution! Sashiko AI review found no new issues
+in this patch, but noticed 1 related pre-existing issue it does not
+introduce:
+- [Critical] bpf: misplaced nospec flag in adjust_insn_aux_data() [1]
+--
 
-The issue: __bpf_redirect_neigh_v4() and __bpf_redirect_neigh_v6()
-install a dst for the redirect target only when the program lets the
-helper do the FIB lookup. With BPF_F_NEXTHOP the program supplies the
-nexthop, the lookup is skipped, and whatever dst the packet arrived
-with stays attached while bpf_out_neigh_v{4,6}() switch skb->dev to the
-target device. If that device's neighbour is incomplete the packet is
-parked on its arp_queue with the original route's dst; draining the
-queue re-looks the neighbour up from that dst and builds the frame with
-the original device's link-layer header, then transmits it on the target
-device.
+commit f29fbac112320caad2087aefcfcc0181b977759d
+Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-The Fix: drop the dst when the nexthop is supplied. That branch never
-consults the route dst, so nothing is lost, and the queue drain keeps
-the target device's parking neighbour.
+bpf: Keep last insn's aux data in add_hidden_subprog()
 
-Conditions to recreate the bug: two network namespaces, A (10.10.0.1/24)
-and B (10.1.0.1/24) in one, their veth peers in the other with only A's
-peer addressed (10.10.0.2/24) so B's nexthop cannot be resolved by ARP.
-Resolve A's neighbour for 10.10.0.2 as permanent and attach a cls_bpf
-egress program to A, with vb the index of B:
+This commit swaps the aux data of the original last instruction and the end
+of the patch in add_hidden_subprog() so that the original instruction keeps
+its aux data (while leaving indirect_target on the first instruction).
 
-    struct bpf_redir_neigh nh = { .nh_family = AF_INET,
-                                  .ipv4_nh = htonl(0x0a010002) };
+> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+> index eb5a5bca5c8d5..8597b443d5619 100644
+> --- a/kernel/bpf/fixups.c
+> +++ b/kernel/bpf/fixups.c
+> @@ -2280,8 +2280,10 @@ static int add_hidden_subprog(struct bpf_verifier_=
+env *env, struct bpf_insn *pat
+>  {
+>  	struct bpf_subprog_info *info =3D env->subprog_info;
+>  	int err, cnt =3D env->subprog_cnt;
+> +	struct bpf_insn_aux_data *aux;
+>  	struct bpf_insn *last;
+>  	struct bpf_prog *prog;
+> +	bool indirect;
+> =20
+>  	/* We only reserve one slot for hidden subprogs in subprog_info. */
+>  	if (env->hidden_subprog_cnt) {
+> @@ -2299,6 +2301,17 @@ static int add_hidden_subprog(struct bpf_verifier_=
+env *env, struct bpf_insn *pat
+>  	if (err)
+>  		return err;
+>  	prog =3D env->prog;
+> +	/*
+> +	 * The patch starts with the original last insn, but the commit moved t=
+hat
+> +	 * insn's aux data to the end of the patch: give it back to the insn. A=
+ll
+> +	 * but indirect_target, which the commit left with the insn, since an
+> +	 * indirect jump to it lands there still, see patch_list_adj_aux().
+> +	 */
+> +	aux =3D &env->insn_aux_data[prog->len - len];
+> +	indirect =3D aux->indirect_target;
+> +	swap(aux[0], aux[len - 1]);
+> +	aux[0].indirect_target =3D indirect;
+> +	aux[len - 1].indirect_target =3D false;
+>  	info[cnt + 1].start =3D info[cnt].start;
+>  	info[cnt].start =3D prog->len - len + 1;
+>  	/* The patch ends with the exit. */
 
-    return bpf_redirect_neigh(vb, &nh, sizeof(nh), 0);
+[Severity: Critical]
+This problem wasn't introduced by this patch, but can patch_list_adj_aux()
+misplace the nospec flag [1] when expanding a single instruction into a
+multi-instruction sequence?
 
-Send one packet to 10.10.0.2. It is parked on B's incomplete neighbour
-for 10.1.0.2; once that neighbour becomes valid the frame leaves B
-carrying A's source address and A's neighbour as the destination.
+kernel/bpf/fixups.c:patch_list_adj_aux() {
+	...
+	*last =3D *old;
+	/* Recompute zext_dst: the last insn of the patch need not be the patched =
+one. */
+	last->zext_dst =3D bpf_insn_def32(prog, &patch[p->len - 1]) >=3D 0;
+	memset(slot, 0, sizeof(*slot) * (p->len - 1));
+	...
+	/* indirect jumps to the replaced insn land on p->target */
+	if (last->indirect_target && p->target !=3D p->len - 1) {
+		slot[p->target].indirect_target =3D 1;
+		last->indirect_target =3D 0;
+	}
+}
 
-Reported-by: Sashiko (nipa) <sashiko-bot@kernel.org>
-Closes: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-6HS9.v3.r0.20261103062649-2@mojatatu.com
-Link: https://lore.kernel.org/netdev/QDISC-6HS9.v3.r0.20261103062649-2@mojatatu.com/
-Reviewed-by: Victor Nogueira <victor@mojatatu.com>
-Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
----
- net/core/filter.c | 4 ++++
- 1 file changed, 4 insertions(+)
+During verification with Spectre v1 mitigation active, a bpf_loop() call can
+be eligible for inlining on an architectural path while a speculative path =
+to
+the same instruction fails in check_func_args() with -EACCES, causing
+do_check() to set insn_aux->nospec on the call instruction and stop verifyi=
+ng
+that speculative path.
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index aca8160b26a1..2af24f371648 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -2318,6 +2318,8 @@ static int __bpf_redirect_neigh_v6(struct sk_buff *skb, struct net_device *dev,
- 		skb_dst_set(skb, dst);
- 	} else if (nh->nh_family != AF_INET6) {
- 		goto out_drop;
-+	} else {
-+		skb_dst_drop(skb);
- 	}
- 
- 	err = bpf_out_neigh_v6(net, skb, dev, nh);
-@@ -2433,6 +2435,8 @@ static int __bpf_redirect_neigh_v4(struct sk_buff *skb, struct net_device *dev,
- 
- 		skb_dst_drop(skb);
- 		skb_dst_set(skb, &rt->dst);
-+	} else {
-+		skb_dst_drop(skb);
- 	}
- 
- 	err = bpf_out_neigh_v4(net, skb, dev, nh);
--- 
-2.43.0
+When bpf_optimize_bpf_loop() -> inline_bpf_loop() later replaces the call
+with a 19-instruction sequence, patch_list_adj_aux() moves old aux data to
+last and zeroes the preceding entries while only restoring indirect_target =
+to
+slot[p->target].  As a result, bpf_convert_ctx_accesses() emits BPF_ST_NOSP=
+EC()
+before the last instruction of the inlined loop instead of at its entry,
+allowing speculative execution to enter the loop body and invoke the callba=
+ck
+with unverified state.
 
+[1] https://sashiko.dev/#/bug/linux-9fe39327-eb21-4b95-9330-3ea552a3b9fc
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1794399387.gi=
+t.memxor@gmail.com?part=3D6
