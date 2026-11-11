@@ -1,56 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794382712;
-	b=Fquw/qumq1ATOA/Ynnr/wwh01MsVnDK3mt0axj2oNFRhkOOYfAmmuaCEnvEK6ASozMhK
-	 3x7hoRvr0/eNmCJEMjEm4MNuEhROQFP/qLiReQ2jvm7A0pAQm9l08/rNgLdtZ+8k/oZr7
-	 xxKhnS5tWGjvCovPgtKiCCPSTCp1tMlOd+cuhmKDJMJeWUi33ZYSnY05IRtm05Y2PN6f2
-	 rj+OvtZ7zWJr5KQaovKN4EH6xmtqbPK3Y3jOCrSUUpn6N5yqbX5faj2e0z95Gdy4Bi6Zd
-	 t4SjtREZbuKoJTUBMj0GKby0ZWJH0KDG7hnmxNW/NHVcywHC4kQ6gnMA/LV49L21pJQ==
+	t=1794384083;
+	b=DgKpSQ1/uN47L0oj1n8g5FvVFo8S14dDv11wEyX184N9McBgapYMeer58rRPs7nSZxtJ
+	 1j347UW3IaS/Q8bhI/1gn9iN8/Thf5CDxWKh0amTb0g+UqFSh0Vkp7o/U1Cc29SNDSgZO
+	 ivlIlDcOT4teDkTAaUre+bt5THig1G6hfnkSfZTYuu3KaR4H6VIFkvsATJClP5ZCzmdl2
+	 qEp7w4KB0TmJWaAgsVAaunMU+r1UZ2CHpCWEJS5KFKSo4KZ4zRCxiey3josEwv/HTRUj2
+	 eIChEogFVKHgllNoA6HR13bDOt+e3AWd+8GRNvtqpcq/rfsbUPIJsq54Pb584vZ2Sbg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794382712;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=bO5rxit6USkrft3N2tcytxP6nv4U9l+A1JlCAlqUMZ0=;
-	b=PjpmfRQRW2grj4zDtUde+R8Mg0oyGtblz3IvByPnvKDPJFx9eSYOpuc5E+wIdcORT4C4
-	 OIHluhH9HeqJ84W1wH3yz9IZFbC/UewJAnG1EQvwI+iCnUm85k0guA3rPPfoCP1TBgDV9
-	 RU41+ai6H4dmImZHbDE8U1lIep1gKaK/CyL8benbSwC7tQ5NvvazWj4xsQQdgIJAQaIek
-	 Ej1Je9WAmQD2pBQHlAxFzJPUC1XEXdQGVmXfQgIxl5zKMCsakJ/KNxOl9kq3v25XR6ErP
-	 9P7l2t5PFNfxcf3roUFm61yFvhhQVKVF3MrcvFo3LoMbGNWEsqIw8RdgNG/+Oq0jpVQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794384083;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=auUioKB9iDxCNGJRzVwktkzZSlbRGmUGRm1khRaq5NA=;
+	b=RRlEMJfp1+Fuio0z6bzZyceii0hQBl9Ny7gLDAdcrUPoPsdq80EqubnwbnmqRDMVejEz
+	 rjblmdzGXs6JtBdfPFCLSreem0Ty7krAk7HwSgOWDOHW6h/PV6HcOK5QqZRakBMMpj7QP
+	 Jy5w2/xfQIkRJ55J6mKxF0bO0ZlLUGXcdkRauiYiUVcJ+179ygU7usVU2QAavFnZoY7ix
+	 5UIUh2Ya3r5o/i+XEioZE5JIZvhMcKrovM/uNxVHUuBDq2aqiusuwTQNIPHARV1qMQfyJ
+	 nYDwinn8qEw/fFnYK6hzkzGTjMXNcofKQUugegM2iB8yxvsv9ueZzxNjqVVDT6zTHRQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TzvwwaZ6;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RBJ1GW3Z;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 742C8606A31C
-	for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 07:38:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76575606A31C;
+	Wed, 11 Nov 2026 08:01:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TzvwwaZ6
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF6601F00A05;
-	Wed, 11 Nov 2026 07:38:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RBJ1GW3Z
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EACD31F00A05;
+	Wed, 11 Nov 2026 08:01:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794382712;
-	bh=bO5rxit6USkrft3N2tcytxP6nv4U9l+A1JlCAlqUMZ0=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=TzvwwaZ6LQRdL2og8z8CgZJx7NueZQIJkh+UzbPn2GKWImdqaBjmqezBorRKYTXtS
-	 SCtYSgi++MiMCLfxvyAB68mLB11ayE049thqcnjxkSw7V1UkVnGP0vJReEqgeCpQAS
-	 c79hCpf6abpgHYrMmlfIa6DGNaByE28XEgyVspqr0RtWfowpa3+c1QZD3wuLlfoM/v
-	 GGOdeKtJdBxjYlNB4Z7HHf+Ue7BKIZybAuQ7gZtkQFFmJo6vTMCXorYCieHqNATjx0
-	 NA4zIg8f9LzQf20qkQ6YIuOmKAEG5CTnICYUL6QKCRpONCEevZzHvWVX5E/LNuv/P8
-	 JbEdF8gGoRIig==
-Message-ID: <sashiko-outbox-208531@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v10 1/2] bpftool: Use batch lookups for map
- dumps
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Tianyi Chen" <hi@tychen.cc>, bpf@vger.kernel.org
-In-Reply-To: <074a359a044d121b4d85d5b15b7740bc9a9f1073.1794380384.git.hi@tychen.cc>
-References: <cover.1794380384.git.hi@tychen.cc>
- <074a359a044d121b4d85d5b15b7740bc9a9f1073.1794380384.git.hi@tychen.cc>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 11 Nov 2026 07:38:31 +0000
+	s=k20260515; t=1794384083;
+	bh=auUioKB9iDxCNGJRzVwktkzZSlbRGmUGRm1khRaq5NA=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=RBJ1GW3Z0bSR+qUg9Pw4kt8EbNcp81Q+TJuPaB6fro9CJMVs0nEpE2u1FsQ1gsE/9
+	 kEeGyq8zos9VrOUilQHnrRL9J/gbLG7FDdKW7s4fnkTjtv6i/1m/r1FeUdWmMzRYBU
+	 gh12JIJd6s+KKgAGEq9Z5TGjdIxF0qv4EvafFwGJsdeAOYGf+E+lXbLpYe0M3ZLODL
+	 tuvk5Aaj+p6krN9tjFv9hAfaM6Ll5kpLE/1aDHenrMfyF7xeRCNGv4rfg3cLT5BhJ5
+	 iBvDsHdVdvRRlwisdN4HH5RLK1UHN3ZrUwBnKHOkLNoTBoyNVT/XrcBZGKeoJp0K+Y
+	 t3VskGvUeDc1w==
+Content-Type: multipart/mixed; boundary="===============6009813406233217659=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,139 +48,85 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Message-Id: <08e4851ff6c0fec6c90ae269b9edafedafdc5ed0462802fe1c1dae6aef465696@mail.kernel.org>
+In-Reply-To: <20261110164046.454431-2-a.s.protopopov@gmail.com>
+References: <20261110164046.454431-2-a.s.protopopov@gmail.com>
+Subject: Re: [PATCH v3 bpf-next 01/18] bpf: Add BTF ID sets for fmod_ret targets
+From: bot+bpf-ci@kernel.org
+To: a.s.protopopov@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,almagui@kernel.org,john.fastabend@gmail.com,qmo@kernel.org,brauner@kernel.org,kpsingh@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,sashal@kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org
+Cc: a.s.protopopov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed, 11 Nov 2026 08:01:21 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Medium] bpftool: silent map dump truncation on RHASH in
-  dump_map_batch()
---
+--===============6009813406233217659==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 7f62f4c69f650b2c84d0fbb5439eadc6c97b8aea
-Author: Tianyi Chen <hi@tychen.cc>
+> bpf: Add BTF ID sets for fmod_ret targets
 
-bpftool: Use batch lookups for map dumps
+TL;DR: Comment nit only: the BTF_SET8_FMODRET comment (also in tools/include)
+says the set governs fentry/fexit attachment, but non-sleepable fentry/fexit
+never consult it. It could mislead readers.
 
-This commit updates map_dump() to use BPF_MAP_LOOKUP_BATCH in 1 MiB batches
-and fall back to bpf_map_get_next_key() after the last printed key if a
-batch lookup fails.
+> diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
+> --- a/include/linux/btf_ids.h
+> +++ b/include/linux/btf_ids.h
 
-Link: https://github.com/libbpf/bpftool/issues/63
-
-> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-> index 4b65edf74859b..c5c56323f0623 100644
-> --- a/tools/bpf/bpftool/map.c
-> +++ b/tools/bpf/bpftool/map.c
 [ ... ]
-> @@ -763,10 +761,75 @@ static int dump_map_elem(int fd, void *key, void *v=
-alue,
->  	} else {
->  		print_entry_plain(map_info, key, value, cpu_ids, cpu_cnt);
->  	}
-> +}
->
-> +static int dump_map_elem(int fd, void *key, void *value,
-> +			 struct bpf_map_info *map_info, struct btf *btf,
-> +			 json_writer_t *btf_wtr, const int *cpu_ids, int cpu_cnt)
-> +{
-> +	if (bpf_map_lookup_elem(fd, key, value)) {
-> +		print_entry_error(map_info, key, errno);
-> +		return -1;
-> +	}
-> +
-> +	print_map_elem(key, value, map_info, btf, btf_wtr, cpu_ids, cpu_cnt);
->  	return 0;
->  }
->
-> +#define MAP_DUMP_BATCH_BYTES (1U << 20)
-> +
+
+> @@ -13,6 +13,12 @@ struct btf_id_set {
+>  /* This flag implies BTF_SET8 holds kfunc(s) */
+>  #define BTF_SET8_KFUNCS		(1 << 0)
+>  
 > +/*
-> + * Print the elements returned by batched lookups, leaving the last one =
-in
-> + * @key. Return true at the end of the map. After any error, the caller
-> + * continues with bpf_map_get_next_key(), which walks the map in the sam=
-e order.
-> + * The caller must ensure that key_size + value_size is non-zero.
+> + * This flag implies BTF_SET8 holds functions which BPF fmod_ret, fentry and
+> + * fexit programs may attach to. Per-function flags: KF_SLEEPABLE only.
 > + */
-> +static bool dump_map_batch(int fd, void *key, void *value,
-> +			   struct bpf_map_info *info, struct btf *btf,
-> +			   json_writer_t *wtr, const int *cpu_ids, int cpu_cnt,
-> +			   unsigned int *num_elems)
-> +{
-> +	size_t value_size =3D map_value_size(info);
-> +	void *keys, *values, *batch, *in_batch =3D NULL;
-> +	__u32 capacity, count, i;
-> +	bool done =3D false;
-> +	int err;
+> +#define BTF_SET8_FMODRET	(1 << 1)
 > +
-> +	capacity =3D min(MAP_DUMP_BATCH_BYTES / (info->key_size + value_size),
-> +		       (size_t)info->max_entries);
-> +	if (!capacity)
-> +		return false;
-> +
-> +	/* Hash table batch cursors are u32 bucket indices; other maps use keys=
-. */
-> +	batch =3D malloc(max(info->key_size, 4U));
-> +	keys =3D malloc((size_t)capacity * info->key_size);
-> +	values =3D malloc((size_t)capacity * value_size);
-> +	if (!batch || !keys || !values)
-> +		goto out;
-> +
-> +	do {
-> +		count =3D capacity;
-> +		err =3D bpf_map_lookup_batch(fd, in_batch, batch, keys, values,
-> +					   &count, NULL);
-> +		if (err && err !=3D -ENOENT)
-> +			goto out;
-> +		for (i =3D 0; i < count; i++) {
-> +			/* Preserve alignment for odd-sized BTF keys and values. */
-> +			memcpy(key, keys + (size_t)i * info->key_size, info->key_size);
-> +			memcpy(value, values + (size_t)i * value_size, value_size);
-> +			print_map_elem(key, value, info, btf, wtr, cpu_ids, cpu_cnt);
-> +		}
-> +		*num_elems +=3D count;
-> +		in_batch =3D batch;
-> +	} while (!err);
-> +	done =3D true;
 
-[Severity: Medium]
-As reported by bot+bpf-ci@kernel.org on v9 [1], can dump_map_batch()
-silently truncate a BPF_MAP_TYPE_RHASH dump when an element is deleted
-concurrently?
+This isn't a bug, but does this comment describe the set accurately?  It
+says the set holds functions that fmod_ret, fentry and fexit programs may
+attach to, which reads as if the set controls fentry/fexit attachment.
 
-For BPF_MAP_TYPE_RHASH, __rhtab_map_lookup_and_delete_batch() holds only
-rcu_read_lock().  If dst_key is removed between copying elem->data and
-calling rhashtable_next_key(&rhtab->ht, dst_key), rhashtable_next_key()
-returns ERR_PTR(-ENOENT), which leaves has_next_cursor false and causes
-__rhtab_map_lookup_and_delete_batch() to return -ENOENT early:
+The set is only read through btf_kfunc_is_modify_return(), which has two
+callers.  bpf_check_attach_target() uses it for non-sleepable
+BPF_MODIFY_RETURN only:
 
-kernel/bpf/hashtab.c:__rhtab_map_lookup_and_delete_batch() {
-	...
-	while (elem && !IS_ERR(elem) && total < max_count) {
-		memcpy(dst_key, elem->data, key_size);
-		...
-		elem =3D rhashtable_next_key(&rhtab->ht, dst_key);
-		...
-	}
+    } else if (prog->expected_attach_type == BPF_MODIFY_RETURN) {
+        ...
+        if (btf_kfunc_is_modify_return(btf, btf_id, prog) ||
+            !check_attach_modify_return(addr, tname))
+            ret = 0;
 
-	if (elem && !IS_ERR(elem)) {
-		/* Stash next-to-process key as cursor for the next batch. */
-		memcpy(cursor, elem->data, key_size);
-		has_next_cursor =3D true;
-	}
-	...
-	/* No more elements after this batch. */
-	if (!has_next_cursor)
-		ret =3D -ENOENT;
-}
+and btf_id_allow_sleepable() uses it for sleepable programs only, and
+requires KF_SLEEPABLE:
 
-Because dump_map_batch() treats -ENOENT as end-of-map and returns true,
-map_dump() skips the bpf_map_get_next_key() fallback loop (where
-rhtab_map_get_next_key() restarts from NULL on -ENOENT) and exits with
-success after printing only part of the map.
+    u32 *flags = btf_kfunc_is_modify_return(btf, btf_id, prog);
+    if (flags && (*flags & KF_SLEEPABLE))
+        return 0;
 
-[1] https://lore.kernel.org/r/33b057d852c258c157f6aa31e45083418944efe0efaad=
-1d72bcb5513205a67f6@mail.kernel.org
+Non-sleepable fentry and fexit programs never look at the set.  This
+remains true through the end of the series (6dc8474f6891 has the same two
+callers).
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1794380384.gi=
-t.hi@tychen.cc?part=3D1
+The commit message ("the functions BPF fmod_ret programs may attach to ...
+KF_SLEEPABLE marks targets sleepable programs may attach to") and the
+resolve_btfids header comment ("the targets of BPF fmod_ret programs")
+describe it differently.  Someone could read this comment and add a
+function to a BTF_FMODRET set to make fentry/fexit attach work, which would
+also allow fmod_ret programs to override its return value.
+
+Could the wording be along the lines of "the set holds fmod_ret targets,
+and KF_SLEEPABLE additionally lets sleepable fentry, fexit and fmod_ret
+programs attach"?  The identical comment in tools/include/linux/btf_ids.h
+has the same problem.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42981885558
+--===============6009813406233217659==--
