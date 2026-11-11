@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794436887;
-	b=Od3aQiUJSpuQiT9XnMzBmSI9SIgmlCrYwjgOmmdu3hICA4zdGZfsgJK0bvGAt5LQO2cc
-	 oFDkJCbEzLigZrairvsYrKVc73d5bAkUSjFtRGq3YfI7z/wKf/AKersH1bYCbbcQ3z/hR
-	 vdVmM2sMoPV6JXojquA8no+rxdj0JYfn3fB374wmSTCKQZLjKR1foPm4/Fb96FfHY62E8
-	 UyJIefR2WDa3YTppP7KEaDk/yrwicEklYwokXD1YZCDaK/aN0XSjHEhOTuX3Yn7/s8sHA
-	 DKgmiz439KJ5Lo/rgmUjbCyEvywvEa3B524YgfoVk/c94Sn7+E2SZ7CvFVfXkoAQDXQ==
+	t=1794436890;
+	b=stMWDrgadOXP7oBLT3DcEP236oDUUebIaetnlHG7UuwEY27kYRpErsMqxJ9Q0jCVIhDM
+	 bzj8mG3c+AKPtgseZlJkmMrLLUg2UBcQQxRn9PkVPJlwtJ8IBD42UYk/jsISUl+aLm9YK
+	 pfPc8Wt00NNMpgEcY+cBV0MmORqp5e9egnq7BrAjtQMbZBmvpaJt3axaxhMvlw/ZrRkQQ
+	 Wb3xAozPxFIg2bQ5ma4g1fg1KAv0nm4NkTPgM0YuuxLu/z2aq1yZDV9eVa3y9MsxmXCJx
+	 ZCOxniT5vaaT093qMZ6hHPpTbTw/1HhrF96v8238km+a+WI7wG3PKxLazUYUonwOYnA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794436887;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794436890;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=UY3RMS56DkTiyj0krxa5zBr/mBUw7hLobgrEZX1POGE=;
-	b=zS1slmV6d/mJ2JCkiODo/qU6/nx4wV53Ej2KrhONwyk2zY5DEzrHER7L6ygxDoqO9iSa
-	 O7e6R+cZqWW/6DOgX5l9+gCycxd05UPmtynzIdF/H463oiXNmBHSKrl/7DMW+3wmFkMQH
-	 ZcJ945y3PYzwSe20UhDwNVHo+9wvngseT1NbFe/c8ak55JX13bfdx2MihPZgUuOLNc9im
-	 +xRHKo29yPOQlDFdmsX6o4Ri72jNrS2ORjOwrA29BpgKN5mC66RtoS82C1aLtWZTQiNYR
-	 016a6G2XiIW2KyGKC1rLNBS4caDZ4gm3TApNaBHJk9UqMy24OKduxN0r6S5BdvqBx0A==
+	bh=I3SdX6kZQ0XDoO/6VQkWrZqhfUCv1pPcoLBzgR6/zDc=;
+	b=vmOj1obywy1rJ/s4r3gH+KSTf+SPlzaKsKjcUaTCZQqdjzPFACyUbBNzkZ/VggV5HMHe
+	 wJU+pDby+o7nHn2mrZ65v09idycZ1UzJXPZ2pa3JvYlYlo83AmNr8Hi4KNBe1QoaNzMmh
+	 PnHOHID4jpwt75syC1O2hOLA6GnwFM+4mhgQhpKdqN7p7RB/g1KmBdaZF30l4eIj2g7H5
+	 qQhxtQuSsJjZH9qxpCGDWdVCUountrtJUS3EXkgpHVp3DL8G3PG8dzSXiWhoNYdnZkFwT
+	 fdlmaFYw/n/+zEltWhPPmDqT9JLS6w+afOKOr7xB38Dop/YtPAZYGWCXfU1wDlm+1Jg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iHI+Wm8K;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KAZ8uQGr;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A47E606A880;
-	Wed, 11 Nov 2026 22:41:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4443660A2604;
+	Wed, 11 Nov 2026 22:41:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iHI+Wm8K
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEDF11F00A0A;
-	Wed, 11 Nov 2026 22:41:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KAZ8uQGr
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D35AB1F00A05;
+	Wed, 11 Nov 2026 22:41:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794436887;
-	bh=UY3RMS56DkTiyj0krxa5zBr/mBUw7hLobgrEZX1POGE=;
+	s=k20260515; t=1794436890;
+	bh=I3SdX6kZQ0XDoO/6VQkWrZqhfUCv1pPcoLBzgR6/zDc=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=iHI+Wm8KcSPSvJBFNxNli54Zk3sK/ga3jxTAPM7hgTxGSFX5fqD1gnPhB6596uoN9
-	 i+qy8oDyxvR5IJpgw9Z3Qaq5Q/ln0MSLSRSNsVvheo13lNFSce7r0NmSg0EWq8+Ghx
-	 NFBBkR+X6sKRYrFfHKKnHofhDE53X943wccSU7Q2Ua+yMWcxi4BUSeaMo1mc7fwN3Q
-	 u46+I8fyauv8wQ/lfsgCxqGiA6UWzcNfUuQSbtYVcSLOZ+xLPaHPFF1qYW3BqcPPNY
-	 7MRAfYRR1sl8CW+LP3loUeT+nXi91y+GZPpxdvW/s2dfKOakLnRUbOyo6Ko9NmucZF
-	 IEtCFltIV416g==
+	b=KAZ8uQGrJIqbjhAcnQh3lL3zP6UZKh6JTUOlsvT9lh7HbzzYdt5JASy+/049a1IOF
+	 Qh93y6CsfRl/KzjafjGP7QsrxASRizDoZY6HRBlFuYgCmB8E3wIb3e4z5cP5OAf4wP
+	 im6oRyCFFqm+T3JuQpu3EPULMuPa8z5bqYxJ/dHniZTt30yW+6JBcPFgLKoSA+4Z+J
+	 ujaGJEbLyoMamXOOO7qsxMX8QvjgMlB56oRFTsVB4xNC8bjGLay5o2/YKbx9nyWNgP
+	 V7h3eJkrf4mSk4XMg6Iud8pg4v/GuzS4NQbdi4D4kaJIVT8GjT/O44q7fnUHZwYosx
+	 iK1XNWMujKdPQ==
 Subject:
- Re: [PATCH net-next v1 03/11] xdp: Copy buffers with restricted lifetime
+ Re: [PATCH net-next v1 04/11] xsk: Allocate UMEM chunks through page_pool
 From: netdev-bot+sashiko@kernel.org
 To: bjorn@kernel.org
 Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, sdf@fomichev.me,
@@ -58,11 +58,11 @@ Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, sdf@fomichev.me,
  bestswngs@gmail.com, razor@blackwall.org, dw@davidwei.uk,
  aleksander.lobakin@intel.com, linux-doc@vger.kernel.org,
  linux-kernel@vger.kernel.org, stuclar@meta.com
-Date: Wed, 11 Nov 2026 22:41:24 +0000
-Message-ID: <179443688445.2199510.2127044982916637399@kernel.org>
-In-Reply-To: <20261110102039.1002605-4-bjorn@kernel.org>
-References: <20261110102039.1002605-4-bjorn@kernel.org>
-X-sashiko-severity: High
+Date: Wed, 11 Nov 2026 22:41:27 +0000
+Message-ID: <179443688740.2199510.18354202331310807632@kernel.org>
+In-Reply-To: <20261110102039.1002605-5-bjorn@kernel.org>
+References: <20261110102039.1002605-5-bjorn@kernel.org>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
@@ -75,98 +75,108 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Critical: 0 · High: 2 · Medium: 0 · Low: 0
+Low priority / nit picks for your consideration:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [High] xdp: missing xdp_data_meta_unsupported() check in
-  xdp_build_skb_from_zc()
-- [High] xdp: skb_shared_info overwrite in xdp_build_skb_from_zc() via
-  aligned memcpy
+- [Low] The patch adds NET_IOV_XSK, a net_iov type the CPU can read:
+  net_iov_address() returns area->vaddr + (idx << niov_shift), and…
+- [Low] The kernel-doc of __netmem_address() (include/net/netmem.h) still
+  describes header buffers as the standard case of always-page-backed…
 
 --
 
-> diff --git a/net/core/xdp.c b/net/core/xdp.c
-> --- a/net/core/xdp.c
-> +++ b/net/core/xdp.c
-> @@ -638,6 +689,9 @@ struct sk_buff *xdp_build_skb_from_buff(const struct xdp_buff *xdp)
->  	u32 nr_frags = 0;
->  	int metalen;
+xsk: Allocate UMEM chunks through page_pool
+
+This patch adds an AF_XDP memory provider for page_pool. Each aligned
+UMEM chunk becomes a CPU-readable net_iov of the new type NET_IOV_XSK,
+and netmem_address() can now return an address for it. The provider
+tracks which owner holds each chunk, and keeps chunks released by a page
+pool on an internal reuse stack.
+
+> diff --git a/include/net/netmem.h b/include/net/netmem.h
+> index b986ad616334b..a3b67ef32b218 100644
+> --- a/include/net/netmem.h
+> +++ b/include/net/netmem.h
+> @@ -69,6 +69,7 @@ DECLARE_STATIC_KEY_FALSE(page_pool_restricted);
+>  enum net_iov_type {
+>  	NET_IOV_DMABUF,
+>  	NET_IOV_IOURING,
+> +	NET_IOV_XSK,
+>  };
 >  
-> +	if (unlikely(xdp_buff_needs_copy(xdp)))
-> +		return xdp_build_skb_from_zc(xdp);
-> +
->  	if (unlikely(xdp_buff_has_frags(xdp))) {
->  		sinfo = xdp_get_shared_info_from_buff(xdp);
->  		nr_frags = sinfo->nr_frags;
+>  /* A memory descriptor representing abstract networking I/O vectors.
 
-[Severity: High]
-This makes xdp_build_skb_from_zc() the XDP_PASS path for restricted
-page pool buffers, and its copy can overrun the new head into the
-skb_shared_info.
+[Severity: Low]
+The struct net_iov kernel-doc just below this enum still says:
 
-The function asks the system page pool for truesize = xdp->frame_sz.
-When that comes back unchanged, napi_build_skb() places
-skb_shared_info at the same offset that xdp_data_hard_end() has in the
-source. The code then copies LARGEST_ALIGN(len) bytes starting at
-offset xdp->data_meta - xdp->data_hard_start.
+ * Examples include imported dmabuf memory and imported io_uring memory. See
+ * net_iov_type for all the supported types. While current net_iov types are
+ * unreadable by the CPU, net_iov has no inherent restrictions and may be
 
-That offset is often not a multiple of 16, which is normal after
-bpf_xdp_adjust_head() by an Ethernet or VLAN header. If data_end is
-also close to xdp_data_hard_end(), the rounded-up memcpy writes into
-the already initialised skb_shinfo() of the new skb: flags,
-nr_frags, the gso fields and frag_list.
+NET_IOV_XSK is readable by the CPU. xsk_pp_create() sets
+pp->area.vaddr = pool->addrs, so net_iov_address() returns
+area->vaddr + (idx << niov_shift), and netmem_address() is no longer
+NULL for every in-tree net_iov.
 
-The bytes written come from past data_end in the head chunk, which
-for UMEM is writable by userspace. Freeing or segmenting the skb
-later then walks a bogus nr_frags or frag_list.
+Documentation/networking/netmem.rst has the same problem. Its "Decouple
+net_iov from unreadability" section still says that in-tree net_iov
+implementations are unreadable by the CPU and that netmem_address()
+returns NULL for them.
 
-With XDP_FLAGS_EXT the head chunk no longer holds the shared info at
-all. Does anything still keep data_end below xdp_data_hard_end() for
-these buffers? If not, len alone can run past skb->end, since
-__skb_put() does not check.
+Should both texts be updated to list XSK UMEM as a readable net_iov
+type? Neither has changed by the last commit of the series, "eth: fbnic:
+Support AF_XDP page pool zero copy".
 
-Should the destination size be derived from the copy instead of
-xdp->frame_sz? For example: headroom + LARGEST_ALIGN(len) +
-SKB_DATA_ALIGN(sizeof(struct skb_shared_info)). Or should this path
-copy exactly len bytes?
+[ ... ]
 
-[Severity: High]
-Restricted buffers on XDP_PASS now go through xdp_build_skb_from_zc(),
-but that function cannot cope with unsupported metadata. If the driver
-called xdp_prepare_buff(..., false), or metadata is otherwise invalid,
-xdp->data_meta is xdp->data + 1.
+> @@ -345,10 +362,16 @@ static inline void *__netmem_address(netmem_ref netmem)
+>  	return page_address(__netmem_to_page(netmem));
+>  }
+>  
 
-The non-copy path of xdp_build_skb_from_buff() handles this. It
-reserves and puts from xdp->data and only sets metadata when
-metalen > 0. xdp_copy_buff_to_frame() in this patch also checks
-xdp_data_meta_unsupported().
+[Severity: Low]
+The kernel-doc for __netmem_address() above still uses a header buffer
+as its example of netmem that is always page-backed:
 
-xdp_build_skb_from_zc() does not. It:
+ * Unsafe version of netmem_address(). When @netmem is always page-backed,
+ * e.g. when it's a header buffer, performs faster and generates smaller
+ * object code (no check for the LSB). When @netmem points to IOV, provokes
+ * undefined behaviour.
 
-- computes len as data_end - data_meta,
-- reserves data_meta - data_hard_start,
-- copies from data_meta,
-- then sees metalen == -1 and skips the __skb_pull().
+memory_provider.h says MP_CAP_READABLE providers "may back header page
+pools". xsk_pp is the first provider that is both net_iov based and
+MP_CAP_READABLE.
 
-The resulting skb starts at the second byte of the Ethernet header and
-is one byte short, so eth_type_trans() and everything above it parse
-shifted data. If data_end == data, len also wraps as a u32.
+xsk_pp_init() does not reject header pools, and xsk_pp_alloc_netmems()
+only hands out NET_IOV_XSK net_iovs. Later in the series, "xsk: Install
+UMEM page pool providers in the core" requires the readable provider to
+back the header pool.
 
-The XSK callers did not hit this, because the pool sets
-data_meta == data. Page pool drivers without metadata support pass
-meta_valid == false routinely, though.
+A driver that follows this doc could call __netmem_address() on a header
+buffer of an xsk_pp backed queue. Would it get a garbage pointer back?
 
-Could xdp_build_skb_from_zc() compute the metadata size the way
-xdp_copy_buff_to_frame() does? That means treating unsupported
-metadata as zero length and copying from xdp->data.
+No in-tree caller does this today; fbnic uses netmem_address(). Should
+the "e.g. when it's a header buffer" wording be updated, though?
+
+> +/**
+> + * netmem_address - get the CPU address of the memory behind @netmem
+> + * @netmem: netmem to get the address of
+> + *
+> + * Return: the address, or NULL if the CPU cannot read @netmem.
+> + */
+>  static inline void *netmem_address(netmem_ref netmem)
+>  {
+>  	if (netmem_is_net_iov(netmem))
+> -		return NULL;
+> +		return net_iov_address(netmem_to_net_iov(netmem));
+>  
+>  	return __netmem_address(netmem);
+>  }
+
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261110102039.1002605-1-bjorn%40kernel.org
