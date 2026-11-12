@@ -1,91 +1,105 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=50.112.246.219
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.177
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794471117;
-	b=5WhoU6UEPaO6jCjGeCxh9XdNyIW+4P3wUZoKzTvWqBzN/ZJQKevnY70PTlRdODkTdRo7
-	 NcFlWk7f4PVSU6lkOLZAHxG3Gv57aH5QI5IcireGTv1LylXFUwRqAbfjhZfaZzabp9RHS
-	 RXBDtkEpO0aDEOGQW7fYEYqhX3tU7BFEAi7VrgENzDfu93X98IxUbJW36Q8H6gBdreb5X
-	 QH70XMssCR24I+ErIznCc7yV0hVO/guG0Hx7Ktx8RNS+h6iQlv11r2ifdHypmHQleHs5n
-	 46dYLiiPzwLE1Uw2YPpKtlCsSgAu4N3U5LyJ9/Bsn9yc8p/NgiRdkOnCP0GvPfsZitw==
+	t=1794471411;
+	b=fsAqQT0CMtm2f5Hrwmx76/ddpufFFr6cQMELp9Dt6RvFLvRRaBmJmFH14MbhLvWIMSIg
+	 pqhnjdgJPqms3RlWsDF2P6jEHKz5A98w7hS07oZSzk9ryh4aXRzZusGpBGPXyFykXVSkr
+	 eQoOV/P1vqyhpXtlOe5jv//IQ40xAbbpsvlQj1lrxj/umf6nwCp4mDuGwasLrSLVZ2kU6
+	 8vxWNgZpR1x00jm0YK00AZtSCySgZ4AtRY91i/6v1H9O6RdQb0+xGawXN6iGM22NDHBRl
+	 9gq31cExgSSP/M8pdluSA1F7xZO+GQ9E9rh2aQPZEtCO5ssQBr2V25FquPo73ZdSo/Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794471117;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
-	 From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Type:X-Originating-IP:X-ClientProxiedBy:
-	 Content-Transfer-Encoding;
-	bh=yRwejwn52j/pckFIXfpb6iPXXl8i/31yG967frHncGQ=;
-	b=2ZvXGcw7ZcqV7lhFR6S/I8pJa4flyNFRJGv7jevc8SlauEYpBWPI7906VY46qRJW0yyR
-	 HRsEWX85QbC0WDOQ39YU104grCq2p7B5F1qAZaVFzAEZDh4sFj5GsqNE+85DngMAr+8St
-	 dap+YcrdG8uYSQnmDPDP2Rb2b6ySJJQipja8E5E/Yeyj7xAKz7RrHWl4lGfQbv7by+Q5w
-	 CNMnZ5ZPP2iEtglMbhPmCFx6PIgnOWAp/X8gOphz3BjhUduNlskY+P3hZiGWh3MQ5Fsdc
-	 ay5ASlifbo1kxA++x/yr62uHHkPY14Dw2wGtDI12VdrWhYTueskE0XQi9z3EkTzS0QA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794471411;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=7a0tlXjZIjM2y8jRkqPsXOqBGSfZhqpDFXwLVtg4q7g=;
+	b=JStfPnGvUIickc+V/vXjzO9PR+yhoxMQSctfPPp4FnTApPMNLtug4Mh3oTtI4pDnqtlA
+	 xsM70rwaAlHn31p2m0AYE/TMoZPrLzGsUuvXm8Hrs3uOioZ6HeOLGYKD7UtJG6beSfDdC
+	 Vm5OHVy1Prz74TdGmII2KwurlNFr/34Q7IaI4t02qgBTcBw6P9bxAL8NpeCw3jIdXdP4R
+	 CBomXaxupSfjcav0pWlkbpOT5v3rZkvyLFOT0WXNoe3aFC12sImrrDcHjTtuZtDAIR8zf
+	 LAw18wEerEILsaki9Cr82CvlZyDMbvbhd8bS1n1Vd95cEHW5q2E58Yfb/hvBY1kdVZA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=amazon.com;
-	spf=pass smtp.mailfrom=amazon.com;
-	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=Eop3zxX0;
-	arc=none smtp.remote-ip=50.112.246.219
-Received: from pdx-out-015.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-015.esa.us-west-2.outbound.mail-perimeter.amazon.com [50.112.246.219])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FoPdHi1B;
+	arc=none smtp.remote-ip=209.85.214.177
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B94B606A32D;
-	Thu, 12 Nov 2026 08:11:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0B94B606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E73A606A327
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 08:16:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9E73A606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=Eop3zxX0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FoPdHi1B
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2eb0f1b592bso15432775ad.1
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 00:16:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1794471117; x=1826007117;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=yRwejwn52j/pckFIXfpb6iPXXl8i/31yG967frHncGQ=;
-  b=Eop3zxX03l9RnQYMeBxTQelYygV5Tsez/u/Rer934FkD8eqkr65+A539
-   KlAIohQfZFEGz8vZMTWPDnQNUNXaBr5KXE7I/zQF/Zr074EnJfbGySRnC
-   j3UM4iK9qabTNowb8Bj9j2NP1v/KVNS+YwDSuYCD2Udg60jo8U+BVsz6d
-   YcM+7xk8q8gF8qFvHWPDdt3qR9ljF7mX+SxVG2ZgyNRc3mFqFmSkIU+gg
-   ynvrGnNjF9qWVdga6e9KgDKZDdRcgUdXPae4GYPWJ6lmq7M2epQDceinE
-   HhE3zJpGyVSjdMFVs2rOeR8BXdIdtZm5HY0mha/wFDcbqLQH1F/3L8S/7
-   A==;
-X-CSE-ConnectionGUID: 88UP8YXmSku6Ng9uIsV3zw==
-X-CSE-MsgGUID: BDVhN59CST2+sSodA55VWA==
-X-IronPort-AV: E=Sophos;i="6.27,209,1787011200"; 
-   d="scan'208";a="33570827"
-Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
-  by internal-pdx-out-015.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2026 08:11:54 +0000
-Received: from EX19MTAUWC001.ant.amazon.com [205.251.233.53:28378]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.55.227:2525] with esmtp (Farcaster)
- id 57c27c56-a479-41ea-ac2a-2ef1fd33fc35; Thu, 12 Nov 2026 08:11:53 +0000 (UTC)
-X-Farcaster-Flow-ID: 57c27c56-a479-41ea-ac2a-2ef1fd33fc35
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
- Thu, 12 Nov 2026 08:11:53 +0000
-Received: from dev-dsk-sieberf-metal-1a-7543e84d.eu-west-1.amazon.com
- (172.19.116.227) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56; Thu, 12 Nov 2026
- 08:11:49 +0000
-From: Fernand Sieber <sieberf@amazon.com>
-To: <tj@kernel.org>
-CC: <mingo@redhat.com>, <peterz@infradead.org>, <juri.lelli@redhat.com>,
-	<vincent.guittot@linaro.org>, <bsegall@google.com>,
-	<dietmar.eggemann@arm.com>, <rostedt@goodmis.org>, <mgorman@suse.de>,
-	<vschneid@redhat.com>, <kprateek.nayak@amd.com>, <hannes@cmpxchg.org>,
-	<mkoutny@suse.com>, <void@manifault.com>, <arighi@nvidia.com>,
-	<changwoo@igalia.com>, <skhan@linuxfoundation.org>, <corbet@lwn.net>,
-	<rdunlap@infradead.org>, <cgroups@vger.kernel.org>,
-	<sched-ext@lists.linux.dev>, <linux-doc@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <bpf@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <nh-open-source@amazon.com>,
-	<hborghor@amazon.de>, <fmubeen@amazon.de>, <dwmw@amazon.co.uk>,
-	<karataev@amazon.com>, <sieberf@amazon.com>
-Subject: Re: [PATCH v2 0/4] sched/fair: cpu.max.runtime and idle refill for CPU credits
-Date: Thu, 12 Nov 2026 10:11:44 +0200
-Message-ID: <20261112081144.38224-1-sieberf@amazon.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <e795d4feb4a4e7ca4cf24f3cde9e301b@kernel.org>
-References: <e795d4feb4a4e7ca4cf24f3cde9e301b@kernel.org>
+        d=gmail.com; s=20260707; t=1794471410; x=1795076210; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=7a0tlXjZIjM2y8jRkqPsXOqBGSfZhqpDFXwLVtg4q7g=;
+        b=FoPdHi1BEIGYGOBQ8jpJJIMmkvpoD/bZN9zxseg4DWxtKOIMnkgyW2NgswJLpCTZGz
+         p1+TfM59lcC2EW57qxPryBMIphXUQabOQu4Jx3o0cQEA5eVZW+q3z4oJDaTU65prWjun
+         xPePBDtG7BRbz22ciNdE54qMSG4epM5qM0kXyzzkDipV444UesJJDbPG36nehwmBBehr
+         XpRkNix741MvHry8gMqmK4NqzYLWkh2hZ5suL84EPYn1Fx0TkWq1AU+EG6SsbPXWULUX
+         KOumUjbA6kskBFStVoYgOt8c9Gmi/rcShFFGhETqGd0IDRbejzeHrKPwCPTnsu1EVgph
+         a86Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794471410; x=1795076210;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=7a0tlXjZIjM2y8jRkqPsXOqBGSfZhqpDFXwLVtg4q7g=;
+        b=g9kNp18EhSEED7BeCo6f5RB6Prs+5N/E4Iq26VMU67DAM1RtUftq/KqLTAv5qaSPiu
+         mFPsdQtZ7tQLnvh3PTtqbctYod/TsBZDTGpWBmYpqXhNsAo00QuDm0yn5K2e5NjAQo/r
+         qyEHSP+JSLW7YGOPE9kR3U7+L0fEBCIOtJF1dtUcQirM+9FnT8z8l8Aawgn+km2dR3mx
+         OWssE+URRMYqCpGvYooZP2bh45eP8ilQ1TpoZbmuH/LOKMi7y/Hn74I8Dw/6ihswoVhd
+         iu5Cc9u7w5TFhKGRttPLFG/9cn7Lj3KsDPdomwSXIW0f7PLW7oXpX1WhKC+zXMn3Q/o+
+         6xPw==
+X-Forwarded-Encrypted: i=1; AL+hErEKWixMVxcTmLMC6LJAjBMBbfrLvJtuo7sgvpPqvvBsm/ND6QHyOAV77jZP+wSNLYZfYPU=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9O54vvMh5IPwddYYDRgnIRSZ02JuxI1uymbWAT+gIK7SaXFvdi
+	vZDbNcOElwFPuIgEZ3idA02Z/hqJUvAt9l9yHIs+uh+LlbEye9oZ6Jff
+X-Gm-Gg: AYBFou3OOKHWjXHIVfQSL0xGEM/juYZA2TcA6h89rofqS9cJiTWBvjNC7/gk4ZLaz/6
+	luR38PD0pvDfwChm4yJOPBfjhtIsc5LccUyfkXoO3LFCUspaq3CskEjbiiYhYdSYWYbV16HBsMA
+	RgtM5laNF0iR/XC7Rl45rnoW82GEX7wSExZmdiofTKs+DB9t3TvXdLVF/UPNqnQfPavXBbhTzYR
+	k1/kXdtjrbFGDA3kxtfUqUeBOWTgi74hLUkXXS3iBHm4cuMZG58xHT397Ocf5aLWvo84NuPhDSQ
+	xXTp9bdq6cHowdDMvR5Rk/gTfPj0qkPGMekCH09Z+9IeGhd3TzrH8miCCMrL8LUOp8zH9vb98J5
+	xOIkL1Fx7HNo1tmTRXOWDq1E6gpmcqXhV8BtTDusqcJAgVY8LjvWx5WNlDI2Sm2HDZvAVHr/hH+
+	XrTvBQlav9Rcq6FJVaRyIG3PtJxCTgoBBKM90oTUr8UJM3Sk2l7IGJXyAPuyq+3Czv0ZLo+ArPG
+	FU0z8b42v+Kxjg1XcooK/aHYusCl5MgH9cgYi67HOVDTNDRSGz/YBiPhM84ZoWjZk25BEL0tCRk
+	b6pq/jlgZhyWROrhNx4XeVkkKa4hgxOOIyenkvHeUoJ+R92Q4ASKEn14/CDWjteDyjlUNIS9E/8
+	87zzqVHml
+X-Received: by 2002:a17:902:f707:b0:2e5:38bf:cb43 with SMTP id d9443c01a7336-2edd7432537mr55445995ad.2.1794471409521;
+        Thu, 12 Nov 2026 00:16:49 -0800 (PST)
+Received: from thinkpad.tail59a646.ts.net ([112.199.224.229])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2edb6d4dc3bsm29970705ad.17.2026.11.12.00.16.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Nov 2026 00:16:49 -0800 (PST)
+From: Hang Zhengyang <hang.zhengyang1010@gmail.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH] uprobes/x86: Emulate ENDBR as a NOP
+Date: Thu, 12 Nov 2026 16:16:42 +0800
+Message-ID: <20261112081643.3983403-1-hang.zhengyang1010@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261112080406.GA2668804@noisy.programming.kicks-ass.net>
+References: <20261112-uprobe-endbr-v1-1-284a47a5ae3e@gmail.com> <20261112080406.GA2668804@noisy.programming.kicks-ass.net>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -95,26 +109,11 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-X-ClientProxiedBy: EX19D031UWC004.ant.amazon.com (10.13.139.246) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Tejun,
+On Thu, Nov 12, 2026 at 09:04:06AM +0100, Peter Zijlstra wrote:
+> Uh, no. We must not allow uprobe on ENDBR. If we ever get userspace IBT
+> (people are actually looking at that), then putting a probe on it will
+> make indirect function calls #CP.
 
-Fair point. I am happy to focus on the fair patches for now.
-
-v3, the two fair patches on their own with the bot findings fixed, is
-on the list:
-
-  https://lore.kernel.org/all/cover.1794398404.git.sieberf@amazon.com/
-
-Thanks,
-Fernand
-
-
-
-Amazon Development Centre (South Africa) (Proprietary) Limited
-29 Gogosoa Street, Observatory, Cape Town, Western Cape, 7925, South Africa
-Registration Number: 2004 / 034463 / 07
-
+You're right, I missed that. I'll drop this patch.
