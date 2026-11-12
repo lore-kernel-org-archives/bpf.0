@@ -1,64 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.251
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794488581;
-	b=tWUydDuWyltVYkZrDdca+qPwZkdQTBXWM9XS7P/ELXKb6H3a5VEXbDrGZM/ypN8Ech1v
-	 e+vfd5/G8V/E0csxosE/P9Sc7K0dFHfXEIzPJ3v/OqbqRzNUxSdiaml5wa4jhZgb5q4ow
-	 NHlozCvkBAqQ5tISWvSFk51kJIE5STC6xmxYyy1FmFzXFr8xvtY6wm8tpHqErPAfm9mRT
-	 fwxGspkQjK5ShhhT8MYeCk5TqwDe/N6UBG+60z1xNmjiVO59Xnof1QzTlrHeNFY9ITWdB
-	 kIJkBwV73G6Og7xmaEyB7N53xmSSNPWchjewtxfrcYMGm1v5UQt+/m+r2HG23I4I9Fw==
+	t=1794489005;
+	b=sQ3hClPvFTPC5ztknO0vefFXp8aK5y86IaLwtiqSudSSDaYUmHwDbi4MtCFCasqC5xZq
+	 8AvrzBmUpVqorrhZAA3Hm4Jq5DOrrAv/rCdz8WcyAD4iFkYfV25IYQ+yF7BH2jShj8wfQ
+	 BwUUrs2eRyF3/0ChjjHObu7WTexCFjWm0Vfmgne5oyqGLxeayJtl8cxo0s0NXNYFamdvr
+	 rT83KAc+hUJFdu4t8AMQVgV8F0hiHvubouym/jPWoas4R5NZhwLepGh7OdtQvHP0FGwCf
+	 A9JTAYy10FQFpMgWcKDlNJ08jqiehSQ+ZhcEwo4DpI7Mp9hmmKzX7oZAjhf0GEVtZtA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794488581;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=PBMXrFHASTKvrJ3Cb5b0x0+RtF3vzzYr8AtwvtbYKsw=;
-	b=eBzqwnKj6nxRAs85F9d91ojB97+YahzPdIXl/RtjQ3NbF/tNRp6AAdXKGpV/pQIG8LC2
-	 w6e20KzXfULHK5lQVuHGplwZ2f75fp2Qnsnxj2H15qk8blvyxVX4dyyYbO+6KTinp1LUT
-	 STXee7gYvX8A8JMglOqwno0Xcr5BZZOWqruowKQ0pmtmj4bjGDKOoWtTOFxRWr6/U7gJi
-	 FWjLDPi0iYdwev/wdfzc9uoY3miudsdS4g4pmpaavtRgcyj3TMURCjAATxwWjjxyD+FRI
-	 QM5sSwSTGpM3sclHhtK0A8eTYxyc5ZdyAJLHXEfFGoQ+6re5KlGR8179qDzteYNYV1w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794489005;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=PkhB7N72lsb6VkiCQm485DylgVp4F6QNfvuw6ggAbJI=;
+	b=WAfEaAYYDQys3Ly+FZbm/ZC5odjdN2LtWfPSfoXyzJ1MPdrjBwFak59AZZSDvCtYLD2W
+	 5VXjdY0h4FqKzitSoIQPT0qhSk2a0JUhr+QdZZ+L4Y7CBLkzMlFahNBAx5WMF8sY4eq+V
+	 cDO945WozMXHAgbLHUh/Gv/GpQkZ2NdpCAYqRy/fv/dRnjS//Uq5rMVEPUAk5Cbe0ZbqD
+	 Yp4ZLEmi3Fs8+QYIkwpa8d+ebN92Vk4rTpXGuy5cQfznG3f7aN3Yihb3NwD+xARdeBsP9
+	 ZMH53ITWK1Z/RMhLzBhq22jk1sh6KkH+6Z2BXjt7MvbCwOKW+WhhuJjsxz5C/VNsgmg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jRHY2zLx;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=wDqbg94j;
+	arc=none smtp.remote-ip=95.215.58.251
+Received: from mta1.migadu.com (out-251.mta1.migadu.com [95.215.58.251])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEE87606A32D;
-	Thu, 12 Nov 2026 13:03:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D31DE606A89F
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 13:10:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D31DE606A89F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jRHY2zLx
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9FD91F00A05;
-	Thu, 12 Nov 2026 13:02:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794488581;
-	bh=PBMXrFHASTKvrJ3Cb5b0x0+RtF3vzzYr8AtwvtbYKsw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=jRHY2zLxOj7WOeDeEhGyK3iIohwoIz8uR9UPmPqVT352H9skpMuFTV9PBQ/6y/1Fx
-	 GzdmrtGGqJQ63ZNgLxvdxP6/TqfDfv+pWpyJzzJjsEy0uLq0gCHvLtP2kFaPaF2gmD
-	 k+82GEbMTwloLecctiZmDuG7AmYK6+EdtzWP4kHBvpz/QaP6+ggdm+v2Euvg+7jxrf
-	 dZ8PsSmiuOYeuKxv4Ga7Hc56IzIDxYY5JTbQN7bguZv3KvKcNni9eKjMhpoB8uQHcL
-	 gImrGD5cw+GOgZatap3BjEF7H+jbUQyRB1xDogkvH5zB1pphPHXsBWhyi9bL21hoJy
-	 iD99ShP63r5Fg==
-Date: Thu, 12 Nov 2026 07:02:54 -0600
-From: "Serge Hallyn (AMD)" <sergeh@kernel.org>
-To: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc: James Morris <jmorris@namei.org>, Paul Moore <paul@paul-moore.com>,
-	Serge Hallyn <serge@hallyn.com>, Ada Smith <adasmithgt@gmail.com>,
-	Christian Brauner <brauner@kernel.org>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	John Johansen <john.johansen@canonical.com>,
-	KP Singh <kpsingh@kernel.org>, Matt Bobrowski <matt@bobrowski.net>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>,
-	apparmor@lists.ubuntu.com, bpf@vger.kernel.org,
-	kernel-team@cloudflare.com, linux-kernel@vger.kernel.org,
-	linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] capabilities: Check PR_SET_SECUREBITS with
- ns_capable()
-Message-ID: <avW4_r3IwLTNsXDg@shallyn-amd>
-References: <20261110202811.2409395-1-mic@digikod.net>
- <20261110202811.2409395-2-mic@digikod.net>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=wDqbg94j
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=tTg4Ftlr3+mzKsKjq40xt8Ey6Nx9uO7sfn51pYZJ8iw=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794489002; v=1; x=1795093802;
+ b=wDqbg94jhgqETmCRc1QoSIaJ9wCYSVCl5yWt6QW6t8Bf3+T88i0V+d2pIJWRx/U+Tg6qdqqE
+ f4in3yBSZtpOATTvKTG+SRVTFG5O9SccSz8J+9Op/QrkwYtYdH8hqeoxoTmvnGP40q8wyinCrkf
+ f75Pzq3BMeZ6SDnUMCr/82lc=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 1e6d0a9f2e3ed8e4;
+	Thu, 12 Nov 2026 13:10:01 +0000
+X-Mizu-Trace-ID: 1e6d0a9f2e3ed8e4
+X-Migadu-Flow: FLOW_OUT
+From: Tao Cui <cui.tao@linux.dev>
+To: tj@kernel.org
+Cc: void@manifault.com,
+	arighi@nvidia.com,
+	changwoo@igalia.com,
+	liwanwu@kylinos.cn,
+	usama.arif@linux.dev,
+	sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	cui.tao@linux.dev,
+	Tao Cui <cuitao@kylinos.cn>
+Subject: [PATCH 0/6] sched_ext: fix kfunc, sub-sched, flatcg and idle-mask issues
+Date: Thu, 12 Nov 2026 21:09:28 +0800
+Message-ID: <20261112130934.563321-1-cui.tao@linux.dev>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -68,128 +71,60 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20261110202811.2409395-2-mic@digikod.net>
 
-On Tue, Nov 10, 2026 at 09:28:06PM +0100, Mickaël Salaün wrote:
-> Per-process securebits were introduced with a direct cap_capable() check
-> for CAP_SETPCAP.  The capable LSM hook and SELinux capability policy
-> already existed, and SELinux forwarded task_prctl operations to
-> commoncap.  The direct call therefore bypassed SELinux policy from the
-> start.  It now also bypasses AppArmor, Landlock, and BPF LSM programs
-> attached to the capable hook.
-> 
-> A task with CAP_SETPCAP in its effective set can consequently change
-> privileged securebits despite an LSM denial.  This can alter how its
-> capabilities evolve across UID and execution transitions without the
-> expected LSM denial or audit record.
-> 
-> Use ns_capable(), as cap_prctl_drop() already does for PR_CAPBSET_DROP.
-> Call it only for a no-op, which requires privilege for legacy reasons,
-> or when a privileged bit changes.  Changes limited to
-> SECURE_ALL_UNPRIVILEGED and their lock bits do not need the capability,
-> so they must not invoke an LSM check or set PF_SUPERPRIV.  Successful
-> privileged checks now set PF_SUPERPRIV, as other ns_capable() callers
-> do.  Without other LSMs, the same requests remain allowed as before.
-> 
-> The check now reaches every capable hook before commoncap commits the
-> new credentials.  A later task_prctl hook cannot provide equivalent
-> mediation because commoncap runs first and commits the change itself.
-> 
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: Günther Noack <gnoack@google.com>
-> Cc: James Morris <jmorris@namei.org>
-> Cc: John Johansen <john.johansen@canonical.com>
-> Cc: KP Singh <kpsingh@kernel.org>
-> Cc: Matt Bobrowski <matt@bobrowski.net>
-> Cc: Paul Moore <paul@paul-moore.com>
-> Cc: Serge Hallyn <serge@hallyn.com>
+From: Tao Cui <cuitao@kylinos.cn>
 
-The commit message is a bit wordy.  All it really needed to say was
-that 1. s/cap_capable/ns_capable to query other lsms, and 2. move
-the check to a concise helper.  I really do not relish looking through
-a git log where every commit message re-litigates the full history of
-any code that is touched or moved.
+Hello,
 
-But it looks good, thanks.
+This series fixes six issues in the sched_ext core, the scx_flatcg
+example scheduler and the CID helpers. The core.c fixes travel as a
+separate series.
 
-Reviewed-by: Serge Hallyn (AMD) <sergeh@kernel.org>
+The DSQ iterator kfuncs bpf_iter_scx_dsq_next() and
+bpf_iter_scx_dsq_destroy() take the user DSQ's raw spinlock but stay
+callable from tracing programs, so a tracing program running while
+that lock is already held deadlocks the machine. scx_bpf_cid_node()
+is documented to return NUMA_NO_NODE for an invalid cid but aborts
+the scheduler instead. A sub-scheduler can declare
+ops.cid_online()/cid_offline() and read its own caps from
+ops.init_cids(), but hotplug callbacks are only delivered to the root
+scheduler and the caps storage isn't up during a self-read, so the
+callbacks never run and the self-read kills the scheduler.
+scx_flatcg strands a cgroup off the rbtree on the ENQ_RACE path until
+the watchdog kills the scheduler, and the built-in idle masks aren't
+cleared on hotplug, leaving an offline CPU advertised as idle.
 
-> Cc: Stephen Smalley <stephen.smalley.work@gmail.com>
-> Cc: stable@vger.kernel.org
-> Reported-by: Ada Smith <adasmithgt@gmail.com>
-> Fixes: 3898b1b4ebff ("capabilities: implement per-process securebits")
-> Signed-off-by: Mickaël Salaün <mic@digikod.net>
-> ---
->  security/commoncap.c | 42 ++++++++++++++++++++----------------------
->  1 file changed, 20 insertions(+), 22 deletions(-)
-> 
-> diff --git a/security/commoncap.c b/security/commoncap.c
-> index d47ab3022343..1947128396e2 100644
-> --- a/security/commoncap.c
-> +++ b/security/commoncap.c
-> @@ -1283,6 +1283,23 @@ static int cap_prctl_drop(unsigned long cap)
->  	return commit_creds(new);
->  }
->  
-> +/*
-> + * Doing anything with securebits requires privilege (go read about the
-> + * "sendmail capabilities bug"), except for unprivileged bits.  Indeed, the
-> + * SECURE_ALL_UNPRIVILEGED bits are not restrictions enforced by the kernel but
-> + * by user space on itself.  For legacy reasons, a non-change requires
-> + * privilege too.  Only checking CAP_SETPCAP when it is needed keeps LSMs from
-> + * seeing (and logging) a capability check for unprivileged changes.
-> + */
-> +static bool securebits_need_setpcap(unsigned long old, unsigned long new)
-> +{
-> +	const unsigned long unpriv_and_locks = SECURE_ALL_UNPRIVILEGED |
-> +					       SECURE_ALL_UNPRIVILEGED << 1;
-> +	const unsigned long changed = old ^ new;
-> +
+0001 rejects the two iterator kfuncs for tracing programs. 0002 makes
+scx_bpf_cid_node() a benign lookup that returns the documented
+NUMA_NO_NODE. 0003 returns -EBUSY from a pre-init self-read instead
+of killing the scheduler. 0004 rejects the hotplug callback
+declaration on sub-schedulers at load time. 0005 waits for the picker
+to resolve on ENQ_RACE instead of stranding the cgroup. 0006 clears
+the built-in idle masks in handle_hotplug() and gates the claim path
+on cpu_online().
 
-FWIW, I think the code was clearer when the !changed was separate with a
-one line comment above it, than rolled into this return.
+All six are verified in qemu with A/B runs against a stock kernel.
 
-> +	return !changed || (changed & ~unpriv_and_locks);
-> +}
-> +
->  /**
->   * cap_task_prctl - Implement process control functions for this security module
->   * @option: The process control function requested
-> @@ -1346,28 +1363,9 @@ int cap_task_prctl(int option, unsigned long arg2, unsigned long arg3,
->  			/* cannot change a locked bit */
->  			return -EPERM;
->  
-> -		/*
-> -		 * Doing anything requires privilege (go read about the
-> -		 * "sendmail capabilities bug"), except for unprivileged bits.
-> -		 * Indeed, the SECURE_ALL_UNPRIVILEGED bits are not
-> -		 * restrictions enforced by the kernel but by user space on
-> -		 * itself.
-> -		 */
-> -		if (cap_capable(current_cred(), current_cred()->user_ns,
-> -				CAP_SETPCAP, CAP_OPT_NONE) != 0) {
-> -			const unsigned long unpriv_and_locks =
-> -				SECURE_ALL_UNPRIVILEGED |
-> -				SECURE_ALL_UNPRIVILEGED << 1;
-> -			const unsigned long changed = old->securebits ^ arg2;
-> -
-> -			/* For legacy reason, denies non-change. */
-> -			if (!changed)
-> -				return -EPERM;
-> -
-> -			/* Denies privileged changes. */
-> -			if (changed & ~unpriv_and_locks)
-> -				return -EPERM;
-> -		}
-> +		if (securebits_need_setpcap(old->securebits, arg2) &&
-> +		    !ns_capable(current_user_ns(), CAP_SETPCAP))
-> +			return -EPERM;
->  
->  		new = prepare_creds();
->  		if (!new)
-> -- 
-> 2.56.0
-> 
+Based on sched_ext/for-next (5b740a72b55c).
+
+Tao Cui (6):
+  sched_ext: Reject DSQ iterator kfuncs in tracing programs
+  sched_ext: Make scx_bpf_cid_node() a benign lookup for invalid cids
+  sched_ext: Return -EBUSY from a pre-init scx_bpf_sub_caps() read
+  sched_ext: Reject cid_online/cid_offline on sub-schedulers
+  tools/sched_ext: scx_flatcg: Don't strand a cgroup on the ENQ_RACE
+    path
+  sched_ext: Clear the built-in idle masks on CPU hotplug transitions
+
+ kernel/sched/ext/cid.c           | 10 ++++++++++
+ kernel/sched/ext/ext.c           | 24 ++++++++++++++++++++++--
+ kernel/sched/ext/idle.c          | 21 +++++++++++++++++++++
+ kernel/sched/ext/idle.h          |  1 +
+ kernel/sched/ext/internal.h      |  3 +++
+ kernel/sched/ext/sub.c           | 19 ++++++++++---------
+ tools/sched_ext/scx_flatcg.bpf.c | 17 +++++++++++++++--
+ 7 files changed, 82 insertions(+), 13 deletions(-)
+
+-- 
+2.53.0
