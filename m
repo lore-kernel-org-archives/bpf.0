@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794483049;
-	b=1KKe6ZY9xrzUPhsVSjUePqJt6c8LGBRy8nbculK9w5LosF62rghUIkgy0ZuSnFGwNQnq
-	 HTfbP6IqxY2GSNAh+T8lMy4kHxaIPBrQm8wjN11h2AugHz8lVFeyjW3648ofOMhX+8KzC
-	 +8nsaFcITEkSrybvvCh7vWh+xxDrWfsIiphq3xrOSf6bfFl1uj+gHq5HL7FBfs4Gr/nUj
-	 PWYXAofdH4eh/c3j0At4G7j2gfjtjqq9H913y8FXJ4Ddq4wzSClL22aPefztn9evrEsI5
-	 9xfdRbpC8cpZoHL2i3T4DR0am/6XKsPHWhhd39KOMbiFhHsDl2SFMysnnk3wynbfX/w==
+	t=1794483115;
+	b=GyVDbtJqsRsdq/1e3Fi5/jiN4Kdom2nZhie432lYTRStvCaboTZVR/n5CwULGc6D4eqt
+	 wb5K1kJnvilF7+Vox4sbaKcrUs67fb+dwhs2KJ9dhaVYr0xqXoKRwN0KMy8FRFFz6Yzbg
+	 TJlCdSPFX2YDGoJMSNLsJph2PhjGmMWcB+fKosWQRsSG1F0puiGpadEjbxQ1KSdzDcsvP
+	 B55KIEqmGvewD3G5VukT8zjwrqEg6naGvS9ATOauq8Xae4aPGRooakTjZcEGegPYXHhmb
+	 ayRnQNNzWcg6qk2gmwR+BV2JI2tOLvRa7Av6YsMjxyh7Ad8Jn/FQKzTV5IsCJ5t//eA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794483049;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794483115;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=4VQE+wCw+63cnThzXfE5m3Wkr677M0OSU+v7x8jQn64=;
-	b=mE+MlHmWYMuzi9o6bZLL9tMUjz8JnHp3tU0MSTsvKPk4QH78deVI6HhqCvam9KYBivi3
-	 QxrGwrQq1sAuh5OLzy2qYNRMRRXzhvsXp5dXXflPbt4QfcXb6R9mgV4G3swl2opEel58W
-	 6SjJIkwwFPgga3H1yxGDEivnyFIVsTil9APUhg1I0G4n9wrPFJZWQmrRZkGkFfRlaFwM9
-	 6JrA/fipTd1HkfIboxSWztZ1RZWZ2PKOiUxxj6uFhp+DLzl8AY7fnmyimqlhfCUQNv9i8
-	 lT0nHn3OhCqxkxZbnulWlnQEC2FW0QHeg4lk2tUyBAYc42YJmkHSB1bEFdM2M+rTjKQ==
+	bh=RcotuArfsvbkeksjSM7B/SH7oTNsE9adGBwe+em9i5w=;
+	b=N3Rj2ZXyQcINPARO8xBV69S/osri4DTQM+SzmMKmLLGdK6Xn/ia0y/fKlD9UA7CTRxYy
+	 bIPVBcvwIqycWp1rMU+QLlkSk2lUqfjGdwq20sZylztH0BCu5AzpULJmNbH8VOTbhUel2
+	 OGZvM+MGkQk4osajowXXQG5j0JeOQ4NvYcF4oO2FnY/3CQNrNXHJhnJxPYtQvbEvVUXP4
+	 flY+SHwqffn4J0UlrCPPcXkbCdty7f3GGkXnh1WcJdvTjhFITqIEwRfx0DB9f/5LtrA39
+	 Tircv4DnmL0wYjJvuCvSuB8AY+moTcyzsy0qlwJrp7zqhSnrcBHBR8MOzjlasn6+mtg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=fail reason="signature verification failed" header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Lv0uE8rD;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Eb92iPgE;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD817606A8BF;
-	Thu, 12 Nov 2026 11:30:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D266606A321;
+	Thu, 12 Nov 2026 11:31:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Lv0uE8rD
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 758841F00A09;
-	Thu, 12 Nov 2026 11:30:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Eb92iPgE
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18C601F00A05;
+	Thu, 12 Nov 2026 11:31:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794483049;
-	bh=4VQE+wCw+63cnThzXfE5m3Wkr677M0OSU+v7x8jQn64=;
+	s=k20260515; t=1794483115;
+	bh=RcotuArfsvbkeksjSM7B/SH7oTNsE9adGBwe+em9i5w=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Lv0uE8rD32wyRfV5sPXfxmly+/H4WSct6DgNgB+borGLOHQHrPLIX+nDFWq8WIR5a
-	 6AtC7CnbNeLwvde/cSjhKEvSpenf4t0Wu4NTtXot75V8BVGl2rFunUOcGyNsN4UI68
-	 wNERe8a2KaEWMchf+DBb8Bs1DvhulbUFaoAuvnrKGZEac6tb6LCixMCO2ciI45WqCn
-	 5rzApcOojjQxqR7Be5XjATEt71gD58xH7QXIWmI8trxikOKPyX7zLM0t/f/t7TwpTp
-	 molNGWnrHSHxcdMFd0azahw83gPRaA1oGx6MU/a7XQjmmEtHkAo1P+T8dMYcy21pbm
-	 BNy/IJvPTGAsw==
-Content-Type: multipart/mixed; boundary="===============8011434571142281874=="
+	b=Eb92iPgE6cf3O27OesLFsHUem9A+wHqp87UvYoPyh7jTG2f3W39H69wIymc31TWhE
+	 cdB3poWheLGniGstz1JynrlUju3wR6EZgmqOKccM/mumxX8WABi1xl1ResllZdY88D
+	 VYRnuTwV1xvuuKFxT2Trlq3cb3VmiCCzOHNWacyZ2ICL3auyvJXRecUGspotYj1WC4
+	 PlRGYnX+F5UueWhce2PSAB0gh0F3xREq/QKvIIkwHncRUQKylRvO7kw0SBpI0ikpA1
+	 W4NTHM2LSOd1WbuMN+dGoez+y4rHBEPzi/BHK6J5vDa09J8LLtzjY/CA3oBR0I/ikq
+	 /wq8hRHIhyrqQ==
+Content-Type: multipart/mixed; boundary="===============8043813505677554832=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,57 +49,56 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <9c88485e232da5a503d56c83b14b7765e672fd0c4ccc92686c342cec03c8e350@mail.kernel.org>
-In-Reply-To: <20261112104149.38589-10-cuiyunhui@bytedance.com>
-References: <20261112104149.38589-10-cuiyunhui@bytedance.com>
-Subject: Re: [PATCH v10 9/9] riscv: select HAVE_CMPXCHG_LOCAL
+Message-Id: <b24ca383df1298651bedfb7ef22dd605f2cdcf822369782d46fa0f3598eaebf2@mail.kernel.org>
+In-Reply-To: <20261112105620.57520-1-shlomojune6@gmail.com>
+References: <20261112105620.57520-1-shlomojune6@gmail.com>
+Subject: Re: [PATCH] bpf: Reject offloaded maps as map-in-map inner maps
 From: bot+bpf-ci@kernel.org
-To: cuiyunhui@bytedance.com,pjw@kernel.org,palmer@dabbelt.com,aou@eecs.berkeley.edu,alex@ghiti.fr,dennis@kernel.org,tj@kernel.org,cl@gentwo.org,oleg@redhat.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,bjorn@kernel.org,pulehui@huawei.com,puranjay@kernel.org,broonie@kernel.org,cuiyunhui@bytedance.com,dave@stgolabs.net,david.laight.linux@gmail.com,jszhang@kernel.org,tglx@kernel.org,conor.dooley@microchip.com,thuth@redhat.com,ajones@ventanamicro.com,ben.dooks@codethink.co.uk,rkrcmar@ventanamicro.com,samuel.holland@sifive.com,zong.li@sifive.com,debug@rivosinc.com,seanwascoding@gmail.com,andybnac@gmail.com,menglong8.dong@gmail.com,cyrilbur@tenstorrent.com,wangruikang@iscas.ac.cn,atishp@rivosinc.com,apatel@ventanamicro.com,arnd@arndb.de,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.c
- om,qingfang.deng@siflower.com.cn,linux-riscv@lists.infradead.org,linux-kernel@vger.kernel.org,linux-mm@kvack.org,bpf@vger.kernel.org,linux-arch@vger.kernel.org,llvm@lists.linux.dev
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 12 Nov 2026 11:30:44 +0000 (UTC)
+To: shlomojune6@gmail.com,bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,kuba@kernel.org,qmo@kernel.org,shlomojune6@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu, 12 Nov 2026 11:31:53 +0000 (UTC)
 
---===============8011434571142281874==
+--===============8043813505677554832==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> riscv: select HAVE_CMPXCHG_LOCAL
+> bpf: Reject offloaded maps as map-in-map inner maps
 
-TL;DR: Nit only, no runtime problem: selecting HAVE_CMPXCHG_LOCAL on riscv may
-need the cmpxchg-local arch-support.txt feature table updated from TODO to ok
-in the same patch.
+TL;DR: Nit only: the comment in bpf_map_meta_equal() saying ops need no
+comparison now contradicts the new ops check in bpf_map_fd_get_ptr(); suggests
+updating it or moving the check there.
 
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -155,6 +155,7 @@ config RISCV
->  	select HAVE_ARCH_VMAP_STACK if MMU && 64BIT
->  	select HAVE_ASM_MODVERSIONS
->  	select HAVE_BUILDTIME_MCOUNT_SORT
-> +	select HAVE_CMPXCHG_LOCAL
->  	select HAVE_CONTEXT_TRACKING_USER
+> diff --git a/kernel/bpf/map_in_map.c b/kernel/bpf/map_in_map.c
+> --- a/kernel/bpf/map_in_map.c
+> +++ b/kernel/bpf/map_in_map.c
 
-This isn't a runtime problem, but should the feature table be updated in
-this patch as well?
+[ ... ]
 
-Documentation/features/locking/cmpxchg-local/arch-support.txt is keyed on
-this Kconfig symbol and still lists riscv as TODO:
+> @@ -110,7 +112,8 @@ void *bpf_map_fd_get_ptr(struct bpf_map *map,
+>  		return ERR_PTR(-ENOTSUPP);
+>  
+>  	inner_map_meta = map->inner_map_meta;
+> -	if (inner_map_meta->ops->map_meta_equal(inner_map_meta, inner_map)) {
+> +	if (inner_map_meta->ops == inner_map->ops &&
+> +	    inner_map_meta->ops->map_meta_equal(inner_map_meta, inner_map)) {
 
-    |       riscv: | TODO |
+This isn't a bug, but the comment in bpf_map_meta_equal() still says:
 
-Nothing later in the series changes it.  Other riscv patches that select a
-feature symbol update the matching arch-support.txt in the same commit, for
-example d1f014012571 ("riscv: enable HAVE_IOREMAP_PROT").  LoongArch
-selected the same symbol without updating the table, and it needed a
-follow-up in 0c4c9abbf68b ("Documentation/features: Mark cmpxchg-local as
-supported on loongarch").  Would changing the riscv row to "ok" here keep
-the table accurate?
+	/* No need to compare ops because it is covered by map_type */
+
+Offloaded maps share map_type with software maps but use
+bpf_map_offload_ops, so that comment now contradicts the new ops check
+here.  Could it be updated or dropped?
+
+Another option is to move the ops comparison into bpf_map_meta_equal(),
+which array_map_meta_equal() and xsk_map_meta_equal() also call, and
+replace the comment there.
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43205409812
---===============8011434571142281874==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43208166255
+--===============8043813505677554832==--
