@@ -1,105 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794471411;
-	b=fsAqQT0CMtm2f5Hrwmx76/ddpufFFr6cQMELp9Dt6RvFLvRRaBmJmFH14MbhLvWIMSIg
-	 pqhnjdgJPqms3RlWsDF2P6jEHKz5A98w7hS07oZSzk9ryh4aXRzZusGpBGPXyFykXVSkr
-	 eQoOV/P1vqyhpXtlOe5jv//IQ40xAbbpsvlQj1lrxj/umf6nwCp4mDuGwasLrSLVZ2kU6
-	 8vxWNgZpR1x00jm0YK00AZtSCySgZ4AtRY91i/6v1H9O6RdQb0+xGawXN6iGM22NDHBRl
-	 9gq31cExgSSP/M8pdluSA1F7xZO+GQ9E9rh2aQPZEtCO5ssQBr2V25FquPo73ZdSo/Q==
+	t=1794472038;
+	b=xzp4NO5wd4ZsYWfUzMcgHN2dae366c/f7GMKsiH5+1w50gdMl9daqC9BnAtk0Xg8CcK+
+	 A7+m/tUabvJHqcF1mAZRQlVgZMs3d3N4NhlBe9BmJ3WgzSK6QQI+EBzreXaDc8VzptUqo
+	 uHZSl/v5xvNNaWRoW+DmADw4aAPx71DZgiGWeL1Re5KGo07cndHDK7YhU0h+bmH/KY1ph
+	 m7dcSPhj/sKHirK6hH4QsQ/28rRxhjlx4c3ycd6iEBxQGU2egHA1spdUeJyrQ8FyFponN
+	 qe+qS33tb0+y85KabIPt/1MydpRnCbC00UxKpbvysTae07E4t2cmb28wUpCSX3bgOEA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794471411;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=7a0tlXjZIjM2y8jRkqPsXOqBGSfZhqpDFXwLVtg4q7g=;
-	b=JStfPnGvUIickc+V/vXjzO9PR+yhoxMQSctfPPp4FnTApPMNLtug4Mh3oTtI4pDnqtlA
-	 xsM70rwaAlHn31p2m0AYE/TMoZPrLzGsUuvXm8Hrs3uOioZ6HeOLGYKD7UtJG6beSfDdC
-	 Vm5OHVy1Prz74TdGmII2KwurlNFr/34Q7IaI4t02qgBTcBw6P9bxAL8NpeCw3jIdXdP4R
-	 CBomXaxupSfjcav0pWlkbpOT5v3rZkvyLFOT0WXNoe3aFC12sImrrDcHjTtuZtDAIR8zf
-	 LAw18wEerEILsaki9Cr82CvlZyDMbvbhd8bS1n1Vd95cEHW5q2E58Yfb/hvBY1kdVZA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794472038;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=sMpeZvvFIjF13I11zU+PpvUQU6tPIoWaekL8/3Omix0=;
+	b=kWchfkDyyoXg5CD70q6jmbRIZkmN7W0kUYUPAUnEsPbG1+G3RoWz/g51fpQ0aSQlAqw8
+	 5wFVOp77ew2gt47P3+vPzAcvdrz0bwqled+w3p07iFohzc0ReRG2X0OV9v+mYOb3lQMVi
+	 M6ZnGhk8warGjal2r6rIl1PEn2LFkHc+3eOb6cGpsaXUX9osYv6GoB+f4tHtxXcrpHUc/
+	 fyx8TlpEzz6bZ1eOzGEZ0GW0x7WByNPsGMV5M7Sz7qltLHzwUPZ0+8s0/kScF7rC03/BH
+	 kYIksV4oPDxnlwtzdbfIVgEkyGP+DKrQYuda7206lkhjiIab9Ab2Kkk8sEIQgVQIZHg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FoPdHi1B;
-	arc=none smtp.remote-ip=209.85.214.177
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=infradead.org;
+	spf=pass smtp.mailfrom=infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=GiiYOOIv;
+	arc=none smtp.remote-ip=90.155.92.199
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E73A606A327
-	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 08:16:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9E73A606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3944606A31C;
+	Thu, 12 Nov 2026 08:27:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D3944606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FoPdHi1B
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2eb0f1b592bso15432775ad.1
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 00:16:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794471410; x=1795076210; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=7a0tlXjZIjM2y8jRkqPsXOqBGSfZhqpDFXwLVtg4q7g=;
-        b=FoPdHi1BEIGYGOBQ8jpJJIMmkvpoD/bZN9zxseg4DWxtKOIMnkgyW2NgswJLpCTZGz
-         p1+TfM59lcC2EW57qxPryBMIphXUQabOQu4Jx3o0cQEA5eVZW+q3z4oJDaTU65prWjun
-         xPePBDtG7BRbz22ciNdE54qMSG4epM5qM0kXyzzkDipV444UesJJDbPG36nehwmBBehr
-         XpRkNix741MvHry8gMqmK4NqzYLWkh2hZ5suL84EPYn1Fx0TkWq1AU+EG6SsbPXWULUX
-         KOumUjbA6kskBFStVoYgOt8c9Gmi/rcShFFGhETqGd0IDRbejzeHrKPwCPTnsu1EVgph
-         a86Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794471410; x=1795076210;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=7a0tlXjZIjM2y8jRkqPsXOqBGSfZhqpDFXwLVtg4q7g=;
-        b=g9kNp18EhSEED7BeCo6f5RB6Prs+5N/E4Iq26VMU67DAM1RtUftq/KqLTAv5qaSPiu
-         mFPsdQtZ7tQLnvh3PTtqbctYod/TsBZDTGpWBmYpqXhNsAo00QuDm0yn5K2e5NjAQo/r
-         qyEHSP+JSLW7YGOPE9kR3U7+L0fEBCIOtJF1dtUcQirM+9FnT8z8l8Aawgn+km2dR3mx
-         OWssE+URRMYqCpGvYooZP2bh45eP8ilQ1TpoZbmuH/LOKMi7y/Hn74I8Dw/6ihswoVhd
-         iu5Cc9u7w5TFhKGRttPLFG/9cn7Lj3KsDPdomwSXIW0f7PLW7oXpX1WhKC+zXMn3Q/o+
-         6xPw==
-X-Forwarded-Encrypted: i=1; AL+hErEKWixMVxcTmLMC6LJAjBMBbfrLvJtuo7sgvpPqvvBsm/ND6QHyOAV77jZP+wSNLYZfYPU=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9O54vvMh5IPwddYYDRgnIRSZ02JuxI1uymbWAT+gIK7SaXFvdi
-	vZDbNcOElwFPuIgEZ3idA02Z/hqJUvAt9l9yHIs+uh+LlbEye9oZ6Jff
-X-Gm-Gg: AYBFou3OOKHWjXHIVfQSL0xGEM/juYZA2TcA6h89rofqS9cJiTWBvjNC7/gk4ZLaz/6
-	luR38PD0pvDfwChm4yJOPBfjhtIsc5LccUyfkXoO3LFCUspaq3CskEjbiiYhYdSYWYbV16HBsMA
-	RgtM5laNF0iR/XC7Rl45rnoW82GEX7wSExZmdiofTKs+DB9t3TvXdLVF/UPNqnQfPavXBbhTzYR
-	k1/kXdtjrbFGDA3kxtfUqUeBOWTgi74hLUkXXS3iBHm4cuMZG58xHT397Ocf5aLWvo84NuPhDSQ
-	xXTp9bdq6cHowdDMvR5Rk/gTfPj0qkPGMekCH09Z+9IeGhd3TzrH8miCCMrL8LUOp8zH9vb98J5
-	xOIkL1Fx7HNo1tmTRXOWDq1E6gpmcqXhV8BtTDusqcJAgVY8LjvWx5WNlDI2Sm2HDZvAVHr/hH+
-	XrTvBQlav9Rcq6FJVaRyIG3PtJxCTgoBBKM90oTUr8UJM3Sk2l7IGJXyAPuyq+3Czv0ZLo+ArPG
-	FU0z8b42v+Kxjg1XcooK/aHYusCl5MgH9cgYi67HOVDTNDRSGz/YBiPhM84ZoWjZk25BEL0tCRk
-	b6pq/jlgZhyWROrhNx4XeVkkKa4hgxOOIyenkvHeUoJ+R92Q4ASKEn14/CDWjteDyjlUNIS9E/8
-	87zzqVHml
-X-Received: by 2002:a17:902:f707:b0:2e5:38bf:cb43 with SMTP id d9443c01a7336-2edd7432537mr55445995ad.2.1794471409521;
-        Thu, 12 Nov 2026 00:16:49 -0800 (PST)
-Received: from thinkpad.tail59a646.ts.net ([112.199.224.229])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2edb6d4dc3bsm29970705ad.17.2026.11.12.00.16.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2026 00:16:49 -0800 (PST)
-From: Hang Zhengyang <hang.zhengyang1010@gmail.com>
-To: Peter Zijlstra <peterz@infradead.org>
+	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=GiiYOOIv
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=sMpeZvvFIjF13I11zU+PpvUQU6tPIoWaekL8/3Omix0=; b=GiiYOOIvCr8zIA3QXmJOXc6wQr
+	7MTcX5OoqcscNQQIUmvVEdi03Fk+VMqquyrK/X3dnjtDBRoJzIwwFtRKKyIdqUAyDYO//D05eGyzr
+	wlp15syJGKZuZxTiYwaccggk/R+jB4YA73RDdetQY83NJBIWL7O3Ys4rsN+aMWNPxZ2dum7xqTXRc
+	Uctslm5woKsWfBv/CC1oP6qm6ZP1pOYm3hCn25CovBgK/W03TvHLfPVxY5zXMw7OJQJBdWgDc4qcd
+	F4gucRcm3qAWyPJVR+rHeasa5c4puer2vvsWr8ZftV6udaO3USsr6YGh+89ZuWeEgHuubawQJwS3n
+	ydaspvYg==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xRQ9G-0000000A31e-29G6;
+	Thu, 12 Nov 2026 08:27:10 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 64C46300400; Thu, 12 Nov 2026 09:27:09 +0100 (CET)
+Date: Thu, 12 Nov 2026 09:27:09 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Jiri Olsa <jolsa@kernel.org>
 Cc: Masami Hiramatsu <mhiramat@kernel.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH] uprobes/x86: Emulate ENDBR as a NOP
-Date: Thu, 12 Nov 2026 16:16:42 +0800
-Message-ID: <20261112081643.3983403-1-hang.zhengyang1010@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261112080406.GA2668804@noisy.programming.kicks-ass.net>
-References: <20261112-uprobe-endbr-v1-1-284a47a5ae3e@gmail.com> <20261112080406.GA2668804@noisy.programming.kicks-ass.net>
+	Naveen N Rao <naveen@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Jason Baron <jbaron@akamai.com>, Alice Ryhl <aliceryhl@google.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ard Biesheuvel <ardb@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Alan Maguire <almagui@kernel.org>,
+	x86@kernel.org, linux-trace-kernel@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH 01/13] static_call: Index code text reservation lookups
+Message-ID: <20261112082709.GC2668804@noisy.programming.kicks-ass.net>
+References: <20261109194916.1089703-1-jolsa@kernel.org>
+ <20261109194916.1089703-2-jolsa@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -109,11 +75,18 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261109194916.1089703-2-jolsa@kernel.org>
 
-On Thu, Nov 12, 2026 at 09:04:06AM +0100, Peter Zijlstra wrote:
-> Uh, no. We must not allow uprobe on ENDBR. If we ever get userspace IBT
-> (people are actually looking at that), then putting a probe on it will
-> make indirect function calls #CP.
+On Mon, Nov 09, 2026 at 08:49:04PM +0100, Jiri Olsa wrote:
+> Text reservation checks scan every static call site. Build an address-sorted
+> index for core text sites and use binary search to find the starting point
+> near the requested range.
+> 
+> Module indexing is intentionally unsupported. Module reservation checks
+> continue to use a linear scan, avoiding per-module index allocation and
+> teardown complexity.
 
-You're right, I missed that. I'll drop this patch.
+So this changelog leaves me wondering why, and at what cost. Why do I
+want to have this extra array in my kernel and such.
