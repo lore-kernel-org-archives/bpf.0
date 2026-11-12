@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794527437;
-	b=CozsU9Q9RP8JKGwIq36XnsSWHbWIx48EymrmSnCha4EQpiJv43IAE+5pcdnwzaN2YEYV
-	 vOOZmQ6nyd3os1Mk49nMHQvfyzSSlCnTs8LUbfoOa24HX1zU17Uj6adXvHmnq3jI2ESv0
-	 JQ02753iPk65xX2fyZKGEMGyLsknuKpdji1B3d4kvcZvEUGbx0K7pK0/PnP3O3CEVcX8G
-	 uC+IT1BlrQQhSaXPzyPc+mbHa3zi2plVXI4ybu/diqOhsDwiJfiB9WRz1cLteY8LCHtiB
-	 wEa68XBTrJB9y3bnVm9j7Z15iNV+TFb2o4t9k4r2m3Ua7CyMg5dYQnUc+z6vAuf/ekA==
+	t=1794527434;
+	b=ISqSXytQV/RsLoOBxuGaA07IyeoYisl8/g2hNs54p8p1hZ7RqUoPCFI8h4tUo8duajTK
+	 +wx3M4E66ezjvpI7QEiDumizZnPtZrkNZhV5ojiRzVltC6G0OP3yFRT4yqlGUTIPFkiTl
+	 NKjGO8LygSFviI9xaIYx2xanftnoiBA0lhkqcejdL1ZXvsoRrCxh8+YNTSCELPIWxrGWS
+	 9p+m2a+9Ox2V6OpTiP2csCI1iicsQrny9UX9s8qrsfBogdnCVK1SOoVzff8B+Eifzr7Td
+	 IqILZ7jovo+TpauUj9V2LSNsPC8VUuA/MGfTlb1L79Wc1lrm15I0fK7EI8zXlGGfAHQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794527437;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794527434;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=KYerT8C4qC+ZU83I8xoTGRYN8+Qc7EuzFMb4fJ6T9dU=;
-	b=bvJTcBLjyi0HXNtTjDmlmAaDZc6vuF9RCEgRKG9S3F5SkpuZrPo+HhnYcQRt2DbfBWKC
-	 0HNK8aYaSyiiIOLDgCe87AOdX9tVUFnJhDNcN9R3pVCnefA+BENeVzGcWAZKHLI5HhhaK
-	 IMLMhtbsGO+PZoT7Kd8xrB9kehYhDD0HwGxx958769KoYPO+9K90TH9+53/xU/KEbTHUR
-	 MjtA7UHfGZDfgkFoKNWF3rkcTaTxG3u2XoP4fDdixC/JZfLceapxV88GLj2mYRdfMQ5iy
-	 fdgifQ1I85dY7szOryJHw+EgXlWUaRyQQUF9WR19LA9gdk23+prnNpY5g0oNLWcHgTg==
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=EudAvXyZApkHGTMnPSVknUFuPN2G5AVaFWBCjrbLR3U=;
+	b=t4mOHsDVOIzddm9l9Q5+8rbxrAq6NgqRoubA6WH0jZgxfmA+I5TvxgFULtIzi9BVGBIa
+	 QvP5D8kOgUGptCsjv/iMQUnofYHnOi1AYK3/9/x5pH9dz0Jxk+Zqxx5zqkX4BflNK/w7p
+	 kgVFqHGYVWExZi7TF6u+MIl0U+Mer9x+Y57GL9BBAYir0Bw+8brSw8E8j3BxDtqy4mSxw
+	 uwY/9MYLuiK2+Lvi/j1skHmKn27smThTE2FdqOdVdw3U6dtNRIoOR+YvQxK3jQBD/Aks+
+	 bWZhfcEnVzZQv7OdLu6Md/Oq2TJXspXC8zQkHL/BWrvIdd/kci4LMS+/fWECIr1rSdw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XEjICfBH;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KWoQsCZx;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32D84606A8BD;
-	Thu, 12 Nov 2026 23:50:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DB07606A327;
+	Thu, 12 Nov 2026 23:50:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XEjICfBH
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 881F91F000CF;
-	Thu, 12 Nov 2026 23:50:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KWoQsCZx
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C9D91F000C4;
+	Thu, 12 Nov 2026 23:50:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794527437;
-	bh=KYerT8C4qC+ZU83I8xoTGRYN8+Qc7EuzFMb4fJ6T9dU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=XEjICfBHV6jmHi2oZbRaTIi8Kd3xMUHxJtLk+s+Tno85YKvi7de5vAgn8PRZYYf7H
-	 2q3lAAuBcZYe6bpWywA1PzQZ0KXtZBjqVimJgVyI/4erunHrO1ZSQtB3BEQcVQL5lQ
-	 gqoGoDnGDXbVv4sMdFW6vWVRDGc16q2KbNhDQjOhWWPswVG5oQvDNNRqmDr+LS5fYm
-	 /RKra+AxKcD8RkYbMfL91gRqnMDVe0BrwSOC6Fr3OFw3mGZ5PP0sNNUsdpfKZSX0xe
-	 rCpjR3lWPt0tiC/RcrRe5eRNCX+mqpGXcfyeEYjUB6QXYrJ8MpDY4kygLd/BD1brZB
-	 lnKvD98emxmFg==
+	s=k20260515; t=1794527433;
+	bh=EudAvXyZApkHGTMnPSVknUFuPN2G5AVaFWBCjrbLR3U=;
+	h=From:To:Cc:Subject:Date;
+	b=KWoQsCZxLI2bV8n8RJDVP5uVYQOXOpjVhFh3maR+tDfYfbMB82E4egBMN7jxPZB7e
+	 32etNX0UyubNopXt5DEiivg2bE/owVzx4xNAQtUkL6hCDWa70yABn2WNO1tUssXwh0
+	 Tlm1AjCE0xiclwUsVkRlJO+GuLoFYBv0kgRivT94LbkagAeXDsR3f/H1R6c8E1Q3EV
+	 U/nwR/6j+9T6akYSg/Zg4d0zJf404eJtQWzVXcu+tJRFOnEWFHM9L4tyfb7Z9bKE4n
+	 k5vaRn6IoWCKTVPlwJMvhsBxZlYUTQq5Q5brZn4CswCjASqMChfBpH9tJc9mBboGFs
+	 El7mezXTw6sLg==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -56,12 +56,10 @@ Cc: netdev@vger.kernel.org,
 	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 5/5] selftests/bpf: check replacing and detaching XDP on a bond through a link
-Date: Thu, 12 Nov 2026 15:50:27 -0800
-Message-ID: <20261112235027.4072149-6-kuba@kernel.org>
+Subject: [PATCH net-next 0/5] net: make xdp config checks effective vs netif_xdp_propagate()
+Date: Thu, 12 Nov 2026 15:50:22 -0800
+Message-ID: <20261112235027.4072149-1-kuba@kernel.org>
 X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261112235027.4072149-1-kuba@kernel.org>
-References: <20261112235027.4072149-1-kuba@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -73,133 +71,40 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The bond tests attach and destroy links, but never replace the program
-behind one, or detach it without closing the link. Both only ever
-operate on the device the link was created on, and rely on the bond to
-pass the change down to its slaves.
+Bonding (and netvsc) try to auto-propagate XDP programs down
+to their lower devices. These programs were installed directly
+with .ndo_bpf and not recorded in struct net_device of the lowers.
+This makes all the config checks for features incompatible with XDP
+ineffective - HDS, memory providers etc. use dev_xdp_prog_count()
+and do not call down to the driver to ask it whether it has XDP
+installed.
 
-Check that the slave follows the replacement and the detach, and that
-the program which got replaced is released - the bond used to leak it.
+Record the state appropriately. dev_xdp_prog_count() will now
+"see" the propagated programs.
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
- .../selftests/bpf/prog_tests/xdp_bonding.c    | 96 +++++++++++++++++++
- 1 file changed, 96 insertions(+)
+The issue was discovered when reworking HW-GRO and XDP interactions.
+I was trying to make sure HW-GRO is reliably disabled with XDP,
+and discovered we have a way to bypass all checks with bonding.
+Not treating this as a fix since it's admin-only self-inflicted
+damage that nobody is reporting being bothered by in real life.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-index ab0f01be4131..05f2e8079858 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-@@ -516,6 +516,99 @@ static void test_xdp_bonding_nested(struct skeletons *skeletons)
- 	system("ip link del bond_nest2");
- }
- 
-+/*
-+ * Replace, then detach the program on a bond through its link. The link only
-+ * knows about the bond, the slave has to follow it, and the replaced program
-+ * has to be released.
-+ */
-+static void test_xdp_bonding_link_update(struct skeletons *skeletons)
-+{
-+	LIBBPF_OPTS(bpf_prog_load_opts, opts, .expected_attach_type = BPF_XDP);
-+	struct bpf_program *new_prog = skeletons->xdp_dummy->progs.xdp_dummy_prog;
-+	struct bpf_insn insns[] = {
-+		BPF_MOV64_IMM(BPF_REG_0, XDP_PASS),
-+		BPF_EXIT_INSN(),
-+	};
-+	int veth, bond, err, fd, old_fd = -1, link_fd = -1;
-+	struct bpf_prog_info info = {};
-+	__u32 old_id, new_id, id, len;
-+
-+	if (!ASSERT_OK(system("ip link add veth type veth"), "add veth"))
-+		goto out;
-+	if (!ASSERT_OK(system("ip link add bond type bond"), "add bond"))
-+		goto out;
-+
-+	veth = if_nametoindex("veth");
-+	if (!ASSERT_GT(veth, 0, "if_nametoindex veth"))
-+		goto out;
-+	bond = if_nametoindex("bond");
-+	if (!ASSERT_GT(bond, 0, "if_nametoindex bond"))
-+		goto out;
-+
-+	err = system("ip link set veth master bond");
-+	if (!ASSERT_OK(err, "set veth master"))
-+		goto out;
-+
-+	/* same attach type as the skeleton's, or the link won't take it */
-+	old_fd = bpf_prog_load(BPF_PROG_TYPE_XDP, "xdp_old", "GPL", insns,
-+			       ARRAY_SIZE(insns), &opts);
-+	if (!ASSERT_GE(old_fd, 0, "load old program"))
-+		goto out;
-+	len = sizeof(info);
-+	if (!ASSERT_OK(bpf_prog_get_info_by_fd(old_fd, &info, &len), "old program info"))
-+		goto out;
-+	old_id = info.id;
-+
-+	memset(&info, 0, sizeof(info));
-+	len = sizeof(info);
-+	err = bpf_prog_get_info_by_fd(bpf_program__fd(new_prog), &info, &len);
-+	if (!ASSERT_OK(err, "new program info"))
-+		goto out;
-+	new_id = info.id;
-+
-+	link_fd = bpf_link_create(old_fd, bond, BPF_XDP, NULL);
-+	if (!ASSERT_GE(link_fd, 0, "attach old program to bond"))
-+		goto out;
-+
-+	err = bpf_xdp_query_id(veth, XDP_FLAGS_DRV_MODE, &id);
-+	if (!ASSERT_OK(err, "query veth") ||
-+	    !ASSERT_EQ(id, old_id, "veth runs the old program"))
-+		goto out;
-+
-+	err = bpf_link_update(link_fd, bpf_program__fd(new_prog), NULL);
-+	if (!ASSERT_OK(err, "replace the program through the link"))
-+		goto out;
-+
-+	err = bpf_xdp_query_id(veth, XDP_FLAGS_DRV_MODE, &id);
-+	if (!ASSERT_OK(err, "query veth") ||
-+	    !ASSERT_EQ(id, new_id, "veth follows to the new program"))
-+		goto out;
-+
-+	/* nothing but our fd should be holding on to the old program now */
-+	close(old_fd);
-+	old_fd = -1;
-+	fd = bpf_prog_get_fd_by_id(old_id);
-+	if (!ASSERT_EQ(fd, -ENOENT, "old program released") && fd >= 0)
-+		close(fd);
-+
-+	err = bpf_link_detach(link_fd);
-+	if (!ASSERT_OK(err, "detach the link"))
-+		goto out;
-+
-+	err = bpf_xdp_query_id(veth, XDP_FLAGS_DRV_MODE, &id);
-+	if (!ASSERT_OK(err, "query veth"))
-+		goto out;
-+	ASSERT_EQ(id, 0, "veth has no program left");
-+
-+out:
-+	if (link_fd >= 0)
-+		close(link_fd);
-+	if (old_fd >= 0)
-+		close(old_fd);
-+	system("ip link del veth");
-+	system("ip link del bond");
-+}
-+
- /*
-  * Test that XDP redirect via xdp_master_redirect() does not crash when
-  * the bond master device is not up. When bond is in round-robin mode but
-@@ -826,6 +919,9 @@ void serial_test_xdp_bonding(void)
- 	if (test__start_subtest("xdp_bonding_nested"))
- 		test_xdp_bonding_nested(&skeletons);
- 
-+	if (test__start_subtest("xdp_bonding_link_update"))
-+		test_xdp_bonding_link_update(&skeletons);
-+
- 	if (test__start_subtest("xdp_bonding_features"))
- 		test_xdp_bonding_features(&skeletons);
- 
+Jakub Kicinski (5):
+  net: don't safety-check device features for XDP uninstall
+  net: move dev_xdp_set_link() and dev_xdp_set_prog() up
+  net: record XDP programs propagated to lower devices
+  selftests/bpf: check XDP attach on a nested bond slave
+  selftests/bpf: check replacing and detaching XDP on a bond through a
+    link
+
+ .../networking/net_cachelines/net_device.rst  |   1 +
+ include/linux/netdevice.h                     |   7 +
+ drivers/net/bonding/bond_main.c               |   4 +-
+ drivers/net/hyperv/netvsc_bpf.c               |   2 +-
+ drivers/net/hyperv/netvsc_drv.c               |   5 +-
+ net/core/dev.c                                | 133 ++++++++++++------
+ .../selftests/bpf/prog_tests/xdp_bonding.c    | 120 +++++++++++++++-
+ 7 files changed, 224 insertions(+), 48 deletions(-)
+
 -- 
 2.56.0
 
