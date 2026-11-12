@@ -1,96 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794498894;
-	b=yviJtFBF1L+V8ld/NVdB57HIW1iMDVAiAHLS1FX5M7I4pZS7GG50KXZzp2qbESO1g1Rm
-	 MbAU68/fAYYoU+JsY/4Qt5Wv2nM8NJ/iOfggFXtJAGyD09WxP4bf1n3IQ+jqnhJEvQuvE
-	 Od3qoCTUxvaUJdjALR9OXWTuo0kVaCWdQTdrKSdOURgIaMuGRhi5plbtvUNwwSr1CoV1n
-	 x83iwkuMK/ry79D7Y6tqrN9pbVmiG9HXL35lhPmuamrSLshFgu+3majJ0GU/G/6Pw7Ts+
-	 mJoMWLSZAMdD54p4cb++sOOVOYgArRdYnkb9AWPQbmXOi7VUpyXCVREK76JBOXG3LKA==
+	t=1794499302;
+	b=cI8TdWvbCQl1jYf+rjzHVEEMN0F81HtVVzvuWj/WiqBYUMGHwhXCKaqhWV31ql7Toi4T
+	 KglPw4oC/eWM38IrQrGK6Ixpx/ovE8xZlE3DXo59x6pqbFyZzi55EeIYkWPpsV5H27dXe
+	 7cK/S3gC6diVt13wgFMkuoyLa4qQ2ZwQQbDiNd2io+WZK+Vkv+ORGMb2BQQIUudMN1BeG
+	 rSblrBdrgwDyRT6m02I7h+Ql0SivputkekhbMjsGI5kzQ9cp64OY0O2Qs1y+oQ9QlQ1gE
+	 JIeZDP45yf8IZQfyhlGgb3mthqVKZzwkLwiqCcSWZLVcictGed+Mmqtv98b6gRkm3ew==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794498894;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=d2TPl4JNAw7RzVE69dDCBFI69w+IvtToIR9imFo6f4Q=;
-	b=04eXItCBDwQ/LKzmLZ3mN0kX/EKsbxDfvo6yyxWWcMdTA91lVbmF9KhnTf0zpjNhEYBk
-	 MYhoA9OTCSu0QYJx3gulh+GPLwliHzhxsO4QxMUDWe0Wacll1gH8SKqj1FjZLDMDncfs4
-	 RCXTQ+PfH2ufHoEDGldKhsu8QaXhEAdQAF1slGvmZQGw57JcEyYZXaMuM1+DUWuHt+6EH
-	 3uE+Ih5psnsXySQ+be2z5t4wIkv+ozPzFHQk0XrXMI0Y8MmIKfw3GLMDa9GPm63yatski
-	 R/+Muvq/67JrpcdPzuBG4tO//ziWWeD+o+2NRp3XFyGZivL0BSyxWqTBI4nn5rcL+1A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794499302;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=kjiQ212yf1PFzgc0XMcYedCjf1x/Z7XdUe85fS5QUeM=;
+	b=DcsVPBDk8nYt+1dglhRruZgsDC3gffzeUJeUePx7mX2SiYXbgvl3/AOLiFJxRMbuCzz7
+	 PoYjuJIcDGwIUnDcuuWIsWOfI5OO65NiQmQXaGfdPvr+PbcnO7GzRakD1hyZdrK5S8plE
+	 PsUXMYgz5M1ZgVytGYgTYt+QnlZpKIO+hko+zXw/BihRGfzY6qZ0uu3ltEimBBVe5+Y1e
+	 ctJ6fvDEpql463eMfJRscZ1nuefJrFu8fWU6PdOHITsf8BNgQTz2+N2rXQW0kRCTZJQ54
+	 8g/U6SpkjI5Wy3e52lkwmM2rY7ToGmhLmqWcXFXRvyiX8bcjeTSZP4sfMsojuMLSrpA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hLxJJHf+;
-	arc=none smtp.remote-ip=209.85.210.173
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=infradead.org;
+	spf=pass smtp.mailfrom=infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=JakJZCtG;
+	arc=none smtp.remote-ip=90.155.50.34
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6333D606A330
-	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 15:54:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6333D606A330
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55B1A606A327;
+	Thu, 12 Nov 2026 16:01:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 55B1A606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hLxJJHf+
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-8b67f25e6e1so2378766b3a.0
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 07:54:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794498893; x=1795103693; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=d2TPl4JNAw7RzVE69dDCBFI69w+IvtToIR9imFo6f4Q=;
-        b=hLxJJHf+Z9mXJGLx9+26UuwjKsXYxL/uULgJtWsKRqLrtBHTjyCVnNJn/0yjLqW+NF
-         syPi7Fp37bqki1hVcM95RhV3oh0boDOG4RkmWZ7RhoeV3jvPXOuuAR63kihdwJtdBqYG
-         91B/lwVdvGqhsCUrA1PRzNvmbgfiKFJcOyvB8pPzlI/EHmP5JjfNgF0peM46QnfodVeT
-         NzLi72RBCcaA6zBUTxq0/iIvjWEAP0P37XdOirjwiLr3fpWhoRMPX4MUMTJM7oGj/zyU
-         pOUC6NhIVnisjtK9OqjCUip09mTp/x2bkKckWIQq721qbtlWdR/je0BNKPIB83ghkAuG
-         kpFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794498893; x=1795103693;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=d2TPl4JNAw7RzVE69dDCBFI69w+IvtToIR9imFo6f4Q=;
-        b=ztCUyKONxXmMY74rMovZFFuj8mlzkaL9YH7FXYn73owih1F2lNfwvrLUISBgZ6C02X
-         MrR8I+X4qQyuFsQFCU88h2ZyPMmXeoFKlAjeGrbeg26pQEkwBemfNkwooDGqSlm7Sj8j
-         6gbcTuTGWtRnNM4LM9fnZ4kYceoeIsAr7OTMoacplbDfmgnMC3PteyH/mZ6t+aI4MZYg
-         j9iSmxKyxGZ8VUbPtiauIQpoNQoYA0qfp65cF+dfAmXlUjK4pt6d7rUH6fK5uHCHF/QL
-         1/Hnw9aquWNaB8h8G436On/B+XlT8KJcLZKaUJ9gmENznrPmEeqACL5XY9v54GmZ01Sb
-         cCPA==
-X-Gm-Message-State: APuU4Z/YnFCnt6aENjCE9KdpAcMkhIo2hMWLVsCBrSshyGaKpYNtsgj2
-	jD0MLZ5Hns1hIH4u7wPbYpzprrPZXHep7Iey5J0Oj/u8BRho70Adzuza5tkjHQ==
-X-Gm-Gg: AYBFou3hYnngGF1Hvxnk0/1KTgrHWK2CIsmJYRjQAMLxDVVRl7/cXRhDfqmMriSHuk7
-	zGFmTgq48DkK2KEnqnL3QiP2bU5PwanIZNK1GB7q0Jk/xh5NhlwWGMF2qF/mAixKa0iHTzoJlU9
-	rCoJfAVa3LXF4SUP8PJeXgpwuwU4VrzCITum4pb9ePSfJsL3s2QmkwpzBBlmGfY7GhHaeJ/IuPF
-	vjYxXLbHmg6cQFMiKs5nYHmIt+aRcp71SQGucEkqZZZ1gMcZOsitAB53ljU+EgGkV34tscqTkZk
-	mH5/vnvia5tz6OqxQUhvtweRn2Ki6mmNTKXcXEbCVH1MeZ5aXQi27sUTYEqdNqmgyrF+XIGYyzW
-	50xKY7c6XZFL8TEDptmurn3jqtctwK6EOfOozPB0fjDhGtag7H+GdN7/TwrakQg0cZaB4/h69Wd
-	9kP6Ps8u/XhCRccbtnlhRQwYuSlDI8rmkRDIfD9wV31LuQHMk0aMgBs5kHh97t3amnSjBpBDJdw
-	LvckBwojFJngT9FWCljp4G1dsKGxk3uwRQBAmp5c01QdZg+v4RGrAqzJRGsK0Zpya2J07eEDEjf
-	7TzD2LMj+0BeWfTfE2WBfusRrIDHcijHfLMQ24jX6U2u7bOHGcxu0JLDzAOCan3gjfiLfdeAA9O
-	zq7JjgmjHtdoBuC/JmoVpIwjDUsnzJQo4ijAmFNQq3y6GlWZbxCoAPc4KkAbMbpOoa5rtrJw3XH
-	XubsQlAv29rQJ/gpABobHz
-X-Received: by 2002:a05:6a21:3991:b0:3e1:d43e:367f with SMTP id adf61e73a8af0-3f2fffbe63cmr6442476637.73.1794498892285;
-        Thu, 12 Nov 2026 07:54:52 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.253])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8baab8dccc7sm3583511b3a.52.2026.11.12.07.54.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2026 07:54:51 -0800 (PST)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com
-Subject: [PATCH bpf-next 12/12] selftests/bpf: Test the evaluation of linked expressions
-Date: Thu, 12 Nov 2026 15:53:37 +0000
-Message-ID: <20261112155337.1040699-13-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261112155337.1040699-1-alexei.starovoitov@gmail.com>
-References: <20261112155337.1040699-1-alexei.starovoitov@gmail.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=JakJZCtG
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=kjiQ212yf1PFzgc0XMcYedCjf1x/Z7XdUe85fS5QUeM=; b=JakJZCtGHFNweWgQDckDwc0f5Z
+	gsEb4L65dV9gyPS6dxEOn6flj6hHJf0j9l0KfYyRTX3FB56NwnktQDJxy5EzK7QjlVIuYsB4voQdX
+	wf6IXeLZ+Y7Zmh2/hMxOkA9JHeunIixny+YI819lSOor57L6jqA6D4owpapY9dAqUw+66ZmJ8/mal
+	cE3oGap/WnkYIumfG6du72z4m3sc2fp0SgEeK+sIqNN2b0v3xSRGWEzKVgcGjixJ7fNXi6LhMYz3u
+	lf57jd1GfuVYO8KixWLbVQO659mxDvVJR0vWB6kj890Qwrf+pVEXfviobjk6mL1rg7r9Re9lyng9C
+	FEO6xd8g==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xRXF3-00000008iFE-0mpe;
+	Thu, 12 Nov 2026 16:01:37 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 30AD33005AF; Thu, 12 Nov 2026 17:01:36 +0100 (CET)
+Date: Thu, 12 Nov 2026 17:01:36 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Tao Cui <cui.tao@linux.dev>
+Cc: tj@kernel.org, void@manifault.com, arighi@nvidia.com,
+	changwoo@igalia.com, mingo@redhat.com, sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	Tao Cui <cuitao@kylinos.cn>
+Subject: Re: [PATCH 2/2] sched_ext: Block a retained donor before PI deboost
+ routes it back to sched_ext
+Message-ID: <20261112160136.GF1922751@noisy.programming.kicks-ass.net>
+References: <20261112144935.583937-1-cui.tao@linux.dev>
+ <20261112144935.583937-3-cui.tao@linux.dev>
+ <20261112152118.GD1813469@noisy.programming.kicks-ass.net>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -100,182 +71,204 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261112152118.GD1813469@noisy.programming.kicks-ass.net>
 
-From: Alexei Starovoitov <ast@kernel.org>
+On Thu, Nov 12, 2026 at 04:21:18PM +0100, Peter Zijlstra wrote:
+> On Thu, Nov 12, 2026 at 10:49:35PM +0800, Tao Cui wrote:
+> > From: Tao Cui <cuitao@kylinos.cn>
+> > 
+> > rt_mutex_setprio() is the only entry path into sched_ext that does not
+> > block a retained donor: an ext task PI-boosted by an rt waiter can
+> > block on a second kernel mutex while boosted, and on deboost is routed
+> > back to sched_ext carrying the queued+blocked state that
+> > scx_prepare_setscheduler() promises never happens; every PI cycle
+> > hands the BPF scheduler a queued+blocked donor it never admitted.
+> > 
+> > Call scx_prepare_task_sched_change() before the sched_change guard when
+> > the class change routes the task back to sched_ext, which performs the
+> > missing sched_proxy_block_task() (plus an update_rq_clock() that is
+> > harmless here: the clock was already advanced, so the second advance
+> > only applies a small delta). The boost direction (ext -> rt) needs no
+> > handling.
+> 
+> I can't understand this. And I take a very dim view of sprinking magic
+> hooks like this. So no.
 
-Next to the tests of 'p = buf + i':
+Ooh, is this the thing from here:
 
- - the outermost common base: 'm = n + 1' follows '(u32)(n - 1)' where n is
-   a 16-bit fill
- - a masked copy is tested: the register follows if it fits in a u8
- - 'p = &hdr[n]' before 'if (n >= 4)', with n and hdr in stack slots as in
-   the HTTP/2 parser of the Datadog agent
- - each branch evaluates in its own state
- - a product in 32 bits, one that wraps
- - a scalar, '63 - n * 8'
- - the constant between an operand and its leader
- - '>>'; '%', '>>' and a zero extension of a value of which too few bits
-   are known; the bound of a loop in a slot with a 32-bit spill
- - a signed division by a range that has 0
- - an operand that is overwritten before the jump
- - two partial spills of one value, the step of the address base
- - a pointer below '-' and '*', the offset of a pointer for a scalar
- - an offset that 'p += i' refuses
- - with an arena: a product and a shifted sum of a pointer to the arena
- - memory of a caller whose address the callee holds in r0
+  https://patch.msgid.link/20260924075925.GE4121620%40noisy.programming.kicks-ass.net
 
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+where you need to block a task because ext doesn't want to support
+proxy-exec?
+
+Why can't anybody search email these days..
+
+Something like so? Although I note the scx_block_proxy_donor() thing has
+gotten more complicated, so perhaps this needs a little more?
+
+Andrea?
+
 ---
- .../selftests/bpf/progs/verifier_arena.c      |   8 ++
- .../selftests/bpf/progs/verifier_scev.c       | 108 ++++++++++++++++++
- 2 files changed, 116 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
-index 3931a1d9b6da..4741cd7d20cd 100644
---- a/tools/testing/selftests/bpf/progs/verifier_arena.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
-@@ -659,6 +659,14 @@ ARENA_LINKED(scalar_plus_two_constants, __success __retval(0),
- ARENA_LINKED(arena_ptr_plus_constant, __failure,
- 	"r3 += 1; r3 = le64 r3; r7 = le64 r7; r2 = 0xffffffff ll; if r7 != r2 goto out_%=;"
- 	"r3 >>= 32; r3 -= 1; r1 = r6; r1 += r3;")
-+/* the add is an operand: (>> (+ x 1) 32) */
-+ARENA_LINKED(arena_ptr_plus_constant_shifted, __failure,
-+	"r3 += 1; r3 = le64 r3; r3 >>= 32; r7 = le64 r7; r2 = 0xffffffff ll;"
-+	"if r7 != r2 goto out_%=; r3 -= 1; r1 = r6; r1 += r3;")
-+/* 'r3 *= 2' is converted to 'w3 *= 2': r3 is 0 and not 1 << 32 */
-+ARENA_LINKED(arena_ptr_times_constant, __failure,
-+	"r3 *= 2; r3 = le64 r3; r7 = le64 r7; r2 = 0x80000000 ll; if r7 != r2 goto out_%=;"
-+	"r3 >>= 32; r3 -= 1; r1 = r6; r1 += r3;")
- /* At the join point r3 is phi((+ x 1)). The insn there, an add to a scalar, does not define it. */
- ARENA_LINKED(arena_ptr_plus_constant_on_two_paths, __failure,
- 	"if r8 == 0 goto 1f; r3 += 1; goto 2f; 1: r3 += 1; 2: r8 += 1; r3 = le64 r3; r7 = le64 r7;"
-diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
-index 012515859921..8039a5d6769f 100644
---- a/tools/testing/selftests/bpf/progs/verifier_scev.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
-@@ -3581,6 +3581,106 @@ LINKED(index_is_empty, VALID __flag(BPF_F_TEST_REG_INVARIANTS),
- 	"r7 &= 1; r7 *= 7; r7 += -2; r1 = r6; r1 += r7; r1 += 2; if r7 & 1 goto l_%=; goto out_%=;"
- 	"l_%=: if r7 & 2 goto m_%=; goto out_%=; m_%=: r1 += 1;" USE_R6)
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 1a088d4576f5..1c1e669473a6 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -11252,8 +11252,13 @@ void sched_change_end(struct sched_change_ctx *ctx)
+ 	 */
+ 	WARN_ON_ONCE(p->sched_class != ctx->class && !(ctx->flags & ENQUEUE_CLASS));
  
-+/*
-+ *	n = hdr.len; m = n + 1; if ((u32)(n - 1) > 61) return 0; c = buf[m];
-+ * n is a u16. r3 and r4 are r2 + a constant modulo 2^32, and the slot + a constant modulo 2^16.
-+ * r3 does not fit in a u16.
-+ */
-+#define U16_FILL(m)								\
-+	"*(u64 *)(r10 - 8) = r8; r2 = *(u16 *)(r10 - 8); r3 = " m "; r3 += 1; w4 = w2;"	\
-+	"w4 += -1; if r4 > 61 goto out_%=; r1 = r6; r1 += r3;"
-+
-+LINKED(outermost_common_base, VALID, U16_FILL("r2"))
-+LINKED(innermost_common_base, UNBOUND, U16_FILL("r8"))
-+/*
-+ *	u8 n; .. if (n > 3) return 0; c = buf[n * 16];
-+ * n is in a 64-bit register, the compiler tests a masked copy. r2 is (u8)r8. If r8 fits in a u8 too
-+ * the jump bounds it.
-+ */
-+#define MASKED_COPY(shift)							\
-+	"r8 >>= " shift "; r2 = r8; r2 &= 255; if r2 > 3 goto out_%=; r8 <<= 4; r1 = r6; r1 += r8;"
-+
-+LINKED(masked_copy_tested, VALID, MASKED_COPY("56"))
-+LINKED(masked_copy_tested_256_is_0, MAP_OOB, MASKED_COPY("55"))
-+/*
-+ *	p = &hdr[n]; if (n >= 4) return 0; c = p->type;
-+ * sizeof(hdr[0]) is 20, n is a u8 in a slot, hdr is live in a slot. The jump bounds r2. The
-+ * expression of r1, *fp-16 + (u8)*fp-24 * 20, is evaluated in the state after the jump.
-+ */
-+#define HDR(cnt)								\
-+	"*(u64 *)(r10 - 16) = r6; *(u64 *)(r10 - 24) = r8; r2 = *(u64 *)(r10 - 24); r2 &= 255;"	\
-+	"r3 = r2; r3 *= 20; r1 = *(u64 *)(r10 - 16); r1 += r3; r3 = " cnt ";"	\
-+	"if r3 > r2 goto l_%=; goto out_%=; l_%=: r0 = *(u64 *)(r10 - 16);"
-+
-+LINKED(scaled_index_tested_after_the_add, VALID, HDR("4"))
-+LINKED(scaled_index_tested_after_the_add_oob, MAP_OOB, HDR("5"))
-+/* both branches evaluate in their own state: r7 is 8 or more in the one, less in the other */
-+LINKED(scaled_index_in_the_other_branch, MAP_OOB,
-+	"r2 = r7; r2 *= 8; r1 = r6; r1 += r2; if r7 > 7 goto l_%=; goto out_%=; l_%=:" USE_R6)
-+LINKED(scaled_index_is_32bit, VALID,
-+	"w2 = w7; w2 *= 16; r1 = r6; r1 += r2; if r7 > 3 goto out_%=;" USE_R6)
-+/* w2 wraps: r8 is 0x10000003 */
-+LINKED(scaled_index_is_32bit_and_wraps, __failure,
-+	"r8 >>= 32; w2 = w8; w2 *= 16; r3 = r8; r3 *= 16; if r2 > 48 goto out_%=;"
-+	"r1 = r6; r1 += r3;")
-+LINKED(scalar_is_evaluated, VALID,
-+	"r3 = r7; r3 *= 8; r2 = 63; r2 -= r3; if r7 > 7 goto out_%=; r1 = r6; r1 += r2;")
-+LINKED(scalar_is_evaluated_oob, __failure,
-+	"r3 = r7; r3 *= 8; r2 = 63; r2 -= r3; if r7 > 8 goto out_%=; r1 = r6; r1 += r2;")
-+/* the operand r8 + 1 is dead, its leader is r8 */
-+LINKED(leader_plus_constant, VALID,
-+	"r4 = r8; r4 += 1; r2 = r4; r2 *= 8; r4 = 0; if r8 > 6 goto out_%=; r1 = r6; r1 += r2;")
-+LINKED(leader_plus_constant_oob, MAP_OOB,
-+	"r4 = r8; r4 += 1; r2 = r4; r2 *= 8; r4 = 0; if r8 > 7 goto out_%=; r1 = r6; r1 += r2;")
-+LINKED(shifted_index, VALID,
-+	"r2 = r8; r2 >>= 2; r1 = r6; r1 += r2; if r8 > 255 goto out_%=;" USE_R6)
-+/* r8 is dead at the jump. Its leader r3 holds 32 or 8 bits of it: r8 is 1 << 32, 1 << 8 */
-+LINKED(remainder_of_low_32_bits, MAP_OOB,
-+	"w3 = w8; r2 = r8; r2 %%= 100; r8 = 0; if r3 > 63 goto out_%=; r1 = r6; r1 += r2;")
-+/* r8 >> 32 has a leader and no value */
-+LINKED(operand_has_a_leader_but_no_value, __failure __msg("R1 unbounded memory access"),
-+	"w3 = w8; r2 = r8; r2 >>= 32; r2 += r7; r8 = 0; if r7 != 0 goto out_%=;"
-+	"r1 = r6; r1 += r2; r0 = r3;")
-+/* the bound is filled from 8 bytes: a 32-bit spill below 4 bytes that nobody knows */
-+LINKED(bound_of_loop_above_a_32bit_spill, UNBOUND,
-+	"*(u64 *)(r10 - 16) = r8; r3 = 5; *(u32 *)(r10 - 16) = r3; r1 = 0;"
-+	"l_%=: r2 = *(u64 *)(r10 - 16); r1 += 1; if r1 < r2 goto l_%=; r1 *= 12; r1 += r6;")
-+LINKED(zero_extension_of_low_8_bits, MAP_OOB,
-+	"r3 = r8; r3 &= 0xff; r2 = r8; r2 &= 0xffff; r2 *= 8; r8 = 0; if r3 > 7 goto out_%=;"
-+	"r1 = r6; r1 += r2;")
-+/* Two slots have the expression (spill32 r8). Their upper halves differ: r3 is 1 << 32 */
-+LINKED(two_partial_spills_of_one_value, __failure,
-+	"r4 = 0; *(u64 *)(r10 - 16) = r4; *(u32 *)(r10 - 16) = r8; r4 = 0x100000000 ll;"
-+	"*(u64 *)(r10 - 24) = r4; *(u32 *)(r10 - 24) = r8; r2 = *(u64 *)(r10 - 16);"
-+	"r3 = *(u64 *)(r10 - 24); if r2 > 63 goto out_%=; r1 = r6; r1 += r3;")
-+/* r3 is r6 + 0, 8 .. 56. r3 + r8 is not a multiple of 8: 8 bytes at 63 */
-+LINKED(step_of_the_address_base, MAP_OOB,
-+	"r2 = r7; r2 &= 7; r2 <<= 3; r3 = r6; r3 += r2; r8 >>= 32; r1 = r3; r1 += r8;"
-+	"if r8 > 7 goto out_%=; r0 = *(u64 *)(r1 + 0); r0 = *(u8 *)(r3 + 0);")
-+/* The divisor is a range that has 0: the quotient is not known, whatever the jump tells */
-+LINKED(dividend_tested, VALID,
-+	"r3 = r7; r2 = r8; r2 s/= r3; if r8 > 7 goto out_%=; r2 &= 63; r1 = r6; r1 += r2; r0 = r3;")
-+/* r7 is another value at the jump than in r9 */
-+LINKED(operand_is_overwritten, MAP_OOB,
-+	"r9 = r7; r9 *= 8; call %[bpf_get_prandom_u32]; r7 = r0; r7 &= 255;"
-+	"if r7 > 7 goto out_%=; r1 = r6; r1 += r9;")
-+/* a pointer is evaluated below an add only */
-+LINKED(pointer_minus_index, __failure,
-+	"r1 = r6; r1 += 63; r1 -= r7; if r7 > 63 goto out_%=;" USE_R6)
-+/* r3 is an address as a scalar. r6 + r7 * 2 has the offset [0, 14]: that is not the range of r3 */
-+LINKED(offset_of_pointer_is_not_scalar, UNBOUND,
-+	"r2 = r7; r2 *= 2; r5 = r6; r5 += r2; r3 = r5; r3 = le64 r3; if r7 > 7 goto out_%=;"
-+	"r1 = r6; r1 += r3;")
-+LINKED(product_of_pointer, UNBOUND,
-+	"r5 = r6; r5 += r7; r3 = r5; r3 = le64 r3; r3 *= 2; if r7 > 7 goto out_%=;"
-+	"r1 = r6; r1 += r3;")
-+/* As index_is_constant_that_the_add_refuses: r7 + r8 * 16 is r10 - 32 + 0x100000010 */
-+LINKED_SEC("tc", scaled_index_that_the_add_refuses,
-+	__failure __msg("dynptr has to be at a constant offset"),
-+	"r1 = r9; r2 = 0; r3 = r10; r3 += -16; call %[bpf_dynptr_from_skb];"
-+	"r8 >>= 8; r7 = r10; r7 += -32; r3 = r8; r3 *= 16; r1 = r7; r1 += r3; r2 = 0x10000001 ll;"
-+	"if r8 != r2 goto out_%=; r2 = 0; r3 = r7; r4 = 0; call %[bpf_dynptr_slice_rdwr]; r1 = r6;")
-+
- /*
-  *	static void clamp(struct buf *b) { if (b->len > 63) b->len = 0; }
-  *	clamp(&b); c = b.data[b.len];
-@@ -3612,6 +3712,14 @@ LINKED(callee_writes_next_field, VALID, CALL(store_next_and_clamp))
- /* another address base can be another name of the memory */
- CLAMP(store_alias_and_clamp, "*(u64 *)(r4 + 0) = r2;")
- LINKED(callee_writes_through_alias, __failure, CALL(store_alias_and_clamp))
-+static __naked __noinline __used void clamp_through_r0(void)
-+{
-+	asm volatile (
-+	"r0 = r1; r1 = 0; r3 = *(u64 *)(r0 + 0);"
-+	"if r3 <= 63 goto +2; r3 = 0; *(u64 *)(r0 + 0) = r3; r0 = 0; exit;"
-+	::: __clobber_all);
-+}
-+LINKED(callee_has_the_address_in_r0, VALID, CALL(clamp_through_r0))
+-	if ((ctx->flags & ENQUEUE_CLASS) && p->sched_class->switching_to)
+-		p->sched_class->switching_to(rq, p);
++	if ((ctx->flags & ENQUEUE_CLASS) && p->sched_class->switching_to) {
++		bool block = p->sched_class->switching_to(rq, p);
++		if (block && p->is_blocked && ctx->queued) {
++			block_task(rq, p, READ_ONCE(p->__state));
++			ctx->queued = false;
++		}
++	}
  
+ 	if (ctx->queued)
+ 		enqueue_task(rq, p, ctx->flags);
+diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
+index f74ffb3b1aca..4440e32236b3 100644
+--- a/kernel/sched/ext/ext.c
++++ b/kernel/sched/ext/ext.c
+@@ -46,21 +46,6 @@ bool __scx_allow_proxy_exec(const struct task_struct *p)
+ 	return !sch || (sch->ops.flags & SCX_OPS_ENQ_BLOCKED);
+ }
+ 
+-/*
+- * End retained proxy execution before changing @p's BPF scheduler ownership.
+- * Called with @p's pi and rq locks held immediately before
+- * sched_change_begin(). The caller must pass DEQUEUE_NOCLOCK so the rq clock
+- * is updated only once.
+- */
+-void scx_prepare_task_sched_change(struct task_struct *p)
+-{
+-	lockdep_assert_held(&p->pi_lock);
+-	lockdep_assert_rq_held(task_rq(p));
+-
+-	update_rq_clock(task_rq(p));
+-	scx_block_proxy_donor(task_rq(p), p);
+-}
+-
  /*
-  *	struct { char *buf; u64 len; } c = { buf, 0 };		bpf_loop(100, append, &c, 0);
--- 
-2.55.0
-
+  * NOTE: sched_ext is in the process of growing multiple scheduler support and
+  * scx_root usage is in a transitional state. Naked dereferences are safe if the
+@@ -5004,12 +4989,12 @@ static void prio_changed_scx(struct rq *rq, struct task_struct *p, u64 oldprio)
+ {
+ }
+ 
+-static void switching_to_scx(struct rq *rq, struct task_struct *p)
++static bool switching_to_scx(struct rq *rq, struct task_struct *p)
+ {
+ 	struct scx_sched *sch = scx_task_sched(p);
+ 
+ 	if (task_dead_and_done(p))
+-		return;
++		return false;
+ 
+ 	scx_enable_task(sch, p);
+ 
+@@ -5020,6 +5005,8 @@ static void switching_to_scx(struct rq *rq, struct task_struct *p)
+ 	 */
+ 	if (!scx_is_cid_type() && SCX_HAS_OP(sch, set_cpumask))
+ 		scx_call_op_set_cpumask(sch, rq, p, (struct cpumask *)p->cpus_ptr);
++
++	return !scx_allow_proxy_exec(p);
+ }
+ 
+ static void switched_from_scx(struct rq *rq, struct task_struct *p)
+@@ -8947,10 +8934,8 @@ static void scx_root_enable_workfn(struct kthread_work *work)
+ 
+ 		if (old_class != new_class)
+ 			queue_flags |= DEQUEUE_CLASS;
+-		if (new_class == &ext_sched_class) {
+-			scx_prepare_task_sched_change(p);
++		if (new_class == &ext_sched_class)
+ 			queue_flags |= DEQUEUE_NOCLOCK;
+-		}
+ 
+ 		scoped_guard (sched_change, p, queue_flags) {
+ 			scx_set_task_slice(p, READ_ONCE(sch->slice_dfl));
+diff --git a/kernel/sched/ext/internal.h b/kernel/sched/ext/internal.h
+index ff0a3d508533..961694e4c27c 100644
+--- a/kernel/sched/ext/internal.h
++++ b/kernel/sched/ext/internal.h
+@@ -2300,7 +2300,6 @@ struct task_struct *scx_task_iter_next_locked(struct scx_task_iter *iter);
+ bool scx_set_task_slice(struct task_struct *p, u64 slice);
+ void scx_task_slice_ended(struct rq *rq, struct task_struct *p);
+ void scx_task_unlink_from_dsq(struct task_struct *p, struct scx_dispatch_q *dsq);
+-void scx_prepare_task_sched_change(struct task_struct *p);
+ void scx_dispatch_dequeue(struct rq *rq, struct task_struct *p);
+ void scx_do_enqueue_task(struct rq *rq, struct task_struct *p, u64 enq_flags,
+ 			 int sticky_cpu);
+diff --git a/kernel/sched/ext/sub.c b/kernel/sched/ext/sub.c
+index b5d92d89629b..e73f3474d685 100644
+--- a/kernel/sched/ext/sub.c
++++ b/kernel/sched/ext/sub.c
+@@ -1647,7 +1647,6 @@ static void scx_rehome_task(struct scx_sched *to, struct task_struct *p)
+ 	lockdep_assert_held(&p->pi_lock);
+ 	lockdep_assert_rq_held(task_rq(p));
+ 
+-	scx_prepare_task_sched_change(p);
+ 	scoped_guard (sched_change, p,
+ 		      DEQUEUE_SAVE | DEQUEUE_MOVE | DEQUEUE_NOCLOCK) {
+ 		scx_disable_and_exit_task(scx_task_sched(p), p);
+@@ -1680,7 +1679,6 @@ static void scx_punt_task(struct scx_sched *to, struct task_struct *p)
+ 	lockdep_assert_rq_held(task_rq(p));
+ 	WARN_ON_ONCE(!READ_ONCE(to->bypass_depth));
+ 
+-	scx_prepare_task_sched_change(p);
+ 	scoped_guard (sched_change, p,
+ 		      DEQUEUE_SAVE | DEQUEUE_MOVE | DEQUEUE_NOCLOCK) {
+ 		scx_disable_and_exit_task(scx_task_sched(p), p);
+@@ -2459,7 +2457,6 @@ void scx_sub_enable_workfn(struct kthread_work *work)
+ 		if (!(p->scx.flags & SCX_TASK_SUB_INIT))
+ 			continue;
+ 
+-		scx_prepare_task_sched_change(p);
+ 		scoped_guard (sched_change, p,
+ 			      DEQUEUE_SAVE | DEQUEUE_MOVE | DEQUEUE_NOCLOCK) {
+ 			/*
+diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
+index e0c10a5dbda2..cda367bd92af 100644
+--- a/kernel/sched/idle.c
++++ b/kernel/sched/idle.c
+@@ -547,7 +547,7 @@ static void task_tick_idle(struct rq *rq, struct task_struct *curr, int queued)
+ 	update_curr_idle(rq);
+ }
+ 
+-static void switching_to_idle(struct rq *rq, struct task_struct *p)
++static bool switching_to_idle(struct rq *rq, struct task_struct *p)
+ {
+ 	BUG();
+ }
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 1d76950dbb0a..979c520034b1 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -2782,7 +2782,7 @@ struct sched_class {
+ 	 */
+ 	void (*switching_from)(struct rq *this_rq, struct task_struct *task);
+ 	void (*switched_from) (struct rq *this_rq, struct task_struct *task);
+-	void (*switching_to)  (struct rq *this_rq, struct task_struct *task);
++	bool (*switching_to)  (struct rq *this_rq, struct task_struct *task);
+ 	void (*switched_to)   (struct rq *this_rq, struct task_struct *task);
+ 	u64  (*get_prio)     (struct rq *this_rq, struct task_struct *task);
+ 	void (*prio_changed) (struct rq *this_rq, struct task_struct *task,
+diff --git a/kernel/sched/stop_task.c b/kernel/sched/stop_task.c
+index 1e0109ec36b3..b7541bb7b593 100644
+--- a/kernel/sched/stop_task.c
++++ b/kernel/sched/stop_task.c
+@@ -78,7 +78,7 @@ static void task_tick_stop(struct rq *rq, struct task_struct *curr, int queued)
+ {
+ }
+ 
+-static void switching_to_stop(struct rq *rq, struct task_struct *p)
++static bool switching_to_stop(struct rq *rq, struct task_struct *p)
+ {
+ 	BUG(); /* its impossible to change to this class */
+ }
