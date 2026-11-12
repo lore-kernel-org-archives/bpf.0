@@ -1,66 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794496883;
-	b=t20A3E5dbhKvQ+qc0AomXt81APDn0baMkz0A0SH5k3eTthP4dcqjcn4R0j9A4oetfrc3
-	 5wtSbGJ9owe6mKxAsCZYqJztLyUMsPCI9fp7kb4VSaksnHEyXim7YrUJNakW+IEZ5GSO2
-	 N0u3FSTHUByRTezcImw0RnFYnFdHcAl4+Fju8v4YkB+GDvL/e+eH7fUf4XdaX61jRHsIh
-	 FYS94IrbarAqvG1Cui9OgEalpcMt8uO/ESshEaoSRDn57S68H3NQ81hnTG1b/dM445n6D
-	 I4qSChhBCTnMfquSW92KA1Qh4AdXbdtBBYTrfH2rtHiPVkfRQlMJsRidhsoUvLv9v0A==
+	t=1794497195;
+	b=hEj6oGRnjKtxjIWTHmJ3yAe3rIi/3pn5G4chC+f8GU7EqPZ6rJkuW5Uy12iWLMgsp+y5
+	 WGdQBaMcyXuecl9mudadnlv3iGZH3kflbNJPTPqHyQKDBAyOKbODTjrWPRYjWFvmrM+j8
+	 i/xIGBBR3B56GbXMtwsB5saI8rfZmUcvud+wE7wZgjSd9jt4x4mt5Zuo6kZAtoqtl21Hc
+	 OkhncatPbRtg7lFF66yR2WAguymP4GTruw7fAmaXmxLSNsLZN5mI+x3V9p/9p0AvYh/oG
+	 Bx4ejTIFthwQxpLUAlipjG4r0y93MQ0QcG3PAc+nO36qOrXJCz9d40k7WBxC/bycyNA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794496883;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=2k9Pp8R0bWBJ2/Be4kIp/NqviaViJyrqHM3zzKX/Os4=;
-	b=vlDQO+7l2b1I9HrmgQ603E1VKEDVhY/hivDtWXIFrA130RfUkV7OB+eRGDQUvhsNhkSw
-	 h6g5wboV2nPJzd7Cs1RM+Da/o7/EvLe5ECFeiGW899vzS1jgvx1YjxPNjgLbzESfcbanT
-	 m9gOwGh379v9dBAbSiMOD+88/wU/bwTjoXNh68H8zidf48hcU4KgMc3Nol2Nwq3ujxeiC
-	 BQgTytO0MTM/EfGz/PW+NX6waYS4S/w7F7GItnS2DLvd3KR26W6/LP2FWDw7y4qcZ6WJX
-	 0wddI3CVIutER8OzQ5Cjs+nEeOkDf5WeIDUlTsz88EAkleoc/7QLd+RVIKGSV+FcBqg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794497195;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=D7K+gjYPU1+zc1Ew28qYuvbBMXEHVNChCyc/MmpO1Wk=;
+	b=KZTNpk1KdEc3dwo2zNH3ChX4X9l3t0CxUdyF1TodgcaJvGbn+/shO4jmb+jDf8SbhoJg
+	 hAEXDIVrZRa9+Eauknd0Iyqs6ZFTkzUqpFhS1wxhtCt3vLdhDRTVVJX2/3MIdEIPuhOJd
+	 Oy/nc+Ju1ZmcX1ct2AIVGaC9X7BR7VB5qDuPYv8fRdgnjdGXWvtYQkowC+f/zVoY8sevw
+	 nZL12mqR0rKDYz4it6kPZnkPl1Kk9KUCexhV0AE7gLlA2NSZr5kOG44GhohNPfarbsx4K
+	 Kwi+feHQin+ecTrVpgwkVp1yZ3Iw4P/6YXilHFu0MY8vTimptGQgiO9kAMT53WDrAHA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=pass smtp.mailfrom=infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=HbQP09mZ;
-	arc=none smtp.remote-ip=90.155.92.199
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=W6FsuYQU;
+	arc=none smtp.remote-ip=91.218.175.172
+Received: from mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E465C60A2607;
-	Thu, 12 Nov 2026 15:21:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E465C60A2607
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3059606A338
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 15:26:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D3059606A338
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=HbQP09mZ
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=2k9Pp8R0bWBJ2/Be4kIp/NqviaViJyrqHM3zzKX/Os4=; b=HbQP09mZDCZTwfu11tESG/toXs
-	/Clf2p3Q3g1YVQ/zDXzeeiJrrj4HkXxQy1UStS9GHnaAf6L7Gpgq5WxfJe1aZNqbqCZftcQjIo1nQ
-	rKLQhdi82A6d5sQHKXEUVy9gyTIvSDMit/TzYT+9bFn0xiUqAdGepTTkNUZjeROkYK0T3m8Hv5mMR
-	OmPqZaInqzuCs+RwxSVYI1Vm9Ng0Ry6eMwg3zlcVd7mNAmowFukrfD8kOQ7aGZYeKt+IY5YVROZMz
-	ceRYWpsMZeU2yPjKqrug42xOK6eAEFHqlXyKAm2pZD/yCZvxhkoDRZ9eHTfKgrXm3sWWeZOOW8//s
-	JoUXMJ3Q==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xRWc3-0000000AUYM-2OtI;
-	Thu, 12 Nov 2026 15:21:19 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 936ED30057E; Thu, 12 Nov 2026 16:21:18 +0100 (CET)
-Date: Thu, 12 Nov 2026 16:21:18 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Tao Cui <cui.tao@linux.dev>
-Cc: tj@kernel.org, void@manifault.com, arighi@nvidia.com,
-	changwoo@igalia.com, mingo@redhat.com, sched-ext@lists.linux.dev,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	Tao Cui <cuitao@kylinos.cn>
-Subject: Re: [PATCH 2/2] sched_ext: Block a retained donor before PI deboost
- routes it back to sched_ext
-Message-ID: <20261112152118.GD1813469@noisy.programming.kicks-ass.net>
-References: <20261112144935.583937-1-cui.tao@linux.dev>
- <20261112144935.583937-3-cui.tao@linux.dev>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=W6FsuYQU
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Z3txQ2yt8kFeDJmHwbwGZDt+fjjN/wHa2N2LH+Xhsvo=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794497193; v=1; x=1795101993;
+ b=W6FsuYQUUxP7Kp378VPU2ATSmWT7IYRiOu6KPrfWnKcrNwE4TA5IsI6JYw9O1gLEgA0XcPRP
+ /3IPOxJBDrANFU0Z3oLXK6TohLqXarzbMxZgbioxpzhv+nzI+UQsLYXRGDajPf4vbTm4mnyow7r
+ QMQbTo124JzW/Gj4OQB2QdG4=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id eba51540c4148465;
+	Thu, 12 Nov 2026 15:26:32 +0000
+X-Mizu-Trace-ID: eba51540c4148465
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <f6f8e159-f0a3-45a4-b29c-093c45900949@linux.dev>
+Date: Thu, 12 Nov 2026 07:26:29 -0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -70,84 +58,185 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261112144935.583937-3-cui.tao@linux.dev>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH dwarves] btf_encoder: Keep the source prototype of kfuncs
+To: Alan Maguire <almagui@kernel.org>, Alan Maguire
+ <alan.maguire@oracle.com>, Arnaldo Carvalho de Melo
+ <arnaldo.melo@gmail.com>, dwarves@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ bpf@vger.kernel.org, kernel-team@fb.com, Breno Leitao <leitao@debian.org>
+References: <20261111222447.322978-1-yonghong.song@linux.dev>
+ <ffd8e847-6a3f-4403-a33c-1b3804e1c039@kernel.org>
+Content-Language: en-GB
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <ffd8e847-6a3f-4403-a33c-1b3804e1c039@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, Nov 12, 2026 at 10:49:35PM +0800, Tao Cui wrote:
-> From: Tao Cui <cuitao@kylinos.cn>
-> 
-> rt_mutex_setprio() is the only entry path into sched_ext that does not
-> block a retained donor: an ext task PI-boosted by an rt waiter can
-> block on a second kernel mutex while boosted, and on deboost is routed
-> back to sched_ext carrying the queued+blocked state that
-> scx_prepare_setscheduler() promises never happens; every PI cycle
-> hands the BPF scheduler a queued+blocked donor it never admitted.
-> 
-> Call scx_prepare_task_sched_change() before the sched_change guard when
-> the class change routes the task back to sched_ext, which performs the
-> missing sched_proxy_block_task() (plus an update_rq_clock() that is
-> harmless here: the clock was already advanced, so the second advance
-> only applies a small delta). The boost direction (ext -> rt) needs no
-> handling.
 
-I can't understand this. And I take a very dim view of sprinking magic
-hooks like this. So no.
 
-The little I understand of things makes me think __setscheduler_class()
-is buggy for EXT and *that* should be fixed.
+On 11/12/26 4:36 AM, Alan Maguire wrote:
+> On 11/11/26 10:24 PM, Yonghong Song wrote:
+>> The location based checks can drop kfuncs from BTF even though their ABI
+>> did not change. With the arm64 KCSAN setup in the report, resolve_btfids
+>> fails with:
+>>
+>>    WARN: resolve_btfids: no BTF func for kfunc bpf_tcp_ops_set_rcvlowat in bpf_tcp_ops_set_rcvlowat_kfunc_set
+>>    WARN: resolve_btfids: unresolved symbol bpf_tcp_ops_set_rcvlowat
+>>
+>> The location list of 'rcvlowat' starts after the function entry, in a
+>> callee-saved register, so the function is marked unexpected_reg and
+>> skipped. scx_bpf_tid_to_task() hits the same skip through a
+>> different DWARF pattern.
+>>
+>> Kfuncs are defined with __bpf_kfunc ("__used __retain __noclone
+>> noinline"), so the compiler keeps the calling convention of the C
+>> prototype. Odd parameter locations of a kfunc are debug info artifacts,
+>> not ABI changes.
+>>
+>> For kfuncs, clear the location derived flags when saving the state,
+>> keep all source parameters, and skip the location based checks, also in
+>> btf_encoder__add_saved_funcs() where saved_functions_combine() can merge
+>> the flags back in. The inconsistent prototype and ambiguous address
+>> checks still apply.
+>>
+>> Kfuncs were only collected with decl_tag_kfuncs, which the kernel no
+>> longer passes since commit 692393104909 ("resolve_btfids: Emit bpf_kfunc
+>> and bpf_fastcall decl tags"). Collect them whenever BTF is encoded; the
+>> decl tags are still only emitted with decl_tag_kfuncs.
+>>
+>> With this change, bpf_tcp_ops_set_rcvlowat() and scx_bpf_tid_to_task()
+>> are encoded again, and no other function in vmlinux BTF changes.
+>>
+>> Reported-by: Breno Leitao <leitao@debian.org>
+> I'm having trouble reproducing the original failure; would you mind sharing
+> the config that reproduces it? I tried with clang 22, but no luck so far.
+>
+>> Closes: https://lore.kernel.org/all/au27Y9m78_3EH2v1@gmail.com/
+>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+>> ---
+>>   btf_encoder.c | 49 +++++++++++++++++++++++++++++++++++--------------
+>>   1 file changed, 35 insertions(+), 14 deletions(-)
+>>
+>> diff --git a/btf_encoder.c b/btf_encoder.c
+>> index 05ffe82..4269467 100644
+>> --- a/btf_encoder.c
+>> +++ b/btf_encoder.c
+>> @@ -1421,16 +1421,30 @@ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct functi
+>>   			}
+>>   		}
+>>   	}
+>> +
+>> +	/*
+>> +	 * A kfunc keeps the ABI of its C prototype, so reset the DWARF
+>> +	 * location based flags: otherwise the kfunc may be treated as
+>> +	 * optimized and skipped, or lose parameters in BTF.
+>> +	 */
+>> +	if (!loc && is_kfunc_state(state)) {
+>> +		state->unexpected_reg = 0;
+>> +		state->optimized_parms = 0;
+>> +		state->uncertain_parm_loc = 0;
+>> +		state->reordered_parm = 0;
+>> +		state->signature_changed = 0;
+>> +	}
+>> +
+> a nit I know, but to me this would read better if we did it above, i.e where we
+> set these values to non-zero, and avoided doing so for the kfunc case, something like:
+>
+> 	/*
+> 	 * A kfunc keeps the ABI of its C prototype, so avoid setting
+> 	 * state flags, otherwise the kfunc may be treated as
+> 	 * optimized and skipped, or lose parameters in BTF.  For other
+> 	 * cases, ensure the optimizations/uncertainties are reflected
+> 	 * in state flags.
+> 	 */
+> 	if (loc || !is_kfunc_state(state)) {
+> 		state->inconsistent_proto = ftype->inconsistent_proto;
+>          	state->unexpected_reg = ftype->unexpected_reg;
+>          	state->optimized_parms = ftype->optimized_parms;
+>          	state->uncertain_parm_loc = ftype->uncertain_parm_loc;
+>          	state->reordered_parm = ftype->reordered_parm;
+>          	state->signature_changed = ftype->signature_changed;
+>          	if (state->addr && func) {
+>                  	for (int i = 0; i < func->sym_cnt; i++) {
+>                          	if (state->addr != func->syms[i].addr)
+>                                  	continue;
+>                          	if (str_contains_optimized_fn_suffix(func->syms[i].name)) {
+>                                  	state->optimized_symbol = 1;
+>                                  	break;
+>                          	}
+>                  	}
+>          	}
+> 	}
+>
+> Better to not set these values in the first place for kfuncs since we start
+> with a zeroed out state.
 
-> Fixes: be8be8acb268 ("sched_ext: Block proxy donors before taking control")
-> Signed-off-by: Tao Cui <cuitao@kylinos.cn>
-> ---
->  kernel/sched/core.c    | 12 ++++++++++++
->  kernel/sched/ext/ext.h |  2 ++
->  2 files changed, 14 insertions(+)
-> 
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index f7a452123ef5..dcb16b006740 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -7816,6 +7816,18 @@ void rt_mutex_setprio(struct task_struct *p, struct task_struct *pi_task)
->  	if (prev_class != next_class)
->  		queue_flag |= DEQUEUE_CLASS;
->  
-> +	/*
-> +	 * PI boost can route @p out of sched_ext: policy stays SCHED_EXT but
-> +	 * __setscheduler_class() follows the effective rt prio, and rt/fair
-> +	 * may have retained @p on the rq as a blocked donor. Block it before
-> +	 * sched_change_begin() records the queued state, the same way the
-> +	 * other entry points into sched_ext do.
-> +	 */
-> +#ifdef CONFIG_SCHED_CLASS_EXT
-> +	if ((queue_flag & DEQUEUE_CLASS) && next_class == &ext_sched_class)
-> +		scx_prepare_task_sched_change(p);
-> +#endif
-> +
->  	scoped_guard (sched_change, p, queue_flag) {
->  		/*
->  		 * Boosting condition are:
-> diff --git a/kernel/sched/ext/ext.h b/kernel/sched/ext/ext.h
-> index d32bc01071b0..1a699be25331 100644
-> --- a/kernel/sched/ext/ext.h
-> +++ b/kernel/sched/ext/ext.h
-> @@ -19,6 +19,7 @@ void scx_rq_activate(struct rq *rq);
->  void scx_rq_deactivate(struct rq *rq);
->  int scx_check_setscheduler(struct task_struct *p, int policy);
->  void scx_prepare_setscheduler(struct task_struct *p, int policy);
-> +void scx_prepare_task_sched_change(struct task_struct *p);
->  bool task_should_scx(int policy);
->  bool scx_allow_ttwu_queue(const struct task_struct *p);
->  bool __scx_allow_proxy_exec(const struct task_struct *p);
-> @@ -72,6 +73,7 @@ static inline void scx_rq_activate(struct rq *rq) {}
->  static inline void scx_rq_deactivate(struct rq *rq) {}
->  static inline int scx_check_setscheduler(struct task_struct *p, int policy) { return 0; }
->  static inline void scx_prepare_setscheduler(struct task_struct *p, int policy) {}
-> +static inline void scx_prepare_task_sched_change(struct task_struct *p) {}
->  static inline bool task_on_scx(const struct task_struct *p) { return false; }
->  static inline bool scx_allow_ttwu_queue(const struct task_struct *p) { return true; }
->  static inline bool scx_allow_proxy_exec(const struct task_struct *p) { return true; }
-> -- 
-> 2.53.0
-> 
-> base-commit: 5b740a72b55c4267ba4d8010f17dde26b26f52d3
+Okay, Will send v2 with the above suggestion!
+
+>
+>
+>>   	ftype__for_each_parameter(ftype, param) {
+>>   		const char *name;
+>>   		char *final_name = NULL;
+>>   
+>>   		/* No location info/optimized + reordered means optimized out. */
+>> -		if (!loc && ftype->reordered_parm && (!param->has_loc || param->optimized)) {
+>> +		if (!loc && state->reordered_parm && (!param->has_loc || param->optimized)) {
+>>   			state->nr_parms--;
+>>   			continue;
+>>   		}
+>> -		if (!loc && encoder->true_signature && ftype->signature_changed &&
+>> +		if (!loc && encoder->true_signature && state->signature_changed &&
+>>   		    param->optimized) {
+>>   			state->nr_parms--;
+>>   			continue;
+>> @@ -1797,17 +1811,20 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_e
+>>   		 * signature; true_signature can rewrite those signatures.
+>>   		 * Also exclude functions with unexpected register use, multiple
+>>   		 * inconsistent prototypes or uncertain parameter locations.
+>> +		 * The location based checks do not apply to kfuncs.
+>>   		 */
+>> -		if (state->unexpected_reg)
+>> -			skip_reason = "unexpected register usage for parameter\n";
+>> +		if (!is_kfunc_state(state)) {
+>> +			if (state->unexpected_reg)
+>> +				skip_reason = "unexpected register usage for parameter\n";
+>> +			if (state->uncertain_parm_loc)
+>> +				skip_reason = "uncertain parameter location\n";
+>> +			if (state->reordered_parm)
+>> +				skip_reason = "reordered parameters\n";
+>> +			if (btf_encoder_func_state__skip_optimized_parms(encoder, canonical_state))
+>> +				skip_reason = "optimized parameters\n";
+>> +		}
+>>   		if (skip_encoding_inconsistent_proto && state->inconsistent_proto)
+>>   			skip_reason = "inconsistet prototype\n";
+>> -		if (state->uncertain_parm_loc)
+>> -			skip_reason = "uncertain parameter location\n";
+>> -		if (state->reordered_parm)
+>> -			skip_reason = "reordered parameters\n";
+>> -		if (btf_encoder_func_state__skip_optimized_parms(encoder, canonical_state))
+>> -			skip_reason = "optimized parameters\n";
+>>   		if (state->elf->ambiguous_addr)
+>>   			skip_reason = "ambiguous address\n";
+>>   
+>> @@ -3056,10 +3073,14 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, const char *detached_filenam
+>>   		if (!found_percpu && encoder->verbose)
+>>   			printf("%s: '%s' doesn't have '%s' section\n", __func__, cu->filename, PERCPU_SECTION);
+>>   
+>> -		if (encoder->tag_kfuncs) {
+>> -			if (btf_encoder__collect_kfuncs(encoder))
+>> -				goto out_delete;
+>> -		}
+>> +		/*
+>> +		 * Mark kfuncs before any function state is saved, so
+>> +		 * btf_encoder__save_func() keeps their source prototypes.
+>> +		 * Needed even without decl_tag_kfuncs, which only controls
+>> +		 * the decl tags.
+>> +		 */
+>> +		if (btf_encoder__collect_kfuncs(encoder))
+>> +			goto out_delete;
+>>   
+>>   		if (encoder->verbose)
+>>   			printf("File %s:\n", cu->filename);
+
