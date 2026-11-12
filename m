@@ -1,55 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794492466;
-	b=rIdfjdZylQNOTW14BYZDxnJs5lhf+Ovk8stcRpgVDPSMQfytM9zMuNpvT5+VMJ8XPeM2
-	 6vUtqHIA4SwcM60v7DEQSYrTIeo/83V7PgRckyc6HvT87NVU7Vonc1kjQTPVi9TOE2taW
-	 ysorYU9b41J6iRGIM3Q4oVsf7SdxWGofIRidH+VB9WcIiCvu51vfaENVi7STMhpf/CSoQ
-	 Bxu5EoW1Tq++jQxx2rSZYceKwQPdusUbuyrZ0BPMwJ/uJTS19zhUdByoHV0Z/XxEGzotu
-	 BjQz2CU1mEsYAUjRgeh+C2fcm/800pF4i+46+3JbzixyM3fza5mGIER7QJ/dcgiDETQ==
+	t=1794493018;
+	b=tbOOnY5Ce5TccYJ5NwjVrsnECqtzTIUUTFI6OrEyVIz1Ns6m12gvbkIH/sczg2FJHWiw
+	 ZAJPZPKJHRoAvgvTFy2WZXcJoYUhpWvncFlO4kIRahF9bP/+yPI7rTOL+6gl5WV2F7vT8
+	 WwaixgoPy9Ora1c0ldsgkhUnzkkHW6p43e0ux+0B+bJhPeZPYAic9+InBZjvuEz9GOjqv
+	 QYgvOBI+2KgNwV6f7g1VbiQJqRtf7+rsGGLhB4i1yxa1lSHFDEUr2RlA0WkcaysQd1OYV
+	 fXHgYpNTdYvF74GQi4jw3QT55uc1OB9wCMTWbB1dCrxsGO2/wgmSXDiplcq3OTZgeQg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794492466;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	a=rsa-sha256; c=relaxed/relaxed; t=1794493018;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=/lwI9x1mAEArrsKgoIbDXZ2nX7SmRnoFzYv07qQjLks=;
-	b=SXMipAsGO7BmF6/modwYttau2/1BI97gdoee9+xuUl+ObcswEtWwz//C7vX+Cify7Ss0
-	 bR6LlJKaJBq9Ta/DMyXQxRTOvRIyd123JZQxEgDUGOIkUemdAWW0wgP1tk7YQXt07jSVO
-	 6lqYuoZJLTLAk1rdZM76SzRuJmVzvf8SorY+m9FP5fJrF1xwpfgk0plYb6nvF88WQ2K1B
-	 RZI5eCX/315SvY6RgDd6vLA3FyW4PBiHQyV7V2H3qI5rmLhyoGE6LxWmvdeL5eoE6MHPV
-	 74i6TLt8FKcbfvYQweGrad+hbiM0Y5ZdC0y9+mlQqIsVIk/KdR6Psgi+ZQrr5jmw/kw==
+	bh=/Vv1E7PpJMJRjqnKtZZTz9HXKfHhwH3E4+V11WdZeIc=;
+	b=mTUhFABZfXtbQ5VoOng46GpDVezIRndIpxM1iNmwgBktw+PERsSSzCvaEGUv0Qh4mSCR
+	 EMYRAG5Yxf7e+3h0N2XtJRJDy0Qok1vydbe3aSb0uBD95gj6vAWPxg1oQlsqzrGRamywt
+	 ARcf4vvnTyLfXOJt2tuS1e6fdOfzDBPkWARmjPtAFQF/IztgR1SlPxd2d35l8jGQWeiar
+	 nauIwjk2tTurf5FIDw+GU4GbOu31KqGheULsNNGF1cTliYfTAoaUrBPrnqzfeFYFwhs2y
+	 M6TGMfH8EybnE8hCx6GOC21p3aXSlR7oFsBQIPsP8Gers8TAvEpsxHGKP2qZFpXF3Tw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Szydob4h;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SBOik6AE;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 410BE606A32A
-	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 14:07:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19888606A323
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 14:16:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Szydob4h
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A73711F00A05;
-	Thu, 12 Nov 2026 14:07:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SBOik6AE
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 795E91F00A05;
+	Thu, 12 Nov 2026 14:16:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794492465;
-	bh=/lwI9x1mAEArrsKgoIbDXZ2nX7SmRnoFzYv07qQjLks=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=Szydob4hLtSMz7wrFmYs53vn0reVrPLOo6gS7igRZXigynt+U7rjbImgO8E8sdnXV
-	 AztdXs28dJpA1Uus6lKZhkpd4iXu9h2bZBnMNWHGLvOGx+FDsywbKsYNgRmO5QCmJS
-	 330/SR10+mrq5pJNIObsd0f5iRMc5SIU85AGi0Wmd+Wg0haGt8Vxwn2fAe9kCcWXQU
-	 7Vnwnz0KV3k1r/N2a52XNJv4jTceDKb3PzJmyXcKulME8jV6rD0hSJxe0RlWaczr7s
-	 1nwdZwZZm7Izb1XhQmkoYjOIwG9+py3DbB5JWYGXbrD6GD7yMdbZK+e7LvUtcGojd+
-	 inz3MXgjKckVg==
-Message-ID: <sashiko-outbox-211267@kernel.org>
+	s=k20260515; t=1794493017;
+	bh=/Vv1E7PpJMJRjqnKtZZTz9HXKfHhwH3E4+V11WdZeIc=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=SBOik6AE1wGOkuI4w+7DKALFA422wjmZOppba7/6KDNYYIWYILx4NyRWoZo356VKt
+	 UsufBF8zfolMHrNxR61QOIHAsF75BUlEOmoYzkSn0v9e0JN0hT1B1HwvyA/JmuGa+e
+	 OKnJ3sG2y7260apuePWCNpB5FdisMawXMGKYmWl8+thQwOq79RUCfiK+KDdsiAFv2P
+	 q9YY1wcM4nEkckxOXrZl19GmRi46TXyTKsNVbE4izFlI1umBzTXvEFDC7SLzEQgo88
+	 xwdlAZUdrykGNkMFR1kDWnDaAT4VfJ7+nyxrBSpGfh5UmVcCowvhUptAhgcSnsF/K/
+	 82J5X9it+wCtg==
+Message-ID: <sashiko-outbox-211289@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] bpf: Fix cgroup link update after a failed effective
- array rebuild
+Subject: Re: [PATCH net-next 2/2] bpf: drop the stale dst when redirecting
+ to an explicit nexthop
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Shihuang Liu" <shlomojune6@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261112134942.288831-1-shlomojune6@gmail.com>
-References: <20261112134942.288831-1-shlomojune6@gmail.com>
+To: "Jamal Hadi Salim" <jhs@mojatatu.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <CORE-9NOG.v1.r0.20261111073528-2@mojatatu.com>
+References: <CORE-9NOG.v1.r0.20261111073528@mojatatu.com>
+ <CORE-9NOG.v1.r0.20261111073528-2@mojatatu.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 12 Nov 2026 14:07:45 +0000
+Date: Thu, 12 Nov 2026 14:16:57 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,90 +61,66 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issues to consider:
-- [Medium] bpf: wrong slot in replace_effective_prog() after override
-  OOM detach
-- [Low] bpf: multi-line comment above bpf_cgroup_array_item_at()
-  violates style
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Low] bpf: missing Fixes trailer for commit ba452c9e996d in commit
+  message
 --
 
-commit 417086c03fb15b10d49180c23398c0440bbc2a1b
-Author: Shihuang Liu <shlomojune6@gmail.com>
+commit 563f2cf949ebea821bc686f9b196aaca4663a1a8
+Author: Jamal Hadi Salim <jhs@mojatatu.com>
 
-bpf: Fix cgroup link update after a failed effective array rebuild
-
-This commit introduces bpf_cgroup_array_item_at() to skip dummy entries
-left by a failed effective array rebuild when looking up a program slot in
-bpf_cgroup_array_delete_safe_at() and replace_effective_prog().
-
-> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> index 57a785241d42f..db3f173e83c69 100644
-> --- a/kernel/bpf/cgroup.c
-> +++ b/kernel/bpf/cgroup.c
-> @@ -403,6 +403,28 @@ static int bpf_cgroup_array_length(struct bpf_prog_a=
-rray *array,
->  	return cnt;
->  }
-> =20
-> +/* Return the entry at logical position @index in an effective program
-> + * array.  Dummy entries left behind by a failed rebuild are skipped bec=
-ause
-> + * they do not correspond to an entry in the program list.
-> + */
+> bpf: drop the stale dst when redirecting to an explicit nexthop
+>
+> This is a followup of the review of the teql arp-queue fix as reported
+> by Sashiko.
+>
+> The issue: __bpf_redirect_neigh_v4() and __bpf_redirect_neigh_v6()
+> install a dst for the redirect target only when the program lets the
+> helper do the FIB lookup. With BPF_F_NEXTHOP the program supplies the
+> nexthop, the lookup is skipped, and whatever dst the packet arrived
+> with stays attached while bpf_out_neigh_v{4,6}() switch skb->dev to the
+> target device. If that device's neighbour is incomplete the packet is
+> parked on its arp_queue with the original route's dst; draining the
+> queue re-looks the neighbour up from that dst and builds the frame with
+> the original device's link-layer header, then transmits it on the target
+> device.
+>
+> The Fix: drop the dst when the nexthop is supplied. That branch never
+> consults the route dst, so nothing is lost, and the queue drain keeps
+> the target device's parking neighbour.
+>
+> Conditions to recreate the bug: two network namespaces, A (10.10.0.1/24)
+> and B (10.1.0.1/24) in one, their veth peers in the other with only A's
+> peer addressed (10.10.0.2/24) so B's nexthop cannot be resolved by ARP.
+> Resolve A's neighbour for 10.10.0.2 as permanent and attach a cls_bpf
+> egress program to A, with vb the index of B:
+>
+>     struct bpf_redir_neigh nh =3D { .nh_family =3D AF_INET,
+>                                   .ipv4_nh =3D htonl(0x0a010002) };
+>
+>     return bpf_redirect_neigh(vb, &nh, sizeof(nh), 0);
+>
+> Send one packet to 10.10.0.2. It is parked on B's incomplete neighbour
+> for 10.1.0.2; once that neighbour becomes valid the frame leaves B
+> carrying A's source address and A's neighbour as the destination.
+>
+> Reported-by: Sashiko (nipa) <sashiko-bot@kernel.org>
+> Closes: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-6HS9.v3=
+.r0.20261103062649-2@mojatatu.com
+> Link: https://lore.kernel.org/netdev/QDISC-6HS9.v3.r0.20261103062649-2@mo=
+jatatu.com/
+> Reviewed-by: Victor Nogueira <victor@mojatatu.com>
+> Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
 
 [Severity: Low]
-This isn't a bug, but BPF coding style places the opening /* of a
-multi-line comment on its own line.
+This fixes a bug in the explicit nexthop handling of
+__bpf_redirect_neigh_v4() and __bpf_redirect_neigh_v6().  Should the
+commit message include a Fixes tag?
 
-[ ... ]
-
-> @@ -1175,7 +1193,9 @@ static void replace_effective_prog(struct cgroup *c=
-grp,
->  		progs =3D rcu_dereference_protected(
->  				desc->bpf.effective[atype],
->  				lockdep_is_held(&cgroup_mutex));
-> -		item =3D &progs->items[pos];
-> +		item =3D bpf_cgroup_array_item_at(progs, pos, atype);
-> +		if (WARN_ON_ONCE(!item))
-> +			continue;
->  		prog_list_replace_item(pl, item);
->  	}
->  }
-
-[Severity: Medium]
-Can bpf_cgroup_array_item_at() still resolve the wrong slot in
-desc->bpf.effective[atype] when a descendant cgroup overrides an ancestor
-BPF_F_ALLOW_OVERRIDE program and then detaches its last program via the
-purge_effective_progs() fallback?
-
-In a 3-level hierarchy P -> C -> GC where P has BPF_F_ALLOW_MULTI links,
-C has a BPF_F_ALLOW_OVERRIDE program prog_C, and GC has an overriding
-program prog_GC, GC's effective array contains [prog_GC, link_P1, ...] and
-omits prog_C.  If detaching prog_GC fails to allocate in
-update_effective_progs(), __cgroup_bpf_detach() replaces items[0] with a
-dummy via purge_effective_progs() and removes prog_GC from
-GC->bpf.progs[atype], leaving GC->bpf.effective[atype] as
-[dummy, link_P1, ...].
-
-When link_P1 is later updated, effective_prog_pos() sees an empty
-GC->bpf.progs[atype] (cnt =3D=3D 0), so it no longer skips C:
-
-kernel/bpf/cgroup.c:effective_prog_pos() {
-	...
-	do {
-		if (cnt > 0 && !(p->bpf.flags[atype] & BPF_F_ALLOW_MULTI))
-			continue;
-	...
-}
-
-effective_prog_pos() counts prog_C at index 0 and returns pos =3D 1 for
-link_P1.  bpf_cgroup_array_item_at(progs, 1, atype) then skips items[0]
-(dummy) and treats items[1] (link_P1) as index 0, either overwriting the
-next link at items[2] or hitting WARN_ON_ONCE(!item).  In either case,
-items[1] retains old_prog after __cgroup_bpf_replace() drops its
-reference, causing a use-after-free when GC's effective array runs.
+  Fixes: ba452c9e996d ("bpf: Fix bpf_redirect_neigh helper api to support s=
+upplying nexthop")
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261112134942.2888=
-31-1-shlomojune6@gmail.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/CORE-9NOG.v1.r0.202=
+61111073528@mojatatu.com?part=3D2
