@@ -1,58 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=66.163.188.212
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794447632;
-	b=eLD3/epKSy1G3zeBq0p/rPUVAf44stciEzjzvMYH4ukFA3WWE9FAlp9lIx6b/OJI/gYG
-	 jlllLNGqWhVUWhYfxmnChO1+FX7Zx/2VTTzZ1KJ3wiFzC4kt9coXsKqLLihpgvNOkEfTP
-	 lyOtRg0svahYSKao4SvdX3UG05wW25oOSRbVV/IFQhSwJJT6kyGCW7dY6q06fJi50A9nR
-	 qKSgpvJpIdPQ704zUmBja61BbT7libETa/Jj4/hF6MRRVbzw1fAKzH0t6CG0J8n5jKDWg
-	 D1m8z+/D2vTDK+HVwL2Naqtp7FdtSMKQh+uYWpOJCZuUPtAmDE1NY1l5If9WfSacWFA==
+	t=1794448237;
+	b=qvzx5Sz1GiFJ5R2efb8/XTRdufxEz2u7jngKUIOC7ErF3/V+C5C+JEAP529MfJx7tNJH
+	 Co2p3+UETVdBB/BHCTXXKympNHQCQWNFmT55hxlhP/xUZEKp4YMxaPuXiORl16JRD9VDC
+	 qsb5FWj8s3O/50/upAKKYDpUptEwX48wfLpkmHViFw9gs4aY9nZY/NkWfDe9nrW3YKZa1
+	 iO8l51EszbDA0KoIEdd9qSwjeN8Ud8PgQLUY+D8aWBa5G/KXzmdNtCIsK5Ja2kDFHZYyU
+	 ww5+jiGbLkvUeAhunROFGLW4gKKUFjjD8W0u38/Q5QqN+ESDjOWJ0QLvOP970thwkEg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794447632;
-	h=DMARC-Filter:X-UUID:X-CID-P-RULE:X-CID-O-INFO:X-CID-META:X-CID-BVR:
-	 X-CID-BAS:X-CID-FACTOR:X-CID-RHF:X-UUID:X-User:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=TLmU0zCU5pqSaqfVN81bq9IYO9jaYJz+0tuGU5ooGj0=;
-	b=vaj67/q0cYMJPAYtGIsjtn73icjfEkEWHSPg/dm7/T9BPKoGYNX4RTTQi5hBwqFj6Efc
-	 29xOjoxJW9P1O7c4DpJU5gMQCrHvkMa8TsJwyGS0EUX9MfQGsrBQZxJTWpH+O6hUqHbn/
-	 EYuG5yn8e56znvswsAy0LhOBUTB7WVgoA7quQdMVoQ3sJdBska7WtrYurToKWqQlXUB1F
-	 occsYZgHH61gO0fxT3avmfj1ISCQNiDjKsmX7bTvDdZ1/U6VwURe0yi/hJJEC8m7qfzfA
-	 9f823Bj+SdLUsVZwoJJcbsG7yVJ13GV6jRlYpgw+B9WDztTQ+FVaIZAz6WD2FiW/xuw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794448237;
+	h=DMARC-Filter:DKIM-Signature:X-SONIC-DKIM-SIGN:X-YMail-OSG:X-Sonic-MF:
+	 X-Sonic-ID:Received:Received:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-Mailer;
+	bh=O8h9fybdyu+Al7CdWlfRBQ6LgqQutaBSF+Rc2HGjCVE=;
+	b=Q7PUiEvViYrRa63hobaMn6iHnx9P+5K/VMrtuHP93Fs6tBg1eOp1I//BT9rpBZ+6MDDy
+	 UT8LPGURFqRh2kLoK6w38/OxNXZ/LmjcLJb+HA2I0Z4YqW6JF+WmVUUOAWFZjRPTGIvo2
+	 m1jwcvVcRTyWL1OKO81UGb+XOCSuCG3cCB6nZWNTyzoA5AQLVjgl5vhCScGFS9TFUkh/0
+	 0PT9WAGLBkISOYmHx/aD/ukRQ2w19S1KuarPDEMjqcEs+QEpuVqNRr9l3/CxSJQTwP8/T
+	 SQIjJN2I2JfKG6hG9k4mAfFl2rZ9HY3ASM5K3XPYL28prEBw/TYReC/JelDS1eBO3Cw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=kylinos.cn;
-	spf=pass smtp.mailfrom=kylinos.cn;
-	arc=none smtp.remote-ip=124.126.103.232
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=schaufler-ca.com;
+	spf=pass smtp.mailfrom=schaufler-ca.com;
+	dkim=pass header.d=yahoo.com header.i=@yahoo.com header.a=rsa-sha256 header.s=s2048 header.b=F+m434hx;
+	arc=none smtp.remote-ip=66.163.188.212
+Received: from sonic311-31.consmr.mail.ne1.yahoo.com (sonic311-31.consmr.mail.ne1.yahoo.com [66.163.188.212])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D265F606A324;
-	Thu, 12 Nov 2026 01:40:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D265F606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 07ba000ade3a11f19a56ed5b684f684d-20261112
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.19,REQID:a45ceaec-e4ad-48e8-9635-81a454928b53,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:7db8b62,CLOUDID:7c6b00ed8ad170562809c94a1ee2c01e,BulkI
-	D:nil,BulkQuantity:0,SF:80|81|82|83|102|865|898,TC:nil,Content:0|15|50|99,
-	EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OS
-	A:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 07ba000ade3a11f19a56ed5b684f684d-20261112
-X-User: weirongguang@kylinos.cn
-Received: from [10.42.124.137] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <weirongguang@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
-	with ESMTP id 731677355; Thu, 12 Nov 2026 09:40:24 +0800
-Message-ID: <d105b2a4-952c-47d8-a1d6-2d3ae63d5c1c@kylinos.cn>
-Date: Thu, 12 Nov 2026 09:40:21 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2CE8606A339
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 01:50:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B2CE8606A339
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.a=rsa-sha256 header.s=s2048 header.b=F+m434hx
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1794448235; bh=O8h9fybdyu+Al7CdWlfRBQ6LgqQutaBSF+Rc2HGjCVE=; h=Date:Subject:To:Cc:References:From:In-Reply-To:Content-Type:From:Subject:Reply-To:Content-Type; b=F+m434hxnazo+znIsDN87b1q6q2BjDXrSK85l4sPO4/7/Nv6ouklEMGBpfrTHUnO8eGiNQoV5Bbw/uB3JZACliQBg8PtdTRYRP97HHZoegx3ArYwH69kAdVaUPkV7WcyNd89YKs91cZCwmWeziNsUM+FCRLahqzZW3a6Ku8pvIiJlMO/7XaKbdkzRicymfmmSk9XFsFNG+fkHI8UO70pZ1hFT9v2XQiwRrAslvpHUFbDR+3rpTT4Ikh/N/oSBL0qRMnhxDrBkdI0Mmku6tTsyJWpgcJjSTSvBuepznmh0kGiP8yElqSHRAm6ov8qvVTBbZJZj+71HtVfmpD+WAp7XA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1794448235; bh=cB6ms4YZu3OSr7Oj5Ktyy9vRYllWqlKKBSjCDtAOhd3=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=Wh5tO+A7k6l9RAB9CmF+7nFPpV+s7vwQOvHRCpB836zmpk+EmZdiT1obFQYb3eEYUV/ZZrDMNSGrpqiSFrVBvEAP1+BcX3bVXL8AkZe5aM0djERGyxVy+oivb40ItIA89tHRP/kW5BzO7GaPGZrOTfFkDQF1HHnKQVH/ifoH5PYTL/BXjLkbPViq5JKecTMlRIryhz3iU6NkOHkP1F3oliaijdeTD+Tk00HCA4w802Q1PFZvsZSndMk6hlb4A1wMRPh3z4tVeu12oZckS5JIJR1ywCFknBKWBE+hVxojbZ57Qr3RCaKJrua5vLBD1s/SnsdmRZ+/JLOhUlVDaAQyJw==
+X-YMail-OSG: zqmnDtkVM1n5t6ueog55b_vkFHSYM5E1qoECEJywzBr3UwiKAfUIVI_o6w7R9SH
+ CQ1t93f4qyBpZEcVGjU2OBO9C0Of8.lRAD_UtcVdUMSf6_GiG98G7rNXb1ZhUGsyYLDyJE5oLG69
+ MPpknxdoviNcfunvMa.q1ATsxUiRNZaaYFEtaSi7o3ARz3uzFbYwa4zXUFVTxVNR1M4yEm8E_vMu
+ CX3lc6b1b0MWbnmh3DAeGebLmTpZwI12LuF9QH7MRRpV.Y7YkiPkkooycQl42qWPa_ZCsKSCVnTi
+ cfYjzn7ZtEqmGYVjYEY1kEbVCA4JoS5GMMDKMoO39G5YhBugROnX2jrgGh0AwdwAby30.ZBxmd.l
+ S62hS2hlPvIDoPxGhzS2whxCcIZrt8XbiUGRsBq2lfu8t9x.TIubZ4wIiRqzfDYoZIwioLDCjm6k
+ .cljRFJEOnSix_ImX_sSyVP7eQAAEJ1GsHeUHb7atzAIHDlw0lV7YT_EQZaDbjuCghjYyGwMa7FJ
+ LxdRDFOXlr05WMcbROqV0a4sd0J7UyT01rGVa2p8mqlfg_ZPSk1p0.zKLMJDr5A1o8n0sxe4LbiR
+ qbREBgT6XAwECEJNbNHKO1YTM4iOmevp8GvnGDd6MDNapigfFoPwfu59SMy7zYd9LO3Z8_0VkIJt
+ aPlGTgcyxBF.v1wQggIdb30_WaSmydGJlcGPdQ03irHq2wrwxiCoQO6IJUZEr0jypo3mUQnAGyDG
+ k9vUUntKtCsyi.w0t_vFjR1T1M3Z6Xk5RLKDL9njS7LNW.CupQSEmNQ1GkX7kSwPFQP21HwmyMsp
+ i9SdJowJ0s5y.bw2SrHxrP7sM6YbNToNL5ZVELMODpe5VuCBtDWl7VcCxYMmahr5455.ZE_hGmHs
+ LrmFJx1uQ46OcZ2Ii956498sukETOy0INQsrtoq.ypS01I6QTO8GSI7rVFeq81ZNfcHhvUGJ06ME
+ B8yJmeeVBase_8cBDx_Yk7y0xRppCWZz9S9bNwiHzQcmhSHJ99JaTf4E0zOIsgLWqU5tZh4wLZKp
+ MnYneLIuBkBNwjBcYTuKXcpCwff8fTcsfan2g9ag6_HRqbKvb3lqTrnQRPIG.IGMBIXdu4D1HB2r
+ Ygn65JHFmN1QF2ROBGshwilsGajQNSqHXHgx.co9RO5Evfjv8vx67t__1ew7rn3sc1C.7W_m4N4M
+ cSR8SYdV43PcknGSee9yB1x8pWannWLYRUROzisZnoPLwDPX1S0a5pIeYojUo9jnHaAdfaOw5IJs
+ bc0nB3tQZQ.0b782FrYX_n_pf05DxifKK1hrJ0OqXSo23BlRt.p63_4auT8X4tq9HTs9fxQLg0OA
+ ydi2BtTIKopjFdQtWH0NOUC1U6_wILbgtZfZnlVsbVhHJ7Tk.UZGmAVff_vQl8b4id5D4T9jwtS9
+ 8nKfk1Ghey2tqeZDF9SgVACRH_x6kJa81R1e4J_83TMyBY4Ays_MTt39YbFzXRfBMRqG0I92h9IS
+ Xl4i4wMK_gUqmjpP0P_oaDsTzptxLp7NMOmOY3T81w3i60pQpmuYMvggEU3dv.ebRC4Brat.KcXq
+ ZyjrZ4BouQUvapbNSNNP1Y253sBId7Ys37DryRT0fCsyFp6LIN0DYA1xElaICSH34S2v84muDGZe
+ .CGRnjEo0Q2679LeUfRrG7eDmdHtGbtXa02kyQjntuOc7VrR9y8jRUHqkLiiITgSdxH1QGB5PWuQ
+ ARpFP1xjX3OHKFGeQd7o8WX3xDhKeppcWAPJEhIosno79RY0IQ4.4JX7WCaXgDYbj6BL4okuPPnu
+ 9CEiWKr_A1oRBHcXo_t2XyX1N2Jd1tPqjLAB1WY0vIGe1SVdGRdRloM6.RT24mU1pbFP4DjeRn1w
+ _aXrAymHoztvd7BVNk78MI6f1URU2iBFJ6msmP6JgXQac5cfrtvlS9yn2eohnwEPfv__IKNy26n1
+ mYs7i0yOvj6LH9jEvBJfejsFOAeuf8LBdL.MbTk8ZZiVorhzaxO81Zf4PRAQwZfM29CLtP5dAKbb
+ klVicXy3HgsPrMZiM94qTb2yOlO2WSLEgrPS_2Vx31FNEHJNJpuKXHkfgTtKgjLPmpCr4Taq44yO
+ KB8vbaoDybAHzNwFN22pWQG3NDp.x8aciLmMT8fUQgwMgW8NlLKb6ErL7ChYlwsHUhzhzMbUfvnT
+ 2bA6QlHpoN4OcRsGeb2ygbIpUCMhvL1tqClAnkg41oGlCJa3crNRCKKeXXqZBarf9KzLHJa8i581
+ 0YgHHROuHzbtZ8GRm6ggBoLbsrITMfTGKIshO9uwpGYYxl6nVscbC6LtZUsxlV5iP8t8XsYi.ga0
+ EDsRWYHlK
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 4e6572e0-628c-4102-8309-f6caa349ac8e
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Thu, 12 Nov 2026 01:50:35 +0000
+Received: by hermes--production-gq1-fd7994565-9vhlr (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 15d81e1a8a6348ae9dcd84771e3b8196;
+          Thu, 12 Nov 2026 01:50:33 +0000 (UTC)
+Message-ID: <41617b0a-90d9-484e-a143-78e2a92e872c@schaufler-ca.com>
+Date: Wed, 11 Nov 2026 17:50:30 -0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -63,194 +85,67 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v10 1/2] tun: keep a kernel copy of the socket filter
- program
-To: netdev-bot+sashiko@kernel.org, clementwei90@163.com
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
- willemdebruijn.kernel@gmail.com, jasowangio@gmail.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- willemb@google.com
-References: <20261109023848.59575-2-clementwei90@163.com>
- <179442971051.2199510.17461948089232677295@kernel.org>
+Subject: Re: [apparmor] [PATCH RFC 19/41] smack: use fc_init_pseudo() for
+ smackfs
+To: Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org
+Cc: linux-efi@vger.kernel.org, Jan Kara <jack@suse.cz>,
+ Amir Goldstein <amir73il@gmail.com>, linux-nvme@lists.infradead.org,
+ fuse-devel@lists.linux.dev, linux-mm@kvack.org,
+ target-devel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Chris Mason <mason@kernel.org>, Christoph Hellwig <hch@lst.de>,
+ linux-s390@vger.kernel.org, linux-erofs@lists.ozlabs.org,
+ linux-scsi@vger.kernel.org, xen-devel@lists.xenproject.org,
+ driver-core@lists.linux.dev, Jann Horn <jannh@google.com>,
+ selinux@vger.kernel.org, apparmor@lists.ubuntu.com,
+ Josef Bacik <josef@toxicpanda.com>, linux-block@vger.kernel.org,
+ ocfs2-devel@lists.linux.dev, Alexander Viro <viro@zeniv.linux.org.uk>,
+ linux-nfs@vger.kernel.org, netdev@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, Casey Schaufler <casey@schaufler-ca.com>
+References: <20261110-work-loop-pseudo-v1-0-4c998976c6c7@kernel.org>
+ <20261110-work-loop-pseudo-v1-19-4c998976c6c7@kernel.org>
 Content-Language: en-US
-From: weirongguang <weirongguang@kylinos.cn>
-In-Reply-To: <179442971051.2199510.17461948089232677295@kernel.org>
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20261110-work-loop-pseudo-v1-19-4c998976c6c7@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.26943 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
+On 11/10/2026 1:14 AM, Christian Brauner via AppArmor wrote:
+> Initialize smackfs as a pseudo filesystem. This raises SB_I_PSEUDO and
+> also SB_I_NOEXEC and SB_I_NODEV. smackfs never holds executables or
+> device nodes.
+>
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 
+Please include me at least as a CC on Smack patches.
+I ain't dead yet. Nonetheless,
 
-netdev-bot+sashiko@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential
-> issue(s) to consider.
-> 
-> Critical: 0 · High: 0 · Medium: 2 · Low: 0
-> > If you believe none of the issues are legitimate, please reply to each
-> issue of Medium severity or higher and explain why the AI is wrong.
-> If any of them are legitimate and you plan to respin, please let patchwork
-> know by including "pw-bot: cr" as a separate line at the end of your reply
-> (one such reply per series is enough).
-> 
-> - [Medium] TUNATTACHFILTER on a device with zero enabled queues saves a
->   program that has never been built.
-> - [Medium] After a partial TUNATTACHFILTER failure, the device's recorded
->   filter state no longer matches what the queues enforce, and the reason…
-> 
-> --
-> 
-Thanks for the review.
-> tun: keep a kernel copy of the socket filter program
-> 
-> This patch makes TUNATTACHFILTER keep a kernel copy of the classic BPF
-> instructions in tun->fprog_kern. Each queue gets its own program, built
-> from that copy with the new sk_attach_filter_kern() helper. The patch
-> also fixes the inverted error check in tun_attach(), and checks the
-> program with the new bpf_prog_validate_classic() before the saved filter
-> is replaced.
-> 
->> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
->> index dcec7311e6011..67c8b74d59bde 100644
->> --- a/drivers/net/tun.c
->> +++ b/drivers/net/tun.c
-> 
-> [ ... ]
-> 
->> @@ -3091,15 +3166,29 @@ static int tun_attach_filter(struct tun_struct *tun)
->>  	for (i = 0; i < tun->numqueues; i++) {
->>  		tfile = rtnl_dereference(tun->tfiles[i]);
->>  		lock_sock(tfile->socket.sk);
->> -		ret = sk_attach_filter(&tun->fprog, tfile->socket.sk);
->> +		ret = sk_attach_filter_kern(fprog_kern, tfile->socket.sk);
->>  		release_sock(tfile->socket.sk);
->> -		if (ret) {
->> -			tun_detach_filter(tun, i);
->> -			return ret;
->> -		}
->> +		if (ret)
->> +			goto out_detach;
->>  	}
->>  
->>  	tun->filter_attached = true;
->> +	return 0;
-> 
-> [Severity: Medium]
-> What happens here when tun->numqueues is 0?
-> 
-> The loop body never runs, so bpf_prog_create() is never called on the new
-> program. Even so, filter_attached is set, and the TUNATTACHFILTER case in
-> __tun_chr_ioctl() commits the program:
-> 
-> 	kfree(tun->fprog_kern.filter);
-> 	tun->fprog_kern = fprog_kern;
-> 	tun->fprog = fprog;
-> 
-> tun_copy_filter() only runs bpf_prog_validate_classic(). A program can pass
-> that check and still be refused later by bpf_convert_filter(), when a
-> converted jump offset falls outside the s16 range. It can also be refused
-> by bpf_prog_select_runtime(), which returns -ENOTSUPP when a JIT is
-> required but cannot be used.
-> 
-> A usable fd with numqueues == 0 looks reachable on a multiqueue TAP.
-> tun_set_queue() lets IFF_DETACH_QUEUE detach every queue, and
-> __tun_detach(tfile, false) keeps tfile->tun. A detached fd can therefore
-> still issue TUNATTACHFILTER.
-> 
-> The inverted check in tun_attach() is now fixed:
-> 
-> 	err = sk_attach_filter_kern(&tun->fprog_kern, tfile->socket.sk);
-> 	release_sock(tfile->socket.sk);
-> 	if (err)
-> 		goto out;
-> 
-> With that fix, wouldn't every later IFF_ATTACH_QUEUE on this persistent
-> device fail? The same goes for every TUNSETIFF without IFF_NOFILTER.
-> Before the patch, a new tfile in this situation still attached.
-> 
-> The commit message says "Such a late failure does not replace the saved
-> program". Here, though, the program is saved without ever being built, so
-> the late failure happens on every later queue attach instead.
-> 
-> Could the program be built once with bpf_prog_create() even when there
-> are no queues to attach it to?
-> 
-The program is stored only after it passed the classic verifier, and a
-program that is refused later, when it is built, only makes the attach fail:
-nothing is left half-installed, and TUNATTACHFILTER can be reissued with a
-valid program. Building it once in tun_attach_filter() when there are no
-queues would just move the same failure earlier in the ioctl; it would not
-make the program installable. The commit message sentence is vacuous in that
-case, not wrong: the intent is that a failed build does not replace the saved
-program, not that the stored copy has necessarily been built.
->> +
->> +out_detach:
->> +	/* Drop the copies already installed on queues 0..i-1, which leaves
->> +	 * them without a filter: their previous sk_filter, if any, was
->> +	 * already replaced and released. The caller does not replace the
->> +	 * saved program when this fails, so tun->fprog, tun->fprog_kern and
->> +	 * filter_attached keep their previous values.
->> +	 */
->> +	while (i--) {
->> +		tfile = rtnl_dereference(tun->tfiles[i]);
->> +		lock_sock(tfile->socket.sk);
->> +		sk_detach_filter(tfile->socket.sk);
->> +		release_sock(tfile->socket.sk);
->> +	}
-> 
-> [Severity: Medium]
-> Does this rollback leave the device's filter state out of sync with what
-> the queues actually enforce?
-> 
-> Suppose filter P is attached on every queue, and a new TUNATTACHFILTER
-> fails on queue i > 0. On queues 0..i-1, __sk_attach_prog() has already
-> replaced and released P. This loop then detaches those queues, so they
-> run no filter at all. Queues i..n-1 still run P.
-> 
-> tun->fprog, tun->fprog_kern and filter_attached keep their old values, so
-> TUNGETFILTER still reports P. tun_attach() also installs P on queues
-> attached later. Meanwhile, queues 0..i-1 pass every packet through
-> sk_filter() unfiltered.
-> 
-> Before the patch, tun_detach_filter(tun, i) cleared filter_attached on
-> this path. The device therefore did not claim a filter that some of its
-> queues lacked.
-> 
-> The commit message says:
-> 
->     A queue that
->     already took the copy is rolled back, which leaves it without a filter,
->     because the program it ran before was already released; restoring it
->     would need an extra reference per queue.
-> 
-> Is that accurate? P's instructions are still in tun->fprog_kern. It looks
-> like sk_attach_filter_kern(&tun->fprog_kern, sk) could rebuild P on queues
-> 0..i-1, the same way tun_attach() does for new queues. Another option
-> would be to clear the saved state when the attach fails partway.
-> 
-This is not a state introduced here. Before this series the same failure ran
-tun_detach_filter(tun, i), which also left queues 0..i-1 without a filter,
-queues i..n-1 on the old program, and cleared filter_attached while
-tun->fprog already held the new header. What this series changes is that
-tun->fprog, tun->fprog_kern and filter_attached keep describing the program
-queues i..n-1 still run, so a later attach retries it instead of silently
-starting without a filter.
+Acked-by: Casey Schaufler <casey@schaufler-ca.com>
 
-Rebuilding from tun->fprog_kern would not remove the failure:
-__sk_attach_prog() uncharges the old sk_filter as soon as the replacement is
-installed, so queues 0..i-1 no longer hold it, and the rebuild is a new
-bpf_prog_create() on the path where that allocation, the optmem charge or
-the JIT limit has just failed. It needs a fallback of its own. Building and
-charging every program before swapping any of them in would require
-splitting __sk_attach_prog(), which is a filter core change, not something to
-mix into this fix.
-
-Both are error paths of TUNATTACHFILTER with no corruption outside the
-device, so I would leave them as they are.
-> A failure partway through the loop looks reachable in several ways:
-> 
->   - -ENOMEM from bpf_prog_alloc(), or from kmalloc_obj() in
->     __sk_attach_prog()
->   - the per-socket optmem check in __sk_filter_charge()
->   - under CONFIG_BPF_JIT_ALWAYS_ON, bpf_jit_limit being reached partway
->     through, because each queue JITs its own copy
-> 
+> ---
+>  security/smack/smackfs.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/security/smack/smackfs.c b/security/smack/smackfs.c
+> index a72bc7fabea9..4a56bbeaeca3 100644
+> --- a/security/smack/smackfs.c
+> +++ b/security/smack/smackfs.c
+> @@ -25,6 +25,7 @@
+>  #include <linux/magic.h>
+>  #include <linux/mount.h>
+>  #include <linux/fs_context.h>
+> +#include <linux/pseudo_fs.h>
+>  #include "smack.h"
+>  
+>  #define BEBITS	(sizeof(__be32) * 8)
+> @@ -2880,6 +2881,7 @@ static const struct fs_context_operations smk_context_ops = {
+>   */
+>  static int smk_init_fs_context(struct fs_context *fc)
+>  {
+> +	fc_init_pseudo(fc);
+>  	fc->ops = &smk_context_ops;
+>  	return 0;
+>  }
+>
