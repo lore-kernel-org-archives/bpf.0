@@ -1,57 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.47
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794466280;
-	b=REwiT/WN3TR/XUYIdYx+6ZetSbPqfrdH5zVe15HJwewyAef89CWe1qAArUwkZdmga2n7
-	 tEES+Kms9NdnZQtAbuMICgjprgKdWJjPBNUcXX0pALH8vVWfLmDE07pdyJi0U23tqfR4e
-	 FfYP5lanuSbXCnl2JY+v11AGAGSyZ9wW1BH1lZSp//FAQ5PY/kjns6B4OlGedQ5PKiZfO
-	 LUoOHSoyoEmZ9Hi9tdsEcSppQhzaUGi6D+8pZpPi8Zs2kqRjlcagrOMXkV1sDzUn/PJzF
-	 d3r7k64yGGPEKwVV+Kay71ONxUe64bHkj0rzLaJz/cE2kBhNxxim4bICisTmrBmc3zg==
+	t=1794467112;
+	b=L6XZY99WeZ9xs3bdO+YGF+wDrIvGY4gDqNubRJ2wiPpfjvivWyfjqGj0uZfMoDLaGiSv
+	 fXMKMBcl6BHd7eQ6wfbd6502A2GUsMM8ekma7WoGSYdzrY77QiO2tbfAzzJMl7apjznZI
+	 e8DN7u12e8nLqaI+8UzPE0Qxj833FlHsvhdXQkMvIWTtgfVpgRy7DPwzV8yzPfHchMOnD
+	 kcXpNHmI4yMibfDSnEoNawDE1R1Q32bNSNvJ1qArYAXiAr+wUliZQRthWBWhKBZGQLv1u
+	 lk6YwcWb/k3JR3huV+dY2fze32RDYyhUKyobnF2g8CTuaB9ra9yiGQmsyjviys1blMQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794466280;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=IH9il20ZjJIgSkam44X4Ugnx8QrSwePCKb9nP+mFcT8=;
-	b=2k6FTQbkDl8pyXNmw65LIv6KcCJBLNbE7qudTozGpvO7eh4HvM5G0Bp3XEzdilchl2Wn
-	 xQxWEbUvICWwkBNMkM4EBicYzpsdwKWgubna7lNRWo21bHSPUY7ALHqGAdgGtW33j0BgL
-	 0wPBD6dKPu0vZDaZJx1chBv5vAqWm8m0MxxA5cLSTp1A6KRNAiLRjrv0juPXHbYrfb13h
-	 /vJ0NcMEmqeNL01i7oH/IBmE8gnF7Y8M2urON8iq3J7vlnlxmXFlUPtQyeIomW3aWDNoc
-	 Clmk4kO31u/9MDrnnvPu2HAGxr2WX3g8thTvmkbHRW2Kw2hiv3/f+nKZsyFIM/KdYSQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794467112;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
+	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
+	bh=BhXIIma0KyYX4XFmWxtnNZ2v8I5eSZ8V5FzW7KusbPo=;
+	b=l4vpYWisSBgdff9WntgdDerD03513IhOHijrbXuJOgx+JATN12nTyL0bCoX7AHAktl/v
+	 WG8bphUEDiv+DyUC9XEDU3XRLPIjWWuhxxDi6vxjamG4BOTKsXDsOKWBo2ZQUcEp73sq4
+	 jrU6WDNKeHBegMv+y7JHPX9xExfN/y3CoTBBQCJuywUbYpLWpz7hwx51WimSyWpz0YaD6
+	 2d4qQ695F3qD7h8lhtjZHR3YcNYro9UHdUyNQv0N8L2n4s0KyK+8IBoYS3K8CQUZVL5yy
+	 nQePZReYNo/6z4ewALx85fcq/DzOTIqhSuiF1wi0L+tSXs59FnPdKVsbr9uKusj1BJQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EXX4Bw0f;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=none header.from=etsalapatis.com;
+	spf=pass smtp.mailfrom=etsalapatis.com;
+	dkim=pass header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=ErZn5GOK;
+	arc=none smtp.remote-ip=209.85.216.47
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57E79606A333
-	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 06:51:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6073D606A31C
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 07:05:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6073D606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EXX4Bw0f
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7B511F00A06;
-	Thu, 12 Nov 2026 06:51:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794466279;
-	bh=IH9il20ZjJIgSkam44X4Ugnx8QrSwePCKb9nP+mFcT8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=EXX4Bw0fIEDj3NmqjAVM2icnxwHyHSG1f0QjbHd6Nb4rGeL+lU/NHxrWJ3JzQqtXQ
-	 5a1aKfJVgVDDxjNKY7ezotal6ehhmpQ2xRYdMIz7EsAoueu1hIY3zDhA713fKsJFTg
-	 aXha7wmJsX/zYtT0wEFyaeFZlEMTgIPz+Mc2DtwvX3DZXxpzpphToXzdZdcPnXZJfR
-	 ZAaPm2GRmXF4MGNwAJ6HkFiAjeiT2qrgiitZA29oXIYbxHkx0MaIYzHdSJ6K7n7kRv
-	 nlFwi7psBtytDYe2H6bBIIzckgGoMc3hNAMildUgUB+A5+FJVRyTO45FZxjnRGYstY
-	 yTBmHS/9LheBg==
-Message-ID: <sashiko-outbox-210542@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net v6 3/3] igb: do not split AF_XDP zero-copy frames
- over several Rx buffers
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Tjerk Kusters" <tkusters@aweta.nl>
-Cc: intel-wired-lan@lists.osuosl.org, bpf@vger.kernel.org
-In-Reply-To: <20261111-igb-rx-ts-fix-v6-3-ba5b9903859c@aweta.nl>
-References: <20261111-igb-rx-ts-fix-v6-0-ba5b9903859c@aweta.nl>
- <20261111-igb-rx-ts-fix-v6-3-ba5b9903859c@aweta.nl>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 12 Nov 2026 06:51:19 +0000
+	dkim=pass (2048-bit key) header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=ErZn5GOK
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3ada4c06b7bso2050878a91.2
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 23:05:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis.com; s=google; t=1794467110; x=1795071910; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=BhXIIma0KyYX4XFmWxtnNZ2v8I5eSZ8V5FzW7KusbPo=;
+        b=ErZn5GOKi0CEkJzCCpPNKT/ryKX64Xp9SX3BkfEIg7z0SqLdvbprdvHg91F9ccANlZ
+         b+xQCYd0HJcrW9ksPlHYPcSiH0krExXJ59LCzEA+Kfbl1+HsaPPEwC4yAH9xh2Ieg1r3
+         hlhdg2hFAnTYCC9HdMZoF+Qw58W5zni6RvWfHad/ATF+DtvVfurV6i0yCpzV/tZRXlvm
+         dEujBKmrfMKJdt9eq4Zmb9aXueL/6L+PB0H+pKR97SVJeglPuQxEGNOzxINdrIfRVYUn
+         gmNsaV2z5KhD7/hMp1GoQ+F4FtVLoXkAnzkBITMCQxVyP9V2sJhfslqtsbuf5iFPwrfI
+         S+rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794467110; x=1795071910;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=BhXIIma0KyYX4XFmWxtnNZ2v8I5eSZ8V5FzW7KusbPo=;
+        b=e6g1estO3dYJQrnMdd+cbl/Uc5JrKVZwlvgvuj4Zsz6zMoek4e/JyNiGDfs+q/sycx
+         xzgVpxov5KhG71Z67Dd2pf4bI4aqev8Mk9HEfEciGnpW3Ixl87+BC3hn0MzoODCNLHrB
+         e5eqI6oqPo+Un/7hIRZ6eA6UO+I2vFxQnNvDozpfnv0bR9vPVM94AR3bB5FnialuA2Bb
+         pMF2i8e6xJ1DL3rK2TIWRBU9ge7QIOSNVQNlYvth4ARmK2JnCDtri5dh0ns6blyVczQ5
+         M9OSu8VimzcRFPs1lq8azUikNu6j7s9oh1OWtlSROcg7n4YjYW6THQsWkuIrM8SHRmIC
+         yUpg==
+X-Forwarded-Encrypted: i=1; AL+hErF05EAvNGk196W9Dri+EaUh+KCUliXcg55uOYInRwrFjAl5tenqWbUmU+2znuIAggSx3wA=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+vMEW3pf2a0gqZvz4+VBWyRB4Sp1B8iC1x/kPYOIgXlvM9uq2U
+	vBkmbAW9/CcLREo4HdSuu60hSWzBv9t5fWiJeggpWUc6s08Q96BCy+KkAIVGpmbHGco=
+X-Gm-Gg: AYBFou1ZyhX/bJtm8AFkmwF2AFWo4jxKkHuryWc42UE66MYLRDmW47PCD5PeofbCclu
+	gUeh9FKsw/qhw3+m9FZXXZmQfIfEFuc18AOQXwC38J94kYUCvjgWkrcnOdYZbeKXMNa2/MDIFkQ
+	D/9O1dj5S5StM8MK/n22L7L3Wxhn231SFv7LJN+nWW5yIm80FAI+e5a64Z1nojp4HCEzZ2Oc9c+
+	D9zsWWdHqoFPcP/+/2kclVDbJufuPSbVykPt8imt7Z1GpqDJ5zQQm0Eszsi7mudejQkje98GBk7
+	irs7az9HLu68Jho0sRtVQur+CjaznH/A3wOOv1PuvNxJuZnrNN4UEQBd+KY2qSp046ASa2Ppvvx
+	r8ua/XCqZHIz2C5Un3HNbB/p+okjJvF1ZZAxm++n4y7wbEVO1kX0gT7l6JBEBxYA1/G5JJijck9
+	f9ADPFmaAVotpqMdrNXWNxULsP6zqro4HO0/SbSrFrk3AWhbkXPWzxkVaUQFbiWO99dc9TliMwo
+	m9suPqljT2EQ7a2NDVIQvN3+CV4laNPgo+FMGKoOdHQzsklGB2SeMBvRp+3hyXAdody5VIefBAp
+	6YxasPO7wB/C0GujWvrjH6nezw98+kLof+vGV6zHNoO6if6vTXjN2gCZXXFX9cNHCIGCPpUeo9r
+	YUL2t0GBJ9nX4ICT5aQ==
+X-Received: by 2002:a17:90b:4a12:b0:3b0:9fbf:8951 with SMTP id 98e67ed59e1d1-3b182e0346bmr4836706a91.5.1794467110421;
+        Wed, 11 Nov 2026 23:05:10 -0800 (PST)
+Received: from localhost (107-190-31-93.cpe.teksavvy.com. [107.190.31.93])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2edb6e06833sm29122375ad.68.2026.11.11.23.05.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Nov 2026 23:05:10 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,271 +88,96 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 12 Nov 2026 07:05:07 +0000
+Message-Id: <DMT1I0RRNARI.1LTPB6JPWY4E9@etsalapatis.com>
+Cc: "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
+ "Ihor Solodrai" <ihor.solodrai@linux.dev>, <david.dai@linux.dev>, "Gavin
+ Guo" <gavinguo@igalia.com>, <bpf@vger.kernel.org>,
+ <sched-ext@lists.linux.dev>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <kernel-dev@igalia.com>
+Subject: Re: [PATCH bpf-next v3 0/3] selftests/bpf: libarena: Add
+ ordered-walk and lockless-peek support to the rbtree
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Changwoo Min" <changwoo@igalia.com>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Shuah Khan"
+ <shuah@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>
+X-Mailer: aerc 0.21.0
+References: <20261111100951.230730-1-changwoo@igalia.com>
+In-Reply-To: <20261111100951.230730-1-changwoo@igalia.com>
 
-Thank you for your contribution! Sashiko AI review found 4 potential
-issues to consider:
-- [Medium] igb: PF MAC filter clobber in igb_enable_sriov() before XSK
-  queue check
-- [Medium] igb: skipped PF reinit in igb_disable_sriov() when
-  igb_sriov_reinit() fails
-- [Medium] igb: unlocked VF state and flag rollback in
-  igb_enable_sriov() on error
-- [Medium] igb: stale real queue counts in __igb_open() break
-  igb_xsk_pool() check
---
+On Wed Nov 11, 2026 at 10:09 AM UTC, Changwoo Min wrote:
+> A sched_ext scheduler can build a task queue on libarena's rbtree, keyed
+> by vtime, in place of a vtime-ordered DSQ. Such a queue needs three thing=
+s
+> the tree lacks. This series adds them:
+>
+> - Serve equal keys in insertion order, as vtime-ordered DSQs do (1/3).
+> - Add rb_next(), so that a consumer can walk past tasks it cannot run
+>   in key order (2/3).
+> - Cache the leftmost node and the node count, so that other CPUs can
+>   peek at the head and the length without the writer's lock, like
+>   scx_bpf_dsq_peek() and scx_bpf_dsq_nr_queued(). Add rb_init() and
+>   rb_fini() for a tree embedded in another object (3/3).
+>
+> Each patch adds selftests, which run with:
+>
+>   $> ./test_progs -t 'libarena/test_rbtree*'
 
-commit 0d73c7e718f3a4a479e43541f8ed94977b90b3db
-Author: Tjerk Kusters <tkusters@aweta.nl>
+Hi Changwoo,
 
-igb: do not split AF_XDP zero-copy frames over several Rx buffers
+feel free to keep my:
 
-This commit programs standard 2 KiB or 3 KiB hardware Rx buffer sizes for
-AF_XDP zero-copy rings in igb_setup_srrctl() so frames are not split across
-multiple descriptors, and rejects XSK pool bindings, MTU changes, and SR-IOV
-queue reductions when frames or bound queues would no longer fit.
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-Link: https://lore.kernel.org/all/20261028083344.3047350-3-p@1g4.org/
+(though I didn't add them myself to v1's patches 2 and 3,
+I assume transcription error?)
 
-> diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethe=
-rnet/intel/igb/igb_main.c
-> index e787095d3cdbe..c9351a8c4f5e5 100644
-> --- a/drivers/net/ethernet/intel/igb/igb_main.c
-> +++ b/drivers/net/ethernet/intel/igb/igb_main.c
-> @@ -3777,9 +3777,29 @@ static int igb_sriov_reinit(struct pci_dev *dev)
->  	struct net_device *netdev =3D pci_get_drvdata(dev);
->  	struct igb_adapter *adapter =3D netdev_priv(netdev);
->  	struct pci_dev *pdev =3D adapter->pdev;
-> +	unsigned int i, rxq, txq, end;
-> =20
->  	rtnl_lock();
-> =20
-> +	/* With VFs the PF gets fewer Rx queues and a single Tx queue, see
-> +	 * igb_set_interrupt_capability(). Refuse that while an XSK pool is
-> +	 * bound to a queue the PF would lose; the core refuses ethtool -L in
-> +	 * the same case.
-> +	 */
-> +	rxq =3D min_t(unsigned int, igb_get_max_rss_queues(adapter),
-> +		    num_online_cpus());
-> +	txq =3D adapter->vfs_allocated_count ? 1 : rxq;
-> +	end =3D max(netdev->real_num_rx_queues, netdev->real_num_tx_queues);
-> +	for (i =3D min(rxq, txq); i < end; i++) {
-> +		if (xsk_get_pool_from_qid(netdev, i)) {
-> +			rtnl_unlock();
-> +			dev_err(&pdev->dev,
-> +				"Cannot change the number of queues, an AF_XDP socket is bound to qu=
-eue %u\n",
-> +				i);
-> +			return -EBUSY;
-> +		}
-> +	}
-> +
->  	if (netif_running(netdev))
->  		igb_close(netdev);
->  	else
+>
+> Changes in v3:
+> - Make the lockless readers static inline. A plain static function in
+>   a header fails -Wunused-function under -Werror in a file that does
+>   not call it (bot+bpf-ci, 3/3).
+>
+> Changes in v2:
+> - Drop the comment on the insert helper and keep the name
+>   rbnode_least_upper_bound() (Emil, 1/3).
+> - Move rb_next() before the caching patch and into rbtree.bpf.c with the
+>   other traversal functions (Alexei, Emil, 2/3).
+> - Hand the head to its successor at the top of rb_node_remove(), before
+>   an RB_ALLOC tree frees the node, so that a lockless reader never sees a
+>   freed head. This drops the wrapper, was_first and the rename to
+>   rbnode_remove() (Alexei, 3/3).
+> - Drop the cache line alignment of the lockless fields, which showed no
+>   measurable benefit (Alexei, 3/3).
+> - Rename the lockless readers to rb_first_lockless(),
+>   rb_first_key_lockless() and rb_nr_nodes_lockless(), and document that
+>   a caller that dereferences the head must keep the node valid itself
+>   (Emil, 3/3).
+> - Drop __always_inline from static functions (Emil, 3/3).
+> - Add Reviewed-by tags from Alexei and Emil.
+> - Rebase on bpf-next.
+>
+> v2: https://lore.kernel.org/bpf/20261111073416.203153-1-changwoo@igalia.c=
+om/
+> v1: https://lore.kernel.org/bpf/20261028060046.549097-1-changwoo@igalia.c=
+om/
+>
+> Changwoo Min (3):
+>   selftests/bpf: libarena: Order equal rbtree keys FIFO
+>   selftests/bpf: libarena: Add rb_next()
+>   selftests/bpf: libarena: Cache the rbtree's leftmost node and count
+>
+>  .../bpf/libarena/include/libarena/rbtree.h    |  57 +++-
+>  .../bpf/libarena/selftests/test_rbtree.bpf.c  | 303 ++++++++++++++++++
+>  .../selftests/bpf/libarena/src/rbtree.bpf.c   | 120 +++++--
+>  3 files changed, 457 insertions(+), 23 deletions(-)
+>
+>
+> base-commit: 0fb18ce8a2e9de830433923cf65838933d615359
 
-[Severity: Medium]
-When igb_enable_sriov() fails here with -EBUSY, does returning before
-igb_close() or igb_reset() wipe active PF unicast MAC filters in the upper
-RAR slots?
-
-Before calling igb_sriov_reinit(), igb_enable_sriov() calls
-igb_vf_configure() -> igb_set_vf_mac() with a zero MAC address for each VF,
-which overwrites the top adapter->vfs_allocated_count entries of
-adapter->mac_table, marks them IGB_MAC_STATE_IN_USE, and clears E1000_RAH_AV
-in the hardware RAR registers:
-
-drivers/net/ethernet/intel/igb/igb_main.c:igb_set_vf_mac() {
-    ...
-	int rar_entry =3D hw->mac.rar_entry_count - (vf + 1);
-	unsigned char *vf_mac_addr =3D adapter->vf_data[vf].vf_mac_addresses;
-
-	ether_addr_copy(vf_mac_addr, mac_addr);
-	ether_addr_copy(adapter->mac_table[rar_entry].addr, mac_addr);
-	adapter->mac_table[rar_entry].queue =3D vf;
-	adapter->mac_table[rar_entry].state |=3D IGB_MAC_STATE_IN_USE;
-	igb_rar_set_index(adapter, rar_entry);
-    ...
-}
-
-Previously igb_sriov_reinit() always ran igb_close() or igb_reset(), which
-flushed the MAC table and unsynced netdev->uc via __dev_uc_unsync() before
-re-syncing PF filters.  Returning early leaves netdev->uc marked synced whi=
-le
-any PF unicast filters (such as macvlan or bridge FDB entries) that occupied
-those upper RAR slots are disabled in hardware and leaked as in-use until t=
-he
-next reset.
-
-[Severity: Medium]
-Can this check in igb_sriov_reinit() also return -EBUSY when called from
-igb_disable_sriov(), after SR-IOV has already been torn down?
-
-igb_disable_sriov() calls pci_disable_sriov(), frees adapter->vf_data, rese=
-ts
-adapter->vfs_allocated_count to 0, and writes E1000_IOVCTL_REUSE_VFQ before
-calling igb_sriov_reinit().  If min(rxq, txq) < end (for example, if CPUs
-were offlined so num_online_cpus() is smaller than real_num_rx_queues, or if
-VFs were enabled while the interface was down) and an XSK pool is bound to a
-queue in that range, igb_sriov_reinit() aborts and leaves the PF running
-without reinitializing its queue configuration and interrupt scheme for
-non-SR-IOV operation.
-
-> @@ -3844,6 +3864,7 @@ static int igb_enable_sriov(struct pci_dev *pdev, i=
-nt num_vfs, bool reinit)
->  {
->  	struct net_device *netdev =3D pci_get_drvdata(pdev);
->  	struct igb_adapter *adapter =3D netdev_priv(netdev);
-> +	bool dmac =3D adapter->flags & IGB_FLAG_DMAC;
->  	int old_vfs =3D pci_num_vf(pdev);
->  	struct vf_mac_filter *mac_list;
->  	int err =3D 0;
-> @@ -3933,6 +3954,8 @@ static int igb_enable_sriov(struct pci_dev *pdev, i=
-nt num_vfs, bool reinit)
->  	kfree(adapter->vf_data);
->  	adapter->vf_data =3D NULL;
->  	adapter->vfs_allocated_count =3D 0;
-> +	if (dmac)
-> +		adapter->flags |=3D IGB_FLAG_DMAC;
->  out:
->  	return err;
->  }
-
-[Severity: Medium]
-When igb_sriov_reinit() returns -EBUSY on a live PF, can the unlocked
-rollback in err_out race with concurrent readers of adapter->vf_data and
-adapter->flags?
-
-CPU0                              CPU1
-igb_enable_sriov()
-  adapter->vfs_allocated_count =3D num_vfs;
-  adapter->vf_data =3D kzalloc_objs(...);
-  ...
-  igb_sriov_reinit()
-    rtnl_unlock()
-    return -EBUSY;
-                                  igb_set_rx_mode()
-                                    igb_restore_vf_multicasts()
-                                      i < adapter->vfs_allocated_count
-  kfree(adapter->vf_data);
-  adapter->vf_data =3D NULL;
-                                      &adapter->vf_data[i]
-                                        <-- NULL pointer dereference / UAF
-  adapter->vfs_allocated_count =3D 0;
-
-igb_enable_sriov() runs without rtnl_lock() or adapter->vfs_lock, and frees
-adapter->vf_data before clearing adapter->vfs_allocated_count (unlike
-igb_disable_sriov(), which takes adapter->vfs_lock).  In addition, saving a=
-nd
-restoring IGB_FLAG_DMAC in adapter->flags performs unlocked read-modify-wri=
-te
-updates that can race with RTNL-protected changes to adapter->flags.  Check=
-ing
-for bound XSK queues before mutating adapter state in igb_enable_sriov()
-would avoid having to roll back live VF state and RAR entries on error.
-
-[ ... ]
-
-> @@ -6778,6 +6805,7 @@ static int igb_change_mtu(struct net_device *netdev=
-, int new_mtu)
->  {
->  	struct igb_adapter *adapter =3D netdev_priv(netdev);
->  	int max_frame =3D new_mtu + IGB_ETH_PKT_HDR_PAD;
-> +	int i;
-> =20
->  	if (igb_xdp_is_enabled(adapter) &&
->  	    !igb_xdp_frame_fits(adapter, max_frame)) {
-> @@ -6791,6 +6819,23 @@ static int igb_change_mtu(struct net_device *netde=
-v, int new_mtu)
->  	if (max_frame < (ETH_FRAME_LEN + ETH_FCS_LEN))
->  		max_frame =3D ETH_FRAME_LEN + ETH_FCS_LEN;
-> =20
-> +	/* the frame must fit the buffers of a bound XSK pool, also while no
-> +	 * XDP program is attached, as attaching one does not check it again
-> +	 */
-> +	for (i =3D 0; i < adapter->num_rx_queues; i++) {
-> +		struct xsk_buff_pool *pool =3D xsk_get_pool_from_qid(netdev, i);
-> +
-> +		if (!pool || !pool->dev)
-> +			continue;
-> +
-> +		if (!igb_xsk_frame_fits(pool, max_frame)) {
-> +			netdev_warn(adapter->netdev,
-> +				    "Requested MTU size is not supported with AF_XDP. Frame size is =
-%d\n",
-> +				    max_frame);
-> +			return -EINVAL;
-> +		}
-> +	}
-> +
->  	while (test_and_set_bit(__IGB_RESETTING, &adapter->state))
->  		usleep_range(1000, 2000);
-> =20
-> diff --git a/drivers/net/ethernet/intel/igb/igb_xsk.c b/drivers/net/ether=
-net/intel/igb/igb_xsk.c
-> index ce4a7b58cad2f..7f99e834c1edb 100644
-> --- a/drivers/net/ethernet/intel/igb/igb_xsk.c
-> +++ b/drivers/net/ethernet/intel/igb/igb_xsk.c
-> @@ -91,7 +91,21 @@ struct xsk_buff_pool *igb_xsk_pool(struct igb_adapter =
-*adapter,
->  	if (!igb_xdp_is_enabled(adapter))
->  		return NULL;
-> =20
-> -	return (pool && pool->dev) ? pool : NULL;
-> +	if (!pool || !pool->dev)
-> +		return NULL;
-> +
-> +	/* igb_change_mtu() does not see a pool on a queue that is hidden, for
-> +	 * example after a fallback from MSI-X to MSI. The hardware buffer can
-> +	 * be larger than the XSK frame, so check again when the ring is set up.
-> +	 */
-> +	if (!igb_xsk_frame_fits(pool, adapter->max_frame_size)) {
-> +		netdev_warn_once(adapter->netdev,
-> +				 "XSK frame size is too small for the MTU, queue %d is not used in z=
-ero-copy mode\n",
-> +				 qid);
-> +		return NULL;
-> +	}
-> +
-> +	return pool;
->  }
-
-[Severity: Medium]
-When a hidden queue is set up again during __igb_open(), does
-xsk_get_pool_from_qid() in igb_xsk_pool() return NULL before reaching
-igb_xsk_frame_fits()?
-
-In __igb_open(), igb_configure() sets up the Tx and Rx rings (calling
-igb_xsk_pool()) before netif_set_real_num_tx_queues() and
-netif_set_real_num_rx_queues() update the netdev queue counts:
-
-drivers/net/ethernet/intel/igb/igb_main.c:__igb_open() {
-    ...
-	igb_configure(adapter);
-
-	err =3D igb_request_irq(adapter);
-	if (err)
-		goto err_req_irq;
-
-	/* Notify the stack of the actual queue counts. */
-	err =3D netif_set_real_num_tx_queues(adapter->netdev,
-					   adapter->num_tx_queues);
-	if (err)
-		goto err_set_queues;
-
-	err =3D netif_set_real_num_rx_queues(adapter->netdev,
-					   adapter->num_rx_queues);
-    ...
-}
-
-Because xsk_get_pool_from_qid() checks queue_id against
-netdev->real_num_rx_queues and netdev->real_num_tx_queues, it still sees the
-reduced queue count (such as 1 after an MSI fallback) during igb_configure()
-and returns NULL for any restored queue >=3D 1.  As a result, the restored
-queue stays out of zero-copy mode even when the MTU fits, and for the same
-reason igb_change_mtu() can miss bound pools if queue counts were changed
-while the interface was down and real_num_rx_queues has not been updated ye=
-t.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261111-igb-rx-ts-=
-fix-v6-0-ba5b9903859c@aweta.nl?part=3D3
