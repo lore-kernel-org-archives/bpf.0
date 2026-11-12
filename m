@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794498851;
-	b=MMHEPi/yBW5qKx6OiFfQkBZlcTtAPY1jYhNJw4mSCrmhyNkQ5IPFFSDwL+wwVI56h0ao
-	 Ayw+8/Z/PQynR7mMQbSz09fPqdY5GdKS0dNELy5Rn1GOTVCi27aiINGTVBTVGWKfYkziX
-	 TtV2pcv5MCY1d/ztJp9yvoR2DOwLq9834oQrG3WJoD5jYPC00lCXYj8pV+vCu4xhwVYSu
-	 zrHGH+D9AD/s/stVTHhY7gFvKnzIg7A9EX0AT8a1EVhOWXUtdV+IrOXyI52loq8tAoMmk
-	 bwGqwRxBzChtG9p+jFFcc+DWhKokB0TBrCa90r68Jxss3SOdLMz/VYE6B0tGjG39i0Q==
+	t=1794498857;
+	b=Qn6IfTP4O+byNT8amJs/+sN3L1evAjszfw452Nct5EhGoyn0PBYZND6P9LVHUgwUy5tj
+	 3B2RyWPbmX1160agHEOncwy+YzlcwnRNV0wPysY9uUBucQvOnCosvKZGHu+JrTXQAU98y
+	 BdDkayq6hKFix/s7ZjVrMBF8NZ6ZKA8mOSwXaAGm22deHRAK0IADpMR3ODYb1cEEGA3r2
+	 fTwcealLT1iw36zKSuymwGkknwLxcImKTnGEDSGR7FaW0SOV5rMlC8s3mPIK3cHCzQ2If
+	 PDRwMhOQ6LkV5Wz2HwUD7VmFjm06TXCFXUuXqMBxnqI/5m+IdnWs9yDgD6eL2kE+gSw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794498851;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794498857;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=PUfac4JZ8jOSf3KpvW8DHmAcT7h1Lf/4ztm3rUdkarM=;
-	b=vHg8US3bIu2IDQhWw7xl24ox4bBUIvwXCnU83gIUbZwyyGY2t2Dj1ICF6OCtbNZ3Lkov
-	 hQd6NUnswbLRyLfvCn0rnAqYUkLv2huBWwBlUWE5uUDkhtexJg3YiJl4oyyEu1oK5+EHy
-	 ur0s7E7OVE1K9jJyAGK/utIHCMsJoCt+E2g0tQcoQ5e6SBJ5mHrYops3tQHrWs6W1bKlL
-	 IJhw6L1/Qe9yKbTUDZysdlA5vRN71IerhVTTEEz9PwSFkPL+ydGP2G2b3lk1P3p1o8XEx
-	 x8Po8gC03Kq/bUFUp6sy+hSOV2H/GSTXvPD11uJLKwVv2C4894yjFNb8L+chpbqqvMA==
+	bh=+U8DmuT0uXrDU0a8DlNb1HzjgaXxLrgyI0JSrF2/wsg=;
+	b=ItXAarRmyeV+z3mYwYpA4PM24ImygkSnGdiJjRba3j7oDDTzBw9wHQ+v9vVOhuvDuFed
+	 p98uZLATPic/hBCB6A2UbTO/q1EdiIZb189WmgXJgRSSoy8K4jxXXIyVenbVWhNREhIBr
+	 1APQ3D16pjQauFsSRwqcSQU3WVZdwcl6OuVdBF1/wi0jqSyW+uJvX9GXobXRscQbNXKL+
+	 2AUiF/u1Vg16Jg0lncTN0XCg7gdKq1Q7ZHa2KqBVqXsqUi3n1UEmm8ANgR7Q3vucX2lDh
+	 URT4oOlHVrbQpJ2OceCJIuax69vLnBEP0txb1JUGnn+1kLxR7d2VCYypt9cpaswanDw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=r1fuvxV7;
-	arc=none smtp.remote-ip=209.85.215.174
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=S0x4Je2e;
+	arc=none smtp.remote-ip=209.85.210.174
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A666606A323
-	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 15:54:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4A666606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60BC1606A31C
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 15:54:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 60BC1606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=r1fuvxV7
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-cd61cef87f1so8745a12.0
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 07:54:11 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=S0x4Je2e
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-8a06cc097c7so895552b3a.0
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 07:54:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794498850; x=1795103650; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794498856; x=1795103656; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=PUfac4JZ8jOSf3KpvW8DHmAcT7h1Lf/4ztm3rUdkarM=;
-        b=r1fuvxV703+TC/DdFeFREwN+jE1zuP0mRZhPIe9u9f1aGqS40ND27XZCyUFAwXkjdN
-         T3OEqdNDFddlr2YoklnNdshqAbTQIOuUtTzIHeJX+mTGYFUYawESwArFbgcGW68+dCIl
-         vUFxWq0v44yEULhYzBVFFxtu+Oir6Pb4MMdLeSxv4ZkmA6flS17fbsxzZeRh4E1WfL3z
-         yjT6a7ILyve2sk4ufJadiKNYEXyfGmJSlLPwq0T+WIHieWLocx3kl+OS20unyGlFpx8n
-         wJ0i7xFPWB3nwpIXddy8bxS9ydtOy6na+X63xmk4dskgxhMGLUsIiVysa2keIznEeGOB
-         4JQw==
+        bh=+U8DmuT0uXrDU0a8DlNb1HzjgaXxLrgyI0JSrF2/wsg=;
+        b=S0x4Je2enLHesBY175oQkjmuhRMXih4vc8lbrhUhXFiuaTcJ+dEa4OK1AKfWdUhgv6
+         F7Q3k7QA0Mu92By+ptSEAR7+0jvIRyi2n2rL8XyCCMvEXTlpydzsvegLAAet9sn39jtJ
+         7kJpB2ehBBboTA4I6UxF6seysTsSbFV61xV65iwHM0RV7Oco0wwycbdNyJ1SmdFHZkT9
+         g09zqGkscrLdfurdwHb+Has+pH0SLr2Sn2Z4+TuaZ/thfnlXAfP+oDRaZkmuV7FEuFPr
+         D8kRUbMe1rNdbG31z8KObeDvg4ym/JQOmh4OYPvL3iKO9PmDu4fxGcMDy0iWcodvLEkE
+         zQ6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794498850; x=1795103650;
+        d=1e100.net; s=20260707; t=1794498856; x=1795103656;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=PUfac4JZ8jOSf3KpvW8DHmAcT7h1Lf/4ztm3rUdkarM=;
-        b=1diIkwSjAioqtd8HIPTLN3bMq5VsmaeHTd/zV1XAnIo/PtgBx6yUlrYyEESAz479Rp
-         UNSZASdDRco2d70pqSv+Fx4UJOjf8KdYPgbLIzQo/sHFgkbG/AKV7rjxVpQHzqg16qCg
-         q9bXup7I9ICX0Oau2c4IHCKuccrsFC3it/t2z2gbsY5B+LHhMPEZckFhWj70qANrDuoF
-         rIu9Nylg+rDnhrmChgjUb3qkR1QD3bTpgBwP40jrYJPzL775Wb9BLNi3+xgUSQbQLvsX
-         utttLmbBgjgmmYGVuw9+eZqh6cyjxptKSSobuNM7GXL5ueNYIhoh0Pcpg1F07F8uWp1t
-         0DbA==
-X-Gm-Message-State: APuU4Z9l8SHnGrzUiFsJ37WAukwP+RXX0h3I+lEmc+6rQBN5CdcvZejw
-	XZGQvJgTch7g+ixGidvi18ULjAbsA/kWWaXI9K9bNETbBesql/vUluhk1QXZUg==
-X-Gm-Gg: AYBFou0VIbt2CJfPQp7I7Jr6Yu088O1lxgptGO4jXUv9x6aSbaNqavx4J2Q+UeBx4Zk
-	0mGaJS3sJbbcpKcQOGzX0G777Dzmvtn9RMMXMHrpIVVth/G9l9OXTJpjgfr84p3BRNAnvtAHRkK
-	GtE38H3d8ZDV6Nvf7OHK+QgWqB7Ld5H14MVQA5C+1QdM/6gK9RYEB9Gb+gEBNOeUUhJ87bNjFCd
-	xqPEg4xXrSdaRdgLphDdlJI63vU3A02EDeyCL4Y7zKFPdsOjDN4e3fvBMK6gqe3XUwHf5fiw1h2
-	bzSqv9SiYPrtxGVQc9Zp9q3zDn6T25hpsvv+9ycbYGfbgjs6JuUDl1RiGQtCdmnYJdeG1Cusn2/
-	hhSbFNweheLwCCWgbua2SQU2Sa8RpfDZtk6d1ZFNwyQMRZEamsopAbys+dGxuWa+j9fLm23kN8e
-	PtCKovqZWTaakdpkvaO/ny049OO8osUtlfiQQ3z7oMt+Q0li6KMYl4SRnpjcNt6cuB6/LJ0dB+R
-	G+sISzy71Fd1W6SmbNPSBvlGCvz6h67BPtzzwHBdi9YsINz0m7wOwr/zj+lAr3GQ9bSMYOuDGZs
-	yA95pfxSEBGbAe3Vgfe+ooC1llTpltblpMJnQexCRLXu9woHkiCvVXGif7eOt3nnzOl2VvTHACN
-	leAq55wmMK1mL1LkLdhQ7ZN5ZdGeAfN/RWEv2cj/j3zpOcpl8LcuE5UtbfZZ9LCCl+rilZBL+cg
-	R25cOJsxz+vuAaQQlxfMqU
-X-Received: by 2002:a17:90b:57cd:b0:3b0:9cc6:62ba with SMTP id 98e67ed59e1d1-3b182f3ec75mr5735507a91.38.1794498850385;
-        Thu, 12 Nov 2026 07:54:10 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cdd8d67adcfsm3176847a12.8.2026.11.12.07.54.09
+        bh=+U8DmuT0uXrDU0a8DlNb1HzjgaXxLrgyI0JSrF2/wsg=;
+        b=Si5KM19zPwiKu7Ldxbab1//9oCDhWLKjuPJXjE7FvoMTuiMfDYy19JJ+9zLzCGfRAW
+         n5l6nsM2RGq8J9Aub+e+1FQGYyCY9funFZ32IluzjOyaHHYqN393NsYIL4T8K59giTeG
+         Ov5OjY1YCwnqhGIwSiUm4/a7m7HfF0RN+dZd2q4+FZWBKOis5ZcKi4SGitnhSLWMuT7d
+         P/9jZasnGEGIZ8zLYYzH/3Zlgk+mTa6s7Z0cM4LVGHvUhwOkgRgbPwCdinPELmvq5nVp
+         05LzxD1D0oegLHeaW097sdWES1WMq2Jwr3jJyB8NwIcFv7tnDglBQmLF1cqN9G/+OHF7
+         mmCg==
+X-Gm-Message-State: APuU4Z8go0yKWXXrnUIXI0Su7/8daaBpGmEh3oER2dhohdNq/9am8ab5
+	NPL30CfTrmZLT8FASgFc+NbBskFHNCFeJ2IhK84ILi2dAVN0v8yPGM5vO3C6Mg==
+X-Gm-Gg: AYBFou0eK30BaTjmxA+bwTHvnJXS8MdE6Dx4QF6ME8geUc70MwyVRklI497C8C7n4sb
+	K90VzDv+yeAAL2DjHFyg79lk3T+WcmEI5tfWpbolxzacBF/BXbBNvom1xtnWZQ7e3E5Alo8uvFn
+	Gzsu8oRhPl3Mhlf/qVjMBG7SGhK/Ci9BDjoh1HXkvm5Q0MU3ooxVZqboReuL12JNI2qWha927Y5
+	/w8zJEXkVpwNIK5tenx5hO8VHTJPiybb8QWSoramrZnuJ/pCrWejF+Ga0E08+X1E0eJs9c6zOzO
+	bF6vLwOEJfW6tLEJKJpD7bEHa4+TNqYVWGx5keX5VsZFnGBsH590DJhH65O3LBkSzHkBywyhbaZ
+	vbpK5IQiH1acwzQgi9pIKLApIBUer36ZXdFN0BPu9JcBPAqOTikbVGU9QaGspBXzX6jDyxjIqiZ
+	CG86BHOMiQOka7vC+totOTVfrfJzknVQIaMqCArTNA8xVnU7vWWoFhQ84vYp36wMM9cYZhfhB8O
+	1JZm8NAmChKVYH8V/rRkfTiDtpaMefceoTlGFB2WWRqj9FRfmEfujm1t+wkX9fSAbib2js5oAME
+	6FXN9xU4NsJQtGZD/I1YAjpJ93to7KIofxFfUiH6D33sHhqlj3Cw/oCKk8j+BDL56VDAAb97ab2
+	rtUoerWdak1wUoFGLDOWOn49KQMIM+DvNLKUSLaXoLPs4vpE+ry9RvycfL2mQl+ATZUxCCGEYMM
+	an0MWSTPxos95f8jb8qdF4
+X-Received: by 2002:a05:6a21:a96:b0:3ed:b2b6:9bdc with SMTP id adf61e73a8af0-3f2fe7d20a4mr6269157637.54.1794498856305;
+        Thu, 12 Nov 2026 07:54:16 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.245])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cdd8d7b37casm3152460a12.22.2026.11.12.07.54.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2026 07:54:09 -0800 (PST)
+        Thu, 12 Nov 2026 07:54:15 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 05/12] bpf: Split scalar_alu() out of adjust_scalar_min_max_vals()
-Date: Thu, 12 Nov 2026 15:53:30 +0000
-Message-ID: <20261112155337.1040699-6-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 06/12] selftests/bpf: Test a jump that compares two pointers
+Date: Thu, 12 Nov 2026 15:53:31 +0000
+Message-ID: <20261112155337.1040699-7-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261112155337.1040699-1-alexei.starovoitov@gmail.com>
 References: <20261112155337.1040699-1-alexei.starovoitov@gmail.com>
@@ -104,155 +104,67 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-adjust_scalar_min_max_vals() is the transfer function of an ALU insn
-with two scalar operands. Two calls in it need the environment of the
-verifier: sanitize_val_alu() and maybe_fork_scalars(). Scalar evolution
-is going to evaluate expressions such as h + (n & 255) * 20 and needs
-the transfer function without them.
+is_branch_taken() decides 'ptr == 0' and 'ptr != 0' for a pointer that
+can't be NULL. It finds the constant with is_reg_const(), which tests
+the type of the register. Without that test the offset of a second
+pointer, the constant 0, is taken for its value: 'if r6 != r0' on two
+map values is always taken, and the code after the jump is not
+verified.
 
-Cut the function in two. scalar_alu(dst, src, insn) is
-is_safe_to_compute_dst_reg_range(), the switch, the zero extension of
-an ALU32 result and the reduction. adjust_scalar_min_max_vals() calls
-sanitize_val_alu(), maybe_fork_scalars() and then scalar_alu(). It still
-gets its source operand by value, so 'r1 += r1' does not pass one scalar
-as dst and src.
+is_reg_const() is scalar_is_const() and the test of the type now.
+test_progs -t verifier and test_verifier don't notice if
+is_branch_taken() calls the one where the other belongs. Add such
+a jump.
 
-The two calls used to come after is_safe_to_compute_dst_reg_range().
-sanitize_val_alu() is called for ADD and SUB, maybe_fork_scalars() for
-AND and OR, and the range of these four is always safe to compute.
-
-bpf_mark_reg_unknown(dst_reg) becomes scalar_set_unknown(dst) in two
-places. The rest of a SCALAR_VALUE register is 0 already.
-
-No functional change.
-
-Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h |  1 +
- kernel/bpf/verifier.c        | 59 +++++++++++++++++++-----------------
- 2 files changed, 33 insertions(+), 27 deletions(-)
+ .../bpf/progs/verifier_jeq_infer_not_null.c   | 33 +++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 4708131cceb6..15528f3a352e 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -2069,6 +2069,7 @@ void bpf_trim_pkt_range(struct bpf_reg_state *reg, s64 smax);
- void scalar_set_unknown(struct scalar *s);
- void scalar_set_const(struct scalar *s, u64 imm);
- void scalar_add(struct scalar *dst, const struct scalar *a, const struct scalar *b);
-+void scalar_alu(struct scalar *dst, const struct scalar *src, const struct bpf_insn *insn);
- void scalar_zext32(struct scalar *s);
- void scalar_union(struct scalar *acc, const struct scalar *src);
- int bpf_set_reg_range(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index c208603a10e7..9721530636e3 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -17894,33 +17894,27 @@ static int maybe_fork_scalars(struct bpf_verifier_env *env, struct bpf_insn *ins
- 	return adjust_scalar_min_max_vals(env, insn, reg, *src);
+diff --git a/tools/testing/selftests/bpf/progs/verifier_jeq_infer_not_null.c b/tools/testing/selftests/bpf/progs/verifier_jeq_infer_not_null.c
+index 3c789c565b18..8acebb22f0d8 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_jeq_infer_not_null.c
++++ b/tools/testing/selftests/bpf/progs/verifier_jeq_infer_not_null.c
+@@ -273,6 +273,39 @@ __naked void jne_reg_reg_null_check(void)
+         : __clobber_all);
  }
  
--/* WARNING: This function does calculations on 64-bit values, but the actual
 +/*
-+ * dst = dst <op> src: the transfer function of the ALU insn @insn, all but BPF_MOV.
-+ * @src can't be @dst. BPF_NEG and BPF_END ignore its value: any valid scalar will do.
-+ *
-+ * WARNING: This function does calculations on 64-bit values, but the actual
-  * execution may occur on 32-bit values. Therefore, things like bitshifts
-  * need extra checks in the 32-bit case.
-  */
--static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
--				      struct bpf_insn *insn,
--				      struct bpf_reg_state *dst_reg,
--				      struct scalar src_val)
-+void scalar_alu(struct scalar *dst, const struct scalar *src, const struct bpf_insn *insn)
- {
--	struct scalar *dst = scalar_of(dst_reg), *src = &src_val, tmp;
- 	u8 opcode = BPF_OP(insn->code);
- 	s16 off = insn->off;
- 	bool alu32 = (BPF_CLASS(insn->code) != BPF_ALU64);
--	int ret;
-+	struct scalar tmp;
- 
- 	if (!is_safe_to_compute_dst_reg_range(insn, src)) {
--		bpf_mark_reg_unknown(dst_reg);
--		return 0;
--	}
--
--	if (sanitize_needed(opcode)) {
--		ret = sanitize_val_alu(env, insn);
--		if (ret < 0)
--			return sanitize_err(env, insn, ret);
-+		scalar_set_unknown(dst);
-+		return;
- 	}
- 
--	/* The count of a shift is a range: a bit of dst_reg can end up in more than one place */
-+	/* The count of a shift is a range: a bit of dst can end up in more than one place */
- 	if ((opcode == BPF_LSH || opcode == BPF_RSH || opcode == BPF_ARSH) &&
- 	    cnum64_umin(src->r64) != cnum64_umax(src->r64))
- 		dst->var_off = tnum_unknown;
-@@ -17966,7 +17960,7 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
- 		if (bpf_insn_is_hmul(insn) &&
- 		    (!scalar_is_const(dst, false) ||
- 		     !scalar_is_const(src, false))) {
--			bpf_mark_reg_unknown(dst_reg);
-+			scalar_set_unknown(dst);
- 			break;
- 		}
- 		if (!alu32 && insn->off == BPF_UHMUL) {
-@@ -18019,22 +18013,12 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
- 		scalar_step_reset(dst);
- 		break;
- 	case BPF_AND:
--		if (tnum_is_const(src->var_off)) {
--			ret = maybe_fork_scalars(env, insn, dst_reg, src);
--			if (ret)
--				return ret;
--		}
- 		dst->var_off = tnum_and(dst->var_off, src->var_off);
- 		scalar32_min_max_and(dst, src);
- 		scalar_min_max_and(dst, src);
- 		scalar_step_reset(dst);
- 		break;
- 	case BPF_OR:
--		if (tnum_is_const(src->var_off)) {
--			ret = maybe_fork_scalars(env, insn, dst_reg, src);
--			if (ret)
--				return ret;
--		}
- 		dst->var_off = tnum_or(dst->var_off, src->var_off);
- 		scalar32_min_max_or(dst, src);
- 		scalar_min_max_or(dst, src);
-@@ -18087,6 +18071,27 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
- 	if (alu32 && opcode != BPF_END)
- 		scalar_zext32(dst);
- 	scalar_bounds_sync(dst);
++ * The offset of a pointer is the constant 0. That is not the value of the register: a jump that
++ * compares two pointers goes both ways.
++ */
++SEC("tc")
++__failure __msg("R1 invalid mem access 'scalar'")
++__naked void jne_of_two_map_values_goes_both_ways(void)
++{
++	asm volatile ("					\
++	r1 = 0;						\
++	*(u32 *)(r10 - 4) = r1;				\
++	r2 = r10;					\
++	r2 += -4;					\
++	r1 = %[map_hash] ll;				\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto l0_%=;				\
++	r6 = r0;					\
++	r2 = r10;					\
++	r2 += -4;					\
++	r1 = %[map_hash] ll;				\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto l0_%=;				\
++	if r6 != r0 goto l0_%=;				\
++	r1 = 0;						\
++	r0 = *(u64 *)(r1 + 0);				\
++l0_%=:	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_hash)
++	: __clobber_all);
 +}
 +
-+static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env, struct bpf_insn *insn,
-+				      struct bpf_reg_state *dst_reg, struct scalar src_val)
-+{
-+	u8 opcode = BPF_OP(insn->code);
-+	int ret;
-+
-+	if (sanitize_needed(opcode)) {
-+		ret = sanitize_val_alu(env, insn);
-+		if (ret < 0)
-+			return sanitize_err(env, insn, ret);
-+	}
-+
-+	if ((opcode == BPF_AND || opcode == BPF_OR) && tnum_is_const(src_val.var_off)) {
-+		ret = maybe_fork_scalars(env, insn, dst_reg, &src_val);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	scalar_alu(scalar_of(dst_reg), &src_val, insn);
- 	return 0;
- }
- 
+ /*
+  * A comparison between PTR_TO_MEM | MEM_RDONLY | PTR_UNTRUSTED and
+  * PTR_TO_MAP_VALUE_OR_NULL should not infer that map pointer is not null.
 -- 
 2.55.0
 
