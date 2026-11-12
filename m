@@ -1,66 +1,49 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794446560;
-	b=M8lo5HtYKyGTqSOHi1+llV2Y2cPrlXEf54KCCyl9hxHfIgGYx9Mzg+sXk6e95fb/8yDA
-	 boiWmVQdtAtfqjFSeZYxFal5sp1/ebmKaS6luFWmrAZajsF7SOo424JCHrOCETwUkRUCn
-	 lX+NTzd6qoBY7AFrykiDuX7UTZkVdBp/BIc6EXKAuJAujtUnTOXJzIEd4nAbJ1A7Vwet2
-	 TNR5MRCo1znIREfkBobfTXEU47SMuo8jux33a77Ocrpl0KrSsx4G3DZOn9lNbwsbp6HEp
-	 uSCYAYex3awgZZOrd3FacaHi+obpSUW/Z9/FFn+LfH32I2Y2zYHKFv3jVdurmF8Tauw==
+	t=1794447009;
+	b=xZH1bN1HyjgpMGbXNrScN2vwkBD2yd0zKoP9+pxOEWeuMrX6NxexfDKBqv/RJTmd/xHg
+	 6tyTavQOvWX6q1PJmjdE0o/hmycBYIblMBWBq31+IQvwEAYx1cD3T4QyWMZlJab9Nvg12
+	 p/IruTPXJt33jGm1INcM6tlAdqrmXZ8PjcIostp0762/QrQ+ISZvSeXBnXZGm3tcFUZOn
+	 3YZIiM6QomdCLvSwczt+7tos61TNAoerNNFsGpMEVY363GXU/OjBImYSaBJBz05lSOpcx
+	 BSOfGXAab2qEz+gPAfZBkDW/sH2xEJ/AIxVTQWuJBmlmz4s83g7fIid0zSoutk7HfAg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794446560;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=yMgbUplGc67CDT49oiQXFHdtB0XBP/ABTmNCDVt654s=;
-	b=THMVN4//9VD0Oib+XPxi28GPGXX6hHICylBLvZDqTDZQ+OLqx7RU+0pINnhZc2gnTkxw
-	 7yTMWq/liF7naddFpQV0RrFrrUIKe9lO7IJ7ZPiNatuhYOyJZjm3dVBzQ7GuZsDXcfk39
-	 TitSImjnsqaCDjSBtDq83LB8LqWFIq814WJW05QRN5hRHLZ3DGxHo9wHal526sTTNNPXs
-	 jd9a5jN5CeViNDjlTHdq5jL7rE7KLlJoAyl5bNwvx5mhJ0DGLZ0vbz2B9lak/cfKIHuar
-	 WpHyBqzr2y2LHSC5z5qjnc/F4S+yNi+LBTcJOVSe4hErohkJQA5Ko3MWXPdLgDxL2fQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794447009;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=0mvwJ5u7CVLi8wnAR/yBIhqqmgfvfbGS9sdPc8+kgjY=;
+	b=PQLURMWwU6ThUiro7Y3E3O5SC2L1zxQWop3vVj46Bn9WdKoK/ggos8bddYyzWOsGpg6G
+	 ti64kH/5zIWvWCGKVjdYpbKqxwy/Z7k/AIJHei3Th5l9pFkGEyk3dzCYedWgHunsdBbgo
+	 Ucp9bxnycWKy11lirLUx1eIYjz9SbaQsLj/7lhRwU/usH5s5BU0XJfKQKVjhGXGs9n1mD
+	 dwAp8er6+dro/KO4U5HzmGLvbeSbFk9jv7KOjIwhfWIiQ4e5rAH/SaAlyFAJyHmGB1nYR
+	 t/4Zdf/Z1sLya8tvM/CcId0Lov2cxXzLS1+wwW9BmFbaw5XGn9kKgZTQwJm/zfiv6fQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NsL424JA;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ACjQxyQP;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 285B0606A31C;
-	Thu, 12 Nov 2026 01:22:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2ADE606A885
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 01:30:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NsL424JA
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 014821F00A06;
-	Thu, 12 Nov 2026 01:22:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ACjQxyQP
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ED771F00A06;
+	Thu, 12 Nov 2026 01:30:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794446559;
-	bh=yMgbUplGc67CDT49oiQXFHdtB0XBP/ABTmNCDVt654s=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=NsL424JAQYNS49/xxqD5d2o9VWjbWTUkrnj05TSe/ZCiOBHpLLgaBGZJolIMiEYOa
-	 rQGZJZ5E3tdchZ4z6ED8TBuui8XcshgtTU2kRl5we0KZ3kRXdwm97qPect0o//6vp4
-	 MQQ3lj3hEUnYi0MMJiyofLq7oSO0JJngff5g+cNFziZf6+9obvdaYVFnl0IMIRMsMh
-	 e/JZPi/1qUD+aXR/K0Unmn9R+ht2TOK3lYusaJAh7ZByzqgklmtfApHkqVLBgeX7M7
-	 2Phopcip5EYZsVcvTsGzLoiVyIt9wELfLn9Y9lZ/74UfZjt+AjwNWB/wv5+yGS9son
-	 kRt+YTzL6w6dg==
-Date: Wed, 11 Nov 2026 17:22:38 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Alexandre Cassen <acassen@corp.free.fr>
-Cc: Jamal Hadi Salim <jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
- <horms@kernel.org>, Vladimir Oltean <vladimir.oltean@nxp.com>, Ido Schimmel
- <idosch@nvidia.com>, Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai
- Lau <martin.lau@linux.dev>, John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil
- Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
- netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net-next v3 2/4] net/sched: honor
- TCA_ACT_FLAGS_NO_PERCPU_STATS in bpf, ife and skbmod
-Message-ID: <20261111172238.506fb9ce@kernel.org>
-In-Reply-To: <20261109124618.933149-3-acassen@corp.free.fr>
-References: <20261109124618.933149-1-acassen@corp.free.fr>
-	<20261109124618.933149-3-acassen@corp.free.fr>
+	s=k20260515; t=1794447009;
+	bh=0mvwJ5u7CVLi8wnAR/yBIhqqmgfvfbGS9sdPc8+kgjY=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=ACjQxyQPgQB3ij+gS/AWdKFMAbRu7KtlOZV0chn/xtyTz9v93UY1oPGlm12tOT8/z
+	 fgQPUy7LZtS1qDYG1UvJGY+yWpNJEXTUMqF7ZDmjJOFCF2zniBFMESDgDQxQPSZk51
+	 ZEE72jVO2kI5E3gLo6O13T4vYYX2/n4Z5GZHXF67El3KwDLH8uKn2jiI9Oa2NG2WOR
+	 a//WjfiK4KwzKHOC+KLvDGlYbdUuIcqk0q+gqGiEDuYs9F+EquQ33aXkvoACspCHTS
+	 36nk8yRcUmPnR1gkJn02CW4rOjJ3C7879XPjGZfvUgVqAhkudHXH5ZTnaDbrWWHF2m
+	 rv5zdAKbLhwaA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 21291391AFCF;
+	Thu, 12 Nov 2026 01:30:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -70,16 +53,61 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2 0/7] bpf: struct scalar,
+ and one backedge-taken count on it
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179444700768.1753823.7340169159675729297.git-patchwork-notify@kernel.org>
+Date: Thu, 12 Nov 2026 01:30:07 +0000
+References: <20261112000836.3138846-1-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261112000836.3138846-1-alexei.starovoitov@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com
 
-On Mon,  9 Nov 2026 13:46:13 +0100 Alexandre Cassen wrote:
-> -		ret = tcf_idr_create(tn, index, est, act,
-> -				     &act_bpf_ops, bind, true, flags);
-> +		ret = tcf_idr_create_from_flags(tn, index, est, act,
-> +						&act_bpf_ops, bind, flags);
+Hello:
 
-Now that we modified all actions could you take a look at removing 
-the unnecessary API variants? tcf_idr_create() has one remaining
-caller AFAICT, so we can probably rename tcf_idr_create_from_flags()
-back to tcf_idr_create() and make using flags the default?
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Thu, 12 Nov 2026 00:08:28 +0000 you wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
+> 
+> Eduard asked three things about the code in scev.c that counts the
+> iterations of a loop:
+> 
+>  1. Can struct scev_value be a cnum64 and a cnum32, in place of eight
+>     open coded bounds?
+>  2. Why are there two functions, compute_backedge_taken_count() for
+>     constants and compute_backedge_taken_max() for ranges? He suggested
+>     to compute on cnum: no bias, no struct latch_domain, one function,
+>     one way to handle 32 bits.
+>  3. Extract cnum64, cnum32, tnum, base and step from struct bpf_reg_state
+>     as struct scalar, with a set of arithmetic operations, and move scev.c
+>     to this abstraction.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v2,1/7] bpf: Don't WARN on a register invariants violation
+    https://git.kernel.org/bpf/bpf-next/c/d17237abe54a
+  - [bpf-next,v2,2/7] bpf: Add const, sub, zext32 and sext32 operations to cnum
+    https://git.kernel.org/bpf/bpf-next/c/5a8baba3dfe8
+  - [bpf-next,v2,3/7] bpf: Add struct scalar
+    https://git.kernel.org/bpf/bpf-next/c/adcbaf887108
+  - [bpf-next,v2,4/7] bpf: Add scalar_add() and four more operations on struct scalar
+    https://git.kernel.org/bpf/bpf-next/c/2d6abb265b1f
+  - [bpf-next,v2,5/7] bpf: Compute the backedge-taken count on cnum, in one function
+    https://git.kernel.org/bpf/bpf-next/c/1ce78eea8373
+  - [bpf-next,v2,6/7] bpf: Count a '!=' latch if the step divides the distance
+    https://git.kernel.org/bpf/bpf-next/c/c7a4e3f18d0a
+  - [bpf-next,v2,7/7] selftests/bpf: Test the backedge-taken count on struct scalar
+    https://git.kernel.org/bpf/bpf-next/c/577e75d8c04f
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
