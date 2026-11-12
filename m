@@ -1,49 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=69.171.232.181
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794499904;
-	b=1j848A5t25LU5fLg9+19RGZpzugAr0fg+4UdfKHJUnvn5zY5mOEqwVNw3RX+VcaF+2aA
-	 T1r0Jbp51Zm9P6gNQ73m3Fl08S+cudNApyQO2ZaSgTWVl/yY/dDmwIaeLTYHlqhgjNoZu
-	 uYidtdlYaNl0NwFU+Jx6VE4mlXYwJqSWFdPhLmVAfrLX1tLbRgYANcIIK+TJSEzlwtDDc
-	 IlLy23wIYvYmQ2mGKO5STxuGQOol49hUxSJMbkGsJuUVOrWutwt9OcWQZfduPr4Dc1Okg
-	 uDQtXV49Cc1NLDYqD1q99unnMlnmxi1BfUGzckFaJm51rZEjc+tx4lO0c6TJ5Ff8Hfw==
+	t=1794500407;
+	b=VOf3ax4yClyAYMui/txTNqPv/CpbpOYQ671rFlBQhTUn+OJqR1LfWNz0hxcR3bBMSQny
+	 775YvT1JRXsbOtzYuk2uUPbuzmsPBjaa0ZoeYIM/9mNamtGjxfyK4+ZhABEj6WcPbdJoD
+	 vgm0KwOYYBO+Qeo//Z8GFnbJTNjUc+5SlAjWB1uTxDX67x3rD5qIfStBt1gihm/TrnXMJ
+	 D6d41x5qHTZlck7WyHqtnVeKgEZdvAWkotijV0x+8WLo11zWmMzD46rvUWRu4X0ed2QdS
+	 E4z9cSq6LVfcxT7WwHVyDWuPCoMWZbpNb135Pies/70HY6D92bQpchXs0rDaXA3mhOw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794499904;
-	h=DMARC-Filter:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=YveoyabFfEkpknWUccD4GnejroQxoMPfnh9Wqt0wcEk=;
-	b=1azkeFM5xoJaWZJq8CYCdAzJ1WSFWbSGX3LCXxpH1CUhw3BINrZG2xNf9A2H5/pi6d8w
-	 fvl8ZxqngwVaGI3ei/38oK3/cplxpFSyOeKzoQ+7RO01zIoLpIhlGY5sHpBEeLo6fVQcd
-	 oGeNXhizJLR6vI5XXHtV/jYREi0bPg6IlyaLCmi0bKAnh6/FANDGXB7DPK0gxShTaksnP
-	 4ynkE3nxIFdvrx1TKYZztrcNDdM8znia2IGkLy1lIWdzDw0B5R7WvjJCjHMRODbVf3qay
-	 Lt5D38ARAlhJfRY9Ox9q3tiwwmM029bdM/Xtr0HGUc2HcvKbCC2rZh/PKG1NBePgJXg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794500407;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=/KbZqwAX9q3OhGF17k4YUyCJru5x7wrgR3CRRpIUUzc=;
+	b=oPjhjk2qSIEjmGTgHPS71Dh0ignifrXB/8XWHPJxrhVEUGs2niga+60X104iA8zVXeaW
+	 YeMWgRhFU6bxvhuHylKeuiDuSGbT5/0k1LbiEEkScphiN5QKQLOgcWYLmkEZIomftwBid
+	 4Gasi9yA6UibS+C3bbzMKIPhJU2U5tRRUKZqtwhUD00OJXeKzG4WPTfDKbIxAcONWiX8F
+	 2/JZpsoX5yu4hUL+XsME/vsf4WQH9X2sSB2GhQRSvzWokqa/INclRfUzY9ruQdzYuzZmI
+	 OHmX7H+AiW1RiTuwK325ygI/fcsUOAp/AzkidXZ383F8u4pQy1JjU0DOfRayB+ZIfYQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=fail header.from=linux.dev;
-	spf=fail smtp.mailfrom=linux.dev;
-	arc=none smtp.remote-ip=69.171.232.181
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Jggp6FrR;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02D4C606A323
-	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 16:11:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 02D4C606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm50310.atn0.facebook.com (Postfix, from userid 128203)
-	id EAEBF583745DF; Thu, 12 Nov 2026 08:11:29 -0800 (PST)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: Alan Maguire <alan.maguire@oracle.com>,
-	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-	dwarves@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	bpf@vger.kernel.org,
-	kernel-team@fb.com,
-	Breno Leitao <leitao@debian.org>
-Subject: [PATCH dwarves v2] btf_encoder: Keep the source prototype of kfuncs
-Date: Thu, 12 Nov 2026 08:11:29 -0800
-Message-ID: <20261112161129.1903805-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.53.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84C7B606A31C;
+	Thu, 12 Nov 2026 16:20:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Jggp6FrR
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F3AE1F000C4;
+	Thu, 12 Nov 2026 16:20:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794500407;
+	bh=/KbZqwAX9q3OhGF17k4YUyCJru5x7wrgR3CRRpIUUzc=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=Jggp6FrRtXMrsRjhkZ/ZiF9INv9FTKscEaxcc1xp0lUUn+9MdyuMIKK7mGdrr5At2
+	 MV7GbV0xRUcsQZHMRfc5NRqHd4BH/HiYTTLnqwWAsweq/xhw466vyNQyzJvQ+S9Pbr
+	 F7mbZ2kiKEHy8b2KS4HqgagYt1ICHs5ppNwDtOOVqcpezeWjD6JOjE3P26dF6AqCuK
+	 xX9PQ1ziZlFoht3ZpH70C8B7kYEE+GobZO30ptZeoNkVJm/sZAQ+KHz3/ehEsIKdft
+	 KSWE9K4kiQPhvQH2ZwPHkGImd2BOUVDB8886SYTZNZrFs/6/DHeqUslXRcKkfhTsaF
+	 UCk8dyyx4P3jQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F1537380AA5F;
+	Thu, 12 Nov 2026 16:20:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -53,166 +53,47 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v3 0/2] net: psp: preserve SKB_EXT_PSP across packet
+ scrubbing
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179450040578.42282.14929639226978181632.git-patchwork-notify@kernel.org>
+Date: Thu, 12 Nov 2026 16:20:05 +0000
+References: <20261106182007.374660-1-weiwan@google.com>
+In-Reply-To: <20261106182007.374660-1-weiwan@google.com>
+To: Wei Wang <weiwan@google.com>
+Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+ andrew+netdev@lunn.ch, shuah@kernel.org, horms@kernel.org,
+ jakub@cloudflare.com, daniel.zahka@gmail.com, willemb@google.com,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org
 
-The location based checks can drop kfuncs from BTF even though their ABI
-did not change. With the arm64 KCSAN setup in the report, resolve_btfids
-fails with:
+Hello:
 
-  WARN: resolve_btfids: no BTF func for kfunc bpf_tcp_ops_set_rcvlowat in=
- bpf_tcp_ops_set_rcvlowat_kfunc_set
-  WARN: resolve_btfids: unresolved symbol bpf_tcp_ops_set_rcvlowat
+This series was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-The location list of 'rcvlowat' starts after the function entry, in a
-callee-saved register, so the function is marked unexpected_reg and
-skipped. scx_bpf_tid_to_task() hits the same skip through a
-different DWARF pattern.
+On Fri,  6 Nov 2026 18:20:05 +0000 you wrote:
+> When a virtual interface such as netkit is associated with a PSP device
+> in another network namespace via PSP_CMD_DEV_ASSOC, incoming PSP packets
+> decapsulated on the physical device lose their SKB_EXT_PSP extension
+> when scrubbed during redirection (e.g. skb_do_redirect() or
+> netkit_xmit() calling skb_scrub_packet()). As a result,
+> __psp_sk_rx_policy_check() rejects incoming PSP-encrypted TCP data
+> segments at the socket layer.
+> 
+> [...]
 
-Kfuncs are defined with __bpf_kfunc ("__used __retain __noclone
-noinline"), so the compiler keeps the calling convention of the C
-prototype. Odd parameter locations of a kfunc are debug info artifacts,
-not ABI changes.
+Here is the summary with links:
+  - [net,v3,1/2] net: Make PSP skb extension survive packet scrubbing
+    https://git.kernel.org/netdev/net/c/b22268fc3ddc
+  - [net,v3,2/2] selftests/net: psp: test bidirectional data transfer
+    https://git.kernel.org/netdev/net/c/51127238570b
 
-For kfuncs, do not set the flags when saving the state,
-keep all source parameters, and skip the location based checks, also in
-btf_encoder__add_saved_funcs() where saved_functions_combine() can merge
-the flags back in. The inconsistent prototype and ambiguous address
-checks still apply.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Kfuncs were only collected with decl_tag_kfuncs, which the kernel no
-longer passes since commit 692393104909 ("resolve_btfids: Emit bpf_kfunc
-and bpf_fastcall decl tags"). Collect them whenever BTF is encoded; the
-decl tags are still only emitted with decl_tag_kfuncs.
-
-With this change, bpf_tcp_ops_set_rcvlowat() and scx_bpf_tid_to_task()
-are encoded again, and no other function in vmlinux BTF changes.
-
-Reported-by: Breno Leitao <leitao@debian.org>
-Closes: https://lore.kernel.org/all/au27Y9m78_3EH2v1@gmail.com/
-Tested-by: Breno Leitao <leitao@debian.org>
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- btf_encoder.c | 71 +++++++++++++++++++++++++++++++--------------------
- 1 file changed, 44 insertions(+), 27 deletions(-)
-
-diff --git a/btf_encoder.c b/btf_encoder.c
-index 05ffe82..8537628 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -1405,32 +1405,42 @@ static int32_t btf_encoder__save_func(struct btf_=
-encoder *encoder, struct functi
- 			break;
- 		}
- 	}
--	state->inconsistent_proto =3D ftype->inconsistent_proto;
--	state->unexpected_reg =3D ftype->unexpected_reg;
--	state->optimized_parms =3D ftype->optimized_parms;
--	state->uncertain_parm_loc =3D ftype->uncertain_parm_loc;
--	state->reordered_parm =3D ftype->reordered_parm;
--	state->signature_changed =3D ftype->signature_changed;
--	if (state->addr && func) {
--		for (int i =3D 0; i < func->sym_cnt; i++) {
--			if (state->addr !=3D func->syms[i].addr)
--				continue;
--			if (str_contains_optimized_fn_suffix(func->syms[i].name)) {
--				state->optimized_symbol =3D 1;
--				break;
-+	/*
-+	 * A kfunc keeps the ABI of its C prototype, so avoid setting
-+	 * state flags, otherwise the kfunc may be treated as
-+	 * optimized and skipped, or lose parameters in BTF.  For other
-+	 * cases, ensure the optimizations/uncertainties are reflected
-+	 * in state flags.
-+	 */
-+	if (loc || !is_kfunc_state(state)) {
-+		state->inconsistent_proto =3D ftype->inconsistent_proto;
-+		state->unexpected_reg =3D ftype->unexpected_reg;
-+		state->optimized_parms =3D ftype->optimized_parms;
-+		state->uncertain_parm_loc =3D ftype->uncertain_parm_loc;
-+		state->reordered_parm =3D ftype->reordered_parm;
-+		state->signature_changed =3D ftype->signature_changed;
-+		if (state->addr && func) {
-+			for (int i =3D 0; i < func->sym_cnt; i++) {
-+				if (state->addr !=3D func->syms[i].addr)
-+					continue;
-+				if (str_contains_optimized_fn_suffix(func->syms[i].name)) {
-+					state->optimized_symbol =3D 1;
-+					break;
-+				}
- 			}
- 		}
- 	}
-+
- 	ftype__for_each_parameter(ftype, param) {
- 		const char *name;
- 		char *final_name =3D NULL;
-=20
- 		/* No location info/optimized + reordered means optimized out. */
--		if (!loc && ftype->reordered_parm && (!param->has_loc || param->optimi=
-zed)) {
-+		if (!loc && state->reordered_parm && (!param->has_loc || param->optimi=
-zed)) {
- 			state->nr_parms--;
- 			continue;
- 		}
--		if (!loc && encoder->true_signature && ftype->signature_changed &&
-+		if (!loc && encoder->true_signature && state->signature_changed &&
- 		    param->optimized) {
- 			state->nr_parms--;
- 			continue;
-@@ -1797,17 +1807,20 @@ static int btf_encoder__add_saved_funcs(struct bt=
-f_encoder *encoder, bool skip_e
- 		 * signature; true_signature can rewrite those signatures.
- 		 * Also exclude functions with unexpected register use, multiple
- 		 * inconsistent prototypes or uncertain parameter locations.
-+		 * The location based checks do not apply to kfuncs.
- 		 */
--		if (state->unexpected_reg)
--			skip_reason =3D "unexpected register usage for parameter\n";
-+		if (!is_kfunc_state(state)) {
-+			if (state->unexpected_reg)
-+				skip_reason =3D "unexpected register usage for parameter\n";
-+			if (state->uncertain_parm_loc)
-+				skip_reason =3D "uncertain parameter location\n";
-+			if (state->reordered_parm)
-+				skip_reason =3D "reordered parameters\n";
-+			if (btf_encoder_func_state__skip_optimized_parms(encoder, canonical_s=
-tate))
-+				skip_reason =3D "optimized parameters\n";
-+		}
- 		if (skip_encoding_inconsistent_proto && state->inconsistent_proto)
- 			skip_reason =3D "inconsistet prototype\n";
--		if (state->uncertain_parm_loc)
--			skip_reason =3D "uncertain parameter location\n";
--		if (state->reordered_parm)
--			skip_reason =3D "reordered parameters\n";
--		if (btf_encoder_func_state__skip_optimized_parms(encoder, canonical_st=
-ate))
--			skip_reason =3D "optimized parameters\n";
- 		if (state->elf->ambiguous_addr)
- 			skip_reason =3D "ambiguous address\n";
-=20
-@@ -3056,10 +3069,14 @@ struct btf_encoder *btf_encoder__new(struct cu *c=
-u, const char *detached_filenam
- 		if (!found_percpu && encoder->verbose)
- 			printf("%s: '%s' doesn't have '%s' section\n", __func__, cu->filename=
-, PERCPU_SECTION);
-=20
--		if (encoder->tag_kfuncs) {
--			if (btf_encoder__collect_kfuncs(encoder))
--				goto out_delete;
--		}
-+		/*
-+		 * Mark kfuncs before any function state is saved, so
-+		 * btf_encoder__save_func() keeps their source prototypes.
-+		 * Needed even without decl_tag_kfuncs, which only controls
-+		 * the decl tags.
-+		 */
-+		if (btf_encoder__collect_kfuncs(encoder))
-+			goto out_delete;
-=20
- 		if (encoder->verbose)
- 			printf("File %s:\n", cu->filename);
---=20
-2.53.0-Meta
 
