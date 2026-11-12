@@ -1,101 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.227.137
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.180
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794491465;
-	b=AbljOqaJSM+ySI4HZCo8zypFfAEEj1f/8d5b35k56G2zkdf3R2rLaa9pU9et+BkL4MoK
-	 TXvn8p+OhDVE4hvAxru7BbwQbjegTdhPTZdQP+HGh0aaP6yLovigP4oJi/mqURUcrdyV7
-	 Dzg8Gygh9AAZ9kovPofZA1ia2JIMZ01YF7WXMHhEfxsrlkBhkTCbUd7YhK3SH9mdv+ESp
-	 9lWddqK4YlXX3kwyF91aMwWudpI7Uk5I4qZ3M4jtZjdXvZw4xSWT4yICJN2u/Zy5hgMFo
-	 r9gVLU6gbof9DuSMRMvxoH1cFaxuzWHEzIez0RnhiOqSTwWYZmzK8nC91beF9yL58Ag==
+	t=1794491682;
+	b=PTkfYqRc85BYGoO6QH4JK/eGsqd4Vx2UYFMlRCL5AJTz3EJlMvahA8hKOVqTfQvZeKeU
+	 LCCxnq1dfXQT0rOpgojqtmycHNgmrqNRZf6GSXgGgcVtHkKSvVTEassZ10Ntd7j9Bdg41
+	 jPU1HcER2Dj82KUX8YnGAVko25fFuR8Q+orPmnUBS5VM96O7rcUH8YaGPEbXkPB+rYUlv
+	 nxrfmGaM3m8XIBiDKBXJ6kxByG2nsfQA+dURYyNpZ6fDXzg9oHcSpQ+r4bNsOsufzFor7
+	 Ma4QS1GRNydELeaEylnVSfZ4phza8ScSCChOiFFmi0uT/vFK/IjYFrOwV26QdmNvOXw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794491465;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=QBfpBqH9DfyEOdhBhH9UadavYWWE9bgXFu1+ss9tjLw=;
-	b=K85brx7lwsYek3KgMRjzEOzdlLWI60pM7rOiLQrNDjrzSfDaUHoCo+Xsb9q6VzuXqCc1
-	 tuajCs2nj9nuj9svxzDsu2xG7ayyg1nC8xNAky1GV8oZD2TBVb4YiQp6keBHfYbd71G4+
-	 jXHPJaJxJDoYnwdF6hSrV4yo0RFGt77+0Aawl/FjNkSEjS//M8RV1RQoHkBX5Et69QddE
-	 yRNgFx2ZuS+Gz8AvR4qPl31FTFXDRU+eVc/ikTdtCXoNaWrwYOGR2YXMsA+YbCjEbFBjj
-	 NgUm4hiPy7hC5rL4ZWMtKuUlS16NGvb0wsdG2+N8raYo+rZ2DRKyqtAI4YEU848hbaw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794491682;
+	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=GJzpU18PpbltGnIbSo/mDFrOgiPvvS/9/MBenbJHib4=;
+	b=NKFLCoczUMtqSkI/G5FcEijmLqyTCTlf76ynS39jnt6BdIDx5x+UH1f/YPqNX3lN67H+
+	 JJku6Vn5gvi8eMcuv3VG7PSPQTuy37W4DWfbQRFs27URe/jaFDnQGFY7sakW6amWded8c
+	 M4K7UPKNldUDFdqBSkzTKnzy4eBDoTFA204ZH1wQheofM7YeGzYkn5M7NAPWmvllUmxFE
+	 jY2EdPaQPUVV4t7k/NQX7+Jxnrp21JmnVFOmkQWB/OC4Rk4qXVxQAmD00+nSPAQdSO4l+
+	 Ci5saWXzyeozSAq18v9aDi8AukTzoUIAwrsl7j5nNyg9DyneoMFeeWMBnNzGU5Pk3yQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
+	dmarc=fail header.from=debian.org;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=LvOJsOzE;
-	arc=none smtp.remote-ip=74.125.227.137
-Received: from mail-pj2-f9.google.com (mail-pj2-f9.google.com [74.125.227.137])
+	arc=none smtp.remote-ip=209.85.128.180
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84599606A321
-	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 13:51:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 84599606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F183606A338
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 13:54:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1F183606A338
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=LvOJsOzE
-Received: by mail-pj2-f9.google.com with SMTP id d9443c01a7336-2e97ddaf3c4so19835635ad.1
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 05:51:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794491464; x=1795096264; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=QBfpBqH9DfyEOdhBhH9UadavYWWE9bgXFu1+ss9tjLw=;
-        b=LvOJsOzEgbgl7nXZFUpikpO+sPH215DynZNktvAHyYkp3yom0zPzdYGSDcZkvgaOUb
-         MtTwYR9abNDhvoSjpVwNtwDHT0X3B8CRNwvoLRgoBnhyT/9JHadf/NWhIzJ0bGfA8oW8
-         RKpb2E2W1KcLaw+dyN74Nc7nTgA+4sELAebw4GDl6EvRaZVad7aZBdN1UQjh11O73qPX
-         i7WSeVw9YyHuU2zdGt3fkV3uUQDCtIHCvcAtl+B8vrGWYU2XLYUhOoOo5s+PMDUwxzY7
-         hLNf5oIFViXMTUUnavPGDuHMpr1Qa0JfInwKPzakXge+I4ZG7CqlnEA5bOVOTB6YetFZ
-         9PPg==
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-8b3a332105bso9211807b3.1
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 05:54:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794491464; x=1795096264;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=QBfpBqH9DfyEOdhBhH9UadavYWWE9bgXFu1+ss9tjLw=;
-        b=i24CN/WyXTd/g4rZIQNsT+kwKjklKv5CHGsAsESx21q6NU18375OVlE06msFKSFI/s
-         B+PSxg9g5slMTerYFt9ZUWzgytHKPLahEPmNGgzjngMP3r7L6LThpinoCURyzmzpeYZR
-         bWX3upaPsAxjyp/NiZ/mJiZY453FmMSJB5guJ0qicC7fm7k6s7VaRpgYzWABBqmtXnIR
-         qvaqdGxRrMZsJTwNvtBQJ7Gd4YvKupi0xAeAdvow/x5I3TkYUg3vev2IxT/LufNjGgUY
-         QQ/P9KnGoOWLyA8k0lTo1rqpR0kdVjeqkTabwAAmwD5xdAFqHoKQ/NIcru6RgbLotcVf
-         yKKw==
-X-Gm-Message-State: APuU4Z/3yTjmdBM1/Q970n3tV5Z+gelfqLbZkRXo4PV/VpYq/rewFZ1I
-	C5kSUyPx40rPG4CaLlTkUfJAjpyt8a9luUyegCMt8NoJG67RsYd3tFtJGdPMocy7XKVYDg==
-X-Gm-Gg: AYBFou0hbGXQCiUV6r356aUbubk38bAZQsUNm1JElfLCqPTgNbyiqpYzGNZn4XHYm9o
-	Oex0u1pNSv7giqJGVDlxKLQMN81wv5XmtMnNKIY70CjMUfTd1DNtM2EHflFJ/nJbOn2Ay0/cBR+
-	54acRroeB9FhIlF+dkuqazUlg/SRgnrfp1sfOn4ovZ87qSqSGCn9grPhj2OTZPXfsUhVuCG8xYx
-	H/0FYpTeJ/geZxe7dkVxJttEXNBmvxMVka9H3j5Qb7btg9irqiUZpYFFYstBANS2O0HbVPyHoro
-	NgbgdTyRS/dz8ZXtHP3HJgQFyiz8OXA21IgOyDCDKEzrvoKGhEFuONm5Hy45FvaUOT1T6b2Y80D
-	zfijMh/WbGg8Ab3LVjYXBSaS901FTvEfXOq2oP1MHs4SZzv4suOt7kk4iekqP2HqXaSkXbZRaZX
-	ppL0cDKsl5tgNAXvvQaIJY6aAzk6AD2S2rhQazrNBPcWpiJXfKn8bAaYlTYAvNyWVkPNbOx6MSd
-	P4HhV9Xc7nZYWXvfWlbz4FG4bz9JTCIOnv3WIcmMAsOpK2RAb5enOmQAn5wSeIx8GE4lL9H/uu2
-	FhAnvwlk21Y4LMZiEySXeAvEUdSd7UBW6eV3s24SkaH92PM=
-X-Received: by 2002:a17:903:3bac:b0:2e9:8510:6acf with SMTP id d9443c01a7336-2edd7748dc3mr60985655ad.25.1794491463730;
-        Thu, 12 Nov 2026 05:51:03 -0800 (PST)
-Received: from J4f-Laptop.localdomain ([183.36.237.113])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2edb6e0f9ffsm35078015ad.75.2026.11.12.05.50.57
+        d=1e100.net; s=20260707; t=1794491681; x=1795096481;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=GJzpU18PpbltGnIbSo/mDFrOgiPvvS/9/MBenbJHib4=;
+        b=DdPG9sdsTxKToOMACJfJvzDdzsNWdFUsypqIyOGQE/o88rva8i/f8Dr0B9rU4HBiwi
+         oKpfU1TxAHxUbQB4MK81Mp0gfm7Tyi2p6Jb3GWpIuhk3IgHsBwo4JyICAQKi3y9OD9JY
+         LppXHIlRr18eodgJ0HbX6SARI0Ibzn3BE5m/elpAYIEAP59Ex7kPmt4VAKdrsjqMwvZO
+         yaHs0nFDO4NUfFYPx8Sc5SpsaqtOvkHZxcF1cl5hJ88yAiUqztIi0jHbmy4RfVqRjk4P
+         4KnLBhqiuMV1klCRbPz6xOZcez8NhkbwsmGpAnj/bsHdv9sbpXTh2/uesiR1QN/dGGf9
+         rHdw==
+X-Forwarded-Encrypted: i=1; AL+hErEqhREmi/I14CX7dluItCNSirCCFyoZlH0Q6o6iL/eRU0hDLoZjoScdc7C1YlgOo5wifP8=@vger.kernel.org
+X-Gm-Message-State: APuU4Z985JjcuEAcPQMsi2OOzrlH5iZAS+1Kr72BIO4o3INQVmTwkCcQ
+	FBL+VmtRrAqJ7CJaoGU8+LUq6SGHYRT7a6hTMS0EbmC9FxE2pQy06LtBHe4A8A==
+X-Gm-Gg: AYBFou0P/m5gfNUuuYTtorGJbDeE2GDsTkYbxT1NCN81u3VgbsM4tAUH/8/QFDBHNVV
+	BdB3Hn5L7wHCW1DgrlwktpjJTDMQqBZwAgraME8oumw0b6DwI8RVfD4Nkehj7cWYobW72zVv3Js
+	teL/Vy1ObTUZKdUNe3AyAfDMcT/oxlk+Rv+DdWR3SvkMv77ezDDYOLxPGNTHgbAwdcPwkGF7htu
+	TAqpYj4GtNwT9jbHPKFkHuStR/8HUjnkfU1kYfUXfmJIRKCJLg0xBgdMNkX8RVKVhkZ0hq+dhKC
+	mjPYLo/ZKBC+bb9zDNoLurVYRv7jeK5GxGgV4DFWHblZGeEJDa+C7GFdzVBFDURbICjgYRWQH0N
+	rQNP5kAqi3KW88Yz6uiYLLTa7Vn2HSpkzURo4KYY7cchFt3k4XdwvHDXyqv62Yt4hwQP9IS/sq5
+	9ZpUe2ckGJADak4Fz5O3Qq08rudt4Csv23U3R4len61MGazoVbW/gF0zkPQcwDH/q5Nf/i3Zj0O
+	UWrWv+G38kdv+UWWtrYd+pR/Gks+s1pzEEk7pvx0j9iRn+k9nE/CZ3rICMF9uZTPazC/P/RnjVL
+	60GV6lobMW9wk0yElMXu
+X-Received: by 2002:a05:690c:c4e6:b0:87e:645c:182b with SMTP id 00721157ae682-8b3baf09b42mr17315587b3.26.1794491681204;
+        Thu, 12 Nov 2026 05:54:41 -0800 (PST)
+Received: from gmail.com ([2a03:2880:24ff:42::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b3933e0d01sm70407067b3.22.2026.11.12.05.54.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2026 05:51:03 -0800 (PST)
-From: Shihuang Liu <shlomojune6@gmail.com>
-To: bpf@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Shihuang Liu <shlomojune6@gmail.com>,
-	stable@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Tadeusz Struk <tadeusz.struk@linaro.org>
-Subject: [PATCH] bpf: Fix cgroup link update after a failed effective array rebuild
-Date: Thu, 12 Nov 2026 21:49:41 +0800
-Message-ID: <20261112134942.288831-1-shlomojune6@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        Thu, 12 Nov 2026 05:54:40 -0800 (PST)
+Date: Thu, 12 Nov 2026 05:54:38 -0800
+From: Breno Leitao <leitao@debian.org>
+To: Alan Maguire <almagui@kernel.org>
+Cc: Yonghong Song <yonghong.song@linux.dev>, 
+	Alan Maguire <alan.maguire@oracle.com>, Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, 
+	dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [PATCH dwarves] btf_encoder: Keep the source prototype of kfuncs
+Message-ID: <avXE70_JpiqemxzV@gmail.com>
+References: <20261111222447.322978-1-yonghong.song@linux.dev>
+ <ffd8e847-6a3f-4403-a33c-1b3804e1c039@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,95 +84,34 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ffd8e847-6a3f-4403-a33c-1b3804e1c039@kernel.org>
 
-replace_effective_prog() uses the position of a cgroup program list
-entry as a physical index into the effective program array.  When an
-OOM detach falls back to purge_effective_progs(), the detached entry is
-replaced by a dummy but the other entries keep their position, so the
-list position no longer matches the array index.  A later link update
-then writes the new program into the wrong slot, leaving the old
-program pointer in the array.  The array does not hold a reference, so
-the old program can be freed while it is still published.
+Hello Alan,
 
-Translate the position to the corresponding non-dummy entry before
-writing, and use the same helper for deletion and replacement.  This
-covers both regular programs and cgroup struct_ops entries.
+On Thu, Nov 12, 2026 at 12:36:29PM +0000, Alan Maguire wrote:
+> > Reported-by: Breno Leitao <leitao@debian.org>
+> 
+> I'm having trouble reproducing the original failure; would you mind sharing
+> the config that reproduces it? I tried with clang 22, but no luck so far.
 
-Fixes: 4c46091ee985 ("bpf: Fix KASAN use-after-free Read in compute_effective_progs")
-Cc: stable@vger.kernel.org
-Signed-off-by: Shihuang Liu <shlomojune6@gmail.com>
----
- kernel/bpf/cgroup.c | 42 +++++++++++++++++++++++++++++++-----------
- 1 file changed, 31 insertions(+), 11 deletions(-)
+This reproduces it on x86_64, with next-20261111, clang 22.1.3 and
+pahole master (9eb594d):
 
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 57a785241d42fb..db3f173e83c693 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -403,6 +403,28 @@ static int bpf_cgroup_array_length(struct bpf_prog_array *array,
- 	return cnt;
- }
- 
-+/* Return the entry at logical position @index in an effective program
-+ * array.  Dummy entries left behind by a failed rebuild are skipped because
-+ * they do not correspond to an entry in the program list.
-+ */
-+static struct bpf_prog_array_item *
-+bpf_cgroup_array_item_at(struct bpf_prog_array *array, int index,
-+			 enum cgroup_bpf_attach_type atype)
-+{
-+	void *dummy = bpf_cgroup_array_dummy(atype);
-+	struct bpf_prog_array_item *item;
-+
-+	for (item = array->items; item->prog; item++) {
-+		if (item->prog == dummy)
-+			continue;
-+		if (!index)
-+			return item;
-+		index--;
-+	}
-+
-+	return NULL;
-+}
-+
- static int bpf_cgroup_array_copy_to_user(struct bpf_prog_array *array,
- 					 __u32 __user *prog_ids, int cnt,
- 					 enum cgroup_bpf_attach_type atype)
-@@ -432,16 +454,12 @@ static int bpf_cgroup_array_delete_safe_at(struct bpf_prog_array *array,
- {
- 	struct bpf_prog_array_item *item;
- 
--	for (item = array->items; item->prog; item++) {
--		if (item->prog == bpf_cgroup_array_dummy(atype))
--			continue;
--		if (!index) {
--			WRITE_ONCE(item->prog, bpf_cgroup_array_dummy(atype));
--			return 0;
--		}
--		index--;
--	}
--	return -ENOENT;
-+	item = bpf_cgroup_array_item_at(array, index, atype);
-+	if (!item)
-+		return -ENOENT;
-+
-+	WRITE_ONCE(item->prog, bpf_cgroup_array_dummy(atype));
-+	return 0;
- }
- 
- /**
-@@ -1175,7 +1193,9 @@ static void replace_effective_prog(struct cgroup *cgrp,
- 		progs = rcu_dereference_protected(
- 				desc->bpf.effective[atype],
- 				lockdep_is_held(&cgroup_mutex));
--		item = &progs->items[pos];
-+		item = bpf_cgroup_array_item_at(progs, pos, atype);
-+		if (WARN_ON_ONCE(!item))
-+			continue;
- 		prog_list_replace_item(pl, item);
- 	}
- }
--- 
-2.43.0
+    # make LLVM=1 x86_64_defconfig
+    # ./scripts/config -e BPF_SYSCALL -e BPF_JIT -e CGROUP_BPF \
+            -d DEBUG_INFO_NONE -e DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT \
+            -e DEBUG_INFO_BTF -e KCSAN -e UBSAN -e WERROR
+    # make LLVM=1 olddefconfig
+    # make LLVM=1 -j$(nproc) vmlinux
+    [...]
+      BTF     .tmp_vmlinux1
+    WARN: resolve_btfids: no BTF func for kfunc bpf_tcp_ops_set_rcvlowat in bpf_tcp_ops_set_rcvlowat_kfunc_set
+    WARN: resolve_btfids: unresolved symbol bpf_tcp_ops_set_rcvlowat
+    Failed to generate BTF for vmlinux
 
+let me know if you are not able to, and I will send you my full .config
+
+Thanks,
+--breno
