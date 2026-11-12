@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.11
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.215
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794489023;
-	b=n2kI+63KTnYbbABv//uWSlNEGyvGGguioWIHIXCGS6Wk2QcfmZ4f2SgKDQKpReyMxH7k
-	 yFH/Zxd7Mul0IYlb9NG3Dm+1laOR66myjkm4U5cSaPrAAltvO52h9yyqUuuZE55QWmPh6
-	 uN6iu+JyT3ulAoTuQyYSW5zTWYpJlKXlkd1yhIddTl0dvJHt/P9cjCVLlC83pu5II2UwQ
-	 FhdsWWu0G9Gd64C6Hb9GQG8sb9DxdQhlIesgVxJb2AsUSDK71Qaqw4bXo9et9dQ0U5y9h
-	 sGGl2l7FgqRuusHwFAz4d6zAveLodVr7QIFB13fEuHanBr+AFmwgK9uHeStaft4BkIg==
+	t=1794489038;
+	b=JtmZ/W6stRLz11p73tcvV6sBczyGmfYi4yXhAi3207hxG9kpxjh9tpxI9D9u1+sYqQxk
+	 Dua5nnMBLLNJc9DkjetXrJ8LKhgrwLrYORIG0SYtj/AoQkJXg43ob13+O5CB90vXRHulI
+	 fOVZM2Z9G77b9V2KDn8uFPpbYeLH9j3ZbmbutE2Q6Pj5+T945MgmnbzI1+7hNpx1dXaSg
+	 HUVPvje9lF4GO4x6lOxaIfCS4umSHOvv8uJ4zt2RMHXcaW98DnqrdN5sBETyOuugD7uyv
+	 J9nrfwpWPzpcjZF0c23qT1kU7UOpgZl4tM8880WuRPgqcjTfQxgL45CdCt2aG2sLFSw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794489023;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794489038;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=/ScJysAfHU/3UcDNAAYnWlZ68uEE/9WuK+T2tCuHaVA=;
-	b=Uwiopv2DYjmmSbE6o0dow/NpPRC/fccVyimtaFw8ZJOnEr7QNKKD66myn7E8OYAV7pLJ
-	 nDJcygUKTOEIa2UBCfP37bxWy0DPxmfHmA4jYNPIXWzbGWllv7RXl6U5FQ2D4E8R197fX
-	 Mu4azlA+eGSilcJ2GWKYyNwFzV915KaKhpwfSUhMNHCOEnN21bhMLwwaWW+skUsDVZiZK
-	 dnchwqMig6yBQCrA7w01IpNttU3b1AlfkuMexpOqzsQ5PkFyRUbLdrd4LWxh96nKMyjqb
-	 wU60i3q9+8+/Yp6lwW3nteniFef+8Zz4Kt5rxnlBPdRLaxwIIvgs1+nX3rYbbOnA/SQ==
+	bh=CpuKkXH89DE72g3q3A2BBjC4W8j4PRXj24oxWP7atUI=;
+	b=J9F1KbBth/sU9TpHzry8rUb6racTwZx0iFs7czovw+eL1J3PTVK6F3jSMkgDkuAnELe/
+	 nW8DnWjHCytvIhS5UbKkPVOkHtpqexvuQ3fl4wfo8TSeaQjxForxz90+v4LxaiJi4/Hhc
+	 Mp0wxjhC1euVOwDhp3y3SgPz+zgQMUjs6b3kG3nYijsbRJgFZ4siEIUe0eMyirPLFKKsL
+	 pno6S0ExWqrwIwUn0ASofLz6idNHgQjQWHgZokqfUlfH04avQnRKSPEkmUmJ/Llle0NZ5
+	 WUyNqvdSORuo0/qsm59jjmJWDYr3A1pq2b6MWYtjKg0BBFduj7UVIZzfoZleXxpuLhg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=sSC54di3;
-	arc=none smtp.remote-ip=95.215.58.11
-Received: from mta1.migadu.com (out-11.mta1.migadu.com [95.215.58.11])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=MPp9ma1+;
+	arc=none smtp.remote-ip=91.218.175.215
+Received: from mta0.migadu.com (out-215.mta0.migadu.com [91.218.175.215])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A3B8606A33E
-	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 13:10:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8A3B8606A33E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19BF4606A33A
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 13:10:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 19BF4606A33A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=sSC54di3
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=MPp9ma1+
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Khvjz3OMMUyRYmhS0+smYP9TQ+oix+8/Op5iUO6ggxk=;
+DKIM-Signature: a=rsa-sha256; bh=FR3xtWrOv3CbYRT4VvRu+Yy8kCQGznQLHhChKo1P2Dc=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794489020; v=1; x=1795093820;
- b=sSC54di3GgxMKWcYF2sSz/O0xlW8ZapetPfB185w55XaPUrxYTxmnsq1q7z2OKmPXlczUrBp
- N+e7mA+F8zvvZSV6U7M+EjV5GgZqBIypCf7FmRr77XgHWYqopk6nFS7hiW3QBfDWDximHNd2ovj
- 4QNEu8eHP1y3frIV8evzTZmI=
+ t=1794489036; v=1; x=1795093836;
+ b=MPp9ma1+69EGc5SS0xzpV9Qcfse/6zWaQhbiPa4c3rKsszYw3iM2wbQqIAb43slvtuj7Lk2h
+ IJEkmCW+fsXceR5drcL3Sre8TvCceFyy659u25xDQkbGlA3QjsTWNrneC0NOgQQ0wzcDX0a2bTz
+ hJhByqnNTylZcpbwRO0y/YiI=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 6a1e810a2867f43e;
-	Thu, 12 Nov 2026 13:10:19 +0000
-X-Mizu-Trace-ID: 6a1e810a2867f43e
+Received: by smtp.migadu.com with ESMTPS id d1fb0a55dd6491ca;
+	Thu, 12 Nov 2026 13:10:29 +0000
+X-Mizu-Trace-ID: d1fb0a55dd6491ca
 X-Migadu-Flow: FLOW_OUT
 From: Tao Cui <cui.tao@linux.dev>
 To: tj@kernel.org
@@ -59,9 +59,9 @@ Cc: void@manifault.com,
 	bpf@vger.kernel.org,
 	cui.tao@linux.dev,
 	Tao Cui <cuitao@kylinos.cn>
-Subject: [PATCH 2/6] sched_ext: Make scx_bpf_cid_node() a benign lookup for invalid cids
-Date: Thu, 12 Nov 2026 21:09:30 +0800
-Message-ID: <20261112130934.563321-3-cui.tao@linux.dev>
+Subject: [PATCH 3/6] sched_ext: Return -EBUSY from a pre-init scx_bpf_sub_caps() read
+Date: Thu, 12 Nov 2026 21:09:31 +0800
+Message-ID: <20261112130934.563321-4-cui.tao@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261112130934.563321-1-cui.tao@linux.dev>
 References: <20261112130934.563321-1-cui.tao@linux.dev>
@@ -78,43 +78,65 @@ Content-Transfer-Encoding: 8bit
 
 From: Tao Cui <cuitao@kylinos.cn>
 
-scx_bpf_cid_node() is documented to return NUMA_NO_NODE when @cid is
-invalid or there is no scheduler. Its implementation goes through
-scx_cid_to_cpu(), whose cid_valid() calls scx_error() on an invalid
-value, so an invalid @cid does end at NUMA_NO_NODE, but only after
-flagging the whole scheduler for exit.
+scx_bpf_sub_caps() flags the scheduler for exit when the target's caps
+storage isn't up yet. But the guard's own comment names a legitimate
+way to get there: a scheduler reading its own caps from
+ops.init_cids(), which runs before scx_alloc_pshards() publishes the
+storage. An init_cids() implementation that starts by querying its
+caps, a reasonable thing to do, kills the scheduler it is still
+initializing.
 
-Bounds-check @cid in the kfunc instead, keeping the documented benign
-return and leaving the aborting validation to the paths whose contracts
-call for it.
+Return -EBUSY instead: the caller sees a retryable "not ready yet"
+and the comment's expected scenario stays survivable. This mirrors
+how the cid path already handles the same class of pre-init window:
+reads before the tables are published test the table pointer and
+return -EINVAL instead of killing the scheduler.
 
-Fixes: 5cadf7545cc6 ("sched_ext: Add a CID NUMA node lookup kfunc")
+Fixes: 86094b95efcf ("sched_ext: Add per-shard cap delegation for sub-schedulers")
 Signed-off-by: Tao Cui <cuitao@kylinos.cn>
 ---
- kernel/sched/ext/cid.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ kernel/sched/ext/sub.c | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
-diff --git a/kernel/sched/ext/cid.c b/kernel/sched/ext/cid.c
-index 8e04a8494e11..b09b2c73ccec 100644
---- a/kernel/sched/ext/cid.c
-+++ b/kernel/sched/ext/cid.c
-@@ -690,6 +690,16 @@ __bpf_kfunc s32 scx_bpf_cid_node(s32 cid, const struct bpf_prog_aux *aux)
- 	sch = scx_prog_sched(aux);
- 	if (unlikely(!sch))
- 		return NUMA_NO_NODE;
-+
-+	/*
-+	 * Bounds-check @cid here rather than letting scx_cid_to_cpu() do it:
-+	 * its cid_valid() aborts the scheduler on an invalid value, while
-+	 * this kfunc is documented as a benign lookup that returns
-+	 * NUMA_NO_NODE.
-+	 */
-+	if (cid < 0 || cid >= num_possible_cpus())
-+		return NUMA_NO_NODE;
-+
- 	cpu = scx_cid_to_cpu(sch, cid);
- 	return cpu < 0 ? NUMA_NO_NODE : cpu_to_node(cpu);
- }
+diff --git a/kernel/sched/ext/sub.c b/kernel/sched/ext/sub.c
+index d2da4d2322f8..55e637e7a54a 100644
+--- a/kernel/sched/ext/sub.c
++++ b/kernel/sched/ext/sub.c
+@@ -3081,8 +3081,10 @@ __bpf_kfunc void scx_bpf_sub_revoke(u64 cgroup_id, u64 caps,
+  * child - the literal granted set. A sched can read only itself or a direct
+  * child.
+  *
+- * Return 0, -ENODEV if @cgroup_id names no direct child, or -EINVAL on bad
+- * inputs.
++ * Return 0, -ENODEV if @cgroup_id names no direct child or the caller has
++ * no scheduler, -EINVAL on bad inputs, -EOPNOTSUPP on the cpu form, or
++ * -EBUSY if the target's caps storage is not up yet (expected from a
++ * self-read in ops.init_cids()).
+  */
+ __bpf_kfunc s32 scx_bpf_sub_caps(u64 cgroup_id, u64 caps, struct scx_cmask *out__arena,
+ 				 const struct bpf_prog_aux *aux)
+@@ -3124,15 +3126,14 @@ __bpf_kfunc s32 scx_bpf_sub_caps(u64 cgroup_id, u64 caps, struct scx_cmask *out_
+ 
+ 	/*
+ 	 * The target's caps storage may not be set up yet (e.g. a self-read
+-	 * during ops.init_cids()). Pairs with the publish in
+-	 * scx_alloc_pshards(): a non-NULL pshard has every element set and the
+-	 * acquire also orders the cid table reads below against it.
++	 * during ops.init_cids()); return -EBUSY instead of aborting the
++	 * scheduler. Pairs with the publish in scx_alloc_pshards(): a
++	 * non-NULL pshard has every element set and the acquire also orders
++	 * the cid table reads below against it.
+ 	 */
+ 	pshard = smp_load_acquire(&target->pshard);
+-	if (unlikely(!pshard)) {
+-		scx_error(sch, "scx_bpf_sub_caps() called before caps storage is initialized");
+-		return -ENODEV;
+-	}
++	if (unlikely(!pshard))
++		return -EBUSY;
+ 
+ 	ret = scx_cmask_ref_init(sch, out__arena, &ref);
+ 	if (ret) {
 -- 
 2.53.0
 
