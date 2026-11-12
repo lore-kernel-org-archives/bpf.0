@@ -1,99 +1,64 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.51
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794509174;
-	b=ccS8ePrenY1Sq6Vmm0Q3jlvmJOgj8xH2uO1xn3cmgzgYVyDWqNIHUhjLZbIAc2hlS5bH
-	 PS68763/X8mt9PSgdtSlRn9v8fOS+bjXr6lffmc4A8vFpTZhn8FRyT/RsIPgKTztY5YIA
-	 8/ZiMPterxVHlYFVip1FBl4AYnlhs6VLO0YjZS/5RxSTVB4BfWCOamkkhUeEICUmJb8Al
-	 nphfuJ7/Lzu+ZTFvOuFDchXA3NeLEm9dnKaY/FXjlg3q8eccFxGhrzFv39yBV1tYl0RLv
-	 Anh4wJMQ/KnCpASS48lRFJPiGoJalJ3dWF2sFHHGBKsVbdNU99IFYWVXsjs9bB7t35A==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794509174;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=x3rVQKLNyXgwCalWuHmNjEvs5Zt3d54kCgFpqRsY3Kk=;
-	b=XJXW+Jz8MaGY1DV6RfSA3Iwyfsw6j+fO3qsaRZ7grzXyM+gSRg/o/PGk8vI0TZTQ17gc
-	 Q3q5gyy9m7cWmg6HZr7mpgqYGzbiZKcITSD9VrrwSK1nfYuA8NUbOHWqFNYtwJYlQUmcr
-	 DpMpGKj2NLv+spo36JH1jxicJnb8rXJr2PLJ02VvjIzKVwPZM2mxbidpqZqJeEXOroXCE
-	 4a9dBX/T35Hf7hTvGBX/DG0h/TUSRFRbOG1LMQ/tYkK6hCTfJe1sBYUJJDgEYdSFKjk6J
-	 WhCHTbrmeNws/r5guzbI3JU45B7yWEZi9HUeGEghlV+cHatSwmlo97Fk5EEFlw4MtqQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="Bq/HEmfP";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.51
-Received: from mail-yx1-f51.google.com (mail-yx1-f51.google.com [74.125.224.51])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794509407;
+	b=V4jkB/u6Rr2UMMmRlKIoN7oCu/gZWBwlsgkaHQNwXy11n3MqkOcvhmIfKiR1mJMmrm6e
+	 gWI9DgL0ipTHJXFP/zB8aeZm+Bay6zWCUmd6j/wbYAAiEdA3eFJNPoEP/0mAOWKS9vQVn
+	 LAG9+DKdWy8Of6d6ckTgQ7+whp5bra6umFAEov0emlvee2cPSteFZ/oDyaaThZSx0t7Eh
+	 8RiyXBnHRZYwG6ggHlSZrzKkTidCen/5XCGbuM1BPPnUhuwo+TktSp5RoMBu1rYaAuFxb
+	 dMWRWQqJsIuN1EaGvR4xBnuzk+Bjd8EzKeuqRMf6GTqoe9VIj4hdH9x9iondlR/yfWg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794509407;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=uPqB6/0clUPwkTK+X5/I5kQkFm8UpzxKuRZOpXIFmTY=;
+	b=dCW+AYS6GgZ+nye7GrYHSKvEt4O+sdUrODklOn8kmFWYSa5M7oFIAiwAajqoKXk15c4J
+	 n68oLkQn/s/fcPVVTLUFUgbcT+7LAO5lD77kOEMf0QJNVe0FT/glagGA0huzvANOk2LvN
+	 xQhdIYFiMgogtst82POAkCv7y+qyjzv4nsNaEALPDwt3ii4SshgA2Yc6NlNgAmtUwcGUB
+	 gYTdTJPVsGuupx8+w99904gVKYwNsSu9p0FC1iW0ap2zF/vZeCjzBaWCxxkb6GTLpKUV5
+	 ImYL7YAkyhOovRpW03zS+04UsyOwZbuII84KLvvJd2xXSjBwjjpeTrKyqWzCotvOY8Q==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="c2eQP+/O";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B00B2606A336
-	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 18:46:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B00B2606A336
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD147606A321;
+	Thu, 12 Nov 2026 18:50:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Bq/HEmfP
-Received: by mail-yx1-f51.google.com with SMTP id 956f58d0204a3-677bc4704cbso149906d50.0
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 10:46:13 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794509173; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ORlJjc5KxyCKHLTRmywj7LbW0sqcSIBLVqEimFIxAreg2dzfsPvbE0OJsdZxFlXRuM
-         N3kTs+scUQMw5pj2r6lyopjBufQGzH/u+lgbVIj4/UwQP4cLDl9f4Tsxczjp9jrbR7Ny
-         SyYL5WZx2xhxqDZ6MRzVOa6vIySf7lN+7DTEasu3/JfJ6dP8Rb0i5g3aRX+6Vg9+sMsx
-         2ex+S4VxoZ5L2vwbQWX1Csq954BciET+hf2RHfD1jhHdlw5Rely4LyUlXl8RC8aXBE+V
-         ZUOLJjxSJfNtRNX2eJnbuPQXOYkcXPckt3+9uX4Cn7Aa9nmaHEigaeckM7ARR01zPdWp
-         xsFw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=x3rVQKLNyXgwCalWuHmNjEvs5Zt3d54kCgFpqRsY3Kk=;
-        fh=R8BU2yF4CrhD2szyM+OdVFJqHyACMniUSKqaOjdXodo=;
-        b=sCT2zT02UNAk6syrMcUJgtoH3deV4IihbSxgVT0hBmnub3o4kinHOk8wbE7w6URXj7
-         fXXQvDojQWf0HyCap8BgbrmdczAVJLTW5mQJThH18F/EwbFQKLGbHnoGpvdyQE/uZ0SR
-         U5WUOdmg4x1QgDspy0oSB4g4oF8hkA78HXE5oFHd2FQuhAOsi/1ggFFfSPiSV78RxSWs
-         5vABqsyzBjlYpAPrTC1UWU6V6fqkzGVauRIsCHrOyPzeS7tiAOsMszcmCaQFlh8R0XX8
-         NZgOTSjrRHG67h4l/5lcNXyJgYvGA9qviECSKuetO4Car0zs0Y7bJgqYCoUNcpkpQ76J
-         XwZQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794509173; x=1795113973; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=x3rVQKLNyXgwCalWuHmNjEvs5Zt3d54kCgFpqRsY3Kk=;
-        b=Bq/HEmfPsxRrBbzAXNyJJfHucRLuhzK77L4t/Pk4tybSrTM/szEkDr3kvuDeUmMjpw
-         J0Qx0DG/zkHeYfIo1YlNZmB7muL78EZeuMzg2tkOo75jcwc0udrwwqV3rehNuYU4Vx9e
-         7YcFl9NhIFksS2kfivkSt/lJbgcux5N5kH616AKvu035FH0lRpHvBQdOUx7fXZBg8IxW
-         3fqTs0CyJid7CK444UJKacxi6EkzvNjWUD1cvSih+D3TIAbtbuX+weLUz/hCG3a1FX2U
-         IOyaHXXBbNrPpcRciYmrvQXBEezj7QVnOxe9fMgN5u4iV/mmO7hVVMKu484/OloYKeSQ
-         Ap0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794509173; x=1795113973;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=x3rVQKLNyXgwCalWuHmNjEvs5Zt3d54kCgFpqRsY3Kk=;
-        b=ysHExU4xkV8iVLLaRtwt8cXTfvnMkVsDS+WLofwXEkQoRNIDdFnJB/Tckcb0vUJzig
-         XwmoUBlCv4RmBtJbqSqIg+PY20eYFRG+dv6b/Y7BiwlRuvagltgV7W376WvlhVZcKGnX
-         RDnpHGXRsDHVkqAptrWKO/fNNrbqHtLdKf8q1yXEuucHgSOhL+vMXVrHQKMjs8hBWdfD
-         8SrrzgT4HaMg9xHfn5rVPkiFygwsJ0PX5yZDAQAfK9g9TWnBiim/1DFNWo9N8i4H2QPV
-         +5CvwBgEAY+Y14BjW3bnRh+7pKL1dB+sT7f5YFAMUgaz8bZrThXUbDmIHpARmSbqAGbN
-         dKWg==
-X-Gm-Message-State: APuU4Z/9pn7wcDw1H6U15dIg+bg6tmHqUhHrffScr2oRlbVGJfYQn68e
-	Nu2IFKuiefIBFrCKA5O0nQAi1IwT9QmFD9mfKiiXvbEBd33WT2YAdikV+f4xxk8RPBSQgpelnri
-	UrV6QE1E3dl7j7trDk54pb5rrqzZwd25tRs+vkRA=
-X-Gm-Gg: AYBFou2FDyoZRx3j/wHI87j4xjY+LI91Q37KNXb6gwurYdZUHNqY1QnSVJUjRBo7y+l
-	C56vNFn5gGZW6CFUJdxrPgTtJ3nduY8H0PDHBHDviE0UtgAiBZDhKfbjUeVmhddiuoPxVEnvhMK
-	AqepQy14CqFZdODbVUzn0sr3V9nSa8QpJdGn588zRVa/0uyFftrCWIjHg1SXTh9He8/Z4lClzzJ
-	xmcHI4t6pygqs4iEUj0z7yOzLK7Osx1OmZhNX/RtyUa6WutHHkTf8IJCH6TmosGLFw5eY109Br7
-	iY+Xu7Y3tvZZbWn8zThKpVfLGJzwUVfrW4CiUewhf12qxnfqJB4oOn0VRIpqly+b4RN67blYuln
-	V5/aibCxrcP/mngaeoZdSuz95VkfWAq0TOyh+bQ==
-X-Received: by 2002:a05:690e:4002:b0:67c:1557:7b4f with SMTP id
- 956f58d0204a3-67d897cc499mr144350d50.141.1794509172542; Thu, 12 Nov 2026
- 10:46:12 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=c2eQP+/O
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 069D51F000C4;
+	Thu, 12 Nov 2026 18:50:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794509407;
+	bh=uPqB6/0clUPwkTK+X5/I5kQkFm8UpzxKuRZOpXIFmTY=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=c2eQP+/OmBtccN6lFP3HYFxFG8agGWrDI1ZXY/qzbQbBLl9kz0DtpxOocyCBeQh/1
+	 P/GJX5SY2nNJT4ZjDvY7qfUJOKzOnJEtsmCPA0PNiZ8DY/kvJ0WuFEHcet0S5vEkLZ
+	 p94CGqnBzPefm6Xkw2QIA2aXbo77Y+eyyqSr/ikhqeI4OdxK30UzH6kC1dynETqKWr
+	 cyG1PQpeMpAJ67J2cjI8+TjpsgcIajdVA1myeYV3IdZbbkblQe5LZfore+ergk6LBG
+	 Kqfod2wBo2GGDO1uErPTdY4/hDbA/JE4xTiW4TO4JS4C7rWT7Ta+tPR51DCSdkibnC
+	 q6m8EjZlYY8LQ==
+Subject: Re: [PATCH net-next V2 1/2] net/mlx5e: Batch NAPI RCU grace periods
+ on channel close
+From: netdev-bot+sashiko@kernel.org
+To: tariqt@nvidia.com
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
+ kuba@kernel.org, netdev@vger.kernel.org, pabeni@redhat.com, ast@kernel.org,
+ bpf@vger.kernel.org, cjubran@nvidia.com, cratiu@nvidia.com,
+ daniel@iogearbox.net, dtatulea@nvidia.com, gal@nvidia.com, hawk@kernel.org,
+ john.fastabend@gmail.com, leon@kernel.org, linux-kernel@vger.kernel.org,
+ linux-rdma@vger.kernel.org, lirongqing@baidu.com, mbloch@nvidia.com,
+ richardcochran@gmail.com, saeedm@nvidia.com, shshitrit@nvidia.com,
+ sdf@fomichev.me
+Date: Thu, 12 Nov 2026 18:50:05 +0000
+Message-ID: <179450940555.2199510.18034823087861989713@kernel.org>
+In-Reply-To: <20261110185005.2932568-2-tariqt@nvidia.com>
+References: <20261110185005.2932568-2-tariqt@nvidia.com>
+X-sashiko-severity: High
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,320 +68,261 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261112164610.1917256-1-alexei.starovoitov@gmail.com>
-In-Reply-To: <20261112164610.1917256-1-alexei.starovoitov@gmail.com>
-From: Anton Protopopov <a.s.protopopov@gmail.com>
-Date: Thu, 12 Nov 2026 19:46:01 +0100
-X-Gm-Features: AclHuK-4w17Lo6YKPSWizS3VdkazWV9aFW6Z67O90E00UP20KEfYwfKexz2nclk
-Message-ID: <CAGn_itym+8YRWMXS7-EUfewVXtct0fF2nPE-V4v2YoOeDM8MaQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 00/10] bpf: fmod_ret for each function that
- returns errors
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	eddyz87@gmail.com, memxor@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 12, 2026 at 5:46=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> From: Alexei Starovoitov <ast@kernel.org>
->
-> In short: with CONFIG_BPF_FMODRET_SCAN=3Dy the build tags the functions t=
-hat
-> return errors, 12633 of them. A program with CAP_BPF and CAP_PERFMON can
-> attach to one, skip a call and return one of its errors. No file of net,
-> fs or mm changes. Test: one skipped call per function, 4401 functions of
-> net, fs, mm. With this set 1 function in 180 then damages the kernel. A
-> deny list by name can take those out.
->
-> 1. What for?
-> BPF can keep user space away from a security bug in the rest of the kerne=
-l
-> until the fixed kernel runs. An fmod_ret program attaches to a function o=
-n
-> the way to the bug and fails the bad call:
->   SEC("fmod_ret/vfs_fallocate")    return len > MAX_LEN ? -EFBIG : 0;
->   err =3D vfs_fallocate(..) --> program
->                                returns 0      --> call it, err =3D its re=
-sult
->                                returns -EFBIG --> skip it, err =3D -EFBIG
-> Such a program needs targets in net, fs and mm. Today it has 1000 syscall
-> entries, the security hooks and about 20 other functions. Of 417 fixes of
-> one year that add a failing check to a function, the fixed function is a
-> target: today 1 %, v3 (4) 17 %, this set 50 %.
->
-> 2. What is a target?
->   THE RULE  A function f() that returns errors is a target.
->             A program returns 0, or an error that f() returns.
->   EXCEPTION An error is not allowed if each path to its "return" calls a
->             void function with a pointer: an argument of f() or
->             &arg->member, not a loaded arg->ptr.
->             If no error is left, f() is no target.
-> A caller can get each of these errors today, without a program. The rule
-> is simple on purpose. It does not aim at 100 % safety (5).
-> Why the exception? "spin_unlock(&arg->lock); return -EBUSY;". If f() fail=
-s,
-> the lock is free. A skip of f() leaves the lock held. So a program cannot
-> return this -EBUSY (5).
-> A program can only fail a call. Loss of function is the purpose: a progra=
-m
-> that switches off a part of netfilter to keep a bug out of reach works as
-> designed. Who may load does not change: CAP_BPF and CAP_PERFMON, or a BPF
-> token. An attach does not taint the kernel, as today.
->
-> 3. How are targets found?
->   vmlinux, *.ko      machine code of GCC or clang, inlined and linked
->   resolve_btfids     "the tool". It runs at the link, after pahole
->     | 1 decode       LLVM's MC (machine code) layer gives the length, the
->     |                branches, the written and the read registers
->     | 2 analyse      data flow, backward, may, like liveness: the constan=
-ts
->     |                -4095..-1 that reach the return value register.
->     |                Forward, may: is a path free of the exception's call=
-?
->     v 3 tag
->   DECL_TAG 'bpf_fmodret_retval:-95,-29,-27,-26,-22,-21,-19,-9,-1'
->            on FUNC 'vfs_fallocate'. This is "the list" of vfs_fallocate()
->     v verifier       at load
->   The program attaches. At each exit R0 is 0 or an error of the list.
->
-> 4. What do I get, and what is the price?
-> v3 is "[PATCH v3 bpf-next 00/18] Auto-detect BPF fmodret targets" by Anto=
-n
-> Protopopov. This set is a rework of v3. The idea, resolve_btfids as the
-> place, the tag, the check, the tests, and that Kconfig asks llvm-config a=
-nd
-> a host C++ compiler are his. So is the question behind the exception: wha=
-t
-> has f() done before the error?
->
->                      targets   kernel damage   the build reads
->   allowed today         1290    not measured   -
->   v3                    4457           0.2 %   LLVM IR, in a clang plugin
->   this set             12633     0.6 - 0.7 %   machine code, GCC or clang
->   targets: tags in one x86-64 clang kernel. GCC: 11985. arm64: 11601.
+Thank you for your contribution! Sashiko AI review found 3 potential
+issue(s) to consider.
 
-Just in case, I've got 16524 on x86, and 15149 on my arm.
+Critical: 0 · High: 2 · Medium: 0 · Low: 1
 
->   A program can attach to 12096 of the 12633, and to 4454 of v3's 4457.
->   kernel damage: the share of the functions in net, fs, mm where one
->   injected error ends in a panic, a stall or a lockdep report (5). 0.7 %:
->   a second run, and a blind run on new functions.
->   allowed today: 957 syscall entries, 312 security_*(), 21 others. They a=
-re
->   no safe baseline. security_*() is a match by name: 47 are internals of
->   SELinux, 59 return void, 12 are hooks that BPF LSM refuses. The value
->   that a program returns is not checked. This set does not change that.
-> v3's rule: a "clean path", one without side effects, leads from the entry
-> to "return -E..". A call, a store or a shared "goto err" label ends it.
-> The exception (patch 8) takes v3's clean path and narrows what ends it:
-> only a call of a void function on an argument.
->
-> 5. Does the kernel survive?
-> An injection: one program attaches to one tagged function. At one call it
-> returns one error of the list, whoever calls. The control attaches and
-> always returns 0. The kernel is x86-64 GCC with inline KASAN, lockdep,
-> kmemleak and a wide config. The workload is 530 tests and scripts, mostly
-> selftests. It calls 8027 tagged functions, 4401 of them in net, fs, mm.
-> Each gets one injection:
->
->                                          panic
->                                          oops
->                                kernel    BUG()   hang   lock
->                   functions    damage    KASAN   stall  dep    WARN   lea=
-k
->   net                  2716   25  0.9 %     20      4     1      14     3=
-4
->   fs                   1307   18  1.4 %      5     13     0       4      =
-2
->   mm                    378    7  1.9 %      6      1     0       2      =
-0
->   net + fs + mm        4401   50  1.1 %     31     18     1      20     3=
-6
->     error is dropped    290   27  9.3 %     16     10     1       1     1=
-6
->     error stays        4111   23  0.6 %     15      8     0      19     2=
-0
->       v3 has it too     903    2  0.2 %      2      0     0       3      =
-1
->       only this set    3208   21  0.7 %     13      8     0      16     1=
-9
->   kernel damage =3D the three columns right of it. WARN stands apart.
->   A leak is the lowest concern: it is not in the rate.
->   The run has the lists without the exception. "error is dropped": the
->   exception takes the injected error out of the list.
->
->  1 With the exception about 1 function in 180 damages the kernel after on=
-e
->    injection. It is not 1 in 2, not 1 in 10.
->  2 The exception takes out 27 of the 50 cases, for 7 % of the functions.
->    These 27 functions have no error left: no tag, no attach. The exceptio=
-n
->    comes from this run. In a blind run on 632 new functions: 3 of 9 cases=
-.
->  3 v3's rule is safer per function, 0.2 % against 0.7 %. It has far fewer
->    functions: 903 of the 4111.
->  - Of all 8027 injections 48 % only give user space an error, 50 % nothin=
-g.
->  - 354 of 355 runs of the control are clean. A second harness with its ow=
-n
->    program sees all 50 cases again.
->  - Are the 50 cases bugs in the kernel? By the source of each case: at mo=
-st
->    2 are, on an error path. In the other 48 a real failure of f() at that
->    call does not do that damage, or cannot happen.
->
->   A skip of f() is not a failure of f(). 38 of the 50 cases come from tha=
-t.
->   The exception of (2) is made for them. It closes 26 of the 38. An
->   example, fs/file.c. ksys_dup3() takes the lock and ends with
->   "return do_dup2(..)":
->       static int do_dup2(..) __releases(&files->file_lock)
->       ..
->       Ebusy:
->               spin_unlock(&files->file_lock);
->               return -EBUSY;
->       do_dup2() fails        dup2() =3D -EBUSY, the lock is free
->       do_dup2() is skipped   dup2() =3D -EBUSY, the lock stays held
->   With this set do_dup2() has no tag: a program cannot attach to it. The
->   tool sees that in the machine code. It needs no name and no __releases(=
-):
->       mov  %rdi,%r13           r13 =3D files: a pointer argument
->       lea  0xc0(%r13),%rdi     rdi =3D &files->file_lock: no load
->       call _raw_spin_unlock    BTF: it returns void and takes a pointer
->       mov  $0xfffffff0,%eax    -EBUSY: each path to it has this call
->   A void function cannot fail: it has done its work when f() returns the
->   error. The caller relies on that work, and a skip leaves it out. Most
->   unlock, put, free and init functions return void. A function that retur=
-ns
->   a value can be the one that failed: it does not count.
->   v3 has no do_dup2() either: the unlock ends its clean path.
->   Functions with __releases() and no __acquires() that have a tag, withou=
-t
->   and with the exception: 7 and 0 in this kernel, 4 and 0 in the GCC kern=
-el
->   of (4), 3 and 1 with clang and on arm64.
->
->   What stays? In four runs, all directories, 169 functions cause kernel
->   damage in this kernel. The exception takes out 55. A deny list by name,
->   not in this set, can take out the other 114, 55 of them in net, fs, mm.
->
-> 6. What does it cost me?
->   CONFIG_BPF_FMODRET_SCAN    option off   option on
->   each Kconfig run           +3 ms        +3 ms: one run of llvm-config
->   build host                 as today     C++17, llvm-config, headers and
->                                           libraries of LLVM 17 or later
->   the tool on vmlinux        0.31 s       0.9 s, after 4.3 s of pahole
->   BTF of vmlinux             8.02 MB      8.25 MB =3D +2.9 %
->   kernel memory              -            +0.33 MB: BTF and its index
->  - Nobody gets the option without a question: no default, not in defconfi=
-g.
->    allmodconfig and allyesconfig have no BTF, so they do not have it.
->  - A GCC build needs LLVM too. It need not be the LLVM of the compiler.
->  - LLVM's C++ API and opcode names change between releases. The build the=
-n
->    stops and says why. So a new LLVM can stop the build of an old kernel
->    with the option on.
->  - x86-64 and arm64 only.
->  - No file outside of BPF's entries in MAINTAINERS changes.
->
-> 7. Why this rule? Why machine code? Why LLVM?
->   the rule (* =3D taken)                 targets  against it
->   v3: an error on a clean path            4457  17 % of the fixed f() (1)
->   an error reaches a return              13549  0.9 - 1.3 % kernel damage
-> * the same with the exception            12633  0.6 - 0.7 % (5, patch 8)
->   + the errors of callees               + 40 %  3 - 6 % are never returne=
-d
-> v3's promise holds in the machine code for each of its 5249 errors. The
-> exception drops none of them.
->
->   who reads what               lines  against it
->   v3: clang plugin, LLVM IR    +1913  no GCC, no LTO yet
->   objtool, v3's rule           +1272  no arm64
-> * resolve_btfids at the link   +2118  LLVM on the host
->   lines: the part that finds and tags.
-> The rule makes the targets, not the reader. A plugin with "an error reach=
-es
-> a return" finds 14229. But a plugin serves one compiler, before the link.
-> Why LLVM? A decoder by hand is 300 - 800 lines per arch, for ever. The MC
-> layer takes 538 lines, and a table of 137 (x86-64) or 123 (arm64) lines:
-> what an opcode computes, by opcode name. The tool checks the table agains=
-t
-> LLVM at each start. LLVM's C API gives only text, so it is C++ (patch 3).
->
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
->
-> Alexei Starovoitov (5):
->   selftests/bpf: Don't depend on the width of a BTF id in
->     verifier_live_stack
->   resolve_btfids: Describe machine instructions with LLVM's MC layer
->   resolve_btfids: Fold the constants of a select without a branch
->   resolve_btfids: Say which registers an instruction reads
->   resolve_btfids: Don't list an error that follows work on an argument
->
-> Anton Protopopov (5):
->   resolve_btfids: Read the code of an ELF file by address
->   resolve_btfids: Find the definitions that reach the return value
->   resolve_btfids: Tag the functions that return errors
->   bpf: Allow fmod_ret on tagged functions and check the return value
->   selftests/bpf: Test fmod_ret on tagged functions
->
->  include/linux/bpf.h                           |   2 +
->  include/linux/bpf_verifier.h                  |   2 +
->  kernel/bpf/Kconfig                            |  19 +
->  kernel/bpf/verifier.c                         |  83 ++++
->  scripts/Makefile.btf                          |   1 +
->  tools/bpf/resolve_btfids/Build                |  13 +
->  tools/bpf/resolve_btfids/Makefile             |  23 +-
->  tools/bpf/resolve_btfids/fmodret.c            | 185 ++++++++
->  tools/bpf/resolve_btfids/fmodret.h            |  12 +
->  tools/bpf/resolve_btfids/fmodret_scan.c       | 259 +++++++++++
->  tools/bpf/resolve_btfids/fmodret_scan.h       |  29 ++
->  tools/bpf/resolve_btfids/image.c              | 222 +++++++++
->  tools/bpf/resolve_btfids/image.h              |  62 +++
->  tools/bpf/resolve_btfids/llvm-mc.sh           |  59 +++
->  tools/bpf/resolve_btfids/main.c               |  11 +
->  tools/bpf/resolve_btfids/text_flow.c          | 262 +++++++++++
->  tools/bpf/resolve_btfids/text_flow.h          |  77 ++++
->  tools/bpf/resolve_btfids/text_insn.h          |  87 ++++
->  tools/bpf/resolve_btfids/text_mc.cpp          | 431 ++++++++++++++++++
->  tools/bpf/resolve_btfids/text_mc.h            | 107 +++++
->  tools/bpf/resolve_btfids/text_mc_arm64.c      | 123 +++++
->  tools/bpf/resolve_btfids/text_mc_x86.c        | 137 ++++++
->  tools/testing/selftests/bpf/config            |   1 +
->  .../selftests/bpf/prog_tests/fmodret_retval.c | 152 ++++++
->  .../selftests/bpf/progs/fmodret_retval.c      | 168 +++++++
->  .../selftests/bpf/progs/fmodret_retval_ext.c  |  18 +
->  .../selftests/bpf/progs/verifier_live_stack.c |   6 +-
->  .../testing/selftests/bpf/test_kmods/Makefile |   8 +
->  .../selftests/bpf/test_kmods/bpf_testmod.c    |   4 +-
->  .../bpf/test_kmods/bpf_testmod_retval.c       | 131 ++++++
->  30 files changed, 2689 insertions(+), 5 deletions(-)
->  create mode 100644 tools/bpf/resolve_btfids/fmodret.c
->  create mode 100644 tools/bpf/resolve_btfids/fmodret.h
->  create mode 100644 tools/bpf/resolve_btfids/fmodret_scan.c
->  create mode 100644 tools/bpf/resolve_btfids/fmodret_scan.h
->  create mode 100644 tools/bpf/resolve_btfids/image.c
->  create mode 100644 tools/bpf/resolve_btfids/image.h
->  create mode 100755 tools/bpf/resolve_btfids/llvm-mc.sh
->  create mode 100644 tools/bpf/resolve_btfids/text_flow.c
->  create mode 100644 tools/bpf/resolve_btfids/text_flow.h
->  create mode 100644 tools/bpf/resolve_btfids/text_insn.h
->  create mode 100644 tools/bpf/resolve_btfids/text_mc.cpp
->  create mode 100644 tools/bpf/resolve_btfids/text_mc.h
->  create mode 100644 tools/bpf/resolve_btfids/text_mc_arm64.c
->  create mode 100644 tools/bpf/resolve_btfids/text_mc_x86.c
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/fmodret_retval=
-.c
->  create mode 100644 tools/testing/selftests/bpf/progs/fmodret_retval.c
->  create mode 100644 tools/testing/selftests/bpf/progs/fmodret_retval_ext.=
-c
->  create mode 100644 tools/testing/selftests/bpf/test_kmods/bpf_testmod_re=
-tval.c
->
->
-> base-commit: 2e14a351662dc5a3b7421d210049c59edd0425d2
-> --
-> 2.55.0
->
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [High] PTP SQ recovery loses the RCU/NAPI grace period that used to
+  separate the PTP napi_disable from freeing the PTP CQs, which can…
+- [High] net/mlx5e: missing grace period after page_pool_destroy() in
+  channel close
+- [Low] The patch adds an unmentioned change in XSK teardown state
+  tracking and several copies of teardown sequences that will have to be…
+
+--
+
+net/mlx5e: Batch NAPI RCU grace periods on channel close
+
+This patch splits mlx5e channel deactivate and close into pre_sync and
+post_sync phases, so one synchronize_net() covers all channels instead
+of one per queue. NAPI instances are unlinked with
+__netif_napi_del_locked(), and a single grace period runs before the
+channels are freed. Single-queue paths keep their per-object
+synchronize_net() calls.
+
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> index c3c2c5720c6f3..73b504ba8c8c6 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+
+[ ... ]
+
+> @@ -2936,35 +2993,62 @@ static void mlx5e_activate_channel(struct mlx5e_channel *c)
+
+[ ... ]
+
+> -static void mlx5e_close_channel(struct mlx5e_channel *c)
+> +static void mlx5e_close_channel_pre_sync(struct mlx5e_channel *c)
+>  {
+>  	if (test_bit(MLX5E_CHANNEL_STATE_XSK, c->state))
+> -		mlx5e_close_xsk(c);
+> -	mlx5e_close_queues(c);
+> -	mlx5e_qos_close_queues(c);
+> -	netif_napi_del_locked(&c->napi);
+> +		mlx5e_close_xsk_pre_sync(c);
+> +
+> +	if (c->xdp)
+> +		mlx5e_close_xdpsq_pre_sync(&c->rq_xdpsq);
+>  
+> +	if (c->xdpsq)
+> +		mlx5e_close_xdpsq_pre_sync(c->xdpsq);
+> +}
+> +
+> +static void mlx5e_close_channel_post_sync(struct mlx5e_channel *c)
+> +{
+> +	if (c->xskrq.xsk_pool)
+> +		mlx5e_close_xsk_post_sync(c);
+> +	mlx5e_close_queues_post_sync(c);
+> +	mlx5e_qos_close_queues_post_sync(c);
+> +}
+
+[Severity: Low]
+This isn't a functional bug, but the XSK teardown decision here now uses
+c->xskrq.xsk_pool instead of MLX5E_CHANNEL_STATE_XSK. That is because
+mlx5e_close_channel_pre_sync() clears the state bit before post_sync
+runs.
+
+For the new check to work, the error path in mlx5e_open_xsk() in
+en/xsk/setup.c now does:
+
+	c->xskrq.xsk_pool = NULL;
+	c->xsksq.xsk_pool = NULL;
+
+The commit message mentions neither change. Could it explain that
+xsk_pool is now the liveness flag for XSK teardown?
+
+The patch also adds several copies of existing teardown sequences:
+
+  - mlx5e_close_queues_post_sync() is a near line-by-line copy of
+    mlx5e_close_queues(). The original is still used by the
+    err_close_queues path in mlx5e_open_channel().
+
+  - mlx5e_close_channels_post_sync() open-codes mlx5e_ptp_close() as
+    mlx5e_ptp_close_queues() plus kvfree(). mlx5e_ptp_close() is still
+    used by the error handling in mlx5e_open_channels() and by the PTP
+    recovery in en/reporter_tx.c.
+
+  - mlx5e_close_locked() open-codes the same sequence as
+    mlx5e_deactivate_priv_channels() followed by
+    mlx5e_close_channels(), with the same two grace periods.
+
+If a resource is later added to only one copy, either the batched close
+path or the error/recovery path will skip its cleanup.
+
+Could the single-object variants be written as pre_sync, then
+synchronize_net(), then post_sync? And could mlx5e_close_locked() keep
+calling the existing wrappers?
+
+[ ... ]
+
+> @@ -3060,32 +3144,67 @@ static int mlx5e_wait_channels_min_rx_wqes(struct mlx5e_channels *chs)
+>  	return err ? -ETIMEDOUT : 0;
+>  }
+>  
+> -static void mlx5e_deactivate_channels(struct mlx5e_channels *chs)
+> +static void mlx5e_deactivate_channels_pre_sync(struct mlx5e_channels *chs)
+>  {
+>  	int i;
+>  
+>  	if (chs->ptp)
+> -		mlx5e_ptp_deactivate_channel(chs->ptp);
+> +		mlx5e_ptp_deactivate_channel_pre_sync(chs->ptp);
+>  
+>  	for (i = 0; i < chs->num; i++)
+> -		mlx5e_deactivate_channel(chs->c[i]);
+> +		mlx5e_deactivate_channel_pre_sync(chs->c[i]);
+>  }
+>  
+> -void mlx5e_close_channels(struct mlx5e_channels *chs)
+> +static void mlx5e_deactivate_channels_post_sync(struct mlx5e_channels *chs)
+> +{
+> +	int i;
+> +
+> +	if (chs->ptp)
+> +		mlx5e_ptp_deactivate_channel_post_sync(chs->ptp);
+> +
+> +	for (i = 0; i < chs->num; i++)
+> +		mlx5e_deactivate_channel_post_sync(chs->c[i]);
+> +}
+
+[Severity: High]
+Does freeing the channels here need another grace period after the
+page pools are destroyed?
+
+mlx5e_alloc_rq() creates rq->page_pool with pp_params.napi set to
+rq->cq.napi. That is &c->napi for regular channels and &ptp->napi for
+PTP, and both are embedded in the structs freed here.
+
+When an in-flight skb backed by that pool is freed in softirq on
+another CPU, page_pool_napi_local() does READ_ONCE(pool->p.napi) and
+then reads napi->list_owner without any lock.
+
+pool->p.napi is only cleared in page_pool_disable_direct_recycling().
+That runs from page_pool_destroy(), reached from mlx5e_close_rq()
+through mlx5e_free_rq().
+
+Before this patch, mlx5e_close_channel() ran mlx5e_close_queues()
+first and only then called netif_napi_del_locked(). Its
+synchronize_net() covered any softirq that had loaded the old
+pool->p.napi before kvfree(c) ran.
+
+In the batched path, the only grace period runs between
+mlx5e_close_channels_pre_sync() and mlx5e_close_channels_post_sync().
+At that point pool->p.napi still points at the embedded napi.
+
+post_sync then calls mlx5e_ptp_close_queues() and
+mlx5e_close_channel_post_sync(), which clear pool->p.napi. It then
+immediately calls kvfree() on chs->ptp and chs->c[i].
+
+page_pool_scrub() only calls synchronize_net() when
+dma_dev_need_sync() is true. So on DMA-coherent platforms nothing
+waits here.
+
+A softirq that read pool->p.napi just before it was cleared can then
+read list_owner from freed memory. If the stale value matches the
+current CPU, it would also take the direct recycling path into a pool
+that is being torn down.
+
+This affects mlx5e_close_locked() and every mlx5e_close_channels()
+caller, for example ip link set down or a channel count change. The
+single-channel mlx5e_close_channel() still does
+netif_napi_del_locked() after post_sync, so it looks unaffected.
+
+Would it work to destroy all the queues in post_sync, issue a second
+synchronize_net(), and only then kvfree() the channels and PTP? That
+keeps the cost at a fixed number of grace periods. Or is the
+page_pool core meant to provide this guarantee, and I am missing it?
+
+[Severity: High]
+Is the PTP SQ recovery path still safe after this change?
+
+mlx5e_tx_reporter_ptpsq_unhealthy_recover() in en/reporter_tx.c does:
+
+	mlx5e_deactivate_priv_channels(priv);
+
+	mlx5e_ptp_close(chs->ptp);
+
+Before this patch, mlx5e_deactivate_channels() ran
+mlx5e_ptp_deactivate_channel() first, which ends in
+napi_disable_locked(). It then ran mlx5e_deactivate_channel() for each
+channel. Those calls did several synchronize_net() calls through
+mlx5e_deactivate_rq(), mlx5e_deactivate_icosq() and
+mlx5e_deactivate_txqsq(). So a grace period always followed the PTP
+napi_disable_locked().
+
+Now the single synchronize_net() in mlx5e_deactivate_priv_channels()
+runs before post_sync. mlx5e_ptp_deactivate_channel_post_sync() calls
+napi_disable_locked(), and nothing waits after it.
+
+mlx5e_ptp_close() then frees the queues before netif_napi_del_locked():
+
+	mlx5e_ptp_close_queues(c);
+	netif_napi_del_locked(&c->napi);
+
+	kvfree(c);
+
+The call chain mlx5e_ptp_close_queues()->mlx5e_close_cq()->
+mlx5e_free_cq()->mlx5_wq_destroy() frees the CQ buffer, and frees the
+doorbell record through mlx5_db_free().
+
+Meanwhile, mlx5e_ptp_napi_poll() keeps running under rcu_read_lock()
+after napi_complete_done():
+
+	if (unlikely(!napi_complete_done(napi, work_done)))
+		goto out;
+
+	ch_stats->arm++;
+
+	if (test_bit(MLX5E_PTP_STATE_TX, c->state)) {
+		for (i = 0; i < c->num_tc; i++) {
+			mlx5e_cq_arm(&c->ptpsq[i].txqsq.cq);
+			mlx5e_cq_arm(&c->ptpsq[i].ts_cq);
+
+napi_disable_locked() only waits for NAPIF_STATE_SCHED and
+NAPIF_STATE_NPSVC to clear. Can it return while the poller is still in
+this arm section?
+
+If so, mlx5e_cq_arm() could write through mcq->arm_db into a doorbell
+record that has been freed, or that mlx5_db_alloc() has already given
+to another queue. It would also ring the UAR for a destroyed CQN.
+
+The other callers of mlx5e_deactivate_priv_channels() look fine:
+mlx5e_switch_priv_channels(), the ipoib paths and mlx5e_queue_start()
+go on to mlx5e_close_channels() or mlx5e_close_channel(), and both call
+synchronize_net() before freeing. So this seems limited to the PTP
+recovery path.
+
+The later patch in this series ("net/mlx5e: Batch ICOSQ trigger RCU
+synchronization") does not touch this path either.
+
+Would either of these close the window?
+
+  - Add synchronize_net() before mlx5e_ptp_close() in the recovery
+    path.
+
+  - Have mlx5e_ptp_close() call __netif_napi_del_locked() and
+    synchronize_net() before mlx5e_ptp_close_queues(), as the batched
+    close path now does.
+
+[ ... ]
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261110185005.2932568-1-tariqt%40nvidia.com
