@@ -1,76 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.44
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794513458;
-	b=1anX/uCg2hwk/P/8eMTdM61jHBrAPfemEo697vniGIg4i9436W2+FzYM5+CARlRVjRpL
-	 N3fkzXNkZLskJjsSCmx71PwEAwG+IDOTGfxRvc3ycICXcIZJJv63CNOPOHqJfm+GzaWYC
-	 U8DrAT4ZgDM4aUhidB8/zrUQ5InK7sIEQCMn9yKSFveMpvEjt1oBaMCTMh61Cirqkm40G
-	 6VCJwWmKWNjhTSFAZwtKUM6N5OIvUE7WbT4v8WUaM2db37ecuQBNirV0kHtaJsNnLiYM3
-	 H+tthZzGXzTmsUW7oW6lD9eIywuYRq7ZURvzWLgvKOneNzzzOS5ksx2uhK/+SnjiRdg==
+	t=1794513549;
+	b=p0brEdy0zU5WwUIbV0ScLKNhVeQVc72MTgmd7Z8acqYnb/rW34+v00jocH24c6zYTLOD
+	 UibqoqPD4nAb+BjjR8JCMW+8pN+WMS+CwtP23DRFY0S7LDrpKvcr220fiLDBhkfLUqpi7
+	 Azgulb7vEqngCvBewuk5hYjIfk8vpBfp4MbbCkoleVyl8hSsp0ChW7Q5QemH0YNWMFoJb
+	 ZHx2lKpFklAHaBi8xgrAbebShgrPveakiCozgZpQ9pY0TNHQuqVGCRKS4TM8WPTJrl644
+	 uwaKAErlPFA3KdKfTC2m9toeIinA4XMgYUzolNWXjDiAOpOMvmYVEoU9BnktTlez1aA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794513458;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
-	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=7guJMRRaIyBXSu5q1TNtm5fdzWXrkWkE2iKaLV14h3U=;
-	b=kvJJnBIpXnEqbemn+vE3lTmWItKPdXdrUOdApZUt/qlOGSO3cRJ6ECavnAfNrmhbjNSA
-	 74VGnb/jq3zhXW7f3mRbSiX9pZSoJUFqdB+RywRvkwTt4MZjis1pBCTk3TjM/t3fCVVZ5
-	 8MH1ZInPpc2nzSmI9QjmQKmu1jybeROeS+1gxtVeuMWSo6xwdskIIs7IUrxOQj8Q16upu
-	 j8upr/x2L8YhAOU1e8DhbTeqncDi6e2RPjP9vmODWLtjmKoylbjDpXcH3oNr7C/322LSl
-	 W8lbYEdPNQQqy46n+l77h6hD/R8tevzwIM6/k3WwCXVe0Xr71MDMMxUDW1+FClL+lSA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794513549;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
+	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
+	bh=T/wWb7fRaZUGBhzDhHV/eUFOWgluySiOaHkvWzqe8FM=;
+	b=yh5VDD8ks/lOGyT1K8WPHsCfMoNTI+pue/wITEl6ZWVkMcxr2pq78BLNCwtBaYEpPfeV
+	 fTwPO1EmDdUuOLgVUPIouA1gvyrE8D2bC5e4g6syB0t10ycxcvlnvcj7eCHVPozTyesl2
+	 8NfKSz6mYve3TNo83Wqi9cUjCWvu3HsXK3mFqdLaPeL2aMoWe+oOYRccRVlCWjNv+6SUR
+	 yp64AQnWGb4oaubq5prn+1midTuIILhiwsfu83WQxSUjX3pnZN1o2/RdXHiRG9Txa29qX
+	 0Iu7nPBTJCJie7TYOoHd3WA2ZHXK2uZGZL7osQsrG7snl6mGMbLEWn0vd5UGQPFKbPw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WwR0zLi9;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=nZ99iNli;
+	arc=none smtp.remote-ip=209.85.216.44
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCBFE606A88F;
-	Thu, 12 Nov 2026 19:57:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFF0F606A31C
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 19:59:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CFF0F606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WwR0zLi9
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDE151F000C5;
-	Thu, 12 Nov 2026 19:57:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794513458;
-	bh=7guJMRRaIyBXSu5q1TNtm5fdzWXrkWkE2iKaLV14h3U=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=WwR0zLi94YNDct3dcB3nW3opR+n+eZhSHuebehNpSFyoYQJYcRB/uTok6f0VIEsn8
-	 VhNnmCYLnslIOCeD3XHMyPbA/szoNfexl/h4UkRdQdnkKQS+t4viFQd0RF5sIrS+7w
-	 94NnR1EI7kWlcUYSg5DeygJD9WLbjg6lApMtl06hUAl/P2fwWHzg6oLoFiO4b46RcW
-	 EtTonZU6mxNjqp2zNmo0stc9wJcpwtqAxzNRKlZulu64/zsMZDedhlHfcdt4xWq8eU
-	 vUh5tJKBKk+fh7k+Z924uIN9JJy6j+hnV411pXsULtaOC6Ei5AfRW5f5NXXqASN3YD
-	 y+XV789RFCh3g==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Stanislav Fomichev
- <sdf@fomichev.me>, "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jonathan Corbet
- <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>,
- kernel-team@meta.com, Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard
- Brouer <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Pavel
- Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, Andrii
- Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar
- Kartikeya
- Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song
- Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
- <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai
- <ihor.solodrai@linux.dev>, netdev@vger.kernel.org, bpf@vger.kernel.org,
- io-uring@vger.kernel.org, Mina Almasry <almasrymina@google.com>, "Mike
- Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>, Weiming Shi
- <bestswngs@gmail.com>, Nikolay Aleksandrov <razor@blackwall.org>, David
- Wei <dw@davidwei.uk>, Alexander Lobakin <aleksander.lobakin@intel.com>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, Stuart Clark
- <stuclar@meta.com>
-Subject: Re: [PATCH net-next v1 07/11] xsk: Deliver provider chunks without
- copying
-In-Reply-To: <avWua/xvHrUa5wUI@boxer>
-References: <20261110102039.1002605-1-bjorn@kernel.org>
- <20261110102039.1002605-8-bjorn@kernel.org> <avWua/xvHrUa5wUI@boxer>
-Date: Thu, 12 Nov 2026 20:57:34 +0100
-Message-ID: <875wy1rff5.fsf@all.your.base.are.belong.to.us>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=nZ99iNli
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3b0e61a4decso176845a91.2
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 11:59:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794513548; x=1795118348; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=T/wWb7fRaZUGBhzDhHV/eUFOWgluySiOaHkvWzqe8FM=;
+        b=nZ99iNli759lMAvhBbAMaHI4hL3nQwqz1Nsq0QOZXT8qpzrscDd3JSrlc3xG0/w1ss
+         Nm/+eLkmQRT1o7ffssVqdFEfKY1Tg0f9G6j1GiHyJikbuFchJSqkXb4hrb/POXYl44Xq
+         YBKDZRwUjSdmcl87FPpc9Nguo+mzOXATLf0hIs1F3C18yIWDSQldm7zk3Caxcl7TSoxS
+         RrFf0GyszcFOdlOVRqel4dF/0Sa3LoQMY2vRsXDoHxHkX59n7ZJLg4VHdVctijhiV6he
+         KAY6C72+00GzPDhM5Tk2cHQ8TnLprNZ7kmUEqGJ7NRYrRdqhaFRESOQdzlX97UQqOf6g
+         lipw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794513548; x=1795118348;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=T/wWb7fRaZUGBhzDhHV/eUFOWgluySiOaHkvWzqe8FM=;
+        b=KjIFRAmXBzDUFGid5KSa9b3V+QBSS+Ss+Xjl1e4OqgtzirpBu4GWKkgTYz/fX4tE53
+         ssDBV46hRr+zpiS8prZcmMCgQRWLiZfSf+kEzMlCoBb/7VcmGixG8AtxpYaaJ47COzrx
+         O85BZ/Zw5VT7mBC8ereVjC42rRTdAIwEtHc8u1OF2icCr3zsqd7yyXSrP6boetXvZV7B
+         MOxT63APpOTPE/gO05V0ePRbCNUA/AkmL0GnPbgVSQ7NdX3sNqt3pMy2iNPvpjOQA0qq
+         z2qrtkVouCXxbntrrIjXAowibTV2sl0Uw1a70JAY9dLGlJQNQLA/Wg3YDWyEqFuUsLqd
+         M9eQ==
+X-Forwarded-Encrypted: i=1; AL+hErFS1OxLphaa9ZiBLkP8MgsKRKP6gx34QlaX3WeSFBNOIjBnRsSeYt3ozFxvKEEzdyMcenk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z862ZjGLxHWnRebAFP0XF9nC7dCfAErzZKFw+2Jjn2pqSYvFiTO
+	YGEKl15/TgklqhlxMoT/NRCswGHSKVixAG0u/vrfVpcHDJUUXBUd0Nzk
+X-Gm-Gg: AYBFou06NS94LFKuyruQ5ch4EJXFhSy7GJma2FDZArngy71wqH42bzP3ukDLCdxCTKA
+	el0k8hmvfaDKtVAJQ0LY0TERZv1AOwJcgEDpAy5bsUok+/PGhO9iZDJfOCZaTZKXty08EybxAdD
+	6CdX9KuBRJg1Y/tPOIRpgjc4S8DpUlQwT9wiGpE3kTS+tphdAMCskex1jAeekZZTxZ+l/O5C7hC
+	+MFGy5MwE2Q+tmEZGAbytAjEeD+OCo3VmgYanwQ1cfAYkH6o4B6xNBukis8Xk6XDvuO5bTh8niS
+	mWKq2mBouWXQqv5rznnExHrzIQlTRRI8tJVCMMRCM5/2X5da5GuvoX0GPEAL39jFduatqSklvnt
+	oTL6BECKSD8AaIF+BgM+Y/tEmGzbvl15vjVAAnql8dGWPQgqFUpIgRcAiaiun3nyC3MxG5+aIwD
+	TiWOFzZxZEP8J5csOjxhhHwMo3Y1D/FWcLGAWRusrs/FL1RiAltQAG9uTTJr8zgLZVSo2pbk/G0
+	4tWis//Cl3Pb2rKFPQ67dY1ktLb6y1QcwmqaU3KgoxdYvkbIHTRGRIYnwO6Hzr/vU1at3BcibDA
+	3qEOw89wHgWW0itoXMs0OKI0W8g4Gl7OqnOKj5gpgHsCxLIGj90JDs6HlSxiio598M1t0urNzM5
+	IM5ORpRE9XmDkg734RdTlAwg7ylYqKOZbbQ==
+X-Received: by 2002:a17:90b:280c:b0:3b0:a9de:9886 with SMTP id 98e67ed59e1d1-3b1b0b669camr123766a91.12.1794513547754;
+        Thu, 12 Nov 2026 11:59:07 -0800 (PST)
+Received: from localhost ([153.61.198.252])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1aec3a903sm838062a91.8.2026.11.12.11.59.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Nov 2026 11:59:07 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -79,88 +88,39 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 12 Nov 2026 19:59:06 +0000
+Message-Id: <DMTHYMNVPCR4.1GZZE98IRO363@gmail.com>
+Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
+ Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf] bpf: Fix soft lockup in fd_array_map_free()
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Li Jinyue" <jinyue.li@linux.alibaba.com>, <bpf@vger.kernel.org>,
+ "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>
+X-Mailer: aerc 0.20.1-355-gf870624f6c37
+References: <20261112122015.3356106-1-jinyue.li@linux.alibaba.com>
+In-Reply-To: <20261112122015.3356106-1-jinyue.li@linux.alibaba.com>
 
-Maciej Fijalkowski <maciej.fijalkowski@intel.com> writes:
-
-> On Tue, Nov 10, 2026 at 11:20:28AM +0100, Bj=C3=B6rn T=C3=B6pel wrote:
->> A provider socket still receives through the copy path, which takes
->> FILL entries without the provider's ownership checks: a chunk that a
->> page pool holds could be handed out twice. No driver opts in yet.
->>=20
->> Put packets whose buffers all belong to the socket's provider on the
->> RX ring as they are, and copy others into chunks the provider claims.
->> Only the queue NAPI may produce to such a socket, so generic XDP and
->> CPUMAP redirects to it are dropped.
->>=20
->> A device may place payload at chunk offset 0, as fbnic does, so only
->> the first buffer of a packet keeps the UMEM headroom. Such buffers may
->> be sent back as they are, so only descriptors with XDP_TX_METADATA
->> need room for TX metadata in front.
->>=20
->> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
->> ---
->>  Documentation/networking/af_xdp.rst          |   6 +-
->>  Documentation/networking/xsk-tx-metadata.rst |   3 +-
->>  include/net/page_pool/memory_provider.h      |   2 +
->>  net/core/page_pool.c                         |  34 +++-
->>  net/xdp/xsk.c                                |  82 ++++++++-
->>  net/xdp/xsk.h                                |   5 +
->>  net/xdp/xsk_pp.c                             | 165 +++++++++++++++++++
->>  net/xdp/xsk_queue.h                          |  18 +-
->>  8 files changed, 304 insertions(+), 11 deletions(-)
->>=20
+On Thu Nov 12, 2026 at 12:20 PM UTC, Li Jinyue wrote:
+> fd_array_map_free() walks all map entries to assert that the map is
+> empty before its memory is freed. max_entries is not bounded, and the
+> free runs from the bpf_map_free_deferred work item, so with a large
+> max_entries the scan occupies the CPU for a long time without a
+> scheduling point:
 >
-> (...)
->
->> +
->>  static int xsk_pp_nl_fill(void *mp_priv, struct sk_buff *rsp,
->>  			  struct netdev_rx_queue *rxq)
->>  {
->> diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
->> index 1bc42c8902f4..b9464b917a88 100644
->> --- a/net/xdp/xsk_queue.h
->> +++ b/net/xdp/xsk_queue.h
->> @@ -156,17 +156,24 @@ static inline bool xp_unused_options_set(u32 optio=
-ns)
->>  	return options & ~(XDP_PKT_CONTD | XDP_TX_METADATA);
->>  }
->>=20=20
->> +static inline u32 xp_desc_meta_len(struct xsk_buff_pool *pool,
->> +				   struct xdp_desc *desc)
->> +{
->> +	return desc->options & XDP_TX_METADATA ? pool->tx_metadata_len : 0;
->
-> How is it related to this patch? I know I trimmed, but I didn't see any
-> references above to tx_metadata_len, only some documentation bump.
+>   watchdog: BUG: soft lockup - CPU#1 stuck for 26s! [kworker/u8:5:8894]
+>   Workqueue: events_unbound bpf_map_free_deferred
+>    epc : fd_array_map_free+0x7c/0xea
 
-Provider frags start at chunk offset 0, and an application may send them
-back as they are. TX validation wants tx_metadata_len in front of every
-descriptor once the UMEM has it, so such a descriptor fails, though only
-XDP_TX_METADATA descriptors use that room. Driver ZC never puts RX data
-below offset 256, so it never came up. It stands on its own; I'll make
-it a separate patch.
+I don't think you root caused it correctly.
 
-> Besides, the amount of branches introduced to existing hot path is
-> worrying. On next revision, could you provide numbers from xdpsock before
-> and after this set run on existing zc driver?
-
-(FWIW, I've left a all my performance patches out, to keep the size of
-set down.)
-
-Will do, but the only one I got is mlx5. Would be awesome if you or
-Magnus could take it for a spin on Intel NICs.
-
-Single-buffer RX on driver ZC gets no new per-packet branch: xsk_rcv()
-leaves through xsk_rcv_zc() first. The rest is one test per flush, one
-XDP_TX_METADATA test per TX descriptor, and a flag test in the
-multi-buffer and XDP_PASS/redirect helpers. v2 also moves pool->pp next
-to fq, which the flush reads anyway, and drops the frag walk in
-xdp_buff_needs_copy(), as agreed with Stan.
-
-Anything specific, or just in general?
+pw-bot: cr
 
 
-Bj=C3=B6rn
