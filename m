@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794527434;
-	b=YbR5sq883SELSfNtUhwjvs0pbB4ANNVgnfkBnVlt55Qj+LyQdkiF4sf2YbcEyEZJRdjI
-	 YlWqtdUt+aLFbQF6yrvv9+W2tUNtqIIm5QYA4uUO7puDyuUB1m0JxIqh61RuKhNm7e+Gp
-	 UgOXCA3k3mI8PfuOa6pL0aLxb6o0RWeMXBQBH22t11lxQxe9SXg8YThD19B6tS5TlDweD
-	 T4k8SBPoYwLsHAWMBIBhAQZKPHhwLRPp/kaAxjRTaBiewfLTUg4fRHwJ+KM44d5zc9Oeg
-	 OwG9czWPHd032okF/xtgBD/ARSL411XYx1D7JKdPCePAjdE5/bLzfqQjiOJOA+bqdfg==
+	t=1794527435;
+	b=zwh9m7siGMfEsxR5GfUtIM/gHrMaYtNMxOyTHg+blLNF5gkpncq+bnlW9QH+GNegsjGK
+	 Lso7cJqAbtIH4vdkfufII4Ujq+K1z75SXxkY5gqEHKH7QrhPTEnxHemRJF4YsIu6bMV7j
+	 S2c5xeHN22IQ+bUPoAvyWnZIjZBQf/tQhTcRbGQtULac2t5qDT1s15ewPx/GFQ65/8RAQ
+	 fkHOI1XXLkaFTKVcp6iMO4rV+/tB2UxhrVK9xjWi5KUTrBV5bpXD6iY0xqhpfyWIt4aMX
+	 XGAbcAfSqGx60Xywh7lnFOICsYe6cCC8QqzxHw7M07C4pCDNLRj+w+6AaIO+LjLRtCQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794527434;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794527435;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=ihCBkfqaIdNV+ymo3RhKa9CO83kd4/k7iZNLY62D9OE=;
-	b=ReM/+YEejjHKEiPpRguiLVDiJ5XqNR4M2ydLOSKrFycDuesHseiwIoLHj98nXzGZ3KBh
-	 NHPsPiZeuHjYnrx5pG2dSB1gMIhp3FQgJcd07VOovR7JSncbg9CWJXoxSHmqcCEMyjHkO
-	 JZl4PGaykMMiJAnK4yCFnWo2hEL8tPbhzwjzWUt3PbUyt8fesSd9mWlQstQ2lJv5wL+CZ
-	 2DUAPkNjTroOHilfPxLo8hUaJBBg41o7yxnnWU5iZNr+6sZpAnus2vOfaScPDE6srNOIX
-	 tWBcvB6irlXxXvdSDsJ5cOP3bGYuYi+AVQIXv6u/I0SoqS5k6n0JGY3nhUufu1U1i/A==
+	bh=1CbFla+Cutf/4Cji2KLiN7m8jOF3JEcVex4ECBlx0NQ=;
+	b=zYp8PKPge2LCBMJvVEtcNrBkRBvP0bXtV8syrQ6ziS+IscYZdZCUT47q2xfXOoDVMUUL
+	 Q6VbAn7onzPxp7AStWdXMkvEsTQtWbVUZaBhpFeNmakaQ9PGfku0Xq4SErTsnUlsCuRTa
+	 d8xYFq0VwspJb/FLTKMA/2dRC7XnFFFDVIaykv2jcjOtU0QG8sw7C0dOfMoSwLBmXOzUV
+	 vKXMO+2bpqJFepXTCBcfST64uPhUJj2PPjbTgIskpCn5/b5HuX413UkMlmknrecEQyfam
+	 zDFspbb9/o4XDOu1JG4xjtOQ0tPj+eNo+3KkpIUhe19CrE9ciiB9BtZG/Rj8mpjpK/g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JZqwBcKZ;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hTTSzx10;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A650B606A332;
-	Thu, 12 Nov 2026 23:50:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A7FB606A882;
+	Thu, 12 Nov 2026 23:50:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JZqwBcKZ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 118901F000C6;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hTTSzx10
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7A791F000C4;
 	Thu, 12 Nov 2026 23:50:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794527434;
-	bh=ihCBkfqaIdNV+ymo3RhKa9CO83kd4/k7iZNLY62D9OE=;
+	s=k20260515; t=1794527435;
+	bh=1CbFla+Cutf/4Cji2KLiN7m8jOF3JEcVex4ECBlx0NQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=JZqwBcKZGBYMWZVNKFFInQxMJf9qCVMt3kIrxBCTBULd3HQVSzfaHFkgvl8wbXdbp
-	 u3yZEtJvYVq81H5aMKulnvnzlcJZDkk1l7C8L46V9UjRWSsNPjg5+BXgQf/NrRPs1+
-	 mIxouNyTQQ3V7uddqCVvZ1a2dy7UGvPfqTVsVv/rNQI1Qq7at06l6WtwDQb4KFi91a
-	 B+ZdBrR6gDCAhJZ1Bt9Ch/oJMYEOuL+a6RwZFi+Gb+6Kmu5weBsbk5WEXeM2K+GtKp
-	 iB+XqzClxVnaZegjlixLwjlVDTlaaEEnIi8dAUzDnudIweA72RpTbv+3RdHIY6ji0A
-	 KBIOREpIjHtJg==
+	b=hTTSzx10FdA0Cf0NyCpKCbQiagKMrCgreZNv9MbUu98iXNnt/lHEPCQkFPbfrFAXT
+	 Q79UtAtGlsQbbCdMmh+HqHtthTJLfodaOBTfxnee4mTPwa7Q6a+HzH7f14iht+pdmj
+	 WBt0svisOEpyB4FxManvTo6Vm83RMO6c4HA1f1cziJKf7KgeDwXXF6OlnKky/bFoHD
+	 hLYBpAfVAZYHG9XrhFxqEGs58OkWJ5OP/URdOCW73+vm55mByDRWA8rnvrHvld0mGY
+	 FqKeXYxKo/aX0BV8SVUTu+LSPFzLFqEmfjk6u1+OAsbg7BenQt/IihER7dK12XTDCI
+	 43A0Nat5SxEIw==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -56,9 +56,9 @@ Cc: netdev@vger.kernel.org,
 	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 1/5] net: don't safety-check device features for XDP uninstall
-Date: Thu, 12 Nov 2026 15:50:23 -0800
-Message-ID: <20261112235027.4072149-2-kuba@kernel.org>
+Subject: [PATCH net-next 2/5] net: move dev_xdp_set_link() and dev_xdp_set_prog() up
+Date: Thu, 12 Nov 2026 15:50:24 -0800
+Message-ID: <20261112235027.4072149-3-kuba@kernel.org>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261112235027.4072149-1-kuba@kernel.org>
 References: <20261112235027.4072149-1-kuba@kernel.org>
@@ -73,93 +73,60 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Commit ad27ed7d2309 ("bpf, xdp: move offload check into dev_xdp_install()")
-lifted the safety checks from dev_xdp_attach() to dev_xdp_install()
-to cover more paths. Since all these checks are prog
-related they are under one big "if (prog)".
-
-Lift the pre-existing checks under "if (prog)" as well,
-and do the same thing in netif_xdp_propagate().
-This way we don't have to worry about triggering WARN()s
-on cleanup paths mistakenly trying to un-install a program
-when there is none, and failing because device has a memory
-provider.
-
-This is a refactoring / consistency cleanup, later patches
-don't depend on this change.
+netif_xdp_propagate() will need dev_xdp_set_prog() in the next patch.
+Move both helpers above it, no functional change.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- net/core/dev.c | 48 +++++++++++++++++++++++++++---------------------
- 1 file changed, 27 insertions(+), 21 deletions(-)
+ net/core/dev.c | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 
 diff --git a/net/core/dev.c b/net/core/dev.c
-index a230ecce9327..a5120da879d1 100644
+index a5120da879d1..69ee4342f43e 100644
 --- a/net/core/dev.c
 +++ b/net/core/dev.c
-@@ -10580,17 +10580,23 @@ int netif_xdp_propagate(struct net_device *dev, struct netdev_bpf *bpf)
- 	if (!dev->netdev_ops->ndo_bpf)
- 		return -EOPNOTSUPP;
+@@ -10575,6 +10575,20 @@ u8 dev_xdp_sb_prog_count(struct net_device *dev)
+ 	return count;
+ }
  
--	if (dev->cfg->hds_config == ETHTOOL_TCP_DATA_SPLIT_ENABLED &&
--	    bpf->command == XDP_SETUP_PROG &&
--	    bpf->prog && !bpf->prog->aux->xdp_has_frags) {
--		NL_SET_ERR_MSG(bpf->extack,
--			       "unable to propagate XDP to device using tcp-data-split");
--		return -EBUSY;
--	}
-+	/* setup requires extra handling, bypass those for other commands */
-+	if (bpf->command != XDP_SETUP_PROG)
-+		return dev->netdev_ops->ndo_bpf(dev, bpf);
- 
--	if (dev_get_min_mp_channel_count(dev)) {
--		NL_SET_ERR_MSG(bpf->extack, "unable to propagate XDP to device using memory provider");
--		return -EBUSY;
-+	if (bpf->prog) {
-+		if (dev->cfg->hds_config == ETHTOOL_TCP_DATA_SPLIT_ENABLED &&
-+		    !bpf->prog->aux->xdp_has_frags) {
-+			NL_SET_ERR_MSG(bpf->extack,
-+				       "unable to propagate XDP to device using tcp-data-split");
-+			return -EBUSY;
-+		}
++static void dev_xdp_set_link(struct net_device *dev, enum bpf_xdp_mode mode,
++			     struct bpf_xdp_link *link)
++{
++	dev->xdp_state[mode].link = link;
++	dev->xdp_state[mode].prog = NULL;
++}
 +
-+		if (dev_get_min_mp_channel_count(dev)) {
-+			NL_SET_ERR_MSG(bpf->extack,
-+				       "unable to propagate XDP to device using memory provider");
-+			return -EBUSY;
-+		}
- 	}
++static void dev_xdp_set_prog(struct net_device *dev, enum bpf_xdp_mode mode,
++			     struct bpf_prog *prog)
++{
++	dev->xdp_state[mode].link = NULL;
++	dev->xdp_state[mode].prog = prog;
++}
++
+ int netif_xdp_propagate(struct net_device *dev, struct netdev_bpf *bpf)
+ {
+ 	if (!dev->netdev_ops->ndo_bpf)
+@@ -10610,20 +10624,6 @@ u32 dev_xdp_prog_id(struct net_device *dev, enum bpf_xdp_mode mode)
+ 	return prog ? prog->aux->id : 0;
+ }
  
- 	return dev->netdev_ops->ndo_bpf(dev, bpf);
-@@ -10656,17 +10662,17 @@ static int dev_xdp_install(struct net_device *dev, enum bpf_xdp_mode mode,
- 			NL_SET_ERR_MSG(extack, "BPF_XDP_CPUMAP programs can not be attached to a device");
- 			return -EINVAL;
- 		}
--	}
+-static void dev_xdp_set_link(struct net_device *dev, enum bpf_xdp_mode mode,
+-			     struct bpf_xdp_link *link)
+-{
+-	dev->xdp_state[mode].link = link;
+-	dev->xdp_state[mode].prog = NULL;
+-}
 -
--	if (dev->cfg->hds_config == ETHTOOL_TCP_DATA_SPLIT_ENABLED &&
--	    prog && !prog->aux->xdp_has_frags) {
--		NL_SET_ERR_MSG(extack, "unable to install XDP to device using tcp-data-split");
--		return -EBUSY;
--	}
+-static void dev_xdp_set_prog(struct net_device *dev, enum bpf_xdp_mode mode,
+-			     struct bpf_prog *prog)
+-{
+-	dev->xdp_state[mode].link = NULL;
+-	dev->xdp_state[mode].prog = prog;
+-}
 -
--	if (dev_get_min_mp_channel_count(dev)) {
--		NL_SET_ERR_MSG(extack, "unable to install XDP to device using memory provider");
--		return -EBUSY;
-+		if (dev->cfg->hds_config == ETHTOOL_TCP_DATA_SPLIT_ENABLED &&
-+		    !prog->aux->xdp_has_frags) {
-+			NL_SET_ERR_MSG(extack,
-+				       "unable to install XDP to device using tcp-data-split");
-+			return -EBUSY;
-+		}
-+		if (dev_get_min_mp_channel_count(dev)) {
-+			NL_SET_ERR_MSG(extack,
-+				       "unable to install XDP to device using memory provider");
-+			return -EBUSY;
-+		}
- 	}
- 
- 	memset(&xdp, 0, sizeof(xdp));
+ static int dev_xdp_install(struct net_device *dev, enum bpf_xdp_mode mode,
+ 			   bpf_op_t bpf_op, struct netlink_ext_ack *extack,
+ 			   u32 flags, struct bpf_prog *prog)
 -- 
 2.56.0
 
