@@ -1,77 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794496224;
-	b=snOZgEZSfH67YC3QbQJaqI6QaqQshkzrSwZOYAnixq4IbX+FQCQEC0RAaMHSuJLMZEX9
-	 kyV0aEXUiWKEyY/jfFlfSaGcuRifEGxKPP177ILqFMqZm3dkRCQFJXtkWFiK+9gxk1h8z
-	 f1btavPRMhxhiqW6Dp+t9bCEsK+vSshgX3SIfWtcefqulvAc7KW/j9Ck/ypK2Akc3Z3Df
-	 1JAIuHNYwpykwsAHyinONBkD/R1cbdyC3scodUQlnRa9qNJp79HntbxtWyVvrqexghbfy
-	 WEql4Z6w6+mWYOktv1i0g/UqWa8s8ZT8XqGsD9Zz7H9jaWCDHW8Y2xfTjaU8kTQQdLw==
+	t=1794496883;
+	b=t20A3E5dbhKvQ+qc0AomXt81APDn0baMkz0A0SH5k3eTthP4dcqjcn4R0j9A4oetfrc3
+	 5wtSbGJ9owe6mKxAsCZYqJztLyUMsPCI9fp7kb4VSaksnHEyXim7YrUJNakW+IEZ5GSO2
+	 N0u3FSTHUByRTezcImw0RnFYnFdHcAl4+Fju8v4YkB+GDvL/e+eH7fUf4XdaX61jRHsIh
+	 FYS94IrbarAqvG1Cui9OgEalpcMt8uO/ESshEaoSRDn57S68H3NQ81hnTG1b/dM445n6D
+	 I4qSChhBCTnMfquSW92KA1Qh4AdXbdtBBYTrfH2rtHiPVkfRQlMJsRidhsoUvLv9v0A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794496224;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
-	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=eCnP3f/5sYjDgXu5gjLcJGqvVbM8pnJiTnh+Y99hcQc=;
-	b=BjjtmEFPke+RJ9ALOm57CbBnucRcKJffAwfUBk8HBZfCfV+xe/ixYuPs52BlN17Os+nl
-	 NiFehmKb9RV020nj44tWe9Y/p+y8saUyZRAE2Oi6sG2wsYBVkrwBhVm3OlpG25PSFrezD
-	 bF7FKk0bK8gkEqSCPMVTAx+g6bOAF2D3j2Fas78XdVIEUxy/LK2mtMHkylpk46TPrKnol
-	 e7HwZFfmCKD/pOZ+8aNl+Wq73nVErMVrAmce9qIsHbTZKg4R5E09v/4Wc5qn27H7heW8N
-	 JBrTbK5Tl5W4eb9/3/a9BZG2cYNLihSxzSqrXDWC8nWt56Dcinrh+CI15yTcpvQqD8Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794496883;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=2k9Pp8R0bWBJ2/Be4kIp/NqviaViJyrqHM3zzKX/Os4=;
+	b=vlDQO+7l2b1I9HrmgQ603E1VKEDVhY/hivDtWXIFrA130RfUkV7OB+eRGDQUvhsNhkSw
+	 h6g5wboV2nPJzd7Cs1RM+Da/o7/EvLe5ECFeiGW899vzS1jgvx1YjxPNjgLbzESfcbanT
+	 m9gOwGh379v9dBAbSiMOD+88/wU/bwTjoXNh68H8zidf48hcU4KgMc3Nol2Nwq3ujxeiC
+	 BQgTytO0MTM/EfGz/PW+NX6waYS4S/w7F7GItnS2DLvd3KR26W6/LP2FWDw7y4qcZ6WJX
+	 0wddI3CVIutER8OzQ5Cjs+nEeOkDf5WeIDUlTsz88EAkleoc/7QLd+RVIKGSV+FcBqg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FO5t0psT;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=infradead.org;
+	spf=pass smtp.mailfrom=infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=HbQP09mZ;
+	arc=none smtp.remote-ip=90.155.92.199
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6569E606A321;
-	Thu, 12 Nov 2026 15:10:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E465C60A2607;
+	Thu, 12 Nov 2026 15:21:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E465C60A2607
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FO5t0psT
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34B841F00A05;
-	Thu, 12 Nov 2026 15:10:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794496223;
-	bh=eCnP3f/5sYjDgXu5gjLcJGqvVbM8pnJiTnh+Y99hcQc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=FO5t0psTMMZWTQWrqQmrvKX36gkiFfAvWR4ZiJcJQPFqWVcWeZ6he0Lnaz9j6IYXe
-	 OEhcfG3tlmlZ/fATPT5sFcQSt7MVxQJvfaGiDGWXbrugT/e9zrsByvjQuURudjIKql
-	 gtAG65W3qOmSeFUxExq7PhBgy3xrfs6MpgPQ2jKTx248VgzHeub57/eF3bpAJsts6c
-	 OGSCZc/p5egFjnMBgPqeFROyK9o1O2FzrbS6UGt8xstf9stnD3hpsFKzx85K9HsqhR
-	 kF8f7qvoEkDB6/QcIXpKjVxAjj4hT5qouLyrG2HDncrZTR16M4thCL4WmT+Fa9EI/F
-	 beW8/QL8AEP5Q==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Stanislav Fomichev <sdf.kernel@gmail.com>
-Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jonathan Corbet
- <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>,
- kernel-team@meta.com, Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard
- Brouer <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Pavel
- Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, Andrii
- Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar
- Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
- <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
- netdev@vger.kernel.org, bpf@vger.kernel.org, io-uring@vger.kernel.org,
- Mina Almasry <almasrymina@google.com>, "Mike Marciniszyn (Meta)"
- <mike.marciniszyn@gmail.com>, Weiming Shi <bestswngs@gmail.com>, Nikolay
- Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, Alexander
- Lobakin <aleksander.lobakin@intel.com>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, Stuart Clark <stuclar@meta.com>
-Subject: Re: [PATCH net-next v1 07/11] xsk: Deliver provider chunks without
- copying
-In-Reply-To: <avT3vVT8iyKqyW8q@devvm16445.scu0.facebook.com>
-References: <20261110102039.1002605-1-bjorn@kernel.org>
- <20261110102039.1002605-8-bjorn@kernel.org>
- <avT3vVT8iyKqyW8q@devvm16445.scu0.facebook.com>
-Date: Thu, 12 Nov 2026 16:10:21 +0100
-Message-ID: <87qzgqqe5e.fsf@all.your.base.are.belong.to.us>
+	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=HbQP09mZ
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=2k9Pp8R0bWBJ2/Be4kIp/NqviaViJyrqHM3zzKX/Os4=; b=HbQP09mZDCZTwfu11tESG/toXs
+	/Clf2p3Q3g1YVQ/zDXzeeiJrrj4HkXxQy1UStS9GHnaAf6L7Gpgq5WxfJe1aZNqbqCZftcQjIo1nQ
+	rKLQhdi82A6d5sQHKXEUVy9gyTIvSDMit/TzYT+9bFn0xiUqAdGepTTkNUZjeROkYK0T3m8Hv5mMR
+	OmPqZaInqzuCs+RwxSVYI1Vm9Ng0Ry6eMwg3zlcVd7mNAmowFukrfD8kOQ7aGZYeKt+IY5YVROZMz
+	ceRYWpsMZeU2yPjKqrug42xOK6eAEFHqlXyKAm2pZD/yCZvxhkoDRZ9eHTfKgrXm3sWWeZOOW8//s
+	JoUXMJ3Q==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xRWc3-0000000AUYM-2OtI;
+	Thu, 12 Nov 2026 15:21:19 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 936ED30057E; Thu, 12 Nov 2026 16:21:18 +0100 (CET)
+Date: Thu, 12 Nov 2026 16:21:18 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Tao Cui <cui.tao@linux.dev>
+Cc: tj@kernel.org, void@manifault.com, arighi@nvidia.com,
+	changwoo@igalia.com, mingo@redhat.com, sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	Tao Cui <cuitao@kylinos.cn>
+Subject: Re: [PATCH 2/2] sched_ext: Block a retained donor before PI deboost
+ routes it back to sched_ext
+Message-ID: <20261112152118.GD1813469@noisy.programming.kicks-ass.net>
+References: <20261112144935.583937-1-cui.tao@linux.dev>
+ <20261112144935.583937-3-cui.tao@linux.dev>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -81,104 +70,84 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261112144935.583937-3-cui.tao@linux.dev>
 
-Stanislav Fomichev <sdf.kernel@gmail.com> writes:
+On Thu, Nov 12, 2026 at 10:49:35PM +0800, Tao Cui wrote:
+> From: Tao Cui <cuitao@kylinos.cn>
+> 
+> rt_mutex_setprio() is the only entry path into sched_ext that does not
+> block a retained donor: an ext task PI-boosted by an rt waiter can
+> block on a second kernel mutex while boosted, and on deboost is routed
+> back to sched_ext carrying the queued+blocked state that
+> scx_prepare_setscheduler() promises never happens; every PI cycle
+> hands the BPF scheduler a queued+blocked donor it never admitted.
+> 
+> Call scx_prepare_task_sched_change() before the sched_change guard when
+> the class change routes the task back to sched_ext, which performs the
+> missing sched_proxy_block_task() (plus an update_rq_clock() that is
+> harmless here: the clock was already advanced, so the second advance
+> only applies a small delta). The boost direction (ext -> rt) needs no
+> handling.
 
-> On 11/10, Bj=C3=B6rn T=C3=B6pel wrote:
+I can't understand this. And I take a very dim view of sprinking magic
+hooks like this. So no.
 
->> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
->> index 113b0b08356d..b419c673e3f1 100644
->> --- a/net/xdp/xsk.c
->> +++ b/net/xdp/xsk.c
+The little I understand of things makes me think __setscheduler_class()
+is buggy for EXT and *that* should be fixed.
 
->> @@ -453,8 +501,14 @@ static int xsk_rcv_check(struct xdp_sock *xs, struc=
-t xdp_buff *xdp, u32 len)
->>=20=20
->>  static void xsk_flush(struct xdp_sock *xs)
->>  {
->> +	struct xsk_pp *pp =3D xs->pool->pp;
->> +
->> +	if (pp)
->> +		xsk_pp_flush(pp);
->>  	xskq_prod_submit(xs->rx);
->> -	__xskq_cons_release(xs->pool->fq);
->> +	/* A provider releases FILL entries under its lock. */
->> +	if (!pp)
->> +		__xskq_cons_release(xs->pool->fq);
->>  	sock_def_readable(&xs->sk);
->
-> optional nit:
->
-> if (pp) {
-> 	pp_flush
-> 	prod_submit
-> } else {
-> 	prod_submit
-> 	cons_release
-> }
->
-> sock_def_readable
->
-> (hard to follow these scattered if(pp) checks :-( )
-
-Sure, will do!
-
->
->>  }
->>=20=20
->> @@ -464,6 +518,11 @@ int xsk_generic_rcv(struct xdp_sock *xs, struct xdp=
-_buff *xdp)
->>  	int err;
->>=20=20
->>  	err =3D xsk_rcv_check(xs, xdp, len);
->> +	/* Only the NAPI of the queue feeds a memory provider socket. */
->> +	if (!err && xs->pool->pp) {
->> +		xs->rx_dropped++;
->> +		err =3D -EOPNOTSUPP;
->> +	}
->
-> This is confusing? Why even call xsk_rcv_check for pp case?
-
-Hmm! I think you're right here... this was a (is it bound) check. I
-might have been wrong in my reply to Maciej as well. I'll drop this.
-
->>  	if (!err) {
->>  		spin_lock_bh(&xs->pool->rx_lock);
->>  		err =3D __xsk_rcv(xs, xdp, len);
->> @@ -488,7 +547,26 @@ static int xsk_rcv(struct xdp_sock *xs, struct xdp_=
-buff *xdp)
->>  		return xsk_rcv_zc(xs, xdp, len);
->>  	}
->>=20=20
->> -	err =3D __xsk_rcv(xs, xdp, len);
->> +	if (!xs->pool->pp) {
->> +		err =3D __xsk_rcv(xs, xdp, len);
->> +	} else {
->
-> [..]
->
->> +		/* A CPUMAP program runs XDP on another CPU, not in NAPI. */
->> +		if (unlikely(!xdp_rxq_info_is_reg(xdp->rxq))) {
->> +			xs->rx_dropped++;
->> +			return -EINVAL;
->> +		}
->> +
->> +		err =3D xsk_pp_rcv_zc(xs->pool->pp, xs, xdp);
->> +		if (err !=3D -EXDEV)
->> +			return err;
->> +
->> +		/* Copy only packets of the queue, from its NAPI */
->> +		if (unlikely(!xsk_pp_queue_buf(xs->pool->pp, xdp))) {
->> +			xs->rx_dropped++;
->> +			return -EINVAL;
->> +		}
->> +		err =3D xsk_pp_rcv_copy(xs, xdp, len);
->
-> Move this into __xsk_rcv_pp ?
-
-Yes.
-
-
-Bj=C3=B6rn
+> Fixes: be8be8acb268 ("sched_ext: Block proxy donors before taking control")
+> Signed-off-by: Tao Cui <cuitao@kylinos.cn>
+> ---
+>  kernel/sched/core.c    | 12 ++++++++++++
+>  kernel/sched/ext/ext.h |  2 ++
+>  2 files changed, 14 insertions(+)
+> 
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index f7a452123ef5..dcb16b006740 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -7816,6 +7816,18 @@ void rt_mutex_setprio(struct task_struct *p, struct task_struct *pi_task)
+>  	if (prev_class != next_class)
+>  		queue_flag |= DEQUEUE_CLASS;
+>  
+> +	/*
+> +	 * PI boost can route @p out of sched_ext: policy stays SCHED_EXT but
+> +	 * __setscheduler_class() follows the effective rt prio, and rt/fair
+> +	 * may have retained @p on the rq as a blocked donor. Block it before
+> +	 * sched_change_begin() records the queued state, the same way the
+> +	 * other entry points into sched_ext do.
+> +	 */
+> +#ifdef CONFIG_SCHED_CLASS_EXT
+> +	if ((queue_flag & DEQUEUE_CLASS) && next_class == &ext_sched_class)
+> +		scx_prepare_task_sched_change(p);
+> +#endif
+> +
+>  	scoped_guard (sched_change, p, queue_flag) {
+>  		/*
+>  		 * Boosting condition are:
+> diff --git a/kernel/sched/ext/ext.h b/kernel/sched/ext/ext.h
+> index d32bc01071b0..1a699be25331 100644
+> --- a/kernel/sched/ext/ext.h
+> +++ b/kernel/sched/ext/ext.h
+> @@ -19,6 +19,7 @@ void scx_rq_activate(struct rq *rq);
+>  void scx_rq_deactivate(struct rq *rq);
+>  int scx_check_setscheduler(struct task_struct *p, int policy);
+>  void scx_prepare_setscheduler(struct task_struct *p, int policy);
+> +void scx_prepare_task_sched_change(struct task_struct *p);
+>  bool task_should_scx(int policy);
+>  bool scx_allow_ttwu_queue(const struct task_struct *p);
+>  bool __scx_allow_proxy_exec(const struct task_struct *p);
+> @@ -72,6 +73,7 @@ static inline void scx_rq_activate(struct rq *rq) {}
+>  static inline void scx_rq_deactivate(struct rq *rq) {}
+>  static inline int scx_check_setscheduler(struct task_struct *p, int policy) { return 0; }
+>  static inline void scx_prepare_setscheduler(struct task_struct *p, int policy) {}
+> +static inline void scx_prepare_task_sched_change(struct task_struct *p) {}
+>  static inline bool task_on_scx(const struct task_struct *p) { return false; }
+>  static inline bool scx_allow_ttwu_queue(const struct task_struct *p) { return true; }
+>  static inline bool scx_allow_proxy_exec(const struct task_struct *p) { return true; }
+> -- 
+> 2.53.0
+> 
+> base-commit: 5b740a72b55c4267ba4d8010f17dde26b26f52d3
