@@ -1,70 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.36
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794489062;
-	b=10W8zw6Ce6y0U8VBuAG+KskWfs/jz5UvnsScvXMSP2CeROXpa4Y3VZowwq1o2xNo7UXr
-	 t5K6VDRul/ujtpzswlV/ZMyMZ4QN0oHZWvZYVgdRM6Mem3c/uXwJeyUPVRuGw13Ai64f2
-	 gA1DYTA4NIaTJSPN5kHVcfmKRBz7OtJ2rL2dNkv9caKRo8CV8vIzgZJ9ByQswRZ/LEP37
-	 yULHDrWadOpR0plgz0+issE2t33usoXqUyujOBbItAAQgM847j3V8CHYMClyznCd3tIbr
-	 WNfYASu8ggN+cYJoBaD/yz7Abbfr2H/XWI0mVT+kCjihH73HdqHsPS1XRZARXsiBmmQ==
+	t=1794489977;
+	b=tKhC2mPR/ArJcJFbH9bSYEeCNiqXnlj4veLBkYcmUGzzknujgmhsrmB1wwNAiG6xUnW4
+	 8OsAjM1d4piNwgXKIzvLRxgV4lFJdBMgAr+rzXt7rB7ojkYQwxm0/jSqwE+WYPrSbaSlj
+	 2QqRSdEB26QQoZi/2d1+O6sMnMNGqirQ04cs6McLQWQeil4zpPcU0r0QO5tdYfAuhGflG
+	 VOi6efNIU9UJOTPTFf4FctWLx4+fT8yxRjwredF760f47m8HgLT7RUTcXusOhc9x4dq6z
+	 IF8ymMMfdWAjXCBj5GaiAQuD+m8pOjeK6c96EO6P11y8Rj2M+yrzIPHSOloNNxd3pDw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794489062;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=BW+evLCwYzgT0GOJ7iXT+1380LgSCWUXaHPzAnO9hFo=;
-	b=2kHcVQjpDVpydWbXfpeKl/ZkdgHwFTNVoFafiKaI4/9b/rJZvgQM7+Ugsz2bKJSkVb1B
-	 KjKuqxM4TjCItfU+lU6+P0Ud7xjCSOpGBiLZp0+E1tCgGjgSh0sO68dELNT0B6FS7LcB9
-	 TGyaVHoDWmN4JIvUZmSEAoH8A8HW8fPfAAprLqm/L6dwJUJi2A8sZF/3OuvM3o6Gq2yzp
-	 E2BogkVEYWJ1xDdkzRubhDIN0Vl4SPHWCZ8bg7zTJoAL5WwYFrptQ1zo8/F/XCeyXEDUq
-	 nH0PJjrXW53RC9774gSB/U0Dms5rh1TBOkeSk9I+vXHiJvj8ugEiqk/wSN5WfvCFM7Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794489977;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=igf95Krua7UgMjmbH7P6vnjzRdRidkRE+YlT5u31rRs=;
+	b=nSYJ9GeV31xhPQzueNlb6JE7ecQF90jA3MEx9nh79Hj/zoUl4Ntcv0TWoyPnXXUbMKA7
+	 c+LGZEC7CEwhdjilmqB6Npc5IFIwso7C2S+khLClfKJhIY2uxV1ngsX8q0yW8VXRrffIB
+	 SRTyOIOPfexVB5m0hJVBEd+MM4gKs3Doc0nyN4o5VqGqeDUOfODInUyVexCFn8i/D3L4F
+	 GSFKPWlX9Glw+dbm0ZONzt5KbfM8gEGmtgr50POq9XG4miXbSpTNRl21T/Jwht8TwO0Ca
+	 3qoqn2maitS2vLjqPgNIqf8xqb95/VxLH1iu+rJYhpAF7hRPlgOQzjC2v6YIDYzm9hg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=qBQLcaX+;
-	arc=none smtp.remote-ip=95.215.58.36
-Received: from mta1.migadu.com (out-36.mta1.migadu.com [95.215.58.36])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eLV8ZHWQ;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65CE8606A884
-	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 13:11:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 65CE8606A884
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 288B8606A321;
+	Thu, 12 Nov 2026 13:26:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=qBQLcaX+
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=W34IEyxXNHmafjPVCQKPdoBcem/laKBLdON5EZxe8XQ=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794489059; v=1; x=1795093859;
- b=qBQLcaX+Me9W57ltaRTAIhnjpIRKP+PymHektNYZ4RwLctL4Q2fAArBiRRHG3fZVjj1KXlbU
- kfVL4iOWVueCM0CJ161yJrLgKWMwQLLmXGymHBgkHkmETGRyHW1lMNJdF6NplUYjDUfxAKVbb7C
- msg8OQMVcRDPbRISi1LDi7kg=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id a55b6c2c48a7caae;
-	Thu, 12 Nov 2026 13:10:59 +0000
-X-Mizu-Trace-ID: a55b6c2c48a7caae
-X-Migadu-Flow: FLOW_OUT
-From: Tao Cui <cui.tao@linux.dev>
-To: tj@kernel.org
-Cc: void@manifault.com,
-	arighi@nvidia.com,
-	changwoo@igalia.com,
-	liwanwu@kylinos.cn,
-	usama.arif@linux.dev,
-	sched-ext@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	cui.tao@linux.dev,
-	Tao Cui <cuitao@kylinos.cn>
-Subject: [PATCH 6/6] sched_ext: Clear the built-in idle masks on CPU hotplug transitions
-Date: Thu, 12 Nov 2026 21:09:34 +0800
-Message-ID: <20261112130934.563321-7-cui.tao@linux.dev>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261112130934.563321-1-cui.tao@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eLV8ZHWQ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 763DB1F00A05;
+	Thu, 12 Nov 2026 13:26:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794489976;
+	bh=igf95Krua7UgMjmbH7P6vnjzRdRidkRE+YlT5u31rRs=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=eLV8ZHWQaX0RM3qtYia866BYNgAmQIGP0By6cZFBsJ+Aza7LrouqSM6YoaSOVkIHb
+	 K1itxE9lpTIXaElgh7qm87Sfh9k0VrAiTjJEGGavdORvktNCTwvyui6yNaGQVlpicu
+	 Gd8SFqmKiy6cTpeveHyK1cb6B87Kn+4aOmhoTvnjR6pk3nXALz73YRARhw3QHNvoYz
+	 dN5mVRGCYgF0qAbdMfhi9AdH7wpjTlJInPFCDx6nySjNgW8w79Yadv6eoNpZ/P/Y+A
+	 PizfwO+ybaw0hpAPU3jJyzc/0HT8/RpM+3VIIWfXBhpmZhDaHkj56TX7uMdVtmasqi
+	 MSMMa5T1AuDrg==
+Message-ID: <sashiko-outbox-211177@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 5/6] tools/sched_ext: scx_flatcg: Don't strand a cgroup
+ on the ENQ_RACE path
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Tao Cui" <cui.tao@linux.dev>
+Cc: sched-ext@lists.linux.dev, bpf@vger.kernel.org
+In-Reply-To: <20261112130934.563321-6-cui.tao@linux.dev>
 References: <20261112130934.563321-1-cui.tao@linux.dev>
+ <20261112130934.563321-6-cui.tao@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 12 Nov 2026 13:26:16 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -73,116 +60,130 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Tao Cui <cuitao@kylinos.cn>
+Thank you for your contribution! Sashiko AI review found 2 potential
+issues to consider:
+- [Medium] sched_ext: scx_flatcg: cgroup stranding in cgrp_enqueued()
+  retry loop
+- [Medium] sched_ext: scx_flatcg: 1024-iteration spin in cgrp_enqueued()
+  after PNC_RACE
+--
 
-The built-in idle masks are only maintained by __scx_update_idle()
-(task driven idle transitions) and reset_idle_masks() (ops load);
-nothing clears them when a CPU is hotplugged. If a CPU goes offline
-while idle, its bit stays set for the whole offline window:
-scx_bpf_pick_idle_cpu() and the other idle kfuncs keep reporting the
-offline CPU as an idle candidate, and the built-in select_cpu path may
-claim it once before the guard layers bounce the wakeup, costing a
-failed pick and a bumped SCX_EV_SELECT_CPU_FALLBACK each time. This is
-not the documented racy and self-correcting regime of the idle SMT
-handling: the stale bit is a deterministic leftover, and read-only
-kfunc consumers never trigger the claim-time self-correction.
+commit 183b4752d1564aee66142be30c8948ab1d3f9a90
+Author: Tao Cui <cuitao@kylinos.cn>
 
-handle_hotplug() now drops the CPU from the built-in idle masks on
-both transitions like it already does for the cid-form online_cmask.
-scx_idle_test_and_clear_cpu() is also gated on cpu_online(): the clear
-alone is not sufficient, because a dying CPU keeps re-picking its idle
-task until it halts and each re-pick re-sets its bit, which can happen
-after the hotplug paths have already run. The claim path is the one
-choke point every idle consumer goes through, so an offline CPU is
-never handed out as an idle candidate regardless of any stale bits.
+tools/sched_ext: scx_flatcg: Don't strand a cgroup on the ENQ_RACE path
 
-Verified in qemu (4 cpus) with an idle-probe scheduler probing
-scx_bpf_pick_idle_cpu() every dispatch: 15/15 offline/online cycles
-probe zero stale entries with the change. Stock is not A/B-comparable,
-as every hotplug transition restarts the scheduler and reinitializes
-the masks; the fix rests on the path above.
+This commit adds a bounded retry loop in cgrp_enqueued() when
+bpf_kptr_xchg(&stash->node, NULL) returns NULL, polling for either the
+stashed cgv_node or a non-empty cgroup DSQ before returning.
 
-Fixes: f0e1a0643a59 ("sched_ext: Implement BPF extensible scheduler class")
-Signed-off-by: Tao Cui <cuitao@kylinos.cn>
----
- kernel/sched/ext/ext.c  |  7 +++++++
- kernel/sched/ext/idle.c | 21 +++++++++++++++++++++
- kernel/sched/ext/idle.h |  1 +
- 3 files changed, 29 insertions(+)
+> diff --git a/tools/sched_ext/scx_flatcg.bpf.c b/tools/sched_ext/scx_flatc=
+g.bpf.c
+> index 1d168d492203c..5f2b9d0b867a7 100644
+> --- a/tools/sched_ext/scx_flatcg.bpf.c
+> +++ b/tools/sched_ext/scx_flatcg.bpf.c
+> @@ -285,11 +285,24 @@ static void cgrp_enqueued(struct cgroup *cgrp, stru=
+ct fcg_cgrp_ctx *cgc)
+>  		return;
+>  	}
+> =20
+> -	/* NULL if the node is already on the rbtree */
+> +	/* NULL if the node is on the rbtree or in the picker's hands */
+>  	cgv_node =3D bpf_kptr_xchg(&stash->node, NULL);
+>  	if (!cgv_node) {
+> +		/*
+> +		 * The node is either back on the rbtree or in the
+> +		 * picker's hands; bailing out strands the cgroup. Wait
+> +		 * for the picker to resolve and retry.
+> +		 */
+>  		stat_inc(FCG_STAT_ENQ_RACE);
+> -		return;
+> +		bpf_repeat(CGROUP_MAX_RETRIES) {
+> +			cgv_node =3D bpf_kptr_xchg(&stash->node, NULL);
+> +			if (cgv_node)
+> +				break;
+> +			if (scx_bpf_dsq_nr_queued(cgid) > 0)
+> +				break;
+> +		}
 
-diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
-index 792cf0c1d582..a9612d768986 100644
---- a/kernel/sched/ext/ext.c
-+++ b/kernel/sched/ext/ext.c
-@@ -4356,6 +4356,13 @@ static void handle_hotplug(struct rq *rq, bool online)
- 	if (scx_enabled())
- 		scx_idle_update_selcpu_topology(&sch->ops);
- 
-+	/*
-+	 * Keep the built-in idle masks in sync with the hotplug state: an
-+	 * offline CPU must stop being advertised as idle and a CPU coming
-+	 * back must not inherit a stale idle bit.
-+	 */
-+	scx_idle_clear_cpu(cpu);
-+
- 	/*
- 	 * The tables can't be retired while this function is running as the
- 	 * retirement is inside cpus_read_lock. However, scx_cpu_arg() is
-diff --git a/kernel/sched/ext/idle.c b/kernel/sched/ext/idle.c
-index 922fbc3065cc..ff0c5402886e 100644
---- a/kernel/sched/ext/idle.c
-+++ b/kernel/sched/ext/idle.c
-@@ -107,6 +107,18 @@ static bool scx_idle_test_and_clear_cpu(int cpu)
- 			__cpumask_clear_cpu(cpu, idle_smts);
- 	}
- 
-+	/*
-+	 * An offline CPU is never an idle candidate, but its bit can
-+	 * linger past @cpu going offline: the dying CPU keeps re-picking
-+	 * its idle task until it halts, which can happen after the
-+	 * hotplug paths have already run. Drop the stale bit and refuse
-+	 * the claim.
-+	 */
-+	if (unlikely(!cpu_online(cpu))) {
-+		cpumask_clear_cpu(cpu, idle_cpus);
-+		return false;
-+	}
-+
- 	return cpumask_test_and_clear_cpu(cpu, idle_cpus);
- }
- 
-@@ -743,6 +755,15 @@ static void update_builtin_idle(int cpu, bool idle)
- 	}
- }
- 
-+/*
-+ * Drop @cpu from the built-in idle masks; used on hotplug transitions
-+ * so an offline CPU stops being advertised as idle.
-+ */
-+void scx_idle_clear_cpu(s32 cpu)
-+{
-+	update_builtin_idle(cpu, false);
-+}
-+
- /*
-  * Notify schedulers of an idle transition on @cpu's cid, delivering to every
-  * sched that holds %SCX_CAP_BASE on the cid (the root holds every cap). A real
-diff --git a/kernel/sched/ext/idle.h b/kernel/sched/ext/idle.h
-index 87a0e58f1eb7..89180abbfd21 100644
---- a/kernel/sched/ext/idle.h
-+++ b/kernel/sched/ext/idle.h
-@@ -21,6 +21,7 @@ extern struct btf_id_set8 scx_kfunc_ids_select_cpu;
- 
- void scx_idle_update_selcpu_topology(struct sched_ext_ops *ops);
- void scx_idle_init_masks(void);
-+void scx_idle_clear_cpu(s32 cpu);
- 
- s32 scx_select_cpu_dfl(struct task_struct *p, s32 prev_cpu, u64 wake_flags,
- 		       const struct cpumask *cpus_allowed, u64 flags);
--- 
-2.53.0
+[Severity: Medium]
+Can breaking out of the retry loop on scx_bpf_dsq_nr_queued(cgid) > 0
+still strand the cgroup when try_pick_next_cgroup() has already checked
+scx_bpf_dsq_nr_queued(cgid) or when the queued task is consumed before it
+does?
 
-base-commit: 5b740a72b55c4267ba4d8010f17dde26b26f52d3
+In try_pick_next_cgroup(), clearing cgc->queued, checking
+scx_bpf_dsq_nr_queued(cgid), and stashing cgv_node are not atomic:
+
+tools/sched_ext/scx_flatcg.bpf.c:try_pick_next_cgroup() {
+    ...
+	__sync_val_compare_and_swap(&cgc->queued, 1, 0);
+
+	if (scx_bpf_dsq_nr_queued(cgid)) {
+		bpf_spin_lock(&cgv_tree_lock);
+		bpf_rbtree_add(&cgv_tree, &cgv_node->rb_node, cgv_node_less);
+		bpf_spin_unlock(&cgv_tree_lock);
+		stat_inc(FCG_STAT_PNC_RACE);
+	} else {
+		cgv_node =3D bpf_kptr_xchg(&stash->node, cgv_node);
+    ...
+}
+
+If try_pick_next_cgroup() observes an empty DSQ before a second enqueue
+completes its deferred DSQ insert, cgrp_enqueued() sees the second task in
+the DSQ and bails out while the picker proceeds to stash cgv_node:
+
+CPU0                       CPU1                         CPU2
+try_pick_next_cgroup()
+  cmpxchg(&cgc->queued,
+          1, 0)
+  dsq_nr_queued(cgid) =3D=3D 0
+                           fcg_enqueue(T0)
+                             cgrp_enqueued()
+                               cmpxchg(&cgc->queued,
+                                       0, 1)
+                               kptr_xchg(&stash->node,
+                                         NULL) =3D=3D NULL
+                                                        fcg_enqueue(T1)
+                                                          cgrp_enqueued()
+                                                            cgc->queued =3D=
+=3D 1
+                                                        <T1 inserted in DSQ>
+                               dsq_nr_queued(cgid) > 0
+                               return;
+  kptr_xchg(&stash->node,
+            cgv_node)  <-- cgroup stranded
+
+The same stranding happens if T1 is already in the DSQ when CPU1 checks
+scx_bpf_dsq_nr_queued(cgid), and another CPU with an active slice for
+cgid consumes T1 via scx_bpf_dsq_move_to_local() in fcg_dispatch() before
+CPU0 reaches its scx_bpf_dsq_nr_queued(cgid) check.  In both cases
+cgv_node ends up in stash->node with cgc->queued left at 1 and tasks in
+the DSQ, so subsequent enqueues hit FCG_STAT_ENQ_SKIP and the watchdog
+terminates the scheduler with SCX_EXIT_ERROR_STALL.
+
+> +		if (!cgv_node)
+> +			return;
+>  	}
+
+[Severity: Medium]
+Does this loop spin through all CGROUP_MAX_RETRIES (1024) iterations
+whenever cgv_node is already on cgv_tree with cgc->queued =3D=3D 0 and an
+empty DSQ?
+
+When try_pick_next_cgroup() hits FCG_STAT_PNC_RACE, it clears cgc->queued
+to 0 and re-adds cgv_node to cgv_tree without setting cgc->queued back to
+1.  Once the queued tasks in that DSQ are consumed, cgv_node remains on
+cgv_tree (so stash->node is NULL), the DSQ is empty, and cgc->queued is 0.
+On the next fcg_enqueue() for this cgroup, cgrp_enqueued() sets
+cgc->queued to 1 and enters the retry loop, but because the current task's
+DSQ insertion is deferred until fcg_enqueue() returns, neither
+bpf_kptr_xchg(&stash->node, NULL) nor scx_bpf_dsq_nr_queued(cgid) > 0 can
+succeed, burning 1024 atomic exchanges and kfunc calls under the rq lock
+and widening the window for a concurrent picker to pop and stash cgv_node
+after the retries expire.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261112130934.5633=
+21-1-cui.tao@linux.dev?part=3D5
