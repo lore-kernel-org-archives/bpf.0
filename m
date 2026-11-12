@@ -1,104 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.125
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794508436;
-	b=0c3LtjCLWbYhqk2RUFXYn1hv8enoNxa+61iDu8VxN0niJU7MEqOXp1vsGm0vcKWBV3Yo
-	 LN2Nk+pPUr1gviZuMKaKxdAJj2KsxG0RUa44Xuk6MIHW6E+EqqBD1YMSyE2ww0XWLIlxR
-	 s6WMmgFDGSB5HgOy/hmJgiUEiB8vO09haGn9f/R/s3VuWdWM4E2XMw2mDQstNQvbl+zEB
-	 7huyzYF6W1V0A5EeMy70Em4bB9zPMk4nWo2XZl1deCI92C3DAjniWNEkWIvQSiNHyr+gP
-	 5VgQ9zlJjOBHUmHUPPW9UrWFSaB/GsqM2IblHFgztUNpM+TUIPmBbU/KCy3bxb6NRoA==
+	t=1794508699;
+	b=e68j6mUPtoka/jSJbikp9oLQynDk9cnK+zoou6WFCMqNjbvSyK8wnjiiB3cgHOmp8Zyn
+	 wBoOtP+0hPBNkwyyT005lLuj2FAPDB/Ju0AQQRgBPFFFD0hOmamf7eHvwdsFCAUV3SnQ/
+	 3C33hrk9jaMRnRgl8HuD3r2NZfg/nvnw8EjzCtNnpGvT7i7Nmhh8AxkRb1QHvSPLMZlN2
+	 GU53Sgv5whOzH013Ci5c2/0gU5gl5F5pnQCbRasLc3rei7OafnNZpiOdEQ19aK0Kj81wZ
+	 j0BGhtrUB1I2c8HVFCeLcme1DFJsyVGQZc391nPvTYJkvQyz0LnoI1zRbP1fItNA36w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794508436;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:X-Google-Original-From:Date:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=0T59pX0NBuc6eb0M//aPEdCc6M8d0Cv25oKr0gLdXm4=;
-	b=YlPhgbSKsBia74ajmrIVwqQJapSgc/Z4uAW8UkZDh8+zkmaMsLiUFFdeI8ZPtRfkjr26
-	 +CZvPMqx9H2sb1I11nSwrhyDxtTLnC7Ev494rxSY3UU5xOpiR1jKGbx2xrFUTU7pKFKX3
-	 bf+iP1B/achbVnrk/XbZZcqqCm/fpxrOgsA7ciPlTYMq1QolmQ525I8sQmd9025zZuPCG
-	 kGDq+Lgub9yA+jjA6z88Rs5UVhvqesmsgXYnBWz75L3aCyuMtL4B99pEpQG8ymeS/MfqD
-	 3eJqJu52b6aEOY69yzstOC+zrfKSrPDGTSLcLdMITOR6TqOn1Lwwku3IQS3QvVDPsuA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794508699;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=QY5is9RtLyMLeUC3YRVX8Vk8F2XbXaQV9wHoojb4eko=;
+	b=l1mZAaF02NxdzVmqzLOw3jJqZwstFrkbC5+Yy9ucnTTG4qHggY569NcafpcFXWAjedGF
+	 zdCrTLJjtNhB/Rzf99SP/AvJjWMO/vvLE+Ip38zJri0p1k/r9rCiCfAFosn2+Dp6Px6Pj
+	 cHNJJ+vn33j72642o+44xLTxuMGov6PBWi10luej17CCclW8a72ef7SKA/j1bWnsqY7vt
+	 qaLk5RfdHcM+8AGpf5wzfFlwZutdn8+wKmW/6E9VXIU0P9umf+p5mBHsHSaQGKPj6DBz7
+	 jGbLvF9u5iS/CKAi+WbuueJS629a0Tnl6bksfEJ0WHFk3gO4k0FkQK8WluM6RmG13YQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=imxi032c;
-	arc=none smtp.remote-ip=209.85.218.45
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=nfMdGc36;
+	arc=none smtp.remote-ip=95.215.58.125
+Received: from mta1.migadu.com (out-125.mta1.migadu.com [95.215.58.125])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25CC1606A8A5
-	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 18:33:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 25CC1606A8A5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43523606A323
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 18:38:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 43523606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=imxi032c
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-c50604721c8so6042266b.3
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 10:33:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794508434; x=1795113234; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=0T59pX0NBuc6eb0M//aPEdCc6M8d0Cv25oKr0gLdXm4=;
-        b=imxi032cS0x76ZjKJFrnJjVcpa4j/RetctXMOzH/RAoNujK81/PGf3OD9XVYf06OD1
-         vMOvSOHUE1wes4tjT1uZAJSvdzXng96OWh7uXcoizRID5Qg974oCg9DJKqHlfSgvn0yB
-         HHIrjDSMWAnaoz6IMUo/apC7uFmgXX5uqLfubomxF6t6a6FERmpTCCxABUYjEawULXD8
-         klCWqBM5uZl2TzEOtDF8+awi/vDwXsGP9mrDUvkQ3x3dvy2DALPta8aXV3ALMPfppqQt
-         QWVUBf5h/qbYDOLqSp+D8Q1sgXktGZ452oL3iWWjvUjnOjMKtiaDUjnMGMQH8PY1ThWJ
-         yVMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794508434; x=1795113234;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=0T59pX0NBuc6eb0M//aPEdCc6M8d0Cv25oKr0gLdXm4=;
-        b=dHQU37rRrHCiJLGp1b7MhMSo0MbZVmoKliD6u51SmcxN48lj6sms4JFpJAtApAAQMs
-         B7lj7lssC47Gb1sdpfRxqsPb/Qb9AcSSuynvUjdXL+0feDKH5qJnwyp1bHX9r1wKaKhI
-         JzGWYEq35RxCi6gkUSJI87DKvycv/GfxbwXdqIES6t9TI04iUHvswA51T1kwGyhyfZVS
-         clRtuHbKrYXwfAYI60zR8WUqZuaA81B6n5PkJYfpCEXJCSTLIjneg47DnfvQvY7BIr3U
-         ucG1fi/U/QvNwwkFrBCsRzPxs9lp5jvLvMvGJVL+0lPC6gyJ7VNw42c/GP07qInuofD6
-         zBLw==
-X-Forwarded-Encrypted: i=1; AL+hErED8Ldj/IfUPhvNN4LUOKbsyvYThPYsVgfpz6ClRaQ0gQRH+yb7vi6jSmXrYVnnNi7pl9g=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9F14fuvUmJqCKrtZCOwJHC+AXsBP8VcfsnTINkW4JnfUWnR2EL
-	zxwxhyiCZ5ZhtQ4eZv8s5gxnQ8fkdZHKNJYsFiiGEZ/FhkwElJNUZ3rA
-X-Gm-Gg: AYBFou0ZO2a/+aul1nYQW4T0idp9NpOmvUYWxYER3rOfQZP5L14xlL69ji8ajebbXXs
-	bLKP1TMv1GMydRCLPUiamFN6NLU+DiyTV7BNwsgUhaMUJAR+pJFOYOI3Jw1s0uL69bt52Gi6qGQ
-	Yg6RFQ5ZtylLON6q6XgUKCvoh1WwvDcTa0fKwkUmbtuSIiaGgXxJJZv1L3YPhZNcQnVNSI4puh4
-	QqH0/EyrXtsO/37gQFhRssSyA3gJCNzoiq1uVjLO77TW2HD7pxJnljPYMpqYJTfSBSG193dqSEt
-	NHm1TlyjsDxjVdBD8ujd3R1W0/5JYUqPppS7pHbRcusmFi6OksriNPNdM0JO00lEeutJKClE01n
-	tnRw2qcU8zr6Es3ggawqIOamJZ2dp5fns2/QObFT3LIUAbk8glKcxOsokAOwif8lrhPJAVEGeWy
-	8E8PGLluN/KsG26dXmmNEE/oqNnKbKsTAx4ICtaI4hYHj8DBn6EwYGgBh55Rhg1v2hbtxNv8S8/
-	zs6GzaEsNQ+bIJFRQRyinRRzZJbGmLv2fvtSp3c/Tx2CP6Y6GHKp4Azg/ZSQLhk+7fI7UcoBDFC
-	LQNo4zvSvbLp8uzP
-X-Received: by 2002:a17:907:6d08:b0:c34:e9fe:82ed with SMTP id a640c23a62f3a-c50963d803amr9289866b.28.1794508434209;
-        Thu, 12 Nov 2026 10:33:54 -0800 (PST)
-Received: from krava ([173.38.220.46])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c5095b236edsm6328666b.23.2026.11.12.10.33.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2026 10:33:53 -0800 (PST)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 12 Nov 2026 19:33:51 +0100
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>,
-	Naveen N Rao <naveen@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jason Baron <jbaron@akamai.com>, Alice Ryhl <aliceryhl@google.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ard Biesheuvel <ardb@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Alan Maguire <almagui@kernel.org>,
-	x86@kernel.org, linux-trace-kernel@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH 03/13] jump_label/x86: Avoid decoding instructions for
- jump entry size
-Message-ID: <avYGjyj9-g5jugTt@krava>
-References: <20261109194916.1089703-1-jolsa@kernel.org>
- <20261109194916.1089703-4-jolsa@kernel.org>
- <20261112083945.GF2668804@noisy.programming.kicks-ass.net>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=nfMdGc36
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=sK8MCNxvFgMKq/D0bjVj2QtnGQtRotR84ghf/Rgf2uo=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794508696; v=1; x=1795113496;
+ b=nfMdGc36XTWFxNt4irRREV+Gfyxp1YjUASb8exVEPZGrUGTdID5QNeFWniUQW4nyn42FLtmv
+ gVdjD7ft63oBkeGQFaXRD1Q7nUMnPKUdFF54RYhm+3TKWiDWRabsicunAfysmS9/DIidqEDsoj+
+ CajguF6POsDnQg25aXm5IuVI=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id bd651488b6e2ad80;
+	Thu, 12 Nov 2026 18:38:15 +0000
+X-Mizu-Trace-ID: bd651488b6e2ad80
+X-Migadu-Flow: FLOW_OUT
+From: Shakeel Butt <shakeel.butt@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Sashiko <sashiko-bot@kernel.org>,
+	Meta kernel team <kernel-team@meta.com>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next] bpf, cgroup: Don't lose errors in effective BPF_LSM_CGROUP queries
+Date: Thu, 12 Nov 2026 10:38:03 -0800
+Message-ID: <20261112183804.1171535-1-shakeel.butt@linux.dev>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -108,34 +76,67 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261112083945.GF2668804@noisy.programming.kicks-ass.net>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Nov 12, 2026 at 09:39:45AM +0100, Peter Zijlstra wrote:
-> On Mon, Nov 09, 2026 at 08:49:06PM +0100, Jiri Olsa wrote:
-> 
-> >  int arch_jump_entry_size(struct jump_entry *entry)
-> >  {
-> > +	const u8 *code = (void *)jump_entry_code(entry);
-> >  
-> > +	if (code[0] == JMP8_INSN_OPCODE ||
-> > +	    !memcmp(code, x86_nops[JMP8_INSN_SIZE], JMP8_INSN_SIZE))
-> > +		return JMP8_INSN_SIZE;
-> >  
-> > +	if (code[0] == JMP32_INSN_OPCODE ||
-> > +	    !memcmp(code, x86_nops[JMP32_INSN_SIZE], JMP32_INSN_SIZE))
-> > +		return JMP32_INSN_SIZE;
-> > +
-> > +	BUG();
-> >  }
-> 
-> Does this actually generate sane code and checks code[0] first for both
-> values before it goes and does memcmp() ? The naive translation would
-> suggest it does not.
-> 
+An effective BPF_LSM_CGROUP query walks one attach type per LSM hook.
+__cgroup_bpf_query() sets ret to -ENOSPC before the loop when prog_cnt
+is too small, but the effective branch then overwrites ret with each
+type's copy result:
 
-nope.. you're right, I'll make it explicit
+- If the buffer runs out exactly at the end of a type, the last copy
+  returns 0 and the query returns 0 instead of -ENOSPC.
+- If one type's copy faults and a later one succeeds, the query returns
+  0 instead of -EFAULT.
 
-thanks,
-jirka
+Return -EFAULT right away when a copy faults, as the non-effective
+branch does, and leave ret alone otherwise.  The copy helper then no
+longer needs to return -ENOSPC.  That also removes a false -ENOSPC it
+gave when a dummy entry followed the last copied program.
+
+Reproduced in a VM with two BPF_LSM_CGROUP programs on different hooks.
+An effective query with prog_cnt=1 returned 0, and so did one whose
+first id slot was not writable.  With this patch they fail with -ENOSPC
+and -EFAULT.  Queries of other attach types already did.
+
+Fixes: b79c9fc9551b ("bpf: implement BPF_PROG_QUERY for BPF_LSM_CGROUP")
+Reported-by: Sashiko <sashiko-bot@kernel.org>
+Closes: https://lore.kernel.org/bpf/sashiko-outbox-211618@kernel.org/
+Signed-off-by: Shakeel Butt <shakeel.butt@linux.dev>
+---
+This is independent of the "bpf, cgroup: Don't wait for cgroup_mutex to
+read or free cgroup bpf state" series [1], which changes nearby lines.
+The two apply cleanly in either order.
+
+[1] https://lore.kernel.org/bpf/20261112172721.440275-1-shakeel.butt@linux.dev/
+
+ kernel/bpf/cgroup.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 57a785241d42..2bffa9f659cd 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -424,7 +424,7 @@ static int bpf_cgroup_array_copy_to_user(struct bpf_prog_array *array,
+ 			return -EFAULT;
+ 		i++;
+ 	}
+-	return item->prog ? -ENOSPC : 0;
++	return 0;
+ }
+ 
+ static int bpf_cgroup_array_delete_safe_at(struct bpf_prog_array *array,
+@@ -1505,7 +1505,8 @@ static int __cgroup_bpf_query(struct cgroup *cgrp, const union bpf_attr *attr,
+ 			effective = rcu_dereference_protected(cgrp->bpf.effective[atype],
+ 							      lockdep_is_held(&cgroup_mutex));
+ 			cnt = min_t(int, bpf_cgroup_array_length(effective, atype), total_cnt);
+-			ret = bpf_cgroup_array_copy_to_user(effective, prog_ids, cnt, atype);
++			if (bpf_cgroup_array_copy_to_user(effective, prog_ids, cnt, atype))
++				return -EFAULT;
+ 		} else {
+ 			struct hlist_head *progs;
+ 			struct bpf_prog_list *pl;
+
+base-commit: 2e14a351662dc5a3b7421d210049c59edd0425d2
+-- 
+2.53.0-Meta
+
