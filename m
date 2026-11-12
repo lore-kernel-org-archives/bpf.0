@@ -1,88 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794445473;
-	b=upIaDYkEpQpqsBN3p86KmU/tboYi0jIevYZVd6u6KiuBUEtnOhXezbSrPLdtE9z9rY09
-	 BtT+qrffu+8H8DTHqCobXTeUk83zprWiO0M8ElOyravVKaTVEgRV5OSx0fDlcotOOxdbP
-	 urryJ4zjoGYav52xz2TmH8bXCPziu52yzI17+5n12kVN5fMIMTVRULvHb3/pwHW3IzLmh
-	 aV5kmdEkHaqcugsWyyDfZbezHWpBM4b0CS/twD5UJrcabiut3soDT8yj78e2NfosHWq0L
-	 4LtdLSM7aqBmlvrC7pyXOAy3HsKXVtd/oXc1nCshyjPDN/TPmSRUFFViI9fzliJGhCg==
+	t=1794446325;
+	b=SyTE+iwZKwqyHIIlJqAwo+2+9+5cf5W8gApu2Or/S2zpzxQCu16ag4stzvIuYjubCzRp
+	 ChiupgHgvHlAIBNlCL1uZZLegRGHq/7KzvE64+rer2yJamQVXduv4Bsqd8ztAJc7yPk/r
+	 H6iUZOhj6L64h6jzdmyFesp6sKXtCFlLIthiZYgpjE5f+f7Fo7UZS5q+06phbiaNIIkkk
+	 i8fd+jvlftfb8GYdwKssrFgLaSzMo07LOLVBHEyEqVcTOpIXh5hff0Xse3eUZ+CrtlNZQ
+	 esMr2zB5EpX+JV8a1Sm8txs0D0cbBjseghl+l2Ilq4fdx001y+RcJ65xXkJiTRWEmXQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794445473;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794446325;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
 	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=ImXBWGlfZVszV/Tkddt3FR7QWzPa65TkJvi8WUZhBmU=;
-	b=5KmgNXDUn1Tak3lPWhOYftcYxFMuDZB6z7vrQaXEANcx2HoSt1iPqvZZBPg/PrccAv1P
-	 eNqz3VfYrqpHeV6M4HxNNZFyHvLjQEqTpArL8aOE981KzAhspIJX8EmmuuhsKgdtQjWnl
-	 A6YGmwLWU+u74dDdfSBNvbQ98KpmvRoMky2d1qd5g+tsdlSQ5/g7rXfybyL8Zp3dls5Eo
-	 PaD0tCXm4xweRLzgjWHxv43xB6vqLa+Roz59N4wfnReCWqlS1s0PV0Bpa5Mpt2wHEUXhJ
-	 aPZTD+aTZJpXJWscnmvolYnO/gBWEhjciKT1fnww8/cICQwHcV/U/zCo9p33QCwGzGg==
+	bh=BbOODuGG0FNPjmT+T9b+kLN1Jw1z3hyQyq3dad9XfLI=;
+	b=3Q63nfqjDeB3oHF3j6sF+k8KcgGAupoxi5jAQ310H4cQsT56vXZ0dy/RH1roVd9jbw+Z
+	 92GHtYYgHnVNW0LppqKBvscGNsZ5+Z2BNJ5xWiKxEW6n/dbJT7rRE4tjM9vvJT3MlYoNX
+	 sijwutGSYSFPtsZfpGkgvfJVATUp6nUFLj7VLdAb4DlZEBLfNRAmpWP5kCrjJfAj9+YN3
+	 6w/VGdsWlGOtuGshAnHw7fTC9FEGhxLI2rAOkxxP2HeYL9V8oa/TM0mDWXeqDU2OtG82U
+	 oZVVa60ihkEsbch0Wy3JeH1LKBmZhPhGmEm1reJVADHJNaNWzzakhu4lv+i6WyoSlQA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=AISAJ9bb;
-	arc=none smtp.remote-ip=209.85.215.173
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="x/N4LmaU";
+	arc=none smtp.remote-ip=209.85.214.169
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3094F606A33B
-	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 01:04:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3094F606A33B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9699606A321
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 01:18:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B9699606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=AISAJ9bb
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-cdb1199bfd8so1575538a12.1
-        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 17:04:33 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=x/N4LmaU
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2e99b1e5b4cso21570795ad.0
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 17:18:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794445472; x=1795050272; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794446324; x=1795051124; darn=vger.kernel.org;
         h=mime-version:content-transfer-encoding:references:in-reply-to:to
          :from:subject:cc:message-id:date:content-type:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=ImXBWGlfZVszV/Tkddt3FR7QWzPa65TkJvi8WUZhBmU=;
-        b=AISAJ9bbeU8GfdfXc0hLt7sMbDWH+hMBgyUtmeidknJQeLdeCBSqQ++3Ab4McAJkWR
-         cyjHGHKPWZzGDjet/7z2iDyQHRyGnIe0HOdif98bx4pz+lYySI0+lCGOf7CeW2pHWIzv
-         tpEDH/VJX+VnjRJHCVZeNsYXOyzUXqAldn6kkUhTXMYZ+sWD0fa4Fc+tKpTZu0IWHlFt
-         irjynHqGN/7GuyKtbmfM4Qje2w8qHPEyAIAcozxd1LS8veIrrThANyqqXGD3oVTjmZiB
-         HOIJg46NX89zi+SYaRrcx29ZvLGnCEStm56k8tduYDPHOn//AwYmnhWpqU28Qgdby59I
-         wSLA==
+        bh=BbOODuGG0FNPjmT+T9b+kLN1Jw1z3hyQyq3dad9XfLI=;
+        b=x/N4LmaUUINrFgwptBM8QAlvbesRfu4BGD9yFRk/riBmXpTFAwL8LzBrtMivIx/h5M
+         nnokgp4EAATpf3aI/KwuCHbZyiVUYrODGsx2gtQV/ThZX83DqA7Eb/P+fukzYMu6Gw7K
+         XRqNTLL2ANJwV2q/XTaTBREHRukfZvTGYYmw8wU8EzmrLlMae4xXOqn1E7oDo2eAEvHF
+         LHMMehFrGb1dJCVfV4StrJ5qftCuWhMd4iBMU8LC7pCNY6O7EaiqWXaclHbgUjralz8V
+         R5SwrqA2tY47XgsCnvTJH2xUTV5REZbP7tX9Mseb+JP+Vb4EABFuxvzNc0K6WCp21vKb
+         bunA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794445472; x=1795050272;
+        d=1e100.net; s=20260707; t=1794446324; x=1795051124;
         h=mime-version:content-transfer-encoding:references:in-reply-to:to
          :from:subject:cc:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ImXBWGlfZVszV/Tkddt3FR7QWzPa65TkJvi8WUZhBmU=;
-        b=jqkKVxc6CcSvwMDx/Xkt3Vrbbp2LVjA4OLCX8ss3mll/Aqw1Ex7q8q0W6Wj1ODbXtL
-         jiOKKG2gTZ2xUcyoHxVBdNTZXAdqymcSA4NjK3McieoRK6fmRQZDkUD7eeKa12eWoK51
-         mw5d/ZqiZVzRl1aXQooodQKiRXp6sqmilTDT5qHjXfvyW/rK6H50JeCujlz2l/jAPHIW
-         atqUAFquin5YsMMkqaz8avyQJ0aq7urc/3U3LhftBGs+k7d4EOa4P7SCRO70oost+yl4
-         p1Qt2YxMf9pHiZr9qJAiN6MxDnx6SLNNk5ELVlQkk2u4BQPUsQJeqSZ9EfukPgyB7nU8
-         cQRg==
-X-Forwarded-Encrypted: i=1; AL+hErGArtxwOAAthkNRIwh7XBLBh96qWK7SCFmxriTJInOI4RtFcLLK+kuBApM6l0ZLD/DGBqQ=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8J+4fAtyL/zsQ7Oph1Ckn8jWUVNA9J0UsUIDfJErnzJsoGsbew
-	wkTLrL1FVWVxmeUm9YuTSQ/Gi0NW42/XCMPCHsl2uncDWH/B3Sy1PXk1
-X-Gm-Gg: AYBFou1dY/vJLybJN8tDCvCaxaLp0oYI+9oao1a2tS+AtzuepGJRXNsN1BWuh5DWuj5
-	3xzvQGPfIH5l05AstR+eUHlCKmtk1foHVRSy1gGZh4FSCgzI/Q2isPTWlxoq7SLN1U0mJAgjJjb
-	lYMsXKbHIkIKqAKwMHHDyKSlKH5fwt9WRDtlVc28zQO6JVxdQlOhVj6yT+wliHnHRHwTzZ5tMLw
-	hBeO8ho3tuxzKQd7Wl5GJeWT/yQjXlROyMmpMATvnykSO7yvSy7d7wLDPyAihC2lapVOYvDi2dr
-	dF7GxcOIzf0TKUqnmb7WqF0VzM1SDFCsNM1potZWzrdqeoHE8yZG0NuJHhvNdsUvqq8t8LNptzW
-	iZKzCKCiUgeoPJW4TnK+sdKCG5B0yUq7DP8b3Yor0wbu0gEmAQEBVh4vxB4V4vMDLNZk0w/1HBq
-	u+h1OVHyN0k+dyrH2nr4v6SOPHOq1m3pVZom9Vx5PA0eeXCZCu44z6v1Gt7f/xHXsNOgLs5t2ed
-	CwSRXJFfM1G3WbTknqV4nZabeKTzbfrTdWRvbjGg4d6CiMqm1CH+hMvCWQqV4sWIx/s+2/UG6zV
-	zFA6I98tY1DskNhBLBdSghW68WpKCX7Zs4kmzNBfpDtlv9P6531xxfjYYaAWG7HoKJ/CzAf4ANw
-	3mUY7g3vdSGN0HKiaEn9k5b9933V5Luh71Q==
-X-Received: by 2002:a17:90b:590c:b0:3a8:699f:959d with SMTP id 98e67ed59e1d1-3b182f28bd7mr3487343a91.31.1794445472226;
-        Wed, 11 Nov 2026 17:04:32 -0800 (PST)
-Received: from localhost ([153.61.198.252])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cdd8d7a26e5sm2247647a12.18.2026.11.11.17.04.30
+        bh=BbOODuGG0FNPjmT+T9b+kLN1Jw1z3hyQyq3dad9XfLI=;
+        b=V9uiwWj8KkvuUmjmyLYTuxXx8x9z5O0luzLc4YhHoZPxvLa4ZiPwH1QZCBuJcL7fG3
+         nRIiaSCEZ0Z7wrLh8mxZI0Fsb1bleIyD/isxqSmiKfGXoIQnc2RdPS1Qj19P+zmolTor
+         Pit4llT3IGdJJ98CD/871Kl7wBvzgkzW+zGqkvZUsTPSSu1D49Y8FZhftUvCq7y3wiT5
+         cDUc7snweti5EBfN52tWhxkigfvb9SITOrrD3U7DeXS11T4+XgpMqfwOqJYjO5earGIg
+         quGimG9SECTNQnOQkguMLHBq7W75oP4xr3IoIEnWsEKFRGfO0gguSWGOQl2XnkpxCYVU
+         lJow==
+X-Forwarded-Encrypted: i=1; AL+hErHkjw/VMBTDaRgmZhyOguGqaMj+dth300POp9cpK3iVnp79k3j0juF+Dhy0W+aBPIJi9SE=@vger.kernel.org
+X-Gm-Message-State: APuU4Z84qk2Ur7hDhWbZivwLb0mIffkLYFmG890QSuQ5C3V1/J4jzIBn
+	7OjYsf1P12EbVLElhsreqXmTKeLGwbYlQUKr4SKph8QMnr7VhUPj3G3Z
+X-Gm-Gg: AYBFou18MZde3gKzKdglvdy22QF6VgFp2/AUrea9rulsqOeuJrD531OikF8Weg0O6GS
+	Lnv3kh87OmW79rnmKhEpP84x+U2QBW0RU9Z6mYmzVxwItUh327A0vxktepB5shgTkXLONihph7X
+	gtLk2rvjewQQePWH6mH0xcztoNWUmgk9bRmyeh+DNpmDvol52pZEJMrQddGGovWGhLK9lP3ux3X
+	ro2YiTdTC6mb244DdwmQyMqcTFoHTGLStw+BasHLgn9Po6x6jbbosx5CZ/amOAmpqx+LYuKX1hl
+	jjzoItVNmyjGWmfUMXdlFrm+s7tW8zPyLuuZVNzeusB3Deou7jsuJR2ZMfn55XcPyQgA6Nfa+Nf
+	GC8uPz5uvykA+ImUyl+kEPFw6vn6NuIAyabWXUS+Js1f6gN2Dv3Ce+h0gBseZpBM078gkuRYsQa
+	GFykLip9aXoQbTZpLNgeVyXbXEJ7DLIEguwu40tMYlbyejcixIiDqmj5YXLIPSQZ6TCh0/lGIKf
+	OGZ0r2/bg4A5QDsHRzefNOFrkBo9u9rigIcXa597Hz1bTS7hMJUr9S1kohVB4bOGAUIi4IbEBZk
+	6+HroW4OUVAArdeQMIcpKvzdrsjfyI48vL61ch+4PGx/VlYQart4Tq2KXIhb0cID/fvrmT31BhD
+	6q/r5Wt/hcG7+w0cfZ/FNNKmGLsg4o2CiBA==
+X-Received: by 2002:a17:902:cf4a:b0:2dd:ad74:ac28 with SMTP id d9443c01a7336-2edd7752fa1mr45783595ad.26.1794446323913;
+        Wed, 11 Nov 2026 17:18:43 -0800 (PST)
+Received: from localhost ([153.61.198.248])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2edb6d7d964sm25621155ad.32.2026.11.11.17.18.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Nov 2026 17:04:31 -0800 (PST)
+        Wed, 11 Nov 2026 17:18:43 -0800 (PST)
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 12 Nov 2026 01:04:30 +0000
-Message-Id: <DMSTTWR4MAET.1VEV3R66S7ZFY@gmail.com>
+Date: Thu, 12 Nov 2026 01:18:42 +0000
+Message-Id: <DMSU4S7392QQ.357Y29RMDZ8BJ@gmail.com>
 Cc: "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman"
  <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song
  Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri
@@ -92,13 +92,13 @@ Cc: "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman"
  Hiramatsu" <mhiramat@kernel.org>, "Mathieu Desnoyers"
  <mathieu.desnoyers@efficios.com>, "JP Kobryn" <jp.kobryn@linux.dev>,
  <linux-trace-kernel@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v2 2/5] bpf: Check program recursion per task
- via bpf_ctx
+Subject: Re: [PATCH bpf-next v2 0/5] bpf: Check recursion per task for
+ preemptible programs
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
 To: <mikeba@sentinelone.com>, <bpf@vger.kernel.org>, "Daniel Borkmann"
  <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>
-In-Reply-To: <20261111-bpf-preempt-v2-r2-v2-2-9d8f6b952ad2@sentinelone.com>
-References: <20261111-bpf-preempt-v2-r2-v2-0-9d8f6b952ad2@sentinelone.com> <20261111-bpf-preempt-v2-r2-v2-2-9d8f6b952ad2@sentinelone.com>
+In-Reply-To: <20261111-bpf-preempt-v2-r2-v2-0-9d8f6b952ad2@sentinelone.com>
+References: <20261111-bpf-preempt-v2-r2-v2-0-9d8f6b952ad2@sentinelone.com>
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -111,33 +111,69 @@ Precedence: list
 MIME-Version: 1.0
 
 On Wed, Nov 11, 2026 at 11:39 AM Mike Bazov via B4 Relay <devnull+mikeba.sentinelone.com@kernel.org> wrote:
-> As a result, the same program can now run in two tasks at once on one
-> CPU. Programs that use a per-CPU map as scratch space across helper
-> calls may see another run's data, where the run was dropped before.
+> This series checks recursion per task instead. Each run already links a
+> run context into the task's chain (current->bpf_ctx); the run context
+> now records the program, and the check walks the task's chain.
 
-The kernel has such scratch space too: bpf_raw_tp_regs.
-bpf_get_stack(), bpf_get_stackid() and bpf_perf_event_output() of fentry,
-raw_tp and tp_btf progs take a slot of it with get_bpf_raw_tp_regs().
-It doesn't disable preemption. Three tasks on one cpu:
+The link walk doesn't look too bad,
+but pls share bench trig-fentry/exit/rawtp numbers.
+Maybe we should do a per-task array of progs instead to detect recursion?
+It's likely more cache efficient than link list walk.
 
-  task A              task B              task C
-  level 1, regs[0]
+Just for the record here is the illustration of
+the case I was concerned about earlier:
+
+  task A, cpu 0                     task B, cpu 0
+  buf = lookup(&percpu_scratch)
+  fill buf
   <preempted>
-                      level 2, regs[1]
-                      <preempted>
-  put: level 1
-                                          level 2, regs[1]
-                      uses the regs of C
+                                    buf = lookup(&percpu_scratch)
+                                    fill buf
+                                    output(buf)
+  output(buf)   <- data of B
 
-B sends a sample or a stack trace with the regs of C.
-This is an existing bug. Today it takes two or more progs.
-With this patch A, B and C can be in one prog.
-Doesn't hold the series, but I had to mention.
+               today              with the series
+  -----------  -----------------  -----------------
+  run of B     skipped            runs
+  event of A   correct            has the data of B
+  who sees it  recursion_misses   nobody
 
-> Fixes: ca06f55b9002 ("bpf: Add per-program recursion prevention mechanism")
-> Fixes: a46023d5616e ("tracing: Guard __DECLARE_TRACE() use of __DO_TRACE_CALL() with SRCU-fast")
-> Fixes: 439ebd5b5708 ("bpf: Add sleepable support for raw tracepoint programs")
+A prog with a scratch map of its own is correct today and
+that's what plenty of production bpf progs use today.
 
-I don't think we will be sending them to stable soon.
-This is a big behavior change.
-Backports only after next merge window.
+This patch set will make them send corrupted events, and nothing counts
+this corrupted events. Today, at least, you have a miss count.
+
+Please add it to commit log, so that trade-offs are clear.
+Commit log here and in cover letter talk about 'what'.
+It needs 'why' and 'trade offs'.
+
+Also should we add an verbose warning to the verifier that
+when the tracing prog that uses per-cpu maps might have corrupted
+per-cpu data? I know, no one is reading the warnings unless they
+are verifier errors, but above scenario really worries me.
+I thought about automatic insertion of bpf_preempt_disable() for such lookups
+and bpf_preempt_enable() in epilogue.
+Maybe that's the way?
+
+> - Timed may_goto keeps its budget per program and CPU, as before: a run
+>   in another task can renew the budget of a preempted run.
+
+Not quite.
+Today prog->active rejects B before the first insns of the prog.
+These insns set count and timestamp.
+With the link list approach every B gives A 250 ms more:
+
+  task A, cpu 0                task B, cpu 0
+  spins on may_goto
+  <preempted>
+                               enters the prog:
+                               count = BPF_MAX_TIMED_LOOPS
+                               timestamp = 0
+  spins for 250 ms more
+
+On a hot function A never ends, and it holds rcu_read_lock.
+So the promise of may_goto that I just fixed a week or so ago
+will be borken again.
+
+pw-bot: cr
