@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.182
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794442126;
-	b=U3FxB14bMudO0w3R5AfALshTfYJkE4kWtEmY79a4oBEFgKqr7KxqJX/0y2cg3YYai7uf
-	 /8ICTcXHWlyBLxEUEnyE9kC97Xoo3B8YyxanYDCh8kwsyFO5f9a+B4bqNqkH55JnD6Jc7
-	 mhamRcrsCdziL8njiOrvaUx0aHwvEhdOOM5+InmdcUTI88scCG+O/APXd/bjZBUBvYheh
-	 R/CfijvBYyKcJ21Pn1pPEQqANovqLwJlyo7rxBlXLWgdQIqQfUICB2rv6Tg1yiWGH7tE+
-	 3Y4IXcBQFiRs10/j2Vb+WgFfPikWynXFLPF8atJQzD/8+pPzehxWRVPESSHI4Dsq54w==
+	t=1794442133;
+	b=ibpvp34r40rtNm57/K1HJKh/99tZKUtwuFtspOpccZ/jeBvj9OSPI7C76V4HQ4t2n6gS
+	 yuA1VJRcbRI0LRMYEuLJTDPtJCf3rSipyjC0phko/rwLQTUC7e12MCGBKOTnbHe9n+MPe
+	 rQ3f3ZPkq3rmlNBUvtuskgyjpX8xRV/t4uCBfYur2k24b5NwBaDrpR9Ku9UE1JOuH7TEV
+	 yVNFU5zOn3N2KkO5noRIVKkSRAb18KtLP/oas+ty1QukpwEssvVs6tvDNm77DiKJkCcDy
+	 xINyokTMtocPkTy8oAXUgZbAAFFsCKAG2ZF2CZhv05DlO7D6yu4w4IFeY6X75z5b42w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794442126;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794442133;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=8hsKQ3r04MWSm4MPAyXf+uKpXmvqJ+4Mr6jtiVLixwU=;
-	b=ZkcXOXCa371qXSkd+2yWa1JeIg5N1VBhRyGWUIWC7mnJDs8k7nwvOeknUPstucHPuhR1
-	 gfE9tHju+M6P7Ri280bZwP+DT7D/rXrdPqESVZyUZnhcx3bbXNRsmM3j0GRLlrGxq/aWD
-	 MEcMnaobzYUkPipY3oNmNY/1Z/PC90jezgDmNTMfJHOvJBSlkYf7rMlzYlAwl0JLG1U8v
-	 g1up6soFLzq+JDJDtF1hwuR0d6kWHXuO7RmYKbK9htl1OeruZFX26pDUXfMrz9nFtSoOh
-	 XSGlEHcID8M8ma3TacUTBh06fvAQCl6XE383n4nQ1FQdu9rfanGQgRKYbaqslVrt9fA==
+	bh=4IqfiLjrtZK0Vc6Kqn07lwCGDYJ5+QU+VRyPbGGpiIU=;
+	b=353lLF8ia+I/l8Ku9lkhiWJ6W+iBeucN6ZECK5UnijYM7BofKeIjLiQaM7Quk8zU0xT/
+	 t3aU+Ix0xPoQ9MWpOa94RyRyrZ19hA3jtaHS1/ZUeQK5tJomFjRgbpk+T3hmthrrwXZDW
+	 sXAtkQSrOqCHxO8KPmqiWfpJhzlO0ArO6qOubsgh9tuPUfMaacquCOlRhN7mqF6ehSmaI
+	 FfOzBTUgKi527Ig38sUURB5D+yvHk+I6UXoLXpnMzeRTbtY5GIgAu5LM8TGPH/X9bA3OW
+	 wgeO9uxe5sje1uK8exE4NOfrbEKzRJjbOPzkvDgo7O0WHPJ633RXpZ9g9hwPClARXUg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=f5Tjc3dU;
-	arc=none smtp.remote-ip=209.85.215.172
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eDwBrqip;
+	arc=none smtp.remote-ip=209.85.210.182
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AF71606A324
-	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 00:08:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1AF71606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E84DD606A31C
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 00:08:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E84DD606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=f5Tjc3dU
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-cc4aa0246b7so1487774a12.3
-        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 16:08:45 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eDwBrqip
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-8b5a6f2f27fso1469272b3a.3
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 16:08:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794442125; x=1795046925; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794442132; x=1795046932; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=8hsKQ3r04MWSm4MPAyXf+uKpXmvqJ+4Mr6jtiVLixwU=;
-        b=f5Tjc3dUt0kWiCU01TpXWBPzXzLuf8uu//z9CJHMpf0Uf8rDt+17L0izCOozjIsk/j
-         +/fhDr409qxHFSV6wav9zmftfe1TlN2EGrvPU52vnca1hx0DO1UA3TkCK0brOmjBxtoO
-         ntw/4c4HRrLlzevY+y5LNGvZ/977DKe4kVjpNeYaR64NfE0gUNI9sA6WgO4YobDXt1vR
-         S6H4g3EdoEhm5kS3eG+zReKYhurAqu8vxfHB40yySjIf7hevNNmDVAXNr2qMiUbhaVxy
-         L3GXkmTU1AmGLodQ0omQTf187CgH/khbykRQHi3yH54Ck6U59rvGKvsXNUXvv27pgbHB
-         ZPXQ==
+        bh=4IqfiLjrtZK0Vc6Kqn07lwCGDYJ5+QU+VRyPbGGpiIU=;
+        b=eDwBrqipAzHulx/sqNghaags/UFAS09g4h2wU1Bt0jd6daupYthIkGRK+UnEIZDLC5
+         CZJgRn3Ps0tL0HJkB4F1OPM+oJnYWVEwZzrpXfbp1riIqu2ykXD2o9pXZrszPdjj/LO+
+         zJ/lIj/PULWm7MNrrl/Wz1BLU1jDKHsDMP8z+hGIB9DO5DDeRv6/EKUqz1HbtGJxgLXg
+         xhEHzo6332uEnwpfWxn4O8f/lKoQkrftmtFNBRyFyIX5Tw8R7HG5uqh5ug/xppzOEZnL
+         abZKpUh7SRoblLhblczkPyGZPv/4Dd0IOSy8+zpR+DUMmXoFFvD+QZJ1hqiXwJeT8m3j
+         WV7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794442125; x=1795046925;
+        d=1e100.net; s=20260707; t=1794442132; x=1795046932;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=8hsKQ3r04MWSm4MPAyXf+uKpXmvqJ+4Mr6jtiVLixwU=;
-        b=KgwEzYHxGGhmiQYarfl0hYdtYigtH2yjjT9Wxm2USdzM0VSrU/cYDawOp8EJoyQ2O5
-         weRdnQbJiy3iV2K7DUaPE0qFT6JEZ+bUX5iVETQHaR8u5kItRCVKTI/FMtBOlOEpLwqX
-         3sLIKMN9Q6KsJBnT3cunyicqCScmevzK+Rkkga4YhcwMEIgscqUmXk94hm8HUtJ3CDXO
-         MYOss0mfTVwB3WQrJMJ5DpxvAMDC2jqiNM7qpjzEnzFQbhieWQJdUbBXX0VZ8IyA/Or8
-         uQ86D4ZuyUJXM5yLETbHw8kOLLs/TTzUNFaA07ouE1/27ouuke8plYUkqDBJxTkSTcEU
-         47yg==
-X-Gm-Message-State: APuU4Z+PgQiiy62AU/dKkISpUmkY+dQAR8bm/uzpq2odMPtvPzOUNV20
-	uIRKBU9mk0DWSX5C7b+0oXYoqLR9mYu7Abmvqq13RIPsf70kQlC+P4R7Vd7Itg==
-X-Gm-Gg: AYBFou18qmhD5aVU0zWy9k1fgwopy54aeNvZ58ofSiWqabCkPax3M8IaAPAGiNYJ2YC
-	pVW9coSLDc1A8WPSkJ4Nu3WNM6uGYFravNUEfEAOFZG6K3kHqt/dqxZ2Zz87PdVpTV8V849BTsu
-	XHCHsfvd59Q98MRvKSS4lsahTte9JruTazamPykB3Es9eVzWNGaJ57RO2n66Rbhi3n0Tf0GclpI
-	vMk8lu/GpVZ5jeol3udX2ejteaTawQueEAtjs+Dnibza/plUhNOqgbQIxME1wJ2sTGpytAbqdKV
-	v/sW5UWwT8GyzgvrNQskNpKL2tGwXkvF17s9jJN+D2mMn21GmMxsAizIUFXC6Engmtfu4/5v5X7
-	+tPqb/gRZY70a7QB9hQr24Z4YtKb5OWN6Y4pWTl5AlwpVWcBNq7Og9MzTMjYpLZSYfS/sWbb7Dg
-	ZLOY5tCCHVDCveJpUZAiRkuV5AxB+ny2QjtRaSFbh8aosdgRjPG5ewy1u92HAt91nLKf279iAqi
-	i9wKETmZQW8fC+UOWhCOlcNO0EIxFeXOhTfB9qmtva866DWc/5hm8SCvMmxrrDevj3JHSmTwXkn
-	/TJpNhl18sFm829+H0dau9WhcW8SwjUZhHlICkDfdLCHaxHDHFVI3IM+e3M+S/cX4IjrpICEbVN
-	Bchp640/83JwC8JTkeAC7G70gR11CGZR7vdON5cVWDRzb+2r+ZRWDJfxO0CZBMadfX5EQQZ19We
-	MlNHNmBz8X4YhcnIwqn6k=
-X-Received: by 2002:a17:90a:e7d0:b0:3ac:ea3b:f28b with SMTP id 98e67ed59e1d1-3b182f1ed7fmr3416770a91.24.1794442125332;
-        Wed, 11 Nov 2026 16:08:45 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.245])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b197c4eea2sm1363947a91.5.2026.11.11.16.08.44
+        bh=4IqfiLjrtZK0Vc6Kqn07lwCGDYJ5+QU+VRyPbGGpiIU=;
+        b=XwzuXqAFrl+bQG+l7BC833qOD54Fww0hOkQS+8kO0fQdELzzDp4a+dH83N/oQHS0Q8
+         ymcKwRmmQ74BaBE6xwhqDR+u11akoC8SlSmWA6UCNBS1uCoY+fKcYal25LGBYQjVP2Ly
+         LL+IEsuWRk8szXMwu7H6m1X+7fNrRbL17TcDrhLRkyWqk4E3ZJChB3v4LqXk3iwVtwJv
+         JhUGhFfCuUm5eytpg5GZdcuDpPphZKEX5DFDBn8dlQp4dDweqScaWX95LE7Pi7SRB5Uc
+         lZXWSZLxf/5ldp4xmFSDDphGLw7S7vxIIx6kqbJsVRjQlVtDaEP9hHf+iQePR6tLoAJo
+         bFig==
+X-Gm-Message-State: APuU4Z8WdJt3yh/fsDIKdiVJCeFI200G8z0QLXN2GkOiWrfF08uxry4A
+	6aXGyl+K+Jv7x/Z0VAcBKxT2374x/FPq6wG+xPSLLuJ9XRVMzQ4za6hWdZwO2A==
+X-Gm-Gg: AYBFou2jBbNB2a0rDNKpsgKakFsPuXNMHr+jsKCaYRefcVVgMS5uaOEZOZ+WWe9FwCy
+	nVGWJ7Kyhwh7cnSANTiabIo86CfHYOiyRxH9P/yBgBhZYFYjVnn2CDRr++/RdVTx+91FTf9fHkn
+	tpa870iS4HPEBuui+ZJZRycLb8SmYifPPwF/+Lb9IAL4cGoUgMVcfG25pfeODhgt/nMorBncwXY
+	rYUjXZj8/zPMyiZEdkog2gzt4sqeckH2q9WyxI+/HZJa19ZxxuJFlU/D3T5pOkW2QH5tOjZze+f
+	sRZzjUjr8lG+2f+JSAGH38hOJORevp1ZEnIkDyZA3ozwoeQ6UHxCWtN/brd2AsBwt3hbT0JbBRc
+	h/QZXaznlsLVYahqPFnHjR5mt21WNXLgsN3tvcdwjnuXa1q7kOEzkHZRvMRRApNMq8qAYCKZTmj
+	+GvsA0WaV1RmKT/KBdoGOARC9qF0HsOCjZyUN52Fed6rmnP+TzRhjTooh/Cd6gwbvCVFnTcSq5r
+	82zM06V6KjoPSh70fzM1vPjvV6imZOMNhEBaaPf+YegvZYmr+dgVcuk+lMbNCmjub9kW9JNcz6S
+	8Pw7KWYh2IELBAhJVViktRLm6Qeh6c+ej8QAouUJdfU/6z4BoLvCMxyOpXOGB30YPqonIfFC9aO
+	3BJ50/ZIPKGQOItGqgbtf2ZTrLOXK5ot/ukmz8JPcGr338oeR/PZLZzGAWfXFXGLDl1p2nb1qAw
+	==
+X-Received: by 2002:a05:6a21:a45:b0:3e8:b7fd:626c with SMTP id adf61e73a8af0-3f2fd69dd40mr4286116637.20.1794442132053;
+        Wed, 11 Nov 2026 16:08:52 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.253])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8baaac46b20sm2639969b3a.30.2026.11.11.16.08.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2026 16:08:44 -0800 (PST)
+        Wed, 11 Nov 2026 16:08:50 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 1/7] bpf: Don't WARN on a register invariants violation
-Date: Thu, 12 Nov 2026 00:08:29 +0000
-Message-ID: <20261112000836.3138846-2-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 2/7] bpf: Add const, sub, zext32 and sext32 operations to cnum
+Date: Thu, 12 Nov 2026 00:08:30 +0000
+Message-ID: <20261112000836.3138846-3-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261112000836.3138846-1-alexei.starovoitov@gmail.com>
 References: <20261112000836.3138846-1-alexei.starovoitov@gmail.com>
@@ -104,114 +104,205 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-  2: r8 &= 60
-  3: r8 *= 7
-  4: if r8 >= 44 goto pc+2
-  5: if r8 < 34 goto pc+1
-  6: r8 += 5
-  verifier bug: REG INVARIANTS VIOLATION (alu): range bounds violation
+A register is a cnum64 and a cnum32. scev.c does not compute with them:
+struct scev_value has the eight bounds umin .. s32_max and adds them by
+hand, with four checks for wrap-around. [-1, 0] + 1 is 'any number' as
+an unsigned range, and [0, 1] as a cnum. A later patch moves scev.c to
+cnum. These operations are missing or open coded:
 
-7 * (x & 60) is a multiple of 28 and [34, 43] has none: the fall-through
-branch of insn 5 is dead. The prog is safe, the verifier has no bug here,
-and a kernel with CONFIG_DEBUG_KERNEL prints a WARN_ONCE(): a panic with
-panic_on_warn=1.
+ - cnum{32,64}_const(v). verifier.c has cnum{32,64}_from_urange(imm, imm)
+   in three functions.
+ - cnum{32,64}_sub(a, b). verifier.c has
+   cnum{32,64}_add(a, cnum{32,64}_negate(b)) in three functions.
+ - cnum64_zext32(), cnum64_sext32(). They move from scev.c to cnum.c.
 
-The verifier gets to insn 6 with r8 in [35, 42], var_off=(0x20; 0xc) and
-step=0+7. var_off leaves 36 and 40, the congruence leaves 35 and 42. The
-register has no value, but no part of it is empty. After the addition
-reg_bounds_sync() cuts the range by var_off to [41, 45], where no value is
-5 modulo 7: now r64 is empty.
+Convert the users. ___mark_reg_known() follows when it moves to struct
+scalar.
 
-var_off, r64, r32 and the congruence are a product that reg_bounds_sync()
-does not reduce to the end. reg_is_empty(), which finds dead branches,
-compares var_off with r64 and with r32. So the verifier takes infeasible
-paths with registers that have no value. That is imprecise, not wrong: no
-execution gets there.
+Like add, negate and intersect the two extensions now give an empty range
+for an empty range. They gave [0, U32_MAX] and all of s64. Their user,
+linear_bounds(), has no empty range to pass. No other functional change.
 
-Commit 5f99f312bd3b ("bpf: add register bounds sanity checks and
-sanitization") added the check: a line in the log, the ranges are
-forgotten, -EFAULT with the test flag. In that form it showed bugs:
-  92424801261d ("bpf: Fix reg_set_min_max corruption of fake_reg")
-  44b7f7151dfc ("bpf: Add missed var_off setting in
-                coerce_subreg_to_size_sx()")
-Commit 0df1a55afa83 ("bpf: Warn on internal verifier errors") made it
-a verifier_bug(). Fixes for it since then:
-  6279846b9b25 ("bpf: Forget ranges when refining tnum after JSET")
-  d43ad9da8052 ("bpf: Skip bounds adjustment for conditional jumps on
-                same scalar register")
-  efc11a667878 ("bpf: Improve bounds when tnum has a single possible
-                value")
-  b254c6d816e5 ("bpf: Simulate branches to prune based on range
-                violations"), its log lists three more
-  150aeba624e8 ("bpf: Fix REG INVARIANTS VIOLATION on speculative pointer
-                arithmetic")
-  84d326943649 ("bpf: Detect a dead branch when a range and var_off don't
-                overlap")
-Five of the six are about a dead branch, one is about a speculative path.
-A new part of the product can add such states again: the listing above
-needs the congruence, which is newer than b254c6d816e5.
-
-WARN*() is not for what user space can trigger: "Do not WARN lightly" in
-Documentation/process/coding-style.rst. Print the line with verbose(), as
-before 0df1a55afa83, without "verifier bug: ". The rest stays: the ranges
-are forgotten, and a prog that is loaded with BPF_F_TEST_REG_INVARIANTS
-fails with -EFAULT: tests with that __flag(), veristat -r, a fuzzer.
-
-'invalid base/step' keeps verifier_bug(): step == 0 or base >= step is
-a malformed congruence, not an empty register.
-
-Fixes: 0df1a55afa83 ("bpf: Warn on internal verifier errors")
+Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/verifier.c | 22 ++++++++++++++--------
- 1 file changed, 14 insertions(+), 8 deletions(-)
+ include/linux/cnum.h   |  6 ++++++
+ kernel/bpf/cnum.c      | 19 +++++++++++++++++++
+ kernel/bpf/cnum_defs.h | 11 +++++++++++
+ kernel/bpf/scev.c      | 10 ----------
+ kernel/bpf/verifier.c  | 12 ++++++------
+ 5 files changed, 42 insertions(+), 16 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index c9c6b1367a0b..5a30ce76da73 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -2355,6 +2355,12 @@ static bool reg_is_empty(struct bpf_reg_state *reg)
- 				   U32_MAX);
+diff --git a/include/linux/cnum.h b/include/linux/cnum.h
+index 49160318adf9..bf514cc0a098 100644
+--- a/include/linux/cnum.h
++++ b/include/linux/cnum.h
+@@ -33,6 +33,7 @@ struct cnum32 {
+ #define CNUM32_UNBOUNDED ((struct cnum32){ .base = 0, .size = U32_MAX })
+ #define CNUM32_EMPTY ((struct cnum32){ .base = U32_MAX, .size = U32_MAX })
+ 
++struct cnum32 cnum32_const(u32 v);
+ struct cnum32 cnum32_from_urange(u32 min, u32 max);
+ struct cnum32 cnum32_from_srange(s32 min, s32 max);
+ u32 cnum32_umin(struct cnum32 cnum);
+@@ -49,6 +50,7 @@ bool cnum32_is_const(struct cnum32 cnum);
+ bool cnum32_is_empty(struct cnum32 cnum);
+ struct cnum32 cnum32_add(struct cnum32 a, struct cnum32 b);
+ struct cnum32 cnum32_negate(struct cnum32 a);
++struct cnum32 cnum32_sub(struct cnum32 a, struct cnum32 b);
+ bool cnum32_is_subset(struct cnum32 outer, struct cnum32 inner);
+ 
+ /* Same as cnum32 but for 64-bit ranges */
+@@ -60,6 +62,7 @@ struct cnum64 {
+ #define CNUM64_UNBOUNDED ((struct cnum64){ .base = 0, .size = U64_MAX })
+ #define CNUM64_EMPTY ((struct cnum64){ .base = U64_MAX, .size = U64_MAX })
+ 
++struct cnum64 cnum64_const(u64 v);
+ struct cnum64 cnum64_from_urange(u64 min, u64 max);
+ struct cnum64 cnum64_from_srange(s64 min, s64 max);
+ u64 cnum64_umin(struct cnum64 cnum);
+@@ -76,9 +79,12 @@ bool cnum64_is_const(struct cnum64 cnum);
+ bool cnum64_is_empty(struct cnum64 cnum);
+ struct cnum64 cnum64_add(struct cnum64 a, struct cnum64 b);
+ struct cnum64 cnum64_negate(struct cnum64 a);
++struct cnum64 cnum64_sub(struct cnum64 a, struct cnum64 b);
+ bool cnum64_is_subset(struct cnum64 outer, struct cnum64 inner);
+ 
+ struct cnum32 cnum32_from_cnum64(struct cnum64 cnum);
++struct cnum64 cnum64_zext32(struct cnum32 cnum);
++struct cnum64 cnum64_sext32(struct cnum32 cnum);
+ struct cnum64 cnum64_cnum32_intersect(struct cnum64 a, struct cnum32 b);
+ struct cnum64 cnum64_intersect_linear(struct cnum64 in, u16 base, u16 step);
+ 
+diff --git a/kernel/bpf/cnum.c b/kernel/bpf/cnum.c
+index 8ec5187d7c75..21bb6411cfb8 100644
+--- a/kernel/bpf/cnum.c
++++ b/kernel/bpf/cnum.c
+@@ -23,6 +23,25 @@ struct cnum32 cnum32_from_cnum64(struct cnum64 cnum)
+ 		return (struct cnum32){ .base = (u32)cnum.base, .size = cnum.size };
  }
  
++/* The zero extension of each value of 'cnum'. An arc that crosses U32_MAX/0 gives [0, U32_MAX]. */
++struct cnum64 cnum64_zext32(struct cnum32 cnum)
++{
++	if (cnum32_is_empty(cnum))
++		return CNUM64_EMPTY;
++	return cnum64_from_urange(cnum32_umin(cnum), cnum32_umax(cnum));
++}
++
 +/*
-+ * var_off, r64, r32 and the line base + step * k are a product that reg_bounds_sync() doesn't
-+ * reduce to the end. The verifier can take an infeasible path with a register that has no value
-+ * while each part looks sane, and a later insn finds it out. That is not a verifier bug: no WARN,
-+ * a line in the log, the ranges are forgotten. A malformed base or step is a bug.
++ * The sign extension of each value of 'cnum'.
++ * An arc that crosses S32_MAX/S32_MIN gives [S32_MIN, S32_MAX].
 + */
- static int reg_bounds_sanity_check(struct bpf_verifier_env *env,
- 				   struct bpf_reg_state *reg, const char *ctx)
++struct cnum64 cnum64_sext32(struct cnum32 cnum)
++{
++	if (cnum32_is_empty(cnum))
++		return CNUM64_EMPTY;
++	return cnum64_from_srange(cnum32_smin(cnum), cnum32_smax(cnum));
++}
++
+ /*
+  * Suppose 'a' and 'b' are laid out as follows:
+  *
+diff --git a/kernel/bpf/cnum_defs.h b/kernel/bpf/cnum_defs.h
+index 05b17a8b4814..56d0c6f555a8 100644
+--- a/kernel/bpf/cnum_defs.h
++++ b/kernel/bpf/cnum_defs.h
+@@ -20,6 +20,11 @@
+ #define EMPTY    __PASTE(__PASTE(CNUM, T), _EMPTY)
+ #define FN(name) __PASTE(__PASTE(cnum, T), __PASTE(_, name))
+ 
++struct cnum_t FN(const)(ut v)
++{
++	return (struct cnum_t){ .base = v, .size = 0 };
++}
++
+ struct cnum_t FN(from_urange)(ut min, ut max)
  {
-@@ -2375,20 +2381,20 @@ static int reg_bounds_sanity_check(struct bpf_verifier_env *env,
- 		goto out;
+ 	return (struct cnum_t){ .base = min, .size = (ut)max - min };
+@@ -259,6 +264,12 @@ struct cnum_t FN(negate)(struct cnum_t a)
+ 	return FN(normalize)((struct cnum_t){ -((ut)a.base + a.size), a.size });
+ }
+ 
++/* { x - y : x in 'a', y in 'b' } */
++struct cnum_t FN(sub)(struct cnum_t a, struct cnum_t b)
++{
++	return FN(add)(a, FN(negate)(b));
++}
++
+ bool FN(is_empty)(struct cnum_t cnum)
+ {
+ 	return cnum.base == EMPTY.base && cnum.size == EMPTY.size;
+diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
+index 8438313e7b4a..a477a3029baa 100644
+--- a/kernel/bpf/scev.c
++++ b/kernel/bpf/scev.c
+@@ -4453,16 +4453,6 @@ static struct bpf_reg_state *spill32_counter(struct scev *scev, struct bpf_func_
+ 	return scev_reg_for_spill32(st, r);
+ }
+ 
+-static struct cnum64 cnum64_zext32(struct cnum32 r32)
+-{
+-	return cnum64_from_urange(cnum32_umin(r32), cnum32_umax(r32));
+-}
+-
+-static struct cnum64 cnum64_sext32(struct cnum32 r32)
+-{
+-	return cnum64_from_srange(cnum32_smin(r32), cnum32_smax(r32));
+-}
+-
+ /* Compute the range an induction variable in `reg` spans over the loop. */
+ static void linear_bounds(struct bpf_reg_state *reg, u32 max_header_count,
+ 			  struct linear_coefs *coefs, struct bounds *out)
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 5a30ce76da73..6512909600f4 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2020,7 +2020,7 @@ void bpf_mark_reg_known_scalar(struct bpf_reg_state *reg, u64 imm)
+ static void __mark_reg32_known(struct bpf_reg_state *reg, u64 imm)
+ {
+ 	reg->var_off = tnum_const_subreg(reg->var_off, imm);
+-	reg->r32 = cnum32_from_urange((u32)imm, (u32)imm);
++	reg->r32 = cnum32_const(imm);
+ }
+ 
+ /* Mark the 'variable offset' part of a register as zero.  This should be
+@@ -6351,8 +6351,8 @@ static void coerce_reg_to_size_sx(struct bpf_reg_state *reg, int size)
+ 			reg->var_off = tnum_const((s32)u64_cval);
+ 
+ 		u64_cval = reg->var_off.value;
+-		reg->r64 = cnum64_from_urange(u64_cval, u64_cval);
+-		reg->r32 = cnum32_from_urange((u32)u64_cval, (u32)u64_cval);
++		reg->r64 = cnum64_const(u64_cval);
++		reg->r32 = cnum32_const(u64_cval);
+ 		return;
  	}
  
--	if (reg->step == 0 || reg->base >= reg->step) {
-+	if (verifier_bug_if(reg->step == 0 || reg->base >= reg->step, env, "%s", ctx)) {
- 		msg = "invalid base/step";
- 		goto out;
- 	}
+@@ -17083,7 +17083,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env, struct bpf_insn
+ 				"Use addition from R10 to form stack addresses within the tracked stack frame.");
+ 			return -EACCES;
+ 		}
+-		dst_reg->r64 = cnum64_add(ptr_reg->r64, cnum64_negate(off_reg->r64));
++		dst_reg->r64 = cnum64_sub(ptr_reg->r64, off_reg->r64);
+ 		dst_reg->var_off = tnum_sub(ptr_reg->var_off, off_reg->var_off);
+ 		dst_reg->raw = ptr_reg->raw;
+ 		if (reg_is_pkt_pointer(ptr_reg)) {
+@@ -17190,13 +17190,13 @@ static void scalar_min_max_add(struct bpf_reg_state *dst_reg,
+ static void scalar32_min_max_sub(struct bpf_reg_state *dst_reg,
+ 				 struct bpf_reg_state *src_reg)
+ {
+-	dst_reg->r32 = cnum32_add(dst_reg->r32, cnum32_negate(src_reg->r32));
++	dst_reg->r32 = cnum32_sub(dst_reg->r32, src_reg->r32);
+ }
  
- 	return 0;
- out:
--	verifier_bug(env, "REG INVARIANTS VIOLATION (%s): %s r64={.base=%#llx, .size=%#llx} "
--		     "r32={.base=%#x, .size=%#x} var_off=(%#llx, %#llx) step=%u+%u",
--		     ctx, msg,
--		     reg->r64.base, reg->r64.size,
--		     reg->r32.base, reg->r32.size,
--		     reg->var_off.value, reg->var_off.mask,
--		     reg->base, reg->step);
-+	verbose(env, "REG INVARIANTS VIOLATION (%s): %s r64={.base=%#llx, .size=%#llx} "
-+		"r32={.base=%#x, .size=%#x} var_off=(%#llx, %#llx) step=%u+%u\n",
-+		ctx, msg,
-+		reg->r64.base, reg->r64.size,
-+		reg->r32.base, reg->r32.size,
-+		reg->var_off.value, reg->var_off.mask,
-+		reg->base, reg->step);
- 	if (env->test_reg_invariants)
- 		return -EFAULT;
- 	__mark_reg_unbounded(reg);
+ static void scalar_min_max_sub(struct bpf_reg_state *dst_reg,
+ 			       struct bpf_reg_state *src_reg)
+ {
+-	dst_reg->r64 = cnum64_add(dst_reg->r64, cnum64_negate(src_reg->r64));
++	dst_reg->r64 = cnum64_sub(dst_reg->r64, src_reg->r64);
+ }
+ 
+ static void scalar32_min_max_mul(struct bpf_reg_state *dst_reg,
 -- 
 2.55.0
 
