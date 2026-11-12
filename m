@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794498875;
-	b=XMBzQQ5WeYyiA0EPWS5otv/31XSgWJ1VHxFmt4HjstIgZqVAfnwj35u7fwGTC0FxRhvi
-	 qfr/8EPhmFCIA9k9zDy3pS9ZfEmDAdWsQdy/D19UpcKqHNK3Cr5ryqw1oSqQe0Vz7TWQj
-	 48YoX28EY5GAMFWNHYMI2P0DeDAXQJ7+zc3caVaSjPjIwVjWpIy5efzle/8haD6NYZCWX
-	 g87qOQemvLfqp1mTwhq18287n2+TjxLYhAX7jmb5614OzN9yNrJvs0sswqLvWXNxT+S0b
-	 fmuQ0ceuM9WmohIKChkhJHSAbEp/tzddK3oOZ4qWwgnTl5j/XDLcaL8rC1lCE/5z1xQ==
+	t=1794498881;
+	b=oyK7Fhi02vMIgZ1QY7wJqOJea5KceYao66F9l/P82hGNXy6W1/icc9zIRlFzt+Ml0Tap
+	 cYx/tdZ3NRWqImywW1wAbPLXHG1UHSdhPJevMaFhRQjCc3PITRVCvTG0vZQ4ZKAQarb2E
+	 v02UUM5gQrzdAgq/0kWmB5uHJNvVhAMvlw6ADEg60EFH4eq5WyA/1KfVOD9BWDKq18gJJ
+	 rI42+zj/bSszAK4S+7nkx8da0fcHwyVyqnqfV3wNpvI4dETKtscUrOqJ0hZ5D3yPLEuyt
+	 7GOwMsX5rlj2GGd5B0iEHHeC83qzSrWY4SDqZfB4cbWpUS7taP6suDQceQppRlXJWsA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794498875;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794498881;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=LzLsLO+2G2mLGcXsoPeDJvZ5ZaSjG/RP0/EP2rwgcNw=;
-	b=MnswTJBRz3RbjBWBt0pSiILxpY2HraHl6kpXPv5lzF0BO2nwhxRIe1zOFZQxE40IvJZO
-	 6r/5hcpqpIRZ+YZM42utJnkKMCJ4ut9UswVxDN51SE1tJjFwQJI9TUHg6osU5BtAoiZNt
-	 pkX0A7RXYXHeVq2xcxdcM4w+2oClhQ6eQ1l4n8UJi1ckRL4gaQmNK9VlFAO861MBCrNVo
-	 8Xrdw9xURHkIqdd/t38wyhvKwDQA6IF5AsBD6IIWI94c8irnY1aryueRk2C7r4pmawHgS
-	 EpJGwN/bsxqqRgDSSlAsi0WTRupd5Wjgft4Z+FJu1pjxUow/elIxzk4vEbWTsSHaTdw==
+	bh=ebj6Lsq8pH33aOTAO0E70QKCpVIiAvLd+XmPZxs8ctc=;
+	b=obVFFZUyEZDuoXQrR1stgWrugnbrviC0t4OPatqVSclC5nDlCe5YO1fl35cTJgaqX06T
+	 hDHpXQtPBZNa9MdLMQmx6UgteenlAz4czxlgaLvdxJnTbZyfNhp1qAlB53sHmmCOy5Irs
+	 Vx5vfqnSJORshWKSAkzrOUDHjt0DdZx+yxgvSvwGgbRwhkR2q/8kWilXhmMZ5lD+EwNTl
+	 V5/t1vn18tzgeCpA8a1Ddvgs1Y1pRr7fwbySzqditctsRPM7czNUznfmhiSVJfj7rdOmg
+	 RBvk9IP/Ndu2KY26UV3bS+ZoYZ+AszhANtJhS0/2YXujmMDlYmCjnryQyniftOiJypA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kJ4Z1Z9o;
-	arc=none smtp.remote-ip=209.85.216.52
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=x0Zav6tu;
+	arc=none smtp.remote-ip=209.85.214.178
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04FB6606A31C
-	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 15:54:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 04FB6606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47287606A337
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 15:54:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 47287606A337
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kJ4Z1Z9o
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-3ad41b47541so2906355a91.1
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 07:54:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=x0Zav6tu
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2ed06b725fdso8511825ad.0
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 07:54:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794498874; x=1795103674; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794498880; x=1795103680; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=LzLsLO+2G2mLGcXsoPeDJvZ5ZaSjG/RP0/EP2rwgcNw=;
-        b=kJ4Z1Z9oXLPl1N0Y5WUzOmq6CcyWsaga5Hj3x3LL4a2BF0+dgZEgu+IL6OFYd9MngG
-         s0HmO8fftTAY6nNOl2BzE6uS2cstTDprIxSrXV4y+O3ukbSyWBM+Oz4E+yzBWd83aY+Y
-         ThJMAhRlo3adHUsTz5WIcX5hanb6We9KRkw3C0GOpw+MdKrr1WmlvEAKZ4bVuT2mcjYd
-         bXpcYaIJemS2vvsGr2fo3B5R4nVb7sUPcjST4dR/6YSLKRAGcKtgKvScMhev/ViSxUfw
-         YnfK7RL3CdN23JfvQn/tmSjKRe6ZJA9SD06IYUEU9r8b+NK2q0mDgFbvDAo3Bg4SlUiW
-         7xnA==
+        bh=ebj6Lsq8pH33aOTAO0E70QKCpVIiAvLd+XmPZxs8ctc=;
+        b=x0Zav6tuT6OjOPnLM3E48Xwb163bVtWKRxuLu9+5U/ZbpSvP59+6MWIqDlq3sGzB9n
+         JPXPdYj1Pw+ZrGgHxOVF7Y0Dq3xjjAATSDGD7NqcncSYmQZrACTOB1VvxWjBXsDVHJND
+         WzX2atOyGYC1Tq3y/+gWxWSqguRbt/DSgHLhYgMJDaKuZUHkmDjvFmaTNSl0FNQ8RBwa
+         osWzKUgjsYUBrmyms8jsxs2VmAymjkli3X9s7UJiYpTti9VU0WEACheutF+u6vGDXihq
+         5cBHvfSkOM1k02rOAzzWouM4vBU7texb3Dn8MOZTXUKIdh+KM0GpgjU7GYeeqBjn04nF
+         nXNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794498874; x=1795103674;
+        d=1e100.net; s=20260707; t=1794498880; x=1795103680;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=LzLsLO+2G2mLGcXsoPeDJvZ5ZaSjG/RP0/EP2rwgcNw=;
-        b=PVH6hd9+t/bruyxdmjCjrXCLzT0xFMHMsGsMNl5PlEj9Sbj2JLvLJoRFouRZ+8KKbm
-         jXInmPIB2woFxDY/Lntx8aa+/2K0VQxskMbnMfMSVjVzZbyXdhldVJKX2IJdwoKUvGXC
-         2PztEcDxaHvSB13Mvr9zp4M4WQqgUjUbKRzNnlRC9K4rj/ZgSp3rZZlV9OD6OkbffcoK
-         gVfN80Zuk2MJziBh6AFk9GRN9HN63DHPU2Q2bGun4CWaMm+A/JfoBdSrJo1hlNw4uEzg
-         +MVx5wTtM6UpYnDZw6N5kevqtbM/GkBYg48FcbvDsX5SVg5AJVxF2JLHCRp5t7QGA2Kh
-         MDRg==
-X-Gm-Message-State: APuU4Z9LLbWbrnStroWHcd/DxG5New/1xFi9r6SBmA78jcKCWNIDqasz
-	OieMsAoR9K6aLzHGcxbJqp/jzlkaH3AG1td9golg3YChHCp8uTf/YmOKjKUGvw==
-X-Gm-Gg: AYBFou080kqNyNPM7YBxGEwPN6Jfqv+rgO9dLLXPWQ1n1KDJwXctT28CmngO1BoxBSO
-	ty/06u6e7cbrfSMfJM308ALE/bZmOzebL3tpgvvJXhbGSvR7t3wBA7YCJJynC8SKlZXR0R+Kh3r
-	IzASWfrGKdMVoLK88VoSLL0nbCtqoFOsvZA7YTK5OTNrxvY12XMkEHWhtnvzr2xYfUZs4ISGFzS
-	TfoPzvV2ugFFjq42kD3m3qnNRc9j0MoQYdKDS5eoTcV0r2RvwL4ejZwFofbIiNucZ/ouFm3Zz0Z
-	YU/b1UEUVPor58SW4uYOIYc99O/WIYsfRb2gvHbxgtIsPW7+CfkGHbSyAs+3g4kYlJmwnHP/0U6
-	Kb53mjx5Yiz3SWW8FcIRhGNbWdwEvjUG597tHbqL5pUDz/NxE4CYI+biJcbQ2guSRXnwp0KfWD8
-	fQWfJHh6g61Mbi89xEDSnog+Bl1QdEwRCa+hSy/FkFHhKgIpMQkh65J/g5IP83mU0D8O5KvWEkq
-	QEQ/0MyVUNmpOjpcwiFmC4l6vRe8QkSdBsL/PB598CSGHKS5jJSyMlpB2L53jNS9OKg6Q+8jX5I
-	Byvw5BfQY0yGiUnLbmUUauFImLZZbyBG/a3OVO1FSi5GRyeHSeZf2rOcN+r2guNVStN7j6akI7b
-	iqxjmH8pHfOLvV7LyOO407MKFcHu/W2vpE2qb32OO8ECh6g6r6M/lwo5mLOkJs9H5EyuyOfY6mC
-	A=
-X-Received: by 2002:a17:90b:5405:b0:3ac:9c37:9430 with SMTP id 98e67ed59e1d1-3b182e6f7c4mr5766421a91.21.1794498874005;
-        Thu, 12 Nov 2026 07:54:34 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.243])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b197d257a0sm5308099a91.11.2026.11.12.07.54.33
+        bh=ebj6Lsq8pH33aOTAO0E70QKCpVIiAvLd+XmPZxs8ctc=;
+        b=yjgO1lZTUyKFKy9wOh88YfOALKeY0n5StcISu8XeUOs85foZJ/ie6YX+hAW44U2DlT
+         jpytdJXKK9qjkBUUQsHrhzsT4wa5i4HcTqmVgCPoJ9llODUScok9AM3bNKzshO5+QbRY
+         UF+a86KcNIh2DKhJYZMHVP2IhdBM8TaeKIV0p1oXFbw2+Bqi1ZqzhME2QbU7l1q4V7l0
+         +PoyoVBm7m6BLm3hO3n2diluE0VyWLq8bnJtwIjrvOj/Yh8JJjNTTLy9BONj1oW2q1nP
+         CTM9dngdk6BYq1iTXCdAY2s12KzUcSHiWjXcA2Yxvd2Ml2dqAp+9SghSx7Nq/z7bQE65
+         h6ag==
+X-Gm-Message-State: APuU4Z+WnnXyhYHkGJsb1shhT+5K19uiAxbz1tmct5OOmqs4C1k0KFyu
+	CHnBShWsFCbWffd++09zz6X5RdHOdlSZpT0KU+wyMi7us6deQykX0hyoM94Ekw==
+X-Gm-Gg: AYBFou1/SWMvHLMpaB2AnvIA1ZqxGtNbgtfbidusnZ9o0qOKurs0FJ+yP997iIvH7yI
+	N6tQjsYJwlKp9F7FOqe6v3nDWDAWC7opVBBezAv87qrI/6etE1E2RloC29vEaU3IQ9DtjYTiDE9
+	rGaGQUeiFuG/DoIrnnpK7tY7hIsbnat8EJnsK3EwtnuhhFMdUn+EsnG71DGjOoGoJoyODv7ZLE5
+	sC42717rlPremJIu6SG26EqZjMTzI+SHVsDcYay6wsu3SigR415Q57cg3SxndjPPAdX0QuI/AVF
+	bk7uy3NXs2Q+lMTVtTuaVIpljqlttQrn5vWEb3oJ8paa6keLeul08Pmv0vE3cRptlu6nlpUi2UG
+	ufOYzm32eEj+59o7XQavh+mkbF7xjUUDPhIt7gm3zou/12vcFH12obD7WaPzd59quu/g+2zW+Mz
+	2gQa/67Rt9HJ11y4d+BmME8HdvOvF3Vl9zNQrsK0jUnKJluldEtRVUfHLEd2aLVaDolXRiF/9Tx
+	wxmzc7prcWWHGssCzs0CJz40GDHCmuXTiEdMqy6GAzOtXdcZSFlON2yaQxPgFREFdy2dpoSAIks
+	dyhm1uknhVKfujn53Qba3jyhD8GQqct2RU1Pw98rNu3Rm+x4S2hEgrzoWV/Q9xtJqVKA8ayRAm7
+	YQj1MexDEWuqMgIRl+lKdvDEgfQGndi/Qr4ruh0k77j08ps9mx6FFF3y8xUYn/mKszQoK3VA1Qg
+	s=
+X-Received: by 2002:a17:903:2f4f:b0:2e9:484d:693 with SMTP id d9443c01a7336-2edf1631283mr22121835ad.5.1794498880066;
+        Thu, 12 Nov 2026 07:54:40 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.245])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2edbc8a1eb7sm34733535ad.39.2026.11.12.07.54.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2026 07:54:33 -0800 (PST)
+        Thu, 12 Nov 2026 07:54:39 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 09/12] bpf: Add scalar_intersect()
-Date: Thu, 12 Nov 2026 15:53:34 +0000
-Message-ID: <20261112155337.1040699-10-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 10/12] bpf: Evaluate expressions by the transfer functions of the main pass
+Date: Thu, 12 Nov 2026 15:53:35 +0000
+Message-ID: <20261112155337.1040699-11-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261112155337.1040699-1-alexei.starovoitov@gmail.com>
 References: <20261112155337.1040699-1-alexei.starovoitov@gmail.com>
@@ -104,140 +104,315 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-	r1 = r6
-	r1 &= 255
-	if r1 > 29 goto out
-	/* r6 is used */
+	current_header = NULL;
+	if (interesting_headers < HTTP2_MAX_HEADERS_COUNT_FOR_PROCESSING)
+		current_header = &headers_to_process[interesting_headers];
 
-Scalar evolution tells refine_linked_regs() that r6 and r1 are equal in
-their low 8 bits. For other registers it is 16, 32 or 64 bits. The function
-intersects the two by hand: are they equal in all bits because both fit, do
-the known bits overlap, the 32-bit ranges, the 64-bit ranges, the
-reduction, and back to the saved register if nothing is left.
+clang computes the address before it tests the index (the HTTP/2 parser of
+the Datadog agent). The jump bounds the index, and scalar evolution has the
+expression of the pointer: (+ hdrs (* (zext8 n) 20)). What nobody computes
+is the range of that expression after the jump. The next patch does.
 
-The next patches compute the value of an expression in scev.c. A value can
-be known from more than one source there, what a register holds and what
-the operands give, in a number of bits each. The sources are intersected by
-the same rules.
+eval_expr() is the evaluator that scev.c has. It computes the value of an
+expression in a state at a loop header: the initial value, the step and the
+bound of an induction variable. It knows a register, a constant, an add and
+(zext32 slot) for a 32-bit spill.
 
-Move the rules into scalar_intersect(dst, src, bits), an operation on
-struct scalar like scalar_add() and scalar_alu(). No functional change.
+Give it + - * / % & | ^ << >> s>> and the extensions. scev_value_alu()
+applies an op to two values by scalar_alu(), the transfer function that the
+main pass applies to the insn. scalar_ext() is new: the two casts of the
+main pass under one name. No arithmetic is added. neg and the byte swaps
+have no value, as before. Two things are not in struct scalar:
+
+ - The width. A 32-bit spill holds the low 32 bits of a value: struct
+   scev_value gets 'bits', the value is known modulo 2^bits.
+   + - * & | ^ << respect that. An extension of N bits wants N bits and
+   makes 64. >> s>> / % want 64. (zext32 slot) is no special case any more.
+ - The type. Expressions have none, the state has it. A pointer can be an
+   operand of an add, with a scalar, as in scev_value_add(), which goes
+   with its level 2 message.
+
+match_linear_latch() decides which expressions get here, and it does not
+change. For these: (zext32 r) of a register or a 64-bit spill had no value
+and has one. A slot with a 32-bit spill, read in 64 bits, was unknown and
+has no value. A sum of scalars ends with the reduction.
+
+struct scev_value moves to bpf_verifier.h: the main pass is going to get
+one.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h |  1 +
- kernel/bpf/verifier.c        | 70 ++++++++++++++++++++++--------------
- 2 files changed, 45 insertions(+), 26 deletions(-)
+ include/linux/bpf_verifier.h |   7 ++
+ kernel/bpf/scev.c            | 171 +++++++++++++++++++++++++----------
+ kernel/bpf/verifier.c        |   9 ++
+ 3 files changed, 140 insertions(+), 47 deletions(-)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 15528f3a352e..516e704c3d7d 100644
+index 516e704c3d7d..978aa6db16e0 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
 @@ -2071,6 +2071,7 @@ void scalar_set_const(struct scalar *s, u64 imm);
  void scalar_add(struct scalar *dst, const struct scalar *a, const struct scalar *b);
  void scalar_alu(struct scalar *dst, const struct scalar *src, const struct bpf_insn *insn);
  void scalar_zext32(struct scalar *s);
-+bool scalar_intersect(struct scalar *dst, const struct scalar *src, u32 bits);
++void scalar_ext(struct scalar *s, u32 bits, bool sign);
+ bool scalar_intersect(struct scalar *dst, const struct scalar *src, u32 bits);
  void scalar_union(struct scalar *acc, const struct scalar *src);
  int bpf_set_reg_range(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
- 		      const struct scalar *range);
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 9721530636e3..47ed36292e1b 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -19394,6 +19394,46 @@ static bool scalars_fit_in_bits(const struct scalar *a, const struct scalar *b,
- 		cnum64_smin(b->r64) >= -smax - 1 && cnum64_smax(b->r64) <= smax);
+@@ -2235,6 +2236,12 @@ int bpf_init_scev(struct bpf_verifier_env *env);
+ void bpf_free_scev(struct bpf_verifier_env *env);
+ int bpf_compute_scev(struct bpf_verifier_env *env);
+ int bpf_scev_jump_counts(struct bpf_verifier_env *env, int header, int n, bool taken_leaves);
++/* What is known about a scalar or about the offset of a pointer. */
++struct scev_value {
++	struct scalar;
++	int ptr_reg;	/* SCEV register identifying the pointer origin, or -1. */
++	u8 bits;	/* The value is known modulo 2^bits. 0: nothing is known. */
++};
+ bool bpf_scev_next_linked_reg(struct bpf_verifier_env *env, int insn_idx, u32 regno, u32 *pos,
+ 			      u32 *linked_regno, u32 *fill_off, int *base_regno, s64 *delta,
+ 			      u32 *bits);
+diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
+index af437e9286cb..008d8b2a53e6 100644
+--- a/kernel/bpf/scev.c
++++ b/kernel/bpf/scev.c
+@@ -3493,12 +3493,6 @@ int bpf_scev_jump_counts(struct bpf_verifier_env *env, int header, int n, bool t
+ 	return match_linear_latch(env, header, n, taken_leaves, &latch);
+ }
+ 
+-/* What is known about a scalar or about the offset of a pointer. */
+-struct scev_value {
+-	struct scalar;
+-	int ptr_reg;	/* SCEV register identifying the pointer origin, or -1. */
+-};
+-
+ static void log_scev_value(struct bpf_verifier_env *env, struct bpf_func_state *st,
+ 			   const struct scev_value *v)
+ {
+@@ -3548,53 +3542,135 @@ static bool scev_value_compatible(struct bpf_verifier_env *env, struct bpf_func_
+ 	return false;
+ }
+ 
+-static bool scev_value_add(struct bpf_verifier_env *env, struct bpf_func_state *st,
+-			   const struct scev_value *a, const struct scev_value *b,
+-			   struct scev_value *result)
++/* @v = the SCEV register @r in the state @st */
++static void eval_reg(struct bpf_verifier_env *env, struct bpf_func_state *st, u32 r,
++		     struct scev_value *v)
+ {
+-	if (a->ptr_reg >= 0 && b->ptr_reg >= 0) {
+-		if (env->log.level & BPF_LOG_LEVEL2)
+-			log_incompatible_scev_values(env, "can't add two pointers", st, a, b);
+-		return false;
++	const struct bpf_reg_state *reg;
++
++	v->ptr_reg = -1;
++	v->bits = 64;
++	/* a 32-bit spill, or the upper half of the slot is dead: the low 32 bits of the value */
++	reg = scev_reg_for_spill32(st, r);
++	if (reg)
++		v->bits = 32;
++	else
++		reg = scev_reg_for_read(env, st, r);
++	if (!reg || reg->type == NOT_INIT) {
++		v->bits = 0;
++		return;
+ 	}
+-	result->ptr_reg = a->ptr_reg >= 0 ? a->ptr_reg : b->ptr_reg;
+-	scalar_add(scalar_of(result), scalar_of(a), scalar_of(b));
+-	return true;
++	*scalar_of(v) = *scalar_of(reg);
++	if (reg->type != SCALAR_VALUE)
++		v->ptr_reg = r;
++}
++
++static void scev_value_set_const(struct scev_value *v, s64 imm)
++{
++	scalar_set_const(scalar_of(v), imm);
++	v->ptr_reg = -1;
++	v->bits = 64;
  }
  
 +/*
-+ * The values of @dst and @src are equal in their low @bits bits: @dst becomes the intersection.
-+ * False: @dst is left as it is. Fewer than 32 bits say nothing about a range. Or the intersection
-+ * is empty: no execution gets here with these values, the path is infeasible.
++ * @v = @v @op @r, by the transfer functions of the main pass. @r is not read if @op has one
++ * operand. An op that is not evaluated: nothing is known.
++ * A value is known modulo 2^bits: the run-time value and a member of the abstract value have the
++ * same low bits. + - * & | ^ and << by an exact amount respect that. An extension of N bits wants N
++ * bits and makes 64. The other ops want 64.
++ * Expressions have no types, the state has them. A pointer can be an operand of an add, with a
++ * scalar, in 64 bits.
 + */
-+bool scalar_intersect(struct scalar *dst, const struct scalar *src, u32 bits)
++static void scev_value_alu(u32 op, struct scev_value *v, const struct scev_value *r)
 +{
-+	struct tnum a = dst->var_off, b = src->var_off;
-+	struct scalar s = *dst;
++	struct bpf_insn insn = { .code = BPF_ALU64 | BPF_X | op };
++	u32 low = op_low_bits(op);
 +
-+	if (scalars_fit_in_bits(dst, src, bits))
-+		bits = 64;
-+	if (bits < 32)
-+		return false;
-+	if (bits < 64) {
-+		a = tnum_subreg(a);
-+		b = tnum_subreg(b);
++	if (low) {
++		if (v->ptr_reg >= 0)
++			goto unknown;
++		/* a partial spill: the other bits of the slot are not known */
++		if (op == SPILL8 || op == SPILL16 || op == SPILL32) {
++			v->bits = min(v->bits, low);
++			return;
++		}
++		if (v->bits < low)
++			goto unknown;
++		scalar_ext(scalar_of(v), low, !is_zext(op));
++		v->bits = 64;
++		return;
 +	}
-+	/* tnum_intersect() of two tnums that don't overlap is not empty */
-+	if (!tnum_overlap(a, b))
-+		return false;
-+	/*
-+	 * Equal in 64 bits is equal in the low 32 bits too. 'if w1 s> 200' on a zero extended int
-+	 * refines nothing but the 32-bit range.
-+	 */
-+	s.r32 = cnum32_intersect(dst->r32, src->r32);
-+	if (bits == 64) {
-+		s.r64 = cnum64_intersect(dst->r64, src->r64);
-+		s.var_off = tnum_intersect(a, b);
-+	} else {
-+		s.var_off = tnum_with_subreg(dst->var_off, tnum_intersect(a, b));
++	if (op_params_num(op) != 2)
++		goto unknown;
++	v->bits = min(v->bits, r->bits);
++	switch (op) {
++	case BPF_ADD:
++		if (v->ptr_reg < 0 && r->ptr_reg < 0)
++			break;
++		if ((v->ptr_reg >= 0 && r->ptr_reg >= 0) || v->bits < 64)
++			goto unknown;
++		v->ptr_reg = max(v->ptr_reg, r->ptr_reg);
++		scalar_add(scalar_of(v), scalar_of(v), scalar_of(r));
++		return;
++	case BPF_SUB:
++	case BPF_MUL:
++	case BPF_AND:
++	case BPF_OR:
++	case BPF_XOR:
++		break;
++	case BPF_LSH:
++		if (r->bits < 64)
++			goto unknown;
++		break;
++	case SDIV:
++	case SMOD:
++		insn.code = BPF_ALU64 | BPF_X | (op == SDIV ? BPF_DIV : BPF_MOD);
++		insn.off = 1;
++		fallthrough;
++	case BPF_DIV:
++	case BPF_MOD:
++	case BPF_RSH:
++	case BPF_ARSH:
++		if (v->bits < 64)
++			goto unknown;
++		break;
++	default:
++		goto unknown;
 +	}
-+	scalar_bounds_sync(&s);
-+	if (scalar_is_empty(&s) || const_tnum_range_mismatch(&s) ||
-+	    const_tnum_range_mismatch_32(&s))
-+		return false;
-+	*dst = s;
-+	return true;
++	if (v->ptr_reg >= 0 || r->ptr_reg >= 0)
++		goto unknown;
++	if (v->bits)
++		scalar_alu(scalar_of(v), scalar_of(r), &insn);
++	return;
++unknown:
++	v->bits = 0;
 +}
 +
- /*
-  * The state of the SCEV register @r. As in check_stack_read_fixed_off() a fill of @bits bits from
-  * byte @fill_off of the slot reads the low bits of the spill.
-@@ -19494,7 +19534,7 @@ static void refine_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier
- 			       int idx, u32 regno)
++/*
++ * The value of @id in the state @st at a loop header: every SCEV register is its header phi there,
++ * (REG r) is r. All 64 bits are wanted.
++ */
+ static bool eval_expr(struct bpf_verifier_env *env, struct scev *scev,
+-		      struct bpf_func_state *st, u32 id, struct scev_value *result)
++		      struct bpf_func_state *st, u32 id, u32 lvl, struct scev_value *result)
  {
- 	struct bpf_func_state *frame = vstate->frame[vstate->curframe], *linked_frame;
--	struct bpf_reg_state *reg, *base_reg, implied, saved;
-+	struct bpf_reg_state *reg, *base_reg, implied;
- 	u32 pos, linked_regno, fill_off, bits;
- 	int base_regno;
- 	s64 delta;
-@@ -19527,33 +19567,11 @@ static void refine_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier
- 		add_scalar_to_reg(&implied, delta);
- 		if (base_regno >= 0) {
- 			base_reg = scev_reg_for_fill(frame, base_regno, 0, 64);
--			if (base_reg && bits == 64 && recompute_ptr(env, reg, base_reg, &implied))
--				goto scratch;
--			continue;
--		}
--		if (scalars_fit_in_bits(scalar_of(reg), scalar_of(&implied), bits))
--			bits = 64;
--		if (bits < 32)
--			continue;
--		/* tnum_intersect() of two tnums that don't overlap is not empty */
--		if (!tnum_overlap(bits == 32 ? tnum_subreg(reg->var_off) : reg->var_off,
--				  bits == 32 ? tnum_subreg(implied.var_off) : implied.var_off))
--			continue;
--		saved = *reg;
--		/*
--		 * Equal in 64 bits is equal in the low 32 bits too. 'if w1 s> 200' on a zero
--		 * extended int refines nothing but the 32-bit range.
--		 */
--		scalars_refine_cond_op(scalar_of(reg), scalar_of(&implied), BPF_JEQ, true);
--		if (bits == 64)
--			scalars_refine_cond_op(scalar_of(reg), scalar_of(&implied), BPF_JEQ, false);
--		reg_bounds_sync(reg);
--		if (reg_is_empty(reg) || const_tnum_range_mismatch(scalar_of(reg)) ||
--		    const_tnum_range_mismatch_32(scalar_of(reg))) {
--			*reg = saved;
-+			if (!base_reg || bits < 64 || !recompute_ptr(env, reg, base_reg, &implied))
-+				continue;
-+		} else if (!scalar_intersect(scalar_of(reg), scalar_of(&implied), bits)) {
- 			continue;
- 		}
--scratch:
- 		if (linked_regno < MAX_BPF_REG)
- 			mark_reg_scratched(env, linked_regno);
- 		else if (linked_frame == frame)
+-	struct scev_value lval, rval;
+-	const struct bpf_reg_state *reg;
+-	u32 l, r, regno;
++	struct expr *e = &scev->exprs[id];
++	struct scev_value rval;
++	u32 regno;
+ 	s64 imm;
+ 
++	result->ptr_reg = -1;
++	result->bits = 0;
+ 	if (is_reg(scev, id, &regno)) {
+-		reg = scev_reg_for_read(env, st, regno);
+-		if (!reg || reg->type == NOT_INIT)
+-			return false;
+-		*scalar_of(result) = *scalar_of(reg);
+-		result->ptr_reg = reg->type == SCALAR_VALUE ? -1 : (int)regno;
+-		return true;
+-	} else if (is_zext32(scev, id, &l) && is_reg(scev, l, &regno)) {
+-		reg = scev_reg_for_spill32(st, regno);
+-		if (!reg)
+-			return false;
+-		*scalar_of(result) = *scalar_of(reg);
+-		scalar_zext32(scalar_of(result));
+-		result->ptr_reg = -1;
+-		return true;
++		eval_reg(env, st, regno, result);
+ 	} else if (is_imm(scev, id, &imm)) {
+-		scalar_set_const(scalar_of(result), imm);
+-		result->ptr_reg = -1;
+-		return true;
+-	} else if (is_add(scev, id, &l, &r) &&
+-		   eval_expr(env, scev, st, l, &lval) &&
+-		   eval_expr(env, scev, st, r, &rval)) {
+-		return scev_value_add(env, st, &lval, &rval, result);
++		scev_value_set_const(result, imm);
++	} else if (op_params_num(e->op) && !e->def.set && lvl < EXPR_STACK_DEPTH) {
++		eval_expr(env, scev, st, e->params[0], lvl + 1, result);
++		if (op_params_num(e->op) == 2)
++			eval_expr(env, scev, st, e->params[1], lvl + 1, &rval);
++		scev_value_alu(e->op, result, &rval);
+ 	}
+-	return false;
++	return result->bits == 64;
+ }
+ 
+ /* The range of @v. With @low32 that of its low 32 bits, in the upper half of a u64. */
+@@ -3893,7 +3969,7 @@ static void latch_iv_range(struct bpf_verifier_env *env, struct bpf_func_state *
+ 	l = latch->base_expr;
+ 	if (!is_reg_or_low32(scev, l, &regno)) {
+ 		if (!is_add(scev, latch->base_expr, &l, &r) || !is_reg_or_low32(scev, l, &regno) ||
+-		    !eval_expr(env, scev, st, r, &off) || !cnum64_is_const(off.r64) ||
++		    !eval_expr(env, scev, st, r, 0, &off) || !cnum64_is_const(off.r64) ||
+ 		    off.ptr_reg >= 0)
+ 			return;
+ 		c = off.r64.base;
+@@ -3950,9 +4026,9 @@ static bool compute_max_iters(struct bpf_verifier_env *env,
+ 
+ 	iters->iv_reg = -1;
+ 
+-	if (!eval_expr(env, scev, st, latch->base_expr, &initial_val) ||
+-	    !eval_expr(env, scev, st, latch->step_expr, &step_val) ||
+-	    !eval_expr(env, scev, st, latch->bound_expr, &bound_val))
++	if (!eval_expr(env, scev, st, latch->base_expr, 0, &initial_val) ||
++	    !eval_expr(env, scev, st, latch->step_expr, 0, &step_val) ||
++	    !eval_expr(env, scev, st, latch->bound_expr, 0, &bound_val))
+ 		return false;
+ 
+ 	if (step_val.ptr_reg >= 0) {
+@@ -3982,7 +4058,8 @@ static bool compute_max_iters(struct bpf_verifier_env *env,
+ 		if (!is_reg_or_low32(scev, l, &r) && !is_add(scev, latch->base_expr, &l, &r))
+ 			return false;
+ 		if (cnum64_umax(initial_val.r64) > U32_MAX &&
+-		    (!eval_expr(env, scev, st, l, &reg_val) || cnum64_umax(reg_val.r64) > U32_MAX))
++		    (!eval_expr(env, scev, st, l, 0, &reg_val) ||
++		     cnum64_umax(reg_val.r64) > U32_MAX))
+ 			return false;
+ 		if (!bound_of_zext32(latch->op, &bound_val))
+ 			return false;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 47ed36292e1b..3659cb839641 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6417,6 +6417,15 @@ static void coerce_scalar_to_size_sx(struct scalar *s, int size)
+ 	set_sext64_default_val(s, size);
+ }
+ 
++/* @s = (uN)@s or (sN)@s. N is @bits: 8, 16 or 32. */
++void scalar_ext(struct scalar *s, u32 bits, bool sign)
++{
++	if (sign)
++		coerce_scalar_to_size_sx(s, bits / BITS_PER_BYTE);
++	else
++		coerce_scalar_to_size(s, bits / BITS_PER_BYTE);
++}
++
+ static void set_sext32_default_val(struct scalar *s, int size)
+ {
+ 	if (size == 1)
 -- 
 2.55.0
 
