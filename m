@@ -1,84 +1,97 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.219.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794516062;
-	b=3jFs0l/hD3HeNOgTJbrYfJX9RbJXFDb+koJ1MG9WjSTLFfCBxbPVMuuWlV28sg16gIOC
-	 XqVJKh3phIt3/HOrFpqrWndCu54foavEp0WpruzBhPZVbD5cx57hwXvwDB+uNCdcY9OJ5
-	 Hj4TsvsUVyOkZQBOPboRmPxwekwybhZh3lDmz62/3sqAGfmHLiGlseMLW0B7NmfiWPt1K
-	 l63lxfSKzuoet/BwpG3RFsO55eCuFD6jTNEQLIwaU4BQfxOgoRbaxcYM1zKst7UOcOuqA
-	 PG4WLKq6zBRj3LtP4+0/amMSVobdZ2rRCOIM15sdRS7sJO5px6zBvgJfTTx2SbzQqjQ==
+	t=1794516072;
+	b=ssRyFKQuEtKn1NgsO48PxNZ0K9uLJymcatUg/IaWTTZT7d3zlNIk/BElNlrHABJac7Gk
+	 DGmiwNkucY8s3HJOPGib4Ni2vU8qONh0qLqxO0QdmaIilbT+m5HLqMRKSth3LRx+ncbsS
+	 gos2G7djjSiSPxItlkbJYcf4lt6yAZ/YiQOhjjeXf1lE1BCSI2OBSPUieSKtwZJO65Jet
+	 g7rme8Nu51Af3+RcB70r4/tHtS8wwvqDSO1wxz32CyeSu52hnedJ0mx3jMADr+zXi5L5x
+	 IxBXuM/Ad5CmReEBftOmMGiI7mLJI44HrKJjeADP8KHuE1eWVUNSYSO9XEPMqpnW2AQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794516062;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794516072;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=Byn2HhOPb19dBjcx3Tbrg9Im7VPacdPGrEuEzofnAl8=;
-	b=zqj9VTGxrl93konW+N6mu69XeMIX6z/XnMxJJNmm0j7J3QPELyFWRC2mbtUC8HnCkJd7
-	 G3HkLSKdIyMbhzA+OsF3l1hwLiw7TMh7U/W6rFd4WJrw73jX8F+uF9XWgvYhuECltEm2E
-	 jDWDmGUVjzB6WsLWpofA/2uG8dXCcFohM+YsqorLVrAEdiHGvWmwt3lw0J0q11toJB4IB
-	 b3ahW7ea7yW9hg9thpQgq5wnreD6/DqnXFXJ5lQxACqUfbuNMQQG1zmr8lBwHP6OcJwIh
-	 m6VQQr4x3iEYiKq9S2b0z2WKSUEjpB7hdoVcWFMehR2BndUrIbjoVSqLh6jz5lEX4Wg==
+	bh=xXKJrbALur9qe5R1OS4jb0FmQE/KqmF7j3A3hmQEcbY=;
+	b=pcFtfFfpbdtJHWYjLoCJ9D57EQ1HQ7mhh6eI0bq3dlq3sfg/wZl3WhVXRg1hSNDOmZKj
+	 AfIKVPi1Y6HcU1W5dEc4bnwAQcYymZWrGCmaanWUmL/vyfkXzxH6T1JvgD4ltdMj/c9eq
+	 QtkoO09JoYAWGhSeERv77dKTZnfISbX1KbuH6YtOy5B3PCqHcu2rnp1MQSaoZ8damfPpP
+	 PZmiXmKpO1RB7509srj7vBrWkDPBXv0ZsHwYfKn7ky2Bq1rzzvUhprjqMe71szXughByc
+	 2NVXg6uxxlmRClJdrQCchPqikEImo1lF0xPMURyNVDS7Xictx7oRMQo+tTqp+H0jKbw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=mojatatu.com;
 	spf=none smtp.mailfrom=mojatatu.com;
-	dkim=pass header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=yHrt5zki;
-	arc=none smtp.remote-ip=209.85.160.180
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+	dkim=pass header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=oq6IFftj;
+	arc=none smtp.remote-ip=209.85.219.45
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40DCA606A89B
-	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 20:41:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 40DCA606A89B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24333606A327
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 20:41:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 24333606A327
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=yHrt5zki
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-53665358476so1950971cf.2
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 12:41:02 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=oq6IFftj
+Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-91ecd81cd67so3262056d6.2
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 12:41:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1794516061; x=1795120861; darn=vger.kernel.org;
+        d=mojatatu.com; s=google; t=1794516071; x=1795120871; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Byn2HhOPb19dBjcx3Tbrg9Im7VPacdPGrEuEzofnAl8=;
-        b=yHrt5zkiYxyh/0WxMr6yVueyeQv5MaHKHfPsU+myfUx6yZPMSV8Fu8W4BCVojnXbEc
-         BiAwRt8JqQEJNG0dqY+n8VMyQOYvY4hv+YZDpW1H4Sq/Bawe4wtnfUgd5v4krZ+tA5tR
-         eqkzOw+dTmpCr55DFj9+ZJHZDI7HgkIyeymR8=
+        bh=xXKJrbALur9qe5R1OS4jb0FmQE/KqmF7j3A3hmQEcbY=;
+        b=oq6IFftjyrFUryFH45jbu50E1yaW9IoYXs4KxMPfykjuuxi2t5A0nX7Vx2jL5itsC3
+         sXgMemAuKhbSOPFcZ3RVAC7kZ0YHy1r9r5DLs7SyBxBTuwg28OOwDBaQNGU8CsJa/4y2
+         gXah5wBuAisxvrKdRzgNznqtRWBlHauCNwPIA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794516061; x=1795120861;
+        d=1e100.net; s=20260707; t=1794516071; x=1795120871;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Byn2HhOPb19dBjcx3Tbrg9Im7VPacdPGrEuEzofnAl8=;
-        b=qCfGWp/rn7lUpB8oi/tx0GjFM8JHCaO+5/LCB9Q1yy6QzJq0BTrecI5rOXfbBLT/OL
-         kZsZChM6mXtmfr3hUlxp2nLUbpSrtV1OuU+B1EUIB9tOxYnz3dIp0fAql8MfMvQoA4JZ
-         B+8TUtsjU+eGncIPLr7THjA7e2yf7m6eZ4H6Jg04Lfg+e1EdnFpsyeUtFtlZf+dtOVac
-         YmqgU4HkY6ZmzMPLMlsOILnlmPCtFQOR8h4Gnhdb6Lwf5HvZiAifRDg1pfT0cyephwsg
-         o0nSAlCGl2uxBjWn144HpQPv3H8CrxNqSE9XQJRS09yU6qp/2Mi9xIjnmouO0i6LP8jX
-         f2NQ==
-X-Forwarded-Encrypted: i=1; AL+hErFvO2Zdy21u74l9lmGVr8AjCqK2nXMHWUc4C+IkpHDyF/haEFreQE+ydU4xJRixqDFuPnw=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8kmaKPFJvwDPPklhJmEOLWdZshTR9LaAJQuu58qOi/suhDDHMW
-	RyH6zposrek2RrLX5nA2MqrVFcuoRu0NSN/3ihLotwitRUrak9RfpUNA7dww0R4+GQ==
-X-Gm-Gg: AYBFou1J5vj/HwWsLmTOQYlz+ZAU+8C5IHtxTdHYzUrpgWwwU+xUcrYTvOzT3XmO2sB
-	b2TSUgbZ/Oey2/qpEj8bobW2/nvjuNbhqQOJJI5L4MJgddWnXsGEf6wfb7pv9maPdc/7hFleMvl
-	zElChdJNW0MWSEErFzfZAlFHZ/6cUHRvzG1dpB2OskM/HDnGPXYda+SRe+o4enbbF7lwgPq4ndj
-	z86wBBnYEu1XJKq6DCtda1zFBWRI3h7jrVhbSSxy+cH2PqxfGuiqyg2Y1RrL6uG7Ukru3T+sW5s
-	J/QvE4rawSL3RjHTaeImOAbmXtuY76jSnQkIG9omS3vhJtqbD9yGTZbzthLpSZlbLMr2dKbgr6w
-	izgpjGd8m2vdm4njkxg3p2w31JhuXEQ74wV8Hsf+Aep7Hhq7As0dNMXdA9SeEqhuIG3LW321lIA
-	OSL4JmjIDwiwlIVbvR+piUOqmr7EJKKxPgNo1EZ1iGET3J3FEFhEofzXtHzADIKCx2wUjG2RueC
-	NukCMojvw9qxx86MN49j7tTOEGHZtvV3yBvFTRTijio1MsbKuSXU+x6rxnmgJNa8XhmeeqaeV5s
-	+clhvEzwh6ayEtr3Pe+O5z9MqQvl8OtYrkoLtO493foKgROfPEAc5A8tzLzgsqAhL1KfDlZ/v7k
-	=
-X-Received: by 2002:a05:622a:1214:b0:535:1b50:48a6 with SMTP id d75a77b69052e-55ac366a4e1mr10884361cf.6.1794516061226;
-        Thu, 12 Nov 2026 12:41:01 -0800 (PST)
+        bh=xXKJrbALur9qe5R1OS4jb0FmQE/KqmF7j3A3hmQEcbY=;
+        b=eVoJlJ+J9HnUKFnt4Km31HWC2whTp+okOuLOuD8Ym2GAQEx6Xn6UQmyI5p/RzWM2V4
+         80QoI+IcNR/M+b0JHLpnBcwNGQiafkiJPUWOexPFc0+rEC/bq5Ox4/Z6WgCImN1nVNgX
+         ZOWiHTzKZDvzy88B8MzuYzOPhOo4GZ8/VqO/lnrdlA59fVA0ykvVrTH4szZSsDnPz3Of
+         lapHkCh9QPS14pAJlv8VjB0Bv7ewW9k1GqZWA/c7HObpmLWDdtxvmt9MNHlSJSn5ZBVY
+         3XLj2uzu3ArB8bdMeOeDYrPfqMZ8yyQBduybJ7YXkzgQc0REs6rIybd960YikMuHZK6p
+         JXHA==
+X-Forwarded-Encrypted: i=1; AL+hErETJgbaGJmeCo+kqIM3+5una2PKu/3xarEs5IKUeDAR6vt7D4wDZ4oycxq+6TJZb/fxde8=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9k/Ym/WlyMfJTklkMe93uepe/Ukn9BEPx9N9SrHWkhE68JYnOb
+	qkgwwkb7tKVWeI5qWy+ApFMN0w+rhBYhGj4KmRkpOlmIefmS5lx7ys10K6tuoUc+qw==
+X-Gm-Gg: AYBFou18s841EUDAEOEdrDpEDL3AnSh+yBJhJuNtC4gQvDQnL5PTdi7QO1fYSff+q+8
+	el1Fq6UeGLcp0GLk/z1ktc9ilNUrUFuvp00PjhQyc9J51r2nvIsOj5JhJYQMH1UZpCJJ8zvnrHA
+	hsxJRKjHqPxkT60UhSuM7XEcbHrFBxeQWpuu4KMuUrKi2vvklUUwTilWYK8Oxzj+uGyNUgqBxN3
+	DUKiJHk7PbYo9uWUGIWJrxCozGUf5lO8Lt/nK9nJ3Rux68F4aEAwOnsk+N36FKuPOlqitHT4T6S
+	uGapkc70lCnGc7A+tir7TlJ9hnH95uaQmYvPR3Thzfer1FJOW6C/3j/g5GdChU/saYizsObL4wX
+	8SNHVUjHywgNYQdMXDmM8heGFTQgZlnSkc+gdrjIr+sJueNxJIFtRZA/i60YoyfocDUiYPuHflp
+	eekQxj4bt0NS21IWMMBoNpURoyBxVE9e+gqJP4kVkZD3tpn8MsFKfJvWQBubGhnyh/8f2kZVWEm
+	/0QVQH1Aw4uCrCWRpITnbAYTd6xP7B2JztwsGLdlJ7q6A2ALCLkeqTlA888paY/srhG2XbjwZnl
+	lPeQZCyg/zU/js8jD6UZuEITJFnERrUpNn1384N+wRsE+2q0XfZM1yXNJP3FzTC34ARAqmnwrIX
+	+o3iHBTLuMJ+7ydsbrhXY
+X-Received: by 2002:ad4:5764:0:b0:91e:93df:7968 with SMTP id 6a1803df08f44-91f2427df7dmr8048966d6.58.1794516065405;
+        Thu, 12 Nov 2026 12:41:05 -0800 (PST)
 Received: from mbili.waya ([64.203.83.2])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91f23d61888sm4452116d6.20.2026.11.12.12.40.59
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91f23d61888sm4452116d6.20.2026.11.12.12.41.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2026 12:41:00 -0800 (PST)
+        Thu, 12 Nov 2026 12:41:04 -0800 (PST)
 From: Jamal Hadi Salim <jhs@mojatatu.com>
 To: netdev@vger.kernel.org
 Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@kernel.org>,
 	Jakub Kicinski <kuba@kernel.org>,
@@ -86,10 +99,11 @@ Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
 	Simon Horman <horms@kernel.org>,
 	bpf@vger.kernel.org,
 	Jiri Pirko <jiri@resnulli.us>,
-	Victor Nogueira <victor@mojatatu.com>
-Subject: [PATCH net-next v2 2/4] net: dst: keep the LWT metadata of a dropped route
-Date: Thu, 12 Nov 2026 15:40:47 -0500
-Message-Id: <CORE-9NOG.v2.r0.20261112151659-2@mojatatu.com>
+	Victor Nogueira <victor@mojatatu.com>,
+	Sashiko <sashiko-bot@kernel.org>
+Subject: [PATCH net-next v2 4/4] bpf: drop the stale dst when redirecting to an explicit nexthop
+Date: Thu, 12 Nov 2026 15:40:49 -0500
+Message-Id: <CORE-9NOG.v2.r0.20261112151659-4@mojatatu.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <CORE-9NOG.v2.r0.20261112151659@mojatatu.com>
 References: <CORE-9NOG.v2.r0.20261112151659@mojatatu.com>
@@ -104,138 +118,84 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Found while working on the two producers that steer a packet to another
-device's neighbour, fixed later in this series. Both release the route
-dst on the way, and a route installed with an encapsulation carries the
-parameters a device downstream needs: an ip or ip6 encapsulation holds an
-ip_tunnel_info, where skb_tunnel_info() reads it, and an xfrm encapsulation
-holds an xfrm_md_info, where skb_xfrm_md_info() reads it. The release
-discards them, so a tunnel or an xfrm interface downstream has nothing left
-to build the outer header with, or to select its if_id.
+This is a followup of the review of the teql arp-queue fix as reported
+by Sashiko.
+
+The issue:
+__bpf_redirect_neigh_v4() and __bpf_redirect_neigh_v6() install a dst for
+the redirect target only when the program lets the helper do the FIB
+lookup. With BPF_F_NEXTHOP the program supplies the nexthop, the lookup is
+skipped, and whatever dst the packet arrived with stays attached while
+bpf_out_neigh_v{4,6}() switch skb->dev to the target device. If that
+device's neighbour is incomplete the packet is parked on its arp_queue with
+the original route's dst; draining the queue re-looks the neighbour up from
+that dst and builds the frame with the original device's link-layer header,
+then transmits it on the target device.
 
 The Fix:
-Add skb_dst_drop_keep_metadata(), which moves those parameters onto a
-metadata dst of its own before the route is released. The ip and ip6
-payload is copied field by field; the route's dst cache belongs to its
-lwtstate and is shared by every packet that uses the route, so it is not
-duplicated: the copy starts with an empty cache, which costs the tunnel one
-route lookup. The xfrm payload keeps the route itself, because the xfrm
-lookup reads its family; the counted reference the skb already holds moves
-into the metadata dst, which releases it once it has been consumed.
+Release the dst when the nexthop is supplied. That branch never consults
+the route dst, so nothing that describes the route is lost, and the queue
+drain keeps the target device's parking neighbour.
 
-The helper owns the whole operation: a dst that is not a route is not
-dropped, because a metadata dst is the encapsulation itself. Its callers
-must not transmit with the stale route, so a failed copy is reported and
-the skb is left untouched for its owner to drop.
+The release goes through skb_dst_drop_keep_metadata(), so encapsulation
+parameters a route carries are handed over to a metadata dst instead of
+being lost, and a metadata dst already on the packet is left in place. Both
+wrappers take their existing drop path when that copy cannot be allocated,
+so a packet is never sent with the stale route.
 
 Conditions to recreate the bug:
-Install a route with an encapsulation (ip route add ... encap ip id <id>
-dst <remote>, or encap xfrm if_id <id>), steer a packet to another
-device's neighbour with a netdev egress fwd rule or
-bpf_redirect_neigh(), and release the route dst before neigh_xmit() hands
-the packet on. A tunnel or xfrm device in the path then finds no
-parameters in skb_tunnel_info() or skb_xfrm_md_info() and drops the packet
-instead of using them.
+Two network namespaces, A (10.10.0.1/24) and B (10.1.0.1/24) in one, their
+veth peers in the other with only A's peer addressed (10.10.0.2/24) so B's
+nexthop cannot be resolved by ARP. Resolve A's neighbour for 10.10.0.2 as
+permanent and attach a cls_bpf egress program to A, with vb the index of B:
 
+    struct bpf_redir_neigh nh = { .nh_family = AF_INET,
+                                  .ipv4_nh = htonl(0x0a010002) };
+
+    return bpf_redirect_neigh(vb, &nh, sizeof(nh), 0);
+
+Send one packet to 10.10.0.2. It is parked on B's incomplete neighbour
+for 10.1.0.2; once that neighbour becomes valid the frame leaves B
+carrying A's source address and A's neighbour as the destination.
+
+Reported-by: Sashiko (nipa) <sashiko-bot@kernel.org>
+Closes: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-6HS9.v3.r0.20261103062649-2@mojatatu.com
+Link: https://lore.kernel.org/netdev/QDISC-6HS9.v3.r0.20261103062649-2@mojatatu.com/
+Link: https://lore.kernel.org/netdev/avTfQjFQYR2NNdRg@chamomile/
 Reviewed-by: Victor Nogueira <victor@mojatatu.com>
 Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
 ---
- include/net/dst_metadata.h |  1 +
- net/core/dst.c             | 72 ++++++++++++++++++++++++++++++++++++++
- 2 files changed, 73 insertions(+)
+v1 -> v2:
+- Do not drop a dst that is not a route, and keep the encapsulation
+  parameters a route carries: the release goes through a helper that moves
+  them onto a metadata dst first (new 2/4), and a copy that cannot be
+  allocated drops the packet instead of sending it with the stale route.
 
-diff --git a/include/net/dst_metadata.h b/include/net/dst_metadata.h
-index f45d1e3163f0..32d74b4f009f 100644
---- a/include/net/dst_metadata.h
-+++ b/include/net/dst_metadata.h
-@@ -136,6 +136,7 @@ struct metadata_dst *metadata_dst_alloc(u8 optslen, enum metadata_type type,
- void metadata_dst_free_percpu(struct metadata_dst __percpu *md_dst);
- struct metadata_dst __percpu *
- metadata_dst_alloc_percpu(u8 optslen, enum metadata_type type, gfp_t flags);
-+bool skb_dst_drop_keep_metadata(struct sk_buff *skb);
+ net/core/filter.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 2d574ae52c4b..4980fb8db299 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -2318,6 +2318,8 @@ static int __bpf_redirect_neigh_v6(struct sk_buff *skb, struct net_device *dev,
+ 		skb_dst_set(skb, dst);
+ 	} else if (nh->nh_family != AF_INET6) {
+ 		goto out_drop;
++	} else if (!skb_dst_drop_keep_metadata(skb)) {
++		goto out_drop;
+ 	}
  
- static inline struct metadata_dst *tun_rx_dst(int md_size)
- {
-diff --git a/net/core/dst.c b/net/core/dst.c
-index 092861133023..daa003979d59 100644
---- a/net/core/dst.c
-+++ b/net/core/dst.c
-@@ -353,3 +353,75 @@ void metadata_dst_free_percpu(struct metadata_dst __percpu *md_dst)
- 	free_percpu(md_dst);
- }
- EXPORT_SYMBOL_GPL(metadata_dst_free_percpu);
-+
-+/**
-+ * skb_dst_drop_keep_metadata - release a route dst, keeping its LWT metadata
-+ * @skb: buffer whose dst is to be released
-+ *
-+ * A route installed with an encapsulation carries the parameters a downstream
-+ * device needs in dst->lwtstate, where skb_tunnel_info() and skb_xfrm_md_info()
-+ * find them. Releasing such a route would discard them, so move them onto a
-+ * metadata dst of their own first. The route is not duplicated: the copy
-+ * starts with an empty cache, and for xfrm the route is kept because the
-+ * lookup needs its family.
-+ *
-+ * A dst that is metadata is left in place. False means no copy could be
-+ * allocated and the caller must drop the skb.
-+ */
-+bool skb_dst_drop_keep_metadata(struct sk_buff *skb)
-+{
-+	struct dst_entry *old = skb_dst(skb);
-+	struct metadata_dst *md_dst = NULL;
-+
-+	if (!skb_valid_dst(skb))
-+		return true;
-+
-+	if (old->lwtstate && old->lwtstate->type == LWTUNNEL_ENCAP_XFRM) {
-+		struct xfrm_md_info *src = lwt_xfrm_info(old->lwtstate);
-+
-+		md_dst = metadata_dst_alloc(0, METADATA_XFRM, GFP_ATOMIC);
-+		if (!md_dst)
-+			return false;
-+
-+		/* Count the route so it outlives the skb, then move the
-+		 * reference into the metadata dst.
-+		 */
-+		if (!skb_dst_force(skb)) {
-+			metadata_dst_free(md_dst);
-+			return false;
-+		}
-+
-+		md_dst->u.xfrm_info.if_id = src->if_id;
-+		md_dst->u.xfrm_info.link = src->link;
-+		md_dst->u.xfrm_info.dst_orig = old;
-+		skb_dstref_steal(skb);
-+		skb_dst_set(skb, &md_dst->dst);
-+		return true;
-+	}
-+
-+	if (old->lwtstate &&
-+	    (old->lwtstate->type == LWTUNNEL_ENCAP_IP ||
-+	     old->lwtstate->type == LWTUNNEL_ENCAP_IP6)) {
-+		struct ip_tunnel_info *src = lwt_tun_info(old->lwtstate);
-+		struct ip_tunnel_info *dst;
-+
-+		md_dst = metadata_dst_alloc(src->options_len,
-+					    METADATA_IP_TUNNEL, GFP_ATOMIC);
-+		if (!md_dst)
-+			return false;
-+
-+		dst = &md_dst->u.tun_info;
-+		dst->key = src->key;
-+		dst->encap = src->encap;
-+		dst->options_len = src->options_len;
-+		dst->mode = src->mode;
-+		memcpy(ip_tunnel_info_opts(dst), ip_tunnel_info_opts(src),
-+		       src->options_len);
-+	}
-+
-+	skb_dst_drop(skb);
-+	if (md_dst)
-+		skb_dst_set(skb, &md_dst->dst);
-+	return true;
-+}
-+EXPORT_SYMBOL_GPL(skb_dst_drop_keep_metadata);
+ 	err = bpf_out_neigh_v6(net, skb, dev, nh);
+@@ -2433,6 +2435,8 @@ static int __bpf_redirect_neigh_v4(struct sk_buff *skb, struct net_device *dev,
+ 
+ 		skb_dst_drop(skb);
+ 		skb_dst_set(skb, &rt->dst);
++	} else if (!skb_dst_drop_keep_metadata(skb)) {
++		goto out_drop;
+ 	}
+ 
+ 	err = bpf_out_neigh_v4(net, skb, dev, nh);
 -- 
 2.43.0
 
