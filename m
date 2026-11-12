@@ -1,64 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794509407;
-	b=V4jkB/u6Rr2UMMmRlKIoN7oCu/gZWBwlsgkaHQNwXy11n3MqkOcvhmIfKiR1mJMmrm6e
-	 gWI9DgL0ipTHJXFP/zB8aeZm+Bay6zWCUmd6j/wbYAAiEdA3eFJNPoEP/0mAOWKS9vQVn
-	 LAG9+DKdWy8Of6d6ckTgQ7+whp5bra6umFAEov0emlvee2cPSteFZ/oDyaaThZSx0t7Eh
-	 8RiyXBnHRZYwG6ggHlSZrzKkTidCen/5XCGbuM1BPPnUhuwo+TktSp5RoMBu1rYaAuFxb
-	 dMWRWQqJsIuN1EaGvR4xBnuzk+Bjd8EzKeuqRMf6GTqoe9VIj4hdH9x9iondlR/yfWg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794509407;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=uPqB6/0clUPwkTK+X5/I5kQkFm8UpzxKuRZOpXIFmTY=;
-	b=dCW+AYS6GgZ+nye7GrYHSKvEt4O+sdUrODklOn8kmFWYSa5M7oFIAiwAajqoKXk15c4J
-	 n68oLkQn/s/fcPVVTLUFUgbcT+7LAO5lD77kOEMf0QJNVe0FT/glagGA0huzvANOk2LvN
-	 xQhdIYFiMgogtst82POAkCv7y+qyjzv4nsNaEALPDwt3ii4SshgA2Yc6NlNgAmtUwcGUB
-	 gYTdTJPVsGuupx8+w99904gVKYwNsSu9p0FC1iW0ap2zF/vZeCjzBaWCxxkb6GTLpKUV5
-	 ImYL7YAkyhOovRpW03zS+04UsyOwZbuII84KLvvJd2xXSjBwjjpeTrKyqWzCotvOY8Q==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="c2eQP+/O";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.176
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794511490;
+	b=fEijlEm9JmD+HF9czs7TlCYYIGDwICHkAmIK1O1qFKv5WXDSMbdl9zJZoVBEcHuMaMFh
+	 wpHczc7qaAo/zYz3Inlb1arq8uRw//5kTnbiBbeDSw6I1vS4+r8thLeMUZuv2PW7Lsqin
+	 qFZ7xbDKpA15Qn+WJR7+BpZufjOfH+m0q9zzwjiEeYberFT3qqTUAjL5S7T5p2miC0AzS
+	 v9uM2ea2LHsMd/1bGsTShGx8J9Cd71/vnFSEFm98ttWJNeHakKGr13BnlGtiMSN4p0wDt
+	 AOBUtE2gU5oWEnld8sRnVSarocJPsX0QR4wXnKnaiE0GlqomAP2wlB1PnFQygBQUgoA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794511490;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
+	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
+	 Content-Type;
+	bh=jlygkzaiytXLTgXwrjQaRLpn1zirXNFAaFt+aJvGZ9Y=;
+	b=LiWNgBboLf1IDvgx/PmovKwvCUqLpBYRZzQOjV2PRxxChfb1Wc6S7uAV8H6vn0M9JRgT
+	 4+jH4Q1/VyT1aEi0NPNoOQxLXkgqJI98uahzYcsKLYaEJiBsF40fWvrNB0XbL4D+1y3Bz
+	 Bm1BVzDBvLwecMemZajMYXltMiyhJZUxjByShT0npZsWtk6KfQ9BXrgeKM27TOkmCl31T
+	 DGhlf53dKO020/oNRqy4JTzxA5sepEtpOREKGefUQhQMicx1hQAFtEh6xkD8IETUAfUZ7
+	 MBphfeFQSTrtZDEZWhH9ggwnDp+qySB1G2mC/Yi2u0glu5XVar+jsPR4YpCaKFgrNNg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=sentinelone.com;
+	spf=pass smtp.mailfrom=sentinelone.com;
+	dkim=pass header.d=sentinelone.com header.i=@sentinelone.com header.a=rsa-sha256 header.s=google header.b=YQikDXDn;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.176
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD147606A321;
-	Thu, 12 Nov 2026 18:50:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6173B606A893
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 19:24:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6173B606A893
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sentinelone.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sentinelone.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=c2eQP+/O
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 069D51F000C4;
-	Thu, 12 Nov 2026 18:50:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794509407;
-	bh=uPqB6/0clUPwkTK+X5/I5kQkFm8UpzxKuRZOpXIFmTY=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=c2eQP+/OmBtccN6lFP3HYFxFG8agGWrDI1ZXY/qzbQbBLl9kz0DtpxOocyCBeQh/1
-	 P/GJX5SY2nNJT4ZjDvY7qfUJOKzOnJEtsmCPA0PNiZ8DY/kvJ0WuFEHcet0S5vEkLZ
-	 p94CGqnBzPefm6Xkw2QIA2aXbo77Y+eyyqSr/ikhqeI4OdxK30UzH6kC1dynETqKWr
-	 cyG1PQpeMpAJ67J2cjI8+TjpsgcIajdVA1myeYV3IdZbbkblQe5LZfore+ergk6LBG
-	 Kqfod2wBo2GGDO1uErPTdY4/hDbA/JE4xTiW4TO4JS4C7rWT7Ta+tPR51DCSdkibnC
-	 q6m8EjZlYY8LQ==
-Subject: Re: [PATCH net-next V2 1/2] net/mlx5e: Batch NAPI RCU grace periods
- on channel close
-From: netdev-bot+sashiko@kernel.org
-To: tariqt@nvidia.com
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
- kuba@kernel.org, netdev@vger.kernel.org, pabeni@redhat.com, ast@kernel.org,
- bpf@vger.kernel.org, cjubran@nvidia.com, cratiu@nvidia.com,
- daniel@iogearbox.net, dtatulea@nvidia.com, gal@nvidia.com, hawk@kernel.org,
- john.fastabend@gmail.com, leon@kernel.org, linux-kernel@vger.kernel.org,
- linux-rdma@vger.kernel.org, lirongqing@baidu.com, mbloch@nvidia.com,
- richardcochran@gmail.com, saeedm@nvidia.com, shshitrit@nvidia.com,
- sdf@fomichev.me
-Date: Thu, 12 Nov 2026 18:50:05 +0000
-Message-ID: <179450940555.2199510.18034823087861989713@kernel.org>
-In-Reply-To: <20261110185005.2932568-2-tariqt@nvidia.com>
-References: <20261110185005.2932568-2-tariqt@nvidia.com>
-X-sashiko-severity: High
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=sentinelone.com header.i=@sentinelone.com header.a=rsa-sha256 header.s=google header.b=YQikDXDn
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-8a052288e41so2110b3a.1
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 11:24:50 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794511489; cv=none;
+        d=google.com; s=arc-20260327;
+        b=m8rwJoV8SCf3eCtkUTJ/5VpkL0RKeapti07ILv4j11n5qeY6Cy0YpLMC1enoDCRhBw
+         fJH02NTltvHlQhvGrwEvS+1TevcpQ2mdez+OQu0ZuuBnmzdr7jZ7PPIWphbIF1hSa+QG
+         c+D1fQ3OHMOvsGIK1bEwwXjhEOXhuulCJh/IqOSbkLU3pjApaeAbwUQHTxfcX6SZussE
+         2s0KNb9Q6s9Hpb5SYJNZ5dcEYIyCJQf2ed0eU1OfammNCLLzIM2XVBDqU+TGwf2RJP0K
+         adCMlJjw5lmudHjd/0tN9BOBj9jYHmIUKuWwwNnZLa5wyfB6d3wMbF1d8HgWlNKH2YFj
+         CQ0g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=jlygkzaiytXLTgXwrjQaRLpn1zirXNFAaFt+aJvGZ9Y=;
+        fh=mf5EVZun5581mPQ3B6XU/k1UuOq1dtpbkLbT0av5AvQ=;
+        b=nw+oc5dVe02odtsNr76xFXBq3PTK3ua7aIL3Hw50ealoDYQmyKulBAurU5DuryDuHE
+         YkOiwC4TgnUThe4h+OnUkAv2cJRI2Y0BDUAtCSl/UXgDTolDCDPmoS+1xfAeTHQknyXl
+         Bvu8hltkwHYd/+jqfyi2rawP+0Nu3qb1TdkICuAA4S3UeyoFbAyZhV5Ow4rX+QZ+S8t9
+         6OfUZO7ull1u6RKnuYAk1ICFfNMwGv8H9fjVJ0s1593iV/9/ICuV/rP8xmscLd4T2VGR
+         uFKFSERE6OaAIZ1Tk1N9IbsxNlD5aEAvfeWPAXRpeCCeAaakbI4VSGC50BJN/FNZAK4o
+         ezGw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sentinelone.com; s=google; t=1794511489; x=1795116289; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=jlygkzaiytXLTgXwrjQaRLpn1zirXNFAaFt+aJvGZ9Y=;
+        b=YQikDXDnkcXNSoppt0sTKONosWFPIbhd/LmeG8Bbp8TUsqZzeSNXv1AZw0SCqyHP69
+         zxhZlkWGWOCikEGCKQF6poLCuTxFwnb1CeYYXNvrDr6Ky+eAXsaI5gYneSmFpyRtz4Ly
+         DVWNnMo+PfYfBiMh1AjdstdZIj58YuG+jCvSpSu96HYt9+yqle+LwYqP4paX+Cn9+m+7
+         vdpovau1a3G4WJbl9brgP7Qn2duB8fEFz4TFO6lQIXMB2+uYVoGFxNgeJgim3R0q2225
+         cudwhQZLNxK7969rLcScmJGGc8ryJbks8ZvGNMYDxCfHafF0/jcXiuzDkzM3zyF4NII0
+         NzHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794511489; x=1795116289;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=jlygkzaiytXLTgXwrjQaRLpn1zirXNFAaFt+aJvGZ9Y=;
+        b=wZOgAoJmtLRchqDtnKNdjESf7KZR5WFl6e1mMnBswyiLAhZxynCY+dUkxBSLIGZm50
+         MzDeipqVmdmFg0K6wNezEtAgdEYx1hH+Us3AMjNtZVj9rJ3OO4GcVbCrwN8BTdw6fhMq
+         wJcUR5fkf3r/81JFXQQWFimbMBXaZV3VsxFFgF+mUoAyZijWlBu0cwkO6WQyS13Ii40h
+         eBw/VJcsiJAqvCrHJW8zZc3p9Ama89h3IoFiv+VgG6F7IeeRF8LxTtxiYNl2WXNygQoz
+         +2uhujL/jwSwIyj4rKP7rz6MKOHCJwMmKI4QTvfv5PNmC9454AoMkYAEV0krtI/sMAUW
+         2CHA==
+X-Gm-Message-State: APuU4Z8FRPOEnEKGrHez2Jc6OUOZc61GMM96D/LcYcMwZTu4jV6RLpq0
+	F2wSi8VCc437US0A9N9iPUSNSGLmXBaZXpPbHYzGFVYCCYZMhP+AdoDoG2tCIBDjYmrsY4EFyn9
+	Aq5qOSxPMjlm8iCPepqfEW+QCNzOEQKtIFEayhUt3wg==
+X-Gm-Gg: AYBFou2kPV0p6Zxod4Qllp5MZH7qmNZTuDI9yL69YnwDCg5vaB1BPgYrzCE6ENH4fvT
+	Q8eoyYjlyUhDM+gtKv+usEo5FSOtqC8bufcTRxvKnURFB5MZJMWneVVWjtXkHuz1PfS9pEd+fNL
+	w+Q06Q83kZmqN/v3bV3YXGR2dTJojyb3G/9xImcQFqBkQQmU5qDhapYhBlinnYmcF9UToyiwNTJ
+	Buu1MsdJa7Q7DImT4dZVgo6I/e5+dEy8b3vaPhaNozkcYT/Sm8WUDKnfpiNTAdSD/vTVxmm46HC
+	F1DTwqAmjjLrKUKlplbPGg86YrOd/0vH6LocmZmqJpKnWplg7xCBzNw5ZLYiOG/hmtgW+UtLeJJ
+	Lkdq09OFcb/UWFgDrQZ6l2DavTkl8kirpXw==
+X-Received: by 2002:a05:6a00:3d89:b0:8a0:92ec:5f1c with SMTP id
+ d2e1a72fcca58-8beaf2a4d6fmr712148b3a.0.1794511489473; Thu, 12 Nov 2026
+ 11:24:49 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -68,261 +102,99 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+References: <20261111-bpf-preempt-v2-r2-v2-0-9d8f6b952ad2@sentinelone.com> <DMSU4S7392QQ.357Y29RMDZ8BJ@gmail.com>
+In-Reply-To: <DMSU4S7392QQ.357Y29RMDZ8BJ@gmail.com>
+From: Mike Bazov <mikeba@sentinelone.com>
+Date: Thu, 12 Nov 2026 21:24:52 +0200
+X-Gm-Features: AclHuK-ZDEUJCai-MX-vK2KnyCinEohrdaF3lHXe5jxxeIvqToo4i-MZUdaZeSs
+Message-ID: <CAPnbwjrBnhnJt7BC-QBEJNh9Jp3bP7WXVnT38mLv9txFrftcZA@mail.gmail.com>
+Subject: Re: [EXT.MSG] Re: [PATCH bpf-next v2 0/5] bpf: Check recursion per
+ task for preemptible programs
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	JP Kobryn <jp.kobryn@linux.dev>, linux-trace-kernel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Thank you for your contribution! Sashiko AI review found 3 potential
-issue(s) to consider.
+> The link walk doesn't look too bad,
+> but pls share bench trig-fentry/exit/rawtp numbers.
 
-Critical: 0 · High: 2 · Medium: 0 · Low: 1
+Got the numbers below, bpf-next 0fb18ce8a2e9 with and without the series,
+x86-64 VM with 4 vCPUs, lazy preemption. Each value is the median of
+10 runs of:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+  ./bench -w2 -d12 -a trig-<x>
 
-- [High] PTP SQ recovery loses the RCU/NAPI grace period that used to
-  separate the PTP napi_disable from freeing the PTP CQs, which can…
-- [High] net/mlx5e: missing grace period after page_pool_destroy() in
-  channel close
-- [Low] The patch adds an unmentioned change in XSK teardown state
-  tracking and several copies of teardown sequences that will have to be…
+  (M/s, median of 10 runs, min-max in brackets; non-debug kernels from
+   the same config; bpf-next #2 is a second boot after the series)
 
---
+               bpf-next             series               bpf-next #2
+  trig-fentry  39.71 [38.75-40.43]  40.35 [39.74-41.12]  39.75 [39.10-40.08]
+  trig-fexit   35.67 [32.67-37.56]  36.70 [33.26-37.79]  36.56 [31.69-37.60]
+  trig-rawtp   41.07 [40.43-41.73]  38.15 [37.78-38.87]  40.30 [39.86-40.92]
 
-net/mlx5e: Batch NAPI RCU grace periods on channel close
+In these runs, fentry measured about 1.5% higher throughput with the
+series. The fexit difference is comparable to the variation between
+the two baseline boots.
 
-This patch splits mlx5e channel deactivate and close into pre_sync and
-post_sync phases, so one synchronize_net() covers all channels instead
-of one per queue. NAPI instances are unlinked with
-__netif_napi_del_locked(), and a single grace period runs before the
-channels are freed. Single-queue paths keep their per-object
-synchronize_net() calls.
+raw_tp is 5-7% slower, outside the run-to-run variation. Its run
+context is a C local in __bpf_trace_run() that grew from 16 to 32
+bytes, and bpf_trace_run1() now zero-fills more of it, realigns the
+stack, and checks jits_use_priv_stack, which a raw_tp program can't
+need after patch 1. I'll try to trim those and send the numbers again.
 
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-> index c3c2c5720c6f3..73b504ba8c8c6 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> Maybe we should do a per-task array of progs instead to detect recursion?
+> It's likely more cache efficient than link list walk.
 
-[ ... ]
+I think it would bring a different set of trade-offs rather
+than a clear win:
 
-> @@ -2936,35 +2993,62 @@ static void mlx5e_activate_channel(struct mlx5e_channel *c)
+- I believe most of the time the chain is empty, so there is nothing
+  to walk and an array wouldn't save anything.
+- A fixed-size array would require choosing a capacity and an overflow
+  policy. Its setup cost would depend on the generated code; the extra
+  stack initialization in the raw_tp disassembly is a reason to check
+  that cost.
+- The chain reuses bpf_ctx and the existing stack-allocated contexts,
+  without a capacity limit.
 
-[ ... ]
+do you think it is worth doing?
 
-> -static void mlx5e_close_channel(struct mlx5e_channel *c)
-> +static void mlx5e_close_channel_pre_sync(struct mlx5e_channel *c)
->  {
->  	if (test_bit(MLX5E_CHANNEL_STATE_XSK, c->state))
-> -		mlx5e_close_xsk(c);
-> -	mlx5e_close_queues(c);
-> -	mlx5e_qos_close_queues(c);
-> -	netif_napi_del_locked(&c->napi);
-> +		mlx5e_close_xsk_pre_sync(c);
-> +
-> +	if (c->xdp)
-> +		mlx5e_close_xdpsq_pre_sync(&c->rq_xdpsq);
->  
-> +	if (c->xdpsq)
-> +		mlx5e_close_xdpsq_pre_sync(c->xdpsq);
-> +}
-> +
-> +static void mlx5e_close_channel_post_sync(struct mlx5e_channel *c)
-> +{
-> +	if (c->xskrq.xsk_pool)
-> +		mlx5e_close_xsk_post_sync(c);
-> +	mlx5e_close_queues_post_sync(c);
-> +	mlx5e_qos_close_queues_post_sync(c);
-> +}
+> A prog with a scratch map of its own is correct today and
+> that's what plenty of production bpf progs use today.
+>
+> This patch set will make them send corrupted events, and nothing counts
+> this corrupted events. Today, at least, you have a miss count.
 
-[Severity: Low]
-This isn't a functional bug, but the XSK teardown decision here now uses
-c->xskrq.xsk_pool instead of MLX5E_CHANNEL_STATE_XSK. That is because
-mlx5e_close_channel_pre_sync() clears the state bit before post_sync
-runs.
+ agreed, can we consider keeping today's per-CPU guard for
+ the programs that depend on it?
 
-For the new check to work, the error path in mlx5e_open_xsk() in
-en/xsk/setup.c now does:
+- programs with a private stack (as in v2);
+- programs that use timed may_goto;
+- programs that use per-CPU map values: lookups, bpf_this_cpu_ptr()/
+  bpf_per_cpu_ptr(), and bpf_for_each_map_elem() callbacks;
+- programs that can reach a tail call, since a tail-called program
+  skips its own guard.
 
-	c->xskrq.xsk_pool = NULL;
-	c->xsksq.xsk_pool = NULL;
+Only the remaining programs would get the per-task check. Extensions
+(freplace) of raw_tp and tracepoint programs still need a rule.
+Preemption-disable, as you suggested, could later remove the drops for
+the guarded programs as a separate step. The commit logs will spell out
+these trade-offs.
 
-The commit message mentions neither change. Could it explain that
-xsk_pool is now the liveness flag for XSK teardown?
+> With the link list approach every B gives A 250 ms more:
+[...]
+> So the promise of may_goto that I just fixed a week or so ago
+> will be borken again.
 
-The patch also adds several copies of existing teardown sequences:
+right. The proposal above keeps the existing per-CPU guard
+for the relevant programs.
 
-  - mlx5e_close_queues_post_sync() is a near line-by-line copy of
-    mlx5e_close_queues(). The original is still used by the
-    err_close_queues path in mlx5e_open_channel().
-
-  - mlx5e_close_channels_post_sync() open-codes mlx5e_ptp_close() as
-    mlx5e_ptp_close_queues() plus kvfree(). mlx5e_ptp_close() is still
-    used by the error handling in mlx5e_open_channels() and by the PTP
-    recovery in en/reporter_tx.c.
-
-  - mlx5e_close_locked() open-codes the same sequence as
-    mlx5e_deactivate_priv_channels() followed by
-    mlx5e_close_channels(), with the same two grace periods.
-
-If a resource is later added to only one copy, either the batched close
-path or the error/recovery path will skip its cleanup.
-
-Could the single-object variants be written as pre_sync, then
-synchronize_net(), then post_sync? And could mlx5e_close_locked() keep
-calling the existing wrappers?
-
-[ ... ]
-
-> @@ -3060,32 +3144,67 @@ static int mlx5e_wait_channels_min_rx_wqes(struct mlx5e_channels *chs)
->  	return err ? -ETIMEDOUT : 0;
->  }
->  
-> -static void mlx5e_deactivate_channels(struct mlx5e_channels *chs)
-> +static void mlx5e_deactivate_channels_pre_sync(struct mlx5e_channels *chs)
->  {
->  	int i;
->  
->  	if (chs->ptp)
-> -		mlx5e_ptp_deactivate_channel(chs->ptp);
-> +		mlx5e_ptp_deactivate_channel_pre_sync(chs->ptp);
->  
->  	for (i = 0; i < chs->num; i++)
-> -		mlx5e_deactivate_channel(chs->c[i]);
-> +		mlx5e_deactivate_channel_pre_sync(chs->c[i]);
->  }
->  
-> -void mlx5e_close_channels(struct mlx5e_channels *chs)
-> +static void mlx5e_deactivate_channels_post_sync(struct mlx5e_channels *chs)
-> +{
-> +	int i;
-> +
-> +	if (chs->ptp)
-> +		mlx5e_ptp_deactivate_channel_post_sync(chs->ptp);
-> +
-> +	for (i = 0; i < chs->num; i++)
-> +		mlx5e_deactivate_channel_post_sync(chs->c[i]);
-> +}
-
-[Severity: High]
-Does freeing the channels here need another grace period after the
-page pools are destroyed?
-
-mlx5e_alloc_rq() creates rq->page_pool with pp_params.napi set to
-rq->cq.napi. That is &c->napi for regular channels and &ptp->napi for
-PTP, and both are embedded in the structs freed here.
-
-When an in-flight skb backed by that pool is freed in softirq on
-another CPU, page_pool_napi_local() does READ_ONCE(pool->p.napi) and
-then reads napi->list_owner without any lock.
-
-pool->p.napi is only cleared in page_pool_disable_direct_recycling().
-That runs from page_pool_destroy(), reached from mlx5e_close_rq()
-through mlx5e_free_rq().
-
-Before this patch, mlx5e_close_channel() ran mlx5e_close_queues()
-first and only then called netif_napi_del_locked(). Its
-synchronize_net() covered any softirq that had loaded the old
-pool->p.napi before kvfree(c) ran.
-
-In the batched path, the only grace period runs between
-mlx5e_close_channels_pre_sync() and mlx5e_close_channels_post_sync().
-At that point pool->p.napi still points at the embedded napi.
-
-post_sync then calls mlx5e_ptp_close_queues() and
-mlx5e_close_channel_post_sync(), which clear pool->p.napi. It then
-immediately calls kvfree() on chs->ptp and chs->c[i].
-
-page_pool_scrub() only calls synchronize_net() when
-dma_dev_need_sync() is true. So on DMA-coherent platforms nothing
-waits here.
-
-A softirq that read pool->p.napi just before it was cleared can then
-read list_owner from freed memory. If the stale value matches the
-current CPU, it would also take the direct recycling path into a pool
-that is being torn down.
-
-This affects mlx5e_close_locked() and every mlx5e_close_channels()
-caller, for example ip link set down or a channel count change. The
-single-channel mlx5e_close_channel() still does
-netif_napi_del_locked() after post_sync, so it looks unaffected.
-
-Would it work to destroy all the queues in post_sync, issue a second
-synchronize_net(), and only then kvfree() the channels and PTP? That
-keeps the cost at a fixed number of grace periods. Or is the
-page_pool core meant to provide this guarantee, and I am missing it?
-
-[Severity: High]
-Is the PTP SQ recovery path still safe after this change?
-
-mlx5e_tx_reporter_ptpsq_unhealthy_recover() in en/reporter_tx.c does:
-
-	mlx5e_deactivate_priv_channels(priv);
-
-	mlx5e_ptp_close(chs->ptp);
-
-Before this patch, mlx5e_deactivate_channels() ran
-mlx5e_ptp_deactivate_channel() first, which ends in
-napi_disable_locked(). It then ran mlx5e_deactivate_channel() for each
-channel. Those calls did several synchronize_net() calls through
-mlx5e_deactivate_rq(), mlx5e_deactivate_icosq() and
-mlx5e_deactivate_txqsq(). So a grace period always followed the PTP
-napi_disable_locked().
-
-Now the single synchronize_net() in mlx5e_deactivate_priv_channels()
-runs before post_sync. mlx5e_ptp_deactivate_channel_post_sync() calls
-napi_disable_locked(), and nothing waits after it.
-
-mlx5e_ptp_close() then frees the queues before netif_napi_del_locked():
-
-	mlx5e_ptp_close_queues(c);
-	netif_napi_del_locked(&c->napi);
-
-	kvfree(c);
-
-The call chain mlx5e_ptp_close_queues()->mlx5e_close_cq()->
-mlx5e_free_cq()->mlx5_wq_destroy() frees the CQ buffer, and frees the
-doorbell record through mlx5_db_free().
-
-Meanwhile, mlx5e_ptp_napi_poll() keeps running under rcu_read_lock()
-after napi_complete_done():
-
-	if (unlikely(!napi_complete_done(napi, work_done)))
-		goto out;
-
-	ch_stats->arm++;
-
-	if (test_bit(MLX5E_PTP_STATE_TX, c->state)) {
-		for (i = 0; i < c->num_tc; i++) {
-			mlx5e_cq_arm(&c->ptpsq[i].txqsq.cq);
-			mlx5e_cq_arm(&c->ptpsq[i].ts_cq);
-
-napi_disable_locked() only waits for NAPIF_STATE_SCHED and
-NAPIF_STATE_NPSVC to clear. Can it return while the poller is still in
-this arm section?
-
-If so, mlx5e_cq_arm() could write through mcq->arm_db into a doorbell
-record that has been freed, or that mlx5_db_alloc() has already given
-to another queue. It would also ring the UAR for a destroyed CQN.
-
-The other callers of mlx5e_deactivate_priv_channels() look fine:
-mlx5e_switch_priv_channels(), the ipoib paths and mlx5e_queue_start()
-go on to mlx5e_close_channels() or mlx5e_close_channel(), and both call
-synchronize_net() before freeing. So this seems limited to the PTP
-recovery path.
-
-The later patch in this series ("net/mlx5e: Batch ICOSQ trigger RCU
-synchronization") does not touch this path either.
-
-Would either of these close the window?
-
-  - Add synchronize_net() before mlx5e_ptp_close() in the recovery
-    path.
-
-  - Have mlx5e_ptp_close() call __netif_napi_del_locked() and
-    synchronize_net() before mlx5e_ptp_close_queues(), as the batched
-    close path now does.
-
-[ ... ]
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261110185005.2932568-1-tariqt%40nvidia.com
+Thanks,
+Mike
