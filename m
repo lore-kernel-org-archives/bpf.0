@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794502028;
-	b=sBIkFAzCL7AshN9Ao5palKwPHdWXhQEDatyIIApUrNmm2+HOZI42sCepGAta6bX5RIJ6
-	 cMSlrxyobuDUB/9WQbKXWw2F+IJPEnbQhLkoWvrA7sr52aJk/mjT/kfMo2ShDAc0pp1fj
-	 0vlOdlAyhANLmOU3BUPl2cZrr/gC5NtPAB/28DyyyLnfWXPLx8+UfD2icMxXzDDwtOxVz
-	 hKfMabdqweVfPcGVe6euCqkFOaQ32oBLmP8a5t36qgCPoQmAP91F92rAyFtLAF6zCeQxM
-	 t3X1P/yeRxKtWpLmA2d2h8UCRf+6ljSRuIFmugHo1hk5/zl7TTxgycWv5k5JFdNe6Ow==
+	t=1794502035;
+	b=KyOl2EPxe4LWsMQ6QfQdcvio07nY5/PGwh+jJyEQ88twxzBMK8aGEcdjOXZwD+Eb4Wt9
+	 3QEPDAmnnuvxxwCjzC3DiYd+JOTNFhmewRRbRpQAB1rveyWkHwn6t3SV8Ib/te2UcqL13
+	 lZHK2TMAzHanqxENGzN+wVLpqveptAjr+lK/xd0gnptM90hz2kteXsmSWKmLZoJRhAyXk
+	 WXOmu/dkmLW20+kMeCqJEQzYniaZ6EoKsKINSzwvaCYXscLxK74KAxLQf0Pww2Nri3PVv
+	 cTFfHGsW0v61Ga/nJtssQtHELiDMOj4tte6FqWmZIpA4ZWH5ma7oQflkc759Mjmrxxw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794502028;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794502035;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=opQ/GNakZXCGVFGGrK9thJYl93ChEkWHL4+yOrmtK3I=;
-	b=AIJc4zzrGUdhpYtzcAxmYKbts55WALMva7Q3TQHuzudawOdA7+qTBN+ZrTzzJlp5N65v
-	 8BOWLJ7UTJ43lYcQadH3ioD+RylZAJFAlMkg5YNvt+og7XACvekRVs6d8y/+tEd+msEvi
-	 IRdOh5yrtYZT7u5rl7e3VJYKrLnO3kCiyfRXOkTRtDbyXsztToE94PhVISp5i8L4Gijyf
-	 mjxZqsAB1z5jIGpmB0RCGopidj4RUUHoklg/0KnLBfyxg20g5MNjVLKIWCw7/12j5lCEg
-	 vIc0khbTNXj9lyRU3D0ZCxt483OqKmZMk9Vdl6ON9ZIArWCPBMTLva78N45KStfN+8A==
+	bh=y13tzQMxaqWDVZpPZiHRt8EhvRAALX1QXWRyXbt0zOA=;
+	b=wcs2DmYajZfWWnkUfm+U8CfvAWXl1/wcFG21PYFuYNbc+JeodbRPVYs2wJBtpVxHrFw0
+	 BkDjmnYnlDkWwbxtK5anRev3i/rJD/WE3PRB+kezilhP7U6ErkE34bM+0yqMor/Rjz978
+	 A64sv5tP3X/xms/OE9Zn6ab3jwn+Ux7hrTrfGn3VnM/ZOIsFy4M1Id6hLTVSMndtM8//c
+	 2eMiWB1qqHUJvhAaIDL6j0iyW5Rn+206M8D8gL2onSW9eSL2z9NlZAWmDCKtB68Zdze/M
+	 j/hU6vYiRPo5ZuCPmpYak+vVMEsbmqDFMPts4G1MCD9kE2OZPigYfHO7dRL3k8YbD8g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="n/FMurJp";
-	arc=none smtp.remote-ip=209.85.214.175
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=n1oRutBR;
+	arc=none smtp.remote-ip=209.85.210.172
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C2A3606A89E
-	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 16:47:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8C2A3606A89E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67A8860A260D
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 16:47:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 67A8860A260D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=n/FMurJp
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2ea138a3497so301845ad.2
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 08:47:08 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=n1oRutBR
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-8b58d6f67a5so2709113b3a.2
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 08:47:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794502027; x=1795106827; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794502033; x=1795106833; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=opQ/GNakZXCGVFGGrK9thJYl93ChEkWHL4+yOrmtK3I=;
-        b=n/FMurJpFup0sOkWcVVMez0V1Nv09TZipIIDeTVVY1lMtr6vzUtvyZJCaVUEaK1mEs
-         Ds133RV08ZvBo1LzqUVjwfyCyLx1EoiWWODuqIFydszwYgV8VZwT8tFR22T6OioStNyq
-         AmTE9Ccwzdqy91KIHyfNjUSA200B6Dee1oRO/OxoUGbIpvNq18R7gobcNSi9gyr5LpZl
-         geDWXvBuyxRHgeAyuJDjidtqNFkFaPHH+Qs5YdOrpRuRGu3WwVDgRV2PdxS2qqBkE5Tw
-         7UTnZkoWVrT6aZKxuzruOLhbf5DPYVC8FGekB/dcePYBpGEa2LHtkLTwc6SReDtt9gDt
-         +ukA==
+        bh=y13tzQMxaqWDVZpPZiHRt8EhvRAALX1QXWRyXbt0zOA=;
+        b=n1oRutBRieY8sHb6cjrSmFO3V3iTSmmfUlb5f9QXza7a9fi9pHSgtihpv3I1nsIiDD
+         3tQiGnJofgV6/Wq+371dcH5c1Ua3BaCU2/gkUz7EtNMHuCxA9Hr7Q977w9f4aUU5G486
+         1JWft/Y0YGKPNCBubPPDg/q/AIUxdhROVCt+RusPVKm+yC3U6Cj1RWmszsr1urOBPJi5
+         4+s19FLG+cKpGJZ3gfqd5ZpFOlzJ/ehZviEstb+V0VLoRkpGPfKe66MbHNVcLCgLpjpG
+         YWgn7madG6eJJChI5j41cLdzLASXtdTaH0luN/V6o9rF3wMbHWfFD51fhfDhvb0iMj0X
+         r2CQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794502028; x=1795106828;
+        d=1e100.net; s=20260707; t=1794502033; x=1795106833;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=opQ/GNakZXCGVFGGrK9thJYl93ChEkWHL4+yOrmtK3I=;
-        b=owCAGynGz2ip3snOQLeHIX5VhQR5De9lZsQZqiK+f5aH81nwPlrPLIHc9Fa4GmWmpc
-         tQqQ8V2BssDdnvsdbpUU/XGjYXoGNbxQkZPkoZhZSIEnpp91IDcxGqTPPegLHPrOiX3f
-         22PbhtY0GtKXMDtuLA3D9tlkTQC4EbiX1SJuCWMIuTt1dD3XZo0l5YU5uPVIkadP+EB4
-         ShL2URujyFUDMPCljCGVwTNwC6P3eV7uX/Pg0Or6jJHPjvKXIEOWBWgQJ2p/zQgb/QJO
-         Vx4iq9NV+yLVITixDddKQ0KSvQVCgOUCUtRsX406W67+V2tArw6OaY4xHj8AfN9i+urF
-         PoJQ==
-X-Gm-Message-State: APuU4Z/fy/oVfXx+UmVSDBTtSO+SpkWDIwZzKWNY+t2CLjIhjg9wBZnk
-	kaMS4708jziyQTNM//dNOu6V/ypk/5W5m+ryvVZ9I4E1/wxILA22x9Ercl3sLQ==
-X-Gm-Gg: AYBFou13UqoV8VeTklZchg8jANOZ7LFWLGz4cDT9qi9uYUgX8XWiC10ctaUuFZA04ZA
-	U3KLI3wkKGZw84EowaeufUQe3lSuM3roGzoia73Bk+5mHeO1XS1LC20dFx1EXWh7z4ZIPJhNS+y
-	Pb8SIGYHrFJIjtEOSRl4af2c5z9Rks8CDBH/PRQBLf0Mfm1U5tjRO95B6C+V/F8RZRr3/xU/n7O
-	8tuTDJ2rGenJcWHlfekDuPdVE80p7dWXiyO5Umaxp8Op0xTtcONqyEPqoATdAKUtB5g7hWW9x+g
-	cXVkc/NLw8hdfkuIFQ1DQw9aopT3bUt7FIhT1UIIAh44qW6ijDQaC/wx3LjF5jbjhHdyjoJhhPq
-	94OPLJU6tvDkDgr30r7sCakS4CYSxW79KwwqykWf47pui5juGOYDzfc4t46HEENIvYZYirt88yD
-	yc8JKpR0xt1Yr6ijGBJfGJF5gez1gtG0NVacb3o6VQUcVH6cCxMPUsns4ZyJS/ApGhC6v30c+1Z
-	oLvVBEeE7TtzBdR9Ra4x4hepmSG6+j6VNtKhipbyIvptWOa4c5IXdPY7ryJyUJNCbjxZmE6OXxw
-	PbugAqraou2euQMnTk7tULvU8cdxCSkAnTOlWY1k3XfN4D6sv6NdKvQdf6bkV314U4GV3+LUtJK
-	PqxxITwwX6QrGdAfXu5wqjBD6W2U9QRmXGI0oZDItiHq0pJVSn9rmM5+wQkBXIXWr4+9q1Yg8Tj
-	yH8rJuaqWYGK7YZN5l1Vzp
-X-Received: by 2002:a17:902:f683:b0:2e8:93b5:c555 with SMTP id d9443c01a7336-2edd7aeae6dmr64055645ad.61.1794502027323;
-        Thu, 12 Nov 2026 08:47:07 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.247])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2edb6e0f9ffsm37396285ad.75.2026.11.12.08.47.06
+        bh=y13tzQMxaqWDVZpPZiHRt8EhvRAALX1QXWRyXbt0zOA=;
+        b=LNj18ofz8/QnMCszbXusRxRR/drMwmgAH4X8UsQRSBDkUiqY5hhLzBZ0ZDuAid+6+D
+         jyh4Q2luwZjrXoya85KJ9lQPOiybnvtHnLZZiUrpoY8zkrCAdzpi1pdJP/SvpYJh1nQB
+         grrTEX70gU7IyKRrxuqF/Ky6lc1Xw3w2+nZZ8u8WlLHOWYWS7qSQWyo9jygpqTBjUop9
+         EXdtNsCGwyh7sagbEJeggiKzq0hO8RoXmpMMZ1YZjhCjT9/szETR72sPEVzIxlhKe3CX
+         NTsTapPhKPV5wPQ0NvKDIl2Ie2LaUXGadjBMXpFjhqw5SXFOg7FC2HWAVnMeo07pNfXv
+         ZVVg==
+X-Gm-Message-State: APuU4Z87qAKAzgn0K7PSRAVTgvNkM4d3ecmWu1o2ECVKgzdZH/Krh+9a
+	pQy8TZSgs/MSy2eekbE99bokkHvX+d302VQBjdtPHyQlDZcXmzfumKRwh/VJ6g==
+X-Gm-Gg: AYBFou2x0ReVElffD2joT2+JOZfY1YYbGFkO/zbRg7n5YZXN6JC1QMnRJqCIhngyLRs
+	RO68nozotKZEiUItdnZowJnnv7y3rnOwX2yVBEuFxB2Lr+8gc7nKyBYl35tapPUbSWV6NgdQOdl
+	y3jgcu+WZnzqEfRLSiLCoU603y/Lm5RHdeFtAU4tVWTXMwPakrfon+duDYMuLR6C8Hgpu3YJK+d
+	1L46Bst0ZSeS0PIYCThpe4Bl21lQFBc+fCuyGK0AegSuBG+u/rE4iASvlHIHl22wjIYgszWJ4xA
+	z4uM1EzErU7fG6UoUMpTRb3uj7oFTp3fRFfSngxwsW8H4csy1qy12CXzF3PuRg7meIREz+ivMP0
+	E67BzwGXwmnzHa/GES4Dl8lbOIQtJGr7NcdSOegjCCr3LcteQOa25qR4U1eeVBr7yb4gfVbrqdu
+	qTD6b1f7bt/C/O2AAkuTuukD6ttD4MDsPll7GsFt7lo06y6kGb/lKA1/EpF6evupkkUjRTHPUFb
+	CGr0L5wFvFF1vqf+xC8QmBbDxXHv9YV7mnmt8cqkfC1vEnQbHE+/xc7G55yxEElybxsmZpWYZkD
+	bTFpZOeDhF+g7+WE2TCf16KnrKRclrith7TpnKPlnfuq6zVXmDxjfC14gK+gDI1olHg1DkNZRbz
+	sUQga+RgWiKWV1t6YKbQkfD41JKmKBxfbWKpv6WdqZMwEempd+sN8N0ka0aJMTO9v5EuURMZWPA
+	==
+X-Received: by 2002:a05:6a00:4087:b0:874:706d:962a with SMTP id d2e1a72fcca58-8beb619e287mr115064b3a.28.1794502033173;
+        Thu, 12 Nov 2026 08:47:13 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.248])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8baab4fd5c6sm3768289b3a.46.2026.11.12.08.47.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2026 08:47:06 -0800 (PST)
+        Thu, 12 Nov 2026 08:47:12 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -86,9 +86,9 @@ Cc: daniel@iogearbox.net,
 	eddyz87@gmail.com,
 	memxor@gmail.com,
 	a.s.protopopov@gmail.com
-Subject: [PATCH bpf-next 09/10] bpf: Allow fmod_ret on tagged functions and check the return value
-Date: Thu, 12 Nov 2026 16:46:09 +0000
-Message-ID: <20261112164610.1917256-10-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 10/10] selftests/bpf: Test fmod_ret on tagged functions
+Date: Thu, 12 Nov 2026 16:46:10 +0000
+Message-ID: <20261112164610.1917256-11-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261112164610.1917256-1-alexei.starovoitov@gmail.com>
 References: <20261112164610.1917256-1-alexei.starovoitov@gmail.com>
@@ -105,213 +105,620 @@ Content-Transfer-Encoding: 8bit
 
 From: Anton Protopopov <a.s.protopopov@gmail.com>
 
-	SEC("fmod_ret/vfs_fallocate")
-	int BPF_PROG(no_big_files, struct file *file, int mode,
-		     loff_t offset, loff_t len, int ret)
-	{
-		return len > MAX_LEN ? -EFBIG : 0;
-	}
+bpf_testmod gets functions for the rules of the tool. Subtest "tags"
+compares their tags:
 
-This program keeps user space away from a bug below vfs_fallocate() until
-the fixed kernel runs. It does not load: "vfs_fallocate() is not
-modifiable". The build has tagged the function with the errors that it
-returns, the list: "bpf_fmodret_retval:-95,-29,-27,-26,-22,-21,-19,-9,-1".
+	bpf_testmod_retval_      returns                        tag
+	called, long             two errors, int and long       both errors
+	zero_extended, minus_one (u32)-EINVAL as u64, -1 alone  none
+	eperm                    -1 and -ENOENT                 both errors
+	denied                   -EACCES, -EAGAIN, -EMSGSIZE,   -13
+	                         -EINPROGRESS, -512, -529
+	effect, effect_late      -EINVAL, an unlock, -EBUSY     -22
+	no_effect                trylock, unlock on one path    all errors
+	err_ptr                  PTR_ERR(), inlined helper      both errors
+	no_branch                sbb + and with GCC             -14
+	pointer, argument, init  not an integer, an error that  none
+	                         is an argument, init code
 
-Let an fmod_ret program that is not sleepable attach to a tagged function.
-The declared targets stay as they are, without a restriction. A caller of
-a tagged function can get each error of the list from the function itself.
-The build knows nothing about other values:
+bpf_testmod.c includes the new file, so that bpf_testmod stays one object.
 
-	R0 at an exit           the trampoline
-	0                       calls the function
-	an error of the list    skips it, the caller gets the error
-	another value           -, the program does not load
+Subtest "run": bpf_testmod_test_write() calls bpf_testmod_retval_called().
 
-With -EDQUOT in place of -EFBIG:
+	the program returns    the function    write() fails with
+	0                      is called       -EFBIG, its own error
+	-EINVAL                is skipped      -EINVAL
 
-  At program exit the register R0 should be 0 or one of -95,-29,-27,..
+The other programs are only loaded, one for each rule of the check:
 
-The check is static: every value in the range of R0 is 0 or in the list.
-[-27, 0] has -25, which is not in the list. The program above gets to the
-exit in two states, R0 = -27 and R0 = 0. The verifier tests R0 at the
-exit, so flow_join_makes_up() does not join ranges that leave a gap.
+	other_error              an error that is not in the list
+	range                    [-27, -22]: only both ends are in the list
+	two_paths                two errors on two paths to one exit
+	negated_bool             [-1, 0] in the low 32 bits
+	high_bits                1 << 32
+	zero_extended            w0 = -14, the target returns long
+	pointer                  R0 is not a scalar
+	throws, exception_cb     the cookie, the exit of the callback
+	tail_call, not_a_target  refused
 
-R0 has a 64-bit and a 32-bit range. clang ends "return a && b ? -EPERM : 0"
-with "w0 &= 1; w0 = -w0; exit". That is [0, U32_MAX] and [-1, 0].
+Subtest "extension": what an extension returns is not checked against the
+list, and an extension of the main program returns to the trampoline.
+Existing checks refuse it. The subtest keeps it so: the extension must not
+load, with a plain ctx and with __arg_ctx in either program, whatever the
+message is.
 
-	target returns   range     R0 at the exit
-	int              32-bit    w0 = -22        -22, allowed
-	                           r0 = 1 << 32    rejected
-	long             64-bit    w0 = -22        4294967274, rejected
+The config of the selftests turns the option on. Without it, or without
+LLVM on the build host, the test is skipped.
 
-The caller of an int function reads the low 32 bits. The trampoline tests
-all 64 bits: 1 << 32 skips the function and the caller sees 0. So the
-32-bit range decides only if the high 32 bits are known to be 0. That
-fits the ABI of x86-64 and arm64, see the comment.
-
-	What returns to the trampoline
-	exit of the main program, of an exception callback    checked
-	cookie of bpf_throw(), default callback               checked
-	tail call                                             refused
-	extension of the main program      refused by existing checks
+The selftests build their own resolve_btfids, without LLVM, and pass it to
+kbuild for the test modules. kbuild runs it with the flags of the config
+of the kernel, and --fmodret_scan fails: "no decoder for the code of ELF
+machine 62". Let kbuild take the resolve_btfids of the kernel build if
+there is one: flags and tool belong together.
 
 Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
 Co-developed-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf.h          |  2 +
- include/linux/bpf_verifier.h |  2 +
- kernel/bpf/verifier.c        | 83 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 87 insertions(+)
+ tools/testing/selftests/bpf/config            |   1 +
+ .../selftests/bpf/prog_tests/fmodret_retval.c | 152 ++++++++++++++++
+ .../selftests/bpf/progs/fmodret_retval.c      | 168 ++++++++++++++++++
+ .../selftests/bpf/progs/fmodret_retval_ext.c  |  18 ++
+ .../testing/selftests/bpf/test_kmods/Makefile |   8 +
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |   4 +-
+ .../bpf/test_kmods/bpf_testmod_retval.c       | 131 ++++++++++++++
+ 7 files changed, 481 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/fmodret_retval.c
+ create mode 100644 tools/testing/selftests/bpf/progs/fmodret_retval.c
+ create mode 100644 tools/testing/selftests/bpf/progs/fmodret_retval_ext.c
+ create mode 100644 tools/testing/selftests/bpf/test_kmods/bpf_testmod_retval.c
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 520fd72e21fd..ee26185557ef 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1542,6 +1542,8 @@ struct bpf_attach_target_info {
- 	struct module *tgt_mod;
- 	const char *tgt_name;
- 	const struct btf_type *tgt_type;
-+	/* The errors in the "bpf_fmodret_retval:" tag, if that is what allows fmod_ret */
-+	const char *fmodret_retvals;
- };
- 
- #define BPF_DISPATCHER_MAX 48 /* Fits in 2048B */
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index d4fdb724cc1b..8a3cded313f4 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1359,6 +1359,8 @@ struct bpf_verifier_env {
- 	char tmp_arg_name[32];
- 	struct bpf_insn insn_buf[INSN_BUF_SIZE];
- 	struct bpf_insn epilogue_buf[INSN_BUF_SIZE];
-+	/* See check_fmodret_retval() */
-+	const char *fmodret_retvals;
- 	struct bpf_liveness *liveness;
- 	struct bpf_iarray *succ;
- 	struct bpf_iarray *gotox_tmp_buf;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 56924ce392e0..3ee90c2bb1ec 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -13531,6 +13531,14 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 	}
- 
- 	if (func_id == BPF_FUNC_tail_call) {
-+		/*
-+		 * The program which a tail call jumps to returns for this one,
-+		 * and a program array does not check the values it may return.
-+		 */
-+		if (env->fmodret_retvals) {
-+			verbose(env, "tail calls are not allowed in fmod_ret programs with restricted return values\n");
-+			return -EINVAL;
-+		}
- 		if (env->cur_state->curframe) {
- 			struct bpf_verifier_state *branch;
- 
-@@ -20209,6 +20217,66 @@ static bool program_returns_void(struct bpf_verifier_env *env)
- 	return false;
- }
- 
-+static bool fmodret_retval_allowed(const char *list, s64 value)
-+{
-+	char *end;
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index 49dfe939467c..30b744844ef5 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -3,6 +3,7 @@ CONFIG_BOOTPARAM_HARDLOCKUP_PANIC=y
+ CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=1
+ CONFIG_BPF=y
+ CONFIG_BPF_EVENTS=y
++CONFIG_BPF_FMODRET_SCAN=y
+ CONFIG_BPF_JIT=y
+ CONFIG_BPF_KPROBE_OVERRIDE=y
+ CONFIG_BPF_LIRC_MODE2=y
+diff --git a/tools/testing/selftests/bpf/prog_tests/fmodret_retval.c b/tools/testing/selftests/bpf/prog_tests/fmodret_retval.c
+new file mode 100644
+index 000000000000..8139f007e306
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/fmodret_retval.c
+@@ -0,0 +1,152 @@
++// SPDX-License-Identifier: GPL-2.0
++/* The functions which the build tags as fmod_ret targets, because they return errors */
++#include <test_progs.h>
++#include <bpf/btf.h>
++#include "fmodret_retval.skel.h"
++#include "fmodret_retval_ext.skel.h"
 +
-+	if (!value)
-+		return true;
-+	for (; *list; list = *end ? end + 1 : end) {
-+		if (simple_strtoll(list, &end, 10) == value)
-+			return true;
++#define TAG	"bpf_fmodret_retval:"
++
++/* The functions of test_kmods/bpf_testmod_retval.c and the errors in their tags */
++static const struct {
++	const char *func, *errors;
++} fixtures[] = {
++	{ "bpf_testmod_retval_called",		"-27,-22" },
++	{ "bpf_testmod_retval_long",		"-28,-14" },
++	{ "bpf_testmod_retval_zero_extended",	"" },
++	{ "bpf_testmod_retval_minus_one",	"" },
++	{ "bpf_testmod_retval_eperm",		"-2,-1" },
++	{ "bpf_testmod_retval_denied",		"-13" },
++	{ "bpf_testmod_retval_effect",		"-22" },
++	{ "bpf_testmod_retval_effect_late",	"-22" },
++	{ "bpf_testmod_retval_no_effect",	"-28,-22,-16" },
++	{ "bpf_testmod_retval_err_ptr",		"-34,-14" },
++	{ "bpf_testmod_retval_no_branch",	"-14" },
++	{ "bpf_testmod_retval_pointer",		"" },
++	{ "bpf_testmod_retval_argument",	"" },
++	{ "bpf_testmod_retval_init",		"" },
++};
++
++/* Return the errors in the tag of FUNC, or NULL */
++static const char *tagged_errors(const struct btf *btf, const char *func)
++{
++	int id, func_id = btf__find_by_name_kind(btf, func, BTF_KIND_FUNC);
++
++	if (!ASSERT_GT(func_id, 0, func))
++		return NULL;
++	for (id = btf__type_cnt(btf__base_btf(btf)); id < btf__type_cnt(btf); id++) {
++		const struct btf_type *t = btf__type_by_id(btf, id);
++		const char *name = btf__name_by_offset(btf, t->name_off);
++
++		if (btf_is_decl_tag(t) && t->type == func_id && !strncmp(name, TAG, strlen(TAG)))
++			return name + strlen(TAG);
 +	}
-+	return false;
++	return NULL;
++}
++
++static int write_errno(int len)
++{
++	int fd = open("/sys/kernel/bpf_testmod", O_WRONLY), err;
++	char buf[8] = {};
++
++	if (!ASSERT_GE(fd, 0, "open"))
++		return 0;
++	err = write(fd, buf, len) < 0 ? -errno : 0;
++	close(fd);
++	return err;
++}
++
++/* bpf_testmod_test_write() returns the error of the target, or -EIO */
++static void test_run(void)
++{
++	struct fmodret_retval *skel;
++	struct bpf_program *prog;
++
++	skel = fmodret_retval__open();
++	if (!ASSERT_OK_PTR(skel, "open"))
++		return;
++	bpf_object__for_each_program(prog, skel->obj)
++		bpf_program__set_autoload(prog, prog == skel->progs.called);
++	if (!ASSERT_OK(fmodret_retval__load(skel), "load"))
++		goto out;
++	skel->bss->pid = getpid();
++
++	ASSERT_EQ(write_errno(7), -EFBIG, "before");
++	if (!ASSERT_OK(fmodret_retval__attach(skel), "attach"))
++		goto out;
++	ASSERT_EQ(write_errno(7), -EFBIG, "called");
++	skel->bss->deny = true;
++	ASSERT_EQ(write_errno(7), -EINVAL, "skipped");
++	fmodret_retval__detach(skel);
++	ASSERT_EQ(write_errno(7), -EFBIG, "after");
++out:
++	fmodret_retval__destroy(skel);
 +}
 +
 +/*
-+ * The build tags the functions which return errors: "bpf_fmodret_retval:-22,-12",
-+ * see tools/bpf/resolve_btfids/fmodret.c. An fmod_ret program can attach to such
-+ * a function. A caller can get each of these errors today: the function returns
-+ * them itself. So the program must return one of them, or 0 to call the function.
++ * What an extension returns is not checked against the tag, and an extension of
++ * the main program would return to the trampoline. Today none has the type of
++ * the main program of a tracing program. Whatever the reason is, it must not load.
 + */
-+static int check_fmodret_retval(struct bpf_verifier_env *env, int regno,
-+				const char *exit_ctx, const char *reg_name)
++static void test_extension(void)
 +{
-+	const struct bpf_prog_aux *aux = env->prog->aux;
-+	struct bpf_reg_state *reg = reg_state(env, regno);
-+	s64 smin = reg_smin(reg), smax = reg_smax(reg), v;
-+	const struct btf_type *t;
++	struct bpf_program *prog, *main_prog, *ext_prog;
++	struct fmodret_retval_ext *ext;
++	struct fmodret_retval *skel;
++	int i;
 +
-+	if (reg->type != SCALAR_VALUE) {
-+		verbose(env, "%s the register %s is not a known value (%s)\n",
-+			exit_ctx, reg_name, reg_type_str(env, reg->type));
-+		return -EINVAL;
++	skel = fmodret_retval__open();
++	if (!ASSERT_OK_PTR(skel, "open"))
++		return;
++	bpf_object__for_each_program(prog, skel->obj)
++		bpf_program__set_autoload(prog, prog == skel->progs.called ||
++						prog == skel->progs.tagged_ctx);
++	if (!ASSERT_OK(fmodret_retval__load(skel), "load"))
++		goto out;
++	for (i = 0; i < 4; i++) {
++		ext = fmodret_retval_ext__open();
++		if (!ASSERT_OK_PTR(ext, "open extension"))
++			break;
++		main_prog = i & 1 ? skel->progs.called : skel->progs.tagged_ctx;
++		ext_prog = i & 2 ? ext->progs.plain_ctx : ext->progs.arg_ctx;
++		bpf_object__for_each_program(prog, ext->obj)
++			bpf_program__set_autoload(prog, prog == ext_prog);
++		ASSERT_OK(bpf_program__set_attach_target(ext_prog, bpf_program__fd(main_prog),
++							 bpf_program__name(main_prog)),
++			  "set_attach_target");
++		ASSERT_ERR(fmodret_retval_ext__load(ext), "load extension");
++		fmodret_retval_ext__destroy(ext);
 +	}
++out:
++	fmodret_retval__destroy(skel);
++}
 +
-+	/*
-+	 * "w0 = -22" zero-extends, the caller of an int function sees -22. The
-+	 * trampoline tests all 64 bits: 1 << 32 would skip the function, and the
-+	 * caller would see 0. So the low 32 bits decide only if the high ones are 0.
-+	 *
-+	 * That is right where the ABI leaves the high 32 bits of an int in the
-+	 * return value register open: x86-64, arm64. s390x, riscv64, ppc64 and
-+	 * loongarch want it sign-extended: look here before one of them is added
-+	 * to CONFIG_BPF_FMODRET_SCAN.
-+	 */
-+	t = btf_type_skip_modifiers(aux->attach_btf, aux->attach_func_proto->type, NULL);
-+	if (t->size == 4 && reg_umax(reg) <= U32_MAX) {
-+		smin = reg_s32_min(reg);
-+		smax = reg_s32_max(reg);
-+	}
++void test_fmodret_retval(void)
++{
++	struct btf *vmlinux_btf, *btf = NULL;
++	int i;
 +
-+	/* Stops at the first value which is not in the list, however wide the range is */
-+	for (v = smin; v <= smax; v++) {
-+		if (!fmodret_retval_allowed(env->fmodret_retvals, v)) {
-+			verbose(env, "%s the register %s should be 0 or one of %s\n",
-+				exit_ctx, reg_name, env->fmodret_retvals);
-+			return -EINVAL;
-+		}
++	vmlinux_btf = btf__load_vmlinux_btf();
++	if (!ASSERT_OK_PTR(vmlinux_btf, "btf__load_vmlinux_btf"))
++		return;
++	btf = btf__load_module_btf("bpf_testmod", vmlinux_btf);
++	if (!ASSERT_OK_PTR(btf, "btf__load_module_btf"))
++		goto out;
++	if (!tagged_errors(btf, fixtures[0].func)) {
++		printf("%s:SKIP:no CONFIG_BPF_FMODRET_SCAN\n", __func__);
++		test__skip();
++		goto out;
 +	}
++	if (test__start_subtest("tags"))
++		for (i = 0; i < ARRAY_SIZE(fixtures); i++)
++			ASSERT_STREQ(tagged_errors(btf, fixtures[i].func) ?: "", fixtures[i].errors,
++				     fixtures[i].func);
++	if (test__start_subtest("run"))
++		test_run();
++	if (test__start_subtest("extension"))
++		test_extension();
++	RUN_TESTS(fmodret_retval);
++out:
++	btf__free(btf);
++	btf__free(vmlinux_btf);
++}
+diff --git a/tools/testing/selftests/bpf/progs/fmodret_retval.c b/tools/testing/selftests/bpf/progs/fmodret_retval.c
+new file mode 100644
+index 000000000000..a15d1f638252
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/fmodret_retval.c
+@@ -0,0 +1,168 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * fmod_ret programs on functions of bpf_testmod which the build has tagged, see
++ * test_kmods/bpf_testmod_retval.c. They may return only 0 or the errors in the
++ * "bpf_fmodret_retval:" tag of their target.
++ */
++#include <vmlinux.h>
++#include <errno.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include "bpf_misc.h"
++#include "bpf_experimental.h"
++
++char _license[] SEC("license") = "GPL";
++
++int pid;
++bool deny;
++
++/* What write() to /sys/kernel/bpf_testmod returns tells whether the function was called */
++SEC("fmod_ret/bpf_testmod_retval_called")
++__success
++int BPF_PROG(called, size_t len, int ret)
++{
++	if (bpf_get_current_pid_tgid() >> 32 != pid)
++		return 0;
++	return deny ? -EINVAL : 0;
++}
++
++/* For the extensions of fmodret_retval_ext.c: "called" has a plain ctx */
++SEC("fmod_ret/bpf_testmod_retval_called")
++__success
++int tagged_ctx(unsigned long long *ctx __arg_ctx)
++{
 +	return 0;
 +}
 +
- static int check_return_code(struct bpf_verifier_env *env, int regno, const char *reg_name)
- {
- 	const char *exit_ctx = "At program exit";
-@@ -20265,6 +20333,9 @@ static int check_return_code(struct bpf_verifier_env *env, int regno, const char
- 	if (prog_type == BPF_PROG_TYPE_CGROUP_SKB && (env->prog->expected_attach_type == BPF_CGROUP_INET_EGRESS))
- 		enforce_attach_type_range = tnum_range(2, 3);
- 
-+	if (env->fmodret_retvals)
-+		return check_fmodret_retval(env, regno, exit_ctx, reg_name);
++SEC("fmod_ret/bpf_testmod_retval_called")
++__failure __msg("At program exit the register R0 should be 0 or one of -27,-22")
++int BPF_PROG(other_error, size_t len, int ret)
++{
++	return -EPERM;
++}
 +
- 	if (!return_retval_range(env, &range))
- 		return 0;
- 
-@@ -24260,6 +24331,16 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 			if (btf_kfunc_is_modify_return(btf, btf_id, prog) ||
- 			    !check_attach_modify_return(addr, tname))
- 				ret = 0;
-+			if (ret) {
-+				/* Nobody declared it as a target. Has the build tagged it? */
-+				tgt_info->fmodret_retvals =
-+					btf_find_decl_tag_value(btf, btf_type_by_id(btf, btf_id), -1,
-+								"bpf_fmodret_retval:");
-+				if (IS_ERR(tgt_info->fmodret_retvals))
-+					tgt_info->fmodret_retvals = NULL;
-+				else
-+					ret = 0;
-+			}
- 			if (ret) {
- 				module_put(mod);
- 				bpf_log(log, "%s() is not modifiable\n", tname);
-@@ -24438,6 +24519,8 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
- 		return -EINVAL;
- 	}
- 
-+	env->fmodret_retvals = tgt_info.fmodret_retvals;
++/* Each path to the exit has an allowed value, their join has not */
++SEC("fmod_ret/bpf_testmod_retval_called")
++__success
++__naked void two_paths(void)
++{
++	asm volatile (
++	"r2 = *(u64 *)(r1 + 0);"
++	"r0 = -27;"
++	"if r2 == 7 goto 1f;"
++	"r0 = -22;"
++"1:"
++	"exit;"
++	::: __clobber_all);
++}
 +
- 	/*
- 	 * We don't get trampoline for tracing_multi programs at this point,
- 	 * it's done when tracing_multi link is created.
++/* Both ends of the range are in the list, the values between them are not */
++SEC("fmod_ret/bpf_testmod_retval_called")
++__failure __msg("R0 should be 0 or one of -27,-22")
++__naked void range(void)
++{
++	asm volatile (
++	"r0 = *(u64 *)(r1 + 0);"
++	"if r0 s< -27 goto 1f;"
++	"if r0 s> -22 goto 1f;"
++	"exit;"
++"1:"
++	"r0 = 0;"
++	"exit;"
++	::: __clobber_all);
++}
++
++/* The end of clang's "return a && b ? -EPERM : 0": [0, U32_MAX] in 64 bits, [-1, 0] in 32 */
++SEC("fmod_ret/bpf_testmod_retval_eperm")
++__success
++__naked void negated_bool(void)
++{
++	asm volatile (
++	"r0 = *(u64 *)(r1 + 0);"
++	"w0 &= 1;"
++	"w0 = -w0;"
++	"exit;"
++	::: __clobber_all);
++}
++
++/* Not 0, so the function is not called, but the caller would see 0 */
++SEC("fmod_ret/bpf_testmod_retval_called")
++__failure __msg("R0 should be 0 or one of -27,-22")
++__naked void high_bits(void)
++{
++	asm volatile (
++	"r0 = 1;"
++	"r0 <<= 32;"
++	"exit;"
++	::: __clobber_all);
++}
++
++/* The function returns long, so all 64 bits count: this is 4294967282 */
++SEC("fmod_ret/bpf_testmod_retval_long")
++__failure __msg("R0 should be 0 or one of -28,-14")
++__naked void zero_extended(void)
++{
++	asm volatile (
++	"w0 = -14;"
++	"exit;"
++	::: __clobber_all);
++}
++
++/* A privileged program may return a pointer, but not here */
++SEC("fmod_ret/bpf_testmod_retval_called")
++__failure __msg("R0 is not a known value (ctx)")
++__naked void pointer(void)
++{
++	asm volatile (
++	"r0 = r1;"
++	"exit;"
++	::: __clobber_all);
++}
++
++/* The default exception callback returns the cookie */
++SEC("fmod_ret/bpf_testmod_retval_denied")
++__failure __msg("At program exit the register R1 should be 0 or one of -13")
++int BPF_PROG(throws, int a, int b, int c, int d, int ret)
++{
++	if (a)
++		bpf_throw(7);
++	return 0;
++}
++
++/* An exception callback returns for the program */
++__noinline int returns_eperm(u64 cookie)
++{
++	return -EPERM;
++}
++
++SEC("fmod_ret/bpf_testmod_retval_called")
++__exception_cb(returns_eperm)
++__failure __msg("R0 should be 0 or one of -27,-22")
++int BPF_PROG(exception_cb, size_t len, int ret)
++{
++	if (len)
++		bpf_throw(0);
++	return 0;
++}
++
++SEC("fmod_ret/bpf_testmod_retval_minus_one")
++__failure __msg("bpf_testmod_retval_minus_one() is not modifiable")
++int BPF_PROG(not_a_target, int value, int ret)
++{
++	return 0;
++}
++
++struct {
++	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
++	__uint(max_entries, 1);
++	__uint(key_size, sizeof(__u32));
++	__uint(value_size, sizeof(__u32));
++} jmp_table SEC(".maps");
++
++SEC("fmod_ret/bpf_testmod_retval_called")
++__failure __msg("tail calls are not allowed in fmod_ret programs with restricted return values")
++int BPF_PROG(tail_call, size_t len, int ret)
++{
++	bpf_tail_call(ctx, &jmp_table, 0);
++	return 0;
++}
+diff --git a/tools/testing/selftests/bpf/progs/fmodret_retval_ext.c b/tools/testing/selftests/bpf/progs/fmodret_retval_ext.c
+new file mode 100644
+index 000000000000..9f640fcabdb1
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/fmodret_retval_ext.c
+@@ -0,0 +1,18 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Extensions for the main program of an fmod_ret program, see prog_tests/fmodret_retval.c */
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++
++char _license[] SEC("license") = "GPL";
++
++SEC("freplace")
++int plain_ctx(unsigned long long *ctx)
++{
++	return 7;
++}
++
++SEC("freplace")
++int arg_ctx(unsigned long long *ctx __arg_ctx)
++{
++	return 7;
++}
+diff --git a/tools/testing/selftests/bpf/test_kmods/Makefile b/tools/testing/selftests/bpf/test_kmods/Makefile
+index 031c7454ce65..9ca0b58057d6 100644
+--- a/tools/testing/selftests/bpf/test_kmods/Makefile
++++ b/tools/testing/selftests/bpf/test_kmods/Makefile
+@@ -12,6 +12,14 @@ KDIR ?= $(if $(KMOD_O_VALID),$(SRCTREE_KDIR), \
+ 	    $(if $(wildcard $(SRCTREE_KDIR)/Module.symvers),$(SRCTREE_KDIR), \
+ 		/lib/modules/$(shell uname -r)/build))
+ 
++# kbuild runs resolve_btfids with the flags which the config of the kernel asks
++# for, and --fmodret_scan needs a resolve_btfids which is linked with LLVM. The
++# one of the kernel build is. The one of the selftests, which bpf/Makefile passes
++# down, is not: use it only if the kernel build has none.
++ifneq ($(wildcard $(or $(KMOD_O_VALID),$(KDIR))/tools/bpf/resolve_btfids/resolve_btfids),)
++MAKEOVERRIDES := $(filter-out RESOLVE_BTFIDS=%,$(MAKEOVERRIDES))
++endif
++
+ ifeq ($(V),1)
+ Q =
+ else
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+index 41ff36f0ca77..1f8bc0c99a71 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+@@ -879,6 +879,8 @@ static __always_inline size_t testmod_inline_len(size_t len)
+ 	return len;
+ }
+ 
++#include "bpf_testmod_retval.c"
++
+ noinline ssize_t
+ bpf_testmod_test_write(struct file *file, struct kobject *kobj,
+ 		      const struct bin_attribute *bin_attr,
+@@ -892,7 +894,7 @@ bpf_testmod_test_write(struct file *file, struct kobject *kobj,
+ 
+ 	trace_bpf_testmod_test_write_bare_tp(current, &ctx);
+ 
+-	return -EIO; /* always fail */
++	return bpf_testmod_retval_called(len) ?: -EIO; /* always fail */
+ }
+ EXPORT_SYMBOL(bpf_testmod_test_write);
+ ALLOW_ERROR_INJECTION(bpf_testmod_test_write, ERRNO);
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_retval.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_retval.c
+new file mode 100644
+index 000000000000..f2e4e21fe36f
+--- /dev/null
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_retval.c
+@@ -0,0 +1,131 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Functions for resolve_btfids --fmodret_scan, which tags the functions that
++ * return errors as fmod_ret targets. prog_tests/fmodret_retval.c has the tags
++ * which it expects. A part of bpf_testmod.c.
++ */
++
++/* bpf_testmod_test_write() calls it and returns what it gets */
++static noinline int bpf_testmod_retval_called(size_t len)
++{
++	if (len == 7)
++		return -EFBIG;
++	return len ? 0 : -EINVAL;
++}
++
++static __used noinline long bpf_testmod_retval_long(int value)
++{
++	return value ? -EFAULT : -ENOSPC;
++}
++
++/* 0xffffffea is not an error in 64 bits */
++static __used noinline u64 bpf_testmod_retval_zero_extended(int value)
++{
++	return value ? (u32)-EINVAL : 0;
++}
++
++/* -1 may be "less" or "none": it counts only next to another error */
++static __used noinline int bpf_testmod_retval_minus_one(int value)
++{
++	return value ? -1 : 0;
++}
++
++static __used noinline int bpf_testmod_retval_eperm(int value)
++{
++	if (value < 0)
++		return -EPERM;
++	return value > 8 ? -ENOENT : value;
++}
++
++/* Errors which tell the caller that something goes on are not listed */
++static __used noinline int bpf_testmod_retval_denied(int a, int b, int c, int d)
++{
++	if (a > 1)
++		return -EMSGSIZE;
++	if (a)
++		return -EACCES;
++	if (b)
++		return -EAGAIN;
++	if (c)
++		return -EINPROGRESS;
++	return d ? -ERESTARTSYS : -EIOCBQUEUED;
++}
++
++/* A caller which gets -EBUSY relies on the unlock */
++static __used noinline int bpf_testmod_retval_effect(struct mutex *lock, int value)
++{
++	if (value < 0)
++		return -EINVAL;
++	mutex_unlock(lock);
++	return value > 8 ? -EBUSY : value;
++}
++
++/* The errors are set before the unlock. The pointer moves to another register */
++static __used noinline int bpf_testmod_retval_effect_late(int value, struct mutex *lock)
++{
++	int err = 0;
++
++	if (value < 0)
++		return -EINVAL;
++	if (value == 1)
++		err = -EBUSY;
++	else if (value == 2)
++		err = -ENOSPC;
++	mutex_unlock(lock);
++	return err;
++}
++
++/* The callee can fail, the pointer is loaded, a path goes around the unlock */
++static __used noinline int bpf_testmod_retval_no_effect(struct mutex *lock, struct mutex **other,
++							int value)
++{
++	if (!mutex_trylock(lock))
++		return -EBUSY;
++	mutex_unlock(*other);
++	if (value < 0)
++		return -EINVAL;
++	if (value & 1)
++		mutex_unlock(lock);
++	return mutex_is_locked(lock) ? -ENOSPC : 0;
++}
++
++/* PTR_ERR() of the ERR_PTR() of an inlined helper */
++static __always_inline int *bpf_testmod_retval_slot(int *buf, int idx)
++{
++	if (idx < 0)
++		return ERR_PTR(-ERANGE);
++	return idx > 8 ? ERR_PTR(-EFAULT) : &buf[idx];
++}
++
++static __used noinline int bpf_testmod_retval_err_ptr(int *buf, int idx)
++{
++	int *slot = bpf_testmod_retval_slot(buf, idx);
++
++	if (IS_ERR(slot))
++		return PTR_ERR(slot);
++	*slot = 1;
++	return 0;
++}
++
++/* GCC for x86-64: neg, sbb, and */
++static __used noinline int bpf_testmod_retval_no_branch(unsigned long left)
++{
++	return left ? -EFAULT : 0;
++}
++
++/* Not an integer, and an error which is not returned */
++static __used noinline void *bpf_testmod_retval_pointer(int value)
++{
++	return value ? ERR_PTR(-EINVAL) : NULL;
++}
++
++static __used noinline int bpf_testmod_retval_argument(int value)
++{
++	return bpf_testmod_retval_minus_one(value ? -EINVAL : -ENOMEM) + 1;
++}
++
++/* Gone before a program can attach */
++static __used noinline __init int bpf_testmod_retval_init(int value)
++{
++	return value ? -EINVAL : -ENOMEM;
++}
 -- 
 2.55.0
 
