@@ -1,97 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.136.65.227
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794457208;
-	b=wGbwJ+0Hce/Ywpt2dOmXadr3nMGNGQMTPsX5wV3jBnv0elmm3Z/Y6tFt8YgLo/KIqys7
-	 fTu89SCijiPhwj0Sh1ghPGFrr/EALPEgccamyuiphDqp8ExEnB2DoOj058Z+yADc7wdb+
-	 JJy9HlH/2JzNlWhsJF93Wrqrp11YdVL/SW9hbNpl1uAXVdw6PXDeXBZdsos25wclZ2iyX
-	 tEFyNkP0DOlri1eIDytezeesQIkjPkVrTFK0kohyzoaV4GzRv7B+G9RKegnYSR98nBMqH
-	 owtjIe3pYMaqc52aWZ3I9IdO2+jSzmFc1YONbv/qNZvq39wHV4tF1f8abfWf+iG5PIQ==
+	t=1794458060;
+	b=jgP3fXh4FZQHd8nf1cP0VGIaTIeq2fv0ZEzn+AvnEeYNQzePQ02Eoso3lpzIAgKDC910
+	 nb4OD5us4C3e+B4HyNp2Nc7uFflg/P4gJBPDA/d9MyjvgV97P7HT59mQLw8mtogmO+93i
+	 Kt6jmJgwAd9bfOkikOnermIykAkBFugAIq4hYVbYddlxI36abR8hPlSSiryngx3Lpi4h9
+	 z/f3mj+5nmqQGqMTu88u0rQIne1jTRTBe4Lz03R4//V/dLfLqy1HofU/c1ozBvzUCmjjm
+	 PPuqIzesCSnS0CeT9erTfO7EVnW247Rph7IGAHidHRmMnQECpE25i2zGlxv4U+barBA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794457208;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:From:To:Cc:Subject:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=A5/owT9FvL3cWMXDgvLY0NCzw6oVKkSNI7f5H0xK3CY=;
-	b=OkyFMN3392+Pu6391xanbSxpk/sC7C0+nKc6vYxpFiSs8sn5TJUMQCVy67R/C23MH6Yd
-	 J35OfmuW29pVRc3fpjN9gf1I/IcokgW+zoRfMYrIJmxIuUBuNB7TTJCR0SEtmoXJZ2jK9
-	 b0Bs7F6A9mVwdz1FuUzMRUAriAGasvpXXPstKI9sLt4MGhec+Xc5b63sn4IGSVbjKHApT
-	 OuxujueTcbMyAqvhlxie3BuWGxWH/W0H2WwDnNQ5B+L+QUIjjB799xopg+jMytsKr+Q2U
-	 wJEEIxBJu96RqrzMbdrLKPwduvJf/gsM4wBSweKqXZGZe5wPscTIies+n1TC4iTnH9A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794458060;
+	h=DMARC-Filter:Received:DKIM-Signature:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To:X-Flowmailer-Platform:Feedback-ID;
+	bh=RARPdGFOpymjJpoSOvkZ7QwTFzh+akN3FwghGunS9+o=;
+	b=vsIOwWu0mo8iNVYNRQW4eJmvsEVes6BgnkDqrwGlvmmHfJm5DdgEUlj2Iju1njtaSzeW
+	 jKmy9oI8CAf8lV7SXiIQQtyfih5+tt3ChaAEm28SSuhFliOlhCDgfgWSMv5PC+PrLKvI2
+	 U7M1OTVgW6qUUBuBVCDHdluLebYbv8RJ8lUYf4pnsza3imUUl1r2INC6Rf0GT5IFRNCja
+	 lmEMSaaCPiRWm5YjGmZmXfVdl/lThK71wHdVnSxVDGx1nuxc30TwK7p8PhZSPn6jFLATg
+	 QFObG9WXEN88dD2ZVlELwRIudHx9vQrYKMZPtR1XCl++5TBUds4vXoVKa/HN8TSlOPQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="Zqegy/9C";
-	arc=none smtp.remote-ip=209.85.214.169
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=siemens.com;
+	spf=pass smtp.mailfrom=rts-flowmailer.siemens.com;
+	dkim=pass header.d=siemens.com header.i=meng.ding@siemens.com header.a=rsa-sha256 header.s=fm1 header.b=RTxMQDBd;
+	arc=none smtp.remote-ip=185.136.65.227
+Received: from mta-65-227.siemens.flowmailer.net (mta-65-227.siemens.flowmailer.net [185.136.65.227])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54DDD606A31C
-	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 04:20:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 54DDD606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 861C2606A327
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 04:34:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 861C2606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Zqegy/9C
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2ed39646f04so14595435ad.0
-        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 20:20:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794457208; x=1795062008; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=A5/owT9FvL3cWMXDgvLY0NCzw6oVKkSNI7f5H0xK3CY=;
-        b=Zqegy/9CN9h2hD9pOcgkMRkRuCNvf2y7GZiiPL9y5m0N9pX4BmJ0h25SViVnHEb1Jf
-         41GjJYsgvx7H84wlGEq7bMn6XWLZTjN4k/Ixn0hGRPxAte3XaSQ4C1yZT278zKJNPVHJ
-         r/V/fcIozG5wpmMy2k8MmYBsoLXP1Qias+uieeft1rToVylf1YAqZRvwmprgmgB+/bda
-         fvlyBFd53zDSxCjbv86DFL6AfSL23WfIWXN2opq8XEWPOlRvWpktkzATrJ6ra9PZ6oJo
-         oyDBuqV9ojr7vhg9N35JWG6sE4+hDp7y+6PxLraMXyWqXplqFtyUMa57aWb3eKFjl9KJ
-         OJhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794457208; x=1795062008;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=A5/owT9FvL3cWMXDgvLY0NCzw6oVKkSNI7f5H0xK3CY=;
-        b=d6oxpogUik1j5cVWhJI6PEWDR7K5BltXRfPm81pLUXtBaMVbQfJgYM7M90nRPBNdR9
-         RoUjXUT0Xh76Jng6QhkKGZ7laqvsGajgV57LTD+dLzPhoXy+O2vj2WBEd+I99A9sJhm7
-         O0GAWhopkNjmrXjlXDOmNJrD6kH1/rEQ0lW38i8xx+YbcrKno4SsCFoDUAm6JTXmcl4w
-         ZNFLfJ+8nBhzc4qmRV46EdBNShSTxTFarrC+mkbxl8tVwMfioFdVxoJ7UkVgTY2KzgZv
-         tSdTHKxz8HrhGBooo5TBc+7xJzr54uZxhDKnRb/NuBoJo+2A4Xd4M6IAsNUETAobwx84
-         qQcg==
-X-Forwarded-Encrypted: i=1; AL+hErE1LDY8CF77qJmcEWPhcjzKKs6q56MSOyopbqCeV+rKkvEtGB2yOdoqq7+B6I472ZzpYwg=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9/hVwo5neqRXyQiJxRa5kIr1ogARqljv7Tg9IO4hHuKwRnFPzr
-	G1B4tJrxGc5Mt9FFmmPjZg+1RzxdR+TFZPRk2EgylNVjF2uZP7WBJFIT
-X-Gm-Gg: AYBFou3WM4950PW3Oxf6gmXWsW9g8M9XsYEhu58z3BnF+4X+Wi5LgV7j7RjQcgdhOT2
-	CYlW1WSqlbYWPeoXU65AFlaZaGbhleIx5Cbd2glyqDw5QaShgvhNKj82Dg9iBHVBX1wMS2M4V1k
-	LNpw18G0nHMKBND736xJsJ4WofZhf6t0fphTOZjD/mvV9xP40XLE+yGkDoyt7V+zxrX1dXh1+t7
-	E1dkA6MKxsk9J1u5VsK6V3J7Zy+fq4yjqOZFkXEeZezYwOXVRKmIBCalfCdYJEdDz8fM1XEid7M
-	5jBnuvEhCHzujPgnLyD3Z2FgcdpHywA9IsWSUu2rSQOK6IJxzoN6lyXRtCOnVmb4jtq5cjzfJdn
-	uYhm1FOdt+5rsqjExZUTm2BzJFRQBaaGMHrGhL6UT7AAt+BLqVTLX7M31fmsMZsnBLG01maFRQK
-	qZUmfuQ4GGXH5IFD316y8xnnCIB2axYkcn62r0WCz2/gLikJydQG/rTOFSgc6dYGwYxwFWsIPfT
-	gjoQ/g5vUcCo75wcKljOlZmWc/64RyhPOF4VUZctKRj/Q2hYqa6b4OVUxSzCE41ip8nyXMiFo+c
-	vWAS7IaBAfGkNjgFabyUN8/lk9Gtpl6tiB1QFNAIvef/ZEbNlmF52t0CuxypyPoYtG1GnaEjFXa
-	KINmpcRP9yD4kB75YokeErUwtqbhVkjeLcw==
-X-Received: by 2002:a17:903:384d:b0:2e9:8bd4:577d with SMTP id d9443c01a7336-2edd7a729damr47100435ad.37.1794457207335;
-        Wed, 11 Nov 2026 20:20:07 -0800 (PST)
-Received: from localhost ([153.61.198.253])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2edb6d7bb64sm27813465ad.28.2026.11.11.20.20.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Nov 2026 20:20:06 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 12 Nov 2026 04:20:06 +0000
-Message-Id: <DMSXZO5WWV0C.392TVOFZNS4OI@gmail.com>
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "bo cao" <treebacker@foxmail.com>, <bpf@vger.kernel.org>
-Cc: <daniel@iogearbox.net>, <john.fastabend@gmail.com>,
- <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] bpf, sockmap: Fix ring capacity invariant break in
- bpf_msg_push_data()
-In-Reply-To: <tencent_84A432FD1AE7054D384BEB36958789AAFA05@qq.com>
-References: <tencent_84A432FD1AE7054D384BEB36958789AAFA05@qq.com>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=siemens.com header.i=meng.ding@siemens.com header.a=rsa-sha256 header.s=fm1 header.b=RTxMQDBd
+Received: by mta-65-227.siemens.flowmailer.net with ESMTPSA id 2026111204341594fff3f2f600020766
+        for <bpf@vger.kernel.org>;
+        Thu, 12 Nov 2026 05:34:15 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=meng.ding@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Cc:References:In-Reply-To;
+ bh=RARPdGFOpymjJpoSOvkZ7QwTFzh+akN3FwghGunS9+o=;
+ b=RTxMQDBdADI8ovC2WPdHk/BquO6khlSuF/w9iJcD14LD1Q/WpUmD52lDbgUHOzR5ne8BGx
+ xCEGlCZSb8N8GeM+3SZ8ztY9hRyIaQu6eK8NDmnUChRlwn7RaCA5KQLXdUi3bWCYD/v0j9Er
+ /y2kK8taxTDcxmeMbgUTUn9xl4JesRDDVenzYKIzl0o6n2plX6JNtgzJirgu2LsONLMGnRAD
+ UbJ/SKwBojpF7Tapnv9vACFg5zO8S3SYm3iI5lHU2q56ZZptBjrTTtyUVEYT9RhdiJT5Re7Y
+ AgilNrGtYvJZS+iVdSKVNWIIYdbiE1ekVZEso+vnZuctJFKZ3g+33oTQ==;
+Date: Thu, 12 Nov 2026 12:33:57 +0800
+From: Ding Meng <meng.ding@siemens.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, Willem de Bruijn
+ <willemdebruijn.kernel@gmail.com>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>, Tony
+ Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel
+ <przemyslaw.kitszel@intel.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, Andrii
+ Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar
+ Kartikeya Dwivedi <memxor@gmail.com>, Richard Cochran
+ <richardcochran@gmail.com>, florian.bezdeka@siemens.com,
+ jan.kiszka@siemens.com, wq.wang@siemens.com, p@1g4.org,
+ gerhard@engleder-embedded.com, Jason Xing <kerneljasonxing@gmail.com>,
+ Simon Horman <horms@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
+ Randy Dunlap <rdunlap@infradead.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Martin KaFai Lau <martin.lau@linux.dev>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri
+ Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Ihor
+ Solodrai <ihor.solodrai@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ intel-wired-lan@lists.osuosl.org, linux-trace-kernel@vger.kernel.org,
+ bpf@vger.kernel.org
+Subject: Re: [PATCH] net: mark skb NAPI IDs independently of busy polling
+Message-ID: <4pqljild2fp6eotiicvwbwu2wfw66fzd4qamwt6utirdjxlaok@iiu2f3k7azrp>
+References: <20261105071706.7043-1-meng.ding@siemens.com>
+ <20261110134539.12d860ef@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -101,83 +83,36 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20261110134539.12d860ef@kernel.org>
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-1335312:519-21489:flowmailer
 
-On Wed, Nov 11, 2026 at 07:13 PM bo cao <treebacker@foxmail.com> wrote:
-> A push at msg->size ends the element walk on the ring's free slot, so
-> the "no space, absorb by copy" fallback reads the free slot's length
-> instead of the last live element's. Nothing is absorbed and the split
+On Tue, Nov 10, 2026 at 01:45:39PM -0800, Jakub Kicinski wrote:
+> On Thu,  5 Nov 2026 15:16:08 +0800 Ding Meng wrote:
+> > +  interface index will be returned only if CONFIG_SKB_MARK_NAPI_ID is
+> > +  enabled and the driver is using NAPI. This hidden configuration is
+> > +  selected automatically by busy-poll support and by drivers that need
+> > +  skb NAPI IDs to resolve deferred hardware timestamps. Drivers that
+> > +  use deferred timestamp conversion must select it so the networking
+> > +  stack can find the device and call its timestamp callback even when
+> > +  busy polling is disabled. The struct contains also two other fields,
+> > +  but they are reserved and undefined.
+> 
+> Just take napi_id from under CONFIG_NET_RX_BUSY_POLL instead of
+> complicating everyone's lives.
+> -- 
+> pw-bot: cr
 
-Way too long.
-A push at msg->size on a full ring reads the length of the free slot.
-It is 0, so nothing is copied and sg.end moves onto sg.start.
-The ring looks empty and the next push overwrites live elements.
-The prog needs CAP_BPF and CAP_NET_ADMIN.
-That's all that needs to be said.
+When BUSY_POLL is n under PREEMPT_RT && NETCONSOLE, igc fails to get RX
+hardware timestamps.
 
-> put_page() on a zeroed scatterlist entry. With the fix the helper
-> returns -ENOSPC, the message frees normally, and the crash is gone.
+Then, drivers that use deferred timestamp conversion (e.g. igc, engleder) must
+specify a busy poll dependency if they want to obtain the original net
+device upon consuming the skb. However, this dependency is far from
+obvious, and annotating it for future features of this kind will be very
+hard to discover.
 
-It doesn't.
-I don't think you tested your patch.
-
-> Fixes: 6fff607e2f14 ("bpf: sk_msg program helper bpf_msg_push_data")
-
-Wrong tag.
-A push at msg->size returned -EINVAL before
-commit 15ab0548e310 ("bpf, sockmap: Several fixes to bpf_msg_push_data").
-
-> +	if (!space || (space == 1 && start != offset)) {
-> +		/* A push at msg->size leaves the walk on the ring's free
-[...]
-> +		if (i == msg->sg.end) {
-> +			if (!space) {
-> +				sk_msg_iter_var_prev(i);
-> +				copy = msg->sg.data[i].length;
-> +				if (!copy)
-> +					return -ENOSPC;
-> +			}
-> +		} else {
-> +			copy = msg->sg.data[i].length;
-> +		}
-> +	}
-
-This is overkill.
-Replace your slop with improved slop:
-
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 9245009..c0db554 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -2897,6 +2897,10 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_msg *, msg, u32, start,
- 	if (start > offset + l)
- 		return -EINVAL;
-
-+	/* A push at the end of the msg works on the last element */
-+	if (i == msg->sg.end && start != offset)
-+		sk_msg_iter_var_prev(i);
-+
- 	space = MAX_MSG_FRAGS - sk_msg_elem_used(msg);
-
- 	/* If no space available will fallback to copy, we need at
-@@ -2922,8 +2926,6 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_msg *, msg, u32, start,
-
- 		raw = page_address(page);
-
--		if (i == msg->sg.end)
--			sk_msg_iter_var_prev(i);
- 		psge = sk_msg_elem(msg, i);
- 		front = start - offset;
- 		back = psge->length - front;
-@@ -2945,8 +2947,6 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_msg *, msg, u32, start,
- 	}
-
- 	if (start - offset) {
--		if (i == msg->sg.end)
--			sk_msg_iter_var_prev(i);
- 		psge = sk_msg_elem(msg, i);
- 		rsge = sk_msg_elem_cpy(msg, i);
- 		rsge_copy = sk_msg_elem_is_copy(msg, i);
-
-Pls tag the respin as [PATCH bpf v2].
-
-pw-bot: cr
+Configuring the skb napi ID separately
+from busy poll seems cleaner and more reasonable.
