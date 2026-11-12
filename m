@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794442133;
-	b=ibpvp34r40rtNm57/K1HJKh/99tZKUtwuFtspOpccZ/jeBvj9OSPI7C76V4HQ4t2n6gS
-	 yuA1VJRcbRI0LRMYEuLJTDPtJCf3rSipyjC0phko/rwLQTUC7e12MCGBKOTnbHe9n+MPe
-	 rQ3f3ZPkq3rmlNBUvtuskgyjpX8xRV/t4uCBfYur2k24b5NwBaDrpR9Ku9UE1JOuH7TEV
-	 yVNFU5zOn3N2KkO5noRIVKkSRAb18KtLP/oas+ty1QukpwEssvVs6tvDNm77DiKJkCcDy
-	 xINyokTMtocPkTy8oAXUgZbAAFFsCKAG2ZF2CZhv05DlO7D6yu4w4IFeY6X75z5b42w==
+	t=1794442140;
+	b=kAQKpQTPXSOxl+pdKVY7L9uz3H62Dj4P/wMvMOdlLNHy6K2nIym2wF+lX8C6EhF9YxQt
+	 osHqvrBbBZw3CYD/WYBfbo3EKnQuDy2zpaNPVKSijxhepbCJarVbXEZY968CsvK5hK3+Q
+	 A+a0FQBcyHIYLCXEBkJXJNbIBKqirM85dr0DIDK2ZcnSnjSnYnA4Iz3bx6l1AxxcO9lHf
+	 L2OMO6MSAESbeO0LFE2ZGZMIUATJgT/idcWxngQSVpqM+oSZxbN8uGjJ8Hc7E5E45ZE8P
+	 E45SxWOiiGhCZWbhfxRdFRYjmK4FyOXbWmnF8Q0g0INYLwmJzq0gXEYG9YBFpgprjbQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794442133;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794442140;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=4IqfiLjrtZK0Vc6Kqn07lwCGDYJ5+QU+VRyPbGGpiIU=;
-	b=353lLF8ia+I/l8Ku9lkhiWJ6W+iBeucN6ZECK5UnijYM7BofKeIjLiQaM7Quk8zU0xT/
-	 t3aU+Ix0xPoQ9MWpOa94RyRyrZ19hA3jtaHS1/ZUeQK5tJomFjRgbpk+T3hmthrrwXZDW
-	 sXAtkQSrOqCHxO8KPmqiWfpJhzlO0ArO6qOubsgh9tuPUfMaacquCOlRhN7mqF6ehSmaI
-	 FfOzBTUgKi527Ig38sUURB5D+yvHk+I6UXoLXpnMzeRTbtY5GIgAu5LM8TGPH/X9bA3OW
-	 wgeO9uxe5sje1uK8exE4NOfrbEKzRJjbOPzkvDgo7O0WHPJ633RXpZ9g9hwPClARXUg==
+	bh=dvexS2Z4egippfwHCEkXxIVcEpMLb9Dji4bRj1waghA=;
+	b=uDuMXrUqVzimt45dt5JgTOoo5M/KElPNJ+xSp6xWYXRtWXp6GxIvms0/Nrufw1Y2NjRg
+	 n4+nYhxOC1ItA8FQ6O03Ad27Lmrv+wNaVKj5wogMfieOYgz2JU/eIuexCBcQrywWjmNN2
+	 w3hPpvmwKTz0+6Y4Iwl+Y1B/lXePrzfVz7cW9RbpOe5x6JuJ3T04YHXTuFoSsItgv9lIL
+	 qxqGvqTtjK6WYqPtoo6xQJp29urOMNMu5iYoIbzklQpSWcr5D5i87EuA61T2gFiqOvXPx
+	 DqCte9zhXgWzTbwLVNlGien/YaUPDjW+UNIsiPnMfP/amyrf2TQL1QmgshoQIvejsUQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eDwBrqip;
-	arc=none smtp.remote-ip=209.85.210.182
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iIOxoeUP;
+	arc=none smtp.remote-ip=209.85.210.178
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E84DD606A31C
-	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 00:08:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E84DD606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7398C606A321
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 00:08:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7398C606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eDwBrqip
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-8b5a6f2f27fso1469272b3a.3
-        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 16:08:52 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iIOxoeUP
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-8b612fd74e1so1340831b3a.0
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 16:08:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794442132; x=1795046932; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794442139; x=1795046939; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=4IqfiLjrtZK0Vc6Kqn07lwCGDYJ5+QU+VRyPbGGpiIU=;
-        b=eDwBrqipAzHulx/sqNghaags/UFAS09g4h2wU1Bt0jd6daupYthIkGRK+UnEIZDLC5
-         CZJgRn3Ps0tL0HJkB4F1OPM+oJnYWVEwZzrpXfbp1riIqu2ykXD2o9pXZrszPdjj/LO+
-         zJ/lIj/PULWm7MNrrl/Wz1BLU1jDKHsDMP8z+hGIB9DO5DDeRv6/EKUqz1HbtGJxgLXg
-         xhEHzo6332uEnwpfWxn4O8f/lKoQkrftmtFNBRyFyIX5Tw8R7HG5uqh5ug/xppzOEZnL
-         abZKpUh7SRoblLhblczkPyGZPv/4Dd0IOSy8+zpR+DUMmXoFFvD+QZJ1hqiXwJeT8m3j
-         WV7g==
+        bh=dvexS2Z4egippfwHCEkXxIVcEpMLb9Dji4bRj1waghA=;
+        b=iIOxoeUP5VaYKBsE46zEtbYUrNgdVcTfchPKGvRDHTJ/kLgTT/1mEwf1Sncu9cXXo8
+         SRz/zRxS+XI8bvm5TEpvw3bUbfy8cp0R08gEvvcLR9eAjQ4+UNM2J5ARog/PncTyvtpl
+         +W7nTyYpNQsPh/Y0BVDEVy8C1Nua9mBRCZpExrlwpkQWK/or0VXpKhud/Kfs9awx5Ip5
+         mP+tGBfsXfQAugYva2wCI8IALie39iQYBHAAvLEAIgHyVuOhmfH6TzOkfzHo9dF8hJ8y
+         Kgf0C/BUwpKuyp6Uw5SNqKBhbA3QgwU4ifD2/b67fXfS6eQOhqrBwO2dG3HaDiMCt7HZ
+         t77w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794442132; x=1795046932;
+        d=1e100.net; s=20260707; t=1794442139; x=1795046939;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=4IqfiLjrtZK0Vc6Kqn07lwCGDYJ5+QU+VRyPbGGpiIU=;
-        b=XwzuXqAFrl+bQG+l7BC833qOD54Fww0hOkQS+8kO0fQdELzzDp4a+dH83N/oQHS0Q8
-         ymcKwRmmQ74BaBE6xwhqDR+u11akoC8SlSmWA6UCNBS1uCoY+fKcYal25LGBYQjVP2Ly
-         LL+IEsuWRk8szXMwu7H6m1X+7fNrRbL17TcDrhLRkyWqk4E3ZJChB3v4LqXk3iwVtwJv
-         JhUGhFfCuUm5eytpg5GZdcuDpPphZKEX5DFDBn8dlQp4dDweqScaWX95LE7Pi7SRB5Uc
-         lZXWSZLxf/5ldp4xmFSDDphGLw7S7vxIIx6kqbJsVRjQlVtDaEP9hHf+iQePR6tLoAJo
-         bFig==
-X-Gm-Message-State: APuU4Z8WdJt3yh/fsDIKdiVJCeFI200G8z0QLXN2GkOiWrfF08uxry4A
-	6aXGyl+K+Jv7x/Z0VAcBKxT2374x/FPq6wG+xPSLLuJ9XRVMzQ4za6hWdZwO2A==
-X-Gm-Gg: AYBFou2jBbNB2a0rDNKpsgKakFsPuXNMHr+jsKCaYRefcVVgMS5uaOEZOZ+WWe9FwCy
-	nVGWJ7Kyhwh7cnSANTiabIo86CfHYOiyRxH9P/yBgBhZYFYjVnn2CDRr++/RdVTx+91FTf9fHkn
-	tpa870iS4HPEBuui+ZJZRycLb8SmYifPPwF/+Lb9IAL4cGoUgMVcfG25pfeODhgt/nMorBncwXY
-	rYUjXZj8/zPMyiZEdkog2gzt4sqeckH2q9WyxI+/HZJa19ZxxuJFlU/D3T5pOkW2QH5tOjZze+f
-	sRZzjUjr8lG+2f+JSAGH38hOJORevp1ZEnIkDyZA3ozwoeQ6UHxCWtN/brd2AsBwt3hbT0JbBRc
-	h/QZXaznlsLVYahqPFnHjR5mt21WNXLgsN3tvcdwjnuXa1q7kOEzkHZRvMRRApNMq8qAYCKZTmj
-	+GvsA0WaV1RmKT/KBdoGOARC9qF0HsOCjZyUN52Fed6rmnP+TzRhjTooh/Cd6gwbvCVFnTcSq5r
-	82zM06V6KjoPSh70fzM1vPjvV6imZOMNhEBaaPf+YegvZYmr+dgVcuk+lMbNCmjub9kW9JNcz6S
-	8Pw7KWYh2IELBAhJVViktRLm6Qeh6c+ej8QAouUJdfU/6z4BoLvCMxyOpXOGB30YPqonIfFC9aO
-	3BJ50/ZIPKGQOItGqgbtf2ZTrLOXK5ot/ukmz8JPcGr338oeR/PZLZzGAWfXFXGLDl1p2nb1qAw
+        bh=dvexS2Z4egippfwHCEkXxIVcEpMLb9Dji4bRj1waghA=;
+        b=AH5KJqcY1VJb42kuDHJGio4SCnuq5dvwdqRp9+yVHFq8UojZwgAf6KMeW3A7kYrKpF
+         XsFN7pqMxSDfaq4kvGLVCqQuZXUEqH1Ae0D1hzF/aCi9RtwqVmEMjYZvXWaM/dZpvPr9
+         9byzYNuwZwB2CGgGqy91PrMtSVVbWXh1TAUMdOafaYBKEA06e7K7aRRJ8VEr27A0erqg
+         ZgdTH/o+i6liXK0aJgWc/QutThHKHkFrcs7A4xYL88wibnMNfoVfLw9koSgmfEqaFlrW
+         YkbeiVQpn1/YCVG+1OfK+IpIaKAakWiErQMebbs7uVkC9i0xw9J/tv1JKJYMEsf/Up5R
+         5UAw==
+X-Gm-Message-State: APuU4Z+H05XwWezDyIbJwpn+E8c1JRtGCffETtLOY/IqUJ8QsWyn2fSH
+	xPxQqVEieKSs4B23azDBXDr8+EosYCTtVSM8S2oRyYrsuF+Pv1MlRZPAlpY3JA==
+X-Gm-Gg: AYBFou3m0G/e+n0P7Poz/lzOqD7MfC7s2zd+Q5CyvpGBmhTHYlHRNOwnXpvQex6WOx0
+	h0t9sWXRjvTk/lwpQb6FL5TqIkmmwqjjYEd5dXlcX2SypzMl8EX+ITyM5wLiKCgnZchZ1R2ju3k
+	e1xzTQDFOrEpZEkPPN2K2iFX775TzC1XoEHjElE3njnOFjydNaeucmlZEEqrPmdPE+3T14bPoZJ
+	IFrPslZ7VsBhlW6KD9w050OF5QCg3/X8zo2XJbpY0gI0AFajX2ckx0ue8ZtbcSW5AiK49ZSoKSv
+	jRrlvLx/khOhBMjG5qFe5H+7n37OtGn9+NX96Mu5zr+s77aVj2CoxZb38N8mXsppMD8Doqrho/7
+	/p3a7rYAR6fXTCQpPrKy9RfmLTs/wcONEY/jgCuMZPEOokw6IFBiTeYVItcDhKc2HJRIaR0a9qB
+	HIWjalGNmCYytjLezDy6ly0bAj99uAZcuykcxy0OCIANdQj04qCYJ7zFhORUgsHDNDn3B7yAJqH
+	5xMgeY0FPEbssLeNopPo5ZnamOhGYvQIVG9JN5PgK0VTqA0SIcRrlVFv7XbxqGRLz1DeY9bhZjw
+	FRmVmyXHUDS9dbxkBLE98QVv5UeXnq4Rl86AnHnD76lQMlgbxzhmipuw/R4zOAlnyGZRgllhpVq
+	MDEvgbYtl8WE3oNJp2t6Xp7tQCKMSQdhVOIba2t+evxJJ6hugIZX3FJpp+eQoh1kxHXHKfkMtGw
 	==
-X-Received: by 2002:a05:6a21:a45:b0:3e8:b7fd:626c with SMTP id adf61e73a8af0-3f2fd69dd40mr4286116637.20.1794442132053;
-        Wed, 11 Nov 2026 16:08:52 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.253])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8baaac46b20sm2639969b3a.30.2026.11.11.16.08.50
+X-Received: by 2002:a05:6a00:170b:b0:8b6:59a:2ae with SMTP id d2e1a72fcca58-8bc1d819c34mr3815460b3a.52.1794442138454;
+        Wed, 11 Nov 2026 16:08:58 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.245])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8baaae3da61sm2562242b3a.35.2026.11.11.16.08.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2026 16:08:50 -0800 (PST)
+        Wed, 11 Nov 2026 16:08:57 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 2/7] bpf: Add const, sub, zext32 and sext32 operations to cnum
-Date: Thu, 12 Nov 2026 00:08:30 +0000
-Message-ID: <20261112000836.3138846-3-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 3/7] bpf: Add struct scalar
+Date: Thu, 12 Nov 2026 00:08:31 +0000
+Message-ID: <20261112000836.3138846-4-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261112000836.3138846-1-alexei.starovoitov@gmail.com>
 References: <20261112000836.3138846-1-alexei.starovoitov@gmail.com>
@@ -104,205 +104,409 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-A register is a cnum64 and a cnum32. scev.c does not compute with them:
-struct scev_value has the eight bounds umin .. s32_max and adds them by
-hand, with four checks for wrap-around. [-1, 0] + 1 is 'any number' as
-an unsigned range, and [0, 1] as a cnum. A later patch moves scev.c to
-cnum. These operations are missing or open coded:
+What the verifier knows about a value is five members of struct
+bpf_reg_state: var_off, r64, r32, base and step. Code that computes with
+values and has no register for them copies some of the five, or makes up
+a register. scev.c has struct scev_value and struct bounds, each with its
+own addition. verifier.c fills in fake registers of 80 bytes to add a
+constant.
 
- - cnum{32,64}_const(v). verifier.c has cnum{32,64}_from_urange(imm, imm)
-   in three functions.
- - cnum{32,64}_sub(a, b). verifier.c has
-   cnum{32,64}_add(a, cnum{32,64}_negate(b)) in three functions.
- - cnum64_zext32(), cnum64_sext32(). They move from scev.c to cnum.c.
+Give the five members a type. struct scalar is the reduced product of
+known bits, a range, a range of the low 32 bits and a congruence. It is
+an anonymous member of struct bpf_reg_state: reg->r64 stays reg->r64 and
+no user changes. scalar_of(reg) points to it.
 
-Convert the users. ___mark_reg_known() follows when it moves to struct
-scalar.
+The five members have 44 bytes, a struct of them has 48. Where they are
+now it would grow a register from 80 to 88 bytes and put 4 bytes of
+padding into what regsafe() compares with memcmp(). So id takes the place
+of 'u32 unused' and the scalar is the last member:
 
-Like add, negate and intersect the two extensions now give an empty range
-for an empty range. They gave [0, U32_MAX] and all of s64. Their user,
-linear_bounds(), has no empty range to pass. No other functional change.
+	 0  type			 0  type
+	 4  unused			 4  id
+	 8  union, 16 bytes		 8  union, 16 bytes
+	24  var_off .. step		24  parent_id
+	68  id				28  map_uid
+	72  parent_id			32  struct scalar
+	76  map_uid			76  padding
+	80				80
+
+11 lines depend on the old order: they compare, hash or clear a register
+up to offsetof(struct bpf_reg_state, var_off) or up to its id. Now they
+name what they mean. reg_fixed_part_equal() and reg_value_equal() move
+from join.c to the header, range_equal() of join.c is scalar_equal().
+refine_live_branch() compares whole registers with memcmp(), which would
+read the padding. It calls reg_value_equal() now. flow_shape_ptr() hashes
+the type, the union and the scalar one after the other. Its hash values
+change. They are only compared with each other.
+
+The union is named by its member raw: two unsigned long, half of the union
+on a 32-bit kernel. They become u64, and a static_assert() says that raw
+ends where the union ends.
+
+No functional change.
 
 Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/cnum.h   |  6 ++++++
- kernel/bpf/cnum.c      | 19 +++++++++++++++++++
- kernel/bpf/cnum_defs.h | 11 +++++++++++
- kernel/bpf/scev.c      | 10 ----------
- kernel/bpf/verifier.c  | 12 ++++++------
- 5 files changed, 42 insertions(+), 16 deletions(-)
+ include/linux/bpf_verifier.h | 116 ++++++++++++++++++++++-------------
+ kernel/bpf/flow.c            |  26 +++++---
+ kernel/bpf/join.c            |  22 +------
+ kernel/bpf/states.c          |   8 +--
+ kernel/bpf/verifier.c        |  11 ++--
+ 5 files changed, 102 insertions(+), 81 deletions(-)
 
-diff --git a/include/linux/cnum.h b/include/linux/cnum.h
-index 49160318adf9..bf514cc0a098 100644
---- a/include/linux/cnum.h
-+++ b/include/linux/cnum.h
-@@ -33,6 +33,7 @@ struct cnum32 {
- #define CNUM32_UNBOUNDED ((struct cnum32){ .base = 0, .size = U32_MAX })
- #define CNUM32_EMPTY ((struct cnum32){ .base = U32_MAX, .size = U32_MAX })
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 598763d128ab..673956376c2a 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -57,11 +57,46 @@ struct bpf_stack_range {
+ 	u32 size;
+ };
  
-+struct cnum32 cnum32_const(u32 v);
- struct cnum32 cnum32_from_urange(u32 min, u32 max);
- struct cnum32 cnum32_from_srange(s32 min, s32 max);
- u32 cnum32_umin(struct cnum32 cnum);
-@@ -49,6 +50,7 @@ bool cnum32_is_const(struct cnum32 cnum);
- bool cnum32_is_empty(struct cnum32 cnum);
- struct cnum32 cnum32_add(struct cnum32 a, struct cnum32 b);
- struct cnum32 cnum32_negate(struct cnum32 a);
-+struct cnum32 cnum32_sub(struct cnum32 a, struct cnum32 b);
- bool cnum32_is_subset(struct cnum32 outer, struct cnum32 inner);
- 
- /* Same as cnum32 but for 64-bit ranges */
-@@ -60,6 +62,7 @@ struct cnum64 {
- #define CNUM64_UNBOUNDED ((struct cnum64){ .base = 0, .size = U64_MAX })
- #define CNUM64_EMPTY ((struct cnum64){ .base = U64_MAX, .size = U64_MAX })
- 
-+struct cnum64 cnum64_const(u64 v);
- struct cnum64 cnum64_from_urange(u64 min, u64 max);
- struct cnum64 cnum64_from_srange(s64 min, s64 max);
- u64 cnum64_umin(struct cnum64 cnum);
-@@ -76,9 +79,12 @@ bool cnum64_is_const(struct cnum64 cnum);
- bool cnum64_is_empty(struct cnum64 cnum);
- struct cnum64 cnum64_add(struct cnum64 a, struct cnum64 b);
- struct cnum64 cnum64_negate(struct cnum64 a);
-+struct cnum64 cnum64_sub(struct cnum64 a, struct cnum64 b);
- bool cnum64_is_subset(struct cnum64 outer, struct cnum64 inner);
- 
- struct cnum32 cnum32_from_cnum64(struct cnum64 cnum);
-+struct cnum64 cnum64_zext32(struct cnum32 cnum);
-+struct cnum64 cnum64_sext32(struct cnum32 cnum);
- struct cnum64 cnum64_cnum32_intersect(struct cnum64 a, struct cnum32 b);
- struct cnum64 cnum64_intersect_linear(struct cnum64 in, u16 base, u16 step);
- 
-diff --git a/kernel/bpf/cnum.c b/kernel/bpf/cnum.c
-index 8ec5187d7c75..21bb6411cfb8 100644
---- a/kernel/bpf/cnum.c
-+++ b/kernel/bpf/cnum.c
-@@ -23,6 +23,25 @@ struct cnum32 cnum32_from_cnum64(struct cnum64 cnum)
- 		return (struct cnum32){ .base = (u32)cnum.base, .size = cnum.size };
- }
- 
-+/* The zero extension of each value of 'cnum'. An arc that crosses U32_MAX/0 gives [0, U32_MAX]. */
-+struct cnum64 cnum64_zext32(struct cnum32 cnum)
-+{
-+	if (cnum32_is_empty(cnum))
-+		return CNUM64_EMPTY;
-+	return cnum64_from_urange(cnum32_umin(cnum), cnum32_umax(cnum));
-+}
-+
 +/*
-+ * The sign extension of each value of 'cnum'.
-+ * An arc that crosses S32_MAX/S32_MIN gives [S32_MIN, S32_MAX].
++ * What is known about a 64-bit value: the reduced product of known bits, a range, a range of the
++ * low 32 bits and a congruence. The value is in each of the four. reg_bounds_sync() is the
++ * reduction: what one of them knows refines the others.
 + */
-+struct cnum64 cnum64_sext32(struct cnum32 cnum)
++struct scalar {
++	struct tnum var_off;
++	struct cnum64 r64; /* 64-bit range as circular number */
++	struct cnum32 r32; /* 32-bit range as circular number */
++	/*
++	 * The value, interpreted as s64, lies on a line described by a linear
++	 * equation base + step * k.
++	 * Invariant: base < step.
++	 */
++	u16 base;
++	u16 step;
++};
++
++/* The struct scalar that is an anonymous member of *@p */
++#define scalar_of(p) container_of_const(&(p)->var_off, struct scalar, var_off)
++
+ struct bpf_reg_state {
+-	/* Ordering of fields matters.  See regsafe() */
+ 	enum bpf_reg_type type;
+-	/* 0. regsafe() compares the bytes before var_off: there is no hole among them. */
+-	u32 unused;
++	/*
++	 * For PTR_TO_PACKET, used to find other pointers with the same variable
++	 * offset, so they can share range knowledge.
++	 * For PTR_TO_MAP_VALUE_OR_NULL this is used to share which map value we
++	 * came from, when one is tested for != NULL.
++	 * For PTR_TO_MEM_OR_NULL this is used to identify memory allocation
++	 * for the purpose of tracking that it's freed.
++	 * For PTR_TO_SOCKET this is used to share which pointers retain the
++	 * same reference to the socket, to determine proper reference freeing.
++	 * For stack slots that are dynptrs, this is used to track references to
++	 * the dynptr to determine proper reference freeing.
++	 * Similarly to dynptrs, we use ID to track "belonging" of a reference
++	 * to a specific instance of bpf_iter.
++	 * A scalar has no id. The scalars that it is linked to are static: computed before the
++	 * main pass, see bpf_scev_next_linked_reg().
++	 */
++	u32 id;
+ 	union {
+ 		/* valid when type == PTR_TO_PACKET */
+ 		int range;
+@@ -134,8 +169,8 @@ struct bpf_reg_state {
+ 
+ 		/* Max size from any of the above. */
+ 		struct {
+-			unsigned long raw1;
+-			unsigned long raw2;
++			u64 raw1;
++			u64 raw2;
+ 		} raw;
+ 
+ 		struct { /* for PTR_TO_FUNC */
+@@ -144,43 +179,6 @@ struct bpf_reg_state {
+ 			u32 func_set;
+ 		};
+ 	};
+-	/* For scalar types (SCALAR_VALUE), this represents our knowledge of
+-	 * the actual value.
+-	 * For pointer types, this represents the variable part of the offset
+-	 * from the pointed-to object, and is shared with all bpf_reg_states
+-	 * with the same id as us.
+-	 */
+-	struct tnum var_off;
+-	/* Used to determine if any memory access using this register will
+-	 * result in a bad access.
+-	 * These refer to the same value as var_off, not necessarily the actual
+-	 * contents of the register.
+-	 */
+-	struct cnum64 r64; /* 64-bit range as circular number */
+-	struct cnum32 r32; /* 32-bit range as circular number */
+-	/*
+-	 * The value described by this register, interpreted as s64, lies on
+-	 * a line described by a linear equation base + step * k.
+-	 * Invariant: base < step.
+-	 */
+-	u16 base;
+-	u16 step;
+-	/* For PTR_TO_PACKET, used to find other pointers with the same variable
+-	 * offset, so they can share range knowledge.
+-	 * For PTR_TO_MAP_VALUE_OR_NULL this is used to share which map value we
+-	 * came from, when one is tested for != NULL.
+-	 * For PTR_TO_MEM_OR_NULL this is used to identify memory allocation
+-	 * for the purpose of tracking that it's freed.
+-	 * For PTR_TO_SOCKET this is used to share which pointers retain the
+-	 * same reference to the socket, to determine proper reference freeing.
+-	 * For stack slots that are dynptrs, this is used to track references to
+-	 * the dynptr to determine proper reference freeing.
+-	 * Similarly to dynptrs, we use ID to track "belonging" of a reference
+-	 * to a specific instance of bpf_iter.
+-	 * A scalar has no id. The scalars that it is linked to are static: computed before the
+-	 * main pass, see bpf_scev_next_linked_reg().
+-	 */
+-	u32 id;
+ 	/*
+ 	 * Tracks the parent object this register was derived from.
+ 	 * Used for cascading invalidation: when the parent object is
+@@ -195,8 +193,42 @@ struct bpf_reg_state {
+ 	 * during state comparisons.
+ 	 */
+ 	u32 map_uid;
++	/*
++	 * For scalar types (SCALAR_VALUE), this represents our knowledge of
++	 * the actual value.
++	 * For pointer types, this represents the variable part of the offset
++	 * from the pointed-to object, and is shared with all bpf_reg_states
++	 * with the same id as us. It is used to determine if any memory access
++	 * using this register will result in a bad access.
++	 * The last member: its padding is at the end of the register.
++	 */
++	struct scalar;
+ };
+ 
++/* reg->raw stands for the union where it is compared, hashed, copied or cleared */
++static_assert(offsetofend(struct bpf_reg_state, raw) == offsetof(struct bpf_reg_state, parent_id));
++
++static inline bool scalar_equal(const struct scalar *a, const struct scalar *b)
 +{
-+	if (cnum32_is_empty(cnum))
-+		return CNUM64_EMPTY;
-+	return cnum64_from_srange(cnum32_smin(cnum), cnum32_smax(cnum));
++	return a->r64.base == b->r64.base && a->r64.size == b->r64.size &&
++	       a->r32.base == b->r32.base && a->r32.size == b->r32.size &&
++	       a->var_off.value == b->var_off.value && a->var_off.mask == b->var_off.mask &&
++	       a->base == b->base && a->step == b->step;
 +}
 +
++/* The type and what goes with it: the object that a pointer points to */
++static inline bool reg_fixed_part_equal(const struct bpf_reg_state *ra,
++					const struct bpf_reg_state *rb)
++{
++	return ra->type == rb->type && !memcmp(&ra->raw, &rb->raw, sizeof(ra->raw));
++}
++
++/* All but the ids */
++static inline bool reg_value_equal(const struct bpf_reg_state *ra, const struct bpf_reg_state *rb)
++{
++	return reg_fixed_part_equal(ra, rb) && scalar_equal(scalar_of(ra), scalar_of(rb));
++}
++
+ static inline s64 reg_smin(const struct bpf_reg_state *reg)
+ {
+ 	return cnum64_smin(reg->r64);
+diff --git a/kernel/bpf/flow.c b/kernel/bpf/flow.c
+index abbadba1e79f..f4edf411e81f 100644
+--- a/kernel/bpf/flow.c
++++ b/kernel/bpf/flow.c
+@@ -2173,12 +2173,16 @@ static bool flow_needed_consts_differ(const struct bpf_flow *flow, enum flow_nee
+ 	return false;
+ }
+ 
++/* flow_shape_ptr() hashes a struct scalar up to its padding: there is no hole in front of it */
++static_assert(offsetofend(struct scalar, step) == sizeof(struct tnum) + sizeof(struct cnum64) +
++						  sizeof(struct cnum32) + 2 * sizeof(u16));
++
+ /* regsafe() and join_reg() say what each type needs */
+ static void flow_shape_ptr(struct flow_shape *sh, u32 place, const struct bpf_reg_state *reg)
+ {
+ 	u32 ids = (reg->id != 0) | (reg->parent_id != 0) << 1 | (reg->map_uid != 0) << 2;
+-	u32 len = offsetof(struct bpf_reg_state, var_off);
+-	bool has_off = false, var_off = false;
++	bool fixed_part = true, exact = false, has_off = false, var_off = false;
++	u32 *ptrs = &sh->word[FLOW_PTRS];
+ 	u64 off = reg->var_off.value;
+ 
+ 	switch (base_type(reg->type)) {
+@@ -2187,12 +2191,12 @@ static void flow_shape_ptr(struct flow_shape *sh, u32 place, const struct bpf_re
+ 		return;
+ 	case PTR_TO_ARENA:
+ 		/* the offset is not tracked */
+-		len = sizeof(reg->type);
++		fixed_part = false;
+ 		ids = 0;
+ 		break;
+ 	case PTR_TO_PACKET_META:
+ 	case PTR_TO_PACKET:
+-		len = sizeof(reg->type);
++		fixed_part = false;
+ 		ids &= 1;
+ 		/* behind the end of the packet, or at the end: the same in both states */
+ 		if (reg->range < 0)
+@@ -2224,11 +2228,15 @@ static void flow_shape_ptr(struct flow_shape *sh, u32 place, const struct bpf_re
+ 		var_off = !tnum_is_const(reg->var_off);
+ 		break;
+ 	default:
+-		len = offsetof(struct bpf_reg_state, id);
++		exact = true;
+ 	}
+ 	sh->word[FLOW_LAYOUT] = jhash_1word(place << 1 | var_off, sh->word[FLOW_LAYOUT]);
+-	sh->word[FLOW_PTRS] = jhash2((const u32 *)reg, len / sizeof(u32),
+-				     sh->word[FLOW_PTRS] + ids);
++	*ptrs = jhash_1word(reg->type, *ptrs + ids);
++	if (fixed_part)
++		*ptrs = jhash2((const u32 *)&reg->raw, sizeof(reg->raw) / sizeof(u32), *ptrs);
++	if (exact)
++		*ptrs = jhash2((const u32 *)scalar_of(reg),
++			       offsetofend(struct scalar, step) / sizeof(u32), *ptrs);
+ 	if (has_off && !var_off)
+ 		sh->word[FLOW_OFFS] = jhash_2words(lower_32_bits(off), upper_32_bits(off),
+ 						   sh->word[FLOW_OFFS]);
+@@ -2605,7 +2613,7 @@ static bool flow_join_makes_up(const struct bpf_flow *flow, struct bpf_verifier_
+ 	struct bpf_func_state *fa = a->frame[a->curframe], *fb = b->frame[b->curframe];
+ 	const struct bpf_reg_state *ra, *rb, *one_a = NULL, *one_b = NULL;
+ 	const struct flow_need *tested = flow->need[FLOW_NEED_JUMP], *need;
+-	u32 fr, i, len = offsetof(struct bpf_reg_state, id);
++	u32 fr, i;
+ 
+ 	if (!tested)
+ 		return false;
+@@ -2623,7 +2631,7 @@ static bool flow_join_makes_up(const struct bpf_flow *flow, struct bpf_verifier_
+ 			if (flow_gap(ra, rb))
+ 				return true;
+ 			/* copies of a scalar count once: same range and tnum in each state */
+-			if (one_a && (memcmp(ra, one_a, len) || memcmp(rb, one_b, len)))
++			if (one_a && (!reg_value_equal(ra, one_a) || !reg_value_equal(rb, one_b)))
+ 				return true;
+ 			one_a = ra;
+ 			one_b = rb;
+diff --git a/kernel/bpf/join.c b/kernel/bpf/join.c
+index 2b8c94b7dc50..9db52e8f36ca 100644
+--- a/kernel/bpf/join.c
++++ b/kernel/bpf/join.c
+@@ -129,14 +129,6 @@ static bool jid_strict_ok(struct bpf_join_state *js, u32 ida, u32 idb)
+ 	return jid_good(js, ida, idb);
+ }
+ 
+-static bool range_equal(const struct bpf_reg_state *ra, const struct bpf_reg_state *rb)
+-{
+-	return ra->r64.base == rb->r64.base && ra->r64.size == rb->r64.size &&
+-	       ra->r32.base == rb->r32.base && ra->r32.size == rb->r32.size &&
+-	       ra->var_off.value == rb->var_off.value && ra->var_off.mask == rb->var_off.mask &&
+-	       ra->base == rb->base && ra->step == rb->step;
+-}
+-
+ static const struct bpf_loop_rungs *join_rungs(const struct bpf_join_state *js)
+ {
+ 	u32 i;
+@@ -166,10 +158,10 @@ static int join_place_is_linear(const struct bpf_join_state *js)
+ static bool join_range(struct bpf_join_state *js, struct bpf_reg_state *dst,
+ 		       const struct bpf_reg_state *ra, const struct bpf_reg_state *rb)
+ {
+-	if (range_equal(ra, rb))
++	if (scalar_equal(scalar_of(ra), scalar_of(rb)))
+ 		return true;
+ 	bpf_reg_union_range(dst, rb);
+-	if (!js->widen || range_equal(dst, ra))
++	if (!js->widen || scalar_equal(scalar_of(dst), scalar_of(ra)))
+ 		return true;
+ 	/*
+ 	 * The bound of a number that grows around a cycle is put where it may come to rest. If
+@@ -184,16 +176,6 @@ static bool join_range(struct bpf_join_state *js, struct bpf_reg_state *dst,
+ 	return true;
+ }
+ 
+-static bool reg_fixed_part_equal(const struct bpf_reg_state *ra, const struct bpf_reg_state *rb)
+-{
+-	return !memcmp(ra, rb, offsetof(struct bpf_reg_state, var_off));
+-}
+-
+-static bool reg_value_equal(const struct bpf_reg_state *ra, const struct bpf_reg_state *rb)
+-{
+-	return !memcmp(ra, rb, offsetof(struct bpf_reg_state, id));
+-}
+-
  /*
-  * Suppose 'a' and 'b' are laid out as follows:
-  *
-diff --git a/kernel/bpf/cnum_defs.h b/kernel/bpf/cnum_defs.h
-index 05b17a8b4814..56d0c6f555a8 100644
---- a/kernel/bpf/cnum_defs.h
-+++ b/kernel/bpf/cnum_defs.h
-@@ -20,6 +20,11 @@
- #define EMPTY    __PASTE(__PASTE(CNUM, T), _EMPTY)
- #define FN(name) __PASTE(__PASTE(cnum, T), __PASTE(_, name))
- 
-+struct cnum_t FN(const)(ut v)
-+{
-+	return (struct cnum_t){ .base = v, .size = 0 };
-+}
-+
- struct cnum_t FN(from_urange)(ut min, ut max)
+  * Join two registers, regsafe() documents what each type needs.
+  * Pass 1 records id pairs, pass 2 computes @dst, which is a copy of @ra on entry.
+diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+index 48359e789faa..9ff067dba497 100644
+--- a/kernel/bpf/states.c
++++ b/kernel/bpf/states.c
+@@ -185,7 +185,7 @@ static bool regs_exact(const struct bpf_reg_state *rold,
+ 		       const struct bpf_reg_state *rcur,
+ 		       struct bpf_idmap *idmap)
  {
- 	return (struct cnum_t){ .base = min, .size = (ut)max - min };
-@@ -259,6 +264,12 @@ struct cnum_t FN(negate)(struct cnum_t a)
- 	return FN(normalize)((struct cnum_t){ -((ut)a.base + a.size), a.size });
- }
- 
-+/* { x - y : x in 'a', y in 'b' } */
-+struct cnum_t FN(sub)(struct cnum_t a, struct cnum_t b)
-+{
-+	return FN(add)(a, FN(negate)(b));
-+}
-+
- bool FN(is_empty)(struct cnum_t cnum)
- {
- 	return cnum.base == EMPTY.base && cnum.size == EMPTY.size;
-diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-index 8438313e7b4a..a477a3029baa 100644
---- a/kernel/bpf/scev.c
-+++ b/kernel/bpf/scev.c
-@@ -4453,16 +4453,6 @@ static struct bpf_reg_state *spill32_counter(struct scev *scev, struct bpf_func_
- 	return scev_reg_for_spill32(st, r);
- }
- 
--static struct cnum64 cnum64_zext32(struct cnum32 r32)
--{
--	return cnum64_from_urange(cnum32_umin(r32), cnum32_umax(r32));
--}
--
--static struct cnum64 cnum64_sext32(struct cnum32 r32)
--{
--	return cnum64_from_srange(cnum32_smin(r32), cnum32_smax(r32));
--}
--
- /* Compute the range an induction variable in `reg` spans over the loop. */
- static void linear_bounds(struct bpf_reg_state *reg, u32 max_header_count,
- 			  struct linear_coefs *coefs, struct bounds *out)
+-	return memcmp(rold, rcur, offsetof(struct bpf_reg_state, id)) == 0 &&
++	return reg_value_equal(rold, rcur) &&
+ 	       check_ids(rold->id, rcur->id, idmap) &&
+ 	       check_ids(rold->parent_id, rcur->parent_id, idmap) &&
+ 	       check_ids(rold->map_uid, rcur->map_uid, idmap);
+@@ -229,7 +229,7 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
+ 			/* explore_alu_limits disables tnum_in() and range_within()
+ 			 * logic and requires everything to be strict
+ 			 */
+-			return memcmp(rold, rcur, offsetof(struct bpf_reg_state, id)) == 0;
++			return reg_value_equal(rold, rcur);
+ 		}
+ 		return range_within(rold, rcur) && tnum_in(rold->var_off, rcur->var_off);
+ 	case PTR_TO_MAP_KEY:
+@@ -242,7 +242,7 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
+ 		/* If the new min/max/var_off satisfy the old ones and
+ 		 * everything else matches, we are OK.
+ 		 */
+-		return memcmp(rold, rcur, offsetof(struct bpf_reg_state, var_off)) == 0 &&
++		return reg_fixed_part_equal(rold, rcur) &&
+ 		       range_within(rold, rcur) &&
+ 		       tnum_in(rold->var_off, rcur->var_off) &&
+ 		       check_ids(rold->id, rcur->id, idmap) &&
+@@ -275,7 +275,7 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
+ 	case PTR_TO_ARENA:
+ 		return true;
+ 	case PTR_TO_INSN:
+-		return memcmp(rold, rcur, offsetof(struct bpf_reg_state, var_off)) == 0 &&
++		return reg_fixed_part_equal(rold, rcur) &&
+ 		       range_within(rold, rcur) && tnum_in(rold->var_off, rcur->var_off);
+ 	default:
+ 		return regs_exact(rold, rcur, idmap);
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 5a30ce76da73..6512909600f4 100644
+index 6512909600f4..4a973b77cd69 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -2020,7 +2020,7 @@ void bpf_mark_reg_known_scalar(struct bpf_reg_state *reg, u64 imm)
- static void __mark_reg32_known(struct bpf_reg_state *reg, u64 imm)
+@@ -2002,9 +2002,8 @@ static void ___mark_reg_known(struct bpf_reg_state *reg, u64 imm)
+  */
+ static void __mark_reg_known(struct bpf_reg_state *reg, u64 imm)
  {
- 	reg->var_off = tnum_const_subreg(reg->var_off, imm);
--	reg->r32 = cnum32_from_urange((u32)imm, (u32)imm);
-+	reg->r32 = cnum32_const(imm);
+-	/* Clear off and union(map_ptr, range) */
+-	memset(((u8 *)reg) + sizeof(reg->type), 0,
+-	       offsetof(struct bpf_reg_state, var_off) - sizeof(reg->type));
++	/* Clear union(map_ptr, range) */
++	memset(&reg->raw, 0, sizeof(reg->raw));
+ 	reg->id = 0;
+ 	reg->parent_id = 0;
+ 	reg->map_uid = 0;
+@@ -18318,7 +18317,7 @@ bool bpf_reg_union_compatible(const struct bpf_reg_state *a, const struct bpf_re
+ 		return false;
+ 	if (a->type == SCALAR_VALUE)
+ 		return true;
+-	return !memcmp(a, b, offsetof(struct bpf_reg_state, var_off)) &&
++	return reg_fixed_part_equal(a, b) &&
+ 	       a->id == b->id && a->parent_id == b->parent_id && a->map_uid == b->map_uid;
  }
  
- /* Mark the 'variable offset' part of a register as zero.  This should be
-@@ -6351,8 +6351,8 @@ static void coerce_reg_to_size_sx(struct bpf_reg_state *reg, int size)
- 			reg->var_off = tnum_const((s32)u64_cval);
+@@ -19622,8 +19621,8 @@ static int refine_live_branch(struct bpf_verifier_env *env, struct bpf_insn *ins
+ 	int err;
  
- 		u64_cval = reg->var_off.value;
--		reg->r64 = cnum64_from_urange(u64_cval, u64_cval);
--		reg->r32 = cnum32_from_urange((u32)u64_cval, (u32)u64_cval);
-+		reg->r64 = cnum64_const(u64_cval);
-+		reg->r32 = cnum32_const(u64_cval);
- 		return;
- 	}
- 
-@@ -17083,7 +17083,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env, struct bpf_insn
- 				"Use addition from R10 to form stack addresses within the tracked stack frame.");
- 			return -EACCES;
- 		}
--		dst_reg->r64 = cnum64_add(ptr_reg->r64, cnum64_negate(off_reg->r64));
-+		dst_reg->r64 = cnum64_sub(ptr_reg->r64, off_reg->r64);
- 		dst_reg->var_off = tnum_sub(ptr_reg->var_off, off_reg->var_off);
- 		dst_reg->raw = ptr_reg->raw;
- 		if (reg_is_pkt_pointer(ptr_reg)) {
-@@ -17190,13 +17190,13 @@ static void scalar_min_max_add(struct bpf_reg_state *dst_reg,
- static void scalar32_min_max_sub(struct bpf_reg_state *dst_reg,
- 				 struct bpf_reg_state *src_reg)
- {
--	dst_reg->r32 = cnum32_add(dst_reg->r32, cnum32_negate(src_reg->r32));
-+	dst_reg->r32 = cnum32_sub(dst_reg->r32, src_reg->r32);
- }
- 
- static void scalar_min_max_sub(struct bpf_reg_state *dst_reg,
- 			       struct bpf_reg_state *src_reg)
- {
--	dst_reg->r64 = cnum64_add(dst_reg->r64, cnum64_negate(src_reg->r64));
-+	dst_reg->r64 = cnum64_sub(dst_reg->r64, src_reg->r64);
- }
- 
- static void scalar32_min_max_mul(struct bpf_reg_state *dst_reg,
+ 	/* is_branch_taken() knew the branch before it refined anything */
+-	if (!memcmp(reg1, &regs[insn->dst_reg], sizeof(*reg1)) &&
+-	    (BPF_SRC(insn->code) == BPF_K || !memcmp(reg2, &regs[insn->src_reg], sizeof(*reg2))))
++	if (reg_value_equal(reg1, &regs[insn->dst_reg]) &&
++	    (BPF_SRC(insn->code) == BPF_K || reg_value_equal(reg2, &regs[insn->src_reg])))
+ 		return 0;
+ 	/*
+ 	 * The fall-through branch of JSET forgets the ranges. Or this branch is dead too: the path
 -- 
 2.55.0
 
