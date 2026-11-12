@@ -1,67 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.216
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=162.62.57.64
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794450654;
-	b=OjL6+BXsrAU3BTGleCeWxJ9w286HXLJlRv3N9NJ0WWqRjhuve6Nz+vAQ5ICQ32wmy/jq
-	 +ngfgpFUFkyztvcVEWxZ9bmS3ndn2UJMgJLidLG9KnMebr2EryJRPppf/P/hyleVo7dAz
-	 vZS6TunSamMUfesmMHWl8FpaikLUrttpxrYX3XKAMiqIvhC9Hg2Xp9EN0sq+uHXt1lph5
-	 TsMgUj9C/2R3CEFYEBRpFKWY6nXVPzd5mUzpjlSm/GjvtnQJ3SqZF+5mbOEfDs5FId0i2
-	 HMdyX9dKcDeKxFSu587B1XeRNQdN7Nkx3ngMfdjW8xekbOtXRwURymG91jAhCUFTH1g==
+	t=1794453244;
+	b=lcEZjhetM9ISafNIPi5R01dLvWkppzz2TxOdEWFg7utUTK2dCPwcl8SKoCizZLJp/7uW
+	 nbbZkm7UnKuQz2N8MA+ftf1yvX0zfMKpopdfpl9vdrWtQNnYWvmAv7v/H5FkfSI8p9KXE
+	 mqtl+XjKoH+i8IPQu6aIR2p4/PmhwffizgfCOMLPGSgskUNsLMkPlh1sGSv45wD7a4Sa4
+	 lsi/HB9cTtSuO1gZDHSkCMDHIp/m25cAD+d+5xBCn2o56gjgHRDI57JSjcx6BGdQMvWJo
+	 jZXoOUZoWm+SFzGgPWN7biiVgPW2aIGqnM6XEwAXQSFc7KrZQUWbxRnVW5QRthDoP3g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794450654;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=gTQZHlCJUjOxYEpdFL/jeCbv156/zSw9VUjF1xBlN98=;
-	b=OlhhQ2PUHt4gH5IJzISJvK61bJ7nkOKm7v5cx+H7eLlFBjUwhqZij/h79pHJpg+hy+a0
-	 YFy27J/dQ0wl2l5tQkhqiT1wciLAdZtu6rCpBetJfajfN8VWHlarSmld1TQEd+6Jtmsks
-	 Hw4B4F0+nImjHgHm9P3VqlbYi3vQh8YCB7BT9WSrnxS+SMVO1ucZByYqHdU8DoyYiVeWc
-	 eMf5YdRsMJgndR9HYxTl5O+gykxCe7v8OvF4TBOfC5AxNO7ztpfw6LY0k7fxy11kBA56f
-	 5tF4haM6OEqZlapEM/0vV6+ii/345uakdWTqtj5RcZrama2od9guUWZfEetcpWjkkpw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794453244;
+	h=DMARC-Filter:DKIM-Signature:Received:X-QQ-mid:Message-ID:
+	 X-QQ-XMAILINFO:X-QQ-XMRINFO:From:To:Cc:Subject:Date:X-OQ-MSGID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=zqikwoBUu0eCLYMp7bcVrEZ+6pwvkxFl8gLa2oK3B4A=;
+	b=LRqmLb2H31ev4un+U4ylsda1K5w/PHQZvtrI0sthObj6JIoes93Df7IDSdToc6D2KNZa
+	 9m2aPmiz7ZxilVShW9nFozSAfMnuYAgkJR1shx8fPCHNsmKpT9V+4IHtvnAavEfzgjokr
+	 0Ghf5OyttGmUxo8OrfSx1EPBOcLRRgXSGHnXelsrSYmZ5Yibqx3Ns2egHqCP//ZtJMKy4
+	 rYblGkvMLfXJ50E7IyA4dbY1eGJa7Oj5kLWLXtv4kZHLDQfVGxTOHlw6dYtPs6h4RLthz
+	 +wzBPG7QmkrPYpm594BYYt5Tlj9x/bnGW5bmph9Vd6JYW7HBDQjeFFdi16ucJftetmw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=X6ao6tY2;
-	arc=none smtp.remote-ip=95.215.58.216
-Received: from mta1.migadu.com (out-216.mta1.migadu.com [95.215.58.216])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=foxmail.com;
+	spf=pass smtp.mailfrom=foxmail.com;
+	dkim=pass header.d=foxmail.com header.i=@foxmail.com header.a=rsa-sha256 header.s=s201512 header.b=VM5jNWB4;
+	arc=none smtp.remote-ip=162.62.57.64
+Received: from out162-62-57-64.mail.qq.com (out162-62-57-64.mail.qq.com [162.62.57.64])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D0DD606A32D
-	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 02:30:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8D0DD606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E07A1606A31C
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 03:14:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E07A1606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=X6ao6tY2
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=ex0fZxg7xmW+zEI8jmq9pJooKKCHvU2lpCHkYI6HRkQ=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794450651; v=1; x=1795055451;
- b=X6ao6tY2lqQAPz7q73RHLLNxHFcQEQzPkblh0SAlZGtImUKpeqF8DpOoTlQT6XwGI4030rSt
- mS60Qk3YQ35ctBEMrCpl4Ri8YqGtpmCMHGrA5RNrA+Y6QhKPogy011ok4pAKhUL7on5qwwQkb7T
- 6dMEdDaCJHYCtu3BRtwFCbvg=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by mta10.migadu.com with ESMTPS id 8d3da5d7f84c678c;
-	Thu, 12 Nov 2026 02:30:39 +0000
-X-Mizu-Trace-ID: 8d3da5d7f84c678c
-X-Migadu-Flow: FLOW_OUT
-Date: Thu, 12 Nov 2026 10:30:27 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: Weiming Shi <bestswngs@gmail.com>
-Cc: "David S . Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Kees Cook <kees@kernel.org>,
-	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org, bpf@vger.kernel.org,
-	Xiang Mei <xmei5@asu.edu>, stable@vger.kernel.org,
-	co+beaa1ed2d7aaec16@bugs.sh
-Subject: Re: [PATCH net] net: initialize ICMP error queue opt_stats
-Message-ID: <avUjeFUIFJAWbSlt@fedora>
-References: <20261111170528.495116-3-bestswngs@gmail.com>
+	dkim=pass (1024-bit key, unprotected) header.d=foxmail.com header.i=@foxmail.com header.a=rsa-sha256 header.s=s201512 header.b=VM5jNWB4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1794453233;
+	bh=zqikwoBUu0eCLYMp7bcVrEZ+6pwvkxFl8gLa2oK3B4A=;
+	h=From:To:Cc:Subject:Date;
+	b=VM5jNWB4/3G12gbRHQ/Wulr/+YehAPyb4dJz2NbPZmA4L372gC2lYFhMZPgj/MlSw
+	 FIn4A5fDLwPRsWpwDOVSY7y8GjCK9TNkzZXNGr2gI88j0/YpTvbChpEixXqpO4d2x+
+	 8V4/emXsaFdDz2pfsSDK4iVrd/rCcWCx4MWbVmbE=
+Received: from HAPYCAO-MC1.tencent.com ([61.151.228.147])
+	by newxmesmtplogicsvrsza53-0.qq.com (NewEsmtp) with SMTP
+	id 37283A0E; Thu, 12 Nov 2026 11:13:50 +0800
+X-QQ-mid: xmsmtpt1794453230tx8r0n4a2
+Message-ID: <tencent_84A432FD1AE7054D384BEB36958789AAFA05@qq.com>
+X-QQ-XMAILINFO: MqrcRCpyXC2Gc4tZ1E4IO5J2s34IEUI0ldAhgdmRrPeM2Oqo5tWCy74j9zK8UC
+	 yGsn3Vxi9pb/q33si8GWT+mb3+g5w8WWP0GET7wk1XiAHECfwe7xJnmX9CiZ1aaUchJGhKHXMq8z
+	 FXiUJMh52t/eri7SbFG8ZrLWin3An+N9DduaJ9zX5YZPVMkuLMLs5qkFjCifxI/ToKh+sPNvPBR+
+	 7amyzZs38HMY9QJ5Mu3T46Y3YsTilUCxvkx3VCpCHLhxU7xhFjPieaDXNp34KqbYC+5H4ZH/j5gF
+	 ru6uw6yn9rcGXgwx7xcBrHxoZ6yoDEEqGbhDcwZqBNRp/LfRZxO72kn9T0xtQEB1gp1K2UuarU6E
+	 V66PIAv/Wg0e8pCJUSBWQ6oR/xEhuOVN66wjIm0JnmDcdcxyV9l3YpBYzYhFrHa4EGu6oWUjlGty
+	 aaYrqGEKoXU3ds3P4qb45PStJVPctQev9lUi1dWBqp5EKQBB78Z8Zdwh9zNoRqKa4wsYD4091NF6
+	 xQ2yPYTVKxMJ92ZsUJvjRp81yL1ELGxQb+bD8TKpc+lbuHd8y4qKa7bTCp25nua6BC2wsxvnwpI4
+	 drp8NCcdw73i8pxJ5VOIGkSLe9pZnZLqLRROc03yL5o20JvM15/eFImxgqDnomnSIQc/2oexMWuw
+	 eFodbpmNjzNV/W2+AzpmVCT8QAbKbqyA0B4oRqq7kq4WuaYBYNBggrWO1G/Rmjj43akkdwGw35if
+	 4Z1bmjODgwjpCHng8Bg+Go6z6syYYP/jI79UoMSJtUpgX2ZKQB6UTXNCvP01k9WQZm6VKMweTxKk
+	 hyxKX9OH/nsi9XQ1tP6/vUI0HmOQHvzBTOx1q9uzIbRe88U/Wl4nIQ690IiPohGXpAYss9iylLd5
+	 aCLQQKdmIuugJC4mpS5hPsotVDel1DWteaVLGv70jIjhzJBWt+29h+h66tWsbyroLrPdJIapaaEU
+	 eTihiErf7PJQYBozakHUP71ZUsRZF391aCs8RuuwcdKiAdtbeMi0acsomnaSJvgPvSaEHxvUU0ni
+	 uWjmCQQyHQiYZejpt4KrYPcfoKuSIHDdQMWteK6ZdDFOUHYPrmBmHQO6YMQMBvpF4Yuh2c3Zsm/t
+	 tJZpcuWHioTQ2VMpY=
+X-QQ-XMRINFO: MSVp+SPm3vtSI1QTLgDHQqIV1w2oNKDqfg==
+From: bo cao <treebacker@foxmail.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	gregkh@linuxfoundation.org,
+	Bo Cao <treebacker@foxmail.com>
+Subject: [PATCH] bpf, sockmap: Fix ring capacity invariant break in bpf_msg_push_data()
+Date: Thu, 12 Nov 2026 11:13:41 +0800
+X-OQ-MSGID: <20261112031341.92203-1-treebacker@foxmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -71,93 +81,100 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261111170528.495116-3-bestswngs@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 11, 2026 at 09:05:30AM -0800, Weiming Shi wrote:
-> ip_icmp_error() and ipv6_icmp_error() clone a received ICMP skb before
-> building its error queue entry.  skb_clone() preserves the complete control
-> buffer, while the IP receive paths initialize only the portion aliased by
-> sock_exterr_skb::header.  The two functions initialize ee, addr_offset, and
-> port, but leave the final byte containing opt_stats and unused untouched.
-> A TCX classifier can leave bpf_skb_data_end::data_end across that byte,
-> forging opt_stats and making __sock_recv_timestamp() pass skb->len bytes
-> from skb->data to put_cmsg().  For a non-linear ICMP skb, this reads beyond
-> its linear head.
-> 
-> Initialize both bitfields in the two clone-based producers.  Do not clear
-> the whole sock_exterr_skb because the error receive paths consume the saved
-> IP control-buffer header.
-> 
->   usercopy: Kernel memory exposure attempt detected from SLUB object
->             'skbuff_small_head' (offset 72, size 59964)!
->   kernel BUG at mm/usercopy.c:102!
->   Oops: invalid opcode: 0000 [#1] SMP KASAN NOPTI
->   RIP: usercopy_abort (mm/usercopy.c:102)
->   Call Trace:
->    __check_heap_object (mm/slub.c:8146)
->    __check_object_size (mm/usercopy.c:258)
->    put_cmsg (net/core/scm.c:276)
->    __sock_recv_timestamp (net/socket.c:1061)
->    ip_recv_error (net/ipv4/ip_sockglue.c:550)
->    udp_recvmsg (net/ipv4/udp.c:2034)
->    inet_recvmsg (net/ipv4/af_inet.c:896)
->    sock_recvmsg (net/socket.c:1159)
->    ____sys_recvmsg (net/socket.c:2918)
->    ___sys_recvmsg (net/socket.c:2961)
->    __sys_recvmsg (net/socket.c:2993)
->    do_syscall_64 (arch/x86/entry/syscall_64.c:94)
->    entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:130)
->   Kernel panic - not syncing: Fatal exception
-> 
-> With HARDENED_USERCOPY enabled, the reproducer aborted the unpatched kernel
-> on its first packet.  With runtime usercopy checks disabled and KASAN left
-> in report mode, the same recvmsg() returned 59,964 control-message data
-> bytes sourced past a 704-byte skb head.  Beyond offset 1,024, 58,932 bytes
-> differed from the prefilled userspace marker, including 6,288 nonzero
-> bytes.  The patched build completed 2,000 packets under both configurations
-> without a forged SCM_TIMESTAMPING_OPT_STATS message or sanitizer report.
-> Networking selftests were not run.
-> 
-> Fixes: 4ef1b2869447 ("tcp: mark skbs with SCM_TIMESTAMPING_OPT_STATS")
-> Cc: stable@vger.kernel.org
-> Reported-by: <co+beaa1ed2d7aaec16@bugs.sh>
-> Signed-off-by: Weiming Shi <bestswngs@gmail.com>
-> 
-> ---
->  net/ipv4/ip_sockglue.c | 2 ++
->  net/ipv6/datagram.c    | 2 ++
->  2 files changed, 4 insertions(+)
-> 
-> diff --git a/net/ipv4/ip_sockglue.c b/net/ipv4/ip_sockglue.c
-> index a55ef327ec93..3ab84a4c31e5 100644
-> --- a/net/ipv4/ip_sockglue.c
-> +++ b/net/ipv4/ip_sockglue.c
-> @@ -429,6 +429,8 @@ void ip_icmp_error(struct sock *sk, struct sk_buff *skb, int err,
->  	serr->addr_offset = (u8 *)&(((struct iphdr *)(icmp_hdr(skb) + 1))->daddr) -
->  				   skb_network_header(skb);
->  	serr->port = port;
-> +	serr->opt_stats = 0;
-> +	serr->unused = 0;
->  
->  	if (skb_pull(skb, payload - skb->data)) {
->  		if (inet_test_bit(RECVERR_RFC4884, sk))
-> diff --git a/net/ipv6/datagram.c b/net/ipv6/datagram.c
-> index ca3605acb433..85f646f8d059 100644
-> --- a/net/ipv6/datagram.c
-> +++ b/net/ipv6/datagram.c
-> @@ -330,6 +330,8 @@ void ipv6_icmp_error(struct sock *sk, struct sk_buff *skb, int err,
->  	serr->addr_offset = (u8 *)&(((struct ipv6hdr *)(icmph + 1))->daddr) -
->  				  skb_network_header(skb);
->  	serr->port = port;
-> +	serr->opt_stats = 0;
-> +	serr->unused = 0;
->  
->  	__skb_pull(skb, payload - skb->data);
->  
-> -- 
-> 2.56.0
-> 
+From: Bo Cao <treebacker@foxmail.com>
 
-Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
+A push at msg->size ends the element walk on the ring's free slot, so
+the "no space, absorb by copy" fallback reads the free slot's length
+instead of the last live element's. Nothing is absorbed and the split
+path runs anyway: with the ring already holding MAX_MSG_FRAGS live
+elements it advances sg.end onto sg.start, all NR_MSG_FRAG_IDS slots
+become live, and the occupancy (the distance from sg.start to
+sg.end) reads 0 -- "empty". Every capacity check in push/pop is then
+bypassed and later transforms corrupt the element list.
+
+Without the fix, a single send() with an SK_MSG verdict program on a
+full ring deterministically crashes the SK_DROP teardown (arm64,
+7.4.0-rc2 + the bpf master sockmap series):
+
+  Unable to handle kernel NULL pointer dereference at virtual address 0000000000000008
+  ESR = 0x0000000096000004  FSC = 0x04: level 0 translation fault
+  Internal error: Oops: 0000000096000004 [#1]  SMP
+  CPU: 2 UID: 0 PID: 546 Comm: skmsg_panic Tainted: G        W           7.4.0-rc2 #1 PREEMPT(full)
+  pc : sk_msg_free_elem+0x90/0x148
+  lr : __sk_msg_free+0x8c/0x10c
+  x14: 4141414141414141
+  Call trace:
+   sk_msg_free_elem+0x90/0x148
+   __sk_msg_free+0x8c/0x10c
+   sk_msg_free+0x18/0x24
+   tcp_bpf_sendmsg+0x298/0xa54
+   inet_sendmsg+0x44/0x70
+   __sys_sendto+0x120/0x198
+
+put_page() on a zeroed scatterlist entry. With the fix the helper
+returns -ENOSPC, the message frees normally, and the crash is gone.
+
+Never read the free slot in the fallback: absorb into the last live
+element when the walk ended on it and the ring is full, or fail with
+-ENOSPC if there is nothing to absorb, so the guard slot is never
+consumed.
+
+The bug was found with LLM-assisted source auditing and verified end
+to end: it is reachable with CAP_BPF/CAP_NET_ADMIN and confirmed
+exploitable for local privilege escalation (details reported to the
+maintainers separately). Regression tested with
+tools/testing/selftests/bpf/test_sockmap.
+
+Tested on top of v7.4-rc2 plus the sockmap fix series currently in
+bpf/bpf.git master (b889ea1f6dbe..0048086bd361); neither that series
+nor the June sk_msg fixes (f3f34ca45b96 and friends) touch the ring
+capacity invariant, and the patch applies to mainline and bpf master
+alike.
+
+Fixes: 6fff607e2f14 ("bpf: sk_msg program helper bpf_msg_push_data")
+Signed-off-by: Bo Cao <treebacker@foxmail.com>
+---
+ net/core/filter.c | 25 +++++++++++++++++++++++--
+ 1 file changed, 23 insertions(+), 2 deletions(-)
+
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 1f81a3dd6a5c..371c090d7f8d 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -2892,8 +2892,29 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_msg *, msg, u32, start,
+ 	 * offset case because its the common case for inserting a
+ 	 * header.
+ 	 */
+-	if (!space || (space == 1 && start != offset))
+-		copy = msg->sg.data[i].length;
++	if (!space || (space == 1 && start != offset)) {
++		/* A push at msg->size leaves the walk on the ring's free
++		 * slot, which is not a live element: its length reads 0
++		 * (or stale data left by an earlier ring rotation), so
++		 * the copy fallback would absorb nothing and the split
++		 * path below would run. With the ring already full
++		 * (space == 0) that path advances sg.end onto sg.start,
++		 * leaving all NR_MSG_FRAG_IDS slots live -- the ring can
++		 * no longer tell "full" from "empty" and later
++		 * transforms corrupt state. Absorb into the last live
++		 * element instead, or fail if there is nothing to absorb.
++		 */
++		if (i == msg->sg.end) {
++			if (!space) {
++				sk_msg_iter_var_prev(i);
++				copy = msg->sg.data[i].length;
++				if (!copy)
++					return -ENOSPC;
++			}
++		} else {
++			copy = msg->sg.data[i].length;
++		}
++	}
+ 
+ 	if (unlikely(copy + len < copy))
+ 		return -EINVAL;
+-- 
+2.39.5 (Apple Git-154)
+
