@@ -1,67 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794499302;
-	b=cI8TdWvbCQl1jYf+rjzHVEEMN0F81HtVVzvuWj/WiqBYUMGHwhXCKaqhWV31ql7Toi4T
-	 KglPw4oC/eWM38IrQrGK6Ixpx/ovE8xZlE3DXo59x6pqbFyZzi55EeIYkWPpsV5H27dXe
-	 7cK/S3gC6diVt13wgFMkuoyLa4qQ2ZwQQbDiNd2io+WZK+Vkv+ORGMb2BQQIUudMN1BeG
-	 rSblrBdrgwDyRT6m02I7h+Ql0SivputkekhbMjsGI5kzQ9cp64OY0O2Qs1y+oQ9QlQ1gE
-	 JIeZDP45yf8IZQfyhlGgb3mthqVKZzwkLwiqCcSWZLVcictGed+Mmqtv98b6gRkm3ew==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794499302;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.56.28
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794499605;
+	b=AJn5gzQA7mEAHLWRQ7DYB7G+u8KZfTzu4VKgIW6l0rQ1dVTrC1CuPJ0ow+HAOF7EIp2n
+	 2bP6lLUeZBioOwoEtEDy3+gKMla9ur/mrQMpLhwtby2orvFC8cpmgaV1zG9K3fO2ad+GY
+	 xP6A97ZiwlwGYfCkhz9WvlmNv46jOoEj3MMuE0BCIN4COM/qwCSDDLHxX3NHE2Dn2ZjZc
+	 aA3ZTWAoDc/WRZZRQfJqGGBA0sxH3P8UKuZ+c7bdVcNcNSb9bGHNdfskOxe3Nnm83EA4E
+	 GpAa9z9kfQg7CaKXtnQp/5je8YCsEmNkzJv4b3x5XUpmxe37Rkh/cWfWjglsGqkLxyA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794499605;
 	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=kjiQ212yf1PFzgc0XMcYedCjf1x/Z7XdUe85fS5QUeM=;
-	b=DcsVPBDk8nYt+1dglhRruZgsDC3gffzeUJeUePx7mX2SiYXbgvl3/AOLiFJxRMbuCzz7
-	 PoYjuJIcDGwIUnDcuuWIsWOfI5OO65NiQmQXaGfdPvr+PbcnO7GzRakD1hyZdrK5S8plE
-	 PsUXMYgz5M1ZgVytGYgTYt+QnlZpKIO+hko+zXw/BihRGfzY6qZ0uu3ltEimBBVe5+Y1e
-	 ctJ6fvDEpql463eMfJRscZ1nuefJrFu8fWU6PdOHITsf8BNgQTz2+N2rXQW0kRCTZJQ54
-	 8g/U6SpkjI5Wy3e52lkwmM2rY7ToGmhLmqWcXFXRvyiX8bcjeTSZP4sfMsojuMLSrpA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=pass smtp.mailfrom=infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=JakJZCtG;
-	arc=none smtp.remote-ip=90.155.50.34
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	 Subject:Message-ID:References:Content-Type:Content-Disposition:
+	 In-Reply-To:X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
+	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
+	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
+	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
+	 X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=6MmXx0cIG1BO5Vq6gjwpdVoZ25cbH6TfLdbwi6a23iI=;
+	b=w4j4SnFw+xq8wyFD4pW7BqyHYMCCzioL02rkOI79VQ+i/5c1onLZZvA1qX4B1ybeAJPp
+	 X7hZ4QVrtiJpHkwdkWlGFsSnw5/y/PIdRDEZKWaV6R1lljmMFLuYLOUNUHd0A1OR0CHeB
+	 w+uzpEe1D2ADp7fkmDw+p/6qNWxMRfjh34YZ8xewhim37AOhUbfkn2RZGU10PJ/dRVm1B
+	 /jVp5AXhpiIwzI4P7DoGzXVw8GgRil6JH8W92ar4iW6v3uzRkVhV4vDR0kQdAUYbTzhUI
+	 8Ibqel0zvYUeseQZ/Ukve+wZaBe+jt1J0bZJ3eXgYL+dzruFoa0RhT8ULRUW/sAh6tw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=nvidia.com;
+	spf=fail smtp.mailfrom=nvidia.com;
+	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=Z7euJp4x;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.56.28
+Received: from BN1PR04CU002.outbound.protection.outlook.com (mail-eastus2azon11010028.outbound.protection.outlook.com [52.101.56.28])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55B1A606A327;
-	Thu, 12 Nov 2026 16:01:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 55B1A606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 472C3606A327;
+	Thu, 12 Nov 2026 16:06:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 472C3606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=JakJZCtG
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=kjiQ212yf1PFzgc0XMcYedCjf1x/Z7XdUe85fS5QUeM=; b=JakJZCtGHFNweWgQDckDwc0f5Z
-	gsEb4L65dV9gyPS6dxEOn6flj6hHJf0j9l0KfYyRTX3FB56NwnktQDJxy5EzK7QjlVIuYsB4voQdX
-	wf6IXeLZ+Y7Zmh2/hMxOkA9JHeunIixny+YI819lSOor57L6jqA6D4owpapY9dAqUw+66ZmJ8/mal
-	cE3oGap/WnkYIumfG6du72z4m3sc2fp0SgEeK+sIqNN2b0v3xSRGWEzKVgcGjixJ7fNXi6LhMYz3u
-	lf57jd1GfuVYO8KixWLbVQO659mxDvVJR0vWB6kj890Qwrf+pVEXfviobjk6mL1rg7r9Re9lyng9C
-	FEO6xd8g==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xRXF3-00000008iFE-0mpe;
-	Thu, 12 Nov 2026 16:01:37 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 30AD33005AF; Thu, 12 Nov 2026 17:01:36 +0100 (CET)
-Date: Thu, 12 Nov 2026 17:01:36 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Tao Cui <cui.tao@linux.dev>
-Cc: tj@kernel.org, void@manifault.com, arighi@nvidia.com,
+	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=Z7euJp4x
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=M814BBsy8lz5x9sOYsUIatxaZY9pDN4sscfVM/l19GTRlerq2vmENWxDGcXXnftwIf9FCPs3Zhl/SyE6iTBJ5mbxqx2qIyo2EKgviZiwVZvmTdMshKNLS/Kp3QKxSPYhybf1aMRzyxB5ncc+jP+u+Gv7uM7dQUtpp/jDurK9ihhyKywZIQiSr0RcNWbA2cH/JCmlSU/i6LjH8IPXNCojiP/Cqe5AWPWhYbAhG7wfCxcJrInfoTzVpCKQoDXOfza6qwcX8bg+H2boC6Rp8ovX1l73Jm9CzEH8W7xYJFm5SC8Oel028xndbpOXzHqfoPh9BghUXO4bnG4yUgyi3+ezpg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6MmXx0cIG1BO5Vq6gjwpdVoZ25cbH6TfLdbwi6a23iI=;
+ b=NUvKf8nSfqaQWFDATdrFiUFCXt35pyOxMqnUN0JgBcCRIxitveHnLyL+e5K2uqG8CthkB9K/6M9kKlvOL8xMpU29C2MoIdMh/4Sr5x4eHNfSAN+L62EyxuAPscj56XB+MFULvIMqkq8BlmO1DHvvTy5+EqdPr8vtsVWC5C08yoF6ZdVlYujlCXv0GzZ4RiFpPYX0KGZF05mLuRbwl0YpH0Zeetg3RjtpJ+vaVXwpcctiBXZBizORtEskfKQcYW8EaMB9fFEz9X9O44U3LZuKCghgdu+OHQu4K7p3UD/mp6FB94Ca50jaQxv+Cdg4w+7b0f+tnZz3UdsslrMLZAGNzw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6MmXx0cIG1BO5Vq6gjwpdVoZ25cbH6TfLdbwi6a23iI=;
+ b=Z7euJp4xwQPiVBIj0BWeuNsFYuNcFQwoZ/87y6pJNtDPcYfmaK1gENX0PZrwMwv9rRYfKywrTen6ZpjmKLNBDqCXJtnkG0Kz7WtfecC0eGE66hG768QHlUNglJbX36uomqtUpIQYwvHig2ayqqSRgiBFgKLmVcDPiVn+5km2ZXiORdnAYde3uB5kX4tRHxArxxnyX38dq+GHFQy45ZAnUVrYLB8d1wuBYy1dXvce1EyRBh35xLUGHGPZYod68mheZeeAU1ATfpJF1eBmlO3D9KFEGvrVbOPClrnUL4/qY/07oBBCTDkIYXLbBzvRYfcvILRoZGf+yoxVoDo5nbXciA==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BL1PR12MB5174.namprd12.prod.outlook.com (2603:10b6:208:31c::19)
+ by SN7PR12MB7450.namprd12.prod.outlook.com (2603:10b6:806:29a::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.10; Thu, 12 Nov
+ 2026 16:05:15 +0000
+Received: from BL1PR12MB5174.namprd12.prod.outlook.com
+ ([fe80::58de:822b:868:96e9]) by BL1PR12MB5174.namprd12.prod.outlook.com
+ ([fe80::58de:822b:868:96e9%6]) with mapi id 15.21.0615.008; Thu, 12 Nov 2026
+ 16:05:15 +0000
+Date: Thu, 12 Nov 2026 17:05:04 +0100
+From: Andrea Righi <arighi@nvidia.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Tao Cui <cui.tao@linux.dev>, tj@kernel.org, void@manifault.com,
 	changwoo@igalia.com, mingo@redhat.com, sched-ext@lists.linux.dev,
 	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
 	Tao Cui <cuitao@kylinos.cn>
 Subject: Re: [PATCH 2/2] sched_ext: Block a retained donor before PI deboost
  routes it back to sched_ext
-Message-ID: <20261112160136.GF1922751@noisy.programming.kicks-ass.net>
+Message-ID: <avXjsO_fLaUC_4mG@gpd4>
 References: <20261112144935.583937-1-cui.tao@linux.dev>
  <20261112144935.583937-3-cui.tao@linux.dev>
  <20261112152118.GD1813469@noisy.programming.kicks-ass.net>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261112152118.GD1813469@noisy.programming.kicks-ass.net>
+X-ClientProxiedBy: MI1P293CA0005.ITAP293.PROD.OUTLOOK.COM
+ (2603:10a6:290:2::12) To BL1PR12MB5174.namprd12.prod.outlook.com
+ (2603:10b6:208:31c::19)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -71,9 +100,59 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261112152118.GD1813469@noisy.programming.kicks-ass.net>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5174:EE_|SN7PR12MB7450:EE_
+X-MS-Office365-Filtering-Correlation-Id: 649d599f-7e3e-48af-c4f3-08df40d6bd34
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|366016|376014|1800799024|23010399003|10067099003|4143699003|11063799006|56012099006|261022115727099003|261026121527099003|261022075727099003|261026140227099003|261028144727099003|261022105027099003|261021121427099003|261021123027099003|261102123227099003|261009223027099003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	0YungozPP5xs1QOIi1DDvvUSr6wYmCSxZMIOL/azvspr8fs04h9+vugny1bM8OVL2DqTjp74c6ezDccFBIujFmftMVDRAI8UOZqzUoFCRBfcwueSv9v51J0bUDd3WUrbqoRgliYcTbrKQcak6cBp2pKwDJJpVTBAL6wYQU6s/O9gmgWKCFXucEjteq8LK3NHX6XO/49XcgwmOSg5HHlSk9v6Zahdf5TweSVKr5mS6RKzLj/WLomUEslxS3QGLojDGIcvHq6+gcH1VaB6n4aFupyHXk1JIQPGL8LeOAET3mrbyyCpv67LxzqY5HaxQTbOKfFZxJimmWWl/DBRw0ckrdl8p01Co9KXcC/ELfJp+QYiUJvjMHsAkAWeb8uvpF1Ox0ZuHMZV5YRXcpvjDGjNy9lWgXyXb2LyZN/3ZaThh/biRts4M0gxF4PfniXKuOIX7I8bsK6NO61yYEEyn3EbFGljKzZwDnODpwAwCTjevZp1i4AiFLHLZosg2ioaTz/+261GaTowcI/EahjAVAU8AifOK81Epk8Mk6ofgUAk77lCyQpjCiBHiUvJJTuVoHHXcB8lqZ4BZj9Kc5oWbSENyXn0k7uBQ3JE15+7iD+pa4vHscrYAwMMWMmJo9UcNBPaZRGA2G8QNOIBFJctiBJKVREKYYyGL0d3JWFaEPOmuaE=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5174.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(366016)(376014)(1800799024)(23010399003)(10067099003)(4143699003)(11063799006)(56012099006)(261022115727099003)(261026121527099003)(261022075727099003)(261026140227099003)(261028144727099003)(261022105027099003)(261021121427099003)(261021123027099003)(261102123227099003)(261009223027099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?k5/aTfSTDDWoQ2o8vpxEFZcjxKzh6oS+HmcjnBFd1hX0Grj2Fnnic1c0EAEn?=
+ =?us-ascii?Q?Xls1A0BYLA1G9DR/1smtuV8PG8NCpArPjiLK8r96iwJ2Xn6ak0iKVEqNlMhl?=
+ =?us-ascii?Q?NpZ8LZHyirdS18Gw/ra2/QLa1lvhV/B0f3nD3KXXQ63IvgeuxoBUSTXMpbhe?=
+ =?us-ascii?Q?JFb3Fh0NW6xI555rrnXiYB51xzntZnVMogaLGgO23GHfGnufxBMHAmlcsRjU?=
+ =?us-ascii?Q?QmpNe1Zbuf1G4BawC85I6x6xoKX9Yf3vXk1vvpV7qLjuzpO51feYUXqUX6HS?=
+ =?us-ascii?Q?OBk/xFzk20lm2lMKP0Q5p34KEAHz+m+NMjAWNY+z8qZWHN4au5rUIIhT7P6c?=
+ =?us-ascii?Q?d53CTz0SIws+ZKj6dmRpbSkVMcufmpUshgfZ7csOKJ2WHc2+FMFFSDdHHE++?=
+ =?us-ascii?Q?BtRfbBYebzeY3lC2lqidHAiU16N1tAG/fVhOZoDuI5SgpSI/pA1oYNqMytK/?=
+ =?us-ascii?Q?0UZecXezEZ9yLIF28F9Fmlt/ZWkvvdHUu+wNJJKUgJpyaXOvojRVPcHTOgTp?=
+ =?us-ascii?Q?NlsCVIj9JMDnVkZ033Qf/J96CXevqxwmcwRD8ZKSVh4Dpcsf8uYG1ityNu0x?=
+ =?us-ascii?Q?zjMZunUyJaETYIz5+uYUkOQ+9UdlYVJPECjA0loGCWyzLexyFqGQp/jvYREh?=
+ =?us-ascii?Q?cMqEbJMmvx1yACOaOeSm6Xp/JgEW7qYthyzEUKMOhG/SPbOiFTdT6ImQtiaC?=
+ =?us-ascii?Q?9Pk2P0XJEeWlMJRrXRLzM8DwTmphND2AdVY1llKRX6xjQYr/j9AI9iC/RJsn?=
+ =?us-ascii?Q?JT5z1cPJ7J+SPJzRPPMUtCaQ0C+WIntVPGsvA0736bVSffbljbKXTHXgKy2t?=
+ =?us-ascii?Q?P/yci6eqy2AcHcGC8XWf+/3BQ99WA427fy+aSoU5O+3N90pOVpGBHuZCv3o2?=
+ =?us-ascii?Q?Qdc4wh87SuC8u0D3uIAjU5EqMGyvxs6v2BGYvU4J1S3CrgFihyiUwj7sqnCY?=
+ =?us-ascii?Q?+P1g1TEOA33RSpX/lTDm6AZMHGT6toc14NhraiOJh3jpRiswiiQ64ZuBbjTL?=
+ =?us-ascii?Q?FF42ZcwA/Y71t7u55vMpdmpQjDOWTSOa2Khv3BVrLTkrp0ng4RGqgoB3mNfW?=
+ =?us-ascii?Q?QY5DbZrXpA1ICFhJzYZkoMxr6E2erp/cOUA2GnQpkK5T89JsiVGbw/9TD5Ms?=
+ =?us-ascii?Q?ZKjA1pijpeoS16GGfBbtK3GH3zBflAb5Uyc2aVTMLFBUmfa80Y0L82aPUsBn?=
+ =?us-ascii?Q?TBR+5AOOaOch2aJO90o2SpMfuqlQxgu1IVqJLZ4IgyY698WKiEX8vNZdlTUv?=
+ =?us-ascii?Q?NvWh7dCy7ZHadP7x2CR7o2WWovUrCQF4/TlbBZRJliTZmeuwYOZ42fA0RD9p?=
+ =?us-ascii?Q?TF+PkhGDRVTpQEJlRQSJnCVxu9elIRCoHdUxPyL/rGW2fZ8BoYbkUSLQXQ89?=
+ =?us-ascii?Q?kO9xwqB5XXMDLtG4+IGtVjnCcRwN2bLXkMZBp8MvbpjdJf8LWogwiY3U4FDg?=
+ =?us-ascii?Q?hh3EE95Zp4bEgHP3fkzkGWroEF2CyPpMiF5GOrKauhm3o8K3GiYlPhyZ+hms?=
+ =?us-ascii?Q?cvmmbr6LDNFNh+iq9BNlrMvytVVlRuuf4KHRFhdaQAPptnKvp1to2zUgrnfy?=
+ =?us-ascii?Q?WZhq3iK0gKUL1jqyDbb8AF2zV8GHGmzIVjbfqzg4mg630XPIDLQohQdX/1NF?=
+ =?us-ascii?Q?0MzqxEjwM2B2Vqa3GtKz7uPhbnNjDbZ26BG9+3iMgDp3KxVnpzS/hIWJ8ZPW?=
+ =?us-ascii?Q?neZUdS3Bm4qXHHTWxyjGQtXK/zKir0tV/9pLFw3/Xrwz6iiH?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 649d599f-7e3e-48af-c4f3-08df40d6bd34
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5174.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Nov 2026 16:05:15.3696
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ncP7E9LE0cE74hGmzPwD2vg6UInetUBmh+nkKAxE6MH5f16H3bqTfBxu+iarqzlmu3Hq0QL6SI8bqIHRYQFChw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7450
 
 On Thu, Nov 12, 2026 at 04:21:18PM +0100, Peter Zijlstra wrote:
 > On Thu, Nov 12, 2026 at 10:49:35PM +0800, Tao Cui wrote:
@@ -95,180 +174,92 @@ On Thu, Nov 12, 2026 at 04:21:18PM +0100, Peter Zijlstra wrote:
 > 
 > I can't understand this. And I take a very dim view of sprinking magic
 > hooks like this. So no.
+> 
+> The little I understand of things makes me think __setscheduler_class()
+> is buggy for EXT and *that* should be fixed.
 
-Ooh, is this the thing from here:
+Agreed on avoiding another special-case hook.
 
-  https://patch.msgid.link/20260924075925.GE4121620%40noisy.programming.kicks-ass.net
+To recap, we ran into this while developing the proxy-exec support for
+scx. Earlier versions were handling the PI deboost case too and we also
+explored passing next_class into sched_change_begin(). But that didn't
+make it into the final version and it was left as a future improvement,
+to keep things simpler.
 
-where you need to block a task because ext doesn't want to support
-proxy-exec?
+Regarding __setscheduler_class(), the task keeps its SCHED_EXT policy
+while PI moves it into RT/DL, so selecting EXT again after deboost seems
+expected. The problem is carrying the retained proxy state across that
+transition.
 
-Why can't anybody search email these days..
+Would it make sense to revisit the old idea passing next_class into
+sched_change_begin(), so we can handle entry into EXT consistently
+before recording the queued/running state and replace the separate
+class-entry preparation hooks?
 
-Something like so? Although I note the scx_block_proxy_donor() thing has
-gotten more complicated, so perhaps this needs a little more?
+And unlike the earlier version, we could restrict this to transitions
+into EXT, leaving retained proxy state across FAIR/RT/DL transitions
+untouched. An incoming-class preparation callback would let EXT enforce
+that requirement without an EXT-specific check in each caller.
 
-Andrea?
+That would address the transition handling generally, including PI
+deboost. Does it make sense?
 
----
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 1a088d4576f5..1c1e669473a6 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -11252,8 +11252,13 @@ void sched_change_end(struct sched_change_ctx *ctx)
- 	 */
- 	WARN_ON_ONCE(p->sched_class != ctx->class && !(ctx->flags & ENQUEUE_CLASS));
- 
--	if ((ctx->flags & ENQUEUE_CLASS) && p->sched_class->switching_to)
--		p->sched_class->switching_to(rq, p);
-+	if ((ctx->flags & ENQUEUE_CLASS) && p->sched_class->switching_to) {
-+		bool block = p->sched_class->switching_to(rq, p);
-+		if (block && p->is_blocked && ctx->queued) {
-+			block_task(rq, p, READ_ONCE(p->__state));
-+			ctx->queued = false;
-+		}
-+	}
- 
- 	if (ctx->queued)
- 		enqueue_task(rq, p, ctx->flags);
-diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
-index f74ffb3b1aca..4440e32236b3 100644
---- a/kernel/sched/ext/ext.c
-+++ b/kernel/sched/ext/ext.c
-@@ -46,21 +46,6 @@ bool __scx_allow_proxy_exec(const struct task_struct *p)
- 	return !sch || (sch->ops.flags & SCX_OPS_ENQ_BLOCKED);
- }
- 
--/*
-- * End retained proxy execution before changing @p's BPF scheduler ownership.
-- * Called with @p's pi and rq locks held immediately before
-- * sched_change_begin(). The caller must pass DEQUEUE_NOCLOCK so the rq clock
-- * is updated only once.
-- */
--void scx_prepare_task_sched_change(struct task_struct *p)
--{
--	lockdep_assert_held(&p->pi_lock);
--	lockdep_assert_rq_held(task_rq(p));
--
--	update_rq_clock(task_rq(p));
--	scx_block_proxy_donor(task_rq(p), p);
--}
--
- /*
-  * NOTE: sched_ext is in the process of growing multiple scheduler support and
-  * scx_root usage is in a transitional state. Naked dereferences are safe if the
-@@ -5004,12 +4989,12 @@ static void prio_changed_scx(struct rq *rq, struct task_struct *p, u64 oldprio)
- {
- }
- 
--static void switching_to_scx(struct rq *rq, struct task_struct *p)
-+static bool switching_to_scx(struct rq *rq, struct task_struct *p)
- {
- 	struct scx_sched *sch = scx_task_sched(p);
- 
- 	if (task_dead_and_done(p))
--		return;
-+		return false;
- 
- 	scx_enable_task(sch, p);
- 
-@@ -5020,6 +5005,8 @@ static void switching_to_scx(struct rq *rq, struct task_struct *p)
- 	 */
- 	if (!scx_is_cid_type() && SCX_HAS_OP(sch, set_cpumask))
- 		scx_call_op_set_cpumask(sch, rq, p, (struct cpumask *)p->cpus_ptr);
-+
-+	return !scx_allow_proxy_exec(p);
- }
- 
- static void switched_from_scx(struct rq *rq, struct task_struct *p)
-@@ -8947,10 +8934,8 @@ static void scx_root_enable_workfn(struct kthread_work *work)
- 
- 		if (old_class != new_class)
- 			queue_flags |= DEQUEUE_CLASS;
--		if (new_class == &ext_sched_class) {
--			scx_prepare_task_sched_change(p);
-+		if (new_class == &ext_sched_class)
- 			queue_flags |= DEQUEUE_NOCLOCK;
--		}
- 
- 		scoped_guard (sched_change, p, queue_flags) {
- 			scx_set_task_slice(p, READ_ONCE(sch->slice_dfl));
-diff --git a/kernel/sched/ext/internal.h b/kernel/sched/ext/internal.h
-index ff0a3d508533..961694e4c27c 100644
---- a/kernel/sched/ext/internal.h
-+++ b/kernel/sched/ext/internal.h
-@@ -2300,7 +2300,6 @@ struct task_struct *scx_task_iter_next_locked(struct scx_task_iter *iter);
- bool scx_set_task_slice(struct task_struct *p, u64 slice);
- void scx_task_slice_ended(struct rq *rq, struct task_struct *p);
- void scx_task_unlink_from_dsq(struct task_struct *p, struct scx_dispatch_q *dsq);
--void scx_prepare_task_sched_change(struct task_struct *p);
- void scx_dispatch_dequeue(struct rq *rq, struct task_struct *p);
- void scx_do_enqueue_task(struct rq *rq, struct task_struct *p, u64 enq_flags,
- 			 int sticky_cpu);
-diff --git a/kernel/sched/ext/sub.c b/kernel/sched/ext/sub.c
-index b5d92d89629b..e73f3474d685 100644
---- a/kernel/sched/ext/sub.c
-+++ b/kernel/sched/ext/sub.c
-@@ -1647,7 +1647,6 @@ static void scx_rehome_task(struct scx_sched *to, struct task_struct *p)
- 	lockdep_assert_held(&p->pi_lock);
- 	lockdep_assert_rq_held(task_rq(p));
- 
--	scx_prepare_task_sched_change(p);
- 	scoped_guard (sched_change, p,
- 		      DEQUEUE_SAVE | DEQUEUE_MOVE | DEQUEUE_NOCLOCK) {
- 		scx_disable_and_exit_task(scx_task_sched(p), p);
-@@ -1680,7 +1679,6 @@ static void scx_punt_task(struct scx_sched *to, struct task_struct *p)
- 	lockdep_assert_rq_held(task_rq(p));
- 	WARN_ON_ONCE(!READ_ONCE(to->bypass_depth));
- 
--	scx_prepare_task_sched_change(p);
- 	scoped_guard (sched_change, p,
- 		      DEQUEUE_SAVE | DEQUEUE_MOVE | DEQUEUE_NOCLOCK) {
- 		scx_disable_and_exit_task(scx_task_sched(p), p);
-@@ -2459,7 +2457,6 @@ void scx_sub_enable_workfn(struct kthread_work *work)
- 		if (!(p->scx.flags & SCX_TASK_SUB_INIT))
- 			continue;
- 
--		scx_prepare_task_sched_change(p);
- 		scoped_guard (sched_change, p,
- 			      DEQUEUE_SAVE | DEQUEUE_MOVE | DEQUEUE_NOCLOCK) {
- 			/*
-diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
-index e0c10a5dbda2..cda367bd92af 100644
---- a/kernel/sched/idle.c
-+++ b/kernel/sched/idle.c
-@@ -547,7 +547,7 @@ static void task_tick_idle(struct rq *rq, struct task_struct *curr, int queued)
- 	update_curr_idle(rq);
- }
- 
--static void switching_to_idle(struct rq *rq, struct task_struct *p)
-+static bool switching_to_idle(struct rq *rq, struct task_struct *p)
- {
- 	BUG();
- }
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 1d76950dbb0a..979c520034b1 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -2782,7 +2782,7 @@ struct sched_class {
- 	 */
- 	void (*switching_from)(struct rq *this_rq, struct task_struct *task);
- 	void (*switched_from) (struct rq *this_rq, struct task_struct *task);
--	void (*switching_to)  (struct rq *this_rq, struct task_struct *task);
-+	bool (*switching_to)  (struct rq *this_rq, struct task_struct *task);
- 	void (*switched_to)   (struct rq *this_rq, struct task_struct *task);
- 	u64  (*get_prio)     (struct rq *this_rq, struct task_struct *task);
- 	void (*prio_changed) (struct rq *this_rq, struct task_struct *task,
-diff --git a/kernel/sched/stop_task.c b/kernel/sched/stop_task.c
-index 1e0109ec36b3..b7541bb7b593 100644
---- a/kernel/sched/stop_task.c
-+++ b/kernel/sched/stop_task.c
-@@ -78,7 +78,7 @@ static void task_tick_stop(struct rq *rq, struct task_struct *curr, int queued)
- {
- }
- 
--static void switching_to_stop(struct rq *rq, struct task_struct *p)
-+static bool switching_to_stop(struct rq *rq, struct task_struct *p)
- {
- 	BUG(); /* its impossible to change to this class */
- }
+Thanks,
+-Andrea
+
+> 
+> > Fixes: be8be8acb268 ("sched_ext: Block proxy donors before taking control")
+> > Signed-off-by: Tao Cui <cuitao@kylinos.cn>
+> > ---
+> >  kernel/sched/core.c    | 12 ++++++++++++
+> >  kernel/sched/ext/ext.h |  2 ++
+> >  2 files changed, 14 insertions(+)
+> > 
+> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> > index f7a452123ef5..dcb16b006740 100644
+> > --- a/kernel/sched/core.c
+> > +++ b/kernel/sched/core.c
+> > @@ -7816,6 +7816,18 @@ void rt_mutex_setprio(struct task_struct *p, struct task_struct *pi_task)
+> >  	if (prev_class != next_class)
+> >  		queue_flag |= DEQUEUE_CLASS;
+> >  
+> > +	/*
+> > +	 * PI boost can route @p out of sched_ext: policy stays SCHED_EXT but
+> > +	 * __setscheduler_class() follows the effective rt prio, and rt/fair
+> > +	 * may have retained @p on the rq as a blocked donor. Block it before
+> > +	 * sched_change_begin() records the queued state, the same way the
+> > +	 * other entry points into sched_ext do.
+> > +	 */
+> > +#ifdef CONFIG_SCHED_CLASS_EXT
+> > +	if ((queue_flag & DEQUEUE_CLASS) && next_class == &ext_sched_class)
+> > +		scx_prepare_task_sched_change(p);
+> > +#endif
+> > +
+> >  	scoped_guard (sched_change, p, queue_flag) {
+> >  		/*
+> >  		 * Boosting condition are:
+> > diff --git a/kernel/sched/ext/ext.h b/kernel/sched/ext/ext.h
+> > index d32bc01071b0..1a699be25331 100644
+> > --- a/kernel/sched/ext/ext.h
+> > +++ b/kernel/sched/ext/ext.h
+> > @@ -19,6 +19,7 @@ void scx_rq_activate(struct rq *rq);
+> >  void scx_rq_deactivate(struct rq *rq);
+> >  int scx_check_setscheduler(struct task_struct *p, int policy);
+> >  void scx_prepare_setscheduler(struct task_struct *p, int policy);
+> > +void scx_prepare_task_sched_change(struct task_struct *p);
+> >  bool task_should_scx(int policy);
+> >  bool scx_allow_ttwu_queue(const struct task_struct *p);
+> >  bool __scx_allow_proxy_exec(const struct task_struct *p);
+> > @@ -72,6 +73,7 @@ static inline void scx_rq_activate(struct rq *rq) {}
+> >  static inline void scx_rq_deactivate(struct rq *rq) {}
+> >  static inline int scx_check_setscheduler(struct task_struct *p, int policy) { return 0; }
+> >  static inline void scx_prepare_setscheduler(struct task_struct *p, int policy) {}
+> > +static inline void scx_prepare_task_sched_change(struct task_struct *p) {}
+> >  static inline bool task_on_scx(const struct task_struct *p) { return false; }
+> >  static inline bool scx_allow_ttwu_queue(const struct task_struct *p) { return true; }
+> >  static inline bool scx_allow_proxy_exec(const struct task_struct *p) { return true; }
+> > -- 
+> > 2.53.0
+> > 
+> > base-commit: 5b740a72b55c4267ba4d8010f17dde26b26f52d3
+> 
