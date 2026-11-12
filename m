@@ -1,69 +1,97 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794501714;
-	b=KRcMPXAwzZ8Gn0Kyqzdsf8E5J7/I/hJGDb4kdfgGgE4J/WyVSSwY3i5TpEIQuTxlMvJQ
-	 oMr3taEJ7DLAq/HeQW6EW0B8uzEUxuF+L9xGG9MYBoH4dmcQ/9mNlCMtgAxO29kbQd1sv
-	 Qxhtfepc4P4FVzgk6qmcr6mpb9LFVKUsKDEV7F7qDajwsuVNrBEURpWztLOSJxGW++44Q
-	 EABnSxk1kjTlN00zFakCvlXE1GIK4djB6wWaCD9wpZG2QGp0uzZG+OkU65VCT5K+qM1Si
-	 HlYUhwjP0ecTfEHgvgiDsJ1yqO8/KrDf/si6sGJgFVtUYIIbGcr0Beu1PQh6gqLKN9w==
+	t=1794501981;
+	b=plxla47YVaEHoUGD60FMVpRfGwov7gFGDeIxzmVkilDS10tx5PO3R1MCaAku6sV/1ikQ
+	 Y1Xu7CaWGm7wliZrs6+mLgdPzeQ6N60zeU377P6AeKpOWrDoyPIHPM0nCUgoDSFviYdCt
+	 atbkfTUFwl5qz3ueut/zi0s6tWh40jFhY749Ufe+StCub+o8uQlZfgaaTbv2Ed/nFINtn
+	 +lUhMPA57xKuPV2m187U5E066CSBQu1gma6USFBTajZ15Gkp6KfDL2GtdwpFQRo3Muile
+	 ZIA2yiQRCSrwDQFNkgW4Fh4u50kpyxxXwPAPsvRNbzRrmSe/55MAGsPE+XygKurmuzg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794501714;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=FmGT6juCirIZiH3gAOJXo+P6a62HxlEOwgb0n9iNzwg=;
-	b=j0o89qJdDkDkbkvNAQp3g0Q1yW/S+Kkp6wXb3VaH2wFECi1Mc8Kw14e+fRHJrkXGpsS6
-	 OHpZ0+JMWHW9LqSwkPubk7IUOVvMia+rHjLaayipRSqcEnaz+N5UBCPSSdXCj+aw7MeUD
-	 8yAfcfd3VVdLB1IznHHekb/8kKTIgO/IDy3o0kGxTKuOHoBL4UdyTnWurVMg03M1t+MVJ
-	 t3I3wv2QciyWn/Nj+WqLwmRC557nz9vZKiAIArxKvD6jW0EnL49iahz2w7iYMIwCusj3i
-	 gOPZf1yxTXQrmtsGeX/lS85HLRx6w8mEnLtZ7WZF0lj5dbDOtD5p6w/4at7iOzMdXzw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794501981;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=e+fa4dlOSY8wpg+UjX2P2/CLIEQS7LnbqFRFKW2XN9g=;
+	b=zd62U5hnagOTVRETp597lqZkJ+W9t0A2BejfRieHwMfXlfR30x1sUgKpG/W0I/RiD8O/
+	 SK9jsRxlzE4Ab8nhV/YnPFQO7ZzNLx3YCjKW9jPOLK54foQP55xlTDiUXtWvSP+fd8vsH
+	 pjdivZGIwEZUtv//9Lv1SaFZLB7ez5MpgVCStUgmU68O0CwQllzwDfdcTtcbvy0tmwDAr
+	 WwNUA7XL/81IIhIWo2t9h2MqaFyOXzaQjcEJv3fkBCQuv0ERxqQI3QAFs8/9PBAI+bvfC
+	 p2bkGofnuKYnkVfNWSjPiWgvU1le1+dSc60U8vrtw/4OoIy7TD2j2V+e6QwT5deC1vg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=pass smtp.mailfrom=infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=Is+VHQ0i;
-	arc=none smtp.remote-ip=90.155.92.199
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="KTVVrB/U";
+	arc=none smtp.remote-ip=209.85.216.46
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9784606A331;
-	Thu, 12 Nov 2026 16:41:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B9784606A331
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27030606A335
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 16:46:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 27030606A335
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=Is+VHQ0i
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=FmGT6juCirIZiH3gAOJXo+P6a62HxlEOwgb0n9iNzwg=; b=Is+VHQ0i7LL6eE3D80U1yf25vr
-	7QJxVPIQpiQuajhj4JxYqPUpz7XW2Jng5ALd/U4BStRCiKgtcajq79BXqWmkDopJpoDmyy9kADkJC
-	5ZCp7NKKW5ynx+QNFPFPTlomYQIraZ2A28GTWuE/pxHj7dLH9WZHBVH5xkRJouDw71DN95IlIaFFf
-	ekR5cpSA2T8ZGLDm4iQN7pBw1opyB4n5Tb3VeBkoNkmw0OdVWZVPj/M2vxI7QrgwLtyASFtIUM4LK
-	bRNdsetgKbjLZ7bhwRORMjGPtWOwSVn7KjBtMVFrA6Y6px7cJd8ncJGkGbw8IMKqQZK7DYIBSMoZT
-	dcEe7jzA==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xRXry-0000000AZNp-3JMZ;
-	Thu, 12 Nov 2026 16:41:50 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id A51033005AF; Thu, 12 Nov 2026 17:41:49 +0100 (CET)
-Date: Thu, 12 Nov 2026 17:41:49 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Andrea Righi <arighi@nvidia.com>
-Cc: Tao Cui <cui.tao@linux.dev>, tj@kernel.org, void@manifault.com,
-	changwoo@igalia.com, mingo@redhat.com, sched-ext@lists.linux.dev,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	Tao Cui <cuitao@kylinos.cn>
-Subject: Re: [PATCH 2/2] sched_ext: Block a retained donor before PI deboost
- routes it back to sched_ext
-Message-ID: <20261112164149.GE1813469@noisy.programming.kicks-ass.net>
-References: <20261112144935.583937-1-cui.tao@linux.dev>
- <20261112144935.583937-3-cui.tao@linux.dev>
- <20261112152118.GD1813469@noisy.programming.kicks-ass.net>
- <20261112160136.GF1922751@noisy.programming.kicks-ass.net>
- <avXqKIZ1ZkaH2WTh@gpd4>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KTVVrB/U
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3ac9f49b984so733355a91.1
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 08:46:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794501980; x=1795106780; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=e+fa4dlOSY8wpg+UjX2P2/CLIEQS7LnbqFRFKW2XN9g=;
+        b=KTVVrB/UXs/Ge2uSWM0VSRvEcTWyBjMvVEz33gVRCCUjNBC+dLK59GL54EkDGS5Idc
+         ZvJ8sSzfoL/nBqUA8D9tExv8PA/oo5EyuSOdRYtb7wuBCajC6W11dUjPzty8A4Offy1+
+         9emOUyG+tmxyksZot2k/Gk6GipDq7H1IZxabGxNrBQ/41Zv2dq6zxP6Z9rrX6UuxGwTE
+         U8NSI+i5CQJRb3dAJ9MeMUhydXv5Y2OMWTaRg+AvQClZgK11KpQmwV8SV0HxKWmsdipD
+         j8Ab8R5Ip+sh2WPd1cwCJzMZxq5C5Gd1+mLKPvkxbLpv48AmUD6wD33PjzcmDKYzO3JE
+         Cb1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794501980; x=1795106780;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=e+fa4dlOSY8wpg+UjX2P2/CLIEQS7LnbqFRFKW2XN9g=;
+        b=k3AUbYzo9JgKoIQVcIEOLC+xeBqR+lQ9BNtNsiCCQ85wm0mMBiAyjIU+oc2ruMsC/P
+         Q9SATvoXqcIVErfl8JH5M09DvGSlci7L7aoTKBsqtpYTqEzWpwTkow0frzgEYVygY/ie
+         m9dzpR4/x6pEnYLI0lvHJIVyqT6gyZPCMUFP2lKWI87JWv62kUwcOfvGPab7VflcGw3m
+         qWN01mBN8bC5Xj5Ebv4TBkHj4Blt5RIEVwCF9VMc6CXkRkaN4nHIkDxpKtznssXUUsH/
+         rUwV5aKy4Aj2Md+4ITp/9DM120W6qdxfzFsxA77GUT2IQqVkptwtPa1VaGUbhuB1hxd+
+         XLbw==
+X-Gm-Message-State: APuU4Z8ipAr7V9biHaOnKhjd6AEycEmcBehx2P0ebVZxQVDweDHkGiXy
+	SXQKR4qI00Ny0EbiCUrwvRH+UPpujWX/qNjrl2pOskqPLXMvXJ/os5D1V9P9Rw==
+X-Gm-Gg: AYBFou09q+MmRal8DGnFc2wpRDuc8XlJ0nPE8f8WzTIFkELVI5RR+aCkAw4sjMtI/xT
+	2OKsJ4bYtoxYy5DxJn8erefFuhQy9PLHlf50LAXAQZ7GJGzV/Whu48HuRJdRMOec9vzE/Uq4YbS
+	6fTODnsIwjMkf10wx5gG0+nwu7KsLqTQRtLf+XYMbw5ubciGd4AMylOZ8D6TqdbQVDBIoaicr9h
+	FHFOUfpoTZXgOSe9Jxfvbwnli1kC85kjdHvaKU2k4oyDVpT2CezChoFLhdwWSHB2sJHjGeT+De8
+	GQ72/wX/56WEOV+1oLdTT+YuMTsv0elb1OGl4K+yjB3C/C+8ptTb1ScLl80XZD+O7Hc2ne6OunV
+	ldCiMyH7sRcZKW2uXTjdTt0hr1L76JCRsy3KMSjPfsr6Do3uHdT4tRYtYOgBAjchPr/taDjhwgR
+	FoKMSCShbHw/Et21LkeoYetsuT5kQt/M6oPB6IRmk6BDkXtk4n8P6PkMD5L8l6QeXeyUh+5JhVp
+	0LRQ+TbLAfuSMoDJzi2qB+AJLBZjxUWxOYWXLAdvlxDou1HDzDo/0ZiJIwB6PZy+iA6UfcBtjB5
+	6S4N96jpGIxyUZ+1tjQaal+1wui09LTKMjVVZbtbPi7cXdt3W8ZiQmbBMyh8n1A3A4wSdvAVjHL
+	/UnjafWvbvtYRQeO9rSgAqFh8khY0SC+7/W+pNK8dQ/Ak1JPCFQ+cslTubRk+lEAgJzS+MwABZ6
+	o=
+X-Received: by 2002:a17:90b:4ac3:b0:3ac:7b9e:a545 with SMTP id 98e67ed59e1d1-3b197c8ab1amr2431014a91.3.1794501980306;
+        Thu, 12 Nov 2026 08:46:20 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.247])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2edb6d4bf02sm37964605ad.25.2026.11.12.08.46.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Nov 2026 08:46:19 -0800 (PST)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	a.s.protopopov@gmail.com
+Subject: [PATCH bpf-next 01/10] selftests/bpf: Don't depend on the width of a BTF id in verifier_live_stack
+Date: Thu, 12 Nov 2026 16:46:01 +0000
+Message-ID: <20261112164610.1917256-2-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261112164610.1917256-1-alexei.starovoitov@gmail.com>
+References: <20261112164610.1917256-1-alexei.starovoitov@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -73,100 +101,51 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <avXqKIZ1ZkaH2WTh@gpd4>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Nov 12, 2026 at 05:32:40PM +0100, Andrea Righi wrote:
+From: Alexei Starovoitov <ast@kernel.org>
 
-> > 
-> > ---
-> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> > index 1a088d4576f5..1c1e669473a6 100644
-> > --- a/kernel/sched/core.c
-> > +++ b/kernel/sched/core.c
-> > @@ -11252,8 +11252,13 @@ void sched_change_end(struct sched_change_ctx *ctx)
-> >  	 */
-> >  	WARN_ON_ONCE(p->sched_class != ctx->class && !(ctx->flags & ENQUEUE_CLASS));
-> >  
-> > -	if ((ctx->flags & ENQUEUE_CLASS) && p->sched_class->switching_to)
-> > -		p->sched_class->switching_to(rq, p);
-> > +	if ((ctx->flags & ENQUEUE_CLASS) && p->sched_class->switching_to) {
-> > +		bool block = p->sched_class->switching_to(rq, p);
-> > +		if (block && p->is_blocked && ctx->queued) {
-> > +			block_task(rq, p, READ_ONCE(p->__state));
-> > +			ctx->queued = false;
-> > +		}
-> 
-> So at this point sched_change_begin() has already dequeued p from the
-> old class, but p hasn't been enqueued in the new class yet, block_task()
-> would dequeue it again, through the new class, and repeat the generic
-> dequeue accounting. I think we should complete the block without another
-> dequeue here.
-> 
-> Also, if p is rq->donor, clearing ctx->queued isn't enough: we need to
-> reset the donor and clear ctx->running, otherwise sched_change_end()
-> would call set_next_task(rq, p) for the task we just blocked.
+kfunc_iter_stack_liveness matches a line of the verifier log:
 
-Right, I figured there was something missing. Can you take this patch
-and make it work?; you are more proficient with running this ext stuff
-than me.
+	 6: (85) call bpf_iter_num_new#95448          ; def: fp0-24 ..
+	" 6: (85) call bpf_iter_num_new{{.*}}          ; def: fp0-24 .."
 
-> > +	}
-> >  
-> >  	if (ctx->queued)
-> >  		enqueue_task(rq, p, ctx->flags);
-> > diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
-> > index f74ffb3b1aca..4440e32236b3 100644
-> > --- a/kernel/sched/ext/ext.c
-> > +++ b/kernel/sched/ext/ext.c
+The pattern has "{{.*}}" for the id and then ten spaces. The verifier
+pads the insn to a fixed column. An id of six digits leaves nine spaces,
+and the test fails.
 
-> > @@ -8947,10 +8934,8 @@ static void scx_root_enable_workfn(struct kthread_work *work)
-> >  
-> >  		if (old_class != new_class)
-> >  			queue_flags |= DEQUEUE_CLASS;
-> > -		if (new_class == &ext_sched_class) {
-> > -			scx_prepare_task_sched_change(p);
-> > +		if (new_class == &ext_sched_class)
-> >  			queue_flags |= DEQUEUE_NOCLOCK;
-> > -		}
-> 
-> scx_prepare_task_sched_change() also calls update_rq_clock(). With
-> that call removed, keeping DEQUEUE_NOCLOCK makes sched_change_begin()
-> skip the clock update even though we haven't done it here.
-> 
-> Maybe we should drop this flag too and let sched_change_begin() update
-> the clock.
+resolve_btfids sorts BTF by name. The next patches add about 12000 decl
+tags to vmlinux. Their names start with "bpf_fmodret_retval:", so all of
+them come before "bpf_iter_num_new":
 
-Sure.
+	                      id of bpf_iter_num_new
+	before this series      95448
+	after this series      107433
 
-> > diff --git a/kernel/sched/ext/sub.c b/kernel/sched/ext/sub.c
-> > index b5d92d89629b..e73f3474d685 100644
-> > --- a/kernel/sched/ext/sub.c
-> > +++ b/kernel/sched/ext/sub.c
-> > @@ -1647,7 +1647,6 @@ static void scx_rehome_task(struct scx_sched *to, struct task_struct *p)
-> >  	lockdep_assert_held(&p->pi_lock);
-> >  	lockdep_assert_rq_held(task_rq(p));
-> >  
-> > -	scx_prepare_task_sched_change(p);
-> >  	scoped_guard (sched_change, p,
-> >  		      DEQUEUE_SAVE | DEQUEUE_MOVE | DEQUEUE_NOCLOCK) {
-> 
-> With sub-schedulers these paths can move a task between BPF schedulers
-> without changing p->sched_class, so switching_to() won't run. We still
-> need to end the old proxy session before changing ownership, even if the
-> new BPF scheduler also supports proxy-exec.
-> 
-> Can we keep scx_prepare_task_sched_change() for these ownership changes
-> and use switching_to() for the actual class transitions?
+Let "{{.*}}" match the spaces too, as other tests in this file do.
 
-ARGH, are you *sure* you want to support crazy like that? Just have the
-thing mandate consistent proxy support.
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+---
+ tools/testing/selftests/bpf/progs/verifier_live_stack.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Enforce the primary scheduler's take when loading sub-schedulers. If it
-does support proxy, dis-allow loading sub scheds that don't and
-vice-versa.
+diff --git a/tools/testing/selftests/bpf/progs/verifier_live_stack.c b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
+index d6a6420d219d..741260a1e834 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_live_stack.c
++++ b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
+@@ -979,9 +979,9 @@ void __kfunc_btf_root(void)
+  */
+ SEC("socket")
+ __success __log_level(2)
+-__msg(" 6: (85) call bpf_iter_num_new{{.*}}          ; def: fp0-24 may_def: fp0-24{{$}}")
+-__msg(" 9: (85) call bpf_iter_num_next{{.*}}         ; use: fp0-24 may_def: fp0-24{{$}}")
+-__msg("14: (85) call bpf_iter_num_destroy{{.*}}      ; use: fp0-24 may_def: fp0-24{{$}}")
++__msg(" 6: (85) call bpf_iter_num_new{{.*}}; def: fp0-24 may_def: fp0-24{{$}}")
++__msg(" 9: (85) call bpf_iter_num_next{{.*}}; use: fp0-24 may_def: fp0-24{{$}}")
++__msg("14: (85) call bpf_iter_num_destroy{{.*}}; use: fp0-24 may_def: fp0-24{{$}}")
+ __naked void kfunc_iter_stack_liveness(void)
+ {
+ 	asm volatile (
+-- 
+2.55.0
 
-Alternatively, make the support the logical and of all sub-scheduler
-support. Ergo if one sub sched doesn't want to support proxy, nobody
-gets it.
