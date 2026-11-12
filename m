@@ -1,112 +1,97 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.219.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794516072;
-	b=ssRyFKQuEtKn1NgsO48PxNZ0K9uLJymcatUg/IaWTTZT7d3zlNIk/BElNlrHABJac7Gk
-	 DGmiwNkucY8s3HJOPGib4Ni2vU8qONh0qLqxO0QdmaIilbT+m5HLqMRKSth3LRx+ncbsS
-	 gos2G7djjSiSPxItlkbJYcf4lt6yAZ/YiQOhjjeXf1lE1BCSI2OBSPUieSKtwZJO65Jet
-	 g7rme8Nu51Af3+RcB70r4/tHtS8wwvqDSO1wxz32CyeSu52hnedJ0mx3jMADr+zXi5L5x
-	 IxBXuM/Ad5CmReEBftOmMGiI7mLJI44HrKJjeADP8KHuE1eWVUNSYSO9XEPMqpnW2AQ==
+	t=1794516400;
+	b=CcYsV4tm2p6Nifp2vaHbNQB3Ito1wJG43K9C1W1jldtq+ewUF7IlTl1szSgQ4vEG5CZ8
+	 frexTnsxgc8RLoaYnKzvjlenM/GZ3Oq3DFTCIR6CsQZO4VZQZApjUPsckmVJ60IlCSaRz
+	 hCVLmn9RTkYeIaynip9iUtZQ/RG1GpMqAiaK5mg2/hJbrXiNuMGOL6WbRrh5iDZ4C84/T
+	 u/9MyqSIIP+Ec4p/HOYaNr757uKFZMd4/R78qbv03zd0fFeN4xG+GXMaXovlbpT7csBwP
+	 Bodg5Jw7CBYspyJ5JklM6FV1zda9ISjQYmvohAo484EscqVz4zdDdH5PJAq1yS6YWlQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794516072;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794516400;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=xXKJrbALur9qe5R1OS4jb0FmQE/KqmF7j3A3hmQEcbY=;
-	b=pcFtfFfpbdtJHWYjLoCJ9D57EQ1HQ7mhh6eI0bq3dlq3sfg/wZl3WhVXRg1hSNDOmZKj
-	 AfIKVPi1Y6HcU1W5dEc4bnwAQcYymZWrGCmaanWUmL/vyfkXzxH6T1JvgD4ltdMj/c9eq
-	 QtkoO09JoYAWGhSeERv77dKTZnfISbX1KbuH6YtOy5B3PCqHcu2rnp1MQSaoZ8damfPpP
-	 PZmiXmKpO1RB7509srj7vBrWkDPBXv0ZsHwYfKn7ky2Bq1rzzvUhprjqMe71szXughByc
-	 2NVXg6uxxlmRClJdrQCchPqikEImo1lF0xPMURyNVDS7Xictx7oRMQo+tTqp+H0jKbw==
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=hz5GQHqAenEtUeQQFEsz4kxYnKJ4ExEV68tpoBxSRrI=;
+	b=4zwp4rM81lFXiC6GYnac/+4fWC3fv+soKNRpXY3z/MFM7CDupkQqRm0Oan1W1S3Fmcni
+	 AA3yABwgG+nOM8ycMkqn3dzZ6g6C2r5G4bsSfhqczoWLbLG6p628nduZIHEgEBivVqnhJ
+	 TlkHGhw4CvBv2ALMHRMeyhU/VY3zX4wgK4Z8yvtQuLO4fsilAISDxWbxh3YK3K/bUSVuj
+	 rgQSUIDiIxA/eK9jgArMbQrxZ0eElJ5T82AYwHW13tYc3q+Z6iFq9ZFjiw+G+QooZ5uVR
+	 A+EevIjN41moYEsGmSxQL8LXZterBqitHdAwMdGzx4CbPhdl55kUn+y3PMdoohB97Bg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=mojatatu.com;
-	spf=none smtp.mailfrom=mojatatu.com;
-	dkim=pass header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=oq6IFftj;
-	arc=none smtp.remote-ip=209.85.219.45
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mFRzgcm9;
+	arc=none smtp.remote-ip=209.85.215.179
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24333606A327
-	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 20:41:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 24333606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B838C606A323
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 20:46:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B838C606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=oq6IFftj
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-91ecd81cd67so3262056d6.2
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 12:41:11 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mFRzgcm9
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-cc147d86bebso134671a12.0
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 12:46:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1794516071; x=1795120871; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=xXKJrbALur9qe5R1OS4jb0FmQE/KqmF7j3A3hmQEcbY=;
-        b=oq6IFftjyrFUryFH45jbu50E1yaW9IoYXs4KxMPfykjuuxi2t5A0nX7Vx2jL5itsC3
-         sXgMemAuKhbSOPFcZ3RVAC7kZ0YHy1r9r5DLs7SyBxBTuwg28OOwDBaQNGU8CsJa/4y2
-         gXah5wBuAisxvrKdRzgNznqtRWBlHauCNwPIA=
+        d=gmail.com; s=20260707; t=1794516399; x=1795121199; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=hz5GQHqAenEtUeQQFEsz4kxYnKJ4ExEV68tpoBxSRrI=;
+        b=mFRzgcm9gmxgGhSCXeOWWlMZxh6O/oOrWZWbR1v+FQMQKnRRf1UHRUyyi0iTJgwD2w
+         YcW5jNL9bQLiND4CesLayd/jcdXBv/bzM2Qsh+mYd1T9p3ofQLgd+2l7TjVRuUmSmw+/
+         ISf2z21yExELgwU2cOW7LAlXjDBMA7+Kp8i2LhmwzHZs2FcleOz4G0XPUycErEwreF7s
+         TYcm9cYzhHzNI40XnUBoK1u0xgq1jU6RabxjObVFROzWGpVOmZleytrXwNzqLZGs6KQM
+         NlknNzW+At0SLkdEX0qvlBbELp5LtnoOTpD4nUeaMfpTQvtbjpgwcc3i/ChWejExIIHO
+         tF2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794516071; x=1795120871;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=xXKJrbALur9qe5R1OS4jb0FmQE/KqmF7j3A3hmQEcbY=;
-        b=eVoJlJ+J9HnUKFnt4Km31HWC2whTp+okOuLOuD8Ym2GAQEx6Xn6UQmyI5p/RzWM2V4
-         80QoI+IcNR/M+b0JHLpnBcwNGQiafkiJPUWOexPFc0+rEC/bq5Ox4/Z6WgCImN1nVNgX
-         ZOWiHTzKZDvzy88B8MzuYzOPhOo4GZ8/VqO/lnrdlA59fVA0ykvVrTH4szZSsDnPz3Of
-         lapHkCh9QPS14pAJlv8VjB0Bv7ewW9k1GqZWA/c7HObpmLWDdtxvmt9MNHlSJSn5ZBVY
-         3XLj2uzu3ArB8bdMeOeDYrPfqMZ8yyQBduybJ7YXkzgQc0REs6rIybd960YikMuHZK6p
-         JXHA==
-X-Forwarded-Encrypted: i=1; AL+hErETJgbaGJmeCo+kqIM3+5una2PKu/3xarEs5IKUeDAR6vt7D4wDZ4oycxq+6TJZb/fxde8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9k/Ym/WlyMfJTklkMe93uepe/Ukn9BEPx9N9SrHWkhE68JYnOb
-	qkgwwkb7tKVWeI5qWy+ApFMN0w+rhBYhGj4KmRkpOlmIefmS5lx7ys10K6tuoUc+qw==
-X-Gm-Gg: AYBFou18s841EUDAEOEdrDpEDL3AnSh+yBJhJuNtC4gQvDQnL5PTdi7QO1fYSff+q+8
-	el1Fq6UeGLcp0GLk/z1ktc9ilNUrUFuvp00PjhQyc9J51r2nvIsOj5JhJYQMH1UZpCJJ8zvnrHA
-	hsxJRKjHqPxkT60UhSuM7XEcbHrFBxeQWpuu4KMuUrKi2vvklUUwTilWYK8Oxzj+uGyNUgqBxN3
-	DUKiJHk7PbYo9uWUGIWJrxCozGUf5lO8Lt/nK9nJ3Rux68F4aEAwOnsk+N36FKuPOlqitHT4T6S
-	uGapkc70lCnGc7A+tir7TlJ9hnH95uaQmYvPR3Thzfer1FJOW6C/3j/g5GdChU/saYizsObL4wX
-	8SNHVUjHywgNYQdMXDmM8heGFTQgZlnSkc+gdrjIr+sJueNxJIFtRZA/i60YoyfocDUiYPuHflp
-	eekQxj4bt0NS21IWMMBoNpURoyBxVE9e+gqJP4kVkZD3tpn8MsFKfJvWQBubGhnyh/8f2kZVWEm
-	/0QVQH1Aw4uCrCWRpITnbAYTd6xP7B2JztwsGLdlJ7q6A2ALCLkeqTlA888paY/srhG2XbjwZnl
-	lPeQZCyg/zU/js8jD6UZuEITJFnERrUpNn1384N+wRsE+2q0XfZM1yXNJP3FzTC34ARAqmnwrIX
-	+o3iHBTLuMJ+7ydsbrhXY
-X-Received: by 2002:ad4:5764:0:b0:91e:93df:7968 with SMTP id 6a1803df08f44-91f2427df7dmr8048966d6.58.1794516065405;
-        Thu, 12 Nov 2026 12:41:05 -0800 (PST)
-Received: from mbili.waya ([64.203.83.2])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91f23d61888sm4452116d6.20.2026.11.12.12.41.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2026 12:41:04 -0800 (PST)
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-To: netdev@vger.kernel.org
-Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	bpf@vger.kernel.org,
-	Jiri Pirko <jiri@resnulli.us>,
-	Victor Nogueira <victor@mojatatu.com>,
-	Sashiko <sashiko-bot@kernel.org>
-Subject: [PATCH net-next v2 4/4] bpf: drop the stale dst when redirecting to an explicit nexthop
-Date: Thu, 12 Nov 2026 15:40:49 -0500
-Message-Id: <CORE-9NOG.v2.r0.20261112151659-4@mojatatu.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <CORE-9NOG.v2.r0.20261112151659@mojatatu.com>
-References: <CORE-9NOG.v2.r0.20261112151659@mojatatu.com>
+        d=1e100.net; s=20260707; t=1794516399; x=1795121199;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=hz5GQHqAenEtUeQQFEsz4kxYnKJ4ExEV68tpoBxSRrI=;
+        b=bZahM8ZhFJdhKM9Ufutfm7PM+kwuqDmcdUDldfRGz3N2RCU/Zeqxh8SgJP4aEZVOhs
+         703oug1ZvNs9t5/dEh1RkAyXXfL0B+GmJWy0P50hAOjrTJsslE1tVScpTWnfZYSUfNn1
+         G/WM5d2KIB50VeQ9pxKNSmW8XFNpI9fz5ODsUF5wz3WY+sxEusr8iUduEEBzChOGZq+x
+         GXh31ttI1R49m0d0al7bfy0Mpdfqnr+gyBbqDA5r+eACNI3jhzkLKlPTOQDZn49gxE6D
+         qCvNBZaNIk1JG1xP7ts4fPoS41/3+BSsPITprTGeq+Paq4rzUV5i9C/i3lfaaIFBiQNX
+         hI3w==
+X-Forwarded-Encrypted: i=1; AL+hErEY9kt9gt7Io7AAIEf4zpfM9QH0SSYz4QOUWxONL71ndzyyS9mGhGUYA8X/I5g87WUMCYg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/T8kc1zM3ypzyZWth2Jnzkp22HGbruQ8oYOXK+yZmmD7FEXZvq
+	vLZMIexhrDRaMS3+ehBqAu+fwQixR8R3QsgumNGtjIPAdNnzOxgmzlZ5
+X-Gm-Gg: AYBFou00ImD/a08ZintXqNh957Dvco3pfRBzdX8tD1d9PGwG88ZcdJQ/SXFurBFLZB8
+	H6dj3I4D7LowRUS3RbTvdXR1ogEUT463v6sPxA6JrGqMAiMzY0nGw2l6tQgkDV1tkHyMQsb0NEB
+	v5UZZ5WC1/V+MGORilSONip5rPg8r93WlSAKE1SMky9Danooios7RQR9xODG3pAUE11XpUDWq+S
+	dntkC/syySQsdlb9oUBc48W/K5wpBsTlnr6aX2ycMVgdtlyhm8WaItIAIiojtu/nRYyrnOYTkhT
+	5OTVT0DeWelM2ixi5Q+hN9z69WeiLvGLxBQauh5UyJZd2qEa52G1ACvjKo4fjsLxIf8Bs48q0tD
+	Wig9XIUTwnqF9HAzgMmLg6XCl1hTKG8fbqMMvoFoCjFfV5ErMRLvTOhnFJCY7PpQq7sr3UXI1LJ
+	GMulkNwbaV0l3OhL6D0/G4N09Vnc9xqiRVHIK7ZP2DiLeq+hSrnu4w4FZHU5Y2DfOViWVScEBrd
+	wNWS/UwFJo9HNAOPHtIIJHtZmRfXXwe1f6drYXvQL5TDBo54BY2FSIuU3DsiDMRYXjutvR4GJL/
+	BZ8GbV75EsO51BxhIq02PwLIG98bCcOeWBW4Sp6fE3FT9JcgwJ981KN5Gzx1ycRG7+K5ywtaUMD
+	bVeD+00s5/mc2ka4VR4dagtkLlalqXxodYw==
+X-Received: by 2002:a17:90b:3a47:b0:3ac:860e:1af9 with SMTP id 98e67ed59e1d1-3b1b0d7e539mr149037a91.41.1794516398718;
+        Thu, 12 Nov 2026 12:46:38 -0800 (PST)
+Received: from localhost ([153.61.198.241])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b197d257a0sm6330400a91.11.2026.11.12.12.46.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Nov 2026 12:46:38 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 12 Nov 2026 20:46:37 +0000
+Message-Id: <DMTIZ0EMQ6HE.7OEA0L4EX96X@gmail.com>
+Cc: <andrii.nakryiko@gmail.com>, <andrii@kernel.org>,
+ <daniel@iogearbox.net>, <netdev@vger.kernel.org>
+Subject: Re: [PATCH bpf v4] bpf: check cpu_possible() in per-cpu helpers and
+ map callbacks
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "bo cao" <treebacker@foxmail.com>, <bpf@vger.kernel.org>
+In-Reply-To: <tencent_6A1D611E2DA9545DA6E76ABCCA806BC39707@qq.com>
+References: <tencent_6A1D611E2DA9545DA6E76ABCCA806BC39707@qq.com>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -116,86 +101,28 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-This is a followup of the review of the teql arp-queue fix as reported
-by Sashiko.
+On Sun, Nov 08, 2026 at 06:43 PM bo cao <treebacker@foxmail.com> wrote:
+> @@ -133,6 +133,10 @@ const struct bpf_func_proto bpf_map_peek_elem_proto = {
+>  BPF_CALL_3(bpf_map_lookup_percpu_elem, struct bpf_map *, map, void *, key, u32, cpu)
+>  {
+>  	WARN_ON_ONCE(!bpf_rcu_lock_held());
+> +
+> +	if (cpu >= nr_cpu_ids || !cpu_possible(cpu))
+> +		return 0;
+> +
+>  	return (unsigned long) map->ops->map_lookup_percpu_elem(map, key, cpu);
 
-The issue:
-__bpf_redirect_neigh_v4() and __bpf_redirect_neigh_v6() install a dst for
-the redirect target only when the program lets the helper do the FIB
-lookup. With BPF_F_NEXTHOP the program supplies the nexthop, the lookup is
-skipped, and whatever dst the packet arrived with stays attached while
-bpf_out_neigh_v{4,6}() switch skb->dev to the target device. If that
-device's neighbour is incomplete the packet is parked on its arp_queue with
-the original route's dst; draining the queue re-looks the neighbour up from
-that dst and builds the frame with the original device's link-layer header,
-then transmits it on the target device.
+bpf-ci is right. All three callbacks have the check.
+Drop this hunk. It's dead code.
 
-The Fix:
-Release the dst when the nexthop is supplied. That branch never consults
-the route dst, so nothing that describes the route is lost, and the queue
-drain keeps the target device's parking neighbour.
+>  			if (returns_cpu_specific_alloc_ptr) {
+> -				regs[BPF_REG_0].type = PTR_TO_BTF_ID | MEM_ALLOC | MEM_RCU;
+> +				regs[BPF_REG_0].type = PTR_TO_BTF_ID | MEM_ALLOC | MEM_RCU |
+> +						       (ret_flag & PTR_MAYBE_NULL);
 
-The release goes through skb_dst_drop_keep_metadata(), so encapsulation
-parameters a route carries are handed over to a metadata dst instead of
-being lost, and a metadata dst already on the packet is left in place. Both
-wrappers take their existing drop path when that copy cannot be allocated,
-so a packet is never sent with the stale route.
+This is a fix for a different bug. It doesn't need a sparse mask.
+bpf_per_cpu_ptr(p, -1) returns NULL on every machine.
+It may break existing progs and needs a separate discussion.
 
-Conditions to recreate the bug:
-Two network namespaces, A (10.10.0.1/24) and B (10.1.0.1/24) in one, their
-veth peers in the other with only A's peer addressed (10.10.0.2/24) so B's
-nexthop cannot be resolved by ARP. Resolve A's neighbour for 10.10.0.2 as
-permanent and attach a cls_bpf egress program to A, with vb the index of B:
-
-    struct bpf_redir_neigh nh = { .nh_family = AF_INET,
-                                  .ipv4_nh = htonl(0x0a010002) };
-
-    return bpf_redirect_neigh(vb, &nh, sizeof(nh), 0);
-
-Send one packet to 10.10.0.2. It is parked on B's incomplete neighbour
-for 10.1.0.2; once that neighbour becomes valid the frame leaves B
-carrying A's source address and A's neighbour as the destination.
-
-Reported-by: Sashiko (nipa) <sashiko-bot@kernel.org>
-Closes: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-6HS9.v3.r0.20261103062649-2@mojatatu.com
-Link: https://lore.kernel.org/netdev/QDISC-6HS9.v3.r0.20261103062649-2@mojatatu.com/
-Link: https://lore.kernel.org/netdev/avTfQjFQYR2NNdRg@chamomile/
-Reviewed-by: Victor Nogueira <victor@mojatatu.com>
-Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
----
-v1 -> v2:
-- Do not drop a dst that is not a route, and keep the encapsulation
-  parameters a route carries: the release goes through a helper that moves
-  them onto a metadata dst first (new 2/4), and a copy that cannot be
-  allocated drops the packet instead of sending it with the stale route.
-
- net/core/filter.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 2d574ae52c4b..4980fb8db299 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -2318,6 +2318,8 @@ static int __bpf_redirect_neigh_v6(struct sk_buff *skb, struct net_device *dev,
- 		skb_dst_set(skb, dst);
- 	} else if (nh->nh_family != AF_INET6) {
- 		goto out_drop;
-+	} else if (!skb_dst_drop_keep_metadata(skb)) {
-+		goto out_drop;
- 	}
- 
- 	err = bpf_out_neigh_v6(net, skb, dev, nh);
-@@ -2433,6 +2435,8 @@ static int __bpf_redirect_neigh_v4(struct sk_buff *skb, struct net_device *dev,
- 
- 		skb_dst_drop(skb);
- 		skb_dst_set(skb, &rt->dst);
-+	} else if (!skb_dst_drop_keep_metadata(skb)) {
-+		goto out_drop;
- 	}
- 
- 	err = bpf_out_neigh_v4(net, skb, dev, nh);
--- 
-2.43.0
-
+pw-bot: cr
