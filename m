@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794498869;
-	b=MvLZ3ZUfmy1As4hcix2jDvPoXPhJwc2lfCwhNXjyzhBW0CLsbYmY6gYtY+/9xLJu5Lhx
-	 REtDctCgltUWzstxSQBAIhtKHwNJ9hQahscMJSbook/G0iVpw4a0uuoeEu3crCcp8pPyK
-	 wfG8Bkv5MAjzRmlOTVv/UEzQ6v4dPD1moTHk0p05mKnWlSt/a2IM4MFAJ6WlTE0akxcLC
-	 3/z3DTkjcjnEkoUxqZQv0P5x3J4bd0QeWWVNBikv1AFZ/S8PDAt9CbDqoiu/f4W9jyInC
-	 vK7jV3sAg3IUmUin5B2VSWpi5JPV23x3zc6hYno82TKSfvzkgwJx+2dsHPGwsyGE0Wg==
+	t=1794498875;
+	b=XMBzQQ5WeYyiA0EPWS5otv/31XSgWJ1VHxFmt4HjstIgZqVAfnwj35u7fwGTC0FxRhvi
+	 qfr/8EPhmFCIA9k9zDy3pS9ZfEmDAdWsQdy/D19UpcKqHNK3Cr5ryqw1oSqQe0Vz7TWQj
+	 48YoX28EY5GAMFWNHYMI2P0DeDAXQJ7+zc3caVaSjPjIwVjWpIy5efzle/8haD6NYZCWX
+	 g87qOQemvLfqp1mTwhq18287n2+TjxLYhAX7jmb5614OzN9yNrJvs0sswqLvWXNxT+S0b
+	 fmuQ0ceuM9WmohIKChkhJHSAbEp/tzddK3oOZ4qWwgnTl5j/XDLcaL8rC1lCE/5z1xQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794498869;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794498875;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=m0yxcbitoPwaoyIZjidXv1MS88yf9Z1UTDaVRsCujAI=;
-	b=0Gbj4QBVkH6pNH0uHsmLL86rrRDfvCdy+AXTwP7w9NWauRBdnwuy5mnPS2Rm2cwQ30hd
-	 BGkgsyyqYzsSVe24kYhiIabbrnC9OovQb6rwXJO7U5dY7bpy1UPZJiGODNWV5IJmJGrdV
-	 KTYdL0J7gpGSMQr2M/LzW8+dJx2oh2EOhDOkIT66FP0QGZQ1ImFHlxIk/h4G/EDsXM4WW
-	 y9wGTG9lppu9zDVm0+7EHMbeNqudYjZSDoKcre8mPrPOPQXehvU4lKclEPeeHEM9CtjPR
-	 Epzh6NPZCSSiUVcmEy/LlE7nxsbtQAot1iBS0ZWRW0Q78AoU52hqPaLRwL/uhQTEdgQ==
+	bh=LzLsLO+2G2mLGcXsoPeDJvZ5ZaSjG/RP0/EP2rwgcNw=;
+	b=MnswTJBRz3RbjBWBt0pSiILxpY2HraHl6kpXPv5lzF0BO2nwhxRIe1zOFZQxE40IvJZO
+	 6r/5hcpqpIRZ+YZM42utJnkKMCJ4ut9UswVxDN51SE1tJjFwQJI9TUHg6osU5BtAoiZNt
+	 pkX0A7RXYXHeVq2xcxdcM4w+2oClhQ6eQ1l4n8UJi1ckRL4gaQmNK9VlFAO861MBCrNVo
+	 8Xrdw9xURHkIqdd/t38wyhvKwDQA6IF5AsBD6IIWI94c8irnY1aryueRk2C7r4pmawHgS
+	 EpJGwN/bsxqqRgDSSlAsi0WTRupd5Wjgft4Z+FJu1pjxUow/elIxzk4vEbWTsSHaTdw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=AbsQaXZJ;
-	arc=none smtp.remote-ip=209.85.216.46
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kJ4Z1Z9o;
+	arc=none smtp.remote-ip=209.85.216.52
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A571606A327
-	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 15:54:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2A571606A327
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04FB6606A31C
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 15:54:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 04FB6606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=AbsQaXZJ
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3b0b3754f57so2641949a91.0
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 07:54:29 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kJ4Z1Z9o
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-3ad41b47541so2906355a91.1
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 07:54:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794498868; x=1795103668; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794498874; x=1795103674; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=m0yxcbitoPwaoyIZjidXv1MS88yf9Z1UTDaVRsCujAI=;
-        b=AbsQaXZJpzTVx1ghLzz8ksyhu8d9Z7LXs2tJOpUqwwvjMQNmOmcoTZhFR56lyGkcqC
-         tz/RWh4uroHZuU5V8PLRDGGpzy7Vw2uwedz3mDAFLi5eVcNJedfTFp0AWmxzGwLeCNNm
-         OIFLmZfZTF0UWMAR+P3FnTArNBBmiYl971qWTRN0wmJ/CJfSuo+UKGVCobiyGR52Dy9U
-         p8rNp6y304wYUkrs1sGvF/myVkeaODInw5pyJMKxJVIIueLOoGeQ4KEx+DsaMhCItSK6
-         GlKmr2STLf5l2LnFfKz/SYg/2odG8q6vTv/jWFFAs7k0LlLaKq4vS8B+ZdDzELYokKdM
-         UXYg==
+        bh=LzLsLO+2G2mLGcXsoPeDJvZ5ZaSjG/RP0/EP2rwgcNw=;
+        b=kJ4Z1Z9oXLPl1N0Y5WUzOmq6CcyWsaga5Hj3x3LL4a2BF0+dgZEgu+IL6OFYd9MngG
+         s0HmO8fftTAY6nNOl2BzE6uS2cstTDprIxSrXV4y+O3ukbSyWBM+Oz4E+yzBWd83aY+Y
+         ThJMAhRlo3adHUsTz5WIcX5hanb6We9KRkw3C0GOpw+MdKrr1WmlvEAKZ4bVuT2mcjYd
+         bXpcYaIJemS2vvsGr2fo3B5R4nVb7sUPcjST4dR/6YSLKRAGcKtgKvScMhev/ViSxUfw
+         YnfK7RL3CdN23JfvQn/tmSjKRe6ZJA9SD06IYUEU9r8b+NK2q0mDgFbvDAo3Bg4SlUiW
+         7xnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794498868; x=1795103668;
+        d=1e100.net; s=20260707; t=1794498874; x=1795103674;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=m0yxcbitoPwaoyIZjidXv1MS88yf9Z1UTDaVRsCujAI=;
-        b=XZ1M7Opk0rBWW1bCidvfm4Q5dUd9stVRPX7D6bGnXpSEPKPLK3jQIuj66bfa5Ami+T
-         +rXnbcf1+sw6OrjGWdfh3DV5RC0UMjb+1MWID0x6SPxpnlqBSgPlpx7FgbLAE7UVzfyL
-         6n/vLhtlLGLb8CDp2uHSaiyv+iXdMRFocSc1n0TAOzUagPYeBzdnS6HgjQ5caS8Xrhoj
-         qCbNxkkRvMYB/obSSIhWkiU79Oeha3VO0YA/89W/rcdXO0QwPPkQaYduPN4+q6qEE718
-         ICN27B8OjAQ9wORB1bTYwVSIrBtrv86eec459pfJtNQBSCQVPhYimUdWnEdUPfc4HXAd
-         CiXw==
-X-Gm-Message-State: APuU4Z9nEIoNztGBgUtIgUuMRYGeSnAz3d5vFYbQbxtxTC+DAfDwkY+Y
-	QCWfYhHU7r+lz/FtPp0pRZsWluPkP2QDHjb71SYDMSeCZGNqKw7Tfkpg3BKL6w==
-X-Gm-Gg: AYBFou3E9y9fWAuWRenbY7QUuptXAarUhBiafYnINlTUPO26pqrpwjV2RGB6Wt8pm2E
-	m4w87wMs5nkrNzkNBMBLL3bOC/HQei/9WviBYjBLYlLIn6+Y6NZaQ+ggaFBYzSO5uvZHZORe1Av
-	CL8e2SbDm+FL3/Olg4+t9cUSd/WQtM5Q6kdu/Orr/ZEuW8cxI5larrfbA9+Oxv0vQyA6WFLllA+
-	nOQojEnGfc/XEaDywpzwlboL1lA0YaGMIGPTO0V5nzf8f7QvRl1a5AK6dv6rONeSCAOCTs/qtgD
-	Ta8ZLkmoI5wTAFxYV16HbIeV0MTturlP73+bgXK6W4H1TGKU/XhQly5D53EhU+W3I4UMRkWNaWP
-	BQkaiHSKZg4OTtfxiMvwkS/LHDd/nAdgI2BYZ40eYmRinnTsy9mWBP86pbptJmM8GXVxKegeOo1
-	sWNt2Q2LadF0iPmyUo5DKsx0m3O6Pb3iMIYMFTB52ldYWAn4ulXk24W6b0CTf/Q/3KDDNjoq76g
-	nRk2sFKC/gk0D3knXsaKnG35bUTWnuNoS1FaJZZZxX6qQQPEO+q1KrRw1+mKfYVAKvOGoASBi/j
-	8toJMrM0z6UyoEeN0HklI8L0GWoncDFED9V9IJFUi+JkD1pzVLlcSV8mBwjh7k9Mt/D63KtSZwB
-	T5qubHmj61h3Shq+QyAohnzvkTUqaHG9wlQCiSjer+c80er5pFQY+orpcx/xBp+lym+VKl0Aa75
-	c=
-X-Received: by 2002:a17:90b:2887:b0:3ac:7378:be04 with SMTP id 98e67ed59e1d1-3b182d35e6bmr5912756a91.0.1794498868150;
-        Thu, 12 Nov 2026 07:54:28 -0800 (PST)
+        bh=LzLsLO+2G2mLGcXsoPeDJvZ5ZaSjG/RP0/EP2rwgcNw=;
+        b=PVH6hd9+t/bruyxdmjCjrXCLzT0xFMHMsGsMNl5PlEj9Sbj2JLvLJoRFouRZ+8KKbm
+         jXInmPIB2woFxDY/Lntx8aa+/2K0VQxskMbnMfMSVjVzZbyXdhldVJKX2IJdwoKUvGXC
+         2PztEcDxaHvSB13Mvr9zp4M4WQqgUjUbKRzNnlRC9K4rj/ZgSp3rZZlV9OD6OkbffcoK
+         gVfN80Zuk2MJziBh6AFk9GRN9HN63DHPU2Q2bGun4CWaMm+A/JfoBdSrJo1hlNw4uEzg
+         +MVx5wTtM6UpYnDZw6N5kevqtbM/GkBYg48FcbvDsX5SVg5AJVxF2JLHCRp5t7QGA2Kh
+         MDRg==
+X-Gm-Message-State: APuU4Z9LLbWbrnStroWHcd/DxG5New/1xFi9r6SBmA78jcKCWNIDqasz
+	OieMsAoR9K6aLzHGcxbJqp/jzlkaH3AG1td9golg3YChHCp8uTf/YmOKjKUGvw==
+X-Gm-Gg: AYBFou080kqNyNPM7YBxGEwPN6Jfqv+rgO9dLLXPWQ1n1KDJwXctT28CmngO1BoxBSO
+	ty/06u6e7cbrfSMfJM308ALE/bZmOzebL3tpgvvJXhbGSvR7t3wBA7YCJJynC8SKlZXR0R+Kh3r
+	IzASWfrGKdMVoLK88VoSLL0nbCtqoFOsvZA7YTK5OTNrxvY12XMkEHWhtnvzr2xYfUZs4ISGFzS
+	TfoPzvV2ugFFjq42kD3m3qnNRc9j0MoQYdKDS5eoTcV0r2RvwL4ejZwFofbIiNucZ/ouFm3Zz0Z
+	YU/b1UEUVPor58SW4uYOIYc99O/WIYsfRb2gvHbxgtIsPW7+CfkGHbSyAs+3g4kYlJmwnHP/0U6
+	Kb53mjx5Yiz3SWW8FcIRhGNbWdwEvjUG597tHbqL5pUDz/NxE4CYI+biJcbQ2guSRXnwp0KfWD8
+	fQWfJHh6g61Mbi89xEDSnog+Bl1QdEwRCa+hSy/FkFHhKgIpMQkh65J/g5IP83mU0D8O5KvWEkq
+	QEQ/0MyVUNmpOjpcwiFmC4l6vRe8QkSdBsL/PB598CSGHKS5jJSyMlpB2L53jNS9OKg6Q+8jX5I
+	Byvw5BfQY0yGiUnLbmUUauFImLZZbyBG/a3OVO1FSi5GRyeHSeZf2rOcN+r2guNVStN7j6akI7b
+	iqxjmH8pHfOLvV7LyOO407MKFcHu/W2vpE2qb32OO8ECh6g6r6M/lwo5mLOkJs9H5EyuyOfY6mC
+	A=
+X-Received: by 2002:a17:90b:5405:b0:3ac:9c37:9430 with SMTP id 98e67ed59e1d1-3b182e6f7c4mr5766421a91.21.1794498874005;
+        Thu, 12 Nov 2026 07:54:34 -0800 (PST)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.243])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b197d0fdbdsm5243908a91.10.2026.11.12.07.54.27
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b197d257a0sm5308099a91.11.2026.11.12.07.54.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2026 07:54:27 -0800 (PST)
+        Thu, 12 Nov 2026 07:54:33 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 08/12] bpf: Treat 'r1 &= 0xff' as a zero extension in scalar evolution
-Date: Thu, 12 Nov 2026 15:53:33 +0000
-Message-ID: <20261112155337.1040699-9-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 09/12] bpf: Add scalar_intersect()
+Date: Thu, 12 Nov 2026 15:53:34 +0000
+Message-ID: <20261112155337.1040699-10-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261112155337.1040699-1-alexei.starovoitov@gmail.com>
 References: <20261112155337.1040699-1-alexei.starovoitov@gmail.com>
@@ -104,115 +104,140 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The HTTP/2 filter of the Datadog agent counts the frames that it keeps in
-a __u8 (find_relevant_headers() of release 7.50):
+	r1 = r6
+	r1 &= 255
+	if r1 > 29 goto out
+	/* r6 is used */
 
-	__u8 interesting_frame_index = 0;
-	..
-	/* in a loop that is unrolled */
-	if (interesting_frame_index < HTTP2_MAX_FRAMES_ITERATIONS && ..) {
-		frames_array[interesting_frame_index].frame = ..;
-		frames_array[interesting_frame_index].offset = ..;
-		interesting_frame_index++;
-	}
+Scalar evolution tells refine_linked_regs() that r6 and r1 are equal in
+their low 8 bits. For other registers it is 16, 32 or 64 bits. The function
+intersects the two by hand: are they equal in all bits because both fit, do
+the known bits overlap, the 32-bit ranges, the 64-bit ranges, the
+reduction, and back to the saved register if nothing is left.
 
-The count is in a 64-bit register, and clang masks a copy at every use:
+The next patches compute the value of an expression in scev.c. A value can
+be known from more than one source there, what a register holds and what
+the operands give, in a number of bits each. The sources are intersected by
+the same rules.
 
-	2802: r1 = r6
-	2803: r1 &= 255
-	2806: if r1 > 0x1d goto pc+27
-	2818: r1 = r6
-	2819: r1 &= 255
-	2820: r1 <<= 4
-	2822: r3 += r1
-	2829: *(u8 *)(r3 +8) = r1
-	invalid access to map value, value_size=488 off=488 size=1
-
-The states of the unrolled iterations are joined: r6 is [0, 30]. The jump
-bounds r1. (& r6 255) is a base of its own, so nothing links r1 to r6, and
-the second copy is [0, 30] again.
-
-(& x 0xff) is (zext8 x) and (& x 0xffff) is (zext16 x), as in LLVM's
-ScalarEvolution: simplify() rewrites them. The base below the extension is
-r6: r1 == r6 modulo 2^8, and refine_linked_regs() takes two registers that
-fit in a u8 for equal. The main pass does not change.
-
-'w1 &= 0xff' is (zext32 (zext8 x)): a zero extension of a zero extension
-that is not wider is dropped.
-
-In a prog with an arena the ALU64 insn has a def. There is no link through
-it, as before.
-
-Two tests of verifier_bounds_step.c want a range in '(u8)r6' after a jump
-on r6. 'if r6 > 0' leaves the constant 0 there now. Test 'r6 > 0xff'.
+Move the rules into scalar_intersect(dst, src, bits), an operation on
+struct scalar like scalar_add() and scalar_alu(). No functional change.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/scev.c                                  | 14 ++++++++++++++
- .../selftests/bpf/progs/verifier_bounds_step.c     |  4 ++--
- 2 files changed, 16 insertions(+), 2 deletions(-)
+ include/linux/bpf_verifier.h |  1 +
+ kernel/bpf/verifier.c        | 70 ++++++++++++++++++++++--------------
+ 2 files changed, 45 insertions(+), 26 deletions(-)
 
-diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-index 991f800b1b15..af437e9286cb 100644
---- a/kernel/bpf/scev.c
-+++ b/kernel/bpf/scev.c
-@@ -478,6 +478,11 @@ static u32 op_low_bits(u32 op)
- 	return 0;
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 15528f3a352e..516e704c3d7d 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -2071,6 +2071,7 @@ void scalar_set_const(struct scalar *s, u64 imm);
+ void scalar_add(struct scalar *dst, const struct scalar *a, const struct scalar *b);
+ void scalar_alu(struct scalar *dst, const struct scalar *src, const struct bpf_insn *insn);
+ void scalar_zext32(struct scalar *s);
++bool scalar_intersect(struct scalar *dst, const struct scalar *src, u32 bits);
+ void scalar_union(struct scalar *acc, const struct scalar *src);
+ int bpf_set_reg_range(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+ 		      const struct scalar *range);
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 9721530636e3..47ed36292e1b 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -19394,6 +19394,46 @@ static bool scalars_fit_in_bits(const struct scalar *a, const struct scalar *b,
+ 		cnum64_smin(b->r64) >= -smax - 1 && cnum64_smax(b->r64) <= smax);
  }
  
-+static bool is_zext(u32 op)
++/*
++ * The values of @dst and @src are equal in their low @bits bits: @dst becomes the intersection.
++ * False: @dst is left as it is. Fewer than 32 bits say nothing about a range. Or the intersection
++ * is empty: no execution gets here with these values, the path is infeasible.
++ */
++bool scalar_intersect(struct scalar *dst, const struct scalar *src, u32 bits)
 +{
-+	return op == ZEXT8 || op == ZEXT16 || op == ZEXT32;
++	struct tnum a = dst->var_off, b = src->var_off;
++	struct scalar s = *dst;
++
++	if (scalars_fit_in_bits(dst, src, bits))
++		bits = 64;
++	if (bits < 32)
++		return false;
++	if (bits < 64) {
++		a = tnum_subreg(a);
++		b = tnum_subreg(b);
++	}
++	/* tnum_intersect() of two tnums that don't overlap is not empty */
++	if (!tnum_overlap(a, b))
++		return false;
++	/*
++	 * Equal in 64 bits is equal in the low 32 bits too. 'if w1 s> 200' on a zero extended int
++	 * refines nothing but the 32-bit range.
++	 */
++	s.r32 = cnum32_intersect(dst->r32, src->r32);
++	if (bits == 64) {
++		s.r64 = cnum64_intersect(dst->r64, src->r64);
++		s.var_off = tnum_intersect(a, b);
++	} else {
++		s.var_off = tnum_with_subreg(dst->var_off, tnum_intersect(a, b));
++	}
++	scalar_bounds_sync(&s);
++	if (scalar_is_empty(&s) || const_tnum_range_mismatch(&s) ||
++	    const_tnum_range_mismatch_32(&s))
++		return false;
++	*dst = s;
++	return true;
 +}
 +
- /* The low @bits bits of the slot are those of @left. The other bits are not known. */
- static bool is_spill(struct scev *scev, int id, u32 *bits, u32 *left)
+ /*
+  * The state of the SCEV register @r. As in check_stack_read_fixed_off() a fill of @bits bits from
+  * byte @fill_off of the slot reads the low bits of the spill.
+@@ -19494,7 +19534,7 @@ static void refine_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier
+ 			       int idx, u32 regno)
  {
-@@ -2714,6 +2719,11 @@ static int simplify(struct scev *scev, u32 id)
- 	    is_imm(scev, b, &imm1) && imm1 == 32 && !scev->exprs[l].def.set)
- 		return expr1(scev, ZEXT32, a);
- 
-+	/* 'r1 &= 0xff' is (u8)r1, 'r1 &= 0xffff' is (u16)r1: (& x 0xff) -> (zext8 x) */
-+	if (is_binop(scev, BPF_AND, id, &l, &r) &&
-+	    is_imm(scev, r, &imm1) && (imm1 == 0xff || imm1 == 0xffff))
-+		return expr1(scev, imm1 == 0xff ? ZEXT8 : ZEXT16, l);
-+
- 	/* (+ (linear base slope) imm) -> (linear (+ base imm) slope) */
- 	if (is_add(scev, id, &l, &r) &&
- 	    is_linear(scev, l, &base, &slope) &&
-@@ -2741,6 +2751,10 @@ static int simplify(struct scev *scev, u32 id)
- 	if (!bits)
- 		return id;
- 	t = scev->exprs[id].params[0];
-+	/* 'w1 &= 0xff': (zext32 (zext8 $a)) -> (zext8 $a) */
-+	if (is_zext(op) && is_zext(scev->exprs[t].op) && !scev->exprs[t].def.set &&
-+	    op_low_bits(scev->exprs[t].op) <= bits)
-+		return t;
- 	if (is_low_bits(scev, t, bits, &a))
- 		return expr1(scev, op, a);
- 	if (is_add(scev, t, &l, &r) && !scev->exprs[t].def.phi &&
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds_step.c b/tools/testing/selftests/bpf/progs/verifier_bounds_step.c
-index b42717a825c6..2b8ff0f44c36 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bounds_step.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bounds_step.c
-@@ -473,7 +473,7 @@ __naked void step_prune_hit_const_on_line(void)
- 	r7 = r0;					\
- 	r1 = r6;					\
- 	r1 &= 0xff;					\
--	if r6 > 0 goto l_cur_%=;			\
-+	if r6 > 0xff goto l_cur_%=;			\
- 	r1 *= 3;			/* step 3 */	\
- 	goto l_join_%=;					\
- l_cur_%=:						\
-@@ -523,7 +523,7 @@ __naked void step_prune_miss_const_off_line(void)
- 	r7 = r0;					\
- 	r1 = r6;					\
- 	r1 &= 0xff;					\
--	if r6 > 0 goto l_cur_%=;			\
-+	if r6 > 0xff goto l_cur_%=;			\
- 	r1 *= 3;			/* step 3 */	\
- 	goto l_join_%=;					\
- l_cur_%=:						\
+ 	struct bpf_func_state *frame = vstate->frame[vstate->curframe], *linked_frame;
+-	struct bpf_reg_state *reg, *base_reg, implied, saved;
++	struct bpf_reg_state *reg, *base_reg, implied;
+ 	u32 pos, linked_regno, fill_off, bits;
+ 	int base_regno;
+ 	s64 delta;
+@@ -19527,33 +19567,11 @@ static void refine_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier
+ 		add_scalar_to_reg(&implied, delta);
+ 		if (base_regno >= 0) {
+ 			base_reg = scev_reg_for_fill(frame, base_regno, 0, 64);
+-			if (base_reg && bits == 64 && recompute_ptr(env, reg, base_reg, &implied))
+-				goto scratch;
+-			continue;
+-		}
+-		if (scalars_fit_in_bits(scalar_of(reg), scalar_of(&implied), bits))
+-			bits = 64;
+-		if (bits < 32)
+-			continue;
+-		/* tnum_intersect() of two tnums that don't overlap is not empty */
+-		if (!tnum_overlap(bits == 32 ? tnum_subreg(reg->var_off) : reg->var_off,
+-				  bits == 32 ? tnum_subreg(implied.var_off) : implied.var_off))
+-			continue;
+-		saved = *reg;
+-		/*
+-		 * Equal in 64 bits is equal in the low 32 bits too. 'if w1 s> 200' on a zero
+-		 * extended int refines nothing but the 32-bit range.
+-		 */
+-		scalars_refine_cond_op(scalar_of(reg), scalar_of(&implied), BPF_JEQ, true);
+-		if (bits == 64)
+-			scalars_refine_cond_op(scalar_of(reg), scalar_of(&implied), BPF_JEQ, false);
+-		reg_bounds_sync(reg);
+-		if (reg_is_empty(reg) || const_tnum_range_mismatch(scalar_of(reg)) ||
+-		    const_tnum_range_mismatch_32(scalar_of(reg))) {
+-			*reg = saved;
++			if (!base_reg || bits < 64 || !recompute_ptr(env, reg, base_reg, &implied))
++				continue;
++		} else if (!scalar_intersect(scalar_of(reg), scalar_of(&implied), bits)) {
+ 			continue;
+ 		}
+-scratch:
+ 		if (linked_regno < MAX_BPF_REG)
+ 			mark_reg_scratched(env, linked_regno);
+ 		else if (linked_frame == frame)
 -- 
 2.55.0
 
