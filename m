@@ -1,88 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794508390;
-	b=qwQJ9c7n7dFeGTRrBe6S2hWSdkgAx+JBj76v14p5MEYGYaDnqrJzPcFMTxIZYehd3vME
-	 s0HL0ZDvZfnCjsZHuMeAVJGems+2THdfUpBzq/gc2EOHLM0+YHvmuSeJstMNYjFxRaTGs
-	 LRK48gs9IY5NFt1LB990qrimhD7RToZAExaQBOyL5oKd1R4PMY8Z+HppDYUhckRwcvUdN
-	 QZjB1QV4WFlE2RADdgiW8lXfQNUS5am/fqr1WUJZuzHHz22zyBu4XhFjkMRqG23FqOLv7
-	 JgfPDe/gnC5iD9ScYRGLzg4Q8dVXJEbWJ7l3FN0INJPTXjK5TXlJ6kbJIdLnGVg0Lww==
+	t=1794508401;
+	b=pB2nMJrhQFU8iIZSI10q1G7a0jZO5k+wFQ6VgBRua+kbQF4VYzXih2ZPulZCPC83Bbl4
+	 SBziLkJQ/F0B15KUMok034dxcyAwvQ/opWlw0yBqEguvNXuQwsW9w3E68D3Ukfyw6Ingj
+	 LJ8hrvxLe3f93wL/Ll12GVcvSXmaxgSWpDmLdvlYXasLAltFu+QsrzD3ZsxDZb+jn/RHq
+	 d/Ku4FnmDvkvky0JSGfdRmRaLDhSz1ezVc4sd6haT2OzmD1vRAM36Z9rLGglHh49fc86I
+	 YchopLeJqhiYOqwmzC/4SOfiVz6fWOrelCZIWFuEBe6qEomcGJ9CpsyDucF7y4CoAwQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794508390;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794508401;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:X-Google-Original-From:Date:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=7XTaMBSJocX7R1q9IiXe5TvK1ts0/2rtoQ55kCQz38Q=;
-	b=xzVzr0NyQJp50Mh7zInKY+mIAVATKK3RP0GuciXdjYuz3i1IiGl1nDjRIPl6pNvULk+7
-	 zyOISm0xQynEKf95Cy4SlzGk22rVl/ZcG/rAsAZhfRrDE22LQWQoYIZ5ThK8SCWUc/zzD
-	 IbmpaAJb/1hrNeBKC+S/5r6rcOzUCLIiUGLcSd5v2T3oQbIy0MkipXFxAJ3AbJvIxEzEU
-	 8DqBAx/TqtxIESSP6TKDPz1plnuuQsjNT4W3AiTDanTFEv2D8mWUwT/lH+FAXLBksIw/K
-	 1h0rAt4JeZJnm0b2MIsmzkkyogEZI1mUEoNi8hC0N+teFLJh/ZYjXMZcvO5c1wb8Pog==
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=+0890/1KdBxvDOFaG5+6Gtq1sFZ3f+/3xUbaBwJyo30=;
+	b=UzTxuFNPwJvipBHHEAp+chqyabga+1ArHiuDfFYXnpswqA+kgnAdNetNcjoRpgBzbhc0
+	 zsno3aR/DV+r3Hy2Tqc+P1iFZgjoWDA41wpDNn2n3zw+7VSH85Vhb6CZ5I+6PXrZ31eHT
+	 6oW/Cae6T8qMfHgHiU+G8+gmpE3SpdJOGStUmWz/AHAwt+QmyXm6By7YGVje5IrlnXdO6
+	 z1mIxWYLYeDbHbPP/Ih04efBv7115pYPTS6NOLjxRwTMvgZTQL5vSjKpt6x8G+Z3LuH+s
+	 byiStIl2DHD4yj2J9q/QdTTFbNgC9ykHSjl8M/+3DBUh6JLOeP6MkEWi8hdTgrw+nFg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=L+hCYSRp;
-	arc=none smtp.remote-ip=209.85.218.51
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=bpJb013w;
+	arc=none smtp.remote-ip=209.85.208.45
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F1A3606A8B9
-	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 18:33:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7F1A3606A8B9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 256DD606A337
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 18:33:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 256DD606A337
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=L+hCYSRp
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-c4d5b2db4bbso30343566b.0
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 10:33:10 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=bpJb013w
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-6b7245ab5e2so1881033a12.1
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 10:33:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794508389; x=1795113189; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:date
-         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=7XTaMBSJocX7R1q9IiXe5TvK1ts0/2rtoQ55kCQz38Q=;
-        b=L+hCYSRpqtbZvvzfTPM51bNUhMq2BbuykAG5oFAhxSmlmrzcY9wgwVFlr9REQwSZ3x
-         wFQ6aD5XkVDSlS/t58e2UDg4YJLULKoeISY6s48Uc8/WoP71bu8tnqwwhKrweZaLpmyV
-         dIFkAlIIk/2ibebZ6Clb/IQ1VW9uBuNzs3oRGC3Cy/4rIjM8ybiqZ+dPvrCsX7ObOkTu
-         3yV5Ycwm05puJ4S++T/NemezOeH+JiHw7TmJPBFnw7JNh6J4/wpJgrdWY4J5FQsB6Gkq
-         ctxI8c7X7ypxK7cTPvieH4Y2A3rpTI2NqPrPISkBK53e2xSFbKFOl1D6Pa39J3FtUw6v
-         egfw==
+        d=gmail.com; s=20260707; t=1794508399; x=1795113199; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=+0890/1KdBxvDOFaG5+6Gtq1sFZ3f+/3xUbaBwJyo30=;
+        b=bpJb013wg86TqxRRlt4sD67lUpI5p2+GLIho39k7oCu3QGTMGi+VmybFlQbzbYOvWa
+         TnZ2bwWfbluvwDTDSUeNSX+b7jc4Lt6Zo7P1EPak/SThQLr7vtt0X9DHs8IqAKxVDdjN
+         g5KbnjYEuuYMYhMMw1wUa41FWtu/T5h8r29aCpnwpsIvqF9xt0gVlLDJUM2x9pwUjy3R
+         2XnCBtztXNRasQLxA1HL+pN/n77Tk+Gj7idiZOnJCKOk4HOTKBadsMG1mqQrCDYruHN6
+         IANIFSepZ5jOz2SDRsvUfch8m7CLPqfCmxRZ75qu00DNEDZpWs7nqlhFeNLlpGutHtrc
+         crxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794508389; x=1795113189;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:date
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=7XTaMBSJocX7R1q9IiXe5TvK1ts0/2rtoQ55kCQz38Q=;
-        b=kc5dGyuO7VA+p1cSSJugtydRUbryOrktXgjXfocnStl5HwwR+i95gBewOqmvYtgVvU
-         noAusTiCU6mxT4rvW/GgBhMd77XFNdYdELbRROjX8YzMKaXBVP/y846HVstNQsqqYAlN
-         sp6GIccSCj5KYLILFLPQivRj+yFpHW3bUYrbw49HZZje2dSrh6fyiPeQUWWtcMR7J1mE
-         A+HhtYE0KT/tClubDKTJsaYS3ObkLYfIgQxAy5CGFCKLVR2MmZC9eoB2WlBrRoMSG3no
-         cEHODTk/B1eXHMzTgsSwiFrkJjYBTr1onJ8Tfb/w9lKXOHO0h8blJlD2DULnZZD0AJiB
-         7thw==
-X-Forwarded-Encrypted: i=1; AL+hErGsAQFE2VnCRDjCGBgLKAdgYm5vr7NhrnQANl8euDLke7UnTQXxszHkzfhHh/OHGZwzEi4=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8tZtUXJGBOCtCkrcEU9Dsfoqhfr450O5xqRz+fJxN6UMO5B6cy
-	3jsbRPZjLpXcCua7LUWVUUhrRwm9sel1amyye7OjWaMi3HVs9Hoa6Px4
-X-Gm-Gg: AYBFou3hmRHv5IWbGbt0Oz1mD4+qawmxaerBaam7OxNAD8b4lMZzbVLd9JJjw0wVJ1E
-	cUKGKRQFRonjYMQCu8DAJbmb3tPIjxbWy1t9I8hXojDUf83ek2JNyejzoUkkhMs6jwkL+WJaY+6
-	92SAwarYoAUsg61bHyLfgrOnyPdsm8exGy5MHfMDo48SpXl6VqOBduBBTZp9HZCwZcdpDoiZ1ja
-	1AYlTMoLIMlFPRiIfBJMdCAS08C8P5NqRkUyyDgTXuanxg9Q+M9et+Q6zQoH6gYfh2gYGMM2DNm
-	5GLQuhE1eNLFs5Dog/mWAl8Kn3N6LgTCyGBCg/fschAyCxrMUkKoAklQuXv41Nfk/NreCCelw3/
-	KPHTXPIhyGWp5qc0cmB7i5BiNWiPZi23sdNHsYjVUHBPFYbQ0DS/3jj/TOdhIi5STM3yhyrwqi/
-	d0ACGrv+DHYK4V4g6CzygZYaoOSPnXh/O0qR0i1EsjsxM52H0v05WsiAEjdLM2xMXrt/bpRPTuR
-	cPOmfSoYM8qoU0STSHRi/ogcRsRu5nO39r8EHZUK5OYPdbm3vJMQlW5iXvjzdTi9+B+gY8DlCAy
-	/0uhG9hISOenp2cQiHZrJ3I6NvrP78AofpEMvw==
-X-Received: by 2002:a17:907:c0f:b0:c2e:2275:1168 with SMTP id a640c23a62f3a-c507c3fd35fmr333753066b.19.1794508388705;
-        Thu, 12 Nov 2026 10:33:08 -0800 (PST)
+        d=1e100.net; s=20260707; t=1794508399; x=1795113199;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=+0890/1KdBxvDOFaG5+6Gtq1sFZ3f+/3xUbaBwJyo30=;
+        b=ju7bM9bj5XD31z4rDWukIW8nqy33A5XeO/nvS7/fKJ+DpLT/jQZorxSPYEBeqO/p5S
+         KyXIJvUTu0ozdVzefWMJeNO/0HP44erdsTP/HjF2VK7wU/fGqUKo1G0/ecJalfrDMOD+
+         CVrXQbHfrL3NnddBSly+6kaa+LyCEbF28RhPjjKNE2KI4vEmnuEUEWTConv5guaJ5sQe
+         JHX0puWGX3bIN12OkjTrHshOnknG8geTTt5Y7fmTBextlJ8Pwj3tPtHkyRUDZsxsZkN8
+         4fjqtAa6NKF71+gBqkjV5Znt2lROILnVg8mOXKB1lu0dkTXQhUiI5WkWbrWShH+3Tpmt
+         XWrg==
+X-Forwarded-Encrypted: i=1; AL+hErFF4Ui7Tz0ujLeclwAZmIfFiK0UgQoKnScl0X2BVnNk6eYMaYVuM15ZGA/hq8ylIVAZOa4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/pSlH/FqmLdra1/3tDkDm0YgPbzIDXad0w2hzQisBbpw1s37Cq
+	CZsscHJb8wjcZaHKdD0U8Bf9mV/XldyyDPx1cMR54Jgwwhehw9Y6Xdk8
+X-Gm-Gg: AYBFou2WxbbgzS3XfqgSGUTcj75go3gwl87rF4WhBmauUcotgeljwVJUEQQDAjYx35Q
+	5LN9dyGGEgezRbTyuzyMNmH9lDXyEoonqqkitN4r9dSySOF4bDstFDUHUhuCxzUHrckQI3LGWzE
+	B8rj0GrTSy+ngPvXRcIYEyjAAF6iMhJi24cw6QE5bWvdW28WneRxCv74bsVjyRkB1aoQ/EgZDho
+	KgBwBOAIDRGLYUEx4eKP771val+D0vw9ANvNAvQ1XRTqgew5PbqxVDhutK+CDa4M2T6W6JTj6+P
+	T6MzSyuouGk0+tXkBmY6cMT8QVMeDqJItV2RVjww27iDbv+6Wt6MBDl7YFB87JdtgLHauXYCxu8
+	Mfd9aZU/dZpa6nNIXRer6e3WO4xRnXUff5unH3kmyiKG00YcN/Q/DA6hqdrZrBEDocPUw5RQ9vA
+	OkoXT5D06yImBHnwH0YSQgvqKx5AuMloOddCMWfmCPDvckCgX6HxM7aVflKaOKfzieGI29n5WrZ
+	BuMzNWOMzMxxPFn+XOxPkbLvhkYprnaBjvxV5dYSpzbHFfZk+xrVvVqMjRs8ubqGclkmhT9b0tH
+	M8/YQNvedW1Zf1V0
+X-Received: by 2002:a17:907:608f:b0:c4c:a409:5aa3 with SMTP id a640c23a62f3a-c50963879c9mr11899066b.17.1794508399520;
+        Thu, 12 Nov 2026 10:33:19 -0800 (PST)
 Received: from krava ([173.38.220.46])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c5095b2369asm6139766b.25.2026.11.12.10.33.06
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c5095b68dbbsm5890066b.61.2026.11.12.10.33.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2026 10:33:07 -0800 (PST)
+        Thu, 12 Nov 2026 10:33:19 -0800 (PST)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 12 Nov 2026 19:33:03 +0100
+Date: Thu, 12 Nov 2026 19:33:16 +0100
 To: Peter Zijlstra <peterz@infradead.org>
 Cc: Masami Hiramatsu <mhiramat@kernel.org>,
 	Naveen N Rao <naveen@kernel.org>,
@@ -95,11 +94,10 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
 	x86@kernel.org, linux-trace-kernel@vger.kernel.org,
 	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
 Subject: Re: [PATCH 01/13] static_call: Index code text reservation lookups
-Message-ID: <avYGX1UpGlvbvHO5@krava>
+Message-ID: <avYGbCrfomowKKiH@krava>
 References: <20261109194916.1089703-1-jolsa@kernel.org>
  <20261109194916.1089703-2-jolsa@kernel.org>
- <20261112090734.GH2668804@noisy.programming.kicks-ass.net>
- <20261112101108.GE2669272@noisy.programming.kicks-ass.net>
+ <20261112083413.GE2668804@noisy.programming.kicks-ass.net>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -109,48 +107,90 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20261112101108.GE2669272@noisy.programming.kicks-ass.net>
+In-Reply-To: <20261112083413.GE2668804@noisy.programming.kicks-ass.net>
 
-On Thu, Nov 12, 2026 at 11:11:08AM +0100, Peter Zijlstra wrote:
-> On Thu, Nov 12, 2026 at 10:07:34AM +0100, Peter Zijlstra wrote:
-> > Looking at this in a little more detail; I'm confused. 
-> > 
-> > You're literally adding an index, so that you can find the
-> > static_call_size, while all you really need is static_call_addr().
+On Thu, Nov 12, 2026 at 09:34:13AM +0100, Peter Zijlstra wrote:
+> On Mon, Nov 09, 2026 at 08:49:04PM +0100, Jiri Olsa wrote:
 > 
-> /size/site/ obviously :-)
+> > +static int static_call_site_index_cmp(const void *a, const void *b, const void *priv)
+> > +{
+> > +	const struct static_call_site *base = priv;
+> > +	unsigned int ia = *(u32 *)a;
+> > +	unsigned int ib = *(u32 *)b;
+> > +	unsigned long ca = (unsigned long)static_call_addr(base + ia);
+> > +	unsigned long cb = (unsigned long)static_call_addr(base + ib);
+> > +
+> > +	return cmp_int(ca, cb);
+> > +}
+> > +
+> > +static struct static_call_site_index *
+> > +static_call_site_index_alloc(struct static_call_site *start,
+> > +			     struct static_call_site *stop)
+> > +{
+> > +	struct static_call_site_index *index;
+> > +	unsigned int nr = stop - start;
+> > +	unsigned int i;
+> > +
+> > +	if (!nr)
+> > +		return NULL;
+> > +
+> > +	index = kvmalloc_flex(*index, entries, nr, GFP_KERNEL);
+> > +	if (!index)
+> > +		return NULL;
+> > +
+> > +	index->nr = nr;
+> > +	index->base = start;
+> > +	for (i = 0; i < nr; i++)
+> > +		index->entries[i] = i;
+> > +
+> > +	sort_r(index->entries, nr, sizeof(index->entries[0]),
+> > +	       static_call_site_index_cmp, NULL, start);
+> > +
+> > +	return index;
+> > +}
+> > +
+> > +static int
+> > +static_call_site_index_text_reserved(struct static_call_site_index *index,
+> > +				     void *start, void *end, bool init)
+> > +{
+> > +	unsigned int low = 0, high = index->nr, i;
+> > +
+> > +	/* Find the first site after @start. */
+> > +	while (low < high) {
+> > +		unsigned int mid = low + (high - low) / 2;
+> > +		void *addr = static_call_addr(index->base + index->entries[mid]);
+> > +
+> > +		if (addr <= start)
+> > +			low = mid + 1;
+> > +		else
+> > +			high = mid;
+> > +	}
+> > +
+> > +	/* The preceding site may overlap @start. */
+> > +	if (low)
+> > +		low--;
+> > +
+> > +	for (i = low; i < index->nr; i++) {
+> > +		struct static_call_site *site = index->base + index->entries[i];
+> > +		void *addr = static_call_addr(site);
+> > +
+> > +		/* Later sites cannot overlap once this address is past @end. */
+> > +		if (addr > end)
+> > +			break;
+> > +		if ((init || !static_call_is_init(site)) &&
+> > +		    addr_conflict(site, start, end))
+> > +			return 1;
+> > +	}
+> > +
+> > +	return 0;
+> > +}
 > 
-> > That is, you could have just created an array of relocated site->addr
-> > and sorted that, that would safe you a ton of indirection all around.
-> > 
-> > That is:
-> > 
-> > 	index->entries[i] = (long)static_call_addr(start + i) - (long)&index->entries[i];
-> 
-> Should be:
-> 
->  	index->entries[i] = (long)static_call_addr(start + i) - (long)index->entries;
-> 
-> They have to all be relative to one location in order for sorting to
-> make sense.
-> 
-> > That will make your lookup take at least half the amount of loads.
+> FWIW, we do have bsearch() as well.
 
-hum, but we still need the site’s init flag for static_call_is_init
-
-I could store site pointer directly instead of the index and see how
-much faster it is
-
-
-> > 
-> > 
-> > Also, you really should support modules, there is no point being fast
-> > until you load a module.
-
-I had that, but decided to remove it because my follow up changes
-did not support modules as well.. I will include it
+yes, but bsearch() returns exact match, but we need to find first entry
+after start even when no entry matches it... I'm not sure how to do that
+with bsearch
 
 jirka
