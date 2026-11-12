@@ -1,64 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.216
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794449623;
-	b=B78SdDfyaUUtiVkYooiJIZts0F5n8Y6oD/+EjynriA0YPAWIjt94n7WrX4x9MWcrkvOs
-	 SI+7DYRxylMDzMhh7zAaw+UyapK/GxygAsqzoWVDQiPjF69WsrrKqFAo9a3MTo2XAZu5u
-	 /dWadruNQtDkmsdM4i2CwgiUO7E2fR7gsOVpzn3VwKd4nOs/8dcBjNbaVd/3n+mvFz9uw
-	 Ej3LxIdqRviLRaT7oAL+o9UgAHgJ1TkhieXwjQ3Ku3aLJFnusb45pgirhBiwV7FMOEOkh
-	 kCWBJth3YQhAhvDgVDX2q1TmJ/7rPecLfZ2/v6pJbslr/UoOiVYpdZUikOmByjI4ycg==
+	t=1794450654;
+	b=OjL6+BXsrAU3BTGleCeWxJ9w286HXLJlRv3N9NJ0WWqRjhuve6Nz+vAQ5ICQ32wmy/jq
+	 +ngfgpFUFkyztvcVEWxZ9bmS3ndn2UJMgJLidLG9KnMebr2EryJRPppf/P/hyleVo7dAz
+	 vZS6TunSamMUfesmMHWl8FpaikLUrttpxrYX3XKAMiqIvhC9Hg2Xp9EN0sq+uHXt1lph5
+	 TsMgUj9C/2R3CEFYEBRpFKWY6nXVPzd5mUzpjlSm/GjvtnQJ3SqZF+5mbOEfDs5FId0i2
+	 HMdyX9dKcDeKxFSu587B1XeRNQdN7Nkx3ngMfdjW8xekbOtXRwURymG91jAhCUFTH1g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794449623;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=ASxibD7eZkzQFD1xdlQZW+ZvbrwHxv8p5UBEzGgjh6c=;
-	b=UwTXVFHiWCyoFLppQUb2HQOMyDfcJqlBRonMxUA49YObskqTv242Vi2kgoMN5lzpJZjI
-	 NMnMpbCbw/ScH7kQp1cirI9HvOQK3zpP5NIdYSbnuNy9gfmmL95wyrrHnKYlgp6TSvemy
-	 /+eDfQm+6rR3MzWBuQtkQ8GYnm7cjgpTbK71WvO9gTQl7M/W7WSq82eV+XHraTX92IA0+
-	 QPG3oe6isRzL9fIJuln5h45ZzR7qk5iRvUY+vmbVnP3QxPqINM9F6eYqSPha1aaOzxbEk
-	 FhKL7e3sOGoFPshxjOlkCflzbd4ybW8RILsmGJBtLLEv9cxSCd0RgPkce4xneUlrfGw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794450654;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=gTQZHlCJUjOxYEpdFL/jeCbv156/zSw9VUjF1xBlN98=;
+	b=OlhhQ2PUHt4gH5IJzISJvK61bJ7nkOKm7v5cx+H7eLlFBjUwhqZij/h79pHJpg+hy+a0
+	 YFy27J/dQ0wl2l5tQkhqiT1wciLAdZtu6rCpBetJfajfN8VWHlarSmld1TQEd+6Jtmsks
+	 Hw4B4F0+nImjHgHm9P3VqlbYi3vQh8YCB7BT9WSrnxS+SMVO1ucZByYqHdU8DoyYiVeWc
+	 eMf5YdRsMJgndR9HYxTl5O+gykxCe7v8OvF4TBOfC5AxNO7ztpfw6LY0k7fxy11kBA56f
+	 5tF4haM6OEqZlapEM/0vV6+ii/345uakdWTqtj5RcZrama2od9guUWZfEetcpWjkkpw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="aW3ZCB/I";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=X6ao6tY2;
+	arc=none smtp.remote-ip=95.215.58.216
+Received: from mta1.migadu.com (out-216.mta1.migadu.com [95.215.58.216])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9040606A327;
-	Thu, 12 Nov 2026 02:13:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D0DD606A32D
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 02:30:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8D0DD606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aW3ZCB/I
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BF0B1F00A05;
-	Thu, 12 Nov 2026 02:13:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794449622;
-	bh=ASxibD7eZkzQFD1xdlQZW+ZvbrwHxv8p5UBEzGgjh6c=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=aW3ZCB/I5FqCT1QTrrYSfnW73l065oZNdZXhjvby7kHi1ZSkeVXLP3eqLlENLiHaP
-	 iQnDSIrUQGyoKlO8Q1pv1kn0/pXGMJ0rgxkR9C+PI58GyHZBSvltR5SSAq9Qj5wdGQ
-	 IgstssvDXsHNClcHzQTRvOI1pRqhUXqk9Ax9x/rHdZKWnuQYE50XfnKo20q5FqEUsu
-	 RczCKoIqSWrmUv3KT65booOJnRKsVUN0XxVKa883AIUYHHRiEhye6H1ZVgId2lvGAa
-	 jUaSporZwXBFSDy7qmpiNiMmXb8ql0dG6NcRcowuF3jut3t6FBSiYVBMtbhR/MH0ip
-	 HGNU6c8gjHwLw==
-Date: Wed, 11 Nov 2026 18:13:41 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
-Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>, Andrew Lunn
- <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Maxime
- Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue
- <alexandre.torgue@foss.st.com>, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev
- <sdf@fomichev.me>, Jose Abreu <Jose.Abreu@synopsys.com>, Ong Boon Leong
- <boon.leong.ong@intel.com>, netdev@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org, Nicolai Buchwitz
- <nb@tipi-net.de>
-Subject: Re: [PATCH net-next v9] net: stmmac: rework stmmac_rx to support
- XDP rx multi-buff
-Message-ID: <20261111181341.56706354@kernel.org>
-In-Reply-To: <20261106-stmmac-rx-mb-v9-1-c099c923664b@oss.qualcomm.com>
-References: <20261106-stmmac-rx-mb-v9-1-c099c923664b@oss.qualcomm.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=X6ao6tY2
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=ex0fZxg7xmW+zEI8jmq9pJooKKCHvU2lpCHkYI6HRkQ=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794450651; v=1; x=1795055451;
+ b=X6ao6tY2lqQAPz7q73RHLLNxHFcQEQzPkblh0SAlZGtImUKpeqF8DpOoTlQT6XwGI4030rSt
+ mS60Qk3YQ35ctBEMrCpl4Ri8YqGtpmCMHGrA5RNrA+Y6QhKPogy011ok4pAKhUL7on5qwwQkb7T
+ 6dMEdDaCJHYCtu3BRtwFCbvg=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id 8d3da5d7f84c678c;
+	Thu, 12 Nov 2026 02:30:39 +0000
+X-Mizu-Trace-ID: 8d3da5d7f84c678c
+X-Migadu-Flow: FLOW_OUT
+Date: Thu, 12 Nov 2026 10:30:27 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: Weiming Shi <bestswngs@gmail.com>
+Cc: "David S . Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Kees Cook <kees@kernel.org>,
+	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org, bpf@vger.kernel.org,
+	Xiang Mei <xmei5@asu.edu>, stable@vger.kernel.org,
+	co+beaa1ed2d7aaec16@bugs.sh
+Subject: Re: [PATCH net] net: initialize ICMP error queue opt_stats
+Message-ID: <avUjeFUIFJAWbSlt@fedora>
+References: <20261111170528.495116-3-bestswngs@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -68,106 +71,93 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261111170528.495116-3-bestswngs@gmail.com>
 
-On Fri, 06 Nov 2026 11:54:19 +0100 Lorenzo Bianconi wrote:
-> +static struct sk_buff *stmmac_build_skb(struct xdp_buff *xdp)
-> +{
-> +	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
-> +	u32 metasize = xdp->data - xdp->data_meta;
-> +	struct sk_buff *skb;
-> +	u8 num_frags = 0;
-> +
-> +	if (unlikely(xdp_buff_has_frags(xdp)))
-> +		num_frags = sinfo->nr_frags;
-> +
-> +	skb = napi_build_skb(xdp->data_hard_start, xdp->frame_sz);
-> +	if (!skb)
-> +		return NULL;
-> +
-> +	skb_mark_for_recycle(skb);
-> +	skb_reserve(skb, xdp->data - xdp->data_hard_start);
-> +	skb_put(skb, xdp->data_end - xdp->data);
-> +	if (metasize)
-> +		skb_metadata_set(skb, metasize);
-> +
-> +	if (unlikely(xdp_buff_has_frags(xdp)))
-> +		xdp_update_skb_frags_info(skb, num_frags, sinfo->xdp_frags_size,
-> +					  sinfo->xdp_frags_truesize,
-> +					  xdp_buff_get_skb_flags(xdp));
-> +	return skb;
-> +}
+On Wed, Nov 11, 2026 at 09:05:30AM -0800, Weiming Shi wrote:
+> ip_icmp_error() and ipv6_icmp_error() clone a received ICMP skb before
+> building its error queue entry.  skb_clone() preserves the complete control
+> buffer, while the IP receive paths initialize only the portion aliased by
+> sock_exterr_skb::header.  The two functions initialize ee, addr_offset, and
+> port, but leave the final byte containing opt_stats and unused untouched.
+> A TCX classifier can leave bpf_skb_data_end::data_end across that byte,
+> forging opt_stats and making __sock_recv_timestamp() pass skb->len bytes
+> from skb->data to put_cmsg().  For a non-linear ICMP skb, this reads beyond
+> its linear head.
+> 
+> Initialize both bitfields in the two clone-based producers.  Do not clear
+> the whole sock_exterr_skb because the error receive paths consume the saved
+> IP control-buffer header.
+> 
+>   usercopy: Kernel memory exposure attempt detected from SLUB object
+>             'skbuff_small_head' (offset 72, size 59964)!
+>   kernel BUG at mm/usercopy.c:102!
+>   Oops: invalid opcode: 0000 [#1] SMP KASAN NOPTI
+>   RIP: usercopy_abort (mm/usercopy.c:102)
+>   Call Trace:
+>    __check_heap_object (mm/slub.c:8146)
+>    __check_object_size (mm/usercopy.c:258)
+>    put_cmsg (net/core/scm.c:276)
+>    __sock_recv_timestamp (net/socket.c:1061)
+>    ip_recv_error (net/ipv4/ip_sockglue.c:550)
+>    udp_recvmsg (net/ipv4/udp.c:2034)
+>    inet_recvmsg (net/ipv4/af_inet.c:896)
+>    sock_recvmsg (net/socket.c:1159)
+>    ____sys_recvmsg (net/socket.c:2918)
+>    ___sys_recvmsg (net/socket.c:2961)
+>    __sys_recvmsg (net/socket.c:2993)
+>    do_syscall_64 (arch/x86/entry/syscall_64.c:94)
+>    entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:130)
+>   Kernel panic - not syncing: Fatal exception
+> 
+> With HARDENED_USERCOPY enabled, the reproducer aborted the unpatched kernel
+> on its first packet.  With runtime usercopy checks disabled and KASAN left
+> in report mode, the same recvmsg() returned 59,964 control-message data
+> bytes sourced past a 704-byte skb head.  Beyond offset 1,024, 58,932 bytes
+> differed from the prefilled userspace marker, including 6,288 nonzero
+> bytes.  The patched build completed 2,000 packets under both configurations
+> without a forged SCM_TIMESTAMPING_OPT_STATS message or sanitizer report.
+> Networking selftests were not run.
+> 
+> Fixes: 4ef1b2869447 ("tcp: mark skbs with SCM_TIMESTAMPING_OPT_STATS")
+> Cc: stable@vger.kernel.org
+> Reported-by: <co+beaa1ed2d7aaec16@bugs.sh>
+> Signed-off-by: Weiming Shi <bestswngs@gmail.com>
+> 
+> ---
+>  net/ipv4/ip_sockglue.c | 2 ++
+>  net/ipv6/datagram.c    | 2 ++
+>  2 files changed, 4 insertions(+)
+> 
+> diff --git a/net/ipv4/ip_sockglue.c b/net/ipv4/ip_sockglue.c
+> index a55ef327ec93..3ab84a4c31e5 100644
+> --- a/net/ipv4/ip_sockglue.c
+> +++ b/net/ipv4/ip_sockglue.c
+> @@ -429,6 +429,8 @@ void ip_icmp_error(struct sock *sk, struct sk_buff *skb, int err,
+>  	serr->addr_offset = (u8 *)&(((struct iphdr *)(icmp_hdr(skb) + 1))->daddr) -
+>  				   skb_network_header(skb);
+>  	serr->port = port;
+> +	serr->opt_stats = 0;
+> +	serr->unused = 0;
+>  
+>  	if (skb_pull(skb, payload - skb->data)) {
+>  		if (inet_test_bit(RECVERR_RFC4884, sk))
+> diff --git a/net/ipv6/datagram.c b/net/ipv6/datagram.c
+> index ca3605acb433..85f646f8d059 100644
+> --- a/net/ipv6/datagram.c
+> +++ b/net/ipv6/datagram.c
+> @@ -330,6 +330,8 @@ void ipv6_icmp_error(struct sock *sk, struct sk_buff *skb, int err,
+>  	serr->addr_offset = (u8 *)&(((struct ipv6hdr *)(icmph + 1))->daddr) -
+>  				  skb_network_header(skb);
+>  	serr->port = port;
+> +	serr->opt_stats = 0;
+> +	serr->unused = 0;
+>  
+>  	__skb_pull(skb, payload - skb->data);
+>  
+> -- 
+> 2.56.0
+> 
 
-This is almost identical to xdp_build_skb_from_buff(), why not use the
-common code?
-
-> +static void
-> +stmmac_xdp_put_buff(struct stmmac_rx_queue *rx_q, struct xdp_buff *xdp,
-> +		    bool allow_direct)
-> +{
-> +	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
-> +	int i;
-> +
-> +	if (likely(!xdp_buff_has_frags(xdp)))
-> +		goto out;
-> +
-> +	for (i = 0; i < sinfo->nr_frags; i++)
-> +		page_pool_put_full_page(rx_q->page_pool,
-> +					skb_frag_page(&sinfo->frags[i]),
-> +					allow_direct);
-> +out:
-> +	page_pool_put_full_page(rx_q->page_pool, virt_to_head_page(xdp->data),
-> +				allow_direct);
-> +}
-> +
-> +static int stmmac_xdp_shrink_tail(struct stmmac_rx_queue *rx_q,
-> +				  struct xdp_buff *xdp, int offset)
-> +{
-> +	struct skb_shared_info *sinfo;
-> +	int i;
-> +
-> +	if (unlikely(offset < 0 ||
-> +		     offset > (int)xdp_get_buff_len(xdp) - ETH_HLEN))
-> +		return -EINVAL;
-> +
-> +	if (likely(!xdp_buff_has_frags(xdp))) {
-> +		xdp->data_end -= offset;
-> +		return 0;
-> +	}
-> +
-> +	sinfo = xdp_get_shared_info_from_buff(xdp);
-> +	for (i = sinfo->nr_frags - 1; i >= 0 && offset > 0; i--) {
-> +		skb_frag_t *frag = &sinfo->frags[i];
-> +		int delta = min_t(int, offset, skb_frag_size(frag));
-> +
-> +		if (delta == skb_frag_size(frag)) {
-> +			/* The whole frag is consumed by the strip: return it
-> +			 * to the page pool right away. Its ring slot still
-> +			 * carries the page DMA address until stmmac_rx_refill()
-> +			 * re-arms it at the end of the NAPI poll. This is
-> +			 * safe because HW cannot touch the slot until then.
-> +			 */
-> +			page_pool_put_full_page(rx_q->page_pool,
-> +						skb_frag_page(frag), true);
-> +			sinfo->nr_frags--;
-> +			sinfo->xdp_frags_truesize -= xdp->frame_sz;
-> +		} else {
-> +			skb_frag_size_sub(frag, delta);
-> +		}
-> +
-> +		sinfo->xdp_frags_size -= delta;
-> +		offset -= delta;
-> +	}
-> +
-> +	if (unlikely(!sinfo->nr_frags)) {
-> +		xdp_buff_clear_frags_flag(xdp);
-> +		xdp_buff_clear_frag_pfmemalloc(xdp);
-> +		xdp->data_end -= offset;
-> +	}
-> +
-> +	return 0;
-> +}
-
-These two OTOH could easily become new common helpers, they seem to do
-nothing stmmac specific?
+Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
