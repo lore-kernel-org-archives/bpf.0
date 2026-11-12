@@ -1,96 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.56.28
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.169
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794499605;
-	b=AJn5gzQA7mEAHLWRQ7DYB7G+u8KZfTzu4VKgIW6l0rQ1dVTrC1CuPJ0ow+HAOF7EIp2n
-	 2bP6lLUeZBioOwoEtEDy3+gKMla9ur/mrQMpLhwtby2orvFC8cpmgaV1zG9K3fO2ad+GY
-	 xP6A97ZiwlwGYfCkhz9WvlmNv46jOoEj3MMuE0BCIN4COM/qwCSDDLHxX3NHE2Dn2ZjZc
-	 aA3ZTWAoDc/WRZZRQfJqGGBA0sxH3P8UKuZ+c7bdVcNcNSb9bGHNdfskOxe3Nnm83EA4E
-	 GpAa9z9kfQg7CaKXtnQp/5je8YCsEmNkzJv4b3x5XUpmxe37Rkh/cWfWjglsGqkLxyA==
+	t=1794499783;
+	b=mwp4BrN6pVSeASSq4M07gOQ2YBPMFxG0HuSzxo71Kx9Vq0b2cI7RlTpNopLabXqj/ErF
+	 Qc2vWRUUucOZfAUy/GT+kXy4W68Nk/OsrIwcZ0zLIq5nQj4wPmfdytUAFA9M1J6+8VKDV
+	 XMmFCmwRuP0YENdKftb+SWZ9jBRT/im0Z5RMz5LLAMt3KfUbbLZ1qqAWwkjqHMYdoXXYY
+	 cZt+G/zaHUXHhXSjwMc+LQxMdg6a3/tMLf7FrSY3IxPDVzCDcr9kNw0b8q5+QD3hVpCMD
+	 T2aNxK71ez5ET+x6Tg+L/k4uXMQC2MRCB4jlucK8wzLPPwXlNRS4skv66yHzx19nxhg==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794499605;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:Content-Type:Content-Disposition:
-	 In-Reply-To:X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
-	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
-	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
-	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
-	 X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=6MmXx0cIG1BO5Vq6gjwpdVoZ25cbH6TfLdbwi6a23iI=;
-	b=w4j4SnFw+xq8wyFD4pW7BqyHYMCCzioL02rkOI79VQ+i/5c1onLZZvA1qX4B1ybeAJPp
-	 X7hZ4QVrtiJpHkwdkWlGFsSnw5/y/PIdRDEZKWaV6R1lljmMFLuYLOUNUHd0A1OR0CHeB
-	 w+uzpEe1D2ADp7fkmDw+p/6qNWxMRfjh34YZ8xewhim37AOhUbfkn2RZGU10PJ/dRVm1B
-	 /jVp5AXhpiIwzI4P7DoGzXVw8GgRil6JH8W92ar4iW6v3uzRkVhV4vDR0kQdAUYbTzhUI
-	 8Ibqel0zvYUeseQZ/Ukve+wZaBe+jt1J0bZJ3eXgYL+dzruFoa0RhT8ULRUW/sAh6tw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794499783;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=N0ZJsqzR/c1fZDYFNq43Ai9ghBTFqYNHBo+RKWJmWtA=;
+	b=IWcd0kYnZXvVoTuGBuucJZK0olqCugYjPxehY6j5RSyOTN8Ass/ERhbuPAQ00mjKeHPy
+	 m0lQp+hFJzrl5jBViYArJWPnta4TjUiZmPjXYtc+jscXpY4AbdX8FxhexL4JB3ScKtuxw
+	 VBP5p+MOFYkeAXnUUEnaMxaOHErZYY45HjQ5ecloeNYbjyZsYV45xlok02GOmkiqqIObn
+	 3iILA/bv2VZiD+T/Fwc/FTQ+oTh18zsQZoqtNlqW3i8B6GPkzQ+Ug1JoaqVEBqZQBOHuj
+	 CpzfbnvHoVAjbXUMaaNDFTIq1hwdciAtBu0ueVwwUayhxDyARBB726O6byhnH3uuoEQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=nvidia.com;
-	spf=fail smtp.mailfrom=nvidia.com;
-	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=Z7euJp4x;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.56.28
-Received: from BN1PR04CU002.outbound.protection.outlook.com (mail-eastus2azon11010028.outbound.protection.outlook.com [52.101.56.28])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=HkqPvzgK;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.169
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 472C3606A327;
-	Thu, 12 Nov 2026 16:06:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 472C3606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0EA8606A327
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 16:09:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C0EA8606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=Z7euJp4x
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=M814BBsy8lz5x9sOYsUIatxaZY9pDN4sscfVM/l19GTRlerq2vmENWxDGcXXnftwIf9FCPs3Zhl/SyE6iTBJ5mbxqx2qIyo2EKgviZiwVZvmTdMshKNLS/Kp3QKxSPYhybf1aMRzyxB5ncc+jP+u+Gv7uM7dQUtpp/jDurK9ihhyKywZIQiSr0RcNWbA2cH/JCmlSU/i6LjH8IPXNCojiP/Cqe5AWPWhYbAhG7wfCxcJrInfoTzVpCKQoDXOfza6qwcX8bg+H2boC6Rp8ovX1l73Jm9CzEH8W7xYJFm5SC8Oel028xndbpOXzHqfoPh9BghUXO4bnG4yUgyi3+ezpg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6MmXx0cIG1BO5Vq6gjwpdVoZ25cbH6TfLdbwi6a23iI=;
- b=NUvKf8nSfqaQWFDATdrFiUFCXt35pyOxMqnUN0JgBcCRIxitveHnLyL+e5K2uqG8CthkB9K/6M9kKlvOL8xMpU29C2MoIdMh/4Sr5x4eHNfSAN+L62EyxuAPscj56XB+MFULvIMqkq8BlmO1DHvvTy5+EqdPr8vtsVWC5C08yoF6ZdVlYujlCXv0GzZ4RiFpPYX0KGZF05mLuRbwl0YpH0Zeetg3RjtpJ+vaVXwpcctiBXZBizORtEskfKQcYW8EaMB9fFEz9X9O44U3LZuKCghgdu+OHQu4K7p3UD/mp6FB94Ca50jaQxv+Cdg4w+7b0f+tnZz3UdsslrMLZAGNzw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6MmXx0cIG1BO5Vq6gjwpdVoZ25cbH6TfLdbwi6a23iI=;
- b=Z7euJp4xwQPiVBIj0BWeuNsFYuNcFQwoZ/87y6pJNtDPcYfmaK1gENX0PZrwMwv9rRYfKywrTen6ZpjmKLNBDqCXJtnkG0Kz7WtfecC0eGE66hG768QHlUNglJbX36uomqtUpIQYwvHig2ayqqSRgiBFgKLmVcDPiVn+5km2ZXiORdnAYde3uB5kX4tRHxArxxnyX38dq+GHFQy45ZAnUVrYLB8d1wuBYy1dXvce1EyRBh35xLUGHGPZYod68mheZeeAU1ATfpJF1eBmlO3D9KFEGvrVbOPClrnUL4/qY/07oBBCTDkIYXLbBzvRYfcvILRoZGf+yoxVoDo5nbXciA==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL1PR12MB5174.namprd12.prod.outlook.com (2603:10b6:208:31c::19)
- by SN7PR12MB7450.namprd12.prod.outlook.com (2603:10b6:806:29a::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.10; Thu, 12 Nov
- 2026 16:05:15 +0000
-Received: from BL1PR12MB5174.namprd12.prod.outlook.com
- ([fe80::58de:822b:868:96e9]) by BL1PR12MB5174.namprd12.prod.outlook.com
- ([fe80::58de:822b:868:96e9%6]) with mapi id 15.21.0615.008; Thu, 12 Nov 2026
- 16:05:15 +0000
-Date: Thu, 12 Nov 2026 17:05:04 +0100
-From: Andrea Righi <arighi@nvidia.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Tao Cui <cui.tao@linux.dev>, tj@kernel.org, void@manifault.com,
-	changwoo@igalia.com, mingo@redhat.com, sched-ext@lists.linux.dev,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	Tao Cui <cuitao@kylinos.cn>
-Subject: Re: [PATCH 2/2] sched_ext: Block a retained donor before PI deboost
- routes it back to sched_ext
-Message-ID: <avXjsO_fLaUC_4mG@gpd4>
-References: <20261112144935.583937-1-cui.tao@linux.dev>
- <20261112144935.583937-3-cui.tao@linux.dev>
- <20261112152118.GD1813469@noisy.programming.kicks-ass.net>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261112152118.GD1813469@noisy.programming.kicks-ass.net>
-X-ClientProxiedBy: MI1P293CA0005.ITAP293.PROD.OUTLOOK.COM
- (2603:10a6:290:2::12) To BL1PR12MB5174.namprd12.prod.outlook.com
- (2603:10b6:208:31c::19)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=HkqPvzgK
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-3aced9804e8so39650001fa.2
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 08:09:42 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794499781; cv=none;
+        d=google.com; s=arc-20260327;
+        b=CHDHUCJaECws3YpvJG5RCwajPDRu+IjJwn4Jt9IKS0LXMECqkWO1k8rcP/IYdaEG+8
+         oY+gGcCo0fZ8ieqkg7Ml7eDgOOvnJz+epzVBdkq9e3r7jMYkT9IEmMCcTWcjgbdo9EBq
+         XgBprWlTiISDCJbJhz15HTyQYi/971aRu9gP3vdRJm99HpfAlYjwggsC+k718I04P+gD
+         1FBdGPo/eAhUqUF5vdvrHo326psjTeDOrE90kvZoEGSKJLHO3J9brPCOCViQD2C9Nn/2
+         7wpfsp+9+l8qWxsbFjstVbXl2/1McRJ+Oe8kbfQNexwGTBgC+H3ZJmVAsHhIJ94hoI67
+         aHHA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=N0ZJsqzR/c1fZDYFNq43Ai9ghBTFqYNHBo+RKWJmWtA=;
+        fh=jZEpmanWap+k6u3rO4x22YyKckhC27G1Xqqsj0PrZbk=;
+        b=fxaH+AAGrl4V+JWLFRD1uM4GKFsAlcEx/5zpTPcAbTHHT6MW46qmqmpKiEsvmzzvh1
+         L1ce675LNp29IZwlS7yeQjQxzXuhmW7+3I9CvboX4bw+jao21bgaeO+lsl+JjgBYdfgw
+         Ql8rxq2kVCWl3Fkk9w9Bk21XWONuSIo8H+xMAjWfY5t/jv1AwtH7QYKwz6xFNIH3wATV
+         uIqUIU9O8tpqRDK6WxP2g60JTnxEckEzgwsDxHjOc8TKEtycxJdQRHLxm0iLd4lhs/Lw
+         f14hzEskcvz+kRuTyftuzWM/L26C/dAhsuY0MnD2ZZJHK2lrOflYI9yoe23soy1ET/Tx
+         a1CA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794499781; x=1795104581; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=N0ZJsqzR/c1fZDYFNq43Ai9ghBTFqYNHBo+RKWJmWtA=;
+        b=HkqPvzgKP+XCUjGb45k5wH4PkzaSBqWf6dBWgk0ZPwgu5mjatfBJgkb/nRdfPtnvnk
+         WQukZc9APT4+HCR/O2epMXl0JnrGpDgUu5N8LlceEMG0F3w2EzV92AB0m/Rt2YdHYK1m
+         fegfo+zKJcpIXvlg2wZBNp2dtyCZaj0FygWez2KxNgsrl2BhZB60F5mRoshL+ddafpJH
+         Tu8cZz42LUNEEWud1TRxhMAs5VWIV2aROSCwzvyeJJ7FH2o1AhyfIuwXviocNoyuing7
+         GEoJ6L9RhBx84Vpo6/qHHHvDKPFS9fKY02zbltvgytt9IEzYuUEoBek58+LA7SbFoqpk
+         ++2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794499781; x=1795104581;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=N0ZJsqzR/c1fZDYFNq43Ai9ghBTFqYNHBo+RKWJmWtA=;
+        b=DfoCzL7qsDL8n58MyXglw33QbcNGpnClMj34MjcMJKYBy/Do9zenF1I1r47x1+qx/T
+         qxBWu33BUYAYmVI3rewHECPxeegkPD/aMu6LNnwjHuYbmhArFn4JW/0xcZHGOujg2Qc7
+         oxNZbRjkYf1WlHEjKqzb07Mrkgs7x0WFhdpIr1aNh3Q3y5p/NF1008SK5N0MrZsZP0Sn
+         CfYpyy1Nr/8S6xKtme623WrfgjFFrBZwFZJGknjgDKTsm/jDV/BtDHE7X9A2eBBWtDXj
+         jHJoDOgCmsTnKm/ThlbfnDTOQIl6BjiUHYyADNqZxcIkU/wuiz1vW49O4DbUpRnQLUH+
+         4oAw==
+X-Forwarded-Encrypted: i=1; AL+hErElfYDWuM6cm1wgdDwhxIvKCTHEkSecSgGpwAcIVhg33qwaI85t+X0WEO5AYLvUi7GE+Vs=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/ReJqKd3rBzIsNan3ehtXE4YYM1v9I7DfjIllbK1iv4YboGl/L
+	XKqX5juCJsgj+gZg0T8fxgMNRgzZLhpvJZyj5sqCaJpoETk7q/aah4nUSX6ur8DzIvQDhAu61IY
+	G0K5LLdu+oz0rIzuyCkxSyYo9+pab608iOw==
+X-Gm-Gg: AYBFou3ONAv26AW1mOocy0RA6owT8UKdq07hGrAvpiWHgrRdUPir2ZsPaxhwsXRARfF
+	hdnjMvTN7totmuEYGaVX3OJkp+i8K5ECCiXM16LzHcvq4RuqnsX3uMtpQEa7H97WE0FMCYaR2so
+	ssn5m5FYalKWeSHskcG8D8dyES0utQnA/XKtLwZwv7mJAPQ5QD/3DDGVfXm0ZsSP2xtnYzh2UNx
+	zGhU8URghu8C0eliuWD/iyInl699kQ8yaRZD87T+ejr+xIXVgD2s5ZHDcOjyaL4h914hltx1Oxo
+	P5RAZC66WbOoyfkohCsP9+9NJlh04MW4Ph0E3U+73+lXuvjd9UgSHwpuSUXl6UvbJtBARPRXnqi
+	L7qud75WSICLI00ywOtkE240A8fuZcUNHE0HouJC7t00Lb8VaSrLnBjbtnJ9Zs0sBVfdo5M7C1r
+	jtJtTyk9S9KBmKLPbeucC9oY/FXg0=
+X-Received: by 2002:a05:651c:a16f:b0:3ab:1fc4:8eb6 with SMTP id
+ 38308e7fff4ca-3ae2b49f24emr231381fa.5.1794499780672; Thu, 12 Nov 2026
+ 08:09:40 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -100,166 +104,76 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5174:EE_|SN7PR12MB7450:EE_
-X-MS-Office365-Filtering-Correlation-Id: 649d599f-7e3e-48af-c4f3-08df40d6bd34
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|366016|376014|1800799024|23010399003|10067099003|4143699003|11063799006|56012099006|261022115727099003|261026121527099003|261022075727099003|261026140227099003|261028144727099003|261022105027099003|261021121427099003|261021123027099003|261102123227099003|261009223027099003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	0YungozPP5xs1QOIi1DDvvUSr6wYmCSxZMIOL/azvspr8fs04h9+vugny1bM8OVL2DqTjp74c6ezDccFBIujFmftMVDRAI8UOZqzUoFCRBfcwueSv9v51J0bUDd3WUrbqoRgliYcTbrKQcak6cBp2pKwDJJpVTBAL6wYQU6s/O9gmgWKCFXucEjteq8LK3NHX6XO/49XcgwmOSg5HHlSk9v6Zahdf5TweSVKr5mS6RKzLj/WLomUEslxS3QGLojDGIcvHq6+gcH1VaB6n4aFupyHXk1JIQPGL8LeOAET3mrbyyCpv67LxzqY5HaxQTbOKfFZxJimmWWl/DBRw0ckrdl8p01Co9KXcC/ELfJp+QYiUJvjMHsAkAWeb8uvpF1Ox0ZuHMZV5YRXcpvjDGjNy9lWgXyXb2LyZN/3ZaThh/biRts4M0gxF4PfniXKuOIX7I8bsK6NO61yYEEyn3EbFGljKzZwDnODpwAwCTjevZp1i4AiFLHLZosg2ioaTz/+261GaTowcI/EahjAVAU8AifOK81Epk8Mk6ofgUAk77lCyQpjCiBHiUvJJTuVoHHXcB8lqZ4BZj9Kc5oWbSENyXn0k7uBQ3JE15+7iD+pa4vHscrYAwMMWMmJo9UcNBPaZRGA2G8QNOIBFJctiBJKVREKYYyGL0d3JWFaEPOmuaE=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5174.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(366016)(376014)(1800799024)(23010399003)(10067099003)(4143699003)(11063799006)(56012099006)(261022115727099003)(261026121527099003)(261022075727099003)(261026140227099003)(261028144727099003)(261022105027099003)(261021121427099003)(261021123027099003)(261102123227099003)(261009223027099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?k5/aTfSTDDWoQ2o8vpxEFZcjxKzh6oS+HmcjnBFd1hX0Grj2Fnnic1c0EAEn?=
- =?us-ascii?Q?Xls1A0BYLA1G9DR/1smtuV8PG8NCpArPjiLK8r96iwJ2Xn6ak0iKVEqNlMhl?=
- =?us-ascii?Q?NpZ8LZHyirdS18Gw/ra2/QLa1lvhV/B0f3nD3KXXQ63IvgeuxoBUSTXMpbhe?=
- =?us-ascii?Q?JFb3Fh0NW6xI555rrnXiYB51xzntZnVMogaLGgO23GHfGnufxBMHAmlcsRjU?=
- =?us-ascii?Q?QmpNe1Zbuf1G4BawC85I6x6xoKX9Yf3vXk1vvpV7qLjuzpO51feYUXqUX6HS?=
- =?us-ascii?Q?OBk/xFzk20lm2lMKP0Q5p34KEAHz+m+NMjAWNY+z8qZWHN4au5rUIIhT7P6c?=
- =?us-ascii?Q?d53CTz0SIws+ZKj6dmRpbSkVMcufmpUshgfZ7csOKJ2WHc2+FMFFSDdHHE++?=
- =?us-ascii?Q?BtRfbBYebzeY3lC2lqidHAiU16N1tAG/fVhOZoDuI5SgpSI/pA1oYNqMytK/?=
- =?us-ascii?Q?0UZecXezEZ9yLIF28F9Fmlt/ZWkvvdHUu+wNJJKUgJpyaXOvojRVPcHTOgTp?=
- =?us-ascii?Q?NlsCVIj9JMDnVkZ033Qf/J96CXevqxwmcwRD8ZKSVh4Dpcsf8uYG1ityNu0x?=
- =?us-ascii?Q?zjMZunUyJaETYIz5+uYUkOQ+9UdlYVJPECjA0loGCWyzLexyFqGQp/jvYREh?=
- =?us-ascii?Q?cMqEbJMmvx1yACOaOeSm6Xp/JgEW7qYthyzEUKMOhG/SPbOiFTdT6ImQtiaC?=
- =?us-ascii?Q?9Pk2P0XJEeWlMJRrXRLzM8DwTmphND2AdVY1llKRX6xjQYr/j9AI9iC/RJsn?=
- =?us-ascii?Q?JT5z1cPJ7J+SPJzRPPMUtCaQ0C+WIntVPGsvA0736bVSffbljbKXTHXgKy2t?=
- =?us-ascii?Q?P/yci6eqy2AcHcGC8XWf+/3BQ99WA427fy+aSoU5O+3N90pOVpGBHuZCv3o2?=
- =?us-ascii?Q?Qdc4wh87SuC8u0D3uIAjU5EqMGyvxs6v2BGYvU4J1S3CrgFihyiUwj7sqnCY?=
- =?us-ascii?Q?+P1g1TEOA33RSpX/lTDm6AZMHGT6toc14NhraiOJh3jpRiswiiQ64ZuBbjTL?=
- =?us-ascii?Q?FF42ZcwA/Y71t7u55vMpdmpQjDOWTSOa2Khv3BVrLTkrp0ng4RGqgoB3mNfW?=
- =?us-ascii?Q?QY5DbZrXpA1ICFhJzYZkoMxr6E2erp/cOUA2GnQpkK5T89JsiVGbw/9TD5Ms?=
- =?us-ascii?Q?ZKjA1pijpeoS16GGfBbtK3GH3zBflAb5Uyc2aVTMLFBUmfa80Y0L82aPUsBn?=
- =?us-ascii?Q?TBR+5AOOaOch2aJO90o2SpMfuqlQxgu1IVqJLZ4IgyY698WKiEX8vNZdlTUv?=
- =?us-ascii?Q?NvWh7dCy7ZHadP7x2CR7o2WWovUrCQF4/TlbBZRJliTZmeuwYOZ42fA0RD9p?=
- =?us-ascii?Q?TF+PkhGDRVTpQEJlRQSJnCVxu9elIRCoHdUxPyL/rGW2fZ8BoYbkUSLQXQ89?=
- =?us-ascii?Q?kO9xwqB5XXMDLtG4+IGtVjnCcRwN2bLXkMZBp8MvbpjdJf8LWogwiY3U4FDg?=
- =?us-ascii?Q?hh3EE95Zp4bEgHP3fkzkGWroEF2CyPpMiF5GOrKauhm3o8K3GiYlPhyZ+hms?=
- =?us-ascii?Q?cvmmbr6LDNFNh+iq9BNlrMvytVVlRuuf4KHRFhdaQAPptnKvp1to2zUgrnfy?=
- =?us-ascii?Q?WZhq3iK0gKUL1jqyDbb8AF2zV8GHGmzIVjbfqzg4mg630XPIDLQohQdX/1NF?=
- =?us-ascii?Q?0MzqxEjwM2B2Vqa3GtKz7uPhbnNjDbZ26BG9+3iMgDp3KxVnpzS/hIWJ8ZPW?=
- =?us-ascii?Q?neZUdS3Bm4qXHHTWxyjGQtXK/zKir0tV/9pLFw3/Xrwz6iiH?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 649d599f-7e3e-48af-c4f3-08df40d6bd34
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5174.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Nov 2026 16:05:15.3696
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ncP7E9LE0cE74hGmzPwD2vg6UInetUBmh+nkKAxE6MH5f16H3bqTfBxu+iarqzlmu3Hq0QL6SI8bqIHRYQFChw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7450
+References: <202608191340.98574fe2-lkp@intel.com> <4h7zrdfpu3ailx5ajkyqohmcfuxgrk3tn7i7n3dkp3ksy5xehk@xqg5j6pqzocv>
+ <179361623876.3.16264907931792312619.redis-ibpb-report@gmail.com>
+ <99b9d530-d962-4739-8f6e-83ee5c0e18a2@intel.com> <CANGjgdkmNTRUNebXcUVnmXfx=ofCTmioGw10jZsGfbShG5e1mA@mail.gmail.com>
+In-Reply-To: <CANGjgdkmNTRUNebXcUVnmXfx=ofCTmioGw10jZsGfbShG5e1mA@mail.gmail.com>
+From: Chengfeng Lin <lin2530632123@gmail.com>
+Date: Fri, 13 Nov 2026 00:09:28 +0800
+X-Gm-Features: AclHuK90H13AfC2kajknsWwbrMWddUrDNgqH8Fzf8YrLwLCTFOXpslvkhInORC8
+Message-ID: <CANGjgdmcVPwq0+1ch6wO4_j4iaiyQEp1p90yYg=i5LMyNS9k9g@mail.gmail.com>
+Subject: Re: [linus:master] [x86/bugs] a3af84b0fa: stress-ng.seccomp.ops_per_sec
+ 95.7% regression
+To: Dave Hansen <dave.hansen@intel.com>, Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>, x86@kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Nov 12, 2026 at 04:21:18PM +0100, Peter Zijlstra wrote:
-> On Thu, Nov 12, 2026 at 10:49:35PM +0800, Tao Cui wrote:
-> > From: Tao Cui <cuitao@kylinos.cn>
-> > 
-> > rt_mutex_setprio() is the only entry path into sched_ext that does not
-> > block a retained donor: an ext task PI-boosted by an rt waiter can
-> > block on a second kernel mutex while boosted, and on deboost is routed
-> > back to sched_ext carrying the queued+blocked state that
-> > scx_prepare_setscheduler() promises never happens; every PI cycle
-> > hands the BPF scheduler a queued+blocked donor it never admitted.
-> > 
-> > Call scx_prepare_task_sched_change() before the sched_change guard when
-> > the class change routes the task back to sched_ext, which performs the
-> > missing sched_proxy_block_task() (plus an update_rq_clock() that is
-> > harmless here: the clock was already advanced, so the second advance
-> > only applies a small delta). The boost direction (ext -> rt) needs no
-> > handling.
-> 
-> I can't understand this. And I take a very dim view of sprinking magic
-> hooks like this. So no.
-> 
-> The little I understand of things makes me think __setscheduler_class()
-> is buggy for EXT and *that* should be fixed.
+Hi Dave, Pawan,
 
-Agreed on avoiding another special-case hook.
+Following up on the Redis result, libMicro 0.4.3 [1] provides a smaller
+reproducer: single-threaded loopback TCP. In an unmodified
+parent / a3af84b0fa00 / parent comparison, native time/op increased
+29.84% for 1 byte and 28.76% for 4 KiB. Each condition had nine
+unprofiled runs per boot; the TCP baselines differed by less than 0.10%.
+The pipe control was essentially unchanged.
 
-To recap, we ran into this while developing the proxy-exec support for
-scx. Earlier versions were handling the PI deboost case too and we also
-explored passing next_class into sched_change_begin(). But that didn't
-make it into the final version and it was left as a future improvement,
-to keep things simpler.
+To exclude kernel code changes, the following diagnostics used three
+boots of the same unmodified parent, 96cce16e26dd, on the i7-12700KF
+(microcode 0x3e). Using the per-CPU helpers attached to the original
+report, the pre-test sequence was sham / protection trigger / sham.
+All helpers exited before testing; the benchmark did not inherit their
+speculation-control setting. The test cgroup was restricted to CPU2,
+one P-core.
 
-Regarding __setscheduler_class(), the task keeps its SCHED_EXT policy
-while PI moves it into RT/DL, so selecting EXT again after deboost seems
-expected. The problem is carrying the retained proxy state across that
-transition.
+Inside that cgroup, the original 30-second command was:
 
-Would it make sense to revisit the old idea passing next_class into
-sched_change_begin(), so we can handle entry into EXT consistently
-before recording the queued/running state and replace the separate
-class-entry preparation hooks?
+  ./pipe -E -C 0 -D 30000 -B 10000 -L -S -W \
+      -N pipe_tst1 -s 1 -x tcp -m st
 
-And unlike the earlier version, we could restrict this to transitions
-into EXT, leaving retained proxy state across FAIR/RT/DL transitions
-untouched. An incoming-class preparation callback would let EXT enforce
-that requirement without an EXT-specific check in each caller.
+Despite the executable name, -x tcp selects TCP. Each operation writes
+then reads one byte; connection setup is outside the native timed loop.
+The control uses -x pipe instead.
 
-That would address the transition handling generally, including PI
-deboost. Does it make sense?
+These are means of three separate counter runs per boot. Per-operation
+values divide each run's totals by all completed TCP operations,
+including executed batches excluded by libMicro's timing statistics.
+CPU time and counters cover the whole test cgroup, including setup,
+cleanup and wrapper overhead, not just the TCP loop; instructions
+include user and kernel execution.
+
+                                 Sham A       Trigger       Sham B
+  Cgroup CPU time, us/TCP op     1.68762       2.19800      1.68571
+  Cycles/op                     8233.34      10728.11      8225.14
+  Instructions/op              20291.04      20243.49     20307.35
+  Kernel near returns/op        442.537       442.379      442.556
+  Kernel return miss rate         0.471%       13.111%       0.454%
+
+Relative to the two sham means, CPU time/op increased 30.32%, while
+instructions/op changed by -0.27%. Pipe CPU time/op changed by -0.18%.
+
+Separate branch-stack samples showed mispredicted returns at
+__do_softirq(), net_rx_action() and __dev_queue_xmit() after the trigger;
+both sham boots sampled the same return source/target pairs as correctly
+predicted. The samples identify locations; the 13.11% rate comes from
+event counts, not sample proportions. This supports a return-prediction
+cost, but does not explain all extra cycles or its persistence after
+the helpers exit.
+
+Would this smaller reproducer and these counters help investigate the
+persistent effect?
 
 Thanks,
--Andrea
+Chengfeng
 
-> 
-> > Fixes: be8be8acb268 ("sched_ext: Block proxy donors before taking control")
-> > Signed-off-by: Tao Cui <cuitao@kylinos.cn>
-> > ---
-> >  kernel/sched/core.c    | 12 ++++++++++++
-> >  kernel/sched/ext/ext.h |  2 ++
-> >  2 files changed, 14 insertions(+)
-> > 
-> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> > index f7a452123ef5..dcb16b006740 100644
-> > --- a/kernel/sched/core.c
-> > +++ b/kernel/sched/core.c
-> > @@ -7816,6 +7816,18 @@ void rt_mutex_setprio(struct task_struct *p, struct task_struct *pi_task)
-> >  	if (prev_class != next_class)
-> >  		queue_flag |= DEQUEUE_CLASS;
-> >  
-> > +	/*
-> > +	 * PI boost can route @p out of sched_ext: policy stays SCHED_EXT but
-> > +	 * __setscheduler_class() follows the effective rt prio, and rt/fair
-> > +	 * may have retained @p on the rq as a blocked donor. Block it before
-> > +	 * sched_change_begin() records the queued state, the same way the
-> > +	 * other entry points into sched_ext do.
-> > +	 */
-> > +#ifdef CONFIG_SCHED_CLASS_EXT
-> > +	if ((queue_flag & DEQUEUE_CLASS) && next_class == &ext_sched_class)
-> > +		scx_prepare_task_sched_change(p);
-> > +#endif
-> > +
-> >  	scoped_guard (sched_change, p, queue_flag) {
-> >  		/*
-> >  		 * Boosting condition are:
-> > diff --git a/kernel/sched/ext/ext.h b/kernel/sched/ext/ext.h
-> > index d32bc01071b0..1a699be25331 100644
-> > --- a/kernel/sched/ext/ext.h
-> > +++ b/kernel/sched/ext/ext.h
-> > @@ -19,6 +19,7 @@ void scx_rq_activate(struct rq *rq);
-> >  void scx_rq_deactivate(struct rq *rq);
-> >  int scx_check_setscheduler(struct task_struct *p, int policy);
-> >  void scx_prepare_setscheduler(struct task_struct *p, int policy);
-> > +void scx_prepare_task_sched_change(struct task_struct *p);
-> >  bool task_should_scx(int policy);
-> >  bool scx_allow_ttwu_queue(const struct task_struct *p);
-> >  bool __scx_allow_proxy_exec(const struct task_struct *p);
-> > @@ -72,6 +73,7 @@ static inline void scx_rq_activate(struct rq *rq) {}
-> >  static inline void scx_rq_deactivate(struct rq *rq) {}
-> >  static inline int scx_check_setscheduler(struct task_struct *p, int policy) { return 0; }
-> >  static inline void scx_prepare_setscheduler(struct task_struct *p, int policy) {}
-> > +static inline void scx_prepare_task_sched_change(struct task_struct *p) {}
-> >  static inline bool task_on_scx(const struct task_struct *p) { return false; }
-> >  static inline bool scx_allow_ttwu_queue(const struct task_struct *p) { return true; }
-> >  static inline bool scx_allow_proxy_exec(const struct task_struct *p) { return true; }
-> > -- 
-> > 2.53.0
-> > 
-> > base-commit: 5b740a72b55c4267ba4d8010f17dde26b26f52d3
-> 
+[1] https://github.com/gormanm/libMicro/tree/976d502afaa2d9b919564d7fa8a08fec286dfc89
