@@ -1,63 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.227.137
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794480801;
-	b=wrqkEKy/S9l5tVu3TpVgMg+x+NWRnGhBz1EoTkE7t/hkuS2KtaWVcrBNqB3RnCV0Wo5/
-	 hNrRAibCLGgl9teqhYwJz0QQzPW8RvNKwLtAOvz7C9zemOwersiXL+2CznRjFiB+0Ya4T
-	 9Fq46hN9kBQUrx/ZxORwUw6fNgZz7KDRJ5CZvve6s3FgamjQw5Ia2WKKGmk1nPwIQCJKy
-	 h18LKahAYIsGXdZBkGQr1jirARlDbrQcbAiECL540Cmd+nwNNrGIrruT0/3z0wUNd7+HG
-	 hYfojjz+u1bGUM1N7jI7ATrCYkmKHfW7snid9UiCyd2fqdukN5EAoOf268k1gpEbUOg==
+	t=1794480995;
+	b=pu7SowzH0PRnhtz3ikLUSJd/W+bAQvJutpsK+Ck4b5MOTbb3bBoj+rofjm68PzHRT1sX
+	 cODuAnKaZ2wOfQmI/WZh04OH8y4gVf7bnujK75OOqiMj+DTpOP6iZRoaPljgrWEngfasN
+	 tWT/OXvFlzvlMTh8YFz7nxs8qQYXneUQ6/KWhBzQkqLZYfZO1nezX0NF5UjQ5PZ+lb6W+
+	 LDgADMODIYusQPKplz4fmonNWff3ILwU6oEPdO/LUHop4ahRxxCV7cgCbtDZppVO4Eljd
+	 HHUQTgphO3Zt0dJ03iTUy17s0UbF6QrG74/W2D53fLt8qbqAcLciHw0t5o3O5lheV8w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794480801;
-	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To:X-Debian-User;
-	bh=dpWVkgIAlZX8Vu+OGjIOuEfjiO2MgyeWWvRHXsSgUG0=;
-	b=Lbot2deTUAHl+ZB8SYeP8UKa36UF/iBs6INnWM3oIKDlMsmfQM2ritvCk1to7EZElDUE
-	 EjE2Qk5H2eTPCHwyn8eXDfLbnsPN3Z59qmBmJMz8eK6F4cMCYu9vJifU0jmN0h3l+hegz
-	 Fx4eVAM9mlKBo1/TooX4W6zdxp3PpPCJmA04EJKXKYQpi3Yq2gnWXeDxmG5JK+wyewf8Q
-	 ZG2fXaO9+1vilRycUqLGw++S5iJkOlomdohFWXlAaFmQmUCuEpy0AbjGMuUUpGiDYSIa1
-	 MpoXVJQyWlkxO4mlzxt/l5lj++kH/LqlhVs1pkpqObqnIXPKA8TH6hyEvviOGch1SzQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794480995;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=jtGHs2eqhkMRzNqa6Gcv6/y7Ijx8kqUTG8HewUTMQTc=;
+	b=nN82HLXyibWV4YwQKxI5Fnj5S6V6fgHnE+InLQwpK5+zmVHhh+PJCrLbyOCpuBefbzuH
+	 OdXlmh/8on9MjUg+GMD3XeJFvPa+fhZtjFyHRQvPnU45STrmWmGHAoN5Bzyk0LpA+vELG
+	 Pw6Ehd0ijEDGjIVxt8yhLEl4khBcapW23p8sHgKmUjUeycIcuR5Y/EFAIfPtU4MEobq2f
+	 EiJEYpHgDEZ14vT13kNirRv1KJ5VOT/rWI1xOSQRYJ21ptoy6Ufx2bs4CFMsORvehU1hf
+	 HxDSjVSa8m4RAijo4DSsPUoKeL7o3jsxexssQVyxIgUf5DT6rsOoTOOGh+mSe1SYinw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=debian.org;
-	spf=pass smtp.mailfrom=debian.org;
-	dkim=pass header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=ooi4bpXe;
-	arc=none smtp.remote-ip=82.195.75.108
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jrkXU1T+;
+	arc=none smtp.remote-ip=74.125.227.137
+Received: from mail-pj2-f9.google.com (mail-pj2-f9.google.com [74.125.227.137])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A975606A327;
-	Thu, 12 Nov 2026 10:53:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4A975606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91845606A33F
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 10:56:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 91845606A33F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=ooi4bpXe
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=dpWVkgIAlZX8Vu+OGjIOuEfjiO2MgyeWWvRHXsSgUG0=; b=ooi4bpXeGWR5YsVhny7mkqjKQH
-	cppE5FRcXZRTB8L1JSIpd4aebrSV2SeRc5yNGqQQGqnQ2f6JL+6AauEBPlzYNLfbJ9F9ll0t5hmX9
-	7pRmhos89JZRWYRAVMbNKLtWVkUBOTb9U+Ek6JozPybHxFsbLT5gGVi4QqwlI5bG40TZBxm5+zAg4
-	l7a4a6SXJxfxOnWvgxhUZR86I5e9F5NAGOHbiR1No2nLd/4X8LlvisN+bpBH4DhG2I+cPdD/ikAEB
-	Na6CbHXFDKUFAhxTNNx1sk068ZTkBVlfZp9r7Eva4oT3DnxesfwDMkA289Hdry9boNzU2skeg4h1o
-	JBSQlW9A==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1xRSQa-00Dubr-3B;
-	Thu, 12 Nov 2026 10:53:13 +0000
-Date: Thu, 12 Nov 2026 02:53:08 -0800
-From: Breno Leitao <leitao@debian.org>
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: Alan Maguire <alan.maguire@oracle.com>, 
-	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [PATCH dwarves] btf_encoder: Keep the source prototype of kfuncs
-Message-ID: <avWaZSCBSZ7wcm5y@gmail.com>
-References: <20261111222447.322978-1-yonghong.song@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jrkXU1T+
+Received: by mail-pj2-f9.google.com with SMTP id d9443c01a7336-2e97ddaf3c4so19200755ad.1
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 02:56:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794480995; x=1795085795; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=jtGHs2eqhkMRzNqa6Gcv6/y7Ijx8kqUTG8HewUTMQTc=;
+        b=jrkXU1T+YrLuTQfCjAmR7IxcQeKyuXOPWSQgLpSmcaKR/ycd/j7ErZn2Q9V/OePG6M
+         mw0k1g0N/JiJZD07zxm3VaoVtoPwBASHFEOjObAcHSoTfmS19wLeCvIiY5wm92sCDER9
+         HhJaCH72PUwGrZ1gfY1m5z4oNsgGE84915pxmwW7yazaKyktie7US8qdBONlXyw9b/Yv
+         YLtaUp58Md8tfZlYy2Iai7WVKDpSYuiSx3MnUqAhxlStT/X+DO3LhesPnYDIpqgx4cB1
+         wehn6EfRpgZKi5YdQEfNtPQ3qT90lTorr/O9gEOpvTvtwwuu6LzohbAUBu4tKnBByHLP
+         uyCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794480995; x=1795085795;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=jtGHs2eqhkMRzNqa6Gcv6/y7Ijx8kqUTG8HewUTMQTc=;
+        b=OyWC/UD+0zEtGnxf+ika4xYwFVxM8v3KhzHH7+0YChfW3M8f1cgFQqwwFoPB3nVKON
+         VXIF02Q9ZfgtYscaR/2pRIga9PyVOYs8TMzEITh1Gpkx97UOQLCO1L5AXCSMVFF9cf/w
+         Vnc12vrqwmIft3i0qdVCjGHW37HPgdFthERpKCx2X6MOwWiR5ZIfDyGXEPrrhp/8P3UT
+         7Sk+LZ1NQzrOCwm+U9TVKJoox5AbtGo2jFP5IGLqcADDJzJbYNDnuWILAem556AsMiNf
+         3ok5A5EPtQu4RfPuUeWQhvfaJkgkaOj8yGJp+K0pqjMX+PEZ43UXGjnj3i99vijRjfbt
+         SWpg==
+X-Gm-Message-State: APuU4Z/3++XIAFMO2zsS0Iwt56setjLdGzlPTrDVDdnRm/Pg6rH5i385
+	YHBgJYs/gRqUF/FRDpRG6rVQGKZJoaXrOfuKiPvfn/UCrSj6wnSeBEeXgBe+wWEaCdPFTQ==
+X-Gm-Gg: AYBFou0a0dGoFBA+gmROtybo4Y5abCEPVXWMxTN0GyMv9138w4fdetiTu0yLekfHOpf
+	GSc0fht10Ghd2BODFRi9QJT+Mn3MTcWuwJ3I7/LA0Kw5nSBcggQiSHA9qaCE65TU0lO49veQS/S
+	aFDgK1kRJQrsnggobtvHx3aqvVQFjf/ApFot5WtpFK2WBSKkwv9P78SzwBZOxYr88YEOIkduXUt
+	RVhWmbsUthqDKrzTOm109KJiIUwCiDE/+hheL3eOZBsL1NPa75974Q4DXvXNrD2ofmzfLUBjhlu
+	7FfC4gnl1ste0B7kMAW0JnDkBaAJt8PQzjbNRsi+JhL3FBEPxPHGuaKj8BooAF9gIk4yLz7OeKh
+	ZdMh8EBuCiCdH17GX9XDUtrDjESr7sQczDA6uHDU5ZhhlZ+rbMNvPRB2Piyg1k6hbK/s03q+nyX
+	nQc7p/mtYCBxFRYWYhczEJMAEZEs6Q4SdNcsG3Wjh7a5IUBjVMfNJDOmvoomDWZpr8sweTRiHBv
+	IX5i9UW/kbAjKmeqB+HsT9CRYi7piw6gMSARxTXO7jOUgHzp8tz9k9NqvoZ8gFNOksKPwJYyiOV
+	sPzhRNk8ANDfsjjKNgIyrnA8UlBWFNy2zlIQ802/BbFv2r8=
+X-Received: by 2002:a17:90b:1d0b:b0:3b0:8947:fad2 with SMTP id 98e67ed59e1d1-3b182fb2981mr5114945a91.53.1794480994840;
+        Thu, 12 Nov 2026 02:56:34 -0800 (PST)
+Received: from J4f-Laptop.localdomain ([183.36.237.241])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b197d0fdbdsm4228959a91.10.2026.11.12.02.56.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Nov 2026 02:56:34 -0800 (PST)
+From: Shihuang Liu <shlomojune6@gmail.com>
+To: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Quentin Monnet <qmo@kernel.org>,
+	Shihuang Liu <shlomojune6@gmail.com>
+Subject: [PATCH] bpf: Reject offloaded maps as map-in-map inner maps
+Date: Thu, 12 Nov 2026 18:56:20 +0800
+Message-ID: <20261112105620.57520-1-shlomojune6@gmail.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -67,61 +106,59 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261111222447.322978-1-yonghong.song@linux.dev>
-X-Debian-User: leitao
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 11, 2026 at 02:24:47PM -0800, Yonghong Song wrote:
-> The location based checks can drop kfuncs from BTF even though their ABI
-> did not change. With the arm64 KCSAN setup in the report, resolve_btfids
-> fails with:
-> 
->   WARN: resolve_btfids: no BTF func for kfunc bpf_tcp_ops_set_rcvlowat in bpf_tcp_ops_set_rcvlowat_kfunc_set
->   WARN: resolve_btfids: unresolved symbol bpf_tcp_ops_set_rcvlowat
-> 
-> The location list of 'rcvlowat' starts after the function entry, in a
-> callee-saved register, so the function is marked unexpected_reg and
-> skipped. scx_bpf_tid_to_task() hits the same skip through a
-> different DWARF pattern.
-> 
-> Kfuncs are defined with __bpf_kfunc ("__used __retain __noclone
-> noinline"), so the compiler keeps the calling convention of the C
-> prototype. Odd parameter locations of a kfunc are debug info artifacts,
-> not ABI changes.
-> 
-> For kfuncs, clear the location derived flags when saving the state,
-> keep all source parameters, and skip the location based checks, also in
-> btf_encoder__add_saved_funcs() where saved_functions_combine() can merge
-> the flags back in. The inconsistent prototype and ambiguous address
-> checks still apply.
-> 
-> Kfuncs were only collected with decl_tag_kfuncs, which the kernel no
-> longer passes since commit 692393104909 ("resolve_btfids: Emit bpf_kfunc
-> and bpf_fastcall decl tags"). Collect them whenever BTF is encoded; the
-> decl tags are still only emitted with decl_tag_kfuncs.
-> 
-> With this change, bpf_tcp_ops_set_rcvlowat() and scx_bpf_tid_to_task()
-> are encoded again, and no other function in vmlinux BTF changes.
-> 
-> Reported-by: Breno Leitao <leitao@debian.org>
-> Closes: https://lore.kernel.org/all/au27Y9m78_3EH2v1@gmail.com/
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+bpf_map_update_elem() on an ARRAY_OF_MAPS or HASH_OF_MAPS map accepts
+the fd of an offloaded map.  A program that then looks up the inner map
+gets a pointer computed with the software map layout: with an ARRAY
+template the write lands in struct bpf_offloaded_map.dev_priv, with a
+HASH template __htab_map_lookup_elem() reads bpf_htab fields past the
+320-byte offloaded map allocation (KASAN slab-out-of-bounds).  An
+offloaded map used as inner_map_fd is accepted as well, and the first
+inner lookup jumps to an invalid address because bpf_map_offload_ops
+has no map_lookup_elem.
 
-Thanks, this fixes my build. I tested it on top of pahole master
-(9eb594d) with next-20261111 and clang 22.1.3:
+The root cause is that bpf_map_meta_equal() compares map_type,
+key_size, value_size, map_flags and the btf record only, and
+bpf_map_fd_get_ptr() relies on the template's map_meta_equal() without
+comparing ops.  Offloaded maps share map_type (ARRAY/HASH) with the
+software maps, but use bpf_map_offload_ops and a different object
+layout, while the verifier and the JIT keep using the template's ops
+and layout.
 
- - arm64 KCSAN, CONFIG_WERROR=y: vmlinux links again,
-   bpf_tcp_ops_set_rcvlowat() and scx_bpf_tid_to_task() are back in BTF,
-   __bpf_tcp_ops_init() and scx_init() return 0 instead of -22, and the
-   prog_tests/tcp_autolowat.c cases pass (run standalone).
+Reject offloaded maps in bpf_map_meta_alloc() so they cannot be an
+inner-map template, and require inner_map_meta->ops == inner_map->ops
+in bpf_map_fd_get_ptr().
 
- - x86_64 KCSAN drops bpf_tcp_ops_set_rcvlowat() in the same way, and
-   this fixes it there too.
+Fixes: a38845729ea398 ("bpf: offload: add map offload infrastructure")
+Signed-off-by: Shihuang Liu <shlomojune6@gmail.com>
+---
+ kernel/bpf/map_in_map.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
- - Running pahole with and without this patch on the same vmlinux, the
-   only BTF difference on both architectures is the kfuncs coming back.
+diff --git a/kernel/bpf/map_in_map.c b/kernel/bpf/map_in_map.c
+index 0fa3f2ac0f992f..5aa1f8249feb51 100644
+--- a/kernel/bpf/map_in_map.c
++++ b/kernel/bpf/map_in_map.c
+@@ -22,6 +22,8 @@ struct bpf_map *bpf_map_meta_alloc(int inner_map_ufd)
+ 		return ERR_PTR(-EINVAL);
+ 	if (inner_map->excl_prog_sha)
+ 		return ERR_PTR(-ENOTSUPP);
++	if (bpf_map_is_offloaded(inner_map))
++		return ERR_PTR(-EOPNOTSUPP);
+ 	if (!inner_map->ops->map_meta_equal)
+ 		return ERR_PTR(-ENOTSUPP);
+ 
+@@ -110,7 +112,8 @@ void *bpf_map_fd_get_ptr(struct bpf_map *map,
+ 		return ERR_PTR(-ENOTSUPP);
+ 
+ 	inner_map_meta = map->inner_map_meta;
+-	if (inner_map_meta->ops->map_meta_equal(inner_map_meta, inner_map)) {
++	if (inner_map_meta->ops == inner_map->ops &&
++	    inner_map_meta->ops->map_meta_equal(inner_map_meta, inner_map)) {
+ 		bpf_map_inc(inner_map);
+ 		/* Its users are those of the outer maps from now on */
+ 		WRITE_ONCE(inner_map->was_inner_map, true);
+-- 
+2.43.0
 
-Tested-by: Breno Leitao <leitao@debian.org>
-
---breno
