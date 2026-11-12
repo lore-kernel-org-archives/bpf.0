@@ -1,60 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=176.119.200.171
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794512845;
-	b=FGM1j+L/a7JhMDKZdvUeYUz2+wFkMz84EJ8pbclaCPMxXH4ljm4zxC3FwhfeusYpAPHq
-	 1X/ep0krXGJLwB0qwujMmR4pSnium/u2uuZKN92Xrdfo++Xo1gw6/juUo0bRDi0TsH84i
-	 JwEOQUh7WtREDjolJNjryO9oj5wKswdauOnVMgldj/+S3Jb4o1ti6sl8geQxtC1iMOrOd
-	 5TrAfc9yvowMWjiGu+sh1eYEf6j1vhcfVgjg7gTLd9vdiHp19NzRbWWu87OYLXXGUkuNC
-	 /C+TtYpXktsUvA6/KSfMom0QVw2LZhR0hedG75FPep3Z4ql6e4m/aAc8nWNKD26HKjw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794512845;
-	h=DMARC-Filter:DKIM-Signature:Date:Subject:In-Reply-To:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:From:To:Cc:Message-ID:
-	 References:X-SimpleLogin-Type:X-SimpleLogin-EmailLog-ID:
-	 X-SimpleLogin-Want-Signing;
-	bh=ivl2fzOJBQU4OmEbMUJ0rBy92j+Wag+ptYQzVvr86dM=;
-	b=SHmLz2dOnrna4aQa55p5VZUd73F7ip4xRDj+6DcOUphrbREj88vC2CHtJkyRQXgP4CRD
-	 XqhLTgc/XrAUQwET4VMAPJ2ell/UIko/Jr8Q2+TJk8hTNTF/ylG3hoHQQ8v/hcX2ehTND
-	 EdOr2gE+q6AFFao3l83R3z47F3G3I4Ka+2r6HPJF55AfaSdLXxV8i1mwP30rZmvTBQYkw
-	 X5GxF8w6gl7XmRh+V6ai/+GMyT/oLcnAnjxdpX22y/J9d8ITZ9n3oYeRARyeNbAUyExNw
-	 uNC6qK3/ntWd0BNdAS/lbalz5YeN8jrLzq7IZ/VRmlvrPsNrWcxEeuBCCRv3TjUTYMA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=eldare.de;
-	spf=pass smtp.mailfrom=eldare.de;
-	dkim=pass header.d=eldare.de header.i=@eldare.de header.a=rsa-sha256 header.s=dkim header.b=tZnT5CS6;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=176.119.200.171
-Received: from mail-200171.simplelogin.co (mail-200171.simplelogin.co [176.119.200.171])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794513090;
+	b=o8q9FL1s4h0xv8rEm3XQyglIbyJepFFBKt6MwREZbZSNKZM0dD650mXtRYl8rDu8DhVU
+	 EuDv1hAA84BqRAU6/kUJd1PkknC2B7SYLKf66vww/RPhtuIbkLeAX70IORsgoSJlsudB1
+	 ciS/0oZcb2NZhZaIFhWy2hl5fn29ICgrpRjQIkXi+2Y9fXMnGFESIIzPsJPOAUw4UFXub
+	 nDRr7K4Bw1adg7U5TccPfBeVhyLO4Dbl7K21N55hNAwhkPSPN2sCQALIlAMGnAbN0S7PZ
+	 psAxdVWjr5T99fIEyU6X1R/gJISaJI1SQ9Y24rthGcNB10kR2qc/XsiYcrKCeyHUqTw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794513090;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
+	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=J5YHlMWLzixlGZAieAoDB/16KHmKEu6ecY+Dpg3o9Zs=;
+	b=vIJ0BzuOSSbqTGz2ArCxx6pF6s8836a06+cq7gvQMVKj4AXwlqq4PRZ38mR1jvtmTA9S
+	 IVqW94wRe8muk5rp3uHq6cLyeMPdzSRNaK+sZmRBzvuVVZncjwSyc3KtzQ4k1/j8l2Nob
+	 rbBHF7YOz5Zu/8SHNcajNi8QsEmEgzwdXCDJvENNcUDeXQOWOk41Zz6vXPPgfB/68fpvG
+	 Q0PDNMrH4NVzb2c0571u65HU4Oxb0SruNOJk2R8tmEOwmyNwi+iqaNQjSlvDv8K/2VTWe
+	 TRjzEbpOxHtaE9uEL/Vk1h/+3gOmJsxBdAbnqzA0Jytp3tNY4DD+kdYS1+hFM0EcH5w==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YDNlhiDz;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4B32606A31C
-	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 19:47:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A4B32606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=eldare.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eldare.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C2CA606A327;
+	Thu, 12 Nov 2026 19:51:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=eldare.de header.i=@eldare.de header.a=rsa-sha256 header.s=dkim header.b=tZnT5CS6
-ARC-Seal: i=1; a=rsa-sha256; d=simplelogin.co; s=arc-20230626; t=1794512837;
-	cv=none; b=MLyWX6h41Ec0y/MPu5j4cYey2enN5wPYO9ljx3piW4zHNjnNJ2KmKY4K48d2BClOxrhQrxcRP04cFySn0whOmvzd01s1TrcZrRXg8AnGGRaZPbJBWO/KxUSJZ5tBX2iuJ4afRSe3ke6NoN7F6X/AiH3eRDYwIlsuh8cBL52jLsRpq5ZgCll/1WwApL/nbww3PLhCdSJAZBdk+NNVOa5gojY8ERD/6nFWFh7B+OOxN6ga6mBqolyzmIItzAlVvNMpEXvF+SFAitjo7AzwlqKoPzNdQz6HNYJArh8DfuMcTU4vj3fIbfa89MrpkHzdvDNJ0VPX7sIOtdUuLyjIMemtyg==
-ARC-Message-Signature: i=1; a=rsa-sha256; d=simplelogin.co; s=arc-20230626;
-	t=1794512837; c=relaxed/simple;
-	bh=ztgw636+7zmYYSIAXD/3iv7hAPBrWzov6S3L7gOj9Xo=;
-	h=Date:Subject:In-Reply-To:From:To:Cc:References; b=bsv6pe3bSj6KKJKdN/wM+26csewIZoh61McZDOnoBfLluIPvu2x6QtjVQG8y0JyXOYWlusu/j0KyARyZhhJsl5MBaOsrE+0dtUtDzt/tfvc8a9NVJx2Rk+b+xvfsxdk8fH6PkndrUlLOtrdSfLqI5fJwMLZvlJixQkkZSizMaFnjfx7g9kK00I4SYQ9V8epLdYG+ofeQc3quGeDAEaRIT0E4v7aIQSuBiiTqUxYSPjhyQyN0hPYeBWVjUusKIs9BnLFcwz3XCEFWsUrLUzKu68U44Y/UB5MZqdvfZc5hrXnRZ0GvLCGJUxgG2kCn3r44iWoozvApHfwurJo5TYdy2w==
-ARC-Authentication-Results: i=1; mail.protonmail.ch
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=eldare.de; s=dkim;
-	t=1794512836;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ivl2fzOJBQU4OmEbMUJ0rBy92j+Wag+ptYQzVvr86dM=;
-	b=tZnT5CS6C6cxJpsrqHazPBI0Zbg5ymh/bFwT7RqGGOlZoYDvTOr6+2eC2q3nruhiPdzIoY
-	h8J9c2gzY29Tc93F8O2wB0fXN4GQDFAqZ6Hxt2u8lt66aVDCWl6X0vRWvpHEGfZbGn2NvW
-	m/OAXuDn+niq3PRYj8SYbrF7vi5RJCM=
-Date: Thu, 12 Nov 2026 19:47:11 +0000
-Subject: Re: [PATCH net v5] vsock/bpf: release sock lock while waiting for
- data in recvmsg
-In-Reply-To: <avXyzxvIN3ngFepE@sgarzare-redhat>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YDNlhiDz
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C70A1F000C4;
+	Thu, 12 Nov 2026 19:51:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794513089;
+	bh=J5YHlMWLzixlGZAieAoDB/16KHmKEu6ecY+Dpg3o9Zs=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=YDNlhiDztLYpch6dqmeK4d/fJdLblsXSh91VJXz40SJ9cUOTncJMi+qJXByJG/+kE
+	 +DYitf3rLVS32dgj1tn8IKs47A+pnKprk9/9BrxrwCSvn6rwbUljhsyuikM5ZgbpnS
+	 jxQOTmhsK4ZN745Lw4PuHRF6wxmjyiwpJPiGWK3Rp0SFDnnFfT6xOyR+smWuVpYfq4
+	 EJfhtaV71jhRmVTGE6yxPBTbuLt6sIuY0fdOesbRHjWE29sVf2l0KN5+0YUwWbI0qj
+	 5SsntQDys/KtKLuSKpYr/NDlDse0nrF6EKcwBRqsu7XS3XGtw47uH6XkSyRhgEs+cB
+	 cMqbgAb0je2iA==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Stanislav Fomichev
+ <sdf@fomichev.me>, "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jonathan Corbet
+ <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
+ <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>,
+ kernel-team@meta.com, Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard
+ Brouer <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Pavel
+ Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, Andrii
+ Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar
+ Kartikeya
+ Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song
+ Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
+ <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai
+ <ihor.solodrai@linux.dev>, netdev@vger.kernel.org, bpf@vger.kernel.org,
+ io-uring@vger.kernel.org, Mina Almasry <almasrymina@google.com>, "Mike
+ Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>, Weiming Shi
+ <bestswngs@gmail.com>, Nikolay Aleksandrov <razor@blackwall.org>, David
+ Wei <dw@davidwei.uk>, Alexander Lobakin <aleksander.lobakin@intel.com>,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, Stuart Clark
+ <stuclar@meta.com>
+Subject: Re: [PATCH net-next v1 05/11] xsk: Install UMEM page pool providers
+ in the core
+In-Reply-To: <avXeswRldufJ8Nor@boxer>
+References: <20261110102039.1002605-1-bjorn@kernel.org>
+ <20261110102039.1002605-6-bjorn@kernel.org> <avWo1bY5MSN1XvHL@boxer>
+ <874idmrtq8.fsf@all.your.base.are.belong.to.us> <avXeswRldufJ8Nor@boxer>
+Date: Thu, 12 Nov 2026 20:51:26 +0100
+Message-ID: <87a4ndrfpd.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -66,54 +83,182 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-From: jrmmhm.kernel@eldare.de
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: Bobby Eshleman <bobbyeshleman@meta.com>,"David S. Miller"
- <davem@davemloft.net>,Eric Dumazet <edumazet@kernel.org>,Jakub Kicinski
- <kuba@kernel.org>,Paolo Abeni <pabeni@redhat.com>,Simon Horman
- <horms@kernel.org>,"Michael S. Tsirkin" <mst@redhat.com>,Alexei Starovoitov
- <ast@kernel.org>,Michal Luczaj
- <mhal@rbox.co>,virtualization@lists.linux.dev,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,stable@vger.kernel.org
-Message-ID: <179451283622.7.13355395779239029915.1767743913@eldare.de>
-References: <20261109-kbh3-1-022-fix-v2-v5-1-4d9af04f0fad@eldare.de>
- <avXyzxvIN3ngFepE@sgarzare-redhat>
-X-SimpleLogin-Type: Reply
-X-SimpleLogin-EmailLog-ID: 1767743926
-X-SimpleLogin-Want-Signing: yes
 
-On Thu, Nov 12, 2026 at 06:23:00PM +0100, Stefano Garzarella wrote:
->On Mon, Nov 09, 2026 at 09:08:29PM +0100, Jerome Mohm via B4 Relay
->wrote:
->>The loop
->>and the zero-length check belong to the fix (without them the reader
->>returns early or spins with the lock held), so this is one patch;
+Maciej Fijalkowski <maciej.fijalkowski@intel.com> writes:
+
+> On Thu, Nov 12, 2026 at 03:48:31PM +0100, Bj=C3=B6rn T=C3=B6pel wrote:
+>> Maciej Fijalkowski <maciej.fijalkowski@intel.com> writes:
+
+>> >> +/* Called with RTNL and the instance lock of @dev. On error, @pool->=
+pp stays
+>> >> + * set if an old page pool still owns chunks; copy mode must not tak=
+e the pool.
+>> >> + */
+>> >> +int xsk_pp_bind(struct xsk_buff_pool *pool, struct net_device *dev,
+>> >> +		u16 queue_id)
+>> >> +{
+>> >> +	struct pp_memory_provider_params mp =3D { .mp_ops =3D &xsk_pp_ops };
+>> >> +	struct device *dma_dev;
+>> >> +	struct xsk_pp *pp;
+>> >> +	int err;
+>> >> +
+>> >> +	if (queue_id >=3D dev->real_num_rx_queues || pool->unaligned)
+>> >> +		return -EOPNOTSUPP;
+>> >> +	if ((dev->xdp_features & NETDEV_XDP_ACT_XSK) !=3D NETDEV_XDP_ACT_XS=
+K ||
+>> >> +	    (xsk_pool_uses_sg(pool) && dev->xdp_zc_max_segs =3D=3D 1))
+>> >> +		return -EOPNOTSUPP;
+>> >
+>> > that is checked elsewhere, in xp_assign_dev() I assume.
+>>=20
+>> Ah, yes! I'll do the common checks first in xp_assign_dev(), and branch
+>> after.
+>>=20
+>> > Why there are skb mode checks?
+>>=20
+>> (Note to self: I need to make some details/designs more obvious in the
+>> cover!)
+>>=20
+>> Because the provider is turned on by the queue API at bind, not by an
+>> XDP program. This is a big difference. Once the socket is bound, the
+>> queue's page pool hands the device chunks from FILL, whatever program is
+>> attached: native, generic or none. A generic redirect would copy into a
+>> chunk taken from FILL behind the provider's back, and a provider pool
+>> doesn't have the heads that copy path needs. So 07 drops those
+>> redirects.
+>>=20
+>> The checks make that visible (I hope): with a generic program attached,
+>> bind falls back to copy mode, where generic XDP works, and attaching one
+>> to a provider queue fails instead of dropping everything.
 >
->I don't understand why that fix can't be in a fist patch of the
->series...
+> Might be a dumb question but couldn't you forbid generic xdp attach if you
+> detect zc socket active on netdev? Or can't you have some deferring
+> mechanism like other drivers do? Or is it now not possible as decision at
+> that other drivers is done early at napi and here you don't really have a
+> way to distinguish it?
 >
->>+    if (unlikely(!len || (flags & (MSG_OOB | MSG_ERRQUEUE))))
->>+        return __vsock_recvmsg(sk, msg, len, flags);
+> Another thought here - if user binds ZC socket and follows with generic
+> XDP prog, then i'd say something is wrong.
 >
->... I mean, why this change ^^^ can't be in patch 1/2?
+> You generally *need* native xdp prog for resource bringup. I don't see why
+> we have to worry that much about generic hook, which probably lacks real
+> world use cases (sorry if I offended someone actually using it) ?
+
+Not dumb, and that's what the attach check does: a generic program
+fails to attach while a provider socket is bound, and a bind with one
+attached falls back to copy mode. With those two, the drop in 07 can't
+trigger, so it goes, as I told Stan. I agree generic doesn't
+deserve more than that.
+
+And I'd rather not tie the bringup to a native program, as driver ZC
+does. That adds state: attach and detach would install and remove the
+provider, restart the queues and handle that failing half way, and
+whether a bound socket gets zero copy would depend on the program. Here
+a socket depends only on its allocator, set up at bind, and the program
+just picks the packets that go to it; the two are orthogonal.
+
+That also leaves room for a mode without an XDP program, steering flows
+to the queue like devmem and io_uring zcrx do ;-)
+
+>>=20
+>> Driver ZC is different: ice and i40e use the pool only while a native
+>> program is attached, so with a generic one the queue runs on normal
+>> buffers, and the copy is the only FILL user.
+>>=20
+>> > You sort of introduce totally separate control path and rx data path. =
+It
+>> > is hard for me to buy onto the management burden of all this new code =
+:(
+>> >
+>> > I believe we should break this up onto smaller chunks and don't try to
+>> > solve everything within a single set...or wil that not be possible?
+>>=20
+>> Separate from driver ZC, yes, but not new: the provider binds the way
+>> devmem and io_uring zcrx do, netif_mp_open_rxq() and a queue restart,
+>> and the driver keeps its normal page pool RX path, with no ZC RX loop of
+>> its own. The cost moves into the AF_XDP core, and xsk_pp.c is real code,
+>> I know.
+>>=20
+>> It can be split:
+>>=20
+>> 1. preparation, no new behaviour: netmem frag addresses, the page pool
+>>    caps, fbnic's redirect and netmem patches, the TX metadata fix;
+>> 2. the provider for single-buffer packets, with fbnic, without the copy
+>>    fallback or fbnic's shared header/payload pool;
+>> 3. multi-buffer.
+>>=20
+>> Not sure it would help much TBH.
 >
->BTW I'm not asking to split it (at least for now).
+> 1 as prep would be good, but I believe we were saying new ZC drivers are
+> supposed to include mbuf support from day 0. Otherwise it might be hard to
+> enforce this later.
 
-It can: the loop is needed for the deadlock fix, since without it the
-reader returns -EAGAIN early when it wakes without data, but the early
-return isn't. A zero-length read with data in the psock queue already
-spins with the lock held on net, and as far as I can tell from the code
-the early return alone fixes that, plus the MSG_OOB and MSG_ERRQUEUE
-cases. In v4 those reads were patch 2/2. They went into one patch only
-because Alexei's diff replaced both, and my v5 sentence justified that
-badly. You said you're not asking for a split, but since the early
-return isn't needed for the deadlock, it would fit as its own patch:
-should v6 have it as 1/2 and the lock change as 2/2, or stay one patch?
+TBH I fail to see how moving 1 to a separate set would make it easier to
+review.
 
->I saw some comments from sashiko, can you reply to them?
+>>=20
+>> The provider, its bind and the delivery need a driver to land, so 2 is
+>> the smallest set that does something. v2 also loses some things (but I'd
+>> like to keep the validate ndo_bpf), e.g. nr_pools and the duplicate
+>> checks. And I'm happy to look after xsk_pp.c. Would that work for you?
+>>=20
+>> >> +	if (dev_xdp_prog_id(dev, XDP_MODE_SKB))
+>> >> +		return -EOPNOTSUPP;
+>> >> +	if (!netif_all_mps_have_cap(dev, MP_CAP_READABLE))
+>> >> +		return -EBUSY;
+>> >> +
+>> >> +	err =3D xsk_pp_validate(dev, pool, dev->mtu, NULL, NULL);
+>> >> +	if (err)
+>> >> +		return err;
+>> >> +
+>> >> +	dma_dev =3D netdev_queue_get_dma_dev(dev, queue_id, NETDEV_QUEUE_TY=
+PE_RX);
+>> >> +	if (!dma_dev)
+>> >> +		return -EOPNOTSUPP;
+>> >> +
+>> >> +	err =3D xp_dma_map(pool, dma_dev, XSK_PP_DMA_ATTR, pool->umem->pgs,
+>> >> +			 pool->umem->npgs);
+>> >> +	if (err)
+>> >> +		return err;
+>> >
+>> > Couldn't we have this part common across drivers wanting to do ZC?
+>>=20
+>> It is: this is core code, and no provider driver maps UMEM itself;
+>> netdev_queue_get_dma_dev() gives the core the device, as for io_uring
+>> zcrx. Driver ZC could map in xp_assign_dev() too, but drivers differ in
+>> DMA device and attributes, so that's its own series.
+>
+> I meant existing drivers do this on their side, idea was to make it common
+> before your set so that you could reuse existing code.
+>
+> I am wondering what is the end goal here. If we would have enough of work
+> force (or tokens) and time and willpower, I assume we would have every
+> current xsk ZC driver converted to page_pool and finally orphan the
+> MEM_TYPE_XSK_BUFF_POOL.
+>
+> That might not happen, so I feel like I sound like a sentinel, but current
+> code can't just be abandonded. Hence all these asks for code reuse, etc.
 
-I'll wait for your answer before sending v6, and I'm replying to the
-Sashiko comments separately.
+I'm not saying we're orphaning anything. I am trying to reuse as much as
+possible, but some parts does not fit. Like using xsk_buff_head -- the
+page_pool return netmems. Type type is PAGE_POOL, and driver typically
+use a stack allocated xdp_buff.
 
-Thanks,
-Jerome
+The end goal is enable the XSK core, so that a netdev driver does not
+need to build a secondary shadow driver for XSK. Instead, driver
+supports the page pool + queue restart APIs, and you can then use XSK,
+devmem, and iouring zc with less code. Initially Rx, but we need a plan
+for Tx as well at some point.
 
+It would be awesome if over time we move from the existing "shadow
+driver" world, to page pool and the provider, and MEM_TYPE_XSK_BUFF_POOL
+goes once the last one has. Until then driver ZC keeps working as it
+does today, and v2 will have numbers for it. FWIW, I'll keep converting
+drivers too, not just land the core.
+
+The fact that Linux does not have a driver ABI, which IMO a strength, is
+just for work like this. We can clean up drivers, as the world change,
+without keeping old stuff around forever.
+
+
+Bj=C3=B6rn
