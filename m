@@ -1,80 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794491682;
-	b=PTkfYqRc85BYGoO6QH4JK/eGsqd4Vx2UYFMlRCL5AJTz3EJlMvahA8hKOVqTfQvZeKeU
-	 LCCxnq1dfXQT0rOpgojqtmycHNgmrqNRZf6GSXgGgcVtHkKSvVTEassZ10Ntd7j9Bdg41
-	 jPU1HcER2Dj82KUX8YnGAVko25fFuR8Q+orPmnUBS5VM96O7rcUH8YaGPEbXkPB+rYUlv
-	 nxrfmGaM3m8XIBiDKBXJ6kxByG2nsfQA+dURYyNpZ6fDXzg9oHcSpQ+r4bNsOsufzFor7
-	 Ma4QS1GRNydELeaEylnVSfZ4phza8ScSCChOiFFmi0uT/vFK/IjYFrOwV26QdmNvOXw==
+	t=1794491877;
+	b=3LBHnbLa8CCBXnnHgfBVgizl1FU/iiXGoij1/GBXAi7DsHXrtrlVebCNZvRVPFRHFFL+
+	 tK0BLCaNHmwT2+bl3rK2nhFYfk2c3T/jmLoFIfs9cQtJLB646pMKMivm11c/2lyZr7E49
+	 BWfHpE/OkyN64grrPDIJ+ZAQ7LQOOWmGVtw//+mPd4fnZ5dGGcie2BVvQb+eo82bcjvYz
+	 /yu51varekPTEuCP86Du+4eqkVmMnkTUW515aqp/7CwbWycC2RpAbjxy1ThQ1EW+IFTtr
+	 wa1ncPEjY6GxRGRJoz1VSYJCeZ80P1d5j+1nO5Mwac3nXlsx5D5rijzXux3JGLBsDCA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794491682;
-	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=GJzpU18PpbltGnIbSo/mDFrOgiPvvS/9/MBenbJHib4=;
-	b=NKFLCoczUMtqSkI/G5FcEijmLqyTCTlf76ynS39jnt6BdIDx5x+UH1f/YPqNX3lN67H+
-	 JJku6Vn5gvi8eMcuv3VG7PSPQTuy37W4DWfbQRFs27URe/jaFDnQGFY7sakW6amWded8c
-	 M4K7UPKNldUDFdqBSkzTKnzy4eBDoTFA204ZH1wQheofM7YeGzYkn5M7NAPWmvllUmxFE
-	 jY2EdPaQPUVV4t7k/NQX7+Jxnrp21JmnVFOmkQWB/OC4Rk4qXVxQAmD00+nSPAQdSO4l+
-	 Ci5saWXzyeozSAq18v9aDi8AukTzoUIAwrsl7j5nNyg9DyneoMFeeWMBnNzGU5Pk3yQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794491877;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
+	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=wdg8stMM6r5FBivxq5EOSdvuNXe49X33jADApWgpna0=;
+	b=EKkat43Dug/bTS7Z7khc81l7mdJbxXuFbRJ//VSfgahORj5UuQJAE3anKhPs9Tvx0qez
+	 KHMYEHpCmFugGp86Ay2bBX2I29BmSbrhxCBQcFNSb9lAQB5HcXTJwZz6wtjy9iKTuPFT3
+	 P6YF2jp+e/YXxMl1UEj7PUYPiD5mNLtN3EhWAurWIyhHuZauXqP4aLI1Slewm8crjUuUN
+	 ppKQhDwabaxqu7y2CFpSDvxGrKSeArNCAfz2iALuDuMlO8kumDDI716Sr62o6zIFWUuZB
+	 tpEm9ZsdS66ZfLMjNODJK2IK5AE46vmEuvldVDuTgmwhNhoi6gqSv0y8xmqJ2yIxwOw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=fail header.from=debian.org;
-	spf=pass smtp.mailfrom=gmail.com;
-	arc=none smtp.remote-ip=209.85.128.180
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ODhw8U4P;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F183606A338
-	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 13:54:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1F183606A338
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-8b3a332105bso9211807b3.1
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 05:54:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794491681; x=1795096481;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=GJzpU18PpbltGnIbSo/mDFrOgiPvvS/9/MBenbJHib4=;
-        b=DdPG9sdsTxKToOMACJfJvzDdzsNWdFUsypqIyOGQE/o88rva8i/f8Dr0B9rU4HBiwi
-         oKpfU1TxAHxUbQB4MK81Mp0gfm7Tyi2p6Jb3GWpIuhk3IgHsBwo4JyICAQKi3y9OD9JY
-         LppXHIlRr18eodgJ0HbX6SARI0Ibzn3BE5m/elpAYIEAP59Ex7kPmt4VAKdrsjqMwvZO
-         yaHs0nFDO4NUfFYPx8Sc5SpsaqtOvkHZxcF1cl5hJ88yAiUqztIi0jHbmy4RfVqRjk4P
-         4KnLBhqiuMV1klCRbPz6xOZcez8NhkbwsmGpAnj/bsHdv9sbpXTh2/uesiR1QN/dGGf9
-         rHdw==
-X-Forwarded-Encrypted: i=1; AL+hErEqhREmi/I14CX7dluItCNSirCCFyoZlH0Q6o6iL/eRU0hDLoZjoScdc7C1YlgOo5wifP8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z985JjcuEAcPQMsi2OOzrlH5iZAS+1Kr72BIO4o3INQVmTwkCcQ
-	FBL+VmtRrAqJ7CJaoGU8+LUq6SGHYRT7a6hTMS0EbmC9FxE2pQy06LtBHe4A8A==
-X-Gm-Gg: AYBFou0P/m5gfNUuuYTtorGJbDeE2GDsTkYbxT1NCN81u3VgbsM4tAUH/8/QFDBHNVV
-	BdB3Hn5L7wHCW1DgrlwktpjJTDMQqBZwAgraME8oumw0b6DwI8RVfD4Nkehj7cWYobW72zVv3Js
-	teL/Vy1ObTUZKdUNe3AyAfDMcT/oxlk+Rv+DdWR3SvkMv77ezDDYOLxPGNTHgbAwdcPwkGF7htu
-	TAqpYj4GtNwT9jbHPKFkHuStR/8HUjnkfU1kYfUXfmJIRKCJLg0xBgdMNkX8RVKVhkZ0hq+dhKC
-	mjPYLo/ZKBC+bb9zDNoLurVYRv7jeK5GxGgV4DFWHblZGeEJDa+C7GFdzVBFDURbICjgYRWQH0N
-	rQNP5kAqi3KW88Yz6uiYLLTa7Vn2HSpkzURo4KYY7cchFt3k4XdwvHDXyqv62Yt4hwQP9IS/sq5
-	9ZpUe2ckGJADak4Fz5O3Qq08rudt4Csv23U3R4len61MGazoVbW/gF0zkPQcwDH/q5Nf/i3Zj0O
-	UWrWv+G38kdv+UWWtrYd+pR/Gks+s1pzEEk7pvx0j9iRn+k9nE/CZ3rICMF9uZTPazC/P/RnjVL
-	60GV6lobMW9wk0yElMXu
-X-Received: by 2002:a05:690c:c4e6:b0:87e:645c:182b with SMTP id 00721157ae682-8b3baf09b42mr17315587b3.26.1794491681204;
-        Thu, 12 Nov 2026 05:54:41 -0800 (PST)
-Received: from gmail.com ([2a03:2880:24ff:42::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b3933e0d01sm70407067b3.22.2026.11.12.05.54.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2026 05:54:40 -0800 (PST)
-Date: Thu, 12 Nov 2026 05:54:38 -0800
-From: Breno Leitao <leitao@debian.org>
-To: Alan Maguire <almagui@kernel.org>
-Cc: Yonghong Song <yonghong.song@linux.dev>, 
-	Alan Maguire <alan.maguire@oracle.com>, Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, 
-	dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [PATCH dwarves] btf_encoder: Keep the source prototype of kfuncs
-Message-ID: <avXE70_JpiqemxzV@gmail.com>
-References: <20261111222447.322978-1-yonghong.song@linux.dev>
- <ffd8e847-6a3f-4403-a33c-1b3804e1c039@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49765606A32D;
+	Thu, 12 Nov 2026 13:57:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ODhw8U4P
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37B681F00A06;
+	Thu, 12 Nov 2026 13:57:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794491877;
+	bh=wdg8stMM6r5FBivxq5EOSdvuNXe49X33jADApWgpna0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=ODhw8U4PU7NP+U07JtvrHQ7fu76dDLy178QWgpxgqEazVhYKBZGPLIoEgZis3SVGS
+	 hQDy8s6SGKHwCcswZeDrcCyFyHmmjh1B8CYSQAZSTEhrAE5Zaz+0h+Xq41B2MztB8l
+	 WspG5vC8CCIyhfeM0RzhKJzHrsE69lZGgiegiBQ6HpYGejFxwiouVHVpx0FWVoXh3Y
+	 ZF98zklsEGtHur1BtcNANtZUsILZoKQd4Utonsdsj20ZOqsJ6a0E3e2KMLxr7Drjh8
+	 DeobS4tVRNpaqSOGlAhSgQ8XfHHd06S0GKxW/yXutdhBS40zknt3k7hTol6e9Cnt5j
+	 F1Nd/XoO/2BBQ==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: saeed bishara <saeed.bishara.os@gmail.com>
+Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jonathan Corbet
+ <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
+ <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>,
+ kernel-team@meta.com, Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard
+ Brouer <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Pavel
+ Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, Andrii
+ Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar
+ Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
+ <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, io-uring@vger.kernel.org,
+ Mina Almasry <almasrymina@google.com>, "Mike Marciniszyn (Meta)"
+ <mike.marciniszyn@gmail.com>, Weiming Shi <bestswngs@gmail.com>, Nikolay
+ Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, Alexander
+ Lobakin <aleksander.lobakin@intel.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Stuart Clark <stuclar@meta.com>
+Subject: Re: [PATCH net-next v1 01/11] net: Get skb fragment addresses
+ through netmem
+In-Reply-To: <CAHfVqdVYBbs8zu40nEaCDvGVNeXHe2DXh0dGxEcgL3kP8S8_HQ@mail.gmail.com>
+References: <20261110102039.1002605-1-bjorn@kernel.org>
+ <20261110102039.1002605-2-bjorn@kernel.org>
+ <CAHfVqdVYBbs8zu40nEaCDvGVNeXHe2DXh0dGxEcgL3kP8S8_HQ@mail.gmail.com>
+Date: Thu, 12 Nov 2026 14:57:52 +0100
+Message-ID: <87ld6yrw2n.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -84,34 +81,39 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ffd8e847-6a3f-4403-a33c-1b3804e1c039@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hello Alan,
+saeed bishara <saeed.bishara.os@gmail.com> writes:
 
-On Thu, Nov 12, 2026 at 12:36:29PM +0000, Alan Maguire wrote:
-> > Reported-by: Breno Leitao <leitao@debian.org>
-> 
-> I'm having trouble reproducing the original failure; would you mind sharing
-> the config that reproduces it? I tried with clang 22, but no luck so far.
+> On Tue, Nov 10, 2026 at 12:27=E2=80=AFPM Bj=C3=B6rn T=C3=B6pel <bjorn@ker=
+nel.org> wrote:
+>>
+>> skb_frag_address() goes through struct page, so a net_iov never has an
+>> address. Only unreadable memory should lack one: XDP and BPF read
+>> fragments through this helper, and AF_XDP UMEM will back readable
+>> net_iovs. netmem_address() also returns NULL, not a bogus pointer, for
+>> an unmapped highmem page.
+> Does this mean that skb_frag_address_safe() is practically identical
+> to skb_frag_address()? I assume highmem page is the only case where
+> non niov page isn't mapped.
 
-This reproduces it on x86_64, with next-20261111, clang 22.1.3 and
-pahole master (9eb594d):
+Yes to both. With this patch they're the same, so I'll have
+skb_frag_address_safe() call skb_frag_address() instead of keeping a
+copy. Its callers can move over separately.
 
-    # make LLVM=1 x86_64_defconfig
-    # ./scripts/config -e BPF_SYSCALL -e BPF_JIT -e CGROUP_BPF \
-            -d DEBUG_INFO_NONE -e DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT \
-            -e DEBUG_INFO_BTF -e KCSAN -e UBSAN -e WERROR
-    # make LLVM=1 olddefconfig
-    # make LLVM=1 -j$(nproc) vmlinux
-    [...]
-      BTF     .tmp_vmlinux1
-    WARN: resolve_btfids: no BTF func for kfunc bpf_tcp_ops_set_rcvlowat in bpf_tcp_ops_set_rcvlowat_kfunc_set
-    WARN: resolve_btfids: unresolved symbol bpf_tcp_ops_set_rcvlowat
-    Failed to generate BTF for vmlinux
+>>   *
+>> - * Returns: the address of the data within @frag. The page must already
+>> - * be mapped.
+>> + * Returns: the address of the data within @frag, or %NULL if the CPU c=
+annot
+>> + * read it.
+> "CPU cannot read" isn't accurate, I assume that in iouring case the
+> buffer is mapped to userspace.
 
-let me know if you are not able to, and I will send you my full .config
+I'll use the netmem.rst term: "%NULL for unreadable netmem or an
+unmapped highmem page". Same for netmem_address() in patch 4 and
+MP_CAP_READABLE in patch 2.
 
-Thanks,
---breno
+
+Bj=C3=B6rn
