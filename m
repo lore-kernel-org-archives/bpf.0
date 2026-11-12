@@ -1,97 +1,117 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794516400;
-	b=CcYsV4tm2p6Nifp2vaHbNQB3Ito1wJG43K9C1W1jldtq+ewUF7IlTl1szSgQ4vEG5CZ8
-	 frexTnsxgc8RLoaYnKzvjlenM/GZ3Oq3DFTCIR6CsQZO4VZQZApjUPsckmVJ60IlCSaRz
-	 hCVLmn9RTkYeIaynip9iUtZQ/RG1GpMqAiaK5mg2/hJbrXiNuMGOL6WbRrh5iDZ4C84/T
-	 u/9MyqSIIP+Ec4p/HOYaNr757uKFZMd4/R78qbv03zd0fFeN4xG+GXMaXovlbpT7csBwP
-	 Bodg5Jw7CBYspyJ5JklM6FV1zda9ISjQYmvohAo484EscqVz4zdDdH5PJAq1yS6YWlQ==
+	t=1794516485;
+	b=GutBQRpuOMtYLKLor5JI2bFcCYfT5PiZByYWeI4fTsnKJPJ5wY2QJURSj3NKomQoU/EE
+	 sri3jNGPI1mdvI6djTegD7HLZw7uFnVgKpubcxLlOEOep1+AOU7RVNYzCGJhKf3TnnUNy
+	 QDDhe9cLtZ2De1gO2mONoCudN24OJQBWDrW5kZqPgCW5bFLcM8BJ2o7E59R237zyOJON9
+	 ZfA81hbsn5tGsAVekaR22bDNPZPVcyFxkYV6Zv+LkC8i44WWN6aGk3s7QdpixMqJs0H0O
+	 XPGJL6RVl5+XdUQwn3jPfpk54O5iTRvDziL6Vxkd4CeeBsvsuJPYXNtIachLvhsbotQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794516400;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=hz5GQHqAenEtUeQQFEsz4kxYnKJ4ExEV68tpoBxSRrI=;
-	b=4zwp4rM81lFXiC6GYnac/+4fWC3fv+soKNRpXY3z/MFM7CDupkQqRm0Oan1W1S3Fmcni
-	 AA3yABwgG+nOM8ycMkqn3dzZ6g6C2r5G4bsSfhqczoWLbLG6p628nduZIHEgEBivVqnhJ
-	 TlkHGhw4CvBv2ALMHRMeyhU/VY3zX4wgK4Z8yvtQuLO4fsilAISDxWbxh3YK3K/bUSVuj
-	 rgQSUIDiIxA/eK9jgArMbQrxZ0eElJ5T82AYwHW13tYc3q+Z6iFq9ZFjiw+G+QooZ5uVR
-	 A+EevIjN41moYEsGmSxQL8LXZterBqitHdAwMdGzx4CbPhdl55kUn+y3PMdoohB97Bg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794516485;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=lOwnGQXmS8evHlFVLwX0xtuDnhg6yBqOr9ZK8AmqtFQ=;
+	b=ltEoceVPGF5OJu+rmOSBfn8HLxyvzWMDL0l/sRFWzM2DHJLvcHXo1jMt0tg8coXj3pbU
+	 5Fpg+B30kWlfz/A/UI/R0rdw40FwYyFasZTJrkYLASi+qZnSYvORy5DSPJBTW0veyS1P2
+	 XDRxKf+0COL2RSDuSO/7Moo1QZPrgng8nhImow4F0P1qKwGShrfKXj7+VDr6/clC+RiQX
+	 8QXh1tYPLdE8PdUrizxglOSWgKQhNsWK2AbWDTynZL/9DmepZ+r2+U5WOa6WWUq1n2awy
+	 jeVIJAzvEAGxuccB4NnGQoO9Lzc8bZvBYX7W9GYRk+nhvJq5dzMtyNL4RLcpg+urYaA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mFRzgcm9;
-	arc=none smtp.remote-ip=209.85.215.179
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=YrbUqHU+;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=XrcILpcV;
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B838C606A323
-	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 20:46:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B838C606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C61A3606A32A
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 20:48:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C61A3606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mFRzgcm9
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-cc147d86bebso134671a12.0
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 12:46:39 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=YrbUqHU+;
+	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=XrcILpcV
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1794516483;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lOwnGQXmS8evHlFVLwX0xtuDnhg6yBqOr9ZK8AmqtFQ=;
+	b=YrbUqHU+rHcmSyyevIaNaoiXUMa2N0Kvot6Q+zVerXXVvKOxuOPK0M6Sed5DGbzU6dkOS7
+	fVTxI/xMYbuQUR7ufhDNmwWhqwOI7dSExJMvvYQlEkOqPnuj+zyivdbg0E8rug7Vrm0ewA
+	AV1XWjyUDNbr5vYl8WlKYDkeMIAoVO8=
+Received: from mail-oa1-f69.google.com (mail-oa1-f69.google.com
+ [209.85.160.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-37-RkWISA9HOfW6R1_Ut7VFbA-1; Thu, 12 Nov 2026 15:48:02 -0500
+X-MC-Unique: RkWISA9HOfW6R1_Ut7VFbA-1
+X-Mimecast-MFC-AGG-ID: RkWISA9HOfW6R1_Ut7VFbA_1794516481
+Received: by mail-oa1-f69.google.com with SMTP id 586e51a60fabf-4566537e644so297473fac.0
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 12:48:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794516399; x=1795121199; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+        d=redhat.com; s=google; t=1794516481; x=1795121281; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=hz5GQHqAenEtUeQQFEsz4kxYnKJ4ExEV68tpoBxSRrI=;
-        b=mFRzgcm9gmxgGhSCXeOWWlMZxh6O/oOrWZWbR1v+FQMQKnRRf1UHRUyyi0iTJgwD2w
-         YcW5jNL9bQLiND4CesLayd/jcdXBv/bzM2Qsh+mYd1T9p3ofQLgd+2l7TjVRuUmSmw+/
-         ISf2z21yExELgwU2cOW7LAlXjDBMA7+Kp8i2LhmwzHZs2FcleOz4G0XPUycErEwreF7s
-         TYcm9cYzhHzNI40XnUBoK1u0xgq1jU6RabxjObVFROzWGpVOmZleytrXwNzqLZGs6KQM
-         NlknNzW+At0SLkdEX0qvlBbELp5LtnoOTpD4nUeaMfpTQvtbjpgwcc3i/ChWejExIIHO
-         tF2Q==
+        bh=lOwnGQXmS8evHlFVLwX0xtuDnhg6yBqOr9ZK8AmqtFQ=;
+        b=XrcILpcVi768ekJQkiC6az4W/O0HPMyYmAmrrucrjsC0hI5lPjWzPKtGVXVrPb/dhf
+         mKJi3hUwD03+UV7Xy6OaeqHZ6kiYXq2Vi/JdrO5CCIpD7aYGwqcz40MxDbeO/GCduMho
+         Ht6+Jb3yfMALIrFojQBCuihl7Po26goyI6uI4KHe0JLu2KNCg26Ys6jEvlFyYKSJPiMa
+         B2cRnWyz0uXpBoMNCUY1kPpGuPVJ4MjYYqQItmrW0/chATCt5G3ehy/53eSqR2tmn4Sx
+         3phun0NRzswUh+bs3xHt6nj8cJ4M+0cdfSlxpR66cZsU5LP0emccfjnc3SwylUeytqQl
+         QMfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794516399; x=1795121199;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
+        d=1e100.net; s=20260707; t=1794516481; x=1795121281;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=hz5GQHqAenEtUeQQFEsz4kxYnKJ4ExEV68tpoBxSRrI=;
-        b=bZahM8ZhFJdhKM9Ufutfm7PM+kwuqDmcdUDldfRGz3N2RCU/Zeqxh8SgJP4aEZVOhs
-         703oug1ZvNs9t5/dEh1RkAyXXfL0B+GmJWy0P50hAOjrTJsslE1tVScpTWnfZYSUfNn1
-         G/WM5d2KIB50VeQ9pxKNSmW8XFNpI9fz5ODsUF5wz3WY+sxEusr8iUduEEBzChOGZq+x
-         GXh31ttI1R49m0d0al7bfy0Mpdfqnr+gyBbqDA5r+eACNI3jhzkLKlPTOQDZn49gxE6D
-         qCvNBZaNIk1JG1xP7ts4fPoS41/3+BSsPITprTGeq+Paq4rzUV5i9C/i3lfaaIFBiQNX
-         hI3w==
-X-Forwarded-Encrypted: i=1; AL+hErEY9kt9gt7Io7AAIEf4zpfM9QH0SSYz4QOUWxONL71ndzyyS9mGhGUYA8X/I5g87WUMCYg=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/T8kc1zM3ypzyZWth2Jnzkp22HGbruQ8oYOXK+yZmmD7FEXZvq
-	vLZMIexhrDRaMS3+ehBqAu+fwQixR8R3QsgumNGtjIPAdNnzOxgmzlZ5
-X-Gm-Gg: AYBFou00ImD/a08ZintXqNh957Dvco3pfRBzdX8tD1d9PGwG88ZcdJQ/SXFurBFLZB8
-	H6dj3I4D7LowRUS3RbTvdXR1ogEUT463v6sPxA6JrGqMAiMzY0nGw2l6tQgkDV1tkHyMQsb0NEB
-	v5UZZ5WC1/V+MGORilSONip5rPg8r93WlSAKE1SMky9Danooios7RQR9xODG3pAUE11XpUDWq+S
-	dntkC/syySQsdlb9oUBc48W/K5wpBsTlnr6aX2ycMVgdtlyhm8WaItIAIiojtu/nRYyrnOYTkhT
-	5OTVT0DeWelM2ixi5Q+hN9z69WeiLvGLxBQauh5UyJZd2qEa52G1ACvjKo4fjsLxIf8Bs48q0tD
-	Wig9XIUTwnqF9HAzgMmLg6XCl1hTKG8fbqMMvoFoCjFfV5ErMRLvTOhnFJCY7PpQq7sr3UXI1LJ
-	GMulkNwbaV0l3OhL6D0/G4N09Vnc9xqiRVHIK7ZP2DiLeq+hSrnu4w4FZHU5Y2DfOViWVScEBrd
-	wNWS/UwFJo9HNAOPHtIIJHtZmRfXXwe1f6drYXvQL5TDBo54BY2FSIuU3DsiDMRYXjutvR4GJL/
-	BZ8GbV75EsO51BxhIq02PwLIG98bCcOeWBW4Sp6fE3FT9JcgwJ981KN5Gzx1ycRG7+K5ywtaUMD
-	bVeD+00s5/mc2ka4VR4dagtkLlalqXxodYw==
-X-Received: by 2002:a17:90b:3a47:b0:3ac:860e:1af9 with SMTP id 98e67ed59e1d1-3b1b0d7e539mr149037a91.41.1794516398718;
-        Thu, 12 Nov 2026 12:46:38 -0800 (PST)
-Received: from localhost ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b197d257a0sm6330400a91.11.2026.11.12.12.46.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Nov 2026 12:46:38 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 12 Nov 2026 20:46:37 +0000
-Message-Id: <DMTIZ0EMQ6HE.7OEA0L4EX96X@gmail.com>
-Cc: <andrii.nakryiko@gmail.com>, <andrii@kernel.org>,
- <daniel@iogearbox.net>, <netdev@vger.kernel.org>
-Subject: Re: [PATCH bpf v4] bpf: check cpu_possible() in per-cpu helpers and
- map callbacks
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "bo cao" <treebacker@foxmail.com>, <bpf@vger.kernel.org>
-In-Reply-To: <tencent_6A1D611E2DA9545DA6E76ABCCA806BC39707@qq.com>
-References: <tencent_6A1D611E2DA9545DA6E76ABCCA806BC39707@qq.com>
-Content-Transfer-Encoding: 8bit
+        bh=lOwnGQXmS8evHlFVLwX0xtuDnhg6yBqOr9ZK8AmqtFQ=;
+        b=TPwTySDcvtzMzUVT/yrajlo2gzstrGut+xE+ALhVMNhqqmDqvFNtvUgiNXMPWti/Ut
+         klTJ6nO0+fqPiKD6h0r+OWefXqLXWgybmuj6y6FByZlgVs4ioqrtQs/OnIRyjrCNVxRr
+         7OCwVyWnrzeNIK4sz4N5fYBL0U0iCuC7qbtfkrhYYrh5HHz5r9YvNb9odm6dldgSy0eh
+         RqFdPITfybWoMbnbYIPYxuOhEJ1UG80akcQQrI8866qBlxoBK9Ba8dtIFDyh9K7MqvSP
+         XgqBvOo9wMFrkkbZkjD1VLZYlHOcTF2uF23yYptIjqvFbb9kZMjZXg/CnJT2bQYXTnAd
+         xxSQ==
+X-Forwarded-Encrypted: i=1; AL+hErHcKahKpp5uTnVUZ02ZF3r8uwYK7uH+vVf9racw7PgA0fclmmtruRGvzwzcGqvzVQ1WIss=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/U01ykiXN4Igwv1iZTheVLdCnEjyP5G9xxXlwN6ZyB7D5qiVlR
+	AOIsliZia4BWBd47rcnf9agcoR93/FGbsBDv0Dh/WtEn3m9GBekDjTfsmmKA/r8jjC3lJ6AWvKd
+	5csF1V1vz+nMkoXv1Lo7KdpZo7hBoeLrGEobMzEd+pd4cYy18za8s6g==
+X-Gm-Gg: AYBFou2ai19Ujk+zXTEmRrn0GErOjScINNd+khUHqcLEUogVgFdxD5sYDL56YKmWVXN
+	hPF1LsHC1b+sdU4hSfohjSlZKq0Tsm3kGkv2TGmOu/CS2OJRZw2Zpd3E1PDzpYtevQHzWF3/qn7
+	fUH1/DaBojgZzZVpeCUiLzCX8xTuyAihrCJe5z8N6cEShOn0TfWEaA1nrVWhEgBz7hOhMH3mAS4
+	sNdwd+r4VwEg01so9XZalsM0+3pjl0RTbOij0bGsvM7s96UYFvKv9/Qu91VsI9ubQxu9u+YhBJX
+	eRRlCKbunzYvBesZQY+sYelbfHF1Pv6XwGoIM/Ec2dyNe1fGUBjc74KDmObunoTEsOEr3oueta8
+	pMO0PzTfZoY03Ua5vDT58VMWL3GATdV9hO+GgsTKpTbgEMrc7nReb
+X-Received: by 2002:a05:6871:7b0a:b0:49d:ff8c:205e with SMTP id 586e51a60fabf-4afdf2da638mr911047fac.29.1794516481342;
+        Thu, 12 Nov 2026 12:48:01 -0800 (PST)
+X-Received: by 2002:a05:6871:7b0a:b0:49d:ff8c:205e with SMTP id 586e51a60fabf-4afdf2da638mr911021fac.29.1794516480871;
+        Thu, 12 Nov 2026 12:48:00 -0800 (PST)
+Received: from sgarzare-redhat ([69.196.88.181])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-8628813465esm686251a34.16.2026.11.12.12.47.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Nov 2026 12:48:00 -0800 (PST)
+Date: Thu, 12 Nov 2026 21:47:54 +0100
+From: Stefano Garzarella <sgarzare@redhat.com>
+To: jrmmhm.kernel@eldare.de
+Cc: Bobby Eshleman <bobbyeshleman@meta.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	"Michael S. Tsirkin" <mst@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Michal Luczaj <mhal@rbox.co>, virtualization@lists.linux.dev, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH net v5] vsock/bpf: release sock lock while waiting for
+ data in recvmsg
+Message-ID: <avYllBVgJg2AHYc0@sgarzare-redhat>
+References: <20261109-kbh3-1-022-fix-v2-v5-1-4d9af04f0fad@eldare.de>
+ <avXyzxvIN3ngFepE@sgarzare-redhat>
+ <179451283622.7.13355395779239029915.1767743913@eldare.de>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -101,28 +121,48 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <179451283622.7.13355395779239029915.1767743913@eldare.de>
 
-On Sun, Nov 08, 2026 at 06:43 PM bo cao <treebacker@foxmail.com> wrote:
-> @@ -133,6 +133,10 @@ const struct bpf_func_proto bpf_map_peek_elem_proto = {
->  BPF_CALL_3(bpf_map_lookup_percpu_elem, struct bpf_map *, map, void *, key, u32, cpu)
->  {
->  	WARN_ON_ONCE(!bpf_rcu_lock_held());
-> +
-> +	if (cpu >= nr_cpu_ids || !cpu_possible(cpu))
-> +		return 0;
-> +
->  	return (unsigned long) map->ops->map_lookup_percpu_elem(map, key, cpu);
+On Thu, Nov 12, 2026 at 07:47:11PM +0000, jrmmhm.kernel@eldare.de wrote:
+>On Thu, Nov 12, 2026 at 06:23:00PM +0100, Stefano Garzarella wrote:
+>>On Mon, Nov 09, 2026 at 09:08:29PM +0100, Jerome Mohm via B4 Relay
+>>wrote:
+>>>The loop
+>>>and the zero-length check belong to the fix (without them the reader
+>>>returns early or spins with the lock held), so this is one patch;
+>>
+>>I don't understand why that fix can't be in a fist patch of the
+>>series...
+>>
+>>>+    if (unlikely(!len || (flags & (MSG_OOB | MSG_ERRQUEUE))))
+>>>+        return __vsock_recvmsg(sk, msg, len, flags);
+>>
+>>... I mean, why this change ^^^ can't be in patch 1/2?
+>>
+>>BTW I'm not asking to split it (at least for now).
+>
+>It can: the loop is needed for the deadlock fix, since without it the
+>reader returns -EAGAIN early when it wakes without data, but the early
+>return isn't. A zero-length read with data in the psock queue already
+>spins with the lock held on net, and as far as I can tell from the code
+>the early return alone fixes that, plus the MSG_OOB and MSG_ERRQUEUE
+>cases. In v4 those reads were patch 2/2. They went into one patch only
+>because Alexei's diff replaced both, and my v5 sentence justified that
+>badly. You said you're not asking for a split, but since the early
+>return isn't needed for the deadlock, it would fit as its own patch:
+>should v6 have it as 1/2 and the lock change as 2/2, or stay one patch?
 
-bpf-ci is right. All three callbacks have the check.
-Drop this hunk. It's dead code.
+Yeah, I'd prefer 2 patches with this change as first patch.
 
->  			if (returns_cpu_specific_alloc_ptr) {
-> -				regs[BPF_REG_0].type = PTR_TO_BTF_ID | MEM_ALLOC | MEM_RCU;
-> +				regs[BPF_REG_0].type = PTR_TO_BTF_ID | MEM_ALLOC | MEM_RCU |
-> +						       (ret_flag & PTR_MAYBE_NULL);
+>
+>>I saw some comments from sashiko, can you reply to them?
+>
+>I'll wait for your answer before sending v6, and I'm replying to the
+>Sashiko comments separately.
 
-This is a fix for a different bug. It doesn't need a sparse mask.
-bpf_per_cpu_ptr(p, -1) returns NULL on every machine.
-It may break existing progs and needs a separate discussion.
+Great, thanks for that!
 
-pw-bot: cr
+Stefano
+
