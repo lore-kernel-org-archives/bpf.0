@@ -1,70 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.17
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794495010;
-	b=Q2A2/zYwxuUSVg9+N3PNIC5GfqW1lkZ3X4zwKyl77v/9L2sot3vE9ONmk63/Z0cRSXiy
-	 D7W2nCyYei4ArB5mus7zTeAHnhV8+Rb6vJ1onUmvMTGVBJhrukHbe1CdmosO5Z1lG0T3T
-	 rYLVsIQwrx/dC/lFo9ZyoCKkeStgfmxyfyBLBVWrF0EqZC1sDlJs9nZlbmQSE/epYWNbn
-	 hAMauaErRaGp/6FSJYhLu0j1GhAZDcPPQ1mTB6wllmImMHpDyiQbJL6yFNxaPj2kn8len
-	 IvWCAVC8kLk639/83/DroUnNPmvSD1N/iqSe6gayGYF2BDYCFNS/68YvEtYhc/MzUEA==
+	t=1794495211;
+	b=Hy7dIJwjwQfOy1jzOZqUlrX22NwAQSHPvmeSi8c/pTYpPj+FYC4yzVK5OWu216JfSTpj
+	 xc5vPTceyvCuc9uPM3mfUKU2VpIy9pmkLCDroN5ZffU0or8YYTbwoHdfCuPyJSASbv1ya
+	 zb6oURAyMuzU5dE/8Ly/WUmSx9LIsMpER146kB13XXDuUQis0Zk0WDiungV0fG9Jr6Prp
+	 phy1n/1fmfOKDMdyWHJRCDma0U/a49P4WcKh3idq/qxMKiRKUL/GUBt5fmBgEmsplZ9Ae
+	 AYKu1057xnkLIU8Q/8kO06bpcvSPo68rNIFNNIdpNesQJSAbcsV6wa6COv2oHNdO8Bg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794495010;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=fKhNVS4HIbJOghQyFAYDyIQH4s/FReGVb6zBWdLmzR4=;
-	b=To1dyiJU7qTRteQyt/0RsXEbiRfuILMY7mbi0+BucSIM7LuXk74zcSEqx0zyAC3slDxz
-	 hns8UnPU87dI6tR2eu1RLllcJHuCWjsXEleKam65bD3iuZa+9eOxi2AQ3X2sEurMe1aUD
-	 7xy893olb1LNHvTulGnD9WIbI5+TefatYLLjQV+eD24zKTMLvyb/TAoqmqwzZa1SL+Mry
-	 6CCgkU76SqMSkP3KD3zSq0vHJD031lbCH4hGsFOM8MZ+zRnP1xLUJVkDOPTqzQ1rRDHeZ
-	 z9yFFG/aEX4XQ57xA+jJc/C2cABqSG/9d5f6Zj3VHtXkf6urvKDpYJG9NU7ctEbldDw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794495211;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
+	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=UBXnliURw1WYp3chrqS7sjRbFTt6XEXbMT1fDo9/1TM=;
+	b=k0WkBC8jp8SEp/9JQwXWc5wZ+xPP3RpSlE/VpRP80stzw0WLMQ8XTj9UyRl8qQ7CuEFi
+	 ZevJCAohyoJ+xmDseK77juG24UKmPD2MOhgWya/jhtLd0BfX5mmjhvMU1Hm7CQDqXB8Y2
+	 im9swdd4rStxRTU1ZK0/8/8ELR8TTUBWG3MrxLZrQyL4EemXoqs3of7I9MwTTVY5DipnQ
+	 wu1ZINpAq40qdW46tCbI5arTKS14Eh7QvpXpNhdsVD4taMUnFmutlPW8V2tMUeboF9amy
+	 Ahgu7bQa4dSeff7aaeZGinkqwY1dlppTjweG1Rq3dXTwpBKoUMAExea+Q412pYgm26Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=VgtrlgrF;
-	arc=none smtp.remote-ip=91.218.175.17
-Received: from mta0.migadu.com (out-17.mta0.migadu.com [91.218.175.17])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BSUSIwfp;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FE5C606A32D
-	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 14:50:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2FE5C606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3AB5606A321;
+	Thu, 12 Nov 2026 14:53:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=VgtrlgrF
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=KG9+P7EeigIaTfG3TpucRpnUPoNln70sSanoxbchnvI=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794495008; v=1; x=1795099808;
- b=VgtrlgrFSZRND/KG4Eiwkv/bvfUqhpJO9HtTOyyU2ZShdzTQGoTCcXtWQB9TKFwGv816ydHf
- aGyhKJmmL2LAxiswRs7ymGAmCsLKG1sQzMrmKpPJ+rOMkvowXZC9tc7FkFudeh8+IqvA09kIm8/
- bIaeCjR5iifzkXJK6jYinMXI=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 58f4540b9f06cb52;
-	Thu, 12 Nov 2026 14:50:06 +0000
-X-Mizu-Trace-ID: 58f4540b9f06cb52
-X-Migadu-Flow: FLOW_OUT
-From: Tao Cui <cui.tao@linux.dev>
-To: tj@kernel.org
-Cc: void@manifault.com,
-	arighi@nvidia.com,
-	changwoo@igalia.com,
-	mingo@redhat.com,
-	peterz@infradead.org,
-	sched-ext@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	cui.tao@linux.dev,
-	Tao Cui <cuitao@kylinos.cn>
-Subject: [PATCH 2/2] sched_ext: Block a retained donor before PI deboost routes it back to sched_ext
-Date: Thu, 12 Nov 2026 22:49:35 +0800
-Message-ID: <20261112144935.583937-3-cui.tao@linux.dev>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261112144935.583937-1-cui.tao@linux.dev>
-References: <20261112144935.583937-1-cui.tao@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BSUSIwfp
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B67991F00A08;
+	Thu, 12 Nov 2026 14:53:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794495210;
+	bh=UBXnliURw1WYp3chrqS7sjRbFTt6XEXbMT1fDo9/1TM=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=BSUSIwfpwBS95bhGX07VGZDkvg5eJbUBRjTovvFvuyyl9O4KKBkRLMpDjQWmkCCv2
+	 14m3/vbC/nnjlVkglV3QPl3riOJFD5UvK39YWhOEfVVmFRUJ6aRnkuKMGk2TlFeMjl
+	 fF/cbZbYAcderFGW12psD5gJtpIIDqGl1SFcnrBPY22izW2LGGLEjRj9nv2UFbNeja
+	 ikfgKQrbKaFPQxmwodBjYhUvcCNmek0dufRRAc0o9J9WdFqNM4qoL/zLgX4ZpXxN5U
+	 f9k4ZswwSCr/tGFWel0B7PdTbQGT86nnmEhWHpnSnsbHTQhx6EGPCoN97SjZQisZGn
+	 MibpFZab8bc+w==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Stanislav Fomichev <sdf.kernel@gmail.com>
+Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jonathan Corbet
+ <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
+ <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>,
+ kernel-team@meta.com, Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard
+ Brouer <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Pavel
+ Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, Andrii
+ Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar
+ Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
+ <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, io-uring@vger.kernel.org,
+ Mina Almasry <almasrymina@google.com>, "Mike Marciniszyn (Meta)"
+ <mike.marciniszyn@gmail.com>, Weiming Shi <bestswngs@gmail.com>, Nikolay
+ Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, Alexander
+ Lobakin <aleksander.lobakin@intel.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Stuart Clark <stuclar@meta.com>
+Subject: Re: [PATCH net-next v1 06/11] page_pool: Coordinate refill with
+ memory providers
+In-Reply-To: <avT2Fj5qjbJkArpg@devvm16445.scu0.facebook.com>
+References: <20261110102039.1002605-1-bjorn@kernel.org>
+ <20261110102039.1002605-7-bjorn@kernel.org>
+ <avOtxBw_grmuDJae@devvm16445.scu0.facebook.com>
+ <87tslnrwgt.fsf@all.your.base.are.belong.to.us>
+ <avT2Fj5qjbJkArpg@devvm16445.scu0.facebook.com>
+Date: Thu, 12 Nov 2026 15:53:27 +0100
+Message-ID: <87y0ayqexk.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -74,75 +83,60 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-From: Tao Cui <cuitao@kylinos.cn>
+Stanislav Fomichev <sdf.kernel@gmail.com> writes:
 
-rt_mutex_setprio() is the only entry path into sched_ext that does not
-block a retained donor: an ext task PI-boosted by an rt waiter can
-block on a second kernel mutex while boosted, and on deboost is routed
-back to sched_ext carrying the queued+blocked state that
-scx_prepare_setscheduler() promises never happens; every PI cycle
-hands the BPF scheduler a queued+blocked donor it never admitted.
+> On 11/11, Bj=C3=B6rn T=C3=B6pel wrote:
+>> Stanislav Fomichev <sdf.kernel@gmail.com> writes:
+>>=20
+>> > On 11/10, Bj=C3=B6rn T=C3=B6pel wrote:
+>>=20
+>> >> diff --git a/include/net/netdev_rx_queue.h b/include/net/netdev_rx_qu=
+eue.h
+>> >> index 989120cbf452..ca12cbf7b825 100644
+>> >> --- a/include/net/netdev_rx_queue.h
+>> >> +++ b/include/net/netdev_rx_queue.h
+>> >> @@ -33,6 +33,12 @@ struct netdev_rx_queue {
+>> >>  	struct pp_memory_provider_params mp_params;
+>> >>  	/* stamps the page pools of each queue allocation */
+>> >>  	u32				mp_gen;
+>> >> +	/* NAPI of the running queue, for memory provider wakeups. Set while
+>> >> +	 * mp_armed, and if the provider has a refill_done op. Written under
+>> >> +	 * the ops lock, read under RCU, see netif_mp_wake().
+>> >> +	 */
+>> >> +	struct napi_struct __rcu	*mp_napi;
+>> >> +	bool				mp_armed;
+>> >
+>> > The comment should explain why mp_napi !=3D napi? (I do not understand=
+ why)
+>>=20
+>> Fair. It's the same NAPI, with other rules. napi is the driver's
+>> association: read under the ops lock, and not cleared when the NAPI is
+>> deleted. Provider wakeups run without that lock, from socket syscalls
+>> and ->release_netmem().
+>>=20
+>> mp_napi is an RCU copy, set only while the device is up and the queue
+>> isn't restarting, for providers with ->refill_done(). netif_napi_del()
+>> clears it before its grace period. Setting it also schedules the NAPI
+>> once, which replays wakeups lost while the queue was stopped. I'll put
+>> that in the comment.
+>
+> And all this only to make sure that we are not recycling something from
+> the old pp into the new one? And reworking existing pointer to change/upd=
+ate
+> its lifetime is not gonna do it?
 
-Call scx_prepare_task_sched_change() before the sched_change guard when
-the class change routes the task back to sched_ext, which performs the
-missing sched_proxy_block_task() (plus an update_rq_clock() that is
-harmless here: the clock was already advanced, so the second advance
-only applies a small delta). The boost direction (ext -> rt) needs no
-handling.
+No, it's how the provider wakes the queue when chunks show up: userspace
+posts FILL and calls {e,}poll() or sendto(), or an old page pool
+releases chunks after a restart. It replaces ndo_xsk_wakeup.
 
-Fixes: be8be8acb268 ("sched_ext: Block proxy donors before taking control")
-Signed-off-by: Tao Cui <cuitao@kylinos.cn>
----
- kernel/sched/core.c    | 12 ++++++++++++
- kernel/sched/ext/ext.h |  2 ++
- 2 files changed, 14 insertions(+)
+But! I think that rxq->napi can do it: make it RCU, clear it when the
+NAPI is deleted, and have the driver poll the queue once after enabling
+its NAPI, as fbnic does. A wakeup that hits a stopped queue is then
+covered by that poll, so mp_napi and mp_armed go (and with them the
+error-path bugs Sashiko found...) I'll do that in v2.
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index f7a452123ef5..dcb16b006740 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -7816,6 +7816,18 @@ void rt_mutex_setprio(struct task_struct *p, struct task_struct *pi_task)
- 	if (prev_class != next_class)
- 		queue_flag |= DEQUEUE_CLASS;
- 
-+	/*
-+	 * PI boost can route @p out of sched_ext: policy stays SCHED_EXT but
-+	 * __setscheduler_class() follows the effective rt prio, and rt/fair
-+	 * may have retained @p on the rq as a blocked donor. Block it before
-+	 * sched_change_begin() records the queued state, the same way the
-+	 * other entry points into sched_ext do.
-+	 */
-+#ifdef CONFIG_SCHED_CLASS_EXT
-+	if ((queue_flag & DEQUEUE_CLASS) && next_class == &ext_sched_class)
-+		scx_prepare_task_sched_change(p);
-+#endif
-+
- 	scoped_guard (sched_change, p, queue_flag) {
- 		/*
- 		 * Boosting condition are:
-diff --git a/kernel/sched/ext/ext.h b/kernel/sched/ext/ext.h
-index d32bc01071b0..1a699be25331 100644
---- a/kernel/sched/ext/ext.h
-+++ b/kernel/sched/ext/ext.h
-@@ -19,6 +19,7 @@ void scx_rq_activate(struct rq *rq);
- void scx_rq_deactivate(struct rq *rq);
- int scx_check_setscheduler(struct task_struct *p, int policy);
- void scx_prepare_setscheduler(struct task_struct *p, int policy);
-+void scx_prepare_task_sched_change(struct task_struct *p);
- bool task_should_scx(int policy);
- bool scx_allow_ttwu_queue(const struct task_struct *p);
- bool __scx_allow_proxy_exec(const struct task_struct *p);
-@@ -72,6 +73,7 @@ static inline void scx_rq_activate(struct rq *rq) {}
- static inline void scx_rq_deactivate(struct rq *rq) {}
- static inline int scx_check_setscheduler(struct task_struct *p, int policy) { return 0; }
- static inline void scx_prepare_setscheduler(struct task_struct *p, int policy) {}
-+static inline void scx_prepare_task_sched_change(struct task_struct *p) {}
- static inline bool task_on_scx(const struct task_struct *p) { return false; }
- static inline bool scx_allow_ttwu_queue(const struct task_struct *p) { return true; }
- static inline bool scx_allow_proxy_exec(const struct task_struct *p) { return true; }
--- 
-2.53.0
 
-base-commit: 5b740a72b55c4267ba4d8010f17dde26b26f52d3
+Bj=C3=B6rn
