@@ -1,100 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.161.47
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794441795;
-	b=tNujVo7uKFNA5p+gNS/6l6HNlCx1kRXfKoNHhl0TyBYM7QdAdKcecEooakf3q328v/h1
-	 p5ph6jo+s1elIzfNKGfapeGxj07lI4eAfT60aTx9csJBd7Kq1pnvT08QUyqk26GIYek2U
-	 4Snbr6QjNkWPJrPIEJFwTrYWttmYNrX3nQx5V+Rco0yRx9DVgMdbIrXnHzR7/+5dHW/6Q
-	 pKI8To/mrFwdOtAxTx98hmaVDzT0v1wdXDWEXuhfrl9EF0HhwHNRHwe5gctsforXztVMN
-	 kvCoevHBnJUxdeBaw2eBdlMshJD80ll5qpOvgD/H/fb2ZbEh67Q7hpVoaT0a809HL4A==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794441795;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.169
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794442120;
+	b=d8E1W8T/YSoakFMC/rKOqBEqZte8K1qP5EJTsXMcnbUm0c6sYZ1gTxVMxZKm0ruo3iDC
+	 Uv1wwIaP9/nxkCWjAh6ASRtBjy4eIvmaMQK7YNfnZxWNX/7yz5V1XdfdBs+wR8OUhdRfb
+	 1dQfTlAt5GAxwMhunnb9+roGXFRB69PDqKIUbEzHu5LMnDGvHDGELuTE20d1BqtpFp9eS
+	 KjAdXsJ9BIc3VjCZQEmLgQTNGpQJXv75Bdrn3Vs76xg+rxIgnACH5WCUaSC/pYjPS11mh
+	 TiUloS2xKb4mdp3iB4l8qrukztQhDC8NYt2RLNbT1ubscflqlFjGsskZ9I5TleCYuGg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794442120;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=tSGqJI9Sfy6jLqsvt9BVccCgWOo1O99X2AFDHy843oU=;
-	b=Wd4XpOOYyBSrfNvvQWc2gAp+Zx90/6v7nPXPp3CPiUQadL64VZ+fgdfrNLhEId0i9C5U
-	 rlg4OXPOYoPYyv9Ddo/IJDg1vVB6L5wrU79pv3hshKEQqMHDUm6jU3fUV6nRvY0Uur7El
-	 CEJp0zGi3BQmBXmskpwhZ09eMCGzGcKdtwfpWXwyScssRcUD3RRwpd31dMQfLeXpdyrLb
-	 whHA2OxfgL5i3Mi7nctxQ9mQSTGB1JIELz7z9U7Jzky9es6L5Vs7aMwKnyflxiP+IBgoH
-	 9VybKkeOitA8NEsrowwSQuQcCA9I84vFI8MXTC62vszqa3FKj0Xk2J8mBQegRrd7TGQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cloudflare.com;
-	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=cILHLZST;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.161.47
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=d/FBU/21WpE5f6YGA3ntN/C1akP7qq2R2YB1rM/tvh4=;
+	b=lhm1VuELVn00OTD0mAOYkUoCF6iZkROn08D0f8oEZPjIdzBbRDCgjgoD26veUkITiB5o
+	 Fq0K9llPP8QcCOWxAtpUljE8lULUVHfCtRGqApeag8eiJvM+E8YRpZjBHLX+dOubF73k1
+	 loyjRxSisgzbS4/WVCcPjaeqjhkkof2MDZ7l7eXU56/NONWu1sNSUwrunV+6IjkCHv0Pd
+	 rwkKBXvBAYMD5PxL7E1U8siGh2FPFFL4K7c4Lt46WK0PmBR4v8zYxeFwDMfxjKd01NzOL
+	 Ngez8XxYn/SR+kG6Ax2vrG8mDtD6PPc9TwXIAUgECMfk+qRHZhfoS2uuAy3eQADOfBA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Mm0pHWNU;
+	arc=none smtp.remote-ip=209.85.215.169
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A1D7606A326
-	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 00:03:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6A1D7606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EE3C606A31C
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 00:08:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1EE3C606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=cILHLZST
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-6de1fd5f572so1552693eaf.3
-        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 16:03:15 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794441794; cv=none;
-        d=google.com; s=arc-20260327;
-        b=GxX4GV8qyEa9GTN/qiUbQuvlL8WQYKNHUGp4dzaRHhVG7AToQik0x5sZXWoP2orkNC
-         YLIx9YLNKdKi1wLS7ZpK+LbN7Sou/ERTufY64sUEM92LMBjpavVrIkNKIYaC7Sspp5ds
-         aHK3jqP645VyL1OHCWqRKh1zEhZSzXKjndk9Sp+M5dONInvBJCV8kpDoQzqTShXcrLp6
-         /CXEQSBa+qxjgU+oLJpgHhBARW/QkqCfM9UjulsCtvbRrmqxi0JJ9YNa9/9Qnsgn0DTG
-         UWSKClxI0JfcnGfUdT6I6Odjhg2DrNuDvZOqVJtIKA03KlQAhOR2JkkGrSfhcHlnsHmv
-         j7RA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=tSGqJI9Sfy6jLqsvt9BVccCgWOo1O99X2AFDHy843oU=;
-        fh=evQ81zQF0O4y4VbjEDt4CVCV+iimpwCWGa3P93vE/rk=;
-        b=jEgxXck8aaM09kFgWopphq0IeCl1vjMUb9sQ+CAIwEb+QZ2In2SQAeRzc8YaK9Kufc
-         wx6oO+sqHfTFwJADHJR+ls9AdW5zHle6lWwfU+9GgVfrhcGJ4/qOR0esUYNnG+SnK2TC
-         pPYSiFQyGq4szoK1yiUBnYpAEuoPHSNf2WpALjRjysvouOzJ3mcikK7ySwC5CMU7Ugnv
-         5Chv7x4/83yo3DlQ9+Ss0BwP2aaTU7ef6s0ODLc2yr845trf3HWDg4fRGqHMAXXboY8j
-         agZ/q6uQKMH+sdNs3ysO8bWS18aReFhrYRMltK4wWvAxxoOSNAzupBFVFuW5mijc5yEx
-         Y1Tg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Mm0pHWNU
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-cc1bc88a20eso2583416a12.3
+        for <bpf@vger.kernel.org>; Wed, 11 Nov 2026 16:08:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1794441794; x=1795046594; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=tSGqJI9Sfy6jLqsvt9BVccCgWOo1O99X2AFDHy843oU=;
-        b=cILHLZSTnKQEkbe7N+Oc0kZd1YMJ90v+inoo8hnd/du4Q8+TI7ThmqwGF7mc5pC4Zc
-         p3RST8uK9+o/pASznYLtV0Z7weQjU6OIrJgytinvIk4otwF+rNEOKoimbWWnNMqH5buJ
-         xCLw9HMNTcZlZTRHoJrN6pcicTv9FCZZeYbCVTLEV3d1vbtkvmzglrLY0Rw0y2iTXn+U
-         z7pDnxzc2gWXMtz92BavIWrAnQ1cEvS0+M9IK0CPUjNYAYrv8VaJisHOkU80CgP/RKfw
-         MyqjjMvpkeYtcCpkYSm24Gf8unvyyVbX7NIxTeOG3ssNop+SIoW1Unp6JfOBJr+qi4OR
-         Btjg==
+        d=gmail.com; s=20260707; t=1794442119; x=1795046919; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=d/FBU/21WpE5f6YGA3ntN/C1akP7qq2R2YB1rM/tvh4=;
+        b=Mm0pHWNU1xWGWclCgy/RrCqKm4/UjDJbTBoE8u629Yvo2v90G/w/d+Og+e8xuUbDNW
+         E59kcft45p0Bfa4W1aYI5uINBkzRCiLpH1pPsNjxBFaBNS5LjdLi+PceJ4bkrZo371SX
+         nYa32CwlXGGK/KI3sGcx75+g1K0BWdjgng+yQh8nAG8/e/B+UVZ2csFnb/LIiGaZXklr
+         ZkTDXHkv9siSYUggimJiQVVEyoCpB2VtZqdq6hoRVt4CxVxmgqe+gWxVGhrN1TQVE9zd
+         LekS14c3QVaQqBC/XrsC0GxNbnLAAIUCW39UIYBH7mpvRk/TZjuMPAiNmqElx8caold+
+         LWfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794441794; x=1795046594;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=tSGqJI9Sfy6jLqsvt9BVccCgWOo1O99X2AFDHy843oU=;
-        b=DAKM1FQqoV7G9Qh5QaVk3JtQSsQhWMUMg+nK5InkPuOjkqHUt2bi/fV3EEOGBLvGdI
-         ECAeLluTdUqXk4TVFdXeHWTeGWWB8nuu+O5mIhRfkcUZxYWyEdoO2XVQtlLVo5iXC98f
-         TrAXpIYiai7moBl9X4kS6ALKlDl6xIdSrz6cBOxuXSOqGo0sG5Qi4fny22U7htkVk8sP
-         A+NdulIWZ4ZKGV2BoZVvnVKnDjt332ICvo+dg21LgwzTHv1BG2UDeiR0Rryxeqh8z29K
-         kWjLfcFiiTAbgj/AnCjpduis0mfO5o22uPFS+YBAwhW0CcmPKOLVKReEmI0A/P5L2+C/
-         lMoQ==
-X-Forwarded-Encrypted: i=1; AL+hErHS1moMBS84MQ2G4wG76sNvNZIPl4eLmGPD4d/wtpBD+Ag7s7S3q2sy8p6oPQITPyp05w8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/8fgiXyljgHQf/BruIJryPThDXcrMypcNc4ym+y/RKfsY1cjCS
-	e/3zQLemCxASS77+SfQFvD9kKiEMUGEZwuWaAo43Jd26AR8LbzcmBglbDVfaMZ3KGR4S4dXD6Zs
-	NPtt3ivKiEjY3a5kfk67buJu+/KpPWp2dZOCGFEAdJw==
-X-Gm-Gg: AYBFou11UPmR+VeZ8OeHYM9jL8IVCtcqMgm7laPNtgiJ8VP4/w8VMGQ+m9rcohy0m3Q
-	OeyJRRiPm8x7KJ4qkKYUrNnFakeD/a9b4JGoWsQdHuNSutAjabsEUjs6jhZGdRfZLKRK12dmGbb
-	6NmDpo0/x+wXsOcV7aj/ueBRhNWS27n35a77e7lZlmf+4OcBEAqLGlm9caf59DEVNRzNpeiBoGm
-	dAEs5WNef2Gqiu6uzPbMZ+S8dnjbW+kf8k1DUVJKin9GegbaTRWZZbQgZMHGLRnxIdGXMfG3TJX
-	JOb1dolZjhfiEUFfGM9IS8f6JPvr21wUFCShcscuhDm192SUWQIyQOgiUuiPvjoYLQgJe3dFUeh
-	ReEiwMHPiKQV0HBHYzx2+sMCrV/WJU9PsQ4MqRtHR7DwZlWpwBvjWfdhUE5MWB0kUSVptrTIsv4
-	LV4zkQMGquvQ==
-X-Received: by 2002:a05:6820:1341:b0:70d:8086:e48e with SMTP id
- 006d021491bc7-7191784f4c9mr2405201eaf.20.1794441794070; Wed, 11 Nov 2026
- 16:03:14 -0800 (PST)
+        d=1e100.net; s=20260707; t=1794442119; x=1795046919;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=d/FBU/21WpE5f6YGA3ntN/C1akP7qq2R2YB1rM/tvh4=;
+        b=ePl2jSjnjOl3x123LgmoRdabZgEUOgLzCHfAw+8kogir5OmCkaLeRoNc3xO9twR2qj
+         QYwmVXs1ar8hH0j+/8FI8cog3zdaJ0ICQ5sJio8tANpcUa6xgOJ59J3mjfc6ouCcCPP7
+         6kV6fX5ATEW7ounJBTO72Run/Net4nHVQpeXfxP+Qy6fIIosPOWBquq9cBg0x66DS19j
+         Ga+M34F6/+B6KEZevKbakQFM7tnkf75jOOlKNrBb/gH44zKCtcrnKb9vxTwqC4cjeHoY
+         aTBF2uRVMcriRMqOlqCRTMEfHlPWmMhSLBuddb85QhgH4sMHaSd6ntQaoXCbiB4gNJoe
+         AisQ==
+X-Gm-Message-State: APuU4Z8rw+T1trCcfKUCz2v4el91q8YxLUOInsMe1fQ4XlsW18XEnphP
+	VT3iClbWVRwzqPZ2vK+5XevY+E44jiClXbRkPPPCF8e+80tNJ/RLqUcnEU5W8w==
+X-Gm-Gg: AYBFou3fH0Z5xymdyCjrykvDzYGe0aPspgTvRpEzz/cwP/+jd9OWaXWs4Ds9F12JgrD
+	bjxnTkl1wlMD+qAa1NYPiaGVfcQny4dQAJsRKUxoIh3r/X6db/iCegfpw3j1QOhv3RKvbu3WOPs
+	dKD1S3Ci4ewRjgFb61xomztBOUyKQZeLLf5lA3dR9GBph4EtH4VRwSKMcujkWvFBr8ZKetBJ5UK
+	gsx8Z7+wCbGLDDRn6tdm47en5V8YLxZsWHRagkuoZukMs2Sgitnj52/cCYLnw6Gw9P3W2IFndIP
+	1eKrww+ChblkgpVP6krZpFYW8iRMxiZvSIiZStTp9Sf2joQ1bTzmbFWw8IvRafjmqpGacAtKgVk
+	RodTMGqKtY+rGkvAxMl+LYG6d41f1ppD0itZzMtEAqR0FPkqQ6zfeZznDwOJ79I9pmJlpz34Hlp
+	J+UX0UT5D40rIRBgE+VQHlPo8c94sSWBiO7b9jmZwxTVifRzWoLmDl43IF3/qXjeS32vhYTYYJZ
+	oMXaeQIi1k3+Zk+DdPxJusFm7TV33PY//jtQubPIGHRqhUKO/kRZ4Y7DcPPXMp0JDuPUm/6r7x6
+	vhe7FREAR0uDeKMxom1KJzLcm/76GueGp2TAEP0ekE4UEhmJbbqG7cbTnGra02JnopN/hBSVQ44
+	FRgTvQO6Mc30+R2CCktD9kqaPUVibtGQm00CFZiVDnayLXmItGWyADMZy7Bxd8j9/ZE4GaILyhA
+	==
+X-Received: by 2002:a17:90b:3e8e:b0:3ac:95d7:2fa5 with SMTP id 98e67ed59e1d1-3b182f1ff12mr3927785a91.44.1794442118990;
+        Wed, 11 Nov 2026 16:08:38 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.253])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b197c74bf3sm1405330a91.10.2026.11.11.16.08.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Nov 2026 16:08:38 -0800 (PST)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com
+Subject: [PATCH bpf-next v2 0/7] bpf: struct scalar, and one backedge-taken count on it
+Date: Thu, 12 Nov 2026 00:08:28 +0000
+Message-ID: <20261112000836.3138846-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,96 +96,167 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <cover.1794020868.git.tianyi@cloudflare.com> <e90e748e0aefa7cbe1c2b31b8c7902ccf135c3f2.1794020868.git.tianyi@cloudflare.com>
- <willemdebruijn.kernel.1d64e7848503b@gmail.com> <20261107182526.69543-1-tianyi@cloudflare.com>
- <willemdebruijn.kernel.2c6a653eb65fa@gmail.com> <20261108190831.3f991a13@phoenix.local>
- <20261109154909.32748-1-tianyi@cloudflare.com> <avTOvr+yy+2j8xrQ@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
- <avTSBFpR2t7PO9tx@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
- <CAG4wq-d+LtEi-omGwzgqx14rCp_4J9HztGMpa8ioMsviaPw+ZQ@mail.gmail.com> <avT4CezZCiRhvCXw@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
-In-Reply-To: <avT4CezZCiRhvCXw@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
-From: Tianyi Gao <tianyi@cloudflare.com>
-Date: Thu, 12 Nov 2026 00:03:02 +0000
-X-Gm-Features: AclHuK_s8wIPjsY9dzqaekzO2VZaPxMJTb6Tg8Z4dNlh8vuXp1Ar6fObcRSwolA
-Message-ID: <CAG4wq-cyLyxnnmhPvL+ZNmnXGjBp=OsbBNE=16j6WRSVJ8uv3w@mail.gmail.com>
-Subject: Re: [PATCH net-next 1/8] net: add tx_extra_headroom and LL_ALLOC_SPACE()
-To: David Keogh <dkeogh@amazon.com>
-Cc: Stephen Hemminger <stephen@networkplumber.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, netdev@vger.kernel.org, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Eric Dumazet <edumazet@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Simon Horman <horms@kernel.org>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	David Woodhouse <dwmw2@infradead.org>, Dragos Tatulea <dtatulea@nvidia.com>, 
-	Nimrod Oren <noren@nvidia.com>, Alasdair McWilliam <alasdair@mcwilliam.dev>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Magnus Karlsson <magnus.karlsson@intel.com>, David Ahern <dsahern@kernel.org>, 
-	Ido Schimmel <idosch@nvidia.com>, Alexei Starovoitov <ast@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Donald Hunter <donald.hunter@gmail.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Breno Leitao <leitao@debian.org>, 
-	=?UTF-8?B?QXNiasO4cm4gU2xvdGggVMO4bm5lc2Vu?= <ast@fiberby.net>, 
-	Danielle Ratson <danieller@nvidia.com>, Kuniyuki Iwashima <kuniyu@google.com>, bpf@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kernel-team@cloudflare.com, nh-open-source@amazon.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 11, 2026 at 11:19:37PM +0000, David Keogh wrote:
-> On Wed, Nov 11, 2026 at 09:41:32PM +0000, Tianyi Gao wrote:
->> By the way, I plan to support tcx only in this series. A tcx program
->> is attached to one device, so the kernel knows which device to update
->> on attach. A cls_bpf filter can sit in a tc block that is shared by
->> several devices, which is harder to handle.
->
-> tcx only is fine with us. Our chain is attached with cls_bpf today.
-> Rather than move it, the simplest option for us is a separate tcx
-> program on each device that carries only the tag and returns
-> TCX_NEXT, so the existing tc chain still runs after it. A few
-> questions so we can check that this works with v2:
+From: Alexei Starovoitov <ast@kernel.org>
 
-Yes, this works.
+Eduard asked three things about the code in scev.c that counts the
+iterations of a loop:
 
-> 1. Is the tag read for programs attached with BPF_PROG_ATTACH as well
->    as with BPF_LINK_CREATE? "bpftool net attach tcx_egress" uses
->    BPF_PROG_ATTACH, so a startup script could do the whole setup
->    without keeping a link pinned.
+ 1. Can struct scev_value be a cnum64 and a cnum32, in place of eight
+    open coded bounds?
+ 2. Why are there two functions, compute_backedge_taken_count() for
+    constants and compute_backedge_taken_max() for ranges? He suggested
+    to compute on cnum: no bias, no struct latch_domain, one function,
+    one way to handle 32 bits.
+ 3. Extract cnum64, cnum32, tnum, base and step from struct bpf_reg_state
+    as struct scalar, with a set of arithmetic operations, and move scev.c
+    to this abstraction.
 
-Yes.
+This series does the three. It applies on top of bpf-next.
 
-> 2. When several programs are attached at the same tcx hook, is the
->    value the largest tag among them, and is it recomputed when one of
->    them is detached or replaced?
+  1  no WARN on a reg invariants violation     fix
+  2  cnum: const, sub, zext32, sext32          no functional change (*)
+  3  struct scalar                             no functional change
+  4  five operations on it                     no functional change (*)
+  5  scev.c on struct scalar, one function     cleanup, precision
+     for the count
+  6  '!=' with a step that is not 1            precision
+  7  tests
+ (*) but for an empty range, which stays empty
 
-It is the sum of the tags, because each tcx program can push headers.
+Patch 1 stands alone. Where the verifier takes an infeasible path
+a register can end up without a value. reg_bounds_sanity_check() says so
+in the log, and no longer with a WARN_ONCE(). It comes first because
+patch 6 gives a congruence to more induction variables.
 
-Yes, it is recomputed.
+struct scalar is an anonymous member of struct bpf_reg_state: reg->r64
+stays reg->r64, a register keeps its 80 bytes. What scev.c needs takes a
+struct scalar: scalar_add(), _set_const(), _set_unknown(), _zext32(),
+_union(), each verifier.c's own code with another type of parameter.
+'a + b' was written six times and is written once. 66 functions still take
+a register. A script can convert them, not in this series. scev.c loses
+218 lines.
 
-> 3. What is the exact form of the tag: which BTF element it must be
->    attached to, and the string format? It would help to have that
->    documented, since programs will depend on it.
+These loops are rejected today and load (clang -mcpu=v4, buf is a map
+value of 64 bytes, data has 4096 bytes, rec has 12 bytes, n is 0..16):
 
-This is the form I plan to use, and I will document it in v2:
+	for (char *p = buf + 56; p >= buf; p -= 8)
+		*p = 0;
+	for (u32 i = bpf_get_prandom_u32(); i < 64; i--)
+		buf[i] = 0;
+	for (long i = bpf_get_prandom_u32(); (u32)i < 64; i++)
+		buf[i] = 0;
+	for (u64 off = 0; off != (len & 0xff8); off += 8)
+		sum += *(u64 *)(data + off);
+	for (u32 o = n * sizeof(struct rec); o != 0; ) {
+		o -= sizeof(struct rec);
+		sum += *((u8 *)recs + o);
+	}
 
-SEC("tcx/egress")
-__attribute__((btf_decl_tag("tx_extra_headroom:64")))
-int headroom(struct __sk_buff *skb)
-{
-return TCX_NEXT;
-}
+What changes in behaviour is listed in patches 5 and 6. A loop with a
+count gets no may_goto, and more loops have a count, of up to 2^32. A
+count can cost insns: beside a variable without a linear form, like
+'off += ids[i] & 63', the iterations are kept apart up to the count:
+90 -> 247 insns for 32 iterations. And it can cost programs. A loop with a
+count is summarized: each induction variable is 'initial + step * count'.
+The count of one exit can be far above what another exit allows, one that
+has no count:
 
-The tag is a BTF decl tag on the main function of the program, and the
-value is a decimal number of bytes. The kernel ignores tags on tail
-call targets.
+	long n = bpf_probe_read_kernel_str(e->comm, 16, src);
+	if (n < 0)
+		return 0;
+	u32 i = n;			/* 0..16 for the verifier */
+	while (i-- > 0) {		/* clang: '2 * i != 0', step -2 */
+		sum += e->offs[i];
+		if (off + 256 > 4096)	/* clang: (u32)(off - C1) < C2 */
+			break;
+		bpf_get_current_comm(e->data + off, 16);
+		off += 16;
+	}
 
-> 4. Is there an upper bound on the value, and is a larger value
->    rejected at attach time with an error, or clamped?
+Today no exit of this loop has a count, its iterations are verified one
+by one and it loads. Since patch 5 the test of 'off' has a count, 242,
+2 * i is -480..32 and the load from e->offs[] is rejected. Patch 6 counts
+the latch: 16. The loop loads again, and it loads with 'off > 3840', which
+is rejected today.
 
-The upper bound is still NETDEV_TX_EXTRA_HEADROOM_MAX (512 bytes).
+Patch 6 does not reach each such loop: a latch on the low 16 bits of a
+register ('u16 i') has no count, a flag or a conditional increment beside
+a variable that has a count since patch 5 has no summary. A loop of one of
+these shapes that loads today can be rejected. No program of the projects
+below is lost.
 
-- A tag above 512 is rejected with -EINVAL in tcx_prog_attach(),
-  tcx_link_attach() and tcx_link_update() in kernel/bpf/tcx.c.
-- Several tags, XDP on the veth peer and VETH_INFO_TX_EXTRA_HEADROOM
-  can add up to more than 512. The total is then clamped to 512 in
-  netdev_update_tx_extra_headroom() in net/core/dev.c.
+The counting code and the operations of struct scalar and of cnum were
+compiled in user space with u64 of 4 to 6 bits and u32 of 2 or 3 bits, and
+the loops were run: each op, step, range of initial values and of bounds,
+64 and 32 bits and their mixtures, pointers. Without a congruence, at 5
+and 3 bits: 7.95 G cases, all of them. With one: 534 G, all at 4 bits, a
+sample at 5 and 6 bits. No count, false_until or range is wrong, patch 6
+loses no count. Of 160 M random loops at 64 and 32 bits the 39.5 M with a
+count of up to 300 were run: each value at the header is in r64, r32 and
+on the line of base and step.
 
-Thanks,
-Tianyi
+Patches 3 and 4: 26402 progs of the selftests
+(clang in three flavours, GCC) have the same verdict, insns, states and
+peak states. The level 2 logs of 26272 of them, 24.5 M lines, are the same
+but for BTF ids and kernel addresses.
+
+veristat against the tree before the series. Tetragon, Tracee, Falco, the
+Datadog agent and more than 70 other public projects, the set in the cover
+of "bpf: Find linked registers by scalar evolution, remove scalar ids":
+1105579 progs, 1058728 load, not one verdict, number of insns or number of
+states changes. In 33216 more progs no verdict changes:
+
+                       progs   load     insns    states
+  selftests, clang     18810  11757   -0.53 %   -1.13 %
+  selftests, GCC        6011   3673   -0.01 %   -0.01 %
+  Cilium                5496   5490    0.00 %    0.00 %
+  sched_ext             1272   1163    0.00 %    0.00 %
+  katran, bpfjailer      538    511    0.00 %    0.00 %
+  Rust                  1089   1081   -0.96 %   -1.09 %
+
+Cilium has two more weekly builds than in that cover. In C
+trace_netif_receive_skb changes, 14519 -> 3505 insns, and two asm tests.
+In Rust 242 programs change, 165 of them sched_ext schedulers. Two get
+worse: float_fmt_display 66118 -> 70018 insns,
+float_fmt_precision 65296 -> 69196.
+
+To load the C programs, those in Rust, Tetragon, Tracee and Falco the
+kernel spends -0.19 % to +0.03 % instructions (perf stat, two passes of one
+kernel differ by up to 0.3 %). Load time changes by -0.92 % to -0.11 %,
+mem_peak of the 1105579 progs by +0.01 %.
+
+v1 -> v2:
+- reg->raw covers the union on 32-bit too: u64, static_assert() (patch 3).
+- No WARN on a register invariants violation. New patch 1.
+- Applies on top of bpf-next.
+v1: https://lore.kernel.org/bpf/20261111164950.2674588-1-alexei.starovoitov@gmail.com/
+
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+
+Alexei Starovoitov (7):
+  bpf: Don't WARN on a register invariants violation
+  bpf: Add const, sub, zext32 and sext32 operations to cnum
+  bpf: Add struct scalar
+  bpf: Add scalar_add() and four more operations on struct scalar
+  bpf: Compute the backedge-taken count on cnum, in one function
+  bpf: Count a '!=' latch if the step divides the distance
+  selftests/bpf: Test the backedge-taken count on struct scalar
+
+ include/linux/bpf_verifier.h                  | 131 ++-
+ include/linux/cnum.h                          |   8 +
+ kernel/bpf/cnum.c                             |  45 +
+ kernel/bpf/cnum_defs.h                        |  11 +
+ kernel/bpf/flow.c                             |  26 +-
+ kernel/bpf/join.c                             |  24 +-
+ kernel/bpf/scev.c                             | 938 +++++++-----------
+ kernel/bpf/states.c                           |   8 +-
+ kernel/bpf/verifier.c                         | 215 ++--
+ .../selftests/bpf/progs/verifier_loop_latch.c |   6 +-
+ .../selftests/bpf/progs/verifier_scev.c       | 146 ++-
+ 11 files changed, 773 insertions(+), 785 deletions(-)
+
+-- 
+2.55.0
+
