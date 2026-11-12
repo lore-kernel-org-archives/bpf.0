@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794501560;
-	b=rvp7DfsSqSkCoIx5jl3BFWv/guCdsB9gn/6Ew6W9MOkhnOWmiSR3zoRQyFCzJlQitVaE
-	 sYkldOk+dRk+TzIN6jBArzoCaWxIEYvlks6P9yGX/jtOug/Ld8a8lHJmxjleaUkKt9x3i
-	 S2FZJaO2M+8uuik7F/9M/E2OwsZrTYgH+k1eGNWdyVDCfuhAg831ZeOmpFJa7uESrKVhC
-	 74OSavmdxxdntepSNBW2uvMw2Lo0tUoHneUF9t2/qxn+542uvNesh4ZuPxPhEUgO7aeY/
-	 TeAZDJL4Q5X9SOqK0vt/n2DXI16N4By3LEpdpBXyr3faaye4DG0+2N6okZcWYPpMITg==
+	t=1794501563;
+	b=cDSf0/2MxtLiMfDdy03sSzH2WDTabImMkDmkR3KzauSr5cCf1h3W/CMnRyg3QXzG6A1m
+	 qr9WW92ZMFV8xBIE+6qWIl5YZQSGkTRoRPsdT2DVtIL3iojUEBPaHCrAYT8SRYrOoctC8
+	 vIsFRjIKDnhgRaszEDz73Z9sgF7F0y7j1YcJejlrQMhMK4yyqlTpmsYsbeR4IQ44bVuq0
+	 jTGPD96KU2PYZ533Q0xEGzFj/9jfM0qQLp8iKrF8bvDr68zivuHTm2fY8CFxUnhWEzo3a
+	 FHRt2O5ZgU89haPvndt2/y7q8E6T/PCv8ddwS2NmmfomStSz3/QZklr4kRYHlVEibPg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794501560;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794501563;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=s5KVY0ttJPwM44AedaEeBMvPANq5jjCioUBbmEBCb0c=;
-	b=iHycl998jwslJURCRC7TEdZbTGuNC977snTGFSqLWii6tDBWQoNfD1wwRshCjSHuGYoU
-	 oaax2vaXk4icXVxRsUhGKMqwTsRDJfnb3wlfRPcXuZIsaCPta9mU8PgItzdkoGIFNDUkc
-	 d+kuq7nmo3bw2bcjj4g/yQekRmVL+Nzg+i0NGseImYkfcw1N4ebQilJY5IYO/CCMGvHqH
-	 FMubJ1MtjM0vc1n4DA90N6EtTiKbOwNMaJzABZGw5J7njW24zR8auBc9yjjsoQV+b8Vdb
-	 Aisrzb3p0YYmRDli3xa3SwIFHNxSlVcNppSn+3MwbnFDWl0XFO7+jI6DZSVzDf4HjxA==
+	bh=87Yvq5Tfw20D1NHuIdIjGitV2Wx0A+jA2klH0/7UQCM=;
+	b=uJ7mD23F1kqgIxKxd1qX9nkztQV0O/9jlatJqmhBUcbb1HY0r6gtNFmyGncG6fPsjYwX
+	 BuJjxHKoh5skLtYUpugNwMw5ypQA5CW6xxVHDVVFT8WgJVd6pxJuCgAJK185XZrXDupN/
+	 G10mWFXjJ0Iz3wH57dNR3SHOsDcrum6OUOi/wwu8U1WWb5hgrLGjLxOQzIh4AdWFq4rGD
+	 kRFhmdFdqmFJ/sb8b4IERBuEQ7mSJkF6AMPY1j9eOq2C7CPkABppg1MObXGbW5qwhxDte
+	 xN3TAVOmrOIK35slHid33KtbAoatcpC/ZzRTVyzFPNBTvnxn3GOYLV5BaC2RpBNx7PQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BuKg8obU;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VGVvgKCe;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7659C606A885
-	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 16:39:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71CE7606A885
+	for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 16:39:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BuKg8obU
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3C731F000C4;
-	Thu, 12 Nov 2026 16:39:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VGVvgKCe
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28F091F000C4;
+	Thu, 12 Nov 2026 16:39:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794501560;
-	bh=s5KVY0ttJPwM44AedaEeBMvPANq5jjCioUBbmEBCb0c=;
+	s=k20260515; t=1794501563;
+	bh=87Yvq5Tfw20D1NHuIdIjGitV2Wx0A+jA2klH0/7UQCM=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=BuKg8obUUbcUAQHtSKQ0tChZRMgEqm0/W34MiRvwqxkRyp/VEnO7ZE8dZaOlhMOut
-	 WAqfv8Gyj2RYTQzF7e9BXlDIxbZKxowGfZBxMe+fB1Nxuzjye7Z//Y2GAIF6Dg5GIf
-	 Z/qEY9a2MnLZRF87zuLFaoEYMl8Pe+LJcBhYmafOTN0tFRSJVWzQ4S/bjFa1Lb5BMA
-	 o+I/0oQpvE+vjeC7yYYDXCe65kqWIrs4vIe3ST2kCeyz0s8TjYG7V1uHXcR0NVBKxn
-	 Sce/+yuUaZqaStVbjiu7Q4/HkMkmI4Y3slz5GPhCiGV69KdFJpWlmd8d4rhtjBjdJb
-	 8p4p/gXOTentw==
-Content-Type: multipart/mixed; boundary="===============2718250168366836207=="
+	b=VGVvgKCeaChKautC+S+eaajI6YbLxDI9/zmUkyT0pH33ontKqEmumipLmPoc/inAm
+	 i7JaZeu2iLMPZ+L4JdfcOeV3vTmabEmGc599EZ3SA9J5p99tDsJByBK2J90vbBvrqv
+	 Onh3Gb6ElSvONWOZRIFkc10MkWbMC8r19cfDtKe1JRSJopt+vL6x13smaOMXlR5D6C
+	 f1HnbWe93HU1OfkHEyr1HQOn+9pbosShyUfXxiPKUoVm2Uv8HMhv/9o8eWyGPE9Wm9
+	 cNggTsNzosij4BgmnujK/kqEZQnkk+nxTkaIihYhDIBLYgdOfLKEsQFK/L67nmv8TD
+	 uiqU4B4/5Q82A==
+Content-Type: multipart/mixed; boundary="===============3232780938788462101=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,120 +49,49 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <d76ecfc94a833a84c390b5a2ca009d49fc4d8ad52e34ffca85722d5a8055e9d6@mail.kernel.org>
-In-Reply-To: <20261112155337.1040699-8-alexei.starovoitov@gmail.com>
-References: <20261112155337.1040699-8-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next 07/12] bpf: Take the outermost common base of two linked expressions
+Message-Id: <90528bedbd81c1687f01a4ba9ca5bea8fabe22b97628640ce3af85f488f638ca@mail.kernel.org>
+In-Reply-To: <20261112155337.1040699-13-alexei.starovoitov@gmail.com>
+References: <20261112155337.1040699-13-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next 12/12] selftests/bpf: Test the evaluation of linked expressions
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 12 Nov 2026 16:39:18 +0000 (UTC)
+Date: Thu, 12 Nov 2026 16:39:22 +0000 (UTC)
 
---===============2718250168366836207==
+--===============3232780938788462101==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Take the outermost common base of two linked expressions
+> selftests/bpf: Test the evaluation of linked expressions
 
-TL;DR: innermost_base() may differ for two linked registers when extension
-widths differ, so find_linked_regs() may skip a linked register; lost verifier
-precision (a valid program may be rejected), not unsoundness.
+TL;DR: Nit only, in the selftests: the comment above remainder_of_low_32_bits
+also describes the 8-bit case, which belongs to zero_extension_of_low_8_bits
+further down; move that test up or give it its own comment.
 
-> diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-> --- a/kernel/bpf/scev.c
-> +++ b/kernel/bpf/scev.c
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
+> --- a/tools/testing/selftests/bpf/progs/verifier_scev.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
 
 [ ... ]
 
-> @@ -529,6 +518,38 @@ static bool is_low_bits(struct scev *scev, int id, u32 bits, u32 *left)
->  	return true;
->  }
->  
-> +/*
-> + * A value is *@base + *@off (mod 2^*@bits). An extension and a partial spill are values of their
-> + * own, and they have the low N bits of their operand: go on to the base of the operand, modulo 2^N.
-> + * Only to fewer bits: three steps at most. N is 32 or less: it does not matter if an add on the way
-> + * becomes ALU32, see split_const_offset().
-> + */
-> +static bool next_base(struct scev *scev, u32 *base, s64 *off, u32 *bits)
-> +{
-> +	struct expr *x, *e = &scev->exprs[*base];
-> +	u32 low = op_low_bits(e->op);
-> +
-> +	/* nothing looks through a phi, see struct expr_def */
-> +	if (!low || low >= *bits || e->def.set)
-> +		return false;
-> +	x = &scev->exprs[e->params[0]];
-> +	*base = x->base;
-> +	*off = (u64)*off + x->off;
-> +	*bits = low;
-> +	return true;
-> +}
-> +
-> +/* Two expressions that have a constant difference in some bits have the same one, or two REGs */
-> +static u32 innermost_base(struct scev *scev, u32 id)
-> +{
-> +	u32 base = scev->exprs[id].base, bits = 64;
-> +	s64 off = 0;
-> +
-> +	while (next_base(scev, &base, &off, &bits))
-> +		;
-> +	return base;
-> +}
+> +/* r8 is dead at the jump. Its leader r3 holds 32 or 8 bits of it: r8 is 1 << 32, 1 << 8 */
+> +LINKED(remainder_of_low_32_bits, MAP_OOB,
+> +	"w3 = w8; r2 = r8; r2 %%= 100; r8 = 0; if r3 > 63 goto out_%=; r1 = r6; r1 += r2;")
 
-Does the invariant stated above innermost_base() (and in the commit
-message, "Two expressions that have a constant difference in some bits have
-the same innermost base, or they are two header phis") actually hold?
+This isn't a bug, but the comment above remainder_of_low_32_bits seems to
+cover two tests.
 
-const_diff() takes the first base X that both chains share, but the two
-sides can reach X with different widths.  next_base() only steps to fewer
-bits:
+In remainder_of_low_32_bits, r3 = w8 holds 32 bits of r8, and r8 = 1 << 32
+is its counterexample.  The '8 bits' and 'r8 is 1 << 8' parts belong to
+zero_extension_of_low_8_bits (r3 = r8 & 0xff, r8 = 256 gives r3 = 0 and
+r2 = 2048), which sits three tests further down, after
+operand_has_a_leader_but_no_value and bound_of_loop_above_a_32bit_spill,
+and has no comment of its own.
 
-	if (!low || low >= *bits || e->def.set)
-		return false;
-
-So if X is an extension whose width is at least the width on one side and
-less than the width on the other, one chain stops at X while the other steps
-past it.  The innermost bases then differ even though const_diff() returns
-true.
-
-This looks reachable in a program with an arena, where alu64_with_def()
-gives every ALU64 add a def and simplify() does not fold (+ (+ x imm) imm)
-through a def:
-
-	w2 = w8        r2 = X = (zext32 r8)
-	r3 = r2
-	r3 += -1       (+ X -1)[def]
-	r3 += -1       (+ (+ X -1)[def] -1)[def]   (not folded)
-	w4 = w3        r4 = (zext32 <that>)
-	if r4 > 61 goto out
-	r1 = r6; r1 += r2; r0 = *(u8 *)(r1 + 0)
-
-const_diff(r4, r2) matches at X with bits 32, and refine_linked_regs()
-would make r2 [2, 63].  However innermost_base(r4) is X, since from 32 bits
-it does not step through (zext32 r8), while innermost_base(r2) is r8.
-
-The filter in find_linked_regs() then skips r2 before const_diff_reg() runs:
-
-	base = innermost_base(scev, id);
-	if (base != base_dst && base != base_src && !is_op(scev, base, BPF_ADD) &&
-	    (h < 0 || !is_op(scev, base, REG)) && !is_big_endian_slot(r))
-		continue;
-
-so r2 stays unbounded and the access is rejected, where the parent commit
-linked all three registers through the base r8.  forget_dead_mem_regs() uses
-the same comparison and can evict a memory location that a live register is
-still linked to.
-
-This is lost precision rather than unsoundness, since both users are
-filters.  The same reliance remains at the end of the series in
-add_linked_expr()/tested_base (f3e884229534), so no later commit fixes it.
-
-Since innermost_base() is only compared for equality, could it follow every
-extension and partial spill regardless of width, as the old base did?  The
-chain that const_diff() walks is a prefix of that full chain, so two linked
-expressions would always end at the same innermost base.
+Could zero_extension_of_low_8_bits move up next to remainder_of_low_32_bits,
+or get its own comment, so that the '8 bits' / '1 << 8' part sits above the
+test it describes?
 
 
 ---
@@ -170,4 +99,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43255831689
---===============2718250168366836207==--
+--===============3232780938788462101==--
