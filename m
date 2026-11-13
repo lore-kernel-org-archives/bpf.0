@@ -1,58 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794538628;
-	b=yizHDQ2ieFn8vnj5zRh4SqVPPxj7aKH6aG+PDt4aVTQ4HK00EJZkLiCdAH4s09sN5jc8
-	 op2kmx0mCzvUXzL6l5w8IOvYSNGy7eZ77Z3qT6+h/apSVZeuvVbmTYwpp5NEywZAR+ch6
-	 ZJYBmtOE6RPMirzPcKODpIG1VZ1HFO6KgNOJBB/oCkQtNoGGN8Hr1IinkyvrPhDYNgZ+k
-	 Aaxbdnditj30xhKyJn9JBdhEEknqa7TFDTL+n67/nuXGPz0d9V5GVRov/ApNKPq3/bHH7
-	 WrXQkr5N2ogeDCf+x1yxySWyMER2eczGdjBpFtTnRo3vvsEmOq+gZZA6IeIhuWxuTFA==
+	t=1794539116;
+	b=1aypsy+Bh58JMBLsJSO7h4jmJQ8MUUQkCEyacRprFiuXbVy/XQb/HQDdpPZ4jhG9+VYb
+	 Zw32NoY8eeZ6x8sks3zrwtEx6nbGM9lZ4IfNOvMDrOTxswhA2wln1fYFEkEYMJ3ZBUm8s
+	 ISRfa3VZmkXDQSRBHwgbmmTQawy6dEzmY5jRq4pPjKCz5/U5RCafv7TqEvT5HrzXnEGbP
+	 1JZXuEsY88ExaoCRqIhvz/BjYw8N9kIWo1iOvatLJE+pBkKUSQ6IkSoJjElpZbHjq5Ogv
+	 m/B6KfsH6jrLU1bKy/LWY5l9271odA03qRhmCR6TkMooV6in4+XE1kdps8ZQFEUP1Mg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794538628;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=2RrneKrWhLC6311R741U12D/fvrdtls7uMrysE8oAYs=;
-	b=2VfwcULPu5rqFG9g1a+UWnAWroGrVGZDjOA4tk/OMh6/yVdid5gRE2ElChRr48V0ivTy
-	 fwzqwrrxpInCACubs34Ss54X9/x2mB7hV2QuxYDqTFYymLdL7uek0i1zcDfnyzwb6Iuf1
-	 7kK8/LYgkMC0JiIcTy85vVPwKKLHfmJK24RkAUMVYmS+kfE4WzS+0wtO0ptyJbCB5OxFy
-	 hL7hRXKvQK+g9u+hGkm4HiXSOs9eHhn12mP4XbQIOsbPrWKWXa9HdQORkqy7n5LNivs17
-	 zh/94RfsJ6jNyjxxiWOAtftS/tpnzjLM9b9G9PyXpk5g7YNYi5RQAZMjOTQGPlVgh/Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794539116;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=jNB7W//7JP+AU0kGw/bmy15q+GCRPvpGya5e+wAjm4o=;
+	b=B2crlxpkvKJoV/s4u4n56qbJhfRejwm+JltekWZh/PUKJO4hPNTB6RbQ9FB8WriHtVVE
+	 t0NHUf636IurQnf+X+pQ44Noq10jyEX0VwncLOYFHapBCglu4hQe+gb14efzm9Ar/5adU
+	 SlYl7t8lf3CIiGzhxLsCOnrx8hlFbe1gI8MMdinjevs4w16f8ThPt1IRHoSkZUW6ABur2
+	 003TuJexiL8ry3h8lMZipu4prPbFgZfaLp+svcrbR9PH000d5T5dZlV0j8QC9AQOUdPsa
+	 VAN8/rrJifjoEEQLvkhNPQA12H8uQLh0vVPAqoz2YuHyeFLA/2o+9skMbTlsuUh9j+A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SmjAJNfe;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="g6/t3vEU";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35BEE606A323;
-	Fri, 13 Nov 2026 02:57:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2DB7606A31C;
+	Fri, 13 Nov 2026 03:05:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SmjAJNfe
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90C7D1F000C7;
-	Fri, 13 Nov 2026 02:57:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=g6/t3vEU
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAF981F000C4;
+	Fri, 13 Nov 2026 03:05:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794538627;
-	bh=2RrneKrWhLC6311R741U12D/fvrdtls7uMrysE8oAYs=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=SmjAJNfeF8LeK6oDMo2qmpBQWVj4a4Poiz7i3xi10wXs0wgBnh+v8JmBWYinj+OI/
-	 sXCDxopCcOTG7NbQ4NUzEhaEMCXU6mwxiYylhMamSEF14fOFO/y6eKaDyBos2TEuSp
-	 vPRDPrsFCeL3T9wzrI3LAy23VYxS5AGipPF/nj68pzLBaEQetmeHstcIFAMIP//Z2s
-	 /Wwv5w80NhsVralJJzdb3P3PI/qQ/HlUuXaSYVt/SESVvyIjK8thEp5hOuddglhYiZ
-	 eNZWf+EbHXE3HLl/LDToJgHwoGfx98HPwMW52NutKwN9H2tAdaAcazHlVB1v0KK1p1
-	 VWhd5mH3TPz0g==
-Message-ID: <sashiko-outbox-212108@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH sched_ext v2 2/2] selftests/sched_ext: check that a
- drained DSQ iterator stays NULL
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kang Chen" <k.chen@smail.nju.edu.cn>
-Cc: sched-ext@lists.linux.dev, bpf@vger.kernel.org
-In-Reply-To: <20261113024505.922854-2-k.chen@smail.nju.edu.cn>
-References: <20261110125113.2935742-1-k.chen@smail.nju.edu.cn>
- <20261113024505.922854-1-k.chen@smail.nju.edu.cn>
- <20261113024505.922854-2-k.chen@smail.nju.edu.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 13 Nov 2026 02:57:06 +0000
+	s=k20260515; t=1794539116;
+	bh=jNB7W//7JP+AU0kGw/bmy15q+GCRPvpGya5e+wAjm4o=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=g6/t3vEUsbXDMVqiM26ZOsj0RK7ASV9gw7gJjSf8FzKK1rpjq4GTq2C8+pjmRtYNf
+	 fap+svi60qaDDZBXnCOspek3hDYg7F9i3MTgXl4EVQPSn+Fn9Ytvph8hGY9VhIVm9M
+	 UyBp5eElPN/lZ3JS7V5de5LCrHRdfITY8B0TNqjbOJ1nfVG0dcA+9oV8bAHMYNPz+R
+	 1XEWbMQEtANJ85LkeKIzLTDMzFKaznrnH3GfqKm7Zys2/31r0LFhqI7xLpcN8RKm/x
+	 jclze15Yxm2fXKSyIHiJQkLSI3+aIvG1YTOABxjlc+I8FVcryOXJLby6PfM+srh8b5
+	 d91+oPZzoxmPw==
+Content-Type: multipart/mixed; boundary="===============5277389857893964114=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -61,87 +48,138 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Message-Id: <89f7ed00d7373ea7389e563810fbcd7ae775858e7fb592ad6e12cc1d1aee2565@mail.kernel.org>
+In-Reply-To: <20261112144935.583937-3-cui.tao@linux.dev>
+References: <20261112144935.583937-3-cui.tao@linux.dev>
+Subject: Re: [PATCH 2/2] sched_ext: Block a retained donor before PI deboost routes it back to sched_ext
+From: bot+bpf-ci@kernel.org
+To: cui.tao@linux.dev,tj@kernel.org
+Cc: void@manifault.com,arighi@nvidia.com,changwoo@igalia.com,mingo@redhat.com,peterz@infradead.org,sched-ext@lists.linux.dev,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,cui.tao@linux.dev,cuitao@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri, 13 Nov 2026 03:05:14 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issues to consider:
-- [Medium] selftests/sched_ext: unconditional overwrite of
-  next_after_drain in dequeue_iter_dequeue()
-- [Medium] selftests/sched_ext: empty TEST_DSQ_ID in
-  dequeue_iter_dequeue() leaves iter_count at 0
---
+--===============5277389857893964114==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 2125e4ff3cb11bd1e11aff810c77c47f61782533
-Author: Kang Chen <k.chen@smail.nju.edu.cn>
+> sched_ext: Block a retained donor before PI deboost routes it back to sched_ext
 
-selftests/sched_ext: check that a drained DSQ iterator stays NULL
+TL;DR:
+- Possible WARN_ON_ONCE from a double rq clock update on every rt/dl to ext PI
+  deboost when WARN_DOUBLE_CLOCK is enabled
+- Changelog's "only entry path" claim may be wrong: sched_setscheduler() can
+  also skip blocking donors
+- Peter Zijlstra rejected this hook; is it still intended?
 
-This commit extends the dequeue_iter selftest to verify that calling
-bpf_iter_scx_dsq_next() again after a DSQ iterator is drained continues
-to return NULL.
+>     sched_ext: Block a retained donor before PI deboost routes it back to sched_ext
+>
+>     rt_mutex_setprio() is the only entry path into sched_ext that does not
+>     block a retained donor: an ext task PI-boosted by an rt waiter can
+>     block on a second kernel mutex while boosted, and on deboost is routed
+>     back to sched_ext carrying the queued+blocked state that
+>     scx_prepare_setscheduler() promises never happens; every PI cycle
+>     hands the BPF scheduler a queued+blocked donor it never admitted.
+>
+>     Call scx_prepare_task_sched_change() before the sched_change guard when
+>     the class change routes the task back to sched_ext, which performs the
+>     missing sched_proxy_block_task() (plus an update_rq_clock() that is
+>     harmless here: the clock was already advanced, so the second advance
+>     only applies a small delta). The boost direction (ext -> rt) needs no
+>     handling.
+>
+>     Fixes: be8be8acb268 ("sched_ext: Block proxy donors before taking control")
+>     Signed-off-by: Tao Cui <cuitao@kylinos.cn>
 
-> diff --git a/tools/testing/selftests/sched_ext/dequeue_iter.bpf.c b/tools=
-/testing/selftests/sched_ext/dequeue_iter.bpf.c
-> index 76c2c71a90b61..38eb2df54a6b5 100644
-> --- a/tools/testing/selftests/sched_ext/dequeue_iter.bpf.c
-> +++ b/tools/testing/selftests/sched_ext/dequeue_iter.bpf.c
-> @@ -18,6 +18,8 @@ UEI_DEFINE(uei);
->  #define TEST_DSQ_ID 1000
-> =20
->  u64 dq_count;
-> +u64 iter_count;
-> +u64 next_after_drain =3D -1;
-> =20
->  s32 BPF_STRUCT_OPS_SLEEPABLE(dequeue_iter_init)
->  {
-> @@ -47,7 +49,10 @@ void BPF_STRUCT_OPS(dequeue_iter_dequeue, struct task_=
-struct *p, u64 deq_flags)
-> =20
->  	if (!bpf_iter_scx_dsq_new(&it, TEST_DSQ_ID, 0)) {
->  		while ((t =3D bpf_iter_scx_dsq_next(&it)))
-> -			;
-> +			iter_count++;
-> +
-> +		/* NULL must stay final after the iterator is drained. */
-> +		next_after_drain =3D (__u64)bpf_iter_scx_dsq_next(&it);
->  	}
->  	bpf_iter_scx_dsq_destroy(&it);
+The changelog says rt_mutex_setprio() is the only entry path into sched_ext
+that does not block a retained donor.  Is that accurate?
 
-[Severity: Medium]
-Can this assignment overwrite a non-NULL next_after_drain captured by an
-earlier dequeue and cause a false pass on an unfixed kernel?
+In __sched_setscheduler(), scx_prepare_setscheduler() only blocks the donor
+when policy == SCHED_EXT.  With a BPF scheduler loaded without
+SCX_OPS_SWITCH_PARTIAL, task_should_scx() returns true for every policy, so
+__setscheduler_class(SCHED_NORMAL, ...) returns &ext_sched_class.
 
-scx_consume_dispatch_q() unlinks the consumed task from TEST_DSQ_ID
-before calling ops.dequeue().  If an earlier dequeue saw another task in
-TEST_DSQ_ID and recorded a non-NULL task pointer in next_after_drain, any
-subsequent dequeue that runs when TEST_DSQ_ID is empty will unconditionally
-overwrite next_after_drain with 0.  In addition, iter_count and
-next_after_drain are updated with plain stores even though ops.dequeue()
-can run concurrently on multiple CPUs after dsq->lock is dropped.
+That means sched_setscheduler(pid, SCHED_NORMAL) on a SCHED_FIFO or
+SCHED_DEADLINE task that is being retained as a mutex-blocked donor routes it
+into sched_ext without scx_block_proxy_donor() being called.  The same
+applies to normalize_rt_tasks() via sysrq-n.
 
-> diff --git a/tools/testing/selftests/sched_ext/dequeue_iter.c b/tools/tes=
-ting/selftests/sched_ext/dequeue_iter.c
-> index f60711bf3b395..48e8c94b7bf14 100644
-> --- a/tools/testing/selftests/sched_ext/dequeue_iter.c
-> +++ b/tools/testing/selftests/sched_ext/dequeue_iter.c
-> @@ -59,6 +59,10 @@ static enum scx_test_status run(void *ctx)
->  		return SCX_TEST_FAIL;
->  	}
-> =20
-> +	SCX_FAIL_IF(!skel->bss->iter_count,
-> +		    "DSQ iterator drained no tasks");
+The new comment in rt_mutex_setprio() also says "the same way the other entry
+points into sched_ext do".
 
-[Severity: Medium]
-Will skel->bss->iter_count stay at 0 on an idle or single-CPU system?
+Should scx_prepare_setscheduler() be keyed on the resulting class like the new
+check, or should the changelog be reworded?
 
-Because scx_consume_dispatch_q() unlinks the task being consumed from
-TEST_DSQ_ID and clears SCX_TASK_IN_CUSTODY before invoking
-dequeue_iter_dequeue(), bpf_iter_scx_dsq_next() only yields a task if a
-second task happens to be queued in TEST_DSQ_ID at the same instant.
-run() only drives a single thread calling usleep(100) until dq_count
-reaches DQ_TARGET, so if no other task is concurrently queued in
-TEST_DSQ_ID during those 10 dequeues, the test fails with "DSQ iterator
-drained no tasks".
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index f7a452123ef5..dcb16b006740 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261113024505.9228=
-54-1-k.chen@smail.nju.edu.cn?part=3D2
+[ ... ]
+
+> @@ -7816,6 +7816,18 @@ void rt_mutex_setprio(struct task_struct *p, struct task_struct *pi_task)
+>  	if (prev_class != next_class)
+>  		queue_flag |= DEQUEUE_CLASS;
+>
+> +	/*
+> +	 * PI boost can route @p out of sched_ext: policy stays SCHED_EXT but
+> +	 * __setscheduler_class() follows the effective rt prio, and rt/fair
+> +	 * may have retained @p on the rq as a blocked donor. Block it before
+> +	 * sched_change_begin() records the queued state, the same way the
+> +	 * other entry points into sched_ext do.
+> +	 */
+> +#ifdef CONFIG_SCHED_CLASS_EXT
+> +	if ((queue_flag & DEQUEUE_CLASS) && next_class == &ext_sched_class)
+> +		scx_prepare_task_sched_change(p);
+> +#endif
+
+rt_mutex_setprio() has already called update_rq_clock() after taking the rq
+lock, and the rq is not unpinned in between, so RQCF_UPDATED is still set.
+scx_prepare_task_sched_change() then calls update_rq_clock(task_rq(p))
+unconditionally, before checking whether @p is a retained donor.
+
+update_rq_clock() does:
+
+    if (sched_feat(WARN_DOUBLE_CLOCK))
+        WARN_ON_ONCE(rq->clock_update_flags & RQCF_UPDATED);
+
+Can this warn on every rt/dl -> ext deboost when WARN_DOUBLE_CLOCK is
+enabled?  For example, an ext task holding a PI futex that was boosted by a
+SCHED_FIFO waiter and then unlocks:
+
+mark_wakeup_next_waiter()
+  rt_mutex_adjust_prio()
+    rt_mutex_setprio()
+      update_rq_clock()
+      scx_prepare_task_sched_change()
+        update_rq_clock()   <- WARN_ON_ONCE(RQCF_UPDATED)
+
+This does not need CONFIG_SCHED_PROXY_EXEC, since without it
+sched_proxy_block_task() is an empty stub and the clock update is all the
+call does.
+
+The comment on scx_prepare_task_sched_change() says the caller must pass
+DEQUEUE_NOCLOCK so the rq clock is updated only once, and the commit message
+calls the second update "harmless".  scx_prepare_setscheduler(), whose caller
+has already updated the rq clock, calls scx_block_proxy_donor() directly.
+Would a variant without the clock update, or exposing scx_block_proxy_donor()
+to core.c, avoid this?
+
+Peter Zijlstra also replied to this patch on the list: "I can't understand
+this. And I take a very dim view of sprinking magic hooks like this. So no."
+
+He proposed instead having sched_class->switching_to() return a bool saying
+whether the class accepts blocked tasks, with sched_change_end() blocking the
+task.  Andrea Righi agreed to take that approach over, noting that the block
+must not dequeue a second time, donor and ctx->running must be reset, and
+DEQUEUE_NOCLOCK must be dropped.
+
+This patch still adds the explicit sched_ext specific call in
+rt_mutex_setprio().  Is this approach still intended given that discussion?
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43353689014
+--===============5277389857893964114==--
