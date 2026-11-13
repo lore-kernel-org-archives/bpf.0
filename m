@@ -1,76 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=54.243.244.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.121
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794542232;
-	b=zKz3rKu1+A/weLsSSBmJWrqZr3PNL4kDvIXYowP6PPGacb9K1FxtTKJZyIspu5ocm4PZ
-	 1vTFnWcdqm3QpRFSlZLRNdEwUCI2lGLStkup3w0l2AeYNzU9mKxvS6oWDm6jfMOuBBZ3v
-	 PzJ8eDgwvrR9wTG28PrYUtM0x4CD5MjwxvjP3B2cMChXRqjy0w4T5Ivo8Ui7oPBQRgY71
-	 s3x0tX94o3+FVTGx61T++YjS/DF2wUqgRQtl/YvzZGLmF0Lze52xX4CvzD0jaCAzBbmuQ
-	 HhxZ6pxLWOwNY/qEbXYBp1hwt06QokIMmGRW3SbkulfodXG7t38PkXaAHbeYEPWFgrw==
+	t=1794542863;
+	b=T7DqzgJ6WMu34/M+ci+8U8ijA55fVqmO7g5Pb09WjwaVnimbYHTQkgeCRqmK2iJboRQ9
+	 uFZhBGq0ECx6w3JkZZ4aInXpehED+D6hVxTJcp5GkgGX7YfuP/MagyqiBKeQLLLT+Tr5B
+	 AK1Iv2gNlur1FQBNpGqrkKSD3mrNiz4KYQHjnqVL8BJ04ltBpHPrP17q/kwBFNb6vzebb
+	 wu1BA8NAU41djJFF3qe5AYk36imMNANN8Xf76D0SNGKC6SPNjBv+EVVpqlB9R8I5NzpUx
+	 xjyFl+prQaI1qHmiDzeEbReOyu1OBXCBRQKulTMu/MivmhRW+TVkYHBP6yTzSEhGu/Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794542232;
-	h=DMARC-Filter:DKIM-Signature:X-QQ-mid:X-QQ-Originating-IP:Received:
-	 X-QQ-SSF:X-QQ-GoodBg:X-BIZMAIL-ID:From:To:Cc:Subject:Date:Message-Id:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-QQ-SENDSIZE:Feedback-ID:X-QQ-XMAILINFO:
-	 X-QQ-XMRINFO:X-QQ-RECHKSPAM;
-	bh=hAiDmJ443y2iUubPvVfTIYqLx/39zAUaPPDN0i4fC9k=;
-	b=tKK7ZOYJs2mNiKXtcVITe18yNM/m5G+PbillGcDUUkLlbc6RwTmAGMmIQJZUUJN39A6u
-	 xOCTLC6LYnCV6ENxX3wRXVgHCf7ktkTdN3Lw8z1J3DdAIkuCXbsiQLJ3/eaGQqhDqz/ul
-	 59IVZSLnWpyqk/4ORjkzCD3SR3DHVvLRU3lL2SaFu6yDiZK4Vhdar/dk4iN8hnCQ1c0DX
-	 bf/QDj+t/0mJAZ8KiUov/W5Jt9o2VUIzMMkTTBU1SafrvDT85ETLjCFABCyrDLMbpi4tm
-	 XBrqUXMHp/h7wBimjm1r7OOqZZe8wwrMcvx5mvtoa2uylBoFhHCg+hQWQVI7ucj6RfA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794542863;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Cc:Subject:To:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=URjcWFFmaQz9JzFhkAeN4Frd2qPoCJDSemfggDPbALI=;
+	b=ih5mb5dWCMFD+xQSMBiQ3nIhiBK9Phwb5ZFv6x1JuvVJ05GiK8GtANXez2QghiCCznW0
+	 ooedymCcCPH7qSwRaI0vUs6vg2nZKMa1QczLpRS0yFCppj0O6JzhRG3zknYdgo2Hur4VW
+	 7IZR1njRNhj3l+aDxD8ig9+EExrab26mDpH68z+t+evYnIx0/mwaJ+I++aYgtugK+eWb/
+	 7QJhxFqHVX61VIJphEukD8tPnXG1KITSFdzt26IBaOFsirIsYhLB+TRKqFm+p5HZODXJQ
+	 cP/Su5RPDZXm9Sn+9IzoxYJZ98Q5pgUG9mqS4prhjJQTPRvdB7XFadT3f61wmAoETZQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=smail.nju.edu.cn;
-	spf=pass smtp.mailfrom=smail.nju.edu.cn;
-	dkim=pass header.d=smail.nju.edu.cn header.i=@smail.nju.edu.cn header.a=rsa-sha256 header.s=iohv2404 header.b="a/lP3ijM";
-	arc=none smtp.remote-ip=54.243.244.52
-Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=lh+5Wx9z;
+	arc=none smtp.remote-ip=95.215.58.121
+Received: from mta1.migadu.com (out-121.mta1.migadu.com [95.215.58.121])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D96E4606A323;
-	Fri, 13 Nov 2026 03:57:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D96E4606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=smail.nju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=smail.nju.edu.cn
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A579606A321
+	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 04:07:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9A579606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=smail.nju.edu.cn header.i=@smail.nju.edu.cn header.a=rsa-sha256 header.s=iohv2404 header.b=a/lP3ijM
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=smail.nju.edu.cn;
-	s=iohv2404; t=1794542203;
-	bh=hAiDmJ443y2iUubPvVfTIYqLx/39zAUaPPDN0i4fC9k=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version;
-	b=a/lP3ijMWgkal7l2BohGnJ3ekLRbNt2EIQwU0MMYuojPJut0mJiAtCJEKZ8bPOOp8
-	 Q65mU/q2aRmCXvjd1HhXJSjqq+Ev5eaM9PLisTcRqU8mE8IGmhPKYVIqaRBHcoCe5E
-	 ULFiG4SqYWE+T1GlChcXTER0AtEDdOLjksSwWYzc=
-X-QQ-mid: zesmtpip2t1794542202tdf7edc25
-X-QQ-Originating-IP: pjvt4R46xHwoXR/6JTLGH/XItwH2cP13Q18VXRvb/gk=
-Received: from workstation-Precision-7920-Towe ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Fri, 13 Nov 2026 11:56:40 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 10146906103779689649
-From: Kang Chen <k.chen@smail.nju.edu.cn>
-To: Yonghong Song <yonghong.song@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	tjmercier@google.com,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-	Philipp Stanner <phasta@kernel.org>,
-	linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	linaro-mm-sig@lists.linaro.org
-Subject: [PATCH bpf v3 1/2] bpf: make dmabuf iterator stay drained after NULL
-Date: Fri, 13 Nov 2026 11:56:39 +0800
-Message-Id: <20261113035640.948458-1-k.chen@smail.nju.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20261113024447.922683-1-k.chen@smail.nju.edu.cn>
-References: <20261113024447.922683-1-k.chen@smail.nju.edu.cn>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=lh+5Wx9z
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=WOR7k447wuym28T+VI83MiZCHdDAluAll1lu5BCwOYk=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794542855; v=1; x=1795147655;
+ b=lh+5Wx9zqLFj+ASf4/F0EYXl7iurm2KL7BxNxHir87qOojq9SoWRR8J38Ikg9jRnuL6fHvLo
+ 90LdRDEpg3CUcSn7OcJSU6lpdZSUJ8N14ZvKpiKgsdKPpvn+dbQQ+N+wSqA3FTq9uzm+/3ZFgCH
+ haFgQQZGW1zlhO8Sw0gK/oVY=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 65693a2ca75d0c4c;
+	Fri, 13 Nov 2026 04:07:35 +0000
+X-Mizu-Trace-ID: 65693a2ca75d0c4c
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <2df669c7-d321-4cf3-8e04-250ad527a28c@linux.dev>
+Date: Fri, 13 Nov 2026 12:07:19 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -80,103 +58,53 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Cc: cui.tao@linux.dev, void@manifault.com, arighi@nvidia.com,
+ changwoo@igalia.com, liwanwu@kylinos.cn, usama.arif@linux.dev,
+ sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, Tao Cui <cuitao@kylinos.cn>
+Subject: Re: [PATCH 0/6] sched_ext: fix kfunc, sub-sched, flatcg and idle-mask
+ issues
+To: Tejun Heo <tj@kernel.org>
+References: <20261112130934.563321-1-cui.tao@linux.dev>
+ <eb63bdf20dd6e2f09b0e7c81bc905878@kernel.org>
+From: Tao Cui <cui.tao@linux.dev>
+In-Reply-To: <eb63bdf20dd6e2f09b0e7c81bc905878@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpip:smail.nju.edu.cn:qybglogicsvrgz:qybglogicsvrgz5b-1
-X-QQ-XMAILINFO: NJL+bfc5gN/m02E90MnK47QbFF60SCYpAJ5U7s7yWnsxMo6cOPzxj4Rl
-	JnnMHwikp0+0OGowLd72xT2TVnHkGIevqJl8l6QAGK0NlynjESd+RHEN3CSp7LaV8qmb5Vb
-	uDeMfC91Sy3bxzbHkzYZ2H0MQ7HHcce9sP6PMVxEf+u6FIHIjQvEYSn3dR9t5TZQ+xD0DDS
-	muzT8p8MXEDlEyvVRk7cCNRc7u7Wem/tGBCYDo1vJ/n4C23Xh9oIl2j59Ntpj5yjFkBGVzP
-	PF08Ino0S1D0MG1sy2XF1WFTUBAk9p+LW0i3ri+Tb8eEFDbzHtJ2I9iWRtBi2TRxKS4UOPX
-	BVnEif33WTfWCPiMhB4Mcx1ESEO6upgtAs6LjSl30YH9q35xOCbdWQsCVNiywYsElIU0qlm
-	U3ZFXSm1d3NiAMwIKa5fOB7HJEeEVmfTiSmVYuV6jx3T8ntCkvW1Mj3lZYOLhl+uREUSkxX
-	Ow3h7Xsv6d+ieoPLfE1UP4P9Aw6nUQvzHle0Jhy+ZFbL3cWrxZkydX33gWiMVAHnEnBmhmF
-	uwkmdirJ1/Q4Nk29nBh5ko49GtFtOBNEtzAPf75ncx/+fGsy2FDQlKbGPzZtY/kE7+4WOBW
-	CwMWlA0YgfkBSR66OGEHsTak7K/3tjDtJNVgvt9biCDxh7gT16PbmJAnZ6TxZauqdyHLX+j
-	ZWVZ4DZc3jkG4Xi0O6JSz8TFppfDbrIv3BmA37kY/+oZ+ohTA/8dS/yGEn0Hm6HF4fHnvrj
-	NrDPsYaqq9vKR3GBWtY85LltTv3BKvmK1++aPy/6yIwvMhS4kA6DAGZfYX6sZ8bONnMXISB
-	lnbk1yNgYnWO6hgOJlBa1pPI4gBFf1YRgJkVxEKpeDtRnEkWI+Sttcf7tRX9aQ8dp8zlZKT
-	+DpnmEUZoB20psGI9T6oYh5dmRIeSi2wm2BjvmJYnDp3U9E5lcEFGC4NztBjYm/U098h4f3
-	vcYmb+dnm7OaMQrp+Th0WFpHCV1U/T6d1BP7FZ46u7SbwEnqXcLzCfw1AbLgwM4EvY+DHhW
-	mGvUxNXRGxyZp6Z4gkYnf48WBztbIo3AX/M3CxBM+VNE6qUL+ArwnXYsWFk7snJDAbyJP7E
-	7R/Va0s4ks8JBV3Xr0t6w0=
-X-QQ-XMRINFO: Mp0Kj//9VHAxzExpfF+O8yhSrljjwrznVg==
-X-QQ-RECHKSPAM: 0
 
-bpf_iter_dmabuf_next() uses kit->dmabuf == NULL to mean "iteration has
-not started".  dma_buf_iter_next() also returns NULL at the end of the
-list, so a next() call after exhaustion restarts from the list head.
+Hello Tejun,
 
-The verifier relies on the iterator contract that once next() returns
-NULL it keeps returning NULL: process_iter_next_call() marks the
-iterator DRAINED and treats the result of later next() calls as the
-constant zero.  A restarted dmabuf iteration therefore hands the BPF
-program a kernel pointer while the verifier believes R0 == 0.
+在 2026/11/13 01:34, Tejun Heo 写道:
+> Hello, Tao.
+> 
+> On Thu, Nov 12, 2026 at 09:09:28PM +0800, Tao Cui wrote:
+>> This series fixes six issues in the sched_ext core, the scx_flatcg
+>> example scheduler and the CID helpers. The core.c fixes travel as a
+>> separate series.
+> 
+> There's one actual fix here (1/6) and the rest are rather vacuous. Can you
+> please think more through each change and whether it makes sense in the
+> context of actual usage? If these are coming from LLM scans, please don't
+> just follow the details that they surface. It'd help to actually use the
+> thing that you're producing patches for and think through the implications
+> of the changes that you're suggesting.
+> 
 
-NULL now means drained.  Initialize the state to DMABUF_ITER_START and
-translate it to dma_buf_iter_begin() on the first next().  The iterator
-state is BPF-visible ABI (one pointer wide), so use an invalid pointer
-sentinel instead of growing it.
+Thanks for the feedback.
 
-Fixes: 6eab7ac7c5ee ("bpf: Add open coded dmabuf iterator")
-Signed-off-by: Kang Chen <k.chen@smail.nju.edu.cn>
----
-v3:
-- No change from v2; reposted with the updated 2/2 attribution.
+I did use LLM as a development aid. Some of the patches started with
+issues it identified.
 
- kernel/bpf/dmabuf_iter.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+I see your point. I focused too much on the issues and not enough on
+whether the fixes made sense in the context of actual sched_ext
+usage. I'll keep that in mind for future submissions.
 
-diff --git a/kernel/bpf/dmabuf_iter.c b/kernel/bpf/dmabuf_iter.c
-index cd500248abd9..390f6d730a67 100644
---- a/kernel/bpf/dmabuf_iter.c
-+++ b/kernel/bpf/dmabuf_iter.c
-@@ -156,6 +156,9 @@ struct bpf_iter_dmabuf_kern {
- 	struct dma_buf *dmabuf;
- } __aligned(8);
- 
-+/* NULL means drained; START means "not started yet". */
-+#define DMABUF_ITER_START	((struct dma_buf *)1L)
-+
- __bpf_kfunc_start_defs();
- 
- __bpf_kfunc int bpf_iter_dmabuf_new(struct bpf_iter_dmabuf *it)
-@@ -165,7 +168,7 @@ __bpf_kfunc int bpf_iter_dmabuf_new(struct bpf_iter_dmabuf *it)
- 	BUILD_BUG_ON(sizeof(*kit) > sizeof(*it));
- 	BUILD_BUG_ON(__alignof__(*kit) != __alignof__(*it));
- 
--	kit->dmabuf = NULL;
-+	kit->dmabuf = DMABUF_ITER_START;
- 	return 0;
- }
- 
-@@ -173,10 +176,14 @@ __bpf_kfunc struct dma_buf *bpf_iter_dmabuf_next(struct bpf_iter_dmabuf *it)
- {
- 	struct bpf_iter_dmabuf_kern *kit = (void *)it;
- 
--	if (kit->dmabuf)
--		kit->dmabuf = dma_buf_iter_next(kit->dmabuf);
--	else
-+	/* Once NULL is returned, next() has to keep returning NULL. */
-+	if (!kit->dmabuf)
-+		return NULL;
-+
-+	if (kit->dmabuf == DMABUF_ITER_START)
- 		kit->dmabuf = dma_buf_iter_begin();
-+	else
-+		kit->dmabuf = dma_buf_iter_next(kit->dmabuf);
- 
- 	return kit->dmabuf;
- }
-@@ -185,7 +192,7 @@ __bpf_kfunc void bpf_iter_dmabuf_destroy(struct bpf_iter_dmabuf *it)
- {
- 	struct bpf_iter_dmabuf_kern *kit = (void *)it;
- 
--	if (kit->dmabuf)
-+	if (kit->dmabuf && kit->dmabuf != DMABUF_ITER_START)
- 		dma_buf_put(kit->dmabuf);
- }
- 
--- 
-2.34.1
+Thanks,
+Tao
+
+> Thanks.
+> 
+> --
+> tejun
 
