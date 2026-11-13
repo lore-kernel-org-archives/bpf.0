@@ -1,57 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794539186;
-	b=KxXrwjugMyFV9WBt62B2ostZYJGG3G67k68IVenyKMxMySCUuCCbVVIcTa+c9cpE1RCd
-	 msXtAcfOc2xdK2h2sJ0H2u0VAxy9X7dy4Wz3MyP2MmOldz65YwiPwkg2Ohxq2dHhWg4sf
-	 RlBnRuBle+Xng6HKKTtAqdXlGG3S7jnJ7pt/zURYul1NWH+6ViwSDlkR1jj+0TwjBs/1j
-	 tvIhQzVKVW1c3ECbiQqJ/lWbUphVFJimin/PKLs6QmtC9Ml3vGjxqREVQBDPrtm6S2D6T
-	 8ha2qf3cWvEyjl3kR1ho6q3ZJUGyDIoAynkrGWLBQcwVa+2Lp0/uu5Krzb7NV8ZhZ4Q==
+	t=1794540067;
+	b=zgaLKS16Uln/+R+3w9ER/oJhw4QmAi6bXNpQoT0CRCfSH3zcMqnvCnXUrq7of+cyP1Dv
+	 RuTUyZaTg5mE5dMWufAi1cjKyANOAVZidCImlPAh9ly5bUagBId1kme0RiPJ40Hq+qrfs
+	 7ayEzuPo34D/oS4B7jpdV8RsAl58QBupjpOPN1HFZixkHC0aSY4kVjA3cSmd1mEUmglAt
+	 YvWnDgR9DVrYlp4EbfU8vKi3hmFT46NwN/EtKOhtSHgddiuyQWgichuCB5/OSpb8EpGQh
+	 Q/efyyv3JZB+L10wM7e8tMy8AtparX7irPgPFecF6FDfFFgJoG2rdVc2V+5zaP/y+kw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794539186;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=F5XvvWXAj/ydcU2vfCIDHLVsusySc9K7FkKDwA8A1uY=;
-	b=ILa99cYMBf16CnUFDYXIVWcMJnisix7kuZJIhqRSkWg1YhH7PMUXDzvJQ9fVE9lngZiA
-	 eBhjZkHLnHwylI2F1bYnGprWeM89DxoDvxyjz5T1BmsBJZL4BIANalWoFP6pJe08VPsGe
-	 /qpImM93p0dmbKjpxB2id5fhOX2DuoJHEpQFkNabzKQpiKZs0Uzhlic7GDxv+Lg6il3JN
-	 uFZxrG5sZ1dpxKzT7LCkjVukKNETi827gE3mcUVu128N9y6ZIu9OyfX25JPFOZ4pVwxru
-	 /CKY9c+/QH8UPmkBPyRd8mdcTcQc1sPwcJG/VYhA16wIYx+RcpGM3UhJZKBynQYCCmg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794540067;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=nBJkOQ2q2zXYUFL1OoXZyx/MF8UrYnWwNyMJqNuazjo=;
+	b=JMbjqW6DCB+OTXi4xNk58VGx0yIhTuqz2f5CTLDJiS1kn4llTuqwpc6Xx43WRFpeAbEO
+	 qWkC/29R0U4ltq9xP2fzOkpQhM8OVk+X2o1WRzmWFSbvDyj14KlqlgthEJICqq840dSF4
+	 b55ukYblqlV9QPVBhc8poLSZNtlk2d2ooxg7iw06UKk4B3cEIC7nkKX6CkCZC8WoM3l2C
+	 GG09SA9ngX0AB0udK/RCqMLWq/Dfb/i+sEjrURuQNVRJPoTvaVrBiUV3txsmDoE0a6oi7
+	 ojcn55vLTwlsiUQyr9eosI9+juNX3yQQ/zY6S3kWmmSPVpG6S9sKNt9NlSyKhOGRyKg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mMsk9dfO;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CdHvpMVO;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A219606A31C
-	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 03:06:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4AFC606A321;
+	Fri, 13 Nov 2026 03:21:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mMsk9dfO
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BE381F000C4;
-	Fri, 13 Nov 2026 03:06:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CdHvpMVO
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A3FB1F000C4;
+	Fri, 13 Nov 2026 03:21:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794539186;
-	bh=F5XvvWXAj/ydcU2vfCIDHLVsusySc9K7FkKDwA8A1uY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=mMsk9dfOEHS8muvTgRe2oVQ0cS0TKuPYnJJpOc6xWQJVKUcVjtQd3oI/Dtj0qm2NE
-	 yTTpgfY4zrEOEN5N6Pguy+jQLjSGFfzkINFoI7DFXqb1t0e7AX3EpENqhsC4Kc3KdF
-	 qAPhWQLtZvdXgQB4wx2Vts3mUyPI/abNKDpEb6BU1NKWeocqWtHQ6b8EBLvqAZ7Qhx
-	 7FrYtCfQ0/+s4MAu8LlUgwRoHduf+dW5H8tcfG73sIfDwmlrl+Y7/M2adsqILok/y7
-	 3jZHRS38rplBoqdAd/NX8RLQNk0axy/bz7eJ9K6iRR74kM+7LH26v0QcUp4aqVZaiC
-	 Oq5DJlNqt+LTw==
-Message-ID: <sashiko-outbox-212121@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf 2/2] selftests/bpf: Test that a drained task_vma
- iterator keeps returning NULL
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kang Chen" <k.chen@smail.nju.edu.cn>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261113024500.922824-2-k.chen@smail.nju.edu.cn>
-References: <20261113024500.922824-1-k.chen@smail.nju.edu.cn>
- <20261113024500.922824-2-k.chen@smail.nju.edu.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 13 Nov 2026 03:06:25 +0000
+	s=k20260515; t=1794540067;
+	bh=nBJkOQ2q2zXYUFL1OoXZyx/MF8UrYnWwNyMJqNuazjo=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=CdHvpMVOGwgKWscIuQ8A3utOk5wIvk9pNV3isIPQKIVvP7qZLeQ09PPM1jl4OCfW2
+	 GnUpjRI1szJQFZaPeZ4oPKHZjBrS9FnBX2IOPHP4Ds5ua/kdAc3nbEJBMTCESILE/6
+	 EKNPtRM+cn2/pwdfWkcTyAUB2a4PHTgFazJuX+2f+YdI+jSzMkluOoza4b7UIf2Em+
+	 6f4fUNzWKC4IjewaQSSmLyvjaZUE8eCur7GUBd/ScTZPZo40bSv/0KAbSPBoPbC/fx
+	 kVa86sjSwKHykASdtIzY1XVv4hjnOLJOg2EhiGyJfrtzJsmYEKscZY/ABX3CXLdAVt
+	 XLyxF1OnKFCYQ==
+Content-Type: multipart/mixed; boundary="===============5694792853191233504=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,121 +48,59 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Message-Id: <964189cada1029ecd88ceace91964d377836638fc7796c40636426b1d2ccbe00@mail.kernel.org>
+In-Reply-To: <20261113024447.922683-2-k.chen@smail.nju.edu.cn>
+References: <20261113024447.922683-2-k.chen@smail.nju.edu.cn>
+Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Test that a drained dmabuf iterator keeps returning NULL
+From: bot+bpf-ci@kernel.org
+To: k.chen@smail.nju.edu.cn,yonghong.song@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
+Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,tjmercier@google.com,sumit.semwal@linaro.org,christian.koenig@amd.com,phasta@kernel.org,linux-media@vger.kernel.org,dri-devel@lists.freedesktop.org,linaro-mm-sig@lists.linaro.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri, 13 Nov 2026 03:21:05 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 4 potential
-issues to consider:
-- [Medium] selftests/bpf: short bpf_loop() spin in
-  iter_task_vma_next_after_drain()
-- [Low] selftests/bpf: missing acquire/release ordering in map_new_vma()
-- [Low] selftests/bpf: mmap() at last_end in map_new_vma() fails at
-  TASK_SIZE
-- [Low] selftests/bpf: standalone task_vma_iter test instead of
-  extending iters.c
---
+--===============5694792853191233504==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 6861abec39a496e31db7f94849dcb9afd420ad9b
-Author: Kang Chen <k.chen@smail.nju.edu.cn>
+> selftests/bpf: Test that a drained dmabuf iterator keeps returning NULL
 
-selftests/bpf: Test that a drained task_vma iterator keeps returning NULL
+TL;DR: Commit message only: the test is credited to T.J. Mercier, but no
+From:, Co-developed-by: or Signed-off-by: names him; the review asks whether
+those tags should be added.
 
-This commit adds a BPF selftest verifying that calling
-bpf_iter_task_vma_next() on an already drained task_vma iterator continues
-to return NULL even after a new VMA is mapped at the end of the address
-space.
+>     selftests/bpf: Test that a drained dmabuf iterator keeps returning NULL
+>
+>     The BPF iterator docs in bpf_iterators.rst specify that the next
+>     function of an open-coded iterator should keep returning NULL after it
+>     has been returned once.
+>     Add a subtest that checks this for the dmabuf iterator.  It drains an
+>     iterator, calls bpf_iter_dmabuf_next() once more and checks that the
+>     result is NULL.  The dma-bufs the test creates keep the list from being
+>     empty, so an iterator that starts over would return one of them.
+>     The existing open_coded subtest uses bpf_for_each(), which stops at the
+>     first NULL and never calls next() on a drained iterator.
+>     The selftest was originally posted by T.J. Mercier in the v1 thread:
+>     Link: https://lore.kernel.org/bpf/CABdmKX09vLG4U-7FwF-vm_iTy1AjGUPXka08KhWE+qJ0J=XGMA@mail.gmail.com/
+>     Signed-off-by: Kang Chen <k.chen@smail.nju.edu.cn>
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/task_vma_iter.c b/too=
-ls/testing/selftests/bpf/prog_tests/task_vma_iter.c
-> new file mode 100644
-> index 0000000000000..bb9feb840a277
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/task_vma_iter.c
-> @@ -0,0 +1,89 @@
+The changelog says the selftest was originally posted by T.J. Mercier, but
+the only trailer is the submitter's Signed-off-by.  Nothing names the
+original author: there is no From:, no Co-developed-by: with a matching
+Signed-off-by:, and no Suggested-by:.
 
-[ ... ]
+Documentation/process/submitting-patches.rst says Co-developed-by: is used
+to give attribution to co-authors, and that every Co-developed-by: must be
+immediately followed by a Signed-off-by: of the associated co-author.
 
-> +static void *map_new_vma(void *arg)
-> +{
-> +	struct map_ctx *ctx =3D arg;
-> +	struct task_vma_iter *skel =3D ctx->skel;
-> +	void *addr;
-> +
-> +	while (!__atomic_load_n(&skel->bss->drain_done, __ATOMIC_RELAXED))
-> +		sched_yield();
-> +
-> +	if (!skel->bss->new_ret) {
-> +		addr =3D (void *)(unsigned long)skel->bss->last_end;
+Should this carry Co-developed-by: and Signed-off-by: tags from T.J.
+Mercier (or have him as the From: author), depending on what he agreed to
+in the v1 thread?
 
-[Severity: Low]
-Can map_new_vma() observe drain_done =3D=3D 1 before the stores to last_end
-and new_ret are visible on weakly-ordered architectures?
 
-iter_task_vma_next_after_drain() writes last_end, new_ret, and drain_done
-with plain stores, while map_new_vma() polls drain_done with
-__ATOMIC_RELAXED instead of __ATOMIC_ACQUIRE.  Similarly, map_new_vma()
-sets go with __ATOMIC_RELEASE, but wait_for_go() reads go with a plain
-load.  If the stores are reordered, mmap() with MAP_FIXED_NOREPLACE can
-use a stale last_end address and fail the test.
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-> +		ctx->addr =3D mmap(addr, getpagesize(), PROT_READ | PROT_WRITE,
-> +				 MAP_PRIVATE | MAP_ANONYMOUS | MAP_FIXED_NOREPLACE,
-> +				 -1, 0);
-> +		if (ctx->addr =3D=3D MAP_FAILED)
-> +			ctx->err =3D errno;
-> +	}
-
-[Severity: Low]
-Can mmap() at last_end fail with ENOMEM when the highest VMA ends at
-TASK_SIZE?
-
-iter_task_vma_next_after_drain() records vm_end of the final VMA in the
-process.  On architectures where STACK_TOP equals TASK_SIZE, the stack
-VMA's vm_end is TASK_SIZE whenever ASLR is disabled (such as
-kernel.randomize_va_space=3D0 or under gdb) or when randomize_stack_top()
-picks a zero offset, leaving no unmapped user address space at last_end.
-
-[ ... ]
-
-> +void test_task_vma_iter(void)
-> +{
-> +	if (test__start_subtest("next_after_drain"))
-> +		test_task_vma_iter_next_after_drain();
-> +}
-
-[Severity: Low]
-This isn't a bug, but tools/testing/selftests/bpf/prog_tests/iters.c and
-tools/testing/selftests/bpf/progs/iters_task_vma.c already test the
-open-coded bpf_iter_task_vma iterator.  Could this subtest be added there
-instead of introducing standalone task_vma_iter files?
-
-> diff --git a/tools/testing/selftests/bpf/progs/task_vma_iter.c b/tools/te=
-sting/selftests/bpf/progs/task_vma_iter.c
-> new file mode 100644
-> index 0000000000000..9159aa7fc48e4
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/task_vma_iter.c
-> @@ -0,0 +1,53 @@
-
-[ ... ]
-
-> +	/* Let user space map a new VMA at last_end before the extra next(). */
-> +	drain_done =3D 1;
-> +	bpf_loop(1000000, wait_for_go, NULL, 0);
-> +	go_seen =3D go;
-
-[Severity: Medium]
-Can bpf_loop(1000000, wait_for_go, NULL, 0) finish before map_new_vma()
-runs and sets go?
-
-wait_for_go() is inlined into a tight loop of 1,000,000 reads that
-completes in roughly 1 to 3 ms inside bpf_prog_test_run_syscall() with
-migration disabled.  test_task_vma_iter_next_after_drain() starts the
-syscall program immediately after pthread_create() without waiting for
-map_new_vma() to start.  On a single-CPU system (especially under
-!CONFIG_PREEMPT where the kernel loop is not preempted) or under parallel
-test_progs load where thread startup and mmap() take more than a few
-milliseconds, bpf_loop() exhausts its iterations before go is set and fails
-the go_seen assertion.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261113024500.9228=
-24-1-k.chen@smail.nju.edu.cn?part=3D2
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43356758506
+--===============5694792853191233504==--
