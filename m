@@ -1,88 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.171
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.175
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794605057;
-	b=p59ES3hKGYq5RhLdAj5VEF53lDZ1mN/QtnnC7SwUQ/fpCa5C/Y/zQQ+scCdtEul4hBVH
-	 zw+kqkECY+sI6LTm2hig3ia/fqzfoohSAvVjnjSZxxNRfPjmZ1PPS2KfuhdbcOEgDh4Uu
-	 scO3Sqea7dpc9BoWzj5KYwCq9VQtgUYhkr9z8k5keN/VnKFf/3ik7ST10GN0rnBUboxgi
-	 +ijldx58wLGC1nGQq3MWrzSJlDSrQhqYzLB+m+rCTQQDCa3el0JIKpEN22OpTxiMs+fLn
-	 8ZewHX99FraMBngoTTkf72NCXCCrCN4RYUGeAqKof8W5tJbg9VQBfDG3OGImY+UXZ/g==
+	t=1794605059;
+	b=zHoiyMkrgrwCTkgaa2mMyymtLWeLCYDIz3DuHXZf/eb/lsQfDNZu1/26fxCzkIE9UdwZ
+	 wqguVRK5fbww3lQPSKx6V+eGtzAAEAKTo7z1p2LbcUPAgo/7TvK5Ev3Z15XB+nhuoz97z
+	 +0nsrKTLyfP5c9sMtqfzCK/Tj28JbWWgVuUfc8Dc6Uhin4NU5CpEyLzRvRYDqLE5NK4Gl
+	 DQmCFaC3IHtY6Qy56+tg+zp+geFBeRUX9U62vHMupP+uXaZ2bFjIHpY+Hni3T6cO/7GZD
+	 6kRHf+6mxo7hoYWOge4WhX0W373O6zB9VulJ4lmhsR6ccal+Q7feE8Ssz3rdIJ4djBA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794605057;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794605059;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:Subject:Date:Message-Id:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer;
-	bh=FhWFPAhlx3PkfOPSMdfzvg8lxyB1LM9Yi9ZslgJUh9M=;
-	b=uSGqV1xoKgGwl8zrt84JfyOh2EQmcmnYWX/inTQJVkDECkVLvy1sof9Vr9nD9bdntzVq
-	 zWclkWivn7ciTXx10DQgox+k85a+K6SCd6sA6a7RZLV00NfSCNPW9A1XJd2De9rf/wSm6
-	 OJVfk1HFyFjb5vlw4H2ujSu0u8j/r11+sEtIWELv+ZsMQ4z0LJPJl3xN1W1PaKOqAA6Fa
-	 mI7iWSC7bJJVosAtGw3LCYlcq5pi2ZDUw2iQBJQ2OT3LckaU9XQpNfpsjkcRaY1nDLLgU
-	 1zWcXQWXCLZwY/U6joyS9PGsuNicIA3cDe1RWdTOMrVUP6+SJOJsbWWd/QWlaSY4VEg==
+	 From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer;
+	bh=IdFSo6JzzG9qQGdtD5ihKLoQ40g+bsnor4ELUYyg40E=;
+	b=aDgltTqt/DirbPPRmB6r5YxnBITisEH0a5T3jWflliNWPUPl4NTXddAZ3S7UeZw2hnJS
+	 ITzESNumtGwi1dPffZKpJJuxtRnjhru1KlOV8ULD9xHkmI2SfbSXOay7+4Ajn+VLJ3cc4
+	 8CinZXnVIWIoGf//sH71Ux5H4ifQWw9MSDi+HhhXx8p01Yxr7vpmqz0FBhLZT2zFyDv1F
+	 QtQvqkvGcTvth2n2ffMQ+QHWH5r9llag8+s+4VsDmPilQekaQ6jYXdWLjOWyTdjKXgxbx
+	 ghB1TNSwcY9F3QyIIfI2EgUbzFRXR9FJfXrHT4AEMeDgWvwopQgxqTYIln/9OFjsW+g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BJy5rvJa;
-	arc=none smtp.remote-ip=209.85.128.171
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=RIO3iS2R;
+	arc=none smtp.remote-ip=209.85.128.175
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC78B606A88A
-	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 21:24:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AC78B606A88A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 345B7606A89F
+	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 21:24:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 345B7606A89F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BJy5rvJa
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-8b0d63f60bcso17807947b3.3
-        for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 13:24:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=RIO3iS2R
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-8b4b2e52baaso6977327b3.2
+        for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 13:24:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794605053; x=1795209853; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=FhWFPAhlx3PkfOPSMdfzvg8lxyB1LM9Yi9ZslgJUh9M=;
-        b=BJy5rvJafPobbIoLVUPKhs/edjpptbPAdPiHxbFipHFNLc6IWl5aVRky/uZQ5Qv7K1
-         Yp3cN+17qsLDQQJ2pmqG+twcpw80Od1KARNILW8J/fvaIEnKwYAUSEsD3RMv3bSg73D1
-         Tg/cxg3hQ2ZmfbzOMqqcKDHbBAIdBWnrlPuzatSmQEYfbZ3wAChPQYdE4puz9NFhpAvB
-         OaSnUxFVw3Nfz8WiIbvTP4uclKOsiYneTmwX4LboB2sd3ZYI2ulaknNAlmMGa6GZQoEH
-         d/S6Zxx4I55awJ/ilUwqjdkKoODHB6hHgw14Vz/orE4ynHp2iQEShG1WoT7baWTzpEGh
-         NnYw==
+        d=gmail.com; s=20260707; t=1794605057; x=1795209857; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=IdFSo6JzzG9qQGdtD5ihKLoQ40g+bsnor4ELUYyg40E=;
+        b=RIO3iS2RV7Tpg6eCUSLoRhHJjC8HOazmZ5idRahgh/6DI5mndK/odzajLwB5rXS2PB
+         fO5JCXtYGxzIdmG5nIvtJwb4sUEuN71rlTc9poJIFgr0r7/vstHZMF9uwSG2u4JYwZxT
+         Qfq7sXk0V3t0DGySNP+FYF7c5tQzLp89rLSJlV4s8cbn9PdIMPfKC4brIz1z8u4CahCx
+         OrRo+rnTFuxrGIdaA4+J69IEh7d/YdQAaQ6QFxqpZGrmcYhwGCGyod9Gyc+mKS7WOmac
+         2e9B9JTwqYgR39wbJw0wzEZLEIKZxVt6oShjzGylmejTQrKlIrcwHxbH6Qfb6hN7FjMX
+         njBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794605053; x=1795209853;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=FhWFPAhlx3PkfOPSMdfzvg8lxyB1LM9Yi9ZslgJUh9M=;
-        b=JoGDYMDPOlOcJaH71rUCN8ZQZTX0C2XohUFktGz178sGLAd6wwU8vr+8t/CE69f/7L
-         zVidjrurcqXbX4tMiPS9ts6LzSMvYhILZWkZydfwgCyJE/oqmtpdm7/lSfQd5NXElqFE
-         fLtPBQQzLfgyONZeFcyVDYpBdZshFS/HfY4zqsrY+vSS8B36mx4+hobdko0U0nQFY8JK
-         ZZ1K1fXj/IwoEGlTs/gezmK9Px8adK1SawByjdYvFtgyoxXGFyHibfgez7wjeQ3lJvdi
-         FMpC0+CRT2fIKD5/tASDn/Xt4iZT4pP0MqawzHwfhYekDiPIxYsVOXGGRjg16jkiY72o
-         6XzA==
-X-Forwarded-Encrypted: i=1; AL+hErH3146NIS+bq7ZRxF0x6J1EZyBBrGOQTmDs7XDFhCMXQ0T6vgqEodrwkIbF3hMCnG9D6VA=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9odTjSImu0gB6pTotx+ZNg2VDI6BhWg5F5qi+rWMMsuRcRB4Dt
-	wzvFX0naonxKpsi2flHZ9HlxdDzR/jiM5s7t6b2+oSioB0IutxKF2HJk
-X-Gm-Gg: AYBFou2NKtFdxYJT+oc8lfvWXrGva3JQHbOJ5c8jhIO8PQ7gDko49glWU48mC1wdi0T
-	/R8TXvVO96yZV9+biVK/UuHyU4eo3SdeanXuAEm5IXRONSQh89pPWMoxVNxAEwAE8iaZ2omA9/Z
-	fwjU3kyEA4aPH1JBZamsB24ZxxhM+DBJ1v/PufXtLdtHeA1f0SpetMSP0eOxjucja0R7MzOPoJO
-	1gSXr5VXTdJ73q28+YFvuoqpeGiQk7sicmcFl8OyUB01pKHJWCU9i8UqwBiVELK8LofezpxhaB/
-	K2JjeUFMrK0rERHQGN9Ik5ywsyJmkljvvr+mZLdoEsR62LlVEey79tZnflt1Q/Je+Q2bLHO/W7w
-	V/G2l3MCr1TSpqdZxHfIyVElI1fSDObQnjjO6nWU6B4vEdaedkZB2X3gE72l6v2/3SmQfN03kTy
-	wHMtzGDEEa/8yS7WaY+Ppa92xuKBoSQx778nWZAlp+bYqi0Tzz7236kHBTmcC/c4ETS1zM78mBJ
-	NLHZkSq6K8nh13JPu+PTQLGbeEZQ4q6JQrNDnyl42OZwmdx8OwGhqYhPBCDfo7WlxN3n3pq2usK
-	38p9pJNk0J8WG3wR6Q1A3Xd6OUtjOJWwbw==
-X-Received: by 2002:a05:690c:289:b0:8b3:5969:f245 with SMTP id 00721157ae682-8b4aa0cf2a7mr23640207b3.4.1794605053410;
-        Fri, 13 Nov 2026 13:24:13 -0800 (PST)
+        d=1e100.net; s=20260707; t=1794605057; x=1795209857;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=IdFSo6JzzG9qQGdtD5ihKLoQ40g+bsnor4ELUYyg40E=;
+        b=iaROU/RzWzhzNDqkWHnh8ljnAdqosG1NY3saKVjJ6R9BRBQpPlzqxqNSFu3xZ0P+Kb
+         UqVAdV+ybwg3CP3TmNx/gYihkeMlVULsAlK+IcrTjAvn1NJz9NN+T1+SoR5RrFtVlYWZ
+         RbZ0/7tFzLvn3bTmjrjfSyOlm+Nr97rSllPJQgbKxfRo+tzVL9qgrIhUoGnDvZGO9sCZ
+         DTdtRa9ufAu5krouPyaJs+fNqUCZGqn14LShELpkkgNq6gZJeKMgwepOqOQCbRNcUNT2
+         WsLPPckqDbVX2FG/Xq/AVn8IRev1RzYzX0jbd1+uBSwmC7BcYYOMwhXPpDNnRcNAVnBl
+         tN0w==
+X-Forwarded-Encrypted: i=1; AL+hErGPHNaoyy2jzHMMmsP7tpWbZNP40mEX/JMR+AlSPrsA9dPW7kx1L8HJdHG7yaaVd9UHRdA=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+VTHpwJA58EQYg5H2DRh9BwjDB1jafWLiHlJfp/xFYvGCXkRfh
+	O9Jew9l/OPFKbmlSsDHCC7qirD+U/zA0v4rznaZ9y11YKj1hUj3dKf+b
+X-Gm-Gg: AYBFou1O0wo54Rx2Uh19qFk7KpKJ9Ud4c9EK+K5nIZtaJivHLI5l7m9M79ZdCKUFpzy
+	UqZwF0AIYHS7q9g2r7OM0y/Ev3yobkqxv4XcAv07s5dm4OVUqKL0P9Xm0xH69TF3nAGCXqEIS8o
+	WQ2DHV3R2Gz+z/jntsgC6FJk/rMG1iqurKFP21iMaUOfAuJCxphi0CEDvWPBLsuCCJwGdHaNkzm
+	OOkIIYjjdt/bKuNVEPdpw0Of0MnlURSZcHUwlbQ6aIQ7rtjA/UL0+7GqSWnQ5TT2DyPgLljiV5n
+	ubb3G3doOO6Hy1HkuXpyUFYkSvNhtGRNAlfrW3iLdBV+w67i50xIUKhQyJ82Ns4oukYSuUJSIim
+	bydTBqcw7586hVBceXOx4dLasNQdv7Lb0gqufYV+y1qZbRSU/kXOXGERuhbGLoKGhbZ1kbnVRom
+	zCmfxnY01NWjudR+ipVOHlQwUGhS7V1dRyGTKkpRx9zxRgzlcYMolOIcrk800yy5VxLWDv6uS6u
+	odibrg0L/BqwTCf9Lvrf1Ckvh9mF3zBko6K3RJU7MEJjyMjoDgEfosxY2ae9zi58f14bL8rzQYg
+	Vbt3I1KNEWilGDA73M5suFnk1B8ERSvBUQ==
+X-Received: by 2002:a05:690c:f85:b0:8b3:2af9:11f9 with SMTP id 00721157ae682-8b4aa2dd1a7mr23701777b3.26.1794605057150;
+        Fri, 13 Nov 2026 13:24:17 -0800 (PST)
 Received: from [127.0.1.1] ([187.15.141.223])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b4aaa1361fsm29539357b3.43.2026.11.13.13.24.11
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b4aaa1361fsm29539357b3.43.2026.11.13.13.24.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Nov 2026 13:24:12 -0800 (PST)
+        Fri, 13 Nov 2026 13:24:16 -0800 (PST)
 From: Nicholas Dudar <main.kalliope@gmail.com>
-Subject: [PATCH bpf-next 0/2] bpf, parisc: Add support for BPF_MOVSX in the
- JITs
-Date: Fri, 13 Nov 2026 16:24:09 -0500
-Message-Id: <20261113-parisc_bpf_jit_movsx_20261112-v1-0-7ecc33cdf1b2@gmail.com>
+Date: Fri, 13 Nov 2026 16:24:11 -0500
+Subject: [PATCH bpf-next 2/2] bpf, parisc: Add support for BPF_MOVSX in the
+ parisc32 JIT
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -94,11 +94,9 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/zWM2wqDMBBEf0X2uaHG0ov9FSkhl7WuYJRsKgHx3
- 5v08jgzZ84GjIGQ4V5tEHAlptnnIA8V2EH7JwpyOUNTNxcp5UksOhBbZZZejRTVNK+c1G9thGn
- duXX17SqdhOxYAvaUPv4O8kd4TBEe34VfZkQbi76wRjMKE7S3Q6n+9HHSHDHAvr8BZCBbXa0AA
- AA=
-X-Change-ID: 20261113-parisc_bpf_jit_movsx_20261112-b9d59d0871d1
+Message-Id: <20261113-parisc_bpf_jit_movsx_20261112-v1-2-7ecc33cdf1b2@gmail.com>
+References: <20261113-parisc_bpf_jit_movsx_20261112-v1-0-7ecc33cdf1b2@gmail.com>
+In-Reply-To: <20261113-parisc_bpf_jit_movsx_20261112-v1-0-7ecc33cdf1b2@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
  Eduard Zingerman <eddyz87@gmail.com>, 
@@ -113,39 +111,101 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
  Nicholas Dudar <main.kalliope@gmail.com>
 X-Mailer: b4 0.16.0
 
-Both PA-RISC JITs compile BPF_MOV | BPF_X without looking at the
-offset, so a sign-extending move (offset 8, 16 or 32) is emitted as a
-plain move. This series adds the sign extension to the 64-bit and the
-32-bit JIT, one patch each. It follows the signed DIV/MOD series [1];
-the parisc32 gap was pointed out by Sashiko in review of that series
-[2].
+RFC9669 defines BPF_MOV | BPF_X with an offset of 8, 16 or 32 as a
+sign-extending move, dst = (s8,s16,s32)src. The parisc32 JIT handles it
+like an ordinary register move, so r0 = (s8)r0 with 0x80 gives 128
+instead of -128.
 
-Tested under QEMU on a 32-bit and a 64-bit kernel, with test_progs
-built as a static 32-bit binary with jit_insns only. jit_insns/movsx
-fails without and passes with the patch for the respective JIT, and no
-other jit_insns subtest changes. jit_insns/helper_calls is left out on
-the 64-bit kernel, where it does not complete with or without the
-series. Not tested on physical hardware. The commands and output are in
-the patches.
+Add emit_movsx_r(). It sign-extends the low 8 or 16 bits of the source
+low word with extrw,s, or copies the low word for a 32-bit extension,
+and fills the high word with the sign for ALU64. For ALU32,
+bpf_put_reg32() zeroes the high word unless the verifier inserts the
+zero extension.
 
-Claude Mythos 5.2 assisted with this patch series.
+Under QEMU on a 32-bit kernel, with test_progs built as a static 32-bit
+binary with jit_insns only:
 
-[1] https://lore.kernel.org/bpf/20260915022905.1535566-1-main.kalliope@gmail.com/
-[2] https://lore.kernel.org/r/20260717192714.25C241F000E9@smtp.kernel.org
+  # ./test_progs -t jit_insns -w 0
+  [...]
+  #201/33  jit_insns/movsx:OK
+  [...]
+  Summary: 0/40 PASSED, 0 SKIPPED, 2/12 FAILED
 
+Without this change jit_insns/movsx fails as well. The 12 failures left
+fail without this change too.
+
+Signed-off-by: Nicholas Dudar <main.kalliope@gmail.com>
 ---
-Nicholas Dudar (2):
-      bpf, parisc: Add support for BPF_MOVSX in the parisc64 JIT
-      bpf, parisc: Add support for BPF_MOVSX in the parisc32 JIT
-
  arch/parisc/net/bpf_jit_comp32.c | 41 +++++++++++++++++++++++++++++++++++++++-
- arch/parisc/net/bpf_jit_comp64.c | 11 +++++++++++
- 2 files changed, 51 insertions(+), 1 deletion(-)
----
-base-commit: 0021f17128de5dc0b19f1a523f448df2440d8088
-change-id: 20261113-parisc_bpf_jit_movsx_20261112-b9d59d0871d1
+ 1 file changed, 40 insertions(+), 1 deletion(-)
 
-Best regards,
---  
-Nicholas Dudar <main.kalliope@gmail.com>
+diff --git a/arch/parisc/net/bpf_jit_comp32.c b/arch/parisc/net/bpf_jit_comp32.c
+index eea0a34a3bfe..9cfbff3e58bb 100644
+--- a/arch/parisc/net/bpf_jit_comp32.c
++++ b/arch/parisc/net/bpf_jit_comp32.c
+@@ -705,6 +705,35 @@ static void emit_alu_r32(const s8 *dst, const s8 *src,
+ 	bpf_put_reg32(dst, rd, ctx);
+ }
+ 
++/* dst = sign_extend(src, width) */
++static void emit_movsx_r(const s8 *dst, const s8 *src,
++			 struct hppa_jit_context *ctx, u8 width, bool is64)
++{
++	const s8 *tmp1 = regmap[TMP_REG_1];
++	const s8 *tmp2 = regmap[TMP_REG_2];
++	const s8 *rs = bpf_get_reg32(src, tmp2, ctx);
++	const s8 *rd;
++
++	if (is64)
++		rd = bpf_get_reg64_ref(dst, tmp1, false, ctx);
++	else
++		rd = bpf_get_reg32_ref(dst, tmp1, ctx);
++
++	/* Low word: sign-extend the field, or copy it for a 32-bit extension */
++	if (width == 32)
++		emit_hppa_copy(lo(rs), lo(rd), ctx);
++	else
++		emit(hppa_extrws(lo(rs), 31, 32 - width, lo(rd)), ctx);
++
++	if (is64) {
++		/* High word: copies of the sign bit */
++		emit(hppa_extrws(lo(rd), 0, 31, hi(rd)), ctx);
++		bpf_put_reg64(dst, rd, ctx);
++	} else {
++		bpf_put_reg32(dst, rd, ctx);
++	}
++}
++
+ static int emit_branch_r64(const s8 *src1, const s8 *src2, s32 paoff,
+ 			   struct hppa_jit_context *ctx, const u8 op)
+ {
+@@ -1145,7 +1174,12 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct hppa_jit_context *ctx,
+ 	switch (code) {
+ 	/* dst = src */
+ 	case BPF_ALU64 | BPF_MOV | BPF_X:
+-
++		if (off == 8 || off == 16 || off == 32) {
++			/* Sign-extending mov: dst = (s8,s16,s32)src */
++			emit_movsx_r(dst, src, ctx, off, true);
++			break;
++		}
++		fallthrough;
+ 	case BPF_ALU64 | BPF_ADD | BPF_X:
+ 	case BPF_ALU64 | BPF_ADD | BPF_K:
+ 
+@@ -1196,6 +1230,11 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct hppa_jit_context *ctx,
+ 			emit_zext64(dst, ctx);
+ 			break;
+ 		}
++		if (off == 8 || off == 16) {
++			/* Sign-extending mov32: dst = (s8,s16)src */
++			emit_movsx_r(dst, src, ctx, off, false);
++			break;
++		}
+ 		fallthrough;
+ 	/* dst = dst OP src */
+ 	case BPF_ALU | BPF_ADD | BPF_X:
+
+-- 
+2.53.0
 
