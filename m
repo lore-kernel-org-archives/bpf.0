@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.47
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794567446;
-	b=j7KO3cXJc0rxp6SEafwjWqs+uSFef0eEDtiPFl4VMe5C0WeHotblBCjZ9Lkyhm+FEsDK
-	 fqcYOlQA7DM/mszru2Wkw4HYKfCI2mbvuu3gtgx8tVnTzqSTrAPuz3I3W35gy+K8yQcyV
-	 Rph9DDqJC5uhBVgC4kpdou3u3oW3sJhjVlCg4fRJgUTcD9fZmkKtaLZiuNctWcp1+Y96C
-	 2H01X2DXDodx8m5uebQEPVCUogCINV9lK3NbfKM3xGpv2HL/PWOrKKyJfb7wh6+zy5kGu
-	 UQy8OcwhEoAoIJj/Q6wBBFyybgd/XqO6hBlRWEoTlIeAj7idPKbgd0aJxHykmaC6NVg==
+	t=1794567747;
+	b=dTF+Rz9FYzx7hTdyM8Fpe6gSnnpEVcamS2rmp82bHZmbF3TGu6EqUJp5isXmDpLlrgYW
+	 KoitDH8ksADIbSag1/p7ztE4Xy6i8XFBofiEqNqyhYc8wpW+ixKqTLTMsBrcF+IrEbJHm
+	 PK1EiFLW1ltseXg2EVRPdZ4p/vN//ScAFfnGpB6+6/MfevtT5lbJ2eBwJxsz858Dtaq7c
+	 tSymdPMcqrojESqz28AB1BQM9RhWpBzV45K2sE2aOmuuv1Q/3OCCtL0NNXRsj6EpViidQ
+	 AHNzs672UR0iJIXozjILntsHs+n3+ceqcod/anQ3xOqQdx7MjlaegLOo1FeycGYP8KA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794567446;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794567747;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
 	 Subject:Message-ID:References:MIME-Version:Content-Type:
 	 Content-Disposition:In-Reply-To;
-	bh=lbkgMQC7Zw8kBx4C+tjZuuC1ilPxnyE5d2jDtTeiWe4=;
-	b=qGE+tdJgSVjsrVaQAdVV0xqf3dPOX6Exq6RKYxwrhM0lZ2wFu1kP/XcnXrx54Vqxp4Az
-	 GHgB2SjpbQ+ezyDSvBI4tYZpZoNyVqFXIRcLoRAKwFYaahipn8bqWKUfNO0H6JEjYpQBi
-	 nGSiLX+Q51E34f6yd98L31kcxSsTJ0Ej/cpTA4iQTlOfpX/zDZZ/CgLzrJpWkZENsfCa1
-	 sNEKgt4jItvtSSvCO7ee/rGX4Uev3HYmACSO9F/2wN1CUkCQ+lTaDYUzT7Iy7QV79mpbi
-	 Vnl3ZjOrLvtixqL+Rsrm7JNBC2QXobSMfgIMTINc6OoQJWwU3VOBxBpG8CpkOmUcBvw==
+	bh=pZPFd1SYASnwZE8RQDnWSkbWoNyjC9gCBlg7DkYNUyw=;
+	b=OGb+4nKn1oLo9OgxvRD+ZKdSh0nL9rOopJ/txzlv+ohHQlq2ncN8nvd0G1mCye+JrBvI
+	 UqQ14ppSlj1nhyqYcSbGaOXUMvuouI86EPxC9gv/u1UDKed4h+Sz9e9p+W9TUJ9RGz9c3
+	 51wFsVGXvLMpuL8H2OP+krjrKJwXU6tBuaao4DoaLxQU97pKu1sD8XtTxtP9i30/j3nTY
+	 XFLFXzuegDJ2DLlfA8F5KMnxW2+vc7LWBKArvnMKmhiiIhQgJ7CfoNvVRDKWAyWWa5nsO
+	 C9fwXMtgbeE/6lYt4c4nb/lC5S/kvNe8p73UKKJg41qbl7VALuXx4Xtj7sUjE42LNzg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=SEPF7REP;
-	arc=none smtp.remote-ip=209.85.128.43
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FqkVusjk;
+	arc=none smtp.remote-ip=209.85.128.47
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C04C606A8A6
-	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 10:57:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0C04C606A8A6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28FA9606B241
+	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 11:02:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 28FA9606B241
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=SEPF7REP
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4b467581b98so5927475e9.0
-        for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 02:57:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FqkVusjk
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4a2153c8525so4581435e9.3
+        for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 03:02:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794567444; x=1795172244; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794567745; x=1795172545; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=lbkgMQC7Zw8kBx4C+tjZuuC1ilPxnyE5d2jDtTeiWe4=;
-        b=SEPF7REPdnWBoaNaI278Hy8wEWH+5+Z+4wBhQEEMceTSn+Cqdz8UrfVFmPLb4GEvui
-         fM1R0j8sPFylk7hFHP/gzWwnWjRT0g1PJGX/WFuw9xxjLiNTBqfN1dGOJ5S07I6M809O
-         8Pat4nJhcC1XWVONrourDhZgLvVre5MY+So/T4gpOhxmWvj+p/xfPkfZpI4Syuu8ZrTj
-         fHIDSHDVs+6onEMr0CT8juKZ2rGCI4md45XogHTFqA3Pc6b0p7DP0OiBIaiD32Ht+Hh+
-         eKFpQQQnIDa4YRU0zVOrVEWm053jERxMX+kBjCQ591LQ+PIm+dZvBzw3Ub73sUzp/nyC
-         NHJQ==
+        bh=pZPFd1SYASnwZE8RQDnWSkbWoNyjC9gCBlg7DkYNUyw=;
+        b=FqkVusjkkXiqr+Cerf83nEtyPWYBrAZhv+mJsQUxyz/818Uu6km9IiuS9O/2xNXXwB
+         uQ6Rtv3w8FKXnysw5zqV0EfDyExq5Dhi3FXIyPmWv9hSLGAhbSVLSZ6ee/8UrNgiM6HL
+         HTFHLnmLD4Y3LRQaF7Zm5Chk8CoFxxYTfCa+MUPJJ4jhXfvZxofmsCdIxi55MgJ846Aq
+         2JPUgtvGsQp+HzrBf+UKvayZbWRH8uyUXYVAoO2D2DRIxeA+UuhlpfcgHMyb9nBXlfkA
+         WfMf30PXQt8UUBLzfn0xdltzDDCfPVxNAtrz9lBB/sq9O5qs0QklDWSrPswLD5FLf7Y+
+         XW9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794567444; x=1795172244;
+        d=1e100.net; s=20260707; t=1794567745; x=1795172545;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=lbkgMQC7Zw8kBx4C+tjZuuC1ilPxnyE5d2jDtTeiWe4=;
-        b=iOLOfPkhm1oGWyNo7+GZQwY2V4jrOaEJTb6yoB+KHiMNufHB1XdUhlKkAqs9KbDzoz
-         r0VKuaFmkWxIvicS4vXIyesRMcju/9izqnQMZYqDf92PfGbMWl+tC/lkmVY0bh3LKWKe
-         LZWX4ZA7YZY2cCrZ4hqCRxI6suS47HVBACYoCIH37ros//stvme+3HbXRB8JW8nhUfWb
-         zcn8b8RwGb9qVHg3ACc3kgJWI1awvyepaMPRh7x1jQiCFYF/XFYpQjPDMrg9fn6/Ongt
-         OSeSYIZCS9eSo9NGkZ1fkogQo1BgP8XiofH5W2Uat7ufbILhTumEjzJH+FrElmE5tEF5
-         4AWw==
-X-Gm-Message-State: APuU4Z/ouIbXIL4uAXM55H+hkEAjP6UScfw4nvG7lN7aRbEcawYQHUlH
-	CeEAD+XuwLb8OCJoGF6UEvmdwAny87RxKZAMmBlUbafzLWFR2DVa4Cmk
-X-Gm-Gg: AYBFou0m70QsTS4IdF4EqyBR6z3XmxJPalVCngeb1t/PIFKGR+3Shkpxjpjt6w9JKNe
-	s7i3zOgqgpzVnQTJioU20Ds6iQH5lLk+YrG7aSdho+27WHW2gYbhPD1ouoyHdliaZuPmlR7NpLQ
-	MRZdvVpzAlf4egKSk5DasL9scozeryXuvLQvX/qw5+H1ZFbTw+54pU+6lSWgPNJ6reTqMvelil2
-	e3YOT7LXIE+Jpponf5uKAAgjXR4V6YNI3GizkeaMgRtptwEo66BxwA0WTipp9sB+tfDA91AL5Tf
-	e6Q+niTbeldKgxyzXkP4BgD2ewsuKeWkSY/Nl30gz8Sdl1Mk7nnXvD4A3fIUd0eFxJc74TxHPug
-	Sq0m6lsUKWiZdeeSLk1NaiUjeP5VqlPFjxNa0ex5jGAn8FvMqPl3vJ45ql5C88GELA2TOE56Tgb
-	+mGlSRFpJw8X3MptKhZpGg0UBbZb3NCuNmSkLCIWFPtxd5b5gGrrpWcwIZHS/bOzMFC2KkeWW/g
-	5dRq2zWQyII/VfYIYbwv9H7qLQsN7nOlQe4h0OQ6liRuNG+PIowkWx0eWCS6ud/ENeMm/mNgorf
-	jeBnZXGbAL3UpTiq3u7+q02HK2uVvIkTm30m3A==
-X-Received: by 2002:a05:600c:4752:b0:4a3:59c9:a754 with SMTP id 5b1f17b1804b1-4bb55ab2b89mr40646185e9.22.1794567444155;
-        Fri, 13 Nov 2026 02:57:24 -0800 (PST)
+        bh=pZPFd1SYASnwZE8RQDnWSkbWoNyjC9gCBlg7DkYNUyw=;
+        b=kgfa1qs+oloyNXUH3rTIqEymE/1uG8Da4zWrp/uuqCz9BGZhWKaaO3WwDvWfHB4LW0
+         MNgYpTfTQjgs9y0BNagNhPavbC3hQ2tVU/N8PeSoc3W6scynCJQP5qaBgkOLOJvYq7k2
+         V+hvDtFKDoiLsNNUJHeG9ArDR4LII/yBFnpjmACp8cC1uvy/0DHQ9/T8fTwl7+2G7K3Y
+         hwTaZnNrviRDdJ52X2DDs0GaMRcXC6xvSKiLmUFJTHjsnkLLp/h0J8pdBlRFke08Asdx
+         wEDhYtxbI2wM3LkdWsJ5UY8lYNBOKpOeEXy2E8gwbW9TuXcwRbAP09e0tmAndgNBfDFA
+         16gQ==
+X-Gm-Message-State: APuU4Z9covLsTSFv1OajEQgCL/MtHh5MFj9bhSg1sbrqXqkKl3JVu/6W
+	VamPMXESYcH/gcKDEOT85zj75W8MhWNGR3LhI+DLaVbsSI68IZAGw+1ceBBk2Q==
+X-Gm-Gg: AYBFou2e8SekyqBQVksw8rnOpdqL5AHIpjgmpqFSBVxrrcRU2Ug5B/ZmdBYFGJ/sgDr
+	0Dl+/BzZ9+Lpvbf9EprKqBoaXEllTAy9QCvDUsYC1toUGcx7R4EP/0ww0Txcm4rO5udclHO+ddm
+	1urJFBBJVUIpe379RZD6nQ29xGtn7jc9ShJc5fo+3z4vAbLSHd7EHO83+WTHReM9hkPrI+Ypv19
+	E7KNsDHAaqpEN2nJ6ILIu8wcOdQNJFntMVy2yXiRH8Pp96LQhosmv9xH4SVlXLbRGlTgvbrR8xl
+	wGEp7lyp34XTpjvHB20BGmd5j12eGCNsS+VG6KbNCKQvcS7uMw9tP08+x44mwddOTHVeyUSl23A
+	jg3qLaFzteDDFiIKuUYnKnjpIaISA/YwwYRCTHg1BqBCVtdfjgCJaWxY7I/uG5vgNuz4X77r0e1
+	/xWR7XgNsLPPayf4lv3dECI/EEKMF/eAKeyZiz9Wey4GLOG+sL5QO0lwEDE3bGROWwne+svpYWW
+	4cevAMJJUfLEhHWgAHKHHkmLmwtDU1LR0ueWdB/qZ03tLTmKrckN/aD0VGkPyFBlrd2DhDOLqsQ
+	uSUsgD3CXlqJIGBDvS1xQss47F2q6cD+lX0L1g==
+X-Received: by 2002:a05:600c:4f93:b0:49f:fd2d:23c7 with SMTP id 5b1f17b1804b1-4bb55ab36famr42705415e9.27.1794567745235;
+        Fri, 13 Nov 2026 03:02:25 -0800 (PST)
 Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb5b4a3fcdsm16449605e9.0.2026.11.13.02.57.22
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49c5f1c1797sm5180914f8f.11.2026.11.13.03.02.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Nov 2026 02:57:23 -0800 (PST)
-Date: Fri, 13 Nov 2026 11:09:00 +0000
+        Fri, 13 Nov 2026 03:02:23 -0800 (PST)
+Date: Fri, 13 Nov 2026 11:13:39 +0000
 From: Anton Protopopov <a.s.protopopov@gmail.com>
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
 	eddyz87@gmail.com, memxor@gmail.com
-Subject: Re: [PATCH v2 bpf-next 11/13] bpf: Mark the arguments of fmod_ret
- progs as PTR_UNTRUSTED
-Message-ID: <avbvzPFUFQOB4iYj@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 01/13] selftests/bpf: Don't depend on the
+ width of a BTF id in verifier_live_stack
+Message-ID: <avbw438CHdTWK1BW@mail.gmail.com>
 References: <20261113050901.1399091-1-alexei.starovoitov@gmail.com>
- <20261113050901.1399091-12-alexei.starovoitov@gmail.com>
+ <20261113050901.1399091-2-alexei.starovoitov@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -99,70 +99,54 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261113050901.1399091-12-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261113050901.1399091-2-alexei.starovoitov@gmail.com>
 
 On 26/11/13 05:08AM, Alexei Starovoitov wrote:
 > From: Alexei Starovoitov <ast@kernel.org>
 > 
-> fmod_ret attaches to about 12000 kernel functions now. Nobody looked at
-> what these functions get. A pointer argument can be NULL, an ERR_PTR(),
-> stale, or an object that is not set up yet.
+> kfunc_iter_stack_liveness matches a line of the verifier log:
 > 
-> 	SEC("fmod_ret/tcp_v4_connect")
-> 	int BPF_PROG(guard, struct sock *sk, struct sockaddr_unsized *addr,
-> 		     int addr_len, int ret)
-> 	{
-> 		if (bpf_get_socket_cookie(sk) == cookie)
+> 	 6: (85) call bpf_iter_num_new#95448          ; def: fp0-24 ..
+> 	" 6: (85) call bpf_iter_num_new{{.*}}          ; def: fp0-24 .."
 > 
-> sk is PTR_TO_BTF_ID without a flag. The verifier does not rely on such
-> a pointer: each load through it is BPF_PROBE_MEM, stores are refused,
-> kfuncs want a trusted pointer. But helpers take it, for compatibility, and
-> dereference it.
+> The pattern has "{{.*}}" for the id and then ten spaces. The verifier
+> pads the insn to a fixed column. An id of six digits leaves nine spaces,
+> and the test fails.
 > 
-> PTR_UNTRUSTED is the flag of a pointer that nobody vouches for. Such
-> a pointer can do what PTR_TO_BTF_ID without a flag can, except that
-> helpers refuse it:
+> resolve_btfids sorts BTF by name. The next patches add about 12000 decl
+> tags to vmlinux. Their names start with "bpf_fmodret_retval:", so all of
+> them come before "bpf_iter_num_new":
 > 
->   R1 type=untrusted_ptr_ expected=sock_common, sock, tcp_sock, ..
+> 	                      id of bpf_iter_num_new
+> 	before this series      95448
+> 	after this series      107433
 > 
-> What is loaded through an untrusted pointer is untrusted too, also a __user
-> or a __percpu member.
-> 
-> That holds for each fmod_ret prog, also on a target that is allowed today:
-> security_*(), a syscall, the error injection list. A prog there does not
-> load any more if a helper that expects a kernel object gets an argument:
-> 
-> 	SEC("fmod_ret/security_file_open")
-> 		bpf_d_path(&file->f_path, buf, sizeof(buf));
-> 
-> bpf_probe_read_kernel() takes each address, as before. All fmod_ret progs
-> of the selftests, Tetragon, runtime-enforcer and bad-bpf load as before.
-> 
-> The arguments of fentry and fexit progs keep their type for now.
+> Let "{{.*}}" match the spaces too, as other tests in this file do.
 
-I am not 100% following why this change is needed without enforcing
-this for fentry as well. One can attach fentry before fmodret and
-follow all the same args. (But in general, +1 for this and the
-following patches.)
+Acked-by: Anton Protopopov <a.s.protopopov@gmail.com>
 
 > Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 > ---
->  kernel/bpf/btf.c | 2 ++
->  1 file changed, 2 insertions(+)
+>  tools/testing/selftests/bpf/progs/verifier_live_stack.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 228b93d4f8c9..4ed660dc4612 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -7618,6 +7618,8 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
->  	info->reg_type = PTR_TO_BTF_ID;
->  	if (prog_args_trusted(prog))
->  		info->reg_type |= PTR_TRUSTED;
-> +	else if (prog->expected_attach_type == BPF_MODIFY_RETURN)
-> +		info->reg_type |= PTR_UNTRUSTED;
->  
->  	if (btf_param_match_suffix(btf, &args[arg], "__nullable"))
->  		info->reg_type |= PTR_MAYBE_NULL;
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_live_stack.c b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
+> index 2d31868bcfdb..4bc4091b17a5 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_live_stack.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
+> @@ -979,9 +979,9 @@ void __kfunc_btf_root(void)
+>   */
+>  SEC("socket")
+>  __success __log_level(2)
+> -__msg(" 6: (85) call bpf_iter_num_new{{.*}}          ; def: fp0-24 may_def: fp0-24{{$}}")
+> -__msg(" 9: (85) call bpf_iter_num_next{{.*}}         ; use: fp0-24 may_def: fp0-24{{$}}")
+> -__msg("14: (85) call bpf_iter_num_destroy{{.*}}      ; use: fp0-24 may_def: fp0-24{{$}}")
+> +__msg(" 6: (85) call bpf_iter_num_new{{.*}}; def: fp0-24 may_def: fp0-24{{$}}")
+> +__msg(" 9: (85) call bpf_iter_num_next{{.*}}; use: fp0-24 may_def: fp0-24{{$}}")
+> +__msg("14: (85) call bpf_iter_num_destroy{{.*}}; use: fp0-24 may_def: fp0-24{{$}}")
+>  __naked void kfunc_iter_stack_liveness(void)
+>  {
+>  	asm volatile (
 > -- 
 > 2.55.0
 > 
