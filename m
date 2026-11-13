@@ -1,57 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794589670;
-	b=WnYEJhKR9JlFMxEtVUbSBZoyOdE3CknMS8bi55Iit+AmvncRLhpfqkFQsOCid84EmN26
-	 XV0db9Bb82GapORYjFGsLTcTOBd2aqltz1SXctyaTmP+E6sGj4c8nx7cxJEiUAsU24FjT
-	 rb27JpGL3YFjz7MO0fAl+gswi0dhsFGkkG32fxUYVxw4DY7bDOeO5eHOLT9kvB/WdLBmW
-	 Rgb3xTmLmaMIb2DuI2IgUXaA7dYgizjoFaiGfQ8y/P7q9O+iZhUCk4Ukjj/QDWzHYTiLs
-	 fuE7IxoRfqIyPvB2E57Ynh/j4EehRSbxfk/Zjc3F2AEQeFYeM1B637xVqtR64xqH8Yw==
+	t=1794589671;
+	b=32uhGwI6we+y8bnCRup4crajQom8AfJV4bOzJcX6iydtnJ0vk7JDiBF0qauBWBvNW33E
+	 MTqS5ASTF5ZUCnSAX7QuxGkvkf/fWQSjlNqPT2ms1GfRz7IFjCA1PjrC+3Axq8h13GzlP
+	 ywrFzcAEHnLYex3joTqfG4ieJFmr2kYzETJEnGlZwTQHIEn4+Y98o6wZvios10hOLSG2K
+	 KpcTtjHbD81+blp8QAstaXTh/h8VxAAH0PO3C/ou+sbUiyjmLT5W1T7R91m3EMhXG5MyS
+	 BjSvzcgecAnNRh8O3gi9k6+mLcFr5m/S9tt3oAESPNBKh7ob7zd46jNc6jYfgyqPjSw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794589670;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794589671;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=NQzhutDUub2+BeweYXmAJd5ZQ1j21fbFWwglmjxib/0=;
-	b=g7ndsQA2286vbMdqNpbWWnckPk+8b+JodhwHe5pk9w9k0apUQENKRuN3EotQtk1rs8D1
-	 7TN3DWT0quPU1BRKL9BEZYaKOeRtLiTBgDwb1iNXUszndA1F/+D3wZHD5cj+EtYwpy7UC
-	 ltKYaG8efKgVpd32E1K46+IPz0BZ7Acf9a2poU2yLXlXbZ1zxD73PIPXwJ8FhqbmZTkrl
-	 J5ArbrQj0FDuY6z390JUL83LGOdDULlhDoq4OcxOYiVRl/ceKAUAA1IRIiy9cmN2YHPa1
-	 AQq/UjcEA+gqa/za7wlIawrtS9/5KBEurHF/GmnWzuxcbN1Pm0zRvY85yGJPM4ivV+A==
+	bh=zhrXd6irbCVGRCuk+B5sgbrY9TcqoC+GJ4D9REvZQI8=;
+	b=va2Io9JzORxosqbdJ9Bq2XLfhhKJRa+B0WvJp2+BX22WsI/4Km1aykGtHGUBkgt4DWm+
+	 1JLVZybwxEZ6kLJ5oJOsxw+Xifu/XeCFIO7uWxuVpg8eO3Jcy0yqqD+wDTnazpoLWzBmm
+	 aRcavFn2J8hywyNwuwjI6JJdMFZHhVUcr1NQkGcDsAkY6UN1k1Yf1DDGTUBhrY1MvRCPf
+	 ofKjXVKxIkfVbq2nWWzqrYPW4X0ienJ2TnFRMGx3Xq23KQCLOw4McBo0L1jxHcmu6LPWL
+	 Ifp7eZZlf1IGOxIcaIAOGR6CJNnk6RvqG95ecCsnmu6xW3VVNl/ERhCt5qY9f2gn/nA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VC0tk+fK;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GMWpqOHd;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 909F8606A334
-	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 17:07:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4595D606A33B
+	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 17:07:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VC0tk+fK
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 501D41F000C5;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GMWpqOHd
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03F111F000C7;
 	Fri, 13 Nov 2026 17:07:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794589670;
-	bh=NQzhutDUub2+BeweYXmAJd5ZQ1j21fbFWwglmjxib/0=;
+	s=k20260515; t=1794589671;
+	bh=zhrXd6irbCVGRCuk+B5sgbrY9TcqoC+GJ4D9REvZQI8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=VC0tk+fKsC7+yB0P6rR9rMfnhP3X0UXwjVl3JzwQ07EpPy9kNnGYfX3KkQI1StwdZ
-	 dk6e6Veb0+jzOknQ/iKftDkDyuVl9kym/VyldCLvJLW1Hwo9OxtJmDgCikPt9xZame
-	 rEXZkvi8QAn6z7T7ZwIFYta58HCXjkySMKM10MTb2n1bXDlVx9nsx0EhfOH50ECCY0
-	 j97uiOVeCm3DO302gNujufzxOFUXRLSFIJe+XUpEOqlaneXe20h/3GlOGf+s03G2z+
-	 H/jrRjCVKbZfVb4H/4jecUuJ6DSBSyNXX7ons06Gvkzo2mYOqzBKh5S+ZSPOxySFWm
-	 j8ya8jDo6EL/w==
-Message-ID: <sashiko-outbox-213275@kernel.org>
+	b=GMWpqOHdGT0gNQErPWKk+O7GhPMn9KOBh6AojoCTnzqBl4rvOWMYvmSr3/QyGuXe0
+	 j2xyKnQ4LpCUy8QBHAKsODnRw8tnx2xrB9GanQ7QUkux9MpqDGnB2uWM+hM3BMxHYH
+	 R1911dtxntvFSh/71puVQQ4xt6gUf627q9v0VsBut+fEkvCUHsWa9FTBhy0q6rkJfy
+	 jFh7i2I5kSOLVov/9QiP9u3ufrA5uHc6G6d1xyZ2W8jHkXttAGyOG30/vxlRoG7v//
+	 d9bvOHxgM7nZQv+KEp4O2x5Jh3ffev/SiAZvKTkGCXo+JMTABjEJbTZaaYjBhZQtoH
+	 8nSX3HwR6IXew==
+Message-ID: <sashiko-outbox-213276@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next 2/3] tcp: convert do_tcp_getsockopt() to
- sockopt_t
+Subject: Re: [PATCH net-next 3/3] selftests: net: getsockopt_iter: cover tcp
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Breno Leitao" <leitao@debian.org>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261112-getsockopt_phase7-v1-2-1eb759dd0929@debian.org>
+In-Reply-To: <20261112-getsockopt_phase7-v1-3-1eb759dd0929@debian.org>
 References: <20261112-getsockopt_phase7-v1-0-1eb759dd0929@debian.org>
- <20261112-getsockopt_phase7-v1-2-1eb759dd0929@debian.org>
+ <20261112-getsockopt_phase7-v1-3-1eb759dd0929@debian.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 13 Nov 2026 17:07:49 +0000
+Date: Fri, 13 Nov 2026 17:07:50 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -63,49 +62,53 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue to consider:
-- [Low] bpf: non-standard multi-line comment style in
-  sol_tcp_getsockopt()
+- [Low] selftests: net: nodelay_undersize_clamped() uses optlen=3D1 and
+  cannot test clamping vs 1-byte shrink
 --
 
-commit adc743711fff2b36324cfbce470ae256d9f2a174
+commit d0de5c7edf661839608cbe0dcd2d478b9815dc91
 Author: Breno Leitao <leitao@debian.org>
 
-tcp: convert do_tcp_getsockopt() to sockopt_t
+selftests: net: getsockopt_iter: cover tcp
 
-This commit converts do_tcp_getsockopt() to take a sockopt_t pointer and
-updates tcp_getsockopt() and the bpf sol_tcp_getsockopt() helper to pass
-one.
+This commit adds a kselftest fixture covering do_tcp_getsockopt() across
+exact, undersized, and oversized option buffers.
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 9b8d5191c4ba2..0d5afe1c5606b 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -5686,6 +5686,28 @@ static int bpf_sol_tcp_setsockopt(struct sock *sk,=
- int optname,
->  	return 0;
->  }
-> =20
-> +static int sol_tcp_getsockopt(struct sock *sk, int optname, char *optval,
-> +			      int *optlen)
+> diff --git a/tools/testing/selftests/net/getsockopt_iter.c b/tools/testin=
+g/selftests/net/getsockopt_iter.c
+> index 2367fce226d4c..4e51c8aa6a855 100644
+> --- a/tools/testing/selftests/net/getsockopt_iter.c
+> +++ b/tools/testing/selftests/net/getsockopt_iter.c
+
+[ ... ]
+
+> @@ -1005,4 +1008,246 @@ TEST_F(tls, bad_optname)
+
+[ ... ]
+
+> +/* Unlike IPv4, TCP clamps the reply rather than shrinking it to a byte.=
+ */
+> +TEST_F(tcp, nodelay_undersize_clamped)
 > +{
-> +	struct kvec kvec;
-> +	sockopt_t opt;
-> +	int err;
+> +	socklen_t optlen =3D 1;
+> +	int val =3D 0;
 > +
-> +	err =3D sockptr_to_sockopt(&opt, KERNEL_SOCKPTR(optval),
-> +				 KERNEL_SOCKPTR(optlen), &kvec);
-> +	if (err)
-> +		return err;
-> +
-> +	/* BPF may call this in softirq: with page faults disabled, the
-> +	 * usercopy check skips find_vmap_area() and its lock.
-> +	 */
+> +	ASSERT_EQ(0, getsockopt(self->fd, IPPROTO_TCP, TCP_NODELAY, &val,
+> +				&optlen));
+> +	ASSERT_EQ(1, optlen);
+> +}
 
 [Severity: Low]
-This isn't a bug, but bpf code uses the kernel multi-line comment style
-where the opening /* goes on its own line and the comment text starts on
-the next line.
+Does passing optlen =3D 1 in nodelay_undersize_clamped() distinguish clampi=
+ng to
+optlen from shrinking a sub-int reply to a single byte?  Both min_t(unsigned
+int, len, sizeof(int)) in do_tcp_getsockopt() and the single-byte fallback =
+in
+do_ip_getsockopt() report optlen =3D=3D 1 when called with a 1-byte buffer,=
+ so
+passing optlen =3D 2 or 3 is needed to test the behavior described in the
+comment.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261112-getsockopt=
-_phase7-v1-0-1eb759dd0929@debian.org?part=3D2
+_phase7-v1-0-1eb759dd0929@debian.org?part=3D3
