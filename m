@@ -1,88 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.170
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794611335;
-	b=J7AYsq8gH2OTX1MlBIgHUWGlk9IqMFxS1XWfFfkhDtljKGRANGLavPDwjC5+y8LUhy1S
-	 wwS0gFzIgvmv2wADhvFt8v4KISUo5SYFN+7PsOYNKAEuVZeT3ERhQpWdlrjRPbOtoq4mk
-	 KyqKmz0jz1a51qFbYS7Ln7o01IfHPNhcUeuUbmX8I49xAhpcIQfYFOtHsHn+imxhzsB92
-	 1tDpCx6EtvfDviXWC5hcFfoQ9p1sWAM6HS6bCyI7rQWtd3rD42Y/SyCw+0Lg2evkg3P7f
-	 dwyimD4a1G5FqAo2IssFdWhkrxvZnFPmgVo1dHOX07JndwmEb27sya2I03faGUlxtmw==
+	t=1794611340;
+	b=VUqujqQsO2nva6BzdKI4dJf1geKZ4wdDE9OTnAsRgsEiaQTdx4nNPcWig4DnkOJugkWr
+	 d02K560TPXHRLdPnbrmBkQ/eNz9fnWVECJ9B7bVpUtiG8D2Ob+GQfWQV86F97ap4QHxL0
+	 dl6Y4Yc6GQ4RFXgDvsrO/HjKxkiKgvyhd883wu+CXCeBc6FibnKHmOQHoZ43lxhVnD8xS
+	 S2X25DDwNdrKpB8YsRKr6a9yclfVwryM548I748udIXJGVxog7SjRAMCvpVgVhFOqhHCs
+	 VtUwrnjPHy9plfy8cfbRM3OsBBQ4XqcPEHtAvbSa2SYEy6ElRoJK4i+27n5vrdhjGcQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794611335;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794611340;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:Date:Subject:
 	 MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
 	 References:In-Reply-To:To:Cc:X-Mailer:X-Developer-Signature:
 	 X-Developer-Key;
-	bh=GJoooGPhLJPY6s6gMD1zBsANV/pXSdErIppoBI/AIcQ=;
-	b=cecON/dJlED7Aq8stFd34HIelpb/X5iQanQoS2k29AwrHOgLjdttVF+g9yhPJnEIJ5yv
-	 BRqj5lJmZPfwenFufGpgvfKiiKywStwSS3Z8sRxgEXnMGy2K+EjXO9hWY5Xtoxy3MajW/
-	 l1J/3wB35JjwTE6YutyFW6NON4P4IiA4QcbmpJhDL/0Daw1ZTneARkSKs280xQqyJDqlS
-	 96uTU4KEbC3tNNom5HDVlip9HFK0iUAYBFheTUZ7yqro4WJXtTV7jI6/AhYp6GHtsYHv0
-	 hcVj44hxzydHJ9UqkRZwKF72Bd7/lhfw7g3KJSinmkm9UkpHsM3PGX2F8G9YEtr8dHA==
+	bh=koHAS1kxw4+RZOy5HKiNvlQJCowjePX6NSOH8g+MRpQ=;
+	b=Bbma0/FGlntoFVfQR7heZwB3Oyru3Y5VAPIme9rcVR5ND98hVYxaw7Hkl7ef1xZYuzj4
+	 LEoUqrxIuI0ZDKNXC7o8nSOtoBXhVpEcjq6hUJM/geCK+YCC0U8+5gmIPs41Rt8t7fjXj
+	 bC07HOYBBUKZif9c8deEXJLYhQhF31TCJRT/90t95R74r6pHdQs7jiFTKalhA1r6U1GPN
+	 DjAzjtw+14E3quA3i/B6TF9lTyYedVoO1wQ3/qQXQd/uOE0MZ/kcJvBMxRqpmX4lJN7XT
+	 8rciEdoCFnOEnmmCBv1RqVgwZmVt8runw2b3oi1M6VJt0S166/nXwVlmvqtRdePUf0w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gc5SGeVi;
-	arc=none smtp.remote-ip=209.85.128.178
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DALwdOyX;
+	arc=none smtp.remote-ip=209.85.128.170
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E239D606A32E
-	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 23:08:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E239D606A32E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1821A606A329
+	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 23:08:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1821A606A329
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gc5SGeVi
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-8b32daac9d7so12242287b3.0
-        for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 15:08:54 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DALwdOyX
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-8b4a15c84c5so15150597b3.1
+        for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 15:08:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794611334; x=1795216134; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794611336; x=1795216136; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=GJoooGPhLJPY6s6gMD1zBsANV/pXSdErIppoBI/AIcQ=;
-        b=gc5SGeVidl7XoHtPDUSm1n1EqbgiD1bOaZ85QqFPNATphPe5uO+t38jmaF+5ZS7JDF
-         8to7CkEqWoDnMoA7DOe5wDgI4b2Umemu8EJHEiAlLP8HDytQArjcH/t3dinogtQQPzqY
-         Qh77yYnqqoEdSu+PxKIS8v9jaWDoE9JTrog68ilQ7cC4/penIeCq5DfqTyIKsuVoge16
-         BxXDGDDZ/2juQPght+7b47VSB0HgNHMenyJQcSPbw9EvgbEX6Lpvg0wGkAfkGrvdTbJh
-         L3x+xj1Nco7Q1qjue6iViNQ2sr0AiTkmMLAkDJECGQqobvC/w9ANgT7WPdBjJWJxv8Qj
-         u/VA==
+        bh=koHAS1kxw4+RZOy5HKiNvlQJCowjePX6NSOH8g+MRpQ=;
+        b=DALwdOyX6hcntxU+DpVA48RU3WkicGcpBCgiYfxwe/jxbcrEcJPlrf5lnDrT5Y55wS
+         BGfWFDuagv7udEwgHNrU/G67C8ox2/yusgCmZ8wetT+4H4ah4WKIIop3GQ7Mc+7eeuEh
+         ov5X1XW9nGHtdlPXcwxfjS/WITleDS9NbhYVafrvw0YbGLcaPpxhRbN6jbDAgdk+5kVf
+         ZEIJAp37I+gPDFmoWl9ihQplfKkKOgaq3IGChWuisgTnjuwVQxeSuLbmozzWmfrg14Fy
+         wEJpatYNNvLgtTFcU3gr3Gk04QjsZ4+jSdm+PNEHfOCn9sOZf5y01zwSo4/vj9d9hvXV
+         ZVdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794611334; x=1795216134;
+        d=1e100.net; s=20260707; t=1794611336; x=1795216136;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=GJoooGPhLJPY6s6gMD1zBsANV/pXSdErIppoBI/AIcQ=;
-        b=kVrKQu7FviyVCXG8ItqxLW2EY6NyoUpBRWpjQFemza0QL3SCjTJohNpN6b3nV2BBiw
-         F2OU0d0hn1VjsHBXPq6r3yG2qpiZuNw+bNjL9vu5hdr5YHQ1nI8EdbIOyQw/UbDF/xn3
-         GKh/n5CnX3eo7PWwC4vlxWSzKY1G/NcmTuDeN3uczSW6lA4yy0EH3Q7lPa1e5A1hzzcJ
-         XEEPuBZRmgeJrs84n88DIvTee2N5lRK54L6zzoECbhJcIA2g/e0lKu6llzCl2JYfMFIF
-         HByl5zyvNjnuFpSh4QEpKBuqlFVFiyZ1tJQ+tLf9nmYrQ5lxl/P7A3o5UHzZhP/i0sxv
-         RcJA==
-X-Gm-Message-State: APuU4Z/E2QqoeY5NoEvp5/1kBPxfV4U3CpDHPwlDF9oRFJ7zVBCfjkBH
-	B9nwE/xNCUsi9LQFcc4CfZ0ltdYuZsFtzfLRQYZpeNGXVoaesDdsAQ2m
-X-Gm-Gg: AYBFou0iEba1aWXjFDeIi9dAAzS8YZ0jdAQbEkV1xE70er/wLVSzDilP4CPyIc4J/lR
-	NSPtRBM2YPg2+THYeiSfS/4LE7ez/jgM59MrQX92ISKvuKuYIkfmKHYBOJx9jcUf15OmQUurTqg
-	bIDNBNDeTmuzXDugL3k+ECsL2lsMaH9kwLpX4Rf6ZcNrZkD/NlrekFdc7/iDVnMAqvvqq9GUI0A
-	QIkg2rFS3V2ucrA5VkofxyOtLaxvuuRAJCVaHa3+tNUXvW99tuIo9Oc7CS/HJepSISlr2N1DgjL
-	3YKgH5JzrQ5jV0Z03s+ZoF0kN4aOnQY6FhyaoaTgM8yRTAZe18xJ51QccEd5z2YexSn8fN8aEnk
-	wCysTxYqK2RZZH1azR3YVRywR2nlKPGByrIWPh2vkDHVdAnPAliUZT27sfGoko1LnYUh8kbOeGH
-	X3QWw3QktoOcPjkkMKJwwD0RQI7NPug5xXq0B2hiPSSRAvADd7fjzTAWDcyxbwsQGJeIdGj4ns0
-	BCi+qAKZwiyvPlBRKuHv9ouzFiSb44h5UkHrXFkBZqdh6QEAC146Lm0hGi50ei2lL9pKqeFccrj
-	vTWuzNsYBNkrKoe0rDBYmQIbV0rCgkUIrOPDp0RC
-X-Received: by 2002:a05:690c:8010:10b0:8a9:a1e9:2665 with SMTP id 00721157ae682-8b3bb0580famr29939947b3.6.1794611333650;
-        Fri, 13 Nov 2026 15:08:53 -0800 (PST)
-Received: from localhost ([2a03:2880:30ff:6::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b4aaa0ea50sm31554767b3.42.2026.11.13.15.08.53
+        bh=koHAS1kxw4+RZOy5HKiNvlQJCowjePX6NSOH8g+MRpQ=;
+        b=pYOLtz6uHfJRNpAqSmMtaSYwip+O3ZCbVlU8VtZYqVMM+f4dcs70GBMqqJPJIZ5ede
+         LkGQ1onn0E5ruJbplfyUYkzznCKEGVFG6YpxiCEh0IPfG96nMf4wQ32bePHmMOHIwqBX
+         3nOjC3OjCPEtW3Lp6ZueXgdr9SDGON4hw98C3UtaS+w+1/VykDOSV8o3kvKydkOVCEv2
+         8Lw8cEbhjZqv0Aj9ieEWjf29tzBzM+v04/JrwSghGXb9hhyXJwk1kp27O9rcefYjsMtx
+         HPRS9tbqcQESa7IZj+9so6URg2mpuyeRZLNz3ZvJchjcdkAlUHzxFTBIOCqSWzEWl3qS
+         VvKg==
+X-Gm-Message-State: APuU4Z90uyKou5JLUJKwki2S1mZrdhnsp/7EyBJ0geoka8NKKojIUIrr
+	4ahRC1oWZY8GdqFtLRVhwgXhjp5OTK0vJ3ULWWhQ6yjLT1iy12gjMbUIE6BDTnpH
+X-Gm-Gg: AYBFou06D9NNDdvId4/D4yCxv3WWTOP14tj/QXXtUcbpfCYKdem28UpQ2w4a97pDhZm
+	dOViO1EFrk/j5KYPYdca8xNwJRfF39UqqfLs9UCCFW9H6mDe6hz9svx/B2uI+xdF+Rfydq2xLTm
+	ZQtf2f7LHTbPSDLs+bYU1JXUSHj8QWIg/B647VfhDBIZNLsKqUDYwrpgbTKGaxa3M3suvx+uamq
+	AtruYkT0a19bo9KYqE6Ck8KHMMCIzGoqYZt9vzm12KefOAmpGF+fYUUplGiniVrJJIC0bPfjIxG
+	MUf4VOj6Boxz8tnwzW74z9vhFfmetjWLaMvo+ljd8GpRZ+zfnFQV9X4dPzo7wCFB5U1Cw8CTjhM
+	inVeTUhJ/F2L6h7kFmj5ZE+YLysz2l4y9Tkh/zPYYZaqziNnGlaUvzBXSPUAXTYvMUK3CwwcXPb
+	Dj+Ia/LgIhPfr9L+Pv0ZPRz06ZOS9tS+YGOPMm6hRtt4hhsK10CWTidOQirdiF3fv8x7/i8F+SC
+	zbWiSonK8od52+YdhTwwqRIpbJWOo7SmaVD0hN8MLxf4xUd5xkJ/dGVRdgbQlbNoaLWjFNEGp4z
+	+IRaSPVLxfgX6Fdulk0=
+X-Received: by 2002:a05:690c:7:b0:8b3:22c:b40c with SMTP id 00721157ae682-8b4aa0d0fb2mr26406697b3.7.1794611336070;
+        Fri, 13 Nov 2026 15:08:56 -0800 (PST)
+Received: from localhost ([2a03:2880:30ff:4::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b4aa987da8sm32172597b3.25.2026.11.13.15.08.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Nov 2026 15:08:53 -0800 (PST)
+        Fri, 13 Nov 2026 15:08:55 -0800 (PST)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Date: Fri, 13 Nov 2026 15:08:29 -0800
-Subject: [PATCH RFC bpf-next 06/13] bpf: Keep local storage objects with an
- inline area until owner death
+Date: Fri, 13 Nov 2026 15:08:30 -0800
+Subject: [PATCH RFC bpf-next 07/13] bpf: Keep values of BPF_F_INLINE_VALUE
+ maps in the storage object
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -94,230 +94,384 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261113-sls_f1-v1-6-1b9492bd3f97@meta.com>
+Message-Id: <20261113-sls_f1-v1-7-1b9492bd3f97@meta.com>
 References: <20261113-sls_f1-v1-0-1b9492bd3f97@meta.com>
 In-Reply-To: <20261113-sls_f1-v1-0-1b9492bd3f97@meta.com>
 To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
  daniel@iogearbox.net, kernel-team@meta.com, eddyz87@gmail.com
 Cc: Mykyta Yatsenko <yatsenko@meta.com>
 X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1794611317; l=8639;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794611317; l=13716;
  i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
- bh=yHk0OmNetEFIcmtzLE7qgJHhrQReIzJGp9KAbDT/5Vg=;
- b=ZU4JTFjfVYb2Gl+AekDsDzkOMOLI+YAVly1KGywwgtksvCAOh/WDo8GlHRqnM8cm2TyKUsJbh
- 4D05/eWJxKtBJws8xgjz8D0UDPZ4YPUOd4o3PClNpBeWrFd0DHDi+iL
+ bh=G+r/fMVzjR2LFXCC8xrJCKYCyWyQkb01mF81k0Gftkg=;
+ b=zQ1ZOFqsVEc+IxErxwRP8Ul26XZk9TTvS+mh8lMJsTRGp6fVdVDZFYqSMRSx9wxL+KXa5SyRk
+ vTDGum0ItbUCRn9TGdvO31JY33MR91+wYOLsKGxEfI+1iGt2pJxM5Kn
 X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
  pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
 
 From: Mykyta Yatsenko <yatsenko@meta.com>
 
-A later patch lets programs get pointers to values in the inline area.
-Such a value has no selem, so an empty list does not mean that nobody
-uses the object. Free an object with an inline area only after destroy(),
-and always after an RCU tasks trace grace period, so that sleepable
-programs cannot see freed memory.
+A lookup of a normal map reads the storage object, a cache slot and
+then the selem that holds the value. When the owner is cold, each read
+can miss. A map with a slot finds its value at a fixed offset in the
+object, with one tag compare, so a lookup has one dependent load less.
 
-Updaters can no longer use an empty list to see that the object goes
-away, so destroy() marks it as dying under the storage lock. If it
-cannot take that lock, it tries again after a grace period, so the mark
-adds no leak. A failed unlink of an selem leaks as before.
+The tag is 8 bytes and comes from the claim number of the map, so old
+value bytes rarely match it. It is written with a release store after
+the value and read with an acquire load. 32-bit has no 8 byte acquire
+and release, so slots are 64-bit only.
 
-While an inline map exists, new objects of its owner type are bigger and
-live until owner death, also when the owner uses only normal maps.
+An update copies the value in place under the storage lock. Lockless
+readers (programs, the syscall lookup, sk diag) can see a torn value, as
+in array maps. KCSAN can report this race; it is intended.
+
+A normal map pays one more test of a map field. There is no hint on
+that test, so that inline maps do not pay for normal maps.
 
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 ---
- include/linux/bpf_local_storage.h | 11 +++++
- kernel/bpf/bpf_local_storage.c    | 96 +++++++++++++++++++++++++++++++++++----
- 2 files changed, 99 insertions(+), 8 deletions(-)
+ include/linux/bpf_local_storage.h |  63 ++++++++++++++++++-
+ kernel/bpf/bpf_local_storage.c    | 129 ++++++++++++++++++++++++++++++++++----
+ net/core/bpf_sk_storage.c         |   9 ++-
+ 3 files changed, 180 insertions(+), 21 deletions(-)
 
 diff --git a/include/linux/bpf_local_storage.h b/include/linux/bpf_local_storage.h
-index f8e4e47b47c6..7a5f024622e6 100644
+index 7a5f024622e6..d482ff6a1448 100644
 --- a/include/linux/bpf_local_storage.h
 +++ b/include/linux/bpf_local_storage.h
-@@ -111,8 +111,19 @@ struct bpf_local_storage {
- 	u32 obj_size;		/* Size of this object. It does not change. */
- 	u64 mem_charge;		/* Copy of mem charged to owner. Protected by "lock" */
- 	refcount_t owner_refcnt;/* Used to pin owner when map_free is uncharging */
-+	bool dying;		/* destroy() has run. Only with an inline area */
+@@ -70,8 +70,16 @@ struct bpf_local_storage_data {
+ 	 *
+ 	 * Put it in the same cacheline as the data to minimize
+ 	 * the number of cachelines accessed during the cache hit case.
++	 *
++	 * An inline slot has the same layout, with a tag in place of smap:
++	 * the tag of the map whose value is in the slot. Any other tag (0
++	 * after a delete) means no value. A slot is not in an selem: never
++	 * apply SELEM() to it.
+ 	 */
+-	struct bpf_local_storage_map __rcu *smap;
++	union {
++		struct bpf_local_storage_map __rcu *smap;
++		u64 inline_tag;
++	};
+ 	u8 data[] __aligned(8);
  };
  
+@@ -195,6 +203,45 @@ bpf_local_storage_map_alloc(union bpf_attr *attr,
+ void __bpf_local_storage_insert_cache(struct bpf_local_storage *local_storage,
+ 				      struct bpf_local_storage_map *smap,
+ 				      struct bpf_local_storage_elem *selem);
++
 +/*
-+ * A program can hold a pointer into the inline area without an selem. So an
-+ * object with an inline area lives until its owner goes away.
++ * smap has an inline slot. The tag needs an 8 byte acquire and release, so
++ * slots are 64-bit only: on 32-bit, false lets the compiler drop the slot
++ * code. There is no hint on the inline_off test, so that inline maps do not
++ * pay for normal maps.
 + */
-+static inline bool
-+bpf_local_storage_has_inline(const struct bpf_local_storage *local_storage)
++static __always_inline bool
++bpf_local_storage_map_inline(const struct bpf_local_storage_map *smap)
 +{
-+	return local_storage->obj_size > sizeof(*local_storage);
++	return IS_ENABLED(CONFIG_64BIT) && smap->inline_off;
 +}
 +
- /*
-  * Drop a reference got by refcount_inc_not_zero(&local_storage->owner_refcnt).
-  * bpf_local_storage_destroy() may have dropped the owner's reference meanwhile
++/* The inline slot of smap, or NULL if local_storage does not hold it */
++static __always_inline struct bpf_local_storage_data *
++bpf_local_storage_inline(struct bpf_local_storage *local_storage,
++			 struct bpf_local_storage_map *smap)
++{
++	if (!bpf_local_storage_map_inline(smap) ||
++	    smap->inline_end > local_storage->obj_size)
++		return NULL;
++	return (void *)local_storage + smap->inline_off;
++}
++
++static inline u64 bpf_local_storage_inline_tag(const struct bpf_local_storage_map *smap)
++{
++	return (u64)~smap->inline_claim << 32 | smap->inline_claim;
++}
++
++/* The slot holds a value of smap */
++static __always_inline bool
++bpf_local_storage_inline_valid(struct bpf_local_storage_data *sdata,
++			       const struct bpf_local_storage_map *smap)
++{
++	/* Pairs with the tag release in an update: see the value */
++	return smp_load_acquire(&sdata->inline_tag) ==
++	       bpf_local_storage_inline_tag(smap);
++}
++
+ /* If cacheit_lockit is false, this lookup function is lockless */
+ static inline struct bpf_local_storage_data *
+ bpf_local_storage_lookup(struct bpf_local_storage *local_storage,
+@@ -204,6 +251,15 @@ bpf_local_storage_lookup(struct bpf_local_storage *local_storage,
+ 	struct bpf_local_storage_data *sdata;
+ 	struct bpf_local_storage_elem *selem;
+ 
++	/*
++	 * An object that holds the slot of smap never has an selem of smap:
++	 * the object size does not change, and a create puts the value in
++	 * the slot.
++	 */
++	sdata = bpf_local_storage_inline(local_storage, smap);
++	if (sdata)
++		return bpf_local_storage_inline_valid(sdata, smap) ? sdata : NULL;
++
+ 	/* Fast path (cache hit) */
+ 	sdata = rcu_dereference_check(local_storage->cache[smap->cache_idx],
+ 				      bpf_rcu_lock_held());
+@@ -251,10 +307,11 @@ bpf_selem_alloc(struct bpf_local_storage_map *smap, void *owner, void *value,
+ void bpf_selem_free(struct bpf_local_storage_elem *selem,
+ 		    bool reuse_now);
+ 
+-int
++struct bpf_local_storage *
+ bpf_local_storage_alloc(void *owner,
+ 			struct bpf_local_storage_map *smap,
+-			struct bpf_local_storage_elem *first_selem);
++			struct bpf_local_storage_elem *first_selem,
++			void *value);
+ 
+ struct bpf_local_storage_data *
+ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
 diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
-index 072807a1245f..b737b2e67c8a 100644
+index b737b2e67c8a..31f62a2be62b 100644
 --- a/kernel/bpf/bpf_local_storage.c
 +++ b/kernel/bpf/bpf_local_storage.c
-@@ -114,7 +114,12 @@ static void bpf_local_storage_free(struct bpf_local_storage *local_storage,
- 	if (!local_storage)
- 		return;
+@@ -390,6 +390,8 @@ int bpf_local_storage_delete(void *owner, struct bpf_local_storage_map *smap)
+ 	struct bpf_local_storage __rcu **owner_ptr = owner_storage(smap, owner);
+ 	struct bpf_local_storage *local_storage;
+ 	struct bpf_local_storage_data *sdata;
++	unsigned long flags;
++	int err;
  
--	if (reuse_now) {
-+	/*
-+	 * A sleepable program can still use an inline value: wait for it. A
-+	 * tasks trace grace period also covers plain RCU readers: RCU Tasks
-+	 * Trace is SRCU-fast, and its grace period calls synchronize_rcu().
-+	 */
-+	if (reuse_now && !bpf_local_storage_has_inline(local_storage)) {
- 		kfree_rcu(local_storage, rcu);
- 		return;
- 	}
-@@ -184,6 +189,31 @@ static void bpf_selem_free_list(struct hlist_head *list, bool reuse_now)
- 		bpf_selem_free(selem, reuse_now);
+ 	/* An inode can have no LSM blob, so no storage pointer */
+ 	local_storage = owner_ptr ? rcu_dereference_check(*owner_ptr, bpf_rcu_lock_held()) : NULL;
+@@ -397,7 +399,24 @@ int bpf_local_storage_delete(void *owner, struct bpf_local_storage_map *smap)
+ 	if (!sdata)
+ 		return -ENOENT;
+ 
+-	return bpf_selem_unlink(SELEM(sdata));
++	if (sdata != bpf_local_storage_inline(local_storage, smap))
++		return bpf_selem_unlink(SELEM(sdata));
++
++	/* As bpf_selem_unlink(): the result must not depend on the place */
++	if (in_nmi())
++		return -EOPNOTSUPP;
++
++	/* The value bytes stay: a program can still hold a pointer to them */
++	err = raw_res_spin_lock_irqsave(&local_storage->lock, flags);
++	if (err)
++		return err;
++	/* A racing delete can clear the tag before this one takes the lock */
++	if (sdata->inline_tag == bpf_local_storage_inline_tag(smap))
++		WRITE_ONCE(sdata->inline_tag, 0);
++	else
++		err = -ENOENT;
++	raw_res_spin_unlock_irqrestore(&local_storage->lock, flags);
++	return err;
  }
  
+ /*
+@@ -565,20 +584,30 @@ static u32 bpf_local_storage_obj_size(struct bpf_local_storage_map *smap)
+ 	return end ? kmalloc_size_roundup(end) : sizeof(struct bpf_local_storage);
+ }
+ 
+-int bpf_local_storage_alloc(void *owner,
+-			    struct bpf_local_storage_map *smap,
+-			    struct bpf_local_storage_elem *first_selem)
 +/*
-+ * Free local_storage when selem, its last selem, goes away. An object with an
-+ * inline area can hold values with no selem, so free it only after destroy()
-+ * marked it.
++ * The first value for owner goes into first_selem or, if first_selem is NULL,
++ * into the inline slot of smap (value, or zeros if value is NULL). Return the
++ * new storage, so that the caller does not read the owner pointer again.
 + */
-+static bool bpf_local_storage_free_last(struct bpf_local_storage *local_storage,
-+					struct bpf_local_storage_elem *selem)
-+{
-+	if (!hlist_is_singular_node(&selem->snode, &local_storage->list))
-+		return false;
-+	return !bpf_local_storage_has_inline(local_storage) ||
-+	       READ_ONCE(local_storage->dying);
++struct bpf_local_storage *
++bpf_local_storage_alloc(void *owner, struct bpf_local_storage_map *smap,
++			struct bpf_local_storage_elem *first_selem, void *value)
+ {
++	struct bpf_local_storage **owner_storage_ptr =
++		(struct bpf_local_storage **)owner_storage(smap, owner);
+ 	struct bpf_local_storage *prev_storage, *storage;
+-	struct bpf_local_storage **owner_storage_ptr;
+ 	struct bpf_local_storage_map_bucket *b;
+ 	u32 size = bpf_local_storage_obj_size(smap);
++	struct bpf_local_storage_data *sdata;
+ 	unsigned long flags;
+ 	int err;
+ 
++	/* The new object holds the slot of an inline map: no selem for it */
++	WARN_ON_ONCE(first_selem && bpf_local_storage_map_inline(smap));
++
+ 	err = mem_charge(smap, owner, size);
+ 	if (err)
+-		return err;
++		return ERR_PTR(err);
+ 
+ 	storage = bpf_map_kmalloc_nolock(&smap->map, size, __GFP_ZERO,
+ 					 NUMA_NO_NODE);
+@@ -594,6 +623,24 @@ int bpf_local_storage_alloc(void *owner,
+ 	storage->mem_charge = size;
+ 	refcount_set(&storage->owner_refcnt, 1);
+ 
++	if (!first_selem) {
++		/*
++		 * Nobody can see storage before it is published, so fill the
++		 * slot with no lock. With no selem, nobody can find storage
++		 * through the map, so no bucket lock either. cmpxchg() orders
++		 * the slot before the pointer. sdata is not NULL:
++		 * bpf_local_storage_obj_size() covers the slot of smap.
++		 */
++		sdata = bpf_local_storage_inline(storage, smap);
++		if (value)
++			copy_map_value(&smap->map, sdata->data, value);
++		sdata->inline_tag = bpf_local_storage_inline_tag(smap);
++		if (likely(!cmpxchg(owner_storage_ptr, NULL, storage)))
++			return storage;
++		err = -EAGAIN;
++		goto uncharge;
++	}
++
+ 	bpf_selem_link_storage_nolock(storage, first_selem);
+ 
+ 	b = select_bucket(smap, storage);
+@@ -601,8 +648,6 @@ int bpf_local_storage_alloc(void *owner,
+ 	if (err)
+ 		goto uncharge;
+ 
+-	owner_storage_ptr =
+-		(struct bpf_local_storage **)owner_storage(smap, owner);
+ 	/* Publish storage to the owner.
+ 	 * Instead of using any lock of the kernel object (i.e. owner),
+ 	 * cmpxchg will work with any kernel object regardless what
+@@ -628,13 +673,53 @@ int bpf_local_storage_alloc(void *owner,
+ 	bpf_selem_link_map_nolock(b, first_selem);
+ 	raw_res_spin_unlock_irqrestore(&b->lock, flags);
+ 
+-	return 0;
++	return storage;
+ 
+ uncharge:
+ 	/* storage was never published: no reader can see it */
+ 	kfree_nolock(storage);
+ 	mem_uncharge(smap, owner, size);
+-	return err;
++	return ERR_PTR(err);
 +}
 +
-+/*
-+ * local_storage goes away: the owner needs a new one for a new value. An
-+ * object with an inline area can be empty, so destroy() marks it instead.
-+ */
-+static bool bpf_local_storage_gone(const struct bpf_local_storage *local_storage)
++/* Write the value of smap into its slot, in place */
++static struct bpf_local_storage_data *
++bpf_local_storage_update_inline(struct bpf_local_storage *local_storage,
++				struct bpf_local_storage_map *smap,
++				void *value, u64 map_flags)
 +{
-+	if (bpf_local_storage_has_inline(local_storage))
-+		return READ_ONCE(local_storage->dying);
-+	return hlist_empty(&local_storage->list);
-+}
++	u64 tag = bpf_local_storage_inline_tag(smap);
++	struct bpf_local_storage_data *sdata;
++	unsigned long flags;
++	int err;
 +
- static void bpf_selem_unlink_storage_nolock_misc(struct bpf_local_storage_elem *selem,
- 						 struct bpf_local_storage_map *smap,
- 						 struct bpf_local_storage *local_storage,
-@@ -227,8 +257,7 @@ static bool bpf_selem_unlink_storage_nolock(struct bpf_local_storage *local_stor
++	sdata = bpf_local_storage_inline(local_storage, smap);
++	err = raw_res_spin_lock_irqsave(&local_storage->lock, flags);
++	if (err)
++		return ERR_PTR(err);
++
++	/* As an empty list in the selem path: destroy() has started */
++	if (unlikely(bpf_local_storage_gone(local_storage)))
++		err = -EAGAIN;
++	else
++		err = check_flags(sdata->inline_tag == tag ? sdata : NULL, map_flags);
++	if (err)
++		goto unlock;
++
++	/*
++	 * Lockless readers (programs, the syscall lookup, sk diag) can see a
++	 * torn value. This race is intended, as in array maps. The init value
++	 * can be the old value in the slot: keep it.
++	 */
++	if (!value)
++		memset(sdata->data, 0, smap->map.value_size);
++	else if (value != sdata->data)
++		copy_map_value(&smap->map, sdata->data, value);
++	/* A reader that sees the tag must see the value */
++	smp_store_release(&sdata->inline_tag, tag);
++unlock:
++	raw_res_spin_unlock_irqrestore(&local_storage->lock, flags);
++	return err ? ERR_PTR(err) : sdata;
+ }
  
- 	smap = rcu_dereference_check(SDATA(selem)->smap, bpf_rcu_lock_held());
- 
--	free_local_storage = hlist_is_singular_node(&selem->snode,
--						    &local_storage->list);
-+	free_local_storage = bpf_local_storage_free_last(local_storage, selem);
- 
- 	bpf_selem_unlink_storage_nolock_misc(selem, smap, local_storage,
- 					     free_local_storage, false);
-@@ -440,8 +469,8 @@ static void bpf_selem_unlink_nofail(struct bpf_local_storage_elem *selem,
- 		err = raw_res_spin_lock_irqsave(&local_storage->lock, flags);
- 		if (!err) {
- 			if (likely(selem_linked_to_storage(selem))) {
--				free_storage = hlist_is_singular_node(&selem->snode,
--								      &local_storage->list);
-+				free_storage = bpf_local_storage_free_last(local_storage,
-+									   selem);
- 				 /*
- 				  * Okay to skip clearing owner_storage and storage->owner in
- 				  * destroy() since the owner is going away. No user or bpf
-@@ -634,7 +663,7 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
+ /* sk cannot be going away because it is linking new elem
+@@ -663,26 +748,44 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
  
  	local_storage = rcu_dereference_check(*owner_storage(smap, owner),
  					      bpf_rcu_lock_held());
--	if (!local_storage || hlist_empty(&local_storage->list)) {
-+	if (!local_storage || bpf_local_storage_gone(local_storage)) {
++	/* One gone() read decides slot or selem: a second read can differ */
+ 	if (!local_storage || bpf_local_storage_gone(local_storage)) {
  		/* Very first elem for the owner */
  		err = check_flags(NULL, map_flags);
  		if (err)
-@@ -683,7 +712,7 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
- 		goto free_selem;
+ 			return ERR_PTR(err);
  
- 	/* Recheck local_storage->list under local_storage->lock */
--	if (unlikely(hlist_empty(&local_storage->list))) {
-+	if (unlikely(bpf_local_storage_gone(local_storage))) {
- 		/* A parallel del is happening and local_storage is going
- 		 * away.  It has just been checked before, so very
- 		 * unlikely.  Return instead of retry to keep things
-@@ -901,6 +930,48 @@ int bpf_local_storage_map_check_btf(struct bpf_map *map,
- 	return 0;
- }
++		/* destroy() has started: no new object can be published */
++		if (local_storage && READ_ONCE(local_storage->dying))
++			return ERR_PTR(-EAGAIN);
++
++		if (bpf_local_storage_map_inline(smap)) {
++			/* Only destroy() frees the new object with the slot */
++			local_storage = bpf_local_storage_alloc(owner, smap, NULL,
++								value);
++			return IS_ERR(local_storage) ? ERR_CAST(local_storage) :
++			       bpf_local_storage_inline(local_storage, smap);
++		}
++
+ 		selem = bpf_selem_alloc(smap, owner, value, swap_uptrs);
+ 		if (!selem)
+ 			return ERR_PTR(-ENOMEM);
  
-+/*
-+ * A storage is freed when its last selem goes away. An object with an inline
-+ * area can hold values with an empty list, so mark it as dying under the
-+ * lock: from now on updaters return -EAGAIN, and the last selem frees the
-+ * object. Free an empty object now.
-+ *
-+ * If destroy() could not take the lock to unlink an selem, the selem stays
-+ * linked. A racing map free that read its storage pointer before destroy()
-+ * cleared it unlinks it and frees the object. Else the object leaks, as the
-+ * selem does: map free skips the storage, and bpf_selem_unlink_nofail()
-+ * warns.
-+ *
-+ * Only a timeout can fail the lock here: destroy() holds no other lock.
-+ * Then try again after a grace period. Nothing frees the object while dying
-+ * is false, so its rcu head is free. destroy() never runs in NMI.
-+ */
-+static void bpf_local_storage_mark_dying_rcu(struct rcu_head *rcu);
-+
-+static void bpf_local_storage_mark_dying(struct bpf_local_storage *local_storage)
-+{
-+	unsigned long flags;
-+	bool empty;
-+
-+	if (raw_res_spin_lock_irqsave(&local_storage->lock, flags)) {
-+		call_rcu_tasks_trace(&local_storage->rcu,
-+				     bpf_local_storage_mark_dying_rcu);
-+		return;
-+	}
-+	WRITE_ONCE(local_storage->dying, true);
-+	empty = hlist_empty(&local_storage->list);
-+	raw_res_spin_unlock_irqrestore(&local_storage->lock, flags);
-+
-+	if (empty)
-+		bpf_local_storage_free(local_storage, false);
-+}
-+
-+static void bpf_local_storage_mark_dying_rcu(struct rcu_head *rcu)
-+{
-+	bpf_local_storage_mark_dying(container_of(rcu, struct bpf_local_storage,
-+						  rcu));
-+}
-+
- /*
-  * Destroy local storage when the owner is going away. Caller must uncharge memory
-  * if memory charging is used.
-@@ -908,6 +979,7 @@ int bpf_local_storage_map_check_btf(struct bpf_map *map,
- u32 bpf_local_storage_destroy(struct bpf_local_storage *local_storage)
- {
- 	struct bpf_local_storage_elem *selem;
-+	u32 mem;
+-		err = bpf_local_storage_alloc(owner, smap, selem);
+-		if (err) {
++		local_storage = bpf_local_storage_alloc(owner, smap, selem, NULL);
++		if (IS_ERR(local_storage)) {
+ 			bpf_selem_free_unpublished(selem, smap);
+ 			mem_uncharge(smap, owner, smap->elem_size);
+-			return ERR_PTR(err);
++			return ERR_CAST(local_storage);
+ 		}
  
- 	/* Neither the bpf_prog nor the bpf_map's syscall
- 	 * could be modifying the local_storage->list now.
-@@ -931,7 +1003,15 @@ u32 bpf_local_storage_destroy(struct bpf_local_storage *local_storage)
- 		smp_mb();
+ 		return SDATA(selem);
  	}
  
--	return local_storage->mem_charge;
-+	/*
-+	 * The loop must not free an object with an inline area: only the mark
-+	 * lets the last selem free it, so mark it after the loop. The mark can
-+	 * free the object, so read mem_charge first.
-+	 */
-+	mem = local_storage->mem_charge;
-+	if (bpf_local_storage_has_inline(local_storage))
-+		bpf_local_storage_mark_dying(local_storage);
-+	return mem;
- }
- 
- u64 bpf_local_storage_map_mem_usage(const struct bpf_map *map)
++	/* An object without room for the slot keeps the value in an selem */
++	if (bpf_local_storage_inline(local_storage, smap))
++		return bpf_local_storage_update_inline(local_storage, smap,
++						       value, map_flags);
++
+ 	if ((map_flags & BPF_F_LOCK) && !(map_flags & BPF_NOEXIST)) {
+ 		/* Hoping to find an old_sdata to do inline update
+ 		 * such that it can avoid taking the local_storage->lock
+diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
+index a838be80ebbd..409213755feb 100644
+--- a/net/core/bpf_sk_storage.c
++++ b/net/core/bpf_sk_storage.c
+@@ -201,17 +201,16 @@ int bpf_sk_storage_clone(const struct sock *sk, struct sock *newsk)
+ 			}
+ 			bpf_selem_link_storage_nolock(new_sk_storage, copy_selem);
+ 		} else {
+-			ret = bpf_local_storage_alloc(newsk, smap, copy_selem);
+-			if (ret) {
++			new_sk_storage = bpf_local_storage_alloc(newsk, smap,
++								 copy_selem, NULL);
++			if (IS_ERR(new_sk_storage)) {
++				ret = PTR_ERR(new_sk_storage);
+ 				bpf_selem_free(copy_selem, true);
+ 				atomic_sub(smap->elem_size,
+ 					   &newsk->sk_omem_alloc);
+ 				bpf_map_put(map);
+ 				goto out;
+ 			}
+-
+-			new_sk_storage =
+-				rcu_dereference(copy_selem->local_storage);
+ 		}
+ 		bpf_map_put(map);
+ 	}
 
 -- 
 2.53.1-Meta
