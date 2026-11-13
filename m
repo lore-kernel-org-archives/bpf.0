@@ -1,80 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794587205;
-	b=yHGxPlPTsEx9FHqrXkAf/QsM5+ap5Vv2wnDQ19xH1vKBYOFjOzmeSpRoF/3sdV1FS2WC
-	 KAuM9E7ZG/VueSdUFPU+NgcTXEM9X1E2aG8biHF7beqREDW3DViD+Oz3Egp927q92MEzZ
-	 uq5U5fQzh2+H+tvOVRuP1M6zi48E+6srY/hBZOfZRdkdD+caMQ8V26AiZFWH+VtnpH1yn
-	 8nCildS0GcYd835+JV9J/WfC97ixi65biwHwHftk4EOUcEbxDjda7Tnu4cE/nWbEBmBQb
-	 cXVmrlt30hoyn4eXallKQkb/RtsMDwozHr51wmcZeTnYLJN6CQiLUDoxKiaTWgcql/g==
+	t=1794587408;
+	b=3IXW7OpLhGXlxDy41Jlu5Sn2s7GdPzb2XF64gnm3miHszVduVlc47a29adL4Fg9ryM79
+	 N1qYXiHYhJs3yiTs/NmPzagD11HvEJQ6Bo19VNJ9eOHntKXhYUfe8sjfbrDA9MhQb0lZ0
+	 CMi3C5sCqZIbdJP0nBrRLsJXEpuUbqNn7FujT74nGvo1jJNXjLJA8v5/B4N0t1ci++llU
+	 0xYpCew9hvRZ2Nur4t7Z6XShzGDbMzE41SIcZCPoFBWIUZzGgrKwvr/qrbVsiQfxv1mc9
+	 ZrOSYf3Phgo9iKQ5WYVxxaEJEV0EsY8qVOeHlJRSZvnNu6lIrlwALEb9cKjGgId89og==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794587205;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=7ZfF8luHREto/ub5t5xIcKnzvyfNad3KP1cbQ4+yoxs=;
-	b=TQ42+SvPVDgfofY3wrfBE1O/uKtJZDZ7Rbms3QnWvBxCa1FEf4AncrtzvxieXr9C1xTM
-	 vPLBLIYuZTKcTnMQLRh5ddkcIRMQdJ8vOzOzu4okF47Tz7ZttQ2U088xj1tic6F3zktBZ
-	 p/jDejhnVhTJ3PeF9GVr01VfWGKUOCdZcyGMefDgakqaDl1ehIryKXQlDfXMdStXbAWbT
-	 O+D3BUpjAA7eryt2nrg1jZMFKiOoLKer5J9xKAdl1j+VwBBn/DUQcSOMHYjvsvGISllgj
-	 KiyBJZNX1DTU9TMrZSmTY7i6T5Q90eTVohs0PRsy4vQ8oT7wDlFvXnx81IDnv0eqmyw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794587408;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
+	 Message-Id:Cc:Subject:From:To:In-Reply-To:References:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=cqCsbX3RyqYZWDeRaH4vXF7pXJb+mPTW2Vj8gfzsjjU=;
+	b=2FnlXkIrYmmUIbYgMrBBV2jhQhPPGx5ePNAZwUrvFMaeeHXdY8WfcEwgz48mcGoyNLEs
+	 zAPkrnkGwC0earGeomZwlnk4ThM6LirWswHVVLpD/9HRvNT7sr9G68Qnz+3u4OBi3fllh
+	 EGNOaqFH9hQV/blIuzlmrF99gKkpNeqYW3Asib9E9m/WNqp6CWqXmvfmBQjtVbKC9lu/v
+	 OFLynT4MuPPB9nI64tmjE/R6fkH3rjrcx6T94t2Uk+44OPx7jIy1nTEMF8Uro5gHYugG3
+	 Quo2Q5pfDIvBir19EUMwlGuz7D6+lHgj0RcqrAwdPNPqdrDfb/R1038Wsy+sI4CbPsg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PGdbvyD+;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hlxnUDzM;
+	arc=none smtp.remote-ip=209.85.210.179
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 6D136606B2EA;
-	Fri, 13 Nov 2026 16:26:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09AF5606A886
+	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 16:30:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 09AF5606A886
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PGdbvyD+
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 5B4821F000C4;
-	Fri, 13 Nov 2026 16:26:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794587205;
-	bh=7ZfF8luHREto/ub5t5xIcKnzvyfNad3KP1cbQ4+yoxs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=PGdbvyD+2glvNYn4aWF67C5abmwt8X5SusDm06ubZ5KfmfHlvA6WSsotDlfEZ5Jo5
-	 nCkLaoKt0XLmtR1Hi6JkJ61CaAwYpyRTC740e6+kpGsdAxlAuQvQNwET/tXQKB+X3K
-	 /XdbhzeuRy2IFU1d0BiJxGO8t7i/48Vqq1Nsj238jba6JtysSGtxnC0shZNGF8ZtQP
-	 JnsH+OOidLxZFlQ/yFf5c97LWhpISeIeBjbWvvDsigvl9jdT1Taj/lRgvRobfeVEHK
-	 8cfOs6ioXBp1G03RIOuVBD8tQzIiQrwnD8WH+Qj5wr5SMUVr+KhZcoCLQSJoIWTxvm
-	 2JjKLTgq7vBMA==
-Date: Fri, 13 Nov 2026 18:26:41 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: David Howells <dhowells@redhat.com>
-Cc: bpf@vger.kernel.org, dm-devel@lists.linux.dev, fsverity@lists.linux.dev,
-	keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	Alasdair Kergon <agk@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>, Alex Shi <alexs@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Benjamin Marzinski <bmarzins@redhat.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Dongliang Mu <dzm91@hust.edu.cn>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Ignat Korchagin <ignat@linux.win>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	James Morris <jmorris@namei.org>, Jiri Olsa <jolsa@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Mike Snitzer <snitzer@kernel.org>,
-	Mikulas Patocka <mpatocka@redhat.com>,
-	Paul Moore <paul@paul-moore.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Shuah Khan <skhan@linuxfoundation.org>, Song Liu <song@kernel.org>,
-	"Theodore Y. Ts'o" <tytso@mit.edu>,
-	Yanteng Si <si.yanteng@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>
-Subject: Re: [PATCH v10 0/3] KEYS: Replace assoc_array with rhashtable
-Message-ID: <avc6QSzdVwtpUxUf@kernel.org>
-References: <20261113161836.3587552-1-jarkko@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hlxnUDzM
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-8b612fd74e1so684623b3a.0
+        for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 08:30:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794587407; x=1795192207; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=cqCsbX3RyqYZWDeRaH4vXF7pXJb+mPTW2Vj8gfzsjjU=;
+        b=hlxnUDzMLTsv/M1XS65Ts0U0nML4kZS5No5vTaxurjafFHmzioJNIRn/9ainMckpBV
+         mXOi52PraNdHlgIc33CbkW5utMt9MNY3aEesbHGk4qVNWavWewdwukelDelWxEAgdCF2
+         MUG6xTnm9D2XzaPsAeNelasfrWM3vEgvEyMdxo9qXcQHvxe8RgYbGj9gGy9yAaI3jgmL
+         ZLOfMijQaDNtBFrQTogZf2tF404RgZHK34In6D8AkSYlPLNshjlfY20GtWIaDvWMxJEW
+         hUq3SHQMkpXh5wjKUpc53A35GyTNU8UgP4Xlx6AznFsblqZLb1lMKTshWmbbOnWtCwhs
+         mLLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794587407; x=1795192207;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=cqCsbX3RyqYZWDeRaH4vXF7pXJb+mPTW2Vj8gfzsjjU=;
+        b=E16nz2iexaQuAo495BGug8f5NbFi+9yAFZ0c4ufLFWdVe/5EahpmzLtnQCHyVMBwy4
+         Sb2g6rOlaQRCKDUPYoqda/snsUUD9EG6yY9Jq+c8PmvRDJxNx7calWsZ/F/uynmMK0Gd
+         4M0grLzk+nOYvzv7currZmG4a3kmIydQ0cC4+snOwPek2Tqq0VCbPTLv+2jHrxniy5cc
+         8miJ5E7QM55gO2XdH2lUq4c/pJa2IVse9W5t/4ns+h6QgwmCqpVjEVwAN/m1dO8mWUyi
+         c+VyKNilriC2gwoFqvyaDYvHqwXLuIbfLtU2fGGD4d1iY2moyu+jJNuL8hXil2PEI/5K
+         uuCA==
+X-Gm-Message-State: APuU4Z8EV++orGYcKl3vyhlcpw64ZRGEiAvvTBKKVceyOO+r0yf1aALc
+	CyIPNGM6C61mMxp6aHPU/AoQgeMMIJqqNnoo8qCTS4G9gw8A7JeFY0zZ
+X-Gm-Gg: AYBFou1F95oV98aTitaryofcTe6nCDIYw98NypYTrBpB543HmfjiaaYCDFSbOvYwxeN
+	PaO6rrJFdKkU9gKtNJj+nwxze+DDMJcjj5xRvZpcTvb6TmpgxKyeOQ17tGaf2Ffzj7yQOZULUCL
+	gLONJyXRio9kbjdgwYJSWFOGCK9UuTrUh8Twt+I3qek+OZ4HIIA6W+skeH8yPUQlZdlLwwYiBaP
+	wGRJbQQUDo3aLqKAmKKq+vyudE26gYZGaN6eHlqRwgHcYZ6+farobhaIO1egGALg9V1S6/6PdAK
+	iV3N3UcBlkyiGLZzlS0qZ9/g2hBIF7XtjR7JvvRwXbtjptyWEcC1EZiz/Q6POYyqxVaQA0oZYun
+	35Q00yev6f5dVZq5ifGL5r6pdY/Ls7v/+lPVIWV2Nuf4CjONawRMe5kPdzGi78I+xi4Fg0q2S9C
+	VsCcXtVqcKYwWXuCghwbVd23XCVENyGjoQUV8WxcjhX7pWy6pW3lAdWfe9fXefjt9Cw88im1AEc
+	BckG2C5YiB22X69nOv3c/b0ZeGjJ19LUmJsyyOqTmuKVFHJuY3DqWhW6Gq7k0WBHWpfnYCN2IcR
+	YbrUTh6tFSq9E4bqE6wQwe/pEo+lR8//ouJ6kUiXJVqYARvaZmnPU8zye5DQyIyjfk8MXZLzLV4
+	6N9L5MHphvq/7vcu0p/kmdvB6d6c2MCZpZg==
+X-Received: by 2002:a05:6a21:3f91:b0:3e2:d68:e8f6 with SMTP id adf61e73a8af0-3f7a85d799cmr2481810637.63.1794587407244;
+        Fri, 13 Nov 2026 08:30:07 -0800 (PST)
+Received: from localhost ([153.61.198.242])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8becbad7de3sm1373303b3a.0.2026.11.13.08.30.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Nov 2026 08:30:06 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 13 Nov 2026 16:30:05 +0000
+Message-Id: <DMU854VMCPXG.6LJLSEU82GMO@gmail.com>
+Cc: <bpf@vger.kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+ <eddyz87@gmail.com>, <memxor@gmail.com>
+Subject: Re: [PATCH v2 bpf-next 11/13] bpf: Mark the arguments of fmod_ret
+ progs as PTR_UNTRUSTED
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Anton Protopopov" <a.s.protopopov@gmail.com>
+In-Reply-To: <avbvzPFUFQOB4iYj@mail.gmail.com>
+References: <20261113050901.1399091-1-alexei.starovoitov@gmail.com> <20261113050901.1399091-12-alexei.starovoitov@gmail.com> <avbvzPFUFQOB4iYj@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -84,21 +100,33 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261113161836.3587552-1-jarkko@kernel.org>
 
-On Fri, Nov 13, 2026 at 06:18:33PM +0200, Jarkko Sakkinen wrote:
-> v10:
-> - No changes since the previous round. This is a sanity check round
->   given the lack of feedback to v9. I'll apply these patch very soon,
->   unless nothing (relevant) comes up fast.
+On Fri, Nov 13, 2026 at 03:09 AM Anton Protopopov <a.s.protopopov@gmail.com> wrote:
+>> The arguments of fentry and fexit progs keep their type for now.
+>
+> I am not 100% following why this change is needed without enforcing
+> this for fentry as well. One can attach fentry before fmodret and
+> follow all the same args. (But in general, +1 for this and the
+> following patches.)
 
-We're at mid-cycle. Thus, it makes sense to get these changes ASAP to
--next so that they get more exposure.
+Spot on question.
+we've been talking about deprecating legacy PTR_TO_BTF_ID forever
+and tried to do that several times, but there was always something in the way.
 
-I have one PR waiting for keyrings in queue with a couple of bug fixes.
-As soon as -next is in-sync, I'll send tate PR, apply rhashstable patches
-and make the commits available at -next.
+I did the analysis of all bpf open source programs I could find.
+Turned out with these patches none of them fail
+when we make only fmod_ret's args to be untrusted.
+Of course, there is a chance of braking non-public progs.
+Before this patch set the kernel has ~1200 fmod_ret targets.
+After it will have ~12000 fmod_ret targets.
+If we keep them legacy ptr_to_btf_id, we will have endless
+slop from bots demonstrating how fmod_ret can crash the kernel.
 
-Br, Jarkko
+But back to "why not fentry question"... having decompiler is so empowering :)
+I'm thinking to add a step to analyze how all these fmod_rets access their args.
+If BTF says it's a pointer and asm code just goes and reads through this
+pointer without any checks, that's 99% likely a trusted pointer and will be
+marked as such.
+All other pointers will be untrusted. This way we can finally
+remove legacy ptr_to_btf_id with minimal bpf prog breakage.
+
