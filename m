@@ -1,93 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794567747;
-	b=dTF+Rz9FYzx7hTdyM8Fpe6gSnnpEVcamS2rmp82bHZmbF3TGu6EqUJp5isXmDpLlrgYW
-	 KoitDH8ksADIbSag1/p7ztE4Xy6i8XFBofiEqNqyhYc8wpW+ixKqTLTMsBrcF+IrEbJHm
-	 PK1EiFLW1ltseXg2EVRPdZ4p/vN//ScAFfnGpB6+6/MfevtT5lbJ2eBwJxsz858Dtaq7c
-	 tSymdPMcqrojESqz28AB1BQM9RhWpBzV45K2sE2aOmuuv1Q/3OCCtL0NNXRsj6EpViidQ
-	 AHNzs672UR0iJIXozjILntsHs+n3+ceqcod/anQ3xOqQdx7MjlaegLOo1FeycGYP8KA==
+	t=1794568823;
+	b=r8pBJ8+ldHXLMQJgkZBmA9pa5YbfJ3Ap3itnL17WW519U1yB0s+IkftwTVPMqQ6UV5mj
+	 iJCbP7x+2KIuByY4xCOS4qlLE/6C+aoQR9f8TgQ3ZoHE8eK8GxAazzx3WdgsIUKBUz0h1
+	 8MeC9XrIRCZU3te5xl85AiMbFGNVHOad7284EZFDQxVKXKM507emTyhpJbi15kJWil06f
+	 gljaCebwU046W/0FhpRKKggqA5BlLUA6J1UIfELX/WoCvaL9tFxYpUgq0uGO/EW861Bjt
+	 afNPoMfCUWsljabxlWZTSUZBIlvWjC8P6rLN1eCZ5O/fZVf+huFVh1SiCvOEJ6I2l6w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794567747;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=pZPFd1SYASnwZE8RQDnWSkbWoNyjC9gCBlg7DkYNUyw=;
-	b=OGb+4nKn1oLo9OgxvRD+ZKdSh0nL9rOopJ/txzlv+ohHQlq2ncN8nvd0G1mCye+JrBvI
-	 UqQ14ppSlj1nhyqYcSbGaOXUMvuouI86EPxC9gv/u1UDKed4h+Sz9e9p+W9TUJ9RGz9c3
-	 51wFsVGXvLMpuL8H2OP+krjrKJwXU6tBuaao4DoaLxQU97pKu1sD8XtTxtP9i30/j3nTY
-	 XFLFXzuegDJ2DLlfA8F5KMnxW2+vc7LWBKArvnMKmhiiIhQgJ7CfoNvVRDKWAyWWa5nsO
-	 C9fwXMtgbeE/6lYt4c4nb/lC5S/kvNe8p73UKKJg41qbl7VALuXx4Xtj7sUjE42LNzg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794568823;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=f7uqArV1jAtpFrD+qGNcFGks6nXlP6uwZeIFZyLm7/M=;
+	b=qaCRGem6/Fm/eDud+n0odzTy8H4WWskMJTKYrYV9jOR/96ijQsiS48yt6x5Qob8IImw7
+	 bG5GIKPizC0+xUkr1n76YBN0tjVSmJ5VSgy14FPNW0lKijhil1VY7QRFIpG4xGap9m18C
+	 y+SFfsFu9E0VhVQYwrRBXdULzVwPOL64wBNTIjY6bdfOwpY5yYUT0fWnjRVi6cQ/sHZ6N
+	 eGpZmukuYm4SOwgm+nI/ExEGPWeywK/gh3/a00zOFuGkaedlfp/FqtnqWOl3c1C0gHcT7
+	 foq3dJHtci2YQ9zBGh7Lp2tNs9sWQsYxh/gXG3Sqk6TDIYUZTu7Yj3ZLLMrscMi8pbg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FqkVusjk;
-	arc=none smtp.remote-ip=209.85.128.47
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IYtLe9Ox;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28FA9606B241
-	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 11:02:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 28FA9606B241
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD6C1606A333;
+	Fri, 13 Nov 2026 11:20:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FqkVusjk
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4a2153c8525so4581435e9.3
-        for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 03:02:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794567745; x=1795172545; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=pZPFd1SYASnwZE8RQDnWSkbWoNyjC9gCBlg7DkYNUyw=;
-        b=FqkVusjkkXiqr+Cerf83nEtyPWYBrAZhv+mJsQUxyz/818Uu6km9IiuS9O/2xNXXwB
-         uQ6Rtv3w8FKXnysw5zqV0EfDyExq5Dhi3FXIyPmWv9hSLGAhbSVLSZ6ee/8UrNgiM6HL
-         HTFHLnmLD4Y3LRQaF7Zm5Chk8CoFxxYTfCa+MUPJJ4jhXfvZxofmsCdIxi55MgJ846Aq
-         2JPUgtvGsQp+HzrBf+UKvayZbWRH8uyUXYVAoO2D2DRIxeA+UuhlpfcgHMyb9nBXlfkA
-         WfMf30PXQt8UUBLzfn0xdltzDDCfPVxNAtrz9lBB/sq9O5qs0QklDWSrPswLD5FLf7Y+
-         XW9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794567745; x=1795172545;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=pZPFd1SYASnwZE8RQDnWSkbWoNyjC9gCBlg7DkYNUyw=;
-        b=kgfa1qs+oloyNXUH3rTIqEymE/1uG8Da4zWrp/uuqCz9BGZhWKaaO3WwDvWfHB4LW0
-         MNgYpTfTQjgs9y0BNagNhPavbC3hQ2tVU/N8PeSoc3W6scynCJQP5qaBgkOLOJvYq7k2
-         V+hvDtFKDoiLsNNUJHeG9ArDR4LII/yBFnpjmACp8cC1uvy/0DHQ9/T8fTwl7+2G7K3Y
-         hwTaZnNrviRDdJ52X2DDs0GaMRcXC6xvSKiLmUFJTHjsnkLLp/h0J8pdBlRFke08Asdx
-         wEDhYtxbI2wM3LkdWsJ5UY8lYNBOKpOeEXy2E8gwbW9TuXcwRbAP09e0tmAndgNBfDFA
-         16gQ==
-X-Gm-Message-State: APuU4Z9covLsTSFv1OajEQgCL/MtHh5MFj9bhSg1sbrqXqkKl3JVu/6W
-	VamPMXESYcH/gcKDEOT85zj75W8MhWNGR3LhI+DLaVbsSI68IZAGw+1ceBBk2Q==
-X-Gm-Gg: AYBFou2e8SekyqBQVksw8rnOpdqL5AHIpjgmpqFSBVxrrcRU2Ug5B/ZmdBYFGJ/sgDr
-	0Dl+/BzZ9+Lpvbf9EprKqBoaXEllTAy9QCvDUsYC1toUGcx7R4EP/0ww0Txcm4rO5udclHO+ddm
-	1urJFBBJVUIpe379RZD6nQ29xGtn7jc9ShJc5fo+3z4vAbLSHd7EHO83+WTHReM9hkPrI+Ypv19
-	E7KNsDHAaqpEN2nJ6ILIu8wcOdQNJFntMVy2yXiRH8Pp96LQhosmv9xH4SVlXLbRGlTgvbrR8xl
-	wGEp7lyp34XTpjvHB20BGmd5j12eGCNsS+VG6KbNCKQvcS7uMw9tP08+x44mwddOTHVeyUSl23A
-	jg3qLaFzteDDFiIKuUYnKnjpIaISA/YwwYRCTHg1BqBCVtdfjgCJaWxY7I/uG5vgNuz4X77r0e1
-	/xWR7XgNsLPPayf4lv3dECI/EEKMF/eAKeyZiz9Wey4GLOG+sL5QO0lwEDE3bGROWwne+svpYWW
-	4cevAMJJUfLEhHWgAHKHHkmLmwtDU1LR0ueWdB/qZ03tLTmKrckN/aD0VGkPyFBlrd2DhDOLqsQ
-	uSUsgD3CXlqJIGBDvS1xQss47F2q6cD+lX0L1g==
-X-Received: by 2002:a05:600c:4f93:b0:49f:fd2d:23c7 with SMTP id 5b1f17b1804b1-4bb55ab36famr42705415e9.27.1794567745235;
-        Fri, 13 Nov 2026 03:02:25 -0800 (PST)
-Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49c5f1c1797sm5180914f8f.11.2026.11.13.03.02.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Nov 2026 03:02:23 -0800 (PST)
-Date: Fri, 13 Nov 2026 11:13:39 +0000
-From: Anton Protopopov <a.s.protopopov@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	eddyz87@gmail.com, memxor@gmail.com
-Subject: Re: [PATCH v2 bpf-next 01/13] selftests/bpf: Don't depend on the
- width of a BTF id in verifier_live_stack
-Message-ID: <avbw438CHdTWK1BW@mail.gmail.com>
-References: <20261113050901.1399091-1-alexei.starovoitov@gmail.com>
- <20261113050901.1399091-2-alexei.starovoitov@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IYtLe9Ox
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 478BC1F000CA;
+	Fri, 13 Nov 2026 11:20:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794568823;
+	bh=f7uqArV1jAtpFrD+qGNcFGks6nXlP6uwZeIFZyLm7/M=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=IYtLe9Oxec6Sw6lgS9yWWd39yeq0AH320nbnEmOrPwT7fMmpsqT9J9/WO5rKgBpwv
+	 zuAo5DxfWz9aQ9RKmjd1aguwCkZpTacUQL9kISDMnaEXv+nDigU0I4qOwUge74WW+u
+	 p11I6Yg82iwjIeR8UqVlIRlBMwY76I3V6MI/KCkW0WMXCtCtyfH6C0QqoWuZIP0NvD
+	 b6fB3aRToDDa8l/+lpnwg4LdlZyPJXlkW3NOxCL9919UMNOagmWlrMIB40CiKkNWQt
+	 yRuKuyQxkSGJ5zwdxu8AMroq/wvPogaqi2hfbfqY/V0TQ9qcREqeaz4qoxywoRtxQN
+	 uXs4qLqVEgFaw==
+Message-ID: <sashiko-outbox-212702@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next v5 2/9] virtio-net: zero the whole tx header
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Steffen Trumtrar" <s.trumtrar@pengutronix.de>
+Cc: virtualization@lists.linux.dev, bpf@vger.kernel.org, kvm@vger.kernel.org, "Michael
+ S. Tsirkin" <mst@redhat.com>, "Eugenio Perez" <eperezma@redhat.com>
+In-Reply-To: <20261112-v6-7-topic-virtio-net-ptp-v5-2-7ab67b572f4f@pengutronix.de>
+References: <20261112-v6-7-topic-virtio-net-ptp-v5-0-7ab67b572f4f@pengutronix.de>
+ <20261112-v6-7-topic-virtio-net-ptp-v5-2-7ab67b572f4f@pengutronix.de>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 13 Nov 2026 11:20:22 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -96,57 +60,74 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261113050901.1399091-2-alexei.starovoitov@gmail.com>
 
-On 26/11/13 05:08AM, Alexei Starovoitov wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
-> 
-> kfunc_iter_stack_liveness matches a line of the verifier log:
-> 
-> 	 6: (85) call bpf_iter_num_new#95448          ; def: fp0-24 ..
-> 	" 6: (85) call bpf_iter_num_new{{.*}}          ; def: fp0-24 .."
-> 
-> The pattern has "{{.*}}" for the id and then ten spaces. The verifier
-> pads the insn to a fixed column. An id of six digits leaves nine spaces,
-> and the test fails.
-> 
-> resolve_btfids sorts BTF by name. The next patches add about 12000 decl
-> tags to vmlinux. Their names start with "bpf_fmodret_retval:", so all of
-> them come before "bpf_iter_num_new":
-> 
-> 	                      id of bpf_iter_num_new
-> 	before this series      95448
-> 	after this series      107433
-> 
-> Let "{{.*}}" match the spaces too, as other tests in this file do.
+Thank you for your contribution! Sashiko AI review found no new issues
+in this patch, but noticed 1 related pre-existing issue it does not
+introduce:
+- [Critical] virtio_net: uninitialized skb->cb read in
+  virtnet_receive_done() [1]
+--
 
-Acked-by: Anton Protopopov <a.s.protopopov@gmail.com>
+commit 539d0b476e95c38e08289348fc9e76ffb578e50d
+Author: Steffen Trumtrar <s.trumtrar@pengutronix.de>
 
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> ---
->  tools/testing/selftests/bpf/progs/verifier_live_stack.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_live_stack.c b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
-> index 2d31868bcfdb..4bc4091b17a5 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_live_stack.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
-> @@ -979,9 +979,9 @@ void __kfunc_btf_root(void)
->   */
->  SEC("socket")
->  __success __log_level(2)
-> -__msg(" 6: (85) call bpf_iter_num_new{{.*}}          ; def: fp0-24 may_def: fp0-24{{$}}")
-> -__msg(" 9: (85) call bpf_iter_num_next{{.*}}         ; use: fp0-24 may_def: fp0-24{{$}}")
-> -__msg("14: (85) call bpf_iter_num_destroy{{.*}}      ; use: fp0-24 may_def: fp0-24{{$}}")
-> +__msg(" 6: (85) call bpf_iter_num_new{{.*}}; def: fp0-24 may_def: fp0-24{{$}}")
-> +__msg(" 9: (85) call bpf_iter_num_next{{.*}}; use: fp0-24 may_def: fp0-24{{$}}")
-> +__msg("14: (85) call bpf_iter_num_destroy{{.*}}; use: fp0-24 may_def: fp0-24{{$}}")
->  __naked void kfunc_iter_stack_liveness(void)
->  {
->  	asm volatile (
-> -- 
-> 2.55.0
-> 
+virtio-net: zero the whole tx header
+
+This commit zeroes the entire negotiated virtio-net transmit header in
+xmit_skb() before populating it so that uninitialized skb->cb or headroom
+bytes are not sent to the device.
+
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index dd2c41ef6fbe7..4c740b403ad1e 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -3326,14 +3326,16 @@ static int xmit_skb(struct send_queue *sq, struct=
+ sk_buff *skb, bool orphan)
+>  	else
+>  		hdr =3D &skb_vnet_common_hdr(skb)->tnl_hdr;
+> =20
+> +	/* Fields the helper below does not fill in must not carry stale
+> +	 * skb->cb or headroom bytes to the device.
+> +	 */
+> +	memset(hdr, 0, hdr_len);
+> +
+>  	if (virtio_net_hdr_tnl_from_skb(skb, hdr, vi->tx_tnl,
+>  					virtio_is_little_endian(vi->vdev), 0,
+>  					false, feature_hdrlen))
+>  		return -EPROTO;
+> =20
+> -	if (vi->mergeable_rx_bufs)
+> -		hdr->hash_hdr.hdr.num_buffers =3D 0;
+> -
+
+[Severity: Critical]
+This problem wasn't introduced by this patch, but can virtnet_receive_done()
+read uninitialized skb->cb fields [1] when an XDP program returns
+XDP_PASS?
+
+In receive_small_xdp() and receive_mergeable_xdp(), the skb constructed on
+XDP_PASS via virtnet_build_skb() or build_skb_from_xdp_buff() does not copy
+or zero the virtio-net header in skb_vnet_common_hdr(skb).  When
+receive_buf() passes that skb to virtnet_receive_done(), only hdr->hdr.flags
+is written before the rest of hdr is read:
+
+drivers/net/virtio_net.c:virtnet_receive_done() {
+	...
+	hdr =3D skb_vnet_common_hdr(skb);
+	if (dev->features & NETIF_F_RXHASH && vi->has_rss_hash_report)
+		virtio_skb_set_hash(&hdr->hash_v1_hdr, skb);
+
+	hdr->hdr.flags =3D flags;
+	if (virtio_net_handle_csum_offload(skb, &hdr->hdr, vi->rx_tnl_csum)) {
+	...
+}
+
+virtio_net_handle_csum_offload() and virtio_skb_set_hash() then evaluate
+garbage csum_start, csum_offset, gso_type, and hash metadata from skb->cb,
+causing corrupted checksums, unexpected packet drops, or bogus skb state.
+
+[1] https://sashiko.dev/#/bug/linux-89f94565-4be5-4c5d-b3a1-d88fa369641f
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261112-v6-7-topic=
+-virtio-net-ptp-v5-0-7ab67b572f4f@pengutronix.de?part=3D2
