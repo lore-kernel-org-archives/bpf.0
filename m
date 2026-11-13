@@ -1,49 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794607206;
-	b=D3eby081FsWV57WQIfO5SQRPfdRrWlneJI2vH5GIsXHbaMhlM0pyAtGL9JwiJq00aNSJ
-	 KUzdSMXyE0MhY1MmTJMOB34c6jqde6QnADly0i0hFWK4Pm/AnjhVVEueTnRphtiQYNb+M
-	 WGlpGqI10c/qLaSntxCxFLyb+KT1N0HFmtaTXh7Pypmg4ZAXq8YPfER37l34YFYeEc50T
-	 LvfOsimqDg74s8hI15flFv78gMBiGLHI4oJu2lZMFV7tjf4Wz5Kaw0Uh69LM3a21xXIFN
-	 XDClkBFnxZsNrYKLz6o+iCkw4LOlnhEjveuKLWH7bLnh/TTSlyixiDgjvLnjKsyuBgQ==
+	t=1794607780;
+	b=mjZmnjCNEDM45qjOj7EEXjfZG+pCDSGv2WymVCq9n2e/cLr6rqrKY/lwp6oCba9+Y73f
+	 OSvZmCdVWxIyB70eVrusBNoFsUokvgAl4+KXF47al+v0ghn9+edGCF+8Cwr394JpKWpa2
+	 mAiO+5+pA1bsRW4LUgSC8lIYZuTjGyP+5PDgJCdKojzXYxdBRTQ8l9Ru6/r+U2zd2R/J7
+	 LfdHcjJlGgT/dWpL6qTigBhmsh95UaiK6jwZKzN/YjjYvsHw9Oxt5+bGvHytxcLrT6HFs
+	 BfcHhI9O1guW+aaaPm6CylRpL1454uVf/6in+5glM4I2cciWoeoIhC/PDbz7Exi4obA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794607206;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=5urqeH+ZNfZzvFfHpvL0MZSQdZHgaWvWp1JZE9nopBY=;
-	b=W2EVeID0rv5vAr2WhqL10X1G14SAvUqiLp1kPVrhsQTeYXYpKvpXYJG2lefOov5w3qKo
-	 i7hz4+JEFD008uMwmqLsECHftoAEEo/u0oPnjJmmb8+hciGfhA0q8SvSSA21v1fU74ydY
-	 sw5GodU5QHOhUuRi5vOrgQD0WmvuTViAHegZyXxq1xmPECdxtaISacC7a47ghJKOkJ3cL
-	 qn6pAiAAeBjA9mgzr0Ac5mZ1V+YKiXc5D1qPVg5+R0s2oicU1QB+6NXYfre8tQ1ku0LOF
-	 saToHMd3GyYjYGWZKT1fJbnkLoT5r1ZylfXt3LOatoGFEdeMXPXLTbGOLSiJWB87UKA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794607780;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=PKA+hMV7mnVUr0hIw2tQmBkgxWx2AKfmo6RBkdSQQ1Y=;
+	b=aRcV/zoaFCAgtzbDYqYe72yVqEEKpXR0bEtk85+Ni0tUmLAm7ch6vx0KcIx6StxcXqGU
+	 ZwtULlUGuoxU6/SSZnVmvA0UeY5GGWnJuO7fQoLz3lW9Jsn7S2KiamJydZ4Ndv3Q4/F0M
+	 UkhkdhwEfg0LpUYiDyDLc7vXROi5v6W7QIsc6dBO0ODBv5z906yo4cFWADnCm3kO3Zl+T
+	 U6nehX7uNC092J/Ou6iz8se+59f4s08MxHNgDlVdGCth1+N93xBPRgmNzhIARgYpT+h83
+	 lPkbViOGZZzi4RChqDVkA48z+2ncO/siH6z1H4pfVhtBlnMXNALb+lOW0lZ0twcRhGA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mdJi6AUD;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Q+EFLJKo;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 574ED606A323;
-	Fri, 13 Nov 2026 22:00:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D258606A332
+	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 22:09:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mdJi6AUD
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29FEE1F000C4;
-	Fri, 13 Nov 2026 22:00:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Q+EFLJKo
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCC5E1F000C4;
+	Fri, 13 Nov 2026 22:09:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794607206;
-	bh=5urqeH+ZNfZzvFfHpvL0MZSQdZHgaWvWp1JZE9nopBY=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=mdJi6AUDFv/Jtua3OQE8bGoxIfYJe1XepllJ8CUcpbeVeO+Xk/wcv9e5JMSrOJpjZ
-	 lIACuY/f03xxenUeLLcIFzYkKQBTBvQBMggcCZfn+TuFW6IbrzWPbVMU3VA1Knwgn6
-	 u8v8aApmeXZ+7eZuR3SdA0Z/T7Rs8sAcBSDKPrCWHLK7tgolHKPIi1nV5PloohXSQP
-	 UluSNRDR0Gl9DZs3f+I03O3VA6Btj9eZrlYLaOoPkNa3TRmmLlyFBaqyHtHPpL/KeO
-	 WJhVpfMFAUapKPM2MJZH9v5rBxVYSecHKpEefa2R4LxEIaRNx0zqAhZsJ+cF6plL2L
-	 3fGWqVHxV2yGA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 1D475380821F;
-	Fri, 13 Nov 2026 22:00:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1794607779;
+	bh=PKA+hMV7mnVUr0hIw2tQmBkgxWx2AKfmo6RBkdSQQ1Y=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Q+EFLJKonN+uOI1AFgb1qGQQBGWD5Pqy+1w5Zf3u3Srsnj6Tz79sY8BP+EW+AdlB+
+	 m74TPa/2LBz6ARENLiKx7vBdFI10MgQJN2FZlwfbghkO/oWvYCSFKMalr82yf66JFH
+	 kDG/QQLT8cCu17jDudMO3FI1xwkjHB2fqAl+RU/AgtANNRjZE2oSsWTxjANWgolDmE
+	 YdnnGx16cf8q6XL1K2iGsYoGmK7sujPf5+ENJDwcFKqfw5ZXxkjDVjSD9xQ1uIaq8t
+	 dyCIo/ML2Si2XDEVv6wvTmEHQLbWOuLdsF2nZICrcaPwGcWf55dxUIME+LRIsy6dJO
+	 hKiiviYHc3vYg==
+Message-ID: <sashiko-outbox-213775@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v4 3/6] bpf: Scope the bpf_user_ringbuf_drain()
+ dynptr to its callback frame
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Ihor Solodrai" <ihor.solodrai@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261113213921.1646681-4-ihor.solodrai@linux.dev>
+References: <20261113213921.1646681-1-ihor.solodrai@linux.dev>
+ <20261113213921.1646681-4-ihor.solodrai@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 13 Nov 2026 22:09:39 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -52,51 +60,53 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v5 1/2] bpf: Add sleepable version of
- bpf_get_stack
- in raw_tp_prog_func_proto and tp_prog_func_proto
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179460720473.1862583.931377392708911121.git-patchwork-notify@kernel.org>
-Date: Fri, 13 Nov 2026 22:00:04 +0000
-References: <20261106080746.661431-1-yangfeng59949@163.com>
-In-Reply-To: <20261106080746.661431-1-yangfeng59949@163.com>
-To: Feng Yang <yangfeng59949@163.com>
-Cc: song@kernel.org, jolsa@kernel.org, ihor.solodrai@linux.dev,
- kpsingh@kernel.org, matt@bobrowski.net, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
- yonghong.song@linux.dev, emil@etsalapatis.com, rostedt@goodmis.org,
- mhiramat@kernel.org, mathieu.desnoyers@efficios.com, bpf@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 
-Hello:
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Low] bpf: missing Fixes trailer for commit 205715673844 in commit
+  message
+--
 
-This series was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
+commit 3259f9f888525f719a6f09fc51c44281ce232398
+Author: Ihor Solodrai <ihor.solodrai@linux.dev>
 
-On Fri,  6 Nov 2026 16:07:45 +0800 you wrote:
-> From: Feng Yang <yangfeng@kylinos.cn>
-> 
-> bpf_get_stack() has two implementations.  bpf_get_stack() passes
-> may_fault == false and resolves build IDs with build_id_parse_nofault(),
-> so an IP whose backing file page is not resident falls back to
-> BPF_STACK_BUILD_ID_IP.  bpf_get_stack_sleepable() passes may_fault == true
-> and uses build_id_parse_file(), which faults the page in and returns a real
-> build ID.
-> 
-> [...]
+> bpf: Scope the bpf_user_ringbuf_drain() dynptr to its callback frame
+>
+> The dynptr argument to a bpf_user_ringbuf_drain() callback points to a
+> descriptor on the helper's stack. The descriptor and the sample it
+> describes are valid only during that callback invocation.
+>
+> The callback can save the dynptr pointer, a slice, or a clone in the
+> caller's frame and use it after the drain returns. An escaped descriptor
+> pointer can allow arbitrary kernel read/write once the helper's stack
+> is reused.
+>
+> The verifier assigns the dynptr a type and an id, but does not tie it
+> or its descendants to the callback's lifetime.
+>
+> Give the callback frame an id and make it both the id and the parent_id
+> of R1, then invalidate that id and everything derived from it when the
+> frame is popped. R1 has to be its own parent: slices take the dynptr's
+> id as their parent_id, and bpf_dynptr_data() clobbers R1, so with a
+> separate dynptr id nothing would connect a slice to the frame.
+>
+> Pair the frame id in join_func() like any other id, so joining states
+> from different callback frames cannot link a value to the wrong frame.
+>
+> Reported-by: Nicholas Carlini <npc@anthropic.com>
+> Suggested-by: Alexei Starovoitov <ast@kernel.org>
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 
-Here is the summary with links:
-  - [bpf-next,v5,1/2] bpf: Add sleepable version of bpf_get_stack in raw_tp_prog_func_proto and tp_prog_func_proto
-    https://git.kernel.org/bpf/bpf-next/c/4812fd2d2942
-  - [bpf-next,v5,2/2] selftests/bpf: Test faulting build IDs from a sleepable raw tracepoint
-    https://git.kernel.org/bpf/bpf-next/c/e8c1bcf8d591
+[Severity: Low]
+As reported by bot+bpf-ci@kernel.org on v1 [1], this fixes a lifetime bug in
+set_user_ringbuf_callback_state(). Should the commit message include a Fixes
+tag?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+  Fixes: 205715673844 ("bpf: Add bpf_user_ringbuf_drain() helper")
 
+[1] https://lore.kernel.org/r/1e8b758af3e2561b6b9d60b87866a3545432da526326c=
+1ba303845f9cb1188b7@mail.kernel.org
 
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261113213921.1646=
+681-1-ihor.solodrai@linux.dev?part=3D3
