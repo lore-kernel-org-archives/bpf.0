@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794570743;
-	b=Ho79/Nq7+CW3udv5rfyeXKDUAeiF1dnqT6VWRAKxqU35YPRUmzBG/0j/GdyjjJ0g4ZpK
-	 sH6LZAA8TDY4QYcGEc5IAifQVN5hQjkNDRQaRyX39TK3dOMT4sLJ1IybvzIQ1RikPgFxI
-	 5KxXPGjK6IgmR8WIwbLs/3+W8NOb3QRsuUG7EbM5gLBVF3aAlq+zW1CQ+xv5cvfamEInG
-	 cVrjil70kj5WB7AXMf6Oh6oAPhTASQ4to7yOxS1AH6RlZdk00rpqUOF9Y70+1P3Qrs+eh
-	 QhMZiYseqgEPvdICLbicnDz8YEzCFESxXINDSoo27xvIwTdR4mPIg32MO0aayy1suMQ==
+	t=1794571358;
+	b=qVGqxeESaVNDp9OzlIV/8En9yLGKdXZGfK63aPDyxcKPrrMsaThNBqdpBdLvQe0jOKM1
+	 3suFwLKCR0gSecxShIIfkjheR+10k5DDo7Vh28yNjnMMMpdRbkSvScEddBt9nxkH93u3e
+	 qlBoTgXKDJbm143olzvnp9W9yFTbywARDLPN7XymcCIAR6wYs+0cMsdXVBQkAoeS/tHDr
+	 F62yYmYcuR1IlwpcUgVW/zodKduJ5hoz2ho3WVrPt06fv8XdddM8kqQ5fk8HRXMymaOee
+	 46aT7bo/ucDZx7vAFvp179al+APApgYppP+WDq1CuC0eCjKtP5wk4+BANnMq/4nNlow==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794570743;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794571358;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
 	 Subject:Message-ID:References:MIME-Version:Content-Type:
 	 Content-Disposition:In-Reply-To;
-	bh=Nxwcn/C0m/NpMzGHlhmtS3EuXEWZRUeIp4y6wUB9sRQ=;
-	b=S3hCWQSD5SkNKhLmnI5K+Fmp+RFn6LHZj2sBSJZrLqXJYaoZAoMY6ejkyseVtKERo/nE
-	 slNp2jEGlr7qBuMzzQNnbnyTE8nuSvf7N/z+uLL09AUVQTL1pi63Dt4ja39XAx3dhUE5V
-	 oojf8VYh7sC1wG1DyDc8AKUwUnutnd7UqqJyWh454YNAQ/nzZ3EuM5IMj5ui0IxamuUV2
-	 pBd3k57ofMjmmc093gT1Ih7cg7889gFvY2jixSGPt6gvdaG+Bh4uYhY4unLWxf7JgVzJ9
-	 HbI3kQv3BJdbHCAwOKyRgef2JF0d5OoV9JMBfaqF9+xD3VmRU7WV1lTJP6e58qOidJw==
+	bh=ePINk0mSFf3VIuXGADrPFF3uNMGNrwU5/iy/vZOc9s4=;
+	b=2C20tm1vBiZaBuSOVsM5G+TNbqgw/Mrfz4LrmQ7wi2QfxGXN3uWD54DUQtAgO2nqUKRU
+	 M/6ffbatZpdUdruwDkdzVCsN4MsYgQSD0q8krFxXi9MUvNUXyDIMRhmC87XR5VdYKHvpW
+	 pHgoP2i5iw8fkRITJZ1QeADZSvSpzeAoNXqKqFf8HFjFcBoEuv9SAGkYTFyJcfjjrDeIw
+	 LSuy52CuPcSW6TM1PTbz/7/y55nyQOLJTV2NdDvlrWtAYGGd7Xy0JoFdNw4cHo9drer+j
+	 gHis0FcImaDlZeoxVLTn3gANRN+NgYmRzVyDr4Ad8VqKgEOGv09qD3FhyvCabswNlMg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Dr3vDkNv;
-	arc=none smtp.remote-ip=209.85.221.43
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=S52GLF0s;
+	arc=none smtp.remote-ip=209.85.128.50
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B379606A32D
-	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 11:52:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5B379606A32D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F44A606A890
+	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 12:02:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9F44A606A890
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Dr3vDkNv
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-490585eddfcso848637f8f.0
-        for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 03:52:23 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=S52GLF0s
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4a9a8d6cea8so8711375e9.1
+        for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 04:02:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794570742; x=1795175542; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794571356; x=1795176156; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=Nxwcn/C0m/NpMzGHlhmtS3EuXEWZRUeIp4y6wUB9sRQ=;
-        b=Dr3vDkNvy8HgC1CCw3wL5yzaILA7nmq/ku0PNHeIo61UA+D2nORoPcaWhe+cSVvHjG
-         gTqGWe0fUgwX1c1oBMk2p28TbK0I5NmtUevUYj+YuvnZWQP1JV3+K7GErril5Km3bjR5
-         34EAon3zOv4HMLByF0l958HWCUt36O6obGx1+ACBwdbCpQLFoc6IHpXFPUQHG6k7BKg2
-         IQ24ZXnsZtzi5beX/rADjRhbKxhWzRk/MbA/Xt8+cJK8bos7JLEr/kmNfhcKB5Y7m21w
-         ML7f6/ge0lY9ZY1P5uyh/qHsDPpaApju7e1xrQblH5JA2lyiLZ0rAHCgwJKb4mTKB0yK
-         GB8Q==
+        bh=ePINk0mSFf3VIuXGADrPFF3uNMGNrwU5/iy/vZOc9s4=;
+        b=S52GLF0sFG4+vIRlUUXcyfi+FRVt7RgHAJCkDJqkA7q3KMtTMZXAIEj0mx31JLWQB8
+         KaPjL1hFuFOmGPEOQSdpIcA/Jk0EZczKJekwl/94gNmTItLiP9kfd1KI3plzL3ePzByy
+         QMqa6I88O10fTb6++ga+wQykKJ0+1R9ExxM8WQbO0P/CtqcXJsfneAeHD+bRxmuVLW0F
+         MRGd1xyyJRnI9Omk+LrL7mLA3wBK0i2O5qRClLuW2rLuYbfxPMvZmeps0XlnCRbNS9Oz
+         Q6FgSKceF1SMBXYrS1pqwG9JRcplC7wOP+X3KiRUp6wg/OuOHKt6SjS3P8AhI9/9GnMQ
+         vtog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794570742; x=1795175542;
+        d=1e100.net; s=20260707; t=1794571356; x=1795176156;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Nxwcn/C0m/NpMzGHlhmtS3EuXEWZRUeIp4y6wUB9sRQ=;
-        b=YQXNsB7MwEYM4nXsXEJ9XCm6iZO8ajE65FF42xmVdJykd10KW26TrHLucqDGYICwSJ
-         PsaAeKq9j3TgGFMN6IXBPBMtcPVjqLvc9Heu8e5c+oPDuyvMyMFSvcrBczd8kPnKUUV/
-         5SbUupHD0NA0nuYn46ABDT1yHLU63ZOrJebbSWDnGFKzeRokJcERJiotQzHkFhUDn2Gf
-         E8NUPZvGfh90BVgBK1eMTV7S4tFENY84xPaiv+XOIBiKlELtgoYHN6pl8dQ7KryzLJBE
-         XtviJlEKmFCLFG1/sEyal7pTpbZasbi5jXUSDKKHt0kUYrmdC/cR71EilK5wcOq9mvnd
-         Mypg==
-X-Gm-Message-State: APuU4Z9IXx4SRRcZq+DnJium4USaNH6yWw+uPOQWaK4VFW8LgnyNhqhH
-	pvXxAHxwum7byHV1I1+IgPNQYEbKM0HYFN/LCPKywhXZ/CyPeznVzm01
-X-Gm-Gg: AYBFou2K2vkETki7c/c2FPJ818Ar7aWZs/Yl8v9Vs9WoqfdBiBSTRaba81EC99nJIeL
-	TuaooLG0eG+/vs86b6JVltuhfdTIl2G+7s0KUXxIiuZPQArPmk0zPo0CHB7JkkACGyzP9WDZOSv
-	Hc2KoPrNEJnwNgdGslWM2DaTguAV3iuo74MGTIYNQyy5sxEbvOlH9ytkryKMw/JGQLOEaBzyvCT
-	FKzMcN0d/5ysKZZV28AhlSM+xULpqHPgIQNUMMbCHlhQHSa1qt2orWTn+uLQVYaMVutHUEBWdiN
-	g1xQYw5fkgj+Q0Hh+XNAFlMm9wRinEp1/S1WLY6tHuydWTN0j7pezp9nfpspRRgVxFEJCWUzm5Z
-	T+GCNLT7zytlpmNQuyXKCMa+Q00W10MuyeLM8f+9+rh7fVHXkmxBbY5MaWOIQwyf3hvP2D6fCxi
-	SNDtcTY48kZkWVHsXwINtlruEGXIRT1bLRQRpJhwYcrS09QI2njzTrULqVR50Iz2Ja2Jqi3Dhx0
-	OJRZBa2pl4dtnG//EP1iHWMAy12KIJ9yZB9kj+HDz/dAS4+BXvgiq9uOrTumevhOGq5bHjh86ND
-	pRnIVPKSbtllgENzB8Iz1eEHFr1v6fnAjC4LhA==
-X-Received: by 2002:a05:6000:2dca:b0:48b:1c:d6e1 with SMTP id ffacd0b85a97d-49c726da6d3mr6039605f8f.43.1794570741553;
-        Fri, 13 Nov 2026 03:52:21 -0800 (PST)
+        bh=ePINk0mSFf3VIuXGADrPFF3uNMGNrwU5/iy/vZOc9s4=;
+        b=dEvDGNywhzVCUYRUHjx02N04K0Ny/WjFbhttlS2kf5ugKjTj/84tRlu3PfLwfWHSLv
+         8XkAG6AjEh0Bg0Ot1O3Q6yx2zfWMZiihIVP9gc1q4520qzS8RAApMtSJAqHPyewATPv2
+         iOfl9BU2TEXeso9CExDFBQ6dHnjXoWeVJ9YWpk38RVLkcY+5K6ASQDtONd/458r/LCkY
+         nS5U9QI06Ac6dkfcFbYK0l9/YHdP0dRfXqerTsXX9yTzIGL8neURAzI/owmg5jKcR3Of
+         MGZ91QuG3dFkTbTDXZBrZTS6lqmauIPsbE6HKOm8sGZ29U+iUngOH3DavZoOVJ8egU31
+         uFAw==
+X-Gm-Message-State: APuU4Z9/rxnvY0nnAtWRM6HOaamn5icNlafnZpk4ZK9Q1ruBTkViISw2
+	2CLG1i33eEW4wNd3rzhbUbPRJmunj35EApT1GcJcofUt/SqWTp4MEg8V
+X-Gm-Gg: AYBFou2M0bCufkwD1CFqS3IN3QOV2hePtBmxl4V52y61oo7Fe6E/cuqgI4K6XAwLpDO
+	svTyEMxagCewIDzsJKvQ/bUVliP+RIlK/vrskiNf8dRdNg4q7aXH0YWD/T9TJJxgZf72aWixFEa
+	RgOqTc5KtsI4He5hPVU+8qHNpyRF3weJGEvokGq4Xzk2QTKqvWPVRvMShOILtNanhFj5xpys57G
+	0pWzAHNFtYDx4M658V0NQgveCMFNFuFnzAWwMQIvjQcXA/2eITox2vAoecO50OAEyT4bWj9hX36
+	Ln2SzcCiJh09ZSnKxRTD+JXqX2cG6WC2trl6tMEj1H/1ngM7QOPI9pXR/zq788649SeLG78gGa6
+	2oJwqE9SqzUyhSa9F73tNDVqbIOKevH5rbr8OCoGBrNN01ymIuuJ7ICAjGvmZajZkAOjXRxa93Q
+	zi4fZTOlZNJrJNNxs8aFW8FiBs/UPqDeIHxIRDSNJs8CBekpzPjbfo+5MvZJWJD/8wujo65G8Zs
+	VOIwS/C9iT6+36+UuxV0Zyd+5cCKt3QaY/qMlQE8bi8usFV+YRvh/5DATJTncmm4Rcmr8yD2bPV
+	dYauN+QY45a8QWFUd3l0m0pOGQLjhMrRf0TiiEJDa2t6bMPnKJCbg5hlJKs=
+X-Received: by 2002:a05:600c:55c7:b0:4a1:88df:8a2a with SMTP id 5b1f17b1804b1-4bb55a8d13fmr33670975e9.13.1794571355926;
+        Fri, 13 Nov 2026 04:02:35 -0800 (PST)
 Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49c605e4a2asm5012590f8f.39.2026.11.13.03.52.20
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb4e2538b9sm253302365e9.1.2026.11.13.04.02.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Nov 2026 03:52:21 -0800 (PST)
-Date: Fri, 13 Nov 2026 12:03:58 +0000
+        Fri, 13 Nov 2026 04:02:34 -0800 (PST)
+Date: Fri, 13 Nov 2026 12:14:09 +0000
 From: Anton Protopopov <a.s.protopopov@gmail.com>
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
 	eddyz87@gmail.com, memxor@gmail.com
-Subject: Re: [PATCH v2 bpf-next 07/13] resolve_btfids: Say which registers an
- instruction reads
-Message-ID: <avb8rvfYDksxC-Za@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 08/13] resolve_btfids: Don't list an error
+ that follows work on an argument
+Message-ID: <avb_ETHW4LCryuhQ@mail.gmail.com>
 References: <20261113050901.1399091-1-alexei.starovoitov@gmail.com>
- <20261113050901.1399091-8-alexei.starovoitov@gmail.com>
+ <20261113050901.1399091-9-alexei.starovoitov@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -99,47 +99,64 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261113050901.1399091-8-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261113050901.1399091-9-alexei.starovoitov@gmail.com>
 
 On 26/11/13 05:08AM, Alexei Starovoitov wrote:
 > From: Alexei Starovoitov <ast@kernel.org>
 > 
+> A program that returns an error skips f(). A skip of f() is not a failure
+> of f(). ksys_dup3() takes the lock and ends with "return do_dup2(..)":
+> 
+> 	static int do_dup2(..) __releases(&files->file_lock)
+> 	..
 > 	Ebusy:
 > 		spin_unlock(&files->file_lock);
 > 		return -EBUSY;
 > 
-> 	mov    %rdi,%r13                files, the first argument
-> 	...
-> 	lea    0xc0(%r13),%rdi          &files->file_lock
-> 	call   _raw_spin_unlock
-> 	mov    $0xfffffff0,%eax
+> 	do_dup2() fails         dup2() = -EBUSY, the lock is free
+> 	do_dup2() is skipped    dup2() = -EBUSY, the lock stays held
 > 
-> do_dup2() unlocks an object of its caller before it returns the error. The
-> next patch looks for that in the machine code: is the pointer in %rdi
-> computed from an argument of do_dup2()? The decoder says which registers
-> an instruction writes. It does not say from what.
+> A caller can rely on what f() does on each path to "return e". The rule:
 > 
-> 	text_insn.uses    the registers that the instruction reads: the
-> 	                  operands behind the defs of MCInstrDesc, and its
-> 	                  implicit uses
-> 	text_insn.load    it reads memory: MCInstrDesc::mayLoad()
+> 	An error is not in the list if, on each path from the entry to its
+> 	return, f() hands a pointer that is based on one of its pointer
+> 	arguments to a callee that returns void.
 > 
-> 	lea    0xc0(%r13),%rdi          uses r13: a pointer into *files
-> 	mov    0xc0(%r13),%rdi          uses r13, load: another object
+> A callee that returns void cannot fail: what it does to the object is done
+> when f() returns the error. Most unlock, put, free and init functions
+> return void. BTF says so, no name is needed. A callee that returns a value
+> may have failed. "Based on": computed without a load, as &arg->lock is.
 > 
-> An opcode with hasUnmodeledSideEffects() reads all registers, as it writes
-> all registers.
+> 	forward, may   the registers that hold a based pointer. A call that
+> 	               hands one to a void callee is an effect. Does a path
+> 	               without an effect lead from the entry to here?
+> 	backward, may  the analysis that is there. It stops at an effect
 > 
-> For LLVM "xor %edi,%edi" reads %edi. Compilers pass NULL in this way. The
-> table of x86-64 gets a pattern for it: dst = 0.
+> f() stays a target if its list keeps an error.
 > 
-> A test instruction says what is read only if that is its point: four for
-> x86-64, three for arm64.
+> 	                tagged            errors
+> 	x86-64 GCC      12817 -> 11985    20967 -> 19248
+> 	x86-64 clang    13549 -> 12633    22964 -> 20889
+> 	arm64 clang     12435 -> 11543    21304 -> 19186
+> The run on vmlinux takes 0.2 s more.
 > 
-> No tag changes.
+> The tool does not see
+>  - an unlock that is inlined: it is a store, not a call
+>  - a callee that takes the object and returns a value, a computed callee
+>  - a void callee without BTF: f.isra.0, a name that two functions have
+>  - a pointer that was spilled to the stack, or loaded from the object
+>  - that BUG() and panic() do not return: the next block counts as reached
+> It also leaves out
+>  - an error between mutex_lock(&arg->lock) and its unlock: both are void
+>  - an error after a void callee that only prints a message about arg
+> 
+> Outline KASAN and KCSAN add void callees that get a pointer, such as
+> __asan_load8(p) and __tsan_read8(p). Each read of *arg is an effect then:
+> in 32 files of fs, net and mm 76 % of the errors go, not 6.5 %.
+> Inline KASAN and KCOV: 6.3 % and 6.6 %. Targets are lost, none is added.
 > 
 > Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
-Acked-by: Anton Protopopov <a.s.protopopov@gmail.com>
+The robot's finding is real, otherwise
 
->  [...]
+Acked-by: Anton Protopopov <a.s.protopopov@gmail.com>
