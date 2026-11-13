@@ -1,11 +1,11 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=18.194.254.142
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=54.243.244.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1794542232;
-	b=bW6F32ptaHLOUBza+5i4XbqQ4S6RJtK5Rl0Zf+LU3j55NmD6IYM2W3i6D9s93GR6sGtZ
-	 3XpmxtDqTw6wbLOwNpw3QRCjqTGtSCZ6w/sb8q9DD/SUePuBWN7fV7Yvp0HuLmMIozNy6
-	 hu3rsT5O2bVZ81bkXHV9PjDsoqVa5sI/cwvBZKGQsvJsvqE/IdU3aDMa3FNRNB3m1lynK
-	 dwXcbRwzUZfQzxyNxDfWA/l7vZc/odmgCEZptmZW3LvF93qmWumjXJLTYTQrqDKuWxvKB
-	 mSnkLb2drZn5JYOGOGKEpBRY/uw4GEnYmbPkACp0GmPrx9/bezVr+65VWinDgbdeaAA==
+	b=zKz3rKu1+A/weLsSSBmJWrqZr3PNL4kDvIXYowP6PPGacb9K1FxtTKJZyIspu5ocm4PZ
+	 1vTFnWcdqm3QpRFSlZLRNdEwUCI2lGLStkup3w0l2AeYNzU9mKxvS6oWDm6jfMOuBBZ3v
+	 PzJ8eDgwvrR9wTG28PrYUtM0x4CD5MjwxvjP3B2cMChXRqjy0w4T5Ivo8Ui7oPBQRgY71
+	 s3x0tX94o3+FVTGx61T++YjS/DF2wUqgRQtl/YvzZGLmF0Lze52xX4CvzD0jaCAzBbmuQ
+	 HhxZ6pxLWOwNY/qEbXYBp1hwt06QokIMmGRW3SbkulfodXG7t38PkXaAHbeYEPWFgrw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1794542232;
 	h=DMARC-Filter:DKIM-Signature:X-QQ-mid:X-QQ-Originating-IP:Received:
@@ -13,42 +13,42 @@ ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:X-QQ-SENDSIZE:Feedback-ID:X-QQ-XMAILINFO:
 	 X-QQ-XMRINFO:X-QQ-RECHKSPAM;
-	bh=dPhxcd6/BZYgx50DAMwodoQTThTXpPpE+XC7POngjKc=;
-	b=Ud7kfaL8T7BOqnm9kJNmGcDBEexbGTeMXmK8RU1IDeS3RA/mXe6472sQIQyS5nUMViU/
-	 xVEK/+vpB2Ug6JYc0EVJsrPZ5LxZI2/OpGeDg9Ltwii25Uf/mDLcJH7drSaTOMrW2D1Wz
-	 eVntm7lDCj96Ed8wSASm2HEaNzR6bwvovvHfV0J8gtWRxOXfePga03QXmUAcVC2xWEOJj
-	 MSNBdi1V1DFxT6Yp4E9KG75SWE2DznZ5tyJRrzYcWqtSzZwbdxh7A/WRGsNTJFAyPA3CK
-	 Ow4b8pikXXPCjzGhAAe2tDtPut1GMNVPBnz3X1Fmk4Ih2WY8gYa5Zf8pqEkP0Y28tzg==
+	bh=hAiDmJ443y2iUubPvVfTIYqLx/39zAUaPPDN0i4fC9k=;
+	b=tKK7ZOYJs2mNiKXtcVITe18yNM/m5G+PbillGcDUUkLlbc6RwTmAGMmIQJZUUJN39A6u
+	 xOCTLC6LYnCV6ENxX3wRXVgHCf7ktkTdN3Lw8z1J3DdAIkuCXbsiQLJ3/eaGQqhDqz/ul
+	 59IVZSLnWpyqk/4ORjkzCD3SR3DHVvLRU3lL2SaFu6yDiZK4Vhdar/dk4iN8hnCQ1c0DX
+	 bf/QDj+t/0mJAZ8KiUov/W5Jt9o2VUIzMMkTTBU1SafrvDT85ETLjCFABCyrDLMbpi4tm
+	 XBrqUXMHp/h7wBimjm1r7OOqZZe8wwrMcvx5mvtoa2uylBoFhHCg+hQWQVI7ucj6RfA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=smail.nju.edu.cn;
 	spf=pass smtp.mailfrom=smail.nju.edu.cn;
-	dkim=pass header.d=smail.nju.edu.cn header.i=@smail.nju.edu.cn header.a=rsa-sha256 header.s=iohv2404 header.b=tZW4o+wP;
-	arc=none smtp.remote-ip=18.194.254.142
-Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
+	dkim=pass header.d=smail.nju.edu.cn header.i=@smail.nju.edu.cn header.a=rsa-sha256 header.s=iohv2404 header.b="a/lP3ijM";
+	arc=none smtp.remote-ip=54.243.244.52
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D1BB606A32D;
-	Fri, 13 Nov 2026 03:57:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5D1BB606A32D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D96E4606A323;
+	Fri, 13 Nov 2026 03:57:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D96E4606A323
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=smail.nju.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=smail.nju.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=smail.nju.edu.cn header.i=@smail.nju.edu.cn header.a=rsa-sha256 header.s=iohv2404 header.b=tZW4o+wP
+	dkim=pass (1024-bit key) header.d=smail.nju.edu.cn header.i=@smail.nju.edu.cn header.a=rsa-sha256 header.s=iohv2404 header.b=a/lP3ijM
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=smail.nju.edu.cn;
-	s=iohv2404; t=1794542206;
-	bh=dPhxcd6/BZYgx50DAMwodoQTThTXpPpE+XC7POngjKc=;
+	s=iohv2404; t=1794542203;
+	bh=hAiDmJ443y2iUubPvVfTIYqLx/39zAUaPPDN0i4fC9k=;
 	h=From:To:Subject:Date:Message-Id:MIME-Version;
-	b=tZW4o+wP4u2aKyvmdv8OtQtI7wAI6PUv4Kl+nHnECdilJdzwgdFvlLZM0/1EyUDMo
-	 PhEgKU+AMKfUJ14CndUAtIPC+jiPg73Fti7l+s4UCAahM7wUYqPnoUrzzd+EB1+PUq
-	 E+/K2wNCBo790xw8ux9n5hIYPjE6Pxx3DdC2dQ/I=
-X-QQ-mid: zesmtpip2t1794542205tbf655990
-X-QQ-Originating-IP: e1SLVr7RTm7aupYw6jdBDKSKPKp3JMysT4SS655xl4c=
+	b=a/lP3ijMWgkal7l2BohGnJ3ekLRbNt2EIQwU0MMYuojPJut0mJiAtCJEKZ8bPOOp8
+	 Q65mU/q2aRmCXvjd1HhXJSjqq+Ev5eaM9PLisTcRqU8mE8IGmhPKYVIqaRBHcoCe5E
+	 ULFiG4SqYWE+T1GlChcXTER0AtEDdOLjksSwWYzc=
+X-QQ-mid: zesmtpip2t1794542202tdf7edc25
+X-QQ-Originating-IP: pjvt4R46xHwoXR/6JTLGH/XItwH2cP13Q18VXRvb/gk=
 Received: from workstation-Precision-7920-Towe ( [localhost])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Fri, 13 Nov 2026 11:56:43 +0800 (CST)
+	id ; Fri, 13 Nov 2026 11:56:40 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 6820046291963919950
+X-BIZMAIL-ID: 10146906103779689649
 From: Kang Chen <k.chen@smail.nju.edu.cn>
 To: Yonghong Song <yonghong.song@linux.dev>,
 	Alexei Starovoitov <ast@kernel.org>,
@@ -65,13 +65,12 @@ Cc: bpf@vger.kernel.org,
 	linux-media@vger.kernel.org,
 	dri-devel@lists.freedesktop.org,
 	linaro-mm-sig@lists.linaro.org
-Subject: [PATCH bpf v3 2/2] selftests/bpf: Test that a drained dmabuf iterator keeps returning NULL
-Date: Fri, 13 Nov 2026 11:56:40 +0800
-Message-Id: <20261113035640.948458-2-k.chen@smail.nju.edu.cn>
+Subject: [PATCH bpf v3 1/2] bpf: make dmabuf iterator stay drained after NULL
+Date: Fri, 13 Nov 2026 11:56:39 +0800
+Message-Id: <20261113035640.948458-1-k.chen@smail.nju.edu.cn>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20261113035640.948458-1-k.chen@smail.nju.edu.cn>
+In-Reply-To: <20261113024447.922683-1-k.chen@smail.nju.edu.cn>
 References: <20261113024447.922683-1-k.chen@smail.nju.edu.cn>
- <20261113035640.948458-1-k.chen@smail.nju.edu.cn>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -84,119 +83,100 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: zesmtpip:smail.nju.edu.cn:qybglogicsvrgz:qybglogicsvrgz5b-1
-X-QQ-XMAILINFO: MVMn5D3ouL6CRs7SYK/eQvRARRNYnt+QewD2lzqvtDn3REqkJ18ZVb0o
-	oACC/KUJSpl7Wh4Mfz/L/UDEYeX/ViPetGE0xoPZRkKOURX/c/zMbOryVhWrkHcrhCuilIq
-	Vz/i7Wq7fN7Ll3WP7sZU2VEr9RvQ95Lm/DWFZg7vpp+eD6o/f+hOd20ftHbixafOiNo18i3
-	BQnt2YCPNFShxJG6OY7ude53TgAvqAiXiO9FT0GQL9qT6K4k2sO17Hlw+dUwuKhuscJlHys
-	K/A8cu8P6G2jRIPoxbaor5cNtKjB1loOvZo8UXOEcuc7sAexTD0GhR0TrzOBBnglFyDmN+6
-	dHxBakKQDO4D23rH2CtAnYhoAUZ5nM7W6Xk5sYZj78rQVqDtODLHz8NFLYL2mhLMIYgfHQt
-	oizyF5ND3fQiVElJDsuOHWwHVrXnY/M0+IeZurlXmWALk9izPVs0A+D0p4IRU2FfYFbhoMw
-	pbDxM6QTsCUAOne/U5UiFoGrc16QaYA83nUz8lCUlaqB8D9fIzi8xgJc3TMxAqu79wABPcC
-	lNWXcUbv/puS5ZBnwJ0uhD4LMip6i48ueSHJ+ckBNsUjF9J7UzbBZGEICfcBpMYO8tITrJN
-	cYnBYpCiRNADS+pvWQD8YXNl1EZmNVjfWBMZGdPRl3LWcwte5d91ErxfXsiGyEmrTEeP0x3
-	+Vk51N8sRWtXQpYH+7+skq9S2nRo/59AxeupyAurbLepXgOeI6Ksifh6z6gumQR1z3n6np8
-	LIWg8ftbvvqPHvWVzulQB+auPyvDwVQTJSucac75V1fmeboxmsbPFwN8uYQXOHUwy+rioFj
-	OccnBQKFJFwuoQi8/K/mToBlRQ3mVSAMt4RjUNo67FuAhx5hOz70xhx4OJ51yGQLJvE0fb0
-	S2LausbvnCyK75VDiAit34EAH60WRF3ODJtRHCKZecM9AUUZZsB8UUg+3klOL3kHnNBGAm5
-	PgztHvP/GfzcOMPv7/jALJOMg6+gWsYMT8Xq7bF4BFElF9GiiViz7M8vefLzZ7V4oZyYJ0O
-	UogpF/6Cm+AZJN0em7ZEr3yzpIsqHg7rHlJ/Z8AUb/wdV/MU85VSgz3gvjRZMIp4uBz5hn7
-	VxiStPrZkx7Dre0c6OxsKUaGKnxtP1iMDlvGdSWdZ82tQOxRD1RsftwZlwzWtWE6nlG9wd9
-	65ha9X7WNSj/oDhYpvSvyMNAoA==
-X-QQ-XMRINFO: NS+P29fieYNwqS3WCnRCOn9D1NpZuCnCRA==
+X-QQ-XMAILINFO: NJL+bfc5gN/m02E90MnK47QbFF60SCYpAJ5U7s7yWnsxMo6cOPzxj4Rl
+	JnnMHwikp0+0OGowLd72xT2TVnHkGIevqJl8l6QAGK0NlynjESd+RHEN3CSp7LaV8qmb5Vb
+	uDeMfC91Sy3bxzbHkzYZ2H0MQ7HHcce9sP6PMVxEf+u6FIHIjQvEYSn3dR9t5TZQ+xD0DDS
+	muzT8p8MXEDlEyvVRk7cCNRc7u7Wem/tGBCYDo1vJ/n4C23Xh9oIl2j59Ntpj5yjFkBGVzP
+	PF08Ino0S1D0MG1sy2XF1WFTUBAk9p+LW0i3ri+Tb8eEFDbzHtJ2I9iWRtBi2TRxKS4UOPX
+	BVnEif33WTfWCPiMhB4Mcx1ESEO6upgtAs6LjSl30YH9q35xOCbdWQsCVNiywYsElIU0qlm
+	U3ZFXSm1d3NiAMwIKa5fOB7HJEeEVmfTiSmVYuV6jx3T8ntCkvW1Mj3lZYOLhl+uREUSkxX
+	Ow3h7Xsv6d+ieoPLfE1UP4P9Aw6nUQvzHle0Jhy+ZFbL3cWrxZkydX33gWiMVAHnEnBmhmF
+	uwkmdirJ1/Q4Nk29nBh5ko49GtFtOBNEtzAPf75ncx/+fGsy2FDQlKbGPzZtY/kE7+4WOBW
+	CwMWlA0YgfkBSR66OGEHsTak7K/3tjDtJNVgvt9biCDxh7gT16PbmJAnZ6TxZauqdyHLX+j
+	ZWVZ4DZc3jkG4Xi0O6JSz8TFppfDbrIv3BmA37kY/+oZ+ohTA/8dS/yGEn0Hm6HF4fHnvrj
+	NrDPsYaqq9vKR3GBWtY85LltTv3BKvmK1++aPy/6yIwvMhS4kA6DAGZfYX6sZ8bONnMXISB
+	lnbk1yNgYnWO6hgOJlBa1pPI4gBFf1YRgJkVxEKpeDtRnEkWI+Sttcf7tRX9aQ8dp8zlZKT
+	+DpnmEUZoB20psGI9T6oYh5dmRIeSi2wm2BjvmJYnDp3U9E5lcEFGC4NztBjYm/U098h4f3
+	vcYmb+dnm7OaMQrp+Th0WFpHCV1U/T6d1BP7FZ46u7SbwEnqXcLzCfw1AbLgwM4EvY+DHhW
+	mGvUxNXRGxyZp6Z4gkYnf48WBztbIo3AX/M3CxBM+VNE6qUL+ArwnXYsWFk7snJDAbyJP7E
+	7R/Va0s4ks8JBV3Xr0t6w0=
+X-QQ-XMRINFO: Mp0Kj//9VHAxzExpfF+O8yhSrljjwrznVg==
 X-QQ-RECHKSPAM: 0
 
-The BPF iterator docs in bpf_iterators.rst specify that the next
-function of an open-coded iterator should keep returning NULL after it
-has been returned once.
+bpf_iter_dmabuf_next() uses kit->dmabuf == NULL to mean "iteration has
+not started".  dma_buf_iter_next() also returns NULL at the end of the
+list, so a next() call after exhaustion restarts from the list head.
 
-Add a subtest that checks this for the dmabuf iterator.  It drains an
-iterator, calls bpf_iter_dmabuf_next() once more and checks that the
-result is NULL.  The dma-bufs the test creates keep the list from being
-empty, so an iterator that starts over would return one of them.
+The verifier relies on the iterator contract that once next() returns
+NULL it keeps returning NULL: process_iter_next_call() marks the
+iterator DRAINED and treats the result of later next() calls as the
+constant zero.  A restarted dmabuf iteration therefore hands the BPF
+program a kernel pointer while the verifier believes R0 == 0.
 
-The existing open_coded subtest uses bpf_for_each(), which stops at the
-first NULL and never calls next() on a drained iterator.
+NULL now means drained.  Initialize the state to DMABUF_ITER_START and
+translate it to dma_buf_iter_begin() on the first next().  The iterator
+state is BPF-visible ABI (one pointer wide), so use an invalid pointer
+sentinel instead of growing it.
 
-The selftest was originally posted by T.J. Mercier in the v1 thread:
-
-Link: https://lore.kernel.org/bpf/CABdmKX09vLG4U-7FwF-vm_iTy1AjGUPXka08KhWE+qJ0J=XGMA@mail.gmail.com/
-
-Co-developed-by: T.J. Mercier <tjmercier@google.com>
-Signed-off-by: T.J. Mercier <tjmercier@google.com>
+Fixes: 6eab7ac7c5ee ("bpf: Add open coded dmabuf iterator")
 Signed-off-by: Kang Chen <k.chen@smail.nju.edu.cn>
 ---
 v3:
-- Add T.J. Mercier's Co-developed-by and matching Signed-off-by.
-- No code change.
+- No change from v2; reposted with the updated 2/2 attribution.
 
- .../selftests/bpf/prog_tests/dmabuf_iter.c    | 19 +++++++++++++++++++
- .../testing/selftests/bpf/progs/dmabuf_iter.c | 19 +++++++++++++++++++
- 2 files changed, 38 insertions(+)
+ kernel/bpf/dmabuf_iter.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c b/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c
-index 1a5dc1adae73..c1f81b5dccdc 100644
---- a/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c
-+++ b/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c
-@@ -265,6 +265,23 @@ static void subtest_dmabuf_iter_check_open_coded(struct dmabuf_iter *skel, int m
- 	} while (bpf_map_get_next_key(map_fd, key, key));
- }
+diff --git a/kernel/bpf/dmabuf_iter.c b/kernel/bpf/dmabuf_iter.c
+index cd500248abd9..390f6d730a67 100644
+--- a/kernel/bpf/dmabuf_iter.c
++++ b/kernel/bpf/dmabuf_iter.c
+@@ -156,6 +156,9 @@ struct bpf_iter_dmabuf_kern {
+ 	struct dma_buf *dmabuf;
+ } __aligned(8);
  
-+static void subtest_dmabuf_iter_check_next_after_drain(struct dmabuf_iter *skel)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+	int err, fd;
++/* NULL means drained; START means "not started yet". */
++#define DMABUF_ITER_START	((struct dma_buf *)1L)
 +
-+	fd = bpf_program__fd(skel->progs.iter_dmabuf_next_after_drain);
-+
-+	err = bpf_prog_test_run_opts(fd, &topts);
-+	if (!ASSERT_OK(err, "test_run_opts err"))
-+		return;
-+	if (!ASSERT_OK(topts.retval, "test_run_opts retval"))
-+		return;
-+
-+	/* The test buffers exist, so a restarted iteration would find one */
-+	ASSERT_EQ(skel->data->next_after_drain, 0, "next_after_drain");
-+}
-+
- void test_dmabuf_iter(void)
- {
- 	struct dmabuf_iter *skel = NULL;
-@@ -315,6 +332,8 @@ void test_dmabuf_iter(void)
- 	}
- 	if (test__start_subtest("open_coded"))
- 		subtest_dmabuf_iter_check_open_coded(skel, map_fd);
-+	if (test__start_subtest("next_after_drain"))
-+		subtest_dmabuf_iter_check_next_after_drain(skel);
+ __bpf_kfunc_start_defs();
  
- destroy:
- 	destroy_test_buffers();
-diff --git a/tools/testing/selftests/bpf/progs/dmabuf_iter.c b/tools/testing/selftests/bpf/progs/dmabuf_iter.c
-index 9cbb7442646e..d5421b75c39c 100644
---- a/tools/testing/selftests/bpf/progs/dmabuf_iter.c
-+++ b/tools/testing/selftests/bpf/progs/dmabuf_iter.c
-@@ -99,3 +99,22 @@ int iter_dmabuf_for_each(const void *ctx)
+ __bpf_kfunc int bpf_iter_dmabuf_new(struct bpf_iter_dmabuf *it)
+@@ -165,7 +168,7 @@ __bpf_kfunc int bpf_iter_dmabuf_new(struct bpf_iter_dmabuf *it)
+ 	BUILD_BUG_ON(sizeof(*kit) > sizeof(*it));
+ 	BUILD_BUG_ON(__alignof__(*kit) != __alignof__(*it));
  
+-	kit->dmabuf = NULL;
++	kit->dmabuf = DMABUF_ITER_START;
  	return 0;
  }
+ 
+@@ -173,10 +176,14 @@ __bpf_kfunc struct dma_buf *bpf_iter_dmabuf_next(struct bpf_iter_dmabuf *it)
+ {
+ 	struct bpf_iter_dmabuf_kern *kit = (void *)it;
+ 
+-	if (kit->dmabuf)
+-		kit->dmabuf = dma_buf_iter_next(kit->dmabuf);
+-	else
++	/* Once NULL is returned, next() has to keep returning NULL. */
++	if (!kit->dmabuf)
++		return NULL;
 +
-+/* Result of a bpf_iter_dmabuf_next() call after the iterator was drained */
-+__u64 next_after_drain = -1;
-+
-+SEC("syscall")
-+int iter_dmabuf_next_after_drain(const void *ctx)
-+{
-+	struct bpf_iter_dmabuf it;
-+
-+	bpf_iter_dmabuf_new(&it);
-+	while (bpf_iter_dmabuf_next(&it))
-+		;
-+
-+	/* Store the raw value; the verifier would remove a branch on it */
-+	next_after_drain = (__u64)bpf_iter_dmabuf_next(&it);
-+	bpf_iter_dmabuf_destroy(&it);
-+
-+	return 0;
-+}
++	if (kit->dmabuf == DMABUF_ITER_START)
+ 		kit->dmabuf = dma_buf_iter_begin();
++	else
++		kit->dmabuf = dma_buf_iter_next(kit->dmabuf);
+ 
+ 	return kit->dmabuf;
+ }
+@@ -185,7 +192,7 @@ __bpf_kfunc void bpf_iter_dmabuf_destroy(struct bpf_iter_dmabuf *it)
+ {
+ 	struct bpf_iter_dmabuf_kern *kit = (void *)it;
+ 
+-	if (kit->dmabuf)
++	if (kit->dmabuf && kit->dmabuf != DMABUF_ITER_START)
+ 		dma_buf_put(kit->dmabuf);
+ }
+ 
 -- 
 2.34.1
 
