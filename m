@@ -1,100 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.169
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794537715;
-	b=t+xK3SRxrW0u8QbsJ52OS1FdDWwh0QTrvYyXoP7tkhV2UEmFOFU9PWt0YD2f+KnIcxhe
-	 Pje9/D78PtLdFaDvSUiRWybFpuY9aVLomBiA7PeLu/CKykPbaVCukJIm079iYNlRdhXFQ
-	 5zE9ZNasy2VuA7wePbZBWGY2HUJtH+x/FammTJGdkb5IXIdyFmM68TN+JhbmuW8jj4a6Y
-	 FFgVEFGHuFRLrPSCJLTODhnjZU+iUUmjyRHtxUttkh8KuSjPvi1dyl1Bmq05i+a6bIwx8
-	 F5EBtdsuV1iArVe1nToolzMPuDtY7LwMXadxKEB8QciPjafFUEpJmtP64/abJMjMnmg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794537715;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=jAKaL6ziK4SU3uYWDKIwk2j64mElGB9GfkW4ERNhraA=;
-	b=iswuDyUD9ffaGr13vhMKEms+0yEQ1016SiBMV8Xnhok7p1w0OIUCrvkYnsXhPdjuYk86
-	 cegr0U0CyOIxpSzAoWBLKDI8J0/0CdPUtvZQWl1sr1Rylzh1GnKscqsyZgrfDY0fYFzpO
-	 cwE3dyQ9bDNd+722Tkr8h0KPb/HXMrlHZIyU0gmFKu7xf4fcWQBD+dYlUAnUqjRvvpbKV
-	 iZJ47zYPAwVU488fuRvjWmZc1h+/5qunenvajWdK5UyX7icPA9yNpjwZXnSLaQlMkitG0
-	 BW5t7PyihqX6ulGbz84ktktBYF+VZ/+T9PnYKMKYMzDqHbSsqFXXZuugB59bzIpb/dA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=paul-moore.com;
-	spf=pass smtp.mailfrom=paul-moore.com;
-	dkim=pass header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=XHLr4Ebq;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.169
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=54.243.244.52
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794537913;
+	b=Ik0tLkhV62M6bKmqfwribr1vhON+RUSN9xOAkB2knEKUetGsQ6dGFh7BpZ3XbnM0ObFZ
+	 CCQtr5ZDhcDVyEQF7QSLZd2W80Xs7EVPft97u4X3Rvc/JUze1uKdX1t8FkQf5D03wnb7W
+	 C6nfyA7XM/pL4KAzGWzwuDsQSnoa7GAzmC5Ux29x7KprDBKG80Fo0BkpFTNSDTPiHatWa
+	 o58z6P77dI6VKbEvaRcpgdbBpqdrPVd+HqlQSgnrPkJXpbwym68aW6PxBHO1t7/KbFf8X
+	 iAYcGF+8Q+0a0+HhgtwxKv+d9biL+7y+4o84a5eDZrtrpT5WX/wLZ+W+49pfbgO37+A==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794537913;
+	h=DMARC-Filter:DKIM-Signature:X-QQ-mid:X-QQ-Originating-IP:Received:
+	 X-QQ-SSF:X-QQ-GoodBg:X-BIZMAIL-ID:From:To:Cc:Subject:Date:Message-Id:
+	 X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-QQ-SENDSIZE:Feedback-ID:X-QQ-XMAILINFO:
+	 X-QQ-XMRINFO:X-QQ-RECHKSPAM;
+	bh=l5lZWNF7Ym38b1LI7ehF+OPGmdiH9wvt6SCkHsFrtjw=;
+	b=GbbPOkShuLkq+/GIU47J/aHfI+PSS9/yKKV5l00+BHR+qKlzZUsUvMYOS7d9SMVlqN3L
+	 QTMQzGjVEdReK/XlEoa5LQgVt/p91qBDP27a7YPjWLfFSEM/hTalhdC5D2qDAm+ruACOd
+	 +rkbn6W8AeihmLy/mh2a26XJazNjFTrKr2Mm9Cbm02UD16VsCiE1fEn5HX03dql8JT30q
+	 85n4WIPyhAgNx6JXgwUA7eKflfQgzRw+J38m1qVd0c+nIMgmDa1VrUI4o855Zs0LoLiNN
+	 PAMTPSwOQGhFhni4HKSQB74yQ7WW/1L6mn1jowODO4z5jevkL4lFflmPHnbx5S52DkA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=smail.nju.edu.cn;
+	spf=pass smtp.mailfrom=smail.nju.edu.cn;
+	dkim=pass header.d=smail.nju.edu.cn header.i=@smail.nju.edu.cn header.a=rsa-sha256 header.s=iohv2404 header.b=gOxtODFq;
+	arc=none smtp.remote-ip=54.243.244.52
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EF1B60A381F
-	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 02:41:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4EF1B60A381F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 581CD606A88E;
+	Fri, 13 Nov 2026 02:45:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 581CD606A88E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=smail.nju.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=smail.nju.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=XHLr4Ebq
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2e9d7791b00so6384505ad.0
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 18:41:55 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794537714; cv=none;
-        d=google.com; s=arc-20260327;
-        b=dwgNwI3u0J5yB7oNjnkj0zitKIp5niI2ylRiCX8vem3LjOrmXhl19MC4uj26EtlUTR
-         nH4N2zBMh/EXyO0TAm7fF9fMQSd3xqGMUNzLI5Gk61kGLn0YD7wLIxdKLXYFpJnqGypj
-         +KsWyxQTVwRyUU0qhOtKipF5ZLxydGnQHXDJpSbrWPh0CxCUihFqUI6quvp/rmojYT38
-         6ETUM54kLoX5J6Atcz3kdrGWNRWSJv1TvZWXALah2KqChCyCWBS5zJ8tNUG7RfCzVGqV
-         QkgyJ8j9lE/WY+p0dP6GoN0KBsZnG/kdMuIghw4SDypAC7JVllcg4mpKWJlxmXpnFGe8
-         LhqQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=jAKaL6ziK4SU3uYWDKIwk2j64mElGB9GfkW4ERNhraA=;
-        fh=U7rCeKUq1gIR94U7U8nuOUDr+SAZp2rmX5LW3AsCUeI=;
-        b=Pq5OtJBT94GgM5xxo5wgCAwA8OLJ5IIjPyIjxcc0I2mGWGvpK27rWqks9GGdB33yhR
-         bruL2diWITm0g3bD33TJuq1fcMKO+gthiASxAxnZhAZth9iLpb/wm8DPEPHfQDqvojnx
-         ghezFNv2v7yLEW4fcS4bOstVftHR4zFZeZmaMwtSbp/xrbVa8ers6xEdEweI7YV5Keav
-         070OScnAm4tDDYvtSBKnwD5vzAaKeVNvOH4VNVTVUC8KmJPMucMVNFLIHDfvUkDbyfWJ
-         vgWQOWhLpO1yCJC8TS0BF70J+j6f200skF04R1uHsRMHpFJP+KMnfkUrIw2AJVSBmvK+
-         5BmA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1794537714; x=1795142514; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=jAKaL6ziK4SU3uYWDKIwk2j64mElGB9GfkW4ERNhraA=;
-        b=XHLr4Ebq5HLkuLIfnhLPMx5ugv3Xsm/b9CrFFdTNc381Y+3R1DG4UnRb4SMJPUQX/n
-         ngfxcKauznwrSl+fiVyaM3bmGu310q4x/AW/f3Lc1H3erul5CeL3GkUWaKn1XIzycPHJ
-         /AuCnAKHKKJm2CvanqMb5+0vOCUszWF6CrEtpPEplUMnkh91rwbKa9ydV64YPao7WsjL
-         SFpGXGF2hfax3ktt0+wm6KLqAKWnlYXyAi4lW1tH5XZfmWzxV87bVyx0dLaLu+5DcBTq
-         26XqL/EzUksAUVuk8gtZa5J5uFcJwdPTdamZ50XBjhuQzM5fBCo9EFZzKbEa9ANC05eT
-         SfHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794537714; x=1795142514;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=jAKaL6ziK4SU3uYWDKIwk2j64mElGB9GfkW4ERNhraA=;
-        b=Cpn5cO+oLUx8Y76tI+IKlppy3cwW/mXTsf1rQQvyovA2SV1WODT5pW7TEB7qmC8lB7
-         namrqMQBkkJmQSEFRTIwCaCT2HCLxL96k9sVdm9CGrjTTzVeU/S9CUU5kAPhBPI2MsS2
-         Y10mOwAxOyPfSQLVrDUEndJ+Ryo86SY9JbW75yWCvq7VkyOyjG5b/0ldlcOcKqmQADtS
-         JU5MLxeh1YR/jgqLwYx4+OH4O8aBGXl5elEBeolYllGrxVomvzoG7zfwLB7PBuLhL8sx
-         28aIhGsNbDWh5cI8g7SkX6RHsQMIhiI7FAZJvSZ9VMSnGjk3H4p5vpYCLoPdRcoc/WsD
-         E4FA==
-X-Forwarded-Encrypted: i=1; AL+hErHbh98IaJx1Ohvj78o/4PNNTGz9MZptAsX7YPd4P1XRm/+Aeymdp9YdvOCubhI+GMDNRSc=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/zzQrdVwG1bMut/R8T5EJ6XdWEiinxJSKosbWWHIHWYog7Xfbo
-	MS9DoL1BWrSUWhtPhOIL04zfxiY9MtBEAiShvW5gBm9LS3HBdg9spJsYUZxQBifNC+egStQh72Q
-	ezf2PSJnSVDOt4L1gwbQXDOQqxHe35w1W3iB8jGiy
-X-Gm-Gg: AYBFou2/7l7c6ZvlUsiv2t6qmjrLPFfkcVazTfgTXtCjC2nuCn4XLg6TzvUfXk2MqwD
-	CVVU3xnJOvI53d6l/z2wITJd9T8RQJ/VmsJSPNUGuWNEo/2sKJkmIp1YtGca+OQRIQ6Xkmbec45
-	iLchMm9W/V5MCXPFFnsBL6ajrcCwvZSD7l8ZpRh2yxmFKVkkEiYYm71NNnbXcXENBP8nbTZyKne
-	OfzM3v+UaGnOsfXYt555LWbxYxmP0xoCkBP3YvYCIdcLPd+U8XYOM/1qPnpfU2GL9UDj9HwU/6/
-	cXZf0Ityi0JGXAQcyW1aETG6dVVSQeqfg2ScC9mP5jheEJ6XinrUir5XQzPif2ttkM8jquCWzTX
-	ybKkloo2DyEckLq84OduZE31ATuV1/bq3sW6VDv7DJSYNaZzhHipHt8Uj1mVKg2Rca3XJ
-X-Received: by 2002:a17:902:d58a:b0:2e9:9a19:c43 with SMTP id
- d9443c01a7336-2ee0dc92381mr10406915ad.15.1794537714397; Thu, 12 Nov 2026
- 18:41:54 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=smail.nju.edu.cn header.i=@smail.nju.edu.cn header.a=rsa-sha256 header.s=iohv2404 header.b=gOxtODFq
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=smail.nju.edu.cn;
+	s=iohv2404; t=1794537891;
+	bh=l5lZWNF7Ym38b1LI7ehF+OPGmdiH9wvt6SCkHsFrtjw=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version;
+	b=gOxtODFquZ6qM11cjavoeLWu/7D72/nrGmfDSjTyPTKlBvyzWUxgtP88AOBH/I/Np
+	 kICCbJVRuvOjL+xXm912VmHnx5Z4pPsWKtEuNDrJrlUSimeEhhPHPkPx5h8QGQK+vq
+	 k5tk21/LwSgkeNDkYP87qfqrQJSJ8C2G91Xiuhhg=
+X-QQ-mid: zesmtpip2t1794537889t9e608108
+X-QQ-Originating-IP: /Dst6S97j4UJ+YS+s8qXpvhzGetRv4t3V4IIfCGjFGI=
+Received: from workstation-Precision-7920-Towe ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Fri, 13 Nov 2026 10:44:47 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 8035796014243981157
+From: Kang Chen <k.chen@smail.nju.edu.cn>
+To: Yonghong Song <yonghong.song@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	tjmercier@google.com,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	Philipp Stanner <phasta@kernel.org>,
+	linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org
+Subject: [PATCH bpf v2 1/2] bpf: make dmabuf iterator stay drained after NULL
+Date: Fri, 13 Nov 2026 10:44:46 +0800
+Message-Id: <20261113024447.922683-1-k.chen@smail.nju.edu.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20261110125106.2935677-1-k.chen@smail.nju.edu.cn>
+References: <20261110125106.2935677-1-k.chen@smail.nju.edu.cn>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,60 +80,103 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <d85ece6e-27f9-4d9f-83af-4101bc76fef6@app.fastmail.com>
- <356db94e-f5d6-4fb2-839a-b97aef72256b@app.fastmail.com> <CAHC9VhR9sjunJRnM9gy-BkBZkapQTrr8a8FtmaK7JkAmUqTrLA@mail.gmail.com>
- <CAEf4BzZKmn6g0SK8OddjKFj_vAmZFvpZv32Hs_S+GHgT7VNfrg@mail.gmail.com>
- <9d6bdc31-e57c-4187-be78-29d82471f710@app.fastmail.com> <CAEf4Bzb+oYDqO20v4YbJ45wdtcGgJT3xVse822P+=oA7fpFAOA@mail.gmail.com>
-In-Reply-To: <CAEf4Bzb+oYDqO20v4YbJ45wdtcGgJT3xVse822P+=oA7fpFAOA@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 12 Nov 2026 21:41:41 -0500
-X-Gm-Features: AclHuK_hptpm5wmZcDCZpYaTcjHynA9uzBvoUM-dSQMe8mTEMVFigRMkrd49BmM
-Message-ID: <CAHC9VhRcT3rmdpeadwi2avhwvr7aEZYStZ3bbEEx1hm=wtBGhQ@mail.gmail.com>
-Subject: Re: [BUG] bpf, lsm: new first argument in 7.4 inode hooks silently
- breaks BPF LSMs
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>, roblabla <linux@roblab.la>
-Cc: Daan De Meyer <daan@amutable.com>, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, paul.mabileau@harfanglab.fr, 
-	linux-kernel@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:smail.nju.edu.cn:qybglogicsvrgz:qybglogicsvrgz5b-1
+X-QQ-XMAILINFO: MjqaYNLY8QZGJszbSAppscBWRdlMG+zMbHf+MeJn3oSHTkWESnyckha8
+	/1RKf+CZ2KJjVPK9CziiTSjjso1gH0ckXskEnIz8paJ/ieazUyoYRyPYgVGPVALWrQemeoE
+	DzcDOEliV0aMuCWG6z3GYY8A9tdxY1bK0tl86G+WI1gf7tr3WvhCZ6xcgzpZVwSBG89fCd2
+	wwnzgLdUi1Klj/aSgwhV4hfvnYwnyqVQj6ofbe/nC+3mn0432hIOLDGeev3a+Ari8eug/cu
+	3M6BCCai/NjoFDaCr4YBT0tloayP9Tmlty1CX/tRIbuYoA5lcMLq2K6vMpTZUPRxhHrctVI
+	zPxKQSW9wrtzWz+vhck5WMEtjMJuhGwWr50TIdJjABixD3pQkPoYWn11kgaffvJ3rrloKEz
+	DMk3LeSD+e4+VduFN/u7CKrDuZx8nJoNdrfKIhJN2yjUkmkgoQkbTfxnn2vbbRT9JdhGubY
+	3b/7D+IQzL7q2hIjKVdDTTDB9zx5XUnTRRVI4NElRGtXm4pthDvWDMnBlcMrBtKbwNkMy1G
+	mpIJzIMB9iXsmnta/P8XJVrPberg1UdupC9nNENgzJudBlyNTGJX1FXKmEkw5bZzfhVukEN
+	OQdkshjxtvnIF1ViX47FZhRZhK1WUCjuM/Uq1w7Dstx+KmRZ2MNZjkps/oPYEQ1iwBr353d
+	Owvnj8XGxIxrT33pDAZvKhPDUXvF4wLVDP51WmdHifaIfpQvNOWMKe0c8xzKwwrUBUqqf7e
+	p7extZD2KdYDzmOBALf/l31fPqN2ESbIRA8JTkVHyawh21iDCGwzyN6uXJndcFxm73mur2S
+	WrmNFBfwU3TfURVUyj5J/O32V7TAB6t7+SRjozzYyQZaN6mQIjL+P9NeICH2Uk3So4+xXN0
+	oGViuAbQTWpNXpAYEgW70tcSkmdwnaXpwguYg0u4V1i5+fry/RZuvUb21OOGkEQ3ahc5wHY
+	txemdHXRAZKCd6zZowQ+VGM11tw/1vKFMPyJmBQaRo3QOxOzlxagosY5ZAH+FwVSb+c6cPw
+	Ej7p6TNw==
+X-QQ-XMRINFO: OD9hHCdaPRBwH5bRRRw8tsiH4UAatJqXfg==
+X-QQ-RECHKSPAM: 0
 
-On Thu, Nov 12, 2026 at 6:00=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
-> On Mon, Nov 9, 2026 at 7:08=E2=80=AFAM roblabla <linux@roblab.la> wrote:
-> >
-> > Hi,
-> >
-> > Thanks for the replies!
-> >
-> > > LSMs that need to provide a stable API must provide an abstraction
-> > > layer between the LSM hook callbacks and their stable API.  The LSM
-> > > framework is not responsible for the stability of individual LSM APIs=
-.
-> >
-> > Understood, that lines up with my expectations. I think the biggest
-> > thing here would not necessarily be stability guarantees, but rather to
-> > make sure that the eBPFs fail to load when the compatibility is broken.
-> > But that's probably a problem for the eBPF side, and not LSM, I assume.
-> >
-> > > So, in short, would it be possible to send a follow up to Daan's
-> > > commit and move `struct mnt_idmap *idmap` to the end of LSM argument
-> > > list?
-> >
-> > If this is possible, that'd be nice so that we avoid this breakage in
-> > the short term, since the change isn't in a released kernel yet.
->
-> can you please send a patch proposing that and we can continue
-> discussion there? please cc me so I can follow along
+bpf_iter_dmabuf_next() uses kit->dmabuf == NULL to mean "iteration has
+not started".  dma_buf_iter_next() also returns NULL at the end of the
+list, so a next() call after exhaustion restarts from the list head.
 
-Considering the original patch was submitted, reviewed, and merged
-with the BPF LSM being the only user (none of the existing in-tree
-LSMs use the idmap parameter at present), I'm a little surprised this
-wasn't brought up earlier.
+The verifier relies on the iterator contract that once next() returns
+NULL it keeps returning NULL: process_iter_next_call() marks the
+iterator DRAINED and treats the result of later next() calls as the
+constant zero.  A restarted dmabuf iteration therefore hands the BPF
+program a kernel pointer while the verifier believes R0 == 0.
 
-Beyond that, from a style perspective, I think I prefer the idmap at
-the front of the parameter list in most (all?) of the hooks where it
-was added.  I'm not interested in moving it at this point in time.
+NULL now means drained.  Initialize the state to DMABUF_ITER_START and
+translate it to dma_buf_iter_begin() on the first next().  The iterator
+state is BPF-visible ABI (one pointer wide), so use an invalid pointer
+sentinel instead of growing it.
 
---=20
-paul-moore.com
+Fixes: 6eab7ac7c5ee ("bpf: Add open coded dmabuf iterator")
+Signed-off-by: Kang Chen <k.chen@smail.nju.edu.cn>
+---
+v2:
+- Use DMABUF_ITER_START; NULL now means drained.
+- Move the ABI explanation to the commit message.
+
+ kernel/bpf/dmabuf_iter.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
+
+diff --git a/kernel/bpf/dmabuf_iter.c b/kernel/bpf/dmabuf_iter.c
+index cd500248abd9..390f6d730a67 100644
+--- a/kernel/bpf/dmabuf_iter.c
++++ b/kernel/bpf/dmabuf_iter.c
+@@ -156,6 +156,9 @@ struct bpf_iter_dmabuf_kern {
+ 	struct dma_buf *dmabuf;
+ } __aligned(8);
+ 
++/* NULL means drained; START means "not started yet". */
++#define DMABUF_ITER_START	((struct dma_buf *)1L)
++
+ __bpf_kfunc_start_defs();
+ 
+ __bpf_kfunc int bpf_iter_dmabuf_new(struct bpf_iter_dmabuf *it)
+@@ -165,7 +168,7 @@ __bpf_kfunc int bpf_iter_dmabuf_new(struct bpf_iter_dmabuf *it)
+ 	BUILD_BUG_ON(sizeof(*kit) > sizeof(*it));
+ 	BUILD_BUG_ON(__alignof__(*kit) != __alignof__(*it));
+ 
+-	kit->dmabuf = NULL;
++	kit->dmabuf = DMABUF_ITER_START;
+ 	return 0;
+ }
+ 
+@@ -173,10 +176,14 @@ __bpf_kfunc struct dma_buf *bpf_iter_dmabuf_next(struct bpf_iter_dmabuf *it)
+ {
+ 	struct bpf_iter_dmabuf_kern *kit = (void *)it;
+ 
+-	if (kit->dmabuf)
+-		kit->dmabuf = dma_buf_iter_next(kit->dmabuf);
+-	else
++	/* Once NULL is returned, next() has to keep returning NULL. */
++	if (!kit->dmabuf)
++		return NULL;
++
++	if (kit->dmabuf == DMABUF_ITER_START)
+ 		kit->dmabuf = dma_buf_iter_begin();
++	else
++		kit->dmabuf = dma_buf_iter_next(kit->dmabuf);
+ 
+ 	return kit->dmabuf;
+ }
+@@ -185,7 +192,7 @@ __bpf_kfunc void bpf_iter_dmabuf_destroy(struct bpf_iter_dmabuf *it)
+ {
+ 	struct bpf_iter_dmabuf_kern *kit = (void *)it;
+ 
+-	if (kit->dmabuf)
++	if (kit->dmabuf && kit->dmabuf != DMABUF_ITER_START)
+ 		dma_buf_put(kit->dmabuf);
+ }
+ 
+-- 
+2.34.1
+
