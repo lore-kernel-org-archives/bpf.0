@@ -1,95 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.191.73
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794580657;
-	b=V4Std6m6e/41JLFjjsTBp/2BYBh9vyfCN1nqTPVd/E77Ui5EmpTWTl7W3nkHFZdkkfjF
-	 58iw3lE3wNomZ/ma8iqb2QYmCPr5Ky2EO1ib1Ya9yXGirv74F8Hek4su733D/cYk8Vf58
-	 DjqgoxDSzNVwEYtTpP0tPedBbwXIeYwi2LW/ACyzQxScMt6O/opLANgWUTBaCL/re+T5k
-	 UVV/PgYiAQAknomeU856ws6kRyK2bsRZ2UjLHA9NFqfyShGLuD4Ly4xaBIPOMoDhcB3fA
-	 HREsYJeEaMNyyA2moBHbdPhRG8eAOGk146UYZx+mrbPF9mnZYVDNMZj0TvyNsLWBpEA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794580657;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
-	 User-Agent:Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
-	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=/RYVCqV7k7xTPgRrR2CDb38P/NJSsTKrT2U6zO68EaA=;
-	b=AgWym4w7UtOWAjsKwjcgBkUjlH/gUhM3uVfYSj3zNQkBQ08CA58if4h8k2WU5F2vML4y
-	 VucyI7iHcjHBes6/T5kXdh8aKJu9vQOriYUUesI2Mq07A3P7JUd5jFJ061m7gwQQD2EV+
-	 H+ZvXzJHlxBPCBX5MmtrXnR6R7CVSzT0RjW0FUe/Ke5IHtSui8Q0PZzVJbzobEAU6LuTy
-	 lISvDGUiHuiHfa7sfzirhJy5NiaTsHAz0LFGWGaH3/6ifpahsWv6oXM7VmFkdPz5FR3ui
-	 E2AKB2VKxK3PUBadDmVxN2nfZPvthJVSKMFSSTwGof0zlP+6N3cGkAOyalTPF/zpHLA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=efficios.com;
-	spf=pass smtp.mailfrom=efficios.com;
-	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b=m0jnPKVs;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.191.73
-Received: from YQZPR01CU011.outbound.protection.outlook.com (mail-canadaeastazon11020073.outbound.protection.outlook.com [52.101.191.73])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.42
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794581606;
+	b=tusB4SqcmZayIoWNa45ECYANQ+OZZa6+vgLUZ1zgqi1bfwN7Ei8OI077u9W8kVkhseL4
+	 tSwUH1DtrCSxhFvmmZltbv6U/WcuDcjfaOmEDRNreauUCW+EoVzvUwOBeHkFSOLwHyGmd
+	 nVRDSA0MG5Jl+TEzFNgF/dCTL0X3XoDpOx1g2Y/z4EfXlZtbhR8FYZRj3WMQqhacvvfEb
+	 N7ki52aFLqiRksvH8FOiGikSaYW3s+amWBEylMP5ZWaOcp2+jpGrFVSFNcV+1EbSFPT4d
+	 MkAg7uCX8Yk2cQUQb6OjekF4YTXvDpy6XriZaRD1TOHsxcfRo+Elppeyd7K1Mb4lohg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794581606;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:
+	 X-Google-Original-From:Date:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=jlcDsdtlo0slK+vvqG3ptpM7GvIadzb1KxPdJ/tncg8=;
+	b=E1oW5OW7deCwHf0L30jnW31rZlGMHDmtoBuWFo10M/jHApntMlfbJQjYc8gQRFa4qZtl
+	 N0rGU2xKkM7B9p+O/ijYEtF+pcKSkBQbcwTmVscsukw6SImqq1/wqw7/tdtKCsNFBB30c
+	 moGFFWG9UGONnD+XiuIudli7KsKVL39/TbQk7IGZgY81Fv+Z6tQsZR3OlhRYbUA+EoluF
+	 GhVfKVX2kQrr6aMOiWACEiy8Vclp/Px5tUuNygAClkt9CEOZWNgfIZInGhybBUZbEhYX+
+	 3zIeodUaX4wW7mAR7VAh72jJifhz7TExtb4aw7lQosR3fO1UIY+IpQqn0ZXKWeeFWxA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DmfxAftj;
+	arc=none smtp.remote-ip=209.85.218.42
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3667C606A327;
-	Fri, 13 Nov 2026 14:37:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3667C606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C23E606A32E
+	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 14:53:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9C23E606A32E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b=m0jnPKVs
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=HPZyWASnZIjDfIJsLMruSVyzhbTk6oCADYFCaXukApBU7wow6peVFjn28IyVtlaM9M3l19a6GO1UvjrskB4LF9e39L0GXAbI+uL5RuohIDU1NPfqgqngvErajGBfFtjBH73aDH6QY95aZSADXyohrIZIuoF+avbaWshtkDwgdgA5HVgLZBTgDcaKO99BLsQIx3pdqHnFjoHz99MZJVDaeQIIfPqd6s+HKbK323pw3S5kHTvOljxCmqpVBbgVJ98k8wzeavKhbCuRLLQigQ9Ky100fWGi5uJ+WkBwdo7o7dLgasqpRE4Jqh+be4gueOfcKElsiOpq1caQiBSeD683cQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/RYVCqV7k7xTPgRrR2CDb38P/NJSsTKrT2U6zO68EaA=;
- b=Lgp6jI6MLZW1a1oTJRYjupvWcSd/vqTaMXkBIzxP0R1fl0tA29L/boL+qXrid9qjJKXENgpT7CB85HVfSjeptYcU6ycFOvlmOSPMQh/Uggz9nBjoOC3V89IFoeorfkdWB9cFno2lORrAiXvz7pw2EiBYHziatSOvmW/reKC/W3JueyQ6cb93kLtNwieNkWgJSXWXfsFrB5O+kwpAzkFCUlc1I+F9KDFI1NrHLqQci0hhY5bZx0NqMXLD1DA5HM9P/AphNdCFHnzFMkkLGcfl9uORcOvSr7vQ7S39cmpUML0tRYRlm/mlD+Xp40UAcs3LXwkODF52K2DC42lW0n+stQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
- dkim=pass header.d=efficios.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/RYVCqV7k7xTPgRrR2CDb38P/NJSsTKrT2U6zO68EaA=;
- b=m0jnPKVs7PNgGxMNqabU3Z6JW3Bz16zQy7IiiaJPehoIvUXV0g2Ge7hrwOAVeDubeD7L3dHsB6/jIDQFe3D+7BqqjH1y+VTnrYKsr2kOJAEC0TISJN16FSSqDeyVpC0KxiTV74/n1az1cBWTZopa0+OsGUadsKNkDuArgDq1xnv44bZi9vEb6LDXUQf7rRURLCMGdAE9Tnwmlu01WZeVqg6OQYbVbTNS1jPOO8rlIk9MQe3aEzghKTiZEV8aVelvY30A0rHNkgxUy/rI2gK4pIU/jhZWDDC+1GagS7VSaO1VHVXghLeLEMgUGQ6qhtiBeKB9QheDiJShZnK6l5k3TQ==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=efficios.com;
-Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:1d0::10) by YT6PR01MB940077.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:1ba::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.9; Fri, 13 Nov
- 2026 14:37:33 +0000
-Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::6b9e:a901:67c5:7ddc]) by YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::6b9e:a901:67c5:7ddc%6]) with mapi id 15.21.0615.008; Fri, 13 Nov 2026
- 14:37:33 +0000
-Message-ID: <9b274b15-7b4d-4611-b894-d1651b99c490@efficios.com>
-Date: Fri, 13 Nov 2026 09:37:32 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 15/16] selftests/membarrier: Check the memory barriers
- of each thread
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-References: <20261113131903.157186-1-mathieu.desnoyers@efficios.com>
- <20261113131903.157186-16-mathieu.desnoyers@efficios.com>
- <sashiko-outbox-212919@kernel.org>
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Language: en-US
-In-Reply-To: <sashiko-outbox-212919@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT4PR01CA0003.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:d1::7) To YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:1d0::10)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DmfxAftj
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-c40e30c26a4so257156866b.0
+        for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 06:53:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794581604; x=1795186404; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=jlcDsdtlo0slK+vvqG3ptpM7GvIadzb1KxPdJ/tncg8=;
+        b=DmfxAftjg1G0HivU6QqMf8e3eweoMRPo6IiUtQMJu/JvFCTg0GlhPfANGtdLM8gmEa
+         1Y1gOpfeCPNuBctz9TkVqjg1s7+TCCWsLwdPWVjek06VvFD1Lf+6kzdYcUkrntp4MuHA
+         AGFejj4ke0Zks+9TOi9ApExlrHD/laF5/i/ip2747yxLyNmkORTjO75MxKLXse4hJG06
+         QCED55IhlT9Kvd5FH8qzEKLoFp9Xjij/OyG/q2H6itc4x6clZ3/iCq8/RNAJh5AtSRfh
+         SFmVoZllL7g2CMBG/inRBBpDTnOYdEWwI5HwRqfj1vItt9THSKKrmICGkPie2coiD2A7
+         76AQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794581604; x=1795186404;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=jlcDsdtlo0slK+vvqG3ptpM7GvIadzb1KxPdJ/tncg8=;
+        b=YQAmv0YIN6i2jKRVQpCW16T/Ur3k9sCFAKauTdhqmXEgq2VFMgKHNJxA0B7QdmK37o
+         ZFSa/p7cYr30BzaQF9Z63XyYBIYcd3nupajyARnvhCi3l+7gkA6IMZq4lTBTV2T0IHkV
+         7vOck31j3rnXS7QaiEamhB1dr9/+WrQzTwlUP3bg71csFREZTkF+1So19D1CpqEymiOm
+         A8oAIPKn2cW0Cy+6dS788wrddsQC5kdpTem92FFwDi52EZG+rhqNmJmnU//osY4u9Por
+         Mlctyk9AXqM7cAVh4bCA6l43x23HZrniitH0VDVy6GwHlIXL+yeQvy4jfypSqEtC8syk
+         WgrA==
+X-Gm-Message-State: APuU4Z+mc5hhJF/2UpMacYFaFaTKrzLkb/Qb5tkF/NSSOgA7H+oM6FVd
+	tAL1cRk0QTG+GOoBbsAR8+Ym2FbhY5IC1Bq4OKtvkfDMdGSZ5JxF2hlr
+X-Gm-Gg: AYBFou1gYdh0eTwDdqg+31x0dHLlfv3ZbMEPTfmqqQyvpplFCaaUw3AIzZlYOsXMW78
+	CoJ30U/59RVxfedFcMBzASYkl01j73m4QKMFy7HhE+O0I0eOvOaDxTomVXyj7M5xJmhGY8ysiSr
+	Kigk5SU6pT+8r1BAuYKOoTd/AJsgJ255D5MuFMWpTeTvJHXUCZe8VehxFkA52FsNkJL7dSVC9Ww
+	nPVVH5Irv+CtE8/x5kFu0l95f/l3ldUm7kQdVFyhQaWhaVZvQdfL7aXPqzkMyh1D0NF6lKK67g8
+	SMvcgQUdy3NqvSFanmkLu3BJ0omH8fKmXlNnxpcmj2XGZWN1LMAPsNCe6JG+3XaKPWb2Wj9KgGG
+	pOE8oOYwPTf34QlYKQ/ZvoidHNIh+Iv+4A7ufINBmAqsaaDTSrlAtv4sJiyWVMTY+RfM9knvB/Q
+	CHp3cX16cV1QGG4kL4I2MNu6mqYfROx2S9zs+3a32xaIowSeCeU/GpP5b56sT5vqCgjEz8i1IHt
+	6gNPrZFnGPbP68iWIepWJTHnCxqDZiQcMRqjnD1DLEGeVvPEyrLJFOFGHEg+T8WNMygfR0JNTVH
+	YnYvgjMR+S5nu1c5
+X-Received: by 2002:a17:906:9c89:b0:c2d:c6e7:9e9a with SMTP id a640c23a62f3a-c509634a669mr257870466b.11.1794581603715;
+        Fri, 13 Nov 2026 06:53:23 -0800 (PST)
+Received: from krava ([173.38.220.49])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c5095b58b66sm111032166b.50.2026.11.13.06.53.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Nov 2026 06:53:23 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Fri, 13 Nov 2026 15:53:20 +0100
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org, Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	HyeongJun An <sammiee5311@gmail.com>,
+	Christian Simon <simon@swine.de>, stable@vger.kernel.org
+Subject: Re: [PATCHv2 bpf-next 2/2] bpf: Disable private stacks for untagged
+ kprobe programs
+Message-ID: <avckYL7KMRk96XQP@krava>
+References: <20261106164043.546879-1-jolsa@kernel.org>
+ <20261106164043.546879-3-jolsa@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -99,135 +103,137 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT6PR01MB491026:EE_|YT6PR01MB940077:EE_
-X-MS-Office365-Filtering-Correlation-Id: 61686479-b856-4d12-7c27-08df4193a795
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|23010399003|22082099003|18002099003|261009223027099003|56012099006|4143699003|261028144727099003|261026140227099003|261022105027099003|261022075727099003|261026121527099003|10067099003;
-X-Microsoft-Antispam-Message-Info:
-	30VbqRvNKbnH4K8pqeTeEqUgrgxYiB8p3W5MWSZaVUoRQfwl+rZy0zqVcwEBRYEUO8NhrHoMGH0Numxnc1hY2IvQQA6hGpl+j3FwhPYghF1cachW2CeLN7G6gQIoV/sx5ZXaQwduAEmu0hxemrMoF5XFZDPkXTWDJo5S1OFlwP8aqfBJadgQUYtnf3VwHlFrEIJAL9cU6leyW5Dq1DT14luW5ZMCIgCelw36j0whMh+xVA4xmHNE0Hisdl0Bd1/tsj6YAU0LBya3jbCcy1/eAY7ixZOhXL/U0m3saOIl5Pqq9S8MCz8v1LjNeBOT+MbZ+WNxd9BllqMF7ZCIXzDZmR/cEpsPubrKdpyikFBSVnC9AKJZh8Nx5sKg9Ft/g6F09LpOO6polmTZItRWocyZ5D61JQ4kS1aDJzrVxRbxVq7p3CYY/2MFOyg3biEXPzoga803U/yoKqezV+Qh8151o5W/HbTanhmayOyEpk6RKfjcDnZZIPM/pHZYQJvutGi9vFGB2X6ro0SbKpVZCd4dLfE31nM3knawM+gqCsVlff3m+XcYDE8aQ0n0Qd8vjVFTh/u7eJv6OuRnsAVBiZsr8jskPPtcnkuQRv9cr5B9jKc=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(23010399003)(22082099003)(18002099003)(261009223027099003)(56012099006)(4143699003)(261028144727099003)(261026140227099003)(261022105027099003)(261022075727099003)(261026121527099003)(10067099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?SHIzeERKMjZwWW9rOURkaVAxR0l0aHE3VWF5YytBbmJaSlRobHV2RGJsQkpt?=
- =?utf-8?B?VFdIUjh1TGUxSkxCdUQ2cXNGUndJaEVIVStSYkNydEdHaDAzMUxFZU1hVTlr?=
- =?utf-8?B?QzNTblBKK0NqM3ZlQmpUaWhSYk1rY0hPcGtIWXc1d1ZySG9BTmZ4emZnQzNO?=
- =?utf-8?B?UXR2dHRCSk96c3BQMnZRL290TkxvZHhQNTBja2FkRERDSHFCdzVST1g0Rnlj?=
- =?utf-8?B?Mm9UVVdFenNkcHJZLzVJeFVIWlkzUm9seFgwcml2bnlBVWtHc3BiTDVwbmI3?=
- =?utf-8?B?SndheFZrZVhXT0ZXaitDYjNQdTJtSlVQT0dUVHdETytweEpOWFdXQStGUm1y?=
- =?utf-8?B?dDQ2OFB6ajJjeE51V0l0cXl2R3BNTTVIUzlpN0h4ZkJlTFNuOEV1Uk5nVExk?=
- =?utf-8?B?K3ZaclhlNGtRYzFIVWRjdFc0ZEZQYWc5SXZzdVZ4V0NmYzlLVzZYTHd6VXIw?=
- =?utf-8?B?UTZLU1BEN3NCZy9qb2ZlODJ6bkxad2IyeGpLbTlyZUJqZjJQWVJkRERrQWZm?=
- =?utf-8?B?aXlORElxbkJBT3k5clM4QmppZnM5WnlYbzVVRHdWU1BDNEc3bkhxaFBVZEov?=
- =?utf-8?B?bzhPZDVERklXVE9FcVIxd3FzQjg1SlgrMFc0RnJaSWo4Q3hKa0xPaTdhOE05?=
- =?utf-8?B?TVhMRVF6aHB4M2d4UkJvMjlZR2EzR2QxZ0xLdUJSZ3E3cTNFN0dZRHd6MmdS?=
- =?utf-8?B?U05udTAxblJoOUFEN1VTNjFKUG91RHM5N0R4VEJDc0wwUC9tMnB5dFZLelUz?=
- =?utf-8?B?NG5ZbnhVTUpZMTR5WGdYOFB5M0VJd1liU1dXbzhFMStBVXNaNndaRFhRSlpZ?=
- =?utf-8?B?UHFSTkpnUHRkOEFrdS93MVJQNCtJaGtMMDcwUHBtY0hObGs2cWppT09LdTBB?=
- =?utf-8?B?U0ZWNStzQUNJTW0vR3Y5WTM1WVpsWjdyZ01qMXpQVGdRajRrYzFpZnlVbUdz?=
- =?utf-8?B?UER5TTc0ZTAxU1V0MkwvTDNLbDNWQmVEZEtNR2Z4R01tOURTOFpUV3NzeDNW?=
- =?utf-8?B?ZzBvaFo2UkRCb2lKRkZZMThpemcrQzIzRGVHN0JPa2RNK0N6c1A0Nlhyelcv?=
- =?utf-8?B?bUpMMlR3Wmk5blh0elV2cUY0VVI3R3ZDRGFIS01QMENPT0NmcTVqMTQ3M2xQ?=
- =?utf-8?B?Ukp4SEI2TE13c2IwNk9SZ2pmY2VKdjR1L2FTQkExNGhEZWh1Sy9Zb0EyT1lU?=
- =?utf-8?B?aEtYWC9FbGo4d0hPRVhVNjdxNU1HMjUwVFZSa0pjdGlxZWUzQXdXanI5N1RL?=
- =?utf-8?B?OHY1b2x0NXB3OE4wVFh4VjlZYStxNW1IREJxN3hVbXpHV2tjbGg0VFg4MlBp?=
- =?utf-8?B?bDRHelBwNjJPMzVraFhhcDAzYnNuRjRONElETlFQUE1tRm43NS9Semg3R2JD?=
- =?utf-8?B?dkplbUM3ZHNLNGY5S3ZaYWdqL0FZQWdUUDNUcUNwUHNkUW1IaGFpVkoweVly?=
- =?utf-8?B?ZVVaZG1sazRIQ1pqRGZxT2p5K29WMUFjalhjU1BVZUVIVk1FRkpUV1QyK3Rp?=
- =?utf-8?B?SDVXaXI3SnpQVEF5ZC9nOENXcUkxSDc0bXhNdjk4cVBDT3VlTkNxTUJSNlZ2?=
- =?utf-8?B?YVd1cWM1UHl2enZPNWp3dWJValNNNUVVajBqR2p1OTUxQkE0NTZ2ZzhRZ3M2?=
- =?utf-8?B?TWljNjhISDFwZGMxK2dseTFmNG5XUFRMRFYvZVZwS0kwME5TWml2ekdyUDBK?=
- =?utf-8?B?bmZ0eGp1T1pyeTNrcm5DVTB5d2hjZkdOd3d0KzR5VGFyMithdmEyTUx2d2lm?=
- =?utf-8?B?aHUrZUM3NGliLzRJWlBzdk8ySHNnbmZQYWpLT2Vvc3JGN3o3Ym03VTJKWmJ3?=
- =?utf-8?B?UW9RNU5MU1hGRmdFZlhzd3k5ZkVVZnR4Wmk1UFdodHFYa0dvZzdOa0pTSkdo?=
- =?utf-8?B?K0NsemFhczFxREZXOWo5cmtoREVEdkVMQ01yL0Y2RysyNkZpZXRLTkVhTXNu?=
- =?utf-8?B?U29wbnE2TEdBeUFyTmhhOFlRUGs0eHA1L2RDRHZJQmdnMDk1bndNMWZudjM2?=
- =?utf-8?B?MHZoelZ0THV0UzUwUkZIZm1FRjQvdXFrRExreTJtaWpaZmlnWkFYWGR1eHZO?=
- =?utf-8?B?QnJHVjQ2cVZmMlcyVGFTWE5xZXo5cW8wT3dCZGxHVjhJWnRJeWsxU2xLYUtL?=
- =?utf-8?B?eTR2LzRBU21hTThYeU43ajhuWW5UdGdBdWd6ZkxJUGtUTTFkdzljZ1p0TWJ4?=
- =?utf-8?B?clN5L2JYVnVldElRMXpmbXhxZmFMYjlGV1ZGWDNQajdNb05pMXRyNENrNzhs?=
- =?utf-8?B?SjRoRENTVWZjY2ZxMUZWT2ZaOE55SVc0M080TldrKzNGMFJucjcvcEJNT3BE?=
- =?utf-8?B?bS91aFBUV1hNNjlpWW51QUQxVmZrK0wzbkpkaEpNaEphQnVoV2ZYSEtEeEM3?=
- =?utf-8?Q?7irTrs05e1HlscrfZ7GrpCVvp2xeDqF9nG1H0?=
-X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 61686479-b856-4d12-7c27-08df4193a795
-X-MS-Exchange-CrossTenant-AuthSource: YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Nov 2026 14:37:33.8330
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /+tA+82iCRUX6YM2vww1KoglqnmkfB2hV+Zg8YgVsInUpvWKa2rxPShHowpnDyzo7O0GtY1pJvKRMr8piPTVeS+3F4Q+B5ZcVQmyq8/YXk8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT6PR01MB940077
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261106164043.546879-3-jolsa@kernel.org>
 
-> [Severity: Medium]
-> Does setting setup_broken = true before bpf_object__load() and
-> bpf_program__attach() cause main() to fail instead of skipping when the
-> kernel lacks required BPF features?
->
-> A kernel with CONFIG_DEBUG_INFO_BTF=y and CONFIG_PROC_KCORE=y can still
-> lack CONFIG_BPF_EVENTS=y (needed to load kprobe/tracing programs and
-> BPF_MAP_TYPE_TASK_STORAGE) or have BPF JIT disabled (needed to attach
-> tp_btf/sched_switch).
+On Fri, Nov 06, 2026 at 05:40:43PM +0100, Jiri Olsa wrote:
+> Uprobe programs can be preempted and re-entered on the same CPU. Since
+> the private stack is shared per program and CPU, another invocation can
+> overwrite the preempted invocation's stack.
+> 
+> Programs without a multi or session attach type may be standard kprobes
+> or uprobes. Disable private stacks for them, and retain private stacks
+> only for kprobe multi and session programs, which have attach types that
+> identify them as kprobes.
+> 
+> Update verifier tests that rely on private stacks to use kprobe.multi,
+> and add coverage that untagged kprobe and uprobe programs do not use
+> private stacks.
+> 
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 
-Yes for CONFIG_BPF_EVENTS. The same holds for CONFIG_KPROBE_EVENTS,
-which the kprobes of the test need. The test should skip in both cases.
+hi,
+I did not realize before, but I think this should be added to stable
 
-The BPF JIT is not needed. The sched_switch program is attached as a raw
-tracepoint, which does not use a BPF trampoline. I built a kernel
-without CONFIG_BPF_JIT: the test attaches and all 13 test cases pass.
+Fixes: a76ab5731e32 ("bpf: Find eligible subprogs for private stack support")
+Cc: stable@vger.kernel.org
 
-Planned fix for the next round: bpf_setup() checks both options before
-it treats an error as a failure. It probes the kprobe program type with
-libbpf_probe_bpf_prog_type(), and it looks for the kprobe PMU in sysfs.
-I tested this on a kernel without each option: the test is skipped.
-
-> [Severity: Medium]
-> Does calling pin_to_cpu(target->cpu) before map_counters() miss the
-> lazy-TLB context switch in global_expedited_lazy_tlb?
-
-[...]
-
-> As a result, sched_switch never sets OWES_BARRIER or increments
-> MBT_SCHED_IN for that lazy-TLB switch.  Calling map_counters() before
-> pin_to_cpu(target->cpu) registers the thread in task_slot before it
-> migrates back to cpus[1].
-
-Yes. The target moves back to its CPU before it has a counter slot. The
-BPF program does not see that switch, so the barrier which the scheduler
-owes the target there is not checked.
-
-The checks of each call start after the registration, so they are not
-affected. Without the fix of patch 1, the test case still fails.
-
-Planned fix for the next round: run_target() calls map_counters() before
-pin_to_cpu().
-
-> [Severity: Low]
-> Can zeroing shared->next_slot in reset_shared() let an exiting task from a
-> finished test case clobber the BPF counters of a new thread in the next
-> test case?
-
-[...]
-
-> Preserving shared->next_slot across reset_shared() avoids reusing counter
-> slots across test cases.
-
-Yes, this window exists. I did not reproduce it.
-
-Planned fix for the next round: reset_shared() keeps next_slot. The 13
-test cases use about 270 of the 512 slots at most.
-
-Thanks,
-
-Mathieu
+jirka
 
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+> ---
+>  kernel/bpf/verifier.c                         |  9 +++++
+>  .../bpf/progs/verifier_large_stack.c          |  2 +-
+>  .../bpf/progs/verifier_private_stack.c        | 38 ++++++++++++++++++-
+>  3 files changed, 46 insertions(+), 3 deletions(-)
+> 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index b7329d164771..1b58a1796a2e 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -5749,6 +5749,15 @@ static enum priv_stack_mode bpf_enable_priv_stack(struct bpf_prog *prog)
+>  	 */
+>  	switch (prog->type) {
+>  	case BPF_PROG_TYPE_KPROBE:
+> +		/*
+> +		 * Uprobes are preemptible and lack recursion protection. Classic
+> +		 * kprobe and uprobe progs have no expected attach type, so enable
+> +		 * private stacks only for kprobe.multi and kprobe.session progs.
+> +		 */
+> +		if (prog->expected_attach_type != BPF_TRACE_KPROBE_MULTI &&
+> +		    prog->expected_attach_type != BPF_TRACE_KPROBE_SESSION)
+> +			return NO_PRIV_STACK;
+> +		fallthrough;
+>  	case BPF_PROG_TYPE_TRACEPOINT:
+>  	case BPF_PROG_TYPE_PERF_EVENT:
+>  	case BPF_PROG_TYPE_RAW_TRACEPOINT:
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_large_stack.c b/tools/testing/selftests/bpf/progs/verifier_large_stack.c
+> index 7e4f5e3463a2..cbabb41d973c 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_large_stack.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_large_stack.c
+> @@ -243,7 +243,7 @@ static void priv_stack_frame_2048(void)
+>  "	::: __clobber_all);
+>  }
+>  
+> -SEC("kprobe")
+> +SEC("kprobe.multi")
+>  __description("private stack: two frames of 2048 bytes")
+>  __load_if_large_stack()
+>  __arch_x86_64
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_private_stack.c b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
+> index aa15361bcca5..0ce07bf6b566 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_private_stack.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
+> @@ -22,7 +22,7 @@ struct {
+>  	__type(value, struct elem);
+>  } array SEC(".maps");
+>  
+> -SEC("kprobe")
+> +SEC("kprobe.multi")
+>  __description("Private stack, single prog")
+>  __success
+>  __arch_x86_64
+> @@ -110,6 +110,40 @@ int no_private_stack_stack_args(void)
+>  }
+>  #endif
+>  
+> +SEC("kprobe")
+> +__description("No private stack, untagged kprobe")
+> +__success
+> +__arch_x86_64
+> +__jited("	subq	$0x100, %rsp")
+> +__arch_arm64
+> +__jited("	sub	sp, sp, #0x100")
+> +__naked void no_private_stack_kprobe(void)
+> +{
+> +	asm volatile ("			\
+> +	r1 = 42;			\
+> +	*(u64 *)(r10 - 256) = r1;	\
+> +	r0 = 0;				\
+> +	exit;				\
+> +"	::: __clobber_all);
+> +}
+> +
+> +SEC("uprobe")
+> +__description("No private stack, uprobe")
+> +__success
+> +__arch_x86_64
+> +__jited("	subq	$0x100, %rsp")
+> +__arch_arm64
+> +__jited("	sub	sp, sp, #0x100")
+> +__naked void no_private_stack_uprobe(void)
+> +{
+> +	asm volatile ("			\
+> +	r1 = 42;			\
+> +	*(u64 *)(r10 - 256) = r1;	\
+> +	r0 = 0;				\
+> +	exit;				\
+> +"	::: __clobber_all);
+> +}
+> +
+>  __used
+>  __naked static void cumulative_stack_depth_subprog(void)
+>  {
+> @@ -123,7 +157,7 @@ __naked static void cumulative_stack_depth_subprog(void)
+>  	: __clobber_all);
+>  }
+>  
+> -SEC("kprobe")
+> +SEC("kprobe.multi")
+>  __description("Private stack, subtree > MAX_BPF_STACK")
+>  __success
+>  __log_level(4) __msg("stack depth max 512")
+> -- 
+> 2.43.0
+> 
