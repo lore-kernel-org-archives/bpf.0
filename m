@@ -1,57 +1,122 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794577564;
-	b=Mu0Kj9gJyXDkZlQF0Df10LQ1x6RCXrlD5O53IbwSV5TBcn1kY0gYO05b5qw8nQF/fKeO
-	 hIMDHUOexsCLhOzUxEr8+6wmth9VmjSObkl2Bv7mU5pPiBw4yARmO4/917kKQI4uU7bpJ
-	 Ui2A6T0JrSLF09ytMJK1aKyVOoDU0RUWgX45hCSwo/mGCqOx8jLsegaEmP2DkXT3PtDJq
-	 GgYw9/zB3Hq/85iU/1HHkgdldISGTI2JoAwBI2Xfn92CfEmDUzIcXBS9apFFmYmDIVPaq
-	 f1hjFCo5iRsL9xujqqGy1RRF6Jc0Xp/ozKbze9166EczGFhhKZ6yqATyvhAEGhmPBNw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794577564;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=5GG8uI5pGVFGK6vDOm4uHQXdvzsDrmWTq8Qe1GlRKpc=;
-	b=5VQuVP4Lezo3edqrSvEk+Yd1amgkIp7fGrgXzP9C1rP50Kj+iqFtrn8Uzz8VD7dFAcLh
-	 Yq4DIjTrFdh7uWS0kicCvDN7nzLmDutqzeqHk8nE38pTyWpi463QLsmeA3d5755I+RhIJ
-	 TkHscOnUhTnPL/Zt0o/wQVq0ybMmEEBwpxPm3dejeraWFVgV/BNI9abMUs1M4BfoJDSFk
-	 SHHXcz0XqUggZnO8kXS9B4t/zJojvE3tBMuDsJ3eMNnxwu4VkqSK7azWv4z7XJklG/5LJ
-	 Iw9oDikzUI1L3BL07fV9sLPOMnrJ+41o5HPxv8y8CXgFB6Y+FGd9YlQN7kWlg2d86zA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FV2quZMk;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=170.10.129.124
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794577796;
+	b=Rw6JaBtOozZe/Gk/at5PAXnolhLup8pob9VY9gBoSyPjLC5VB/kLw7WNSe2nC5jw+6dP
+	 Tyslct3i48WdLjSAniB7UFV2czJPfWPV+UazjaEiYnS5xFM+KGrTsC36Iuo2OrE7dewRu
+	 +hE3EerO0XIIRWm/uMl1LYym13Gz/Uai/ZegOeOP7fqwCwi5KWJ43ChXg0m68pMIlIDok
+	 bF13JZBcbGaVQ56U4m5UM14IvZ7JaXgHuWwIZ5gxHLIPVrRVbxQ5uljNVqcfYCcO4v3rc
+	 at00zItaG1i6LhfSnH2Lx+cH9pvUnrTnPiBDvTrav1a/5Thm+5PyS9V0bQQWYdFrNOA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794577796;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:From:In-Reply-To:References:MIME-Version:Date:
+	 X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type;
+	bh=8e2MXnw38pYzH1XVs1yXJtejPbQN6bZltGajv/NaWc0=;
+	b=cdy9H9RL8BpOedkMq/e5dIJwwRTm9JVU6691rn0Agnpi7Heaf9SiBC0Lt9A7zAlcYeuz
+	 xYkR4LjWxBA/KNgh/HrILvRp/wf8ziQPvtfrqzmvmZvhNOM4urphKLjjrZT5bNuUppXrj
+	 n6hHz1HcRt5wIKjW/pepI82wMOgauVwo7qyVcYpAwXk8Ueu1o9kKOKA9KRU+q86fkZ2EP
+	 RH0t93+NGKDFTPj82Qpl5BoCByLIOawFsgA5HsNbo92uVraVR/0voEGwXT62cG9UKhEXD
+	 eBeUhqKFrWcMLSTlQ3/Lc3Zs0IqgpXAS43ecnv5o6baCpNJDa0OsiFdShBcvymdvgQQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=dnr4bWaa;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=Ga5oluTv;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C77C606A327;
-	Fri, 13 Nov 2026 13:46:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0661760A3832
+	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 13:49:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0661760A3832
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FV2quZMk
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1530C1F000C5;
-	Fri, 13 Nov 2026 13:46:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794577564;
-	bh=5GG8uI5pGVFGK6vDOm4uHQXdvzsDrmWTq8Qe1GlRKpc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=FV2quZMkyGZXAtmhvuVpvmot00AnfMPDSbreLEP1hzKHeVGIOf4JiVqr9bu934G+E
-	 okd3Er8nWVHXBOyBmmR9cMO0Rj/I7RJi+CqWZhnF2U2I3w59BrtLXTmXOXAj1CmpLb
-	 AYFLYGZ4sDDMzcXq+vZpuIW2ogln+brIqvQvp/TT9uQlNma7w1UMEbWAsQpiKa/w0U
-	 8vDggvkz/AjnCxQSoYIyPPKdqmcH7zM0KLamQh0d14zVYZe/xEqYG7Ke7MsGeTv0P5
-	 aYdcO5JMM9B5iyW7w0IIYpp5iVq7GqWuqnlfMGxWXJJgJerR56vn2tcFqMrWBaS7J8
-	 ZJHCOVecyJvBA==
-Message-ID: <sashiko-outbox-212919@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH 15/16] selftests/membarrier: Check the memory
- barriers of each thread
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-In-Reply-To: <20261113131903.157186-16-mathieu.desnoyers@efficios.com>
-References: <20261113131903.157186-1-mathieu.desnoyers@efficios.com>
- <20261113131903.157186-16-mathieu.desnoyers@efficios.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 13 Nov 2026 13:46:03 +0000
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=dnr4bWaa;
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=Ga5oluTv
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1794577795;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8e2MXnw38pYzH1XVs1yXJtejPbQN6bZltGajv/NaWc0=;
+	b=dnr4bWaah9/wySNrHe71UxG7yxYO1hP4OJsDO4UuONplGfOBRiaQICVPWXH0a5xAfClVPc
+	t+VpNg58eHK3YP5XWW59CAcUzV5E/GfH9p/c18EmHQRz6zpg7GqxOWWu1kW44oqkX5txvm
+	zu2Lk64sIPPATltWgXHym6Mxatxh5HU=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-97-2BmY-q9APo26dGN74L9iTQ-1; Fri, 13 Nov 2026 08:49:53 -0500
+X-MC-Unique: 2BmY-q9APo26dGN74L9iTQ-1
+X-Mimecast-MFC-AGG-ID: 2BmY-q9APo26dGN74L9iTQ_1794577793
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-91edde88d16so12636476d6.1
+        for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 05:49:53 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794577793; cv=none;
+        d=google.com; s=arc-20260327;
+        b=gEPVpAP7CQPwBY1PSQ40d2a5vQTA5AXrCQA2f3zTb8QkRfg+AhZfjuGTj0egFDw9uT
+         MgDaULl9+CZBUzBJ4urWgETLEH0FadUtDyHDEDMUWpbG7dME/WJZOAiXWeYAU209Wqdf
+         Nv18DD7EbWKy/KDCSXOsNXayddnZqe1Ih0gCydNCj1XCpaazz4fDtz/8EeCbvq5jptTG
+         lTrlivVluCQ+knxliBSzF7UFC+MLdF3B9dOQWs77pJi/jKRBnk8DmHyliCunfLiCGuaG
+         Sbndmi3o9WspV7qpBwFiVPb47n5k3kDJSoJqU2N10aM+ujTPstXMN1WlRiG+nOt1fFYn
+         EWGg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=8e2MXnw38pYzH1XVs1yXJtejPbQN6bZltGajv/NaWc0=;
+        fh=ZIhQg+3CwRsgkqII+zl7SiNUHt6v8lKGAlFlpQPyZB4=;
+        b=XaMhwm2XLNxI3Pu5lnujU8MhdtAtqqDtGAfr+odINIDtQvvIhTQIbo6lys6mrxq7sv
+         xtfV44tnRZgO8Bq9cKXKh1kDcQH5zGrtneOjQFX11ObSHMdhDPwtFOCZUeq2WUq/Z+rg
+         Hs2poIUtdyDkgNS5l3rLuQ7nWtIHsltaapd/WHNcIlJQU3h7jAOy/nHWJvkjcEsUWqgY
+         zS6VOr1TSDagUenfs+0hsEN2KF8qQgVoJi7CCTxAUrvwza+zfVEdZInlfy+uiGI2uz2J
+         8BTSsCmQF+etiK5Am89JOYRUW1ZMTGHzT76kGk6jLwIdv8L2XnTuxMt5PZWmdYuO7+KO
+         pMgw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1794577793; x=1795182593; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=8e2MXnw38pYzH1XVs1yXJtejPbQN6bZltGajv/NaWc0=;
+        b=Ga5oluTv2VoCAk4tJJMwd4DcHxnzZN8P5RMMfsYuwHSiMT40x247pqXYZppw40aUfp
+         AgXHj7O5P5EGzLh4fIFmrS2LDUH+QEQZYT3NfXESJ7+2AAzl/5iG4ssuum/lz5MnkbiY
+         FEWaupRQi3hJm3DKU1Rj2ZQVesMwID+ZlD3yg4Dcq13ucBIA2y5CuZZ0qDg+hag5pCQ2
+         rQ5GzjunzI61xrZyS6U/SOWzCL5dpAMnK6H42AAF/0so3HDc8I1e5CduBSEcu1Nj+iKT
+         Na7YqNXXzrX2iDdPop6PnLFczlm8s6Y4c3Y6Takf75DT2e9wYXuz0ZE7I3UrxJfbFVUJ
+         fD0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794577793; x=1795182593;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=8e2MXnw38pYzH1XVs1yXJtejPbQN6bZltGajv/NaWc0=;
+        b=kJhqOeDvyvb38Sc3c0v/PF9OwNB9tqqu8XCSNHJKdM7rE67B/OcPosu2vFK9iwzJ6U
+         DbPgnEEcZXSD18fTO31shbjzQGJof88eqfxrRkyim88wv4+vX0UymgFSO3/HM2wxY0o8
+         lU+ckITMvLyKTpVkBSytKEM10cWqqDBzyPDvtxt9JtKRomwDL9NezugO+c/ZbVBRC1H5
+         NopMylSauVcw9H1HxlPT7/vB8muH9xy4kZsnh6RJJ3t34DjoR2l77fPKu4jvUqgAvIQy
+         QXFFdyz4TO5KMapExX4Erb4+ihZMk1DXvsL0ZEJ8D8o0M5jH+glFrjLUZyOBEH2n9zKA
+         SBQA==
+X-Forwarded-Encrypted: i=1; AL+hErFBnK9/OKX2sr/p4Lkl4CC9VFrD4tR6X8fuJ2b5n6BvNOQDejeySAVhFTntXyQkm/VbtcI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/F01gd89LVqdgwmX1MnE5JDgb4WteoX7Bq17EPmOV9PljbnY5z
+	eGDnk2UDJHA4YP/kiuog4CxuEi5GGkhXrZmNqYvDLWbBgaSIkeGYkfLqdDiDkZhzMfyWw8GVkEo
+	yowsDPh1f/hA3nsyoaWrE0fw67ECUE03GeJnlO/CkfjsXV16heiolJjz490EymKJ0TQLu/YCRe5
+	CzWyVtb+CIWaGu/GjbqJOZnfyDy/QX
+X-Gm-Gg: AYBFou0waW/uMkJl6A5S6ttHV21LtdJ7MKNAmw1B67ZN/8hsuK4EL14FRRoy2u310Z+
+	pURpUjLxnDAXsjgG2/dmuGFXedpDVh8nvXJOHj25aTO7lK4D2rXfZiYzfYOJp2ncvMuAWB5g+OF
+	/x+1wF/9d4oVPExmgUupzTFhAJscuDnWKFeaHsyWXOj+pclQ/Lao1HVvI=
+X-Received: by 2002:a05:6214:85cd:20b0:91e:89d8:a330 with SMTP id 6a1803df08f44-91f241f6d2bmr27649196d6.25.1794577793105;
+        Fri, 13 Nov 2026 05:49:53 -0800 (PST)
+X-Received: by 2002:a05:6214:85cd:20b0:91e:89d8:a330 with SMTP id
+ 6a1803df08f44-91f241f6d2bmr27648836d6.25.1794577792581; Fri, 13 Nov 2026
+ 05:49:52 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 13 Nov 2026 07:49:50 -0600
+From: Sergio Lopez Pascual <slp@redhat.com>
+In-Reply-To: <20261113080506-mutt-send-email-mst@kernel.org>
+References: <20261113-vsock-dgram-support-v2-0-bacfc85b71ce@redhat.com> <20261113080506-mutt-send-email-mst@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,172 +125,64 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Date: Fri, 13 Nov 2026 07:49:50 -0600
+X-Gm-Features: AclHuK9yYj2AE7jCL2Q7aluEqsTHouql9M7zvOo0Tu9GOsA54iFCZqauW8Q06G4
+Message-ID: <CAAiTLFXvuHY=r8FPM7TFNTAO1oyco-brcc6YAc=YN432h87RSw@mail.gmail.com>
+Subject: Re: [PATCH RFC v2 0/8] vsock: add datagram support to virtio and vhost
+To: "Michael S. Tsirkin" <mst@redhat.com>
+Cc: Stefano Garzarella <sgarzare@redhat.com>, Bobby Eshleman <bobbyeshleman@meta.com>, 
+	Alexei Starovoitov <ast@kernel.org>, "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Bryan Tan <bryan-bt.tan@broadcom.com>, Vishnu Dasa <vishnu.dasa@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
+	Stefan Hajnoczi <stefanha@redhat.com>, Jason Wang <jasowangio@gmail.com>, 
+	=?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Haiyang Zhang <haiyangz@microsoft.com>, 
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	virtualization@lists.linux.dev, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-hyperv@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Thank you for your contribution! Sashiko AI review found 3 potential
-issues to consider:
-- [Medium] selftests/membarrier: run_target() pins CPU before
-  registering BPF slot
-- [Medium] selftests/membarrier: bpf_setup() fails instead of skipping
-  on missing BPF configs
-- [Low] selftests/membarrier: reset_shared() reuses BPF counter slots of
-  exiting tasks
---
+"Michael S. Tsirkin" <mst@redhat.com> writes:
 
-commit 3ab38ee940d58df6774d85bc12aa7c4563dfeb02
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> On Fri, Nov 13, 2026 at 01:47:33PM +0100, Sergio Lopez wrote:
+>> This RFC adds SOCK_DGRAM support to virtio-vsock and vhost-vsock through
+>> the existing AF_VSOCK API. It is intended for guest and host services
+>> that exchange independent requests, responses, or events and need message
+>> boundaries and sender addresses without a stream connection or application
+>> framing.
+>>
+>> VIRTIO_VSOCK_F_DGRAM gates virtio traffic in both directions. Each virtio
+>> send carries zero to 64 KiB of payload in one VIRTIO_VSOCK_TYPE_DGRAM
+>> packet. On the RX virtqueue, the device may split a datagram across
+>> page-sized guest buffers.
+>> START and EOM delimit the message; the guest reassembles at most 64
+>> fragments and 64 KiB before delivering it to a socket.
+>
+> where do these limits come from? how does peer know not to send more?
+>
 
-selftests/membarrier: Check the memory barriers of each thread
+The 64 KiB limit comes from VIRTIO_VSOCK_MAX_PKT_BUF_SIZE. The number of
+fragments is a reasonable number to prevent the driver from putting too
+much strain on the device.
 
-This commit adds the membarrier_test_barrier selftest, which uses BPF
-kprobes and the sched_switch tracepoint on x86-64 to count per-thread
-memory barriers executed during expedited membarrier commands and context
-switches.
+Both limits should be part of the spec. This is the relevant part from
+the draft I have put together so far:
 
-> diff --git a/tools/testing/selftests/membarrier/membarrier_test_barrier.c=
- b/tools/testing/selftests/membarrier/membarrier_test_barrier.c
-> new file mode 100644
-> index 0000000000000..46502d2712425
-> --- /dev/null
-> +++ b/tools/testing/selftests/membarrier/membarrier_test_barrier.c
-> @@ -0,0 +1,1253 @@
++When VIRTIO_VSOCK_F_DGRAM is negotiated, each rx virtqueue buffer supplied
++by the driver MUST have room for the header and at least 1024 payload bytes.
++The driver MUST discard a received datagram packet whose \field{dst_cid}
++differs from the current \field{guest_cid} configuration value.
++The driver MUST reassemble consecutive fragments with matching address
++fields and MUST NOT deliver a partial datagram. It MUST discard an orphaned
++fragment, a fragment with an unsupported flag or operation, and any
++incomplete datagram interrupted by a new START or an unrelated packet. It
++MUST discard a datagram if its total length exceeds 65536 bytes or it has
++more than 64 fragments.
 
-[ ... ]
+Thanks!
+Sergio.
 
-> +static const char *bpf_setup(void)
-> +{
-> +	struct bpf_program *prog;
-> +	libbpf_print_fn_t print;
-> +	struct bpf_map *map;
-> +	const char *err;
-> +
-> +	setup_pid =3D getpid();
-> +	atexit(bpf_teardown);
-> +	if (geteuid())
-> +		return "this test needs root";
-> +	if (access("/sys/kernel/btf/vmlinux", R_OK))
-> +		return "the kernel has no BTF (CONFIG_DEBUG_INFO_BTF)";
-> +	kcore_fd =3D open("/proc/kcore", O_RDONLY | O_CLOEXEC);
-> +	if (kcore_fd < 0)
-> +		return "cannot read /proc/kcore (CONFIG_PROC_KCORE)";
-> +	setup_broken =3D true;
-> +	bpf_obj =3D bpf_object__open_file(BPF_OBJECT, NULL);
-> +	if (!bpf_obj)
-> +		return "cannot open " BPF_OBJECT;
-> +	if (bpf_object__load(bpf_obj))
-> +		return "cannot load the BPF programs";
-> +	site_prog =3D bpf_object__find_program_by_name(bpf_obj, "barrier_site");
-> +	prog =3D bpf_object__find_program_by_name(bpf_obj, "register_thread");
-> +	map =3D bpf_object__find_map_by_name(bpf_obj, "counters");
-> +	if (!site_prog || !prog || !map)
-> +		return "incomplete BPF object";
-> +	register_fd =3D bpf_program__fd(prog);
-> +	counters_fd =3D bpf_map__fd(map);
-> +	map =3D bpf_object__find_map_by_name(bpf_obj, "site_hits");
-> +	hits_fd =3D map ? bpf_map__fd(map) : -1;
-> +	/* The exec test case passes these two to the new program. */
-> +	if (fcntl(register_fd, F_SETFD, 0) || fcntl(counters_fd, F_SETFD, 0))
-> +		return "fcntl failed";
-> +	signal(SIGINT, restore_optprobes);
-> +	signal(SIGTERM, restore_optprobes);
-> +	signal(SIGHUP, restore_optprobes);
-> +	if (!set_optprobes('0'))
-> +		return "cannot write " OPTPROBES_FILE;
-> +	prog =3D bpf_object__find_program_by_name(bpf_obj, "sched_switch");
-> +	switch_link =3D prog ? bpf_program__attach(prog) : NULL;
-> +	if (!switch_link)
-> +		return "cannot attach to the sched_switch tracepoint";
-
-[Severity: Medium]
-Does setting setup_broken =3D true before bpf_object__load() and
-bpf_program__attach() cause main() to fail instead of skipping when the
-kernel lacks required BPF features?
-
-A kernel with CONFIG_DEBUG_INFO_BTF=3Dy and CONFIG_PROC_KCORE=3Dy can still
-lack CONFIG_BPF_EVENTS=3Dy (needed to load kprobe/tracing programs and
-BPF_MAP_TYPE_TASK_STORAGE) or have BPF JIT disabled (needed to attach
-tp_btf/sched_switch).  When bpf_object__load() or bpf_program__attach()
-fails for those reasons, setup_broken is already true, so main() exits via
-ksft_exit_fail_msg() rather than ksft_exit_skip().
-
-[ ... ]
-
-> +/* Run the checks of a target. */
-> +static void run_target(const struct target *target)
-> +{
-> +	struct target_stats *stats =3D &shared->stats[target->idx];
-> +	const uint64_t *counters;
-> +	long deadline =3D now_ms() + target->ms;
-> +	unsigned long checks =3D 0;
-> +	uint64_t first_ipi, first_sched_in;
-> +
-> +	if (target->cpu >=3D 0 && pin_to_cpu(target->cpu))
-> +		setup_error("sched_setaffinity");
-> +	counters =3D map_counters();
-
-[Severity: Medium]
-Does calling pin_to_cpu(target->cpu) before map_counters() miss the
-lazy-TLB context switch in global_expedited_lazy_tlb?
-
-In global_expedited_lazy_tlb, the child pins itself to cpus[1] and then
-cpus[2] so that cpus[1]'s idle thread borrows its mm, and then calls
-run_target() with target.cpu =3D cpus[1].  Because pin_to_cpu() migrates the
-child back onto cpus[1] before map_counters() runs register_thread to
-populate task_slot, the switch from the lazy-TLB idle thread back to the
-child on cpus[1] runs while slot_of(next) is still 0:
-
-tools/testing/selftests/membarrier/membarrier_test_barrier.bpf.c:sched_swit=
-ch() {
-    ...
-	slot =3D slot_of(next);
-	state->slot =3D slot;
-	state->owed =3D 0;
-	/* The cases which need a barrier after the store to rq->curr. */
-	if (slot && next->mm && prev->mm !=3D next->mm) {
-		state->owed =3D OWES_BARRIER;
-		count(slot, 1U << MBT_SCHED_IN);
-	}
-    ...
-}
-
-As a result, sched_switch never sets OWES_BARRIER or increments
-MBT_SCHED_IN for that lazy-TLB switch.  Calling map_counters() before
-pin_to_cpu(target->cpu) registers the thread in task_slot before it
-migrates back to cpus[1].
-
-[ ... ]
-
-> +static void reset_shared(void)
-> +{
-> +	memset(shared, 0, sizeof(*shared));
-> +}
-
-[Severity: Low]
-Can zeroing shared->next_slot in reset_shared() let an exiting task from a
-finished test case clobber the BPF counters of a new thread in the next
-test case?
-
-pthread_join() and waitpid() return during do_exit() before the dying task
-reaches its final context switch in do_task_dead(), while its task_slot
-entry remains attached until free_task().
-
-CPU0                                  CPU1
-join_targets() / child_ok()
-reset_shared()
-  shared->next_slot =3D 0
-start_targets()
-  map_counters()
-    register_thread() (slot 1)
-                                      do_exit()
-                                        do_task_dead()
-                                          __schedule()
-                                            sched_switch() (prev slot 1)
-                                              count(1, 1U << MBT_SCHED_OUT)
-                                              <-- increments new thread's
-                                                  counters
-
-Preserving shared->next_slot across reset_shared() avoids reusing counter
-slots across test cases.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261113131903.1571=
-86-1-mathieu.desnoyers@efficios.com?part=3D15
