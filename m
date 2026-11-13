@@ -1,77 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.10.208.62
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794612504;
-	b=nezlaTuwxRrv92+sNoKyNGIrUg9walaDAbffk+zar0LPbAtYGSv57SvNhXzkqGr2zbFT
-	 bgxPOCvINYwUi9t4P+WD2f23tCcL5RHLTEnSHdHhPe5iOgruZGZ7C8mMuKXzTe9PEsYpo
-	 Q3f0/odWL4fGlbK3YKO25yjIRJv0LwHehgQecrC+KmRZUe4W/Mpv46/OZpouuBC4c7Jiu
-	 0yfqhwwAcqvQvQcKaHgebPTP8r/MZmwB+ydVf8bOs9lxBqBMOGb2h2qsOZuCiLx5ht4wY
-	 FyPLwRYfduNHA56S+yxpV5RoAFokUtFee4EqfQP5Zrjr6LCuPSvrPP3L2nTdMi5icyw==
+	t=1794612543;
+	b=vq5CdQHCSd1GlHpYF2tPnaM/LB1L8hR6SOH1Gcno2dsV5YS6ZH+8fEhaETbvhmMG+uDE
+	 c6QUZ9A5XSTf7A1/67YeeEJtPQjEgvGCC+ctK3Uhp6U2zz5YJCcLZpYnb1ArlZthzLqxG
+	 sx2wGs2pNj+EeB2BBiaxeFofEhOFVXIDbPEUHg9qZcg6LqQrnDL+W2Cu1kCt1qa6SVrAx
+	 6ZHfHeo+NCS9zJVp2Xmkadw8hyF7wn0r+HWtO7aMRF1ROgkeTs77xuHpDKdmOkD2kLo/G
+	 Vz2ZdF/0sedwBBm+f98MWAehfsQBEnxNbiG7mUtOb7uCWYx1g6ZmJtzMyEjHGptm2fg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794612504;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=MP44A2UXd/wSnusowTnecNPA/CsL40YpZ+6cXn2Yq5o=;
-	b=Sq5txMwUbRcGJx5ttnQLWn6OD5y7q2rqBAWaKvjSWRLTOM2yUQ4qQCCFrNZ+XXwfnKzt
-	 6njcjO3AhrEg7egMoYfMoBpEAy+1eDecl73tUJKQztEgiehr9Bb2ib03gXOPwh6HdbiTR
-	 4albzVmDlrgFJno7nRjw3vpNxTcjm+HyPbAVDmuawqqrVDxmrRQpMrmNdCeKJJhJN9kwr
-	 UWHJNkPTTKufBAAkEvHUy4vvyVNEwsosut4x5SfI/orlsEaqtYJ2V90HBOvXy1sbm4iYH
-	 lVGbmOzYbfsyEE0ruun5vO+Q/7qFpRU0oGVuZKcs/LwMNtP2FNZ4qW5rq8zI5P1+byw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794612543;
+	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-Rspamd-Queue-Id;
+	bh=YMmiURWTclyFUKjPqBzMU4kcCzHqWhA5bK0YM2ZJ3Pw=;
+	b=Sx//eW+OgAjJ/q1m6HYLcF1tT0fVDgNM1iAcXjD7l+kGc+2sXs9EdtepAowwwbxbrVFJ
+	 OFZk2RNDV5zNOgSapJAUghKexm7PizqaCF7zarLZbVm8IyV6HZryfnLqHLsQ2P3KFwvkT
+	 XdSzthSXTPE1UxSiRgH0cLat8rRKps/OM5Q8Ql9Up9Izx1eFcb6djxisv6OaXWkPYxptm
+	 NWCouaqBa5PHvF2oglXoKwCn64TuyZA51ZAjMN556KDdr8Da9NfbD2LazwM665z85s9bo
+	 Ufb1bnCoR14OUvo5ZMWEwOESQrobJM5HaK+JmKuUVT9DYGqnvNb9PdPSV/cLMHp7aYw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BFmsfKiM;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=mandelbit.com;
+	spf=pass smtp.mailfrom=mandelbit.com;
+	dkim=pass header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=ZvtB7qAH;
+	arc=none smtp.remote-ip=195.10.208.62
+Received: from mout-b-202.mailbox.org (mout-b-202.mailbox.org [195.10.208.62])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52857606A327;
-	Fri, 13 Nov 2026 23:28:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29A26606A886;
+	Fri, 13 Nov 2026 23:28:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 29A26606A886
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mandelbit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mandelbit.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BFmsfKiM
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91BCF1F000C4;
-	Fri, 13 Nov 2026 23:28:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794612503;
-	bh=MP44A2UXd/wSnusowTnecNPA/CsL40YpZ+6cXn2Yq5o=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=BFmsfKiMNSSguxngG5T8TrvzhBZikBS8lfNfuEiBlybN5vaxLk351fbzf17HP53qs
-	 KNUCvlZMeITfQazmYnj5eztC02HQcH9cnSPy0tTc7P3gvsNrNyd+9EWzuoBQR6F7wP
-	 qOH9TJmA3PVAhoimmwyWEDtxiDgat5iyUjNjRct/FDqggt18zC6NYyBvmiGqljqtQp
-	 QCSyGIE4sQ50KkB1Aggc+ity1nl7SdzXHTIVUTLYeafC9xkDtFahIjvAbVbJFtXDSA
-	 DvwsuK9aIJE+5t5x2PZ1DQw8KG+ez35Km2Fcn8vT+g6qFT8Tis0pg3m/c6XwCy7JFk
-	 ILuB/iQ+Rm2/g==
-Date: Fri, 13 Nov 2026 15:28:21 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Ding Meng <meng.ding@siemens.com>
-Cc: netdev@vger.kernel.org, Willem de Bruijn
- <willemdebruijn.kernel@gmail.com>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>, Tony
- Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel
- <przemyslaw.kitszel@intel.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, Andrii
- Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar
- Kartikeya Dwivedi <memxor@gmail.com>, Richard Cochran
- <richardcochran@gmail.com>, florian.bezdeka@siemens.com,
- jan.kiszka@siemens.com, wq.wang@siemens.com, p@1g4.org,
- gerhard@engleder-embedded.com, Jason Xing <kerneljasonxing@gmail.com>,
- Simon Horman <horms@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
- Randy Dunlap <rdunlap@infradead.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Martin KaFai Lau <martin.lau@linux.dev>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri
- Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Ihor
- Solodrai <ihor.solodrai@linux.dev>, John Fastabend
- <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- intel-wired-lan@lists.osuosl.org, linux-trace-kernel@vger.kernel.org,
- bpf@vger.kernel.org
-Subject: Re: [PATCH] net: mark skb NAPI IDs independently of busy polling
-Message-ID: <20261113152821.47e9d219@kernel.org>
-In-Reply-To: <4pqljild2fp6eotiicvwbwu2wfw66fzd4qamwt6utirdjxlaok@iiu2f3k7azrp>
-References: <20261105071706.7043-1-meng.ding@siemens.com>
-	<20261110134539.12d860ef@kernel.org>
-	<4pqljild2fp6eotiicvwbwu2wfw66fzd4qamwt6utirdjxlaok@iiu2f3k7azrp>
+	dkim=pass (2048-bit key, unprotected) header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=ZvtB7qAH
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-b-202.mailbox.org (Postfix) with ESMTPS id 4jRD3V0vmqzKnR0;
+	Sat, 14 Nov 2026 00:28:54 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mandelbit.com;
+	s=MBO0001; t=1794612534;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=YMmiURWTclyFUKjPqBzMU4kcCzHqWhA5bK0YM2ZJ3Pw=;
+	b=ZvtB7qAH43vttbZJaG/JxTYoCepd8k6m73Avmyuq9kroqKWsDgrJ41LwfBnugSC2laTbKF
+	hiwcnZ9qnyciDWwE+0XtL7Q88W9nzGCwomq7ABVSgZ3nk4LStdugulNRLjPHtoNujkocvm
+	NAImsyqRFF9feGz35LaHRjO6BNFtP0nFeDKARmhcObOK7JdLBYjHjJj7vtHfFPkeBP3rJC
+	WW5dBuuKy5YSF2GbEKQV+dVVpI6hcz9h2Y+Q2pIzE754Oi8zn6wvhpdcGeskmJZ18bCgDp
+	v0lk79zU3AuX01xuUHzKUGznwMm17J9Ih/4Emx52avefCGN+IM5eN/atKIyjfQ==
+Authentication-Results: outgoing_mbo_mout;
+	dkim=none;
+	spf=pass (outgoing_mbo_mout: domain of antonio@mandelbit.com designates 2001:67c:2050:b231:465::102 as permitted sender) smtp.mailfrom=antonio@mandelbit.com
+From: Antonio Quartulli <antonio@mandelbit.com>
+To: willemdebruijn.kernel@gmail.com,
+	jasowangio@gmail.com
+Cc: Antonio Quartulli <antonio@mandelbit.com>,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	mst@redhat.com,
+	eperezma@redhat.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	netdev@vger.kernel.org,
+	virtualization@lists.linux.dev,
+	bpf@vger.kernel.org
+Subject: [PATCH net] tun: complete the zerocopy buffer of packets consumed by XDP
+Date: Sat, 14 Nov 2026 00:28:41 +0100
+Message-ID: <20261113232843.2338734-1-antonio@mandelbit.com>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -81,36 +86,65 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 4jRD3V0vmqzKnR0
 
-On Thu, 12 Nov 2026 12:33:57 +0800 Ding Meng wrote:
-> On Tue, Nov 10, 2026 at 01:45:39PM -0800, Jakub Kicinski wrote:
-> > On Thu,  5 Nov 2026 15:16:08 +0800 Ding Meng wrote:  
-> > > +  interface index will be returned only if CONFIG_SKB_MARK_NAPI_ID is
-> > > +  enabled and the driver is using NAPI. This hidden configuration is
-> > > +  selected automatically by busy-poll support and by drivers that need
-> > > +  skb NAPI IDs to resolve deferred hardware timestamps. Drivers that
-> > > +  use deferred timestamp conversion must select it so the networking
-> > > +  stack can find the device and call its timestamp callback even when
-> > > +  busy polling is disabled. The struct contains also two other fields,
-> > > +  but they are reserved and undefined.  
-> > 
-> > Just take napi_id from under CONFIG_NET_RX_BUSY_POLL instead of
-> > complicating everyone's lives.
-> > -- 
-> > pw-bot: cr  
-> 
-> When BUSY_POLL is n under PREEMPT_RT && NETCONSOLE, igc fails to get RX
-> hardware timestamps.
-> 
-> Then, drivers that use deferred timestamp conversion (e.g. igc, engleder) must
-> specify a busy poll dependency if they want to obtain the original net
-> device upon consuming the skb. However, this dependency is far from
-> obvious, and annotating it for future features of this kind will be very
-> hard to discover.
-> 
-> Configuring the skb napi ID separately
-> from busy poll seems cleaner and more reasonable.
+When vhost-net passes a zerocopy buffer that tun_get_user() does not use,
+because the packet spans too many pages, the packet is copied and the
+buffer completed. If the copy goes through build_skb() and native XDP
+consumes the packet (DROP, TX or REDIRECT), tun_get_user() returns
+without completing it: vhost-net never gets the descriptor back, and
+closing the vhost-net device then blocks forever.
 
-"take from under" == make it always compiled in
+Complete it in that case too, as copied.
+
+Reproducer: vhost-net with experimental_zcopytx=1 on a tap device with a
+native XDP_DROP program; send one 806-byte packet as 40 descriptors, each
+in its own page. The descriptor is never returned and close() of the
+vhost-net fd does not return. With the patch it is returned.
+
+Tested in an x86-64 VM with the reproducer and the tun kselftest.
+
+Found by the Sashiko AI review bot, as a pre-existing issue while
+reviewing an unrelated tun patch, and confirmed with the reproducer.
+
+Link: https://sashiko.dev/#/bug/linux-f9997fb6-303f-41d6-93e2-60c392b1856f
+Fixes: 761876c857cb ("tap: XDP support")
+Signed-off-by: Antonio Quartulli <antonio@mandelbit.com>
+---
+Notes:
+- Completed as copied (success false), as the copy path does: the packet
+  was copied into a page fragment.
+- net-next replaced ubuf_info->ops with net_zcopy_complete() in
+  ecca9bb2c855; there the call becomes
+  net_zcopy_complete(NULL, msg_control, false).
+
+ drivers/net/tun.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+index 86fd44e10755..927196840725 100644
+--- a/drivers/net/tun.c
++++ b/drivers/net/tun.c
+@@ -1871,8 +1871,15 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
+ 		err = PTR_ERR_OR_ZERO(skb);
+ 		if (err)
+ 			goto drop;
+-		if (!skb)
++		if (!skb) {
++			/* consumed by XDP, after copying */
++			if (msg_control) {
++				struct ubuf_info *uarg = msg_control;
++
++				uarg->ops->complete(NULL, uarg, false);
++			}
+ 			return total_len;
++		}
+ 	} else {
+ 		if (!zerocopy) {
+ 			copylen = len;
+
+base-commit: ead6fa9a0ab194f02a2f36d634b193e9c5f9a1c6
+-- 
+2.56.0
+
