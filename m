@@ -1,93 +1,210 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.50
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794571358;
-	b=qVGqxeESaVNDp9OzlIV/8En9yLGKdXZGfK63aPDyxcKPrrMsaThNBqdpBdLvQe0jOKM1
-	 3suFwLKCR0gSecxShIIfkjheR+10k5DDo7Vh28yNjnMMMpdRbkSvScEddBt9nxkH93u3e
-	 qlBoTgXKDJbm143olzvnp9W9yFTbywARDLPN7XymcCIAR6wYs+0cMsdXVBQkAoeS/tHDr
-	 F62yYmYcuR1IlwpcUgVW/zodKduJ5hoz2ho3WVrPt06fv8XdddM8kqQ5fk8HRXMymaOee
-	 46aT7bo/ucDZx7vAFvp179al+APApgYppP+WDq1CuC0eCjKtP5wk4+BANnMq/4nNlow==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794571358;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=ePINk0mSFf3VIuXGADrPFF3uNMGNrwU5/iy/vZOc9s4=;
-	b=2C20tm1vBiZaBuSOVsM5G+TNbqgw/Mrfz4LrmQ7wi2QfxGXN3uWD54DUQtAgO2nqUKRU
-	 M/6ffbatZpdUdruwDkdzVCsN4MsYgQSD0q8krFxXi9MUvNUXyDIMRhmC87XR5VdYKHvpW
-	 pHgoP2i5iw8fkRITJZ1QeADZSvSpzeAoNXqKqFf8HFjFcBoEuv9SAGkYTFyJcfjjrDeIw
-	 LSuy52CuPcSW6TM1PTbz/7/y55nyQOLJTV2NdDvlrWtAYGGd7Xy0JoFdNw4cHo9drer+j
-	 gHis0FcImaDlZeoxVLTn3gANRN+NgYmRzVyDr4Ad8VqKgEOGv09qD3FhyvCabswNlMg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=S52GLF0s;
-	arc=none smtp.remote-ip=209.85.128.50
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=192.198.163.10
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794571380;
+	b=RuHWqF7MjcEZFbsi8qFbft9ognwC1XLzH5b4Vv3NHOv6Cu1zmHaN0ZlRnRwTpyE6WsQR
+	 j1b825xjYALt1MOzEMmClT3SG/Cg6vZtFfnHDoVDCU0aD2PUrdk4EegVrU1CirWhzFN8P
+	 hBIYvDVMpcJOm5IxoLeIm/KHy5eZMSuisim6aloehJ8ZMKhXGO5Ka9dMKLAkxALdeQQBF
+	 XPqOw6RfEPOqa2yVnBUSQ8v3AVO061ltid0RjxS3ujEsNwsfTCVVvRnvvIf8Zl7uQnRpF
+	 HKq0N4sf7n8civl/WDKp0WR3RFLAynyJLgOqUuNH5bp+c8/3NAJy2rObObvrQ+9l0iw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794571380;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Received:
+	 Received:DKIM-Signature:Received:Received:From:To:CC:Subject:
+	 Thread-Topic:Thread-Index:Date:Message-ID:References:In-Reply-To:
+	 Accept-Language:Content-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:
+	 x-ms-publictraffictype:x-ms-traffictypediagnostic:
+	 x-ms-office365-filtering-correlation-id:x-ms-exchange-senderadcheck:
+	 x-ms-exchange-antispam-relay:x-microsoft-antispam:
+	 x-microsoft-antispam-message-info:x-forefront-antispam-report:
+	 x-ms-exchange-antispam-messagedata-chunkcount:
+	 x-ms-exchange-antispam-messagedata-0:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version:
+	 X-Exchange-RoutingPolicyChecked:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-AuthSource:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-originalarrivaltime:
+	 X-MS-Exchange-CrossTenant-fromentityheader:
+	 X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
+	 X-MS-Exchange-CrossTenant-userprincipalname:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg;
+	bh=o4fZ6NiE58Go47E7elTL2xBVuuAZC1n3IVg4+61jD4M=;
+	b=0F/KAhQQDwh2IS8cccIHyoz16kL/sruexYx7X7KjmXvAscG7TO8/xidymi6rEDgkEiiB
+	 FoPqfGmkB/jNUccffCIIm1yUddDxdCT+8mJTkbKrzatxHRpDY/FAQxDWbYDsGIizgA/lo
+	 Fof10Ahfx4rjy3o1V5m+B7EldL00qhtx8SS8qNDdY/rVeSQ/KmqqWGE7ogu4T6AVeMM6g
+	 YdOw863TpPOtt8iy2kHqj7HKty5ZWRfozyixEhzRWV8J66HfuPGuEoxHr0qcwKl2OnPSk
+	 LpTuXOYI2wrpCmi5eO9HiCGjlxcv2w1G+0W8H/qsD9Mhz4ItrOkMPb/ZgXUWpuMpGjg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=n1JTG6hg;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=selector1 header.b=WXSA12Oi;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=192.198.163.10
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F44A606A890
-	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 12:02:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9F44A606A890
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBE6F606A336;
+	Fri, 13 Nov 2026 12:02:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CBE6F606A336
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=S52GLF0s
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4a9a8d6cea8so8711375e9.1
-        for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 04:02:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794571356; x=1795176156; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=ePINk0mSFf3VIuXGADrPFF3uNMGNrwU5/iy/vZOc9s4=;
-        b=S52GLF0sFG4+vIRlUUXcyfi+FRVt7RgHAJCkDJqkA7q3KMtTMZXAIEj0mx31JLWQB8
-         KaPjL1hFuFOmGPEOQSdpIcA/Jk0EZczKJekwl/94gNmTItLiP9kfd1KI3plzL3ePzByy
-         QMqa6I88O10fTb6++ga+wQykKJ0+1R9ExxM8WQbO0P/CtqcXJsfneAeHD+bRxmuVLW0F
-         MRGd1xyyJRnI9Omk+LrL7mLA3wBK0i2O5qRClLuW2rLuYbfxPMvZmeps0XlnCRbNS9Oz
-         Q6FgSKceF1SMBXYrS1pqwG9JRcplC7wOP+X3KiRUp6wg/OuOHKt6SjS3P8AhI9/9GnMQ
-         vtog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794571356; x=1795176156;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ePINk0mSFf3VIuXGADrPFF3uNMGNrwU5/iy/vZOc9s4=;
-        b=dEvDGNywhzVCUYRUHjx02N04K0Ny/WjFbhttlS2kf5ugKjTj/84tRlu3PfLwfWHSLv
-         8XkAG6AjEh0Bg0Ot1O3Q6yx2zfWMZiihIVP9gc1q4520qzS8RAApMtSJAqHPyewATPv2
-         iOfl9BU2TEXeso9CExDFBQ6dHnjXoWeVJ9YWpk38RVLkcY+5K6ASQDtONd/458r/LCkY
-         nS5U9QI06Ac6dkfcFbYK0l9/YHdP0dRfXqerTsXX9yTzIGL8neURAzI/owmg5jKcR3Of
-         MGZ91QuG3dFkTbTDXZBrZTS6lqmauIPsbE6HKOm8sGZ29U+iUngOH3DavZoOVJ8egU31
-         uFAw==
-X-Gm-Message-State: APuU4Z9/rxnvY0nnAtWRM6HOaamn5icNlafnZpk4ZK9Q1ruBTkViISw2
-	2CLG1i33eEW4wNd3rzhbUbPRJmunj35EApT1GcJcofUt/SqWTp4MEg8V
-X-Gm-Gg: AYBFou2M0bCufkwD1CFqS3IN3QOV2hePtBmxl4V52y61oo7Fe6E/cuqgI4K6XAwLpDO
-	svTyEMxagCewIDzsJKvQ/bUVliP+RIlK/vrskiNf8dRdNg4q7aXH0YWD/T9TJJxgZf72aWixFEa
-	RgOqTc5KtsI4He5hPVU+8qHNpyRF3weJGEvokGq4Xzk2QTKqvWPVRvMShOILtNanhFj5xpys57G
-	0pWzAHNFtYDx4M658V0NQgveCMFNFuFnzAWwMQIvjQcXA/2eITox2vAoecO50OAEyT4bWj9hX36
-	Ln2SzcCiJh09ZSnKxRTD+JXqX2cG6WC2trl6tMEj1H/1ngM7QOPI9pXR/zq788649SeLG78gGa6
-	2oJwqE9SqzUyhSa9F73tNDVqbIOKevH5rbr8OCoGBrNN01ymIuuJ7ICAjGvmZajZkAOjXRxa93Q
-	zi4fZTOlZNJrJNNxs8aFW8FiBs/UPqDeIHxIRDSNJs8CBekpzPjbfo+5MvZJWJD/8wujo65G8Zs
-	VOIwS/C9iT6+36+UuxV0Zyd+5cCKt3QaY/qMlQE8bi8usFV+YRvh/5DATJTncmm4Rcmr8yD2bPV
-	dYauN+QY45a8QWFUd3l0m0pOGQLjhMrRf0TiiEJDa2t6bMPnKJCbg5hlJKs=
-X-Received: by 2002:a05:600c:55c7:b0:4a1:88df:8a2a with SMTP id 5b1f17b1804b1-4bb55a8d13fmr33670975e9.13.1794571355926;
-        Fri, 13 Nov 2026 04:02:35 -0800 (PST)
-Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb4e2538b9sm253302365e9.1.2026.11.13.04.02.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Nov 2026 04:02:34 -0800 (PST)
-Date: Fri, 13 Nov 2026 12:14:09 +0000
-From: Anton Protopopov <a.s.protopopov@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	eddyz87@gmail.com, memxor@gmail.com
-Subject: Re: [PATCH v2 bpf-next 08/13] resolve_btfids: Don't list an error
- that follows work on an argument
-Message-ID: <avb_ETHW4LCryuhQ@mail.gmail.com>
-References: <20261113050901.1399091-1-alexei.starovoitov@gmail.com>
- <20261113050901.1399091-9-alexei.starovoitov@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=n1JTG6hg;
+	dkim=pass (1024-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=selector1 header.b=WXSA12Oi
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794571380; x=1826107380;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=3BVgHsM8mMRKCWNsanrPpMKINm9vGwp1Z4QIQ1r0fjY=;
+  b=n1JTG6hg56cpjyBSijIgEXljrHvWVBdLU1HiJrKeNgs8yzatrzF6lXe2
+   2658cSGJUmqRTUjqvLVTNgANyoRjhyhmgCglzPUmJ4oqd+JePGgU0UcLl
+   KDvSV9ht8TcgVZJzSH74kIuhTEkjCq2YRc+FXUEsICDzoIpLBjey8bgFS
+   CEoK6whzakj01BCSQCzXPelgxkVSf3dvVWc1fnT//O+PkTnIK5emntAQh
+   4Q1Ho+HqVT6WZoTkHkuhKYle3TzDm6rtp18NdiQ1zsiRwjA63KEvlsUwE
+   9iURN+1dhvfsSWkW5H9CebcFOC7VX8wfzgEaGoxmsHpS2zWM8V/hJw8Nu
+   Q==;
+X-CSE-ConnectionGUID: yAtemSlrTkyBWnvR3/fpEw==
+X-CSE-MsgGUID: ntdX/dTXSd6rtBd3u7mn7g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11964"; a="3260801"
+X-IronPort-AV: E=Sophos;i="6.27,211,1787036400"; 
+   d="scan'208";a="3260801"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2026 04:02:59 -0800
+X-CSE-ConnectionGUID: u6+wZ0wdSoeL8eQ5brPQ7w==
+X-CSE-MsgGUID: Gl+GRKGtRXeQXmWYBH1twg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,211,1787036400"; 
+   d="scan'208";a="8796726"
+Received: from orsmsx901.amr.corp.intel.com ([10.22.229.23])
+  by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2026 04:02:59 -0800
+Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.56; Fri, 13 Nov 2026 04:02:58 -0800
+Received: from ORSEDG902.ED.cps.intel.com (10.7.248.12) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.56 via Frontend Transport; Fri, 13 Nov 2026 04:02:58 -0800
+Received: from SA9PR02CU001.outbound.protection.outlook.com (40.93.196.33) by
+ edgegateway.intel.com (134.134.137.112) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.56; Fri, 13 Nov 2026 04:02:57 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=GwcUkb9cu3R1Qr+p+ruMZkjAOU3L/M/Q87lXAH+okMwzsG1A3dFBVz+4SpiCPVoZ7QQA7a0CnLbMwuBIcVFXdKejkbno/dwUB38IAHneHkFAktmL5vGFXjsBwTH5ArrnArzs+e18Z37Csa6B6u/8rw5/wVShkShSPi5+NolmkOJvQr2vKpEuk4UQQn45nCUlVn73aby2X2q5xZTrxmssb8rL06teV2bldjrF85lUPMG1xAyodorQEqA0tigXiTKsfUba2VjfDXWDEm3IC/VoOhIZRRlvAzD+UR+CfutTKtGZ77tmFSPvDigbB78gO9RGkTgjGuG0+1EHsqjw7AQmyQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=o4fZ6NiE58Go47E7elTL2xBVuuAZC1n3IVg4+61jD4M=;
+ b=oQOxj/yBNXxK2THlb8n8+GZvv5i/BaA6i8+21K+EBEC7j3ktVufeHh9lxAmGAAHKrFmYoQG11S14JcLJIxt5xoUDQ6aEypZcVC/aa+K5ReitQRpp4LE6SvJTlxSoMNBMjnnUBpqrU/rePwOP+HMFdzPrbQ0Vm1ikaaUecMUhwQq3aQwLny367l63K3aeFTTI8cv+h7BEoiSjlnt9DBeuS9VdI6IjY5UVqUrVzkkudDlmG4kvKwmCdvXamJK6yiw+ys/FPufTgs70rdVnYTbwKuVYqr/HQeCYrXIxN5uy+5snSOz9JOWjZXqWT+JAaotAZGGIH+GidO1ZHZfBytUsjQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=o4fZ6NiE58Go47E7elTL2xBVuuAZC1n3IVg4+61jD4M=;
+ b=WXSA12Oixu2ta12ZxS4/HEh1lHdxc4IaRz0rhOEexIGTGL1HSE0bh7Fy6TycPeooF7QN3B4JWvNU2yFD/N9wV5yqoqWYHk+QLcjn4NTMn1KVkNrbzfPI+nYMNKP+h1147APeR4vQHkFeLsB82IDLGz4wTPnMsawCmxTHU+okEKQ=
+Received: from CH3PR11MB566895.namprd11.prod.outlook.com
+ (2603:10b6:610:34d::22) by BL1PR11MB5221.namprd11.prod.outlook.com
+ (2603:10b6:208:310::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.9; Fri, 13 Nov
+ 2026 12:02:47 +0000
+Received: from CH3PR11MB566895.namprd11.prod.outlook.com
+ ([fe80::87f5:c8cf:d52:e584]) by CH3PR11MB566895.namprd11.prod.outlook.com
+ ([fe80::87f5:c8cf:d52:e584%7]) with mapi id 15.21.0615.009; Fri, 13 Nov 2026
+ 12:02:47 +0000
+From: "Loktionov, Aleksandr" <aleksandr.loktionov@intel.com>
+To: Tianyi Gao <tianyi@cloudflare.com>, "bpf@vger.kernel.org"
+	<bpf@vger.kernel.org>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
+	Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>
+CC: John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev
+	<sdf@fomichev.me>, Lorenzo Bianconi <lorenzo@kernel.org>, Vladimir Vdovin
+	<deliran@verdict.gg>, "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+	<edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+	<horms@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, Donald Hunter
+	<donald.hunter@gmail.com>, Eduard Zingerman <eddyz87@gmail.com>, "Kumar
+ Kartikeya Dwivedi" <memxor@gmail.com>, Song Liu <song@kernel.org>, "Yonghong
+ Song" <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
+	"Nguyen, Anthony L" <anthony.l.nguyen@intel.com>, "Kitszel, Przemyslaw"
+	<przemyslaw.kitszel@intel.com>, "Fijalkowski, Maciej"
+	<maciej.fijalkowski@intel.com>, "Lobakin, Aleksander"
+	<aleksander.lobakin@intel.com>, "Karlsson, Magnus"
+	<magnus.karlsson@intel.com>, "Vyavahare, Tushar"
+	<tushar.vyavahare@intel.com>, Jason Xing <kerneljasonxing@gmail.com>, Nikolay
+ Aleksandrov <razor@blackwall.org>, Madalin Bucur <madalin.bucur@nxp.com>,
+	Ioana Ciornei <ioana.ciornei@nxp.com>, "Jonathan Corbet" <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, Randy
+ Dunlap <rdunlap@infradead.org>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, "Bill Wendling" <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, "Chris J Arges"
+	<carges@cloudflare.com>, Jakub Sitnicki <jakub@cloudflare.com>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, "kernel-team@cloudflare.com"
+	<kernel-team@cloudflare.com>
+Subject: RE: [PATCH bpf-next 02/15] net: dpaa, dpaa2: clear the skb core
+ extension flag
+Thread-Topic: [PATCH bpf-next 02/15] net: dpaa, dpaa2: clear the skb core
+ extension flag
+Thread-Index: AQHdcTO+77YJv7IvfEGuCfkav4RF7rcr60Iw
+Date: Fri, 13 Nov 2026 12:02:47 +0000
+Message-ID: <CH3PR11MB566895F1CFCD1EC995B08E6E51E57F2@CH3PR11MB566895.namprd11.prod.outlook.com>
+References: <cover.1794281983.git.tianyi@cloudflare.com>
+ <bff7f72c7c28f67497e23a6629b9e4db74332da6.1794281983.git.tianyi@cloudflare.com>
+In-Reply-To: <bff7f72c7c28f67497e23a6629b9e4db74332da6.1794281983.git.tianyi@cloudflare.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH3PR11MB566895:EE_|BL1PR11MB5221:EE_
+x-ms-office365-filtering-correlation-id: 10ebc469-c347-4e7a-1603-08df417e08b0
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|23010399003|366016|1800799024|376014|7416014|261028144727099003|261022115727099003|261026121527099003|261102123227099003|261026140227099003|261021135927099003|261022075727099003|261021121427099003|56012099006|38070700021|11063799006|4143699003|261022113327099003|261022105027099003|10067099003|22082099003|261009223027099003|18002099003;
+x-microsoft-antispam-message-info: /S7paou6+w9cioE2JxMu/wFgTmyYdXEnGlzq/SUt9uvjCTji7WVSy2oZ1zqp/NDqmfn47jCpkP1d5VB/i+YwHjt3zUgWCA/pGzD4U9mHfsJ7V8BvCNf/s91STauvM3Zo/3YCwbOKSYA8ZQwwexG4SWd0+VQDPuWgyT9OX0KCJNccmYbXSzuSfHskCdIt4b7sSZZCsAdH9OXmNtm2R2ajFxAdfT6FH6CaVXezRF3j/3eA1wnEaXOdcnY0eVRBAiN84W4Qn5R73PLPq5T8YLKBgSTCo9OjN1zu7qS+mRvjoS/w99dkojNFNf9ADw6UvRBri6qyn1Fpsouh90fw5lj5oxLatkodt7OuFQBtnpRFvvBhVQkzjxf2rdgBLrB+dymMq5fk3tSdBsHWEz9J3thfg2jXMfhAuiweqtiyPYWmN+6T0cb3wWZlvOqVA/qwE6uqAqQH6B+1wclKCW/Mtcg87nGO5z0zrLXfo8zsClrmkYFgtVsxc/U52mFuxZFvJdXLCSGIACQDzaoil7sdjz8HSvujJ09YaCShu+Z6hxvvRHo/65BDBQSLq0e6EQJ4aOIAOG9sDJmltyVe2ns8x7cD0yyB/ebxthTXRVpUI1r0b1CrhWDPYauLTeDZ9pf5oJBpAtwRu4vfy4aTpcsHxGtevMj43XGK9QQs6iIdLdK2LUr6ifz8GJUpvIlORM4fiyXNazhSMiLqlFziCdVvekwhfaXs/alLZwtYcgAh3UWXj9s=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR11MB566895.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(1800799024)(376014)(7416014)(261028144727099003)(261022115727099003)(261026121527099003)(261102123227099003)(261026140227099003)(261021135927099003)(261022075727099003)(261021121427099003)(56012099006)(38070700021)(11063799006)(4143699003)(261022113327099003)(261022105027099003)(10067099003)(22082099003)(261009223027099003)(18002099003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?4c92mINoUhB5d4XxQAcX1vl6O793sgcfSIgHTft3ao/c6bmsIcJGDbVAlvnT?=
+ =?us-ascii?Q?HRwXchvqu7bkukXPJ9k9jkBB97Ln15OsTWh9yaIfKDriURXCRFDKKqX9zHBX?=
+ =?us-ascii?Q?zMOa6b3Jxy7TSKOhdL2sYryvD/2rNLOxDs7bYaoZrBbgpZp+ti/J3n2yVWP1?=
+ =?us-ascii?Q?waN7pXsk+gOcRKG0nnnT5wYk/vQvFq1jnXssbUzwI6l2Tyk34tLidml8yWKv?=
+ =?us-ascii?Q?L/1kIDeah46zEJ4HX4pA/2Wg4qudM5dc+S5z4DF1nJx4b44FiTBrlGKs9T//?=
+ =?us-ascii?Q?QPNUVMFhKg0BeMUP8LgHc9OI2i6FIdCg0K9p07cURMp+bQgaXNfqba/csYBq?=
+ =?us-ascii?Q?uOVBaoEqFctvsHF6hscEXVw+kzoFtmjUt0jcj62BTw+3RU30Ffe+95iU+UCQ?=
+ =?us-ascii?Q?gQqey5D2RPANXhjLCkEGb0IFIRHBjYrp+bii3o3cPizdD54L49XgTWHlO966?=
+ =?us-ascii?Q?ldJdcgoQIZZ+kFSRv56U9NeUNupeHtKb5Ud2qm0kY0Jmp4cGD1ZGMY2kk0Io?=
+ =?us-ascii?Q?GkSxvO9Q0l5eJpuvskTt6ZoyxFEOO1qIadTwbeHf1yAM5qyxD3+wWivotkZM?=
+ =?us-ascii?Q?5rpWhiPIn508gqNXN+vrGuCuiGblcKivYNAZFEQP0ROeuz2dpqLqNQuVAuiT?=
+ =?us-ascii?Q?3jnFGHdT/2JZjkbt7jvAztdwXevq7qQD8HYc8fdulm9ezzw+I/iIvqLOreTt?=
+ =?us-ascii?Q?5Fv3kucOu+ErlsSxkD/OJsD2SUKd23alJAeKyVev3AakN8kawYNy+G3itF8O?=
+ =?us-ascii?Q?5LVSehtJttMsGosI4RUnnQybXTjRWpgYB6GTGRla3m2h9rbnxYOAz3UTFzeg?=
+ =?us-ascii?Q?r0fuNJqJHISw9qCblxxj1RQPKpEAsJNLeDu37iyCQaNl+M5gQo0Njg1RT2xI?=
+ =?us-ascii?Q?5LwmNXpW3XoHfNDrP080mUiFURtk6QpQ+IoSan4P8UEHwa+A9W/dDAeGZfUR?=
+ =?us-ascii?Q?cgGIA+ZHB2b/0zapRYWDrHXPSdV680ehKEqQOWqK5GXYGqhxO+mJc5N3fXpH?=
+ =?us-ascii?Q?m6a9gt7e9uTKN4R3gvlrGJPAsc1D/6iOLT0khVjapwzxB37CAuuf1+71MpB+?=
+ =?us-ascii?Q?+5WFThVMbZGBixzcpeDac1u8KXIQH9rP+RKa1DzBt5sT5EjCjVFfatGw3zEx?=
+ =?us-ascii?Q?Ht4mbDzvXkON/linJo6l5GqykopAiU5tSfrmpdWKKlyeBwGfGEoNvjs0Bl3M?=
+ =?us-ascii?Q?XeDx4UaM/QvP3U/GNlBw14CXIvggqRFRn+N9/ZSH68msAdtpSFUO+ZJktb4f?=
+ =?us-ascii?Q?Pbmx1NgfyMXnFI4xLNMdCtWfiwnHiUNZz+22BHSXwtACwuW2LZsjr8iXubpE?=
+ =?us-ascii?Q?DpPLkq2zcUp39NLuTgwGqK3Uy7UkXXYO5zSU5ZvUnNNz78zjkbdppqL0uLCy?=
+ =?us-ascii?Q?fJ9QiKDYRoAeFR+cadnV2Pj1AGCKG6xiqx7R4NaKfhyRtVVHlxZDKUH7/yd+?=
+ =?us-ascii?Q?v3k/flP6ax6cI95H2dNSDBXXrpZXuxGIKHRymAqH6i19fLmL3ymQsrefz2jZ?=
+ =?us-ascii?Q?Rzb+8EAl0n1dRwJQm+5Qopw+71lA2el6+i3t9GiIjf0dllENTWw4h72SrS8u?=
+ =?us-ascii?Q?Gy8xljeDrQZUELKUHDVnPjl59J6/WYyvMkIretqKiu7IBogO0/bDDO+7pHjn?=
+ =?us-ascii?Q?j4AYw75oN606nEofEbzUB9uD82GNVmbJ9wBduOPVw5Gej36xWLz3IsbnKnT2?=
+ =?us-ascii?Q?F8XjF908h/G+Xe6QUQxDtnbj8FF8EWWNxsLGP/aXE0Wi4T/xxx82AtkOd0W+?=
+ =?us-ascii?Q?Ad2qY77D0+v/NkQ8liwo7a2NKUC1alM=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -97,66 +214,111 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261113050901.1399091-9-alexei.starovoitov@gmail.com>
+X-Exchange-RoutingPolicyChecked: 4cARNF/zIeUIHz3hmjyDtAZIpS72JrcmAr4OTBB47AaXf+WMgECbodpmw6H1twaXmP0vJAIUzZlNkT2yQlQS7VcDFN9UIFX51BBK78mdMpd8hZuEiKbrPiYY9a3d1g437GmYOjC03o3zVWGwvVXbwBel9ynhFoCPjcfDd81NUWwL6Md1cVmoTNLtzghatddWhOVLaw/nczLlz8GiFBABwkN14qYBfo6y7shgttJJkd326mDCXnO+GCDhp1pkcXfrAOONAD65L5GBjyzHNHbnCbgKFluJWsswguEjmIB4d3I7dO+/0VmSkitSvRLrlDVWv9xC2SerLjzoqw/PorVrZw==
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR11MB566895.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 10ebc469-c347-4e7a-1603-08df417e08b0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Nov 2026 12:02:47.6983
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: eRCU93zqFBWUYLE5olPaxhDf2RDAvrnN3Bdtrae9x+w3k85Rd1uUUpoebTDzj7FE3Xi7DJGKxy47tNSYsPn6Dfx7SAMc+LOTzRlk0390o30=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5221
+X-OriginatorOrg: intel.com
 
-On 26/11/13 05:08AM, Alexei Starovoitov wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
-> 
-> A program that returns an error skips f(). A skip of f() is not a failure
-> of f(). ksys_dup3() takes the lock and ends with "return do_dup2(..)":
-> 
-> 	static int do_dup2(..) __releases(&files->file_lock)
-> 	..
-> 	Ebusy:
-> 		spin_unlock(&files->file_lock);
-> 		return -EBUSY;
-> 
-> 	do_dup2() fails         dup2() = -EBUSY, the lock is free
-> 	do_dup2() is skipped    dup2() = -EBUSY, the lock stays held
-> 
-> A caller can rely on what f() does on each path to "return e". The rule:
-> 
-> 	An error is not in the list if, on each path from the entry to its
-> 	return, f() hands a pointer that is based on one of its pointer
-> 	arguments to a callee that returns void.
-> 
-> A callee that returns void cannot fail: what it does to the object is done
-> when f() returns the error. Most unlock, put, free and init functions
-> return void. BTF says so, no name is needed. A callee that returns a value
-> may have failed. "Based on": computed without a load, as &arg->lock is.
-> 
-> 	forward, may   the registers that hold a based pointer. A call that
-> 	               hands one to a void callee is an effect. Does a path
-> 	               without an effect lead from the entry to here?
-> 	backward, may  the analysis that is there. It stops at an effect
-> 
-> f() stays a target if its list keeps an error.
-> 
-> 	                tagged            errors
-> 	x86-64 GCC      12817 -> 11985    20967 -> 19248
-> 	x86-64 clang    13549 -> 12633    22964 -> 20889
-> 	arm64 clang     12435 -> 11543    21304 -> 19186
-> The run on vmlinux takes 0.2 s more.
-> 
-> The tool does not see
->  - an unlock that is inlined: it is a store, not a call
->  - a callee that takes the object and returns a value, a computed callee
->  - a void callee without BTF: f.isra.0, a name that two functions have
->  - a pointer that was spilled to the stack, or loaded from the object
->  - that BUG() and panic() do not return: the next block counts as reached
-> It also leaves out
->  - an error between mutex_lock(&arg->lock) and its unlock: both are void
->  - an error after a void callee that only prints a message about arg
-> 
-> Outline KASAN and KCSAN add void callees that get a pointer, such as
-> __asan_load8(p) and __tsan_read8(p). Each read of *arg is an effect then:
-> in 32 files of fs, net and mm 76 % of the errors go, not 6.5 %.
-> Inline KASAN and KCOV: 6.3 % and 6.6 %. Targets are lost, none is added.
-> 
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
-The robot's finding is real, otherwise
 
-Acked-by: Anton Protopopov <a.s.protopopov@gmail.com>
+> -----Original Message-----
+> From: Tianyi Gao <tianyi@cloudflare.com>
+> Sent: Tuesday, November 10, 2026 4:57 AM
+> To: bpf@vger.kernel.org; netdev@vger.kernel.org; Alexei Starovoitov
+> <ast@kernel.org>; Daniel Borkmann <daniel@iogearbox.net>; Andrii
+> Nakryiko <andrii@kernel.org>; Martin KaFai Lau <martin.lau@linux.dev>;
+> Jakub Kicinski <kuba@kernel.org>; Jesper Dangaard Brouer
+> <hawk@kernel.org>
+> Cc: John Fastabend <john.fastabend@gmail.com>; Stanislav Fomichev
+> <sdf@fomichev.me>; Lorenzo Bianconi <lorenzo@kernel.org>; Vladimir
+> Vdovin <deliran@verdict.gg>; David S. Miller <davem@davemloft.net>; Eric
+> Dumazet <edumazet@kernel.org>; Paolo Abeni <pabeni@redhat.com>; Simon
+> Horman <horms@kernel.org>; Andrew Lunn <andrew+netdev@lunn.ch>; Donald
+> Hunter <donald.hunter@gmail.com>; Eduard Zingerman <eddyz87@gmail.com>;
+> Kumar Kartikeya Dwivedi <memxor@gmail.com>; Song Liu <song@kernel.org>;
+> Yonghong Song <yonghong.song@linux.dev>; Jiri Olsa <jolsa@kernel.org>;
+> Emil Tsalapatis <emil@etsalapatis.com>; Ihor Solodrai
+> <ihor.solodrai@linux.dev>; Nguyen, Anthony L
+> <anthony.l.nguyen@intel.com>; Kitszel, Przemyslaw
+> <przemyslaw.kitszel@intel.com>; Fijalkowski, Maciej
+> <maciej.fijalkowski@intel.com>; Lobakin, Aleksander
+> <aleksander.lobakin@intel.com>; Karlsson, Magnus
+> <magnus.karlsson@intel.com>; Vyavahare, Tushar
+> <tushar.vyavahare@intel.com>; Jason Xing <kerneljasonxing@gmail.com>;
+> Nikolay Aleksandrov <razor@blackwall.org>; Madalin Bucur
+> <madalin.bucur@nxp.com>; Ioana Ciornei <ioana.ciornei@nxp.com>; Jonathan
+> Corbet <corbet@lwn.net>; Shuah Khan <skhan@linuxfoundation.org>; Shuah
+> Khan <shuah@kernel.org>; Randy Dunlap <rdunlap@infradead.org>; Nathan
+> Chancellor <nathan@kernel.org>; Nick Desaulniers
+> <ndesaulniers@google.com>; Bill Wendling <morbo@google.com>; Justin
+> Stitt <justinstitt@google.com>; Chris J Arges <carges@cloudflare.com>;
+> Jakub Sitnicki <jakub@cloudflare.com>; linux-doc@vger.kernel.org; linux-
+> kselftest@vger.kernel.org; intel-wired-lan@lists.osuosl.org;
+> llvm@lists.linux.dev; kernel-team@cloudflare.com; Tianyi Gao
+> <tianyi@cloudflare.com>
+> Subject: [PATCH bpf-next 02/15] net: dpaa, dpaa2: clear the skb core
+> extension flag
+>=20
+> dpaa_run_xdp() and dpaa2_eth_run_xdp() move data_hard_start to the start
+> of the buffer after the XDP program runs and before XDP_REDIRECT.
+> xdp_skb_ext() then returns a different address from the one used while
+> storing the entries. These drivers have not implemented the XDP RX
+> metadata kfuncs. Hence they now clear the XDP_FLAGS_HAS_SKB_EXT flag
+> before XDP_REDIRECT, and their redirected frames carry no stored
+> entries.
+>=20
+> With the A050385 erratum workaround, dpaa already moves data_hard_start
+> before the XDP program runs, so the entries remain valid. The flag is
+> cleared on that path too, to keep the change simple. This can change
+> when dpaa implements the XDP RX metadata kfuncs.
+>=20
+> Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
+> ---
+>  drivers/net/ethernet/freescale/dpaa/dpaa_eth.c   | 2 ++
+>  drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c | 2 ++
+>  2 files changed, 4 insertions(+)
+>=20
+> diff --git a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
+> b/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
+> index ad2d8256eb8d..4cafc0b84dc9 100644
+> --- a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
+> +++ b/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
+> @@ -2654,6 +2654,8 @@ static u32 dpaa_run_xdp(struct dpaa_priv *priv,
+> struct qm_fd *fd, void *vaddr,
+>  		/* Allow redirect to use the full headroom */
+>  		xdp.data_hard_start =3D vaddr;
+>  		xdp.frame_sz =3D DPAA_BP_RAW_SIZE;
+> +		/* data_hard_start moves, so the stored entries are lost
+> */
+> +		xdp_buff_clear_skb_ext_flag(&xdp);
+>=20
+>  		err =3D xdp_do_redirect(priv->net_dev, &xdp, xdp_prog);
+>  		if (err) {
+> diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
+> b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
+> index 7227a35dfaf2..fcefdc9daf2b 100644
+> --- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
+> +++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
+> @@ -472,6 +472,8 @@ static u32 dpaa2_eth_run_xdp(struct dpaa2_eth_priv
+> *priv,
+>  		/* Allow redirect use of full headroom */
+>  		xdp.data_hard_start =3D vaddr;
+>  		xdp.frame_sz =3D DPAA2_ETH_RX_BUF_RAW_SIZE;
+> +		/* data_hard_start moves, so the stored entries are lost
+> */
+> +		xdp_buff_clear_skb_ext_flag(&xdp);
+>=20
+>  		err =3D xdp_do_redirect(priv->net_dev, &xdp, xdp_prog);
+>  		if (unlikely(err)) {
+> --
+> 2.56.0
+
+Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
