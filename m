@@ -1,70 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.117
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794606004;
-	b=WHjWB+BTZ7C5SM6SVw0e2M/HseOBYqdaXt0IC+mOQTFsIsp3NJ1Jsthj+q8NAPZA/NMl
-	 607j2SCNMO9mf0C8FFIx410stDbGskS8/f9Qr7tpWHxddTRgX6CpcvN0l54n8msTsY7gI
-	 gXdQUdE/+gexpM+zjgS44GGNGFpGJYfVm126jkC4Kk/ItHeHBjXcbTmrhavlZgUDPhE8A
-	 NyIxphuJbej/LZIALd1Eb+PmdS8dKVyfjQ+bfeAU2eqS2WuxJ8blaesv8OxXMwCbJjFYm
-	 GIxz65rpMBIVd+6myX26DF7iOIIuNu899NlSIQBBr+osZRNqwc9Tfwfq+3y0ykKTXRQ==
+	t=1794606008;
+	b=4uS58fsi9BlLRWu9QjLs6wlrD8JcoB5pFZvH8LhT5ycFrFEkFPnmuMXl6oOYFRglrOt3
+	 pyIoyIHBk3OfPDatc5BhqNVtVc+04J3QXw04YzHKi5gApJ8d2wGFzbytEWgUBXukAeOo1
+	 8nLU3RGMC3Ujv9tE19AMYSk/P9JzJ6Xlz0JHHxRdwC4lNUtZOucT8DFpThlpb2PFTo/ZO
+	 UdsG7xwDV1g+Lo9VJAnecPbvijezUacfbtPdN2KVjDDioDzJxd2xmFI/e+PYJ6nCIa4TY
+	 aNoPQMG4bdOisRuA8Ost8b1Q9FF2SQn9W0a6f8HyjZwIfB1dxLDMnxLjCoyeKRpd0EQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794606004;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=o6BLMWGyYA/eRwNUSGfhLzF/PmgCxowd+1uKcbGHQA0=;
-	b=N0badI5qHDo8o4wwyEOOJdPaiy78A0y71FgJ04dRZkOQigs8asoA+tu8Nmbn4dJ1gD3G
-	 nCniV5LweCIrBB2hqdhS9p1KAc9jEXcRp6E5+Yf8r72EjfQm47RZNnAfXmcy3pYTiekpG
-	 aFNFb/ol/rhoUaE20ONIyR0e+fzxbDFR8+za8TRJU/JGhBTcDgfLAp+mvuLPPETgN8E6E
-	 /OI7scvzw8BMqwrqTBIZFDvpXIrFXBcjqA4vm5qKvXUxzVwYZznH16R//EQ9HpQDWrRDg
-	 NWpeQB1P+bAWcJzNOxmJTbbJRRSUVZc5snonTVI0jz/u0R1qV8QD99T7YUCQibd/x8Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794606008;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=Nrqhvqr/i2EoXqHkA1xxvEv5ep3yiAFTSve3A+551mM=;
+	b=ZQwygIBrMFDM0Zd4fGU/KyOyDKk6Kd1VoXmzr92B5zyeKnz2XDxMvc+o1sI/OlMNC8F3
+	 mdvXEgYpcUIRcweUdfOWMVM8sLQ8RXWNKGyl8sVfZ5IwjAxSSt+xNrPqSD83n23lwnf3q
+	 A9/CydSsfIqktsnNiSKO+tgaS1NTP51gqcChDBIlnrwZlRW9804ledgvtdpDAHbpMzNvO
+	 qMvAk0JX/aKndKjNEh9CYdIOi4fHYS5gvI4pZLbex5bEaczCG+/o6BUdcHGk/lxaC//lT
+	 Vw7bnoOtsy/JuuSP7bhAS162P7H+UwzgtyK/uDjHDrN8rcufHUv3BOQftwPsS0WEyFQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="F7dL/CLa";
-	arc=none smtp.remote-ip=95.215.58.117
-Received: from mta1.migadu.com (out-117.mta1.migadu.com [95.215.58.117])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BR1xzx80;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C87C606A8B8
-	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 21:40:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8C87C606A8B8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30AA1606A8A7;
+	Fri, 13 Nov 2026 21:40:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=F7dL/CLa
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=uOMBHIAh2voUel2PSBXq9GwHi/7oyUlmSAxCygMdB5Q=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794606001; v=1; x=1795210801;
- b=F7dL/CLa+iE34809PXQNt31PlApX/uuvCDRmDLnS7cqt4tgJ3EGjuOVsPp3qZYiN507KrgLD
- 91MUl8bCrlyR0ZPKNhkfzKiuTF1ON64tLM8skEWICEuK0fwKBOKUDquLr+uxAiqQFTqbgpWjtNL
- 8dGzucpMDEM5HARJ6tjgw90E=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by mta12.migadu.com with ESMTPS id 74e642830b745cab;
-	Fri, 13 Nov 2026 21:40:01 +0000
-X-Mizu-Trace-ID: 74e642830b745cab
-X-Migadu-Flow: FLOW_OUT
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Amery Hung <ameryhung@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Nicholas Carlini <npc@anthropic.com>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v4 5/6] bpf: Scope the bpf_for_each_map_elem() array key to the callback frame
-Date: Fri, 13 Nov 2026 14:39:20 -0700
-Message-ID: <20261113213921.1646681-6-ihor.solodrai@linux.dev>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261113213921.1646681-1-ihor.solodrai@linux.dev>
-References: <20261113213921.1646681-1-ihor.solodrai@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BR1xzx80
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06EB01F000C4;
+	Fri, 13 Nov 2026 21:40:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794606008;
+	bh=Nrqhvqr/i2EoXqHkA1xxvEv5ep3yiAFTSve3A+551mM=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=BR1xzx80M9v7zX9thY+44h57psw6DllFOj6poaDj5vBAMdoFyk5ClFEbQkpy7eGZz
+	 gBo1VQ6bt22exOnbB3GtidbWNS2Pj64VEVyT3R88ZR2bEBL8duwbmt26crLqmGKWZg
+	 klqwfsRIw/Ztpo0dHpjwroyEKivoHctQD0em0V5qtPwdF/62UuMQ1Kvpap7a+HADaA
+	 DNhgXhgEoJEbrTjkbJ70MngWgEbJ0FWbwOpkgEbIkzeYKWZ8NVSm1GytfsAZre8cHh
+	 FEz1maIUIf5Htnwet4kX6kaPO3BRrKuIW8xR/haYly1x+/AECMnlv4fyUXrdIjb5LX
+	 XADjs2CIp0QFA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F1553380821F;
+	Fri, 13 Nov 2026 21:40:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -75,103 +54,47 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 0/2] selftests/bpf: Fix d_path check_mem_access and
+ drop
+ CHECK()
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179460600678.1853483.7161886083844264787.git-patchwork-notify@kernel.org>
+Date: Fri, 13 Nov 2026 21:40:06 +0000
+References: <20261106-dpath-memfd-v2-0-1dc0799b4aa6@gmail.com>
+In-Reply-To: <20261106-dpath-memfd-v2-0-1dc0799b4aa6@gmail.com>
+To: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
+Cc: andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev,
+ ast@kernel.org, daniel@iogearbox.net, memxor@gmail.com, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ emil@etsalapatis.com, shuah@kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 
-bpf_for_each_map_elem() passes array and per-CPU array callbacks the
-address of a key on the helper's stack.
+Hello:
 
-A callback can save that pointer in its context and dereference it
-after the helper returns. Loads through PTR_TO_MAP_KEY are not
-fault-protected, allowing a four-byte read-only leak of reused kernel
-stack.
+This series was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-The verifier tracks the pointer's type and key size, but does not tie
-its lifetime to the callback invocation.
+On Fri, 06 Nov 2026 10:37:07 +0700 you wrote:
+> Patch 1 replaces the deprecated CHECK() calls with ASSERT_*().
+> 
+> Patch 2 fixes check_mem_access, which creates a temp file in
+> /dev/shm that isn't mounted under vmtest.sh in local runs. This
+> causes mkstemp() to fail with ENOENT. mkstemp() is replaced with
+> memfd_create() as it gives a shmem-backed file with no mount
+> needed while still reaching vfs_fallocate.
+> 
+> [...]
 
-Scope R2 to the callback frame in the array map callback setup so the
-key and its copies are invalidated on callback return. Leave hash keys
-and map values unchanged, since their storage is not callback-local.
+Here is the summary with links:
+  - [v2,1/2] selftests/bpf: Replace d_path CHECK() with ASSERT_*()
+    https://git.kernel.org/bpf/bpf-next/c/ed6624f3e8b6
+  - [v2,2/2] selftests/bpf: Use memfd_create instead of mkstemp in d_path
+    https://git.kernel.org/bpf/bpf-next/c/75cf1b5e5489
 
-Reported-by: Nicholas Carlini <npc@anthropic.com>
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
----
- include/linux/bpf.h   |  2 ++
- kernel/bpf/arraymap.c | 19 +++++++++++++++++--
- kernel/bpf/verifier.c |  4 ++--
- 3 files changed, 21 insertions(+), 4 deletions(-)
-
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 520fd72e21fd..36587b63ce13 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -3291,6 +3291,8 @@ int bpf_iter_map_check_value_write(const struct bpf_prog *prog,
- int map_set_for_each_callback_args(struct bpf_verifier_env *env,
- 				   struct bpf_func_state *caller,
- 				   struct bpf_func_state *callee);
-+void mark_frame_scoped_arg(struct bpf_verifier_env *env,
-+			   struct bpf_func_state *callee, u32 regno);
- 
- int bpf_percpu_hash_copy(struct bpf_map *map, void *key, void *value, u64 flags);
- int bpf_percpu_array_copy(struct bpf_map *map, void *key, void *value, u64 flags);
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index 133f189bf6d2..508706d0c360 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -855,6 +855,21 @@ static u64 array_map_mem_usage(const struct bpf_map *map)
- 	return usage;
- }
- 
-+static int array_map_set_for_each_callback_args(struct bpf_verifier_env *env,
-+						struct bpf_func_state *caller,
-+						struct bpf_func_state *callee)
-+{
-+	int err;
-+
-+	err = map_set_for_each_callback_args(env, caller, callee);
-+	if (err)
-+		return err;
-+
-+	/* the key is on the stack of bpf_for_each_array_elem() */
-+	mark_frame_scoped_arg(env, callee, BPF_REG_2);
-+	return 0;
-+}
-+
- BTF_ID_LIST_SINGLE(array_map_btf_ids, struct, bpf_array)
- const struct bpf_map_ops array_map_ops = {
- 	.map_meta_equal = array_map_meta_equal,
-@@ -875,7 +890,7 @@ const struct bpf_map_ops array_map_ops = {
- 	.map_check_btf = array_map_check_btf,
- 	.map_lookup_batch = generic_map_lookup_batch,
- 	.map_update_batch = generic_map_update_batch,
--	.map_set_for_each_callback_args = map_set_for_each_callback_args,
-+	.map_set_for_each_callback_args = array_map_set_for_each_callback_args,
- 	.map_for_each_callback = bpf_for_each_array_elem,
- 	.map_mem_usage = array_map_mem_usage,
- 	.map_btf_id = &array_map_btf_ids[0],
-@@ -900,7 +915,7 @@ const struct bpf_map_ops percpu_array_map_ops = {
- 	.map_check_btf = array_map_check_btf,
- 	.map_lookup_batch = generic_map_lookup_batch,
- 	.map_update_batch = generic_map_update_batch,
--	.map_set_for_each_callback_args = map_set_for_each_callback_args,
-+	.map_set_for_each_callback_args = array_map_set_for_each_callback_args,
- 	.map_for_each_callback = bpf_for_each_array_elem,
- 	.map_mem_usage = array_map_mem_usage,
- 	.map_btf_id = &array_map_btf_ids[0],
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 995a5edf66a8..ce11e78c7c98 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -12246,8 +12246,8 @@ int map_set_for_each_callback_args(struct bpf_verifier_env *env,
- }
- 
- /* The arg points into the stack frame of the helper that calls the callback */
--static void mark_frame_scoped_arg(struct bpf_verifier_env *env,
--				  struct bpf_func_state *callee, u32 regno)
-+void mark_frame_scoped_arg(struct bpf_verifier_env *env,
-+			   struct bpf_func_state *callee, u32 regno)
- {
- 	if (!callee->frame_id)
- 		callee->frame_id = ++env->id_gen;
+You are awesome, thank you!
 -- 
-2.56.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
