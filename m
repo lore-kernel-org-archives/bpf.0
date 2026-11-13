@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794546616;
-	b=fW/Xspj4rnMIHGhx6inEFPUgrqk0YM+k3io8OyH1y8UzUsdpL3chSkrrSjjTF7UfHU2t
-	 QvU8vkk1K+9FDUBSRYO9mCD7Qjzbv45TGzU8WvNjtUKBin23QqLSvOjXYAi9/GdxDR3k1
-	 rIB2zIPZnge7OPUP0/kmvrG4s0dNaV+fulcQqXG6Y+WVd5KMjHgkWl+pylwkww4z3BZId
-	 jubbK4xAwyITdUVVzvLolzNt6R/B92rul3Kt+WSaH3cB93ALsjOo5pfGbDtHWuowyt/ud
-	 r07yJF26sGv8VBeaP/p4ROZeBPpbl0ako9qD33CpiSZW4dOwnKpqRAMuuAGPIhPu+fQ==
+	t=1794546623;
+	b=SjOXyLQ+hxmBTrAd7qurnNZFvXmOdtPrYvDN6KYYMyPfejQPq9+NA01HGqTT2bvJKhsn
+	 24r2Ka5/z1YtzZM+iaanWBVmiqOmf0tkDwOBVc0aiXtahrUs/yTCk8X7zMpeC/nd1Zcsx
+	 eWI58H8vykgXQjwTRlmVH2nlDcTa/vXzidXJBv3/2FcTJIkAa62Ff3vObhLFbmn7M9GFB
+	 /8mddWLcQBKSVyszaD03myVAK1n7ixf8Wgu6nNkTWdMwGWPOCznxKPa1xqJ0SJrbyt8an
+	 qHQkQe84DIcGUWPULMPWIzCUPwZupb6lyMKpIFtjI86xxHROjcGS6te4suFtcncH2lw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794546616;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794546623;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=3iQVCS1aoo6lbMf9eY8wjB5AOxvcLiLUEZoVQHtgSIo=;
-	b=G9yp0y411qstlRCYS4Unw1A0qemo7FOXL1ki0tCzFX54pFJZDmh2p/ZDsB8fXVLsMMI+
-	 KSOe0cgJYVKqmiMI3k/QuesRK16LW56pxtmo2eRru0Msxs3TvUQWfZgjtKxJnAgRm3Aql
-	 T5ZKtqXxrvWSbpwyJvhFto3mJ65T0E7Kpf/Ksl/oUZhw0u8Pc+AFvW6nOJDlkGXYESXJ9
-	 8R7kG9JcF/bwhhwOt4asMxw5sYnFqYNlGR/sNOLwOCfw3d5h/C/iqDECWlflGhQ2o6OjC
-	 kyoekODJAnXB0cAF1w2xO4FccUYGW/D6nmNBO8wdtEk09dNWDyp6RY8CcEHoT6iMcBA==
+	bh=NMH97Fk3PWPVn+P/iaoukHh1wzl243PKREFzHGmF3II=;
+	b=gIX5oaPsbknA54Lx21qFO7N/V6IdFERz4zbwq7j46+WAyHD+hsrFBNJ7GOF5A0u+WOhM
+	 CSVpdni2r6TtxRRQdmwftxStxBVLenS4pRoTWIRlvL/rgnBDILueJBg2FX3MK4YvNLWuG
+	 zMqz/fddT1yyVMhQpsXiJXuF2uwHfbArV8jpDKS7qU3r9lO8X+juOddvrjeyavWYXShLn
+	 Cyhf0kfUwBQFG8k9kNGFfwJKVB6EPNLWEz3WX33eabGTMyNiBvPReq6lnoH6ho77JJ8G0
+	 Q5u0/uQz9XNPLridi1dj3fKemUiVuFFbGOWw62lC6MoegwF5fPZCHWo7iGoRJ6qWLaw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=OqWMvfVB;
-	arc=none smtp.remote-ip=209.85.216.46
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eXWKCeZT;
+	arc=none smtp.remote-ip=209.85.215.172
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63C28606A327
-	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 05:10:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 63C28606A327
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BC02606A31C
+	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 05:10:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8BC02606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=OqWMvfVB
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3ae7626d14aso218726a91.2
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 21:10:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eXWKCeZT
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-cc4aa0246b7so227072a12.3
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 21:10:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794546616; x=1795151416; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794546623; x=1795151423; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=3iQVCS1aoo6lbMf9eY8wjB5AOxvcLiLUEZoVQHtgSIo=;
-        b=OqWMvfVBhMVcS+FQg1PBPiSacArxVBQ/ofIUFAxzNhyzD6Phgdd0omXAqlmWb7gk6f
-         JeENC2X4Sa6mPsE747lBmZuv+1ERpOl1dPJsyaF5MgZIV+9YXx+J+G+7ShCebkhhqwTF
-         YV/0Dn2wMdYPj795BlkIwmCMJibctigih2cTR8mfXQ2SssPGQcSu6HHCABQeMzWau5kI
-         r88ECXZZmAGHTzaJKeRFzlkFXmwbcPbX99xA18XmO7Y1eIyG8b9Jj9ab5W09TH7MxZ0Z
-         AjMl1Re/K01lSYffuJD8JpoelF91EVwjC/sOPNh03v4MUXZR/JZbqbjNnngvHKJEqiLv
-         KtHg==
+        bh=NMH97Fk3PWPVn+P/iaoukHh1wzl243PKREFzHGmF3II=;
+        b=eXWKCeZTfJ1h2HXVpmVsI2a7XcvljNaCpkUdGD+lXBWToms9CQ2yCA0oLuIoKKPBSd
+         fiBGtA6YdIlGsXK7DE0ndyDOOxchHhRrPIKVatz9H0xgjAo2BYrRXE5EHyDXoIwIrYVp
+         vXvWv5c344sq8Xtug5rSqPyduU2433esWtVzcqG+Kim3/524smwCtAG50PIt7IBEp8JV
+         CxRfnXDDnJ/iYxy0wK85aPWmj04yuyL4giiUswGTSR/q+xxFDaJLf4IyZ3ruSYw7m1l1
+         mt5TaGuWhdqmJ7yDoAKRruY1I1JIsbHMMl6+cuThfJS5YsWSboFQKCWw9oHrUNbVZ8nF
+         VmVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794546616; x=1795151416;
+        d=1e100.net; s=20260707; t=1794546623; x=1795151423;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=3iQVCS1aoo6lbMf9eY8wjB5AOxvcLiLUEZoVQHtgSIo=;
-        b=ryfP2QEZp8+lBL1YXLntzTjEknXXkeXnuecZNkxiMhWcHATEaScyzKHqvGvZ/l2hPW
-         ceTJaOvPwNBIEWUAVA/byDLKShR6MHpyLtuL+6l3e8sBtR3hsX4/4OKVB2Xs+akaA1zu
-         Q4yh8WLn4ultRlfEdm2+TIzHHSQp5UN5BDQy90Xxp8pPkU+zno9GgEg5BlrJzsZIdiYj
-         n7GIWlWXMs43yP5m25VGpH3g9YSHQVbR+5DGpLtvAWw25JIs33lIoGhR1LoY+SHk3PeM
-         YlzENno6YWiE4zm2oMt71ay9UWMNvdqwQFv8hsIESR2PDavsD3PfZQVdopU+iAKw64RV
-         wLGg==
-X-Gm-Message-State: APuU4Z9Irq0qr3kqSsjY3qKmTIP/KNcB/bR7N6k89OJ3jSj0DDUUwybA
-	PIGmaH8oyoOj5bEkbjlnxmnuSewHjwqMk7KWq2Wa9MoAEeDBPWxyBd1CPWgcog==
-X-Gm-Gg: AYBFou2SZj3573WtGsjnSUR0oB+8y+CN53ciNY0ayl8v737NsY78k0pdsthhLBjBVe5
-	kqvGjLEFZnxfhmqFkqZywcVeyON7mEhrvL4FJ+OQrCIlvJ6Aa9XLVzNHdOnSNzbX5WqHw8c/sAj
-	dpiNI5UBOtzESd/yKoVkQ4cW/CG3phmY2tQtv1nSleszUKiOYSsnq7hvD6Aj7kt5hoNdVunD1K0
-	xVOhUeAJ7qOFEkEHKVNsEcHkPHN2nNvZoYN7ipZyxDeUFylzlW1GdrPf4kYsY7HXb+GXsQdfN0W
-	LA2Khxcq/vdBFkijyrZenpRzT4tdQjCQOb/1fcy+C6gQqoVPofvBLHZuxcKgg3CZHlkr1T5Otho
-	C9b+jltXUPLnxrQKInnOUZ7aWY/Vd/V7mrY2ugTOXo651zrMzBAPkJ1szm17ZAGh5hvMfkxhIh3
-	p6FHk3xHQEhDsXy/emqeyRQunNhlUeXBsC2k/8cNVYixdG/ut+pd49y4VJLboltqEAOHrSm07Em
-	wf0isxpw2UFxDJXMzBe+Be8b4v5kP+oK2FOjl5EBuVmfAlFjnjPaItx0d2DalUsF9yW5PlQRdxX
-	nUPzwdnQjmAzTYG9gDDjpWPBa8y7qr2PhBSdaMdNC6wXxQcwoKi2Y96ugPjRYtzW/8joSlgcl4E
-	3GMSpCRBKzU4qLsHMzk1TYEBeZGWPeJoBrgZSadJhHevVocJv7CYbsxHnAr0DLKfBpWIZctpWMw
+        bh=NMH97Fk3PWPVn+P/iaoukHh1wzl243PKREFzHGmF3II=;
+        b=wDgRuN4FDwx5IzHg8cUUA5VDmwTvDSTeXQxwbRuqI5kI4UvjonI1Zh/qtPqRqCgcCm
+         1u0KGrHtarAeBko2DZAROEZB1MhZ2Eg7KjR5Ym6h1QpvJJFzLaCXU5noPtCFDti3f4Vc
+         q9NEtDpLWaT0bfGLJK9IfjkI9aQAcPs7KVJMpJYePsIFQ0MIV5H/N4rEHE6v2/ORfTyf
+         uUxdgSpOHRmVa6TULKUbzTxC59G1FZSGnwNBgKCfHRonlkLg+j2vpIVvSjMZQOy7nIOG
+         Q7s1n3Fjbg/OdNUzKICxc3QBYszJBwgpK5ObdduY0Hh8vC/zo30VfVZnLqownqGRytGM
+         vfbg==
+X-Gm-Message-State: APuU4Z9YRGUpEpT9KsO7oW1HveGPcwtSV+17ms7EGEj0z76wdwBZq1CO
+	IFKx1Afyxb2NR6inmCrty0My6Ik+vnAGtcpgJZJl3RjonxtmFZKvP1koadIpOg==
+X-Gm-Gg: AYBFou0PgNP1TCE7b7szut0n2QK6seTV/jis76XTcd8Czk2/Cw8qYNnSnU0uFhQTe9Y
+	FZTqWt1hzS5jhuPiFPy8UhyqetZ5uyQuTO0QUX1FO4ibPGeEIQMHT36BnA4j3+zEBiyOzqu1aDg
+	lpqeZk+uhc2H+1ci7E+HMHmABwkKJr0jTem8Nba30QOAUcxAHx734OzJk62qJJUsaUEkbaz0VAT
+	e2DMpCluyE4nVfdh4k471UvC18cjw9eOaqNDWIWTW5v5vBsHO/tGzfhHMVebXXnyYSFpfyFdne3
+	ugU+lu52349BeQsG08zqnSh6v6SiWp9qdpfK4Q+eV4UKoDtT6bqrl8QevOXKOZ2qHcrE4nt7vAi
+	gZldxX0igz1nS9yfBIjaliOt3ed63Edof1pK+Nce4W6WT9ID9h/cssLIIAyXWtQGYO+8CyQy+iz
+	tOYcPjN2ZbL0OwQoug4AJH12eHEd5sXoLtbqr/zeTzKLTYZ1My0M6f9/wwK581n+vvoBHmUTNWI
+	pGbgWNnBqEKulQhN9jdEa5i3+0ghHxgIOBIdVWgT4ck4N4T1XlqM9XOETZxsyW2UNDJ7B4So7Cd
+	1fbpFXcZji9X77lptpEHUBM3WO/7h2M+ehQfIYz7g8pPHvw9uxNeNE2OjxJeAkXJMGWe3/3cxkg
+	MYmW256JwULwyn9wgEweX67wIl2y4ToSQ9lMSoZh+RN0VVVwpkHZB8Y2aeA3Ho4vUc3eUilZUeQ
 	==
-X-Received: by 2002:a17:90b:3c4e:b0:3a7:b260:9ced with SMTP id 98e67ed59e1d1-3b1b0b87f83mr1086685a91.58.1794546615550;
-        Thu, 12 Nov 2026 21:10:15 -0800 (PST)
+X-Received: by 2002:a17:90b:4f85:b0:3b0:91ce:6720 with SMTP id 98e67ed59e1d1-3b1b0a1ef3emr1052753a91.30.1794546621449;
+        Thu, 12 Nov 2026 21:10:21 -0800 (PST)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.251])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b197ce556dsm7686226a91.6.2026.11.12.21.10.14
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1aec63b9bsm2599412a91.12.2026.11.12.21.10.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2026 21:10:15 -0800 (PST)
+        Thu, 12 Nov 2026 21:10:21 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -86,9 +86,9 @@ Cc: daniel@iogearbox.net,
 	eddyz87@gmail.com,
 	memxor@gmail.com,
 	a.s.protopopov@gmail.com
-Subject: [PATCH v2 bpf-next 12/13] bpf: Treat the type of an untrusted pointer as a hint
-Date: Fri, 13 Nov 2026 05:09:00 +0000
-Message-ID: <20261113050901.1399091-13-alexei.starovoitov@gmail.com>
+Subject: [PATCH v2 bpf-next 13/13] selftests/bpf: Test untrusted pointers in fmod_ret progs
+Date: Fri, 13 Nov 2026 05:09:01 +0000
+Message-ID: <20261113050901.1399091-14-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261113050901.1399091-1-alexei.starovoitov@gmail.com>
 References: <20261113050901.1399091-1-alexei.starovoitov@gmail.com>
@@ -105,159 +105,205 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-A prog that guards a kernel function wants to read what the function
-reads, in the words of the function:
+Helpers refuse an argument of an fmod_ret prog and what is loaded through
+it. tcp_sk(sk)->snd_una, container_of(), a part of a pointer and an index
+behind a pointer load and give a number. The number is no pointer. A store
+and a store-release are refused, a trusted pointer is checked against its
+type as before.
 
-	SEC("fmod_ret/tcp_ack")
-	int BPF_PROG(guard, struct sock *sk, const struct sk_buff *skb,
-		     int flag, int ret)
-	{
-		if (tcp_sk(sk)->snd_una == seq)
+Two progs run: container_of(task->tasks.next->prev, ..)->prio, a load at
+a negative offset, gives the prio of current. A load at NULL - 8 gives 0.
 
-	dev = container_of(skb->dev->dev_list.next, struct net_device,
-			   dev_list);
-	if (dev->ifindex == idx)
-
-tcp_sk() is a cast to the struct around struct sock, container_of()
-subtracts an offset. The verifier says:
-
-  access beyond struct sock at off 2544 size 4
-  R2 is ptr_list_head invalid negative access: off=-120
-
-and the prog falls back to bpf_core_cast() or bpf_probe_read_kernel().
-
-These checks guard nothing. A load through an untrusted pointer is
-BPF_PROBE_MEM, whatever the address. bpf_rdonly_cast(p, 0) and the load
-of a 'u8 *' member give PTR_TO_MEM | MEM_RDONLY | PTR_UNTRUSTED, which
-has no bounds at all. The type of PTR_TO_BTF_ID | PTR_UNTRUSTED only says
-what a load gives.
-
-	the walk of the type finds    the load gives
-	a member                      a number or a pointer, as before
-	nothing: past the end,        a number
-	negative offset, a part of
-	a pointer, a variable offset
-	that matches no array
-
-The number is not a pointer: tcp_sk(sk)->out_of_order_queue.rb_node can
-be tested, not followed.
-
-Stores, atomics, helpers, __user and __percpu arguments are refused as
-before. Trusted and RCU pointers are checked as before.
-
-Five tests took an untrusted pointer to see an error of the walk. They
-load now.
+The progs attach to security hooks. These are targets in each kernel, with
+and without CONFIG_BPF_FMODRET_SCAN.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/verifier.c                         | 19 +++++++++++++++++++
- .../selftests/bpf/progs/map_kptr_fail.c       |  2 +-
- .../bpf/progs/verifier_btf_array_access.c     |  6 ++----
- .../bpf/progs/verifier_btf_flex_array.c       |  2 +-
- .../testing/selftests/bpf/verifier/map_kptr.c |  3 +--
- 5 files changed, 24 insertions(+), 8 deletions(-)
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../bpf/progs/verifier_btf_untrusted.c        | 112 ++++++++++++++++++
+ .../bpf/progs/verifier_store_release.c        |  23 ++++
+ 3 files changed, 137 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_btf_untrusted.c
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 960231ec591e..7d8449baca4c 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -6844,6 +6844,24 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
- 		return -EINVAL;
- 	}
- 
-+	/*
-+	 * The type of an untrusted pointer is a hint. A load through the
-+	 * pointer is a BPF_PROBE_MEM load, whatever the address. Where the
-+	 * type describes the bytes, the result has the type of the member.
-+	 * Elsewhere the result is a number, as it is for
-+	 * PTR_TO_MEM | MEM_RDONLY | PTR_UNTRUSTED.
-+	 */
-+	if (atype == BPF_READ && value_regno >= 0 && (reg->type & PTR_UNTRUSTED) &&
-+	    !(reg->type & (MEM_USER | MEM_PERCPU))) {
-+		ret = SCALAR_VALUE;
-+		if (!check_add_overflow(reg_smin(reg), off, &min_off) && min_off >= 0)
-+			ret = btf_struct_access(NULL, reg, off, size, atype, &btf_id, &flag,
-+						&field_name);
-+		if (ret < 0)
-+			ret = SCALAR_VALUE;
-+		goto loaded;
-+	}
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index 4d77b8fd4eab..e6e4a13117dd 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -36,6 +36,7 @@
+ #include "verifier_btf_ctx_access.skel.h"
+ #include "verifier_btf_flex_array.skel.h"
+ #include "verifier_btf_unreliable_prog.skel.h"
++#include "verifier_btf_untrusted.skel.h"
+ #include "verifier_call_large_imm.skel.h"
+ #include "verifier_calls_in_a_row.skel.h"
+ #include "verifier_callx.skel.h"
+@@ -245,6 +246,7 @@ void test_verifier_btf_array_access(void)     { RUN(verifier_btf_array_access);
+ void test_verifier_btf_ctx_access(void)       { RUN(verifier_btf_ctx_access); }
+ void test_verifier_btf_flex_array(void)       { RUN(verifier_btf_flex_array); }
+ void test_verifier_btf_unreliable_prog(void)  { RUN(verifier_btf_unreliable_prog); }
++void test_verifier_btf_untrusted(void)        { RUN(verifier_btf_untrusted); }
+ void test_verifier_call_large_imm(void)       { RUN(verifier_call_large_imm); }
+ void test_verifier_calls_in_a_row(void)       { RUN(verifier_calls_in_a_row); }
+ void test_verifier_callx(void)                { RUN_JITED(verifier_callx); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_btf_untrusted.c b/tools/testing/selftests/bpf/progs/verifier_btf_untrusted.c
+new file mode 100644
+index 000000000000..5b2e74277dc8
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_btf_untrusted.c
+@@ -0,0 +1,112 @@
++// SPDX-License-Identifier: GPL-2.0
 +
- 	if (check_add_overflow(reg_smin(reg), off, &min_off)) {
- 		verbose(env,
- 			"%s is ptr_%s access, offset computation overflows: register's minimal offset is %lld, instruction offset is %d\n",
-@@ -6926,6 +6944,7 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
- 	if (ret < 0)
- 		return ret;
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_core_read.h>
++#include "bpf_misc.h"
++
++#undef container_of
++#define container_of(ptr, type, member) \
++	((type *)((void *)(ptr) - __builtin_offsetof(type, member)))
++#define tcp_sk(sk) ((struct tcp_sock *)(sk))
++
++long out;
++
++/* Nobody vouches for an argument of a function that fmod_ret attaches to */
++SEC("fmod_ret/security_sock_rcv_skb")
++__failure
++__msg("R1 type=untrusted_ptr_ expected=sock_common")
++int BPF_PROG(arg_to_helper, struct sock *sk)
++{
++	out = bpf_get_socket_cookie(sk);
++	return 0;
++}
++
++SEC("fmod_ret/security_socket_listen")
++__failure
++__msg("R1 type=untrusted_ptr_ expected=sock_common")
++int BPF_PROG(member_of_arg_to_helper, struct socket *sock)
++{
++	out = bpf_get_socket_cookie(sock->sk);
++	return 0;
++}
++
++/* A load that the type does not describe gives a number */
++SEC("fmod_ret/security_sock_rcv_skb")
++__success
++int BPF_PROG(past_the_end, struct sock *sk)
++{
++	out = tcp_sk(sk)->snd_una == tcp_sk(sk)->snd_nxt;
++	return 0;
++}
++
++SEC("syscall")
++__success __retval(0)
++int negative_offset(void *ctx)
++{
++	struct task_struct *task = bpf_get_current_task_btf(), *self;
++
++	/* next->prev points to task->tasks. prio stands in front of tasks */
++	self = container_of(task->tasks.next->prev, struct task_struct, tasks);
++	return self->prio != task->prio;
++}
++
++SEC("fmod_ret/security_sock_rcv_skb")
++__success
++int BPF_PROG(part_of_a_pointer, struct sock *sk)
++{
++	out = *(u32 *)&sk->sk_socket;
++	return 0;
++}
++
++SEC("fmod_ret/security_sock_rcv_skb")
++__success
++int BPF_PROG(no_array, struct sock *sk, struct sk_buff *skb)
++{
++	struct net *net = sk->__sk_common.skc_net.net;
++
++	out = !net->dev_index_head[skb->len & 255].first;
++	return 0;
++}
++
++SEC("syscall")
++__success __retval(0)
++int bad_address(void *ctx)
++{
++	struct sock *sk = bpf_core_cast(NULL, struct sock);
++
++	return *(int *)((void *)sk - 8) + tcp_sk(sk)->snd_una;
++}
++
++/* The number is no pointer */
++SEC("fmod_ret/security_sock_rcv_skb")
++__failure
++__msg("invalid mem access 'scalar'")
++int BPF_PROG(number_is_no_pointer, struct sock *sk)
++{
++	out = !tcp_sk(sk)->out_of_order_queue.rb_node->rb_left;
++	return 0;
++}
++
++SEC("fmod_ret/security_sock_rcv_skb")
++__failure
++__msg("only read is supported")
++int BPF_PROG(no_store, struct sock *sk)
++{
++	tcp_sk(sk)->snd_una = 0;
++	return 0;
++}
++
++/* The type of a trusted pointer is no hint */
++SEC("tp_btf/sys_enter")
++__failure
++__msg("access beyond struct task_struct")
++int trusted_past_the_end(void *ctx)
++{
++	struct task_struct *task = bpf_get_current_task_btf();
++
++	return *(int *)(task + 1);
++}
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/verifier_store_release.c b/tools/testing/selftests/bpf/progs/verifier_store_release.c
+index 0abbee5ce109..b108fcd54437 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_store_release.c
++++ b/tools/testing/selftests/bpf/progs/verifier_store_release.c
+@@ -3,6 +3,7 @@
  
-+loaded:
- 	if (ret == PTR_TO_ARENA)
- 		return check_arena_member_load(env, regs, value_regno, flag, tname, field_name);
+ #include <linux/bpf.h>
+ #include <bpf/bpf_helpers.h>
++#include <bpf/bpf_core_read.h>
+ #include "../../../include/linux/filter.h"
+ #include "bpf_misc.h"
  
-diff --git a/tools/testing/selftests/bpf/progs/map_kptr_fail.c b/tools/testing/selftests/bpf/progs/map_kptr_fail.c
-index ac4003bfb8b0..4553d41c6ebb 100644
---- a/tools/testing/selftests/bpf/progs/map_kptr_fail.c
-+++ b/tools/testing/selftests/bpf/progs/map_kptr_fail.c
-@@ -164,7 +164,7 @@ int marked_as_untrusted_or_null(struct __sk_buff *ctx)
+@@ -223,6 +224,28 @@ __naked void store_release_to_sock_pointer(void)
+ 	: __clobber_all);
  }
  
- SEC("?tc")
--__failure __msg("access beyond struct prog_test_ref_kfunc at off 32 size 4")
-+__success
- int correct_btf_id_check_size(struct __sk_buff *ctx)
- {
- 	struct prog_test_ref_kfunc *p;
-diff --git a/tools/testing/selftests/bpf/progs/verifier_btf_array_access.c b/tools/testing/selftests/bpf/progs/verifier_btf_array_access.c
-index 9dc2c9a5f8b7..5accc0279c37 100644
---- a/tools/testing/selftests/bpf/progs/verifier_btf_array_access.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_btf_array_access.c
-@@ -482,8 +482,7 @@ int flex_array_field(void *ctx)
-  * not match.
-  */
- SEC("syscall")
--__failure
--__msg("invalid variable offset access into struct vring_used")
-+__success
- int flex_array_unaligned_step(void *ctx)
- {
- 	unsigned long i = bpf_get_prandom_u32();
-@@ -511,8 +510,7 @@ int flex_array_unaligned_step(void *ctx)
-  * The flexible-tail exemption must not apply to that fixed array.
-  */
- SEC("syscall")
--__failure
--__msg("invalid variable offset access into struct unix_address")
-+__success
- int flex_array_inner_array_out_of_bounds(void *ctx)
- {
- 	unsigned long i = bpf_get_prandom_u32();
-diff --git a/tools/testing/selftests/bpf/progs/verifier_btf_flex_array.c b/tools/testing/selftests/bpf/progs/verifier_btf_flex_array.c
-index 59b84261f622..63a9f6372a8b 100644
---- a/tools/testing/selftests/bpf/progs/verifier_btf_flex_array.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_btf_flex_array.c
-@@ -26,7 +26,7 @@ struct {
- 
- SEC("syscall")
- __description("btf walk into flexible array of zero-sized elements")
--__failure __msg("access beyond struct test_flex_batch at off 4 size 1")
-+__success
- int stash_and_peek(void *ctx)
- {
- 	struct test_flex_batch *b, *old;
-diff --git a/tools/testing/selftests/bpf/verifier/map_kptr.c b/tools/testing/selftests/bpf/verifier/map_kptr.c
-index 345cecc722a3..d6a6a58c73c4 100644
---- a/tools/testing/selftests/bpf/verifier/map_kptr.c
-+++ b/tools/testing/selftests/bpf/verifier/map_kptr.c
-@@ -219,8 +219,7 @@
- 	},
- 	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
- 	.fixup_map_kptr = { 1 },
--	.result = REJECT,
--	.errstr = "access beyond struct prog_test_ref_kfunc at off 32 size 8",
-+	.result = ACCEPT,
- },
- {
- 	"map_kptr: unref: inherit PTR_UNTRUSTED on struct walk",
++struct task_struct {} __attribute__((preserve_access_index));
++
++SEC("socket")
++__description("store-release to untrusted_ptr_ pointer")
++__failure __msg("only read is supported")
++int store_release_to_untrusted_btf_id(void *ctx)
++{
++	struct task_struct *p;
++
++	p = bpf_core_cast(0, struct task_struct);
++	asm volatile (
++	"r1 = %[p];"
++	"r2 = 0;"
++	".8byte %[store_release_insn];" // store_release((u64 *)(r1 + 0), r2);
++	:
++	: [p] "r" (p),
++	  __imm_insn(store_release_insn,
++		     BPF_ATOMIC_OP(BPF_DW, BPF_STORE_REL, BPF_REG_1, BPF_REG_2, 0))
++	: "r1", "r2");
++	return 0;
++}
++
+ SEC("socket")
+ __description("store-release, leak pointer to stack")
+ __success __success_unpriv __retval(0)
 -- 
 2.55.0
 
