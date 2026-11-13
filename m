@@ -1,101 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.44
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794589201;
-	b=W3J7Smiefl3VXs+Da1lOmZ6UfOCws2/wYUNq0TshulxgFKe/fBGC35UC+Bs6XsjuGAHy
-	 BSTBQqozGiSAM/3lJiT1Pqw2vrYdPfMcpgY3AaIwifRopJYrTWuZB8Wco7sAyeyXSXtVS
-	 OWdMIKH0J7tGW3Vk9lmfLEM8yf6Qy3jinMeF3gfChzz1EkMTCFvrDF0Q6qYqp+Z+I0VZz
-	 1Wg1FH2Zvxksa5JgXCA5THOUWHm8aWRc4TOBGqKHQ2xHqo/Lr+kDo0eU7AKEXF+iwIUJf
-	 h7hZ7IisFRKN9Ny1nAvmljPg/rFv+DffWglm/KfUBSUS6G6+5TOp7Yen31IVoCTE1Nw==
+	t=1794589209;
+	b=k/gK64C44DXJNB+iVPSpAZSf3x0SB3yun4Db4pq9NHQxRTPYFrDYMgGl9USDfXbzz30q
+	 sGZOiwTiPUggrTUEAMqqHabrA4yz3vRQXCJgyuLgefhNvka411IJ1nekUBrYkJ/XcKNdF
+	 9QZOC4iCTGPVeS8DN683XS0mkkRZBwtZoukJhBgiGJOKQ+d4AUk8UDEd93h+jqg5aw5uY
+	 kSK0qTOeb4nwh6ixBWVMazNQWQAmiosaomvkCBlmMwZ02jKeSGx0x1DdLPdjCrvvPkeEA
+	 lR3Y1vo9znJRP5EGrK5eqUmVXxWgVA9TnVae/xFf4yYFKl3+63zXyLyYOp0zcftvrLg==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794589201;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794589209;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=ht73lIdKfLXzYIM4DvC0DDEzfXuL/I3GCKbyKODV+Yg=;
-	b=MWJa1VCmZcQnZy7t6iyjNJ6n1w4N2yKbsIDYgCbMjdq1B05jGlchktfTsGQ5qnZuODg+
-	 L7eJO9wdt4Cd1xKWcSMJcCfHz8TxQPj7P89rwOILD/vzpNOoMhW5QFu5Z3ZeQnt8vi9m1
-	 NQBt8tfV43hhvprbCQxmG8MgV00ef6dT+l3//JHWCsmeU3g0FDdbTRvBoqd0UF5gMsXvV
-	 SYpeD89LnbjejcjWHBZoYBV0tnhGBjvLroDGAnsriHIcs6hUiCPWkcd9ToFIoeh3rWTrq
-	 EmPLye9maA+zEZrH01PullHY2bhZjPtOgWWV+MAih7StPgeg7aERKB3ff/G4TQzg3GA==
+	bh=scUARIYa6JlZqbM9o9X8UDZhtH4UB7ysOYNW/jveLZY=;
+	b=zsO//lhYpmUzRLX1dpTMU0bV8bgIu6H6Id+tnXwTLqMhjonCKcuf/3nmBeFNGZn3Zy+Z
+	 yhTMCW7jRgxDfwqQfo+0bxfo5o0JeXw6maHXnxSkatRe4ZqCd6R+rRihdu7XAUMKCd1Ww
+	 1hObKBHmvPPFxto9DcOQhI/+C5iiCya+YTaQma8Hz8ytIcMQF2RSUf5XdUhR0795bSodl
+	 2WWoogR9w97ohP8osNuLR+Ag/5idewAZMTvsoqpiULuKktVwNlZHEcfvJOYNjMVgz+kbd
+	 EO1PQGmwXSJVNx4toKFUHiUfwhSvE813/wJZDLSSUwdVxcflqbOFmWkG7CfTyrLvJ8g==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=FYLt4ttP;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.45
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=ZBf70J36;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.44
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 867A5606A8BD
-	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 17:00:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 867A5606A8BD
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72EE3606AA23
+	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 17:00:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 72EE3606AA23
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=FYLt4ttP
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4a206f0b95bso127885e9.0
-        for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 09:00:00 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794589199; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=ZBf70J36
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4b76c15ae36so88985e9.1
+        for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 09:00:08 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794589207; cv=none;
         d=google.com; s=arc-20260327;
-        b=MhkiLprs01xru6WPYbEv/4LWm0gFPs/YitpOIzU2DBvIAsmu8JDbVodXSGlFtBXcV+
-         MLYfv2PLMw+FhMOA/jHIxikYUV4ASgeI5s+otzXYBT0MtvFKKX3jKxE9QrOkiKDCp9en
-         UWFYp3DX6P4XP1sYw4YIsUybzw/E1CBtttT03LvBCa89hzZR449/RDo17EgNAPMdI6Gw
-         MfiAXji4gSSmxxrCfnA1mlOIcOfavxtIJXOd/w4ixUY63QRVZ/T3T88IVYpiyN3cVXyB
-         8m8uIdz3zVVReVmlNWk9EGwvNlGDKFNu4+q8iLIhWWes9UR2ScpGzdKS6TuDBqAvumzX
-         wIXw==
+        b=dhRUO+CnbWbbvfEtAzZbadNSCME+WGKcrUHV96g1Iw4+A3ZyFPgMX0lsLd4kG4N1UK
+         E7ziCPSsbRIGrE6TTZey/0d+5HwZB+/5HrnlVVdk6/FicBrkLypT39+w3y3y8CIPkGGX
+         JxrknjYA5nM1VnxbCo1BwfXnuOEjABG508LKz8YVO3BUVwi2n63g0JIt60ayk3Bvh3j+
+         FRYDsmzlOX9ahE/DjtyrEjmHpgHwerwyhATTB8SDX/+3PHcvBI5MwrC6OTOtInCJV5+q
+         ultGVfvOWsDkjf/6aOeiNejr0T8KsHRG7qlwevSaKLNcL5IEfJ/I4oD8nS+CmcUfcqKd
+         rx4Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=ht73lIdKfLXzYIM4DvC0DDEzfXuL/I3GCKbyKODV+Yg=;
-        fh=xO6BQI7/+fETG60XibcTly7s0xXax1/v+Mtpqopi7jA=;
-        b=foi2SKZJmpQ8MW0MAolwOS7seHoeYcR/S9EWauZCDKCQsOhXCgMW/knSjOp3UuyXVa
-         LCtV+34Dcu+fzyPd4IzqhJRBOL3wUG4XQQL2lGjTImAOkj9/usudMeDgUR0Gdg0hDIIq
-         hp8FKzDmAdoEx+o+xGSfQnwwAxs+4aCJPzf1BeU+LTldDO+P+Sl81D8aR2i4uxbXkJiE
-         63asefv9WZRadZLq2m9VgUn7yddV+Zhc3QUA2OfOtLzdpdk5u2tPMaOHbx56H+DjT9A6
-         5Jff1U8zSIj1FvXLej7ktdlq8UVUgwpjiMsTvqcmU7rLSuto8bdwAIwSluc1Xqe6c8Y4
-         3Ogg==;
+        bh=scUARIYa6JlZqbM9o9X8UDZhtH4UB7ysOYNW/jveLZY=;
+        fh=SrhPbBZbqkSo+nHE6b+ChQnHiXCmVhmlpcvzGa3DO+4=;
+        b=I8UXb9bQPj+B+Wpqq0+aSe0gUFS+dzRVyqnZZdAZ4C9DUZkuAmcWrbS9uBH3FwVfoQ
+         VaOa1JY+BKTyxgjiKmWpdOzVk1naz7PQ6e1gzYOG6K20U4jghwp8Dt/AP1o1qEhJqp4T
+         Gm9jYR2RYEI7Ld0fVkD5zipKzD19aac8jEshXQeNkkpit8cpr69FJ/zi0wOG6B7mPxUS
+         xu00IMted0FT9igXD8qLmk4ZRu5GZnCTH1Uet7/3K1A6ARls7eNlGUWpfb0IoRRXZDSM
+         E8In+g+RSSlOtZEKKr6148VFPyJQBfDpXDLtuAlznkomsdZOfpUbbUBqjFMxi1lRPOlw
+         QjYw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794589199; x=1795193999; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1794589207; x=1795194007; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=ht73lIdKfLXzYIM4DvC0DDEzfXuL/I3GCKbyKODV+Yg=;
-        b=FYLt4ttP5B2WVHQ6vCHPoKjcfSzLRA8ecYOiE3nk+gqHrDdCArmGFAfCyVT148EhQI
-         skjMiEVfofxcg4nfQkdnRH/JuUm1GJzsPQ/7iVvkcS2U47+eiAF3fvSKLoC8XiZ6PpiN
-         EsMq7P3BZPSdCP0gqXHlU+VY/K/cxaFCtA4aX2ZxI0lafAlFqO8dD4gj55d6W39NjDYV
-         WLD5DXNDPLF0iPlngPDHrtgxmh9UxHCbX83YetyGUfWLNJhWfuAEtUAvsAxTrtXta/+h
-         hzPHbYgbYCWnpaB1yL01GqPyf2qozPZTXq0xoJVXcTqEgA/Me6HcfB5kVIOOIIoj1a4y
-         kdDw==
+        bh=scUARIYa6JlZqbM9o9X8UDZhtH4UB7ysOYNW/jveLZY=;
+        b=ZBf70J36PbEu4eQ+SNTy5zuGy74PhNTaJdDpje3jNp4bPngtmrGES7egt+vv9prBpg
+         4L+4nnjiSSDwLYLRb7VYtr1pG7rqHFuj68TMPdxGvi+d07fbBK72knjwosg+tvLZVmV/
+         7yap3Bwfb0oJ9CEU3qPJ9EtDfvRM1Yp3YX8PCWJE5guWzcu5Prz7Ua7WjmgG4Mk/toBa
+         OyMSpBPdjlTPUD5hAB+9e4VyPGoJmII+Wms0dgUdh9QMy7xYARZvhjYiSvZCgVPHfDAO
+         PnPRn6RoneZ6phOLPC7VAO4v53np23+EF8R1aqe2QwPx+QontsvLjdFsMHt6PuDpRC6G
+         2xow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794589199; x=1795193999;
+        d=1e100.net; s=20260707; t=1794589207; x=1795194007;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ht73lIdKfLXzYIM4DvC0DDEzfXuL/I3GCKbyKODV+Yg=;
-        b=XWp0mVCGpMM/oK1oMrOfFK6VEsEcMEdI5bukH2xvyTU7Yl/S4tP8S2oyj0i9e0rcjM
-         RIvobaKIrPQlyr6VcKjnizhN2B8uvDCKt8o6AZaXQk3eJIGp8Fv4vFV9r2of/O6vbAPf
-         7MTk5n5BEgQHwbbq5nVRV6M0RHfMkk0KOvrixxlDptHAlaF4RywkWyfLeL4NFt2KzzjK
-         9Vsj8XUp6pjslCeAOP+8TUKPQTNTUToDMCsf7YrBuulwoxvs0PIjPw+QxNWixxPJGDQF
-         eEdcPCYjk0t2zfL68qUXH8yUFaaZYfasZUIN920zcOV/ezODqZFbYkQIBuH7Kyo8TCAz
-         fGQA==
-X-Forwarded-Encrypted: i=1; AL+hErHbxT+tvbPthGskboT2q/bDF3hP3pX5EwFKv/9f5TpYnWjScjud2HjFnuT+tgocUIG8XrE=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/Xdw093z+PW8MUCZ1olhedbkRauXGcE202xc+nei3V+jcDlVjH
-	CCly0s6XzWDtZ3JkERcBZG3DpIfnbEqvcQPmUPQJGIuABIxBHpbvBFIPOxSg1T97S2PNd63C1FW
-	wk2WxBnpMhwnLLrH0Eu1Gjt6R32fZCKMN84Z5dwid
-X-Gm-Gg: AYBFou3BTTF08mdndeDzWbzpOf3HRgbSSsdpk/PxkKQwG3dRSoBHHYRBGOmo0vyh5ZB
-	GQDGJbvKmaW1lsd4yHnTPY9MUuNqL5VbqLw9imD8PfkDRT4N0kQPrSn8dcAF2fGuAG9CwbttI1i
-	WpMcAVVifvkPA3dalPUTTP4/AW4rbJ01BSU/BK01MHaZbpXuKKVjtghmUFOd993N8IiIG32iTcO
-	5FD3BjiMFic3LkuXsloYZHT1uMGSKcLzeGiHRsPDCDeRT8rp1Cs7MZJzDzz5ItNSNSEJO51ftMd
-	rYYgxtt2fM33ySUhFdIYjRQ7xKb1DwrTrwEAr59Cgs1m3ceMQGx3FFRAVUBRS4MJnUvvGetylbd
-	AmvZSwB+25USB2ieDXx6DxYkWz7+eszyUnhe35O8pSpQZsntf9JUxjrpwpZJ9yBjwdlOHXholbh
-	OHOmYwDY1jlKXDFkMmOapJ9E4=
-X-Received: by 2002:a05:600c:ac1:b0:4b8:b175:c5a3 with SMTP id
- 5b1f17b1804b1-4bb56e4edcbmr658015e9.9.1794589198370; Fri, 13 Nov 2026
- 08:59:58 -0800 (PST)
+        bh=scUARIYa6JlZqbM9o9X8UDZhtH4UB7ysOYNW/jveLZY=;
+        b=hVNCAeDN0FUhRUFjOC+GYXaaGEOMuYQYBjQ7iN93FZwZiFWkhzEXPIgYfbiCBE1FvU
+         Cr/9ddlCGQCKXF87aEAaLTfBcu+BTriXGNDV35FZKKkPNGxQ8lrC2YqEBjasI+VbJ0Ss
+         wLyXSIUfquDBGKvbo85Yatw0q1CxoqKrZrr+ig2eqPrzvsd4YKUU0OngY71C8aVwXtAp
+         ObgxzopC6Gk8pvmkAsuXEHZgls2FOGVghCCcIRZ6icAh/IxCKhh0mVQO1rk4q4u/rvmG
+         WDqFtQUTiOA815qPL3dvhGik+HOqbf9Tt5V4NNLQOvqqOJ6YLtO/oSUd0qLsKcjc677o
+         P/tw==
+X-Forwarded-Encrypted: i=1; AL+hErEZkJBtYvHxV5npci0iVDp9vDkbOEoyOEesOGP0vnBcWfzdVQt23N7QaPQN8cZb62npyXg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+PK9H7iC/7gLA8QSeAwEWv+cBq1cT63fLaiJvniTg6s7Qm20HW
+	/PnZHxOaxC9Vc7Xpx+ApQpMz8oVdf7BheCB+7gtocZL19lBosFqm1dbpN0Z3PR75us2gEqX2Lc9
+	nfllcjo0TN1aGPaF6yEwXZYz3/LSb487Z9gHuSrcY
+X-Gm-Gg: AYBFou3M402jlMAzYrNA9oZrSXyGgRgvY6x6xrFcuhdSyJKBn5VZ9/ISjKfQJ9gPaWA
+	LgENJjwPUYdsSztm/dQPtNhSujK5zcUDM66sdwKFcoVgeAbYIQdNUvhtEouDkeMALzhLrrEAGFh
+	ZA893SpIJJtOp44kno+Vm0UpcacVfnDqlkIqpJk4zp0FzlooEQNLkyJ6Z8FN+jrvQ6XJ6klgR4O
+	3EgpLsUegEobU0QUWaYCHtVU/jC4CLEw4mP0ec5WMB8zrHotwA5bdH+wFwDcf+AQhfQpsJaYz2k
+	nQgycOtsagbKQVESEUMS9JfpitxzRlsMCidYRHDBxU+ao6XrbER/qLzNCT+h/XjbDZ9Upqjb+G4
+	hC0/tDLMZL5lBAKj/zKDME9M+RgGlbgYMP7zmNv9lDbKSCAKN9JLeDopU3bElFYfS0We6yt+Iq+
+	dqgdYDwKpMrhbFETxz79FJ5bvo
+X-Received: by 2002:a05:600c:870c:b0:4a2:ba3:236e with SMTP id
+ 5b1f17b1804b1-4bb56e56238mr936435e9.14.1794589206285; Fri, 13 Nov 2026
+ 09:00:06 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,13 +105,15 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261113024447.922683-1-k.chen@smail.nju.edu.cn> <20261113035640.948458-1-k.chen@smail.nju.edu.cn>
-In-Reply-To: <20261113035640.948458-1-k.chen@smail.nju.edu.cn>
+References: <20261113024447.922683-1-k.chen@smail.nju.edu.cn>
+ <20261113035640.948458-1-k.chen@smail.nju.edu.cn> <20261113035640.948458-2-k.chen@smail.nju.edu.cn>
+In-Reply-To: <20261113035640.948458-2-k.chen@smail.nju.edu.cn>
 From: "T.J. Mercier" <tjmercier@google.com>
-Date: Fri, 13 Nov 2026 08:59:42 -0800
-X-Gm-Features: AclHuK-LFbMT3CtNvV1OqgqhSoIHpLJtutAfAmKAD9TN_Xuh-nAE2mDUwuHSl-g
-Message-ID: <CABdmKX39KyeRFLwiJKpt0ZVjWkNcL62ajYNUjHfN4VXAqbHJrQ@mail.gmail.com>
-Subject: Re: [PATCH bpf v3 1/2] bpf: make dmabuf iterator stay drained after NULL
+Date: Fri, 13 Nov 2026 08:59:53 -0800
+X-Gm-Features: AclHuK9SEKgiz7MAOQEc_T8XPTeLCyBuqWo3mPZz76potYWEjTPup_06Sl92Rh4
+Message-ID: <CABdmKX1AskqjkCcL8Xu7zqgoBCeXjoeRuQggFNxq7ktSo+ij3g@mail.gmail.com>
+Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: Test that a drained dmabuf
+ iterator keeps returning NULL
 To: Kang Chen <k.chen@smail.nju.edu.cn>
 Cc: Yonghong Song <yonghong.song@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
 	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
@@ -126,87 +128,123 @@ Content-Transfer-Encoding: quoted-printable
 On Thu, Nov 12, 2026 at 7:57=E2=80=AFPM Kang Chen <k.chen@smail.nju.edu.cn>=
  wrote:
 >
-> bpf_iter_dmabuf_next() uses kit->dmabuf =3D=3D NULL to mean "iteration ha=
-s
-> not started".  dma_buf_iter_next() also returns NULL at the end of the
-> list, so a next() call after exhaustion restarts from the list head.
+> The BPF iterator docs in bpf_iterators.rst specify that the next
+> function of an open-coded iterator should keep returning NULL after it
+> has been returned once.
 >
-> The verifier relies on the iterator contract that once next() returns
-> NULL it keeps returning NULL: process_iter_next_call() marks the
-> iterator DRAINED and treats the result of later next() calls as the
-> constant zero.  A restarted dmabuf iteration therefore hands the BPF
-> program a kernel pointer while the verifier believes R0 =3D=3D 0.
+> Add a subtest that checks this for the dmabuf iterator.  It drains an
+> iterator, calls bpf_iter_dmabuf_next() once more and checks that the
+> result is NULL.  The dma-bufs the test creates keep the list from being
+> empty, so an iterator that starts over would return one of them.
 >
-> NULL now means drained.  Initialize the state to DMABUF_ITER_START and
-> translate it to dma_buf_iter_begin() on the first next().  The iterator
-> state is BPF-visible ABI (one pointer wide), so use an invalid pointer
-> sentinel instead of growing it.
+> The existing open_coded subtest uses bpf_for_each(), which stops at the
+> first NULL and never calls next() on a drained iterator.
 >
-> Fixes: 6eab7ac7c5ee ("bpf: Add open coded dmabuf iterator")
+> The selftest was originally posted by T.J. Mercier in the v1 thread:
+>
+> Link: https://lore.kernel.org/bpf/CABdmKX09vLG4U-7FwF-vm_iTy1AjGUPXka08Kh=
+WE+qJ0J=3DXGMA@mail.gmail.com/
+>
+> Co-developed-by: T.J. Mercier <tjmercier@google.com>
+> Signed-off-by: T.J. Mercier <tjmercier@google.com>
 > Signed-off-by: Kang Chen <k.chen@smail.nju.edu.cn>
 
-Reviewed-by: T.J. Mercier <tjmercier@google.com>
+This should be:
+From: T.J. Mercier <tjmercier@google.com>
+
+<unmodified original commit message>
+
+Signed-off-by: T.J. Mercier <tjmercier@google.com>
+Acked-by: Christian K=C3=B6nig <christian.koenig@amd.com>
+Signed-off-by: Kang Chen <k.chen@smail.nju.edu.cn>
+
+
+For example see:
+https://lore.kernel.org/all/20261104-v2_20230123_tjmercier_google_com-v4-1-=
+1819a017000b@redhat.com/
+and: https://docs.kernel.org/process/submitting-patches.html#from-line
+
 
 > ---
 > v3:
-> - No change from v2; reposted with the updated 2/2 attribution.
+> - Add T.J. Mercier's Co-developed-by and matching Signed-off-by.
+> - No code change.
 >
->  kernel/bpf/dmabuf_iter.c | 17 ++++++++++++-----
->  1 file changed, 12 insertions(+), 5 deletions(-)
+>  .../selftests/bpf/prog_tests/dmabuf_iter.c    | 19 +++++++++++++++++++
+>  .../testing/selftests/bpf/progs/dmabuf_iter.c | 19 +++++++++++++++++++
+>  2 files changed, 38 insertions(+)
 >
-> diff --git a/kernel/bpf/dmabuf_iter.c b/kernel/bpf/dmabuf_iter.c
-> index cd500248abd9..390f6d730a67 100644
-> --- a/kernel/bpf/dmabuf_iter.c
-> +++ b/kernel/bpf/dmabuf_iter.c
-> @@ -156,6 +156,9 @@ struct bpf_iter_dmabuf_kern {
->         struct dma_buf *dmabuf;
->  } __aligned(8);
+> diff --git a/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c b/tools=
+/testing/selftests/bpf/prog_tests/dmabuf_iter.c
+> index 1a5dc1adae73..c1f81b5dccdc 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c
+> @@ -265,6 +265,23 @@ static void subtest_dmabuf_iter_check_open_coded(str=
+uct dmabuf_iter *skel, int m
+>         } while (bpf_map_get_next_key(map_fd, key, key));
+>  }
 >
-> +/* NULL means drained; START means "not started yet". */
-> +#define DMABUF_ITER_START      ((struct dma_buf *)1L)
+> +static void subtest_dmabuf_iter_check_next_after_drain(struct dmabuf_ite=
+r *skel)
+> +{
+> +       LIBBPF_OPTS(bpf_test_run_opts, topts);
+> +       int err, fd;
 > +
->  __bpf_kfunc_start_defs();
+> +       fd =3D bpf_program__fd(skel->progs.iter_dmabuf_next_after_drain);
+> +
+> +       err =3D bpf_prog_test_run_opts(fd, &topts);
+> +       if (!ASSERT_OK(err, "test_run_opts err"))
+> +               return;
+> +       if (!ASSERT_OK(topts.retval, "test_run_opts retval"))
+> +               return;
+> +
+> +       /* The test buffers exist, so a restarted iteration would find on=
+e */
+> +       ASSERT_EQ(skel->data->next_after_drain, 0, "next_after_drain");
+> +}
+> +
+>  void test_dmabuf_iter(void)
+>  {
+>         struct dmabuf_iter *skel =3D NULL;
+> @@ -315,6 +332,8 @@ void test_dmabuf_iter(void)
+>         }
+>         if (test__start_subtest("open_coded"))
+>                 subtest_dmabuf_iter_check_open_coded(skel, map_fd);
+> +       if (test__start_subtest("next_after_drain"))
+> +               subtest_dmabuf_iter_check_next_after_drain(skel);
 >
->  __bpf_kfunc int bpf_iter_dmabuf_new(struct bpf_iter_dmabuf *it)
-> @@ -165,7 +168,7 @@ __bpf_kfunc int bpf_iter_dmabuf_new(struct bpf_iter_d=
-mabuf *it)
->         BUILD_BUG_ON(sizeof(*kit) > sizeof(*it));
->         BUILD_BUG_ON(__alignof__(*kit) !=3D __alignof__(*it));
+>  destroy:
+>         destroy_test_buffers();
+> diff --git a/tools/testing/selftests/bpf/progs/dmabuf_iter.c b/tools/test=
+ing/selftests/bpf/progs/dmabuf_iter.c
+> index 9cbb7442646e..d5421b75c39c 100644
+> --- a/tools/testing/selftests/bpf/progs/dmabuf_iter.c
+> +++ b/tools/testing/selftests/bpf/progs/dmabuf_iter.c
+> @@ -99,3 +99,22 @@ int iter_dmabuf_for_each(const void *ctx)
 >
-> -       kit->dmabuf =3D NULL;
-> +       kit->dmabuf =3D DMABUF_ITER_START;
 >         return 0;
 >  }
->
-> @@ -173,10 +176,14 @@ __bpf_kfunc struct dma_buf *bpf_iter_dmabuf_next(st=
-ruct bpf_iter_dmabuf *it)
->  {
->         struct bpf_iter_dmabuf_kern *kit =3D (void *)it;
->
-> -       if (kit->dmabuf)
-> -               kit->dmabuf =3D dma_buf_iter_next(kit->dmabuf);
-> -       else
-> +       /* Once NULL is returned, next() has to keep returning NULL. */
-> +       if (!kit->dmabuf)
-> +               return NULL;
 > +
-> +       if (kit->dmabuf =3D=3D DMABUF_ITER_START)
->                 kit->dmabuf =3D dma_buf_iter_begin();
-> +       else
-> +               kit->dmabuf =3D dma_buf_iter_next(kit->dmabuf);
->
->         return kit->dmabuf;
->  }
-> @@ -185,7 +192,7 @@ __bpf_kfunc void bpf_iter_dmabuf_destroy(struct bpf_i=
-ter_dmabuf *it)
->  {
->         struct bpf_iter_dmabuf_kern *kit =3D (void *)it;
->
-> -       if (kit->dmabuf)
-> +       if (kit->dmabuf && kit->dmabuf !=3D DMABUF_ITER_START)
->                 dma_buf_put(kit->dmabuf);
->  }
->
+> +/* Result of a bpf_iter_dmabuf_next() call after the iterator was draine=
+d */
+> +__u64 next_after_drain =3D -1;
+> +
+> +SEC("syscall")
+> +int iter_dmabuf_next_after_drain(const void *ctx)
+> +{
+> +       struct bpf_iter_dmabuf it;
+> +
+> +       bpf_iter_dmabuf_new(&it);
+> +       while (bpf_iter_dmabuf_next(&it))
+> +               ;
+> +
+> +       /* Store the raw value; the verifier would remove a branch on it =
+*/
+> +       next_after_drain =3D (__u64)bpf_iter_dmabuf_next(&it);
+> +       bpf_iter_dmabuf_destroy(&it);
+> +
+> +       return 0;
+> +}
 > --
 > 2.34.1
 >
