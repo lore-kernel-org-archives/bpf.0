@@ -1,45 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=81.19.149.119
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794602799;
-	b=SJqj2Q8+h78PKm8joXcELldwwoJXUF8hm2LmS7uKdUW+pFrR90htMHBG5qQmnBI4Vc00
-	 pL7Z6yUOVKDi/ortQ4R+wJkQtjHUsX0BaQF8EOChHf/wV71KARVQOJO0IVcfV95GPanL0
-	 LtyLu3DCZ7yQyGOl3Zv5RJH07RLM+OpVDC1kXueiLfKsMdTayiB2BhzlLNom8Mv/QybB+
-	 nieo4t7j4Uoz9HBfnDvmujbrj0xXg9Y/UcUeOfy8eMcjhxyJ0Z5mAdAYB6JzMtnvys/V5
-	 az/UZfvqR4/16RFTWrQcrgjuNGcmpjs4HvdJ75bf26L7ZQY7hj72VAgAbcWuJIilmrg==
+	t=1794603576;
+	b=a6FqfZsXSB/SJecTeZsS8xSMvKVtg/RRQDKi6sFCNbyLN+GL8ZzSZQ6D0pa6NxLrvW6m
+	 zk0/xROmvoqbIzWfdz7T2BrCSvniLbCOfCAbLaUcKeW0DW3+pjkL9A1W0zaUnoVuqZEDi
+	 3M2EDTbn9SKtz3bINxXtORu0FabGj0ghIJmpyKO6f3gYi7n6RycCn6vV6CgrvF6KpsWS4
+	 IHXYNj1ge1ClgeRwTcHxsuhq/bEUstXPX7huyxPd3cQS5ttE5oiGuyG81YFNlQ1UUj8fY
+	 ZQScPud1KsE87JY653yfald/1cPlG7Ko+WIweVgYb8yrO5Apqe2Ik6d9ASeSFw8XV0A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794602799;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=mvDC8AgZ3N1caSO2w8AjVA+n1IhC5yWLMz1RCK3jyqY=;
-	b=3tU+WVHxlvCysKAtqazHNC+8y7+TC2pLtF76OEMaNXYwY8tyxYRfNgdPLyFN9MeubfH8
-	 A8DT/kr799O/NsBV9YSHMZeHEfBqje+WPPpvEgs+UGa3+JWBc9xh/7rA1I7dprgS7LSPM
-	 lmiKyAB306HhXLhvuA+y4mnLw3wkAbBZggSmZbsacclhseTRQZpZ70NR9Kx8nW5RcXnuq
-	 zRqbGyRHRsn/3BoRSxPi+RUaaFQMJB4fG52NSMf41sxM+qJ5ltTZvmf7mSzShQ/AsNEBD
-	 cspOJXwi1awiVHDsUVF7VaS/v3d18Sn+FizUSewSjs5BdbPAJn3vpaSfR/qmDEO0DDQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794603576;
+	h=DMARC-Filter:DKIM-Signature:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-AV-Do-Run;
+	bh=EJBj5wqDDAB9+pHKPL6VCCp1UXeWowXlq/LPUcUSsu4=;
+	b=smLrE9PUrEHD79L9jBsRFTewXHmA8L5A7G6St1wMvAZTCPmVPayW/1POlsuN67Cq7eUe
+	 xnjmDvoB0BF7PUc4zUGh0oI+OrLDdaQlpUWylPxRzrTpqheAon8a5s1rI8zZRnp0NCljS
+	 HEaMLPSx/aTEy2TxboYlACBmPvbayXDlCuNPY+XRNw4H+P1Ntql5hSlw1ItYOy3oA1Tk6
+	 wBK80eiiBeiwOiyLLZT9oyj4CesW6O+zBN5npCoxtEWeXbzWV2WAoQNzYVhTeu8T2KSco
+	 Z6B0VKdOdq8j8RIImgSpugfwTtys2DLVMgnNmhbmk/SHhS13jwekSfeRkgiHLHi8sJw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=j0q+0SFk;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=engleder-embedded.com;
+	spf=pass smtp.mailfrom=engleder-embedded.com;
+	dkim=pass header.d=engleder-embedded.com header.i=@engleder-embedded.com header.a=rsa-sha256 header.s=dkim11 header.b=dHn8cJbq;
+	arc=none smtp.remote-ip=81.19.149.119
+Received: from mx09lb.world4you.com (mx09lb.world4you.com [81.19.149.119])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B32C606A337;
-	Fri, 13 Nov 2026 20:46:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75D1C606A323;
+	Fri, 13 Nov 2026 20:59:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 75D1C606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=engleder-embedded.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=j0q+0SFk
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36CD91F000C8;
-	Fri, 13 Nov 2026 20:46:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794602798;
-	bh=mvDC8AgZ3N1caSO2w8AjVA+n1IhC5yWLMz1RCK3jyqY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=j0q+0SFkiBXQSraN4EqvJBROKR2mcquGuAPCbOw0DgeacG6PMuxZawuosKEih7CED
-	 QgYF0XyOo7iFI+scNPKIIt6n8Afo9cykJo9eomLUGMFqoA0xLfxj/T5iF7VrbnIVR+
-	 sSLp4D0Uz6whxGQcMJb95LXEe2yzgI/nIXooRk/GvHoCrpV38terTMDZ8kVLNjSxlZ
-	 GKdZkpybhNC/aFTkS8vjFyZUpVLs+ik0tHxJ7BbgOGLVhJIunDkfuPzEJow1Ts0qxJ
-	 OPh92ofxKEjSzJlTF+9roDgYqWIeuOEwDq0yQS9Buw2EYscKBOrrGQ957LKmjo/+nW
-	 cInVamCDKEASw==
-Content-Type: multipart/mixed; boundary="===============6062532438743464253=="
+	dkim=pass (1024-bit key, unprotected) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.a=rsa-sha256 header.s=dkim11 header.b=dHn8cJbq
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=engleder-embedded.com; s=dkim11; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=EJBj5wqDDAB9+pHKPL6VCCp1UXeWowXlq/LPUcUSsu4=; b=dHn8cJbqKQ+Jj9d6vLb1sY/nWc
+	B6e+o0CtxAqo/uiUQxLgcOvzG5rwHmG6mUVvysHwv/8Q4vyIoeHlj6zWXFc8wyQnOiyUlJhJ1aT+r
+	GPFq/WKMzMFmbnaScuB7+7mfZJlPcKE59hOuMdOXFHcO2apJFdVvRKSwbj/yAd1dGhWY=;
+Received: from [80.121.72.134] (helo=[10.0.0.160])
+	by mx09lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.97.1)
+	(envelope-from <gerhard@engleder-embedded.com>)
+	id 1xRyMi-000000004vO-2IYe;
+	Fri, 13 Nov 2026 21:59:20 +0100
+Message-ID: <1ab53072-b9ee-464b-b5b3-cbb578059b49@engleder-embedded.com>
+Date: Fri, 13 Nov 2026 21:59:17 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,87 +58,70 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <651acc6e21aae9067dd3b8ccce4aa38da032b57324836cc75a1fbaa959e2ef10@mail.kernel.org>
-In-Reply-To: <20261113-cbpf-ind-nospec-v1-bpf-v1-1-764ac4c14573@nvidia.com>
-References: <20261113-cbpf-ind-nospec-v1-bpf-v1-1-764ac4c14573@nvidia.com>
-Subject: Re: [PATCH bpf] bpf: mask speculative out-of-bounds skb helper loads
-From: bot+bpf-ci@kernel.org
-To: datrujillo@nvidia.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,john.fastabend@gmail.com,sdf@fomichev.me,davem@davemloft.net,edumazet@kernel.org,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org
-Cc: bpf@vger.kernel.org,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,datrujillo@nvidia.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 13 Nov 2026 20:46:36 +0000 (UTC)
-
---===============6062532438743464253==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] net: mark skb NAPI IDs independently of busy polling
+To: Paul Moses <p@1g4.org>, Ding Meng <meng.ding@siemens.com>
+Cc: Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, Tony Nguyen
+ <anthony.l.nguyen@intel.com>, Przemek Kitszel
+ <przemyslaw.kitszel@intel.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Richard Cochran <richardcochran@gmail.com>, florian.bezdeka@siemens.com,
+ jan.kiszka@siemens.com, wq.wang@siemens.com,
+ Jason Xing <kerneljasonxing@gmail.com>, Simon Horman <horms@kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
+ <rdunlap@infradead.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+ linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+References: <20261105071706.7043-1-meng.ding@siemens.com>
+ <20261110134539.12d860ef@kernel.org>
+ <4pqljild2fp6eotiicvwbwu2wfw66fzd4qamwt6utirdjxlaok@iiu2f3k7azrp>
+ <Fhn2gT70aJ-2_eak73NBZYuXuKtVb64PoD8VQ9jwm-S-K0RhZilAg9iwSBJ0RlaiSrRvM1vPw1aHvGPjcktu9GmdBuvFk9244-q2IVOrFu0=@1g4.org>
+Content-Language: en-US
+From: Gerhard Engleder <gerhard@engleder-embedded.com>
+In-Reply-To: <Fhn2gT70aJ-2_eak73NBZYuXuKtVb64PoD8VQ9jwm-S-K0RhZilAg9iwSBJ0RlaiSrRvM1vPw1aHvGPjcktu9GmdBuvFk9244-q2IVOrFu0=@1g4.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-AV-Do-Run: Yes
 
-> bpf: mask speculative out-of-bounds skb helper loads
+On 13.11.26 09:29, Paul Moses wrote:
+> 
+>>
+>> Then, drivers that use deferred timestamp conversion (e.g. igc, engleder) must
+>> specify a busy poll dependency if they want to obtain the original net
+>> device upon consuming the skb. However, this dependency is far from
+>> obvious, and annotating it for future features of this kind will be very
+>> hard to discover.
+> 
+> The "deferred timestamp conversion" was incomplete is what I'm saying.
+> 
+> This started with 97dc7cd92ac6, 0abb62b68252 and 069b142f5819 were built upon
+> it, so maybe Gerhard should decide the path forward?
 
-TL;DR: The nospec masking may be incomplete: inline classic BPF ABS/MSH loads
-from convert_bpf_ld_abs() on efficient-unaligned-access architectures bypass
-the helpers, so a short packet could still transiently read out of bounds.
+The deferred timestamp conversion is a niche feature for TSN to solve
+the working clock / global time problem in TSN networks. IMO there is
+no need to make it working as soon as igc or tsnep drivers are enabled.
+It would be ok to fall back to normal vclock behavior like all other
+drivers if CONFIG_NET_RX_BUSY_POLL=n. For me it is ok that NETCONSOLE
+is not possible for PREEMPT_RT in combination with this feature.
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
+There are already so many things to consider to get TSN working. To
+not enable NETCONSOLE on PREEMPT_RT for deferred timestamp conversion
+would be just one of many.
 
-[ ... ]
+@Ding Meng: Do you actually need the NETCONSOLE in this combination?
+On productive systems likely not these days due to CRA.
 
-> +static __always_inline const void *
-> +bpf_skb_load_nospec(const struct sk_buff *skb, const void *data,
-> +		    int headlen, int offset, int len)
-> +{
-
-[ ... ]
-
-> +	/* Out-of-bounds transient offsets select NULL as the load address. */
-> +	return (const void *)(((unsigned long)data + (long)offset) & mask);
-> +}
-> +
->  BPF_CALL_4(bpf_skb_load_helper_8, const struct sk_buff *, skb, const void *,
->  	   data, int, headlen, int, offset)
->  {
-
-[ ... ]
-
->  	if (headlen - offset >= len)
-> -		return *(u8 *)(data + offset);
-> +		return *(const u8 *)bpf_skb_load_nospec(skb, data, headlen,
-> +							  offset, len);
-
-This isn't a bug in the hunk itself, but is the mitigation complete?
-
-On architectures with HAVE_EFFICIENT_UNALIGNED_ACCESS, a classic
-BPF_LD|BPF_ABS load with k >= 0, and BPF_LDX|BPF_MSH|BPF_B, do not reach
-these helpers.  convert_bpf_ld_abs() emits an inline check and load
-instead:
-
-    TMP = H - k;
-    if (TMP s< size) goto helper;
-    A = *(size *)(D + k);   /* BPF_REG_D == cached skb->data */
-
-This is the same bounds-check-then-load pattern described in the commit
-message, and nothing masks it.  An unprivileged SO_ATTACH_FILTER program
-chooses k, and packet size controls the linear length.  After training the
-branch with long packets, a short packet could transiently load from
-skb->data + k past the linear area.  The value could then go through
-BPF_LSH/BPF_TAX into a BPF_IND load, which reaches
-bpf_skb_load_helper_*() and passes the new mask because the shifted index
-is in range.
-
-The commit message says "For indirect loads, packet data can determine the
-offset", yet the patch also masks ABS loads that go through the helpers.
-
-Should convert_bpf_ld_abs() get the same treatment (for example, always
-calling the helpers, or masking D + k in the emitted code), or should the
-changelog explain why constant-offset loads are out of scope?
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43500835329
---===============6062532438743464253==--
+Gerhard
