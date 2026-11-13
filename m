@@ -1,99 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794581606;
-	b=tusB4SqcmZayIoWNa45ECYANQ+OZZa6+vgLUZ1zgqi1bfwN7Ei8OI077u9W8kVkhseL4
-	 tSwUH1DtrCSxhFvmmZltbv6U/WcuDcjfaOmEDRNreauUCW+EoVzvUwOBeHkFSOLwHyGmd
-	 nVRDSA0MG5Jl+TEzFNgF/dCTL0X3XoDpOx1g2Y/z4EfXlZtbhR8FYZRj3WMQqhacvvfEb
-	 N7ki52aFLqiRksvH8FOiGikSaYW3s+amWBEylMP5ZWaOcp2+jpGrFVSFNcV+1EbSFPT4d
-	 MkAg7uCX8Yk2cQUQb6OjekF4YTXvDpy6XriZaRD1TOHsxcfRo+Elppeyd7K1Mb4lohg==
+	t=1794582400;
+	b=oT291tEDATyYVDhefsOItyhtLYcjUIcOdyimjXRRrLzA/iYV5aYq4cFXrM3ccM8AlQQe
+	 09WV8Vb3o0mnmyLLlVnLILdhDQtKlEC3kWmY02aHW1noXVOpvZaH2vcfGUKAhghTL6T3B
+	 ztN6H9X7K0eUcOTyw2tps3l5pYG5xvOFbH6yABumlMAtMr2zCmupM6qzJNeMQSXMQU2Ps
+	 6+VlbssXzss0ibllujZfj2Tf9JQYMSH9C16jnRYHFD+om021kZ8NsqddeSRFKiALGXwby
+	 ccmkwWSG8fj27LVPNVfZHwRdLEVxECaaY8glTPvydRUQeZobwMSzFfeuQOJ4ncjVZMQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794581606;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:
-	 X-Google-Original-From:Date:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=jlcDsdtlo0slK+vvqG3ptpM7GvIadzb1KxPdJ/tncg8=;
-	b=E1oW5OW7deCwHf0L30jnW31rZlGMHDmtoBuWFo10M/jHApntMlfbJQjYc8gQRFa4qZtl
-	 N0rGU2xKkM7B9p+O/ijYEtF+pcKSkBQbcwTmVscsukw6SImqq1/wqw7/tdtKCsNFBB30c
-	 moGFFWG9UGONnD+XiuIudli7KsKVL39/TbQk7IGZgY81Fv+Z6tQsZR3OlhRYbUA+EoluF
-	 GhVfKVX2kQrr6aMOiWACEiy8Vclp/Px5tUuNygAClkt9CEOZWNgfIZInGhybBUZbEhYX+
-	 3zIeodUaX4wW7mAR7VAh72jJifhz7TExtb4aw7lQosR3fO1UIY+IpQqn0ZXKWeeFWxA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794582400;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=L98w9PEmqazjymAPg1K4CjcJ7948jQ40rylr2ZeVzas=;
+	b=JwZVwEUMqM1HvR9MNoy5w9rGf57Zgmpr/d0CGCAF1JLOw0dAq4Hp+hLmTJ9cAQ4zkUNH
+	 I+kq4zU4UIRyM2s3LUl0jvkQBrbfEYygyUZkkgSBJYH/9PPye/mpC8m3RitGLwle120z0
+	 5YB9jyNEqsdBqUV+sIZVQTsB5Vot+OYEREWMiE5ToJD0RF2anh+QQbHV0H4PF2uwDzXxR
+	 ffWmjtwZ4b2AWpWJjaQ/A5ybNif9Qq/gEwVyMirahD2ImylM1qO6soLpRMMcR3odhk0JN
+	 gIWOWQyGffcTo5w2qkg3I6rn00R2K0elwEuaUSZEP8rYs9aVgCOES9nI3bqFKqPXZyQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DmfxAftj;
-	arc=none smtp.remote-ip=209.85.218.42
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nAnPSphs;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C23E606A32E
-	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 14:53:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9C23E606A32E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6032960A6F60
+	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 15:06:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DmfxAftj
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-c40e30c26a4so257156866b.0
-        for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 06:53:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794581604; x=1795186404; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=jlcDsdtlo0slK+vvqG3ptpM7GvIadzb1KxPdJ/tncg8=;
-        b=DmfxAftjg1G0HivU6QqMf8e3eweoMRPo6IiUtQMJu/JvFCTg0GlhPfANGtdLM8gmEa
-         1Y1gOpfeCPNuBctz9TkVqjg1s7+TCCWsLwdPWVjek06VvFD1Lf+6kzdYcUkrntp4MuHA
-         AGFejj4ke0Zks+9TOi9ApExlrHD/laF5/i/ip2747yxLyNmkORTjO75MxKLXse4hJG06
-         QCED55IhlT9Kvd5FH8qzEKLoFp9Xjij/OyG/q2H6itc4x6clZ3/iCq8/RNAJh5AtSRfh
-         SFmVoZllL7g2CMBG/inRBBpDTnOYdEWwI5HwRqfj1vItt9THSKKrmICGkPie2coiD2A7
-         76AQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794581604; x=1795186404;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=jlcDsdtlo0slK+vvqG3ptpM7GvIadzb1KxPdJ/tncg8=;
-        b=YQAmv0YIN6i2jKRVQpCW16T/Ur3k9sCFAKauTdhqmXEgq2VFMgKHNJxA0B7QdmK37o
-         ZFSa/p7cYr30BzaQF9Z63XyYBIYcd3nupajyARnvhCi3l+7gkA6IMZq4lTBTV2T0IHkV
-         7vOck31j3rnXS7QaiEamhB1dr9/+WrQzTwlUP3bg71csFREZTkF+1So19D1CpqEymiOm
-         A8oAIPKn2cW0Cy+6dS788wrddsQC5kdpTem92FFwDi52EZG+rhqNmJmnU//osY4u9Por
-         Mlctyk9AXqM7cAVh4bCA6l43x23HZrniitH0VDVy6GwHlIXL+yeQvy4jfypSqEtC8syk
-         WgrA==
-X-Gm-Message-State: APuU4Z+mc5hhJF/2UpMacYFaFaTKrzLkb/Qb5tkF/NSSOgA7H+oM6FVd
-	tAL1cRk0QTG+GOoBbsAR8+Ym2FbhY5IC1Bq4OKtvkfDMdGSZ5JxF2hlr
-X-Gm-Gg: AYBFou1gYdh0eTwDdqg+31x0dHLlfv3ZbMEPTfmqqQyvpplFCaaUw3AIzZlYOsXMW78
-	CoJ30U/59RVxfedFcMBzASYkl01j73m4QKMFy7HhE+O0I0eOvOaDxTomVXyj7M5xJmhGY8ysiSr
-	Kigk5SU6pT+8r1BAuYKOoTd/AJsgJ255D5MuFMWpTeTvJHXUCZe8VehxFkA52FsNkJL7dSVC9Ww
-	nPVVH5Irv+CtE8/x5kFu0l95f/l3ldUm7kQdVFyhQaWhaVZvQdfL7aXPqzkMyh1D0NF6lKK67g8
-	SMvcgQUdy3NqvSFanmkLu3BJ0omH8fKmXlNnxpcmj2XGZWN1LMAPsNCe6JG+3XaKPWb2Wj9KgGG
-	pOE8oOYwPTf34QlYKQ/ZvoidHNIh+Iv+4A7ufINBmAqsaaDTSrlAtv4sJiyWVMTY+RfM9knvB/Q
-	CHp3cX16cV1QGG4kL4I2MNu6mqYfROx2S9zs+3a32xaIowSeCeU/GpP5b56sT5vqCgjEz8i1IHt
-	6gNPrZFnGPbP68iWIepWJTHnCxqDZiQcMRqjnD1DLEGeVvPEyrLJFOFGHEg+T8WNMygfR0JNTVH
-	YnYvgjMR+S5nu1c5
-X-Received: by 2002:a17:906:9c89:b0:c2d:c6e7:9e9a with SMTP id a640c23a62f3a-c509634a669mr257870466b.11.1794581603715;
-        Fri, 13 Nov 2026 06:53:23 -0800 (PST)
-Received: from krava ([173.38.220.49])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c5095b58b66sm111032166b.50.2026.11.13.06.53.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Nov 2026 06:53:23 -0800 (PST)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Fri, 13 Nov 2026 15:53:20 +0100
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org, Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	HyeongJun An <sammiee5311@gmail.com>,
-	Christian Simon <simon@swine.de>, stable@vger.kernel.org
-Subject: Re: [PATCHv2 bpf-next 2/2] bpf: Disable private stacks for untagged
- kprobe programs
-Message-ID: <avckYL7KMRk96XQP@krava>
-References: <20261106164043.546879-1-jolsa@kernel.org>
- <20261106164043.546879-3-jolsa@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nAnPSphs
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F3481F000C7;
+	Fri, 13 Nov 2026 15:06:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794582400;
+	bh=L98w9PEmqazjymAPg1K4CjcJ7948jQ40rylr2ZeVzas=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=nAnPSphshCMl9boffR/x///O/FqAXpkLCbrVdpgTOmiuFyGFtnTc3SIlb2ra3McXu
+	 oAIzgcDyMttv082QfQF+V3GVNRkMPcqxwjaJna/Ono+E0rM1KiltFRJ+iwkYV0ewRS
+	 5q37Qf7w+KQPsCFtiM3x09i8x/oCUyUhEhiFlQJ5YH0Qjuqmwh1kfQXJuiRRFPGFi9
+	 EM3a3tAdEOFqnNgAMYZLYSIzgj7xCZAXODswsj9gegjWgdiyOjl2YDh6Qi7XWS4VEo
+	 dQTuI0Mc6/jd+cGkRl4AMzFVjXFNiVBvOdhnk+DeOzQ+w0zLnZ0SrYoF9paSIRZDcL
+	 HtKjrsaRGjN9w==
+Message-ID: <sashiko-outbox-213052@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next 2/3] tun: don't disable BHs for the XDP program
+ check of every packet
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Antonio Quartulli" <antonio@mandelbit.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261112150612.3866546-3-antonio@mandelbit.com>
+References: <20261112150612.3866546-1-antonio@mandelbit.com>
+ <20261112150612.3866546-3-antonio@mandelbit.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 13 Nov 2026 15:06:39 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -102,138 +60,107 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261106164043.546879-3-jolsa@kernel.org>
 
-On Fri, Nov 06, 2026 at 05:40:43PM +0100, Jiri Olsa wrote:
-> Uprobe programs can be preempted and re-entered on the same CPU. Since
-> the private stack is shared per program and CPU, another invocation can
-> overwrite the preempted invocation's stack.
-> 
-> Programs without a multi or session attach type may be standard kprobes
-> or uprobes. Disable private stacks for them, and retain private stacks
-> only for kprobe multi and session programs, which have attach types that
-> identify them as kprobes.
-> 
-> Update verifier tests that rely on private stacks to use kprobe.multi,
-> and add coverage that untagged kprobe and uprobe programs do not use
-> private stacks.
-> 
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+Thank you for your contribution! Sashiko AI review found no new issues
+in this patch, but noticed 1 related pre-existing issue it does not
+introduce:
+- [High] tun: ubuf_info reference leak in tun_get_user() [1]
+--
 
-hi,
-I did not realize before, but I think this should be added to stable
+commit 1a1e58a937e3b55d0632ff554e804970bf806fab
+Author: Antonio Quartulli <antonio@mandelbit.com>
 
-Fixes: a76ab5731e32 ("bpf: Find eligible subprogs for private stack support")
-Cc: stable@vger.kernel.org
+tun: don't disable BHs for the XDP program check of every packet
 
-jirka
+This commit checks tun->xdp_prog with rcu_access_pointer() in
+tun_build_skb() and tun_get_user() so packets on devices without an XDP
+program avoid entering an RCU read-side critical section or disabling BHs.
 
-
-> ---
->  kernel/bpf/verifier.c                         |  9 +++++
->  .../bpf/progs/verifier_large_stack.c          |  2 +-
->  .../bpf/progs/verifier_private_stack.c        | 38 ++++++++++++++++++-
->  3 files changed, 46 insertions(+), 3 deletions(-)
-> 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index b7329d164771..1b58a1796a2e 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -5749,6 +5749,15 @@ static enum priv_stack_mode bpf_enable_priv_stack(struct bpf_prog *prog)
+> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+> index 9fc60a73fb963..395923651f312 100644
+> --- a/drivers/net/tun.c
+> +++ b/drivers/net/tun.c
+> @@ -1702,13 +1702,12 @@ static struct sk_buff *tun_build_skb(struct tun_s=
+truct *tun,
+>  	int pad =3D TUN_RX_PAD;
+>  	int metasize =3D 0;
+>  	int err =3D 0;
+> +	bool xdp;
+> =20
+> -	rcu_read_lock();
+> -	xdp_prog =3D rcu_dereference(tun->xdp_prog);
+> -	if (xdp_prog)
+> +	xdp =3D rcu_access_pointer(tun->xdp_prog);
+> +	if (xdp)
+>  		pad +=3D XDP_PACKET_HEADROOM;
+>  	buflen +=3D SKB_DATA_ALIGN(len + pad);
+> -	rcu_read_unlock();
+> =20
+>  	alloc_frag->offset =3D ALIGN((u64)alloc_frag->offset, SMP_CACHE_BYTES);
+>  	if (unlikely(!skb_page_frag_refill(buflen, alloc_frag, GFP_KERNEL)))
+> @@ -1725,7 +1724,7 @@ static struct sk_buff *tun_build_skb(struct tun_str=
+uct *tun,
+>  	 * of xdp_prog above, this should be rare and for simplicity
+>  	 * we do XDP on skb in case the headroom is not enough.
 >  	 */
->  	switch (prog->type) {
->  	case BPF_PROG_TYPE_KPROBE:
-> +		/*
-> +		 * Uprobes are preemptible and lack recursion protection. Classic
-> +		 * kprobe and uprobe progs have no expected attach type, so enable
-> +		 * private stacks only for kprobe.multi and kprobe.session progs.
-> +		 */
-> +		if (prog->expected_attach_type != BPF_TRACE_KPROBE_MULTI &&
-> +		    prog->expected_attach_type != BPF_TRACE_KPROBE_SESSION)
-> +			return NO_PRIV_STACK;
-> +		fallthrough;
->  	case BPF_PROG_TYPE_TRACEPOINT:
->  	case BPF_PROG_TYPE_PERF_EVENT:
->  	case BPF_PROG_TYPE_RAW_TRACEPOINT:
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_large_stack.c b/tools/testing/selftests/bpf/progs/verifier_large_stack.c
-> index 7e4f5e3463a2..cbabb41d973c 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_large_stack.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_large_stack.c
-> @@ -243,7 +243,7 @@ static void priv_stack_frame_2048(void)
->  "	::: __clobber_all);
->  }
->  
-> -SEC("kprobe")
-> +SEC("kprobe.multi")
->  __description("private stack: two frames of 2048 bytes")
->  __load_if_large_stack()
->  __arch_x86_64
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_private_stack.c b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
-> index aa15361bcca5..0ce07bf6b566 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_private_stack.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
-> @@ -22,7 +22,7 @@ struct {
->  	__type(value, struct elem);
->  } array SEC(".maps");
->  
-> -SEC("kprobe")
-> +SEC("kprobe.multi")
->  __description("Private stack, single prog")
->  __success
->  __arch_x86_64
-> @@ -110,6 +110,40 @@ int no_private_stack_stack_args(void)
->  }
->  #endif
->  
-> +SEC("kprobe")
-> +__description("No private stack, untagged kprobe")
-> +__success
-> +__arch_x86_64
-> +__jited("	subq	$0x100, %rsp")
-> +__arch_arm64
-> +__jited("	sub	sp, sp, #0x100")
-> +__naked void no_private_stack_kprobe(void)
-> +{
-> +	asm volatile ("			\
-> +	r1 = 42;			\
-> +	*(u64 *)(r10 - 256) = r1;	\
-> +	r0 = 0;				\
-> +	exit;				\
-> +"	::: __clobber_all);
-> +}
-> +
-> +SEC("uprobe")
-> +__description("No private stack, uprobe")
-> +__success
-> +__arch_x86_64
-> +__jited("	subq	$0x100, %rsp")
-> +__arch_arm64
-> +__jited("	sub	sp, sp, #0x100")
-> +__naked void no_private_stack_uprobe(void)
-> +{
-> +	asm volatile ("			\
-> +	r1 = 42;			\
-> +	*(u64 *)(r10 - 256) = r1;	\
-> +	r0 = 0;				\
-> +	exit;				\
-> +"	::: __clobber_all);
-> +}
-> +
->  __used
->  __naked static void cumulative_stack_depth_subprog(void)
->  {
-> @@ -123,7 +157,7 @@ __naked static void cumulative_stack_depth_subprog(void)
->  	: __clobber_all);
->  }
->  
-> -SEC("kprobe")
-> +SEC("kprobe.multi")
->  __description("Private stack, subtree > MAX_BPF_STACK")
->  __success
->  __log_level(4) __msg("stack depth max 512")
-> -- 
-> 2.43.0
-> 
+> -	if (hdr->gso_type || !xdp_prog) {
+> +	if (hdr->gso_type || !xdp) {
+>  		*skb_xdp =3D 1;
+>  		return __tun_build_skb(tfile, alloc_frag, buf, buflen, len,
+>  				       pad, metasize);
+> @@ -1962,7 +1961,10 @@ static ssize_t tun_get_user(struct tun_struct *tun=
+, struct tun_file *tfile,
+>  	skb_reset_network_header(skb);
+>  	skb_record_rx_queue(skb, tfile->queue_index);
+> =20
+> -	if (skb_xdp) {
+> +	/* Only TAP devices can have an XDP program: don't disable BHs and
+> +	 * enter an RCU section for every packet just to find out it's unset.
+> +	 */
+> +	if (skb_xdp && rcu_access_pointer(tun->xdp_prog)) {
+>  		struct bpf_prog *xdp_prog;
+>  		int ret;
+> =20
+
+[Severity: High]
+This problem wasn't introduced by this patch, but does tun_get_user() leak
+the msg_control ubuf_info reference when tun_build_skb() consumes the
+packet via XDP [1]?
+
+When msg_control is non-NULL but iov_iter_npages() exceeds MAX_SKB_FRAGS,
+zerocopy stays false and tun_can_build_skb() can succeed:
+
+drivers/net/tun.c:tun_get_user() {
+    ...
+	if (msg_control) {
+		...
+		if (iov_iter_npages(&i, INT_MAX) <=3D MAX_SKB_FRAGS)
+			zerocopy =3D true;
+	}
+
+	if (!frags && tun_can_build_skb(tun, tfile, len, noblock, zerocopy)) {
+		skb =3D tun_build_skb(tun, tfile, from, gso, len, &skb_xdp);
+		err =3D PTR_ERR_OR_ZERO(skb);
+		if (err)
+			goto drop;
+		if (!skb)
+			return total_len;
+	}
+    ...
+	if (zerocopy)
+		skb_zcopy_init(skb, msg_control);
+	else if (msg_control)
+		net_zcopy_complete(NULL, msg_control, false);
+}
+
+If the XDP program in tun_build_skb() returns XDP_DROP, XDP_TX, or
+XDP_REDIRECT, tun_build_skb() returns NULL and tun_get_user() returns
+total_len without calling net_zcopy_complete().  That permanently leaks the
+ubuf_info reference, which exhausts vhost_net virtqueue descriptors and
+hangs vhost_net_ubuf_put_wait_and_free() on teardown.
+
+[1] https://sashiko.dev/#/bug/linux-f9997fb6-303f-41d6-93e2-60c392b1856f
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261112150612.3866=
+546-1-antonio@mandelbit.com?part=3D2
