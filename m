@@ -1,97 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.172
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794546623;
-	b=SjOXyLQ+hxmBTrAd7qurnNZFvXmOdtPrYvDN6KYYMyPfejQPq9+NA01HGqTT2bvJKhsn
-	 24r2Ka5/z1YtzZM+iaanWBVmiqOmf0tkDwOBVc0aiXtahrUs/yTCk8X7zMpeC/nd1Zcsx
-	 eWI58H8vykgXQjwTRlmVH2nlDcTa/vXzidXJBv3/2FcTJIkAa62Ff3vObhLFbmn7M9GFB
-	 /8mddWLcQBKSVyszaD03myVAK1n7ixf8Wgu6nNkTWdMwGWPOCznxKPa1xqJ0SJrbyt8an
-	 qHQkQe84DIcGUWPULMPWIzCUPwZupb6lyMKpIFtjI86xxHROjcGS6te4suFtcncH2lw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794546623;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.43
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794547076;
+	b=2sHL6LVMay94UZtScgoCBonHMb37TGtvqb9+DczWTN/UVwHLpE0q/DE6stnYd8fnH7ta
+	 qqGc531YYOEPKB4Rjnly/4yN1qfx1WuqT7UbWWkGRrWDCpL9ASENptYkjByKJxn/3ucbA
+	 /ZVzdOqV3UY03hnShLekYkAT4rKuz8W11QHRQd370pUiy6HxfkRkEWuHZG83q4FpETpIL
+	 posBA6LjjoLCL90OATs92BbaPC6K1HLYKsYgSYYf/0ujgS8ctmwkqkAbJJ4NA63LWJRpW
+	 ZsqFa38uczQpaERuATQ0qSdglRLGRQAFd/puOijqUXOUUuzV5FpxUHBBLfMrdBo5BVA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794547076;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=NMH97Fk3PWPVn+P/iaoukHh1wzl243PKREFzHGmF3II=;
-	b=gIX5oaPsbknA54Lx21qFO7N/V6IdFERz4zbwq7j46+WAyHD+hsrFBNJ7GOF5A0u+WOhM
-	 CSVpdni2r6TtxRRQdmwftxStxBVLenS4pRoTWIRlvL/rgnBDILueJBg2FX3MK4YvNLWuG
-	 zMqz/fddT1yyVMhQpsXiJXuF2uwHfbArV8jpDKS7qU3r9lO8X+juOddvrjeyavWYXShLn
-	 Cyhf0kfUwBQFG8k9kNGFfwJKVB6EPNLWEz3WX33eabGTMyNiBvPReq6lnoH6ho77JJ8G0
-	 Q5u0/uQz9XNPLridi1dj3fKemUiVuFFbGOWw62lC6MoegwF5fPZCHWo7iGoRJ6qWLaw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eXWKCeZT;
-	arc=none smtp.remote-ip=209.85.215.172
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=f+W0yRPPh5LN5Rei1H2okk7m72K0RoxQKNaAvZ54EI4=;
+	b=bHgdCPcnrE70+3goK0t22nXyf+kqjc9Ba//IcQOZgKLooTQSE/R1zDKPBSuA0avuUDto
+	 H8JVpGAkYSNaomu+bosf8YKi6j3NFXLfE7m7fSLVzKGS3azc7nxd+BpEZG5V8YFJ+EmTZ
+	 KUhhzLjLF4/TADatDjTST+uP2eLh6MPII97UtlxiuL7wjtctMeyXs/odCIlYGcEvNYlbm
+	 Sa0V7JQeDuqFkhJ9IfPXyp9V1GIyJE2T0FLysZmcO+DemBYbCWVDXMImnxUaWiW9RwXoi
+	 sTbmkOxO72lyoysv1elCuMAGMqwxjgLPSeOaNyBJfdcoWGKpSEb5cQbviciCBRWP5Mw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=XkcAxtUC;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.43
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BC02606A31C
-	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 05:10:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8BC02606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7468606A330
+	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 05:17:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A7468606A330
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eXWKCeZT
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-cc4aa0246b7so227072a12.3
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 21:10:23 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=XkcAxtUC
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-6b571a45a2aso4468a12.0
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 21:17:55 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794547074; cv=none;
+        d=google.com; s=arc-20260327;
+        b=so22vSSXHOD2LIHyfXLLmtXoDiuBp+l428Luo3EXOC5RgFyzLz52Mb4u1J6L4ubr6c
+         xjmE913BcKHwO+3E3ffG1E6/zdy/yQPQSt1HxPsAqIIxtb9btXe7UCo7Ltg3Tcmjt+Re
+         DPz3GYtpAHcrg1X/Z34ptQfuw5rWeauu4nWi6zt4C0PG1SIrNB4CjKucdWY1fFUWK9pz
+         n5Ng7Nxh/FTwlbQ45oPXD/AcVnuf7aQLZ+MUh6LCR4PaywIaTdXT1Y23wbeZ/u9kXRgj
+         fppLqrQtUuWofkEuhXmN356J7YPCBnoCjiIQAQsr82+1E2hKbmV/QjCtF9W6Xama+727
+         dcaw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=f+W0yRPPh5LN5Rei1H2okk7m72K0RoxQKNaAvZ54EI4=;
+        fh=UbeXgJX4Xyd8Jfnoz6iWvjSU5v73CFgoSIcDInSuGIY=;
+        b=inMu/6Em4rktarXpRRKHuB4DeVD065Af8gUiZoSxPQ/50X63aFy7mvP1OHrYH/1fVk
+         x4KXe9QwD1UIQDchCqCnHkKxWPh6VN2WFsI7I39V5KpvxUAL46fzoqBRxwYwYOXO7Yal
+         dbVwLhMEimQwbkPVM2XGFchG6pWdwV6++/1A74FJTd9HCWORaAiDiqyGfChAAb2LE522
+         /PCKe6pbx/ZHAHy3DZPeY0FJ15efmZ+2X94zjEyHtsuXyxGOw2THSKBmvEmyaWDqVbba
+         UEG0IdMVhR3j6J3Pq+eC/0pI+RPHbzfXSEsLkOdxuIIWRsiQp1GMqfeuTpxcCoyJgLU4
+         y9lQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794546623; x=1795151423; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=NMH97Fk3PWPVn+P/iaoukHh1wzl243PKREFzHGmF3II=;
-        b=eXWKCeZTfJ1h2HXVpmVsI2a7XcvljNaCpkUdGD+lXBWToms9CQ2yCA0oLuIoKKPBSd
-         fiBGtA6YdIlGsXK7DE0ndyDOOxchHhRrPIKVatz9H0xgjAo2BYrRXE5EHyDXoIwIrYVp
-         vXvWv5c344sq8Xtug5rSqPyduU2433esWtVzcqG+Kim3/524smwCtAG50PIt7IBEp8JV
-         CxRfnXDDnJ/iYxy0wK85aPWmj04yuyL4giiUswGTSR/q+xxFDaJLf4IyZ3ruSYw7m1l1
-         mt5TaGuWhdqmJ7yDoAKRruY1I1JIsbHMMl6+cuThfJS5YsWSboFQKCWw9oHrUNbVZ8nF
-         VmVA==
+        d=google.com; s=20260707; t=1794547074; x=1795151874; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=f+W0yRPPh5LN5Rei1H2okk7m72K0RoxQKNaAvZ54EI4=;
+        b=XkcAxtUCanemul+RicaP/aozebWZdnRnipw0ipFQorOt0CF/BrSpgOa8erBdCdQ4N4
+         VLN7NIrJsbUZs5/qRbv6PVx8HdejsexGCcXBvZF9JMwInu54ZTGyLTXV4CP5Khnt6ZmY
+         KtwFVLwvIbCaIc+i4hJo68hl9fk2E5AG+n1NWywpxM5HEwL/Sh5PnG2wSuHDKvMPj93c
+         eS9Wdn4dxDybUNs84KncdG8MxZzbqIualdyZuYd1d9+Jv3B6t3kVQ5SHpDpkkDeOs8Hr
+         TJbLqq+E4fLdgNwbW0RukXF0HL4RUXNqvH0YKSicntzdAKQfXtwzBHxp8r6Xg1qJ7l/Y
+         8paQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794546623; x=1795151423;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=NMH97Fk3PWPVn+P/iaoukHh1wzl243PKREFzHGmF3II=;
-        b=wDgRuN4FDwx5IzHg8cUUA5VDmwTvDSTeXQxwbRuqI5kI4UvjonI1Zh/qtPqRqCgcCm
-         1u0KGrHtarAeBko2DZAROEZB1MhZ2Eg7KjR5Ym6h1QpvJJFzLaCXU5noPtCFDti3f4Vc
-         q9NEtDpLWaT0bfGLJK9IfjkI9aQAcPs7KVJMpJYePsIFQ0MIV5H/N4rEHE6v2/ORfTyf
-         uUxdgSpOHRmVa6TULKUbzTxC59G1FZSGnwNBgKCfHRonlkLg+j2vpIVvSjMZQOy7nIOG
-         Q7s1n3Fjbg/OdNUzKICxc3QBYszJBwgpK5ObdduY0Hh8vC/zo30VfVZnLqownqGRytGM
-         vfbg==
-X-Gm-Message-State: APuU4Z9YRGUpEpT9KsO7oW1HveGPcwtSV+17ms7EGEj0z76wdwBZq1CO
-	IFKx1Afyxb2NR6inmCrty0My6Ik+vnAGtcpgJZJl3RjonxtmFZKvP1koadIpOg==
-X-Gm-Gg: AYBFou0PgNP1TCE7b7szut0n2QK6seTV/jis76XTcd8Czk2/Cw8qYNnSnU0uFhQTe9Y
-	FZTqWt1hzS5jhuPiFPy8UhyqetZ5uyQuTO0QUX1FO4ibPGeEIQMHT36BnA4j3+zEBiyOzqu1aDg
-	lpqeZk+uhc2H+1ci7E+HMHmABwkKJr0jTem8Nba30QOAUcxAHx734OzJk62qJJUsaUEkbaz0VAT
-	e2DMpCluyE4nVfdh4k471UvC18cjw9eOaqNDWIWTW5v5vBsHO/tGzfhHMVebXXnyYSFpfyFdne3
-	ugU+lu52349BeQsG08zqnSh6v6SiWp9qdpfK4Q+eV4UKoDtT6bqrl8QevOXKOZ2qHcrE4nt7vAi
-	gZldxX0igz1nS9yfBIjaliOt3ed63Edof1pK+Nce4W6WT9ID9h/cssLIIAyXWtQGYO+8CyQy+iz
-	tOYcPjN2ZbL0OwQoug4AJH12eHEd5sXoLtbqr/zeTzKLTYZ1My0M6f9/wwK581n+vvoBHmUTNWI
-	pGbgWNnBqEKulQhN9jdEa5i3+0ghHxgIOBIdVWgT4ck4N4T1XlqM9XOETZxsyW2UNDJ7B4So7Cd
-	1fbpFXcZji9X77lptpEHUBM3WO/7h2M+ehQfIYz7g8pPHvw9uxNeNE2OjxJeAkXJMGWe3/3cxkg
-	MYmW256JwULwyn9wgEweX67wIl2y4ToSQ9lMSoZh+RN0VVVwpkHZB8Y2aeA3Ho4vUc3eUilZUeQ
-	==
-X-Received: by 2002:a17:90b:4f85:b0:3b0:91ce:6720 with SMTP id 98e67ed59e1d1-3b1b0a1ef3emr1052753a91.30.1794546621449;
-        Thu, 12 Nov 2026 21:10:21 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.251])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1aec63b9bsm2599412a91.12.2026.11.12.21.10.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2026 21:10:21 -0800 (PST)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	a.s.protopopov@gmail.com
-Subject: [PATCH v2 bpf-next 13/13] selftests/bpf: Test untrusted pointers in fmod_ret progs
-Date: Fri, 13 Nov 2026 05:09:01 +0000
-Message-ID: <20261113050901.1399091-14-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261113050901.1399091-1-alexei.starovoitov@gmail.com>
-References: <20261113050901.1399091-1-alexei.starovoitov@gmail.com>
+        d=1e100.net; s=20260707; t=1794547074; x=1795151874;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=f+W0yRPPh5LN5Rei1H2okk7m72K0RoxQKNaAvZ54EI4=;
+        b=yyQEEv0t+LEmiSLOFO6V6wC0+BYO0ob7NOejjWllP5Q4w+LQFLRGwQBq8Fezl13ExK
+         H5alnbASSrOOEJcSBsI3W6+IzUNOYw9fZPNDOS35jWncb/u24V/U6Jf3ThoeM+y6HP1w
+         h2gXk1QnHhX3yZbEnAxLIcuyJRqiIYItSM1vZcUmjhir+7vPoZ9WEtMeOm+wT5TkN1OU
+         jzFxvz6tAsJ/0EBSZ+GSO7cjemYCv5j6SnPCtSqAkg3GM6I0A8NDZhFJr6drnZ59UHIB
+         GCsPcSkZ/vDNquMH8Z+QNZgaMKi5hh0onlp5elTmMMhlT/cP8tf2gCzpLdEmYaiWh/O8
+         HEqg==
+X-Forwarded-Encrypted: i=1; AL+hErEP7JvonvlJyq0bYw78wnyr36Jl4odfACRcH39Pl9FkCsEWgHoLce5aUZDlGbfWoSN7iyg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+EW8tXmvfnAsq4KAHGRw3Aw++BYzmm4Oz1W2/u+h6XoDlFz1sp
+	gOKZnAl8z7xVCDaEnyzqEtSurVMKSFBu1HX5sL1IL4y4Q7ivmIRvGkFMkz7sIAGkVmzSDPguTMs
+	4Pfz5O49P+dxLBNVafKqfIzyFpcsUKK91lrlIQY6s
+X-Gm-Gg: AYBFou1LOzxw++EylYsF1MVhBlADFBc61dhuuPCKziqFX5uoEtLSs7UzMSxUDBr2rwh
+	VDGN/4P5Gfw5VdXj8rC51J/ulmkqcsa9l64E+z5fCkMb5fuV1VNQA9KWpW27oYU/M3OU1HJxJ50
+	Aw1x0ljmj7I/0B/nydayxCpke1kEMnTTyaCrQe0wenLDucMFbTvRUbBgJ0JXmXXWn8a2mHcLZNh
+	Hx5Z3riOTy4R+3JMm+y3zvqINAkOyY1NBRjihL3V7enBBaWXF0wAaR4g0UBzyPc9wk04KzCoozI
+	lq80JHwDBaI7bn4uzPb+QEQaIB5cFv6RfVhEwRBwq84HimWB7voSCR4tGGNC4tb66SKwXttT2oQ
+	npEkKjAUOVlGs+Pcm9ACCzUrgUE2HjUMtq+E=
+X-Received: by 2002:a05:6402:160d:b0:6b5:70c1:650c with SMTP id
+ 4fb4d7f45d1cf-6b7c34c6eb8mr48079a12.4.1794547073617; Thu, 12 Nov 2026
+ 21:17:53 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -101,209 +104,55 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20261110102039.1002605-1-bjorn@kernel.org> <20261110102039.1002605-2-bjorn@kernel.org>
+In-Reply-To: <20261110102039.1002605-2-bjorn@kernel.org>
+From: Mina Almasry <almasrymina@google.com>
+Date: Thu, 12 Nov 2026 21:17:41 -0800
+X-Gm-Features: AclHuK-EmG-vcwSjI4xi1-iRc2SNUCp5kahvZ3vW1cJ6PmqMOttCBZ_NEdrFdlY
+Message-ID: <CAHS8izPnmy4W6f3dWp2NCkmNYxtP8jKm5rxjvPbQc8VdFm0Wng@mail.gmail.com>
+Subject: Re: [PATCH net-next v1 01/11] net: Get skb fragment addresses through netmem
+To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc: Magnus Karlsson <magnus.karlsson@intel.com>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, netdev@vger.kernel.org, 
+	bpf@vger.kernel.org, io-uring@vger.kernel.org, 
+	"Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>, Weiming Shi <bestswngs@gmail.com>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, 
+	Alexander Lobakin <aleksander.lobakin@intel.com>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Stuart Clark <stuclar@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Alexei Starovoitov <ast@kernel.org>
+On Tue, Nov 10, 2026 at 2:21=E2=80=AFAM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel=
+.org> wrote:
+>
+> skb_frag_address() goes through struct page, so a net_iov never has an
+> address. Only unreadable memory should lack one: XDP and BPF read
+> fragments through this helper, and AF_XDP UMEM will back readable
+> net_iovs. netmem_address() also returns NULL, not a bogus pointer, for
+> an unmapped highmem page.
+>
+> Generic code needs the size of a net_iov to find its address, so keep
+> it in struct net_iov_area instead of the devmem binding.
+>
+> Suggested-by: Mina Almasry <almasrymina@google.com>
+> Suggested-by: Stanislav Fomichev <sdf@fomichev.me>
+> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
 
-Helpers refuse an argument of an fmod_ret prog and what is loaded through
-it. tcp_sk(sk)->snd_una, container_of(), a part of a pointer and an index
-behind a pointer load and give a number. The number is no pointer. A store
-and a store-release are refused, a trusted pointer is checked against its
-type as before.
+Are the changes for niov_shift some kind of rebase error? I don't see
+how they're related. Otherwise changes LGTM.
 
-Two progs run: container_of(task->tasks.next->prev, ..)->prio, a load at
-a negative offset, gives the prio of current. A load at NULL - 8 gives 0.
-
-The progs attach to security hooks. These are targets in each kernel, with
-and without CONFIG_BPF_FMODRET_SCAN.
-
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
----
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- .../bpf/progs/verifier_btf_untrusted.c        | 112 ++++++++++++++++++
- .../bpf/progs/verifier_store_release.c        |  23 ++++
- 3 files changed, 137 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_btf_untrusted.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 4d77b8fd4eab..e6e4a13117dd 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -36,6 +36,7 @@
- #include "verifier_btf_ctx_access.skel.h"
- #include "verifier_btf_flex_array.skel.h"
- #include "verifier_btf_unreliable_prog.skel.h"
-+#include "verifier_btf_untrusted.skel.h"
- #include "verifier_call_large_imm.skel.h"
- #include "verifier_calls_in_a_row.skel.h"
- #include "verifier_callx.skel.h"
-@@ -245,6 +246,7 @@ void test_verifier_btf_array_access(void)     { RUN(verifier_btf_array_access);
- void test_verifier_btf_ctx_access(void)       { RUN(verifier_btf_ctx_access); }
- void test_verifier_btf_flex_array(void)       { RUN(verifier_btf_flex_array); }
- void test_verifier_btf_unreliable_prog(void)  { RUN(verifier_btf_unreliable_prog); }
-+void test_verifier_btf_untrusted(void)        { RUN(verifier_btf_untrusted); }
- void test_verifier_call_large_imm(void)       { RUN(verifier_call_large_imm); }
- void test_verifier_calls_in_a_row(void)       { RUN(verifier_calls_in_a_row); }
- void test_verifier_callx(void)                { RUN_JITED(verifier_callx); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_btf_untrusted.c b/tools/testing/selftests/bpf/progs/verifier_btf_untrusted.c
-new file mode 100644
-index 000000000000..5b2e74277dc8
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_btf_untrusted.c
-@@ -0,0 +1,112 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_core_read.h>
-+#include "bpf_misc.h"
-+
-+#undef container_of
-+#define container_of(ptr, type, member) \
-+	((type *)((void *)(ptr) - __builtin_offsetof(type, member)))
-+#define tcp_sk(sk) ((struct tcp_sock *)(sk))
-+
-+long out;
-+
-+/* Nobody vouches for an argument of a function that fmod_ret attaches to */
-+SEC("fmod_ret/security_sock_rcv_skb")
-+__failure
-+__msg("R1 type=untrusted_ptr_ expected=sock_common")
-+int BPF_PROG(arg_to_helper, struct sock *sk)
-+{
-+	out = bpf_get_socket_cookie(sk);
-+	return 0;
-+}
-+
-+SEC("fmod_ret/security_socket_listen")
-+__failure
-+__msg("R1 type=untrusted_ptr_ expected=sock_common")
-+int BPF_PROG(member_of_arg_to_helper, struct socket *sock)
-+{
-+	out = bpf_get_socket_cookie(sock->sk);
-+	return 0;
-+}
-+
-+/* A load that the type does not describe gives a number */
-+SEC("fmod_ret/security_sock_rcv_skb")
-+__success
-+int BPF_PROG(past_the_end, struct sock *sk)
-+{
-+	out = tcp_sk(sk)->snd_una == tcp_sk(sk)->snd_nxt;
-+	return 0;
-+}
-+
-+SEC("syscall")
-+__success __retval(0)
-+int negative_offset(void *ctx)
-+{
-+	struct task_struct *task = bpf_get_current_task_btf(), *self;
-+
-+	/* next->prev points to task->tasks. prio stands in front of tasks */
-+	self = container_of(task->tasks.next->prev, struct task_struct, tasks);
-+	return self->prio != task->prio;
-+}
-+
-+SEC("fmod_ret/security_sock_rcv_skb")
-+__success
-+int BPF_PROG(part_of_a_pointer, struct sock *sk)
-+{
-+	out = *(u32 *)&sk->sk_socket;
-+	return 0;
-+}
-+
-+SEC("fmod_ret/security_sock_rcv_skb")
-+__success
-+int BPF_PROG(no_array, struct sock *sk, struct sk_buff *skb)
-+{
-+	struct net *net = sk->__sk_common.skc_net.net;
-+
-+	out = !net->dev_index_head[skb->len & 255].first;
-+	return 0;
-+}
-+
-+SEC("syscall")
-+__success __retval(0)
-+int bad_address(void *ctx)
-+{
-+	struct sock *sk = bpf_core_cast(NULL, struct sock);
-+
-+	return *(int *)((void *)sk - 8) + tcp_sk(sk)->snd_una;
-+}
-+
-+/* The number is no pointer */
-+SEC("fmod_ret/security_sock_rcv_skb")
-+__failure
-+__msg("invalid mem access 'scalar'")
-+int BPF_PROG(number_is_no_pointer, struct sock *sk)
-+{
-+	out = !tcp_sk(sk)->out_of_order_queue.rb_node->rb_left;
-+	return 0;
-+}
-+
-+SEC("fmod_ret/security_sock_rcv_skb")
-+__failure
-+__msg("only read is supported")
-+int BPF_PROG(no_store, struct sock *sk)
-+{
-+	tcp_sk(sk)->snd_una = 0;
-+	return 0;
-+}
-+
-+/* The type of a trusted pointer is no hint */
-+SEC("tp_btf/sys_enter")
-+__failure
-+__msg("access beyond struct task_struct")
-+int trusted_past_the_end(void *ctx)
-+{
-+	struct task_struct *task = bpf_get_current_task_btf();
-+
-+	return *(int *)(task + 1);
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/verifier_store_release.c b/tools/testing/selftests/bpf/progs/verifier_store_release.c
-index 0abbee5ce109..b108fcd54437 100644
---- a/tools/testing/selftests/bpf/progs/verifier_store_release.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_store_release.c
-@@ -3,6 +3,7 @@
- 
- #include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_core_read.h>
- #include "../../../include/linux/filter.h"
- #include "bpf_misc.h"
- 
-@@ -223,6 +224,28 @@ __naked void store_release_to_sock_pointer(void)
- 	: __clobber_all);
- }
- 
-+struct task_struct {} __attribute__((preserve_access_index));
-+
-+SEC("socket")
-+__description("store-release to untrusted_ptr_ pointer")
-+__failure __msg("only read is supported")
-+int store_release_to_untrusted_btf_id(void *ctx)
-+{
-+	struct task_struct *p;
-+
-+	p = bpf_core_cast(0, struct task_struct);
-+	asm volatile (
-+	"r1 = %[p];"
-+	"r2 = 0;"
-+	".8byte %[store_release_insn];" // store_release((u64 *)(r1 + 0), r2);
-+	:
-+	: [p] "r" (p),
-+	  __imm_insn(store_release_insn,
-+		     BPF_ATOMIC_OP(BPF_DW, BPF_STORE_REL, BPF_REG_1, BPF_REG_2, 0))
-+	: "r1", "r2");
-+	return 0;
-+}
-+
- SEC("socket")
- __description("store-release, leak pointer to stack")
- __success __success_unpriv __retval(0)
--- 
-2.55.0
-
+--=20
+Thanks,
+Mina
