@@ -1,91 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.227.131
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794599895;
-	b=JMj5W/5m6P5zhyBgPpxmVLpSHJo60ygKi977qUOugYYSXJcjmA89/EWv3g0cZsKqKzk7
-	 Vs8jXEQSSarAOihDcKE5adcGwYR9cy+MU0801N5xg4+GgFGLzBAuJbgijuRTemCCvfFhe
-	 Plfx88qpF484NlB+2ZtYqPVKr31ff0cBub1fVWWm2oQxJqSSpynjSDO53XFF2wNN53r/O
-	 nadP7j7vHcJNCDVUt51Dpgk3AEI4lv5zzyxe+HMDWNoibbfW1pnZzmWi2xALkJfRWs5Sn
-	 t1B+yth4AZygGxS4IfhoPTrcM8DLnj+aSYqhb0uiF6INatt7E+FzN5hOnzgWqDr1F0g==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794599895;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:In-Reply-To:References:MIME-Version:
-	 Content-Type:Content-Disposition:Message-ID:User-Agent;
-	bh=SA/I1XcNdOqWCHpHPoabvJbPaHjQpV93aW+4lUY75XM=;
-	b=Ea8/7R9IlXHdG8aLx7Z42sjOiRFhvqVS9yuYo34x/qsv7d3k82ABW6yqER8DDgcmc1hc
-	 ahFnRQI8CJI9DKQ2xt0eAxwY+5Nm8gHkvX4UDw/upKounaHkvmKjmjL4Peax0PeyHA0uu
-	 kLgQx9CLefx15hIm+9iOQAi40JgRTuepmtuxgRchyBWpXdG2vPzXCdHTZQvHocO49wqS8
-	 DhIfoLdbIQr2qoAesPYcY6+IOXm/HXftfbgSUWg8zIS1SdG6M52lz+IqzwOZSR6g8nAsW
-	 olmVlB28iqF4RVKGDR9t5ZH1MsgfbKEZhqKnKrRRdgQB99hEvtIu0ZrxS9qzDdbjzFA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=chrisdown.name;
-	spf=pass smtp.mailfrom=chrisdown.name;
-	dkim=pass header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=MAPT6p8f;
-	arc=none smtp.remote-ip=74.125.227.131
-Received: from mail-pj2-f3.google.com (mail-pj2-f3.google.com [74.125.227.131])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794600902;
+	b=1M5dxFFE/rRcto42nXOhtclCoCXJ/mo26Fyn36sEgxXEpwJKmB49w0sPbshogA2HhHHt
+	 /Y+yh1hzotn6PCEHsXoAXlrfBpRWtIqaEDlmqvH+o2B0LlJNrX1fhwnp48YBN/Q6DMbpo
+	 Oe/Wb/7m3ViuJ4JRQKUuATfhLJqrRsadZqH2ahv8fHfi14v5l6+UGchp+GJI52GfjOS9G
+	 Kh/evnKK3jROnPDOag/78n1PPAjKTxhbk4ZopMNQC3bP+SNkUlbjt33Pgy52LT0eu7hFT
+	 TOg6ebgFuGQhLM3cLEW84u4KnubTviTc9T9huBZ3+lQ2GN6VaG/NmgXW7rSUFc2SQGA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794600902;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=AAo9Q3VQrLylyCTPQs8zy2hqWw0i0HrVtcUrV/cI8uQ=;
+	b=WRVTjoGkiF5SKpi+4gs/sQ/zFy+gj0z2AdVRGNcs/5Uex/GtVAGojdMf64QZMf9l1k25
+	 gZrEC/ohuAnEG9RghlhrbZ2MxzwzKapeK4NBvqH7uUtoBvnPdHU3LeXGKshp9HbxMWmjB
+	 /jCpWspIAQQHd4czfiazDMb0+McmT1WkWirylhBMI1BAqrFLGDx0DIx3sf+bYlYRCG+fY
+	 Xm/gYbe2nkYVQVcH6DldZglxA9aLSHt6rldS5k2yWIsU0CeGFkVxbIQMtZPfEhp/yLH3R
+	 srqADJUWM7MIXHHq2+RyVGtWOdwjRbF/Z1AqxaI0SD8Kqe4FKb86VthONO8BRXPJt9g==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KbTBSfVJ;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EA2E606A32E;
+	Fri, 13 Nov 2026 20:15:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KbTBSfVJ
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1794600901;
+	b=G7d88/hoUQPKQHsPSmfF/iiwHVkwG3HuNhNIhdMzzoKSvxz9i3wkhsJMVpDqpFjlAwGE
+	 TM21QIVm+fl3eBwyRSWpIhHeJsE6xqPx4pGnbSkqMQUYaruiV7oPdhw9Kn1MD8TGgX936
+	 agH8xfkh95pYwU+ukFO6c/vQ16GtdaELhhI20BD52Lh6Sv7BDH0+UeTvlEHJZERv9DidU
+	 lL960vxIEn9VgwMZizwzUNpX6OHymCzqh1yHb8ASF1jZh8/CHHUuECNBHH88m9aBQ2vtU
+	 AX6I4CIo3lDaa9AxxsN67iXnDpZPKcoXiDi8gOVRGNoaeHncYAY3ioIi57IxED/Aqaw==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1794600901;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=AAo9Q3VQrLylyCTPQs8zy2hqWw0i0HrVtcUrV/cI8uQ=;
+	b=nPIH4ThaHfeXVjsZJsfy6P6VhuFMB3WeEimlxbZyLLXCAkSmsAk934pQBsn1aPDT1jVb
+	 dSyQ8En3SiO0ViVZwdCkGLO7ujA61yThAtJ+UQ2cef5VlnjLHS5Rz7ouZovYiOybyNN2/
+	 XIdi7dWvW2ngEk5h3ge4fRmg+HUFkoi48IGdVPQJYH/2/yfULy3fqGXuOhFPYJPX+nPjY
+	 a8MwjUnrQbXK6fKe423VQA7CtRWPOHpurRffBn2rXfZWvZb6KnBjhNXRvUKSDTXgqBxHt
+	 OV8vt1gWml7psAXuJT0Yse5vls1vi1Gm0qgav4t7m10RXfXPcJVlH0W03xi2rKKsZ6g==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADDE5606A8BB
-	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 19:58:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ADDE5606A8BB
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=chrisdown.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chrisdown.name
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=MAPT6p8f
-Received: by mail-pj2-f3.google.com with SMTP id 98e67ed59e1d1-3adc0ac3564so321589a91.1
-        for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 11:58:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google; t=1794599894; x=1795204694; darn=vger.kernel.org;
-        h=user-agent:message-id:content-disposition:content-type:mime-version
-         :references:in-reply-to:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=SA/I1XcNdOqWCHpHPoabvJbPaHjQpV93aW+4lUY75XM=;
-        b=MAPT6p8fzX9d12RkIjrOPm2Vue7u555UmawaN5NwZ3kF8eomxf1unrChz4ijRJddzc
-         A6Md4fH+XjA2x1dmEsonbcoTNkR34hZ9Waa1GsLQ1GAOVnRCH/Sdpf5b2cm5q+JMAWSS
-         pqOdCmIxo/F/Coty9/1uaqJON4Jn28u9Dc6ss=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794599894; x=1795204694;
-        h=user-agent:message-id:content-disposition:content-type:mime-version
-         :references:in-reply-to:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=SA/I1XcNdOqWCHpHPoabvJbPaHjQpV93aW+4lUY75XM=;
-        b=GT4ENiIVJ4iz59iSlszoncnUJ1y189tDSOquLMHw1lwL3jg00BjOeb8iJd3ZpHj+xm
-         zey/v5m0KKiKcxRgxwXmL8bBSsTMPH1WKhwgRzNqGrpw5W0u0ZN4dNBSoMcHCvsn0nDb
-         Wz+aNkRcGLQ9FP+1b7uOYUKb8JVV8lw59ksn7NFiFQH0Mu4gxolCfz7O22GSwYJYbvwi
-         /bjPhCIRzvN2Lo+L8AQtor3KvRDmuGSNATYkuUsyHRJgPYmO1l8MCZr1dGZfNuGfBGCC
-         gj71hmd/gtZBKIK5M9nwBkplRCRhP/K6bIbw4waEda295TY4WlUTFWfTLAxpqvqdWhpu
-         anOw==
-X-Forwarded-Encrypted: i=1; AL+hErFi8CFne3WU+gcwdAfXbZLD+mRShj7cqoxrjTMzv5iLnXL+v2i66fB5QJTvykOY5EOreKo=@vger.kernel.org
-X-Gm-Message-State: APuU4Z80aiakyER7J5ZgiuqJB0uL8U83tQTvjDHLZUxjojjj9TdzofC3
-	a8t9niRf+moNq168ftv6W0Jq0mnBpfPm2/IUTKFEHoJpDnVK2qa3rDu0jslNcGFi2W0=
-X-Gm-Gg: AYBFou2/msQnBYQ7DMjFa4J6dvZnCTKJcRcgE1I+hiIcQ6A5Kak0UlXX0InTDulEBvR
-	5qnIVpvvQwnEz37FiWQM9J0l6OR3DXD7Hthc5FPfa5M27Vra0ADiEAPVM00ja5oVAqQ4yUwFckJ
-	TgQcir0v/gB4Yt7DZ2r66xeiEaIQbo+3syY+g5CnK+aN7XfXsJuId4qNzurfM+rQV5/nyhsrLbH
-	HGMqaBIPhdJjy4shoz+cqF+Wx8pa+W/FSCWLwn0POpUmhbvdh3OnFvHnpb1JDVM36H3FCPe7hXE
-	jjbX+ZQ4dDO6Mu9T3EX8tchLV19sTXXOiXDrkjAeAw0a7EQxsqPwMV8OFU5WaDnscAHTCEJQZep
-	I8O3F3xsRKfVNprdAEs9daLzzAUTW61dcgXW4vpKkfVFZ7GcYUTKD68aTjHSggQriIQR1lxAKfr
-	00M7kWrdp5/2Nx0nJQ1tWZj6aS3PpDlidXo5XXW5uOYeqxxLDfHZSqkATIaOpUHlFDg70X9X7lG
-	gJvsdReQPbRl4TyGYgGyweB8g4ijO1zQQLea3ETnw3lhwgBxbijFQi518fWhy+iGEVFq66kAJMl
-	JKSzBA+ia+8dw6J1vy8sfa45ocLBbTYQQH1sOjr1sik8z1+JFUwdScPCSOUe8nwFsa0qW10DWHW
-	0QdRcMgkCMSUxF1ccdmMmuLv+12l/tyu9Q0AvWDJdcuoA+r40wEdAnD7VYiBMK7hM8uUwY9g0Lv
-	cBfokq+m0WWGLCGyYrzaTvg6283GhU+SaO6n6jA+Ij12iFZba0b/mwzwINW1Ktj3/PerLXLIhp3
-	LftW5f3
-X-Received: by 2002:a17:90b:394e:b0:3ab:be66:ddbf with SMTP id 98e67ed59e1d1-3b1b0b60493mr3259630a91.54.1794599894079;
-        Fri, 13 Nov 2026 11:58:14 -0800 (PST)
-Received: from [172.22.0.2] ([50.175.87.158])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1aec66f4csm5853480a91.14.2026.11.13.11.58.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Nov 2026 11:58:13 -0800 (PST)
-Date: Fri, 13 Nov 2026 11:58:10 -0800
-From: Chris Down <chris@chrisdown.name>
-To: Vineet Gupta <vineet.gupta@linux.dev>
-Cc: dennis@kernel.org, tj@kernel.org, cl@gentwo.org, peterz@infradead.org, mingo@redhat.com, will@kernel.org, boqun@kernel.org, longman@redhat.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, acme@kernel.org, yonghong.song@linux.dev, eddyz87@gmail.com, martin.lau@linux.dev, nathan@kernel.org, ndesaulniers@google.com, morbo@google.com, justinstitt@google.com, llvm@lists.linux.dev
-Subject: Re: [RFC PATCH 2/2] local_lock: do not put btf_type_tag on the lock guard type
-In-Reply-To: <20261110012235.1024461-3-vineet.gupta@linux.dev>
-References: <20261110012235.1024461-1-vineet.gupta@linux.dev> <20261110012235.1024461-3-vineet.gupta@linux.dev>
+	by smtp.kernel.org (Postfix) with ESMTPS id 3A0431F000C4;
+	Fri, 13 Nov 2026 20:15:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794600901;
+	bh=AAo9Q3VQrLylyCTPQs8zy2hqWw0i0HrVtcUrV/cI8uQ=;
+	h=From:Date:Subject:To:Cc:Reply-To;
+	b=KbTBSfVJMDncH7HQ/yoQaH8rJov1C3+hQf1IZWXpgMvHtewFXsrDJWEbOZuZHzAND
+	 UTsGtYrpCKl6xq67NNC30glNT+Ul5DU2i0r9jl1a7GUuhwWyhQEwXaJ/wEB3EK8Cjm
+	 2E6PTLm2pQJBJQayOBFZewVuu29cJG2fmYLlbsJGPzgS5oknfW0m/hVjmSE1MBH/g8
+	 ygdZtgeDaojidyKHBFM/+fBQ5AUtvGhbBQER+gmoRN1rJzW/joPv4Cvy0U+2Rc6k5P
+	 1asAgJYAQ40cR+B4tN5u/QpN5Uq8BQFWpbrz+GJcJ3Me8KsPqqIDnpPWNy3xvmOmxP
+	 1wqwzsAVOMGMg==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id 8B36F49AA3;
+	Fri, 13 Nov 2026 20:15:00 +0000 (UTC)
+From: =?utf-8?q?Dani=C3=ABl_Trujillo_via_B4_Relay?= <devnull+datrujillo.nvidia.com@kernel.org>
+Date: Fri, 13 Nov 2026 20:15:43 +0000
+Subject: [PATCH bpf] bpf: mask speculative out-of-bounds skb helper loads
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -95,72 +82,163 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Message-ID: <20261113115810.cd33f9ed58c02dd9@chrisdown.name>
-User-Agent: Mutt/2.4.3 (cc9e3943) (2026-10-09)
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261113-cbpf-ind-nospec-v1-bpf-v1-1-764ac4c14573@nvidia.com>
+X-B4-Tracking: v=1; b=H4sIAO5v92oC/yWMSw7CMAwFr1K9NZZwi8rnKohF6zhgFmkUQ4VU9
+ e6ksJzRe7PAtZg6Ls2CorO5TakC7xrIY0h3JQuV0e7bnpk7kjFHshQoTZ5VaGbaTNefQzgco5y
+ GiHrORaN9fuEr6gC3v/T3+FR5bUms6xcJrs+sfwAAAA==
+X-Change-ID: 20261113-cbpf-ind-nospec-v1-bpf-369dd47fc8af
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Dani=C3=ABl_Trujillo?= <datrujillo@nvidia.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794600943; l=4789;
+ i=datrujillo@nvidia.com; s=20261008; h=from:subject:message-id;
+ bh=IrkM3A5rzY7Lrf7aX7/eWswOO8MwkLehIVbqhgYc0eI=;
+ b=yv1ifv5IFVTISmKtkoz2U0m3t/XpoQQNbWEsj72vF7o4NyVJgZqZGb9+Jk1Dx1T8OPQ5NulY8
+ IoTM7o5LAd7DiMUQTNIeNKu5gXHCV6pYBrPOvcO/d26dnI5SmenVi9K
+X-Developer-Key: i=datrujillo@nvidia.com; a=ed25519;
+ pk=AP24zUwENFy2geglpKJAA8oaT41tkteCL9hTWGd88rs=
+X-Endpoint-Received: by B4 Relay for datrujillo@nvidia.com/20261008 with
+ auth_id=1128
+X-Original-From: =?utf-8?q?Dani=C3=ABl_Trujillo?= <datrujillo@nvidia.com>
+Reply-To: datrujillo@nvidia.com
+Content-Transfer-Encoding: 8bit
 
-Hi Vineet,
+From: Daniël Trujillo <datrujillo@nvidia.com>
 
-Vineet Gupta <vineet.gupta@linux.dev> writes:
->	typedef local_lock_t __seg_gs
->	__attribute__((btf_type_tag("percpu"))) lock_local_lock_t;
->
->	typedef struct { local_lock_t __seg_gs
->	__attribute__((btf_type_tag("percpu"))) *lock; } class_local_lock_t;
->
->Both put the tag on local_lock_t, an aggregate: the first on a typedef of
->it, the second on the pointee of the guard's member.
+The fast paths in bpf_skb_load_helper_{8,16,32}() check whether the
+requested bytes fit before loading from data + offset. For indirect loads,
+packet data can determine the offset. A mispredicted check can cause a
+transient out-of-bounds load, as Jin et al. independently demonstrated
+for bpf_skb_load_helper_32() in BeeBox (USENIX Security 2024).
 
-The typedef is the aggregate case, and it's the only one of the two that
-GCC warns about. But the second one is just the "T __percpu *p" spelling
-that 1/2 keeps the tag for. _T->lock really is a pointer to per-cpu memory,
-since local_lock() passes it to this_cpu_ptr(). So the tag is correct
-there. This patch drops it from the guard's lock member and the
-constructor's argument as well, not only from the typedef. I think it
-should keep the tag on those two and only drop it from the typedef.
+A classic BPF filter can shift the loaded value and use it as another
+indirect load’s offset (BPF_LSH, BPF_TAX, then BPF_IND),
+creating a data-dependent cache footprint.
 
->Every variant of an
->aggregate shares one DIE, so there is nowhere to record it, exactly as for
->DECLARE_PER_CPU() of a struct. clang writes the annotation into DWARF
->without complaint, but pahole does not translate it from that position,
->so with today's toolchains it reaches BTF from neither compiler.
+Leakage was demonstrated with instrumentation that delays branch
+resolution with a CLFLUSH before the mispredicted branch and makes the
+leaked location deterministic for reproducible measurement. In that
+setup, an unprivileged process that attached a classic BPF socket filter
+was able to recover kernel values from userspace using Prime+Probe. A
+real-world attacker would likely need to delay branch resolution, which
+was not demonstrated end-to-end without the added CLFLUSH.
 
-That's true of the typedef, but not of the member. With clang 23 and
-pahole 1.32 the lock member comes out as PTR -> TYPE_TAG 'percpu' ->
-local_lock_t, the same as any other per-cpu pointer.
+Mask the load address when the converted offset falls outside the
+permitted range. This removed the leakage in the described setup.
+Derive the lower bound from the network and MAC header
+positions. An out-of-bounds transient offset dereferences NULL instead
+of a potential secret.
 
-For the typedef, clang 23 puts the annotation on the typedef's own DIE, as
-you say, so there is somewhere to record it. It's only pahole that doesn't
-pick it up yet. You also mentioned GCC patches for type tags on typedefs
-in the pahole thread [0]. Once those land, does this warning go away?
+Masking increased the time for a filter with
+64 indirect byte loads by roughly 36% in a direct in-kernel test
+(280% with LFENCE). In a loopback UDP test with the same filter, the
+overhead was roughly 6% (21% with LFENCE).
 
->Unlike the per-cpu declarations this changes no BTF at all. A tag in that
->position was never recorded, so there is nothing to remove, and the one
->percpu TYPE_TAG that does reach a local_lock type comes from those casts,
->which keep it. An x86 defconfig built with clang is identical with and
->without this patch: 152551 BTF types and a 6828300 byte .BTF either way,
->and .text is unchanged. The patch removes a GCC diagnostic and no more.
+Fixes: e0cea7ce988c ("bpf: implement ld_abs/ld_ind in native bpf")
+Signed-off-by: Daniël Trujillo <datrujillo@nvidia.com>
+---
+Requesting fix for stable.
+---
+ net/core/filter.c | 36 +++++++++++++++++++++++++++++++++---
+ 1 file changed, 33 insertions(+), 3 deletions(-)
 
-The defconfig BTF only stays the same because nothing in a defconfig uses
-these guards. lib/test_context-analysis.c is the only user in the tree.
-With CONFIG_CONTEXT_ANALYSIS_TEST=y, class_local_lock_t,
-class_local_lock_irq_t, class_local_lock_irqsave_t and
-class_local_lock_nested_bh_t all lose the percpu tag on lock with this
-patch applied.
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 1a60a2a70e2d..c50e94df79b3 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -28,6 +28,7 @@
+ #include <linux/in.h>
+ #include <linux/inet.h>
+ #include <linux/netdevice.h>
++#include <linux/nospec.h>
+ #include <linux/if_packet.h>
+ #include <linux/if_arp.h>
+ #include <linux/gfp.h>
+@@ -240,6 +241,32 @@ static int bpf_skb_load_helper_convert_offset(const struct sk_buff *skb, int off
+ 	return INT_MIN;
+ }
+ 
++static __always_inline const void *
++bpf_skb_load_nospec(const struct sk_buff *skb, const void *data,
++		    int headlen, int offset, int len)
++{
++	/* An unset mac_header is maximal and cannot lower the bound. */
++	int header = min(skb->network_header, skb->mac_header);
++	int lower = min(0, header - (int)skb_headroom(skb));
++	unsigned long index, size, mask;
++
++	/* Normalize [lower, headlen) to a zero-based range. */
++	index = (unsigned long)(long)offset - (unsigned long)(long)lower;
++	size = (unsigned long)(long)headlen - (unsigned long)(long)lower;
++
++	OPTIMIZER_HIDE_VAR(index);
++	OPTIMIZER_HIDE_VAR(size);
++
++	/* Check the start and the number of bytes remaining. */
++	mask = array_index_mask_nospec(index, size);
++	/* Each caller passes a constant width, so inlining eliminates this branch. */
++	if (len > 1)
++		mask &= array_index_mask_nospec(len - 1, size - index);
++
++	/* Out-of-bounds transient offsets select NULL as the load address. */
++	return (const void *)(((unsigned long)data + (long)offset) & mask);
++}
++
+ BPF_CALL_4(bpf_skb_load_helper_8, const struct sk_buff *, skb, const void *,
+ 	   data, int, headlen, int, offset)
+ {
+@@ -251,7 +278,8 @@ BPF_CALL_4(bpf_skb_load_helper_8, const struct sk_buff *, skb, const void *,
+ 		return -EFAULT;
+ 
+ 	if (headlen - offset >= len)
+-		return *(u8 *)(data + offset);
++		return *(const u8 *)bpf_skb_load_nospec(skb, data, headlen,
++							  offset, len);
+ 	if (!skb_copy_bits(skb, offset, &tmp, sizeof(tmp)))
+ 		return tmp;
+ 	else
+@@ -276,7 +304,8 @@ BPF_CALL_4(bpf_skb_load_helper_16, const struct sk_buff *, skb, const void *,
+ 		return -EFAULT;
+ 
+ 	if (headlen - offset >= len)
+-		return get_unaligned_be16(data + offset);
++		return get_unaligned_be16(bpf_skb_load_nospec(skb, data,
++							 headlen, offset, len));
+ 	if (!skb_copy_bits(skb, offset, &tmp, sizeof(tmp)))
+ 		return be16_to_cpu(tmp);
+ 	else
+@@ -301,7 +330,8 @@ BPF_CALL_4(bpf_skb_load_helper_32, const struct sk_buff *, skb, const void *,
+ 		return -EFAULT;
+ 
+ 	if (headlen - offset >= len)
+-		return get_unaligned_be32(data + offset);
++		return get_unaligned_be32(bpf_skb_load_nospec(skb, data,
++							 headlen, offset, len));
+ 	if (!skb_copy_bits(skb, offset, &tmp, sizeof(tmp)))
+ 		return be32_to_cpu(tmp);
+ 	else
 
-Nothing in BPF looks at those types today, so this doesn't break anything.
-But it does remove correct annotations to get rid of a warning that is
-only ever caused by the typedef itself. When the guards were added, the
-type was only ever used as _type *. The typedef came later with
-3931d4b98039 ("cleanup: Basic compatibility with context analysis"). If
-GCC isn't going to accept the tag on a typedef, could this be limited to
-that typedef in cleanup.h instead, so the guard's pointer keeps its tag?
-As far as I can see, lock_##_name##_t is only ever used through a
-pointer, in DECLARE_LOCK_GUARD_1_ATTRS().
+---
+base-commit: 7f1e33230b7c7a55318765862b255b41e5c97cfb
+change-id: 20261113-cbpf-ind-nospec-v1-bpf-369dd47fc8af
 
-[0] https://lore.kernel.org/r/252c53f3-3f06-40f4-9cd3-795eb298687c@linux.dev
+Best regards,
+--  
+Daniël Trujillo <datrujillo@nvidia.com>
 
-Thanks!
 
-Chris
