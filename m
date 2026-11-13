@@ -1,97 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.170
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794586540;
-	b=I/EW8p+9LiuoYKzZQ8LE3t+7FAvlk8puoW5bkhaFni90M8W9+9SVoziHkmA+c+cBfYWs
-	 TMRnLY48gffmpfHdoO3MaUaPqc2p0uwwlO5q815GJ/HqAfJuUJKMJsVSi8me1aAP2azLk
-	 l2spte8GreBj93kVGJYfTC6/UVWsG0uwdXs1Okk355dCxB9TXD2sWETlpUeh9qFf/dopv
-	 VRZJx0INEQHDAnD/NrLRns4/OFDIWaucsT46EKnhN4ixRJruoTDg6TDMeIPlMSndLY2Fi
-	 PfTba12CO3XbujRHdplIcdBUMyBY+U1c1rfiaZSVRFQKVsEvtYN35fMvV5+L3q56O7w==
+	t=1794586640;
+	b=2OeNwmsL80TH3+JdT2h9byR2GnVeeoHTFlXSlcWnanmHu3XXRdV77FjJoKBj8J7NggRP
+	 mBwS67hL/SxU8gCnybUO7HxfAS4kBWQTH6NmBc7g+Bqm9G8L5PXJcr/RA4K7nQCk5exWL
+	 4TgplN5jUBWYZXoa246jgxoebD3DcLvsxVI7cY8jaFpyobhSwiICmDjt46pHxhPOa2QoV
+	 75k4fnzX6Mh2SD/GaFX2K6AsPj+n59LUuxgOGQYuQ0dcDRP5z0NV+V1+CWuz3+6bWcdeU
+	 lgV5H1f3iSCmvCjvw/hURsr3LkCwuwuRJb3y0xoM2OwoOQoNexz8TFS8faODlar5ddw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794586540;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794586640;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=j3WMQoq3LZGUg08n1zN3PVbGtGVmsjr4StONFCTkZYc=;
-	b=sV4TuMcxqliMIr+Ch/ZNnHe32Rj52vxtwf/WLhB4Ksp5KcMpgsrCDjWfpLBWdyDLKuyQ
-	 Z3J4oGNc42ijfWfAu4PhQyudqU1lIUzUOIiBlYufwFBTZnuMEsIfAeToceqNjWYLN78MP
-	 iIgBBD+TQIkZYgoNOGeu7+SRkSjOmGNWAAfFt6O+Y8um83joQTsEOGH1gp+RFVdtX3vwx
-	 gpvdAh215RBKdomm/zE0h9MCbvjnuP/220Cj8BwY3MY8fEEx818WcNZlA0dZopSwn763z
-	 n+tNjwy2vTkeL0hEWimc15VIWqiQZG5byBi2BrhBI45ACwDX7jFvJcg2ElL16tqAQSg==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
+	 Message-Id:Cc:Subject:From:To:In-Reply-To:References:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=BRpA10axCrXVZ099IyeUTv8IF2etUVslsgkPoau4YqY=;
+	b=1/LKKKwdQoIrxWFyjuvUbdsDRvm1TU0SLcxmABH9aJqw7x/N2d5d3Js1XsapuHwBQffq
+	 0VQSvyLVYKFdfZVXwbzsSaPWzeanhsBoOulndWnL7XaPuC8pl+8VzMQdWlWhU36SnZAOW
+	 64/MfQ8fDjDSSdlsvxop1nzXR9DLoe9RX3USNTTV4H/x6hINBiXZXoc1ypI09JEPxHBJk
+	 pKeMRSkpQaoYliIFDCT2s2mOl0jO7b/h4TETN41WCEtz13UrZH//b+LjZcOCbTE6lDlSm
+	 VGKznR27jsmtdOlLEGnkp+ZCphJVcLhY9WH/ZlY5bsCM40NpDajpdCWBgfRpADinF+g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="mKEw5R/W";
-	arc=none smtp.remote-ip=209.85.216.49
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wi6zE+ZS;
+	arc=none smtp.remote-ip=209.85.214.170
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 939AC606A337
-	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 16:15:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 939AC606A337
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24954606AE20
+	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 16:17:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 24954606AE20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mKEw5R/W
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3b197cd42b0so1075526a91.2
-        for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 08:15:40 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wi6zE+ZS
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2ee2072d1e7so1706325ad.2
+        for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 08:17:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794586540; x=1795191340; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794586639; x=1795191439; darn=vger.kernel.org;
         h=mime-version:content-transfer-encoding:references:in-reply-to:to
          :from:subject:cc:message-id:date:content-type:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=j3WMQoq3LZGUg08n1zN3PVbGtGVmsjr4StONFCTkZYc=;
-        b=mKEw5R/WmjQ8Drmd//CmjN6uf2wjG0Qm03r5v4508Rx/lrjW1NBmSDFaktVDAri2dF
-         INGu90GdGyI683vRDBZa8HF77/gkxJGEvsz6jnQExSfnqNPbCxXTnAl/cG99QPRVqBzB
-         x8BuE8IAVAk7xCd10YAgfsbD5Mk9+FPqQ2GNCGpmFumuDUPYQ5t0ryhzTxSMTdwEDczO
-         hDBt+vww9hLSqBnGjIntXKMF2FOuohEE+eH4U0+46vIoYlXe9CqoGN3Ld58W8G7zdQyF
-         PSRs8gGkCm2aToSYFjwwiIFcXAMFN+tS6zJyIMNSiFpTBMhjVKgydWainHGp4/Inv7Y7
-         jeOw==
+        bh=BRpA10axCrXVZ099IyeUTv8IF2etUVslsgkPoau4YqY=;
+        b=wi6zE+ZStl1hmfGJ0Vf2UO5LdI8hkGd/Z/YsjxveZdrZ7ZIeX10KPqQpFpe7ENuDXb
+         LuLlg+jm6kucLV4UojKYhkusLD6XKV4UPRh6gUqgv9uJBOM6wgHqUHTUmbDYz0TIOrih
+         K64pI+yfDyTuUSTCu9XJTw3kAssGmU+rXduB+a082Q/hHtb0Tb8lG7NBC4dWca73OYEF
+         v+M4dRXAWo2Jng7ETPDiO/lO3XjKQ02ElwcORuZC2hHBN+oYrQMWcPI0z/h4b2irqFIW
+         yn7zsfY0MhNwFCAWBPaDDc3gy10J4mpHBC0wWh/rYE2+e3E8oWe80sIwvanFA5TcUXgQ
+         6QKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794586540; x=1795191340;
+        d=1e100.net; s=20260707; t=1794586639; x=1795191439;
         h=mime-version:content-transfer-encoding:references:in-reply-to:to
          :from:subject:cc:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=j3WMQoq3LZGUg08n1zN3PVbGtGVmsjr4StONFCTkZYc=;
-        b=pLOq5WcFWh+z5YaD7O+EwjFcs4Q7ySimfIpRnqwGE/7fnMR6rAasBBzjVw79mv1JdT
-         lkvIkkGH+dXRtGIrgyWzZuzztXQeqd7jG0o4ZAxd6fECxx5xyanCOaqVFBR++PdAwds2
-         dep2qsa/3YOCBtFzXPMiRhp7vdgXs7N0RY1ni1WSjOBWUBxDJRly0wxPu4nadAjuXO+3
-         6aW81F5gjEemCvVgrVpY9IDAnrlu/QZtbiRPJw06ZcE14p3fYffSMEHCn+Y/T9e35pFh
-         NfsSy55hrH2m0WS4tHcoXsMg33aL0mx/rqsIMrXtKOJlwkInKFF9F+I5SMadS6mr8HQN
-         mP7w==
-X-Forwarded-Encrypted: i=1; AL+hErEIRIDFOv6dNiWnkHrJBxy+swqx4D1bUJdlICvUn5WYx5ukcNq4u+nboDCd+fNQPYOtMMg=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/QgLs9wf3b7toMrFcTVuDQAwXqaTeHSPOuVMWhwcKFDszim6Hq
-	OE/sgKzywQWG+l6p/ZC4vrv8bWkXoDChaJ7gCX15xpSMvP+p4l6kqdMJ
-X-Gm-Gg: AYBFou3AAWwKUhHrd4fQIyFgW0ibOvtzI153bUxHW5kbKb4PhavD1ymQ4MsoDPRs4cJ
-	Og6mezTJMuyzISvIMwbk574GDRE6yy+ti3wMgRxEB7GgU5oJ5A8y65iGVcsy8sRLJ3h3wbSjS8v
-	ZhYFWdSCDoimcgGnQr5XdpWfXh79ZCBBOSwljf2s0kYWzIZPKYMKi+B3JR3G5ODlgDj/iilWUuX
-	1ZNTwtgYskAnG76FHT28ZjE5Pp+UYuvvCB/NfE/AfHcFPOTf6sZmkAtOmVM6PcRVxPlqPf+0pb/
-	6E8A1PdMKmVfep+hs21JdxD+vDJdEJkxic+ApPY2/PjtsUdRTlcHwPuB/n89F3ZGvUbgkzRqVtf
-	oYuuKQ7SzZq74fwIKO4+cVxYGtHL09SOPw6RFgJAVjeebvzO7u7niWNfNBAdY0nRVUXdYDBA2WB
-	fR5z04i/rx1c0PC/6ooJQVTe89vKO7SPvOYLVrE12bk07eskBl9l3tRvsf4dC/12eRC0nogyE58
-	drBroGqMPxVIbhYayUa//12k8AxSaUtGM3ByzMWUaUkVNRqbPYcHya0otMySyjNQDaLa5K/JfeZ
-	IArA+EiqYSRjKykB+6AaJqeaJ2y8bmdF43a0+/ra0EnZ6eKMlJ+r/ml8fig+ArpD02oqOhIg4Te
-	r3kzs6Ugb86Mpfq2b2+KU5Pxho6R3dNR6Uxnr
-X-Received: by 2002:a17:90b:528c:b0:3ac:8897:7baa with SMTP id 98e67ed59e1d1-3b1b0a5030emr2346356a91.40.1794586539745;
-        Fri, 13 Nov 2026 08:15:39 -0800 (PST)
+        bh=BRpA10axCrXVZ099IyeUTv8IF2etUVslsgkPoau4YqY=;
+        b=awz3GquW9DBkQxNuvmCOSU3146gzBzz56/2Nk1oXQNYPSZmP4ABVaVo5PsESK94bnJ
+         ZtlsPHx9kI3Bw0oZJGcaHZnSpFP4ko76KEdhb5qM55Z+uvz01hblXjvvgBsDPnZB2BkK
+         +V6IQ2lvgYJj14ZK0xH5ZiJXTHljCiFG5u5lGXYpNzPfknoojImaBk+vi5noGbf5rBc6
+         fV7ZD2PW0i/I9V/Jfe8TRKLvnjMwMjQvvrvvKCLM/gh++LmnZcPzf+a00C00k9zwlB9X
+         VtlETgy8TWtFtwDJiRzD+pXvV1w2C0V7XbGK0hoqZxyXBIMjQm8Byh/crMIVtozyFPsG
+         MC8w==
+X-Gm-Message-State: APuU4Z884YXP0HnTiT8mNi5uMIJWMvNYdYEKECeIORKDene4bKPo1ubU
+	fIy7M1dbYg2fFNySp9f4iYjhENmXYdYNd1/PqCvItTigsZ88lAThyQ3k
+X-Gm-Gg: AYBFou0OXpwEXw6kw+PfsO1R8eu8TXjw+Te+L5R1igeLyhEM+bsINC8BtFvYZcBQeAm
+	eBZdO5iPptTeJte1QQH4ZAcYre12CVNFsQs8V40yogQ/wjIEvFuRSMaCRE7xYidyazlNog7Tdbi
+	tP7W2Br9G6qkK+EL1Pbd+BeoKXaY39iUni0ugNVQ/V6hGGqI9wLU+CxxLvNTGVT1yzk0r7Vvkgp
+	LP1QTrHZxqHidJhtvUAWTfIG6Z1EP0UkWCpUBrz01Ou2J/Uxl3xMBNvQmV4hxImBCR4RPGRqi2K
+	gYGbG4F1b3l3k/fVvNcgJL1QsJSnT8koiNYBKcTrilQaw7zMUuT3cYOVyorE8HmOnj57pd2FXpl
+	AA41gGbeHlYV6gWQtgyjRpkWznoyuBVLy2BHdgbXiA0mWfcAO6OxjAbFB+zRFHNOdMZcAGFWC2Q
+	ho8aUjR9/YPddVfvweqQCT5Srm9uiqMM2EYWNmYLNzCwQXZwSGzxhOA0QbzcnKASChIv/gIkeDA
+	TZMvKgXWtEXYs1qD1VIzajvoX9ZxvzsGJMdt5GDKEzk+EjCeLiCP+AWasj/SN8ZIa+o5XOwkxEz
+	+knI3y+D1iENmdNxJ5G+wLsypaCJTSLEdpjP7sh+lNO7PELed3D65dVJ0oE7n52/i4L9yZBkR53
+	poffWF77lpvqJMRROilR4sYk3qtE7Fcd72DE=
+X-Received: by 2002:a17:902:e54b:b0:2e9:3395:cca8 with SMTP id d9443c01a7336-2ee0dc779b4mr27718525ad.46.1794586639096;
+        Fri, 13 Nov 2026 08:17:19 -0800 (PST)
 Received: from localhost ([153.61.198.252])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b197c6c9c5sm10137966a91.1.2026.11.13.08.15.37
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ee0f7cf891sm12972395ad.28.2026.11.13.08.17.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Nov 2026 08:15:37 -0800 (PST)
+        Fri, 13 Nov 2026 08:17:18 -0800 (PST)
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 13 Nov 2026 16:15:36 +0000
-Message-Id: <DMU7U1PO0XJR.4L9Y1AL5QO42@gmail.com>
-Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
- <memxor@gmail.com>, <a.s.protopopov@gmail.com>, <martin.lau@kernel.org>,
- <yonghong.song@linux.dev>, <mason@kernel.org>, <ihor.solodrai@linux.dev>
-Subject: Re: [PATCH v2 bpf-next 08/13] resolve_btfids: Don't list an error
- that follows work on an argument
+Date: Fri, 13 Nov 2026 16:17:17 +0000
+Message-Id: <DMU7VC37HEEP.2K1XVHJJN8FFQ@gmail.com>
+Cc: <bpf@vger.kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+ <eddyz87@gmail.com>, <memxor@gmail.com>
+Subject: Re: [PATCH v2 bpf-next 09/13] bpf: Allow fmod_ret on tagged
+ functions and check the return value
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: <bot+bpf-ci@kernel.org>, <bpf@vger.kernel.org>
-In-Reply-To: <552ca9c7597417c92823f305ed9e41c67c2621674e3b568ffa085ae2e2c28aa5@mail.kernel.org>
-References: <20261113050901.1399091-9-alexei.starovoitov@gmail.com> <552ca9c7597417c92823f305ed9e41c67c2621674e3b568ffa085ae2e2c28aa5@mail.kernel.org>
+To: "Anton Protopopov" <a.s.protopopov@gmail.com>
+In-Reply-To: <avcApw6Q0_DUmWkE@mail.gmail.com>
+References: <20261113050901.1399091-1-alexei.starovoitov@gmail.com> <20261113050901.1399091-10-alexei.starovoitov@gmail.com> <avcApw6Q0_DUmWkE@mail.gmail.com>
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -103,29 +101,9 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-On Thu, Nov 12, 2026 at 09:52 PM bot+bpf-ci@kernel.org <bot+bpf-ci@kernel.org> wrote:
->> +void scan_set_proto(struct scan *s, const struct image_func *f, unsigned int pointers, bool effect)
->> +{
->> +	struct callee *callee = callee_at(s, f->addr);
->> +	unsigned int i;
->> +
->> +	callee->effect = effect;
->> +	callee->pointers = 0;
->> +	for (i = 0; i < s->flow.arch->nr_args; i++)
->> +		if (pointers & BIT(i))
->> +			callee->pointers |= BIT(s->flow.arch->args[i]);
->> +}
->
-> Does this mapping hold when a parameter takes more than one register?  Here
-> BTF parameter i is mapped straight to arch->args[i], and set_protos() builds
-> the mask the same way, without regard to parameter size:
+On Fri, Nov 13, 2026 at 04:20 AM Anton Protopopov <a.s.protopopov@gmail.com> wrote:
+> Please consider taking also this commit from v3, which requires JIT for fmodret functions: https://github.com/aspsk/bpf-next/commit/f8abd203106bc3f0cf978f2292148d4a63f66b26
 
-It doesn't. Will fix in v3.
+Makes sense. Will add it in the next version.
 
-> Would advancing the register index by the size of each parameter,
-> (btf__resolve_size() + 7) / 8, work here?  Alternatively, could a prototype
-> with a struct or union parameter be given up on (cleared)?
-
-Only up to 16 bytes. A bigger struct takes no register on x86-64
-and one on arm64. So I'll count registers like bpf_jit_place_args()
-and stop the mapping at a bigger parameter.
+btw bpf-next enforces JIT_ALWAYS_ON=y for x86 and arm64 already.
