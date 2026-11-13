@@ -1,69 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=54.243.244.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794538013;
-	b=fnuZ/jCBYwIf9FRaVxsoTDsnF/y9WD4wJkt5kCGRRg5NJumivMncoOohh4736DBmXJCF
-	 9qcHB+EO+0Fh6VuZ354GMpONqTitkZmrbV681fDAAo7w/hx8VhaSdzUPdt3QcuxiYZSig
-	 qjUHf7RuH6Qe5bn9msOfyMQycvgIu44Rf6e08v40oKaF35TS/Ncyx+WHfynwNGNB3iF/w
-	 vrMmDaerA159c/AYmRZdWVvay8pxFBGXhdqPKT5CPINXIawu8of9D547z92bYol6isOwL
-	 Zjn6ksJx6rXQA+4iDE0i8jMqWA1dGa1Rzruxq661+1SMKBFZR2P54FtcwwKrgJkeJSg==
+	t=1794538308;
+	b=XmNn8dO1xzW6kCdGpVo0MDf/i8yxKH3KPq4dOxxiOLNIaIwWH/VtRZFcUskg0gL3e8kY
+	 iFOh2wTVTQ302LpKkTsMtXvMqeysxFOhP41vKdk+VpmwmEXZRfS26BnQTni5EtHVDRyp1
+	 h+hNvD/TofhS29qgE5kEIpqfgtOpFRxpgqaZE0Hls2ns28+uyh9rH9lkUtbPLuM/JtjDJ
+	 1Th6Rm6PQHvYfuPFMBwR1NxcdkGtmuh8lJJ9Oy0frWo3iQlxMLxvixfOmQpy/yF6+RzfU
+	 GzjNbHwE95/bEZRkAdCug5b03RVYDU/t03dZuGGruw71fURWY/H0r5/xttl0BwE1/1g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794538013;
-	h=DMARC-Filter:DKIM-Signature:X-QQ-mid:X-QQ-Originating-IP:Received:
-	 X-QQ-SSF:X-QQ-GoodBg:X-BIZMAIL-ID:From:To:Cc:Subject:Date:Message-Id:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-QQ-SENDSIZE:Feedback-ID:X-QQ-XMAILINFO:
-	 X-QQ-XMRINFO:X-QQ-RECHKSPAM;
-	bh=ZoUgNOzuky+BKyHj57K5wBljJWDfzkgnCUy7oUq6Re8=;
-	b=YCUOHCGU7FXX+LvSRuIniTfVNA7juhttqsHjuZVva9T48JtYKoxEtF52fhW8nNayik70
-	 LfwSXehEf8UfNXhJm+3FltqUmVQ3u69pPuj0uNJjjYgZGlFgthIO//e6tp9e/0uKUpn5x
-	 fMXR8SJkgb8T3rY0ClYI4wRI5687u78gHz8CurZL5Emj4II771M8OcAd6ZwhLttmWIp14
-	 cYoaIS3yCgp79O4Norn0IkJwr/QN/9ZVRaEwitBC6zsqXAj26R2Ayl2LOTHh9DJmI9dRO
-	 mgwy2K9+w940lULO/RI0BlEa/R4601LdbqUgLrN9Qld50FmLbt8mHRY4JkJonS/3T8Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794538308;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=YSDKhuAyA203Yf37PQcYYDMK03F6qG5lQsZSKy/tw5g=;
+	b=vZ55K67uVMKo1a7mUrVr3E/L9FtzorByM5iOs9aChywMXzrKdqIwT2O8BG9gkAJSKqVY
+	 dHD3yfkI9yQc5gjBKhUtxDbaRFacznFEzqPcqobOoZpVfv6WsfhFWpGtGHsREPGW3A1BQ
+	 rRe5sRxKB99bLVEj/7vPtXAgfSeKv/RWx2DT4n/iLYpGgaiQZvUWJhwfg3xbnB+/tLgZX
+	 Mfhl68yw2BCUNeB7g0SmVgWWv98h+VUzgz+3Oh+T5+wbk32Eu5PiEjfgfPBTrQqH4xxm7
+	 tC8/v8qNA+0OHtriw9kv5dzD/z6EE7qxNCJd+dwHsvxRkhIgoXBUIKs1utcQFpWdrHg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=smail.nju.edu.cn;
-	spf=pass smtp.mailfrom=smail.nju.edu.cn;
-	dkim=pass header.d=smail.nju.edu.cn header.i=@smail.nju.edu.cn header.a=rsa-sha256 header.s=iohv2404 header.b="hf/a4nYQ";
-	arc=none smtp.remote-ip=54.243.244.52
-Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CsJe5KLx;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D24F606A321;
-	Fri, 13 Nov 2026 02:46:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4D24F606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=smail.nju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=smail.nju.edu.cn
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC653606A8B5
+	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 02:51:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=smail.nju.edu.cn header.i=@smail.nju.edu.cn header.a=rsa-sha256 header.s=iohv2404 header.b=hf/a4nYQ
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=smail.nju.edu.cn;
-	s=iohv2404; t=1794537914;
-	bh=ZoUgNOzuky+BKyHj57K5wBljJWDfzkgnCUy7oUq6Re8=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version;
-	b=hf/a4nYQlwoTW4l9zA6WEuTRXbWEpDseO6k7hx1o8ArQ8tjk9xkdbe3snUv36n5Dn
-	 2ueNDyrvqZyu/oY2nqAe097qLyysonaek9BE5ZZkRPL9h7XddhrlsyFPMi+idcchG2
-	 koISafbyXINVolEMZfJ7MgqXBC5mtaMwyK3QAlhk=
-X-QQ-mid: zesmtpip3t1794537908t89f91e2b
-X-QQ-Originating-IP: I7dyP3jMDpcYscZrnWzmbQ/K2dCgLhDcVhP+g+Ji61w=
-Received: from workstation-Precision-7920-Towe ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Fri, 13 Nov 2026 10:45:07 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 12657397245065214614
-From: Kang Chen <k.chen@smail.nju.edu.cn>
-To: Tejun Heo <tj@kernel.org>,
-	David Vernet <void@manifault.com>,
-	Andrea Righi <arighi@nvidia.com>,
-	Changwoo Min <changwoo@igalia.com>
-Cc: sched-ext@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH sched_ext v2 2/2] selftests/sched_ext: check that a drained DSQ iterator stays NULL
-Date: Fri, 13 Nov 2026 10:45:05 +0800
-Message-Id: <20261113024505.922854-2-k.chen@smail.nju.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20261113024505.922854-1-k.chen@smail.nju.edu.cn>
-References: <20261110125113.2935742-1-k.chen@smail.nju.edu.cn>
- <20261113024505.922854-1-k.chen@smail.nju.edu.cn>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CsJe5KLx
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CD8A1F000C4;
+	Fri, 13 Nov 2026 02:51:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794538308;
+	bh=YSDKhuAyA203Yf37PQcYYDMK03F6qG5lQsZSKy/tw5g=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=CsJe5KLxXV5wRjj0iD48ClTrdy4CQn7Tdxreax14DwAyYWSBvn/NO4kEPyLX/YMpu
+	 MHdkwSQ89wDwvaACzm06JX8w9OtdkGRgM2vnW+kJSo3jlv13oTbcSxdd5I0cSNCcss
+	 Ut6Dc43cZ8I+ylBJJWN0EoVw9wBFbtsQALR/3XIjMuh8eW5BGm+X4ltwUnZo7cTvmR
+	 LSX5WN2fEsnQb4MGei1qL5Cq/zMBYP9HEBoL0LCKHJ1mpqZbrs7QA3HEUrOmIssi9i
+	 CrN94FUT/qh2M6pkhZ4xILXi4I/C3wL9Qj8fCUAY3fMW9reueBcStfcqWFdIslwgtQ
+	 iRyGOiEdknVYQ==
+Message-ID: <sashiko-outbox-212098@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Test that a drained css
+ iterator keeps returning NULL
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Kang Chen" <k.chen@smail.nju.edu.cn>
+Cc: bpf@vger.kernel.org, tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com
+In-Reply-To: <20261113024453.922726-2-k.chen@smail.nju.edu.cn>
+References: <20261110125110.2935707-1-k.chen@smail.nju.edu.cn>
+ <20261113024453.922726-1-k.chen@smail.nju.edu.cn>
+ <20261113024453.922726-2-k.chen@smail.nju.edu.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 13 Nov 2026 02:51:47 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -72,87 +61,49 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpip:smail.nju.edu.cn:qybglogicsvrgz:qybglogicsvrgz5b-1
-X-QQ-XMAILINFO: Ml8T/6JCI2CtUq8dcZUq/vlruxBat4W0Mr494KquwvexP9ySz2vtqA0E
-	ZSgt/0yWw46fbcQltUuZejcv3m4HnYZUQ5mkFVGLr42VMF/hVgV9FVVDrPX53WEB4jg+20c
-	IA5PE2fadkXZrF4RJWxzbiM0hPLJQI9cYgVfS9BYzzeAIATrZYUuyu7UMW50Z65WrFSzUGE
-	i0CrTQx+vR0fj8lX7ziatLMNxmYPfF21HAAt6hwhSF6hp6ysRnNgAwDAgQpg0qQsyWhxWyn
-	i4G9aaGRSe2VkbVBtZAhg5e0eQgPOw3bwwF+6jAFBiQzU156oiOfmTV1+Avf9O8NBOSYRAs
-	lut1Cg79dfRO6+COybmGyEzdTZu9d7ZCTrP+ZA/KzLHyV2ND3DFTmYq2jQKhOQgr31NcJAG
-	fCkiq/iMX37kWlWqQkQP8jcS/Gl3FvBEYBgqBLGoJbEr5BlCvY7nJqPXEfX0JkmopDEdIsM
-	3Oj6oig9JrUx3lyExiLNTWDOFncdx8p44Q8GtsWeYHT2WvqvtdN8p2aORe30NeXweiXx8Lt
-	YyUzraSy2ChaqPJKYK8wms2TbMxaM9Yw2Ltk9c+SizPhkH4Zdmh8g5kfCKtAxbBFWY4wVov
-	e7wxI2OxOP1EPcfYmmNCkCSphHQnBnqcwyI2sRL/0x4goNw1PlikYruUB+Ybn2RpjYXqQ4Y
-	U4HWIRVYWgNQWlWPvtaMo7bQ/lypEbAKyS0ayPRtMEVSmEvbVerknwAdZX/oq6epMknFvOJ
-	6DvaYSiMFmAyeJ7NcvQ9jxmFhIxI170t4C6/i/dLyaTzyIy+3pVeetQwkIX+mMfp6dZl2dj
-	MYTHVGsp8pyYcjxZKxJNjJzHD5EN493PhKvdnGan8J8x4eb/foprQo2cFICaxz29u3NrcZP
-	/8C0F3LBy/UbgAaPjnP8JouofqXUIBjx8Nx8ODg+DM+7lK3nisl4yXsh+EsHoZXCVsy2lGk
-	+8uAwVXaJl2leJpW0kEWIVNT//TTp8SqRcJyezl4jz9s3qBZuwHfVkB3RhYaskQ24ttcezf
-	m2U2pkj3UpwSnXfu3PYDOYBzS4tCMmCR/AAJcPqaldLoxNgYPmrt0yITMNEja2mwGD7UEYS
-	Q==
-X-QQ-XMRINFO: NS+P29fieYNwqS3WCnRCOn9D1NpZuCnCRA==
-X-QQ-RECHKSPAM: 0
 
-Extend the dequeue_iter selftest: after the DSQ iterator drains, call
-bpf_iter_scx_dsq_next() once more and store the raw result.  The
-user-space test checks that at least one task was iterated and that the
-extra next() returned NULL.
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Low] selftests/bpf: standalone css_iter files duplicate existing
+  iters_css tests
+--
 
-The test fails on a kernel without the drained cursor state: the cursor
-was unlinked and the extra next() starts again from the DSQ head.
+commit 2e186e543b0b323cd0fe5abfcf3d4268a7d8d9cd
+Author: Kang Chen <k.chen@smail.nju.edu.cn>
 
-Signed-off-by: Kang Chen <k.chen@smail.nju.edu.cn>
----
-v2:
-- New selftest in v2.
+selftests/bpf: Test that a drained css iterator keeps returning NULL
 
- tools/testing/selftests/sched_ext/dequeue_iter.bpf.c | 7 ++++++-
- tools/testing/selftests/sched_ext/dequeue_iter.c     | 4 ++++
- 2 files changed, 10 insertions(+), 1 deletion(-)
+This commit adds a BPF selftest verifying that calling bpf_iter_css_next()
+on an already drained css iterator continues to return NULL.
 
-diff --git a/tools/testing/selftests/sched_ext/dequeue_iter.bpf.c b/tools/testing/selftests/sched_ext/dequeue_iter.bpf.c
-index 76c2c71a90b6..38eb2df54a6b 100644
---- a/tools/testing/selftests/sched_ext/dequeue_iter.bpf.c
-+++ b/tools/testing/selftests/sched_ext/dequeue_iter.bpf.c
-@@ -18,6 +18,8 @@ UEI_DEFINE(uei);
- #define TEST_DSQ_ID 1000
- 
- u64 dq_count;
-+u64 iter_count;
-+u64 next_after_drain = -1;
- 
- s32 BPF_STRUCT_OPS_SLEEPABLE(dequeue_iter_init)
- {
-@@ -47,7 +49,10 @@ void BPF_STRUCT_OPS(dequeue_iter_dequeue, struct task_struct *p, u64 deq_flags)
- 
- 	if (!bpf_iter_scx_dsq_new(&it, TEST_DSQ_ID, 0)) {
- 		while ((t = bpf_iter_scx_dsq_next(&it)))
--			;
-+			iter_count++;
-+
-+		/* NULL must stay final after the iterator is drained. */
-+		next_after_drain = (__u64)bpf_iter_scx_dsq_next(&it);
- 	}
- 	bpf_iter_scx_dsq_destroy(&it);
- 
-diff --git a/tools/testing/selftests/sched_ext/dequeue_iter.c b/tools/testing/selftests/sched_ext/dequeue_iter.c
-index f60711bf3b39..48e8c94b7bf1 100644
---- a/tools/testing/selftests/sched_ext/dequeue_iter.c
-+++ b/tools/testing/selftests/sched_ext/dequeue_iter.c
-@@ -59,6 +59,10 @@ static enum scx_test_status run(void *ctx)
- 		return SCX_TEST_FAIL;
- 	}
- 
-+	SCX_FAIL_IF(!skel->bss->iter_count,
-+		    "DSQ iterator drained no tasks");
-+	SCX_EQ(skel->data->next_after_drain, 0);
-+
- 	return SCX_TEST_PASS;
- }
- 
--- 
-2.34.1
+> diff --git a/tools/testing/selftests/bpf/prog_tests/css_iter.c b/tools/te=
+sting/selftests/bpf/prog_tests/css_iter.c
+> new file mode 100644
+> index 0000000000000..9bf8f056d3cd0
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/css_iter.c
+> @@ -0,0 +1,35 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <test_progs.h>
+> +#include <bpf/libbpf.h>
+> +#include "css_iter.skel.h"
 
+[ ... ]
+
+> +void test_css_iter(void)
+> +{
+> +	if (test__start_subtest("next_after_drain"))
+> +		test_css_iter_next_after_drain();
+> +}
+
+[Severity: Low]
+This isn't a bug, but could this test case be added to the existing css
+iterator test suite in tools/testing/selftests/bpf/prog_tests/iters.c
+(subtest_css_iters()) and tools/testing/selftests/bpf/progs/iters_css.c
+instead of introducing new standalone files?  iters_css.c already exercises
+bpf_iter_css_new(), bpf_iter_css_next(), and bpf_iter_css_destroy() with
+the same ksym declarations and cgroup/RCU setup.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261113024453.9227=
+26-1-k.chen@smail.nju.edu.cn?part=3D2
