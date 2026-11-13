@@ -1,50 +1,50 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=158.69.130.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794575957;
-	b=BTYGZ8ylT7wh6V5N8RtVO7LnUl1TvI0gne1E4JOWDGKcE/iLH+MLA2+FDu54me1fpnvA
-	 G/smcVtNS0vc4p8qhW7+3SDvDYC0gA3DF1l5jG/IwfFgoC30CTHqVusjGagkZOBQubDQ2
-	 pNXBB12qgehRzvhdd16dtNwsrcT4KV/z/dBqIyctZ1WR/jTCzKiBuRoHYzqbU2nfHOebc
-	 8/7UD9ZyBAo63wbXac/YHPJRSdvj3TKbPKDDzicOZwI9rlyCoKkQb47X9TC76vDGLOmG+
-	 IRLh2wPej9i7X7UCCLXyZLf6i350lSOVH2KrWZ3ywEKKaaS7elFPBh+fwPHpNjQ8IYg==
+	t=1794575958;
+	b=oGz2FEPOeH64zB20dZgBW0fRvqZ0avXSyqbj5PTsTA/hEZikpDLV8gqtafBZ+SjdKXgb
+	 gzjs3v8RhcJC6OFzztI3iZLFp2z7UyavXRS6Onsn/eBzCqPq4TNKWg+j8S1LJHbBjZZGz
+	 ZwCl+vjvNNLFPog+KmMS8Baa2AEtjFAivKQnf3cmy4WJ6fngW+O5BmhLqcpoOBl8jyUyl
+	 Kk8Uk+Fdy9fuq0SV96FB4NTFo5+JUv4CgNXeMVvO9bKKO0YjPJtGXBI6hMdCjbuEf8Ip8
+	 DikwAp0j1vyWQ/RQ1JrBVJeRaWs1ugqgCMqGybCRP+8ePnPX2n4OWYN5OTaPdAOcRVw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794575957;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794575958;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
 	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=8OhAk9cmyRbLG0MiVOEFk9DU+w4LVEx3Semv5sjBMcE=;
-	b=c52z4rwpcb8bgYTFSzDCswTftW6nq46SRnP6naB/EbUBkimVpHOSoTQ/fiww3ujmk/5v
-	 KqxSEfq+PclfHZ2XaOF3NVtXx5dF2En9IM105NGoSY1GC7J76v/iRjeTBABLxfrV6oyMa
-	 ncb+s0jweyp46m8KazLq7JhPuw0A+Kj3rBkSBk1etX3SfzTAsoy6hwe6GF7afmYcEMqlT
-	 XRqccZ6mw/3qDTUwGEPqcsnfm+myxj1KCggWWCh3dvG6Cn7ETQ7IMOtCObioQ/YFD8DXU
-	 lfDSUbIxZnN03PaRknSNBsW8M4IvJC0WYN9KXjM5StebEyDRE2hygXiDpAgRovegvHg==
+	bh=MfSMwXSAWBd4ItZsKrFa1iXIKNYRq7JCuBaisKgh7Hs=;
+	b=hPgnGtXpCXqIZEGA+trgYxUBZu6GPx4sEP9Zlt3n/wsM7t5oSFguFiKAErhlYj5DuKil
+	 xpq/gwX4muhfY12m8oFdUw6l2FiCcPYviwG/Eif+emS4qJyPF01j2QFaBXs0No0/1objj
+	 MjWEVwSMUPt4Uxznv6fElWYyJ13lK8jM4levV4GjZczl6xaDqAwDeUISHc1HN3BFJoItx
+	 yNy+MQBi074QnXc31YApxguVMfca3gq25JE1kFpVxIbxIu2SNjUheiE9XjxZV3iO6GKDS
+	 CGk5a788Gyqn363wuP0VZKeS1dX25bNrJng2+dmhk1xwhsl/pxUaWNa6Qtap8uTHQxA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=efficios.com;
 	spf=pass smtp.mailfrom=efficios.com;
-	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b="gB8/n3oE";
+	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=XzFBQinm;
 	arc=none smtp.remote-ip=158.69.130.18
 Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79FA9606A89C;
-	Fri, 13 Nov 2026 13:19:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 79FA9606A89C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B439606A8A0;
+	Fri, 13 Nov 2026 13:19:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9B439606A8A0
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=gB8/n3oE
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=XzFBQinm
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
 	s=smtpout1; t=1794575950;
-	bh=8OhAk9cmyRbLG0MiVOEFk9DU+w4LVEx3Semv5sjBMcE=;
+	bh=MfSMwXSAWBd4ItZsKrFa1iXIKNYRq7JCuBaisKgh7Hs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gB8/n3oEPTSMcNN9PdI9lIveWGuLnluQZil7NIeWFqwYI4Gw9gjeUngDIWVZTwpwC
-	 ev3GqxrZUFItO0Z0bdp4UkWTvgelfNPzCaxqyE6pAewOLcEliu8TAyGFUC3EgF/AXr
-	 KX/PzKmMk/F7ajfdA+aWSN93ZjFNgVMTnGepMcGhHONnwzz0cyGm9TrUfV7H5P9FAr
-	 G+vZJSJdtYc0QCH46I7hpJmr/ePCojt3tr2uWshOjLr3BbHKsiHgy+q0XIbxxasEvd
-	 gtmY52BTLXh/fTROKqSk6K/fEKOGyrr0+jhhUbQe4+OqBHorjefk8dtWhhwGOMsYiw
-	 Rs8opj+Gsilsg==
+	b=XzFBQinmY6fr9eGhf2cbtfzg/1faOcgzEfBG8sRtll1K4eiA9z+xy6NK05lIDWKlj
+	 kNySDgTBw731Hug+iba6DV9A8A2GHSMxVNC9OMzVhRoZd1UBtnPgnvXUPffB9Srbz3
+	 BmCvNaKRs077KN/Pm392V5d1O2PTUuBybv92UVIomLJ6rY2//OJElrbXP49mAhylJ4
+	 8zUBSUy7RE98POsyXfrpd4aKo6WZ0d1OxzhW72JLRKBuO8J5wZ5ZTlq//d9pvQ71YL
+	 iyqCJZph1ZigjdlDYW6WE1w9cuab/DhZykEg3kX/56qv6g5/Wrjv/1ue7v14f+Vh3X
+	 tESQLk/L/TApg==
 Received: from thinkos.internal.efficios.com (mtl.efficios.com [216.120.195.104])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jQyWy1b9lzPX1;
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jQyWy3XCtzPX2;
 	Fri, 13 Nov 2026 08:19:10 -0500 (EST)
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To: Peter Zijlstra <peterz@infradead.org>,
@@ -123,10 +123,11 @@ Cc: linux-kernel@vger.kernel.org,
 	Naveen N Rao <naveen@kernel.org>,
 	"David S. Miller" <davem@davemloft.net>,
 	Masami Hiramatsu <mhiramat@kernel.org>,
-	linux-trace-kernel@vger.kernel.org
-Subject: [RFC PATCH 07/16] selftests/membarrier: Test command arguments and registration lifetime
-Date: Fri, 13 Nov 2026 08:18:54 -0500
-Message-Id: <20261113131903.157186-8-mathieu.desnoyers@efficios.com>
+	linux-trace-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [RFC PATCH 08/16] LoongArch: membarrier: Add full memory barrier in switch_mm()
+Date: Fri, 13 Nov 2026 08:18:55 -0500
+Message-Id: <20261113131903.157186-9-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20261113131903.157186-1-mathieu.desnoyers@efficios.com>
 References: <20261113131903.157186-1-mathieu.desnoyers@efficios.com>
@@ -141,415 +142,129 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The existing tests issue each command once with valid arguments, in
-one fixed order of registrations. They miss the following:
+The expedited membarrier commands need a full memory barrier after
+the scheduler stores to rq->curr, before the CPU returns to
+user-space. membarrier() skips the IPI to a CPU which it sees running
+another mm. This barrier orders the user-space accesses of the
+incoming thread after that check. See scenario (A) in
+kernel/sched/membarrier.c.
 
- - the query mask is not compared with the commands which the kernel
-   accepts. Commit 809232619f5b ("sched/membarrier: Fix
-   membarrier-rseq fence command missing from query bitmask") fixed
-   such a mismatch,
- - only MEMBARRIER_CMD_QUERY is tested with an invalid flag,
- - only the stress test issues the rseq command. Its registration,
-   its -EPERM result and its CPU argument are not checked,
- - each registration is not tested alone. Commit fc0d77387cb5
-   ("sched/membarrier: Fix private expedited registration check")
-   fixed an interaction between two registrations,
- - the registrations are not tested across fork, exec and CLONE_VM.
+LoongArch has no dedicated barrier. It used to get it from
+spin_unlock() in finish_lock_switch(), which was a full barrier
+("dbar 0").
 
-Add membarrier_test_cmd for those. It uses the kselftest harness,
-which runs each test in its own process. A registration cannot be
-undone, so each test needs a new process.
+This is no longer true. Commit e031a5f3f1ed ("LoongArch: Support dbar
+with different hints") made smp_store_release() an ordering barrier
+("dbar 0b10010"). It does not order a previous store with a following
+load. That commit kept a full barrier in queued_spin_unlock(). Commit
+9c68ece8b2a5 ("LoongArch: Define the __io_aw() hook as mmiowb()") then
+removed it.
 
-The sync core and rseq registration tests fail without commit
-"sched/membarrier: Report only completed registrations".
+Nothing else is a full barrier on a switch between two user
+processes. switch_mm_irqs_off() writes CSRs and sets a bit in the mm
+cpumask with a plain "amor". finish_task() uses smp_store_release().
 
+The LoongArch manual lists the instructions which order memory
+accesses: DBAR, IBAR, the AM*_DB instructions and LL/SC pairs. A CSR
+write and ERTN are not among them.
+
+This was found by reading the code and the architecture manual. On
+Loongson-3A6000 or newer, a thread which is scheduled in would run
+user-space code without the barrier which membarrier promised to the
+caller. User-space would see a memory ordering failure: the caller of
+an expedited membarrier command would miss a recent store of that
+thread. Older processors treat every dbar hint as "dbar 0" and are not
+affected.
+
+Do as powerpc and riscv: add membarrier_arch_switch_mm() and call it
+from switch_mm_irqs_off() when the mm changes. It issues smp_mb()
+only when the next mm registered for an expedited command.
+
+Compile-tested only.
+
+Fixes: 9c68ece8b2a5 ("LoongArch: Define the __io_aw() hook as mmiowb()")
+Cc: stable@vger.kernel.org
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- tools/testing/selftests/membarrier/.gitignore |   1 +
- tools/testing/selftests/membarrier/Makefile   |   1 +
- .../membarrier/membarrier_test_cmd.c          | 352 ++++++++++++++++++
- 3 files changed, 354 insertions(+)
- create mode 100644 tools/testing/selftests/membarrier/membarrier_test_cmd.c
+ arch/loongarch/Kconfig                   |  1 +
+ arch/loongarch/include/asm/membarrier.h  | 33 ++++++++++++++++++++++++
+ arch/loongarch/include/asm/mmu_context.h |  4 +++
+ 3 files changed, 38 insertions(+)
+ create mode 100644 arch/loongarch/include/asm/membarrier.h
 
-diff --git a/tools/testing/selftests/membarrier/.gitignore b/tools/testing/selftests/membarrier/.gitignore
-index 58969a5e4613..45b995b884a6 100644
---- a/tools/testing/selftests/membarrier/.gitignore
-+++ b/tools/testing/selftests/membarrier/.gitignore
-@@ -3,3 +3,4 @@ membarrier_test_multi_thread
- membarrier_test_single_thread
- membarrier_rseq_stress
- membarrier_test_ipi
-+membarrier_test_cmd
-diff --git a/tools/testing/selftests/membarrier/Makefile b/tools/testing/selftests/membarrier/Makefile
-index ee5b9deb808b..c7fa0573e978 100644
---- a/tools/testing/selftests/membarrier/Makefile
-+++ b/tools/testing/selftests/membarrier/Makefile
-@@ -5,6 +5,7 @@ LDLIBS += -lpthread
- TEST_GEN_PROGS := membarrier_test_single_thread \
- 		membarrier_test_multi_thread \
- 		membarrier_test_ipi \
-+		membarrier_test_cmd \
- 		membarrier_rseq_stress
- 
- LOCAL_HDRS += membarrier_test_impl.h
-diff --git a/tools/testing/selftests/membarrier/membarrier_test_cmd.c b/tools/testing/selftests/membarrier/membarrier_test_cmd.c
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index b5ed4881d3c0..be6e7545d646 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -22,6 +22,7 @@ config LOONGARCH
+ 	select ARCH_HAS_FORTIFY_SOURCE
+ 	select ARCH_HAS_KCOV
+ 	select ARCH_HAS_KERNEL_FPU_SUPPORT if 64BIT && CPU_HAS_FPU
++	select ARCH_HAS_MEMBARRIER_CALLBACKS
+ 	select ARCH_HAS_NMI_SAFE_THIS_CPU_OPS
+ 	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+ 	select ARCH_HAS_PREEMPT_LAZY
+diff --git a/arch/loongarch/include/asm/membarrier.h b/arch/loongarch/include/asm/membarrier.h
 new file mode 100644
-index 000000000000..5982861f77b6
+index 000000000000..1789f878821f
 --- /dev/null
-+++ b/tools/testing/selftests/membarrier/membarrier_test_cmd.c
-@@ -0,0 +1,352 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Check the membarrier command arguments and the lifetime of the
-+ * registrations.
-+ *
-+ * The test harness runs each test in its own process. This matters
-+ * because a membarrier registration cannot be undone.
-+ */
-+#define _GNU_SOURCE
-+#include <linux/membarrier.h>
-+#include <sys/wait.h>
-+#include <syscall.h>
-+#include <limits.h>
-+#include <pthread.h>
-+#include <signal.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <sched.h>
-+#include <errno.h>
++++ b/arch/loongarch/include/asm/membarrier.h
+@@ -0,0 +1,33 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef _ASM_LOONGARCH_MEMBARRIER_H
++#define _ASM_LOONGARCH_MEMBARRIER_H
 +
-+#include "kselftest_harness.h"
-+
-+#define STACK_SIZE	(64 * 1024)
-+
-+#define REGISTER_CMDS						\
-+	(MEMBARRIER_CMD_REGISTER_GLOBAL_EXPEDITED |		\
-+	 MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED |		\
-+	 MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE |	\
-+	 MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ)
-+
-+/* Pairs of registration command and command which needs it. */
-+static const struct {
-+	int register_cmd;
-+	int cmd;
-+} private_cmds[] = {
-+	{ MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED,
-+	  MEMBARRIER_CMD_PRIVATE_EXPEDITED },
-+	{ MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE,
-+	  MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE },
-+	{ MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ,
-+	  MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ },
-+};
-+
-+static int sys_membarrier(int cmd, unsigned int flags, int cpu_id)
++static inline void membarrier_arch_switch_mm(struct mm_struct *prev,
++					     struct mm_struct *next,
++					     struct task_struct *tsk)
 +{
-+	return syscall(__NR_membarrier, cmd, flags, cpu_id);
++	/*
++	 * Only need the full barrier when switching between processes.
++	 * Barrier when switching from kernel to userspace is not
++	 * required here, given that it is implied by mmdrop(). Barrier
++	 * when switching from userspace to kernel is not needed after
++	 * store to rq->curr.
++	 */
++	if (IS_ENABLED(CONFIG_SMP) &&
++	    likely(!(atomic_read(&next->membarrier_state) &
++		     (MEMBARRIER_STATE_PRIVATE_EXPEDITED |
++		      MEMBARRIER_STATE_GLOBAL_EXPEDITED))))
++		return;
++
++	/*
++	 * The membarrier system call requires a full memory barrier
++	 * after storing to rq->curr, before going back to user-space.
++	 *
++	 * Nothing else provides it on this path. spin_unlock() and
++	 * smp_store_release() are ordering barriers ("dbar 0b10010"):
++	 * they do not order a previous store with a following load.
++	 */
++	smp_mb();
 +}
 +
-+static int query(void)
-+{
-+	return sys_membarrier(MEMBARRIER_CMD_QUERY, 0, 0);
-+}
++#endif /* _ASM_LOONGARCH_MEMBARRIER_H */
+diff --git a/arch/loongarch/include/asm/mmu_context.h b/arch/loongarch/include/asm/mmu_context.h
+index 304363bd3935..dba62dd7a131 100644
+--- a/arch/loongarch/include/asm/mmu_context.h
++++ b/arch/loongarch/include/asm/mmu_context.h
+@@ -9,6 +9,7 @@
+ 
+ #include <linux/errno.h>
+ #include <linux/sched.h>
++#include <linux/sched/mm.h>
+ #include <linux/mm_types.h>
+ #include <linux/smp.h>
+ #include <linux/slab.h>
+@@ -91,6 +92,9 @@ static inline void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *
+ 	bool need_flush = false;
+ 	unsigned int cpu = smp_processor_id();
+ 
++	if (prev != next)
++		membarrier_arch_switch_mm(prev, next, tsk);
 +
-+static int get_registrations(void)
-+{
-+	return sys_membarrier(MEMBARRIER_CMD_GET_REGISTRATIONS, 0, 0);
-+}
-+
-+/* Each command is either in the query mask or returns -EINVAL. */
-+TEST(query_matches_commands)
-+{
-+	int mask = query(), bit, ret;
-+
-+	ASSERT_GE(mask, 0);
-+	for (bit = 0; bit < 32; bit++) {
-+		int cmd = (int)(1U << bit);
-+
-+		errno = 0;
-+		ret = sys_membarrier(cmd, 0, 0);
-+		if (mask & cmd) {
-+			EXPECT_NE(errno, EINVAL) {
-+				TH_LOG("command 0x%x is in the query mask", cmd);
-+			}
-+		} else {
-+			EXPECT_EQ(ret, -1);
-+			EXPECT_EQ(errno, EINVAL) {
-+				TH_LOG("command 0x%x is not in the query mask", cmd);
-+			}
-+		}
-+	}
-+}
-+
-+/* A command is a single bit. */
-+TEST(invalid_commands)
-+{
-+	static const int cmds[] = {
-+		-1, INT_MAX,
-+		MEMBARRIER_CMD_GLOBAL | MEMBARRIER_CMD_GLOBAL_EXPEDITED,
-+		MEMBARRIER_CMD_PRIVATE_EXPEDITED |
-+			MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED,
-+	};
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(cmds); i++) {
-+		EXPECT_EQ(sys_membarrier(cmds[i], 0, 0), -1);
-+		EXPECT_EQ(errno, EINVAL);
-+	}
-+}
-+
-+/* Only the rseq command accepts a flag: MEMBARRIER_CMD_FLAG_CPU. */
-+TEST(invalid_flags)
-+{
-+	static const unsigned int flags[] = {
-+		MEMBARRIER_CMD_FLAG_CPU, 1U << 1, 1U << 31, ~0U,
-+		MEMBARRIER_CMD_FLAG_CPU | (1U << 1),
-+	};
-+	int mask = query(), bit, i;
-+
-+	ASSERT_GE(mask, 0);
-+	/* Bit -1 stands for MEMBARRIER_CMD_QUERY, which is 0. */
-+	for (bit = -1; bit < 32; bit++) {
-+		int cmd = bit < 0 ? MEMBARRIER_CMD_QUERY : (int)(1U << bit);
-+
-+		if (cmd && !(mask & cmd))
-+			continue;
-+		for (i = 0; i < ARRAY_SIZE(flags); i++) {
-+			if (cmd == MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ &&
-+			    flags[i] == MEMBARRIER_CMD_FLAG_CPU)
-+				continue;
-+			EXPECT_EQ(sys_membarrier(cmd, flags[i], 0), -1);
-+			EXPECT_EQ(errno, EINVAL) {
-+				TH_LOG("command 0x%x flags 0x%x", cmd, flags[i]);
-+			}
-+		}
-+	}
-+}
-+
-+/* A private command needs its own registration. */
-+TEST(private_needs_registration)
-+{
-+	int mask = query(), registered = get_registrations(), i;
-+
-+	ASSERT_GE(mask, 0);
-+	ASSERT_GE(registered, 0);
-+	for (i = 0; i < ARRAY_SIZE(private_cmds); i++) {
-+		if (!(mask & private_cmds[i].cmd))
-+			continue;
-+		/* The C library may have registered already. */
-+		if (registered & private_cmds[i].register_cmd)
-+			continue;
-+		EXPECT_EQ(sys_membarrier(private_cmds[i].cmd, 0, 0), -1);
-+		EXPECT_EQ(errno, EPERM);
-+	}
-+	if ((mask & MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ) &&
-+	    !(registered & MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ)) {
-+		EXPECT_EQ(sys_membarrier(MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ,
-+					 MEMBARRIER_CMD_FLAG_CPU, 0), -1);
-+		EXPECT_EQ(errno, EPERM);
-+	}
-+}
-+
-+/*
-+ * Issue one registration command. It must add its own bit to the
-+ * registrations, and no other bit. It must allow its own command, and
-+ * no other command.
-+ */
-+static void register_one(struct __test_metadata *_metadata, int register_cmd)
-+{
-+	int mask = query(), before = get_registrations(), i;
-+
-+	ASSERT_GE(mask, 0);
-+	ASSERT_GE(before, 0);
-+	if (!(mask & register_cmd))
-+		SKIP(return, "command 0x%x is not available", register_cmd);
-+	ASSERT_EQ(sys_membarrier(register_cmd, 0, 0), 0);
-+	EXPECT_EQ(get_registrations(), before | register_cmd);
-+	/* A second registration succeeds and changes nothing. */
-+	ASSERT_EQ(sys_membarrier(register_cmd, 0, 0), 0);
-+	EXPECT_EQ(get_registrations(), before | register_cmd);
-+
-+	for (i = 0; i < ARRAY_SIZE(private_cmds); i++) {
-+		if (!(mask & private_cmds[i].cmd))
-+			continue;
-+		if ((before | register_cmd) & private_cmds[i].register_cmd) {
-+			EXPECT_EQ(sys_membarrier(private_cmds[i].cmd, 0, 0), 0);
-+		} else {
-+			EXPECT_EQ(sys_membarrier(private_cmds[i].cmd, 0, 0), -1);
-+			EXPECT_EQ(errno, EPERM);
-+		}
-+	}
-+}
-+
-+TEST(register_global_expedited)
-+{
-+	register_one(_metadata, MEMBARRIER_CMD_REGISTER_GLOBAL_EXPEDITED);
-+}
-+
-+TEST(register_private_expedited)
-+{
-+	register_one(_metadata, MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED);
-+}
-+
-+TEST(register_private_expedited_sync_core)
-+{
-+	register_one(_metadata,
-+		     MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE);
-+}
-+
-+TEST(register_private_expedited_rseq)
-+{
-+	register_one(_metadata, MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ);
-+}
-+
-+/* Register every command, one at a time. Return the registrations. */
-+static int register_all(struct __test_metadata *_metadata)
-+{
-+	int mask = query(), expected = get_registrations(), bit;
-+
-+	for (bit = 0; bit < 31; bit++) {
-+		int cmd = 1 << bit;
-+
-+		if (!(cmd & REGISTER_CMDS & mask))
-+			continue;
-+		ASSERT_EQ(sys_membarrier(cmd, 0, 0), 0);
-+		expected |= cmd;
-+		EXPECT_EQ(get_registrations(), expected);
-+	}
-+	return expected;
-+}
-+
-+TEST(register_all_commands)
-+{
-+	register_all(_metadata);
-+}
-+
-+static void *thread_pause(void *arg)
-+{
-+	for (;;)
-+		pause();
-+	return NULL;
-+}
-+
-+/*
-+ * The rseq command accepts any CPU number. It ignores a CPU which does
-+ * not exist. A negative CPU number selects all CPUs.
-+ *
-+ * The kernel only looks at the CPU number of a multi-threaded process,
-+ * so keep a second thread alive.
-+ */
-+TEST(rseq_cpu_argument)
-+{
-+	static const int cpus[] = { 0, INT_MAX, -1, INT_MIN };
-+	pthread_t thread;
-+	int i;
-+
-+	if (!(query() & MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ))
-+		SKIP(return, "the rseq command is not available");
-+	ASSERT_EQ(pthread_create(&thread, NULL, thread_pause, NULL), 0);
-+	ASSERT_EQ(sys_membarrier(MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ,
-+				 0, 0), 0);
-+	EXPECT_EQ(sys_membarrier(MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ,
-+				 MEMBARRIER_CMD_FLAG_CPU, sched_getcpu()), 0);
-+	for (i = 0; i < ARRAY_SIZE(cpus); i++) {
-+		EXPECT_EQ(sys_membarrier(MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ,
-+					 MEMBARRIER_CMD_FLAG_CPU, cpus[i]), 0) {
-+			TH_LOG("cpu_id %d", cpus[i]);
-+		}
-+	}
-+	/* Without the flag, the CPU argument is ignored. */
-+	EXPECT_EQ(sys_membarrier(MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ,
-+				 0, INT_MAX), 0);
-+}
-+
-+/* A forked child inherits the registrations. */
-+TEST(fork_inherits_registrations)
-+{
-+	int expected = register_all(_metadata), status;
-+	pid_t pid;
-+
-+	pid = fork();
-+	ASSERT_GE(pid, 0);
-+	if (!pid)
-+		_exit(get_registrations() != expected);
-+	ASSERT_EQ(waitpid(pid, &status, 0), pid);
-+	EXPECT_TRUE(WIFEXITED(status));
-+	EXPECT_EQ(WEXITSTATUS(status), 0);
-+}
-+
-+/*
-+ * exec() drops the registrations. The new program image starts with
-+ * the registrations which this test program had when it started.
-+ */
-+static int initial_registrations;
-+
-+TEST(exec_drops_registrations)
-+{
-+	char expected[16];
-+	int status;
-+	pid_t pid;
-+
-+	register_all(_metadata);
-+	snprintf(expected, sizeof(expected), "%d", initial_registrations);
-+	pid = fork();
-+	ASSERT_GE(pid, 0);
-+	if (!pid) {
-+		execl("/proc/self/exe", "membarrier_test_cmd",
-+		      "--expect-registrations", expected, NULL);
-+		_exit(2);
-+	}
-+	ASSERT_EQ(waitpid(pid, &status, 0), pid);
-+	EXPECT_TRUE(WIFEXITED(status));
-+	if (WEXITSTATUS(status) == 2)
-+		SKIP(return, "cannot exec /proc/self/exe");
-+	EXPECT_EQ(WEXITSTATUS(status), 0);
-+}
-+
-+static int clone_vm_fn(void *arg)
-+{
-+	int cmd = *(int *)arg;
-+
-+	return sys_membarrier(cmd, 0, 0) ? 1 : 0;
-+}
-+
-+/*
-+ * The registrations belong to the mm. A task of another thread group
-+ * which shares the mm (CLONE_VM without CLONE_THREAD) registers for
-+ * both thread groups.
-+ */
-+TEST(clone_vm_shares_registrations)
-+{
-+	int cmd = MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED;
-+	int before = get_registrations(), status;
-+	char *stack;
-+	pid_t pid;
-+
-+	ASSERT_GE(before, 0);
-+	stack = malloc(STACK_SIZE);
-+	ASSERT_NE(stack, NULL);
-+	pid = clone(clone_vm_fn, stack + STACK_SIZE, CLONE_VM | SIGCHLD, &cmd);
-+	ASSERT_GE(pid, 0);
-+	ASSERT_EQ(waitpid(pid, &status, 0), pid);
-+	EXPECT_TRUE(WIFEXITED(status));
-+	EXPECT_EQ(WEXITSTATUS(status), 0);
-+	EXPECT_EQ(get_registrations(), before | cmd);
-+	EXPECT_EQ(sys_membarrier(MEMBARRIER_CMD_PRIVATE_EXPEDITED, 0, 0), 0);
-+	free(stack);
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	/* New program image of exec_drops_registrations. */
-+	if (argc == 3 && !strcmp(argv[1], "--expect-registrations"))
-+		return get_registrations() != atoi(argv[2]);
-+
-+	if (query() < 0)
-+		ksft_exit_skip("sys membarrier (CONFIG_MEMBARRIER) is disabled.\n");
-+	initial_registrations = get_registrations();
-+	if (initial_registrations < 0)
-+		ksft_exit_skip("MEMBARRIER_CMD_GET_REGISTRATIONS is not available.\n");
-+	return test_harness_run(argc, argv);
-+}
+ 	/* Check if our ASID is of an older version and thus invalid */
+ 	if (!asid_valid(next, cpu))
+ 		get_new_mmu_context(next, cpu, &need_flush);
 -- 
 2.47.3
 
