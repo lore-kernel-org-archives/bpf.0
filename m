@@ -1,45 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794539116;
-	b=1aypsy+Bh58JMBLsJSO7h4jmJQ8MUUQkCEyacRprFiuXbVy/XQb/HQDdpPZ4jhG9+VYb
-	 Zw32NoY8eeZ6x8sks3zrwtEx6nbGM9lZ4IfNOvMDrOTxswhA2wln1fYFEkEYMJ3ZBUm8s
-	 ISRfa3VZmkXDQSRBHwgbmmTQawy6dEzmY5jRq4pPjKCz5/U5RCafv7TqEvT5HrzXnEGbP
-	 1JZXuEsY88ExaoCRqIhvz/BjYw8N9kIWo1iOvatLJE+pBkKUSQ6IkSoJjElpZbHjq5Ogv
-	 m/B6KfsH6jrLU1bKy/LWY5l9271odA03qRhmCR6TkMooV6in4+XE1kdps8ZQFEUP1Mg==
+	t=1794539186;
+	b=KxXrwjugMyFV9WBt62B2ostZYJGG3G67k68IVenyKMxMySCUuCCbVVIcTa+c9cpE1RCd
+	 msXtAcfOc2xdK2h2sJ0H2u0VAxy9X7dy4Wz3MyP2MmOldz65YwiPwkg2Ohxq2dHhWg4sf
+	 RlBnRuBle+Xng6HKKTtAqdXlGG3S7jnJ7pt/zURYul1NWH+6ViwSDlkR1jj+0TwjBs/1j
+	 tvIhQzVKVW1c3ECbiQqJ/lWbUphVFJimin/PKLs6QmtC9Ml3vGjxqREVQBDPrtm6S2D6T
+	 8ha2qf3cWvEyjl3kR1ho6q3ZJUGyDIoAynkrGWLBQcwVa+2Lp0/uu5Krzb7NV8ZhZ4Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794539116;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=jNB7W//7JP+AU0kGw/bmy15q+GCRPvpGya5e+wAjm4o=;
-	b=B2crlxpkvKJoV/s4u4n56qbJhfRejwm+JltekWZh/PUKJO4hPNTB6RbQ9FB8WriHtVVE
-	 t0NHUf636IurQnf+X+pQ44Noq10jyEX0VwncLOYFHapBCglu4hQe+gb14efzm9Ar/5adU
-	 SlYl7t8lf3CIiGzhxLsCOnrx8hlFbe1gI8MMdinjevs4w16f8ThPt1IRHoSkZUW6ABur2
-	 003TuJexiL8ry3h8lMZipu4prPbFgZfaLp+svcrbR9PH000d5T5dZlV0j8QC9AQOUdPsa
-	 VAN8/rrJifjoEEQLvkhNPQA12H8uQLh0vVPAqoz2YuHyeFLA/2o+9skMbTlsuUh9j+A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794539186;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=F5XvvWXAj/ydcU2vfCIDHLVsusySc9K7FkKDwA8A1uY=;
+	b=ILa99cYMBf16CnUFDYXIVWcMJnisix7kuZJIhqRSkWg1YhH7PMUXDzvJQ9fVE9lngZiA
+	 eBhjZkHLnHwylI2F1bYnGprWeM89DxoDvxyjz5T1BmsBJZL4BIANalWoFP6pJe08VPsGe
+	 /qpImM93p0dmbKjpxB2id5fhOX2DuoJHEpQFkNabzKQpiKZs0Uzhlic7GDxv+Lg6il3JN
+	 uFZxrG5sZ1dpxKzT7LCkjVukKNETi827gE3mcUVu128N9y6ZIu9OyfX25JPFOZ4pVwxru
+	 /CKY9c+/QH8UPmkBPyRd8mdcTcQc1sPwcJG/VYhA16wIYx+RcpGM3UhJZKBynQYCCmg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="g6/t3vEU";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mMsk9dfO;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2DB7606A31C;
-	Fri, 13 Nov 2026 03:05:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A219606A31C
+	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 03:06:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=g6/t3vEU
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAF981F000C4;
-	Fri, 13 Nov 2026 03:05:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mMsk9dfO
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BE381F000C4;
+	Fri, 13 Nov 2026 03:06:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794539116;
-	bh=jNB7W//7JP+AU0kGw/bmy15q+GCRPvpGya5e+wAjm4o=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=g6/t3vEUsbXDMVqiM26ZOsj0RK7ASV9gw7gJjSf8FzKK1rpjq4GTq2C8+pjmRtYNf
-	 fap+svi60qaDDZBXnCOspek3hDYg7F9i3MTgXl4EVQPSn+Fn9Ytvph8hGY9VhIVm9M
-	 UyBp5eElPN/lZ3JS7V5de5LCrHRdfITY8B0TNqjbOJ1nfVG0dcA+9oV8bAHMYNPz+R
-	 1XEWbMQEtANJ85LkeKIzLTDMzFKaznrnH3GfqKm7Zys2/31r0LFhqI7xLpcN8RKm/x
-	 jclze15Yxm2fXKSyIHiJQkLSI3+aIvG1YTOABxjlc+I8FVcryOXJLby6PfM+srh8b5
-	 d91+oPZzoxmPw==
-Content-Type: multipart/mixed; boundary="===============5277389857893964114=="
+	s=k20260515; t=1794539186;
+	bh=F5XvvWXAj/ydcU2vfCIDHLVsusySc9K7FkKDwA8A1uY=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=mMsk9dfOEHS8muvTgRe2oVQ0cS0TKuPYnJJpOc6xWQJVKUcVjtQd3oI/Dtj0qm2NE
+	 yTTpgfY4zrEOEN5N6Pguy+jQLjSGFfzkINFoI7DFXqb1t0e7AX3EpENqhsC4Kc3KdF
+	 qAPhWQLtZvdXgQB4wx2Vts3mUyPI/abNKDpEb6BU1NKWeocqWtHQ6b8EBLvqAZ7Qhx
+	 7FrYtCfQ0/+s4MAu8LlUgwRoHduf+dW5H8tcfG73sIfDwmlrl+Y7/M2adsqILok/y7
+	 3jZHRS38rplBoqdAd/NX8RLQNk0axy/bz7eJ9K6iRR74kM+7LH26v0QcUp4aqVZaiC
+	 Oq5DJlNqt+LTw==
+Message-ID: <sashiko-outbox-212121@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf 2/2] selftests/bpf: Test that a drained task_vma
+ iterator keeps returning NULL
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Kang Chen" <k.chen@smail.nju.edu.cn>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261113024500.922824-2-k.chen@smail.nju.edu.cn>
+References: <20261113024500.922824-1-k.chen@smail.nju.edu.cn>
+ <20261113024500.922824-2-k.chen@smail.nju.edu.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 13 Nov 2026 03:06:25 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -48,138 +60,121 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Message-Id: <89f7ed00d7373ea7389e563810fbcd7ae775858e7fb592ad6e12cc1d1aee2565@mail.kernel.org>
-In-Reply-To: <20261112144935.583937-3-cui.tao@linux.dev>
-References: <20261112144935.583937-3-cui.tao@linux.dev>
-Subject: Re: [PATCH 2/2] sched_ext: Block a retained donor before PI deboost routes it back to sched_ext
-From: bot+bpf-ci@kernel.org
-To: cui.tao@linux.dev,tj@kernel.org
-Cc: void@manifault.com,arighi@nvidia.com,changwoo@igalia.com,mingo@redhat.com,peterz@infradead.org,sched-ext@lists.linux.dev,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,cui.tao@linux.dev,cuitao@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 13 Nov 2026 03:05:14 +0000 (UTC)
 
---===============5277389857893964114==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 4 potential
+issues to consider:
+- [Medium] selftests/bpf: short bpf_loop() spin in
+  iter_task_vma_next_after_drain()
+- [Low] selftests/bpf: missing acquire/release ordering in map_new_vma()
+- [Low] selftests/bpf: mmap() at last_end in map_new_vma() fails at
+  TASK_SIZE
+- [Low] selftests/bpf: standalone task_vma_iter test instead of
+  extending iters.c
+--
 
-> sched_ext: Block a retained donor before PI deboost routes it back to sched_ext
+commit 6861abec39a496e31db7f94849dcb9afd420ad9b
+Author: Kang Chen <k.chen@smail.nju.edu.cn>
 
-TL;DR:
-- Possible WARN_ON_ONCE from a double rq clock update on every rt/dl to ext PI
-  deboost when WARN_DOUBLE_CLOCK is enabled
-- Changelog's "only entry path" claim may be wrong: sched_setscheduler() can
-  also skip blocking donors
-- Peter Zijlstra rejected this hook; is it still intended?
+selftests/bpf: Test that a drained task_vma iterator keeps returning NULL
 
->     sched_ext: Block a retained donor before PI deboost routes it back to sched_ext
->
->     rt_mutex_setprio() is the only entry path into sched_ext that does not
->     block a retained donor: an ext task PI-boosted by an rt waiter can
->     block on a second kernel mutex while boosted, and on deboost is routed
->     back to sched_ext carrying the queued+blocked state that
->     scx_prepare_setscheduler() promises never happens; every PI cycle
->     hands the BPF scheduler a queued+blocked donor it never admitted.
->
->     Call scx_prepare_task_sched_change() before the sched_change guard when
->     the class change routes the task back to sched_ext, which performs the
->     missing sched_proxy_block_task() (plus an update_rq_clock() that is
->     harmless here: the clock was already advanced, so the second advance
->     only applies a small delta). The boost direction (ext -> rt) needs no
->     handling.
->
->     Fixes: be8be8acb268 ("sched_ext: Block proxy donors before taking control")
->     Signed-off-by: Tao Cui <cuitao@kylinos.cn>
+This commit adds a BPF selftest verifying that calling
+bpf_iter_task_vma_next() on an already drained task_vma iterator continues
+to return NULL even after a new VMA is mapped at the end of the address
+space.
 
-The changelog says rt_mutex_setprio() is the only entry path into sched_ext
-that does not block a retained donor.  Is that accurate?
-
-In __sched_setscheduler(), scx_prepare_setscheduler() only blocks the donor
-when policy == SCHED_EXT.  With a BPF scheduler loaded without
-SCX_OPS_SWITCH_PARTIAL, task_should_scx() returns true for every policy, so
-__setscheduler_class(SCHED_NORMAL, ...) returns &ext_sched_class.
-
-That means sched_setscheduler(pid, SCHED_NORMAL) on a SCHED_FIFO or
-SCHED_DEADLINE task that is being retained as a mutex-blocked donor routes it
-into sched_ext without scx_block_proxy_donor() being called.  The same
-applies to normalize_rt_tasks() via sysrq-n.
-
-The new comment in rt_mutex_setprio() also says "the same way the other entry
-points into sched_ext do".
-
-Should scx_prepare_setscheduler() be keyed on the resulting class like the new
-check, or should the changelog be reworded?
-
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index f7a452123ef5..dcb16b006740 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
+> diff --git a/tools/testing/selftests/bpf/prog_tests/task_vma_iter.c b/too=
+ls/testing/selftests/bpf/prog_tests/task_vma_iter.c
+> new file mode 100644
+> index 0000000000000..bb9feb840a277
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/task_vma_iter.c
+> @@ -0,0 +1,89 @@
 
 [ ... ]
 
-> @@ -7816,6 +7816,18 @@ void rt_mutex_setprio(struct task_struct *p, struct task_struct *pi_task)
->  	if (prev_class != next_class)
->  		queue_flag |= DEQUEUE_CLASS;
->
-> +	/*
-> +	 * PI boost can route @p out of sched_ext: policy stays SCHED_EXT but
-> +	 * __setscheduler_class() follows the effective rt prio, and rt/fair
-> +	 * may have retained @p on the rq as a blocked donor. Block it before
-> +	 * sched_change_begin() records the queued state, the same way the
-> +	 * other entry points into sched_ext do.
-> +	 */
-> +#ifdef CONFIG_SCHED_CLASS_EXT
-> +	if ((queue_flag & DEQUEUE_CLASS) && next_class == &ext_sched_class)
-> +		scx_prepare_task_sched_change(p);
-> +#endif
+> +static void *map_new_vma(void *arg)
+> +{
+> +	struct map_ctx *ctx =3D arg;
+> +	struct task_vma_iter *skel =3D ctx->skel;
+> +	void *addr;
+> +
+> +	while (!__atomic_load_n(&skel->bss->drain_done, __ATOMIC_RELAXED))
+> +		sched_yield();
+> +
+> +	if (!skel->bss->new_ret) {
+> +		addr =3D (void *)(unsigned long)skel->bss->last_end;
 
-rt_mutex_setprio() has already called update_rq_clock() after taking the rq
-lock, and the rq is not unpinned in between, so RQCF_UPDATED is still set.
-scx_prepare_task_sched_change() then calls update_rq_clock(task_rq(p))
-unconditionally, before checking whether @p is a retained donor.
+[Severity: Low]
+Can map_new_vma() observe drain_done =3D=3D 1 before the stores to last_end
+and new_ret are visible on weakly-ordered architectures?
 
-update_rq_clock() does:
+iter_task_vma_next_after_drain() writes last_end, new_ret, and drain_done
+with plain stores, while map_new_vma() polls drain_done with
+__ATOMIC_RELAXED instead of __ATOMIC_ACQUIRE.  Similarly, map_new_vma()
+sets go with __ATOMIC_RELEASE, but wait_for_go() reads go with a plain
+load.  If the stores are reordered, mmap() with MAP_FIXED_NOREPLACE can
+use a stale last_end address and fail the test.
 
-    if (sched_feat(WARN_DOUBLE_CLOCK))
-        WARN_ON_ONCE(rq->clock_update_flags & RQCF_UPDATED);
+> +		ctx->addr =3D mmap(addr, getpagesize(), PROT_READ | PROT_WRITE,
+> +				 MAP_PRIVATE | MAP_ANONYMOUS | MAP_FIXED_NOREPLACE,
+> +				 -1, 0);
+> +		if (ctx->addr =3D=3D MAP_FAILED)
+> +			ctx->err =3D errno;
+> +	}
 
-Can this warn on every rt/dl -> ext deboost when WARN_DOUBLE_CLOCK is
-enabled?  For example, an ext task holding a PI futex that was boosted by a
-SCHED_FIFO waiter and then unlocks:
+[Severity: Low]
+Can mmap() at last_end fail with ENOMEM when the highest VMA ends at
+TASK_SIZE?
 
-mark_wakeup_next_waiter()
-  rt_mutex_adjust_prio()
-    rt_mutex_setprio()
-      update_rq_clock()
-      scx_prepare_task_sched_change()
-        update_rq_clock()   <- WARN_ON_ONCE(RQCF_UPDATED)
+iter_task_vma_next_after_drain() records vm_end of the final VMA in the
+process.  On architectures where STACK_TOP equals TASK_SIZE, the stack
+VMA's vm_end is TASK_SIZE whenever ASLR is disabled (such as
+kernel.randomize_va_space=3D0 or under gdb) or when randomize_stack_top()
+picks a zero offset, leaving no unmapped user address space at last_end.
 
-This does not need CONFIG_SCHED_PROXY_EXEC, since without it
-sched_proxy_block_task() is an empty stub and the clock update is all the
-call does.
+[ ... ]
 
-The comment on scx_prepare_task_sched_change() says the caller must pass
-DEQUEUE_NOCLOCK so the rq clock is updated only once, and the commit message
-calls the second update "harmless".  scx_prepare_setscheduler(), whose caller
-has already updated the rq clock, calls scx_block_proxy_donor() directly.
-Would a variant without the clock update, or exposing scx_block_proxy_donor()
-to core.c, avoid this?
+> +void test_task_vma_iter(void)
+> +{
+> +	if (test__start_subtest("next_after_drain"))
+> +		test_task_vma_iter_next_after_drain();
+> +}
 
-Peter Zijlstra also replied to this patch on the list: "I can't understand
-this. And I take a very dim view of sprinking magic hooks like this. So no."
+[Severity: Low]
+This isn't a bug, but tools/testing/selftests/bpf/prog_tests/iters.c and
+tools/testing/selftests/bpf/progs/iters_task_vma.c already test the
+open-coded bpf_iter_task_vma iterator.  Could this subtest be added there
+instead of introducing standalone task_vma_iter files?
 
-He proposed instead having sched_class->switching_to() return a bool saying
-whether the class accepts blocked tasks, with sched_change_end() blocking the
-task.  Andrea Righi agreed to take that approach over, noting that the block
-must not dequeue a second time, donor and ctx->running must be reset, and
-DEQUEUE_NOCLOCK must be dropped.
+> diff --git a/tools/testing/selftests/bpf/progs/task_vma_iter.c b/tools/te=
+sting/selftests/bpf/progs/task_vma_iter.c
+> new file mode 100644
+> index 0000000000000..9159aa7fc48e4
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/task_vma_iter.c
+> @@ -0,0 +1,53 @@
 
-This patch still adds the explicit sched_ext specific call in
-rt_mutex_setprio().  Is this approach still intended given that discussion?
+[ ... ]
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> +	/* Let user space map a new VMA at last_end before the extra next(). */
+> +	drain_done =3D 1;
+> +	bpf_loop(1000000, wait_for_go, NULL, 0);
+> +	go_seen =3D go;
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43353689014
---===============5277389857893964114==--
+[Severity: Medium]
+Can bpf_loop(1000000, wait_for_go, NULL, 0) finish before map_new_vma()
+runs and sets go?
+
+wait_for_go() is inlined into a tight loop of 1,000,000 reads that
+completes in roughly 1 to 3 ms inside bpf_prog_test_run_syscall() with
+migration disabled.  test_task_vma_iter_next_after_drain() starts the
+syscall program immediately after pthread_create() without waiting for
+map_new_vma() to start.  On a single-CPU system (especially under
+!CONFIG_PREEMPT where the kernel loop is not preempted) or under parallel
+test_progs load where thread startup and mmap() take more than a few
+milliseconds, bpf_loop() exhausts its iterations before go is set and fails
+the go_seen assertion.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261113024500.9228=
+24-1-k.chen@smail.nju.edu.cn?part=3D2
