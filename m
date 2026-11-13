@@ -1,58 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.224
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794535692;
-	b=p+OCAdGyQTluAMXM2IMjhPqoDssF3k0v9cXs1PByJ8sQNTntlLl32u9gYFwRGQxoMsuF
-	 FpPG/uNtz8O8rMCukKoRuiXR90YdYwVEEHfhh616wlsW0OR8aRmepRvL3T0vJ7Oe+/PoU
-	 4h70MG50RqjBv4F69D6wB4lIn6PTxbuH6sLiTBTRz4YpwRIpEBaGqe7Y3kjI0ldcuXT2y
-	 RE7GRQphiYobnV4CB8aXdO9qtkyzxFSD4zKhKBTSTYrGSWn8nrhPQ784N5tWBWXnkSx6L
-	 cm/ce2LhWJlRj8jWTXMnlBy6cZxSt34FRzAUDB4jMReP09fSxH6cKHxxTMlSsaXEyKQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794535692;
-	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:CC:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
-	bh=fRlFnEwOyhCsf6bntFNWmv0q3cjwumqt5gvXEY0j99s=;
-	b=h/zV89+qLgaCReHEGqt6Yz7QuMFLau76PrUC64xyupskVtNCPQ+nmxOMNmYpHzOqslFo
-	 kgKw5ZY2wbzhJd0lF+zjKrlPUCmjb5IgsUFtoQqhIVm9cnGfBBQV27Zmw0SOuawfTJrqj
-	 COUDeteeu91XQma3e/4ndW4VEdrl3CeyYA6qLcmmNoBHr88AeGjUDrznix08ey7CkL7dN
-	 ATYbiJ85jaQA4TqrEF0OxrluHBWYxqRn9fPvtPMnNG9q6tAJkXdtwGsMyPUdrjdmiatZM
-	 Nm2oKKg5nghW9PZOToKPGBNxCtDI6DTaPEoBLZidyMqSogmB9o3taotFsdyv1n5vU6w==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=huawei.com;
-	spf=pass smtp.mailfrom=huawei.com;
-	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=tgB76D+u;
-	arc=none smtp.remote-ip=113.46.200.224
-Received: from canpmsgout09.his.huawei.com (canpmsgout09.his.huawei.com [113.46.200.224])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.169
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794537715;
+	b=t+xK3SRxrW0u8QbsJ52OS1FdDWwh0QTrvYyXoP7tkhV2UEmFOFU9PWt0YD2f+KnIcxhe
+	 Pje9/D78PtLdFaDvSUiRWybFpuY9aVLomBiA7PeLu/CKykPbaVCukJIm079iYNlRdhXFQ
+	 5zE9ZNasy2VuA7wePbZBWGY2HUJtH+x/FammTJGdkb5IXIdyFmM68TN+JhbmuW8jj4a6Y
+	 FFgVEFGHuFRLrPSCJLTODhnjZU+iUUmjyRHtxUttkh8KuSjPvi1dyl1Bmq05i+a6bIwx8
+	 F5EBtdsuV1iArVe1nToolzMPuDtY7LwMXadxKEB8QciPjafFUEpJmtP64/abJMjMnmg==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794537715;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=jAKaL6ziK4SU3uYWDKIwk2j64mElGB9GfkW4ERNhraA=;
+	b=iswuDyUD9ffaGr13vhMKEms+0yEQ1016SiBMV8Xnhok7p1w0OIUCrvkYnsXhPdjuYk86
+	 cegr0U0CyOIxpSzAoWBLKDI8J0/0CdPUtvZQWl1sr1Rylzh1GnKscqsyZgrfDY0fYFzpO
+	 cwE3dyQ9bDNd+722Tkr8h0KPb/HXMrlHZIyU0gmFKu7xf4fcWQBD+dYlUAnUqjRvvpbKV
+	 iZJ47zYPAwVU488fuRvjWmZc1h+/5qunenvajWdK5UyX7icPA9yNpjwZXnSLaQlMkitG0
+	 BW5t7PyihqX6ulGbz84ktktBYF+VZ/+T9PnYKMKYMzDqHbSsqFXXZuugB59bzIpb/dA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=paul-moore.com;
+	spf=pass smtp.mailfrom=paul-moore.com;
+	dkim=pass header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=XHLr4Ebq;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.169
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81167606A31C;
-	Fri, 13 Nov 2026 02:08:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 81167606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EF1B60A381F
+	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 02:41:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4EF1B60A381F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=tgB76D+u
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=fRlFnEwOyhCsf6bntFNWmv0q3cjwumqt5gvXEY0j99s=;
-	b=tgB76D+uPHT+xoP/MsIq5QT99tPRFyjCjYAa5bPvS0n/BLMW7GmhAJphWd0AaFaCXwNcxc4Ka
-	dPjWkV3Gm+TFWMTFawukI93MmREL5xwGs2ILp3CVZdJ2RNXEKTgDHIK4mZDlwgvononmGVpnLul
-	eI6cXevbd8zNABceS1BMSf4=
-Received: from mail.maildlp.com (unknown [172.19.163.127])
-	by canpmsgout09.his.huawei.com (SkyGuard) with ESMTPS id 4jQgdL6LlBz1cyTG;
-	Fri, 13 Nov 2026 10:07:50 +0800 (CST)
-Received: from whupemk100010.china.huawei.com (unknown [7.152.184.41])
-	by mail.maildlp.com (Postfix) with ESMTPS id 63B8C40572;
-	Fri, 13 Nov 2026 10:08:07 +0800 (CST)
-Received: from [10.67.110.140] (10.67.110.140) by
- whupemk100010.china.huawei.com (7.152.184.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Fri, 13 Nov 2026 10:08:00 +0800
-Message-ID: <2dbd365b-eac5-448b-b6c2-4ed8754551a7@huawei.com>
-Date: Fri, 13 Nov 2026 10:07:59 +0800
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=XHLr4Ebq
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2e9d7791b00so6384505ad.0
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 18:41:55 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794537714; cv=none;
+        d=google.com; s=arc-20260327;
+        b=dwgNwI3u0J5yB7oNjnkj0zitKIp5niI2ylRiCX8vem3LjOrmXhl19MC4uj26EtlUTR
+         nH4N2zBMh/EXyO0TAm7fF9fMQSd3xqGMUNzLI5Gk61kGLn0YD7wLIxdKLXYFpJnqGypj
+         +KsWyxQTVwRyUU0qhOtKipF5ZLxydGnQHXDJpSbrWPh0CxCUihFqUI6quvp/rmojYT38
+         6ETUM54kLoX5J6Atcz3kdrGWNRWSJv1TvZWXALah2KqChCyCWBS5zJ8tNUG7RfCzVGqV
+         QkgyJ8j9lE/WY+p0dP6GoN0KBsZnG/kdMuIghw4SDypAC7JVllcg4mpKWJlxmXpnFGe8
+         LhqQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=jAKaL6ziK4SU3uYWDKIwk2j64mElGB9GfkW4ERNhraA=;
+        fh=U7rCeKUq1gIR94U7U8nuOUDr+SAZp2rmX5LW3AsCUeI=;
+        b=Pq5OtJBT94GgM5xxo5wgCAwA8OLJ5IIjPyIjxcc0I2mGWGvpK27rWqks9GGdB33yhR
+         bruL2diWITm0g3bD33TJuq1fcMKO+gthiASxAxnZhAZth9iLpb/wm8DPEPHfQDqvojnx
+         ghezFNv2v7yLEW4fcS4bOstVftHR4zFZeZmaMwtSbp/xrbVa8ers6xEdEweI7YV5Keav
+         070OScnAm4tDDYvtSBKnwD5vzAaKeVNvOH4VNVTVUC8KmJPMucMVNFLIHDfvUkDbyfWJ
+         vgWQOWhLpO1yCJC8TS0BF70J+j6f200skF04R1uHsRMHpFJP+KMnfkUrIw2AJVSBmvK+
+         5BmA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1794537714; x=1795142514; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=jAKaL6ziK4SU3uYWDKIwk2j64mElGB9GfkW4ERNhraA=;
+        b=XHLr4Ebq5HLkuLIfnhLPMx5ugv3Xsm/b9CrFFdTNc381Y+3R1DG4UnRb4SMJPUQX/n
+         ngfxcKauznwrSl+fiVyaM3bmGu310q4x/AW/f3Lc1H3erul5CeL3GkUWaKn1XIzycPHJ
+         /AuCnAKHKKJm2CvanqMb5+0vOCUszWF6CrEtpPEplUMnkh91rwbKa9ydV64YPao7WsjL
+         SFpGXGF2hfax3ktt0+wm6KLqAKWnlYXyAi4lW1tH5XZfmWzxV87bVyx0dLaLu+5DcBTq
+         26XqL/EzUksAUVuk8gtZa5J5uFcJwdPTdamZ50XBjhuQzM5fBCo9EFZzKbEa9ANC05eT
+         SfHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794537714; x=1795142514;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=jAKaL6ziK4SU3uYWDKIwk2j64mElGB9GfkW4ERNhraA=;
+        b=Cpn5cO+oLUx8Y76tI+IKlppy3cwW/mXTsf1rQQvyovA2SV1WODT5pW7TEB7qmC8lB7
+         namrqMQBkkJmQSEFRTIwCaCT2HCLxL96k9sVdm9CGrjTTzVeU/S9CUU5kAPhBPI2MsS2
+         Y10mOwAxOyPfSQLVrDUEndJ+Ryo86SY9JbW75yWCvq7VkyOyjG5b/0ldlcOcKqmQADtS
+         JU5MLxeh1YR/jgqLwYx4+OH4O8aBGXl5elEBeolYllGrxVomvzoG7zfwLB7PBuLhL8sx
+         28aIhGsNbDWh5cI8g7SkX6RHsQMIhiI7FAZJvSZ9VMSnGjk3H4p5vpYCLoPdRcoc/WsD
+         E4FA==
+X-Forwarded-Encrypted: i=1; AL+hErHbh98IaJx1Ohvj78o/4PNNTGz9MZptAsX7YPd4P1XRm/+Aeymdp9YdvOCubhI+GMDNRSc=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/zzQrdVwG1bMut/R8T5EJ6XdWEiinxJSKosbWWHIHWYog7Xfbo
+	MS9DoL1BWrSUWhtPhOIL04zfxiY9MtBEAiShvW5gBm9LS3HBdg9spJsYUZxQBifNC+egStQh72Q
+	ezf2PSJnSVDOt4L1gwbQXDOQqxHe35w1W3iB8jGiy
+X-Gm-Gg: AYBFou2/7l7c6ZvlUsiv2t6qmjrLPFfkcVazTfgTXtCjC2nuCn4XLg6TzvUfXk2MqwD
+	CVVU3xnJOvI53d6l/z2wITJd9T8RQJ/VmsJSPNUGuWNEo/2sKJkmIp1YtGca+OQRIQ6Xkmbec45
+	iLchMm9W/V5MCXPFFnsBL6ajrcCwvZSD7l8ZpRh2yxmFKVkkEiYYm71NNnbXcXENBP8nbTZyKne
+	OfzM3v+UaGnOsfXYt555LWbxYxmP0xoCkBP3YvYCIdcLPd+U8XYOM/1qPnpfU2GL9UDj9HwU/6/
+	cXZf0Ityi0JGXAQcyW1aETG6dVVSQeqfg2ScC9mP5jheEJ6XinrUir5XQzPif2ttkM8jquCWzTX
+	ybKkloo2DyEckLq84OduZE31ATuV1/bq3sW6VDv7DJSYNaZzhHipHt8Uj1mVKg2Rca3XJ
+X-Received: by 2002:a17:902:d58a:b0:2e9:9a19:c43 with SMTP id
+ d9443c01a7336-2ee0dc92381mr10406915ad.15.1794537714397; Thu, 12 Nov 2026
+ 18:41:54 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -62,95 +104,60 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 -next 00/18] landlock: Add READ_METADATA and
- WRITE_METADATA access rights
-To: Christian Brauner <brauner@kernel.org>
-CC: <mic@digikod.net>, <gnoack@google.com>, <paul@paul-moore.com>,
-	<jmorris@namei.org>, <serge@hallyn.com>, <corbet@lwn.net>,
-	<skhan@linuxfoundation.org>, <utilityemal77@gmail.com>, <ast@kernel.org>,
-	<daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
-	<memxor@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
-	<yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
-	<ihor.solodrai@linux.dev>, <rdunlap@infradead.org>,
-	<gregkh@linuxfoundation.org>, <rafael@kernel.org>, <dakr@kernel.org>,
-	<johan@kernel.org>, <dlemoal@kernel.org>, <hch@lst.de>, <axboe@kernel.dk>,
-	<viro@zeniv.linux.org.uk>, <jack@suse.cz>, <dhowells@redhat.com>,
-	<code@tyhicks.com>, <linkinjeon@kernel.org>, <sj1557.seo@samsung.com>,
-	<yuezhang.mo@sony.com>, <hirofumi@mail.parknet.co.jp>, <cel@kernel.org>,
-	<jlayton@kernel.org>, <neil@brown.name>, <okorniev@redhat.com>,
-	<Dai.Ngo@oracle.com>, <tom@talpey.com>, <hyc.lee@gmail.com>,
-	<miklos@szeredi.hu>, <amir73il@gmail.com>, <senozhatsky@chromium.org>,
-	<chenxiaosong@chenxiaosong.com>, <dsterba@suse.com>, <mason@kernel.org>,
-	<kpsingh@kernel.org>, <matt@bobrowski.net>, <rostedt@goodmis.org>,
-	<mhiramat@kernel.org>, <mathieu.desnoyers@efficios.com>,
-	<john.johansen@canonical.com>, <georgia.garcia@canonical.com>,
-	<zohar@linux.ibm.com>, <roberto.sassu@huawei.com>,
-	<dmitry.kasatkin@gmail.com>, <eric.snowberg@oracle.com>,
-	<stephen.smalley.work@gmail.com>, <omosnacek@gmail.com>,
-	<casey@schaufler-ca.com>, <takedakn@nttdata.co.jp>,
-	<penguin-kernel@i-love.sakura.ne.jp>, <xiujianfeng@huawei.com>,
-	<nanx95726@gmail.com>, <djwong@kernel.org>, <lujialin4@huawei.com>,
-	<bpf@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
-	<driver-core@lists.linux.dev>, <linux-block@vger.kernel.org>,
-	<linux-btrfs@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-	<netfs@lists.linux.dev>, <ecryptfs@vger.kernel.org>, <exfat@lists.linux.dev>,
-	<linux-nfs@vger.kernel.org>, <ntfs@lists.linux.dev>,
-	<linux-unionfs@vger.kernel.org>, <linux-cifs@vger.kernel.org>,
-	<linux-trace-kernel@vger.kernel.org>, <apparmor@lists.ubuntu.com>,
-	<linux-integrity@vger.kernel.org>, <selinux@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>
-References: <20261027121151.1887650-1-caixinchen1@huawei.com>
- <20261110-rekonstruieren-erbfolge-vollversammlung-26be74966211@brauner>
-Content-Language: en-US
-From: Cai Xinchen <caixinchen1@huawei.com>
-In-Reply-To: <20261110-rekonstruieren-erbfolge-vollversammlung-26be74966211@brauner>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- whupemk100010.china.huawei.com (7.152.184.41)
+References: <d85ece6e-27f9-4d9f-83af-4101bc76fef6@app.fastmail.com>
+ <356db94e-f5d6-4fb2-839a-b97aef72256b@app.fastmail.com> <CAHC9VhR9sjunJRnM9gy-BkBZkapQTrr8a8FtmaK7JkAmUqTrLA@mail.gmail.com>
+ <CAEf4BzZKmn6g0SK8OddjKFj_vAmZFvpZv32Hs_S+GHgT7VNfrg@mail.gmail.com>
+ <9d6bdc31-e57c-4187-be78-29d82471f710@app.fastmail.com> <CAEf4Bzb+oYDqO20v4YbJ45wdtcGgJT3xVse822P+=oA7fpFAOA@mail.gmail.com>
+In-Reply-To: <CAEf4Bzb+oYDqO20v4YbJ45wdtcGgJT3xVse822P+=oA7fpFAOA@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Thu, 12 Nov 2026 21:41:41 -0500
+X-Gm-Features: AclHuK_hptpm5wmZcDCZpYaTcjHynA9uzBvoUM-dSQMe8mTEMVFigRMkrd49BmM
+Message-ID: <CAHC9VhRcT3rmdpeadwi2avhwvr7aEZYStZ3bbEEx1hm=wtBGhQ@mail.gmail.com>
+Subject: Re: [BUG] bpf, lsm: new first argument in 7.4 inode hooks silently
+ breaks BPF LSMs
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>, roblabla <linux@roblab.la>
+Cc: Daan De Meyer <daan@amutable.com>, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, paul.mabileau@harfanglab.fr, 
+	linux-kernel@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-You are right, and thanks for catching it.
-
-I have been working on these modifications over the past two weeks and 
-have deployed sashiko locally. However, my current changes are still 
-being flagged for some bugs by my local sashiko, and I am still in the 
-process of fixing them. I expect to release v4 in a few days. Regarding 
-these issues, my current fixes are as follows: - AT_EMPTY_PATH: v4 will 
-use CLASS(fd_raw, f)(dfd), the   same lookup path_init() does for an 
-empty path, so O_PATH descriptors   work again.  do_utimes_fd() 
-(futimens(2)) intentionally keeps   CLASS(fd, f), matching 
-fchmod(2)/fchown(2); AT_EMPTY_PATH returns   -EINVAL there anyway.  The 
-same patch rejects a NULL pathname with   -EFAULT before 
-CLASS(filename_maybe_null) can turn it into an empty   path relative to 
-AT_FDCWD, and adds the missing audit_file() on the   do_utimes_path() fd 
-branch. - __nullable (patches 5-9, 11-13): v4 will extend 
-kernel/bpf/bpf_lsm_proto.c (the existing   strong-override file used for 
-mmap_file) with strong definitions for   all 11 hooks that gained a file 
-argument, each declared   file__nullable, so the verifier sees 
-PTR_MAYBE_NULL and a program must   check before dereferencing. - ntfs 
-named stream setattr (patch 1): v3 forwarded with   
-__notify_change(idmap, base_dentry, ...).  v4 will use   
-notify_change_target(idmap, attr->ia_path, base_dentry, ...), so the   
-hook is checked against the path the syscall used while the attributes   
-still land on the base inode. - overlayfs fileattr (patch 8): v3 removed 
-the ovl_security_fileattr()   workaround but then called the unchecked 
-__vfs_fileattr_get()/_set()   on the real dentry, which bypasses the 
-hooks.  v4 will call the checked   vfs_fileattr_get()/_set() with the 
-real upper/lower path, so the hooks   also run for the underlying layer; 
-ecryptfs is switched the same way.
-
-Best regards.
-
-Cai
-
-On 11/11/2026 12:52 AM, Christian Brauner wrote:
-> This regresses AT_EMPTY_PATH. fchmodat2(), fchownat() and utimensat()
-> with an empty path now go through CLASS(fd) which is fdget() and that
-> refuses O_PATH file descriptors. IOW, this is very very broken.
+On Thu, Nov 12, 2026 at 6:00=E2=80=AFPM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+> On Mon, Nov 9, 2026 at 7:08=E2=80=AFAM roblabla <linux@roblab.la> wrote:
+> >
+> > Hi,
+> >
+> > Thanks for the replies!
+> >
+> > > LSMs that need to provide a stable API must provide an abstraction
+> > > layer between the LSM hook callbacks and their stable API.  The LSM
+> > > framework is not responsible for the stability of individual LSM APIs=
+.
+> >
+> > Understood, that lines up with my expectations. I think the biggest
+> > thing here would not necessarily be stability guarantees, but rather to
+> > make sure that the eBPFs fail to load when the compatibility is broken.
+> > But that's probably a problem for the eBPF side, and not LSM, I assume.
+> >
+> > > So, in short, would it be possible to send a follow up to Daan's
+> > > commit and move `struct mnt_idmap *idmap` to the end of LSM argument
+> > > list?
+> >
+> > If this is possible, that'd be nice so that we avoid this breakage in
+> > the short term, since the change isn't in a released kernel yet.
 >
-> Please also go through Sashiko's review of v3 (cf. [1]). The new struct
-> file arguments need __nullable or bpf programs can dereference NULL,
-> and the ntfs3 stream setattr and overlayfs fileattr paths that bypass
-> the hooks need treatment.
+> can you please send a patch proposing that and we can continue
+> discussion there? please cc me so I can follow along
+
+Considering the original patch was submitted, reviewed, and merged
+with the BPF LSM being the only user (none of the existing in-tree
+LSMs use the idmap parameter at present), I'm a little surprised this
+wasn't brought up earlier.
+
+Beyond that, from a style perspective, I think I prefer the idmap at
+the front of the parameter list in most (all?) of the hooks where it
+was added.  I'm not interested in moving it at this point in time.
+
+--=20
+paul-moore.com
