@@ -1,106 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794613849;
-	b=XPmmxsiw4SFwrkTcaUBEPB+Qi2cbSehJ+e3FIC+LGnyYttSh8h3UxlVNdgxS/a7Ydojp
-	 YRx0pdQU/i8VnhpqNqYKxnNPSzeuum5hXBOkpl5Nir15yu54ac9BQnb/GzSgKH65RgKZf
-	 sT1DLinnXq8Ak3irMWy1Ilui9/bkdDUnWPtagNcfcb/5FB22CqqMIBbA4f4yPpamlr5B9
-	 YYuCHdI+/E36UBowJh+qDI8pU6mgrWOsMdvUow0CiSmfhttmgziJulv08ut2gJ0GTzr/u
-	 JXFeo2QvA5s2CjT5oWnzFPAlBwJ9UjI1kw2WBcZWwlOX66BMNJSwnQtf1j1gUtM7n9A==
+	t=1794613999;
+	b=SR84U2ak6rgb/UYnndeO21YzXMO1xn0moK/EWG/EJxrP11h8pm3VOtJW5fCDdHHZHbSe
+	 Zi5VjbWPzdC8+jlp31bSguTR5cummFOzANXzmib317G7pMxbzOuj6n0b9VT6DUzrIOITt
+	 DxQRt6Z4HdB3TrRBjrJCcEuM52nViuJdxuzhXGuaxQLU5VRypFkabg5xiSksSXJ47huR6
+	 nGn0xMs0NuXWFpJBasYjg2+F7FskzwHCsRcG9tW0uDHsot7bKzLKqhMct6rDQoaW8wsb0
+	 w5+W7bRY6hjVQuGPn04FJPVhMI9qoNJhSt392O5JzOwTeIGiIii+kjYDUyq8k1fboKQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794613849;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
-	 Message-Id:Subject:From:To:Cc:In-Reply-To:References:
+	a=rsa-sha256; c=relaxed/relaxed; t=1794613999;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=aW4OUjIIQjUPFcHTtnWclyPPg4R7VFoUgK4imjGVz3A=;
-	b=TDhZyU1rgvcHi5X4edBOsbOhWNhMHebyNOT1XnraBMb/SXZrFeFkP2xP4Jx8FftCpVcv
-	 aTvOEu16hPFM9HnW1AckIeD8v+RM7y8YIxc5XBxMzXwc21oowy+qoNS4no5fqiIAhbepx
-	 D8s9ZDw2UjSocUhbDVQ4Lf3MIqbT6ie5Tf7ZbskKtwidWgvoDnSj6JFKCIKp5gmRMOzLy
-	 ITJQGTMLZmNyjJIhUe/gQb6KycJ8XEfe6Cv9pbb07chEvAj+Y0Gq7pc6IHRZnlnopBqg4
-	 LHwYd7x+F8LmU5QhcPQN6oS4CmXARQxAySxYw/FAD0CuM8l25o03fYpGP7PcEqf+hQw==
+	bh=UO7zCD/dIdmHwhrdXFwbWOIaFNY3ih4tudZtgmKXEUw=;
+	b=2st43GoksBDnxAQOJucKbjziICX65TX8mnngJjl9HYRp7XvluLwQ0l38L9H9Ufq3qvJg
+	 FYxBsGMIOmO8cbFPw4gh49iwsefWQems8aZP2LqRqrgzj3KsghQ2j1SRt9CMvVJW3CVRP
+	 vSPTU2zA18Pn52vxUbnZsYTVW0g6xgHupO7lE94qbJjl3s6ZT8q1s3SzWGPAdmpU85BUI
+	 sR5uVwWuZWJL9YB1B5xJqA942AWIkW9MWqlr1JKyDqooHICEelq2WkMKNgQuhS0f4CeLM
+	 l08UVd17p2VRPDEBF6kcTbVtTfgCysLm8cbWPw5NF7W4sDq2Y8ghCnoc/aemK1dxYmg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=v2faQj2s;
-	arc=none smtp.remote-ip=209.85.216.54
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cVNyIedS;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87038606A88E
-	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 23:50:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 87038606A88E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2708D606A891;
+	Fri, 13 Nov 2026 23:53:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=v2faQj2s
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3ae1da332bcso550833a91.2
-        for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 15:50:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794613848; x=1795218648; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=aW4OUjIIQjUPFcHTtnWclyPPg4R7VFoUgK4imjGVz3A=;
-        b=v2faQj2sHjPThklo3kvSAsdztwwUVuRSFp3BgLG0TbuqHqTjQ0SRFZfLGVnHzRdt4h
-         BPFLguLiU6iNuxLrBySq2qMcoIL3vedz6F9MaXkfKvqUDFhpuaNBtgnmkHiFN/1GspGh
-         umudzPDvpiOKqZHDOz3xtaZuVQOO4OQspjSacvFJFWn5Vi5TqLdJZQRqwf36D8FOzL8Z
-         JKLL6pd7Z1vDlXZYPL0d4CYDZ7Ev5uVq/MEIJfj5uYrgkG1M9zvh2KIFJ04OGhAwgJJj
-         vFxiuvwsWIbcMUERQhKmZu2sg78xA3dM76/kDq8MFXa0ZnoAoeGo8sosWedpCZzi4SeW
-         HQNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794613848; x=1795218648;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=aW4OUjIIQjUPFcHTtnWclyPPg4R7VFoUgK4imjGVz3A=;
-        b=UIokGKmZv+mfQ3+B/HWqZCCM260N4pBvPQ/znsPrHmoG/WJtY9illUSMskjhEeHRuv
-         DS0s1EUwKaBsLp9OFt/5KiK/QmFCPFu8g7G8PfcmEFv72cWWPRZUcOkD+XiC6JbTr+0y
-         uJvHdOWwb7VrdToHDubKHWoKwb0MUMprLUFDq+gEbKrxssanifEVu5Nc7taRoFveX+7m
-         wKj4Bh454z7CaAqydMN8a03W2xL2RayhFU7Y/8H9+3GSZguIvwik1fCTCNZqGubhpJz8
-         Z1J3YxqiZa+sjLoRFsHdEoMT2NJGj3WC8O4NgP1V2xz6GGhCyNGwnysqkZL8RFCUq1JE
-         en3Q==
-X-Gm-Message-State: APuU4Z+Rb6b6xQIrW8P+GkYFCTKOkl/n9Z6VwT0CZeVumDjofs/eHlKr
-	GlC8QGB9DCNAiwc0L2QFI5/M4caFh3GHFFU/sArMcWLqRiVhhzpzlUZF
-X-Gm-Gg: AYBFou31eyz9afZO/9DpKLRDRqWzR3AV5YgIp1nwzOdftdEujdGSN09/AJTqqyBrpyx
-	YSji3RmHwBEm5gg2ZPbFaL9hHUn2gbAuywDUgGSOnOsBPpX7djnNqzAinXnuU7wKP5XZiI23Mo5
-	ZNvwUDTDosnxSnRoophyMpCZ0dhL9n4xmY+XFPHGY0KpirU1IvCyjd6fXEw1WvjSKGWQztkGLm6
-	6vA511WEabI/fybhA+EVuhIPBGIkXg6ni1fhEKMcNRw9YFa7tRhPw7z5DWV9ozuX6JeJ7YIeyOZ
-	1yzZxgkAqA44uT7pca0U9G4Cjdt/BVA3rnPvKsGkM7k714UEIzytkReX5QsieBc7oTBn/s1MhmB
-	Aqre7MDfEoom0TW+WIJQm1cRZDd1MuFTcNN3mYl/RlkkzRWSt699m6OWG4IIwodOP9hcAg+e14x
-	wFegW92tenQAOfOw5mIOGgIqvHH9tSPwvKjYwV/DtJJ7o+mcom0qTJLFyBdcTLkWHPVVuyvth6J
-	nusd/K66U6zZIWbjlCai23px5+U1F1oL/mR8iGYCtHhfkYAoMHEOg7imBaIQy9wXdEIfIvnNKsQ
-	2h7bWxBySNLeUIgrHwcC03WrHDeIy7kTIp+MuiQmUkHGGDTwugZrDwwrGpG1XVC+HZVTyTJgPUS
-	hHqlRqtJA+895zyVZhhDNjtc2QakweRlvssY=
-X-Received: by 2002:a17:90b:2f0c:b0:3b0:8947:fad2 with SMTP id 98e67ed59e1d1-3b1b0ba0a4emr3788699a91.53.1794613847830;
-        Fri, 13 Nov 2026 15:50:47 -0800 (PST)
-Received: from localhost ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b197c6c9c5sm11507001a91.1.2026.11.13.15.50.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Nov 2026 15:50:46 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 13 Nov 2026 23:50:45 +0000
-Message-Id: <DMUHIJ5FC8EA.2XFM7TJ6AH0YB@gmail.com>
-Subject: Re: [PATCH bpf] bpf: mask speculative out-of-bounds skb helper
- loads
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: <datrujillo@nvidia.com>, =?utf-8?q?Dani=C3=ABl_Trujillo_via_B4_Relay?=
- <devnull+datrujillo.nvidia.com@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor
- Solodrai" <ihor.solodrai@linux.dev>, "John Fastabend"
- <john.fastabend@gmail.com>, "Stanislav Fomichev" <sdf@fomichev.me>, "David
- S. Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@kernel.org>,
- "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>,
- "Simon Horman" <horms@kernel.org>
-Cc: <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-In-Reply-To: <20261113-cbpf-ind-nospec-v1-bpf-v1-1-764ac4c14573@nvidia.com>
-References: <20261113-cbpf-ind-nospec-v1-bpf-v1-1-764ac4c14573@nvidia.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cVNyIedS
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AB061F000C9;
+	Fri, 13 Nov 2026 23:53:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794613998;
+	bh=UO7zCD/dIdmHwhrdXFwbWOIaFNY3ih4tudZtgmKXEUw=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=cVNyIedSVPLpDQ0RaCVl3M62/3SASAjvCWdUk8cop69qQl+JHHn2m2oJPbA9BOLvs
+	 PwuEkt/HAic9grpGOOkb2eMYzh+BY5xEhFFDHAqt7Xo/U5B7HsTgE5B84eapfxsaTQ
+	 sauJmAl2vf7lHFdnsFWRkUoLsl8aTUXZIxwonPGZomLx42RdU8uhQfxPgS5mqx1OBO
+	 YPopFb9x8lr/0WtghAGQPkf0BaRVeUc0jBdDBAyBEOToeSFdcOQt6Fq47czmQIamZW
+	 p8k1V50AR+0GEdiPqqmuserdM42IQmd4lfPL45AtQ+mMjMn9/UxUSOC/WLWxvpXSkU
+	 TU2p8eHRy1gyQ==
+Subject: Re: [PATCH net-next 5/5] selftests/bpf: check replacing and detaching
+ XDP on a bond through a link
+From: netdev-bot+sashiko@kernel.org
+To: kuba@kernel.org
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, jv@jvosburgh.net,
+ haiyangz@microsoft.com, ast@kernel.org, hawk@kernel.org,
+ john.fastabend@gmail.com, sdf@fomichev.me, bpf@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Date: Fri, 13 Nov 2026 23:53:17 +0000
+Message-ID: <179461399762.2199510.9496726183772456630@kernel.org>
+In-Reply-To: <20261112235027.4072149-6-kuba@kernel.org>
+References: <20261112235027.4072149-6-kuba@kernel.org>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -112,18 +66,63 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-On Fri, Nov 13, 2026 at 12:15 PM Daniël Trujillo via B4 Relay <devnull+datrujillo.nvidia.com@kernel.org> wrote:
-> Mask the load address when the converted offset falls outside the
-> permitted range. This removed the leakage in the described setup.
-> Derive the lower bound from the network and MAC header
-> positions. An out-of-bounds transient offset dereferences NULL instead
-> of a potential secret.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-I suspect you don't have a reproducer and it's all theoretical.
-Because if you had one you would have seen that your patch does nothing.
-convert_bpf_ld_abs() inlines the LD_ABS fast
-path with its own bounds check.
+Low priority / nit picks for your consideration:
 
-wont-fix.
+- [Low] The commit message of "selftests/bpf: check replacing and
+  detaching XDP on a bond through a link" leaves out two things a reader…
 
-pw-bot: cr
+--
+
+selftests/bpf: check replacing and detaching XDP on a bond through a link
+
+This adds an xdp_bonding_link_update subtest. The subtest attaches a
+program to a bond through a link, replaces it with bpf_link_update(), and
+detaches it with bpf_link_detach(). It checks that the veth slave follows
+each change and that the replaced program is released.
+
+> Check that the slave follows the replacement and the detach, and that
+> the program which got replaced is released - the bond used to leak it.
+
+[Severity: Low]
+This isn't a bug, but could the message name the fix this test guards?
+The leak appears to have been fixed by commit 184b5ddf82d4 ("bonding: fix
+the program leak when XDP is replaced"). That commit's message says the
+selftest would come in the net-next series.
+
+The message also leaves out that the slave-side assertions depend on
+"net: record XDP programs propagated to lower devices", which is earlier
+in this series. The previous patch, "selftests/bpf: check XDP attach on a
+nested bond slave", does name that dependency.
+
+bpf_xdp_query_id(veth, XDP_FLAGS_DRV_MODE, &id) reads
+dev->xdp_state[XDP_MODE_DRV] through
+rtnl_xdp_prog_drv()->dev_xdp_prog_id().
+
+Before that patch, netif_xdp_propagate() only called ndo_bpf() and never
+recorded the program on the lower device. A bond slave therefore always
+reported id 0.
+
+In test_xdp_bonding_link_update() in
+tools/testing/selftests/bpf/prog_tests/xdp_bonding.c, the first slave
+check jumps to out before the leak check runs:
+
+	err = bpf_xdp_query_id(veth, XDP_FLAGS_DRV_MODE, &id);
+	if (!ASSERT_OK(err, "query veth") ||
+	    !ASSERT_EQ(id, old_id, "veth runs the old program"))
+		goto out;
+	...
+	fd = bpf_prog_get_fd_by_id(old_id);
+	if (!ASSERT_EQ(fd, -ENOENT, "old program released") && fd >= 0)
+		close(fd);
+
+On a kernel that has 184b5ddf82d4 but not the propagation change, the test
+fails at the first veth query and the leak assertion never runs.
+
+Could the commit message reference both of these changes?
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261112235027.4072149-1-kuba%40kernel.org
