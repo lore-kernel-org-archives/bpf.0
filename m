@@ -1,77 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794570013;
-	b=rnV2vjEVgxL185Xoieh8E6aSefHOWohSNT/vCInbCWparP+4hOObUsJvmegHQRlFvg5K
-	 44w6MnZchdqlyPEGnikhoK41yHr7yxUEjUsVybMD29ktTkB4WVwfPPnPega/VlAvcRznA
-	 /cHToY4gQChaP6Zef64+1WnfyWikkdmnBj1g7uGnhv700OYskPaCSnKr1d+qPKIPqZORt
-	 7+LrzUfH5l5v9GlJPDlcpa4B+EP8v+eyEJQ8ibMqhftGCHt0550th9A6jxhK7WtC52hvj
-	 olqhgFVG6cd0/uopctJGt4zBGdBOu7AX9AImK5aeHNAjr7D9qeTWaXJYBq4Iz7iBfsg==
+	t=1794570493;
+	b=iXYDrOdcGhT2Fn5u4zjiewd1lJKfGeIVun7aMjiUFrZLBxA2h4fkuFwyapxPzmA8nKJ4
+	 lkILxtFq8WM+AhTxLke+BKBSLDn5eWW0nXPJByXENe5orLKXjx49dkzpWpZDdcIRvsWJO
+	 G6gxpLrbddZqtd5zUyvGxAvDF2DASuVnUcnPdREv33keoEBgEoLLNksIqXxNZmerxdMQr
+	 YG65gP024Udho4VF7yFj+yvuKlHgIL+VXtKHdoEkfV7RHCzHhHX6uKT+eVNqcJKb2aDR0
+	 wGn045W0ZBVOM+N+UMBfu4xoHm7SCvBA4QOcI3WZzml6oF2eDOj9DPQxSSHMUOCeKWA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794570013;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
-	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=Sx4I5TQr/tJnq6LolN0jCNFUVlDYTPLN9V39idqWiWI=;
-	b=WX/MFLWlUyS+uTaNjAsfrX8EjIGNiy9kjvuspTY2YsgZ0Kudwh9/h8hJx0dc8K5t8I2S
-	 NCHcVNIZeM/XUwpgHX93mq6kjOBcwoOILsO1lw+1qL1qyU570NUCFuqG/VW+LjGVqtc0F
-	 yJnEnol8+vjXYHoGyVVBkwGacZSiIAv+ND5TR+aMjPUJIVon+D1IS7GuM09hj9hybM7iD
-	 uqgD4ZoFw26ULRbH1CV+zEQHokWaFJ/JSjhKKgCVdODcrPbdUyuMugrDyrxhx73g53xMv
-	 Mu29U3+mC1KXrhHVYNthsIe2x1DNpn1PveHrWm7oA5FNvt9nJvUTa0dAIvNmDO5Xgeg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794570493;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=FF393OWUbpiID2ySHDkmn+OTtcDLw7WwaP3Q15EwAJE=;
+	b=guyAC9kEnCrrmSO0LJOalLReM06ZWrAD3tJsP7MyntMo820ko+17OrD+qBpkWKP07X6z
+	 UK4dSlmJIZUPGtTBSpzA8kYzXVCqHX7sp2Y9lhNr6xxwl0iBb3nF1UZTK+suJpnj4Xx3d
+	 o5NM6yUuAg50eOW23MWK5ieYR/jmjRxPDnpMJha5CytQFRTSgqTkKO3OnLGAlxHHk9cFs
+	 48nsTQf3i9m+D02k+1Kk8PlzY5GV3D/yTJvVCvnHgkccbGol8A14/5KOLJr9cy6mtJnUl
+	 n5l/Oxz9xsn3Jj0Noy7vW/o+9eBPTj+DMIlzSZxcc77/sLzUN5tGx0JIMQmA9tbtBUA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kni5FwAo;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ju51keFO;
+	arc=none smtp.remote-ip=209.85.128.52
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B19F0606A31C;
-	Fri, 13 Nov 2026 11:40:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B040606A321
+	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 11:48:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9B040606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kni5FwAo
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D7031F000C4;
-	Fri, 13 Nov 2026 11:40:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794570013;
-	bh=Sx4I5TQr/tJnq6LolN0jCNFUVlDYTPLN9V39idqWiWI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=kni5FwAouxMtDA8R93e8iSlDAJTDtGYbK21KGRib3SZb7xNDHAIlrTvOjQiLjB8re
-	 Bdjgg9FwAwSnAjo7uKXMBMbGIDlt8naewDQWpT29oKYLv/bKX2tedXO0+oEpEHjOXz
-	 4lEqG5kyTCVZXX8hC/HoqW6sF7e6gsamUhceqMNwPlJp6SGxvLnmS1I9cupMdAHCMd
-	 ymUC5jPHh+XJSEXKtvm+DyABf8fX5S4WK49awYlV6S0979oDIBQGQ3YKMcxGIywy96
-	 aGvXenv3zP7estPpkfzpogmvvux9Nt+iQk+zyF8vn/RDWyi2hW4NvoslCL7FUWl1Xy
-	 b5PM0oyvsnyDg==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Stanislav Fomichev
- <sdf@fomichev.me>, "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jonathan Corbet
- <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>,
- kernel-team@meta.com, Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard
- Brouer <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Pavel
- Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, Andrii
- Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar
- Kartikeya
- Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song
- Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
- <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai
- <ihor.solodrai@linux.dev>, netdev@vger.kernel.org, bpf@vger.kernel.org,
- io-uring@vger.kernel.org, Mina Almasry <almasrymina@google.com>, "Mike
- Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>, Weiming Shi
- <bestswngs@gmail.com>, Nikolay Aleksandrov <razor@blackwall.org>, David
- Wei <dw@davidwei.uk>, Alexander Lobakin <aleksander.lobakin@intel.com>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, Stuart Clark
- <stuclar@meta.com>
-Subject: Re: [PATCH net-next v1 11/11] eth: fbnic: Support AF_XDP page pool
- zero copy
-In-Reply-To: <87wlqhq0kb.fsf@all.your.base.are.belong.to.us>
-References: <20261110102039.1002605-1-bjorn@kernel.org>
- <20261110102039.1002605-12-bjorn@kernel.org> <avWk5as19fvZoEJA@boxer>
- <87wlqhq0kb.fsf@all.your.base.are.belong.to.us>
-Date: Fri, 13 Nov 2026 12:40:09 +0100
-Message-ID: <87jymhot7q.fsf@all.your.base.are.belong.to.us>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ju51keFO
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4a59100fa83so5774795e9.0
+        for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 03:48:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794570491; x=1795175291; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=FF393OWUbpiID2ySHDkmn+OTtcDLw7WwaP3Q15EwAJE=;
+        b=ju51keFOeH7ByukWRrWQShBW452PCvaCNcrSAe/WSlTsq/z2DEQGkJl6J25VlE65rO
+         xZoRzECtqrrgjyjAkcWwWmAnDRYAL7Ao/1LpD84FRObhqYec0fvOohi39pSf4ybhT3bK
+         11hzVgAaXaEMTWyCVcencF7uqErGcwM4/a2r/6CcVorVy2CnZpGa4gnHtQCxSHIyT29M
+         1aFDj8UhFB3AkH7ijzgFobd7JrKGL/WKsGca0Ds9b/xTMXdYEdikN70IkT7rFXwmZ4ny
+         VtgiFazFdCWrKafdogm/fv9nuo0y74wv9MLHA91Em/pxYIirKdGhsRl5cnts1oAV6SA+
+         zgKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794570491; x=1795175291;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=FF393OWUbpiID2ySHDkmn+OTtcDLw7WwaP3Q15EwAJE=;
+        b=GFk6qUzNmKsvVlQmSVrDaSZgfDJ7qPZfMaW6E48aXVmz+3eH7lSwwoMT7V0WUIkU+s
+         Pjl3A7l4U3BlTntXEBdWG6SDOgzMoN4zM6GxYh9U3vBHCmMZMmDX/hHDvnwHhMwJndUN
+         m0/nFSgs1dvai3YXZ8SymMIgJSzowefAkdMWaRkHtKzg+Ss8GG/OyYb9/sbHRHUnpayF
+         PveE7Sr8WfdOJgvXfubR0xjjG/5TqQ4MIBlt4BeCc1AdjHG7/S9hn+ypocf3mvJO3FTm
+         uSj6oApeWbM/vMIcex9OttPCFtB5bZBVULMmu3NrFNfbgb+G1t5qAQxGvtsMsxkZKIJm
+         y+JA==
+X-Gm-Message-State: APuU4Z/EAG75i/q7ZvCRCRFfis8+LjnZn0Pk5K+O1BnSlKGqTFdbtAJ6
+	A2tkgPRY+AgAS24LyhxSXsGHRS9vscsmzO2FncVo9+tFgMuh9Kvsrdod
+X-Gm-Gg: AYBFou12ywKyb6w4mc6gJxVI5muRHOXFGhKLwQ0pVPJ+OoPuXk9j952bhTRsktREECX
+	iE+VvOSgkKtVl/sQzQOWFTTiFKW9OkR1vYSDWfy6PwmFpJtNIpwdDhymuKg6u+nFej0GAjPLpk9
+	noE+njXhux0pjxCxJfHa8PByhYdaPq3LovOJqSWDob4khHrPmdkIikAaFqEvLAimF+EicvDOAqv
+	qNNf8pFIoaKH6vDcLIB3rznrvOmkDKjGr7is0PgiilxBGuj+Re2scEz7zaHVeegO5dvdtcuxNq+
+	ZJliR3tGUS2nfxMTcLyQAqB4+UVugYsRPllRPe1BE+HuXTVa4pTJfs1+mDiMSoRbd4Yq4hzmBB6
+	tQSVpev6/hB71Lh0U7EojEdtUpwDBCfNXtLqptD2vJgYhRT2jrp6Sgg/dRFqP3Hf26YYftkjMqT
+	ltOgjXCtST0wxWNe5/0+1tp0qHXfmE+5Lj5lkiJsy4hNom0WgtwcsiObRnkylI//yldXDpEFZ+O
+	OXo5y8J48UMta68y+veBglgRP1UiOGlJfAAAKFeZbA/Rz6CN56H3gzOzfhcCyPPfTu2VBKI5LjG
+	MH+YfP0ZPpr74tkadFkerSorFtK3ceSjzktaFQ==
+X-Received: by 2002:a05:600c:3e17:b0:4bb:53e4:a7c8 with SMTP id 5b1f17b1804b1-4bb55aa27cfmr45389995e9.22.1794570490877;
+        Fri, 13 Nov 2026 03:48:10 -0800 (PST)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49c5fb58fefsm5405863f8f.26.2026.11.13.03.48.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Nov 2026 03:48:08 -0800 (PST)
+Date: Fri, 13 Nov 2026 11:59:45 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	eddyz87@gmail.com, memxor@gmail.com
+Subject: Re: [PATCH v2 bpf-next 06/13] resolve_btfids: Fold the constants of
+ a select without a branch
+Message-ID: <avb7sY_yAZuvTnxZ@mail.gmail.com>
+References: <20261113050901.1399091-1-alexei.starovoitov@gmail.com>
+ <20261113050901.1399091-7-alexei.starovoitov@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -81,56 +97,44 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261113050901.1399091-7-alexei.starovoitov@gmail.com>
 
-Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> writes:
+On 26/11/13 05:08AM, Alexei Starovoitov wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
+> 
+> 	return copy_to_user(to, from, n) ? -EFAULT : 0;
+> 
+> GCC for x86-64 never loads -14 into a register here:
+> 
+> 	neg    %rax
+> 	sbb    %eax,%eax                0 or -1
+> 	and    $0xfffffff2,%eax         0 or -14
+> 	ret
+> 
+> So the function gets no tag. Other forms of the same select:
+> 
+> 	one of two errors               sbb; and; sub
+> 	the condition is negated        sbb; not; and
+> 
+> The table of x86-64 describes "sbb %eax,%eax" as a definition with two
+> constants, 0 and -1. Describe "dst = src op imm" in text_insn.h as
+> TEXT_ALU_IMM. text_flow_fold() runs before the analysis. It computes the
+> instruction if src still holds the constants of an earlier instruction,
+> and the code falls through from there. The result is again a definition
+> with two constants.
+> 
+> Five patterns of x86-64 use it: "and" and "sub" of a short immediate, in
+> 32 and in 64 bits, and "not".
+> 
+> 	functions tagged     before      after
+> 	x86-64 GCC            12633       12817
+> 	x86-64 clang          13541       13549
+> 	arm64 clang           12435       12435
+> 
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
-> Maciej Fijalkowski <maciej.fijalkowski@intel.com> writes:
->
->> On Tue, Nov 10, 2026 at 11:20:32AM +0100, Bj=C3=B6rn T=C3=B6pel wrote:
->
->>> @@ -538,6 +547,13 @@ static int fbnic_bpf(struct net_device *netdev, st=
-ruct netdev_bpf *bpf)
->>>  {
->>>  	struct bpf_prog *prog =3D bpf->prog, *prev_prog;
->>>  	struct fbnic_net *fbn =3D netdev_priv(netdev);
->>> +	const struct xsk_rx_check *check;
->>> +
->>> +	if (bpf->command =3D=3D XDP_VALIDATE_XSK_POOL) {
->>
->> do you really need a separate command here? why not rely on existing
->> XDP_SETUP_XSK_POOL ?
->>
->> here it doesn't look like things being validated are something unique th=
-at
->> you could not check during XDP_SETUP_XSK_POOL and XDP_SETUP_PROG.
->
-> I'd like to keep it. XDP_SETUP_XSK_POOL means "set up driver ZC for this
-> pool": the driver maps the UMEM and restarts its queue, and the core
-> WARNs if it didn't map. A provider driver does neither; it only says yes
-> or no, before the core maps and installs anything. The same question
-> comes up on MTU and program changes of a bound device, with the new MTU
-> or program, which XDP_SETUP_XSK_POOL can't carry. One command keeps that
-> in one place, and v2 runs it from the core MTU path too, so a driver
-> can't forget that case. This is only a burden for the core.
+Acked-by: Anton Protopopov <a.s.protopopov@gmail.com>
 
-Thinking more about it, maybe I can drop the callback altogether, by
-doing what devmem, io_uring zcrx and tcp-data-split already do: the core
-refuses a setup that can't work, instead of asking the driver.
-
-The driver only judges the chunk size and headroom, in
-ndo_validate_qcfg, which the queue API already calls when it installs
-the provider, with a new bit saying the buffers can't be split. A frame
-of up to the chunk size (minus headroom), then lands in one buffer, so
-the core checks the MTU itself, at bind and on MTU changes. And like
-tcp-data-split, a socket bound with XDP_USE_SG needs a frags XDP
-program: attaching a single-buffer program fails while one is bound, and
-the bind fails while one is attached.
-
-That drops XDP_VALIDATE_XSK_POOL and struct xsk_rx_check, and fbnic's
-MTU and program hooks with them. Not fully cooked in my head, but maybe?
-Wdyt?
-
-
-Bj=C3=B6rn
+> [...]
