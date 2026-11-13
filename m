@@ -1,13 +1,13 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=192.198.163.19
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794571464;
-	b=IIDjXsqila+fcMfKyQ0Za3M583NU8pVcWvAUJfTrm26JHWCLahJCk6Hyw4ipOnFwGQ12
-	 1fduQfdY9mdIh8EtyYeru7rSOKLGsyI2VhuP4QGA8ULRl/GgfEFyjXa3taWIYvfOinHCg
-	 nVSJ8L3FYcHQ1jeh4MTrKsyfg+pTM7ZrPw60470jUq5az99yq5Tq1fB2L04RNb8WmnQXg
-	 rtG0YpeahCTPfkrq+p7S5nPytw7MKh+fTGlgvm434v2QJtez1kzoSEdmpIwPKfRRjF1jt
-	 Jy74tzQHfwWygne4IyV+p7HvteWG7gZ0A5UZjOQkUAra3dptD/qeNoEq5KocQqZFL+Q==
+	t=1794571563;
+	b=Q2FC1wQSbiCT1Lvr/U2Dh5ZkrkpYCu9QzKjf0c+k3dJTpzOuCCsLtgL8d0nENTboqz7F
+	 6VBxFB9yvBucl+hhpWjF5AgE0uMKN1KE+oeGor6rWCxNc9jVcl7oCJklaB3YMwm39uEUH
+	 RnDHTr/r3p/98TqKT9xpduZKxOv7z2CN3eLoVExSFYcfvoWMseDkwklxEeEhaLiiBYY/s
+	 0G7jJ1Bc7hGA+qPjDwpFprfoZUePjduWOsN59/oqga3L8xIDcmmxHXpYtFZV8g/hevSBB
+	 RowRVfo2ODE0Zo7WdgCPoFSoiDJBtqtc8gtim6/aBMwO/7fcg/QM0vzfVEG57sHPnWQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794571464;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794571563;
 	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
 	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
 	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Received:
@@ -29,92 +29,92 @@ ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	 X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
 	 X-MS-Exchange-CrossTenant-userprincipalname:
 	 X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg;
-	bh=9wk0T2Qi9FXwPbL85ieDMdkKJ76//C2dJg6SYzMsx9k=;
-	b=dwrkcQH6L4Zb2cTYzmWUUeDchpfEcl3epVpspjj4wruIX/ahR4Bk5JlcM0Edg5oE/QiN
-	 XscyFWDdtQCp68s2mZDwvupx9spHzeqelxDmsRfuStZLs7bdKRSUkhnZMiKRlGRkqN8hH
-	 3z0E0Ntyy6yzQhxfL4byTTCjVHiDQKdFd/LEo7r5vCExAYrFyeRqh7nuU0VWXWG9Fm4xs
-	 HqepJo0+eREg8B7D5Q2G7M1FblXm/XFlsuEBz51S7tPOpKlX6oA/5xbOTWZ4YCdQ/FTmO
-	 g7Lr8LfftvfewCPctu7U8rGHP/VPx8WKyIFACqXLVFFPu6YUUWtQLvnOO3RXGuTP81Q==
+	bh=u0sUp+926VJv4VKcJhWo1TNu6Z0KK/7VH8tdLdsCALE=;
+	b=RH0FAuYMXqWKFherrU0SNt9L5IuKAEKaUqikLP9/E446DMS2qkhG00W/mSPPNN14bGWq
+	 Ah7NC+czhz4Ka2+ZczAlHInzdLE2TumH4nCodAPOjCmkvex959ekYyJOsB/wMwSlEN60R
+	 bUw7uf+4GCpMwxWjC0Jj6AQlmFBpOasOKzuaIusSU7Pir9DSXkpBmT0P5TE+Kp5DmX2xV
+	 4hav0Rg1u8rDL0PDucpQKFFnezAcqAgfDDYUaKEG50a1mVuWZc9OTsF+vuD+BPLzIhSfC
+	 ODk+sBSTUoU3fVan6N9SUOZHHKklEKHqy110T9qy2FukX+5we7MYfK0hUyfbbt9xLyA==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=intel.com;
 	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=N3dbeqlW;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=selector1 header.b=UW7tUJOp;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=198.175.65.11
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=B7LgMPom;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=selector1 header.b=Kf0ty2en;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=192.198.163.19
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7E4F606A8B5;
-	Fri, 13 Nov 2026 12:04:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B7E4F606A8B5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD038606F909;
+	Fri, 13 Nov 2026 12:06:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CD038606F909
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=N3dbeqlW;
-	dkim=pass (1024-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=selector1 header.b=UW7tUJOp
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=B7LgMPom;
+	dkim=pass (1024-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=selector1 header.b=Kf0ty2en
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794571464; x=1826107464;
+  t=1794571564; x=1826107564;
   h=from:to:cc:subject:date:message-id:references:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=KLczQ7Km/NXyRaSwjLeJUO65mqAGEI7OFgh8uOur2Ok=;
-  b=N3dbeqlWwafJ4wO13ApOxLhB1GtDlPCR0eq6obT8nybLxHAemOaTXGAF
-   2OI0dQfj6G0SjufQiQ5iRgyx5l40fooGSYy1t0vZD9i0uxNuhrCbUmmHn
-   feK37+CDOWSP1JZSjrAo5KvC1knH89iwPyhD13E5Sm7xAvyMlKG0YfFwi
-   hwdWMzFgHI/ZRir8pIIFxgwltV7SBJY0UJif2pn1QMnXMrd6E9EeHOyg+
-   lafZ75WCCV9Mug8NdloiNx0olXh7hRf0FC8GdE+TfImJYfRvpjtRwvq4W
-   Ck7KeTF7ZX3qsLLe9Hw2bAIfXSWrAg/ofr/cR5cNfMsK5ZQOwoEABp6FD
-   A==;
-X-CSE-ConnectionGUID: VgTp/zToQEyU7/LglOb4sA==
-X-CSE-MsgGUID: 7CGB9qmrR4CKY+6hAIsKcQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11964"; a="3264060"
+  bh=BlXU84ZKPOlYCINsu2tiM+duUdNk+ILxHtNvaVcEpkI=;
+  b=B7LgMPomNn5k9LKiqlDe285sNKzOWY9oFhBovim6xuE5zKtoGkH169kc
+   CFGrpATpzbQJKze6WZAI9c1kRLs9PDItmk54uwqkHpZTFtiFRClCVqFBp
+   V3dDSVmK211TCFECblWt0GJ07SdmgxPRCobfYieTEJYLH6PdatG933NnH
+   fAi6cy0oLbbrM1r2MfIKgBiTfT79ir+aCQ93n+o5egQEFzxUgVxWnOq5a
+   tJ4gUr1yqQKZ5IdUkKsmkw66fdN82zvbkKjcHvf+VYxOUAWABdx7hUqOA
+   MVELuUdDbIwId3w+nnkVa4J95+W53qWqSyeeiZhTbyMjS8RMjA5zMkJAl
+   w==;
+X-CSE-ConnectionGUID: vrEuiAhoTRuvWQjPZI7dlw==
+X-CSE-MsgGUID: 9WhR5ryQR4i4F7oKiw95HA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11964"; a="3466081"
 X-IronPort-AV: E=Sophos;i="6.27,211,1787036400"; 
-   d="scan'208";a="3264060"
-Received: from fmviesa012.fm.intel.com ([10.60.135.152])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2026 04:04:24 -0800
-X-CSE-ConnectionGUID: SkklmmMNRECUd3DptcOLvg==
-X-CSE-MsgGUID: 7jI2QcjsQqWUNmBKlYwBnw==
+   d="scan'208";a="3466081"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2026 04:05:51 -0800
+X-CSE-ConnectionGUID: BR3GQXNXSrqXmCBQGQv9cw==
+X-CSE-MsgGUID: 60xem91LT2SaCyZ/MT08+A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,211,1787036400"; 
-   d="scan'208";a="10623488"
-Received: from fmsmsx901.amr.corp.intel.com ([10.18.126.90])
-  by fmviesa012.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2026 04:04:22 -0800
-Received: from FMSMSX903.amr.corp.intel.com (10.18.126.92) by
- fmsmsx901.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+   d="scan'208";a="9325680"
+Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
+  by fmviesa007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2026 04:05:50 -0800
+Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.56; Fri, 13 Nov 2026 04:04:22 -0800
-Received: from fmsedg903.ED.cps.intel.com (10.1.192.145) by
- FMSMSX903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ 15.2.2562.56; Fri, 13 Nov 2026 04:05:49 -0800
+Received: from ORSEDG903.ED.cps.intel.com (10.7.248.13) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.56 via Frontend Transport; Fri, 13 Nov 2026 04:04:22 -0800
-Received: from DM5PR21CU001.outbound.protection.outlook.com (52.101.62.48) by
- edgegateway.intel.com (192.55.55.83) with Microsoft SMTP Server
+ 15.2.2562.56 via Frontend Transport; Fri, 13 Nov 2026 04:05:49 -0800
+Received: from DM5PR21CU001.outbound.protection.outlook.com (52.101.62.25) by
+ edgegateway.intel.com (134.134.137.113) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.56; Fri, 13 Nov 2026 04:04:21 -0800
+ 15.2.2562.56; Fri, 13 Nov 2026 04:05:49 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=KkqlpeORBgFjw3g+z01VET2esv2fY2v7annByqOv+xYwTrvkM05JTaoaHcxWJNrGLTU6rBXdyNNeNT96Sa0mn9Ds0feHiqufnzpumoCIYOAJqRIIRUEtdC3hI2nSWpvjglsDRWsChh4oKrTXNIbceiVzlI+RWDyR48geM9ygZKyup9XX13aECe+6w/1rAHcqwevs23XJO76ltux9muA/Yzy/qCUwl4HWEPGa4yAl6XgfwKEB9mGp+6QOM1B+bgekFabCGlK4rp1gr/13+pom6xh7Nw+Ctay9C19QeDYEgFA7lmLbV+48tkKD9Ndy9bgr1oMOqITG4iikcPlm6jSoIg==
+ b=cE5vI/mxHFbOvQ5GCpayvOoz04fN5oX8umwf8rvCApdKNfxB8XBIJoqBTiKMNfqEs8KVVIghfvitiUB2OWC/9WAHjmkGTznA3spXirZnWEImuIa+fTQW/nOY5F6H7nOWPN4VzgGGWWF6e4XeUgSYs5RgqcGEapgjK3smJFB7rkNIWvkMZfcxIRQU5kltoVTx1gqMdoUOMr85U1eumN1Hy4YAq31dqJH1KP91BHmyrzXmNz+SmVkZFRMXGTKf2FmNpJBWW7DqK595gZqTjuBjVRA6rUYqnVr6DYuoP18JXDob5WMtwKUiStwezmKpIAV3UAy5v8I/3J9N1hjHRP/hDg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9wk0T2Qi9FXwPbL85ieDMdkKJ76//C2dJg6SYzMsx9k=;
- b=W4MHwRUaARuarlt8oe9QXZohXn4TWtwZ2agWt44QTQIqgRXyo5taNM/UKXfBQn0uK+8VCULOpv/D2RRjThkhGlYMvXHGgh+CQCfsdHjngOtpZ6w7DVXHJDOvy63l+H05iTWf+OT5Cbi/v54Y64IxXaW4U8kGXtpEoFliPQKTQNhmdDtso51kqrc7O+akR1KAJYWab4kvAvgHGmcKTWbjM+UAxQf4LISqHaMokSa1GpY1HMU4gRu/9GyUaEObIPANXD57veQjPucE0NG8AiOgPrIhiHNReXdUzlQwRNP4zRZShUEbDlqveJHTongA5prMQJcW2/3mJ91uJQSFoKLUBg==
+ bh=u0sUp+926VJv4VKcJhWo1TNu6Z0KK/7VH8tdLdsCALE=;
+ b=ntLZcurfUh3qUpQUe8EyRbgqnnPpGelLAOzyyb9BjViovlQ+wF2lJRHcHM1x0r/aRNBvwhkLHUxEGC80dgMfffA7EQq9D2jARdcCXCKqbuJF2N+4ni8EwzJQweGMzlXH9blERfQws0Xq9gjOYGo9rAMu2O3G4E5t5IlXRZEYjCv4HXimo6Rst+LkNJI0d2czinwz0cB55Y3/Vju/kDyTMsc6zSf7aHGMc4iNxvkBo6pwO7jkCZQU9XO5MKdWr9vaEm47U8mHOODcDYepL4EMPFtECGhp7H8UmPnaZ2NEXLOrtvsSC8AtBNKHLPgdaIyi/xatPwzV9PUD7ARdhJxlqw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9wk0T2Qi9FXwPbL85ieDMdkKJ76//C2dJg6SYzMsx9k=;
- b=UW7tUJOpdP8VavUigdH7MikbLkJmXh4C8UX43ei6jOWRlvkwJAcChq8V7wcIRB8i8J6IO5G9lluS9hisHvMzTqbPGdZvnOF8mW+BdGhtuFbnZ71gVOYZFqugTWbV29OUVDFq2SrgpDx2msSLicUy4zitXCLW4McJAt4SqECienc=
+ bh=u0sUp+926VJv4VKcJhWo1TNu6Z0KK/7VH8tdLdsCALE=;
+ b=Kf0ty2en76yDtoccUE74zcicAGgJ8luxSaTYC6jN81V3/GOOwvhNzzQAMxEZ+cJ2nZTOAE2T14/4OuxC0SLY5ad9aeW/ETK++PqdpyLND5CwJR9KRN7R1fW/ssGLJ3VK54VWnJOYk+BgOoOZW+u9anAKWP8vFYTzvprII0ULroQ=
 Received: from CH3PR11MB566895.namprd11.prod.outlook.com
  (2603:10b6:610:34d::22) by BL1PR11MB5221.namprd11.prod.outlook.com
  (2603:10b6:208:310::19) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.9; Fri, 13 Nov
- 2026 12:04:11 +0000
+ 2026 12:05:45 +0000
 Received: from CH3PR11MB566895.namprd11.prod.outlook.com
  ([fe80::87f5:c8cf:d52:e584]) by CH3PR11MB566895.namprd11.prod.outlook.com
  ([fe80::87f5:c8cf:d52:e584%7]) with mapi id 15.21.0615.009; Fri, 13 Nov 2026
- 12:04:09 +0000
+ 12:05:45 +0000
 From: "Loktionov, Aleksandr" <aleksandr.loktionov@intel.com>
 To: Tianyi Gao <tianyi@cloudflare.com>, "bpf@vger.kernel.org"
 	<bpf@vger.kernel.org>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
@@ -148,16 +148,16 @@ CC: John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev
 	"intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
 	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, "kernel-team@cloudflare.com"
 	<kernel-team@cloudflare.com>
-Subject: RE: [PATCH bpf-next 04/15] xdp: add a kfunc to delete skb core
- extension entries
-Thread-Topic: [PATCH bpf-next 04/15] xdp: add a kfunc to delete skb core
- extension entries
-Thread-Index: AQHdcTPFRloa4I39P0O7yUUlFKolDbcr67Lw
-Date: Fri, 13 Nov 2026 12:04:09 +0000
-Message-ID: <CH3PR11MB566895F0222F46F58DA8D5128EE57F2@CH3PR11MB566895.namprd11.prod.outlook.com>
+Subject: RE: [PATCH bpf-next 13/15] xdp: add kfuncs to load the stored RX
+ metadata
+Thread-Topic: [PATCH bpf-next 13/15] xdp: add kfuncs to load the stored RX
+ metadata
+Thread-Index: AQHdcTPANtbVY2uFjEunpjbbw82/Abcr7CIw
+Date: Fri, 13 Nov 2026 12:05:45 +0000
+Message-ID: <CH3PR11MB566895B67CB1C3E21DFAA92994E57F2@CH3PR11MB566895.namprd11.prod.outlook.com>
 References: <cover.1794281983.git.tianyi@cloudflare.com>
- <2892d19e606e3809c268de0610a4ccc8bf68625a.1794281983.git.tianyi@cloudflare.com>
-In-Reply-To: <2892d19e606e3809c268de0610a4ccc8bf68625a.1794281983.git.tianyi@cloudflare.com>
+ <1985183a511a2217fe0f42582cbd16f023d8991e.1794281983.git.tianyi@cloudflare.com>
+In-Reply-To: <1985183a511a2217fe0f42582cbd16f023d8991e.1794281983.git.tianyi@cloudflare.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach:
@@ -166,43 +166,43 @@ authentication-results: mx.microsoft.com 1; dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: CH3PR11MB566895:EE_|BL1PR11MB5221:EE_
-x-ms-office365-filtering-correlation-id: b3b382c4-d154-4471-a474-08df417e398e
+x-ms-office365-filtering-correlation-id: d5ceab0f-c86f-4bea-183a-08df417e729a
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|23010399003|366016|1800799024|376014|7416014|261028144727099003|261022115727099003|261026121527099003|261102123227099003|261026140227099003|261021135927099003|261022075727099003|261021121427099003|56012099006|38070700021|5023799004|11063799006|4143699003|261022113327099003|261021123027099003|261022105027099003|10067099003|22082099003|261009223027099003|18002099003;
-x-microsoft-antispam-message-info: DXEqyDO6PdjPAoY01S35+fKnDteu7Vj6szFHPf4nfXfcMpsUvic3LrwWHyEvMinF3bvqC26/4JfDXrIoF+t30AaMLCx7tc+WMN/ZQMeVOAZh+FBoQVKrhumt/M3ZXw+0zu/KpdGyTh9ZM4jMmCOYVxmZf6SK9L60Ncm09vmEHstEVs7A9YRUM7N7GungzeAYc2vEBXN2k9Jez8zIOMhxKruCI6MR4YbIDTDKXPONHDaSomh8vcAV2zRjBifO59HX91RURrolTUnz/yw/rn4G95Ab7AQkWoh9+yVzwXuGiv9/nCKeAvoPSxPjRoRgQivae/TTyuv95DRrxUK98Gs9MtEXUUuZwKpQ+IsrKo2Dof54ChVZnZ/Rhnv24S0WZu4m+Nhs0eufgBqxW8d2wluC+aERfpchAIvSvkuqnfSbXuI511WVRnxA+srz0yBTZZYn0jyWEDdLREfOyVhXfMjTtq10OeRZz1De9DZGcaBQzqr6sDhDYIK7WVjLEAFO9oCG88At+RRwYkRbB/bhESIukM5Fx8JaEozZQYejuxnERvwR2M0A2saMsz+ysedyBRL41Rh4zhhFIC370aLvdq9tXcmWxwh0vHw7rbFj9hdohHTLl24Ki7pJo06/bOYQJF9NxAqv2+i3jZbRZBs5HDchuMyAT1/ItlwhGADHpkQdQdeUxN4lLMieVcO4TtKdulmOFV/GQmvvfz/HuI99/mJQjlRz5154aK3VdkCoQNZAIOM=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR11MB566895.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(1800799024)(376014)(7416014)(261028144727099003)(261022115727099003)(261026121527099003)(261102123227099003)(261026140227099003)(261021135927099003)(261022075727099003)(261021121427099003)(56012099006)(38070700021)(5023799004)(11063799006)(4143699003)(261022113327099003)(261021123027099003)(261022105027099003)(10067099003)(22082099003)(261009223027099003)(18002099003);DIR:OUT;SFP:1101;
+x-microsoft-antispam: BCL:0;ARA:13230040|23010399003|366016|1800799024|376014|7416014|261028144727099003|261022115727099003|261026121527099003|261102123227099003|261026140227099003|261021135927099003|261022075727099003|261021121427099003|56012099006|38070700021|11063799006|4143699003|261022113327099003|261021123027099003|261022105027099003|10067099003|22082099003|261009223027099003|18002099003|6133799003;
+x-microsoft-antispam-message-info: hf6PdouPfyQMvkDxpFOQ7udeuL2XKJQQEfbVQ8HgS74rN63wZtzL/kqfdAF4WfZkLfp9gBn342hwzq36iB173tHBy1BXNX5TsSac5fHALUP3bTlTwntvrOo9CZsMPv/NuNJOUmMPkQMaaTN1zYWx3v9EeDtol90+bsI0T16b1OB9mTVFWFk4sRSyzq5PekpbePxgA8F0f0O5o/R27VZ+SnBcejoIUaEId/aHv4AMH4HapcMv4qI3MJkzYbNtdvBPtM7gFGK6h9N5IXivF4uZTbJTgiY70Owx+SoDa5pdfjmwcDHEzsvLK1OTPk4O1eVTWNwQEXHBrrChxA55186IbPq5ptrw2pcvyhyapaGA+SkZgW+JiJVfRtDBvg0qGf2H0w8d4PT7piQcHUKdVYP1YR5w376NyNKgIty7W9bwYXnorl2IwStIgREzgB+MMH2TKdfZtdRnr0RgWoYIyuS4nVCid/8ohFpbxvTL+7aLsP+fnLgl6ClVn1atdbzD5WDFM9wHx4PV1X5Jt9xwzGLaWYziUWOABnwAihX+EKUlafFPGH779th21iT1VFSdto0eTLBDJVi4IPbgAzLsWctJGCBQwRcMDp3ZuOqUeJnMuMYdP13G4n6uunCcRTSqgwSbKl5B4AIW+iUaqHHtFyP+as2zjPRo5RLa7zxZJ6Wqs8o4+pUmdFd0J34FCEPMQfgMExH1pHOEcEcPjvr6Zw1U2ER3hweAqZYGxiv221vUJy0=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR11MB566895.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(1800799024)(376014)(7416014)(261028144727099003)(261022115727099003)(261026121527099003)(261102123227099003)(261026140227099003)(261021135927099003)(261022075727099003)(261021121427099003)(56012099006)(38070700021)(11063799006)(4143699003)(261022113327099003)(261021123027099003)(261022105027099003)(10067099003)(22082099003)(261009223027099003)(18002099003)(6133799003);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?VFEieli19j71nYqDbJ3BseJG4NiBOwAvQ/ZFfZXQJ5gG4YIMPVGTvypPhNhk?=
- =?us-ascii?Q?IEikLS2Q5+rWBnhogJ0z12/VeLdqvDqTtVGfXFOa2MIZYF2g+/aMtzKsTnmP?=
- =?us-ascii?Q?04PDlcAUo0braUIoiBETtFx90ICA7jr5x6Esg1hEfGCE2xPxtGsluiSb4Cqf?=
- =?us-ascii?Q?FecTbZCVqZMdSr4bgAXB34/zztpfB0r24FVFG/EfAlFoN6mLqHfAPqxi4cOY?=
- =?us-ascii?Q?B/j6vUNzW0LaiTfVXSDSO4JJ3pAbQinx2GYvJv2Vd9D4Hii9OP1m6eaW4ycr?=
- =?us-ascii?Q?PytrI1pM69HpZumnardnn9+UCHrXhMeIE618nztCkjani/yL9UbtiXJ+iW76?=
- =?us-ascii?Q?WC9ZflEHAIsxWZ5nqsmE6u6PoXJzXoMPWWASOt7Hi7sJQWnPGiYoAn681Xao?=
- =?us-ascii?Q?NOsBpxBkMmca43Wy2En1186501pPlipEAZn21ZWBTcloti/OaF4tSAhUZfP5?=
- =?us-ascii?Q?8ajlc78JtTorlk/dMjl6JF1FvhVJdbKNyWvD61c3CO/7N99VSXFG7IuUSMKP?=
- =?us-ascii?Q?Xy86OIP5+IV8Hb4r5cz2WFSIm6TmOKDE9KS0rYmBYraBS2yl0b64FJBqSidC?=
- =?us-ascii?Q?uZi9MAVsl3pr3pQUtBzEyC/r0GYwQ7k+7lU0i9eFe/reoqoIysHQWgoR8IAF?=
- =?us-ascii?Q?n1xJT8KsoRNVHdsEXIt4u4xKdC+PDzU6ptMIzjanU+P5RzvIf5uJFwHrt/9F?=
- =?us-ascii?Q?hL0sGk9GWLWqJ5tWI9Lr5DJWEPDrYF6QAwTxB152Ow4eaqRBk3lMUtj3WJND?=
- =?us-ascii?Q?NJrbRRR5GGn5wXOIfBJWXKYm6smNT53Q7ixh2RX7pdTSB6/jXiibXy6oN/2z?=
- =?us-ascii?Q?qgRHi7NvlK4HRhqSK+7vDgJoNk3o/eeRkWwgzWQRX0tQP4IySZyvHGVCpEra?=
- =?us-ascii?Q?6FXlkIzWTP8dBtI+p5IEaTT8btoX1u9tgS7Io7WIY0UNMxE/AYNxef5Lgiy3?=
- =?us-ascii?Q?cTMKQ6/+JDdpJjNRFSsuCfJADigPB9y2ymH2cDKqJaZfplkOTb/LHw7GZFDN?=
- =?us-ascii?Q?TMSh9/F9fzdxaFW+/f93ZCG73bFRwAP9KfPMIxNWK2w88LiJviaL4MUZk+cn?=
- =?us-ascii?Q?I2KEiPmzdsLcbhkF1dpp6UUZlrbDc7LmgssocALEkDlHeYZHrpdPIE7OLDzT?=
- =?us-ascii?Q?FW7OUN+nG1C8uTRp4nKYlJMfaFPgX2GOiiNaBGeCK6JEHIBdG5GpNx2725N2?=
- =?us-ascii?Q?n5Z+u66+In9aaviPLdNYTvawLsNgUHmkluNdp9JM8EYC/9y9zKKCtwDtCxfG?=
- =?us-ascii?Q?ra9MBMVqy06GaElFrk87cTKXexHZbEcZXJ/R1xSPg6UdZ7jZs+G8Pdb/0dFZ?=
- =?us-ascii?Q?VhAnDxLilPPvVOeZFejV96KldPNFiKxrVVAqL1b73lDgfNEL1h4LOChVVlzZ?=
- =?us-ascii?Q?rgrPOfJlInWqcj4aX+pY8wTrTZGT401RQUKGEePW4PYOH7rf6HOi7pHVONxV?=
- =?us-ascii?Q?0aJw2EYXCv/4BCM5BReag7TkFCEbDImriM3l4cB1cE+dv8dtFwY4pjx/sauA?=
- =?us-ascii?Q?olUIKKPJVZIqWpW0ZeyzKzqFOp0oSdLzGrHwaJ8rQyD+vRP0cXMKnrv8FRCT?=
- =?us-ascii?Q?4TZiJNQa8Rj6uvZcP7rdASbLcm4Su4CF+EMfzWRcyMdeByJ739e2SEdeNqN4?=
- =?us-ascii?Q?1u8LBmhE8wYg7DK+xnE5cXZRr0gR38oc73q5BTibA8Z/XmZSulMLGSrT7u1+?=
- =?us-ascii?Q?AwCSO//+fOPTMYTbuP4VQOa4YeY/RjQCjuScUs/dLJyjSfZcUoLqrJVFLgmk?=
- =?us-ascii?Q?oGxaOJMQ+vdiaFqKIjdbQtt3QC6d6Zw=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?gr0LdRcXJ3kVTJ8w1XIP+SaI1QIH/UjNRn35DiOz2e2wZqwugerJi4WNwx4G?=
+ =?us-ascii?Q?Lxn8Q9r5wwrrZe3v0ia+56OUC7yJMFL+ktfSv45jjalqIXKhIzrsL73TRg6n?=
+ =?us-ascii?Q?+7PoEp3+ziEjVvZj2L23vrfzKf7dqLBSI9M33R4dv8N9vFYuNsnTWLXJTexE?=
+ =?us-ascii?Q?yAebXPLlfULF5l1yiiYyGTe+wimnBQFGMbF3Mo1AxG6gzbep2OvjPpYrITZa?=
+ =?us-ascii?Q?uKHOdpRPZcBjwrf8R9ZSDYcvho2hkNm52RPWpy3Fm1H1FwQyuCmrcKZ9qiys?=
+ =?us-ascii?Q?7pfc/J6Qj1ws4/NgVtgityAx5sx0IfdqcW14kUD3cLjPWQlubVvI8SvrKiwD?=
+ =?us-ascii?Q?RViYjPypg+MiwIFqqC7vNnu2Rlm8ziZNtXoqoV92SMmhwFrNJqLO/W2oZY1S?=
+ =?us-ascii?Q?LIhzMtUDzW4FKdCk5cFp4lWV9z4JhQkX/+KVp+SltX1TcT48BD/5Kg5wJQ6u?=
+ =?us-ascii?Q?cq4oshCOw10tg5OplBJLqdGnwNLQa9428YlQ0uqXhKoNR9+pvKqIGPBtX0n2?=
+ =?us-ascii?Q?wTmEtyVLvP/lK5mvI4rv3bvDPEUe+DHcOATN3WJKPiwhhvgDz3YuUqABC71d?=
+ =?us-ascii?Q?1ey4S+99gx5mqwtsxEsSNdzT6z/hRfHVaDCYRrXJUiUYglSnl7fG2MbNjpMF?=
+ =?us-ascii?Q?fEG383a+qXix5Pw/9E/YDNtENrBm9AEv8t5TUkgBJUkvQE67d8Hup6DUqCyb?=
+ =?us-ascii?Q?SQHYu4Z461UyF8GethInNef0rKZ5XFpTe0PMHB64RScJsGNpHV1fQB6q8ETz?=
+ =?us-ascii?Q?RLBgNGj4/Z+g/WaF2/Wathq6RWitPY7wl1ClbuHVKM/0k2Vto4oyEnvshMEy?=
+ =?us-ascii?Q?HyIOhPZ6xb+MLcLnUxDWKIp2IN5qVS0YGB+tqx0/BC5Vny84Pe3Oji7habkA?=
+ =?us-ascii?Q?6L9tRNMTbaLqUECNEuKCZvxcZ4kweET0XYbpK+wWBG+AeNKoBFBpmRm9kQxR?=
+ =?us-ascii?Q?zXUzRu6YZvACmLBYDtIPu+OX0kjJiy8CtRgjkqBRPzpIxc7GsDvJxKZOifUl?=
+ =?us-ascii?Q?12Ey7WbEdHRzR7sc+ZayaOCv85UDbyxM2nl4Px/F7/9cJLU2l4cw5W+yFQkg?=
+ =?us-ascii?Q?MU+Lne8gO3C1hr9W9KwZOsJ7blibWfv7aS4Tk+buPinMkggqt7nOBvHwivyT?=
+ =?us-ascii?Q?YIiDzmlkL5xCc3Z9HvB+9+LswVo3e+6xtwFhff6IAke5jrQYv2mtZN5IcOUQ?=
+ =?us-ascii?Q?06CoI4D4buCLZFiREhaJC8ux3n0AlHZl85Dn+eoyOKobJ4MbKQAuVng0j+38?=
+ =?us-ascii?Q?gNFc3JHGcrOOuO1PtFBaIhAa7CJ/qgpJNMQ9eW82WwFHws4576GM/p1i/ZmA?=
+ =?us-ascii?Q?DCu7v8Mz9UvRLbkMB7yEMU5/6jRD6GHIIxEfun1v07xIDFwJzM6pSxHZWhXP?=
+ =?us-ascii?Q?JKXgF9KcRVRmsXzAC6xdaHL3bb71ueGh24h9tr6lo8QXs6hNST4Fgu56rnqx?=
+ =?us-ascii?Q?a4eaT4Ek2mIGiw463SNTJhx8UEaTps2kdf7uhcE2WzT3VDaNpFtpHv3u3zki?=
+ =?us-ascii?Q?ei/S6m3fitj+wkAbRnegVAaBPujBl89aNloA8JvKQTb/7fStqh2yxZrImWlB?=
+ =?us-ascii?Q?gtc6x9vjGYiPIo8rzaUm+5oh+8zBsvTgsWyXFw5Gl7iUxY2xywt0/BMeIlFU?=
+ =?us-ascii?Q?mgGim177HgnYkbHmh+lv0NDPnZb02i13SniJdT3ED/BtXVBuC2foORqEUod+?=
+ =?us-ascii?Q?OpwcqJpbLQcA7yKZFdwtZ+6Pi3mZOUv7d2QrdrItTzYVHWOoOg8jj2A6VWh+?=
+ =?us-ascii?Q?2CBFerw21g=3D=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 X-Mailing-List: bpf@vger.kernel.org
@@ -214,16 +214,16 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-Exchange-RoutingPolicyChecked: UbmUTyGNB8vJhRGAGHqY1ba5U4qPUF6RT/+VCujvzgeCfF0mhCXjLSJrvoXAsHUIAWQpPS+0nkWqAJ38TZbo+ixQ+PJTGpd+/y5vGwadJ7LdWwTT8kEWsbse4vPYEUkb4pJ4PxdP4KxDs5vwFqYKr6DKcJ0W6d+0a/aUVWGseQxpKIB1MhGqxFe04LcxlLjidFbE8CCUl6xSMOMHCFy/liWXhxRNUPlf12+sR5u/24tjmifM3w6LgjO14fnu3j7J4Uj5MBEyxTVQ6pzXdd1dv2EUMZxWpGXu6z0Rogjmxkx18gXQq2ks3+ywnlgjf/5HCjvE7T8lFnjANVjjmR5OiA==
+X-Exchange-RoutingPolicyChecked: xTj5cMVM5LWZkdzk2277dpMdkUMjjQpSg9AP4bFxCmCOc6yogxBRN+Xps4p9La9gJBRd0G8AjhU5EQGdI3HNpEqa2ReSVnKlRTCM27ivZkNVQs2IKHDV/F6fiSnvF+ZKooM/fuNtHoDrIyPyMlVa9zj68weg0jFxhS76oSvPmIgfV8bMBFlBtGEso66vvArucMckMXI/L2JYGkmz+aeOPgvLS7WngieIV/dQRQ8ct1ffzK4TNy7qpF/MCOTkr1gnDXhooLa2pULIM7DCCwAZeHBmAqLupKvy5niz/OkRxgPD1//egVLg6ahoZvshQxW3TbVjfz6RndP/sGVAkgLumw==
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: CH3PR11MB566895.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b3b382c4-d154-4471-a474-08df417e398e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Nov 2026 12:04:09.6615
+X-MS-Exchange-CrossTenant-Network-Message-Id: d5ceab0f-c86f-4bea-183a-08df417e729a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Nov 2026 12:05:45.4222
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +EiOiVL0Wq1tOw98/A2U9YzZQ2DXV2DNpQzdKt9SOWDBPMSKOY5zvAW0m7JBba0M9YaHmfT0DdO+vzSANuhqupZUlC6hn5M5oBxacJhnWQ0=
+X-MS-Exchange-CrossTenant-userprincipalname: rqjT3CKFD0F9tYW+q3ic0aTTKxjHhfdT4E+XDKKXiz+iw8KZ33rUzBikE/Xvm/jGfAvE7e+ntuOpXg1d+5O1vWShGmmdgry+jUa/Ymc3hEE=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5221
 X-OriginatorOrg: intel.com
 
@@ -264,87 +264,133 @@ X-OriginatorOrg: intel.com
 > kselftest@vger.kernel.org; intel-wired-lan@lists.osuosl.org;
 > llvm@lists.linux.dev; kernel-team@cloudflare.com; Tianyi Gao
 > <tianyi@cloudflare.com>
-> Subject: [PATCH bpf-next 04/15] xdp: add a kfunc to delete skb core
-> extension entries
+> Subject: [PATCH bpf-next 13/15] xdp: add kfuncs to load the stored RX
+> metadata
 >=20
-> bpf_xdp_skb_ext_del() deletes the stored entry for an id. A program on
-> cpumap or veth can use it to drop RX metadata that an earlier program
-> stored.
+> A program on cpumap or devmap cannot call the XDP RX metadata kfuncs,
+> because they need a device-bound program. A program on veth can be bound
+> to veth, but the veth callbacks return -ENODATA for an xdp_frame. So a
+> program after the redirect cannot read the values that the program on
+> the NIC stored.
 >=20
-> Without the XDP_FLAGS_HAS_SKB_EXT flag, the kfunc does nothing, because
-> the header bytes may then belong to the packet.
+> Add three kfuncs that read the skb core extension area:
+> bpf_xdp_skb_ext_load_rx_hash(), bpf_xdp_skb_ext_load_rx_vlan() and
+> bpf_xdp_skb_ext_load_rx_csum(). Each returns -ENODATA when its entry is
+> not stored. They are in the same kfunc set as the store kfuncs, so they
+> are not device-bound and need no driver callback. A program on the NIC
+> can also read back the values that it stored.
 >=20
-> The kfunc only clears XDP_SKB_EXT_ENTRY_ACTIVE, so a later store of the
-> same id reuses its offset. The flag and the size of the area stay the
-> same, also after the last delete. To give the bytes back, the kfunc
-> would have to move the entries after the deleted one. The cost is
-> headroom that bpf_xdp_adjust_head() and bpf_xdp_adjust_meta() cannot
-> use.
+> The RX metadata kfuncs could return the stored values instead. This
+> patch does not do that. Relaxing bpf_dev_bound_kfunc_check() for cpumap
+> is not trivial, and it changes these kfuncs for existing programs, which
+> read the values from the RX descriptor of the bound device.
 >=20
 > Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
 > ---
-> __skb_ext_del() frees struct skb_ext after the last delete, because it
-> comes from a slab cache. The skb core extension area uses existing
-> headroom, so it is not freed.
-> ---
->  include/net/xdp.h |  8 ++++++++
->  net/core/xdp.c    | 26 ++++++++++++++++++++++++++
->  2 files changed, 34 insertions(+)
+>  net/core/xdp.c | 91 ++++++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 91 insertions(+)
 >=20
-> diff --git a/include/net/xdp.h b/include/net/xdp.h index
-> c888353425d4..23c976e92898 100644
-> --- a/include/net/xdp.h
-> +++ b/include/net/xdp.h
-> @@ -486,6 +486,14 @@ static __always_inline struct xdp_skb_ext
-> *xdp_skb_ext(struct xdp_frame *frame)
->  	return (void *)(frame + 1);
->  }
->=20
-> +static __always_inline struct xdp_skb_ext * xdp_buff_skb_ext(const
-> +struct xdp_buff *xdp) {
-> +	if (!xdp_buff_has_skb_ext(xdp))
-> +		return NULL;
-> +	return xdp_skb_ext(xdp->data_hard_start);
-> +}
-> +
->  static __always_inline void *xdp_skb_ext_end(const struct xdp_buff
-> *xdp)  {
->  	struct xdp_skb_ext *ext =3D xdp_skb_ext(xdp->data_hard_start);
 > diff --git a/net/core/xdp.c b/net/core/xdp.c index
-> 97dc0e403a78..2c1d5ec3311b 100644
+> fdda072a5858..4df3984479a7 100644
 > --- a/net/core/xdp.c
 > +++ b/net/core/xdp.c
-> @@ -991,6 +991,7 @@ bool bpf_dev_bound_kfunc_id(u32 btf_id)  }
+> @@ -1081,6 +1081,15 @@ static const void *xdp_skb_ext_get(const struct
+> xdp_skb_ext *ext,
+>  	return (const void *)ext + off * XDP_SKB_EXT_ALIGN;  }
 >=20
->  #define XDP_SKB_EXT_CHUNKSIZEOF(x) DIV_ROUND_UP(sizeof(x),
-> XDP_SKB_EXT_ALIGN)
-> +/* A deleted entry keeps its offset, without this bit */
->  #define XDP_SKB_EXT_ENTRY_ACTIVE BIT(7)
->=20
->  struct xdp_skb_ext_hash {
-> @@ -1119,11 +1120,36 @@ __bpf_kfunc int
-> bpf_xdp_skb_ext_store_rx_vlan(struct xdp_md *ctx,
+> +static const void *xdp_skb_ext_load(const struct xdp_md *ctx,
+> +				    enum xdp_skb_ext_id id)
+> +{
+> +	const struct xdp_buff *xdp =3D (const struct xdp_buff *)ctx;
+> +	const struct xdp_skb_ext *ext =3D xdp_buff_skb_ext(xdp);
+> +
+> +	return ext ? xdp_skb_ext_get(ext, id) : NULL; }
+> +
+>  /**
+>   * xdp_skb_ext_to_skb - Set the stored RX metadata on an skb.
+>   * @skb: The skb that is built from the packet.
+> @@ -1296,6 +1305,85 @@ __bpf_kfunc int bpf_xdp_skb_ext_del(struct xdp_md
+> *ctx, enum xdp_skb_ext_id id)
 >  	return 0;
 >  }
 >=20
 > +/**
-> + * bpf_xdp_skb_ext_del - Delete a stored entry of this packet.
+> + * bpf_xdp_skb_ext_load_rx_hash - Load the stored RX hash of this
+> packet.
 > + * @ctx: XDP context pointer.
-> + * @id: Entry id, see &enum xdp_skb_ext_id.
+> + * @hash: Return value pointer.
+> + * @rss_type: Return value pointer for RSS type, see &enum
+> xdp_rss_hash_type.
 > + *
 > + * Return:
-> + * * Returns 0 on success, also when the entry is not stored.
-> + * * ``-EINVAL`` : @id is not a valid entry id  */ __bpf_kfunc int
-> +bpf_xdp_skb_ext_del(struct xdp_md *ctx, enum xdp_skb_ext_id id) {
-> +	struct xdp_buff *xdp =3D (struct xdp_buff *)ctx;
-> +	struct xdp_skb_ext *ext;
+> + * * Returns 0 on success or ``-errno`` on error.
+> + * * ``-ENODATA`` : the RX hash is not stored  */ __bpf_kfunc int
+> +bpf_xdp_skb_ext_load_rx_hash(const struct xdp_md *ctx,
+> +					     u32 *hash,
+> +					     enum xdp_rss_hash_type
+> *rss_type) {
+> +	const struct xdp_skb_ext_hash *entry;
 > +
-> +	if ((u32)id >=3D XDP_SKB_EXT_NUM)
-> +		return -EINVAL;
+> +	entry =3D xdp_skb_ext_load(ctx, XDP_SKB_EXT_HASH);
+> +	if (!entry)
+> +		return -ENODATA;
 > +
-> +	ext =3D xdp_buff_skb_ext(xdp);
-> +	if (ext)
-> +		ext->offset[id] &=3D ~XDP_SKB_EXT_ENTRY_ACTIVE;
+> +	*hash =3D entry->val;
+> +	*rss_type =3D entry->type;
+> +
+> +	return 0;
+> +}
+> +
+> +/**
+> + * bpf_xdp_skb_ext_load_rx_vlan - Load the stored VLAN tag of this
+> packet.
+> + * @ctx: XDP context pointer.
+> + * @vlan_proto: Return value pointer for the TPID, in network byte
+> order.
+> + * @vlan_tci: Return value pointer for the TCI, in host byte order.
+> + *
+> + * Return:
+> + * * Returns 0 on success or ``-errno`` on error.
+> + * * ``-ENODATA`` : the VLAN tag is not stored  */ __bpf_kfunc int
+> +bpf_xdp_skb_ext_load_rx_vlan(const struct xdp_md *ctx,
+> +					     __be16 *vlan_proto, u16
+> *vlan_tci) {
+> +	const struct xdp_skb_ext_vlan *entry;
+> +
+> +	entry =3D xdp_skb_ext_load(ctx, XDP_SKB_EXT_VLAN);
+> +	if (!entry)
+> +		return -ENODATA;
+> +
+> +	*vlan_proto =3D entry->proto;
+> +	*vlan_tci =3D entry->tci;
+> +
+> +	return 0;
+> +}
+> +
+> +/**
+> + * bpf_xdp_skb_ext_load_rx_csum - Load the stored RX checksum status of
+> this
+> + *                                packet.
+> + * @ctx: XDP context pointer.
+> + * @ip_summed: Return value pointer, ``XDP_CHECKSUM_NONE`` or
+> + *             ``XDP_CHECKSUM_UNNECESSARY``.
+> + * @csum_level: Return value pointer for the checksum level.
+> + *
+> + * Return:
+> + * * Returns 0 on success or ``-errno`` on error.
+> + * * ``-ENODATA`` : the checksum status is not stored  */ __bpf_kfunc
+> +int bpf_xdp_skb_ext_load_rx_csum(const struct xdp_md *ctx,
+> +					     enum xdp_checksum *ip_summed,
+> +					     u8 *csum_level)
+> +{
+> +	const struct xdp_skb_ext_csum *entry;
+> +
+> +	entry =3D xdp_skb_ext_load(ctx, XDP_SKB_EXT_CSUM);
+> +	if (!entry)
+> +		return -ENODATA;
+> +
+> +	*ip_summed =3D BIT(entry->ip_summed);
+> +	*csum_level =3D entry->level;
 > +
 > +	return 0;
 > +}
@@ -352,9 +398,12 @@ X-OriginatorOrg: intel.com
 >  __bpf_kfunc_end_defs();
 >=20
 >  BTF_KFUNCS_START(xdp_skb_ext_kfunc_ids)
->  BTF_ID_FLAGS(func, bpf_xdp_skb_ext_store_rx_hash)  BTF_ID_FLAGS(func,
-> bpf_xdp_skb_ext_store_rx_vlan)
-> +BTF_ID_FLAGS(func, bpf_xdp_skb_ext_del)
+> @@ -1303,6 +1391,9 @@ BTF_ID_FLAGS(func, bpf_xdp_skb_ext_store_rx_hash)
+> BTF_ID_FLAGS(func, bpf_xdp_skb_ext_store_rx_vlan)  BTF_ID_FLAGS(func,
+> bpf_xdp_skb_ext_store_rx_csum)  BTF_ID_FLAGS(func, bpf_xdp_skb_ext_del)
+> +BTF_ID_FLAGS(func, bpf_xdp_skb_ext_load_rx_hash) BTF_ID_FLAGS(func,
+> +bpf_xdp_skb_ext_load_rx_vlan) BTF_ID_FLAGS(func,
+> +bpf_xdp_skb_ext_load_rx_csum)
 >  BTF_KFUNCS_END(xdp_skb_ext_kfunc_ids)
 >=20
 >  static const struct btf_kfunc_id_set xdp_skb_ext_kfunc_set =3D {
