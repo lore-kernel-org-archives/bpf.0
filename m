@@ -1,100 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=209.85.208.41
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
-	t=1794547871;
-	b=BbPlYBxeiU9pvmoGkoECfd5w3hlYnd2aYFQqwUExIO2ZHUffNF03J9RMEVLzg47rxnZR
-	 54QDeEBebvFDnjZs+MOslvTQpskHBMdHf3PJTbPbuxbk9PoMOPG0HkPUycgyAil2i0fOt
-	 dniVosyefKLsbbWMCLC9rzeTXkeIHi4QbndIsmVk4h6lT3GNIYHYtcyNFKWlUPK7tpYAY
-	 LR5Ecy45lRAdlD62X1kbns7FEb93/swjdbya+VHHDLw/6QbTfs4ccf3aXvQ6yhRYfmqDI
-	 cpaKJOTwrOjMzjMLrP75l+GezPZxS/YmXaGP1hNvb9QFtJGnHZqM5abdfvp1ESDe2Rw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794547871;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=w43UbU37I+5iOET4dygwr5SwGRkUmEoClUGG8OTjGgI=;
-	b=COQBfDdxWXHAVri3MMOx9xmvsqmdf+HxIfkSgohy6QR92vufu9l3snp/MQUPZrxQTGTQ
-	 Xy5wjpAxlI+/Dx3XjJ+8zOxNMBnLGpJN5b+W9nS+VDCAxDHVO+Y4mtyi2tzvvIQhGqmF5
-	 pS+SWPuLprE/u7s3SjtLiQ6knt4rXTXHwS6JKSZW6xHOp7gmfh07ezSF934m5LkaK2hxv
-	 w/aSQ81Lzd6cv9+7/SsaVHs+NKSEJJ2nbsgPdoB9roaeE1Fp3KzSXytaRdLd0BeWVb4R0
-	 4lGle8avbYjSwUcZFFAfXOYzDIjTCqDHrBPx2L4a0fPEnfcMhx7TgNa+ZtGvdrqmjlQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="VTU/Umv/";
-	arc=fail smtp.remote-ip=209.85.208.41
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794549149;
+	b=qBpxNd2YaQ5qbNywZ4BMtR98OmTHaWnA041oilqUisUc+7972SD8bgqwitQzd6sX/NaB
+	 M3IbAdFN3Y8VNfFE+LPMeuEXwbQWFEPzjkSQ3sZ0DVqaQBNdc1slNoZy72qsSU7vU9lRc
+	 wG2Gz+Rbf3/N0mvrPXnq/xxBDaN5vVK6Y43I2C6H1bMexsjFipcTMKTpGODMQn8DVrOZb
+	 Hoj3dPgb2j1tk/ETV/hGT6lueMa2wHbU6yqz/8byQPXV3cLYPQzp8QxV4Nm2LF7Bdbfq6
+	 Pf8IXyWTO6Dft6RbAsyHzyP38qEvTeRZ0n1DLky75W7gr+sh9/JkfdNMdKFr7s7wFmg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794549149;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=XiP6kbOnk5aGoSfWSCeMBHb+xlwoQH67hWzA8o7H21w=;
+	b=rqvf9RB+JlfMysOLlkqpY0GtZx91ogMxlqGlWoUTBuBhG45oxjp58uy99+P8A8maccwf
+	 ZZCOBVr2qh5WjErkOQ4+yogCZQ9lAmfGm8DTQ57yh9zQif5iaSyQS+n8y0tEvuEVxU/4U
+	 s2IgeiMZ8pxA0w+qCXKmFC6EByg+OCU3Ror9XHkjl/A5NBJ8dGKfPvePZFU3ZngZQ5JIH
+	 4GzKDUVbstBnhurx3K7vMR8yefQ+Et5oPYnR3DJujE/N1AOsP1CR+pzwWrxtYRY3oD4Pc
+	 lz5eoRFjqtLsYxT5Y/eF3CvQSdzrTCMJkSJP+MbPH/dpWhBU/TJOw8AaHP01aI8q5RQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZOsqxGno;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0164606A32E
-	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 05:31:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C0164606A32E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9883606A321
+	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 05:52:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=VTU/Umv/
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-6b71ee00f0dso4650a12.1
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2026 21:31:10 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794547869; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ar734nysBQbUL2FR2lWCX3besFc8bExqFjY0aseaS1SqGaxgT+37odVYN+CS5ZT9x5
-         BCflsW4DvdDLKwMHIt2YsyREjS63f+WwNfd0IcQuhB3huLS566g1C5cTHUxg7W/iZ5cM
-         epgvpUsxvKw7Z2lghSyHwyAGM8k6mP8BXf/FgbzlW9ffuNSu83k2rj9K0uCCUUVeJ7F8
-         164THU91ezDG9w65uXr+POU2fBuihCyE4Uz2cEHtaDemryfj7HLTQuj/jMLcCHmlsY2d
-         EAFY33+jSH3NSLs4q234DVexWJ0wajZVFLf1aeYDOpcHppIZWN4Vxn4dDVrS5Xf/aPPL
-         cHKQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=w43UbU37I+5iOET4dygwr5SwGRkUmEoClUGG8OTjGgI=;
-        fh=T9ZvtydcC6nfJ+yd2MOJLIodJGr7CBQZy/xhWbxdWco=;
-        b=FYSHujgwk4X3eljcA9YhRmUlcXCP11PFf35ON5Av/W/rAwGkS3cFh99SUssrGc+i14
-         WBqwhspNccsAAwFW9LvRGXtKof98wnepyBFKgeBbyoLn8xC5vJkxrpcJHiZhAgt6Ry2+
-         RtmF9Oy49d+igSjYbVcyEvRYD64APPYORLpPNN20S8xxYQMn3EeoDmbKcbveZk4uJjJT
-         V3a4XMjBzQPhFchbUSwZ38lqQanjmhIe98qwdE5Jaaw2VLtykjLwkzu91yXBjj0pnmOc
-         /54s34O3PWa2phi6o7GVc1T6Oogoj2aHCgYSNZkzHVvURO0IDopLVFY6OLwpF/YyNDu9
-         6ffQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794547869; x=1795152669; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=w43UbU37I+5iOET4dygwr5SwGRkUmEoClUGG8OTjGgI=;
-        b=VTU/Umv/XxRmtX3d/XSHHHzSkVNlCjGAiWWmvRpYtATJbDMspOvWRWvSyyqUeqeGeO
-         Q8uCINspbjVgU1zSuH+9UnHcqxv8cjRjT4BNbJxmhaQFB8TeexUJIOYqLp4e6zCgNF7n
-         GqWGMPJWmhxv2jXRWVtVDAZqa1EhqIWzuIWQ7K3QsEysQ+usM5G4CvZUur47OQUqnPpY
-         PP7Up96FsigDTcgDAk4n7JTplwxHbQe689kspsrS0geT7o0ItGIgt0vez+TupVh2sN/m
-         e+JFPSRT2SGGBWIOmeouwuXUS1RYlIiX34y+UZSFFdexoH4xWaCTbeVKnfpyGGT5KVCu
-         Qs2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794547869; x=1795152669;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=w43UbU37I+5iOET4dygwr5SwGRkUmEoClUGG8OTjGgI=;
-        b=BAOaRpjhvTlPthDWodF/cUts4kkIpOE9yr8mtGpdcGbV1WLIdfecVODtMCVx0VYQdD
-         Ke2hzSjHpbo9TI7Nb68gWHIZ/QQvcyZRj4KauFJ/1CNIkwgPRpA4UYXs3/lR6jgYvEWz
-         KITSuN+ULxvnRetSCkqbCOUrmrM5L8pmoZRafFmgH6OJL4EahNcJ3BKPL986AvwdFkTb
-         8Kc+4BGIc6GcA8ntJ24SHKcuVpIBfKV7RIEF8wYbTQ/OHhobm5Gbl62Xh55v1eB+OuQn
-         bKQgNp41p0vZtisGsw304BhywjXrGRE1/cZayPt6ViKlK7zC/VAgmMhRZEXiDuM+C1fN
-         RFhg==
-X-Forwarded-Encrypted: i=1; AL+hErEr/pfxVIKw8993EFECfybbkH3uBGS/UgHUcqMn4OaX9xGJbxSDG8bLjP7wgdlC38z6Ji8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/BMyes2TruCWgwt8ZMhtDWLKYU2PvYVTmmwFDENdhfZ76gxksC
-	lGxmLT9dAy/WO+DndgMS7NxyctcWA02jaB47lGyZ3HZCvVqNwK0vj7f73bvNzVzNxiBx9Pgsxt3
-	MIrH2DvVqrhYxuAXXbUqqMIwIsoZt1WwllZhoUlzO
-X-Gm-Gg: AYBFou2SmQB/i51tN9nNLfXZhD8d9kXMV2PBJ32+ff4QaCa1fKARcfK2UbDfalW+y4U
-	GZrZ+z+bH0ZA2aJRGG7DDYZa4nSxu92HP2Rakiie/hTOyn7wc5ITbH5C7wqu/H7VJLXVREGkewd
-	Pg9QpI9ixMjUwxAUQIdH9kUZ02m/siC+Go6YO8Qw62Us/Dk55hnZyhZBMDKMPlkhVaQzgWjr0ts
-	QTVvLbndkc5uhS0pSG7pj33Spck6NwyBlZeGuW8hb7Dy/aXSIWgkjDVT/8SCL8MAjwRepgoCwWZ
-	HqwRABB+luqKfE58FT+SEdCZXuE4gaiEeCSTRFUMwqhAUiiLbH7D7LBpH3FSeiMLB0GayjcMLQx
-	lu0i2JyHaKF2+1NgoYkjZVQE8CkQ4Fd9c1Y8=
-X-Received: by 2002:a05:6402:50c:b0:6b1:bce6:1220 with SMTP id
- 4fb4d7f45d1cf-6b7c82ccc67mr31403a12.12.1794547868632; Thu, 12 Nov 2026
- 21:31:08 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZOsqxGno
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 245AC1F000C4;
+	Fri, 13 Nov 2026 05:52:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794549149;
+	bh=XiP6kbOnk5aGoSfWSCeMBHb+xlwoQH67hWzA8o7H21w=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=ZOsqxGnodo7Q6XpFGUWt8nv+JdVO1QsFLr23JQVMXoTl8KIMpUgm+ZwXYGYbmQfNv
+	 Zmi5IBRJMAuoncZBZQr7tRKoJ+v5I2Yak+VhTf4mL7Rt7oPgcX8+x5Q0dOuAZGNSiP
+	 qYzuLCDPtQXc1/ItGUomG0xk1O/GBS6siQ4wCq08vkqvztyXiOPNi1q8C3Cukt6NYu
+	 wD1zmd6oKgsuxiFoOm3gNjO7LiNE+TGX7t19HsVGlsFQKYLpQ6hrbYATTTGjf+E3Tu
+	 Vv2iDlpVQen+rT54DeDNmtwiqImJtl5UnHTBCkYUip7JQPw7cOpivMl4TUtDsSQORe
+	 oxXDBjc4y8Vew==
+Content-Type: multipart/mixed; boundary="===============7604913813621578243=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,49 +49,88 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261110102039.1002605-1-bjorn@kernel.org> <20261110102039.1002605-3-bjorn@kernel.org>
-In-Reply-To: <20261110102039.1002605-3-bjorn@kernel.org>
-From: Mina Almasry <almasrymina@google.com>
-Date: Thu, 12 Nov 2026 21:30:57 -0800
-X-Gm-Features: AclHuK8G8jI-cBJtcQSxvGp_Bq701GaxLVhNUpqBJGdSCTN97QaxO6J0E1uIQ_U
-Message-ID: <CAHS8izMaAv6gX1NeJR+QCf43CL+DC4DgePRNNxSLoE31jxHU0g@mail.gmail.com>
-Subject: Re: [PATCH net-next v1 02/11] net: Add memory provider capabilities
-To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc: Magnus Karlsson <magnus.karlsson@intel.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, netdev@vger.kernel.org, 
-	bpf@vger.kernel.org, io-uring@vger.kernel.org, 
-	"Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>, Weiming Shi <bestswngs@gmail.com>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, 
-	Alexander Lobakin <aleksander.lobakin@intel.com>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Stuart Clark <stuclar@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <552ca9c7597417c92823f305ed9e41c67c2621674e3b568ffa085ae2e2c28aa5@mail.kernel.org>
+In-Reply-To: <20261113050901.1399091-9-alexei.starovoitov@gmail.com>
+References: <20261113050901.1399091-9-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH v2 bpf-next 08/13] resolve_btfids: Don't list an error that follows work on an argument
+From: bot+bpf-ci@kernel.org
+To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,a.s.protopopov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri, 13 Nov 2026 05:52:28 +0000 (UTC)
 
-On Tue, Nov 10, 2026 at 2:21=E2=80=AFAM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel=
-.org> wrote:
->
-> The core treats every memory provider as unreadable: installing one
-> needs header split and no XDP program, and any page pool that allows
-> unreadable netmem takes it. An AF_XDP UMEM provider is readable, needs
-> XDP, and hands out whole buffers.
->
-> Describe providers by MP_CAP_READABLE and MP_CAP_FRAG; devmem and
-> io_uring keep their behavior with MP_CAP_FRAG. A page pool takes a
-> readable provider only with the new PP_FLAG_MEM_PROVIDER:
+--===============7604913813621578243==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Why do we need this? I thought whatever creates the pool actually
-shouldn't get to pick whether the pool picks up the memory provider. I
-thought if core has configured the rxq for a memory provider then the
-pool is forced to take it.
+> resolve_btfids: Don't list an error that follows work on an argument
+
+TL;DR: Possible wrong register mapping in resolve_btfids when a struct or
+union parameter takes multiple registers (or none): later pointer args may be
+misidentified, so an error may be wrongly dropped from or kept in the fmod_ret
+list.
+
+> diff --git a/tools/bpf/resolve_btfids/fmodret_scan.c b/tools/bpf/resolve_btfids/fmodret_scan.c
+> --- a/tools/bpf/resolve_btfids/fmodret_scan.c
+> +++ b/tools/bpf/resolve_btfids/fmodret_scan.c
+
+[ ... ]
+
+> +void scan_set_proto(struct scan *s, const struct image_func *f, unsigned int pointers, bool effect)
+> +{
+> +	struct callee *callee = callee_at(s, f->addr);
+> +	unsigned int i;
+> +
+> +	callee->effect = effect;
+> +	callee->pointers = 0;
+> +	for (i = 0; i < s->flow.arch->nr_args; i++)
+> +		if (pointers & BIT(i))
+> +			callee->pointers |= BIT(s->flow.arch->args[i]);
+> +}
+
+Does this mapping hold when a parameter takes more than one register?  Here
+BTF parameter i is mapped straight to arch->args[i], and set_protos() builds
+the mask the same way, without regard to parameter size:
+
+	for (i = 0; i < btf_vlen(t) && i < 32; i++) {
+		int type = btf__resolve_type(btf, btf_params(t)[i].type);
+
+		if (type > 0 && btf_is_ptr(btf__type_by_id(btf, type)))
+			pointers |= 1U << i;
+	}
+
+On x86-64 and arm64 a struct or union of 9 to 16 bytes passed by value takes
+two argument registers, and on x86-64 a larger struct takes none.  Every
+later parameter then sits in a different register than the one assumed.
+
+For example, in kernel/bpf/btf.c:
+
+	int btf_new_fd(const union bpf_attr *attr, bpfptr_t uattr,
+		       struct bpf_log_attr *attr_log)
+
+bpfptr_t is the 16-byte sockptr_t, so attr is in %rdi, uattr in
+%rsi:%rdx and attr_log in %rcx (x0, x1:x2 and x3 on arm64).  set_protos()
+produces BIT(0) | BIT(2), which becomes %rdi | %rdx.  In scan_func(),
+flow.args then treats %rdx (uattr.is_kernel) as a pointer argument and never
+tracks %rcx (attr_log).  map_create_alloc() and groups_to_user() are shifted
+the same way.
+
+The callee side has the same problem: for a void callee with such a
+signature, insn->pointers names the wrong register.
+
+An effect on a later pointer argument would be missed, so the error stays in
+the list, and a register holding non-pointer data can be taken as a based
+pointer, which could drop an error by mistake.  The commit message lists
+what the tool does not see, and this case is not on the list.
+
+Would advancing the register index by the size of each parameter,
+(btf__resolve_size() + 7) / 8, work here?  Alternatively, could a prototype
+with a struct or union parameter be given up on (cleared)?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43372129532
+--===============7604913813621578243==--
