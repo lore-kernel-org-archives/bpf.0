@@ -1,57 +1,105 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794592272;
-	b=Yzy/+wWWoZ/kqQ/VR2eLGgRNmn/GAr4TbpbL5gXQ7P/BSs3PtvZDa7Lrg8g9rQf8zFjb
-	 /DCo5BSfnzn4eaDQGh+H4LtCoOw0nQB5LISBr9og5iU+e6fxD9scmyN/p3dn+gDinKmqe
-	 i6K8ah8y9aECnlC92nCJGKnCgUbW/NbKFcPtb2ACQ1NqbBMZs68xGsB9I8fNC9yAHMZfa
-	 ia56suSS0NlNlxoQ5iaxVc5kV8HpMKwvH+UGSr0Z2pTj72KNeq0pR+RuiKZgVLis6g4q4
-	 A3t256uBnIfiGIw5VfhQKi8IwMXHYF1Vn8VQ5EXxpR47J2K1dQcqY6AM05He5d/oPTw==
+	t=1794592946;
+	b=gXRmBeOI4mO/Oj4OgGdbAq61h5/C3spsVVLC1JLfWO4pD1sy3GDcrW3kO8sZeBgdC+0p
+	 aRC6iF4lHoDAH8w77Bs1oQ+5nAKy7KSd4KqOLmbD+N/8uiLQvOhze/g+6TFGLCxqtsFIT
+	 2qTmmXI++oN1N28ezr7fNYrwABb10/AGw6LDQAlqdjoPmc0Fp4AC96ft9VPP8d7JEOiB1
+	 EP3L+hCbzYernm4rEfTnakFQkR+66ZJeEgyaZevwFajPXyNlg5lg5l8qQa6NaPaEG+1WD
+	 y+09aw7lg7GnABZBodv0hsjiVq5RJa2yLuUCQyBeO8KtbmjqeXckoDXIKfVTu4bWaVA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794592272;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=kp6LJYO7FBDq9cnPH8XB/SVlMIwHKZGH99cpSp4Ussw=;
-	b=xlOpaHuKUlUNM/KQqZfddMIrDEHVsVBbgsfL5lFSmVhz37lwZxB8fYoW7X3rxU3RVDQk
-	 QWDjLWiQv8rUDoH9wjKXuQdiH2+5LMd7JQLDoQaP3hwtp6aQOdJbbjuCwekUe6ijY4SH3
-	 8qfMQzeS9Q1/a8hvOnGBCYB9q4vltXgwCPw5Gtge8YxD0k+PXDWABbJ3yGkD8gD5BfF4B
-	 cu+XV2EhWmSFcGm8W2w2OV0NXAJePEFsdsB1R/MlQc1j/Xt2wGSMe4RKeyt74mpVZ0906
-	 uhHGFhwYUt4tvRlqJEKEx6iLnsEAMkZyUHhbwdAZbxw1+6wSoV7zuqKVEU5Re7/xuyg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794592946;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=wLpQg5QcAg89Cohrx6Yev6AjF1ehi1341b5g301iJZ8=;
+	b=4ug7Db+dIM7g10xjaI52HLMhdYg4VchfK22H6GzWf5oXWS05xnrJPpbWQ920ujAxq5bc
+	 Zwut7mwOBARNvUkNaOxZRtgVvXSyBRyX5nybDjVRbR62ifusjn8T3OMrE3Irrx2IiB8hd
+	 /Re2gl9bEMyd5TLkVC3aVeSQW0oCuV5SbEX+/yPkX2ceXlYZH1uQvgrgxo6DqBN1kq/QB
+	 2ftjII862WHwwOMO8rcSOFu14fqtMYSZWKqaoXKV00j3PSO4ephcMmaiFKP4jDObC0poD
+	 5M/wsa9/NWA1l5/1jc4VWIIa39lawQeA69glMxDWizHv3QyYwwojGGehhGcWDtOmM4w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YSeDKEr3;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XGeQHk8Z;
+	arc=none smtp.remote-ip=74.125.82.174
+Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF324606A8BC;
-	Fri, 13 Nov 2026 17:51:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43705606B46F
+	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 18:02:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 43705606B46F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YSeDKEr3
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 468EA1F000C4;
-	Fri, 13 Nov 2026 17:51:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794592272;
-	bh=kp6LJYO7FBDq9cnPH8XB/SVlMIwHKZGH99cpSp4Ussw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=YSeDKEr3kFtMIpdz7r3PWKfVNvQX6p0qQiyINauVJ5retsHiYWHGjiufaCBVwu7Ny
-	 fNYIyA4DNmrFJGE3+YsgKar7WWSpDsu+W14mSyYobg2Tg3qnGrQZXbaX5ZR/XwbZfH
-	 AV3jfmYpNFTQsv2btO8jUeHZ0iWcM8FF13mO2owXMTlvM5TobEflTPQkB0vg2Z0jaB
-	 OqncOFBAgQuHy1TiZFMIhqV0t0MyM6xVuKyIhwcmRCkGVYCScQ3Z7W960mL6IdveMJ
-	 PJIY/Ybx3IIXyZj0M+zxvPblRYD8XPgsVcihFNIBAjHGkkDX0LJknkOtzmiaXucGox
-	 OapjjdKphZbZA==
-Message-ID: <sashiko-outbox-213365@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC v3 8/8] vsock: add datagram tests to vsock_test
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Sergio Lopez" <slp@redhat.com>
-Cc: virtualization@lists.linux.dev, kvm@vger.kernel.org, bpf@vger.kernel.org, linux-hyperv@vger.kernel.org, "Michael
- S. Tsirkin" <mst@redhat.com>, "Eugenio Perez" <eperezma@redhat.com>
-In-Reply-To: <20261113-vsock-dgram-support-v3-8-1523c8e9b27e@redhat.com>
-References: <20261113-vsock-dgram-support-v3-0-1523c8e9b27e@redhat.com>
- <20261113-vsock-dgram-support-v3-8-1523c8e9b27e@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 13 Nov 2026 17:51:11 +0000
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XGeQHk8Z
+Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-36e795af1d4so894197eec.1
+        for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 10:02:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794592945; x=1795197745; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=wLpQg5QcAg89Cohrx6Yev6AjF1ehi1341b5g301iJZ8=;
+        b=XGeQHk8ZO1dp9XZamtxcj2r2j6j4skWEmXGyEXYr7dFlvJL27ZBmdlz+SyuNiXAgOR
+         xbIByzYO6KX4Ix85QHA+VnOZ7ZNIS1dhSLTbTOLRiVhr/shYi35xXVExkPy6CafjrWqC
+         LDo3azPLy8TyMTWYi23rBhcHcTHJVEHoMMIuCBtuAyQ3TMc8V0Biy3MSsFvdLvpZ0VaK
+         OgFhg0GhA7RaQPUClsAgz8QbgKp17GLTXGZnZR9798o/5yPaBcxD4TijVEzFTYtlBqbq
+         B+vJvlCv0+gMz0wgrmjPgXpJ/tEtOQKOSJTgJJl90FnvHv3pjUGh3xL4i08ELLz4G54c
+         gkAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794592945; x=1795197745;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=wLpQg5QcAg89Cohrx6Yev6AjF1ehi1341b5g301iJZ8=;
+        b=mWhi1TGPHXRMuNcP8pwvZns+91crJ3BpOtoXW3h2xPuwklztC6UH6nyC7nS9zkiiDn
+         xYxcWMQGWjPp71Yd2ilWPAwi8s0nE/swMeRw5T9W2oEmS8lg2fhHKXFj9zfuz4kf3VL/
+         wlBKj6DCGyCIo4pRIRQHuqUFRp/ionktiEsZUnLQlXE/hB9uFvNCHBa3CXIFS7wMbANq
+         HT/W6y2s1c7nF1FFvVu/sqL7Q/rOed+xb8TWtmS0XuIuCcLlDpHLMfJv/4I7isa3JQjk
+         Yx5zwakYmYw+ixLsuAaTHSPQwBbdsrCB9bcmN9osPH+oMqnth6gI5mFTi1o/sXQKkneG
+         OZNA==
+X-Forwarded-Encrypted: i=1; AL+hErGRUw81HBCdH4OuY1Iu/kLk7OcqG/DCh0YsYj/NCBuZDuCf/b31RQR7ZDAwJZMl58CG0xA=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+bxlhcvjiyP7u42hG+1HBQb7RjJ+OdqOrYh8ZdDuSM6ict/Ves
+	11n9FRBe//lOf8KRv66FVOwhZb7IJ4HDGXYhoOEuevrqnL8Y2fSDJXyW
+X-Gm-Gg: AYBFou2U529MreSdW1TySPdB9i8p8mVp2DcwmPbscKtEt94KzNWy4m7OZVvCfUxPrJ4
+	pkCg3TgSTx1E1cjoKB4P4ndH88RZuPrtN+0Ule9zU29iQ+bnAoQAb8acaH0+kCpP8CuhZySAq7V
+	N3exfHXGBTh01v6iDgauXaMUeKEbbYYYorp4b6PE72xjCbl6T6Pcsa+gh9qgyyWruMuS1NBiqEV
+	iWdqoS2S2PvOxUFLzhjgGQMHKCjDvuBdOqOyehYas95HOfF3rIFnX7eziC24Q/w2CN7OA77nr5M
+	tZ74EIJGWcczdjr/309Hh0z6ZW9Fj9O8H5G276SISo1GX32wMjpb8ytbKMaaAn2YNRXfJt6f/oI
+	ra+NUx8nY4UYGzVhRWrJL9YZluZZXvulIsJsOU4R7sst+PaikAaPvSm9a8vbjVb1+j3lehDXjVh
+	kW7vu+lR+vV5YJlZko/ytDSHkIUAL0o70KRJhptx1LuShwKnfnkhRzbU6Wgiqh8ggHsvn7LIgML
+	mqyo0dt/csxRSqBaRlg3KBYTJVqJtLFst8/jeRF6XJ36N4jzUv05VdwFYbgMb1FX0Z2d4ZyADvi
+	Gt/DOA9z5vfn/SQ0Qdganbxh8Y/+1sTSFzG0INW/BBDUJfe962yOEawVsoAjTnKbq6WCby0=
+X-Received: by 2002:a05:693c:60c1:b0:36a:2473:9b2f with SMTP id 5a478bee46e88-377e1af6414mr5950264eec.23.1794592945251;
+        Fri, 13 Nov 2026 10:02:25 -0800 (PST)
+Received: from localhost (218-35-178-218.cm.dynamic.apol.com.tw. [218.35.178.218])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-37955f02ff0sm8621741eec.16.2026.11.13.10.02.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Nov 2026 10:02:24 -0800 (PST)
+From: Kurt Lin <lylin1023@gmail.com>
+To: Hui Zhu <zhuhui@kylinos.cn>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Barry Song <baohua@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Kurt Lin <lylin1023@gmail.com>
+Subject: [PATCH bpf-next] selftests/bpf: Skip memcg_proactive_reclaim when data lands in shmem
+Date: Sat, 14 Nov 2026 02:01:59 +0800
+Message-ID: <20261113180159.602033-1-lylin1023@gmail.com>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,127 +108,86 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issues to consider:
-- [Medium] selftests/vsock: unguarded loopback SOCK_SEQPACKET connect in
-  local netns
-- [Low] vsock/test: incomplete DGRAM_VMCI probe in dgram_capabilities()
---
+workload_dir() keeps the data file off tmpfs because shmem cannot be
+reclaimed without swap. But statfs() only sees the top of a stacking
+filesystem: with /tmp on overlayfs over tmpfs, as in virtme-ng guests,
+the check passes and all 32 MiB are still charged as shmem. Whether the
+test then passes depends on unrelated page cache in the cgroup; in a
+full test_progs run it fails with:
 
-commit 75f8685914783d3ed99f76000f4d13a1f1c04ea3
-Author: Sergio Lopez <slp@redhat.com>
+  test_memcg_proactive_reclaim:FAIL:reclaimed unexpected reclaimed: actual 0 <= expected 0
 
-vsock: add datagram tests to vsock_test
+Check memory.stat after writing the file and skip when most of the
+data was charged as shmem.
 
-This commit adds AF_VSOCK datagram tests to vsock_test covering local
-semantics, peer transfers, routing, queue accounting, and capability-based
-skips, along with a --local mode for running local test cases standalone.
+An AI coding assistant (Claude) was used to find and analyze the
+failure and to draft the fix and this changelog.
 
-> diff --git a/tools/testing/vsock/vsock_test_dgram.c b/tools/testing/vsock=
-/vsock_test_dgram.c
-> new file mode 100644
-> index 0000000000000..4b45dcf2a15cc
-> --- /dev/null
-> +++ b/tools/testing/vsock/vsock_test_dgram.c
-> @@ -0,0 +1,1061 @@
+Fixes: 0f9b1e9ef584 ("selftests/bpf: Add bpf_proactive_reclaim test")
+Signed-off-by: Kurt Lin <lylin1023@gmail.com>
+---
 
-[ ... ]
+Notes:
+    Tested in a virtme-ng guest without swap: with /tmp on overlayfs over
+    tmpfs the test now skips; on a disk-backed directory it passes.
+    
+    After writing 32 MiB, memory.stat shows shmem 32.0 MiB on overlayfs
+    /tmp and on tmpfs, and 0.0 MiB on a disk-backed filesystem.
 
-> +static unsigned int dgram_capabilities(const struct test_opts *opts,
-> +				       unsigned int needs)
-> +{
-> +	unsigned int caps =3D DGRAM_SOCKET;
-> +	struct sockaddr_vm peer;
-> +	int fd, local_fd;
-> +
-> +	fd =3D socket(AF_VSOCK, SOCK_DGRAM | SOCK_NONBLOCK | SOCK_CLOEXEC, 0);
-> +	if (fd < 0) {
-> +		if (dgram_unavailable(errno))
-> +			return 0;
-> +		check(fd, "probe datagram socket");
-> +	}
-> +	/* VMCI may own the socket while a directional transport serves peers.
-> +	 * A nested guest can have both virtio and vhost registered. Probe the
-> +	 * requested direction so vhost registration cannot mask a virtio device
-> +	 * that did not negotiate datagrams.
-> +	 */
-> +	if (!access("/sys/module/vmw_vsock_vmci_transport", F_OK))
-> +		caps |=3D DGRAM_VMCI;
+ .../bpf/prog_tests/memcg_proactive_reclaim.c  | 28 +++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-[Severity: Low]
-Does checking only for /sys/module/vmw_vsock_vmci_transport leave
-test_dgram_vmci_inq() unskipped when VMCI cannot route datagrams to
-itself?
+diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c b/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
+index c22dcfabe856..c03550676041 100644
+--- a/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
++++ b/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
+@@ -46,6 +46,28 @@ static const char *workload_dir(void)
+ 	return NULL;
+ }
+ 
++/*
++ * statfs() only sees the top of a stacking filesystem. When /tmp is an
++ * overlayfs whose upper layer lives on tmpfs, as in virtme-ng guests, the
++ * check above passes but the written data still ends up as shmem. Ask the
++ * cgroup how the pages were actually charged.
++ */
++static bool charged_as_shmem(void)
++{
++	static char buf[8192];
++	unsigned long long shmem;
++	char *p;
++
++	if (read_cgroup_file(CG_PATH, "memory.stat", buf, sizeof(buf)))
++		return false;
++
++	p = strstr(buf, "\nshmem ");
++	if (!p || sscanf(p, "\nshmem %llu", &shmem) != 1)
++		return false;
++
++	return shmem >= FILE_SIZE / 2;
++}
++
+ void test_memcg_proactive_reclaim(void)
+ {
+ 	struct memcg_proactive_reclaim *skel = NULL;
+@@ -99,6 +121,12 @@ void test_memcg_proactive_reclaim(void)
+ 	if (!ASSERT_OK(fsync(data_fd), "fsync"))
+ 		goto out;
+ 
++	if (charged_as_shmem()) {
++		printf("%s:SKIP: %s is backed by shmem\n", __func__, dir);
++		test__skip();
++		goto out;
++	}
++
+ 	args.cgroup_id = cgroup_id;
+ 	args.size = FILE_SIZE;
+ 	skel->bss->reclaimed = 0;
 
-When vmw_vsock_vmci_transport is loaded without vsock_loopback, running in
-a local-mode vsock network namespace causes vmci_transport_dgram_allow()
-to return false and sendto() in test_dgram_vmci_inq() to fail with EINVAL
-(or EADDRNOTAVAIL when VMCI has no active context ID), aborting the test
-run instead of skipping.
+base-commit: 0021f17128de5dc0b19f1a523f448df2440d8088
+-- 
+2.56.0
 
-[ ... ]
-
-> +	if (needs & DGRAM_LOOPBACK) {
-> +		/* Binding a stream socket to CID_LOCAL probes registration of
-> +		 * the loopback transport without sending a packet to the host.
-> +		 */
-> +		local_fd =3D vsock_bind_try(VMADDR_CID_LOCAL, VMADDR_PORT_ANY, SOCK_ST=
-REAM);
-> +		if (local_fd >=3D 0) {
-> +			caps |=3D DGRAM_LOOPBACK;
-> +			close(local_fd);
-> +		} else if (errno !=3D EADDRNOTAVAIL) {
-> +			check(local_fd, "probe loopback transport");
-> +		}
-> +	}
-> +	return caps;
-> +}
-
-[ ... ]
-
-> +void test_dgram_bound_lookup(const struct test_opts *opts)
-> +{
-> +	const int types[] =3D { SOCK_STREAM, SOCK_SEQPACKET };
-> +	unsigned int cid =3D local_cid();
-> +	size_t i;
-> +
-> +	for (i =3D 0; i < ARRAY_SIZE(types); i++) {
-> +		int listener =3D vsock_bind(VMADDR_CID_ANY, VMADDR_PORT_ANY, types[i]);
-> +		int stream =3D vsock_bind(VMADDR_CID_LOCAL, VMADDR_PORT_ANY, types[i]);
-> +		struct sockaddr_vm listen_addr =3D local_address(listener);
-> +		struct sockaddr_vm src =3D sock_name(stream, false);
-> +		struct sockaddr_vm dest;
-> +		int accepted, tx, rx;
-> +		char byte;
-> +
-> +		check(listen(listener, 1), "listen");
-> +		if (vsock_connect_fd(stream, listen_addr.svm_cid, listen_addr.svm_port=
-))
-> +			fail("%s loopback connect: %s",
-> +			     types[i] =3D=3D SOCK_STREAM ? "stream" : "seqpacket", strerror(e=
-rrno));
-
-[Severity: Medium]
-Will the SOCK_SEQPACKET iteration in test_dgram_bound_lookup() and
-test_dgram_port_space() fail with ESOCKTNOSUPPORT when vsock_test runs in
-a local-mode vsock network namespace?
-
-dgram_capabilities() probes DGRAM_LOOPBACK with SOCK_STREAM, which is
-allowed in both global and local namespace modes, whereas
-vsock_loopback_seqpacket_allow() rejects SOCK_SEQPACKET when the socket is
-not in global mode:
-
-net/vmw_vsock/vsock_loopback.c:vsock_loopback_seqpacket_allow() {
-	return vsock_net_mode_global(vsk);
-}
-
-As a result, running vsock_test in a local-mode namespace (such as the
-local-namespace cases in tools/testing/selftests/vsock/vmtest.sh) will
-pass the capability check and then abort in test_dgram_bound_lookup() and
-test_dgram_port_space() when connecting the SOCK_SEQPACKET socket to
-VMADDR_CID_LOCAL.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261113-vsock-dgra=
-m-support-v3-0-1523c8e9b27e@redhat.com?part=3D8
