@@ -1,96 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.7
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794608567;
-	b=TQkGu63Pfn91xCGwed074SA3yixr+zPCNewmQ4WYL7uD/1kMMp18/aGJ4El5/WS9vnIL
-	 MagucChc5RQkiIaEOEomM9YZ8PGpTqWbYUmMsrgF8+966mhuaFiv1f2sPzAXFCw9NXgwJ
-	 mMkSJh+T+d/jIA+HPQfIbzH7bpAnnwKYlM28s2TjJDlsEK1juzqj/NLBml3hdzOaTqeMH
-	 Sy+MYVcr4e8kG5MrSW9c6tzLCNPkLKt2rhfzraaa9SMgJvRa+ebMyFKG7J0/BkDNNSsYE
-	 mn8AL3j5TQPHoa9qMoI5qzHtibDgDlyFn8ETPq2jXS9Gq7e7CuN1RQGxC7J9xIVBTIg==
+	t=1794608831;
+	b=PARj8tCePObcFYj6lQDHmucnCTTe9s2l8zQ53alPXvlgduP6ebynryTkI7jkUSYxGGX1
+	 OT4hvzeLFPAatIl2pXGGdFtaUtqQtgYJCbRH4kdjLnhm+VCvmxEcJFNM/tPvX6CNX12bO
+	 nn6YlsNhqHj/mBIXM0esIudvYbV2YempbN0QoRx2VsuhYTFZFOHmbAzgTlXjn/r+ZYt8I
+	 9zvfJPEFz6T6Q+R/IJsrcBlDtU4xIdjZ/ypKYB7Fzvj2Jl7gzaa8dVnAwNu6qzjbZcgo7
+	 7H8m9hPqwYZ5RUUj+Qs7LVo/sNeKB649YgXe47Qf99pqA83eZU+uA2LbllKZ8glVm/Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794608567;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=PuWQ2BwaMw0F60EupC+5yCUtgb9A+hweuIMrIgnawM4=;
-	b=y2K6w+ODRnmZDMxLHYtLIFDMwvG4finyXTR8ZAEDXULuNiJqtKQQ+h2ZGgVtnBbUgP5h
-	 pFj7qJsCDymEvyXOGGlOs09+0AJLhIPdaOWLYveSyNQq+3gVUN05i2MLR9s5LjC0j/qe2
-	 QwA6AjEPVnQEFkI52z1NWsU60Fc4Y8E89yObP+fGfRKbm6qK8JqvTTCJo4JeQ8C2arwsk
-	 GqkB9QY0Uw+e6HOIN1nyUMev+bCbpsh/rPnXnUVXUKifqiiiiAP4Zvntp3U5l18VD03QD
-	 wy6nIaLFAnUh+RXiAj2eXV3Ld4xfbj/Ti+Di2AQPIx2UiZKrteOWhAP2mv46cvd5nhA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794608831;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=GACYChRxvh8l0R71XPrOTkQkzrVUaOg8eaEAk/KLdBI=;
+	b=5I4rCoI1I07Ggi0oidJv1kdNqgDVj+P5EO48TTMqHQuEocekUcRLaxndIFocFIpqKnTV
+	 F/oswujYLlpBDRJz/Nu33K84kmsaz2s/T7TxZKqQLlKBpL9GN87ptZqyHnkSI14QZJJaj
+	 6KPpJax7rwbkPt4G+0jdzASNMiEfqV7RnpIqb8nVaUzxpc9EUl5IHdeF6CzRMe2l2Ppxb
+	 m0fSnbyXqLO8sKZ6MKCoqMUuYuW+lg5j1uxmEj48Bkzhf9M5Nc+kQiuM6JMGhMhj8gZXP
+	 X0ZYwUEyum1AQSHj65isj/6XcfqDevw5JePzjQBXoQTlgsA9fHSeKD/nfXKujKHFpxg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kt0eGjZ6;
-	arc=none smtp.remote-ip=74.125.229.7
-Received: from mail-dy2-f7.google.com (mail-dy2-f7.google.com [74.125.229.7])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nbEMxuoF;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB363606A88B
-	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 22:22:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AB363606A88B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D015606A331;
+	Fri, 13 Nov 2026 22:27:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kt0eGjZ6
-Received: by mail-dy2-f7.google.com with SMTP id 5a478bee46e88-36c9b5c6faaso716665eec.0
-        for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 14:22:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794608566; x=1795213366; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=PuWQ2BwaMw0F60EupC+5yCUtgb9A+hweuIMrIgnawM4=;
-        b=kt0eGjZ6lI9yQVuQ0WalkgZYGqnAu6quAkbn/YNnSaNNY4bDxmg7vWu5L/iCEKeRq1
-         BcHDv16Nly2AE2lgZ1szXyCbpA//4r+TIy7pmoIrIaWlaAuhxishgr/nf6iJy+MF8JHL
-         MnFiQ8swqhS0T9o7CW2+KpZh79x4DzoeNMIG6AbPH6bu90SMA4+yEXC9cAzM6enI8Y0J
-         2N0H9Y4xL4Kj41pYFL5pMsv1U33XLXGZlmtM3S4WLqvVUbDJ+yObSu0oCraJ4gIg+Qrv
-         xYsUdpVKLCo1UNmumy85tcug4O2Qi4xN+kSO2xy4WFG7/h6Nu2vesGAp6pwgnTMh6ALv
-         Nypw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794608566; x=1795213366;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=PuWQ2BwaMw0F60EupC+5yCUtgb9A+hweuIMrIgnawM4=;
-        b=0mjZMQU/eWBTI3tCfSN7X0Fn7fWbjS5jszoHHX+UzRvLUg1x3f3s/NdgVfmKSaL2MC
-         pGjSS1ePa4YoeM3poQif7QcVqQbtUQUYsfDmMowyxXG/O925leDE4b8yXYpVHdXVpcBs
-         4G5B1HZ1ql9WVQM5SBojmSsntuSgNf8MtimPKZeKaWG50oil75p8WWUZBbMH8v6uJKqW
-         xpLnuH0QGm69cEub7vG0TO3ciZ3uaIXW+ZHMzMc2NziphtVL1F4hJKbrSHQljm6Gphj0
-         UZMekHfxoJpjFQtojX3u0hU58+SfrDOo7CIGz1q9UYDxwGJwtrNJJVp7OEJDFvqrI79T
-         ZjMg==
-X-Forwarded-Encrypted: i=1; AL+hErGgAasdRQo8BXXSLkK/WIOduXteeqPXCZ62WzvjD0X3ANMU8Iz0RX+xJmWDcPIH4FYvtcg=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9K4wCvHAqZxdcIfEldtmzNjRgBlpYYANxiQBSt5Bt1smEQ4JIJ
-	MOyYNF4fIll3yLvCF5NYEPG3rnHaYoD8VOZcDcRURX5R+vo5dcAWC3nz
-X-Gm-Gg: AYBFou2og4dy+UvQnnJKnDSI4Yh81/c62t1pIXiYsgV+bIFI8bNimQQPKxRGEmlT+34
-	H0wpodCoYSQP2mWRyZfQ0VqJb3h0bL6t+3miOLfGi6836uE/7wCMe/89t/F0PP6ceANZGYy0MOQ
-	LMEUYJLGx4oB3qGWvVxWhpJSD+N1cJ1ZiZ5xeNa75huXMQ0wyLC18STIftcEM+u2aOr0rIW69TI
-	SCgkjNKBKQBsdHwt3QAZP6PPLjkzi4X0O9evEe7Wx5tq4GJ5M9+asUQODlvQyLH7GjT0Sn4nQS0
-	r7uqq5+ZNoYf2XUDwmyk3QxnPDwGgw22PwSoVc/S+7jb2IJN4U28iX1Ze5WCEVKfOm7tDBUrXZd
-	Ku4JlufXoh7DdHCEq4C+YfxUxztwNtG7/X7g2o55tr00FPqfouCVoIQkGwVpcsl1oH/zatjInT5
-	RftllDwb2+IyA4nVp23G8tvjjvNDcUvVbKoL+76VS9oKsSoAx1ww1/0srCPuTVw5NIpDB5kcQgr
-	A36hdif/3rrQ0QpKTx1aloVkDuppiljxZlDZtcjWfc+GmwyymU9VmFpA/hZeRAj4kro/QEEJjht
-	T6HV1997tQw4l+w6ZYqOEjM=
-X-Received: by 2002:a05:7300:cf8c:b0:369:f70e:bd40 with SMTP id 5a478bee46e88-3796628f4c8mr3171439eec.16.1794608565735;
-        Fri, 13 Nov 2026 14:22:45 -0800 (PST)
-Received: from localhost ([2a03:2880:9ff:72::])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3795378d7e5sm10160338eec.3.2026.11.13.14.22.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Nov 2026 14:22:45 -0800 (PST)
-Date: Fri, 13 Nov 2026 14:22:41 -0800
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com, 
-	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, jv@jvosburgh.net, 
-	haiyangz@microsoft.com, ast@kernel.org, hawk@kernel.org, john.fastabend@gmail.com, 
-	sdf@fomichev.me, bpf@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 0/5] net: make xdp config checks effective vs
- netif_xdp_propagate()
-Message-ID: <aveNqpUudFjo0jA9@devvm16445.scu0.facebook.com>
-References: <20261112235027.4072149-1-kuba@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nbEMxuoF
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F08E1F000C8;
+	Fri, 13 Nov 2026 22:27:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794608830;
+	bh=GACYChRxvh8l0R71XPrOTkQkzrVUaOg8eaEAk/KLdBI=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=nbEMxuoFHYN9EoVx/4y9Hrlzl8J7k2QFlt/CQW/uR9myulk+uMWuRfF+kS1PIPPnG
+	 i64SHV9he47ucQuYHjxcVCcomuKbYMM+jNvz5lx0vEx6I/ujN1tk4fsiYd+4flzSHE
+	 LANRMZ1P5wcIh3DHX32aK6LB9wlCXn++XM0VTw4SFojNxwo6aVkTeBzBTZFfbHd8wT
+	 eT/Ls4TFXtx9oi+IgMI3GhOAh3txMtB5BChpDMur9lTxDS95mDz9UWsquT1X8aDROH
+	 1MUh3HTbYoHPSj5IKV3f9HPCNvScX0fPeBGzcuSx8Z1lz96RQAJODMrHZE4HzhJ0r3
+	 D7IC6YBipyNlw==
+Message-ID: <sashiko-outbox-213807@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v3 7/9] selftests/proc: Add KALLSYMS_QUERY_*
+ ioctl tests
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Samuel Wu" <wusamuel@google.com>
+Cc: linux-modules@vger.kernel.org, bpf@vger.kernel.org, "Petr Pavlu" <petr.pavlu@suse.com>
+In-Reply-To: <20261113221248.3535369-18-wusamuel@google.com>
+References: <20261113221248.3535369-11-wusamuel@google.com>
+ <20261113221248.3535369-18-wusamuel@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 13 Nov 2026 22:27:09 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -99,35 +60,87 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20261112235027.4072149-1-kuba@kernel.org>
 
-On 11/12, Jakub Kicinski wrote:
-> Bonding (and netvsc) try to auto-propagate XDP programs down
-> to their lower devices. These programs were installed directly
-> with .ndo_bpf and not recorded in struct net_device of the lowers.
-> This makes all the config checks for features incompatible with XDP
-> ineffective - HDS, memory providers etc. use dev_xdp_prog_count()
-> and do not call down to the driver to ask it whether it has XDP
-> installed.
-> 
-> Record the state appropriately. dev_xdp_prog_count() will now
-> "see" the propagated programs.
-> 
-> The issue was discovered when reworking HW-GRO and XDP interactions.
-> I was trying to make sure HW-GRO is reliably disabled with XDP,
-> and discovered we have a way to bypass all checks with bonding.
-> Not treating this as a fix since it's admin-only self-inflicted
-> damage that nobody is reporting being bothered by in real life.
-> 
-> Jakub Kicinski (5):
->   net: don't safety-check device features for XDP uninstall
->   net: move dev_xdp_set_link() and dev_xdp_set_prog() up
->   net: record XDP programs propagated to lower devices
->   selftests/bpf: check XDP attach on a nested bond slave
->   selftests/bpf: check replacing and detaching XDP on a bond through a
->     link
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Low] selftests/proc: main() bypasses kselftest reporting and harness
+  helpers
+--
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+commit cea94aa72f17dbd75f99a6a582f1fe997f0b838e
+Author: Samuel Wu <wusamuel@google.com>
+
+selftests/proc: Add KALLSYMS_QUERY_* ioctl tests
+
+This commit adds a selftest for the KALLSYMS_QUERY_BY_NAME and
+KALLSYMS_QUERY_BY_ADDR ioctls on /proc/kallsyms.
+
+> diff --git a/tools/testing/selftests/proc/proc-kallsyms-query.c b/tools/t=
+esting/selftests/proc/proc-kallsyms-query.c
+> new file mode 100644
+> index 0000000000000..7788cb0f30f83
+> --- /dev/null
+> +++ b/tools/testing/selftests/proc/proc-kallsyms-query.c
+
+[ ... ]
+
+> +int main(void)
+> +{
+> +	struct {
+> +		struct kallsyms_query_by_name q;
+> +		__u64 extra;
+> +	} qx =3D {};
+> +	struct {
+> +		struct kallsyms_query_sym s;
+> +		__u64 extra;
+> +	} sx =3D {};
+> +	struct kallsyms_query_by_addr qa;
+> +	struct kallsyms_query_by_name q;
+> +	struct kallsyms_query_sym sym;
+> +	unsigned int cnt =3D 0;
+> +	__u64 first_pos =3D 0;
+> +	char name[512];
+> +	__u64 size;
+> +	__u64 len;
+> +	int err;
+> +	int fd;
+> +
+> +	fd =3D open("/proc/kallsyms", O_RDONLY | O_CLOEXEC);
+> +	if (fd < 0)
+> +		ksft_exit_skip("open(/proc/kallsyms): %s\n", strerror(errno));
+> +	scan_text();
+> +	if (!ref.vfs_read_found)
+> +		ksft_exit_skip("vfs_read is not in /proc/kallsyms\n");
+> +
+> +	/* Exact name in vmlinux, with name and module buffers */
+> +	sym =3D bufs(sizeof(name_buf), sizeof(mod_buf));
+> +	q =3D name_q("vfs_read", "vmlinux", &sym);
+> +	err =3D by_name(fd, &q);
+> +	if (err =3D=3D -ENOTTY)
+> +		ksft_exit_skip("KALLSYMS_QUERY_BY_NAME is not supported\n");
+> +	if (!ref.vfs_read_addr) {
+> +		qa =3D addr_q(0, &sym);
+> +		assert(err =3D=3D -EPERM && by_addr(fd, &qa) =3D=3D -EPERM);
+> +		ksft_exit_skip("kallsyms addresses are hidden\n");
+> +	}
+> +	assert(!err);
+> +	assert(sym.sym_addr =3D=3D ref.vfs_read_addr && sym.sym_size > 0);
+
+[ ... ]
+
+> +	close(fd);
+> +	return 0;
+> +}
+
+[Severity: Low]
+Could this test use kselftest_harness.h (FIXTURE(), TEST_F(), and the
+ASSERT_*/EXPECT_* macros) or the kselftest.h result helpers
+(ksft_print_header(), ksft_set_plan(), ksft_test_result_*(), and
+ksft_finished()) instead of running sequential raw assert() checks in main()
+and exiting with a bare return 0?  As written, a normal run emits no KTAP
+plan or result lines, and any failed check aborts the process with SIGABRT
+rather than reporting which subtest failed.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261113221248.3535=
+369-11-wusamuel@google.com?part=3D7
