@@ -1,49 +1,70 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.125
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794606008;
-	b=4uS58fsi9BlLRWu9QjLs6wlrD8JcoB5pFZvH8LhT5ycFrFEkFPnmuMXl6oOYFRglrOt3
-	 pyIoyIHBk3OfPDatc5BhqNVtVc+04J3QXw04YzHKi5gApJ8d2wGFzbytEWgUBXukAeOo1
-	 8nLU3RGMC3Ujv9tE19AMYSk/P9JzJ6Xlz0JHHxRdwC4lNUtZOucT8DFpThlpb2PFTo/ZO
-	 UdsG7xwDV1g+Lo9VJAnecPbvijezUacfbtPdN2KVjDDioDzJxd2xmFI/e+PYJ6nCIa4TY
-	 aNoPQMG4bdOisRuA8Ost8b1Q9FF2SQn9W0a6f8HyjZwIfB1dxLDMnxLjCoyeKRpd0EQ==
+	t=1794606010;
+	b=adNiliEZhLS8vtd1oIqzD68WoxNg+BFHL5rTn04ECprmAVS+e32Qupc7tBBCW8HqHOnD
+	 keBUQO8nfxX5E78O1SIvx+1iB6zlZOfQfjTX5rUax5nA4QbObLJFZgoiOv9i0KfVPu7O8
+	 Q8w6hvaOUkyWjjlXc97FKV02MVerMgu7bxBDe020QBntdDs/RiP8uOV0x7WdEnznxbGfQ
+	 sb0kW6ATwLysSYCgi0v8hj3BmEKzBiNpxvzZxssQfs0z060AQ8OABeKItzDU1JlgWkVn0
+	 GGii++XRMv32jzRxqCuDRkNXXrsDdEsOL1OJyexIH09dJnUetEYi9ho1GS4cTdzVGtQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794606008;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=Nrqhvqr/i2EoXqHkA1xxvEv5ep3yiAFTSve3A+551mM=;
-	b=ZQwygIBrMFDM0Zd4fGU/KyOyDKk6Kd1VoXmzr92B5zyeKnz2XDxMvc+o1sI/OlMNC8F3
-	 mdvXEgYpcUIRcweUdfOWMVM8sLQ8RXWNKGyl8sVfZ5IwjAxSSt+xNrPqSD83n23lwnf3q
-	 A9/CydSsfIqktsnNiSKO+tgaS1NTP51gqcChDBIlnrwZlRW9804ledgvtdpDAHbpMzNvO
-	 qMvAk0JX/aKndKjNEh9CYdIOi4fHYS5gvI4pZLbex5bEaczCG+/o6BUdcHGk/lxaC//lT
-	 Vw7bnoOtsy/JuuSP7bhAS162P7H+UwzgtyK/uDjHDrN8rcufHUv3BOQftwPsS0WEyFQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794606010;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=LCQc9kOni4SWH9/sppw3ilCo5DL7FdPQXQxmUFpEAF8=;
+	b=mtWGcY30DJgpq9G0xXJc65OcFd8xh1PEcTi6FO+v4N04a/QqO8yNvmw9UqozY3iTLFsU
+	 /qgZcvElISUcpLXfGXk2d/R6j9r6NZtE3wBvGllvy429sVUrqC30rj3qKb+0ubzfBQ8ub
+	 FmS15j+ynfPWMt3xkgMxePJvDaryWidXittv9mtYLEf0jlzpI4KbNGluScpAF2z5IIDg9
+	 zh+5HIrHcQGsLUOlasl237n7FCs0gEPpk0yHs14zULlHoJId67s0JVB3rDtZKd00QB/OJ
+	 JDqOa07q7cofdUmoStriP06i4uol8UpqPzukQiBrS7BfYXOFLu0tPCb0Q3hV0AChdyQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BR1xzx80;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DyXYNQG0;
+	arc=none smtp.remote-ip=95.215.58.125
+Received: from mta1.migadu.com (out-125.mta1.migadu.com [95.215.58.125])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30AA1606A8A7;
-	Fri, 13 Nov 2026 21:40:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACC0360A381C
+	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 21:40:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ACC0360A381C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BR1xzx80
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06EB01F000C4;
-	Fri, 13 Nov 2026 21:40:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794606008;
-	bh=Nrqhvqr/i2EoXqHkA1xxvEv5ep3yiAFTSve3A+551mM=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=BR1xzx80M9v7zX9thY+44h57psw6DllFOj6poaDj5vBAMdoFyk5ClFEbQkpy7eGZz
-	 gBo1VQ6bt22exOnbB3GtidbWNS2Pj64VEVyT3R88ZR2bEBL8duwbmt26crLqmGKWZg
-	 klqwfsRIw/Ztpo0dHpjwroyEKivoHctQD0em0V5qtPwdF/62UuMQ1Kvpap7a+HADaA
-	 DNhgXhgEoJEbrTjkbJ70MngWgEbJ0FWbwOpkgEbIkzeYKWZ8NVSm1GytfsAZre8cHh
-	 FEz1maIUIf5Htnwet4kX6kaPO3BRrKuIW8xR/haYly1x+/AECMnlv4fyUXrdIjb5LX
-	 XADjs2CIp0QFA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F1553380821F;
-	Fri, 13 Nov 2026 21:40:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DyXYNQG0
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=zEMZrhKbiE7PjxVtAluBP/MvIVAz42s7MtM09a7r768=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794606006; v=1; x=1795210806;
+ b=DyXYNQG07hf4/J4/BEB+YNsCJ9CPr0IqY2GTIV6ueuzRw0hJjSnHGNMYuExRs0DLkdHPxBPH
+ wJKM4VqhRPC1UvNiDfxZl4q3dnQ1ff+8iYfiyru0esyk0FxtPUkpo/m9lt+HYw17YhXV4yfyPyL
+ Pu4vetjHiY9V6QM8e92UMvOI=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta12.migadu.com with ESMTPS id 1cbded36f2dc424a;
+	Fri, 13 Nov 2026 21:40:04 +0000
+X-Mizu-Trace-ID: 1cbded36f2dc424a
+X-Migadu-Flow: FLOW_OUT
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Amery Hung <ameryhung@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Nicholas Carlini <npc@anthropic.com>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v4 6/6] selftests/bpf: Cover callback-frame map key lifetime
+Date: Fri, 13 Nov 2026 14:39:21 -0700
+Message-ID: <20261113213921.1646681-7-ihor.solodrai@linux.dev>
+X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20261113213921.1646681-1-ihor.solodrai@linux.dev>
+References: <20261113213921.1646681-1-ihor.solodrai@linux.dev>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -54,47 +75,129 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 0/2] selftests/bpf: Fix d_path check_mem_access and
- drop
- CHECK()
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179460600678.1853483.7161886083844264787.git-patchwork-notify@kernel.org>
-Date: Fri, 13 Nov 2026 21:40:06 +0000
-References: <20261106-dpath-memfd-v2-0-1dc0799b4aa6@gmail.com>
-In-Reply-To: <20261106-dpath-memfd-v2-0-1dc0799b4aa6@gmail.com>
-To: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
-Cc: andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev,
- ast@kernel.org, daniel@iogearbox.net, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, shuah@kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 
-Hello:
+Array and per-CPU array callbacks to bpf_for_each_map_elem() receive
+a key on the helper's stack.
 
-This series was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
+Check that saving this key in the callback context and dereferencing
+it after iteration is rejected.
 
-On Fri, 06 Nov 2026 10:37:07 +0700 you wrote:
-> Patch 1 replaces the deprecated CHECK() calls with ASSERT_*().
-> 
-> Patch 2 fixes check_mem_access, which creates a temp file in
-> /dev/shm that isn't mounted under vmtest.sh in local runs. This
-> causes mkstemp() to fail with ENOENT. mkstemp() is replaced with
-> memfd_create() as it gives a shmem-backed file with no mount
-> needed while still reaching vfs_fallocate.
-> 
-> [...]
+Also require the same pattern to keep verifying for a hash key and
+an array value, whose storage outlives the callback. These controls
+guard the array-only and key-only scope of the lifetime restriction.
 
-Here is the summary with links:
-  - [v2,1/2] selftests/bpf: Replace d_path CHECK() with ASSERT_*()
-    https://git.kernel.org/bpf/bpf-next/c/ed6624f3e8b6
-  - [v2,2/2] selftests/bpf: Use memfd_create instead of mkstemp in d_path
-    https://git.kernel.org/bpf/bpf-next/c/75cf1b5e5489
+Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+---
+ .../bpf/progs/verifier_iterating_callbacks.c  | 91 +++++++++++++++++++
+ 1 file changed, 91 insertions(+)
 
-You are awesome, thank you!
+diff --git a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
+index e30f7676081f..1dfeb13b4382 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
++++ b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
+@@ -9,6 +9,20 @@ struct {
+ 	__type(value, __u64);
+ } map SEC(".maps");
+ 
++struct {
++	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
++	__uint(max_entries, 8);
++	__type(key, __u32);
++	__type(value, __u64);
++} percpu_map SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(max_entries, 8);
++	__type(key, __u32);
++	__type(value, __u64);
++} hash_map SEC(".maps");
++
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_USER_RINGBUF);
+ 	__uint(max_entries, 8);
+@@ -860,4 +874,81 @@ __naked void check_add_const_regsafe_off(void)
+ 	: __clobber_common);
+ }
+ 
++struct key_ctx {
++	__u32 *key;
++};
++
++static long park_key_cb(struct bpf_map *map, __u32 *key, __u64 *value,
++			void *context)
++{
++	struct key_ctx *c = context;
++
++	c->key = key;
++	return 0;
++}
++
++/* bpf_for_each_array_elem() passes a key from its own stack frame. */
++SEC("?raw_tp")
++__failure __msg("invalid mem access 'scalar'")
++int array_park_map_key(void *ctx)
++{
++	struct key_ctx c = {};
++
++	bpf_for_each_map_elem(&map, park_key_cb, &c, 0);
++	if (c.key)
++		return *c.key;
++	return 0;
++}
++
++SEC("?raw_tp")
++__failure __msg("invalid mem access 'scalar'")
++int percpu_array_park_map_key(void *ctx)
++{
++	struct key_ctx c = {};
++
++	bpf_for_each_map_elem(&percpu_map, park_key_cb, &c, 0);
++	if (c.key)
++		return *c.key;
++	return 0;
++}
++
++/* A hash key points into the element, which outlives the callback. */
++SEC("?raw_tp")
++__success
++int hash_park_map_key(void *ctx)
++{
++	struct key_ctx c = {};
++
++	bpf_for_each_map_elem(&hash_map, park_key_cb, &c, 0);
++	if (c.key)
++		return *c.key;
++	return 0;
++}
++
++struct value_ctx {
++	__u64 *value;
++};
++
++static long park_value_cb(struct bpf_map *map, __u32 *key, __u64 *value,
++			  void *context)
++{
++	struct value_ctx *c = context;
++
++	c->value = value;
++	return 0;
++}
++
++/* Only the key is frame-scoped; the element lives until map teardown. */
++SEC("?raw_tp")
++__success
++int array_park_map_value(void *ctx)
++{
++	struct value_ctx c = {};
++
++	bpf_for_each_map_elem(&map, park_value_cb, &c, 0);
++	if (c.value)
++		return *c.value;
++	return 0;
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.56.0
 
