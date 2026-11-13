@@ -1,88 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794611321;
-	b=fQ5LviAMGKMd7SDhCT3oHzs7qY5dQRtLU5IAk/C6LZMnIpZBDkFq0NU76eIE2e7tAxeq
-	 +B6BWHX7UIE22AqnO7Tj1MuSQbEoCLXK/8vk/B6MTa4zj46AnaN4toEJu+Ynhv6eDOghV
-	 gYV5RUWcNO/jcfasKh4KI7XDGm8O+q3zrmgDc7ncT2mq+ZFi2ZNKCxVJKiPvgXNNtLfDz
-	 U3b3bsXUVVn3VkNoyB5/Gwn7QRLbZV/AX/kqLrAtOb5Mu4cNlgWoeXIyJ1AgJg45A162n
-	 JKZF0xEkIBnxX9MmDGTQwrh/TP89nqltCGRdzkeIHSmzwC0hv8pU6F6JKWY2KBDTLew==
+	t=1794611324;
+	b=BQ0qyg1YGC1PV5LTDUD2EiqbkY15OFaW0D1Il9f3kncYJquiBCaz1Tp50xm8rUmQeoPd
+	 r4XR3VawCftqjG3xyhsNFsvGpGZaUkcCo9TfyS6XQPjnMpgLPsldo1qYIwgNjUjo1hiQZ
+	 6xyDNc+SBiBxKcbFemGaGxJeSWN4/0/kFcriba3OzTHlSQ+08XOwSKJTI1Svnx2bncjlN
+	 vL+M4hNSZAhuY3qo8WGbttXbmK23Q2/5IPNcIAYxqZlxCSfzWKS/B3IKSZMKUvH1rWZ0T
+	 d/0y0p1WccdA6U9NXXWiAMUXedKEg/ehUyIRPJb41/8PLWaWv0aiA8oOhxumMDi2M3A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794611321;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794611324;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:Subject:Date:
-	 Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:Date:Subject:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
+	 References:In-Reply-To:To:Cc:X-Mailer:X-Developer-Signature:
 	 X-Developer-Key;
-	bh=L4wD0yAKJsE9cFFbUwnLpE2snlrkMqOneMhQ/vB0/Dw=;
-	b=wKFcXM8urRk5OAsMI0WVX2WqmlUQWtGLHil2s9Sk4FKza1UVEYerkmKYktJylJcGsOAB
-	 T4CXsfc1MK/uY36or59Hx8DcSIOciTad0dGReEIp79BD84KrjmUg5dxEsIMfRCVmhxQTk
-	 Hi5gm3VdzFPkTDPmQwUT6Djx5N0uMTFVhVr95LFe6Bxu9pMMUjowBcn0gg73/ZnnLNNGl
-	 cNXTAfIxASpZVvg0hb5eDaJ2SLMR34msNQqGw9fQ7lteaFq4GSYF7aHQIciFRbf7FSlnQ
-	 HFMOk130gSxn+TphfQD3SX0VVp/+/nsVvAipZOVJhej+nZYNEDFezqnUxSOHHlkQUWQ==
+	bh=J24RLR53zlPX5f5tzZyOuR6MXK+JSdJ7SqSssMORHsc=;
+	b=AeWSB7b0GcdSw7//HGentjLehBsdTT02MMCpAlVMJBRxPUVmZBSNY67qI1rs94Cvpbyg
+	 7tw7ZH4aziIMRwEqxEGXkJHK7dkbaVv/NXMCYB20JueJuZuF6mMPH71UuQ1gvNj2Ff46b
+	 7wKAFElO6or0Zug7DidBPAsxJ7wBjvJKrojDz7EH/lWeMC+yLdLFkWD/ua65q1HZCVwNB
+	 F3MAsp1QEZ93HmDeykm/ovujKrgwNhhUWnn6ciI+ChZFAFVIrwl75GhMIq5P2bn1hdOhj
+	 uiq9WVShutdPAUNhnPIOg1irCUk5cmebFm2xJindd6KQSRhibDtQuYFws3x6ZlXlkMw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JgOF8yzJ;
-	arc=none smtp.remote-ip=209.85.128.178
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FLo9EV9a;
+	arc=none smtp.remote-ip=74.125.224.52
+Received: from mail-yx1-f52.google.com (mail-yx1-f52.google.com [74.125.224.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65E10606A330
-	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 23:08:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 65E10606A330
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD377606A32D
+	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 23:08:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CD377606A32D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JgOF8yzJ
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-8b30ff12f84so11935587b3.2
-        for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 15:08:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FLo9EV9a
+Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-67be9601f31so1590745d50.3
+        for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 15:08:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794611320; x=1795216120; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=L4wD0yAKJsE9cFFbUwnLpE2snlrkMqOneMhQ/vB0/Dw=;
-        b=JgOF8yzJs7uxpt8zHs1ibgDZpSM8YKR8B9mIkByTGTq1JCRgVJ/BlyC60q4anRT4wb
-         CCMQsoZfxyq3ZwZ0oeTmI6KK4CfKxLgMI9CpDiuHMb5bpZ2YhqMUF1EfKVG45Lv0iIFI
-         AvRz3dSr3imuPdSa70T/kn8s4200yhlt6QhO35KexsqBlpS6+hVmym9GW2i2hxvmzww2
-         hvZe8171W4SH3+qyqCpIvtbTzk3r4RR8L1Hz6HD+t+ljfGCN1YrMUW3RT5Jnll2PAdbF
-         lgsMmiOSSNgH5HYWZrHlPvrbJ4pa4dkyDAuslHfS7O236ZLy//ldUR0JlQBNCPt+QL7g
-         XdGw==
+        d=gmail.com; s=20260707; t=1794611322; x=1795216122; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=J24RLR53zlPX5f5tzZyOuR6MXK+JSdJ7SqSssMORHsc=;
+        b=FLo9EV9a+0GWIoRbEdJbbLK+Py3YR16pnWak7juhr3vqWiZgs74R0albViXzCW35Eu
+         P7HMaEGIOrrWrudew5z3c5kOOHPcBV8A55h9ErBlJAzXMSkaiVVPqSuoE32SRTRDMBUX
+         /HlyAipADWlUEJ67eC4tftYAJmTmIPWYs2h+fiqLGv2nCCrty3VoGa1dSP6QJVXtnRbO
+         Jk/h/bkiwRcTqwLkrcq3LjJvnmMfJcnZ2yTzMZKyObt3gqdITHUffYOPL15egjrLSzxv
+         2iwSSolPvA46cxDGtIQ7abgtyo2mGkjPmerludssg6wZt1ridxBdnKfBbtYiBHE4P05s
+         f7EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794611320; x=1795216120;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=L4wD0yAKJsE9cFFbUwnLpE2snlrkMqOneMhQ/vB0/Dw=;
-        b=QApaH0diQrDBiWdKhN4MGJja5dX8FlSBLjA8gZ098CerLwdAKuz2V6DJ2iYuhn+AZ/
-         OdfrWnGlY8Hb8X9MdFJLhJ9f7okP+h7eBk6b0hqsecozrquUPG5c6ST9eh/StZldKiLX
-         PXZBnDDMFalvl7diyHWMmFBcVM4nipt1QB0NjpZqeFZ1BAX7bUhJplaQ/KkNr/vfcpkl
-         eNpgOkuj3vCgkpNasAwxPoQn65IPcUfpt9X0k4XN4G7hO95sa/tsfJhG7YKO1tOfrRCS
-         BuPKpmehxL6S0AM0daMmTXTcMqIPePEcg4EhkGy5OnvEEkN2Ne+ek3U7HrpsGEryR/8U
-         4oGA==
-X-Gm-Message-State: APuU4Z8FzTGGJXxmVSX0agvgkzhUCcCohYhUwOsNk0P/Y7ag1ShmoI7o
-	sAG3s70vVmvWMc64TnRtd/Igy4fT8D5Hro4pW85UAFIieDcbr0RmBjBG
-X-Gm-Gg: AYBFou36EQ2JWlGbTUHQK/3bDFcJ/0/qDb/3I2ICRSERS+QDOXD9swAoVy4moezj7IC
-	pA4AyQLpcRzSxUN0XFrKHCBFd5WHr8RJ5CeJykxafeWo/Oh6O+o0dSA80ymhYBx9O3CuRTDpDo8
-	nhL2lDxPfIkh0YtPQ0RvFr4xnr2LSJNbjC4drYz++4YCSm78O4kIiylnSyINK52q4Y+SaPYLo2J
-	a3eqsNMQPqS67x9Dc7W6qdeQFdjWtA5Lm+0WeGTAbTHaEFigx2VdRICyy1iSNH77lugQpDEYEXH
-	+qzRSM1Fv8lHzl+gQnIQqB2qoF3wFK3etPPtr07mDVdYVP9W07ePOtbyNV1UvFbuKDK4f39pMz1
-	DP2EZ+FO63mB/aipjxuYvq8kgjFZY32185CdvY6XQMmp0suWvPltpc2igapFBUcYnsGf1G2trPM
-	OjbDhgHxjupyrqtdQoRciCm9gAg88Yk21WSGfr9MY2COJ0nLU+YCDpmIGDyqru+BwFHWlcPKi77
-	MtAVhw1Yr+ivbwvscTGz2lbEyzfmXMe95C9i29YEL2qPhm81TQhFkhYCxGmaNzFuQWXoqyIszQX
-	+3ITH4Om4JzYitjBH/n5
-X-Received: by 2002:a05:690c:6608:b0:8b3:47fd:a033 with SMTP id 00721157ae682-8b4aa2f3b19mr34570977b3.31.1794611320128;
-        Fri, 13 Nov 2026 15:08:40 -0800 (PST)
-Received: from localhost ([2a03:2880:30ff:45::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b4beaaaf08sm1687647b3.38.2026.11.13.15.08.39
+        d=1e100.net; s=20260707; t=1794611322; x=1795216122;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=J24RLR53zlPX5f5tzZyOuR6MXK+JSdJ7SqSssMORHsc=;
+        b=u7lnVIRT04HEjCADCCmINSFZPLAMkYME3yTTCTkKLMcJd3+P73ClSmc3UGHL58Ljqz
+         6WaM78KxN7lFHUL08YsUQjkr1y+e0/I5NXcPVxIWdPZ6bpHS2UVX2Sbm1s4ob8Cck950
+         yjLoHsvCeVGzDENzXVLVs1tSCMwKI/R+d8Z7KRvZ/TV5lGKGYOexVXb46KbDsg7v5UlO
+         lHAYzBCctaGH2/o//yshvVb9nYXchhZqQfGxtTjduaK7xVwLAZSMlXro5Jvy1PmtdMmH
+         KydCvN5ynTFsMX2wo+BFoWAfzpox+QQKL5Ldwkr5+iVk+0dYgnvMvL9WiaAi+mu8zaYZ
+         RGsQ==
+X-Gm-Message-State: APuU4Z9kle6PQiPilWoYFXCdzyLO6a8kp6m2uMItG6ZH6BFwMn0LZLwj
+	kCGTQKjxcXxdcR+rHVFOcIwWjH9ryVlN4ZmlNv/Q8YTRt2jVIL+P/nez
+X-Gm-Gg: AYBFou3NhYi+0/PiK/g1q50v1Z3p/hiFI+DwhPgFqy+2sA+220KKT4QSpmIHhGNLiEE
+	/I6kjBSs6D7xFqDyOrNudVAvhzJFqBCsP1RfwNeVvZz7AhrQ2XOCQ2LEy0X2aPttWma8tsqulZ6
+	clcaz0It88T3OPg0gkRKEjd3zQK3K/0cWXFG2xCtxAaRQnGnmjm3VMBv734vZRFbE8kVbV/ZUh+
+	GESvH07K+o0fsTpyOntQATDaDQVLO3JRGrX461iOhU2ihqlvjMxrJYh82I6+6pYf/lrpTZ+1BWg
+	X7hiuyFiSUDqOuTsR3o0/de2P1OJA9fSqRkhwiQ7f5srbbmyq19cqfzFjboXemS5qLZeWlBLKQV
+	ltbFoGRx2EGZWf/JW3R6C77ZOR6wAVPe4zTb53c6xVgjWlkTRClRPqX/oEK1YkJCJfdWclxOszA
+	4HGTuJKP5Q0hveatI2IfbfQZLUYF9OHdodNwLpiAwcGHbc3lPPXZKo5evfjCtifrLNkAO2V6MR3
+	E0Q6x+HrKvLtz4CtF+eyAglX05lHAOHoPEdwpyrRtGN2P6fMIHgF2fi4tk9kNAMgN0ryXXAAzU4
+	9WPCZo3sqr/LILz9XkU=
+X-Received: by 2002:a53:d247:0:b0:675:d561:1eca with SMTP id 956f58d0204a3-67d896e9320mr1555771d50.72.1794611322308;
+        Fri, 13 Nov 2026 15:08:42 -0800 (PST)
+Received: from localhost ([2a03:2880:30ff:5::])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-67d8a629a2dsm3378034d50.21.2026.11.13.15.08.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Nov 2026 15:08:39 -0800 (PST)
+        Fri, 13 Nov 2026 15:08:41 -0800 (PST)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Subject: [PATCH RFC bpf-next 00/13] bpf: Embed local storage values in the
- storage object
-Date: Fri, 13 Nov 2026 15:08:23 -0800
-Message-Id: <20261113-sls_f1-v1-0-1b9492bd3f97@meta.com>
+Date: Fri, 13 Nov 2026 15:08:24 -0800
+Subject: [PATCH RFC bpf-next 01/13] bpf: Free unpublished local storage
+ with kfree_nolock()
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -94,154 +94,91 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAGeY92oC/x3MQQqDQAwF0KuEv3bAOOJitoUewK2UMrZJGyhTm
- UgRxLsXfAd4O1yqiSPRjio/c/sWJOKG8Hjn8pJgTyRC13YDM8fgH78rhzwrD7HtJYqiISxV1LY
- zmjBeLzQvGopsK27H8QcU8u7qZgAAAA==
-X-Change-ID: 20261113-sls_f1-abf16304e3ef
+Message-Id: <20261113-sls_f1-v1-1-1b9492bd3f97@meta.com>
+References: <20261113-sls_f1-v1-0-1b9492bd3f97@meta.com>
+In-Reply-To: <20261113-sls_f1-v1-0-1b9492bd3f97@meta.com>
 To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
  daniel@iogearbox.net, kernel-team@meta.com, eddyz87@gmail.com
 Cc: Mykyta Yatsenko <yatsenko@meta.com>
 X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1794611317; l=7000;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794611317; l=2691;
  i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
- bh=CJSh42fENIFd0uk32Ugqxkm0UoNRsMrpsYRFaCJGE/Q=;
- b=GHVlj3aaHFT4l+3f1aEiN60o9TNymGEes8mV4T4xMSz95nBPzwETZPfQqmO6s2xIWQ47XuiDT
- sU4ba0lxMpfAVwNcaRLcxIiu+0sKS4dIrfABzfPkL+wmkrpj6/aVa/b
+ bh=x7XFB2uSqCSLnN2T6J6S0To4SeK+7aYkkdeErraTbSc=;
+ b=/av1d+YUYxqhRBOAVbNnypRPcIKgnVmvXYxGxksBhFj4CwXOa/Q9+PujvK5kOSwksUd27DAiA
+ pCuF18PqChZAAOs8leLUFk1RNMl2uz6ub9+e3t/lz7OYsY7VsGC9p5D
 X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
  pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
 
-A lookup in a local storage map reads the storage object, a cache slot
-and then the selem that holds the value. When the owner is cold, each
-of these reads can be a cache miss. Programs that do a few lookups for
-each packet pay this cost on each packet.
+From: Mykyta Yatsenko <yatsenko@meta.com>
 
-This series adds the map flag BPF_F_INLINE_VALUE for sk, task, inode
-and cgroup storage. The value of such a map is in the storage object,
-at a fixed offset, so a lookup has one dependent load less: it does
-not read a separate element.
+A tracing program can create local storage in NMI. When the create
+fails, the new storage and selem are freed with kfree_rcu(), which is
+not safe in NMI. Nobody has seen them yet, so free them at once with
+kfree_nolock(), which works in any context for kmalloc_nolock() memory.
 
-Design
-------
-- Each owner type has one inline area at the end of struct
-  bpf_local_storage. A storage object is at most 1 KB, so the area is
-  840 B and the largest value is 832 B on x86-64.
-- Map create claims a slot (an 8 B tag and the value) in the area,
-  first fit. A table of the live inline maps holds the layout, with at
-  most 16 maps for each owner type. Map create fails with -ENOSPC if
-  the area has no room now, and with -E2BIG if the value never fits.
-- A storage object that is made while inline maps exist gets the
-  area. If an object has no room for a slot, the value goes into a
-  normal selem. Programs do not see the difference.
-- The tag comes from a claim number. A lookup compares the tag with an
-  acquire load, so a new map does not see the values of a freed map
-  at the same offset.
-- Programs can keep pointers to inline values, and these values have
-  no selem. Thus an object with an inline area lives until its owner
-  dies, and it is freed after an RCU tasks trace grace period.
-- A lookup of a normal map tests one more field of the map, also on a
-  host with no inline map.
-- The sk storage map iterator is refused for inline maps, and sk diag
-  shows inline values. A delete in NMI fails with -EOPNOTSUPP, as for
-  normal maps. The flag needs a 64-bit kernel.
-- libbpf does not retry a local storage map create without BTF any
-  more. That retry always failed with -EINVAL and hid the real error.
+This fix needs commit bd897919e4dc ("bpf: Link the first element after
+its storage is published"). Before that commit, an iterator can find the
+first selem before the storage is published, so an immediate free is not
+safe.
 
-Semantics and costs
--------------------
-- A syscall update copies the value in place, under the storage lock.
-  A reader that takes no lock can see a torn value, as with array
-  maps. Without the flag, an update swaps in a new selem, so readers
-  see the whole old or new value. BPF_F_LOCK is not available,
-  because an inline value cannot have a spin lock.
-- A pointer that a program keeps after an update or a delete points
-  to the same slot. It sees, and can change, the next value of the
-  same map. Without the flag, it sees the old value.
-- The tag is predictable, and claim numbers wrap after 2^32 claims. A
-  user that can create inline maps can make another map see bytes that
-  it did not write, in objects made before that map.
-- The area and the 16-map limit are shared by the whole host, also
-  with BPF token users.
-- While an inline map exists, new objects of its owner type are bigger
-  and live until owner death. This is also true for owners that use
-  only normal maps. A delete or a map unload does not give this memory
-  back.
-
-Numbers
--------
-Host: AMD EPYC (Zen 5), pinned 24-vCPU KVM guest. Workload: two TC
-egress programs look up two sk storage values for each packet (124 B
-and 2 B), 9 sk storage maps for each socket, 131k connections with
-request/response traffic. Paired A/B runs against the base kernel.
-
-- Whole request, programs on, both values inline: -200 +- 108 ns
-  (-2.9%). Programs on with normal maps only: no measurable change.
-- Sampled cost of the two lookups: 169 -> 58 ns and 90 -> 11 ns.
-- bench_local_storage, hot loop with all data in L1, ns per lookup:
-  normal maps: +0.39 to +0.76 (1 to 16 maps; 3 more instructions and
-  1 more taken branch); inline hit: +0.32 to +0.67. The gain comes
-  from cold owners, not from a hot loop.
-- Memory: an object grows from 192 B to 256 B with inline values of up
-  to 64 B, and to 1 KB with a 512 B inline value. Owners that use only
-  normal maps pay the same while an inline map exists. In the workload
-  above, unreclaimable slab grows by 629 B for each connection.
-- Socket churn: no throughput cost. At about 230k closes each second,
-  about 18 MB more objects wait for the tasks trace grace period.
-
-Patches
--------
-Patch 1 fixes an existing bug: a failed create in NMI freed storage
-that was never published with kfree_rcu(). It can go in alone. It needs
-commit bd897919e4dc, which is in bpf-next only. Patches 2-3 prepare the
-code. Patches 4-10 add the inline area, its lifetime, lookup and
-update, the iterator refusal, sk diag and the UAPI flag. Patch 11
-changes libbpf, patch 12 adds a selftest and patch 13 adds the docs.
-
-Testing
--------
-- The selftest passes on normal and KASAN kernels, with no kmemleak
-  report.
-- Out of tree: races of create, update, delete, destroy and map free,
-  also from sleepable and NMI programs; sk diag, clone, inner maps and
-  owner death; fault injection
-  that forces the storage lock to fail in destroy, with no leak and no
-  KASAN report. KCSAN ran on an earlier revision with no report.
-
+Fixes: f484f4a3e058 ("bpf: Replace bpf memory allocator with kmalloc_nolock() in local storage")
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 ---
-Mykyta Yatsenko (13):
-      bpf: Free unpublished local storage with kfree_nolock()
-      bpf: Add obj_size to bpf_local_storage
-      bpf: Add bpf_local_storage_delete()
-      bpf: Add an inline slot allocator to local storage caches
-      bpf: Size new local storage objects for the inline area
-      bpf: Keep local storage objects with an inline area until owner death
-      bpf: Keep values of BPF_F_INLINE_VALUE maps in the storage object
-      bpf: Refuse the sk storage map iterator for BPF_F_INLINE_VALUE maps
-      bpf: Show inline values in sk diag
-      bpf: Allow BPF_F_INLINE_VALUE for local storage maps
-      libbpf: Do not retry local storage map create without BTF
-      selftests/bpf: Test BPF_F_INLINE_VALUE local storage maps
-      bpf, docs: Document BPF_F_INLINE_VALUE for local storage maps
+ kernel/bpf/bpf_local_storage.c | 19 ++++++++++++++++---
+ 1 file changed, 16 insertions(+), 3 deletions(-)
 
- Documentation/bpf/map_cgrp_storage.rst             |   3 +
- Documentation/bpf/map_sk_storage.rst               | 103 +++-
- include/linux/bpf_local_storage.h                  | 105 +++-
- include/uapi/linux/bpf.h                           |   7 +
- kernel/bpf/bpf_cgrp_storage.c                      |   8 +-
- kernel/bpf/bpf_inode_storage.c                     |   8 +-
- kernel/bpf/bpf_local_storage.c                     | 420 +++++++++++++--
- kernel/bpf/bpf_task_storage.c                      |   8 +-
- net/core/bpf_sk_storage.c                          |  71 ++-
- tools/include/uapi/linux/bpf.h                     |   7 +
- tools/lib/bpf/libbpf.c                             |  17 +-
- .../bpf/prog_tests/local_storage_inline.c          | 591 +++++++++++++++++++++
- .../selftests/bpf/progs/local_storage_inline.c     | 123 +++++
- 13 files changed, 1396 insertions(+), 75 deletions(-)
----
-base-commit: 76b3efa01847795720f86d714a4ebea4979eb0cd
-change-id: 20261113-sls_f1-abf16304e3ef
+diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
+index b12fcec47ffa..3abfe7034df8 100644
+--- a/kernel/bpf/bpf_local_storage.c
++++ b/kernel/bpf/bpf_local_storage.c
+@@ -158,6 +158,18 @@ void bpf_selem_free(struct bpf_local_storage_elem *selem,
+ 	call_rcu_tasks_trace(&selem->rcu, bpf_selem_free_trace_rcu);
+ }
+ 
++/*
++ * selem was never published: no reader can see it, and this works in NMI.
++ * Only the syscall update puts special fields (uptrs) in a new selem, and it
++ * never runs in NMI, so freeing them here is safe too.
++ */
++static void bpf_selem_free_unpublished(struct bpf_local_storage_elem *selem,
++				       struct bpf_local_storage_map *smap)
++{
++	bpf_obj_free_fields(smap->map.record, SDATA(selem)->data);
++	kfree_nolock(selem);
++}
++
+ static void bpf_selem_free_list(struct hlist_head *list, bool reuse_now)
+ {
+ 	struct bpf_local_storage_elem *selem;
+@@ -562,7 +574,8 @@ int bpf_local_storage_alloc(void *owner,
+ 	return 0;
+ 
+ uncharge:
+-	bpf_local_storage_free(storage, true);
++	/* storage was never published: no reader can see it */
++	kfree_nolock(storage);
+ 	mem_uncharge(smap, owner, sizeof(*storage));
+ 	return err;
+ }
+@@ -605,7 +618,7 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
+ 
+ 		err = bpf_local_storage_alloc(owner, smap, selem);
+ 		if (err) {
+-			bpf_selem_free(selem, true);
++			bpf_selem_free_unpublished(selem, smap);
+ 			mem_uncharge(smap, owner, smap->elem_size);
+ 			return ERR_PTR(err);
+ 		}
+@@ -692,7 +705,7 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
+ 	bpf_selem_free_list(&old_selem_free_list, false);
+ 	if (alloc_selem) {
+ 		mem_uncharge(smap, owner, smap->elem_size);
+-		bpf_selem_free(alloc_selem, true);
++		bpf_selem_free_unpublished(alloc_selem, smap);
+ 	}
+ 	return err ? ERR_PTR(err) : SDATA(selem);
+ }
 
-Best regards,
---  
-Mykyta Yatsenko <yatsenko@meta.com>
+-- 
+2.53.1-Meta
 
