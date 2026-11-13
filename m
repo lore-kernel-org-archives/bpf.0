@@ -1,98 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794587631;
-	b=1bEnRb9LP2TQACg9oWzN4gbka2hOO3lK7ll4cV5kYE0xeAHrROAPi+6Lf/VzEEK+kOUQ
-	 NPcb/5pE72k+AYho50oT0j0P/GjJITtpqFJzVxYczBovG9mjMLKcatsNFcuLSRbxHmeCJ
-	 LnpE43jscDtih20q6O0wPChpQBh7f7p24Vo5aqwLzJnCzr8PC/2/GRM4WiwGmSdHfk2EV
-	 VKszAB+sP1PSnQYLYgE5UIFUo4cWGqV5U5jNDQVVa2mCO0/4hYLMMXVPRllOHTaJlih7j
-	 nzaBCznt2WVaW4vAUTM4cASpyFYRsHJYnBe1EPP5Xp/wezikFQ/CfS+4KZqe51O8XVw==
+	t=1794587809;
+	b=zqfbKxFBoyde0QQOMoROWK4IHOh/hqdcLQS4petycKET3zq5Anq8/ord/eYnmByxlyxI
+	 PKLMxHNkRt6n3jc6XuR0ICpKvdQESBTnP27TOMT6YFS3ptxiQ/ztGdid//Kkxk7iaa6U8
+	 fNkil+Zj2XQiW6J/36oE4YJ9xNEPk4l2++hOWNlhSmttqxGi2cg55akGopklkQk9fFELT
+	 ISTvQLnt1PfotBuGUWJ3+UObdzWQGFPShgXzVUrKGzUEpGhunEoSQQ2nvJA4a4RRetbpd
+	 KUx/qOIFLRZBePsc+LfaoQ3cln0p19BDH5g8liGxdjNkOqQp6LJEvsU5pu06IVM66GA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794587631;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=MXX3akIJJnniaTKNyBd5BFOan5vtWMWqc3ToNszlBxw=;
-	b=Sdo6+QD0V28fbHrfoI7dfd28F04ttqvJpbsN9KBrO21mRSHAZDwy142e/68tQdasSVjQ
-	 l9PdCjPxEbrYoUcAq3aP5eTDvcoHZ1ndhD3uv348rQoDbJlAjeBF4eCN5wO6+0ABR7HCp
-	 vMDaB+nwlEryR8ZlFi7ExiLYp80i4zIqACzp6K+It4Jpr2EOuGXj3h2H2X5ncjdxC0Yl/
-	 MYtWFA7vncAOmbEp45pps3HiR7v1a910ZQGzKZ34Dp0i/OGSlrdq3+qYvuKHI6arX+LDS
-	 i1n5fIqyF4CjEAIr2F+w1r3g4mGoDZwb8OwuM7Yw5E+0VekKEkuXSUR76UbZAOPHJDg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794587809;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=UyJE0mbTTEEewCt1bY7p9pW9FJzBUBKBqTbg7Tka4X4=;
+	b=knM0gpnDC2IWjgsGRDCKPcxATt3TIEZygMJwmqcJzVisJx6HSffD4F+QL1iASRd11LLJ
+	 TkNOP8k1jfaCd8gPpYheTVhzQDQNdgCEeyFNR3RJMYOli3MEmb25W2QQ/FIBwvc2nbvRJ
+	 elIdPDkIzjVlhJhwAHOmBjCuhpNLhPbyxqYeKad1Ie8mwFcqJjYU4r9GeQJ77mcdFpORE
+	 7IPGfMYcPdx83wrCRcObO7FYvztjMdui0lnXj3jTMaJUwShWwQmxz06oBfGMfYTuAARLH
+	 EWRuOuIoI9nkcggLJbJcfF/m+Gi4AlZxpAiTCx6j28sLlQW2YrwaYEX3fvT5LtpSikw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=yalAuqPc;
-	arc=none smtp.remote-ip=209.85.215.178
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=i3GGemaR;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71F0E606A32D
-	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 16:33:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 71F0E606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8CBD606A323
+	for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 16:36:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=yalAuqPc
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-cd8ba7c2694so467447a12.1
-        for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 08:33:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794587631; x=1795192431; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=MXX3akIJJnniaTKNyBd5BFOan5vtWMWqc3ToNszlBxw=;
-        b=yalAuqPcOEWyZTcExezZehIbYLE/2/dgqSNKpActhbBVaBqSgaWvjIjmznMJeS6ep4
-         7XzNftcbBJJK8emreUrXdWyhEmDtqbbKnpHJLbQc5gVBBPyma7UsC7jvzSzV8+moBVVL
-         /bwjxjOj8jV4AWaTTTKh+QgwoXbIBb215sAvlyCxaXnYasfhb2PcDzOizfe6jGEtmHAM
-         6hadodUN7VESv9g0PPuDxgd4fZhYzU9j0oHa9BIdSiKZVdqil2wauU2pSZB6c1Cl4fOx
-         igj6HPsrqpdN1IrDf+D67gBboWuYyH0zv6K5wlmKa3KINbEsNptLpLXNtKBrwdnLUY1v
-         /coA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794587631; x=1795192431;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=MXX3akIJJnniaTKNyBd5BFOan5vtWMWqc3ToNszlBxw=;
-        b=rdCDkXV9Yrq/wnNgYQ1rPv/95jEuRMR5eEeHhy7o2egYeKxB9xuj8RF/azZzFMKfNC
-         4kdhc9I4qba8eEIQMLvL0dGoLdj5pfLBW5ovuUUU8pe8hvWKac03R76v9Krjymg8oafe
-         Ou4zl4MMCPD8HxdY01V35tJEcmIK0QH6C2IefI/LH0OUo1iH8/ax80NwaIS3C07QXIt4
-         mLdd+wKTX/qlaCBdvGQyBYwwomqh+2MymG2i0xkcLkbxlndvRZickDNreUuOa4JskCGG
-         3F80pZLAAGLQkxDI27gNieEZsJaID3NxvOxloE3nDPnD8LmGi2EheB1t8pHxfBIsjcmY
-         fdUw==
-X-Forwarded-Encrypted: i=1; AL+hErGd7a2ni9hgK+px5bHlKUfg1nc0jyElFXNOJjLvRsOAvto7Qs5HKO/Etdw6C4dRsNHEbak=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/R2ZszTNfxoBuUvKM0LhIbcwh00gQPWYaITwxRhIJpO97CYXfa
-	SLuMqMtdaQbdWgCczVVN9TErE9Kd1tS3ZAx2LYKYaUSbkH4IJ57GcPQi
-X-Gm-Gg: AYBFou0eU4jO9RMihM1HMEOsD1K24Pnra8EJlkyc2g5pe+GoWTPnQWpWDoGVWNsu6y6
-	nPQvba0QgUtaQ3gFGaDOUr3Oahph0snt6dR+xR98OBCY5IeeKnR4HlXoJE1WXqy1dxFuh8ERqEh
-	nYI6NWpgEKyhveE9Y3JqITOIa9jzcZpgw6LlcKDD7lAj2F4+CmWNklujkEjEUyRR0Qep5+QowKf
-	J/+3cdtB0Fgtgh36wtArK+/gK0yIGOBvuAmrSm55QarTgYclHxy5TozXDqlMw5/ljyPe/SWyAgm
-	4DbUSI2IH6jrWRTHxO/aiHvrn19xAsHgjWrguPzSuJ4K9c0aLUy+fnz51aLmT5D5NIN2VaUh1nQ
-	uSeI7VPkyHLwQZ7J2wBzsu20mdlVFMfY73dMQhU3l2p6bPcjwqfMcCArnkHUYxtAmKgYfI6GZRV
-	IRrfF7QUtch7egKbjP1NPq4/fKzdgGBtubeMGNSoZJwi7K1F9o8Bjxe/vQKo16uz17o7GvRhAnJ
-	4VSV0OvRB7/WY/hbL+WBcQtlZxFAaV14QU6C2uQKhSz1wLew6/QYmTJYkR9MljHrsDF5pg2loXW
-	ojGoryTC1A9F304J2lmphb/Zb6FxoKVuZ0sbotrKX4q66q3/xEslshTqnUDCURZm4s81Fsf0WfX
-	1p3xMxlxwI3XssxtMygJa17Uf0mDHN6HWNQ==
-X-Received: by 2002:a17:90b:3c4e:b0:3a7:b260:9ced with SMTP id 98e67ed59e1d1-3b1b0b87f83mr2684082a91.58.1794587630503;
-        Fri, 13 Nov 2026 08:33:50 -0800 (PST)
-Received: from localhost ([153.61.198.252])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1b24938bdsm2417857a91.1.2026.11.13.08.33.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Nov 2026 08:33:49 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 13 Nov 2026 16:33:49 +0000
-Message-Id: <DMU87ZLFC00R.263G7S4GQS8HX@gmail.com>
-Subject: Re: [PATCH v2 bpf-next 12/13] bpf: Treat the type of an untrusted
- pointer as a hint
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: <bot+bpf-ci@kernel.org>, <bpf@vger.kernel.org>
-Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
- <memxor@gmail.com>, <a.s.protopopov@gmail.com>, <martin.lau@kernel.org>,
- <yonghong.song@linux.dev>, <mason@kernel.org>, <ihor.solodrai@linux.dev>
-In-Reply-To: <cdadf16f205392dbca1eabedeb3123c4b4ff7512d74b4c7f52f4b6b8f671a48e@mail.kernel.org>
-References: <20261113050901.1399091-13-alexei.starovoitov@gmail.com> <cdadf16f205392dbca1eabedeb3123c4b4ff7512d74b4c7f52f4b6b8f671a48e@mail.kernel.org>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=i3GGemaR
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FAEF1F000C4;
+	Fri, 13 Nov 2026 16:36:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794587809;
+	bh=UyJE0mbTTEEewCt1bY7p9pW9FJzBUBKBqTbg7Tka4X4=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=i3GGemaRR+XeInhi3X/AdOcK/SjaoujEQ0VCaH1jBwz1Rtz9fZds3X1HcHgFL5qSP
+	 3E2HHE2vnsdKdyOWmFuzLLs0RTwE9zGLgFpQ+qk5CtHdAx3tQfokw9iyyqgmRneRjc
+	 a2RUerhCd9v+al9wOmBqHkZYeQ2Z3yhixfaWrIQC67HEZbfK4LsYsliw+ICCLXf3sS
+	 irdrFI3JN3ZOowtOI7K1btiRFiqrP8oNlSTMLcbtB73b1QfjLgMOEOXivLaLoSf008
+	 ZN0wKuU8t8srPs9FLQoWLafF8v8X5e/120swL/ze+U3IMI2ITBJP2XvTo9NIXqFrqg
+	 UlijS6IZHjGEg==
+Message-ID: <sashiko-outbox-213209@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next v10 2/4] net: xdp: add xdp_buff_shrink_tail()
+ helper
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Lorenzo Bianconi" <lorenzo.bianconi@oss.qualcomm.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261112-stmmac-rx-mb-v10-2-d3d04b65c6bc@oss.qualcomm.com>
+References: <20261112-stmmac-rx-mb-v10-0-d3d04b65c6bc@oss.qualcomm.com>
+ <20261112-stmmac-rx-mb-v10-2-d3d04b65c6bc@oss.qualcomm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 13 Nov 2026 16:36:48 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -101,23 +60,120 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
 
-On Thu, Nov 12, 2026 at 09:52 PM bot+bpf-ci@kernel.org <bot+bpf-ci@kernel.org> wrote:
-> Both tests reach the kernel type through bpf_core_cast(), so they hold an
-> untrusted pointer, and a failed walk now gives a scalar instead of an
-> error.  The tests then only check that the walk does not crash, and no
-> longer exercise the variable-offset logic in btf_struct_access() that the
-> comments describe.
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [High] net: xdp: bounds check split in bpf_xdp_adjust_tail() allows
+  pointer wrap
+--
 
-Right. flex_array_field() has the same pointer, so it cannot fail either.
-arr_unaligned_step() still covers the stride check. Nothing covers the
-'nelems == 0' check of the flexible tail now.
+commit fe8a696967ad3281fe5305e0444a8948ebb0b12e
+Author: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
 
-> Should these comments be updated to say what the tests check now?  Or could
-> the two flexible-array cases use a trusted kernel pointer, so that the
-> stride check and the flexible-tail check in btf_struct_access() stay
-> covered?
+net: xdp: add xdp_buff_shrink_tail() helper
 
-Will fix in v3: the three tests will take unix_sk->addr in iter/unix.
-It's a plain PTR_TO_BTF_ID, so the two tests stay __failure.
+This commit moves the XDP tail-shrinking helpers from net/core/filter.c to
+net/core/xdp.c and exports xdp_buff_shrink_tail() for driver use.
+
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 9b8d5191c4ba2..5ea45dfce7a22 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -4438,96 +4438,21 @@ static int bpf_xdp_frags_increase_tail(struct xdp=
+_buff *xdp, int offset)
+
+[ ... ]
+
+>  BPF_CALL_2(bpf_xdp_adjust_tail, struct xdp_buff *, xdp, int, offset)
+>  {
+>  	void *data_hard_end =3D xdp_data_hard_end(xdp); /* use xdp->frame_sz */
+>  	void *data_end =3D xdp->data_end + offset;
+> =20
+> -	if (unlikely(xdp_buff_has_frags(xdp))) { /* non-linear xdp buff */
+> -		if (offset < 0)
+> -			return bpf_xdp_frags_shrink_tail(xdp, -offset);
+> +	if (offset < 0)
+> +		return xdp_buff_shrink_tail(xdp, -offset);
+> =20
+> +	if (unlikely(xdp_buff_has_frags(xdp))) /* non-linear xdp buff */
+>  		return bpf_xdp_frags_increase_tail(xdp, offset);
+> -	}
+> =20
+>  	/* Notice that xdp_data_hard_end have reserved some tailroom */
+>  	if (unlikely(data_end > data_hard_end))
+>  		return -EINVAL;
+> =20
+> -	if (unlikely(data_end < xdp->data + ETH_HLEN))
+> -		return -EINVAL;
+> -
+>  	/* Clear memory area on grow, can contain uninit kernel memory */
+>  	if (offset > 0)
+>  		memset(xdp->data_end, 0, offset);
+
+[ ... ]
+
+> diff --git a/net/core/xdp.c b/net/core/xdp.c
+> index 470bf90d93ef2..7c98dbc2a770c 100644
+> --- a/net/core/xdp.c
+> +++ b/net/core/xdp.c
+> @@ -672,6 +672,97 @@ struct sk_buff *__xdp_build_skb_from_buff(const stru=
+ct xdp_buff *xdp)
+
+[ ... ]
+
+> +int xdp_buff_shrink_tail(struct xdp_buff *xdp, int offset)
+> +{
+> +	void *data_end =3D xdp->data_end - offset;
+> +
+> +	if (unlikely(offset < 0))
+> +		return -EINVAL;
+> +
+> +	if (unlikely(xdp_buff_has_frags(xdp))) /* non-linear xdp buff */
+> +		return xdp_frags_shrink_tail(xdp, offset);
+> +
+> +	if (unlikely(data_end < xdp->data + ETH_HLEN))
+> +		return -EINVAL;
+> +
+> +	xdp->data_end =3D data_end;
+> +
+> +	return 0;
+> +}
+
+[Severity: High]
+Can splitting the upper and lower bounds checks between bpf_xdp_adjust_tail=
+()
+and xdp_buff_shrink_tail() allow pointer wraparound on linear buffers?
+
+Previously, bpf_xdp_adjust_tail() checked both data_end > data_hard_end and
+data_end < xdp->data + ETH_HLEN on xdp->data_end + offset, which prevented
+pointer arithmetic overflow or underflow from passing validation.
+
+With the checks split:
+
+1. In bpf_xdp_adjust_tail(), offset >=3D 0 now only checks
+   data_end > data_hard_end. On 32-bit architectures, a large positive offs=
+et
+   (e.g. 0x40000000) wraps xdp->data_end + offset past 0 to an address below
+   data_hard_end, bypassing the check and passing offset to
+   memset(xdp->data_end, 0, offset) for an out-of-bounds kernel memory writ=
+e.
+   It also allows frames initially shorter than ETH_HLEN (such as L3 packets
+   on tun devices in generic XDP) to remain shorter than ETH_HLEN when
+   offset >=3D 0.
+
+2. In xdp_buff_shrink_tail(), linear buffers only check
+   data_end < xdp->data + ETH_HLEN on xdp->data_end - offset. When
+   (uintptr_t)xdp->data_end < 0x80000000 (for example on s390x where
+   PAGE_OFFSET is 0, or 32-bit kernels with VMSPLIT_1G / VMSPLIT_2G_OPT), a
+   positive offset larger than xdp->data_end underflows data_end to a high
+   address above xdp->data + ETH_HLEN, setting xdp->data_end past
+   data_hard_end and exposing out-of-bounds memory to BPF packet accesses.
+
+Checking offset against the integer buffer bounds (such as
+offset > (int)(xdp->data_end - xdp->data) - ETH_HLEN in
+xdp_buff_shrink_tail(), and keeping the ETH_HLEN and tailroom checks in
+bpf_xdp_adjust_tail() overflow-safe) would avoid both wraparounds.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261112-stmmac-rx-=
+mb-v10-0-d3d04b65c6bc@oss.qualcomm.com?part=3D2
