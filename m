@@ -1,100 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794635923;
-	b=nsk0QS4f4XKZ1hZmhaDyhmRCK3ewnneSj02ka6gRsxGZVPpkt7Ne4cmHAJbzRNDEBEsl
-	 pxQUTct3nyApLOYPjubT+41jL/O5VmAC/mwszKqy8oXzcB3USwPhoCrT6ww58shwkVdj4
-	 DhtnrxRKkGMx2hmzpSJGvSiKFRULP858MJUfPbz/n9eQvD4HgTmzE461N0tC1XpoUac4C
-	 rkK04Ugs9ERjsgWuGzTVfaO+Dcky+TCtifBLAxLtFIlM4ONJBs67BY6qWKDxVDsDKt46f
-	 M55t8C9lMYMTQOVwotRb7yCvzRhudYXylp60g8ob8R620ZRm/5sQcAy0AHjgdlFT9xg==
+	t=1794636318;
+	b=pTT7HzHdraJuxljR2xbGDqK/slzK+Oz+xc7MRmzcifwesBO1qgU50uj+agRYNnDe8rgz
+	 Q+rWVgH2WqVX1LST6wQCSy8PRuJFqJLcH1wxLjqlVwHaitxzxa/aZJc/Wc58rDg79ZfLv
+	 kgxdwIh6wMbCRbzufQpRBVPzkoyvAr9feQtUPKkQ9AuVuSlE2pynMyPyLARi2f0HvXcIT
+	 ZKHpYjBLxMlSbgu8YDCvtIBixEEo2ZVUZRCpGlPyRLHxSSXFkv7AHtCdxBNnlG7It9kzi
+	 6o8qk46X4eay8exEpkRC2L2laAa1WUc+nyUjyFAfhFh6kC9MNBdfrkL+EmbJ6NnN35Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794635923;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:From:To:Cc:Subject:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=Ym/b1fWsEbJtm9qFvOFht1VdLbQA2jNfhiJxfk6+BKU=;
-	b=xPz4chrmgjimbaYl0mlSbwjFuaMcBONUfbrIyG86radq2GLgRoTBGsGpi8EodGrVhQGn
-	 y4eCFZthLjwxcVCxjnNpJG2ivFd3vuRNRf1qthGXUiSQZndEI5gOWTETN0yE0EOFArg0T
-	 CUEtWdeBjzHMLbTJYZnwiHwNBbLrphRZQ2e/C3q97Hhpovg1kkCSJLWGAf9yOhXsPzqu/
-	 RxAQ6XDOzOMMq/7v6lawTy6W4nVA0dMMSOwQfDv2+MC/2eieuYtHTTsN43dY0WcA8dv9c
-	 h/9tKptLd8zwY9CJxBwBvJFnkVA257Y0bBrtNplLA5Vkm+as2PWlPSaWeotlrnwd6ZQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794636318;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=Adb9FHChsSQ+xm0rqzte2dA6EU95VOhm8NVCpxGanNo=;
+	b=PvCJl0B7c8snbUWTcbF7jX9BOLnSpqzq/wmgCrpYvCL6BwNTCvMtnJfqvESbSVE5XhJ5
+	 0bRpVKQ0C2/cgrv8w1A9AfXPsryk9Q/sgI+ANMuS4EGzibN6zuKRpw8HEUEhgye0sJ2zl
+	 G0ML3Oi5VnY9etTKu5aaPcKAf04WQQsw0U9DmjS5jLNWpcEaWdCRWdpbBWMDEPMPeVamj
+	 qWDGQ41UehoSnA9hgCS3DSGUTaz5zCrw8SdvOSnKqHj0a6j7fWAVv3uZBCY6J4D/dDDtK
+	 G4QEhrWwHl7e8KI4uq4Mh612E+hhC7Cni1Rd2GPk2LuVJKDEMpTXoKwtvKXSHa9yx9A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iAMSHfJS;
-	arc=none smtp.remote-ip=209.85.214.176
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nt5e1abb;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F814606A329
-	for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 05:58:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2F814606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58A7D606A327
+	for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 06:05:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iAMSHfJS
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2ee0533d249so6451735ad.1
-        for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 21:58:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794635922; x=1795240722; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Ym/b1fWsEbJtm9qFvOFht1VdLbQA2jNfhiJxfk6+BKU=;
-        b=iAMSHfJSyZ9aJiv8I2N2EwOA0IagQKe+xY0cWdblJ1VkkBcu1DaDiYHnj/WX701mMs
-         bNg53GAa1AuloyF0zl7ct869w7xQdvk4H2hAQJAX8sdPVO1IWF+XuuVyxqjn9BMMFntx
-         gj0bbZcPyT5WfAJOh8l9Smumxzu0oj26xD5Z4or/VyPb73ZPq/JOBF0ps+/CFuHFaXE+
-         YsYltkrh2t6jR7x2zLZBWD4DJWlFXzJg1mRNLniAMiDjZYjGDvhEd7HdQr/JWcltj1w8
-         qUrGFD48E6ynEJDqHdi0+st27DrGP33AGQcwTVEeSDOXP3DUVcg8S+t4HAkboFW8jFMv
-         qYIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794635922; x=1795240722;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Ym/b1fWsEbJtm9qFvOFht1VdLbQA2jNfhiJxfk6+BKU=;
-        b=B3EIVuxLL24fFXUPZwmUvXP84nIyWE6XX/ZQw/TOQts9iU13s0OWnZ29rZYhbhu8zv
-         LZizOkbgBakT9inTpt63xMAG/1lD/wh9eBzJlsFGOGTCggrb6msJrK0kEHlRtIgVhRBW
-         48dF2TPCnXMPxnu7/RYM/JehsZdhiB4sn9TQbxEjBtk3LkODUU6NMnU5T0NrqquxAlTm
-         6lhFQt5sWXS1uTrq/clMkOxwWc9YIpvakaXjYKso7OwGEMD4peGOibIrpPGcnvecAbPL
-         +sOxWbS5o5Tf7ow0m4v2wXD0GKNnPnTrK3S1t0WyqvVARdNmVDnAbce/jm/mvX/fFwCG
-         JGUA==
-X-Forwarded-Encrypted: i=1; AL+hErFl4a0qo+E9EHEK1lVkkfv2l3S6CT5nqZemvtGjP9rWD+d3EgKApehuP6KXItlB2KhRWTo=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+DON2+763NE3RnFdaVCXah+PrPBZEhTO7lmFPxEp4xnIR7Vu8x
-	j8GN48JtpzSM8ca98myK4hT/Vjoa4SDGPHa5ITfdsi3+6KP6keY/esRmh797oQ==
-X-Gm-Gg: AYBFou2zHsoIUawinERx7Jv+H9ZbECba5M9/4z/s1zMBWjILDaNdkOsngwVf7roUAoo
-	m424uAjZ62MaAFuFMo5iJ41ExyQdvisitcLt5V1ajL7QwC1kshn99jqR9K8HgI91A5sTs30X2J1
-	xitPk601aHRDmrRAvGTA/BtuTrsaJXJDrPoxymUfE9bch00M9L4FMoEmkza8ClEYfIx5b4gGspn
-	4FUnrubKFWB3cbdmFUOLOvKQU/ic+bn9Mn5tSLoYYFkh2DEq5fkpzd+Xtv02IlLa0BNUzOiEruX
-	pC8U8K1+PMZ7YjWjgyxXqxbq927embnoCDkAzJDCCLy/NNQ5TxPW4Me3ETm5b8AWp716I1Gd4n7
-	JwrCQHOZ14hE5JG90JCXGb0z3pLUBZJoSkspb3Kxr2GxqWKPCzbj9voI0XFsKW5VmSbbFTTsi3H
-	giuBrt8cqIdt6KhsSal9vGWRde9DCkA4QB2ds2gBd6f8AdDL4GoXy3FaDM9HnQH9sePLVC71ryB
-	js0JVX/wp/Ue5w+Tl6vwmmDPbN9sr9TD6o8dKUWbqE/GqjtZPeey1W5eK3mOsLT5pnMqlVOE5Ce
-	fBUlk11fJo2DcAKIviA5Rjt4r1kfMo3Ku9rlZAyzYPek4O03ncKrlw1n13gdsFcPMFckA79e7ic
-	IGtOTgL+Jk14GD1NBC6OoU0gVHRtTSGW99A==
-X-Received: by 2002:a17:903:184:b0:2eb:201c:91a8 with SMTP id d9443c01a7336-2ee0de4fa67mr48849665ad.29.1794635922261;
-        Fri, 13 Nov 2026 21:58:42 -0800 (PST)
-Received: from localhost ([153.61.198.243])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ee0f862744sm17702925ad.44.2026.11.13.21.58.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Nov 2026 21:58:41 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 14 Nov 2026 05:58:41 +0000
-Message-Id: <DMUPC8KHIGGC.1GSNJVGA8XC98@gmail.com>
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Hungyu Lin" <dennylin0707@gmail.com>, <andrii@kernel.org>,
- <bpf@vger.kernel.org>
-Cc: <eddyz87@gmail.com>, <ihor.solodrai@linux.dev>, <daniel@iogearbox.net>,
- <memxor@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
- <yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
- <alan.maguire@oracle.com>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next] libbpf: Fix sign extension of unaligned enums
- in btf_dump_get_enum_value()
-In-Reply-To: <20261113223449.97604-1-dennylin0707@gmail.com>
-References: <20261113223449.97604-1-dennylin0707@gmail.com>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nt5e1abb
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C4891F000C4;
+	Sat, 14 Nov 2026 06:05:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794636317;
+	bh=Adb9FHChsSQ+xm0rqzte2dA6EU95VOhm8NVCpxGanNo=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=nt5e1abbvkBLR781yr3Wf59XQnl1SVutn+l9asLMHq9SqcHFX7veptyB3buASqLEf
+	 ssMc2S8o8g9H+hfN3ikMGq1nAf4eseGDu7Y+Wt7HoANYjfsy2dAWCiYivvIYRLyZpi
+	 zKi83CdPp0bfosCPYg8VyTQOA/YHF83c8d38ekB2OWvc60pWmqAYbzpEeLAXu/j2D8
+	 T38UMEjpiFLrcPXvcxHkFKFHYW1M3IL9xCMESSZhjgcD2IDv9T0tG83fVx7a/N2M5/
+	 t8veL9d5FUuiSJLZBjTZrBYdjuHQfl47YEfVNTqK9jP5PwlpJJO+zPxGR9ZJ3H5sp2
+	 xOLWjirNFrByA==
+Content-Type: multipart/mixed; boundary="===============5896059209891492302=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,78 +49,127 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Message-Id: <c986875c5e7fd09ea087346a83cada5e27f15e73b8531acb817eaac3cfbf5092@mail.kernel.org>
+In-Reply-To: <20261114051805.683966-9-alexei.starovoitov@gmail.com>
+References: <20261114051805.683966-9-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH v3 bpf-next 08/11] resolve_btfids: Don't list an error that follows work on an argument
+From: bot+bpf-ci@kernel.org
+To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,a.s.protopopov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sat, 14 Nov 2026 06:05:16 +0000 (UTC)
 
-On Fri, Nov 13, 2026 at 02:34 PM Hungyu Lin <dennylin0707@gmail.com> wrote:
-> btf_dump_get_enum_value() reads unaligned enum values through
-> btf_dump_get_bitfield_value() with a zero bit size. That path
-> zero-extends the value instead of using the signed loads that are used
+--===============5896059209891492302==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Not quite. bit_sz == 0 makes right_shift_bits == 64 in
-  *value = (num << left_shift_bits) >> right_shift_bits;
-That's undefined behavior for __u64 on both endians.
-Pls say it in the commit log.
+> resolve_btfids: Don't list an error that follows work on an argument
 
-> +	if (t->size <= sizeof(buf) && !ptr_is_aligned(d->btf, id, data)) {
-> +		if (data + t->size > d->typed_dump->data_end)
-> +			return -E2BIG;
+TL;DR: In resolve_btfids, solve_forward() may not reach blocks behind computed
+branches (jump tables, static branches), so an error may stay listed for
+fmod_ret after an effect; no regression, but the documented limits may be
+wrong.
 
-This breaks the dump of struct fs_context when emit_zeroes is not set.
-'phase' is an enum bitfield of 8 bits, 3 bytes before the end of the
-struct. btf_dump_type_data_check_zero() ignores bit_sz of an enum:
+> diff --git a/tools/bpf/resolve_btfids/text_flow.c b/tools/bpf/resolve_btfids/text_flow.c
+> --- a/tools/bpf/resolve_btfids/text_flow.c
+> +++ b/tools/bpf/resolve_btfids/text_flow.c
 
-  btf_dump_struct_data()
-    btf_dump_dump_type_data(data = end - 3, bit_sz = 8)
-      btf_dump_type_data_check_overflow()    1 byte, ok
-      btf_dump_type_data_check_zero()
-        btf_dump_get_enum_value()            t->size == 4, unaligned
-          end - 3 + 4 > data_end             -E2BIG
+[ ... ]
 
-Today it reads 1 byte past data_end and the dump succeeds.
-The over-read is an old bug of enum bitfields. It needs its own fix.
-The fs_context test in test_btf_dump_struct_data() sets emit_zeroes,
-so it doesn't notice.
+> +/* Sweep from the first instruction to the last one until nothing changes */
+> +static void solve_forward(struct text_flow *flow)
+> +{
+> +	const struct text_reach entry = { flow->args, TEXT_CLEAN_PATH };
+> +	bool changed;
+> +	u32 i;
+> +
+> +	memset(flow->reach, 0, flow->nr_insns * sizeof(*flow->reach));
+> +	join_reach(flow, insn_at(flow, flow->entry), &entry);
+> +	do {
+> +		changed = false;
+> +		for (i = 0; i < flow->nr_insns; i++) {
+> +			const struct text_insn *insn = &flow->insns[i];
+> +			struct text_reach out = flow->reach[i];
+> +
+> +			out.based = transfer_based(flow, insn, out.based);
+> +			if (insn->pointers)
+> +				out.path = TEXT_EFFECT_PATH;
+> +			if (insn->kind == TEXT_BRANCH || insn->kind == TEXT_COND_BRANCH)
+> +				changed |= join_reach(flow, insn->target, &out);
+> +			if (insn->kind != TEXT_BRANCH && insn->kind != TEXT_RETURN)
+> +				changed |= join_reach(flow, next_insn(flow, i), &out);
+> +		}
+> +	} while (changed);
+> +}
 
-Drop the check. btf_dump_int_data() copies without it.
-The check against data_end belongs in one place for all types.
+[ ... ]
 
-The first case below fails on bpf-next today.
-The second case fails with this patch.
-I didn't build it and didn't run it:
+> @@ -172,6 +236,11 @@ void text_flow_solve(struct text_flow *flow)
+>  		if ((insn->kind == TEXT_BRANCH || insn->kind == TEXT_COND_BRANCH) && insn->imm)
+>  			insn->target = insn_at(flow, insn->imm);
+>  	}
+> +	/* Where do the pointers go? A call which gets none is not an effect. Then the paths */
+> +	solve_forward(flow);
+> +	for (i = 0; i < flow->nr_insns; i++)
+> +		flow->insns[i].pointers &= flow->reach[i].based;
+> +	solve_forward(flow);
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-index b5c90f7..d6fd993 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-@@ -945,7 +945,7 @@ static void test_btf_dump_enum_data(struct btf *btf, struct btf_dump *d,
- 				    char *str)
- {
- 	__u32 high = 0x80000000;
--	__s32 neg = -1;
-+	__s32 neg[2] = { -1, -1 };
+Does this filter work in blocks that solve_forward() cannot reach from the
+entry?
 
- 	/* enum where enum value does (and does not) exist */
- 	TEST_BTF_DUMP_DATA_C(btf, d, "enum", str, enum bpf_cmd, BTF_F_COMPACT,
-@@ -994,6 +994,8 @@ static void test_btf_dump_enum_data(struct btf *btf, struct btf_dump *d,
- 				"(enum test_enum_u32)TEST_ENUM_HIGH"), "dump unsigned enum");
- 	ASSERT_OK(btf_dump_data(btf, d, "test_enum_s32", NULL, 0, &neg, 4, str,
- 				"(enum test_enum_s32)TEST_ENUM_NEG"), "dump signed enum");
-+	ASSERT_OK(btf_dump_data(btf, d, "test_enum_s32", NULL, 0, (void *)neg + 1, 4, str,
-+				"(enum test_enum_s32)TEST_ENUM_NEG"), "dump unaligned enum");
- 	btf_dump__free(d);
- }
+The forward pass only follows direct edges.  A computed branch is
+TEXT_BRANCH with imm 0, so text_flow_solve() gives it target TEXT_NO_INSN
+and join_reach() ends that path.  Two cases where this happens are an
+arm64 switch compiled to a jump table ('br x10') and, on x86, the
+out-of-line block behind a static branch whose jump is a nop until run
+time.
 
-@@ -1182,6 +1184,12 @@ static void test_btf_dump_struct_data(struct btf *btf, struct btf_dump *d,
- 		type_sz = btf__resolve_size(btf, type_id);
- 		str[0] = '\0';
+The blocks behind such a branch keep the memset value
+reach[i] = {0, TEXT_NO_PATH}, so:
 
-+		/* 'phase' is an enum bitfield 3 bytes before the end */
-+		ret = btf_dump__dump_type_data(d, type_id, zero_data, type_sz, &opts);
-+		ASSERT_EQ(ret, type_sz,
-+			  "unexpected return value dumping zeroed fs_context");
-+
-+		str[0] = '\0';
- 		opts.emit_zeroes = true;
- 		ret = btf_dump__dump_type_data(d, type_id, zero_data, type_sz, &opts);
- 		ASSERT_EQ(ret, type_sz,
+  1) based is 0 there, and
+     flow->insns[i].pointers &= flow->reach[i].based
+     clears the pointers of every call in those blocks;
 
-pw-bot: cr
+  2) transfer() no longer does out = (struct text_facts){} at that call;
+
+  3) scan_func() only skips flow->reach[i].path == TEXT_EFFECT_PATH, and
+     the path there is TEXT_NO_PATH.
+
+Example on arm64:
+
+  static int f(struct obj *o, int cmd)   /* called with o->lock held */
+  {
+          switch (cmd) {                 /* br x10 through a jump table */
+          ...
+          case 3:
+                  spin_unlock(&o->lock); /* bl _raw_spin_unlock, x0 = o + off */
+                  return -EINVAL;
+          ...
+
+Every path from the entry to that return goes through _raw_spin_unlock()
+with a pointer based on o, yet -EINVAL stays in the tag.  With e0f57028de9a
+("bpf: Allow fmod_ret on tagged functions and check the return value"), an
+fmod_ret program can return -EINVAL and skip f(), which leaves o->lock
+held.  That is the dup2 problem this commit describes.
+
+The parent commit listed these errors as well, so nothing gets worse.  But
+the rule in the commit message and the claim in fmodret_scan.h ("Leave out
+a constant if each path from the entry to its return has an effect ...")
+do not hold for code behind a jump table, and "The tool does not see"
+names computed callees but not computed branches.
+
+Would it work to skip the filter where reach[i].path == TEXT_NO_PATH, so a
+void callee with pointer parameters still counts as an effect there?  That
+would cost some targets in exception-fixup blocks.  Otherwise, could this
+case be added to the documented limits?
+
+No later commit in the series touches tools/bpf/resolve_btfids.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43561939812
+--===============5896059209891492302==--
