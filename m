@@ -1,100 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794675694;
-	b=GL0oRUtCl3edrTpkp/UrQ1LVO0jCdNac8ZpbPEJNThrdxQKlyyyZx1wm+ZkJoYjYdV4z
-	 kGAgFUBGaRux19D95jgS6gYUnugOTQsei5aVrLgkstYc8HIw1PLw6EIMw8/zDJItOYdV4
-	 qcHk67fAc5DhkLolbB6yZ5qBNRKow4ZX4o3x09Cg52lQNOIKIB8j8CziJtlpUzt/6S/mw
-	 weH2x0W1zn4EteqJzcRLyCfxUMW9c0DUzFO5l0ExvMq/E5FCWDX/BAPXp6Nn8bRunDdB1
-	 u2eXfDwjPj5lZfoChK5nf0fAmEcASfsSzSzYe6EYEv0ZlHdqcsIwFMy0PlrHwBHFMyQ==
+	t=1794675698;
+	b=gbJG25ZmPgGzxdyT5pPWFhA87jFWKkFmnqKMP32NAc1JhEswZQFrN0kjrSB+T8cpGxXA
+	 DOzZVmgTKhdvoCM7S46OfBsCyJjT3MLCrR33mazbXutRhaMWZL550VBfF2Y6A9xuysBa9
+	 pY1/YqVIFTe3OGobj5hyOx3umhSbFhH8FaO5CpB9T0kP3zqB4OPKUG9Ld8vR9C5Wqapj+
+	 Ttg+U0jZ4HKlY1C65MzkPLzLYANJ6uL5Yoj5qy1G89KBKyks0aUKfwNAcRi9cAVs1S+iC
+	 ajH8BzyY1thGR5jabavQe3VSTT1hCD1JWKbK8b0Z5Ew+ZapgulqcR9hXapxwXSA2+rg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794675694;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=Ep+n5rIbIBkWijYN/P8smm9x/IxlgV6O3xbPYJDU0As=;
-	b=OqrT1l+8sYO++ybbzsogFPXTKMiE6XlO8oAF2lwdhmRxL8tYZvHonOdfsWPvPgPA57gW
-	 Kh8o5gmVAmIIiWMrU5FDyIBUWGa9TGxriqNdImQCcI/dJuIiaedo+h+yTT/W0X3aggCF7
-	 YgKaiDwQNmYu5H/dbc8MANaRyMJbtkXkp7Y0RQcAGbeDEZu4evLJMRmrK7M+I6Ulih/UK
-	 P8vjEAuvishIdQiY/bv9Q21pJ4eZl15XvrmmUswDJN9pmbgTI2LD3fZ2shYK+t3IK/Qi0
-	 gPy+qMomDUtQTc5MLqKSavD4vMg4CUAIrVV9Ugdn3kqEjPCfaX0WhnQaesePx2mVscQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794675698;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=bm80fs2NeC70k7e6B2ZN8qEEqza+vKslbAZ0gAfzt7U=;
+	b=ngImPP9LmXAz+U8xI4gsAefeycEm9ffQp5/J7PzNrzNLpkXoAZQLRi1gmtnd2F9psYp9
+	 iu+jpN9Rtlij35s9KKtV6cvBWz2T5p0aU/zmX56wQAru2B0Y8yYIdeBNfUaZ20PIEL/MD
+	 dZXc7ykvhi4/r75ytYb/uGzVcIs636qgnvxMm6yHD6fFLkBstkopvCNwVGAqQuOGnUUqv
+	 bC8jA7eIBq2Fg8F4iPgZzALArVtAQqZl1IlgHLhIb3AYKIqLOBtCq7Gay7fhkMe3EolCF
+	 nXDW2li1p2vlVcs5ePpmqYF4eRdXEqJOvCFz+fOd3GGMibN6Uvb6ElXM6K/7y9Gqv9w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=CpNp+i54;
-	arc=none smtp.remote-ip=74.125.82.178
-Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CtChy+Gk;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69AFF606A323
-	for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 17:01:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 69AFF606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D89A606A323;
+	Sat, 14 Nov 2026 17:01:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=CpNp+i54
-Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-36e99cf7bb3so2679237eec.0
-        for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 09:01:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794675694; x=1795280494; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Ep+n5rIbIBkWijYN/P8smm9x/IxlgV6O3xbPYJDU0As=;
-        b=CpNp+i54/v6tOHdyDxVQNdYBsB9xSD8IrZMj5lzcvealEleNlvsVZpKDskPYge19oz
-         wyW5fMmtJj4tccpwzgdZjRZJ4rcvlMvb+4XVXNE5hzFxijuoLQwPhKSmq1z1IZsVUajg
-         TmdXLTER3QqDCHqjr947KNxpwILpkOtzaWuCpCb6LDB//A6gNtNIDW495JeEibg+xlLp
-         Cl9Aij89Py2OCKzmRAmKLyPr+rPwYT6XCsrTbene1IBVP4SrVt4Z3FxHxkdyq6vnuEot
-         0uIohD1XJynwnL2Fm6M0jdakxFLhGmL+uhfYGG5RRISmiDXphXHz1JL5PTtUSD46sPex
-         WupQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794675694; x=1795280494;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Ep+n5rIbIBkWijYN/P8smm9x/IxlgV6O3xbPYJDU0As=;
-        b=VhP+5r+by1MmGUNuILLXsUO1r30gywOajytmtCJEpoFjn6drPVzlv6VUaR8UOVueF5
-         lgGkmwAddH6Z+V6SR4Tsq++7Osor4EJdNRv/vmXvBkEQ+1XrfQhqEjiZu/Da+n/lQlyW
-         emQZ2w5cG/pJf5BM+78Ji3PoRO4Ccv9UxPhuO0EFQc9T4oOJijN8W03xVdnkQwXfF0B6
-         Ic7S24JQOaxAgRe5Yy1/9Aq98phWI1zbvMIJ3zqCUxS2Weim3Whc1Eew99+gvUhlLyiy
-         a1aCVPPpmn04wc/1nX7ECJxOD5KX3DLJwBlSqFy9xDRmQsrl9onMneLe11ng78+HcqHZ
-         wwrA==
-X-Gm-Message-State: APuU4Z9ukWSGvP/CDxbK91v216SznYEWU1WF7TVYPmGjY3fziJ2zfyhn
-	zEr+zpQNm4vJ/zolIn4HurT7VYrH4+dX9FbuP489TGud1F6WsrIHEU6O3wxJOdqX
-X-Gm-Gg: AYBFou2N+gKxmcjdHWxPsxBaSTZFX16bT1MDSIQZWeb+Te+inwExDw1YqZ7Dvp5hpEl
-	/6FJtcOtjpa9YcAMghKg4tqLQo4u95tG4Eywq/kKLYo9/Czmeja1QKCDgQUxOTy/6a72dwYkaHF
-	IYIqAxa3CkzGaEf1gDnwHT5lpVbltYhvYKJ7A9rc8IKD9MsLBeiEw7GFD0vKETWvwQNsVSOWs1m
-	TpvY05CYoJ8HfWLrVr4guh3xYJPNa8FMVjz2zUwoYOGg438rBP1q+6VL5aAtCBWhf6cm3phjfo7
-	a9WN3AdWhRO8kxIGVV1DB0eAnTgImRJepmyL3maqA3herVTk0LiI4CysuJ38zh2a5kSMox88aKS
-	1Mo4VfeTCszhUSya5m6Oj33cAC3rLxEmuVge9Q96CJsogk9FLs6EtpGafxZy4zqun2+/VdmiISr
-	MQ0bqgGxPK1tuCiCT5D0cCOsn3ZjEP3X6OD0NcrZk8tb23/z8fKKLePg1wJ4B4LgiEbgr8BRJRI
-	rTQDtnLNtQerWgUgL7C2rIUmw39nwBZYfGG/yp/y9hGqIz9BOVzHphQN/ZJtI+4O8QntAykVniz
-	Er8TRcOukVRytpnoDtsv6eVS30XQvffg5J3Jw7hkvQI=
-X-Received: by 2002:a05:693c:808f:b0:351:29c8:643 with SMTP id 5a478bee46e88-379675fc97fmr5683571eec.18.1794675693304;
-        Sat, 14 Nov 2026 09:01:33 -0800 (PST)
-Received: from LAPTOP-G6J9COQB.lan ([182.253.124.115])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-379563e6b6dsm31586761eec.21.2026.11.14.09.01.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Nov 2026 09:01:32 -0800 (PST)
-From: Ahmad Wicaksono <supersonix03@gmail.com>
-To: bpf@vger.kernel.org
-Cc: rhkrqnwk98@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	john.fastabend@gmail.com,
-	corbet@lwn.net,
-	linux-doc@vger.kernel.org,
-	Ahmad Wicaksono <supersonix03@gmail.com>
-Subject: [PATCH bpf-next 0/2] Documentation/bpf: Fix stale references in map docs
-Date: Sun, 15 Nov 2026 00:01:15 +0700
-Message-ID: <20261114170117.196552-1-supersonix03@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CtChy+Gk
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E60901F000C8;
+	Sat, 14 Nov 2026 17:01:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794675698;
+	bh=bm80fs2NeC70k7e6B2ZN8qEEqza+vKslbAZ0gAfzt7U=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=CtChy+GkcKyQoOyaTV5M0d3dJ8crDGkKs0cvnZErF1XGLS2mw/OtrKo+ztrI6ZsQE
+	 aViwIOZdq65SOeyLvb9DlfPgjRCkM1ZIC5Cr9Md0XwVgD/hxwx7T27tD05NAPzHyIT
+	 1LbTKUd3ALnVTGvAtBWKLWb1YCkDABLNompgZJDVCj/Idpphp5bAlEaxsjnAMlOk/0
+	 GCHlH+4JeyRn2clECzKFkG3+3be65TRXiZX8Y+poGwYCwJ+QPayho5GlFAjemjxeFr
+	 IuIrJi2FhBJjJRqHpJN/T8W3Ztsj95UlkbfzhpjyK98r7qtgOZ/7PfyWykeO6duIID
+	 p1Mu7+Cr23cFg==
+Message-ID: <sashiko-outbox-214809@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v12 3/6] s390/cert_store: Skip keys that disappeared
+ during invalidation
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jarkko Sakkinen" <jarkko@kernel.org>, "David Howells" <dhowells@redhat.com>
+Cc: bpf@vger.kernel.org, dm-devel@lists.linux.dev, fsverity@lists.linux.dev, keyrings@vger.kernel.org, linux-security-module@vger.kernel.org, "Alasdair
+ Kergon" <agk@redhat.com>, "Alexander Gordeev" <agordeev@linux.ibm.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, "Alex Shi" <alexs@kernel.org>, "Anastasia
+ Eskova" <anastasia.eskova@ibm.com>, "Andrew Morton" <akpm@linux-foundation.org>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Benjamin Marzinski" <bmarzins@redhat.com>, "Christian
+ Borntraeger" <borntraeger@linux.ibm.com>, "Daniel Borkmann" <daniel@iogearbox.net>, "Dongliang
+ Mu" <dzm91@hust.edu.cn>, "Eduard Zingerman" <eddyz87@gmail.com>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Eric Biggers" <ebiggers@kernel.org>, "Ignat
+ Korchagin" <ignat@linux.win>, "Heiko Carstens" <hca@linux.ibm.com>, "Ihor
+ Solodrai" <ihor.solodrai@linux.dev>, "James Bottomley" <James.Bottomley@HansenPartnership.com>, "James
+ Morris" <jmorris@namei.org>, "Jiri Olsa" <jolsa@kernel.org>, "Jonathan
+ Corbet" <corbet@lwn.net>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Linus
+ Torvalds" <torvalds@linux-foundation.org>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Mike
+ Snitzer" <snitzer@kernel.org>, "Mikulas Patocka" <mpatocka@redhat.com>, "Mimi
+ Zohar" <zohar@linux.ibm.com>, "Paul Moore" <paul@paul-moore.com>, "Peter
+ Oberparleiter" <oberpar@linux.ibm.com>, "Randy Dunlap" <rdunlap@infradead.org>, "Roberto
+ Sassu" <roberto.sassu@huawei.com>, "Serge E. Hallyn" <serge@hallyn.com>, "Shuah
+ Khan" <skhan@linuxfoundation.org>, "Song Liu" <song@kernel.org>, "Sven
+ Schnelle" <svens@linux.ibm.com>, =?utf-8?b?VGhlb2RvcmUgWS4gVHMnbw==?= <tytso@mit.edu>, "Vasily
+ Gorbik" <gor@linux.ibm.com>, "Yanteng Si" <si.yanteng@linux.dev>, "Yonghong
+ Song" <yonghong.song@linux.dev>
+In-Reply-To: <20261114164139.429814-4-jarkko@kernel.org>
+References: <20261114164139.429814-1-jarkko@kernel.org>
+ <20261114164139.429814-4-jarkko@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 14 Nov 2026 17:01:34 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,41 +80,84 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Two documentation fixes for the BPF map pages.
+Thank you for your contribution! Sashiko AI review found 2 potential
+issues to consider:
+- [Medium] s390/cert_store: incomplete handling of unlinked keys in
+  invalidate_keyring_keys()
+- [Low] s390/cert_store: commit message claims key_lookup() returns NULL
+--
 
-Patch 1 records that since commit be39165224d0 ("bpf, sockmap: Disallow
-update and delete from tc, xdp, socket_filter and flow_dissector"), only
-BPF_TRACE_ITER tracing, sock_ops (delete only), sk_reuseport and
-sk_lookup programs may mutate a sockmap or sockhash; anything else is
-rejected with "cannot update sockmap in this context". The kernel-side
-sections of map_sockmap.rst did not mention this. It also drops the
-reference to progs/test_sockmap_update.c, removed by
-commit 5de7a6eaed89 ("selftests/bpf: Drop
-tc/xdp/flow_dissector/socket_filter sockmap mutation tests").
+commit 725043b976271178c0635971476e80ff473d9670
+Author: Jarkko Sakkinen <jarkko@kernel.org>
 
-Patch 2 fixes two moved selftests paths: test_lpm_map.c, now
-map_tests/lpm_trie_map_basic_ops.c, and test_xdp_noinline.c, now under
-progs/.
+s390/cert_store: Skip keys that disappeared during invalidation
 
-Documentation only; no functional change.
+This commit updates invalidate_keyring_keys() to initialize rc to 0 and
+skip keys when key_lookup() returns an error pointer during keyring
+invalidation.
 
-Ahmad Wicaksono (2):
-  Documentation/bpf: Update sockmap docs for mutation restrictions
-  Documentation/bpf: Fix stale selftests file references
+> key_lookup() can return NULL for an unlinked key. Skip such keys instead.
 
- Documentation/bpf/btf.rst          |  2 +-
- Documentation/bpf/map_lpm_trie.rst |  6 +++---
- Documentation/bpf/map_sockmap.rst  | 18 ++++++++++++++++--
- 3 files changed, 20 insertions(+), 6 deletions(-)
+[Severity: Low]
+Is this commit message description accurate?  CONFIG_CERT_STORE depends on
+CONFIG_KEYS, and when CONFIG_KEYS is enabled, key_lookup() returns
+ERR_PTR(-ENOKEY) rather than NULL (which matches the IS_ERR(current_key)
+check in the diff).
 
-checkpatch.pl --strict is clean. make SPHINXDIRS=bpf htmldocs gives
-identical warnings before and after. Documentation only, so nothing to
-run-test.
+> diff --git a/arch/s390/kernel/cert_store.c b/arch/s390/kernel/cert_store.c
+> index 0a10b31d68af3..03391b379dad3 100644
+> --- a/arch/s390/kernel/cert_store.c
+> +++ b/arch/s390/kernel/cert_store.c
+> @@ -331,8 +331,13 @@ static int invalidate_keyring_keys(struct key *keyri=
+ng)
+>  		goto out;
+>  	}
+> =20
+> +	rc =3D 0;
+> +
+>  	for (key_index =3D 0; key_index < num_keys; key_index++) {
+>  		current_key =3D key_lookup(key_array[key_index]);
+> +		if (IS_ERR(current_key))
+> +			continue;
+> +
+>  		pr_dbf_msg("Invalidating key %08x", current_key->serial);
+> =20
+>  		key_invalidate(current_key);
 
-base-commit: ca4181cacb0c6a5632018f1c94f29d9dbc0e9270
--- 
-2.43.0
+[Severity: Medium]
+Does skipping only key_lookup() failures still leave unlinked keys unhandled
+later in invalidate_keyring_keys()?
 
+When a key is unlinked from a keyring, dropping its reference is deferred to
+an RCU callback (or another reference may exist), so key_lookup() still
+succeeds; key_invalidate(current_key) also schedules keyring_gc(), which can
+unlink current_key before key_unlink() runs:
+
+arch/s390/kernel/cert_store.c:invalidate_keyring_keys() {
+	...
+		key_invalidate(current_key);
+		key_put(current_key);
+		rc =3D key_unlink(keyring, current_key);
+		if (rc) {
+			pr_dbf_msg("Couldn't unlink key %08x: %d", current_key->serial, rc);
+			break;
+		}
+}
+
+In either case, key_unlink() returns -ENOENT, aborting the loop before the
+remaining keys in key_array are invalidated and causing cleanup_cs_keys() to
+fall back to unregister_key_type(&key_type_cert_store_key).  Note also that
+key_put(current_key) drops the caller's reference before key_unlink() and
+current_key->serial are used.
+
+Similarly, if a key is unlinked between the two key_type_keyring.read() cal=
+ls
+earlier in invalidate_keyring_keys(), the second call returns a smaller byte
+count than keyring_payload_len and jumps to out without invalidating the
+remaining keys, returning 0 if the last key was unlinked or a positive byte
+count otherwise.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261114164139.4298=
+14-1-jarkko@kernel.org?part=3D3
