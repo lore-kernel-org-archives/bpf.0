@@ -1,63 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794625189;
-	b=HU3zHrDsUFWelt3ZflXjnN/5CtqBsV6SJqBMAOO/ohwk56FZlxy75Rg86y7JbDE+LOpY
-	 9RMTBIF6lchDJxw6dO9zMDWv9eAXZnyNg/9HYUT4QwLa4OFuTZUrocQQ6v67GaL0aY7DC
-	 m0z0toU4an1/U2IUVrPZXyBa9A6jw03s2oAS/5gMYYvOuh96KVg6j2fMjyXZZw7w0abTQ
-	 Uo1Q4VoaG23t2nPnnPrJ+tO5D9JcXOv+1b9O+tckGiGvZy1c/ccnnOB1C72gvB414SmXM
-	 TyV8QzDQhI/nQ1QO4MKhMvE6vS2BUzjWS+Itxhu1ZOyMeFmRjNqwtpsTe2DDcsliE/g==
+	t=1794627149;
+	b=ikjof5ip8ODU3L2hGolAqjpOhn3JQ9MlG+HiIOHvRjf71Ddmv45F1PbaQVHcgrpmhE+C
+	 fb0zNnNTt3XJv6LyG9KephGOV7ZYtaKAQILrm7embcfrl9iPRpoX7/0TPiWbiWW4EJhQS
+	 WLnRTWX1TNa/dSRd8jdKY5WJeK/hCBoP0e8bFxmsUJs+bWfjMGFXYSluLlBXiYAxNcoYI
+	 Vq8d/RwUY5DzRcWt8vkJOledQyoNX88qSfJDi2ZXTtIIIuCRgakwDo8QmU9Z8nkFld5Yb
+	 PyauHJhbP2pUcVowZllcBNnl0VP1GK5BdDQBCuqOZimXykVChK1mH0JVjsfDbWY3clQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794625189;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=gtqgkeZJdBZqWJgZYD55Ddial0CIGRsrTMXTK2arrJ4=;
-	b=lih5vHqYX4nCN422GHvgqwVDkL1NWDGOaOMKyTPgVCGglpYzryv2tc5P85mzvKOnVeZR
-	 ivfRHM9OOdlTLKpOqEh6gj1ZmAr5cQyN1cbscePlyk8LEtHxThlDiWylYHwD6bDPf04zb
-	 hlI2clfvKmN8U+/eP0X764NRu+rCjUs9bkR47e+MxTrGxfRhFIq/58jOWzHQXL4zbc0zq
-	 qEdTQbKPkgKxcHbCXNK9csW5Cn9AJ07YrIAmCeMudxyQdjhjbQuOnbL7QD4swE3og6HRd
-	 IDQdz+tNhFNmkyyEBTPHM7wEYYQsymzuuWBtIldtFqveF+zzDd83jiXt2tgHx+1rA2Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794627149;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=hZ/+DLpUIlcbirEPmqeVlKHp9sAsvUE1CUbfS01vK7I=;
+	b=2FSf8QcY6erjWA9bYYaDd2UmRYsglAP4eouYhd+bxmSVYRp99H9zW5GQLShV4yWoqbh2
+	 w+BM+OmU4EJFchMR6451Vf4+QxPNgF5ODWGLbF1o/gUgI09ztdYJQTpwMqBjLKxviqnNU
+	 0HGfHP+ivsR2dSWSztRmK/LvyD5oPnQHsYQCzrt6sVCqC4Fv1JWfyaYXYoBe8aCeNr/l3
+	 5kiEQGOGHphOfy9cOP1N5I2XDLfxMQ0ZfHnaQgbU7NUAW9ZLZSBBRKy2uNCavGHpqdeAC
+	 IVUKrAdSQG6sgtujkM/bJQEneNEzq7AUNvOYLkft/5Jc4mxb6S7cAQDI1KzyPJPJe2Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MpdwKDMh;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="fSpHT/5Y";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57FB0606A323;
-	Sat, 14 Nov 2026 02:59:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8D07606A898;
+	Sat, 14 Nov 2026 03:32:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MpdwKDMh
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D38B1F000C4;
-	Sat, 14 Nov 2026 02:59:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fSpHT/5Y
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82EC11F000C4;
+	Sat, 14 Nov 2026 03:32:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794625189;
-	bh=gtqgkeZJdBZqWJgZYD55Ddial0CIGRsrTMXTK2arrJ4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=MpdwKDMh7RYG3utRHcOSHI5e1nHSdpfQEqvfX+E5ZHS2yLIC+mhHWhCdXMnSwwuex
-	 2l3FMO/J4/UkFfmNK69RFOpv8PlRbwAf4pA2egWCJyE+aU/6vblWQSmZxQa2n7N0Hv
-	 S9B9gP7wK7lkpO+1FDFyPVLi1NM8AWPXWLpve4deGXdSSD5px9VmB87Dq7UWWpYJSj
-	 yjwedu4pqzeWlWz5UtMOfoKV4kz2EMwdZ2T4CttH/XVl7jZNGIvak3DQp6uC1ey4n8
-	 Ig56iwuiRaTZFdVDH+urVvEGrCxQtPexjKLxtqRvYV8MlQiFZdgzSKWwgoPb3DzNis
-	 FluIWOvU+YGjg==
-Date: Fri, 13 Nov 2026 18:59:46 -0800
-From: Namhyung Kim <namhyung@kernel.org>
-To: Ian Rogers <irogers@google.com>
-Cc: bot+bpf-ci@kernel.org, peterz@infradead.org, mingo@redhat.com,
-	acme@kernel.org, jolsa@kernel.org, adrian.hunter@intel.com,
-	qmo@kernel.org, jpoimboe@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
-	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
-	james.clark@linaro.org, leo.yan@arm.com,
-	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, ast@kernel.org, martin.lau@kernel.org,
-	mason@kernel.org, ihor.solodrai@linux.dev
-Subject: Re: [PATCH v3 1/4] tools build: Add explicitly sequenced -lzstd to
- libbfd feature fallback
-Message-ID: <avfOol00qzRyJgD9@google.com>
-References: <20261104043006.1199857-2-irogers@google.com>
- <d94520950f855a1d5ac4b51975988b70185ba7da61836aa84b044b69e8104bbc@mail.kernel.org>
- <CAP-5=fWekVEnxS_eSGsrCPM2XzoY=Z5fkYYK_dD6MGgxX3N2gg@mail.gmail.com>
+	s=k20260515; t=1794627149;
+	bh=hZ/+DLpUIlcbirEPmqeVlKHp9sAsvUE1CUbfS01vK7I=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=fSpHT/5YlKnVLQuflwMsI4ithJsCcCowAQeNfKXQn68pyvBjpKOneHjq/7tzigdU/
+	 fBYUSuvX8vs6XD0Sn0kOKRcLcTwIu0Vg+RMZHWWD3GcLzqxkS3cfmNIIqSZYc26qY+
+	 e+zaW8YGi4y83EuS58EkSpi3pyOfNOq8dmKJmiH2jWdqIZtcpzuEOpufh+oDPw55vW
+	 NlHXaKHb0KHbJFsWf1drlXvwoCAnfiwAPpnZUcdaNCSrw/PXdN5K49A1P6Ts/eABr4
+	 bzbs8Ld8g0AH+bTkbgSH6KnYPbPzcnPA9mJWzrtCxdw0ooLNs+ziSbnxkD9zD2M0t9
+	 jQAMzdYVhW1tg==
+Content-Type: multipart/mixed; boundary="===============0128583470197541293=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -67,52 +49,95 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fWekVEnxS_eSGsrCPM2XzoY=Z5fkYYK_dD6MGgxX3N2gg@mail.gmail.com>
+Message-Id: <2bd464dd12d81f4d712f7d89f65e0e572c66c9e84acce225d144eef3badc0251@mail.kernel.org>
+In-Reply-To: <20261113161836.3587552-3-jarkko@kernel.org>
+References: <20261113161836.3587552-3-jarkko@kernel.org>
+Subject: Re: [PATCH v10 2/3] KEYS: Replace assoc_array with rhashtable
+From: bot+bpf-ci@kernel.org
+To: jarkko@kernel.org,dhowells@redhat.com
+Cc: jarkko@kernel.org,bpf@vger.kernel.org,dm-devel@lists.linux.dev,fsverity@lists.linux.dev,keyrings@vger.kernel.org,linux-doc@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-security-module@vger.kernel.org,agk@redhat.com,ast@kernel.org,alexs@kernel.org,akpm@linux-foundation.org,andrii@kernel.org,bmarzins@redhat.com,daniel@iogearbox.net,dzm91@hust.edu.cn,eddyz87@gmail.com,emil@etsalapatis.com,ebiggers@kernel.org,ignat@linux.win,ihor.solodrai@linux.dev,jmorris@namei.org,jolsa@kernel.org,corbet@lwn.net,memxor@gmail.com,torvalds@linux-foundation.org,martin.lau@linux.dev,snitzer@kernel.org,mpatocka@redhat.com,paul@paul-moore.com,rdunlap@infradead.org,serge@hallyn.com,skhan@linuxfoundation.org,song@kernel.org,tytso@mit.edu,si.yanteng@linux.dev,yonghong.song@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sat, 14 Nov 2026 03:32:25 +0000 (UTC)
 
-On Thu, Nov 12, 2026 at 10:13:35AM -0800, Ian Rogers wrote:
-> On Tue, Nov 3, 2026 at 9:03 PM <bot+bpf-ci@kernel.org> wrote:
-> >
-> > > tools build: Add explicitly sequenced -lzstd to libbfd feature fallback
-> >
-> > TL;DR: Possible build break at this commit: the libbfd -lzstd fallback is
-> > removed but no consumer uses the new feature test yet, so perf may fail to
-> > link and bpftool may lose JIT disassembly.
-> >
-> > > diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-> > > --- a/tools/build/feature/Makefile
-> > > +++ b/tools/build/feature/Makefile
-> >
-> > [ ... ]
-> >
-> > > @@ -249,18 +250,21 @@ $(OUTPUT)test-python-module.bin:
-> > >       $(BUILD) $(FLAGS_PYTHON_EMBED)
-> > >
-> > >  $(OUTPUT)test-libbfd.bin:
-> > > -     $(BUILD_BFD) || $(BUILD_BFD) -lzstd
-> > > +     $(BUILD_BFD)
-> > >
-> > >  $(OUTPUT)test-libbfd-threadsafe.bin:
-> > > -     $(BUILD_BFD) || $(BUILD_BFD) -lzstd || $(BUILD_BFD) -liberty || $(BUILD_BFD) -liberty -lz
-> > > +     $(BUILD_BFD) || $(BUILD_BFD) -liberty || $(BUILD_BFD) -liberty -lz || \
-> > > +     $(BUILD_BFD) -liberty -lz -lzstd
-> >
-> > Can this leave perf and bpftool unable to link libbfd at this commit?
-> 
-> So the concern is that at this commit, not later in the series, a
-> feature test for a libbfd built with zstd that previously failed to
-> link in this feature test will now succeed, but the parent Makefile
-> will not pass the -zstd flag and so break the build. This issue is
-> fixed later in the series by adding the -lzstd. Will this impact
-> anything? It will turn one broken build into a different kind of
-> broken build. I can reengineer the series to maintain bisectability
-> but this seems like a low priority issue to address.
+--===============0128583470197541293==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Ok, fair enough.  As it got acked from other maintainers, I think it's
-good to go.
+> KEYS: Replace assoc_array with rhashtable
 
-Thanks,
-Namhyung
+TL;DR: keyring_read() now needs keyring->sem, but s390 cert_store calls it
+unlocked; this may trigger a lockdep splat and possibly a use-after-free if a
+link or index is freed during the walk.
 
+> diff --git a/security/keys/keyring.c b/security/keys/keyring.c
+> --- a/security/keys/keyring.c
+> +++ b/security/keys/keyring.c
+
+[ ... ]
+
+>  static long keyring_read(const struct key *keyring,
+>  			 char *buffer, size_t buflen)
+>  {
+> -	struct keyring_read_iterator_context ctx;
+> +	struct keyring_index *links = keyring_index_locked(keyring);
+> +	key_serial_t *serials = (key_serial_t *)buffer;
+> +	struct keyring_link *link;
+> +	size_t count = 0;
+>  	long ret;
+>  
+>  	kenter("{%d},,%zu", key_serial(keyring), buflen);
+
+[ ... ]
+
+> +	if (buffer && buflen && links) {
+> +		list_for_each_entry(link, &links->list, list) {
+> +			if (count == buflen / sizeof(*serials))
+> +				break;
+> +
+> +			serials[count++] = keyring_link_key(link)->serial;
+> +			cond_resched();
+> +		}
+>  	}
+
+keyring_index_locked() is rcu_dereference_protected() on
+lockdep_is_held(&keyring->sem), and the list is then walked with plain
+list_for_each_entry() and a cond_resched() per entry.  That is fine when
+the caller holds keyring->sem, as __keyctl_read_key() does.
+
+Is that also true for all callers of the read method?  The s390 certificate
+store calls it with no lock held:
+
+arch/s390/kernel/cert_store.c:invalidate_keyring_keys() {
+    keyring_payload_len = key_type_keyring.read(keyring, NULL, 0);
+    ...
+    rc = key_type_keyring.read(keyring, (char *)key_array,
+                               keyring_payload_len);
+}
+
+The path is refresh_store() -> fill_cs_keyring() -> create_cs_keyring() ->
+cleanup_cs_keys() -> find_cs_keyring() -> invalidate_keyring_keys(), and it
+holds only cs_refresh_lock.
+
+Before this patch the (keyring, NULL, 0) size query only read
+nr_leaves_on_tree, and the real read used assoc_array_iterate(), which has
+no lockdep check and never scheduled.  Now keyring_index_locked() runs at
+function entry, so with CONFIG_PROVE_RCU=y a second cert_store refresh
+looks like it would report a suspicious rcu_dereference_protected() usage.
+
+The walk also runs with neither keyring->sem nor rcu_read_lock(), and
+cond_resched() lets a grace period complete while the walker is sitting on
+a link.  Can a concurrent key_unlink() or keyring_gc() (list_del_rcu() plus
+call_rcu(keyring_link_free_rcu)), or keyring_clear() or keyring_revoke()
+(keyring_index_free() -> queue_rcu_work()), free the link or the whole
+index under the walker?
+
+Should invalidate_keyring_keys() take down_read(&keyring->sem) around its
+two read calls as part of this conversion?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43549115625
+--===============0128583470197541293==--
