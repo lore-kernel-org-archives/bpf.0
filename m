@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.181
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794686757;
-	b=Z2Ty/o59VEiPEWuxoc5PoAlo7b8AZIIDLGo/luzxnHArRN3jK/vAFXqhT3zFHSIRRoSq
-	 EAzgooiwZloXIrgKMsDnKD0P4l/GlLJLYEO00cF9O4s9+zIUqIaCof9aQDD+KB0Tt8W+t
-	 aB5+Qw94dyoH3blGYdt0kEjX6lcq0NNVJXzvTYzw5fK7nOh65RtUycSl1+t6H7aeK/oYH
-	 Xe7vF8qgE2zh/9fb/uKRAlYG6iBKMC6mxbmsFyewftG42w6eJ+zM3mH0lzBm4oURds0xF
-	 G5kea0tHRfube9rkf7fXrUrNwO/6cDtYxdxZ+r1fLLh8Pl0w2Y5b4fFRAe3+oZuZbnQ==
+	t=1794686759;
+	b=rhVZAyG1BGbBYqAZXIeBAEm6lLq7R97QjxBEzYwlEhMYXyheUUJNPH8z/Qp/Xn30Uhvx
+	 ih9Tvq37iTV09R3I0CmhdGyCA94jyCLBlAz6vryW7qt1qUNw/7BmX4O1d9n8baOAjFfIf
+	 7WisFJWW3N9HnmG479vle76Kxw5x6cRnXOSdtBSwGdI9lUmncaZJNv6W7gft9Tfy0up4x
+	 Dbt6SmcGlL2ouRTgynZvslvlHMitofNHe0DLKzbT/BWpX90DQ4IZDTvQTVZZPzR/2qD6N
+	 +AUzt4wKtE/JQ38z89+hJo6bGj4To0mp4fq3U63mETQZ6k9IbjOVWA7eY7v3HMA1kYQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794686757;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794686759;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Date:From:To:Cc:Subject:In-Reply-To:References:MIME-Version:
 	 Content-Type:Content-Disposition:Message-ID:User-Agent;
-	bh=SncZUWGrBOxT9WurRufkDIe8hGFcWm37DANGybHY+fQ=;
-	b=zAyhg5Xu0wZvb0qTu2ClqEXj+EHx17U7+J5LVEC2vbHtV1amvRHo257db3nD3fAByfhO
-	 42HnlvRJHPwrKfuTPsUHSHpBpv/bx9ZaAGz+Fn0bd9VYW4VcVYQnqcRxYue6bT+LnRY4X
-	 4vi9p7SzgqCfPfUU9JtM/mKh+VCAdLrkyITNpMfKEZPECdczBO7oH2T//yVIETTDayCwN
-	 c5BkRGvw4yBDXHGNlelFXlCp4Rl/YVUHorznFkexkpxX11H+EkF4uEPe84z/CaKl7+TQX
-	 F3SmPZhBijRNAGcnzoRScf4Ol/gCRxf31uk6v8NRnXsoeq0qvSEg3eka8hl7o0nMaLg==
+	bh=cEK0v6G1yB2cz/8630PKsjvi8Z78P9QyctaIU0ylRW4=;
+	b=GxB5WtRDRdfAWhQucl5PEdAFUnNZr0/ZAgsMHoTFEcEkBMKgXpUxOuqeFmcpU6cm/PhZ
+	 OOzDSo1koPfHsDp78ZPGKU5Iyzk4UZBJym3sETQBHIDdsGoHRIxdESRZpD0F0+RSG9DTB
+	 7cwyprhBAY3Ys8AhAr8aHhTjZcn9l4I9qxHHXXhcrqRbcyHLxDtXh74sgWlsHjp+x5ulI
+	 pxA+QaYOe12cn2gq3GgaOtLpapWirzGIItvMp87QqKfDv1lmK8uAmBCHKEEEuItCW2RCs
+	 ZmaR+X//kNGQPrtqh2pQHaF+CIO4UXg21Bc1qnr1vwEqIfhtHqveXF0/KFQF3ZlEd4g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=chrisdown.name;
 	spf=pass smtp.mailfrom=chrisdown.name;
-	dkim=pass header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=ZNpsvJMi;
-	arc=none smtp.remote-ip=209.85.210.177
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	dkim=pass header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=t4xxtvlP;
+	arc=none smtp.remote-ip=209.85.215.181
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C6D8606A329
-	for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 20:05:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9C6D8606A329
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D42A606A8BB
+	for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 20:05:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2D42A606A8BB
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=chrisdown.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chrisdown.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=ZNpsvJMi
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-8b5e5e64494so1463750b3a.1
-        for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 12:05:56 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=t4xxtvlP
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-cdb75699c7cso835205a12.2
+        for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 12:05:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google; t=1794686756; x=1795291556; darn=vger.kernel.org;
+        d=chrisdown.name; s=google; t=1794686758; x=1795291558; darn=vger.kernel.org;
         h=user-agent:message-id:content-disposition:content-type:mime-version
          :references:in-reply-to:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=SncZUWGrBOxT9WurRufkDIe8hGFcWm37DANGybHY+fQ=;
-        b=ZNpsvJMizOoFFuviUq3R3I7xBszXKHR6f+dU2Lhp8+AdJOsuucW/Jpjz4DKxOc01P8
-         7Bf2gXYBYorSyL2ypHSps7l13uEx7uOW/BQ3oCjgyM7fn4nszFId/ZhifmOhhkUhMak/
-         Krv6vg2ZKrT882kZ97nfZeCj+rR5WiJ1p/wW0=
+        bh=cEK0v6G1yB2cz/8630PKsjvi8Z78P9QyctaIU0ylRW4=;
+        b=t4xxtvlP4RAICjpBIWPIkESb6EJJVOcRd9+LEytv251d1ZQsfD2pYblwETMOf/zroc
+         BDzAo5elUgpAiRA0oYEfExHYSjjGywxztBxThvGs665InMbo4S8LytfXKr2B4Cw2IX6x
+         hCl30XcWjOl3zGKKK0Vny1KN9lt2zjyLiPz3U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794686756; x=1795291556;
+        d=1e100.net; s=20260707; t=1794686758; x=1795291558;
         h=user-agent:message-id:content-disposition:content-type:mime-version
          :references:in-reply-to:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=SncZUWGrBOxT9WurRufkDIe8hGFcWm37DANGybHY+fQ=;
-        b=pNd/fhood02U68C/hRW2C8bjgCyt3bwBRt8BED65ktWG0ZZsd1B4V2FwppzOamRg07
-         5LqgUkCGGNOu90adFmBShKJtCA1uYJtZxew6qVakwQd1k4Ukv0mqxEG1fed7KDkNvGkP
-         6RK31Qrx8GA5TIGsFmtCHcirL9790KMNiC41SBvrdXYx/0vj/c0LaeE9tBS5Hn0K9Ogd
-         LbTfLKPlX+9r/mDx1beU5K5nqSnTxXb/TOy3x+qaCeD7Ho/h/aVfMoCGNn4smMJ0S0cI
-         pfmh/SC6RgIAfXdUv2iYZ5nATZGWnR8dmA61ILkzBwvewwSdCHxRC1fToWGw7O92hnHA
-         l1yA==
-X-Forwarded-Encrypted: i=1; AL+hErFpitcAPxVZdTueAewrqlfgEW6syFtF/zAb6/emWlGiqCVKvZJdVuXo+nw8iP4wpWtxfpg=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+bnPLg3wIKMKtZiUB1Ujg9d36bOYC0aPGCiA84cwNXg/A5qEVH
-	S9xgMU+BxEzdNaP0Qw32XhIwZ6K0XrkrPzU+OrvD8JOm5uCMI7lnmmEYoCNMoKx9m7s=
-X-Gm-Gg: AYBFou0MyEkQwNGJci6x2lPddeeYOMlz09hNfvQaPa4hm4DUT9ArVREj6fJejA65VH8
-	dlGIdmjLV8f3Zmkh5ih13zin7+Pi8Vucj0JzCfdPUvxBSIZ2r375YXTmqWSdK+3LCJDSKf15YbX
-	G+c7+j+pgYyRB02XhWOu4lSItv1aMkE6hCv6/r1hG/uVprWpFmYMLcHAulZu5/jq3bi1BtRS8X3
-	mXF3drQKONUl9OEczi21fGkYqlOYfRAJpT3gy/8mhtL5ccOyXJiKgh04cHXHNgACO9ROYMrIBfw
-	7nBEA+pPWtn9ieGToLhexiaXxLkXuUKUBhSLuXZbt8kHgwtDBk1d4fSyI5IAkI2GnSqRnIYkXLp
-	QUrGv/ARIhiKAxkwko4olWIPRGQIUzx/tujrAprl7hDc3cCT0SCch6PLcZ5S1CSrpZsJyS+B6M3
-	FYcPAReJPIkYXHsGi86XZ/NnhaIGbkXv3qAnjTO1J9HKQo/iDrbY3ZhNDx4eVdxXdZtWINK9ttq
-	wGK0dnY0q7FV/I9OdLw0xImp24/7Ovee27pRvWEkHK3yTqEuYDTzXBPLTdI6+GheL+x2b6UapAb
-	NFgMCH52s/QsvMbAijf0z2X3IPYdYSjAWsB14mWq6z+5Ia/Rs5KkRQsc0HAA6uOHCmlWsmG2ODz
-	6+UqXNm4GbMgeUAdyQCzyDwndlzvCVYnw4A/KY7lt7NsKnGxcC4dJbPLVB1H/Txe9FEEy2YO5rk
-	+E9qH6BqhZWgDexz1X6JOo8rkd+5f8Dl8aFVBtUSGUzDManPyvaJoqbIFt
-X-Received: by 2002:a05:6a21:748b:b0:3e3:37ff:3795 with SMTP id adf61e73a8af0-3f7a4dbfbbfmr5517650637.7.1794686756009;
-        Sat, 14 Nov 2026 12:05:56 -0800 (PST)
+        bh=cEK0v6G1yB2cz/8630PKsjvi8Z78P9QyctaIU0ylRW4=;
+        b=KUahd/RPyrwuTYBRAY/RSqmXeXesF7hKZKPQf7M0rJWPUcQ5yKXQ+2BAEi39K/JsKi
+         YRU1MsweFIsrMY1rIJdOEILnce+MeP1lJkwJSjHph+yl+Z8+KHtfNK9XoGHu63P14DfI
+         HK72sic6nlQ1DcTvMKd4vfTikG6uzzsN8TBRx+DL0Ytxkc7qYs0ctVoi8aueilrHwpXy
+         jq0v+yWgZqPKCHz6ht5lx1LO1NSQUQqmcqfuVOmVjOvAs7PEF4Meq0awycjMY62Xzm7j
+         B7zpmPU4VP/SFMxgMp/ik6p+BHgNTKXM6Eysd8YQUi4xKZPXS99LjSqEU1AE6gJbVaMP
+         HAvg==
+X-Forwarded-Encrypted: i=1; AL+hErFn1YHR3wFXC7eTAfzgz4bvdK4YFA5FWV66tfYN9cMD0cuQc+4is/zYgvZJiPG1ZCi7WvM=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9DPtXQ+dHHNHgLuzt+m1GthIUFfUKQXCc1VDmaObb8/4bLyOF2
+	9LyEfPhizK7egI1vVe9LiGEhsIN4k+Loizgev5YbDMZ4xhxTH+uVsh2spTOLVL1kybU=
+X-Gm-Gg: AYBFou1CNvFDxkBRxSUOKc1kJUqNTAxoKDUGzoQOwXIS01DaJvYaUkb+85DKtiJO3YZ
+	Ns93dlZDVdowTcqxdGVj2H21w9gOa4/v8uFkzlAfIvxYsGpEPDV/rkCL6tnac20vdlF/KZ3zbR9
+	6uyDHvAKvyF7h1mSSOTsxJ7/HOXuBf+LSoeLsgzcoasIEC4sOcZ3s0uvlUFCLFHk/ksfpyGRE13
+	D6LqL12zG0SdWzQYJtxUHxD5TYmzJWWrTxR9wRlIicB2myCTil3aLpbcFR/GM0s8fUS3ihNyrr1
+	G+Jrzqpa+JbVrn1gU8y0G3Xro2dDec6bxs6THZMGwSQC8+yI8jTymj4QJ3mAJvGyhqJgpu4qzlD
+	wIwu719rzvBPz13h7Eoq9mXTUknyC28WpgNdamCzL+Zvb23GjS6U4/ce/0Am+b4fb/QTiNbtyJK
+	L34Cu+ka6QaUcWvdJqq1U2RWkfBWEsR2jpW2wxcwPwyYcOP2UF37koyrIJT+M6t+BWUgyYBKvoN
+	CAUVNzngp/2dQUhbONtwzkGGwnzx007sxs5M1pbdcxyQwbNkm5t+Z+NMQH1cLwLrpUVV/0tfg8m
+	yNbLDmNWxa+DZvgRE7q9+/JNH2kj0bWFC4l/k65e+jSeTpEZYicGef/05mb5vQqtE5m1Bxf0X9Z
+	SyWd4kkIs5mA0MZu5glj5Y3PG0bsMKh2tTndcvkTdwPpdE9rwDkO7flZib53MGbdUF/JtJQbQ4L
+	sq5UO+cbG6Xy8qTyxl4fAynhnaSkHJNxfsl8KWcOYImhYuonPk0gU+QVTQ
+X-Received: by 2002:a17:90b:3b8a:b0:3b0:9f53:e8a8 with SMTP id 98e67ed59e1d1-3b1b0b5f2c1mr6192503a91.52.1794686758572;
+        Sat, 14 Nov 2026 12:05:58 -0800 (PST)
 Received: from [172.22.0.2] ([64.16.22.130])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8bed12a8172sm2271197b3a.13.2026.11.14.12.05.52
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1b266d873sm4654869a91.1.2026.11.14.12.05.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Nov 2026 12:05:54 -0800 (PST)
-Date: Sat, 14 Nov 2026 12:05:50 -0800
+        Sat, 14 Nov 2026 12:05:57 -0800 (PST)
+Date: Sat, 14 Nov 2026 12:05:55 -0800
 From: Chris Down <chris@chrisdown.name>
 To: Christian Brauner <brauner@kernel.org>
 Cc: linux-fsdevel@vger.kernel.org, Jann Horn <jannh@google.com>,
@@ -95,13 +95,11 @@ Cc: linux-fsdevel@vger.kernel.org, Jann Horn <jannh@google.com>,
 	linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
 	linux-usb@vger.kernel.org, Amir Goldstein <amir73il@gmail.com>,
 	linux-erofs@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
-	stable@vger.kernel.org, Alexander Mikhalitsyn <alex@amutable.com>,
-	Breno Leitao <leitao@debian.org>, Casey Schaufler <casey@schaufler-ca.com>,
-	Chuck Lever <cel@kernel.org>, Sashiko <sashiko-bot@kernel.org>
-Subject: Re: [PATCH RFC v2 00/42] fs: don't use pseudo filesystem files as
-	storage
-In-Reply-To: <20261114-work-loop-pseudo-v2-0-98639a2286fb@kernel.org>
+	Alexander Mikhalitsyn <alex@amutable.com>
+Subject: Re: [PATCH RFC v2 17/42] securityfs: use fc_init_pseudo()
+In-Reply-To: <20261114-work-loop-pseudo-v2-17-98639a2286fb@kernel.org>
 References: <20261114-work-loop-pseudo-v2-0-98639a2286fb@kernel.org>
+	<20261114-work-loop-pseudo-v2-17-98639a2286fb@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -113,25 +111,23 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
-Message-ID: <20261114120550.0c9e73aa12a3072c@chrisdown.name>
+Message-ID: <20261114120555.cbfaf8ab8a92fb25@chrisdown.name>
 User-Agent: Mutt/2.4.3 (cc9e3943) (2026-10-09)
 
 Hi Christian,
 
-Patches 1-11, 13-16, 18-26, 28, 31, 32, 34-37 and 39-42 look good to me,
-so for those please feel free to add:
+Christian Brauner writes:
+>AppArmor puts a .null device node into securityfs but only ever opens
+>it via dentry_open() which doesn't care about SB_I_NODEV.
+
+Not a big deal, but userspace can see that node too, as
+/sys/kernel/security/apparmor/.null. Opening it by path works in current
+kernels and fails with EACCES after this patch. Now, I don't know of
+anything that does that, but selinuxfs gets SB_I_NODEV cleared again in
+the next patch for the same kind of node, so I think we should do the
+same thing here. If not, it would be good to have a line in the
+changelog saying that opening it by path is meant to stop working.
+
+Once that's fixed, please feel free to add:
 
 Reviewed-by: Chris Down <chris@chrisdown.name>
-
-I've also tested 5, 6, 34-37, 41 and 42. The selftests all pass with the
-series applied, and a uid 0 without capabilities can no longer change
-/sys/kernel/reboot/mode through a loop device. So for those, please also
-feel free to add:
-
-Tested-by: Chris Down <chris@chrisdown.name>
-
-I've replied separately to 17 and 33.
-
-Thanks!
-
-Chris
