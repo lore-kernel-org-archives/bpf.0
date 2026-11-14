@@ -1,100 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.48
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794698411;
-	b=yxAQdWyYFfkFND/coJmPpzNdJ6lOMGQ8PuZQtCmzeuUEN2NQ3Rjba3XWXqwNn+TGbGki
-	 bZGQyYNgu45Xdvd2lZ08sPDIb3ShHREeDUcPPZ+1p42aWaLN4omN4GPgYOODYnLORQjin
-	 jVeW+xglpESpka9c4YUG3ZKlyGWx17/pLmmzjrur3ZpuEW5Ud9PZ7lOjMT3FrX5Kt9DkR
-	 empAj/QStfBmC0UvEJaykKC+auWrnxkQN3hCb112rzPzAGy/NlW0CaVdc3/ZfK94kmQux
-	 BetH1PKhf2zFMyFVzrUePSEf7Sl0WVB6SBlB+5l82FMCzAkJ1oOwSG9LbPaXQG+aXOg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794698411;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.47
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794698731;
+	b=cwEN1JgqFTkSb6opvtR3mm3AEfgO9Kg8i/WkK1WROA14YsD9Xhbd2sHruF5t6qC/csIF
+	 iAkKVgvWJC/96ToSZqicSsgCJhk0NMr8wpQS8ylINDekJ+M1PFzP9NJkTV3Xo+HagNh3z
+	 3Ogt9xXoS0NnbXi3tBCpi7OVn/TSsp4yK7R23foq1miPYg8x0YTNSNByj94Knx8zdaKHC
+	 Sa+fPpK2O5lOIoyQJANJuHW883tkWHcVa8YN8gNGKdf0faatn966/xJLw7FroRIbqUhjB
+	 7jhIbUfcz8tTjcui8NqZ+Q3roAZzHADOAvIrvIcr5Iq6W6XqrDakPG1dkbC+d/yQqhA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794698731;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=98mXXJR5XCg4Z4S2yqrizowpYg4fQiN0pgPOU/BiUFY=;
-	b=EOaSYgpp9HuY7fs9Olll352dnUmG8/U2JUNr9gnX4FiAjUA0cqgrtLw8iOIlFEJ9Nnu5
-	 XzB8kEVj1Z8HCkInpvbRy2O9/t45TC6fJQn0Ogmvw85yvscjOXTgUr+AypZtftqpR0bSv
-	 +s+x+6+dwQ5jLmUqdK0Y6s+cJpe9O3J6JGF8hE0W2hzyChIT9852zPj3iVynEql8WMM2j
-	 tLmr2qX5/hQUrdt34SJvLsRBbdpT5HpSsY7q4TOFUdJufVnnH0Ie9ugiK46F7fA/yzY6N
-	 oNz+8IjBfeWsJwvm5XcClDvVvSLFAZ+EmimgGXyhZsBqHPLVPLqp2+ThQvihxmR62eA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=0VCNYcHU0qd2uIDbmUJ+MEDD4eLEb4rGpu9d31FfkFg=;
+	b=Mo3li06IjD8wg7PiOsVQ9xMIQExDnFRmxdJ7fW7jXMnZEl1FCXtSY5hDKRLiD+bkZYvD
+	 GNPRyxtK6ZQRvsdU7GjR3vpPDTiMQKN7JL3UC3PqN6HTODel5mgpivBJtKOUzPkNISDSY
+	 Pb65EIl9OnsGnWiKbF1e+eUuVYFBq/J5oo7AG10l9aOjF6WRCUSUX6Ec9VPSJbNiEtG6D
+	 3nEftdMLsNAtnbcoDesxGF5N3oo8uwZCEMjuaJ4j7tLg11JVhjRxWHcQV2pgD+tOlyIMS
+	 COfHTGbcfeyPq8oaXDcXG6vlQSIxF4YXicJ+EUrbOOkKWveBuaqj2TeA7fkNXBzSKBg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=bZ4A5V+6;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.48
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=OBixjjB0;
+	arc=none smtp.remote-ip=209.85.216.47
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8A25606A327
-	for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 23:20:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E8A25606A327
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 701EA606A323
+	for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 23:25:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 701EA606A323
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=bZ4A5V+6
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-6b596569640so4611872a12.1
-        for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 15:20:10 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794698409; cv=none;
-        d=google.com; s=arc-20260327;
-        b=pdYU1bSoz65yMgH1C4S6s511jLpajRzvY/CwIwsrQA+hyGdXWsssBUrAthnC2jXE1U
-         NGUc638AdbKYZQf6ZutJapQCMmwnmdF1ACN0o2L6ixkl5jSyQaZZ1z9LzLuFvOIeiYsX
-         nX4oz/MT5mPR6x4F56OaWRyL9LyfAn40P8lCIJI0MdsTOVgr9bfpSHuGc89TT23QZDe6
-         Wm7B8MpwIMTHD8Ij2Xr9+F3XIK0ToP3NVs6nWR98d7fialoD5i1JpKBlfb5vBJtkTUd7
-         A8Uq+rAjyQudBaGH6SM3dHznicR0Dmm4K4j2AMdV1uIiXEIJJr7MGmhHQP4XrHkvTWRC
-         lt0w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=98mXXJR5XCg4Z4S2yqrizowpYg4fQiN0pgPOU/BiUFY=;
-        fh=+yX4TaL3+I+rBeBFSGTCqQYKkcosc9MhbWFRw+RFT1k=;
-        b=NTBhp4FF7MKgTT2CfGFGz4HasJ09pn7jqKVE/VWeSjkPMyzeO/K4JOquPeQW0f7ZUX
-         kBUX2oALdytuHq0L6wnBLxV5AzZRxgmCtXzsBlQZA3DxyXdfIlUARa3l5ZAWxzggaVBO
-         SaF8okvVIUDg76U0ikNQHwaJJIFmQBfuSkdMca1kibt7d+yQdweNdTwz+R4GNBxfjEz9
-         Aab/Jhyt5KnKvhc7HfKyPsl6OjhUX4jUmKVqRvKAK1A17RjHW94CwLj3EnxxsPMklrqN
-         1oU8hAuvQhX3e2fVNuHOHY4fQg2LQMN0G8+jHGhFR8gxebbMlc2rZTDeL/CgLPW1+/L1
-         uSXQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=OBixjjB0
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3ae1b34e0d2so1747252a91.1
+        for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 15:25:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794698409; x=1795303209; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=98mXXJR5XCg4Z4S2yqrizowpYg4fQiN0pgPOU/BiUFY=;
-        b=bZ4A5V+6Vs4HKIPLNbCXlaoHg6GUiZAgPE1CoHup/u8F9XnmCFMSb6naMqQFAl++mw
-         +LZR0jt78s/FhrwMU+95xN0Ho10rZ/g9p6M/dfGpr9SfvlaOXM2WfiTCtO0CejnyefhK
-         5gg17lDjyCI6S+pTTK/DIWzHtcTY1JHkLI4t/I/Teu6/Lgz9A0oKfkx231Ay53Fdu4Kp
-         zCo0ecwmPzO3ZOIddRCFMjOjLH94BU3oXsC8cOhJgJSeLFwZkZlFyxo1cq6JVw7hHb6A
-         21NW8PziNlBat7d4DfM9UgO0YIScpglsDnmQoGQNIOQhlOx3hw76q6t8+8jTPfBn24eS
-         FVGg==
+        d=gmail.com; s=20260707; t=1794698731; x=1795303531; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=0VCNYcHU0qd2uIDbmUJ+MEDD4eLEb4rGpu9d31FfkFg=;
+        b=OBixjjB0bz31nhREAoP3sB991FtTS1Gp7Vku1qU8XzZscuPXLIm17SqSSpdVOX7jIu
+         G96an6XFTjRwgSdgl5CxOPbVqho6ElHSg2SQlaNXqm8LIdaSHsg31ce8yMfX95YJjapI
+         5JYqgVCPkVnfH3+Op2vmVI+Iciw8u7WNwmsOGttqMpf04Eyyw3c5HCGlib0iGmiksZNB
+         UKvsbUlYxJ8U6JjkITjV+dXPO+hxJfc2OX3i1yVylc5R2p6pT8Z+mn4Vsjf0ieN2wBOT
+         RZVY1RyDqH0bAm60Nxk5zbX9VngvbiR9Mx8NmcUqjDMgmSuMvqaVGGP7hC1er896+O2y
+         lMfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794698409; x=1795303209;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=98mXXJR5XCg4Z4S2yqrizowpYg4fQiN0pgPOU/BiUFY=;
-        b=e79Mx5BaI5dQC0UKvLrc1PHkmKL5jZ6OXvdZ5voqh7Y93fJGtAlV1rGwDGW2APYc1s
-         sdmKoB0GBz+9TtrHWGKqK1NHhGFAW2VqRP3mf7pu4EWPgTT+xfYourkaLmQ66eKK8Nzd
-         1iYNdx65cobohKMQGKe3lTheWq+OBU8l0XyJTMDhlPaQ6JjhJfN00v3b4O2jCajDHaMK
-         6xiI6BLCAG0gYt1c+B5wk8LrGVV0W1hZSrh8yKLdeHDCcm0+irZjFO/PBLguSCDgdEdn
-         y7N2I4LYwQeB5TDyYTCdNH/4Nq1aiyGZsdW1AgsrtHT7t1Vlx0Mf/GAXcwxRUFnA8lOg
-         61jQ==
-X-Forwarded-Encrypted: i=1; AL+hErEx/T8GGMVozga+knrZQD13EkgI1e4w8Uhx98iIgEPipwJ54ohxGrypabiM11fH2xyPqCU=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8JYK7DTKeCISe/KbjCXzOUWl45KpOZVsm6klqMiEQj/hqESD9I
-	W6/IkebLDrrIez964Q1xMjuaWXjvGm/3bbl1gorlI+HB2HjhNWx/6L/TUCbWx2dt408VLUBtrnn
-	WqukL1Fn+vS1wz7Z7SjioRwTX9yco8rU=
-X-Gm-Gg: AYBFou0EMn9zFvXdsqZsIm6cucpUXdU4vC59n8/yic6+o3LIQmGTS3S/Y8aK6I8ZuBg
-	JNtmQDKmWfwknMkceTD37apzBBiYva4eZhh3z+3QXBB7hYU6zYKEpcSuVrq6Hbg+fC0XOdTpA+f
-	dn5co5GGKzuMaBkDSVH5hHQ0uQTaxLFm6KY+FyBQC1MwwW2Y88VCggEQhCa2cLXdfAXeEjlenHF
-	Nksw+Di+y14shhd7PwixJiz2LIlnL+f5k4vbvaDpPMAiJageYpuM0Dd/7HAN2ANKSncldLxBFl4
-	orxQ+7+x6rNARVSStvvO7ULpZdbWKVJGvonPVrStwz1mWfR9o32Its/ChEkVOsMT2ky40SBuNAt
-	0enuatIYQlGuThRtCNk9V/oa6iatElpRsXOXb3BSdoRSAtLeWpmqCx0Q9Adw0yTXZV185zw==
-X-Received: by 2002:a05:6402:e10:b0:6b7:f00e:5e56 with SMTP id
- 4fb4d7f45d1cf-6b7f00e5f37mr1542816a12.1.1794698409123; Sat, 14 Nov 2026
- 15:20:09 -0800 (PST)
+        d=1e100.net; s=20260707; t=1794698731; x=1795303531;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=0VCNYcHU0qd2uIDbmUJ+MEDD4eLEb4rGpu9d31FfkFg=;
+        b=Wadk7iY5gETU/LmAdBgPW2E7fOOzfBDe7mJ5EsidJondxEoNCKOo5bvRMm2Xvt6Cds
+         qe03KROEv5LYBthrm1HfW+uExp5t9hcbRFunbawI0H6mkFmOF7BATWl2Z5BUwDzK3bgp
+         QPO2Mkn+4qLVxlpPonFYrU5whVM9IBwuEKHB9+E7PF6UqIfFBnfL332MqxluPr3SvCjb
+         ffzN03QUOv642Rv5j0YlF6uQ1ZfDRleJwcbH3UvrD6ZuoTIvQwboRfOKvt2dG4F45TbP
+         Zy7qO7WDXurHAUXfum2FTpVmFWjvQwH/+paaPRuGmrA06Il9FphLiSItxxhAI7TZdfWa
+         /zOw==
+X-Gm-Message-State: APuU4Z8njbwrnq19AFvzXMTF882uYWKZJQ9M6XEHMt77gD2DcEu7UT3O
+	CWHex580lBhEt8BZDlDg0AOu2h2ktVeEApN+jZ01tAI5r/cvkAhajmfzUip8NA==
+X-Gm-Gg: AYBFou3rfYaKlZAMldXuK+6tfF6Qsab55hU2aQmh2PT2qEySDkuNxu7PDf+nlJbpQFi
+	0mGA3EpTkgMItkAbd296rDGi5S8WDNEkG9NkxMD3ToeeS5HNO3Y+18itQNY8Le5pc0feVAv69ue
+	PI1FnPfbEBa7ohlet+YQKA1d0BFMCRBPvCh2MBqce5uf/fGN2xaN8sE7FVgkYChFe4NgeRGb73Q
+	DTYVpNJtMGSfDCJL5vx0lVMdpaW/FZV7f9e9ihZs04RnspOB1JGOxu/SG/2TkQ7WoFY8hBjChQf
+	k3p9TYI3UfuK/433qPmSA1YVM5GTJ0vZ2m5VsjhF8fGFZEFW0Cem9QUCKk5ivyfLsnKJKDoVNTM
+	f5UDQqDg1Kag07zfh3KXbpk8xw4amZh2E8F1tl4Wk1IjLriUYT0qR3cjCLd64KdAvHuKcfZd8iy
+	O6udXNkb0jmBR0mZIFcNp5X590POlG0/HsAuKpXAlFSE0ediOmdIYSw+iUH9z+fnt47YK0v/Xy6
+	amGRDyM8Go+x6TT9o7fxorBtphFfdyJojX/FXB5ePkfwH28Z7OSqHiaj/kIiuclzDAha0whADdI
+	8jyFNPsGXDwcq34g/q1rK5V8BWReN3j8tF6eEGwMp1ThTGW+Xpli8K8jog2I/fEooHIvNjXThry
+	QsnAYcoZmDmuEPhZv75Y9GBaUoy+a8VRvOQm81R4u4JL/1OI0Fk6iJQQ8YkUTwLxLrYGwgE2Bew
+	==
+X-Received: by 2002:a17:90a:f495:b0:3b1:bd6d:fcc2 with SMTP id 98e67ed59e1d1-3b1bd6dfd26mr2280797a91.40.1794698730705;
+        Sat, 14 Nov 2026 15:25:30 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.250])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1aeb3d2d4sm10281607a91.7.2026.11.14.15.25.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Nov 2026 15:25:30 -0800 (PST)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com
+Subject: [PATCH bpf-next] bpf: Quiet two smatch warnings in the verifier
+Date: Sat, 14 Nov 2026 23:25:26 +0000
+Message-ID: <20261114232526.2727027-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,86 +96,58 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261114-work-loop-pseudo-v2-0-98639a2286fb@kernel.org>
- <20261114-work-loop-pseudo-v2-33-98639a2286fb@kernel.org> <20261114120557.4bc1eb6e57218cdc@chrisdown.name>
-In-Reply-To: <20261114120557.4bc1eb6e57218cdc@chrisdown.name>
-From: Amir Goldstein <amir73il@gmail.com>
-Date: Sun, 15 Nov 2026 00:19:57 +0100
-X-Gm-Features: AclHuK_YVxhIpv6JLzeNAX5mX5IHGfu05WS6uQ-TCKewxE3JKeci2PyA-UDMCbo
-Message-ID: <CAOQ4uxhGxpBtMZ5kfuzR1tQAewiecoX7UjXQRo91QjJHH9T_Yw@mail.gmail.com>
-Subject: Re: [PATCH RFC v2 33/42] fs: add file_check_backing()
-To: Chris Down <chris@chrisdown.name>
-Cc: Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org, 
-	Jann Horn <jannh@google.com>, Chris Mason <mason@kernel.org>, Josef Bacik <josef@toxicpanda.com>, 
-	Christoph Hellwig <hch@lst.de>, linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-nvme@lists.infradead.org, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Jan Kara <jack@suse.cz>, linux-scsi@vger.kernel.org, target-devel@vger.kernel.org, 
-	driver-core@lists.linux.dev, linux-mm@kvack.org, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, 
-	apparmor@lists.ubuntu.com, linux-nfs@vger.kernel.org, netdev@vger.kernel.org, 
-	fuse-devel@lists.linux.dev, linux-efi@vger.kernel.org, 
-	xen-devel@lists.xenproject.org, ocfs2-devel@lists.linux.dev, 
-	linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-usb@vger.kernel.org, linux-erofs@lists.ozlabs.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sat, Nov 14, 2026 at 9:06=E2=80=AFPM Chris Down <chris@chrisdown.name> w=
-rote:
->
-> Hi Christian,
->
-> Christian Brauner writes:
-> >+      /* Look through stacking filesystems at the inode with the data. =
-*/
-> >+      if (d_real_inode(file->f_path.dentry)->i_sb->s_iflags & SB_I_PSEU=
-DO)
-> >+              return -EINVAL;
->
-> This looks good in general, but what the bots said about O_PATH files
-> here is real. With FMODE_PATH this is reached for a file that was never
-> opened, so on overlayfs nothing has been through ovl_open() to look up
-> the lowerdata of a metacopy file yet. ovl_d_real() then does the lookup
-> itself, and when that fails it hits the WARN(1) at its end and returns
-> the overlayfs dentry, so the check passes as well.
->
-> Only fuse passes FMODE_PATH, so it takes CAP_SYS_ADMIN to get there, but
-> it's easy to trigger with that. From a quick test with a metacopy file
-> whose redirect into a data-only layer points at nothing, registering an
-> O_PATH fd of it with FUSE_DEV_IOC_BACKING_OPEN gives
->
->      ovl_d_real(/f, 0): real dentry not found
->      WARNING: fs/overlayfs/super.c:79 at ovl_d_real+0xc9/0x210
->      [...]
->       file_check_backing+0x308/0x5e0
->       fuse_backing_new+0x219/0x4a0
->       fuse_backing_open+0xe8/0x390
->       fuse_dev_ioctl+0x53a/0x7d0
->
-> and the ioctl still succeeds. A normal open of that file fails with
-> ENOENT, so nothing could have used it as a backing file anyway, but with
-> panic_on_warn this is now a panic.
->
-> Maybe ovl_d_real() should just stop warning when the lookup fails, now
-> that it has a caller that isn't trace_uprobe?
+From: Alexei Starovoitov <ast@kernel.org>
 
-Yeh I guess that this needs to be a Fixes for lazy data lookup.
+The kernel test robot runs smatch on bpf-next and reports:
 
-The correct fix would be to teach all the callers to deal with an error.
+  kernel/bpf/flow.c:2758 flow_merge() warn: missing unwind goto?
+  kernel/bpf/scev.c:5350 bpf_widen_scev_regs() error: we previously assumed 'reg' could be null (see line 5336)
 
-> The check would still pass
-> for an O_PATH file whose lowerdata couldn't be looked up at that point,
-> though.
+Both are false positives. flow_merge() frees the state and returns. The
+label err_free does the same. scev_reg_for_write() returns 0 only when it
+has set 'reg'.
 
-One observation relevant to this patch set is that a datadir layer has no
-business being a pseudo fs and that can and should be blocked explicitly
-at overlayfs mount time.
+Use the label in flow_merge(). Test spill32 instead of its copy in
+bpf_widen_scev_regs(). No functional change.
 
-The other observation is that fuse_passthrough_open() should probably
-check the backing_file that was opened for io in addition to checking
-in fuse_backing_open(), which could have different FMODE and specifically
-could be FMODE_PATH.
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+---
+ kernel/bpf/flow.c | 5 ++---
+ kernel/bpf/scev.c | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-Thanks,
-Amir.
+diff --git a/kernel/bpf/flow.c b/kernel/bpf/flow.c
+index 99abcef86920..5341f95c5072 100644
+--- a/kernel/bpf/flow.c
++++ b/kernel/bpf/flow.c
+@@ -2755,9 +2755,8 @@ static int flow_merge(struct bpf_verifier_env *env, struct flow_set *set,
+ 		if (env->log.level & BPF_LOG_LEVEL2)
+ 			verbose(env, "from %d to %d: within\n", prev, insn_idx);
+ 		err = flow_cycle_closed(env, &t->st, &s->st) ?:
+-		      flow_unite(flow, s->st.flow_entry, t->st.flow_entry);
+-		flow_free_state(env, s);
+-		return err ?: 1;
++		      flow_unite(flow, s->st.flow_entry, t->st.flow_entry) ?: 1;
++		goto err_free;
+ 	}
+ 
+ 	flow_sweep_trips(env, set, s);
+diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
+index 733394a21942..5648beca3931 100644
+--- a/kernel/bpf/scev.c
++++ b/kernel/bpf/scev.c
+@@ -5333,7 +5333,7 @@ int bpf_widen_scev_regs(struct bpf_verifier_env *env, struct bpf_verifier_state
+ 				continue;
+ 			/* the other half of the slot stays as it is */
+ 			reg = spill32;
+-			err = reg ? 0 : scev_reg_for_write(env, cur_func, r, &reg);
++			err = spill32 ? 0 : scev_reg_for_write(env, cur_func, r, &reg);
+ 			if (err)
+ 				return err;
+ 			linear_bounds(scalar_of(reg), iters->max_header_count, &coefs, &bounds);
+-- 
+2.55.0
+
