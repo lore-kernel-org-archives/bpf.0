@@ -1,109 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794624989;
-	b=OPcN4UA1ke+q16Cn+x8KARN8ykXRpACuPBcQ4PNoITUo+5YiNk4RXKBt+jjox74TVx26
-	 cdnwOD0F0Z8oZgEi9cCAQeXBpz/Tk04FgdpjFARhWpNbCTQ4/rtShvTk/DNkGQ9HQHnRW
-	 J8MJzp4ZO9dBbwBhwAiUoSSJwNW7KSeg5jXIOibMsqYFd5v3MrJEdNIR/5sBx/c1d21IZ
-	 FCJgoOEYkTXR4whypnWtjoJquqbYO54rat96Yz0dxS+M9zWYBo9jUW82YjD059vLYWQ89
-	 geFWpwgWZbcznOMBtRJED90JbcdjpNV5Uu0WGRSzWEOnWqqhkjdMXix8j5sTrzcuD/Q==
+	t=1794625189;
+	b=HU3zHrDsUFWelt3ZflXjnN/5CtqBsV6SJqBMAOO/ohwk56FZlxy75Rg86y7JbDE+LOpY
+	 9RMTBIF6lchDJxw6dO9zMDWv9eAXZnyNg/9HYUT4QwLa4OFuTZUrocQQ6v67GaL0aY7DC
+	 m0z0toU4an1/U2IUVrPZXyBa9A6jw03s2oAS/5gMYYvOuh96KVg6j2fMjyXZZw7w0abTQ
+	 Uo1Q4VoaG23t2nPnnPrJ+tO5D9JcXOv+1b9O+tckGiGvZy1c/ccnnOB1C72gvB414SmXM
+	 TyV8QzDQhI/nQ1QO4MKhMvE6vS2BUzjWS+Itxhu1ZOyMeFmRjNqwtpsTe2DDcsliE/g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794624989;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
-	 Message-Id:Cc:Subject:From:To:In-Reply-To:References:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=DXaSN0Fr6JcTZ0oBKaOBneCo8B26Hy879oIpVgJVCjY=;
-	b=LOjXEzhJdOizg952ciTJ9vvWC2OF7Mbhvok7JqT4bpcXuZl4oa8Usp9KMOwsgYrinbdd
-	 FH+4zNgwa7NzUP7GW923oMqb+Jn3Tli7DcIJIaab/5PI8Ncb3wemOtZHjMPmzNV8WefkY
-	 M1DiO9EEZp6XLQBDcghPbZCYKkmI0Y7IUM+Feqi9cG0ciuUPZswykYCH3kBEXgwXv7XOe
-	 eIOYtCn+bXXLfjdU+Ld3d50AMyt5flOqh2nU6b2OSCnu6uaDUN7/uRy2vqSsurRICRqaW
-	 OdIEZBEnUGNLEqlIg6jJ1ok2BWVABmet8u1cVr2yrmuKbBnJQcmUEdlhatxrkmLBgAw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794625189;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=gtqgkeZJdBZqWJgZYD55Ddial0CIGRsrTMXTK2arrJ4=;
+	b=lih5vHqYX4nCN422GHvgqwVDkL1NWDGOaOMKyTPgVCGglpYzryv2tc5P85mzvKOnVeZR
+	 ivfRHM9OOdlTLKpOqEh6gj1ZmAr5cQyN1cbscePlyk8LEtHxThlDiWylYHwD6bDPf04zb
+	 hlI2clfvKmN8U+/eP0X764NRu+rCjUs9bkR47e+MxTrGxfRhFIq/58jOWzHQXL4zbc0zq
+	 qEdTQbKPkgKxcHbCXNK9csW5Cn9AJ07YrIAmCeMudxyQdjhjbQuOnbL7QD4swE3og6HRd
+	 IDQdz+tNhFNmkyyEBTPHM7wEYYQsymzuuWBtIldtFqveF+zzDd83jiXt2tgHx+1rA2Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=F271ZPsA;
-	arc=none smtp.remote-ip=209.85.216.49
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MpdwKDMh;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45DD4606A330
-	for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 02:56:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 45DD4606A330
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57FB0606A323;
+	Sat, 14 Nov 2026 02:59:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=F271ZPsA
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3adac5c10e3so886268a91.0
-        for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 18:56:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794624988; x=1795229788; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=DXaSN0Fr6JcTZ0oBKaOBneCo8B26Hy879oIpVgJVCjY=;
-        b=F271ZPsASE2nn0cBwU2z3nrOqmEB7IsBi7VUB1XP8xsVs1T36Rk8uScTq9dzju/j/E
-         YXOtKWlbcHaZNdCd0BfMqsL/3tjLyk4lBaT2dw88DFSDjqCLFo1dk12pvlC/rjzGJUxG
-         YplTHJLUdUz2B+IRhFYAQG/ZFMPd4Zn50chZwuC1XSdivJus957D1HaVsTA9VnCHGa+a
-         g1T4FbYIxG6Pd3ZXDO6162e95icEmczP6ScbJInpHqDxrBg3L9Npabsy6YF2r47EzQpi
-         q/vhw2hSaAojeqc4ikfTVrF/WnvMFHXgrxB/f3rlSbbiJGyX1N1VChVS8GeqMMwwbvR9
-         +csQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794624988; x=1795229788;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=DXaSN0Fr6JcTZ0oBKaOBneCo8B26Hy879oIpVgJVCjY=;
-        b=qnF3dTifTDT/y1AmdJLIV5PEix+60BRSJ5uU5qyNtZgzA53svm+Ju9N1tJyeOk35/2
-         KHjx671tg26VKyhbPdJ+/ROZdS6Jdp2dXH8YtWsAVOpH0UZWSa9TNm/WyDG43Q4RKRSS
-         awunEu5RHhDQ4XILY+jZD6lcCSDHwEdJyo8ckGT/OXsPfRJQ2R2zvst6tmx/lQuciO1+
-         RJGrRlojnrbZvFS3kw/ERLHOCBIvXsUAkxrckX7cJ7Z+yWZfyCUD6skppWLNS9Rob6oH
-         wsRHM637tODC5ErkRPAV/lHPJf5H9O6X7dI19VY438Zzrf4cpyDuUMkT+R5LmlohmOJy
-         sEsg==
-X-Gm-Message-State: APuU4Z9qaJ4fUnwiLpaS5yxe0Ik2TaZrI0ajOkwA7Q6Eg9daZPggvLpq
-	scKKPWMHjQioGj+ySo0LCTZo+ivV43L8TPQn8gP40Yf+Cy1n1eXK6E7M
-X-Gm-Gg: AYBFou2Hb6RLnirFiN0R2YTjD0a3I1w6w4IDGB8PxPjvTuOKSetn1c6Vmj0hPaoPu6w
-	U0pqQjhcPCdlPg5Io50Nd4ljNU48k43iYr3IIO+6+qucUk8OV4T30qgeI/XTFWMCIPfX7lOSUtX
-	kkdOW1F9i7nuTuGT0sXS6ts6D8VZZ8s0Lg2o1sHVM8WH8iEBssldMMsb3JWvsw67Upae63rBAlp
-	s1kbyzVeCF3LcQgUmMcgmWA593SI5YxXstaI1pjFJt6nNl9oHex+sHQAZ0lncxff4mXAQtsmzy8
-	JycfW0x96xf2dHEMEjVvqE3Xlt6MyYAgWgQNRJ1feq6nfLfPnPAh6N3Yfu3D2UVa2YimwrOEJ3s
-	xL0qIDSlGaztO5oF7wOpGGKhLhOalfPiGrRcc4uN2y8NUrNfMZG9Ta81EuwUlesi53JK6sVV21l
-	YVf4PAgj8FhV4I66bfCDT7DHwEaBga23/KmXcF3argZVcYXiJbKWVKx8WxQ4pSDEx5ZXPX4lYeP
-	Xw+rCN57FzrcCZO0EtbkQ5jNbIMFHJgQgPtVgM3ztcDUsa0G3G/IE33ghUZd1GVmhoDzlUHl+gT
-	4VSPYoC/kTm9aYLS4QX1DnwhpO0MInfQqmiOTAkpwb8rpLR4ePlCQ6vNMY2F2xekTCb/phgCoXz
-	oFE7sIHkQSbhT4e3AW1RDEl1n4EylvUy1LiHg52EIR/l8h2dxDRxLxOo=
-X-Received: by 2002:a17:90a:c784:b0:3ac:8af9:4a77 with SMTP id 98e67ed59e1d1-3b1b0a0e859mr3188105a91.10.1794624988299;
-        Fri, 13 Nov 2026 18:56:28 -0800 (PST)
-Received: from localhost ([153.61.198.244])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1b25ebf34sm2758293a91.1.2026.11.13.18.56.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Nov 2026 18:56:27 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 14 Nov 2026 02:56:26 +0000
-Message-Id: <DMULGPH2RSTQ.19OTSZVNUXME4@gmail.com>
-Cc: "bpf@vger.kernel.org" <bpf@vger.kernel.org>, "netdev@vger.kernel.org"
- <netdev@vger.kernel.org>, "linux-kernel@vger.kernel.org"
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf] bpf: mask speculative out-of-bounds skb helper
- loads
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Daniel Trujillo" <datrujillo@nvidia.com>,
- =?utf-8?q?Dani=C3=ABl_Trujillo_via_B4_Relay?=
- <devnull+datrujillo.nvidia.com@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor
- Solodrai" <ihor.solodrai@linux.dev>, "John Fastabend"
- <john.fastabend@gmail.com>, "Stanislav Fomichev" <sdf@fomichev.me>, "David
- S. Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@kernel.org>,
- "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>,
- "Simon Horman" <horms@kernel.org>
-In-Reply-To: <PH7PR12MB879437C51235E3A3094EBCB9B27E2@PH7PR12MB8794.namprd12.prod.outlook.com>
-References: <20261113-cbpf-ind-nospec-v1-bpf-v1-1-764ac4c14573@nvidia.com> <DMUHIJ5FC8EA.2XFM7TJ6AH0YB@gmail.com> <PH7PR12MB879437C51235E3A3094EBCB9B27E2@PH7PR12MB8794.namprd12.prod.outlook.com>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MpdwKDMh
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D38B1F000C4;
+	Sat, 14 Nov 2026 02:59:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794625189;
+	bh=gtqgkeZJdBZqWJgZYD55Ddial0CIGRsrTMXTK2arrJ4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=MpdwKDMh7RYG3utRHcOSHI5e1nHSdpfQEqvfX+E5ZHS2yLIC+mhHWhCdXMnSwwuex
+	 2l3FMO/J4/UkFfmNK69RFOpv8PlRbwAf4pA2egWCJyE+aU/6vblWQSmZxQa2n7N0Hv
+	 S9B9gP7wK7lkpO+1FDFyPVLi1NM8AWPXWLpve4deGXdSSD5px9VmB87Dq7UWWpYJSj
+	 yjwedu4pqzeWlWz5UtMOfoKV4kz2EMwdZ2T4CttH/XVl7jZNGIvak3DQp6uC1ey4n8
+	 Ig56iwuiRaTZFdVDH+urVvEGrCxQtPexjKLxtqRvYV8MlQiFZdgzSKWwgoPb3DzNis
+	 FluIWOvU+YGjg==
+Date: Fri, 13 Nov 2026 18:59:46 -0800
+From: Namhyung Kim <namhyung@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: bot+bpf-ci@kernel.org, peterz@infradead.org, mingo@redhat.com,
+	acme@kernel.org, jolsa@kernel.org, adrian.hunter@intel.com,
+	qmo@kernel.org, jpoimboe@kernel.org, daniel@iogearbox.net,
+	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+	james.clark@linaro.org, leo.yan@arm.com,
+	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, ast@kernel.org, martin.lau@kernel.org,
+	mason@kernel.org, ihor.solodrai@linux.dev
+Subject: Re: [PATCH v3 1/4] tools build: Add explicitly sequenced -lzstd to
+ libbfd feature fallback
+Message-ID: <avfOol00qzRyJgD9@google.com>
+References: <20261104043006.1199857-2-irogers@google.com>
+ <d94520950f855a1d5ac4b51975988b70185ba7da61836aa84b044b69e8104bbc@mail.kernel.org>
+ <CAP-5=fWekVEnxS_eSGsrCPM2XzoY=Z5fkYYK_dD6MGgxX3N2gg@mail.gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -113,14 +67,52 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP-5=fWekVEnxS_eSGsrCPM2XzoY=Z5fkYYK_dD6MGgxX3N2gg@mail.gmail.com>
 
-On Fri, Nov 13, 2026 at 06:50 PM Daniel Trujillo <datrujillo@nvidia.com> wrote:
-> With the instrumentation described in the commit message, the
-> reproducer recovered the target bytes on the unpatched kernel. The same
-> reproducer did not recover them on the patched kernel.
+On Thu, Nov 12, 2026 at 10:13:35AM -0800, Ian Rogers wrote:
+> On Tue, Nov 3, 2026 at 9:03 PM <bot+bpf-ci@kernel.org> wrote:
+> >
+> > > tools build: Add explicitly sequenced -lzstd to libbfd feature fallback
+> >
+> > TL;DR: Possible build break at this commit: the libbfd -lzstd fallback is
+> > removed but no consumer uses the new feature test yet, so perf may fail to
+> > link and bpftool may lose JIT disassembly.
+> >
+> > > diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+> > > --- a/tools/build/feature/Makefile
+> > > +++ b/tools/build/feature/Makefile
+> >
+> > [ ... ]
+> >
+> > > @@ -249,18 +250,21 @@ $(OUTPUT)test-python-module.bin:
+> > >       $(BUILD) $(FLAGS_PYTHON_EMBED)
+> > >
+> > >  $(OUTPUT)test-libbfd.bin:
+> > > -     $(BUILD_BFD) || $(BUILD_BFD) -lzstd
+> > > +     $(BUILD_BFD)
+> > >
+> > >  $(OUTPUT)test-libbfd-threadsafe.bin:
+> > > -     $(BUILD_BFD) || $(BUILD_BFD) -lzstd || $(BUILD_BFD) -liberty || $(BUILD_BFD) -liberty -lz
+> > > +     $(BUILD_BFD) || $(BUILD_BFD) -liberty || $(BUILD_BFD) -liberty -lz || \
+> > > +     $(BUILD_BFD) -liberty -lz -lzstd
+> >
+> > Can this leave perf and bpftool unable to link libbfd at this commit?
+> 
+> So the concern is that at this commit, not later in the series, a
+> feature test for a libbfd built with zstd that previously failed to
+> link in this feature test will now succeed, but the parent Makefile
+> will not pass the -zstd flag and so break the build. This issue is
+> fixed later in the series by adding the -lzstd. Will this impact
+> anything? It will turn one broken build into a different kind of
+> broken build. I can reengineer the series to maintain bisectability
+> but this seems like a low priority issue to address.
 
-That instrumentation is a CLFLUSH added to the kernel in front of
-the branch. Nobody runs such a kernel.
-So it is theoretical.
+Ok, fair enough.  As it got acked from other maintainers, I think it's
+good to go.
 
-Sorry, still wont-fix.
+Thanks,
+Namhyung
+
