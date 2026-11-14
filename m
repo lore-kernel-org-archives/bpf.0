@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794668847;
-	b=3vhyH+9neB7jx3sCV9iAQWSXD0mRfgphTR50tSYILK7CGgZeSS/OF6QL+OE0cnnkxNbA
-	 Rm0HzG2kOaynGamoWpBZF47lJ4o74tAgXotcZNe32XQGhBKwgdgzFPDDi3WHEH7jqjXo1
-	 211pkL/OJhnFnPa7I7aGAt49e7eCHKKaJqt6+D4PF+gQbWok6BCDhjlyDcE/ieLTSt6hs
-	 v6DpwMaRHNfweFbAVcYIuDq6zfAzPDbIovJcJ9h/8oZ9WMGvHetEYAiKSYkatTi3TgDlv
-	 9JUtlyrn/ZAKmfyrRcydkBps53CLViA7bRjO9GeEcvBrEw3DwKRXc7OfWY/0P+5bZ3Q==
+	t=1794668855;
+	b=yfJXq0nPUp0kgB8move2h9xKrOaIP+wqfxgVAJutZ8vJF/F2XpXYlgwmu3R9vq2AVSts
+	 mTDhoLduecdM28ru/96LULG+uCWyGcEgryQHrcVpirugy3vqL0bFFfOtSCyDaZSkK8oKf
+	 WMFNQCR1NZxEc8E15iCTt0LPFUNJ7bUKOZYc/ynUFYdbQTj4Nl6s0pvchHSZGIaBXvBwt
+	 Tc64KEaDmii9kkE0wFw8I5nEkFQOB8EpLaWK3Uz0zrVVuXP9fmzAxEOME/amRSGpWQnqK
+	 a5XX5Sy9cWFiEh8lB+hqbMHjTbTyGU/6dSd2oMczovcJBgU5znc5C1xvKVoKdbYtbTA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794668847;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794668855;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=tQQNnVu5sa7UMxlu2gH2t9z3DlNLMLNyr6RhAENgCHk=;
-	b=QJDPgvKBhQ8lixiLjEEjpinqIhnCROpIpGhJLvh+sQp3g8HFEjhVHs+k71w4dkrxEkUQ
-	 zuZIoI2yv3Xi4Ghn5wda80Dnp1d3f3l9CZdTtT66e0cega4t6ns9NwRK4vJ9ypQ3MLzfr
-	 iUkd0zjI9TB2H1H9POfHLW907isiJPqL7ewZd8k0bo1W8FqfYjlYaacyFmGLLo0Q3K1AS
-	 z/+DCbE23hl2WYlYDIVeMtmd1d9GCko3L6NjnYwnZqkm93eFv4EHSBS0jgn+Ktw5fG8RT
-	 StChHVNovSxTW3B7h/byihGIxdW5XY+Tit/Ngfdw5wHQYRv4mXBbwgr4yQn4q4jirKg==
+	bh=lfuB0iAt4fsbkwUXrECmRSa5sibx9H8Mj3Q+0EdYXoo=;
+	b=1dHtirqWAP4cx3Ja1wiDFfya8gWHdYQGyTqr4iE1kopwII+hupYgvD+Yk1cfH/+9id4v
+	 CjlhpP3rnkDS8+rSCnc4OWvSTOPLLz3Y5sC93S+LYP1qUR8rpA8WsDzsc5s0puoT6pZTm
+	 NwjT5ubvWvfk/0TwQH49BKOUcHnB3nl5/OMDbRNGGwNbllsQjl6t78pd3WfxdXOT5kYvH
+	 1x8FXYc6prLsjbStUbR4UZlu0AdCtq86MPKGk7Unhg8EjzXXo9xF6enwQR2Bw8EA6iyxN
+	 lv9hMcvVSQ/cwSpTMpHNxqX0IHdHTLftDFeRqG3sAHa0ohFtK4TbqII/b5T40fvUrJQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Zk4NUGaJ;
-	arc=none smtp.remote-ip=91.218.175.43
-Received: from mta0.migadu.com (out-43.mta0.migadu.com [91.218.175.43])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="p1ep/FFw";
+	arc=none smtp.remote-ip=91.218.175.51
+Received: from mta0.migadu.com (out-51.mta0.migadu.com [91.218.175.51])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69964606A881
-	for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 15:07:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 69964606A881
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 098B8606A8B7
+	for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 15:07:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 098B8606A8B7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Zk4NUGaJ
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=p1ep/FFw
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=BkS+y7ePRlJ0EKeZ7dXvg3C7h9wxY5qRABbpyHKvKvE=;
+DKIM-Signature: a=rsa-sha256; bh=4PLDyayOW4SUB8uP2Ok6WKtAL/3r/C5d8EOBKBMG5CU=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794668844; v=1; x=1795273644;
- b=Zk4NUGaJluDz3qTlcp44ks0+4f1GvNAMqKgv1mCMwaIpHP2UStzMqfUkXtDqknGZepZZr3K4
- UFFWZBQej/4EFkrXcADE6lvLP7plbC0C4Z5PGfrXPSHqQxG+jbCyGBa5V42Bnqm3DcGYGXMGajW
- GsVAOos559bhzMervouKO7HU=
+ t=1794668853; v=1; x=1795273653;
+ b=p1ep/FFwBFVPITYdhOD6wjEfmQ7wey/yW8LL31qXa3BRwXSemsZJCWT64ni6OcphJrEpGNpk
+ CTPTgyzBhtp9hFXoRE/UlqYLPgAxv0/r4yeRrIba3fvA6MvnPYuqNxfpE/h5G4yd76EB7kgoaHS
+ ATciVlfpxSk/7WVBjqiUNE3M=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 45ad7670b685d85c;
-	Sat, 14 Nov 2026 15:07:24 +0000
-X-Mizu-Trace-ID: 45ad7670b685d85c
+Received: by smtp.migadu.com with ESMTPS id caacfbb81211073e;
+	Sat, 14 Nov 2026 15:07:33 +0000
+X-Mizu-Trace-ID: caacfbb81211073e
 X-Migadu-Flow: FLOW_OUT
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
@@ -72,9 +72,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-trace-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	netdev@vger.kernel.org
-Subject: [PATCH bpf-next v2 5/9] libbpf: Add log_opts support for BPF_TRACE_ITER
-Date: Sat, 14 Nov 2026 23:06:06 +0800
-Message-ID: <20261114150610.84507-6-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v2 6/9] selftests/bpf: Verify tracing link_create logs
+Date: Sat, 14 Nov 2026 23:06:07 +0800
+Message-ID: <20261114150610.84507-7-leon.hwang@linux.dev>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261114150610.84507-1-leon.hwang@linux.dev>
 References: <20261114150610.84507-1-leon.hwang@linux.dev>
@@ -89,127 +89,375 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add iter.info and iter.len to pass iterator information separately from
-log_opts. Keep the existing iter_info and iter_info_len fields working
-for callers that do not request logs.
-
-Thereafter, log_opts can work for iter link_create.
-
-Meanwhile, add log_opts support for bpf_program__attach_iter() API.
+Check the error code, log message, and reported log size for invalid
+tracing and freplace link creation parameters. Cover reattachment and
+attach-target checks, including incompatible kprobe_write_ctx and
+max_ctx_offset settings.
 
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- tools/lib/bpf/bpf.c    | 23 +++++++++++++++++------
- tools/lib/bpf/bpf.h    |  8 ++++++++
- tools/lib/bpf/libbpf.c |  5 +++--
- tools/lib/bpf/libbpf.h |  3 ++-
- 4 files changed, 30 insertions(+), 9 deletions(-)
+ .../selftests/bpf/prog_tests/tracing_link.c   | 327 ++++++++++++++++++
+ .../selftests/bpf/progs/tracing_link_ctx.c    |  17 +
+ 2 files changed, 344 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/tracing_link.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_link_ctx.c
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 38dcb31e8c0e..ad6b356cc48c 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -808,11 +808,6 @@ int bpf_link_create(int prog_fd, int target_fd,
- 	if (iter_info_len && attach_type != BPF_TRACE_ITER)
- 		return libbpf_err(-EINVAL);
- 
--	if (iter_info_len)
--		iter_info = OPTS_GET(opts, iter_info, (void *)0);
--	else
--		log_opts = OPTS_GET(opts, log_opts, (void *)0);
--
- 	/* validate we don't have unexpected combinations of non-zero fields */
- 	if (iter_info_len || target_btf_id) {
- 		if (iter_info_len && target_btf_id)
-@@ -821,6 +816,22 @@ int bpf_link_create(int prog_fd, int target_fd,
- 			return libbpf_err(-EINVAL);
- 	}
- 
-+	if (attach_type == BPF_TRACE_ITER) {
-+		if (iter_info_len) {
-+			iter_info = OPTS_GET(opts, iter_info, (void *)0);
-+		} else {
-+			log_opts = OPTS_GET(opts, log_opts, (void *)0);
-+			iter_info = OPTS_GET(opts, iter.info, (void *)0);
-+			iter_info_len = OPTS_GET(opts, iter.len, 0);
-+			if (iter_info_len && target_btf_id)
-+				return libbpf_err(-EINVAL);
-+			if (!OPTS_ZEROED(opts, iter))
-+				return libbpf_err(-EINVAL);
-+		}
-+	} else {
-+		log_opts = OPTS_GET(opts, log_opts, (void *)0);
+diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_link.c b/tools/testing/selftests/bpf/prog_tests/tracing_link.c
+new file mode 100644
+index 000000000000..28154fdd2f0c
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/tracing_link.c
+@@ -0,0 +1,327 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include <bpf/btf.h>
++#include "fentry_recursive.skel.h"
++#include "priv_freplace_prog.skel.h"
++#include "xdp_dummy.skel.h"
++#include "kprobe_write_ctx.skel.h"
++#include "tracing_link_ctx.skel.h"
++
++static void test_fentry_link_create_log(int target_fd, __u32 target_btf_id, int cookie,
++					enum bpf_attach_type attach_type,
++					bool reattach, const char *msg)
++{
++	struct fentry_recursive *skel = NULL;
++	struct xdp_dummy *target;
++	char log_buf[128] = {};
++	int err, fd, prog_fd;
++	LIBBPF_OPTS(bpf_log_opts, log_opts,
++		    .buf = log_buf,
++		    .size = sizeof(log_buf),
++		    .level = 1,
++	);
++	LIBBPF_OPTS(bpf_link_create_opts, opts,
++		    .log_opts = &log_opts,
++		    .target_btf_id = target_btf_id,
++		    .tracing.cookie = cookie,
++	);
++
++	target = xdp_dummy__open_and_load();
++	if (!ASSERT_OK_PTR(target, "xdp_dummy__open_and_load"))
++		return;
++
++	skel = fentry_recursive__open();
++	if (!ASSERT_OK_PTR(skel, "fentry_recursive__open"))
++		goto out;
++
++	err = bpf_program__set_attach_target(skel->progs.recursive_attach,
++					     bpf_program__fd(target->progs.xdp_dummy_prog),
++					     "xdp_dummy_prog");
++	if (!ASSERT_OK(err, "bpf_program__set_attach_target"))
++		goto out;
++
++	err = fentry_recursive__load(skel);
++	if (!ASSERT_OK(err, "fentry_recursive__load"))
++		goto out;
++
++	prog_fd = bpf_program__fd(skel->progs.recursive_attach);
++	if (reattach) {
++		/* Consume the initial target saved when the program was loaded. */
++		fd = bpf_link_create(prog_fd, 0, BPF_TRACE_FENTRY, &opts);
++		if (!ASSERT_GE(fd, 0, "bpf_link_create first"))
++			goto out;
++
++		close(fd);
++		memset(log_buf, 0, sizeof(log_buf));
++		log_opts.true_size = 0;
 +	}
 +
- 	memset(&attr, 0, attr_sz);
- 	attr.link_create.prog_fd = prog_fd;
- 	attr.link_create.target_fd = target_fd;
-@@ -970,7 +981,7 @@ int bpf_link_create(int prog_fd, int target_fd,
- 			return libbpf_err(-EINVAL);
- 		break;
- 	default:
--		if (!OPTS_ZEROED(opts, iter_info_len))
-+		if (!OPTS_ZEROED(opts, log_opts))
- 			return libbpf_err(-EINVAL);
- 		break;
- 	}
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index fe3b7fd8512b..2ac143fd1102 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -422,6 +422,10 @@ union bpf_iter_link_info; /* defined in up-to-date linux/bpf.h */
- struct bpf_link_create_opts {
- 	size_t sz; /* size of this struct for forward/backward compatibility */
- 	__u32 flags;
-+	/*
-+	 * iter_info and iter_info_len are deprecated, use iter.info and
-+	 * iter.len instead.
-+	 */
- 	union {
- 		union bpf_iter_link_info *iter_info;
- 		struct bpf_log_opts *log_opts;
-@@ -478,6 +482,10 @@ struct bpf_link_create_opts {
- 			const __u64 *cookies;
- 			__u32 cnt;
- 		} tracing_multi;
-+		struct {
-+			union bpf_iter_link_info *info;
-+			__u32 len;
-+		} iter;
- 	};
- 	size_t :0;
- };
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 44134421bd7d..28830d198e9d 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -14811,8 +14811,9 @@ bpf_program__attach_iter(const struct bpf_program *prog,
- 	if (!OPTS_VALID(opts, bpf_iter_attach_opts))
- 		return libbpf_err_ptr(-EINVAL);
- 
--	link_create_opts.iter_info = OPTS_GET(opts, link_info, (void *)0);
--	link_create_opts.iter_info_len = OPTS_GET(opts, link_info_len, 0);
-+	link_create_opts.log_opts = OPTS_GET(opts, log_opts, (void *)0);
-+	link_create_opts.iter.info = OPTS_GET(opts, link_info, (void *)0);
-+	link_create_opts.iter.len = OPTS_GET(opts, link_info_len, 0);
- 
- 	prog_fd = bpf_program__fd(prog);
- 	if (prog_fd < 0) {
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 49f1120f4021..56300be81016 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -1000,8 +1000,9 @@ struct bpf_iter_attach_opts {
- 	size_t sz; /* size of this struct for forward/backward compatibility */
- 	union bpf_iter_link_info *link_info;
- 	__u32 link_info_len;
-+	struct bpf_log_opts *log_opts;
- };
--#define bpf_iter_attach_opts__last_field link_info_len
-+#define bpf_iter_attach_opts__last_field log_opts
- 
- LIBBPF_API struct bpf_link *
- bpf_program__attach_iter(const struct bpf_program *prog,
++	fd = bpf_link_create(prog_fd, target_fd, attach_type, &opts);
++	if (!ASSERT_LT(fd, 0, "bpf_link_create")) {
++		close(fd);
++		goto out;
++	}
++
++	ASSERT_EQ(fd, -EINVAL, "err");
++	ASSERT_STREQ(log_buf, msg, "log_buf");
++	ASSERT_EQ(log_opts.true_size, strlen(msg) + 1, "log_size");
++
++out:
++	fentry_recursive__destroy(skel);
++	xdp_dummy__destroy(target);
++}
++
++static void test_log_invalid_attach_type(void)
++{
++	const char *msg = "Invalid tracing attach_type.\n";
++
++	test_fentry_link_create_log(0, 0, 0, BPF_TRACE_FEXIT, false, msg);
++}
++
++static void test_log_tgt_prog_fd_only(void)
++{
++	const char *msg = "tgt_prog_fd and btf_id must be both set or both unset.\n";
++
++	test_fentry_link_create_log(-1, 0, 1, BPF_TRACE_FENTRY, false, msg);
++}
++
++static void test_log_tgt_prog_fd_disallowed(void)
++{
++	const char *msg = "tgt_prog_fd is only allowed for freplace prog.\n";
++
++	test_fentry_link_create_log(-1, 1, 0, BPF_TRACE_FENTRY, false, msg);
++}
++
++static void test_log_invalid_attach_btf(void)
++{
++	const char *msg = "Invalid attach_btf.\n";
++
++	test_fentry_link_create_log(0, 0, 1, BPF_TRACE_FENTRY, true, msg);
++}
++
++static void test_freplace_link_create_log(int target_fd, __u32 target_btf_id, int err_exp,
++					  bool reattach, const char *msg)
++{
++	struct priv_freplace_prog *skel = NULL;
++	char log_buf[256] = {};
++	struct xdp_dummy *xdp;
++	int err, fd, prog_fd;
++	LIBBPF_OPTS(bpf_log_opts, log_opts,
++		    .buf = log_buf,
++		    .size = sizeof(log_buf),
++		    .level = 1,
++	);
++	LIBBPF_OPTS(bpf_link_create_opts, opts,
++		    .log_opts = &log_opts,
++		    .target_btf_id = target_btf_id,
++	);
++
++	xdp = xdp_dummy__open_and_load();
++	if (!ASSERT_OK_PTR(xdp, "xdp_dummy__open_and_load"))
++		return;
++
++	skel = priv_freplace_prog__open();
++	if (!ASSERT_OK_PTR(skel, "priv_freplace_prog__open"))
++		goto out;
++
++	err = bpf_program__set_attach_target(skel->progs.new_xdp_prog2,
++					     bpf_program__fd(xdp->progs.xdp_dummy_prog),
++					     "xdp_dummy_prog");
++	if (!ASSERT_OK(err, "bpf_program__set_attach_target"))
++		goto out;
++
++	err = priv_freplace_prog__load(skel);
++	if (!ASSERT_OK(err, "priv_freplace_prog__load"))
++		goto out;
++
++	prog_fd = bpf_program__fd(skel->progs.new_xdp_prog2);
++	if (reattach) {
++		/* Consume the initial target saved when the program was loaded. */
++		fd = bpf_link_create(prog_fd, 0, 0, &opts);
++		if (!ASSERT_GE(fd, 0, "bpf_link_create first"))
++			goto out;
++
++		close(fd);
++		memset(log_buf, 0, sizeof(log_buf));
++		log_opts.true_size = 0;
++	}
++
++	if (!target_fd && target_btf_id)
++		target_fd = bpf_program__fd(xdp->progs.xdp_dummy_prog);
++
++	fd = bpf_link_create(prog_fd, target_fd, 0, &opts);
++	if (!ASSERT_LT(fd, 0, "bpf_link_create")) {
++		close(fd);
++		goto out;
++	}
++
++	ASSERT_EQ(fd, err_exp, "err");
++	ASSERT_STREQ(log_buf, msg, "log_buf");
++	ASSERT_EQ(log_opts.true_size, strlen(msg) + 1, "log_size");
++
++out:
++	priv_freplace_prog__destroy(skel);
++	xdp_dummy__destroy(xdp);
++}
++
++static void test_log_invalid_target_fd(void)
++{
++	const char *msg = "Invalid tgt_prog_fd.\n";
++
++	test_freplace_link_create_log(-1, 1, -EBADF, false, msg);
++}
++
++static void test_log_reattach_without_target(void)
++{
++	const char *msg = "Only allow re-attach for tracing and lsm progs.\n";
++
++	test_freplace_link_create_log(0, 0, -EINVAL, true, msg);
++}
++
++static void test_log_invalid_target_btf_id(void)
++{
++	const char *msg = "attach_btf_id 4294967295 is invalid\n";
++
++	test_freplace_link_create_log(0, ~0U, -EINVAL, false, msg);
++}
++
++#ifdef __x86_64__
++static void test_log_invalid_kprobe_write_ctx(void)
++{
++	struct kprobe_write_ctx *skel_kprobe, *skel_freplace = NULL;
++	struct bpf_program *prog_kprobe, *prog_freplace;
++	const char *msg = "Invalid kprobe_write_ctx.\n";
++	int err, prog_fd, btf_id, fd;
++	char log_buf[128] = {};
++	LIBBPF_OPTS(bpf_log_opts, log_opts,
++		    .buf = log_buf,
++		    .size = sizeof(log_buf),
++		    .level = 1,
++	);
++	LIBBPF_OPTS(bpf_link_create_opts, link_opts,
++		    .log_opts = &log_opts,
++	);
++
++	skel_kprobe = kprobe_write_ctx__open();
++	if (!ASSERT_OK_PTR(skel_kprobe, "kprobe_write_ctx__open kprobe"))
++		return;
++
++	prog_kprobe = skel_kprobe->progs.kprobe_dummy;
++	bpf_program__set_autoload(prog_kprobe, true);
++
++	err = kprobe_write_ctx__load(skel_kprobe);
++	if (!ASSERT_OK(err, "kprobe_write_ctx__load kprobe"))
++		goto out;
++
++	skel_freplace = kprobe_write_ctx__open();
++	if (!ASSERT_OK_PTR(skel_freplace, "kprobe_write_ctx__open freplace"))
++		goto out;
++
++	prog_freplace = skel_freplace->progs.freplace_kprobe;
++	bpf_program__set_autoload(prog_freplace, true);
++
++	prog_fd = bpf_program__fd(skel_kprobe->progs.kprobe_write_ctx);
++	bpf_program__set_attach_target(prog_freplace, prog_fd, "kprobe_write_ctx");
++
++	err = kprobe_write_ctx__load(skel_freplace);
++	if (!ASSERT_OK(err, "kprobe_write_ctx__load freplace"))
++		goto out;
++
++	prog_fd = bpf_program__fd(prog_kprobe);
++	btf_id = btf__find_by_name_kind(bpf_object__btf(skel_kprobe->obj), "kprobe_dummy",
++					BTF_KIND_FUNC);
++	if (!ASSERT_GT(btf_id, 0, "btf__find_by_name_kind"))
++		goto out;
++
++	link_opts.target_btf_id = btf_id;
++	fd = bpf_link_create(bpf_program__fd(prog_freplace), prog_fd, 0, &link_opts);
++	if (!ASSERT_LT(fd, 0, "bpf_link_create")) {
++		close(fd);
++		goto out;
++	}
++
++	ASSERT_EQ(fd, -EINVAL, "err");
++	ASSERT_STREQ(log_buf, msg, "log_buf");
++	ASSERT_EQ(log_opts.true_size, strlen(msg) + 1, "log_size");
++
++out:
++	kprobe_write_ctx__destroy(skel_freplace);
++	kprobe_write_ctx__destroy(skel_kprobe);
++}
++#else
++static void test_log_invalid_kprobe_write_ctx(void)
++{
++	test__skip();
++}
++#endif
++
++static void test_log_freplace_ctx_size(void)
++{
++	const char *msg = "Freplace prog accesses more ctx than its target.\n";
++	struct tracing_link_ctx *target, *skel = NULL;
++	char log_buf[128] = {};
++	int err, fd;
++	LIBBPF_OPTS(bpf_log_opts, log_opts,
++		    .buf = log_buf,
++		    .size = sizeof(log_buf),
++		    .level = 1,
++	);
++	LIBBPF_OPTS(bpf_link_create_opts, opts,
++		    .log_opts = &log_opts,
++	);
++
++	target = tracing_link_ctx__open_and_load();
++	if (!ASSERT_OK_PTR(target, "tracing_link_ctx__open_and_load"))
++		return;
++
++	skel = tracing_link_ctx__open();
++	if (!ASSERT_OK_PTR(skel, "tracing_link_ctx__open"))
++		goto out;
++
++	bpf_program__set_autoload(skel->progs.target, false);
++	bpf_program__set_autoload(skel->progs.replacement, true);
++	err = bpf_program__set_attach_target(skel->progs.replacement,
++					     bpf_program__fd(target->progs.target), "target");
++	if (!ASSERT_OK(err, "bpf_program__set_attach_target"))
++		goto out;
++
++	err = tracing_link_ctx__load(skel);
++	if (!ASSERT_OK(err, "tracing_link_ctx__load"))
++		goto out;
++
++	fd = bpf_link_create(bpf_program__fd(skel->progs.replacement), 0, 0, &opts);
++	if (!ASSERT_LT(fd, 0, "bpf_link_create")) {
++		close(fd);
++		goto out;
++	}
++
++	ASSERT_EQ(fd, -EINVAL, "err");
++	ASSERT_STREQ(log_buf, msg, "log_buf");
++	ASSERT_EQ(log_opts.true_size, strlen(msg) + 1, "log_size");
++
++out:
++	tracing_link_ctx__destroy(skel);
++	tracing_link_ctx__destroy(target);
++}
++
++void test_tracing_link_log(void)
++{
++	if (test__start_subtest("invalid_attach_type"))
++		test_log_invalid_attach_type();
++	if (test__start_subtest("tgt_prog_fd_only"))
++		test_log_tgt_prog_fd_only();
++	if (test__start_subtest("tgt_prog_fd_disallowed"))
++		test_log_tgt_prog_fd_disallowed();
++	if (test__start_subtest("invalid_attach_btf"))
++		test_log_invalid_attach_btf();
++	if (test__start_subtest("invalid_target_fd"))
++		test_log_invalid_target_fd();
++	if (test__start_subtest("reattach_without_target"))
++		test_log_reattach_without_target();
++	if (test__start_subtest("invalid_target_btf_id"))
++		test_log_invalid_target_btf_id();
++	if (test__start_subtest("invalid_kprobe_write_ctx"))
++		test_log_invalid_kprobe_write_ctx();
++	if (test__start_subtest("freplace_ctx_size"))
++		test_log_freplace_ctx_size();
++}
+diff --git a/tools/testing/selftests/bpf/progs/tracing_link_ctx.c b/tools/testing/selftests/bpf/progs/tracing_link_ctx.c
+new file mode 100644
+index 000000000000..940a7d74b7e3
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/tracing_link_ctx.c
+@@ -0,0 +1,17 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++
++SEC("tracepoint")
++int target(struct trace_event_raw_sys_enter *ctx __arg_ctx)
++{
++	return 0;
++}
++
++SEC("?freplace")
++int replacement(struct trace_event_raw_sys_enter *ctx __arg_ctx)
++{
++	return ctx->id;
++}
++
++char LICENSE[] SEC("license") = "GPL";
 -- 
 2.55.0
 
