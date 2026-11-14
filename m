@@ -1,101 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.238
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794666787;
-	b=N27R+xcq6xByZQXyqMOmYLrYMMlGfpXGjBhuGhmCnUKCGmXihpud8JpYLZplY8P3Wy03
-	 ao1EbJx79j0lUVWqHOOTFeHCvovJI1WFwYCGc15Rup5xoZpxxr8qijDdWMt6hGAC6AI9X
-	 oLSY6pJtSGBD6URx+5+r+YeYyHDG7sbsTuVsQMzYDheZ/VKB6T06GJhn4/sNYz+xMEle3
-	 /SetDcJfHa1e4/29fUCBgwoxIafAjEdPKx592rD2PFEiUVOEXdMm0f638YMvbTdN3HZxU
-	 KNtRu3MGt+AlbcHHoW0uRjpGhXtf7Xdx61Za6hM2H0pPqccdXqQD5gT6ARpqsgYC1TA==
+	t=1794668786;
+	b=SXdXFD4voVaASWy7phe9KG15vTqX5bCHZa5N7iytGyt4v5JmxOGFYwUEwuf+POwZMGpu
+	 Ljfc+aDKZIa7vRUpRZ9bw9T9ylPMW8H1ZpGHHmVWNSCfPnoSCGLVmgtL+GCUw5x8J0QZb
+	 VZZKqrYGTzgZq5gDQwC6dBS2MrC3BQvAXTWx0McwltBsg82rF7aIiXPZ2ZMsI3E3Fep88
+	 vRJhrT0B/Lqs59C0QIh24FQdqLoTznR/Ui3mNKPKRDbnoIMuOT+5KndqaJx4crgxTKBRa
+	 TzxUBFUiMINxC/9IhyV2vezT+E3SiNFeIVK1AXert3WeAOcVOxZmgeq+TSINNXDmPGQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794666787;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=zZTHArb7/cDEOGGmixdYHyste9bMwihASbVf49eSoI4=;
-	b=KqFJBfoXf/s3Rpd8xCaPzbRmKxn9UqRYXem/md9CjZbtYWICl+30qySSYPy7bipT9k3Z
-	 IWjZXOEyY1S4muYnbDnCAWBKB1js8uMbUwKtXRn+ivdkEK9qzaLWa0h9uckXja62Fs9e4
-	 ssDfgFHNFEzy60PxRK/tv2KQTaRgM/b2WE2QxgiSA4lI1YRV7X3VK+CgkubJomjw3lEYD
-	 KjlhmLsOD+doDsWqjTPJU0gjVk44jYaXquYpzqCjeNt6JZXRCvKsTTGPbkJEi5ZQTmfyt
-	 VD3n+GbUWbhEVpQded54ZMHs5c18kddXrG1xkK0Tzo3UM8kyyJsL6X/uba6jrAYDoOg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794668786;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=GqVfe+gMMe0HOFEnoFcjKGVxfj+tUTB2vMVxeIhcZK8=;
+	b=ODcIFuEUAGQ0fzf1fplaBziUeiz/oW93c0QhWQqTz4KX9q7DNMuYhoeLGgUBvvliluOU
+	 czW8EuxE+LYHfRdHK6eGGvuCkKD06SKglyGkwDaVER0DQ7bd7tNIuT7IB3vLieDentpdV
+	 eQmNPs7q6fNQn3PPaapcNP+dfUvrv4F/ZeXgaGe197OzMBWkk0rw1jpW4jdna6cxp9/Gz
+	 I1wDCYClzxI2nmTaCrdkmboQiHg0mfiDnDsMtOyMRWeu5kXrjeezkfOA54vawNOoXTzc2
+	 ID8BKqU7cEThK+oL1yWWAsfsZNeTk3MSGEBlaPOvG4APi7Jq16ZF1mYVtRLTop4SHuA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=o3UL23wO;
-	arc=none smtp.remote-ip=209.85.128.47
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="ab/7ZlsT";
+	arc=none smtp.remote-ip=91.218.175.238
+Received: from mta0.migadu.com (out-238.mta0.migadu.com [91.218.175.238])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 407DD606A327
-	for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 14:33:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 407DD606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA93606A32D
+	for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 15:06:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AEA93606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=o3UL23wO
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4a9a8d6cea8so20082605e9.1
-        for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 06:33:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794666784; x=1795271584; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=zZTHArb7/cDEOGGmixdYHyste9bMwihASbVf49eSoI4=;
-        b=o3UL23wOoojCCtw099LOef2o6FXVCYwfWYdM+YI1ELuwWae0ZY5CRolxwTnSJwqRo6
-         tbmG7+Rxxvu7K+Xqs5BLB3WcVEs3MzYOF9EXviq05ByDs/kG4OheQ3+y71A0hUo+HVd6
-         Eyr4xE6/uhsBTxt3gWXOtnN1bRczoxfiaKwMj2ow7adwVjJoWGJ1Z7bJgjFYxAYXQq+Z
-         NNJahNh/iFfyTdhBEZsOABZe6f3g05zsZj5vT/hTlCYUgzzzKDM8gQbCEBp0wgkUBpG2
-         fgn6OgovIRBTzLaHd10nD8jN2N8xl0Mrmw4MHrnqFr/sXmdQvxxe5FwyH0GoDA9It/rc
-         PquA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794666784; x=1795271584;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=zZTHArb7/cDEOGGmixdYHyste9bMwihASbVf49eSoI4=;
-        b=fWRx9/Ms/XljX4M9D08u/lUm/YaGcsVXzSgcYHcU7CKJAdQNQGau/ZIuFc8s4tacdT
-         j/rOB17JifjoEwXbiZfHryx16sI7O3a0lpGjxKHgKwTfbE07xeWzqiEoYV64I2w/0XhJ
-         zoTOag+BxyRCIJeFv2L0zGhe1pl241JY2iegNRNozqVYy1fXibS9Rz4MuYhMmjnCAiMn
-         2SMl8QIQTcp5Xa1/zWMXbf1SEsFuJypUwo5inEH5LUg2IvcCo3Boqa3n4kP05HjvZQUZ
-         fHmUeBxLdTfnw8xrx/f9O4+MZCn93rtqk14GPmxypi5u8vwhQQvs9pLrM0V73q31CyGr
-         XdKQ==
-X-Forwarded-Encrypted: i=1; AL+hErFnlNNNbqmLg5Idl5aw/gNyENQgkgzGJ/X3iafYixOTP+gKBJkixzymekYZSafSxWkaa4I=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9VKajJlvEpd8Z1hpmblhNoW4yCSAlddFnS3PqrCn1MI9kRbVl2
-	Bg5kWR/AswmDffKMyz9dcf7qeUYgV4rq2hLS3NodlaufXxwDS/XiVt+q
-X-Gm-Gg: AYBFou0IqryTKmTwATcmGfKGV/qyPL1l1ufHHccg8u0BcZysM/8KJBc5BNTC/DyLPWZ
-	ilizM93zOX5gSMPn7jtz3Ziouiv5Iew3/NOC9dKbkaE2yxYAXFAJu88rAC8O7X5Y5T87AR8Cqm3
-	BbUsnCnfJmFNpC4dKdvV+zSsV2AvZlwrS8By0gVZgaIVmV1Tha2eyh/v20eYUVSOhZs7JYvtJcZ
-	elmDGb3MS78uj+VydCvnf5NI1RUJ87ysDoSXRypaecDSRjbgP2AbeHcJJrGRN2luxFLE3A6v+nk
-	VFkMr5cw8URE5ptJ3fHf5O+GFTe6OitR/oQBHuO1M8RQ+1nzqGDEODvwEgBcNOsxzC2aCL7m52c
-	wBaX69ojjqAic8kAHgucsKMq9YBtL8OhjVCJGpycVKIlE5/f8j4pPedHoFo16K+gsVYFyVO9jlg
-	RRha5TUW/CsLh6qYU3cKY3yLU8iXYwt3vaPgvtI+NviR3VGZJ6AK/kxjDhLM2tr2PhpYkx91DiA
-	RJf/lf0SoXf4m/r6UuV8dUCSkGiNjpf3U5zjJLLRJ4pc/aOygJ9REQh5CBcqmb0tLSXX+tdUCMe
-	voqkEXc1dXeM9JWXpEOdkPqj2UKG9zXhZA9/Gb8OayP8ATw/az7LyJ6npSsogBqKKg==
-X-Received: by 2002:a05:600c:4691:b0:4bb:5e8c:13bc with SMTP id 5b1f17b1804b1-4bb5e8c13e4mr80850505e9.7.1794666784523;
-        Sat, 14 Nov 2026 06:33:04 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb56fa1062sm95802815e9.5.2026.11.14.06.33.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Nov 2026 06:33:04 -0800 (PST)
-Date: Sat, 14 Nov 2026 14:33:02 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: sashiko-bot@kernel.org
-Cc: sashiko-reviews@lists.linux.dev, "Petr Mladek" <pmladek@suse.com>, "Kees
- Cook" <kees@kernel.org>, linux-kbuild@vger.kernel.org, bpf@vger.kernel.org,
- "Jim Cromie" <jim.cromie@gmail.com>, "Lorenzo Stoakes" <ljs@kernel.org>,
- "Luis Chamberlain" <mcgrof@kernel.org>, "Andrey Grodzovsky"
- <andrey.grodzovsky@crowdstrike.com>, "Steven Rostedt"
- <rostedt@goodmis.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Samuel Wu"
- <wusamuel@google.com>, nathan@kernel.org, nsc@kernel.org
-Subject: Re: [PATCH v3 next 05/13] kallsyms: Fix selftest startup delay
-Message-ID: <20261114143302.3eb7125d@pumpkin>
-In-Reply-To: <sashiko-outbox-208986@kernel.org>
-References: <20261111115911.1142000-1-david.laight.linux@gmail.com>
-	<20261111115911.1142000-6-david.laight.linux@gmail.com>
-	<sashiko-outbox-208986@kernel.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ab/7ZlsT
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=3EHbdy83rCpwpfT1fsnCR8rbfvn0CmloPXzAcMGse/I=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794668783; v=1; x=1795273583;
+ b=ab/7ZlsTtiVY3VB3DcqUDjUiGrLBdgSEEQTEZoaETB8zKE925WeOA9gI0qnKv+BmMt2NIJ94
+ /zeKbLuHocWwAOSZ0BQJB9CMzTwIpURnaKXhos6P0mWtRfB7IbU069drQAeJeZV1UDLqQG8BKpw
+ bb9atwlvvcbLVQymyyWrYjb0=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 5012754fb9425d27;
+	Sat, 14 Nov 2026 15:06:23 +0000
+X-Mizu-Trace-ID: 5012754fb9425d27
+X-Migadu-Flow: FLOW_OUT
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Matt Bobrowski <matt@bobrowski.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH bpf-next v2 0/9] bpf: Add log support for tracing link_create
+Date: Sat, 14 Nov 2026 23:06:01 +0800
+Message-ID: <20261114150610.84507-1-leon.hwang@linux.dev>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,44 +84,71 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Wed, 11 Nov 2026 12:36:03 +0000
-sashiko-bot@kernel.org wrote:
+I'm planning to add syscall common attrs support for LINK_CREATE cmd.
 
-> Thank you for your contribution! Sashiko AI review found 1 potential
-> issue to consider:
-> - [Low] kallsyms: missing Fixes trailer on selftest startup delay fix
-> --
+This is the second series for the plan, that adds syscall common attrs
+support for LINK_CREATE of tracing prog and cgroup prog.
 
-Missed because it isn't worth backporting.
+BTW, address Andrii's review [1] in patch 5:
+1. Change if (!OPTS_ZEROED(opts, iter_info_len)) to if
+   (!OPTS_ZEROED(opts, log_opts)).
+2. Add comment to iter_info and iter_info_len that they are
+   deprecated, and use iter.info and iter.len instead.
 
-David
+Links:
+[1] https://lore.kernel.org/bpf/CAEf4BzbW4zwL-9j8e2B6KNXVNwsfWyMSAo_RsGCqv-nu_yGhTg@mail.gmail.com/
 
-> 
-> commit 06f0c3fe023ccc28da9c2bd9798921899fb0ec63
-> Author: David Laight <david.laight.linux@gmail.com>
-> 
-> > kallsyms: Fix selftest startup delay
-> >
-> > The kallsym_selftest code clearly intends to sleep until initialisation
-> > is complete in order to get more reproducable timings.
-> >
-> > Replace the schedule_timeout() calls with schedule_timeout_idle()
-> > so that the thread actually sleeps.
-> > Poll every second (not every 5) for SYSTEM_RUNNING and then wait
-> > another 10 seconds before starting the tests, otherwise the tests
-> > start as soon an init is executed.
-> >
-> > This code is in the initial 2022 import of the tests.
-> >
-> > Signed-off-by: David Laight <david.laight.linux@gmail.com>  
-> 
-> [Severity: Low]
-> Since this fixes the broken schedule_timeout() call from the initial
-> selftest import, should it include:
-> 
->   Fixes: 30f3bb09778d ("kallsyms: Add self-test facility")
-> 
+Changes:
+v1 -> v2:
+* Add log_opts support for bpf_program__attach_iter() API in libbpf.
+* Add test to verify the log for freplace max_ctx_offset case.
+* Update a subtest to verify the log_opts in bpf_program__attach_iter()
+  API.
+* Add log for freplace max_ctx_offset case. (bot+bpf-ci)
+* Drop unnecessary bpf_verifier.h include. (bot+bpf-ci)
+* Change log to "Invalid tracing attach_type.\n" when the link
+  attach_type is not prog->expected_attach_type. (bot+bpf-ci)
+* Change BPF_XDP to BPF_TRACE_FEXIT in tracing link_create test.
+  (bot+bpf-ci)
+* Drop dead iter.len check in libbpf. (bot+bpf-ci, Sashiko)
+* Add OPTS_ZEROED(opts, iter) check. (bot+bpf-ci, Sashiko)
+* Swap log positions of iter_info and iter_info_len. (Sashiko)
+* Update bpf_program__attach_iter() to use iter.info and iter.len.
+  (Sashiko)
+* v1: https://lore.kernel.org/bpf/20261109140816.5196-1-leon.hwang@linux.dev/
 
+Leon Hwang (9):
+  bpf: Add log support for tracing link_create
+  bpf: Add log support for tracing_multi link_create
+  bpf: Add log support for iter link_create
+  bpf: Add log support for cgroup prog link_create
+  libbpf: Add log_opts support for BPF_TRACE_ITER
+  selftests/bpf: Verify tracing link_create logs
+  selftests/bpf: Verify tracing_multi link_create logs
+  selftests/bpf: Verify iter link_create logs
+  selftests/bpf: Verify cgroup prog link_create logs
+
+ include/linux/bpf-cgroup.h                    |   6 +-
+ include/linux/bpf.h                           |   3 +-
+ include/linux/trace_events.h                  |   7 +-
+ kernel/bpf/bpf_iter.c                         |  27 +-
+ kernel/bpf/cgroup.c                           |  76 +++-
+ kernel/bpf/syscall.c                          |  29 +-
+ kernel/trace/bpf_trace.c                      |  26 +-
+ tools/lib/bpf/bpf.c                           |  23 +-
+ tools/lib/bpf/bpf.h                           |   8 +
+ tools/lib/bpf/libbpf.c                        |   5 +-
+ tools/lib/bpf/libbpf.h                        |   3 +-
+ .../selftests/bpf/prog_tests/cgroup_link.c    | 324 +++++++++++++
+ .../selftests/bpf/prog_tests/iter_link.c      | 156 +++++++
+ .../selftests/bpf/prog_tests/tracing_link.c   | 429 ++++++++++++++++++
+ .../selftests/bpf/progs/tracing_link_ctx.c    |  17 +
+ 15 files changed, 1083 insertions(+), 56 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/iter_link.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/tracing_link.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_link_ctx.c
+
+--
+2.55.0
