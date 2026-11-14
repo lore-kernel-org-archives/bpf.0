@@ -1,112 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.48
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794657338;
-	b=U5EFT2MjrpFlAI3Aj/gVMJ6O59OZn6teQ/M54GgTasDxxnbql36U2lLnle7kJy/90Y/O
-	 aZHGXA4eY//HQ85L/p/A/UO+XhDm7BGuzO8AtvP2Gbx/mvjdAVTWC/W/jr49elDwwflm2
-	 ubBwGGEVlojAWM98NMpyOGGhPtgEYe1zuwWtkZy7lG7tQSekqHosEyp1QBPWL3vBU7BvN
-	 AU8ynzNw9QoYxZi8D8XAkLkVcJ0Ynj6ssc/iGhpOgo1VCNtxAPIXqMWBo3S34qGdWGxx2
-	 Upzck0hWs15ktPqNzwjqBjOOK7rWIG/CDWiLFI3wue8WjBz0y53KAjKFGYugnfSIccg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794657338;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:Content-Transfer-Encoding:
-	 In-Reply-To;
-	bh=nJvs09p7QWIuuw8YOzj5TR133+2IJ5+yRajckn/hsO0=;
-	b=izWdRW79TWNPAqKMpqGTFQzTyrZPZ2Yk8pZCRG7MJdE3+oo6ws8zhfxJ54iTU+Jls2C0
-	 UPPn+s38QCXJYFygG1u1ebSudWzOcdIx81SdNbagrfSTlqW8TW0b/zs9OK8EtZbQA4tot
-	 Cmrqjy63XHSycaFIlaRtvvKfSkCdJw1r3Az/Cb7yG28kKv/18EFJsgpUAIBYUDj3WCou4
-	 XCte2saJT0XRaLHWJTnALjHXMJyrYYCZqfYQc2/QfiHFcOoSANDwqayUzOioaZ9wU0xpV
-	 XW1d5yABRJD0BOWAj5wSklNIKJlaAysaKa2U7NKBkFIiAXrzs4Jq8Lis6MFw8xHmrqA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MrTBjpIE;
-	arc=none smtp.remote-ip=209.85.218.48
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794657556;
+	b=TNICQ0IDTA9qPwcVlc30rsSfS+P3Pa8r57tbXHG1i2ANcukm263gNl3m8YHm0jLphbD7
+	 m3cYvmHmTAcIKwb8Vk1oZMp3bxdot7o4RQE8rZZmZVTXqDmHL6PTodWVdEu+aFrulwnpx
+	 MXjB1wSitzhyPULtC4DbploJLUaqgh5HBsmNXISKKDklLaCYvmOUdwGqagi3YGRWEHkx0
+	 hUZyUSygSSJFWf1/Xz5Gn4Y2BE5dCumvYdK2iIn5Xvs+HQhJuRloP22vMnzksZlqkeZ+I
+	 BHCTLeHc8eE+9SYh66SEljT1zjEtpl7nIN7GWB+uSEFH25c+tTcKf7eoJXW4a1g8Kxw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794657556;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=SPA37YGgureDWQIEB+9Q3nNARSqEbSpJ8VBl+t4Y6c0=;
+	b=bO8FQm4cnqrznax8Uxxd4351/qfrxM/It0tgX4btEmheEXYdSewVvTQunM0ObS/bMO+u
+	 2IciqUHYarg8VT/0ZE8LfbeYFKy9R9yT/TBe/Rks6jMvHOvzF7WjtHm4KviKlR6+OGHMB
+	 38GExhT/z48p8MJI9XT2Wc4EwgZB7u2SF24ZJjy0bBcs7KxPd8H0XRI5zqUCTrMKMNyGH
+	 1V6GRbI9EKEIUpw+zz/npHDmAe5dTxk+9zzPj6o7foE3tpzJxIR/MNLDbBe7wkO/ieXfu
+	 DpnE0WOtCNHMydlQy8djR4nauQZLsfBYZUiZGvKQuUUrBMnyRYfVncLP+9Q3Lc7G6ag==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CevO0zI9;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9DFB606A32D;
+	Sat, 14 Nov 2026 11:59:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CevO0zI9
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1794657556;
+	b=p/pZCm9V8cQECLPtC31Xd4kFiHuQCC5KRti7cN41qfuRqHJhVlu+jixRURel9tbJlwsG
+	 tYBdNGSEADiMVjL8IOGaA0sG5FxtpoCXHifawNHulO/idZ3O/zwt1YiA06XsrojQ6tQ7V
+	 ksVLEDGJEgqsRF48FTZ+YiDe8bThH/x/qXNUrizTd99u377OCXgk8w7l4I/nn3r2PGMQR
+	 2XJ6rEF8RhVU/FKCOIMrv+HtsTjBWtXYyFT8eEb1tPghDXe1vaav9HEEXENsUQYMu5WIG
+	 23+PVDAi7/flgrkV7ql85eYlck5fO4UepN2OjPcRyFJjh4Y5xRK5Wck0/j+PhB9qOmg==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1794657556;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=SPA37YGgureDWQIEB+9Q3nNARSqEbSpJ8VBl+t4Y6c0=;
+	b=snO2mjW8B5GJI/TZKtVZ+mH1apuTj6PWJd37kxKeEIgJeCBgfRoF3KUUaL3NovK+vmF5
+	 Z/z+ZtdUvUhjpR45ZlxwocLAAyNOk/tjZxAp0FzYyJjeSFKktSsgcVR0Q8xBCGQVEOY/R
+	 JHAUmPH2N5dvf5zDqBx0gRvFjZP/7G/+F3C52XZQdLsLbQDpxO4k8fVaF/Ume3/oudkjS
+	 uGome2E3jiBIxo4itRy5ngPzwS5e/MwCnzTyXw46coNLlC1D2fEdR9gt5sox33VUlXnZm
+	 8WMnDYFkj2/LKdQdK41Vcz288ZecOSuEWi787nM/91tvSVoQgZ2Coh1Do/hD4gdLTtw==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69B90606A333
-	for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 11:55:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 69B90606A333
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MrTBjpIE
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-c50604721c8so370135366b.3
-        for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 03:55:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794657337; x=1795262137; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=nJvs09p7QWIuuw8YOzj5TR133+2IJ5+yRajckn/hsO0=;
-        b=MrTBjpIEXzsSZaANjc7oExJhwGnF+j3pBQoJGLV3AozjECewWnT/dOn8PoCfUIeYGI
-         mRgldWBhVoyoY4kjpOu/TkcCPMpetn8bMN74Irqnk0JnK5MAQS777TE3iVfENO0qNvUE
-         8qb82pxhdLikkA/6tATGUpByZMee1vHTbdl6A6vtosorr3+hE9wD/mpuH76lS1WAZqyn
-         nUdTyabyG8UAyWqGnpYJGfY62DgpvBldD5kNADP5MARyaYxmHHJYDsQkr6qVKrnaldzF
-         KHIyaxdpU8Pcl80WjVwUUXXw+yU81KD0D8RdN7wE6Dhf//BzElFXAKq/AgQBu3vGzFII
-         7JmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794657337; x=1795262137;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=nJvs09p7QWIuuw8YOzj5TR133+2IJ5+yRajckn/hsO0=;
-        b=ZKdGnbpNig2Rl4egaelhlK3nfkIcquttcSGg1LtB7zW6xCAgrCIolqOIKst4Fe+5DH
-         1PnYmVb2IoQeSc5UR+VjqvdVrByPb3+DBctoBTRgjOZADCpNaNVqMizVQ0EK9mumt3zT
-         /DweU53mJoitMqNmwbiTybbYyeG7VxeA/8B+Izx4qncPlyso4Oz7W3gicJoE2br+8jFt
-         p18mR1WtYIp9iQjU/tE638Bk2698PeC/iAnGItIJLLzCuwxGta9nitDQh/ke+Lrtc5Lj
-         VRhJfl8lB5VmDwPHeLfMqU3Iz71yuJZUkrqNcU9u2nYTP4h04PpduZ5uYa2c7uI//oQI
-         sjJg==
-X-Forwarded-Encrypted: i=1; AL+hErGKcABMAoockh2tdmSRFyCfvok2+LejBT2H9hqhoC0KrE2sIBbjBcoaJ8Vk42238B95Ui0=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+pWiAYjbNGIoYSP6ItHy1d+4Kusd6UUc4IpeRHUb7xts6tJOVZ
-	oJc4aX7Ppc3zQR2s8XCaJQZGdNB8ZKSZkHb02tvxDM49d0oMRWUHDUMX
-X-Gm-Gg: AYBFou0Ofk5Ln5rRf+Q1Cv/XatLVso8Vaikb2DUxphx9UhfsGXSNu2EqKs3RdS5v/N2
-	F83NWHK0p7NIBwNZi5kZZ1o0DWEQ5d13TK8ATqd4XsAbOVqUsZSkeTnRnaXRqLyUg3/nKcyu5hs
-	Qnqz32VPLjUa8IPORqqrJ2y3LTM/cuQ+rj5596GC8/gbLE0jinyIuAdSPchJiIP+Cjwi3Ij8nlq
-	AHRPSWTkLgUuQlnA8LVHs7dLF8FHbZKhnUUEEvmmS7ySBXI5A14cmGW7SXiaeyysGRpUhPzh2es
-	JmQJnOgHanDTXucHY7VmN78qDgFOENKwsI5KYeV+I1OwzjI9cwq03Ywqdlnu+Rj/aC4ne4qBz8U
-	mgumgmb883yBhk/aLw3k5MFr2vCeworOZ8/c9F6S7F0psrXEHsjdeOLcakbADWnAEiFqtCx2Ykp
-	8XvJDXKya6b7BjWsRIKVtnYqd9aOJEFGVCWvKg8TSLF1GHxbP3L7Vo+6aOxAQNBV6CdLXCx1d+8
-	L/YyC/1oNbFJbQIP+7YxPY4rSt4MrWHl9Cfa2OieLE0e+RY9AoP3Z1oYp1EYhVoDFIhIwAeTJWk
-	3/a6PwkSQfKnGXajQbiPdET3fceWwMA5Ebw9Re38TN5vFW8AaA9fPNCDGG/GDah3trhXHF1uPxz
-	O/75pT2VmsZ8=
-X-Received: by 2002:a17:907:3e10:b0:c40:231:6eab with SMTP id a640c23a62f3a-c5096370c31mr441592966b.16.1794657336589;
-        Sat, 14 Nov 2026 03:55:36 -0800 (PST)
-Received: from localhost (178-84-201-199.dynamic.upc.nl. [178.84.201.199])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c5095b41f44sm206223866b.31.2026.11.14.03.55.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Nov 2026 03:55:36 -0800 (PST)
-Date: Sat, 14 Nov 2026 12:55:35 +0100
-From: Amir Goldstein <amir73il@gmail.com>
-To: Alexander Mikhalitsyn <alex@amutable.com>
-Cc: Christoph Hellwig <hch@lst.de>, Christian Brauner <brauner@kernel.org>,
-	linux-fsdevel@vger.kernel.org, Jann Horn <jannh@google.com>,
-	Chris Mason <mason@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-nvme@lists.infradead.org,
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-	linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-	driver-core@lists.linux.dev, linux-mm@kvack.org,
-	bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-	selinux@vger.kernel.org, apparmor@lists.ubuntu.com,
-	linux-nfs@vger.kernel.org, netdev@vger.kernel.org,
-	fuse-devel@lists.linux.dev, linux-efi@vger.kernel.org,
-	xen-devel@lists.xenproject.org, ocfs2-devel@lists.linux.dev,
-	linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-usb@vger.kernel.org, linux-erofs@lists.ozlabs.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC 38/41] fuse: refuse files on pseudo filesystems as
- passthrough backing files
-Message-ID: <avhMN39TECaur0sS@amir-ThinkPad-T480>
-References: <20261110-work-loop-pseudo-v1-0-4c998976c6c7@kernel.org>
- <20261110-work-loop-pseudo-v1-38-4c998976c6c7@kernel.org>
- <20261111151202.GA11391@lst.de>
- <fb1d72cf25d10a960da627f6d93a3e041820ed3a.camel@amutable.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id B97C71F000C4;
+	Sat, 14 Nov 2026 11:59:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794657556;
+	bh=SPA37YGgureDWQIEB+9Q3nNARSqEbSpJ8VBl+t4Y6c0=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
+	b=CevO0zI92EWJyvfjonwAAn27fhnxW/S162JefscfA0lJxAgQ42AE2n2aVFgoG2mam
+	 H1U/JRQCoeqc2CoZbOwYQ4r9U+PzFVMIEyX1a+PXx6rJvoj+lCca8x6jd5Rb0JAuTx
+	 15m7Il5j913U3XmiGAbqDV/e5l1br7qEG//qKh6WxGlfwu8qXlVEAL1/Nx3d8IQX6H
+	 0ang5g7/bI/EoIns0BgupGAgDmftevmWIeY2DXC8gKn47v8gajgstT7n7MAIGNQx8Y
+	 6G7PItujaOzjwWM2bxDbA3hVXUXFz+WWaEIAk3+iOFQczIIoU+P75OwXN7+HX5n3Zx
+	 cwRahjn0VgmpQ==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id 30FAB49D76;
+	Sat, 14 Nov 2026 11:59:15 +0000 (UTC)
+From: Jerome Mohm via B4 Relay <devnull+jrmmhm.kernel.eldare.de@kernel.org>
+Date: Sat, 14 Nov 2026 12:59:14 +0100
+Subject: [PATCH net v6 1/2] vsock/bpf: fix zero-length, MSG_OOB and
+ MSG_ERRQUEUE reads
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -116,34 +83,85 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <fb1d72cf25d10a960da627f6d93a3e041820ed3a.camel@amutable.com>
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261114-kbh3-1-022-fix-v2-v6-1-96b6029bbffa@eldare.de>
+References: <20261114-kbh3-1-022-fix-v2-v6-0-96b6029bbffa@eldare.de>
+In-Reply-To: <20261114-kbh3-1-022-fix-v2-v6-0-96b6029bbffa@eldare.de>
+To: Stefano Garzarella <sgarzare@redhat.com>, 
+ Bobby Eshleman <bobbyeshleman@meta.com>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>, 
+ Alexei Starovoitov <ast@kernel.org>
+Cc: Michal Luczaj <mhal@rbox.co>, virtualization@lists.linux.dev, 
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ stable@vger.kernel.org, Jerome Mohm <jrmmhm.kernel@eldare.de>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794657554; l=2260;
+ i=jrmmhm.kernel@eldare.de; s=20260928; h=from:subject:message-id;
+ bh=HNk00rg3w34p5I+aJL5/O9foUQOvgErOJTc5nh/GqmQ=;
+ b=swjcV4jiYBjHRD+LmXnkm4bBMz5vy4M5McoYob0jJlTaEfRXY+ad6xFFFFtcLe4OhoOT/wnJ0
+ SohR0mWWn1DAy4oT/UEDBgfmmzhcdpCtcLvSj+7BIusfI3+jsD7ehrY
+X-Developer-Key: i=jrmmhm.kernel@eldare.de; a=ed25519;
+ pk=xRCxNXbnNottaHpmvPDAOC9NuMJxqKo24abkehKRVlo=
+X-Endpoint-Received: by B4 Relay for jrmmhm.kernel@eldare.de/20260928 with
+ auth_id=1075
+X-Original-From: Jerome Mohm <jrmmhm.kernel@eldare.de>
+Reply-To: jrmmhm.kernel@eldare.de
+Content-Transfer-Encoding: 7bit
 
-On Fri, Nov 13, 2026 at 11:25:57AM +0100, Alexander Mikhalitsyn wrote:
-> Hi Christoph,
-> 
-> On Wed, 2026-11-11 at 16:12 +0100, Christoph Hellwig wrote:
-> > I've seen setups where people use fuse to mediate access to sysfs
-> > sysfs in odd ways.  No idea if that's still around, but if so, this
-> > patch will break it.
-> 
-> 
-> Oh, that's painful. Do they use backing files for that?
-> It's a relatively new feature in FUSE...
-> 
+From: Jerome Mohm <jrmmhm.kernel@eldare.de>
 
-Very unlikely that they use FUSE passthrough and if they did
-very unlikely that it would break their filesystem.
+On a vsock socket in a sockmap, vsock_bpf_recvmsg() sends zero-length,
+MSG_OOB and MSG_ERRQUEUE reads down the sockmap path whenever the psock
+queue has data or nothing is queued at all. That path copies from the
+psock queue and waits for data, and it handles none of these reads:
 
-The API for fuse passthrough is that the server requests to setup a
-backing file before open via ioctl and if ioctl fails (as this patch
-does) then server falls back to non-passthrough open.
+ - a zero-length read with data in the psock queue spins with the
+   socket lock held, and the delivery worker blocks on that lock;
+ - MSG_ERRQUEUE consumes stream bytes from the psock queue, and the
+   zero-length MSG_ERRQUEUE read that MSG_ZEROCOPY users make to collect
+   completions gets -EAGAIN or blocks instead of reading the error
+   queue;
+ - MSG_OOB consumes ordinary stream bytes or waits for data, where a
+   connected native socket returns -EOPNOTSUPP.
 
-The ioctl can already fail for many reasons such as MAX_STACK_DEPTH on
-procfs as the commit message says, so server needs to cope with the
-fall back.
+Hand these reads to __vsock_recvmsg(), the path of a socket outside a
+sockmap, which does not wait for any of them. They now take one path,
+so the order of the checks no longer matters.
 
-Thanks,
-Amir.
+The MSG_ERRQUEUE case was found with the help of Anthropic's Claude,
+its stream-byte and MSG_ZEROCOPY parts by Stefano, and the zero-length
+and MSG_OOB cases by the netdev Sashiko reviews. Each was reproduced in
+a VM with a vsock-loopback socket in a sockmap, without kernel changes
+or error injection. With this patch alone they behave as on a native
+socket. The vsock vmtest.sh single-VM tests and the BPF sockmap
+selftests pass with the series; I did not run them on this patch alone.
+
+Fixes: 634f1a7110b4 ("vsock: support sockmap")
+Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Jerome Mohm <jrmmhm.kernel@eldare.de>
+---
+ net/vmw_vsock/vsock_bpf.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/net/vmw_vsock/vsock_bpf.c b/net/vmw_vsock/vsock_bpf.c
+index 9049d2648646..c9b399f37720 100644
+--- a/net/vmw_vsock/vsock_bpf.c
++++ b/net/vmw_vsock/vsock_bpf.c
+@@ -80,6 +80,9 @@ static int vsock_bpf_recvmsg(struct sock *sk, struct msghdr *msg,
+ 	struct vsock_sock *vsk;
+ 	int copied;
+ 
++	if (unlikely(!len || (flags & (MSG_OOB | MSG_ERRQUEUE))))
++		return __vsock_recvmsg(sk, msg, len, flags);
++
+ 	psock = sk_psock_get(sk);
+ 	if (unlikely(!psock))
+ 		return __vsock_recvmsg(sk, msg, len, flags);
+
+-- 
+2.56.0
+
+
