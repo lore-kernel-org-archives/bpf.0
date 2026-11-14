@@ -1,89 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794660528;
-	b=vpYhNpwXq7SKQiQ4B+6aCntGAoRaoB9YHDz+dInwZJuAVkuj2BXvxSSkmKLxTdJ/SAtX
-	 oYdZtiyjGMcbOXXllhdeabie/F5Wx9hVCrL/cQPmhKdZVgzmLMrKJ4NOWHNYT9mx5SHrt
-	 XZvxYnm8o08cL9OXzTN1WWCe27kgxsVVet83CMf8TSaT4uRnRX+elU+H3/d0X/qpMZrAt
-	 jlrCf2YuEnVFUIjdOC3eDLBTxJ/2XSCCrQzpBkVes7UE5pyWAJJ0TZSNNo7TEKyUJQM0i
-	 RhlxOtu4z1lORzlgbXMGs7U7l8B0rctHovUV0raYx9NU8Lt+8BjD4hs2cjgeLG5EhVw==
+	t=1794661447;
+	b=cprRb67552UyU2JR5otWyB5Xs7Trr39Jhp1pwRapVEiopeD0IoHTRvIW0o6BATbdFvW8
+	 E3r4I/9CNCwrGrGTOFazcuHkXXnOHG9QzPQl7bxxk1A633IPiXko/TmUraqVhyyH5O+ry
+	 SMozq0tmBXF+FktukHDHX9hKHg4RoIAzm73whO+66Yg9gXDPo9u3Tbv41xDsue2IZ6S+U
+	 Rk2bDRAc1DNSxI1xeWSivdG1FW3vnjX81GeqZwvOasikB3wrs4ziExoIJ7XjMWV5CG9iT
+	 IBJE432kQYv/D8fCHRoDGunI5Myk8R8R2drRRWBNFiRyFLQ4zSt18qPgFKISqLWXPvg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794660528;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:In-Reply-To:Date:Message-ID:References;
-	bh=oj9na0DVBDJtudsZfLncNdoZFNBIlfRdys75ekuhQE0=;
-	b=uh+lQCWf9d1E9u3xr3GfTPGJzXnmGFCtGhvfRULcihVF+0Is4ou6PHfQEuazR96NPl4S
-	 qgD4jzSKWll0qhB3eUN5MXKH9FFSxibNpMRdLQ8ptY2YBk9ROlphzWgnYAAlc2N9NnU6j
-	 4roiU7wEae8GGRsKol3yFeULAI6hWDUxY2/R0de8Vu0JYsoZetX2LaaCO1f0QWp8RHrIo
-	 kR/U/+tbFIVYMI9+LPyi7N7jkCd4MC1tZplMx23bhROdasRQ1Acf19ln+dXkMF9b3SiBL
-	 lT7/KGJcDjkSS2NzsJotAAgS7r5pvQAjisMXPBr17cW9/DPniVDjpoo6yw+hv2QtmCQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794661447;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=jmFaSxEkxznu2joKRb4CtLIuI9acOjlBj4phgIO6eYw=;
+	b=1dcwGfXavhy2hiPz/fopmWznHhFhB0X0zadjlN+44xe7c5+ZurCKajTRkU57IE+m1b4n
+	 bRmH/iDd3Zc8kWCt1s71PIQrI7HTXwaweoxgexum3XVbpfGpVP+Z4Sj5UtW37wZluVob5
+	 Xa0POjVK6aaSJgbbDr5OibVMpV/rd6c+SpKYlgfQPThZASM1iwp7vqY++T7GPClZfIrxW
+	 2JFlZcrr1+R6nbbI0osKCD/4EnAr2EggnUpUc0FcQOHR+TM69YxOtF/jGXyx07NySpzZx
+	 unlRWiDKZ3gnbRORSgS6uKq2tnsba2gb0hdt6RIoktGq01Q9QDEOdrTlLhZRlkpnz1w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hfdQ4MEg;
-	arc=none smtp.remote-ip=74.125.82.178
-Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Uq//O83y";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3ADD606A327
-	for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 12:48:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E3ADD606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56BD6606A323;
+	Sat, 14 Nov 2026 13:04:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hfdQ4MEg
-Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-3791619605cso3901696eec.0
-        for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 04:48:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794660527; x=1795265327; darn=vger.kernel.org;
-        h=references:message-id:date:in-reply-to:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=oj9na0DVBDJtudsZfLncNdoZFNBIlfRdys75ekuhQE0=;
-        b=hfdQ4MEgT0OcBrLyehsxdWw84F9f/5GCZOQqj2amNoCkIYk8eWe4OKfIVS90luZGXt
-         +w/W2fyscAdro0HxNBsyigoZJIrRGzXg03K1Mo8dxCrZC4w8CGZS2xfzGWaBhwAm5mVk
-         NW9ftwwqSBkSSsjMNvgDMIhiul3oQrsB+42SceuIquIJOa4ZqlCYZaQeS1AhPT8JvuJM
-         fvEJUs1wlk5l94qcRHzVFdToMuLJiYoxPlCBMhG9PaEMS5r3Oi1Ill5pmV3vFOeccr+T
-         dFkvGNuB1f/E/cW8/naZzkiklTu/PeY8pE6qPMyPo6w04yPmfMmYvzqmq8nP6EiRDgVw
-         APpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794660527; x=1795265327;
-        h=references:message-id:date:in-reply-to:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=oj9na0DVBDJtudsZfLncNdoZFNBIlfRdys75ekuhQE0=;
-        b=GvNE9qTy8NFUgLfXC6+JGM2+FIpPHz5XLruEkBXVG49HaXAUkiULt+NI/jYTpkW2rm
-         NnY2HlQv8VWQ05VrSpSo8luJIE3R17tsW4loiYtv6UJShcno7dOekvOy8WkNMHzTUHYU
-         P7ZtC5+2Nh20YC9334ud3hsY7iLPS5S/YKHMJE+EeutQP031YAznvmTeWm/mkSDY7zob
-         pe8Nwnl5vKCcT51pJzhpT0VmER28chno33xisems2zyhYWpKel2dBFoyn5zAomsJha9H
-         xA2Q/FkHFxZxUqrK1g7iECLwT5I1oCFUG3omY92g+xsAg3+LGErdWJGrpd/kb5PZ16WT
-         dOig==
-X-Forwarded-Encrypted: i=1; AL+hErFQSKpaQgQBbbz4QAVX+EigWmbFKxufJ9IdBOi/kwXIlWNslw594KGIRB1DJoYO+qm4AXk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/n1vZb21yz6gh5cIcsbNhgQQQ3erBDZkERptH4jU6YakgvgtCw
-	9m+fh6p6yN+S7Qmiz5XdCrkRov9hevcB1WIgdtmN0qyHc2/fQlC4xwM2
-X-Gm-Gg: AYBFou11hlkTOAsrJTBCCy4SERHr81KJcUfPJloAMEdffG0o53aBQVTjfBBZw4X7X85
-	qAKecu3Wv9Nxsg/rCQo6gu2F8vD/MPvCCy7t8kaHqchZ+C3aw+yw01JbKQ1IlYkAjiVE+HAHiZS
-	avlohRhWEllwh6IVOWKh4cKQSGD81CT1yyfkz40cc/KliJEgLHs9t74vcXq3v2mwRMzj7fxpjXF
-	MLzM6pv5v3T5z04eYe70xulkQBks5Pk1pUuYXYOzwiNfBghGP6jnjU3oqKiAw4ufVSkivIxsNl1
-	OSaNhwoYlcJBQRmVf9TOJ+nUq53U5/D360lrDCquCuRUrNTxFmw/Z4Rb+ymUlTsO6Z114ZuurWy
-	ptwInmozrLb2T4YWCKIFy81h7/qwat8oCrIrk/Oi2dz8WiUIXTa0BrvTh8gx40M78vqbqIBIt6K
-	bVhSjg/JMdxWTwyVESKE9NXdzTOq0v+I48kiDVPWDczLyzNY9nsvkT6EnLCt6tbUItY6QQoVQ/c
-	cPbU1BeB7hwoXEWrvI5DgtOphwW/WwbRSO8iiwFCCwpl5hDfGKywPYylmiPB7DVzXbOE1LDHSLl
-	YVywCsVoa1klr+k58tnfZR4zT1o=
-X-Received: by 2002:a05:7301:da0f:b0:36c:a42d:9bc9 with SMTP id 5a478bee46e88-37966961442mr5196237eec.25.1794660526823;
-        Sat, 14 Nov 2026 04:48:46 -0800 (PST)
-Received: from pve-server ([49.205.216.49])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-379569b8389sm28530823eec.25.2026.11.14.04.48.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Nov 2026 04:48:46 -0800 (PST)
-From: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-To: Karl Mehltretter <kmehltretter@gmail.com>, Hari Bathini <hbathini@linux.ibm.com>, "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>
-Cc: Karl Mehltretter <kmehltretter@gmail.com>, Naveen N Rao <naveen@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, Abhishek Dubey <adubey@linux.ibm.com>, Dan Carpenter <error27@gmail.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] powerpc32/bpf: return false from bpf_jit_supports_fsession() on ppc32
-In-Reply-To: <20261003184226.76740-1-kmehltretter@gmail.com>
-Date: Sat, 14 Nov 2026 18:06:33 +0530
-Message-ID: <cxs78u9a.ritesh.list@gmail.com>
-References: <20261003184226.76740-1-kmehltretter@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Uq//O83y
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64B7F1F000C4;
+	Sat, 14 Nov 2026 13:04:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794661447;
+	bh=jmFaSxEkxznu2joKRb4CtLIuI9acOjlBj4phgIO6eYw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Uq//O83yckPl8vOXt6Bc5q+ZyVZY4qQBBhRv1J9JLebKgNU5ceZzhurztTOW5DrAd
+	 zfzs4HQmFb9YGJjmDtcxKBj7yu1B1/Rt+kAnsgqrjbYGXQx/6WZu5oZBMA4a47YM6E
+	 vANzyXh4CyCnG/3GxhlzD2mhbxERzTvUGvtsCtyOUEHdyooDZuvmgQoyOeD6JPloVc
+	 jNCzylTQJ6BzxJ80Al9idnTCEUSUVZuZlaHUd3eAe4MQJDf5bdSw+ufDSFi8ELd0hw
+	 vRjMIenjc/xng+l2uPAiI9tepuJgl1TxCOqH8MuZFjr46jl/c7HFGZYfzbP3V0RlnJ
+	 mxXAEvyBWx8nQ==
+Date: Sat, 14 Nov 2026 14:04:01 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Amir Goldstein <amir73il@gmail.com>
+Cc: Jan Kara <jack@suse.cz>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jens Axboe <axboe@kernel.dk>, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, io-uring@vger.kernel.org, Christoph Hellwig <hch@lst.de>, 
+	linux-block@vger.kernel.org, linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org, 
+	target-devel@vger.kernel.org, linux-unionfs@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-nfs@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 00/12] fs: take freeze protection for writes to backing
+ files
+Message-ID: <20261114-tragen-joghurt-wucher-ad0ccbd68f25@brauner>
+References: <20261114-work-fs-frozen_writes-v1-0-f5ae61c898b1@kernel.org>
+ <avhUn1Hb5iT6zBZp@amir-ThinkPad-T480>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -92,35 +61,46 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <avhUn1Hb5iT6zBZp@amir-ThinkPad-T480>
 
-Karl Mehltretter <kmehltretter@gmail.com> writes:
+On Sat, Nov 14, 2026 at 01:31:27PM +0100, Amir Goldstein wrote:
+> On Sat, Nov 14, 2026 at 11:47:07AM +0100, Christian Brauner wrote:
+> > While testing the pseudo filesystem series I noticed that zloop, the
+> > nvme target's file backend and the fileio backend of the scsi target
+> > with fd_async_io=1 call ->write_iter() of their backing files without
+> > taking freeze protection. So their writes go straight through to a
+> > frozen filesystem. ext4 complains loudly:
+> > 
+> >     WARNING: fs/ext4/ext4_jbd2.c:90 at ext4_journal_check_start+0x1f6/0x2d0
+> > 
+> > Loop doesn't get it right for discard and write zeroes. Those end up
+> > calling ->fallocate() of the backing file directly. The fileio backend
+> > does the same for UNMAP. And zloop records its write pointers on flush
+> > with vfs_setxattr() which leaves freeze protection to the caller. So all
+> > of them modify a frozen filesystem just the same. Fix them too.
+> > 
+> > Looking for more of the same turned up a few simple ones. coredump
+> > truncates the core file, overlayfs stores its uuid xattr on mount, nfsd
+> > truncates on OPEN and the BPF xattr kfuncs modify xattrs, all without
+> > freeze protection. Fix those as well. The ones that need more work in
+> > their subsystems I have reported separately.
+> > 
+> > The fileio backend also frees its aio command in the completion handler
+> > while the filesystem may still be using the kiocb. KASAN catches ext4
+> > doing that for direct reads on v7.4-rc1. ext4 gets its own fix (cf. [1])
+> > but fileio should hold a reference across the submission like loop,
+> > zloop and fs/backing-file.c do.
+> > 
+> > [1]: https://lore.kernel.org/r/20261113-work-ext4-dio_read_kiocb-v1-1-172a88be803c@kernel.org
+> > 
+> 
+> Claude says you missed another one.
+> nfs_local_write_iocb_done() does not end_write
+> its ended too early right after submission.
 
-> bpf_jit_supports_fsession() returns bool. Commit 92258b5bf1ec
-> ("powerpc32/bpf: Add fsession support") made it return -EOPNOTSUPP on
-> ppc32 until fsession is validated there. The negative value converts to
-> true, so the verifier does not reject fsession programs on ppc32. Such a
-> program loads, and only attaching it fails because
-> __arch_prepare_bpf_trampoline() returns -EOPNOTSUPP on ppc32.
->
-> Return false instead. The load then fails with "JIT does not support
-> fsession". Tested with a ppc32 kernel on QEMU g3beige.
->
-
-Fair enough.
-
-> Fixes: 92258b5bf1ec ("powerpc32/bpf: Add fsession support")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <error27@gmail.com>
-> Closes: https://lore.kernel.org/r/202608010958.cYfBCQAC-lkp@intel.com/
-> Assisted-by: LLM
-> Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
-> ---
->  arch/powerpc/net/bpf_jit_comp.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-
-Sorry, I guess, this must have falled through the cracks.
-Should mostly get queued for next -rc release.
-
-LGTM. Feel free to add:
-Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-
+I know. There's a bunch more. These are the easy ones.
+I sent individual bug reports to susbystems that need larger changes.
+NFS is one of them, so is ksmbd, ecryptfs, ima and so on. :)
