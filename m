@@ -1,45 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794675108;
-	b=GQW3Qq1t645i2d0PF+PM48L38lism66C/8VOU8J8lJ/i6JrhuCUWxRLb3NMoM3/3CX8j
-	 q/nAnTKEPWJ2TI65Rx46iqCbe1NXkPPQSQ8dtcL6OdWTQ5vHqxUly47Z3Ft/hKHl9hIuN
-	 OFjcMA1xuxGlPTe2ZrXjS+yn1hM4nVZpP/mjK4SdWH2BvyBsBPiNy+72HE0ov54HwbFUv
-	 BSDeVGApt8m7GntWMyysLWZZ9KxmAqgTkuy+vqcw0GGDYIL+KfXIf7ZqMW1ekVzDi8dSg
-	 3ym6aGG+fH7FqSIXkEKRVi7gRbvNXVqkN4qCzXDBEEVPA+mw0Kn1iM3S+wXDnDBMNdg==
+	t=1794675694;
+	b=GL0oRUtCl3edrTpkp/UrQ1LVO0jCdNac8ZpbPEJNThrdxQKlyyyZx1wm+ZkJoYjYdV4z
+	 kGAgFUBGaRux19D95jgS6gYUnugOTQsei5aVrLgkstYc8HIw1PLw6EIMw8/zDJItOYdV4
+	 qcHk67fAc5DhkLolbB6yZ5qBNRKow4ZX4o3x09Cg52lQNOIKIB8j8CziJtlpUzt/6S/mw
+	 weH2x0W1zn4EteqJzcRLyCfxUMW9c0DUzFO5l0ExvMq/E5FCWDX/BAPXp6Nn8bRunDdB1
+	 u2eXfDwjPj5lZfoChK5nf0fAmEcASfsSzSzYe6EYEv0ZlHdqcsIwFMy0PlrHwBHFMyQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794675108;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=LXQuHtzRZ4Jdx8f4vSdPwcHY0jVqbzYOQJ255Mn11LY=;
-	b=qrhb32mupyZ+OE7z6gurR1pTxtOdq8nRu+36Mo8IKvU5rzexggv23ZKzDcyXzaergIyS
-	 c5P5FwCNjVwRBb4Uyj6pvjKjAhaVoabezBpKHTJwL7ws/zcPRFuakCNO69h6N08ae7Eif
-	 IXaTA4w7ZsVvvmOmnd+JhsrfY3hv6k6bdcPOD0DZtuwpugpTb3IwgQUObXWkZhelLi0Th
-	 D0d9PQOV5wGV2uFqxR96tOW6uZDJ6QDX4H9YG85eBQqLJ30TQewQfpjjf1ee6ZCenQiC1
-	 v8uanqMcp6bOK8NXrpldNYBRHpdV6yslIPyKidg41L6W8ywwNCgKNcF13QYBT4mvTZg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794675694;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=Ep+n5rIbIBkWijYN/P8smm9x/IxlgV6O3xbPYJDU0As=;
+	b=OqrT1l+8sYO++ybbzsogFPXTKMiE6XlO8oAF2lwdhmRxL8tYZvHonOdfsWPvPgPA57gW
+	 Kh8o5gmVAmIIiWMrU5FDyIBUWGa9TGxriqNdImQCcI/dJuIiaedo+h+yTT/W0X3aggCF7
+	 YgKaiDwQNmYu5H/dbc8MANaRyMJbtkXkp7Y0RQcAGbeDEZu4evLJMRmrK7M+I6Ulih/UK
+	 P8vjEAuvishIdQiY/bv9Q21pJ4eZl15XvrmmUswDJN9pmbgTI2LD3fZ2shYK+t3IK/Qi0
+	 gPy+qMomDUtQTc5MLqKSavD4vMg4CUAIrVV9Ugdn3kqEjPCfaX0WhnQaesePx2mVscQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=fail reason="signature verification failed" header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=l9kHxO0K;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=CpNp+i54;
+	arc=none smtp.remote-ip=74.125.82.178
+Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D844F606A889;
-	Sat, 14 Nov 2026 16:51:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69AFF606A323
+	for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 17:01:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 69AFF606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=l9kHxO0K
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 005511F000C6;
-	Sat, 14 Nov 2026 16:51:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794675108;
-	bh=LXQuHtzRZ4Jdx8f4vSdPwcHY0jVqbzYOQJ255Mn11LY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=l9kHxO0KQXwnDz0rsqo34SJK0Pu9fp7Iy/4eAJQ5hzVXkZtfvH2tJm6eRobqW57xX
-	 sSNGlLftlsMpsd+FSsMtTrRbh8aI2bIKTlDzncuTjoy4HL1zf6a/tN/6796NWDAeIf
-	 Q8ZKFOKVbZEmS8vUGtQwSHdtR1JSSJ5FtYCU8dzvFMqCwfdvI/gkzhhrPlYwpuCAlx
-	 qKXPxWJooWuy/tnPnMDUsRAcUoyC3BaWGJfDZ9sJWtsh/4izREc/0gxOYE0eqvhypq
-	 1bzu4lUoeNAYJgN6cTTp4a1r31G3kk4E89FNPY4tAlXOTRTuY3BvLycbNcmKeR/1JH
-	 3DiPAbhKpX/WA==
-Content-Type: multipart/mixed; boundary="===============5830880315187501306=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=CpNp+i54
+Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-36e99cf7bb3so2679237eec.0
+        for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 09:01:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794675694; x=1795280494; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Ep+n5rIbIBkWijYN/P8smm9x/IxlgV6O3xbPYJDU0As=;
+        b=CpNp+i54/v6tOHdyDxVQNdYBsB9xSD8IrZMj5lzcvealEleNlvsVZpKDskPYge19oz
+         wyW5fMmtJj4tccpwzgdZjRZJ4rcvlMvb+4XVXNE5hzFxijuoLQwPhKSmq1z1IZsVUajg
+         TmdXLTER3QqDCHqjr947KNxpwILpkOtzaWuCpCb6LDB//A6gNtNIDW495JeEibg+xlLp
+         Cl9Aij89Py2OCKzmRAmKLyPr+rPwYT6XCsrTbene1IBVP4SrVt4Z3FxHxkdyq6vnuEot
+         0uIohD1XJynwnL2Fm6M0jdakxFLhGmL+uhfYGG5RRISmiDXphXHz1JL5PTtUSD46sPex
+         WupQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794675694; x=1795280494;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Ep+n5rIbIBkWijYN/P8smm9x/IxlgV6O3xbPYJDU0As=;
+        b=VhP+5r+by1MmGUNuILLXsUO1r30gywOajytmtCJEpoFjn6drPVzlv6VUaR8UOVueF5
+         lgGkmwAddH6Z+V6SR4Tsq++7Osor4EJdNRv/vmXvBkEQ+1XrfQhqEjiZu/Da+n/lQlyW
+         emQZ2w5cG/pJf5BM+78Ji3PoRO4Ccv9UxPhuO0EFQc9T4oOJijN8W03xVdnkQwXfF0B6
+         Ic7S24JQOaxAgRe5Yy1/9Aq98phWI1zbvMIJ3zqCUxS2Weim3Whc1Eew99+gvUhlLyiy
+         a1aCVPPpmn04wc/1nX7ECJxOD5KX3DLJwBlSqFy9xDRmQsrl9onMneLe11ng78+HcqHZ
+         wwrA==
+X-Gm-Message-State: APuU4Z9ukWSGvP/CDxbK91v216SznYEWU1WF7TVYPmGjY3fziJ2zfyhn
+	zEr+zpQNm4vJ/zolIn4HurT7VYrH4+dX9FbuP489TGud1F6WsrIHEU6O3wxJOdqX
+X-Gm-Gg: AYBFou2N+gKxmcjdHWxPsxBaSTZFX16bT1MDSIQZWeb+Te+inwExDw1YqZ7Dvp5hpEl
+	/6FJtcOtjpa9YcAMghKg4tqLQo4u95tG4Eywq/kKLYo9/Czmeja1QKCDgQUxOTy/6a72dwYkaHF
+	IYIqAxa3CkzGaEf1gDnwHT5lpVbltYhvYKJ7A9rc8IKD9MsLBeiEw7GFD0vKETWvwQNsVSOWs1m
+	TpvY05CYoJ8HfWLrVr4guh3xYJPNa8FMVjz2zUwoYOGg438rBP1q+6VL5aAtCBWhf6cm3phjfo7
+	a9WN3AdWhRO8kxIGVV1DB0eAnTgImRJepmyL3maqA3herVTk0LiI4CysuJ38zh2a5kSMox88aKS
+	1Mo4VfeTCszhUSya5m6Oj33cAC3rLxEmuVge9Q96CJsogk9FLs6EtpGafxZy4zqun2+/VdmiISr
+	MQ0bqgGxPK1tuCiCT5D0cCOsn3ZjEP3X6OD0NcrZk8tb23/z8fKKLePg1wJ4B4LgiEbgr8BRJRI
+	rTQDtnLNtQerWgUgL7C2rIUmw39nwBZYfGG/yp/y9hGqIz9BOVzHphQN/ZJtI+4O8QntAykVniz
+	Er8TRcOukVRytpnoDtsv6eVS30XQvffg5J3Jw7hkvQI=
+X-Received: by 2002:a05:693c:808f:b0:351:29c8:643 with SMTP id 5a478bee46e88-379675fc97fmr5683571eec.18.1794675693304;
+        Sat, 14 Nov 2026 09:01:33 -0800 (PST)
+Received: from LAPTOP-G6J9COQB.lan ([182.253.124.115])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-379563e6b6dsm31586761eec.21.2026.11.14.09.01.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Nov 2026 09:01:32 -0800 (PST)
+From: Ahmad Wicaksono <supersonix03@gmail.com>
+To: bpf@vger.kernel.org
+Cc: rhkrqnwk98@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	john.fastabend@gmail.com,
+	corbet@lwn.net,
+	linux-doc@vger.kernel.org,
+	Ahmad Wicaksono <supersonix03@gmail.com>
+Subject: [PATCH bpf-next 0/2] Documentation/bpf: Fix stale references in map docs
+Date: Sun, 15 Nov 2026 00:01:15 +0700
+Message-ID: <20261114170117.196552-1-supersonix03@gmail.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,84 +104,40 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <caabf5117f03756c1c1b478d2a802c2a188996dde73545bbc552b6093484d557@mail.kernel.org>
-In-Reply-To: <20261114161211.376859-2-jarkko@kernel.org>
-References: <20261114161211.376859-2-jarkko@kernel.org>
-Subject: Re: [PATCH v11 1/6] s390/cert_store: Pin the user session keyring
-From: bot+bpf-ci@kernel.org
-To: jarkko@kernel.org,dhowells@redhat.com
-Cc: jarkko@kernel.org,bpf@vger.kernel.org,dm-devel@lists.linux.dev,fsverity@lists.linux.dev,keyrings@vger.kernel.org,linux-doc@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-security-module@vger.kernel.org,agk@redhat.com,agordeev@linux.ibm.com,ast@kernel.org,alexs@kernel.org,anastasia.eskova@ibm.com,akpm@linux-foundation.org,andrii@kernel.org,bmarzins@redhat.com,borntraeger@linux.ibm.com,daniel@iogearbox.net,dzm91@hust.edu.cn,eddyz87@gmail.com,emil@etsalapatis.com,ebiggers@kernel.org,ignat@linux.win,hca@linux.ibm.com,ihor.solodrai@linux.dev,James.Bottomley@HansenPartnership.com,jmorris@namei.org,jolsa@kernel.org,corbet@lwn.net,memxor@gmail.com,torvalds@linux-foundation.org,martin.lau@linux.dev,snitzer@kernel.org,mpatocka@redhat.com,zohar@linux.ibm.com,paul@paul-moore.com,oberpar@linux.ibm.com,rdunlap@infradead.org,roberto.sassu@huawei.com,serge@hallyn.com,skhan@linuxfoundation.org,song@kernel.org,svens@linux.ibm.com,tytso@mit.edu,gor@linux.ibm.com,
- si.yanteng@linux.dev,yonghong.song@linux.dev,stable@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat, 14 Nov 2026 16:51:43 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============5830880315187501306==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Two documentation fixes for the BPF map pages.
 
-> s390/cert_store: Pin the user session keyring
+Patch 1 records that since commit be39165224d0 ("bpf, sockmap: Disallow
+update and delete from tc, xdp, socket_filter and flow_dissector"), only
+BPF_TRACE_ITER tracing, sock_ops (delete only), sk_reuseport and
+sk_lookup programs may mutate a sockmap or sockhash; anything else is
+rejected with "cannot update sockmap in this context". The kernel-side
+sections of map_sockmap.rst did not mention this. It also drops the
+reference to progs/test_sockmap_update.c, removed by
+commit 5de7a6eaed89 ("selftests/bpf: Drop
+tc/xdp/flow_dissector/socket_filter sockmap mutation tests").
 
-TL;DR: Commit message only: the stable tag should be v6.6+, not v6.1+, and the
-changelog's keyring-lifetime reason looks inaccurate. It also omits the new
-ERR_PTR handling. The code change looks worthwhile.
+Patch 2 fixes two moved selftests paths: test_lpm_map.c, now
+map_tests/lpm_trie_map_basic_ops.c, and test_xdp_noinline.c, now under
+progs/.
 
->     s390/cert_store: Pin the user session keyring
->
->     The user session keyring stays alive only because the session keyring is
->     pinned by current_cred().
->
->     Pin the reference at:
->
->     1. find_cs_keyring()
->     2. cleanup_cs_keys()
->     3. create_cs_keyring()
->
->     Cc: David Howells <dhowells@redhat.com>
->     Cc: stable@vger.kernel.org # v6.1+
->     Fixes: 8cf57d7217c3 ("s390: add support for user-defined certificates")
->     Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+Documentation only; no functional change.
 
-The stable tag says "# v6.1+", but the commit named in Fixes: is not in
-v6.1.  8cf57d7217c3 is contained in v6.6 and not in v6.5, and
-arch/s390/kernel/cert_store.c does not exist in v6.1 through v6.5, so there
-is nothing to backport there.
+Ahmad Wicaksono (2):
+  Documentation/bpf: Update sockmap docs for mutation restrictions
+  Documentation/bpf: Fix stale selftests file references
 
-The other patches in this series that fix the same commit use "# v6.6+".
-Should this be:
+ Documentation/bpf/btf.rst          |  2 +-
+ Documentation/bpf/map_lpm_trie.rst |  6 +++---
+ Documentation/bpf/map_sockmap.rst  | 18 ++++++++++++++++--
+ 3 files changed, 20 insertions(+), 6 deletions(-)
 
-  Cc: stable@vger.kernel.org # v6.6+
+checkpatch.pl --strict is clean. make SPHINXDIRS=bpf htmldocs gives
+identical warnings before and after. Documentation only, so nothing to
+run-test.
 
-The changelog says the user session keyring stays alive only because the
-session keyring is pinned by current_cred().  Is that accurate?
+base-commit: ca4181cacb0c6a5632018f1c94f29d9dbc0e9270
+-- 
+2.43.0
 
-look_up_user_keyrings() links the user session keyring into the per-user_ns
-register:
-
-    ret = key_link(reg_keyring, session_keyring);
-
-and get_user_register() notes that "the keyring is pinned by the user_ns".
-That link is what normally keeps it alive.
-
-cred->session_keyring is usually a different keyring, either a "_ses"
-keyring from join_session_keyring() or pam_keyinit, or NULL.  It is the user
-session keyring only when install_session_keyring(user_session) happened to
-run for that process.
-
-The change itself looks worthwhile, since the owner has KEY_USR_ALL on that
-keyring and can revoke or invalidate it, after which keyring_gc() can drop
-the register link while cert_store still uses the pointer.  Could the
-changelog give that reason instead?
-
-The changelog also does not mention that the three callers now handle an
-ERR_PTR return from get_user_session_keyring().  Before this patch that
-ERR_PTR was passed straight into keyring_search(), key_unlink() and
-keyring_alloc(), which dereference keyring->type.  Could that be described
-as well?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43615900108
---===============5830880315187501306==--
