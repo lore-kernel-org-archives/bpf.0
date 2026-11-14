@@ -1,77 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794673500;
-	b=PtrELGZFOXQJrHTb88hC3F29s6lpoum13kiBTTE/P69Ud6+6yp6WYZ6apxp9FMda3H2d
-	 JNS+3MP9wFJjetp73EcxTu7id5wqNE93s0YrSWOocpyK1dKF51gtcRKMd1/+c54Ur2P5O
-	 TyFCFnO4oIYJd35ZruO1sa97OsT2XNZ2xKu5Xqj8A1AfZ1xf+UBd5l9q3aqFk8zuvFbRl
-	 UIgWT0jQic1xauSOFsWw92bR5SKvDW3TSVssKu6nCQeN/mUHXtgXOIKxHVF1M3jHlySwx
-	 dZlBa5mEtFqRKVrSLEWDfogJe/ShVLUdt86u4K/brvXCWwNxfhYABQfdsbkjaUcZtVQ==
+	t=1794673526;
+	b=M4+05tnxN60mc6qaUrzEztIOh8ccBOLM+bBa7zldJ6wCt0IFrNszB+Z31S0aVyo/rYkQ
+	 B4/ZYtlsTDw4oi+dl6GcXNz72hRuG3mCzYyYKKzrU1RbrouQYu7qQM0mbxNAcUj2ojQdr
+	 wqZvQbWEOPd4usYv08YjInPkMx9LRav0JrP0X+kJA4askV9k1U5mhbSS2lW4UUD/gNTLa
+	 wDpexeOMM4V6LuTxihmB0otYBPtmp7rz/Gz9uLpKY0XDxiEcNnaAnJiNvn8/olOYG2rQD
+	 KBGuVXOVz6ARoKysc8k2tFBN90hrzOpEO8xKEqGV3FB2eyngg8mvdjUdhTzNNyS3SHg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794673500;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=jz87ZYAGYqcJoQ2kmgOqlDTLnLIOTXTc1pDphy7g1RE=;
-	b=Pxd4Ue6B+fpEeqktT3tqbnMJ7YhPwtxJA20LA9D2MeiOP8oXtpTF/1lJplVmlw5jmwqR
-	 UOGJx2E3U0ac3MbvQsGMpvRwXDlSuat496dPaoi1LCnYyCY0wDP2Nin0a7fp7Glc9PFwe
-	 d6ekZDf0hzYTbUeh0K0mJPJ0yo7JVZorsEoClXnjXyiT2HhlxD8pSt43Qy7AwWfTYtjQk
-	 Ldb1v5abeW8mFuG8xfZIUrlXJ49LY4TE1XIivf0vY9dpVUO7jYhHY9x3GXtVAJMPzhoyv
-	 RvqXGvkZdL+RJebWf1/KIxrUC15iYTX9saxOkBhSmUPumeXUziUHsmpgAgbVxMUcBKg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794673526;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=SqQMxeEG/rV3oOFhBA4WNyw3pi2YPDOttfW60TkJK8g=;
+	b=SBERa0YtmK3oxk59hW/xab7xIEPM2ELHbZK1O6M7LF9loC7hwl3BuMWRRurebAEVa8vo
+	 6CXBhTwiBqBqpFBwEftW+WFkLNiUqhUUVrmGd8V5U/lVWrTLf4w4lbo3llyKbXj5+d97L
+	 FC5OnrPVkJ9dDLeI9DNFH9Yb+o08fhx4X7NHZb3YbduvE9jbMOEYCt3HerzTn64YZgxsr
+	 cloc9ssGNcr0iWUr9wtlMNbPhPhK44GJ00xK8XazuuNfVowePZjNNAnrfakJ1k4HyXsWV
+	 NrRSY+rrHNIzEoiA/U5OnnS+JrDSkJlsHwY7bd0AOeJT3SwDQg/Mmgy2lWcJLy7af0A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IcS8h9k0;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IKzVTdBA;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 278BD606A323;
-	Sat, 14 Nov 2026 16:24:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47362606A323;
+	Sat, 14 Nov 2026 16:25:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IcS8h9k0
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81E621F000C4;
-	Sat, 14 Nov 2026 16:24:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IKzVTdBA
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A2FE1F000C8;
+	Sat, 14 Nov 2026 16:25:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794673499;
-	bh=jz87ZYAGYqcJoQ2kmgOqlDTLnLIOTXTc1pDphy7g1RE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=IcS8h9k0FWz9/wTqT70Mz4pNudlz9lkzQ6zC1Y+N34DwysCH3QUfXZ6yKhUf5sJkW
-	 L5h5NG1HmwxIgl71NruyEWRsRQZYsJY+zum3Z0lrM8pwjnQVS3ZvBYwjZDZX+dqSH3
-	 msgnLxRYbaEoCtEOrZneKnHmDqTCpZ2TOVJ4dC8haUXi6oYS37tJ2EEG01Cl93BsSh
-	 vUhTU8o242TJicB7zgMrhzbCyDj8yI1OuHLdZA0rvCsguf84GF/JnaTdqhs+E/XyFo
-	 W6hp+ZivzxMBd9opbRsvGaECQQMvLgwJzlfiK2DEaoEMlkEAXJauxN625rgVeakEGw
-	 BODbGLc8j73OA==
-Message-ID: <sashiko-outbox-214746@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v11 3/6] s390/cert_store: Skip keys that disappeared
- during invalidation
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jarkko Sakkinen" <jarkko@kernel.org>, "David Howells" <dhowells@redhat.com>
-Cc: bpf@vger.kernel.org, dm-devel@lists.linux.dev, fsverity@lists.linux.dev, keyrings@vger.kernel.org, linux-security-module@vger.kernel.org, "Alasdair
- Kergon" <agk@redhat.com>, "Alexander Gordeev" <agordeev@linux.ibm.com>, "Alexei
- Starovoitov" <ast@kernel.org>, "Alex Shi" <alexs@kernel.org>, "Anastasia
- Eskova" <anastasia.eskova@ibm.com>, "Andrew Morton" <akpm@linux-foundation.org>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Benjamin Marzinski" <bmarzins@redhat.com>, "Christian
- Borntraeger" <borntraeger@linux.ibm.com>, "Daniel Borkmann" <daniel@iogearbox.net>, "Dongliang
- Mu" <dzm91@hust.edu.cn>, "Eduard Zingerman" <eddyz87@gmail.com>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Eric Biggers" <ebiggers@kernel.org>, "Ignat
- Korchagin" <ignat@linux.win>, "Heiko Carstens" <hca@linux.ibm.com>, "Ihor
- Solodrai" <ihor.solodrai@linux.dev>, "James Bottomley" <James.Bottomley@HansenPartnership.com>, "James
- Morris" <jmorris@namei.org>, "Jiri Olsa" <jolsa@kernel.org>, "Jonathan
- Corbet" <corbet@lwn.net>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Linus
- Torvalds" <torvalds@linux-foundation.org>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Mike
- Snitzer" <snitzer@kernel.org>, "Mikulas Patocka" <mpatocka@redhat.com>, "Mimi
- Zohar" <zohar@linux.ibm.com>, "Paul Moore" <paul@paul-moore.com>, "Peter
- Oberparleiter" <oberpar@linux.ibm.com>, "Randy Dunlap" <rdunlap@infradead.org>, "Roberto
- Sassu" <roberto.sassu@huawei.com>, "Serge E. Hallyn" <serge@hallyn.com>, "Shuah
- Khan" <skhan@linuxfoundation.org>, "Song Liu" <song@kernel.org>, "Sven
- Schnelle" <svens@linux.ibm.com>, =?utf-8?b?VGhlb2RvcmUgWS4gVHMnbw==?= <tytso@mit.edu>, "Vasily
- Gorbik" <gor@linux.ibm.com>, "Yanteng Si" <si.yanteng@linux.dev>, "Yonghong
- Song" <yonghong.song@linux.dev>
-In-Reply-To: <20261114161211.376859-4-jarkko@kernel.org>
-References: <20261114161211.376859-1-jarkko@kernel.org>
- <20261114161211.376859-4-jarkko@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 14 Nov 2026 16:24:57 +0000
+	s=k20260515; t=1794673525;
+	bh=SqQMxeEG/rV3oOFhBA4WNyw3pi2YPDOttfW60TkJK8g=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=IKzVTdBA5GhsDqOGj5/JgPLtTAeeQAoS1iNi5qTYlFaymdTUg4EoBmT8bk5L/7ly8
+	 PpTU7PlC94F5dtD6fR9DuYigP+UtWRkspm+m4dpgz41gs0gd0ei61FRmed8SuaNmAx
+	 +o7HpgmRX2gEmGNAxA9q5UOz7Kx9jwch1837JE3i8r7kc7jRQwu4wq0gADyS8dPi3K
+	 Juqt6AQIaqx5wkDTJke6yvHUv1xYNE2kjJSMc4mRV9OQTYlq5fClD7nzEXJN2GBf3z
+	 iBxbFO2WxB5wCRfIwBbk/P4xqI1y025wvR75KrdKp43Rhw0QEBE7Nl5pwlws6QFrkm
+	 HmCHVqZWc1XCQ==
+Message-ID: <31d0e915-8a6c-475f-9208-5622cf0a81d7@kernel.org>
+Date: Sat, 14 Nov 2026 16:25:22 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -80,73 +50,175 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH dwarves v2] btf_encoder: Keep the source prototype of
+ kfuncs
+To: Yonghong Song <yonghong.song@linux.dev>,
+ Alan Maguire <alan.maguire@oracle.com>,
+ Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, dwarves@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ bpf@vger.kernel.org, kernel-team@fb.com, Breno Leitao <leitao@debian.org>
+References: <20261112161129.1903805-1-yonghong.song@linux.dev>
+Content-Language: en-GB
+From: Alan Maguire <almagui@kernel.org>
+In-Reply-To: <20261112161129.1903805-1-yonghong.song@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issues to consider:
-- [High] s390/cert_store: error pointer dereference in
-  invalidate_keyring_keys()
-- [Medium] s390/cert_store: stale positive return value in
-  invalidate_keyring_keys()
---
+On 11/12/26 4:11 PM, Yonghong Song wrote:
+> The location based checks can drop kfuncs from BTF even though their ABI
+> did not change. With the arm64 KCSAN setup in the report, resolve_btfids
+> fails with:
+> 
+>   WARN: resolve_btfids: no BTF func for kfunc bpf_tcp_ops_set_rcvlowat in bpf_tcp_ops_set_rcvlowat_kfunc_set
+>   WARN: resolve_btfids: unresolved symbol bpf_tcp_ops_set_rcvlowat
+> 
+> The location list of 'rcvlowat' starts after the function entry, in a
+> callee-saved register, so the function is marked unexpected_reg and
+> skipped. scx_bpf_tid_to_task() hits the same skip through a
+> different DWARF pattern.
+> 
+> Kfuncs are defined with __bpf_kfunc ("__used __retain __noclone
+> noinline"), so the compiler keeps the calling convention of the C
+> prototype. Odd parameter locations of a kfunc are debug info artifacts,
+> not ABI changes.
+> 
+> For kfuncs, do not set the flags when saving the state,
+> keep all source parameters, and skip the location based checks, also in
+> btf_encoder__add_saved_funcs() where saved_functions_combine() can merge
+> the flags back in. The inconsistent prototype and ambiguous address
+> checks still apply.
+> 
+> Kfuncs were only collected with decl_tag_kfuncs, which the kernel no
+> longer passes since commit 692393104909 ("resolve_btfids: Emit bpf_kfunc
+> and bpf_fastcall decl tags"). Collect them whenever BTF is encoded; the
+> decl tags are still only emitted with decl_tag_kfuncs.
+> 
+> With this change, bpf_tcp_ops_set_rcvlowat() and scx_bpf_tid_to_task()
+> are encoded again, and no other function in vmlinux BTF changes.
+> 
+> Reported-by: Breno Leitao <leitao@debian.org>
+> Closes: https://lore.kernel.org/all/au27Y9m78_3EH2v1@gmail.com/
+> Tested-by: Breno Leitao <leitao@debian.org>
+> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 
-commit ec7f40e3c2123cec6e6be32d5977d8c112a6da55
-Author: Jarkko Sakkinen <jarkko@kernel.org>
+Applied, thanks all!
 
-s390/cert_store: Skip keys that disappeared during invalidation
+Alan
 
-This commit adds a NULL check after key_lookup() in
-invalidate_keyring_keys() to skip keys that were unlinked before lookup.
-
-> diff --git a/arch/s390/kernel/cert_store.c b/arch/s390/kernel/cert_store.c
-> index 0a10b31d68af3..bc682216fa7fd 100644
-> --- a/arch/s390/kernel/cert_store.c
-> +++ b/arch/s390/kernel/cert_store.c
-> @@ -333,6 +333,9 @@ static int invalidate_keyring_keys(struct key *keyrin=
-g)
-> =20
->  	for (key_index =3D 0; key_index < num_keys; key_index++) {
->  		current_key =3D key_lookup(key_array[key_index]);
-> +		if (!current_key)
-> +			continue;
+> ---
+>  btf_encoder.c | 71 +++++++++++++++++++++++++++++++--------------------
+>  1 file changed, 44 insertions(+), 27 deletions(-)
+> 
+> diff --git a/btf_encoder.c b/btf_encoder.c
+> index 05ffe82..8537628 100644
+> --- a/btf_encoder.c
+> +++ b/btf_encoder.c
+> @@ -1405,32 +1405,42 @@ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct functi
+>  			break;
+>  		}
+>  	}
+> -	state->inconsistent_proto = ftype->inconsistent_proto;
+> -	state->unexpected_reg = ftype->unexpected_reg;
+> -	state->optimized_parms = ftype->optimized_parms;
+> -	state->uncertain_parm_loc = ftype->uncertain_parm_loc;
+> -	state->reordered_parm = ftype->reordered_parm;
+> -	state->signature_changed = ftype->signature_changed;
+> -	if (state->addr && func) {
+> -		for (int i = 0; i < func->sym_cnt; i++) {
+> -			if (state->addr != func->syms[i].addr)
+> -				continue;
+> -			if (str_contains_optimized_fn_suffix(func->syms[i].name)) {
+> -				state->optimized_symbol = 1;
+> -				break;
+> +	/*
+> +	 * A kfunc keeps the ABI of its C prototype, so avoid setting
+> +	 * state flags, otherwise the kfunc may be treated as
+> +	 * optimized and skipped, or lose parameters in BTF.  For other
+> +	 * cases, ensure the optimizations/uncertainties are reflected
+> +	 * in state flags.
+> +	 */
+> +	if (loc || !is_kfunc_state(state)) {
+> +		state->inconsistent_proto = ftype->inconsistent_proto;
+> +		state->unexpected_reg = ftype->unexpected_reg;
+> +		state->optimized_parms = ftype->optimized_parms;
+> +		state->uncertain_parm_loc = ftype->uncertain_parm_loc;
+> +		state->reordered_parm = ftype->reordered_parm;
+> +		state->signature_changed = ftype->signature_changed;
+> +		if (state->addr && func) {
+> +			for (int i = 0; i < func->sym_cnt; i++) {
+> +				if (state->addr != func->syms[i].addr)
+> +					continue;
+> +				if (str_contains_optimized_fn_suffix(func->syms[i].name)) {
+> +					state->optimized_symbol = 1;
+> +					break;
+> +				}
+>  			}
+>  		}
+>  	}
 > +
->  		pr_dbf_msg("Invalidating key %08x", current_key->serial);
-> =20
->  		key_invalidate(current_key);
+>  	ftype__for_each_parameter(ftype, param) {
+>  		const char *name;
+>  		char *final_name = NULL;
+>  
+>  		/* No location info/optimized + reordered means optimized out. */
+> -		if (!loc && ftype->reordered_parm && (!param->has_loc || param->optimized)) {
+> +		if (!loc && state->reordered_parm && (!param->has_loc || param->optimized)) {
+>  			state->nr_parms--;
+>  			continue;
+>  		}
+> -		if (!loc && encoder->true_signature && ftype->signature_changed &&
+> +		if (!loc && encoder->true_signature && state->signature_changed &&
+>  		    param->optimized) {
+>  			state->nr_parms--;
+>  			continue;
+> @@ -1797,17 +1807,20 @@ static int btf_encoder__add_saved_funcs(struct btf_encoder *encoder, bool skip_e
+>  		 * signature; true_signature can rewrite those signatures.
+>  		 * Also exclude functions with unexpected register use, multiple
+>  		 * inconsistent prototypes or uncertain parameter locations.
+> +		 * The location based checks do not apply to kfuncs.
+>  		 */
+> -		if (state->unexpected_reg)
+> -			skip_reason = "unexpected register usage for parameter\n";
+> +		if (!is_kfunc_state(state)) {
+> +			if (state->unexpected_reg)
+> +				skip_reason = "unexpected register usage for parameter\n";
+> +			if (state->uncertain_parm_loc)
+> +				skip_reason = "uncertain parameter location\n";
+> +			if (state->reordered_parm)
+> +				skip_reason = "reordered parameters\n";
+> +			if (btf_encoder_func_state__skip_optimized_parms(encoder, canonical_state))
+> +				skip_reason = "optimized parameters\n";
+> +		}
+>  		if (skip_encoding_inconsistent_proto && state->inconsistent_proto)
+>  			skip_reason = "inconsistet prototype\n";
+> -		if (state->uncertain_parm_loc)
+> -			skip_reason = "uncertain parameter location\n";
+> -		if (state->reordered_parm)
+> -			skip_reason = "reordered parameters\n";
+> -		if (btf_encoder_func_state__skip_optimized_parms(encoder, canonical_state))
+> -			skip_reason = "optimized parameters\n";
+>  		if (state->elf->ambiguous_addr)
+>  			skip_reason = "ambiguous address\n";
+>  
+> @@ -3056,10 +3069,14 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, const char *detached_filenam
+>  		if (!found_percpu && encoder->verbose)
+>  			printf("%s: '%s' doesn't have '%s' section\n", __func__, cu->filename, PERCPU_SECTION);
+>  
+> -		if (encoder->tag_kfuncs) {
+> -			if (btf_encoder__collect_kfuncs(encoder))
+> -				goto out_delete;
+> -		}
+> +		/*
+> +		 * Mark kfuncs before any function state is saved, so
+> +		 * btf_encoder__save_func() keeps their source prototypes.
+> +		 * Needed even without decl_tag_kfuncs, which only controls
+> +		 * the decl tags.
+> +		 */
+> +		if (btf_encoder__collect_kfuncs(encoder))
+> +			goto out_delete;
+>  
+>  		if (encoder->verbose)
+>  			printf("File %s:\n", cu->filename);
 
-[Severity: High]
-Should this check IS_ERR(current_key) instead of !current_key?  When a key
-is not found or its usage count has dropped to zero, key_lookup() returns
-ERR_PTR(-ENOKEY) rather than NULL, so current_key->serial and
-key_invalidate(current_key) will still dereference an error pointer.
-
-[Severity: Medium]
-Can skipping keys via continue cause invalidate_keyring_keys() to return a
-positive byte count on success?  Before the loop, rc is set to
-keyring_payload_len by key_type_keyring.read() and is only updated by
-key_unlink():
-
-arch/s390/kernel/cert_store.c:invalidate_keyring_keys() {
-	...
-	rc =3D key_type_keyring.read(keyring, (char *)key_array, keyring_payload_l=
-en);
-	if (rc !=3D keyring_payload_len) {
-		pr_dbf_msg("Couldn't read keyring payload");
-		goto out;
-	}
-
-	for (key_index =3D 0; key_index < num_keys; key_index++) {
-		...
-		rc =3D key_unlink(keyring, current_key);
-	...
-out:
-	kfree(key_array);
-	return rc;
-}
-
-If all keys in key_array have disappeared and are skipped, rc remains
-keyring_payload_len, causing cleanup_cs_keys() to treat the call as a
-failure and unregister key_type_cert_store_key.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261114161211.3768=
-59-1-jarkko@kernel.org?part=3D3
