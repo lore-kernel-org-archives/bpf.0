@@ -1,45 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794664506;
-	b=dFULKUlpSf6cJv8vlLSA8J7ZIzQqdqmTQM89l2Dxy1Hdqn2C/+y0hyVCTCExk9u3ifMy
-	 SRcOGcq1Sjb24iQYd/xjD3KjPHOmmbH/SeZ5CQ4cg3KcgajoYKbFwIQjLIiprAtMsVq8P
-	 5YQB+5Lw5+zF0o+RO15yPOCdagSBHmfewN5BZ7UKQVtpkGVNknEUnufq0sT+FH2ew7yWn
-	 xUswKFVmpu0VGjR9fJR5s+KLT161L8WOy9h7xnp/go9ONgoWpYF4KoZUOO9RONxNtCj+m
-	 TFExwtRuNAcQhKPB+JgFCQnMMfhk9qz9yMpiQVKc8QZt7f6JpshEULhsu2tNE9ZZ1Ew==
+	t=1794665211;
+	b=ceH67phqn+P4sPOOKaC4mKIZZV1MjQ0gXrozP4FjmsUuvOj+BZVlcvvohtlLte3+JjQI
+	 lAKjy3mjg93OGRfyi7tM4emLDME18HdefnPkicslzzncPk1HrmSGoiyeQUnhGqDkT3zxP
+	 T0vHW7QExRhK94B5zkQa6wgQwe2fr1x5KmDJamN2+KQkisEhYgMz+MiQHMO6zWOfVQVEu
+	 /g4rjIsxHJM+G05siU38qWH4/V0+OtohPNnheyhmFhQ6H2ZsnSAYKgRonGWOM5UG3LoE+
+	 733cRqLzV1nL7vmaxUap7ckHzTieE2FPa/daql/UgPGf55oPtDzzJQIN74Q/6tFuQtA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794664506;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=gZCOg3PYW5/XzYktPPO7fZbRJ9jC/nh9/3WC5LHdP9k=;
-	b=hXY0DqmenbfI+3T5ge4+EoX9i3cpPrl44Pw2sJDk/0UpqdvK6T1+RR8S39nxUDw94uxp
-	 FH4aL0rBYG6dBDMrQwEu4o2SLO7PnNWrmbIgRHaCZ0JPM2DoeBzR1r+3dkLJg967QJMJh
-	 IIXiLxd84C+ycGsOHCX/KP/IlY8wMI+QGF2Xk3w/IEBzq2GEqFvaVxrFMPCx2KLPXKUtg
-	 2ImZkYNaybwMrMH8ujZhShTb6OQtP2mtWbqXWUzCSdKr8lJxiIgY+GacAT7gokXY+yCzL
-	 PpkvAkEWlurTRdRtHvD903r3rOq8kW+5Ha0oaySWWfG+dK08Fo98Oc+aZA4QJjuRb1Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794665211;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=+b+IR0Sc9aIyrc9NQuKmEzFBz/W8nHq32ixnl1kXGFQ=;
+	b=KaygcEP3CPpuVRiWJnYMZqqKAiSz88Rx0DpM1+1rV1igOPPwKrSDj4ubdZuLKw9P19J7
+	 7hSmJfRnHMRpMH7fTJA/RIAkWBofLZCOt2SVzjyuTLoymeiBriqAAucsuFJFdWQbrga7s
+	 kJ/3tYK4FGKw4xeJyZSP3NwoBM+bSOvwpRuiKa811UFdF7xPc9Ln+di8xtpZ+k6fXVuCx
+	 6VAHOUw+NQQwBnB0DZiGqsQYgQGwwRep4DfK9xd382hI12FOqkGqJZOEfLVZ/kQtjECMS
+	 CY6ci8WZ4qgb1v0u96Y2wbptUNUTZc7OaWLv9nhvfDzXDGiOYRV6Lbu+NVBH2For8tw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lC1rRmz7;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NU1vzrFU;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87187606A338;
-	Sat, 14 Nov 2026 13:55:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D0A8606A32D
+	for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 14:06:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lC1rRmz7
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E73891F000C5;
-	Sat, 14 Nov 2026 13:55:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NU1vzrFU
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D753D1F000C4;
+	Sat, 14 Nov 2026 14:06:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794664506;
-	bh=gZCOg3PYW5/XzYktPPO7fZbRJ9jC/nh9/3WC5LHdP9k=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=lC1rRmz7ahj/srEYA2ijCYwgAqxvBpBEiZzJTz1BT/wrTEWhRCAJRjIQUg90ualPp
-	 8fNiGIog6yGBq7jcPWwPg3KTZ4hhP7wzOgQinag8fVT+8JrN/YD10tUBIHBk4t50YO
-	 lVbRqj+kObH/VFAULApyIEa7KJo13ikHhn4sjSYyAVLzN15VB21GTINJSJZ5zSjoJ2
-	 SqbEpuE67Y8c73FjyTC9QAtGI69lnMt18W/xx4/7c8YFqB+lo9IQTij1vjYC2G1yJC
-	 gbXcz8wGq7FFvOpMP/hQpyy359bbb1860T3yz8/mr3WEBUyRt+SVvwAJEu6hB8hDoE
-	 Jru9mkTF+Jtaw==
-Content-Type: multipart/mixed; boundary="===============0802335019258284520=="
+	s=k20260515; t=1794665211;
+	bh=+b+IR0Sc9aIyrc9NQuKmEzFBz/W8nHq32ixnl1kXGFQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=NU1vzrFUmAEvV0uFsn1ALXTURzMjen7VwezBBtkWrRTzVpDLHa7u5QQbKr9BRdXED
+	 o0wq+eY6S1NlTQE5DMqMMAvf5+mYZKGWupyw9awe16yJT1pKBhJhTSaCQTvYUDNTzs
+	 IZzV2ceW72gZVO5O83O0VoRU4HI7TCjj6q0aVe5CtkqIiFt6lIK4MlHxnzX7nyR6LP
+	 gpdVxAFKmhBpA2dTlrS6kj0kvhl/oP/ZHh7qafkqxZ+pkGvo+oBClIFDFv3YaEBkOA
+	 2ql6RTgWP4FklHu/XZW+aJRQBojGOIA1K5e0YcR4M80fbc1E6qqCVOAPgPYfXpUrVg
+	 1/QWroJetsq7g==
+Message-ID: <sashiko-outbox-214603@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next 1/6] bonding: check XDP support before
+ enslaving changes state
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Hangbin Liu" <hangbin.liu@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261113-bond_enslave_restruct-v1-1-364c549e78db@kylinos.cn>
+References: <20261113-bond_enslave_restruct-v1-0-364c549e78db@kylinos.cn>
+ <20261113-bond_enslave_restruct-v1-1-364c549e78db@kylinos.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 14 Nov 2026 14:06:50 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -48,98 +60,42 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Message-Id: <91e245da9f3df6d6e61808e72a4ad0213a9a6b838f594d0be74dd70ab228422f@mail.kernel.org>
-In-Reply-To: <20261114-work-loop-pseudo-v2-33-98639a2286fb@kernel.org>
-References: <20261114-work-loop-pseudo-v2-33-98639a2286fb@kernel.org>
-Subject: Re: [PATCH RFC v2 33/42] fs: add file_check_backing()
-From: bot+bpf-ci@kernel.org
-To: brauner@kernel.org,linux-fsdevel@vger.kernel.org
-Cc: jannh@google.com,mason@kernel.org,josef@toxicpanda.com,hch@lst.de,linux-block@vger.kernel.org,linux-kernel@vger.kernel.org,linux-nvme@lists.infradead.org,viro@zeniv.linux.org.uk,jack@suse.cz,linux-scsi@vger.kernel.org,target-devel@vger.kernel.org,driver-core@lists.linux.dev,linux-mm@kvack.org,bpf@vger.kernel.org,linux-security-module@vger.kernel.org,selinux@vger.kernel.org,apparmor@lists.ubuntu.com,linux-nfs@vger.kernel.org,netdev@vger.kernel.org,fuse-devel@lists.linux.dev,linux-efi@vger.kernel.org,xen-devel@lists.xenproject.org,ocfs2-devel@lists.linux.dev,linux-s390@vger.kernel.org,linuxppc-dev@lists.ozlabs.org,linux-usb@vger.kernel.org,amir73il@gmail.com,linux-erofs@lists.ozlabs.org,linux-kselftest@vger.kernel.org,brauner@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat, 14 Nov 2026 13:55:02 +0000 (UTC)
 
---===============0802335019258284520==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Low] bonding: missing Fixes trailer for bond_enslave() XDP check fix
+--
 
-> fs: add file_check_backing()
+commit 13721b74b0f4f7f2e2971839a9fe53fd558da85a
+Author: Hangbin Liu <hangbin.liu@linux.dev>
 
-TL;DR: file_check_backing() may call d_real_inode() on O_PATH overlayfs files,
-which could hit WARN in ovl_d_real() (panic with panic_on_warn) and let the
-pseudo-fs check pass wrongly; reachable via fuse backing open, needs
-CAP_SYS_ADMIN.
+> bonding: check XDP support before enslaving changes state
+>
+> The XDP capability checks (ndo_bpf/ndo_xdp_xmit) and the slave XDP
+> program count check in bond_enslave() run after the slave has already
+> been opened, attached and made visible to the datapath. In particular
+> the slave can become bond->curr_active_slave, or be published via
+> bond->slave_cnt, before we verify that slave_dev->netdev_ops->ndo_xdp_xmit
+> exists, so bond_xdp_xmit() may call a NULL ndo_xdp_xmit.
+>
+> Move both checks to the validation section at the top of bond_enslave(),
+> before the first state change. On failure nothing has been mutated yet,
+> so the function can return directly. The dev_xdp_propagate() setup is
+> left in place for now and still uses the same error path.
+>
+> Error messages and errno values are unchanged (-EOPNOTSUPP with the
+> same netlink extack strings), and the success path is unaffected
+> beyond running the read-only checks earlier.
+>
+> Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
 
-> diff --git a/fs/read_write.c b/fs/read_write.c
-> --- a/fs/read_write.c
-> +++ b/fs/read_write.c
+[Severity: Low]
+Since this fixes a NULL ndo_xdp_xmit dereference when enslaving a slave
+on an XDP-enabled bond, should it include a Fixes: tag?
 
-[ ... ]
+  Fixes: 9e2ee5c7e7c3 ("net, bonding: Add XDP support to the bonding driver=
+")
 
-> +int file_check_backing(const struct file *file, fmode_t mode, umode_t type)
-> +{
-
-[ ... ]
-
-> +	/* Look through stacking filesystems at the inode with the data. */
-> +	if (d_real_inode(file->f_path.dentry)->i_sb->s_iflags & SB_I_PSEUDO)
-> +		return -EINVAL;
-
-With FMODE_PATH accepted, can d_real_inode() be reached for an O_PATH file
-here?  No ->open() has run on such a file.
-
-For an overlayfs metacopy file whose data is in a data-only lower layer,
-the lowerdata redirect is only resolved lazily, by ovl_open() via
-ovl_verify_lowerdata() or by ovl_d_real().  For an O_PATH file this means
-d_real_inode() goes into ovl_d_real(), which does the lookup and verity
-check itself:
-
-    err = ovl_verify_lowerdata(dentry);
-    if (err)
-        goto bug;
-    ...
-bug:
-    WARN(1, "%s(%pd4, %d): real dentry not found\n", __func__, dentry, type);
-    return dentry;
-
-ovl_maybe_lookup_lowerdata() treats a failed lookup as a normal runtime
-event (pr_warn_ratelimited("lazy lowerdata lookup failed ...")).  It can
-also return -EINTR from ovl_inode_lock_interruptible(), and
-ovl_maybe_validate_verity() returns -EIO for a missing or wrong digest with
-verity=require.  Each of these would hit WARN(1) when reached through this
-helper, which panics with panic_on_warn.
-
-In that case ovl_d_real() returns the overlayfs dentry, so the SB_I_PSEUDO
-test looks at the overlayfs superblock and passes.  Does the check fail
-open there?
-
-Nothing calls the helper in this commit, but later in the series
-f79b9e79484f ("fuse: refuse files on pseudo filesystems as passthrough
-backing files") adds file_check_backing(file, FMODE_PATH, 0) to
-fuse_backing_open_file().  That gets its fd via CLASS(fd_raw), which
-accepts O_PATH:
-
-FUSE_DEV_IOC_BACKING_OPEN
-  fuse_backing_new()
-    fuse_backing_open_file()
-      file_check_backing()
-        d_real_inode()
-          ovl_d_real()
-            ovl_verify_lowerdata() fails -> WARN
-
-This needs CAP_SYS_ADMIN and an overlayfs with data-only layers where the
-data file is missing, the digest check fails, or the inode lock is
-contended while a signal is pending.  No fix for this was found later in
-the series.
-
-Could the pseudo filesystem check avoid forcing the lazy lowerdata lookup
-on O_PATH files, or should ovl_d_real() stop warning on lookup failures now
-that it has callers besides trace_uprobe?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43599461726
---===============0802335019258284520==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261113-bond_ensla=
+ve_restruct-v1-0-364c549e78db@kylinos.cn?part=3D1
