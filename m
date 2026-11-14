@@ -1,100 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.180
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794683333;
-	b=G8iR1u+mE4ml4N8a4TA19pCBJ7NTm057AZMW03jNIwWjT/nC/r0hyvFLfyaqP9k/rU7o
-	 GWpk72DZ1+U9foFQzKGp+m4U/V+NJOpesYto/hJ7FF9Qn7nLevKHXAuwsMlZQLTiVua7S
-	 QFvQyMEITLbqyV2FJbbDAa1YvApooG3vJ6wHN74bZX5WlUGVqEOCeJTD+sKvXH7K93jBv
-	 qySOQL7UX4hf8gJ5i1qJ1gt5V9ePCcqWTLe99m/WShEh5aST1t8SWmuS3+PnwLrXCi+1C
-	 eOxW07KdeXY6p7L6utlwshQu/A24k13cd50UmL7bOxzxG52xZMR0tx5RoiC6YSHs9tA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794683333;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=lxmRDFoHxpt+qxahysWPY8cNjC08++XK90U4r6nVLsw=;
-	b=g1+5bX1s1soNryR2/VbXf1EIgMrc9ZMbdOlMYn00UI0pxL5NpJ80kW6UIYSKu0ROG2iK
-	 IrO7VaOAvdnDydWj6tEMnFoiMETygcqJKDmKFmMGKXuMGrpfhQXYVQj7JAXTVcgXQawRN
-	 jwLQ/Q52DXxU19gdc+4/oYB/PVZPK6tAI8PQ4CWy9F70uMK/AhgOoBsA98ey7T/goKijZ
-	 X6lgiBSmgxhlaFTqISaClWrHH9EHkpozOyuwJBJZTShNwB1jX2F+np+zIAZGCi/LAh+Kk
-	 wBrxvhZwFz5EvTdlMCExLQgLZzF3+vm6AxMvj0/+Z9fhlyulaYdjWkR0s8+Rf9sspdg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hX6nwmg8;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.180
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794683407;
+	b=VddxYQ168anXAXv0M7xrjUsXaxEMwFxeUa6aq47OoFr4HXfKrjgu5VXRMM6znISewDxw
+	 bwa8SzmT8pcTCQtIRgs2klXDVZOjVWc3In34SMo+8dlYAd+nuVex9Gwfg7FVUWMCBaHny
+	 LR+RHRqn1J4BJ7s8VZXayJk9ODrqUf+7ta1I7x5elzm/AxC+nMIAGX9GCVfPugxyKUq74
+	 iCMJPrjLvURU2F8nxBDN8GCl4dSK13DhljUJkXgDH8g3MlOLU9YJ7fRz4FcO2WZjBMF/c
+	 7drqNWgqXqw5UlPSROU0vba78XHZ22nCCUv1Zf+jCUuxtL5gbjoKvBs8h3fHAAhh4ZA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794683407;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=tKT6x4msThxj0gozIVJttaxZay8pW0TdepjyA9p1YpA=;
+	b=UaP7iy9XnpZeAf3COZ8u5iwQ0siAaA15/pWBrF7kQpV4fncccTjCc7NRnHxE5ifk9m4B
+	 NTbtVG+orKCpIuAsDt0OQdKJBZBYWqKBFWKvtbpZ01DMX4T2pz6xnBhzD7QUOKVQvG5ME
+	 5p3DBOOQ+VbGZrbZP6KQaFSIC0fjKVMZ5dP8YeZuzEfOcqSOQ26SIEheYTRj9MWGCohew
+	 sqcaDjuge1kBhc+5gDh5NZgIK8lRgqJ3WuqP/0mlSUuyfa1g/jdirm5RWK+K/7KSig5Ln
+	 s/D4N4Wkk3nLox2Wpvgl2ySUcwm3eVf/hCwl6zOthUYbWPQstjTx6kUdiPjJCA1qLww==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bsZzNwuY;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91689606A323
-	for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 19:08:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 91689606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4AED606A327;
+	Sat, 14 Nov 2026 19:10:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hX6nwmg8
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2e987a2ba0cso11621815ad.3
-        for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 11:08:53 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794683333; cv=none;
-        d=google.com; s=arc-20260327;
-        b=kgfa+L8AAJdijCdYFQ2P8m7aFbUu7oPtq8NqTWccoGTMSeGzEHDdIWEnSkfnJUA2KG
-         3XvKr+r0KqWS5FLmyXdkaNsesE9DKgX7yxyKct0B0p9RdhdXOaqqHUaOxIWZ6AAlgTNr
-         1xUoKT921tUfg66BJgSk9mcoGWPl2oxbi6Mdxp/r3VmgmTXfv/Dt/Wd/zBqbgMJO1hhf
-         Try9puTFJ5PgLBU4zfOeRABoyfm/RnNFJBe8+LtmTlIryhFGk06JgBfovpyt7FgxbL4R
-         ZsvJ15xRgsk76aV/KYo1bwBPV7yO93LymR6aDBHh4ez/krS7fmAzvhs2+4F6xDWtVMQE
-         5I2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=lxmRDFoHxpt+qxahysWPY8cNjC08++XK90U4r6nVLsw=;
-        fh=pEYwSXBrQA3iHjmAtZkC/joUX6hwyWYKBb4zPqGp9vw=;
-        b=H97D4o9Kr/j7t6SgMGmeWRl/Mb4OGe9df9tUN/hATqO8ICfJSkfMjns28746VzDjMo
-         3yenyXgf41lpz0JO4AQCLOeaNC3/wbTKrazncVERvUGuIeNh8QN62UhqiDIE1T8jCJC9
-         00Cs/AY86ZkYbsrgwXw5nhp+ONoMSM20PvPakzwbQvQx0mzcO9cIBV8WSgJiGnFZvOuk
-         Or6TjnA/j8t1VnNY1QVfuQChjTQ96mkVXqJTFWZ+TtrA40n546NWtb0Tj+vZPurcdp+r
-         F1JX6u4JpNKKtE/JOpzx3ssiS8hj0HsKBarBmuaTeMtM+3kvZU0fQCSGitQTaMmuWmF6
-         ghKA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794683333; x=1795288133; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=lxmRDFoHxpt+qxahysWPY8cNjC08++XK90U4r6nVLsw=;
-        b=hX6nwmg8Rs65GoXZ5zZB7Gd+AOh9hOUa96uBWwnYwRTzYswLc3aPgt1QSSWIWJ2ZNL
-         w1OYUFY9NOmjZaShrhx2Jj1npiVNQ04Y6Hhu/S4bTfRY274mBn73KcPczVJKNfaDyTq/
-         s3EPjaXHTJx4ZUmVMtOGA+yLUeLpUtEhqR20JdQzsRQOCACtHjU4EzlwKOZC7SIxXH1w
-         /D4nbX2IcT9o7JbKePam36e+s+dAAKf2HaVd137ni10RqdwaEWxW0E6gqIN2/d1OAQBG
-         HpgEmk+cE8pKWnk/iVZuCp+BQ/Maeb2RHfQd/nXiMu3P8rJ1lUkCy8bZejy+nfIARXfJ
-         sWdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794683333; x=1795288133;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=lxmRDFoHxpt+qxahysWPY8cNjC08++XK90U4r6nVLsw=;
-        b=pWQUuAX+yJnGopx/EWkjPqwIrEY0pzhrgt74ZaVwcNNxZn5NgVPZNZNbpmV3sR0bOb
-         +sq1eLl9omq8PWXUOK5NXpXyP6y+JJXb8HGgPMow3SNoTw+Bt4e7Uy3TDPnCyxgN3Pc0
-         z3ou7XZwDgg9U1mr8YjEh+8tVZW4zWFts9FlNyBJDpe+MH+ZjcsPHiEUHQhcrtmD11xe
-         kAWc70VLYCQT04K2u39HFwZWfbazEMw/lG3ocBrNnfFNnYwgbrjs158nnuCgbPU87QtW
-         fM1+sK60n3GGLGdfM+FNK7DT+NmA6PClkoZe5uHCSh3P1PPIBLdqLTVXP3mZ0fcQdEzW
-         gemQ==
-X-Gm-Message-State: APuU4Z+w3Fx2kNxRmjyqocDyHTUCE1PAQSbWCKy3c2X4aJ/zz1EeYsly
-	7wQAFuMiwGoSiyE/ztu06c2SJt7BULavcsjB4ZStovlEpxIoJbUZn/XcAFuQDTjEDC07mElz6oG
-	nDKRlimKTyKjjLuonhhkHsaCiZWG6oVU=
-X-Gm-Gg: AYBFou2IkBZwVtuyVUWHaveaS18iYeQJG9bKsZLmQqeVWBznxSZWyIphREQRKQW+7l4
-	vXZHiHYP/NLR2t8JRhikIzCj8spQzYwpFpS6VCZivk9pcprCWIjUJu6Q5WD9GLvVQWUcT6WjKt0
-	V9xO6wleCVxsJxaJ40GeLNtt3l0Fa0Wh94rCyHnH2LsMX/4DM3S7UGcfXkgHczefMod1ro68gGf
-	R+wDKpAmDRwc4w3i5QNYcYozPlXj6XQqFrJxfahoOvk90p+3cgWVB0M1aU0sa4HxbBCRSemjj0w
-	f8lWB7Y0hVceyX7IOIpDNTKpBqbZ2E2+gR2jcmRuFTo4Ld2C/k3KjIziV5qzN8Szr7TOZ2MvXCJ
-	q6V4y0lHya+n5u3f24LdLcYldW/KhiE8LlVZKZDOVhcKZO/ePvGzQETV83YbxeTaxqcIHe7Cx06
-	09tD2tLl9B/QeCJgVegM68jqhb2er9nwxv5WgaAslJ3/Zjg8WfXq8=
-X-Received: by 2002:a17:902:da86:b0:2ed:1fb0:7784 with SMTP id
- d9443c01a7336-2ee0da7bd5fmr58535095ad.10.1794683332797; Sat, 14 Nov 2026
- 11:08:52 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bsZzNwuY
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43AD51F000C4;
+	Sat, 14 Nov 2026 19:10:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794683407;
+	bh=tKT6x4msThxj0gozIVJttaxZay8pW0TdepjyA9p1YpA=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=bsZzNwuYRG6dqootzkmC0PXDAZfKQigfM6YLQIYBhwwlnmjQr+JryGxNEZDe0eK8r
+	 bCgbPFcxHgCBhnpKmRSId1jpUo28sEi6NhUMpy7UPbenmYxbl0MHdgpUh4kff/vWwn
+	 +8BiGQ/zpdJ7JtOf2iU/v6IoqDXk6RKBux5GxR9N91NXnBo5TObhzObDF9HTWwn5Fj
+	 VYgEgrD95eujp8gnb8SKR7Rc7sR5syIupCDiN/hVDqpZV/vca3qJDDNbidiDVVRiiv
+	 TZMgUFZjGjd4zQlmiBH5cyD5L409ZXH/pDoLT5iLdTNtgrXh1kQvQudACMWuH/kJ5D
+	 1zFyhO6Bpv0Iw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3A409380821F;
+	Sat, 14 Nov 2026 19:10:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,47 +53,53 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261030042138.73739-1-kylebot@openai.com>
-In-Reply-To: <20261030042138.73739-1-kylebot@openai.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sat, 14 Nov 2026 11:08:40 -0800
-X-Gm-Features: AclHuK--H_3_n6VCnyOL61NaQc63vtDDD0D0yPb0rGJY-Xl4-Bos2pmaPEQ1p5E
-Message-ID: <CAADnVQJ=nsuU6GTJFG8VnF1drWW9pQOy9=fB3UhUyRYAOUmGuQ@mail.gmail.com>
-Subject: Re: [PATCH] net: skmsg: fix copy cursor when coalescing clones
-To: Kyle Zeng <kylebot@openai.com>
-Cc: bpf <bpf@vger.kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Jakub Sitnicki <jakub@cloudflare.com>, Jiayuan Chen <jiayuan.chen@linux.dev>, 
-	Network Development <netdev@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	outbounddisclosures@openai.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next 0/3] bpf,
+ cgroup: Don't wait for cgroup_mutex to read or free cgroup bpf state
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179468340603.2344194.2562831381781655798.git-patchwork-notify@kernel.org>
+Date: Sat, 14 Nov 2026 19:10:06 +0000
+References: <20261112172721.440275-1-shakeel.butt@linux.dev>
+In-Reply-To: <20261112172721.440275-1-shakeel.butt@linux.dev>
+To: Shakeel Butt <shakeel.butt@linux.dev>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
+ song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ roman.gushchin@linux.dev, ameryhung@gmail.com, tj@kernel.org,
+ hannes@cmpxchg.org, mkoutny@suse.com, kernel-team@meta.com,
+ cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
 
-On Thu, Oct 29, 2026 at 9:22=E2=80=AFPM Kyle Zeng <kylebot@openai.com> wrot=
-e:
->
-> A splice or zero-copy append can leave the destination copy cursor at
-> sg.end. If sk_msg_clone() subsequently coalesces with the last entry,
-> sg.end does not advance and the cursor still points at an unused slot.
-> sk_msg_memcopy_from_iter() can then walk around the ring and write into
-> older entries, including file pages spliced from a read-only descriptor.
->
-> Software TLS can reach this with an ordinary MSG_MORE send after a file
-> splice and a splice from another TCP socket. Both TCP and the TLS
-> encrypted-message allocation can use the sending task's page fragment,
-> so the TCP-sourced plaintext can be contiguous with the next cloned
-> encrypted-message range.
->
-> When coalescing with an exhausted destination, move the copy cursor to
-> the tail and set copybreak to its old length before extending it. Find
-> the actual tail on each iteration using the ring iterator, including
-> when end wraps to zero. Leave an existing copy cursor unchanged and
-> preserve the normal coalescing, reference counting, and memory charging.
->
-> Fixes: fda497e5f5b8 ("Optimize sk_msg_clone() by data merge to end dst sg=
- entry")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Kyle Zeng <kylebot@openai.com>
+Hello:
 
-pls respin and target bpf tree.
+This series was applied to bpf/bpf.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-pw-bot: cr
+On Thu, 12 Nov 2026 09:27:12 -0800 you wrote:
+> In the Meta fleet, BPF_PROG_QUERY callers, link-info readers and the
+> cgroup bpf release work often wait minutes for cgroup_mutex. The holder is
+> almost always a cgroup mkdir or rmdir stuck on kernfs_rwsem. In one day,
+> hung-task reports showed this on 1,075 hosts (query), 94 hosts (link info)
+> and 458 hosts (release work).
+> 
+> Patch 3 gives the cgroup bpf state its own mutex, so these paths no longer
+> take cgroup_mutex. Attach, detach and replace still take cgroup_mutex
+> first, because they walk the descendants.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,1/3] bpf, cgroup: Don't read freed effective arrays in BPF_PROG_QUERY
+    https://git.kernel.org/bpf/bpf/c/90f4e698f9c1
+  - [bpf-next,2/3] bpf, cgroup: Don't attach to a removed cgroup
+    https://git.kernel.org/bpf/bpf/c/b2e007371909
+  - [bpf-next,3/3] bpf, cgroup: Protect cgroup_bpf state with its own mutex
+    https://git.kernel.org/bpf/bpf/c/40aec6bab02e
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
