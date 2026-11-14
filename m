@@ -1,85 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794682230;
-	b=U3CHAVSSL4PTGdx+GmushFc3zmgqwqWzos6gb94hDLFqa/qonhDdOFoTCC+q1cp39Kav
-	 V7nRb7YVeB11AJYaqdwzxw/dWzm9AQkm+gf+ykUjgXgs4DVa3CBq/bjDENbHnAgahlXP5
-	 oy/3fQwSXN0J98qrq2cWp646yk9Jpak6q9tLyk6cvjV0a0MBil+aTJi3tD5zclL/YDxbo
-	 AyCpMn0/qHQNjB3clehAYVgRA7zcmHWcmlQL2pemcuDS9SeSooorkaNnkq7T7Bc3ICGs3
-	 TcrAuCS0Z4H4BiMwD2tXQmpwlp8rkzLMJS4ukc01QwSG3Kxqk+rDx94xEuw5LKLMuew==
+	t=1794683215;
+	b=vBvlGoxn0VsAhKJFSWBSSToahjEHT4tdLMNd/6r70CPbgzBZL+ip8f33VWFRoahDNneQ
+	 fzBo2eIi+IYzVliskSnM+6cCrfXleagpTa67sOHRWZt7pmAazUG2TUa5ZznwWPq5kxQvT
+	 czs2zORfZg4uBAXcxD+RwRkDJJvMCkoWR4wpasf51V+QdfLLnjYYoU1qc0EdK4xfSCcuh
+	 jvU3TwcuvqYr4IUj5Nf66Ucdg2g7+7tQ6sa7L/kcvH5yh6F0Owwi7DGf0qKi0L8efciaV
+	 0Hz9b0FP8qZ5X5h/z3zdHWQbdawTc/EJQbAzKgV1tob+15xhF0686V3goqtyOpvD5RQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794682230;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794683215;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
-	bh=J7v9/YPEzjxZ/LGBEzvQ09s+gFXT8pS/d7xVKdjrCoE=;
-	b=csLPwFSBUX7COLcdPuNbmKQnqjsxLQ60rpKvV3+AGFqe4C/GHUEO9Hm89euztLoWYKtf
-	 19hmdY8eeE+cUPEn4GGdkaMXSPEdka0Vx0xOcIL9yF1RUZGo9JmU6Ppw6rzLOFsh9KCnn
-	 GNmezJZCtiF3niUqCDWMWtkVK7e2WCv4pJmoLuhaB/hOEF2rcOIbDXHq2ypcvwQ6TEwRH
-	 qOTSp9s9DhUS4ZZsu3GXf++4lDwfwsaGBN9kcG++NZFgR2rszZlxxW4TlhmHdUy1HkgHW
-	 zYbptO0n5RDrOSfrm02J5bhw+c+N4jLYdq9MxR2j4ZhJWAR5Y4byUplOP7shMVJo42w==
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=GXnJ7EqkeurbEfzLsmAnsY6oVJKbWZqTiWPnVwATPj8=;
+	b=U6pVaDibWlNR023WR4Kz5JivtsXhBalDp5sM1zOMKqj5t2iXBxQduPUiBeox0tgGxhT0
+	 146p0/fQHTeobeHewGO0t1nT0rjqLaicpwzn+4mfKKm5jv9rID6xtoYRbLtSGGoln2d6k
+	 TjGkEqxfLSxXtT4mzTKKhpkbKmoLx1s8WJNv5kFz9fK6Y5W6vPjnnCVoZ0upL+1r7gjHO
+	 Aw97ZZXGG8xIpkgFKs2agiI7qj0gast1RO+wDYKgBufJ+sDYzrlSBnJKBnEJRYnvq6X97
+	 m9zh3lRJ7tycqJAfLfVKMn2xNzXyD+6AbaEm2aZt5RIFV5oL1Kb11pcMJNHIHoI3ygg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GLhZMEfG;
-	arc=none smtp.remote-ip=209.85.214.177
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=V4GVwOrm;
+	arc=none smtp.remote-ip=209.85.216.42
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D72E6606A330
-	for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 18:50:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D72E6606A330
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42F29606A323
+	for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 19:06:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 42F29606A323
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GLhZMEfG
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2e977109392so11968725ad.0
-        for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 10:50:29 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=V4GVwOrm
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3b179528d56so986723a91.3
+        for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 11:06:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794682229; x=1795287029; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=J7v9/YPEzjxZ/LGBEzvQ09s+gFXT8pS/d7xVKdjrCoE=;
-        b=GLhZMEfGifRuC596AndpNsLBIA9hBtwq3Fl2rl3RpCiUBa8JAgBi68PRu+6UvL0g+9
-         Xzpu5p86rL78arrOM1QXBYNA9uv/mQu8WneFiAYdgeLD3BArt1DXcWip0vvdIfwC1ddG
-         0N7V1Ecf+4SbVcB6y4tQNetroGzQmR9Z6fFcA0F6Ilqp1eKHvae2lq5iaUBEk0SCv3fZ
-         JsSK0yuswuP9WHl5IzYpDImD+QbhCfQvlc2i+GAF3wnXupHdatzhSaYbY7MO1Gbgv/tJ
-         /1lWvvJ7uBAc0QGCLV5ij/aoOAMBqbIa9aK22/g81KNbLj5WqLzMp41HokYHr0zzbrFb
-         IZ1w==
+        d=gmail.com; s=20260707; t=1794683214; x=1795288014; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=GXnJ7EqkeurbEfzLsmAnsY6oVJKbWZqTiWPnVwATPj8=;
+        b=V4GVwOrms2+fzVnpV/iw5bpRwU+scd7Yf5pD18/YFy2oTqf0gWxkJLNHhadzJtY/PT
+         9Osxm1tNSJi5+jkFgDR8U6u2WJwNbJrDf+XC0SEbVlDHiO5boZ433BAZzu7Eu9T38Msp
+         2FvzhN/BgIxldcL0VeXXcrtsmheCfV8EsBrB0O18aHJu6RwZ5vDo/FbJ4bNZah/IyIwl
+         yht61N3RvnINOf4WD3vmFZoAKOXPvEi1luSqfcD2HyZJMkOFm+Lxx14l5X01GkEuFkcg
+         CSM5sAJpl9D3r5kZzG6j8L7vCRyH438S6ZxEGx1f9YEy235H/akRh2aMTHFJnO24vmmO
+         tMhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794682229; x=1795287029;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1794683214; x=1795288014;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=J7v9/YPEzjxZ/LGBEzvQ09s+gFXT8pS/d7xVKdjrCoE=;
-        b=f9vYA8x4lVittCNk8/gtR0NzthlcVhL7O9LsdVCW4xbed7I/QsH/R4G1Umu9hMwC9v
-         mfcGLQj5De1TuHE/X0q/h4Q1VLOVb7a9haSBJ84PoPqEz7OsCoqBmrxCDpXWMGtL1QPX
-         DmqA7BkBbBqBXvws4VVrrUjmxU/nfGw8YaVEn/BZdbwsV5qXgH2w+yCmeWlk65u3n7tA
-         u+MZ/CNznIX1vFZM68cc0pJNrJ+9AYH+AwSBZ1pn8YEo/3YOSWOvR34z2GF+5UD1w2Pu
-         0gQfjS8Hu43o+fmn61UM3Ancszvj0FtDpyy9AI19JUwvixhUYVihpWydvsPFwMwBAuiq
-         Ogrw==
-X-Forwarded-Encrypted: i=1; AL+hErFhwfgmJF4gi/mlyiLuBoYWdIw9rWGtEn8NPEJ9AfR9txBbDAhrTH5vuxH9y3eWDItYtWM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/LAkWvBu01BCdXK77J0zLGEIvpQIXbUjQ/ngP53ExrI3BW8nCb
-	CKbLoLnwu0FDhXwKBIE1x7ilbIBM2+u8cprZF0xAWURSK5sJKOgBpMtF
-X-Gm-Gg: AYBFou3nEPrKawrghpZrjJGCDbd5b3zBtBP/vs5ATcF/miwnCNsD0p2/YlnvJE8Nsfv
-	WdAE5CXcOR/R18KJsIn/3IWlpWAYrhSXiYowCoX9h+GhzYt0Pv9SleckWq7MzFqhd+RN2i18pCl
-	kA06LRWaQCBEesNBbJWcNM0YuFlFj8jtNFuUBBFGowl+VlG0DtFjlRg1BL8r8FcWsMteLOz+KbH
-	u//bAiqVtNyEmniRKq8BcENcUYvldWv0f9kZ7Q9zpn46oq0vDayws6oWLhaQu7voyCFCrB2Eupy
-	DU1IRXPGSk3CDvdMKTcAfv4VmhY8eco/H2ZmI/tb7dB8ytx5MelrmAOrNNcOG3oWRAVAmY5kWZH
-	sPkagaDXI05zYphz84O8LM3F/OwE3a4aBCszv5ki1MY8fydvDi6W0EuwNzd7Ffjo5IxJFfQ5MF/
-	haz53XD2PWrNMf4IxpUdUovqFvbnQ+F5Pf7VGwrhsFzeZe3pUj4cIiKFxnZV9FgFXploMEE1ev+
-	mUZxm2B3FDq+yl6gQc6cM0zw4Wz6f4XLS3M8mDetZ0xIWsUQiQY3K7cjp78x714MWiwZenyFseL
-	YpQDPfDn0Q96zTr2ktzvk+OZW2xjDmExU15Bu56Lavbxqa5961JP21V03iU7TQG/AN9/cS/3Ucf
-	Oyo00slq0jW205fGksI5A+vKF0XdxWngcfw==
-X-Received: by 2002:a17:902:db04:b0:2ed:2b43:483c with SMTP id d9443c01a7336-2ee0dc2a5bfmr60623615ad.38.1794682228921;
-        Sat, 14 Nov 2026 10:50:28 -0800 (PST)
+        bh=GXnJ7EqkeurbEfzLsmAnsY6oVJKbWZqTiWPnVwATPj8=;
+        b=JV3gHkkP8SqfxtUdpusk63nh02N3oS5oqu+KT+IMI3CzO6PRRFhkqVwGs3jTkq1Tar
+         vgDfnPNQvKgowQZBS0EOHZUkAOkk3PjhqFY7APy6aBUVdnm3RL0UUJxS9VnJfLf9MNWu
+         I76DXKvWqEl1ya6I5Dky2cT+xygLx7H86AavcIr6A91VbR2l0kDcmLwE9bCv8e5sF9d7
+         lEqVUrcAkUeECMbVsHh3tkJFCLO6HUkRynxm3tVLc7f5IW+MR/SzuwwXNjggij6YzYoO
+         xuGjahmwda8TroK73zbDq1VQU7xzSIhpWiytPyRkoD8NmrQrprUdAMrbL8VHC6Vkx8Tx
+         E4Yg==
+X-Forwarded-Encrypted: i=1; AL+hErERnZncT44SCSQsLUFEzo0Y6JL+Fv6lc1o+zU2b6nPxYYLPjK7guUZIqwr4r9XBEuZO4+0=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9T1TawlOmpw/rOP6TB/tn45on/E85Ez70gTnxfUgh6k9SP+ela
+	NVn2Wf7nVT9z8M+77XKy2ihJrf4kU+vHkzhtnPYQX0LQ8H3LkBbTmolD
+X-Gm-Gg: AYBFou2QBIrS6HjKFatK90YyKJWi0IL6sIsNyXk3CImjJo1PUHv/DntNgCvKP4FTAc9
+	vnwiz2AvWocBdIqMgM1Z1+dYrsh13EYnCkJlquolVQWwtc7lMMZHlVZVkvMaouL0Im0XYmi0Zan
+	7DVDlye77tDqpIJrRDgqg8LJIc3FEOvquFnL0vL9dzYNpVmvNgdqYuUgHZX46bdYB+kl9C8c8cL
+	s2JxsvCuuwvJsn+OLMdsjSYyYZ3EjbQrLLqcZLU5qFH6mOZqxJnYaJcTxT9CY3Ohe2uPlv/z1Wz
+	V5AsfNvLTuiMxoabcz1RWe4h1RsCJVJ7hwPdzw/Kov6FV6V7vmK3UZrj6ZkeWYtHTSl/Gs40gSl
+	rzq8P6owFHQZ1bDyd2a4pRCNKmrnCDkuO3ToSqtjPstPrZzx3bY+kS1PpOspI59cwjYEfB4Doi0
+	zxulxM91iRMyJmtQQb3K8DS9T2TR5yMSRTIiEl38jgC9kU5w3NOE7B9DTWhddP72vKlbBXpyA5x
+	u+dSFnPCYWvDHAIS0XOOWJVdCVEbu4RKQFsnNU3UAhjpz16/73wpLuIfBlLbL1T2km0OuWp8G/T
+	d0rv5K3lbNm1r4iAwQm58/iP3f8bJ/rGxDN89wxoMzOUn2QpG1tZvrQVRfBi3OTza9gKKYTXfIY
+	++UVe2DjbujEdHwi+ufvda+WmgVO7G3eaNw==
+X-Received: by 2002:a17:90a:f947:b0:3b0:bd53:8e5d with SMTP id 98e67ed59e1d1-3b1b0b67c7emr5335875a91.58.1794683214515;
+        Sat, 14 Nov 2026 11:06:54 -0800 (PST)
 Received: from localhost ([153.61.198.243])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ee0f75c980sm22473765ad.25.2026.11.14.10.50.25
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b197c6c9c5sm14736486a91.1.2026.11.14.11.06.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 14 Nov 2026 10:50:26 -0800 (PST)
+        Sat, 14 Nov 2026 11:06:54 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 14 Nov 2026 19:06:53 +0000
+Message-Id: <DMV63QDBPR8M.OQPRTU7QTUUC@gmail.com>
+Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Stanislav Fomichev" <sdf@fomichev.me>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song
+ Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri
+ Olsa" <jolsa@kernel.org>
+Subject: Re: [PATCH bpf-next] bpf, tcx: Skip RCU synchronization when the
+ entry was newly created
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Qi Wu" <shijing.wuqi@linux.alibaba.com>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
+In-Reply-To: <20261114124039.111360-1-shijing.wuqi@linux.alibaba.com>
+References: <20261114124039.111360-1-shijing.wuqi@linux.alibaba.com>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -88,56 +105,185 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 14 Nov 2026 18:50:24 +0000
-Message-Id: <DMV5R4A5D4UE.CX5X9T3GM3GL@gmail.com>
-Cc: "Michal Luczaj" <mhal@rbox.co>, <virtualization@lists.linux.dev>,
- <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <bpf@vger.kernel.org>, <stable@vger.kernel.org>
-Subject: Re: [PATCH net v6 0/2] vsock/bpf: fix recvmsg deadlock and
- zero-length, OOB, errqueue reads
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: <jrmmhm.kernel@eldare.de>, "Stefano Garzarella" <sgarzare@redhat.com>,
- "Bobby Eshleman" <bobbyeshleman@meta.com>, "David S. Miller"
- <davem@davemloft.net>, "Eric Dumazet" <edumazet@kernel.org>, "Jakub
- Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Simon
- Horman" <horms@kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>, "Alexei
- Starovoitov" <ast@kernel.org>
-X-Mailer: aerc 0.20.1-355-gf870624f6c37
-References: <20261114-kbh3-1-022-fix-v2-v6-0-96b6029bbffa@eldare.de>
-In-Reply-To: <20261114-kbh3-1-022-fix-v2-v6-0-96b6029bbffa@eldare.de>
+MIME-Version: 1.0
 
-On Sat Nov 14, 2026 at 11:59 AM UTC, Jerome Mohm via B4 Relay wrote:
-> On a vsock socket in a sockmap, a blocking recv() deadlocks with the
-> virtio delivery worker and stops all vsock rx on that worker, and
-> zero-length, MSG_OOB and MSG_ERRQUEUE reads spin with the lock held,
-> wait, or consume stream bytes. Both come from the commit that added
-> sockmap support. Patch 1 hands those reads to __vsock_recvmsg(), and
-> patch 2 releases the lock around the wait and makes the wait loop.
->
-> The deadlock and the MSG_ERRQUEUE case were found with the help of
-> Anthropic's Claude, with Stefano adding the stream-byte part; the other
-> cases come from the netdev Sashiko reviews and Alexei. The reproducers
-> are available on request.
->
-> Changes in v6:
-> - Split into two patches, the zero-length, MSG_OOB and MSG_ERRQUEUE
->   early return first, as Stefano preferred; the deadlock fix does not
->   need it. This is the reverse of the v3 and v4 order, and 2/2 no
->   longer argues for one patch.
-> - 2/2: check the transport in the wait loop before the data, so a
->   reader that wakes after a failed connect() has dropped the transport
->   no longer calls the data check, which warns (netdev Sashiko review).
->   I check the transport instead of swapping the two tests because
->   hv_sock reports the peer's FIN from its has_data() callback. The
->   WARN_ON_ONCE() at the top of vsock_bpf_recvmsg() is unchanged.
-> - 2/2: reword the comment above vsock_rx_done() (Sashiko).
-> - 2/2: leave Sashiko's signal-and-timeout point as is: such a reader
->   gets -EAGAIN where a native one gets -EINTR (see my v5 reply).
-> - Rebase onto current net.
-> - Link to v5: https://patch.msgid.link/20261109-kbh3-1-022-fix-v2-v5-1-4d=
-9af04f0fad@eldare.de
+On Sat, Nov 14, 2026 at 04:40 AM Qi Wu <shijing.wuqi@linux.alibaba.com> wrote:
+> Both preconditions for the grace period are therefore absent and the
+> synchronize_rcu() is pure overhead. It runs inside the rtnl_lock()
+> critical section, so it also serializes the whole machine's network
+> control plane. This is visible when creating containers or sandboxes
+> in bulk: each new netdev needs one first attach per direction, i.e.
+> 2N grace periods for N devices, all serialized under RTNL.
 
-thanks. lgtm.
+No attach has to wait after the swap. Not only the first one.
+Attach releases nothing. The old entry has to stay intact only until
+the next attach or detach overwrites it as the peer.
+
+mini_qdisc_pair_swap() has the same a/b scheme in the same hook.
+It stores start_poll_synchronize_rcu() after the swap and waits
+before it writes to the old buffer again. See
+commit 267463823adb ("net: sch: eliminate unnecessary RCU waits in mini_qdisc_pair_swap()")
+
+Lets do the same in bpf_mprog.
+A new bundle starts with get_completed_synchronize_rcu().
+Then there is no need for the 'created' check.
+netkit needs no special case either.
+
+  attach                     this patch   poll in bpf_mprog
+  -------------------------  -----------  ----------------------------
+  tcx, first on the device   no wait      no wait
+  tcx, clsact came first     waits        no wait
+  tcx, prog #2..N            waits        waits only when the previous
+                                          change is younger than a
+                                          grace period
+  netkit                     waits        same as tcx
+
+The diff is at the end.
+
+> Detach, replace, multi-program chains and the error rollback path are
+> unchanged.
+
+Bulk removal has the same 2N problem.
+unregister_netdevice_many_notify() calls tcx_uninstall() for both
+directions of every device. Each call that finds an entry waits for
+a grace period under RTNL.
+synchronize_net() is expedited under RTNL.
+Should tcx_entry_sync() and netkit_entry_sync() use it?
+
+> The numbers below come from an A/B pair built from the same bpf-next
+> base (2e14a351662d) with identical configs apart from LOCALVERSION, and
+> all lock/RCU debugging disabled. 64 vCPU KVM guest, CONFIG_HZ=1000,
+
+Way too long. That's 100+ lines of commit log for a two line change.
+Keep the problem, the idea and one table of numbers.
+
+> -			tcx_entry_sync();
+> +			/* A newly created entry was never published, so
+> +			 * there are no inflight RCU users to wait for.
+> +			 */
+> +			if (!created)
+> +				tcx_entry_sync();
+
+bpf_mprog_commit() records the state after detach and replace too.
+They don't need it, but the next attach is never slower than today.
+This is what I have in mind. The x86-64 build passes, no test was run:
+
+diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
+index 82e608e..aa15fed 100644
+--- a/drivers/net/netkit.c
++++ b/drivers/net/netkit.c
+@@ -770,10 +770,8 @@ int netkit_prog_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+ 			       attr->attach_flags, attr->relative_fd,
+ 			       attr->expected_revision);
+ 	if (!ret) {
+-		if (entry != entry_new) {
++		if (entry != entry_new)
+ 			netkit_entry_update(dev, entry_new);
+-			netkit_entry_sync();
+-		}
+ 		bpf_mprog_commit(entry);
+ 	}
+ out:
+@@ -852,10 +850,8 @@ static int netkit_link_prog_attach(struct bpf_link *link, u32 flags,
+ 	ret = bpf_mprog_attach(entry, &entry_new, link->prog, link, NULL, flags,
+ 			       id_or_fd, revision);
+ 	if (!ret) {
+-		if (entry != entry_new) {
++		if (entry != entry_new)
+ 			netkit_entry_update(dev, entry_new);
+-			netkit_entry_sync();
+-		}
+ 		bpf_mprog_commit(entry);
+ 	}
+ 	return ret;
+diff --git a/include/linux/bpf_mprog.h b/include/linux/bpf_mprog.h
+index 0b9f4ca..e74430a 100644
+--- a/include/linux/bpf_mprog.h
++++ b/include/linux/bpf_mprog.h
+@@ -28,11 +28,8 @@
+  *   [...]
+  *   ret = bpf_mprog_attach(entry, &entry_new, [...]);
+  *   if (!ret) {
+- *       if (entry != entry_new) {
++ *       if (entry != entry_new)
+  *           // swap @entry to @entry_new at attach location
+- *           // ensure there are no inflight users of @entry:
+- *           synchronize_rcu();
+- *       }
+  *       bpf_mprog_commit(entry);
+  *   } else {
+  *       // error path, bail out, propagate @ret
+@@ -104,9 +101,12 @@
+  *
+  * Fast path accesses the active bpf_mprog_entry within RCU critical section
+  * (in case of tcx it runs in NAPI which provides RCU protection there,
+- * other users might need explicit rcu_read_lock()). The bpf_mprog_commit()
+- * assumes that for the old bpf_mprog_entry there are no inflight users
+- * anymore.
++ * other users might need explicit rcu_read_lock()). In the detach case the
++ * bpf_mprog_commit() assumes that for the old bpf_mprog_entry there are no
++ * inflight users anymore. In the attach case nothing is released, and the
++ * old bpf_mprog_entry only has to stay intact until its users are gone:
++ * bpf_mprog_commit() records the RCU state after the swap, bpf_mprog_peer()
++ * waits for it before the old bpf_mprog_entry is written again.
+  *
+  * The READ_ONCE()/WRITE_ONCE() pairing for bpf_mprog_fp's prog access is for
+  * the replacement case where we don't swap the bpf_mprog_entry.
+@@ -147,6 +147,7 @@ struct bpf_mprog_bundle {
+ 	struct bpf_mprog_cp cp_items[BPF_MPROG_MAX];
+ 	struct bpf_prog *ref;
+ 	atomic64_t revision;
++	unsigned long rcu_state;
+ 	u32 count;
+ };
+
+@@ -158,6 +159,11 @@ struct bpf_tuple {
+ static inline struct bpf_mprog_entry *
+ bpf_mprog_peer(const struct bpf_mprog_entry *entry)
+ {
++	/* The peer was active until the last swap and the caller is going
++	 * to overwrite it, therefore ensure that there are no inflight
++	 * users on it anymore.
++	 */
++	cond_synchronize_rcu(entry->parent->rcu_state);
+ 	if (entry == &entry->parent->a)
+ 		return &entry->parent->b;
+ 	else
+@@ -172,6 +178,7 @@ static inline void bpf_mprog_bundle_init(struct bpf_mprog_bundle *bundle)
+
+ 	memset(bundle, 0, sizeof(*bundle));
+ 	atomic64_set(&bundle->revision, 1);
++	bundle->rcu_state = get_completed_synchronize_rcu();
+ 	bundle->a.parent = bundle;
+ 	bundle->b.parent = bundle;
+ }
+@@ -243,6 +250,7 @@ static inline void bpf_mprog_commit(struct bpf_mprog_entry *entry)
+ {
+ 	bpf_mprog_complete_release(entry);
+ 	bpf_mprog_revision_new(entry);
++	entry->parent->rcu_state = start_poll_synchronize_rcu();
+ }
+
+ static inline u64 bpf_mprog_revision(struct bpf_mprog_entry *entry)
+diff --git a/kernel/bpf/tcx.c b/kernel/bpf/tcx.c
+index 02db011..0079be0 100644
+--- a/kernel/bpf/tcx.c
++++ b/kernel/bpf/tcx.c
+@@ -42,7 +42,6 @@ int tcx_prog_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+ 	if (!ret) {
+ 		if (entry != entry_new) {
+ 			tcx_entry_update(dev, entry_new, ingress);
+-			tcx_entry_sync();
+ 			tcx_skeys_inc(ingress);
+ 		}
+ 		bpf_mprog_commit(entry);
+@@ -156,7 +155,6 @@ static int tcx_link_prog_attach(struct bpf_link *link, u32 flags, u32 id_or_fd,
+ 	if (!ret) {
+ 		if (entry != entry_new) {
+ 			tcx_entry_update(dev, entry_new, ingress);
+-			tcx_entry_sync();
+ 			tcx_skeys_inc(ingress);
+ 		}
+ 		bpf_mprog_commit(entry);
+
+pw-bot: cr
