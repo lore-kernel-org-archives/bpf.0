@@ -1,99 +1,59 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794614969;
-	b=mwKgScBMs7rXTe2/7ybb3u0UMG/h4+PJEGQi7Apo3tUcY9/bQHOoFm+xPkBzfq6VCJky
-	 44CRZ2taFmHHqVIPtyC9EAgHmUWhp9TBi2M0AXDOsxUvawkZnw02VJNDhOg4plF7YwVkB
-	 +luMVJcL/zGkv+s/9L9KbX/Rac/Tpf0htuhcUWAgnSsWkVOXAVr0FWbRTVumKdxFQXESZ
-	 R/RRDaYC19AJx1mh1+XpFRypvnIT65Pz25ytAmqsEBW7O6OxBYKrR7ZpPrcO/uX+/3xv4
-	 U6he41MBVtWeFryDsqjJWe3w0UAHTaJDk/TGk7QkjJoPILUVfmMoL8ZUMkJHUQMm/tg==
+	t=1794615392;
+	b=Md81zYC/Vp/dHFvAgfhIOZwiXTxBe89HIsnGDbmqVkUuwiVim8bfhnSHejjNNaL2ROEx
+	 g3QVqwC3k6VnHLX6ipUIGrzBxkRATcUF4x8ZizZf518OGG/svVEw4NPK7P09FUQPxD6/I
+	 KP9Z5fLBQNxGajPwQOFebTSleIjPzlMB8IDp2HPItnyF4d4QkGpK3iI+IVBnpKeihtl0t
+	 7RzW+g5BhsGs8nTSXpnwDnfZEmCJhRRVSwzoU54Pnkzmi/A2Bouf9YeBbK6EyNFuLAq7Z
+	 qvGZg6juJW1WLtfT2kg8qeWA4BvHRYxTrS+o6BCvGc1MOnZJ4ohw0SOAemjZx5Z+H0A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794614969;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=4yrUMiwU74ePoC7CS3ielRLdXk2a6q9S0udjjWNbE8c=;
-	b=aBEyyPLSqetiUv73mLTbJGrHy4TF7eScOnFvCO9QKqrZ6tMd5NGh9Bdn54KHx67jsqi4
-	 gPZ8CVGmmTIBbY2wSzWgLRbu9HMUt2kxxTFJjWBunrXXcxUeS187t/QXkcCwTpt4j1cPH
-	 byD+rUV2KmLBZHn6QiuQepXCsGR8kWy5PMTRItqs+F4FppeTzkRTcsVBOBcCgpIXvWz2i
-	 TAljsvJX9zv0YRdbUvx4FY0ZjN7wrMsV1xSmjLPjpncxfj0j6py9eDOo0/gBtGXSKZQHM
-	 0k0dZktsKCpwaZQEe1Mntqo8FD9JvCHi0LhFFD7HEaTYSFRqzmivY/EI7L+SMjCS+0A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794615392;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=Guk0aJMCD2cOZJhykYYMTeDOfM6tQhjRyfXxpDWH01I=;
+	b=upWD3+FxpJvHjCR03zBPqTuTz4gIVr6xIvub7AM794Kgc0+vmto1eYcyCDpg2qmxf6/o
+	 mnL7dRYWESIEss3iab5BlseLjzgZtiFPQHalwEU2h01+ZI+CqYYQtBpvedoE77OZlF6Q6
+	 5vcmB6b+2qeQQphm8CDEJYO/MZyXa5hzzrQz/tM3ncWxQ8RgYd8BfKtVmTXoM5yhwvNmN
+	 9X1h8awB9GI8QvNjr0zaBteza5C69PVIhdYKoNKggDzXfcM4KiNPck2TqHs+pOJH2Vl2N
+	 W5RQPS/PJD6nmgg4H9b4XjPlnB3/LtlZnVKHlau8cVmOw1DKmtwn2RN/oJN4T9Fx3oA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=v5iZSFw4;
-	arc=none smtp.remote-ip=209.85.216.48
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iKkgEkh3;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F582606A335
-	for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 00:09:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3F582606A335
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03E3D606A33D;
+	Sat, 14 Nov 2026 00:16:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=v5iZSFw4
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3b197cd42b0so1307557a91.2
-        for <bpf@vger.kernel.org>; Fri, 13 Nov 2026 16:09:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794614968; x=1795219768; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=4yrUMiwU74ePoC7CS3ielRLdXk2a6q9S0udjjWNbE8c=;
-        b=v5iZSFw4q0Wg2W/n/fCZuIckUPY1gHJe9x3xA9P5y9Anc+oOLqjmyo9uRUeazV1pcY
-         2rSNuN7+P5ozU9+Ck9y0Wp/Ei8/yypbtowwn3bHCpDJruG1s/rZOphXLl0AqYQvUovcx
-         CZCd1epsTL+5nUrT3cxc6e0m1QHeQPD0DVeW+RyYI19cVCS36o9a0xw05S6UeXjnfow6
-         v9UeY+BV4AiDRcns/iiCnk660SOnXNCJPiDYCWXlD8b7HKvx2JM0r+qJdaCeAhEulz+T
-         EkMKgCppNCjS4RAuEJrHnF6nWwFCsIG4ZZcbEvh/o82SNhHgkEeARl8E0ETCpWGGFnij
-         KK+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794614968; x=1795219768;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=4yrUMiwU74ePoC7CS3ielRLdXk2a6q9S0udjjWNbE8c=;
-        b=MB9B8d4eGTBgL4UuhNZ+mefaF5v5ol53lvZOaNxBcNdZ95AQB43ah1VFt+gjNql6e0
-         v+XOj8h64JOl7I2CpM5eRyNKrMNCslI6E/qz9wAedpgrqeAWNtFO9FmNVSfNLFQMAAQU
-         a7Vo3zXW7uOnR3OVG/+kutXECuyQd+s170+K07kk3+HKBhT0gOqX99mwpOwvuDFVgvv5
-         yY+5QK9L1hWYIhxiG4SYnVW2Q8IGWDC0aiv/HMSzRydfPPq48Lk36wAQh3KGOry1xYhK
-         3OGEWIhFVzYD+LPrwEHLLl+SvqmCYe/a5S+p24BentaSqOyrqdclBCD3Y56qoV4A1nuS
-         9RYw==
-X-Forwarded-Encrypted: i=1; AL+hErHu+ix1LaEhw10QcL3Hdj+RaMU5dRcgAidG9VwN9R1zB4qjBVBajzyBG+9PFcecomi5c4I=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/pGvCuPZKm03P2lC9utNpXJ0s0guXprD9EFbA7U83hsEM/DFeC
-	Wvcy1SzmvK5TvWd47K9TAtAq8bpMzYEWjCbiHoqjm5t1v+kkaBswOyx6
-X-Gm-Gg: AYBFou2wuZUSHzsNvhhaJ04lAyMRNIKQRlxNHgnFV5IZJjCNEt5/bohyft1wXMLPdZc
-	4Si85ESFi2SFf8zGAkWlLdujeWHKW2oNWoCEoCWK4cUbXhe8F8n8TWuvZzQUq8V7MEbSfKRj/kG
-	wH73ivI14zf/GA2B7bkOvh9CaiobK0cOAJuu+IBhQ635dq27MTzy3FXi89UCOe1rA0wfajgc4Ne
-	YVysQobBCYzFWunW/nomLUr71g/UAsFLnxH7e45Pcj+Hfe1hh8KMXKoMPZSyyJ8gQ/WHO2TQkrf
-	E1E9Lh2WsGuJThi8WrrUO5UeYNloQjx2bay/TawUEAZtIWmueWLRunVPMYavs7EWSNW1xcK3Kyu
-	AN5blskunA30hgwxHsszlVnwqkthfOei+bWiGNpe2eIvpbwfKiC+o6jgFiPcVYFJcjl6JmI+DBs
-	+8Pef4wbu0LnJdVgn5o79RBLxmCiBLFAAeQ0euEsOK40oBs8RSsrU1s3pMJ4uchYrXCzvTtnqtZ
-	ysl5r3KNDF/zYOFTQV02efbLDfIh4QRzw13fGx3xd2KdISkJ5eeMjoOw8lKjmWJJposPuLpWTCS
-	iPv4jsNE7qIrpbIl8QUsD3lSe6SP7/GM79AJGtp2b/yew6FAF5zh0eUBd2wA/rrnNJjyTLwZIlS
-	QTcMRE38U1q8MxyVyEmcG75t8fTG6bh+HjCY65Yacfx2DlUQTZSUaNHk=
-X-Received: by 2002:a17:90b:5546:b0:3b0:9e2c:9b61 with SMTP id 98e67ed59e1d1-3b1b0a46d3emr3997899a91.35.1794614968390;
-        Fri, 13 Nov 2026 16:09:28 -0800 (PST)
-Received: from localhost ([153.61.198.242])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1b39d73c9sm3046893a91.2.2026.11.13.16.09.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Nov 2026 16:09:27 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 14 Nov 2026 00:09:27 +0000
-Message-Id: <DMUHWUF1OF82.3VM2D2YIBY40V@gmail.com>
-Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Tejun Heo" <tj@kernel.org>, "Shakeel Butt"
- <shakeel.butt@linux.dev>, <kkd@meta.com>, <kernel-team@meta.com>
-Subject: Re: [PATCH bpf-next v1 00/20] BPF kthreads and waitqueues
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, <bpf@vger.kernel.org>
-In-Reply-To: <cover.1794269506.git.memxor@gmail.com>
-References: <cover.1794269506.git.memxor@gmail.com>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iKkgEkh3
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABE491F000C4;
+	Sat, 14 Nov 2026 00:16:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794615391;
+	bh=Guk0aJMCD2cOZJhykYYMTeDOfM6tQhjRyfXxpDWH01I=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=iKkgEkh3nvdGULC2ZH+VcEtVMwdO+VZ+VnYroH3Q+w1lRH8EiUx402lll70mN6Gfm
+	 zJkLi3ycoK/tsL46xyXOqMR/e2H94PCOO734dfUwwWEpT4jTv6bDfAt6pth1/SK1u3
+	 TkkiUsTuPn0bU8sN41QYFi2u1ft7e/6+TZIE1mLmP/R+AI44v0n6sRoRHBZ1bheKke
+	 0pFQhdpd13uSFMHAbqsSyav7VmAL8GVaNZhd07As4jNjMLar8r6VsH5cZkIZ/KNKUd
+	 Le+cXA3JjWxxPMJGjK0qfbqOmjtD/e9HmsVdG7v91NW5elgkAJsIz6VttARL2WR6kj
+	 EMeFD2jVQU3AA==
+Date: Fri, 13 Nov 2026 16:16:29 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: netdev-bot+sashiko@kernel.org
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ jv@jvosburgh.net, haiyangz@microsoft.com, ast@kernel.org, hawk@kernel.org,
+ john.fastabend@gmail.com, sdf@fomichev.me, bpf@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 3/5] net: record XDP programs propagated to
+ lower devices
+Message-ID: <20261113161629.23d3d67a@kernel.org>
+In-Reply-To: <179461399614.2199510.14192155072084970014@kernel.org>
+References: <20261112235027.4072149-4-kuba@kernel.org>
+	<179461399614.2199510.14192155072084970014@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,25 +63,152 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, Nov 09, 2026 at 04:27 PM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
-> A syscall program parks the same way, in the user thread that runs it.
+On Fri, 13 Nov 2026 23:53:16 +0000 netdev-bot+sashiko@kernel.org wrote:
+> > diff --git a/net/core/dev.c b/net/core/dev.c
+> > index 69ee4342f43ee..3a520c798d4a8 100644
+> > --- a/net/core/dev.c
+> > +++ b/net/core/dev.c
+> > @@ -9326,6 +9326,9 @@ static void __netdev_upper_dev_unlink(struct net_device *dev,
+> >  
+> >  	__netdev_adjacent_dev_unlink_neighbour(dev, upper_dev);
+> >  
+> > +	if (changeupper_info.master)
+> > +		dev->xdp_from_upper = 0;
+> > +
+> >  	call_netdevice_notifiers_info(NETDEV_CHANGEUPPER,
+> >  				      &changeupper_info.info);
+> >    
+> 
+> [Severity: Medium]
+> The commit message says that clearing the flag here lets the device own a
+> leftover program "rather than leave it with nobody allowed to remove it".
+> Can a lower end up with xdp_from_upper set when no master link was ever
+> created, so that this code never runs?
+> 
+> netvsc_register_vf() propagates netvsc's program before it joins:
+> 
+>     ret = netvsc_vf_setxdp(vf_netdev, prog);
+>     ...
+>     if (netvsc_vf_join(vf_netdev, ndev, context) != 0) {
+>         ret = prog ? netvsc_vf_setxdp(vf_netdev, NULL) : 0;
+>         if (ret)
+>             netdev_warn(ndev,
+>                         "failed to remove XDP program from VF %s: %d\n",
+>                         vf_netdev->name, ret);
+>         return NOTIFY_DONE;
+>     }
+> 
+> The first call stores the program in vf_netdev->xdp_state[XDP_MODE_DRV]
+> and sets xdp_from_upper. netvsc_vf_join() can fail in
+> netdev_rx_handler_register() or in netdev_master_upper_dev_link(). Both
+> failure paths return without a master link.
+> 
+> If the driver's ndo_bpf() then refuses the NULL program,
+> netif_xdp_propagate() returns before it touches xdp_state[] or the flag:
+> 
+>     err = dev->netdev_ops->ndo_bpf(dev, bpf);
+>     if (err)
+>         return err;
+> 
+> netvsc returns NOTIFY_DONE without storing the VF in
+> net_device_ctx->vf_netdev, so it never comes back to this VF. No master
+> was linked, so __netdev_upper_dev_unlink() never clears the flag. Only
+> dev_xdp_uninstall() at unregister does.
+> 
+> From then on, every IFLA_XDP set or remove and every BPF link attach on  
+> the VF hits the new -EBUSY check in dev_xdp_attach(). netvsc's program
+> keeps running on the VF. Before this patch xdp_state[] was empty in this
+> case, so the user could attach a program and then detach it to clear
+> things up.
+> 
+> The only way out seems to be linking the VF to some master and then
+> unlinking it. Should the failed-join path, or netif_xdp_propagate(),
+> handle this case?
+> 
+> bond_xdp_set() has a smaller version of the same problem. If the unwind
+> call fails:
+> 
+>     err_unwind = dev_xdp_propagate(slave_dev, &xdp);
+> 
+> the slave keeps the new program with xdp_from_upper set, while
+> bond->xdp_prog has been reset to old_prog. That slave can't be fixed
+> directly until it is released from the bond.
 
-I'm missing something. What's the point of bpf kthreads if only syscall
-progs can do them?
-It feels less intrusive to start smaller and allow parking of
-user threads from syscall progs only... for now.
+I guess AI semi-randomly anchored this comment here, it's basically
+saying that since netvsc is buggy the state may get out of sync.
+Yes, as mentioned in the netvsc series I didn't manage to cover all
+the error paths there. And also that's the reason why I added the
+clearing of "from upper" on unlink, to make the bad state recoverable.
 
-kthreads have no limits it seems. memcg is probably not aware.
-I didn't check all release mechanisms and cleanups.
-I'd think syscall prog can signal to user space to create a new user
-thread and start bpf syscall prog there.
-It's less flexible, but at least the ownership of threads and their
-resources are clear and contained.
-We kinda do bpf_wq() already, so one car argue that bpf can consume
-a bunch of cpus too, but wq is really for short term work and
-the rest of wq machinery will yell if bpf is abuses it.
-Here kthreads suppose to be long lived. It feels too amitious
-to let bpf lose on them. Let them be user threads for now?
+IOW patch is working as intended. We're going from "no safety checks"
+to "some already buggy driver error path may fail to clean up".
 
-pw-bot: cr
+> > @@ -10561,6 +10564,15 @@ u8 dev_xdp_prog_count(struct net_device *dev)
+> >  }
+> >  EXPORT_SYMBOL_GPL(dev_xdp_prog_count);
+> >  
+> > +/* Does the device have an XDP program, and was it installed directly on the
+> > + * device rather than propagated down by an upper with netif_xdp_propagate()?
+> > + */
+> > +bool dev_xdp_has_own_prog(struct net_device *dev)
+> > +{
+> > +	return dev_xdp_prog_count(dev) && !dev->xdp_from_upper;
+> > +}
+> > +EXPORT_SYMBOL_GPL(dev_xdp_has_own_prog);  
+> 
+> [Severity: Low]
+> This isn't a bug, but does this comment still match what the function
+> returns? It describes where the program came from. The new kernel-doc in
+> include/linux/netdevice.h does too:
+> 
+>     @xdp_from_upper: the program in @xdp_state was installed by an
+>         upper device with netif_xdp_propagate(); it belongs to the
+>         upper and can't be replaced or removed through this device.
+> 
+> __netdev_upper_dev_unlink() clears xdp_from_upper on any master unlink.
+> That includes the case where the upper's NULL propagate failed and
+> bonding or netvsc only warned. After that, dev_xdp_has_own_prog() returns
+> true for a program that an upper propagated.
+> 
+> Could both comments describe the flag as current ownership, including the
+> hand-over on master unlink?
+
+No, it's a failure mode / de-sync case. We shouldn't document it.
+
+> > @@ -10773,6 +10816,10 @@ static int dev_xdp_attach(struct net_device *dev, struct netlink_ext_ack *extack
+> >  	}
+> >  
+> >  	mode = dev_xdp_mode(dev, flags);
+> > +	if (dev->xdp_from_upper) {
+> > +		NL_SET_ERR_MSG(extack, "Can't replace an XDP program installed by an upper device");
+> > +		return -EBUSY;
+> > +	}  
+> 
+> [Severity: Low]
+> This check now runs before the existing loop that refuses an attach when
+> an upper has a program:
+> 
+>     netdev_for_each_upper_dev_rcu(dev, upper, iter) {
+>         if (dev_xdp_prog_count(upper) > 0) {
+>             NL_SET_ERR_MSG(extack, "Cannot attach when an upper device already has a program");
+>             return -EEXIST;
+>         }
+>     }
+> 
+> For a direct bond slave or a joined netvsc VF, the upper keeps its
+> program in its own xdp_state[]. Attach, replace and detach on the lower
+> were therefore already refused, with -EEXIST. They now fail with -EBUSY
+> and a different extack message.
+> 
+> The commit message says dev_xdp_attach() reads the flag "to keep the
+> program from being replaced or removed behind the upper's back". However,
+> that protection is only new for nested lowers and for the netvsc window
+> before the join.
+> 
+> Is the errno and message change for the common direct-lower case
+> intended? If so, could the commit message mention it?
+
+Intended / doesn't matter.
