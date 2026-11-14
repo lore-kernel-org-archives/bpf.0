@@ -1,64 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794652724;
-	b=oqawjCYXViBhZDOu54mO4rFz5m3zErSirnUbuzXnMAw5PATI/TruwwQCkwdYiSLiYDWT
-	 87+gx8lEZbzpBfhA+I9R/lP3Tj64Irpw9UlSdc+p4na9S7JCuJzxOJ4l/gtzUEqjOMI7V
-	 DJHN6iX/ivzO7lbnKY46RBEEl0JZ42vbCVul1KDbsbqHvMtBf7fP7k5za24lFJMnv2acy
-	 tc9PFjKvxjpUacndXixORGVwbf0veUq8K7TT9dHn+NvEw19syoMtzELWJVlFAnS85jZU2
-	 MsBpOdAkcOgkFCqLIUggxnTJAqvI4a+i6uFgZcE3+rlJwGd7/bwvyVtmWY/ExSPHbTw==
+	t=1794653242;
+	b=mczozm5CDRkNjLjMK06YsTpw6W/eSvl7gefZQaDPzMhZ9SGDUFpTJyFJUc/9/LBHUAz1
+	 b+PygOmcSNfX2OAXaX2YuEUdxOgyR0NPrX+lJrzVpNhKude+DPX8bQdPCJowXVq8FJlmb
+	 OLxvNx274r6S9ai/fHhUcfI3BZASPBEgf2Zc/QmuaEDaXtJaSs5b8hUg/WfME+QasNTWw
+	 2PtORRl7kcRTt9m7NsMiv7GRBxs+D6vln9ETSa3wZg/7VFPQxi2I+j9dt8Geq+z7G8QZQ
+	 Xc2Zm5uT1kkdJ8mjVwpI9rjDgOQHaSs0jQgpm9pOiaqFG/5vpjhOQi0jtmT7+vMnuWQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794652724;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=f0g6P6hsNAkBmmk1dhVL/yqmLVxvhNEJRF73P8Hffz8=;
-	b=XTRFf3I9lNTiXczV41KEJg/FNuIVqDVo2dmDdYyszYgVrx7yTyVRPsPuZfvPA4veCQgQ
-	 jKr/qKLNzZFhQ2jewlC/ZCTk4+8Poh+6hOz3XN5IEfOlepYONBBN/dZ283nK3OXJNhLZ3
-	 LUjdHWsRXLFyh6UM22W5GyemHIlJGs7c/oztRdwvhrP9kxWVJWRUZdqykh/yKnLFBm5zI
-	 jW/KA9kONTlAz0bqr1L/Ybfmzs2qCgDwTbIVbBI+YVwP1Dtp3zII5gIcV0LHpaX/uQIQh
-	 TF5BkI2HzftmVZuRIitvcviJKbYL8yp7+DQl14DOpUMxZZ2GcSxk2dCywnFttGpRBDw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794653242;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=damD+a6ATypVAnXYglYV6le4AUcHLkfIShEa6x0MyLQ=;
+	b=43yEQu7PkanhkQBh8fXdhDgsPzXJBrQeBBJDEWBV6Va5kfWRffiAUhYLasGErIvao1Dm
+	 DtDeb7cckv/Ss6lQmQk258tFoTIPNuaKrhA5+5ISrdSrEpFgv98hGgx/fNyozuUxcvZuK
+	 MyVl2Mq91nCkSs9i6RiAweH+bRtlFnqvxX36WGyFSMrQos+c5mDCmlpu1shKz5e7x0XST
+	 AhRY374Evvg/iYE2BEbluvjaUKA505v5zPh+2e2am0+/I+4Y2jeQxlY86VqZGP+hnIC5B
+	 9l35akWAcK5dkvyCN/ApMiZAHrnPJgWdGaCdRWEFzDUYb9rA+lVEiWkILKtFHPXhDSQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ozu7z0Kj;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gl7HZO6P;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFCDB606A323;
-	Sat, 14 Nov 2026 10:38:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB460606A32E
+	for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 10:47:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ozu7z0Kj
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CE541F000C4;
-	Sat, 14 Nov 2026 10:38:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gl7HZO6P
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3684D1F000C4;
+	Sat, 14 Nov 2026 10:47:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794652724;
-	bh=f0g6P6hsNAkBmmk1dhVL/yqmLVxvhNEJRF73P8Hffz8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Ozu7z0Kj1tHIOD24bkiz6twDQ59H2LG047bnoA597yeAQD+7loV9AVNQq6/EfNxmA
-	 RAV43n2Xp3rFswhwCvrdVPjCv2twIaBECTwXwjSyPBKOEecSJccYi16iPUffdcy+kX
-	 2KsSYHa0TM5q3kVm9Et0sKjXOYpfJER4fjfggVZYik+Tlk8iLg4VYcTfwPq6hSWTb+
-	 FqNtagBKrLecsr9nZyvU/RGWRSqwrFdabGVO12uSaA2rrQgzv6ROpsZEsD9jdN00pG
-	 9AVp7r2bVcIF0aGX9qNUD3D/9g7VuGmG+jesekdRYeqNRWWlH0zjJp4ZwQJyQCg3y0
-	 VLaLdAkJXNuOg==
-Date: Sat, 14 Nov 2026 11:38:35 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Christoph Hellwig <hch@lst.de>
-Cc: linux-fsdevel@vger.kernel.org, Jann Horn <jannh@google.com>, 
-	Chris Mason <mason@kernel.org>, Josef Bacik <josef@toxicpanda.com>, linux-block@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, linux-scsi@vger.kernel.org, 
-	target-devel@vger.kernel.org, driver-core@lists.linux.dev, linux-mm@kvack.org, 
-	bpf@vger.kernel.org, linux-security-module@vger.kernel.org, selinux@vger.kernel.org, 
-	apparmor@lists.ubuntu.com, linux-nfs@vger.kernel.org, netdev@vger.kernel.org, 
-	fuse-devel@lists.linux.dev, linux-efi@vger.kernel.org, xen-devel@lists.xenproject.org, 
-	ocfs2-devel@lists.linux.dev, linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-usb@vger.kernel.org, Amir Goldstein <amir73il@gmail.com>, 
-	linux-erofs@lists.ozlabs.org, linux-kselftest@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH RFC 01/41] loop: refuse backing files that aren't open
- for reading
-Message-ID: <20261114-erfrieren-vorher-taktieren-ef10b08e210f@brauner>
-References: <20261110-work-loop-pseudo-v1-0-4c998976c6c7@kernel.org>
- <20261110-work-loop-pseudo-v1-1-4c998976c6c7@kernel.org>
- <20261111145555.GA9996@lst.de>
+	s=k20260515; t=1794653242;
+	bh=damD+a6ATypVAnXYglYV6le4AUcHLkfIShEa6x0MyLQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=gl7HZO6PYA/o6XLzx84VfUbayEMmy+QQsn2KHGas/uJ9tQEJB2SjJRkgVHlTJvVbY
+	 4s+16uuvVfutxzH8NfN3C17Q6VC1EA28MV8fvbi5maelajsyYPl/syC6bGn/MUh/p1
+	 yXwfnFbI0tteM0UJTITYRHFfOk7zty9IL4qgwMYvWMMArTuIBfplHQkiYsAFK/e6Sl
+	 MFpdGnvh3xhvS9A5Xq1sTSSAWNE8vBdMQUmqCMD6AGM435bYCKpgHo+U2sB9zqNcar
+	 0BG08MC7m3qK50r4VujUBh3+vPuxCKwmS9JpEHkeUMQfJrl1D/OBKTl7fNYk/gx34k
+	 oDxlVA0Q0hv4Q==
+Message-ID: <sashiko-outbox-214363@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net 1/2] veth: wake a stopped peer txq beyond
+ real_num_tx_queues
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Simon Schippers" <simon.schippers@tu-dortmund.de>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261113104648.225983-2-simon.schippers@tu-dortmund.de>
+References: <20261113104648.225983-1-simon.schippers@tu-dortmund.de>
+ <20261113104648.225983-2-simon.schippers@tu-dortmund.de>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 14 Nov 2026 10:47:21 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -67,19 +60,51 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20261111145555.GA9996@lst.de>
 
-On Wed, Nov 11, 2026 at 03:55:55PM +0100, Christoph Hellwig wrote:
-> But i wonder if we want a thin wrapper around ->read_iter/_write_iter
-> to do this check so that it matches the normal read/write path?
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Low] veth: Fixes trailer cites dc82a33297fc instead of 08f566e8f83b
+--
 
-Yes, I had thought about that as well. We could use
-vfs_iocb_iter_{read,write}() for that but it's not thin at all and
-brings in the LSM into these codepaths where they shouldn't meddle.
+commit 4511ff49371a3a9f93211f5b51b7a6404ecb1f22
+Author: Simon Schippers <simon.schippers@tu-dortmund.de>
 
-So maybe as a follow-up series with a new
-vfs_iocb_iter_{read,write}_raw() or whatever. Feel free to make a
-suggestion.
+> veth: wake a stopped peer txq beyond real_num_tx_queues
+>
+> Since commit dc82a33297fc ("veth: apply qdisc backpressure on full
+> ptr_ring to reduce TX drops"), only the peer's veth_poll() wakes a txq
+> that veth_xmit() stopped on a full ptr_ring. veth_poll() skips txqs at
+> or above the peer's real_num_tx_queues.
+>
+> If the peer shrinks its TX channels while such a txq is stopped, nothing
+> wakes it. netif_set_real_num_tx_queues() keeps its state, so once the
+> channels are grown back, its first skb is requeued forever. With a single
+> root qdisc this blocks all transmission of the device.
+>
+> Look the txq up below num_tx_queues instead. Waking a txq that is not in
+> use is harmless.
+>
+> Reproduced in virtme-ng with a UDP flood from veth0 into veth1, which has
+> GRO, while switching veth0 between one and two TX channels: without this
+> patch veth0 stopped transmitting within 11 cycles in 3 of 3 runs, with
+> it veth0 kept transmitting through 30 cycles in 3 of 3 runs.
+>
+> Fixes: dc82a33297fc ("veth: apply qdisc backpressure on full ptr_ring to =
+reduce TX drops")
+> Assisted-by: Claude:claude-opus-5-5
+> Signed-off-by: Simon Schippers <simon.schippers@tu-dortmund.de>
+
+[Severity: Low]
+Should the Fixes: tag reference 08f566e8f83b ("veth: fix OOB txq access
+in veth_poll() with asymmetric queue counts") instead?
+
+Commit dc82a33297fc ("veth: apply qdisc backpressure on full ptr_ring to
+reduce TX drops") looked up peer_txq unconditionally via
+netdev_get_tx_queue(peer_dev, queue_idx).  The queue_idx <
+peer_dev->real_num_tx_queues check that skips txqs above
+real_num_tx_queues in veth_poll() was introduced in 08f566e8f83b ("veth:
+fix OOB txq access in veth_poll() with asymmetric queue counts").
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261113104648.2259=
+83-1-simon.schippers@tu-dortmund.de?part=3D1
