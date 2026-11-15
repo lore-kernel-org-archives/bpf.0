@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794712703;
-	b=y/FNl5QfvCbjynuORsghG2u9q73ccKHrQfRmrS98kIpvzpwcchEtuvOCoM+wIUvDJXp3
-	 uwb1WoOo7vZZBQf8Cx/V8yVa+XUual+Ddsrm2qLJtK6ZykkiHP4YJ1++20AbXAvWc/wtO
-	 9ZTB6Bk9ZEO1YQFILRtadQm8X0JZhjvnNdUfikhqrHEcZDJTbjlDUaF+33xdoMtZtxtwZ
-	 l35u6mKRA+xrWisyn9xh/tUfsf03xAwkjeobzYrnwjObUXv60KjiwFCTc2ANGWzKkNYOM
-	 +FNUs+IwH8ansxFQx7iK2ac2DkK1UNcIK9P93Z0opXs+srWs4cfvGe33RszX+pi7V2Q==
+	t=1794712708;
+	b=Rue/wZyvjVb4KeeDT6IOgeDrYCxtG8oAY77z1lCynCbK2jg555lmg35Sm+reI6FsPejX
+	 OA+biqQa/G4CXb3BfnpLBBVTkVUE1x+HUiq7dB4xG6fhCRuSPRtk/gKLJyp3KbCdU+zbe
+	 z6RJ5U5cccnAU5346CJV2dPcf9AEYD7HIcKQ18fllpyYpBNqI2jXslRqoU/7rQjrMyUa2
+	 qkBoJlbYeIB/lpdcRMHKoVQPgAJADIfZHxuzbjee5R9+NBtJAD4GE+0tq59r3/3ZN6MVj
+	 MdB+YQKOKIQGMztlgXj5hOV6uLIiiMUBOMS2C7drYo1iEFAv0pS5cn1hqMtyD5Wt/JQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794712703;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794712708;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=ERJ1IoTOJVoO0BUVAAL35jSmT72i5VI3cMJqWRwEe3o=;
-	b=b4ETre91R/tWqCnBPROOnVn9W0l8nhg82KNpw0LRKXdV7/s5bXu0o7UOyHBFhPRKFn5l
-	 F9ku5TireEU6q3q4mGH5KIW8HWOQdOpTcMZRCsinJ9/RgLPp1/MsC6e7+ITZMHMDQAVSI
-	 Yk2V6f8SQQC7psX6PFXb1NtdYOujq9AKJ+nFcGbmWF6x/TtuhPdDRbImOpAi8AjueZO+b
-	 ZlZME//P6v1JyltXI63SgCVNV9JXrXCTAVcNeQ4FdErIuqs6BD2WTPeOeRmFrkyF31SxB
-	 4/+Nv407D4vb1IAkVRQE99K5jApPZ+SdQLJf7ixkNlhG2hqmPV/gzVAgvBkDzS0PxDg==
+	bh=6xELBp+yLa1rDoNGymklB/N3IouGpSartu+yBIKoLYM=;
+	b=VBhcc3ZBMqPMBysPDzOryOwO5buF4EFs/S2k8cdodpgAtifZR0/1gqPXgUXXEiExyy0R
+	 NwVW41XRL/hm98R6ZzrAgHh48DF8XJL0x6ZF0HPOkXXyP4F6ixT4xOVz7bDhrcbVDLCN+
+	 WHHkj2Mty628V/kKO3iuszuYbXJLoaO466IrWOBG0z+hZvOwC6l+tn1WH4S5829tErJ/g
+	 ZKHot0JX/SP0LV7hlyAtiBZo5sNkGe9RXVpzi/o+ZlCX+B/BJLkl7O49O/eAUiZzHJq34
+	 hMsSe2p/ysQTPDZUb1aweV7s1XCGshkj5ExU3MWrhlCgmaFv5DiYBT13kEnZArJllAA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IouvtsYX;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XE+TbmoL;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0A6C606A889;
-	Sun, 15 Nov 2026 03:18:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49A6660A5BCA;
+	Sun, 15 Nov 2026 03:18:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IouvtsYX
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 546AB1F000D3;
-	Sun, 15 Nov 2026 03:18:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XE+TbmoL
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADC411F00925;
+	Sun, 15 Nov 2026 03:18:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794712702;
-	bh=ERJ1IoTOJVoO0BUVAAL35jSmT72i5VI3cMJqWRwEe3o=;
+	s=k20260515; t=1794712707;
+	bh=6xELBp+yLa1rDoNGymklB/N3IouGpSartu+yBIKoLYM=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=IouvtsYXSVwqKZuDWjKGOnZoPCAscCsdr3Tk/EIuMn8ERkAIt0Nx1kwNd4hWFj4tD
-	 zHb3wvmv59cmoAtYHRXqMT3PYrcCFs5vOeBxlg/lqiINmMDUi8bXSyVzuJtolpQWoe
-	 E1Pr2VG5CDPnTFm6XwVOIPYGL4uYovLMiFqWEs06+L4StbeOcmsoRZf38o0x0WKAnL
-	 Ju8r9quKA7T7jH/ZhCIsmObyU6ejNUZLuy0cox7SU2Ic2DyIkwAwoYDtiLcrYVpymK
-	 0qX2Ac56pLkzcvmFCsQvO1Xvi3BlhwePJhLb72gaHW2EUZ9qis9t3Q4UFhJq1O4yEP
-	 FVR438SOIb/Pg==
-Subject: Re: [PATCH net-next v1 07/15] bpf: don't redirect decrypted skbs from
- egress to ingress
+	b=XE+TbmoLDF9UzbfJoVAvGRVHMKoZ+DrsTGtNSz6uXvziuagHeJEKFqg4bAJNQ7zSW
+	 iJaIpBsWtgEVlRpGLnJ6aMJd9uE+A6Vlff74BcEwIuxUrWrEaypz1JtaByQiqC0Kn4
+	 GVHuN5PgL/pW7Aw5E9WIHzE8C5pShtsKnhHUumSZHuV6Rh6TSAHc3HjnQQg4f55wQB
+	 ykLOsgCxq6lrS4aDUJYkuv0Ka4iDj5x0iGMya6CDArD0NSp7D6qpyOumiUnJB1KAJu
+	 oSDQCYIQQ+7Jv0KVwr4N+o57kNmnyWhCOg/jR93mzO7Co/2ysBSfn7wDdCJUoPAyHp
+	 auJUiVAT7v5lg==
+Subject: Re: [PATCH net-next v1 10/15] net/sched: flower: add psp_spi,
+ psp_ver, and psp_dev matches
 From: netdev-bot+sashiko@kernel.org
 To: toddfreed@meta.com
 Cc: netdev@vger.kernel.org, davem@davemloft.net, andrew+netdev@lunn.ch,
@@ -52,10 +52,10 @@ Cc: netdev@vger.kernel.org, davem@davemloft.net, andrew+netdev@lunn.ch,
  linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
  martin.lau@linux.dev, pabeni@redhat.com, saeedm@nvidia.com, horms@kernel.org,
  tariqt@nvidia.com, weiwan@google.com, willemdebruijn.kernel@gmail.com
-Date: Sun, 15 Nov 2026 03:18:20 +0000
-Message-ID: <179471270091.2199510.4320994626979041884@kernel.org>
-In-Reply-To: <20261111005533.6436-8-toddfreed@meta.com>
-References: <20261111005533.6436-8-toddfreed@meta.com>
+Date: Sun, 15 Nov 2026 03:18:26 +0000
+Message-ID: <179471270629.2199510.9480561958902023552@kernel.org>
+In-Reply-To: <20261111005533.6436-11-toddfreed@meta.com>
+References: <20261111005533.6436-11-toddfreed@meta.com>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -69,10 +69,10 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 3 potential
+Thank you for your contribution! Sashiko AI review found 1 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 2
+Critical: 0 · High: 0 · Medium: 1 · Low: 0
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -80,132 +80,116 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] The new check in __bpf_redirect()
-  (net/core/filter.c:2232-2233) decides that the skb is on egress, and…
-- [Low] The new drop in __bpf_redirect() (net/core/filter.c:2234) uses
-  kfree_skb(skb), which records SKB_DROP_REASON_NOT_SPECIFIED.
-- [Low] bpf: non-standard multi-line comment style in __bpf_redirect()
+- [Medium] The commit message misstates what a PSP flower rule matches
+  once two key rotations have passed, and it overstates its claim that…
 
 --
 
-bpf: don't redirect decrypted skbs from egress to ingress
+net/sched: flower: add psp_spi, psp_ver, and psp_dev matches
 
-With this patch, __bpf_redirect() drops skbs that have skb->decrypted set
-when they are redirected with BPF_F_INGRESS from outside tc ingress. On
-transmit the bit asks the device to encrypt. In a receive path the same
-bit would make the packet look like the device decrypted it. This matches
-the mirred change from the previous patch.
+This adds a flow dissector key that is filled from the SKB_EXT_PSP Rx
+state of decrypted packets. It also adds flower matches on the SPI (with
+a mask), the PSP version and the PSP device ID. The goal is to let a tc
+rule select the packets of a single Rx association, for example to apply
+psp decap.
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index aca8160b26a1a..a178a9dd30070 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -2226,6 +2226,15 @@ static int __bpf_redirect_common(struct sk_buff *skb, struct net_device *dev,
->  static int __bpf_redirect(struct sk_buff *skb, struct net_device *dev,
->  			  u32 flags)
->  {
-> +	/* On transmit, decrypted asks the device to encrypt the packet. Sent
-> +	 * to ingress, the packet would read as decrypted by the device.
-> +	 */
-> +	if (unlikely((flags & BPF_F_INGRESS) && !skb_at_tc_ingress(skb) &&
-> +		     skb_is_decrypted(skb))) {
+> diff --git a/net/core/flow_dissector.c b/net/core/flow_dissector.c
+> index 1be6c739e3c71..95d3fa3b1568e 100644
+> --- a/net/core/flow_dissector.c
+> +++ b/net/core/flow_dissector.c
 
-[Severity: Low]
-This isn't a bug, but could the new comment in __bpf_redirect() use
-the multi-line comment style that BPF code prefers?
+[ ... ]
 
-net/core/filter.c is covered by the BPF comment style. There the
-opening /* goes on its own line and the text starts on the next line,
-even where the surrounding code still uses the older networking style.
-The added comment puts "On transmit, decrypted asks the device ..." on
-the same line as the opening delimiter. Moving that text down one line
-would match the preferred form:
-
-	/*
-	 * On transmit, decrypted asks the device to encrypt the packet.
-	 * Sent to ingress, the packet would read as decrypted by the
-	 * device.
-	 */
+> @@ -511,6 +512,32 @@ void skb_flow_dissect_hash(const struct sk_buff *skb,
+>  }
+>  EXPORT_SYMBOL(skb_flow_dissect_hash);
+>  
+> +void skb_flow_dissect_psp(const struct sk_buff *skb,
+> +			  struct flow_dissector *flow_dissector,
+> +			  void *target_container)
+> +{
+> +#if IS_ENABLED(CONFIG_INET_PSP)
+> +	struct flow_dissector_key_psp *key;
+> +	struct psp_skb_ext *pse;
+> +
+> +	if (!dissector_uses_key(flow_dissector, FLOW_DISSECTOR_KEY_PSP))
+> +		return;
+> +
+> +	pse = skb_ext_find(skb, SKB_EXT_PSP);
+> +	if (!pse)
+> +		return;
+> +
+> +	key = skb_flow_dissector_target(flow_dissector,
+> +					FLOW_DISSECTOR_KEY_PSP,
+> +					target_container);
+> +	key->spi = pse->spi;
+> +	key->dev_id = pse->dev_id;
+> +	key->version = pse->version;
+> +	key->present = 1;
 
 [Severity: Medium]
-Is skb_at_tc_ingress() a reliable direction signal for every caller of
-__bpf_redirect()?
+Does the commit message describe the right failure mode for rules that
+are still installed after two key rotations?
 
-tcf_mirred_act() only checks this inside a tc hook, where tc_at_ingress
-is always current. But __bpf_redirect() is also reached from LWT xmit
-programs. lwt_xmit_func_proto() gives those programs bpf_redirect() and
-bpf_clone_redirect(), and BPF_F_INGRESS is an accepted flag:
+The commit message says:
 
-ip_finish_output2()
-  lwtunnel_xmit()
-    run_lwt_bpf()
-      skb_do_redirect()
-        __bpf_redirect(skb, dev, flags)
+  Together these matches tie a rule to one association, ...
 
-This runs before __dev_queue_xmit(), the only place on transmit that
-clears the bit:
+and:
 
-net/core/dev.c:__dev_queue_xmit() {
+  this means that a rule matching packets that correspond to an rx
+  association which is stale (two rotations have passed), can still match.
+
+After two rotations the device key for the original association is gone.
+Its packets then fail to decrypt and never get SKB_EXT_PSP, so the stale
+association itself can no longer match.
+
+The SPI value can be handed out again, though. In netdevsim, for example:
+
+drivers/net/netdevsim/psp.c:nsim_key_rotate() {
     ...
-	tcx_set_ingress(skb, false);
-    ...
-}
-
-The only place that sets the bit is sch_handle_ingress(), and only when
-the input device has a tcx/clsact ingress entry. skb_scrub_packet() does
-not touch it. For a forwarded skb, tc_at_ingress at the LWT xmit hook is
-whatever the input device left behind.
-
-Here is one way to get a forwarded skb whose decrypted bit means "please
-encrypt". psp_validate_xmit() accepts any device whose psp_dev matches
-the association, including dev-assoc veth/netkit devices. A PSP socket in
-a container can then cross the veth with decrypted=1, and the host-side
-peer forwards it.
-
-Say the host-side veth has a tc ingress hook. Then tc_at_ingress=1
-reaches the LWT xmit hook, and bpf_redirect(X, BPF_F_INGRESS) passes this
-check. The packet enters X's receive path through __bpf_rx_skb() with
-decrypted=1.
-
-Without a tc ingress hook on the host-side veth, the same packet and the
-same program get -EINVAL, and the packet is dropped.
-
-Doesn't that make the result depend on unrelated tc configuration on the
-input device, rather than on the direction of the hook calling the
-helper? Neither the comment ("On transmit, ...") nor the commit message
-("drop decrypted skbs which bpf redirects from egress to ingress")
-describes this case.
-
-The socket-less PSP case through act_psp encap on tc egress looks fine,
-since tc_at_ingress is 0 there. Could the caller pass the direction
-instead (LWT xmit is always egress), or could the LWT path be handled
-explicitly?
-
-> +		kfree_skb(skb);
-> +		return -EINVAL;
-
-[Severity: Low]
-This isn't a bug, but could this use kfree_skb_reason() with a specific
-drop reason?
-
-kfree_skb() records SKB_DROP_REASON_NOT_SPECIFIED. For bpf_redirect(),
-the program has already returned TC_ACT_REDIRECT, and the callers of
-skb_do_redirect() ignore its return value:
-
-net/core/dev.c:sch_handle_egress() {
-    ...
-		skb_do_redirect(skb);
-		*ret = NET_XMIT_SUCCESS;
+	if (ns->psp.spi & PSP_SPI_KEY_PHASE)
+		ns->psp.spi = 0;
+	else
+		ns->psp.spi = PSP_SPI_KEY_PHASE;
     ...
 }
 
-run_lwt_bpf() and netkit ignore it too. Neither the program nor the
-sender learns about this new policy drop. In drop_monitor or the
-kfree_skb tracepoint it looks like any other generic drop.
+and nsim_rx_spi_alloc() then does:
 
-The matching mirred drop in the previous patch returns TC_ACT_SHOT and is
-recorded as SKB_DROP_REASON_TC_EGRESS. The series also already defines
-SKB_DROP_REASON_PSP_OUTPUT for related PSP policy drops.
+	assoc->spi = cpu_to_be32(++ns->psp.spi);
+
+So a new rx-spi-alloc, possibly for a different peer, can get 0x80000001
+again. skb_flow_dissect_psp() only copies spi, dev_id and version. Given
+that, wouldn't the example rule from the commit message:
+
+  psp_spi 0x80000001 psp_ver 0 psp_dev 1 action psp decap
+
+strip PSP state from the traffic of a different, live association? With
+a mirred action instead of decap, it would forward that traffic.
+
+The socket path avoids this because psp_pse_matches_pas() also compares
+the generation:
+
+	return pse && pas->rx.spi == pse->spi &&
+	       pas->generation == pse->generation &&
+	       pas->version == pse->version &&
+	       pas->dev_id == pse->dev_id;
+
+Adding generation to the key would not fully fix this either. The mlx5
+Rx path always passes generation = 0 to psp_dev_rcv(). So it looks like
+(spi, version, dev) cannot identify a single association beyond two
+rotations on any driver.
+
+The "Socket-less associations" text that a later patch in this series
+adds to Documentation/networking/psp.rst has the same gap. It only says
+userspace should replace such rules before two rotations, and it repeats
+that the matches tie a decap rule to one Rx association. No later patch
+in the series adds a generation match or any enforcement.
+
+Could the commit message and the documentation say that a stale rule can
+end up matching a different association that reused the SPI, rather
+than the stale association itself?
 
 [ ... ]
 
