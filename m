@@ -1,84 +1,107 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794785200;
-	b=TPUUysIwlYA/isYXpUzRQJL3W0/N3thTn5GiKVA7UQ1I3lFs6l9kRVVDQO331TsxV1Ny
-	 sY84REOTJP+p4P8aI2uAacDgfSEz8I7G+c4LhRXDYMsvM58bln43yrlZ7waFGfaejGGV1
-	 bM9SuhTH+RO/qN8qqN6bvzZ+8xQkEQqlO/KPOFw0empbHQjE38wuZ162g9NRPjm+1nARQ
-	 Jd2+LaNA+0MpzQiypO+dF38EDoduDRMmhcPIzYA8AB9kefQT6peBZMDGugp08LefiVMPA
-	 /rQg0+BfFKYlDASxVB2W/9/+UOY6x2aUrqlAN9GVlEFWynhl11ao9wLm4q+L6tg4ufg==
+	t=1794785311;
+	b=pKcBL2DVxCaiInlGKInTkI4iIh6ezlK03DhxYJ15noQvofJfwTqAazeMgLNweakDT/zj
+	 dfui5Q5iHJ9DGL4sjV8VD4IpBqDQGk3HUNH5gNl2fGehUbUl/XDlMbvIaYnYaynUknrZF
+	 rvTDobfayA0Ba/NVAL/0C2GowV6vMMbhq9fWjk1FNo+iJMUQK5VGjPpctWYwQP7HaqKqr
+	 EpVGQ/Y7ZM5x0uM4AmYfY15zTPn7NYLlwo9U0i3nd7JXSw2SyobYIFbys7xUubaJa1vvH
+	 UJGc/jAkbDU6mVNWqMUdHNSF1NsSIpRflpiZf6TD/nUJkxETN28EaOrHHM6Dz7d9UFw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794785200;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794785311;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Mime-Version:
-	 Content-Transfer-Encoding:Content-Type:Date:Message-Id:Cc:Subject:
-	 From:To:X-Mailer:References:In-Reply-To;
-	bh=20xh83TZY5Uy9+3Rpue534EqUQXyz0SBbzg5tu3uVBA=;
-	b=HBgy6/KQ4tlSVWW28hK3qPzjC3RvPDWJ4J/gwjMsMmLPchHAOlfBrtOqtKTx+NkA76+P
-	 w5MqZumThrJX6s9ld7mWOQtMoRcEHJM+PPT8dqMO/FHyFiWsNQNU4kY3JLhJ3hOLiQsGD
-	 zbzpcRa9q849eNaihVg74UgL1karr3Jzd2ICyDOMkXQZbceev90nLTOXUzN3f69QXm9Lk
-	 2eEVPD7UJfVgiMjcp2SzfF6Jv4N8Qyvy3yIWJt1EZmETxkR/YYzyoIpr5QI0sva90ZL1f
-	 O5CERuAA71T5b5WJ4bVpJEhRMf/Hiorf5OzEtbVdpH4APhJTjv5ivfqxDexdLJRYcPg==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=UBeykY1+H/vPJmkPV2pLCmI2Bs+Pj25kP6+DXgtUhEg=;
+	b=XD/ckvWXxNzn5fFIC00htvJ0f3jqSxUBTOt/C8hCh8zQrq4qPZSVmgyfmTxRZM+lm6eq
+	 yuJAjICY4p3Q/o/Ik/zIECuVMPdJkP+eN84xFJ7AegvYf+6NVIVrAPGSGklxjkkWHFDhu
+	 UIZ87ogMzfAA/sdNSqt25LpPo81dTJKR+Qlv74/PPny9gImnhpNW6d44lBp0iY7RCfhRD
+	 03CCu/ELqLwWSF+reUNgCbfpQK/XAqXsfj/rpvVqFwVLvcgCb/gnI6ay9FSW3f2T+VUpz
+	 8M0MUXPreNBBNWu93sZTjT7ML7M66zTHfUEay1KPDUdHcIkJPyjmw9LKIPAy/aoUiCw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VaCpIw98;
-	arc=none smtp.remote-ip=209.85.215.173
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=R4X8Y8HY;
+	arc=none smtp.remote-ip=209.85.214.178
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4245C606A32C
-	for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 23:26:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4245C606A32C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B0CB606A330
+	for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 23:28:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0B0CB606A330
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VaCpIw98
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-cddac941ed1so1265567a12.2
-        for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 15:26:40 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=R4X8Y8HY
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2e9ae391a05so15808015ad.1
+        for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 15:28:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794785200; x=1795390000; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=20xh83TZY5Uy9+3Rpue534EqUQXyz0SBbzg5tu3uVBA=;
-        b=VaCpIw98wKkbD9OSdh+EXoit3eBwjIoeGgt9ZEQ7/6yotVqNdI+yVTIV4nDAt39T+g
-         hA3v8JQQTbZPLQ9KlTD8PQ65DMoPqKo6NEKaC+Pcs2KJvuZ3uqVAMO0/yGDR5m9WRlbk
-         Ttndfl7ARxujEeM3sI+HJOzB6iemESu+bl89ewTirMDu8fwIJofahrTqRx6PxbeMoRAV
-         0qpLvcKAlmapM8EW4JaHCqfNGSHmKOsIP4SQ4wrULD8oP08K88628xdIqANFCyWHjMb+
-         /gp0OiNl3lkIBbKaBRcHjJK3v0sTsIEZZnnOVJ+vm/tdFHOZZKdjch4O7XBkhnujfW1q
-         Vu/w==
+        d=gmail.com; s=20260707; t=1794785310; x=1795390110; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=UBeykY1+H/vPJmkPV2pLCmI2Bs+Pj25kP6+DXgtUhEg=;
+        b=R4X8Y8HY8JvXK9sdMGMllaKudzpsfMfDLWS/qg6c0goxa2kUGuYQv/8mPEQn7MTQwN
+         9RpdlbNq0uFqewcYwl+PkyM/jUdR6c5AkuMetaUc3nP6yyslFlaUUprBo0FDyhiCpcx1
+         0nqgdtFlgbGe4nQG7wQaHZtPTeB6PxsPL4ESMRO1CCXaBMoVQKRwYCZ/4nuE0Wal6v+N
+         8530jNemiaGvpVK93xW7ndcQ9X3tvuspHUk6ZlHK/ECwo1u0FgJ8qU6+DVzh6IEaCW1E
+         z1cI3F9z5KnNORNVANdIaxAI9mLinedBuq5zYc/IKacgWB6knVUmOcAeyTaNsxctGQgz
+         6VNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794785200; x=1795390000;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1794785310; x=1795390110;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=20xh83TZY5Uy9+3Rpue534EqUQXyz0SBbzg5tu3uVBA=;
-        b=aZCKge3M15Ku3Soo6f3f2S1mDEG69FKWuUblpuZ7e9U+Hoa9K737g0NsyUNHyorlci
-         tP3ZS518zrwL5A+eh0GYdhdPsjWv+uKBmAJU1KDSm3wCm5xhT3fD7cKVZRD3wEuEh7Jx
-         OpnfyrGLEf9XpaHww1+Ip8nTtynMDpoNtDYU36fYqqaZvYHKdnXezbuttYw8LKbv5mj7
-         znNz56cAr8L8wxKCN4z0zMYpMaaXIb1nA+9gqrDQDY3JpdS6jOQQvqaKimcbQBxAAwMg
-         /CtI8EHA32KhFlhFm5p9tXbAx9CzP3BRu0uKvzYbcblFPzL6qgFwt+3ola2P+C5ZaHiJ
-         Jdew==
-X-Gm-Message-State: APuU4Z9PWI+j6QH6g+tSSIR03seChgP08DYF2oPdVRfbOUbrPakeuO3X
-	bEA/6Od/82V/sdkCsgY5j8BEMeoPbN9YGhXperjlBAl0en5qw0QXCYyc
-X-Gm-Gg: AYBFou02Muu/IWzzM8HBZKJT4fd6teg7oedy+nqtE7NXoj48gu8x9VZMaf7BiYZqSkw
-	WkSwb0dpco6MFK/fEjBz0HFccpbAyeA1eDD0lPH1AyBV8d/UHGzaUz95Rp3xG8Jwii2c8iONN7O
-	CnMRtIGbmPDy8KCvZcrltDVXOH4QpVTr0yg4/SraA5p1/XkGSkzzCcxXgTz/zyo7KENbXU2pvBz
-	w2/dEJzoZt1uI1eiVB/lWaG2pm5DNy46hstDHi2gM2fhXIvE/XqUZkZ0WiGCxI0XQ2ohS+lAiOl
-	bZQCCVGfW+HP2LaDduzNB1KGrbq8od04REjSOEA+qCnoaHw5ZZeruzN491AYcJ9rf7D+ihdR3bs
-	MmJXyvbOKT27gsqkwDHTyqpTBp/2cDVST0DRPwe5SW32GZNU/bfg2+RLaUPpI1MsvkWG4cIhLzx
-	28kOFGAm00EqQnvuk/VpnJip0HxooUD3vPevhK+7A0NSQLNHAz8p1BL0yA0fx8svBGyKbdZ4dph
-	vuZ0BjSeHso9LB2w4x8s6uGSfX8PSZzVRl7WyeHCLGEVnaI0gedshChXDqvOzOq/4ZOTZGCgWPI
-	S2AdRHXFrdNWqAH5kKiipCXBnvlHHoj91CBveiKDqZpYfOCRtg/YufZQvsYCyW2fgMc+ifWJgw2
-	p+Er4Wt/dIjQ5yZZ/jdLekMtZDLAn8JoBYA==
-X-Received: by 2002:a17:90b:2e06:b0:3ac:8897:7bab with SMTP id 98e67ed59e1d1-3b1b07e1cd4mr8163612a91.6.1794785199420;
-        Sun, 15 Nov 2026 15:26:39 -0800 (PST)
+        bh=UBeykY1+H/vPJmkPV2pLCmI2Bs+Pj25kP6+DXgtUhEg=;
+        b=sWUDrs0zsfK9Dd7LNldhTKgwdvUzjyz/x6DS4IJOPyBLkv2+J2w0CWvJHt4WnLnXJd
+         7oI7V/AdRMMgUq5HOoovtBqHWLXPuQ8MQUE2pe3Jj85TzEMK8YbOFz0bnnJpuE0WgzOZ
+         WFsIJoYLQOe480wSj4w5YB43WFf1kDYWApyIKcOCDqW2NkSdSwYTjQ2YHY89v06GXZ7y
+         NdwxjyIL3Vuji6TxMH6mz800LOJKWWoWPu2ZC1S2uy2ODMA8AyMrGd63cRmDqIkMw4dD
+         KynH8pBL64wSKUVl7xxXw+I/4G8TjUHYi1Vk5lYQ46acDZ7KCxcM0yM9qN2uM+UkUhtZ
+         Ry8g==
+X-Forwarded-Encrypted: i=1; AL+hErHpy7pDm5McJIphqIhjpB4guEnx1XnCWCdMDfb7e0SEU4ytSe+QV+wmILHwbcZVUg/Dnq0=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8W/hGHqf3G9aK5da85fjIROnGIyBLN5SZaHFHZ7uNTZOCtXMA8
+	ilc/P71Pzi7ZQIrq8aYNMT74nDpEO15mcxUK+uSCig90L3q65WWbRk3A
+X-Gm-Gg: AYBFou3tzsi+t1TbMdmdgaxvr+Mvkb9B4DDjvK5lMtpoKQJJ42ykzUQwKqLWqzxXwXD
+	LLfzvYIeKWXc32IY6zJm2Rd7PFPOSlIS+UZ0n3RdB1uzyXYW2ti4LPJd2rOOvhjFEQEozClVrM0
+	il/1M+fgEa0b7nHKCJeY3RNqDrihUpdvS/kfxj8fVrJeJ+rBiBWIFDn+tzUt7WsNZ8Wm+jBG7s2
+	ficvoy6BZ21DWUFzBknFgRKZLo/3X6CY8AcLp/kks0Cjw1eFn1IOJf/8uIMEY+1OdbN3JPWyXuB
+	KZbog7lDweQg2QabDdfqxw53pKY+1ex7tY+8p57biUVNLb8gOpWkEFiJTwO7LhwHb8wuBHALAyi
+	gntOk6k8O3C2srGzwQbwRrLa3/paZgzGN/+1ft688afStfvlNx2DK2opJjNS97ljL5nrL8I734F
+	r8zKy7U8WR5FwBI3vc4KBQzx5ZbYtcNZWnEVwKkI1MuTWwu7RU/rC/ArVsuZ68Nw0L/7HGAvSCJ
+	96SAPwW7CTCEC/+eSyFRX8PPntbydYv6sm21/gOPDCNXwPFAtQ1p6XN9PQTBpEwk29wriEHFI2L
+	UG1F2I9hddw7O8Mi/kV7w5j7gUFnxEotdjhPOn2DapCnbwj49pAMnB2+S2vQnXPoS3pAbUOdrTe
+	3XWIddBDOm8u5tNQdz3anjAWpks8dlklyeQ==
+X-Received: by 2002:a17:903:2a87:b0:2e9:199c:f800 with SMTP id d9443c01a7336-2edf2212d5cmr82331265ad.37.1794785310143;
+        Sun, 15 Nov 2026 15:28:30 -0800 (PST)
 Received: from localhost ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1b3f09b92sm6832094a91.4.2026.11.15.15.26.38
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ee0f75b467sm30194865ad.20.2026.11.15.15.28.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 15 Nov 2026 15:26:39 -0800 (PST)
+        Sun, 15 Nov 2026 15:28:29 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 15 Nov 2026 23:28:28 +0000
+Message-Id: <DMW6AKE8C8K5.H33UQQDOD34J@gmail.com>
+Cc: "Martin KaFai Lau" <martin.lau@linux.dev>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Stanislav Fomichev" <sdf@fomichev.me>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo
+ Abeni" <pabeni@redhat.com>, "Eric Dumazet" <edumazet@kernel.org>, "David S
+ . Miller" <davem@davemloft.net>, "Andrew Lunn" <andrew+netdev@lunn.ch>
+Subject: Re: [PATCH bpf-next v2] bpf, mprog: Defer RCU synchronization until
+ peer reuse
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Qi Wu" <shijing.wuqi@linux.alibaba.com>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Nikolay
+ Aleksandrov" <razor@blackwall.org>, <bpf@vger.kernel.org>,
+ <netdev@vger.kernel.org>
+In-Reply-To: <20261115144556.41927-1-shijing.wuqi@linux.alibaba.com>
+References: <20261115144556.41927-1-shijing.wuqi@linux.alibaba.com>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -87,74 +110,167 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 15 Nov 2026 23:26:38 +0000
-Message-Id: <DMW695ICRVGM.2YJJUJQ12T0V6@gmail.com>
-Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
- <linux-doc@vger.kernel.org>, "Sashiko" <sashiko-bot@kernel.org>
-Subject: Re: [PATCH bpf-next v3 0/8] bpf, sockmap: Restrict iter-context
- sockmap updates to sockmap iterators
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Michal Luczaj" <mhal@rbox.co>, "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Shuah Khan" <shuah@kernel.org>, "John
- Fastabend" <john.fastabend@gmail.com>, "Eric Dumazet"
- <edumazet@kernel.org>, "Kuniyuki Iwashima" <kuniyu@google.com>, "Paolo
- Abeni" <pabeni@redhat.com>, "Willem de Bruijn" <willemb@google.com>, "Jakub
- Sitnicki" <jakub@cloudflare.com>, "Jiayuan Chen" <jiayuan.chen@linux.dev>,
- "David S. Miller" <davem@davemloft.net>, "Jakub Kicinski"
- <kuba@kernel.org>, "Simon Horman" <horms@kernel.org>, "Jonathan Corbet"
- <corbet@lwn.net>, "Shuah Khan" <skhan@linuxfoundation.org>, "Randy Dunlap"
- <rdunlap@infradead.org>, "Stanislav Fomichev" <sdf@fomichev.me>
-X-Mailer: aerc 0.20.1-355-gf870624f6c37
-References: <20261107-sockmap-update-limit-iter-v3-0-7c0bad1ad036@rbox.co>
- <DMV5NLOEYFGF.C7ITHCRCNA7P@gmail.com>
- <e8f1736e-3f13-4f92-ad69-8b166c41e68a@rbox.co>
-In-Reply-To: <e8f1736e-3f13-4f92-ad69-8b166c41e68a@rbox.co>
+MIME-Version: 1.0
 
-On Sun Nov 15, 2026 at 11:10 PM UTC, Michal Luczaj wrote:
-> On 11/14/26 19:45, Alexei Starovoitov wrote:
->> On Sat Nov 7, 2026 at 5:58 PM UTC, Michal Luczaj wrote:
->>> Follow-up to Sashiko's report [1] and the decision to restrict which
->>> iterator may perform sockmap updates [2]. Series started short: remove
->>> about-to-be-stale test, restrict updates, add a negative test. Then it
->>> expanded: mark bpf_iter__sockmap::sk as PTR_TRUSTED, restrict
->>> bpf_sock_destroy() callers to iter/{tcp,udp}, few little tweaks.
->>>
->>> [1]: https://msgid.link/20260626205814.BAC3C1F000E9@smtp.kernel.org
->>> [2]: https://msgid.link/87echn2fhd.fsf@cloudflare.com
->>>
->>> Signed-off-by: Michal Luczaj <mhal@rbox.co>
->>> ---
->>> Changes in v3:
->>> - Drop RFC prefix
->>> - Update bpf_iter_reg::feature docs
->>> - Fix tcp_request_sock BTF build error
->>> - Restrict allowed callers of bpf_sock_destroy() to iter/{tcp,udp} (Ale=
-xei)
->>> - Link to v2: https://patch.msgid.link/20261102-sockmap-update-limit-it=
-er-v2-0-e96a63c43b39@rbox.co
->>=20
->> Sorry for the delay. Applied.
->
-> No problem, thanks.
->
-> To follow up on bpf_iter__unix::unix_sk, looks like there's a single help=
-er
-> that will become unusable from iter/unix (once plain-PTR_TO_BTF_ID is
-> gone): bpf_get_socket_cookie(). PTR_TRUSTED then?
+On Sun, Nov 15, 2026 at 06:45 AM Qi Wu <shijing.wuqi@linux.alibaba.com> wrote:
+> An attach within a grace period of the previous change still waits
+> (e.g. a tight loop); spaced-out attaches do not. Detach retains its
+> post-swap synchronization; peer reuse can add a conditional wait
+> before a detach. Functional checks pass and a 300-cycle attach/detach
 
-I have a patch that 'forks' bpf_get_socket_cookie() into two helpers.
-One for trusted and one for untrusted.
+The extra wait before a detach was my suggestion, sorry.
+I looked at the next attach only.
 
-Also have a patch set that removes legacy ptr_to_btf_id for good.
-Hopefully will send today or tomorrow.
+A detach that follows a detach or a replace now waits twice.
+The first detach waits in tcx_entry_sync(). The old entry has no users
+after that. Then bpf_mprog_commit() takes a new state, and the next
+bpf_mprog_peer() waits for it. Nothing needs that wait.
+A replace doesn't swap, but it takes a new state too.
+To close N links of one hook takes 2N-1 grace periods under RTNL.
+Today it takes N.
 
+Grace periods that the second change waits for, when it comes within
+a grace period of the first one:
+
+  first     second    today   v2   diff below
+  -------   -------   -----   --   ----------
+  attach    attach      1     1        1
+  detach    attach      1     1        0
+  replace   attach      1     1        0
+  attach    detach      1     2        2
+  detach    detach      1     2        1
+  replace   detach      1     2        1
+
+In the attach/detach row the attach saves one wait.
+The sum is the same as today.
+
+Pls add "detach after detach" to the table of numbers.
+
+> @@ -243,6 +251,7 @@ static inline void bpf_mprog_commit(struct bpf_mprog_entry *entry)
+>  	bpf_mprog_revision_new(entry);
+> +	entry->parent->rcu_state = start_poll_synchronize_rcu();
+
+Only the swap in attach needs the state.
+Lets take it there, in place of the sync that goes away.
+Detach and replace leave the old state alone. bpf_mprog_peer() waited
+for it already, so the next change doesn't wait.
+The build is clean on x86-64. I did not boot it:
+
+diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
+index 82e608e..75a1a56 100644
+--- a/drivers/net/netkit.c
++++ b/drivers/net/netkit.c
+@@ -772,7 +772,7 @@ int netkit_prog_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+ 	if (!ret) {
+ 		if (entry != entry_new) {
+ 			netkit_entry_update(dev, entry_new);
+-			netkit_entry_sync();
++			bpf_mprog_defer_sync(entry);
+ 		}
+ 		bpf_mprog_commit(entry);
+ 	}
+@@ -854,7 +854,7 @@ static int netkit_link_prog_attach(struct bpf_link *link, u32 flags,
+ 	if (!ret) {
+ 		if (entry != entry_new) {
+ 			netkit_entry_update(dev, entry_new);
+-			netkit_entry_sync();
++			bpf_mprog_defer_sync(entry);
+ 		}
+ 		bpf_mprog_commit(entry);
+ 	}
+diff --git a/include/linux/bpf_mprog.h b/include/linux/bpf_mprog.h
+index 0b9f4ca..2e180a4 100644
+--- a/include/linux/bpf_mprog.h
++++ b/include/linux/bpf_mprog.h
+@@ -30,8 +30,8 @@
+  *   if (!ret) {
+  *       if (entry != entry_new) {
+  *           // swap @entry to @entry_new at attach location
+- *           // ensure there are no inflight users of @entry:
+- *           synchronize_rcu();
++ *           // nothing is released, no need to wait for users of @entry:
++ *           bpf_mprog_defer_sync(entry);
+  *       }
+  *       bpf_mprog_commit(entry);
+  *   } else {
+@@ -104,9 +104,13 @@
+  *
+  * Fast path accesses the active bpf_mprog_entry within RCU critical section
+  * (in case of tcx it runs in NAPI which provides RCU protection there,
+- * other users might need explicit rcu_read_lock()). The bpf_mprog_commit()
+- * assumes that for the old bpf_mprog_entry there are no inflight users
+- * anymore.
++ * other users might need explicit rcu_read_lock()). In the detach case the
++ * bpf_mprog_commit() assumes that for the old bpf_mprog_entry there are no
++ * inflight users anymore. In the attach case nothing is released, and the
++ * old bpf_mprog_entry only has to stay intact until its users are gone:
++ * bpf_mprog_defer_sync() records the RCU state after the swap, and
++ * bpf_mprog_peer() waits for it before the old bpf_mprog_entry is written
++ * again.
+  *
+  * The READ_ONCE()/WRITE_ONCE() pairing for bpf_mprog_fp's prog access is for
+  * the replacement case where we don't swap the bpf_mprog_entry.
+@@ -147,6 +151,7 @@ struct bpf_mprog_bundle {
+ 	struct bpf_mprog_cp cp_items[BPF_MPROG_MAX];
+ 	struct bpf_prog *ref;
+ 	atomic64_t revision;
++	unsigned long rcu_state;
+ 	u32 count;
+ };
+
+@@ -158,12 +163,23 @@ struct bpf_tuple {
+ static inline struct bpf_mprog_entry *
+ bpf_mprog_peer(const struct bpf_mprog_entry *entry)
+ {
++	/*
++	 * The peer was active until the last swap and the caller is going
++	 * to overwrite it, therefore ensure that there are no inflight
++	 * users on it anymore. Paired with bpf_mprog_defer_sync().
++	 */
++	cond_synchronize_rcu(entry->parent->rcu_state);
+ 	if (entry == &entry->parent->a)
+ 		return &entry->parent->b;
+ 	else
+ 		return &entry->parent->a;
+ }
+
++static inline void bpf_mprog_defer_sync(struct bpf_mprog_entry *entry)
++{
++	entry->parent->rcu_state = start_poll_synchronize_rcu();
++}
++
+ static inline void bpf_mprog_bundle_init(struct bpf_mprog_bundle *bundle)
+ {
+ 	BUILD_BUG_ON(sizeof(bundle->a.fp_items[0]) > sizeof(u64));
+@@ -172,6 +188,7 @@ static inline void bpf_mprog_bundle_init(struct bpf_mprog_bundle *bundle)
+
+ 	memset(bundle, 0, sizeof(*bundle));
+ 	atomic64_set(&bundle->revision, 1);
++	bundle->rcu_state = get_completed_synchronize_rcu();
+ 	bundle->a.parent = bundle;
+ 	bundle->b.parent = bundle;
+ }
+diff --git a/kernel/bpf/tcx.c b/kernel/bpf/tcx.c
+index 02db011..12a1620 100644
+--- a/kernel/bpf/tcx.c
++++ b/kernel/bpf/tcx.c
+@@ -42,7 +42,7 @@ int tcx_prog_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+ 	if (!ret) {
+ 		if (entry != entry_new) {
+ 			tcx_entry_update(dev, entry_new, ingress);
+-			tcx_entry_sync();
++			bpf_mprog_defer_sync(entry);
+ 			tcx_skeys_inc(ingress);
+ 		}
+ 		bpf_mprog_commit(entry);
+@@ -156,7 +156,7 @@ static int tcx_link_prog_attach(struct bpf_link *link, u32 flags, u32 id_or_fd,
+ 	if (!ret) {
+ 		if (entry != entry_new) {
+ 			tcx_entry_update(dev, entry_new, ingress);
+-			tcx_entry_sync();
++			bpf_mprog_defer_sync(entry);
+ 			tcx_skeys_inc(ingress);
+ 		}
+ 		bpf_mprog_commit(entry);
+
+pw-bot: cr
