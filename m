@@ -1,56 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794774197;
-	b=pvV0PCtwGF+Sodp55pbCxLd+Q3Tw3GqBR5IKLu3n4lO5VM08HhX1wWfdZV+oKJRVyZY/
-	 ROd7il92EnaZMV1MHFZLAHzLIhIH95zjxf9uHpt5+8tcWAd4W43BpsNCqmzlfNPFwFK8t
-	 sPNKSwNANmU2Kw8QaVApfGxPoP1HvNyTocRvGZxdTv6dtTZKoq169nOFmfsEYwXyaFiKG
-	 S9lWh6CWJBsYMfSl1mARVZvJ7Nger/Pgz5AEYVNmXCxFGjyrfoVkSScu1gtaR47OFi9NE
-	 rwa9N1xKypN3JLjpjio3FvdSzrL4575BebTSxTWeP2RnlZC+F3kEPYIviGJlWmVgQtQ==
+	t=1794775151;
+	b=aCpa0jPrFNVbFv94BvZ7bI9ZSwPFE19h/BAvJfhbCnmAsbDkl6Ni7XK54ei3az7YUzzZ
+	 2N8ZOAK8FIZz3MfbpvU0ItISOAxUrkSV8+EYeKHvj4trZ9MEPkVzEr72luD78KjdSuawY
+	 57yU33AT7EdWpSimGooCc9WG8HsZXe8lgmAh2G7kFvF1zpDP06vFUqVXKeXsmPYQNTmYP
+	 +veCRENp6cZz4TsqLEo/hR5Ti3Qvm2QfExrol4OvlCu++9YWEKweJSDchAli5sJWnX+23
+	 K0ksRvWNhzpcgqzJRcXE3isORu+wF70q7ieR9uuXAvZ7Qew95/s2/esfnZk2rHIT4qg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794774197;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=X0QxnSKu9srTBD1v+qCPJE5ZTN+N5zaEGUIuCGP6wjo=;
-	b=hd4rNtwghr+cUTziTSV87BZnOvZKu/BXK6o3SdS2RjIRBI8Uy3ReDmKIBxitwhyhxXT5
-	 ZktUzEvAlLvFz7f7TGq2uOsRpoZSr09gHgFXWTyX0/ZUDF4/vJBWAHiQbNCr1eenQF0An
-	 Enl7Ra+xSH/8Hlg2jDsw3kNJTwYPp0m0y7LxK47/tO2BcdYQwEQQAlCPgdUXiTbU0pdjD
-	 eBXJ6xZcWGol4hVlwJ+57uFCfTR7cndR1P/4X1fSrURXbj0fB+EJo8IrkfFhl8vZ3Ise3
-	 bBnrw+HLN1YN/oC0eMdtdlf3jCSZyS4bWrCB/yifPhoq3E1Hi6go5tE6dkt3fUSnsXQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794775151;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=SYnKw1raUAzd3oGbNwevOMeKUBQWz4Y8HJx8/Ua61PM=;
+	b=PXaU+RxUvFBZAaixYgt+AspDv08hbgqZXBJTVbbu630Ymu61T0yP674k+lCzQEAdDs9V
+	 ETAPmsVPnA6bHPuyEDUumzhChLWqMJxNc2Lr0cj/xsHnR8u4PRzQGTaGqr6f1g7E9M5CZ
+	 v7me6bhnRbylq2leX9Bi4IXWYzguwWG06zB2xgUX2lZsa7/E3qWk/KJo45V+co58P7xHG
+	 b7Rdu1wWl9yHDZ20n9VnzyEQ9WiCO/FivPkAqoVl0g/EJGWOyHIQHSKvugrX9cS4i1zQi
+	 OzAKasnwoUd1R2GLvXtB24D7rGctDwRRwIDUoJI0eI+Hrt5N0dgolftmRT9L0v9ZX2A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NlbK1UUU;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AFRuDvhf;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAFE8606A32C
-	for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 20:23:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2425E606A31F;
+	Sun, 15 Nov 2026 20:39:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NlbK1UUU
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 420B91F000C4;
-	Sun, 15 Nov 2026 20:23:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AFRuDvhf
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C1A41F000C5;
+	Sun, 15 Nov 2026 20:39:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794774197;
-	bh=X0QxnSKu9srTBD1v+qCPJE5ZTN+N5zaEGUIuCGP6wjo=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=NlbK1UUUf0TttcrtYxAORV5OtBaRPGK5wKMYF+sxrdiZpc4xaYb79zN6jhdEvQuC9
-	 LTgY69oqzSaDLoWiXOLBTy82ecOzpSQeiu7K9gS84jOg/+MwYsZB3oUSkzQcWdIpGa
-	 KLJmuh+ylr8J45XkPGPFbrCLCx9tqQwCohnfImt1FzhpvksMVurc7OcGtqrepUqjw0
-	 xPtoG5szWSLF3c1RbjsDJvVU1zYRm0LXlABaWwEdwFYcOnWroFo50drrfn9MDQIsvG
-	 54OkjNVuR1kmoB/sdvhC/YqjMKhayEb21npsEnrlz9+HU1/NjpYTzyUowXjvzuC+/j
-	 jPhsWjmtCD9bw==
-Message-ID: <sashiko-outbox-215783@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 5.10-6.18] libbpf: fix cross-endian build with newer
- libbpf
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Dominique Martinet" <asmadeus@codewreck.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261115200505.1494710-2-asmadeus@codewreck.org>
-References: <20261115200505.1494710-2-asmadeus@codewreck.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 15 Nov 2026 20:23:16 +0000
+	s=k20260515; t=1794775151;
+	bh=SYnKw1raUAzd3oGbNwevOMeKUBQWz4Y8HJx8/Ua61PM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=AFRuDvhfAj0dgAanXIbk2qYSf/iBx5gTWt01dxkdS7Ht9GMgM6t9ds/0xcLpOsA86
+	 XpNToIlHpVr3wZAuq+NCnLcv3HzoZW2Ncbzb2BTY4mFOykzZPZUCy7dOSMRk7oO3uC
+	 QGkr+sGP/8jnXCYf0x8Cq7z+kbMmAz5NqDOOpbIU8A2QpvIz4ehLg1VWOspSCBqbcc
+	 ikHcY2yewpv+tjvuFGTn77EH3h6zZj9QE5GWHkw/r57vserNyUhaWtLX+uhwTa+YCA
+	 W4q7EGecCUnX/PmrhqRIaRl/43xXm0He7t1KCUdtpKTCEewe1kUEFSIkzfCk3FtK+h
+	 1WOk0xcs5zBaA==
+Date: Sun, 15 Nov 2026 21:39:06 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Amir Goldstein <amir73il@gmail.com>
+Cc: linux-fsdevel@vger.kernel.org, Chris Down <chris@chrisdown.name>, 
+	Miklos Szeredi <mszeredi@redhat.com>, linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 02/13] fs: add d_real_data_inode() and
+ d_real_metadata_inode()
+Message-ID: <20261115-fechten-goldfisch-worum-5c478291ebf5@brauner>
+References: <20261115-work-ovl-d_real-v1-0-ca155efbcb2e@kernel.org>
+ <20261115-work-ovl-d_real-v1-2-ca155efbcb2e@kernel.org>
+ <CAOQ4uxjoHbevvu8auB4m8AVcY9H6uHdDAP6mfi9OOMh+3775xA@mail.gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,95 +60,144 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAOQ4uxjoHbevvu8auB4m8AVcY9H6uHdDAP6mfi9OOMh+3775xA@mail.gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issues to consider:
-- [Low] libbpf: missing Fixes trailer for btf_parse_hdr() endianness
-  check
-- [Low] libbpf: out-of-bounds access in btf_parse_hdr() when hdr_len >
-  sizeof(*hdr)
---
+On Sun, Nov 15, 2026 at 04:00:36PM +0100, Amir Goldstein wrote:
+> Wondering out loud - since you needed to change IMA anyway and need
+> IMA patches reviews, do you think it is hard to also gracefully deal with errors
+> from d_real_metadata_inode() and not have to promise that it never fails?
 
-commit c3e5e38661056ceb32071ab50ba595824eefbdbf
-Author: Dominique Martinet <asmadeus@codewreck.org>
+No, that's easy enough:
 
-> libbpf: fix cross-endian build with newer libbpf
->
-> commit 087f3964f4b3 ("libbpf: Support layout section handling in BTF")
-> added extra data to the BTF header.
->
-> This extra data is ignored in the native case, but when building with
-> different endianness the bswap code in old libbpf would check for strict
-> size equality, leading to build failures such as this when BTF data is
-> generated with a newer version of libbpf (through pahole)
->     BTFIDS  vmlinux.unstripped
->   libbpf: Can't load BTF with non-native endianness due to unsupported he=
-ader length 32
->   FAILED: load BTF from vmlinux.unstripped: Operation not supported
->   make[2]: *** [../scripts/Makefile.vmlinux:72: vmlinux.unstripped] Error=
- 255
->
-> Newer libbpf versions also properly ignore trailing data in the bswap
-> case, but the patch is too intrusive to backport, just fix the header
-> length comparison.
->
-> Link: https://github.com/NixOS/nixpkgs/pull/570639
-> Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
-
-[Severity: Low]
-Should this include a Fixes tag for the commit that introduced the strict
-swapped-endian header size check:
-
-  Fixes: 3289959b97ca ("libbpf: Support BTF loading and raw data output in =
-both endianness")
-
-> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> index 231b07203e3d2..8f3f942eda704 100644
-> --- a/tools/lib/bpf/btf.c
-> +++ b/tools/lib/bpf/btf.c
-> @@ -198,7 +198,7 @@ static int btf_parse_hdr(struct btf *btf)
-> =20
->  	if (hdr->magic =3D=3D bswap_16(BTF_MAGIC)) {
->  		btf->swapped_endian =3D true;
-> -		if (bswap_32(hdr->hdr_len) !=3D sizeof(struct btf_header)) {
-> +		if (bswap_32(hdr->hdr_len) < sizeof(struct btf_header)) {
->  			pr_warn("Can't load BTF with non-native endianness due to unsupported=
- header length %u\n",
->  				bswap_32(hdr->hdr_len));
->  			return -ENOTSUP;
-
-[Severity: Low]
-Can relaxing this check cause out-of-bounds reads and writes on
-btf->raw_data when parsing a malformed cross-endian BTF buffer with
-hdr->hdr_len > sizeof(*hdr)?
-
-Previously, requiring hdr->hdr_len =3D=3D sizeof(struct btf_header) together
-with btf->raw_size >=3D sizeof(struct btf_header) guaranteed hdr->hdr_len
-fit within btf->raw_size.  btf_parse_hdr() still computes meta_left from
-sizeof(*hdr) instead of hdr->hdr_len:
-
-tools/lib/bpf/btf.c:btf_parse_hdr() {
-	...
-	meta_left =3D btf->raw_size - sizeof(*hdr);
-	...
-}
-
-However, btf__new() offsets the section pointers by btf->hdr->hdr_len:
-
-tools/lib/bpf/btf.c:btf__new() {
-	...
-	btf->strs_data =3D btf->raw_data + btf->hdr->hdr_len + btf->hdr->str_off;
-	btf->types_data =3D btf->raw_data + btf->hdr->hdr_len + btf->hdr->type_off;
-	...
-}
-
-If hdr->hdr_len exceeds sizeof(*hdr) (or exceeds btf->raw_size),
-btf->strs_data and btf->types_data can point past btf->raw_data +
-btf->raw_size, causing btf_parse_str_sec() to read out of bounds and
-btf_parse_type_sec() to byte-swap memory in place past the end of the heap
-buffer.  Checking that btf->raw_size >=3D hdr->hdr_len and subtracting
-hdr->hdr_len when computing meta_left would avoid this.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261115200505.1494=
-710-2-asmadeus@codewreck.org?part=3D1
+diff --git a/include/linux/dcache.h b/include/linux/dcache.h
+index 2b15179e9baf9..477f0d29f3cbe 100644
+--- a/include/linux/dcache.h
++++ b/include/linux/dcache.h
+@@ -639,12 +639,12 @@ static inline struct inode *d_backing_inode(const struct dentry *upper)
+  * Otherwise return the dentry itself.
+  *
+  * For D_REAL_DATA the union/overlay may have to look up the data first. This
+- * can sleep and it can fail. D_REAL_METADATA never fails.
++ * can sleep and it can fail. Callers must handle errors for D_REAL_METADATA
++ * as well.
+  *
+  * See also: Documentation/filesystems/vfs.rst
+  *
+- * Return: The real dentry, or an ERR_PTR() for D_REAL_DATA if the data can't
+- * be resolved.
++ * Return: The real dentry, or an ERR_PTR() if it can't be resolved.
+  */
+ static inline struct dentry *d_real(struct dentry *dentry, enum d_real_type type)
+ {
+@@ -686,15 +686,18 @@ static inline struct inode *d_real_data_inode(const struct dentry *dentry)
+  * If @dentry is a regular file on a union/overlay, then return the
+  * underlying, real inode that hosts its metadata. Otherwise return d_inode().
+  *
+- * Unlike d_real_data_inode() this never has to look anything up and so it
+- * never fails.
+- *
+- * Return: The real inode hosting the metadata of @dentry.
++ * Return: The real inode hosting the metadata of @dentry, or an ERR_PTR() if
++ * it can't be resolved.
+  */
+ static inline struct inode *d_real_metadata_inode(const struct dentry *dentry)
+ {
++	struct dentry *real;
++
+ 	/* This usage of d_real() results in const dentry */
+-	return d_inode(d_real((struct dentry *)dentry, D_REAL_METADATA));
++	real = d_real((struct dentry *)dentry, D_REAL_METADATA);
++	if (IS_ERR(real))
++		return ERR_CAST(real);
++	return d_inode(real);
+ }
+ 
+ struct name_snapshot {
+diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
+index 1b50cb4913d0b..17d528771d8fe 100644
+--- a/security/integrity/evm/evm_crypto.c
++++ b/security/integrity/evm/evm_crypto.c
+@@ -241,6 +241,9 @@ static int evm_calc_hmac_or_hash(struct dentry *dentry,
+ 	bool ima_present = false;
+ 	u64 i_version = 0;
+ 
++	if (IS_ERR(inode))
++		return PTR_ERR(inode);
++
+ 	if (!(inode->i_opflags & IOP_XATTR) ||
+ 	    inode->i_sb->s_user_ns != &init_user_ns)
+ 		return -EOPNOTSUPP;
+diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
+index ac8328812e6ef..71faf156f9d6b 100644
+--- a/security/integrity/evm/evm_main.c
++++ b/security/integrity/evm/evm_main.c
+@@ -763,11 +763,11 @@ static void evm_reset_status(struct inode *inode)
+ /**
+  * evm_metadata_changed: Detect changes to the metadata
+  * @inode: a file's inode
+- * @metadata_inode: metadata inode
++ * @metadata_inode: metadata inode, or an ERR_PTR() if it can't be resolved
+  *
+  * On a stacked filesystem detect whether the metadata has changed. If this is
+- * the case reset the evm_status associated with the inode that represents the
+- * file.
++ * the case, or if the metadata inode can't be resolved, reset the evm_status
++ * associated with the inode that represents the file.
+  */
+ bool evm_metadata_changed(struct inode *inode, struct inode *metadata_inode)
+ {
+@@ -775,7 +775,8 @@ bool evm_metadata_changed(struct inode *inode, struct inode *metadata_inode)
+ 	bool ret = false;
+ 
+ 	if (iint) {
+-		ret = (!IS_I_VERSION(metadata_inode) ||
++		ret = (IS_ERR(metadata_inode) ||
++		       !IS_I_VERSION(metadata_inode) ||
+ 		       integrity_inode_attrs_changed(&iint->metadata_inode,
+ 						     metadata_inode));
+ 		if (ret)
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 9df7fbe3523e8..016de5a66eced 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -357,7 +357,8 @@ static int process_measurement(struct file *file, const struct cred *cred,
+ 		}
+ 
+ 		/*
+-		 * Reset the EVM status when metadata changed.
++		 * Reset the EVM status when metadata changed or the inode
++		 * hosting it can't be resolved.
+ 		 */
+ 		metadata_inode = d_real_metadata_inode(file_dentry(file));
+ 		if (evm_metadata_changed(inode, metadata_inode))
+diff --git a/Documentation/filesystems/vfs.rst b/Documentation/filesystems/vfs.rst
+index 6953f399672f3..ff7ea00a42ad7 100644
+--- a/Documentation/filesystems/vfs.rst
++++ b/Documentation/filesystems/vfs.rst
+@@ -1376,9 +1376,10 @@ defined:
+ 
+ 	For D_REAL_DATA the filesystem may have to look up the data first,
+ 	e.g., for a file that was never opened.  If that fails an ERR_PTR()
+-	is returned and callers must handle it.  D_REAL_METADATA must not
+-	fail.  Most callers should use d_real_data_inode() or
+-	d_real_metadata_inode() instead of calling d_real() directly.
++	is returned and callers must handle it.  Callers must handle an
++	ERR_PTR() for D_REAL_METADATA as well.  Most callers should use
++	d_real_data_inode() or d_real_metadata_inode() instead of calling
++	d_real() directly.
+ 
+ 	For non-regular files, the 'dentry' argument is returned.
+ 
+diff --git a/Documentation/filesystems/porting.rst b/Documentation/filesystems/porting.rst
+index 28a24b702f2a6..aa0fc43907017 100644
+--- a/Documentation/filesystems/porting.rst
++++ b/Documentation/filesystems/porting.rst
+@@ -1431,4 +1431,4 @@ d_real_inode() is gone. d_real() can fail for D_REAL_DATA now and returns an
+ ERR_PTR() then, e.g., when overlayfs can't look up the data of a metacopy file
+ in a data-only layer. Use d_real_data_inode(), which returns the inode hosting
+ the data or an ERR_PTR(), and handle the error. Use d_real_metadata_inode() for
+-the inode hosting the metadata. That one never fails.
++the inode hosting the metadata and handle its errors as well.
