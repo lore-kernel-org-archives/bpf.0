@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794768726;
-	b=NXVsAl7r3sZX2EjYc/qH2G5tnpg2W3pJql8V05IZBnOm5ZeBCwPd4YvGWNIqBm4ClhRL
-	 e3InZbYUwZIgifGQ1CbNUO5h8t9JLrTFwQh9FwOyLvTxlA0X0U4g5QoTNFqNfFuGIcqZ1
-	 0oAqwfHrWZe3B9WaYkYBVAf7XSMHoa0vKAPa2s0eU0hLd9VXvvtLcQDiLpqGZIxxLhuFm
-	 sittHRpyUsQEG7js9xbzpRfKKUSqQclo1udWOnkaj4IDh2/rJ2dLQYtYTIqhtVL+DjA3t
-	 PJ/GE9BXZuT71HOGMfN7dXm7vIipu7FvqxiqZsbQec6gSDTS9vxrtrPFofqQhnm7GzA==
+	t=1794768958;
+	b=RZF0E5v9qm8ounCxvA81egqNhBJGE1Ti+9g8THK7NMsn8lx228rjHeJfPTKmO7S7sJhl
+	 gpwsRY2b6mXwtXCCtcfO5xipKA0Dhe+UjjRytpTrhnbjGsqQ84YckuWyPI2/UAWmgGzVE
+	 lAWrRbE6DxMR50SthjMXN1/jiY8SnL4IwEm+Ui12LKkjHIv7p0rupjSQYBeyk0DPDOXN9
+	 Bey/16ho+oYmiXn1tdQcMJGZ7HpIWvZ22H5meBc+Yg1XYY94rEWbSSo3BW4fHB8L3HhEb
+	 90ojNhEvPYvKN1c6yJzXCvLNv3/xjLArreMtk8SFykSohPeNluf4JxXx7PQlJHzrGcA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794768726;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794768958;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
 	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=SdudER1+z7QJDiZ1Nnh2ZbZ2E80axq39/K+Tsu5UA/w=;
-	b=wLfRl8I7bgWf/d4cB/GdGcHCJdGtgBhH0P3dQVbCAH9LUlfvLO/pZcIosQ7J8yvKRCB8
-	 vWJ2o/gW0vpO5RRRjgUnWd5DTmPv0jJ4hlT4uUHnYB0QGmeCL2/wbqgVpo50zXHD5q3+S
-	 Rp31DKslsa0WgoLz8twGGSYtxY42i2aWUQnq33urjw+kvfBmrLYBBWGsQZKc4KQ8i19C/
-	 CVkcZ3tSRxyceF0NxWlwZVnHwEzNhMbG8rlyAYyNEwvGiVu+0Wgt19v4a4v7Q4/EbRyoU
-	 Re+t/1qpxCo0z+csJC1qsB8M1IaOG191OCXb6UGyV2QrhAHqOs8inGhw85Tsjr5OyzA==
+	bh=zyXslw9VshoP0Dt+hSCQbWwSxcGhI3BWVVf2b5NPS+g=;
+	b=rZIx8Pu9Q/WhfPRyoVyEYOhdAqD3qjPWL9++ZH0kvqNX3YcVFcO44Yk9gDmhgKVGc58Q
+	 qWkVAgbTNU3Nmlkz9LdqMepRNOMD1iaLk1oXlX9QZH6V+k+ocVF7GswY5rEcaHRlNzKce
+	 WLjyvA3dxLOieqq7Qu5fz7iG2/scKiPG//2I/gLb5De1k+uAevaVPN/7w6uAiUqLS5W/l
+	 WEbjiSjfg/7ycqRm1tTSH7kxzuXjoOze30agluEpiF1Xh+MyGuOZYQP2bNBNOwO5FXc4/
+	 tbhvQBjkasKE0nn7FLci4ll6o0Rv0oikux9W0SN2j7LdqHx5jDJf6E1SGrYvV5SWQ/w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Yi4oaMcO;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fJ+vqeSl;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45979606A31D;
-	Sun, 15 Nov 2026 18:52:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F6CB606A31A;
+	Sun, 15 Nov 2026 18:55:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Yi4oaMcO
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 940D41F000C4;
-	Sun, 15 Nov 2026 18:52:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fJ+vqeSl
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 708D61F000C4;
+	Sun, 15 Nov 2026 18:55:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794768725;
-	bh=SdudER1+z7QJDiZ1Nnh2ZbZ2E80axq39/K+Tsu5UA/w=;
+	s=k20260515; t=1794768958;
+	bh=zyXslw9VshoP0Dt+hSCQbWwSxcGhI3BWVVf2b5NPS+g=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=Yi4oaMcOGX2qt7K6xqQ1ukn3u3IMrRR9Vyw5Msfzk3hAI8l8HV/yfhWxljmFTkgXe
-	 QewrDoa47Q8taP+G8Cw5AWN7uDgarEMA0qA82uQHDKhScIKK1ZpA9Crlfy9f9AjtEx
-	 uRXn46e/XmiB/CTeO2qOXT6V+0x9UtPa4PY8kRz5EgO2XXdYO0fs55Tbo7W8EZm9MK
-	 7216YnY0EOU37M4AYq7EdEuJSOX6jJHDJeDBZCDQoyFxLtvcnNdLTYNeohvpNzPjwq
-	 7EgC17gY/t/VY3BRoZCfyJ2sTgIAmko21KncSHOQ3pB1WvZb2IhxIkg3rBUwW1lTMt
-	 D5JoYQJimN3QQ==
+	b=fJ+vqeSlkhrBkQxZvX/Lxn09eGioyBRenoJ34ugy0G+/njudzKIqL/wqu8vvvN9Av
+	 Jthdkut6dozLF5eLQTi2o2XbpLRc3OxrGEmBjqULmZMZk9e6GmM8UKPLHSMLEUEZQT
+	 18HtuzmhqbbbQrmhlKYbMhJfsTq3uhIx5ksae9Pq8bV1XrdIYQ/SZLPWm7Xt9qpJZ0
+	 I4CneqOuGhjFbRvGp2R8sdnWt/M3tDLeZxVodVojrTQGH+kuBLdV45r0FrhKUsurHH
+	 lK7XnIRt9FalYffxGd54cxd2GVXt6aGE4iofQnOOsTxD/s4lJEftWdxkVb1dYXMUS/
+	 GgAm86xzyWIiA==
 From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
 To: Mina Almasry <almasrymina@google.com>
 Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski
@@ -64,14 +64,14 @@ Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski
  Wei <dw@davidwei.uk>, Alexander Lobakin <aleksander.lobakin@intel.com>,
  linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, Stuart Clark
  <stuclar@meta.com>
-Subject: Re: [PATCH net-next v1 03/11] xdp: Copy buffers with restricted
- lifetime
-In-Reply-To: <CAHS8izMhFEMu+v4zAm6VqjU=Lz=vMn58Ft6HKya1L-uNY0hL-A@mail.gmail.com>
+Subject: Re: [PATCH net-next v1 04/11] xsk: Allocate UMEM chunks through
+ page_pool
+In-Reply-To: <CAHS8izNC9APadHg9yPtROkii1H7TPMAB7Xhxo+y9Cx-XCw9C1Q@mail.gmail.com>
 References: <20261110102039.1002605-1-bjorn@kernel.org>
- <20261110102039.1002605-4-bjorn@kernel.org>
- <CAHS8izMhFEMu+v4zAm6VqjU=Lz=vMn58Ft6HKya1L-uNY0hL-A@mail.gmail.com>
-Date: Sun, 15 Nov 2026 19:52:01 +0100
-Message-ID: <874idij5bi.fsf@all.your.base.are.belong.to.us>
+ <20261110102039.1002605-5-bjorn@kernel.org>
+ <CAHS8izNC9APadHg9yPtROkii1H7TPMAB7Xhxo+y9Cx-XCw9C1Q@mail.gmail.com>
+Date: Sun, 15 Nov 2026 19:55:55 +0100
+Message-ID: <87v75xj550.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -88,47 +88,82 @@ Mina Almasry <almasrymina@google.com> writes:
 
 > On Tue, Nov 10, 2026 at 2:21=E2=80=AFAM Bj=C3=B6rn T=C3=B6pel <bjorn@kern=
 el.org> wrote:
->>
->> UMEM stays mapped writable in userspace, and it has a fixed number of
->> chunks. The stack must not keep its chunks in an skb or an xdp_frame.
->> Mark the providers whose buffers the stack may keep with
->> MP_CAP_RETAIN, and copy packets of the others on XDP_PASS, on
->> conversion to a frame, and on redirects other than XSKMAP.
->>
->
-> I'm not understanding why that needs special handling. Devmem stays
-> mapped and writeable and did not need MP_CAP_RETAIN. Also, today the
-> stack can keep any pp page in the socket's receive queue for arbitrary
-> time without _RETAIN. I'm espcially confused you're not adding _RETAIN
-> as a cap to existing providers, but their netmems can be retained.
 
-This patch does give devmem and io_uring zcrx MP_CAP_RETAIN, and pages
-need nothing... a pool without a provider is retainable. Only UMEM
-isn't.
-
-The stack never reads devmem or io_uring zcrx payloads, so it doesn't
-matter that userspace can write them. UMEM is readable, and the stack
-would parse headers and payload that the application can change under
-it. An AF_XDP socket also has a fixed set of chunks, and chunks held in
-skbs elsewhere starve it. Driver zero copy copies on XDP_PASS for the
-same reasons, in xdp_build_skb_from_zc(); this does the same for
-provider buffers.
-
->> The head chunk is writable by userspace, so it cannot hold
->> skb_shared_info, and virt_to_netmem() cannot find a net_iov head.
->> Drivers pass kernel memory for both to xdp_init_buff_netmem().
+>> diff --git a/include/net/xdp.h b/include/net/xdp.h
+>> index 1105bb9e3292..5ab7802ac4e1 100644
+>> --- a/include/net/xdp.h
+>> +++ b/include/net/xdp.h
+>> @@ -368,7 +368,7 @@ static inline bool xdp_buff_add_frag(struct xdp_buff=
+ *xdp, netmem_ref netmem,
 >>
->> A static key keeps the check off while no such page pool exists. A
->> frame copy is linear, so a multi-buffer packet of such a provider
->> cannot go to a device or CPU map.
+>>         if (unlikely(netmem_is_pfmemalloc(netmem)))
+>>                 xdp_buff_set_frag_pfmemalloc(xdp);
+>> -       if (unlikely(netmem_is_net_iov(netmem)))
+>> +       if (unlikely(netmem_is_net_iov(netmem) && !netmem_address(netmem=
+)))
+>>                 xdp_buff_set_frag_unreadable(xdp);
 >>
 >
-> Did this actually improve perf? I recall that when I benchmarked the
-> performance improvement, it was questionable.
+>
+> netmem_is_net_iov() check became redundant.
 
-I have no numbers for it, and it goes in v2. With the frag walk gone, as
-agreed with Stan, the only check left under the key is for page heads,
-and no provider hands out pages.
+Hmm, not quite... netmem_address() is also NULL for a highmem page
+without a mapping, and the stack reads those through kmap, so they
+aren't unreadable. The net_iov test keeps them out. I'll add a comment.
 
+>> diff --git a/net/xdp/xsk_pp.c b/net/xdp/xsk_pp.c
+>> new file mode 100644
+>> index 000000000000..fdd55265a6cd
+>> --- /dev/null
+>> +++ b/net/xdp/xsk_pp.c
+>> @@ -0,0 +1,246 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/* AF_XDP UMEM as a page pool memory provider
+>> + *
+>> + * Each aligned UMEM chunk is a readable net_iov with one owner at a ti=
+me:
+>> + *
+>> + *   userspace --FILL--> page pool --release--> reuse --alloc--> page p=
+ool
+>> + *       ^                   |
+>> + *       +-----RX ring-------+
+>> + */
+>> +
+>> +#include <net/page_pool/helpers.h>
+>> +#include <net/page_pool/memory_provider.h>
+>> +#include <net/xdp_sock_drv.h>
+>> +
+>> +#include "xsk.h"
+>> +#include "xsk_queue.h"
+>> +
+>> +enum xsk_pp_chunk {
+>> +       XSK_PP_USER,    /* owned by userspace */
+>> +       XSK_PP_POOL,    /* owned by a page pool */
+>> +       XSK_PP_REUSE,   /* on the reuse stack */
+>> +};
+>
+> maybe should be xsk_mp_chunk.
+>
+> But also, why is this 3? Usually the mp's track allocated and free. I
+> assume PP_REUSE is actually free, but I'm curious why it matters to
+> your mp whether the pool or the userspace holds the memory (or whether
+> the net stack holds it. Can't it hold it?)
+
+REUSE is free, yes. USER and POOL are both allocated, but userspace
+gives chunks back by writing addresses to FILL, and it can write any
+address, also one of a chunk the kernel still owns. Taking that entry
+would hand the device the same chunk twice. So the provider only takes
+FILL entries for chunks in USER, and drops the rest. io_uring zcrx
+checks the same with user_refs, and devmem with the socket's token
+xarray.
+
+The stack can't hold a chunk, see my reply on patch 3.
+
+>> +
+>> +struct xsk_pp {
+>
+> maybe xsk_mp? this is a memory provider right?
+
+Yes, I'll rename it to xsk_mp, the enum too.
 
 Bj=C3=B6rn
