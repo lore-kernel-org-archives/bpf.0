@@ -1,100 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794753458;
-	b=5WTrKLpI4loSgP5TTQmfxUbAM8DsZ8/Qgg6eV4BydZtAoXlvxgaDrULTDBzkL/9H4AMu
-	 KBVSHp2jzde1gBOEsp32Vg11R/1PUmVo4SGKOaeFLz/1PkKSpZOCS3Mg+VQNioBcorv2A
-	 tYYkFRflbVcbB7krdYtPrYRCGXTYgGE4nmoRdsATkN+wDwEJFHzBRDh3jhfChFGdyj6Bz
-	 Wsq/imkFI+lPdKXYKdMo0x1V9PeataPJM+7SHcu4CNWjxZkZkW0sDetQZxQS/MYvQgDEZ
-	 +T8hI7QrUAdVPzy32bPVPDhptf8eOgHlz42CTvc1ILYaOKbnb1dZvGXKji33U4DgkKA==
+	t=1794753468;
+	b=kP2wCI7ZUcroYv1JifOCnC2P2RPx48pQvTvtijmUs/0KpVmXiqkS7fq4gbpmlnqWWSOH
+	 4715I/0E08v3/I+NUSbbQNP3YNAohU1I/QsKGm37hayyynbxS6lsaVQ3M9DSbyt8S792C
+	 krWQNBa1wsd4WEZKXzOcXuyy9a+x0SzCDDiJ1eF6GZFxJ53oy5WzO+LoHQFGpcq47aa7H
+	 dWGoB8u5ICxkZ2jPOVQjkFRMAFhJUZCO/RdrsCivB+vjLBYfY9Lr+sYMdJ69R4hlhV6f4
+	 G8ilyW1eVXEBwL6UA42jVVLIm10y1E8M23T7GOjRixtCCIzbHng+8Ms56VSVdIcFOSg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794753458;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=TZFY0nWk89RIttQycWfHfmi3Uv3kaULeHN2GeypqrKs=;
-	b=ji9n6RPx5bTn73WJe7ofm6W52YdCOrHmKqBO/yfj0FOLR4QR3OuUqVUYXI04WBPHu0rW
-	 Hb2MOoEqQby/X61XcE2+5Nkj3Tu8SBUfvBJE2gdiv+kED3Zn4+IOAaKiEtfXOljhgxwYU
-	 rpbcbfCf2s7AcSLqbZmZ4jXelE6Brs67F4SgV89HJDD5YvaVJFhvswt/3wqTJs6j7r84K
-	 aXLE6YmElAMFIbMzYRyjyb2GGZuZpdMRrjPaQ2fIAMnRqP3nSeaWULAHo78JKPjAZpAsA
-	 KQzIcyI53dkBPue/M2Runq+xyAyRazvEZbaIcrHGPtA0wO+BUtpLGdgcHtWhiWK8mdA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794753468;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=2aQpD+5wOwFw2m2I7/vgi2Nycby2o3K9U9x+kyRBQZ4=;
+	b=Bz1jCZ9ZUB3HbYsayh/qjIw/0GBFzyJmtQLS3rx/xeJeGFV9EmOcNh384eer9LV96Vfh
+	 YgX0/CajRg107YrWBhc2vOV4R8IHwbuuWmWBtC6TRu2+2+p5fFDAZcBe1QmPnwEm0i7/q
+	 hvVBiNzIKuSnJJZucrxcOzVKosezIjeNwwmDLCfZUpBPhTNu8qskeVAXf3foNBcBqJ8AA
+	 eTHk+5ScdegOyEXy+agGI5jENO2YG+j97rJdEE7sRs9KvLOrlUwpAoFXjxUZU+/aCF4zt
+	 HHUSrzkLrAyrayBKRKC3sZtu2mRb9bRVar0jf3eL8HnjmSFAU+Lt1W2n/Yd11ltidlg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=dbIl5CZB;
-	arc=none smtp.remote-ip=209.85.221.47
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="F/8qSbuo";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E0B0606A31E
-	for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 14:37:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9E0B0606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93337606A31D;
+	Sun, 15 Nov 2026 14:37:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=dbIl5CZB
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-498f5fa4f70so2899374f8f.0
-        for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 06:37:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794753456; x=1795358256; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=TZFY0nWk89RIttQycWfHfmi3Uv3kaULeHN2GeypqrKs=;
-        b=dbIl5CZBTlZARi63kuoDghFVe2FXcO1LMdDeRqXWoj4s6usVbGU/Ee5bTMidXDwiro
-         On9rPGsq6pRmeXQNPyVgPLs02pMGlubT/7jSYEKOabny1JNKW9BeiyCJEguOmM4JXSP2
-         8kg3aLkDQShWXXWajzbIf4VYzaLKi1l4tkrmioKCWgUXfACFxqwrqKI3DsoqGnBPuSax
-         eqm+rxN2elipMluqrHYhz69lN9MSNixobHK76TNGzZdOGQDt+67D5b1ovOQMaos9wQ9k
-         vDxSvC68KdJWakHd78r9QqzG9g70S/CF3Y+ADs8XF/rczpISsEKNn3q15ntorz9eb/eq
-         flAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794753456; x=1795358256;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=TZFY0nWk89RIttQycWfHfmi3Uv3kaULeHN2GeypqrKs=;
-        b=hZ9bjK2OJcdm2n4HNW+YjQY051tQJs01bfiGTxxVugxFxhUM3B54gsSNJYouTKKToe
-         NjFcn6VjRc9HI18hUl0BXdwQKmZoTpfdK7v+lwa2c4KGuiSDNSuvvFX2QleGxCb5cCrd
-         ja7gTicOspK5YCfdN7W4HxGFPnYw8WMFYx/wYliW1No1RF8nNL91EW/WZRXDr9DkKv25
-         /LB3UNUB0ZeXnJ/WNvhiNjeTY2whTRpbh+5y8KCIu3QVZrjs16VnutbYQq54hxNxp9UH
-         7kS5Z4YL2Y51BVx8fSDZolXWmF99lRi8QROdq3f/uG3yRdLzVDpZ17sWE+gho+/lTnGY
-         RtfA==
-X-Forwarded-Encrypted: i=1; AL+hErGZIjMZUORrqamGoX8PmcC2+/uWCP0fcHaEZw0BavjBli3i5sQ77UT058fyJ2VCcR4vflY=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8cyDIsawXm49m61zjjM9k6JAVzeQJZOyYR3SV/CnxBIlzs2I6J
-	frpF+nN/B/uVkYG1MYiEsx8gbo0g1bO8avSIE9aODWJUvooDeUokAqSK
-X-Gm-Gg: AYBFou3hq+6ISs5Yv/FxN31C5Q3o0jY6JL7eijfhnuVVnHZa1PD+VX3WdgkkwKWzc/4
-	9LO0usMgVCwBMrr1ctcDDV7HpFkvSWDAoXWhBOGUdY+bJpYA8M5c5v6Bdw2D3a2jRi4F/Hgs8Kx
-	XBcp5npfjqyY23H4G+Biap0ZNgvKX52gefE/pY3ju05x5OzuR/9m6l8D4/JrdQ0r5SHFIJ6sNTX
-	yT/Ef24GbjBNToqRY9G0DGg8zCiTKVetMkK1BXEVryvZ5tMRDoZnAzjz4fEM6G7sqhWTBGVcF8x
-	jcWi46CsbGwD7eIG1gMrmkfg8kR9WBaXqMWVVsqQ8CoMAFWhR+orwXzxjKqopJECCL7814lD2ud
-	jTXvkUTHelry3sWoynJ3Oy3iytqo9lm3wvChWjsIr0V/BHr2DO3+PqmwhmoT4T145sJtmH+dDjI
-	PKjU6OKvSShm+qEqFIApnHD+Kbchg5jNZJDlxxnMbb6TJgVNQnCXZvXAztv/1yPRzBwSWh0p4e2
-	axU8NVjcdwPBF3Qq/CjZJHxovlB41lF+Mrb9ex0wgKpUTlWtqnnIIyDVb3Kw/wiRc1b1bUjF1Y9
-	NMY3j0uaPR//vy36fabDaG4AGbPLBFFfh4BtfrR1lWxGfzDuDrm+tVydEdzQO/fUPw==
-X-Received: by 2002:a05:6000:2990:20b0:48e:3d2:44b1 with SMTP id ffacd0b85a97d-49c7353c8aamr12310750f8f.52.1794753455945;
-        Sun, 15 Nov 2026 06:37:35 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49c60f8d615sm16954821f8f.56.2026.11.15.06.37.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Nov 2026 06:37:35 -0800 (PST)
-Date: Sun, 15 Nov 2026 14:37:34 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-Cc: "Hungyu Lin" <dennylin0707@gmail.com>, <andrii@kernel.org>,
- <bpf@vger.kernel.org>, <eddyz87@gmail.com>, <ihor.solodrai@linux.dev>,
- <daniel@iogearbox.net>, <memxor@gmail.com>, <martin.lau@linux.dev>,
- <song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
- <emil@etsalapatis.com>, <alan.maguire@oracle.com>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next] libbpf: Fix sign extension of unaligned enums
- in btf_dump_get_enum_value()
-Message-ID: <20261115143734.4addeb28@pumpkin>
-In-Reply-To: <DMUPC8KHIGGC.1GSNJVGA8XC98@gmail.com>
-References: <20261113223449.97604-1-dennylin0707@gmail.com>
-	<DMUPC8KHIGGC.1GSNJVGA8XC98@gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=F/8qSbuo
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78A461F000C5;
+	Sun, 15 Nov 2026 14:37:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794753468;
+	bh=2aQpD+5wOwFw2m2I7/vgi2Nycby2o3K9U9x+kyRBQZ4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=F/8qSbuoGQZGQtgBxIr6B2ueFpU95+7qJMwmm8INX1xDHRlTUaSD8BFdbq4CbOxrR
+	 ox1qNccLa8/HK300SOpQmBbk5Qvso5s0ej0nnLzfaw7woW9fsTRsB3fn8XKtg4GZi2
+	 mkIHuNrdV77fS3AS7HGyBsRW6r1I1TVsLts0dAY635e5VsCW997Apri30eUILQ8DE8
+	 6QT8gY4VS7IF4+z6kjL7VWLQ7z0W25C7ZhfXYsY6RHZAfw5JKq52esd/VilnzZerDm
+	 yfh9vV8t3VLyXsXWrgdekBNeTMfP6B4g7EKPziGoUoo9vqTOsFrf/z8rys1tdDFec/
+	 iXGUcM50BmJSQ==
+Content-Type: multipart/mixed; boundary="===============5766711597295612734=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,93 +49,96 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Message-Id: <9bacf710b101058735f399d44953a18d1630aec3b6b176fe96215cdd2f0eb7ac@mail.kernel.org>
+In-Reply-To: <20261115-work-ovl-d_real-v1-8-ca155efbcb2e@kernel.org>
+References: <20261115-work-ovl-d_real-v1-8-ca155efbcb2e@kernel.org>
+Subject: Re: [PATCH 08/13] ipe: handle errors from resolving the real inode
+From: bot+bpf-ci@kernel.org
+To: brauner@kernel.org,amir73il@gmail.com,linux-fsdevel@vger.kernel.org
+Cc: chris@chrisdown.name,mszeredi@redhat.com,linux-unionfs@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,linux-integrity@vger.kernel.org,linux-security-module@vger.kernel.org,linux-mm@kvack.org,brauner@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sun, 15 Nov 2026 14:37:46 +0000 (UTC)
+
+--===============5766711597295612734==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-On Sat, 14 Nov 2026 05:58:41 +0000
-"Alexei Starovoitov" <alexei.starovoitov@gmail.com> wrote:
+> ipe: handle errors from resolving the real inode
 
-> On Fri, Nov 13, 2026 at 02:34 PM Hungyu Lin <dennylin0707@gmail.com> wrote:
-> > btf_dump_get_enum_value() reads unaligned enum values through
-> > btf_dump_get_bitfield_value() with a zero bit size. That path
-> > zero-extends the value instead of using the signed loads that are used  
-> 
-> Not quite. bit_sz == 0 makes right_shift_bits == 64 in
->   *value = (num << left_shift_bits) >> right_shift_bits;
-> That's undefined behavior for __u64 on both endians.
-> Pls say it in the commit log.
+TL;DR: Behaviour question: the new ipe_evaluate_event() early return for an
+unresolvable real inode skips ipe_audit_match(), so enforce-mode -EACCES and
+permissive-mode allows may leave no IPE audit record. Should it audit?
 
-Isn't a size of 0 just wrong?
-The code is likely also wrong for a size of 64 - which is valid.
-I also remember there being a helper somewhere to sign extend
-a 'narrow' integer.
+> diff --git a/security/ipe/eval.c b/security/ipe/eval.c
+> --- a/security/ipe/eval.c
+> +++ b/security/ipe/eval.c
 
-David
+[ ... ]
 
-> 
-> > +	if (t->size <= sizeof(buf) && !ptr_is_aligned(d->btf, id, data)) {
-> > +		if (data + t->size > d->typed_dump->data_end)
-> > +			return -E2BIG;  
-> 
-> This breaks the dump of struct fs_context when emit_zeroes is not set.
-> 'phase' is an enum bitfield of 8 bits, 3 bytes before the end of the
-> struct. btf_dump_type_data_check_zero() ignores bit_sz of an enum:
-> 
->   btf_dump_struct_data()
->     btf_dump_dump_type_data(data = end - 3, bit_sz = 8)
->       btf_dump_type_data_check_overflow()    1 byte, ok
->       btf_dump_type_data_check_zero()
->         btf_dump_get_enum_value()            t->size == 4, unaligned
->           end - 3 + 4 > data_end             -E2BIG
-> 
-> Today it reads 1 byte past data_end and the dump succeeds.
-> The over-read is an old bug of enum bitfields. It needs its own fix.
-> The fs_context test in test_btf_dump_struct_data() sets emit_zeroes,
-> so it doesn't notice.
-> 
-> Drop the check. btf_dump_int_data() copies without it.
-> The check against data_end belongs in one place for all types.
-> 
-> The first case below fails on bpf-next today.
-> The second case fails with this patch.
-> I didn't build it and didn't run it:
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-> index b5c90f7..d6fd993 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-> @@ -945,7 +945,7 @@ static void test_btf_dump_enum_data(struct btf *btf, struct btf_dump *d,
->  				    char *str)
->  {
->  	__u32 high = 0x80000000;
-> -	__s32 neg = -1;
-> +	__s32 neg[2] = { -1, -1 };
-> 
->  	/* enum where enum value does (and does not) exist */
->  	TEST_BTF_DUMP_DATA_C(btf, d, "enum", str, enum bpf_cmd, BTF_F_COMPACT,
-> @@ -994,6 +994,8 @@ static void test_btf_dump_enum_data(struct btf *btf, struct btf_dump *d,
->  				"(enum test_enum_u32)TEST_ENUM_HIGH"), "dump unsigned enum");
->  	ASSERT_OK(btf_dump_data(btf, d, "test_enum_s32", NULL, 0, &neg, 4, str,
->  				"(enum test_enum_s32)TEST_ENUM_NEG"), "dump signed enum");
-> +	ASSERT_OK(btf_dump_data(btf, d, "test_enum_s32", NULL, 0, (void *)neg + 1, 4, str,
-> +				"(enum test_enum_s32)TEST_ENUM_NEG"), "dump unaligned enum");
->  	btf_dump__free(d);
->  }
-> 
-> @@ -1182,6 +1184,12 @@ static void test_btf_dump_struct_data(struct btf *btf, struct btf_dump *d,
->  		type_sz = btf__resolve_size(btf, type_id);
->  		str[0] = '\0';
-> 
-> +		/* 'phase' is an enum bitfield 3 bytes before the end */
-> +		ret = btf_dump__dump_type_data(d, type_id, zero_data, type_sz, &opts);
-> +		ASSERT_EQ(ret, type_sz,
-> +			  "unexpected return value dumping zeroed fs_context");
+> @@ -335,6 +339,15 @@ int ipe_evaluate_event(const struct ipe_eval_ctx *const ctx)
+>  		return 0;
+>  	}
+>  
+> +	/*
+> +	 * Without the inode hosting the data none of the properties of the
+> +	 * file can be evaluated. Refuse it unless IPE is permissive.
+> +	 */
+> +	if (ctx->file_err) {
+> +		rcu_read_unlock();
+> +		return READ_ONCE(enforce) ? -EACCES : 0;
+> +	}
 > +
-> +		str[0] = '\0';
->  		opts.emit_zeroes = true;
->  		ret = btf_dump__dump_type_data(d, type_id, zero_data, type_sz, &opts);
->  		ASSERT_EQ(ret, type_sz,
-> 
-> pw-bot: cr
-> 
 
+Should this path emit an AUDIT_IPE_ACCESS record?
+
+This early return skips the eval: label, so ipe_audit_match() is never
+called.  Every other way ipe_evaluate_event() ends in a denial goes through:
+
+eval:
+	ipe_audit_match(ctx, match_type, action, rule);
+	rcu_read_unlock();
+
+	if (action == IPE_ACTION_DENY)
+		rc = -EACCES;
+
+	if (!READ_ONCE(enforce))
+		rc = 0;
+
+With this patch, in permissive mode a file whose data cannot be resolved
+returns 0 and leaves no record at all, even though
+Documentation/admin-guide/LSM/ipe.rst says that in permissive mode policy
+violations are logged.  In enforce mode the -EACCES has no IPE audit record
+to explain it.  The commit message says "Permissive mode allows it like any
+other denial", but other denials are audited and this one is not.
+
+This path can be reached for an already open file.  ovl_open() verifies
+lowerdata and sets OVL_VERIFIED_DIGEST, but a metacopy copy-up clears that
+flag (ovl_clear_flag(OVL_VERIFIED_DIGEST, inode) in fs/overlayfs/copy_up.c).
+A later mmap(PROT_EXEC) on the open fd then goes:
+
+vm_mmap_pgoff()
+  security_mmap_file()
+    ipe_mmap_file()
+      ipe_build_eval_ctx()
+        d_real_data_inode()
+          ovl_d_real()
+            ovl_verify_lowerdata()
+              ovl_maybe_validate_verity()
+
+which can fail with -EINTR from ovl_inode_lock_interruptible() or with an
+error from ovl_validate_verity(), setting ctx->file_err.  The IMA patch in
+this series (c9952f8fed84) describes the same scenario, and its error path
+in ima_collect_measurement() still calls integrity_audit_msg().
+
+Could this set action = IPE_ACTION_DENY with a suitable match type and jump
+to eval:, or use a dedicated audit helper that records the error, so that
+denials and permissive-mode would-be denials are still logged?  No later
+commit in the series touches security/ipe.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43723438893
+--===============5766711597295612734==--
