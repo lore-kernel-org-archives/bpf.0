@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794712714;
-	b=x4FzrZDlUB18ykOXeJueQrdSpdaZLcG2474Z7Y/tNSEhrAZFX55uohD5nzbdWFpNZNT1
-	 X6051KtnHRXqKW4Wll3+469o4dy/GAdrdbkclxGIsgf2dGQa7MpzGoeeVvtMQPi8cFYpD
-	 9U2Nz+hqlBFAanS9zAuiKDguOv9InWt//EGeAs3u2CKOKY5EkAFdFdAN6v93KiTxmlj5e
-	 14TLZHdGUr5QijFxBPv4pjqriQUKKTAwcFezn1pav7AuJAghdgUSbMErrVxecVJSyfzlv
-	 j7xLQ00VCBpKrPVFju5jT3r2buuyD1E/CWqRDsb3H3a4XdhzpJWM9cDZHzXEnxsVUxQ==
+	t=1794712710;
+	b=SG3Mwj2GoERnO9UWrdAKlxBYMIQ9nbpgmEI5583gC8Op5ru/2TyTsYqeVKZTgUJN3bcR
+	 LcePwUbblFEbxtiZtsrdmc/o74AS+90Roh/Z/fRyqLwKwTw3lLS8B5LQTUNoWRldTXz5i
+	 kxSZTLTHO7vDcCsTiC9Rh6v+YNCdePw+1GbF+D8Y0Wn574o2iTNiElvMxHEBenIezV6XM
+	 AcDmFT8B/INmzdRxiSKgGEHZaPHLNH7luKIs/Mj++n83N/NfPZdgn6ckee8NhvXEQh6aM
+	 qSD3bS/Le4sZNbQJCBB1nino4v4We5AncBmBydj+G8x8Xm+Lo1gYlCw5DmHQzSp5bUQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794712714;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794712710;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=+59FBjeC7oJeIISLvvUpOT2DqbU3vKBMYCLmewoC1RI=;
-	b=DqgkJXKyq+rKsY4NfWZVnUzmG0JF0sHm1oPUqbqtZfx/DLCmx0qysU0sHQTJN06mAiAG
-	 HoTq8S6Et/Z0wPxw4qIfiTsgpoUyJRcXQKkNFRt/6s/c7UnmuDYtaxVncCFVJrjwTuVf9
-	 MSiu+MbMtMphSZ43UWJ1qDqw/7+khglhv6N4QDWknRCJzc2DjUXZ/0p0p3GBY5TSRLJRZ
-	 e7bWXCsRC9a6Io2M0cTVcaIs+Qz7EiNfvq4BAQxkgx9WkH8mNKid5iWDbu8OxfXLb0SWO
-	 NmZGHLCS3gtOE8c0pSW9MFVYcjidfu9nXptT25hFkiBlzQ70fhyjeaDumtaUAJFUWhA==
+	bh=Xqkmq+KJ2/HtU3nnCQ54j5ML6laUMMrM5zulVXs75RE=;
+	b=m3aOTNMuIpjdOxTR9Ibdeo28m3dbvKtnYvNVLP06IftrbCMMVid3AB5xChKKjZL3kMx+
+	 bpPxIekqHufADT6G+tEKREW5s5LYk3gyJz/uvN5T1n1PBVfYt++T7eAHTCXdYsBznZ2Ng
+	 xHZXxLy6sqrcJT2hPLAqsdPTF2+RFg9oK1rMlk7ufybOCkXR993eCabVSQkvz+E4D1qfi
+	 qhzTEDYS27s+PabR38TcwHMbx5KzTN5amj5AeW+qjK4e+uzLRJjsFG2x6hZWW+GbyM8xg
+	 hdtgTTnhr3vy9+M3SOtTVYgP2nd9y3+7H5RzhRdw6EG3Ygb1ey6a3HmrAe+YoQDevfg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UPuqxtZc;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=olyVM2U2;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED8E2606A32D;
-	Sun, 15 Nov 2026 03:18:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 012CB606A891;
+	Sun, 15 Nov 2026 03:18:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UPuqxtZc
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2740E1F000C5;
-	Sun, 15 Nov 2026 03:18:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=olyVM2U2
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AB2A1F000D0;
+	Sun, 15 Nov 2026 03:18:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794712713;
-	bh=+59FBjeC7oJeIISLvvUpOT2DqbU3vKBMYCLmewoC1RI=;
+	s=k20260515; t=1794712709;
+	bh=Xqkmq+KJ2/HtU3nnCQ54j5ML6laUMMrM5zulVXs75RE=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=UPuqxtZcJdwdzUfuxpVQNuzKP4twGxU2Z6Sz2Z1qo2d6Y0jUrWfOZ6MRuuSsKd2RL
-	 LVkV/zUaQnwK91FoulDf967oMn5AXcJ0zWjEUqT+9oOJV5DjRSYIfoANw/RLLv1gSX
-	 FmZEuAhVI8dNRT2E3vCZnqvA8TXP2IqLmsynZL/1nNLiCtRkbSu+eDg/WM4zwi08TH
-	 Xg8S8g9y/bKIFxMdroqgPEvVvHJoS5EkpdCG5Eizn4ld0QfR6L6vtvo6NuqK0NRZsN
-	 eItDKT458CZMdP6tPF/w6y69DGGCHbJqsDFMz7ED2OqOT/a4GVXJz54H7Vx0/DQtx7
-	 DCY8x+syaNojQ==
-Subject: Re: [PATCH net-next v1 15/15] Documentation: networking: psp:
- document socket-less associations
+	b=olyVM2U2Aghqs20/HIhJGzxuOPZytZp20BXK6kDJZG7fEqVSYDHQfu9aHJgTG0O3S
+	 tjTfvrSoLJW1mGGIRFh7fLTGgkUnB/u4EUzkL1RuPSaXzzt6cOPRF8jseKIfQ3sMv9
+	 JzQ+3e7tVwVW4ToyOU+pWm9q1vF7uya1N0OIlLqlnYQeNXIa1uO2UNvTcIwZ0+Szmo
+	 H3cJdRxlG8MHbSfZqFn6OBLryQX2l6kqMfItgEtybaVIvNEvUZv6hJ58G9B/kuBVaZ
+	 MwWjTgAKVLl6TCtRlHRz1DxmjD0n63YI2y27hpyipZT90m7wT0VHA+0LSyvt/m/mOb
+	 3jBWkkhpVdXtQ==
+Subject: Re: [PATCH net-next v1 13/15] selftests: tc-testing: run dependsOn
+ probes outside the test namespace
 From: netdev-bot+sashiko@kernel.org
 To: toddfreed@meta.com
 Cc: netdev@vger.kernel.org, davem@davemloft.net, andrew+netdev@lunn.ch,
@@ -52,10 +52,10 @@ Cc: netdev@vger.kernel.org, davem@davemloft.net, andrew+netdev@lunn.ch,
  linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
  martin.lau@linux.dev, pabeni@redhat.com, saeedm@nvidia.com, horms@kernel.org,
  tariqt@nvidia.com, weiwan@google.com, willemdebruijn.kernel@gmail.com
-Date: Sun, 15 Nov 2026 03:18:31 +0000
-Message-ID: <179471271167.2199510.6222235735319435450@kernel.org>
-In-Reply-To: <20261111005533.6436-16-toddfreed@meta.com>
-References: <20261111005533.6436-16-toddfreed@meta.com>
+Date: Sun, 15 Nov 2026 03:18:28 +0000
+Message-ID: <179471270808.2199510.6514314455565065109@kernel.org>
+In-Reply-To: <20261111005533.6436-14-toddfreed@meta.com>
+References: <20261111005533.6436-14-toddfreed@meta.com>
 X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -75,179 +75,96 @@ you want to address the nit picks below when you respin.
 
 Low priority / nit picks for your consideration:
 
-- [Low] The new psp.rst text says, in the `psp encap assoc ID` bullet,
-  "Encap on ingress is hardware offload only." The header comment of…
-- [Low] In psp.rst, the `psp encap assoc ID` bullet says: "If the
-  association is removed before transmit, or if the packet is…
-- [Low] In the flower paragraph, psp.rst says the `psp_spi`, `psp_ver`
-  and `psp_dev` matches together "tie a decap rule to one Rx…
+- [Low] The patch fixes a real regression but has no Fixes: tag.
+- [Low] run_one_test() now passes a new stage string, 'probe', to every
+  plugin's adjust_command(stage, command) hook.
 
 --
 
-Documentation: networking: psp: document socket-less associations
+selftests: tc-testing: run dependsOn probes outside the test namespace
 
-This commit reorganizes the PSP documentation around associations. It
-documents the new netlink commands for socket-less associations, the psp
-tc action and the flower psp_spi, psp_ver and psp_dev matches. It also
-adds sections on fragments and on PSP device statistics.
+This changes run_one_test() in tdc.py so the dependsOn probe is passed to
+exec_cmd() with a new 'probe' stage instead of 'execute'. With that stage,
+nsPlugin does not put "ip netns exec" in front of the probe, so the probe
+runs in the base namespace and the probe-gated tests are no longer always
+skipped.
 
-> diff --git a/Documentation/networking/psp.rst b/Documentation/networking/psp.rst
-> index 0f9b6b73f2447..79b101db5dfc4 100644
-> --- a/Documentation/networking/psp.rst
-> +++ b/Documentation/networking/psp.rst
-
-[ ... ]
-
-> @@ -140,6 +162,55 @@ The PSP assoc state of a socket is not reset when the connection is
->  torn down. ``connect()`` on a socket that has PSP assoc state will
->  return ``-EINVAL``.
->  
-> +Socket-less associations
-> +~~~~~~~~~~~~~~~~~~~~~~~~
-> +
-
-[ ... ]
-
-> +- ``assoc-del`` deletes an association. tc actions and packets which still
-> +  reference it keep it alive. The device keeps decrypting the SPI of a
-> +  deleted Rx association until its device key is rotated out: remove the
-> +  decap rule to stop taking its packets.
-
-[ ... ]
-
-> +- ``psp encap assoc ID`` attaches a Tx association. The packet must then
-> +  be transmitted on the main netdev of the association's PSP device, which
-> +  encrypts it (``mirred egress redirect``). If the association is removed
-> +  before transmit, or if the packet is transmitted on any other device,
-> +  it will be dropped, rather than sent in the clear. Encap on ingress is
-> +  hardware offload only.
+> diff --git a/tools/testing/selftests/tc-testing/tdc.py b/tools/testing/selftests/tc-testing/tdc.py
+> index 511d66c36a2a0..541caf984519f 100755
+> --- a/tools/testing/selftests/tc-testing/tdc.py
+> +++ b/tools/testing/selftests/tc-testing/tdc.py
+> @@ -399,7 +399,7 @@ def run_one_test(pm, args, index, tidx):
+>      if 'dependsOn' in tidx:
+>          if (args.verbose > 0):
+>              print('probe command for test skip')
+> -        (p, procout) = exec_cmd(tidx, args, pm, 'execute', tidx['dependsOn'])
+> +        (p, procout) = exec_cmd(tidx, args, pm, 'probe', tidx['dependsOn'])
 
 [Severity: Low]
-Is the part that says "If the association is removed before transmit ...
-it will be dropped" accurate? It conflicts with the assoc-del bullet above
-and with the assoc-del doc in Documentation/netlink/specs/psp.yaml:
 
-    Packets and tc actions which still reference it keep it alive.
+Should this patch have a Fixes: tag?
 
-In the code, psp_nl_assoc_del_doit() only calls psp_assoc_unpublish().
-That removes the ID from the registry and drops the registry's reference:
+The probe block came from commit 7f3f86402609 ("selftests: tc-testing: add
+"depends_on" property to skip tests"). At that time nsPlugin used one
+shared netns that was created ahead of time, so the probe worked.
 
-net/psp/psp_assoc.c:psp_assoc_unpublish() {
-    ...
-	if (xa_cmpxchg(&psp_assocs, pas->id, pas, NULL, 0) == pas)
-		psp_assoc_put(pas);
-    ...
-}
+Commit 98cfbe4234a4 ("selftests/tc-testing: localize test resources")
+moved tests to per-test tcut-<random> namespaces. It also wrote the
+'execute' stage call shown above. In run_one_test(), the probe still runs
+before the per-test suffix is added:
 
-The METADATA_PSP dst created by tcf_psp_md_create() keeps its own
-reference. tcf_psp_act() also keeps attaching dst_clone(&params->md->dst)
-to every packet.
+    NAMES['NS'] = '{}-{}'.format(NAMES['NS'], tidx['random'])
 
-On transmit, psp_xmit_md() checks only the device and the MTU. It never
-checks whether the association was deleted:
+It also runs before pm.call_pre_case() creates the namespace. As a result,
+nsPlugin's adjust_command() wraps the probe in a netns exec for the bare
+"tcut" name, and no namespace with that name is ever created.
 
-include/net/psp/functions.h:psp_xmit_md() {
-    ...
-	if (rcu_access_pointer(dev->psp_dev) != pas->psd ||
-	    dev != pas->psd->main_netdev)
-		return -EINVAL;
-    ...
-}
+Because of this, the mirred dependsOn probes added later in dcfaf1f758ee
+("selftests/tc-testing: require an up to date iproute2 for blockcast
+tests") could never pass.
 
-So after assoc-del, packets are still encrypted and sent with the deleted
-association's key until the tc action is removed. A drop seems to happen
-only when the packet loses its METADATA_PSP dst, or when the PSP device
-does not match or has been unregistered.
+Would this tag fit?
 
-Would "if the packet loses its association on the way (e.g. its dst is
-replaced)" describe this more accurately?
+Fixes: 98cfbe4234a4 ("selftests/tc-testing: localize test resources")
 
 [Severity: Low]
-Is "Encap on ingress is hardware offload only" accurate for this series?
-act_psp_ops in net/sched/act_psp.c does not set .offload_act_setup:
 
-static struct tc_action_ops act_psp_ops = {
-	.kind		=	"psp",
-	.id		=	TCA_ID_PSP,
-	.owner		=	THIS_MODULE,
-	.act		=	tcf_psp_act,
-	.dump		=	tcf_psp_dump,
-	.init		=	tcf_psp_init,
-	.cleanup	=	tcf_psp_cleanup,
-	.size		=	sizeof(struct tcf_psp),
-};
+This passes a new stage string, 'probe', to the adjust_command() hook of
+every plugin. Should the in-tree docs list it?
 
-Because of that, tc_setup_offload_act() in net/sched/cls_api.c rejects the
-action:
+The stage list in tools/testing/selftests/tc-testing/README reads:
 
-	} else {
-		NL_SET_ERR_MSG(extack, "Action does not support offload");
-		return -EOPNOTSUPP;
-	}
+  The stages are identified by the following strings:
 
-In software, tcf_psp_act() always drops encap at ingress:
+    - pre  (pre-suite)
+    - setup
+    - command
+    - verify
+    - teardown
+    - post (post-suite)
 
-		if (unlikely(skb_at_tc_ingress(skb)))
-			return tcf_psp_drop(p, skb, SKB_DROP_REASON_PSP_OUTPUT);
+creating-plugins/AddingPlugins.txt also leaves 'probe' out of both its
+phase list and its "The stages are represented by the following strings"
+list. The commented stage-dispatch template in TdcPlugin.adjust_command()
+has no 'probe' branch either.
 
-So ingress encap cannot work in any configuration today. The flower commit
-in this series says offload will come in a follow-up series.
+The dependsOn description in creating-testcases/AddingTestCases.txt only
+says:
 
-Should this say that ingress encap is not supported (the packet is always
-dropped) and that hardware offload is future work? The header comment in
-net/sched/act_psp.c makes the same claim.
+  dependsOn:    Same as 'skip', but the value is executed as a command. The test
+                is skipped when the command returns non-zero.
 
-[ ... ]
+Probes now run in the base namespace, outside the test netns. A future
+dependsOn command that uses per-test devices such as $DEV0, $DEV1 or
+$DUMMY would fail, and its test would just be skipped. Could this be noted
+in the dependsOn description?
 
-> +The flower classifier matches what a packet was decrypted with:
-> +``psp_spi SPI[/MASK]``, ``psp_ver VERSION`` and ``psp_dev DEV_ID``, the
-> +ID of the PSP device which decrypted it. These never match a clear text
-> +packet, so ``psp_spi 0/0`` matches any packet decrypted with PSP.
-> +Together they tie a decap rule to one Rx association.
-> +
-> +Once the device key an SPI was created from has been rotated twice, that
-> +association is considered stale. Unlike sockets, tc does not handle key
-> +rotation. userspace should replace such rules before two rotations.
+The fix also depends on plugins passing unknown stages through unchanged.
+nsPlugin and valgrindPlugin both do that today.
 
-[Severity: Low]
-Does "Together they tie a decap rule to one Rx association" overstate what
-the match guarantees? The flow key built by skb_flow_dissect_psp() carries
-only these fields:
-
-	key->spi = pse->spi;
-	key->dev_id = pse->dev_id;
-	key->version = pse->version;
-	key->present = 1;
-
-It has no key generation and no association identity. SPI values get
-reused after key rotation. For example, nsim_key_rotate() in netdevsim
-resets the SPI counter:
-
-	if (ns->psp.spi & PSP_SPI_KEY_PHASE)
-		ns->psp.spi = 0;
-	else
-		ns->psp.spi = PSP_SPI_KEY_PHASE;
-
-After two rotations, the same SPI can be given to a different peer or to a
-socket association under a new key. If the old decap rule is still in
-place, it would strip SKB_EXT_PSP and skb->decrypted from that other
-association's packets and forward them.
-
-PSP device IDs are also allocated cyclically in a 16-bit space in
-psp_dev_create():
-
-	err = xa_alloc_cyclic(&psp_devs, &psd->id, psd, xa_limit_16b,
-			      &last_id, GFP_KERNEL);
-
-After enough unregister/register cycles, a stale psp_dev match could end
-up matching a different device.
-
-The next paragraph says userspace should replace rules before two
-rotations. It does not say that a stale rule will match other
-associations' traffic, and it does not mention device ID reuse.
-
-The flower commit in this series says "the generation of the device key is
-not checked". Could the doc include the same qualification here?
+The existing lists were already out of date ('command' rather than
+'execute'). The missing 'probe' entry and the base-namespace behaviour of
+dependsOn are new with this patch.
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261111005533.6436-1-toddfreed%40meta.com
