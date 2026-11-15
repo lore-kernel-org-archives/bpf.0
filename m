@@ -1,107 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.178
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794785311;
-	b=pKcBL2DVxCaiInlGKInTkI4iIh6ezlK03DhxYJ15noQvofJfwTqAazeMgLNweakDT/zj
-	 dfui5Q5iHJ9DGL4sjV8VD4IpBqDQGk3HUNH5gNl2fGehUbUl/XDlMbvIaYnYaynUknrZF
-	 rvTDobfayA0Ba/NVAL/0C2GowV6vMMbhq9fWjk1FNo+iJMUQK5VGjPpctWYwQP7HaqKqr
-	 EpVGQ/Y7ZM5x0uM4AmYfY15zTPn7NYLlwo9U0i3nd7JXSw2SyobYIFbys7xUubaJa1vvH
-	 UJGc/jAkbDU6mVNWqMUdHNSF1NsSIpRflpiZf6TD/nUJkxETN28EaOrHHM6Dz7d9UFw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794785311;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.161.43
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794785806;
+	b=afGBJC2gfrAKp7+g5nDJSJojI1bJCq395c/vgydCLmgXNWHtFp4C5wLXQ5+ob0fZ7l98
+	 zxPA6y8Jyc/Uo83IxbYF/w1/JbXOk6fvAWYolscOogKzuA4i8SUaz6feoE0ac7Mxl55cZ
+	 dUCjopiHWMIkZG7yDy7GEljLPz+eLgIyLRWTkHLvdh0y0aT/L68iHfXeNXUOzRUBvuQwe
+	 7moAVjHpnoQ27kdD2oPjMJ9Pk6jBF0AF057MBufathMhBSvQod1LAyP6rL4dPuPgIssTx
+	 s595yrlYSItBBJcPZbz7OGIe9HNtfJ08fhNuLlRSN7HX9wn6HleCOxoFJKzJma5z3rA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794785806;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=UBeykY1+H/vPJmkPV2pLCmI2Bs+Pj25kP6+DXgtUhEg=;
-	b=XD/ckvWXxNzn5fFIC00htvJ0f3jqSxUBTOt/C8hCh8zQrq4qPZSVmgyfmTxRZM+lm6eq
-	 yuJAjICY4p3Q/o/Ik/zIECuVMPdJkP+eN84xFJ7AegvYf+6NVIVrAPGSGklxjkkWHFDhu
-	 UIZ87ogMzfAA/sdNSqt25LpPo81dTJKR+Qlv74/PPny9gImnhpNW6d44lBp0iY7RCfhRD
-	 03CCu/ELqLwWSF+reUNgCbfpQK/XAqXsfj/rpvVqFwVLvcgCb/gnI6ay9FSW3f2T+VUpz
-	 8M0MUXPreNBBNWu93sZTjT7ML7M66zTHfUEay1KPDUdHcIkJPyjmw9LKIPAy/aoUiCw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=R4X8Y8HY;
-	arc=none smtp.remote-ip=209.85.214.178
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=eiEJgJLTePDasa4fCxlIDYNvy/YXg5RoYnLKMhW0V1k=;
+	b=FivNAo7mL/egH+EA9Uaj4MJWnPZIWmxsKzh1F4nRKqgMJWWct0GuYvNmnBcmOrmnDON3
+	 DCSinE0p1l7yJLUkOuN+Iar6Er6h/EnwjejSPmx1lJJfp1vB8QeaJY3XeCtNe+EUy6vtB
+	 gGY8ijEUVFeZFSPTbEebNLGOMo5LAiyrl2tVS0vyX6ACUTtCmVlRXDUgmFxDgr4e6B/Lb
+	 Vy20bxnkpJ5URl1Pu3SH2gPjveQBU0h8eRefIOVFt25EZO+938Dt57F9ZAxjckgUir+em
+	 6wK+IA4H96iyNUb9pf1XkejgOAHG54muQXC5+7RBjKIXlKtH4Gl/OgkRZmhiUVmp8SA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=cloudflare.com;
+	spf=pass smtp.mailfrom=cloudflare.com;
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=Zmpxi2jL;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.161.43
+Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B0CB606A330
-	for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 23:28:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0B0CB606A330
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64EC1606A31F
+	for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 23:36:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 64EC1606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=R4X8Y8HY
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2e9ae391a05so15808015ad.1
-        for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 15:28:30 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=Zmpxi2jL
+Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-70b875f6f1fso3295660eaf.2
+        for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 15:36:46 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794785805; cv=none;
+        d=google.com; s=arc-20260327;
+        b=LAPS2ACNqVfS4GK6L+SbM24LZUTIUL1l80daXq4ZjVVxEODN+lg0n7t843IiAZ8+hT
+         cz65etgTaWsATT50SH0uLVVUryLkgefZZUKcpOc6PNVOuGVND3zApHPSCdm4J8iILgWV
+         585tMZkMn2JRWL8l/hQNCLiJsP2eEjZH4hz7G/oPfYjRdwKVRTNNFqaoc2wdlYfqx4Di
+         6RaEMIJ+0qVD65aztI3zKBvXwuWU5iqChIdC43c0Cej10D05om70aMaopS2AMVTFuVuM
+         5g6sYIQhjnHJqsPQY6S27TcUDevIVqa/Vits/zcu/wMLSI/CvsPqDZOA3F4p+bVj5gr6
+         W2Tw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=eiEJgJLTePDasa4fCxlIDYNvy/YXg5RoYnLKMhW0V1k=;
+        fh=98JoR3VmPWICny5PTp+47R5mRPSei2P3fZLQdH8xN1M=;
+        b=A6jQt5MiwFb9J7OKWFmxtkkIpf3ZJ/mcslLx4VkQh5VPyeL6udD7D4X6UP/HzZnu3/
+         TfyLVXGVl5RgJ9VyX4WuDPpDZtu0EtDWkUmCFDjA0BKFpd6MiM3WhYERbFaQBQOELxQT
+         noT/2GGKAVR/ijeH295UTTIinFqd7ptM3U98K9KMkyCKYh1BHco5jjIa0maHCKlh7fdo
+         9LpchTX7vuPcIQZs8coG16KvqVZqd4l+8PEKxDvg/vE1dW8JVs3xqtfHi6LjtFbkETc0
+         PcyymLcdXZNEnQqRC02+kNRkCOuV6bqYKenWMeEM3hx0tOBAv73Ms+2T7jJTtzInq9vj
+         4qpQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794785310; x=1795390110; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=UBeykY1+H/vPJmkPV2pLCmI2Bs+Pj25kP6+DXgtUhEg=;
-        b=R4X8Y8HY8JvXK9sdMGMllaKudzpsfMfDLWS/qg6c0goxa2kUGuYQv/8mPEQn7MTQwN
-         9RpdlbNq0uFqewcYwl+PkyM/jUdR6c5AkuMetaUc3nP6yyslFlaUUprBo0FDyhiCpcx1
-         0nqgdtFlgbGe4nQG7wQaHZtPTeB6PxsPL4ESMRO1CCXaBMoVQKRwYCZ/4nuE0Wal6v+N
-         8530jNemiaGvpVK93xW7ndcQ9X3tvuspHUk6ZlHK/ECwo1u0FgJ8qU6+DVzh6IEaCW1E
-         z1cI3F9z5KnNORNVANdIaxAI9mLinedBuq5zYc/IKacgWB6knVUmOcAeyTaNsxctGQgz
-         6VNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794785310; x=1795390110;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=cloudflare.com; s=google09082023; t=1794785805; x=1795390605; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=UBeykY1+H/vPJmkPV2pLCmI2Bs+Pj25kP6+DXgtUhEg=;
-        b=sWUDrs0zsfK9Dd7LNldhTKgwdvUzjyz/x6DS4IJOPyBLkv2+J2w0CWvJHt4WnLnXJd
-         7oI7V/AdRMMgUq5HOoovtBqHWLXPuQ8MQUE2pe3Jj85TzEMK8YbOFz0bnnJpuE0WgzOZ
-         WFsIJoYLQOe480wSj4w5YB43WFf1kDYWApyIKcOCDqW2NkSdSwYTjQ2YHY89v06GXZ7y
-         NdwxjyIL3Vuji6TxMH6mz800LOJKWWoWPu2ZC1S2uy2ODMA8AyMrGd63cRmDqIkMw4dD
-         KynH8pBL64wSKUVl7xxXw+I/4G8TjUHYi1Vk5lYQ46acDZ7KCxcM0yM9qN2uM+UkUhtZ
-         Ry8g==
-X-Forwarded-Encrypted: i=1; AL+hErHpy7pDm5McJIphqIhjpB4guEnx1XnCWCdMDfb7e0SEU4ytSe+QV+wmILHwbcZVUg/Dnq0=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8W/hGHqf3G9aK5da85fjIROnGIyBLN5SZaHFHZ7uNTZOCtXMA8
-	ilc/P71Pzi7ZQIrq8aYNMT74nDpEO15mcxUK+uSCig90L3q65WWbRk3A
-X-Gm-Gg: AYBFou3tzsi+t1TbMdmdgaxvr+Mvkb9B4DDjvK5lMtpoKQJJ42ykzUQwKqLWqzxXwXD
-	LLfzvYIeKWXc32IY6zJm2Rd7PFPOSlIS+UZ0n3RdB1uzyXYW2ti4LPJd2rOOvhjFEQEozClVrM0
-	il/1M+fgEa0b7nHKCJeY3RNqDrihUpdvS/kfxj8fVrJeJ+rBiBWIFDn+tzUt7WsNZ8Wm+jBG7s2
-	ficvoy6BZ21DWUFzBknFgRKZLo/3X6CY8AcLp/kks0Cjw1eFn1IOJf/8uIMEY+1OdbN3JPWyXuB
-	KZbog7lDweQg2QabDdfqxw53pKY+1ex7tY+8p57biUVNLb8gOpWkEFiJTwO7LhwHb8wuBHALAyi
-	gntOk6k8O3C2srGzwQbwRrLa3/paZgzGN/+1ft688afStfvlNx2DK2opJjNS97ljL5nrL8I734F
-	r8zKy7U8WR5FwBI3vc4KBQzx5ZbYtcNZWnEVwKkI1MuTWwu7RU/rC/ArVsuZ68Nw0L/7HGAvSCJ
-	96SAPwW7CTCEC/+eSyFRX8PPntbydYv6sm21/gOPDCNXwPFAtQ1p6XN9PQTBpEwk29wriEHFI2L
-	UG1F2I9hddw7O8Mi/kV7w5j7gUFnxEotdjhPOn2DapCnbwj49pAMnB2+S2vQnXPoS3pAbUOdrTe
-	3XWIddBDOm8u5tNQdz3anjAWpks8dlklyeQ==
-X-Received: by 2002:a17:903:2a87:b0:2e9:199c:f800 with SMTP id d9443c01a7336-2edf2212d5cmr82331265ad.37.1794785310143;
-        Sun, 15 Nov 2026 15:28:30 -0800 (PST)
-Received: from localhost ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ee0f75b467sm30194865ad.20.2026.11.15.15.28.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 15 Nov 2026 15:28:29 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 15 Nov 2026 23:28:28 +0000
-Message-Id: <DMW6AKE8C8K5.H33UQQDOD34J@gmail.com>
-Cc: "Martin KaFai Lau" <martin.lau@linux.dev>, "John Fastabend"
- <john.fastabend@gmail.com>, "Stanislav Fomichev" <sdf@fomichev.me>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo
- Abeni" <pabeni@redhat.com>, "Eric Dumazet" <edumazet@kernel.org>, "David S
- . Miller" <davem@davemloft.net>, "Andrew Lunn" <andrew+netdev@lunn.ch>
-Subject: Re: [PATCH bpf-next v2] bpf, mprog: Defer RCU synchronization until
- peer reuse
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Qi Wu" <shijing.wuqi@linux.alibaba.com>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Nikolay
- Aleksandrov" <razor@blackwall.org>, <bpf@vger.kernel.org>,
- <netdev@vger.kernel.org>
-In-Reply-To: <20261115144556.41927-1-shijing.wuqi@linux.alibaba.com>
-References: <20261115144556.41927-1-shijing.wuqi@linux.alibaba.com>
-Content-Transfer-Encoding: 8bit
+        bh=eiEJgJLTePDasa4fCxlIDYNvy/YXg5RoYnLKMhW0V1k=;
+        b=Zmpxi2jLhXSm+xCyJlTdzyhYrYxOhwtwnZiPPOViT6SmtKy4Igqbe58in1dXdljPa5
+         odULis3BU8aEvIzMrkCPSOWvtShZW07qQQKGRG/uCEK40LNJvS9VS1MHC+1cK5cE+88x
+         Wkakd87wbsOKtHD+85cG9Y8BDYm21VJUwuormhJMhBg6ms6ZqxN7bKewkahZAArP4k5U
+         4iyaONp5TNg1pYjLWDT0L0NCPwogNvCbKN8doTyDHkmy/1O8TDtKGuMR+ZhV1GvB4GjX
+         YNF9M/z+z1n0JUvO57uhcw7KQgxPFjtEqMAGWnxKoh3OFvh6kp8Z0a12mv3XIxy+drs8
+         59Sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794785805; x=1795390605;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=eiEJgJLTePDasa4fCxlIDYNvy/YXg5RoYnLKMhW0V1k=;
+        b=G12sy3NT2g3ZrzgC1AHpRqAWDmZ3UIuxB6H3ZK4rlvAxgST7DDKYcG0fZEXIkj2oWg
+         KlmG9/+TTf6OvwEGhEQAAvfiSQOSJjTJQLGBf1I9029SvzxE8RqxjS1PUdOSIOEgkor0
+         O+QF372AaUCoMO7Aviy3JQ+glWjNU4MUcE3aJRc2SllJiPLikma4S6tK3JvVCvGVNq8u
+         DAR5Tk5MqMFVaSPJc8wte07c7thByWaypcy6z2k308NKnKTOHxoORRzUYtMAKA8jaYN1
+         pir9Y1SeBzUHHcf9ZcINGas6sUE51AzMyiGfKbEPnxcFMXlnI5yDLKIasvr6Y9DU2omj
+         bWAw==
+X-Forwarded-Encrypted: i=1; AL+hErFtLunjUOq5MSQkf14Cvvr93AsAaJ0I9n49XfyZt1n5oYSBQPCPbbuP2c2XN5m7+n6tLLw=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8dlcDje3zYEmPaZY8wjzvqzG8grPt0PNFydT+I31Cf65mrGLVA
+	NmCK+ecOwAMdOiH56CNCQEAT0esL7Jz39s+hqyetm/Tz8uzRNn9XHdqhvZk2YVsSTIdnl9NQ55H
+	DQUk4ToQFHlkY/FxFOeqtCIV4HSVJ/Z4Gz/XqtGHd2g==
+X-Gm-Gg: AYBFou0pWBg3EyFOtgoEehRBoaTFc89t5KRWVUMSehoFdOTbeh5y6wAn59Lfi6s7+D8
+	H2HdLsbRkCNCWppgLjgG0UsW3ubBXJ7a5Sc/R/f9ZRo6i9uA92mCXQufSaDpHhW+B12tNYwN98+
+	VQF5j+OKc2sFlKd+Sh9IUh+oOWDLETGkqRh35PLCMhIpA+f6WjPmyfD1B9ZDzTJPKVZ0bOYAd+J
+	+fnfe/T5QH1ser0EJDnQaT502KYe9/7bUpu4o1M/SON1nAdXJBRM3cbxDCRHgmKmb6tTf6Ybqoe
+	2vVN60djwxX6QBbkaX+oj7Dc5EC622G9lNDoS7wIjjvZwlRIZY7tLc/fqewIA82Gt+DBQeLTDpc
+	SjPepl+ffufQafe2jCMbHzRkr/clrw1Zi8vqGuyOkEKGm/BegFoayE/C2hWXEtF/sea+p+CavI5
+	QTqoc88jT044vM5jcpNnP4zJ+2MSYXEnE=
+X-Received: by 2002:a05:6820:3411:20b0:71a:f794:49af with SMTP id
+ 006d021491bc7-71af7944afamr223598eaf.56.1794785805311; Sun, 15 Nov 2026
+ 15:36:45 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -111,166 +104,65 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+References: <cover.1794281983.git.tianyi@cloudflare.com> <avOvI8xrHI0dwyHj@devvm16445.scu0.facebook.com>
+ <CAG4wq-egD55NZDw+OKVKTKN2tQJ9oKEC504wFv=xoMXyJ-0z4g@mail.gmail.com> <20261115113902.4834dda6@kernel.org>
+In-Reply-To: <20261115113902.4834dda6@kernel.org>
+From: Tianyi Gao <tianyi@cloudflare.com>
+Date: Sun, 15 Nov 2026 23:36:34 +0000
+X-Gm-Features: AclHuK-Ta2Fkr4hOVhZX_y8Xr7mXxa9_sbD5R_U1pL1RP64y3ME0zGRwgXOH1aQ
+Message-ID: <CAG4wq-dhd5a5zxQcSShaKifYd2z+pMpHaCYtZJRX1QCxEH4dfg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 00/15] xdp: add SKB core extensions to keep RX
+ metadata until skb creation
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Stanislav Fomichev <sdf.kernel@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Lorenzo Bianconi <lorenzo@kernel.org>, 
+	Vladimir Vdovin <deliran@verdict.gg>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Donald Hunter <donald.hunter@gmail.com>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
+	Alexander Lobakin <aleksander.lobakin@intel.com>, Magnus Karlsson <magnus.karlsson@intel.com>, 
+	Tushar Vyavahare <tushar.vyavahare@intel.com>, Jason Xing <kerneljasonxing@gmail.com>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, Madalin Bucur <madalin.bucur@nxp.com>, 
+	Ioana Ciornei <ioana.ciornei@nxp.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Chris J Arges <carges@cloudflare.com>, 
+	Jakub Sitnicki <jakub@cloudflare.com>, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, intel-wired-lan@lists.osuosl.org, 
+	llvm@lists.linux.dev, kernel-team@cloudflare.com, 
+	Tianyi Gao <tianyi.gao@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 
-On Sun, Nov 15, 2026 at 06:45 AM Qi Wu <shijing.wuqi@linux.alibaba.com> wrote:
-> An attach within a grace period of the previous change still waits
-> (e.g. a tight loop); spaced-out attaches do not. Detach retains its
-> post-swap synchronization; peer reuse can add a conditional wait
-> before a detach. Functional checks pass and a 300-cycle attach/detach
+On Sun, 15 Nov 2026 11:39:02 -0800 Jakub Kicinski wrote:
+> On Wed, 11 Nov 2026 01:07:46 +0000 Tianyi Gao wrote:
+> > - On veth, an XDP program removes software GSO from the peer, limits
+> >   its MTU, and can copy skbs from the peer.
+>
+> Could you remind us why you XDP_REDIRECT xdp_frames to the veth
+> if you end up allocating the skb on the veth, anyway?
+>
+> I thought that was to let veth run its own prog before skb is allocated
+> but you're saying that you want to avoid veth having a prog, so clearly
+> it's not that.
 
-The extra wait before a detach was my suggestion, sorry.
-I looked at the next attach only.
+Thank you for your comment!
 
-A detach that follows a detach or a replace now waits twice.
-The first detach waits in tcx_entry_sync(). The old entry has no users
-after that. Then bpf_mprog_commit() takes a new state, and the next
-bpf_mprog_peer() waits for it. Nothing needs that wait.
-A replace doesn't swap, but it takes a new state too.
-To close N links of one hook takes 2N-1 grace periods under RTNL.
-Today it takes N.
+XDP_REDIRECT into a veth without a program on it has been supported
+since commit 0e672f306a28 ("veth: check for NAPI instead of xdp_prog
+before xmit of XDP frame"). There is demand for it [1].
 
-Grace periods that the second change waits for, when it comes within
-a grace period of the first one:
+With or without a program on the veth, and on cpumap, this series
+keeps the RX metadata from the NIC until the skb is built.
 
-  first     second    today   v2   diff below
-  -------   -------   -----   --   ----------
-  attach    attach      1     1        1
-  detach    attach      1     1        0
-  replace   attach      1     1        0
-  attach    detach      1     2        2
-  detach    detach      1     2        1
-  replace   detach      1     2        1
+[1] https://lore.kernel.org/all/20210416175929.35c3c389@carbon/
 
-In the attach/detach row the attach saves one wait.
-The sum is the same as today.
-
-Pls add "detach after detach" to the table of numbers.
-
-> @@ -243,6 +251,7 @@ static inline void bpf_mprog_commit(struct bpf_mprog_entry *entry)
->  	bpf_mprog_revision_new(entry);
-> +	entry->parent->rcu_state = start_poll_synchronize_rcu();
-
-Only the swap in attach needs the state.
-Lets take it there, in place of the sync that goes away.
-Detach and replace leave the old state alone. bpf_mprog_peer() waited
-for it already, so the next change doesn't wait.
-The build is clean on x86-64. I did not boot it:
-
-diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
-index 82e608e..75a1a56 100644
---- a/drivers/net/netkit.c
-+++ b/drivers/net/netkit.c
-@@ -772,7 +772,7 @@ int netkit_prog_attach(const union bpf_attr *attr, struct bpf_prog *prog)
- 	if (!ret) {
- 		if (entry != entry_new) {
- 			netkit_entry_update(dev, entry_new);
--			netkit_entry_sync();
-+			bpf_mprog_defer_sync(entry);
- 		}
- 		bpf_mprog_commit(entry);
- 	}
-@@ -854,7 +854,7 @@ static int netkit_link_prog_attach(struct bpf_link *link, u32 flags,
- 	if (!ret) {
- 		if (entry != entry_new) {
- 			netkit_entry_update(dev, entry_new);
--			netkit_entry_sync();
-+			bpf_mprog_defer_sync(entry);
- 		}
- 		bpf_mprog_commit(entry);
- 	}
-diff --git a/include/linux/bpf_mprog.h b/include/linux/bpf_mprog.h
-index 0b9f4ca..2e180a4 100644
---- a/include/linux/bpf_mprog.h
-+++ b/include/linux/bpf_mprog.h
-@@ -30,8 +30,8 @@
-  *   if (!ret) {
-  *       if (entry != entry_new) {
-  *           // swap @entry to @entry_new at attach location
-- *           // ensure there are no inflight users of @entry:
-- *           synchronize_rcu();
-+ *           // nothing is released, no need to wait for users of @entry:
-+ *           bpf_mprog_defer_sync(entry);
-  *       }
-  *       bpf_mprog_commit(entry);
-  *   } else {
-@@ -104,9 +104,13 @@
-  *
-  * Fast path accesses the active bpf_mprog_entry within RCU critical section
-  * (in case of tcx it runs in NAPI which provides RCU protection there,
-- * other users might need explicit rcu_read_lock()). The bpf_mprog_commit()
-- * assumes that for the old bpf_mprog_entry there are no inflight users
-- * anymore.
-+ * other users might need explicit rcu_read_lock()). In the detach case the
-+ * bpf_mprog_commit() assumes that for the old bpf_mprog_entry there are no
-+ * inflight users anymore. In the attach case nothing is released, and the
-+ * old bpf_mprog_entry only has to stay intact until its users are gone:
-+ * bpf_mprog_defer_sync() records the RCU state after the swap, and
-+ * bpf_mprog_peer() waits for it before the old bpf_mprog_entry is written
-+ * again.
-  *
-  * The READ_ONCE()/WRITE_ONCE() pairing for bpf_mprog_fp's prog access is for
-  * the replacement case where we don't swap the bpf_mprog_entry.
-@@ -147,6 +151,7 @@ struct bpf_mprog_bundle {
- 	struct bpf_mprog_cp cp_items[BPF_MPROG_MAX];
- 	struct bpf_prog *ref;
- 	atomic64_t revision;
-+	unsigned long rcu_state;
- 	u32 count;
- };
-
-@@ -158,12 +163,23 @@ struct bpf_tuple {
- static inline struct bpf_mprog_entry *
- bpf_mprog_peer(const struct bpf_mprog_entry *entry)
- {
-+	/*
-+	 * The peer was active until the last swap and the caller is going
-+	 * to overwrite it, therefore ensure that there are no inflight
-+	 * users on it anymore. Paired with bpf_mprog_defer_sync().
-+	 */
-+	cond_synchronize_rcu(entry->parent->rcu_state);
- 	if (entry == &entry->parent->a)
- 		return &entry->parent->b;
- 	else
- 		return &entry->parent->a;
- }
-
-+static inline void bpf_mprog_defer_sync(struct bpf_mprog_entry *entry)
-+{
-+	entry->parent->rcu_state = start_poll_synchronize_rcu();
-+}
-+
- static inline void bpf_mprog_bundle_init(struct bpf_mprog_bundle *bundle)
- {
- 	BUILD_BUG_ON(sizeof(bundle->a.fp_items[0]) > sizeof(u64));
-@@ -172,6 +188,7 @@ static inline void bpf_mprog_bundle_init(struct bpf_mprog_bundle *bundle)
-
- 	memset(bundle, 0, sizeof(*bundle));
- 	atomic64_set(&bundle->revision, 1);
-+	bundle->rcu_state = get_completed_synchronize_rcu();
- 	bundle->a.parent = bundle;
- 	bundle->b.parent = bundle;
- }
-diff --git a/kernel/bpf/tcx.c b/kernel/bpf/tcx.c
-index 02db011..12a1620 100644
---- a/kernel/bpf/tcx.c
-+++ b/kernel/bpf/tcx.c
-@@ -42,7 +42,7 @@ int tcx_prog_attach(const union bpf_attr *attr, struct bpf_prog *prog)
- 	if (!ret) {
- 		if (entry != entry_new) {
- 			tcx_entry_update(dev, entry_new, ingress);
--			tcx_entry_sync();
-+			bpf_mprog_defer_sync(entry);
- 			tcx_skeys_inc(ingress);
- 		}
- 		bpf_mprog_commit(entry);
-@@ -156,7 +156,7 @@ static int tcx_link_prog_attach(struct bpf_link *link, u32 flags, u32 id_or_fd,
- 	if (!ret) {
- 		if (entry != entry_new) {
- 			tcx_entry_update(dev, entry_new, ingress);
--			tcx_entry_sync();
-+			bpf_mprog_defer_sync(entry);
- 			tcx_skeys_inc(ingress);
- 		}
- 		bpf_mprog_commit(entry);
-
-pw-bot: cr
+Thanks,
+Tianyi
