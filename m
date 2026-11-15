@@ -1,63 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794762064;
-	b=SeWTOSGhQTEaFvFxhJ8aHhQQuqrQilyR1Fuy2Jnt3aGtF/psJ+B6I8EO+eJuDEaYVVbm
-	 Ogq8zVtSe0ey5qBxpNj98D6pmNeFnS3L7JnfrFPLIt6ue+iVLeZ16qrxK8CiXqOjqIENo
-	 XBxP5PaUBzCK78GgU0pY7CGC8eVMC3/odgI6r/3aDmcTm6TUL6s4vKTMi2JaBevMKAa5E
-	 aJxuCEnjlj8EvsXiDAVTQeOUDmbgkQ8kiuUNnJcvZs8GBqAjt5IzqKyrkRsJt4ukPfbU7
-	 ONJoqeu9KnwUKYXwG6qozSQhDGrTfmPBEdNt+IJ75Q8YSjl/2x1//wHdFobKhz7ygog==
+	t=1794767281;
+	b=uQyg5m1drxTMqFhqE+aK2oEUlIX+eDeji9rqtb0badjfUTf9aWMH5rZb2WnXxwIj9ne9
+	 ZPEb66VjW5OAYgJXni373o4+nInj8KD34/bwcTK1tj9fwCv7yadFc94lVSl+gMQWF0Kmv
+	 z0p+AjrTOXa16UAG0VS6/Y3TFrC6IN/14nP01ghbmZ6yqaT6PxHWEjZh2ocxiLwwuqQ29
+	 81Lf2VTqrqG01Qc98jy5nK1jQfpTqIblMX/QBbYB7uLPZQeTQoJt7qJR3/sB2Kh3AE4ML
+	 6jq3V/0JXpv6Y4apJsRw9mgh5rGJ5S/GQ4Lb7mye7Ebx4Cz22fD26jXOhxM7rgLhGUw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794762064;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=vlZl5lyf06RdJazenuU5uu1ZB2/A9/qrv1wTC/8Uozw=;
-	b=o13MQrOrDAw/+LGOSyMAnqMk8wx40uIK7rkpwQO8mAjpKohDiGu2gCwg79jViFzERkvG
-	 ta/r0igl1x0J03PZhrles1sbwhYTVX7zcUTBovSOYnzBJajwH67EcCDPoU+AjSXJzhpki
-	 LnHXO1y7jOUDDF17Ci+PSKV1YbAd96XT+xLn/o965tXZESODEUy0x94xZjH00ZVSczMUW
-	 yZLINvHRRxTJAYfazEcGxJsN5bBqdpAFf3Dvs8jQlIc33WiZJCBR+MuSn95dri9IybTdq
-	 jPzOArV0Z75dCQ8Ah7orVrxG8M39nxsG9ptLao68Lpt6uLVo307NYp37BBoUMg6Izjg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794767281;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=fad+5qFUW61Uri7Mze4W7A6gLGHfxkCgg1EVDqGqoGU=;
+	b=hHS6Csw955TROom4ijTfsUGSXFhORhKtork054q1A8fYvIwEU0N0vZpEVxltZR4Gcy5B
+	 fsjY+bh4eo/VAFzD9xEvRiZX8URLvIcMdYN3z+qrszxdHWRGilT8/1CDe4X33A6Lr9SfL
+	 lO5KtybwAU7qmSeT4Hh9Jfn+9k17NdEtRyO+TlmoqlOr0QH/BKvyMDVXogg179xuD2eV3
+	 X3qq3zofc+iLK7yXHPY0kjoHbiINQA8BXdfm6mzGcnnw7fsa6RpJlK00q+hG5UN7ohEmK
+	 Kd1w8bjsOXgivPCF8wmrrbgmPWEo8jI0ympWgFf5jcxzykgIRu3jg4FcMaCHF2qhzFA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gmVluvr9;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XoN2lJHS;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C99EF606A31F;
-	Sun, 15 Nov 2026 17:01:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA4DA606A31A;
+	Sun, 15 Nov 2026 18:28:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gmVluvr9
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B70A1F000C4;
-	Sun, 15 Nov 2026 17:01:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XoN2lJHS
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D5A91F000C5;
+	Sun, 15 Nov 2026 18:28:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794762064;
-	bh=vlZl5lyf06RdJazenuU5uu1ZB2/A9/qrv1wTC/8Uozw=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=gmVluvr9Qad3/lxS3sb/8u4thCf/3QNGBR2/ohidWYqSHICI9N0UpVtAfWeyH9m5N
-	 aoW+u2icFuLdYPRiim+Swdxu2N/HQvonFUUSxy1+aj2DUW8O93zSYhcCzMMaPqQ6o0
-	 ViP6pc+qcn0P0YEfOD8NgUJ7FhN00DlQctsglE4bFoZHSF/B39Fi5oCJgmj0O07+uy
-	 hUYJOk/UCZccG/HHysttMpjsfp7vcIoxlzEI7NDjiP/+4hqhDM9WIqC3AF+xZGq/gh
-	 9V5dLKey+nnoMIIEGsSqFxbfE1nr/MTixiK9wdEOb+pnnxaPgTc8KrzGtLO/jjjvYO
-	 AQidKyzVH5Law==
-Subject: Re: [PATCH net-next 3/3] selftests: net: getsockopt_iter: cover tcp
-From: netdev-bot+sashiko@kernel.org
-To: leitao@debian.org
-Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, kuniyu@google.com, willemb@google.com,
- ncardwell@google.com, daniel@iogearbox.net, john.fastabend@gmail.com,
- sdf@fomichev.me, martin.lau@linux.dev, ast@kernel.org, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- shuah@kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, kernel-team@meta.com
-Date: Sun, 15 Nov 2026 17:01:02 +0000
-Message-ID: <179476206200.2199510.1878424671448402630@kernel.org>
-In-Reply-To: <20261112-getsockopt_phase7-v1-3-1eb759dd0929@debian.org>
-References: <20261112-getsockopt_phase7-v1-3-1eb759dd0929@debian.org>
-X-sashiko-severity: Low
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20260515; t=1794767281;
+	bh=fad+5qFUW61Uri7Mze4W7A6gLGHfxkCgg1EVDqGqoGU=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=XoN2lJHSNPQaB/3IXt5HDhpWnLDJJG66CSBu6LhWv+Csah+soK9XkB3mAWi5bB2E5
+	 rnNiuOslCJsO297w0OhdsyhYnFGjKNhEJgMzc4xMaWDLvSzdpgPabOHhB0nGQoqPNB
+	 BptCDvGCVCvZeWIPx99I7j5FzZ+KVrXCNI00uDpw9Kde6wGkSxfYdjuC2L/k9/jnO4
+	 x/30SeYqER1vC5nqKaK4ZOk1p+A9qOK5tEVK8XjVT3MtOOMkBb8QMy8iJ9O0NkMw8Y
+	 f1wzx1vI9VOl6Hj4PD6kkKMevoprScPUOSinLtrkU75vFLqTihcKzaqsc4wnJulSSo
+	 1G3GRVgKairSA==
+Message-ID: <sashiko-outbox-215718@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net v2 2/2] selftests: net: check TCP IP IDs across
+ tunnels after GRO and GSO
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Julius Bairaktaris" <julius@bairaktaris.de>
+Cc: linux-rdma@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <c4f9c977725ee51341ca84dedf2dddb9fcb4e8ea.1794139176.git.julius@bairaktaris.de>
+References: <cover.1794139176.git.julius@bairaktaris.de>
+ <c4f9c977725ee51341ca84dedf2dddb9fcb4e8ea.1794139176.git.julius@bairaktaris.de>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 15 Nov 2026 18:28:00 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -66,115 +60,214 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
-
-Low priority / nit picks for your consideration:
-
-- [Low] In tools/testing/selftests/net/getsockopt_iter.c, the test
-  tcp/nodelay_undersize_clamped is commented "Unlike IPv4, TCP clamps…
-- [Low] In tools/testing/selftests/net/getsockopt_iter.c, the test
-  tcp/zerocopy_receive_oversize_clamped is commented "A larger struct is…
-
+Thank you for your contribution! Sashiko AI review found 4 potential
+issues to consider:
+- [Low] selftests: net: check() fails instead of skipping on outer=3Dincr
+  without GRO
+- [Low] selftests: net: missing nsim_del() in cleanup() trap and
+  teardown order
+- [Low] selftests: net: tcp_fixedid.sh duplicates lib.sh netdevsim and
+  wait helpers
+- [Low] selftests: net: do_rx() rejects all inner IDs when optional -c
+  is omitted
 --
 
-selftests: net: getsockopt_iter: cover tcp
+commit 6de9851dc8b11c95f79b39bbfd7e7c1ba08870cd
+Author: Julius Bairaktaris <julius@bairaktaris.de>
 
-This commit adds a tcp fixture to the getsockopt_iter selftest. The fixture
-sets up a loopback connection with TCP_SAVE_SYN on the listener. The new
-tests cover do_tcp_getsockopt() clamping, zero-length replies, the
-TCP_SAVED_SYN length-then-EINVAL path, and the TCP_ZEROCOPY_RECEIVE struct
-size handling.
+selftests: net: check TCP IP IDs across tunnels after GRO and GSO
 
-> diff --git a/tools/testing/selftests/net/getsockopt_iter.c b/tools/testing/selftests/net/getsockopt_iter.c
-> index 2367fce226d4c..4e51c8aa6a855 100644
-> --- a/tools/testing/selftests/net/getsockopt_iter.c
-> +++ b/tools/testing/selftests/net/getsockopt_iter.c
+This commit adds a selftest that sends TCP segments with fixed or
+incrementing IPv4 IDs across veth GRO and tunnel software segmentation,
+verifying that inner IP IDs are preserved and new outer IPv4 IDs are
+unique or incrementing.
 
-[ ... ]
-
-> +/* Unlike IPv4, TCP clamps the reply rather than shrinking it to a byte. */
-> +TEST_F(tcp, nodelay_undersize_clamped)
-> +{
-> +	socklen_t optlen = 1;
-> +	int val = 0;
-> +
-> +	ASSERT_EQ(0, getsockopt(self->fd, IPPROTO_TCP, TCP_NODELAY, &val,
-> +				&optlen));
-> +	ASSERT_EQ(1, optlen);
-> +}
-
-[Severity: Low]
-Does this test actually show the difference the comment describes?
-
-With optlen = 1, both paths report the same length. do_tcp_getsockopt()
-clamps:
-
-net/ipv4/tcp.c:do_tcp_getsockopt() {
-    ...
-	len = min_t(unsigned int, len, sizeof(int));
-    ...
-}
-
-and do_ip_getsockopt() also ends up with optlen = 1:
-
-net/ipv4/ip_sockglue.c:do_ip_getsockopt() {
-    ...
-	if (len < sizeof(int) && len > 0 && val >= 0 && val <= 255) {
-		unsigned char ucval = (unsigned char)val;
-
-		sopt->optlen = 1;
-    ...
-}
-
-So if TCP started shrinking sub-int replies to a single byte the way SOL_IP
-does, this test would still pass.
-
-The ip/ttl_single_byte and ipv6/hops_sub_int tests in the same file use a
-3-byte buffer, which does tell the two apart. Would optlen = 2 or 3, with a
-check that optlen is unchanged, match the intent of the comment better?
+> diff --git a/tools/testing/selftests/net/tcp_fixedid.c b/tools/testing/se=
+lftests/net/tcp_fixedid.c
+> new file mode 100644
+> index 0000000000000..25c752beab4ed
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/tcp_fixedid.c
+> @@ -0,0 +1,411 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Send TCP segments with fixed or incrementing IPv4 IDs, optionally in
+> + * VXLAN, and report the IP IDs of TCP segments received on a device,
+> + * also inside IPIP, GRE, VXLAN or ESP.
+> + *
+> + * tx: tcp_fixedid -T -i dev -M dmac -s saddr -d daddr [-f] [-n segs]
+> + *                 [-b bursts] [-l len] [-V osaddr,odaddr -m inner_dmac =
+[-F]]
+> + * rx: tcp_fixedid -R -i dev [-f] [-c segs] [-w ms]
 
 [ ... ]
 
-> +/* A larger struct is cut down to the kernel's, if its tail is zero. */
-> +TEST_F(tcp, zerocopy_receive_oversize_clamped)
+> +static int do_rx(int fd)
 > +{
-> +	char buf[256] = {};
-> +	socklen_t optlen = sizeof(buf);
+> +	static uint8_t outer_map[8192], inner_map[8192];
+> +	unsigned int frames =3D 0, outer4 =3D 0, outer_ids =3D 0, inner_ids =3D=
+ 0;
+> +	unsigned int inner_bad =3D 0;
+> +	unsigned char buf[65536];
+> +	struct pollfd pfd =3D { .fd =3D fd, .events =3D POLLIN };
 > +
-> +	ASSERT_EQ(0, getsockopt(self->fd, IPPROTO_TCP, TCP_ZEROCOPY_RECEIVE,
-> +				buf, &optlen));
-> +	ASSERT_GE(optlen, sizeof(struct tcp_zerocopy_receive));
-> +	ASSERT_LT(optlen, sizeof(buf));
+> +	printf("ready\n");
+> +	fflush(stdout);
+> +
+> +	/* wait longer for the first segment than between segments */
+> +	while (poll(&pfd, 1, frames ? wait_ms : 10 * wait_ms) > 0) {
+> +		const struct iphdr *iph, *oiph;
+> +		struct sockaddr_ll from;
+> +		socklen_t fl =3D sizeof(from);
+> +		uint16_t id;
+> +		int n;
+> +
+> +		n =3D recvfrom(fd, buf, sizeof(buf), 0, (struct sockaddr *)&from,
+> +			     &fl);
+> +		if (n < 0)
+> +			error(1, errno, "recvfrom");
+> +		if (from.sll_pkttype =3D=3D PACKET_OUTGOING)
+> +			continue;
+> +		iph =3D find_inner(buf, n, &oiph);
+> +		if (!iph)
+> +			continue;
+> +		frames++;
+> +		id =3D ntohs(iph->id);
+> +		count_id(inner_map, &inner_ids, id);
+> +		if (fixed_id ? id !=3D FIXED_ID : (uint16_t)(id - INCR_ID) >=3D stop)
+> +			inner_bad++;
+> +		if (oiph) {
+> +			outer4++;
+> +			count_id(outer_map, &outer_ids, ntohs(oiph->id));
+> +		}
+> +		if (stop && frames =3D=3D (unsigned int)stop)
+> +			break;
+> +	}
+
+[Severity: Low]
+Does do_rx() count every segment as inner_bad when the optional -c flag is
+omitted in incrementing-ID mode?  With stop left at 0 and fixed_id false,
+(uint16_t)(id - INCR_ID) >=3D stop is always true.
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/net/tcp_fixedid.sh b/tools/testing/s=
+elftests/net/tcp_fixedid.sh
+> new file mode 100755
+> index 0000000000000..05ef7ec6b08e7
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/tcp_fixedid.sh
+> @@ -0,0 +1,400 @@
+
+[ ... ]
+
+> +cleanup() {
+> +	cleanup_all_ns
+> +	rm -f "$RESULT"
+> +}
+> +
+> +trap cleanup EXIT
+
+[Severity: Low]
+Should cleanup() also call nsim_del() before cleanup_all_ns()?  If the
+script exits via the trap during run_esp() (for example on SIGINT or
+PAUSE_ON_FAIL=3Dyes), netdevsim$NSIM_ID and netdevsim$((NSIM_ID + 1)) are
+left behind in /sys/bus/netdevsim and their interfaces move back into the
+initial network namespace when the namespaces are removed.  At the end of
+run_esp(), cleanup_all_ns is also called before nsim_del.
+
+[ ... ]
+
+> +# check <name> <result> <want: fixed|incr> <outer: 0|unique|incr> <merge=
+d>
+> +check() {
+> +	local name=3D$1 res=3D$2 want=3D$3 outer=3D$4 sent=3D$5
+> +	local frames outer_ids inner_ids inner_bad
+> +
+> +	read -r _ frames _ _ _ outer_ids _ inner_ids _ inner_bad <<< "$res"
+> +	RET=3D0
+> +	if [ -z "$inner_bad" ]; then
+> +		check_err 1 "no result from the receiver"
+> +		log_test "$name"
+> +		return
+> +	fi
+> +	check_err $((frames !=3D TOTAL)) "$frames of $TOTAL segments received"
+> +	check_err "$inner_bad" "$inner_bad inner IDs not sent"
+> +	if [ "$want" =3D fixed ]; then
+> +		check_err $((inner_ids !=3D 1)) "$inner_ids inner IDs, want 1"
+> +	else
+> +		check_err $((inner_ids !=3D TOTAL)) \
+> +			"$inner_ids inner IDs, want $TOTAL"
+> +	fi
+> +	if [ "$outer" =3D unique ]; then
+> +		check_err $((outer_ids !=3D frames)) \
+> +			"$outer_ids outer IDs for $frames segments"
+> +	elif [ "$outer" =3D incr ]; then
+> +		check_err $((outer_ids < 2)) "fixed outer IDs"
+> +	fi
+> +	if [ "$RET" -eq 0 ] && [ \"$sent\" -ge \"$TOTAL\" ]; then
+> +		ret_set_ksft_status \"$ksft_skip\" \"GRO did not merge\"
+> +	fi
+> +	log_test "$name"
 > +}
 
 [Severity: Low]
-Should this assert the exact clamped length? When the tail is zero, the
-kernel sets optlen to the size of its own struct:
+When GRO does not merge in run_esp() (sent >=3D TOTAL), does check() fail
+with "fixed outer IDs" instead of skipping?  Each unmerged packet has DF
+set, so ESP tunnel encapsulation gives every packet outer ID 0
+(outer_ids =3D=3D 1); check_err $((outer_ids < 2)) then sets RET=3D1 before=
+ the
+sent >=3D TOTAL check can mark the test as skipped.
 
-net/ipv4/tcp.c:do_tcp_getsockopt() {
-    ...
-	if (unlikely(len > sizeof(zc))) {
-		...
-		len = sizeof(zc);
-		sopt->optlen = len;
-    ...
-}
+> +
+> +# capture <ns> <dev> <want: fixed|incr>: start the receiver in the
+> +# background, pid in CAP_PID, and wait until it is bound
+> +capture() {
+> +	local f=3D"" i
+> +
+> +	[ "$3" =3D fixed ] && f=3D-f
+> +	: > "$RESULT"
+> +	ip netns exec "$1" "$TX" -R -i "$2" -c "$TOTAL" -w 3000 $f > "$RESULT" &
+> +	CAP_PID=3D$!
+> +	for i in $(seq 100); do
+> +		grep -q ready "$RESULT" && return
+> +		sleep 0.1
+> +	done
+> +}
 
-That is the uapi struct tcp_zerocopy_receive from include/uapi/linux/tcp.h,
-which is 64 bytes.
+[ ... ]
 
-The test includes netinet/tcp.h, so sizeof(struct tcp_zerocopy_receive) here
-is the 16-byte glibc struct the commit message mentions. That means any
-optlen from 16 to 255 passes. A clamp to the wrong size, such as one of the
-older 16 or 40 byte layouts, would not be caught.
+> +NSIM_ID=3D$((RANDOM % 1024 + 1024))
+> +NSIM_BUS=3D/sys/bus/netdevsim
+> +
+> +# nsim_add <id> <ns>: create a netdevsim port in <ns>, print its name
+> +nsim_add() {
+> +	local dev
+> +
+> +	echo "$1 1" > "$NSIM_BUS/new_device" || return 1
+> +	for dev in "$NSIM_BUS/devices/netdevsim$1/net/"*; do
+> +		dev=3D${dev##*/}
+> +		ip link set "$dev" netns "$2" || return 1
+> +		echo "$dev"
+> +		return 0
+> +	done
+> +	return 1
+> +}
+> +
+> +nsim_del() {
+> +	echo "$NSIM_ID" > "$NSIM_BUS/del_device" 2>/dev/null
+> +	echo $((NSIM_ID + 1)) > "$NSIM_BUS/del_device" 2>/dev/null
+> +}
 
-raw/icmpfilter_oversize_clamped in the same file uses ASSERT_EQ against the
-exact struct size. Could this test do the same with the kernel struct size
-(64)?
+[Severity: Low]
+Could this script reuse create_netdevsim(), cleanup_netdevsim(),
+slowwait() and check_gen_prog() from lib.sh instead of open-coding
+nsim_add(), nsim_del(), the readiness loop in capture() and the [ ! -x
+"$TX" ] check?  In particular, create_netdevsim() creates the device
+inside the target netns after udevadm settle, avoiding a race with host
+udevd renaming the interface before ip link set moves it.
 
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261112-getsockopt_phase7-v1-0-1eb759dd0929%40debian.org
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1794139176.gi=
+t.julius@bairaktaris.de?part=3D2
