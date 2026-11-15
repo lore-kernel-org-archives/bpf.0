@@ -1,46 +1,46 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794777197;
-	b=NOyjRReX7YEdzr7wrXnM+flIT0lcvlcJSBtCT9lZA49nm/BGjhPaNSsay79P2B6xmJsL
-	 ZXWWgumQAtY5lUI86Z/cfEy+bG2ISwintdjtlbjTxURIIBI/fLfMWVcBrWcDNaBBhgKqG
-	 b/ZwN4zd3S5Tx4+oapkSh2W8W7e80oHdVISTM4ST0rxDLd5GWH2/AiwNKb3Om8PJu3FFw
-	 UOT5GRBDLySlWoTE/Gvc2WqyyoyKffUYUNi61lHJA5PR/FFzgDm8t1Y3vrQ5omKR7RcYG
-	 SltN3XBZsTHcDgI7H94KRR97h6UITMYcb0mteaXkzWPa9EYTphzpAaz7teCUlU7OXgg==
+	t=1794777522;
+	b=Q5M4EfEGk2oJ/nihG3QaAAbkMci7nfCmfjOXD1NJOKcUs+daFpRUhvcUa4+4GoEqeQvB
+	 lQEfmf0b6iMLRIppUdDkkWEFB310ezMgo8nPLAstNOoPQJiZCZKlyxZMq8OhevhoGzbtr
+	 2lID9oEpa9i68egXZwah3yqbiYEX/+FC0qmeRuFVqfM8sf04XmIjGeeEJy3b3mpphUuXF
+	 0bnPMHgvCjKcyv7biPhcVdw6E1/2pnDbgn4L7xkvChniKM8S2ga0cnfGjSHrwnfsyD1XI
+	 E0vUbcHJShs2jycnTBgek9NJHNOAiwvCzM3VOmwGiXwebbvLFwKO30vVK7R32G8GMwA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794777197;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794777522;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 In-Reply-To:References:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=Dl2GSKLNZwxHnys/gmOepf+Z7DTsWvB68DYjsGWZv64=;
-	b=TxPDETuG8JRheq5bumrsFf2WzyLiwwd86kG0CGR/OoqwIOyE18In8FvwHd+mkGAMeDHt
-	 YhhBwpsPGbvsWwr4cH8QF7+SxpmwaP4FUC3hyCj/phgD1n1+bqlW6gGRSd0KqwHlGN4lC
-	 5vt606VRmodnERqi/V83HziHSBN20N7XeIquwLpQpDBxc6jVMUn9C2yQBVsn96JWBaAQ6
-	 Dkm7m69gyX4Av0pCiTyOYhmQfO3VlfFuxzlWyMRljfI1YYwrEKUrhoML1CHsaSqa5GAjZ
-	 riyvEsqvNRqXqpUKjTbUdgq8BYfmU3XfMUjzO08EMJqPyGEugFs/bfCGZElSaaJfV/A==
+	bh=q5iSJg23I/t5s7cgSYKq2DalQ5gBF4qJzBvJDEt0/lY=;
+	b=A24O1vdTXwHTBeXh6ISv36tAIhGtDlqOJbqw1xqDaAsOeFg8XP0uAC7kCtXZpfE6UdNt
+	 u8mJnPcTUnIUeMA/YeeuiNh1jtZnfVR7jipZ4Giyuf1+Brh3YxqW2xi+YHTg8llu7qagk
+	 55SkW7lzEl5mYtzwM7JY7AUFsRDzlCfFImFszrE+fxWQyIPxGFa8hVN7conKvMkcStuW3
+	 zdi4BQuBGCLUeLzcib8RCBChLz9XA6NGMnOfLTzHm2URXBoDb8ee2y4yl5A60AEiaVHGH
+	 bZoKPzyjGgs2zMwekb+IGi+j4LcGHeGYufWM3lSak0QVsahcK6pn6MjvlEPQL9JkjVg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GS99ENSk;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UtD7pwMy;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E568B606A31F;
-	Sun, 15 Nov 2026 21:13:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA860606A323;
+	Sun, 15 Nov 2026 21:18:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GS99ENSk
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D9511F000C4;
-	Sun, 15 Nov 2026 21:13:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UtD7pwMy
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43BF51F000C4;
+	Sun, 15 Nov 2026 21:18:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794777196;
-	bh=Dl2GSKLNZwxHnys/gmOepf+Z7DTsWvB68DYjsGWZv64=;
+	s=k20260515; t=1794777522;
+	bh=q5iSJg23I/t5s7cgSYKq2DalQ5gBF4qJzBvJDEt0/lY=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=GS99ENSkyF3TPKalnRsitjk9MfxxCoI6uu2CrsWuj6OXs2LGrdDdsTtemrKU81oTS
-	 NQz61UnwJFhSzPQx45UBtUCU4SHKf9nYerW8/f0vMoe4Nnc0PqiDPZ6GkUmC8WfdEr
-	 81svY8FiHAcrkEj9C1GqS0Y+SS20Rz6IEPoAbbjdiVpqAFlGrVvJXGcD5WO8EKnA+x
-	 aORjlLA0gh6XEt6NUM0wUGse7rdtOVrYDdvQCgqJBfwtLeYGvawNqjgaOBHHR7rTya
-	 Uj3Y8dY+wyYgPhRcmdYuNHbD31nus/Dx1xO68JCpIEI/mZzl1dYaqUpZosbs3C3yT1
-	 1tvvicofqqg6A==
-Date: Sun, 15 Nov 2026 13:13:14 -0800
+	b=UtD7pwMyR5SxiDxtCKmp9a2QJlTQP2tilz9oUgQfWQMw4RoPgBSPc30BdzTC7hWyO
+	 Dz+mZcWIay2QujraHaA8j/S1TVUnVUuzlYVnn9C5aGfXQ+IvPqO2qaKUIaciJWwIZO
+	 3DRjrk9bzlm49h0FIjGfKr2QDjIVCxmvlTzCpMFShNPRNWla8VuXSH9IjVEUfvO1NF
+	 8rGFPqXJBg1TnaCkqezW22OdtvU0slXiZ6W+shZHcaoO2Y2/PK3IoPdohQ+ayNCEmO
+	 MitpO6bq+eePkAsluXJ8Xyok+6aHDW5SBqCeCx618Tu9iKxBEf9iTEWMUB4gBVbwiG
+	 uQTwJ7x5R7wHg==
+Date: Sun, 15 Nov 2026 13:18:40 -0800
 From: Jakub Kicinski <kuba@kernel.org>
 To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
 Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski
@@ -65,12 +65,11 @@ Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski
  Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, Alexander
  Lobakin <aleksander.lobakin@intel.com>, linux-doc@vger.kernel.org,
  linux-kernel@vger.kernel.org, Stuart Clark <stuclar@meta.com>
-Subject: Re: [PATCH net-next v1 01/11] net: Get skb fragment addresses
- through netmem
-Message-ID: <20261115131314.2d3ab96f@kernel.org>
-In-Reply-To: <20261110102039.1002605-2-bjorn@kernel.org>
+Subject: Re: [PATCH net-next v1 02/11] net: Add memory provider capabilities
+Message-ID: <20261115131840.55b03578@kernel.org>
+In-Reply-To: <20261110102039.1002605-3-bjorn@kernel.org>
 References: <20261110102039.1002605-1-bjorn@kernel.org>
-	<20261110102039.1002605-2-bjorn@kernel.org>
+	<20261110102039.1002605-3-bjorn@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -83,17 +82,40 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, 10 Nov 2026 11:20:22 +0100 Bj=C3=B6rn T=C3=B6pel wrote:
-> skb_frag_address() goes through struct page, so a net_iov never has an
-> address. Only unreadable memory should lack one: XDP and BPF read
-> fragments through this helper, and AF_XDP UMEM will back readable
-> net_iovs. netmem_address() also returns NULL, not a bogus pointer, for
-> an unmapped highmem page.
->=20
-> Generic code needs the size of a net_iov to find its address, so keep
-> it in struct net_iov_area instead of the devmem binding.
+On Tue, 10 Nov 2026 11:20:23 +0100 Bj=C3=B6rn T=C3=B6pel wrote:
+> diff --git a/include/net/page_pool/memory_provider.h b/include/net/page_p=
+ool/memory_provider.h
+> index bceb5f7740e2..4417e54a0f81 100644
+> --- a/include/net/page_pool/memory_provider.h
+> +++ b/include/net/page_pool/memory_provider.h
+> @@ -19,6 +19,18 @@ struct sk_buff;
+>   * Per-provider custom logic must be delegated to memory_provider_ops ra=
+ther
+>   * than handled directly in page_pool core code.
+>   */
+> +
+> +/**
+> + * enum mp_caps - memory provider capabilities
+> + * @MP_CAP_READABLE: The CPU can access provider memory. It may back hea=
+der
+> + *	page pools, and XDP programs may run on it.
 
-IIRC netmem is supposed to be used for frags and memory CPU never needs
-to access. This patch looks odd. I haven't read the rest of the series
-yet but at the very least commit message should explain why this
-aberration is needed / correct.
+Being readable is the normal state for memory.
+We should be marking mps as unreadable, not as readable?
+
+> @@ -1070,6 +1095,9 @@ netmem_ref page_pool_alloc_frag_netmem(struct page_=
+pool *pool,
+>  	unsigned int max_size =3D PAGE_SIZE << pool->p.order;
+>  	netmem_ref netmem =3D pool->frag_page;
+> =20
+> +	if (static_branch_unlikely(&page_pool_mem_providers) &&
+> +	    WARN_ON_ONCE(!page_pool_supports_frag(pool)))
+> +		return 0;
+
+Shouldn't we return a full page if we can't frag?
+Fragmentation breaks up a page into smaller units,
+it should be legal to simply return a full page if
+fragmentation is not supported for the provider.
+
+>  	if (WARN_ON(size > max_size))
+>  		return 0;
