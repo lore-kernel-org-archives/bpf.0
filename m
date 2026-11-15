@@ -1,95 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.227.130
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794756261;
-	b=bpcWC8O+45C4UV9xG8fXqyNTx3U2B1Zd0oyi3rKLB6crqhZ0H/SQgqi7HhkbnqbcAA3g
-	 WqsFcfg4dHbYI+iTBPRZxBTM9pV8WZQTIGG1BGK1tmYOxf6f4/N5M7G68oVhUQkDUR+Zl
-	 zhsjmOiDqHCIWlgLKpPNOtUQ987jGv7BFN/eRpHmUEuZqsua4ef22mTip3vEUqRPZa+e2
-	 61SYlJiUjfC7vyNCI68NdS/jPHsAW8BhcNtsmHozFjm+vdZevTh1dtsL2g5g1yK0LE0mZ
-	 GPMCa9T1nr7vk1+IZNyHil0ume3IEdhylGunvqQsi4IOttNfkGD048FF0nHWac2J81g==
+	t=1794756332;
+	b=j8wClQkxNz3x4b6jCfzf6bxIGl05h9ClZOHCXu5xnoYoX485zLoYYkGmzvymR/rfhlw0
+	 8VeXYy7+78y6oKGekngNkLXf1qDbQVwPfyu7XR8KZpF6q0s+0ti29G30CMPjZccHrvmls
+	 4yosWNFhy8SwESUAwv50cr36mOLYsESKmqWzr3UrBvn3yQ2imlShlkPBDBg3W/WgfsBpZ
+	 wTFdLCEj6pH4uz5ue4dSAcFn9l3Vg/pIINoCy38cYUnqL8XOOApBdtuVbIno3lcS05sSp
+	 kYTskIJnE8iIef7Oi20KW0FREG6dWqzgwPMTpO9awzy4KQUzJxP0TSkrs5G/Al4c0NA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794756261;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=RsdeMcHfOtRvnpyG5YaLPUdVfJcBoSbUaq4yQfndVIw=;
-	b=dlls6gMk0mRXmqpDHe4KCsOX0zzACgFve3zL9CnMJ8OvCn1dVGAOa0d2jkn7B++LdnfU
-	 fJGP57+q9zGzinA7757VXajJttRSVoGf4rSbT47TALiUAii47VQquk4MieRp3Of6jyBn2
-	 mMb8MeNWVPSlVQ8RGsxzS7QmcHy8bkx4NvIUKdL8q3QYhSBuiN9fPky+x1c9amkNggpqp
-	 ZafSQFMZX11sXq4ebzOTg/7847ZtcUdnDC5KDoUOs5dZCMm1t/27r15BL5sIBsu2exfwe
-	 e/hKv7dzX96aABiO6QiayddLfCi7k5Qp+zaCSCR9yAhrUW7JYnNwrfWBKhezrdYUiDQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794756332;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=1ji34McIdPkUDSNFBA559P3vVFsjSQYecigeqVmnwN4=;
+	b=yfr3Zh7r74bSAB0SUNIdm06JoDCisQKmvOjHL4kXcF6MGlgagZ5+4vNi87qcmFGnlGm8
+	 UcmOJ1bsHgqcSAsCRiFBUgRhS6LiTawLEhN3c2qBLAmrHV5yCQonbUAcj+rfJ4+ZVAD1A
+	 W86Ke+J03U4hXEhi7vn9IOkNnkfJktRP3IZVoF6CjwBr3vE+LJPUqbEiXY9PrV4ue7XIC
+	 AB8P1LLFum8SjBE4JaqLBo9luouQdNNp99ykABP8Yu6CmfIqonWGwacrFO4XeNVm1fe/g
+	 P3D7KSzBI5PRVvpYw5Mal5snVEqtzsW0mgx1gx/LRTmS/lb10UcYaTpOINtWNsXmzAg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=zvqa+OMH;
-	arc=none smtp.remote-ip=74.125.227.130
-Received: from mail-pj2-f2.google.com (mail-pj2-f2.google.com [74.125.227.130])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aUCbiK+m;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66763606A31A
-	for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 15:24:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 66763606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5595606A31A;
+	Sun, 15 Nov 2026 15:25:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=zvqa+OMH
-Received: by mail-pj2-f2.google.com with SMTP id 98e67ed59e1d1-3b14c80b210so615110a91.0
-        for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 07:24:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794756260; x=1795361060; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=RsdeMcHfOtRvnpyG5YaLPUdVfJcBoSbUaq4yQfndVIw=;
-        b=zvqa+OMHr0nV49/v00q/9VhHcjcV3dmBOQXteWf01yIVlwbfNUDhoEcwIeizNkEoCs
-         3drPy2xPOS9nMDjmBAZ0kHOMdFCG/qWJJDsweuOkhHK9GJFrZZ/PJ2wvUaLaE6mqXbol
-         BtUdM+78xkq7x1M3DjvdAsvsW5wUaiTvGBr29zQ2LXkuSITd7qdbd7bGm+sfODp938ly
-         QdUO9kLTac71RMn64Z6dWmYpBEbwD6WUhr9aHQubJ6Ug7rdGp3yRDtqO4h5UExL2h0ZI
-         dgPlss6bwUGqZqnQ8T+1khV4v7/vz+zXqvOP1lS/DhMfSIR/zxx/xqys7viWet1+SCJa
-         UY1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794756260; x=1795361060;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=RsdeMcHfOtRvnpyG5YaLPUdVfJcBoSbUaq4yQfndVIw=;
-        b=CPXa7Isu48D3cgGpsKXJB2fnlLfZjPvOXl+BTPOIXHHXR4/4r9AbVO6sutdsFswo4s
-         v68I1V1hlsycy2IP8UAMeoU8TcR/iRDdo7I1EM0oV50w6okX1G61VXYo7ABgXBPHNqEh
-         WBhgLWshWYsYM1hJQeGdejt8gs0h1bPsDUxytJ+shLKWJ5Z1JKWSw6qXNaVwqhfLG0KC
-         PPTON5JO4/Ga0sD47dKOueCgF8vvBydGvt8FB2h/D5eYWW0qiiLUQEDVZzkzgekbo+AA
-         ZRd1qw06XEepJKGGjrE6bP019GQJL9/TwzqLcqs3GGuOV7KvixZaoxC34JIF6uQGGCbY
-         OV3w==
-X-Gm-Message-State: APuU4Z/jKqIdvOltNzidp4jcxLebRu+5l2Qcq29qNkz2NXRThxAHAVGY
-	hObyZvvOJAppyLu71q7eoptgzRaVHpOO+EO97lmzNNH0l8nTd2CG+Ufo
-X-Gm-Gg: AYBFou31tT+hMhpn/gv+Wtjllom8D3/RnbIO+VqAA6Q/XgHi/cVxw6fsNVJyvSrBZGk
-	3+7ReX8jksOPQrRM2wG7JLd9Y6D8J14c0YbNl9Ac2cAoQ20D2Prmdfi6ORMbLlaB9uZJogyF/71
-	UHmoaABYSwT3SMUCNKWRjqB/gNHf8NTzWZu5hUkYBsGofBtccJTRmbLTk4MZAqvWoosFMOv+2pE
-	ammknJpQ6elyTfIJX5NArudoq3Ff7vvj1NiaTUpd6g7BDRDbdEbqIX3NQClKZZr90QYjHsuuKkL
-	drMDETtBwfQvU9AxYV8YMu9R2plHRvKg0zePfxCACfynIAUV4Gk1zulq//fl5PFT86RhcuVl63v
-	hg+ww27MBL60ZLt8zJcjGwbYpCaShxq3W13TV2xzXZ1kpg+c5gpBZy7N7nkQagRUgKKCv/qFnhV
-	vJFOBRI1qm5p5ugc4Pol7vDBoQt6I4DxDrtMAAyHOJnRuwTVB5wrzo614kQowkCU6Z/MPxzOb5B
-	FCM8VWd1cBbLtamcdyOuSZmYLsuBS1dFSMG/r1NjP0S0bsu0UsicAcVYgw+rS7guwT2awE3pBgs
-	+v0e8NmzXvV6u0b4sEYelAZyJGdJYT9M95BOnv7FmOqL7TE=
-X-Received: by 2002:a17:90b:4b0a:b0:3ac:17c:6e89 with SMTP id 98e67ed59e1d1-3b1b09fa36bmr7316575a91.19.1794756259730;
-        Sun, 15 Nov 2026 07:24:19 -0800 (PST)
-Received: from J4f-Laptop.localdomain ([183.36.237.241])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1aec66f4csm13173904a91.14.2026.11.15.07.24.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Nov 2026 07:24:19 -0800 (PST)
-From: Shihuang Liu <shlomojune6@gmail.com>
-To: netdev@vger.kernel.org
-Cc: bpf@vger.kernel.org,
-	edumazet@kernel.org,
-	kuniyu@google.com,
-	pabeni@redhat.com,
-	willemb@google.com,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	horms@kernel.org,
-	Linux kernel audit <audit@example.invalid>
-Subject: [PATCH v1] net: sock_reuseport: check program type on the migration path
-Date: Sun, 15 Nov 2026 23:24:08 +0800
-Message-ID: <20261115152408.48205-1-shlomojune6@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aUCbiK+m
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 242F51F000C4;
+	Sun, 15 Nov 2026 15:25:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794756331;
+	bh=1ji34McIdPkUDSNFBA559P3vVFsjSQYecigeqVmnwN4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=aUCbiK+mi6ztqqpoxzxpeakgQTdBujT6mE/f9A13TWdPQoAnQKIcXpLI6t8bAEawx
+	 6nRG1U6wuunI7tHx8BGRoPbMOrJm8mQcqNYreT+N5eybHPgM99WUqR/Iz9jH96V5kw
+	 DehUlj5r7YJTWMqnjTLB3feUnjeckzVjbVFgn/t3YDchuk3aWKLA4sDTvk4gKOZkkw
+	 tYHGOpameQCkihz3AlHmw0n2Lv+JA8YZdExOT71/xPgXWWMGGrquBqPM3A6tzi1B9O
+	 uVgmoARfH2XTj82/COO63Hy6Hb/dcIK//fZJKtdy/HSU3oNgkCqBkJNWrccdN6s13U
+	 pn1MYQFzLsAXA==
+Content-Type: multipart/mixed; boundary="===============1426439364760055920=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -99,72 +49,104 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <2e6fd613596d335e06d0f884805fc44489147147fcfc946780eb460db26fec58@mail.kernel.org>
+In-Reply-To: <20261115144556.41927-1-shijing.wuqi@linux.alibaba.com>
+References: <20261115144556.41927-1-shijing.wuqi@linux.alibaba.com>
+Subject: Re: [PATCH bpf-next v2] bpf, mprog: Defer RCU synchronization until peer reuse
+From: bot+bpf-ci@kernel.org
+To: shijing.wuqi@linux.alibaba.com,daniel@iogearbox.net,ast@kernel.org,andrii@kernel.org,razor@blackwall.org,bpf@vger.kernel.org,netdev@vger.kernel.org
+Cc: martin.lau@linux.dev,john.fastabend@gmail.com,sdf@fomichev.me,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,kuba@kernel.org,pabeni@redhat.com,edumazet@kernel.org,davem@davemloft.net,andrew+netdev@lunn.ch,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sun, 15 Nov 2026 15:25:29 +0000 (UTC)
 
-From: Linux kernel audit <audit@example.invalid>
+--===============1426439364760055920==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-A BPF_PROG_TYPE_SOCKET_FILTER program can be loaded with
-expected_attach_type set to BPF_SK_REUSEPORT_SELECT_OR_MIGRATE and
-attached to a SO_REUSEPORT TCP group; both steps are allowed without
-CAP_BPF.  Closing a listener that still has queued children then runs
-that socket filter with a struct sk_reuseport_kern as its context,
-while the program was verified against struct sk_buff.  It reads and
-writes past the 56-byte object on the stack, which KASAN reports as a
-stack-out-of-bounds in ___bpf_prog_run().
+> bpf, mprog: Defer RCU synchronization until peer reuse
 
-The cause is that reuseport_migrate_sock() decides from
-prog->expected_attach_type alone.  That field is supplied by user
-space and does not identify the program type, and
-bpf_prog_load_check_attach() does not reject the value for
-SOCKET_FILTER programs.
+TL;DR:
+- Recording an RCU cookie on every commit may add an extra grace period to
+  back-to-back detaches (N becomes 2N-1), a possible performance regression
+- Nit: example comment in bpf_mprog.h is ambiguous without braces
 
-Fix this by requiring BPF_PROG_TYPE_SK_REUSEPORT before running the
-program, and use the same check in reuseport_stop_listen_sock().
-Socket filters can still be attached and used as selectors; the
-selection path is unchanged.
+> diff --git a/include/linux/bpf_mprog.h b/include/linux/bpf_mprog.h
+> --- a/include/linux/bpf_mprog.h
+> +++ b/include/linux/bpf_mprog.h
+> @@ -28,11 +28,8 @@
+>   *   [...]
+>   *   ret = bpf_mprog_attach(entry, &entry_new, [...]);
+>   *   if (!ret) {
+> - *       if (entry != entry_new) {
+> + *       if (entry != entry_new)
+>   *           // swap @entry to @entry_new at attach location
+> - *           // ensure there are no inflight users of @entry:
+> - *           synchronize_rcu();
+> - *       }
+>   *       bpf_mprog_commit(entry);
+>   *   } else {
+>   *       // error path, bail out, propagate @ret
 
-Fixes: d5e4ddaeb6ab ("bpf: Support socket migration by eBPF.")
-Signed-off-by: Linux kernel audit <audit@example.invalid>
+This isn't a bug, but with the braces removed, the only body of the if is a
+comment line.  Read as C, the next statement becomes the body:
+
+    if (entry != entry_new)
+        bpf_mprog_commit(entry);
+
+In the real callers (tcx_prog_attach(), netkit_prog_attach(),
+tcx_link_update(), ...) bpf_mprog_commit() is unconditional, and it must
+also run when entry == entry_new so that bpf_mprog_revision_new() bumps the
+revision.  Could the braces be kept, or a placeholder statement used for
+the swap, so the example is unambiguous?
+
+[ ... ]
+
+> @@ -243,6 +251,7 @@ static inline void bpf_mprog_commit(struct bpf_mprog_entry *entry)
+>  {
+>  	bpf_mprog_complete_release(entry);
+>  	bpf_mprog_revision_new(entry);
+> +	entry->parent->rcu_state = start_poll_synchronize_rcu();
+>  }
+
+Does recording a new cookie on every commit add a grace period to detach
+sequences that previously paid only one?
+
+The detach paths (tcx_prog_detach(), tcx_link_release(),
+netkit_prog_detach(), netkit_link_release()) already wait before calling
+commit:
+
+    tcx_entry_update(dev, entry_new, ingress);
+    tcx_entry_sync();
+    tcx_skeys_dec(ingress);
+    bpf_mprog_commit(entry);
+
+Once tcx_entry_sync() returns, the old entry has no readers left, but
+commit stores a cookie that only completes after another full grace
+period.
+
+With two programs on one tcx hook detached back to back, the second detach
+goes bpf_mprog_delete() -> bpf_mprog_peer() -> cond_synchronize_rcu(),
+which has to run synchronize_rcu(), and then tcx_entry_sync() waits again.
+That is two grace periods where there used to be one, so N back-to-back
+detaches go from N to 2N-1.
+
+A similar thing happens for replace followed by detach.  tcx_link_update(),
+netkit_link_update() and BPF_F_REPLACE prog attach do not swap entries
+(WARN_ON_ONCE(entry != entry_new)), so the peer is unchanged, yet commit
+still overwrites rcu_state with a fresh cookie.  A detach shortly after
+then pays cond_synchronize_rcu() plus tcx_entry_sync().
+
+The commit message says "peer reuse can add a conditional wait before a
+detach", but in these cases the extra wait does not protect anything.
+mini_qdisc_pair_swap(), which this patch copies, only records state for the
+miniq that was actually swapped out.  Should the cookie be recorded only
+when a swap happened without a following synchronize_rcu(), or should the
+detach paths store get_completed_synchronize_rcu() after their sync?
+
+
 ---
- net/core/sock_reuseport.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
---- a/net/core/sock_reuseport.c
-+++ b/net/core/sock_reuseport.c
-@@ -460,6 +460,18 @@
- }
- EXPORT_SYMBOL(reuseport_detach_sock);
- 
-+/*
-+ * Only a BPF_PROG_TYPE_SK_REUSEPORT program is verified against
-+ * struct sk_reuseport_kern, which is the context bpf_run_sk_reuseport()
-+ * passes to it.  expected_attach_type is set by user space and does not
-+ * identify the program type.
-+ */
-+static bool reuseport_is_migration_prog(const struct bpf_prog *prog)
-+{
-+	return prog && prog->type == BPF_PROG_TYPE_SK_REUSEPORT &&
-+	       prog->expected_attach_type == BPF_SK_REUSEPORT_SELECT_OR_MIGRATE;
-+}
-+
- void reuseport_stop_listen_sock(struct sock *sk)
- {
- 	if (sk->sk_protocol == IPPROTO_TCP) {
-@@ -474,7 +486,7 @@
- 						 lockdep_is_held(&reuseport_lock));
- 
- 		if (READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_migrate_req) ||
--		    (prog && prog->expected_attach_type == BPF_SK_REUSEPORT_SELECT_OR_MIGRATE)) {
-+		    reuseport_is_migration_prog(prog)) {
- 			/* Migration capable, move sk from the listening section
- 			 * to the closed section.
- 			 */
-@@ -644,7 +656,7 @@
- 
- 	hash = migrating_sk->sk_hash;
- 	prog = rcu_dereference(reuse->prog);
--	if (!prog || prog->expected_attach_type != BPF_SK_REUSEPORT_SELECT_OR_MIGRATE) {
-+	if (!reuseport_is_migration_prog(prog)) {
- 		if (READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_migrate_req))
- 			goto select_by_hash;
- 		goto failure;
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43727865402
+--===============1426439364760055920==--
