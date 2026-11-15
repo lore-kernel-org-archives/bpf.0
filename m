@@ -1,116 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.193.64
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794727807;
-	b=bOBo39LvPpkDidoi2r1dhD5JQ4WeqVe0fAl/59FCAkIsiFVfvT2jAOEreupfGfI7uj1G
-	 E0kqM2D4wRveIqnZYVvMqUXnQfeAyBDul9PL0RXc/nJqlXN9623NwG/1+5IGhNW2XwoTZ
-	 bicpIT1QnffodFD4VfRZ1K2hC0cIJ5oCqsKEwgyb6NQtn9tlcsX5DyeJL/a3qt1wnJQFX
-	 bg8X4TiuW4ex8Eixlf+RWuPA1lmgEgBD9cpSXW7kSMdgVNTCFjkv1HEUxlLuws2zCz3wr
-	 RnYCiKvwCMYdUwTr992gLz3t61/xsd+DUEehJJhoVp3Fp7do7CRvyrLKJNNHbtjoq4A==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794727807;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:
-	 X-MS-Exchange-Authentication-Results:Received-SPF:Received:Received:
-	 Received:Received:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding:Content-Type:
-	 X-NV-OnPremToCloud:X-EOPAttributedMessage:X-MS-PublicTrafficType:
-	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
-	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
-	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
-	 X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-Id:
-	 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=sFRNHl/A+EBSc+ljJstso20ObPhS8+gGdpPRrKt1w80=;
-	b=SDg7tiPS9UfdVzM5Iv8MULXgiQRDidkzzzU2cTjpLnx8AWgtJH/AKwKzRlK9L3bJ6T2b
-	 zR1eTH3SrfI7e2lh8UlB8YJ2yfl3xlNjqFzsGX0zez/4zlc6JFbd0DxnRUOFvFU53WFd1
-	 IQOL/iEmj4pn+cmox1KM1nhsvrp28TM/phzGLS0XDD/y8A9i228iTKksYvdQlpfk3Uce8
-	 WOAj7TPxnOYqoihY/U4tUYIY3C+68YS16lUyRoL9N9v83+Hu42GQbbpIaBEv800oSRGu1
-	 IAy4kNlSvaSb1Wr+0AL6EKXk1n9Lk1+ACuhAtF5Jtp1Tv7HQpuNyQoS9AhYzq3Cs/sQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=nvidia.com;
-	spf=fail smtp.mailfrom=nvidia.com;
-	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=K7gpPQNA;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.193.64
-Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010064.outbound.protection.outlook.com [52.101.193.64])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794728577;
+	b=AG7ELtfXGb/4mduRseYk78Lj60dzEW5u+QhR7Ga+rrnoJmitHd4OFk3jvTtK2K97DEgJ
+	 BfTuaHTsYIsslsu7ZqvcR596UwFKlz7c5XNLLaz+8q0ksjskqFOoZIyLYeCzksv68pNJu
+	 DVDbsjN55v74i6ECCQkcApcE8nRCnnUthR20ce+JfsMmIr3A6Gae0kzCS6tVARuFdhRK1
+	 0hzarw6lmoLNR6tXy/AuySdt2/0tAKNnwFEmbmGZicIpVkh06jFeG4T0ad8uQrjToZiQD
+	 us7eMQyNgG6M9LIYFyKLxSgZT51LA8d1asQzcTXPj4+d4taSWwqPDuUoTEzHvf3hudQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794728577;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=GPVorwWextWqTeqhLKlgJWaB2HerQm/MmIfhM1PDl2w=;
+	b=fWLRDBTizf14awtzL/Eop6M0KMkMFmjENe8oYbTD016RqdrWrSYKoa68z1KZkx+kuMlp
+	 4gEPmUpROyrRrA4X1Cf5wyqRNAlG4X9rsib2kT0fshB78kZ73qoVuMgasVixdkTQNHU96
+	 2qQIJYUa2eiB7TiqIos/7Q17wJECWgAgLGKI2Lq88MXwPUK0jB3GtZKgefaYEQWuMQdsm
+	 Fts1bO7Tx/DKIfkyhEonrHhVkVxPD24TY7dO/F7Tvv7ccmD8UKoMShN4VS+TBtsN1njka
+	 QlVyzld5k3J8gFlopjODrdf9YGa2CKcsBsyb9elV90LbItB1uyfgGnOI6O5JMW3Ogfg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KA9hFhdc;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB4ED606A31D;
-	Sun, 15 Nov 2026 07:30:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BB4ED606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8B5E606A31A;
+	Sun, 15 Nov 2026 07:42:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=K7gpPQNA
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=H+f4pAtiphNBVySsDIQwnbxRk0yHRzA+fUZSWj5A52icZNDV/xTmUIIPlZkojRhLFC9LU8UaMqsglSxcTYhAN1xKjk7JDvIyEby4SbgXvrZd29AXoFLHXJazwH5y7fvxq5cQQ80T0oGjht2EnI27C/eKq8+XdGs0p5hRHyqkhfntBMoLHx05EpmuIBFaBnXzJhYkY4vjygnWhNeEPP7w6PrWw2VKbUkqukSce5qLD2l6ZLqOphmjEMqn0VJRlHzUtkelDb+its8GZjQvqtvhYSdn53e2MLuY72jFPk+BKmylpWd4Pt7fQfIWI5xBsKcOMFgRalaFHoKlFV0f7LUkLw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sFRNHl/A+EBSc+ljJstso20ObPhS8+gGdpPRrKt1w80=;
- b=IbVvgTbsKtRo7OB86lG6NXdW2FEGfDip0Aazvyo4HwCS6zJB9MA3ws6WbNXJC6mWi48yXp4nfThbg3wsNpyGiS8W8QPHyh6anHHYtfnPvGL/R/RFMOnbjEq6rnQsrq1YydX3dahzW+AyeLHT6SRCSio2sOJAfA/Ocd5vrevEKc17DQLiFx9Os77b2tB/1ZC+srtv2ku50P0sXDqdy2DBABri4/xQohH4F1k2UMjNKO+KBNYea3l+nQVACJe+aJvmqVsy6sUFYH2AdE1N6vZMcMpAAFWJn7u4CCY1o2N7AvHhdq2605KfQKKr/dmtwMVwgIhxywh74WmmaDXJ3GIvAg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=lunn.ch smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sFRNHl/A+EBSc+ljJstso20ObPhS8+gGdpPRrKt1w80=;
- b=K7gpPQNAqZsnJiLKwQyUySt43qwrwPQFbb0MnHvC6RqicNPjiNalhp0jSf1bY+KMnlzpIEvECcGl7BDeJ/x0xvHWxepWyFyFrIubSYBXAwUiyVq9mQvocspXD9RWhCnQremkFc2g6yk5Zg+WnN7i+fgmosMuFFAyPb+kNUA5eWNUZKeC+Hl6crDlnaVXdE+nn39FuElwbXWqDSd4AEkuJR3Cl7IHjlreTgMovV+SpC+Agsh1iFBExObWAUn9q+mf5X3h3r/JdL6SubwGj+BbSc4fCIJ5gHc/d97inhfVPWbWxNCE9GOmFKF9hM801R++JButTOlqJKDZE6/ok7ngSA==
-Received: from MW4PR02CA0029.namprd02.prod.outlook.com (2603:10b6:303:16d::34)
- by MN2PR12MB4079.namprd12.prod.outlook.com (2603:10b6:208:1d5::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.10; Sun, 15 Nov
- 2026 07:30:01 +0000
-Received: from BY1PEPF00026967.namprd05.prod.outlook.com
- (2603:10b6:303:16d:cafe::8f) by MW4PR02CA0029.outlook.office365.com
- (2603:10b6:303:16d::34) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.615.13 via Frontend Transport; Sun,
- 15 Nov 2026 07:30:01 +0000
-X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP
- is 216.228.117.160) smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BY1PEPF00026967.mail.protection.outlook.com (10.167.244.151) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.615.4 via Frontend Transport; Sun, 15 Nov 2026 07:30:01 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.56; Sat, 14 Nov
- 2026 23:29:46 -0800
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.56; Sat, 14 Nov
- 2026 23:29:46 -0800
-Received: from vdi.nvidia.com (10.127.8.10) by mail.nvidia.com (10.129.68.6)
- with Microsoft SMTP Server id 15.2.2562.56 via Frontend Transport; Sat, 14
- Nov 2026 23:29:40 -0800
-From: Tariq Toukan <tariqt@nvidia.com>
-To: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
-	<davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski
-	<kuba@kernel.org>, <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>
-CC: Alexei Starovoitov <ast@kernel.org>, <bpf@vger.kernel.org>, "Carolina
- Jubran" <cjubran@nvidia.com>, Daniel Borkmann <daniel@iogearbox.net>, "Gal
- Pressman" <gal@nvidia.com>, Jesper Dangaard Brouer <hawk@kernel.org>, "John
- Fastabend" <john.fastabend@gmail.com>, Leon Romanovsky <leon@kernel.org>,
-	"open list" <linux-kernel@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-	Mark Bloch <mbloch@nvidia.com>, Nimrod Oren <noren@nvidia.com>, Saeed
- Mahameed <saeedm@nvidia.com>, Simon Horman <horms@kernel.org>, Stanislav
- Fomichev <sdf@fomichev.me>, Tariq Toukan <tariqt@nvidia.com>
-Subject: [PATCH net] net/mlx5e: Fix XSK pool corruption when switching channels
-Date: Sun, 15 Nov 2026 09:29:34 +0200
-Message-ID: <20261115072934.353341-1-tariqt@nvidia.com>
-X-Mailer: git-send-email 2.44.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KA9hFhdc
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5371A1F000C4;
+	Sun, 15 Nov 2026 07:42:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794728577;
+	bh=GPVorwWextWqTeqhLKlgJWaB2HerQm/MmIfhM1PDl2w=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=KA9hFhdck9Pu0lR2PrmhwtsDEAvpYWSx2ULFs9xe8v42JnsLvlTL9VTH1YD/0KQzI
+	 ejzUQnKFBhTpv5vIhRvfiNJ9gw9oB1RbSmj0/PiJNo96TBXhWcyd1S9v+VjtdEoROI
+	 tV9z87/AmMV0mu4Oh1b1WfE9BNi7icrFg3Lik9P2pgTigu09OWkEUb1cWrt4qP0TN1
+	 fBAm2VusjA6VVhBK1yKmGJ/ugo58sBzS7eTruLD6k8kqWoC617h0FxWiPmrbAJ08Ry
+	 7/EkBoBNjj6wqNa5V6u8WYH9UGKp0dnNoDnZbRHY9whoItb6Vq/B4VjtKFkXQDK3Ho
+	 GX/F/bWX8u1zg==
+Subject: Re: [PATCH net v5 1/2] tun: bound the NAPI receive queue
+From: netdev-bot+sashiko@kernel.org
+To: antonio@mandelbit.com
+Cc: willemdebruijn.kernel@gmail.com, jasowangio@gmail.com,
+ andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, mst@redhat.com,
+ eperezma@redhat.com, shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
+ maheshb@google.com, peterpenkov96@gmail.com, netdev@vger.kernel.org,
+ virtualization@lists.linux.dev, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org
+Date: Sun, 15 Nov 2026 07:42:55 +0000
+Message-ID: <179472857592.2199510.16416804582528441222@kernel.org>
+In-Reply-To: <20261111014208.1795777-2-antonio@mandelbit.com>
+References: <20261111014208.1795777-2-antonio@mandelbit.com>
+X-sashiko-severity: High
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -120,112 +67,184 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY1PEPF00026967:EE_|MN2PR12MB4079:EE_
-X-MS-Office365-Filtering-Correlation-Id: a18c81c7-f9ba-4039-5294-08df42ea426b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|1800799024|23010399003|82310400026|36860700016|10067099003|11063799006|56012099006|261026121527099003|261026140227099003|261028144727099003|261022105027099003|261022075727099003|261021121427099003|261102123227099003|261009223027099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	mMss/ffZN5xNu632jl93QLbbBsDYVxgSD/VBCPyspBu6St81KUvp2+cl40qrwCpJ8tsGvuZ9ZDixxqbGOeZHXTtRCuFkou0yOubgJBs9g6WS4wTh4adTyRHNUIPPMSSA8/jIs6s6tn6TOMoXEm9TnztTyh/ZQK072572Iz8wv9tHtDGlU1xUt+UOl0dmKOg5F7e6JCX7yqHWhOu/3ENsogBeriuIVqrhmbad9ByBmfu+TZPVE8unuuw1iAf+Ex2kIc4jpOGlNvJgfW2/3oBJT24ZvhyjNkq2h/pH+8KeqbXuaiHcwMmnp2Kf5blIe2hq4R9n+s9F9SFQC+gF4sgK4fYSjEwTfNLOXnjPZ+Z9r74+zR3Z1n05BzlBTT/XO0zgboL0DOtME/bH8rMJsUyaxd6TRWF/vL3tnKDkURza9gmnertzMEZrkWM3hn7La+xHJokflIM++vgmWmEEdFylrck5rUwRqMSDiv9EEbUiyrG1D3r9fqNrVilrtMCXUOcq/splUyZPdj+/KKrW6Q4bEHNDvDa8PicPIeyAXV5iw18DGknruljaT+zaxrae2URxRqqIemTWcnMVZHGDTmdH8gUzAeXGlIkqiVtGXgyXDiZIvRAW8vO2RfrBkXgBIYDUnyRC34CLWNtKSeLFiIZyeeXHKKSYUc3Cuufp0PjxwNfY1QHxhL4jvZO8iVRaDwNjcRpxSzmAwkUgRE+Jb6OZZg==
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(23010399003)(82310400026)(36860700016)(10067099003)(11063799006)(56012099006)(261026121527099003)(261026140227099003)(261028144727099003)(261022105027099003)(261022075727099003)(261021121427099003)(261102123227099003)(261009223027099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	SqN7nNEBWRfJRBSGviImOrPNwm43N9JLb2WzTnQTuU5M/z6tt1Vm7Osb1b3M0Vn4odBemndmtig30njG8DYMjvmVaWIc9OJIsXTDX3xGnvUtpAf3BIYnjgB/lYAPjFC7vhQ4RN5mxFGsfS3JLKrGHCGQQyh7NX844OzHOQMr43Hjpy6QIaAJWy8kEqPkK62Mv3Mgo3wPX0ZEIRSMjkkxK2HFQg8XzvuQK6pJ3a7BJB2kElr2SsQiYKzpj73ckBhAiwJbbS0WdmrdzHNA+LxMvf8e73YNM8b4zOl7R772rH3pro+AVljF2k/QAdQkBLwBW9j0e0qq0YmH2x2iypwP893UIo1hVjJg0DVbWlMpUEfwO30EIELTyX+AfIKXqrl26WmHs0kTC8Ugb5tUGglc0APjS7Fa62pkaEso0py/vSjxWAWmAI5Mf5xtZ4jV9MFa
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Nov 2026 07:30:01.3750
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a18c81c7-f9ba-4039-5294-08df42ea426b
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BY1PEPF00026967.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4079
 
-From: Gal Pressman <gal@nvidia.com>
+Thank you for your contribution! Sashiko AI review found 3 potential
+issue(s) to consider.
 
-When the device supports tis_tir_td_order, mlx5e_safe_switch_params()
-closes the old channels only after the new ones are activated.  With an
-AF_XDP socket bound, the old and the new channel hold an XSK RQ on the
-same pool.
+Critical: 0 · High: 1 · Medium: 0 · Low: 2
 
-The old RQ returns its buffers to the pool while the new RQ is already
-allocating from it. Since the pool is lockless and expects a single user
-at a time, it gets out of sync.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-Close the old XSK queues before activating the new channels, the rest of
-the old channels can still be closed later.
+- [High] The new bound is a packet count on each tun_file's
+  sk_write_queue, compared against net_hotdata.max_backlog (default…
+- [Low] The new full-queue check runs before every XDP hook, in both
+  paths the patch changes.
+- [Low] The new comment in tun_napi_receive() says it takes "at most
+  budget skbs, so that the queue never looks emptier to writers than it…
 
-The crash was hit by our regression tests, with a random sequence of
-binding xdpsock to every queue and later changing the ring size.
+--
 
-This resolves the following call trace:
-  BUG: kernel NULL pointer dereference, address: 0000000000000068
-  RIP: 0010:mlx5e_free_rx_mpwqe+0x113/0x250 [mlx5_core]
-  Call Trace:
-   mlx5e_dealloc_rx_mpwqe+0x38/0xb0 [mlx5_core]
-   mlx5e_free_rx_descs+0x126/0x170 [mlx5_core]
-   mlx5e_close_rq+0x81/0xb0 [mlx5_core]
-   mlx5e_close_channels+0x4b/0xa0 [mlx5_core]
-   mlx5e_safe_switch_params+0x34d/0x3e0 [mlx5_core]
-   mlx5e_xdp_set+0x287/0x3a0 [mlx5_core]
-   dev_xdp_install+0x269/0x400
+tun: bound the NAPI receive queue
 
-Fixes: 3b88a535a8e1 ("net/mlx5e: Defer channels closure to reduce interface down time")
-Signed-off-by: Gal Pressman <gal@nvidia.com>
-Reviewed-by: Nimrod Oren <noren@nvidia.com>
-Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
----
- .../net/ethernet/mellanox/mlx5/core/en_main.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+In IFF_NAPI mode, this patch drops new packets in tun_get_user() and
+tun_xdp_one() once the tfile's sk_write_queue holds more than
+netdev_max_backlog packets, and counts them as rx_dropped. It also changes
+tun_napi_receive() to take at most budget skbs from the queue instead of
+splicing out the whole queue and putting the rest back.
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-index 72bca10c579d..97081a644d5a 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-@@ -3421,6 +3421,23 @@ static int mlx5e_switch_priv_params(struct mlx5e_priv *priv,
- 	return 0;
- }
- 
-+/* The old and the new channel of the same index are bound to the same
-+ * XSK pool, which is lockless and expects a single user at a time.
-+ * Close the old XSK queues before the new ones are activated, even
-+ * when the closure of the rest of the old channels is deferred.
-+ */
-+static void mlx5e_close_channels_xsk(struct mlx5e_channels *chs)
-+{
-+	int i;
-+
-+	for (i = 0; i < chs->num; i++) {
-+		struct mlx5e_channel *c = chs->c[i];
-+
-+		if (test_bit(MLX5E_CHANNEL_STATE_XSK, c->state))
-+			mlx5e_close_xsk(c);
-+	}
-+}
-+
- static int mlx5e_switch_priv_channels(struct mlx5e_priv *priv,
- 				      struct mlx5e_channels *old_chs,
- 				      struct mlx5e_channels *new_chs,
-@@ -3452,6 +3469,8 @@ static int mlx5e_switch_priv_channels(struct mlx5e_priv *priv,
- 	mlx5e_set_xdp_feature(priv);
- 	if (!MLX5_CAP_GEN(priv->mdev, tis_tir_td_order))
- 		mlx5e_close_channels(old_chs);
-+	else
-+		mlx5e_close_channels_xsk(old_chs);
- 	priv->profile->update_rx(priv);
- 
- 	mlx5e_selq_apply(&priv->selq);
+> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+> index 3b292bce4438c..e2fda570b90f6 100644
+> --- a/drivers/net/tun.c
+> +++ b/drivers/net/tun.c
 
-base-commit: b71c101bbb9814d163c00234d43c41f0a17907d4
+[ ... ]
+
+> @@ -227,6 +228,16 @@ struct veth {
+>  static void tun_flow_init(struct tun_struct *tun);
+>  static void tun_flow_uninit(struct tun_struct *tun);
+>  
+> +/* In IFF_NAPI mode written packets wait in the tfile's sk_write_queue for the
+> + * NAPI poll, which may run later in a kthread or ksoftirqd. Bound that queue
+> + * like the per-CPU backlog of netif_rx().
+> + */
+> +static bool tun_napi_queue_full(const struct sk_buff_head *queue)
+> +{
+> +	return skb_queue_len_lockless(queue) >
+> +	       READ_ONCE(net_hotdata.max_backlog);
+> +}
+
+[Severity: High]
+Does a per-queue packet count bound the uncharged memory that an
+unprivileged user can pin?
+
+This limit is about 1000 packets on one tfile's sk_write_queue. It has no
+byte accounting and no limit across tfiles. The same user who can run the
+reproducer can also open IFF_MULTI_QUEUE devices. tun_set_iff() only checks
+CAP_NET_ADMIN in the user's own user namespace:
+
+    int queues = ifr->ifr_flags & IFF_MULTI_QUEUE ?
+                 MAX_TAP_QUEUES : 1;
+
+    if (!ns_capable(net->user_ns, CAP_NET_ADMIN))
+        return -EPERM;
+
+That gives up to 256 queues per device, and as many devices as
+RLIMIT_NOFILE allows. Each tfile still has sk_sndbuf = INT_MAX from
+tun_chr_open(), and its queued skbs are not charged to the writer's memcg.
+The only admission check on the write path is this one in tun_get_user()
+and tun_xdp_one().
+
+The commit message says:
+
+    Still open: the limit counts packets rather than bytes and applies per
+    queue, so with large packets and many queues (IFF_MULTI_QUEUE works in a
+    user namespace too) the queued skbs, which are not charged to the
+    writer's memcg, can still add up to an OOM. This is hard to reach in
+    practice: with large packets the writer's copy is slower than the NAPI
+    poll, so the queue does not fill.
+
+That argument covers large packets only. The reproducer itself shows
+1400-byte writes outrunning threaded NAPI. All queues drain on the same
+CPUs, so if the writer cycles small packets through every queue fd, can
+each queue reach max_backlog?
+
+With roughly 2.3 KB of truesize per 1400-byte skb, about 1000 tfiles (the
+default soft RLIMIT_NOFILE) would pin around 2.3 GB, and a higher fd limit
+pins more. Does that still allow the global OOM from a memcg-limited user
+that this patch is meant to fix?
+
+A bound that does not scale with the number of tfiles would close this.
+Two options would be charging queued skb truesize to the socket or memcg on
+every enqueue path, or a per-device or per-netns aggregate limit. Either
+would replace the per-queue packet count.
+
+> +
+>  static int tun_napi_receive(struct napi_struct *napi, int budget)
+>  {
+>  	struct tun_file *tfile = container_of(napi, struct tun_file, napi);
+> @@ -237,21 +248,24 @@ static int tun_napi_receive(struct napi_struct *napi, int budget)
+>  
+>  	__skb_queue_head_init(&process_queue);
+>  
+> +	/* Take at most budget skbs, so that the queue never looks emptier to
+> +	 * writers than it is.
+> +	 */
+>  	spin_lock(&queue->lock);
+> -	skb_queue_splice_tail_init(queue, &process_queue);
+> +	if (skb_queue_len(queue) <= budget) {
+> +		skb_queue_splice_tail_init(queue, &process_queue);
+> +	} else {
+> +		while (skb_queue_len(&process_queue) < budget &&
+> +		       (skb = __skb_dequeue(queue)))
+> +			__skb_queue_tail(&process_queue, skb);
+> +	}
+>  	spin_unlock(&queue->lock);
+>  
+> -	while (received < budget && (skb = __skb_dequeue(&process_queue))) {
+> +	while ((skb = __skb_dequeue(&process_queue))) {
+>  		napi_gro_receive(napi, skb);
+>  		++received;
+>  	}
+
+[Severity: Low]
+Is the "never looks emptier to writers than it is" part of this comment
+accurate?
+
+When skb_queue_len(queue) <= budget, skb_queue_splice_tail_init() resets
+the queue's qlen to 0. Otherwise each __skb_dequeue() lowers qlen by one,
+for up to budget skbs.
+
+In both cases, while napi_gro_receive() works through process_queue,
+possibly on another CPU with threaded NAPI, tun_napi_queue_full() sees up to
+budget fewer pending skbs than are really pending. The real bound comes out
+to about max_backlog + budget, plus one per concurrent lockless writer.
+
+This is much better than hiding the whole backlog as before. Could the
+comment say the queue looks emptier by at most budget, so later code does
+not rely on a strict invariant?
+
+[ ... ]
+
+> @@ -2561,6 +2593,17 @@ static int tun_xdp_one(struct tun_struct *tun,
+>  		return -EIO;
+>  	}
+>  
+> +	/* NAPI queue full: drop, and schedule NAPI so that it drains even if
+> +	 * nothing in this batch gets queued
+> +	 */
+> +	if (tfile->napi_enabled &&
+> +	    unlikely(tun_napi_queue_full(&tfile->sk.sk_write_queue))) {
+> +		napi_schedule(&tfile->napi);
+> +		put_page(virt_to_head_page(xdp->data));
+> +		dev_core_stats_rx_dropped_inc(tun->dev);
+> +		return 0;
+> +	}
+> +
+>  	xdp_prog = rcu_dereference(tun->xdp_prog);
+
+[Severity: Low]
+Should this check come after the XDP program runs?
+
+Here it sits before rcu_dereference(tun->xdp_prog) and bpf_prog_run_xdp().
+In tun_get_user() the new check also comes before tun_build_skb(), which
+runs native XDP and returns NULL when the program consumes the packet, and
+before do_xdp_generic().
+
+Packets the program would REDIRECT, TX or DROP never reach sk_write_queue.
+They add nothing to the queue being bounded.
+
+Once XDP_PASS traffic fills the queue past netdev_max_backlog, those packets
+are dropped without the program seeing them. They are also counted in
+rx_dropped. Would redirected or XDP_TX flows on that tfile stall whenever
+the stack path is congested?
+
+The commit message only says packets are dropped "before allocating and
+copying them". If this trade-off is intended, could the commit message
+mention the effect on XDP?
+
 -- 
-2.44.0
-
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261111014208.1795777-1-antonio%40mandelbit.com
