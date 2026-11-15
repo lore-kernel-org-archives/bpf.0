@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794712699;
-	b=cAfgNWq5h8G8+Npp/BKcNgahV2d4Og6ONcjmXLhxVz9o4P022a4FiO+I7aUykmMNYAUU
-	 QG/826GxCSuvKFbKoKY1vTX9tgf/UwING00gllnjh5OG0NaUJHtyhE+aQFpeAXk0CKJWQ
-	 c61L9gFfNAE4nwUyi9unXwSe0JiWxRG0Gptx6Ux9rvvr1t+ZBi4ZMML7A/KbHdYrGVOtQ
-	 vGMhIHX3vu+8qy/RkPQS+jD4MfPuaSzP2DWtIXEavXoQ6do99M0LVdhWk8pRl6x8DePQ6
-	 MlXtEJGMvbgiMk+Mf0/yUkC7+VdXSGZwTDtz2/68+Hv3pypV4wMKhIClP870KhT1yEg==
+	t=1794712700;
+	b=VSIeqzXaerIUgKs4koW0KuQd4hSN7tjLXlc4yzh7R7ywdMaW4bstUDryUhoawEFB5ayy
+	 0TwADB8Oa+yQ0VyJFuzSwtBUMtFPUCbAeZIixY9+7EHjjeGNhNj9JORLQKMCjit/lt523
+	 Oqyde0uyI6Z9ho/Ji84Z2uBhKfwMXwhMqmCpPkg0XArh30eo9xLfHlpzuFOcIGd9Ljvjs
+	 DIcmjq00M4o+c/ejTWXoZoCGJYikfozKnNWgZc6Z7QgoMt1Z8JAEYDmO9q6LCfY0a0SYC
+	 9/x+LWA/vgYXQMkzD6Gp70x8mphkmJC7awXHKJEAAhW/mDxVf0M6fqKNDq238jSLJfw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794712699;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794712700;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=EQmiMwQ3u6k3uyujpSWR+O2asGp9W/secTZ73M9GPzQ=;
-	b=kCNESYIx4ISWmaV7YBiZx0oYfKTScSmq3ls0o5D0IVdFn0PGzSoIVSpl4pCu+66slra8
-	 KX+sd/VijYdcoIA0ZwxkoTU52WLIoBJnLIeQ0TRmTzinG0lfqfK2ND7WHVEYZ2JYvA7Id
-	 dg0+b8URVUjUNbOPx585TXBw3S4k1uoYZ1y/cxGHZ0arCIfDwY41glrhfVyOSkYPnS/ka
-	 BmUOIH9lMnU2S4r1Zp9K/0TUx9cwfoZ/Y8YX8myTK1j/cRrzY533tnjDDwRj0GlxvjANw
-	 1MP3O+v4DH/n32eUD0TBmITo2cKXPHXQBYPzmKX1lC/T+Uv3Qy/BRsWHv8g9cmDs4hg==
+	bh=zXhT4wOx359GCKUldLkyI3j/qzjMrXPTXW8JlCEpECQ=;
+	b=Eol24FyELDC6xi+pyWdFZb3SPL4pvu1zup7pZ15Kt015uR2EwdYdoYlhwGgrKGuBDsjZ
+	 Uq2QWpdlBA9PFk6ZaQy78ocYOLSTwslHQCPdpW2DyhrFeVLhkCAxbZoFiv1RWQoF0a+At
+	 CZcIFmI7qhcY479CVzt2xtfw5REuNxAWInuYaeNZVfz3VC3xWJvpQZf6hTPs0zQWrxp48
+	 Ohxu0e2Y4eaps21XW+agurIsCJE7ozZxgnA9svYFNwRbeaIFyqyQpoVAuD5/tuin9UqP7
+	 xDqjruh2/ilslsi+Z43BbU5w/rHsgyo5ICw2Cb605LpCR43LW9cdproHg3XV7vrdtjQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=S4O5UKcm;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GZNf2Hla;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A813606A8B5;
-	Sun, 15 Nov 2026 03:18:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAA1A606A32D;
+	Sun, 15 Nov 2026 03:18:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=S4O5UKcm
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64D781F000D0;
-	Sun, 15 Nov 2026 03:18:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GZNf2Hla
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 616B01F000CE;
+	Sun, 15 Nov 2026 03:18:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794712698;
-	bh=EQmiMwQ3u6k3uyujpSWR+O2asGp9W/secTZ73M9GPzQ=;
+	s=k20260515; t=1794712700;
+	bh=zXhT4wOx359GCKUldLkyI3j/qzjMrXPTXW8JlCEpECQ=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=S4O5UKcm+XXFbVBqaNQsjEllJ9mWIy8sHKKM6B/25bfQQLWnQxWIM6raMEzUG9C24
-	 VUt88pk7Z9LWIexHcGLTMkEANAFiLP6p7qQAGVVl84I4VMyxGO/5Tgl/cgnretyEDE
-	 DYN0YOZIAj8ktOaK66oZ6weaRPIVWZsoc2iR+wvkYIw1QmYaec7uKX8UZhSTCUMHK7
-	 qWP4ZeSrxLPJ6Lb09v4vMmeX8QZMQsRlO8GQVOna2NeYUVKFtpzPDfnSlcxHBmXKtA
-	 uylQwvYL2kYgj8/fP+N5zRFxucgXrzXXOTEF7Fguy/rvbWBlSVomzs2ZJQZ1vmzkYy
-	 MqvRB4C7+ne3g==
-Subject: Re: [PATCH net-next v1 05/15] net: add METADATA_PSP dst to carry a
- psp association on an skb
+	b=GZNf2HlaLZlCdc46wskxNqEXZk1in6HzCTrmFtIEhE6q3JzCo0VNIMLrWGmOdKlcN
+	 CsDUiIAsYE7iG3+hgx4l7d2Iv/ZNlW7se9fyf1cwfzbFiFSNbDmLhJFdZdd+i4Eftr
+	 Ie6vTQLSPBEFj0LNRngGCFY0HfWGgeI2ksB9eOxV42VeB2dnF3idKPH6RbNf/VeKIS
+	 av+yGB9oND6omGJNsayRsiy9qHvl4zgEdT6OxOnj77HYKh4+MzvEfj0oDKK1RqEMWj
+	 7ElIO4UukMSVv5YPLgPTuOegSuKAk21UDdtFhQUJc9MCJ7TTNDvOF0boVBuaTGC5Oz
+	 o/8nGgcTyRc4Q==
+Subject: Re: [PATCH net-next v1 06/15] net/sched: act_mirred: don't send
+ decrypted skbs from egress to ingress
 From: netdev-bot+sashiko@kernel.org
 To: toddfreed@meta.com
 Cc: netdev@vger.kernel.org, davem@davemloft.net, andrew+netdev@lunn.ch,
@@ -52,11 +52,11 @@ Cc: netdev@vger.kernel.org, davem@davemloft.net, andrew+netdev@lunn.ch,
  linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
  martin.lau@linux.dev, pabeni@redhat.com, saeedm@nvidia.com, horms@kernel.org,
  tariqt@nvidia.com, weiwan@google.com, willemdebruijn.kernel@gmail.com
-Date: Sun, 15 Nov 2026 03:18:16 +0000
-Message-ID: <179471269695.2199510.18062590833471363525@kernel.org>
-In-Reply-To: <20261111005533.6436-6-toddfreed@meta.com>
-References: <20261111005533.6436-6-toddfreed@meta.com>
-X-sashiko-severity: Medium
+Date: Sun, 15 Nov 2026 03:18:18 +0000
+Message-ID: <179471269893.2199510.10845713252529893412@kernel.org>
+In-Reply-To: <20261111005533.6436-7-toddfreed@meta.com>
+References: <20261111005533.6436-7-toddfreed@meta.com>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
@@ -69,123 +69,72 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+Low priority / nit picks for your consideration:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] The commit message says the second psp_xmit_md() check at
-  dequeue, in sk_validate_xmit_skb() (net/core/dev.c:4164-4172), handles…
+- [Low] This patch adds the egress-to-ingress decrypted check only in
+  tcf_mirred_to_dev() (net/sched/act_mirred.c:291-292).
 
 --
 
-net: add METADATA_PSP dst to carry a psp association on an skb
+net/sched: act_mirred: don't send decrypted skbs from egress to ingress
 
-This adds a METADATA_PSP metadata_dst type, which holds a reference on a
-psp association so that socket-less skbs (for example, ones marked by a tc
-rule) can be PSP-encrypted by existing driver tx paths. __dev_queue_xmit()
-now validates the metadata dst against the device and MTU and keeps the dst
-for the driver. sk_validate_xmit_skb() checks it again at dequeue in case
-the psp device was unregistered while the packet was queued.
+This commit stops tcf_mirred_to_dev() from sending skbs that have
+skb->decrypted set from egress to ingress. On transmit the bit asks the
+device to encrypt the packet, and on receive it means the device already
+decrypted it. Redirected skbs are dropped and mirrored skbs are not copied.
 
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 9665f3b2f5cb2..2cca5f0d302f8 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-
-[ ... ]
-
-> @@ -4156,6 +4161,15 @@ static struct sk_buff *sk_validate_xmit_skb(struct sk_buff *skb,
+> diff --git a/net/sched/act_mirred.c b/net/sched/act_mirred.c
+> index 1c98e4d81ebe6..52c3eeab381ae 100644
+> --- a/net/sched/act_mirred.c
+> +++ b/net/sched/act_mirred.c
+> @@ -285,6 +285,12 @@ static int tcf_mirred_to_dev(struct sk_buff *skb, struct tcf_mirred *m,
+>  		goto err_cant_do;
+>  	}
 >  
->  	if (sk_validate) {
->  		skb = sk_validate(sk, dev, skb);
-> +	} else if (unlikely(skb_psp_md(skb))) {
-> +		int psp = psp_xmit_md(skb, dev);
-> +
-> +		if (psp <= 0) {
-> +			kfree_skb_reason(skb, psp == -EMSGSIZE ?
-> +					 SKB_DROP_REASON_PKT_TOO_BIG :
-> +					 SKB_DROP_REASON_PSP_OUTPUT);
-> +			skb = NULL;
-> +		}
+> +	/* On transmit, decrypted asks the device to encrypt the packet. Sent
+> +	 * to ingress, the packet would read as decrypted by the device.
+> +	 */
+> +	if (unlikely(want_ingress && !at_ingress && skb_is_decrypted(skb)))
+> +		goto err_cant_do;
 
-[Severity: Medium]
+[Severity: Low]
+At this point in the series, is mirred the only egress to ingress path
+that needs this check?
 
-The commit message says this re-check handles the case where "the psp
-device may have been unregistered while the packet was queued, and its
-keys deleted". Does that still hold for skbs that get requeued?
+A tc egress BPF program can still call bpf_redirect() or
+bpf_clone_redirect() with BPF_F_INGRESS. That skb goes through:
 
-This check runs once, from validate_xmit_skb(), before the tx lock is
-taken. If the txq is stopped by then, sch_direct_xmit() requeues the skb
-into q->gso_skb. dequeue_skb() then sends it out again without validating
-it a second time:
+skb_do_redirect() / bpf_clone_redirect()
+  __bpf_redirect()
+    __bpf_redirect_common() / __bpf_redirect_no_mac()
+      __bpf_rx_skb()
+        ____dev_forward_skb()
+          skb_scrub_packet()
 
-net/sched/sch_generic.c:dequeue_skb() {
-    ...
-		/* skb in gso_skb were already validated */
-		*validate = false;
-		if (xfrm_offload(skb))
-			*validate = true;
-    ...
-}
+skb_scrub_packet() drops the dst but does not clear skb->decrypted. A
+kTLS or PSP offload socket skb would therefore reach ingress looking as
+if the device had decrypted it. The socket-less PSP case can't happen yet,
+because act_psp only arrives later in the series.
 
-On mlx5, one possible sequence is:
+The next patch in the series, "bpf: don't redirect decrypted skbs from
+egress to ingress", seems to close this gap. It adds a matching check at
+the top of __bpf_redirect() in net/core/filter.c:
 
-CPU0
-sch_direct_xmit()
-  validate_xmit_skb()
-    sk_validate_xmit_skb()
-      psp_xmit_md() returns 1
+	if (unlikely((flags & BPF_F_INGRESS) && !skb_at_tc_ingress(skb) &&
+		     skb_is_decrypted(skb))) {
+		kfree_skb(skb);
+		return -EINVAL;
+	}
 
-CPU1
-mlx5e_nic_disable()
-  mlx5e_close()
-    ...
-      netif_tx_disable()
+BPF_F_PEER without BPF_F_EGRESS already drops anything that is not at tc
+ingress. So the gap only exists at this intermediate commit.
 
-CPU0
-  HARD_TX_LOCK() finds the txq stopped
-  dev_requeue_skb() puts the skb on q->gso_skb
-
-CPU1
-  mlx5e_psp_unregister()
-    psp_dev_unregister()
-      psp_dev_tx_key_del(psd, pas)
-        mlx5e_psp_assoc_del()
-          mlx5_destroy_encryption_key(priv->mdev, nkey->id);
-
-Later, mlx5e_nic_enable() registers a new psd, and netif_device_attach()
-wakes the queues. The qdisc is not reset at any point. The stale skb then
-comes off gso_skb with validate set to false and reaches mlx5e_xmit(), where
-mlx5e_psp_set_state() still reads from the old association:
-
-	psp_st->spi = pas->tx.spi;
-	psp_st->ver = pas->version;
-	psp_st->keyid = *(u32 *)pas->drv_data;
-
-Can this hand the NIC the id of a DEK that has already been destroyed, and
-that may have been reused for another association? psp_xmit_md() would
-catch the psd mismatch, but it never runs again for this skb.
-
-On mlx5, the plain check-then-xmit race is blocked because
-netif_tx_disable() runs before psp_dev_unregister(). That leaves only the
-requeue window.
-
-The socket path through psp_validate_xmit() was already exposed in the same
-way before this patch. The new METADATA_PSP path, however, depends on this
-re-check to handle the unregister case.
-
->  	} else if (unlikely(skb_is_decrypted(skb))) {
->  		pr_warn_ratelimited("unencrypted skb with no associated socket - dropping\n");
->  		kfree_skb(skb);
-
-[ ... ]
+Would it be worth saying in this commit message that the BPF redirect path
+is handled in the following patch?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261111005533.6436-1-toddfreed%40meta.com
