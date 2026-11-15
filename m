@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794712706;
-	b=EPXmDfNH8ZWCqwjjpaeYDLLIhvSE3hdUTIEO/xxzyHAwo+fTYW4AxBBwTzXDbHcHPw9M
-	 U3LzJYvFgM/nBxL0a76skFpudEILdzKeiG5tD48cImbsEVkll7vGAlqzPYl6w/gVeSXdp
-	 iaJUQgvqLkOyWUiAhxxf7eKf1WRBbHc4ag4daWOO1lDNIpNmX7r3nnJ78IPrI/2zYzU7O
-	 4KdAEPT2yclZcBTyRF0W37GZa5nijSjNdFNEQSM99e4gTww20jqgbi88ZrN+yS8LjDhiv
-	 lA6ZS6EcWPqwVksbXsVS/5adA5eh5xjZ8t8H8Ej3edMALPaJhwT+/VGTELLL8JKrPbw==
+	t=1794712714;
+	b=x4FzrZDlUB18ykOXeJueQrdSpdaZLcG2474Z7Y/tNSEhrAZFX55uohD5nzbdWFpNZNT1
+	 X6051KtnHRXqKW4Wll3+469o4dy/GAdrdbkclxGIsgf2dGQa7MpzGoeeVvtMQPi8cFYpD
+	 9U2Nz+hqlBFAanS9zAuiKDguOv9InWt//EGeAs3u2CKOKY5EkAFdFdAN6v93KiTxmlj5e
+	 14TLZHdGUr5QijFxBPv4pjqriQUKKTAwcFezn1pav7AuJAghdgUSbMErrVxecVJSyfzlv
+	 j7xLQ00VCBpKrPVFju5jT3r2buuyD1E/CWqRDsb3H3a4XdhzpJWM9cDZHzXEnxsVUxQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794712706;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794712714;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=6OJItO86YHqK6IuVI+yOVo6RQNTPReeurz6DnFYn0M8=;
-	b=wUQgbRshyMvatfklmh3vhUgKgJiokqN89M5uMsQMSAbLqiCsunB1mQktJamY8qFnvC4u
-	 R2EyIbGPrqDbDW248+1xL/Qmie5tYM9zhCI6Qp4l8go+b++6sZQJG8Pimor7aP/GJ7UP8
-	 /cZAkj1Kj/LYpIMYVfxO7A0N4xfV9N0aJaWT+2P6qww0+DwGBWSABT//+UOnZcfmvliiH
-	 RJPmkS+vQYoS5aZq2nOwCSJQbiJeKyXPOP4P/jHKqS2/uzVR7e858dyuFVTfGd23ZTZiH
-	 GYyWQoqNc37wvmrM8TV/Skshn/+/nICRZsWIVwU0slUw3w5ybvrGZDe4kP2F6Sb+0AA==
+	bh=+59FBjeC7oJeIISLvvUpOT2DqbU3vKBMYCLmewoC1RI=;
+	b=DqgkJXKyq+rKsY4NfWZVnUzmG0JF0sHm1oPUqbqtZfx/DLCmx0qysU0sHQTJN06mAiAG
+	 HoTq8S6Et/Z0wPxw4qIfiTsgpoUyJRcXQKkNFRt/6s/c7UnmuDYtaxVncCFVJrjwTuVf9
+	 MSiu+MbMtMphSZ43UWJ1qDqw/7+khglhv6N4QDWknRCJzc2DjUXZ/0p0p3GBY5TSRLJRZ
+	 e7bWXCsRC9a6Io2M0cTVcaIs+Qz7EiNfvq4BAQxkgx9WkH8mNKid5iWDbu8OxfXLb0SWO
+	 NmZGHLCS3gtOE8c0pSW9MFVYcjidfu9nXptT25hFkiBlzQ70fhyjeaDumtaUAJFUWhA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="oti/1q4t";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UPuqxtZc;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57D5B60A3828;
-	Sun, 15 Nov 2026 03:18:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED8E2606A32D;
+	Sun, 15 Nov 2026 03:18:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oti/1q4t
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E31DD1F000D0;
-	Sun, 15 Nov 2026 03:18:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UPuqxtZc
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2740E1F000C5;
+	Sun, 15 Nov 2026 03:18:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794712706;
-	bh=6OJItO86YHqK6IuVI+yOVo6RQNTPReeurz6DnFYn0M8=;
+	s=k20260515; t=1794712713;
+	bh=+59FBjeC7oJeIISLvvUpOT2DqbU3vKBMYCLmewoC1RI=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=oti/1q4tTwhoDk4l7ss369GSpqDHEe/XD9M00RV6f6p56AmSVDy+FJiL98iB1k6NG
-	 YiH8u/36qoO1XtSYrcWHjw3u864kjIbsYjSkrPzb4lZNq+mfK9gyIeR72bV0XhJQW2
-	 RJ8ATr/xUeC8/ZXyza1PlnxjZ05MXbnzLFgmrv7KArYMz2gABT7gLiy4W/SOgGV2Xw
-	 dZd/7zXZzdyTBDupC43daMpGZncDOPwjrleaQ4I7Xv8i+aaVV9uaI6FnEVRSQDEvey
-	 EpKSrAWPxF0xHGfupvvXd7GRfZQnqxLKSD862dQe/uT/DbTt/SymElz4/G1DZ8NNZc
-	 v0nCcxPaaFpbQ==
-Subject:
- Re: [PATCH net-next v1 09/15] net/sched: add act_psp for psp transport mode
+	b=UPuqxtZcJdwdzUfuxpVQNuzKP4twGxU2Z6Sz2Z1qo2d6Y0jUrWfOZ6MRuuSsKd2RL
+	 LVkV/zUaQnwK91FoulDf967oMn5AXcJ0zWjEUqT+9oOJV5DjRSYIfoANw/RLLv1gSX
+	 FmZEuAhVI8dNRT2E3vCZnqvA8TXP2IqLmsynZL/1nNLiCtRkbSu+eDg/WM4zwi08TH
+	 Xg8S8g9y/bKIFxMdroqgPEvVvHJoS5EkpdCG5Eizn4ld0QfR6L6vtvo6NuqK0NRZsN
+	 eItDKT458CZMdP6tPF/w6y69DGGCHbJqsDFMz7ED2OqOT/a4GVXJz54H7Vx0/DQtx7
+	 DCY8x+syaNojQ==
+Subject: Re: [PATCH net-next v1 15/15] Documentation: networking: psp:
+ document socket-less associations
 From: netdev-bot+sashiko@kernel.org
 To: toddfreed@meta.com
 Cc: netdev@vger.kernel.org, davem@davemloft.net, andrew+netdev@lunn.ch,
@@ -52,11 +52,11 @@ Cc: netdev@vger.kernel.org, davem@davemloft.net, andrew+netdev@lunn.ch,
  linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
  martin.lau@linux.dev, pabeni@redhat.com, saeedm@nvidia.com, horms@kernel.org,
  tariqt@nvidia.com, weiwan@google.com, willemdebruijn.kernel@gmail.com
-Date: Sun, 15 Nov 2026 03:18:24 +0000
-Message-ID: <179471270451.2199510.14795764193886368841@kernel.org>
-In-Reply-To: <20261111005533.6436-10-toddfreed@meta.com>
-References: <20261111005533.6436-10-toddfreed@meta.com>
-X-sashiko-severity: Medium
+Date: Sun, 15 Nov 2026 03:18:31 +0000
+Message-ID: <179471271167.2199510.6222235735319435450@kernel.org>
+In-Reply-To: <20261111005533.6436-16-toddfreed@meta.com>
+References: <20261111005533.6436-16-toddfreed@meta.com>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
@@ -69,216 +69,185 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 3 potential
-issue(s) to consider.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 2
+Low priority / nit picks for your consideration:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] ENCAP in tcf_psp_act() relies on two marks staying together:
-  the METADATA_PSP dst, which requests encryption, and skb->decrypted,…
-- [Low] The act_psp.c file header ("In software, egress only: like tunnel
-  mode, encap on ingress is hardware offload only"), the comment in the…
-- [Low] The block comment above sk_validate_xmit_skb() in net/core/dev.c
-  still says "If the skb belongs to an HW offloaded socket, apply the…
+- [Low] The new psp.rst text says, in the `psp encap assoc ID` bullet,
+  "Encap on ingress is hardware offload only." The header comment of…
+- [Low] In psp.rst, the `psp encap assoc ID` bullet says: "If the
+  association is removed before transmit, or if the packet is…
+- [Low] In the flower paragraph, psp.rst says the `psp_spi`, `psp_ver`
+  and `psp_dev` matches together "tie a decap rule to one Rx…
 
 --
 
-net/sched: add act_psp for psp transport mode
+Documentation: networking: psp: document socket-less associations
 
-This adds a tc action, act_psp. Its encap mode attaches a PSP Tx
-association to egress packets as a METADATA_PSP dst and sets
-skb->decrypted, so the PSP device encrypts them on transmit. Its decap
-mode removes the PSP Rx state from packets the device decrypted, and
-sk_validate_xmit_skb() now drops METADATA_PSP packets whose socket has its
-own validator.
+This commit reorganizes the PSP documentation around associations. It
+documents the new netlink commands for socket-less associations, the psp
+tc action and the flower psp_spi, psp_ver and psp_dev matches. It also
+adds sections on fragments and on PSP device statistics.
 
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 2cca5f0d302f8..353c0409b3c03 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -4154,13 +4154,22 @@ static struct sk_buff *sk_validate_xmit_skb(struct sk_buff *skb,
+> diff --git a/Documentation/networking/psp.rst b/Documentation/networking/psp.rst
+> index 0f9b6b73f2447..79b101db5dfc4 100644
+> --- a/Documentation/networking/psp.rst
+> +++ b/Documentation/networking/psp.rst
 
 [ ... ]
 
->  	if (sk_validate) {
-> -		skb = sk_validate(sk, dev, skb);
-> +		/* act_psp doesn't give an association to the packets of a
-> +		 * socket with its own offload, but the socket can gain one
-> +		 * while such a packet is queued
-> +		 */
-> +		if (unlikely(skb_psp_md(skb))) {
-> +			kfree_skb_reason(skb, SKB_DROP_REASON_PSP_OUTPUT);
-> +			skb = NULL;
-> +		} else {
-> +			skb = sk_validate(sk, dev, skb);
-> +		}
+> @@ -140,6 +162,55 @@ The PSP assoc state of a socket is not reset when the connection is
+>  torn down. ``connect()`` on a socket that has PSP assoc state will
+>  return ``-EINVAL``.
+>  
+> +Socket-less associations
+> +~~~~~~~~~~~~~~~~~~~~~~~~
+> +
+
+[ ... ]
+
+> +- ``assoc-del`` deletes an association. tc actions and packets which still
+> +  reference it keep it alive. The device keeps decrypting the SPI of a
+> +  deleted Rx association until its device key is rotated out: remove the
+> +  decap rule to stop taking its packets.
+
+[ ... ]
+
+> +- ``psp encap assoc ID`` attaches a Tx association. The packet must then
+> +  be transmitted on the main netdev of the association's PSP device, which
+> +  encrypts it (``mirred egress redirect``). If the association is removed
+> +  before transmit, or if the packet is transmitted on any other device,
+> +  it will be dropped, rather than sent in the clear. Encap on ingress is
+> +  hardware offload only.
 
 [Severity: Low]
-This isn't a bug, but the block comment above sk_validate_xmit_skb()
-still says:
+Is the part that says "If the association is removed before transmit ...
+it will be dropped" accurate? It conflicts with the assoc-del bullet above
+and with the assoc-del doc in Documentation/netlink/specs/psp.yaml:
 
-  /* Validate an skb for device encryption offload. If the skb belongs to an HW
-   * offloaded socket, apply the socket's callback. Otherwise, an skb which
-   * carries a PSP association is checked again against dev: ...
+    Packets and tc actions which still reference it keep it alive.
 
-With this new branch, an skb whose socket has a validator and which also
-carries a METADATA_PSP dst is freed with SKB_DROP_REASON_PSP_OUTPUT. The
-socket's callback never runs for it.
+In the code, psp_nl_assoc_del_doit() only calls psp_assoc_unpublish().
+That removes the ID from the registry and drops the registry's reference:
 
-Should the function comment be updated to cover this case?
+net/psp/psp_assoc.c:psp_assoc_unpublish() {
+    ...
+	if (xa_cmpxchg(&psp_assocs, pas->id, pas, NULL, 0) == pas)
+		psp_assoc_put(pas);
+    ...
+}
 
-[ ... ]
+The METADATA_PSP dst created by tcf_psp_md_create() keeps its own
+reference. tcf_psp_act() also keeps attaching dst_clone(&params->md->dst)
+to every packet.
 
-> diff --git a/net/sched/act_psp.c b/net/sched/act_psp.c
-> new file mode 100644
-> index 0000000000000..4ff54203c9f51
-> --- /dev/null
-> +++ b/net/sched/act_psp.c
+On transmit, psp_xmit_md() checks only the device and the MTU. It never
+checks whether the association was deleted:
 
-[ ... ]
+include/net/psp/functions.h:psp_xmit_md() {
+    ...
+	if (rcu_access_pointer(dev->psp_dev) != pas->psd ||
+	    dev != pas->psd->main_netdev)
+		return -EINVAL;
+    ...
+}
 
-> +static int tcf_psp_act(struct sk_buff *skb, const struct tc_action *a,
-> +		       struct tcf_result *res)
-> +{
+So after assoc-del, packets are still encrypted and sent with the deleted
+association's key until the tc action is removed. A drop seems to happen
+only when the packet loses its METADATA_PSP dst, or when the PSP device
+does not match or has been unregistered.
 
-[ ... ]
-
-> +	switch (params->psp_action) {
-> +	case TCA_PSP_ACT_ENCAP:
-> +		/* Encap on ingress is hardware offload only, like tunnel
-> +		 * mode: the packet would go through the stack with nothing
-> +		 * but its dst, which routing, netfilter or a redirect may
-> +		 * replace, to keep it from leaving in clear text
-> +		 */
-> +		if (unlikely(skb_at_tc_ingress(skb)))
-> +			return tcf_psp_drop(p, skb, SKB_DROP_REASON_PSP_OUTPUT);
+Would "if the packet loses its association on the way (e.g. its dst is
+replaced)" describe this more accurately?
 
 [Severity: Low]
-Is there a hardware offload path for this action?
+Is "Encap on ingress is hardware offload only" accurate for this series?
+act_psp_ops in net/sched/act_psp.c does not set .offload_act_setup:
 
-This comment, the file header ("In software, egress only: like tunnel
-mode, encap on ingress is hardware offload only"), the commit message and
-Documentation/networking/psp.rst all say ingress encap is available through
-hardware offload.
+static struct tc_action_ops act_psp_ops = {
+	.kind		=	"psp",
+	.id		=	TCA_ID_PSP,
+	.owner		=	THIS_MODULE,
+	.act		=	tcf_psp_act,
+	.dump		=	tcf_psp_dump,
+	.init		=	tcf_psp_init,
+	.cleanup	=	tcf_psp_cleanup,
+	.size		=	sizeof(struct tcf_psp),
+};
 
-act_psp_ops doesn't set .offload_act_setup, so tc_setup_offload_act()
-rejects the action:
+Because of that, tc_setup_offload_act() in net/sched/cls_api.c rejects the
+action:
 
-net/sched/cls_api.c:tc_setup_offload_act() {
-	if (act->ops->offload_act_setup) {
-		return act->ops->offload_act_setup(act, entry, index_inc, true,
-						   extack);
 	} else {
 		NL_SET_ERR_MSG(extack, "Action does not support offload");
 		return -EOPNOTSUPP;
 	}
-}
 
-include/net/flow_offload.h has no PSP flow_action_id either. The PSP
-tunnel mode that "like tunnel mode" refers to isn't in the tree yet; the
-commit message says a later series adds it.
+In software, tcf_psp_act() always drops encap at ingress:
 
-So skip_sw rules are rejected. Software rules install without error,
-because tcf_psp_init() has no direction check, and then every matching
-ingress packet is dropped with SKB_DROP_REASON_PSP_OUTPUT.
+		if (unlikely(skb_at_tc_ingress(skb)))
+			return tcf_psp_drop(p, skb, SKB_DROP_REASON_PSP_OUTPUT);
 
-Could the comments, commit message and psp.rst say that ingress encap is
-not supported, rather than hardware offload only?
+So ingress encap cannot work in any configuration today. The flower commit
+in this series says offload will come in a follow-up series.
 
-> +		/* PSP on a tunnel isn't supported: the encap would overwrite
-> +		 * the inner headers which the device's tunnel offloads use
-> +		 */
+Should this say that ingress encap is not supported (the packet is always
+dropped) and that hardware offload is future work? The header comment in
+net/sched/act_psp.c makes the same claim.
 
 [ ... ]
 
-> +		skb_dst_drop(skb);
-> +		skb_dst_set(skb, dst_clone(&params->md->dst));
-> +		/* Must be encrypted: sk_validate_xmit_skb() drops it unless
-> +		 * it still carries the association when it is transmitted
-> +		 */
-> +		skb->decrypted = 1;
+> +The flower classifier matches what a packet was decrypted with:
+> +``psp_spi SPI[/MASK]``, ``psp_ver VERSION`` and ``psp_dev DEV_ID``, the
+> +ID of the PSP device which decrypted it. These never match a clear text
+> +packet, so ``psp_spi 0/0`` matches any packet decrypted with PSP.
+> +Together they tie a decap rule to one Rx association.
+> +
+> +Once the device key an SPI was created from has been rotated twice, that
+> +association is considered stale. Unlike sockets, tc does not handle key
+> +rotation. userspace should replace such rules before two rotations.
 
-[Severity: Medium]
-Can the METADATA_PSP dst and skb->decrypted get separated after this
-point?
+[Severity: Low]
+Does "Together they tie a decap rule to one Rx association" overstate what
+the match guarantees? The flow key built by skb_flow_dissect_psp() carries
+only these fields:
 
-The commit message relies on skb->decrypted as the backstop: "on egress,
-encap sets skb->decrypted, so that sk_validate_xmit_skb() drops the packet
-if it loses the METADATA_PSP dst on the way". The egress to ingress guards
-in mirred and bpf also check only the decrypted bit:
+	key->spi = pse->spi;
+	key->dev_id = pse->dev_id;
+	key->version = pse->version;
+	key->present = 1;
 
-net/sched/act_mirred.c:tcf_mirred_to_dev() {
-	if (unlikely(want_ingress && !at_ingress && skb_is_decrypted(skb)))
-		goto err_cant_do;
-}
+It has no key generation and no association identity. SPI values get
+reused after key rotation. For example, nsim_key_rotate() in netdevsim
+resets the SPI counter:
 
-ip_copy_metadata() copies the dst but not the decrypted bit, so fragments
-built by ip_do_fragment() end up with decrypted == 0:
+	if (ns->psp.spi & PSP_SPI_KEY_PHASE)
+		ns->psp.spi = 0;
+	else
+		ns->psp.spi = PSP_SPI_KEY_PHASE;
 
-net/ipv4/ip_output.c:ip_copy_metadata() {
-	...
-	skb_dst_drop(to);
-	skb_dst_copy(to, from);
-	...
-	skb_ext_copy(to, from);
-	...
-}
+After two rotations, the same SPI can be given to a different peer or to a
+socket association under a new key. If the old decap rule is still in
+place, it would strip SKB_EXT_PSP and skb->decrypted from that other
+association's packets and forward them.
 
-One path where this happens, on a non-PSP netdev's clsact egress:
+PSP device IDs are also allocated cyclically in a 16-bit space in
+psp_dev_create():
 
-  act_ct (defrag, sets tc_skb_cb(skb)->mru)
-  -> psp encap (the reassembled packet is not a fragment, so it is accepted)
-  -> mirred egress redirect to the PSP netdev
+	err = xa_alloc_cyclic(&psp_devs, &psd->id, psd, xa_limit_16b,
+			      &last_id, GFP_KERNEL);
 
-tcf_dev_queue_xmit()
-  sch_frag_xmit_hook()
-    sch_fragment()
-      ip_do_fragment(net, skb->sk, skb, sch_frag_xmit)
+After enough unregister/register cycles, a stale psp_dev match could end
+up matching a different device.
 
-sch_frag_xmit() then puts the original dst back on each fragment:
+The next paragraph says userspace should replace rules before two
+rotations. It does not say that a stale rule will match other
+associations' traffic, and it does not mention device ID reuse.
 
-	__skb_dst_copy(skb, data->dst);
-
-As a result, every fragment carries the association but has
-decrypted == 0.
-
-In the direct case the PSP driver drops the fragments. Suppose a later step
-on the target's egress replaces the dst, for example tunnel_key set plus a
-redirect to a tunnel device. sk_validate_xmit_skb() then sees neither the
-md dst nor the decrypted mark, and the packet goes out in clear text. A
-redirect to ingress would also pass the skb_is_decrypted() check above.
-
-The TCA_PSP_ACT_DECAP branch below can split the two marks as well. It
-clears skb->decrypted whenever SKB_EXT_PSP is present, without checking for
-an attached METADATA_PSP dst.
-
-Would it make sense to do one or more of the following?
-
-- also test skb_psp_md() in the mirred/bpf guards and in the cleartext
-  backstop
-- propagate decrypted in ip_copy_metadata() and ip6_copy_metadata()
-- have decap refuse packets that carry a METADATA_PSP dst
-
-> +		break;
-> +	case TCA_PSP_ACT_DECAP:
-> +		/* Only a packet the device decrypted: on transmit,
-> +		 * skb->decrypted means "device, please encrypt", which decap
-> +		 * must not undo.
-> +		 */
-> +		if (!skb_ext_find(skb, SKB_EXT_PSP))
-> +			break;
-> +		skb_ext_del(skb, SKB_EXT_PSP);
-> +		skb->decrypted = 0;
-> +		break;
-> +	}
-
-[ ... ]
+The flower commit in this series says "the generation of the device key is
+not checked". Could the doc include the same qualification here?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261111005533.6436-1-toddfreed%40meta.com
