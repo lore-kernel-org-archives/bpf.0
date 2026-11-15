@@ -1,49 +1,61 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794708008;
-	b=KlgI36+HkWZW7nIg28Qnv5JHcLfp/Y7zd53pVJPlLsB55iSt2yEcw1UrT2K7Itc1Fg5l
-	 ocbNs4nLqoRfGzEGZ1LHK1sCNlS0rbFkAqgNQmxBoGxR9ZK5Xv/3PhNfIcFXKN2gbx/HB
-	 Q7hbpa6fN5VfiugFfRNDl5eH/RIDWJAflcnf0XXFF9uvb9UyioBcHO3u0NJk/Zg7meLuM
-	 D6GH8wwCrRfntbvj+CYdE1siqmEzDkTs0xC+6d/ZQu7PZkiNyzahL2lIpuBmiXRVjtj3n
-	 FV4FF7ZGdADBgkumlXI5PRtxQ2IDHy3DPVUjYFK+KYWblhHwVbew1bSmcb6TgMEGpDQ==
+	t=1794708834;
+	b=hBaL7uxZ3L/s0QE5uYVjhdnOaCEnj031gHgJSRrVwbVQS1SI3BFA2Wq3B9NsVBtkJMv/
+	 P1n4atrkNo5llXSVO4bgomQOXW9lHJJgNqKzzhedryujKMbPwUfX536SPd6k9KzOA4f6f
+	 m4Xt9BMZfvSYAfb269GMZ/8/1OWi1IrBnFLkIkXM0ooNkpb7j+b5aC+OFpfdYX3Vj7C85
+	 3A2hbpT0cyTxJS5NnrtRhvjiOx5PMH7PXGHBZVI4DNvBc2bqwRUReIGF6A45sVZqIjXIs
+	 ecFvOh0Mv2kYN6woTL5GNXTs/W2pqS7jjPOA7se0QbI5uBonKqPrLQqkoMpqtDXhzWQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794708008;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=QJDJ8+4L0JyVB/Pic2Ka+NweJk2nPMK5pxQBaooRh5I=;
-	b=Us9DoxCNdKYJG0M+jSnJXRYAJuHM5xO+R72gixNAmk2gBqY+eLWSi3/lEvH03QTtxo5E
-	 TeosbSiIq4sMFTAqvug9omozuCbacIqunn7ZE0j9Okpm9oO8wBtQwruvHDuUhjcn6mp6O
-	 Kcu4z7KkqToBi2b29CAXsHpcgNlaDwjIQ1uR1SvNgtkn0Hu6CuU0bAX+rDdF/Cdk0exA3
-	 UhfxpxSwiqp2j3iIUaMABb5TjMU64szoFuuDvaH1YPivo9W5R9Sk/9mveajpYf04yJsR1
-	 WCB9eKfSA+xoFSON4SwM4TA3AEY5QqVuO/dyt8kH9GHacjzCPTOpR+B5xYCR5mONL/g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794708834;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=sbNcZKPG9w7AwGG2dtrY7nVCYbAVfu7qnvLtENI0C/U=;
+	b=n24Zt7DlsIp9jO3epLVbFHdPn+LS8+La3GCVNpCp//rClMCACqWrLAFeP04YTIgP0x4X
+	 280ssk4yF50/6WTbs9D7rqaGd14Nr/1/AFncvMkTqJEAjFprgYdoOsZTCT1IcfzqXB2xg
+	 3FDyZlB05W9CWIWRMhE9UIjeulIixxvhHFHHx/Huo5PrWzix5cph+YFORSk2sE1f/cSoB
+	 nYQ2mTc3z1kuIEN0irn06Jlcok0Sf1cM8QM241bxZslqlN+rh+f2UUzVuqlGkgP7VtG+1
+	 5LFDLT3BDlh6CO2SiepA0SzTEUNbixsfTEgvta3p+VIMJDE1FMRp8NpnrEAnfJl3itg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gv1mbzv6;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="U+/SfPFx";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7873F606A323
-	for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 02:00:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 697E1606A323;
+	Sun, 15 Nov 2026 02:13:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gv1mbzv6
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A6A81F000C4;
-	Sun, 15 Nov 2026 02:00:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=U+/SfPFx
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02AE11F000C5;
+	Sun, 15 Nov 2026 02:13:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794708008;
-	bh=QJDJ8+4L0JyVB/Pic2Ka+NweJk2nPMK5pxQBaooRh5I=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=gv1mbzv6P0UMCgttA/mfrWTzj++/6vbEEJeE6m7z3jMJWpYJg6mH1W32x/pcGUWeh
-	 XPEc2JqoDq0NGXUNyC0jrngSwKyMqERn8lioHEIFojFqKolZj2ldqsVuKqBh82jtkP
-	 bfHwnT23POXSJwlJR8UyOm6676CMs3IDal1D1QdIwvKJSoueGvTQmnHvYjUgUhJw/a
-	 fz0a0lbmQ/7nnAuDjwu48U9z9ZDlKoyq359DC3uc16lGEgpTzZkS4i/OeLmCCyRQrs
-	 S8EYhNhCMZC70j70emAq3pSDAsURRO/kYgpgQLiXf8+R37Xn9PGWJeKx8u1KrHyj1G
-	 pPJVFqmoTUEsw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F15133808210;
-	Sun, 15 Nov 2026 02:00:07 +0000 (UTC)
+	s=k20260515; t=1794708833;
+	bh=sbNcZKPG9w7AwGG2dtrY7nVCYbAVfu7qnvLtENI0C/U=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=U+/SfPFxkpqYB8YbpJNl7wi+RwjaQguYH2qsk0ik2i0LfvoepIKL1gAe3Kwmji6au
+	 iAw8IJ/Je3//m3O6cRD8HfnlpiBZc85vDUl/1uJOlEMZPEyZjrnXG/4CnUrd96kO83
+	 5OcrqesJHVQsQB0f40OAJnJaEF/rEC9uws8y0Wob8BxJpdPF2oABrL6TrBkQoSNywd
+	 1p13ouLUf/8AK136C5g7ifRe7zz3K3nLKHEcC9bDH5Nj/pknYigYeC+W+3reGdZqDE
+	 d0+KDB9KF5JzNAfmwHFLybA4Vl4ExLBxGxxQKL12U3riHGmujXBgKALKeqTjGbRp0e
+	 bjl/qiizpQn7A==
+Subject: Re: [PATCH net-next v2 1/3] veth: refactor NAPI enable paths
+From: netdev-bot+sashiko@kernel.org
+To: tianyi@cloudflare.com
+Cc: netdev@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, toke@redhat.com,
+ lorenzo@kernel.org, horms@kernel.org, bpf@vger.kernel.org, shuah@kernel.org,
+ hawk@kernel.org, kernel-team@cloudflare.com, ast@kernel.org,
+ daniel@iogearbox.net, john.fastabend@gmail.com, sdf@fomichev.me,
+ linux-kselftest@vger.kernel.org
+Date: Sun, 15 Nov 2026 02:13:52 +0000
+Message-ID: <179470883254.2199510.15270739408094114749@kernel.org>
+In-Reply-To: <20261111015922.67745-2-tianyi@cloudflare.com>
+References: <20261111015922.67745-2-tianyi@cloudflare.com>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -53,40 +65,83 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpf: Quiet two smatch warnings in the verifier
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179470800653.2445485.3258690472659285371.git-patchwork-notify@kernel.org>
-Date: Sun, 15 Nov 2026 02:00:06 +0000
-References: <20261114232526.2727027-1-alexei.starovoitov@gmail.com>
-In-Reply-To: <20261114232526.2727027-1-alexei.starovoitov@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com
 
-Hello:
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Low priority / nit picks for your consideration:
 
-On Sat, 14 Nov 2026 23:25:26 +0000 you wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
-> 
-> The kernel test robot runs smatch on bpf-next and reports:
-> 
->   kernel/bpf/flow.c:2758 flow_merge() warn: missing unwind goto?
->   kernel/bpf/scev.c:5350 bpf_widen_scev_regs() error: we previously assumed 'reg' could be null (see line 5336)
-> 
-> [...]
+- [Low] This patch changes the order of NAPI setup in
+  veth_napi_enable_range() (drivers/net/veth.c).
 
-Here is the summary with links:
-  - [bpf-next] bpf: Quiet two smatch warnings in the verifier
-    https://git.kernel.org/bpf/bpf-next/c/283fb1db0d42
+--
 
-You are awesome, thank you!
+veth: refactor NAPI enable paths
+
+This patch stops passing rq->xdp_napi.napi_id to xdp_rxq_info_reg(). It
+moves netif_napi_add() out of veth_enable_xdp_range() and the old
+veth_napi_enable_range() wrapper and into the loop in
+__veth_napi_enable_range() that enables each NAPI. The trivial wrappers
+are removed, and the double-underscore helpers take over their names.
+
+> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+> index 0539b3661793d..f5097696df15e 100644
+> --- a/drivers/net/veth.c
+> +++ b/drivers/net/veth.c
+
+[ ... ]
+
+> @@ -1059,6 +1059,7 @@ static int __veth_napi_enable_range(struct net_device *dev, int start, int end)
+>  	for (i = start; i < end; i++) {
+>  		struct veth_rq *rq = &priv->rq[i];
+>  
+> +		netif_napi_add(dev, &rq->xdp_napi, veth_poll);
+>  		rcu_assign_pointer(rq->xdp_prog, priv->_xdp_prog);
+>  		napi_enable(&rq->xdp_napi);
+
+[Severity: Low]
+Can this leave a veth device with threaded NAPI half on and half off?
+
+Before this patch, every caller added all NAPIs in the range before it
+enabled any of them. The core seems to depend on that order.
+netif_napi_add_weight_locked() in net/core/dev.c says:
+
+	/* Create kthread for this napi if dev->threaded is set.
+	 * Clear dev->threaded if kthread creation failed so that
+	 * threaded mode will not be enabled in napi_enable().
+	 */
+	if (napi_get_threaded_config(dev, napi))
+		if (napi_kthread_create(napi))
+			dev->threaded = NETDEV_NAPI_THREADED_DISABLED;
+
+napi_enable_locked() reads dev->threaded at the time it runs:
+
+	if (n->dev->threaded && n->thread)
+		new |= NAPIF_STATE_THREADED;
+
+With add and enable now in the same loop, suppose threaded mode is on and
+napi_kthread_create() fails for some queue k > start. Queues start..k-1
+have already been enabled with NAPIF_STATE_THREADED. Queue k and the
+queues after it come up non-threaded, and dev->threaded is cleared.
+
+The device then reports threaded mode as disabled through sysfs and
+netlink, while some of its NAPIs are still polled by kthreads. This can
+happen in any path that reaches veth_napi_enable_range():
+veth_set_features() toggling GRO, veth_set_channels() calling
+veth_enable_range_safe(), veth_open(), and veth_enable_xdp(). The
+kthread_run() failure can come from ENOMEM or from a pending fatal
+signal.
+
+netif_set_threaded() avoids this state by reverting all NAPIs when
+kthread creation fails, but this path doesn't do that.
+
+Could netif_napi_add() stay in its own loop over the whole range? It
+could sit after the page_pool and ptr_ring allocations that can fail and
+before the napi_enable() loop. That would keep the new error handling
+and the old ordering.
+
+[ ... ]
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261111015922.67745-1-tianyi%40cloudflare.com
