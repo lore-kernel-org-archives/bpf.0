@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794769347;
-	b=SOAf901PQFhgFvru0jciwpwX6vGrO/rlx9phkTLvL3ETBoVVVY11Ty0edw4QC6mBCsj+
-	 aaUGbqWUJ9GphsuPABxueriGMit+hFs11bJCU8ltPyEOTG28OZTwGLt12HDTyflGp38mK
-	 Cvj7lZcT4k5SQzgJHLiZr/OVGIkvnj8TwRY1EJFULA6RFoznPsf6dPpXcvvm399jWggD6
-	 Y1hGmhJaSgW/JCehrPUU2UFqolTPyQfV22XEp9iI6NncMOdgfnnC+9raHQhLvmGdSos/L
-	 JMkBJC556pvSSujaRBvp9ArgqbxeGPaImqVj28ZnBXkiIv8XnhhN8rZR/io/gqKyIxQ==
+	t=1794769507;
+	b=U+KqE+pzx2cGKnf8FfbzQG2Y1CsmeWgGCBbZUeNRl91wDy/kIMKdHReywJ7opOv9lsfR
+	 HFrQP3oDo6LAK0Ezc9SQqqlnDIjefelVLLzp7WrmkJieaFc7N0x/lv0uAWIk5aAQ4aObX
+	 Z4QVimUVtHJQ2TtJ2Dwv0RoBlbLrfbCgBMEU18rdqcBnri/n27Qrp3ppJAP69m7+ppXug
+	 nT2yrbgmU6GKFd9eeu/PRK+N+4OGtczTFBeTfwNlAm2OvC9QG1MSQtAjqrf154W7/GLRq
+	 hJKWlqEMwar3Ou0ZlQjiwyMSj/NILPzgIHferFMREtuQf3f95e0K+sPjqKrTrkGGjlw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794769347;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794769507;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
 	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=Q/hyJs7suUsQWM9rDMdP2P/X/6Nyzlv7hmi1/xYG81U=;
-	b=0EzuiauqZgNhVYSgUwAmNaBAdTsS/4RpLDUiv9JbAsvBvrzvoOYUU20r4mNu9YHziv3c
-	 Bk+9Z3j5HmITazqtXj43kvieeBrL8Bps2deSNpXOtuyxXVjdHcKE3omiKYzG1YSGB9NZA
-	 IcPCmm8C8tgMwrVJn7fZHsgHRt9Iq2JxS76q7eUrIq8sB2Lqrp1g4DfMM9+/IXjXbjj8C
-	 QlsDiSqmPI8B80k9dMCRGor6cVgFIcXY2kpEpDmqiCeUfh+LuVdav4aFJOj3j0MPkYdFI
-	 aP8HC7ii4jm1T/BFrUiOMQb29EK/81AigMRZrO1jU0UrUbax5kBR9jbiy5q0ufnu0Xw==
+	bh=zXGiTJrEwntGV8op4MyBOAbCJ8yVIiAFp8O5PQ3b1D8=;
+	b=dkaH9ipexsV9y4AtgvMmqmaSEgOyBjq4ipwMf6ywMHOQmlMU5dx2/RNDsZXLbBIC0pcy
+	 X4bnhgn9/vtagO3NKXUW3l2WCbdpuaX71qNVIBA+PbZ9w7n8K1IaxUeRSAMldJultRCFS
+	 xBEgCDJnWHGoo4kskEdIdR3x9m16zTubBt0EfZ+oPdQQiir2k7r6Kic6A2sWwQBNtP/V9
+	 P+tewcd+xc2Do93JvbPe/4m6FlKk9OurTzSn8iwnqhwnPdzkkxguADqDwNZPnCrWjCr48
+	 Xasx0poKdYDXJArnuagRwzHBFLre2yNMgAnL3AzuPFrusX5CWw/zDPbT3k2kZC9CpWA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jCitSQMY;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=D32Rf1mu;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7187C606A323;
-	Sun, 15 Nov 2026 19:02:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69019606A31E;
+	Sun, 15 Nov 2026 19:05:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jCitSQMY
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7757C1F000C4;
-	Sun, 15 Nov 2026 19:02:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=D32Rf1mu
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 715B81F000C4;
+	Sun, 15 Nov 2026 19:05:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794769347;
-	bh=Q/hyJs7suUsQWM9rDMdP2P/X/6Nyzlv7hmi1/xYG81U=;
+	s=k20260515; t=1794769506;
+	bh=zXGiTJrEwntGV8op4MyBOAbCJ8yVIiAFp8O5PQ3b1D8=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=jCitSQMY9Tb/nXzJc/Rl5/ebOalpmPIig30aTEvEKnFOfNmqb45l+Mp0RQmNW9EKV
-	 UzwdX+vPG8NlYqsLZQLjYm1Z9yKMJzUMxdiEwqb0ZL34wD72xTu7XNnpUMfc+zgZ4Y
-	 3uP5YWR4Zx9PrNG96nCKjOCYVHXYgCIBiwLBodX3o+LRQ9P/F6JvoiNQYYJCf75Rn2
-	 y/XPI2f7UB1/9HbGShF0QJhwwojOJ7nnflYYQeDikv8MlOvMFe+O+M59HDLeSEB79W
-	 X48CkpEKcHQa0qIva1yk9RnPpl7BBoS/y7RSVHceJP4/xOam+VJME5HnvQtoAQ/BYh
-	 wlf+4ym7G1U/A==
+	b=D32Rf1munNBT2NK3EMTmueeDc6pHo5E4eKLEPb0TwrTkEFVIJDbN9uxfIEQcyBKBm
+	 1gqfJjeY5xf4KniLWlD8AJPKBDWHhgKyen/269r3W3paujA7r/qkuewnkWUahD+LW0
+	 WLWsLk6+RcOaLY2b3YSMwWVfhZJC8DYJRZtiUaW+NdOoczaqwyQex8B5yINbmdbcv7
+	 P2KY3hsXjTbKetgXMiXxOhaGktl81Iix98zKS0iWgJtglG69z21LDkVBNwHf96zdGz
+	 7QHMeAt0W32rWWHOWCUa19SopATjMfIye9oTIltZHlVjz+IoxJrnrNyjdSdFGpVNYv
+	 q+qtQkW0hKG7Q==
 From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
 To: netdev-bot+sashiko@kernel.org
 Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
@@ -55,13 +55,13 @@ Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
  almasrymina@google.com, mike.marciniszyn@gmail.com, bestswngs@gmail.com,
  razor@blackwall.org, dw@davidwei.uk, aleksander.lobakin@intel.com,
  linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, stuclar@meta.com
-Subject: Re: [PATCH net-next v1 03/11] xdp: Copy buffers with restricted
- lifetime
-In-Reply-To: <179443688445.2199510.2127044982916637399@kernel.org>
-References: <20261110102039.1002605-4-bjorn@kernel.org>
- <179443688445.2199510.2127044982916637399@kernel.org>
-Date: Sun, 15 Nov 2026 20:02:24 +0100
-Message-ID: <87cxs5j4u7.fsf@all.your.base.are.belong.to.us>
+Subject: Re: [PATCH net-next v1 05/11] xsk: Install UMEM page pool providers
+ in the core
+In-Reply-To: <179443689029.2199510.2604170089798059237@kernel.org>
+References: <20261110102039.1002605-6-bjorn@kernel.org>
+ <179443689029.2199510.2604170089798059237@kernel.org>
+Date: Sun, 15 Nov 2026 20:05:01 +0100
+Message-ID: <875wxxj4pu.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -78,38 +78,25 @@ netdev-bot+sashiko@kernel.org writes:
 
 [...]
 
-> With XDP_FLAGS_EXT the head chunk no longer holds the shared info at
-> all. Does anything still keep data_end below xdp_data_hard_end() for
-> these buffers? If not, len alone can run past skb->end, since
-> __skb_put() does not check.
+> Should xsk_pp_detach() be skipped, or the DMA unmap and UMEM release be
+> deferred until pp->nr_pools drops to zero, when the close fails?
 
-Yes. fbnic's MAX_HDR leaves the same tailroom, and bpf_xdp_adjust_tail()
-stops at xdp_data_hard_end().
-
-> Should the destination size be derived from the copy instead of
-> xdp->frame_sz? For example: headroom + LARGEST_ALIGN(len) +
-> SKB_DATA_ALIGN(sizeof(struct skb_shared_info)). Or should this path
-> copy exactly len bytes?
-
-Yes, but that's pre-existing. XSK buffers without XDP_USE_SG have no
-tailroom at all, so it's worse there. It's the head sizing from
-Clement's thread [1]. A fix that sizes the head by its contents and
-copies exact lengths goes to net, and v2 sits on top of it.
+Deferred. A failed restart leaves the old queue running on the provider.
+I have a net fix that keeps the provider on such a queue and retries the
+removal, which also covers netif_rxq_cleanup_unlease(); I might add a
+fix in v2 that unmaps and releases the UMEM only once the queue DMA has
+stopped.
 
 [...]
 
-> Could xdp_build_skb_from_zc() compute the metadata size the way
-> xdp_copy_buff_to_frame() does? That means treating unsupported
-> metadata as zero length and copying from xdp->data.
+> Should the xsk_pp pin the buffer pool and the UMEM, and do the DMA
+> unmap in xsk_pp_free(), so they outlive the last page pool? Or should
+> xsk_bind() defer releasing the pool in this case?
 
-Yes. Nothing hits it today, as fbnic marks the metadata valid, but this
-patch makes it a generic path. Will fix.
-
-pw-bot: cr
+This case can't happen. The page pools of a failed open never hold a
+chunk. fbnic fills its rings only in ndo_queue_start(), which can't
+fail, so a failed open frees empty pools, and they're destroyed at once.
+pool->pp protects nothing there, so v2 drops that branch for a WARN.
 
 
 Bj=C3=B6rn
-
-[1] https://lore.kernel.org/bpf/20260629072300.1664622-1-clecigne@google.co=
-m/
-
