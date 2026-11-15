@@ -1,47 +1,76 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794776456;
-	b=qRfKHGUtGlBKTsqpC97IIjfxR58CYhruTmnVPNo0N4u4Yp9xIwaiDp7wnMYk8ivtj9hG
-	 zyrGAdizivcT7sEnOXvF/6hUG4eayIuEk/erS9t1NAteM3ZD1mOIQOWqPga7gOHoSYzv1
-	 h60aBD0iWQxP2eZfyWOv53wMBBfAftD0ufK4IncT/5grKAaJkZQtQ+QO0a7SneKxe6DEI
-	 UC7RV9NUa6PTWTqVT7SkOzlgIMLBpBaiKXgDdNHFThqPmFLEeWyHSjLSE+oai4JlJhqHg
-	 0GzY8aXlfXI3iP4WOV3lrYDVKrUqPB+/O7P1iT5oA8lg2+ufYyN/hOpUv2M2kKGoVUQ==
+	t=1794777197;
+	b=NOyjRReX7YEdzr7wrXnM+flIT0lcvlcJSBtCT9lZA49nm/BGjhPaNSsay79P2B6xmJsL
+	 ZXWWgumQAtY5lUI86Z/cfEy+bG2ISwintdjtlbjTxURIIBI/fLfMWVcBrWcDNaBBhgKqG
+	 b/ZwN4zd3S5Tx4+oapkSh2W8W7e80oHdVISTM4ST0rxDLd5GWH2/AiwNKb3Om8PJu3FFw
+	 UOT5GRBDLySlWoTE/Gvc2WqyyoyKffUYUNi61lHJA5PR/FFzgDm8t1Y3vrQ5omKR7RcYG
+	 SltN3XBZsTHcDgI7H94KRR97h6UITMYcb0mteaXkzWPa9EYTphzpAaz7teCUlU7OXgg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794776456;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=lEm6igHXIFAAgEEuRJ/bqCUFcve2TkljyAexsixdkJo=;
-	b=2H8pfDaEXmsKlC2U2lb08m1K9ezfqQ5pD1hkVteEqiJdxFTjYqFPsO4CYkPuVZLYxRvy
-	 oZDQmxfLc7BSjEzE+36VjZvksuNiePi/zYiRHXNViElWpyI+7wVcTEOlS9ChMJkBqrO9P
-	 zOPxztEANPndFBisYEslj1N6UAd7GICzesDF/CbfBsdcviDoyrrGRf6SiSCrBioWqkJ3U
-	 lpxodnPLyGnCmPJpjMsEuNIT0ocmPJO7LWkLEkatgcPclFiBS8Fl3WgHgGJoGI3rt9xVy
-	 Fk4zZ2MlrpEJC/PrUNCCO1rDDmb1qeZO7Z3r/AIiWeLSu2cCE3jYKMa+OGn5UzwO7KQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794777197;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=Dl2GSKLNZwxHnys/gmOepf+Z7DTsWvB68DYjsGWZv64=;
+	b=TxPDETuG8JRheq5bumrsFf2WzyLiwwd86kG0CGR/OoqwIOyE18In8FvwHd+mkGAMeDHt
+	 YhhBwpsPGbvsWwr4cH8QF7+SxpmwaP4FUC3hyCj/phgD1n1+bqlW6gGRSd0KqwHlGN4lC
+	 5vt606VRmodnERqi/V83HziHSBN20N7XeIquwLpQpDBxc6jVMUn9C2yQBVsn96JWBaAQ6
+	 Dkm7m69gyX4Av0pCiTyOYhmQfO3VlfFuxzlWyMRljfI1YYwrEKUrhoML1CHsaSqa5GAjZ
+	 riyvEsqvNRqXqpUKjTbUdgq8BYfmU3XfMUjzO08EMJqPyGEugFs/bfCGZElSaaJfV/A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fTFSmfz6;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GS99ENSk;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C50E606A31F;
-	Sun, 15 Nov 2026 21:00:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E568B606A31F;
+	Sun, 15 Nov 2026 21:13:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fTFSmfz6
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B04B61F000C8;
-	Sun, 15 Nov 2026 21:00:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GS99ENSk
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D9511F000C4;
+	Sun, 15 Nov 2026 21:13:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794776455;
-	bh=lEm6igHXIFAAgEEuRJ/bqCUFcve2TkljyAexsixdkJo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=fTFSmfz62R/xzgkMpYRbTZzSO1fAaOTf4jflJ+BI1Scxj9kPgQQRUJh5ePp5hBeOu
-	 +Bd9/jFgUX/Vr3SrSaL7NiWng2cleM7I5eVUET0CxCOxtD3z3JtobCtoEK1uZsrk9O
-	 iAGU9e2NNbHTnHUUm1WhpTgrGJI9DxfNtXj3ZbOqcBeV+X0YOubFg16rMVAG4n816S
-	 meAMgeXKPUTzQXxkWxbQZTL7zIU7+61yO8ddDum1vZdciy3700YyDsvoCC6X0U8Z75
-	 isgWalRVkoXJWNKjU4wQOTcFTO3/feMNx7FHCW3f8rR417/NwmEPrn+s1XJbm2eRIP
-	 zaZrd+FRk8kcA==
-Message-ID: <4e9a39ac-9ad5-49d8-b0c4-09e665504609@kernel.org>
-Date: Sun, 15 Nov 2026 13:00:55 -0800
+	s=k20260515; t=1794777196;
+	bh=Dl2GSKLNZwxHnys/gmOepf+Z7DTsWvB68DYjsGWZv64=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=GS99ENSkyF3TPKalnRsitjk9MfxxCoI6uu2CrsWuj6OXs2LGrdDdsTtemrKU81oTS
+	 NQz61UnwJFhSzPQx45UBtUCU4SHKf9nYerW8/f0vMoe4Nnc0PqiDPZ6GkUmC8WfdEr
+	 81svY8FiHAcrkEj9C1GqS0Y+SS20Rz6IEPoAbbjdiVpqAFlGrVvJXGcD5WO8EKnA+x
+	 aORjlLA0gh6XEt6NUM0wUGse7rdtOVrYDdvQCgqJBfwtLeYGvawNqjgaOBHHR7rTya
+	 Uj3Y8dY+wyYgPhRcmdYuNHbD31nus/Dx1xO68JCpIEI/mZzl1dYaqUpZosbs3C3yT1
+	 1tvvicofqqg6A==
+Date: Sun, 15 Nov 2026 13:13:14 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+ <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>,
+ Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, Andrew Lunn
+ <andrew+netdev@lunn.ch>, Jesper Dangaard Brouer <hawk@kernel.org>, Ilias
+ Apalodimas <ilias.apalodimas@linaro.org>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
+ <john.fastabend@gmail.com>, Pavel Begunkov <asml.silence@gmail.com>, Jens
+ Axboe <axboe@kernel.dk>, Andrii Nakryiko <andrii@kernel.org>, Eduard
+ Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil
+ Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, io-uring@vger.kernel.org, Mina
+ Almasry <almasrymina@google.com>, "Mike Marciniszyn (Meta)"
+ <mike.marciniszyn@gmail.com>, Weiming Shi <bestswngs@gmail.com>, Nikolay
+ Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, Alexander
+ Lobakin <aleksander.lobakin@intel.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Stuart Clark <stuclar@meta.com>
+Subject: Re: [PATCH net-next v1 01/11] net: Get skb fragment addresses
+ through netmem
+Message-ID: <20261115131314.2d3ab96f@kernel.org>
+In-Reply-To: <20261110102039.1002605-2-bjorn@kernel.org>
+References: <20261110102039.1002605-1-bjorn@kernel.org>
+	<20261110102039.1002605-2-bjorn@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -51,97 +80,20 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 08/13] ipe: handle errors from resolving the real inode
-To: Christian Brauner <brauner@kernel.org>,
- Amir Goldstein <amir73il@gmail.com>, linux-fsdevel@vger.kernel.org
-Cc: Chris Down <chris@chrisdown.name>, Miklos Szeredi <mszeredi@redhat.com>,
- linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
- linux-mm@kvack.org
-References: <20261115-work-ovl-d_real-v1-0-ca155efbcb2e@kernel.org>
- <20261115-work-ovl-d_real-v1-8-ca155efbcb2e@kernel.org>
-Content-Language: en-US
-From: Fan Wu <wufan@kernel.org>
-In-Reply-To: <20261115-work-ovl-d_real-v1-8-ca155efbcb2e@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
-On 11/15/2026 6:01 AM, Christian Brauner wrote:
+On Tue, 10 Nov 2026 11:20:22 +0100 Bj=C3=B6rn T=C3=B6pel wrote:
+> skb_frag_address() goes through struct page, so a net_iov never has an
+> address. Only unreadable memory should lack one: XDP and BPF read
+> fragments through this helper, and AF_XDP UMEM will back readable
+> net_iovs. netmem_address() also returns NULL, not a bogus pointer, for
+> an unmapped highmem page.
+>=20
+> Generic code needs the size of a net_iov to find its address, so keep
+> it in struct net_iov_area instead of the devmem binding.
 
-...
-
-> 
-> diff --git a/security/ipe/eval.c b/security/ipe/eval.c
-> index 4a7be96c84f03..3751963509df4 100644
-> --- a/security/ipe/eval.c
-> +++ b/security/ipe/eval.c
-> @@ -102,7 +102,11 @@ void ipe_build_eval_ctx(struct ipe_eval_ctx *ctx,
->  
->  	if (file) {
->  		build_ipe_sb_ctx(ctx, file);
-> -		ino = d_real_inode(file->f_path.dentry);
-> +		ino = d_real_data_inode(file->f_path.dentry);
-> +		if (IS_ERR(ino)) {
-> +			ctx->file_err = PTR_ERR(ino);
-> +			return;
-> +		}
->  		build_ipe_bdev_ctx(ctx, ino);
->  		build_ipe_inode_ctx(ctx, ino);
-
-
-I think we only need to change this part like:
-
-	/*
-	 * If the real data inode cannot be resolved, leave the bdev
-	 * and inode fields unset so the file is evaluated without
-	 * dm-verity/fs-verity state.
-	 */
-	ino = d_real_data_inode(file->f_path.dentry);
-	if (!IS_ERR(ino)) {
-		build_ipe_bdev_ctx(ctx, ino);
-		build_ipe_inode_ctx(ctx, ino);
-	}
-
-
-This also avoids the missing audit issue noted by the bpf bot, and we
-don't need to add file_err to struct ipe_eval_ctx.
-
-With the above change, feel free to add:
-
-Acked-by: Fan Wu <wufan@kernel.org>
-
-Fan
-
->  	}
-> @@ -335,6 +339,15 @@ int ipe_evaluate_event(const struct ipe_eval_ctx *const ctx)
->  		return 0;
->  	}
->  
-> +	/*
-> +	 * Without the inode hosting the data none of the properties of the
-> +	 * file can be evaluated. Refuse it unless IPE is permissive.
-> +	 */
-> +	if (ctx->file_err) {
-> +		rcu_read_unlock();
-> +		return READ_ONCE(enforce) ? -EACCES : 0;
-> +	}
-> +
->  	if (ctx->op == IPE_OP_INVALID) {
->  		if (pol->parsed->global_default_action == IPE_ACTION_INVALID) {
->  			WARN(1, "no default rule set for unknown op, ALLOW it");
-> diff --git a/security/ipe/eval.h b/security/ipe/eval.h
-> index b26d1147d0708..58ca50987b2b5 100644
-> --- a/security/ipe/eval.h
-> +++ b/security/ipe/eval.h
-> @@ -42,6 +42,7 @@ struct ipe_eval_ctx {
->  	enum ipe_hook_type hook;
->  
->  	const struct file *file;
-> +	int file_err;
->  	bool initramfs;
->  #ifdef CONFIG_IPE_PROP_DM_VERITY
->  	const struct ipe_bdev *ipe_bdev;
-> 
-
+IIRC netmem is supposed to be used for frags and memory CPU never needs
+to access. This patch looks odd. I haven't read the rest of the series
+yet but at the very least commit message should explain why this
+aberration is needed / correct.
