@@ -1,45 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.144
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794740435;
-	b=huHwJoohT81CqGWCdMohggLEH49gWF82h/UPJBth2GsBN3GO9Lg9VkskNchaG9eYKGDI
-	 qjQULmp5puWO/jNNEetyaBeo6PWnn98fxiLuloNx1HTExu7Nm+KiNcgDPx4sIgxvvEn7X
-	 jH6xz5FjizL/SVq0+GVjhkTpw82Bk7scuQiMs9ZqJevdzuFf7brlZ5HQNPrGCNs/fYqdk
-	 XeigEkUaLbFFrxD58ICt6mC3WuTEdhHHHNQXaW9Pn/tbtDlr46fpRTX0tN/U3cA9pFCip
-	 6VghvKzcvCnptr13LyH23Q4gi1dzBBRQIPCoWY6ALQLVCyeK2JkXQB50mKHhbKANxgw==
+	t=1794741664;
+	b=dS2Dsc/cNOa0Km3JtxaLaObZJE//rzql7z3gnNnYGL5hQu5cHVOlLEIu7rI2CyHvdloT
+	 vKU8hl8pw+j1KVwW8bhFO/jmhs1oNL22PtyLsqbvcepj1MKPUX0UHyrA7eQh7VMoRkvmZ
+	 QvO74fm9SEUxee1PQ35uSw2K95rfWWfd3ATmC1Xx3DNdnhyTtVQYShRl9Q1y5pTpM7DJr
+	 BUASZAYC6tBWJfFDJB++jv6vC1VO17wjkwzg5erXYLPlqbY6EoKYfgKqUtVbrr8tFqJa2
+	 4SDdps9Cy5j4GMr4Lo9T3dG4IdvkZUyYxiwYxthQDRH5ErZ2trYQ1q3yJ8GIxeQm81w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794740435;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=nSw/c279jOIfupflk9IEBe6c2JhepI9AKelZ1eMdb/k=;
-	b=o6fcNw00Y71pO4roXhpN6d24k7isM3n5AFTVdZ498+3kkcX2eE7T0cdn/pO2x6dey79w
-	 qGcK7HD6LoRd547s6+QTrItmjhaMVxTCf9Rm6TJTzm+0HbtEQCxpnQU7jomefFj/q3ORk
-	 pxhwWn00GdLiwyxq+voWbkMJHuPfm4TSh4HN8KflfEUQNvdL/C+bI5b/mOu1LbRLhunMD
-	 lxLoi7/EOuE8HSku7umr1hLn8I2QqpG9v0rw3/VmLNglAnhw88ubY26Eao6/J7gocKw9A
-	 TmNqa8Ajq1MeU4E9HO2D+lwQMLPILPbzEXie30VwGx+lLFoV01X7I6Oo5NH8Rve+Q9g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794741664;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:X-ME-Sender:
+	 X-ME-Received:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:Date:
+	 From:To:Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=zvMxoLGnfRp8tv67Jq4LKWZMseIi6n4cTVWrV6bYWbc=;
+	b=ueXLCJsCN9vMHpsDi92caYBb086+It5Y6vNIR4x75QNWqbhq/Xoqr9WZ9+zZMaG50ODC
+	 PsZIe2ET+tbIyAYLnLqyVNlr3J8XiHTJJlTZ/6FXVm94DLQ6KKDhstrKx/dH2hFoJPZiN
+	 QRRwPPTwiWa09iSK0i1VcFFBZD9WxqWlkq7qfDGvluDif3OKcYkno6MCnZN2Vhr2/b4v4
+	 dZaAKIHYJkImrn7gQAes/PDB8D2pkzlNH0oEllFm2HjlGhrRprittZAUqm2scpGf0OnB9
+	 knTzm6OCfQ9dkF73a8SK54XNkw9K3X8bqGE43cxhNRO5YXHfWSVDMfk0d3jeEhdYH+w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fylNnq4o;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=idosch.org;
+	spf=none smtp.mailfrom=idosch.org;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=5HHvSaac;
+	arc=none smtp.remote-ip=103.168.172.144
+Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD76C606A31E;
-	Sun, 15 Nov 2026 11:00:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44E14606A31E;
+	Sun, 15 Nov 2026 11:21:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 44E14606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=idosch.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=idosch.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fylNnq4o
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB6881F000C4;
-	Sun, 15 Nov 2026 11:00:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794740435;
-	bh=nSw/c279jOIfupflk9IEBe6c2JhepI9AKelZ1eMdb/k=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=fylNnq4o8c75uIdq+onoCAaeOAIoUSYPOd1AMXfA9NGGuptGbGKZUQWfUGGBqbhOe
-	 9IBZfxu8e6n7WXx5scIKWNsabnJGHKB4fjN4BhibYVkrzthpRGK3n7lpUIOvLP/RB4
-	 3Cl0nSaQJDgyGazAejAJOx5qxF9kGfYQYEW8cCXDkr06b0DK75DR0h7JsNy9Na42H1
-	 T/+TAyMOULdEdf7QjbAWi5mgr4CbfwI0FtqiwrvRn+ioiy6xMRURO6il7Um1yfsPSQ
-	 IGxWKcUbvk8hKetJ0fXAuDjQACNh8U7Mk0azEm/aT7oMaKOBev4ES7IWJ4UPTd1we5
-	 cT8r3mLEAgA+g==
-Content-Type: multipart/mixed; boundary="===============3766954732386504907=="
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=5HHvSaac
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.phl.internal (Postfix) with ESMTP id 3ED72EC0170;
+	Sun, 15 Nov 2026 06:21:02 -0500 (EST)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-04.internal (MEProxy); Sun, 15 Nov 2026 06:21:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1794741662; x=1794828062; bh=zvMxoLGnfRp8tv67Jq4LKWZMseIi6n4cTVW
+	rV6bYWbc=; b=5HHvSaacFfQyShlbT5WKZ2ky52H6HNyVSA8lpIdIA9Cyn/62tDZ
+	8QydcnNK2ZSh5po6r+CiFmp8WnEF7+rH4P14vyqkgvz9YFsQQmQoUVIx5SBsCkc5
+	iqHeGv+Oxk6ojWdGByvblj1kiuzkNRRVB3u4shdN4hOfmyIafJxmF7mF8tvgQfPw
+	F8Xr0Emywln+FIp+V5867oLK2evKldoJcjy0TI3qAvhgUZ952vNGB96OaFM/tMZ+
+	K9oUYY6o+9L7bVWmn57P7SK23pjwJTZNZzo2qfjX94kYGwzU2VvFl9WBR1DLzed+
+	nE8hfJXgjaJohvQwF7U2C/08W001MrP7MWA==
+X-ME-Sender: <xms:nZX5amgxwxCwj_Dr5EhBPzGy_Vjy8JbGqnKrKpGirFVdJ0gMl2boCQ>
+    <xme:nZX5agbFxQ7RbvUX56iVxuTnvI1ZVlLNb7-BHDbzn3gXEBHGj4k3FQf8DI2RvC1YM
+    W62lqL5mNN_IiktI5bTDNjX4_ll09dplMZPIC10rBSElJEFahk>
+X-ME-Received: <xmr:nZX5ammFv571J8salEjiw2C2w8BFalzep2SZrFF-TolQeY3TAaTtrybE>
+X-ME-Proxy-Cause: dmFkZTEUg9AShikM2WElaOQw8QsfrZsSnDDjyKJ+vhQ7mihu5UdoMhDaECuZNvQaIBj6/G
+    3zODFH303/a3RTn8Uo7Sxrk6mBOm4LoFBeaqEr+4zRHeFUimykUy9sDkB4et0n6Goh9F5O
+    +vmyN9QfgxjAbCFtqut3Et71mpOCyVgfZRMzBYKXVovrtFk9DQenBbcSaOydvBMeVicGer
+    pRXPyVpas3o7Ivq7o9FNHKeDxypdDXfDuyO4OCuBklVFdRh88RsEs4IfEIfJn5QgkrPxAK
+    hLhPisoqDpsrNouYBHds/wHjFT6tWlGyQ0En6Kgytcmb39/FoPojbMbUdS4YX3OJREnqkh
+    Ag0joBmiC59blbunpGLW7dp6Z1bncvvSRAaw510cC+HawuHbjI6WDpUnNcFnONmMHNU2zy
+    8btBDejU520TDEY2X1hduDYxDhsF2rNd1gbRuLrchJEyQV1WkLXMKXOAs1jhtXwqdFFnOL
+    ftBSkfedGQb1WzAr89z/rv+jmqWkeRE6GuaQ+94SAMBxT4J49MIKYK7+Jqv5K3HC8+p7q1
+    s2gA1uCv6e+9CgLOtgwI/m9TZzqGTZmbaTKpytwO4pBRnYJE1DBKPUWOoz7B73MznzuTY1
+    EADsxCO2yAR8sW8FbrA5XSoDyNstaRmlZ+fjiPA2oxNMprH/QoWzomkAEK0g
+X-ME-Proxy: <xmx:nZX5auyhbPA-YnY1Z-9SdtCgWkYBO2fR64LdhwOpsOeFeu8uaT_8TA>
+    <xmx:nZX5ak__98NWzudIVK6VVIgvaybGw2nQ3v_uJDPjZa4D_AM_9npLyw>
+    <xmx:nZX5apB4TsxkMuw1MeWX8_gRT4Mjmz1G_pC8DoZvPvH8ot6r2Y5swA>
+    <xmx:nZX5arpXcDxlWmNuQPdjjPpdi5gFz0YZsCvB8hZLpFZEViCAChQALg>
+    <xmx:npX5ao4_-nTj9e87Nx2nf0Zi4xPuTamN0A6KuM5pmXFd834pod5fl98S>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 15 Nov 2026 06:21:00 -0500 (EST)
+Date: Sun, 15 Nov 2026 13:20:58 +0200
+From: Ido Schimmel <idosch@idosch.org>
+To: Weiming Shi <bestswngs@gmail.com>
+Cc: "David S . Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Kees Cook <kees@kernel.org>,
+	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org, bpf@vger.kernel.org,
+	Xiang Mei <xmei5@asu.edu>, stable@vger.kernel.org,
+	co+beaa1ed2d7aaec16@bugs.sh
+Subject: Re: [PATCH net] net: initialize ICMP error queue opt_stats
+Message-ID: <20261115112058.GA3951124@shredder>
+References: <20261111170528.495116-3-bestswngs@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,145 +98,132 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <a0ed645f06e4b9a94870a12f30260d7f9f54761895bff67599ecfe0e26a23138@mail.kernel.org>
-In-Reply-To: <20261115102559.465375-2-chenyuan@kylinos.cn>
-References: <20261115102559.465375-2-chenyuan@kylinos.cn>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Use a 32-bit compare in the array map gen_lookups
-From: bot+bpf-ci@kernel.org
-To: chenyuan@kylinos.cn,bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,martin.lau@linux.dev,shuah@kernel.org,linux-kselftest@vger.kernel.org,chenyuan@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sun, 15 Nov 2026 11:00:33 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261111170528.495116-3-bestswngs@gmail.com>
 
---===============3766954732386504907==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Wed, Nov 11, 2026 at 09:05:30AM -0800, Weiming Shi wrote:
+> ip_icmp_error() and ipv6_icmp_error() clone a received ICMP skb before
+> building its error queue entry.  skb_clone() preserves the complete control
+> buffer, while the IP receive paths initialize only the portion aliased by
+> sock_exterr_skb::header.  The two functions initialize ee, addr_offset, and
+> port, but leave the final byte containing opt_stats and unused untouched.
+> A TCX classifier can leave bpf_skb_data_end::data_end across that byte,
+> forging opt_stats and making __sock_recv_timestamp() pass skb->len bytes
+> from skb->data to put_cmsg().  For a non-linear ICMP skb, this reads beyond
+> its linear head.
+> 
+> Initialize both bitfields in the two clone-based producers.  Do not clear
+> the whole sock_exterr_skb because the error receive paths consume the saved
+> IP control-buffer header.
+> 
+>   usercopy: Kernel memory exposure attempt detected from SLUB object
+>             'skbuff_small_head' (offset 72, size 59964)!
+>   kernel BUG at mm/usercopy.c:102!
+>   Oops: invalid opcode: 0000 [#1] SMP KASAN NOPTI
+>   RIP: usercopy_abort (mm/usercopy.c:102)
+>   Call Trace:
+>    __check_heap_object (mm/slub.c:8146)
+>    __check_object_size (mm/usercopy.c:258)
+>    put_cmsg (net/core/scm.c:276)
+>    __sock_recv_timestamp (net/socket.c:1061)
+>    ip_recv_error (net/ipv4/ip_sockglue.c:550)
+>    udp_recvmsg (net/ipv4/udp.c:2034)
+>    inet_recvmsg (net/ipv4/af_inet.c:896)
+>    sock_recvmsg (net/socket.c:1159)
+>    ____sys_recvmsg (net/socket.c:2918)
+>    ___sys_recvmsg (net/socket.c:2961)
+>    __sys_recvmsg (net/socket.c:2993)
+>    do_syscall_64 (arch/x86/entry/syscall_64.c:94)
+>    entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:130)
+>   Kernel panic - not syncing: Fatal exception
+> 
+> With HARDENED_USERCOPY enabled, the reproducer aborted the unpatched kernel
+> on its first packet.  With runtime usercopy checks disabled and KASAN left
+> in report mode, the same recvmsg() returned 59,964 control-message data
+> bytes sourced past a 704-byte skb head.  Beyond offset 1,024, 58,932 bytes
+> differed from the prefilled userspace marker, including 6,288 nonzero
+> bytes.  The patched build completed 2,000 packets under both configurations
+> without a forged SCM_TIMESTAMPING_OPT_STATS message or sanitizer report.
+> Networking selftests were not run.
+> 
+> Fixes: 4ef1b2869447 ("tcp: mark skbs with SCM_TIMESTAMPING_OPT_STATS")
+> Cc: stable@vger.kernel.org
+> Reported-by: <co+beaa1ed2d7aaec16@bugs.sh>
+> Signed-off-by: Weiming Shi <bestswngs@gmail.com>
+> 
+> ---
+>  net/ipv4/ip_sockglue.c | 2 ++
+>  net/ipv6/datagram.c    | 2 ++
+>  2 files changed, 4 insertions(+)
+> 
+> diff --git a/net/ipv4/ip_sockglue.c b/net/ipv4/ip_sockglue.c
+> index a55ef327ec93..3ab84a4c31e5 100644
+> --- a/net/ipv4/ip_sockglue.c
+> +++ b/net/ipv4/ip_sockglue.c
+> @@ -429,6 +429,8 @@ void ip_icmp_error(struct sock *sk, struct sk_buff *skb, int err,
+>  	serr->addr_offset = (u8 *)&(((struct iphdr *)(icmp_hdr(skb) + 1))->daddr) -
+>  				   skb_network_header(skb);
+>  	serr->port = port;
+> +	serr->opt_stats = 0;
+> +	serr->unused = 0;
+>  
+>  	if (skb_pull(skb, payload - skb->data)) {
+>  		if (inet_test_bit(RECVERR_RFC4884, sk))
+> diff --git a/net/ipv6/datagram.c b/net/ipv6/datagram.c
+> index ca3605acb433..85f646f8d059 100644
+> --- a/net/ipv6/datagram.c
+> +++ b/net/ipv6/datagram.c
+> @@ -330,6 +330,8 @@ void ipv6_icmp_error(struct sock *sk, struct sk_buff *skb, int err,
+>  	serr->addr_offset = (u8 *)&(((struct ipv6hdr *)(icmph + 1))->daddr) -
+>  				  skb_network_header(skb);
+>  	serr->port = port;
+> +	serr->opt_stats = 0;
+> +	serr->unused = 0;
+>  
+>  	__skb_pull(skb, payload - skb->data);
 
-> bpf: Use a 32-bit compare in the array map gen_lookups
+How about [1] instead?
 
-TL;DR:
-- BPF_JMP32 may break sparc64 JIT of array and array-of-map lookups, falling
-  back to interpreter or failing to load
-- Commit message: incomplete bypass_spec_v1 condition and likely wrong Fixes:
-  tag
+Allows us to avoid potential issues in the future.
 
-> diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-> --- a/kernel/bpf/arraymap.c
-> +++ b/kernel/bpf/arraymap.c
+[1]
+diff --git a/net/ipv4/ip_sockglue.c b/net/ipv4/ip_sockglue.c
+index e06c1f48ecad..096546727c3d 100644
+--- a/net/ipv4/ip_sockglue.c
++++ b/net/ipv4/ip_sockglue.c
+@@ -419,13 +419,12 @@ void ip_icmp_error(struct sock *sk, struct sk_buff *skb, int err,
+ 		return;
+ 
+ 	serr = SKB_EXT_ERR(skb);
++	memset_after(serr, 0, header);
+ 	serr->ee.ee_errno = err;
+ 	serr->ee.ee_origin = SO_EE_ORIGIN_ICMP;
+ 	serr->ee.ee_type = icmp_hdr(skb)->type;
+ 	serr->ee.ee_code = icmp_hdr(skb)->code;
+-	serr->ee.ee_pad = 0;
+ 	serr->ee.ee_info = info;
+-	serr->ee.ee_data = 0;
+ 	serr->addr_offset = (u8 *)&(((struct iphdr *)(icmp_hdr(skb) + 1))->daddr) -
+ 				   skb_network_header(skb);
+ 	serr->port = port;
+diff --git a/net/ipv6/datagram.c b/net/ipv6/datagram.c
+index ff7a7ffbf983..f932d5a0d618 100644
+--- a/net/ipv6/datagram.c
++++ b/net/ipv6/datagram.c
+@@ -324,13 +324,12 @@ void ipv6_icmp_error(struct sock *sk, struct sk_buff *skb, int err,
+ 	skb->protocol = htons(ETH_P_IPV6);
+ 
+ 	serr = SKB_EXT_ERR(skb);
++	memset_after(serr, 0, header);
+ 	serr->ee.ee_errno = err;
+ 	serr->ee.ee_origin = SO_EE_ORIGIN_ICMP6;
+ 	serr->ee.ee_type = icmph->icmp6_type;
+ 	serr->ee.ee_code = icmph->icmp6_code;
+-	serr->ee.ee_pad = 0;
+ 	serr->ee.ee_info = info;
+-	serr->ee.ee_data = 0;
+ 	serr->addr_offset = (u8 *)&(((struct ipv6hdr *)(icmph + 1))->daddr) -
+ 				  skb_network_header(skb);
+ 	serr->port = port;
 
-[ ... ]
-
-> @@ -230,10 +230,10 @@ static int array_map_gen_lookup(struct bpf_map *map, struct bpf_insn *insn_buf)
->  	*insn++ = BPF_ALU64_IMM(BPF_ADD, map_ptr, offsetof(struct bpf_array, value));
->  	*insn++ = BPF_LDX_MEM(BPF_W, ret, index, 0);
->  	if (!map->bypass_spec_v1) {
-> -		*insn++ = BPF_JMP_IMM(BPF_JGE, ret, map->max_entries, 4);
-> +		*insn++ = BPF_JMP32_IMM(BPF_JGE, ret, map->max_entries, 4);
->  		*insn++ = BPF_ALU32_IMM(BPF_AND, ret, array->index_mask);
->  	} else {
-> -		*insn++ = BPF_JMP_IMM(BPF_JGE, ret, map->max_entries, 3);
-> +		*insn++ = BPF_JMP32_IMM(BPF_JGE, ret, map->max_entries, 3);
->  	}
-
-Can this break JIT compilation on sparc64?  The inlined lookups for plain
-array maps and array-of-maps now always emit a BPF_JMP32 | BPF_JGE | BPF_K
-instruction, but arch/sparc/net/bpf_jit_comp_64.c has no BPF_JMP32 handling
-at all.  build_insn() only has the BPF_JMP | BPF_JGE | BPF_K cases, so the
-new opcode reaches:
-
-    default:
-        pr_err_once("unknown opcode %02x\n", code);
-        return -EINVAL;
-
-and bpf_int_jit_compile() returns the program un-JITed.
-
-bpf_do_misc_fixups() inlines map_gen_lookup whenever
-prog->jit_requested && BITS_PER_LONG == 64, which sparc64 satisfies with
-net.core.bpf_jit_enable=1.  The old 64-bit BPF_JMP_IMM(BPF_JGE, ...) was
-JITed fine there.
-
-So every sparc64 program calling bpf_map_lookup_elem() on an array map or
-array-of-maps loses its JIT, even programs with no JMP32 of their own.  In
-__bpf_prog_select_runtime():
-
-    if (!fp->jited && jit_needed) {
-        *err = -ENOTSUPP;
-
-With CONFIG_BPF_JIT_ALWAYS_ON=y these programs would then fail to load with
--ENOTSUPP, and otherwise they silently fall back to the interpreter.
-
-There is no JIT capability gate for JMP32 here.  Could the compare avoid
-JMP32, for example by loading the bound into a scratch register with a
-zero-extending BPF_MOV32_IMM and using a 64-bit BPF_JMP_REG(BPF_JGE, ...)?
-R1-R5 are dead after the replaced helper call.  Alternatively, should JMP32
-support be added to the sparc64 JIT first?
-
-percpu_array_map_gen_lookup() is not affected, since sparc64 returns false
-from bpf_jit_supports_percpu_insn() and takes the -EOPNOTSUPP fallback.
-
-commit 3777fda5a1d0e595d3e7d05daddd4eaed5926bc9
-Author: Yuan Chen <chenyuan@kylinos.cn>
-
->     bpf: Use a 32-bit compare in the array map gen_lookups
->
->     array_map_gen_lookup(), percpu_array_map_gen_lookup() and
->     array_of_map_gen_lookup() bound the inlined index with
->     BPF_JMP_IMM(BPF_JGE, idx, max_entries, ...).  The index is a
->     zero-extended u32, but the immediate of a 64-bit JGE is sign-extended,
->     so for max_entries >= 0x80000000 the compare is never true.
->
->     With bypass_spec_v1, an out-of-range key can therefore produce
->     an address beyond the end of the array:
->     array->value + index * elem_size.
->     Without bypass_spec_v1 the index_mask AND keeps the access in bounds,
->     but such a key returns a masked element instead of NULL.
->
->     Creating such a map needs at least a 16 GiB allocation (max_entries
->     0x80000000, elem_size 8); the out-of-bounds path also needs a
->     CAP_PERFMON creator or mitigations=off.
->
->     Use BPF_JMP32_IMM() for the three compares, as commit 70504de0bb62
->     ("xsk: Use a 32-bit compare in xsk_map_gen_lookup") did for
->     xsk_map_gen_lookup().
->
->     Fixes: b2157399cc98 ("bpf: prevent out-of-bounds speculation")
->     Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
-
-The commit message says the out-of-bounds path "also needs a CAP_PERFMON
-creator or mitigations=off".  Is that complete?
-
-map->bypass_spec_v1 comes from bpf_bypass_spec_v1(NULL) in
-array_map_alloc(), which is:
-
-    return bpf_jit_bypass_spec_v1() ||
-           cpu_mitigations_off() ||
-           bpf_token_capable(token, CAP_PERFMON);
-
-On LoongArch, bpf_jit_bypass_spec_v1() unconditionally returns true.  On
-powerpc64 it returns true unless both SEC_FTR_FAVOUR_SECURITY and
-SEC_FTR_BNDS_CHK_SPEC_BAR are set, and always on configs that are neither
-E500 nor BOOK3S_64.
-
-On those systems every array map, including one created by an unprivileged
-user, takes the bypass branch, so neither CAP_PERFMON nor mitigations=off
-is needed.  Could this say "or when bpf_bypass_spec_v1() is true" instead?
-
-Also, the Fixes: tag points at b2157399cc98 ("bpf: prevent out-of-bounds
-speculation"), but that commit only added the unpriv/index_mask variants of
-the sequences; the 64-bit BPF_JMP_IMM(BPF_JGE, idx, max_entries) compare
-already existed.  The sign-extended compare was introduced by:
-
-  Fixes: 81ed18ab3098 ("bpf: add helper inlining infra and optimize map_array lookup")
-
-for array_map_gen_lookup(), with the percpu and array-of-map variants coming
-from db69718b8efa ("bpf: inline bpf_map_lookup_elem() for PERCPU_ARRAY
-maps") and 7b0c2a0508b9 ("bpf: inline map in map lookup functions for array
-and htab").  Should the Fixes: tag be updated?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43705303096
---===============3766954732386504907==--
