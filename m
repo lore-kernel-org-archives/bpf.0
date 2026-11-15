@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794712700;
-	b=VSIeqzXaerIUgKs4koW0KuQd4hSN7tjLXlc4yzh7R7ywdMaW4bstUDryUhoawEFB5ayy
-	 0TwADB8Oa+yQ0VyJFuzSwtBUMtFPUCbAeZIixY9+7EHjjeGNhNj9JORLQKMCjit/lt523
-	 Oqyde0uyI6Z9ho/Ji84Z2uBhKfwMXwhMqmCpPkg0XArh30eo9xLfHlpzuFOcIGd9Ljvjs
-	 DIcmjq00M4o+c/ejTWXoZoCGJYikfozKnNWgZc6Z7QgoMt1Z8JAEYDmO9q6LCfY0a0SYC
-	 9/x+LWA/vgYXQMkzD6Gp70x8mphkmJC7awXHKJEAAhW/mDxVf0M6fqKNDq238jSLJfw==
+	t=1794712697;
+	b=29edEMgNlNGYtWuXXmVbPV8FM1uZk2j9sFrSgPhB8MGd0Pq6p6y7R1hit81fC2aoyLdQ
+	 bLR2AmEWEBK5+X0piA1vzHgQy0DdGocCOA3suiPrJPP/nqXTn3mB7E31+5EH2N7ESi95D
+	 RqVEyt47hsWlsGlZFtyzGK8a0uXFCf3cmpDuGV3fT/PB+LLgg7JpXXiLnByCaSs2cUbtN
+	 /2F5Swu0GMHU1JP7sTejF4RPd+isKuhSRbi55Lv8Xennha9cHSQk9oX2lbDC5QCtDWgzx
+	 Rh8mEWdwlvQPGgjBUmEYRhI1FFDGDLOcWGQnqw+3Xznfia59fFSdsyYmEGGOdEI91Cg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794712700;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794712697;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=zXhT4wOx359GCKUldLkyI3j/qzjMrXPTXW8JlCEpECQ=;
-	b=Eol24FyELDC6xi+pyWdFZb3SPL4pvu1zup7pZ15Kt015uR2EwdYdoYlhwGgrKGuBDsjZ
-	 Uq2QWpdlBA9PFk6ZaQy78ocYOLSTwslHQCPdpW2DyhrFeVLhkCAxbZoFiv1RWQoF0a+At
-	 CZcIFmI7qhcY479CVzt2xtfw5REuNxAWInuYaeNZVfz3VC3xWJvpQZf6hTPs0zQWrxp48
-	 Ohxu0e2Y4eaps21XW+agurIsCJE7ozZxgnA9svYFNwRbeaIFyqyQpoVAuD5/tuin9UqP7
-	 xDqjruh2/ilslsi+Z43BbU5w/rHsgyo5ICw2Cb605LpCR43LW9cdproHg3XV7vrdtjQ==
+	bh=RHK+oDroh+BWIdQDKlDOU+2VRgKkyUtO9u0OdXOwLJs=;
+	b=LgMMv5u1cUfGuW/MbKwCZh1EYLnBIg9ZuXqtIVridXGX12pcrrbX4u/NGh1zKF18Mb8k
+	 alsLkkUFkmePrxd+KJB8OC1pdx1jaEBvhGNKhzjzWKhosdxahuj052m6jQnGnLASa4RvU
+	 TUzoZA29DqHdWNl9RxIVEvIcvkKpFPRICxQRNp32qddWrbz3uA6Ri9oQeXh/40X0meIm4
+	 vk3bW6sI/v5VMslyxi8IkJrAVR+GiiHrXOiyb568CUpE6Y3k2HpAJnpo+t6sV01M4Jeli
+	 Mo54X5y7GwaOzXn7i6/BAmYYNivp0h6jsVsarMJKDUTyI3b7f58Ql1B+z9HJIZXRKvQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GZNf2Hla;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=guf6ZVDm;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAA1A606A32D;
-	Sun, 15 Nov 2026 03:18:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4663606A889;
+	Sun, 15 Nov 2026 03:18:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GZNf2Hla
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 616B01F000CE;
-	Sun, 15 Nov 2026 03:18:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=guf6ZVDm
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76E1D1F000C4;
+	Sun, 15 Nov 2026 03:18:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794712700;
-	bh=zXhT4wOx359GCKUldLkyI3j/qzjMrXPTXW8JlCEpECQ=;
+	s=k20260515; t=1794712696;
+	bh=RHK+oDroh+BWIdQDKlDOU+2VRgKkyUtO9u0OdXOwLJs=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=GZNf2HlaLZlCdc46wskxNqEXZk1in6HzCTrmFtIEhE6q3JzCo0VNIMLrWGmOdKlcN
-	 CsDUiIAsYE7iG3+hgx4l7d2Iv/ZNlW7se9fyf1cwfzbFiFSNbDmLhJFdZdd+i4Eftr
-	 Ie6vTQLSPBEFj0LNRngGCFY0HfWGgeI2ksB9eOxV42VeB2dnF3idKPH6RbNf/VeKIS
-	 av+yGB9oND6omGJNsayRsiy9qHvl4zgEdT6OxOnj77HYKh4+MzvEfj0oDKK1RqEMWj
-	 7ElIO4UukMSVv5YPLgPTuOegSuKAk21UDdtFhQUJc9MCJ7TTNDvOF0boVBuaTGC5Oz
-	 o/8nGgcTyRc4Q==
-Subject: Re: [PATCH net-next v1 06/15] net/sched: act_mirred: don't send
- decrypted skbs from egress to ingress
+	b=guf6ZVDmwaky8SEJp57VkXtN6Ss2A0cMWAFtCpeJkNgcuac1a0hgIhGyT7sas1KCS
+	 1tXHkr0a09hmP/DodxQD7dfLH6N69ho5Wro6/JB0OeDs396wIrERLXi6qHFWZZ6Qjc
+	 LoAel+Pp780j4ZGXc/H6v4iWnGWrvKjc0zcfsStIVQqKSZsfK2fHoWAbR5rsCifQSX
+	 vSZ6ovuAVU3mnVw1UtlXD3ViRNRDkNQV0UCdX6rLp+bcyVAKdbnpzhgU9Lq++VvkyB
+	 AQ+EJIpRrTQ4Yk7HRxxPCodwE5kA2GBr1TP7qwyx9U/YFsb2IE51b0x6VqyTapRsBY
+	 r7Jze/vdNp5/g==
+Subject: Re: [PATCH net-next v1 04/15] psp: add support for socket-less psp
+ associations
 From: netdev-bot+sashiko@kernel.org
 To: toddfreed@meta.com
 Cc: netdev@vger.kernel.org, davem@davemloft.net, andrew+netdev@lunn.ch,
@@ -52,11 +52,11 @@ Cc: netdev@vger.kernel.org, davem@davemloft.net, andrew+netdev@lunn.ch,
  linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
  martin.lau@linux.dev, pabeni@redhat.com, saeedm@nvidia.com, horms@kernel.org,
  tariqt@nvidia.com, weiwan@google.com, willemdebruijn.kernel@gmail.com
-Date: Sun, 15 Nov 2026 03:18:18 +0000
-Message-ID: <179471269893.2199510.10845713252529893412@kernel.org>
-In-Reply-To: <20261111005533.6436-7-toddfreed@meta.com>
-References: <20261111005533.6436-7-toddfreed@meta.com>
-X-sashiko-severity: Low
+Date: Sun, 15 Nov 2026 03:18:15 +0000
+Message-ID: <179471269504.2199510.18115986956046547098@kernel.org>
+In-Reply-To: <20261111005533.6436-5-toddfreed@meta.com>
+References: <20261111005533.6436-5-toddfreed@meta.com>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
@@ -69,72 +69,71 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue(s) to consider.
 
-Low priority / nit picks for your consideration:
+Critical: 0 · High: 0 · Medium: 1 · Low: 0
 
-- [Low] This patch adds the egress-to-ingress decrypted check only in
-  tcf_mirred_to_dev() (net/sched/act_mirred.c:291-292).
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [Medium] The commit message misdescribes how keys are handled by the
+  new socket-less association API.
 
 --
 
-net/sched: act_mirred: don't send decrypted skbs from egress to ingress
+psp: add support for socket-less psp associations
 
-This commit stops tcf_mirred_to_dev() from sending skbs that have
-skb->decrypted set from egress to ingress. On transmit the bit asks the
-device to encrypt the packet, and on receive it means the device already
-decrypted it. Redirected skbs are dropped and mirrored skbs are not copied.
+This commit adds a registry of PSP associations that are not bound to a
+socket. Each one is either an Rx or a Tx association and is referenced
+by an ID. It also adds the rx-spi-alloc, assoc-add, assoc-del and
+assoc-get netlink commands, which are admin-only, to manage these
+associations.
 
-> diff --git a/net/sched/act_mirred.c b/net/sched/act_mirred.c
-> index 1c98e4d81ebe6..52c3eeab381ae 100644
-> --- a/net/sched/act_mirred.c
-> +++ b/net/sched/act_mirred.c
-> @@ -285,6 +285,12 @@ static int tcf_mirred_to_dev(struct sk_buff *skb, struct tcf_mirred *m,
->  		goto err_cant_do;
->  	}
->  
-> +	/* On transmit, decrypted asks the device to encrypt the packet. Sent
-> +	 * to ingress, the packet would read as decrypted by the device.
-> +	 */
-> +	if (unlikely(want_ingress && !at_ingress && skb_is_decrypted(skb)))
-> +		goto err_cant_do;
+> key material enters through netlink and is never reported back. no key
+> is stored for rx associations, and users reference associations by id
+> and never handle keys
 
-[Severity: Low]
-At this point in the series, is mirred the only egress to ingress path
-that needs this check?
+[Severity: Medium]
+Is this paragraph accurate? The code in this patch seems to do the
+opposite in two places.
 
-A tc egress BPF program can still call bpf_redirect() or
-bpf_clone_redirect() with BPF_F_INGRESS. That skb goes through:
+psp_nl_rx_spi_alloc_doit() in net/psp/psp_nl.c returns the
+device-derived Rx key to user space:
 
-skb_do_redirect() / bpf_clone_redirect()
-  __bpf_redirect()
-    __bpf_redirect_common() / __bpf_redirect_no_mac()
-      __bpf_rx_skb()
-        ____dev_forward_skb()
-          skb_scrub_packet()
+net/psp/psp_nl.c:psp_nl_rx_spi_alloc_doit() {
+    ...
+	if (nla_put_u32(rsp, PSP_A_ASSOC_ID, pas->id) ||
+	    nla_put_u32(rsp, PSP_A_ASSOC_DEV_ID, psd->id) ||
+	    psp_nl_put_key(rsp, PSP_A_ASSOC_RX_KEY, version, &key)) {
+    ...
+}
 
-skb_scrub_packet() drops the dst but does not clear skb->decrypted. A
-kTLS or PSP offload socket skb would therefore reach ingress looking as
-if the device had decrypted it. The socket-less PSP case can't happen yet,
-because act_psp only arrives later in the series.
+psp_nl_put_key() emits PSP_A_KEYS_KEY with key_sz raw key bytes. The
+rx-spi-alloc doc in psp.yaml says the same thing: the key "must be
+passed to the peer out of band".
 
-The next patch in the series, "bpf: don't redirect decrypted skbs from
-egress to ingress", seems to close this gap. It adds a matching check at
-the top of __bpf_redirect() in net/core/filter.c:
+psp_nl_assoc_add_doit() also requires user space to supply the raw Tx
+key bytes:
 
-	if (unlikely((flags & BPF_F_INGRESS) && !skb_at_tc_ingress(skb) &&
-		     skb_is_decrypted(skb))) {
-		kfree_skb(skb);
-		return -EINVAL;
-	}
+net/psp/psp_nl.c:psp_nl_assoc_add_doit() {
+    ...
+	err = psp_nl_parse_key(info, PSP_A_ASSOC_TX_KEY, &key, key_sz);
+    ...
+}
 
-BPF_F_PEER without BPF_F_EGRESS already drops anything that is not at tc
-ingress. So the gap only exists at this intermediate commit.
+So user space does handle keys, and rx-spi-alloc does report key
+material back.
 
-Would it be worth saying in this commit message that the BPF redirect path
-is handled in the following patch?
+The code only seems to guarantee two narrower things. No Rx key is
+stored in the association, and assoc-get reports only the SPI.
+
+Could the commit message describe that more precisely? For example:
+"the Rx key is returned once, by rx-spi-alloc, and is never stored or
+reported by assoc-get".
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261111005533.6436-1-toddfreed%40meta.com
