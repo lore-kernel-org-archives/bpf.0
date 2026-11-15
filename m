@@ -1,80 +1,81 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.219.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794737958;
-	b=gbKlj/oNYjJ4D3trZX3yDJj1wqGSIoxTgr0Y1e7kYUluygR3O+jK2aA9bNvsvrx+N8RA
-	 /Q8OdwmCY72Q6mFkU+cq8a8DVEcsIMw44mi34GH6vJmB2fmcF0w2Y5ACS+LWd2eyp+W47
-	 KQp1ihQopIe7NvIdtISPuYugNQPqW2/jUbalHEzzDHfvsCDYZcxfMSD/BtFZ/BxRHyDcB
-	 yBZm2kLGjAh6YBEoIGM4g7zSQ6jyABOfx1pCk2AkZrvTFjOVIOiMJaexy921gV++drYps
-	 1KzHXhiCUmgppOCdK1PzefHvNRJbAXmdjZ7nsY7b0ntvUmjmF8Bu2AutmPFEcAtHWcQ==
+	t=1794737960;
+	b=w2+1RGedddpwB9LRqkqnl3080rqXuD6UzY1gWQmsYk5XaBu8CDZF03SEw5Xd+e+j/QiM
+	 qsMDK578TvqoW6ikWsO+GxUwmfuUPeQviIa4+1z3RvVFIgJfL3JCeMvMGkkq9Dv28nXcj
+	 B3qF5rvH9I1VzEjmjKriDv66E/jzBGxsw/FMEQKBmOaDfhGD2a2EVDKDYX0aJkmxPk8OO
+	 ax/XLKc0Yhd6ztJGc0QRE1vQTDnDpQhkVOAzLVW4C/eAxCh31hczn5vw1kLlOMRN6FqWZ
+	 D6ualLGz6rAw2aBsmFShOREJrJQZoUF+AvhFq2+GRfVzJDULbSeE+8vOzAsEQ0+vLBQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794737958;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794737960;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=qhcPhq0Poj4iCa3rvuLGMg5AWfvy/+rEzDOs01y4iq8=;
-	b=Z7SpJYlsB7oNwussGCQ98uOvQ/GRlkK5nr/lH32UeLIByFPSuLaJ8ae/ztG4RWDhBMWI
-	 Ro/2aLzwZ1+a6MM404t5LISMSgzAp/CqyyL1StNPXcFr4nPaFAO6YjsiqDKxbein9X9mK
-	 YlgK1nFdxXRm4MLJFQ0ZfiEiLAYo5w3J8xjfISmx+boejdUylHMIDcQZoMv17/KEjgRtR
-	 VpRvECxRUK0QHDZTt3/YFbpaAbn0nL1k7XvJh3YYEMB/QPlMrazjMAjtlO6r7jxyYYA9L
-	 TTxv0Mm5YBp6z1ahYrXT+eJtO+mTLou7SWC7uinvf7sd5sPuLqy9uL5wNC9L3Xf4zpA==
+	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=Eplc5FJto6KDJg/y223+4Fj7wO4MSUFeGn6npZetd7A=;
+	b=t3rObeXKjKdHJBBOo4e/T7DXmfcGu76/p19U9EadrQwTgqKTUOixUe2Yqwu5B2swT1aN
+	 +YWR2M6vf9MU/9zP8l9t3Pmlhl4LZdTfSQk0dLr+oiZDcbLNILqWxFpJpws01GILzgZVF
+	 rU2euko4E9PgDeSZtT2rDpLURsY7TA8Z5+fDfZJVVhPhFH6ZLOCY4qVmtt9EBDX+b3lkx
+	 sWgxIHQkGHFDjUjFiI+YoDmTnVQ5NtPvJB3QcXE8gAwcYNbLevuU9Sh7R9XKmRzZfPMFy
+	 +yTTlGfFkIHrgMFlsJiuf++8+qkruPchcBbWKJlWVPNdfveplQO/UMmCOUY6+yPNWvQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=mojatatu.com;
 	spf=none smtp.mailfrom=mojatatu.com;
-	dkim=pass header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=hwoze4w0;
-	arc=none smtp.remote-ip=209.85.222.173
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+	dkim=pass header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=rFOEdbcb;
+	arc=none smtp.remote-ip=209.85.219.50
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71C88606A31E
-	for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 10:19:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 71C88606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 126A4606A31F
+	for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 10:19:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 126A4606A31F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=hwoze4w0
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-9495d543c42so214376085a.3
-        for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 02:19:17 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=rFOEdbcb
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-91eb3fea2a9so31923526d6.3
+        for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 02:19:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1794737956; x=1795342756; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=qhcPhq0Poj4iCa3rvuLGMg5AWfvy/+rEzDOs01y4iq8=;
-        b=hwoze4w0rvuTE/eDhIh+PGCQ2dn2uYdjHJRefHcraIQCVyJq0WbeToxGPxoQpmSfo9
-         UYSMcei1lLgnMoV7XTXwA+F/thuBJjrxH1nrjFQVni9PqvNZ/vUQIMUg9Lw7uGZi9hQ4
-         EnTUPHG02moNEDY+XB+FnSFmR35ApXAC5iSF8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794737956; x=1795342756;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=mojatatu.com; s=google; t=1794737959; x=1795342759; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=qhcPhq0Poj4iCa3rvuLGMg5AWfvy/+rEzDOs01y4iq8=;
-        b=IYFx4a0uZLkqoMAecDzUJkvO/u3RJq4+C0wDwV6+jqJe3y/NDtiWqOhXNCZp3djFea
-         HeiBarPTRs0XU/7+R9gTJ2c6GYY57TGX0N5MEWGNpMQM/7SdJ24jAG6G0YtvFpLhzmo7
-         NPtD531TIeHTtd6Mv0HAuPkAkkneV34hIf00C90fZThBr5J2/3iCEXs9FricGazEFJHX
-         Vi01P26sQPGx4yf3E2NocNVLDHDSQ+TRLTVxOJEwwyWfjhuC/7thlS0JUFCErpZzGlqt
-         aHhOpVBKjJ6i4KZOtwmkTSpXSHLWU2qrvlTX/fNyD1X1syX45s+T3TIMjz873LvM7YaD
-         YqLg==
-X-Forwarded-Encrypted: i=1; AL+hErHAvMDjYKBai8Yd0ToW//pvbwlvkJbik8PD13x+ClioJ3hBm3gyjV9yL3R07WC1NThJ254=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+8yGRFpFQZRzjblb+7wssj3Co+Xw8AkXPoF62mnPJfLDjGWyKI
-	erU2zWrFM0koaH/bM9TRIRR7PodShEfciqd5dqzBAPO8bdtBziaX6E1vSMC25QFl5A==
-X-Gm-Gg: AYBFou3sLK4oOjpoAnloignwQ+fepkKVtQDM1QEJeX6pUguIYwPiEsVff8/f7SMGNVg
-	cH+dp4H+LHclGV0a2A50eCJeQ4abygFbsAFAg4Wjl/IJP6xsA2cAYRTZXhFoRhYYKeU2r3PbmkK
-	xnma7pLnPcnxJ1l1Ifupf6kjttD+gMz2ezVQ/UukpxtQF+Tbf/uuXB1imOywJn0Jx6JqdGvVyM5
-	XELeFnl8mIe0VgcnfV3ZkSFt/SFqsWEO5L4KhENQIg7Ksz+2UnzDXjbh1aaaU9k8R7PyjRwYQ7b
-	UgH1ufL7C7256Apaxs3742MBPCkSnRHXAuqTp4FrW7j1gMKrchfStWBjXP+003BSe6l+etnGbXH
-	ytTiNnAxZ1gly/NzZXyHYNmUjo5RfG4kU6ZPTjNIkf/DDppIunvsuQ305R4ovgYBqHrP9XtSYpz
-	Z93iOEJGs0csquliHtcinSGCJO6mbHEr/WL96iPedLPq4y6s4RfWYaydKee/T+D5L+9T5ato5Iv
-	+u9Vnerkd2t5XKDj4g67CXCE3htEJnx8u15f1AitidZP1j5fnhoU9vEWwo+sd8uYHe1QWdg/Ni6
-	BmCgu/YB1Z95n6MiMEObu63Td1i/j2KK1TSXsz4i28TpPn7VMtD0r3nS/hBKDWoHctgo2aZ/4z7
-	V
-X-Received: by 2002:a05:620a:44d4:b0:949:6fd6:d05c with SMTP id af79cd13be357-9496fd6d08dmr443603885a.42.1794737956093;
-        Sun, 15 Nov 2026 02:19:16 -0800 (PST)
+        bh=Eplc5FJto6KDJg/y223+4Fj7wO4MSUFeGn6npZetd7A=;
+        b=rFOEdbcbIun05gq1ib7jLw8PIjR5xW5urIkjHV8n0H6OieMrfJh09TjO/TrJ2SX39n
+         k/0B5JB38tQcDFjQaHyD6PvsI8JrTnmJ7sGZNVWPG0kEOrmz5yXlL/DxiUcgNpPD4eia
+         Ho/LVK9Xhdi+RKzw0gqedLNq4FHzwpgZGC4v4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794737959; x=1795342759;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Eplc5FJto6KDJg/y223+4Fj7wO4MSUFeGn6npZetd7A=;
+        b=BHIPrdQkc01ST9jYB+QV9WxtI4JUvM71eM+huNPpCj7KL42BZPxQn9xXDfdYNDpih7
+         jU02FPaKHHy9BMzFTBmIYDNP8ziPRoZc5lPDaDfvTzkHON3qAiiBrhKBrYVC5JoWA4rf
+         0bzwHgItd7cXD1WZyxQ3UJYC4isLixvHNl7v6Gq2V7djJ+GkjQTyzG5PxSDkmgR6y9oh
+         h8ixVDCT4J3oMJzOxhEcx1pHfqF02jyjzAO7u9OtgphLyN1B8gjG62pPMtRJChADYpPK
+         z6Y0X2MN5fiDNDtKSRQLKU6zhsJMEljDem6VvGclcmmagbj4rWfmEfDNwJzYgMmTY9jt
+         Vd9g==
+X-Forwarded-Encrypted: i=1; AL+hErF74pNIYyMA0Ostn+jvva/OLpZa5keIu3O0E1GjGpTx85vIG+xJt5jHkSR+6GaL2HHoD+M=@vger.kernel.org
+X-Gm-Message-State: APuU4Z82kWUZ9Y0qln3FxLJnoNvJijFlmQ2eJs77/4Ybjp6+VEaND6jH
+	8/3+oM59YNrBnDb/X79j4MVYkdELT/xcQD1YQqR/1WK2e0UQO9BVpL0TpsKo6aUN1g==
+X-Gm-Gg: AYBFou28Z3GI3LBvzqilGUDK4uR3zmx932sTCBGP7o4LhwqnzLowJlEDJuZq0UCWvRk
+	SFhAJk/PUr6IO9v7XcbSDcBlNhloUkGeKJURy8pSedxBrf3oP75udaml98ht+VwwJkNq9zW5YRJ
+	ZWuNNWwSMeFsoqeEEx8IBx+hCtltgrHMQKiOteVemr6pukBKwb0pEWS5eb+gn2cifdFbk++UE8o
+	QTFCcrMu+3xBvwXuKakorVoTRKyohRY2GuxdWcjthJxtBOek9oNswoRibxo+hPpYh7L62tnfLeJ
+	utBq6NMdRsCUxPbAgf1wzIXOjfrOoJr3pZlh5M7YD/bLvvLR3YBHXcHZvrqgi94bKg7ONqKG+HT
+	VDoskx1x17bdbmia0ift4D05Yi2H+qncbBxN3n7+VC4C+M4c/JVq49rlOemYOFaMpLe8+5Neq/v
+	QShGM6F8CP/Z+kobBbiCmRzDwgKTx9aJZI4jJuFkOObDOhdTygx07haQlLh0qeDng4DMjvb3W1P
+	bDXUgf/xjn8lxOkNkeR/QGrYY7mEMhhLWbIHkoxStH4zxFu4J0QUh/sL2eMOjJ3pxXt2muNr8D+
+	cnTGHFh4EjY6WWZwY4woriEnfCCltzEvEI0eewH3mg5UWDvEcCrQGB4MqH6jORiXo3gg6OD9Vdw
+	=
+X-Received: by 2002:a05:620a:4385:b0:949:6982:3f0c with SMTP id af79cd13be357-949698240admr422657885a.19.1794737958975;
+        Sun, 15 Nov 2026 02:19:18 -0800 (PST)
 Received: from mbili.waya ([64.203.83.2])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-9494c6025f5sm592337085a.5.2026.11.15.02.19.13
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-9494c6025f5sm592337085a.5.2026.11.15.02.19.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Nov 2026 02:19:15 -0800 (PST)
+        Sun, 15 Nov 2026 02:19:17 -0800 (PST)
 From: Jamal Hadi Salim <jhs@mojatatu.com>
 To: netdev@vger.kernel.org
 Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
@@ -86,15 +87,6 @@ Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
 	Paolo Abeni <pabeni@redhat.com>,
 	Simon Horman <horms@kernel.org>,
 	ipsec@lists.linux.dev,
-	bpf@vger.kernel.org,
-	Jiri Pirko <jiri@resnulli.us>,
-	Victor Nogueira <victor@mojatatu.com>,
-	Pablo Neira Ayuso <pablo@netfilter.org>,
-	Florian Westphal <fw@strlen.de>,
-	Phil Sutter <phil@nwl.cc>,
-	netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org,
-	Sashiko <sashiko-bot@kernel.org>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -107,11 +99,16 @@ Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>
-Subject: [PATCH net-next v3 0/4] net: drop the stale dst when steering to another device
-Date: Sun, 15 Nov 2026 05:19:07 -0500
-Message-Id: <CORE-9NOG.v3.r0.20261115050625@mojatatu.com>
+	Stanislav Fomichev <sdf@fomichev.me>,
+	bpf@vger.kernel.org,
+	Jiri Pirko <jiri@resnulli.us>,
+	Victor Nogueira <victor@mojatatu.com>
+Subject: [PATCH net-next v3 1/4] net: xfrm: interface: restore dst_orig on every xfrm interface
+Date: Sun, 15 Nov 2026 05:19:08 -0500
+Message-Id: <CORE-9NOG.v3.r0.20261115050625-1@mojatatu.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <CORE-9NOG.v3.r0.20261115050625@mojatatu.com>
+References: <CORE-9NOG.v3.r0.20261115050625@mojatatu.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -123,115 +120,190 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patchset is created to address constant whining by both sashikos
-about this being an issue when fixing a UAF on a teql issue, see:
-https://lore.kernel.org/netdev/QDISC-6HS9.v4.r0.20261111094338@mojatatu.com/
+Found while testing the dst release for the two producers that steer a
+packet to another device, fixed later in this series. One of the consumers
+of the metadata such a release installs is an xfrm interface, which
+restores the original route before the xfrm lookup; the swap warned on the
+metadata dst still installed in the skb, and only the collect_md arm
+restored the route at all.
 
-Two producers steer a packet to a network device of their choosing and
-then hand it to the neighbour layer for link-layer resolution:
+The issue:
+An xfrm interface takes the if_id and the underlying device either from its
+configuration or, in collect_md mode, from the xfrm metadata on the skb.
+When that metadata also carries the route the packet arrived through,
+xfrmi_xmit2() puts the route back on the skb, because the xfrm lookup takes
+the address family from it. skb_dst_set() expects the dst slot to be empty
+for a reference counted dst and warns when it is not, so the route landed
+over a metadata dst that was still there; a kernel built with
+CONFIG_DEBUG_NET=y panics on the first packet that takes this path when
+panic_on_warn is set.
 
-  3/4 netfilter: the neighbour variant of nft `fwd`, on the netdev egress
-      hook
-  4/4 bpf: `bpf_redirect_neigh()` when the program supplies the nexthop
+Two more defects sit in the same place. An interface with a configured
+if_id never restores the route: it takes the metadata dst as it is, whose
+address family is AF_UNSPEC, so the lookup finds no policy and the packet
+is dropped as a link failure instead of being transformed. And the restore
+moved the route out of the metadata dst, which a clone of the skb shares,
+so the clone that reached the interface first left the original packet with
+nothing to restore.
 
-Both rewrite `skb->dev` to the target device and leave the skb's dst
-pointing at the route the packet arrived through. When the target
-device's neighbour for the nexthop is incomplete the packet is parked on
-that neighbour's arp_queue, and draining the queue re-looks the neighbour
-up from the stale dst. The frame is therefore built with the original
-device's link-layer header and then transmitted on the target device: the
-packet leaves with another device's addresses, and the sender never
-learns that its nexthop was unreachable.
+The same slot overwrite is in the unstable helper a tc-bpf program uses to
+attach that metadata: bpf_skb_set_xfrm_info() records the route as dst_orig
+and installs a per-cpu metadata dst over it. The per-cpu dst is shared by
+every invocation of the program, so the restore cannot keep anything in it.
 
-This is explicit: the steer-to-another-device path never worked in this
-respect, so there is nothing here to regress. Both producers shipped with
-`skb->dev` swapped to the target device and the route's dst still
-attached, and the arp_queue drain has re-derived the neighbour from that
-dst for as long as either producer has existed; the invariant "the skb's
-dst describes where the skb is going", which the routing path keeps when
-it steers, was never established for these two entry points. With no
-commit to anchor with a `Fixes:` tag and no crash, UAF or lockup
-involved, the series targets net-next and does not nominate `Cc: stable`:
-a backport would change long-standing redirect behaviour for no
-crash-class benefit.
+The Fix:
+Restore dst_orig in both arms of xfrmi_xmit2(), taking a reference with
+dst_clone() so the metadata dst keeps its own, and empty the counted slot
+with skb_dst_drop() before the route is installed. The helper allocates a
+metadata dst per skb instead of a per-cpu one, so the route it records
+belongs to that skb and is released with it; the per-cpu allocation is no
+longer used and goes away.
 
-More context: this came out of the review of the fix for a parked skb
-being resolved against the wrong device in sch_teql, posted separately and
-not part of this series. The neighbour code's queue drain is doing the
-right thing there, it re-derives the neighbour from the skb, so the repair
-belongs with the producers rather than with the drain path. Both
-producers are fixed in the same series so neither is left behind; each
-patch that changes a producer carries its own reproduction recipe.
+Conditions to recreate the bug:
+A tc-bpf program that records the route as dst_orig with
+bpf_skb_set_xfrm_info() and redirects the packet to an xfrm interface is
+the shortest way to hit the overwrite. A netdev egress fwd rule that steers
+a packet routed with an xfrm encapsulation into an interface reaches the
+same place once the dst release earlier in this series keeps the route:
 
-The reproduction for both arms is a pair of veth devices, one of them
-with an unresolved neighbour, plus a capture on the target's peer: the
-captured frame's source and destination addresses name the device whose
-neighbour was used to build it.
+    ip link add xf0 type xfrm if_id 42
+    ip link set xf0 up
+    ip neigh replace 10.20.0.1 lladdr 02:aa:00:00:00:ab \
+            dev va nud permanent
+    ip route add 10.20.0.1/32 dev va encap xfrm if_id 42
+    nft add rule netdev t c fwd ip to 10.1.0.2 device xf0
 
-v2 drops the dst only when it describes a route, and keeps what the route
-carries (thanks to Pablo for catching this). A `DST_METADATA` dst is the
-tunnel template a tunnel helper attached to the packet, not a route, and
-dropping it would discard the encapsulation parameters, so it is left in
-place. A route carries encapsulation parameters too when it was installed
-with an ip, ip6 or xfrm encapsulation; 2/4 adds a helper that moves them
-onto a metadata dst before the route is released, so a producer that
-steers into an external tunnel device still finds them in
-`skb_tunnel_info()`, and one that steers into a `collect_md` xfrm interface
-still finds its `if_id` and underlying device. Neither case weakens the fix:
-a metadata dst resolves neighbours through `dst_blackhole_ops`, whose lookup
-returns NULL, so the queue drain keeps the parking (target-device) neighbour
-exactly as it does with no dst at all.
+Send one packet to 10.20.0.1. With CONFIG_DEBUG_NET=y and panic_on_warn=1
+the kernel panics in xfrmi_xmit() with the metadata dst still installed
+while the route is put back. The interface with the configured if_id drops
+the packet as a link failure without consulting the outbound policy, and a
+clone made after the metadata was attached consumes the route before the
+original packet arrives.
 
-1/4 is a prerequisite on the xfrm path turned up after Pablo's comment.
-The interface that consumes that metadata puts the original route back on the
-skb before the xfrm lookup, which needs its family, and installing a
-reference counted route over a dst slot that is still occupied trips the
-slot assertion; the slot is cleared first. The same overwrite is in the
-tc-bpf helper that attaches the metadata, so both sites are fixed in that patch.
-
-Closes: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-6HS9.v3.r0.20261103062649-2@mojatatu.com
-Link: https://lore.kernel.org/netdev/20261026160747.283702-1-horms@kernel.org/
-Link: https://lore.kernel.org/netdev/QDISC-6HS9.v4.r0.20261111094338@mojatatu.com/
-Link: https://lore.kernel.org/netdev/avTfQjFQYR2NNdRg@chamomile/
-
+Reviewed-by: Victor Nogueira <victor@mojatatu.com>
+Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
 ---
+ include/net/xfrm.h             |  2 --
+ net/core/filter.c              |  8 --------
+ net/xfrm/xfrm_interface_bpf.c  | 16 +++++-----------
+ net/xfrm/xfrm_interface_core.c | 22 ++++++++++++----------
+ 4 files changed, 17 insertions(+), 31 deletions(-)
 
-v2 -> v3:
-- Patch 2/4: Document the return value of skb_dst_drop_keep_metadata() in
-  its kernel-doc comment. The missing `Return:` section was caught by
-  NIPA CI.
-
-v1 -> v2:
-- Do not drop a dst that is not a route: a DST_METADATA dst is the tunnel
-  template a tunnel helper attached to the packet, and dropping it discards
-  the encapsulation parameters (Pablo Neira Ayuso).
-- Keep a route's encapsulation parameters as well: a route installed with an
-  ip, ip6 or xfrm encapsulation carries them in dst->lwtstate, which a drop
-  would discard before a downstream tunnel or xfrm device could use them.
-  The dst release now goes through a helper that moves them onto a metadata
-  dst first (new 2/4).
-- Fix the dst slot the xfrm consumer restores: a collect_md xfrm interface
-  puts the original route back before the xfrm lookup, and installing it
-  over a dst that is still there trips the slot assertion.  New 1/4 clears
-  the slot first at both that site and in the tc-bpf helper that attaches
-  the metadata.
-
-Jamal Hadi Salim (4):
-  net: xfrm: interface: restore dst_orig on every xfrm interface
-  net: dst: keep the LWT metadata of a dropped route
-  netfilter: nft_fwd_netdev: drop the stale dst when steering to a
-    device
-  bpf: drop the stale dst when redirecting to an explicit nexthop
-
- include/net/dst_metadata.h     |  1 +
- include/net/xfrm.h             |  2 -
- net/core/dst.c                 | 76 ++++++++++++++++++++++++++++++++++
- net/core/filter.c              | 12 ++----
- net/netfilter/nft_fwd_netdev.c |  6 +++
- net/xfrm/xfrm_interface_bpf.c  | 16 +++----
- net/xfrm/xfrm_interface_core.c | 22 +++++-----
- 7 files changed, 104 insertions(+), 31 deletions(-)
-
+diff --git a/include/net/xfrm.h b/include/net/xfrm.h
+index 445223a8dc6f..1866e5a3b911 100644
+--- a/include/net/xfrm.h
++++ b/include/net/xfrm.h
+@@ -2370,8 +2370,6 @@ static inline bool xfrm6_local_dontfrag(const struct sock *sk)
+ #if (IS_BUILTIN(CONFIG_XFRM_INTERFACE) && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)) || \
+     (IS_MODULE(CONFIG_XFRM_INTERFACE) && IS_ENABLED(CONFIG_DEBUG_INFO_BTF_MODULES))
+ 
+-extern struct metadata_dst __percpu *xfrm_bpf_md_dst;
+-
+ int register_xfrm_interface_bpf(void);
+ 
+ #else
+diff --git a/net/core/filter.c b/net/core/filter.c
+index f42ecfb5841f..bd98d29ed7f8 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -6354,14 +6354,6 @@ static const struct bpf_func_proto bpf_bind_proto = {
+ 
+ #ifdef CONFIG_XFRM
+ 
+-#if (IS_BUILTIN(CONFIG_XFRM_INTERFACE) && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)) || \
+-    (IS_MODULE(CONFIG_XFRM_INTERFACE) && IS_ENABLED(CONFIG_DEBUG_INFO_BTF_MODULES))
+-
+-struct metadata_dst __percpu *xfrm_bpf_md_dst;
+-EXPORT_SYMBOL_GPL(xfrm_bpf_md_dst);
+-
+-#endif
+-
+ BPF_CALL_5(bpf_skb_get_xfrm_state, struct sk_buff *, skb, u32, index,
+ 	   struct bpf_xfrm_state *, to, u32, size, u64, flags)
+ {
+diff --git a/net/xfrm/xfrm_interface_bpf.c b/net/xfrm/xfrm_interface_bpf.c
+index 5ea15037ebd1..8e83c624b774 100644
+--- a/net/xfrm/xfrm_interface_bpf.c
++++ b/net/xfrm/xfrm_interface_bpf.c
+@@ -68,16 +68,9 @@ __bpf_kfunc int bpf_skb_set_xfrm_info(struct __sk_buff *skb_ctx, const struct bp
+ 	if (unlikely(skb_metadata_dst(skb)))
+ 		return -EINVAL;
+ 
+-	if (!xfrm_bpf_md_dst) {
+-		struct metadata_dst __percpu *tmp;
+-
+-		tmp = metadata_dst_alloc_percpu(0, METADATA_XFRM, GFP_ATOMIC);
+-		if (!tmp)
+-			return -ENOMEM;
+-		if (cmpxchg(&xfrm_bpf_md_dst, NULL, tmp))
+-			metadata_dst_free_percpu(tmp);
+-	}
+-	md_dst = this_cpu_ptr(xfrm_bpf_md_dst);
++	md_dst = metadata_dst_alloc(0, METADATA_XFRM, GFP_ATOMIC);
++	if (unlikely(!md_dst))
++		return -ENOMEM;
+ 
+ 	info = &md_dst->u.xfrm_info;
+ 
+@@ -86,7 +79,8 @@ __bpf_kfunc int bpf_skb_set_xfrm_info(struct __sk_buff *skb_ctx, const struct bp
+ 	skb_dst_force(skb);
+ 	info->dst_orig = skb_dst(skb);
+ 
+-	dst_hold((struct dst_entry *)md_dst);
++	/* The allocated dst owns one reference, handed to the skb here. */
++	skb_dstref_steal(skb);
+ 	skb_dst_set(skb, (struct dst_entry *)md_dst);
+ 	return 0;
+ }
+diff --git a/net/xfrm/xfrm_interface_core.c b/net/xfrm/xfrm_interface_core.c
+index 9835fbe63ccb..896180f8d171 100644
+--- a/net/xfrm/xfrm_interface_core.c
++++ b/net/xfrm/xfrm_interface_core.c
+@@ -423,6 +423,7 @@ static int xfrmi_rcv_cb(struct sk_buff *skb, int err)
+ static int
+ xfrmi_xmit2(struct sk_buff *skb, struct net_device *dev, struct flowi *fl)
+ {
++	struct xfrm_md_info *md_info = skb_xfrm_md_info(skb);
+ 	struct xfrm_if *xi = netdev_priv(dev);
+ 	struct dst_entry *dst = skb_dst(skb);
+ 	unsigned int length = skb->len;
+@@ -433,25 +434,26 @@ xfrmi_xmit2(struct sk_buff *skb, struct net_device *dev, struct flowi *fl)
+ 	int mtu;
+ 
+ 	if (xi->p.collect_md) {
+-		struct xfrm_md_info *md_info = skb_xfrm_md_info(skb);
+-
+ 		if (unlikely(!md_info))
+ 			return -EINVAL;
+ 
+ 		if_id = md_info->if_id;
+ 		fl->flowi_oif = md_info->link;
+-		if (md_info->dst_orig) {
+-			struct dst_entry *tmp_dst = dst;
+-
+-			dst = md_info->dst_orig;
+-			skb_dst_set(skb, dst);
+-			md_info->dst_orig = NULL;
+-			dst_release(tmp_dst);
+-		}
+ 	} else {
+ 		if_id = xi->p.if_id;
+ 	}
+ 
++	/* The metadata dst carries the route the packet is still to be
++	 * transformed for, and the lookup below takes the address family from
++	 * the dst it is given. Put that route back, taking our own reference:
++	 * the metadata dst keeps its own, as a clone of this skb shares it.
++	 */
++	if (md_info && md_info->dst_orig) {
++		dst = dst_clone(md_info->dst_orig);
++		skb_dst_drop(skb);
++		skb_dst_set(skb, dst);
++	}
++
+ 	dst_hold(dst);
+ 	dst = xfrm_lookup_with_ifid(xi->net, dst, fl, NULL, 0, if_id);
+ 	if (IS_ERR(dst)) {
 -- 
 2.43.0
 
