@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794712695;
-	b=0cfll5ynoEK+xSFG6FPcckwNTRu3fhdyCEQfUCuASGt3LAvlyRFKHiliDzfuGBcyXctk
-	 Hm8AzdfUSkhTMVsEksWFpBcj2aV8qUK35MCFZbMhRlefmEN931d0P55hZrkHM/PbNw+nS
-	 DnItSCIIRzjyFcGPsVMOlYT95VGpjDdkqr9VaVxh+GfKGyvwgI5vn+PuqSWQY6/xsadAo
-	 8gmK2+AQ4/iUTyippejoTZyfOSGTDqJzlRgzu316YzEEo07KqPxB187UUUjEnOz30uL+O
-	 PdP6YzGVg+asfwNMipciyjcZ82Tqd/+3+vTyyy8ljF81Au+M1VFIIrBLwfTw7piPGnA==
+	t=1794712699;
+	b=cAfgNWq5h8G8+Npp/BKcNgahV2d4Og6ONcjmXLhxVz9o4P022a4FiO+I7aUykmMNYAUU
+	 QG/826GxCSuvKFbKoKY1vTX9tgf/UwING00gllnjh5OG0NaUJHtyhE+aQFpeAXk0CKJWQ
+	 c61L9gFfNAE4nwUyi9unXwSe0JiWxRG0Gptx6Ux9rvvr1t+ZBi4ZMML7A/KbHdYrGVOtQ
+	 vGMhIHX3vu+8qy/RkPQS+jD4MfPuaSzP2DWtIXEavXoQ6do99M0LVdhWk8pRl6x8DePQ6
+	 MlXtEJGMvbgiMk+Mf0/yUkC7+VdXSGZwTDtz2/68+Hv3pypV4wMKhIClP870KhT1yEg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794712695;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794712699;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=4Ndi0ltXRU7nxmxD7d4uTFdZMGtp3eSYlxzbi6FeOro=;
-	b=tj4iNrVHo1sPwASgsugDADSPZwCWnTXa+etgqEdPLyHV+2TubqLfgOF9hujD79FlVeak
-	 Htx/kjY9H4Ku1gL0VqCOf5yTTt4t9rVcTOj8G53fJY2EbZjptptgI3QVyTogTYtQ4UEZM
-	 m+vdmq9sXOQDyhrAxWqEvDS4j7GdDXlx2hrK8gSALgJbs8HVwwE39lU6RGGXaz5j3dPA1
-	 3BOcPcLl6arYU/lbm9FHRVbEixb7v5OYnZXU+Lk70Id+eUOfCG0+5EFrfJ4J++nJM9DsA
-	 QI/qjlkxL2H/gEty+vICJxHntMddPBqBOJ2VKiUb6hst4MwGl/shE85ywjBWMUq3HYQ==
+	bh=EQmiMwQ3u6k3uyujpSWR+O2asGp9W/secTZ73M9GPzQ=;
+	b=kCNESYIx4ISWmaV7YBiZx0oYfKTScSmq3ls0o5D0IVdFn0PGzSoIVSpl4pCu+66slra8
+	 KX+sd/VijYdcoIA0ZwxkoTU52WLIoBJnLIeQ0TRmTzinG0lfqfK2ND7WHVEYZ2JYvA7Id
+	 dg0+b8URVUjUNbOPx585TXBw3S4k1uoYZ1y/cxGHZ0arCIfDwY41glrhfVyOSkYPnS/ka
+	 BmUOIH9lMnU2S4r1Zp9K/0TUx9cwfoZ/Y8YX8myTK1j/cRrzY533tnjDDwRj0GlxvjANw
+	 1MP3O+v4DH/n32eUD0TBmITo2cKXPHXQBYPzmKX1lC/T+Uv3Qy/BRsWHv8g9cmDs4hg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="T9AN4k/r";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=S4O5UKcm;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D980606A323;
-	Sun, 15 Nov 2026 03:18:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A813606A8B5;
+	Sun, 15 Nov 2026 03:18:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=T9AN4k/r
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 885FE1F000C4;
-	Sun, 15 Nov 2026 03:18:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=S4O5UKcm
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64D781F000D0;
+	Sun, 15 Nov 2026 03:18:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794712694;
-	bh=4Ndi0ltXRU7nxmxD7d4uTFdZMGtp3eSYlxzbi6FeOro=;
+	s=k20260515; t=1794712698;
+	bh=EQmiMwQ3u6k3uyujpSWR+O2asGp9W/secTZ73M9GPzQ=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=T9AN4k/reNPzg8+Lb9NCo+jxd1Fl8TuGmTEa+NKww9XMoDiNn+ZmkusVGcxs9RWvt
-	 S5MIuVkS4w42HcwHA2JKfvoqYv+1ZauvRCERXjpEA4HcqK25zJ2r5V5/4o2uiDgOYi
-	 Vx1uSJ5r0Idxflhw6kgpZjd50ERQUA38BZ4umiFTPpVDYYHnw42tLdymtgJ/FwJXq6
-	 BvkQeITgYVLGAuBXb1jP3w4YzCV024x8urb8Rr9fAht7oC2ay4dZDs+cQklC0fBNf/
-	 Q/sQ5TMozOjY4Q3N/XQ+bM7Uh7BC/mh7xw7QRTrhUUGTwd6Tr3Qw2QcuZv0SfPiqxv
-	 naBffzjBpIdVg==
-Subject: Re: [PATCH net-next v1 02/15] psp: take the psp nexthdr from the
- packet on encap
+	b=S4O5UKcm+XXFbVBqaNQsjEllJ9mWIy8sHKKM6B/25bfQQLWnQxWIM6raMEzUG9C24
+	 VUt88pk7Z9LWIexHcGLTMkEANAFiLP6p7qQAGVVl84I4VMyxGO/5Tgl/cgnretyEDE
+	 DYN0YOZIAj8ktOaK66oZ6weaRPIVWZsoc2iR+wvkYIw1QmYaec7uKX8UZhSTCUMHK7
+	 qWP4ZeSrxLPJ6Lb09v4vMmeX8QZMQsRlO8GQVOna2NeYUVKFtpzPDfnSlcxHBmXKtA
+	 uylQwvYL2kYgj8/fP+N5zRFxucgXrzXXOTEF7Fguy/rvbWBlSVomzs2ZJQZ1vmzkYy
+	 MqvRB4C7+ne3g==
+Subject: Re: [PATCH net-next v1 05/15] net: add METADATA_PSP dst to carry a
+ psp association on an skb
 From: netdev-bot+sashiko@kernel.org
 To: toddfreed@meta.com
 Cc: netdev@vger.kernel.org, davem@davemloft.net, andrew+netdev@lunn.ch,
@@ -52,10 +52,10 @@ Cc: netdev@vger.kernel.org, davem@davemloft.net, andrew+netdev@lunn.ch,
  linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
  martin.lau@linux.dev, pabeni@redhat.com, saeedm@nvidia.com, horms@kernel.org,
  tariqt@nvidia.com, weiwan@google.com, willemdebruijn.kernel@gmail.com
-Date: Sun, 15 Nov 2026 03:18:13 +0000
-Message-ID: <179471269307.2199510.1215468778950936295@kernel.org>
-In-Reply-To: <20261111005533.6436-3-toddfreed@meta.com>
-References: <20261111005533.6436-3-toddfreed@meta.com>
+Date: Sun, 15 Nov 2026 03:18:16 +0000
+Message-ID: <179471269695.2199510.18062590833471363525@kernel.org>
+In-Reply-To: <20261111005533.6436-6-toddfreed@meta.com>
+References: <20261111005533.6436-6-toddfreed@meta.com>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -80,104 +80,112 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] This patch makes psp_dev_encapsulate() accept protocols other
-  than TCP: psp->nexthdr and inner_ipproto now come from the packet, and…
+- [Medium] The commit message says the second psp_xmit_md() check at
+  dequeue, in sk_validate_xmit_skb() (net/core/dev.c:4164-4172), handles…
 
 --
 
-psp: take the psp nexthdr from the packet on encap
+net: add METADATA_PSP dst to carry a psp association on an skb
 
-This patch takes the PSP next header from the IP header of the original
-packet instead of hardcoding IPPROTO_TCP, so that socket-less associations
-can carry UDP. psp_dev_encapsulate() now refuses packets with IPv6
-extension headers, IPv4 fragments and skbs that are already encapsulated.
-mlx5e_features_check() also turns off GSO and checksum offload for PSP
-skbs the device can't handle.
+This adds a METADATA_PSP metadata_dst type, which holds a reference on a
+psp association so that socket-less skbs (for example, ones marked by a tc
+rule) can be PSP-encrypted by existing driver tx paths. __dev_queue_xmit()
+now validates the metadata dst against the device and MTU and keeps the dst
+for the driver. sk_validate_xmit_skb() checks it again at dequeue in case
+the psp device was unregistered while the packet was queued.
 
-> diff --git a/net/psp/psp_main.c b/net/psp/psp_main.c
-> index e09f6fec948d7..1eb1617aaf2b5 100644
-> --- a/net/psp/psp_main.c
-> +++ b/net/psp/psp_main.c
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index 9665f3b2f5cb2..2cca5f0d302f8 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
 
 [ ... ]
 
-> @@ -236,7 +237,7 @@ static void psp_write_headers(struct net *net, struct sk_buff *skb, __be32 spi,
->  	uh->check = 0;
->  	udp_set_len(uh, udp_len);
+> @@ -4156,6 +4161,15 @@ static struct sk_buff *sk_validate_xmit_skb(struct sk_buff *skb,
 >  
-> -	psph->nexthdr = IPPROTO_TCP;
-> +	psph->nexthdr = nexthdr;
+>  	if (sk_validate) {
+>  		skb = sk_validate(sk, dev, skb);
+> +	} else if (unlikely(skb_psp_md(skb))) {
+> +		int psp = psp_xmit_md(skb, dev);
+> +
+> +		if (psp <= 0) {
+> +			kfree_skb_reason(skb, psp == -EMSGSIZE ?
+> +					 SKB_DROP_REASON_PKT_TOO_BIG :
+> +					 SKB_DROP_REASON_PSP_OUTPUT);
+> +			skb = NULL;
+> +		}
 
 [Severity: Medium]
 
-psp_dev_encapsulate() now accepts non-TCP packets. Is the outer UDP
-source port selection in psp_write_headers() still correct when skb->sk
-is a UDP socket?
+The commit message says this re-check handles the case where "the psp
+device may have been unregistered while the packet was queued, and its
+keys deleted". Does that still hold for skbs that get requeued?
 
-The code just above this hunk still does:
+This check runs once, from validate_xmit_skb(), before the tx lock is
+taken. If the txq is stopped by then, sch_direct_xmit() requeues the skb
+into q->gso_skb. dequeue_skb() then sends it out again without validating
+it a second time:
 
-	if (likely(sk)) {
-		u32 hash = sk->sk_hash;
-		...
-		hash ^= hash << 16;
-		uh->source = htons(reciprocal_scale(hash, max - min + 1) + min);
-	}
+net/sched/sch_generic.c:dequeue_skb() {
+    ...
+		/* skb in gso_skb were already validated */
+		*validate = false;
+		if (xfrm_offload(skb))
+			*validate = true;
+    ...
+}
 
-The comment there assumes sk_hash is the TCP ehash, which stays constant
-for the life of the flow. UDP sockets use the same storage for other
-values:
+On mlx5, one possible sequence is:
 
-include/linux/udp.h:
-#define udp_port_hash		inet.sk.__sk_common.skc_u16hashes[0]
-#define udp_portaddr_hash	inet.sk.__sk_common.skc_u16hashes[1]
+CPU0
+sch_direct_xmit()
+  validate_xmit_skb()
+    sk_validate_xmit_skb()
+      psp_xmit_md() returns 1
 
-udp_lib_get_port() then sets:
+CPU1
+mlx5e_nic_disable()
+  mlx5e_close()
+    ...
+      netif_tx_disable()
 
-	udp_sk(sk)->udp_port_hash = snum;
-	udp_sk(sk)->udp_portaddr_hash ^= snum;
+CPU0
+  HARD_TX_LOCK() finds the txq stopped
+  dev_requeue_skb() puts the skb on q->gso_skb
 
-At that point udp_portaddr_hash already holds
-ipv4_portaddr_hash(net, rcv_saddr, 0).
+CPU1
+  mlx5e_psp_unregister()
+    psp_dev_unregister()
+      psp_dev_tx_key_del(psd, pas)
+        mlx5e_psp_assoc_del()
+          mlx5_destroy_encryption_key(priv->mdev, nkey->id);
 
-After hash ^= hash << 16, the upper 16 bits are
-udp_portaddr_hash ^ udp_port_hash. That cancels snum and leaves only the
-hash of the netns and local address. reciprocal_scale() uses essentially
-only those upper bits.
+Later, mlx5e_nic_enable() registers a new psd, and netif_device_attach()
+wakes the queues. The qdisc is not reset at any point. The stale skb then
+comes off gso_skb with validate set to false and reaches mlx5e_xmit(), where
+mlx5e_psp_set_state() still reads from the old association:
 
-Wouldn't every UDP socket bound to the same local address then get the
-same outer PSP source port? That includes all wildcard-bound sockets in a
-netns, and it would undo the RSS spreading the comment describes.
+	psp_st->spi = pas->tx.spi;
+	psp_st->ver = pas->version;
+	psp_st->keyid = *(u32 *)pas->drv_data;
 
-This path becomes reachable later in the series. tcf_psp_act() in
-net/sched/act_psp.c attaches the METADATA_PSP dst to egress skbs that
-still carry their UDP skb->sk. As a result, mlx5 and netdevsim call
-psp_dev_encapsulate()->psp_write_headers() with a UDP socket. The later
-patches in the series leave psp_write_headers() unchanged. The sk == NULL
-branch, which uses udp_flow_src_port(), is not affected.
+Can this hand the NIC the id of a DEK that has already been destroyed, and
+that may have been reused for another association? psp_xmit_md() would
+catch the psd mismatch, but it never runs again for this skb.
 
-Should the sk->sk_hash path be limited to TCP sockets, with other sockets
-falling back to udp_flow_src_port()?
+On mlx5, the plain check-then-xmit race is blocked because
+netif_tx_disable() runs before psp_dev_unregister(). That leaves only the
+requeue window.
 
->  	psph->hdrlen = PSP_HDRLEN_NOOPT;
->  	psph->crypt_offset = 0;
->  	psph->verfl = FIELD_PREP(PSPHDR_VERFL_VERSION, ver) |
+The socket path through psp_validate_xmit() was already exposed in the same
+way before this patch. The new METADATA_PSP path, however, depends on this
+re-check to handle the unregister case.
+
+>  	} else if (unlikely(skb_is_decrypted(skb))) {
+>  		pr_warn_ratelimited("unencrypted skb with no associated socket - dropping\n");
+>  		kfree_skb(skb);
 
 [ ... ]
-
-> @@ -279,11 +313,11 @@ bool psp_dev_encapsulate(struct net *net, struct sk_buff *skb, __be32 spi,
->  		be16_add_cpu(&ipv6_hdr(skb)->payload_len, PSP_ENCAP_HLEN);
->  	}
->  
-> -	skb_set_inner_ipproto(skb, IPPROTO_TCP);
-> +	skb_set_inner_ipproto(skb, nexthdr);
->  	skb_set_inner_transport_header(skb, skb_transport_offset(skb) +
->  						    PSP_ENCAP_HLEN);
->  	skb->encapsulation = 1;
-> -	psp_write_headers(net, skb, spi, ver,
-> +	psp_write_headers(net, skb, spi, ver, nexthdr,
->  			  skb->len - skb_transport_offset(skb), sport);
->  
->  	return true;
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261111005533.6436-1-toddfreed%40meta.com
