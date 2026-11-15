@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794712710;
-	b=SG3Mwj2GoERnO9UWrdAKlxBYMIQ9nbpgmEI5583gC8Op5ru/2TyTsYqeVKZTgUJN3bcR
-	 LcePwUbblFEbxtiZtsrdmc/o74AS+90Roh/Z/fRyqLwKwTw3lLS8B5LQTUNoWRldTXz5i
-	 kxSZTLTHO7vDcCsTiC9Rh6v+YNCdePw+1GbF+D8Y0Wn574o2iTNiElvMxHEBenIezV6XM
-	 AcDmFT8B/INmzdRxiSKgGEHZaPHLNH7luKIs/Mj++n83N/NfPZdgn6ckee8NhvXEQh6aM
-	 qSD3bS/Le4sZNbQJCBB1nino4v4We5AncBmBydj+G8x8Xm+Lo1gYlCw5DmHQzSp5bUQ==
+	t=1794712711;
+	b=hgS+IDOlJXL5Hix7t9EoF09ACEKUpv3GbSxk5lRnyBt2jdfXHRIjJGwbGhBojMHqEWGD
+	 3ITyf5Fr6RMWP3PD2Z/usNMQS3m2BLPNUByrJawVgJID4R1GTADThukM0bT/SCIgA5C5h
+	 DoSle/i6vfxeVEns3XYgGS9/YFa/kAPXNkHcqoXMMer+7CgtXpTQjZiM3Yawxmh7t+R4Q
+	 6jkDxlEJt7L3xeBL4fDQz/L/YN4hy9dse0OHwloXR7KNu0VSnpkidn4SSq5fbFjd2le7H
+	 YAdog5xnTEhVV3+BgUxpPM9oQZcOYG7ihU0u5GmnEs0JIoXmYjTaSFxQ2gaUzudrM5g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794712710;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794712711;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=Xqkmq+KJ2/HtU3nnCQ54j5ML6laUMMrM5zulVXs75RE=;
-	b=m3aOTNMuIpjdOxTR9Ibdeo28m3dbvKtnYvNVLP06IftrbCMMVid3AB5xChKKjZL3kMx+
-	 bpPxIekqHufADT6G+tEKREW5s5LYk3gyJz/uvN5T1n1PBVfYt++T7eAHTCXdYsBznZ2Ng
-	 xHZXxLy6sqrcJT2hPLAqsdPTF2+RFg9oK1rMlk7ufybOCkXR993eCabVSQkvz+E4D1qfi
-	 qhzTEDYS27s+PabR38TcwHMbx5KzTN5amj5AeW+qjK4e+uzLRJjsFG2x6hZWW+GbyM8xg
-	 hdtgTTnhr3vy9+M3SOtTVYgP2nd9y3+7H5RzhRdw6EG3Ygb1ey6a3HmrAe+YoQDevfg==
+	bh=NaBBC8TVav3SriqgseLu10PdzgsqTGxGU+07qISdAEI=;
+	b=wHK915eVcfpR3p+nzQ9q9T1yPNVpG7FS+rk4N5T2nCgwk75hlzcqVevbijDsJewwlgqX
+	 0PI4YD7RKEhpmBIBXKgyyxG437NJWX7of4Vl+/VNt7WDrjpXjFZcqxAj91OOKbywKzUQJ
+	 6Ao8xSR7ZufFCEh6hJSfQATvGd8lixwvlO93TekU8/qS/LQARfoyepE+F6cA0KoSdKHJH
+	 jSGE54vmQCmDE23KGxx0u2A9QBFZRDXg3vA2wjZqKq7a0Hf1qhZ8myqdhy80KhgvSpWAw
+	 F+Qpx4hbQpb5GuCrOz0AUlW63sv58GzM8kV64ER+vvXzhbfMlnHPj5nONbcbZu3SBEQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=olyVM2U2;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dLQBFP2F;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 012CB606A891;
-	Sun, 15 Nov 2026 03:18:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC8BF606A897;
+	Sun, 15 Nov 2026 03:18:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=olyVM2U2
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AB2A1F000D0;
-	Sun, 15 Nov 2026 03:18:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dLQBFP2F
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49B481F000C5;
+	Sun, 15 Nov 2026 03:18:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794712709;
-	bh=Xqkmq+KJ2/HtU3nnCQ54j5ML6laUMMrM5zulVXs75RE=;
+	s=k20260515; t=1794712711;
+	bh=NaBBC8TVav3SriqgseLu10PdzgsqTGxGU+07qISdAEI=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=olyVM2U2Aghqs20/HIhJGzxuOPZytZp20BXK6kDJZG7fEqVSYDHQfu9aHJgTG0O3S
-	 tjTfvrSoLJW1mGGIRFh7fLTGgkUnB/u4EUzkL1RuPSaXzzt6cOPRF8jseKIfQ3sMv9
-	 JzQ+3e7tVwVW4ToyOU+pWm9q1vF7uya1N0OIlLqlnYQeNXIa1uO2UNvTcIwZ0+Szmo
-	 H3cJdRxlG8MHbSfZqFn6OBLryQX2l6kqMfItgEtybaVIvNEvUZv6hJ58G9B/kuBVaZ
-	 MwWjTgAKVLl6TCtRlHRz1DxmjD0n63YI2y27hpyipZT90m7wT0VHA+0LSyvt/m/mOb
-	 3jBWkkhpVdXtQ==
-Subject: Re: [PATCH net-next v1 13/15] selftests: tc-testing: run dependsOn
- probes outside the test namespace
+	b=dLQBFP2Fjo571CIuWkJQKywIpqWUt5KJwH9SHqGkuC4Up3dRv1/PCH5Ir635cYSoL
+	 TkF+D+OB/gATihebRlEIw3wo5+vSU+jKTNx6wU/d+ZBIbFrr8T9nMRbqb/ZqzLaQIM
+	 wc8FWcKrfH4CqsyExAqHjrhpK4sf/jX1/kUqdXdj5zQArqaTAojLVL0Rnae5MB4yxq
+	 ncQORahGse0YnSpFo+2kjgHe5jTFgweL+CT5lYCqex0nBG0FfzLEd28nqRf3ZUOc28
+	 oKkJQkFB7WrLoC8MdC815IRRnvEILv2eB+Lv2ZKDhG1O/5d5Phh/aLpNeDo8l6S9k7
+	 99xJHOTG95qtg==
+Subject: Re: [PATCH net-next v1 14/15] selftests: tc-testing: add tests for
+ the psp action
 From: netdev-bot+sashiko@kernel.org
 To: toddfreed@meta.com
 Cc: netdev@vger.kernel.org, davem@davemloft.net, andrew+netdev@lunn.ch,
@@ -52,10 +52,10 @@ Cc: netdev@vger.kernel.org, davem@davemloft.net, andrew+netdev@lunn.ch,
  linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
  martin.lau@linux.dev, pabeni@redhat.com, saeedm@nvidia.com, horms@kernel.org,
  tariqt@nvidia.com, weiwan@google.com, willemdebruijn.kernel@gmail.com
-Date: Sun, 15 Nov 2026 03:18:28 +0000
-Message-ID: <179471270808.2199510.6514314455565065109@kernel.org>
-In-Reply-To: <20261111005533.6436-14-toddfreed@meta.com>
-References: <20261111005533.6436-14-toddfreed@meta.com>
+Date: Sun, 15 Nov 2026 03:18:29 +0000
+Message-ID: <179471270988.2199510.16269189548996714226@kernel.org>
+In-Reply-To: <20261111005533.6436-15-toddfreed@meta.com>
+References: <20261111005533.6436-15-toddfreed@meta.com>
 X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -75,96 +75,119 @@ you want to address the nit picks below when you respin.
 
 Low priority / nit picks for your consideration:
 
-- [Low] The patch fixes a real regression but has no Fixes: tag.
-- [Low] run_one_test() now passes a new stage string, 'probe', to every
-  plugin's adjust_command(stage, command) hook.
+- [Low] Tests 2d50 ("Add psp action without encap or decap"), cab5 ("Add
+  psp encap action without assoc, with index") and 0c17 ("Reject psp…
+- [Low] Tests a744 ("Add flower psp_spi filter with psp decap") and 4e1f
+  ("Add flower psp_spi, psp_ver and psp_dev filter with psp decap") in…
 
 --
 
-selftests: tc-testing: run dependsOn probes outside the test namespace
+selftests: tc-testing: add tests for the psp action
 
-This changes run_one_test() in tdc.py so the dependsOn probe is passed to
-exec_cmd() with a new 'probe' stage instead of 'execute'. With that stage,
-nsPlugin does not put "ip netns exec" in front of the probe, so the probe
-runs in the base namespace and the probe-gated tests are no longer always
-skipped.
+This adds tdc tests for the psp tc action. They add, replace, delete and
+flush decap actions, and check that invalid encap/decap configurations are
+rejected. It also adds flower filter tests for psp_spi, psp_ver and
+psp_dev, and enables CONFIG_INET_PSP and CONFIG_NET_ACT_PSP in the
+tc-testing config.
 
-> diff --git a/tools/testing/selftests/tc-testing/tdc.py b/tools/testing/selftests/tc-testing/tdc.py
-> index 511d66c36a2a0..541caf984519f 100755
-> --- a/tools/testing/selftests/tc-testing/tdc.py
-> +++ b/tools/testing/selftests/tc-testing/tdc.py
-> @@ -399,7 +399,7 @@ def run_one_test(pm, args, index, tidx):
->      if 'dependsOn' in tidx:
->          if (args.verbose > 0):
->              print('probe command for test skip')
-> -        (p, procout) = exec_cmd(tidx, args, pm, 'execute', tidx['dependsOn'])
-> +        (p, procout) = exec_cmd(tidx, args, pm, 'probe', tidx['dependsOn'])
+> diff --git a/tools/testing/selftests/tc-testing/tc-tests/actions/psp.json b/tools/testing/selftests/tc-testing/tc-tests/actions/psp.json
+> new file mode 100644
+> index 0000000000000..990e8bd1ce9a0
+> --- /dev/null
+> +++ b/tools/testing/selftests/tc-testing/tc-tests/actions/psp.json
+> @@ -0,0 +1,459 @@
 
-[Severity: Low]
+[ ... ]
 
-Should this patch have a Fixes: tag?
+> +    {
+> +        "id": "2d50",
+> +        "name": "Add psp action without encap or decap",
 
-The probe block came from commit 7f3f86402609 ("selftests: tc-testing: add
-"depends_on" property to skip tests"). At that time nsPlugin used one
-shared netns that was created ahead of time, so the probe worked.
+[ ... ]
 
-Commit 98cfbe4234a4 ("selftests/tc-testing: localize test resources")
-moved tests to per-test tcut-<random> namespaces. It also wrote the
-'execute' stage call shown above. In run_one_test(), the probe still runs
-before the per-test suffix is added:
-
-    NAMES['NS'] = '{}-{}'.format(NAMES['NS'], tidx['random'])
-
-It also runs before pm.call_pre_case() creates the namespace. As a result,
-nsPlugin's adjust_command() wraps the probe in a netns exec for the bare
-"tcut" name, and no namespace with that name is ever created.
-
-Because of this, the mirred dependsOn probes added later in dcfaf1f758ee
-("selftests/tc-testing: require an up to date iproute2 for blockcast
-tests") could never pass.
-
-Would this tag fit?
-
-Fixes: 98cfbe4234a4 ("selftests/tc-testing: localize test resources")
+> +        "cmdUnderTest": "$TC actions add action psp index 12",
+> +        "expExitCode": "255",
+> +        "verifyCmd": "$TC actions list action psp",
+> +        "matchPattern": "action order [0-9]+: psp",
+> +        "matchCount": "0",
 
 [Severity: Low]
+Does this test reach the kernel check it is named after?
 
-This passes a new stage string, 'probe', to the adjust_command() hook of
-every plugin. Should the in-tree docs list it?
+The test passes if the command exits with 255 and no psp action is listed
+afterwards. tc actions add also exits with 255 when tc's own parser refuses
+the arguments, before any netlink request is sent. In iproute2,
+tc_action_modify() returns -1 for a parse_action() failure and for an
+rtnl_talk() failure alike.
 
-The stage list in tools/testing/selftests/tc-testing/README reads:
+If the psp parser in tc requires encap or decap, this test would pass
+without ever reaching this check:
 
-  The stages are identified by the following strings:
+net/sched/act_psp.c:tcf_psp_init() {
+    ...
+	if (NL_REQ_ATTR_CHECK(extack, nla, tb, TCA_PSP_ACTION)) {
+		NL_SET_ERR_MSG(extack, "Missing PSP action, encap or decap");
+    ...
+}
 
-    - pre  (pre-suite)
-    - setup
-    - command
-    - verify
-    - teardown
-    - post (post-suite)
+The same question applies to two other tests:
 
-creating-plugins/AddingPlugins.txt also leaves 'probe' out of both its
-phase list and its "The stages are represented by the following strings"
-list. The commented stage-dispatch template in TdcPlugin.adjust_command()
-has no 'probe' branch either.
+- cab5 ("Add psp encap action without assoc, with index") and the
+  "Missing PSP association ID" check in the encap case.
+- 0c17 ("Reject psp decap action with an assoc") and the "decap takes no
+  PSP association" check in the decap case.
 
-The dependsOn description in creating-testcases/AddingTestCases.txt only
-says:
+In each case the test would still pass if the kernel branch were removed.
 
-  dependsOn:    Same as 'skip', but the value is executed as a command. The test
-                is skipped when the command returns non-zero.
+The flower tests b58d and 2f96 avoid this by expecting exit code 2.
+tc filter add returns 2 only on an rtnl_talk() error and returns 1 on a
+parse failure. The action tests have no such check.
 
-Probes now run in the base namespace, outside the test netns. A future
-dependsOn command that uses per-test devices such as $DEV0, $DEV1 or
-$DUMMY would fail, and its test would just be skipped. Could this be noted
-in the dependsOn description?
+Would it make sense to match the extack text instead? For example, a
+verifyCmd could rerun the command with stderr captured and grep for the
+kernel message.
 
-The fix also depends on plugins passing unknown stages through unchanged.
-nsPlugin and valgrindPlugin both do that today.
+[ ... ]
 
-The existing lists were already out of date ('command' rather than
-'execute'). The missing 'probe' entry and the base-namespace behaviour of
-dependsOn are new with this patch.
+> +    {
+> +        "id": "a744",
+> +        "name": "Add flower psp_spi filter with psp decap",
+
+[ ... ]
+
+> +        "dependsOn": "$TC filter add flower help 2>&1 | grep -q psp_spi",
+
+[ ... ]
+
+> +        "cmdUnderTest": "$TC filter add dev $DEV1 ingress protocol ip pref 1 flower psp_spi 0x1234 action psp decap",
+> +        "expExitCode": "0",
+
+[Severity: Low]
+Should this dependsOn also check for the psp action?
+
+The command uses "action psp decap", but the probe only checks that flower
+knows psp_spi. The action tests earlier in this file probe for the action
+like this:
+
+    $TC actions add action psp help 2>&1 | grep -q decap
+
+run_one_test() in tdc.py uses only the probe's return code to decide
+whether to skip a test. Suppose tc has the flower psp_* keys but not the
+psp action. This test would then run instead of being skipped. tc would
+fall back to its noact parser, reject the action, and the test would be
+reported as a failure.
+
+The commit message says:
+
+    The tests need a tc with the psp action and the flower psp_* keys; they
+    skip without it (dependsOn).
+
+Test 4e1f ("Add flower psp_spi, psp_ver and psp_dev filter with psp decap")
+has the same issue.
+
+Could both probes be chained with && for these two tests?
+
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261111005533.6436-1-toddfreed%40meta.com
