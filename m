@@ -1,99 +1,64 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.230.70
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794757452;
-	b=DWAvC1mj1yq/oXaHTkB1hUmEBpT8XGal75lfyfIlgz1n/udrS12Wzqv2TbRKRHa8Wkwm
-	 xgW3ziBJunOtXa81+D+4VJ6etvsE0heFZ8xxGQw/Upey4VndCEJE+na/Po96Z4IEJULPm
-	 gHPGD6KaUUkeHSzzYroxVe2oMMNZH/hWMkJGnsbjsdeWpWioRKH+Kr4tD0uoQqM+jZ7ha
-	 RK690OeZHI7syGZzQeZZksGwRadxUBGn/6fTQxzvyOTNd+9i5c6JH+xGlOJhMWF/1LuDn
-	 VxWgOsTr8ix/+iuD1692bSWEKP7m1VpDdfK3CiTTOQ8FFPgZ7xQarR0m7KT3uSsyMig==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794757452;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=vUVVF4AJI6A1KyF5MrpgJ8wgNYqK81vISWpwSYQrSjM=;
-	b=u0nNfY5/ELOukRdmzeT3KAOTokkYFUKULshr1G47j/bOBmFkolhuZ7v7PnnUd1KkE0Ra
-	 u4K5XPG4EVEyrrRkfSbEC+TeU8UvphWQHMEM4uylf88/OzjYEBE2AjwvGUqdLo2RwKIqM
-	 jHOh4PQqv6NfxiJkR3Bv5A99QuPJCoPVOGXHamHJ8WW4gu7p0iG2coNUuBNDG/E6rrKOS
-	 Nw3jQfeMiIZwywVtDEQewVNeLZFnLfGVUk6FiAxgoNStWtKI4kRSQmQ8Io7Jf37nKf23e
-	 dYaArIH8HTiCiFZzbKYSZLS/J0xhti3JNhZ1NzPK4XKxPT4tdDBIDQusjcK3uglsYRg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=sd6bEbok;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.230.70
-Received: from mail-lr2-f6.google.com (mail-lr2-f6.google.com [74.125.230.70])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794762062;
+	b=DuWt1KGEj3ufCUypVH4vGaz1O2rf6wTf6dgveg83g0r6sdCIhBFN4AwjOHg0tXGKfJXh
+	 DuEzDejj9YIJ6Ia/05zgnZJtkgCefAvnswauxfb9406Cr1rZqlbADxojZ3l+rWoQQjQVx
+	 o78wGzX+WFWMAaEMe5g59ZYaLi+4EiOCwYKG6IBuk5wCIcN6BcYcjjVq3/1SpuTY2DnxU
+	 uz7xdqp8ciHyIiqSzapBLXms9NDpbiMQRCF7tqN+eY0+r0CnhvF1DRRhFPL80SwpYTukh
+	 KeqRySARh3WlT60/2bToNfvazSp/0iBP4NAIYmLqob8zYd341vsfK1UyhhmsMs7D9Mw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794762062;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=BVQg03Ck8W5f6msu4j0hffsFbWEt7ebqOkm96wfPAPM=;
+	b=rXcXUv1vzqymZBIENcPOA86t7xmdGnVwyobtM+prb8ok53ba323UJ99CVOqgm7jUZ8fL
+	 9BGDLQvI/QLP79XOk+8EZsQ9K3LgLZR1MOv6VZPT5tbwLCG4R7yFBIn0e61pBcCKcfVAP
+	 a2MieeBhetrpdt0Y66A+thfuFx9V5Mo6nohkb7WWqEmT0NIMDd7OwsnSj7iHVL+G1AtV6
+	 N/z4mPBkobjy+Tp2Ymy3LeeAUt0a/vIRPF1sTxH6f20Zs2cPFOZaj4ahbX1PsJOwdWGCq
+	 W11Wr5b/AB8RDZjRhTw1s6vPN8Wx9jeJYUXZSzOKvNRJYddDDd/uqffftBbVSv7d9vw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hBwKV3W7;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FA0E606A31A
-	for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 15:44:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7FA0E606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58A10606A31D;
+	Sun, 15 Nov 2026 17:01:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=sd6bEbok
-Received: by mail-lr2-f6.google.com with SMTP id 38308e7fff4ca-3ab1bfd1373so17170381fa.0
-        for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 07:44:11 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794757450; cv=none;
-        d=google.com; s=arc-20260327;
-        b=kc4KJQTif/ea9w1zgy6hQd8mXixz4opJ9GRxvN/jGkJbJizC1iUGkwtPgr2pHh30LZ
-         zH6Ry9yxe7OgNPW/N1p8ZCVw/Fqy271fqSHemlEizcD5njt6/e7Xixpy4dAKM7NDvYNx
-         NHSk9k7aQ2qgJfwLA6brrReifclujVLLTkeALQ6zqLpG3WLY17w/kpz2jHOZlw0TOO3h
-         H6jq2ypteN30KZMzP4kZ2wzYxPnVOuMmJ3oUXOmeExfpWoHlreR/aoT0u174Ke1HiBpY
-         gDi2wrQVGq1b1hKsPfxZM8kXv2xqoV2oa2E/UoHbE+zzEkpGhDjTtr1VzCSYkgsPY4XT
-         n+3w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=vUVVF4AJI6A1KyF5MrpgJ8wgNYqK81vISWpwSYQrSjM=;
-        fh=5YhL2jBGP0Oopjd4pZR9zLgYTfOmEKvjU/sBzvNlSz0=;
-        b=ikADSuihpodfYPNezoF8qQlgXiLgvLulXNRPNLEFFRk7ODWGA1Evwm92y6z2muBVe9
-         ESFIJ6T74xBRR5Ardk3YXYSw82nNeR8F7i2ZAkHgkvjt0n3JtzYbOvyFYvkAuqveX5Au
-         CIb8Sn2awLZnaRQZXDC4NYz7S2KqwmYaRfumz0+rGQ22Kwp2wvM3rdwKT1fYByowYlJE
-         qDHe1Cj5almrV46WGXUUGLsilgGg51yY2DsogNgootWl7HaW/jNZ6TRU38OnlkVxXiVo
-         AW9A2F10NKQvZZ9YLEacATzg+2xdKaKyp3rDhJmzURIevdsn6hZWoxL/QiFGPWqmq6g6
-         xdWw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794757450; x=1795362250; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=vUVVF4AJI6A1KyF5MrpgJ8wgNYqK81vISWpwSYQrSjM=;
-        b=sd6bEbokDqmC8HPuZHtMLvJWUEqPx+tuojrCmj9oIEpHkPGG8qWzgd3eDlwowBYEWA
-         Nu0yHcrR843BQQCQWsBy6dgy/DILU1+WrzPQ2F0LMSzvwd0mtpjZw9llTZ5O1f0xOLb0
-         a1lmyOxxFhKcG1hc6d5skVZB9KCHmIMXGO6kIvVYD7BdS9WMxqd3ic2cgVAaD4IcBDog
-         JcjOjaaFeOqANyptqq3f9Le/aGkGx9RgGV4lDOBcWAcxZDyIb61grNtknix4W5xta6mP
-         0sOfxQLnzAXWnf2La8WrxDmhxQBRB2InWks/b14RJFlX3Vz/6mgqFANnwcjVD0Vk49Ra
-         e59w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794757450; x=1795362250;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=vUVVF4AJI6A1KyF5MrpgJ8wgNYqK81vISWpwSYQrSjM=;
-        b=DlZ4GqXlVvIYJ08YnKiiIWh2+JUOfEC0lJIYbsYxguz7os+vxq//3fqPeKU6xztFEl
-         PEtb/qqNgHTrSFj+VU53gQMXASHtv+pqkTAfJZjxzWv0Cbd1bm2JwFDMsoswR9+owo41
-         wESDfpeQ1Ip8zDZtZVB4aA3ydOtRmuLX5AFa3bK5lRniAb6G+Xk2vTd3ErXnrnVgsNZG
-         9risnTsJHE4yMHU8w1ESww4R60u7gqA6d6tkVagYRRzQtnu0cUj2WwMBfty78bKEwQMt
-         lhKYPe8Cu5aY6Vg9RyqGM8IEKOHDJ4KBrRC4UD7m+zReildBXcJ5u6Uq7Xe1FaTsgjrG
-         cgEQ==
-X-Gm-Message-State: APuU4Z8wqMtM6skSX+5b1NWibgQqzOUntFZSxRZD1AM8lH/EAzmq8YRL
-	FXgWz7AdVYxwPScUa2RZu1x6hSMRCAYmB7+hRkfHQZeeibQAYKdcsgJh9ZwHIBNc4nRkbG6ENZ/
-	/UcTwdMtH9awdJlHStQ5ebyrJxMPIq0I=
-X-Gm-Gg: AYBFou39ObBykUMIkHiyZn3hcvmqKLYYwyz0FMQQ298f96GGrPvPii1nO4KNf9HAh65
-	OR9HU682ZPtIOys6hmvfF3ojbaIIjyP+sh/30l7xpqHKJW6Mwz/5zlNg4OeNMfnrEWDno/pbOyr
-	pszPJch/lCdqJEzsqyXTPFp5ylHYbqnp0vY3puujFiqf2EuOHW7lAeqT9/RjB/lLhokdONv2SgE
-	WE/g04vAaUxibd7p9IRuM/kGiAkjgN5Pgc9KRhtkQygapEfeAots2x9Qq00jrQMH4CVvh1cW7qu
-	2qLLSoGzu11/h7TSG0TR5m4TXsdi4g60Mw3e5Tt5G7FwrkzhbqGIXLs1q2Iligg7oJoQ9kgyJ2x
-	xeUmcEtLa05OhQ/ndeoVqb19GqJIAuzTiHGhh2w==
-X-Received: by 2002:a05:6512:398f:b0:5c1:5e26:f718 with SMTP id
- 2adb3069b0e04-5c170b5a5e6mr2612180e87.54.1794757449354; Sun, 15 Nov 2026
- 07:44:09 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hBwKV3W7
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 682291F000C4;
+	Sun, 15 Nov 2026 17:01:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794762061;
+	bh=BVQg03Ck8W5f6msu4j0hffsFbWEt7ebqOkm96wfPAPM=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=hBwKV3W7mjlnj1VPLEgmTPtsZCbXTmL1PWz+B8u/wXdIyuNKbZLIpUYGLwtH/7ccG
+	 bEYhmIGM2Fd2zcIS9jzOwkUCLvZ9yxoUkA0EraUm0N6ir5FDpWh2ApJD138Qfcw+kz
+	 EdV+inYIFKCBuLgs665TYm9JkwnYuhVXbM1dhb7zqrN7pgNaKKzjodSLHeSjvOK3cw
+	 hAYdwW/ZM/CKoXLQpmvnWDla0asfeyAEDZTkYElBfZ1VoOKim/wm3/ycpmFo6+ImR6
+	 2Us2cjFqWoKpeFeFpTRR2BA1hMto+2TFRWQ8v2/PLlHLsS/xwLKtWYWSwJW2u0jw7U
+	 1c5s+Idqzz9Ow==
+Subject:
+ Re: [PATCH net-next 2/3] tcp: convert do_tcp_getsockopt() to sockopt_t
+From: netdev-bot+sashiko@kernel.org
+To: leitao@debian.org
+Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, kuniyu@google.com, willemb@google.com,
+ ncardwell@google.com, daniel@iogearbox.net, john.fastabend@gmail.com,
+ sdf@fomichev.me, martin.lau@linux.dev, ast@kernel.org, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ shuah@kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, kernel-team@meta.com
+Date: Sun, 15 Nov 2026 17:00:59 +0000
+Message-ID: <179476205975.2199510.5756511034430735330@kernel.org>
+In-Reply-To: <20261112-getsockopt_phase7-v1-2-1eb759dd0929@debian.org>
+References: <20261112-getsockopt_phase7-v1-2-1eb759dd0929@debian.org>
+X-sashiko-severity: High
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,100 +68,200 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261115152408.48205-1-shlomojune6@gmail.com>
-In-Reply-To: <20261115152408.48205-1-shlomojune6@gmail.com>
-From: J4f J4f <shlomojune6@gmail.com>
-Date: Sun, 15 Nov 2026 23:43:58 +0800
-X-Gm-Features: AclHuK9qCQ2mCgHNUMy8WdZjghDi7aUSo5ReoClKtDYN8vj2Ui9jiLlxMJxuOKM
-Message-ID: <CAE_LbwmJGV9jMZWc07PqUevk1LzjDDWfnyuL+3wSEQ-YiEA-Ag@mail.gmail.com>
-Subject: Re: [PATCH v1] net: sock_reuseport: check program type on the
- migration path
-To: netdev@vger.kernel.org
-Cc: bpf@vger.kernel.org, edumazet@kernel.org, kuniyu@google.com, 
-	pabeni@redhat.com, willemb@google.com, davem@davemloft.net, kuba@kernel.org, 
-	horms@kernel.org, Linux kernel audit <audit@example.invalid>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sun, 15 Nov 2026 at 23:24, Shihuang Liu <shlomojune6@gmail.com> wrote:
->
-> From: Linux kernel audit <audit@example.invalid>
->
-> A BPF_PROG_TYPE_SOCKET_FILTER program can be loaded with
-> expected_attach_type set to BPF_SK_REUSEPORT_SELECT_OR_MIGRATE and
-> attached to a SO_REUSEPORT TCP group; both steps are allowed without
-> CAP_BPF.  Closing a listener that still has queued children then runs
-> that socket filter with a struct sk_reuseport_kern as its context,
-> while the program was verified against struct sk_buff.  It reads and
-> writes past the 56-byte object on the stack, which KASAN reports as a
-> stack-out-of-bounds in ___bpf_prog_run().
->
-> The cause is that reuseport_migrate_sock() decides from
-> prog->expected_attach_type alone.  That field is supplied by user
-> space and does not identify the program type, and
-> bpf_prog_load_check_attach() does not reject the value for
-> SOCKET_FILTER programs.
->
-> Fix this by requiring BPF_PROG_TYPE_SK_REUSEPORT before running the
-> program, and use the same check in reuseport_stop_listen_sock().
-> Socket filters can still be attached and used as selectors; the
-> selection path is unchanged.
->
-> Fixes: d5e4ddaeb6ab ("bpf: Support socket migration by eBPF.")
-> Signed-off-by: Linux kernel audit <audit@example.invalid>
-> ---
+Thank you for your contribution! Sashiko AI review found 3 potential
+issue(s) to consider.
 
-My mistake =E2=80=94 I got the From: and Signed-off-by: wrong in v1.  Code =
-and
-commit message are unchanged; v2 will fix that.
+Critical: 0 · High: 1 · Medium: 0 · Low: 2
 
-Thanks
-Shihuang
->  net/core/sock_reuseport.c | 16 ++++++++++++++--
->  1 file changed, 14 insertions(+), 2 deletions(-)
->
-> --- a/net/core/sock_reuseport.c
-> +++ b/net/core/sock_reuseport.c
-> @@ -460,6 +460,18 @@
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [High] The commit message identifies a bug class: copy_to_iter() runs
+  the hardened-usercopy check on a kernel stack source.
+- [Low] TCP_SAVED_SYN now consumes and frees tp->saved_syn before optlen
+  is written back.
+- [Low] bpf: non-standard multi-line comment style in
+  sol_tcp_getsockopt()
+
+--
+
+tcp: convert do_tcp_getsockopt() to sockopt_t
+
+This converts do_tcp_getsockopt() from a sockptr_t optval/optlen pair to
+sockopt_t and removes the tcp_ao_get_sockptr() bridge. tcp_getsockopt()
+now always writes optlen back. BPF callers go through a new
+sol_tcp_getsockopt() helper, which calls do_tcp_getsockopt() with page
+faults disabled so the hardened usercopy check skips find_vmap_area().
+
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 9b8d5191c4ba2..0d5afe1c5606b 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -5686,6 +5686,28 @@ static int bpf_sol_tcp_setsockopt(struct sock *sk, int optname,
+>  	return 0;
 >  }
->  EXPORT_SYMBOL(reuseport_detach_sock);
->
-> +/*
-> + * Only a BPF_PROG_TYPE_SK_REUSEPORT program is verified against
-> + * struct sk_reuseport_kern, which is the context bpf_run_sk_reuseport()
-> + * passes to it.  expected_attach_type is set by user space and does not
-> + * identify the program type.
-> + */
-> +static bool reuseport_is_migration_prog(const struct bpf_prog *prog)
+>  
+> +static int sol_tcp_getsockopt(struct sock *sk, int optname, char *optval,
+> +			      int *optlen)
 > +{
-> +       return prog && prog->type =3D=3D BPF_PROG_TYPE_SK_REUSEPORT &&
-> +              prog->expected_attach_type =3D=3D BPF_SK_REUSEPORT_SELECT_=
-OR_MIGRATE;
-> +}
+> +	struct kvec kvec;
+> +	sockopt_t opt;
+> +	int err;
 > +
->  void reuseport_stop_listen_sock(struct sock *sk)
+> +	err = sockptr_to_sockopt(&opt, KERNEL_SOCKPTR(optval),
+> +				 KERNEL_SOCKPTR(optlen), &kvec);
+> +	if (err)
+> +		return err;
+> +
+> +	/* BPF may call this in softirq: with page faults disabled, the
+> +	 * usercopy check skips find_vmap_area() and its lock.
+> +	 */
+> +	pagefault_disable();
+> +	err = do_tcp_getsockopt(sk, SOL_TCP, optname, &opt);
+> +	pagefault_enable();
+
+[Severity: Low]
+This is a minor style nit. net/core/filter.c follows the BPF comment
+style, which wants the opening /* of a multi-line comment on its own
+line, with the text starting on the next line. That applies to new code
+even where older comments in the file still use the net style.
+
+The new comment in sol_tcp_getsockopt() puts the text on the opening
+line. Could it be reformatted as:
+
+	/*
+	 * BPF may call this in softirq: with page faults disabled, the
+	 * usercopy check skips find_vmap_area() and its lock.
+	 */
+
+If the pagefault_disable() moves to a shared BPF entry point, as asked
+above, the same applies to the comment wherever it ends up.
+
+[Severity: High]
+Is the same softirq problem still present in the SOL_IP and SOL_IPV6 BPF
+getsockopt paths in this file?
+
+sol_ip_sockopt() and sol_ipv6_sockopt() build the same kvec-backed
+sockopt_t, and they call the converted getters with no guard:
+
+net/core/filter.c:sol_ip_sockopt() {
+    ...
+		err = sockptr_to_sockopt(&opt, KERNEL_SOCKPTR(optval),
+					 KERNEL_SOCKPTR(optlen), &kvec);
+		if (err)
+			return err;
+
+		err = do_ip_getsockopt(sk, SOL_IP, optname, &opt);
+		*optlen = opt.optlen;
+		return err;
+    ...
+}
+
+sol_ipv6_sockopt() does the same with do_ipv6_getsockopt(). Both
+do_ip_getsockopt() and do_ipv6_getsockopt() end with:
+
+	if (copy_to_iter(&val, len, &sopt->iter_out) != len)
+
+Here val is a stack local and len is not a compile-time constant.
+
+Take a sock_ops program running from a softirq callback such as
+BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB, or a TCP CC struct_ops program, that
+calls bpf_getsockopt(SOL_IP, IP_TOS). Wouldn't it go down this path?
+
+__bpf_getsockopt()
+  sol_ip_sockopt()
+    do_ip_getsockopt()
+      copy_to_iter()
+        check_copy_size()
+          __check_object_size()
+            check_heap_object()
+              find_vmap_area()
+
+The IRQ stack is not current's task stack, and check_heap_object() only
+skips the lookup when page faults are disabled:
+
+mm/usercopy.c:check_heap_object() {
+    ...
+	if (is_vmalloc_addr(ptr) && !pagefault_disabled()) {
+		struct vmap_area *area = find_vmap_area(addr);
+    ...
+}
+
+On CONFIG_HARDENED_USERCOPY plus CONFIG_VMAP_STACK kernels, this looks
+like the same inconsistent lock state on the find_vmap_area() lock. That
+lock is taken with plain spin_lock(), so a softirq that interrupts a
+process-context holder on the same CPU could also deadlock. The same
+applies to bpf_getsockopt(SOL_IP, IP_TRANSPARENT) and to
+bpf_getsockopt(SOL_IPV6, IPV6_TCLASS / IPV6_AUTOFLOWLABEL /
+IPV6_TRANSPARENT).
+
+The commit message names sol_ip_sockopt() as the model for the optlen
+handling, but that function has the same exposure.
+
+Would it be better to put the pagefault_disable() at the shared BPF entry
+(__bpf_getsockopt() / _bpf_getsockopt()), or in the kernel-buffer
+sockopt_t setup? Otherwise every per-level wrapper has to remember it.
+
+[ ... ]
+
+> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+> index 552e8fe22e7e2..de287845e6c0d 100644
+> --- a/net/ipv4/tcp.c
+> +++ b/net/ipv4/tcp.c
+
+[ ... ]
+
+> @@ -4904,13 +4859,22 @@ int tcp_getsockopt(struct sock *sk, int level, int optname, char __user *optval,
+>  		   int __user *optlen)
 >  {
->         if (sk->sk_protocol =3D=3D IPPROTO_TCP) {
-> @@ -474,7 +486,7 @@
->                                                  lockdep_is_held(&reusepo=
-rt_lock));
->
->                 if (READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_migrate_req) =
-||
-> -                   (prog && prog->expected_attach_type =3D=3D BPF_SK_REU=
-SEPORT_SELECT_OR_MIGRATE)) {
-> +                   reuseport_is_migration_prog(prog)) {
->                         /* Migration capable, move sk from the listening =
-section
->                          * to the closed section.
->                          */
-> @@ -644,7 +656,7 @@
->
->         hash =3D migrating_sk->sk_hash;
->         prog =3D rcu_dereference(reuse->prog);
-> -       if (!prog || prog->expected_attach_type !=3D BPF_SK_REUSEPORT_SEL=
-ECT_OR_MIGRATE) {
-> +       if (!reuseport_is_migration_prog(prog)) {
->                 if (READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_migrate_req))
->                         goto select_by_hash;
->                 goto failure;
+>  	struct inet_connection_sock *icsk = inet_csk(sk);
+> +	sockopt_t sopt;
+> +	int err;
+>  
+>  	if (level != SOL_TCP)
+>  		/* Paired with WRITE_ONCE() in do_ipv6_setsockopt() and tcp_v6_connect() */
+>  		return READ_ONCE(icsk->icsk_af_ops)->getsockopt(sk, level, optname,
+>  								optval, optlen);
+> -	return do_tcp_getsockopt(sk, level, optname, USER_SOCKPTR(optval),
+> -				 USER_SOCKPTR(optlen));
+> +
+> +	err = sockopt_init_user(&sopt, optval, optlen);
+> +	if (err)
+> +		return err;
+> +
+> +	err = do_tcp_getsockopt(sk, level, optname, &sopt);
+> +	if (put_user(sopt.optlen, optlen))
+> +		return -EFAULT;
+> +	return err;
+
+[Severity: Low]
+Can TCP_SAVED_SYN now return -EFAULT after the saved SYN has already been
+freed?
+
+In do_tcp_getsockopt(), the TCP_SAVED_SYN success branch copies
+tp->saved_syn->data to iter_out, calls tcp_saved_syn_free(tp) and returns
+0. Only after that does this put_user() write optlen, and if it fails the
+0 becomes -EFAULT.
+
+Before this patch, optlen was written before optval and before
+tcp_saved_syn_free(). Every -EFAULT return therefore left tp->saved_syn
+in place, and the caller could retry.
+
+Now suppose optlen is readable but not writable. get_user() in
+sockopt_init_user() succeeds and the put_user() here fails. The caller
+gets -EFAULT, but the one-shot saved SYN has already been freed.
+
+TCP_ZEROCOPY_RECEIVE also writes optlen here after tcp_zerocopy_receive()
+has consumed data. That option could already return -EFAULT after
+consuming data when optval was unwritable, though.
+
+The commit message mentions that an unwritable optlen now gives -EFAULT.
+It does not mention that TCP_SAVED_SYN frees its saved SYN before
+returning that error.
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261112-getsockopt_phase7-v1-0-1eb759dd0929%40debian.org
