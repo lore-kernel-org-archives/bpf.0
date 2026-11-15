@@ -1,82 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794725119;
-	b=vTzyYLem9EWMDjy4c8ahUCPxHUgIGk8LVccg6/aFF4HUIRs2mOKk5gcAFmgpFlfTKBCr
-	 ktspCaX3jqwy08bEQ2TqZ0nplIKweJ5QvGWANSwUkP433sdrLG9UkzMSuivkma7XtzLz4
-	 Xt0DBdMbxiUqM8MydjOWlXFK/ii9gj5/CnMvC7DSFFnV0CVgB8egO9N/slVfAYFIWRMlQ
-	 xspCngqCL8kIFxmfT+Wn+V/UIGXrDcX6eFkpAqsj6/Y6rz+r62H8XxNj+j47HdV4705aK
-	 hCZ9Sr+DeUfRO+g+JsFKdide7uY2r7e7pxWrg5MLrzU31faf5NmrP8+ibGW5sQY68tA==
+	t=1794725127;
+	b=utjSgVTIDsOnjylqt7m3DSHuAyce8gTeTMIgc0CQOYd3lWbIJ/P0Y4I/n9NRzkKpzvf6
+	 sykng5sQBfsWB07VivfuGCSeFlEQgRAKQmNj+Y283ZMQPji/XjQmi02aBcYJIGe+fgHjq
+	 P1qvqvB0rFwOkqP0xoYc8H01kL5qXz9OXGNuEuu/JpfrPj3Prj+ZuxujyOM3BKqqPkZ4R
+	 F7aMeWRcnUfRV+pIi6vAgNoYVQgo2C+OHePvXaJQp4wv+9IxdaD6p4ArqO725fUe8o5Ib
+	 PP7d9EOcoQtTZkg7MeuEJ3FUNk5GzGltuQjY3+03CbBXsU0NCzaHxhaBLSJJ5coVKlw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794725119;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794725127;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=0pH2zO8Y+wDHFAh0xWZZCbUUbHzL+XO1Q3bpqwy6tnw=;
-	b=aK5kxuQsqXsA5GBN+x1tLFtag7AIlIIult3viB37heNwGqo4Guk8IwR61roM9D6MjqML
-	 LGWI/0ki/W9MSlgnt3CnWVpcWF4SN1cC4E97hcPsqTPGxN6917+6wyu3yZQDqMwZE2BwV
-	 TnChAM0V5wpfHRVxf/hsCKAwXJRRftPczUiZAJutA3ID+qM7MKre7IOnNkldl+CG+JqY8
-	 Db7DBi9GMe/YIZZUlyk4NvDcHSniYCw7o2HQ+C4jDCJXnu9Zihida4FQ5aLhOjwb4b1Cl
-	 ZGDZOgYy5tbIFLK5qGEzQXShf12yaq1+jrXEm4BNQ1YNse/TvuKXGcrxgOSl0cRfG5g==
+	bh=jbBpt+FJ8a8qGQezAUJGyx793S/s/ZwSaKkH+VjjeYU=;
+	b=Hlyc/kECbPOtXEhRUk8uYrhL5oDyqPdS4bc75bGTay3k2hboa6ihbqSapRXYZxelWG56
+	 P5YW63wp4tdcSEDrdxiHU1FoA+sXzZtF4PpTVgBAVXCty9hI3sGJ2xGWxDShYJQxpy+II
+	 tlm7tAuPneZbFMLn67v7Cv2cdIozeUAxaUNMwA4B95i1VemiHUHjrztuw86y9YgiwQMLG
+	 qjYenHF5gLv0CqnxoCY2D8zIN2dl3krG0BQzyxxqLuAi7rEVxRB46gIk1UGRQjdi31TTa
+	 5vodVRSrjP6HH40as8XPu0R16V24ff50DM1PNUeqxaGbjzVbQIct+gn7otbwlSErDSw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=lvo1BI51;
-	arc=none smtp.remote-ip=209.85.221.47
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qkOIAS2J;
+	arc=none smtp.remote-ip=209.85.221.49
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35B49606A330
-	for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 06:45:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 35B49606A330
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FB73606A327
+	for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 06:45:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6FB73606A327
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=lvo1BI51
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-4910b863b84so1899010f8f.0
-        for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 22:45:19 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qkOIAS2J
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-491d1f66968so463250f8f.0
+        for <bpf@vger.kernel.org>; Sat, 14 Nov 2026 22:45:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794725117; x=1795329917; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794725126; x=1795329926; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=0pH2zO8Y+wDHFAh0xWZZCbUUbHzL+XO1Q3bpqwy6tnw=;
-        b=lvo1BI51xLx+UlUjoKGAS5jKdsWX393laUfFx0CN5qIR9C5RtfGOXgN8DoFGlXdWaN
-         z26o3m+NGRNrQAvTu4vuhNZ52S95wWY8Ff/SpxVpnktLYogxh5XQ3It7kJ0vNH5/Qcfa
-         QHjRxuUL39fhJRJCMATmL1/ZsV+t4GooJpSH0LMItRc9mDyyNS5PyIy2IpGqJIFLc7z1
-         GK5fPA68iArw+V42zpZyWwpdZQa1zGap14CN6n9mfM5Cdq+AXjAOz9zQHwc9Cm2Q5s32
-         uAfWs8MkJ400y5lQ5LRSAWzSCG745514AXDAw2QHUA6rUAMzU0Jk0sOd2u6c0oOPcLOb
-         LiSg==
+        bh=jbBpt+FJ8a8qGQezAUJGyx793S/s/ZwSaKkH+VjjeYU=;
+        b=qkOIAS2J5dfRhEsOfY7uH9G91K9RXCbZa+s9wLCAP4VoHegeS862E7+8XAq9ER3GOG
+         GXWzW5j2rGwrMY7ORSOAlNB19zj8Yt6g1GntL/2dPkZ8/U9TOVE8qJ4MP4KwDyz40Tjg
+         daP4r1zQWxAN+w5XRvFj+wuz30nw0m/q0BaLIpqWlFzrRN68+M6Ibrf2j3Q8Uwnow+uw
+         4ctrPSM3yp7pUoM6Uzu7jSeUqnw7eBzp0PHjlHQDLcc8dI9XgznELQw8n2wwqKQlHnz5
+         XPJY9VqHgHiashmKvbyj4Hztn/pNUe+YsnnrzbZw8RqllSTLm3FoNNAPppHZ+R3OCX1I
+         xsUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794725117; x=1795329917;
+        d=1e100.net; s=20260707; t=1794725126; x=1795329926;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=0pH2zO8Y+wDHFAh0xWZZCbUUbHzL+XO1Q3bpqwy6tnw=;
-        b=DM1bOdVox4UUUZwj3cH3sBi8M7Sbr86tB0R64iEr4ATj67CMaMgMHi37Rs0bGfP/yM
-         XEttcBpPUWnkpr3t6KqXqORyY+GWJck/GjYyAREGbWlXTk7ja9JSJT9pLr4iUCssANNM
-         5goQlxBGWn0rQS0j3g/QCNF+eqlw7XQdbseKcX1J6uTowBHLTCvr9YPrPCxIHZDQ/1Vr
-         sqdM1663CNpf1VjjQ25c35b0FZqKVcY3aqgayBF61cq6uH0jkWbAYDemk+IYOhkCl9fh
-         8+Hiq5iLsfaUdE2+2MOzFOMUMm/K9l7BN4fFXXo4hTnTmYfOWFqb2lT8d+18rQq0hioG
-         w5gw==
-X-Gm-Message-State: APuU4Z+Wx3SPxHlOnNqGP7lPpoliiTlXdeeAnOBYN9QeAwzWRb4DGdO3
-	m5hlGj3IP1ZAlDFvOn1dXMnNv4IdOjNFooLExbsy+S4JyQylg55SukknbsrMJQ==
-X-Gm-Gg: AYBFou3mCodi/T6kyXymJlDxKlwAaOzGcQBkpiXpIFqTBBAQ2caWrEzaCKpkF9q+tnj
-	jRbT/sVqJGAHd9vOgirDuM4I9movIysJCX6p3pFvqXj8hX+J6maT5FX2Pi7kt1O65//mQfyV6PK
-	3JNsz1lyXSHH8+9YIs2GM4OiLTZKxpGBw0R7sTJFX8Kdri/zjpP56SG8CL8hl7s8Cn99jB3Kpat
-	52AihE0BfKFBtf8rHupTaZ00GCXERNnCQQeuetrW/5/yCjB90YVlNFzBKPyc5KHvw2SfY1FwUzX
-	iJB5TpHDc2UobSGGyapiwbIjwnxZ6orZsHwa3XpT8awStFyQQ1l7ih4q3dRs98JRiEnLmPtYa4X
-	Qr8lFz1VSk/oEP+00qw5M+4aoBtPiEtP0vVc+Hbf5EEX8cU2CNBEhAuwHd4O2oxSC9EFMnr5uoZ
-	R6fU4ho0Wc2qGQLpdaI5J7M7MEtnPi7zG9DZvvIurHUMI1cPE8yq/c3Ha4hTKVE7hVuBR2w5bwj
-	pNJTd+ryq+4JQx2oh9RQy9rGr98YgLC2m82zRm09V7+Q6r79jvQtfvdjSCqFbPdfWYJFNh1zwWf
-	FPOq1t+RuYYfsv/gLhMDXKQtz9OYHYuvbnfM
-X-Received: by 2002:a05:6000:41d7:b0:491:e477:6820 with SMTP id ffacd0b85a97d-49c70824309mr15696644f8f.20.1794725117343;
-        Sat, 14 Nov 2026 22:45:17 -0800 (PST)
+        bh=jbBpt+FJ8a8qGQezAUJGyx793S/s/ZwSaKkH+VjjeYU=;
+        b=LQATGkQPwRCjUB9cXADfW9v5LCpZ6AgvO2s1U6z9q0lximwlxzmO5zniJj9T3kItht
+         4CqBHITjGTTudoJV8pF57g0KyWx6XRMJChiU3JPJCTXWYuMQFFBtc5gtuoUXqVBois/3
+         gPmyRUkKeb0vVx1Dak2FFr64aVhnQ3T6R7xWBe9nUjv2y4pcK545yk+lKtNCxC3yGUaW
+         VqjWMrB2Rf+8nmtCap0Cdy306NrPeAWSRY6OLsVGIDBpe2/7Y+mxFt9ulDrGLtuFzx20
+         EWeMy3hXxKCMQF7242B+JnP+IccAHq/FpihffivILAxNhjfg+J10DU0/IiOhVsCpadeX
+         XWtQ==
+X-Gm-Message-State: APuU4Z/Oa8QKbZBo432on1Wuw4De8ex3XuIKi3xa5kKZHWslmCsF0LAI
+	/Nsyx8lksspn5YnHDOcjdxTiAKKFHTkfLut+z3dZ+EF1zjN1ZPTh8XIrn6Qh5w==
+X-Gm-Gg: AYBFou2NWUE9AnS2EphJUIs8Xw+WU8BpeDO6bNxvpCnuBqmxdWUpTtC7SxpBqP/xGuh
+	OPlWXbCaaaTb7tRo4DCRdY6ag1g65TLf3yMJu7J5zH1+oEiX1NLCc5+f92QDsK65EZahjt1VFs5
+	Iec+JvQphuxR1S20sgHEbFmmkINK0TjO8jjWzIpKFg5UJaq3BGQl3x6z20cJQNGQtFYqYHiyG8r
+	EJKiLI7+u2F496VPcSfbwUAjCEHPSzmtHe7vQvabptzKQcMoeTqucBtl0mai3nHkveccAOEjCpI
+	rgKgwFYENXGc8PUZA1c1m2I0ATPTmXVSlW8adrVJcroOop+zV497kjRLcmx/jiBTXrL/rckOMNg
+	hV4rkLb77SxcMEcpyKXVXdwhhTxz4zXWyg+BOyaQASmSBJoMWFXT1kuFa5Dk/PF7kjEdSSWVkt5
+	UiFm4mkeHTBrR2HPiVVmmeAmwKnrA6FIm12YZStQpn26wodWh41esYzKPtzEph5ZjvXUPtk0ctX
+	LgoZ/a/ThljdtjMTazlBJ6ntxQroWx7G5wjOZsPIrKfZ+O4wOzF9HQpg2Bx1igRhpDx8gc8Sp8j
+	qkgUezYlar0JqOu2SE8XSG42GsDt/ElfpD02
+X-Received: by 2002:a5d:588f:0:b0:48b:a4b:5a2c with SMTP id ffacd0b85a97d-49c6d4538fbmr17328911f8f.3.1794725125683;
+        Sat, 14 Nov 2026 22:45:25 -0800 (PST)
 Received: from LAPTOP-AVI.lan ([2a06:c701:474b:1700:dc0a:bc51:e26f:5cf8])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49c6020bb0fsm14073284f8f.34.2026.11.14.22.45.15
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49c6020bb0fsm14073284f8f.34.2026.11.14.22.45.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Nov 2026 22:45:17 -0800 (PST)
+        Sat, 14 Nov 2026 22:45:24 -0800 (PST)
 From: Avi Weiss <thnkslprpt@gmail.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -89,9 +89,9 @@ Cc: ast@kernel.org,
 	houtao1@huawei.com,
 	linux-kselftest@vger.kernel.org,
 	Avi Weiss <thnkslprpt@gmail.com>
-Subject: [PATCH bpf 1/2] bpf: Clear invalid tail bits when populating a cpumask
-Date: Sun, 15 Nov 2026 08:45:11 +0200
-Message-ID: <cdb1367b32ba590c822461688e96660b1ce2d035.1794724099.git.thnkslprpt@gmail.com>
+Subject: [PATCH bpf 2/2] selftests/bpf: Check cpumask weight after population
+Date: Sun, 15 Nov 2026 08:45:12 +0200
+Message-ID: <33f2b92b2bf65dd349beb6aaef444c8053adeec1.1794724099.git.thnkslprpt@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1794724099.git.thnkslprpt@gmail.com>
 References: <cover.1794724099.git.thnkslprpt@gmail.com>
@@ -106,36 +106,32 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-bpf_cpumask_populate() uses bitmap_copy(), which copies the full last
-word without clearing source bits above nr_cpu_ids. Those bits do not
-represent valid CPUs, but cpumask operations that scan a whole word
-can still observe them.
+The populate selftest checks individual valid CPU bits, but it does
+not check whether bits beyond nr_cpu_ids affect cpumask operations
+that scan the entire final word.
 
-With CONFIG_NR_CPUS=64 and four possible CPUs, populating a bitmap
-filled with 0xaa makes bpf_cpumask_weight() return 32 instead of 2.
+Verify the weight after populating an alternating-bit source to
+catch leftover invalid bits.
 
-Use bitmap_copy_clear_tail() to mask off the unused bits in the last
-copied word.
-
-Fixes: 950ad93df2fc ("bpf: add kfunc for populating cpumask bits")
 Signed-off-by: Avi Weiss <thnkslprpt@gmail.com>
 ---
- kernel/bpf/cpumask.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/progs/cpumask_success.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/kernel/bpf/cpumask.c b/kernel/bpf/cpumask.c
-index 1336a4efa755..203f93077a0c 100644
---- a/kernel/bpf/cpumask.c
-+++ b/kernel/bpf/cpumask.c
-@@ -467,7 +467,7 @@ __bpf_kfunc int bpf_cpumask_populate(struct bpf_cpumask *cpumask, void *src, siz
- 		!IS_ALIGNED(source, sizeof(long)))
- 		return -EINVAL;
+diff --git a/tools/testing/selftests/bpf/progs/cpumask_success.c b/tools/testing/selftests/bpf/progs/cpumask_success.c
+index ddaba4318c57..09c0ee35d636 100644
+--- a/tools/testing/selftests/bpf/progs/cpumask_success.c
++++ b/tools/testing/selftests/bpf/progs/cpumask_success.c
+@@ -887,6 +887,9 @@ int BPF_PROG(test_populate, struct task_struct *task, u64 clone_flags)
+ 		break;
+ 	}
  
--	bitmap_copy(cpumask_bits(&cpumask->cpumask), src, nr_cpu_ids);
-+	bitmap_copy_clear_tail(cpumask_bits(&cpumask->cpumask), src, nr_cpu_ids);
++	if (!err && bpf_cpumask_weight((const struct cpumask *)mask) != nr_cpus / 2)
++		err = 5;
++
+ out:
+ 	bpf_cpumask_release(mask);
  
- 	return 0;
- }
 -- 
 2.43.0
 
