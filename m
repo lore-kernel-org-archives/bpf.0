@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794769960;
-	b=RajqQ2eWZOreZNDNJt135W+O95Wq9HI5EQ1AMd1CsAxzMP8QWmpCMZUklQDGvRRbNvC3
-	 Y5DRz+S25Ie7MauYEbOMjHGv2rLJAsP2ysq+pt7NXyFTD0UMOaPOYoYMRGCBRpCjSH+WO
-	 AzgD6XJ6dt0z78AX/c3WE88z1hQaGApW3Rx429a7MtWzf8r0bahHCyESJKnr2yj/FzB92
-	 uwXUeld5ykf6LTAf3KjF57tNjUchRxTpVFvvAKxuMlcE+baY9SjFkkQRtDjMxXgeX9MKs
-	 4ulJnCGklcv9OIkcp7h1c7vFfFte+6QVyQCV3yd2jDI+l8iycgCT6aP6gIbcHTYnNWw==
+	t=1794770243;
+	b=JPQ3p0F4pfHRJXHyge2ZhsjM+2fJNNXvohqq5saBeoGvU9iRpKbXtFgbWLhHlA3SxZH7
+	 Hi5ygeuaBBbFb5JFw3tdiaD4q3WnZ7pgV/SAPJVJMOHxMc8ypWSgavo11kdzr7Drj8XVL
+	 pPjYq3wnrOpDbn3yNykNmno+pRUJ9phYkzClZs5E3zWmNwEcV5Lc59y9ysnjKcyWvSQMY
+	 JQkKeewKH8s4uQZSmjHDN8q/I306/VC/GX4aqKVegfjMCv5zlX0zuI9l6WejuND7ZzxDI
+	 J9rK+59nrRWsIKXvib/a1oXdnDofTSqtjLDRrCSbAI5I27NwwSXxL7O5TpNC+8QLHNA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794769960;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794770243;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
 	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=Xqlm2kOR1cxrlmJ+MYBK2EL8pgLaXkcSwS+2jbI07RQ=;
-	b=UZH7qclvSlvw1D9bsA2G4zJ7TsaUMPK4XJ3A4yn5XAoqt4iyMQiczaGEdH1GiPOHXMs2
-	 Mt1vJTNu92Dqxt1K7Xb9igPdAoDk7F9Ja+vCEVuxRTOZEHgEy+M4M1QmhDqAiuSpKZua0
-	 /AUgSmkx8J6V5t469ps05pQqRSjMibe5TA4PRGFTp00Msxku8Y+A1xiB+V6DxIN43YR04
-	 bV3cHcfh0tLQRpzvhwmQ/8vut5sYQckBeBZlAWia4WEkcl/vLXdV41Zx2nrbeTQ2X3GWV
-	 xj+kAw9AMmMd3w5VLzlyRurUBFiCacrWfaEXuyvR6EI9p/ORND9I+mxstuxCVSHWYeQ==
+	bh=syiaQMJ04df2CAPDd9TxgmwagOaCksS43FztMaZSoj4=;
+	b=YI9DW0o84/btgXhcFZC57hmxJfpLJ3uUOz0d10lR3SoNfKVikJylVoTxgADjGgBFwtat
+	 v5jr5alAwc9YhCs25HAwJUWQdQQJ6ud+Uh6p8LaiEXjRONHo+WKOySObDUp9Om7akayAS
+	 q7jZksPe3KAJaUNSqu3Kl38PiFFVJrMYojpaPduqXh++/c/AJTwFphhSgw07Bafsls9tF
+	 xNOJxnogng7KVh5pMIfTxJLbgPcqpXKphda0RYPkqHQB1oekLTvvoltIO2i7/c36qPi0P
+	 +JBhi19AhhX5YbKS5AGsmM+YPUsG7v+if3ArWRZJ1NjQbBcC0U1LNxmi7RyI9c7nh3w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KjO7B99O;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NQ2RTQiU;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D4CA606A31A;
-	Sun, 15 Nov 2026 19:12:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 203CB606A323;
+	Sun, 15 Nov 2026 19:17:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KjO7B99O
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49EF71F000C4;
-	Sun, 15 Nov 2026 19:12:39 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NQ2RTQiU
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBBF11F000C4;
+	Sun, 15 Nov 2026 19:17:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794769960;
-	bh=Xqlm2kOR1cxrlmJ+MYBK2EL8pgLaXkcSwS+2jbI07RQ=;
+	s=k20260515; t=1794770242;
+	bh=syiaQMJ04df2CAPDd9TxgmwagOaCksS43FztMaZSoj4=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=KjO7B99OaOq2BmFtymQVEXKQouaExUwmim5LYsv9zGWLSgFfTkw94kGJEOXQeU2Mx
-	 DCs2YyItL7JHsDcJaFZ/SxlTprQxy05AjkkNffvW2QRnAOf9r9lJS2l5Oz5LgNfCuO
-	 Tmyv1lSHS+aeefWLirLUO81uKDnlomVdeCv2yXyxQJE0FGXL8Qxbb/zyDTqxs93z3s
-	 MZw1JXQjGIsemX5daI/TnF5OhjPB8XHSmTuze2wAmW6GeE9r8j35SPQNbaNEE+pdlj
-	 VTvnLJTyzKYQ6SkRJV5gps4pHiYlEw3P2963JK5b+GYckIs3bkNxzECuUDKic1H13W
-	 DH6f+NjjpI5uw==
+	b=NQ2RTQiUkooIEv2aFmxn0mSejwHAVan7OoLwkXp7+EqL2JE0uyg24oNE/w8/BPWGU
+	 hOkEUqIcDLeoy6OECB08uAAAqUGy6jJbvGmrZQE1k0fPw5aiUyeVkPyTKP6ZLr8hhJ
+	 znImMXQFXrHoaun4DzvCTiTsjpny2ultaPf0sLdeCuE6xqS0qb+FGZLDa7+wyuAKiv
+	 NuTb3IfidJO8ZktYh+I8f6+utWgwo5Mv+YUTMcv9JSMRBm9cDgointBeyQ2h166T9t
+	 a1q+nUh0ZUqUIJQX914bGraPwGIETtkpad3nVgRfq6u6rtlguO+PxFoX7biiqEnA0U
+	 BPqgK4+7YLhXA==
 From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
 To: netdev-bot+sashiko@kernel.org
 Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
@@ -55,13 +55,13 @@ Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
  almasrymina@google.com, mike.marciniszyn@gmail.com, bestswngs@gmail.com,
  razor@blackwall.org, dw@davidwei.uk, aleksander.lobakin@intel.com,
  linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, stuclar@meta.com
-Subject: Re: [PATCH net-next v1 10/11] eth: fbnic: Support RX buffers it
- cannot split
-In-Reply-To: <179443689907.2199510.5966675063900520158@kernel.org>
-References: <20261110102039.1002605-11-bjorn@kernel.org>
- <179443689907.2199510.5966675063900520158@kernel.org>
-Date: Sun, 15 Nov 2026 20:12:37 +0100
-Message-ID: <87tslhhpsq.fsf@all.your.base.are.belong.to.us>
+Subject: Re: [PATCH net-next v1 06/11] page_pool: Coordinate refill with
+ memory providers
+In-Reply-To: <179443689325.2199510.6016244708978672874@kernel.org>
+References: <20261110102039.1002605-7-bjorn@kernel.org>
+ <179443689325.2199510.6016244708978672874@kernel.org>
+Date: Sun, 15 Nov 2026 20:17:19 +0100
+Message-ID: <87ld6thpkw.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -78,23 +78,38 @@ netdev-bot+sashiko@kernel.org writes:
 
 [...]
 
-> Wouldn't the restarted queue keep the old EN_HDR_SPLIT, which no longer
-> matches the MAX_HDR, PAYLD_OFF and PAYLD_PG_CL values in CTL1? Nothing
-> corrects it until the next restart of that queue.
+> Should netif_mp_napi_del() also clear rxq->napi when it matches, or
+> should netif_mp_update_napi() only publish a NAPI that is still
+> listed? If drivers are expected to clear the association themselves,
+> could netmem.rst item 8 say so?
 
-Pre-existing for the drop mode, and the per-queue bits make it worse. I
-have a net fix that serializes link up and queue start with a lock.
+The first. v2 drops mp_napi, so wakeups use rxq->napi itself, under RCU,
+and the core clears it when the NAPI is deleted.
 
 [...]
 
-> Should both callers require that the completion starts the buffer and
-> also closes it, i.e. a zero offset and PAGE_FIN set? Passing the rcd
-> into fbnic_bd_one_desc() and doing both checks there might keep the
-> header and payload paths from drifting apart again.
+> Should the documented contract require that, or should the core handle
+> the disabled-NAPI case itself?
 
-v2 drops these checks instead. With MAX_HDR, PAYLD_OFF and PAYLD_PG_CL
-as programmed, the device closes a whole buffer after one descriptor,
-and fbnic trusts its completion ring everywhere else.
+The contract. fbnic polls the vector right after napi_enable()
+(FBNIC_INTR_SET), so the queue refills once, from the reuse stack or
+FILL, and refill_done marks it starved again if both are empty. A wakeup
+lost on a stopped queue doesn't matter then. v2 documents that a driver
+polls the queue once after enabling its NAPI.
+
+> Could uses_need_wakeup be cached in struct xsk_pp when it is created, or
+> read only after pp->fq is confirmed under pp->lock?
+
+Same root cause as the failed removal in 05, and the same fix. The pool
+then stays until the queue DMA has stopped, and no refill runs after
+that.
+
+> Should the error path arm from the configuration that is running
+> again, or should __netif_mp_open_rxq() and __netif_mp_close_rxq() call
+> netif_mp_update_napi() once they have settled rxq->mp_params?
+
+Neither is needed -- with mp_napi and mp_armed gone in v2, there is no
+wakeup target to arm from the wrong configuration.
 
 
 Bj=C3=B6rn
