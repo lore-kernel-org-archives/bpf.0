@@ -1,96 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794842923;
-	b=I/F8EvW84j0/DFbbxTRCUIlUZy6B5O3c+Bble/SeeGWStJOWhdLqvY/R62vziHYbOjwk
-	 9xXdyEcRy5JIFbMuhYvXMSbEXVey+cYaHcDLo2XfxwbjMt9JH1iabJ5MOzeIN5hfvNsRT
-	 I0aZQpHU/7q46Yi8zPqt5FVz47wxEd4WrylsSooZHcLf4kgXqYy9wzvZVBBvShWZhJdmR
-	 lCwEze3bINDNt/j1iiIeHYYYYiK6yonMvjt+xZu15a00Rx8cqAc8HItzlzR2cDUMypYxf
-	 nTMPHm8wgcM8XfE20ZmUftzRBS6RWcyjxSMRf2UTDYPGEPsqQ3IQFai6d8pUPbfp3fw==
+	t=1794843811;
+	b=enMJZ19VCM0FCy4lb2x6bMiMSneb+9GiOqFL8eRByeUnUnrKvILVpat8WGdK/bwOeEGm
+	 9p19pJ2AqvdztrIbg95VAB+yoHLUgnSJ3WKWOxm/V0HG32VL3kph/p3eb9qFWqHe+A4Fo
+	 DuFUDsx35QKQ+T5OUaRajtM7RzvaIZ3bU6ntGwqmawxf86oxc4T9iTgORKbi3elFF+6+A
+	 g60egGXjsSnjZx3pnpAHAE40T7ClQ5Smi2L/sa49zYm/gLBjsKGVSJiNHtThoTjRcLw2/
+	 nKwif9nDt5XkIlQMvPVopnlqIPXeF+Ki5UciOCtnj/V3i3JQSstlQbbDqChEjSU6v4w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794842923;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=UESD2DeEZGjndf7WY6RLOuo/AkpVKVIjAr1EtfjSqww=;
-	b=0Txr7dHajDompyoXFQUt+bEnFRoNSCRJHEL4D3B3xBeAfpHZfmRrWNioUopZGGboKcN/
-	 1C8Pc7PH/WHF4jVrx8oHcgkeTl7A7ePgKH3/RQUFnj9viL6nrwANixxlWT2uZ1Iz4ocJZ
-	 GVv9lb0TuawBd0Ii0gGpdSX/aYfxBU7jhHP5/9HL9JkL5rcR1DouBZ2C571Wk5B1IYckq
-	 LotEdSphw1cZalJeJpguhw9jLAXaHpz5vM29b+B4fEd/JC8k8uGvdluRr19MIUvSKNWD/
-	 ZP6Uiz/soXXnDWitHd1Ucp9R7Wn/wonwG2wCO5Ti7QRJXgDLhVxRjSSHyVOz+mu/reA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794843811;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=sMpwlgIA254zxEV/NYN8JgBT7BlDFMozhjYDwTjAaB4=;
+	b=1zkENAbWVcoiPf6JEd/x7nmY+C4vMfx6b4RB9e4ch49ic31fS/TVGuaE6D06VOoEfKeA
+	 SNByavNfFQRj4JtMSxCVesCRdYa3F5AYy0tR3KPzs3zrB7jOT+V8iooPMFvKmpBBldYlV
+	 90vJU21GmAmWNgmH9tNQIxIk1uvOFxV0vZpXvX5CRhg24r1pmC3xZTElrnErNxeyWsOcb
+	 gkP7KkDclGl7Xuo2u06WWcnXsdToRHKAvMcsjp8rz+WjAki9A0wTt6KpVqLEmd2FpkMeA
+	 pfu5n0PwrLlAHlAsW5aJvZWwP2E+RmlbKEJGSP8LG0CVUU0dHPa/IPiGYbvKAfsz2Kg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Kq9YjRhd;
-	arc=none smtp.remote-ip=209.85.214.181
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mA71D1LW;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38BCF606A32F
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 15:28:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 38BCF606A32F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20B33606A322;
+	Mon, 16 Nov 2026 15:43:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Kq9YjRhd
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2efd659464aso772955ad.3
-        for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 07:28:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794842921; x=1795447721; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=UESD2DeEZGjndf7WY6RLOuo/AkpVKVIjAr1EtfjSqww=;
-        b=Kq9YjRhd2fqqPa+rQfene3BTuC56tAKxRsTmOxj9N54Rj9Qero7wRgXfNJFre/isAq
-         TOTo7RH3TLnTMNEVQ26qKiFQxgslCcUnGhDE1+pKtPl9aRsfrWm05q4S2h4wLJ1Gfvid
-         bcaUpNjOg3gzA/DqzIi0c0tQ3Aff2T8DFNM318RrGpK4BOeaX8s129XygywS3fo8Z42R
-         +nqGWSn2BcAsarQ/NDeyW7DzcZw3IsS/G0H+lbMWbAt+3WsI8ZPeX9mRjmb7sl/T6GU/
-         cMWOHmj8MhvwWz14MxEYht272qTAR//VHsdRXsxtsZgCACrRuycVuw68LEcy/bhMPXdn
-         PHkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794842921; x=1795447721;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=UESD2DeEZGjndf7WY6RLOuo/AkpVKVIjAr1EtfjSqww=;
-        b=iKOgQZg+JNCnZddBA8vBYrzakEYuQk2tV07tSDoq5Na/fUa5fonnr9+p8VO7w1UAiA
-         FKLHZT5sOksjnvQa9vlTPcYAqaAYIICXRTH63T+XzwAHaMENgolkGWbA3fvi2LdNjK2Q
-         wYKBkgGZdK73iBlGhPMdMb0lOfPaBevJhLmufp/CfAALcaJS6Bb663nTez4pB5olYabZ
-         qXLHILNgSaG9Y4cBkuyOVd6Lkoh8mqARiFNoUo67oqof1By/QITFN7KjPR2ANa8Yucs0
-         DpuhWOqL1oUcM7XNaa+eb8B1qxbxl77FSouA/j+zUP/dnV9G+C85dGsH1qQ70tt8ui1n
-         eavQ==
-X-Gm-Message-State: APuU4Z+LzcjQu/hQDBPFXdMV5Uv+DmuQ0SqqJ4c5Q6wl6CrSH715mSn8
-	k1I9ZL7lk6BOQRZknSG7G1Akmx3ALxDG0+PeYX/QFdbuFxGfpDv+oyHrqEUUvA==
-X-Gm-Gg: AZFdTZdsR34T7x6v9AkSDDSMNjnRbm+ljJIE9Aew+Uzi0X/fKWwHVkKCx0Nwtp1bcQt
-	IfIJ4Y4HjEYhhGv52Hn96JisS04aA7u4xvUOKRo+qkO9t0nL8GNt9Cz+26LSDNprub1d2WD512+
-	epNnlcco6g4Ykfu0t276nbNpSZAaKIIhUIlLeNjhwHcdEycF1PXA+qi9IM4UgCVFUZ5Y9IVxxDY
-	TDrYJ+EWiUAl40SFtJcGTHQrkIPfPEftMwASjnY5IdqmmC1Q21EBRnyKxpt+af2xvLwPt23XUhj
-	K/s/SkmmiBB+jOVM4oVTokEC0FByDxCjhz/EsS3micK+DGofKY3o9IyEFDKwZKyyHZb3b/gDsUK
-	hLlV8SFzG52zirCN7Zm0NN47b/PwwimhqeVUsL0IUnauuEBuiqcVSG8UGvJhENaCYaiu58HK5Sn
-	WkbsigBgRqDFnnymwotiUW8b7hvSads4IepiIgZECST5xIVcIStfFZrtjfCuoKlvEwqHQ2j8JsI
-	mUePwKzRmHfdVNbJN7Du00OgBIPMa3lwzN0G11PEYfPQmoNSz+RLgM03nV0gnDsls69ZQUybqHN
-	htzgqV8Lc4hh2GFlXtYuHXHKp4wzUpmGeoWHBsGtSZHCUpNkSw3e6pFj0zDc/y5zvllfPLGEHcx
-	O/YdrTqoOVat2E/uVykm6I69Mjj+GYX+rJcvzb2ewncvLabKRRkNFHIvo8jppaDHL3eOysAxVEg
-	==
-X-Received: by 2002:a17:902:ef12:b0:2e9:401f:f0f4 with SMTP id d9443c01a7336-2ee0dc93264mr104902445ad.16.1794842921132;
-        Mon, 16 Nov 2026 07:28:41 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.255])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2efd7a7ff9asm977425ad.54.2026.11.16.07.28.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2026 07:28:40 -0800 (PST)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com
-Subject: [PATCH bpf-next v2 21/21] selftests/bpf: Test limits of the load with raw programs
-Date: Mon, 16 Nov 2026 15:26:26 +0000
-Message-ID: <20261116152626.4032587-22-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261116152626.4032587-1-alexei.starovoitov@gmail.com>
-References: <20261116152626.4032587-1-alexei.starovoitov@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mA71D1LW
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CE2F1F000C4;
+	Mon, 16 Nov 2026 15:43:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794843810;
+	bh=sMpwlgIA254zxEV/NYN8JgBT7BlDFMozhjYDwTjAaB4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=mA71D1LWDMFFCnTL2BFgJ0DmsAHG10HapEgN3rLfA9XFZ2cAKJhxDZuFtecXZOAxT
+	 9Ng3Ld+z2HCmk50slHxe/yJ+Ski0QdZIBpzoj/Pe5DdTViVsATbt8Ec1ucNLC6Ftz+
+	 hOYUuFShgMnAkak+CkozH6YFPHqTG+fgtOv4WVmedVtzaYZe4LBuU+QXszRqmFhtOw
+	 DdQMyW4M2sA8vJ3lunwnEtYHxsC9wwXNCrEv7DsyaSVVFGc9MPX+gn0Oc9p/gTO/PD
+	 ruPRlssP23Rk9HesqyG2xQPFOqaoIkFD0hFtWMWMNm9pIfW4K5U3hoCv8a3UwMMTTZ
+	 LIm3zeL8nH3tw==
+Content-Type: multipart/mixed; boundary="===============0547861428020528411=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -100,550 +49,60 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <71941ec27b3bbadc76cdd36b00a4ebc33425b04f3e64a7ddc1431dcc5697856d@mail.kernel.org>
+In-Reply-To: <20261116145318.34084-1-shijing.wuqi@linux.alibaba.com>
+References: <20261116145318.34084-1-shijing.wuqi@linux.alibaba.com>
+Subject: Re: [PATCH bpf-next v3] bpf, mprog: Defer RCU synchronization until peer reuse
+From: bot+bpf-ci@kernel.org
+To: shijing.wuqi@linux.alibaba.com,daniel@iogearbox.net,ast@kernel.org,andrii@kernel.org,razor@blackwall.org,bpf@vger.kernel.org,netdev@vger.kernel.org
+Cc: martin.lau@linux.dev,john.fastabend@gmail.com,sdf@fomichev.me,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,kuba@kernel.org,pabeni@redhat.com,edumazet@kernel.org,davem@davemloft.net,andrew+netdev@lunn.ch,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon, 16 Nov 2026 15:43:29 +0000 (UTC)
 
-From: Alexei Starovoitov <ast@kernel.org>
+--===============0547861428020528411==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-A load under a timer signal, under the freezer and in a small memory
-cgroup, the context of a syscall program, 33000 subprogs, a dump of more
-than 4 MB, 300 kfuncs, loops of BTF types, long BTF names, a light
-skeleton with 600 maps and 601 programs.
+> bpf, mprog: Defer RCU synchronization until peer reuse
 
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+TL;DR: Commit message nits only: rename the "v3" column in the benchmark
+table, and move the BPF CI link and pass counts below the '---' line. No code
+issues raised.
+
+>     bpf, mprog: Defer RCU synchronization until peer reuse
+>
+>     [ ... ]
+>
+>     A/B on the same bpf-next base (8835113107b2), identical configs apart
+>     from LOCALVERSION, lock/RCU debugging off, 64 vCPU KVM guest. Average
+>     operation latency. The attach rows use 30 samples each. The detach
+>     row measures close(link_fd), excluding the first detach in each run:
+>     35 samples across five runs of eight links.
+>       scenario                 base        v3        speedup
+>       first link attach        14.377 ms   268.4 us    54x
+>       first prog attach        12.411 ms   290.0 us    43x
+>       clsact qdisc first       11.562 ms   116.2 us    99x
+>       detach after detach      6.2 ms     5.2 ms     ~1x
+>
+>     [ ... ]
+>
+>     Functional checks pass and a 300-cycle attach/detach churn under live
+>     traffic shows no splats.
+>     BPF CI: https://github.com/kernel-patches/bpf/pull/14821 (39 passed,
+>     0 failed; x86_64 gcc-15/llvm-21, aarch64, s390x).
+
+This isn't a bug, but could the "v3" column in the benchmark table be
+renamed (for example "patched"), since a patch revision label means nothing
+once the commit is in git history?
+
+Also, could the "BPF CI: https://github.com/kernel-patches/bpf/pull/14821
+(39 passed, 0 failed; ...)" line and its pass counts be moved below the
+'---' line so they do not end up in git history?
+
+
 ---
- tools/testing/selftests/bpf/Makefile.skel     |   2 +-
- .../selftests/bpf/prog_tests/no_limits.c      | 465 ++++++++++++++++++
- .../testing/selftests/bpf/progs/many_progs.c  |  36 ++
- 3 files changed, 502 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/no_limits.c
- create mode 100644 tools/testing/selftests/bpf/progs/many_progs.c
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/bpf/Makefile.skel b/tools/testing/selftests/bpf/Makefile.skel
-index b8eaecc7f429..45e4ce5dca4d 100644
---- a/tools/testing/selftests/bpf/Makefile.skel
-+++ b/tools/testing/selftests/bpf/Makefile.skel
-@@ -34,7 +34,7 @@ LINKED_SKELS := test_static_linked.skel.h linked_funcs.skel.h		\
- LSKELS := fexit_sleep.c trace_printk.c trace_vprintk.c map_ptr_kern.c 	\
- 	core_kern.c core_kern_overflow.c test_ringbuf.c			\
- 	test_ringbuf_n.c test_ringbuf_map_key.c test_ringbuf_write.c    \
--	test_ringbuf_overwrite.c callx_rodata.c
-+	test_ringbuf_overwrite.c callx_rodata.c many_progs.c
- 
- LSKELS_SIGNED := fentry_test.c fexit_test.c atomics.c
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/no_limits.c b/tools/testing/selftests/bpf/prog_tests/no_limits.c
-new file mode 100644
-index 000000000000..b949d1db23e6
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/no_limits.c
-@@ -0,0 +1,465 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Limits of the load that an ELF file cannot show, or shows at a high price */
-+
-+#include <test_progs.h>
-+#include <bpf/btf.h>
-+#include <sys/param.h>
-+#include <sys/resource.h>
-+#include <sys/time.h>
-+#include "cgroup_helpers.h"
-+#include "many_progs.lskel.h"
-+
-+static int load(struct bpf_insn *insns, int cnt)
-+{
-+	return bpf_prog_load(BPF_PROG_TYPE_SCHED_CLS, NULL, "GPL", insns, cnt, NULL);
-+}
-+
-+static struct bpf_insn *straight_code(int cnt)
-+{
-+	struct bpf_insn *insns = calloc(cnt, sizeof(*insns));
-+	int i;
-+
-+	if (!ASSERT_OK_PTR(insns, "insns"))
-+		return NULL;
-+	for (i = 0; i < cnt - 1; i++)
-+		insns[i] = BPF_MOV64_IMM(BPF_REG_0, i);
-+	insns[i] = BPF_EXIT_INSN();
-+	return insns;
-+}
-+
-+static void on_alarm(int sig)
-+{
-+}
-+
-+/* A signal that does not kill does not stop the load */
-+static void test_signals(void)
-+{
-+	struct itimerval on = { { 0, 200 }, { 0, 200 } }, off = {};
-+	struct sigaction sa = { .sa_handler = on_alarm }, old;
-+	struct bpf_insn *insns = straight_code(20000);
-+	int fd;
-+
-+	if (!insns)
-+		return;
-+	sigaction(SIGALRM, &sa, &old);
-+	setitimer(ITIMER_REAL, &on, NULL);
-+	fd = load(insns, 20000);
-+	setitimer(ITIMER_REAL, &off, NULL);
-+	sigaction(SIGALRM, &old, NULL);
-+	if (ASSERT_OK_FD(fd, "load"))
-+		close(fd);
-+	free(insns);
-+}
-+
-+static int exit_code(pid_t pid)
-+{
-+	int status;
-+
-+	if (!ASSERT_EQ(waitpid(pid, &status, 0), pid, "wait") ||
-+	    !ASSERT_TRUE(WIFEXITED(status), "exited"))
-+		return -1;
-+	return WEXITSTATUS(status);
-+}
-+
-+/* The freezer does not wait for the end of the load. The load starts again after it. */
-+static void test_freezer(int flag)
-+{
-+	struct bpf_insn *insns = straight_code(200000);
-+	struct bpf_common_attr common = {};
-+	union bpf_attr attr = {
-+		.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-+		.insns = ptr_to_u64(insns),
-+		.insn_cnt = 200000,
-+		.license = ptr_to_u64("GPL"),
-+	};
-+	int cg = -1, pipes[2] = { -1, -1 }, fd;
-+	char buf[64] = "";
-+	pid_t pid;
-+
-+	if (!insns || !ASSERT_OK(setup_cgroup_environment(), "setup") ||
-+	    !ASSERT_OK(pipe(pipes), "pipe"))
-+		goto out;
-+	cg = create_and_get_cgroup("/no_limits");
-+	if (!ASSERT_OK_FD(cg, "cgroup"))
-+		goto out;
-+	pid = fork();
-+	if (!pid) {
-+		/* the fd that the prog gets */
-+		if (join_parent_cgroup("/no_limits"))
-+			_exit(1);
-+		fd = dup(pipes[0]);
-+		close(fd);
-+		if (write(pipes[1], &fd, sizeof(fd)) != sizeof(fd))
-+			_exit(2);
-+		_exit(syscall(__NR_bpf, BPF_PROG_LOAD | flag, &attr, sizeof(attr), &common,
-+			      sizeof(common)) != fd ? 3 : 0);
-+	}
-+	close(pipes[1]);
-+	if (ASSERT_EQ(read(pipes[0], &fd, sizeof(fd)), sizeof(fd), "read")) {
-+		usleep(10000);
-+		ASSERT_OK(write_cgroup_file("/no_limits", "cgroup.freeze", "1"), "freeze");
-+		while (!strstr(buf, "frozen 1") &&
-+		       !read_cgroup_file("/no_limits", "cgroup.events", buf, sizeof(buf)))
-+			usleep(1000);
-+		snprintf(buf, sizeof(buf), "/proc/%d/fd/%d", pid, fd);
-+		ASSERT_ERR(faccessat(AT_FDCWD, buf, F_OK, AT_SYMLINK_NOFOLLOW), "no prog yet");
-+		ASSERT_OK(write_cgroup_file("/no_limits", "cgroup.freeze", "0"), "thaw");
-+	}
-+	ASSERT_OK(exit_code(pid), "load");
-+out:
-+	close(pipes[0]);
-+	if (cg >= 0)
-+		close(cg);
-+	cleanup_cgroup_environment();
-+	free(insns);
-+}
-+
-+/* 4 * funcs + 1 insns */
-+static struct bpf_insn *many_funcs(int funcs)
-+{
-+	struct bpf_insn *insns = calloc(4 * funcs + 1, sizeof(*insns)), *f;
-+	int i;
-+
-+	if (!ASSERT_OK_PTR(insns, "insns"))
-+		return NULL;
-+	for (i = 0, f = insns + funcs + 1; i < funcs; i++) {
-+		insns[i] = BPF_CALL_REL(f - &insns[i] - 1);
-+		*f++ = BPF_MOV64_IMM(BPF_REG_0, i);
-+		*f++ = BPF_MOV64_IMM(BPF_REG_2, 0);
-+		*f++ = BPF_EXIT_INSN();
-+	}
-+	insns[funcs] = BPF_EXIT_INSN();
-+	return insns;
-+}
-+
-+static int load_in_memcg(struct bpf_insn *insns, int cnt)
-+{
-+	pid_t pid = fork();
-+	int fd;
-+
-+	if (pid)
-+		return exit_code(pid);
-+	fd = join_parent_cgroup("/no_limits") ? -EINVAL : load(insns, cnt);
-+	_exit(fd < 0 ? -fd : 0);
-+}
-+
-+/* The load fails. The OOM killer leaves the loader alone. */
-+static void test_memcg(void)
-+{
-+	struct bpf_insn *insns = straight_code(200000), *funcs = many_funcs(2000);
-+	int cg = -1, mb, err;
-+	char max[16];
-+
-+	if (!insns || !funcs || !ASSERT_OK(setup_cgroup_environment(), "setup"))
-+		goto out;
-+	cg = create_and_get_cgroup("/no_limits");
-+	if (!ASSERT_OK_FD(cg, "cgroup"))
-+		goto out;
-+	if (write_cgroup_file("/no_limits", "memory.max", "16M")) {
-+		test__skip();
-+		goto out;
-+	}
-+	ASSERT_EQ(load_in_memcg(insns, 200000), ENOMEM, "errno");
-+
-+	/* some of these end in the JIT of the subprogs */
-+	for (mb = 4; mb <= 24; mb += 2) {
-+		snprintf(max, sizeof(max), "%dM", mb);
-+		ASSERT_OK(write_cgroup_file("/no_limits", "memory.max", max), "max");
-+		err = load_in_memcg(funcs, 4 * 2000 + 1);
-+		ASSERT_TRUE(!err || err == ENOMEM, "errno");
-+	}
-+out:
-+	if (cg >= 0)
-+		close(cg);
-+	cleanup_cgroup_environment();
-+	free(insns);
-+	free(funcs);
-+}
-+
-+static int run(int fd)
-+{
-+	char pkt[64] = {};
-+	LIBBPF_OPTS(bpf_test_run_opts, opts, .data_in = pkt, .data_size_in = sizeof(pkt));
-+
-+	return bpf_prog_test_run_opts(fd, &opts) ?: opts.retval;
-+}
-+
-+/* The target of a tail call reads the context at 'off'. The run passes 8 bytes. */
-+static void check_syscall_target(int off, int expected)
-+{
-+	LIBBPF_OPTS(bpf_prog_load_opts, opts, .prog_flags = BPF_F_SLEEPABLE);
-+	int map = bpf_map_create(BPF_MAP_TYPE_PROG_ARRAY, NULL, 4, 4, 1, NULL);
-+	struct bpf_insn first[] = {
-+		BPF_LD_MAP_FD(BPF_REG_2, map),
-+		BPF_MOV64_IMM(BPF_REG_3, 0),
-+		BPF_EMIT_CALL(BPF_FUNC_tail_call),
-+		BPF_MOV64_IMM(BPF_REG_0, 3),
-+		BPF_EXIT_INSN(),
-+	}, target[] = {
-+		BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, off),
-+		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1, 0),
-+		BPF_EXIT_INSN(),
-+	};
-+	int ctx[2] = { 5, 7 }, key = 0, fd, target_fd;
-+	LIBBPF_OPTS(bpf_test_run_opts, run_opts, .ctx_in = ctx, .ctx_size_in = sizeof(ctx));
-+
-+	fd = bpf_prog_load(BPF_PROG_TYPE_SYSCALL, NULL, "GPL", first, ARRAY_SIZE(first), &opts);
-+	target_fd = bpf_prog_load(BPF_PROG_TYPE_SYSCALL, NULL, "GPL", target, ARRAY_SIZE(target),
-+				  &opts);
-+	if (ASSERT_OK_FD(fd, "load") && ASSERT_OK_FD(target_fd, "target"))
-+		ASSERT_EQ(bpf_map_update_elem(map, &key, &target_fd, 0) ?:
-+			  bpf_prog_test_run_opts(fd, &run_opts) ?: (int)run_opts.retval,
-+			  expected, "result");
-+	close(fd);
-+	close(target_fd);
-+	close(map);
-+}
-+
-+static void test_syscall_ctx(void)
-+{
-+	int off;
-+
-+	check_syscall_target(4, 7);
-+	for (off = 8; off < 65532; off += 4096)
-+		check_syscall_target(off, 0);
-+}
-+
-+/* The number of a subprog does not fit into s16 */
-+static void test_subprogs(void)
-+{
-+	const int funcs = 33000, cnt = 4 * funcs + 1;
-+	struct bpf_insn *insns = many_funcs(funcs);
-+	struct bpf_prog_info info = {};
-+	__u32 len = sizeof(info);
-+	int fd;
-+
-+	if (!insns)
-+		return;
-+	fd = load(insns, cnt);
-+	if (!ASSERT_OK_FD(fd, "load"))
-+		goto out;
-+	ASSERT_EQ(run(fd), funcs - 1, "retval");
-+	info.xlated_prog_len = cnt * sizeof(*insns);
-+	info.xlated_prog_insns = ptr_to_u64(insns);
-+	if (ASSERT_OK(bpf_prog_get_info_by_fd(fd, &info, &len), "dump"))
-+		ASSERT_EQ(insns[funcs - 1].imm, funcs, "subprog");
-+	close(fd);
-+out:
-+	free(insns);
-+}
-+
-+/* A division takes 4 insns. The dump has more than 4 MB. */
-+static void test_dump(void)
-+{
-+	const int cnt = 140000;
-+	struct bpf_insn *insns = straight_code(4 * cnt);
-+	struct bpf_prog_info info = {};
-+	__u32 len = sizeof(info);
-+	int fd, i;
-+
-+	if (!insns)
-+		return;
-+	insns[0] = BPF_EMIT_CALL(BPF_FUNC_get_prandom_u32);
-+	insns[1] = BPF_MOV64_REG(BPF_REG_1, BPF_REG_0);
-+	for (i = 2; i < cnt - 1; i++)
-+		insns[i] = BPF_ALU64_REG(BPF_DIV, BPF_REG_0, BPF_REG_1);
-+	insns[i] = BPF_EXIT_INSN();
-+
-+	fd = load(insns, cnt);
-+	if (ASSERT_OK_FD(fd, "load")) {
-+		info.xlated_prog_len = 4 * cnt * sizeof(*insns);
-+		info.xlated_prog_insns = ptr_to_u64(insns);
-+		if (ASSERT_OK(bpf_prog_get_info_by_fd(fd, &info, &len), "dump"))
-+			ASSERT_GT(info.xlated_prog_len, 4 << 20, "len");
-+		close(fd);
-+	}
-+	free(insns);
-+}
-+
-+/* Calls of all kfuncs that the verifier can describe, in dead code */
-+static void test_kfuncs(void)
-+{
-+	struct btf *btf = btf__load_vmlinux_btf();
-+	struct bpf_insn insns[1024], one[] = {
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 1),
-+		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0, 0),
-+		BPF_EXIT_INSN(),
-+	};
-+	const struct btf_type *t;
-+	int id, fd, cnt = 2;
-+
-+	if (!ASSERT_OK_PTR(btf, "btf"))
-+		return;
-+	for (id = 1; id < btf__type_cnt(btf) && cnt < 302; id++) {
-+		t = btf__type_by_id(btf, id);
-+		if (!btf_is_func(t) || strncmp(btf__name_by_offset(btf, t->name_off), "bpf_", 4))
-+			continue;
-+		one[2].imm = id;
-+		fd = load(one, ARRAY_SIZE(one));
-+		if (fd < 0)
-+			continue;
-+		close(fd);
-+		insns[cnt++] = one[2];
-+	}
-+	btf__free(btf);
-+	if (cnt < 302) {
-+		test__skip();
-+		return;
-+	}
-+	insns[0] = one[0];
-+	insns[1] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, cnt - 2);
-+	insns[cnt++] = one[3];
-+	fd = load(insns, cnt);
-+	if (ASSERT_OK_FD(fd, "load"))
-+		close(fd);
-+}
-+
-+/* Type 1 is int, type 'value' is the value of a map */
-+static void check_btf(struct btf *btf, int value, int expected)
-+{
-+	LIBBPF_OPTS(bpf_map_create_opts, opts, .btf_key_type_id = 1, .btf_value_type_id = value);
-+	int fd;
-+
-+	if (ASSERT_EQ(btf__load_into_kernel(btf), expected, "load") && !expected) {
-+		opts.btf_fd = btf__fd(btf);
-+		fd = bpf_map_create(BPF_MAP_TYPE_ARRAY, NULL, 4, 4, 1, &opts);
-+		if (ASSERT_OK_FD(fd, "map"))
-+			close(fd);
-+	}
-+	btf__free(btf);
-+}
-+
-+static struct btf *new_btf(void)
-+{
-+	struct btf *btf = btf__new_empty();
-+
-+	btf__add_int(btf, "int", 4, BTF_INT_SIGNED);
-+	return btf;
-+}
-+
-+enum chain { STRUCTS, ARRAYS, TYPEDEFS, DAG };
-+
-+/* Type 2 holds type 3, ... The last one holds type 'last'. */
-+static struct btf *btf_chain(enum chain kind, int cnt, int last)
-+{
-+	struct btf *btf = new_btf();
-+	int i, next;
-+
-+	for (i = 2; i < cnt + 2; i++) {
-+		next = i == cnt + 1 ? last : i + 1;
-+		if (kind == ARRAYS) {
-+			btf__add_array(btf, 1, next, 1);
-+		} else if (kind == TYPEDEFS) {
-+			btf__add_typedef(btf, "t", next);
-+		} else {
-+			btf__add_struct(btf, "s", 4);
-+			btf__add_field(btf, "a", next, 0, 0);
-+			if (kind != DAG)
-+				continue;
-+			btf__add_field(btf, "b", next, 0, 0);
-+			btf__add_field(btf, "c", next, 0, 0);
-+		}
-+	}
-+	return btf;
-+}
-+
-+static void test_btf(void)
-+{
-+	static char name[4098];
-+	struct btf *btf;
-+	enum chain kind;
-+	int i;
-+
-+	for (kind = STRUCTS; kind <= DAG; kind++) {
-+		check_btf(btf_chain(kind, 30, 1), 2, 0);
-+		check_btf(btf_chain(kind, 30, 2), 2, -EEXIST);
-+	}
-+
-+	/* 1M kptrs in a struct that nobody can allocate */
-+	btf = new_btf();
-+	btf__add_struct(btf, "task_struct", 4);
-+	btf__add_field(btf, "a", 1, 0, 0);
-+	btf__add_type_tag(btf, "kptr", 2);
-+	btf__add_ptr(btf, 3);
-+	btf__add_array(btf, 1, 4, 1000000);
-+	for (i = 0; i < 100; i++) {
-+		btf__add_struct(btf, "s", 8000008);
-+		btf__add_field(btf, "p", 4, 0, 0);
-+		btf__add_field(btf, "a", 5, 64, 0);
-+	}
-+	check_btf(btf, 1, 0);
-+
-+	/* ptr -> typedef -> struct -> array -> typedef */
-+	btf = new_btf();
-+	btf__add_ptr(btf, 3);
-+	btf__add_typedef(btf, "t", 4);
-+	btf__add_struct(btf, "s", 4);
-+	btf__add_field(btf, "a", 5, 0, 0);
-+	btf__add_array(btf, 1, 3, 1);
-+	check_btf(btf, 4, -EEXIST);
-+
-+	/* ptr -> typedef -> array -> typedef */
-+	btf = new_btf();
-+	btf__add_ptr(btf, 3);
-+	btf__add_typedef(btf, "t", 4);
-+	btf__add_array(btf, 1, 3, 1);
-+	check_btf(btf, 4, -EEXIST);
-+
-+	memset(name, 'x', 4097);
-+	btf = new_btf();
-+	btf__add_typedef(btf, name, 1);
-+	check_btf(btf, 2, -EINVAL);
-+
-+	name[4096] = 0;
-+	btf = new_btf();
-+	btf__add_typedef(btf, name, 1);
-+	check_btf(btf, 2, 0);
-+
-+	name[4000] = 7;
-+	btf = new_btf();
-+	btf__add_typedef(btf, name, 1);
-+	check_btf(btf, 2, -EINVAL);
-+}
-+
-+/* 600 maps and 601 programs */
-+static void test_lskel(void)
-+{
-+	struct rlimit old, new = { 4096, 4096 };
-+	struct many_progs_lskel *skel;
-+
-+	getrlimit(RLIMIT_NOFILE, &old);
-+	new.rlim_max = MAX(new.rlim_max, old.rlim_max);
-+	setrlimit(RLIMIT_NOFILE, &new);
-+	skel = many_progs_lskel__open_and_load();
-+	setrlimit(RLIMIT_NOFILE, &old);
-+	if (!ASSERT_OK_PTR(skel, "load"))
-+		return;
-+	ASSERT_EQ(run(skel->progs.prog699.prog_fd), 699, "retval");
-+	ASSERT_EQ(run(skel->progs.last.prog_fd), 2, "weak ksym");
-+	many_progs_lskel__destroy(skel);
-+}
-+
-+void serial_test_no_limits(void)
-+{
-+	if (test__start_subtest("signals"))
-+		test_signals();
-+	if (test__start_subtest("freezer"))
-+		test_freezer(0);
-+	if (test__start_subtest("freezer_common_attrs"))
-+		test_freezer(BPF_COMMON_ATTRS);
-+	if (test__start_subtest("memcg"))
-+		test_memcg();
-+	if (test__start_subtest("syscall_ctx"))
-+		test_syscall_ctx();
-+	if (test__start_subtest("subprogs"))
-+		test_subprogs();
-+	if (test__start_subtest("dump"))
-+		test_dump();
-+	if (test__start_subtest("kfuncs"))
-+		test_kfuncs();
-+	if (test__start_subtest("btf"))
-+		test_btf();
-+	if (test__start_subtest("lskel"))
-+		test_lskel();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/many_progs.c b/tools/testing/selftests/bpf/progs/many_progs.c
-new file mode 100644
-index 000000000000..060f7b265258
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/many_progs.c
-@@ -0,0 +1,36 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+
-+#define REP10(M, p) M(p##0) M(p##1) M(p##2) M(p##3) M(p##4) M(p##5) M(p##6) M(p##7) M(p##8) M(p##9)
-+#define REP100(M, p) REP10(M, p##0) REP10(M, p##1) REP10(M, p##2) REP10(M, p##3) REP10(M, p##4) \
-+		     REP10(M, p##5) REP10(M, p##6) REP10(M, p##7) REP10(M, p##8) REP10(M, p##9)
-+
-+#define PROG(n)							\
-+struct {							\
-+	__uint(type, BPF_MAP_TYPE_ARRAY);			\
-+	__uint(max_entries, 1);					\
-+	__type(key, int);					\
-+	__type(value, int);					\
-+} map##n SEC(".maps");						\
-+								\
-+SEC("tc")							\
-+int prog##n(void *ctx)						\
-+{								\
-+	int *v = bpf_map_lookup_elem(&map##n, &(int){ 0 });	\
-+								\
-+	return v ? *v + n : 0;					\
-+}
-+
-+REP100(PROG, 1) REP100(PROG, 2) REP100(PROG, 3) REP100(PROG, 4) REP100(PROG, 5) REP100(PROG, 6)
-+
-+extern const void no_such_symbol __ksym __weak;
-+
-+/* The loader is more than 32768 insns away from its cleanup code */
-+SEC("tc")
-+int last(void *ctx)
-+{
-+	return &no_such_symbol ? 1 : 2;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.55.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43894793326
+--===============0547861428020528411==--
