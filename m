@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.170
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794842860;
-	b=IbyhH8ej+MHosGHqTY03bkPV0wMtaBf1QcuUfvJ28kdbKNKs0rXkvM4BeSUbkS6daFOe
-	 dMnH1rGPFiI9K/zE2zWHg/2nEi2oxfJZc+pBxwZ5pLbiU2Q8nt9gIri4SH1uKKlf0d1+r
-	 0SFh9vDb0dCimiP6+4r/AbFfkKXbFxI03YX7SFu1mNEi6nQYhC/fGcW1d/NQChad+iKE3
-	 MzfnLWCUXSD1ruQjH6zGRK+MF8CBr2BJaqC6ctbQfnyLUGFVwktmZZ7TXEEjshkQe2w1O
-	 ohl4PBS5TOJx0n7AQVtRj4yZ/gYP6cdNlRhC0Lm+1BVEdVTzh4/ZXadZF92CVddtU7Q==
+	t=1794842868;
+	b=G9wKlTX61JZFwawPnzpf/9RFZx6+GlQHxLV3VR9PJK6kd7USFA1cEdkqM0n6ZQWoTcd1
+	 D2TKwghRfmdcIy/mvucOBTrWd8n/sctPB2zik4h5Ec2AOGvXNmG+4zlUqaHSJ3L9/ZoI2
+	 YiXtOhYAT5KS88rKkLPljuBzHPXfjaac3HX9I/kqeIvpNR0GLpQ9L7Qo2+T+teA8vK4YV
+	 roKp9r6p7LnX4KiTje/k7vRbMLzACGJAvzJwBCrfXTxRBMTvcU+/M0lkOAJeziAHKmuTb
+	 TWgeigKPrEJYR7l7OygLZIX7b2DhnvPclPALE6bw2MUUmT7FRxE+9IQMhrneAqy9suw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794842860;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794842868;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=5ACvzaShZlCo6fcsqnaIAPFDDtpWeGtCPcOsEdn6sdk=;
-	b=ANJPFUGzdEHwseb/WImIpP2CrQHZ4nVD85Cto7hb41OilFGqUKHywSskCTR3YevmZSfA
-	 jFfiMO/RuOo9pmotta3VsHS4PQXkw3hZs6amt7ftXpSYw1BY+/EdHpPAjJaZ9QwR39TFI
-	 OuPBwRPWAe/L/s62Su7WA0e+qxWsDObYnFDK3wzK0RVzr6F8UrI01Gx3G1LUdgAOGgAm4
-	 CZYkgMdKsml1RbCELqWX1/P7wS425kNOWL2O8QNOiM4U276D3wggSgOpk4ofAWEMKopk1
-	 Bo56qH+cjDAbsj2BhPvijUJ8YkCPveX9Ztit5bb9zN8ACfaXYr0GUkFAQ5Zdj8DANMQ==
+	bh=GvwNIfE0OL/AaCn2QeFFHAxtUV3Jxu0+/QiGs8teeCY=;
+	b=w5eY2CDQ2gJzhqIndSDLicl9xxhRf9/oZQCgWU1AhlZFJ47uWcRDIxcafBMHEBlzkyf/
+	 xknHn2IFfV51pgbcLRg9Q9wNd2FNiskXEQWq+3r/w7etoTtcsGdmMwofh4zZhnxi8UnTg
+	 UPfP9qIllk/7yxx0g7j8pkhnzhYwTrza/EvfNBa0miX0eoYIuutpnRK1fK0btrZIgiSlz
+	 dobScvX49jGeCSRPp/yaw/r/xz7lvhGLK3FtT79Jm59stx5wbhbUzQazuBFgXxK057vQQ
+	 vGsPSz0KZ5sJIpzvcef0yk7hlmWVy9vY9PU+ZGxGxw9C8VLR5cNqR0xwAIQPF8FsQTQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=th9JjqEE;
-	arc=none smtp.remote-ip=209.85.216.42
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cJ343qX4;
+	arc=none smtp.remote-ip=209.85.215.170
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9291606A338
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 15:27:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A9291606A338
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23A42606A329
+	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 15:27:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 23A42606A329
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=th9JjqEE
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3b179528d56so1668183a91.3
-        for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 07:27:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cJ343qX4
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-cdb2e0062bbso1532235a12.1
+        for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 07:27:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794842859; x=1795447659; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794842866; x=1795447666; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=5ACvzaShZlCo6fcsqnaIAPFDDtpWeGtCPcOsEdn6sdk=;
-        b=th9JjqEEz9AQ5++ILLP07y4N89TD54u8Wbz1TwVfqHGillYtqVQ0Vx7ldIuAL5kwBA
-         QEWIoHsdebz/2uh4fLxVFKQZjp1bP3AYCarn0m7EU3gwD0HPF89+vn5bAfW03EagNpXa
-         ct8shuCo7EIjZgM9jdQv6xjZnDmTUACtovRWmYz1W+lk346TTP3riEX5CV75wNt1PXCe
-         FnpccyJeCkGPshZPLAtZPIZ6i1CH/tBFoRFzWtWTIc+mDbdSMxzewvF9HGISFKYvxve9
-         4ufCm9Z4QNsLj/DFfShTdFiObQRTKkvuOJ4DlHF2WBAsjWzuYo1MjV4kD1OlPASynKri
-         wsZg==
+        bh=GvwNIfE0OL/AaCn2QeFFHAxtUV3Jxu0+/QiGs8teeCY=;
+        b=cJ343qX4VFKf6eFteOLI0NygByqanEyLCBnuLQCo1K/tsPL6dRAl48pGWGnHHrln4H
+         KURBvNsMxO7BNG1Tq8YZfRT/UO/n1V77ySgne6rc7nEz8K8e5ViDm/qFx97PsGeYqApK
+         xBqP8QfNaJkpFGprmLpyqtvxBggzoP+NWnLxBtiFZON3eQvCI7EUzkoN1569oX7yHUAP
+         VxeHH4t12TMUiQ3QzrtNGuGQl/vRfx0yqzXumCE6rlcWEB5jsoQgQ6tThPwVrPT15dkC
+         qCqiifDp4/0Cjg4+P3BssJdkWbimzg6EufGjKIXPcLfdB/pVYiCj08cmjh02OFhqt+X2
+         x3TA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794842859; x=1795447659;
+        d=1e100.net; s=20260707; t=1794842866; x=1795447666;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=5ACvzaShZlCo6fcsqnaIAPFDDtpWeGtCPcOsEdn6sdk=;
-        b=EKBjgWsBfJX9DUiZ4PAG6h7SqDzXmF1jrzuQEBV6nG3Z+kwGwA8MkPFegRzcQNLz39
-         XScwsDnKswLHChwD/RK/f88OTBxXrH4D9fwFMCiFXvgSNJTrx/YA+PPJctSUgIBUKTgC
-         m3jElmpby4W6DUaIPbu8RNAj+faHQMP1joiDUha6WjpCLCwiIaUSIbfWEr68xUSfSe2N
-         OPUOzIgCKbAILjRRfgssm6hzmtTz9s2kxY+PQtruIz7pVHuOPhxaZuNqrxWcx8fbolX5
-         KK8lJh1mccD4hsdmRtbF1LMAbU7gu6c59Fv6VPJHZOUUEakWBQ+rVGJNjqwBRsdOsuYa
-         glMg==
-X-Gm-Message-State: APuU4Z9nixGu6XsSzml1OR+j7kVKCCIL8m6rCUw9cGiAFOtwgwy6Soy4
-	OSHb+lK2Ia6dOrO4DUqOwlCVROIE6bE1LlUMCEiQx6huvWcuSoru+V0QJyypYQ==
-X-Gm-Gg: AZFdTZc/Y7/rVVEqTXRbZd6Pwaqak/Ns+pUd3cU2+rQXTK6kibtw1qsz/x/FjV2s20l
-	XSge8XcUG5yxNZ86BNdkUUBhvTTb/Q2RXPl5QlZjaXRrW9J/fpn5G9Z6LK7AAD6Z2/UCqJEiGni
-	TLxEslfQ3I0UH3NmoKoXIstFC3TR22++i2Mb9/dAJo7e5R0zxe1jdGUGBtNlf2yY52qPMTSaeAJ
-	8B4jpsIcHfKgM8DuKZ/4R374JMWDjhOhYPGKt8BqEP09zZmnqtR8Ept+xmKGYqgUSL0GzIjzrVv
-	P7hVi6NkQVSLP2M7blc2RRLN3KxIlOD2pTxRgcNuasQ0utoYXS7Jkm5grrQ/2ziv0xS9ZS3dtx4
-	AoHwYEDh8OeX9F46g3yJ35zT/XBvjFbiylrp9ST4fvWTjoPN4y7ykA7bpvOpNGMj2Dw6m0z0iPQ
-	tlDbAt8xA9aHs/0Cs9CUMWrHbEy2wglYQXn5rDhI1ZRngtNj89MDsEdudBskYQZpHD2DI8+YG7B
-	NnIguP5vBdLWXf/Z62jZkahDRRA6Q0NyS7UXvoximx4k8ORZkY51GaJkn1wXvstRR/T9lUrhwQd
-	j3xic3PbRhemVkkjxPnNNJBviaToHcjx0rIs0YVItjHHMB+3k5CuFIPYLs84KbV47TIwSHEGgzq
-	6TUf019hmZKk5Ugu+XVvOZmJgFRUHyrbvi1HSlihG76Y7zyoLrzwb89bSaObAXvasmysfk3Pc5A
+        bh=GvwNIfE0OL/AaCn2QeFFHAxtUV3Jxu0+/QiGs8teeCY=;
+        b=l6L+U0sAVooACADRiiTGthN08Ljb2W8POwr68VLLnLs1dO+iFANZ/Q2Td+BAP34xol
+         izR8kQ/Kkd8i8+xP1739rsjAN6TiDslDH7IEGzYhTRQhfFTukJZAFycxwl6EHZOXtbVr
+         lLuDEhKQmdJnpZtCjq3c3+VTODScPsWEY+tB9ZT0c3xfvC691KmfZHuWIpT0wDDFMmEP
+         GQEByuTI6S7XSaPa+etvPP5zWQ3SATQqWgZ6rcOTvsEAFksf4joKPcexZhEfEhRc4/iJ
+         tHnImM0vNcZVs0XlFMQOOZNzUyYB22KS+aRruxF2sR4Ybz1yDZD0XbDdjt9uGUcUmqz5
+         NrIQ==
+X-Gm-Message-State: APuU4Z8GOtiq6vYhtn8SL5cRGzr697ZA2g7/rmSEfWslf2YaM+A8G1He
+	i2V0yZ4q1NbMPpS7oDippkWAKoK5glulNFLH68yLTwA18WKLORPWhEspplSZew==
+X-Gm-Gg: AZFdTZcR/Oi3Dyx6IG/uzC4GvBaC9KqUj3EyJbIkHBdHayCWROl3/SFRAIEpXDa/jS2
+	b2kPhKlt+yOwbFBI6MwJVlmy5PZ5wfVDBAOKxC9Q68OKoF8BYC31/cmLHrL3TCd4rXBSXZqsRE5
+	eEk0Knh0HLqYt7/OyBhNP9YoMihvst/a1zcKlWEANll9sCFgdzLECXo7RiIzPMHmZ1RnACLPUHD
+	IopSMX0m34tuU1ShXuLAX5Z0RfIE4Vqyj0Mutk6istMaIn887DUjkkAKyLL4wwSC/Jmh0aBhZ07
+	/2M7VEwhobWmEaP74V/zZAk5HLLSFhEnbsdVoYR0xZP26MSMbnpYjB6iZImp6eIwXEhZy1SNkSp
+	N4df3RWGTE/1HLwsaCODuePw/KAVxwzcyy5mv+tCbaA0L1AYkU/fQ4nuxoG+WnG9RkFA239RyXE
+	TCKDmhl0daYgW7PFVNb6/p01rLg9xMcd4CUcToNRVnJRz5Ik59VwO7KUXpbLajQ9K9Mpun30v82
+	BMrlo2k9uiQhwh7zbi12bCLKjT4Wf01bfNRCw7gyjX8+Qst+0g9uwULYXo+VrL3Ia/n3UzKet7w
+	lbC5IhbjHBJBl4CwArD9+8O1+aVKqzPt0FNX48DGfstJbVpV1STdHqRwKxRN6KDmK0nGAIAYswi
+	qYRdqHwpBK4itP9n/XP6XX4z1stwDDVgmLyO1/abUpRtnLeH7/FFn0PyGtbTg1Jy27h2gMs5PDg
 	==
-X-Received: by 2002:a17:90b:2b87:b0:3b0:dbc5:c56b with SMTP id 98e67ed59e1d1-3b1b07e9026mr9062346a91.6.1794842858514;
-        Mon, 16 Nov 2026 07:27:38 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.243])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1aed76f95sm16670857a91.17.2026.11.16.07.27.37
+X-Received: by 2002:a17:90b:4d0b:b0:3ac:a7ee:678c with SMTP id 98e67ed59e1d1-3b1b07e41aemr10510633a91.2.1794842864885;
+        Mon, 16 Nov 2026 07:27:44 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.251])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1b3eaf732sm8727179a91.3.2026.11.16.07.27.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2026 07:27:38 -0800 (PST)
+        Mon, 16 Nov 2026 07:27:44 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 11/21] libbpf: Size the tables of the loader program from the object
-Date: Mon, 16 Nov 2026 15:26:16 +0000
-Message-ID: <20261116152626.4032587-12-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 12/21] bpf: Relax jumps that patches push out of range
+Date: Mon, 16 Nov 2026 15:26:17 +0000
+Message-ID: <20261116152626.4032587-13-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261116152626.4032587-1-alexei.starovoitov@gmail.com>
 References: <20261116152626.4032587-1-alexei.starovoitov@gmail.com>
@@ -104,374 +104,1697 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-gen_loader mirrors limits of the kernel: 64 maps, 32 programs and 256
-kfuncs. The numbers are known before the loader is made.
+A jump has 16 bits. Patches grow the code under it: inlined lookups,
+checks of divisions, may_goto, guards of loops, constant blinding.
+A verified program fails with -ERANGE: 2979 lookups under one branch
+are enough.
 
-  fd_array:  [ maps | copies of maps | unused | BTFs of kfuncs ]
-  prog_fds:  [ programs ]              was on the stack of the loader
+Let bpf_patch_list_build() use gotol for such a jump:
 
-Use gotol and a register for ctx when an offset needs more than 16 bits.
-That was an error, so loaders that could be made do not get gotol.
+  if r1 > r2 goto far    ->   if r1 > r2 goto +1
+                              goto +1
+                              gotol far
+
+The same form works for may_goto and unwind_goto. An image where all
+jumps fit does not change.
+
+The passes do not compute offsets any more:
+ - the last insn of a patch stands for the patched insn and keeps
+   its target;
+ - bpf_patch_list_jump() gives a target in the old image to an insn.
+
+may_goto_off(), bpf_adj_moved_insn() and BPF_GUARD_NEAR go away. All
+guards that leave a subprog share one 'r0 = 0; exit'.
+
+x86-32, riscv32, parisc and sparc64 have no gotol in the JIT. They fail
+on the unknown opcode, as they do when gotol is in the program. There
+a guard that is more than 32K insns away from the end of its subprog
+had its own exit and was JITed. It is not JITed now.
+
+A jump to itself is a jump like any other. It goes to the start of its
+patch: 'nospec; goto -1' in sanitized dead code is 'nospec; goto -2' now.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- tools/lib/bpf/bpf_gen_internal.h |   3 +-
- tools/lib/bpf/gen_loader.c       | 157 +++++++++++++------------------
- tools/lib/bpf/libbpf.c           |   8 +-
- 3 files changed, 74 insertions(+), 94 deletions(-)
+ include/linux/bpf_verifier.h                  |  11 +-
+ kernel/bpf/core.c                             | 335 +++++++-----
+ kernel/bpf/fixups.c                           | 502 +++++-------------
+ .../{blinding_log.c => blinding_far_jump.c}   |  38 +-
+ .../selftests/bpf/progs/verifier_and.c        |   2 +-
+ .../selftests/bpf/progs/verifier_bounds.c     |  14 +-
+ .../selftests/bpf/progs/verifier_movsx.c      |   4 +-
+ .../selftests/bpf/progs/verifier_patch_list.c | 146 ++++-
+ .../selftests/bpf/progs/verifier_unpriv.c     |   2 +-
+ 9 files changed, 484 insertions(+), 570 deletions(-)
+ rename tools/testing/selftests/bpf/prog_tests/{blinding_log.c => blinding_far_jump.c} (51%)
 
-diff --git a/tools/lib/bpf/bpf_gen_internal.h b/tools/lib/bpf/bpf_gen_internal.h
-index 206adf28793d..c30e05b66abc 100644
---- a/tools/lib/bpf/bpf_gen_internal.h
-+++ b/tools/lib/bpf/bpf_gen_internal.h
-@@ -50,6 +50,7 @@ struct bpf_gen {
- 	struct ksym_desc *ksyms;
- 	__u32 nr_ksyms;
- 	int fd_array;
-+	int prog_fds;
- 	int nr_fd_array;
- 	/*
- 	 * Maps with pointers to functions, that programs get their own copies
-@@ -61,7 +62,7 @@ struct bpf_gen {
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 3b40f66894d9..28104dae5f08 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -1208,6 +1208,10 @@ struct bpf_insn_patch {
+ 	u32 len;
+ 	u32 start;		/* first insn of the patch in bpf_patch_list.insns */
+ 	u32 target;		/* insn of the patch that jumps to 'off' land on */
++	u32 self;		/* insn of the patch that stands for insn 'off' */
++	u32 jmp;		/* 1 + insn of the patch that goes to insn 'jmp_to', 0 if none */
++	u32 jmp_to;
++	u32 jmp_back;		/* or to that many insns in front of the patch of it */
+ 	struct bpf_insn orig;	/* the replaced insn when the patch was queued */
  };
  
- void bpf_gen__init(struct bpf_gen *gen, int log_level, int nr_progs, int nr_maps,
--		   int max_func_ptr_maps);
-+		   int max_func_ptr_maps, int nr_kfuncs);
- int bpf_gen__finish(struct bpf_gen *gen, int nr_progs, int nr_maps);
- void bpf_gen__free(struct bpf_gen *gen);
- void bpf_gen__load_btf(struct bpf_gen *gen, const void *raw_data, __u32 raw_size);
-diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
-index 555d4757a898..27b4bc9e55ac 100644
---- a/tools/lib/bpf/gen_loader.c
-+++ b/tools/lib/bpf/gen_loader.c
-@@ -15,11 +15,6 @@
- #include "bpf_gen_internal.h"
- #include "skel_internal.h"
+@@ -1230,7 +1234,9 @@ struct bpf_patch_image {
+ 	u32 *new_off;
+ 	u32 *new_tgt;
+ 	u32 *new_linfo;
++	u32 *relaxed;		/* insn before patch_image_relax() -> insn after it */
+ 	u32 cnt;
++	u32 short_cnt;		/* insns before patch_image_relax() */
+ 	u32 new_cnt;
+ 	u32 nr_linfo;
+ 	s32 grow;
+@@ -1256,7 +1262,8 @@ struct bpf_insn *__bpf_patch_list_add(struct bpf_patch_list *pl,
+ int __bpf_patch_list_del(struct bpf_patch_list *pl, const struct bpf_prog *prog,
+ 			 u32 off);
+ int __bpf_patch_list_insert(struct bpf_patch_list *pl, const struct bpf_prog *prog,
+-			    u32 off, const struct bpf_insn *insns, u32 cnt);
++			    u32 off, const struct bpf_insn *insns, u32 cnt, bool behind);
++void bpf_patch_list_jump(struct bpf_patch_list *pl, const struct bpf_insn *insn, u32 to, u32 back);
+ void bpf_patch_list_release(struct bpf_patch_list *pl);
+ int bpf_patch_list_build(const struct bpf_patch_list *pl, const struct bpf_prog *prog,
+ 			 struct bpf_patch_image *img);
+@@ -2266,6 +2273,8 @@ static inline void bpf_patch_list_free(struct bpf_verifier_env *env)
+ }
+ #endif
+ int bpf_patch_list_del(struct bpf_verifier_env *env, u32 off);
++int bpf_patch_list_append(struct bpf_verifier_env *env, u32 off,
++			  const struct bpf_insn *insns, u32 cnt);
+ int bpf_patch_list_insert(struct bpf_verifier_env *env, u32 off,
+ 			  const struct bpf_insn *insns, u32 cnt);
  
--#define MAX_USED_MAPS	64
--#define MAX_USED_PROGS	32
--#define MAX_KFUNC_DESCS 256
--#define MAX_FD_ARRAY_SZ (MAX_USED_MAPS + MAX_KFUNC_DESCS)
--
- /* The following structure describes the stack layout of the loader program.
-  * In addition R6 contains the pointer to context.
-  * R7 contains the result of the last sys_bpf command (typically error or FD).
-@@ -34,7 +29,6 @@
- struct loader_stack {
- 	__u32 btf_fd;
- 	__u32 inner_map_fd;
--	__u32 prog_fd[MAX_USED_PROGS];
- };
- 
- #define stack_off(field) \
-@@ -47,6 +41,16 @@ static int blob_fd_array_off(struct bpf_gen *gen, int index)
- 	return gen->fd_array + index * sizeof(int);
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 3385df367b05..147261bf9e6d 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -374,11 +374,7 @@ static int patch_list_reserve_insns(struct bpf_patch_list *pl, u32 cnt)
+ 	return 0;
  }
  
-+static int blob_prog_fd_off(struct bpf_gen *gen, int index)
-+{
-+	return gen->prog_fds + index * sizeof(int);
-+}
-+
-+static bool is_simm16(__s64 value)
-+{
-+	return value == (__s64)(__s16)value;
-+}
-+
- static int realloc_insn_buf(struct bpf_gen *gen, __u32 size)
- {
- 	size_t off = gen->insn_cur - gen->insn_start;
-@@ -113,20 +117,18 @@ static int add_data(struct bpf_gen *gen, const void *data, __u32 size);
- static void emit_sys_close_blob(struct bpf_gen *gen, int blob_off);
- 
- void bpf_gen__init(struct bpf_gen *gen, int log_level, int nr_progs, int nr_maps,
--		   int max_func_ptr_maps)
-+		   int max_func_ptr_maps, int nr_kfuncs)
- {
--	size_t stack_sz = sizeof(struct loader_stack), nr_progs_sz;
--	int i;
-+	size_t stack_sz = sizeof(struct loader_stack);
-+	int i, cleanup_sz;
- 
--	gen->fd_array = add_data(gen, NULL, MAX_FD_ARRAY_SZ * sizeof(int));
-+	/* maps | maps with pointers to functions | unused | BTFs of kfuncs, never at index 0 */
-+	gen->fd_array = add_data(gen, NULL,
-+				 (nr_maps + max_func_ptr_maps + 1 + nr_kfuncs) * sizeof(int));
-+	gen->prog_fds = add_data(gen, NULL, nr_progs * sizeof(int));
- 	gen->log_level = log_level;
- 	gen->nr_obj_maps = nr_maps;
- 	gen->max_func_ptr_maps = max_func_ptr_maps;
--	if (nr_maps + max_func_ptr_maps > MAX_USED_MAPS) {
--		pr_warn("Total maps exceeds %d\n", MAX_USED_MAPS);
--		gen->error = -E2BIG;
--		return;
--	}
- 	/* their fds are closed like the fds of the maps of the object when loading fails */
- 	nr_maps += max_func_ptr_maps;
- 	/* save ctx pointer into R6 */
-@@ -139,27 +141,24 @@ void bpf_gen__init(struct bpf_gen *gen, int log_level, int nr_progs, int nr_maps
- 	emit(gen, BPF_MOV64_IMM(BPF_REG_3, 0));
- 	emit(gen, BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel));
- 
--	/* nr_progs includes subprogs and progs that are not loaded */
--	nr_progs = min(nr_progs, MAX_USED_PROGS);
--	/* amount of stack actually used, only used to calculate iterations, not stack offset */
--	nr_progs_sz = offsetof(struct loader_stack, prog_fd[nr_progs]);
--	/* jump over cleanup code */
--	emit(gen, BPF_JMP_IMM(BPF_JA, 0, 0,
--			      /* size of cleanup code below (including map fd cleanup) */
--			      (nr_progs_sz / 4) * 3 + 2 +
--			      /* 6 insns for emit_sys_close_blob,
--			       * 6 insns for debug_regs in emit_sys_close_blob
--			       */
--			      nr_maps * (6 + (gen->log_level ? 6 : 0))));
-+	/*
-+	 * jump over cleanup code below:
-+	 * 6 insns for emit_sys_close_blob,
-+	 * 6 insns for debug_regs in emit_sys_close_blob
-+	 */
-+	cleanup_sz = (stack_sz / 4) * 3 + 2 + (nr_progs + nr_maps) * (6 + (gen->log_level ? 6 : 0));
-+	emit(gen, is_simm16(cleanup_sz) ? BPF_JMP_A(cleanup_sz) : BPF_JMP32_A(cleanup_sz));
- 
- 	/* remember the label where all error branches will jump to */
- 	gen->cleanup_label = gen->insn_cur - gen->insn_start;
- 	/* emit cleanup code: close all temp FDs */
--	for (i = 0; i < nr_progs_sz; i += 4) {
-+	for (i = 0; i < stack_sz; i += 4) {
- 		emit(gen, BPF_LDX_MEM(BPF_W, BPF_REG_1, BPF_REG_10, -stack_sz + i));
- 		emit(gen, BPF_JMP_IMM(BPF_JSLE, BPF_REG_1, 0, 1));
- 		emit(gen, BPF_EMIT_CALL(BPF_FUNC_sys_close));
- 	}
-+	for (i = 0; i < nr_progs; i++)
-+		emit_sys_close_blob(gen, blob_prog_fd_off(gen, i));
- 	for (i = 0; i < nr_maps; i++)
- 		emit_sys_close_blob(gen, blob_fd_array_off(gen, i));
- 	/* R7 contains the error code from sys_bpf. Copy it into R0 and exit. */
-@@ -192,28 +191,9 @@ static int add_data(struct bpf_gen *gen, const void *data, __u32 size)
- 	return prev - gen->data_start;
- }
- 
--/* Get index for map_fd/btf_fd slot in reserved fd_array, or in data relative
-- * to start of fd_array. Caller can decide if it is usable or not.
+-/*
+- * Extract the pc-relative operand of a jump, a subprog call or a ld_imm64 of a
+- * subprog. gotox and a tail call pass for a jump to the next insn: nothing
+- * reads their 'off'.
 - */
--static int add_map_fd(struct bpf_gen *gen)
++/* Extract the pc-relative operand of a jump, a subprog call or a ld_imm64 of a subprog. */
+ static bool insn_get_rel(const struct bpf_insn *insn, s64 *rel, bool *is_imm)
+ {
+ 	u8 code = insn->code;
+@@ -389,7 +385,8 @@ static bool insn_get_rel(const struct bpf_insn *insn, s64 *rel, bool *is_imm)
+ 		return true;
+ 	}
+ 	if ((BPF_CLASS(code) != BPF_JMP && BPF_CLASS(code) != BPF_JMP32) ||
+-	    BPF_OP(code) == BPF_CALL || BPF_OP(code) == BPF_EXIT)
++	    BPF_OP(code) == BPF_CALL || BPF_OP(code) == BPF_EXIT ||
++	    code == (BPF_JMP | BPF_TAIL_CALL) || code == (BPF_JMP | BPF_JA | BPF_X))
+ 		return false;
+ 
+ 	*is_imm = code == (BPF_JMP32 | BPF_JA);
+@@ -397,21 +394,6 @@ static bool insn_get_rel(const struct bpf_insn *insn, s64 *rel, bool *is_imm)
+ 	return true;
+ }
+ 
+-/* Set the pc-relative operand that insn_get_rel() extracted. */
+-static int insn_set_rel(struct bpf_insn *insn, s64 rel, bool is_imm)
 -{
--	if (gen->nr_maps == MAX_USED_MAPS) {
--		pr_warn("Total maps exceeds %d\n", MAX_USED_MAPS);
--		gen->error = -E2BIG;
--		return 0;
+-	if (is_imm) {
+-		if (rel < S32_MIN || rel > S32_MAX)
+-			return -ERANGE;
+-		insn->imm = rel;
+-	} else {
+-		if (rel < S16_MIN || rel > S16_MAX)
+-			return -ERANGE;
+-		insn->off = rel;
 -	}
--	return gen->nr_maps++;
+-	return 0;
 -}
 -
- static int add_kfunc_btf_fd(struct bpf_gen *gen)
+ /* Whether one of the 'len' insns of a patch in front of the last one jumps past it. */
+ static bool patch_list_jumps_past(const struct bpf_insn *insns, u32 len)
  {
--	int cur;
+@@ -425,72 +407,53 @@ static bool patch_list_jumps_past(const struct bpf_insn *insns, u32 len)
+ 	return false;
+ }
+ 
+-/*
+- * The 'len' insns of a patch were moved down by 'by' insns inside it. Keep
+- * what they referred to in front of the patch, the same way as
+- * bpf_adj_moved_insn() does: a call to the start of the patch, the old start
+- * of a subprog, stays there, a jump to itself doesn't.
+- */
+-static int patch_list_move_down(struct bpf_insn *insns, u32 len, u32 by)
+-{
+-	bool is_imm, call;
+-	s64 rel, tgt;
+-	u32 k;
+-	int err;
 -
--	if (gen->nr_fd_array == MAX_KFUNC_DESCS) {
--		cur = add_data(gen, NULL, sizeof(int));
--		return (cur - gen->fd_array) / sizeof(int);
+-	for (k = 0; k < len; k++) {
+-		if (!insn_get_rel(&insns[k], &rel, &is_imm))
+-			continue;
+-		call = bpf_pseudo_func(&insns[k]) || bpf_pseudo_call(&insns[k]);
+-		tgt = (s64)k + rel + 1;
+-		if (tgt > 0 || (tgt == 0 && !call))
+-			continue;
+-		err = insn_set_rel(&insns[k], rel - by, is_imm);
+-		if (err)
+-			return err;
 -	}
--	return MAX_USED_MAPS + gen->nr_fd_array++;
-+	return gen->nr_obj_maps + gen->max_func_ptr_maps + 1 + gen->nr_fd_array++;
+-	return 0;
+-}
++#define NO_JUMP U32_MAX
+ 
+ /*
+- * insn is number 'idx' of the 'len' insns that replace insn 'off' of the old
+- * image (an insn that isn't patched is its own patch of length 1). It lands
+- * at 'pos' of the new image. 'new_off' maps the old image to the start of
+- * each patch, which calls go to, 'new_tgt' to where jumps go.
++ * Where insn 'idx' of patch 'p' goes in the new image. Calls go to the start
++ * of a patch, img->new_off[], jumps to img->new_tgt[].
+  */
+-static int patch_list_adj_insn(struct bpf_insn *insn, const u32 *new_off,
+-			       const u32 *new_tgt, u32 cnt, u32 off, u32 idx,
+-			       u32 len, u32 pos)
++static int patch_insn_target(const struct bpf_patch_image *img, const struct bpf_insn_patch *p,
++			     const struct bpf_insn *insn, u32 idx, u32 *pos)
+ {
+-	bool is_imm, call;
++	bool is_imm, call = bpf_pseudo_func(insn) || bpf_pseudo_call(insn);
+ 	s64 rel, tgt;
+ 
++	*pos = NO_JUMP;
+ 	if (!insn_get_rel(insn, &rel, &is_imm))
+ 		return 0;
+-	call = bpf_pseudo_func(insn) || bpf_pseudo_call(insn);
+ 
+-	/* relative to the first insn of the patch */
+-	tgt = (s64)idx + rel + 1;
+-	if (tgt >= 0 && tgt < len)
+-		return 0;
+-
+-	/* the patch pushed what follows 'off' down by len - 1 */
+-	tgt = tgt < 0 ? off + tgt : off + tgt - len + 1;
+-	if (tgt < 0 || tgt > cnt)
++	if (idx + 1 == p->jmp) {
++		tgt = p->jmp_to;
++	} else if (idx == p->self) {
++		tgt = p->off + rel + 1;
++	} else {
++		tgt = idx + rel + 1;
++		if (tgt < 0)
++			return -EFAULT;
++		*pos = img->new_off[p->off] + tgt;
++		if (tgt < p->len)
++			return 0;
++		/* the patch pushed what follows 'off' down by len - 1 */
++		tgt += (s64)p->off - p->len + 1;
++	}
++	if (tgt < 0 || tgt > img->cnt)
+ 		return -EFAULT;
+ 
+-	rel = (s64)(call ? new_off : new_tgt)[tgt] - pos - 1;
+-	return insn_set_rel(insn, rel, is_imm);
++	*pos = (call ? img->new_off : img->new_tgt)[tgt];
++	if (idx + 1 == p->jmp && p->jmp_back)
++		*pos = img->new_off[tgt] - p->jmp_back;
++	return 0;
  }
  
- static int insn_bytes_to_bpf_size(__u32 sz)
-@@ -247,18 +227,33 @@ static void move_blob2blob(struct bpf_gen *gen, int off, int size, int blob_off)
- 	emit(gen, BPF_STX_MEM(insn_bytes_to_bpf_size(size), BPF_REG_1, BPF_REG_0, 0));
+ /*
+  * Queue the replacement of insn 'off' of 'prog' by 'patch[0..len)'. Patches
+  * are queued in increasing order of 'off' and applied together, so a pass
+- * keeps addressing insns by their index in 'prog'. Jumps in the patch that
+- * leave it are relative to the patch placed at 'off'. Patching 'off' again
+- * replaces the last insn of its patch, where the insn being patched went, and
+- * the insns in front of it must not jump past it. Jumps of the new insns that
+- * leave the patch are relative to the first of them, as for a first patch.
++ * keeps addressing insns by their index in 'prog'. The last insn of the patch
++ * stands for insn 'off': a copy of a jump or a call goes where it went. The
++ * others jump inside of the patch, ahead, or see bpf_patch_list_jump().
++ * Patching 'off' again replaces the last insn of its patch, and the insns in
++ * front of it must not jump past it.
+  *
+  * Return the copy of the last insn of the patch, which stays valid until the
+  * next call.
+@@ -505,18 +468,16 @@ struct bpf_insn *__bpf_patch_list_add(struct bpf_patch_list *pl,
+ 	int err;
+ 
+ 	if (p && off == p->off) {
+-		if (WARN_ON_ONCE(patch_list_jumps_past(pl->insns + p->start, p->len)))
++		if (WARN_ON_ONCE(p->self != p->len - 1 ||
++				 patch_list_jumps_past(pl->insns + p->start, p->len)))
+ 			return ERR_PTR(-EFAULT);
+ 		err = patch_list_reserve_insns(pl, len - 1);
+ 		if (err)
+ 			return ERR_PTR(err);
+ 		/* the last patch is at the end of pl->insns */
+ 		memcpy(pl->insns + p->start + p->len - 1, patch, len * sizeof(*patch));
+-		err = patch_list_move_down(pl->insns + p->start + p->len - 1, len,
+-					   p->len - 1);
+-		if (err)
+-			return ERR_PTR(err);
+ 		p->len += len - 1;
++		p->self = p->len - 1;
+ 		pl->insn_cnt += len - 1;
+ 		return &pl->insns[p->start + p->len - 1];
+ 	}
+@@ -526,11 +487,13 @@ struct bpf_insn *__bpf_patch_list_add(struct bpf_patch_list *pl,
+ 		return ERR_PTR(err);
+ 
+ 	p = &pl->patches[pl->cnt++];
+-	p->off = off;
+-	p->len = len;
+-	p->target = 0;
+-	p->start = pl->insn_cnt;
+-	p->orig = prog->insnsi[off];
++	*p = (struct bpf_insn_patch){
++		.off = off,
++		.len = len,
++		.self = len - 1,
++		.start = pl->insn_cnt,
++		.orig = prog->insnsi[off],
++	};
+ 	memcpy(pl->insns + p->start, patch, len * sizeof(*patch));
+ 	pl->insn_cnt += len;
+ 
+@@ -541,19 +504,11 @@ struct bpf_insn *__bpf_patch_list_add(struct bpf_patch_list *pl,
+ int __bpf_patch_list_del(struct bpf_patch_list *pl, const struct bpf_prog *prog,
+ 			 u32 off)
+ {
+-	struct bpf_insn_patch *p;
+-	int err;
++	int err = patch_list_reserve_patch(pl);
+ 
+-	err = patch_list_reserve_patch(pl);
+ 	if (err)
+ 		return err;
+-
+-	p = &pl->patches[pl->cnt++];
+-	p->off = off;
+-	p->len = 0;
+-	p->target = 0;
+-	p->start = pl->insn_cnt;
+-	p->orig = prog->insnsi[off];
++	pl->patches[pl->cnt++] = (struct bpf_insn_patch){ .off = off };
+ 	return 0;
  }
  
-+/* Returns the register for an access to ctx + *off: R6, or tmp if *off needs more than 16 bits */
-+static int emit_ctx_reg(struct bpf_gen *gen, int tmp, int *off)
+@@ -564,24 +519,20 @@ int __bpf_patch_list_del(struct bpf_patch_list *pl, const struct bpf_prog *prog,
+  * at the first inserted insn. Inserting in front of a queued patch puts the
+  * insns in front of it. 'off' is the start of a subprog, so nothing falls
+  * through to the inserted insns.
++ * Or queue them to go 'behind' insn 'off'. That is the last patch of 'off'.
+  */
+ int __bpf_patch_list_insert(struct bpf_patch_list *pl, const struct bpf_prog *prog,
+-			    u32 off, const struct bpf_insn *insns, u32 cnt)
++			    u32 off, const struct bpf_insn *insns, u32 cnt, bool behind)
+ {
+ 	struct bpf_insn_patch *p = pl->cnt ? &pl->patches[pl->cnt - 1] : NULL;
++	struct bpf_insn *insn;
+ 	int err;
+ 
+ 	if (!p || off != p->off) {
+-		err = patch_list_reserve_patch(pl) ?: patch_list_reserve_insns(pl, 1);
+-		if (err)
+-			return err;
+-		p = &pl->patches[pl->cnt++];
+-		p->off = off;
+-		p->len = 1;
+-		p->target = 0;
+-		p->start = pl->insn_cnt;
+-		p->orig = prog->insnsi[off];
+-		pl->insns[pl->insn_cnt++] = p->orig;
++		insn = __bpf_patch_list_add(pl, prog, off, &prog->insnsi[off], 1);
++		if (IS_ERR(insn))
++			return PTR_ERR(insn);
++		p = &pl->patches[pl->cnt - 1];
+ 	}
+ 
+ 	err = patch_list_reserve_insns(pl, cnt);
+@@ -589,18 +540,36 @@ int __bpf_patch_list_insert(struct bpf_patch_list *pl, const struct bpf_prog *pr
+ 		return err;
+ 
+ 	/* the last patch is at the end of pl->insns */
+-	err = patch_list_move_down(pl->insns + p->start, p->len, cnt);
+-	if (err)
+-		return err;
+-	memmove(pl->insns + p->start + cnt, pl->insns + p->start,
+-		p->len * sizeof(*insns));
+-	memcpy(pl->insns + p->start, insns, cnt * sizeof(*insns));
++	insn = pl->insns + p->start;
++	if (behind) {
++		insn += p->len;
++	} else {
++		memmove(insn + cnt, insn, p->len * sizeof(*insns));
++		p->target += cnt;
++		p->self += cnt;
++		p->jmp += p->jmp ? cnt : 0;
++	}
++	memcpy(insn, insns, cnt * sizeof(*insns));
+ 	p->len += cnt;
+-	p->target += cnt;
+ 	pl->insn_cnt += cnt;
+ 	return 0;
+ }
+ 
++/*
++ * 'insn' of the last patch goes to insn 'to' of the old image, however far that is.
++ * With 'back' it goes to the last insns of the patch of insn 'to - 1'.
++ * A patch has one such jump.
++ */
++void bpf_patch_list_jump(struct bpf_patch_list *pl, const struct bpf_insn *insn, u32 to, u32 back)
 +{
-+	if (is_simm16(*off))
-+		return BPF_REG_6;
-+	emit(gen, BPF_MOV64_REG(tmp, BPF_REG_6));
-+	emit(gen, BPF_ALU64_IMM(BPF_ADD, tmp, *off));
-+	*off = 0;
-+	return tmp;
++	struct bpf_insn_patch *p = &pl->patches[pl->cnt - 1];
++
++	WARN_ON_ONCE(p->jmp);
++	p->jmp = insn - &pl->insns[p->start] + 1;
++	p->jmp_to = to;
++	p->jmp_back = back;
 +}
 +
- static void move_blob2ctx(struct bpf_gen *gen, int ctx_off, int size, int blob_off)
+ void bpf_patch_list_release(struct bpf_patch_list *pl)
  {
-+	int ctx = emit_ctx_reg(gen, BPF_REG_2, &ctx_off);
+ 	kvfree(pl->patches);
+@@ -640,19 +609,100 @@ static int patch_image_map_linfo(struct bpf_patch_image *img, const struct bpf_p
+ 	return 0;
+ }
+ 
++static bool is_short_jump(const struct bpf_insn *insn)
++{
++	bool is_imm;
++	s64 rel;
 +
- 	emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX_VALUE,
- 					 0, 0, 0, blob_off));
- 	emit(gen, BPF_LDX_MEM(insn_bytes_to_bpf_size(size), BPF_REG_0, BPF_REG_1, 0));
--	emit(gen, BPF_STX_MEM(insn_bytes_to_bpf_size(size), BPF_REG_6, BPF_REG_0, ctx_off));
-+	emit(gen, BPF_STX_MEM(insn_bytes_to_bpf_size(size), ctx, BPF_REG_0, ctx_off));
- }
- 
- static void move_ctx2blob(struct bpf_gen *gen, int off, int size, int ctx_off,
- 				   bool check_non_zero)
- {
--	emit(gen, BPF_LDX_MEM(insn_bytes_to_bpf_size(size), BPF_REG_0, BPF_REG_6, ctx_off));
-+	int ctx = emit_ctx_reg(gen, BPF_REG_0, &ctx_off);
++	return insn_get_rel(insn, &rel, &is_imm) && !is_imm;
++}
 +
-+	emit(gen, BPF_LDX_MEM(insn_bytes_to_bpf_size(size), BPF_REG_0, ctx, ctx_off));
- 	if (check_non_zero)
- 		/* If value in ctx is zero don't update the blob.
- 		 * For example: when ctx->map.max_entries == 0, keep default max_entries from bpf.c
-@@ -277,12 +272,6 @@ static void move_stack2blob(struct bpf_gen *gen, int off, int size, int stack_of
- 	emit(gen, BPF_STX_MEM(insn_bytes_to_bpf_size(size), BPF_REG_1, BPF_REG_0, 0));
- }
- 
--static void move_stack2ctx(struct bpf_gen *gen, int ctx_off, int size, int stack_off)
--{
--	emit(gen, BPF_LDX_MEM(insn_bytes_to_bpf_size(size), BPF_REG_0, BPF_REG_10, stack_off));
--	emit(gen, BPF_STX_MEM(insn_bytes_to_bpf_size(size), BPF_REG_6, BPF_REG_0, ctx_off));
--}
--
- static void emit_sys_bpf(struct bpf_gen *gen, int cmd, int attr, int attr_size)
- {
- 	emit(gen, BPF_MOV64_IMM(BPF_REG_1, cmd));
-@@ -294,11 +283,6 @@ static void emit_sys_bpf(struct bpf_gen *gen, int cmd, int attr, int attr_size)
- 	emit(gen, BPF_MOV64_REG(BPF_REG_7, BPF_REG_0));
- }
- 
--static bool is_simm16(__s64 value)
--{
--	return value == (__s64)(__s16)value;
--}
--
- static void emit_check_err(struct bpf_gen *gen)
- {
- 	__s64 off = -(gen->insn_cur - gen->insn_start - gen->cleanup_label) / 8 - 1;
-@@ -309,7 +293,8 @@ static void emit_check_err(struct bpf_gen *gen)
- 	if (is_simm16(off)) {
- 		emit(gen, BPF_JMP_IMM(BPF_JSLT, BPF_REG_7, 0, off));
- 	} else {
--		gen->error = -ERANGE;
-+		emit(gen, BPF_JMP_IMM(BPF_JSGE, BPF_REG_7, 0, 1));
-+		emit(gen, BPF_JMP32_A(off - 1));
- 	}
- }
- 
-@@ -401,12 +386,12 @@ int bpf_gen__finish(struct bpf_gen *gen, int nr_progs, int nr_maps)
- 	for (i = 0; i < gen->nr_func_ptr_maps; i++)
- 		emit_sys_close_blob(gen, blob_fd_array_off(gen, gen->nr_obj_maps + i));
- 	for (i = 0; i < gen->nr_progs; i++)
--		move_stack2ctx(gen,
--			       sizeof(struct bpf_loader_ctx) +
--			       sizeof(struct bpf_map_desc) * gen->nr_maps +
--			       sizeof(struct bpf_prog_desc) * i +
--			       offsetof(struct bpf_prog_desc, prog_fd), 4,
--			       stack_off(prog_fd[i]));
-+		move_blob2ctx(gen,
-+			      sizeof(struct bpf_loader_ctx) +
-+			      sizeof(struct bpf_map_desc) * gen->nr_maps +
-+			      sizeof(struct bpf_prog_desc) * i +
-+			      offsetof(struct bpf_prog_desc, prog_fd), 4,
-+			      blob_prog_fd_off(gen, i));
- 	for (i = 0; i < gen->nr_maps; i++)
- 		move_blob2ctx(gen,
- 			      sizeof(struct bpf_loader_ctx) +
-@@ -578,8 +563,7 @@ void bpf_gen__map_create(struct bpf_gen *gen,
- 		gen->error = -EDOM; /* internal bug */
- 		return;
- 	} else {
--		/* add_map_fd does gen->nr_maps++ */
--		idx = add_map_fd(gen);
-+		idx = gen->nr_maps++;
- 		emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX_VALUE,
- 						 0, 0, 0, blob_fd_array_off(gen, idx)));
- 		emit(gen, BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_7, 0));
-@@ -720,11 +704,7 @@ static void emit_bpf_kallsyms_lookup_name(struct bpf_gen *gen, struct ksym_relo_
-  * BPF_REG_8 - pointer to instruction
-  *
-  * We need to reuse BTF fd for same symbol otherwise each relocation takes a new
-- * index, while kernel limits total kfunc BTFs to 256. For duplicate symbols,
-- * this would mean a new BTF fd index for each entry. By pairing symbol name
-- * with index, we get the insn->imm, insn->off pairing that kernel uses for
-- * kfunc_tab, which becomes the effective limit even though all of them may
-- * share same index in fd_array (such that kfunc_btf_tab has 1 element).
-+ * index in fd_array, which has one slot for each symbol.
++/*
++ * Some jump is out of its 16-bit range. 'tgt' has the targets of all jumps.
++ *
++ *   goto far          ->  gotol far
++ *
++ *   if r1 > r2        ->  if r1 > r2 goto +1     also may_goto, unwind_goto
++ *      goto far           goto +1
++ *                         gotol far
++ *
++ * That moves the targets of other jumps away. One pass is enough: take each
++ * jump for far that would be far with all jumps that it goes over relaxed.
++ */
++static int patch_image_relax(struct bpf_patch_image *img, u32 *tgt)
++{
++	u32 cnt = img->new_cnt, pos, to, lo, hi, n, *map;
++	unsigned long *far __free(kvfree) = NULL;
++	struct bpf_insn *insns = img->insns;
++
++	far = kvcalloc(BITS_TO_LONGS(cnt), sizeof(long), BPF_VERIFIER_GFP);
++	map = img->relaxed = kvmalloc_array(cnt + 1, sizeof(u32), BPF_VERIFIER_GFP);
++	if (!far || !map)
++		return -ENOMEM;
++
++	for (pos = 0, n = 0; pos <= cnt; pos++) {
++		map[pos] = pos + n;
++		n += pos < cnt && is_short_jump(&insns[pos]) ? 2 : 0;
++	}
++	for (pos = 0; pos < cnt; pos++) {
++		if (!is_short_jump(&insns[pos]))
++			continue;
++		lo = min(pos, tgt[pos]);
++		hi = max(pos + 1, tgt[pos]);
++		if (map[hi] - map[lo] <= S16_MAX)
++			continue;
++		if (insns[pos].code == (BPF_JMP | BPF_JA))
++			insns[pos] = BPF_JMP32_A(0);
++		else
++			__set_bit(pos, far);
++	}
++	for (pos = 0, n = 0; pos <= cnt; pos++) {
++		map[pos] = pos + n;
++		n += pos < cnt && test_bit(pos, far) ? 2 : 0;
++	}
++
++	/* like kvmalloc(): the size of a prog fits into 32 bits */
++	if (map[cnt] > INT_MAX / sizeof(*insns))
++		return -ENOMEM;
++	insns = kvrealloc(insns, array_size(map[cnt], sizeof(*insns)), BPF_VERIFIER_GFP);
++	if (!insns)
++		return -ENOMEM;
++	img->insns = insns;
++	for (pos = cnt; pos--;) {
++		to = map[pos];
++		insns[to] = insns[pos];
++		if (!test_bit(pos, far))
++			continue;
++		insns[to].off = 1;
++		insns[to + 1] = BPF_JMP_A(1);
++		insns[to + 2] = BPF_JMP32_A(map[tgt[pos]] - to - 3);
++		tgt[pos] = NO_JUMP;
++	}
++	for (pos = 0; pos <= img->cnt; pos++) {
++		img->new_off[pos] = map[img->new_off[pos]];
++		img->new_tgt[pos] = map[img->new_tgt[pos]];
++	}
++	img->grow += map[cnt] - cnt;
++	img->new_cnt = map[cnt];
++	return 0;
++}
++
+ /*
+  * Build the image of 'prog' with the queued patches applied in img->insns,
+  * without touching 'prog'. img->new_off[] maps each old insn to the start of
+  * its patch, img->new_tgt[] to where jumps to it land, both map a removed insn
+  * to the next one that stays. img->new_linfo[] is there when insns are
+- * removed, see patch_image_map_linfo(). On -ERANGE, img->bad is the old insn
+- * whose jump got out of range. No list has both removed and inserted insns.
++ * removed, see patch_image_map_linfo(). On -EFAULT, img->bad is the old insn
++ * whose jump is wrong. No list has both removed and inserted insns.
   */
- static void emit_relo_kfunc_btf(struct bpf_gen *gen, struct ksym_relo_desc *relo, int insn)
+ int bpf_patch_list_build(const struct bpf_patch_list *pl, const struct bpf_prog *prog,
+ 			 struct bpf_patch_image *img)
  {
-@@ -837,7 +817,8 @@ static void emit_relo_ksym_typeless(struct bpf_gen *gen,
- 	/* skip typeless ksym_desc in fd closing loop in cleanup_relos */
- 	kdesc->typeless = true;
- 	emit_bpf_kallsyms_lookup_name(gen, relo);
--	emit(gen, BPF_JMP_IMM(BPF_JEQ, BPF_REG_7, -ENOENT, 1));
-+	emit(gen, BPF_JMP_IMM(BPF_JNE, BPF_REG_7, -ENOENT, 1));
-+	emit(gen, BPF_MOV64_IMM(BPF_REG_7, 0));
- 	emit_check_err(gen);
- 	/* store lower half of addr into insn[insn_idx].imm */
- 	emit(gen, BPF_STX_MEM(BPF_W, BPF_REG_8, BPF_REG_9, offsetof(struct bpf_insn, imm)));
-@@ -979,8 +960,7 @@ static void cleanup_relos(struct bpf_gen *gen, int insns)
- 			emit_sys_close_blob(gen, insn);
- 		} else if (!kdesc->is_ld64) {
- 			emit_sys_close_blob(gen, blob_fd_array_off(gen, kdesc->off));
--			if (kdesc->off < MAX_FD_ARRAY_SZ)
--				gen->nr_fd_array--;
-+			gen->nr_fd_array--;
+-	u32 cnt = prog->len, i, k, n;
++	u32 cnt = prog->len, i, k, n, pos, *map;
++	u32 *tgt __free(kvfree) = NULL;
++	bool far = false;
+ 	int err;
++	s64 rel;
+ 
+ 	memset(img, 0, sizeof(*img));
+ 	img->cnt = cnt;
+@@ -670,7 +720,7 @@ int bpf_patch_list_build(const struct bpf_patch_list *pl, const struct bpf_prog
+ 			img->grow += pl->patches[k++].len - 1;
  		}
  	}
- 	if (gen->nr_ksyms) {
-@@ -1136,14 +1116,10 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
- 		gen->attach_kind = 0;
+-	img->new_cnt = cnt + img->grow;
++	img->short_cnt = img->new_cnt = cnt + img->grow;
+ 
+ 	if (img->del && prog->aux->nr_linfo) {
+ 		err = patch_image_map_linfo(img, prog);
+@@ -679,34 +729,53 @@ int bpf_patch_list_build(const struct bpf_patch_list *pl, const struct bpf_prog
  	}
- 	emit_check_err(gen);
--	if (gen->nr_progs == MAX_USED_PROGS) {
--		pr_warn("Total programs exceeds %d\n", MAX_USED_PROGS);
--		gen->error = -E2BIG;
--		return;
--	}
--	/* remember prog_fd in the stack, if successful */
--	emit(gen, BPF_STX_MEM(BPF_W, BPF_REG_10, BPF_REG_7,
--			      stack_off(prog_fd[gen->nr_progs])));
-+	/* remember prog_fd in the blob, if successful */
-+	emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX_VALUE,
-+					 0, 0, 0, blob_prog_fd_off(gen, gen->nr_progs)));
-+	emit(gen, BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_7, 0));
- 	gen->nr_progs++;
+ 
+ 	img->insns = kvmalloc_array(img->new_cnt, sizeof(*img->insns), BPF_VERIFIER_GFP);
+-	if (!img->insns)
++	tgt = kvmalloc_array(img->new_cnt, sizeof(*tgt), BPF_VERIFIER_GFP);
++	if (!img->insns || !tgt)
+ 		return -ENOMEM;
+ 
+-	for (i = 0, k = 0; i < cnt; i++) {
++	for (i = 0, k = 0, pos = 0; i < cnt; i++) {
++		struct bpf_insn_patch none = { .off = i, .len = 1 };
+ 		const struct bpf_insn *src = &prog->insnsi[i];
+-		u32 len = 1, pos = img->new_off[i];
++		const struct bpf_insn_patch *p = &none;
+ 
+ 		if (k < pl->cnt && pl->patches[k].off == i) {
+-			src = &pl->insns[pl->patches[k].start];
+-			len = pl->patches[k++].len;
++			p = &pl->patches[k++];
++			src = &pl->insns[p->start];
+ 		}
+ 
+-		for (n = 0; n < len; n++) {
+-			img->insns[pos + n] = src[n];
+-			err = patch_list_adj_insn(&img->insns[pos + n], img->new_off,
+-						  img->new_tgt, cnt, i, n, len, pos + n);
++		for (n = 0; n < p->len; n++, pos++) {
++			img->insns[pos] = src[n];
++			err = patch_insn_target(img, p, &src[n], n, &tgt[pos]);
+ 			if (err) {
+ 				img->bad = i;
+ 				return err;
+ 			}
++			rel = (s64)tgt[pos] - pos - 1;
++			far |= is_short_jump(&src[n]) && rel != (s16)rel;
+ 		}
+ 	}
++
++	err = far ? patch_image_relax(img, tgt) : 0;
++	if (err)
++		return err;
++
++	for (i = 0, map = img->relaxed; i < img->short_cnt; i++) {
++		if (tgt[i] == NO_JUMP)
++			continue;
++		pos = map ? map[i] : i;
++		rel = (s64)(map ? map[tgt[i]] : tgt[i]) - pos - 1;
++		if (is_short_jump(&img->insns[pos]))
++			img->insns[pos].off = rel;
++		else
++			img->insns[pos].imm = rel;
++	}
+ 	return 0;
  }
  
-@@ -1159,10 +1135,11 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
- static void emit_copy_initial_value(struct bpf_gen *gen, int map_idx, int value,
- 				    __u32 value_size, int nr_more_insns)
+ void bpf_patch_image_free(struct bpf_patch_image *img)
  {
--	emit(gen, BPF_LDX_MEM(BPF_DW, BPF_REG_3, BPF_REG_6,
--			      sizeof(struct bpf_loader_ctx) +
--			      sizeof(struct bpf_map_desc) * map_idx +
--			      offsetof(struct bpf_map_desc, initial_value)));
-+	int off = sizeof(struct bpf_loader_ctx) + sizeof(struct bpf_map_desc) * map_idx +
-+		  offsetof(struct bpf_map_desc, initial_value);
-+	int ctx = emit_ctx_reg(gen, BPF_REG_3, &off);
-+
-+	emit(gen, BPF_LDX_MEM(BPF_DW, BPF_REG_3, ctx, off));
- 	emit(gen, BPF_JMP_IMM(BPF_JEQ, BPF_REG_3, 0, 8 + nr_more_insns));
- 	emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX_VALUE,
- 					 0, 0, 0, value));
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 44134421bd7d..1efc0dd37b2e 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -9909,7 +9909,7 @@ static int bpf_object_load(struct bpf_object *obj, int extra_log_level, const ch
- 	 * permit cross-endian creation of "light skeleton".
- 	 */
- 	if (obj->gen_loader) {
--		int nr_func_ptr_maps = 0, nr_progs = 0, i;
-+		int nr_func_ptr_maps = 0, nr_progs = 0, nr_entries = 0, i;
- 		bool text_has_callx = false;
+ 	kvfree(img->insns);
++	kvfree(img->relaxed);
+ 	kvfree(img->new_linfo);
+ 	kvfree(img->new_tgt);
+ 	kvfree(img->new_off);
+@@ -1576,7 +1645,6 @@ static int bpf_jit_blind_insn(const struct bpf_insn *from,
+ {
+ 	struct bpf_insn *to = to_buff;
+ 	u32 imm_rnd = get_random_u32();
+-	int off;
  
+ 	BUILD_BUG_ON(BPF_REG_PARAMS + 3 != MAX_BPF_JIT_REG);
+ 	BUILD_BUG_ON(BPF_REG_ARENA_SP + 2 != MAX_BPF_JIT_REG);
+@@ -1649,15 +1717,9 @@ static int bpf_jit_blind_insn(const struct bpf_insn *from,
+ 	case BPF_JMP | BPF_JSGE | BPF_K:
+ 	case BPF_JMP | BPF_JSLE | BPF_K:
+ 	case BPF_JMP | BPF_JSET | BPF_K:
+-		/* Accommodate for extra offset in case of a backjump. */
+-		off = from->off;
+-		if (off < 0)
+-			off -= 2;
+-		if (off < S16_MIN)
+-			return -ERANGE;
+ 		*to++ = BPF_ALU64_IMM(BPF_MOV, BPF_REG_AX, imm_rnd ^ from->imm);
+ 		*to++ = BPF_ALU64_IMM(BPF_XOR, BPF_REG_AX, imm_rnd);
+-		*to++ = BPF_JMP_REG(from->code, from->dst_reg, BPF_REG_AX, off);
++		*to++ = BPF_JMP_REG(from->code, from->dst_reg, BPF_REG_AX, from->off);
+ 		break;
+ 
+ 	case BPF_JMP32 | BPF_JEQ  | BPF_K:
+@@ -1671,16 +1733,9 @@ static int bpf_jit_blind_insn(const struct bpf_insn *from,
+ 	case BPF_JMP32 | BPF_JSGE | BPF_K:
+ 	case BPF_JMP32 | BPF_JSLE | BPF_K:
+ 	case BPF_JMP32 | BPF_JSET | BPF_K:
+-		/* Accommodate for extra offset in case of a backjump. */
+-		off = from->off;
+-		if (off < 0)
+-			off -= 2;
+-		if (off < S16_MIN)
+-			return -ERANGE;
+ 		*to++ = BPF_ALU32_IMM(BPF_MOV, BPF_REG_AX, imm_rnd ^ from->imm);
+ 		*to++ = BPF_ALU32_IMM(BPF_XOR, BPF_REG_AX, imm_rnd);
+-		*to++ = BPF_JMP32_REG(from->code, from->dst_reg, BPF_REG_AX,
+-				      off);
++		*to++ = BPF_JMP32_REG(from->code, from->dst_reg, BPF_REG_AX, from->off);
+ 		break;
+ 
+ 	case BPF_LD | BPF_IMM | BPF_DW:
+@@ -1880,10 +1935,6 @@ struct bpf_prog *bpf_jit_blind_constants(struct bpf_verifier_env *env, struct bp
+ 		if (!rewritten)
+ 			continue;
+ 
+-		if (rewritten < 0) {
+-			err = rewritten;
+-			break;
+-		}
+ 		last = env ? bpf_patch_list_add(env, i, insn_buff, rewritten) :
+ 			     __bpf_patch_list_add(&pl, clone, i, insn_buff, rewritten);
+ 		if (IS_ERR(last)) {
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index e05d767ab71e..3daa419f75a9 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -198,7 +198,6 @@ struct bpf_insn *bpf_patch_list_add(struct bpf_verifier_env *env, u32 off,
+ 		return insn;
+ 	}
+ 
+-	/* -ERANGE takes a second patch with a 16-bit jump back out of it: no pass has one */
+ 	return __bpf_patch_list_add(pl, env->prog, off, patch, len);
+ }
+ 
+@@ -218,13 +217,11 @@ int bpf_patch_list_del(struct bpf_verifier_env *env, u32 off)
+ 	return __bpf_patch_list_del(pl, env->prog, off);
+ }
+ 
+-/* Queue insns to go in front of insn 'off', see __bpf_patch_list_insert(). */
+-int bpf_patch_list_insert(struct bpf_verifier_env *env, u32 off,
+-			  const struct bpf_insn *insns, u32 cnt)
++static int patch_list_insert(struct bpf_verifier_env *env, u32 off,
++			     const struct bpf_insn *insns, u32 cnt, bool behind)
+ {
+ 	struct bpf_patch_list *pl = &env->patch_list;
+ 	struct bpf_insn_patch *p = pl->cnt ? &pl->patches[pl->cnt - 1] : NULL;
+-	int err;
+ 
+ 	if (bpf_must_abort())
+ 		return -EINTR;
+@@ -234,11 +231,21 @@ int bpf_patch_list_insert(struct bpf_verifier_env *env, u32 off,
+ 			    env, "insns inserted at %u out of order", off))
+ 		return -EFAULT;
+ 
+-	err = __bpf_patch_list_insert(pl, env->prog, off, insns, cnt);
+-	if (err == -ERANGE)
+-		verbose(env, "insn %d cannot be patched due to 16-bit range\n",
+-			env->insn_aux_data[off].orig_idx);
+-	return err;
++	return __bpf_patch_list_insert(pl, env->prog, off, insns, cnt, behind);
++}
++
++/* Queue insns to go in front of insn 'off', see __bpf_patch_list_insert(). */
++int bpf_patch_list_insert(struct bpf_verifier_env *env, u32 off,
++			  const struct bpf_insn *insns, u32 cnt)
++{
++	return patch_list_insert(env, off, insns, cnt, false);
++}
++
++/* Queue insns to go behind insn 'off', which does not fall through. They are not dead code. */
++int bpf_patch_list_append(struct bpf_verifier_env *env, u32 off,
++			  const struct bpf_insn *insns, u32 cnt)
++{
++	return patch_list_insert(env, off, insns, cnt, true);
+ }
+ 
+ void bpf_patch_list_free(struct bpf_verifier_env *env)
+@@ -255,20 +262,24 @@ static void patch_list_adj_aux(struct bpf_prog *prog, struct bpf_insn_patch *p,
+ 			       const struct bpf_insn_aux_data *old,
+ 			       struct bpf_insn_aux_data *slot)
+ {
+-	struct bpf_insn_aux_data *last = slot + p->len - 1;
++	struct bpf_insn_aux_data *last = slot + p->self;
+ 	struct bpf_insn *orig = &p->orig;
+ 	u32 i;
+ 
++	memset(slot, 0, sizeof(*slot) * p->len);
+ 	*last = *old;
+ 	/* Recompute zext_dst: the last insn of the patch need not be the patched one. */
+-	last->zext_dst = bpf_insn_def32(prog, &patch[p->len - 1]) >= 0;
+-	memset(slot, 0, sizeof(*slot) * (p->len - 1));
++	last->zext_dst = bpf_insn_def32(prog, &patch[p->self]) >= 0;
+ 
+-	for (i = 0; i < p->len - 1; i++) {
++	for (i = 0; i < p->len; i++) {
++		if (i == p->self)
++			continue;
+ 		/* Expand the seen count of the patched insn to the patch. */
+-		slot[i].seen = last->seen;
++		slot[i].seen = last->seen ?: i > p->self;
+ 		/* messages name the insn of the original program */
+ 		slot[i].orig_idx = last->orig_idx;
++		/* for may_goto in front of the insn, see bpf_insert_loop_guards() */
++		slot[i].live_regs_before = last->live_regs_before;
+ 		slot[i].zext_dst = bpf_insn_def32(prog, &patch[i]) >= 0;
  		/*
-@@ -9929,8 +9929,10 @@ static int bpf_object_load(struct bpf_object *obj, int extra_log_level, const ch
- 			    !prog_is_subprog(obj, &obj->programs[i]) &&
- 			    (text_has_callx || prog_has_callx(&obj->programs[i])))
- 				nr_progs++;
--		bpf_gen__init(obj->gen_loader, obj->log_level | extra_log_level,
--			      obj->nr_programs, obj->nr_maps, nr_func_ptr_maps * nr_progs);
-+		for (i = 0; i < obj->nr_programs; i++)
-+			nr_entries += !prog_is_subprog(obj, &obj->programs[i]);
-+		bpf_gen__init(obj->gen_loader, obj->log_level | extra_log_level, nr_entries,
-+			      obj->nr_maps, nr_func_ptr_maps * nr_progs, obj->nr_extern);
- 	} else if (!is_native_endianness(obj)) {
- 		pr_warn("object '%s': loading non-native endianness is unsupported\n", obj->name);
- 		return libbpf_err(-LIBBPF_ERRNO__ENDIAN);
+ 		 * A copy of the patched insn keeps its marking. Any other
+@@ -288,12 +299,12 @@ static void patch_list_adj_aux(struct bpf_prog *prog, struct bpf_insn_patch *p,
+ 	 * systematically mark it for non-stack access if it is not the patched
+ 	 * insn, otherwise keep the original marking.
+ 	 */
+-	if (bpf_is_mem_insn(&patch[p->len - 1]) &&
+-	    memcmp(&patch[p->len - 1], orig, sizeof(*orig)))
++	if (bpf_is_mem_insn(&patch[p->self]) &&
++	    memcmp(&patch[p->self], orig, sizeof(*orig)))
+ 		last->non_stack_access = true;
+ 
+ 	/* indirect jumps to the replaced insn land on p->target */
+-	if (last->indirect_target && p->target != p->len - 1) {
++	if (last->indirect_target && p->target != p->self) {
+ 		slot[p->target].indirect_target = 1;
+ 		last->indirect_target = 0;
+ 	}
+@@ -325,6 +336,28 @@ static void patch_list_drop_removed(struct bpf_verifier_env *env)
+ 	}
+ }
+ 
++/*
++ * Make room for the insns that patch_image_relax() added.
++ * A jump to dead code is dead code, see bpf_opt_hard_wire_dead_code_branches().
++ */
++static void patch_list_relax_aux(const struct bpf_patch_image *img, struct bpf_insn_aux_data *data)
++{
++	const u32 *map = img->relaxed;
++	u32 i, k, to;
++
++	for (i = img->short_cnt; i--;)
++		data[map[i]] = data[i];
++	for (i = 0; i < img->short_cnt; i++) {
++		for (k = map[i] + 1; k < map[i + 1]; k++) {
++			to = k + 1 + bpf_jmp_offset(&img->insns[k]);
++			data[k] = (struct bpf_insn_aux_data){
++				.orig_idx = data[map[i]].orig_idx,
++				.seen = data[map[i]].seen ? data[to].seen : 0,
++			};
++		}
++	}
++}
++
+ /* Fill 'data', the aux data of the new image, from the aux data of the old one. */
+ static void patch_list_remap_aux(struct bpf_verifier_env *env,
+ 				 const struct bpf_patch_image *img,
+@@ -332,22 +365,24 @@ static void patch_list_remap_aux(struct bpf_verifier_env *env,
+ {
+ 	struct bpf_patch_list *pl = &env->patch_list;
+ 	struct bpf_insn_patch *p;
+-	u32 i, k, end;
++	u32 i, k, end, pos;
+ 
+-	for (i = 0, k = 0; i < img->cnt; i = end) {
++	for (i = 0, k = 0, pos = 0; i < img->cnt; i = end) {
+ 		if (k < pl->cnt && pl->patches[k].off == i) {
+ 			p = &pl->patches[k++];
+ 			if (p->len)
+ 				patch_list_adj_aux(env->prog, p, &pl->insns[p->start],
+-						   &env->insn_aux_data[i],
+-						   &data[img->new_off[i]]);
++						   &env->insn_aux_data[i], &data[pos]);
++			pos += p->len;
+ 			end = i + 1;
+ 			continue;
+ 		}
+ 		end = k < pl->cnt ? pl->patches[k].off : img->cnt;
+-		memcpy(data + img->new_off[i], env->insn_aux_data + i,
+-		       sizeof(*data) * (end - i));
++		memcpy(data + pos, env->insn_aux_data + i, sizeof(*data) * (end - i));
++		pos += end - i;
+ 	}
++	if (img->relaxed)
++		patch_list_relax_aux(img, data);
+ 	vfree(env->insn_aux_data);
+ 	env->insn_aux_data = data;
+ 	env->insn_aux_data_len = img->new_cnt;
+@@ -494,11 +529,6 @@ int bpf_patch_list_commit(struct bpf_verifier_env *env)
+ 		goto out;
+ 
+ 	err = bpf_patch_list_build(pl, prog, &img);
+-	if (err == -ERANGE) {
+-		verbose(env, "insn %d cannot be patched due to 16-bit range\n",
+-			env->insn_aux_data[img.bad].orig_idx);
+-		goto out;
+-	}
+ 	if (verifier_bug_if(err == -EFAULT, env, "insn %u jumps out of the program",
+ 			    img.bad))
+ 		goto out;
+@@ -535,52 +565,6 @@ int bpf_patch_list_commit(struct bpf_verifier_env *env)
+ 	return err;
+ }
+ 
+-/*
+- * insn was moved down by delta insns inside its own patch. Operands relative
+- * to the pc that point in front of the old position did not move with it.
+- */
+-static int bpf_adj_moved_insn(struct bpf_insn *insn, u32 delta)
+-{
+-	u8 class = BPF_CLASS(insn->code), op = BPF_OP(insn->code);
+-	s64 off = insn->imm, off_min = S32_MIN;
+-	bool is_imm = true;
+-
+-	if (bpf_pseudo_func(insn) || bpf_pseudo_call(insn)) {
+-		/* subprog that started at the old position starts with the patch */
+-		if (off >= 0)
+-			return 0;
+-	} else if ((class == BPF_JMP || class == BPF_JMP32) &&
+-		   op != BPF_CALL && op != BPF_EXIT) {
+-		if (insn->code != (BPF_JMP32 | BPF_JA)) {
+-			off = insn->off;
+-			off_min = S16_MIN;
+-			is_imm = false;
+-		}
+-		/* jump to itself stays */
+-		if (off >= -1)
+-			return 0;
+-	} else {
+-		return 0;
+-	}
+-
+-	off -= delta;
+-	if (off < off_min)
+-		return -ERANGE;
+-	if (is_imm)
+-		insn->imm = off;
+-	else
+-		insn->off = off;
+-	return 0;
+-}
+-
+-static bool jumps_to_itself(const struct bpf_insn *insn)
+-{
+-	u8 class = BPF_CLASS(insn->code), op = BPF_OP(insn->code);
+-
+-	return (class == BPF_JMP || class == BPF_JMP32) && op != BPF_CALL && op != BPF_EXIT &&
+-	       insn->code != (BPF_JMP32 | BPF_JA) && insn->off == -1;
+-}
+-
+ /* How a subprog leaves when it is out of budget, see push_budget_exit() */
+ static struct bpf_insn budget_exit_insn(struct bpf_verifier_env *env, struct bpf_subprog_info *sub)
+ {
+@@ -591,205 +575,62 @@ static struct bpf_insn budget_exit_insn(struct bpf_verifier_env *env, struct bpf
+ 	return BPF_RAW_INSN(BPF_JMP | BPF_EXIT, 0, BPF_UNWIND_EXIT, 0, 0);
+ }
+ 
+-/*
+- * may_goto has 16 bits for the offset, and what is between it and its target is going
+- * to grow: may_goto itself becomes 10 insns, 14 when it has to save a register.
+- */
+-#define BPF_GUARD_NEAR	2048
+-
+-static bool guard_leaves_subprog(const struct bpf_insn_aux_data *aux)
+-{
+-	return aux->loop_guard && !aux->guard_no_unwind;
+-}
+-
+-/*
+- * 'r0 = 0; exit' behind the last insn of the subprog, for all its guards that are near.
+- * Returns the number of insns that are going to be added.
+- */
+-static int append_budget_exit(struct bpf_verifier_env *env, int s)
+-{
+-	struct bpf_subprog_info *sub = &env->subprog_info[s];
+-	int last = (sub + 1)->start - 1, n = 0, i;
+-	struct bpf_insn buf[4], *insn;
+-
+-	for (i = max_t(int, sub->start, last + 1 - BPF_GUARD_NEAR); i <= last; i++)
+-		if (guard_leaves_subprog(&env->insn_aux_data[i]))
+-			break;
+-	if (i > last)
+-		return 0;
+-
+-	buf[n++] = env->prog->insnsi[last];
+-	buf[n++] = BPF_MOV64_IMM(BPF_REG_0, 0);
+-	if (bpf_ret_reg_pair(env, s))
+-		buf[n++] = BPF_MOV64_IMM(BPF_REG_2, 0);
+-	buf[n++] = budget_exit_insn(env, sub);
+-	insn = bpf_patch_list_add(env, last, buf, n);
+-	return IS_ERR(insn) ? PTR_ERR(insn) : n - 1;
+-}
+-
+ /*
+  * Add may_goto in front of the insns that the main pass marked, see
+  * check_loop_guard(). It verified the edge from the insn to where may_goto goes.
++ *
++ *	may_goto to		or	may_goto leave		see push_budget_exit()
++ *	insn				insn
++ *					...
++ *					last insn of the subprog
++ *				leave:	r0 = 0
++ *					exit
++ *
++ * bpf_do_misc_fixups() keeps the address of the count of may_goto in a register that is
++ * dead at the may_goto. What is live in front of the insn is live in front of its guard.
++ * Nothing else is:
++ *  - The guard of a jump goes where the jump goes.
++ *  - What is live where the guard at the head of a loop goes is live at the head,
++ *    see bpf_head_guard_target().
++ *  - On the way out of the subprog R0, and R2 of a pair, are set to 0.
+  */
+ int bpf_insert_loop_guards(struct bpf_verifier_env *env)
+ {
++	struct bpf_insn patch[2] = { BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, 0, 0) };
++	struct bpf_insn leave[3] = { BPF_MOV64_IMM(BPF_REG_0, 0) };
+ 	struct bpf_insn_aux_data *aux = env->insn_aux_data;
+-	int len = env->prog->len, i, r, s, to, n, jmp, err = 0;
+-	struct bpf_insn *patch, *insn;
+-	int *target, *leave, *moved;
+-	bool indirect;
+-	u16 *zero;
+-	s64 off;
+-
+-	for (i = 0; i < len; i++)
+-		if (aux[i].loop_guard)
+-			break;
+-	if (i == len)
+-		return 0;
+-
+-	/*
+-	 * Where the subprog has 'r0 = 0; exit', 0 if it has none. And how far that moved
+-	 * the subprog: guard_to is from the time before.
+-	 */
+-	leave = kvcalloc(2 * env->subprog_cnt, sizeof(int), BPF_VERIFIER_GFP);
+-	if (!leave)
+-		return -ENOMEM;
+-	moved = leave + env->subprog_cnt;
+-	for (s = 0; s < env->subprog_cnt && !err; s++) {
+-		leave[s] = append_budget_exit(env, s);
+-		if (leave[s] < 0)
+-			err = leave[s];
+-	}
+-	/* A guard cannot jump into a patch that is in the list: 'r0 = 0' has no index yet. */
+-	err = err ?: bpf_patch_list_commit(env);
+-	if (err) {
+-		kvfree(leave);
+-		return err;
+-	}
+-	aux = env->insn_aux_data;
+-	len = env->prog->len;
+-	for (s = 0, n = 0; s < env->subprog_cnt; s++) {
+-		moved[s] = n;
+-		n += leave[s];
+-		if (!leave[s])
+-			continue;
+-		i = env->subprog_info[s + 1].start;
+-		leave[s] = i - leave[s];
+-		/*
+-		 * The list gives what is known about an insn to the last insn of its patch,
+-		 * but for indirect_target. Here the original insn is the first one.
+-		 */
+-		indirect = aux[leave[s] - 1].indirect_target;
+-		swap(aux[leave[s] - 1], aux[i - 1]);
+-		aux[leave[s] - 1].indirect_target = indirect;
+-		aux[i - 1].indirect_target = false;
+-		/* the last insn may be dead code */
+-		while (--i >= leave[s])
+-			aux[i].seen = 1;
+-	}
+-
+-	/* where the guard of the insn goes */
+-	target = kvcalloc(len, sizeof(int), BPF_VERIFIER_GFP);
+-	zero = kvcalloc(len, sizeof(u16), BPF_VERIFIER_GFP);
+-	patch = kvcalloc(8, sizeof(*patch), BPF_VERIFIER_GFP);
+-	if (!target || !zero || !patch) {
+-		err = -ENOMEM;
+-		goto out;
+-	}
+-	for (i = 0; i < len; i++) {
+-		s = bpf_find_containing_subprog(env, i) - env->subprog_info;
+-		target[i] = aux[i].loop_guard ? aux[i].guard_to + moved[s] : -1;
+-		if (guard_leaves_subprog(&aux[i])) {
+-			/* see push_budget_exit() */
+-			if (leave[s] && leave[s] - i <= BPF_GUARD_NEAR) {
+-				target[i] = leave[s];
+-			} else {
+-				target[i] = -2;
+-				zero[i] = BIT(BPF_REG_0);
+-				if (bpf_ret_reg_pair(env, s))
+-					zero[i] |= BIT(BPF_REG_2);
+-			}
+-		}
+-	}
+-
+-	for (i = 0; i < len; i++) {
+-		to = target[i];
+-		if (to == -1)
+-			continue;
+-		/*
+-		 *	may_goto to		or	may_goto +1
+-		 *	insn				goto +N
+-		 *					r0 = 0, ...
+-		 *					exit
+-		 *					insn
+-		 */
+-		n = 0;
+-		if (zero[i]) {
+-			patch[n++] = BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, 1, 0);
+-			patch[n++] = BPF_JMP_A(hweight16(zero[i]) + 1);
+-			for (r = BPF_REG_0; r < BPF_REG_FP; r++)
+-				if (zero[i] & BIT(r))
+-					patch[n++] = BPF_MOV64_IMM(r, 0);
+-		}
+-		jmp = n++;
+-		/* What is behind moves with this patch. The other patches are not there yet. */
+-		if (to == -2)
+-			off = 0;
+-		else if (to > i)
+-			off = to - i + n - jmp - 1;
+-		else
+-			off = to - (i + jmp) - 1;
+-		if (off > S16_MAX || off < S16_MIN) {
+-			verbose(env, "exit of the loop is too far from insn %d for may_goto\n", i);
+-			err = -ERANGE;
+-			break;
+-		}
+-		patch[jmp] = BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, off, 0);
+-		if (to == -2)
+-			patch[jmp] = budget_exit_insn(env, bpf_find_containing_subprog(env, i));
+-		patch[n] = env->prog->insnsi[i];
+-		/* A jump to itself is a back edge. It goes through may_goto like the others. */
+-		if (jumps_to_itself(&patch[n]))
+-			patch[n].off -= n;
+-		else
+-			err = bpf_adj_moved_insn(&patch[n], n);
+-		if (err) {
+-			verbose(env, "insn %d cannot be patched due to 16-bit range\n", i);
+-			break;
+-		}
+-		n++;
+-		insn = bpf_patch_list_add(env, i, patch, n);
+-		if (IS_ERR(insn)) {
+-			err = PTR_ERR(insn);
+-			break;
++	struct bpf_subprog_info *sub;
++	struct bpf_insn *insn;
++	int i, s, n, err;
++	bool leaves;
++
++	for (s = 0; s < env->subprog_cnt; s++) {
++		sub = &env->subprog_info[s];
++		n = bpf_ret_reg_pair(env, s) ? 3 : 2;
++		leaves = false;
++		for (i = sub->start; i < sub[1].start; i++) {
++			if (!aux[i].loop_guard)
++				continue;
++			/* A jump to itself is a back edge. It goes through may_goto too. */
++			patch[1] = env->prog->insnsi[i];
++			insn = bpf_patch_list_add(env, i, patch, 2);
++			if (IS_ERR(insn))
++				return PTR_ERR(insn);
++			if (aux[i].guard_no_unwind)
++				bpf_patch_list_jump(&env->patch_list, insn - 1, aux[i].guard_to, 0);
++			else
++				bpf_patch_list_jump(&env->patch_list, insn - 1, sub[1].start, n);
++			leaves |= !aux[i].guard_no_unwind;
+ 		}
+-	}
+-	err = err ?: bpf_patch_list_commit(env);
+-	if (err)
+-		goto out;
+-	/*
+-	 * bpf_do_misc_fixups() keeps the address of the count of may_goto in a register that is
+-	 * dead at the may_goto. A new insn has no live_regs_before: all registers would be dead.
+-	 * What is live in front of the insn is live in front of its guard. Nothing else is:
+-	 *  - The guard of a jump goes where the jump goes.
+-	 *  - What is live where the guard at the head of a loop goes is live at the head,
+-	 *    see bpf_head_guard_target().
+-	 *  - On the way out of the subprog R0, and R2 of a pair, are set to 0.
+-	 */
+-	aux = env->insn_aux_data;
+-	for (i = 0, n = 0; i < len; i++) {
+-		if (target[i] == -1)
++		if (!leaves)
+ 			continue;
+-		r = zero[i] ? 3 + hweight16(zero[i]) : 1;
+-		aux[i + n].live_regs_before = aux[i + n + r].live_regs_before;
+-		n += r;
++		leave[1] = BPF_MOV64_IMM(BPF_REG_2, 0);
++		leave[n - 1] = budget_exit_insn(env, sub);
++		err = bpf_patch_list_append(env, i - 1, leave, n);
++		if (err)
++			return err;
+ 	}
+-out:
+-	kvfree(leave);
+-	kvfree(target);
+-	kvfree(zero);
+-	kvfree(patch);
+-	return err;
++	return bpf_patch_list_commit(env);
+ }
+ 
+ /*
+@@ -1530,13 +1371,7 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
+ 			struct bpf_insn *patch = insn_buf;
+ 
+ 			*patch++ = BPF_ST_NOSPEC();
+-			*patch = *insn;
+-			ret = bpf_adj_moved_insn(patch++, 1);
+-			if (ret) {
+-				verbose(env, "insn %d cannot be patched due to 16-bit range\n",
+-					env->insn_aux_data[i].orig_idx);
+-				return ret;
+-			}
++			*patch++ = *insn;
+ 			cnt = patch - insn_buf;
+ 			insn = bpf_patch_list_add(env, i, insn_buf, cnt);
+ 			if (IS_ERR(insn))
+@@ -2262,12 +2097,10 @@ int bpf_fixup_call_args(struct bpf_verifier_env *env)
+ 	return err;
+ }
+ 
+-/* The function requires that first instruction in 'patch' is insnsi[prog->len - 1] */
+ static int add_hidden_subprog(struct bpf_verifier_env *env, struct bpf_insn *patch, int len)
+ {
+ 	struct bpf_subprog_info *info = env->subprog_info;
+ 	int err, cnt = env->subprog_cnt;
+-	struct bpf_insn *last;
+ 	struct bpf_prog *prog;
+ 
+ 	/* We only reserve one slot for hidden subprogs in subprog_info. */
+@@ -2275,19 +2108,13 @@ static int add_hidden_subprog(struct bpf_verifier_env *env, struct bpf_insn *pat
+ 		verifier_bug(env, "only one hidden subprog supported");
+ 		return -EFAULT;
+ 	}
+-	/*
+-	 * We're not patching any existing instruction, just appending the new
+-	 * ones for the hidden subprog.
+-	 */
+-	last = bpf_patch_list_add(env, env->prog->len - 1, patch, len);
+-	if (IS_ERR(last))
+-		return PTR_ERR(last);
+-	err = bpf_patch_list_commit(env);
++	err = bpf_patch_list_append(env, env->prog->len - 1, patch, len) ?:
++	      bpf_patch_list_commit(env);
+ 	if (err)
+ 		return err;
+ 	prog = env->prog;
+ 	info[cnt + 1].start = info[cnt].start;
+-	info[cnt].start = prog->len - len + 1;
++	info[cnt].start = prog->len - len;
+ 	/* The patch ends with the exit. */
+ 	info[cnt].exit_idx = prog->len - 1;
+ 	env->subprog_cnt++;
+@@ -2295,44 +2122,17 @@ static int add_hidden_subprog(struct bpf_verifier_env *env, struct bpf_insn *pat
+ 	return 0;
+ }
+ 
+-/*
+- * Expand may_goto: load the count from the stack, jump to the target of
+- * may_goto when it is zero, then the tail that updates the count.
+- * 'off' is the offset of may_goto, 'reach' how far it jumps once the patches
+- * queued so far are applied, see may_goto_off().
+- * Use gotol when 'reach' is too far for 16-bit offset of a conditional jump.
+- */
+-static int may_goto_expand(struct bpf_insn *insn_buf, int off, int reach,
+-			   int stack_off, const struct bpf_insn *tail, int tail_cnt)
+-{
+-	int cnt = 0;
+-
+-	/* Forward jump has to step over the tail */
+-	off = off >= 0 ? off + tail_cnt : off - 1;
+-	reach = reach >= 0 ? reach + tail_cnt : reach - 1;
+-
+-	insn_buf[cnt++] = BPF_LDX_MEM(BPF_DW, BPF_REG_AX, BPF_REG_10, stack_off);
+-	if (reach == (s16)reach) {
+-		insn_buf[cnt++] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_AX, 0, off);
+-	} else {
+-		insn_buf[cnt++] = BPF_JMP_IMM(BPF_JNE, BPF_REG_AX, 0, 1);
+-		insn_buf[cnt++] = BPF_JMP32_A(off >= 0 ? off : off - 1);
+-	}
+-	memcpy(insn_buf + cnt, tail, tail_cnt * sizeof(*tail));
+-	return cnt + tail_cnt;
+-}
+-
+ /*
+  * Timed may_goto. All may_goto of a prog use one count and one timestamp: per-cpu memory of the
+  * prog, set in the first insns of the main prog, and by the callers of async callbacks.
+  * @reg holds the address. It is a register that is dead at the may_goto, or R0 that is saved at
+- * @save_off in the stack. See may_goto_expand() for @off and @reach.
++ * @save_off in the stack. @jmp is the insn that goes where may_goto goes.
+  */
+-static int may_goto_expand_timed(struct bpf_insn *insn_buf, int off, int reach,
++static int may_goto_expand_timed(struct bpf_insn *insn_buf, int *jmp,
+ 				 struct bpf_timed_may_goto __percpu *tmg, int reg, int save_off)
+ {
+ 	struct bpf_insn ld_tmg[] = { BPF_LD_IMM64(reg, (__force unsigned long)tmg) };
+-	int cnt = 0, jmp, tail_cnt = save_off ? 6 : 5;
++	int cnt = 0;
+ 
+ 	if (save_off)
+ 		insn_buf[cnt++] = BPF_STX_MEM(BPF_DW, BPF_REG_10, reg, save_off);
+@@ -2343,19 +2143,9 @@ static int may_goto_expand_timed(struct bpf_insn *insn_buf, int off, int reach,
+ 	if (save_off) {
+ 		insn_buf[cnt++] = BPF_JMP_IMM(BPF_JNE, BPF_REG_AX, 0, 2);
+ 		insn_buf[cnt++] = BPF_LDX_MEM(BPF_DW, reg, BPF_REG_10, save_off);
+-		jmp = cnt++;
+-		insn_buf[jmp] = BPF_JMP32_A(off >= 0 ? off + tail_cnt : off - jmp);
+-	} else {
+-		jmp = cnt;
+-		off = off >= 0 ? off + tail_cnt : off - jmp;
+-		reach = reach >= 0 ? reach + tail_cnt : reach - jmp;
+-		if (reach == (s16)reach) {
+-			insn_buf[cnt++] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_AX, 0, off);
+-		} else {
+-			insn_buf[cnt++] = BPF_JMP_IMM(BPF_JNE, BPF_REG_AX, 0, 1);
+-			insn_buf[cnt++] = BPF_JMP32_A(off >= 0 ? off : off - 1);
+-		}
+ 	}
++	*jmp = cnt;
++	insn_buf[cnt++] = save_off ? BPF_JMP32_A(0) : BPF_JMP_IMM(BPF_JEQ, BPF_REG_AX, 0, 0);
+ 	insn_buf[cnt++] = BPF_ALU64_IMM(BPF_SUB, BPF_REG_AX, 1);
+ 	insn_buf[cnt++] = BPF_JMP_IMM(BPF_JNE, BPF_REG_AX, 0, 2);
+ 	/* AX is the argument and the return value */
+@@ -2367,27 +2157,6 @@ static int may_goto_expand_timed(struct bpf_insn *insn_buf, int off, int reach,
+ 	return cnt;
+ }
+ 
+-/*
+- * The offset of may_goto at 'idx' once the patches queued in front are applied.
+- * The patches that a forward may_goto jumps over aren't queued yet, so its
+- * offset stays as it is.
+- */
+-static int may_goto_off(struct bpf_verifier_env *env, const struct bpf_insn *insn,
+-			u32 idx)
+-{
+-	struct bpf_patch_list *pl = &env->patch_list;
+-	u32 tgt = idx + insn->off + 1;
+-	int off = insn->off;
+-	u32 k = pl->cnt;
+-
+-	if (off >= 0)
+-		return off;
+-	/* all queued patches are in front of idx */
+-	while (k > 0 && pl->patches[k - 1].off >= tgt)
+-		off -= pl->patches[--k].len - 1;
+-	return off;
+-}
+-
+ #ifdef CONFIG_64BIT
+ struct bpf_div_magic {
+ 	u64 m;		/* multiplier, sign extended for signed division */
+@@ -2599,7 +2368,6 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 	if (env->seen_exception && !env->exception_callback_subprog) {
+ 		struct bpf_insn *patch = insn_buf;
+ 
+-		*patch++ = env->prog->insnsi[insn_cnt - 1];
+ 		*patch++ = BPF_MOV64_REG(BPF_REG_0, BPF_REG_1);
+ 		*patch++ = BPF_EXIT_INSN();
+ 		ret = add_hidden_subprog(env, insn_buf, patch - insn_buf);
+@@ -2846,7 +2614,7 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 
+ 		if (bpf_is_may_goto_insn(insn) && timed_may_goto) {
+ 			u16 live = env->insn_aux_data[i].live_regs_before;
+-			int reg, save_off = 0;
++			int reg, jmp, save_off = 0, to = i + insn->off + 1;
+ 
+ 			/* a register that is dead here holds the address of the count */
+ 			for (reg = BPF_REG_0; reg <= BPF_REG_9; reg++)
+@@ -2865,28 +2633,26 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 				prog->aux->timed_may_goto = tmg;
+ 			}
+ 			prog->jit_required = 1;
+-			cnt = may_goto_expand_timed(insn_buf, insn->off, may_goto_off(env, insn, i),
+-						    tmg, reg, save_off);
++			cnt = may_goto_expand_timed(insn_buf, &jmp, tmg, reg, save_off);
+ 
+ 			insn = bpf_patch_list_add(env, i, insn_buf, cnt);
+ 			if (IS_ERR(insn))
+ 				return PTR_ERR(insn);
++			bpf_patch_list_jump(&env->patch_list, insn - (cnt - 1 - jmp), to, 0);
+ 			goto next_insn;
+ 		} else if (bpf_is_may_goto_insn(insn)) {
+-			int stack_off = -stack_depth - 8;
+-			struct bpf_insn tail[] = {
+-				BPF_ALU64_IMM(BPF_SUB, BPF_REG_AX, 1),
+-				BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_AX, stack_off),
+-			};
++			int stack_off = -stack_depth - 8, to = i + insn->off + 1;
+ 
+ 			stack_depth_extra = 8;
+-			cnt = may_goto_expand(insn_buf, insn->off,
+-					      may_goto_off(env, insn, i),
+-					      stack_off, tail, ARRAY_SIZE(tail));
++			insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_AX, BPF_REG_10, stack_off);
++			insn_buf[1] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_AX, 0, 0);
++			insn_buf[2] = BPF_ALU64_IMM(BPF_SUB, BPF_REG_AX, 1);
++			insn_buf[3] = BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_AX, stack_off);
+ 
+-			insn = bpf_patch_list_add(env, i, insn_buf, cnt);
++			insn = bpf_patch_list_add(env, i, insn_buf, 4);
+ 			if (IS_ERR(insn))
+ 				return PTR_ERR(insn);
++			bpf_patch_list_jump(&env->patch_list, insn - 2, to, 0);
+ 			goto next_insn;
+ 		}
+ 
+@@ -3521,9 +3287,7 @@ static int inline_bpf_loop(struct bpf_verifier_env *env, int position,
+ 	int reg_loop_ctx = BPF_REG_8;
+ 
+ 	struct bpf_insn *insn_buf = env->insn_buf;
+-	u32 callback_start;
+ 	struct bpf_insn *last;
+-	s32 callback_offset;
+ 	u32 cnt = 0;
+ 
+ 	/* This represents an inlined version of bpf_iter.c:bpf_loop,
+@@ -3565,19 +3329,13 @@ static int inline_bpf_loop(struct bpf_verifier_env *env, int position,
+ 	insn_buf[cnt++] = BPF_LDX_MEM(BPF_DW, BPF_REG_7, BPF_REG_10, r7_offset);
+ 	insn_buf[cnt++] = BPF_LDX_MEM(BPF_DW, BPF_REG_8, BPF_REG_10, r8_offset);
+ 
+-	/*
+-	 * Note: insn_buf[12] is the BPF_CALL_REL instruction. Jumps and calls
+-	 * out of a patch are relative to the patch placed at 'position': its
+-	 * 'cnt' insns push what is behind 'position' down by cnt - 1.
+-	 */
+-	callback_start = env->subprog_info[callback_subprogno].start;
+-	callback_offset = callback_start - position;
+-	if (callback_start > position)
+-		callback_offset += cnt - 1;
+-	insn_buf[12].imm = callback_offset - 12 - 1;
+-
+ 	last = bpf_patch_list_add(env, position, insn_buf, cnt);
+-	return PTR_ERR_OR_ZERO(last);
++	if (IS_ERR(last))
++		return PTR_ERR(last);
++	/* insn_buf[12] is the BPF_CALL_REL instruction */
++	bpf_patch_list_jump(&env->patch_list, last - (cnt - 1 - 12),
++			    env->subprog_info[callback_subprogno].start, 0);
++	return 0;
+ }
+ 
+ static bool is_bpf_loop_call(struct bpf_insn *insn)
+diff --git a/tools/testing/selftests/bpf/prog_tests/blinding_log.c b/tools/testing/selftests/bpf/prog_tests/blinding_far_jump.c
+similarity index 51%
+rename from tools/testing/selftests/bpf/prog_tests/blinding_log.c
+rename to tools/testing/selftests/bpf/prog_tests/blinding_far_jump.c
+index 658a8494dae5..0b3e09864b32 100644
+--- a/tools/testing/selftests/bpf/prog_tests/blinding_log.c
++++ b/tools/testing/selftests/bpf/prog_tests/blinding_far_jump.c
+@@ -1,24 +1,23 @@
+ // SPDX-License-Identifier: GPL-2.0
+-/* The verifier log of a prog whose constants are blinded */
++/* A far jump in a prog whose constants are blinded */
+ 
+ #include <test_progs.h>
+ #include <linux/filter.h>
+ #include "sysctl_helpers.h"
+ 
+ #define NR_CONSTS 11000
+-#define LOG_SIZE 65536
+ 
+ /*
+  * A prog of one function gets its constants blinded when its runtime is
+  * selected. Each 'r0 += 1' becomes 3 insns, which pushes the jump over them
+  * out of its 16-bit range. Serial, because it sets bpf_jit_harden.
+  */
+-void serial_test_blinding_log(void)
++void serial_test_blinding_far_jump(void)
+ {
+ 	const char *harden = "/proc/sys/net/core/bpf_jit_harden";
+-	LIBBPF_OPTS(bpf_prog_load_opts, opts);
++	char old[16] = {}, pkt[64] = {};
++	LIBBPF_OPTS(bpf_test_run_opts, opts, .data_in = pkt, .data_size_in = sizeof(pkt));
+ 	struct bpf_insn *insns;
+-	char old[16] = {}, *log;
+ 	int i, cnt = 0, fd;
+ 
+ 	if (!is_jit_enabled()) {
+@@ -28,32 +27,25 @@ void serial_test_blinding_log(void)
+ 	}
+ 
+ 	insns = calloc(NR_CONSTS + 3, sizeof(*insns));
+-	log = calloc(1, LOG_SIZE);
+-	if (!ASSERT_OK_PTR(insns, "insns") || !ASSERT_OK_PTR(log, "log"))
+-		goto out;
++	if (!ASSERT_OK_PTR(insns, "insns"))
++		return;
+ 
+-	insns[cnt++] = BPF_EMIT_CALL(BPF_FUNC_get_prandom_u32);
+-	insns[cnt++] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, NR_CONSTS);
++	/* mark is 0 */
++	insns[cnt++] = BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1, offsetof(struct __sk_buff, mark));
++	insns[cnt++] = BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, NR_CONSTS);
+ 	for (i = 0; i < NR_CONSTS; i++)
+ 		insns[cnt++] = BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1);
+ 	insns[cnt++] = BPF_EXIT_INSN();
+ 
+-	opts.log_buf = log;
+-	opts.log_size = LOG_SIZE;
+-	/* log stats only: level 1 logs each insn, which wraps the buffer */
+-	opts.log_level = 4;
+ 	if (sysctl_set_or_fail(harden, old, "2"))
+ 		goto out;
+-	fd = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", insns, cnt, &opts);
++	fd = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", insns, cnt, NULL);
+ 	sysctl_set_or_fail(harden, NULL, old);
+-	/* don't mind whether the interpreter takes the prog or the load fails */
+-	if (fd >= 0)
+-		close(fd);
+-
+-	/* expect the message about the jump in the log and in log_true_size */
+-	ASSERT_HAS_SUBSTR(log, "cannot be patched due to 16-bit range", "log");
+-	ASSERT_EQ(opts.log_true_size, strlen(log) + 1, "log_true_size");
++	if (!ASSERT_OK_FD(fd, "load"))
++		goto out;
++	if (ASSERT_OK(bpf_prog_test_run_opts(fd, &opts), "run"))
++		ASSERT_EQ(opts.retval, NR_CONSTS, "retval");
++	close(fd);
+ out:
+ 	free(insns);
+-	free(log);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_and.c b/tools/testing/selftests/bpf/progs/verifier_and.c
+index fb64ea9928f1..8ef5f87a9766 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_and.c
++++ b/tools/testing/selftests/bpf/progs/verifier_and.c
+@@ -90,7 +90,7 @@ __retval(0)
+ #ifdef SPEC_V1
+ __xlated_unpriv("if w0 < 0x1 goto pc+2")
+ __xlated_unpriv("nospec") /* inserted to prevent `R1 !read_ok'` */
+-__xlated_unpriv("goto pc-1") /* `r1 = *(u32*)(r1 + 512)`, sanitized dead code */
++__xlated_unpriv("goto pc-2") /* `r1 = *(u32*)(r1 + 512)`, sanitized dead code */
+ __xlated_unpriv("r0 = 0")
+ #endif
+ __naked void known_subreg_with_unknown_reg(void)
+diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+index b39275b92e6a..9dc23611332e 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
++++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+@@ -626,7 +626,7 @@ __retval(0)
+ #ifdef SPEC_V1
+ __xlated_unpriv("goto pc+2")
+ __xlated_unpriv("nospec") /* inserted to prevent `R0 invalid mem access 'scalar'` */
+-__xlated_unpriv("goto pc-1") /* sanitized dead code */
++__xlated_unpriv("goto pc-2") /* sanitized dead code */
+ __xlated_unpriv("exit")
+ #endif
+ __naked void _32bit_and_64bit_arithmetic_test1(void)
+@@ -655,7 +655,7 @@ __retval(0)
+ #ifdef SPEC_V1
+ __xlated_unpriv("goto pc+2")
+ __xlated_unpriv("nospec") /* inserted to prevent `R0 invalid mem access 'scalar'` */
+-__xlated_unpriv("goto pc-1") /* sanitized dead code */
++__xlated_unpriv("goto pc-2") /* sanitized dead code */
+ __xlated_unpriv("exit")
+ #endif
+ __naked void _32bit_and_64bit_arithmetic_test2(void)
+@@ -709,7 +709,7 @@ __retval(0)
+ #ifdef SPEC_V1
+ __xlated_unpriv("if r1 != 0x0 goto pc+2")
+ __xlated_unpriv("nospec") /* inserted to prevent `R0 min value is outside of the allowed memory range` */
+-__xlated_unpriv("goto pc-1") /* sanitized dead code */
++__xlated_unpriv("goto pc-2") /* sanitized dead code */
+ __xlated_unpriv("r0 = 0")
+ #endif
+ __naked void reg_0_reg_xor_1(void)
+@@ -742,7 +742,7 @@ __retval(0)
+ #ifdef SPEC_V1
+ __xlated_unpriv("if w1 != 0x0 goto pc+2")
+ __xlated_unpriv("nospec") /* inserted to prevent `R0 min value is outside of the allowed memory range` */
+-__xlated_unpriv("goto pc-1") /* sanitized dead code */
++__xlated_unpriv("goto pc-2") /* sanitized dead code */
+ __xlated_unpriv("r0 = 0")
+ #endif
+ __naked void reg32_0_reg32_xor_1(void)
+@@ -775,7 +775,7 @@ __retval(0)
+ #ifdef SPEC_V1
+ __xlated_unpriv("if r1 > 0x0 goto pc+2")
+ __xlated_unpriv("nospec") /* inserted to prevent `R0 min value is outside of the allowed memory range` */
+-__xlated_unpriv("goto pc-1") /* sanitized dead code */
++__xlated_unpriv("goto pc-2") /* sanitized dead code */
+ __xlated_unpriv("r0 = 0")
+ #endif
+ __naked void reg_2_reg_xor_3(void)
+@@ -862,7 +862,7 @@ __retval(0)
+ #ifdef SPEC_V1
+ __xlated_unpriv("if r1 >= 0x0 goto pc+2")
+ __xlated_unpriv("nospec") /* inserted to prevent `R0 min value is outside of the allowed memory range` */
+-__xlated_unpriv("goto pc-1") /* sanitized dead code */
++__xlated_unpriv("goto pc-2") /* sanitized dead code */
+ __xlated_unpriv("r0 = 0")
+ #endif
+ __naked void reg_0_reg_xor_3(void)
+@@ -896,7 +896,7 @@ __retval(0)
+ #ifdef SPEC_V1
+ __xlated_unpriv("if w1 >= 0x0 goto pc+2")
+ __xlated_unpriv("nospec") /* inserted to prevent `R0 min value is outside of the allowed memory range` */
+-__xlated_unpriv("goto pc-1") /* sanitized dead code */
++__xlated_unpriv("goto pc-2") /* sanitized dead code */
+ __xlated_unpriv("r0 = 0")
+ #endif
+ __naked void reg32_0_reg32_xor_3(void)
+diff --git a/tools/testing/selftests/bpf/progs/verifier_movsx.c b/tools/testing/selftests/bpf/progs/verifier_movsx.c
+index 6f90dac78fcd..44730109db5d 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_movsx.c
++++ b/tools/testing/selftests/bpf/progs/verifier_movsx.c
+@@ -437,7 +437,7 @@ __success_unpriv
+ __xlated_unpriv("w0 = 0")
+ __xlated_unpriv("exit")
+ __xlated_unpriv("nospec") /* inserted to prevent `frame pointer is read only` */
+-__xlated_unpriv("goto pc-1")
++__xlated_unpriv("goto pc-2")
+ #endif
+ __naked void mov64sx_s32_varoff_2(void)
+ {
+@@ -465,7 +465,7 @@ __success_unpriv
+ __xlated_unpriv("w0 = 0")
+ __xlated_unpriv("exit")
+ __xlated_unpriv("nospec") /* inserted to prevent `frame pointer is read only` */
+-__xlated_unpriv("goto pc-1")
++__xlated_unpriv("goto pc-2")
+ #endif
+ __naked void mov64sx_s32_varoff_3(void)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/verifier_patch_list.c b/tools/testing/selftests/bpf/progs/verifier_patch_list.c
+index aada57330ff2..80d08d93b625 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_patch_list.c
++++ b/tools/testing/selftests/bpf/progs/verifier_patch_list.c
+@@ -126,29 +126,132 @@ __naked void patch_list_may_goto(void)
+ 	: __clobber_all);
+ }
+ 
+-/*
+- * The conditional jump skips 8200 divisions, which their patches turn into
+- * 32800 insns, too far for its 16-bit offset.
+- */
+-SEC("raw_tp")
+-__description("patch list: jump pushed out of range by patches")
+-__failure __msg("insn 2 cannot be patched due to 16-bit range")
+-__naked void patch_list_jump_out_of_range(void)
++/* the JITs that support gotol */
++#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
++	defined(__TARGET_ARCH_powerpc) || defined(__TARGET_ARCH_s390) || \
++	defined(__TARGET_ARCH_loongarch) || \
++	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)
++
++/* The patches turn 8200 divisions into 32800 insns, too far for a 16-bit offset. */
++#define DIVS ".rept 8200; r7 /= r6; .endr;"
++
++/* len is not 0 and mark is 0, which the verifier doesn't know */
++#define FAR_JUMP(name, field)				\
++__naked void name(void)					\
++{							\
++	asm volatile (					\
++	"r6 = *(u32 *)(r1 + %[off]);"			\
++	"r7 = 1;"					\
++	"r0 = 1;"					\
++	"if r6 == 0 goto 0f;"				\
++	DIVS						\
++	"r0 = 2;"					\
++"0:	exit;"						\
++	:						\
++	: __imm_const(off, offsetof(struct __sk_buff, field)) \
++	: __clobber_all);				\
++}
++
++SEC("tc")
++__description("patch list: far jump, taken")
++__success __retval(1)
++__arch_x86_64
++__arch_arm64
++__xlated("3: if r6 == 0x0 goto pc+1")
++__xlated("4: goto pc+1")
++__xlated("5: gotol pc+32801")
++FAR_JUMP(patch_list_far_jump_taken, mark)
++
++SEC("tc")
++__description("patch list: far jump, not taken")
++__success __retval(2)
++FAR_JUMP(patch_list_far_jump_not_taken, len)
++
++/* The first jump is in range, 32766, until the second one, 32768, gets two more insns. */
++SEC("tc")
++__description("patch list: far jump over a far jump")
++__success __retval(1)
++__arch_x86_64
++__arch_arm64
++__xlated("3: if r6 == 0x0 goto pc+1")
++__xlated("4: goto pc+1")
++__xlated("5: gotol pc+32768")
++__xlated("6: if r6 == 0x1 goto pc+1")
++__xlated("7: goto pc+1")
++__xlated("8: gotol pc+32768")
++__naked void patch_list_far_jump_over_far_jump(void)
+ {
+-	asm volatile ("					\
+-	call %[bpf_get_prandom_u32];			\
+-	r1 = r0;					\
+-	if r0 == 0 goto 0f;				\
+-	.rept 8200;					\
+-	r0 /= r1;					\
+-	.endr;						\
+-0:	r0 = 0;						\
+-	exit;						\
+-"	:
+-	: __imm(bpf_get_prandom_u32)
++	asm volatile (
++	"r6 = *(u32 *)(r1 + %[mark]);"
++	"r7 = 1;"
++	"r0 = 1;"
++	"if r6 == 0 goto 0f;"
++	"if r6 == 1 goto 1f;"
++	".rept 8191; r7 /= r6; .endr;"
++	"r0 = 2;"
++"0:	r7 = 0;"
++	"r0 = 1;"
++	"exit;"
++"1:	r0 = 3;"
++	"exit;"
++	:
++	: __imm_const(mark, offsetof(struct __sk_buff, mark))
++	: __clobber_all);
++}
++
++SEC("tc")
++__description("patch list: far goto, far jump back, far may_goto")
++__success __retval(3)
++__naked void patch_list_far_loop(void)
++{
++	asm volatile (
++	"r6 = *(u32 *)(r1 + %[len]);"
++	"r7 = 1;"
++	"r0 = 0;"
++	"goto 1f;"
++"0:	.8byte %[may_goto];"
++	DIVS
++	"r0 += 1;"
++"1:	if r0 < 3 goto 0b;"
++	"exit;"
++	:
++	: __imm_const(len, offsetof(struct __sk_buff, len)),
++	  __imm_insn(may_goto, BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, 8202, 0))
+ 	: __clobber_all);
+ }
+ 
++/* The loop has no bound. The verifier adds may_goto at its head, the exit is far. */
++#define FAR_GUARD(name, off, expect)				\
++__naked __noinline __used static unsigned long name##_func(void) \
++{							\
++	asm volatile (					\
++"0:	call %[bpf_get_prandom_u32];"			\
++	"if r0 != 1 goto +1;"				\
++	"goto 0b;"					\
++	".rept 33000; r3 = 0; .endr;"			\
++	"if r0 != 2 goto +1;"				\
++	".8byte %[back];"				\
++	"r1 = %[far_data] ll;"				\
++	"r0 = *(u8 *)(r1 + " #off ");"			\
++	"exit;"						\
++	:						\
++	: __imm(bpf_get_prandom_u32),			\
++	  __imm_addr(far_data),				\
++	  __imm_insn(back, BPF_JMP32_A(-33005))		\
++	: __clobber_all);				\
++}							\
++SEC("tc") expect					\
++__naked void name(void)					\
++{							\
++	asm volatile ("call " #name "_func; exit;" ::: __clobber_all); \
++}
++
++char far_data[8] SEC(".data.far") = { [7] = 9 };
++
++FAR_GUARD(patch_list_far_guard, 7, __success __retval(9))
++FAR_GUARD(patch_list_far_guard_bad, 8, __failure __msg("invalid access to map value"))
++#endif
++
+ /* the JITs that support gotox, as in verifier_gotox.c */
+ #if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
+ 	defined(__TARGET_ARCH_powerpc) || \
+@@ -220,8 +323,9 @@ __arch_arm64
+ __success
+ __xlated("12: if r6 != 0x0 goto pc-3")
+ __xlated("...")
+-__xlated("32783: if r13 != 0x0 goto pc+1")
+-__xlated("32784: gotol pc-32773")
++__xlated("32783: if r13 == 0x0 goto pc+1")
++__xlated("32784: goto pc+1")
++__xlated("32785: gotol pc-32774")
+ __naked void patch_list_may_goto_gotol(void)
+ {
+ 	asm volatile ("					\
+diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
+index 62f998216d4b..7406e8a7d180 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
++++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
+@@ -615,7 +615,7 @@ __retval(0)
+ #ifdef SPEC_V1
+ __xlated_unpriv("if r0 == 0x0 goto pc+2")
+ __xlated_unpriv("nospec") /* inserted to prevent `R7 invalid mem access 'scalar'` */
+-__xlated_unpriv("goto pc-1") /* sanitized dead code */
++__xlated_unpriv("goto pc-2") /* sanitized dead code */
+ __xlated_unpriv("exit")
+ #endif
+ __naked void alu32_mov_u32_const(void)
 -- 
 2.55.0
 
