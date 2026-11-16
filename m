@@ -1,102 +1,50 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794825413;
-	b=OF+twg4iNrlcSyKCiyNJ6YrTzS+/GFFBiMmC/4AiMdFjfNEAWKfCPnN5s5VE+wz8aABA
-	 idx+X68rs4lOsSwGbPezzuIAectUqvmwqzNuXqQahlzUlHmVRJ6UlMFQlunqVypb/rqIh
-	 DFZuvRxtRaq+C/gw8WaXqN8D3jq0hoCeMY55gla37bEIwe5lLODvZLK7j4TSeHHzwLJRd
-	 z2ohF9ZcIRuTEVlCHDVMKj9tgL1wnXanbr7CZZFBHIymO6zrbb/PW/7d+V/i3erYltGMK
-	 UPiW7CME0JKukpxTANfGCg4XmhCYw+TtOpcSRwtjRicVrGpdkVRqLzXmW4t0YDX6/xQ==
+	t=1794827065;
+	b=Mp2w7l8puSqP3/mF7EOi+lC0EvA2gs2oy/OCov4A4yEuYtHGHgdcOggC0KZvLGtvLDFx
+	 0XCvFqOW1MT5GKYnKhJ9LXdGi1Ahod1onLqDJoBM/I8RMM7grpdXtmvimAU7xFMa8jWWa
+	 01ndclItPf2lv0VY0WmWVAbSkjzr3nr9UTjEFcrySVlXxfofvUq6CiMBGptfwfC9Zulw5
+	 OeuOIglFzgaM91DzhdgchTsEobJFFM5Xzr9my9PIh9Y67NnDgBiBzaGp+9NogYn/mDtKz
+	 Dya/fJjjNd05LyAvhBE9UAQFRcpjBTY9HW44lF7BShYnYJ1kDk3oHXcdGeawFqtdhGg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794825413;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=opkasNgH5N2ElWKTLtDlU79vyZanUWteaYR8uJXKCIE=;
-	b=jIDQk0SigcA65fwfv7uERTlDYPdQYw4XrlMtGm9rB+0YCm6XVJVvfmcfc4RZBOmH8Sb1
-	 GqwFSmpekbaaS9ZiqseszyAtNUR5O9hAxCcLRe1OZcFYrWfIAEdYiYwEkP0ShppFG35+G
-	 E7+7GBhUsubiy+vONmFzZTt4r+6MLucSg3aY4DNsdVABzpbDggh2ktkPRBHwBcNIkqE+u
-	 ZmEl0n3IpYGjSwENKWRS2jn74gpDRsC5CRjpht65lx1EbODipiof2xPvk/fLwGNLsOSkM
-	 j2OVI6Mrpra8HH8rFJeVMMtFzmJnB/c1k5bbigDTn+M1S3kstRyzMI2wyXdNX/t3s0g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794827065;
+	h=Received:DKIM-Signature:From:Subject:Date:Message-Id:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
+	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=K6hcsOKot76i6ofOuhnqMqhE4PYGjzAJldUZv2AbfjY=;
+	b=TZYjSp03rT+BhHwAj4k+bVnSSruv9QB2cqbeYrkt/vay3puYzYIsXEWTANx4zREiIf0c
+	 TDLOQSXShhPwQ/qU6NfrdnahhpaES3HY4LJsSLnd4iRT7Zxqt9MU5dJ6lIMU4+j3Yi00w
+	 yiWx3YqE9OZ9bmYljqx44ihORSPhK1DyM2wuUlZgG+jIpdSPYsSnT5XEPUAISs6MnCX2D
+	 ADmy6O8HgfjKfIeGIAx2Wn82pRJChEBFHtC6iKMXq6D9QRQ2AmKUqcelP8BfOIg2dIyP5
+	 EXHr1zObHA4sRK9oN5BULjo1puzSzVAdYDo6vNVulLxwgChhAy+S+9vdV8OsMiMzKdg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=mojatatu.com;
-	spf=none smtp.mailfrom=mojatatu.com;
-	dkim=pass header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=qNy1jVqW;
-	arc=none smtp.remote-ip=209.85.160.180
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Yv+83Ada;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C6AC606A332
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 10:36:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4C6AC606A332
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1331E606A323;
+	Mon, 16 Nov 2026 11:04:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=qNy1jVqW
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-536717a4d83so35663481cf.2
-        for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 02:36:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1794825412; x=1795430212; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=opkasNgH5N2ElWKTLtDlU79vyZanUWteaYR8uJXKCIE=;
-        b=qNy1jVqW6L9/5zG4gg7sEdmDaV5qrCkIrOMT60lMGphvhx75VTvRFFRnCXrKjWR2Zv
-         TBRLQ5q67oU4GX5Ux67P/OHxvbvP9xVTZsWlnyJHyASSZAToHpFGFehpZFvDNdClwGNx
-         n7SfBm+L2DGwfTH9oyOf5ZdA/wdkH0XydmsRI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794825412; x=1795430212;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=opkasNgH5N2ElWKTLtDlU79vyZanUWteaYR8uJXKCIE=;
-        b=ZYIkMm65EAqPYY2BLoDLGjz1JmJDloMGaaYIU5Lj6BvcEXirzAEqr4IYapyBgtKA5x
-         KTQ3tL3BwF3oNgkIt+qKa2IIM4YvcMiKf5bFk5lA3tlX5aoqChPcjVhYIm5TQzBEt9iR
-         RB7hsGfuxWHfjI7rZZcH7T/ob434WJP/tv6tLfLgQURGpyLJJ94oY6Z0MeIdi0zlSdSL
-         mE3YZUvdmC64UcWo64QDcNvcjTKJ2kOgZchx2Kk+B+1MrVZq+JZ/0NCbgL4I2ZDHhrXK
-         10wP0bmNduAfJCoQfeyCmPiYJgHYC378SxEVgI/+lSIJF+9JOgLlgiWkzTipKXBzAbU6
-         VNKw==
-X-Forwarded-Encrypted: i=1; AL+hErFHEm0FUcZU8gUVvmTDRqsbp4+XxnhUZ7FF85q0xRve95WeZtE5v4sRlWDlewKEmTc8W28=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/9+KQYGR5ChY2JjP4XZnwWWd4qd9z84nCSULYgUsfDI7a2sYUr
-	CL4MgGJOQ1RoDLe150V9VhZCk7F371PirS36VsH0z/SIJV+2WF1NdRuHMHGJbAHLIw==
-X-Gm-Gg: AYBFou071xhk9v57b+OY7AKaQMcJYJFP2zcC+zHhVJDf9C1uF8so2cT7eYpTIUdPdmg
-	y0d/iV8mvtNDhwqUC1BjbW4iF8EtqEfhJdNiBqIuuNVovGifMm9TwU2KsBoop4hWyk7BPKF7gtG
-	TgBELEtjwGR2ynuPhT/lMsYyCnb2lgmGu2/CG05tjiUy1ysJtuaMWmSexwRMl97cDFwNylAVH2z
-	ClAg58GLhf7kbfT2pevidxqLPYA/NDXrHdzeJsj0zSXvmpusaWdgIUeXwFFDRgUohaqRoCzRw/C
-	hjTMZrhSkOKw53Kwl6Ebk9u433kWu7oUU/y2/moUGHAR8x7MqUUtlXWL62jykNUuFrxEuj3zFCp
-	LiXsb65wNa7StBjpb9XE8LuncBNuzBb2XyFiMSlQqjX9DMwjybiLu1068DWJUbKmyGDXOQuz4OT
-	W1Tai+hSRiId2yceQovwCsjZbg186y+Aw54MjIVbqcW5Nu4ekkWHUaJVCxupYk9C/KOHwTKCLUA
-	8atbBoxUCSR0XQERCDll9WtugrDiBiGX4Xq7V1AG+sqnJIu69akw9ohoFuwObS4rKkIp4RiUh16
-	YfBRpFosBMaFBSU40s5sCxFGcd1Dp0SdpNKbViiYSWZ60iCCVitlpO9Xhca65cMOpi76zIreQJs
-	=
-X-Received: by 2002:a05:622a:58cd:b0:535:a5fb:67fd with SMTP id d75a77b69052e-55aca05b3aamr157894831cf.73.1794825412136;
-        Mon, 16 Nov 2026 02:36:52 -0800 (PST)
-Received: from mbili.waya ([64.203.83.2])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-55ad14f1ecasm77778651cf.24.2026.11.16.02.36.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2026 02:36:51 -0800 (PST)
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-To: netdev@vger.kernel.org
-Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
-	David Ahern <dsahern@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Victor Nogueira <victor@mojatatu.com>,
-	Jiri Pirko <jiri@resnulli.us>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Simon Horman <horms@kernel.org>,
-	bpf@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH net v5 2/3] net: neighbour: reinject a parked skb through a headerless output device
-Date: Mon, 16 Nov 2026 05:36:42 -0500
-Message-Id: <QDISC-6HS9.v5.r0.20261116052927-2@mojatatu.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <QDISC-6HS9.v5.r0.20261116052927@mojatatu.com>
-References: <QDISC-6HS9.v5.r0.20261116052927@mojatatu.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Yv+83Ada
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 086591F000D1;
+	Mon, 16 Nov 2026 11:04:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794827064;
+	bh=K6hcsOKot76i6ofOuhnqMqhE4PYGjzAJldUZv2AbfjY=;
+	h=From:Subject:Date:To:Cc;
+	b=Yv+83AdaI+rMIF6ZcVumQESxSFqk/+q4KEQ/dNYe1vqGAjhO4UZuY0f32upeyeIcL
+	 U7luNKMRuAsOI84eZrIlAJi/zJYCE8A/tcPIQNVv+qkGeMR+iT2Qd/a23r3cWeRQU+
+	 uTSVeXg9wu6s2JknLRPylmOgOMgs4JvwAc752i150GOLDrUHLrkFmN2Gzfynarvx/9
+	 MQjhumagM8tTagR1n3h7iQmHaV8zyZ3rBpUM5zVesg7Yce9jIpL6WN2evAWJQVcUQz
+	 5lL6SvuerYCNW4EDL0oKuEOdAKrLTwc4zYsCSCXp8DAReNjFGyaadFvjQMB+WH5CwD
+	 iQFheHbOkWpOg==
+From: Christian Brauner <brauner@kernel.org>
+Subject: [PATCH v2 00/17] fs: take freeze protection for writes to backing
+ files
+Date: Mon, 16 Nov 2026 12:03:40 +0100
+Message-Id: <20261116-work-fs-frozen_writes-v2-0-ecc4a2aac40e@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -106,90 +54,110 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3WOQQ6CMBBFr0K6toRWRHTlPQwxbZ1CxbRmBkEl3
+ F2KceHC5Zv8eXkjI0AHxPbJyBB6Ry74GeQqYaZRvgbuzjMzmclCCLHmQ8CWW+IWwwv8aUDXAfE
+ sl0ZtC6mtLtn8e0Ow7rF4j9WH6a4vYLooiwutCLhG5U0TT1GbWkp/tGkcxXHjqAv4XCp7EaXfo
+ PxPUC94xu1GQSFMuSu1OLSAHq5pwJpV0zS9AYIJ+TH6AAAA
+X-Change-ID: 20261113-work-fs-frozen_writes-042ca762bfb8
+To: Jan Kara <jack@suse.cz>
+Cc: Shakeel Butt <shakeel.butt@linux.dev>, 
+ Alexander Viro <viro@zeniv.linux.org.uk>, Jens Axboe <axboe@kernel.dk>, 
+ linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ io-uring@vger.kernel.org, Christoph Hellwig <hch@lst.de>, 
+ linux-block@vger.kernel.org, linux-nvme@lists.infradead.org, 
+ linux-scsi@vger.kernel.org, target-devel@vger.kernel.org, 
+ linux-unionfs@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-nfs@vger.kernel.org, 
+ "Christian Brauner (Amutable)" <brauner@kernel.org>, stable@vger.kernel.org, 
+ Amir Goldstein <amir73il@gmail.com>
+X-Mailer: b4 0.17-dev-ce4c1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3938; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=aJ8lkhUZfSAZD0d0zDSWnIQ89Aj8tUdfJ3u4ID7PtUE=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWT9eixbv91/Cx9PdNTthXsErvIYvLi4cEr/18tX/HtEJ
+ pfvP/W+sKOUhUGMi0FWTJHFod0kXG45T8Vmo0wNmDmsTCBDGLg4BWAie24w/A+ctEfepmXaNH6+
+ fUv+voy9HejBG/Od15BdYyPzrWxh5+WMDKe+GJ5fa2TqoDH18nZZNmF57r7kO2y31r/wVrK0UDL
+ h4QAA
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-The issue:
-neigh_update_process_arp_queue() drains a neighbour's arp_queue and
-reinjects every skb through READ_ONCE(n1->output)(n1, skb), where n1 is
-the top-level neighbour re-looked-up from the skb's dst, not the neighbour
-the skb was queued on. skb->dev is whatever the producer left there.
-Note: skb->dev and n1->dev are not guaranteed to be equal.
+While testing the pseudo filesystem series I noticed that zloop, the
+nvme target's file backend and the fileio backend of the scsi target
+with fd_async_io=1 call ->write_iter() of their backing files without
+taking freeze protection. So their writes go straight through to a
+frozen filesystem. ext4 complains loudly:
 
-When n1->dev has no header_ops, arp_constructor() and ndisc_constructor()
-install neigh_direct_output(), a plain dev_queue_xmit() that transmits on
-skb->dev and builds no link header. Such an output sends the skb out
-whatever device skb->dev names, not out n1->dev, so a producer that
-parked the skb naming a lower device has it leave without the link header
-its own transmit path builds.
+    WARNING: fs/ext4/ext4_jbd2.c:90 at ext4_journal_check_start+0x1f6/0x2d0
 
-sch_teql is the producer that hits this: it parks the skb on the slave's
-neighbour while the top-level neighbour is the master's, so skb->dev and
-n1->dev differ and the reinjection has to come back through the master to
-leave with a header. It names the slave on purpose, so that a parked skb
-does not outlive the master it came from.
+Loop doesn't get it right for discard and write zeroes. Those end up
+calling ->fallocate() of the backing file directly. The fileio backend
+does the same for UNMAP. And zloop records its write pointers on flush
+with vfs_setxattr() which leaves freeze protection to the caller. So all
+of them modify a frozen filesystem just the same. Fix them too.
 
-This half was split out of the sch_teql fix on review, so that the
-neighbour restore carries its own commit log and its own Cc set.
+Looking for more of the same turned up a few simple ones. coredump
+truncates the core file, overlayfs stores its uuid xattr on mount, nfsd
+truncates on OPEN and the BPF xattr kfuncs modify xattrs, all without
+freeze protection. Fix those as well. The ones that need more work in
+their subsystems I have reported separately.
 
-The Fix:
-Put skb->dev back to n1->dev before the output call when that device
-builds no link header, so a headerless output transmits on the device the
-neighbour belongs to, whatever the producer left in skb->dev.
+The fileio backend also frees its aio command in the completion handler
+while the filesystem may still be using the kiocb. KASAN catches ext4
+doing that for direct reads on v7.4-rc1. ext4 gets its own fix (cf. [1])
+but fileio should hold a reference across the submission like loop,
+zloop and fs/backing-file.c do.
 
-A forward that steers the skb to another device, nft fwd ... neigh or
-bpf_redirect_neigh() with explicit nexthop parameters, parks it with the
-dst of the original route still attached. When the original route is
-itself a headerless device this gate matches there and the skb goes back
-out the original device, running its egress hook a second time. Those
-forwards supply their own device and nexthop and do not consult the
-retained dst, so dropping it at those two sites is where that is fixed;
-that is a separate change to the producers.
+[1]: https://lore.kernel.org/r/20261113-work-ext4-dio_read_kiocb-v1-1-172a88be803c@kernel.org
+[2]: https://lore.kernel.org/r/20261116064654.GA2964@lst.de
 
-Conditions to recreate the bug:
-CONFIG_NET_SCH_TEQL=m and CONFIG_VETH=y, run as root. This is the
-neighbour half of the sch_teql parked-skb fix, reached once sch_teql parks
-the skb naming the slave: create a veth pair, make one end a teql slave,
-give the master an address and a route, flush the slave's neighbour entry
-and send one packet:
-
-  ip link add v0 type veth peer name v0p
-  ip link set v0 up;  ip link set v0p up
-  tc qdisc add dev v0 root teql0
-  ip link set teql0 up
-  ip addr add 10.0.0.1/24 dev teql0
-  ip route add 10.0.0.99/32 dev teql0
-  ip neigh flush dev v0
-  ping -I teql0 -c 1 10.0.0.99
-
-The packet parks on v0's arp_queue. When the solicitation resolves,
-neigh_update_process_arp_queue() reinjects it; without this change it
-leaves v0 directly, with no link header, and never reaches the peer.
-
-The window that frees the master, and the unload recipe that shows it,
-are in the sch_teql patch.
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Link: https://lore.kernel.org/netdev/20261110101908.2e64e8e9@kernel.org/
-Cc: stable@vger.kernel.org
-Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
+Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 ---
- net/core/neighbour.c | 3 +++
- 1 file changed, 3 insertions(+)
+Changes in v2:
+- Add kiocb_write_iter() and kiocb_end_write_iter() and use them for
+  zloop, the nvme target and fileio as per Christoph's suggestion.
+- Add a file_write guard and use it for loop discard and write zeroes
+  and fileio unmap.
+- Convert loop, vfs_iocb_iter_write() and fs/backing-file.c to the new
+  helpers.
+- Only complete the fileio target command when the last reference to
+  the aio command is dropped.
+- Link to v1: https://patch.msgid.link/20261114-work-fs-frozen_writes-v1-0-f5ae61c898b1@kernel.org
 
-diff --git a/net/core/neighbour.c b/net/core/neighbour.c
-index d6e9c7c59a89..1b556fa17c57 100644
---- a/net/core/neighbour.c
-+++ b/net/core/neighbour.c
-@@ -1339,6 +1339,9 @@ static void neigh_update_process_arp_queue(struct neighbour *neigh)
- 			if (n2)
- 				n1 = n2;
- 		}
-+		/* headerless output transmits on skb->dev, not n1->dev */
-+		if (!n1->dev->header_ops)
-+			skb->dev = n1->dev;
- 		READ_ONCE(n1->output)(n1, skb);
- 		if (n2)
- 			neigh_release(n2);
--- 
-2.34.1
+---
+Christian Brauner (17):
+      fs: add kiocb_start_write_trylock()
+      fs: add kiocb_write_iter() and kiocb_end_write_iter()
+      fs: add file_write guard
+      zloop: take freeze protection for writes
+      nvmet: take freeze protection for writes to files
+      target: fileio: don't free the aio command under the filesystem
+      target: fileio: take freeze protection for aio writes
+      loop: take freeze protection for discard and write zeroes
+      zloop: take freeze protection when recording write pointers
+      target: fileio: take freeze protection for unmap
+      coredump: take freeze protection for the truncate
+      ovl: take freeze protection when storing the uuid
+      bpf: fs/xattr: take freeze protection in the xattr kfuncs
+      nfsd: take freeze protection for the truncate on open
+      loop: use kiocb_write_iter()
+      fs: use kiocb_write_iter() in vfs_iocb_iter_write()
+      backing-file: use kiocb_end_write_iter()
+
+ drivers/block/loop.c              | 13 ++++---
+ drivers/block/zloop.c             | 12 +++++--
+ drivers/nvme/target/io-cmd-file.c | 20 +++++++----
+ drivers/target/target_core_file.c | 31 +++++++++++-----
+ fs/backing-file.c                 |  8 ++---
+ fs/bpf_fs_kfuncs.c                |  8 +++++
+ fs/coredump.c                     |  6 ++--
+ fs/nfsd/nfs4state.c               | 10 +++++-
+ fs/overlayfs/util.c               |  8 +++--
+ fs/read_write.c                   |  7 ++--
+ include/linux/fs.h                | 75 +++++++++++++++++++++++++++++++++++++++
+ io_uring/rw.c                     |  9 +----
+ 12 files changed, 158 insertions(+), 49 deletions(-)
+---
+base-commit: 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
+change-id: 20261113-work-fs-frozen_writes-042ca762bfb8
 
