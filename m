@@ -1,49 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794827102;
-	b=eIHtmgUTsjK+wbTONZu/b9M2sdhptpJIyq6Avid7YM3itM9fcxjjTqLRc+EQ+bVTguKv
-	 0CWpz6ckFunO0AQwHh0P2o6NyoOsai8C1LV9sLUlGgVzCYuGuKtJoCH/7rGMpAwRP1Te8
-	 qjLUhH46/GgPFX+HdhJZa4yk0wszh2E9uo3F473CsA1suqWA9NCPO6w85OKGpoQ8THerc
-	 6jqpVhcLARiAPSfGZm0Wa2ViGT/IiUtalcUX8qIXp2DqeoutI2Olfq1amsktn7OTxUlTX
-	 Ph9Wr0U6CTBlkwfqkQCQLfFNgGT2nL3MKftx+/TzbD6/F7xWW0fw0RrIEaHkP/1A+uA==
+	t=1794827115;
+	b=W9tvUjdxxBsy3QJI+sM7/XOv8thoIybyA+3zzhpf7xtTUvyBmt9luskbh6utLXaGKDbM
+	 Q7jzydzhoYGCgUGt/D9wHBkzK9+ZLW423EWk1DSFcbDSLiSHEJ93RCd72vFXLGHpIPObv
+	 rJ/0SiVnNN8pHuHHS9sGxuc1VgESmUP3cCCAlK6yORP2JvB0DbDB8bs71+/I9REBMagD9
+	 RYXf0uEzqCuOyqgWNzQVFbovwbJQ95JP/e+URnXRYs8glK8H5Pon6KOwNN2Hb1Pr6sEH8
+	 Vf+Wf5Y2EUGH4OWhQl822EdGHQcHKCQvgxh4Y5xGxWR1f5ciWLYSfDbukpIkEo6mrDg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794827102;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794827115;
 	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
 	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=jHld24Oo1MWppo8/tfsSpZWU26RUmIMv95z42v9sotY=;
-	b=NS2Udzdd6HxxBtWqP3kqoqR4bdZN9sQ4wl35hbcgcUCHn++u/nTn6UVC9dATn4YILUPQ
-	 lpciFmENhWGIKz9t2Dr2p7gFiIOKIDIEv9M1Xf8dEGMNbTT2fui5tqM+2OYGDrH4EIRD9
-	 5G/7QlaHTrYQSlaHTtkGTFwaZ3kKNiUr+2cV1Ho+Z6T/EsB4PaFrGxEdA7h8ki595j67V
-	 7W7b3KtvNWgsitdW7eT5ooI8J+FT//SAgcojjcRzCETkvlnH8yX8E4wowRPh0Eo62PXGE
-	 iyIfwYTgmHheuh/8uDJ7jyjqVhFOq1sPmngGoEV3YJh8PF1dDEW7g09ryrpOAxfyUUg==
+	bh=i8O0jdpykiNB8SwGgODz3acyFz22/17AhWFONkzhh/g=;
+	b=0JoPkU/jL2hxqNTApBpcF7jiUrhhUi2NZFZBvHU3ASROUFBQUOJEMtlMq2/dIGm25WMx
+	 LRRDJrn23GrV9cDAQatd0GzUaupo3sDw3A8C/gQZ/RxbNlV1+LRL6yIbeSznDbcy4a62p
+	 fmV41ONLvefcnOaoxifQdgMSVFRJkmKZesmmWi5bS9nskXSnHZgYCDciWiOGc36h4kUZ9
+	 MNEkJGZSlVaM8BQCAiohAFLA3DZQr2yxrDOLtdcH2xKxJ0ntI8C9C7b9lkjpdKlNE2Vjj
+	 yXirVbZBa78mdwJONWYO43L03xDQki7BR+QvoLXXjiW1Saw2ovGxDVG6mPMZAIMtK4A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cQFtUDoF;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EUBzj8rd;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4404606F1FF;
-	Mon, 16 Nov 2026 11:05:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 603CD606A333;
+	Mon, 16 Nov 2026 11:05:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cQFtUDoF
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 558C11F01573;
-	Mon, 16 Nov 2026 11:04:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EUBzj8rd
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01F871F0181F;
+	Mon, 16 Nov 2026 11:05:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794827102;
-	bh=jHld24Oo1MWppo8/tfsSpZWU26RUmIMv95z42v9sotY=;
+	s=k20260515; t=1794827115;
+	bh=i8O0jdpykiNB8SwGgODz3acyFz22/17AhWFONkzhh/g=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=cQFtUDoFrQUz2WcbhXtkg02LHOrOLlYpUiFModvav8ZzlPl9cVV1Hd6Mzx97pXc8E
-	 uC9A9hM3FdwQDgXCii3ZlvLmTUSWghY0gyv6DTq2Bf7hrtzjJzlrZ+W9lGQazMtuR6
-	 q8WK06huhLK+DSB7eBUyu8cN4jTmRbZp520sbGPQtqw1zHjXF182+fiGQ63eN4SJdt
-	 yzlmcWsQK7yMX8m8MTzLT5pPVNZvCXbixSM1pKr7rj22/l5wh28GiSpnygnvBeLDgi
-	 Fi53LVfO78qk7qtdkRpPavVN5CQmViQGdt0QHOZaF9kN2LMnVGvoHEn6CPtk2AAmVw
-	 fjnHFGrm6VARw==
+	b=EUBzj8rdNpxkagJSBg7wcf9wBRgmeYEHqgbMlEejIEvBFFBhnNYMUGGEHzxWMg0hZ
+	 LyIBdubhmLQQF5f1+O8j7EHv+97DTc5JxXnBnnDbdRTkvNp7b6kCE2QlqKyr030qtf
+	 ZQT0wfryidm3UcE4gPDS2XMHCUh9EnruAWBkQAHUEDYuvOvRBYzB7T6Be0mHdHhMK+
+	 c5sNBl+ZGGpXlDSc6q3HMSHIgO8Duicz2lNKPHnUpz7zS5POXtG36hs2JFLFBaUAlL
+	 qXU6IIaD/vqpkaktX5aVAaqYMeiv3ooKezFeHOWYRfp4nGGvwdNfxQAPXaxhd260nv
+	 kahpjT8C0w64Q==
 From: Christian Brauner <brauner@kernel.org>
-Date: Mon, 16 Nov 2026 12:03:49 +0100
-Subject: [PATCH v2 09/17] zloop: take freeze protection when recording
- write pointers
+Date: Mon, 16 Nov 2026 12:03:52 +0100
+Subject: [PATCH v2 12/17] ovl: take freeze protection when storing the uuid
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -55,7 +54,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261116-work-fs-frozen_writes-v2-9-ecc4a2aac40e@kernel.org>
+Message-Id: <20261116-work-fs-frozen_writes-v2-12-ecc4a2aac40e@kernel.org>
 References: <20261116-work-fs-frozen_writes-v2-0-ecc4a2aac40e@kernel.org>
 In-Reply-To: <20261116-work-fs-frozen_writes-v2-0-ecc4a2aac40e@kernel.org>
 To: Jan Kara <jack@suse.cz>
@@ -67,71 +66,53 @@ Cc: Shakeel Butt <shakeel.butt@linux.dev>,
  linux-scsi@vger.kernel.org, target-devel@vger.kernel.org, 
  linux-unionfs@vger.kernel.org, bpf@vger.kernel.org, 
  linux-nfs@vger.kernel.org, 
- "Christian Brauner (Amutable)" <brauner@kernel.org>, stable@vger.kernel.org
+ "Christian Brauner (Amutable)" <brauner@kernel.org>, stable@vger.kernel.org, 
+ Amir Goldstein <amir73il@gmail.com>
 X-Mailer: b4 0.17-dev-ce4c1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1992; i=brauner@kernel.org;
- h=from:subject:message-id; bh=RHFI0o15CfHlL7wXbapiTqB0SqtZl6Dvtj6uSPjdx74=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWT9eqyu897T6MG0jN4vHBm5s4MeGO7ISJJ2eH7JTaxHp
- Ut6woSXHaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABMJ3MHI0OB33ZO3h+/nCrbg
- SI0ZP5XmmskdebwqUIA9VuavjLv6FYb/WS1H99zdbuv1b83KI9OZ6g4yKabxZFuKXl4WcuH0td9
- nuQA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1319; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=iEqLSnloc6x/kvA8qf87o60wvCftihDv39CzS/x68mo=;
+ b=kA0DAAoWkcYbwGV43KIByyZiAGr64yvIYGRKYpcyDI7foAEx48sCbXXrr2tiH4XzGg+SJ4/Ha
+ Ih1BAAWCgAdFiEEQIc0Vx6nDHizMmkokcYbwGV43KIFAmr64ysACgkQkcYbwGV43KKg3gEAj87k
+ b/pDhchb2tEdJEkXgBi6fLBU6mCmFqJ5E75UmgEBANAEc8kQgCTSmcKpnwq1Bk35rMwZLkityEE
+ R25Yx9RUO
 X-Developer-Key: i=brauner@kernel.org; a=openpgp;
  fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-With discard_write_cache a flush records the write pointer of each
-active zone in an xattr of its zone file. zloop_record_safe_wps() uses
-vfs_setxattr() for that which leaves freeze protection to the caller.
-So a flush rewrites the xattrs on a filesystem that is frozen. With the
-zone files on ext4:
+ovl_init_uuid_xattr() stores the persistent uuid in an xattr on the
+upper root. That happens after ovl_make_workdir() dropped its write
+access to the upper mount and before ovl_get_indexdir() takes it
+again. So a freeze of the upper filesystem that lands in between lets
+the mount modify a frozen filesystem.
 
-  WARNING: fs/ext4/ext4_jbd2.c:90 at ext4_journal_check_start+0x1f6/0x2d0, CPU#0: kworker/u16:2/46
-  Workqueue: zloop0 zloop_cmd_workfn
-  Call Trace:
-   <TASK>
-   __ext4_journal_start_sb+0x7a/0x470
-   ext4_xattr_set+0x20d/0x380
-   __vfs_setxattr+0x10f/0x170
-   __vfs_setxattr_noperm+0xf4/0x5e0
-   vfs_setxattr+0x14d/0x3d0
-   zloop_cmd_workfn+0x384/0x1ff0
-   process_one_work+0x946/0x1820
-   worker_thread+0x4f1/0xd60
-   kthread+0x364/0x460
-   ret_from_fork+0x525/0x770
-   ret_from_fork_asm+0x1a/0x30
-   </TASK>
+Take write access to the upper mount around the xattr update.
 
-Take freeze protection around vfs_setxattr() with mnt_want_write_file()
-like fsetxattr() does.
-
-Fixes: 829def1e35ca ("zloop: forget write cache on force removal")
+Fixes: d9544c1b0d9e ("ovl: store persistent uuid/fsid with uuid=on")
 Cc: stable@vger.kernel.org
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Amir Goldstein <amir73il@gmail.com>
 Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 ---
- drivers/block/zloop.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ fs/overlayfs/util.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/block/zloop.c b/drivers/block/zloop.c
-index 76d54c9b89c0b..d20a0d2afa855 100644
---- a/drivers/block/zloop.c
-+++ b/drivers/block/zloop.c
-@@ -719,8 +719,13 @@ static int zloop_record_safe_wps(struct zloop_device *zlo)
+diff --git a/fs/overlayfs/util.c b/fs/overlayfs/util.c
+index 521717209b2e4..67aa7b71e9c83 100644
+--- a/fs/overlayfs/util.c
++++ b/fs/overlayfs/util.c
+@@ -829,8 +829,12 @@ bool ovl_init_uuid_xattr(struct super_block *sb, struct ovl_fs *ofs,
  
- 		if (!zloop_zone_is_active(zone))
- 			continue;
--		ret = vfs_setxattr(file_mnt_idmap(file), file_dentry(file),
--				"user.zloop.wp", &zone->wp, sizeof(zone->wp), 0);
-+		ret = mnt_want_write_file(file);
-+		if (!ret) {
-+			ret = vfs_setxattr(file_mnt_idmap(file),
-+					file_dentry(file), "user.zloop.wp",
-+					&zone->wp, sizeof(zone->wp), 0);
-+			mnt_drop_write_file(file);
-+		}
- 		if (ret) {
- 			pr_err("%pg: failed to record write pointer (%d)\n",
- 				zlo->disk->part0, ret);
+ 	/* Try to store persistent uuid */
+ 	set = true;
+-	res = ovl_setxattr(ofs, upperpath->dentry, OVL_XATTR_UUID, uuid.b,
+-			   UUID_SIZE);
++	res = mnt_want_write(ovl_upper_mnt(ofs));
++	if (!res) {
++		res = ovl_setxattr(ofs, upperpath->dentry, OVL_XATTR_UUID,
++				   uuid.b, UUID_SIZE);
++		mnt_drop_write(ovl_upper_mnt(ofs));
++	}
+ 	if (res)
+ 		goto fail;
+ 
 
 -- 
 2.53.0
