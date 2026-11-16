@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794810553;
-	b=0xMSAE3krKaoKHNG63+zWxiD+iv+uUGBCG2m6ZtRlq4BfOvuKTGgqhUtSndMiq1yQByz
-	 syy2UJSWIk77Wy+1u7PPR46oKxsPpPwtdywUHU4Zj5bIak2gznTYsS3THMyurcxOg4RLI
-	 /9JN0NnJNc8CODeZ2P5hgfEvT5ap9gsYr/NrFnB16ceCijtl3G8sVNTMC42D3riIot/Tl
-	 0X/8ES+45stsXXnyMhFf8PBX8xJCedsa81rzNKhnws9CaqEHPjdBDdwDZiqKfQtSUOBmW
-	 /7qA3TgBZyYwXkW5pozearYWYqeYQ5NhCy/ZL0n8X6huXpmsqQJNQSRzY2QeNzmiKQA==
+	t=1794810832;
+	b=CyqZDp4USNyyKF4ALVDVBGfS28Xl506KpC5RUueFkbrY1b49+Sml1t2DW4yaIuBypl9n
+	 GEJ14VrZn3fSR3X2XiIdj3pY+VzJ7Sr6lq1Pufoh3tDNWL6FkgRHhrWpVzKloF0+CY8en
+	 H3bBCJ83SlfUv8iCcoALAr0ZOdjgL2xis0KOII+iWSVNVoE6TmF7vZVGz+r8RKkXfN8qE
+	 gPg4Wve1zImUQ8Z9rvEfGhwtV9H2aUpsxeXoUBUR8TG5A+nx+tHKCCE6fUluz5I9Zd9lh
+	 sj9EWtchk+l49dxI7fAu7+Q74oaSEZLUDU/1Q1gT9FPry9palwX8OBPJQo/3H1HNUdA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794810553;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794810832;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=LTAVHE6/GL0wGVtmbeT8xVN8zwKKeUHOOlCbteemRPc=;
-	b=C/a4Aw/fbTaBYR8HCZKWZ4hsf97i9VoMohlVgw1xYeFxZ4VpBjbJAmgs2698ZyEIOOe1
-	 S73giF68DTPYwrSziy45/o+qkP7rugbs38/Dn++QT7n8L7fYMAqLygVviqeOSgG7MT7g3
-	 3F2x9Va/V65L+wbH/lEnNRyzipBn3qQATNsyvZYw9WhxSJXMjF0VSpVZK7aBIlGC9WLSj
-	 ZjKdfXNgNPwiMfKQp3oGJ/OHtuNWvxY9PhrhpO1MOs6vzB8OJF/gzNKC+VYulrBhgLtPn
-	 TJ4lVGX4+KIa1BRn7R3tcryRiZHKDqVFAbACKZfpefefUFNgYkA13tlwgCbHSRpWZPw==
+	bh=kFwr2cb9FH7fyHR8BiuuC0sus43cLV1U281SkGqAP1A=;
+	b=ld0I0XveZywN+c8bXjOBg1x0fGpqfGpxh4H9ilMQhAJT+4ijsxytKGSshqVra5n1kORG
+	 2ZzHqB/IvYmmmZDl7HkfmctFfzIWY2NGQkvSo8FORrlKzW1k4S6ePsHXrO71Z+/D1DiKy
+	 330iDC5+COUR2ZBkAooDvbZTBkkiJQaqkk/vgL+K77i/Xr2iibJeL5q6s/ewvvjHn8Kxk
+	 GlvWFw+9lJfSvvjL27C5wpsGK7xWaiod+VpoOa7bTViLH+fGKc4UQaVVcbKJrzp2ApV0N
+	 Sfzwsg4P80ZA+eh4j8hiJsZJhRg8JJQC7CjbS6mK0zErDfTE3M4377oPlVaE0kUg5ZA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f4URsPtr;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="HKy6N0/c";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA086606A329
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 06:29:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1421606A31C
+	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 06:33:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f4URsPtr
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61AE91F000C4;
-	Mon, 16 Nov 2026 06:29:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HKy6N0/c
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A07F1F000C4;
+	Mon, 16 Nov 2026 06:33:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794810553;
-	bh=LTAVHE6/GL0wGVtmbeT8xVN8zwKKeUHOOlCbteemRPc=;
+	s=k20260515; t=1794810831;
+	bh=kFwr2cb9FH7fyHR8BiuuC0sus43cLV1U281SkGqAP1A=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=f4URsPtrdaJEjswVz5W5942jRfiE1c5FCm93EzEwUvtecek1Y0hEbEFG8jkGfBMXd
-	 O3RLD2aegVW1ofEhDrNlNRjsjO6GI3BiDQadkMBnmSM28ynp0UVsHV+7gMBMZ5cR/H
-	 M7CN3diljzzgGYea3szQhP5gzaSLCh0W6cwWvyNsnFcGinjrL1kpYfewAE7VJA30ZC
-	 04Mtg43P6XLKh/nRlokQrxBqPkFc8HzlXxTNrNC8WbsZfYYDkquvszhNbeRhp26r8J
-	 Z/St0ppk5ppJEbejzp2RPuf6n6pyF5/LBYVTObn8JS2PaCCkjjsixybhX+lagI8EAK
-	 RuVsrGqPVSjjA==
-Message-ID: <sashiko-outbox-216279@kernel.org>
+	b=HKy6N0/cIzCWqNJxqKlNajCBln8zF6txXEd6RtHiDeY/ThcCE7qVrUTflRkoWiflF
+	 wX6k9NKCXlP9u1XEq4nUWlqM9JzrtjuGfFD6UM5KoPvPFKwGvUURGR78HzGd3dM33R
+	 ajN6YubbvRePHsjNhMDA59XOww1IJQxmgoiMLQeSDj3c4GYnt8ynyR1BSj8V2vzgm7
+	 Pdfk/F58Go0jEl0KCyAhgQvWBLWAaZXMmirrFObiNovzcM5IEqvNHYGRZ5n4vDYxep
+	 Nc/Iev8Dz+jo+jjtsgc0H6yimrFitZB6pjSpEOtWyDPa60QsFzrfCCiD8WaWtg6rWX
+	 i7+RXmwgrLtpA==
+Message-ID: <sashiko-outbox-216280@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 02/21] bpf: Fail the load when there is no
- memory
+Subject: Re: [PATCH bpf-next 20/21] selftests/bpf: Test programs above the
+ old limits
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261116055638.4171529-3-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261116055638.4171529-21-alexei.starovoitov@gmail.com>
 References: <20261116055638.4171529-1-alexei.starovoitov@gmail.com>
- <20261116055638.4171529-3-alexei.starovoitov@gmail.com>
+ <20261116055638.4171529-21-alexei.starovoitov@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 16 Nov 2026 06:29:12 +0000
+Date: Mon, 16 Nov 2026 06:33:51 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,117 +60,109 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found no new issues
-in this patch, but noticed 2 related pre-existing issues it does not
-introduce:
-- [Critical] bpf: kernel map pointer leak in bpf_prog_calc_tag() [1]
-- [Medium] bpf: unjoined spills in compute_subprog_args() cause false
-  FM_MUST_WRITE [2]
+Thank you for your contribution! Sashiko AI review found 2 potential
+issues to consider:
+- [Medium] selftests/bpf: missing __load_if_JITed() on far_pad tests in
+  verifier_unwind.c
+- [Medium] selftests/bpf: live_recursion() fails on JIT archs without
+  private stack
 --
 
-commit 7ed141586457177ae6d6a4df96dc2819c9dd9563
+commit a69081d640b7a0d78afbe78ef6d18103940c7493
 Author: Alexei Starovoitov <ast@kernel.org>
 
-bpf: Fail the load when there is no memory
+selftests/bpf: Test programs above the old limits
 
-This commit adds __GFP_RETRY_MAYFAIL | __GFP_NOWARN to BPF verifier and
-program load allocations so that hitting a memory cgroup limit returns
--ENOMEM instead of invoking the OOM killer.
+This commit adds BPF verifier selftests covering large map, subprogram,
+and kptr counts, calls in dead code, dead bpf_loop() callbacks, and far
+unwind cleanup pads.
 
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index b407b2393ac3e..09abfed83109c 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_no_limits.c b/too=
+ls/testing/selftests/bpf/progs/verifier_no_limits.c
+> new file mode 100644
+> index 0000000000000..b464ad3794a57
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/verifier_no_limits.c
 [ ... ]
-> @@ -309,7 +309,7 @@ int bpf_prog_calc_tag(struct bpf_prog *fp)
->  	bool was_ld_map;
->  	u32 i;
-> =20
-> -	dst =3D __vmalloc(size, GFP_KERNEL_ACCOUNT);
-> +	dst =3D __vmalloc(size, BPF_VERIFIER_GFP);
->  	if (!dst)
->  		return -ENOMEM;
-
-[Severity: Critical]
-This problem wasn't introduced by this patch, but can bpf_prog_calc_tag()
-leak kernel map pointers [1] when hashing subprograms that use
-BPF_PSEUDO_MAP_IDX or BPF_PSEUDO_MAP_IDX_VALUE?
-
-check_and_resolve_insns() replaces the immediate fields of those pseudo map
-instructions with kernel map pointers while keeping their original src_reg,
-and jit_subprogs() later calls bpf_prog_calc_tag() on each subprogram.
-Because the loop right below only zeroes dst[i].imm for BPF_PSEUDO_MAP_FD
-and BPF_PSEUDO_MAP_VALUE:
-
-kernel/bpf/core.c:bpf_prog_calc_tag() {
-	...
-	for (i =3D 0, was_ld_map =3D false; i < fp->len; i++) {
-		dst[i] =3D fp->insnsi[i];
-		if (!was_ld_map &&
-		    dst[i].code =3D=3D (BPF_LD | BPF_IMM | BPF_DW) &&
-		    (dst[i].src_reg =3D=3D BPF_PSEUDO_MAP_FD ||
-		     dst[i].src_reg =3D=3D BPF_PSEUDO_MAP_VALUE)) {
-			was_ld_map =3D true;
-			dst[i].imm =3D 0;
-	...
-}
-
-the resolved kernel map pointers for BPF_PSEUDO_MAP_IDX and
-BPF_PSEUDO_MAP_IDX_VALUE are hashed directly into the subprogram digest
-exposed via bpf_prog_info, allowing userspace to recover kernel map
-addresses and making subprogram tags non-deterministic across reloads.
-
-> diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-> index 2c771b936d654..053b3875cde69 100644
-> --- a/kernel/bpf/liveness.c
-> +++ b/kernel/bpf/liveness.c
-[ ... ]
-> @@ -2190,7 +2190,7 @@ static noinline_for_stack int compute_subprog_args(=
-struct bpf_verifier_env *env,
->  			struct spill_snapshot *snap;
-> =20
->  			kvfree(env->callsite_at_stack[idx]);
-> -			env->callsite_at_stack[idx] =3D kvmalloc_flex(*snap, at, nslots, GFP_=
-KERNEL_ACCOUNT);
-> +			env->callsite_at_stack[idx] =3D kvmalloc_flex(*snap, at, nslots, BPF_=
-VERIFIER_GFP);
->  			snap =3D env->callsite_at_stack[idx];
->  			if (!snap) {
->  				err =3D -ENOMEM;
+> +void dead_recursion(void) SEC("?raw_tp") __success;
+> +RECURSION(dead_recursion, 7)
+> +
+> +void live_recursion(void) SEC("?raw_tp") __failure __msg("in a tracing p=
+rogram");
+> +RECURSION(live_recursion, 6)
 
 [Severity: Medium]
-This problem wasn't introduced by this patch, but can snapshotting
-at_stack_in into env->callsite_at_stack[idx] without joining spilled slots
-with ARG_NONE [2] cause a callee to falsely mark a caller's stack slot
-with FM_MUST_WRITE?
+Does live_recursion() fail log matching on JIT architectures without
+private stack support (such as s390x, riscv64, and loongarch64)?
 
-arg_track_xfer() only updates local stack slots on stores or calls, leaving
-ancestor frame snapshots in env->callsite_at_stack unchanged:
+For non-kprobe programs like raw_tp, check_recursion() only emits
+"recursive ... in a tracing program" when bpf_enable_priv_stack() is not
+NO_PRIV_STACK:
 
-kernel/bpf/liveness.c:arg_track_deref() {
-	...
-	if (ptr->frame >=3D 0 && ptr->frame < depth) {
-		struct spill_snapshot *parent =3D env->callsite_at_stack[callsites[ptr->f=
-rame]];
-
-		return fill_from_stack(insn, at_out, reg, parent->at, parent->slots, ptr-=
->frame);
-	}
-	...
+kernel/bpf/verifier.c:check_recursion() {
+    ...
+			if ((bpf_enable_priv_stack(env->prog) !=3D NO_PRIV_STACK ||
+			     env->prog->type =3D=3D BPF_PROG_TYPE_KPROBE) &&
+			    !env->prog->aux->priv_stack_requested) {
+				verbose(env, "recursive %s() in a tracing program\n",
+					bpf_subprog_name(env, s));
+				return -EINVAL;
+			}
+    ...
 }
 
-If a caller spills a frame pointer to its stack and passes a frame pointer
-to a callee that overwrites that spill slot with a non-frame pointer (such
-as a map value pointer), loads it back, and stores through it,
-fill_from_stack() still returns the original single-offset spill from
-parent->at.  record_stack_access_off() then sets FM_MUST_WRITE on the
-originally spilled caller slot, killing FM_LIVE_BEFORE at callee entry so
-clean_verifier_state() poisons the live slot with STACK_POISON and rejects
-valid programs.
+When bpf_jit_supports_private_stack() is false, bpf_enable_priv_stack()
+returns NO_PRIV_STACK and check_recursion() instead logs "JIT does not
+support recursive calls", so __msg("in a tracing program") does not match.
 
-[1] https://sashiko.dev/#/bug/linux-3631fcb7-6cc6-4103-b924-aa236118faf7
-[2] https://sashiko.dev/#/bug/linux-770fd7fa-a8be-43e6-aced-6a3500427b32
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_unwind.c b/tools/=
+testing/selftests/bpf/progs/verifier_unwind.c
+> index 5a21345c34d45..50ab11b909aed 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_unwind.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_unwind.c
+> @@ -69,6 +69,36 @@ static unsigned long may_unwind(void)
+>  	);
+>  }
+> =20
+> +/* The patches of the divisions push the pad out of the 16-bit range */
+> +#define FAR_PAD(name, sub)					\
+> +__naked void name(void)						\
+> +{								\
+> +	asm volatile (						\
+> +		"r6 =3D *(u32 *)(r1 + 0);"			\
+> +		"r1 =3D r6;"					\
+> +		"r1 -=3D " #sub ";"				\
+> +		"call may_unwind;"				\
+> +		unwind_goto(8202)				\
+> +		"r7 =3D 1;"					\
+> +		".rept 8200; r7 /=3D r6; .endr;"			\
+> +		"exit;"						\
+> +		"r0 +=3D 100;"					\
+> +		"exit;"						\
+> +		:						\
+> +		: __imm_unwind_goto(8202)			\
+> +		: __clobber_all);				\
+> +}
+> +
+> +SEC("tc")
+> +__arch_x86_64 __arch_arm64
+> +__success __retval(7)
+> +FAR_PAD(far_pad_returns, 64)
+> +
+> +SEC("tc")
+> +__arch_x86_64 __arch_arm64
+> +__success __retval(105)
+> +FAR_PAD(far_pad_unwinds, 0)
+
+[Severity: Medium]
+Should far_pad_returns() and far_pad_unwinds() include __load_if_JITed()
+like the other valid unwind subtests in verifier_unwind.c?
+
+test_verifier_unwind() uses RUN(verifier_unwind) rather than RUN_JITED(),
+while check_unwind_insns() sets prog->jit_required =3D 1.  When BPF JIT is
+disabled, bpf_fixup_call_args() rejects both programs with -EINVAL and the
+subtests fail instead of being skipped.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261116055638.4171=
-529-1-alexei.starovoitov@gmail.com?part=3D2
+529-1-alexei.starovoitov@gmail.com?part=3D20
