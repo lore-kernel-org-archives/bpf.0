@@ -1,77 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794838863;
-	b=IbCNaqdJOU07zbAZb8Opk3vFkA5dVe5zC8MFLIaGQFMmyJO3XVO4Q8NvB+jKKZNUiaVr
-	 ET2GUnnbfgaAFGHcCmLZXjO/JKXcJRCigWpYmZIWtMEFBC2Q/ki/J3hLvGz9uDtObGLB0
-	 GIWnhLOCAaFyDxhiGxwwz/ZQIVRtCxmIaVObG1AAM+5eI58snhy0xeaVpZ+uCToBJPPa8
-	 a9tQjUl93kQSHsNyxsx7+vGtAp0s6Oku6p4z8D2Nu+khQjVYz6O/eBhg/uzrB04BambFl
-	 TlBuY4UEkit4lvK8rtMMrk6GWTb/1tLa/DSY3p9+02mvgV/0+KRsaBXOebwEDXKFNrA==
+	t=1794839319;
+	b=UtEh7VGoJwSTv1ifb7Trt/y/eEzUNYXLDbqgPumeyvajQrU0hARbiGLK7G/XWMES3INa
+	 orYUfjtTy1Lr/ZsJZlxl0PgDrdXqB6vHSrpDddY4XQR/3eN99h93q4zmZK4N2SaBVrkZf
+	 I/rhbKNvkr9SM1mUFY6p80ztfbIcvYhCA7SkB0nD3Ojx/h8CCSXKWxMHezMrer2Stk+L7
+	 LpnfO72Ecc6uMzCPyoKtpIxwgvdufhdUcxvcWYvMGi9OCwMb6MzXBIEumTKmhvX68Gd0a
+	 WSaFbxkRG3nMamm7Lb+Sue/U9tzP3qPIYzggOUkiXFY2KD7A0ZgjAwr47LMTibasREQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794838863;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
-	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=p0MCEiScXA3/AegZMZrPbSW4djcYCJen36hSgSOSxr8=;
-	b=X7+eyVHJ7Qzo7PbJm3hhjsd5LcQf6N7iF1wN27Am2zkPoU+mXJMgaS8GXnxVOoZPVu1j
-	 NpGtI2idzwwFX0X4zqkfq3RyUiy4Zi+obksfaofHS49EVkoKj1g90aic73QYnar2CFqXm
-	 pFgQ/YmqW7xiF2wgME6Ves3JRd0oMPB5GNUOq/pEax6hXVa9nJLP8/NjbwLPGisKvXcIN
-	 97bYhK12AeKGWqHcyirSNbQ+th3B+njMCSYvfzPwXea0tWSXdwtzqN5rJ5dTIHp0d2zFO
-	 w9SQ4/WbkdBH5AtpbGMckTLG1/nMX8GaqEIKeAHK/ziGfKDGfXRZGV4AuWmKyEWMPBg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794839319;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=ZaQnGbid6q4zyYj9jfXt0T9/5f5P2B/asKQNYP1h4Jw=;
+	b=GeYteXrSlSCo9BCkEAdddlyg4q2IiCfUpyxYbaRjSgDH6hN+mc0n1ni4NCxdAEwM11wM
+	 9/FBbhZXRXVakCe7FKcmoOV3frQXJLczFIRWJhVF5PiVaDM9mKd8iByWtQPDyBDtx6nx1
+	 GP9FY7NAwkpFd7O8Sj0/4QRhF+HezRf5TWtAyiLwqxoNetgcFVc42imM4/V4LZMedlG6T
+	 8YgDwPpikVyKAR3bmGKK8Ki2HxgCmtStVBDQFZlq0LVAAq+s8p4vN69tgRTin6TiUOFBt
+	 zav8eS9R0M+JypchFV0kygyD20rg5DBSTelHY6BVUdf2elOWnpUBXGsba4vD8wgjSxA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lrMNwZMp;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hGfUgus4;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CBDE606A329;
-	Mon, 16 Nov 2026 14:21:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A230606A334;
+	Mon, 16 Nov 2026 14:28:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lrMNwZMp
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64E1A1F000C4;
-	Mon, 16 Nov 2026 14:21:02 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hGfUgus4
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 788E41F000C5;
+	Mon, 16 Nov 2026 14:28:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794838863;
-	bh=p0MCEiScXA3/AegZMZrPbSW4djcYCJen36hSgSOSxr8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=lrMNwZMpVLaC2BtfAP4b7LZ6QFc4IZAk8smXnST30fiArFsHMpDO8pHkIB6Cr8ys+
-	 ee+JRnmqA68sVX265zPLaNHnOzcJcKLeRl4boeqkIBPd85eN10aGzC0MJ8/2iRTaPX
-	 C4js2OW0HI4bnxI5yEVoRrrSVD0MczuQ7+8+Ai3AUOVruZhi0h6yiLoBUlpAnHrgPX
-	 XjK/UDNqOIoRJDvbfzRZ9VG2IFMtNBWl0HmfcnKl7yIiBlpo873jNkEGXJhENBI0CR
-	 gS+aiwQEoBnOez7Qp2dCZTZnUqIJu9WGirp6rXpJ171+S+xd5+BuR5lK65ivivJEec
-	 IBwEluMMFSqZA==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
- <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
- <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>,
- Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, Andrew Lunn
- <andrew+netdev@lunn.ch>, Jesper Dangaard Brouer <hawk@kernel.org>, Ilias
- Apalodimas <ilias.apalodimas@linaro.org>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
- <john.fastabend@gmail.com>, Pavel Begunkov <asml.silence@gmail.com>, Jens
- Axboe <axboe@kernel.dk>, Andrii Nakryiko <andrii@kernel.org>, Eduard
- Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil
- Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
- netdev@vger.kernel.org, bpf@vger.kernel.org, io-uring@vger.kernel.org,
- Mina
- Almasry <almasrymina@google.com>, "Mike Marciniszyn (Meta)"
- <mike.marciniszyn@gmail.com>, Weiming Shi <bestswngs@gmail.com>, Nikolay
- Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, Alexander
- Lobakin <aleksander.lobakin@intel.com>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, Stuart Clark <stuclar@meta.com>
-Subject: Re: [PATCH net-next v1 02/11] net: Add memory provider capabilities
-In-Reply-To: <20261115131840.55b03578@kernel.org>
-References: <20261110102039.1002605-1-bjorn@kernel.org>
- <20261110102039.1002605-3-bjorn@kernel.org>
- <20261115131840.55b03578@kernel.org>
-Date: Mon, 16 Nov 2026 15:20:59 +0100
-Message-ID: <871p8khn78.fsf@all.your.base.are.belong.to.us>
+	s=k20260515; t=1794839319;
+	bh=ZaQnGbid6q4zyYj9jfXt0T9/5f5P2B/asKQNYP1h4Jw=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=hGfUgus4Fy2nTqbefIVxGiyuLcnvQrUp29djC4CLV/DKYtqsJtHiD68QBKPkbnTku
+	 ai4bR6iEyzM61fQxBw1gDVVO610uOkxHZYg3UXT3NQY7aaEquNodGfm9NQsvk3+gCH
+	 z07EEPUNMQL2V6oZPl8ZJNzZPzMXen4xjUdToOh/xxR8a9PWm+Ck184zApeVSx4IMP
+	 fgFShJyqvwKnJL7gNrOHPk9KBZQ43R88lZRJlCabpgQlbQx8DPmhq4NoP8/YWKSa8U
+	 UZdK/chA1AO2PtGek+oB8Zeb6jf3aTWRgwTPA874MzCgQFblVH4bIod6vvKHQ4upeK
+	 OjTmW7K8UkUQw==
+Content-Type: multipart/mixed; boundary="===============5633468459010448984=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -81,53 +49,61 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <81ad1174b88bd26130f0500e705feb4e2dc0a9f962c2ba950729846e5dc82f72@mail.kernel.org>
+In-Reply-To: <20261116134652.322156-1-irlanki.s@samsung.com>
+References: <20261116134652.322156-1-irlanki.s@samsung.com>
+Subject: Re: [PATCH bpf-next v8] bpf: tcp: add ecn_init callback to bpf_tcp_ops for per-connection ECN
+From: bot+bpf-ci@kernel.org
+To: irlanki.s@samsung.com,netdev@vger.kernel.org,bpf@vger.kernel.org,kuba@kernel.org
+Cc: cpgs@samsung.com,edumazet@google.com,davem@davemloft.net,pabeni@redhat.com,ncardwell@google.com,ast@kernel.org,alexei.starovoitov@gmail.com,ameryhung@gmail.com,kuniyu@google.com,daniel@iogearbox.net,andrii@kernel.org,corbet@lwn.net,linux-kernel@vger.kernel.org,lorenzo@google.com,maze@google.com,sporeba@google.com,motomuman@google.com,madhan.raj@samsung.com,srihari.k@samsung.com,g.pokhra@samsung.com,r.kumawat@samsung.com,raj.kumars@samsung.com,ts413.lee@samsung.com,ramyashree.s@samsung.com,daeil2.hwang@samsung.com,irlanki.s@samsung.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon, 16 Nov 2026 14:28:37 +0000 (UTC)
 
-Jakub Kicinski <kuba@kernel.org> writes:
+--===============5633468459010448984==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-> On Tue, 10 Nov 2026 11:20:23 +0100 Bj=C3=B6rn T=C3=B6pel wrote:
->> diff --git a/include/net/page_pool/memory_provider.h b/include/net/page_=
-pool/memory_provider.h
->> index bceb5f7740e2..4417e54a0f81 100644
->> --- a/include/net/page_pool/memory_provider.h
->> +++ b/include/net/page_pool/memory_provider.h
->> @@ -19,6 +19,18 @@ struct sk_buff;
->>   * Per-provider custom logic must be delegated to memory_provider_ops r=
-ather
->>   * than handled directly in page_pool core code.
->>   */
->> +
->> +/**
->> + * enum mp_caps - memory provider capabilities
->> + * @MP_CAP_READABLE: The CPU can access provider memory. It may back he=
-ader
->> + *	page pools, and XDP programs may run on it.
->
-> Being readable is the normal state for memory.
-> We should be marking mps as unreadable, not as readable?
+> bpf: tcp: add ecn_init callback to bpf_tcp_ops for per-connection ECN
 
-Fair, I'll flip it. devmem and io_uring zcrx mark themselves unreadable.
-The same goes for the other two caps; page memory can be split and kept,
-so AF_XDP marks that its buffers can't be.
+TL;DR: Nit only: a comment in bpf_tcp_ops_get_retval() still lists
+timeout_init/rwnd_init as the only bpf_get_retval() users, but ecn_init now
+uses it too; the code is fine.
 
->> @@ -1070,6 +1095,9 @@ netmem_ref page_pool_alloc_frag_netmem(struct page=
-_pool *pool,
->>  	unsigned int max_size =3D PAGE_SIZE << pool->p.order;
->>  	netmem_ref netmem =3D pool->frag_page;
->>=20=20
->> +	if (static_branch_unlikely(&page_pool_mem_providers) &&
->> +	    WARN_ON_ONCE(!page_pool_supports_frag(pool)))
->> +		return 0;
->
-> Shouldn't we return a full page if we can't frag?
-> Fragmentation breaks up a page into smaller units,
-> it should be legal to simply return a full page if
-> fragmentation is not supported for the provider.
+> diff --git a/net/ipv4/bpf_tcp_ops.c b/net/ipv4/bpf_tcp_ops.c
+> --- a/net/ipv4/bpf_tcp_ops.c
+> +++ b/net/ipv4/bpf_tcp_ops.c
 
-Yeah, make sense. I'll return the whole buffer at offset 0, instead of
-the WARN Stan and I settled on, and page_pool_alloc_netmem() reports the
-chunk size for callers that need it for truesize.
+[ ... ]
+
+> @@ -258,7 +267,8 @@ get_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>  		return NULL;
+>  	case BPF_FUNC_get_retval:
+>  		if (moff == offsetof(struct bpf_tcp_ops, timeout_init) ||
+> -		    moff == offsetof(struct bpf_tcp_ops, rwnd_init))
+> +		    moff == offsetof(struct bpf_tcp_ops, rwnd_init) ||
+> +		    moff == offsetof(struct bpf_tcp_ops, ecn_init))
+>  			return &bpf_tcp_ops_get_retval_proto;
+>  		return NULL;
+
+This isn't a bug, but bpf_get_retval() is now also exposed to ecn_init,
+while the comment in bpf_tcp_ops_get_retval() still reads:
+
+	/* bpf_get_retval() is only exposed to timeout_init/rwnd_init, which
+	 * always run via bpf_tcp_ops_call_int(). ...
+	 */
+	if (WARN_ON_ONCE(!ctx->saved_run_ctx))
+
+The invariant still holds, since ecn_init is only invoked through
+tcp_ecn_init_bpf() -> bpf_tcp_ops_call_int(), but the comment now lists
+an incomplete set of members.
+
+Could it name ecn_init as well, or say "the int-returning *_init
+members"?
 
 
-Bj=C3=B6rn
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43881864185
+--===============5633468459010448984==--
