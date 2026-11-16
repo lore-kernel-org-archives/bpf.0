@@ -1,54 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.100
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.136.65.226
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794798273;
-	b=hl8dCm3ltEeo3JICyvvaX4A0n3wFCIj+/Id4fxSoEjpR1u84R34jT0Xw9n+bzYKYZRac
-	 J4wX4o3mgtoWE5BsGfrjTviW7mRtmghjJFu5wDh96rabzMmsaTDpKUns5jpwibiJ7oJxU
-	 4oGULIdUkHc2VfB05tJlb5nLyL+PiMdUsgHyPMhHP1lHZlNfvCxQIitqp537kgUkyyXfP
-	 FqwwOKDI9w8FVFVwjMsN6wiqOodQvfRpbrTtUTyVPyhBjYsi/nwrnUxMT9m7Z09jun2Ir
-	 W9C+OMIWQUUiTNmCuDaBOzcngN1TbUV+fIB9Dh70b4AGCb2vEA1PEd0nCjT2W4XyHIA==
+	t=1794799393;
+	b=mgyQtfsMdN2lJbPN7CBeSHJuTqiA/Us1y7f1giN4PQuV+hb3jqWQgBtsbM0+mGUjS/QH
+	 0EEr+kldXd/5kbKIhzdO6ubB3/+MwIY6MQvRDxbnLO5aV+F0/WvzPTiUIWEJ2fyTk4NKe
+	 8mq8vgKlB+kN70dxg8SKCpAW1vi5wEkHOjonQ+kJrlLAPUA3PbdCrB1FosHcw/tNo9apJ
+	 nou2FUC05Z/LdznYlB+0QTfZxbq0pAiQFoX11Kga/gM9GS8uf/8d3ckl1H2mNcKu4gfzb
+	 xEehk0QbWB02z+gSyeL63YcK+1rhkKsPKj4OzvIleAGfuKnvy7msT6sZ4XUconLGVpw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794798273;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=gjvOzc12J2sR02D1SD6105ACjek4G9ZZ21f6s6C+IuA=;
-	b=IlgUU0BiI/ZjCuWV+KJ3QbRi9GKXLKRlTxfYXpx2ZW/lHz8X8tcfgLBPkk5/gB8qw39D
-	 xEWEWtNpwED/fKvM56L49LatuKfu1TYcmbDBVe2Nhdp4Ihi/XoEvSLXvxJIPzx5EFAOiW
-	 ov6iDkOYQFfhmCyhrchcZULkx/mIaUPu7ecEMCVWamqprOqz/RhR1QAm1xkdQ4+5RwZJz
-	 dIcMf/3BifjM2KDBQidefVbJA+YaVgPArn07DvIblhepwwJozFsNYKa2/2SeGySzaAw+g
-	 Nyjn6AiArGKkocnCBfhFZhlsiQvM3iWumELrDs8F/0pYy2m/uBfWoC6c0N8TL1F1F0w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794799393;
+	h=DMARC-Filter:Received:DKIM-Signature:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To:X-Flowmailer-Platform:Feedback-ID;
+	bh=vuaY7FImZE75sRdiBasv0Tsa2qzXujkTJsfP+X+hpsE=;
+	b=FztmCM9gwbsX0tPkhQLaRJ+tIGrynXZ9Ur7uJTUX5iCKGUg6rlxCvZM8G4IfFFUQfZXP
+	 h4mN54k62HlWIk5Ye4Q9Rb2HD608hanBRzXao3T2aEITiH5/2JD9MwoAnjO49/Vm6DY9m
+	 tK7ldWd+Ur5i6BGNhpS5P8jmMVZ4HIJWB5hYKWVNmVhDPNL7oVFMhZ7H0TXcP0FyrwODP
+	 Hn6awDpYF0+q0hQorixDBZnKoJv9MwJOVhtie4nvOuJ1dfl7oDvUCOxPPyToAWwQ/w8i4
+	 F6iVOq9rER7Hw9Zzk7z8B3/+7OmypW8A2Km3GH/OmaUFJmyxMqjQB7EMmLWRsURcA5Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=fMfGxmrw;
-	arc=none smtp.remote-ip=95.215.58.100
-Received: from mta1.migadu.com (out-100.mta1.migadu.com [95.215.58.100])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=siemens.com;
+	spf=pass smtp.mailfrom=rts-flowmailer.siemens.com;
+	dkim=pass header.d=siemens.com header.i=meng.ding@siemens.com header.a=rsa-sha256 header.s=fm1 header.b=HQQZot2Z;
+	arc=none smtp.remote-ip=185.136.65.226
+Received: from mta-65-226.siemens.flowmailer.net (mta-65-226.siemens.flowmailer.net [185.136.65.226])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA031606A895
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 03:04:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EA031606A895
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2CF6606A332
+	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 03:23:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D2CF6606A332
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=fMfGxmrw
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=2kSxzvz8rnLMULtMF34NYKP/UIdl2tqu/nArinaMAV8=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794798269; v=1; x=1795403069;
- b=fMfGxmrwMc0syW9EWBB+7sGPlvgA1yhdPr6jm0eFi5zBbAwZ134CN/GEkIMmjqg+42AIaMPP
- Nr6BmPPJQiqp9/D2ztbmaLt1AIdKoscDaI+naPqcgiO208yvNSHuhk+QoVJW3skzLVf1siUTBMK
- sspBV0cYnN2anJlgrNvMdhAs=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 80d53e618474a42b;
-	Mon, 16 Nov 2026 03:04:29 +0000
-X-Mizu-Trace-ID: 80d53e618474a42b
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <bbb07259-a2e8-40b5-9933-eb3d5d7a4bba@linux.dev>
-Date: Mon, 16 Nov 2026 11:04:19 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=siemens.com header.i=meng.ding@siemens.com header.a=rsa-sha256 header.s=fm1 header.b=HQQZot2Z
+Received: by mta-65-226.siemens.flowmailer.net with ESMTPSA id 202611160323026346b334e8000207d2
+        for <bpf@vger.kernel.org>;
+        Mon, 16 Nov 2026 04:23:03 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=meng.ding@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Cc:References:In-Reply-To;
+ bh=vuaY7FImZE75sRdiBasv0Tsa2qzXujkTJsfP+X+hpsE=;
+ b=HQQZot2Z8h36ijQln+msDhv9gcSYj5SfMiT/N6XRhq1xugtUNdMn/fUxA9qBarw0//j8Na
+ Qp5FuiVGhxMPO9cC993IMWDRG3jL5qroVt1jz0dpBcib5J1XqAsug55FaOn/UyJlwDW3+4/Z
+ SnqUPMfUPAFyJz26D8x3C+E+NxXIWN8DlZk93cowvaGSNioXssPo/2gJc+UIv9QXzmXIx35U
+ NMhKnIdWTs+/JSI01xzO9af0qK0O6sX7kqp73KReA2Smg8mZnL2c/2jAK8tKE3YieXUoBvbc
+ ix9Kc3VFdeZvjHKk09TilgE806fp1YWk96vwKdP6iRMZZyoFc6l9hW+w==;
+Date: Mon, 16 Nov 2026 11:22:46 +0800
+From: Ding Meng <meng.ding@siemens.com>
+To: Gerhard Engleder <gerhard@engleder-embedded.com>
+Cc: Paul Moses <p@1g4.org>, Jakub Kicinski <kuba@kernel.org>,
+ netdev@vger.kernel.org, Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet
+ <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>, Tony Nguyen
+ <anthony.l.nguyen@intel.com>, Przemek Kitszel
+ <przemyslaw.kitszel@intel.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, Andrii
+ Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar
+ Kartikeya Dwivedi <memxor@gmail.com>, Richard Cochran
+ <richardcochran@gmail.com>, florian.bezdeka@siemens.com,
+ jan.kiszka@siemens.com, wq.wang@siemens.com, Jason Xing
+ <kerneljasonxing@gmail.com>, Simon Horman <horms@kernel.org>, Shuah Khan
+ <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, Mathieu
+ Desnoyers <mathieu.desnoyers@efficios.com>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
+ <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, John
+ Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ intel-wired-lan@lists.osuosl.org, linux-trace-kernel@vger.kernel.org,
+ bpf@vger.kernel.org
+Subject: Re: [PATCH] net: mark skb NAPI IDs independently of busy polling
+Message-ID: <tuwyyxeexvnd4ckncfhdg3grlh2xd6d2rym7vhx2uzdspjopmk@quzaz3gdurlz>
+References: <20261105071706.7043-1-meng.ding@siemens.com>
+ <20261110134539.12d860ef@kernel.org>
+ <4pqljild2fp6eotiicvwbwu2wfw66fzd4qamwt6utirdjxlaok@iiu2f3k7azrp>
+ <Fhn2gT70aJ-2_eak73NBZYuXuKtVb64PoD8VQ9jwm-S-K0RhZilAg9iwSBJ0RlaiSrRvM1vPw1aHvGPjcktu9GmdBuvFk9244-q2IVOrFu0=@1g4.org>
+ <1ab53072-b9ee-464b-b5b3-cbb578059b49@engleder-embedded.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,139 +86,45 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Betterbird (macOS/Intel)
-Subject: Re: [PATCH bpf-next] selftests/bpf: Skip memcg_proactive_reclaim when
- data lands in shmem
-To: Kurt Lin <lylin1023@gmail.com>, Hui Zhu <zhuhui@kylinos.cn>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Ihor Solodrai <ihor.solodrai@linux.dev>,
- Emil Tsalapatis <emil@etsalapatis.com>, Barry Song <baohua@kernel.org>,
- Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20261113180159.602033-1-lylin1023@gmail.com>
-Content-Language: en-US
-From: Hui Zhu <hui.zhu@linux.dev>
-In-Reply-To: <20261113180159.602033-1-lylin1023@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1ab53072-b9ee-464b-b5b3-cbb578059b49@engleder-embedded.com>
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-1335312:519-21489:flowmailer
 
-Hi Kurt,
+On Fri, Nov 13, 2026 at 09:59:17PM +0100, Gerhard Engleder wrote:
+> On 13.11.26 09:29, Paul Moses wrote:
+> > 
+> > > 
+> > > Then, drivers that use deferred timestamp conversion (e.g. igc, engleder) must
+> > > specify a busy poll dependency if they want to obtain the original net
+> > > device upon consuming the skb. However, this dependency is far from
+> > > obvious, and annotating it for future features of this kind will be very
+> > > hard to discover.
+> > 
+> > The "deferred timestamp conversion" was incomplete is what I'm saying.
+> > 
+> > This started with 97dc7cd92ac6, 0abb62b68252 and 069b142f5819 were built upon
+> > it, so maybe Gerhard should decide the path forward?
+> 
+> The deferred timestamp conversion is a niche feature for TSN to solve
+> the working clock / global time problem in TSN networks. IMO there is
+> no need to make it working as soon as igc or tsnep drivers are enabled.
+> It would be ok to fall back to normal vclock behavior like all other
+> drivers if CONFIG_NET_RX_BUSY_POLL=n. For me it is ok that NETCONSOLE
+> is not possible for PREEMPT_RT in combination with this feature.
+> 
+> There are already so many things to consider to get TSN working. To
+> not enable NETCONSOLE on PREEMPT_RT for deferred timestamp conversion
+> would be just one of many.
+> 
+> @Ding Meng: Do you actually need the NETCONSOLE in this combination?
+> On productive systems likely not these days due to CRA.
+> 
+> Gerhard
+OK, understand. Thanks for your comments, Gerhard. Actuallly, we solved
+this issue by disabling netconsole and enabling busy poll. This is
+indeed a quite rare scenario, but when it happens, it is a bit difficult
+to figure out that this was the root cause.
 
-I have two suggestions below.
-
-2026/11/14 02:01, Kurt Lin:
-
-> workload_dir() keeps the data file off tmpfs because shmem cannot be
-> reclaimed without swap. But statfs() only sees the top of a stacking
-> filesystem: with /tmp on overlayfs over tmpfs, as in virtme-ng guests,
-> the check passes and all 32 MiB are still charged as shmem. Whether the
-> test then passes depends on unrelated page cache in the cgroup; in a
-> full test_progs run it fails with:
->
->    test_memcg_proactive_reclaim:FAIL:reclaimed unexpected reclaimed: actual 0 <= expected 0
->
-> Check memory.stat after writing the file and skip when most of the
-> data was charged as shmem.
->
-> An AI coding assistant (Claude) was used to find and analyze the
-> failure and to draft the fix and this changelog.
->
-> Fixes: 0f9b1e9ef584 ("selftests/bpf: Add bpf_proactive_reclaim test")
-> Signed-off-by: Kurt Lin <lylin1023@gmail.com>
-> ---
->
-> Notes:
->      Tested in a virtme-ng guest without swap: with /tmp on overlayfs over
->      tmpfs the test now skips; on a disk-backed directory it passes.
->      
->      After writing 32 MiB, memory.stat shows shmem 32.0 MiB on overlayfs
->      /tmp and on tmpfs, and 0.0 MiB on a disk-backed filesystem.
->
->   .../bpf/prog_tests/memcg_proactive_reclaim.c  | 28 +++++++++++++++++++
->   1 file changed, 28 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c b/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
-> index c22dcfabe856..c03550676041 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
-> @@ -46,6 +46,28 @@ static const char *workload_dir(void)
->   	return NULL;
->   }
->   
-> +/*
-> + * statfs() only sees the top of a stacking filesystem. When /tmp is an
-> + * overlayfs whose upper layer lives on tmpfs, as in virtme-ng guests, the
-> + * check above passes but the written data still ends up as shmem. Ask the
-> + * cgroup how the pages were actually charged.
-> + */
-> +static bool charged_as_shmem(void)
-> +{
-> +	static char buf[8192];
-> +	unsigned long long shmem;
-> +	char *p;
-> +
-> +	if (read_cgroup_file(CG_PATH, "memory.stat", buf, sizeof(buf)))
-> +		return false;
-Would it make sense to turn the silent "return false" into an explicit
-assertion, e.g.:
-
-     if (!ASSERT_OK(read_cgroup_file(CG_PATH, "memory.stat", buf,
-                     sizeof(buf)), "read memory.stat"))
-         return false;
-
-My reasoning: memory.stat exists on every cgroup v2 hierarchy and the
-"shmem" key is emitted unconditionally (not behind any CONFIG), and
-cgroup_setup_and_join() has already succeeded by the time this runs.
-So a read/parse failure here likely means something is genuinely
-broken, rather than an environment limitation. With the silent
-fallback, a shmem-backed dir falls through to the old confusing
-"reclaimed: actual 0 <= expected 0" failure and the real cause is
-never reported. The ASSERT_* macros are statement expressions, so this
-works inside the bool helper: the failure is recorded with a clear
-message first, and any subsequent "reclaimed" failure becomes
-obviously secondary. (Skipping on the error path would be worse still
--- a genuine breakage would be counted as a pass, so I'd keep it as a
-failure either way.)
-> +
-> +	p = strstr(buf, "\nshmem ");
-> +	if (!p || sscanf(p, "\nshmem %llu", &shmem) != 1)
-> +		return false;
-> +
-> +	return shmem >= FILE_SIZE / 2;
-
-
-Small nit: a one-line comment on the threshold might help future
-readers, something like "all-or-nothing: the data file is either fully
-shmem (stacked tmpfs) or not shmem at all (disk-backed), so half of
-FILE_SIZE is a safe midpoint". Also, printing the measured shmem value
-in the SKIP message could be handy when debugging odd environments.
-
-Best,
-Hui
-
-
-> +}
-> +
->   void test_memcg_proactive_reclaim(void)
->   {
->   	struct memcg_proactive_reclaim *skel = NULL;
-> @@ -99,6 +121,12 @@ void test_memcg_proactive_reclaim(void)
->   	if (!ASSERT_OK(fsync(data_fd), "fsync"))
->   		goto out;
->   
-> +	if (charged_as_shmem()) {
-> +		printf("%s:SKIP: %s is backed by shmem\n", __func__, dir);
-> +		test__skip();
-> +		goto out;
-> +	}
-> +
->   	args.cgroup_id = cgroup_id;
->   	args.size = FILE_SIZE;
->   	skel->bss->reclaimed = 0;
->
-> base-commit: 0021f17128de5dc0b19f1a523f448df2440d8088
+Ding Meng
