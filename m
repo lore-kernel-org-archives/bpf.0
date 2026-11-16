@@ -1,100 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.41
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794862930;
-	b=vltzE9KA+Y3LrmBEc8Yu1TjrIgIR1AoKxMSqoQc72WOltoscFSU0I5AjVt+B7+hiUzbe
-	 nKaJu6mnOkk5YEt3svXg8N1oL8ZhYoIzD/6GDauCXQhblITRpNihcgpFimFtBKQIAAlBO
-	 F/Fd16dAyyqSwo3RF+Mn6625j6Bb6aDH1FXlzsyMF13wgP6wt0RruoKWOp9RrMzw/4Wcm
-	 CA5L/bS/YywmFwc1n0QzY8em1WJh06xnTWJG9Dg39PSfO9GQ1uTjAyv5rUSM897HZKbCt
-	 ga/vgtLAWxpk+8GB4NppSkJc3HANulcbLIZPb7YHuql3Op3X4S1X+N7OdYSsIrvGO7w==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794862930;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=sCS5KZMGBLoezFGXiUNPAPDsKb/lPpeScZna/DR+4wA=;
-	b=h0xxGCUiW1L5tSYIZqYe2JoKU+rO+6ohemNHvA0RbcKQT7mlxLYZTSINHJDXOf9ayAel
-	 TnVJ2CM5FDybox1NK/c2sgrfCRFL7fQ+ObgpB+VTW4K3kYhpgSJN4GwgpRujlBohp0ZSI
-	 0+dXAOiL5J0ap+uoobPQSiuRFtEpZ13sUBClrGYW2Qf4aKfqqgllLOr0TQrAHJYdQl0Rl
-	 4UrKb3wvydB27O2SxTErd0CkjzX4j4vRZLgpNYn+JTa700+Joz/TMTDKjxGqPqhU924K1
-	 VqDpAqu8LZuLbRXgibfyceJ5qXvFk9kvTJHfeQychEQ8QKcQsAPzJYdOrKHoU/QxgZg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=ldsOndDa;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.41
-Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794863843;
+	b=SDLnDXFZ4b0rXNRBa9gRNBoNtklyi0P5KfAyrknVBQy5RGiOL8DLA/jVlRSHXOWU3r47
+	 siggHcMJk5ARI/N8p1pi0sS/woAzJcYBspBBETM4eUJ/jcDmaRiLlwhXrjJGiGjK8cBwA
+	 RXSa3edhDL0mgOXEsUHRE5dgN8QMvLyhSwvAovBKDhkuay5xG3sWYgfBUBC49q9n4qlC7
+	 FywLQ9mOfUxZQa2nYfYqbFqTNZ3piysQp6LM91iA7bqv9HZZIAvUgHGfBEgQf+Lj4N9ee
+	 /0TvqgRNSF8BRKAf3LUoOxYBfn1caY+4iYMYHuxhk7JGN4ElL4qvoxrnJ/c24wVSVUA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794863843;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=sTPbJ07GNt0+1u01Y5G4Xr3hVWCoVAYYEn2wljg+BRs=;
+	b=pRUiVd2qI9Nd8ROfM2NyD/4/qqrqz+4k+etPfTbI+H0iG6OM+EA0Yh5kzmsSTEQUg1y/
+	 SQh+tgaOfR+ajnfr1A7SPxaHnZy/W116fCntgWirAN8CZ5MIcvjkfDs7Yyy7fPdKjUrCV
+	 zLtoO4bKVcFgkatK0iGKIA2rerB0SyBECa3nWSpHN9XAoGfdLNkM3kxN1JLhxVOGnjQjo
+	 E6WMYqok14YrTXOFXXC/761uE8Ly2esek6bLEhvwXSO3JCl78yx82zuJ53Nfdsa2V2IWp
+	 SVmtB9s12zk/KREe/F2ZqxbbX3z8Z7mDT4UIsVX25O3fmFzIv2r3Y1RzEjmuyeqheBQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bbdSzC1O;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C694606A32F
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 21:02:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9C694606A32F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 978A2606A88C
+	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 21:17:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=ldsOndDa
-Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-1b0739d31b9so1413c88.0
-        for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 13:02:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794862929; cv=none;
-        d=google.com; s=arc-20260327;
-        b=pgEEYKJ6XA0qOHR09BZFdJtnOOuFtZ+sEQUnaoC7is1tOAEul8SxmPPrvQQYIQtBIX
-         rhc5a7PIwk8joky9RiRwyH/V0NuI4fub7Fdb86QV+X7DhzxWbXvd/yffcog1fzORCbWt
-         X+mI1+wbpYjfh1mmyECuGrYIpZ7rTkC9uo6UE+JAs+H2d3GwzGCqij08mahT08q5PFuW
-         OgLbWjNDQi/mRXirp0GtHo76XbawvthAFYAiBYmas1+kr9FUEkoDNVuq/VbG0kd8AtZs
-         rLYWSIpphnb9d0meyEFFasAiVrnil9ssuVL4ATMFtV3oAjiwsP07ddcII05bhM9smqXc
-         O8cQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=sCS5KZMGBLoezFGXiUNPAPDsKb/lPpeScZna/DR+4wA=;
-        fh=+aj8PKDtYKzvQzmFRhNCnRKz4JioF0HOfYvWQDEFBYs=;
-        b=dqVGw/SRbQbAn9YinVMQ9k+iT0SL4JPIN2I4bi2+f8LylMxt8ZREKv+infOtZS7SOs
-         9CIJaAgWnkGESXchl5l9nx1bpSHn9X6o4fWFT4Ou3aUFtApm81NxP8Lps22KuuBKjyRm
-         HXLgePrLze9hLVgfY8M1oWg0SXorzD0LB+XqqJZZsVpgEqRkMUCfjSR5zh+p+SRpf8RK
-         ByIEjHCBAbgLdX+jSM8y9FYWesQNOdZe9AIhRFCAKQvhNmwZWYTKkSaj61RAnaUsTRKL
-         3MtDD9USMUw5cb8GfCDljVuVHG+TP/lNAfacDWmPvA2svAFBt74/MDx/lJQo+TQ146oQ
-         AhOQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794862929; x=1795467729; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=sCS5KZMGBLoezFGXiUNPAPDsKb/lPpeScZna/DR+4wA=;
-        b=ldsOndDaaU5QY18GvnbJlfwT4saZBZ91nYsgEyjkOy5ZQUNPdp8nSaBoc7WnYkfz8w
-         c0anTf42usoZwliGeBFJ3aAcTr9+ZrYsrETL3LqkISh8XB298exW3fulIW0dLm3B5cnC
-         u6hiyhdL/SPsxdcV9G6AY+qn0bMe77/OZWqByN7f5HxrNpc6WMa9ljAzUaNoXCN2/Nch
-         1RtGcfacXw4e17gjgorciEs4jul2Z8xPgeTJtf44IxPRrf/mHzTlC0mpqjwQxQbh1p+f
-         KVx4CKjjRML0wLR1dCfPJn6wa1Fb4a2X5QXpA+2Ct9UCTDi9yqsn+74PSMTr5HOT7+Mc
-         37BA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794862929; x=1795467729;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=sCS5KZMGBLoezFGXiUNPAPDsKb/lPpeScZna/DR+4wA=;
-        b=V9XqEpDd98DY2rqBmyDz+uF9A0Gpp1tuTEqVfk8HfZoPoNV2RFILHRTicv5BvoI7VT
-         SdLENn08mDaS37oyZ1b2DfkcEw/FKYks0ZPUnMAT5j0XEUSrMOxRTvLtZDqwbW2AHbsG
-         m6GBGW3t4Z6l3Z4M4Ngn4ggpNy9DS3yVQTzI8Ci6zCKo53zeJCilOCAVaC1fDywaoZXO
-         eN8AMIMDk0ew349sCLHuwcj6ysO9yZjiWi0EFonxmAyaWSAn39Z/KQSAn/tzsY3cWVd+
-         SQAEaDc6qUlkPTGJeEs27J9LX6RDhZQFS/asvzlnjrklusCt7vXLF/EngjmplSfQpjBd
-         FQ3Q==
-X-Forwarded-Encrypted: i=1; AL+hErEW9MP3Le1f3JunoKkVWK5aJqbR56IKuxeI8UpQToNtffBEWz4xKOjrzLdRalEZHOCl7ZA=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+RDrlBIKV9fQJmqfpA4GmZBZ0Uj3HdDzG7+p0v76jDXN8KvKJ9
-	mRXDBzaZ7EXsQhz+TelvVgffyyPQw/wBd81kAs7mFimucjph8CWRlU6VJMOZ6Rm8DgkH/oXKio+
-	eQQCLVvWkef/1bbHy1491xxURgDRRDjZ/A9NDP8Ec
-X-Gm-Gg: AYBFou0IOUTdrfkN+SdZMwk4UNJmG7HqvEQUJNXJqGI7bs/VZMHeKxuGDltY0ZGusXz
-	V2v2x+HpsWU9aH5YtAv1kLDokeM1+vTZnPofhtsnHVr+Ko349XVl1f0FixZ23zuzqGGKD00ZxNb
-	Om+aW3TgzrGVGeQO3dBdwfFPPAmKQ85B+42xgocssIldrWGNdxG6tU7+DgOX1iA8OjZI/sPYEzD
-	PPX9UcJHfpTiHlTMeh7EtKXZf2OSy/P4uCVHettFKwowN0mQZmzUqR89sNEA2r44g/pZjauUvu/
-	983Qtpmb8di03a7J9kZBoGi10V2vSQ43h2zk6dESnOyWncMW7rPc0MobrhPviINkhyLTtFp99jC
-	TWsI29I3Rx6aqU72KYwF4M1DWSOV+9BFigiI=
-X-Received: by 2002:a05:701b:290a:b0:1b1:d8c:1ed9 with SMTP id
- a92af1059eb24-1b53b1c51a2mr13906c88.18.1794862926873; Mon, 16 Nov 2026
- 13:02:06 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bbdSzC1O
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ED0B1F000C7;
+	Mon, 16 Nov 2026 21:17:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794863843;
+	bh=sTPbJ07GNt0+1u01Y5G4Xr3hVWCoVAYYEn2wljg+BRs=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=bbdSzC1O7dLOov3QwwKLhMnVBKCYv3rBcI5XvLw9QexMDJ54jfwjtupiTopLtnQAU
+	 lMpGrxi7asiaGUeknQWr68PsKGCyiMeTDEa7WYqbAwlbAhwQJlHaYwQArGZYI/E5+3
+	 oIJMye+BJwcPqB+1ZO7Mqlmy5rgp9rjyOHjbrLguzpV18Gx4WArGQdqhAKo9Ex0Mnv
+	 6ibbAvRLTEOIj+tzGdYZmNlg+KNahyt3oJ7BnPWw5T4oByysnNNd/q9mGoJml6+YNI
+	 q34sml6hNVBgd9IlCr8huEduHxwLYKnI2bMwyjO5crI475Efe3nN86P00H5ENvRH6m
+	 QwMJTf7R44IAQ==
+Message-ID: <sashiko-outbox-217697@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 21/21] selftests/bpf: Test limits of the
+ load with raw programs
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <20261116152626.4032587-22-alexei.starovoitov@gmail.com>
+References: <20261116152626.4032587-1-alexei.starovoitov@gmail.com>
+ <20261116152626.4032587-22-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 16 Nov 2026 21:17:22 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,117 +59,161 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-References: <20261110102039.1002605-1-bjorn@kernel.org> <20261110102039.1002605-3-bjorn@kernel.org>
- <CAHS8izMaAv6gX1NeJR+QCf43CL+DC4DgePRNNxSLoE31jxHU0g@mail.gmail.com> <87fqx2j5jx.fsf@all.your.base.are.belong.to.us>
-In-Reply-To: <87fqx2j5jx.fsf@all.your.base.are.belong.to.us>
-From: Mina Almasry <almasrymina@google.com>
-Date: Mon, 16 Nov 2026 13:01:46 -0800
-X-Gm-Features: AclHuK8rxGqdW2QY8q6YZLLoufNsDrdyzNs-Y5WE5rB9qXBUxJnfIT9hDTQTu7k
-Message-ID: <CAHS8izNVDU8+JzeuwDBmF24C-XqkO+ox01qnTvK665Y8pyWNLA@mail.gmail.com>
-Subject: Re: [PATCH net-next v1 02/11] net: Add memory provider capabilities
-To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc: Magnus Karlsson <magnus.karlsson@intel.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, netdev@vger.kernel.org, 
-	bpf@vger.kernel.org, io-uring@vger.kernel.org, 
-	"Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>, Weiming Shi <bestswngs@gmail.com>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, 
-	Alexander Lobakin <aleksander.lobakin@intel.com>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Stuart Clark <stuclar@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sun, Nov 15, 2026 at 10:47=E2=80=AFAM Bj=C3=B6rn T=C3=B6pel <bjorn@kerne=
-l.org> wrote:
->
-> Mina Almasry <almasrymina@google.com> writes:
->
-> > On Tue, Nov 10, 2026 at 2:21=E2=80=AFAM Bj=C3=B6rn T=C3=B6pel <bjorn@ke=
-rnel.org> wrote:
-> >>
-> >> The core treats every memory provider as unreadable: installing one
-> >> needs header split and no XDP program, and any page pool that allows
-> >> unreadable netmem takes it. An AF_XDP UMEM provider is readable, needs
-> >> XDP, and hands out whole buffers.
-> >>
-> >> Describe providers by MP_CAP_READABLE and MP_CAP_FRAG; devmem and
-> >> io_uring keep their behavior with MP_CAP_FRAG. A page pool takes a
-> >> readable provider only with the new PP_FLAG_MEM_PROVIDER:
-> >
-> > Why do we need this? I thought whatever creates the pool actually
-> > shouldn't get to pick whether the pool picks up the memory provider. I
-> > thought if core has configured the rxq for a memory provider then the
-> > pool is forced to take it.
->
-> Thanks for looking at series, Mina. ...this needed some thinking.
->
-> It isn't forced today either: only pools with
-> PP_FLAG_ALLOW_UNREADABLE_NETMEM take the queue's provider. Drivers set
-> it on the pool that holds payloads, and keep headers in host memory: in
-> a separate pool (fbnic, bnxt), or outside the page pool (gve, mlx5).
-> That works because every provider so far backs payloads only.
->
-> UMEM doesn't. The socket gets whole packets, so UMEM has to back the
-> header buffers, and with multi-buffer the payloads too. The flag was my
-> way to get it there, but you're right that it's the wrong knob: it lets
-> the driver opt in, where it should only say what each pool holds.
->
-> How about this instead. Both sides use the rx_roles bits from patch 5,
-> HEAD and PAYLOAD:
->
->  - The provider says which buffers it backs, next to rx_page_size in
->    pp_memory_provider_params: devmem and io_uring zcrx PAYLOAD, AF_XDP
->    HEAD, or HEAD|PAYLOAD with multi-buffer.
->  - The driver says what each pool holds, in rx_roles. A pool without
->    roles but with PP_FLAG_ALLOW_UNREADABLE_NETMEM holds PAYLOAD, so
->    existing drivers don't change.
->  - page_pool_create() gives the provider to a pool whose roles are all
->    backed; the others get host pages. No opt-in.
->  - After ndo_queue_mem_alloc(), the core checks that the new pools that
->    took the provider cover everything it backs, or fails the restart.
->
-> With fbnic's header and payload pools:
->
->   devmem:                header pool host, payload pool devmem
->   AF_XDP single-buffer:  header pool UMEM, payload pool host
->   AF_XDP multi-buffer:   one shared pool, UMEM
->
-> A shared pool on a devmem queue doesn't take devmem, since devmem
-> doesn't back HEAD, so the check fails and the driver has to split.
-> That's the "headers in host memory" rule, without the driver asking
-> which provider it is.
->
-> Wdyt?
->
+Thank you for your contribution! Sashiko AI review found 3 potential
+issues to consider:
+- [Medium] selftests/bpf: unguarded JIT-only xlated imm check in
+  test_subprogs()
+- [Low] selftests/bpf: pipe write fd leak on error path in
+  test_freezer()
+- [Low] selftests/bpf: unchecked fork() in no_limits reads uninitialized
+  status
+--
 
-Hmm, I think maybe the exsiting knobs PP_FLAG_ALLOW_UNREADABLE +
-CAP_READABLE covers your needs.
+commit 3c35bcd7e95d13e7559756b6f54585ddac4df9c1
+Author: Alexei Starovoitov <ast@kernel.org>
 
-The pp says whether the memory it provides is readable or not via
-CAP_READABLE (or !CAP_UNREADABLE).
+selftests/bpf: Test limits of the load with raw programs
 
-The driver says whether it will allow unreadable memory for this pool.
-For header pools, it doesn't specfiy PP_FLAG_ALLOW_UNREADABLE and for
-paylaod pools it specifies ALLOW_UNREADABLE.
+This commit adds BPF selftests covering program loading under signals,
+the cgroup freezer, and memory cgroup limits, as well as tests for
+syscall program context, large subprogram counts, xlated dumps, kfuncs,
+BTF type chains, and a light skeleton with many maps and programs.
 
-The change I think you need to make is: today we disallow any
-providers if the caller did not specify ALLOW_UNREADABLE (because we
-assume mp's are unreadable). After your series we only need to
-disallow memory providers if the mp is unreadable and the caller said
-it's not fine with unreadable.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/no_limits.c b/tools/t=
+esting/selftests/bpf/prog_tests/no_limits.c
+> new file mode 100644
+> index 0000000000000..b949d1db23e6d
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/no_limits.c
+> @@ -0,0 +1,465 @@
+
+[ ... ]
+
+> +static int exit_code(pid_t pid)
+> +{
+> +	int status;
+> +
+> +	if (!ASSERT_EQ(waitpid(pid, &status, 0), pid, "wait") ||
+> +	    !ASSERT_TRUE(WIFEXITED(status), "exited"))
+> +		return -1;
+> +	return WEXITSTATUS(status);
+> +}
+
+[Severity: Low]
+Can exit_code() read an uninitialized status if fork() fails in
+test_freezer() or load_in_memcg()?  When pid is -1, waitpid(-1, &status,
+0) fails with ECHILD and returns -1 without writing status, which passes
+ASSERT_EQ(-1, -1) and then evaluates WIFEXITED(status) and
+WEXITSTATUS(status) on uninitialized stack memory.
+
+> +
+> +/* The freezer does not wait for the end of the load. The load starts ag=
+ain after it. */
+> +static void test_freezer(int flag)
+> +{
+> +	struct bpf_insn *insns =3D straight_code(200000);
+> +	struct bpf_common_attr common =3D {};
+> +	union bpf_attr attr =3D {
+> +		.prog_type =3D BPF_PROG_TYPE_SCHED_CLS,
+> +		.insns =3D ptr_to_u64(insns),
+> +		.insn_cnt =3D 200000,
+> +		.license =3D ptr_to_u64("GPL"),
+> +	};
+> +	int cg =3D -1, pipes[2] =3D { -1, -1 }, fd;
+> +	char buf[64] =3D "";
+> +	pid_t pid;
+> +
+> +	if (!insns || !ASSERT_OK(setup_cgroup_environment(), "setup") ||
+> +	    !ASSERT_OK(pipe(pipes), "pipe"))
+> +		goto out;
+> +	cg =3D create_and_get_cgroup("/no_limits");
+> +	if (!ASSERT_OK_FD(cg, "cgroup"))
+> +		goto out;
+> +	pid =3D fork();
+> +	if (!pid) {
+> +		/* the fd that the prog gets */
+> +		if (join_parent_cgroup("/no_limits"))
+> +			_exit(1);
+> +		fd =3D dup(pipes[0]);
+> +		close(fd);
+> +		if (write(pipes[1], &fd, sizeof(fd)) !=3D sizeof(fd))
+> +			_exit(2);
+> +		_exit(syscall(__NR_bpf, BPF_PROG_LOAD | flag, &attr, sizeof(attr), &co=
+mmon,
+> +			      sizeof(common)) !=3D fd ? 3 : 0);
+> +	}
+> +	close(pipes[1]);
+> +	if (ASSERT_EQ(read(pipes[0], &fd, sizeof(fd)), sizeof(fd), "read")) {
+> +		usleep(10000);
+> +		ASSERT_OK(write_cgroup_file("/no_limits", "cgroup.freeze", "1"), "free=
+ze");
+> +		while (!strstr(buf, "frozen 1") &&
+> +		       !read_cgroup_file("/no_limits", "cgroup.events", buf, sizeof(bu=
+f)))
+> +			usleep(1000);
+> +		snprintf(buf, sizeof(buf), "/proc/%d/fd/%d", pid, fd);
+> +		ASSERT_ERR(faccessat(AT_FDCWD, buf, F_OK, AT_SYMLINK_NOFOLLOW), "no pr=
+og yet");
+> +		ASSERT_OK(write_cgroup_file("/no_limits", "cgroup.freeze", "0"), "thaw=
+");
+> +	}
+> +	ASSERT_OK(exit_code(pid), "load");
+> +out:
+> +	close(pipes[0]);
+> +	if (cg >=3D 0)
+> +		close(cg);
+> +	cleanup_cgroup_environment();
+> +	free(insns);
+> +}
+
+[Severity: Low]
+Does the out path leak pipes[1] if create_and_get_cgroup() fails after
+pipe(pipes) succeeds?  Also, if an earlier check jumps to out before
+pipe(pipes) succeeds, close(pipes[0]) calls close(-1).
+
+[ ... ]
+
+> +/* The number of a subprog does not fit into s16 */
+> +static void test_subprogs(void)
+> +{
+> +	const int funcs =3D 33000, cnt =3D 4 * funcs + 1;
+> +	struct bpf_insn *insns =3D many_funcs(funcs);
+> +	struct bpf_prog_info info =3D {};
+> +	__u32 len =3D sizeof(info);
+> +	int fd;
+> +
+> +	if (!insns)
+> +		return;
+> +	fd =3D load(insns, cnt);
+> +	if (!ASSERT_OK_FD(fd, "load"))
+> +		goto out;
+> +	ASSERT_EQ(run(fd), funcs - 1, "retval");
+> +	info.xlated_prog_len =3D cnt * sizeof(*insns);
+> +	info.xlated_prog_insns =3D ptr_to_u64(insns);
+> +	if (ASSERT_OK(bpf_prog_get_info_by_fd(fd, &info, &len), "dump"))
+> +		ASSERT_EQ(insns[funcs - 1].imm, funcs, "subprog");
+
+[Severity: Medium]
+Will this assertion fail when BPF JIT is disabled?
+
+When a program is interpreted rather than JIT-compiled,
+bpf_fixup_call_args() rewrites pseudo-calls to BPF_JMP | BPF_CALL_ARGS,
+and prepare_dump_pseudo_call() dumps bpf_call_args_imm(insn->off) into
+insn->imm instead of the target subprogram index:
+
+kernel/bpf/syscall.c:prepare_dump_pseudo_call() {
+	...
+	if (insn->code =3D=3D (BPF_JMP | BPF_CALL_ARGS))
+		insn->imm =3D bpf_call_args_imm(insn->off);
+	else
+		insn->imm =3D bpf_prog_find_func(prog, idx + call_off + 1);
+	...
+}
+
+Should test_subprogs() check info.jited_prog_len (or env.jit_enabled)
+before asserting that insns[funcs - 1].imm equals funcs?
 
 --=20
-Thanks,
-Mina
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261116152626.4032=
+587-1-alexei.starovoitov@gmail.com?part=3D21
