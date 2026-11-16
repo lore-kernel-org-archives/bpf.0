@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794845168;
-	b=4iwJm9dEK2i1Er+GbyFLGAHBpcgVzMzw50Atl2fIgY6WPHdCyEt0Z49jbGFvL9wZzLbs
-	 ch+tp3RZ9JMY8JGqwymGvtndHcq6ehR9uYznb/xQ/nz5A76upXHJHUndub/eiIj9zd40L
-	 OO+vTnpzFWJo/m2R8V/qVBppm9RlFLOMSsJOxPBH+QPFt+et4WZACI4gx9YK7YUOekPRj
-	 btM895mvuTG5y6QW/Iy7TExGdupFlb04XQzS2k8gHgLZrslTDm8uG4Y0vDxjCYABB05dX
-	 SEe+5t5z2f2pmZUwUyp2jXE0OeOW8ykbh9eNRxlH2p+gnGsEbte5Sox2uYI8N07R0Kg==
+	t=1794845170;
+	b=pa985RwnrI2IHhBt74E5DxIjRknYbrgcjXXV8J8DWczzrR1e2zrbMcI5T4BVeUAjEmMo
+	 BDQ71S+4Ko26xcxxCsSdgsk3gbIJYbbDKGTG2kvco4r9zIwvF/i15oztY1kqdUF8loMC1
+	 Tic2MhNp33u/p3xFXxoB+9jxn2dcmD4lrkYihKKDb1RODm36sFWqgpFzfCvaOnWUwrsWU
+	 3LLIKrxNYXOFgNpganEGjTwg4K0cA9X6RY0cfgV2mWeWaAYdybc4uAZuYg+6tLYpYRx41
+	 xNV1DiZ2Zt6StezBA31WQbO6rQ9/waDt6aL6z9bDECsUasrUnr6ScBYqHDutWo/sTxw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794845168;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794845170;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=jk4f67CP2F8u9guOsap+3oWE34HJGSx2VsHVoJmQcEQ=;
-	b=2RczuM5Fnyv/6Wfz4hue1AgMc8rDGnH+JYkAxRbSJ4Zd1YWvFzEMyMKUvhqzXLyScu/U
-	 0qgjdngH2EAzhuKr0mFF8oOApQLWF5epCFUoTk+NZukxui9eLoHKiJ20vRGtWx49mv8UP
-	 LmWEHu7uIqADW7G81IEMcdO1SRl+K+If3x4Qrl+iTADPox/vjZmiMpXcxMXjsSrS5+D4O
-	 URzzrmR13rD/jXc5sREajJIwPWleHvg/KsavMWxfUYcFZByzYfhwnEBVDXY1+hbHox9TJ
-	 gOZKbw5w4v3cK3VuiLg7niTVDIhFdz8Z8iBzYi19X+9R70EIG+EHSSc5baRbME37lHQ==
+	bh=9itPIg7aJEfo+/aaxRkBMiuTQZCc7PZsW/M/SCKETAY=;
+	b=JvCA98NaABKHLIMaF+Dd1fqwqvO/3QQMR5zqcdFVgeP9fM8bjufgZg8O0BE9nMlxCe/J
+	 /9npdObV9xlnQGLGDsKyiUN8AJg6Czi+TGJiExVSFN5iZsYRL8486uuxLjBfxYhYRmWG+
+	 GLuzty8FRZUS29Ln8azcWTbrxax1RUv28ul4Fyuc5H81S8w9CL0zkNE/TdNEC082onlUS
+	 XFRyKWRnNkky13L915m7V/HbPp13i/tP+HgRgbcGOm73xqUQFVCczC7xo6x5YwGr5ORkV
+	 Hj1rv9g7I513e4kd04OMzpM1ITPHWit93ZlBqFb6X34+32qa09rDOYdyCI6FQKcXflw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=N9kJkrdp;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Yvy9v6Cy;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59B95606A31C
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 16:06:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8910E606A31C
+	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 16:06:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=N9kJkrdp
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DB731F000C4;
-	Mon, 16 Nov 2026 16:06:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Yvy9v6Cy
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B59B1F000C4;
+	Mon, 16 Nov 2026 16:06:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794845168;
-	bh=jk4f67CP2F8u9guOsap+3oWE34HJGSx2VsHVoJmQcEQ=;
+	s=k20260515; t=1794845170;
+	bh=9itPIg7aJEfo+/aaxRkBMiuTQZCc7PZsW/M/SCKETAY=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=N9kJkrdpWqdDRbw7vvdvp77FLAXWTeP3Pjhb/puQt9Jjiuyhz0Xv9C5fgRlwqWPJn
-	 kdbEzYgmgUmVLKeGLTpZV2QUSNmbdYhjmefO0OvO+k9XNP28AO5qVpjxqe1T2HZnAo
-	 fFQHaqstVv8TyMlaY1rFTqaSabA1GvOJOC17ZJkIFoP2VGteTaIZ6KWczQF5DcVphv
-	 VoN7eMxTFCxZ9hwY12fa4oMxR1YnIT2KcOt6hKNRQ3BxWKsroVQTrEldGLjv7NOkS+
-	 0evDLfpoEnCmb1iNNBmMhntJHHiJy6pM3u0zpqZhGx2EinfcCgi0f5O4TR87u+/s0A
-	 TD0FePVSRvoEg==
-Content-Type: multipart/mixed; boundary="===============8147075745057409316=="
+	b=Yvy9v6CyWi+quGbkRWwb3Q4WjdquKIwdjv+itCs+WApdwwCA5BkKHFNkWwGw7ZkNH
+	 dNhCgIVHhuYHy9IRDOZgZ9reX63DK3rnI7BJMC9r8XLq6BVisiJqduqt35ZNMDqPZ5
+	 AsIU2oweyeT87fyB+51YQRNzDl81KB22XTnNC7E8z0gw88dUOVdU7EmJs/34R47Xtk
+	 jpRokAjfeUxuKnWKKvifrX4vkG5uLDVa7duE+W4sBlSOFCgQDrK01MlrgrD+kLSTbX
+	 +JmZSVMUV6lId7vgIt6tXFa9jwoaVJ9PHGjjdmsmcbTTF4zOxjC/z6HZtgfUkwCGYY
+	 CCZcAe8Z+yN5A==
+Content-Type: multipart/mixed; boundary="===============1789226211521666341=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,140 +49,103 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <7b99ce30e1ddf3a88b7e8066298daf0fc8a4e7e80f51d9123303d08e0c7fc018@mail.kernel.org>
-In-Reply-To: <20261116152626.4032587-3-alexei.starovoitov@gmail.com>
-References: <20261116152626.4032587-3-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next v2 02/21] bpf: Fail the load when there is no memory
+Message-Id: <cea1af8c2203f4961d936b0e8050c8fcf6a154ba6419c75b314f0a9eaf727461@mail.kernel.org>
+In-Reply-To: <20261116152626.4032587-12-alexei.starovoitov@gmail.com>
+References: <20261116152626.4032587-12-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next v2 11/21] libbpf: Size the tables of the loader program from the object
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 16 Nov 2026 16:06:07 +0000 (UTC)
+Date: Mon, 16 Nov 2026 16:06:09 +0000 (UTC)
 
---===============8147075745057409316==
+--===============1789226211521666341==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Fail the load when there is no memory
+> libbpf: Size the tables of the loader program from the object
 
-TL;DR:
-- Unconverted CO-RE (bpf_core_apply) allocations may still wake the memcg OOM
-  killer during load
-- Constant-blinding allocations lack a mayfail flag, so ENOMEM-fails-load may
-  still hit global OOM
-- Commit message overclaims "all allocations"
+TL;DR: Larger per-program code in the generated loader may push branch offsets
+past 16 bits, so gotol is emitted; kernels older than v6.4 reject it, so
+previously loadable light skeletons may now fail to load there.
 
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
+> gen_loader mirrors limits of the kernel: 64 maps, 32 programs and 256
+> kfuncs. The numbers are known before the loader is made.
+>
+>   fd_array:  [ maps | copies of maps | unused | BTFs of kfuncs ]
+>   prog_fds:  [ programs ]              was on the stack of the loader
+>
+> Use gotol and a register for ctx when an offset needs more than 16 bits.
+> That was an error, so loaders that could be made do not get gotol.
+
+Is that last sentence accurate for loaders close to the old 16-bit limit?
+
+The prog fd slots moved from the stack into the blob, which makes the
+cleanup block and the per-program fd store longer.  Every backward branch
+to cleanup_label from emit_check_err() has to cross that code.
+
+> diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+> --- a/tools/lib/bpf/gen_loader.c
+> +++ b/tools/lib/bpf/gen_loader.c
 
 [ ... ]
 
-> @@ -3017,10 +3017,10 @@ static struct bpf_prog *bpf_prog_jit_compile(struct bpf_verifier_env *env, struc
->  	prog = bpf_jit_blind_constants(env, prog);
->  	/*
->  	 * Fall back to the interpreter after blinding failures, except when
-> -	 * the loader was killed.
-> +	 * the load has to stop or has no memory.
->  	 */
->  	if (IS_ERR(prog)) {
-> -		if (PTR_ERR(prog) == -EINTR)
-> +		if (PTR_ERR(prog) == -EINTR || (env && PTR_ERR(prog) == -ENOMEM))
->  			return prog;
->  		goto out_restore;
+> @@ -139,27 +141,24 @@ void bpf_gen__init(struct bpf_gen *gen, int log_level, int nr_progs, int nr_maps
+> [ ... ]
+>  	for (i = 0; i < stack_sz; i += 4) {
+>  		emit(gen, BPF_LDX_MEM(BPF_W, BPF_REG_1, BPF_REG_10, -stack_sz + i));
+>  		emit(gen, BPF_JMP_IMM(BPF_JSLE, BPF_REG_1, 0, 1));
+>  		emit(gen, BPF_EMIT_CALL(BPF_FUNC_sys_close));
+>  	}
+> +	for (i = 0; i < nr_progs; i++)
+> +		emit_sys_close_blob(gen, blob_prog_fd_off(gen, i));
+>  	for (i = 0; i < nr_maps; i++)
+>  		emit_sys_close_blob(gen, blob_fd_array_off(gen, i));
+
+Previously this was 3 insns per stack prog_fd slot.  Now each program costs
+6 insns here (12 with log_level).
+
+[ ... ]
+
+> @@ -294,7 +283,8 @@ static void emit_check_err(struct bpf_gen *gen)
+>  	if (is_simm16(off)) {
+>  		emit(gen, BPF_JMP_IMM(BPF_JSLT, BPF_REG_7, 0, off));
+>  	} else {
+> -		gen->error = -ERANGE;
+> +		emit(gen, BPF_JMP_IMM(BPF_JSGE, BPF_REG_7, 0, 1));
+> +		emit(gen, BPF_JMP32_A(off - 1));
 >  	}
 
-The commit message says "Use one mask for all allocations of the verifier",
-and this hunk makes -ENOMEM from bpf_jit_blind_constants() fatal for the
-load.  Are the allocations inside bpf_jit_blind_constants() covered by that
-rule?
+[ ... ]
 
-  bpf_jit_blind_constants():
-    linfo_unblinded = kvmalloc_array(nr_linfo, sizeof(*linfo_unblinded),
-                                     GFP_USER);
-    ...
-    clone = bpf_prog_clone_create(prog, GFP_USER);
+> @@ -1136,14 +1116,10 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
+> [ ... ]
+> +	/* remember prog_fd in the blob, if successful */
+> +	emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX_VALUE,
+> +					 0, 0, 0, blob_prog_fd_off(gen, gen->nr_progs)));
+> +	emit(gen, BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_7, 0));
+>  	gen->nr_progs++;
 
-  bpf_prog_clone_create():
-    gfp_t gfp_flags = GFP_KERNEL | __GFP_ZERO | gfp_extra_flags;
-    fp = __vmalloc(fp_other->pages * PAGE_SIZE, gfp_flags);
+The store of each prog fd grew from 1 insn (BPF_STX_MEM to the stack) to 3
+insns here.  emit_relo_ksym_typeless() also adds one insn per typeless ksym.
 
-Neither call has __GFP_RETRY_MAYFAIL or __GFP_NOWARN, so under global
-memory pressure they can still reach the OOM killer or print an allocation
-failure warning before returning the -ENOMEM that now fails the load.
+Take an object with N entry programs and no subprograms, where N <= 32 was
+allowed before.  The backward distance from the last emit_check_err() grows
+by roughly N * (3 + 2) insns, or N * (9 + 2) with log_level.  For N = 32
+that is about 160 to 350 insns.
 
-The path is bpf_check() -> __bpf_prog_select_runtime(env, ...) ->
-bpf_prog_jit_compile() -> bpf_jit_blind_constants() whenever blinding is
-requested (bpf_jit_harden).  bpf_jit_subprogs() reaches the same
-allocations for programs with subprogs.  These allocations are not
-memcg-charged (bpf_prog_clone_create() does not use bpf_memcg_flags()), so
-the memcg case from the commit message is not hit.
+A loader whose last check was within that margin below 32768 insns used to
+be generated with plain 16-bit BPF_JSLT branches.  Now is_simm16(off) fails
+and emit_check_err() emits BPF_JMP32_A (gotol) instead, which kernels older
+than v6.4 reject in do_check() ("BPF_JA uses reserved fields").
 
-Other verifier-path allocations that keep a plain mask are
-bpf_jit_add_poke_descriptor() (krealloc_array(..., GFP_KERNEL), called from
-bpf_do_misc_fixups()) and the func[] array in jit_subprogs().  The func[]
-array is converted later in the series by 8aac70a8f47f ("bpf: Remove
-BPF_MAX_SUBPROGS"); bpf_jit_blind_constants() is not converted anywhere in
-the series.
-
-Should the env path of bpf_jit_blind_constants() pass
-GFP_USER | BPF_GFP_MAYFAIL, as bpf_patch_list_commit() already does for
-bpf_prog_realloc()?  Otherwise the commit message could limit its claim to
-the GFP_KERNEL_ACCOUNT sites.
-
-> The verifier allocates with GFP_KERNEL_ACCOUNT. At the limit of the memory
-> cgroup this wakes up the OOM killer, and the loader dies:
->   memory.max = 64M, program needs 120M
->   before:  Killed
->   after:   bpf() = -ENOMEM
-> Use one mask for all allocations of the verifier. Most of the patch is:
->   sed -i 's/GFP_KERNEL_ACCOUNT/BPF_VERIFIER_GFP/'
-
-Can a CO-RE load at memory.max still be OOM-killed from inside the
-verifier?  The patch does not convert the GFP_KERNEL_ACCOUNT allocations
-reached through:
-
-  bpf_prog_load() -> bpf_check() -> bpf_check_core_relo() ->
-    bpf_core_apply()
-
-kernel/bpf/btf.c:bpf_core_apply() {
-    ...
-	specs = kzalloc_objs(*specs, 3, GFP_KERNEL_ACCOUNT);
-    ...
-	cands.cands = kzalloc_objs(*cands.cands, cc->cnt, GFP_KERNEL_ACCOUNT);
-    ...
-}
-
-bpf_core_find_cands() also reaches populate_cand_cache() (kmemdup() and
-kmemdup_nul() with GFP_KERNEL_ACCOUNT) and bpf_core_add_cands() (kmalloc()
-with GFP_KERNEL_ACCOUNT).
-
-bpf_check_core_relo() runs for every load with attr->core_relo_cnt != 0,
-which includes light skeletons and loader programs.  try_charge_memcg()
-only skips mem_cgroup_oom() for __GFP_NORETRY or __GFP_RETRY_MAYFAIL:
-
-    if (gfp_mask & __GFP_RETRY_MAYFAIL)
-        goto nomem;
-
-None of these masks carries __GFP_RETRY_MAYFAIL, so the memcg OOM killer
-can still be woken from the verifier, which is the "Killed" outcome the
-commit message says is removed.  The tree at the end of the series still
-has GFP_KERNEL_ACCOUNT in bpf_core_apply().
-
-Separately, bpf_prog_verify_signature() converts the "data" kvmalloc() but
-leaves sig = kvmemdup_bpfptr(usig, attr->signature_size), which allocates
-with GFP_USER | __GFP_NOWARN.  That is not memcg-accounted, so it cannot
-cause the memcg kill, but it is another verifier allocation that does not
-use the one mask.
-
-Should the bpf_core_apply() and candidate cache allocations be converted to
-BPF_VERIFIER_GFP, or should the commit message be narrowed so it does not
-claim all allocations of the verifier?
-
+So a light skeleton that a previous libbpf could build for those kernels
+could now fail to load there.  Should the commit message be reworded, or
+should the per-program growth be kept out of the backward-branch distance?
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43899902250
---===============8147075745057409316==--
+--===============1789226211521666341==--
