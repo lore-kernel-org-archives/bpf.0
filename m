@@ -1,92 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794842792;
-	b=qCY9SUK+UIn+JJBU7oROpNYrrvqBX8kRg0J22TF14BrrANfSAluR/yNma7YluqvQEyrZ
-	 K0v4MD71uJzcnW4nEEHVIXlPV3gd+n6CpdnXaf42v3FXHgVKc+qlBEt3hOtzZWsxzeqXH
-	 wbzrotkrw1EQOsA7gKsBPb/pDtkiUpcXjGek9dGgsy3e69tB5ue038eaXSddbeF5Cv54m
-	 lz6Ju4sEvVPGiKR/q5CSHkr+8FbB9N6mPWlCq35LqLkhPyL/WS10k4Vna3RNv2k0VHjl0
-	 NU9pbUjRxK+oJuLpY7K41G11/8sJSDrjlnBgNItt8T+qQOQthiI48DLIWfjbMFNzzOg==
+	t=1794842799;
+	b=o8VMwBGArnofwgzePhC63ysI3+JZv9vxvBF7nb6zTNjYQui0FRHkkAv1vETCTwb1ZWd6
+	 3uyfxfTeFYECN4nnMkbAKKWqimzyq9NYeb2FdRoMcW8FQ55T8zWVQGPqFINDvp0LvMtpc
+	 nxDrCo3ss2H7SCFe5bwiPsSiaQ5qUalf0gUOrMkeKouyl/j+WgWrRpFnyJ4itvB45+K7S
+	 UbamuVsldY9LBFbFdqBmty4PqhBWp4Qnod0WNhYwPCWu0EcFpF8340Ax4c+dE0xPYTLei
+	 4MJ1+l2iI47evO2weitxccagMNJRMIi7A4KYPcd3ASra/Nl5mgasDMv/en3KtJ8qhjQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794842792;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794842799;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=j2tz9I17E3WPOsT62QpJ3ULuSeUMK75nrGOFW5RjaWI=;
-	b=ZanFiVtvsb+y2VqojdxdSOFiP87CpLqfuOItLsHzZcJhSpxRRfpOfOEktU+uztSjiJPL
-	 CFhMl+4bz2dVXdRyBAw6Antmx0ZG77scCWmw3ndunhHb5MF2p3YmBQgYCX+DDdKeQgRFF
-	 Fgx0fVROKdz6mc5k1OUYNuRoWjviyn/PDBDIm30GtWIvnxJXx4WSx5toQbXIdYq0aAb4E
-	 EN19GUlxn9OoLQeRagnxHWM2Bp1svcpTqIb8ehhdx1X7WDkwnvNLqmsfGt6V4BkRscjPb
-	 qlVGPTUsXIsZIwYBqjBpwwLiARKyeXP8VVRbiqHRfxYZ30cG2KQO0GDXHYPu/QENjYw==
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=0MfzQ9uaLQOtbpZjsjqQcTgVeJwR89bCBP2I/pDH/pk=;
+	b=V9axnsZPSdQ0eabTPU4l5P6KUvB0yptI4/9e4D1k6SVVunp/ihIMLynx4e6GWkDiVgrd
+	 vFiU8tHTaqbyDWj5bGU/tZS811BQVAj6tXWFX4bJHQG429D15GXMm2G7Jp26afFopzzL6
+	 DfxYIZsP7mOTSHQXXLLsOgK7uymDH5WiSeZcRdikH3rEM57oFrosVOkjqQSDbvS1SQ4Gm
+	 BIj+2Z26O+K/M6WH9mULcSktl1UHirJZRcAeqiEItZzKUwqCWPDY4283D3HWWwOtR69ix
+	 OTCa/mBSe2b+aWvfj6Jvfvt/fRy8d1wtGirN5M/aqVwyheXgVKueGkWk7QER8V+/WfQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QG+Qid4v;
-	arc=none smtp.remote-ip=209.85.214.174
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=bnnDt6Gd;
+	arc=none smtp.remote-ip=209.85.216.42
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744C5606A31C
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 15:26:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 744C5606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A89F606A333
+	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 15:26:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6A89F606A333
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QG+Qid4v
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2ee2072d1e7so9864775ad.2
-        for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 07:26:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=bnnDt6Gd
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3ae6b4c669fso2796128a91.0
+        for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 07:26:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794842791; x=1795447591; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=j2tz9I17E3WPOsT62QpJ3ULuSeUMK75nrGOFW5RjaWI=;
-        b=QG+Qid4v8+yZOld7dbZTbW3RU65/S8xCVm6r0CLEeoT9t7s506jOd3ueADyXj8pJ4E
-         zXF9zo7OuT164ceoM/x11DdG7g/fSvPJlVtffcuxYAD+TNYdaeP39nP8U4tLfU0yywgf
-         BpzvE/Yni2hRngst/Sy7fCY1pZLfpnpOoMvjDTclieus3/+J7tM6NbWxMjGXQf/MWIgA
-         VLgsGUGgXoElHw6gEXSKXI519yR32PSmkDF7sxqqLEOvbsiQDbUltOhEprJLt90DGokd
-         Ow6bDu5Dox9JyX4p8jMXavRhmZC+Bq3XSAEQ8Iq9MkYTmyH1kO7TP+AhnvHGu95UWd2m
-         OB1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794842791; x=1795447591;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20260707; t=1794842797; x=1795447597; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=j2tz9I17E3WPOsT62QpJ3ULuSeUMK75nrGOFW5RjaWI=;
-        b=ksuR3yArIkfpz6g3X35edfo4+h9/V0l09vLns1WMhIf7Rw15FZR2yFAvW5YXR1Ynvi
-         d/N0mIZykd6z+IzdoTjEEhJrd0fsGZ0j9KmhNC/Ax7ixAW1mGdpPgcP0uAG6F0ZZnOUJ
-         2cMgx0E3ycafkIccVAsrRgF+1WkfnRNW7aTOl3yZTSnpxBmvLf8zMWBirzhQcluuyNJg
-         o6JBJ+I4/LKcAnV07gJTmEKBANWlgzS1pTd3R107klOjqXr2927TsVis4r5DeHuSrMTA
-         e5yif2ZM5D8LdjFmIhficBX2D5oQlPs7mr8qginY/L3wsUCirWMKwVewQfb3Y9B4uy5Y
-         V+Fg==
-X-Gm-Message-State: APuU4Z9C13oXDy1BSKE3lOiRKO1sIp+wth2O0E9UObRB8Ptgq2BJjHCf
-	pTLOKI4ZfNE/cViGShuGJLWB+bPuwV+f62ZvowPGFGljnqCe3WtPEEAf43+JaQ==
-X-Gm-Gg: AZFdTZf2KcL0VTfDnTAiaKlpjmeOSUqqNQPR2UPmC35gvXsGas9Pd/8k3aF6S1djndZ
-	FczWIO6/nzc6BfcocM1IfHGxCJV4sAo1Lo3RCI9W1NU2S+t/IPYcrWVsI1QzGtejjfphadFGcKv
-	XpY4oOPSCwkzsxpSlNKYK2cfx/d0OLlpojKbDaGye9hBK+VKzO+KHqE6IXH9JRYvTELdLM5NUPc
-	lNuqvu8bPjQ4UDw/b3PRoO04aRqHX0f3oFuAIU8mS0rmqVc4kzCDJqqTigOoRkWrJzK8VhQW/wC
-	nE9YX2RY/AJ4pzo58J/hNr5Q64FknTfcn5m7rDwmD3b4Ex9PUmhtbTZ3/tRTkNehrt3fDRy7d7b
-	8iJnL42WNKU5PSWkQ6AEHvCNmO75k8G07LskVYwjhWezkfreZ5gJ7KBUG876wUctT5wZQ1NfAbn
-	TfixgcPBVlVZsJPbibhszCS3aEPS9zxPK6KJn2mlM/nn30mrK+RsVRmP3RxQlEDBa1qApkC8634
-	Yf9X6FtLHDDUvP/G1nyhw8zVuhCjIY0Nxmpo5o47Mw2/0DVeRj90d8MDq4uBBMVEbiR7WI869cR
-	+WPLG9bSXaAGi1DLWiK6JG9YlzbcZzkLeMLQXfJT6QQ7RajrkI3JeniXqqbVzivAiUj1rFHO2YF
-	gd/9RP7mbBt3iSVywVtkRnR1bzA6A5D9wgblgOgPjDawWO0oLZC1tymcc7Bb6SLHA4TVZYr50uQ
+        bh=0MfzQ9uaLQOtbpZjsjqQcTgVeJwR89bCBP2I/pDH/pk=;
+        b=bnnDt6GdXg+CkwT6bElidAKM2740W9qipj6ZMTn728TmSUd0p6ha+bNanOL8eC5cIQ
+         ffH6lja65xzhSK9tlCpysMjeCNMkableo3FGsCmTRijcAzNJOFbMV5NAejs4/BPHdKSO
+         +OE13H5ZDRu8bXGAzlNa8E/kHUA1HASVKj2mlrkysA+Upo1wvnfOVbp79FPbhL+V9itM
+         zwXe03akvx4tcR89IgpK8NzE3MP9wdHooaOWVqVe1CmTJaJaVfK2w/wJp+eSBT+98F5W
+         BLRwpRyQRQVreMFUt9Rwh47rMVjYeYLXtKnZ6WPxBoFTeierjNEwyp36IMsrb5RwpwhI
+         ep9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794842797; x=1795447597;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=0MfzQ9uaLQOtbpZjsjqQcTgVeJwR89bCBP2I/pDH/pk=;
+        b=xbEJbhQvdCmpdlT8uH+8eaY9Zqx08TAVYHFult/VBeT9w09WypKl9ZmXU46jEg8AtB
+         2XZGIoMzcIMdtdubefi+8KC3TMk2glVKKz6Wo2E3SyBcv77J/68/XmGFslepyFuhxfSs
+         yMMwsb5FANPLvFkBl8kUo7q4yT4sYtxtUtYhuEAcmE2W1sIXrMbqoI3UImmysXUuOZj8
+         msmyVM2q+Bb3FPHvcaLe9fxaMU7v1hWUcaenOJOarTGjzjl7ThBPiG+bp41kngQsHHkL
+         mxHs88w2+pKtH3HA4REytwmqGEEfe1clsibdk9wbgLmqf9iHOFZWszXNsu7CRMwjXZ4o
+         6hUg==
+X-Gm-Message-State: APuU4Z+O6tA4q4rl2tSBpHKwqWAl0SmY2ZSKyDaSFTofzI15frK4sN04
+	AcL1ca5ekYZOQsY5fY44M+XHAfb/4Rzh4gRd6dw25NTwxXIOtnxLzUiOvLhpjQ==
+X-Gm-Gg: AZFdTZean0ARj5kcAWdWJHHNQI/pYrmF1IFP23rZDhH92F9wWZB+CYfqHyKFEWQJb6y
+	RV4mmVMVeWjF6cHB4NyANopZq+G70civikKoplAa++qeWXRb8D6uA7DrgrIKnHN9x/Cnvpohk+5
+	/0TOKSMMau2T4obaL7JmLGsaXHQBw5O9U97cGEgD96IDnWKBZAPJaGx4az+RL6MWXcHQtg/TCOF
+	w2ZGfUYhWxN5eCT63xwhJuVO0YRFSU8kd8uSqXb2HzIlW0g+1ovnyXNkKdk0L5fhl+LortSK7IW
+	Csl4xkz8b2cT3H1Sd+v/Q6G7+qOLCiWTi1tlZv+8TyuBxjtbGDOYbK6H62rfy6y0GhSZ1vqTCk/
+	aCN3I0ScaQxNVE9ZtY/QzThTVP0Mj8izRcKgpMJxW2+gwq2TJmXaixep/nUVck8oLu6BsoiT5Zt
+	Dnghu3jjdxRvMvo3hnKOpoCVy0oyAAdhA6edTMiiXT3kY7zgTjdoMazwLxE2+nwBt6tzO/8BZ9V
+	eGXRE1p3mmrlcZZyTitnFTobKU2Xook9ZVPo+qeG/apgjy6lJAc3bgPVaKW0DKOdPKsRgyiZUId
+	F1lX3UW1eGs9IUnVxPkVPTIrTVBT0wVY96a2q97j9xpIqpPvD22+eJIKb9GK1dG8h0wogZA52ih
+	oHiiI2N3Mqg/XzkbUfPzVkwvYKnYmD3Cx8PQeA6gmsy0hFmcg20UBWJ3cQfAj6/DuqWwq1u6NiQ
 	==
-X-Received: by 2002:a17:903:3c2e:b0:2ed:3f47:9691 with SMTP id d9443c01a7336-2ee0dc05bc1mr104506705ad.42.1794842791167;
-        Mon, 16 Nov 2026 07:26:31 -0800 (PST)
+X-Received: by 2002:a17:90b:5687:b0:3a8:337d:228a with SMTP id 98e67ed59e1d1-3b1b087c04bmr6877418a91.6.1794842797171;
+        Mon, 16 Nov 2026 07:26:37 -0800 (PST)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.243])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2efd76d8315sm1122955ad.1.2026.11.16.07.26.30
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1aec66f4csm17698564a91.14.2026.11.16.07.26.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2026 07:26:30 -0800 (PST)
+        Mon, 16 Nov 2026 07:26:36 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 00/21] bpf: Remove the limits on maps, kfuncs, subprogs and special fields
-Date: Mon, 16 Nov 2026 15:26:05 +0000
-Message-ID: <20261116152626.4032587-1-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 01/21] bpf: Stop a load only when the loader is killed or has to freeze
+Date: Mon, 16 Nov 2026 15:26:06 +0000
+Message-ID: <20261116152626.4032587-2-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261116152626.4032587-1-alexei.starovoitov@gmail.com>
+References: <20261116152626.4032587-1-alexei.starovoitov@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -100,255 +104,489 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-In short: the verifier keeps the maps, kfuncs, subprogs and special fields
-of a program in arrays of a fixed size. A safe program that needs one more
-entry is rejected. With this series the arrays grow with the program. What
-was quadratic or worse below a limit is linear or n log n now. Outside of
-tools/ the kernel loses 300 lines.
+Any pending signal stops the verifier with -EAGAIN. A loader with a
+profiling timer never loads a program that takes longer than one period:
 
-                                                 today       new  patch
-  maps of a program                                 64  no limit      7
-  BTF objects of a program                          64  no limit      7
-  entries of fd_array                             4096  no limit      7
-  kfuncs of a program                              256     65536      9
-  module BTFs of these kfuncs                      256  no limit      9
-  tables of functions, for callx:
-    pointers in all maps                       1048576  no limit     10
-    pointers in the range of one read             4096  no limit     10
-    functions that one read can give              1024  no limit     10
-    sets of functions                             4096  no limit     10
-  subprogs                                        1024  no limit     16
-  special fields of a map value                     11  no limit     17
-  special fields of an allocated object             11       512     17
-  bytes of a name in BTF                           512      4096     18
-  insns under a jump, with those that the
-    verifier adds                                32767  no limit     12
-  insns of a program that bpftool can dump      524288  no limit      5
-  maps of a light skeleton                          64     see 7     11
-  programs of a light skeleton                      32     see 7     11
+  timer:  |--10ms--|--10ms--|--10ms--|
+  load:   |--------X EAGAIN
+                   |--------X EAGAIN   ... libbpf gives up after 5 tries
 
-A table of functions is an array of pointers to subprogs in a read-only
-map. A program reads a pointer from it and calls it with callx.
-A special field is a kptr, a bpf_spin_lock, a bpf_timer, a bpf_list_head
-and the like.
+Use one helper for all long loops. Add it to the loops that had no
+check: cfg, const_fold, stack liveness and CO-RE relocations.
 
-1. Why?
-None of these numbers protects the kernel at run time. Each is the size of
-an array, or it hides an algorithm that does not scale. Such a limit is
-raised when a real program hits it. Rust crates did that to two of them:
-commit 70bcb39a7392 ("bpf: Bump BPF_MAX_SUBPROGS to 1024") and commit
-3f4f430fa1b2 ("bpf: Allow BPF_MAX_SUBPROGS targets of a read from a table
-of functions"). Real code is near the next ones:
+  event                     load
+  fatal signal              stops
+  system or cgroup freezer  stops, the task freezes, bpf() starts again
+  other signals             goes on
 
-  subprogs       777 of 1024   the program of rust-bpf [1] in the first
-                               commit
-  name in BTF    429 of 512    a struct of scx_lavd in rust-bpf
-  maps            41 of 64     obi_continue_protocol_http() in OBI of
-                               OpenTelemetry
+The restart is not visible in user space. A loader program gets -EINTR
+from bpf_sys_bpf(), it got -EAGAIN. Unprivileged loaders wait for one
+lock: test the same condition when they get it, so the queue drains.
 
-And it is over the limits of a light skeleton:
-
-  runtime-security.o of Datadog   627 programs   151 maps
-  tracee.bpf.o of Tracee          169 programs    87 maps
-
-The author of a program does not choose the number of its maps. Each
-.data.X and .rodata.X section is a map. Each jump table that clang makes
-from a switch is a map: with -mcpu=v4 bpf_generic_uprobe.o of Tetragon has
-19 of them next to its 66 maps.
-
-2. What bounds BPF_PROG_LOAD now?
-  size     1000000 insns of a program and 16 MB of BTF, as today.
-  memory   memory.max of the cgroup of the task. There bpf() returns
-           -ENOMEM. Today the OOM killer ends the task (patch 2).
-  time     A fatal signal ends each long loop. The freezer does not wait
-           either: the task freezes, then bpf() starts again (patch 1).
-
-A large program also has to get to the end of BPF_PROG_LOAD. Today each
-signal ends it with -EAGAIN, and libbpf gives up after 5 tries. A task with
-a profiling timer of 10 ms never gets through a BPF_PROG_LOAD of 11 ms.
-With patch 1 a signal that does not kill waits for the end.
-
-The limits that hold at run time do not change: the size of the stack,
-32 frames, 33 tail calls.
-
-3. What had to scale?
-  patch  question                  today                 new
-   8     dump: which map is in     look at all maps      maple tree
-         this ld_imm64?
-   9     is this kfunc known?      sort at each new one  hash table
-  10     is this set of            look at all sets      hash table
-         functions known?
-  13     who calls whom, over      matrix of bits,       lists of edges,
-         any number of calls?      n^3 / 64, two times   nodes + edges
-  14     what does a table of      walk its pointers     one node of the
-         functions call?           at each use           call graph
-  15     which decl tags has       look at all types     a list per type
-         this argument?
-  17     which special fields      enter a struct for    enter it once,
-         has this type?            each member of that   copy its fields
-                                   type: members^depth
-  18     is this name valid?       read it for each      read each byte
-                                   type that has it      once
-  19     which insns dominate      quadratic             n log n
-         this insn?
-
-Three small tools carry most of it:
-  bpf_table_next()        an array that doubles                   patch 7
-  struct bpf_index        hash table, key -> number of an entry   patch 7
-  struct bpf_call_graph   lists of edges, sorted once: callees    patch 13
-                          first, the nodes of a cycle in a row
-
-4. Far jumps
-A conditional jump has an offset of 16 bits. The verifier adds insns under
-it: inlined map lookups, checks of divisions, may_goto, constant blinding.
-Then a verified program fails with -ERANGE. 2979 map lookups under one
-branch are enough. Patch 12 does what an assembler does:
-
-  if r1 > r2 goto far    ->   if r1 > r2 goto +1
-                              goto +1
-                              gotol far
-
-Where all jumps fit, no jump changes. The passes in fixups.c do not compute
-offsets any more: bpf_patch_list_build() does it for all of them.
-
-5. Fixes
-  3  A syscall program and the target of its tail call get the same
-     context. Its size is compared with the first program only.
-  4  bpf_loop() is inlined with a call of its callback, also when the
-     callback is removed as dead code.
-  5  A program of more than 524288 insns loads and cannot be dumped.
-  6  btf_resolve() does not see a type that holds itself through
-     ptr -> typedef -> array. Only the limits of the later walks end that
-     loop, and patch 17 removes one of them. With patch 6 such BTF is
-     refused.
-
-6. What else changes for users?
- - The rules on calls look only at insns that the main pass has seen. A
-   call, a tail call, LD_ABS or bpf_throw() in dead code rejects nothing
-   (patch 13).
- - A map value with 12 kptrs had no struct btf_record at all. It has one
-   now. So the map needs CAP_BPF, and it cannot be mmaped or
-   BPF_F_RDONLY_PROG (patch 17).
- - -ENOMEM in front of the JIT fails BPF_PROG_LOAD. There is no fall back
-   to the interpreter (patch 2).
- - The loader program of a light skeleton gets -EINTR from bpf_sys_bpf().
-   It got -EAGAIN (patch 1).
- - An extension that does tail calls cannot attach to a syscall program
-   that does none (patch 3).
- - The tags of subprogs that make calls change, and so do their names in
-   kallsyms (patch 16).
- - x86-32, riscv32, parisc and sparc64 have no gotol in the JIT. A program
-   with a far jump is not JITed there, like a program that has gotol in
-   its source (patch 12).
-
-7. What stays?
-  65536 kfuncs             JITs find a kfunc by insn->off: 16 bits.
-  4096 bytes of a name     A search by name takes types x length.
-  512 special fields       An allocated object has 4096 bytes at most.
-  4096 entries of          For unprivileged programs. They have 4096 insns.
-    fd_array
-  10000 chains of calls    In the analysis of stack liveness.
-  32 levels of types       In btf_resolve().
-  64 KB of context         For the loader program of a light skeleton:
-                           16 bytes for a map, 4 for a program.
-  bpf_flow_reset()         It looks at all insns after each global subprog.
-                           A fatal signal ends that loop.
-
-The tests are in the patch that changes the behaviour (7, 10, 12, 13, 17)
-and in patches 20 and 21. Where a program above an old limit can be unsafe,
-an unsafe twin of it must fail.
-
-v1 -> v2:
-- Patch 1: bpf() starts again after a freeze also when the command has
-  BPF_COMMON_ATTRS. It returned -EINTR. Patch 21 tests it (BPF CI bot).
-- Patch 10: allocate a set of functions in front of its entry in the index.
-  If that allocation failed in a round that is done again, the next round
-  found the entry and no set behind it (sashiko).
-- Patch 12: the test 'far jump over a far jump' relaxed no jump: both had
-  an offset of 32767. Now they have 32766 and 32768: the second one is far
-  and takes the first one along. The test looks at the insns (BPF CI bot).
-- Patch 20: live_recursion runs on x86-64 and arm64 only: other JITs refuse
-  the recursion with another message. The far_pad tests need the JIT
-  (sashiko).
-
-[1] https://github.com/4ast/rust-bpf
+SIGSTOP, ptrace and signals with a handler wait for the end of the load.
+A tool that stops and continues a task all the time is one more timer.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+---
+ include/linux/bpf_verifier.h | 16 ++++++++++++++++
+ kernel/bpf/cfg.c             |  2 +-
+ kernel/bpf/check_btf.c       |  4 ++--
+ kernel/bpf/const_fold.c      |  4 ++++
+ kernel/bpf/fixups.c          | 20 +++-----------------
+ kernel/bpf/flow.c            | 29 +++++++++++------------------
+ kernel/bpf/liveness.c        | 20 ++++++++++++--------
+ kernel/bpf/loops.c           | 22 ++++------------------
+ kernel/bpf/scev.c            | 10 ++++------
+ kernel/bpf/syscall.c         |  9 ++++++++-
+ kernel/bpf/verifier.c        | 14 +++++++-------
+ 11 files changed, 72 insertions(+), 78 deletions(-)
 
-Alexei Starovoitov (21):
-  bpf: Stop a load only when the loader is killed or has to freeze
-  bpf: Fail the load when there is no memory
-  bpf: Give a syscall program the largest context when it does tail
-    calls
-  bpf: Do not inline bpf_loop() when its callback is dead code
-  bpf: Dump programs that have more than 524288 insns
-  bpf: Resolve BTF structs and arrays first
-  bpf: Remove the limits on maps, BTFs and fd_array of a program
-  bpf: Do not scan all maps for each insn and each subprog
-  bpf: Remove the limits on kfuncs of a program
-  bpf: Remove the limits on tables of functions
-  libbpf: Size the tables of the loader program from the object
-  bpf: Relax jumps that patches push out of range
-  bpf: Keep the call graph in lists of edges
-  bpf: Find the effects of callees on the call graph
-  bpf: Link the decl tags of a type
-  bpf: Remove BPF_MAX_SUBPROGS
-  bpf: Walk each type once when looking for special fields
-  bpf: Raise the limit on the length of BTF names
-  bpf: Find dominators in O(n log n)
-  selftests/bpf: Test programs above the old limits
-  selftests/bpf: Test limits of the load with raw programs
-
- arch/sparc/net/bpf_jit_comp_64.c              |    7 +-
- arch/x86/net/bpf_jit_comp.c                   |   12 +-
- include/linux/bpf.h                           |    5 -
- include/linux/bpf_verifier.h                  |  162 ++-
- kernel/bpf/btf.c                              |  503 +++----
- kernel/bpf/cfg.c                              |  428 +++---
- kernel/bpf/check_btf.c                        |   13 +-
- kernel/bpf/const_fold.c                       |    8 +-
- kernel/bpf/core.c                             |  368 +++---
- kernel/bpf/diagnostics.c                      |    8 +-
- kernel/bpf/fixups.c                           |  702 +++-------
- kernel/bpf/flow.c                             |   99 +-
- kernel/bpf/join.c                             |    2 +-
- kernel/bpf/liveness.c                         |   66 +-
- kernel/bpf/log.c                              |    2 +-
- kernel/bpf/loops.c                            |  189 +--
- kernel/bpf/scev.c                             |   32 +-
- kernel/bpf/syscall.c                          |  126 +-
- kernel/bpf/verifier.c                         | 1164 ++++++-----------
- net/bpf/test_run.c                            |   20 +-
- tools/lib/bpf/bpf_gen_internal.h              |    3 +-
- tools/lib/bpf/gen_loader.c                    |  157 +--
- tools/lib/bpf/libbpf.c                        |    8 +-
- tools/testing/selftests/bpf/Makefile.skel     |    2 +-
- .../{blinding_log.c => blinding_far_jump.c}   |   38 +-
- .../selftests/bpf/prog_tests/fd_array.c       |   36 +-
- .../selftests/bpf/prog_tests/no_limits.c      |  465 +++++++
- .../selftests/bpf/prog_tests/verifier.c       |    4 +
- .../selftests/bpf/progs/cpumask_common.h      |    3 -
- .../selftests/bpf/progs/cpumask_failure.c     |    5 +-
- .../testing/selftests/bpf/progs/many_progs.c  |   36 +
- .../bpf/progs/test_global_func_deep_stack.c   |   12 +-
- .../selftests/bpf/progs/verifier_and.c        |    2 +-
- .../selftests/bpf/progs/verifier_bounds.c     |   14 +-
- .../bpf/progs/verifier_callx_dead_cb.c        |   60 +
- .../selftests/bpf/progs/verifier_callx_many.c |   31 +-
- .../selftests/bpf/progs/verifier_movsx.c      |    4 +-
- .../selftests/bpf/progs/verifier_no_limits.c  |  224 ++++
- .../selftests/bpf/progs/verifier_patch_list.c |  146 ++-
- .../selftests/bpf/progs/verifier_tailcall.c   |    4 +-
- .../selftests/bpf/progs/verifier_unpriv.c     |    2 +-
- .../selftests/bpf/progs/verifier_unwind.c     |   32 +
- tools/testing/selftests/bpf/verifier/calls.c  |    3 +-
- 43 files changed, 2924 insertions(+), 2283 deletions(-)
- rename tools/testing/selftests/bpf/prog_tests/{blinding_log.c => blinding_far_jump.c} (51%)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/no_limits.c
- create mode 100644 tools/testing/selftests/bpf/progs/many_progs.c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_callx_dead_cb.c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_no_limits.c
-
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 1afee19fcd25..ecb988ab6349 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -10,6 +10,22 @@
+ #include <linux/tnum.h>
+ #include <linux/cnum.h>
+ #include <linux/math64.h> /* for div_s64_rem() */
++#include <linux/freezer.h>
++#include <linux/sched/signal.h>
++
++/*
++ * For each loop that can run long. The caller returns -EINTR.
++ *   killed          the task dies
++ *   freezer waits   the task freezes, then bpf() starts again
++ *   other signals   wait for the end of the load
++ */
++static inline bool bpf_must_abort(void)
++{
++	cond_resched();
++	return task_sigpending(current) &&
++	       (__fatal_signal_pending(current) || freezing(current) ||
++		(READ_ONCE(current->jobctl) & JOBCTL_TRAP_FREEZE));
++}
+ 
+ /*
+  * Mathematical modulo, the residue of 'v' modulo 'step', normalized to [0, step).
+diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
+index bbcf42eae9d9..163fdb21828f 100644
+--- a/kernel/bpf/cfg.c
++++ b/kernel/bpf/cfg.c
+@@ -686,7 +686,7 @@ int bpf_check_cfg(struct bpf_verifier_env *env)
+ 	while (env->cfg.cur_stack > 0) {
+ 		int t = insn_stack[env->cfg.cur_stack - 1];
+ 
+-		ret = visit_insn(t, env);
++		ret = bpf_must_abort() ? -EINTR : visit_insn(t, env);
+ 		switch (ret) {
+ 		case DONE_EXPLORING:
+ 			insn_state[t] = EXPLORED;
+diff --git a/kernel/bpf/check_btf.c b/kernel/bpf/check_btf.c
+index 8a3f2421331e..d6b930377d75 100644
+--- a/kernel/bpf/check_btf.c
++++ b/kernel/bpf/check_btf.c
+@@ -402,8 +402,8 @@ int bpf_check_core_relo(struct bpf_verifier_env *env,
+ 			break;
+ 		}
+ 
+-		err = bpf_core_apply(&ctx, &core_relo, i,
+-				     &prog->insnsi[core_relo.insn_off / 8]);
++		err = bpf_must_abort() ? -EINTR :
++		      bpf_core_apply(&ctx, &core_relo, i, &prog->insnsi[core_relo.insn_off / 8]);
+ 		if (err)
+ 			break;
+ 		bpfptr_add(&u_core_relo, rec_size);
+diff --git a/kernel/bpf/const_fold.c b/kernel/bpf/const_fold.c
+index 3c8c1b64088b..5869730547ae 100644
+--- a/kernel/bpf/const_fold.c
++++ b/kernel/bpf/const_fold.c
+@@ -278,6 +278,10 @@ int bpf_compute_const_regs(struct bpf_verifier_env *env)
+ 	}
+ 
+ redo:
++	if (bpf_must_abort()) {
++		kvfree(ci_in);
++		return -EINTR;
++	}
+ 	changed = false;
+ 	for (i = env->cfg.cur_postorder - 1; i >= 0; i--) {
+ 		int idx = env->cfg.insn_postorder[i];
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index 1d33a78d9373..735932392a87 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -6,7 +6,6 @@
+ #include <linux/filter.h>
+ #include <linux/vmalloc.h>
+ #include <linux/perf_event.h>
+-#include <linux/sched/signal.h>
+ #include <net/xdp.h>
+ #include "disasm.h"
+ 
+@@ -165,19 +164,6 @@ static int get_callee_stack_depth(struct bpf_verifier_env *env,
+ }
+ #endif
+ 
+-/*
+- * A post-verification rewriting pass can queue a patch for each instruction
+- * of a large program. Keep the primitives that queue them killable and
+- * preemptible.
+- */
+-static bool bpf_rewrite_must_abort(void)
+-{
+-	if (fatal_signal_pending(current))
+-		return true;
+-	cond_resched();
+-	return false;
+-}
+-
+ /*
+  * Queue the replacement of insn 'off' by 'patch[0..len)' until
+  * bpf_patch_list_commit(), see __bpf_patch_list_add(). Replacing one insn by
+@@ -190,7 +176,7 @@ struct bpf_insn *bpf_patch_list_add(struct bpf_verifier_env *env, u32 off,
+ 	struct bpf_patch_list *pl = &env->patch_list;
+ 	struct bpf_insn_patch *p = pl->cnt ? &pl->patches[pl->cnt - 1] : NULL;
+ 
+-	if (bpf_rewrite_must_abort())
++	if (bpf_must_abort())
+ 		return ERR_PTR(-EINTR);
+ 
+ 	if (verifier_bug_if(!len || off >= env->prog->len ||
+@@ -221,7 +207,7 @@ int bpf_patch_list_del(struct bpf_verifier_env *env, u32 off)
+ {
+ 	struct bpf_patch_list *pl = &env->patch_list;
+ 
+-	if (bpf_rewrite_must_abort())
++	if (bpf_must_abort())
+ 		return -EINTR;
+ 
+ 	if (verifier_bug_if(off >= env->prog->len ||
+@@ -240,7 +226,7 @@ int bpf_patch_list_insert(struct bpf_verifier_env *env, u32 off,
+ 	struct bpf_insn_patch *p = pl->cnt ? &pl->patches[pl->cnt - 1] : NULL;
+ 	int err;
+ 
+-	if (bpf_rewrite_must_abort())
++	if (bpf_must_abort())
+ 		return -EINTR;
+ 
+ 	if (verifier_bug_if(!cnt || off >= env->prog->len ||
+diff --git a/kernel/bpf/flow.c b/kernel/bpf/flow.c
+index 5341f95c5072..fbd1178eb9f5 100644
+--- a/kernel/bpf/flow.c
++++ b/kernel/bpf/flow.c
+@@ -504,11 +504,10 @@ int bpf_flow_place_guards(struct bpf_verifier_env *env)
+ 		if (!loop)
+ 			continue;
+ 		/* a deep nest of loops takes long */
+-		if (signal_pending(current)) {
+-			ret = -EAGAIN;
++		if (bpf_must_abort()) {
++			ret = -EINTR;
+ 			break;
+ 		}
+-		cond_resched();
+ 		loop->rt_bounded = flow_loop_is_bounded(env, h);
+ 		/* also when it's bounded: the main pass may find that it's not */
+ 		flow_place_guards(env, h, seen);
+@@ -884,11 +883,10 @@ int bpf_flow_compute_kinds(struct bpf_verifier_env *env)
+ 	for (n = 0; lost; n++) {
+ 		lost = false;
+ 		/* a chain of calls takes a round for each link */
+-		if (signal_pending(current)) {
+-			err = -EAGAIN;
++		if (bpf_must_abort()) {
++			err = -EINTR;
+ 			break;
+ 		}
+-		cond_resched();
+ 		for (j = 0; j < cnt; j++) {
+ 			/* it has callees first */
+ 			s = env->subprog_topo_order[n & 1 ? j : cnt - 1 - j];
+@@ -1068,11 +1066,10 @@ static int flow_compute_need_const(struct bpf_verifier_env *env, struct flow_nee
+ again:
+ 	while (any && changed) {
+ 		changed = false;
+-		if (signal_pending(current)) {
+-			err = -EAGAIN;
++		if (bpf_must_abort()) {
++			err = -EINTR;
+ 			break;
+ 		}
+-		cond_resched();
+ 		for (s = 0; callx && s < env->subprog_cnt; s++)
+ 			if (env->subprog_info[s].addr_taken)
+ 				callx_regs |= need[env->subprog_info[s].start].regs;
+@@ -1619,11 +1616,10 @@ static int flow_compute_rungs(struct bpf_verifier_env *env)
+ 			depth++;
+ 		if (depth >= LOOP_STACK_SIZE)
+ 			continue;
+-		if (signal_pending(current)) {
+-			err = -EAGAIN;
++		if (bpf_must_abort()) {
++			err = -EINTR;
+ 			break;
+ 		}
+-		cond_resched();
+ 		err = flow_compute_loop_rungs(env, at, total, h);
+ 	}
+ 	kvfree(at);
+@@ -2737,12 +2733,10 @@ static int flow_merge(struct bpf_verifier_env *env, struct flow_set *set,
+ 	int prev = s->prev_insn_idx;
+ 
+ again:
+-	if (signal_pending(current)) {
+-		err = -EAGAIN;
++	if (bpf_must_abort()) {
++		err = -EINTR;
+ 		goto err_free;
+ 	}
+-	if (need_resched())
+-		cond_resched();
+ 
+ 	/* again after a join: an offset may not be a constant any more, a pointer may be gone */
+ 	flow_shape_ctx(&s->st, &s->shape);
+@@ -3397,7 +3391,7 @@ void bpf_flow_print_way(struct bpf_verifier_env *env, u64 log_pos, int head, int
+ 	if (!cnt || bpf_vlog_stash(&env->log, log_pos, &stash))
+ 		goto out;
+ 	env->prev_linfo = NULL;
+-	while (cnt-- && !signal_pending(current)) {
++	while (cnt-- && !bpf_must_abort()) {
+ 		w = &way[cnt];
+ 		if (w->s) {
+ 			verbose(env, "from %d to %d:", w->s->prev_insn_idx, w->head);
+@@ -3409,7 +3403,6 @@ void bpf_flow_print_way(struct bpf_verifier_env *env, u64 log_pos, int head, int
+ 			bpf_verbose_insn(env, &insns[i]);
+ 			verbose(env, "\n");
+ 		}
+-		cond_resched();
+ 	}
+ 	bpf_vlog_unstash(&env->log, &stash);
+ out:
+diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+index 06f739610c73..2c771b936d65 100644
+--- a/kernel/bpf/liveness.c
++++ b/kernel/bpf/liveness.c
+@@ -456,7 +456,7 @@ static inline bool update_insn(struct bpf_verifier_env *env, struct func_instanc
+ }
+ 
+ /* Fixed-point computation of @live_before marks */
+-static void update_instance(struct bpf_verifier_env *env, struct func_instance *instance)
++static int update_instance(struct bpf_verifier_env *env, struct func_instance *instance)
+ {
+ 	u32 i, frame, po_start, po_end;
+ 	int *insn_postorder = env->cfg.insn_postorder;
+@@ -469,6 +469,8 @@ static void update_instance(struct bpf_verifier_env *env, struct func_instance *
+ 	po_end = (subprog + 1)->postorder_start;
+ 	/* repeat until fixed point is reached */
+ 	do {
++		if (bpf_must_abort())
++			return -EINTR;
+ 		changed = false;
+ 		for (frame = 0; frame <= instance->depth; frame++) {
+ 			if (!instance->frames[frame])
+@@ -482,6 +484,7 @@ static void update_instance(struct bpf_verifier_env *env, struct func_instance *
+ 			}
+ 		}
+ 	} while (changed);
++	return 0;
+ }
+ 
+ static bool is_live_before(struct func_instance *instance, u32 insn_idx, u32 frameno, u32 half_spi,
+@@ -2130,6 +2133,9 @@ static noinline_for_stack int compute_subprog_args(struct bpf_verifier_env *env,
+ 		struct bpf_iarray *succ;
+ 		int ti;
+ 
++		err = -EINTR;
++		if (bpf_must_abort())
++			goto err_free;
+ 		if (!arg_is_visited(&at_in[i][0]) && !arg_is_visited(&at_in[i][1]))
+ 			continue;
+ 
+@@ -2365,8 +2371,8 @@ static int analyze_subprog(struct bpf_verifier_env *env,
+ 		return -E2BIG;
+ 	}
+ 
+-	if (need_resched())
+-		cond_resched();
++	if (bpf_must_abort())
++		return -EINTR;
+ 
+ 	/*
+ 	 * When an instance is reused (must_write_initialized == true),
+@@ -2524,8 +2530,7 @@ static int analyze_subprog(struct bpf_verifier_env *env,
+ 		if (err)
+ 			return err;
+ 	}
+-	update_instance(env, instance);
+-	return 0;
++	return update_instance(env, instance);
+ 
+ out_free:
+ 	if (prev_instance)
+@@ -2872,11 +2877,10 @@ int bpf_compute_live_registers(struct bpf_verifier_env *env)
+ 
+ 		changed = false;
+ 		/* a cycle of calls takes a round for each link */
+-		if (signal_pending(current)) {
+-			err = -EAGAIN;
++		if (bpf_must_abort()) {
++			err = -EINTR;
+ 			goto out;
+ 		}
+-		cond_resched();
+ 		for (i = 0; i < env->cfg.cur_postorder; ++i) {
+ 			int insn_idx = env->cfg.insn_postorder[i];
+ 			struct insn_live_regs *live = &state[insn_idx];
+diff --git a/kernel/bpf/loops.c b/kernel/bpf/loops.c
+index 7de1574af386..9946146847d7 100644
+--- a/kernel/bpf/loops.c
++++ b/kernel/bpf/loops.c
+@@ -2,7 +2,6 @@
+ /* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+ 
+ #include <linux/slab.h>
+-#include <linux/sched/signal.h>
+ #include <linux/bpf_verifier.h>
+ 
+ static bool is_cfg_jump(struct bpf_insn *insn)
+@@ -107,7 +106,6 @@ static int compute_subprog_idoms(struct bpf_verifier_env *env, struct bpf_iarray
+ 	int po_last = (subprog + 1)->postorder_start - 1;
+ 	int *idoms = env->idoms;
+ 	int po_num, pred;
+-	u32 work = 0;
+ 	bool changed;
+ 
+ 	idoms[start] = start;
+@@ -123,11 +121,8 @@ static int compute_subprog_idoms(struct bpf_verifier_env *env, struct bpf_iarray
+ 			int new_idom = -1;
+ 
+ 			iarray_for_each(pred, preds[idx]) {
+-				if (++work % 1024 == 0) {
+-					if (signal_pending(current))
+-						return -EAGAIN;
+-					cond_resched();
+-				}
++				if (bpf_must_abort())
++					return -EINTR;
+ 
+ 				if (idoms[pred] == -1)
+ 					continue;
+@@ -416,24 +411,15 @@ static int compute_loops_in_subprog(struct bpf_verifier_env *env, struct loops_d
+ 	int *stack = dfs->stack;
+ 	int s, h, err, cur, stack_sz;
+ 	struct bpf_iarray *succ;
+-	u32 i;
+ 
+ 	stack[0] = start;
+ 	state[start].traversed = true;
+ 	state[start].next_succ = 0;
+ 	dfs_pos[start] = 1;
+ 	stack_sz = 1;
+-	i = 0;
+ 	do {
+-		/*
+-		 * The algorithm should be very fast in practice,
+-		 * guard against pathological inputs, just in case.
+-		 */
+-		if ((++i % 1024) == 0) {
+-			if (signal_pending(current))
+-				return -EAGAIN;
+-			cond_resched();
+-		}
++		if (bpf_must_abort())
++			return -EINTR;
+ 
+ 		cur = stack[stack_sz - 1];
+ 		succ = bpf_insn_successors(env, cur);
+diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
+index 5648beca3931..616e22c038ed 100644
+--- a/kernel/bpf/scev.c
++++ b/kernel/bpf/scev.c
+@@ -2664,11 +2664,10 @@ static int compute_scev_for_loop(struct bpf_verifier_env *env, int cur_header, i
+ 		idx = *min_heap_peek_inline(worklist);
+ 		min_heap_pop_inline(worklist, &worklist_cb, env->cfg.postorder_nums);
+ 		start = idx;
+-		if (signal_pending(current)) {
+-			err = -EAGAIN;
++		if (bpf_must_abort()) {
++			err = -EINTR;
+ 			goto out;
+ 		}
+-		cond_resched();
+ 
+ 		/* join_successor() maps nested-loop entries to their representative header. */
+ 		nested_loop = idx != cur_header ? aux[idx].loop : NULL;
+@@ -3265,9 +3264,8 @@ int bpf_compute_scev(struct bpf_verifier_env *env)
+ 		idx = postorder[i];
+ 		if (!aux[idx].need_scev)
+ 			continue;
+-		if (signal_pending(current))
+-			return -EAGAIN;
+-		cond_resched();
++		if (bpf_must_abort())
++			return -EINTR;
+ 		header = bpf_loop_at_index(env, idx);
+ 		err = aux[idx].loop
+ 		      ? compute_header_scevs(env, header)
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 04a3b3c80c74..70caab9648d6 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -6604,7 +6604,14 @@ static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size,
+ SYSCALL_DEFINE5(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, size,
+ 		struct bpf_common_attr __user *, uattr_common, unsigned int, size_common)
+ {
+-	return __sys_bpf(cmd, USER_BPFPTR(uattr), size, USER_BPFPTR(uattr_common), size_common);
++	int err = __sys_bpf(cmd, USER_BPFPTR(uattr), size, USER_BPFPTR(uattr_common), size_common);
++
++	cmd &= ~BPF_COMMON_ATTRS;
++	/* bpf_must_abort() ended the command, nothing of it is left */
++	if (err == -EINTR && task_sigpending(current) &&
++	    (cmd == BPF_PROG_LOAD || cmd == BPF_BTF_LOAD || cmd == BPF_MAP_CREATE))
++		return -ERESTARTNOINTR;
++	return err;
+ }
+ 
+ static bool syscall_prog_is_valid_access(int off, int size,
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index e4fcd1c9242d..03f8b2f33596 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -21790,11 +21790,8 @@ static int do_check_block(struct bpf_verifier_env *env, int prev_insn_idx)
+ 		struct bpf_insn_aux_data *insn_aux;
+ 		int err;
+ 
+-		if (signal_pending(current))
+-			return -EAGAIN;
+-
+-		if (need_resched())
+-			cond_resched();
++		if (bpf_must_abort())
++			return -EINTR;
+ 
+ 		/* no insn makes as many ids as there are from here to BPF_INHERITED_ID */
+ 		if (env->id_gen >= BPF_MAX_ID) {
+@@ -22988,8 +22985,8 @@ static int resolve_func_ptrs(struct bpf_verifier_env *env)
+ 			continue;
+ 
+ 		for (off = 0; off + sizeof(u64) <= map->value_size; off += sizeof(u64)) {
+-			if (!(off % SZ_64K))
+-				cond_resched();
++			if (bpf_must_abort())
++				return -EINTR;
+ 			val = *(u64 *)(unsigned long)(addr + off);
+ 			if (!val || val % sizeof(struct bpf_insn) ||
+ 			    val / sizeof(struct bpf_insn) >= insn_cnt)
+@@ -25306,6 +25303,9 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	/* Serialize verification of unprivileged programs. */
+ 	if (!is_priv)
+ 		mutex_lock(&bpf_verifier_lock);
++	ret = -EINTR;
++	if (bpf_must_abort())
++		goto skip_full_check;
+ 
+ 	len = env->insn_aux_data_len = env->prog->len;
+ 	env->insn_aux_data =
 -- 
 2.55.0
 
