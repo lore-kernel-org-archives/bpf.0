@@ -1,45 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794811147;
-	b=iFTlX927Jg6/yNoSbCuyIN5iNy3LbQdylWumBCPTnebYCUNjFTdgXgkqCxtoDqMqrGNp
-	 HNOci1fiP3ysCduPv7NzXNaCxZgv9GDstmpuxtY2IEAPoi/kEUuFakWjJKcMLGiGY2p3j
-	 RTDkgt7ehk27Oe5gtZl0MSSS9T1/xrdWuymVQ2Sz3Oat7/J+Mja4/BqALJKGObdTbiM6g
-	 HftUFxeyikhJ/JpRGuyTl3Z099UwaHEpDd6IS/HXOwq5+bxQgLUMLQUe8Ql6sTXrGcFju
-	 964QEKeCxBSNKDMk3CvqF+wUfm51eFg4F1Vs7WBfif4uWvbUM5Py6uw1EUvjXRTBzSg==
+	t=1794811148;
+	b=3dKMqpWW5+J3YvaaLu/iC6WkKK4TqI7pBs9OIhnNy2VRBaxzQKzF06DSVZ8Qyn52ottR
+	 jeslkjNoud5QLSdB/2Z3dJMHK9vSmNr98KzeEKCD5St2Ya9WquTaV1gO5l+J85X1d43/z
+	 t4/0OfyNVAhYB6XCdrd+pyUbbG/q3exLPxLeojmGJyOitNxzTzvB79Z/WoU0DU263ecSf
+	 foOmIyNOXC0PBUMBX5S0JlIgBKFPcDfp0O1EUnDd29rBO8QL3dkmr1+tEWT2EoBffSbEJ
+	 Y/QjbOjMADYPIrG73nYMbhV/qYC6TSZol38bOiWO3MEpGlobJa+yesoIOFKJZo/hQVg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794811147;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=MABZxFUmFYhSt1RvdlykTgIwrPnLp1OAS2+7ilN3M+U=;
-	b=1lrUfpT+GJ0IAApjL+qq7BCEfs5kTysFjF2EOBKXqB3BYFIM76yrnS5M+EGlPcNMp91z
-	 NKLVzx1Rk4Ftg7yUqPOItPCk5h5LZqC1CVZrnbEzmOxxDjzDgZcpdXIUJ4MVPS26jzD4J
-	 J91J0CT6hbkNwua/lT/ojOgpnTzPdUJVIoifVZpt760U5MTclihzLTnosoDwXuhjHkqXn
-	 s/Y9XhZRLWL/Uyr8TtdVGUOzyOqzZbFAz1lIvlqnYYDnsy7j6TA8RYfzMCSTPia8avfqG
-	 ySpxY5U5fdFYw/Icjw6vE9IKXfn39JbD/7enp/wj85BT+ayvt5E2j98vNzmX2ezLf/A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794811148;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=izTjP90P/WmdT6wCkSd64S7zbST4eXE5HuNteoEWmR4=;
+	b=BNXaLYSyupp9AZZ5wE6T21zshnrTMcs2K5QIpOtUNuL82Y96NOPSi2FyGXpQeLKHShdQ
+	 ssG7g7Oqhm65FMdyQ8XXtbUTESzLPNYOexkZO7kTKKvDYvNJJAZ3yRAMTeTehcrb6TkM8
+	 fW9UtKDgeajUvVPjXOPMm3De38IWslfwT3sIf5swpjIHjwBGoBzHSEgmegdfeSsuHBN/d
+	 j/vcsXcYfGSDxk7t/r8qEWXhrisorV2e/RZHYO1uaTTsrNUUdBrwR90GZoAAX1d++Cm6O
+	 7h9WTHf8YyD1X50CdC1srhFv1s+raWC6zb/kZgrVwQaxGHkMqTUQ6ZIlSzdVJfwtBOQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PQLg1Gji;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HuJnvzry;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C0D8606A32F
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 06:39:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F797606A336
+	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 06:39:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PQLg1Gji
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C14F41F000C5;
-	Mon, 16 Nov 2026 06:39:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HuJnvzry
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6BF81F000C5;
+	Mon, 16 Nov 2026 06:39:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1794811147;
-	bh=MABZxFUmFYhSt1RvdlykTgIwrPnLp1OAS2+7ilN3M+U=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=PQLg1GjiaMNyM1fnNVaIVgggB+DsiF+1kaNVSKF8mZ1fJLfr4/HjNpQ/RpG8wG+nL
-	 z8eSlY++fr/weQqrxtjBueJoRTXXfetUCju3Itxj3qqhKy4Bucq5La0QchnfcS97tJ
-	 otqixuGEHFsRawgdgU9TWLNec+p2s6FiWS0GNs5J3KJ9nTd3Wp67a9aGMXFYWHV2vf
-	 iWVaKjWyQY9HvMku885Ik1qzzma47MLw0exqTKi5uPSQEzz7KxZLlE9bTVQ/TQW4Lg
-	 b+OfJ0YjipY/+l5F0dP/mBgITovP4xvUGusI6PYVmCDg4BUhEr+MYJTEVUEpk0Bdi1
-	 MNBoCeN9MlVyQ==
-Content-Type: multipart/mixed; boundary="===============8882863217707492737=="
+	bh=izTjP90P/WmdT6wCkSd64S7zbST4eXE5HuNteoEWmR4=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=HuJnvzrylscBXtK186ij3k30a2xWrCpmBSAgiHPLdJfxxmG9ef7fmRoPKenfyBOdv
+	 2OHgwyDD2sB5J31U6KX+ZVJYPc2o+5t0jGeGKP3+H9aiEvpUwGcUfvuUnpZkt0WopO
+	 zNoapc8QeGQ1qPwT2bM3t752JYHXc/Jw6wNNIblqSLLBkJx++fKxVwKMfssBs04r8a
+	 d7z6bmny8xGcI5G3Nw+zEI7RRSgRQFlO7lKEQXu9sG6PK92+w+uJuCZbsoK8hTopUM
+	 t7JNFBZ+Fj8lcqwtDPfHqY/X6Kv5tlpWRdlJLQ32HKYxODJaX5it9/oRghOWVie1Qf
+	 aFCtPWn24Ef9w==
+Message-ID: <sashiko-outbox-216288@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 21/21] selftests/bpf: Test limits of the load
+ with raw programs
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <20261116055638.4171529-22-alexei.starovoitov@gmail.com>
+References: <20261116055638.4171529-1-alexei.starovoitov@gmail.com>
+ <20261116055638.4171529-22-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 16 Nov 2026 06:39:07 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -48,71 +59,133 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Message-Id: <946f29663faad86182bfa2e1e7c2141bac86bfba6b20a9fdbb8a60350c60724e@mail.kernel.org>
-In-Reply-To: <20261116055638.4171529-8-alexei.starovoitov@gmail.com>
-References: <20261116055638.4171529-8-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next 07/21] bpf: Remove the limits on maps, BTFs and fd_array of a program
-From: bot+bpf-ci@kernel.org
-To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 16 Nov 2026 06:39:06 +0000 (UTC)
 
---===============8882863217707492737==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 2 potential
+issues to consider:
+- [Medium] selftests/bpf: unguarded JIT-only xlated imm check in
+  test_subprogs()
+- [Low] selftests/bpf: pipe write fd leak on error path in
+  test_freezer()
+--
 
-> bpf: Remove the limits on maps, BTFs and fd_array of a program
+commit 3c3d567efb107d402bf1f0ddb12c0e6adeace271
+Author: Alexei Starovoitov <ast@kernel.org>
 
-TL;DR: bpf_prog_bind_map() may hit a WARN (panic under panic_on_warn) from
-kvmalloc_objs() without __GFP_NOWARN once map count is unbounded; impractical
-to reach, needs huge memory and fds.
+selftests/bpf: Test limits of the load with raw programs
 
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
+This commit adds a no_limits selftest suite covering BPF program and BTF
+loading edge cases such as signals, cgroup freezer, memory cgroup limits,
+syscall program contexts, large numbers of subprogs, kfuncs, and light
+skeletons.
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/no_limits.c b/tools/t=
+esting/selftests/bpf/prog_tests/no_limits.c
+> new file mode 100644
+> index 0000000000000..2c9e5855f306a
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/no_limits.c
+[ ... ]
+> +/* The freezer does not wait for the end of the load. The load starts ag=
+ain after it. */
+> +static void test_freezer(void)
+> +{
+> +	LIBBPF_OPTS(bpf_prog_load_opts, opts, .attempts =3D 1);
+> +	struct bpf_insn *insns =3D straight_code(200000);
+> +	int cg =3D -1, pipes[2] =3D { -1, -1 }, fd;
+> +	char buf[64] =3D "";
+> +	pid_t pid;
+> +
+> +	if (!insns || !ASSERT_OK(setup_cgroup_environment(), "setup") ||
+> +	    !ASSERT_OK(pipe(pipes), "pipe"))
+> +		goto out;
+> +	cg =3D create_and_get_cgroup("/no_limits");
+> +	if (!ASSERT_OK_FD(cg, "cgroup"))
+> +		goto out;
+> +	pid =3D fork();
+> +	if (!pid) {
+> +		/* the fd that the prog gets */
+> +		if (join_parent_cgroup("/no_limits"))
+> +			_exit(1);
+> +		fd =3D dup(pipes[0]);
+> +		close(fd);
+> +		if (write(pipes[1], &fd, sizeof(fd)) !=3D sizeof(fd))
+> +			_exit(2);
+> +		_exit(bpf_prog_load(BPF_PROG_TYPE_SCHED_CLS, NULL, "GPL", insns, 20000=
+0,
+> +				    &opts) !=3D fd ? 3 : 0);
+> +	}
+> +	close(pipes[1]);
+> +	if (ASSERT_EQ(read(pipes[0], &fd, sizeof(fd)), sizeof(fd), "read")) {
+> +		usleep(10000);
+> +		ASSERT_OK(write_cgroup_file("/no_limits", "cgroup.freeze", "1"), "free=
+ze");
+> +		while (!strstr(buf, "frozen 1") &&
+> +		       !read_cgroup_file("/no_limits", "cgroup.events", buf, sizeof(bu=
+f)))
+> +			usleep(1000);
+> +		snprintf(buf, sizeof(buf), "/proc/%d/fd/%d", pid, fd);
+> +		ASSERT_ERR(faccessat(AT_FDCWD, buf, F_OK, AT_SYMLINK_NOFOLLOW), "no pr=
+og yet");
+> +		ASSERT_OK(write_cgroup_file("/no_limits", "cgroup.freeze", "0"), "thaw=
+");
+> +	}
+> +	ASSERT_OK(exit_code(pid), "load");
+> +out:
+> +	close(pipes[0]);
+> +	if (cg >=3D 0)
+> +		close(cg);
+> +	cleanup_cgroup_environment();
+> +	free(insns);
+> +}
+
+[Severity: Low]
+Does the out path leak pipes[1] if create_and_get_cgroup() fails?  That
+error jump happens after pipe(pipes) succeeds and before close(pipes[1]),
+leaving pipes[1] open in the test_progs runner across later tests, and
+earlier failures also call close(-1) on pipes[0].
 
 [ ... ]
 
-> @@ -6291,8 +6291,8 @@ static int bpf_prog_bind_map(union bpf_attr *attr)
->  			goto out_unlock;
->  		}
->  
-> -	used_maps_new = kmalloc_objs(used_maps_new[0],
-> -				     prog->aux->used_map_cnt + 1);
-> +	used_maps_new = kvmalloc_objs(used_maps_new[0],
-> +				      prog->aux->used_map_cnt + 1);
->  	if (!used_maps_new) {
->  		ret = -ENOMEM;
->  		goto out_unlock;
+> +/* The number of a subprog does not fit into s16 */
+> +static void test_subprogs(void)
+> +{
+> +	const int funcs =3D 33000, cnt =3D 4 * funcs + 1;
+> +	struct bpf_insn *insns =3D many_funcs(funcs);
+> +	struct bpf_prog_info info =3D {};
+> +	__u32 len =3D sizeof(info);
+> +	int fd;
+> +
+> +	if (!insns)
+> +		return;
+> +	fd =3D load(insns, cnt);
+> +	if (!ASSERT_OK_FD(fd, "load"))
+> +		goto out;
+> +	ASSERT_EQ(run(fd), funcs - 1, "retval");
+> +	info.xlated_prog_len =3D cnt * sizeof(*insns);
+> +	info.xlated_prog_insns =3D ptr_to_u64(insns);
+> +	if (ASSERT_OK(bpf_prog_get_info_by_fd(fd, &info, &len), "dump"))
+> +		ASSERT_EQ(insns[funcs - 1].imm, funcs, "subprog");
 
-Can this kvmalloc_objs() call trigger a WARN splat?  It uses plain
-GFP_KERNEL without __GFP_NOWARN, and nothing bounds
-prog->aux->used_map_cnt any more, since this patch removes MAX_USED_MAPS
-and the 4096 fd_array cap for bpf_capable loaders.
+[Severity: Medium]
+Will this assertion fail when BPF JIT is disabled or unavailable?
 
-A program can now be loaded with a used_maps table built by
-bpf_table_next() (which passes __GFP_NOWARN) holding more than
-INT_MAX / sizeof(void *) entries.  A later BPF_PROG_BIND_MAP on that
-program would then ask kvmalloc for more than INT_MAX bytes, and
-__kvmalloc_node_noprof() does:
+When a program is not JIT-compiled, bpf_fixup_call_args() rewrites
+pseudo-calls to BPF_JMP | BPF_CALL_ARGS for the interpreter, so
+prepare_dump_pseudo_call() dumps bpf_call_args_imm(insn->off) instead of
+the subprogram index:
 
-    WARN_ON_ONCE(!(flags & __GFP_NOWARN))
+kernel/bpf/syscall.c:prepare_dump_pseudo_call() {
+    ...
+	if (insn->code =3D=3D (BPF_JMP | BPF_CALL_ARGS))
+		insn->imm =3D bpf_call_args_imm(insn->off);
+	else
+		insn->imm =3D bpf_prog_find_func(prog, idx + call_off + 1);
+    ...
+}
 
-for such a size and returns NULL.  The syscall then fails with -ENOMEM
-and also prints a warning, which panics under panic_on_warn.
+Guarding this check on env.jit_enabled (or info.jited_prog_len) would
+avoid false test failures on interpreter runs.
 
-Reaching that size needs hundreds of GB of kernel memory and roughly 268M
-open fds passed by a CAP_BPF loader, so it is not very practical.  Still,
-every other allocation in this patch uses BPF_VERIFIER_GFP, which includes
-__GFP_NOWARN.  Would GFP_KERNEL | __GFP_NOWARN (or
-GFP_KERNEL_ACCOUNT | __GFP_NOWARN) be appropriate here?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43815411838
---===============8882863217707492737==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261116055638.4171=
+529-1-alexei.starovoitov@gmail.com?part=3D21
