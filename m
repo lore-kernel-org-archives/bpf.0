@@ -1,97 +1,69 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.170
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794830617;
-	b=rWfRW/H2cZ+gFL+wuZpcjDhf2oCwv9MyIo57CHGdb3LIciAh7ig9BbN0JhXod2QS6SWJ
-	 1yB0CKZO7+xfEkD0NQGDRttVZqP4w2PqzhiohPMN1vJtR1pJSX4ADFIHg2R7KrIOnhcxE
-	 5CQOWysKdtPniOtT/lKqB5xCa0tNXf0ICBzgy/IckGlXRF9mOJdF3PxxqmMKeDg9DQlmn
-	 lVvU26Ti7kjJxifCVVTDCqaFAAVSSdWo8FR4UJTSj7W0Uv4UI5/O81PpyHS7bS3F8a6LO
-	 xwrN6xFN6SN3ENdQfdpqLnh06X7Pxi0NQu3CneI1vKGbtjXXcY1vAGzvcKUs4i9v6MQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794830617;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=WiA9mgxsVKJJE+AKOVKJEbQPnJuFJZeJObt4tmh0PaQ=;
-	b=XmyP+12SYSijgwyJydy13XsHOnCETtpjHbSfmeTHi5ISFUpatqi7FwHTsa6yio6d5kBe
-	 iA3aS6scv/k4Gknnr92kLVQBkPrPSbzydvGTIPlevivUbEZTX0lrDnXDcQ6CngEDP0jV3
-	 bXWWyC7xKdLeniJvNuvgID014/vGET1FY56anVvgbEazxiux53aZ2YFsyPrkllHlQxR5m
-	 M+g6jOET8T4lAh/zdH/nHt+ImS077lxH44DowWeuP3k1RkAUgQFjuFUt1JWfGgfRj/yhm
-	 viBv0YI5+Ecv/fEB5a4RfGezjCj24TZbZB2E/0ivMpFLo0hMEsAplxDsIAtAvpIebjA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=none header.from=mojatatu.com;
-	spf=none smtp.mailfrom=mojatatu.com;
-	dkim=pass header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=xEDmxJz1;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.170
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=62.210.214.84
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794830990;
+	b=BMguBias6aEaVX0IAHCAMLbE0Jb72tMiaHM5hs6ZGgFGQgH4wfrvcAf/BwPVHVG0cDHk
+	 xFWfUXxXAbdG/D4mZi0GwEGBjgG5r7PCvVSTNI1UFX25fCc1kf2KR3wzvpJmq1b7k7slb
+	 7sPGDJo4x3HgaGOypHrMdhhj56rK4hB+LctVio1jBP9W7jDb6blRAW1top69c8SeiCGNp
+	 9hAfdyzJcq26MyuntG5XjaH1Y7f0+hOesxsyykb1fEwNkrMNYcS0m49k00c1gbgkLnNHr
+	 rdwFZuBmhpd82g9PoF5Z+NLSIrAFNOPEFhnl8/IDDzfX0m/XcqRrCXipc8udyCrARLA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794830990;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=BMCz1hNWwH41FhMM7fMNO8ay6owivrEG/PE6EWZMGGo=;
+	b=We7PgqW0Dv/p+kPiVtgWS23vJSxcRuI28Mw6p1Ruo0gG5yQNIhXlX+FmTzvJWoTl/B6g
+	 oFJOBUtkxc7n48wl0ARwx7W5pNDgYZZ0wDMiNAOrzjSe5tETK6uT5RQxb1KSbls3WmtrX
+	 ggDmH1rPdIEYGAcQj4NV5vfl5FfHPp8Ulizwsh0+l/K0lyc8Y81Zc3oNKh0woW9fs+jK5
+	 1QVzYT8bgWVfZShJJxNrXmJuJFbCXbo3F7K95NEreFuSJOeMYHzOPYAM05jhHWL6wT1so
+	 FKo0UglKL1CJOKlLhIIsHRTE7MtfciUmfF7vOBu/szRSS5g8XPMuQMgZul5HZiGFRhw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=codewreck.org;
+	spf=pass smtp.mailfrom=codewreck.org;
+	dkim=pass header.d=codewreck.org header.i=@codewreck.org header.a=rsa-sha256 header.s=2 header.b=4Vws9uFw;
+	arc=none smtp.remote-ip=62.210.214.84
+Received: from submarine.notk.org (submarine.notk.org [62.210.214.84])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ECC4606A32A
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 12:03:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9ECC4606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBAA9606A333;
+	Mon, 16 Nov 2026 12:09:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EBAA9606A333
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codewreck.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=xEDmxJz1
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-8b3577deeb0so1578749b3a.3
-        for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 04:03:36 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794830616; cv=none;
-        d=google.com; s=arc-20260327;
-        b=paJ3i4Y39zD8SxEp0LB/1wn/DhFC1l4ftNAAvaiZPC2I7R4sAtQYJFOCUjRM4VfClE
-         Hdk9EyMp0rOnSxkZw7Ntj4O9KugXOkNHY6rPXdGBj31wSyOz5k8/+SQbe4I4aNtvP/K+
-         hNPGmkUiofaewjALHPQiBdR96Ba2bkNpd6BGElfUj06WvAxrhQqqt1ktEevdkKbbGuY/
-         48u3rY+cDkdiG0qBKWJhJ/R6zBuZNUQMcG3j1onqkIDHKo3dJuVH1UJo/MGWA2gsvlbb
-         a96fXGMJCRkIB/PQVLu4JDPcRTfUiLgfKPKxJwwkRMo15y+/UNP2JdmCrPC+IoaxDv/U
-         znQw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=WiA9mgxsVKJJE+AKOVKJEbQPnJuFJZeJObt4tmh0PaQ=;
-        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
-        b=PLVATf6OARWjGqbvKlo/ioWmP4S4uFWLJdMxTEp7yDJKT8iPS3598uuo5fwMOTQDa5
-         hC+gioDPbApYp7hI/BgmqnRpZw+ltTULKkse49esbXOkk2nUosz1Jnx19Q0p0D+4FkiX
-         ASabyizUuJiOZg3/CWStX+mdPI7AfHXzDGu63ty4mgURphh5HUMVStO+uwONlTW88aVa
-         8ke3L73cikP4mYV9lZijyycZCiWwdrjlJ8QHCS3BLiPwNtId0AVKsGn7qlEcb3X4rCjo
-         LnrBAwpLEJQG/x+3+hzMv1tEQqfK851x0/cfp/LZzUDJ5XzxnW73+akY0VsfCObKvyYJ
-         LFXg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1794830616; x=1795435416; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=WiA9mgxsVKJJE+AKOVKJEbQPnJuFJZeJObt4tmh0PaQ=;
-        b=xEDmxJz1WptnYklacxdsDVGU+nJrM45hmKZFE3bjHLAT5ooTisElmkiiUmAAL5audR
-         Vec0SHsEo3Sd7vMNX/APp5RNj0qos31OuZQhp6Rrs+Vp0DhUKJw0PFJvx2sjWjhk+H+5
-         NxZR8skDkVEk9m8DIHeYmZxX/9pPNRoz5IahA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794830616; x=1795435416;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=WiA9mgxsVKJJE+AKOVKJEbQPnJuFJZeJObt4tmh0PaQ=;
-        b=f0OwLu5uWjNs8HrEKCKgc7fKXGGmbtABj+GgiYP+fQX+E8EFbQkYbvBdPMKzqShrhW
-         pMW/vvKy+37wflhE/pCYBpLFRGeEpErbwtwIdL2JOzOhDvhaicy2dU8ILBYM5MNJwn4X
-         8lUfXOue5s+uLy7hUZwzPV3lEkaF/2bHwe+0u/q9zTK9NiDgfvqF1xsxApKJK8wjnumn
-         5SqGR4bjkKvudJ076yRep9sehE5dP/Sk1QNDlxhy8nezDHRwE0jWA16H144krMqVSe+t
-         nFYn7QDIgLdLDl/Rx2uD7FhFdLJ5egl6GXDUxlgYVcN3tNss1EIlqfhp0e5VlTJuT73m
-         J4yA==
-X-Gm-Message-State: APuU4Z/959ahdeLJ7yFtLlJFDF4qXAcfMgJeAmg8u4DpZuKjZxzrBAKH
-	leCgQP3vTL6d3lJHEfrOXnfIrNiPutzf0fXJGwHRfYgW+sCQ2dUQSRHT371bWgCnuxj3ghNzEn2
-	jzsJhRF8rr1LuWtxa9cB84x+VbPt6mPGKW8v+n1PD+RwOVOUiYrk=
-X-Gm-Gg: AYBFou3nfG/VEo5nNF13XxrtEQf4SixS0gDtPMULkIZuD3hYpfJHIGs7iqi54TiBjUo
-	BwL4gOu+GQrVewLbw7W4TAVA2n4bzCmno9apxiQIq54FpytWRR//hRrzx93vtG8OJGiOVS/c9US
-	Zjxqd8CUeYDhbQ84Cp/QR2YgCeDRcjt28u8JxTxfinf6Xu5t8fyoc4KGP49DwkdL6y1lkIL8gGn
-	0koYrPZ8fo+QgytXGSc3Mg1rdZkx+NhbsYh/OywuQfx1075KZmoJy8fZIPF16FfeUALeMJ8jQeY
-	0Wm7wjjdV174iPjjIXZ66gkzwdtOBUS2xtJ9EuMatBjJvnUWQugGVV/o8oRYeNYGAx0EvecSE78
-	0+M3dX+I7REJHaH5EghEwk4e088M4GolBJ+LhQ7UdtHFJujIrmc5G/t3ZhBIxPu0b/ZfCS8ebZA
-	xiHvdfyCJqyeehkWE=
-X-Received: by 2002:a05:6a00:995:b0:89a:5:92c1 with SMTP id
- d2e1a72fcca58-8beb772bd38mr9332011b3a.56.1794830615662; Mon, 16 Nov 2026
- 04:03:35 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=codewreck.org header.i=@codewreck.org header.a=rsa-sha256 header.s=2 header.b=4Vws9uFw
+Received: from gaia.codewreck.org (localhost [127.0.0.1])
+	by submarine.notk.org (Postfix) with ESMTPS id 5C4C614C2D6;
+	Mon, 16 Nov 2026 13:09:40 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org;
+	s=2; t=1794830984;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=BMCz1hNWwH41FhMM7fMNO8ay6owivrEG/PE6EWZMGGo=;
+	b=4Vws9uFw3n5iV3nPEeYK7LfZ7GnOQG/ncYoUaNTyng3FqwKqHrCrTRyCp+Rva8gTkM7QOD
+	tcd2zTtgJIXIcU1uNzgqpASxm3u3w9QzKNXnOZ4/2VdShLsqzIysH5lmNPiw9wW4jBWs0a
+	rfBFFrx8t7/vHaYGxy9aO/jSiDn0PKQjFU9uRQArCXMyJB97rxQfqTCz1jJlrKMxnPOdqi
+	wpK6jWnw8PTn7YmuLWbaM4t3HFQ6CHi7AQwpeqK8x4KvTjNgyWnbLbIo8f1iPccmobE3C7
+	5wFFcVcH300B5NMYTGZvTrSWuIvptf1+6si5BzzbdqkeaN/DOB69v72IJyRUCw==
+Received: from localhost (gaia.codewreck.org [local])
+	by gaia.codewreck.org (OpenSMTPD) with ESMTPA id d552fbde;
+	Mon, 16 Nov 2026 12:09:38 +0000 (UTC)
+Date: Mon, 16 Nov 2026 21:09:23 +0900
+From: Dominique Martinet <asmadeus@codewreck.org>
+To: Alan Maguire <almagui@kernel.org>
+Cc: stable@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
+	andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
+	ihor.solodrai@linux.dev, daniel@iogearbox.net, memxor@gmail.com,
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+	jolsa@kernel.org, emil@etsalapatis.com, dwarves@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH 5.10-6.18] libbpf: fix cross-endian build with newer
+ libbpf
+Message-ID: <avryc0j9LwdUUGl7@codewreck.org>
+References: <20261115200505.1494710-2-asmadeus@codewreck.org>
+ <7a931778-2a99-4b33-8d1e-97f9b061fb02@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -101,138 +73,65 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <CORE-9NOG.v3.r0.20261115050625@mojatatu.com> <CORE-9NOG.v3.r0.20261115050625-1@mojatatu.com>
- <sashiko-outbox-216710@kernel.org>
-In-Reply-To: <sashiko-outbox-216710@kernel.org>
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-Date: Mon, 16 Nov 2026 07:03:23 -0500
-X-Gm-Features: AclHuK-I44M3b7jIQkev6qAYIWNeFTMf2zzj3IKpSjGp9BFft7gh55IgmHG7xkk
-Message-ID: <CAM0EoMn0Hq9xZS=zOm5-Bj-y6jkLbtLKsxxOAKnFhAWK8SJLfQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 1/4] net: xfrm: interface: restore dst_orig on
- every xfrm interface
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <7a931778-2a99-4b33-8d1e-97f9b061fb02@kernel.org>
 
-On Mon, Nov 16, 2026 at 5:19=E2=80=AFAM <sashiko-bot@kernel.org> wrote:
->
-> Thank you for your contribution! Sashiko AI review found 1 potential
-> issue to consider:
-> - [Low] xfrm: interface: missing Fixes trailer in bug-fix commit message
+Alan Maguire wrote on Mon, Nov 16, 2026 at 08:51:24AM +0000:
+> >  	if (hdr->magic == bswap_16(BTF_MAGIC)) {
+> >  		btf->swapped_endian = true;
+> > -		if (bswap_32(hdr->hdr_len) != sizeof(struct btf_header)) {
+> > +		if (bswap_32(hdr->hdr_len) < sizeof(struct btf_header)) {
+> 
+> Thanks for the fix! A small suggestion; what about matching the upstream test instead; i.e.
+> 
+> 		if (bswap_32(hdr->hdr_len) < offsetofend(struct btf_header, str_len)) {
+> 
+> That approach is a bit more portable as the str_len field was the last field in the
+> original BTF header, and it will work regardless of the size of struct btf_header.
 
+Thanks for the look!
 
-Remember this for the future: net-next patches do not carry Fixes trailers.
-This is a net next patch. Just because i use the terms "bug" and "The
-Fix" doesnt qualify i put a fixes patch.
+I wouldn't expect the struct to change in stable trees and favored a
+minimal patch; my opinion being that if someone does take the time to
+backport layout section handling or another btf_header extension in old
+trees then they can also fix the check properly...
 
-cheers,
-jamal
+I actually prepared a v2 with this, but then noticed the raw_size check
+also ought to be updated if you want to handle struct btf_header changes:
+---
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index 9f141395c074..0ab11be8ebc5 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -229,14 +229,14 @@ static int btf_parse_hdr(struct btf *btf)
+ 	struct btf_header *hdr = btf->hdr;
+ 	__u32 meta_left;
+ 
+-	if (btf->raw_size < sizeof(struct btf_header)) {
++	if (btf->raw_size < offsetofend(struct btf_header, str_len)) {
+ 		pr_debug("BTF header not found\n");
+ 		return -EINVAL;
+ 	}
+ 
+ 	if (hdr->magic == bswap_16(BTF_MAGIC)) {
+ 		btf->swapped_endian = true;
+-		if (bswap_32(hdr->hdr_len) != sizeof(struct btf_header)) {
++		if (bswap_32(hdr->hdr_len) < offsetofend(struct btf_header, str_len)) {
+ 			pr_warn("Can't load BTF with non-native endianness due to unsupported header length %u\n",
+ 				bswap_32(hdr->hdr_len));
+ 			return -ENOTSUP;
+---
+and at this point this isn't just a cross-endian fix anymore but
+something that looks more like future-proofing, and with my other
+downstream stable kernel maintainer hat (yay embedded systems full of
+vendor patches...), I'm not too fond of these and would rather keep this
+minimal as it's not like it would reduce further merge conflicts either.
 
-> --
->
-> commit fc50a8a0e09367a243cf350a9e4dc409fd76b617
-> Author: Jamal Hadi Salim <jhs@mojatatu.com>
->
-> > net: xfrm: interface: restore dst_orig on every xfrm interface
-> >
-> > Found while testing the dst release for the two producers that steer a
-> > packet to another device, fixed later in this series. One of the consum=
-ers
-> > of the metadata such a release installs is an xfrm interface, which
-> > restores the original route before the xfrm lookup; the swap warned on =
-the
-> > metadata dst still installed in the skb, and only the collect_md arm
-> > restored the route at all.
-> >
-> > The issue:
-> > An xfrm interface takes the if_id and the underlying device either from=
- its
-> > configuration or, in collect_md mode, from the xfrm metadata on the skb=
-.
-> > When that metadata also carries the route the packet arrived through,
-> > xfrmi_xmit2() puts the route back on the skb, because the xfrm lookup t=
-akes
-> > the address family from it. skb_dst_set() expects the dst slot to be em=
-pty
-> > for a reference counted dst and warns when it is not, so the route land=
-ed
-> > over a metadata dst that was still there; a kernel built with
-> > CONFIG_DEBUG_NET=3Dy panics on the first packet that takes this path wh=
-en
-> > panic_on_warn is set.
-> >
-> > Two more defects sit in the same place. An interface with a configured
-> > if_id never restores the route: it takes the metadata dst as it is, who=
-se
-> > address family is AF_UNSPEC, so the lookup finds no policy and the pack=
-et
-> > is dropped as a link failure instead of being transformed. And the rest=
-ore
-> > moved the route out of the metadata dst, which a clone of the skb share=
-s,
-> > so the clone that reached the interface first left the original packet =
-with
-> > nothing to restore.
-> >
-> > The same slot overwrite is in the unstable helper a tc-bpf program uses=
- to
-> > attach that metadata: bpf_skb_set_xfrm_info() records the route as dst_=
-orig
-> > and installs a per-cpu metadata dst over it. The per-cpu dst is shared =
-by
-> > every invocation of the program, so the restore cannot keep anything in=
- it.
-> >
-> > The Fix:
-> > Restore dst_orig in both arms of xfrmi_xmit2(), taking a reference with
-> > dst_clone() so the metadata dst keeps its own, and empty the counted sl=
-ot
-> > with skb_dst_drop() before the route is installed. The helper allocates=
- a
-> > metadata dst per skb instead of a per-cpu one, so the route it records
-> > belongs to that skb and is released with it; the per-cpu allocation is =
-no
-> > longer used and goes away.
-> >
-> > Conditions to recreate the bug:
-> > A tc-bpf program that records the route as dst_orig with
-> > bpf_skb_set_xfrm_info() and redirects the packet to an xfrm interface i=
-s
-> > the shortest way to hit the overwrite. A netdev egress fwd rule that st=
-eers
-> > a packet routed with an xfrm encapsulation into an interface reaches th=
-e
-> > same place once the dst release earlier in this series keeps the route:
-> >
-> >     ip link add xf0 type xfrm if_id 42
-> >     ip link set xf0 up
-> >     ip neigh replace 10.20.0.1 lladdr 02:aa:00:00:00:ab \
-> >             dev va nud permanent
-> >     ip route add 10.20.0.1/32 dev va encap xfrm if_id 42
-> >     nft add rule netdev t c fwd ip to 10.1.0.2 device xf0
-> >
-> > Send one packet to 10.20.0.1. With CONFIG_DEBUG_NET=3Dy and panic_on_wa=
-rn=3D1
-> > the kernel panics in xfrmi_xmit() with the metadata dst still installed
-> > while the route is put back. The interface with the configured if_id dr=
-ops
-> > the packet as a link failure without consulting the outbound policy, an=
-d a
-> > clone made after the metadata was attached consumes the route before th=
-e
-> > original packet arrives.
-> >
-> > Reviewed-by: Victor Nogueira <victor@mojatatu.com>
-> > Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
->
-> [Severity: Low]
-> This fixes runtime defects in bpf_skb_set_xfrm_info() and xfrmi_xmit2().
-> Should the commit message include a Fixes tag:
->
->   Fixes: 94151f5aa966 ("xfrm: interface: Add unstable helpers for setting=
-/getting XFRM metadata from TC-BPF")
->
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/CORE-9NOG.v3.r0.2=
-0261115050625@mojatatu.com?part=3D1
+But if you think it's better I can send a v2 with either the above or
+just the bswap_32 check updated, I've checked it builds on 5.10 and
+6.18 so have no fundamental problem with either version.
+
+Cheers,
+-- 
+Dominique Martinet | Asmadeus
