@@ -1,66 +1,77 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794838328;
-	b=UVoa1L1Enb9oWPTVlgnQ5/kdGjz39OhjwtV4dg6q+dZAD6OniQNA/GE4T6Bl1YGamqoN
-	 NFjtBtdU7LpWfZ/8VvLGcqVN37FXB6zQLshdTYnV0hS3KI+enkfOqfTZhkjvpYw/u97g0
-	 eu6Ky1KNTt1BOj4OHNTvM2bwGpx8bT0VXnxs95p5vFSvXOe94G8yZf0yV8qR0PsMyXMMD
-	 rh+fMwnyII2ALF5Qoek6Wfm991LtC19l43FUSAa3gt56LV4lrW18hDnw1QVK7v6+BRHJ9
-	 arfsPaGXS8jVNk90S3qI7skPZj706QlQULM5KzAP1U9uf+lxoYwzJw7yJ3q2usLILXw==
+	t=1794838863;
+	b=IbCNaqdJOU07zbAZb8Opk3vFkA5dVe5zC8MFLIaGQFMmyJO3XVO4Q8NvB+jKKZNUiaVr
+	 ET2GUnnbfgaAFGHcCmLZXjO/JKXcJRCigWpYmZIWtMEFBC2Q/ki/J3hLvGz9uDtObGLB0
+	 GIWnhLOCAaFyDxhiGxwwz/ZQIVRtCxmIaVObG1AAM+5eI58snhy0xeaVpZ+uCToBJPPa8
+	 a9tQjUl93kQSHsNyxsx7+vGtAp0s6Oku6p4z8D2Nu+khQjVYz6O/eBhg/uzrB04BambFl
+	 TlBuY4UEkit4lvK8rtMMrk6GWTb/1tLa/DSY3p9+02mvgV/0+KRsaBXOebwEDXKFNrA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794838328;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
-	 In-Reply-To:References:Auto-Submitted:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=Ld9+YyGfs/W/wYUchYl+G0tuTdeNOsMW/DqiAiz5bT8=;
-	b=blkIELXaqeSrPlQhMw5wlX9/fGfIzWiX+AQp2/VCAu9X1bQP+0gJdtWVFGeWg5GROAVD
-	 DRAE5pwpRVqMtR+d5YX/j8vvsxDL1yluYZzbcrmXQksleNk9z8g+dRpgn5jX7Qh/ORYbj
-	 pY63VOAvgYtQmPYoa0309zcYaA4poOxGZz1I6FXfc48LoMdtzsND1IVxSVC9jxMtn52et
-	 /Fgc4b3pBTygOFb1PY6dHT21yhxjIWGl2Zn0kFD2PlO6K9kgfc2h3RqaYN7HV8616YfJU
-	 Dtq4zrRp5UTN093+Jy5wLvXWoIwMRcegqXnZMr8g0oBoYihVcfww0lRATXgh/SRebkA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794838863;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
+	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=p0MCEiScXA3/AegZMZrPbSW4djcYCJen36hSgSOSxr8=;
+	b=X7+eyVHJ7Qzo7PbJm3hhjsd5LcQf6N7iF1wN27Am2zkPoU+mXJMgaS8GXnxVOoZPVu1j
+	 NpGtI2idzwwFX0X4zqkfq3RyUiy4Zi+obksfaofHS49EVkoKj1g90aic73QYnar2CFqXm
+	 pFgQ/YmqW7xiF2wgME6Ves3JRd0oMPB5GNUOq/pEax6hXVa9nJLP8/NjbwLPGisKvXcIN
+	 97bYhK12AeKGWqHcyirSNbQ+th3B+njMCSYvfzPwXea0tWSXdwtzqN5rJ5dTIHp0d2zFO
+	 w9SQ4/WbkdBH5AtpbGMckTLG1/nMX8GaqEIKeAHK/ziGfKDGfXRZGV4AuWmKyEWMPBg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XXeoLJ9p;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lrMNwZMp;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25D79606A31C;
-	Mon, 16 Nov 2026 14:12:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CBDE606A329;
+	Mon, 16 Nov 2026 14:21:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XXeoLJ9p
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D7951F000C5;
-	Mon, 16 Nov 2026 14:12:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lrMNwZMp
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64E1A1F000C4;
+	Mon, 16 Nov 2026 14:21:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794838327;
-	bh=Ld9+YyGfs/W/wYUchYl+G0tuTdeNOsMW/DqiAiz5bT8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=XXeoLJ9pMmP5InmZPg7ILmufllZYde193dt8DdHd5b+tYaq9jS7NBjVekzyDgL0+d
-	 AhTMQwMNHuR694k+pijvgMQsgkCXY9VEWq8Avkbi0wouFYoBUncLM3O+6mQPXBixIJ
-	 qh+4eAjnD4D+90K+CUcTf1ekFqu786fHl6Zcg0r26QNSzgnP484E3/g7Po6YT6QKZM
-	 4NuuHwedEwqrOViJAMw9uFLB5c3F/iQ72P9Zg+gv4tw7HmDAdBce6OPsbP7E+ifDzM
-	 1pCQhUlYYTOyuNQVZpd7ajdGA6G6JlbjASxjBAygZ9kcgIWeiZQb0SxHjXn+7UJS6S
-	 EwBXI0255THdw==
-From: netdev-bot+sinfo@kernel.org
-To: Jisheng Zhang <jszhang@kernel.org>
-Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S . Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: 
- Re: [PATCH v2] net: stmmac: Disable checksum insertion for XDP frame TX
-Date: Mon, 16 Nov 2026 14:12:06 +0000
-Message-ID: <179483832607.3291.9756192515421548834@kernel.org>
-In-Reply-To: <20261116134848.4793-1-jszhang@kernel.org>
-References: <20261116134848.4793-1-jszhang@kernel.org>
-Auto-Submitted: auto-generated
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+	s=k20260515; t=1794838863;
+	bh=p0MCEiScXA3/AegZMZrPbSW4djcYCJen36hSgSOSxr8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=lrMNwZMpVLaC2BtfAP4b7LZ6QFc4IZAk8smXnST30fiArFsHMpDO8pHkIB6Cr8ys+
+	 ee+JRnmqA68sVX265zPLaNHnOzcJcKLeRl4boeqkIBPd85eN10aGzC0MJ8/2iRTaPX
+	 C4js2OW0HI4bnxI5yEVoRrrSVD0MczuQ7+8+Ai3AUOVruZhi0h6yiLoBUlpAnHrgPX
+	 XjK/UDNqOIoRJDvbfzRZ9VG2IFMtNBWl0HmfcnKl7yIiBlpo873jNkEGXJhENBI0CR
+	 gS+aiwQEoBnOez7Qp2dCZTZnUqIJu9WGirp6rXpJ171+S+xd5+BuR5lK65ivivJEec
+	 IBwEluMMFSqZA==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+ <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>,
+ Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, Andrew Lunn
+ <andrew+netdev@lunn.ch>, Jesper Dangaard Brouer <hawk@kernel.org>, Ilias
+ Apalodimas <ilias.apalodimas@linaro.org>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
+ <john.fastabend@gmail.com>, Pavel Begunkov <asml.silence@gmail.com>, Jens
+ Axboe <axboe@kernel.dk>, Andrii Nakryiko <andrii@kernel.org>, Eduard
+ Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil
+ Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, io-uring@vger.kernel.org,
+ Mina
+ Almasry <almasrymina@google.com>, "Mike Marciniszyn (Meta)"
+ <mike.marciniszyn@gmail.com>, Weiming Shi <bestswngs@gmail.com>, Nikolay
+ Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, Alexander
+ Lobakin <aleksander.lobakin@intel.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Stuart Clark <stuclar@meta.com>
+Subject: Re: [PATCH net-next v1 02/11] net: Add memory provider capabilities
+In-Reply-To: <20261115131840.55b03578@kernel.org>
+References: <20261110102039.1002605-1-bjorn@kernel.org>
+ <20261110102039.1002605-3-bjorn@kernel.org>
+ <20261115131840.55b03578@kernel.org>
+Date: Mon, 16 Nov 2026 15:20:59 +0100
+Message-ID: <871p8khn78.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -70,30 +81,53 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi!
+Jakub Kicinski <kuba@kernel.org> writes:
 
-This is an automated message. This series looks like a fix, but its
-commit messages seem to be missing some information:
+> On Tue, 10 Nov 2026 11:20:23 +0100 Bj=C3=B6rn T=C3=B6pel wrote:
+>> diff --git a/include/net/page_pool/memory_provider.h b/include/net/page_=
+pool/memory_provider.h
+>> index bceb5f7740e2..4417e54a0f81 100644
+>> --- a/include/net/page_pool/memory_provider.h
+>> +++ b/include/net/page_pool/memory_provider.h
+>> @@ -19,6 +19,18 @@ struct sk_buff;
+>>   * Per-provider custom logic must be delegated to memory_provider_ops r=
+ather
+>>   * than handled directly in page_pool core code.
+>>   */
+>> +
+>> +/**
+>> + * enum mp_caps - memory provider capabilities
+>> + * @MP_CAP_READABLE: The CPU can access provider memory. It may back he=
+ader
+>> + *	page pools, and XDP programs may run on it.
+>
+> Being readable is the normal state for memory.
+> We should be marking mps as unreadable, not as readable?
 
- - How the issue was discovered, e.g. hit in production, hit during
-   development, syzbot report, manual code inspection, LLM or static
-   analysis tool scan.
+Fair, I'll flip it. devmem and io_uring zcrx mark themselves unreadable.
+The same goes for the other two caps; page memory can be split and kept,
+so AF_XDP marks that its buffers can't be.
 
- - Whether the issue was actually triggered, or is only theoretical
-   (e.g. found by LLM and not proven at runtime). If it was triggered
-   please include the symptoms, like the stack trace or kernel messages.
+>> @@ -1070,6 +1095,9 @@ netmem_ref page_pool_alloc_frag_netmem(struct page=
+_pool *pool,
+>>  	unsigned int max_size =3D PAGE_SIZE << pool->p.order;
+>>  	netmem_ref netmem =3D pool->frag_page;
+>>=20=20
+>> +	if (static_branch_unlikely(&page_pool_mem_providers) &&
+>> +	    WARN_ON_ONCE(!page_pool_supports_frag(pool)))
+>> +		return 0;
+>
+> Shouldn't we return a full page if we can't frag?
+> Fragmentation breaks up a page into smaller units,
+> it should be legal to simply return a full page if
+> fragmentation is not supported for the provider.
 
- - What hardware the change was tested on. For driver fixes please
-   mention the device (and if relevant firmware version) used for
-   testing, or say that the change was not tested on real hardware.
+Yeah, make sense. I'll return the whole buffer at offset 0, instead of
+the WARN Stan and I settled on, and page_pool_alloc_netmem() reports the
+chunk size for callers that need it for truesize.
 
-Please do not repost the series just to address the above. Instead,
-reply to this email with the missing information, so that reviewers
-can take it into account.
 
-*IMPORTANT*: If you do repost (for other reasons) - please include
-the relevant info in the cover letter or commit messages.
--- 
-The evaluation is done by an LLM so it may be wrong, if you think
-that is the case please reply and explain.
+Bj=C3=B6rn
