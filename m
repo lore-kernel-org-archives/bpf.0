@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794808651;
-	b=HLrFHO/5p8yZH6uCIoBagNqRQR3ldt9hXktZ9Bqyq8PCv801ngmNs1GbCMdY1Hqa+TRk
-	 mqn53hg/TIoIXMt+LiMugm2m9TDyBmwanP9aOHiesQbFQBbyJ4CFSsk7FuwgL4FGk4u69
-	 BYUvsM45nOFKqkVCAWbUqEaQ76janguLCaEdq8zUAPO0IyiYHpyrZaE0wqLxsMdP5sGHa
-	 8WsOZy0H0jJi2y6XNclfTVy0b83uLiW6gNAheSV01QpctM8ZwJgnB5Xq6l0/jO9ZTvMRn
-	 XVvf63t3y/B1LfEXKSahW8j6QCPmOt8ZpiwdIsIUU3h5YH+cRn8wBKBI/y/Fz/eZZzA==
+	t=1794808657;
+	b=bpCqBVdrAvu767vEHPjt4aG+m5AjPOhj0m+4cuF/eiJmMTny7KF+p+i1u2Ps9E0Yt5Oj
+	 5qsJ2H0/Vn08STHizqrm6Aupu1oWWINT/lqn7bHB2XIyknxcJpm1cLkiZxD3PXpRNTcK/
+	 LqNGW0nyptd6tePIGoX8wiCt4Ic9jZrWvZK7FQ27f7wyoINhTklx2B/R3KvXO3+Isizox
+	 f2KTw18dS3CDUJxbk/asyYQPdmmyCQb7DBf/fo+SlxJ7k1owy/7ENN/WbyyZ16gQSvIUb
+	 MH0Pv82YHmv0y8v2845tpVk9hmRdgreosZDmv5ftNBgARIE+luFbZ0Oj0v8nH4Xf2Xw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794808651;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794808657;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=LEtoE8nteJfo7VF8of31hMHlZbOPHa3Prd2YK+vVVt8=;
-	b=weeo0MN32LF7nNpj55un5Yr4Opj/adBeWQbWEvXjiiAb8xF5l+JZf3dSNTDOC77yP1Iw
-	 YEWGBxEW8XRBNfmS5EBQWS4kYk8nZWn0FKF4EVyC/458zdLvnuIrPdLuqr1eWD87tNksx
-	 hHkg9Ysz/t55h6q1W1+2lhzp5g4GWCQ+RLPXx5O3gUIe25sVjMp6Cbrt/YlNDdYB6MueJ
-	 kfVIi7X/jkG1FlFVq+EN/7f9nuJVu5CxXJOjJ/jK6ieEqurKQqWq1HyS6k0l9t4aDP32B
-	 fu0QTy3gm1dD6yNBnHWu5TsP1ewnWzqvqHVzdghp00rsM3LdfA56g2b7MIYPJ5YTChQ==
+	bh=9QsXNzOulaPirdNl3c636wN0Uqf7T0+xN9tW/t2Gx78=;
+	b=4Pyv89of4JpWhZocLnPDs/F1uYbX7KsJfu6cBYQt0Hgo+sY3st1RTDpLdZ22GmcMdytk
+	 gWON2HnvWH4Zs00kqP6ueOo3yQCq3D8vkpsL50DXkPH2/F7wcLLBkH4JAt8TgxYnz427D
+	 XAmNaOjjjV0JBXpH4Al201BVpeYvzAUBe68CKPIWIf3jVEKxJqhzMDWvCd/19EO+NFPaf
+	 1/yxLFVF/kF8BdxrRpD/gT1oiswqjlhKfhPgGJ35/TO11v8H6RQob50JBdsDDsW4S1oUK
+	 SmikD8NM4zfzobW0eo2oFkSEcQoZ5qQ3QX3TlNMXSt36R5C3duR89naHdSL1lShXqBw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=fke7Iavs;
-	arc=none smtp.remote-ip=209.85.214.174
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xOC1kRx2;
+	arc=none smtp.remote-ip=209.85.215.171
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F85C606A31C
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 05:57:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1F85C606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 618FB606A881
+	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 05:57:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 618FB606A881
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=fke7Iavs
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2e9d7791b00so30565765ad.0
-        for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 21:57:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xOC1kRx2
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-cddc597d062so2023372a12.3
+        for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 21:57:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794808650; x=1795413450; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794808657; x=1795413457; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=LEtoE8nteJfo7VF8of31hMHlZbOPHa3Prd2YK+vVVt8=;
-        b=fke7Iavszx89Wi+wqeLUUOoousQMTcNBibn6xdv8v8P0tVbqv4i5mM9coqiBFrtTvW
-         A+GAQl/sbhk3hgjIKEoYmj52tADS0SQuNGOwwqPVHjQnxGqp80DtUuhG56RSP7nX5Dni
-         8OVRt4gY6nD9fJWRq6KrUxWzwMPIJk3aSZ2WlgPyzqTcqqMSvjvEoWLUMaHcuCtunGOR
-         GDc4An7u52cHGVx+WuQQOI5KR3FQCB/zvwMS+kLlIQBeAfSP0w9yO6LWVFqrfnBx/bAA
-         wikbrxGVdHAXkn4CW7Wp54W9TNw1BwuKjPzrp4adssX8iT+l3jVMiHQetSvOMoXQsvaY
-         jc9Q==
+        bh=9QsXNzOulaPirdNl3c636wN0Uqf7T0+xN9tW/t2Gx78=;
+        b=xOC1kRx2uWPUYAsiAem/dvkD/s7Z5P15q4o6BTr3NKvmmX5KWXShm25N9yI4wkSARs
+         BzGmx431qDxT5j04iWlXdeizBfxiglt31jSv5U7POwlk3emz8oymhtkUZH2KEcF8QRv4
+         YZJ5I+/HfSvu/5QkR9Kt34iSB1T41cTvdup0wyMGOyrud3ARo+8d71u0eLgC/6/Q92XD
+         ExUzpBBmmZFx3NM+Nbbo+KrSIYhgOigGZdavH9Cu6Z1bJSI7aQA4BOfr8fDflJUd4w4b
+         B9j5VTpgJxWKgYCDlsQ45dGhWd2R2sanwLiwbegELzkn6P5Q4JxzZmSkbHlsWQlJ1ZIy
+         3NBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794808650; x=1795413450;
+        d=1e100.net; s=20260707; t=1794808657; x=1795413457;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=LEtoE8nteJfo7VF8of31hMHlZbOPHa3Prd2YK+vVVt8=;
-        b=m4lnths74wvm8WOTOsC0MhLI9VpjjsnavLdvkBXV7ZRFXk+j+xS03thKx9xIobqVRM
-         r948YvM0dWWbw+Cr+jJ1ZIyCEnis6ndZ6JAl4Ep4QCgmldOjie5Mhjh4QLnTcxW8e8YM
-         Jr6T6z1hbP05ZVuIcvxkcAAwjdy0hAI5P/FTQWKrKLrSw+0KGBIvCXk8t9OBBiBITcXS
-         UvaxnfmBh+jtUasngk+rw5uXgnGJesHmJsWPVIny2zf2hOZBS8Of05Ez6eVEGoLn4wcs
-         64eRTqgOPQ9Mt9G1i9lzt7C0gfBA1rgoTUU+J2C2KUsx4bDisXpjGQkd1MMlJwIc+pMQ
-         sYCQ==
-X-Gm-Message-State: APuU4Z+1KQJ8FIJ/pbxTVkrjfcgoGHKivR77MXFp/0FwwYbMGg1pJTEC
-	Rkd2+O/+NL0QMkqqiJKXB5dlm40Xkx5h43YjBTlYiuEhDB8AvVmEI7HmAwSpIg==
-X-Gm-Gg: AYBFou1VEbScQolTMwxX+SeIe6wryr+lXXfFVL5MgCrDI2n8azRLJ9FWqKkKnYTdHua
-	/3SRVXubgvnfK/vo61M9R9/t/haGXQMijjrHIrKSBZvFI1UJWI95elfZ0Njy2oOVEZGeazKFQAB
-	OtaFQHYuvRXYFtM9u/a2ZXVQASTE6HCkRxGvK57JAgbbE/AIlv16AHLmyjZuNFQQLBR70nNC/1p
-	lBz9lShRAzszYQi3Igv/YcuoHmIcmsCG6hwNTnh9mDBXJlBPzDM/x6DuF8K8p3zwOAgsF5jRYV1
-	O4Wr63d+m9SetFyKriWEW2C/n739SwSa3VSlM5wuC7iBRfe3iCTcqM/4j6RJT/42T3OJ4G5ARRF
-	zsf2ibgNmOc6lthmpfmhLhr+jOZO/emMGXt9doVyEvIgWqIt3rNbfFu8ojR6kIZqTCa+oCPHmC+
-	89Aad8+/b42BFsCWc3R3+auxuK4WH3MSepFXEpCH6piYqQsfngMT7Ozllee7KXTRiqJGxiWcadn
-	sSbREs9xR5UDZzJr2YbVpm9PZ7bTSfQ3wSUxxnPQCzY0R9Yrkh82ThZ74ZLNa9sUpBAMqsUkOGX
-	qpKG3QdInaICiUTeDpw4uZHHu7CkBoR0qTDm6kW3igUec6qBApd+HP6Q731Tbm0uynLd0E4tXEg
-	N7jVuDn04gzNVV+7P9nkVm2VWph7mTI9xFYEawz6pgsQ4PFhKwM9XRU6mRqxLgffkA093N5rdBQ
-	==
-X-Received: by 2002:a17:903:32ca:b0:2dd:ad73:5b6f with SMTP id d9443c01a7336-2ee0dcd0ac7mr90572795ad.31.1794808650215;
-        Sun, 15 Nov 2026 21:57:30 -0800 (PST)
+        bh=9QsXNzOulaPirdNl3c636wN0Uqf7T0+xN9tW/t2Gx78=;
+        b=KCmpRv7oP4GUr75b1ZU6zxx4AFeGtf7jXYv/F1pazT8Y7serYsvNuAteWJkHUrCuKS
+         MRcKwhsDDw6ONjffKWkRzqKNRcF5KFr5VDaNSlxFhBR9TQWVI6fYRVxrc85UuakzQMBl
+         DN9r604jbevJlU7sg/6Hlb9njcPIvg6qY2yblo06Wu4aTSISi1qUuRH84UddSoGZNY3s
+         Q/WksipwMnESugjfiDMi3drUsuYuGr267HqJbCDZdY9q0fEVeTJ7ez1rNkrSVqdeKHU+
+         BG5Tw1IFaFZiBhYoMbz2hmKUEq4qr8Hr4+5wB9tJ86+5/XVR2wdpqb59qJJdQU/y+AZ8
+         3vLA==
+X-Gm-Message-State: APuU4Z+/TjoX8YZ24K9PHAdlvCX3aNu720/zovjgfH2wkgjgyLhh00d2
+	eNhCUuFRny7WLPGGwnRl81nwfhrpoQgm8M65a00AFU/ECmvaA+bfsedEX2F2fw==
+X-Gm-Gg: AYBFou2C6qbHVgxqwvfavGdNG95q4csMlG0axONJklwoSEt45UsQ3i3YjxDv884WBuI
+	miAv32xdGxUV9kc7BTHN7Xa4RgSzFxTEIHiKpQxS1J2RPffcK7h9LZ+IVDfDFJt6Ol9Q9ZcF5kZ
+	N6LkUC7F78OTwbo/5s5mer5+jepufJ0CKfcGKCBqsLVTkajVfOsG0+udDZvmNyDqYWQ6BZ6duHV
+	8jIidzvguh8e5XJdpczkaNpQhp0pFQjhgDCrjLBrCbH6euPX146Axy87YlKEp1HpMG8YoQ2H0Lb
+	rLM9kNTv2QFp5dDKwzjYuX+cVs5tWBewgYEu1lp68rgX6lMSCp0vK7XRftXlSgcs0ko9vJeaeX2
+	3+DHoVsxdt0KYBsam9YUjNrk8M5yD2Qej1CrYvxtJzpbyHC/E1f+GiJ5dSW4acgsYKLJw4P2qfz
+	sUn0Z6km5YyYgIeeRj0rvCGC6zOc78Mv0utdFCkBAjVvsBVx+pTwcnG0INuzpt8ocavsMg14vk9
+	plZ5LEttxzhC5855ulvpdZtz/rleEpNS4jkMGmzY4NOtSZQzAskEd4YYT8ywG8noisU+/0SeanY
+	hHKTqncP0/2pFPNodExvLDGp7rb/Z/XWrm+Mux0/mrSSHCErmqO/tGaO7PJD/4yAEhBNbNi36h3
+	XzJUfrIYCBCbeyI/KcWXnFmxyBRKwzrCg2MbzuQDSF2U3N+ki/Ap2frTp/mwYy3zHCbSWJ1IHyI
+	zkuRb/JI4d23ZVQ/vq69M=
+X-Received: by 2002:a17:90b:2c8d:b0:3ab:e588:c2a8 with SMTP id 98e67ed59e1d1-3b1b0d8a4d0mr9810191a91.64.1794808656340;
+        Sun, 15 Nov 2026 21:57:36 -0800 (PST)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ee0f7e48e2sm32243515ad.36.2026.11.15.21.57.29
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b197d257a0sm20597279a91.11.2026.11.15.21.57.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Nov 2026 21:57:29 -0800 (PST)
+        Sun, 15 Nov 2026 21:57:35 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 08/21] bpf: Do not scan all maps for each insn and each subprog
-Date: Mon, 16 Nov 2026 05:56:25 +0000
-Message-ID: <20261116055638.4171529-9-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 09/21] bpf: Remove the limits on kfuncs of a program
+Date: Mon, 16 Nov 2026 05:56:26 +0000
+Message-ID: <20261116055638.4171529-10-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261116055638.4171529-1-alexei.starovoitov@gmail.com>
 References: <20261116055638.4171529-1-alexei.starovoitov@gmail.com>
@@ -104,163 +104,506 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The number of maps has no limit now.
+A program can call 256 kfuncs from 256 module BTFs. Calls in dead code
+count too. Each new kfunc sorts the table again.
 
- - The dump of a program looks for the map of each ld_imm64. Put the
-   addresses of the maps into a tree.
- - The JIT of each subprog needs the insn arrays only.
- - The jump table of a subprog doubles.
+Append to the tables and find the entries through one index:
+
+  (func_id, offset)               -> descriptor
+  (func_id, offset, specialized)  -> descriptor of the other target
+  (0, offset)                     -> BTF of the module
+
+What stays is the width of insn->off, where JITs get the number of
+the descriptor: 65536 of them.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/cfg.c     |  3 ++-
- kernel/bpf/fixups.c  |  4 +--
- kernel/bpf/syscall.c | 64 +++++++++++++++++++++-----------------------
- 3 files changed, 35 insertions(+), 36 deletions(-)
+ include/linux/bpf_verifier.h |  25 ++--
+ kernel/bpf/core.c            |   2 +-
+ kernel/bpf/fixups.c          |   4 +-
+ kernel/bpf/syscall.c         |   2 +-
+ kernel/bpf/verifier.c        | 225 ++++++++++-------------------------
+ 5 files changed, 79 insertions(+), 179 deletions(-)
 
-diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
-index c16b4a283dbc..92dc8d0dc22a 100644
---- a/kernel/bpf/cfg.c
-+++ b/kernel/bpf/cfg.c
-@@ -366,13 +366,14 @@ static int __compute_subprog_jts(struct bpf_verifier_env *env)
- 		}
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 4d91f665109d..508aef9bad9d 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -1286,6 +1286,7 @@ struct bpf_verifier_env {
+ 	struct bpf_map **used_maps;	/* array of map's used by eBPF program */
+ 	struct btf_mod_pair *used_btfs;	/* array of BTF's used by BPF program */
+ 	struct bpf_index used_index;	/* address of a map or BTF -> entry of these two */
++	struct bpf_index kfunc_index;	/* see kfunc_key() */
+ 	struct bpf_map **insn_array_maps; /* array of INSN_ARRAY map's to be relocated */
+ 	u32 max_key_size;		/* of all used maps and their inner maps */
+ 	u32 max_value_size;
+@@ -2195,11 +2196,6 @@ enum bpf_reg_arg_type {
+ 	DST_OP_NO_MARK	/* same as above, check only, don't mark */
+ };
  
- 		old_cnt = subprog->jt ? subprog->jt->cnt : 0;
--		jt = bpf_iarray_realloc(subprog->jt, old_cnt + jt_cur->cnt);
-+		jt = bpf_iarray_realloc(subprog->jt, roundup_pow_of_two(old_cnt + jt_cur->cnt));
- 		if (!jt) {
- 			subprog->jt = NULL;
- 			kvfree(jt_cur);
- 			return -ENOMEM;
- 		}
- 		memcpy(jt->items + old_cnt, jt_cur->items, jt_cur->cnt << 2);
-+		jt->cnt = old_cnt + jt_cur->cnt;
- 		subprog->jt = jt;
+-#define MAX_KFUNC_DESCS 256
+-/* Each kfunc can have its canonical and one specialized call target. */
+-#define MAX_KFUNC_CALL_DESCS (MAX_KFUNC_DESCS * 2)
+-static_assert(MAX_KFUNC_CALL_DESCS <= S16_MAX + 1);
+-
+ struct bpf_kfunc_desc {
+ 	struct btf_func_model func_model;
+ 	struct bpf_func_proto proto;
+@@ -2209,20 +2205,17 @@ struct bpf_kfunc_desc {
+ };
  
- 		kvfree(jt_cur);
+ struct bpf_kfunc_desc_tab {
++	struct bpf_kfunc_desc *descs;
+ 	u32 nr_descs;
+-	u32 nr_base_descs;
+-	/* Sorted by func_id (BTF ID) and offset (fd_array offset) during
+-	 * verification. JITs use the descriptor index stored in the finalized
+-	 * call's off field. The first nr_base_descs entries are the canonical
+-	 * descriptors used for verifier lookups. Call specialization may append
+-	 * immutable descriptors for additional targets.
+-	 *
+-	 * Grown one entry at a time by bpf_add_kfunc_call() and during
+-	 * call specialization.
+-	 */
+-	struct bpf_kfunc_desc descs[];
+ };
+ 
++static inline void bpf_free_kfunc_tab(struct bpf_kfunc_desc_tab *tab)
++{
++	if (tab)
++		kvfree(tab->descs);
++	kfree(tab);
++}
++
+ /* Functions exported from verifier.c, used by fixups.c */
+ void bpf_mark_subprog_exc_cb(struct bpf_verifier_env *env, int subprog);
+ bool bpf_allow_tail_call_in_subprogs(struct bpf_verifier_env *env);
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 1b51f1d97efc..3385df367b05 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -195,7 +195,7 @@ void bpf_prog_jit_attempt_done(struct bpf_prog *prog)
+ 		prog->aux->jited_linfo = NULL;
+ 	}
+ 
+-	kfree(prog->aux->kfunc_tab);
++	bpf_free_kfunc_tab(prog->aux->kfunc_tab);
+ 	prog->aux->kfunc_tab = NULL;
+ }
+ 
 diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index d1eecb95545f..20697eba9c5f 100644
+index 20697eba9c5f..e05d767ab71e 100644
 --- a/kernel/bpf/fixups.c
 +++ b/kernel/bpf/fixups.c
-@@ -1950,8 +1950,8 @@ static int jit_subprogs(struct bpf_verifier_env *env)
- 		func[i]->aux->arena_stack_size = prog->aux->arena_stack_size;
- 		func[i]->aux->arena_stack_entry = env->subprog_info[i].arena_stack_entry;
- 		func[i]->aux->uses_arena_insns = bpf_prog_has_arena_insns(func[i]);
--		func[i]->aux->used_maps = env->used_maps;
--		func[i]->aux->used_map_cnt = env->used_map_cnt;
-+		func[i]->aux->used_maps = env->insn_array_maps;
-+		func[i]->aux->used_map_cnt = env->insn_array_map_cnt;
- 		num_exentries = 0;
- 		insn = func[i]->insnsi;
- 		for (j = 0; j < func[i]->len; j++, insn++) {
+@@ -122,10 +122,10 @@ bpf_jit_find_kfunc_model(const struct bpf_prog *prog,
+ 	struct bpf_kfunc_desc_tab *tab;
+ 
+ 	tab = prog->aux->kfunc_tab;
+-	if (insn->off < 0 || insn->off >= tab->nr_descs)
++	if ((u16)insn->off >= tab->nr_descs)
+ 		return NULL;
+ 
+-	res = &tab->descs[insn->off];
++	res = &tab->descs[(u16)insn->off];
+ 	if (bpf_jit_supports_far_kfunc_call()) {
+ 		if (res->func_id != insn->imm)
+ 			return NULL;
 diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 67878c6b0cc0..ad24973413f4 100644
+index ad24973413f4..6a567d55c024 100644
 --- a/kernel/bpf/syscall.c
 +++ b/kernel/bpf/syscall.c
-@@ -14,6 +14,7 @@
- #include <linux/slab.h>
- #include <linux/sched/signal.h>
- #include <linux/vmalloc.h>
-+#include <linux/maple_tree.h>
- #include <linux/mmzone.h>
- #include <linux/anon_inodes.h>
- #include <linux/fdtable.h>
-@@ -5015,32 +5016,23 @@ static int bpf_map_get_fd_by_id(const union bpf_attr *attr)
- 	return fd;
- }
- 
--static const struct bpf_map *bpf_map_from_imm(const struct bpf_prog *prog,
--					      unsigned long addr, u32 *off,
--					      u32 *type)
-+/* address of a map, addresses of its value -> map */
-+static int bpf_prog_map_addrs(const struct bpf_prog *prog, struct maple_tree *mt)
+@@ -2489,7 +2489,7 @@ static void __bpf_prog_put_rcu_tasks(struct rcu_head *rcu)
+ static void __bpf_prog_put_noref(struct bpf_prog *prog, bool deferred)
  {
--	const struct bpf_map *map;
--	int i;
-+	struct bpf_map *map;
-+	int i, err = 0;
-+	u64 addr;
- 
--	mutex_lock(&prog->aux->used_maps_mutex);
--	for (i = 0, *off = 0; i < prog->aux->used_map_cnt; i++) {
-+	guard(mutex)(&prog->aux->used_maps_mutex);
-+	for (i = 0; i < prog->aux->used_map_cnt && !err; i++) {
- 		map = prog->aux->used_maps[i];
--		if (map == (void *)addr) {
--			*type = BPF_PSEUDO_MAP_FD;
--			goto out;
--		}
--		if (!map->ops->map_direct_value_meta)
--			continue;
--		if (!map->ops->map_direct_value_meta(map, addr, off)) {
--			*type = BPF_PSEUDO_MAP_VALUE;
--			goto out;
--		}
-+		err = mtree_store(mt, (unsigned long)map, map, GFP_USER);
-+		if (!err && map->ops->map_direct_value_meta &&
-+		    !map->ops->map_direct_value_addr(map, &addr, 0))
-+			err = mtree_store_range(mt, addr, addr + map->value_size - 1, map,
-+						GFP_USER);
- 	}
--	map = NULL;
--
--out:
--	mutex_unlock(&prog->aux->used_maps_mutex);
--	return map;
-+	return err;
+ 	module_put(prog->aux->mod);
+-	kfree(prog->aux->kfunc_tab);
++	bpf_free_kfunc_tab(prog->aux->kfunc_tab);
+ 	kfree(prog->aux->ctx_arg_info);
+ 	if (prog->aux->attach_btf)
+ 		btf_put(prog->aux->attach_btf);
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index b316443548ff..f4e2a9f9f787 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2690,48 +2690,28 @@ static int bpf_find_exception_callback_insn_off(struct bpf_verifier_env *env)
+ 	return ret;
  }
  
- static void prepare_dump_pseudo_call(struct bpf_insn *insn)
-@@ -5069,16 +5061,19 @@ static void prepare_dump_pseudo_call(struct bpf_insn *insn)
- static struct bpf_insn *bpf_insn_prepare_dump(const struct bpf_prog *prog,
- 					      const struct cred *f_cred)
+-#define MAX_KFUNC_BTFS	256
+-
+ struct bpf_kfunc_btf {
+ 	struct btf *btf;
+ 	struct module *module;
+-	u16 offset;
+ };
+ 
+ struct bpf_kfunc_btf_tab {
+-	struct bpf_kfunc_btf descs[MAX_KFUNC_BTFS];
++	struct bpf_kfunc_btf *descs;
+ 	u32 nr_descs;
+ };
+ 
+-static int kfunc_desc_cmp_by_id_off(const void *a, const void *b)
++/* The key of env->kfunc_index. The BTF of a module has func_id 0. */
++static u64 kfunc_key(u32 func_id, u16 offset, bool specialized)
  {
-+	struct bpf_insn *insns = NULL;
- 	const struct bpf_map *map;
--	struct bpf_insn *insns;
--	u32 off, type;
-+	struct maple_tree maps;
-+	u32 off;
- 	u64 imm;
- 	u8 code;
- 	int i;
- 
--	insns = kvmemdup(prog->insnsi, bpf_prog_insn_size(prog), GFP_USER | __GFP_NOWARN);
-+	mt_init(&maps);
-+	if (!bpf_prog_map_addrs(prog, &maps))
-+		insns = kvmemdup(prog->insnsi, bpf_prog_insn_size(prog), GFP_USER | __GFP_NOWARN);
- 	if (!insns)
--		return insns;
-+		goto out;
- 
- 	for (i = 0; i < prog->len; i++) {
- 		code = insns[i].code;
-@@ -5120,15 +5115,18 @@ static struct bpf_insn *bpf_insn_prepare_dump(const struct bpf_prog *prog,
- 			continue;
- 
- 		imm = ((u64)insns[i + 1].imm << 32) | (u32)insns[i].imm;
--		map = bpf_map_from_imm(prog, imm, &off, &type);
--		if (map) {
--			insns[i].src_reg = type;
--			insns[i].imm = map->id;
--			insns[i + 1].imm = off;
-+		map = mtree_load(&maps, imm);
-+		if (!map || imm > ULONG_MAX)
- 			continue;
--		}
-+		off = 0;
-+		insns[i].src_reg = BPF_PSEUDO_MAP_FD;
-+		if (imm != (unsigned long)map && !map->ops->map_direct_value_meta(map, imm, &off))
-+			insns[i].src_reg = BPF_PSEUDO_MAP_VALUE;
-+		insns[i].imm = map->id;
-+		insns[i + 1].imm = off;
- 	}
+-	const struct bpf_kfunc_desc *d0 = a;
+-	const struct bpf_kfunc_desc *d1 = b;
 -
-+out:
-+	mtree_destroy(&maps);
- 	return insns;
+-	/* func_id is not greater than BTF_MAX_TYPE */
+-	return d0->func_id - d1->func_id ?: d0->offset - d1->offset;
+-}
+-
+-static int kfunc_btf_cmp_by_off(const void *a, const void *b)
+-{
+-	const struct bpf_kfunc_btf *d0 = a;
+-	const struct bpf_kfunc_btf *d1 = b;
+-
+-	return d0->offset - d1->offset;
++	return func_id | (u64)offset << 32 | (u64)specialized << 48;
  }
  
+ static struct bpf_kfunc_desc *
+-find_kfunc_desc(const struct bpf_prog *prog, u32 func_id, u16 offset)
++find_kfunc_desc(struct bpf_verifier_env *env, u32 func_id, u16 offset)
+ {
+-	struct bpf_kfunc_desc desc = {
+-		.func_id = func_id,
+-		.offset = offset,
+-	};
+-	struct bpf_kfunc_desc_tab *tab;
++	int i = bpf_index_find(&env->kfunc_index, kfunc_key(func_id, offset, false));
+ 
+-	tab = prog->aux->kfunc_tab;
+-	return bsearch(&desc, tab->descs, tab->nr_base_descs,
+-		       sizeof(tab->descs[0]), kfunc_desc_cmp_by_id_off);
++	return func_id && i >= 0 ? &env->prog->aux->kfunc_tab->descs[i] : NULL;
+ }
+ 
+ int bpf_get_kfunc_addr(const struct bpf_prog *prog, u32 func_id,
+@@ -2831,50 +2811,38 @@ static struct btf *fd_array_get_btf(struct bpf_verifier_env *env, u32 idx)
+ static struct btf *__find_kfunc_desc_btf(struct bpf_verifier_env *env,
+ 					 s16 offset)
+ {
+-	struct bpf_kfunc_btf kf_btf = { .offset = offset };
+-	struct bpf_kfunc_btf_tab *tab;
++	struct bpf_kfunc_btf_tab *tab = env->prog->aux->kfunc_btf_tab;
++	int i = bpf_index_find(&env->kfunc_index, kfunc_key(0, offset, false));
+ 	struct bpf_kfunc_btf *b;
+ 	struct module *mod;
+ 	struct btf *btf;
+ 
+-	tab = env->prog->aux->kfunc_btf_tab;
+-	b = bsearch(&kf_btf, tab->descs, tab->nr_descs,
+-		    sizeof(tab->descs[0]), kfunc_btf_cmp_by_off);
+-	if (!b) {
+-		if (tab->nr_descs == MAX_KFUNC_BTFS) {
+-			verbose(env, "too many different module BTFs\n");
+-			return ERR_PTR(-E2BIG);
+-		}
+-
+-		btf = fd_array_get_btf(env, offset);
+-		if (IS_ERR(btf))
+-			return btf;
+-		if (!btf_is_module(btf)) {
+-			verbose(env, "BTF fd for kfunc is not a module BTF\n");
+-			btf_put(btf);
+-			return ERR_PTR(-EINVAL);
+-		}
++	if (i >= 0)
++		return tab->descs[i].btf;
+ 
+-		mod = btf_try_get_module(btf);
+-		if (!mod) {
+-			btf_put(btf);
+-			return ERR_PTR(-ENXIO);
+-		}
++	b = bpf_table_next(tab->descs, tab->nr_descs);
++	if (!b)
++		return ERR_PTR(-ENOMEM);
+ 
+-		b = &tab->descs[tab->nr_descs++];
+-		b->btf = btf;
+-		b->module = mod;
+-		b->offset = offset;
++	btf = fd_array_get_btf(env, offset);
++	if (IS_ERR(btf))
++		return btf;
++	if (!btf_is_module(btf)) {
++		verbose(env, "BTF fd for kfunc is not a module BTF\n");
++		btf_put(btf);
++		return ERR_PTR(-EINVAL);
++	}
+ 
+-		/* sort() reorders entries by value, so b may no longer point
+-		 * to the right entry after this
+-		 */
+-		sort(tab->descs, tab->nr_descs, sizeof(tab->descs[0]),
+-		     kfunc_btf_cmp_by_off, NULL);
+-	} else {
+-		btf = b->btf;
++	mod = btf_try_get_module(btf);
++	if (!mod) {
++		btf_put(btf);
++		return ERR_PTR(-ENXIO);
+ 	}
+ 
++	b->btf = btf;
++	b->module = mod;
++	if (bpf_index_add(&env->kfunc_index, kfunc_key(0, offset, false), tab->nr_descs++))
++		return ERR_PTR(-ENOMEM);
+ 	return btf;
+ }
+ 
+@@ -2887,6 +2855,7 @@ void bpf_free_kfunc_btf_tab(struct bpf_kfunc_btf_tab *tab)
+ 		module_put(tab->descs[tab->nr_descs].module);
+ 		btf_put(tab->descs[tab->nr_descs].btf);
+ 	}
++	kvfree(tab->descs);
+ 	kfree(tab);
+ }
+ 
+@@ -2908,22 +2877,14 @@ static struct btf *find_kfunc_desc_btf(struct bpf_verifier_env *env, s16 offset)
+ 
+ static struct btf *find_kfunc_desc_btf_cached(struct bpf_verifier_env *env, s16 offset)
+ {
+-	struct bpf_kfunc_btf kf_btf = { .offset = offset };
+-	struct bpf_kfunc_btf_tab *tab;
+-	struct bpf_kfunc_btf *b;
++	int i = bpf_index_find(&env->kfunc_index, kfunc_key(0, offset, false));
+ 
+ 	if (!offset)
+ 		return btf_vmlinux ?: ERR_PTR(-ENOENT);
+ 	if (offset < 0)
+ 		return ERR_PTR(-EINVAL);
+ 
+-	tab = env->prog->aux->kfunc_btf_tab;
+-	if (!tab)
+-		return ERR_PTR(-ENOENT);
+-
+-	b = bsearch(&kf_btf, tab->descs, tab->nr_descs,
+-		    sizeof(tab->descs[0]), kfunc_btf_cmp_by_off);
+-	return b ? b->btf : ERR_PTR(-ENOENT);
++	return i >= 0 ? env->prog->aux->kfunc_btf_tab->descs[i].btf : ERR_PTR(-ENOENT);
+ }
+ 
+ #define KF_IMPL_SUFFIX "_impl"
+@@ -3081,19 +3042,9 @@ int bpf_add_kfunc_call(struct bpf_verifier_env *env, u32 func_id, u16 offset)
+ 		prog_aux->kfunc_btf_tab = btf_tab;
+ 	}
+ 
+-	if (find_kfunc_desc(env->prog, func_id, offset))
++	if (find_kfunc_desc(env, func_id, offset))
+ 		return 0;
+ 
+-	if (tab->nr_base_descs == MAX_KFUNC_DESCS) {
+-		verbose(env, "too many different kernel function calls\n");
+-		return -E2BIG;
+-	}
+-	if (tab->nr_descs != tab->nr_base_descs) {
+-		verifier_bug(env, "unexpected specialized func desc found (%d descs, %d base descs)",
+-			     tab->nr_descs, tab->nr_base_descs);
+-		return -EFAULT;
+-	}
+-
+ 	err = fetch_kfunc_meta(env, func_id, offset, &kfunc);
+ 	if (err)
+ 		return err;
+@@ -3133,12 +3084,9 @@ int bpf_add_kfunc_call(struct bpf_verifier_env *env, u32 func_id, u16 offset)
+ 	meta.func_name = kfunc.name;
+ 	meta.kfunc_flags = kfunc.flags ? *kfunc.flags : 0;
+ 
+-	tab = krealloc(tab, struct_size(tab, descs, tab->nr_descs + 1), BPF_VERIFIER_GFP);
+-	if (!tab)
++	desc = bpf_table_next(tab->descs, tab->nr_descs);
++	if (!desc)
+ 		return -ENOMEM;
+-	prog_aux->kfunc_tab = tab;
+-
+-	desc = &tab->descs[tab->nr_descs];
+ 	memset(desc, 0, sizeof(*desc));
+ 
+ 	err = gen_kfunc_arg_proto(env, &meta, &func_model, &desc->proto);
+@@ -3149,11 +3097,7 @@ int bpf_add_kfunc_call(struct bpf_verifier_env *env, u32 func_id, u16 offset)
+ 	desc->offset = offset;
+ 	desc->addr = addr;
+ 	desc->func_model = func_model;
+-	tab->nr_descs++;
+-	tab->nr_base_descs++;
+-	sort(tab->descs, tab->nr_base_descs, sizeof(tab->descs[0]),
+-	     kfunc_desc_cmp_by_id_off, NULL);
+-	return 0;
++	return bpf_index_add(&env->kfunc_index, kfunc_key(func_id, offset, false), tab->nr_descs++);
+ }
+ 
+ static int add_subprogs(struct bpf_verifier_env *env)
+@@ -3260,7 +3204,7 @@ static int add_kfuncs(struct bpf_verifier_env *env)
+ 			return -EPERM;
+ 		}
+ 
+-		ret = bpf_add_kfunc_call(env, insn->imm, insn->off);
++		ret = bpf_must_abort() ? -EINTR : bpf_add_kfunc_call(env, insn->imm, insn->off);
+ 		if (ret < 0)
+ 			return ret;
+ 	}
+@@ -15042,7 +14986,7 @@ bool bpf_needs_fixed_stack_off(struct bpf_verifier_env *env, int insn_idx)
+ 		if (bpf_get_helper_proto(env, insn->imm, &fn) < 0)
+ 			return false;
+ 	} else if (bpf_pseudo_kfunc_call(insn)) {
+-		desc = find_kfunc_desc(env->prog, insn->imm, insn->off);
++		desc = find_kfunc_desc(env, insn->imm, insn->off);
+ 		if (!desc)
+ 			return false;
+ 		fn = &desc->proto;
+@@ -15520,7 +15464,7 @@ static u16 call_arg_regs(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	u16 mask = 0;
+ 
+ 	if (bpf_pseudo_kfunc_call(insn)) {
+-		desc = find_kfunc_desc(env->prog, insn->imm, insn->off);
++		desc = find_kfunc_desc(env, insn->imm, insn->off);
+ 		if (!desc)
+ 			return 0;
+ 		fn = &desc->proto;
+@@ -15961,7 +15905,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	func_name = meta.func_name;
+ 	insn_aux = &env->insn_aux_data[insn_idx];
+ 
+-	desc = find_kfunc_desc(env->prog, insn->imm, insn->off);
++	desc = find_kfunc_desc(env, insn->imm, insn->off);
+ 	if (!desc) {
+ 		verifier_bug(env, "kfunc descriptor not found for func_id %u", insn->imm);
+ 		return -EFAULT;
+@@ -24703,64 +24647,21 @@ static int specialize_kfunc(struct bpf_verifier_env *env, struct bpf_kfunc_desc
+ 	return 0;
+ }
+ 
+-static int add_kfunc_desc_target(struct bpf_verifier_env *env,
+-				 const struct bpf_kfunc_desc *target_desc,
+-				 u16 base_desc_idx, u16 *desc_idx)
++/* A kfunc has at most one specialized target. Returns the index of its descriptor. */
++static int add_specialized_kfunc(struct bpf_verifier_env *env, const struct bpf_kfunc_desc *desc)
+ {
+-	struct bpf_kfunc_desc desc = *target_desc;
+-	struct bpf_kfunc_desc_tab *new_tab;
+-	struct bpf_kfunc_desc_tab *tab;
+-	struct bpf_prog_aux *prog_aux;
+-	u32 i;
+-
+-	prog_aux = env->prog->aux;
+-	tab = prog_aux->kfunc_tab;
+-
+-	if (base_desc_idx >= tab->nr_base_descs) {
+-		verifier_bug(env, "kfunc desc_idx %d out of bounds (%d descriptors)",
+-				base_desc_idx, tab->nr_base_descs);
+-		return -EFAULT;
+-	}
+-	if (tab->descs[base_desc_idx].func_id != desc.func_id) {
+-		verifier_bug(env, "kfunc desc %d has invalid id (expected %d, got %d)",
+-				base_desc_idx, tab->descs[base_desc_idx].func_id, desc.func_id);
+-		return -EFAULT;
+-	}
+-	if (tab->descs[base_desc_idx].offset != desc.offset) {
+-		verifier_bug(env, "kfunc desc %d has invalid offset (expected %d, got %d)",
+-				base_desc_idx, tab->descs[base_desc_idx].offset, desc.offset);
+-		return -EFAULT;
+-	}
+-
+-	if (tab->descs[base_desc_idx].addr == desc.addr) {
+-		*desc_idx = base_desc_idx;
+-		return 0;
+-	}
++	struct bpf_kfunc_desc_tab *tab = env->prog->aux->kfunc_tab;
++	u64 key = kfunc_key(desc->func_id, desc->offset, true);
++	int i = bpf_index_find(&env->kfunc_index, key);
+ 
+-	for (i = tab->nr_base_descs; i < tab->nr_descs; i++) {
+-		if (tab->descs[i].func_id == desc.func_id &&
+-		    tab->descs[i].offset == desc.offset &&
+-		    tab->descs[i].addr == desc.addr) {
+-			*desc_idx = i;
+-			return 0;
+-		}
+-	}
+-
+-	if (tab->nr_descs == MAX_KFUNC_CALL_DESCS) {
+-		verbose(env, "too many different kernel function call targets\n");
+-		return -E2BIG;
+-	}
+-
+-	new_tab = krealloc(tab, struct_size(tab, descs, tab->nr_descs + 1),
+-			   BPF_VERIFIER_GFP);
+-	if (!new_tab)
++	if (i >= 0)
++		return verifier_bug_if(tab->descs[i].addr != desc->addr, env,
++				       "two targets of kfunc %u", desc->func_id) ? -EFAULT : i;
++	if (!bpf_table_next(tab->descs, tab->nr_descs) ||
++	    bpf_index_add(&env->kfunc_index, key, tab->nr_descs))
+ 		return -ENOMEM;
+-	tab = new_tab;
+-	prog_aux->kfunc_tab = tab;
+-
+-	*desc_idx = tab->nr_descs;
+-	tab->descs[tab->nr_descs++] = desc;
+-	return 0;
++	tab->descs[tab->nr_descs] = *desc;
++	return tab->nr_descs++;
+ }
+ 
+ static void __fixup_collection_insert_kfunc(struct bpf_insn_aux_data *insn_aux,
+@@ -24786,9 +24687,8 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	struct bpf_kfunc_desc desc_copy;
+ 	struct bpf_kfunc_desc *desc;
+ 	unsigned long call_imm;
+-	u16 base_desc_idx, desc_idx;
++	int err, desc_idx;
+ 	bool near_call;
+-	int err;
+ 
+ 	if (!insn->imm) {
+ 		verbose(env, "invalid kernel function call not eliminated in verifier pass\n");
+@@ -24801,13 +24701,13 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	 * __bpf_call_base, unless the JIT needs to call functions that are
+ 	 * further than 32 bits away (bpf_jit_supports_far_kfunc_call()).
+ 	 */
+-	desc = find_kfunc_desc(env->prog, insn->imm, insn->off);
++	desc = find_kfunc_desc(env, insn->imm, insn->off);
+ 	if (!desc) {
+ 		verifier_bug(env, "kernel function descriptor not found for func_id %u",
+ 			     insn->imm);
+ 		return -EFAULT;
+ 	}
+-	base_desc_idx = desc - env->prog->aux->kfunc_tab->descs;
++	desc_idx = desc - env->prog->aux->kfunc_tab->descs;
+ 
+ 	near_call = !bpf_jit_supports_far_kfunc_call();
+ 	desc_copy = *desc;
+@@ -24827,9 +24727,15 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		insn->imm = call_imm;
+ 	}
+ 
+-	err = add_kfunc_desc_target(env, desc, base_desc_idx, &desc_idx);
+-	if (err)
+-		return err;
++	if (desc->addr != env->prog->aux->kfunc_tab->descs[desc_idx].addr)
++		desc_idx = add_specialized_kfunc(env, desc);
++	if (desc_idx < 0)
++		return desc_idx;
++	/* JITs find the descriptor by insn->off */
++	if (desc_idx > U16_MAX) {
++		verbose(env, "too many different kernel function calls\n");
++		return -E2BIG;
++	}
+ 	insn->off = desc_idx;
+ 
+ 	if (is_bpf_obj_new_kfunc(desc->func_id) || is_bpf_percpu_obj_new_kfunc(desc->func_id)) {
+@@ -25596,6 +25502,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	bpf_patch_list_free(env);
+ 	kvfree(env->fd_array);
+ 	kvfree(env->used_index.slots);
++	kvfree(env->kfunc_index.slots);
+ 	kvfree(env->insn_array_maps);
+ 	bpf_free_scev(env);
+ 	kvfree(env->walk_insns);
 -- 
 2.55.0
 
