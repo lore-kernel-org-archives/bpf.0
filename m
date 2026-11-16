@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.181
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794842916;
-	b=Y5wVFVzFcc8Ml/6n5u0xAokejVD4A8cotDXihNv+2+PpNuJnJhLVhqVEVxgM0sJDAIhd
-	 kuBQFLIc27HMUG8Usm2yj/37cmu/fU6bx+SNpK1lC7tKTqmYQqlrRi9EL/vVK25RNgtu9
-	 WlSstHURc3rr5j4mxgd/tTc1uTb1EwzbxB8+/dpoFnNT6h1Jd66iB6gsZLO2uza6mQjeM
-	 jzg/MJgyiNgexuxqYYzHx+CSbEaIs7k0a+yOJskQEvmrFsGZBBw2N2CsZQdXO9pnnctcq
-	 DYDgDgODzvawdUHRRWUM4KOgY4rMEEOmHFw2YNUU9U9E1aotHATD/ued6pZhzLJZ7Hw==
+	t=1794842923;
+	b=I/F8EvW84j0/DFbbxTRCUIlUZy6B5O3c+Bble/SeeGWStJOWhdLqvY/R62vziHYbOjwk
+	 9xXdyEcRy5JIFbMuhYvXMSbEXVey+cYaHcDLo2XfxwbjMt9JH1iabJ5MOzeIN5hfvNsRT
+	 I0aZQpHU/7q46Yi8zPqt5FVz47wxEd4WrylsSooZHcLf4kgXqYy9wzvZVBBvShWZhJdmR
+	 lCwEze3bINDNt/j1iiIeHYYYYiK6yonMvjt+xZu15a00Rx8cqAc8HItzlzR2cDUMypYxf
+	 nTMPHm8wgcM8XfE20ZmUftzRBS6RWcyjxSMRf2UTDYPGEPsqQ3IQFai6d8pUPbfp3fw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794842916;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794842923;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=27KF7Wy7RdsIIHwk4zVsW/CXu6CgufWdNwmBA8ngV1g=;
-	b=qSZVjEVLsA/DNPInEmBZxtrnOGAJ4s4qtw172LXgy6aV3QLmDe1GzfDQoUWSFhiql81b
-	 NUX7MUPgir15WMDya/X7QnDnc6XqHs0T8VVpmrh7vhZnthKEUk8nEckoAA7G/S7CqOm9X
-	 PuEXq8Z6zxmWBO1JODkv/o2ttAdDOFO4tW6Ix6+vBYzrVl5kirl69nxFmLH7EzyfcwxQ7
-	 kPHwnmxt/A0jr6reikBxrzqStVsnTtrpKQ7fZHIWH9YfNyt33G5kErwzrJnOC3KZrKZoy
-	 EmGISUIpMNZBGFWu8JaovW4I8n2Snhobw2qgfn/jf0ewEUx94c6Yehnvf2NHOwxiYZQ==
+	bh=UESD2DeEZGjndf7WY6RLOuo/AkpVKVIjAr1EtfjSqww=;
+	b=0Txr7dHajDompyoXFQUt+bEnFRoNSCRJHEL4D3B3xBeAfpHZfmRrWNioUopZGGboKcN/
+	 1C8Pc7PH/WHF4jVrx8oHcgkeTl7A7ePgKH3/RQUFnj9viL6nrwANixxlWT2uZ1Iz4ocJZ
+	 GVv9lb0TuawBd0Ii0gGpdSX/aYfxBU7jhHP5/9HL9JkL5rcR1DouBZ2C571Wk5B1IYckq
+	 LotEdSphw1cZalJeJpguhw9jLAXaHpz5vM29b+B4fEd/JC8k8uGvdluRr19MIUvSKNWD/
+	 ZP6Uiz/soXXnDWitHd1Ucp9R7Wn/wonwG2wCO5Ti7QRJXgDLhVxRjSSHyVOz+mu/reA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=H+LR2te0;
-	arc=none smtp.remote-ip=209.85.216.53
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Kq9YjRhd;
+	arc=none smtp.remote-ip=209.85.214.181
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D406606A337
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 15:28:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9D406606A337
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38BCF606A32F
+	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 15:28:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 38BCF606A32F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=H+LR2te0
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-3ae2b7e1e17so3085071a91.3
-        for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 07:28:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Kq9YjRhd
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2efd659464aso772955ad.3
+        for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 07:28:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794842915; x=1795447715; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794842921; x=1795447721; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=27KF7Wy7RdsIIHwk4zVsW/CXu6CgufWdNwmBA8ngV1g=;
-        b=H+LR2te0/T3VacmVZuha4+sFJUwlcJKVfNgM3MI0wJX7qoYwijkiO8+4ZmHXPEJGW6
-         StG7F6LUe4VgE/nWKKtysJQoN6TS0mjnNvcxccbnrsoeQoIcynFtuI/cL1MrsHKpkRIB
-         CCye+x/9kOlxQJ/kt/I02n4wTP/AbjU0QdRj4dP5ABE+m+lnV2dJAUkNAu+STgD1Cy89
-         6Yi/YlXrdBrgQZPqxTnptoFxocbbmF12LY5R270oHcL+rJBmgpKxRUipYzGa+rLLxwQy
-         uwkgUpgY/JsyqhzmJxmy96xJvNt4mMq1zOek9n0JO3qEd6BZOxFSTQrk0f+sGMob5IUo
-         0mDg==
+        bh=UESD2DeEZGjndf7WY6RLOuo/AkpVKVIjAr1EtfjSqww=;
+        b=Kq9YjRhd2fqqPa+rQfene3BTuC56tAKxRsTmOxj9N54Rj9Qero7wRgXfNJFre/isAq
+         TOTo7RH3TLnTMNEVQ26qKiFQxgslCcUnGhDE1+pKtPl9aRsfrWm05q4S2h4wLJ1Gfvid
+         bcaUpNjOg3gzA/DqzIi0c0tQ3Aff2T8DFNM318RrGpK4BOeaX8s129XygywS3fo8Z42R
+         +nqGWSn2BcAsarQ/NDeyW7DzcZw3IsS/G0H+lbMWbAt+3WsI8ZPeX9mRjmb7sl/T6GU/
+         cMWOHmj8MhvwWz14MxEYht272qTAR//VHsdRXsxtsZgCACrRuycVuw68LEcy/bhMPXdn
+         PHkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794842915; x=1795447715;
+        d=1e100.net; s=20260707; t=1794842921; x=1795447721;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=27KF7Wy7RdsIIHwk4zVsW/CXu6CgufWdNwmBA8ngV1g=;
-        b=vzYXtcO408HbmfZA/6bu9QoTBJgskOeLvAfs/uji8M+2xeRH5ErULIkEv7KGr4iO93
-         N8GfuWDkv7wVT1fMpa79nhiN9Zc3U+SrHfBkAc3gw37MIiOyAv9prA0MIiOQjAQFtJ8g
-         jRe0UGN7NAhwUKVU1aPCtdti2B214q0u7Haq2wfmP+j4fcs/aECE1Kd71Kf1hBR7hj1t
-         7cpyhGpw3cvCIPbwzm1+dT6TmkT+desd/b9Qktrp+NHbK/W3V1PHBv6RN8qHK7d3+Cgi
-         wwfGJBOZYkMNJ7FLLndom75SMacyOy33ExC0o88WdrteJhetX7WRKTunOBhfs//kewg5
-         5f3Q==
-X-Gm-Message-State: APuU4Z8x3b9P7ZRiAp+dolWWlv8+/ddlw/DqtXLyITQNCKgM7n0uBAQK
-	WguQR/OI6KUiqDD6yagjI5kuXru4LUkRlTngPu8oe1k0W4NeUbskFaXt5QgiXg==
-X-Gm-Gg: AZFdTZeoPRcGMqxBxS+zIjm9P+g2Icj8bw8Wc0lETaaDupL53d098gVmWVRUQ1y/k/H
-	V73igxYF6n5nIXcKzk2v8qwtZ4WtcWADtAhz8pEKw/aS4clsOUnii1pjUPT7scdjhjHSgdz6Fvm
-	nFYNsyC31igAhd4Amn3Lzp80AF4rli5nG6iay01nOaG6D1tvb94Y4HejK3xpZyzM5qVJdtz4qZN
-	sP0KSMsRYGQ5LpMZPxuNB7t/ILrtGV/sWD2/NawHudtlLRo/jkJw6iaIE/jeBeCfs5ePQfcSJBy
-	CMGaMJfI9LkFMhLEd6M6uddKo9A94L7CKkQT86xShiJ/M+57TeH0hKBMe9s6hzPp32VtRG4eLsP
-	ztpomPThA8kMj/fG0rYtGO/2oCBtpOYeCL0ESwINupmzsNCAnhsn6o4WhrG3lJXXBagiedLwhaX
-	aa66Xqq/FpPmtfFmeCVke+P+pZ8lTc5r0bFExgKsBKcRDsXms6AMzam4qZSTwBjTh8C7hgxgICf
-	4mBtGBWSMrp/h1aILf5Qq0j1yn/xxhQPwvj0vtIXg2pTiek40Cbz3Cc+LUvhVypjJd5/ZuWju8p
-	jBJixK8oSZG6nrlOW+oFjvjbXfZeShU/8xED5qOBdL9mFM8Y+jVF3AQ08J0iMOBQlDjDoNt1HXR
-	M6GPSEv3U/Xx7XtLjUs34JJ6kkeRZ3X+v819uMnXzPEqU5zVksJ9s89Ybrl7tY0IjFWiZo+pXDw
+        bh=UESD2DeEZGjndf7WY6RLOuo/AkpVKVIjAr1EtfjSqww=;
+        b=iKOgQZg+JNCnZddBA8vBYrzakEYuQk2tV07tSDoq5Na/fUa5fonnr9+p8VO7w1UAiA
+         FKLHZT5sOksjnvQa9vlTPcYAqaAYIICXRTH63T+XzwAHaMENgolkGWbA3fvi2LdNjK2Q
+         wYKBkgGZdK73iBlGhPMdMb0lOfPaBevJhLmufp/CfAALcaJS6Bb663nTez4pB5olYabZ
+         qXLHILNgSaG9Y4cBkuyOVd6Lkoh8mqARiFNoUo67oqof1By/QITFN7KjPR2ANa8Yucs0
+         DpuhWOqL1oUcM7XNaa+eb8B1qxbxl77FSouA/j+zUP/dnV9G+C85dGsH1qQ70tt8ui1n
+         eavQ==
+X-Gm-Message-State: APuU4Z+LzcjQu/hQDBPFXdMV5Uv+DmuQ0SqqJ4c5Q6wl6CrSH715mSn8
+	k1I9ZL7lk6BOQRZknSG7G1Akmx3ALxDG0+PeYX/QFdbuFxGfpDv+oyHrqEUUvA==
+X-Gm-Gg: AZFdTZdsR34T7x6v9AkSDDSMNjnRbm+ljJIE9Aew+Uzi0X/fKWwHVkKCx0Nwtp1bcQt
+	IfIJ4Y4HjEYhhGv52Hn96JisS04aA7u4xvUOKRo+qkO9t0nL8GNt9Cz+26LSDNprub1d2WD512+
+	epNnlcco6g4Ykfu0t276nbNpSZAaKIIhUIlLeNjhwHcdEycF1PXA+qi9IM4UgCVFUZ5Y9IVxxDY
+	TDrYJ+EWiUAl40SFtJcGTHQrkIPfPEftMwASjnY5IdqmmC1Q21EBRnyKxpt+af2xvLwPt23XUhj
+	K/s/SkmmiBB+jOVM4oVTokEC0FByDxCjhz/EsS3micK+DGofKY3o9IyEFDKwZKyyHZb3b/gDsUK
+	hLlV8SFzG52zirCN7Zm0NN47b/PwwimhqeVUsL0IUnauuEBuiqcVSG8UGvJhENaCYaiu58HK5Sn
+	WkbsigBgRqDFnnymwotiUW8b7hvSads4IepiIgZECST5xIVcIStfFZrtjfCuoKlvEwqHQ2j8JsI
+	mUePwKzRmHfdVNbJN7Du00OgBIPMa3lwzN0G11PEYfPQmoNSz+RLgM03nV0gnDsls69ZQUybqHN
+	htzgqV8Lc4hh2GFlXtYuHXHKp4wzUpmGeoWHBsGtSZHCUpNkSw3e6pFj0zDc/y5zvllfPLGEHcx
+	O/YdrTqoOVat2E/uVykm6I69Mjj+GYX+rJcvzb2ewncvLabKRRkNFHIvo8jppaDHL3eOysAxVEg
 	==
-X-Received: by 2002:a17:90b:2642:b0:3b0:9162:948e with SMTP id 98e67ed59e1d1-3b1b0ba0a60mr9584027a91.27.1794842914766;
-        Mon, 16 Nov 2026 07:28:34 -0800 (PST)
+X-Received: by 2002:a17:902:ef12:b0:2e9:401f:f0f4 with SMTP id d9443c01a7336-2ee0dc93264mr104902445ad.16.1794842921132;
+        Mon, 16 Nov 2026 07:28:41 -0800 (PST)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.255])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1aeb3d2d4sm17303896a91.7.2026.11.16.07.28.33
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2efd7a7ff9asm977425ad.54.2026.11.16.07.28.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2026 07:28:33 -0800 (PST)
+        Mon, 16 Nov 2026 07:28:40 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 20/21] selftests/bpf: Test programs above the old limits
-Date: Mon, 16 Nov 2026 15:26:25 +0000
-Message-ID: <20261116152626.4032587-21-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 21/21] selftests/bpf: Test limits of the load with raw programs
+Date: Mon, 16 Nov 2026 15:26:26 +0000
+Message-ID: <20261116152626.4032587-22-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261116152626.4032587-1-alexei.starovoitov@gmail.com>
 References: <20261116152626.4032587-1-alexei.starovoitov@gmail.com>
@@ -104,394 +104,546 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-100 maps, 1100 subprogs, calls in dead code, 1000 kptrs, far cleanup
-pads, bpf_loop() with a dead callback. Unsafe twins must fail.
+A load under a timer signal, under the freezer and in a small memory
+cgroup, the context of a syscall program, 33000 subprogs, a dump of more
+than 4 MB, 300 kfuncs, loops of BTF types, long BTF names, a light
+skeleton with 600 maps and 601 programs.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- .../selftests/bpf/prog_tests/verifier.c       |   4 +
- .../bpf/progs/verifier_callx_dead_cb.c        |  60 +++++
- .../selftests/bpf/progs/verifier_no_limits.c  | 224 ++++++++++++++++++
- .../selftests/bpf/progs/verifier_unwind.c     |  32 +++
- 4 files changed, 320 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_callx_dead_cb.c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_no_limits.c
+ tools/testing/selftests/bpf/Makefile.skel     |   2 +-
+ .../selftests/bpf/prog_tests/no_limits.c      | 465 ++++++++++++++++++
+ .../testing/selftests/bpf/progs/many_progs.c  |  36 ++
+ 3 files changed, 502 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/no_limits.c
+ create mode 100644 tools/testing/selftests/bpf/progs/many_progs.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 4d77b8fd4eab..57ff2578a991 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -39,6 +39,7 @@
- #include "verifier_call_large_imm.skel.h"
- #include "verifier_calls_in_a_row.skel.h"
- #include "verifier_callx.skel.h"
-+#include "verifier_callx_dead_cb.skel.h"
- #include "verifier_callx_many.skel.h"
- #include "verifier_callx_rodata.skel.h"
- #include "verifier_cfg.skel.h"
-@@ -110,6 +111,7 @@
- #include "verifier_netfilter_retcode.skel.h"
- #include "verifier_bpf_fastcall.skel.h"
- #include "verifier_or_jmp32_k.skel.h"
-+#include "verifier_no_limits.skel.h"
- #include "verifier_patch_list.skel.h"
- #include "verifier_percpu_addr.skel.h"
- #include "verifier_precision.skel.h"
-@@ -248,6 +250,7 @@ void test_verifier_btf_unreliable_prog(void)  { RUN(verifier_btf_unreliable_prog
- void test_verifier_call_large_imm(void)       { RUN(verifier_call_large_imm); }
- void test_verifier_calls_in_a_row(void)       { RUN(verifier_calls_in_a_row); }
- void test_verifier_callx(void)                { RUN_JITED(verifier_callx); }
-+void test_verifier_callx_dead_cb(void)        { RUN_JITED(verifier_callx_dead_cb); }
- void test_verifier_callx_many(void)           { RUN_JITED(verifier_callx_many); }
- void test_verifier_callx_rodata(void)         { RUN_JITED(verifier_callx_rodata); }
- void test_verifier_cfg(void)                  { RUN(verifier_cfg); }
-@@ -317,6 +320,7 @@ void test_verifier_mul(void)                  { RUN(verifier_mul); }
- void test_verifier_netfilter_ctx(void)        { RUN(verifier_netfilter_ctx); }
- void test_verifier_netfilter_retcode(void)    { RUN(verifier_netfilter_retcode); }
- void test_verifier_bpf_fastcall(void)         { RUN(verifier_bpf_fastcall); }
-+void test_verifier_no_limits(void)            { RUN_JITED(verifier_no_limits); }
- void test_verifier_or_jmp32_k(void)           { RUN(verifier_or_jmp32_k); }
- /*
-  * Run serially with bpf_jit_harden at 0: blinding changes the xlated insns that
-diff --git a/tools/testing/selftests/bpf/progs/verifier_callx_dead_cb.c b/tools/testing/selftests/bpf/progs/verifier_callx_dead_cb.c
+diff --git a/tools/testing/selftests/bpf/Makefile.skel b/tools/testing/selftests/bpf/Makefile.skel
+index b8eaecc7f429..45e4ce5dca4d 100644
+--- a/tools/testing/selftests/bpf/Makefile.skel
++++ b/tools/testing/selftests/bpf/Makefile.skel
+@@ -34,7 +34,7 @@ LINKED_SKELS := test_static_linked.skel.h linked_funcs.skel.h		\
+ LSKELS := fexit_sleep.c trace_printk.c trace_vprintk.c map_ptr_kern.c 	\
+ 	core_kern.c core_kern_overflow.c test_ringbuf.c			\
+ 	test_ringbuf_n.c test_ringbuf_map_key.c test_ringbuf_write.c    \
+-	test_ringbuf_overwrite.c callx_rodata.c
++	test_ringbuf_overwrite.c callx_rodata.c many_progs.c
+ 
+ LSKELS_SIGNED := fentry_test.c fexit_test.c atomics.c
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/no_limits.c b/tools/testing/selftests/bpf/prog_tests/no_limits.c
 new file mode 100644
-index 000000000000..a0873095566b
+index 000000000000..b949d1db23e6
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_callx_dead_cb.c
-@@ -0,0 +1,60 @@
++++ b/tools/testing/selftests/bpf/prog_tests/no_limits.c
+@@ -0,0 +1,465 @@
 +// SPDX-License-Identifier: GPL-2.0
-+/* libbpf appends all functions of the table to the prog, hence a file of its own. */
++/* Limits of the load that an ELF file cannot show, or shows at a high price */
 +
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
++#include <test_progs.h>
++#include <bpf/btf.h>
++#include <sys/param.h>
++#include <sys/resource.h>
++#include <sys/time.h>
++#include "cgroup_helpers.h"
++#include "many_progs.lskel.h"
 +
-+#ifdef CAN_USE_CALLX
-+
-+__naked __noinline __used static int live_func(void)
++static int load(struct bpf_insn *insns, int cnt)
 +{
-+	asm volatile ("r0 = 3; exit;");
++	return bpf_prog_load(BPF_PROG_TYPE_SCHED_CLS, NULL, "GPL", insns, cnt, NULL);
 +}
 +
-+__naked __noinline __used static int dead_cb(void)
++static struct bpf_insn *straight_code(int cnt)
 +{
-+	asm volatile ("r0 = 0; exit;");
++	struct bpf_insn *insns = calloc(cnt, sizeof(*insns));
++	int i;
++
++	if (!ASSERT_OK_PTR(insns, "insns"))
++		return NULL;
++	for (i = 0; i < cnt - 1; i++)
++		insns[i] = BPF_MOV64_IMM(BPF_REG_0, i);
++	insns[i] = BPF_EXIT_INSN();
++	return insns;
 +}
 +
-+/* The loop has no iterations. The callback is the last function and it is removed. */
-+SEC("socket")
-+__success __retval(3)
-+__naked void loop_with_dead_callback(void)
++static void on_alarm(int sig)
 +{
-+	asm volatile (
-+	".pushsection .rodata,\"a\",@progbits;"
-+	".balign 8;"
-+"funcs_%=:"
-+	".quad live_func;"
-+	".quad dead_cb;"
-+	".type funcs_%=, @object;"
-+	".size funcs_%=, .-funcs_%=;"
-+	".popsection;"
-+	"r6 = funcs_%= ll;"
-+	"r1 = 0;"
-+	"r2 = *(u64 *)(r6 + 8);"
-+	"r3 = 0;"
-+	"r4 = 0;"
-+	"call %[bpf_loop];"
-+	"r2 = *(u64 *)(r6 + 0);"
-+	"callx r2;"
-+	"exit;"
-+	:
-+	: __imm(bpf_loop)
-+	: __clobber_all);
 +}
 +
-+#else
-+
-+SEC("socket")
-+__skip("callx needs arch JIT and compiler support")
-+__success
-+int dummy(void *ctx)
++/* A signal that does not kill does not stop the load */
++static void test_signals(void)
 +{
-+	return 0;
++	struct itimerval on = { { 0, 200 }, { 0, 200 } }, off = {};
++	struct sigaction sa = { .sa_handler = on_alarm }, old;
++	struct bpf_insn *insns = straight_code(20000);
++	int fd;
++
++	if (!insns)
++		return;
++	sigaction(SIGALRM, &sa, &old);
++	setitimer(ITIMER_REAL, &on, NULL);
++	fd = load(insns, 20000);
++	setitimer(ITIMER_REAL, &off, NULL);
++	sigaction(SIGALRM, &old, NULL);
++	if (ASSERT_OK_FD(fd, "load"))
++		close(fd);
++	free(insns);
 +}
 +
-+#endif
++static int exit_code(pid_t pid)
++{
++	int status;
 +
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/verifier_no_limits.c b/tools/testing/selftests/bpf/progs/verifier_no_limits.c
++	if (!ASSERT_EQ(waitpid(pid, &status, 0), pid, "wait") ||
++	    !ASSERT_TRUE(WIFEXITED(status), "exited"))
++		return -1;
++	return WEXITSTATUS(status);
++}
++
++/* The freezer does not wait for the end of the load. The load starts again after it. */
++static void test_freezer(int flag)
++{
++	struct bpf_insn *insns = straight_code(200000);
++	struct bpf_common_attr common = {};
++	union bpf_attr attr = {
++		.prog_type = BPF_PROG_TYPE_SCHED_CLS,
++		.insns = ptr_to_u64(insns),
++		.insn_cnt = 200000,
++		.license = ptr_to_u64("GPL"),
++	};
++	int cg = -1, pipes[2] = { -1, -1 }, fd;
++	char buf[64] = "";
++	pid_t pid;
++
++	if (!insns || !ASSERT_OK(setup_cgroup_environment(), "setup") ||
++	    !ASSERT_OK(pipe(pipes), "pipe"))
++		goto out;
++	cg = create_and_get_cgroup("/no_limits");
++	if (!ASSERT_OK_FD(cg, "cgroup"))
++		goto out;
++	pid = fork();
++	if (!pid) {
++		/* the fd that the prog gets */
++		if (join_parent_cgroup("/no_limits"))
++			_exit(1);
++		fd = dup(pipes[0]);
++		close(fd);
++		if (write(pipes[1], &fd, sizeof(fd)) != sizeof(fd))
++			_exit(2);
++		_exit(syscall(__NR_bpf, BPF_PROG_LOAD | flag, &attr, sizeof(attr), &common,
++			      sizeof(common)) != fd ? 3 : 0);
++	}
++	close(pipes[1]);
++	if (ASSERT_EQ(read(pipes[0], &fd, sizeof(fd)), sizeof(fd), "read")) {
++		usleep(10000);
++		ASSERT_OK(write_cgroup_file("/no_limits", "cgroup.freeze", "1"), "freeze");
++		while (!strstr(buf, "frozen 1") &&
++		       !read_cgroup_file("/no_limits", "cgroup.events", buf, sizeof(buf)))
++			usleep(1000);
++		snprintf(buf, sizeof(buf), "/proc/%d/fd/%d", pid, fd);
++		ASSERT_ERR(faccessat(AT_FDCWD, buf, F_OK, AT_SYMLINK_NOFOLLOW), "no prog yet");
++		ASSERT_OK(write_cgroup_file("/no_limits", "cgroup.freeze", "0"), "thaw");
++	}
++	ASSERT_OK(exit_code(pid), "load");
++out:
++	close(pipes[0]);
++	if (cg >= 0)
++		close(cg);
++	cleanup_cgroup_environment();
++	free(insns);
++}
++
++/* 4 * funcs + 1 insns */
++static struct bpf_insn *many_funcs(int funcs)
++{
++	struct bpf_insn *insns = calloc(4 * funcs + 1, sizeof(*insns)), *f;
++	int i;
++
++	if (!ASSERT_OK_PTR(insns, "insns"))
++		return NULL;
++	for (i = 0, f = insns + funcs + 1; i < funcs; i++) {
++		insns[i] = BPF_CALL_REL(f - &insns[i] - 1);
++		*f++ = BPF_MOV64_IMM(BPF_REG_0, i);
++		*f++ = BPF_MOV64_IMM(BPF_REG_2, 0);
++		*f++ = BPF_EXIT_INSN();
++	}
++	insns[funcs] = BPF_EXIT_INSN();
++	return insns;
++}
++
++static int load_in_memcg(struct bpf_insn *insns, int cnt)
++{
++	pid_t pid = fork();
++	int fd;
++
++	if (pid)
++		return exit_code(pid);
++	fd = join_parent_cgroup("/no_limits") ? -EINVAL : load(insns, cnt);
++	_exit(fd < 0 ? -fd : 0);
++}
++
++/* The load fails. The OOM killer leaves the loader alone. */
++static void test_memcg(void)
++{
++	struct bpf_insn *insns = straight_code(200000), *funcs = many_funcs(2000);
++	int cg = -1, mb, err;
++	char max[16];
++
++	if (!insns || !funcs || !ASSERT_OK(setup_cgroup_environment(), "setup"))
++		goto out;
++	cg = create_and_get_cgroup("/no_limits");
++	if (!ASSERT_OK_FD(cg, "cgroup"))
++		goto out;
++	if (write_cgroup_file("/no_limits", "memory.max", "16M")) {
++		test__skip();
++		goto out;
++	}
++	ASSERT_EQ(load_in_memcg(insns, 200000), ENOMEM, "errno");
++
++	/* some of these end in the JIT of the subprogs */
++	for (mb = 4; mb <= 24; mb += 2) {
++		snprintf(max, sizeof(max), "%dM", mb);
++		ASSERT_OK(write_cgroup_file("/no_limits", "memory.max", max), "max");
++		err = load_in_memcg(funcs, 4 * 2000 + 1);
++		ASSERT_TRUE(!err || err == ENOMEM, "errno");
++	}
++out:
++	if (cg >= 0)
++		close(cg);
++	cleanup_cgroup_environment();
++	free(insns);
++	free(funcs);
++}
++
++static int run(int fd)
++{
++	char pkt[64] = {};
++	LIBBPF_OPTS(bpf_test_run_opts, opts, .data_in = pkt, .data_size_in = sizeof(pkt));
++
++	return bpf_prog_test_run_opts(fd, &opts) ?: opts.retval;
++}
++
++/* The target of a tail call reads the context at 'off'. The run passes 8 bytes. */
++static void check_syscall_target(int off, int expected)
++{
++	LIBBPF_OPTS(bpf_prog_load_opts, opts, .prog_flags = BPF_F_SLEEPABLE);
++	int map = bpf_map_create(BPF_MAP_TYPE_PROG_ARRAY, NULL, 4, 4, 1, NULL);
++	struct bpf_insn first[] = {
++		BPF_LD_MAP_FD(BPF_REG_2, map),
++		BPF_MOV64_IMM(BPF_REG_3, 0),
++		BPF_EMIT_CALL(BPF_FUNC_tail_call),
++		BPF_MOV64_IMM(BPF_REG_0, 3),
++		BPF_EXIT_INSN(),
++	}, target[] = {
++		BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, off),
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1, 0),
++		BPF_EXIT_INSN(),
++	};
++	int ctx[2] = { 5, 7 }, key = 0, fd, target_fd;
++	LIBBPF_OPTS(bpf_test_run_opts, run_opts, .ctx_in = ctx, .ctx_size_in = sizeof(ctx));
++
++	fd = bpf_prog_load(BPF_PROG_TYPE_SYSCALL, NULL, "GPL", first, ARRAY_SIZE(first), &opts);
++	target_fd = bpf_prog_load(BPF_PROG_TYPE_SYSCALL, NULL, "GPL", target, ARRAY_SIZE(target),
++				  &opts);
++	if (ASSERT_OK_FD(fd, "load") && ASSERT_OK_FD(target_fd, "target"))
++		ASSERT_EQ(bpf_map_update_elem(map, &key, &target_fd, 0) ?:
++			  bpf_prog_test_run_opts(fd, &run_opts) ?: (int)run_opts.retval,
++			  expected, "result");
++	close(fd);
++	close(target_fd);
++	close(map);
++}
++
++static void test_syscall_ctx(void)
++{
++	int off;
++
++	check_syscall_target(4, 7);
++	for (off = 8; off < 65532; off += 4096)
++		check_syscall_target(off, 0);
++}
++
++/* The number of a subprog does not fit into s16 */
++static void test_subprogs(void)
++{
++	const int funcs = 33000, cnt = 4 * funcs + 1;
++	struct bpf_insn *insns = many_funcs(funcs);
++	struct bpf_prog_info info = {};
++	__u32 len = sizeof(info);
++	int fd;
++
++	if (!insns)
++		return;
++	fd = load(insns, cnt);
++	if (!ASSERT_OK_FD(fd, "load"))
++		goto out;
++	ASSERT_EQ(run(fd), funcs - 1, "retval");
++	info.xlated_prog_len = cnt * sizeof(*insns);
++	info.xlated_prog_insns = ptr_to_u64(insns);
++	if (ASSERT_OK(bpf_prog_get_info_by_fd(fd, &info, &len), "dump"))
++		ASSERT_EQ(insns[funcs - 1].imm, funcs, "subprog");
++	close(fd);
++out:
++	free(insns);
++}
++
++/* A division takes 4 insns. The dump has more than 4 MB. */
++static void test_dump(void)
++{
++	const int cnt = 140000;
++	struct bpf_insn *insns = straight_code(4 * cnt);
++	struct bpf_prog_info info = {};
++	__u32 len = sizeof(info);
++	int fd, i;
++
++	if (!insns)
++		return;
++	insns[0] = BPF_EMIT_CALL(BPF_FUNC_get_prandom_u32);
++	insns[1] = BPF_MOV64_REG(BPF_REG_1, BPF_REG_0);
++	for (i = 2; i < cnt - 1; i++)
++		insns[i] = BPF_ALU64_REG(BPF_DIV, BPF_REG_0, BPF_REG_1);
++	insns[i] = BPF_EXIT_INSN();
++
++	fd = load(insns, cnt);
++	if (ASSERT_OK_FD(fd, "load")) {
++		info.xlated_prog_len = 4 * cnt * sizeof(*insns);
++		info.xlated_prog_insns = ptr_to_u64(insns);
++		if (ASSERT_OK(bpf_prog_get_info_by_fd(fd, &info, &len), "dump"))
++			ASSERT_GT(info.xlated_prog_len, 4 << 20, "len");
++		close(fd);
++	}
++	free(insns);
++}
++
++/* Calls of all kfuncs that the verifier can describe, in dead code */
++static void test_kfuncs(void)
++{
++	struct btf *btf = btf__load_vmlinux_btf();
++	struct bpf_insn insns[1024], one[] = {
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 1),
++		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0, 0),
++		BPF_EXIT_INSN(),
++	};
++	const struct btf_type *t;
++	int id, fd, cnt = 2;
++
++	if (!ASSERT_OK_PTR(btf, "btf"))
++		return;
++	for (id = 1; id < btf__type_cnt(btf) && cnt < 302; id++) {
++		t = btf__type_by_id(btf, id);
++		if (!btf_is_func(t) || strncmp(btf__name_by_offset(btf, t->name_off), "bpf_", 4))
++			continue;
++		one[2].imm = id;
++		fd = load(one, ARRAY_SIZE(one));
++		if (fd < 0)
++			continue;
++		close(fd);
++		insns[cnt++] = one[2];
++	}
++	btf__free(btf);
++	if (cnt < 302) {
++		test__skip();
++		return;
++	}
++	insns[0] = one[0];
++	insns[1] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, cnt - 2);
++	insns[cnt++] = one[3];
++	fd = load(insns, cnt);
++	if (ASSERT_OK_FD(fd, "load"))
++		close(fd);
++}
++
++/* Type 1 is int, type 'value' is the value of a map */
++static void check_btf(struct btf *btf, int value, int expected)
++{
++	LIBBPF_OPTS(bpf_map_create_opts, opts, .btf_key_type_id = 1, .btf_value_type_id = value);
++	int fd;
++
++	if (ASSERT_EQ(btf__load_into_kernel(btf), expected, "load") && !expected) {
++		opts.btf_fd = btf__fd(btf);
++		fd = bpf_map_create(BPF_MAP_TYPE_ARRAY, NULL, 4, 4, 1, &opts);
++		if (ASSERT_OK_FD(fd, "map"))
++			close(fd);
++	}
++	btf__free(btf);
++}
++
++static struct btf *new_btf(void)
++{
++	struct btf *btf = btf__new_empty();
++
++	btf__add_int(btf, "int", 4, BTF_INT_SIGNED);
++	return btf;
++}
++
++enum chain { STRUCTS, ARRAYS, TYPEDEFS, DAG };
++
++/* Type 2 holds type 3, ... The last one holds type 'last'. */
++static struct btf *btf_chain(enum chain kind, int cnt, int last)
++{
++	struct btf *btf = new_btf();
++	int i, next;
++
++	for (i = 2; i < cnt + 2; i++) {
++		next = i == cnt + 1 ? last : i + 1;
++		if (kind == ARRAYS) {
++			btf__add_array(btf, 1, next, 1);
++		} else if (kind == TYPEDEFS) {
++			btf__add_typedef(btf, "t", next);
++		} else {
++			btf__add_struct(btf, "s", 4);
++			btf__add_field(btf, "a", next, 0, 0);
++			if (kind != DAG)
++				continue;
++			btf__add_field(btf, "b", next, 0, 0);
++			btf__add_field(btf, "c", next, 0, 0);
++		}
++	}
++	return btf;
++}
++
++static void test_btf(void)
++{
++	static char name[4098];
++	struct btf *btf;
++	enum chain kind;
++	int i;
++
++	for (kind = STRUCTS; kind <= DAG; kind++) {
++		check_btf(btf_chain(kind, 30, 1), 2, 0);
++		check_btf(btf_chain(kind, 30, 2), 2, -EEXIST);
++	}
++
++	/* 1M kptrs in a struct that nobody can allocate */
++	btf = new_btf();
++	btf__add_struct(btf, "task_struct", 4);
++	btf__add_field(btf, "a", 1, 0, 0);
++	btf__add_type_tag(btf, "kptr", 2);
++	btf__add_ptr(btf, 3);
++	btf__add_array(btf, 1, 4, 1000000);
++	for (i = 0; i < 100; i++) {
++		btf__add_struct(btf, "s", 8000008);
++		btf__add_field(btf, "p", 4, 0, 0);
++		btf__add_field(btf, "a", 5, 64, 0);
++	}
++	check_btf(btf, 1, 0);
++
++	/* ptr -> typedef -> struct -> array -> typedef */
++	btf = new_btf();
++	btf__add_ptr(btf, 3);
++	btf__add_typedef(btf, "t", 4);
++	btf__add_struct(btf, "s", 4);
++	btf__add_field(btf, "a", 5, 0, 0);
++	btf__add_array(btf, 1, 3, 1);
++	check_btf(btf, 4, -EEXIST);
++
++	/* ptr -> typedef -> array -> typedef */
++	btf = new_btf();
++	btf__add_ptr(btf, 3);
++	btf__add_typedef(btf, "t", 4);
++	btf__add_array(btf, 1, 3, 1);
++	check_btf(btf, 4, -EEXIST);
++
++	memset(name, 'x', 4097);
++	btf = new_btf();
++	btf__add_typedef(btf, name, 1);
++	check_btf(btf, 2, -EINVAL);
++
++	name[4096] = 0;
++	btf = new_btf();
++	btf__add_typedef(btf, name, 1);
++	check_btf(btf, 2, 0);
++
++	name[4000] = 7;
++	btf = new_btf();
++	btf__add_typedef(btf, name, 1);
++	check_btf(btf, 2, -EINVAL);
++}
++
++/* 600 maps and 601 programs */
++static void test_lskel(void)
++{
++	struct rlimit old, new = { 4096, 4096 };
++	struct many_progs_lskel *skel;
++
++	getrlimit(RLIMIT_NOFILE, &old);
++	new.rlim_max = MAX(new.rlim_max, old.rlim_max);
++	setrlimit(RLIMIT_NOFILE, &new);
++	skel = many_progs_lskel__open_and_load();
++	setrlimit(RLIMIT_NOFILE, &old);
++	if (!ASSERT_OK_PTR(skel, "load"))
++		return;
++	ASSERT_EQ(run(skel->progs.prog699.prog_fd), 699, "retval");
++	ASSERT_EQ(run(skel->progs.last.prog_fd), 2, "weak ksym");
++	many_progs_lskel__destroy(skel);
++}
++
++void serial_test_no_limits(void)
++{
++	if (test__start_subtest("signals"))
++		test_signals();
++	if (test__start_subtest("freezer"))
++		test_freezer(0);
++	if (test__start_subtest("freezer_common_attrs"))
++		test_freezer(BPF_COMMON_ATTRS);
++	if (test__start_subtest("memcg"))
++		test_memcg();
++	if (test__start_subtest("syscall_ctx"))
++		test_syscall_ctx();
++	if (test__start_subtest("subprogs"))
++		test_subprogs();
++	if (test__start_subtest("dump"))
++		test_dump();
++	if (test__start_subtest("kfuncs"))
++		test_kfuncs();
++	if (test__start_subtest("btf"))
++		test_btf();
++	if (test__start_subtest("lskel"))
++		test_lskel();
++}
+diff --git a/tools/testing/selftests/bpf/progs/many_progs.c b/tools/testing/selftests/bpf/progs/many_progs.c
 new file mode 100644
-index 000000000000..a38d75293238
+index 000000000000..060f7b265258
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_no_limits.c
-@@ -0,0 +1,224 @@
++++ b/tools/testing/selftests/bpf/progs/many_progs.c
+@@ -0,0 +1,36 @@
 +// SPDX-License-Identifier: GPL-2.0
-+/* Programs above the limits that the verifier used to have, and unsafe twins of them */
-+
 +#include <vmlinux.h>
 +#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_core_read.h>
-+#include "bpf_misc.h"
-+#include "bpf_experimental.h"
 +
 +#define REP10(M, p) M(p##0) M(p##1) M(p##2) M(p##3) M(p##4) M(p##5) M(p##6) M(p##7) M(p##8) M(p##9)
 +#define REP100(M, p) REP10(M, p##0) REP10(M, p##1) REP10(M, p##2) REP10(M, p##3) REP10(M, p##4) \
 +		     REP10(M, p##5) REP10(M, p##6) REP10(M, p##7) REP10(M, p##8) REP10(M, p##9)
 +
-+/* 100 maps */
-+
-+#define MAP(n) char map##n[8] SEC(".data.map" #n) = { 1 };
-+#define MAP_READ(n) "r1 = map" #n " ll; r1 = *(u8 *)(r1 + 0); r0 += r1;"
-+REP100(MAP, 1)
-+
-+SEC("?tc")
-+__success __retval(100)
-+__naked void maps_100(void)
-+{
-+	asm volatile ("r0 = 0;" REP100(MAP_READ, 1) "exit;" ::: __clobber_all);
-+}
-+
-+SEC("?tc")
-+__failure __msg("invalid access to map value, value_size=8 off=8 size=1")
-+__naked void maps_100_bad(void)
-+{
-+	asm volatile ("r0 = 0;" REP100(MAP_READ, 1) "r1 = map199 ll; r0 = *(u8 *)(r1 + 8); exit;"
-+		      ::: __clobber_all);
-+}
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 2);
-+	__uint(key_size, sizeof(int));
-+	__uint(value_size, sizeof(int));
-+} jmp_table SEC(".maps");
-+
-+/* 1100 subprogs */
-+
-+#define REP1100(M) REP100(M, 10) REP100(M, 11) REP100(M, 12) REP100(M, 13) REP100(M, 14) \
-+		   REP100(M, 15) REP100(M, 16) REP100(M, 17) REP100(M, 18) REP100(M, 19) \
-+		   REP100(M, 20)
-+#define FUNC(n) __naked __noinline __used static void func##n(void) \
-+		{ asm volatile ("r0 = r1; r0 += 1; r2 = 0; exit;"); }
-+#define FUNC_CALL(n) "r1 = r0; call func" #n ";"
-+REP1100(FUNC)
-+
-+SEC("?tc")
-+__success __retval(1100)
-+__naked void subprogs_1100(void)
-+{
-+	asm volatile ("r0 = 0;" REP1100(FUNC_CALL) "exit;" ::: __clobber_all);
-+}
-+
-+SEC("?tc")
-+__failure __msg("invalid mem access 'scalar'")
-+__naked void subprogs_1100_bad(void)
-+{
-+	asm volatile ("r0 = 0;" REP1100(FUNC_CALL) "r0 = *(u8 *)(r0 + 0); exit;" ::: __clobber_all);
-+}
-+
-+/* Calls in dead code do not count. Only the main pass knows that (x & 7) > 7 is false. */
-+
-+#define DEAD_IF(limit)			\
-+	"call %[bpf_get_prandom_u32];"	\
-+	"r0 &= 7;"			\
-+	"if r0 <= " #limit " goto 1f;"
-+
-+#define RECURSION(name, limit)					\
-+__naked __noinline __used static void name##_func(void)	\
++#define PROG(n)							\
++struct {							\
++	__uint(type, BPF_MAP_TYPE_ARRAY);			\
++	__uint(max_entries, 1);					\
++	__type(key, int);					\
++	__type(value, int);					\
++} map##n SEC(".maps");						\
++								\
++SEC("tc")							\
++int prog##n(void *ctx)						\
 +{								\
-+	asm volatile (						\
-+	DEAD_IF(limit)						\
-+	"call " #name "_func;"					\
-+"1:	r0 = 0;"						\
-+	"exit;"							\
-+	:: __imm(bpf_get_prandom_u32) : __clobber_all);		\
-+}								\
-+__naked void name(void)						\
-+{								\
-+	asm volatile ("call " #name "_func; exit;" ::: __clobber_all); \
++	int *v = bpf_map_lookup_elem(&map##n, &(int){ 0 });	\
++								\
++	return v ? *v + n : 0;					\
 +}
 +
-+void dead_recursion(void) SEC("?raw_tp") __success;
-+RECURSION(dead_recursion, 7)
++REP100(PROG, 1) REP100(PROG, 2) REP100(PROG, 3) REP100(PROG, 4) REP100(PROG, 5) REP100(PROG, 6)
 +
-+void live_recursion(void) SEC("?raw_tp") __arch_x86_64 __arch_arm64
-+__failure __msg("in a tracing program");
-+RECURSION(live_recursion, 6)
++extern const void no_such_symbol __ksym __weak;
 +
-+#define TAIL_CALL_IN_CB(name, limit)				\
-+__naked __noinline __used static void name##_cb(void)		\
-+{								\
-+	asm volatile (						\
-+	"r6 = *(u64 *)(r2 + 0);"				\
-+	DEAD_IF(limit)						\
-+	"r1 = r6;"						\
-+	"r2 = %[jmp_table] ll;"					\
-+	"r3 = 0;"						\
-+	"call %[bpf_tail_call];"				\
-+"1:	r0 = 1;"						\
-+	"exit;"							\
-+	:: __imm(bpf_get_prandom_u32), __imm(bpf_tail_call),	\
-+	   __imm_addr(jmp_table) : __clobber_all);		\
-+}								\
-+__naked void name(void)						\
-+{								\
-+	asm volatile (						\
-+	"*(u64 *)(r10 - 8) = r1;"				\
-+	"r1 = 1;"						\
-+	"r2 = " #name "_cb ll;"					\
-+	"r3 = r10;"						\
-+	"r3 += -8;"						\
-+	"r4 = 0;"						\
-+	"call %[bpf_loop];"					\
-+	"exit;"							\
-+	:: __imm(bpf_loop) : __clobber_all);			\
-+}
-+
-+void dead_tail_call_in_cb(void) SEC("?tc") __success __retval(1);
-+TAIL_CALL_IN_CB(dead_tail_call_in_cb, 7)
-+
-+void live_tail_call_in_cb(void) SEC("?tc") __failure __msg("tail call");
-+TAIL_CALL_IN_CB(live_tail_call_in_cb, 6)
-+
-+/* Many edges to one insn: the dominators take linear time */
-+SEC("?tc")
-+__success __retval(0)
-+__naked void goto_out_30000(void)
++/* The loader is more than 32768 insns away from its cleanup code */
++SEC("tc")
++int last(void *ctx)
 +{
-+	asm volatile (
-+	"r6 = *(u32 *)(r1 + 0);"
-+	".rept 30000;"
-+	"if r6 == 1 goto 1f;"
-+	".endr;"
-+"1:	r0 = 0;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+/* GCC loses the tag of 'struct task_struct __kptr *task[1000]' */
-+struct one_kptr {
-+	struct task_struct __kptr *p;
-+};
-+
-+/* 1000 kptrs in a map value. The struct is too big for an allocated object. */
-+
-+struct many_kptrs {
-+	long x;
-+	struct task_struct __kptr *first;
-+	struct one_kptr task[1000];
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, struct many_kptrs);
-+} kptr_map SEC(".maps");
-+
-+SEC("?tc")
-+__success __retval(0)
-+int kptrs_1000(void *ctx)
-+{
-+	struct many_kptrs *v = bpf_map_lookup_elem(&kptr_map, &(int){ 0 });
-+	struct task_struct *t;
-+
-+	if (!v)
-+		return 1;
-+	t = bpf_kptr_xchg(&v->task[999].p, NULL);
-+	if (t)
-+		bpf_task_release(t);
-+	return v->x;
-+}
-+
-+SEC("?tc")
-+__failure __msg("kptr access misaligned")
-+int kptrs_1000_bad(void *ctx)
-+{
-+	struct many_kptrs *v = bpf_map_lookup_elem(&kptr_map, &(int){ 0 });
-+
-+	if (!v)
-+		return 1;
-+	*(volatile int *)((void *)&v->task[999].p + 4) = 1;
-+	return 0;
-+}
-+
-+SEC("?tc")
-+__success __retval(1)
-+int kptrs_1000_obj_new(void *ctx)
-+{
-+	struct many_kptrs *p = bpf_obj_new(typeof(*p));
-+
-+	if (!p)
-+		return 1;
-+	bpf_obj_drop(p);
-+	return 0;
-+}
-+
-+/* 500 kptrs in an allocated object */
-+
-+struct obj_kptrs {
-+	struct task_struct __kptr *first;
-+	struct one_kptr task[499];
-+};
-+
-+SEC("?tc")
-+__failure __msg("direct access to kptr is disallowed")
-+int kptrs_500_obj_bad(void *ctx)
-+{
-+	struct obj_kptrs *p = bpf_obj_new(typeof(*p));
-+
-+	if (!p)
-+		return 1;
-+	*(volatile long *)&p->task[498].p = 1;
-+	bpf_obj_drop(p);
-+	return 0;
++	return &no_such_symbol ? 1 : 2;
 +}
 +
 +char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/verifier_unwind.c b/tools/testing/selftests/bpf/progs/verifier_unwind.c
-index 5a21345c34d4..596e5e0301e5 100644
---- a/tools/testing/selftests/bpf/progs/verifier_unwind.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_unwind.c
-@@ -69,6 +69,38 @@ static unsigned long may_unwind(void)
- 	);
- }
- 
-+/* The patches of the divisions push the pad out of the 16-bit range */
-+#define FAR_PAD(name, sub)					\
-+__naked void name(void)						\
-+{								\
-+	asm volatile (						\
-+		"r6 = *(u32 *)(r1 + 0);"			\
-+		"r1 = r6;"					\
-+		"r1 -= " #sub ";"				\
-+		"call may_unwind;"				\
-+		unwind_goto(8202)				\
-+		"r7 = 1;"					\
-+		".rept 8200; r7 /= r6; .endr;"			\
-+		"exit;"						\
-+		"r0 += 100;"					\
-+		"exit;"						\
-+		:						\
-+		: __imm_unwind_goto(8202)			\
-+		: __clobber_all);				\
-+}
-+
-+SEC("tc")
-+__arch_x86_64 __arch_arm64
-+__success __retval(7)
-+__load_if_JITed()
-+FAR_PAD(far_pad_returns, 64)
-+
-+SEC("tc")
-+__arch_x86_64 __arch_arm64
-+__success __retval(105)
-+__load_if_JITed()
-+FAR_PAD(far_pad_unwinds, 0)
-+
- /* owns nothing: its pad only carries on */
- __naked __noinline __used
- static unsigned long passes_on(void)
 -- 
 2.55.0
 
