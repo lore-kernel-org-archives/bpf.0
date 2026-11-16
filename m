@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794808633;
-	b=uWkjf3OSzhM1CXVnsXz+Pvybmg4rNs/4UBnpU+eollcJ3kr+N/lmxmGHVYa/DCM4Rg0d
-	 a2kUbzcUsm6Ue0tQtKo2+EK6lLUJ49VNZHGfQwBhCsEPHr/wxOlkTlqf5c7YkQVm51to3
-	 QvWbda9ZpAmLr/rhIP2pfWCar9eAGIBmjnAsMYY+OQajOpD83xGMEQmOWRdYj0aJRPA4j
-	 nYEBmH1gEqu3fxjehRLAxDT9h+0Gc2+dqnQGRxQRo60jDAksZ2rIvFD3TTq7Hw2Olxz6U
-	 mVdVIOjhGC8/C2WRA/YCRSDB8E8FHfBJJLKlUArUFwwxa2APWzOXNGIfLcBSsRfuStw==
+	t=1794808639;
+	b=2r99aXwKpwvIb6jo8D4LWRLrgIGK5OJBsXG/nnhYbzgLPsaYAdhUJfX8PR/BTBGsefyb
+	 bKyP7Qd9vlpnKiPVQZOfZDEwrNUuleyaN2/Wh+2BaC1vV+v8+IjW5XwEky3EJyUj08+9O
+	 jsO+MYpWqbWSKLeA8Tg8PYoKod1zy1ayFWYnQrxlzoZUyE4OdEYOQ2kVJg1FwWd6Aw+pI
+	 CPf/RwwhWoeYG10SA3wHWKANrohdSW91W4p77h6E757x1qc1jJewmz+DaMZABXISj1iYc
+	 RfzG8tlhZTNnkKbwRgb7OKTCLo3Evp2BFVhFtVqgS0y92TkRnW+Z6SEtc5xGSonqyBQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794808633;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794808639;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=vfhumMux/RjToeTHYH53kaJsM5xq3VzGHoyTg9n++LE=;
-	b=Fh+3v9vk23jOPh1k1EGRfppxQzZ/N1V+/20bLrqUXRe4kFs0mcddixpyUUL9AAg9H0Uc
-	 WbipaF+XFrrQlkHGit8bpR4T27T8Dp0mieEIxbmDovKct8ZUE9Bo/eJJs9eycsnDJ7f4m
-	 FGoBwqUwB1W2q5V0gL1GSc24ek3yFuGMHKUsra+TZGxUQDLY78g73ahBZVZoShkB9rlCZ
-	 PSUqzh1J/34Hdrb2a+0YjW2awN7VT75dCM1+WQ59eCWQ0B47M8klVNaKAA8Q5jn5FmJo2
-	 urPZ+EfqbK4DUM2HJMrHx18I2EIVNz8/Lge7J+E9l2tYwYVF1FklepUQ4RSzsoA4kWg==
+	bh=0cX2BYToRj+vSyky57J2kfxPtA3MYdTKmzSXTDxkufc=;
+	b=WjJWPy6jBWHsoAItp1Pn74cnq3VuhzylKWG6M1HnUTX54JsuCjEab2wYpAJ68e3auty3
+	 YxFW/8v23P0Y2vKUqRwUTMSaA7MkIGWhMZjGNh+WLa2yw/MjT3xxxdHpadg4sLzU7c775
+	 irQSpHd1i7QVfYYbL2lTViGD1GyFykW3RLEXMxx54aTpXj/R5twQ7n51M4X9z0WeG0IvJ
+	 Z/v3798qY+79MI698ADOy58mgyIe0oewwmXtEUh2wsZMljWNxMyxk3DMdCfV9F1As3JiG
+	 K4h3TqyvmcPWNXDsDviZJ0LGCOLbALH/ZkeZ7g2PjW8ESBPWoF7IKAX8fo2W+lZmsFQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FJ8xC8ML;
-	arc=none smtp.remote-ip=209.85.216.48
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=aUrfTFBX;
+	arc=none smtp.remote-ip=209.85.210.179
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE779606A31C
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 05:57:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BE779606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF826606A31C
+	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 05:57:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CF826606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FJ8xC8ML
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3adac5c10e3so1665009a91.0
-        for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 21:57:12 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=aUrfTFBX
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-8b2f59de176so3573614b3a.2
+        for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 21:57:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794808632; x=1795413432; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794808638; x=1795413438; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=vfhumMux/RjToeTHYH53kaJsM5xq3VzGHoyTg9n++LE=;
-        b=FJ8xC8MLQrkyTMhvdSB9tirmQh/eAx01DXvvA2nyNDWkWXxjCS+fyQSd6G0D8m+3Go
-         SwGx69t62Xpn5aye7tFRGd9/G15dgwy+2ypJmeSrOugvCspmZ8WH9MMbWNsys88Q3dxG
-         M0y8Xwnsfyz4HDQ+NeBZ+m+8yQccUuPPL4nn/L3+BxRf+AcEkTusFFevbqRXUqwkewjl
-         qGohImHLyryq8yW0NSVgw0odnp6h3ARQTItuaG1JjOrg2yGuphHomAcPG5sCDsfX1lK1
-         ZTA7G4a4Z5eSmp2ykyq2VPMJ3NexOVPz3NBN3iTgLyr6ZQz1M+kY1crV/IHlteKuKeCT
-         vVTQ==
+        bh=0cX2BYToRj+vSyky57J2kfxPtA3MYdTKmzSXTDxkufc=;
+        b=aUrfTFBXtaBxnl/C9O5+0mDAlqZcPJxOiZItuPVpIQba3tXLD8do+m5wm+5oynJwWq
+         RALof789TYU8bp7Tx51FJB2MjZ70Ipvx6LpP9/s+dPsJG78LlcNJTNnPTadXgUJWKPnu
+         jWIlaAk5XUVfXrxJg+qNEC2C4Jx/nOOBNh8S7/sBe81tOP0uiqzWtrF4EP/fznWlfNQJ
+         jOi5NXHACjRuhUACd06FH79d03M6OgqCnBcaVBuAwnQSZIkxnXpSsHyds2D/vpVgjToC
+         nJ9xfktEFfoojSRUyfPHrV+IHC7npd+QRN424/CJ8UwdjSV+/C+DO9zENR5owi3naHoa
+         FzLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794808632; x=1795413432;
+        d=1e100.net; s=20260707; t=1794808638; x=1795413438;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=vfhumMux/RjToeTHYH53kaJsM5xq3VzGHoyTg9n++LE=;
-        b=hGYTbrzz+7PkcaF8GkCP9JxpSaZ09BrX1oFZEyoJ08aZX3sOCWx++8JIuT8wyX99Ii
-         ze8h8LUn8vWgIvHADVmhuMDHvoPy7vrNwrsNCeKvlukm3ACSoiEy/rCsYuoE756mHYBr
-         tQw/tfK56iuc200VemwI6Ir+dypHStMdSMwtND5gC5qjE9zSVkXk1ILGgXJ6+eJbe3ak
-         Jy1wqz9BFnrw5+4y9562sRmLVttf5EujaRWxuijTVuWQ2dfYf0CNpaaER65H4FNjeVE/
-         zYxxQR4TrotqP36PvhnVsfT6IG4VEE6xoStrE2LUerstOrQrZ0c47IxPFB0gH60cvh4A
-         F1CQ==
-X-Gm-Message-State: APuU4Z93ym4YBPW0yCTF6R34kfSsgb82XhAhtEN9wGuD28q3yq9hg+1W
-	l0V+WX18jp4eWaa0L5VsFP1plAbSHDh88kFC+82S9p9ykjbiY+cwSg0hGJstsA==
-X-Gm-Gg: AYBFou3RwEWnQvxSV+4/SKt7Q8ohyvC5XAd9Pau3EFa+3+rwVdbNWPZlyeXsqPcnISQ
-	VHIMBCrRUGigH/xar9YD5Vnq5FJEbR3BrBvrNym0SVLI9TtmLf5fD6JDhlt6Nuu6rMwrY5/Z123
-	NKllc2va9cDBaWNMIuGVGZHBVcDxPahmYnL2GDPGjf5Bf+rF01+dZEC+VYIhH9VEBviT4pYa2qG
-	bZQgBFUspvZb1K4nqwcaKNTdq6ndbrtESlLyXDEQ5aNdAOpyseiYZKyfpaQ7a5W67tr8arTnFn5
-	sNBPxiMCN/pCokTa0HfIwhauMUW0Swc0JpcAgW4JW8ZCyI7SkDMONkVzbh8Lu7aPPP+kIHFurnm
-	OJWofcsKizDzK4rV9lHHZJzOOwNaBybnbXHzoPQIQVTixd0spQkDkAyx7ldWR42uNSVYga52BsR
-	9Q22NdOqeERkMIsD0cYLHJHAvVClZPoRy95lWmOQ5FcLSfo9/rWh9IVX3YBkaoWLhhBhsqx/LQ5
-	KvgewqpZnzzyUhd5SQeO9x20SHDhcAsIjW7OKAqjDP3oliscLThGb4odsC5JDyAsjIooJUwNB3K
-	WJ9sfzQmEhZBhXBp9k5mGyN96FbHas+wPZK0uoiE08PvynwjJQ9Jp6d1uJuo786RQibuinU07Eg
-	EDDmvMO6xI1oee1EnifVoM9YPY2F6pra2h1rkaH/y/MIZnbQMSDJP0MOki/Sm4IPxKauKCVrfLw
+        bh=0cX2BYToRj+vSyky57J2kfxPtA3MYdTKmzSXTDxkufc=;
+        b=1ByYiCUO7xyaZODEDuX0p4ObuppKxjJl4kQfIMGckrA7NvPvpv1tHPxcqV87p4YXkb
+         r5NHtk9N9P7PXhVwBLuVWBI1C4hN3mUadTEgi8z5D70BA3HIVps4/kOvnRwhXmTWmqRr
+         aFilKwz7CJWpX1J2Apq9dDzcf1RZk8aEQp9tf/b6xN1l3eA0nXwSc3wW58Lx65pNUpgh
+         hzVqk8aay12SPp8qz9XeI/cMHmiCQPKfzTI3hUFa7gHNCuQ0xIOgAi1p5xIgZPC1QToZ
+         OidMcy3JVcF5yLDJo25vAQLxdu3aj+1yaeAVw73Jge0TrzMk75RRx/W9EpdNX2Dzhpb9
+         JLRg==
+X-Gm-Message-State: APuU4Z880ToEOXBKDCKsvqQw+rfMi8JTRybrewAg/svZcsMw57p686la
+	sNU7nBuR3NIPJa5OHLvU8/IoTCagutuk1p8/Q3qn6uRf01b7Kfn3qHOpP0OcdA==
+X-Gm-Gg: AYBFou0Kb7CilCHlIZkHm+nMCZnCVxcTmYeLyHhx6GtMaTNQR3IsdjJHP+Sus1U0rPD
+	IuUbZ9kBW5mwAHnBZnbKtp1lSwEXEVXHrD5JEy2rhnKepAysE4sjWVKVfQv2zFGiiQf48Q5UZhR
+	SQJS6laLZP1k0qOLBnqpMMZ403jxMFWQHkyezRgGL/MIJFZ9RhLEvOjczEUnrnGdcx3Hz/WVNud
+	QLQTE0a8vW6/VFR/CzJ87SU0jHCu4KjkPr/0eqYd60x9mD2xx989iDH1YIscnPiSfr0HXwfHg/b
+	4UosrETPgWE1Bxq+2eykMDvKHPiCNngwAZjTQZRzINaoF0KppoeiLmP+HkOIy+4joQOuXDTxTx5
+	TFNVM4svMl40hM42+HgnUuu4BgB2lVbIj1aJlON9rfH+Qt4CLSM5bC4AbIkaoj0PcI/YfuLLvqe
+	WZlttU08FMoyyqgekRLIHMvSpr19OY/mgyj3a1nDv/wYz3iYDx79KYuM3+tXnW/aN+qPRfh9GpQ
+	VQSvHByuZEYdhGCyzTLQH3Xzt1mORCckhADLkfHZqGGlkxIyY8kcSx8MwBwMcVrZUn4CJHYYQu8
+	ZYQ1sMW5iU5mB4p92VUS9rT2R47X2A9KLPkT1HhtZr3mARXYxy3KYHVNGW1oi4k5te4FYOejkNB
+	WtfAYpD1Lo/9qm6cJKwBb1WjmtU0QFCt2yv1Zb2S/ds4thUI0iHxhdkUG3xWpCyjSVmS6t1UH/g
 	==
-X-Received: by 2002:a17:90b:2642:b0:3ab:2737:3396 with SMTP id 98e67ed59e1d1-3b1b0b9cb54mr8536129a91.65.1794808631924;
-        Sun, 15 Nov 2026 21:57:11 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1ae981c55sm15508475a91.1.2026.11.15.21.57.11
+X-Received: by 2002:a05:6a20:244e:b0:3eb:8ae3:e1a8 with SMTP id adf61e73a8af0-3f7a91e913amr9490399637.72.1794808637930;
+        Sun, 15 Nov 2026 21:57:17 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8bececcc9basm3209938b3a.3.2026.11.15.21.57.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Nov 2026 21:57:11 -0800 (PST)
+        Sun, 15 Nov 2026 21:57:17 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 05/21] bpf: Dump programs that have more than 524288 insns
-Date: Mon, 16 Nov 2026 05:56:22 +0000
-Message-ID: <20261116055638.4171529-6-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 06/21] bpf: Resolve BTF structs and arrays first
+Date: Mon, 16 Nov 2026 05:56:23 +0000
+Message-ID: <20261116055638.4171529-7-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261116055638.4171529-1-alexei.starovoitov@gmail.com>
 References: <20261116055638.4171529-1-alexei.starovoitov@gmail.com>
@@ -104,37 +104,50 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-kmemdup() stops at 4 MB. A program that loads cannot be dumped.
+btf_resolve() does not see this loop:
 
-Fixes: c04c0d2b968a ("bpf: increase complexity limit and maximum program size")
+  ptr -> typedef -> array -+
+            ^--------------+
+
+The walk from the pointer stops at the array and marks the typedef as
+resolved. Only the limits of the later walks end the loop. The walk for
+special fields is going to lose its limit.
+
+Resolve structs and arrays first. Then a type that holds itself is always
+found. Such BTF does not load any more.
+
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/syscall.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ kernel/bpf/btf.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 86e5c9c38026..a9fef8bb9dcf 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -5076,8 +5076,7 @@ static struct bpf_insn *bpf_insn_prepare_dump(const struct bpf_prog *prog,
- 	u8 code;
- 	int i;
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 242b011ba93a..fffde271bbd7 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -6015,6 +6015,22 @@ static int btf_check_all_types(struct btf_verifier_env *env)
+ 		return err;
  
--	insns = kmemdup(prog->insnsi, bpf_prog_insn_size(prog),
--			GFP_USER);
-+	insns = kvmemdup(prog->insnsi, bpf_prog_insn_size(prog), GFP_USER | __GFP_NOWARN);
- 	if (!insns)
- 		return insns;
- 
-@@ -5252,7 +5251,7 @@ static int bpf_prog_get_info_by_fd(struct file *file,
- 			uinsns = u64_to_user_ptr(info.xlated_prog_insns);
- 			ulen = min_t(u32, info.xlated_prog_len, ulen);
- 			fault = copy_to_user(uinsns, insns_sanitized, ulen);
--			kfree(insns_sanitized);
-+			kvfree(insns_sanitized);
- 			if (fault)
- 				return -EFAULT;
- 		} else {
+ 	env->phase++;
++	/*
++	 * Structs and arrays go first. A walk from a pointer stops at them and hides this loop:
++	 *   ptr -> typedef -> array -+
++	 *             ^--------------+
++	 */
++	for (i = btf->base_btf ? 0 : 1; i < btf->nr_types; i++) {
++		type_id = btf->start_id + i;
++		t = btf_type_by_id(btf, type_id);
++
++		if ((btf_type_is_struct(t) || btf_type_is_array(t)) &&
++		    !env_type_is_resolved(env, type_id)) {
++			err = btf_resolve(env, t, type_id);
++			if (err)
++				return err;
++		}
++	}
+ 	for (i = btf->base_btf ? 0 : 1; i < btf->nr_types; i++) {
+ 		type_id = btf->start_id + i;
+ 		t = btf_type_by_id(btf, type_id);
 -- 
 2.55.0
 
