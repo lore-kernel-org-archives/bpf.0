@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.170
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794808706;
-	b=wX8U6wunqdvGfi/6SuScIqMSGIjkJCyYVxEaJrs9TDZZrRMNAQDDbisTYOvezp4bYenY
-	 vEVg9kJuLH61AdnewEBTGlBUqbjbbyedUcQZ5fRPxx4v7K7MRPe6I8TbQBGjOv2KJpP1E
-	 UZ1iQYMZA/j+7Qf9reAgxyIkfIdNYlYbA05SrugBL5ei0pU9565jzKj5kGYpoNpImU09E
-	 7Fo8d93RDGRGh1OtM44Mvg/biEPTFCg81FIE9NTk8hOzMX/WWTxNKIgMdJlKi1N1n8UB4
-	 ebSR/av5ItIGm8TSirVEVYm3bk+eQyVw5MUQsox0WCQ+JXfmpAmmVZb9/18V/gbS6eA==
+	t=1794808711;
+	b=n5Y5YzMBshdBcwDuj+zEWoIQjxWb+iMXRU9vZ+cR2uBNkjbrh0X9b2RHek3SS7eWK0vQ
+	 1iDUXX7zliHzP1zPAwCAPtkwqUBm9TeWpAQynI0RECk8hj1dn9qvPl9q49o9GLCr/Us5v
+	 lPOC+N78705I/uvYgNYjwnQUGNb1oN859q4q+x8iuAXKTLs6HHtlOD7zUpMaNwf+oj1Fq
+	 +MQ0XQ2TPt+Ayj9CGHNk3HbIrC1lq/LdTNIFrNH+I8fGl5yKH6XTy8P+ISPkcJkzEM9d0
+	 F0VSRzjC8nOrhXR4HayrUD4BYW89oFt559LLXdaJH45iPRYzpwuelzXgWmnB2F8Azvg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794808706;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794808711;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=amlhwPlnJ9Ww5uiS2uuUHRoiz6FLe1fTXQ805lI+dM8=;
-	b=zv8qQYjcO+CXYjUgNeqHZt4Kt/zKR3cfOgZ6YnLYrmI6Ikgo9BPblGdOjtVWTBSPhZxb
-	 VEl4w8Mza8TwO8wjeoBYaG9bTu0fB2AMoyxIceKQ36YJAHtZ4vlt7VfbkdxCRcGSUQoDP
-	 yyIX2Xbe9tM3D+LEksqdKuLkpb9XC2a5NqkqTzoFn9IWOjm1rf8zGjChhQY+nbmn71mnf
-	 aK6wZ9EWZw2PaeYPzvFs7wtGiaYrDXlKBjdfc2Vq77sEVk/RF33gxyw4XYc7MrJHhF7k5
-	 Rx6WcxyRwOH978dIuQZ3HA9WdLmQAjCSWuIiwebqb/YTzD0O0HkEuyUzh2E0IJFvj8Q==
+	bh=t23Bo3Qlr9E/p+IrhICjUTqkQl9+evkBHi9ttxXjS8U=;
+	b=Nz69rE/8J5HbUbMpwQkR7LXQyjpC0iTsoiUQvhX9JHL8vaTn2XoEI5J0DhLSXkCWtlLi
+	 T4Fh396ETbDdL7XT3psDpurY2tDmOBuChGhwdba7qli+gZYkOw5JwiaYxIQmBGKmdMz6+
+	 wMiBqo6EWI7fiP1tpgLduPdJ5y0BpUfBav4zbamAPkAN9pJZoMps8yk+5kc4q7hO0tP8b
+	 SW72J2xTNpH6NiIGBXnzqGzGR3Qlwp27nkvNCqzfMONxLNiQdQ5pO+Y9aBtDKIuTX2cuq
+	 xI9TV2nkFMHpB48SkmzTkzKJTcrvowVx3iZsjdZeV/v1fA1QaunBOj+Mdu77dKYXmAw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GhytpspO;
-	arc=none smtp.remote-ip=209.85.216.44
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=sPMHkaLB;
+	arc=none smtp.remote-ip=209.85.215.170
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0EB2606A31C
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 05:58:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B0EB2606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 601DC606A333
+	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 05:58:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 601DC606A333
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GhytpspO
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3ae6b4c669fso2398167a91.0
-        for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 21:58:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=sPMHkaLB
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-cdddc79a4afso817059a12.1
+        for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 21:58:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794808705; x=1795413505; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794808711; x=1795413511; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=amlhwPlnJ9Ww5uiS2uuUHRoiz6FLe1fTXQ805lI+dM8=;
-        b=GhytpspON0WmVjd4Zf7RZAYVvKW0NjWBVfvtCrAPvlvoTgsE1DMm7MKnNI53Xuko3N
-         p8hOVwAJ6As3PaVR79WPMmT/9Z+AbIAeE+2rZRyrSHwoXVYFTAT8iRxbQ+Q0zDivG3la
-         R3GyKv3p3ng/XKn4V1FVZI6PhSmGcqXq1K7mZBZxNuzFsj5Nsg0n2uNdhi2jMkh961F6
-         1b5T4TiEi67W/KVYjBBGEIKpP0l2rc6G9fgYBpi36iXekV1Oxw60YbQ9IdtpuW0lEtIF
-         zApxdO8m4FR8jgdm8NUhAVDLlI4l8XP9YaB8ScHS41Zue8Zo1gTgtVFaTHQiloXSFlQI
-         zK2Q==
+        bh=t23Bo3Qlr9E/p+IrhICjUTqkQl9+evkBHi9ttxXjS8U=;
+        b=sPMHkaLB7owTIqnFqGle6efXgbYbkwNDBYGpfbDBAzrSbS4e72RybvL7AtfE6P5vMk
+         E8W+rGHTLjiufXIvPhV/aooTLUZW6AhRARd0Kj0Flqjhk4WP91ndMfkEnWEVjpASGSN5
+         EHi/A8pVla8WuADyr3KgZur236WFTPde3xbReTjQiiLPztBIPonxBApw+kWtpLnj4mJv
+         0Su8fT3yPzRcXFrwnKBgWZQ3JJahxU1nlskFlopQQ/exh4UdRYkvW2g4vQV0KR41R7Dx
+         v4ve23acYOQCvKKmvtUmrRfaJEZi7Qcxn7XRpX2hJd3beQZT17uiuEPSso2xg3LYmVdm
+         BIIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794808705; x=1795413505;
+        d=1e100.net; s=20260707; t=1794808711; x=1795413511;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=amlhwPlnJ9Ww5uiS2uuUHRoiz6FLe1fTXQ805lI+dM8=;
-        b=SQ8Tkw6e6XDydKIoaogU75InomVkGPzeAZjv7PlqKDE4QNNNK6Yb+nqRB9McA/plSi
-         BkG2Z9nuYfuXfBXD8w9Zp//vKkQr4bqDwry1M+TLEZK6zvK46kWZdd6hM1WzWXMO5F1L
-         fe0f2nXPyM+ZzbJY6P9ryX/sUMKfhG9+4edlWgW76IPVmvw5v1AwKQ6mke9ijW8vYNJw
-         RXO1J6h5krg+8uQcBKBmDCUS23DmVUR97aYmOHyUjTHTd1XKd4DmMX7OV5M1tGR3snm/
-         mwHeVX9s6kQhHihXwo1I48S2RCrv1ZoAGxfZWskX9N8qlz/Yw9wFlxVxo3LdrPGFNAgW
-         SR/g==
-X-Gm-Message-State: APuU4Z/7VWY5OEYVs5kxtE7un1AG56EzlZCHi18/7PtPlplkoqqkJ+gL
-	rFiKf32QBdFurCWq1p2D7bt7YiNAOsedxDzkGjBxc5RnpTlgucn6t7c2knuXcg==
-X-Gm-Gg: AZFdTZctxTImd+d6KRDbI6XZCjmWTFfsjAq9ub7XPns8NdmjtPvHXqq0PGA2Yc8Cmmd
-	Qd+iuMoqo3z5eQ8ueU5xsItZm0KMS57syO4TKTTYE2DGEJjCXW6bo5NsxMc16jJInVu7fteacIf
-	i0cIzOXMrrYswjhEmwJ8f2N8moDWXCzk0hunPnz8IFsjvCmORLZvJAuTOOHQxcqBphOAzLf0MCB
-	laMD7ykuRCifW9G3sjlSLp04ETaWYPL3Mp4NfzNqJyDNGk/q9Adgi2cryMC2V3nghNj8ADFmvO1
-	1zNhDdveQa2CwsiQxF0H0SJLwZwQYH6a3OXyiMRpDyoYRbttSUafNlXcS1QJE7JXv6XCy/g4XVp
-	bEG2TOni55JMzHt1p7zNwpjiKaAn5+t6uwC/YnLSu0vRIMNWhyMzvxAb0TYGe35WGSDnVYesDRj
-	3p0vqGpz7fyo286btoRMBCYyc0ggF9yyrb1NMvfAVPmDnbuRhVC3SwsIRjv2NKjxPhrVjKLlUhR
-	QH54eOnp8sraxwNRM10brXHOZ+eSw8dxamz6mHakrFs0pePTY2pHofMbGXa72JaKfm/RdmGR14w
-	PNXCRL7fUIRownAzKgirU3b/99X2yxpuRUE4kzGqp92oOGzSFmIqr+ZVdr9/gvweQAQLKiOFx/J
-	XRVmhpFjwLvv5+Dd5MTb1XvAWF2nrfk+uSy0TBqEMy/l1dzBaHFkl8bOqEkN60kRpDHD+/xhoKw
+        bh=t23Bo3Qlr9E/p+IrhICjUTqkQl9+evkBHi9ttxXjS8U=;
+        b=JVHVZgMUdmwXyI2GGSf6tgy//uWyZXcD/zMtlqHzDSlrxEZcsulyqHvRQCiw5RZwBa
+         +5f0htb7OIR5fz1hIWJ8gwUgbDivrxWpuTC1BZ1urNBlKIgkesobrsKFR3MpzoozWBzS
+         Wif+Zm8qqiGlTzAxEoHYBUWDYi2WexD64xlDvYSx5mPMRtRGjEva6yDi2NeRny1T7tbO
+         dAv+jnzE3o5hz372Iv/sumQvPvuOLb41H2PVskFSToDtk3cX98F6uHIEf6GgMXieGYp0
+         T5uEIBYf40HMU/iWFOLSYjamPGxS0htzI61ub+h3OIocauaAZwh7lZSQvYh/VYhMagNe
+         vYkQ==
+X-Gm-Message-State: APuU4Z/UixZXJ0wrx6m3JplEPa6F1/y2ZrVU3/elK505vdSuUXZvGXaa
+	ilmIK/6hY1SqIIm3hfpL4nh5NDOHmTWQ4fbNE0DdtM66g6FKbI0lvQB4KOzX4w==
+X-Gm-Gg: AZFdTZcNOEbi/X/pc8Rh+r5EunmR/I7BDOwTnLRJS3sbIB0S7xAdhF0dABbyaObzK/F
+	3CYWX43YDB4+ofzuEHF8uOPiBAaRAaN9Ylw2O2mN7ktG0igsGyj8TD0A80F9z5ocuIHxvBMFafb
+	2tCxOdOZ8dPC5KO6BUvKWJLU9PUp6YJI1o0KGx3q/38KXdSbJ4aw3uMn1WdUe4nEXcosIwJvsjR
+	6WWioS6YBr6XTXZRURsThvtfg/K1mTT+uc9HIRyl4D36vGxjNws6mbAu6z5oEQ7XvpOuRGMzotV
+	Gp67QFNLdDiqR9WlXgwa8MQQ+X0L7Q4bgMWq/OU+DD1NL+O51wtCg+GtgaW3UhgKkgqXGR6vaoa
+	NdzP6VDNeA6uprpMCj1W3lsk9Nquh47BwVM1a+yk+wc1pugdrNpAIskZdmsVRTVtOTe97AUfDii
+	lL60CBJB2eVDuq08DpdN6GR/KFb07I2F/UJSyNJhVvG455i8y//MlVQ4oYVosgQSoC3tEftSMPL
+	iKc9tTnAwJY47NCU2unau11ixBFJVLFRVE5MD1pArmLouoXHYK4G4wdCjteACWPNQUjk+XUm8uc
+	8MLCgbm9FmQxzu3jhPro8BMT0gCf1oosjy7EEkatKE2ofq1hpFmetJCKrEgxuan1yEAotZKyp5z
+	jydLKvNjdsd6lsrFIETfzfS+wJ+GkldUad9iQ2kCcaUbByyJneZfZuV9W0ipKKIDB4RHs4qp4Ig
 	==
-X-Received: by 2002:a17:90b:4a84:b0:3ac:b6eb:e0de with SMTP id 98e67ed59e1d1-3b1b087c2f3mr6394506a91.4.1794808704729;
-        Sun, 15 Nov 2026 21:58:24 -0800 (PST)
+X-Received: by 2002:a17:90b:1d46:b0:3ac:7613:1ec3 with SMTP id 98e67ed59e1d1-3b1b0a3eaaemr8322360a91.37.1794808710545;
+        Sun, 15 Nov 2026 21:58:30 -0800 (PST)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b197b76ccesm20043350a91.0.2026.11.15.21.58.24
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1b3ac294bsm7295869a91.2.2026.11.15.21.58.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Nov 2026 21:58:24 -0800 (PST)
+        Sun, 15 Nov 2026 21:58:30 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 17/21] bpf: Walk each type once when looking for special fields
-Date: Mon, 16 Nov 2026 05:56:34 +0000
-Message-ID: <20261116055638.4171529-18-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 18/21] bpf: Raise the limit on the length of BTF names
+Date: Mon, 16 Nov 2026 05:56:35 +0000
+Message-ID: <20261116055638.4171529-19-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261116055638.4171529-1-alexei.starovoitov@gmail.com>
 References: <20261116055638.4171529-1-alexei.starovoitov@gmail.com>
@@ -104,710 +104,287 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The walk enters a struct again for each member of that type. With three
-members on each level it takes 3^depth steps, in recursion, and cannot be
-killed. Only the limit of 32 levels ends it.
+A name of 513 bytes refuses the whole BTF. Mangled names can be longer.
+The users that copy a name use snprintf(). Raise the limit to 4096. It
+cannot go away: a search by name takes types x length, and so does the
+log. The search can be stopped now.
 
-Enter a struct once and copy the fields that were found:
+Many types can point into one long string. Look at each byte once and
+keep a bit for each offset:
 
-  struct in  { kptr p; };
-  struct out { struct in a; long x; struct in b[2]; };
-               enter 'in'           copy from a, twice
-
-The walk has its own stack, so the depth is free. The table of fields
-grows, so BTF_FIELDS_MAX goes away. Fields are found in order and do not
-overlap: look them up with a binary search.
-
-A map value with 12 kptrs had no record at all. It has one now, so the
-rules for special fields apply: the map needs CAP_BPF, and it cannot be
-mmaped or BPF_F_RDONLY_PROG.
-
-The size of a record is bounded by the size of what it describes. For a
-map it is value_size. An allocated object has 4096 bytes, that is 512
-fields. A struct with more gets no record when the BTF is loaded.
+  strings:  f o o \0 b \7 r \0
+  names:    1 1 1 0  0 0  1 0
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf.h                           |   5 -
- include/linux/bpf_verifier.h                  |  15 +
- kernel/bpf/btf.c                              | 334 ++++++++----------
- kernel/bpf/syscall.c                          |   6 +-
- kernel/bpf/verifier.c                         |  67 ++--
- .../selftests/bpf/progs/cpumask_common.h      |   3 -
- .../selftests/bpf/progs/cpumask_failure.c     |   5 +-
- 7 files changed, 197 insertions(+), 238 deletions(-)
+ kernel/bpf/btf.c | 108 +++++++++++++++++++++++------------------------
+ 1 file changed, 52 insertions(+), 56 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 16dd9b3d6f33..a5ad08b7937c 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -193,11 +193,6 @@ struct bpf_map_ops {
- 	const struct bpf_iter_seq_info *iter_seq_info;
- };
- 
--enum {
--	/* Support at most 11 fields in a BTF type */
--	BTF_FIELDS_MAX	   = 11,
--};
--
- enum btf_field_type {
- 	BPF_SPIN_LOCK  = (1 << 0),
- 	BPF_TIMER      = (1 << 1),
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index a11cbf75a8fc..f45c18b3cfa2 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1975,6 +1975,21 @@ static inline int bpf_head_guard_target(const struct bpf_verifier_env *env, int
- }
- bool bpf_subprog_is_global(const struct bpf_verifier_env *env, int subprog);
- 
-+/* The first field that ends behind 'off'. The fields are sorted and do not overlap. */
-+static inline u32 btf_record_first_field(const struct btf_record *rec, s64 off)
-+{
-+	u32 l = 0, r = rec->cnt, m;
-+
-+	while (l < r) {
-+		m = (l + r) / 2;
-+		if (rec->fields[m].offset + rec->fields[m].size <= off)
-+			l = m + 1;
-+		else
-+			r = m;
-+	}
-+	return l;
-+}
-+
- /* Kinds of member a by-value struct or union may be composed of. */
- enum btf_member_kind {
- 	BTF_MEMBER_SCALAR	= BIT(0), /* an int or an enum */
 diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 9bb98a1c1072..f97b8e754863 100644
+index f97b8e754863..e95ca39f990c 100644
 --- a/kernel/bpf/btf.c
 +++ b/kernel/bpf/btf.c
-@@ -3836,106 +3836,106 @@ static int btf_get_field_type(const struct btf *btf, const struct btf_type *var_
- 	return type;
+@@ -309,6 +309,9 @@ enum resolve_mode {
+ 					 */
+ };
+ 
++/* It bounds the time of the loops that compare or print names */
++#define BTF_MAX_NAME_LEN 4096
++
+ #define MAX_RESOLVE_DEPTH 32
+ 
+ struct btf_sec_info {
+@@ -320,6 +323,7 @@ struct btf_verifier_env {
+ 	struct btf *btf;
+ 	u8 *visit_states;
+ 	struct resolve_vertex stack[MAX_RESOLVE_DEPTH];
++	unsigned long *names;	/* offsets of the strings that can be names */
+ 	struct bpf_verifier_log log;
+ 	u32 log_type_id;
+ 	u32 top_stack;
+@@ -685,10 +689,15 @@ s32 btf_find_by_name_kind(const struct btf *btf, const char *name, u8 kind)
+ 				return id;
+ 		}
+ 	} else {
++		/* only the tags in BTF of a program have long names */
++		bool slow = !btf->kernel_btf && strlen(name) > KSYM_NAME_LEN;
++
+ 		for (id = btf_start_id(btf); id < total; id++) {
+ 			t = btf_type_by_id(btf, id);
+ 			if (BTF_INFO_KIND(t->info) != kind)
+ 				continue;
++			if (slow && bpf_must_abort())
++				return -EINTR;
+ 			tname = btf_name_by_offset(btf, t->name_off);
+ 			if (strcmp(tname, name) == 0)
+ 				return id;
+@@ -915,49 +924,6 @@ const char *btf_str_by_offset(const struct btf *btf, u32 offset)
+ 	return NULL;
  }
  
--/* Repeat a number of fields for a specified number of times.
-+/*
-+ * A walk over the members of a type and of the structs in it. A struct is entered once.
-+ * The next member of that type gets a copy of the fields that were found:
-  *
-- * Copy the fields starting from the first field and repeat them for
-- * repeat_cnt times. The fields are repeated by adding the offset of each
-- * field with
-- *   (i + 1) * elem_size
-- * where i is the repeat index and elem_size is the size of an element.
-+ *   struct in  { kptr p; };
-+ *   struct out { struct in a; long x; struct in b[2]; };
-+ *                enter 'in'           copy from a, twice
-  */
--static int btf_repeat_fields(struct btf_field_info *info, int info_cnt,
--			     u32 field_cnt, u32 repeat_cnt, u32 elem_size)
+-/* Names in BTF of Rust are not C identifiers. Allow any printable character */
+-static bool btf_name_valid_identifier(const struct btf *btf, u32 offset)
 -{
--	u32 i, j, total_cnt, total_repeats;
--	u32 cur;
+-	/* offset must be valid */
+-	const char *src = btf_str_by_offset(btf, offset);
+-	const char *src_limit;
 -
--	/* Ensure not repeating fields that should not be repeated. */
--	for (i = 0; i < field_cnt; i++) {
--		switch (info[i].type) {
--		case BPF_KPTR_UNREF:
--		case BPF_KPTR_REF:
--		case BPF_KPTR_PERCPU:
--		case BPF_UPTR:
--		case BPF_LIST_HEAD:
--		case BPF_RB_ROOT:
--			break;
--		default:
--			return -EINVAL;
--		}
+-	if (!isprint(*src))
+-		return false;
+-
+-	/* set a limit on identifier length */
+-	src_limit = src + KSYM_NAME_LEN;
+-	src++;
+-	while (*src && src < src_limit) {
+-		if (!isprint(*src))
+-			return false;
+-		src++;
 -	}
-+struct btf_field_walk {
-+	struct btf_field_info *info;
-+	u32 cnt;
-+	u32 field_mask;
-+	u32 seen_mask;
-+	struct btf_field_scope {
-+		const struct btf_type *t;
-+		u32 off;	/* in the outer type */
-+		u32 nelems;
-+		u32 first;	/* its fields in 'info' */
-+		u32 cnt;
-+		u32 next;	/* member to look at */
-+		u32 parent;
-+	} *scopes;
-+	u32 scope;		/* the current one */
-+	struct bpf_index index;	/* address of the type -> scope */
-+};
- 
--	if (check_add_overflow(repeat_cnt, 1, &total_repeats) ||
--	    check_mul_overflow(field_cnt, total_repeats, &total_cnt) ||
--	    total_cnt > (u32)info_cnt)
--		return -E2BIG;
-+/* An allocated object has 4096 bytes at most */
-+#define BTF_OBJ_FIELDS_MAX (SZ_4K / sizeof(u64))
- 
--	cur = field_cnt;
--	for (i = 0; i < repeat_cnt; i++) {
--		memcpy(&info[cur], &info[0], field_cnt * sizeof(info[0]));
--		for (j = 0; j < field_cnt; j++)
--			info[cur++].off += (i + 1) * elem_size;
--	}
-+static int btf_add_field(struct btf_field_walk *w, struct btf_field_info info)
-+{
-+	struct btf_field_info *last = w->cnt ? &w->info[w->cnt - 1] : NULL;
- 
-+	if (last && info.off < last->off + btf_field_type_size(last->type))
-+		return -EEXIST;
-+	if ((w->field_mask & BPF_GRAPH_NODE) && w->cnt == BTF_OBJ_FIELDS_MAX)
-+		return -EFBIG;
-+	if (bpf_must_abort())
-+		return -EINTR;
-+	if (!bpf_table_next(w->info, w->cnt))
-+		return -ENOMEM;
-+	w->info[w->cnt++] = info;
- 	return 0;
- }
- 
--static int btf_find_struct_field(const struct btf *btf,
--				 const struct btf_type *t, u32 field_mask,
--				 struct btf_field_info *info, int info_cnt,
--				 u32 level, u32 *seen_mask);
 -
--/* Find special fields in the struct type of a field.
-- *
-- * This function is used to find fields of special types that is not a
-- * global variable or a direct field of a struct type. It also handles the
-- * repetition if it is the element type of an array.
-- */
--static int btf_find_nested_struct(const struct btf *btf, const struct btf_type *t,
--				  u32 off, u32 nelems,
--				  u32 field_mask, struct btf_field_info *info,
--				  int info_cnt, u32 level, u32 *seen_mask)
-+/* Copy 'cnt' fields from 'first' on to 'nelems' elements. The first copy is 'by' bytes off. */
-+static int btf_repeat_fields(struct btf_field_walk *w, u32 first, u32 cnt, u32 by,
-+			     u32 nelems, u32 elem_size, bool array)
- {
--	int ret, err, i;
--
--	level++;
--	if (level >= MAX_RESOLVE_DEPTH)
--		return -E2BIG;
--
--	ret = btf_find_struct_field(btf, t, field_mask, info, info_cnt, level, seen_mask);
-+	struct btf_field_info info;
-+	u32 i, j;
-+	int err;
- 
--	if (ret <= 0)
--		return ret;
-+	for (i = 0; i < nelems && cnt; i++, by += elem_size) {
-+		for (j = first; j < first + cnt; j++) {
-+			info = w->info[j];
-+			info.off += by;
-+			if (array && !(info.type & (BPF_KPTR | BPF_UPTR | BPF_GRAPH_ROOT)))
-+				return -EINVAL;
-+			if (info.type & w->seen_mask)
-+				return -E2BIG;
-+			err = btf_add_field(w, info);
-+			if (err)
-+				return err;
-+		}
-+	}
-+	return 0;
-+}
- 
--	/* Shift the offsets of the nested struct fields to the offsets
--	 * related to the container.
--	 */
--	for (i = 0; i < ret; i++)
--		info[i].off += off;
-+static int btf_enter_struct(struct btf_field_walk *w, const struct btf_type *t, u32 off, u32 nelems)
-+{
-+	int i = bpf_index_find(&w->index, (unsigned long)t);
-+	struct btf_field_scope *s;
- 
--	if (nelems > 1) {
--		err = btf_repeat_fields(info, info_cnt, ret, nelems - 1, t->size);
--		if (err == 0)
--			ret *= nelems;
--		else
--			ret = err;
-+	if (i >= 0) {
-+		s = &w->scopes[i];
-+		return btf_repeat_fields(w, s->first, s->cnt, off - s->off, nelems, t->size,
-+					 nelems > 1);
- 	}
--
--	return ret;
-+	i = w->index.cnt;
-+	s = bpf_table_next(w->scopes, i);
-+	if (!s || bpf_index_add(&w->index, (unsigned long)t, i))
-+		return -ENOMEM;
-+	*s = (struct btf_field_scope){
-+		.t = t, .off = off, .nelems = nelems, .first = w->cnt, .parent = w->scope,
-+	};
-+	w->scope = i;
-+	return 0;
- }
- 
- static int btf_find_field_one(const struct btf *btf,
- 			      const struct btf_type *var,
- 			      const struct btf_type *var_type,
- 			      int var_idx,
--			      u32 off, u32 expected_size,
--			      u32 field_mask, u32 *seen_mask,
--			      struct btf_field_info *info, int info_cnt,
--			      u32 level)
-+			      u32 base, u32 off, u32 expected_size,
-+			      struct btf_field_walk *w)
- {
- 	int ret, align, sz, field_type;
--	struct btf_field_info tmp;
- 	const struct btf_array *array;
-+	struct btf_field_info info;
- 	u32 i, nelems = 1;
- 
- 	/* Walk into array types to find the element type and the number of
-@@ -3952,15 +3952,13 @@ static int btf_find_field_one(const struct btf *btf,
- 		return 0;
- 
- 	field_type = btf_get_field_type(btf, var_type,
--					field_mask, seen_mask, &align, &sz);
-+					w->field_mask, &w->seen_mask, &align, &sz);
- 	/* Look into variables of struct types */
- 	if (!field_type && __btf_type_is_struct(var_type)) {
- 		sz = var_type->size;
- 		if (expected_size && expected_size != sz * nelems)
- 			return 0;
--		ret = btf_find_nested_struct(btf, var_type, off, nelems, field_mask,
--					     &info[0], info_cnt, level, seen_mask);
--		return ret;
-+		return btf_enter_struct(w, var_type, base + off, nelems);
- 	}
- 
- 	if (field_type == 0)
-@@ -3972,6 +3970,7 @@ static int btf_find_field_one(const struct btf *btf,
- 		return 0;
- 	if (off % align)
- 		return 0;
-+	off += base;
- 
- 	switch (field_type) {
- 	case BPF_SPIN_LOCK:
-@@ -3983,8 +3982,7 @@ static int btf_find_field_one(const struct btf *btf,
- 	case BPF_REFCOUNT:
- 	case BPF_TASK_WORK:
- 	case BPF_RCU_HEAD:
--		ret = btf_find_struct(btf, var_type, off, sz, field_type,
--				      info_cnt ? &info[0] : &tmp);
-+		ret = btf_find_struct(btf, var_type, off, sz, field_type, &info);
- 		if (ret < 0)
- 			return ret;
- 		break;
-@@ -3992,17 +3990,14 @@ static int btf_find_field_one(const struct btf *btf,
- 	case BPF_KPTR_REF:
- 	case BPF_KPTR_PERCPU:
- 	case BPF_UPTR:
--		ret = btf_find_kptr(btf, var_type, off, sz,
--				    info_cnt ? &info[0] : &tmp, field_mask);
-+		ret = btf_find_kptr(btf, var_type, off, sz, &info, w->field_mask);
- 		if (ret < 0)
- 			return ret;
- 		break;
- 	case BPF_LIST_HEAD:
- 	case BPF_RB_ROOT:
- 		ret = btf_find_graph_root(btf, var, var_type,
--					  var_idx, off, sz,
--					  info_cnt ? &info[0] : &tmp,
--					  field_type);
-+					  var_idx, off, sz, &info, field_type);
- 		if (ret < 0)
- 			return ret;
- 		break;
-@@ -4012,81 +4007,51 @@ static int btf_find_field_one(const struct btf *btf,
- 
- 	if (ret == BTF_FIELD_IGNORE)
- 		return 0;
--	if (!info_cnt)
--		return -E2BIG;
--	if (nelems > 1) {
--		ret = btf_repeat_fields(info, info_cnt, 1, nelems - 1, sz);
--		if (ret < 0)
--			return ret;
--	}
--	return nelems;
-+	return btf_add_field(w, info) ?:
-+	       btf_repeat_fields(w, w->cnt - 1, 1, sz, nelems - 1, sz, true);
- }
- 
--static int btf_find_struct_field(const struct btf *btf,
--				 const struct btf_type *t, u32 field_mask,
--				 struct btf_field_info *info, int info_cnt,
--				 u32 level, u32 *seen_mask)
-+static int btf_find_field(const struct btf *btf, const struct btf_type *t,
-+			  struct btf_field_walk *w)
- {
--	int ret, idx = 0;
-+	const struct btf_var_secinfo *vsi;
- 	const struct btf_member *member;
-+	struct btf_field_scope *s;
-+	const struct btf_type *var;
- 	u32 i, off;
-+	int err;
- 
--	for_each_member(i, t, member) {
--		const struct btf_type *member_type = btf_type_by_id(btf,
--								    member->type);
--
--		off = __btf_member_bit_offset(t, member);
--		if (off % 8)
--			/* valid C code cannot generate such BTF */
--			return -EINVAL;
--		off /= 8;
--
--		ret = btf_find_field_one(btf, t, member_type, i,
--					 off, 0,
--					 field_mask, seen_mask,
--					 &info[idx], info_cnt - idx, level);
--		if (ret < 0)
--			return ret;
--		idx += ret;
--	}
--	return idx;
+-	return !*src;
 -}
 -
--static int btf_find_datasec_var(const struct btf *btf, const struct btf_type *t,
--				u32 field_mask, struct btf_field_info *info,
--				int info_cnt, u32 level, u32 *seen_mask)
+-/* Allow any printable character in DATASEC names */
+-static bool btf_name_valid_section(const struct btf *btf, u32 offset)
 -{
--	int ret, idx = 0;
--	const struct btf_var_secinfo *vsi;
--	u32 i, off;
-+	if (!__btf_type_is_struct(t) && !btf_type_is_datasec(t))
-+		return -EINVAL;
- 
--	for_each_vsi(i, t, vsi) {
--		const struct btf_type *var = btf_type_by_id(btf, vsi->type);
--		const struct btf_type *var_type = btf_type_by_id(btf, var->type);
+-	/* offset must be valid */
+-	const char *src = btf_str_by_offset(btf, offset);
+-	const char *src_limit;
 -
--		off = vsi->offset;
--		ret = btf_find_field_one(btf, var, var_type, -1, off, vsi->size,
--					 field_mask, seen_mask,
--					 &info[idx], info_cnt - idx,
--					 level);
--		if (ret < 0)
--			return ret;
--		idx += ret;
-+	for (err = btf_enter_struct(w, t, 0, 1); !err;) {
+-	if (!*src)
+-		return false;
+-
+-	/* set a limit on identifier length */
+-	src_limit = src + KSYM_NAME_LEN;
+-	while (*src && src < src_limit) {
+-		if (!isprint(*src))
+-			return false;
+-		src++;
+-	}
+-
+-	return !*src;
+-}
+-
+ static const char *__btf_name_by_offset(const struct btf *btf, u32 offset)
+ {
+ 	const char *name;
+@@ -1993,9 +1959,21 @@ static int env_resolve_init(struct btf_verifier_env *env)
+ static void btf_verifier_env_free(struct btf_verifier_env *env)
+ {
+ 	kvfree(env->visit_states);
++	kvfree(env->names);
+ 	kfree(env);
+ }
+ 
++/* Names in BTF of Rust are not C identifiers. Allow any printable character */
++static bool btf_name_valid(const struct btf_verifier_env *env, u32 offset)
++{
++	const struct btf *btf = env->btf;
++
++	/* offset must be valid */
++	if (offset < btf->start_str_off)
++		return *btf_str_by_offset(btf, offset);
++	return test_bit(offset - btf->start_str_off, env->names);
++}
++
+ static bool env_type_is_resolve_sink(const struct btf_verifier_env *env,
+ 				     const struct btf_type *next_type)
+ {
+@@ -2768,7 +2746,7 @@ static int btf_ref_type_check_meta(struct btf_verifier_env *env,
+ 	 */
+ 	if (BTF_INFO_KIND(t->info) == BTF_KIND_TYPEDEF) {
+ 		if (!t->name_off ||
+-		    !btf_name_valid_identifier(env->btf, t->name_off)) {
++		    !btf_name_valid(env, t->name_off)) {
+ 			btf_verifier_log_type(env, t, "Invalid name");
+ 			return -EINVAL;
+ 		}
+@@ -3030,7 +3008,7 @@ static s32 btf_fwd_check_meta(struct btf_verifier_env *env,
+ 
+ 	/* fwd type must have a valid name */
+ 	if (!t->name_off ||
+-	    !btf_name_valid_identifier(env->btf, t->name_off)) {
++	    !btf_name_valid(env, t->name_off)) {
+ 		btf_verifier_log_type(env, t, "Invalid name");
+ 		return -EINVAL;
+ 	}
+@@ -3353,7 +3331,7 @@ static s32 btf_struct_check_meta(struct btf_verifier_env *env,
+ 
+ 	/* struct type either no name or a valid one */
+ 	if (t->name_off &&
+-	    !btf_name_valid_identifier(env->btf, t->name_off)) {
++	    !btf_name_valid(env, t->name_off)) {
+ 		btf_verifier_log_type(env, t, "Invalid name");
+ 		return -EINVAL;
+ 	}
+@@ -3371,7 +3349,7 @@ static s32 btf_struct_check_meta(struct btf_verifier_env *env,
+ 
+ 		/* struct member either no name or a valid one */
+ 		if (member->name_off &&
+-		    !btf_name_valid_identifier(btf, member->name_off)) {
++		    !btf_name_valid(env, member->name_off)) {
+ 			btf_verifier_log_member(env, t, member, "Invalid name");
+ 			return -EINVAL;
+ 		}
+@@ -4162,6 +4140,8 @@ static int btf_parse_graph_root(const struct btf *btf,
+ 	 * verify its type.
+ 	 */
+ 	for_each_member(i, t, member) {
 +		if (bpf_must_abort())
 +			return -EINTR;
-+		s = &w->scopes[w->scope];
-+		i = s->next++;
-+		if (i == btf_type_vlen(s->t)) {
-+			if (!w->scope)
-+				break;
-+			s->cnt = w->cnt - s->first;
-+			w->scope = s->parent;
-+			err = btf_repeat_fields(w, s->first, s->cnt, s->t->size, s->nelems - 1,
-+						s->t->size, true);
-+		} else if (btf_type_is_datasec(s->t)) {
-+			vsi = btf_type_var_secinfo(s->t) + i;
-+			var = btf_type_by_id(btf, vsi->type);
-+			err = btf_find_field_one(btf, var, btf_type_by_id(btf, var->type), -1,
-+						 0, vsi->offset, vsi->size, w);
-+		} else {
-+			member = btf_type_member(s->t) + i;
-+			off = __btf_member_bit_offset(s->t, member);
-+			if (off % 8)
-+				/* valid C code cannot generate such BTF */
-+				return -EINVAL;
-+			err = btf_find_field_one(btf, s->t, btf_type_by_id(btf, member->type), i,
-+						 s->off, off / 8, 0, w);
-+		}
- 	}
--	return idx;
--}
--
--static int btf_find_field(const struct btf *btf, const struct btf_type *t,
--			  u32 field_mask, struct btf_field_info *info,
--			  int info_cnt)
--{
--	u32 seen_mask = 0;
--
--	if (__btf_type_is_struct(t))
--		return btf_find_struct_field(btf, t, field_mask, info, info_cnt, 0, &seen_mask);
--	else if (btf_type_is_datasec(t))
--		return btf_find_datasec_var(btf, t, field_mask, info, info_cnt, 0, &seen_mask);
--	return -EINVAL;
-+	return err;
- }
- 
- /* Callers have to ensure the life cycle of btf if it is program BTF */
-@@ -4238,37 +4203,29 @@ static int btf_parse_rb_root(const struct btf *btf, struct btf_field *field,
- 					    __alignof__(struct bpf_rb_node));
- }
- 
--static int btf_field_cmp(const void *_a, const void *_b, const void *priv)
--{
--	const struct btf_field *a = (const struct btf_field *)_a;
--	const struct btf_field *b = (const struct btf_field *)_b;
--
--	if (a->offset < b->offset)
--		return -1;
--	else if (a->offset > b->offset)
--		return 1;
--	return 0;
--}
--
- struct btf_record *btf_parse_fields(const struct btf *btf, const struct btf_type *t,
- 				    u32 field_mask, u32 value_size)
- {
--	struct btf_field_info info_arr[BTF_FIELDS_MAX];
--	u32 next_off = 0, field_type_size;
-+	struct btf_field_info *info_arr __free(kvfree) = NULL;
-+	struct btf_field_walk w = { .field_mask = field_mask };
-+	u32 field_type_size;
- 	struct btf_record *rec;
- 	int ret, i, cnt;
- 
--	ret = btf_find_field(btf, t, field_mask, info_arr, ARRAY_SIZE(info_arr));
-+	ret = btf_find_field(btf, t, &w);
-+	kvfree(w.scopes);
-+	kvfree(w.index.slots);
-+	info_arr = w.info;
- 	if (ret < 0)
- 		return ERR_PTR(ret);
--	if (!ret)
-+	if (!w.cnt)
- 		return NULL;
- 
--	cnt = ret;
-+	cnt = w.cnt;
- 	/* This needs to be kzalloc to zero out padding and unused fields, see
- 	 * comment in btf_record_equal.
- 	 */
--	rec = kzalloc_flex(*rec, fields, cnt, GFP_KERNEL_ACCOUNT | __GFP_NOWARN);
-+	rec = kvzalloc_flex(*rec, fields, cnt, BPF_VERIFIER_GFP);
- 	if (!rec)
- 		return ERR_PTR(-ENOMEM);
- 
-@@ -4286,11 +4243,10 @@ struct btf_record *btf_parse_fields(const struct btf *btf, const struct btf_type
- 			ret = -EFAULT;
- 			goto end;
- 		}
--		if (info_arr[i].off < next_off) {
--			ret = -EEXIST;
-+		if (bpf_must_abort()) {
-+			ret = -EINTR;
- 			goto end;
- 		}
--		next_off = info_arr[i].off + field_type_size;
- 
- 		rec->field_mask |= info_arr[i].type;
- 		rec->fields[i].offset = info_arr[i].off;
-@@ -4379,9 +4335,6 @@ struct btf_record *btf_parse_fields(const struct btf *btf, const struct btf_type
- 		goto end;
- 	}
- 
--	sort_r(rec->fields, rec->cnt, sizeof(struct btf_field), btf_field_cmp,
--	       NULL, rec);
--
- 	return rec;
- end:
- 	btf_record_free(rec);
-@@ -6369,6 +6322,10 @@ btf_parse_struct_metas(struct bpf_verifier_log *log, struct btf *btf)
- 			ret = -EINVAL;
- 			goto free_aof;
- 		}
-+		if (bpf_must_abort()) {
-+			ret = -EINTR;
-+			goto free_aof;
-+		}
- 
- 		ret = btf_find_kptr(btf, t, 0, 0, &tmp, BPF_KPTR);
- 		if (ret != BTF_FIELD_FOUND)
-@@ -6426,6 +6383,9 @@ btf_parse_struct_metas(struct bpf_verifier_log *log, struct btf *btf)
- 		record = btf_parse_fields(btf, t, BPF_SPIN_LOCK | BPF_RES_SPIN_LOCK | BPF_LIST_HEAD | BPF_LIST_NODE |
- 						  BPF_RB_ROOT | BPF_RB_NODE | BPF_REFCOUNT |
- 						  BPF_KPTR, t->size);
-+		/* It cannot be allocated. A map has its own record. */
-+		if (record == ERR_PTR(-EFBIG))
-+			continue;
- 		/* The record cannot be unset, treat it as an error if so */
- 		if (IS_ERR_OR_NULL(record)) {
- 			ret = PTR_ERR_OR_ZERO(record) ?: -EFAULT;
-@@ -8170,15 +8130,11 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 		if (!meta)
- 			break;
- 		rec = meta->record;
--		for (i = 0; i < rec->cnt; i++) {
--			struct btf_field *field = &rec->fields[i];
--			u32 offset = field->offset;
--			if (off < offset + field->size && offset < off + size) {
--				bpf_log(log,
--					"direct access to %s is disallowed\n",
--					btf_field_type_name(field->type));
--				return -EACCES;
--			}
-+		i = btf_record_first_field(rec, off);
-+		if (i < rec->cnt && rec->fields[i].offset < off + size) {
-+			bpf_log(log, "direct access to %s is disallowed\n",
-+				btf_field_type_name(rec->fields[i].type));
-+			return -EACCES;
- 		}
- 		break;
- 	}
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 8d42a5c8dc89..46364ec3e5d9 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -703,7 +703,7 @@ void btf_record_free(struct btf_record *rec)
+ 		if (strcmp(info->graph_root.node_name,
+ 			   __btf_name_by_offset(btf, member->name_off)))
  			continue;
- 		}
+@@ -4640,7 +4620,7 @@ static s32 btf_enum_check_meta(struct btf_verifier_env *env,
+ 
+ 	/* enum type either no name or a valid one */
+ 	if (t->name_off &&
+-	    !btf_name_valid_identifier(env->btf, t->name_off)) {
++	    !btf_name_valid(env, t->name_off)) {
+ 		btf_verifier_log_type(env, t, "Invalid name");
+ 		return -EINVAL;
  	}
--	kfree(rec);
-+	kvfree(rec);
- }
+@@ -4656,7 +4636,7 @@ static s32 btf_enum_check_meta(struct btf_verifier_env *env,
  
- void bpf_map_free_record(struct bpf_map *map)
-@@ -721,7 +721,7 @@ struct btf_record *btf_record_dup(const struct btf_record *rec)
- 	if (IS_ERR_OR_NULL(rec))
- 		return NULL;
- 	size = struct_size(rec, fields, rec->cnt);
--	new_rec = kmemdup(rec, size, GFP_KERNEL | __GFP_NOWARN);
-+	new_rec = kvmemdup(rec, size, BPF_VERIFIER_GFP);
- 	if (!new_rec)
- 		return ERR_PTR(-ENOMEM);
- 	/* Do a deep copy of the btf_record */
-@@ -1293,6 +1293,8 @@ static int map_check_btf(struct bpf_map *map, struct bpf_token *token,
- 				       BPF_RB_ROOT | BPF_REFCOUNT | BPF_WORKQUEUE | BPF_UPTR |
- 				       BPF_TASK_WORK | BPF_RCU_HEAD,
- 				       map->value_size);
-+	if (map->record == ERR_PTR(-ENOMEM) || map->record == ERR_PTR(-EINTR))
-+		return PTR_ERR(map->record);
- 	if (!IS_ERR_OR_NULL(map->record)) {
- 		int i;
- 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 1381b03ab0ec..2742aaa7af71 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4839,48 +4839,43 @@ static int check_map_access(struct bpf_verifier_env *env, struct bpf_reg_state *
- 	if (IS_ERR_OR_NULL(map->record))
- 		return 0;
- 	rec = map->record;
--	for (i = 0; i < rec->cnt; i++) {
-+	/* If any part of a field can be touched by load/store, reject this program. */
-+	for (i = btf_record_first_field(rec, reg_smin(reg) + off);
-+	     i < rec->cnt && rec->fields[i].offset < reg_umax(reg) + off + size; i++) {
- 		struct btf_field *field = &rec->fields[i];
- 		u32 p = field->offset;
- 
--		/* If any part of a field  can be touched by load/store, reject
--		 * this program. To check that [x1, x2) overlaps with [y1, y2),
--		 * it is sufficient to check x1 < y2 && y1 < x2.
--		 */
--		if (reg_smin(reg) + off < p + field->size &&
--		    p < reg_umax(reg) + off + size) {
--			switch (field->type) {
--			case BPF_KPTR_UNREF:
--			case BPF_KPTR_REF:
--			case BPF_KPTR_PERCPU:
--			case BPF_UPTR:
--				if (src != ACCESS_DIRECT) {
--					verbose(env, "%s cannot be accessed indirectly by helper\n",
--						btf_field_type_name(field->type));
--					return -EACCES;
--				}
--				if (!tnum_is_const(reg->var_off)) {
--					verbose(env, "%s access cannot have variable offset\n",
--						btf_field_type_name(field->type));
--					return -EACCES;
--				}
--				if (p != off + reg->var_off.value) {
--					verbose(env, "%s access misaligned expected=%u off=%llu\n",
--						btf_field_type_name(field->type),
--						p, off + reg->var_off.value);
--					return -EACCES;
--				}
--				if (size != bpf_size_to_bytes(BPF_DW)) {
--					verbose(env, "%s access size must be BPF_DW\n",
--						btf_field_type_name(field->type));
--					return -EACCES;
--				}
--				break;
--			default:
--				verbose(env, "%s cannot be accessed directly by load/store\n",
-+		switch (field->type) {
-+		case BPF_KPTR_UNREF:
-+		case BPF_KPTR_REF:
-+		case BPF_KPTR_PERCPU:
-+		case BPF_UPTR:
-+			if (src != ACCESS_DIRECT) {
-+				verbose(env, "%s cannot be accessed indirectly by helper\n",
- 					btf_field_type_name(field->type));
- 				return -EACCES;
- 			}
-+			if (!tnum_is_const(reg->var_off)) {
-+				verbose(env, "%s access cannot have variable offset\n",
-+					btf_field_type_name(field->type));
-+				return -EACCES;
-+			}
-+			if (p != off + reg->var_off.value) {
-+				verbose(env, "%s access misaligned expected=%u off=%llu\n",
-+					btf_field_type_name(field->type),
-+					p, off + reg->var_off.value);
-+				return -EACCES;
-+			}
-+			if (size != bpf_size_to_bytes(BPF_DW)) {
-+				verbose(env, "%s access size must be BPF_DW\n",
-+					btf_field_type_name(field->type));
-+				return -EACCES;
-+			}
-+			break;
-+		default:
-+			verbose(env, "%s cannot be accessed directly by load/store\n",
-+				btf_field_type_name(field->type));
-+			return -EACCES;
+ 		/* enum member must have a valid name */
+ 		if (!enums[i].name_off ||
+-		    !btf_name_valid_identifier(btf, enums[i].name_off)) {
++		    !btf_name_valid(env, enums[i].name_off)) {
+ 			btf_verifier_log_type(env, t, "Invalid name");
+ 			return -EINVAL;
  		}
+@@ -4748,7 +4728,7 @@ static s32 btf_enum64_check_meta(struct btf_verifier_env *env,
+ 
+ 	/* enum type either no name or a valid one */
+ 	if (t->name_off &&
+-	    !btf_name_valid_identifier(env->btf, t->name_off)) {
++	    !btf_name_valid(env, t->name_off)) {
+ 		btf_verifier_log_type(env, t, "Invalid name");
+ 		return -EINVAL;
  	}
- 	return 0;
-diff --git a/tools/testing/selftests/bpf/progs/cpumask_common.h b/tools/testing/selftests/bpf/progs/cpumask_common.h
-index 8fe01308d210..03edad35aa13 100644
---- a/tools/testing/selftests/bpf/progs/cpumask_common.h
-+++ b/tools/testing/selftests/bpf/progs/cpumask_common.h
-@@ -7,9 +7,6 @@
- #include "errno.h"
- #include <stdbool.h>
+@@ -4764,7 +4744,7 @@ static s32 btf_enum64_check_meta(struct btf_verifier_env *env,
  
--/* Should use BTF_FIELDS_MAX, but it is not always available in vmlinux.h,
-- * so use the hard-coded number as a workaround.
-- */
- #define CPUMASK_KPTR_FIELDS_MAX 11
+ 		/* enum member must have a valid name */
+ 		if (!enums[i].name_off ||
+-		    !btf_name_valid_identifier(btf, enums[i].name_off)) {
++		    !btf_name_valid(env, enums[i].name_off)) {
+ 			btf_verifier_log_type(env, t, "Invalid name");
+ 			return -EINVAL;
+ 		}
+@@ -5054,7 +5034,7 @@ static s32 btf_locsec_check_meta(struct btf_verifier_env *env,
+ 	}
  
- int err;
-diff --git a/tools/testing/selftests/bpf/progs/cpumask_failure.c b/tools/testing/selftests/bpf/progs/cpumask_failure.c
-index 2a58209eb8be..47967f960bbc 100644
---- a/tools/testing/selftests/bpf/progs/cpumask_failure.c
-+++ b/tools/testing/selftests/bpf/progs/cpumask_failure.c
-@@ -15,7 +15,6 @@ struct kptr_nested_array_2 {
- };
- 
- struct kptr_nested_array_1 {
--	/* Make btf_parse_fields() in map_create() return -E2BIG */
- 	struct kptr_nested_array_2 d_2[CPUMASK_KPTR_FIELDS_MAX + 1];
- };
- 
-@@ -213,8 +212,8 @@ int BPF_PROG(test_global_mask_rcu_no_null_check, struct task_struct *task, u64 c
- }
- 
- SEC("tp_btf/task_newtask")
--__failure __msg("has no valid kptr")
--int BPF_PROG(test_invalid_nested_array, struct task_struct *task, u64 clone_flags)
-+__success
-+int BPF_PROG(test_big_nested_array, struct task_struct *task, u64 clone_flags)
+ 	if (!t->name_off ||
+-	    !btf_name_valid_section(env->btf, t->name_off)) {
++	    !btf_name_valid(env, t->name_off)) {
+ 		btf_verifier_log_type(env, t, "Invalid name");
+ 		return -EINVAL;
+ 	}
+@@ -5246,7 +5226,7 @@ static s32 btf_func_check_meta(struct btf_verifier_env *env,
+ 			       u32 meta_left)
  {
- 	struct bpf_cpumask *local, *prev;
+ 	if (!t->name_off ||
+-	    !btf_name_valid_identifier(env->btf, t->name_off)) {
++	    !btf_name_valid(env, t->name_off)) {
+ 		btf_verifier_log_type(env, t, "Invalid name");
+ 		return -EINVAL;
+ 	}
+@@ -5315,7 +5295,7 @@ static s32 btf_var_check_meta(struct btf_verifier_env *env,
+ 	}
+ 
+ 	if (!t->name_off ||
+-	    !btf_name_valid_identifier(env->btf, t->name_off)) {
++	    !btf_name_valid(env, t->name_off)) {
+ 		btf_verifier_log_type(env, t, "Invalid name");
+ 		return -EINVAL;
+ 	}
+@@ -5381,7 +5361,7 @@ static s32 btf_datasec_check_meta(struct btf_verifier_env *env,
+ 	}
+ 
+ 	if (!t->name_off ||
+-	    !btf_name_valid_section(env->btf, t->name_off)) {
++	    !btf_name_valid(env, t->name_off)) {
+ 		btf_verifier_log_type(env, t, "Invalid name");
+ 		return -EINVAL;
+ 	}
+@@ -5768,7 +5748,7 @@ static int btf_func_proto_check(struct btf_verifier_env *env,
+ 
+ 		if (args[i].name_off &&
+ 		    (!btf_name_offset_valid(btf, args[i].name_off) ||
+-		     !btf_name_valid_identifier(btf, args[i].name_off))) {
++		     !btf_name_valid(env, args[i].name_off))) {
+ 			btf_verifier_log_type(env, t,
+ 					      "Invalid arg#%u", i + 1);
+ 			return -EINVAL;
+@@ -6067,6 +6047,7 @@ static int btf_parse_str_sec(struct btf_verifier_env *env)
+ 	const struct btf_header *hdr;
+ 	struct btf *btf = env->btf;
+ 	const char *start, *end;
++	u32 i, len = 0;
+ 
+ 	hdr = &btf->hdr;
+ 	start = btf->nohdr_data + hdr->str_off;
+@@ -6091,6 +6072,21 @@ static int btf_parse_str_sec(struct btf_verifier_env *env)
+ 		return -EINVAL;
+ 	}
+ 
++	/* many names can share one long string: look at each byte once */
++	kvfree(env->names);
++	env->names = kvcalloc(BITS_TO_LONGS(hdr->str_len), sizeof(long),
++			      GFP_KERNEL | __GFP_NOWARN);
++	if (!env->names)
++		return -ENOMEM;
++	for (i = hdr->str_len; i--;) {
++		if (!start[i])
++			len = 0;
++		else if (!isprint(start[i]))
++			len = BTF_MAX_NAME_LEN;
++		else if (len++ < BTF_MAX_NAME_LEN)
++			__set_bit(i, env->names);
++	}
++
+ 	return 0;
+ }
  
 -- 
 2.55.0
