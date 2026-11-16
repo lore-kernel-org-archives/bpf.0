@@ -1,54 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.181
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794801557;
-	b=it1wp/N22nCqpc6bB4DDu1E2tBLjJqM4ou9UXHI6iwG/Ih9IoAPSFYY0skFL4zCp/lGP
-	 +IMi5W5zxRUhjZ11Pmp7p1J1rnnJdlu8CGGrPgo9jHdYWlBTpJVSqPWS4efhzGyBymZcp
-	 mph2zpbhd3K0MskI4FYADiV4R6Xym6f8NVK5Um/HgTGTw7OO4eRZe+oh0XK+MbIor8fyl
-	 T9+QTShPPWSSC2EnE/DJF8cr1/WG3GCItyXrJZ9+VpopWku37gne11qVlUXDLb7XbJsF7
-	 YBmHoJ3ybnazoCqXyFqAdQn+43qmqm5SwXvC8/0aSUUDnrECHNNlkfSGO55XlsxR2Ow==
+	t=1794804712;
+	b=H4Wb2G9cy0DySi8ULpEYogZaiwE7IGU/kNIJV8e0ZTQor6XIMd3x6CsDC0t3L0oTy07Z
+	 vU0XidLRQY9I0aEqOwsEok1gfPehJjQJEd89XtSop8yVAm9MuUEwYWWl35FZvVP3TkjJK
+	 OzdLsaqYowy8VfIcIYzsOL6und/Bk01OYNMWuiH58O6qOTM5vWFQ0TOb0wtlfnljr+k0P
+	 flomWyIl8Oy0y3bHdXriJ4BWhTw558f/f49bOTcHEUMZie+CnsrQFOnRNG7aaxx9fnsPU
+	 ya7lKXJfckRsighXVDddVl6wpBJJRhpDgl7WdW6iop5QZowoO8VQ1ocX04aPxZC/tiA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794801557;
-	h=DMARC-Filter:Received:Received:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-CM-TRANSID:X-CM-SenderInfo:
-	 X-Coremail-Antispam;
-	bh=j5y/xB7R2/Z2LDaXzlFtsMtmuvZKAkljLigBDMKHnPI=;
-	b=iSzJHx8mPNl/g0p3hc8tSwj9F1fEK8qvmhkLVY4EuARMy5GEs+gB3nhpvovzKzWwmF0I
-	 dEPgCzLelrkMTprZGX3XniQQJSDiJOWK/yefgXeRDgoswQkWQplMfHj55OB/DvDURqVo5
-	 H6bqW4b1e9SSpXF1SxyObujHMpEGjl0AbvD0B5n5QiljWRzTetlEQ/dDA2T4TwAzf7fT9
-	 eZ9P//uqbAqgEBLzo0MidumJ3M5s7jYWlsNkuV/tSV23yC5gJVxHTTYXPfDc3OSPU4zPS
-	 bjbkKyu+0Bu5CU80HV/SSCGqDIkbBpNlTBXpEsnvaLeU68xEcs2keaMBnaWtjbOTYRw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794804712;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=I4t5XE20i/gJJgLpBrJ+KezC2CeSfioWQ5iCK7ep1kI=;
+	b=2Lq8AKv/pr7llYk1uhlJiYTdcl2BDSoPrvTpzc2F+ZKL4nuTdkwgrR8wmLKE41du6AaP
+	 c2bfRIdTdfIWqu2wviRO1CfOufjaxhml5v6HdQPCVp57DpAptXnFVv95PoHRg+cg9TZTR
+	 qaWeDx2WjoDYUfpqN9rcJM54zUsmOWHrIJZBO7HOWhqQ7kp4oCT51Z1ZdAJHOwxd37AOK
+	 +cnM1z26keDnigRZDzxe+8ABset1XAAtH8zHAgE1p565GLbb/BJsVJc4CD0K9ahABH5JS
+	 xjr4Qqdbp+7m0TSkOA60bouBOIc1Bgo3Z60LfB7QqjjeOgQ27CsmRpiOQZeibsADeNg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=loongson.cn;
-	spf=pass smtp.mailfrom=loongson.cn;
-	arc=none smtp.remote-ip=114.242.206.163
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73C9D606A89E;
-	Mon, 16 Nov 2026 03:59:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 73C9D606A89E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [123.138.236.242])
-	by gateway (Coremail) with SMTP id _____8BxW_CSf_pqSQAgAA--.26723S3;
-	Mon, 16 Nov 2026 11:59:14 +0800 (CST)
-Received: from linux.localdomain (unknown [123.138.236.242])
-	by front1 (Coremail) with SMTP id qMiowJBxJs2Mf_pqKNE0AA--.64529S5;
-	Mon, 16 Nov 2026 11:59:11 +0800 (CST)
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v3 3/4] selftests/bpf: Fix unaligned access failure in fexit_bpf2bpf
-Date: Mon, 16 Nov 2026 11:59:06 +0800
-Message-ID: <20261116035907.4215-4-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20261116035907.4215-1-yangtiezhu@loongson.cn>
-References: <20261116035907.4215-1-yangtiezhu@loongson.cn>
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Q9uMG0sh;
+	arc=none smtp.remote-ip=209.85.215.181
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39B83606A323
+	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 04:51:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 39B83606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Q9uMG0sh
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-cc758830601so2994831a12.2
+        for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 20:51:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794804711; x=1795409511; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=I4t5XE20i/gJJgLpBrJ+KezC2CeSfioWQ5iCK7ep1kI=;
+        b=Q9uMG0shsjQL+u25gEioGMriGdkjPwXQL+5xFLs3BpJN9/lu5iNK6xJCTRdqzaVo5n
+         d9qIjaheY8Sw4SNzemMBpyXWzwDpGL+2DUGvdthUsK5bqlxbmvwhXPby7xVBSckSGUx2
+         A5P6dOPRHR449xae40tDEHvQSxWdGTApunX4iuvlVkVkbcPFv2ympFYjpBuLBdHbwFPX
+         hHsSi0ExiGK17YBMPV+Tk6EimN8j7iNHmFYj4JUle+Z++KdZRzpbA0dPu4Aphd4h4wWm
+         3ULZboBKGMvR28nAEPHHojGsL06gRTFhRBEOrNIKjXaFHRhi/Pc4ukzFpYurIpprgR65
+         N9DA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794804711; x=1795409511;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=I4t5XE20i/gJJgLpBrJ+KezC2CeSfioWQ5iCK7ep1kI=;
+        b=vECdThRNWa3yS0B88WX1POAZa0NLGpm4AAxbmhTsgdoKOXeFzhTxgWZRn5ygBzHMph
+         wcwDYK7o2Ebz9KZ9U+KNKF5ZNN5/C2035syyEemogURGseExX/pikJ46k/uNlJCeyTPI
+         JDfujR6JCtyzVAXGwrFlt9lT/aTOfOp8z9i3SpLqzah0SOWVxQ4eBDWOB+NTaiKEgJsZ
+         5qJ39is1OTpALP0+FJL3JXqiYKbLuO4EPYmmiKapGk78VrNAbiQmgbfoLnECUpZqOLSO
+         u3zUkf6S25DRDk/2q1kjm2qtYS7XWasQu77EwxCFqM9geMg2+VDVwysgFPxkbiY5VQ7R
+         csnQ==
+X-Forwarded-Encrypted: i=1; AL+hErEIeuIZddwmBY0dmpDj49yvVwQSFlmT01lzIyZqdiV6aGOTfauY3KM2pr16Wz2c2QNjCHg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z83/wuKGqW5l89BCjN6CQlyG3VKKuJhZSlVsjZS8FjhT9WMqry6
+	JuLkePUav+aibOOaRf+K9CSuSv+rguSxBDnSAL2fa8vIo8Gk5s0/fGHj
+X-Gm-Gg: AYBFou1DA2yZxtRncKjaec5/vI9Zha2/+GI1lLz/0ZZaxDzPG0+nhXjIZb5WdMffYgS
+	XYtX9q5jiVCF+SgSbIkQSxFap5we9g2x6XAI/d+paKMgFfU9XroiVfIb2vphUz92hZnxm5RH+ss
+	nIvlem5qFyNkRKTmbCAqa34q19KctBC/XuyumSkzAZAKVy8RViWuOxQrEhuR9e3/T25gD31d5gN
+	+rRmpm/okfsWRM90FbEkofX9Lsq7kdzWngTwQJJ0iH5Jc1cvs4AR/KkfY2Q63qGeSJdQK8OQQn4
+	FcEz68r0SzTeGJRbP8XpM0HojR1oh2niPxCkHA/OuEYsgCIFMlFhzOPAEJZHcMWKLA6hHc5GW1P
+	cBdtVhG5P1TNfVH+8hlIiBlK//BYh9He7ZamMgTE0spNj1KqWvXqBfM2wf8UnLbzfrxIPcLCSwC
+	bAf0QDRUiIHMbQtxfyAaCciGxWkKSWxpb5X3oSLbJzv10ujJjuJfM+SZtA0o1oNBH7OSPgzP2bf
+	SPtxbxC5+a21xMpWTy6yiG5M5bUKXozG1aGzzGzcs0ajqWOCfOP8Ibz83mBEOEYg89O9mUBly89
+	bV184XCjPSaXHyHqhbRPzTst4Ftb3mAlrs5bc7HkHUm6eVSW8LAtRz/9zSsugrUiWYVrrEASmip
+	D9dZgrnEuikE9CiA+92yO0X7LcDWp4MB/mQ==
+X-Received: by 2002:a17:90b:2247:b0:3ae:2969:9031 with SMTP id 98e67ed59e1d1-3b1b0d08f2cmr9948935a91.54.1794804711394;
+        Sun, 15 Nov 2026 20:51:51 -0800 (PST)
+Received: from localhost ([153.61.198.243])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b197ce460csm19648688a91.5.2026.11.15.20.51.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 15 Nov 2026 20:51:50 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 16 Nov 2026 04:51:50 +0000
+Message-Id: <DMWD65CI6NZ6.2V1UCWL1FUM8K@gmail.com>
+Subject: Re: [PATCH net 1/2] udp: fix reuseport rescore fallback
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Zihan Xi" <zihanx@nebusec.ai>, <netdev@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <bpf@vger.kernel.org>
+Cc: <willemdebruijn.kernel@gmail.com>, <davem@davemloft.net>,
+ <edumazet@kernel.org>, <pabeni@redhat.com>, <horms@kernel.org>,
+ <benh@amazon.com>, <kuniyu@google.com>, <shuah@kernel.org>,
+ <vega@nebusec.ai>
+In-Reply-To: <8c46325c4a433f02fdc7241c0c3884126cb502af.1794759652.git.zihanx@nebusec.ai>
+References: <cover.1794759652.git.zihanx@nebusec.ai> <8c46325c4a433f02fdc7241c0c3884126cb502af.1794759652.git.zihanx@nebusec.ai>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,84 +103,43 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJBxJs2Mf_pqKNE0AA--.64529S5
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7Ww1DZrW8Jw1rAFW5ZrWDAwc_yoW8KFWkpa
-	97A34jkryIg3W5X3Wjyw47GFWFgFn7tay8Kr1rtr98Zw1DJry0qr1fKF1UKF9xW39Yvwsa
-	vas7KFZ8Z3ykXabCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUU9Yb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q
-	6rW5McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-	vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_
-	Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
-	AY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAI
-	cVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42
-	IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIev
-	Ja73UjIFyTuYvjxU4AhLUUUUU
 
-When executing "./test_progs -t fexit_bpf2bpf", there are 5 subtest
-failures on platforms where CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
-is not set, as the BPF verifier enforces strict alignment checks:
+On Sun, Nov 15, 2026 at 07:55 PM Zihan Xi <zihanx@nebusec.ai> wrote:
+> When a reuseport group contains connected sockets, UDP lookup rescored the
+> socket selected by the reuseport program. If that socket did not match the
+> packet, lookup retained the stale selection while continuing the scan. This
+> could deliver a packet to a socket connected to a different peer.
 
-  ; tcp->check++; @ test_pkt_access.c:98
-  226: (69) r1 = *(u16 *)(r2 +16)
-  misaligned packet access off 2+(0x0; 0x3f)+16 size 2
-  ...
-  libbpf: prog 'test_pkt_access': failed to load: -EACCES
-  libbpf: failed to load object './test_pkt_access.bpf.o'
+Not since 6.13, unless CONFIG_BASE_SMALL=y.
 
-Rather than skipping the tests or setting BPF_F_ANY_ALIGNMENT to
-bypass the alignment check, fix this at the source by applying a
-bitmask 'off &= ~1' right after the initial range check.
+> Link: https://bugtracker.nebusec.ai/f/net/ipv6/udp.c||udp6_lib_lookup2||socket-hijack||m7q
 
-This explicitly communicates the 2-byte alignment state to pass
-the verifier and run the full fexit_bpf2bpf test matrix.
+That's not a hijack.
+udp_reuseport_add_sock() lets only sockets of one uid into a group.
+A member of the group attaches the prog.
+The prog picks a wrong socket of its own user.
 
-Before:
-  $ sudo ./test_progs -t fexit_bpf2bpf | tail -1
-  Summary: 0/10 PASSED, 1 SKIPPED, 1/5 FAILED
+> +		if (need_rescore) {
+> +			if (score > badness)
+> +				badness = score;
+> +			else
+> +				result = sk;
+> +			continue;
+> +		}
 
-After:
-  $ sudo ./test_progs -t fexit_bpf2bpf | tail -1
-  Summary: 1/15 PASSED, 1 SKIPPED, 0/0 FAILED
+This makes it worse.
+The unconnected sockets of a group have the same score.
+So the score of the picked socket is equal to badness, and the patch
+replaces the picked socket with sk.
 
-Fixes: 6dc03dc71387 ("selftests/bpf: Add test for freplace program with write access")
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c   | 1 +
- tools/testing/selftests/bpf/progs/test_pkt_access.c | 1 +
- 2 files changed, 2 insertions(+)
+Sockets A, B, C are not connected. A is the first one in hslot2.
+has_conns is set:
 
-diff --git a/tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c b/tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c
-index f4bbf87b82dd..ed06345825e2 100644
---- a/tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c
-+++ b/tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c
-@@ -173,6 +173,7 @@ int new_test_pkt_write_access_subprog(struct __sk_buff *skb, __u32 off)
- 	if (off > sizeof(struct ethhdr) + sizeof(struct ipv6hdr))
- 		return -1;
- 
-+	off &= ~1;
- 	tcp = data + off;
- 	if (tcp + 1 > data_end)
- 		return -1;
-diff --git a/tools/testing/selftests/bpf/progs/test_pkt_access.c b/tools/testing/selftests/bpf/progs/test_pkt_access.c
-index bce7173152c6..21f28a762d60 100644
---- a/tools/testing/selftests/bpf/progs/test_pkt_access.c
-+++ b/tools/testing/selftests/bpf/progs/test_pkt_access.c
-@@ -91,6 +91,7 @@ int test_pkt_write_access_subprog(struct __sk_buff *skb, __u32 off)
- 	if (off > sizeof(struct ethhdr) + sizeof(struct ipv6hdr))
- 		return -1;
- 
-+	off &= ~1;
- 	tcp = data + off;
- 	if (tcp + 1 > data_end)
- 		return -1;
--- 
-2.42.0
+  reuseport picks   today   with the patch
+  ---------------   -----   --------------
+  A                 A       A
+  B                 B       A
+  C                 C       A
+
+Nack.
 
