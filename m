@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794842854;
-	b=D+d46fQDWM3LCPkRXCrzqG6vXUpOAT3ixInxl3pwMUxQHtF7mMLqjwejbPmSfmRa53eH
-	 jmI0hJAeBOKpER1s8AS2kZd788tzeeC255nRgmXHUiKJISqwFbHAS+FKJ0z4P/XcDRvTK
-	 TJvrqAo0BWDmRB1WTREhDK+Lq654aQwWwJlahWe1rK7TOzPXZX15MpuHnvt4n4AbT1TTT
-	 c6Wyrke0KTP6cuePiAIWhkNNhFQk1yfYKYkVx1AKwtuUPkQBXBNWp/nTDnSUSEOHPCfbi
-	 jW2NOBq2bFfnb1ILwv3AL4JHAP04FoRbYstheYI7ctSGXGIQ+Od/kK1zw66WF6hnkFQ==
+	t=1794842860;
+	b=IbyhH8ej+MHosGHqTY03bkPV0wMtaBf1QcuUfvJ28kdbKNKs0rXkvM4BeSUbkS6daFOe
+	 dMnH1rGPFiI9K/zE2zWHg/2nEi2oxfJZc+pBxwZ5pLbiU2Q8nt9gIri4SH1uKKlf0d1+r
+	 0SFh9vDb0dCimiP6+4r/AbFfkKXbFxI03YX7SFu1mNEi6nQYhC/fGcW1d/NQChad+iKE3
+	 MzfnLWCUXSD1ruQjH6zGRK+MF8CBr2BJaqC6ctbQfnyLUGFVwktmZZ7TXEEjshkQe2w1O
+	 ohl4PBS5TOJx0n7AQVtRj4yZ/gYP6cdNlRhC0Lm+1BVEdVTzh4/ZXadZF92CVddtU7Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794842854;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794842860;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=B7yaOb9lvsHe7rD6wPnCf3vd5e4YsNKVNzHxbF/nHTU=;
-	b=Md8d8zzXxQt/ie0Pcdx9J4slCgC7QUfMKNYN7t9RYGF4FdlIrSPs6x/ukApz5u4zkZpA
-	 4dLZsJxPOwggCcffxKEFE2499n84ui3lp/UYZAODajce2gH/Z/BKWQmKPN7HFZQxO9NAf
-	 oynFicDRzamkULAYBsGSmdYyXzWXcTiHmexDI0JBw3WGYWPLdcm9boxnqiTY/QuEurbkc
-	 i4JlqJj44433LiJ0LH7u50BMebuwrr9U27lc5Cuy1COFwezseQe82GP2eQ+mgwxrz/79K
-	 lpEBhSlAwLxa0246MckyhnU50aK1GfzASG8io9jUXxVcp8IXvu+lY8mp7sY6i9d7u/A==
+	bh=5ACvzaShZlCo6fcsqnaIAPFDDtpWeGtCPcOsEdn6sdk=;
+	b=ANJPFUGzdEHwseb/WImIpP2CrQHZ4nVD85Cto7hb41OilFGqUKHywSskCTR3YevmZSfA
+	 jFfiMO/RuOo9pmotta3VsHS4PQXkw3hZs6amt7ftXpSYw1BY+/EdHpPAjJaZ9QwR39TFI
+	 OuPBwRPWAe/L/s62Su7WA0e+qxWsDObYnFDK3wzK0RVzr6F8UrI01Gx3G1LUdgAOGgAm4
+	 CZYkgMdKsml1RbCELqWX1/P7wS425kNOWL2O8QNOiM4U276D3wggSgOpk4ofAWEMKopk1
+	 Bo56qH+cjDAbsj2BhPvijUJ8YkCPveX9Ztit5bb9zN8ACfaXYr0GUkFAQ5Zdj8DANMQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DkbQkBWI;
-	arc=none smtp.remote-ip=209.85.216.54
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=th9JjqEE;
+	arc=none smtp.remote-ip=209.85.216.42
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 868AA606A329
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 15:27:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 868AA606A329
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9291606A338
+	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 15:27:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A9291606A338
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DkbQkBWI
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3b155f50c24so4517397a91.3
-        for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 07:27:33 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=th9JjqEE
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3b179528d56so1668183a91.3
+        for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 07:27:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794842853; x=1795447653; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794842859; x=1795447659; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=B7yaOb9lvsHe7rD6wPnCf3vd5e4YsNKVNzHxbF/nHTU=;
-        b=DkbQkBWIzsSxpSxM7W3Z23ZJAJvhENQ8FPW9FA5x6glrzZJzxn1aUkLeiYT+HIBeSb
-         JBvBMU4cWb0yBR8AplvzOjW6b5syL0vxotpoT8G/OBQk9hlQadVkzNPDo5fhiNGQhGmL
-         eCCRGToX6b5ZklZ8n0fYbtxxIY7i5wJuSOYxX1EJMPsZcT4OuWs3BAhE8Sug9h3na9U0
-         jEL4eHNU5Z5uQg1/X+0bUQqp/zhrq7dVPsTKGHpbyTMdBNqom2hqAveg/NwkHQUUwR4r
-         ere05ml/jYXh9RjVJTtl5x+mDJbMj38X6xwKpbS1/s23carKIaOINKN2CSqa13fdq+wx
-         Z4Mw==
+        bh=5ACvzaShZlCo6fcsqnaIAPFDDtpWeGtCPcOsEdn6sdk=;
+        b=th9JjqEEz9AQ5++ILLP07y4N89TD54u8Wbz1TwVfqHGillYtqVQ0Vx7ldIuAL5kwBA
+         QEWIoHsdebz/2uh4fLxVFKQZjp1bP3AYCarn0m7EU3gwD0HPF89+vn5bAfW03EagNpXa
+         ct8shuCo7EIjZgM9jdQv6xjZnDmTUACtovRWmYz1W+lk346TTP3riEX5CV75wNt1PXCe
+         FnpccyJeCkGPshZPLAtZPIZ6i1CH/tBFoRFzWtWTIc+mDbdSMxzewvF9HGISFKYvxve9
+         4ufCm9Z4QNsLj/DFfShTdFiObQRTKkvuOJ4DlHF2WBAsjWzuYo1MjV4kD1OlPASynKri
+         wsZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794842853; x=1795447653;
+        d=1e100.net; s=20260707; t=1794842859; x=1795447659;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=B7yaOb9lvsHe7rD6wPnCf3vd5e4YsNKVNzHxbF/nHTU=;
-        b=kUho7dNbDVWisspt2/v3tT6ugZWexWRIO2jfNSvMJBYFCx9eV3ZvyP8qVikHxRZ68Y
-         dwftf1fz2E015UIQW6bK/B6/pSL9slaNP5D7eOFUcAOrw+r2dgWroX8c2jLqSoPJQxxh
-         s2HMBAH7JxDZ8fUYd1eqrUqeJIJae5boIEUyTVYc9wbbFNcT8xJf9oBHebBv19qz3MSR
-         R6EzOE9la1Cj4DTlK4hBSo4DE1HprCPJJ69fjvExLRNge8QZ0p+I7aAQQdDvZGeaPEsH
-         cnF+ziYMH3m3JEma72YpTZRvRQ7ORudNYaXKaOUVrSiupGVeXCKWDJywe2lSJlP+amx4
-         AREA==
-X-Gm-Message-State: APuU4Z8sX98J9aWUN+ngYK5BqGp14YQEvLA3Uf9W8eoZ5NuXAHRVOo22
-	s2GyUt134Toukkp52D+xOj4Y+56danqoFTuU2a5jU2r3gSWupHW8H8TlCLVwMg==
-X-Gm-Gg: AZFdTZe0pBvlfjcRWkVdL1oRpIoaRJXXb91idrLTgLKyPrm6r9loafi5d6soYGtLTsK
-	9eBKtZ25LJ4DvaYL+IMJ0jjHYgklfNRPoIbQrPCOFtouUrPktS/jfTcqYT0QXNbLPnVz7Y4owUs
-	99hAxzH5RBvrIxC40Wj947SvizFIMSJUiAORi2AWxutfR1fz+V9GAI1HNIsxW0jF2c1J3WYeUOL
-	jBuJU+1bXEcwhyVguQGEYrS1UzYe97GFy17BrKDLORLe98XAmZWHkKD02mKY9iuPZoCeKEqsjzY
-	jYFKtemtrFhei6oYcAp3eLxly7meqBRwg05GUZBuKUt+7fcdjXjSF7ZtqEp974x5FsUgzjiI+sQ
-	/JR/v/VUfmBjyyMeNK+riT6LAls2W2vvwWttEF/PngvaY/wiB54ZP1mhaWrVmq7AZGa/sN7oc5s
-	oMi6UqHjulrgygOqs3JS76MvOTX9xKbx8PTo9CJuDo/KeI6oKGWuj7gCJCqNVeilWa2AzcDbOww
-	iVC0XYDV+xyaKLmJ2X0BYP7AzEt0TgWJRYQl1An/lHudZJ0fDtCj0zOKJh5EFspys8OsP48MMLu
-	tubv81U6vmZiyG5CxLb1xAQ5n6rU6iI5CHqZ/L5DB80zwb8J1ZMIiIh4HhmacsHOyvzwhBw83ZN
-	uEuUIl5MzRCKbDgFDz53F7uCyOO1iTMKma1wRiPBe21WYy3FGQWoAVeQWYRHsS6JY+loM44V1fw
+        bh=5ACvzaShZlCo6fcsqnaIAPFDDtpWeGtCPcOsEdn6sdk=;
+        b=EKBjgWsBfJX9DUiZ4PAG6h7SqDzXmF1jrzuQEBV6nG3Z+kwGwA8MkPFegRzcQNLz39
+         XScwsDnKswLHChwD/RK/f88OTBxXrH4D9fwFMCiFXvgSNJTrx/YA+PPJctSUgIBUKTgC
+         m3jElmpby4W6DUaIPbu8RNAj+faHQMP1joiDUha6WjpCLCwiIaUSIbfWEr68xUSfSe2N
+         OPUOzIgCKbAILjRRfgssm6hzmtTz9s2kxY+PQtruIz7pVHuOPhxaZuNqrxWcx8fbolX5
+         KK8lJh1mccD4hsdmRtbF1LMAbU7gu6c59Fv6VPJHZOUUEakWBQ+rVGJNjqwBRsdOsuYa
+         glMg==
+X-Gm-Message-State: APuU4Z9nixGu6XsSzml1OR+j7kVKCCIL8m6rCUw9cGiAFOtwgwy6Soy4
+	OSHb+lK2Ia6dOrO4DUqOwlCVROIE6bE1LlUMCEiQx6huvWcuSoru+V0QJyypYQ==
+X-Gm-Gg: AZFdTZc/Y7/rVVEqTXRbZd6Pwaqak/Ns+pUd3cU2+rQXTK6kibtw1qsz/x/FjV2s20l
+	XSge8XcUG5yxNZ86BNdkUUBhvTTb/Q2RXPl5QlZjaXRrW9J/fpn5G9Z6LK7AAD6Z2/UCqJEiGni
+	TLxEslfQ3I0UH3NmoKoXIstFC3TR22++i2Mb9/dAJo7e5R0zxe1jdGUGBtNlf2yY52qPMTSaeAJ
+	8B4jpsIcHfKgM8DuKZ/4R374JMWDjhOhYPGKt8BqEP09zZmnqtR8Ept+xmKGYqgUSL0GzIjzrVv
+	P7hVi6NkQVSLP2M7blc2RRLN3KxIlOD2pTxRgcNuasQ0utoYXS7Jkm5grrQ/2ziv0xS9ZS3dtx4
+	AoHwYEDh8OeX9F46g3yJ35zT/XBvjFbiylrp9ST4fvWTjoPN4y7ykA7bpvOpNGMj2Dw6m0z0iPQ
+	tlDbAt8xA9aHs/0Cs9CUMWrHbEy2wglYQXn5rDhI1ZRngtNj89MDsEdudBskYQZpHD2DI8+YG7B
+	NnIguP5vBdLWXf/Z62jZkahDRRA6Q0NyS7UXvoximx4k8ORZkY51GaJkn1wXvstRR/T9lUrhwQd
+	j3xic3PbRhemVkkjxPnNNJBviaToHcjx0rIs0YVItjHHMB+3k5CuFIPYLs84KbV47TIwSHEGgzq
+	6TUf019hmZKk5Ugu+XVvOZmJgFRUHyrbvi1HSlihG76Y7zyoLrzwb89bSaObAXvasmysfk3Pc5A
 	==
-X-Received: by 2002:a17:90b:2247:b0:3ae:2969:9031 with SMTP id 98e67ed59e1d1-3b1b0d08f2cmr11373921a91.54.1794842852531;
-        Mon, 16 Nov 2026 07:27:32 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.247])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1aed76f95sm16670478a91.17.2026.11.16.07.27.31
+X-Received: by 2002:a17:90b:2b87:b0:3b0:dbc5:c56b with SMTP id 98e67ed59e1d1-3b1b07e9026mr9062346a91.6.1794842858514;
+        Mon, 16 Nov 2026 07:27:38 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.243])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1aed76f95sm16670857a91.17.2026.11.16.07.27.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2026 07:27:32 -0800 (PST)
+        Mon, 16 Nov 2026 07:27:38 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 10/21] bpf: Remove the limits on tables of functions
-Date: Mon, 16 Nov 2026 15:26:15 +0000
-Message-ID: <20261116152626.4032587-11-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 11/21] libbpf: Size the tables of the loader program from the object
+Date: Mon, 16 Nov 2026 15:26:16 +0000
+Message-ID: <20261116152626.4032587-12-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261116152626.4032587-1-alexei.starovoitov@gmail.com>
 References: <20261116152626.4032587-1-alexei.starovoitov@gmail.com>
@@ -104,359 +104,374 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-  4096 sets of functions       sets are in a hash table now
-  1024 targets of one load     counted before duplicates were removed
-  4096 pointers near a load    the scan is linear and can be killed
-  1M pointers in all maps      the table grows
+gen_loader mirrors limits of the kernel: 64 maps, 32 programs and 256
+kfuncs. The numbers are known before the loader is made.
 
-Nothing sorts the pointers: walk the maps in the order of their addresses,
-and collect the targets of a load in a bitmap.
+  fd_array:  [ maps | copies of maps | unused | BTFs of kfuncs ]
+  prog_fds:  [ programs ]              was on the stack of the loader
 
-The number of a subprog in a set has 32 bits.
+Use gotol and a register for ctx when an offset needs more than 16 bits.
+That was an error, so loaders that could be made do not get gotol.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h                  |   5 +-
- kernel/bpf/verifier.c                         | 132 +++++++-----------
- .../selftests/bpf/progs/verifier_callx_many.c |  31 +++-
- 3 files changed, 82 insertions(+), 86 deletions(-)
+ tools/lib/bpf/bpf_gen_internal.h |   3 +-
+ tools/lib/bpf/gen_loader.c       | 157 +++++++++++++------------------
+ tools/lib/bpf/libbpf.c           |   8 +-
+ 3 files changed, 74 insertions(+), 94 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 508aef9bad9d..3b40f66894d9 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1332,6 +1332,7 @@ struct bpf_verifier_env {
- 	/* What a pointer that was read from a table of functions may point to. */
- 	struct bpf_func_set **func_sets;
- 	u32 func_set_cnt;
-+	struct bpf_index func_set_index;
- 	bool has_callx;
+diff --git a/tools/lib/bpf/bpf_gen_internal.h b/tools/lib/bpf/bpf_gen_internal.h
+index 206adf28793d..c30e05b66abc 100644
+--- a/tools/lib/bpf/bpf_gen_internal.h
++++ b/tools/lib/bpf/bpf_gen_internal.h
+@@ -50,6 +50,7 @@ struct bpf_gen {
+ 	struct ksym_desc *ksyms;
+ 	__u32 nr_ksyms;
+ 	int fd_array;
++	int prog_fds;
+ 	int nr_fd_array;
  	/*
- 	 * Call graph edges created by callx instructions. A bitmap of
-@@ -1718,8 +1719,8 @@ static inline bool bpf_register_is_null(struct bpf_reg_state *reg)
- bool bpf_map_is_rdonly(const struct bpf_map *map);
- /* Sorted, no function is there twice */
- struct bpf_func_set {
--	u16 cnt;
--	u16 subprog[] __counted_by(cnt);
-+	u32 cnt;
-+	u32 subprog[] __counted_by(cnt);
+ 	 * Maps with pointers to functions, that programs get their own copies
+@@ -61,7 +62,7 @@ struct bpf_gen {
  };
  
- struct bpf_func_ptr *bpf_map_func_ptrs(struct bpf_verifier_env *env,
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index f4e2a9f9f787..c5a44c887ada 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -18,6 +18,7 @@
- #include <linux/vmalloc.h>
- #include <linux/stringify.h>
- #include <linux/bsearch.h>
-+#include <linux/jhash.h>
- #include <linux/sort.h>
- #include <linux/perf_event.h>
- #include <linux/ctype.h>
-@@ -6503,17 +6504,6 @@ int bpf_map_direct_read(struct bpf_map *map, int off, int size, u64 *val,
- 	return 0;
+ void bpf_gen__init(struct bpf_gen *gen, int log_level, int nr_progs, int nr_maps,
+-		   int max_func_ptr_maps);
++		   int max_func_ptr_maps, int nr_kfuncs);
+ int bpf_gen__finish(struct bpf_gen *gen, int nr_progs, int nr_maps);
+ void bpf_gen__free(struct bpf_gen *gen);
+ void bpf_gen__load_btf(struct bpf_gen *gen, const void *raw_data, __u32 raw_size);
+diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+index 555d4757a898..27b4bc9e55ac 100644
+--- a/tools/lib/bpf/gen_loader.c
++++ b/tools/lib/bpf/gen_loader.c
+@@ -15,11 +15,6 @@
+ #include "bpf_gen_internal.h"
+ #include "skel_internal.h"
+ 
+-#define MAX_USED_MAPS	64
+-#define MAX_USED_PROGS	32
+-#define MAX_KFUNC_DESCS 256
+-#define MAX_FD_ARRAY_SZ (MAX_USED_MAPS + MAX_KFUNC_DESCS)
+-
+ /* The following structure describes the stack layout of the loader program.
+  * In addition R6 contains the pointer to context.
+  * R7 contains the result of the last sys_bpf command (typically error or FD).
+@@ -34,7 +29,6 @@
+ struct loader_stack {
+ 	__u32 btf_fd;
+ 	__u32 inner_map_fd;
+-	__u32 prog_fd[MAX_USED_PROGS];
+ };
+ 
+ #define stack_off(field) \
+@@ -47,6 +41,16 @@ static int blob_fd_array_off(struct bpf_gen *gen, int index)
+ 	return gen->fd_array + index * sizeof(int);
  }
  
--static int cmp_func_ptrs(const void *_a, const void *_b)
--{
--	const struct bpf_func_ptr *a = _a, *b = _b;
--
--	if (a->map != b->map)
--		return a->map < b->map ? -1 : 1;
--	if (a->map_off != b->map_off)
--		return a->map_off < b->map_off ? -1 : 1;
--	return 0;
--}
--
- /* Find the first pointer to a function at or after 'off' in the value of 'map' */
- static u32 func_ptr_lower_bound(struct bpf_verifier_env *env, const struct bpf_map *map, u64 off)
- {
-@@ -7164,14 +7154,6 @@ static void mark_reg_func_ptr(struct bpf_verifier_env *env, struct bpf_reg_state
- 	regs[regno].subprogno = subprog;
- }
- 
--static int cmp_u16(const void *a, const void *b)
--{
--	return *(const u16 *)a - *(const u16 *)b;
--}
--
--/* that many different sets at most: each load from a table looks through all of them */
--#define BPF_MAX_FUNC_SETS 4096
--
- /*
-  * A load from a table of functions gives one register: a pointer to one of a set of functions.
-  * One state for each function would differ in nothing else up to the call, and there every
-@@ -7179,49 +7161,40 @@ static int cmp_u16(const void *a, const void *b)
-  * Equal sets have the same number, so registers are compared as they are.
-  */
- static int mark_reg_func_set(struct bpf_verifier_env *env, struct bpf_reg_state *regs, int regno,
--			     u16 *subprogs, u32 cnt)
-+			     const u32 *subprogs, u32 n)
- {
--	struct bpf_func_set **sets, *set;
--	u32 i, n = 0;
-+	struct bpf_func_set *set;
-+	u64 key;
-+	int i;
- 
--	sort(subprogs, cnt, sizeof(*subprogs), cmp_u16, NULL);
--	for (i = 0; i < cnt; i++)
--		if (!n || subprogs[n - 1] != subprogs[i])
--			subprogs[n++] = subprogs[i];
- 	mark_reg_func_ptr(env, regs, regno, n == 1 ? subprogs[0] : 0);
- 	if (n == 1)
- 		return 0;
- 
--	for (i = 0; i < env->func_set_cnt; i++) {
-+	/* sets with the same hash have keys in a row */
-+	key = (u64)jhash2(subprogs, n, 0) << 32;
-+	for (; (i = bpf_index_find(&env->func_set_index, key)) >= 0; key++) {
- 		set = env->func_sets[i];
- 		if (set->cnt == n && !memcmp(set->subprog, subprogs, n * sizeof(*subprogs)))
- 			break;
- 	}
--	if (i == env->func_set_cnt) {
--		if (i == BPF_MAX_FUNC_SETS) {
--			verbose(env, "more than %d sets of functions\n", BPF_MAX_FUNC_SETS);
--			return -E2BIG;
--		}
--		sets = krealloc_array(env->func_sets, i + 1, sizeof(*sets), BPF_VERIFIER_GFP);
--		if (!sets)
--			return -ENOMEM;
--		env->func_sets = sets;
--		set = kzalloc_flex(*set, subprog, n, BPF_VERIFIER_GFP);
--		if (!set)
-+	if (i < 0) {
-+		i = env->func_set_cnt;
-+		set = kvzalloc_flex(*set, subprog, n, BPF_VERIFIER_GFP);
-+		/* nothing fails between the entry of the index and the set that it stands for */
-+		if (!set || !bpf_table_next(env->func_sets, i) ||
-+		    bpf_index_add(&env->func_set_index, key, i)) {
-+			kvfree(set);
- 			return -ENOMEM;
-+		}
- 		set->cnt = n;
- 		memcpy(set->subprog, subprogs, n * sizeof(*subprogs));
--		sets[env->func_set_cnt++] = set;
-+		env->func_sets[env->func_set_cnt++] = set;
- 	}
- 	regs[regno].func_set = i + 1;
- 	return 0;
- }
- 
--/* a read from a table of functions yields one of that many at most */
--#define BPF_MAX_FUNC_PTR_TARGETS BPF_MAX_SUBPROGS
--/* and that many pointers at most are next to what is read at variable offset */
--#define BPF_MAX_FUNC_PTR_RANGE 4096
--
- /* Count up to 'limit' offsets in [min_off, max_off] that the read is possible at */
- static u32 count_read_offsets(struct tnum offs, u64 min_off, u64 max_off, u32 limit)
- {
-@@ -7263,7 +7236,8 @@ static int check_func_ptr_read(struct bpf_verifier_env *env, struct bpf_reg_stat
- 	struct tnum offs = tnum_add(reg->var_off, tnum_const(off));
- 	struct bpf_reg_state *regs = cur_regs(env);
- 	struct bpf_map *map = reg->map_ptr;
--	u16 *targets __free(kfree) = NULL;
-+	unsigned long *found __free(kvfree) = NULL;
-+	u32 *targets __free(kvfree) = NULL;
- 	struct bpf_func_ptr *ptrs;
- 	u32 i, cnt, n = 0;
- 	u64 o, lo, hi;
-@@ -7272,13 +7246,14 @@ static int check_func_ptr_read(struct bpf_verifier_env *env, struct bpf_reg_stat
- 	ptrs = bpf_map_range_func_ptrs(env, map, min_off, max_off - min_off + size, &cnt);
- 	if (!ptrs)
- 		return -ENOENT;
--	if (cnt > BPF_MAX_FUNC_PTR_RANGE)
--		goto overlap;
--	targets = kmalloc_array(BPF_MAX_FUNC_PTR_TARGETS, sizeof(*targets), BPF_VERIFIER_GFP);
--	if (!targets)
-+	targets = kvmalloc_array(min(cnt, env->subprog_cnt), sizeof(*targets), BPF_VERIFIER_GFP);
-+	found = kvcalloc(BITS_TO_LONGS(env->subprog_cnt), sizeof(long), BPF_VERIFIER_GFP);
-+	if (!targets || !found)
- 		return -ENOMEM;
- 
- 	for (i = 0; i < cnt; i++) {
-+		if (bpf_must_abort())
-+			return -EINTR;
- 		/* the offsets at which the read overlaps with the pointer */
- 		lo = ptrs[i].map_off >= size ? ptrs[i].map_off - size + 1 : 0;
- 		lo = max(lo, min_off);
-@@ -7288,17 +7263,13 @@ static int check_func_ptr_read(struct bpf_verifier_env *env, struct bpf_reg_stat
- 				continue;
- 			if (o != ptrs[i].map_off || size != sizeof(u64) || value_regno < 0)
- 				goto overlap;
--			if (n == BPF_MAX_FUNC_PTR_TARGETS) {
--				verbose(env, "read from map '%s' may yield more than %d pointers to functions\n",
--					map->name, BPF_MAX_FUNC_PTR_TARGETS);
--				return -E2BIG;
--			}
- 			subprog = bpf_find_subprog(env, ptrs[i].xlated_off);
- 			if (verifier_bug_if(subprog <= 0, env,
- 					    "no function at insn %u for map '%s' offset %u",
- 					    ptrs[i].xlated_off, map->name, ptrs[i].map_off))
- 				return -EFAULT;
--			targets[n++] = subprog;
-+			__set_bit(subprog, found);
-+			n++;
- 		}
- 	}
- 	/* pointers are next to what is read, e.g. the data of an array of vtables */
-@@ -7313,6 +7284,9 @@ static int check_func_ptr_read(struct bpf_verifier_env *env, struct bpf_reg_stat
- 	if (err)
- 		return err;
- 
-+	n = 0;
-+	for_each_set_bit(subprog, found, env->subprog_cnt)
-+		targets[n++] = subprog;
- 	return mark_reg_func_set(env, regs, value_regno, targets, n);
- 
- overlap:
-@@ -22834,29 +22808,11 @@ static int check_and_resolve_insns(struct bpf_verifier_env *env)
- 	return claim_used_maps(env);
- }
- 
--/* that many pointers to functions are recognized in the maps of a program at most */
--#define BPF_MAX_FUNC_PTRS (1 << 20)
--
- static int add_func_ptr(struct bpf_verifier_env *env, struct bpf_map *map, u32 map_off,
- 			u32 xlated_off)
- {
--	struct bpf_func_ptr *ptrs;
--
--	if (env->func_ptr_cnt == BPF_MAX_FUNC_PTRS) {
--		verbose(env, "too many pointers to functions in maps, the limit is %d\n",
--			BPF_MAX_FUNC_PTRS);
--		return -E2BIG;
--	}
--
--	/* grow by doubling, the array is sorted and searched later */
--	if (!(env->func_ptr_cnt & (env->func_ptr_cnt - 1))) {
--		ptrs = kvrealloc(env->func_ptrs,
--				 array_size(max(2 * env->func_ptr_cnt, 16U), sizeof(*ptrs)),
--				 BPF_VERIFIER_GFP);
--		if (!ptrs)
--			return -ENOMEM;
--		env->func_ptrs = ptrs;
--	}
-+	if (!bpf_table_next(env->func_ptrs, env->func_ptr_cnt))
-+		return -ENOMEM;
- 	env->func_ptrs[env->func_ptr_cnt++] = (struct bpf_func_ptr){
- 		.map = map,
- 		.map_off = map_off,
-@@ -22866,6 +22822,11 @@ static int add_func_ptr(struct bpf_verifier_env *env, struct bpf_map *map, u32 m
- 	return 0;
- }
- 
-+static int cmp_maps(const void *a, const void *b)
++static int blob_prog_fd_off(struct bpf_gen *gen, int index)
 +{
-+	return cmp_int(*(const unsigned long *)a, *(const unsigned long *)b);
++	return gen->prog_fds + index * sizeof(int);
 +}
 +
- /*
-  * Compilers put pointers to functions into read-only data: tables of functions,
-  * structures of operations, vtables, where they are mixed with other data.
-@@ -22890,17 +22851,24 @@ static int add_func_ptr(struct bpf_verifier_env *env, struct bpf_map *map, u32 m
-  */
- static int resolve_func_ptrs(struct bpf_verifier_env *env)
- {
-+	struct bpf_map *map, **maps __free(kvfree) = NULL;
- 	int insn_cnt = env->prog->len;
- 	int i, err, subprog;
--	struct bpf_map *map;
- 	u64 addr, val;
- 	u32 off;
- 
--	if (!env->has_callx || !env->allow_ptr_leaks)
-+	if (!env->has_callx || !env->allow_ptr_leaks || !env->used_map_cnt)
- 		return 0;
- 
-+	/* with the maps in order the pointers are in order */
-+	maps = kvmalloc_objs(*maps, env->used_map_cnt, BPF_VERIFIER_GFP);
-+	if (!maps)
-+		return -ENOMEM;
-+	memcpy(maps, env->used_maps, env->used_map_cnt * sizeof(*maps));
-+	sort(maps, env->used_map_cnt, sizeof(*maps), cmp_maps, NULL);
++static bool is_simm16(__s64 value)
++{
++	return value == (__s64)(__s16)value;
++}
 +
- 	for (i = 0; i < env->used_map_cnt; i++) {
--		map = env->used_maps[i];
-+		map = maps[i];
- 		/* coincidences in maps that are shared with other programs don't matter */
- 		if (READ_ONCE(map->user) != (unsigned long)env->prog->aux)
- 			continue;
-@@ -22926,9 +22894,6 @@ static int resolve_func_ptrs(struct bpf_verifier_env *env)
- 				return err;
+ static int realloc_insn_buf(struct bpf_gen *gen, __u32 size)
+ {
+ 	size_t off = gen->insn_cur - gen->insn_start;
+@@ -113,20 +117,18 @@ static int add_data(struct bpf_gen *gen, const void *data, __u32 size);
+ static void emit_sys_close_blob(struct bpf_gen *gen, int blob_off);
+ 
+ void bpf_gen__init(struct bpf_gen *gen, int log_level, int nr_progs, int nr_maps,
+-		   int max_func_ptr_maps)
++		   int max_func_ptr_maps, int nr_kfuncs)
+ {
+-	size_t stack_sz = sizeof(struct loader_stack), nr_progs_sz;
+-	int i;
++	size_t stack_sz = sizeof(struct loader_stack);
++	int i, cleanup_sz;
+ 
+-	gen->fd_array = add_data(gen, NULL, MAX_FD_ARRAY_SZ * sizeof(int));
++	/* maps | maps with pointers to functions | unused | BTFs of kfuncs, never at index 0 */
++	gen->fd_array = add_data(gen, NULL,
++				 (nr_maps + max_func_ptr_maps + 1 + nr_kfuncs) * sizeof(int));
++	gen->prog_fds = add_data(gen, NULL, nr_progs * sizeof(int));
+ 	gen->log_level = log_level;
+ 	gen->nr_obj_maps = nr_maps;
+ 	gen->max_func_ptr_maps = max_func_ptr_maps;
+-	if (nr_maps + max_func_ptr_maps > MAX_USED_MAPS) {
+-		pr_warn("Total maps exceeds %d\n", MAX_USED_MAPS);
+-		gen->error = -E2BIG;
+-		return;
+-	}
+ 	/* their fds are closed like the fds of the maps of the object when loading fails */
+ 	nr_maps += max_func_ptr_maps;
+ 	/* save ctx pointer into R6 */
+@@ -139,27 +141,24 @@ void bpf_gen__init(struct bpf_gen *gen, int log_level, int nr_progs, int nr_maps
+ 	emit(gen, BPF_MOV64_IMM(BPF_REG_3, 0));
+ 	emit(gen, BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel));
+ 
+-	/* nr_progs includes subprogs and progs that are not loaded */
+-	nr_progs = min(nr_progs, MAX_USED_PROGS);
+-	/* amount of stack actually used, only used to calculate iterations, not stack offset */
+-	nr_progs_sz = offsetof(struct loader_stack, prog_fd[nr_progs]);
+-	/* jump over cleanup code */
+-	emit(gen, BPF_JMP_IMM(BPF_JA, 0, 0,
+-			      /* size of cleanup code below (including map fd cleanup) */
+-			      (nr_progs_sz / 4) * 3 + 2 +
+-			      /* 6 insns for emit_sys_close_blob,
+-			       * 6 insns for debug_regs in emit_sys_close_blob
+-			       */
+-			      nr_maps * (6 + (gen->log_level ? 6 : 0))));
++	/*
++	 * jump over cleanup code below:
++	 * 6 insns for emit_sys_close_blob,
++	 * 6 insns for debug_regs in emit_sys_close_blob
++	 */
++	cleanup_sz = (stack_sz / 4) * 3 + 2 + (nr_progs + nr_maps) * (6 + (gen->log_level ? 6 : 0));
++	emit(gen, is_simm16(cleanup_sz) ? BPF_JMP_A(cleanup_sz) : BPF_JMP32_A(cleanup_sz));
+ 
+ 	/* remember the label where all error branches will jump to */
+ 	gen->cleanup_label = gen->insn_cur - gen->insn_start;
+ 	/* emit cleanup code: close all temp FDs */
+-	for (i = 0; i < nr_progs_sz; i += 4) {
++	for (i = 0; i < stack_sz; i += 4) {
+ 		emit(gen, BPF_LDX_MEM(BPF_W, BPF_REG_1, BPF_REG_10, -stack_sz + i));
+ 		emit(gen, BPF_JMP_IMM(BPF_JSLE, BPF_REG_1, 0, 1));
+ 		emit(gen, BPF_EMIT_CALL(BPF_FUNC_sys_close));
+ 	}
++	for (i = 0; i < nr_progs; i++)
++		emit_sys_close_blob(gen, blob_prog_fd_off(gen, i));
+ 	for (i = 0; i < nr_maps; i++)
+ 		emit_sys_close_blob(gen, blob_fd_array_off(gen, i));
+ 	/* R7 contains the error code from sys_bpf. Copy it into R0 and exit. */
+@@ -192,28 +191,9 @@ static int add_data(struct bpf_gen *gen, const void *data, __u32 size)
+ 	return prev - gen->data_start;
+ }
+ 
+-/* Get index for map_fd/btf_fd slot in reserved fd_array, or in data relative
+- * to start of fd_array. Caller can decide if it is usable or not.
+- */
+-static int add_map_fd(struct bpf_gen *gen)
+-{
+-	if (gen->nr_maps == MAX_USED_MAPS) {
+-		pr_warn("Total maps exceeds %d\n", MAX_USED_MAPS);
+-		gen->error = -E2BIG;
+-		return 0;
+-	}
+-	return gen->nr_maps++;
+-}
+-
+ static int add_kfunc_btf_fd(struct bpf_gen *gen)
+ {
+-	int cur;
+-
+-	if (gen->nr_fd_array == MAX_KFUNC_DESCS) {
+-		cur = add_data(gen, NULL, sizeof(int));
+-		return (cur - gen->fd_array) / sizeof(int);
+-	}
+-	return MAX_USED_MAPS + gen->nr_fd_array++;
++	return gen->nr_obj_maps + gen->max_func_ptr_maps + 1 + gen->nr_fd_array++;
+ }
+ 
+ static int insn_bytes_to_bpf_size(__u32 sz)
+@@ -247,18 +227,33 @@ static void move_blob2blob(struct bpf_gen *gen, int off, int size, int blob_off)
+ 	emit(gen, BPF_STX_MEM(insn_bytes_to_bpf_size(size), BPF_REG_1, BPF_REG_0, 0));
+ }
+ 
++/* Returns the register for an access to ctx + *off: R6, or tmp if *off needs more than 16 bits */
++static int emit_ctx_reg(struct bpf_gen *gen, int tmp, int *off)
++{
++	if (is_simm16(*off))
++		return BPF_REG_6;
++	emit(gen, BPF_MOV64_REG(tmp, BPF_REG_6));
++	emit(gen, BPF_ALU64_IMM(BPF_ADD, tmp, *off));
++	*off = 0;
++	return tmp;
++}
++
+ static void move_blob2ctx(struct bpf_gen *gen, int ctx_off, int size, int blob_off)
+ {
++	int ctx = emit_ctx_reg(gen, BPF_REG_2, &ctx_off);
++
+ 	emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX_VALUE,
+ 					 0, 0, 0, blob_off));
+ 	emit(gen, BPF_LDX_MEM(insn_bytes_to_bpf_size(size), BPF_REG_0, BPF_REG_1, 0));
+-	emit(gen, BPF_STX_MEM(insn_bytes_to_bpf_size(size), BPF_REG_6, BPF_REG_0, ctx_off));
++	emit(gen, BPF_STX_MEM(insn_bytes_to_bpf_size(size), ctx, BPF_REG_0, ctx_off));
+ }
+ 
+ static void move_ctx2blob(struct bpf_gen *gen, int off, int size, int ctx_off,
+ 				   bool check_non_zero)
+ {
+-	emit(gen, BPF_LDX_MEM(insn_bytes_to_bpf_size(size), BPF_REG_0, BPF_REG_6, ctx_off));
++	int ctx = emit_ctx_reg(gen, BPF_REG_0, &ctx_off);
++
++	emit(gen, BPF_LDX_MEM(insn_bytes_to_bpf_size(size), BPF_REG_0, ctx, ctx_off));
+ 	if (check_non_zero)
+ 		/* If value in ctx is zero don't update the blob.
+ 		 * For example: when ctx->map.max_entries == 0, keep default max_entries from bpf.c
+@@ -277,12 +272,6 @@ static void move_stack2blob(struct bpf_gen *gen, int off, int size, int stack_of
+ 	emit(gen, BPF_STX_MEM(insn_bytes_to_bpf_size(size), BPF_REG_1, BPF_REG_0, 0));
+ }
+ 
+-static void move_stack2ctx(struct bpf_gen *gen, int ctx_off, int size, int stack_off)
+-{
+-	emit(gen, BPF_LDX_MEM(insn_bytes_to_bpf_size(size), BPF_REG_0, BPF_REG_10, stack_off));
+-	emit(gen, BPF_STX_MEM(insn_bytes_to_bpf_size(size), BPF_REG_6, BPF_REG_0, ctx_off));
+-}
+-
+ static void emit_sys_bpf(struct bpf_gen *gen, int cmd, int attr, int attr_size)
+ {
+ 	emit(gen, BPF_MOV64_IMM(BPF_REG_1, cmd));
+@@ -294,11 +283,6 @@ static void emit_sys_bpf(struct bpf_gen *gen, int cmd, int attr, int attr_size)
+ 	emit(gen, BPF_MOV64_REG(BPF_REG_7, BPF_REG_0));
+ }
+ 
+-static bool is_simm16(__s64 value)
+-{
+-	return value == (__s64)(__s16)value;
+-}
+-
+ static void emit_check_err(struct bpf_gen *gen)
+ {
+ 	__s64 off = -(gen->insn_cur - gen->insn_start - gen->cleanup_label) / 8 - 1;
+@@ -309,7 +293,8 @@ static void emit_check_err(struct bpf_gen *gen)
+ 	if (is_simm16(off)) {
+ 		emit(gen, BPF_JMP_IMM(BPF_JSLT, BPF_REG_7, 0, off));
+ 	} else {
+-		gen->error = -ERANGE;
++		emit(gen, BPF_JMP_IMM(BPF_JSGE, BPF_REG_7, 0, 1));
++		emit(gen, BPF_JMP32_A(off - 1));
+ 	}
+ }
+ 
+@@ -401,12 +386,12 @@ int bpf_gen__finish(struct bpf_gen *gen, int nr_progs, int nr_maps)
+ 	for (i = 0; i < gen->nr_func_ptr_maps; i++)
+ 		emit_sys_close_blob(gen, blob_fd_array_off(gen, gen->nr_obj_maps + i));
+ 	for (i = 0; i < gen->nr_progs; i++)
+-		move_stack2ctx(gen,
+-			       sizeof(struct bpf_loader_ctx) +
+-			       sizeof(struct bpf_map_desc) * gen->nr_maps +
+-			       sizeof(struct bpf_prog_desc) * i +
+-			       offsetof(struct bpf_prog_desc, prog_fd), 4,
+-			       stack_off(prog_fd[i]));
++		move_blob2ctx(gen,
++			      sizeof(struct bpf_loader_ctx) +
++			      sizeof(struct bpf_map_desc) * gen->nr_maps +
++			      sizeof(struct bpf_prog_desc) * i +
++			      offsetof(struct bpf_prog_desc, prog_fd), 4,
++			      blob_prog_fd_off(gen, i));
+ 	for (i = 0; i < gen->nr_maps; i++)
+ 		move_blob2ctx(gen,
+ 			      sizeof(struct bpf_loader_ctx) +
+@@ -578,8 +563,7 @@ void bpf_gen__map_create(struct bpf_gen *gen,
+ 		gen->error = -EDOM; /* internal bug */
+ 		return;
+ 	} else {
+-		/* add_map_fd does gen->nr_maps++ */
+-		idx = add_map_fd(gen);
++		idx = gen->nr_maps++;
+ 		emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX_VALUE,
+ 						 0, 0, 0, blob_fd_array_off(gen, idx)));
+ 		emit(gen, BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_7, 0));
+@@ -720,11 +704,7 @@ static void emit_bpf_kallsyms_lookup_name(struct bpf_gen *gen, struct ksym_relo_
+  * BPF_REG_8 - pointer to instruction
+  *
+  * We need to reuse BTF fd for same symbol otherwise each relocation takes a new
+- * index, while kernel limits total kfunc BTFs to 256. For duplicate symbols,
+- * this would mean a new BTF fd index for each entry. By pairing symbol name
+- * with index, we get the insn->imm, insn->off pairing that kernel uses for
+- * kfunc_tab, which becomes the effective limit even though all of them may
+- * share same index in fd_array (such that kfunc_btf_tab has 1 element).
++ * index in fd_array, which has one slot for each symbol.
+  */
+ static void emit_relo_kfunc_btf(struct bpf_gen *gen, struct ksym_relo_desc *relo, int insn)
+ {
+@@ -837,7 +817,8 @@ static void emit_relo_ksym_typeless(struct bpf_gen *gen,
+ 	/* skip typeless ksym_desc in fd closing loop in cleanup_relos */
+ 	kdesc->typeless = true;
+ 	emit_bpf_kallsyms_lookup_name(gen, relo);
+-	emit(gen, BPF_JMP_IMM(BPF_JEQ, BPF_REG_7, -ENOENT, 1));
++	emit(gen, BPF_JMP_IMM(BPF_JNE, BPF_REG_7, -ENOENT, 1));
++	emit(gen, BPF_MOV64_IMM(BPF_REG_7, 0));
+ 	emit_check_err(gen);
+ 	/* store lower half of addr into insn[insn_idx].imm */
+ 	emit(gen, BPF_STX_MEM(BPF_W, BPF_REG_8, BPF_REG_9, offsetof(struct bpf_insn, imm)));
+@@ -979,8 +960,7 @@ static void cleanup_relos(struct bpf_gen *gen, int insns)
+ 			emit_sys_close_blob(gen, insn);
+ 		} else if (!kdesc->is_ld64) {
+ 			emit_sys_close_blob(gen, blob_fd_array_off(gen, kdesc->off));
+-			if (kdesc->off < MAX_FD_ARRAY_SZ)
+-				gen->nr_fd_array--;
++			gen->nr_fd_array--;
  		}
  	}
--	if (env->func_ptr_cnt)
--		sort(env->func_ptrs, env->func_ptr_cnt, sizeof(*env->func_ptrs),
--		     cmp_func_ptrs, NULL);
- 	return 0;
+ 	if (gen->nr_ksyms) {
+@@ -1136,14 +1116,10 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
+ 		gen->attach_kind = 0;
+ 	}
+ 	emit_check_err(gen);
+-	if (gen->nr_progs == MAX_USED_PROGS) {
+-		pr_warn("Total programs exceeds %d\n", MAX_USED_PROGS);
+-		gen->error = -E2BIG;
+-		return;
+-	}
+-	/* remember prog_fd in the stack, if successful */
+-	emit(gen, BPF_STX_MEM(BPF_W, BPF_REG_10, BPF_REG_7,
+-			      stack_off(prog_fd[gen->nr_progs])));
++	/* remember prog_fd in the blob, if successful */
++	emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX_VALUE,
++					 0, 0, 0, blob_prog_fd_off(gen, gen->nr_progs)));
++	emit(gen, BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_7, 0));
+ 	gen->nr_progs++;
  }
  
-@@ -25516,8 +25481,9 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	kvfree(env->callx_edges);
- 	kvfree(env->func_ptrs);
- 	for (i = 0; i < env->func_set_cnt; i++)
--		kfree(env->func_sets[i]);
--	kfree(env->func_sets);
-+		kvfree(env->func_sets[i]);
-+	kvfree(env->func_sets);
-+	kvfree(env->func_set_index.slots);
- 	bpf_diag_free(env);
- 	kvfree(env->idoms);
- 	kvfree(env);
-diff --git a/tools/testing/selftests/bpf/progs/verifier_callx_many.c b/tools/testing/selftests/bpf/progs/verifier_callx_many.c
-index 23c8948c24b8..804cdeb04845 100644
---- a/tools/testing/selftests/bpf/progs/verifier_callx_many.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_callx_many.c
-@@ -47,7 +47,7 @@ REP400(MANY_FUNC)
- #define SETS400(mask) "r7 = r6; r7 &= " #mask "; r7 += r8;" REP400(SET_LOAD)
- 
- SEC("socket")
--__failure __msg("more than 4096 sets of functions")
-+__success __retval(11)
- __naked void callx_rodata_4400_sets(void)
+@@ -1159,10 +1135,11 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
+ static void emit_copy_initial_value(struct bpf_gen *gen, int map_idx, int value,
+ 				    __u32 value_size, int nr_more_insns)
  {
- 	asm volatile (
-@@ -65,6 +65,35 @@ __naked void callx_rodata_4400_sets(void)
- 		: __clobber_all);
- }
+-	emit(gen, BPF_LDX_MEM(BPF_DW, BPF_REG_3, BPF_REG_6,
+-			      sizeof(struct bpf_loader_ctx) +
+-			      sizeof(struct bpf_map_desc) * map_idx +
+-			      offsetof(struct bpf_map_desc, initial_value)));
++	int off = sizeof(struct bpf_loader_ctx) + sizeof(struct bpf_map_desc) * map_idx +
++		  offsetof(struct bpf_map_desc, initial_value);
++	int ctx = emit_ctx_reg(gen, BPF_REG_3, &off);
++
++	emit(gen, BPF_LDX_MEM(BPF_DW, BPF_REG_3, ctx, off));
+ 	emit(gen, BPF_JMP_IMM(BPF_JEQ, BPF_REG_3, 0, 8 + nr_more_insns));
+ 	emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX_VALUE,
+ 					 0, 0, 0, value));
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 44134421bd7d..1efc0dd37b2e 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -9909,7 +9909,7 @@ static int bpf_object_load(struct bpf_object *obj, int extra_log_level, const ch
+ 	 * permit cross-endian creation of "light skeleton".
+ 	 */
+ 	if (obj->gen_loader) {
+-		int nr_func_ptr_maps = 0, nr_progs = 0, i;
++		int nr_func_ptr_maps = 0, nr_progs = 0, nr_entries = 0, i;
+ 		bool text_has_callx = false;
  
-+#define TABLE_5000(name, last, mask)				\
-+__naked void name(void)						\
-+{								\
-+	asm volatile (						\
-+		RODATA(tab, ".rept 2500; .quad many000; .quad many001; .endr;" last) \
-+		"call %[bpf_get_prandom_u32];"			\
-+		"r0 &= 8191;"					\
-+		"if r0 < " #mask " goto +1;"			\
-+		"r0 = 0;"					\
-+		"r0 <<= 3;"					\
-+		"r2 = tab_%= ll;"				\
-+		"r2 += r0;"					\
-+		"r2 = *(u64 *)(r2 + 0);"			\
-+		"r1 = 10;"					\
-+		"callx r2;"					\
-+		"exit;"						\
-+		:						\
-+		: __imm(bpf_get_prandom_u32)			\
-+		: __clobber_all);				\
-+}
-+
-+SEC("socket")
-+__success __retval(11)
-+TABLE_5000(callx_rodata_5000_pointers, "", 5000)
-+
-+SEC("socket")
-+__failure __msg("overlaps with a pointer to a function")
-+TABLE_5000(callx_rodata_5000_pointers_and_data, ".quad 1;", 5001)
-+
- /* 3 states that have no join get to a table of 400 functions: 3 states, and not 1200 */
- SEC("socket")
- __success __retval(11)
+ 		/*
+@@ -9929,8 +9929,10 @@ static int bpf_object_load(struct bpf_object *obj, int extra_log_level, const ch
+ 			    !prog_is_subprog(obj, &obj->programs[i]) &&
+ 			    (text_has_callx || prog_has_callx(&obj->programs[i])))
+ 				nr_progs++;
+-		bpf_gen__init(obj->gen_loader, obj->log_level | extra_log_level,
+-			      obj->nr_programs, obj->nr_maps, nr_func_ptr_maps * nr_progs);
++		for (i = 0; i < obj->nr_programs; i++)
++			nr_entries += !prog_is_subprog(obj, &obj->programs[i]);
++		bpf_gen__init(obj->gen_loader, obj->log_level | extra_log_level, nr_entries,
++			      obj->nr_maps, nr_func_ptr_maps * nr_progs, obj->nr_extern);
+ 	} else if (!is_native_endianness(obj)) {
+ 		pr_warn("object '%s': loading non-native endianness is unsupported\n", obj->name);
+ 		return libbpf_err(-LIBBPF_ERRNO__ENDIAN);
 -- 
 2.55.0
 
