@@ -1,107 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.17
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794861990;
-	b=xHl5idJGLroJzKuXwcilipBGTtvzI2zalfP7+fKeuNB9svN4MbEbtIWppRyoKxfxN0ws
-	 Gfk6x5+b20htu3oMetCHe/S0ZBoqHtXDwqQm1xUoxMfVNxdtq6kqptposjFwujPnCc6cw
-	 nt8AajsRg3b7djZrcJFlh1H+Ntcf5ec50bqiXifBT4uVrbMRnqG4tW6G0BWHqcO5YmMbp
-	 kFfZ6sqLT1FzclFO9A8rl1jtjQf0qBCZIoD1vd8eqhpIxfBQjilzy8pVfzbKDrRzf1UDH
-	 D7XasprBd/lCdbI6X8rLPdMtb6z449AwZR/UIFSkPV8MRSKw3aCTGs4s6FJpHYlTU6Q==
+	t=1794862262;
+	b=y/hZkMY2m0gnvD46U9dSM5Mol0/psUZe9yUbRSS/BiYFfRsuBdAkVEnGAq4Uao03H8zi
+	 r5ZfQd4u1lD2b9ElHBGya/oLu14M1YCTtVoMcXgJJd+ssRbjOqKgfx8Paosc7L8JFaSfF
+	 b02tHHnePdmdGz5HeaHqXtgYHLPWcgEsciL1wb5EL6oMqTInCAdEskfZJWXqbdYS6XQCm
+	 PXFrMo++ySJOufHlqO/1h7c2ksfCeRhhGYH6chOiUMSwSY4lnHF7+jYDEwKCNpExpMs+v
+	 mtF3YcLPy3Pef2AmqRnvwV9r4DvVKGbMlPajrFgDdLXo3sfxxak2TY/em7lzZkJMR3w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794861990;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=8JYetNZ7DheLCOUJdiDwgn10I8Vfpkp5NSU3Bw4KcF8=;
-	b=wxvWR7psLLce6BrMDWjqYsD4BqIedS433UG+/N00pW5kX/P+Vxyg7OlS4MYfDH0EYxwU
-	 YZvliGHESGNTJ5K+bABztEZItoLEAPVTudVukcDFhT9Y5dtXBUYEqvLp9yKtggRymQgve
-	 aZqmG8AGOyp4OTPj0GenS+KKabRt+dub+g6xQEhgRzeoi9A/9l2S6ltFFl8bSWz5nb/vY
-	 W/1HL3z9zi7rHglnG8h5pOjxAoW1/1KEfquWXO6Hbm8AU7hC4d7QcqAHo9vqrMH0Qc8uk
-	 CsnkZQ0kMlE/leJEKu6vYgs9iBP4dVGSlF8atacgTRAeYhGhTDVmhHw2Ok33HZQvJMg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794862262;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=LbYY8S+YO6IOf9cej8HAyGPboaJz0Yq/WVfxOOkRios=;
+	b=0xz4DM75bN/OBuDaHgrR1+9+u1y3HjEDhKut/zp9J2h7pnCcbKOsK8eLu1OQI2I3yB2m
+	 uJggMkXNuZh41e/e2i+qQHOwwPoeCZuqUIW/nAfIGZmuWYSoiJJfY1VvVSeYScvcjJ+uf
+	 4piZaWilOiBNhkaJGhQ5QJRkKYpYIC4iWVqYhW0X+tJ9whaVgGCSepiD42M8ZtKcEWAd9
+	 tVWs8FvONYt66ZYjWp2jwHI5325E5DTlF7Ix7bwSrSszHfpchC+NiUHK3GcWnRfBcFYSm
+	 fmb99Rq3Se71Asxxe2vJWVV2TV5+RnZae189KVRWlL6uhkpzHP02Eh2NibQOxyQmCMw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hckj8bbs;
-	arc=none smtp.remote-ip=209.85.216.45
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Kc3N08k+;
+	arc=none smtp.remote-ip=198.175.65.17
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA440606A322
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 20:46:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CA440606A322
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F05F8606A32C;
+	Mon, 16 Nov 2026 20:51:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F05F8606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hckj8bbs
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3b197cd42b0so2791056a91.2
-        for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 12:46:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794861989; x=1795466789; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=8JYetNZ7DheLCOUJdiDwgn10I8Vfpkp5NSU3Bw4KcF8=;
-        b=hckj8bbsYR69OuJ0X7cChT8JyxeH6GKENi4lyX+/gX5Kpu7Sp8sojv46XAmFyGR4pW
-         vaoM5SMWVpNj5VMKjSTPt1AIEHCHEKqNVtGzkNpWcXtqZDQOOVywb+VyQydHpUH3jQm3
-         zn7TSBI91dLuyOizrg8Tz5eU9IYKMOZ9I1Dwr4/4TV/0K4PSWKgCExt0dQrbJNyKSgtB
-         igCgIFhFlleysNhB5OTPPacuub2xJXz9KU98OnKQdloD7efNBOnv7i68lwJoJysh2Jk6
-         n4oR3Oh/47F9ooTrcrguQhQw1b10nJuR0zGIm5NY2bmXF3YXcRMaw7pLu3Mj6j8+IWK4
-         SBdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794861989; x=1795466789;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=8JYetNZ7DheLCOUJdiDwgn10I8Vfpkp5NSU3Bw4KcF8=;
-        b=yknUQamQ3wYyuvsfUTDg+iXkhE3si2rsSfxAZCrc0E4Gr8L2C/L3+rHM+nJkqEQSZo
-         rZkR+SUqL3BOhKbTtS5tze7J/gGD3F58TVwQqG7DWskILVh9IXU5OS79+87Gf2wVmuB5
-         c6KHy/FSmqNMpvgw6YlsWLjx+k6nuz+qOACOK0h7BaX43AXTOjmoPHevkC2maieFnR3v
-         +csjtDVT5U93QLpJEM+zK+Ra3n5E8vLseZpINeGxZB0Iu9xVU4OMdiL6e9dZp5FNmEqH
-         fVlHygbwE+rV1FLl/rg2SYnvFjmLikOnPC81r9vbqgiowU5oMFMZ6nRJ0VflkC5UnkMH
-         M0HA==
-X-Forwarded-Encrypted: i=1; AL+hErEmMyZdx/T/VUvMixR4ZXav2lJP5MunQELd15GG/sX7f+8pkyIFP63IL+R4lXmAGFx4f8M=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9JZQKqUoHLQkpAj4ittjBjypWnSMqso9rd2ALqCF3IWx2se10F
-	37tDmoBrC+UCsxIetk1uWJV9u3O4QXNlxEYsrZhZix9XtEEKerR2LEd1
-X-Gm-Gg: AZFdTZfvMuJxZE82GhmTXIi3RxdiS5+1n2SyqGV7pyD3fiSLlx0qhSOC2tvVT8fXinm
-	6KuGIuL2vfqP9ZtJ90dyrRfiktOKlHu08u4d2YijRNTy+rk4iWFQgqFxoZL5ffMBNgurwOZECMZ
-	oQ0lrzssNaG9TJX3fBTLuEmrtJlmCFdOGzrxhL5bZkq7FjqUVnsP6XaHH88SSjqmDsDRWRUK7zG
-	acYWyKd2YUis3cYcjai1ZQtRThj49GGajIqkCiSfODYbp6SdTg270vTTOa3x+1Se1jX2tBJje3z
-	G3OIVcqp2uAV40oUWA0iph/co0Dng+lf9xV1ViNPlUTFoNCFSCBNMBPxOQe2Lu2VMy+EgrOs/QK
-	v/bgzLi3z1RETzQrSUal/l6zU5jUdjVZOu3JuLRwIzTGbiKR/eGH3sFuWTcnXuEj2I+3TBZNtVI
-	jNT/tNgERFAGV23tFhGWytzdXExBCBLkzD1ZnDrhRyaiWnZrAkdGJHhv+cJamrnYSYNhupklHh8
-	s6xwEKo3EsTxluJiDiEsy/DHyHptJc3QKPo1AdfE7j0TT7wyVkxKivk0PkqscT6xi8AlWb7YpWy
-	XuZHiNqZvnkmZBqRGG7Wg6dm3Dct3vHFIzod2vBX7LP/Sj4wSERtF2mNRj9Tn3KDlTvKIN4ycpg
-	ntLpXheToT/f88CaF/U+2EChGkwVOd6Of2Q==
-X-Received: by 2002:a17:90b:4d0b:b0:3ac:a7ee:678c with SMTP id 98e67ed59e1d1-3b1b07e41aemr11138946a91.2.1794861988884;
-        Mon, 16 Nov 2026 12:46:28 -0800 (PST)
-Received: from localhost ([153.61.198.255])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b3abe8b263sm786352a91.13.2026.11.16.12.46.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Nov 2026 12:46:28 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 16 Nov 2026 20:46:27 +0000
-Message-Id: <DMWXH28YQDYH.1SI4Y5WQ7EPSR@gmail.com>
-Subject: Re: [PATCH net-next v4 4/4] bpf: drop the stale dst when
- redirecting to an explicit nexthop
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Jamal Hadi Salim" <jhs@mojatatu.com>, <netdev@vger.kernel.org>
-Cc: "Daniel Borkmann" <daniel@iogearbox.net>, "John Fastabend"
- <john.fastabend@gmail.com>, "Stanislav Fomichev" <sdf@fomichev.me>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Andrii Nakryiko" <andrii@kernel.org>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "David S. Miller" <davem@davemloft.net>, "Eric
- Dumazet" <edumazet@kernel.org>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo
- Abeni" <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>,
- <bpf@vger.kernel.org>, "Jiri Pirko" <jiri@resnulli.us>, "Victor Nogueira"
- <victor@mojatatu.com>, "Sashiko" <sashiko-bot@kernel.org>
-In-Reply-To: <CORE-9NOG.v4.r0.20261116135311-4@mojatatu.com>
-References: <CORE-9NOG.v4.r0.20261116135311@mojatatu.com> <CORE-9NOG.v4.r0.20261116135311-4@mojatatu.com>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Kc3N08k+
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794862262; x=1826398262;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=o+hAdGEu/G2i+6qXpIrE3hZjue1EEFXSISQEDRzQof4=;
+  b=Kc3N08k+1Xc9Kzbt58HPLEFIBolee9HsoPL7rVf4ffHuv/xRCwb30pjF
+   MF0XFgotEDFsSiq0S49rnT/WlewulcqmjJLYQALqIfMSVOOcWyzxQV+At
+   e0Yp/ClUU6Z8S99YyJQTigteIlAKqW3hgYyKKl9n4QVnqYXM3XFqmxybV
+   eR5/pSNCfLRSu8yvrYaaUx8Mn81Th0XtTkbwutLDp8BGAfeaUbSB0FjBV
+   93tPm+LBfA1oyMwdcWjUhqUah9qFfjgOPxdv1pFz86BFBTagnt6l4S3NF
+   sU9O1iyg/hf7BPO8dBIoxZh/dWecVNsRsOAfen5gtBrtiWmICMZXC4L3J
+   A==;
+X-CSE-ConnectionGUID: LhDtlwNkRf+3/VqQDC0GTA==
+X-CSE-MsgGUID: cc461PsgQ8qCY/hgoyoC9g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11968"; a="3627643"
+X-IronPort-AV: E=Sophos;i="6.27,217,1787036400"; 
+   d="scan'208";a="3627643"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2026 12:51:02 -0800
+X-CSE-ConnectionGUID: XQbmmi1NSs+nwwq2ukQKFg==
+X-CSE-MsgGUID: Z839PmLoT2aZ0zvCWNu+dQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,217,1787036400"; 
+   d="scan'208";a="9660347"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 16 Nov 2026 12:50:56 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xT3fB-000000019PL-1eCy;
+	Mon, 16 Nov 2026 20:50:53 +0000
+Date: Tue, 17 Nov 2026 04:50:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Steffen Trumtrar <s.trumtrar@pengutronix.de>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Richard Cochran <richardcochran@gmail.com>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+	Jason Wang <jasowangio@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Eric Dumazet <edumazet@kernel.org>, Simon Horman <horms@kernel.org>,
+	Kory Maincent <kory.maincent@bootlin.com>,
+	Liang Chen <liangchen.linux@gmail.com>,
+	Heng Qi <hengqi@linux.alibaba.com>
+Cc: oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
+	virtualization@lists.linux.dev, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, kvm@vger.kernel.org, kernel@pengutronix.de,
+	Steffen Trumtrar <s.trumtrar@pengutronix.de>
+Subject: Re: [PATCH net-next v5 6/9] virtio-net: assert header sizes
+Message-ID: <202611170421.klVDQaAD-lkp@intel.com>
+References: <20261112-v6-7-topic-virtio-net-ptp-v5-6-7ab67b572f4f@pengutronix.de>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -111,55 +102,81 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261112-v6-7-topic-virtio-net-ptp-v5-6-7ab67b572f4f@pengutronix.de>
 
-On Mon, Nov 16, 2026 at 11:01 AM Jamal Hadi Salim <jhs@mojatatu.com> wrote:
-> The release goes through skb_dst_drop_keep_metadata(), so encapsulation
-> parameters a route carries are handed over to a metadata dst instead of
-> being lost, and a metadata dst already on the packet is left in place. Both
-> wrappers take their existing drop path when that copy cannot be allocated,
-> so a packet is never sent with the stale route.
+Hi Steffen,
 
-Just briefly looked at it. skb_dst_drop_keep_metadata() with kmalloc()
-in the fast path is really no go.
+kernel test robot noticed the following build errors:
 
-Why not do something like this instead of patches 2, 3 and 4 ?
+[auto build test ERROR on c88fd6989aea9237a60a4859139a265bfb7ddc0b]
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 946b07a..13f2d57 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -2470,6 +2470,10 @@ static int __bpf_redirect_neigh(struct sk_buff *skb, struct net_device *dev,
- 	skb_unset_mac_header(skb);
- 	skb_reset_network_header(skb);
+url:    https://github.com/intel-lab-lkp/linux/commits/Steffen-Trumtrar/net-ethtool-tsconfig-allow-hardware-timestamping-without-a-PHC/20261112-121933
+base:   c88fd6989aea9237a60a4859139a265bfb7ddc0b
+patch link:    https://lore.kernel.org/r/20261112-v6-7-topic-virtio-net-ptp-v5-6-7ab67b572f4f%40pengutronix.de
+patch subject: [PATCH net-next v5 6/9] virtio-net: assert header sizes
+config: arm-neponset_defconfig (https://download.01.org/0day-ci/archive/20261117/202611170421.klVDQaAD-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 16.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261117/202611170421.klVDQaAD-lkp@intel.com/reproduce)
 
-+	/* The route is for the old skb->dev. Keep the tunnel key. */
-+	if (skb_valid_dst(skb))
-+		skb_dst_drop(skb);
-+
- 	if (skb->protocol == htons(ETH_P_IP))
- 		return __bpf_redirect_neigh_v4(skb, dev, nh);
- 	else if (skb->protocol == htons(ETH_P_IPV6))
-diff --git a/net/netfilter/nft_fwd_netdev.c b/net/netfilter/nft_fwd_netdev.c
-index 7447da9..d1ac4eb 100644
---- a/net/netfilter/nft_fwd_netdev.c
-+++ b/net/netfilter/nft_fwd_netdev.c
-@@ -15,6 +15,7 @@
- #include <net/netfilter/nf_tables_offload.h>
- #include <net/netfilter/nf_dup_netdev.h>
- #include <net/netfilter/nf_recursion.h>
-+#include <net/dst_metadata.h>
- #include <net/neighbour.h>
- #include <net/ip.h>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611170421.klVDQaAD-lkp@intel.com/
 
-@@ -176,6 +177,9 @@ static void nft_fwd_neigh_eval(const struct nft_expr *expr,
- 		}
- 	}
+All errors (new ones prefixed by >>):
 
-+	/* The route is for the old skb->dev. Keep the tunnel template. */
-+	if (skb_valid_dst(skb))
-+		skb_dst_drop(skb);
- 	skb->dev = dev;
- 	skb_clear_tstamp(skb);
+   In file included from include/linux/bits.h:30,
+                    from include/linux/bitops.h:6,
+                    from include/linux/bitmap.h:8,
+                    from include/linux/ethtool.h:16,
+                    from net/packet/af_packet.c:51:
+>> include/linux/build_bug.h:80:41: error: static assertion failed: "offsetof(struct virtio_net_common_hdr, tstamp) == 32"
+      80 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                         ^~~~~~~~~~~~~~
+   include/linux/build_bug.h:79:34: note: in expansion of macro '__static_assert'
+      79 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+         |                                  ^~~~~~~~~~~~~~~
+   include/linux/virtio_net.h:36:1: note: in expansion of macro 'static_assert'
+      36 | static_assert(offsetof(struct virtio_net_common_hdr, tstamp) == 32);
+         | ^~~~~~~~~~~~~
+>> include/linux/build_bug.h:80:41: error: static assertion failed: "__alignof__(struct virtio_net_common_hdr) == 2"
+      80 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                         ^~~~~~~~~~~~~~
+   include/linux/build_bug.h:79:34: note: in expansion of macro '__static_assert'
+      79 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+         |                                  ^~~~~~~~~~~~~~~
+   include/linux/virtio_net.h:39:1: note: in expansion of macro 'static_assert'
+      39 | static_assert(__alignof__(struct virtio_net_common_hdr) == 2);
+         | ^~~~~~~~~~~~~
 
 
-pw-bot: cr
+vim +80 include/linux/build_bug.h
+
+bc6245e5efd70c4 Ian Abbott       2017-07-10  61  
+6bab69c65013bed Rasmus Villemoes 2019-03-07  62  /**
+6bab69c65013bed Rasmus Villemoes 2019-03-07  63   * static_assert - check integer constant expression at build time
+6ffd853b0b10e1e Randy Dunlap     2026-03-01  64   * @expr: expression to be checked
+6bab69c65013bed Rasmus Villemoes 2019-03-07  65   *
+6bab69c65013bed Rasmus Villemoes 2019-03-07  66   * static_assert() is a wrapper for the C11 _Static_assert, with a
+6bab69c65013bed Rasmus Villemoes 2019-03-07  67   * little macro magic to make the message optional (defaulting to the
+6bab69c65013bed Rasmus Villemoes 2019-03-07  68   * stringification of the tested expression).
+6bab69c65013bed Rasmus Villemoes 2019-03-07  69   *
+6bab69c65013bed Rasmus Villemoes 2019-03-07  70   * Contrary to BUILD_BUG_ON(), static_assert() can be used at global
+6bab69c65013bed Rasmus Villemoes 2019-03-07  71   * scope, but requires the expression to be an integer constant
+6bab69c65013bed Rasmus Villemoes 2019-03-07  72   * expression (i.e., it is not enough that __builtin_constant_p() is
+6bab69c65013bed Rasmus Villemoes 2019-03-07  73   * true for expr).
+6bab69c65013bed Rasmus Villemoes 2019-03-07  74   *
+6bab69c65013bed Rasmus Villemoes 2019-03-07  75   * Also note that BUILD_BUG_ON() fails the build if the condition is
+6bab69c65013bed Rasmus Villemoes 2019-03-07  76   * true, while static_assert() fails the build if the expression is
+6bab69c65013bed Rasmus Villemoes 2019-03-07  77   * false.
+6bab69c65013bed Rasmus Villemoes 2019-03-07  78   */
+6bab69c65013bed Rasmus Villemoes 2019-03-07  79  #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+6bab69c65013bed Rasmus Villemoes 2019-03-07 @80  #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+6bab69c65013bed Rasmus Villemoes 2019-03-07  81  
+07a368b3f55a79d Maxim Levitsky   2022-10-25  82  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
