@@ -1,84 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.171
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.130
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794832899;
-	b=lAVh5DKJ/TUEtoe/46OEQuLzpLphvsYkZmV7KOkYn8fsIFWJpdz++N5w2Q6iCZadyQC+
-	 Q3xkuQEGoJ71JArl5YkJ2JhB6WmN3zO7i2tewR8syOmyN/zVJFAuxd2boJx9axEeHIBcl
-	 w8gSvZm0H7YNtUPmMcPuOafvq/jAvzyi76DJYGn00o1pQSJo2A5DGdrCdKFmKnZseG+nE
-	 9cax7PuGDXam0MV0Np2UiZ9nwClUaRErFKDBJN+oNmgm8q3hUrAm9OisCTOQ2qYe660v7
-	 C2MPY8NhUTHBzhiTSNsvP/8gUeN2+SIdoobSKZf62aq1//a4JrpyN0f+MyXncUiT7Ig==
+	t=1794834466;
+	b=KGtEDc/TxMDOMw+0AiMLHPMwGl4Zw2NbbYLv5lCTZbbwohsl4jH3xpM4r+HCnXY4M+hG
+	 LKLb5DB+AvpU2ihX6nXDJts//PLqtTkR3P+VrePwUbS/PtrYvUMPExi+ZcKQGN2PAFPpU
+	 W+59eJaXTjIB0uxeM6tv3+e+9/53yiKRqKiWu2UOKhXE1lD2gF2jx6u/2KlNAtM/njlJF
+	 f7Jm7yQRJH8vPlYNvcCtyafnm8F5QLMm8pEPHxz+JozijqR3gjNw8b7YjtDpjaJxjLXzX
+	 x8Akm4zdVd7dhGVH7AjBQhO71gRRVVRPK3pLJL3kn+MhO6Uh6uXRv1a4lEZolEVFs5g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794832899;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 To:Cc:Subject:From:X-Mailer:References:In-Reply-To;
-	bh=Zv1d6vvRKz0euN6zrXybl1bD0UkhPFP+MSK0/brc4zE=;
-	b=YMAzgcGePMlhieOwp9utjQ7koyyVyE0WYxtaY6LDsCurqb6osX/K3/xNM+msiMA/HpBS
-	 uMItplbLPo5f2o2pZWJtF1iCOXqWNJVld1Ma+dNz+lxSUKQK2VuAx4Jmj0I9GJyC95M7F
-	 Zna/hpRnJMcPo6RzMdv9t5auARMtQx3eyGrC2wuMOftiQJs2lJc8FFOwUnPYJXMoNom/i
-	 p+P1RyvfO11PJFFogEgzp3yCGDjacB0ZaTT+Fz4eG3V4pW7S1H+ZgRZuYVvYtSqxp2lVW
-	 fStHI+wXBq9S9+35wwj8JTvKUvJPP0UP8ZbKIGrCrZ8nvRvZ98EKB5hUI6TZQDW3vfA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794834466;
+	h=DMARC-Filter:Received:Received:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To:X-Rspamd-Pre-Result:X-Rspamd-Queue-Id:
+	 X-Rspamd-Pre-Result:X-Rspamd-Action:X-Rspamd-Server:X-Spam-Level:
+	 X-Spamd-Result:X-Spam-Flag:X-Spam-Score;
+	bh=/79yD/ePkhOWtFp46GUyu6ts/vcC2MmXQ7vdqbMevlI=;
+	b=vEHDvFYyvgdnD1Y+jx93AZMPCgvvL6MoPTJMcAC8BZ6SJuDYM55/Z/q7hx/9yBuSggXH
+	 OQusekW48FW4iv3GDo9N5euk+XaFSwEyhR8DkQV6dl1OVrJIUw5CNvoKgopDL1KwC54Pd
+	 tx1y2vY/q92EQhBHM/nrbgSnGlsu4QRtywI3YpDVNYbd5cP/Bv0LSqWw1Ve2K17Y9S8eY
+	 8Obluy/ETsyN3EOWnh5LOPAM8KNivlDWKu5FAeD4cBt/sgTIe6XV0bKFGcxJdNfb0tnEi
+	 RQLOAU1ccCnzrvzFtZtOTfhRTcwaRIWjVE0RYfGhCEp+ZfsyTENVBzQw7ccosh89a+w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xN3B7Lud;
-	arc=none smtp.remote-ip=209.85.222.171
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=none header.from=suse.cz;
+	spf=pass smtp.mailfrom=suse.cz;
+	arc=none smtp.remote-ip=195.135.223.130
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4840606A329
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 12:41:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D4840606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xN3B7Lud
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-9495f083657so323232685a.0
-        for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 04:41:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794832898; x=1795437698; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=Zv1d6vvRKz0euN6zrXybl1bD0UkhPFP+MSK0/brc4zE=;
-        b=xN3B7LudVvKrw3MwnajaarcX91x2+u1HXG/hvHMEH3ZnHJFdDpZBBcRtAqROyBktko
-         X46g4lw7rRY4EZfOp3U9VNr6Ww9uTMObjYHuKm64PuVS6VZiijyYuVGHs7X5V0C9S2sH
-         x1mxiPCTUha5+oNdEVrKnYfP19epAeCiRmmWntH6obG78ytEzkwYSmqTjW3Hw4HoLh3X
-         A5SxyRIs01z3DowJd6F9SfiCmRrBIb9SignCreduEbMv4AiCUejw40piWsIP9NWhlFMc
-         JSmxkHyWstT7aLbb2I7brvegGr9bpfFwWSZB9k+n5CKscylv6nxsyvHA5E8qXKFV3wL4
-         fvYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794832898; x=1795437698;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Zv1d6vvRKz0euN6zrXybl1bD0UkhPFP+MSK0/brc4zE=;
-        b=q+/HIGAkAGTzQS7MyYmaXjkVp+qhnjEekvLL/RATCh6/Phc/yMhcU1a94MRa/61pij
-         zsgqdlvBwXyqgosIdyxr1DRNtW8mj74q6B5LdmvkhaPdK92zsEgnlVYeJYhTsX/a06Fp
-         XOHpyMM/bpUEIDXfNLRkPJamid8yhjzIpDyVjS6afi7gUCCx9W5hDPF5dKITqoBTQBiK
-         MECh6aLssOFvjz6XzUWAv3VITRq7QWbfYtW4PxlB6gFyVd+Grmtp0ToztwOfVFY0x1dL
-         MK+XXkyvdAWVl9VNysdEkCUSYXmGAsYFvJX++QZDGZm0gqAIOa712RKl5gGZyLt8KqJo
-         gICw==
-X-Forwarded-Encrypted: i=1; AL+hErFGFDVWTEr5luogMFvl3Ro323beAamUdBPoD0ucIsMsQpzCgmMW2bd0ZobI+g0k0Me1NKU=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/msnlZX3sjwG0kB+RATpccJngncwmmdXgQq29lPQJA5hB6zSll
-	zdqWATS+uOuVzUyKu0Kl9R5OQ2PC5/W016Tib+Ij1r44TEVAGW97zbFp
-X-Gm-Gg: AYBFou3c/C0gxxxPph7UIG5D7mBTiayRe+bJDh9hLpCmuMWzemwxDPuuhqCu42DmGJR
-	1vnK0jc7gEYGHUp8OKHDE0RGEiuLns1t5bGialrNHbjhCFTupRQbB9vml8aB7eZOINhS0EH/GwZ
-	aq75CLWLTKsCLYXTT4VgP6g9S1nKTU/DHP/LKVAf2UyvA0HB0oDt5xOgsN4LJ45vYXiFA5Vdn5/
-	R+Bju/Yv+wLUw2Ik76epZon1iUq7TBRtSVtrnVj4OhpXGygkwMBJnatQhNf8c4CIo5jcWeS0L6D
-	Bh6sGD2xV2kloJPW0Sgq8VU0KwMRAZj0bltoKR1rnwaJFts3jPPELNOMU15RBPerNSU9zVQtzjH
-	SVpLnXr/BDMCouChdrd0I7AE9mN/5LkLJ0hqxLKgdQ7RQ7Mxg2x2XTifZNZcLW7N7zKfQ7YgZuU
-	B4sR+8k1iRYCsleHfOFlFuFZDbWORzszUxKQuSYhMsY72b0m/Rtyms/yfjumG4U05aGeQYx5aSj
-	X/1XqO3x28l/IGFxljhBIRfa9LlDNxStmOck8uzFhXpYkEboBeI+zKJGFV8RgA48iep5BF35tOu
-	5hea2cdldf7T2kyYLOyOK76+xdXX+eSVew==
-X-Received: by 2002:a05:620a:2903:b0:93c:a40d:e3cf with SMTP id af79cd13be357-9494b9c78a6mr1739169585a.1.1794832897831;
-        Mon, 16 Nov 2026 04:41:37 -0800 (PST)
-Received: from localhost ([2600:4040:9399:4000:e553:72e5:7d37:c7ef])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-9494c870ad4sm830567185a.26.2026.11.16.04.41.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Nov 2026 04:41:33 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC42A606A334;
+	Mon, 16 Nov 2026 13:07:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DC42A606A334
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 19E8621DC4;
+	Mon, 16 Nov 2026 13:07:44 +0000 (UTC)
+Authentication-Results: smtp-out1.suse.de;
+	none
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id DE2B51334C;
+	Mon, 16 Nov 2026 13:07:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id BvIgLh8A+2pNEgAAD6G6ig
+	(envelope-from <jack@suse.cz>); Mon, 16 Nov 2026 13:07:43 +0000
+Received: by quack.suse.cz (Postfix, from userid 1000)
+	id 6CC7424E06; Mon, 16 Nov 2026 14:07:43 +0100 (CET)
+Date: Mon, 16 Nov 2026 14:07:43 +0100
+From: Jan Kara <jack@suse.cz>
+To: Christian Brauner <brauner@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, Jann Horn <jannh@google.com>, 
+	Chris Mason <mason@kernel.org>, Josef Bacik <josef@toxicpanda.com>, 
+	Christoph Hellwig <hch@lst.de>, linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-nvme@lists.infradead.org, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Jan Kara <jack@suse.cz>, linux-scsi@vger.kernel.org, target-devel@vger.kernel.org, 
+	driver-core@lists.linux.dev, linux-mm@kvack.org, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, apparmor@lists.ubuntu.com, 
+	linux-nfs@vger.kernel.org, netdev@vger.kernel.org, fuse-devel@lists.linux.dev, 
+	linux-efi@vger.kernel.org, xen-devel@lists.xenproject.org, ocfs2-devel@lists.linux.dev, 
+	linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-usb@vger.kernel.org, 
+	Amir Goldstein <amir73il@gmail.com>, linux-erofs@lists.ozlabs.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC v3 35/44] fs: add file_check_backing()
+Message-ID: <fvmgoq6g3orrcbz5j7xoxrqkz4kc4jiopndjfar4cv45pj2y4g@bfgcucrsffnm>
+References: <20261116-work-loop-pseudo-v3-0-8cbbea1cf34f@kernel.org>
+ <20261116-work-loop-pseudo-v3-35-8cbbea1cf34f@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -87,77 +78,167 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 16 Nov 2026 07:41:30 -0500
-Message-Id: <DMWN5R6QVUPN.1KP7SYYHHU71U@gmail.com>
-To: "Todd Freed" <toddfreed@meta.com>, <netdev@vger.kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>, "Eric Dumazet"
- <edumazet@kernel.org>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni"
- <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>, "Daniel Zahka"
- <daniel.zahka@gmail.com>, "Willem de Bruijn"
- <willemdebruijn.kernel@gmail.com>, "Wei Wang" <weiwan@google.com>, "Jamal
- Hadi Salim" <jhs@mojatatu.com>, "Jiri Pirko" <jiri@resnulli.us>, "Alexei
- Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "John Fastabend" <john.fastabend@gmail.com>,
- "Stanislav Fomichev" <sdf@fomichev.me>, "Sabrina Dubroca"
- <sd@queasysnail.net>, "Boris Pismenny" <borisp@nvidia.com>,
- <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net 3/3] psp: only give time-wait sockets of PSP
- connections a validator
-From: "Daniel Zahka" <daniel.zahka@gmail.com>
-X-Mailer: aerc 0.21.0-threadmapfix
-References: <20261113185553.171059-1-toddfreed@meta.com>
- <20261113185553.171059-4-toddfreed@meta.com>
-In-Reply-To: <20261113185553.171059-4-toddfreed@meta.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261116-work-loop-pseudo-v3-35-8cbbea1cf34f@kernel.org>
+X-Rspamd-Pre-Result: action=no action;
+	module=replies;
+	Message is reply to one we originated
+X-Rspamd-Queue-Id: 19E8621DC4
+X-Rspamd-Pre-Result: action=no action;
+	module=replies;
+	Message is reply to one we originated
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spam-Level: 
+X-Spamd-Result: default: False [-4.00 / 50.00];
+	REPLY(-4.00)[]
+X-Spam-Flag: NO
+X-Spam-Score: -4.00
 
-On Fri Nov 13, 2026 at 1:55 PM EST, Todd Freed wrote:
-> psp_twsk_init() sets tw_validate_xmit_skb on TCP time-wait sockets.
-> Today, that becomes set whether or not the socket has PSP offload, which
-> is not needed but is harmless. psp_validate_xmit() passes such packets.
->
-> But a validator makes a socket look like it has an encryption offload of
-> its own. The tc psp action in the net-next series "psp: introduce
-> socket-less associations" relies on the presence of the validator to
-> determine whether the socket has an encryption offload.
+On Mon 16-11-26 12:05:08, Christian Brauner wrote:
+> Loop, zloop, the nvme target, the scsi target, fuse passthrough, the usb
+> mass storage gadget, erofs and acct all take a file from userspace and
+> use it as storage. Currently, each of them has its own idea of what to
+> check before using a file like that:
+> 
+> - loop and the gadget check for a regular file or a block device, the
+>   nvme target, the scsi target and zloop take any file type
+> - loop checks the open mode, the gadget checks FMODE_CAN_READ, the nvme
+>   target, the scsi target and zloop only check for ->read_iter() and
+>   ->write_iter()
+> - apart from acct which refuses procfs and sysfs files none of them
+>   cares whether the file is a kernel interface
+> 
+> Add a helper that does all of it in one place. It only accepts regular
+> files and, if the caller passes S_IFBLK, block devices. It refuses files
+> on pseudo filesystems. And it checks that the file is open for what the
+> caller is going to do with it and implements ->read_iter() for reading
+> and ->write_iter() for writing.
+> 
+> O_PATH files are refused unless the caller passes FMODE_PATH. That is
+> for callers that only need the path of the file. fuse passthrough is
+> one of them and has accepted O_PATH file descriptors since commit
+> efad7153bf93 ("fuse: allow O_PATH fd for FUSE_DEV_IOC_BACKING_OPEN").
+> 
+> Block devices are fine even though bdevfs is a pseudo filesystem. A
+> block device that userspace hands in is a device node on devtmpfs or
+> some other filesystem. Files on bdevfs only come from
+> bdev_file_open_by_*() and never end up here.
+> 
+> The pseudo filesystem check looks at the inode that actually provides
+> the data via d_real_data_inode(). overlayfs accepts sysfs, cgroup2,
+> debugfs, tracefs, configfs and securityfs as lower layers and reads of
+> such an overlayfs file are served by the file on the pseudo filesystem.
+> Checking the overlayfs inode would miss that.
+> 
+> For an O_PATH file nothing might have looked up the data yet. overlayfs
+> only looks up the data of a metacopy file in a data-only layer when the
+> file is opened. d_real_data_inode() does the lookup then and if that
+> fails we return the error.
+> 
+> Note that the file type is taken from the inode of the file and not from
+> the host of ->f_mapping like loop and the gadget do it. A driver can
+> point ->f_mapping somewhere else in ->open(). It makes no difference for
+> block devices as both inodes are block devices.
+> 
+> No functional changes. Nothing calls the helper yet.
+> 
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 
-I don't think this is relevant.
+Looks good to me. Feel free to add:
 
->
-> Set the validator only when the socket has a PSP association with a Tx
-> key, as psp_sock_set_tx_key() does for full sockets.
->
-> Fixes: 6b46ca260e22 ("net: psp: add socket security association code")
-> Signed-off-by: Todd Freed <toddfreed@meta.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
 > ---
->  net/psp/psp_sock.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
->
-> diff --git a/net/psp/psp_sock.c b/net/psp/psp_sock.c
-> index a6b1c42dd626..1df65505f1c6 100644
-> --- a/net/psp/psp_sock.c
-> +++ b/net/psp/psp_sock.c
-> @@ -314,10 +314,13 @@ void psp_twsk_init(struct inet_timewait_sock *tw, c=
-onst struct sock *sk)
->  {
->  	struct psp_assoc *pas =3D psp_sk_assoc(sk);
-> =20
-> -	if (pas)
-> +	if (pas) {
->  		refcount_inc(&pas->refcnt);
-> +		/* like the full socket case in psp_sock_set_tx_key() */
-
-I'm not a fan of this kind of comment, but that's my own preference.
-
-> +		if (pas->tx.spi)
-> +			tw->tw_validate_xmit_skb =3D psp_validate_xmit;
-> +	}
->  	rcu_assign_pointer(tw->psp_assoc, pas);
-> -	tw->tw_validate_xmit_skb =3D psp_validate_xmit;
+>  fs/read_write.c    | 53 +++++++++++++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/fs.h |  2 ++
+>  2 files changed, 55 insertions(+)
+> 
+> diff --git a/fs/read_write.c b/fs/read_write.c
+> index 6767283108991..9f1e7bfcbd4f1 100644
+> --- a/fs/read_write.c
+> +++ b/fs/read_write.c
+> @@ -866,6 +866,59 @@ static ssize_t do_loop_readv_writev(struct file *filp, struct iov_iter *iter,
+>  	return ret;
 >  }
-> =20
->  void psp_twsk_assoc_free(struct inet_timewait_sock *tw)
-
-Reviewed-by: Daniel Zahka <daniel.zahka@gmail.com>
+>  
+> +/**
+> + * file_check_backing - check that the kernel can use a file as storage
+> + * @file: file that userspace handed in
+> + * @mode: FMODE_READ and/or FMODE_WRITE the kernel will do I/O with, or
+> + *        FMODE_PATH if only the path of @file is used
+> + * @type: S_IFBLK if a block device is fine as well, 0 otherwise
+> + *
+> + * Call this where a file from userspace is taken as a backing file. Only
+> + * regular files and, if @type is S_IFBLK, block devices are storage. Files
+> + * on pseudo filesystems are kernel interfaces and are refused. The file
+> + * must be open for @mode and implement ->read_iter() for reading and
+> + * ->write_iter() for writing. O_PATH files are only fine with FMODE_PATH.
+> + *
+> + * Return: 0 on success, -EBADF if @file isn't open for @mode, -EINVAL if it
+> + * can't be used as storage, or the error from looking up the data of @file
+> + * on a stacking filesystem.
+> + */
+> +int file_check_backing(const struct file *file, fmode_t mode, umode_t type)
+> +{
+> +	fmode_t io = mode & (FMODE_READ | FMODE_WRITE);
+> +	/* Drivers may point ->f_mapping at something else. */
+> +	umode_t fmt = file_inode(file)->i_mode & S_IFMT;
+> +	struct inode *real_inode;
+> +
+> +	/* O_PATH files are only fine for callers that just use the path. */
+> +	if ((file->f_mode & FMODE_PATH) && !(mode & FMODE_PATH))
+> +		return -EBADF;
+> +
+> +	if ((file->f_mode & io) != io)
+> +		return -EBADF;
+> +
+> +	if (fmt != S_IFREG && !(type == S_IFBLK && fmt == S_IFBLK))
+> +		return -EINVAL;
+> +
+> +	/* Look through stacking filesystems at the inode with the data. */
+> +	real_inode = d_real_data_inode(file->f_path.dentry);
+> +	if (IS_ERR(real_inode))
+> +		return PTR_ERR(real_inode);
+> +	if (real_inode->i_sb->s_iflags & SB_I_PSEUDO)
+> +		return -EINVAL;
+> +
+> +	if ((mode & FMODE_READ) &&
+> +	    (!(file->f_mode & FMODE_CAN_READ) || !file->f_op->read_iter))
+> +		return -EINVAL;
+> +
+> +	if ((mode & FMODE_WRITE) &&
+> +	    (!(file->f_mode & FMODE_CAN_WRITE) || !file->f_op->write_iter))
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(file_check_backing);
+> +
+>  ssize_t vfs_iocb_iter_read(struct file *file, struct kiocb *iocb,
+>  			   struct iov_iter *iter)
+>  {
+> diff --git a/include/linux/fs.h b/include/linux/fs.h
+> index 99caef43ff3c4..b1c7ebafbadbe 100644
+> --- a/include/linux/fs.h
+> +++ b/include/linux/fs.h
+> @@ -2553,6 +2553,8 @@ static inline const struct inode *file_user_inode(const struct file *f)
+>  	return file_inode(f);
+>  }
+>  
+> +int file_check_backing(const struct file *file, fmode_t mode, umode_t type);
+> +
+>  static inline struct file *file_clone_open(struct file *file)
+>  {
+>  	return dentry_open(&file->f_path, file->f_flags, file->f_cred);
+> 
+> -- 
+> 2.53.0
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
