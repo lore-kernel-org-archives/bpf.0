@@ -1,56 +1,50 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.95.11.211
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794811202;
-	b=5m4SQ9F7vz889cEx9io2mZPrcEKnoxseU7ZfZALV3JHj+2RqzG57kdzWbrHDqLCNDaQH
-	 anTz7f26A6MwTgGF0sl+gutN3ejwJDNKJO5bEDv3QCHOPvErjy07sePgcg28YQgzli6Zk
-	 +9XqHv57a44tnASU3xY1Cr+VaGIP4nfO76YZFXNQsPxPHSo/1a56C8Zz6CB01W6ronNW8
-	 ZDGqCvZCoRu+Bv4Sx/2tbKkw1nEGxfIr/AqjPJNbNBJ/ynZfWvBoP12Ne6N8uV+NaK5Q8
-	 vsrklixE7Sj+AV322YIusdFoIBOOFRUSb9lI8x34NWRjldce/mcXLH/ta4W39Mo6bqQ==
+	t=1794811621;
+	b=gIa0vf1vLK3bcS4ApXyZxg05IsXsghIUKRjlW4j20AMP+b7QYNrIepMDixxfjO9vjSzB
+	 UlrTDS+0SZoGwqRE5ogJZhv99n7/8yO2JVy1tk+rhieMDlS94OjrgzT3SiG7SQbvlXSP5
+	 CBknp/o+D3QgFCZ+PurFpuY+c10Rej/DevHbwQQ0mol4fmxFB6crkSBak/ynwDzfqvTa4
+	 AYXq2rxLrAGE2zdQsdwG3vAJm8TWOcD4HhLTIxwOK1A/Rcb0tGGe/E/JcgcJvYScwh4+7
+	 vy3/TWDRYANz70KcNosox0MtzPg77o3/30OFxnVSAbGHHOZzGPX85vDMj/MxB1mcsOA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794811202;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=vLJn22a+5nxC81Xu8wK4C9ET8ggPCq5uvqz3JmdzliY=;
-	b=nwL8gS/4s5KA2jG8nFi1tWWgVryfQwBEFqrN5P8tUn3c81WwkM5+UuGZmfE8E9x9Regm
-	 64aKI9SGQyZz6s/US6y+gSSV2xT2uDjHNtHrYc+rngN6aWSOiAg//0/iufloJDp7W76BK
-	 iAK0Agt7v7jtvKqcS5em8INu3Jc6Ibz7sDR5izXFV5knOJWFqvtRIcwqLKvw0xXTOoljc
-	 h4MYrgKTELmvnMmjVXAvXeiMg+F7IpoklGj3UTwll5upEyXvnbY/qSRnSfJkcfCIsOEXD
-	 3DESaDLhpQxplQ+E8F29MEl8tJqKP5nJPHT3M+jwdlMy+XQopa1EWN3xMdmIYqTeThQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794811621;
+	h=DMARC-Filter:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To:User-Agent;
+	bh=/SQB0s9m3nMGtRyx/o5sNyvuyYNHFqW/HgtMVBQxlv8=;
+	b=ilL6tem7wRd9ScaCyxiCwFPmx7IsmTw6ZTK0770asyHuXutiY+9MAluTxV7QPsrSdTSy
+	 i7QZm2WA7rUe3Q2L68rjrz3rD95X+2u36T1fiQVhcZOLsrI255pLuDmZbSLFz+Ch+o/Zo
+	 bA8pCBUVOS0092rWQwJ1+ZVBEGsaS0mpWmVo6+uZCkW/LioPGCWqbhlETWkxH2ExmhKBm
+	 OoaVYAgWl/nLb+SLDHnzT5fuEdG+nTVbHK2gZOBjByazRuScatIi60sUDUGYqS8oZ57lU
+	 U4Mt+NInpMZDa8s3PAFODH5iZKQEpI8JHoXYUfZPz32CBKyRUd632//BwL/tmHzY7Xg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=adtvC0FK;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=lst.de;
+	spf=pass smtp.mailfrom=lst.de;
+	arc=none smtp.remote-ip=213.95.11.211
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58CC7606A338
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 06:40:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=adtvC0FK
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE7BE1F000C4;
-	Mon, 16 Nov 2026 06:39:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794811202;
-	bh=vLJn22a+5nxC81Xu8wK4C9ET8ggPCq5uvqz3JmdzliY=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=adtvC0FKWaxAOmhYsoJKvknreQTal3h1JsrElSp3+CeGOyfClkVCZMfpTL7jd3qym
-	 vqgy1OUZUb1xpEznhR2FowcoaB9WqhP/tE+FO0wyEVeNeITgngCx2JWUPAQ1fSW9LI
-	 UBgZzMKz+k1HY61r5P3wdSTP4EZ88H6jxNIokSe/YaLhS91Qh7lhWaF7OW+bi6IBpc
-	 hL4sIBO5tnr6k90gSI626X/l7KiDgGTWmwo8Drw23uN+gOphEuh6pDoCqOv3U9e1UI
-	 V+niZRhz6ztNEuSHMf9ytqwufJhOrIYy3IaUrd6LHkeRQlL8irwG+WOF8zVY5JUEIE
-	 aOzBIFkLgM1AQ==
-Message-ID: <sashiko-outbox-216293@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 13/21] bpf: Keep the call graph in lists of
- edges
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261116055638.4171529-14-alexei.starovoitov@gmail.com>
-References: <20261116055638.4171529-1-alexei.starovoitov@gmail.com>
- <20261116055638.4171529-14-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 16 Nov 2026 06:39:59 +0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE2A606A31C;
+	Mon, 16 Nov 2026 06:47:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8EE2A606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
+Received: by verein.lst.de (Postfix, from userid 2407)
+	id 7D40E68B05; Mon, 16 Nov 2026 07:46:55 +0100 (CET)
+Date: Mon, 16 Nov 2026 07:46:54 +0100
+From: Christoph Hellwig <hch@lst.de>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Jan Kara <jack@suse.cz>, Shakeel Butt <shakeel.butt@linux.dev>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Jens Axboe <axboe@kernel.dk>, linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
+	Christoph Hellwig <hch@lst.de>, linux-block@vger.kernel.org,
+	linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
+	target-devel@vger.kernel.org, linux-unionfs@vger.kernel.org,
+	bpf@vger.kernel.org, linux-nfs@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH 02/12] zloop: take freeze protection for writes
+Message-ID: <20261116064654.GA2964@lst.de>
+References: <20261114-work-fs-frozen_writes-v1-0-f5ae61c898b1@kernel.org> <20261114-work-fs-frozen_writes-v1-2-f5ae61c898b1@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,95 +53,38 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261114-work-fs-frozen_writes-v1-2-f5ae61c898b1@kernel.org>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Medium] bpf: stale recursive flag on dead subprogs in
-  check_recursion()
-It also noticed 1 related pre-existing issue this patch does not
-introduce:
-- [Critical] bpf: tail call kernel stack overflow in
-  check_max_stack_depth_subprog() [1]
---
-
-commit 05343e493dd94aadf6b39ccc572d2107a34ec086
-Author: Alexei Starovoitov <ast@kernel.org>
-
-bpf: Keep the call graph in lists of edges
-
-This commit replaces the bitmap-based call graph representation with edge
-lists sorted via Tarjan's algorithm, and ignores unseen instructions in
-dead code when building the post-verification call graph and subprogram
-properties.
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index e29eb7d7162b6..35b94ab7ba97f 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-
-[ ... ]
-
-> @@ -5611,8 +5498,8 @@ static int check_recursion(struct bpf_verifier_env =
-*env, struct bpf_call_graph *
+On Sat, Nov 14, 2026 at 11:47:09AM +0100, Christian Brauner wrote:
+> --- a/drivers/block/zloop.c
+> +++ b/drivers/block/zloop.c
+> @@ -514,6 +514,10 @@ static void zloop_rw_complete(struct kiocb *iocb, long ret)
 >  {
->  	int j, s;
-> =20
-> -	for_each_set_bit(s, cg->live, cg->cnt) {
-> -		if (!test_bit(s, subprog_reach(cg, s))) {
-> +	for_each_marked_subprog(cg, s, CG_LIVE) {
-> +		if (!bpf_call_graph_recursive(cg, s)) {
->  			env->subprog_info[s].recursive =3D false;
->  			continue;
->  		}
+>  	struct zloop_cmd *cmd = container_of(iocb, struct zloop_cmd, iocb);
+>  
+> +	/* A queued write still holds freeze protection. */
+> +	if (req_op(blk_mq_rq_from_pdu(cmd)) != REQ_OP_READ)
+> +		kiocb_end_write(iocb);
 
-[Severity: Medium]
-Does check_recursion() leave env->subprog_info[s].recursive set on dead
-subprograms?
+So io_uring, libario and cachefiles use the IOCB_WRITE flag on the
+ioctl to make this somewhat generic.
 
-Before the main pass, mark_recursive_subprogs() sets si[s].recursive =3D tr=
-ue
-using a conservative call graph built from all instructions, including dead
-calls and every addr_taken subprogram when callx is present.  After this
-change, build_call_graph() only adds seen call edges and recorded
-callx_edges, so a subprogram that was conservatively marked recursive may
-no longer be marked CG_LIVE.
+> +	if (rw == ITER_DEST)
+> +		return zone->file->f_op->read_iter(&cmd->iocb, &iter);
+> +
+> +	kiocb_start_write(&cmd->iocb);
+> +	ret = zone->file->f_op->write_iter(&cmd->iocb, &iter);
+> +	if (ret != -EIOCBQUEUED)
+> +		kiocb_end_write(&cmd->iocb);
+> +	return ret;
 
-Because check_recursion() only iterates over CG_LIVE subprograms,
-si[s].recursive stays true on non-live subprograms.
-bpf_insert_recursion_checks() runs before bpf_opt_remove_dead_code() and
-scans all subprograms, so a stale recursive flag sets
-env->prog->jit_required =3D 1 and causes bpf_do_misc_fixups() to reject val=
-id
-non-JITed programs with -EINVAL.
+And then everyone duplicates this.  Do we want a little abstraction
+for the above code + setting IOCB_WRITE, and then another one takes care
+of the kiocb_end_write before or after calling into ->ki_complete?
 
-[ ... ]
+Without that this is a lot of opencoding that feels a bit fragile.
 
-> @@ -5924,7 +5809,7 @@ static int check_call_depth(struct bpf_verifier_env=
- *env, struct bpf_call_graph
->  		 */
->  		depth =3D dinfo[s].depth;
->  		/* nor of the frames of recursive subprogs, see bpf_insert_recursion_c=
-hecks() */
-> -		si[s].in_recursion =3D test_bit(s, cg->in_recursion);
-> +		si[s].in_recursion =3D cg->marks[s] & CG_IN_RECURSION;
->  		if (si[s].in_recursion)
->  			depth +=3D THREAD_SIZE / 2;
->  		if (s && si[s].has_tail_call && depth >=3D 256) {
-
-[Severity: Critical]
-This problem wasn't introduced by this patch, but can the 256-byte caller
-frame limit for tail calls in check_call_depth() overflow the x86-64
-exception stack [1]?
-
-Across a chain of 32 tail calls, allowing up to 256 bytes of caller frames
-to remain on the stack per tail call accumulates up to 7936 bytes, and the
-final program can still use a 512-byte frame (MAX_BPF_STACK) for a total of
-8448 bytes.  Because tail calls disable the private stack, a perf_event
-program running in NMI context on x86-64 without KASAN executes on the
-8192-byte hardware exception stack (EXCEPTION_STKSZ) and overflows it.
-
-[1] https://sashiko.dev/#/bug/linux-d03fddb6-2a86-4813-a8c6-9b07915dc3d1
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261116055638.4171=
-529-1-alexei.starovoitov@gmail.com?part=3D13
