@@ -1,61 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794842752;
-	b=Wnlr4aPgEA8nLJt3za3Y92v/C6M48DiGABNFeu0/iuoB/Sx63sH/nX24TBayCrWLWAdg
-	 qsmC+dPb4KBE06IatZvH/mAm52ofmbMIfRL5eAwbrtt2yNcBPgE8gxR0hfeEGwVB9Qj9R
-	 k+zo8Rs0lco3lTwpaN/xBoGMWUESd5nKTYXkngUIZY6/jzY9ryVJyqvl68Ywjp3YNYOHf
-	 xrUckfLIV+HpTRz7cKs8pP5m8TLfruj309WnWxkDoPQ5Dd3q2ZJDRvl4tskaXO72pMfN0
-	 a0778Ebg0IFQerEoykzFyIt/QI7MPAUmlxyt9eXqYeQXHqC9PhC9UG9KHQ6nx5ysYTQ==
+	t=1794842792;
+	b=qCY9SUK+UIn+JJBU7oROpNYrrvqBX8kRg0J22TF14BrrANfSAluR/yNma7YluqvQEyrZ
+	 K0v4MD71uJzcnW4nEEHVIXlPV3gd+n6CpdnXaf42v3FXHgVKc+qlBEt3hOtzZWsxzeqXH
+	 wbzrotkrw1EQOsA7gKsBPb/pDtkiUpcXjGek9dGgsy3e69tB5ue038eaXSddbeF5Cv54m
+	 lz6Ju4sEvVPGiKR/q5CSHkr+8FbB9N6mPWlCq35LqLkhPyL/WS10k4Vna3RNv2k0VHjl0
+	 NU9pbUjRxK+oJuLpY7K41G11/8sJSDrjlnBgNItt8T+qQOQthiI48DLIWfjbMFNzzOg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794842752;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=CxECcGoxG4bJHUkxZ78akWi3QF20UqitrJenE+Sv7pU=;
-	b=TRbsZs3hc2AOe5AZJ4zEbW9IC0fmJApgOE9YAZZxZ3hmKM66j9ZAzN9HcIAUW/CK56zC
-	 7KOEibv3tJroQnufXcDnXyzqplttBXV/1VAzX2AOEHxfjhdzC8nUPQuuT9xl5jtG/Nkj5
-	 0C0ykQuUHKM4JLbFZ59o0oC5vU3r24Jelhq91KoufopDQvG8+lcqpHSSwN7bp5Yzqcg9+
-	 bijPX+t5y2Qq2YmxsQvHBWFGBwoVCMzR7IXU1MRVCH5BJRhSpgf30BWc0bWLYXpSz1Q+J
-	 hMEjrRFhvChYu+w3heX39OF0JjbkF/tQgsMr/8CAD6s8un8DdEknqnghozmMOwu3CDw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794842792;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=j2tz9I17E3WPOsT62QpJ3ULuSeUMK75nrGOFW5RjaWI=;
+	b=ZanFiVtvsb+y2VqojdxdSOFiP87CpLqfuOItLsHzZcJhSpxRRfpOfOEktU+uztSjiJPL
+	 CFhMl+4bz2dVXdRyBAw6Antmx0ZG77scCWmw3ndunhHb5MF2p3YmBQgYCX+DDdKeQgRFF
+	 Fgx0fVROKdz6mc5k1OUYNuRoWjviyn/PDBDIm30GtWIvnxJXx4WSx5toQbXIdYq0aAb4E
+	 EN19GUlxn9OoLQeRagnxHWM2Bp1svcpTqIb8ehhdx1X7WDkwnvNLqmsfGt6V4BkRscjPb
+	 qlVGPTUsXIsZIwYBqjBpwwLiARKyeXP8VVRbiqHRfxYZ30cG2KQO0GDXHYPu/QENjYw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Qs+5J6Rd;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QG+Qid4v;
+	arc=none smtp.remote-ip=209.85.214.174
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEB63606A8A4;
-	Mon, 16 Nov 2026 15:25:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744C5606A31C
+	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 15:26:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 744C5606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Qs+5J6Rd
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B56911F000C7;
-	Mon, 16 Nov 2026 15:25:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794842752;
-	bh=CxECcGoxG4bJHUkxZ78akWi3QF20UqitrJenE+Sv7pU=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Qs+5J6Rd9BZbhbHnL22oXoUQCFp6iG5stidvs2j647DC2P6eXFadypiq38Q3D3XVW
-	 BJuSM7e/oehj6rkuwdt9vMD6hL7JGS0btpUBzuWxsWKkV0v4SYDtuTYMFdoaRpnla+
-	 g3TmbRvXZxt/myK1BAzTP9AF/3dAFWlRaM4bpsAul8hFUYUkEfDTI22T/MAPpF8BnT
-	 /DEs6hc8wNqhrydfvnrVfzhPu6N+CjKART2xll5e0r/G4nnFTyCqFLpiBF8I0zs4WK
-	 Qod7lXTDRzmBJnEI3T6izL52TK0ptuOZ9n+werwflVKWAwXqraG52XrU6o1IcVSGjx
-	 M9ZioekCFC/Lg==
-Subject: Re: [PATCH net-next 2/3] tun: don't disable BHs for the XDP program
- check of every packet
-From: netdev-bot+sashiko@kernel.org
-To: antonio@mandelbit.com
-Cc: willemdebruijn.kernel@gmail.com, jasowangio@gmail.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
- kuba@kernel.org, pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
- hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
- netdev@vger.kernel.org, bpf@vger.kernel.org
-Date: Mon, 16 Nov 2026 15:25:51 +0000
-Message-ID: <179484275129.3136.12211553035452382830@kernel.org>
-In-Reply-To: <20261112150612.3866546-3-antonio@mandelbit.com>
-References: <20261112150612.3866546-3-antonio@mandelbit.com>
-X-sashiko-severity: Low
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QG+Qid4v
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2ee2072d1e7so9864775ad.2
+        for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 07:26:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794842791; x=1795447591; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=j2tz9I17E3WPOsT62QpJ3ULuSeUMK75nrGOFW5RjaWI=;
+        b=QG+Qid4v8+yZOld7dbZTbW3RU65/S8xCVm6r0CLEeoT9t7s506jOd3ueADyXj8pJ4E
+         zXF9zo7OuT164ceoM/x11DdG7g/fSvPJlVtffcuxYAD+TNYdaeP39nP8U4tLfU0yywgf
+         BpzvE/Yni2hRngst/Sy7fCY1pZLfpnpOoMvjDTclieus3/+J7tM6NbWxMjGXQf/MWIgA
+         VLgsGUGgXoElHw6gEXSKXI519yR32PSmkDF7sxqqLEOvbsiQDbUltOhEprJLt90DGokd
+         Ow6bDu5Dox9JyX4p8jMXavRhmZC+Bq3XSAEQ8Iq9MkYTmyH1kO7TP+AhnvHGu95UWd2m
+         OB1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794842791; x=1795447591;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=j2tz9I17E3WPOsT62QpJ3ULuSeUMK75nrGOFW5RjaWI=;
+        b=ksuR3yArIkfpz6g3X35edfo4+h9/V0l09vLns1WMhIf7Rw15FZR2yFAvW5YXR1Ynvi
+         d/N0mIZykd6z+IzdoTjEEhJrd0fsGZ0j9KmhNC/Ax7ixAW1mGdpPgcP0uAG6F0ZZnOUJ
+         2cMgx0E3ycafkIccVAsrRgF+1WkfnRNW7aTOl3yZTSnpxBmvLf8zMWBirzhQcluuyNJg
+         o6JBJ+I4/LKcAnV07gJTmEKBANWlgzS1pTd3R107klOjqXr2927TsVis4r5DeHuSrMTA
+         e5yif2ZM5D8LdjFmIhficBX2D5oQlPs7mr8qginY/L3wsUCirWMKwVewQfb3Y9B4uy5Y
+         V+Fg==
+X-Gm-Message-State: APuU4Z9C13oXDy1BSKE3lOiRKO1sIp+wth2O0E9UObRB8Ptgq2BJjHCf
+	pTLOKI4ZfNE/cViGShuGJLWB+bPuwV+f62ZvowPGFGljnqCe3WtPEEAf43+JaQ==
+X-Gm-Gg: AZFdTZf2KcL0VTfDnTAiaKlpjmeOSUqqNQPR2UPmC35gvXsGas9Pd/8k3aF6S1djndZ
+	FczWIO6/nzc6BfcocM1IfHGxCJV4sAo1Lo3RCI9W1NU2S+t/IPYcrWVsI1QzGtejjfphadFGcKv
+	XpY4oOPSCwkzsxpSlNKYK2cfx/d0OLlpojKbDaGye9hBK+VKzO+KHqE6IXH9JRYvTELdLM5NUPc
+	lNuqvu8bPjQ4UDw/b3PRoO04aRqHX0f3oFuAIU8mS0rmqVc4kzCDJqqTigOoRkWrJzK8VhQW/wC
+	nE9YX2RY/AJ4pzo58J/hNr5Q64FknTfcn5m7rDwmD3b4Ex9PUmhtbTZ3/tRTkNehrt3fDRy7d7b
+	8iJnL42WNKU5PSWkQ6AEHvCNmO75k8G07LskVYwjhWezkfreZ5gJ7KBUG876wUctT5wZQ1NfAbn
+	TfixgcPBVlVZsJPbibhszCS3aEPS9zxPK6KJn2mlM/nn30mrK+RsVRmP3RxQlEDBa1qApkC8634
+	Yf9X6FtLHDDUvP/G1nyhw8zVuhCjIY0Nxmpo5o47Mw2/0DVeRj90d8MDq4uBBMVEbiR7WI869cR
+	+WPLG9bSXaAGi1DLWiK6JG9YlzbcZzkLeMLQXfJT6QQ7RajrkI3JeniXqqbVzivAiUj1rFHO2YF
+	gd/9RP7mbBt3iSVywVtkRnR1bzA6A5D9wgblgOgPjDawWO0oLZC1tymcc7Bb6SLHA4TVZYr50uQ
+	==
+X-Received: by 2002:a17:903:3c2e:b0:2ed:3f47:9691 with SMTP id d9443c01a7336-2ee0dc05bc1mr104506705ad.42.1794842791167;
+        Mon, 16 Nov 2026 07:26:31 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.243])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2efd76d8315sm1122955ad.1.2026.11.16.07.26.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Nov 2026 07:26:30 -0800 (PST)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com
+Subject: [PATCH bpf-next v2 00/21] bpf: Remove the limits on maps, kfuncs, subprogs and special fields
+Date: Mon, 16 Nov 2026 15:26:05 +0000
+Message-ID: <20261116152626.4032587-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -65,76 +96,259 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+From: Alexei Starovoitov <ast@kernel.org>
 
-Low priority / nit picks for your consideration:
+In short: the verifier keeps the maps, kfuncs, subprogs and special fields
+of a program in arrays of a fixed size. A safe program that needs one more
+entry is rejected. With this series the arrays grow with the program. What
+was quadratic or worse below a limit is linear or n log n now. Outside of
+tools/ the kernel loses 300 lines.
 
-- [Low] In drivers/net/tun.c, the patch adds a function-scope `bool xdp`
-  to tun_build_skb() (line 1705).
+                                                 today       new  patch
+  maps of a program                                 64  no limit      7
+  BTF objects of a program                          64  no limit      7
+  entries of fd_array                             4096  no limit      7
+  kfuncs of a program                              256     65536      9
+  module BTFs of these kfuncs                      256  no limit      9
+  tables of functions, for callx:
+    pointers in all maps                       1048576  no limit     10
+    pointers in the range of one read             4096  no limit     10
+    functions that one read can give              1024  no limit     10
+    sets of functions                             4096  no limit     10
+  subprogs                                        1024  no limit     16
+  special fields of a map value                     11  no limit     17
+  special fields of an allocated object             11       512     17
+  bytes of a name in BTF                           512      4096     18
+  insns under a jump, with those that the
+    verifier adds                                32767  no limit     12
+  insns of a program that bpftool can dump      524288  no limit      5
+  maps of a light skeleton                          64     see 7     11
+  programs of a light skeleton                      32     see 7     11
 
---
+A table of functions is an array of pointers to subprogs in a read-only
+map. A program reads a pointer from it and calls it with callx.
+A special field is a kptr, a bpf_spin_lock, a bpf_timer, a bpf_list_head
+and the like.
 
-tun: don't disable BHs for the XDP program check of every packet
+1. Why?
+None of these numbers protects the kernel at run time. Each is the size of
+an array, or it hides an algorithm that does not scale. Such a limit is
+raised when a real program hits it. Rust crates did that to two of them:
+commit 70bcb39a7392 ("bpf: Bump BPF_MAX_SUBPROGS to 1024") and commit
+3f4f430fa1b2 ("bpf: Allow BPF_MAX_SUBPROGS targets of a read from a table
+of functions"). Real code is near the next ones:
 
-The patch removes the RCU/BH-disabled section that tun_get_user() and
-tun_build_skb() entered for every packet just to check for an attached
-XDP program. It checks first with rcu_access_pointer(), and only enters
-the BH-disabled RCU section when a program is attached.
+  subprogs       777 of 1024   the program of rust-bpf [1] in the first
+                               commit
+  name in BTF    429 of 512    a struct of scx_lavd in rust-bpf
+  maps            41 of 64     obi_continue_protocol_http() in OBI of
+                               OpenTelemetry
 
-> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-> index 9fc60a73fb963..395923651f312 100644
-> --- a/drivers/net/tun.c
-> +++ b/drivers/net/tun.c
-> @@ -1702,13 +1702,12 @@ static struct sk_buff *tun_build_skb(struct tun_struct *tun,
->  	int pad = TUN_RX_PAD;
->  	int metasize = 0;
->  	int err = 0;
-> +	bool xdp;
->  
-> -	rcu_read_lock();
-> -	xdp_prog = rcu_dereference(tun->xdp_prog);
-> -	if (xdp_prog)
-> +	xdp = rcu_access_pointer(tun->xdp_prog);
-> +	if (xdp)
+And it is over the limits of a light skeleton:
 
-[Severity: Low]
-This isn't a bug, but the new function-scope bool xdp in tun_build_skb()
-is shadowed by an existing variable of the same name further down in the
-same function:
+  runtime-security.o of Datadog   627 programs   151 maps
+  tracee.bpf.o of Tracee          169 programs    87 maps
 
-drivers/net/tun.c:tun_build_skb() {
-    ...
-	xdp_prog = rcu_dereference(tun->xdp_prog);
-	if (xdp_prog) {
-		struct xdp_buff xdp;
-		u32 act;
+The author of a program does not choose the number of its maps. Each
+.data.X and .rodata.X section is a map. Each jump table that clang makes
+from a switch is a map: with -mcpu=v4 bpf_generic_uprobe.o of Tetragon has
+19 of them next to its 66 maps.
 
-		xdp_init_buff(&xdp, buflen, &tfile->xdp_rxq);
-		xdp_prepare_buff(&xdp, buf, pad, len, true);
-    ...
-}
+2. What bounds BPF_PROG_LOAD now?
+  size     1000000 insns of a program and 16 MB of BTF, as today.
+  memory   memory.max of the cgroup of the task. There bpf() returns
+           -ENOMEM. Today the OOM killer ends the task (patch 2).
+  time     A fatal signal ends each long loop. The freezer does not wait
+           either: the task freezes, then bpf() starts again (patch 1).
 
-The bool is only read before that block, so the behavior is correct.
-However, the function now has two unrelated xdp identifiers of different
-types, which gives a -Wshadow warning with W=2. It may also confuse
-anyone editing the XDP block later.
+A large program also has to get to the end of BPF_PROG_LOAD. Today each
+signal ends it with -EAGAIN, and libbpf gives up after 5 tries. A task with
+a profiling timer of 10 ms never gets through a BPF_PROG_LOAD of 11 ms.
+With patch 1 a signal that does not kill waits for the end.
 
-Before this patch the gate reused xdp_prog, so there was no clash.
+The limits that hold at run time do not change: the size of the stack,
+32 frames, 33 tail calls.
 
-Could the bool get a different name, for example has_xdp or
-xdp_attached?
+3. What had to scale?
+  patch  question                  today                 new
+   8     dump: which map is in     look at all maps      maple tree
+         this ld_imm64?
+   9     is this kfunc known?      sort at each new one  hash table
+  10     is this set of            look at all sets      hash table
+         functions known?
+  13     who calls whom, over      matrix of bits,       lists of edges,
+         any number of calls?      n^3 / 64, two times   nodes + edges
+  14     what does a table of      walk its pointers     one node of the
+         functions call?           at each use           call graph
+  15     which decl tags has       look at all types     a list per type
+         this argument?
+  17     which special fields      enter a struct for    enter it once,
+         has this type?            each member of that   copy its fields
+                                   type: members^depth
+  18     is this name valid?       read it for each      read each byte
+                                   type that has it      once
+  19     which insns dominate      quadratic             n log n
+         this insn?
 
-The later patches in the series leave this unchanged. Both declarations
-are still present at the end of the series (5b2d3d96af5d).
+Three small tools carry most of it:
+  bpf_table_next()        an array that doubles                   patch 7
+  struct bpf_index        hash table, key -> number of an entry   patch 7
+  struct bpf_call_graph   lists of edges, sorted once: callees    patch 13
+                          first, the nodes of a cycle in a row
 
->  		pad += XDP_PACKET_HEADROOM;
->  	buflen += SKB_DATA_ALIGN(len + pad);
-> -	rcu_read_unlock();
+4. Far jumps
+A conditional jump has an offset of 16 bits. The verifier adds insns under
+it: inlined map lookups, checks of divisions, may_goto, constant blinding.
+Then a verified program fails with -ERANGE. 2979 map lookups under one
+branch are enough. Patch 12 does what an assembler does:
 
-[ ... ]
+  if r1 > r2 goto far    ->   if r1 > r2 goto +1
+                              goto +1
+                              gotol far
+
+Where all jumps fit, no jump changes. The passes in fixups.c do not compute
+offsets any more: bpf_patch_list_build() does it for all of them.
+
+5. Fixes
+  3  A syscall program and the target of its tail call get the same
+     context. Its size is compared with the first program only.
+  4  bpf_loop() is inlined with a call of its callback, also when the
+     callback is removed as dead code.
+  5  A program of more than 524288 insns loads and cannot be dumped.
+  6  btf_resolve() does not see a type that holds itself through
+     ptr -> typedef -> array. Only the limits of the later walks end that
+     loop, and patch 17 removes one of them. With patch 6 such BTF is
+     refused.
+
+6. What else changes for users?
+ - The rules on calls look only at insns that the main pass has seen. A
+   call, a tail call, LD_ABS or bpf_throw() in dead code rejects nothing
+   (patch 13).
+ - A map value with 12 kptrs had no struct btf_record at all. It has one
+   now. So the map needs CAP_BPF, and it cannot be mmaped or
+   BPF_F_RDONLY_PROG (patch 17).
+ - -ENOMEM in front of the JIT fails BPF_PROG_LOAD. There is no fall back
+   to the interpreter (patch 2).
+ - The loader program of a light skeleton gets -EINTR from bpf_sys_bpf().
+   It got -EAGAIN (patch 1).
+ - An extension that does tail calls cannot attach to a syscall program
+   that does none (patch 3).
+ - The tags of subprogs that make calls change, and so do their names in
+   kallsyms (patch 16).
+ - x86-32, riscv32, parisc and sparc64 have no gotol in the JIT. A program
+   with a far jump is not JITed there, like a program that has gotol in
+   its source (patch 12).
+
+7. What stays?
+  65536 kfuncs             JITs find a kfunc by insn->off: 16 bits.
+  4096 bytes of a name     A search by name takes types x length.
+  512 special fields       An allocated object has 4096 bytes at most.
+  4096 entries of          For unprivileged programs. They have 4096 insns.
+    fd_array
+  10000 chains of calls    In the analysis of stack liveness.
+  32 levels of types       In btf_resolve().
+  64 KB of context         For the loader program of a light skeleton:
+                           16 bytes for a map, 4 for a program.
+  bpf_flow_reset()         It looks at all insns after each global subprog.
+                           A fatal signal ends that loop.
+
+The tests are in the patch that changes the behaviour (7, 10, 12, 13, 17)
+and in patches 20 and 21. Where a program above an old limit can be unsafe,
+an unsafe twin of it must fail.
+
+v1 -> v2:
+- Patch 1: bpf() starts again after a freeze also when the command has
+  BPF_COMMON_ATTRS. It returned -EINTR. Patch 21 tests it (BPF CI bot).
+- Patch 10: allocate a set of functions in front of its entry in the index.
+  If that allocation failed in a round that is done again, the next round
+  found the entry and no set behind it (sashiko).
+- Patch 12: the test 'far jump over a far jump' relaxed no jump: both had
+  an offset of 32767. Now they have 32766 and 32768: the second one is far
+  and takes the first one along. The test looks at the insns (BPF CI bot).
+- Patch 20: live_recursion runs on x86-64 and arm64 only: other JITs refuse
+  the recursion with another message. The far_pad tests need the JIT
+  (sashiko).
+
+[1] https://github.com/4ast/rust-bpf
+
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+
+Alexei Starovoitov (21):
+  bpf: Stop a load only when the loader is killed or has to freeze
+  bpf: Fail the load when there is no memory
+  bpf: Give a syscall program the largest context when it does tail
+    calls
+  bpf: Do not inline bpf_loop() when its callback is dead code
+  bpf: Dump programs that have more than 524288 insns
+  bpf: Resolve BTF structs and arrays first
+  bpf: Remove the limits on maps, BTFs and fd_array of a program
+  bpf: Do not scan all maps for each insn and each subprog
+  bpf: Remove the limits on kfuncs of a program
+  bpf: Remove the limits on tables of functions
+  libbpf: Size the tables of the loader program from the object
+  bpf: Relax jumps that patches push out of range
+  bpf: Keep the call graph in lists of edges
+  bpf: Find the effects of callees on the call graph
+  bpf: Link the decl tags of a type
+  bpf: Remove BPF_MAX_SUBPROGS
+  bpf: Walk each type once when looking for special fields
+  bpf: Raise the limit on the length of BTF names
+  bpf: Find dominators in O(n log n)
+  selftests/bpf: Test programs above the old limits
+  selftests/bpf: Test limits of the load with raw programs
+
+ arch/sparc/net/bpf_jit_comp_64.c              |    7 +-
+ arch/x86/net/bpf_jit_comp.c                   |   12 +-
+ include/linux/bpf.h                           |    5 -
+ include/linux/bpf_verifier.h                  |  162 ++-
+ kernel/bpf/btf.c                              |  503 +++----
+ kernel/bpf/cfg.c                              |  428 +++---
+ kernel/bpf/check_btf.c                        |   13 +-
+ kernel/bpf/const_fold.c                       |    8 +-
+ kernel/bpf/core.c                             |  368 +++---
+ kernel/bpf/diagnostics.c                      |    8 +-
+ kernel/bpf/fixups.c                           |  702 +++-------
+ kernel/bpf/flow.c                             |   99 +-
+ kernel/bpf/join.c                             |    2 +-
+ kernel/bpf/liveness.c                         |   66 +-
+ kernel/bpf/log.c                              |    2 +-
+ kernel/bpf/loops.c                            |  189 +--
+ kernel/bpf/scev.c                             |   32 +-
+ kernel/bpf/syscall.c                          |  126 +-
+ kernel/bpf/verifier.c                         | 1164 ++++++-----------
+ net/bpf/test_run.c                            |   20 +-
+ tools/lib/bpf/bpf_gen_internal.h              |    3 +-
+ tools/lib/bpf/gen_loader.c                    |  157 +--
+ tools/lib/bpf/libbpf.c                        |    8 +-
+ tools/testing/selftests/bpf/Makefile.skel     |    2 +-
+ .../{blinding_log.c => blinding_far_jump.c}   |   38 +-
+ .../selftests/bpf/prog_tests/fd_array.c       |   36 +-
+ .../selftests/bpf/prog_tests/no_limits.c      |  465 +++++++
+ .../selftests/bpf/prog_tests/verifier.c       |    4 +
+ .../selftests/bpf/progs/cpumask_common.h      |    3 -
+ .../selftests/bpf/progs/cpumask_failure.c     |    5 +-
+ .../testing/selftests/bpf/progs/many_progs.c  |   36 +
+ .../bpf/progs/test_global_func_deep_stack.c   |   12 +-
+ .../selftests/bpf/progs/verifier_and.c        |    2 +-
+ .../selftests/bpf/progs/verifier_bounds.c     |   14 +-
+ .../bpf/progs/verifier_callx_dead_cb.c        |   60 +
+ .../selftests/bpf/progs/verifier_callx_many.c |   31 +-
+ .../selftests/bpf/progs/verifier_movsx.c      |    4 +-
+ .../selftests/bpf/progs/verifier_no_limits.c  |  224 ++++
+ .../selftests/bpf/progs/verifier_patch_list.c |  146 ++-
+ .../selftests/bpf/progs/verifier_tailcall.c   |    4 +-
+ .../selftests/bpf/progs/verifier_unpriv.c     |    2 +-
+ .../selftests/bpf/progs/verifier_unwind.c     |   32 +
+ tools/testing/selftests/bpf/verifier/calls.c  |    3 +-
+ 43 files changed, 2924 insertions(+), 2283 deletions(-)
+ rename tools/testing/selftests/bpf/prog_tests/{blinding_log.c => blinding_far_jump.c} (51%)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/no_limits.c
+ create mode 100644 tools/testing/selftests/bpf/progs/many_progs.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_callx_dead_cb.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_no_limits.c
 
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261112150612.3866546-1-antonio%40mandelbit.com
+2.55.0
+
