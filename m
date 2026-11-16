@@ -1,100 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.181
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794844991;
-	b=tu3Bg+0al/Aka3G56xxGCkeIyPdFo2TC2uy8HmsALYRV6QsLohK9ayBIzakewKk+Pxg1
-	 RmGGRZyR0enCSlU1f82exNQR9HkNXPDGFQmEPnTr8ps6ly+nG2RGf1MfDEB94/tYFihDK
-	 qMPT2JN6mzw91CcblKcKvWxu5dhvQ6nxAeJtqfByF5pEW+StxMzOwmbSmkhSfdq6aQXX1
-	 BrCnPihFFS5MCzdP8ReWr0xlva8c8qlaL65A5OX+SV3gG2S0+NosfGXlQo9c02MYLGy65
-	 7AJlmatM16B54rU58vG6/q1DYZ+MNXcpJe7liwEou4gsrWxUee0QGqdv2I8BOv0qKEw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794844991;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=75pkuYW/tk7J9Bw8nfex7DohVw3/gs/HE93Gq8puzEQ=;
-	b=SThDrvlqreK17gPjf3bysCAymOM9MW8NMXMMzORPhJRU9t6pmaGpDSq+wKSSSlQi7Lla
-	 xuW5F+MLvKvuCVhWq2E+EqurCaQZiOY+6sQf1h2eJ/fUrdj8JE5hehva6Tj/fcqVwjZ/4
-	 Z5p57o56YJYUoXR7GFdGGqV1CM9JyTxyzCforUuu/pSGbH6LM9Em2rZo2JFFW+CHcwDO2
-	 vNaUEgLN31f1F15nnqlNF8fTZglbs2flgejBjFXv0l3k+yijisyoaIi3zw+wD9bOz2R+G
-	 u5PHhj/bNLyK14AwSbPaEe4lLXpsDwEz6qiyJLmcsYJroy+hhdNPQfIroGXGHHf5heg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=j5+qfPZW;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.181
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794845168;
+	b=4iwJm9dEK2i1Er+GbyFLGAHBpcgVzMzw50Atl2fIgY6WPHdCyEt0Z49jbGFvL9wZzLbs
+	 ch+tp3RZ9JMY8JGqwymGvtndHcq6ehR9uYznb/xQ/nz5A76upXHJHUndub/eiIj9zd40L
+	 OO+vTnpzFWJo/m2R8V/qVBppm9RlFLOMSsJOxPBH+QPFt+et4WZACI4gx9YK7YUOekPRj
+	 btM895mvuTG5y6QW/Iy7TExGdupFlb04XQzS2k8gHgLZrslTDm8uG4Y0vDxjCYABB05dX
+	 SEe+5t5z2f2pmZUwUyp2jXE0OeOW8ykbh9eNRxlH2p+gnGsEbte5Sox2uYI8N07R0Kg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794845168;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=jk4f67CP2F8u9guOsap+3oWE34HJGSx2VsHVoJmQcEQ=;
+	b=2RczuM5Fnyv/6Wfz4hue1AgMc8rDGnH+JYkAxRbSJ4Zd1YWvFzEMyMKUvhqzXLyScu/U
+	 0qgjdngH2EAzhuKr0mFF8oOApQLWF5epCFUoTk+NZukxui9eLoHKiJ20vRGtWx49mv8UP
+	 LmWEHu7uIqADW7G81IEMcdO1SRl+K+If3x4Qrl+iTADPox/vjZmiMpXcxMXjsSrS5+D4O
+	 URzzrmR13rD/jXc5sREajJIwPWleHvg/KsavMWxfUYcFZByzYfhwnEBVDXY1+hbHox9TJ
+	 gOZKbw5w4v3cK3VuiLg7niTVDIhFdz8Z8iBzYi19X+9R70EIG+EHSSc5baRbME37lHQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=N9kJkrdp;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9DDE606A334
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 16:03:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B9DDE606A334
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59B95606A31C
+	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 16:06:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=j5+qfPZW
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2efa9addec5so5770365ad.0
-        for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 08:03:10 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794844990; cv=none;
-        d=google.com; s=arc-20260327;
-        b=i08+xx8m37RJuHHWXMy0+DaqB1pHH9GkcU4RlR11pqlSz6FHoThDUqkMQbUm7f9Ni5
-         CX/3L3SD0w4rARKgZ5DbQnjA+ogF2DdbOu41ZcPeBcu80WNccMbdHEjf+weBZPIBqVcA
-         OlkjR+UDt6c3+6GiqcLZyuilqUcD8nPDv6W3/FEYA4YFQgU4vnZn3AwQlI99PjqZFTqB
-         Ta8AXEl+7UB6Mnhv5IYR5QXmph6y3W0EF380ZtMvzx14FPXE3HAgSYA94PO9wI9Ysyeb
-         0hOX6wmO/3OdGo9Y4syg6LjwUHQVMLJClI1+NJvc76qR8ZdaAslVd6zouIHNgPcNVL+f
-         a2vA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=75pkuYW/tk7J9Bw8nfex7DohVw3/gs/HE93Gq8puzEQ=;
-        fh=NFkKrnW2QdHJ0favwN3CrZQK8ewtvGC0GIwf11Uof68=;
-        b=Nxji5zu4Wr5lfSn6jggWreOMJRfSTzPz/l6WQGoblZw5ieVt2ZTnojaAG0cz+rcAIF
-         4wpplh0lVcp+4dXBZUpW7ccVIb8E4ELKv+vc8xlLvev4MSL1Nae5usiJHsOLbttzgj7d
-         g8NB12NuneZ+ydi1jkmP4WIm+77Wgu4Asp8FpDlf2xN3sZ0GwawyScRVGr5hqx6tH5BI
-         XGgH2rVwuAzfnLMZvr+dKoyZdxBUeepcB2vKBSIbVDtkahuZz/OS8abHvi15YblUQEkL
-         Lrvs2XueknnCWjOOdXYuX5DPxfY450VtCFGXXSH6WVUavMHuN4dOqieYFoxht2UjH0zs
-         odFw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794844990; x=1795449790; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=75pkuYW/tk7J9Bw8nfex7DohVw3/gs/HE93Gq8puzEQ=;
-        b=j5+qfPZWt2MiR9AwyGnuSWff4kqLNf2XZOiwJnxZ+Fv0u1xxF4OIzba8auw2DFGria
-         RUb2lc0JvJCxRj6Sp5wd8n8GN+fVHAzINHu4GRUl3yu2yHMI501c4wW2crgydaFx3jsE
-         lSM2odqPpPWNXbrGAKXoPpmlZw5EaXH1hh87buKYcgSywRmFBtM4pSnPlvXkBQe4++xh
-         0bQTuOm9SoWLQT8EZjRSo/DtXDY558fBXgN3Z+o+1TrHGsvMJ7HiAuWun66rYU1dHnWs
-         VXb+7U5JpdSFegGhqgYMC5nLUFcvstgH/6u4ood/1y0JA3IoK1AR6cJ1RlH2vVzkS7hV
-         zBeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794844990; x=1795449790;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=75pkuYW/tk7J9Bw8nfex7DohVw3/gs/HE93Gq8puzEQ=;
-        b=XRa3FfA91QAp9ow/gwWfNyqdoXu7oKUI7zPPLfu1785lFwtlyXeswYz2ck3XegmlST
-         J+ETOVUC8CuGQOUx4Xl6EfxTeDitsD7lvVdyYUsiSOF+yOjE1xAf+srNoTb6yFLG+MPy
-         OHrBpX2H8zGwdWnmzYC2jrHFvmkjl221qwdzI92iriZT/E8P+48Giah0HAyK1ShuLY+1
-         LqJLIlJ+PRY0TPV5GNBozAhY4WYPtjru7m/aDPWKwc2nTcA6M999zWfNK8izYtWYpUNL
-         NrDiX5RIcCuXhKI3Oin/LhcsxzmQzWITyyOe09Be3zHNk+T3JsreSAGf0YfaNYQsZAVS
-         nfHw==
-X-Forwarded-Encrypted: i=1; AL+hErH9jdQPxaPteWf+LFyitZcCXWu9qRe6nuf75l4lS0pdffK77xdWXdF7WFMVAoU2VQrbYHo=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9tyHUoxIQt/J/FTa0aPgUb9+pbPzXUJnPE8enWWDX1bm3tGbFs
-	80Qx2/mZudRVbcpQppgYuKGLq7LSKy35+/vNFDC687A9cNgjKwy4eWVXvkZrABGkPmR0FlaUL44
-	EfUTfoqizRlTUAwugcE6TjNdwzzHCXnY=
-X-Gm-Gg: AZFdTZfS2TpPxs6XP6tGsJ2bWQaK4YJ6izBLDXQ8RyC72RDAB37bsGJWVTGWuukCqua
-	Aa4qUkytPKj5ZHO0BveSZgmeBJagLAYqg6jh0KBRfUEmGocgykJg5VQ8e23gZHLvGG0nc/TCwJR
-	W694HG/dm3GFBNlLaj4GYHhd48FZKMRuwldxVDqCrBw0jjHQMXAk5zVbKYJF9Fl/wMEfnXklFxg
-	HtIU/C3MQBcTkunrEnikDpbMhOzb29GZsmYaz5viUYNOVn4Ng9u0oJijRAwxX/A6IOsXwWOtDSn
-	tK330x4TUsXXL/HXQJQG4G8sQZklH8bsmMoYTLPJQ8fDaEbOrfu6lZwkAQSuypLmXbYWGlkJ4kZ
-	AgMcc1CtPM0+aLnv3aDtxQ+GIUP94Fp5dmkFhw+V23hQ3rE+bFvvEx00FtQf9EJCdorJTNXMjZ0
-	guWPVERhR1V2HhQ9qBcfGkreLiQ+bA4LPOnDPyzBshXcT9SBo2DxGv6GEj
-X-Received: by 2002:a17:903:3c0c:b0:2ef:d952:4a70 with SMTP id
- d9443c01a7336-2efd9524f10mr160655ad.15.1794844989621; Mon, 16 Nov 2026
- 08:03:09 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=N9kJkrdp
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DB731F000C4;
+	Mon, 16 Nov 2026 16:06:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794845168;
+	bh=jk4f67CP2F8u9guOsap+3oWE34HJGSx2VsHVoJmQcEQ=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=N9kJkrdpWqdDRbw7vvdvp77FLAXWTeP3Pjhb/puQt9Jjiuyhz0Xv9C5fgRlwqWPJn
+	 kdbEzYgmgUmVLKeGLTpZV2QUSNmbdYhjmefO0OvO+k9XNP28AO5qVpjxqe1T2HZnAo
+	 fFQHaqstVv8TyMlaY1rFTqaSabA1GvOJOC17ZJkIFoP2VGteTaIZ6KWczQF5DcVphv
+	 VoN7eMxTFCxZ9hwY12fa4oMxR1YnIT2KcOt6hKNRQ3BxWKsroVQTrEldGLjv7NOkS+
+	 0evDLfpoEnCmb1iNNBmMhntJHHiJy6pM3u0zpqZhGx2EinfcCgi0f5O4TR87u+/s0A
+	 TD0FePVSRvoEg==
+Content-Type: multipart/mixed; boundary="===============8147075745057409316=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,60 +49,140 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <avsfpHqbu_rdmOrf@sirena.org.uk>
-In-Reply-To: <avsfpHqbu_rdmOrf@sirena.org.uk>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 16 Nov 2026 08:02:56 -0800
-X-Gm-Features: AclHuK8Zde0ypoKNoy9FjTToivHq-RePvO_-KQS7SMLakIHz2MwjMtcG0NQBgHE
-Message-ID: <CAADnVQKjK2ezTcTUfQLACJDBLzhy=aBvoiK7L1cqKmb5RE40CA@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the bpf tree with the origin tree
-To: Mark Brown <broonie@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Networking <netdev@vger.kernel.org>
-Cc: Christian Brauner <brauner@kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, Sergei Nizovtsev <snizovtsev@cloudlinux.com>
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <7b99ce30e1ddf3a88b7e8066298daf0fc8a4e7e80f51d9123303d08e0c7fc018@mail.kernel.org>
+In-Reply-To: <20261116152626.4032587-3-alexei.starovoitov@gmail.com>
+References: <20261116152626.4032587-3-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next v2 02/21] bpf: Fail the load when there is no memory
+From: bot+bpf-ci@kernel.org
+To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon, 16 Nov 2026 16:06:07 +0000 (UTC)
 
-On Mon, Nov 16, 2026 at 07:22 AM Mark Brown <broonie@kernel.org> wrote:
-> Hi all,
->
-> Today's linux-next merge of the bpf tree got a conflict in:
->
->   kernel/bpf/bpf_lsm.c
->
-> between commit:
->
->   ea8c4b37b8809 ("bpf: don't mark namespace_init and namespace_free arguments as trusted")
->
-> from the origin tree and commit:
->
->   ab86b62012b9e ("bpf, lsm: Mark backing_file_alloc/free LSM hooks as untrusted")
->
-> from the bpf tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->
-> diff --cc kernel/bpf/bpf_lsm.c
-> index 468e63dbd922d,f39a3766f2245..0000000000000
-> --- a/kernel/bpf/bpf_lsm.c
-> +++ b/kernel/bpf/bpf_lsm.c
-> @@@ -411,8 -411,8 +411,10 @@@ BTF_ID(func, bpf_lsm_bpf_map_free
->   BTF_ID(func, bpf_lsm_bpf_prog_free)
->   BTF_ID(func, bpf_lsm_file_alloc_security)
->   BTF_ID(func, bpf_lsm_file_free_security)
->  +BTF_ID(func, bpf_lsm_namespace_init)
->  +BTF_ID(func, bpf_lsm_namespace_free)
-> + BTF_ID(func, bpf_lsm_backing_file_alloc)
-> + BTF_ID(func, bpf_lsm_backing_file_free)
->   #ifdef CONFIG_SECURITY_NETWORK
->   BTF_ID(func, bpf_lsm_sk_alloc_security)
->   BTF_ID(func, bpf_lsm_sk_free_security)
+--===============8147075745057409316==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Thanks. The resolution is correct.
+> bpf: Fail the load when there is no memory
+
+TL;DR:
+- Unconverted CO-RE (bpf_core_apply) allocations may still wake the memcg OOM
+  killer during load
+- Constant-blinding allocations lack a mayfail flag, so ENOMEM-fails-load may
+  still hit global OOM
+- Commit message overclaims "all allocations"
+
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+
+[ ... ]
+
+> @@ -3017,10 +3017,10 @@ static struct bpf_prog *bpf_prog_jit_compile(struct bpf_verifier_env *env, struc
+>  	prog = bpf_jit_blind_constants(env, prog);
+>  	/*
+>  	 * Fall back to the interpreter after blinding failures, except when
+> -	 * the loader was killed.
+> +	 * the load has to stop or has no memory.
+>  	 */
+>  	if (IS_ERR(prog)) {
+> -		if (PTR_ERR(prog) == -EINTR)
+> +		if (PTR_ERR(prog) == -EINTR || (env && PTR_ERR(prog) == -ENOMEM))
+>  			return prog;
+>  		goto out_restore;
+>  	}
+
+The commit message says "Use one mask for all allocations of the verifier",
+and this hunk makes -ENOMEM from bpf_jit_blind_constants() fatal for the
+load.  Are the allocations inside bpf_jit_blind_constants() covered by that
+rule?
+
+  bpf_jit_blind_constants():
+    linfo_unblinded = kvmalloc_array(nr_linfo, sizeof(*linfo_unblinded),
+                                     GFP_USER);
+    ...
+    clone = bpf_prog_clone_create(prog, GFP_USER);
+
+  bpf_prog_clone_create():
+    gfp_t gfp_flags = GFP_KERNEL | __GFP_ZERO | gfp_extra_flags;
+    fp = __vmalloc(fp_other->pages * PAGE_SIZE, gfp_flags);
+
+Neither call has __GFP_RETRY_MAYFAIL or __GFP_NOWARN, so under global
+memory pressure they can still reach the OOM killer or print an allocation
+failure warning before returning the -ENOMEM that now fails the load.
+
+The path is bpf_check() -> __bpf_prog_select_runtime(env, ...) ->
+bpf_prog_jit_compile() -> bpf_jit_blind_constants() whenever blinding is
+requested (bpf_jit_harden).  bpf_jit_subprogs() reaches the same
+allocations for programs with subprogs.  These allocations are not
+memcg-charged (bpf_prog_clone_create() does not use bpf_memcg_flags()), so
+the memcg case from the commit message is not hit.
+
+Other verifier-path allocations that keep a plain mask are
+bpf_jit_add_poke_descriptor() (krealloc_array(..., GFP_KERNEL), called from
+bpf_do_misc_fixups()) and the func[] array in jit_subprogs().  The func[]
+array is converted later in the series by 8aac70a8f47f ("bpf: Remove
+BPF_MAX_SUBPROGS"); bpf_jit_blind_constants() is not converted anywhere in
+the series.
+
+Should the env path of bpf_jit_blind_constants() pass
+GFP_USER | BPF_GFP_MAYFAIL, as bpf_patch_list_commit() already does for
+bpf_prog_realloc()?  Otherwise the commit message could limit its claim to
+the GFP_KERNEL_ACCOUNT sites.
+
+> The verifier allocates with GFP_KERNEL_ACCOUNT. At the limit of the memory
+> cgroup this wakes up the OOM killer, and the loader dies:
+>   memory.max = 64M, program needs 120M
+>   before:  Killed
+>   after:   bpf() = -ENOMEM
+> Use one mask for all allocations of the verifier. Most of the patch is:
+>   sed -i 's/GFP_KERNEL_ACCOUNT/BPF_VERIFIER_GFP/'
+
+Can a CO-RE load at memory.max still be OOM-killed from inside the
+verifier?  The patch does not convert the GFP_KERNEL_ACCOUNT allocations
+reached through:
+
+  bpf_prog_load() -> bpf_check() -> bpf_check_core_relo() ->
+    bpf_core_apply()
+
+kernel/bpf/btf.c:bpf_core_apply() {
+    ...
+	specs = kzalloc_objs(*specs, 3, GFP_KERNEL_ACCOUNT);
+    ...
+	cands.cands = kzalloc_objs(*cands.cands, cc->cnt, GFP_KERNEL_ACCOUNT);
+    ...
+}
+
+bpf_core_find_cands() also reaches populate_cand_cache() (kmemdup() and
+kmemdup_nul() with GFP_KERNEL_ACCOUNT) and bpf_core_add_cands() (kmalloc()
+with GFP_KERNEL_ACCOUNT).
+
+bpf_check_core_relo() runs for every load with attr->core_relo_cnt != 0,
+which includes light skeletons and loader programs.  try_charge_memcg()
+only skips mem_cgroup_oom() for __GFP_NORETRY or __GFP_RETRY_MAYFAIL:
+
+    if (gfp_mask & __GFP_RETRY_MAYFAIL)
+        goto nomem;
+
+None of these masks carries __GFP_RETRY_MAYFAIL, so the memcg OOM killer
+can still be woken from the verifier, which is the "Killed" outcome the
+commit message says is removed.  The tree at the end of the series still
+has GFP_KERNEL_ACCOUNT in bpf_core_apply().
+
+Separately, bpf_prog_verify_signature() converts the "data" kvmalloc() but
+leaves sig = kvmemdup_bpfptr(usig, attr->signature_size), which allocates
+with GFP_USER | __GFP_NOWARN.  That is not memcg-accounted, so it cannot
+cause the memcg kill, but it is another verifier allocation that does not
+use the one mask.
+
+Should the bpf_core_apply() and candidate cache allocations be converted to
+BPF_VERIFIER_GFP, or should the commit message be narrowed so it does not
+claim all allocations of the verifier?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43899902250
+--===============8147075745057409316==--
