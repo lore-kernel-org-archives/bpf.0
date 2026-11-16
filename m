@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794842811;
-	b=zJ2X2td+qxrXRFSvaL6aHsEse9leaX89b3oNTsiOVLDh2848J0kdXwQjtJsXJCPaFoeb
-	 mO/0SJRJUhb2qFisqW5sRe6NBedDnSYrMwb25b/FAtFpOaP/8/M7Xl6Jt6E6Fb6mn+g7I
-	 NGuFjpFTc2yfqgi1QTpigoKgXiwznpR1x+SWDGuLbshd72/LLRM/F8PsLBHoX5o0eDgb2
-	 mkOgxFUxlufELVwz2cU35Wbnty103wFA4rkoqKfvWvKiD6ERO0ZK8+pJ+9Nm/gLJmDygs
-	 ynQadsD/yBFB4fLmOByNnOXZsC44BOIODa5/rJjfw0Q3YG5aJ+tBHPF6tKFi6/vCb+g==
+	t=1794842817;
+	b=iP/m3IG2jKps8NkWvXoJvDaAhEdsUVEm8kVyv6o9lVn/DTsOC4ivZ5NRGfqGkm50fNXM
+	 7v2fRCkUgp21BjMVzAJvUtxZ0OIwr/Rso5ljMFXheEsdOifFIupwPDuBU1exVwpElpggX
+	 Dgwt1ycFV3bAqX5knsWvOCBnn0A0JDIu/XXtHVyIeEQmo3yo/enAiH8Mk0fa/Y3ZttYu9
+	 54/cwSyZYEdkoy5ldxRoGPcZqbgqNwEr/ojoDi/CG+ZlTNEhlfb9PMb5DkQVT0Aib+XSH
+	 CtH5iGVfve70FuE+8hrpWISJkfFj31Ss0+Z5hOfxlMOeaIFg8dYL5PWIG4vQVWLvoyA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794842811;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794842817;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=8soXgHjoKC02lpqX/lqyTqwN/XEwXScvVdFV+nIPCqI=;
-	b=hBfs2jrsjZjKx93hDTTZSpGgU4s0LwqNJ8IOshtP6aj7c6DEkvDiHhnzUQX39BLePHBM
-	 cVSZArp3Z4E9cwIYVuDKi0ujXBg2UnNwMZPeyLnMux/QV987JXiCrjV6xEKHuoN+27L0m
-	 91eu7anSbKEA9mxGMn+gtMXaBCX2ITePm2t1PrzSvNAKGv0QXR+nMD/3FH3gHvwyQ+ANh
-	 ipC39nDMAR3V/luZ/Tlmc9KfJ/46b36uwa60+VbePqXQubYIdsJtRizGDrzhb07mNHPDF
-	 r9361WItP0jP0sBEbu5SLYRdmg7gpJlBkRAxXjMncP82ZRItZjzTM6M33+4oOqY3StA==
+	bh=5cc9MrK3LHDg2VgyYBlB89Rlidb+17QqXfhNgqaLqRU=;
+	b=Lf7pQvHS/s/+5NLqM4p376Ym1z3sVJ3J7qcgUMydKhIxO0PTgSZOJFge82ofebj4kOt+
+	 0qfgTQ8TdpumHm/Lwbd0NUOCjCiNKJzCZaKcbmZOekqwpGHsiM9DUWpp+WqQxKfRjA78C
+	 Yabo7ltwSdxBTTYvIAQ0A6AUMLKdsIUbyaWp7UxsCWgkNo96+bJdsxbT8KlvJ0Gr89Q9S
+	 XAlBU1WRzCkcjmfT7nYL8s6qNd1SAcRspOAv935xf1sROAb2qeVbbC3AAp4LpvrveUIqQ
+	 Ynhkf0YbPJ8jTiQXsOBlpekZujRlAP4KgE+V2gHp7kV0Sy7UnH/I098ZhJ9yBPfAiEg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=H+iJ0jxK;
-	arc=none smtp.remote-ip=209.85.216.44
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KY04tbsv;
+	arc=none smtp.remote-ip=209.85.210.179
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ED91606A322
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 15:26:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7ED91606A322
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82078606A329
+	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 15:26:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 82078606A329
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=H+iJ0jxK
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3ae2b7e1e17so3083736a91.3
-        for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 07:26:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KY04tbsv
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-8b9c51097e2so1536466b3a.1
+        for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 07:26:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794842811; x=1795447611; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794842817; x=1795447617; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=8soXgHjoKC02lpqX/lqyTqwN/XEwXScvVdFV+nIPCqI=;
-        b=H+iJ0jxK6kx0tB3DpKxZh/IAMsLek3BB20LvT8eFdk3wQBCKEBMWmOvuH0CsW7rL/D
-         1fm5dLHYCW+HBp5EMtS+O3HL+iwFCyiKg1ehp7k/ujE4Lxg8ijJLrFw1d/Sv/trBwDrc
-         PEuHNMWaq0S243bmrVuhB9y1RhF4DxhRApLlDMfbWnITSsiCnBZuxhQcAq+kg/ibFgdY
-         zO3tDtdGBwnbl+F614NJnV15oXina2rjKTt+Sw0eO3HmJQ2eEGr5nUIabwcEY0K4K4BK
-         vFkYrSqeJcHZSrFTDR4mxXCPMQsv0RtJBrTpV7oL9ZavP/rBbJySi5mUBYWM2svev0KW
-         Zx3A==
+        bh=5cc9MrK3LHDg2VgyYBlB89Rlidb+17QqXfhNgqaLqRU=;
+        b=KY04tbsvjd2nqxPwNjJD0DnB2EgtyJHrUBvOwrfIx9AOYCU1gBfXkVuEH5evOmdhMr
+         5ltEqjYaaxSHksFBOMXFLAuFIJlITeeGXg3dOtATO4BpAAqEE27LwXCojPYpGsu7Md4X
+         KtwaIVOSPRqjNLaLW1fddfq5MHN7T4gt0GtB+lG9XPjPr5iDqJx/zY2Ej5jK0ecA2oi0
+         ONun15MZC/aQe5ktcgVibZcrRyhkmROPcmJmcJ334Ke86ltEO5YoN2B0Q8w86Hmy3P09
+         SF5N6wieeMNJv9J2Ng5FablepSBHWzvcCFEZPZ0CCzjO4cYdRHsWYztopNN8I4BHVx+m
+         wc+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794842811; x=1795447611;
+        d=1e100.net; s=20260707; t=1794842817; x=1795447617;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=8soXgHjoKC02lpqX/lqyTqwN/XEwXScvVdFV+nIPCqI=;
-        b=ecnbPyd5mSSHZTjZTbb1FMsIItrIRDRibVF5a/LwC8/BvwOiZY1IOmpL6XgArZeHX/
-         cu27fGoW8O2X0547Hlla2KAouTCAImhxo1Ui0pizrn5vM7ZZ6/Cfe4cAVT4C3dAS/FwB
-         /T61JVimmcEi6PI4DW50/byInOtJdJA13nPT89OR5/HUcjmPpQXzfIptpcx/psyrH9ty
-         sIWcaaZIUjmm2jIIc68YBhKzSdkPbGou4NWXlw++RAEvPgx8EmzbRsCuIfTd4YL23+XQ
-         luzn/V6kh1fNXmgbZhwYtwJLnctiWVlq/qF4axH5hEb75LyJqDMoq4eweSxU+cdXUIav
-         IVYg==
-X-Gm-Message-State: APuU4Z/5QEcKeG/q7E/fgbBnFC/vVjV8jjMyRU9SqVasdhI4t5L1Y1Vt
-	7XwSaMvFAlDbbXjU6ZjHjduIrDPi/gdb4jeTQ7yhGgr2yzKm8Fddit3sx8lM4A==
-X-Gm-Gg: AZFdTZfV+FfL6ziLhLFWq69P7i4Kfc6Lak0Mh9YOgTCl2uA9q9dcZLeI14nFuvtPy93
-	sz4XEruBU58LAhXyfI4vApcPp7Q69azr8K6qco0vw42fnlliWmOtfr3B/t4C3JOZj69T+xK3lzn
-	fUfuijlo+h58F9EFpI/nPKkpqMHFtAkElmB6p0wLMFLZuv9lsDORq1kYo7XtrTxrHQWLve+3wvT
-	Qf7+bYgXWC2SIYhU4A7sDQXo/NzoUKXTENnMO2O6wxGNJn1jj6gRAzRwKHVE7zqoIaNcS1GgUKX
-	wJtppCGO1uIWnf3Vuo6N3UtU1AqlZgMzJfO6FrmOLDlyUj8hOIrUTMJDsdAeZ7QJRoAxTW0hDdT
-	43PeaQRc6WK0qdd2Up+7jKYrtDXAhuNF4gEfBKYC/IOtDtDbBfmYJsB2QRVPl9rkzM6OSXsVH5B
-	rFyaiAsSm7sLJAh9If1Wu2weyOIB5xvOg45vMeZ4DNhRki3iqoIaQ0HMh2V3ww0NG4XjwOKYk5U
-	e4x6quYImjyQxOlL3urXv1dZJN3aV3vLZQlCtPDp+doQClhqVWLNb2D7tx6Hj+BUYAH99AIXEGT
-	Sxq2Rr7rri334gU4fLMHCPAzPch18hN8zqN//FMo2LrpBF2hh426dnjc7zV8lOGdKEpjh3Rjtj5
-	k6LXuGFTuPm1PVonO2te72vpnh8Y/fCmlPjhZkJesP5ZSU1DITyhZUWgpxI6SBhNXQ/qTIyXEnw
+        bh=5cc9MrK3LHDg2VgyYBlB89Rlidb+17QqXfhNgqaLqRU=;
+        b=pz6wwvZhfGuhT9opmO7sZJ+BWv0sWNa6r3dgISGMxPDYJ5giKPp2YeH+Is1kLv/Rso
+         y4XNpaQ6k7UjAudPQEFWtVpYEFkmV0P4Alw9IhhkZuTarW+G2EkTxmDp7v4mrV5KqZ/U
+         M347qLWfpJze21hhnsCEIJvqBsyqBpAaPnz4IlrzbjslsUdXF1P0z4tYH/AKKnxcJFtY
+         Uj9QduUWlMSRWGu2j9eJAUcvPog1lmr8wic+Pi0xA1+2dX79HJDjrB/NvtNabr76JaaQ
+         dB+8fPMGSIy/manx45A/OoG3UxvhfsKd6Qj19Qfn3LvWe5xmVy80PPNjTnl2pnus+ass
+         H4lw==
+X-Gm-Message-State: APuU4Z9ApY6LP6WGW3kFYlQpnEukVlLYy1KuYzJ4l3igHdNiCEXzVcYN
+	KrvdsY8p1DLdqkss0U87I/1L8/USGeoR06KWs1RlMTU2IKWdiEu3ByPiW34RwA==
+X-Gm-Gg: AYBFou10glsS5oKC5iTHD4+mK4wQmLlKQZFDkZJ9F+Vmy+kn/Yg1Tzrgj0vwD7QfIuZ
+	dxfcSuOmpw8elW6CGMjrJaZuVm8Ca1Z8xZkjqp8oEpPGV1dFwy2tpVHmYprrp1AN96uKUb3kcaK
+	o+qhelBiOjSNLVXapdwpXFiZqzypZruEe6TEhsbMi8t/HA5ZeZpAp3JghokW7gMlH+C0XsUZfOw
+	DjQNVulWKMs7QCC96VPWNIbEVzt2wR/sbFEiSiDORVWz7D2h87Vf5GgY09niEj6NzOHsRsUTCDd
+	1tVg7VMmhd0pXfgHPgWmZeWQ1B8UJzabjCFQaAYcCDaLAMO17MimkcMOQ7bULgu5O9RscDzHJ3k
+	TnyzPecgY8VS1IOZkaHHg5FllAgxTKDDRgPC08dyMC0lco8Z1oZIDjS0Eg0IRLyZlcJNljhE844
+	mdFRert4IW/834BI5tDlfgmG5Cb3iKvELrbgfMaVZdaGKVTkfYMmfE4pZrHafRgpplb6bSKJnBX
+	Kz4tu5hmYKnYTp/42i+y6qojUBeOKtCTuwGTqmKXgtFLAvP69yObsW91PqWqiJ4V/BoGnktYaQY
+	7U4PiBA1aU6PsnSuuNbFVDTAD9d06orGBiEG2ZjlcItRx3UW0a5eZ4ppePA1OxnwUjcvFYUQ5Re
+	s8GTfyfRmKaT/bS9IBkOqmiKE0hcmvkXQ1bcjAF6hoYXjlAR4khW8e6V3xdtkMWguxABzgQTiAw
 	==
-X-Received: by 2002:a17:90b:586c:b0:3b0:ab34:afc8 with SMTP id 98e67ed59e1d1-3b1b0b67f13mr9529493a91.20.1794842809639;
-        Mon, 16 Nov 2026 07:26:49 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.254])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b197ce556dsm22413174a91.6.2026.11.16.07.26.48
+X-Received: by 2002:a05:6a00:4b53:b0:89f:d620:232 with SMTP id d2e1a72fcca58-8beb6970bcemr9080313b3a.35.1794842816355;
+        Mon, 16 Nov 2026 07:26:56 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.248])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8bed2d11ac8sm3804598b3a.55.2026.11.16.07.26.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2026 07:26:49 -0800 (PST)
+        Mon, 16 Nov 2026 07:26:55 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 03/21] bpf: Give a syscall program the largest context when it does tail calls
-Date: Mon, 16 Nov 2026 15:26:08 +0000
-Message-ID: <20261116152626.4032587-4-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 04/21] bpf: Do not inline bpf_loop() when its callback is dead code
+Date: Mon, 16 Nov 2026 15:26:09 +0000
+Message-ID: <20261116152626.4032587-5-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261116152626.4032587-1-alexei.starovoitov@gmail.com>
 References: <20261116152626.4032587-1-alexei.starovoitov@gmail.com>
@@ -104,98 +104,36 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-BPF_PROG_RUN compares ctx_size_in with max_ctx_offset of the program that
-it runs. The target of a tail call gets the same context:
+The main pass does not enter the callback of bpf_loop(0, cb). When cb
+comes from a table of functions, nothing keeps it and it is removed. The
+inlined loop still has 'call cb'. The call goes to the next function, or
+the load fails with 'verifier bug: No program to jit'.
 
-  first:   bpf_tail_call(ctx, ...)      max_ctx_offset 0, ctx_size_in 8
-  target:  r0 = *(u32 *)(ctx + 60000)   out of bounds
+Leave the call of the helper. It does not look at cb.
 
-The target is not known before the run. Pad the copy of the context with
-zeros up to U16_MAX, no program can use more. kern_sys_bpf() makes no
-copy, so its caller has to pass that much. An extension cannot add tail
-calls to a program that has none.
-
-The copy is accounted now. It comes from kmalloc-cg or vmalloc, not from
-the caches of memdup_user().
-
-Fixes: 79a7f8bdb159 ("bpf: Introduce bpf_sys_bpf() helper and program type.")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/syscall.c |  7 +++++++
- net/bpf/test_run.c   | 20 ++++++++++++++------
- 2 files changed, 21 insertions(+), 6 deletions(-)
+ kernel/bpf/fixups.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index eda5d8ee8e3f..844b2c2951c6 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -3859,6 +3859,12 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
- 		err = -EINVAL;
- 		goto out_unlock;
- 	}
-+	/* The same for tail calls, see bpf_prog_test_run_syscall(). */
-+	if (prog->type == BPF_PROG_TYPE_EXT && tgt_prog->type == BPF_PROG_TYPE_SYSCALL &&
-+	    prog->aux->tail_call_reachable && !tgt_prog->aux->tail_call_reachable) {
-+		err = -EINVAL;
-+		goto out_unlock;
-+	}
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index 8d1dd0770711..d1eecb95545f 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -3610,8 +3610,12 @@ int bpf_optimize_bpf_loop(struct bpf_verifier_env *env)
+ 		struct bpf_loop_inline_state *inline_state =
+ 			&env->insn_aux_data[i].loop_inline_state;
  
- 	err = bpf_link_prime(&link->link.link, &link_primer);
- 	if (err)
-@@ -6669,6 +6675,7 @@ int kern_sys_bpf(int cmd, union bpf_attr *attr, unsigned int size)
- 			return PTR_ERR(prog);
- 
- 		if (attr->test.ctx_size_in < prog->aux->max_ctx_offset ||
-+		    (prog->aux->tail_call_reachable && attr->test.ctx_size_in < U16_MAX) ||
- 		    attr->test.ctx_size_in > U16_MAX) {
- 			bpf_prog_put(prog);
- 			return -EINVAL;
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index d6c9dc62182e..cc3236e3c0c4 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -1687,8 +1687,8 @@ int bpf_prog_test_run_syscall(struct bpf_prog *prog,
- {
- 	void __user *ctx_in = u64_to_user_ptr(kattr->test.ctx_in);
- 	__u32 ctx_size_in = kattr->test.ctx_size_in;
-+	u32 retval, size = ctx_size_in;
- 	void *ctx = NULL;
--	u32 retval;
- 	int err = 0;
- 
- 	/* doesn't support data_in/out, ctx_out, duration, or repeat or flags */
-@@ -1702,10 +1702,18 @@ int bpf_prog_test_run_syscall(struct bpf_prog *prog,
- 	    ctx_size_in > U16_MAX)
- 		return -EINVAL;
- 
--	if (ctx_size_in) {
--		ctx = memdup_user(ctx_in, ctx_size_in);
--		if (IS_ERR(ctx))
--			return PTR_ERR(ctx);
-+	/* the target of a tail call can use that much */
-+	if (prog->aux->tail_call_reachable)
-+		size = max_t(u32, size, U16_MAX);
-+
-+	if (size) {
-+		ctx = kvzalloc(size, GFP_KERNEL_ACCOUNT | __GFP_NOWARN);
-+		if (!ctx)
-+			return -ENOMEM;
-+		if (copy_from_user(ctx, ctx_in, ctx_size_in)) {
-+			err = -EFAULT;
-+			goto out;
-+		}
- 	}
- 
- 	rcu_read_lock_trace();
-@@ -1720,7 +1728,7 @@ int bpf_prog_test_run_syscall(struct bpf_prog *prog,
- 		if (copy_to_user(ctx_in, ctx, ctx_size_in))
- 			err = -EFAULT;
- out:
--	kfree(ctx);
-+	kvfree(ctx);
- 	return err;
- }
- 
+-		/* the callback that takes a stack in arena is not for a call from the program */
++		/*
++		 * The callback that takes a stack in arena is not for a call from the program.
++		 * The callback of a loop without iterations is dead code, it goes away.
++		 */
+ 		if (is_bpf_loop_call(insn) && inline_state->fit_for_inline &&
++		    env->insn_aux_data[subprogs[inline_state->callback_subprogno].start].seen &&
+ 		    !subprogs[inline_state->callback_subprogno].arena_stack_entry) {
+ 			stack_depth_extra = BPF_REG_SIZE * 3 + stack_depth_roundup;
+ 			err = inline_bpf_loop(env, i,
 -- 
 2.55.0
 
