@@ -1,56 +1,65 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794850835;
-	b=muzseKSwZVnQR0ofI+GwUF7qQWDfCHmzWaQJBF19/nUw0qHQGG8u00pZLZnsT2z/R625
-	 GdbJ23TV9cwBWCd2zTEria81KgeyMlbkQfbftC5NHnpAKxKE7qJKMroWbaYicxzSME/mt
-	 EYnu5RYfm/BdpA71pQ6qksBqL7sYl9oGMkBfeU6V6cByyA7OtTVzvRpEaq4LQRUb0RgZM
-	 50p/GuSXohHxmidNTwm7rtF0PLo2sy5Oqndzm1W6/AriapJIMT9Vad3hSF5RM7je24tdA
-	 REMPE8F/M+7QzxlE13vWYl0QiCVzmp1PDlUUIOpZoNEn6D/b8+T0LHauoPiro2RnI6g==
+	t=1794851363;
+	b=jEv83v+esef4xRHECBvjhqzOi6BM4E2ZbqPJa5ATDJAPtisxO/f0k1xZwwRTk5QgNO2j
+	 XueuQtNeBe5/AK4SFVaTjbzllCsufffryEa/GAjTEhwsR7V+6IgVyOQLVe2cuBt6EuD7A
+	 N5Z2LoZfUAXb0/zdKzfJxcqkB4UX/Piy8KtUOc/1cvEGrEpJN7V8S5FEp6Chq69zNLYyV
+	 pzFJzjj2O7LnT5aUCRUDW/KtZjIvV4/eMyGKjs7UpShCa3tVh2D890rkatBP5BXvYjrdz
+	 s/ibKLwb3Hl/AtwkAjb2+X4cOfT7ihRwaqcmKVdZNZBBVzws+ohcei+6U916qeyPbSg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794850835;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=1FezqDDMFBi/NoKe5GwcJGa6+JE4zrE9BjELtGPCyAU=;
-	b=mCuuj0IYE1AOAJIzjoEMbCuCKLzRhvL4udLgSLG4fSZSAS6Ff4o2y5kMupdvgLfySljl
-	 X9NfJjQfl77Pl/tQ+jRRAkiM7nersPDUzBW4t2mW3i/tSlx0tSNEfXI8QW9j/+bicQXBp
-	 damn1MWeU3nefyzxMGu4yD1MNiotx0G8QUM8yeOsCFLEVKnt6MSnpLsXwE3bxW/YQQydS
-	 Uzmet/b0s6HUe2UOuOsYbgN1gbdxXRKFXtbXxJyPi5HxwDFKOQpA6NXGbRZBcxvZ7wR5J
-	 GGml4lUdMAhPqBdDm0gLoLrUqdI6YU+1Tl28ijM77gYDOw/ecu3qkiBKo9zwdVduiCA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794851363;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=ED8m1EUNyZbVy60KlCH1nfmXFCVOvYy5WXRoQrkl9dY=;
+	b=Pxsm24yvp3ZM3Dhn/NkZuYB3x8IkX6EE44h//EKUvXXYOz/mhraya2Na1NfwBLT0yOvb
+	 CkxqBew1/nBrRGzimV8O+JjKEJgJY9CxCuKXwhjwKB5AX5JpLJB1C4OPoTPRFFLX4s45M
+	 8WvC9GihuT0uhKchkHTFVDAEENqEH8k9DVZF31PmiQACZivX1JaVgleiDocJemK5XID9x
+	 b4lvUauuK1G1YFZdp7SXapEe7Y+7FUOy9XA0eAfv2b3L8x12ft9PVPSUqMFDxSxZDHfxP
+	 savIqIulMuur9cuqN0yW6YUr725mCXCZPEmdLC3CyfR8Hq8c9tpjrvmHVr6ujj6+W8g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=d8HWctyr;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LWj9kUC8;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3A48606A31C
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 17:40:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CACC6606A32F;
+	Mon, 16 Nov 2026 17:49:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=d8HWctyr
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 771331F000C4;
-	Mon, 16 Nov 2026 17:40:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LWj9kUC8
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6A261F02813;
+	Mon, 16 Nov 2026 17:49:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794850834;
-	bh=1FezqDDMFBi/NoKe5GwcJGa6+JE4zrE9BjELtGPCyAU=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=d8HWctyrwWnAwyM1dpin+CeovVNflmKgY/Q8cigQVEOknd1l+MBKvD+IvpoK9o3NL
-	 NqHdVkSuU5aYkJ3Z4Gg+UHfXdu9PJc/Sid4B8EUlZ0pU60PnWZAa3fEAxcTTgKz7Ic
-	 cOl6aTjn0dCh4GiQOAQmhr6cnq19izX1/JPHE8eI4A+dVUs1W+fyEDndKBAKfAUXah
-	 Rh2iNKACQ8eVTmJDa6OgIE6G/JVx79L83zp7P4ZGltGjeJXvCoWrEdc/VbCPNyP15/
-	 tNmttBQ3+wfWTH/Mn9QfAtva/FvPUWXIy98E7daVu7XCs7++fNY8I+qBzAoNbVMyBX
-	 mLHkaivw1dE2A==
-Message-ID: <sashiko-outbox-217437@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 06/21] bpf: Resolve BTF structs and arrays
- first
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261116152626.4032587-7-alexei.starovoitov@gmail.com>
-References: <20261116152626.4032587-1-alexei.starovoitov@gmail.com>
- <20261116152626.4032587-7-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 16 Nov 2026 17:40:33 +0000
+	s=k20260515; t=1794851363;
+	bh=ED8m1EUNyZbVy60KlCH1nfmXFCVOvYy5WXRoQrkl9dY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=LWj9kUC8kQFC5SfD1vjbud2HBFDNnZqFBwsM7D7EkixcrkbHslvvXUPplnT67OEDa
+	 Ojxvc/9bBfh+7M7IgMwLe0/MW3vEZ7MNK475jdjW9gzIKFiwKQYtp2o3epkEHr1OUY
+	 ut8wZMtQ6WwDI4R/4NjZmngdKNKdP+t6PoX5HnYwVJTKEbOQrvDnGzw7NTHVCoa2iV
+	 Az2pSjHFx32LhMnzCRrFLDjD1DXtR7qLBdQXkQEuVAl0z7iuGlB/eKvhfmNtzTqNut
+	 eiuM63/QtPtS1+8sCvNSNotSJGDSOZKb/xcO1WCvyJtafHJlrptV+MYpMU1CW9c9N/
+	 f6aB01Y3d7oMw==
+Date: Mon, 16 Nov 2026 18:49:14 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Amir Goldstein <amir73il@gmail.com>
+Cc: linux-fsdevel@vger.kernel.org, Jann Horn <jannh@google.com>, 
+	Chris Mason <mason@kernel.org>, Josef Bacik <josef@toxicpanda.com>, 
+	Christoph Hellwig <hch@lst.de>, linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-nvme@lists.infradead.org, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Jan Kara <jack@suse.cz>, linux-scsi@vger.kernel.org, target-devel@vger.kernel.org, 
+	driver-core@lists.linux.dev, linux-mm@kvack.org, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, apparmor@lists.ubuntu.com, 
+	linux-nfs@vger.kernel.org, netdev@vger.kernel.org, fuse-devel@lists.linux.dev, 
+	linux-efi@vger.kernel.org, xen-devel@lists.xenproject.org, ocfs2-devel@lists.linux.dev, 
+	linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-usb@vger.kernel.org, 
+	linux-erofs@lists.ozlabs.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC v3 33/44] ovl: refuse data-only layers on pseudo
+ filesystems
+Message-ID: <20261116-kriterien-getoppt-kauern-5a0c1fba70cf@brauner>
+References: <20261116-work-loop-pseudo-v3-0-8cbbea1cf34f@kernel.org>
+ <20261116-work-loop-pseudo-v3-33-8cbbea1cf34f@kernel.org>
+ <CAOQ4uxgPerkkG4ie0SyHVXaBD9VZN2wYfQpEAEi4hytn=ara3A@mail.gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,39 +68,75 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOQ4uxgPerkkG4ie0SyHVXaBD9VZN2wYfQpEAEi4hytn=ara3A@mail.gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Low] bpf: missing Fixes trailer for BTF loop detection in
-  btf_check_all_types()
---
+On Mon, Nov 16, 2026 at 06:37:16PM +0100, Amir Goldstein wrote:
+> On Mon, Nov 16, 2026 at 12:10 PM Christian Brauner <brauner@kernel.org> wrote:
+> >
+> > The data of a metacopy file can live in a data-only layer. overlayfs
+> > doesn't look that data up when it looks up the file. It only remembers
+> > the absolute redirect and looks up the data lazily the first time
+> > someone needs it. So until then nothing can tell which filesystem holds
+> > the data of such a file.
+> >
+> > But a data-only layer has no business being a pseudo filesystem in the
+> > first place. All it does is hold the data of metacopy files and the
+> > regular files of a pseudo filesystem are kernel interfaces, not storage.
+> > So let's refuse data-only layers on superblocks with SB_I_PSEUDO at
+> > mount time.
+> >
+> > Data-only layers can be added via the "::" separator in "lowerdir=" and
+> > via "datadir+" by path or by file descriptor. All of them end up at the
+> > end of ctx->lower. So a single check in ovl_get_lowerstack() covers all
+> > of them.
+> >
+> > Note that regular lower layers on pseudo filesystems are left alone.
+> > Stacking overlayfs on top of sysfs keeps working.
+> >
+> > Suggested-by: Amir Goldstein <amir73il@gmail.com>
+> > Link: https://lore.kernel.org/all/CAOQ4uxhGxpBtMZ5kfuzR1tQAewiecoX7UjXQRo91QjJHH9T_Yw@mail.gmail.com
+> > Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+> > ---
+> >  fs/overlayfs/super.c | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> >
+> > diff --git a/fs/overlayfs/super.c b/fs/overlayfs/super.c
+> > index 39d4d57dec230..719c2569dfeaf 100644
+> > --- a/fs/overlayfs/super.c
+> > +++ b/fs/overlayfs/super.c
+> > @@ -1237,6 +1237,14 @@ static struct ovl_entry *ovl_get_lowerstack(struct super_block *sb,
+> >         for (i = 0; i < ctx->nr; i++) {
+> >                 l = &ctx->lower[i];
+> >
+> > +               /* Pseudo filesystems don't hold data for metacopy files. */
+> > +               if (i >= ctx->nr - ctx->nr_data &&
+> > +                   (l->path.dentry->d_sb->s_iflags & SB_I_PSEUDO)) {
+> > +                       pr_err("filesystem on %s not supported as data-only layer\n",
+> > +                              l->name);
+> > +                       return ERR_PTR(-EINVAL);
+> > +               }
+> > +
+> 
+> How about we make this just a tad more restrictive:
+> 
+>                 /* Pseudo filesystems don't belong in composefs setup */
+>                 if (ctx->nr_data &&
+>                     (l->path.dentry->d_sb->s_iflags & SB_I_PSEUDO)) {
+>                         pr_err("filesystem on %s not supported along
+> with data-only layers\n",
+>                                l->name);
+>                         return ERR_PTR(-EINVAL);
+>                 }
+> 
+> I could send this as followup patch, but since this version is simpler
+> there is no real reason to have the intermediate "only ban datadir" step.
+> 
+> Only the commit message needs a little more flexing to justify this.
 
-commit f2b6216605cc6af96cb5995fe77081d986ad71b1
-Author: Alexei Starovoitov <ast@kernel.org>
-
-> bpf: Resolve BTF structs and arrays first
->
-> btf_resolve() does not see this loop:
->
->   ptr -> typedef -> array -+
->             ^--------------+
->
-> The walk from the pointer stops at the array and marks the typedef as
-> resolved. Only the limits of the later walks end the loop. The walk for
-> special fields is going to lose its limit.
->
-> Resolve structs and arrays first. Then a type that holds itself is always
-> found. Such BTF does not load any more.
->
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-
-[Severity: Low]
-This fixes a bug in BTF type resolution where resolving a pointer first
-marks intermediate modifiers as resolved and hides self-referential loops
-through structs or arrays.  Should this include:
-
-  Fixes: eb3f595dab40 ("bpf: btf: Validate type reference")
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261116152626.4032=
-587-1-alexei.starovoitov@gmail.com?part=3D6
+Just sent me the diff on top of the series and I can fold it with the
+commit message you want and slap your Co-developed-by and SoB on it,
+please?
