@@ -1,95 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.64
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794865502;
-	b=MG95Bj3s45eqpX3sxi33VDUwLi7fkXr80z/pexyo2AWLlIGeT9TWckg8HrQqioxwVvl0
-	 SlJAedJNNj0xrWZxGooGfyCn/9B3XiqbQY/W2ACfOkOvOLVkBnYoDu3Aj5kCekfUQPUAk
-	 3o7kUcth8d3O6Xti1EXmnZrlUix7DdhkDAtNuMB/xnRFR//Ilfow38djLxeMEm+GeoQva
-	 fRGSsWCJ/BiuwMJhNaakTUVwgqbBp1d0DRXsAmphOc5X1I13vArpq8Vt6mQp1OFWYfGFe
-	 ad6WISNATpKli2s3P3rPdsqiFkVC5YBgyeytR5icaa26wVfBUT143gdoIaqJ6WDgPDA==
+	t=1794865750;
+	b=WQIHbi46YlU7HdOCvfHw5nc9FUCX6i7wvAf0gDowhvI81Qmq5bBkHQUdkeLmboTDiS23
+	 5zQ1TnuL4X5E9LOU60k6eaboW2d7mG8i05IAY/U8c+QsE6Ai6D/gfBL1V1+r+wd3Dr+sV
+	 MwimKol+B9lYUGoATlFTp8w96gQ3jwDrhtYao1aL582vLO40X9W6oEEtLiYHAufwwre+i
+	 tfFR2YzM9dnw4lMrmN8y6WHlXORvW6fR/onG096uG4S6pgEXoZSfKq1e7Mnv1zJEk4pN6
+	 OwZylTJqi3XrUs3R9JiPc4ywWBhf/QTte12xsfajb5RekmTimEqI3o6obXjPN2vcirA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794865502;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:X-Google-Original-From:Date:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=KYy2ZgWJhsndoAf8eiR4LBCvqETtDaSKCpeg4Q4xdkM=;
-	b=bEfxwRep7BCAY/483+r2x5qX57bOuPCbt5CEaJ9z5M5138pLTcDvzQp2nB4Fsc+KqnG3
-	 zyPwWtDwzHtcAzmxa1Sw3CB9fKJ3nTXAoA80HrP7uQctaQ4f1uPF2DjgZueVGHrTVLOai
-	 emMgsj+g4VhSKecmlvCDnpCu9RVolBjxbXQTC3i/C3dAcvC9AGxBE7WjaTmPSzQtu2UcA
-	 AaeqHV6dl8RVt26+fys4R3FxxKdGciVSAlDdBU+c2HhYnUsX8P6btGZo9c5RsTfXHbOh6
-	 K6hCD9/vkDaLK088YnV5m6sHmsK307V/GpIGc9B5Ti8o6sAMk+adOq/WZ5ezhNiaokg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794865750;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=yJuKOBNNYnk1ty+KHw/zCYtkc5H0NaB5Yj6zALlwHps=;
+	b=zKWl25v1oK0Fqm4p6f/Gp2rIAAAzv+cyLfzJO82YlGnwS+SeGs2ldvSkfdLeLys27sJ9
+	 ObnTgKd1fqyDjMZshcn2muptCRZp7SQXsyX2Oirj8HgqS3YnHd+Mxy+BquOwXF4mZKsV7
+	 9suorX4UQ2zu1TclCyKKvwgVuQJQVXu/TXDGwuOc+KSCKz8hx05bzcUkVbgv667diWhDV
+	 2gW78XUUBVx5S3Q2FwCsbzieRcekKLEsRizlab3729w2G3CanP1SUHWgjfKejk+fjbGjK
+	 6g7Dtdq25BarkXXgEXHM/idj7UMEVln91WogmNZ+UesF9WrBsvrd8qmZoMzMxRtAR8w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="B/vmmxu+";
-	arc=none smtp.remote-ip=209.85.128.52
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="J1UhoB/9";
+	arc=none smtp.remote-ip=91.218.175.64
+Received: from mta0.migadu.com (out-64.mta0.migadu.com [91.218.175.64])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7227606A323
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 21:45:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A7227606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE6F9606A31C
+	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 21:49:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CE6F9606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=B/vmmxu+
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4bb666304fdso2413065e9.0
-        for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 13:45:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794865500; x=1795470300; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=KYy2ZgWJhsndoAf8eiR4LBCvqETtDaSKCpeg4Q4xdkM=;
-        b=B/vmmxu+MW2e3JWd00CegcTbHhcbMcQXHc+bhVf3nM1lcLNnwxbhrjo/lCCZQ6a36K
-         2xPCJ9Uij2sy4Bm4x5yx/YJAtmdk+XIUhPimII26pQ/ldNEd8UiB34jVveNX3Uf8mJg+
-         89MbK2C6evgE+8CaDkzqXddbY5OjFjPnS6qLWDzaeYcadUM9RhRJa+b01lYFtk3n9bvl
-         oi09moKDD+zbIM5eqiSbkzmzKeOo+v/sLF2D2tdQBqLe4NCCykCGyjdyzZO0bOn4g+Gv
-         z0vSwnmexHa9K68MdOsi6w8apR8PVwwvn8CGWJBLmrxhXY4IWxZut32NV16wl2dMcHRG
-         DEEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794865500; x=1795470300;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=KYy2ZgWJhsndoAf8eiR4LBCvqETtDaSKCpeg4Q4xdkM=;
-        b=mlXbTpNu4i6qXGsnM0NVu8ASwTSt2YperDAkse9DX/ydKMITQioWMDAsU0eubPTYvj
-         WX+qg/4UVhz1T0Ksr5D9zO4hCyAuzDR4Y1tcSpXz7qkS8E6z6z16z+ZnxqMAR3xalKbO
-         7aNdU4c9bCHRvc8IXVratySWYIxxuIB/wL7ncMcnfCmMR4EkeYqRDrw9XqMi1ii7Yoiy
-         v5iMMJSdMPsE4XIKr/OLnRKTR2fayOOskSuUzL4LGORSp0b9SUQWWMLJ4ea1Kh/bH15t
-         +V9tZLMEadqz8insQ330FszjN91pf787PLq5W16UjJUwTOrd338MYa0x2qChkC2pfVyu
-         dy5w==
-X-Forwarded-Encrypted: i=1; AL+hErHay0VFI1aZEERPK7kZ87o2w3cCIeAVPWDhfkHex0U25lI0Hk63AA8oLox2lthmamnLjkA=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9hs9czYlYAf8Id9kkJIMsg6ahxpFFhuQdzIhgIDtqI+CyDVMmQ
-	fRfgqxM2vxFN8VBccU60xF22pAgCtj/XbsumdYvxMHrrvXjfgzepVAB/
-X-Gm-Gg: AYBFou2ow7wG7X4DhygGPNf/dCQKVENx6PYhkg2BCseWmdMepSMNVo96jcLf4tn7adL
-	krZmcP4QYF2ZpeHwlvn3SoltnVjLF6DiA9PABebzq9qOE6JreF/F7w4GJEe5Q5J0hNBLxzG/8Ni
-	dofjD52VCe0FKJHcbKVegNfzJjWyOCh/80iyqKkG5q4vzkLzPWjvBc8b1DQVGVWWDtgeIbSSpE/
-	Hh5MYK8QAYMCUk+wMlbF1SuEsByK/L613Y7NV8TNYJ4plE77B0SXMpprEobhTb9oWuT8pnZ4sdT
-	0dmxND9B9Vx4H5n0o5SWWqcMfd/IVdCMT++4Q1LwaCeIxRNBFnPlRU05Aj4aQ6lpq3Ddfb8sPGK
-	H5GjXAUWVYQ6sxNOLgYg77PRYK7M/1QG8F1S21NB6FHX11IKqSOnzKHOkNC3sSQJeIaM309jlPn
-	aF63cG8b2xwoliWnMm9SDAxce2nslm/bqfcY/XOolHjWDzAbHoYwSrSXZptgVwQh7DoiVNBjZbz
-	UXC5SBlP0lHWyjROawzixPtlxCOCB74obzkU+KTptj/W8zWMSVx8YxkAAdqKkzbmBXTn/ML0NP2
-	B388sla1dW9q7i6w
-X-Received: by 2002:a05:600c:a54:b0:4bb:5fd1:92aa with SMTP id 5b1f17b1804b1-4bb78a1b3f1mr11151135e9.15.1794865499787;
-        Mon, 16 Nov 2026 13:44:59 -0800 (PST)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb78344ddbsm20249415e9.0.2026.11.16.13.44.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2026 13:44:59 -0800 (PST)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Mon, 16 Nov 2026 22:44:58 +0100
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: rtm@csail.mit.edu, Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org
-Subject: Re: a riscv ebpf uprobe can wedge the machine by writing
- pt_regs.status
-Message-ID: <avt5WnmsPkYkeZrz@krava>
-References: <30318.1794850523@30-11-166.wireless.csail.mit.edu>
- <DMWUY4M0QXMH.33XAPR76ZXKRT@gmail.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=J1UhoB/9
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Oi5wYhbLjwdZu+R9/Qn3xoP1Vc2SrBmiTpo0zBudxz0=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794865747; v=1; x=1795470547;
+ b=J1UhoB/9/+fOB3vHOjJ5A4h6AVVjN3hYuRW08wofnUttUirmkSUBjzTI6JlepQw2+2X8w00F
+ qbZoCe52zWoPnLFc3Tah3Vv8LNItCZodcMUgTslNN0BgB9TMjL9NpL/PcPghH8Msfwhbw/cAVm7
+ eU/6cwrzJKyL4Rkbhdesh5p0=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 5853fed9c1d37e21;
+	Mon, 16 Nov 2026 21:49:07 +0000
+X-Mizu-Trace-ID: 5853fed9c1d37e21
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <2e6d98fe-527f-4188-bca0-c9db1ad92bce@linux.dev>
+Date: Mon, 16 Nov 2026 13:49:02 -0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -99,172 +58,113 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DMWUY4M0QXMH.33XAPR76ZXKRT@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 2/2] local_lock: do not put btf_type_tag on the lock
+ guard type
+To: Chris Down <chris@chrisdown.name>
+Cc: dennis@kernel.org, tj@kernel.org, cl@gentwo.org, peterz@infradead.org,
+ mingo@redhat.com, will@kernel.org, boqun@kernel.org, longman@redhat.com,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, acme@kernel.org,
+ yonghong.song@linux.dev, eddyz87@gmail.com, martin.lau@linux.dev,
+ nathan@kernel.org, ndesaulniers@google.com, morbo@google.com,
+ justinstitt@google.com, llvm@lists.linux.dev
+References: <20261110012235.1024461-1-vineet.gupta@linux.dev>
+ <20261110012235.1024461-3-vineet.gupta@linux.dev>
+ <20261113115810.cd33f9ed58c02dd9@chrisdown.name>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <20261113115810.cd33f9ed58c02dd9@chrisdown.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Nov 16, 2026 at 06:47:41PM +0000, Alexei Starovoitov wrote:
-> On Mon, Nov 16, 2026 at 09:35 AM rtm@csail.mit.edu <rtm@csail.mit.edu> wrote:
-> > On riscv, kprobe_prog_is_valid_access() allows a "uprobe" ebpf program
-> > to write ctx at offset 256, which is pt_regs.status. When returning to
-> > user space, ret_from_exception copies whatever value the ebpf program
-> > provided to the CPU's sstatus. One way this can cause trouble is if
-> > the ebpf program sets sstatus.SPP to 1, indicating that the trap
-> > should return to user space in supervisor mode rather than user mode.
-> 
-> Yes. It's a real bug, and it's not only riscv.
-> The exit path trusts some of the fields. ptrace guards the same fields:
-> 
->   arch    field   exit path                       ptrace
->   ------  ------  ------------------------------  -------------------
->   riscv   status  csrw CSR_STATUS, a0             not in the regset
->   arm64   pstate  msr spsr_el1, x22               valid_user_regs()
->   x86-64  cs, ss  (cs & 3) == 0: iretq to ring 0  set_segment_reg()
->   x86-64  flags   iretq loads IF and IOPL         set_flags()
+On 11/13/26 11:58 AM, Chris Down wrote:
+> Hi Vineet,
+>
+> Vineet Gupta <vineet.gupta@linux.dev> writes:
+>> 	typedef local_lock_t __seg_gs
+>> 	__attribute__((btf_type_tag("percpu"))) lock_local_lock_t;
+>>
+>> 	typedef struct { local_lock_t __seg_gs
+>> 	__attribute__((btf_type_tag("percpu"))) *lock; } class_local_lock_t;
+>>
+>> Both put the tag on local_lock_t, an aggregate: the first on a typedef of
+>> it, the second on the pointee of the guard's member.
+> The typedef is the aggregate case, and it's the only one of the two that
+> GCC warns about. But the second one is just the "T __percpu *p" spelling
+> that 1/2 keeps the tag for. _T->lock really is a pointer to per-cpu memory,
+> since local_lock() passes it to this_cpu_ptr(). So the tag is correct
+> there. This patch drops it from the guard's lock member and the
+> constructor's argument as well, not only from the typedef. I think it
+> should keep the tag on those two and only drop it from the typedef.
 
-yes, we need to block it
-
-> 
-> A uprobe prog should write only the registers that ptrace sets to any
-> value. The verifier can reject the other offsets at load time.
-> Each arch lists its registers. An arch without a list gets no writes.
-> flags and pstate become read-only, the condition bits too.
-
-I was wondering about the condition bits, but it'd be cumbersome to
-block specific values and we can always make jump anyway
-
-will send the change
-
-thanks,
-jirka
+Yes you are right, the patch conflated them. And although the warning is 
+same as in patch 1, there typedef is actually involved
 
 
-> 
-> Jiri,
-> pls commandeer the following:
-> 
-> diff --git a/arch/arm64/kernel/probes/uprobes.c b/arch/arm64/kernel/probes/uprobes.c
-> index 2a9b0bc..1e6ac47 100644
-> --- a/arch/arm64/kernel/probes/uprobes.c
-> +++ b/arch/arm64/kernel/probes/uprobes.c
-> @@ -152,6 +152,12 @@ bool arch_uretprobe_is_alive(struct return_instance *ret, enum rp_check ctx,
->  		return regs->sp < ret->stack;
->  }
->  
-> +bool arch_uprobe_regs_writable(int off, int size)
-> +{
-> +	/* From x0 to x30, sp, pc. */
-> +	return off + size <= offsetof(struct pt_regs, pstate);
-> +}
-> +
->  unsigned long
->  arch_uretprobe_hijack_return_addr(unsigned long trampoline_vaddr,
->  				  struct pt_regs *regs)
-> diff --git a/arch/riscv/kernel/probes/uprobes.c b/arch/riscv/kernel/probes/uprobes.c
-> index eb177d0..dbb1534 100644
-> --- a/arch/riscv/kernel/probes/uprobes.c
-> +++ b/arch/riscv/kernel/probes/uprobes.c
-> @@ -126,6 +126,12 @@ bool arch_uretprobe_is_alive(struct return_instance *ret, enum rp_check ctx,
->  		return regs->sp < ret->stack;
->  }
->  
-> +bool arch_uprobe_regs_writable(int off, int size)
-> +{
-> +	/* epc, from ra to t6. */
-> +	return off + size <= offsetof(struct pt_regs, status);
-> +}
-> +
->  unsigned long
->  arch_uretprobe_hijack_return_addr(unsigned long trampoline_vaddr,
->  				  struct pt_regs *regs)
-> diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
-> index 0f60c0d..fc07bcd 100644
-> --- a/arch/x86/kernel/uprobes.c
-> +++ b/arch/x86/kernel/uprobes.c
-> @@ -1888,6 +1888,21 @@ bool arch_uretprobe_is_alive(struct return_instance *ret, enum rp_check ctx,
->  		return regs->sp <= ret->stack;
->  }
->  
-> +bool arch_uprobe_regs_writable(int off, int size)
-> +{
-> +	int end = off + size;
-> +
-> +	/* The 32-bit pt_regs has segments in front of orig_ax. */
-> +	if (!IS_ENABLED(CONFIG_X86_64))
-> +		return false;
-> +	/* From r15 to di. Not orig_ax, cs, flags, ss. */
-> +	if (end <= offsetof(struct pt_regs, orig_ax))
-> +		return true;
-> +	if (off >= offsetof(struct pt_regs, ip) && end <= offsetofend(struct pt_regs, ip))
-> +		return true;
-> +	return off >= offsetof(struct pt_regs, sp) && end <= offsetofend(struct pt_regs, sp);
-> +}
-> +
->  /*
->   * Heuristic-based check if uprobe is installed at the function entry.
->   *
-> diff --git a/include/linux/uprobes.h b/include/linux/uprobes.h
-> index d34dbc0..43b250b 100644
-> --- a/include/linux/uprobes.h
-> +++ b/include/linux/uprobes.h
-> @@ -239,6 +239,7 @@ extern void uprobe_copy_from_page(struct page *page, unsigned long vaddr, void *
->  extern void handle_syscall_uprobe(struct pt_regs *regs, unsigned long bp_vaddr);
->  extern void arch_uprobe_optimize(struct arch_uprobe *auprobe, unsigned long vaddr);
->  extern unsigned long arch_uprobe_get_xol_area(void);
-> +extern bool arch_uprobe_regs_writable(int off, int size);
->  #else /* !CONFIG_UPROBES */
->  struct uprobes_state {
->  };
-> @@ -300,5 +301,9 @@ static inline void uprobe_copy_process(struct task_struct *t, u64 flags)
->  static inline void uprobe_clear_state(struct mm_struct *mm)
->  {
->  }
-> +static inline bool arch_uprobe_regs_writable(int off, int size)
-> +{
-> +	return false;
-> +}
->  #endif /* !CONFIG_UPROBES */
->  #endif	/* _LINUX_UPROBES_H */
-> diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
-> index caf4447..c47b1ee 100644
-> --- a/kernel/events/uprobes.c
-> +++ b/kernel/events/uprobes.c
-> @@ -2703,6 +2703,15 @@ void __weak arch_uprobe_optimize(struct arch_uprobe *auprobe, unsigned long vadd
->  {
->  }
->  
-> +/*
-> + * Can a bpf prog write these bytes of pt_regs? An arch opts in and lists the
-> + * registers that ptrace can set to any value.
-> + */
-> +bool __weak arch_uprobe_regs_writable(int off, int size)
-> +{
-> +	return false;
-> +}
-> +
->  /*
->   * Run handler and ask thread to singlestep.
->   * Ensure all non-fatal signals cannot interrupt thread while it singlesteps.
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index b4ff9d4..4f1be6c 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -1398,8 +1398,16 @@ static bool kprobe_prog_is_valid_access(int off, int size, enum bpf_access_type
->  	if (off + size > sizeof(struct pt_regs))
->  		return false;
->  
-> -	if (type == BPF_WRITE)
-> +	if (type == BPF_WRITE) {
-> +		/*
-> +		 * pt_regs also holds what the kernel restores on the way to
-> +		 * user space: cs and flags on x86, pstate on arm64, status on
-> +		 * riscv. A prog can write the registers of the task only.
-> +		 */
-> +		if (!arch_uprobe_regs_writable(off, size))
-> +			return false;
->  		prog->aux->kprobe_write_ctx = true;
-> +	}
->  
->  	return true;
->  }
-> 
+>> Every variant of an
+>> aggregate shares one DIE, so there is nowhere to record it, exactly as for
+>> DECLARE_PER_CPU() of a struct. clang writes the annotation into DWARF
+>> without complaint, but pahole does not translate it from that position,
+>> so with today's toolchains it reaches BTF from neither compiler.
+> That's true of the typedef, but not of the member. With clang 23 and
+> pahole 1.32 the lock member comes out as PTR -> TYPE_TAG 'percpu' ->
+> local_lock_t, the same as any other per-cpu pointer.
+
+Yep it was wrong for the member. My config was lacking 
+CONFIG_CONTEXT_ANALYSIS_TEST and hence it missed this part.
+
+> For the typedef, clang 23 puts the annotation on the typedef's own DIE, as
+> you say, so there is somewhere to record it. It's only pahole that doesn't
+> pick it up yet. You also mentioned GCC patches for type tags on typedefs
+> in the pahole thread [0]. Once those land, does this warning go away?
+
+Correct, although [0] you referred to is a different, likely won't fix.
+The fix you have in mind is PR125888 [1] and the patches are here [2]
+This addresses the For BTF, as you say, pahole doesn't convert 
+annotation from a typedef DIE so the
+
+>> Unlike the per-cpu declarations this changes no BTF at all. A tag in that
+>> position was never recorded, so there is nothing to remove, and the one
+>> percpu TYPE_TAG that does reach a local_lock type comes from those casts,
+>> which keep it. An x86 defconfig built with clang is identical with and
+>> without this patch: 152551 BTF types and a 6828300 byte .BTF either way,
+>> and .text is unchanged. The patch removes a GCC diagnostic and no more.
+> The defconfig BTF only stays the same because nothing in a defconfig uses
+> these guards. lib/test_context-analysis.c is the only user in the tree.
+> With CONFIG_CONTEXT_ANALYSIS_TEST=y, class_local_lock_t,
+> class_local_lock_irq_t, class_local_lock_irqsave_t and
+> class_local_lock_nested_bh_t all lose the percpu tag on lock with this
+> patch applied.
+
+Yep I was missing that.
+
+> Nothing in BPF looks at those types today, so this doesn't break anything.
+> But it does remove correct annotations to get rid of a warning that is
+> only ever caused by the typedef itself. When the guards were added, the
+> type was only ever used as _type *. The typedef came later with
+> 3931d4b98039 ("cleanup: Basic compatibility with context analysis"). If
+> GCC isn't going to accept the tag on a typedef, could this be limited to
+> that typedef in cleanup.h instead, so the guard's pointer keeps its tag?
+> As far as I can see, lock_##_name##_t is only ever used through a
+> pointer, in DECLARE_LOCK_GUARD_1_ATTRS().
+
+I think GCC supporting them seems like a reasonable ask - fixes have 
+been posted, lets see.
+
+But to recap, I will drop this patch since it only needs to handle the 
+warning which can't be fixed in source and relies on the GCC fix.
+
+The point of this series was to do any needed kernel source changes 
+which can't be addresses in GCC.
+e.g. PR128480 [3] was deemed invalid/wont-fix on GCC side.
+
+> [0] https://lore.kernel.org/r/252c53f3-3f06-40f4-9cd3-795eb298687c@linux.dev
+
+[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=125888
+[2] 
+https://inbox.sourceware.org/gcc-patches/20261112191815.884167-1-vineet.gupta@linux.dev/
+[3] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=128480
+
+Thanks again for chiming in.
+-Vineet
