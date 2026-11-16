@@ -1,66 +1,120 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.158.5
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794849619;
-	b=qhsihwCMy3E332FiCQAITR+kz6du3n4+ohqU+J0Zub07BU4xGny7iUcozexx//ZHsCfp
-	 oS/gCF9PX1VDmQp9ky3siFo24Cyv2FwQ7JET+7u+XtLNyFgxpWJL3uJE1FaxgeoZ5jtHO
-	 Tsqe3VRQPLSGKrvjxxl/qN534Ez0y8s407kHUF2gx+gEc5iF0qhNru+uPe/CM3buOqysv
-	 gCi4Vh/NQfaJSxjqijHg/mIcIGhWNK+Tfat6LG+Rc8Su9I6Qonj0kUj6s3bd6+t8/6fro
-	 QueaDQ+d4uK761Jpi5VhyW1g444xIUoffUihlfe+nqEUaWDomP87abal6JoXL3arNSw==
+	t=1794849998;
+	b=s1KrUOu/Kdrb+bJy5vzG4hyQXlP8KdK+N0k3+3zEkDYM328iUYLFWzi1tcrUjcP8CDJ4
+	 p9uWfoIfhwJ2ZG0q+GfWLm75sTgWuzpJtrLW9f4W8anuW79u1n5ulRL8xgzx4OD71R8s0
+	 b3eJSXl3C8QUr5CqeFg1f0Aja4hxPhGqf9oKeJbFRw4vmWLtPb97g2lujDByyJxxZJOht
+	 pMPkrGj0r5nmUCHNjcrC7/it04sOE4yV0WZol2lRB4nVBPDz0FuUKh48wZaAKUj+qRgAv
+	 edDS9UGqbLhSV/qkSqpl9UTbfUWVH82NHAv3ZRy2ggZ3Wjhql8VCH8QOf2kkon4q4bw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794849619;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=qo+XNJi3+qAMT97TnlZtT0eegnezla+dXLwHmpOKv2w=;
-	b=K7gKXvjdyyFIO0PxRjBh7KQQDgImJZSpdieCoykuZ8EQ5+/kjiE3e3WEtUVuCFkr/ajj
-	 x7HW1AV3MvfIFFw74+EDfT1S0k9B+oVwR5bMyPO+NynZRiD2Q4W18krHxNITVTuvKeudV
-	 D/8qzKBwfLsqIXfkn1pV1JedPtu5Kfn1jiNjxu0Cl01X1dmPTF/u0WDX+2KDowB2SUp3L
-	 PF/ULrbDl0jwjR7Bo3ZHmBwnPmv2dr1kw/mXF7IyExlxQ6AdYRva7gkvvQfbvss8zbuMh
-	 ej3oSfR0q+Sz+Gx5VRYBcA1HR+6TPDLwppzPT1sKLpAOUfp7WWpHstBJnpv4TSW5MiA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794849998;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
+	 Received:Received:Received:Received:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To:X-TM-AS-GCONF:X-Proofpoint-Reinject:X-Authority-Analysis:
+	 X-Proofpoint-GUID:X-Proofpoint-Spam-Info:X-Proofpoint-ORIG-GUID:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Virus-Version:
+	 X-Proofpoint-Spam-Details;
+	bh=BcdHd1taYkaSg30ORbTb8vkzWzgF+yZIQTU8Xg12AEk=;
+	b=PjuHQZVdeeNlTDzcG6jp5X5SgVxmC/74SJJSZfDkwFUEiZ5k1XjkaihmIvzvnQYuTQt+
+	 0B8sRxBpb4/JIwV2QCA3xYAW1lGPmJJRKaeM5K8KXfrCdocLDZWKIhgpYvCKOeyqIwLja
+	 N2WJ/QFBijeg3BH61+PmcqumXHIXH4ENJRPnOQydSIaVKg7AXARDx4iLt9s0uUGJ3mgTE
+	 k5hDg4pqbjLGbk7iHiKqU6GXu99szHZ6Z3CuyDaSToppcPi52E5btiwBfDRoeTVI+QpPN
+	 cfdbgyqJzBn7Xx7BUD1YYxQBI4tzESaavoms8t41c03daTyZXHuOL/E9UJROKhpgAdw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QDRAy9Sj;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=linux.ibm.com;
+	spf=pass smtp.mailfrom=linux.ibm.com;
+	dkim=pass header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=ZAJSkU+Y;
+	arc=none smtp.remote-ip=148.163.158.5
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AEB4606A322;
-	Mon, 16 Nov 2026 17:20:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2A07606A8B4;
+	Mon, 16 Nov 2026 17:26:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B2A07606A8B4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QDRAy9Sj
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E2451F000C9;
-	Mon, 16 Nov 2026 17:20:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794849619;
-	bh=qo+XNJi3+qAMT97TnlZtT0eegnezla+dXLwHmpOKv2w=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=QDRAy9SjFh2jGKg+EHev99/5hoZVQikPXRgMoyNqsTyGo2dMmUyUdqzqvn/82ia2d
-	 lGiup191uGYqRKv60FZobuw2GEvamHnW0aIJou9Gi3YYtlnAA8ykCXj5BH9HDnvmca
-	 FZ7WUBYkpt2mNIU7kwloD86l72adJtDk9lCVTnPwAoY3RlWbKCFE6Ft0MsI4gHqJfn
-	 Nw0dmfZ1eHn6IJQGZjV/p3ECgGZWUF4jYADpd7Y06Wm1q4ULD8yxQNRB5DJFRcIeYz
-	 nqYCAzG6W4n8lS5MEwoOtzjLuZRnc2ozVgMS2xztuwFx+yoyHO4ATBGJTqvsYDfKgP
-	 MSMEpQRNqx6Yw==
-Subject:
- Re: [PATCH net-next v10 2/4] net: xdp: add xdp_buff_shrink_tail() helper
-From: netdev-bot+sashiko@kernel.org
-To: lorenzo.bianconi@oss.qualcomm.com
-Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
- mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, Jose.Abreu@synopsys.com, boon.leong.ong@intel.com,
- horms@kernel.org, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- bpf@vger.kernel.org, nb@tipi-net.de
-Date: Mon, 16 Nov 2026 17:20:16 +0000
-Message-ID: <179484961693.3136.10654880889378798099@kernel.org>
-In-Reply-To: <20261112-stmmac-rx-mb-v10-2-d3d04b65c6bc@oss.qualcomm.com>
-References: <20261112-stmmac-rx-mb-v10-2-d3d04b65c6bc@oss.qualcomm.com>
-X-sashiko-severity: Critical
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=ZAJSkU+Y
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AGGQDIA3730285;
+	Mon, 16 Nov 2026 17:25:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pp1; bh=BcdHd1taYkaSg30ORbTb8vkzWzgF+y
+	ZIQTU8Xg12AEk=; b=ZAJSkU+Y+qllip2NvMD4FBPVPq1w1n2KCnE+3TerpnE6IU
+	kAYupYcyxWCMYk5EQC83M/LgCWycIbCm2HHCtGR4CnKP2OgxXgL6VZ/RmSvfkVPw
+	2eQvRRAWeOk/ZYcuHZn0FX6fs2T61MvZrqu/Ssk410C2UB3Fhh4M6azTCG9HkB/J
+	8koyqyPyVjVx+m8OQDv43mf9m4JYOeJtv2K65NQbRURFRBMVdIWG8Db35DZItKdE
+	FyKwLqNES8KVJP9mdG7bzYxRCjTC+FAbLcjvGSq/OeXoUJVE+BTIPYx2JhzZGzEg
+	jJ4PlQ/FY+teq1okya3xZ+iVUiMgvO7jnODrOGXg==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4hxd2kxcbe-190
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Mon, 16 Nov 2026 17:25:32 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 6AGC4va92416721;
+	Mon, 16 Nov 2026 12:07:39 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4hy3fghqn1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 16 Nov 2026 12:07:39 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6AGC7PII28574136
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 16 Nov 2026 12:07:25 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 596512004F;
+	Mon, 16 Nov 2026 12:07:25 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D5FB52004B;
+	Mon, 16 Nov 2026 12:07:23 +0000 (GMT)
+Received: from osiris (unknown [9.111.42.169])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Mon, 16 Nov 2026 12:07:23 +0000 (GMT)
+Date: Mon, 16 Nov 2026 13:07:22 +0100
+From: Heiko Carstens <hca@linux.ibm.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: David Howells <dhowells@redhat.com>, bpf@vger.kernel.org,
+        dm-devel@lists.linux.dev, fsverity@lists.linux.dev,
+        keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Alasdair Kergon <agk@redhat.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Alexei Starovoitov <ast@kernel.org>, Alex Shi <alexs@kernel.org>,
+        Anastasia Eskova <anastasia.eskova@ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Benjamin Marzinski <bmarzins@redhat.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Dongliang Mu <dzm91@hust.edu.cn>, Eduard Zingerman <eddyz87@gmail.com>,
+        Emil Tsalapatis <emil@etsalapatis.com>,
+        Eric Biggers <ebiggers@kernel.org>, Ignat Korchagin <ignat@linux.win>,
+        Ihor Solodrai <ihor.solodrai@linux.dev>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        James Morris <jmorris@namei.org>, Jiri Olsa <jolsa@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Mikulas Patocka <mpatocka@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>, Paul Moore <paul@paul-moore.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Shuah Khan <skhan@linuxfoundation.org>, Song Liu <song@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        "Theodore Y. Ts'o" <tytso@mit.edu>, Vasily Gorbik <gor@linux.ibm.com>,
+        Yanteng Si <si.yanteng@linux.dev>,
+        Yonghong Song <yonghong.song@linux.dev>
+Subject: Re: [PATCH v13 0/7] KEYS: Replace assoc_array with rhashtable
+Message-ID: <20261116120722.99807Ac6-hca@linux.ibm.com>
+References: <20261114193631.731615-1-jarkko@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -70,152 +124,58 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261114193631.731615-1-jarkko@kernel.org>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Authority-Analysis: v=2.4 cv=B6UsQ+tM c=1 sm=1 tr=0 ts=6afb3c8d cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22 a=oqTggi8YXqEucMIkv7cA:9
+ a=CjuIK1q_8ugA:10
+X-Proofpoint-GUID: 9SDoFU1xBjlY7T5jqlYkE5NvUgSVvYAZ
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTE2MDA2NyBTYWx0ZWRfXySetjeLiQBKc
+ EAdDHNo72O0OksGdsYjL29Vj0sRRwrd7OAt5trA1PAwA9aCZfjkM1wyE389OTKCAW2ejtNsE+5n
+ nmv1x+D2McOwEqkVjobRnrbZLE0nNEs=
+X-Proofpoint-ORIG-GUID: j8IPWo5Dc6zrl5qOvKGqoXraeULv805I
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTE2MDA2NyBTYWx0ZWRfX4VweZfbjaATF
+ 80VGoO/6yW/fNkdJQsV+sfNFohbcoS5tetUDVqFWEPJiRpSgYeb1gFoIhjybiYhoUpjsbrOpguT
+ nJ24xMw06y0g4wE14eCuauXZTJn9AZwwyYBI1k4BCMVFgKGxde/2feOszhdxhJWCfvsm00h19SV
+ RGQ8YVOjbOKM6Y7UNiotIukHOITLKdhsNHw8xBNnkoFI68IMoAKfRPPf8peWtX4hCR2N7zoPPDO
+ 95y9f++8XyBTHhdOSkcL8XIsukigqteYd5RBMNEWRmw+53h4/wij8XynGcOxLR2rWrt4GH2n0TD
+ x9IZtuh2/1dFiROi58yACUWhEbZaLyGBhWXrAbp1+4/xgUSgCYjpxNRet14nqri4v4qXQ0akzDq
+ WT73N7jRe8uQmpCEqjKkld/VLQPIfzrY0Z+Np6BGIJFladspqVhO9ijj/xcZ5C2VmOAODw0S02F
+ XH99IWVypDD8hK/nUEQ==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-16_05,2026-11-16_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 clxscore=1011 spamscore=0 phishscore=0 adultscore=0
+ priorityscore=1501 bulkscore=0 suspectscore=0 impostorscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2611040001 definitions=main-2611160067
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+Hi Jarkko,
 
-Critical: 2 · High: 0 · Medium: 0 · Low: 0
+On Sat, Nov 14, 2026 at 09:36:24PM +0200, Jarkko Sakkinen wrote:
+> The keyrings subsystem is the sole user of assoc_array. It has over 1700
+> lines of code, no test suite, and a long history of bugs, with LLMs now
+> finding more.
+> 
+> This unfortunate outcome has evolved over time by large from the shortage
+> of in-kernel callers, time bandwidth and 3rd party contributors.  What the
+> keyrings subsystem needs is just a generic key-value store, which performs
+> well with sparse key sets. Replace assoc_array with an rhashtable-backed
+> keyring index and remove assoc_array from the kernel.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+...
 
-- [Critical] The patch removes the lower-bound check `data_end <
-  xdp->data + ETH_HLEN` from the linear path of bpf_xdp_adjust_tail()…
-- [Critical] The new exported xdp_buff_shrink_tail() (net/core/xdp.c)
-  checks a linear shrink only against the lower bound: `data_end =…
+> v13:
+> - s390/cert_store: Hold key reference across key_unlink(), and ignore -ENOENT.
+> - s390/cert_store: Add "s390/cert_store: Read-lock keyring semaphore in
+>   invalidate_keyring_keys()".
 
---
-
-net: xdp: add xdp_buff_shrink_tail() helper
-
-This moves the XDP tail-shrink logic out of bpf_xdp_adjust_tail() and into
-net/core/xdp.c. The frag shrink helpers move with it, and a new exported
-xdp_buff_shrink_tail() handles both the linear and frags cases.
-bpf_xdp_adjust_tail() now sends every negative offset to the new helper
-so stmmac can share it for FCS stripping.
-
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 9b8d5191c4ba2..5ea45dfce7a22 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -4438,96 +4438,21 @@ static int bpf_xdp_frags_increase_tail(struct xdp_buff *xdp, int offset)
-
-[ ... ]
-
->  BPF_CALL_2(bpf_xdp_adjust_tail, struct xdp_buff *, xdp, int, offset)
->  {
->  	void *data_hard_end = xdp_data_hard_end(xdp); /* use xdp->frame_sz */
->  	void *data_end = xdp->data_end + offset;
->  
-> -	if (unlikely(xdp_buff_has_frags(xdp))) { /* non-linear xdp buff */
-> -		if (offset < 0)
-> -			return bpf_xdp_frags_shrink_tail(xdp, -offset);
-> +	if (offset < 0)
-> +		return xdp_buff_shrink_tail(xdp, -offset);
->  
-> +	if (unlikely(xdp_buff_has_frags(xdp))) /* non-linear xdp buff */
->  		return bpf_xdp_frags_increase_tail(xdp, offset);
-> -	}
->  
->  	/* Notice that xdp_data_hard_end have reserved some tailroom */
->  	if (unlikely(data_end > data_hard_end))
->  		return -EINVAL;
->  
-> -	if (unlikely(data_end < xdp->data + ETH_HLEN))
-> -		return -EINVAL;
-> -
->  	/* Clear memory area on grow, can contain uninit kernel memory */
->  	if (offset > 0)
->  		memset(xdp->data_end, 0, offset);
-
-[Severity: Critical]
-With the ETH_HLEN check gone from this path, what stops a grow on a
-linear xdp_buff from wrapping the pointer?
-
-The offset argument is ARG_ANYTHING, so a program can pass any positive
-int. data_end is computed as xdp->data_end + offset. For the linear grow
-case, the only check left is data_end > data_hard_end.
-
-On a 32-bit kernel with the default 3G/1G split, packet buffers sit at
-or above 0xC0000000. Take xdp->data_end = 0xC5000100 and
-offset = 0x3B000000: data_end wraps to 0x100. That passes the
-data_hard_end check, and then this runs:
-
-    memset(xdp->data_end, 0, offset);
-
-It would zero about 1 GiB of kernel memory past the packet buffer. After
-that, xdp->data_end is set below xdp->data.
-
-Before this patch, a wrapped value was always below xdp->data + ETH_HLEN,
-so the removed check returned -EINVAL for it. That check now exists only
-in xdp_buff_shrink_tail(), which runs only when offset < 0.
-
-The return value also changes for short frames. A linear frame already
-shorter than ETH_HLEN used to get -EINVAL from
-bpf_xdp_adjust_tail(ctx, 0), or from a small grow that left it under 14
-bytes. It now gets 0. That seems to contradict this sentence in the
-commit message:
-
-    Behavior for valid offsets is unchanged.
-
-Should the lower-bound check stay in bpf_xdp_adjust_tail() for the
-offset >= 0 linear path? The later patch "net: stmmac: rework stmmac_rx
-to support XDP rx multi-buff" doesn't touch bpf_xdp_adjust_tail(), so
-this still looks present at the end of the series.
-
-[ ... ]
-
-> diff --git a/net/core/xdp.c b/net/core/xdp.c
-> index 470bf90d93ef2..7c98dbc2a770c 100644
-> --- a/net/core/xdp.c
-> +++ b/net/core/xdp.c
-> @@ -672,6 +672,97 @@ struct sk_buff *__xdp_build_skb_from_buff(const struct xdp_buff *xdp)
-
-[ ... ]
-
-> +int xdp_buff_shrink_tail(struct xdp_buff *xdp, int offset)
-> +{
-> +	void *data_end = xdp->data_end - offset;
-> +
-> +	if (unlikely(offset < 0))
-> +		return -EINVAL;
-> +
-> +	if (unlikely(xdp_buff_has_frags(xdp))) /* non-linear xdp buff */
-> +		return xdp_frags_shrink_tail(xdp, offset);
-> +
-> +	if (unlikely(data_end < xdp->data + ETH_HLEN))
-> +		return -EINVAL;
-> +
-> +	xdp->data_end = data_end;
-
-[Severity: Critical]
-Can xdp->data_end - offset wrap here and still pass the lower-bound
-check?
-
-bpf_xdp_adjust_tail() passes -offset, so a program can ask for a shrink
-of up to INT_MAX bytes. The old inline code also checked
-data_end > data_hard_end for shrink requests, and that rejected a
-wrapped result. This path no longer has that upper-bound check.
-
-Some 32-bit configurations put lowmem below 0x80000000. Examples are
-ARM with VMSPLIT_1G (PAGE_OFFSET is 0x40000000), nommu ARM (PAGE_OFFSET
-is PHYS_OFFSET), x86-32 with VMSPLIT_1G or VMSPLIT_2G_OPT, and m68k.
-
-On those, a shrink larger than (u32)xdp->data_end wraps to an address
-between data_end + 2^31 and 2^32. That is always above
-xdp->data + ETH_HLEN, so the check passes and the wrapped pointer is
-written to xdp->data_end.
-
-The packet then appears to span gigabytes of kernel memory. Direct
-packet access, bpf_xdp_load_bytes() and bpf_xdp_store_bytes(), XDP_TX,
-redirect, and skb construction on XDP_PASS all trust data_end after
-that.
-
-Should offset be checked against the linear length before the pointer
-subtraction? This code is also unchanged at the end of the series.
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261112-stmmac-rx-mb-v10-0-d3d04b65c6bc%40oss.qualcomm.com
+Actually I had / have a patch series of 15 small patches ready to address
+various bugs in certstore, including yours. I'll send them later - a few
+(or many) collide with your patches. Not sure how we coordinate this.
