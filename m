@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.8
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.133
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794816136;
-	b=cUSFHQngR9N43mbR1W3CwtzI3LBnFU5f9nRSHhI81ZM70t8lZ9c0ZcrGzQ7O77Rg2zc0
-	 9VPFqOY3ONRx3hcwiEK0TFSyN9IB1bYnCsNTB2X2JhEwcEyc4A1tQUjHSWoKptdGrBHhr
-	 NP/it5ePSeIPIiLORJaa6tfGxeZ7q6r5E1UOFXUSH3Flws6DdvzMDs/6uapKZdEvoRArg
-	 Xn+4hJ3OlVIiXfQvJpsg9nI6bus8lJqervT4glfF9v/mD7J1bpu9O3PuRpc7681ytOfWr
-	 CmPMZpQ2uLNJDQysgD0lSEdF/lCq8mgOUsDKetIwgmfRaT8PhObXmfnl5hdVOS2vvxw==
+	t=1794816137;
+	b=qSIUXKLxbe4luc8jxo2vvKuTylLaLcdAKTh9B0+yIByVVX5uTn9mDcAbaF9t738S5gRY
+	 vCSZb3qPfb6BigzUds7gHTnZMdRDl0A6UIHcVuA8KKrgS7/vNQSMJCuE2Vd5BYrB0aPAc
+	 SI60vRxZjxC6a8ZTn8Ywj0fgLFbzH2z5zJ1dK0No1Sca+zJXwirB8BRFn2j6jxdoY1guj
+	 Uu5fiyn0r/2x3eSizJQhtTM0TLa1dCizxnpoHyjBtqffkjPyhC95ibPeAToOYWsk+ykUI
+	 yH72u8hc26TE2HbliIkYjg5Rgt5+hqi4pDXKHlg7CcRLsedCj6sEeXahvsbQTNX/F6g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794816136;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794816137;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=VVmP8n1fZ6dTUrYQ1pJb8BUanjFDIC8PD4fAF71ivjU=;
-	b=atp1rIccLidUwIZu1dnxfR1Zii1L01zZB2St/24KZjyogWDMamFNKhJ04a76URzPvEpY
-	 sYOlede1/c4qj3xU5VW2BO/qoheuqZabkCdVK7T6fgZjMVMYSltiAA6S3gcUDuMJjFqo3
-	 EzO8w2yQZ5pqnlFaAGEjYDf1q6NSIliwNTCJ9PkzNbfB+HySuWW9yXXwtoa/Rve5FmSm8
-	 AYFvd7Tey9fb5p74xDCoepza+vzOEIlpFElfzx3hqNPM/VJin9+4Daxj1TI4BiRoQEVaa
-	 KoDopb+gILQrv12oe1TeGgN/TgyWgFtVDw3EhHS+k3WPVLIqDFZ4YwuUvzZsV/CbTGg==
+	bh=wdN/GENABW5fwEr+WhhCPVo7gKVgeXJgjWEeJkwASG8=;
+	b=IVIkvVg7fHPu2vZNZHoONzPZITMTnajnSMd8cs1SV5AMDmwu9X9DU/n6fhKjyXo3dHZY
+	 rfksacvhMVDeqOYSsJQtO9GV2I2DvDQB2QVfpYYMlDkFP3RZ2ERedHwzpJ8yvh+ZmqT0Q
+	 beE4Wqfj5jdUPgoepiyB0cYLOun3Ek+1bnlB2oL8W/WegiWsbraYnclCYBZ6anp8zpmM9
+	 dZmSIH3kngDH3n/t6Yt9eZZ8eUICF7AaKUmBBJnG5R1CbAeKc8MIJ5zb5eNtzzQ2UDMaV
+	 iiTrryoOKk0K0TFSjfn8+xY8neXowoKWqiZEXWI7+GlBDgMXgW6MMOh/EehprcPrM9w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="KMhx/y2T";
-	arc=none smtp.remote-ip=74.125.229.8
-Received: from mail-dy2-f8.google.com (mail-dy2-f8.google.com [74.125.229.8])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ljwpme0L;
+	arc=none smtp.remote-ip=74.125.229.133
+Received: from mail-dl2-f5.google.com (mail-dl2-f5.google.com [74.125.229.133])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DBAB606A33B
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 08:02:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4DBAB606A33B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF693606A88A
+	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 08:02:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BF693606A88A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KMhx/y2T
-Received: by mail-dy2-f8.google.com with SMTP id 5a478bee46e88-36a6ce64b95so1356906eec.1
-        for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 00:02:15 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ljwpme0L
+Received: by mail-dl2-f5.google.com with SMTP id a92af1059eb24-1ac216daf7dso1253457c88.1
+        for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 00:02:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794816134; x=1795420934; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794816136; x=1795420936; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=VVmP8n1fZ6dTUrYQ1pJb8BUanjFDIC8PD4fAF71ivjU=;
-        b=KMhx/y2TI08m7/WuX0zvsxpuIz/n1FVNmqxo1m/44QouDZU/7IkYgeXP2aa1ro7XWB
-         NYVpjzOjvF098jJAtQY+j4GtoPeD1EgRv1KP5Lay7r5qdoECqTHXoBEozVxkPzECneWs
-         qiSmAWfbu+v8DH08l4uRZG0X7wHui6pFv1/1XhoKMiierI9vDRXZsEhZSTJ1kshLPWn0
-         9g2QgsZbpBVV9PV561ux77z08sQYxIz0lglL8+ZPvOyfTpHpRK6cAWfeOAEk3Pnbjq0t
-         6X8C173C6uCyjOB3ULUGYZGlSUK3EYOqgeA/NADr/jdoWMJHwLobgU3ysoS721QbfL6h
-         GtUA==
+        bh=wdN/GENABW5fwEr+WhhCPVo7gKVgeXJgjWEeJkwASG8=;
+        b=ljwpme0LQVKXeV3vl8q5H9ZscOlG+KxJ5e9vY8+nkJB4ivdBNlbTM366T9nOWo9/42
+         jUi+q32tUIp5/HrR9lLe/28SOQe2SO+p8LWgPaELukXX2MA5lX3iyqrlJ9oQACY4E0Zl
+         3dAOy/Ylb2i8HGGfAhQ3dkbj3Rz/oXni8NHExqvw+kLXHzVsEhJRwuucg/v9Xg9fTszx
+         isGemQmELXHtTCtVazPEaLTowh7pzAxR7HIT3WRkrTIst7c79EaRRPSzKyPAcD4KHW5m
+         ZY9GaowWCwFz4bBQpcirowYM1TzwIPHeG7FjvkLKi8O7y3b8GUmtTYc0tsmuFTcdLd5a
+         gt0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794816134; x=1795420934;
+        d=1e100.net; s=20260707; t=1794816136; x=1795420936;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=VVmP8n1fZ6dTUrYQ1pJb8BUanjFDIC8PD4fAF71ivjU=;
-        b=ahyZj3sGh6d0ha+0QnT1PggaYCgWbF6Z1oG95RWKXBhbe4Ys0N/TWyLyvn06vrgHzk
-         iah1fSUZ3ahLd6p4S61hEZrBvliY8/N4uxFr0683uFK6DYKzskm77uPFeoN23Pbdsyq0
-         0aIpBzmLLkaSpr3nwBS9QQsFz+emq+v1LLPzR2N2k85CxoF7a8Fd6nu62zck9GnNqTTA
-         hZdAnNsYw3bZns6MOw8bt+ORRNXclbfdTjks3cRwNV0DOArwig8uxeF+IOoJjBWI4noQ
-         8lfisZqg6oF6EOTAFiiuIUg30n3M53044ywXtoyhOpdfPRsAYYnrDcWKg8Uo1yeOaDLY
-         Q6JA==
-X-Forwarded-Encrypted: i=1; AL+hErENbD5e6KlTipaZyU+IN0o2fuv3fOuCbodQZwOOwvgMQjUDyxQJ06fyig5dJzliyVaswMA=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8O+CO6x4P4VOWz2sr5UrLh3cnoF+CSorJkHUUWaGJcqvulOyAu
-	RPbJLL0ETmzsKjqSdvX1mX86a6iyS+2CcMhMYjqGcBLY4vm8V04+rl3c
-X-Gm-Gg: AYBFou1JdvIY/f56Y82o4XDkmERpqCsA6S76FSBfxmKRAdxuE4gJuTALOiK5Zgd+oUD
-	D4IjLzSIbIeq73jvTgxTUBsU5tbsUxiVhRPQePBRi1nLXnebwnJlqYHn6b0yiFceN8bBsm7oZae
-	mioBRkDsamoGWzhwnN9WNexWLpjemgD6VgBB5zVNnBZQpqGZC8d2BuCPg7Tvr8Hc/i/AXq/TtW0
-	7/lOscbWJinqxez7fjnJitxkGRkjnDCcmBxeCcEf56q7B1wi2rEygwyVDJi6JXsZcRw/2nHDiWW
-	ORq2angY6+nsQ1Al79IbbElJBj9EZz+VygL69WhxRkp+YBVFqE4sOO/HWY3oRxqilbegDsSP5lb
-	csCc/9qWsP/k8bFkx36fJ2LNuJO2uT4k2DoxZiiY6QyujDqhtSCIYe4+p+H0Wg3o7ieqBAGyzV6
-	rWCx7ZztZXyua0XwnSQLhXPtpyCrxU2qbt+RAseNqPgxZTnjJuHi/Ts2eUDaHolszyKblJmLfE9
-	OI8EydTLNaRLy2aHyJSdyc/dkiG0mLCebRWcc0cnAbY9/P/dqW+NX3sououARPMfV5kKfsKdbJT
-	iN/syOTXtg7HgKaZ+i9fYTmsnN3mSnEWMQxO2WCUitNxHSf7jXjhErHSrzIABu+R8ul13FYaj1x
-	Lj9ewnrADPNpQyWTz06WAhQsnNBALqWT99tlIoQ==
-X-Received: by 2002:a05:7300:6148:b0:36a:270:ce76 with SMTP id 5a478bee46e88-379681c69afmr15104220eec.33.1794816134232;
-        Mon, 16 Nov 2026 00:02:14 -0800 (PST)
+        bh=wdN/GENABW5fwEr+WhhCPVo7gKVgeXJgjWEeJkwASG8=;
+        b=IbCFqsAJ+RISx6eybaMRbE80d9m2VsZA8vUPS4yUuI8bQadRJAGeUcHr07OoIE41CZ
+         8hF0n4I5+03UvzuKgjDzazcwO1UM+bgYJJ0ulw5s3FxkGvVONtQ/DkBgIVHmZo+Q1PLe
+         4aeCR81eNI4adorGmHfAjXjR4Q7VJb35/Um1lDAHff0QqQsmuHPlLFSJmvitUqHWZonA
+         UpOs0PiQuUJG3gy5ZPdM8Sueev/j5RJNsYc4KzE+Sk4w3im95YY2Xm8wWNc24vKqE0XG
+         DKYxIu0RXasTUAc3z85to6NdW1kriBITMfbiCIu9Iv+isNTPFhlg/xWNERc+MJ9QVJJn
+         xTfw==
+X-Forwarded-Encrypted: i=1; AL+hErF0xK7rBPggYAz7tUrrD4Gy3zD/y0Nwjtyh71XQ2lNMMdID2Lbek1w6RkxrLpnu4L3C9yI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+whExSmCFzEGL2r0nOtRWcJsZisC7hf5zsQ0GPQQOK8mPi0THK
+	c+YBXVwfAUiRNZMu6m4dpuGfK9Y8mpa1yeLVTX9JzItFGZPNY7rh6wcS
+X-Gm-Gg: AYBFou2Ta2uKdOgDeAOrMx/zfqbTKVx6Ip103PcUIx0LkSU/vAjz4UVcbX9hTKy+CDp
+	ZCZpcVktM/OJSkueGlp2sBlUvocN3wnZOkCCwHYFak/boPgWkbvxdJl1A6nVjpFUoc0a/6sL3t4
+	9z3oBoXrWBf4NEzifiIEG211yXUYp/gwucbB1N87Qt2+3lmbeF1GRxGtAhd0FRDmVpQDxu+Yp9d
+	F1yq03QYu5Q8DKq5BuM2gd1AbGCqF/sKBOaqGWCsW3PgXqdQOB3MBQUxivalEtcJiRo8oYbBipj
+	QOQlRZdnw8zQgdLjbzFobGeztVLjd6Ua7B2neb8OkC+78aeVu6R+lOg+D5QXWOpDd9rsopRG0NS
+	D796kr6rI5B4Ybdi//F8h9TaVzNQsuhya4eTA/q578f+KE8gaOCqKFFWHL9EWqNCmPwqA+WEv15
+	DUAUiIomw1ZYGYUJ08rkmpFC4JV/0C2r65BB5p11wHu3JKLdQSgVMV36vf6eymxJtURU4wN9/nb
+	wfMMNs2k28wcwDoC75w4m6a/r/ZYdmc2613TDuJPjz06yOfYWmm1TjKtpjG0uNKr0ikyeJY3ePi
+	/VDEPIhjx0Tad4aO7PiZYJ3u7YorBxpl6rTyOSMmthvxcMm1s1jf/GnAW9No5y1yuQqjw4uasRl
+	ZRMR6sfbgUh2fvVcfYTFvgpG5VHiaSHfIlgmppQ==
+X-Received: by 2002:a05:693c:6383:20b0:379:8df3:d2c9 with SMTP id 5a478bee46e88-3798df3d361mr9286131eec.13.1794816135593;
+        Mon, 16 Nov 2026 00:02:15 -0800 (PST)
 Received: from localhost.localdomain ([98.148.34.5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-37955f01d68sm31128558eec.17.2026.11.16.00.02.13
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-37955f01d68sm31128558eec.17.2026.11.16.00.02.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2026 00:02:13 -0800 (PST)
+        Mon, 16 Nov 2026 00:02:15 -0800 (PST)
 From: Hungyu Lin <dennylin0707@gmail.com>
 To: andrii@kernel.org,
 	bpf@vger.kernel.org
@@ -101,9 +101,9 @@ Cc: ast@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	dennylin0707@gmail.com
-Subject: [PATCH bpf-next v3 1/2] libbpf: Fix sign extension of unaligned enums in btf_dump_get_enum_value()
-Date: Mon, 16 Nov 2026 08:01:50 +0000
-Message-ID: <20261116080151.44860-2-dennylin0707@gmail.com>
+Subject: [PATCH bpf-next v3 2/2] selftests/bpf: Dump unaligned enums and a zeroed fs_context
+Date: Mon, 16 Nov 2026 08:01:51 +0000
+Message-ID: <20261116080151.44860-3-dennylin0707@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261116080151.44860-1-dennylin0707@gmail.com>
 References: <20261116080151.44860-1-dennylin0707@gmail.com>
@@ -118,51 +118,52 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-btf_dump_get_enum_value() reads unaligned enum values through
-btf_dump_get_bitfield_value() with a zero bit size. That makes
-right_shift_bits 64 in
+Dump the signed enum value from an unaligned address in the enum data
+test. Also dump a zeroed struct fs_context without emit_zeroes in the
+struct data test, which covers phase, an enum bitfield 3 bytes before
+the end of the struct.
 
-	*value = (num << left_shift_bits) >> right_shift_bits;
-
-which is undefined behavior for a __u64 on both endians. The path also
-bypasses the signed loads used for aligned data, so a negative value of
-a signed enum can lose its enumerator name when the data is unaligned.
-
-Fix this by copying unaligned enum data into an aligned buffer, as
-btf_dump_int_data() does, and reading it with the same loads as aligned
-data.
-
-Fixes: 920d16af9b42 ("libbpf: BTF dumper support for typed data")
+Suggested-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Hungyu Lin <dennylin0707@gmail.com>
 ---
- tools/lib/bpf/btf_dump.c | 13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/btf_dump.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-index bbe86928b3ec..050a5fbb9533 100644
---- a/tools/lib/bpf/btf_dump.c
-+++ b/tools/lib/bpf/btf_dump.c
-@@ -2329,16 +2329,11 @@ static int btf_dump_get_enum_value(struct btf_dump *d,
- 				   __s64 *value)
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+index b5c90f729339..d6fd9933ff25 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+@@ -945,7 +945,7 @@ static void test_btf_dump_enum_data(struct btf *btf, struct btf_dump *d,
+ 				    char *str)
  {
- 	bool is_signed = btf_kflag(t);
-+	char buf[8] __attribute__((aligned(8)));
+ 	__u32 high = 0x80000000;
+-	__s32 neg = -1;
++	__s32 neg[2] = { -1, -1 };
  
--	if (!ptr_is_aligned(d->btf, id, data)) {
--		__u64 val;
--		int err;
--
--		err = btf_dump_get_bitfield_value(d, t, data, 0, 0, &val);
--		if (err)
--			return err;
--		*value = (__s64)val;
--		return 0;
-+	if (!ptr_is_aligned(d->btf, id, data) && t->size <= sizeof(buf)) {
-+		memcpy(buf, data, t->size);
-+		data = buf;
- 	}
+ 	/* enum where enum value does (and does not) exist */
+ 	TEST_BTF_DUMP_DATA_C(btf, d, "enum", str, enum bpf_cmd, BTF_F_COMPACT,
+@@ -994,6 +994,8 @@ static void test_btf_dump_enum_data(struct btf *btf, struct btf_dump *d,
+ 				"(enum test_enum_u32)TEST_ENUM_HIGH"), "dump unsigned enum");
+ 	ASSERT_OK(btf_dump_data(btf, d, "test_enum_s32", NULL, 0, &neg, 4, str,
+ 				"(enum test_enum_s32)TEST_ENUM_NEG"), "dump signed enum");
++	ASSERT_OK(btf_dump_data(btf, d, "test_enum_s32", NULL, 0, (void *)neg + 1, 4, str,
++				"(enum test_enum_s32)TEST_ENUM_NEG"), "dump unaligned enum");
+ 	btf_dump__free(d);
+ }
  
- 	switch (t->size) {
+@@ -1182,6 +1184,12 @@ static void test_btf_dump_struct_data(struct btf *btf, struct btf_dump *d,
+ 		type_sz = btf__resolve_size(btf, type_id);
+ 		str[0] = '\0';
+ 
++		/* 'phase' is an enum bitfield 3 bytes before the end */
++		ret = btf_dump__dump_type_data(d, type_id, zero_data, type_sz, &opts);
++		ASSERT_EQ(ret, type_sz,
++			  "unexpected return value dumping zeroed fs_context");
++
++		str[0] = '\0';
+ 		opts.emit_zeroes = true;
+ 		ret = btf_dump__dump_type_data(d, type_id, zero_data, type_sz, &opts);
+ 		ASSERT_EQ(ret, type_sz,
 -- 
 2.43.0
 
