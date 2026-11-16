@@ -1,98 +1,86 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.176
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794866778;
-	b=L2bZO9fUSgqfRI0TGYlhntNuIz9YrPJaFBfhEGxgOq3Y63Oo95rOAhMtkX5INEgAesIu
-	 mh/Onrp8fGAOsfNUQwYCX1q9Mpguh8cmbKyMU+f3Zh10Oe6cVtz3s0w7HX/Mrvn0iaULt
-	 0Hqc/72qp6BJQJmG1zbxuZ/hHPjVwKb3a2G44+VPKyN5FvJpLxn792KYlQ6Dpnsn/vO0F
-	 DqxE9e2AwaTdv0y2+tswve1zGiCvyqMsmQX6qCErV76M2egiY5OP/AhonSd+lpfIerHyu
-	 8I5LK2KZuZhmOPMU1kw8Yw38F4cQowoUKl6P1uEALtHvCKInmEoljQBH9c2vOCNoQGQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794866778;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=vMqdrlWyOAmekXsQEG1itPY1dEWj1QOm8mYmjBsq/aM=;
-	b=RoDtcz4KF4HEjiKaLm9HFWNc2SEnz7G5f3OF7h+2IeFSFpCHfVQF8bs7CBTtlv19sgP+
-	 UoASwUBq3vhmwoNhnxQf7rV8hdipgASCJJToQFPFjEyEgxBjngYDuOb9TPg1Vm/cSwIk5
-	 fTR3aovjVv2eH3PLIq8KiuAswq8+zibxA7APqXuX3Ui3GRPlZTD6GRzie8Qio238QKNYv
-	 VGclYvw2Mw0eBIHuVh21taEqAvP9lUyP9LH4Y9faxfzbpxjZ3FN1j+IYLMZL8v4Y2Tfh/
-	 fMJxCxdG/xB/lQSeGJnnF6TkUxHUdWIte1OP54cxDfm53E0+GKTFMsQpJhwk0ggAJ9A==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=none header.from=mojatatu.com;
-	spf=none smtp.mailfrom=mojatatu.com;
-	dkim=pass header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=AbgF2ZqY;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.176
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794868033;
+	b=hplwH9RTpse1hTyCVrZWZ2cKJrDCbfM7bI+tn0t3zA7m/viyc3RfR8ptaVZ5lWLqRrH3
+	 ns13UNQ/lBGauS7NgxeOPNRQpOZJ61PNHnl8w3/kpub/H2YiOKsWduzGV3Kx2TzDVMUjV
+	 AbPZp8gD3i27sDxSyGLT5+FJ1PZrIXme5ofoV6/b6DKaqghCzCQIpqQNPMy87f1USo015
+	 XsPaUdeEtxq23f4FQb8aZCYdCCqPLXdgkYLAH+j+s7D60p5ES3v1VQ4hmxNi72WRx16Zx
+	 pEwMdolETgmH1bVf7e4+yQ/ipkBT15VHfd2y3AWYj8bhunA1Vho7uFEexfLHGWeY7jg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794868033;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=yTKvK6Q2yCQePo9OFHjf3+LCM7gt5vNfOS7VI6PK0to=;
+	b=b+bKZ6Rqb2EEz3bnwpwmKMF6d5XVjEWW+toF4reYNspT0sd3OyMIGhQMizXZFdQ+fe78
+	 v8nrsipoD5lG0eqd3UWG1KgSrduYm+cV+1u+eP5A9401Woiwx9AajxCbeaDyYw7SZMDaE
+	 6qNc0V3J1YK1XNq/96OygV8UpencbJrUAiIeXhVZkZ9gxMfsFZdn0iX1M2vtdys5lfVpi
+	 8ea9sjpfIGObhvr2rOGJzvpywuT6fnZCcdnA01au0VA12A+BEgBDgzuCiybJf6orNrYZK
+	 wEoEuNCbHv+ymqL1v5Cn+FRXDR5FHRPK9SoNLzhta9sP5bs8tUNRS5PrtlnZbnA9l1Q==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=md2D4WPO;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29318606A323
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 22:06:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 29318606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA1F8606A884;
+	Mon, 16 Nov 2026 22:27:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=AbgF2ZqY
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-8a070781f63so1465670b3a.1
-        for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 14:06:17 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794866777; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Lxd55gGhkHxC42LktIDNGnqNeg/rXgQLXgXucuQPUJMqUtSV5m3a+/eS+J0xS1gRy2
-         V5YsqW9/MVIao8Q/pW0nH1Pz5SagqxX9XbJ2CNFs6TbgElCv/SY7jsisa29X0XweOEB+
-         hybQH+b+xKPIRwVRL5PM/ezNrKwgQof0mLFtW7BRYDatuAplSoQpUdkXKPkQOQtxjB5A
-         Sw1/gaeZGMs1fS/lwnCtP1AElsMJzreOiWpHzT8q1kQXxvAM2FEl9LQ0DTWv2thn9zvQ
-         N1dRKkvK7Uzm5XzrV8I4fbJrsQgMS7R4wSjFGF/s6LeJZuT+8hOFFyIAeq8xkF8ZhaWR
-         pZLg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=vMqdrlWyOAmekXsQEG1itPY1dEWj1QOm8mYmjBsq/aM=;
-        fh=hjQN2zKZlUzDfDiL2Z820VUNm8IjtAsHKdNWv41pRQA=;
-        b=plf7BXDBxEVG493bpxuWDfS+3uTTHt0DsGfFcDjpbPrDdL116jdUSDw8UyfbWstyPR
-         +3hOsVXxn1Z1XvuIPxISeMa4ddLb5KwGmm/jKZPZUI0JI27BXp0fnUzeJq2FGmN4V+wC
-         cXR6afFP7MGU6XogNgO3mjYH/v/uZwd5wf2Gg4XveuJTnxjfm5HEpj066278rLx/G0VQ
-         swIytQI5gHbe1/QkG/Gv+rg1x5PjHclB0NiA61lDuhwcrTNAAVzcSwHzI10QBYHzzWHV
-         leJZpoVMbuGRhxHKGMNddFHc50ouTRGzT2ui+frB496Ku/f2dpjXWX20V8ToVysUu7da
-         udig==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1794866777; x=1795471577; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=vMqdrlWyOAmekXsQEG1itPY1dEWj1QOm8mYmjBsq/aM=;
-        b=AbgF2ZqY1HyslMGUCiQ6uP1x99OLZqVAaM1OrrEO4CH7mo1PNmgSxN1NhAOMMml7hr
-         Kr8qpUxep5DYauQZpKDrctjJMaD0lup8nL+WN5Te0X1Xue+6X0iQFWdV1SB7ugAHYnu2
-         4VERBbMxZnEKly8N6oAZzau77kTBfePEM5NYE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794866777; x=1795471577;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=vMqdrlWyOAmekXsQEG1itPY1dEWj1QOm8mYmjBsq/aM=;
-        b=PqQ1W+kgfwFAGck/ijrkZ/c2TauXvNz40jks9mvRWEGqyN8KuporH+OURFD7wBCY+8
-         MWCRS8+EBnGvKQH9luCgXXFN4qIhRCyZVT+/c/JBGoAIosqZVBTVECqSa3lOLdqC0qsf
-         IK/kqK75UvK748Prs2jjM6DTu+rux2lxM9hhlvxNmdJt7QE3T5djz+DVFywZN4+iopiz
-         0S2JmIYrwXEf7S+DBx68hM8tBh+MHs9KKb25KWr2k8wwmS8LyjQvMRbpZ2NxQ2RH3ImS
-         3eVCAsVUV+SfrL5/Yhp7fTo/RH99U1Y0KAtIWFFQ63NEi/0EdwFpeCtR4pJ8vA1ztKRk
-         sGJQ==
-X-Forwarded-Encrypted: i=1; AL+hErFeyvTo16SGqiKvN4RsCriwCxuUq6fcbZK9fT+cA0XqbkZRbEQYSgZ63Hkq1h6gVbHDwMU=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+gZ5p9xf8ZR8RfxiYS8KbYEAso03USsEm/wAYcvMsXRpO8lHOY
-	R9ae4u1XcLd1ce58bZQqow2HBCHEOUznJYdvyLHHQd/5E4RcNauZ83DIFZcJb5+AxJHYpLsVUnS
-	E8VRpdAi8SMCmObDNYhtjDTAmXpM18I69Rx/oVNDN
-X-Gm-Gg: AYBFou2Sl+eZilkJ1tHsIh7I2SnG+l2qhRIr0H8Z2mSKbkARQfh9axU6OSFoxzznvha
-	SM+MkZXt4jp7rkw+4fvIE3LwzBZRXMWVpQj4LYXOWN/AM+eeNKqgkL7gkwJHVR34hC9ztVh3Gn9
-	j5y5x6rR+TgurHEdiXwV79jsYXdAw9mhlZs7iWdL2whiSB4Sb+v75eRv8ZivEqqhpEsGJavdPks
-	gTTpLvENufZjRbLkJyKhRZNTIsavFHQW9xM44WFMCe9NBJ32VQpInXMbrG52M7s2mbBo8zFqfJM
-	KlW67EzBeuoXOrm6vExe0/m8u0wF8Ag53aYTamgGdY5+DYaAJe+ZxT7cxHyXMGZtgWUIL8fvEHM
-	wdVZiSSGMvLAgCnUEGpak3ztgAsih8epZcYdmUm9OBMuXbU0dnwHB+/DxpjDdQ4VD6j7YZfPumu
-	uYinLIDR+LdKpYvvg=
-X-Received: by 2002:a05:6a00:4ac7:b0:885:e2eb:23b6 with SMTP id
- d2e1a72fcca58-8beb53d9d07mr10583427b3a.11.1794866777097; Mon, 16 Nov 2026
- 14:06:17 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=md2D4WPO
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 283BA1F000C4;
+	Mon, 16 Nov 2026 22:27:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794868032;
+	bh=yTKvK6Q2yCQePo9OFHjf3+LCM7gt5vNfOS7VI6PK0to=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=md2D4WPOInNakDSqWfE1IPbeod9zOxz2pjEYXRvX5XiOz3ugZVGikYj7oFVPNv5TA
+	 anRLz9W1IPaeffFSXdQM5eIkNzSl7SSBVcl2XNx1GIfniOATopc5iOYnfIW2tcJICz
+	 aVn8KUWMqGcxXYidnfS7JXA/XupIgyyf55FAXfxOjNnYtNjcQUssyVADQa/bzbhV3W
+	 UicZSxsZqypH7o7MtWctPXY/bJPQqUdH6+NnMUSsGHKKnFY1lnd0GDxpKiTXt7vuKS
+	 VxK1w0CvT9hWXVQ6g73MyFiBbMOQ63w53AYN7IuB3i9vZCAPLRr0V5/4yR2A03YPn6
+	 UCdDxRThMLAvA==
+Date: Mon, 16 Nov 2026 14:27:10 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Tianyi Gao <tianyi@cloudflare.com>
+Cc: Stanislav Fomichev <sdf.kernel@gmail.com>, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Stanislav
+ Fomichev <sdf@fomichev.me>, Lorenzo Bianconi <lorenzo@kernel.org>, Vladimir
+ Vdovin <deliran@verdict.gg>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon
+ Horman <horms@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, Donald
+ Hunter <donald.hunter@gmail.com>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil
+ Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel
+ <przemyslaw.kitszel@intel.com>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, Alexander Lobakin
+ <aleksander.lobakin@intel.com>, Magnus Karlsson
+ <magnus.karlsson@intel.com>, Tushar Vyavahare <tushar.vyavahare@intel.com>,
+ Jason Xing <kerneljasonxing@gmail.com>, Nikolay Aleksandrov
+ <razor@blackwall.org>, Madalin Bucur <madalin.bucur@nxp.com>, Ioana Ciornei
+ <ioana.ciornei@nxp.com>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+ <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, Randy Dunlap
+ <rdunlap@infradead.org>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, Chris J Arges
+ <carges@cloudflare.com>, Jakub Sitnicki <jakub@cloudflare.com>,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ intel-wired-lan@lists.osuosl.org, llvm@lists.linux.dev,
+ kernel-team@cloudflare.com, Tianyi Gao <tianyi.gao@linux.dev>
+Subject: Re: [PATCH bpf-next 00/15] xdp: add SKB core extensions to keep RX
+ metadata until skb creation
+Message-ID: <20261116142710.347e8571@kernel.org>
+In-Reply-To: <CAG4wq-dhd5a5zxQcSShaKifYd2z+pMpHaCYtZJRX1QCxEH4dfg@mail.gmail.com>
+References: <cover.1794281983.git.tianyi@cloudflare.com>
+	<avOvI8xrHI0dwyHj@devvm16445.scu0.facebook.com>
+	<CAG4wq-egD55NZDw+OKVKTKN2tQJ9oKEC504wFv=xoMXyJ-0z4g@mail.gmail.com>
+	<20261115113902.4834dda6@kernel.org>
+	<CAG4wq-dhd5a5zxQcSShaKifYd2z+pMpHaCYtZJRX1QCxEH4dfg@mail.gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -102,103 +90,44 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <CORE-9NOG.v4.r0.20261116135311@mojatatu.com> <CORE-9NOG.v4.r0.20261116135311-4@mojatatu.com>
- <DMWXH28YQDYH.1SI4Y5WQ7EPSR@gmail.com>
-In-Reply-To: <DMWXH28YQDYH.1SI4Y5WQ7EPSR@gmail.com>
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-Date: Mon, 16 Nov 2026 17:06:05 -0500
-X-Gm-Features: AclHuK9n7C752nA4wdQHdLQTklh2YsDwp5Gv59-pY4fMu60xseoLBKlaRL5BDRk
-Message-ID: <CAM0EoMk10vCoAKZq0P=8A_jed=Z3SudLEUV8uvXO5F=ewNjnGQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v4 4/4] bpf: drop the stale dst when redirecting
- to an explicit nexthop
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: netdev@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	bpf@vger.kernel.org, Jiri Pirko <jiri@resnulli.us>, 
-	Victor Nogueira <victor@mojatatu.com>, Sashiko <sashiko-bot@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, Nov 16, 2026 at 3:46=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Mon, Nov 16, 2026 at 11:01 AM Jamal Hadi Salim <jhs@mojatatu.com> wrot=
-e:
-> > The release goes through skb_dst_drop_keep_metadata(), so encapsulation
-> > parameters a route carries are handed over to a metadata dst instead of
-> > being lost, and a metadata dst already on the packet is left in place. =
-Both
-> > wrappers take their existing drop path when that copy cannot be allocat=
-ed,
-> > so a packet is never sent with the stale route.
->
-> Just briefly looked at it. skb_dst_drop_keep_metadata() with kmalloc()
-> in the fast path is really no go.
->
-> Why not do something like this instead of patches 2, 3 and 4 ?
->
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 946b07a..13f2d57 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -2470,6 +2470,10 @@ static int __bpf_redirect_neigh(struct sk_buff *sk=
-b, struct net_device *dev,
->         skb_unset_mac_header(skb);
->         skb_reset_network_header(skb);
->
-> +       /* The route is for the old skb->dev. Keep the tunnel key. */
-> +       if (skb_valid_dst(skb))
-> +               skb_dst_drop(skb);
-> +
->         if (skb->protocol =3D=3D htons(ETH_P_IP))
->                 return __bpf_redirect_neigh_v4(skb, dev, nh);
->         else if (skb->protocol =3D=3D htons(ETH_P_IPV6))
-> diff --git a/net/netfilter/nft_fwd_netdev.c b/net/netfilter/nft_fwd_netde=
-v.c
-> index 7447da9..d1ac4eb 100644
-> --- a/net/netfilter/nft_fwd_netdev.c
-> +++ b/net/netfilter/nft_fwd_netdev.c
-> @@ -15,6 +15,7 @@
->  #include <net/netfilter/nf_tables_offload.h>
->  #include <net/netfilter/nf_dup_netdev.h>
->  #include <net/netfilter/nf_recursion.h>
-> +#include <net/dst_metadata.h>
->  #include <net/neighbour.h>
->  #include <net/ip.h>
->
-> @@ -176,6 +177,9 @@ static void nft_fwd_neigh_eval(const struct nft_expr =
-*expr,
->                 }
->         }
->
-> +       /* The route is for the old skb->dev. Keep the tunnel template. *=
-/
-> +       if (skb_valid_dst(skb))
-> +               skb_dst_drop(skb);
->         skb->dev =3D dev;
->         skb_clear_tstamp(skb);
->
+On Sun, 15 Nov 2026 23:36:34 +0000 Tianyi Gao wrote:
+> On Sun, 15 Nov 2026 11:39:02 -0800 Jakub Kicinski wrote:
+> > On Wed, 11 Nov 2026 01:07:46 +0000 Tianyi Gao wrote:  
+> > > - On veth, an XDP program removes software GSO from the peer, limits
+> > >   its MTU, and can copy skbs from the peer.  
+> >
+> > Could you remind us why you XDP_REDIRECT xdp_frames to the veth
+> > if you end up allocating the skb on the veth, anyway?
+> >
+> > I thought that was to let veth run its own prog before skb is allocated
+> > but you're saying that you want to avoid veth having a prog, so clearly
+> > it's not that.  
+> 
+> Thank you for your comment!
+> 
+> XDP_REDIRECT into a veth without a program on it has been supported
+> since commit 0e672f306a28 ("veth: check for NAPI instead of xdp_prog
+> before xmit of XDP frame"). There is demand for it [1].
+> 
+> With or without a program on the veth, and on cpumap, this series
+> keeps the RX metadata from the NIC until the skb is built.
+> 
+> [1] https://lore.kernel.org/all/20210416175929.35c3c389@carbon/
 
-Agreed on the alloc cost (and i will send v5 to resolve that). Having said =
-that:
-skb_valid_dst() is  essentially  "a dst is present and it is not
-DST_METADATA", so it is true for a route (skb_dst_drop() then releases
-that route) and true for keys built with bpf_skb_set_tunnel_key(); for
-encap ip/ip6 or encap xfrm template the tunnel template lives in
-dst->lwtstate  that wont work (packet reaches the tunnel or xfrm
-device with no encapsulation).
-For that reason we cant drop 3 and 4. I see the change in 2/4 (I see
-1/4 not changing either) .  The change is not that small because it
-will have to touch multiple core files (although just small mechanical
-surgeries). Summary it will still be 4 patches..
+Perhaps I'm slow but I don't see how this answers my question.
+I read your reply as "the config is supported and my team uses it".
 
-cheers,
-jamal
+The question is _why_ you use it. Let's leave the cpumap case aside,
+you provided no legitimate reason why having an XDP prog in that case
+is a problem. With veth - you are right that attaching XDP causes
+problems for pure skb traffic. For veth cases, however, there's no
+strong reason to delay the skb allocation. Hence my question.
+Why not let the driver allocate the skb if we know that the
+redirect target will need to allocate one, anyway.
 
-> pw-bot: cr
+Since your patches are not a natural / clean extension of the existing
+infrastructure - we should step back and make sure the use case is
+practically justified.
