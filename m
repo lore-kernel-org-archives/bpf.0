@@ -1,48 +1,49 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794827106;
-	b=GF/UClb3ciOnh5J58qdsdPyprfLY/gn3xgfVtS/odmhCu5KLiKw29ckjdecOj2F5HzvN
-	 9bY/+9RJpmD/E7oHw13wafMlrn5HtjlsFOGMpTs/5YbCv5ecFV0IalvKRaRzTq+iKBEGY
-	 BitCx3PjPECa/vQx4jWycrFwcRsU0Jh+beiBSsh2Wehiql1Gu3gvl/m3b31Y+3fe+rog9
-	 l6XBD0SFvDcq9lzTf2z2Fhr8H0VQg71STRDuBroMiMV+1yi4EwghyvfLk6WaDFLr0alTx
-	 VJJR2DxvziyQ4OlWyxGCOHhKTc4G4bnIuaN3b0RaEKLNOt/lChSpCUB751tyqhI5usA==
+	t=1794827119;
+	b=RdxYIoZKjNOB3iNt/FDlHJLvfaINHQw+E1Q8AsAwQtD823mGwyed3SjrZle2+CFql8Io
+	 rssVF+wsXUN9Dk0yGLqabM9ZF1pXp3U640yQNocGppbXbYZeVeCVxxEF9QlH1wZS+qMUU
+	 ARz6dASTGEMN55ALrgRXGayESlxRSRdthq83anXWhLB8hRzwdwa3+e4/JzCs5hs5hgAjA
+	 AaNn7WJxHzN+f44H2SzmkNJUVAqioZEJcFb3fn+sgt4hf3jpySwxEQIyCTekzWEimKpg0
+	 J4ySbAxKzAfEPDBK9AzHj7JL/HJ5QSdHCiGioZiKGxI/gUTqySs8Hld3040MASXnlRw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794827106;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794827119;
 	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
 	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=Wy/trncCKOEfTT0E9AIfIq9GDwPb+xtZOWXOFtUVT80=;
-	b=oENSR14vxHzgpZ2WqlYJf7qqof8qb05JykfARTT/Mns8KC6VB/zV/4KrfpNZ2gY6X1UV
-	 RYTI5oxQr96vfKse+NWniOnUyQTAn5FZkAcFZNsTtJ94nxTndws11AprKzfQ4rPwO6Vts
-	 8K0khsPDazz52HkIkDzIg6VgitUXPEoyDKr44ujqzVkpDVl6AYd9UqXypRgnUR8CqQiEa
-	 vCSvfdXKua2I2zrnfMz68udj+mewkJ6fBNxtKeuY5yxipbIc66BkxobljYHgoHDoEk4ti
-	 wDWEEhwntZSkuq3MxgGcNge/uF1KsiOvf1rddsjXbJ9fZKZgUXy2hYByYhP+gdnXu5Q==
+	bh=iQwkLUdwk9b1HJi0bdxPWAy3VpDyPS0j6oQB4RnL5Xk=;
+	b=YcvFpzbk/Gp3DFiHTjYrJV8JdfODcG1jGa+9cR9Sk8eya4LsjeV9Dk/xMsKNQKrN++aU
+	 FeSdYWhZpZzeI4Qe72EhDzIfxguHEoxRMBDd2KGmS6XOR7pb1M8E0yMfxqCf1INwpbMu3
+	 KQY74pt7B9TWvAnNWloKzdF6ylcxwWuj1fxE6nTM0sUSoshhYwzJuGO2GiycZy/RtXSp1
+	 AK7d7eCVfBmEj91P+QNNAs9nxtOaiZEw3ojWxNZBTrNOMVKCo8aRaBouyFTwyEPVBxNe9
+	 PkEmkFSts7m41zAbcjWRFA1rr2ifAg4Dwh6EpmboJWwQh21tGGQ0y9uK3Fgy28KziRg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CcIB4Hbm;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TCGsMSU0;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A945606A89B;
-	Mon, 16 Nov 2026 11:05:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5371860A2629;
+	Mon, 16 Nov 2026 11:05:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CcIB4Hbm
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90EA61F000C6;
-	Mon, 16 Nov 2026 11:05:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TCGsMSU0
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77D171F000C8;
+	Mon, 16 Nov 2026 11:05:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794827106;
-	bh=Wy/trncCKOEfTT0E9AIfIq9GDwPb+xtZOWXOFtUVT80=;
+	s=k20260515; t=1794827119;
+	bh=iQwkLUdwk9b1HJi0bdxPWAy3VpDyPS0j6oQB4RnL5Xk=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=CcIB4HbmBgYc5EEMXgIRtc19Qwnoi6JLiX/zxxMppwz5egObZb/cjCtm2SIxhU1RT
-	 i4c38dgiLMKZpLpd6ICIjf9A/VjTxGnwiv6t9rFiEt/zS+MKF+DRInOfOJcJErkv+Y
-	 sKipY2C2Y+xAXP7XwccmsI0YdmD9ZZuSHkIEjX5M6kQ4c/qUdEQ9wgsck4nOWm+I53
-	 xiDlNaNQcqE8XLjMzEKAsejvUuii1rayUUGPiMA228x8Cga1/3Zi5DKOS8r6RB4ntr
-	 AqDbxmGDFarP8m3AGeXA1KKI4Wk/W+PJfLQotnGU0nS1i2zYERCLihGJs1HHXPksgw
-	 gnKOpLRWaBT7A==
+	b=TCGsMSU0VLtPHC6d/+ESb62tB6A5OnT5thXMuSszj0X5SUrXTBlGJp1Uj+AYZe+b7
+	 M6HysKQdgtmSCsAwgJMeEx7nwplOmGQG0k7sii/MZZCEhur/88d3NJPaUnDq/j9QkG
+	 X+za0+knnV7BnsIiOWGJCFcT/hjb+uNPDTAzp/KopV2X6mnbRtgkBhso+/o9Wz8Emg
+	 GLN0MTTmw1FY14Dtm1V9VE8Z320kaoSZDLv0wZWZR8TXN7H7cJiMzgITAI+YkJnZSI
+	 H0oWS7BM5D3vYdjjNnCUwfJZ3AsAxv3uvegQseurk6gWMUJIHo37fMDP5z5z07M8tA
+	 UrwymwOwwteqg==
 From: Christian Brauner <brauner@kernel.org>
-Date: Mon, 16 Nov 2026 12:03:50 +0100
-Subject: [PATCH v2 10/17] target: fileio: take freeze protection for unmap
+Date: Mon, 16 Nov 2026 12:03:53 +0100
+Subject: [PATCH v2 13/17] bpf: fs/xattr: take freeze protection in the
+ xattr kfuncs
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -54,7 +55,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261116-work-fs-frozen_writes-v2-10-ecc4a2aac40e@kernel.org>
+Message-Id: <20261116-work-fs-frozen_writes-v2-13-ecc4a2aac40e@kernel.org>
 References: <20261116-work-fs-frozen_writes-v2-0-ecc4a2aac40e@kernel.org>
 In-Reply-To: <20261116-work-fs-frozen_writes-v2-0-ecc4a2aac40e@kernel.org>
 To: Jan Kara <jack@suse.cz>
@@ -68,67 +69,68 @@ Cc: Shakeel Butt <shakeel.butt@linux.dev>,
  linux-nfs@vger.kernel.org, 
  "Christian Brauner (Amutable)" <brauner@kernel.org>, stable@vger.kernel.org
 X-Mailer: b4 0.17-dev-ce4c1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2121; i=brauner@kernel.org;
- h=from:subject:message-id; bh=l/Efbc9gKVczuM0MtkeYpCTx8c98kWfbXxfwlfze3Hc=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWT9eqwplyRmco/FgOXWPyUzSalfLs83zW8pOKNyhf9X2
- JF5Txc87ChlYRDjYpAVU2RxaDcJl1vOU7HZKFMDZg4rE8gQBi5OAZhIZQ0jw6wjtxb5J/4UOiRx
- aoK7XoeEnMd2qzyftgJxu7Pd+x0mPGf4Z5Nnvf7oChOPI7vZ/PTVkm02GC07t2zHU4dtwb4fax2
- 3sAIA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1908; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=NJMGFUseCC73mMaQQ+G2n/tqmaWyJnxTdoOaGvDxcf8=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWT9eqyz4vOTvRd7PnScFlrJUFmSOf2LzNqtX3/pV02s/
+ duVsbJ1S0cpC4MYF4OsmCKLQ7tJuNxynorNRpkaMHNYmUCGMHBxCsBEMsMY/nts27Bi0jnThyk3
+ rgTkx0uv3JDduWHPlrVNT+w/7PRg5NnOyLD8w+6Pzpvr8jqZuHVV/N37WGys/62TCZGeMe1cfrW
+ NOTcA
 X-Developer-Key: i=brauner@kernel.org; a=openpgp;
  fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-UNMAP and WRITE SAME with UNMAP=1 end up in fd_execute_unmap() which
-calls ->fallocate() of the backing file directly. That skips the freeze
-protection vfs_fallocate() would have taken. So they go straight
-through to a filesystem that is frozen, with and without fd_async_io.
-With the backing file on ext4:
+bpf_set_dentry_xattr() and bpf_remove_dentry_xattr() go through
+__vfs_setxattr() and __vfs_removexattr() which leave freeze protection
+to the caller. BPF LSM programs call them from sleepable hooks such as
+file_open where nobody holds it. So a program can modify a frozen
+filesystem.
 
-  WARNING: fs/ext4/ext4_jbd2.c:90 at ext4_journal_check_start+0x1f6/0x2d0, CPU#1: kworker/1:1/50
-  Workqueue: target_submission target_queued_submit_work
-  Call Trace:
-   <TASK>
-   __ext4_journal_start_sb+0x7a/0x470
-   ext4_dirty_inode+0xa1/0x120
-   __mark_inode_dirty+0x154/0x1110
-   file_update_time_flags+0x3ab/0x4b0
-   ext4_fallocate+0x286/0x3440
-   fd_execute_unmap+0x1eb/0x6e0
-   sbc_execute_write_same_unmap+0x93/0xe0
-   __target_execute_cmd+0x53/0x190
-   tcm_loop_write_pending+0xe/0x20
-   transport_generic_new_cmd+0x612/0xdb0
-   __target_submit+0x12c/0x380
-   target_queued_submit_work+0x73/0x270
-   process_one_work+0x946/0x1820
-   worker_thread+0x4f1/0xd60
-   kthread+0x364/0x460
-   ret_from_fork+0x525/0x770
-   ret_from_fork_asm+0x1a/0x30
-   </TASK>
+The hook may already hold freeze protection or locks a frozen
+filesystem would make us wait under. So don't wait for a thaw. Fail
+with -EBUSY if the filesystem is frozen.
 
-Take freeze protection around ->fallocate() like vfs_fallocate() does.
+The _locked variants are only used from hooks that run inside setattr,
+setxattr, removexattr, unlink and rmdir. Their callers hold freeze
+protection already.
 
-Fixes: 70d3ae5c8075 ("target/file: Add WRITE_SAME w/ UNMAP=1 emulation support")
+Fixes: 56467292794b ("bpf: fs/xattr: Add BPF kfuncs to set and remove xattrs")
 Cc: stable@vger.kernel.org
 Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 ---
- drivers/target/target_core_file.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ fs/bpf_fs_kfuncs.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/target/target_core_file.c b/drivers/target/target_core_file.c
-index e8a44ddf6f5c9..5600ef7bbdbb6 100644
---- a/drivers/target/target_core_file.c
-+++ b/drivers/target/target_core_file.c
-@@ -584,7 +584,8 @@ fd_execute_unmap(struct se_cmd *cmd, sector_t lba, sector_t nolb)
- 		if (!file->f_op->fallocate)
- 			return TCM_LOGICAL_UNIT_COMMUNICATION_FAILURE;
+diff --git a/fs/bpf_fs_kfuncs.c b/fs/bpf_fs_kfuncs.c
+index 35ccd98a4de64..7f61e2efa08ba 100644
+--- a/fs/bpf_fs_kfuncs.c
++++ b/fs/bpf_fs_kfuncs.c
+@@ -295,9 +295,13 @@ __bpf_kfunc int bpf_set_dentry_xattr(struct dentry *dentry, const char *name__st
+ 	if (!inode)
+ 		return -EINVAL;
  
--		ret = file->f_op->fallocate(file, mode, pos, len);
-+		scoped_guard(file_write, file)
-+			ret = file->f_op->fallocate(file, mode, pos, len);
- 		if (ret < 0) {
- 			pr_warn("FILEIO: fallocate() failed: %d\n", ret);
- 			return TCM_LOGICAL_UNIT_COMMUNICATION_FAILURE;
++	/* The hook may hold locks or freeze protection already. */
++	if (!sb_start_write_trylock(inode->i_sb))
++		return -EBUSY;
+ 	inode_lock(inode);
+ 	ret = bpf_set_dentry_xattr_locked(dentry, name__str, value_p, flags);
+ 	inode_unlock(inode);
++	sb_end_write(inode->i_sb);
+ 	return ret;
+ }
+ 
+@@ -323,9 +327,13 @@ __bpf_kfunc int bpf_remove_dentry_xattr(struct dentry *dentry, const char *name_
+ 	if (!inode)
+ 		return -EINVAL;
+ 
++	/* The hook may hold locks or freeze protection already. */
++	if (!sb_start_write_trylock(inode->i_sb))
++		return -EBUSY;
+ 	inode_lock(inode);
+ 	ret = bpf_remove_dentry_xattr_locked(dentry, name__str);
+ 	inode_unlock(inode);
++	sb_end_write(inode->i_sb);
+ 	return ret;
+ }
+ 
 
 -- 
 2.53.0
