@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794808678;
-	b=Yht/Wnemv3Ep7Zk4xy7zGuVheWPn/pSejFcp+ikBEuciElC4JY691QnlW06sPvfcUdGR
-	 8l5UH8BiiLGD7hA4uZBm+rMffpLNY/0k0kaTrjSauSCg+LQ0K1bFSLhdYb/SJL7KUxhb+
-	 Bv6xPOZTMjm7woOOQVrhYnYgnHr2ky++QAVu5Nbc8bKsFG+HAsjBbUVlr5yP6Kl7CGxrz
-	 OMH/9VCzWRSREynzWdMxAuN47O1FMPMPRFa4S+/Y1e6AUfJImp1S9YflfsScvTTyuxkFo
-	 hzBJuPn6v514pSvWrlFOjvnqWHC5v9VGpO8IgrhMDwVhFMFLJRnMU6YPSFl4ZJ/v5cQ==
+	t=1794808683;
+	b=R6yBfzmMKsEr5vbeHJR6NVgbjJ2H5ytgogKRv/0sZb3QcS5iGFtbNJkoN8tXMafmlVoU
+	 4viFfT4nQzSSTUpT7387bRZ1hF1rwt7xnK+iDdNOJmNkewqQyun19zWWA6aJ4oPlt3Loq
+	 pt24AVZPmkjPnoUfKRAKFPiAG+5SPEc9lKL7kN9DxJHg9cdJkLl4SjVBju9AJQXHP8ZES
+	 muCYogDYJqiuR2t3A3fqDjlDqTQch59xi2iouHImi8Y8yMOQziTjMVtV/JQKIa8IM0HmS
+	 EYisyRrL0IVaSjejtOZjabNKTR8tn84HyTAA7dmvNGfrSB/6d7W3HGfiRQGLre6gn7A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794808678;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794808683;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=+Z4w4XKlevqyOP82yu5yapGmHLHHYnPpYJJEK2XLPQI=;
-	b=sP/VNFHik97sb1WiiFtht/sro5ZIIuWnkHCYaNbZKE+D12leSKnL4Yiz6hXiB2zxzwhc
-	 jiIHvbLIqjkuULVN7RJEes6EJ5mbKLgBfJo/VZHT7xysvRbMSVpt/kwiTcLwZA8Zq/sGN
-	 15jyPjd+G+WM3VCaOiNT4B7uC7CKzrqpCI8Egyn+ceZxPUFAZl9qhmeCf+yql+AfwSwJ4
-	 dcvfZE0WtMJBLnW1E5bsgUhvb1qCOchDvMxGB5dg3QyFsZ5kjqaEDOQRkeE4iswanR6JI
-	 UvP/i6t6w4sVHW+7qwsG8LvqfjgBMpMBjLzaua2lHydeXM++uJhnqaGIjORtlABkk4A==
+	bh=RYiVhWtnBs14OEzZoGAdZ11Lz4Jxo1ymudf2sMzgYUc=;
+	b=bPYG13swSpoMzzzk3hcN8uZHT46i2cMiFtZH2y2MbzWQbkRVn4EkH1GhGP43kedYx8pe
+	 lJett0XdEJc3wFRgMhV3SUIujjhVw6mDur/5kpHc5k5keT4XtokpPhn5Hzolv0N86+Ki7
+	 gEBAKFUf7bv/jnkPh9ocZZ0FBK/x2oGbcGAX5ALC18PT5tR9V6uSfJa/1/0F66mg0WDhU
+	 Ywd49rrgQoryrHhJatby47hg5ultYZrgjG15y8dW2FfkGapTjDybGbW3pgHAPW9soonAd
+	 Rm8yGk53c5d7KO/NXrTMhkA6diOB2Tz0jFwIszNnUUvBCqo7ztxzV4ZcnC6Vpz5OJCw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="FHz/sckh";
-	arc=none smtp.remote-ip=209.85.210.176
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iqdyqtQ5;
+	arc=none smtp.remote-ip=209.85.216.52
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F9E4606A32C
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 05:57:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3F9E4606A32C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E88B606A323
+	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 05:58:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9E88B606A323
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FHz/sckh
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-8b600fae14dso1333456b3a.2
-        for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 21:57:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iqdyqtQ5
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-3b37951a397so1013269a91.0
+        for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 21:58:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794808676; x=1795413476; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794808682; x=1795413482; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=+Z4w4XKlevqyOP82yu5yapGmHLHHYnPpYJJEK2XLPQI=;
-        b=FHz/sckhE2nCtTNY3XyckFs6SWXu8DRuwcip/kikF8G+FdlVPFrNvYKtqQ2Btbv3vq
-         dD4M7C6yCrnC0L4BfB0Y/3gtni5To1xNZEdSB/0BRcZlTUQTlj8y/LATsig9hIUKjTaV
-         +YUzjTsi4j8cdsb6O5BcLzgB/vs0ybx/pbhP8+1Pmd29dZEm0OeIosypzNB6Ju0qyDcZ
-         epIUVkLdnjioBJkCZd03F4NFo/SNuipWCVvTuRS/tqcGOiIc934mvXrNgE1wnP476riL
-         v14mRo2gnnhoVaofxybc6IEwWEAWwN03cdG7m6+RZRspNXE+CwKUhQx5SOmW6HpBulSM
-         YjSg==
+        bh=RYiVhWtnBs14OEzZoGAdZ11Lz4Jxo1ymudf2sMzgYUc=;
+        b=iqdyqtQ5O/VxWRTT6rf0LtpAD69cU6v89u/NanuzLv6/5zUYhqW+FtDukgE5kfcULx
+         obUP/yUsc6u9ML/uuEP/ZH2AhNdo8YMxGlmvoT6dv5vuWE27nqDzODUfrwRl71CdGm5D
+         +X1dbrUxp+GV3u/H65dduSjwSuBxW1xT2pM2Ww6x8BV3LnFEvXzMJF9vIUGF8+Xi566e
+         5rHIAiRNaYwb/AyJWl4ZQW/IwxQOi0A560FuaNHt2ioAC0yxx1vZvQPbo8hhtYdeVasW
+         /3PGIvn+wnQVqBObxqsUYsc9FoWeh/ULScKdLVlIrNCCD7qJfma6JbmiPBBg0VUdCs28
+         N2Cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794808676; x=1795413476;
+        d=1e100.net; s=20260707; t=1794808682; x=1795413482;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=+Z4w4XKlevqyOP82yu5yapGmHLHHYnPpYJJEK2XLPQI=;
-        b=hB2r5+JPww9qqyxSpnTfOZi6+WJnGeLu5YiwiauUEA2rz4UEWqmtNpmhx8/y1968sy
-         sFzVay1fpDwRHwQzCXdNivOzTBbCYnvfVUzjo/ZcdPPo2yNeEeZuCcOeUTrYKQdBSxwW
-         eLDG12rpxJGHzmiJF6EWYe89wPP3wCDuVcHXgPARujst7D55F6XfRZc0P15rH+/dv9Qx
-         uvn/TxBp59pGhw4AG/J1Ar3g8OI0h5B4s2ULb7k1j9u9qow0DUHWnBAKITOrAQ6zD4it
-         qNpCR4vtAo847HqDEjxeKGCGB3mPZm1JchxFzpfiPQ9KWxBSMdWidVLWGNjVWCWwE7yk
-         esTA==
-X-Gm-Message-State: APuU4Z8bPyTJS3i8ISOIZeKCoSx013zj9vj/lWUh1UipL+aFIPyUXOBu
-	mUg6KecNoiNR7gieqhQX8h/YC2aG5l/Xx8SvTqwXooKgihnV0VVbr/7F4gEKXg==
-X-Gm-Gg: AYBFou1frbv3YCbLvRveJMruSLSGVn9l7lreJMSgvOcd9yaxRokDStGAk9tdgyhQ30g
-	v1UFb/HtSf1NjXcVcJgTm388ZdAKibRjUwu/VLGggVAmNA+qYb6TfmGU2qsPcUHoBTMCdh/DA7l
-	YHLd5XdTGxbm7/oV8ODrXt7cNR1ncGNOdtaOuQ4TnrVb1WMxKlOLpiAqiTWR1dr985W+AlpCRUI
-	wS4TcUqnJ5QwZolVkvaJgOuU0RbE9uieS+okJn3E5MpPp6+ySlJZE7IvLTcWUwEXTevoMmaPJm0
-	sFRdHz1sA2DJJduE9HnQeSZUQ1u1SEMrW1en+8NKjO0GJDT8awCB12wW5XN1mA7Wfd+4RymOMvI
-	2wPBLl92I6RUyjFPEfbrX2bRcdMVqJj7nwZRVl0QpchjmTEdJ4I4c1ovqP1DyFUal7icehSzzSc
-	2sZr1Khit9o674nv9zKfYy9CNwH5XExKqSV6fPhOyDEWl9Fy7N6ygn/qPmnnHqLyCkid98KXfKn
-	Gb7zsflCzgMLpoGUpm6xWUaLeW+dw9vKMGLtgsKvq3SGhKwGP1iORqlnvM51DWf8kkDPb97qxPi
-	kBXR4SysQlBUIL8qMi2xClCTZn7YjnrdYrsmhxSpxSu2uT7YsEQ22FlCP7Ar40gWisPpnFT39HD
-	Na4xK1Uz+s0J/R7q1hLxT5svMOnfN/XN0Rf8lRK7jJb2ZJ5fzRAnRbw77dNEFESZD7p7o83JoSR
-	0=
-X-Received: by 2002:a05:6a21:6452:b0:3e2:117a:6307 with SMTP id adf61e73a8af0-3f7a75bef1emr6361278637.22.1794808675408;
-        Sun, 15 Nov 2026 21:57:55 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cddc18b4352sm3879187a12.24.2026.11.15.21.57.54
+        bh=RYiVhWtnBs14OEzZoGAdZ11Lz4Jxo1ymudf2sMzgYUc=;
+        b=ak3aqQ3rbDqplveYddytKTXo8Oxd4TGYWXYU/erJ71WEXb2L4FjOvAoosmx2rUSqji
+         pDWnQZHqoLkvS5UJL2w3zCH7KUW534nTqXj0Tn6tADGbhQNykBGl2sw0ELFZp1+Cb3Ps
+         BUNrpqBPCFz6+OE2G3aHFyAEhJ7M6z8Bhy+6oT+P+PEj2c9CSQfIMvl540wGzLq/x/rj
+         7dlp9LDzGG9p0k0ZQ3WA6VPVrY+86aXu7NauFxgtlmRfYRJJ0yQNwJK9bx6UHGiQWbv+
+         63UO1pTK4Tk44BBBHF/gE66oFFiEz38Hg4jdNIOrLTUIy0LIzX6fsZgUtC+SjHWC4krN
+         Tu5A==
+X-Gm-Message-State: APuU4Z/wM5cxlB5EDnb/xkrLbAb74XhP3N2QribdBNIg5A0W7iaUsTGE
+	N6h0lRLcorsWXgIDPVyLBIm9mBcBwmF8UZm4XMaCFANl06+312/npPLPpAw2vQ==
+X-Gm-Gg: AYBFou3EFdjN/nvGsB6vE1GVN+nSktRUZ6Mmtin8y53siZtcdHtdB3juFODdpisBeWZ
+	lO0jpwafw8AA7tydYJ+IUodQN5R0s/efqWkHwk3NBjMhNF6bJTiCcab96axX2L5FX7XhDjUDDSN
+	u7lLDKI1v8wCl/aSnOqqa24sJ1V5litWy+T4G5Sglxq+/XdzrNUu3CFt4K1mZFW3yRD9K5TZl/v
+	efcZnkBGlaGSy6A9BDbtGMgEfLxCJv4qaY3bx9SGwI5kgm0YsBVNxgSUYTIgBzH1kidMuQ++vgf
+	WWQoBGFCgwdXoqd6CRW7NKSwha2zseTfaKoSzM+C+IfBuXWqcH+fVX2pycWZynV2lhWNdOHMwwo
+	hBNSHo14jqwyBeERSQi2g4XaNNWJQ5t3Zm8v9/5LN6Z2SxSFHyB0qH+GtfZW+eV8ReVkadzixEJ
+	Zv4UhTUK/cYOKgrbg+YBvQIUQgMTdZoImkjDA2w9D5K/3vtgr6KMa8aZiUZNFyHRNKctJU491A9
+	qI/dbN9zFIzXj4jHClRRd5PMO7HIrKaCo8tvtWZUC4MaRnwrIQd+lI6nxQpk+E9VoS3lfXIMECU
+	adekvUN3bLtzeizK8fG4Do3HXjWpW3FgOPMI8hHZzp5Ay5M2Tnclqw2DeA1jH30NTLe68g6nbiX
+	Z+O5a51nsd427Z3YX5OqkZoDeGCjpiJj4mvc18C0knTInNerIPsTv7Cf4q3JsrjCcGN206HdAsA
+	==
+X-Received: by 2002:a17:90a:e7ca:b0:3ab:1285:dfd6 with SMTP id 98e67ed59e1d1-3b1b0ca64a7mr11127241a91.38.1794808681376;
+        Sun, 15 Nov 2026 21:58:01 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.252])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1b3a21769sm8233004a91.4.2026.11.15.21.58.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Nov 2026 21:57:54 -0800 (PST)
+        Sun, 15 Nov 2026 21:58:00 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 12/21] bpf: Relax jumps that patches push out of range
-Date: Mon, 16 Nov 2026 05:56:29 +0000
-Message-ID: <20261116055638.4171529-13-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 13/21] bpf: Keep the call graph in lists of edges
+Date: Mon, 16 Nov 2026 05:56:30 +0000
+Message-ID: <20261116055638.4171529-14-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261116055638.4171529-1-alexei.starovoitov@gmail.com>
 References: <20261116055638.4171529-1-alexei.starovoitov@gmail.com>
@@ -104,1688 +104,1087 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-A jump has 16 bits. Patches grow the code under it: inlined lookups,
-checks of divisions, may_goto, guards of loops, constant blinding.
-A verified program fails with -ERANGE: 2979 lookups under one branch
-are enough.
+The call graph is a matrix of bits. Its closure takes O(n^3 / 64) and
+runs twice. The passes over it repeat until nothing changes.
 
-Let bpf_patch_list_build() use gotol for such a jump:
+Keep the edges in lists and sort the graph once, with cycles in a row:
 
-  if r1 > r2 goto far    ->   if r1 > r2 goto +1
-                              goto +1
-                              gotol far
+  main -> f1 -> f2 -> f3       order:  f3 | f2 f1 | main
+          ^     |
+          +-----+
 
-The same form works for may_goto and unwind_goto. An image where all
-jumps fit does not change.
+Marks go to callers or to callees in one pass over that order. callx
+calls one extra node, which calls all functions whose address is taken.
 
-The passes do not compute offsets any more:
- - the last insn of a patch stands for the patched insn and keeps
-   its target;
- - bpf_patch_list_jump() gives a target in the old image to an insn.
-
-may_goto_off(), bpf_adj_moved_insn() and BPF_GUARD_NEAR go away. All
-guards that leave a subprog share one 'r0 = 0; exit'.
-
-x86-32, riscv32, parisc and sparc64 have no gotol in the JIT. They fail
-on the unknown opcode, as they do when gotol is in the program. There
-a guard that is more than 32K insns away from the end of its subprog
-had its own exit and was JITed. It is not JITed now.
-
-A jump to itself is a jump like any other. It goes to the start of its
-patch: 'nospec; goto -1' in sanitized dead code is 'nospec; goto -2' now.
+After the main pass only the insns that were seen count. A call, a tail
+call, LD_ABS or bpf_throw() in dead code rejects nothing. The load of
+an address is not a call: the main pass records who calls a callback.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h                  |  11 +-
- kernel/bpf/core.c                             | 335 +++++++-----
- kernel/bpf/fixups.c                           | 502 +++++-------------
- .../{blinding_log.c => blinding_far_jump.c}   |  38 +-
- .../selftests/bpf/progs/verifier_and.c        |   2 +-
- .../selftests/bpf/progs/verifier_bounds.c     |  14 +-
- .../selftests/bpf/progs/verifier_movsx.c      |   4 +-
- .../selftests/bpf/progs/verifier_patch_list.c | 137 ++++-
- .../selftests/bpf/progs/verifier_unpriv.c     |   2 +-
- 9 files changed, 475 insertions(+), 570 deletions(-)
- rename tools/testing/selftests/bpf/prog_tests/{blinding_log.c => blinding_far_jump.c} (51%)
+ include/linux/bpf_verifier.h                  |  40 +-
+ kernel/bpf/cfg.c                              | 128 +++++
+ kernel/bpf/verifier.c                         | 485 +++++++-----------
+ .../bpf/progs/test_global_func_deep_stack.c   |  12 +-
+ .../selftests/bpf/progs/verifier_tailcall.c   |   4 +-
+ tools/testing/selftests/bpf/verifier/calls.c  |   3 +-
+ 6 files changed, 357 insertions(+), 315 deletions(-)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 3b40f66894d9..28104dae5f08 100644
+index 28104dae5f08..7bea740eeaee 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -1208,6 +1208,10 @@ struct bpf_insn_patch {
- 	u32 len;
- 	u32 start;		/* first insn of the patch in bpf_patch_list.insns */
- 	u32 target;		/* insn of the patch that jumps to 'off' land on */
-+	u32 self;		/* insn of the patch that stands for insn 'off' */
-+	u32 jmp;		/* 1 + insn of the patch that goes to insn 'jmp_to', 0 if none */
-+	u32 jmp_to;
-+	u32 jmp_back;		/* or to that many insns in front of the patch of it */
- 	struct bpf_insn orig;	/* the replaced insn when the patch was queued */
- };
+@@ -769,6 +769,32 @@ struct bpf_index {
+ int bpf_index_find(const struct bpf_index *index, u64 key);
+ int bpf_index_add(struct bpf_index *index, u64 key, u32 val);
  
-@@ -1230,7 +1234,9 @@ struct bpf_patch_image {
- 	u32 *new_off;
- 	u32 *new_tgt;
- 	u32 *new_linfo;
-+	u32 *relaxed;		/* insn before patch_image_relax() -> insn after it */
- 	u32 cnt;
-+	u32 short_cnt;		/* insns before patch_image_relax() */
- 	u32 new_cnt;
- 	u32 nr_linfo;
- 	s32 grow;
-@@ -1256,7 +1262,8 @@ struct bpf_insn *__bpf_patch_list_add(struct bpf_patch_list *pl,
- int __bpf_patch_list_del(struct bpf_patch_list *pl, const struct bpf_prog *prog,
- 			 u32 off);
- int __bpf_patch_list_insert(struct bpf_patch_list *pl, const struct bpf_prog *prog,
--			    u32 off, const struct bpf_insn *insns, u32 cnt);
-+			    u32 off, const struct bpf_insn *insns, u32 cnt, bool behind);
-+void bpf_patch_list_jump(struct bpf_patch_list *pl, const struct bpf_insn *insn, u32 to, u32 back);
- void bpf_patch_list_release(struct bpf_patch_list *pl);
- int bpf_patch_list_build(const struct bpf_patch_list *pl, const struct bpf_prog *prog,
- 			 struct bpf_patch_image *img);
-@@ -2266,6 +2273,8 @@ static inline void bpf_patch_list_free(struct bpf_verifier_env *env)
- }
- #endif
- int bpf_patch_list_del(struct bpf_verifier_env *env, u32 off);
-+int bpf_patch_list_append(struct bpf_verifier_env *env, u32 off,
-+			  const struct bpf_insn *insns, u32 cnt);
- int bpf_patch_list_insert(struct bpf_verifier_env *env, u32 off,
- 			  const struct bpf_insn *insns, u32 cnt);
- 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 3385df367b05..147261bf9e6d 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -374,11 +374,7 @@ static int patch_list_reserve_insns(struct bpf_patch_list *pl, u32 cnt)
- 	return 0;
- }
- 
--/*
-- * Extract the pc-relative operand of a jump, a subprog call or a ld_imm64 of a
-- * subprog. gotox and a tail call pass for a jump to the next insn: nothing
-- * reads their 'off'.
-- */
-+/* Extract the pc-relative operand of a jump, a subprog call or a ld_imm64 of a subprog. */
- static bool insn_get_rel(const struct bpf_insn *insn, s64 *rel, bool *is_imm)
- {
- 	u8 code = insn->code;
-@@ -389,7 +385,8 @@ static bool insn_get_rel(const struct bpf_insn *insn, s64 *rel, bool *is_imm)
- 		return true;
- 	}
- 	if ((BPF_CLASS(code) != BPF_JMP && BPF_CLASS(code) != BPF_JMP32) ||
--	    BPF_OP(code) == BPF_CALL || BPF_OP(code) == BPF_EXIT)
-+	    BPF_OP(code) == BPF_CALL || BPF_OP(code) == BPF_EXIT ||
-+	    code == (BPF_JMP | BPF_TAIL_CALL) || code == (BPF_JMP | BPF_JA | BPF_X))
- 		return false;
- 
- 	*is_imm = code == (BPF_JMP32 | BPF_JA);
-@@ -397,21 +394,6 @@ static bool insn_get_rel(const struct bpf_insn *insn, s64 *rel, bool *is_imm)
- 	return true;
- }
- 
--/* Set the pc-relative operand that insn_get_rel() extracted. */
--static int insn_set_rel(struct bpf_insn *insn, s64 rel, bool is_imm)
--{
--	if (is_imm) {
--		if (rel < S32_MIN || rel > S32_MAX)
--			return -ERANGE;
--		insn->imm = rel;
--	} else {
--		if (rel < S16_MIN || rel > S16_MAX)
--			return -ERANGE;
--		insn->off = rel;
--	}
--	return 0;
--}
--
- /* Whether one of the 'len' insns of a patch in front of the last one jumps past it. */
- static bool patch_list_jumps_past(const struct bpf_insn *insns, u32 len)
- {
-@@ -425,72 +407,53 @@ static bool patch_list_jumps_past(const struct bpf_insn *insns, u32 len)
- 	return false;
- }
- 
--/*
-- * The 'len' insns of a patch were moved down by 'by' insns inside it. Keep
-- * what they referred to in front of the patch, the same way as
-- * bpf_adj_moved_insn() does: a call to the start of the patch, the old start
-- * of a subprog, stays there, a jump to itself doesn't.
-- */
--static int patch_list_move_down(struct bpf_insn *insns, u32 len, u32 by)
--{
--	bool is_imm, call;
--	s64 rel, tgt;
--	u32 k;
--	int err;
--
--	for (k = 0; k < len; k++) {
--		if (!insn_get_rel(&insns[k], &rel, &is_imm))
--			continue;
--		call = bpf_pseudo_func(&insns[k]) || bpf_pseudo_call(&insns[k]);
--		tgt = (s64)k + rel + 1;
--		if (tgt > 0 || (tgt == 0 && !call))
--			continue;
--		err = insn_set_rel(&insns[k], rel - by, is_imm);
--		if (err)
--			return err;
--	}
--	return 0;
--}
-+#define NO_JUMP U32_MAX
- 
- /*
-- * insn is number 'idx' of the 'len' insns that replace insn 'off' of the old
-- * image (an insn that isn't patched is its own patch of length 1). It lands
-- * at 'pos' of the new image. 'new_off' maps the old image to the start of
-- * each patch, which calls go to, 'new_tgt' to where jumps go.
-+ * Where insn 'idx' of patch 'p' goes in the new image. Calls go to the start
-+ * of a patch, img->new_off[], jumps to img->new_tgt[].
-  */
--static int patch_list_adj_insn(struct bpf_insn *insn, const u32 *new_off,
--			       const u32 *new_tgt, u32 cnt, u32 off, u32 idx,
--			       u32 len, u32 pos)
-+static int patch_insn_target(const struct bpf_patch_image *img, const struct bpf_insn_patch *p,
-+			     const struct bpf_insn *insn, u32 idx, u32 *pos)
- {
--	bool is_imm, call;
-+	bool is_imm, call = bpf_pseudo_func(insn) || bpf_pseudo_call(insn);
- 	s64 rel, tgt;
- 
-+	*pos = NO_JUMP;
- 	if (!insn_get_rel(insn, &rel, &is_imm))
- 		return 0;
--	call = bpf_pseudo_func(insn) || bpf_pseudo_call(insn);
- 
--	/* relative to the first insn of the patch */
--	tgt = (s64)idx + rel + 1;
--	if (tgt >= 0 && tgt < len)
--		return 0;
--
--	/* the patch pushed what follows 'off' down by len - 1 */
--	tgt = tgt < 0 ? off + tgt : off + tgt - len + 1;
--	if (tgt < 0 || tgt > cnt)
-+	if (idx + 1 == p->jmp) {
-+		tgt = p->jmp_to;
-+	} else if (idx == p->self) {
-+		tgt = p->off + rel + 1;
-+	} else {
-+		tgt = idx + rel + 1;
-+		if (tgt < 0)
-+			return -EFAULT;
-+		*pos = img->new_off[p->off] + tgt;
-+		if (tgt < p->len)
-+			return 0;
-+		/* the patch pushed what follows 'off' down by len - 1 */
-+		tgt += (s64)p->off - p->len + 1;
-+	}
-+	if (tgt < 0 || tgt > img->cnt)
- 		return -EFAULT;
- 
--	rel = (s64)(call ? new_off : new_tgt)[tgt] - pos - 1;
--	return insn_set_rel(insn, rel, is_imm);
-+	*pos = (call ? img->new_off : img->new_tgt)[tgt];
-+	if (idx + 1 == p->jmp && p->jmp_back)
-+		*pos = img->new_off[tgt] - p->jmp_back;
-+	return 0;
- }
- 
- /*
-  * Queue the replacement of insn 'off' of 'prog' by 'patch[0..len)'. Patches
-  * are queued in increasing order of 'off' and applied together, so a pass
-- * keeps addressing insns by their index in 'prog'. Jumps in the patch that
-- * leave it are relative to the patch placed at 'off'. Patching 'off' again
-- * replaces the last insn of its patch, where the insn being patched went, and
-- * the insns in front of it must not jump past it. Jumps of the new insns that
-- * leave the patch are relative to the first of them, as for a first patch.
-+ * keeps addressing insns by their index in 'prog'. The last insn of the patch
-+ * stands for insn 'off': a copy of a jump or a call goes where it went. The
-+ * others jump inside of the patch, ahead, or see bpf_patch_list_jump().
-+ * Patching 'off' again replaces the last insn of its patch, and the insns in
-+ * front of it must not jump past it.
-  *
-  * Return the copy of the last insn of the patch, which stays valid until the
-  * next call.
-@@ -505,18 +468,16 @@ struct bpf_insn *__bpf_patch_list_add(struct bpf_patch_list *pl,
- 	int err;
- 
- 	if (p && off == p->off) {
--		if (WARN_ON_ONCE(patch_list_jumps_past(pl->insns + p->start, p->len)))
-+		if (WARN_ON_ONCE(p->self != p->len - 1 ||
-+				 patch_list_jumps_past(pl->insns + p->start, p->len)))
- 			return ERR_PTR(-EFAULT);
- 		err = patch_list_reserve_insns(pl, len - 1);
- 		if (err)
- 			return ERR_PTR(err);
- 		/* the last patch is at the end of pl->insns */
- 		memcpy(pl->insns + p->start + p->len - 1, patch, len * sizeof(*patch));
--		err = patch_list_move_down(pl->insns + p->start + p->len - 1, len,
--					   p->len - 1);
--		if (err)
--			return ERR_PTR(err);
- 		p->len += len - 1;
-+		p->self = p->len - 1;
- 		pl->insn_cnt += len - 1;
- 		return &pl->insns[p->start + p->len - 1];
- 	}
-@@ -526,11 +487,13 @@ struct bpf_insn *__bpf_patch_list_add(struct bpf_patch_list *pl,
- 		return ERR_PTR(err);
- 
- 	p = &pl->patches[pl->cnt++];
--	p->off = off;
--	p->len = len;
--	p->target = 0;
--	p->start = pl->insn_cnt;
--	p->orig = prog->insnsi[off];
-+	*p = (struct bpf_insn_patch){
-+		.off = off,
-+		.len = len,
-+		.self = len - 1,
-+		.start = pl->insn_cnt,
-+		.orig = prog->insnsi[off],
-+	};
- 	memcpy(pl->insns + p->start, patch, len * sizeof(*patch));
- 	pl->insn_cnt += len;
- 
-@@ -541,19 +504,11 @@ struct bpf_insn *__bpf_patch_list_add(struct bpf_patch_list *pl,
- int __bpf_patch_list_del(struct bpf_patch_list *pl, const struct bpf_prog *prog,
- 			 u32 off)
- {
--	struct bpf_insn_patch *p;
--	int err;
-+	int err = patch_list_reserve_patch(pl);
- 
--	err = patch_list_reserve_patch(pl);
- 	if (err)
- 		return err;
--
--	p = &pl->patches[pl->cnt++];
--	p->off = off;
--	p->len = 0;
--	p->target = 0;
--	p->start = pl->insn_cnt;
--	p->orig = prog->insnsi[off];
-+	pl->patches[pl->cnt++] = (struct bpf_insn_patch){ .off = off };
- 	return 0;
- }
- 
-@@ -564,24 +519,20 @@ int __bpf_patch_list_del(struct bpf_patch_list *pl, const struct bpf_prog *prog,
-  * at the first inserted insn. Inserting in front of a queued patch puts the
-  * insns in front of it. 'off' is the start of a subprog, so nothing falls
-  * through to the inserted insns.
-+ * Or queue them to go 'behind' insn 'off'. That is the last patch of 'off'.
-  */
- int __bpf_patch_list_insert(struct bpf_patch_list *pl, const struct bpf_prog *prog,
--			    u32 off, const struct bpf_insn *insns, u32 cnt)
-+			    u32 off, const struct bpf_insn *insns, u32 cnt, bool behind)
- {
- 	struct bpf_insn_patch *p = pl->cnt ? &pl->patches[pl->cnt - 1] : NULL;
-+	struct bpf_insn *insn;
- 	int err;
- 
- 	if (!p || off != p->off) {
--		err = patch_list_reserve_patch(pl) ?: patch_list_reserve_insns(pl, 1);
--		if (err)
--			return err;
--		p = &pl->patches[pl->cnt++];
--		p->off = off;
--		p->len = 1;
--		p->target = 0;
--		p->start = pl->insn_cnt;
--		p->orig = prog->insnsi[off];
--		pl->insns[pl->insn_cnt++] = p->orig;
-+		insn = __bpf_patch_list_add(pl, prog, off, &prog->insnsi[off], 1);
-+		if (IS_ERR(insn))
-+			return PTR_ERR(insn);
-+		p = &pl->patches[pl->cnt - 1];
- 	}
- 
- 	err = patch_list_reserve_insns(pl, cnt);
-@@ -589,18 +540,36 @@ int __bpf_patch_list_insert(struct bpf_patch_list *pl, const struct bpf_prog *pr
- 		return err;
- 
- 	/* the last patch is at the end of pl->insns */
--	err = patch_list_move_down(pl->insns + p->start, p->len, cnt);
--	if (err)
--		return err;
--	memmove(pl->insns + p->start + cnt, pl->insns + p->start,
--		p->len * sizeof(*insns));
--	memcpy(pl->insns + p->start, insns, cnt * sizeof(*insns));
-+	insn = pl->insns + p->start;
-+	if (behind) {
-+		insn += p->len;
-+	} else {
-+		memmove(insn + cnt, insn, p->len * sizeof(*insns));
-+		p->target += cnt;
-+		p->self += cnt;
-+		p->jmp += p->jmp ? cnt : 0;
-+	}
-+	memcpy(insn, insns, cnt * sizeof(*insns));
- 	p->len += cnt;
--	p->target += cnt;
- 	pl->insn_cnt += cnt;
- 	return 0;
- }
- 
-+/*
-+ * 'insn' of the last patch goes to insn 'to' of the old image, however far that is.
-+ * With 'back' it goes to the last insns of the patch of insn 'to - 1'.
-+ * A patch has one such jump.
-+ */
-+void bpf_patch_list_jump(struct bpf_patch_list *pl, const struct bpf_insn *insn, u32 to, u32 back)
-+{
-+	struct bpf_insn_patch *p = &pl->patches[pl->cnt - 1];
++/* A graph of calls. The nodes are subprogs, and behind them what stands for a set of subprogs. */
++struct bpf_call_graph {
++	u32 cnt;	/* nodes */
++	u32 edge_cnt;
++	u32 *callee;	/* node s calls callee[first[s]] .. callee[first[s + 1] - 1] */
++	u32 *first;
++	/* see bpf_call_graph_sort() */
++	u32 *postorder;
++	u32 *order;
++	u32 *cycle;
++	u16 *marks;	/* of the user of the graph */
++	u32 next;	/* nodes that have 'first' */
++};
 +
-+	WARN_ON_ONCE(p->jmp);
-+	p->jmp = insn - &pl->insns[p->start] + 1;
-+	p->jmp_to = to;
-+	p->jmp_back = back;
-+}
++#define bpf_for_each_callee(cg, s, j)							\
++	for (u32 ___e = (cg)->first[s];							\
++	     ___e < (cg)->first[(s) + 1] && ({ j = (cg)->callee[___e]; 1; }); ___e++)
 +
- void bpf_patch_list_release(struct bpf_patch_list *pl)
- {
- 	kvfree(pl->patches);
-@@ -640,19 +609,100 @@ static int patch_image_map_linfo(struct bpf_patch_image *img, const struct bpf_p
- 	return 0;
- }
- 
-+static bool is_short_jump(const struct bpf_insn *insn)
-+{
-+	bool is_imm;
-+	s64 rel;
++int bpf_call_graph_init(struct bpf_call_graph *cg, u32 cnt);
++int bpf_call_graph_add(struct bpf_call_graph *cg, u32 caller, u32 callee);
++void bpf_call_graph_sort(struct bpf_call_graph *cg, u16 skip);
++bool bpf_call_graph_recursive(const struct bpf_call_graph *cg, u32 s);
++void bpf_call_graph_mark_callees(struct bpf_call_graph *cg, u16 mask);
++void bpf_call_graph_mark_callers(struct bpf_call_graph *cg, u16 mask, u16 skip);
++void bpf_call_graph_free(struct bpf_call_graph *cg);
 +
-+	return insn_get_rel(insn, &rel, &is_imm) && !is_imm;
-+}
-+
-+/*
-+ * Some jump is out of its 16-bit range. 'tgt' has the targets of all jumps.
-+ *
-+ *   goto far          ->  gotol far
-+ *
-+ *   if r1 > r2        ->  if r1 > r2 goto +1     also may_goto, unwind_goto
-+ *      goto far           goto +1
-+ *                         gotol far
-+ *
-+ * That moves the targets of other jumps away. One pass is enough: take each
-+ * jump for far that would be far with all jumps that it goes over relaxed.
-+ */
-+static int patch_image_relax(struct bpf_patch_image *img, u32 *tgt)
-+{
-+	u32 cnt = img->new_cnt, pos, to, lo, hi, n, *map;
-+	unsigned long *far __free(kvfree) = NULL;
-+	struct bpf_insn *insns = img->insns;
-+
-+	far = kvcalloc(BITS_TO_LONGS(cnt), sizeof(long), BPF_VERIFIER_GFP);
-+	map = img->relaxed = kvmalloc_array(cnt + 1, sizeof(u32), BPF_VERIFIER_GFP);
-+	if (!far || !map)
-+		return -ENOMEM;
-+
-+	for (pos = 0, n = 0; pos <= cnt; pos++) {
-+		map[pos] = pos + n;
-+		n += pos < cnt && is_short_jump(&insns[pos]) ? 2 : 0;
-+	}
-+	for (pos = 0; pos < cnt; pos++) {
-+		if (!is_short_jump(&insns[pos]))
-+			continue;
-+		lo = min(pos, tgt[pos]);
-+		hi = max(pos + 1, tgt[pos]);
-+		if (map[hi] - map[lo] <= S16_MAX)
-+			continue;
-+		if (insns[pos].code == (BPF_JMP | BPF_JA))
-+			insns[pos] = BPF_JMP32_A(0);
-+		else
-+			__set_bit(pos, far);
-+	}
-+	for (pos = 0, n = 0; pos <= cnt; pos++) {
-+		map[pos] = pos + n;
-+		n += pos < cnt && test_bit(pos, far) ? 2 : 0;
-+	}
-+
-+	/* like kvmalloc(): the size of a prog fits into 32 bits */
-+	if (map[cnt] > INT_MAX / sizeof(*insns))
-+		return -ENOMEM;
-+	insns = kvrealloc(insns, array_size(map[cnt], sizeof(*insns)), BPF_VERIFIER_GFP);
-+	if (!insns)
-+		return -ENOMEM;
-+	img->insns = insns;
-+	for (pos = cnt; pos--;) {
-+		to = map[pos];
-+		insns[to] = insns[pos];
-+		if (!test_bit(pos, far))
-+			continue;
-+		insns[to].off = 1;
-+		insns[to + 1] = BPF_JMP_A(1);
-+		insns[to + 2] = BPF_JMP32_A(map[tgt[pos]] - to - 3);
-+		tgt[pos] = NO_JUMP;
-+	}
-+	for (pos = 0; pos <= img->cnt; pos++) {
-+		img->new_off[pos] = map[img->new_off[pos]];
-+		img->new_tgt[pos] = map[img->new_tgt[pos]];
-+	}
-+	img->grow += map[cnt] - cnt;
-+	img->new_cnt = map[cnt];
-+	return 0;
-+}
-+
- /*
-  * Build the image of 'prog' with the queued patches applied in img->insns,
-  * without touching 'prog'. img->new_off[] maps each old insn to the start of
-  * its patch, img->new_tgt[] to where jumps to it land, both map a removed insn
-  * to the next one that stays. img->new_linfo[] is there when insns are
-- * removed, see patch_image_map_linfo(). On -ERANGE, img->bad is the old insn
-- * whose jump got out of range. No list has both removed and inserted insns.
-+ * removed, see patch_image_map_linfo(). On -EFAULT, img->bad is the old insn
-+ * whose jump is wrong. No list has both removed and inserted insns.
-  */
- int bpf_patch_list_build(const struct bpf_patch_list *pl, const struct bpf_prog *prog,
- 			 struct bpf_patch_image *img)
- {
--	u32 cnt = prog->len, i, k, n;
-+	u32 cnt = prog->len, i, k, n, pos, *map;
-+	u32 *tgt __free(kvfree) = NULL;
-+	bool far = false;
- 	int err;
-+	s64 rel;
- 
- 	memset(img, 0, sizeof(*img));
- 	img->cnt = cnt;
-@@ -670,7 +720,7 @@ int bpf_patch_list_build(const struct bpf_patch_list *pl, const struct bpf_prog
- 			img->grow += pl->patches[k++].len - 1;
- 		}
- 	}
--	img->new_cnt = cnt + img->grow;
-+	img->short_cnt = img->new_cnt = cnt + img->grow;
- 
- 	if (img->del && prog->aux->nr_linfo) {
- 		err = patch_image_map_linfo(img, prog);
-@@ -679,34 +729,53 @@ int bpf_patch_list_build(const struct bpf_patch_list *pl, const struct bpf_prog
- 	}
- 
- 	img->insns = kvmalloc_array(img->new_cnt, sizeof(*img->insns), BPF_VERIFIER_GFP);
--	if (!img->insns)
-+	tgt = kvmalloc_array(img->new_cnt, sizeof(*tgt), BPF_VERIFIER_GFP);
-+	if (!img->insns || !tgt)
- 		return -ENOMEM;
- 
--	for (i = 0, k = 0; i < cnt; i++) {
-+	for (i = 0, k = 0, pos = 0; i < cnt; i++) {
-+		struct bpf_insn_patch none = { .off = i, .len = 1 };
- 		const struct bpf_insn *src = &prog->insnsi[i];
--		u32 len = 1, pos = img->new_off[i];
-+		const struct bpf_insn_patch *p = &none;
- 
- 		if (k < pl->cnt && pl->patches[k].off == i) {
--			src = &pl->insns[pl->patches[k].start];
--			len = pl->patches[k++].len;
-+			p = &pl->patches[k++];
-+			src = &pl->insns[p->start];
- 		}
- 
--		for (n = 0; n < len; n++) {
--			img->insns[pos + n] = src[n];
--			err = patch_list_adj_insn(&img->insns[pos + n], img->new_off,
--						  img->new_tgt, cnt, i, n, len, pos + n);
-+		for (n = 0; n < p->len; n++, pos++) {
-+			img->insns[pos] = src[n];
-+			err = patch_insn_target(img, p, &src[n], n, &tgt[pos]);
- 			if (err) {
- 				img->bad = i;
- 				return err;
- 			}
-+			rel = (s64)tgt[pos] - pos - 1;
-+			far |= is_short_jump(&src[n]) && rel != (s16)rel;
- 		}
- 	}
-+
-+	err = far ? patch_image_relax(img, tgt) : 0;
-+	if (err)
-+		return err;
-+
-+	for (i = 0, map = img->relaxed; i < img->short_cnt; i++) {
-+		if (tgt[i] == NO_JUMP)
-+			continue;
-+		pos = map ? map[i] : i;
-+		rel = (s64)(map ? map[tgt[i]] : tgt[i]) - pos - 1;
-+		if (is_short_jump(&img->insns[pos]))
-+			img->insns[pos].off = rel;
-+		else
-+			img->insns[pos].imm = rel;
-+	}
- 	return 0;
- }
- 
- void bpf_patch_image_free(struct bpf_patch_image *img)
- {
- 	kvfree(img->insns);
-+	kvfree(img->relaxed);
- 	kvfree(img->new_linfo);
- 	kvfree(img->new_tgt);
- 	kvfree(img->new_off);
-@@ -1576,7 +1645,6 @@ static int bpf_jit_blind_insn(const struct bpf_insn *from,
- {
- 	struct bpf_insn *to = to_buff;
- 	u32 imm_rnd = get_random_u32();
--	int off;
- 
- 	BUILD_BUG_ON(BPF_REG_PARAMS + 3 != MAX_BPF_JIT_REG);
- 	BUILD_BUG_ON(BPF_REG_ARENA_SP + 2 != MAX_BPF_JIT_REG);
-@@ -1649,15 +1717,9 @@ static int bpf_jit_blind_insn(const struct bpf_insn *from,
- 	case BPF_JMP | BPF_JSGE | BPF_K:
- 	case BPF_JMP | BPF_JSLE | BPF_K:
- 	case BPF_JMP | BPF_JSET | BPF_K:
--		/* Accommodate for extra offset in case of a backjump. */
--		off = from->off;
--		if (off < 0)
--			off -= 2;
--		if (off < S16_MIN)
--			return -ERANGE;
- 		*to++ = BPF_ALU64_IMM(BPF_MOV, BPF_REG_AX, imm_rnd ^ from->imm);
- 		*to++ = BPF_ALU64_IMM(BPF_XOR, BPF_REG_AX, imm_rnd);
--		*to++ = BPF_JMP_REG(from->code, from->dst_reg, BPF_REG_AX, off);
-+		*to++ = BPF_JMP_REG(from->code, from->dst_reg, BPF_REG_AX, from->off);
- 		break;
- 
- 	case BPF_JMP32 | BPF_JEQ  | BPF_K:
-@@ -1671,16 +1733,9 @@ static int bpf_jit_blind_insn(const struct bpf_insn *from,
- 	case BPF_JMP32 | BPF_JSGE | BPF_K:
- 	case BPF_JMP32 | BPF_JSLE | BPF_K:
- 	case BPF_JMP32 | BPF_JSET | BPF_K:
--		/* Accommodate for extra offset in case of a backjump. */
--		off = from->off;
--		if (off < 0)
--			off -= 2;
--		if (off < S16_MIN)
--			return -ERANGE;
- 		*to++ = BPF_ALU32_IMM(BPF_MOV, BPF_REG_AX, imm_rnd ^ from->imm);
- 		*to++ = BPF_ALU32_IMM(BPF_XOR, BPF_REG_AX, imm_rnd);
--		*to++ = BPF_JMP32_REG(from->code, from->dst_reg, BPF_REG_AX,
--				      off);
-+		*to++ = BPF_JMP32_REG(from->code, from->dst_reg, BPF_REG_AX, from->off);
- 		break;
- 
- 	case BPF_LD | BPF_IMM | BPF_DW:
-@@ -1880,10 +1935,6 @@ struct bpf_prog *bpf_jit_blind_constants(struct bpf_verifier_env *env, struct bp
- 		if (!rewritten)
- 			continue;
- 
--		if (rewritten < 0) {
--			err = rewritten;
--			break;
--		}
- 		last = env ? bpf_patch_list_add(env, i, insn_buff, rewritten) :
- 			     __bpf_patch_list_add(&pl, clone, i, insn_buff, rewritten);
- 		if (IS_ERR(last)) {
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index e05d767ab71e..3daa419f75a9 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -198,7 +198,6 @@ struct bpf_insn *bpf_patch_list_add(struct bpf_verifier_env *env, u32 off,
- 		return insn;
- 	}
- 
--	/* -ERANGE takes a second patch with a 16-bit jump back out of it: no pass has one */
- 	return __bpf_patch_list_add(pl, env->prog, off, patch, len);
- }
- 
-@@ -218,13 +217,11 @@ int bpf_patch_list_del(struct bpf_verifier_env *env, u32 off)
- 	return __bpf_patch_list_del(pl, env->prog, off);
- }
- 
--/* Queue insns to go in front of insn 'off', see __bpf_patch_list_insert(). */
--int bpf_patch_list_insert(struct bpf_verifier_env *env, u32 off,
--			  const struct bpf_insn *insns, u32 cnt)
-+static int patch_list_insert(struct bpf_verifier_env *env, u32 off,
-+			     const struct bpf_insn *insns, u32 cnt, bool behind)
- {
- 	struct bpf_patch_list *pl = &env->patch_list;
- 	struct bpf_insn_patch *p = pl->cnt ? &pl->patches[pl->cnt - 1] : NULL;
--	int err;
- 
- 	if (bpf_must_abort())
- 		return -EINTR;
-@@ -234,11 +231,21 @@ int bpf_patch_list_insert(struct bpf_verifier_env *env, u32 off,
- 			    env, "insns inserted at %u out of order", off))
- 		return -EFAULT;
- 
--	err = __bpf_patch_list_insert(pl, env->prog, off, insns, cnt);
--	if (err == -ERANGE)
--		verbose(env, "insn %d cannot be patched due to 16-bit range\n",
--			env->insn_aux_data[off].orig_idx);
--	return err;
-+	return __bpf_patch_list_insert(pl, env->prog, off, insns, cnt, behind);
-+}
-+
-+/* Queue insns to go in front of insn 'off', see __bpf_patch_list_insert(). */
-+int bpf_patch_list_insert(struct bpf_verifier_env *env, u32 off,
-+			  const struct bpf_insn *insns, u32 cnt)
-+{
-+	return patch_list_insert(env, off, insns, cnt, false);
-+}
-+
-+/* Queue insns to go behind insn 'off', which does not fall through. They are not dead code. */
-+int bpf_patch_list_append(struct bpf_verifier_env *env, u32 off,
-+			  const struct bpf_insn *insns, u32 cnt)
-+{
-+	return patch_list_insert(env, off, insns, cnt, true);
- }
- 
- void bpf_patch_list_free(struct bpf_verifier_env *env)
-@@ -255,20 +262,24 @@ static void patch_list_adj_aux(struct bpf_prog *prog, struct bpf_insn_patch *p,
- 			       const struct bpf_insn_aux_data *old,
- 			       struct bpf_insn_aux_data *slot)
- {
--	struct bpf_insn_aux_data *last = slot + p->len - 1;
-+	struct bpf_insn_aux_data *last = slot + p->self;
- 	struct bpf_insn *orig = &p->orig;
- 	u32 i;
- 
-+	memset(slot, 0, sizeof(*slot) * p->len);
- 	*last = *old;
- 	/* Recompute zext_dst: the last insn of the patch need not be the patched one. */
--	last->zext_dst = bpf_insn_def32(prog, &patch[p->len - 1]) >= 0;
--	memset(slot, 0, sizeof(*slot) * (p->len - 1));
-+	last->zext_dst = bpf_insn_def32(prog, &patch[p->self]) >= 0;
- 
--	for (i = 0; i < p->len - 1; i++) {
-+	for (i = 0; i < p->len; i++) {
-+		if (i == p->self)
-+			continue;
- 		/* Expand the seen count of the patched insn to the patch. */
--		slot[i].seen = last->seen;
-+		slot[i].seen = last->seen ?: i > p->self;
- 		/* messages name the insn of the original program */
- 		slot[i].orig_idx = last->orig_idx;
-+		/* for may_goto in front of the insn, see bpf_insert_loop_guards() */
-+		slot[i].live_regs_before = last->live_regs_before;
- 		slot[i].zext_dst = bpf_insn_def32(prog, &patch[i]) >= 0;
- 		/*
- 		 * A copy of the patched insn keeps its marking. Any other
-@@ -288,12 +299,12 @@ static void patch_list_adj_aux(struct bpf_prog *prog, struct bpf_insn_patch *p,
- 	 * systematically mark it for non-stack access if it is not the patched
- 	 * insn, otherwise keep the original marking.
+ #define iarray_for_each(item, arr)						\
+ 	for (int ___idx = 0;							\
+ 	     ___idx < (arr)->cnt && ({ item = (arr)->items[___idx]; 1; });	\
+@@ -1088,6 +1114,7 @@ struct bpf_subprog_info {
+ 	 * U32_MAX when it has none.
  	 */
--	if (bpf_is_mem_insn(&patch[p->len - 1]) &&
--	    memcmp(&patch[p->len - 1], orig, sizeof(*orig)))
-+	if (bpf_is_mem_insn(&patch[p->self]) &&
-+	    memcmp(&patch[p->self], orig, sizeof(*orig)))
- 		last->non_stack_access = true;
- 
- 	/* indirect jumps to the replaced insn land on p->target */
--	if (last->indirect_target && p->target != p->len - 1) {
-+	if (last->indirect_target && p->target != p->self) {
- 		slot[p->target].indirect_target = 1;
- 		last->indirect_target = 0;
- 	}
-@@ -325,6 +336,28 @@ static void patch_list_drop_removed(struct bpf_verifier_env *env)
- 	}
+ 	u32 exit_idx;
++	u32 callx_edge; /* 1 + the first of its env->callx_edges, 0 if none */
+ 	struct bpf_iarray *jt; /* jump table shared by all gotox of this subprogram */
+ 	u16 stack_depth; /* max. stack depth used by this function */
+ 	u16 stack_extra;
+@@ -1341,13 +1368,12 @@ struct bpf_verifier_env {
+ 	u32 func_set_cnt;
+ 	struct bpf_index func_set_index;
+ 	bool has_callx;
+-	/*
+-	 * Call graph edges created by callx instructions. A bitmap of
+-	 * subprog_cnt * subprog_cnt bits, where bit (caller * subprog_cnt + callee)
+-	 * is set when the main verification pass sees 'caller' calling 'callee'
+-	 * via callx. Allocated when the first such edge is recorded.
+-	 */
+-	unsigned long *callx_edges;
++	/* What callx and helpers call, a list for each caller, see record_callx_edge() */
++	struct bpf_callx_edge {
++		u32 callee;
++		u32 next;	/* 1 + the next edge of the caller, 0 if none */
++	} *callx_edges;
++	struct bpf_index callx_index;
+ 	struct bpf_idmap idmap_scratch;
+ 	struct {
+ 		int *insn_state;
+diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
+index 92dc8d0dc22a..07412c0b9d30 100644
+--- a/kernel/bpf/cfg.c
++++ b/kernel/bpf/cfg.c
+@@ -238,6 +238,134 @@ int bpf_index_add(struct bpf_index *index, u64 key, u32 val)
+ 	return 0;
  }
  
-+/*
-+ * Make room for the insns that patch_image_relax() added.
-+ * A jump to dead code is dead code, see bpf_opt_hard_wire_dead_code_branches().
-+ */
-+static void patch_list_relax_aux(const struct bpf_patch_image *img, struct bpf_insn_aux_data *data)
++int bpf_call_graph_init(struct bpf_call_graph *cg, u32 cnt)
 +{
-+	const u32 *map = img->relaxed;
-+	u32 i, k, to;
++	*cg = (struct bpf_call_graph){ .cnt = cnt };
++	/* the last 4 parts are for bpf_call_graph_sort() */
++	cg->first = kvcalloc(8 * (size_t)cnt + 1, sizeof(u32), BPF_VERIFIER_GFP);
++	cg->marks = kvcalloc(cnt, sizeof(u16), BPF_VERIFIER_GFP);
++	if (!cg->first || !cg->marks)
++		return -ENOMEM;
++	cg->postorder = cg->first + cnt + 1;
++	cg->order = cg->postorder + cnt;
++	cg->cycle = cg->order + cnt;
++	return 0;
++}
 +
-+	for (i = img->short_cnt; i--;)
-+		data[map[i]] = data[i];
-+	for (i = 0; i < img->short_cnt; i++) {
-+		for (k = map[i] + 1; k < map[i + 1]; k++) {
-+			to = k + 1 + bpf_jmp_offset(&img->insns[k]);
-+			data[k] = (struct bpf_insn_aux_data){
-+				.orig_idx = data[map[i]].orig_idx,
-+				.seen = data[map[i]].seen ? data[to].seen : 0,
-+			};
++void bpf_call_graph_free(struct bpf_call_graph *cg)
++{
++	kvfree(cg->first);
++	kvfree(cg->callee);
++	kvfree(cg->marks);
++}
++
++/* Callers come in increasing order */
++int bpf_call_graph_add(struct bpf_call_graph *cg, u32 caller, u32 callee)
++{
++	if (WARN_ON_ONCE(callee >= cg->cnt))
++		return -EFAULT;
++	if (!bpf_table_next(cg->callee, cg->edge_cnt))
++		return -ENOMEM;
++	while (cg->next <= caller)
++		cg->first[cg->next++] = cg->edge_cnt;
++	cg->callee[cg->edge_cnt++] = callee;
++	return 0;
++}
++
++/*
++ * Tarjan's algorithm. Calls of the nodes that have a mark in 'skip' do not count.
++ *
++ *   main -> f1 -> f2 -> f3      postorder:  f3 f2 f1 main
++ *           ^     |             order:      f3 f2 f1 main    callees first, a cycle in a row
++ *           +-----+             cycle:      0  1  1  3       where the cycle starts in 'order'
++ */
++void bpf_call_graph_sort(struct bpf_call_graph *cg, u16 skip)
++{
++	u32 cnt = cg->cnt, *low = cg->cycle + cnt, *edge = low + cnt, *path = edge + cnt;
++	u32 *open = path + cnt, depth = 0, top = 0, num = 0, done = 0, post = 0, i, s, j;
++
++	while (cg->next <= cnt)
++		cg->first[cg->next++] = cg->edge_cnt;
++	/* low: 0 - not visited, U32_MAX - is in 'order' */
++	memset(low, 0, cnt * sizeof(*low));
++	for (i = 0; i < cnt; i++) {
++		if (!low[i])
++			path[depth++] = i;
++		while (depth) {
++			s = path[depth - 1];
++			if (!low[s]) {
++				/* until the node is in 'order': its number */
++				low[s] = cg->cycle[s] = ++num;
++				edge[s] = cg->first[s];
++				open[top++] = s;
++			}
++			if (edge[s] < cg->first[s + 1]) {
++				j = cg->callee[edge[s]];
++				if (cg->marks[j] & skip) {
++					edge[s]++;
++				} else if (!low[j]) {
++					path[depth++] = j;
++				} else {
++					low[s] = min(low[s], low[j]);
++					edge[s]++;
++				}
++				continue;
++			}
++			depth--;
++			cg->postorder[post++] = s;
++			if (low[s] != cg->cycle[s])
++				continue;
++			for (j = done; low[s] != U32_MAX; done++) {
++				cg->order[done] = open[--top];
++				cg->cycle[open[top]] = j;
++				low[open[top]] = U32_MAX;
++			}
 +		}
 +	}
 +}
 +
- /* Fill 'data', the aux data of the new image, from the aux data of the old one. */
- static void patch_list_remap_aux(struct bpf_verifier_env *env,
- 				 const struct bpf_patch_image *img,
-@@ -332,22 +365,24 @@ static void patch_list_remap_aux(struct bpf_verifier_env *env,
- {
- 	struct bpf_patch_list *pl = &env->patch_list;
- 	struct bpf_insn_patch *p;
--	u32 i, k, end;
-+	u32 i, k, end, pos;
- 
--	for (i = 0, k = 0; i < img->cnt; i = end) {
-+	for (i = 0, k = 0, pos = 0; i < img->cnt; i = end) {
- 		if (k < pl->cnt && pl->patches[k].off == i) {
- 			p = &pl->patches[k++];
- 			if (p->len)
- 				patch_list_adj_aux(env->prog, p, &pl->insns[p->start],
--						   &env->insn_aux_data[i],
--						   &data[img->new_off[i]]);
-+						   &env->insn_aux_data[i], &data[pos]);
-+			pos += p->len;
- 			end = i + 1;
- 			continue;
- 		}
- 		end = k < pl->cnt ? pl->patches[k].off : img->cnt;
--		memcpy(data + img->new_off[i], env->insn_aux_data + i,
--		       sizeof(*data) * (end - i));
-+		memcpy(data + pos, env->insn_aux_data + i, sizeof(*data) * (end - i));
-+		pos += end - i;
- 	}
-+	if (img->relaxed)
-+		patch_list_relax_aux(img, data);
- 	vfree(env->insn_aux_data);
- 	env->insn_aux_data = data;
- 	env->insn_aux_data_len = img->new_cnt;
-@@ -494,11 +529,6 @@ int bpf_patch_list_commit(struct bpf_verifier_env *env)
- 		goto out;
- 
- 	err = bpf_patch_list_build(pl, prog, &img);
--	if (err == -ERANGE) {
--		verbose(env, "insn %d cannot be patched due to 16-bit range\n",
--			env->insn_aux_data[img.bad].orig_idx);
--		goto out;
--	}
- 	if (verifier_bug_if(err == -EFAULT, env, "insn %u jumps out of the program",
- 			    img.bad))
- 		goto out;
-@@ -535,52 +565,6 @@ int bpf_patch_list_commit(struct bpf_verifier_env *env)
- 	return err;
- }
- 
--/*
-- * insn was moved down by delta insns inside its own patch. Operands relative
-- * to the pc that point in front of the old position did not move with it.
-- */
--static int bpf_adj_moved_insn(struct bpf_insn *insn, u32 delta)
--{
--	u8 class = BPF_CLASS(insn->code), op = BPF_OP(insn->code);
--	s64 off = insn->imm, off_min = S32_MIN;
--	bool is_imm = true;
--
--	if (bpf_pseudo_func(insn) || bpf_pseudo_call(insn)) {
--		/* subprog that started at the old position starts with the patch */
--		if (off >= 0)
--			return 0;
--	} else if ((class == BPF_JMP || class == BPF_JMP32) &&
--		   op != BPF_CALL && op != BPF_EXIT) {
--		if (insn->code != (BPF_JMP32 | BPF_JA)) {
--			off = insn->off;
--			off_min = S16_MIN;
--			is_imm = false;
--		}
--		/* jump to itself stays */
--		if (off >= -1)
--			return 0;
--	} else {
--		return 0;
--	}
--
--	off -= delta;
--	if (off < off_min)
--		return -ERANGE;
--	if (is_imm)
--		insn->imm = off;
--	else
--		insn->off = off;
--	return 0;
--}
--
--static bool jumps_to_itself(const struct bpf_insn *insn)
--{
--	u8 class = BPF_CLASS(insn->code), op = BPF_OP(insn->code);
--
--	return (class == BPF_JMP || class == BPF_JMP32) && op != BPF_CALL && op != BPF_EXIT &&
--	       insn->code != (BPF_JMP32 | BPF_JA) && insn->off == -1;
--}
--
- /* How a subprog leaves when it is out of budget, see push_budget_exit() */
- static struct bpf_insn budget_exit_insn(struct bpf_verifier_env *env, struct bpf_subprog_info *sub)
- {
-@@ -591,205 +575,62 @@ static struct bpf_insn budget_exit_insn(struct bpf_verifier_env *env, struct bpf
- 	return BPF_RAW_INSN(BPF_JMP | BPF_EXIT, 0, BPF_UNWIND_EXIT, 0, 0);
- }
- 
--/*
-- * may_goto has 16 bits for the offset, and what is between it and its target is going
-- * to grow: may_goto itself becomes 10 insns, 14 when it has to save a register.
-- */
--#define BPF_GUARD_NEAR	2048
--
--static bool guard_leaves_subprog(const struct bpf_insn_aux_data *aux)
--{
--	return aux->loop_guard && !aux->guard_no_unwind;
--}
--
--/*
-- * 'r0 = 0; exit' behind the last insn of the subprog, for all its guards that are near.
-- * Returns the number of insns that are going to be added.
-- */
--static int append_budget_exit(struct bpf_verifier_env *env, int s)
--{
--	struct bpf_subprog_info *sub = &env->subprog_info[s];
--	int last = (sub + 1)->start - 1, n = 0, i;
--	struct bpf_insn buf[4], *insn;
--
--	for (i = max_t(int, sub->start, last + 1 - BPF_GUARD_NEAR); i <= last; i++)
--		if (guard_leaves_subprog(&env->insn_aux_data[i]))
--			break;
--	if (i > last)
--		return 0;
--
--	buf[n++] = env->prog->insnsi[last];
--	buf[n++] = BPF_MOV64_IMM(BPF_REG_0, 0);
--	if (bpf_ret_reg_pair(env, s))
--		buf[n++] = BPF_MOV64_IMM(BPF_REG_2, 0);
--	buf[n++] = budget_exit_insn(env, sub);
--	insn = bpf_patch_list_add(env, last, buf, n);
--	return IS_ERR(insn) ? PTR_ERR(insn) : n - 1;
--}
--
- /*
-  * Add may_goto in front of the insns that the main pass marked, see
-  * check_loop_guard(). It verified the edge from the insn to where may_goto goes.
-+ *
-+ *	may_goto to		or	may_goto leave		see push_budget_exit()
-+ *	insn				insn
-+ *					...
-+ *					last insn of the subprog
-+ *				leave:	r0 = 0
-+ *					exit
-+ *
-+ * bpf_do_misc_fixups() keeps the address of the count of may_goto in a register that is
-+ * dead at the may_goto. What is live in front of the insn is live in front of its guard.
-+ * Nothing else is:
-+ *  - The guard of a jump goes where the jump goes.
-+ *  - What is live where the guard at the head of a loop goes is live at the head,
-+ *    see bpf_head_guard_target().
-+ *  - On the way out of the subprog R0, and R2 of a pair, are set to 0.
-  */
- int bpf_insert_loop_guards(struct bpf_verifier_env *env)
- {
-+	struct bpf_insn patch[2] = { BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, 0, 0) };
-+	struct bpf_insn leave[3] = { BPF_MOV64_IMM(BPF_REG_0, 0) };
- 	struct bpf_insn_aux_data *aux = env->insn_aux_data;
--	int len = env->prog->len, i, r, s, to, n, jmp, err = 0;
--	struct bpf_insn *patch, *insn;
--	int *target, *leave, *moved;
--	bool indirect;
--	u16 *zero;
--	s64 off;
--
--	for (i = 0; i < len; i++)
--		if (aux[i].loop_guard)
--			break;
--	if (i == len)
--		return 0;
--
--	/*
--	 * Where the subprog has 'r0 = 0; exit', 0 if it has none. And how far that moved
--	 * the subprog: guard_to is from the time before.
--	 */
--	leave = kvcalloc(2 * env->subprog_cnt, sizeof(int), BPF_VERIFIER_GFP);
--	if (!leave)
--		return -ENOMEM;
--	moved = leave + env->subprog_cnt;
--	for (s = 0; s < env->subprog_cnt && !err; s++) {
--		leave[s] = append_budget_exit(env, s);
--		if (leave[s] < 0)
--			err = leave[s];
--	}
--	/* A guard cannot jump into a patch that is in the list: 'r0 = 0' has no index yet. */
--	err = err ?: bpf_patch_list_commit(env);
--	if (err) {
--		kvfree(leave);
--		return err;
--	}
--	aux = env->insn_aux_data;
--	len = env->prog->len;
--	for (s = 0, n = 0; s < env->subprog_cnt; s++) {
--		moved[s] = n;
--		n += leave[s];
--		if (!leave[s])
--			continue;
--		i = env->subprog_info[s + 1].start;
--		leave[s] = i - leave[s];
--		/*
--		 * The list gives what is known about an insn to the last insn of its patch,
--		 * but for indirect_target. Here the original insn is the first one.
--		 */
--		indirect = aux[leave[s] - 1].indirect_target;
--		swap(aux[leave[s] - 1], aux[i - 1]);
--		aux[leave[s] - 1].indirect_target = indirect;
--		aux[i - 1].indirect_target = false;
--		/* the last insn may be dead code */
--		while (--i >= leave[s])
--			aux[i].seen = 1;
--	}
--
--	/* where the guard of the insn goes */
--	target = kvcalloc(len, sizeof(int), BPF_VERIFIER_GFP);
--	zero = kvcalloc(len, sizeof(u16), BPF_VERIFIER_GFP);
--	patch = kvcalloc(8, sizeof(*patch), BPF_VERIFIER_GFP);
--	if (!target || !zero || !patch) {
--		err = -ENOMEM;
--		goto out;
--	}
--	for (i = 0; i < len; i++) {
--		s = bpf_find_containing_subprog(env, i) - env->subprog_info;
--		target[i] = aux[i].loop_guard ? aux[i].guard_to + moved[s] : -1;
--		if (guard_leaves_subprog(&aux[i])) {
--			/* see push_budget_exit() */
--			if (leave[s] && leave[s] - i <= BPF_GUARD_NEAR) {
--				target[i] = leave[s];
--			} else {
--				target[i] = -2;
--				zero[i] = BIT(BPF_REG_0);
--				if (bpf_ret_reg_pair(env, s))
--					zero[i] |= BIT(BPF_REG_2);
--			}
--		}
--	}
--
--	for (i = 0; i < len; i++) {
--		to = target[i];
--		if (to == -1)
--			continue;
--		/*
--		 *	may_goto to		or	may_goto +1
--		 *	insn				goto +N
--		 *					r0 = 0, ...
--		 *					exit
--		 *					insn
--		 */
--		n = 0;
--		if (zero[i]) {
--			patch[n++] = BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, 1, 0);
--			patch[n++] = BPF_JMP_A(hweight16(zero[i]) + 1);
--			for (r = BPF_REG_0; r < BPF_REG_FP; r++)
--				if (zero[i] & BIT(r))
--					patch[n++] = BPF_MOV64_IMM(r, 0);
--		}
--		jmp = n++;
--		/* What is behind moves with this patch. The other patches are not there yet. */
--		if (to == -2)
--			off = 0;
--		else if (to > i)
--			off = to - i + n - jmp - 1;
--		else
--			off = to - (i + jmp) - 1;
--		if (off > S16_MAX || off < S16_MIN) {
--			verbose(env, "exit of the loop is too far from insn %d for may_goto\n", i);
--			err = -ERANGE;
--			break;
--		}
--		patch[jmp] = BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, off, 0);
--		if (to == -2)
--			patch[jmp] = budget_exit_insn(env, bpf_find_containing_subprog(env, i));
--		patch[n] = env->prog->insnsi[i];
--		/* A jump to itself is a back edge. It goes through may_goto like the others. */
--		if (jumps_to_itself(&patch[n]))
--			patch[n].off -= n;
--		else
--			err = bpf_adj_moved_insn(&patch[n], n);
--		if (err) {
--			verbose(env, "insn %d cannot be patched due to 16-bit range\n", i);
--			break;
--		}
--		n++;
--		insn = bpf_patch_list_add(env, i, patch, n);
--		if (IS_ERR(insn)) {
--			err = PTR_ERR(insn);
--			break;
-+	struct bpf_subprog_info *sub;
-+	struct bpf_insn *insn;
-+	int i, s, n, err;
-+	bool leaves;
++bool bpf_call_graph_recursive(const struct bpf_call_graph *cg, u32 s)
++{
++	u32 j;
 +
-+	for (s = 0; s < env->subprog_cnt; s++) {
-+		sub = &env->subprog_info[s];
-+		n = bpf_ret_reg_pair(env, s) ? 3 : 2;
-+		leaves = false;
-+		for (i = sub->start; i < sub[1].start; i++) {
-+			if (!aux[i].loop_guard)
-+				continue;
-+			/* A jump to itself is a back edge. It goes through may_goto too. */
-+			patch[1] = env->prog->insnsi[i];
-+			insn = bpf_patch_list_add(env, i, patch, 2);
-+			if (IS_ERR(insn))
-+				return PTR_ERR(insn);
-+			if (aux[i].guard_no_unwind)
-+				bpf_patch_list_jump(&env->patch_list, insn - 1, aux[i].guard_to, 0);
-+			else
-+				bpf_patch_list_jump(&env->patch_list, insn - 1, sub[1].start, n);
-+			leaves |= !aux[i].guard_no_unwind;
- 		}
--	}
--	err = err ?: bpf_patch_list_commit(env);
--	if (err)
--		goto out;
--	/*
--	 * bpf_do_misc_fixups() keeps the address of the count of may_goto in a register that is
--	 * dead at the may_goto. A new insn has no live_regs_before: all registers would be dead.
--	 * What is live in front of the insn is live in front of its guard. Nothing else is:
--	 *  - The guard of a jump goes where the jump goes.
--	 *  - What is live where the guard at the head of a loop goes is live at the head,
--	 *    see bpf_head_guard_target().
--	 *  - On the way out of the subprog R0, and R2 of a pair, are set to 0.
--	 */
--	aux = env->insn_aux_data;
--	for (i = 0, n = 0; i < len; i++) {
--		if (target[i] == -1)
-+		if (!leaves)
- 			continue;
--		r = zero[i] ? 3 + hweight16(zero[i]) : 1;
--		aux[i + n].live_regs_before = aux[i + n + r].live_regs_before;
--		n += r;
-+		leave[1] = BPF_MOV64_IMM(BPF_REG_2, 0);
-+		leave[n - 1] = budget_exit_insn(env, sub);
-+		err = bpf_patch_list_append(env, i - 1, leave, n);
-+		if (err)
-+			return err;
- 	}
--out:
--	kvfree(leave);
--	kvfree(target);
--	kvfree(zero);
--	kvfree(patch);
--	return err;
-+	return bpf_patch_list_commit(env);
- }
- 
- /*
-@@ -1530,13 +1371,7 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
- 			struct bpf_insn *patch = insn_buf;
- 
- 			*patch++ = BPF_ST_NOSPEC();
--			*patch = *insn;
--			ret = bpf_adj_moved_insn(patch++, 1);
--			if (ret) {
--				verbose(env, "insn %d cannot be patched due to 16-bit range\n",
--					env->insn_aux_data[i].orig_idx);
--				return ret;
--			}
-+			*patch++ = *insn;
- 			cnt = patch - insn_buf;
- 			insn = bpf_patch_list_add(env, i, insn_buf, cnt);
- 			if (IS_ERR(insn))
-@@ -2262,12 +2097,10 @@ int bpf_fixup_call_args(struct bpf_verifier_env *env)
- 	return err;
- }
- 
--/* The function requires that first instruction in 'patch' is insnsi[prog->len - 1] */
- static int add_hidden_subprog(struct bpf_verifier_env *env, struct bpf_insn *patch, int len)
++	bpf_for_each_callee(cg, s, j)
++		if (cg->cycle[j] == cg->cycle[s])
++			return true;
++	return false;
++}
++
++/* What a node has of 'mask', all nodes that it gets to have */
++void bpf_call_graph_mark_callees(struct bpf_call_graph *cg, u16 mask)
++{
++	u32 start, end, i, j;
++	u16 m;
++
++	for (end = cg->cnt; end; end = start) {
++		start = cg->cycle[cg->order[end - 1]];
++		for (i = start, m = 0; i < end; i++)
++			m |= cg->marks[cg->order[i]] & mask;
++		for (i = start; i < end; i++)
++			bpf_for_each_callee(cg, cg->order[i], j)
++				cg->marks[j] |= m;
++	}
++}
++
++/* What a node has of 'mask', all nodes that get to it have. 'skip' is that of the sort. */
++void bpf_call_graph_mark_callers(struct bpf_call_graph *cg, u16 mask, u16 skip)
++{
++	u32 start, end, j;
++	u16 m;
++
++	for (start = 0; start < cg->cnt; start = end) {
++		for (end = start, m = 0; end < cg->cnt && cg->cycle[cg->order[end]] == start; end++)
++			bpf_for_each_callee(cg, cg->order[end], j)
++				if (!(cg->marks[j] & skip))
++					m |= cg->marks[j] & mask;
++		for (j = start; j < end; j++)
++			cg->marks[cg->order[j]] |= m;
++	}
++}
++
+ static int copy_insn_array(struct bpf_map *map, u32 start, u32 end, u32 *items)
  {
- 	struct bpf_subprog_info *info = env->subprog_info;
- 	int err, cnt = env->subprog_cnt;
--	struct bpf_insn *last;
- 	struct bpf_prog *prog;
+ 	struct bpf_insn_array_value *value;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index e29eb7d7162b..35b94ab7ba97 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3213,7 +3213,8 @@ static int add_kfuncs(struct bpf_verifier_env *env)
+ 	return 0;
+ }
  
- 	/* We only reserve one slot for hidden subprogs in subprog_info. */
-@@ -2275,19 +2108,13 @@ static int add_hidden_subprog(struct bpf_verifier_env *env, struct bpf_insn *pat
- 		verifier_bug(env, "only one hidden subprog supported");
- 		return -EFAULT;
- 	}
--	/*
--	 * We're not patching any existing instruction, just appending the new
--	 * ones for the hidden subprog.
--	 */
--	last = bpf_patch_list_add(env, env->prog->len - 1, patch, len);
--	if (IS_ERR(last))
--		return PTR_ERR(last);
--	err = bpf_patch_list_commit(env);
-+	err = bpf_patch_list_append(env, env->prog->len - 1, patch, len) ?:
-+	      bpf_patch_list_commit(env);
- 	if (err)
- 		return err;
- 	prog = env->prog;
- 	info[cnt + 1].start = info[cnt].start;
--	info[cnt].start = prog->len - len + 1;
-+	info[cnt].start = prog->len - len;
- 	/* The patch ends with the exit. */
- 	info[cnt].exit_idx = prog->len - 1;
- 	env->subprog_cnt++;
-@@ -2295,44 +2122,17 @@ static int add_hidden_subprog(struct bpf_verifier_env *env, struct bpf_insn *pat
+-static void find_subprog_properties(struct bpf_verifier_env *env)
++/* Before the main pass all insns count, after it those that were 'seen' */
++static void find_subprog_properties(struct bpf_verifier_env *env, bool seen)
+ {
+ 	struct bpf_subprog_info *subprog = env->subprog_info;
+ 	struct bpf_insn *insn = env->prog->insnsi;
+@@ -3222,10 +3223,15 @@ static void find_subprog_properties(struct bpf_verifier_env *env)
+ 	for (cur_subprog = 0; cur_subprog < env->subprog_cnt; cur_subprog++) {
+ 		int i;
+ 
++		subprog[cur_subprog].has_tail_call = false;
++		subprog[cur_subprog].tail_call_reachable = false;
++		subprog[cur_subprog].has_ld_abs = false;
+ 		for (i = subprog[cur_subprog].start;
+ 		     i < subprog[cur_subprog + 1].start; i++) {
+ 			u8 code = insn[i].code;
+ 
++			if (seen && !env->insn_aux_data[i].seen)
++				continue;
+ 			if (code == (BPF_JMP | BPF_CALL) &&
+ 			    insn[i].src_reg == 0 &&
+ 			    insn[i].imm == BPF_FUNC_tail_call) {
+@@ -3310,33 +3316,18 @@ static int check_subprogs(struct bpf_verifier_env *env)
+  */
+ static int record_callx_edge(struct bpf_verifier_env *env, int caller, int callee)
+ {
+-	u32 cnt = env->subprog_cnt;
++	u32 *first = &env->subprog_info[caller].callx_edge, cnt = env->callx_index.cnt;
++	u64 key = (u64)caller << 32 | callee;
+ 
+-	if (!env->callx_edges) {
+-		env->callx_edges = kvcalloc(BITS_TO_LONGS(cnt * cnt), sizeof(long),
+-					    BPF_VERIFIER_GFP);
+-		if (!env->callx_edges)
+-			return -ENOMEM;
+-	}
+-	__set_bit(caller * cnt + callee, env->callx_edges);
++	if (bpf_index_find(&env->callx_index, key) >= 0)
++		return 0;
++	if (!bpf_table_next(env->callx_edges, cnt) || bpf_index_add(&env->callx_index, key, cnt))
++		return -ENOMEM;
++	env->callx_edges[cnt] = (struct bpf_callx_edge){ callee, *first };
++	*first = cnt + 1;
  	return 0;
  }
  
 -/*
-- * Expand may_goto: load the count from the stack, jump to the target of
-- * may_goto when it is zero, then the tail that updates the count.
-- * 'off' is the offset of may_goto, 'reach' how far it jumps once the patches
-- * queued so far are applied, see may_goto_off().
-- * Use gotol when 'reach' is too far for 16-bit offset of a conditional jump.
+- * Return the first subprog with the number >= 'from' that 'caller' calls
+- * via callx, or -1 when there is none.
 - */
--static int may_goto_expand(struct bpf_insn *insn_buf, int off, int reach,
--			   int stack_off, const struct bpf_insn *tail, int tail_cnt)
+-static int next_callx_callee(struct bpf_verifier_env *env, int caller, int from)
 -{
--	int cnt = 0;
+-	u32 cnt = env->subprog_cnt;
+-	unsigned long bit, end = (caller + 1) * cnt;
 -
--	/* Forward jump has to step over the tail */
--	off = off >= 0 ? off + tail_cnt : off - 1;
--	reach = reach >= 0 ? reach + tail_cnt : reach - 1;
--
--	insn_buf[cnt++] = BPF_LDX_MEM(BPF_DW, BPF_REG_AX, BPF_REG_10, stack_off);
--	if (reach == (s16)reach) {
--		insn_buf[cnt++] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_AX, 0, off);
--	} else {
--		insn_buf[cnt++] = BPF_JMP_IMM(BPF_JNE, BPF_REG_AX, 0, 1);
--		insn_buf[cnt++] = BPF_JMP32_A(off >= 0 ? off : off - 1);
--	}
--	memcpy(insn_buf + cnt, tail, tail_cnt * sizeof(*tail));
--	return cnt + tail_cnt;
+-	if (!env->callx_edges || from >= cnt)
+-		return -1;
+-	bit = find_next_bit(env->callx_edges, end, caller * cnt + from);
+-	return bit < end ? bit - caller * cnt : -1;
 -}
 -
  /*
-  * Timed may_goto. All may_goto of a prog use one count and one timestamp: per-cpu memory of the
-  * prog, set in the first insns of the main prog, and by the callers of async callbacks.
-  * @reg holds the address. It is a register that is dead at the may_goto, or R0 that is saved at
-- * @save_off in the stack. See may_goto_expand() for @off and @reach.
-+ * @save_off in the stack. @jmp is the insn that goes where may_goto goes.
-  */
--static int may_goto_expand_timed(struct bpf_insn *insn_buf, int off, int reach,
-+static int may_goto_expand_timed(struct bpf_insn *insn_buf, int *jmp,
- 				 struct bpf_timed_may_goto __percpu *tmg, int reg, int save_off)
- {
- 	struct bpf_insn ld_tmg[] = { BPF_LD_IMM64(reg, (__force unsigned long)tmg) };
--	int cnt = 0, jmp, tail_cnt = save_off ? 6 : 5;
-+	int cnt = 0;
- 
- 	if (save_off)
- 		insn_buf[cnt++] = BPF_STX_MEM(BPF_DW, BPF_REG_10, reg, save_off);
-@@ -2343,19 +2143,9 @@ static int may_goto_expand_timed(struct bpf_insn *insn_buf, int off, int reach,
- 	if (save_off) {
- 		insn_buf[cnt++] = BPF_JMP_IMM(BPF_JNE, BPF_REG_AX, 0, 2);
- 		insn_buf[cnt++] = BPF_LDX_MEM(BPF_DW, reg, BPF_REG_10, save_off);
--		jmp = cnt++;
--		insn_buf[jmp] = BPF_JMP32_A(off >= 0 ? off + tail_cnt : off - jmp);
--	} else {
--		jmp = cnt;
--		off = off >= 0 ? off + tail_cnt : off - jmp;
--		reach = reach >= 0 ? reach + tail_cnt : reach - jmp;
--		if (reach == (s16)reach) {
--			insn_buf[cnt++] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_AX, 0, off);
--		} else {
--			insn_buf[cnt++] = BPF_JMP_IMM(BPF_JNE, BPF_REG_AX, 0, 1);
--			insn_buf[cnt++] = BPF_JMP32_A(off >= 0 ? off : off - 1);
--		}
- 	}
-+	*jmp = cnt;
-+	insn_buf[cnt++] = save_off ? BPF_JMP32_A(0) : BPF_JMP_IMM(BPF_JEQ, BPF_REG_AX, 0, 0);
- 	insn_buf[cnt++] = BPF_ALU64_IMM(BPF_SUB, BPF_REG_AX, 1);
- 	insn_buf[cnt++] = BPF_JMP_IMM(BPF_JNE, BPF_REG_AX, 0, 2);
- 	/* AX is the argument and the return value */
-@@ -2367,27 +2157,6 @@ static int may_goto_expand_timed(struct bpf_insn *insn_buf, int off, int reach,
- 	return cnt;
- }
- 
--/*
-- * The offset of may_goto at 'idx' once the patches queued in front are applied.
-- * The patches that a forward may_goto jumps over aren't queued yet, so its
-- * offset stays as it is.
-- */
--static int may_goto_off(struct bpf_verifier_env *env, const struct bpf_insn *insn,
--			u32 idx)
--{
--	struct bpf_patch_list *pl = &env->patch_list;
--	u32 tgt = idx + insn->off + 1;
--	int off = insn->off;
--	u32 k = pl->cnt;
+  * 'call foo; unwind_goto pad' goes to the pad when foo left with unwind_exit.
+  * JITs don't emit a branch for it. unwind_exit finds the pad by its return
+@@ -3403,93 +3394,40 @@ static int sort_subprogs_topo(struct bpf_verifier_env *env)
+ 	struct bpf_subprog_info *si = env->subprog_info;
+ 	int *insn_postorder = env->cfg.insn_postorder;
+ 	struct bpf_insn *insn = env->prog->insnsi;
+-	int cnt = env->subprog_cnt;
+-	int *dfs_stack = NULL;
+-	int top = 0, order = 0;
+-	int i, ret = 0;
+-	u8 *color = NULL;
 -
--	if (off >= 0)
--		return off;
--	/* all queued patches are in front of idx */
--	while (k > 0 && pl->patches[k - 1].off >= tgt)
--		off -= pl->patches[--k].len - 1;
--	return off;
--}
--
- #ifdef CONFIG_64BIT
- struct bpf_div_magic {
- 	u64 m;		/* multiplier, sign extended for signed division */
-@@ -2599,7 +2368,6 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
- 	if (env->seen_exception && !env->exception_callback_subprog) {
- 		struct bpf_insn *patch = insn_buf;
- 
--		*patch++ = env->prog->insnsi[insn_cnt - 1];
- 		*patch++ = BPF_MOV64_REG(BPF_REG_0, BPF_REG_1);
- 		*patch++ = BPF_EXIT_INSN();
- 		ret = add_hidden_subprog(env, insn_buf, patch - insn_buf);
-@@ -2846,7 +2614,7 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
- 
- 		if (bpf_is_may_goto_insn(insn) && timed_may_goto) {
- 			u16 live = env->insn_aux_data[i].live_regs_before;
--			int reg, save_off = 0;
-+			int reg, jmp, save_off = 0, to = i + insn->off + 1;
- 
- 			/* a register that is dead here holds the address of the count */
- 			for (reg = BPF_REG_0; reg <= BPF_REG_9; reg++)
-@@ -2865,28 +2633,26 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
- 				prog->aux->timed_may_goto = tmg;
- 			}
- 			prog->jit_required = 1;
--			cnt = may_goto_expand_timed(insn_buf, insn->off, may_goto_off(env, insn, i),
--						    tmg, reg, save_off);
-+			cnt = may_goto_expand_timed(insn_buf, &jmp, tmg, reg, save_off);
- 
- 			insn = bpf_patch_list_add(env, i, insn_buf, cnt);
- 			if (IS_ERR(insn))
- 				return PTR_ERR(insn);
-+			bpf_patch_list_jump(&env->patch_list, insn - (cnt - 1 - jmp), to, 0);
- 			goto next_insn;
- 		} else if (bpf_is_may_goto_insn(insn)) {
--			int stack_off = -stack_depth - 8;
--			struct bpf_insn tail[] = {
--				BPF_ALU64_IMM(BPF_SUB, BPF_REG_AX, 1),
--				BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_AX, stack_off),
--			};
-+			int stack_off = -stack_depth - 8, to = i + insn->off + 1;
- 
- 			stack_depth_extra = 8;
--			cnt = may_goto_expand(insn_buf, insn->off,
--					      may_goto_off(env, insn, i),
--					      stack_off, tail, ARRAY_SIZE(tail));
-+			insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_AX, BPF_REG_10, stack_off);
-+			insn_buf[1] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_AX, 0, 0);
-+			insn_buf[2] = BPF_ALU64_IMM(BPF_SUB, BPF_REG_AX, 1);
-+			insn_buf[3] = BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_AX, stack_off);
- 
--			insn = bpf_patch_list_add(env, i, insn_buf, cnt);
-+			insn = bpf_patch_list_add(env, i, insn_buf, 4);
- 			if (IS_ERR(insn))
- 				return PTR_ERR(insn);
-+			bpf_patch_list_jump(&env->patch_list, insn - 2, to, 0);
- 			goto next_insn;
- 		}
- 
-@@ -3521,9 +3287,7 @@ static int inline_bpf_loop(struct bpf_verifier_env *env, int position,
- 	int reg_loop_ctx = BPF_REG_8;
- 
- 	struct bpf_insn *insn_buf = env->insn_buf;
--	u32 callback_start;
- 	struct bpf_insn *last;
--	s32 callback_offset;
- 	u32 cnt = 0;
- 
- 	/* This represents an inlined version of bpf_iter.c:bpf_loop,
-@@ -3565,19 +3329,13 @@ static int inline_bpf_loop(struct bpf_verifier_env *env, int position,
- 	insn_buf[cnt++] = BPF_LDX_MEM(BPF_DW, BPF_REG_7, BPF_REG_10, r7_offset);
- 	insn_buf[cnt++] = BPF_LDX_MEM(BPF_DW, BPF_REG_8, BPF_REG_10, r8_offset);
+-	color = kvzalloc_objs(*color, cnt, BPF_VERIFIER_GFP);
+-	dfs_stack = kvmalloc_objs(*dfs_stack, cnt, BPF_VERIFIER_GFP);
+-	if (!color || !dfs_stack) {
+-		ret = -ENOMEM;
+-		goto out;
+-	}
++	int cnt = env->subprog_cnt, i, j, idx, ret;
++	struct bpf_call_graph cg;
  
 -	/*
--	 * Note: insn_buf[12] is the BPF_CALL_REL instruction. Jumps and calls
--	 * out of a patch are relative to the patch placed at 'position': its
--	 * 'cnt' insns push what is behind 'position' down by cnt - 1.
+-	 * DFS post-order traversal.
+-	 * Color values: 0 = unvisited, 1 = on stack, 2 = done.
 -	 */
--	callback_start = env->subprog_info[callback_subprogno].start;
--	callback_offset = callback_start - position;
--	if (callback_start > position)
--		callback_offset += cnt - 1;
--	insn_buf[12].imm = callback_offset - 12 - 1;
++	ret = bpf_call_graph_init(&cg, cnt);
+ 	for (i = 0; i < cnt; i++) {
+-		if (color[i])
+-			continue;
+-		color[i] = 1;
+-		dfs_stack[top++] = i;
 -
- 	last = bpf_patch_list_add(env, position, insn_buf, cnt);
--	return PTR_ERR_OR_ZERO(last);
-+	if (IS_ERR(last))
-+		return PTR_ERR(last);
-+	/* insn_buf[12] is the BPF_CALL_REL instruction */
-+	bpf_patch_list_jump(&env->patch_list, last - (cnt - 1 - 12),
-+			    env->subprog_info[callback_subprogno].start, 0);
-+	return 0;
- }
- 
- static bool is_bpf_loop_call(struct bpf_insn *insn)
-diff --git a/tools/testing/selftests/bpf/prog_tests/blinding_log.c b/tools/testing/selftests/bpf/prog_tests/blinding_far_jump.c
-similarity index 51%
-rename from tools/testing/selftests/bpf/prog_tests/blinding_log.c
-rename to tools/testing/selftests/bpf/prog_tests/blinding_far_jump.c
-index 658a8494dae5..0b3e09864b32 100644
---- a/tools/testing/selftests/bpf/prog_tests/blinding_log.c
-+++ b/tools/testing/selftests/bpf/prog_tests/blinding_far_jump.c
-@@ -1,24 +1,23 @@
- // SPDX-License-Identifier: GPL-2.0
--/* The verifier log of a prog whose constants are blinded */
-+/* A far jump in a prog whose constants are blinded */
- 
- #include <test_progs.h>
- #include <linux/filter.h>
- #include "sysctl_helpers.h"
- 
- #define NR_CONSTS 11000
--#define LOG_SIZE 65536
- 
- /*
-  * A prog of one function gets its constants blinded when its runtime is
-  * selected. Each 'r0 += 1' becomes 3 insns, which pushes the jump over them
-  * out of its 16-bit range. Serial, because it sets bpf_jit_harden.
-  */
--void serial_test_blinding_log(void)
-+void serial_test_blinding_far_jump(void)
- {
- 	const char *harden = "/proc/sys/net/core/bpf_jit_harden";
--	LIBBPF_OPTS(bpf_prog_load_opts, opts);
-+	char old[16] = {}, pkt[64] = {};
-+	LIBBPF_OPTS(bpf_test_run_opts, opts, .data_in = pkt, .data_size_in = sizeof(pkt));
- 	struct bpf_insn *insns;
--	char old[16] = {}, *log;
- 	int i, cnt = 0, fd;
- 
- 	if (!is_jit_enabled()) {
-@@ -28,32 +27,25 @@ void serial_test_blinding_log(void)
+-		while (top > 0) {
+-			int cur = dfs_stack[top - 1];
+-			int po_start = si[cur].postorder_start;
+-			int po_end = si[cur + 1].postorder_start;
+-			bool pushed = false;
+-			int j;
+-
+-			for (j = po_start; j < po_end; j++) {
+-				int idx = insn_postorder[j];
+-				int callee;
+-
+-				if (bpf_is_callx(&insn[idx])) {
+-					/* find a callee that is not explored yet */
+-					callee = -1;
+-					do {
+-						callee = next_callx_callee(env, cur, callee + 1);
+-					} while (callee >= 0 && color[callee] == 2);
+-					if (callee < 0)
+-						continue;
+-				} else if (bpf_pseudo_call(&insn[idx]) || bpf_pseudo_func(&insn[idx])) {
+-					callee = bpf_find_subprog(env, idx + insn[idx].imm + 1);
+-					if (callee < 0) {
+-						ret = -EFAULT;
+-						goto out;
+-					}
+-				} else {
+-					continue;
+-				}
+-				if (color[callee] == 2)
+-					continue;
+-				/*
+-				 * The call that is its own target never returns. It is
+-				 * also what libbpf leaves in place of a call that it
+-				 * could not resolve.
+-				 */
+-				if (bpf_pseudo_call(&insn[idx]) && insn[idx].imm == -1) {
+-					verbose(env, "call at insn %d calls itself\n", idx);
+-					ret = -EINVAL;
+-					goto out;
+-				}
+-				/* recursion: the order within the cycle is arbitrary */
+-				if (color[callee] == 1)
+-					continue;
+-				color[callee] = 1;
+-				dfs_stack[top++] = callee;
+-				pushed = true;
++		for (j = si[i].postorder_start; j < si[i + 1].postorder_start && !ret; j++) {
++			idx = insn_postorder[j];
++			if (!bpf_pseudo_call(&insn[idx]) && !bpf_pseudo_func(&insn[idx]))
++				continue;
++			/*
++			 * The call that is its own target never returns. It is
++			 * also what libbpf leaves in place of a call that it
++			 * could not resolve.
++			 */
++			if (bpf_pseudo_call(&insn[idx]) && insn[idx].imm == -1) {
++				verbose(env, "call at insn %d calls itself\n", idx);
++				ret = -EINVAL;
+ 				break;
+ 			}
+-
+-			if (!pushed) {
+-				color[cur] = 2;
+-				env->subprog_topo_order[order++] = cur;
+-				top--;
+-			}
++			ret = bpf_call_graph_add(&cg, i,
++						 bpf_find_subprog(env, idx + insn[idx].imm + 1));
+ 		}
  	}
- 
- 	insns = calloc(NR_CONSTS + 3, sizeof(*insns));
--	log = calloc(1, LOG_SIZE);
--	if (!ASSERT_OK_PTR(insns, "insns") || !ASSERT_OK_PTR(log, "log"))
--		goto out;
-+	if (!ASSERT_OK_PTR(insns, "insns"))
-+		return;
- 
--	insns[cnt++] = BPF_EMIT_CALL(BPF_FUNC_get_prandom_u32);
--	insns[cnt++] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, NR_CONSTS);
-+	/* mark is 0 */
-+	insns[cnt++] = BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1, offsetof(struct __sk_buff, mark));
-+	insns[cnt++] = BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, NR_CONSTS);
- 	for (i = 0; i < NR_CONSTS; i++)
- 		insns[cnt++] = BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1);
- 	insns[cnt++] = BPF_EXIT_INSN();
- 
--	opts.log_buf = log;
--	opts.log_size = LOG_SIZE;
--	/* log stats only: level 1 logs each insn, which wraps the buffer */
--	opts.log_level = 4;
- 	if (sysctl_set_or_fail(harden, old, "2"))
- 		goto out;
--	fd = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", insns, cnt, &opts);
-+	fd = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", insns, cnt, NULL);
- 	sysctl_set_or_fail(harden, NULL, old);
--	/* don't mind whether the interpreter takes the prog or the load fails */
--	if (fd >= 0)
--		close(fd);
--
--	/* expect the message about the jump in the log and in log_true_size */
--	ASSERT_HAS_SUBSTR(log, "cannot be patched due to 16-bit range", "log");
--	ASSERT_EQ(opts.log_true_size, strlen(log) + 1, "log_true_size");
-+	if (!ASSERT_OK_FD(fd, "load"))
++	if (ret)
 +		goto out;
-+	if (ASSERT_OK(bpf_prog_test_run_opts(fd, &opts), "run"))
-+		ASSERT_EQ(opts.retval, NR_CONSTS, "retval");
-+	close(fd);
++	bpf_call_graph_sort(&cg, 0);
++	memcpy(env->subprog_topo_order, cg.postorder, cnt * sizeof(u32));
+ 
+ 	if (env->log.level & BPF_LOG_LEVEL2)
+ 		for (i = 0; i < cnt; i++)
+ 			verbose(env, "topo_order[%d] = %s\n",
+ 				i, bpf_subprog_name(env, env->subprog_topo_order[i]));
  out:
- 	free(insns);
--	free(log);
+-	kvfree(dfs_stack);
+-	kvfree(color);
++	bpf_call_graph_free(&cg);
+ 	return ret;
  }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_and.c b/tools/testing/selftests/bpf/progs/verifier_and.c
-index fb64ea9928f1..8ef5f87a9766 100644
---- a/tools/testing/selftests/bpf/progs/verifier_and.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_and.c
-@@ -90,7 +90,7 @@ __retval(0)
- #ifdef SPEC_V1
- __xlated_unpriv("if w0 < 0x1 goto pc+2")
- __xlated_unpriv("nospec") /* inserted to prevent `R1 !read_ok'` */
--__xlated_unpriv("goto pc-1") /* `r1 = *(u32*)(r1 + 512)`, sanitized dead code */
-+__xlated_unpriv("goto pc-2") /* `r1 = *(u32*)(r1 + 512)`, sanitized dead code */
- __xlated_unpriv("r0 = 0")
- #endif
- __naked void known_subreg_with_unknown_reg(void)
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-index b39275b92e6a..9dc23611332e 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-@@ -626,7 +626,7 @@ __retval(0)
- #ifdef SPEC_V1
- __xlated_unpriv("goto pc+2")
- __xlated_unpriv("nospec") /* inserted to prevent `R0 invalid mem access 'scalar'` */
--__xlated_unpriv("goto pc-1") /* sanitized dead code */
-+__xlated_unpriv("goto pc-2") /* sanitized dead code */
- __xlated_unpriv("exit")
- #endif
- __naked void _32bit_and_64bit_arithmetic_test1(void)
-@@ -655,7 +655,7 @@ __retval(0)
- #ifdef SPEC_V1
- __xlated_unpriv("goto pc+2")
- __xlated_unpriv("nospec") /* inserted to prevent `R0 invalid mem access 'scalar'` */
--__xlated_unpriv("goto pc-1") /* sanitized dead code */
-+__xlated_unpriv("goto pc-2") /* sanitized dead code */
- __xlated_unpriv("exit")
- #endif
- __naked void _32bit_and_64bit_arithmetic_test2(void)
-@@ -709,7 +709,7 @@ __retval(0)
- #ifdef SPEC_V1
- __xlated_unpriv("if r1 != 0x0 goto pc+2")
- __xlated_unpriv("nospec") /* inserted to prevent `R0 min value is outside of the allowed memory range` */
--__xlated_unpriv("goto pc-1") /* sanitized dead code */
-+__xlated_unpriv("goto pc-2") /* sanitized dead code */
- __xlated_unpriv("r0 = 0")
- #endif
- __naked void reg_0_reg_xor_1(void)
-@@ -742,7 +742,7 @@ __retval(0)
- #ifdef SPEC_V1
- __xlated_unpriv("if w1 != 0x0 goto pc+2")
- __xlated_unpriv("nospec") /* inserted to prevent `R0 min value is outside of the allowed memory range` */
--__xlated_unpriv("goto pc-1") /* sanitized dead code */
-+__xlated_unpriv("goto pc-2") /* sanitized dead code */
- __xlated_unpriv("r0 = 0")
- #endif
- __naked void reg32_0_reg32_xor_1(void)
-@@ -775,7 +775,7 @@ __retval(0)
- #ifdef SPEC_V1
- __xlated_unpriv("if r1 > 0x0 goto pc+2")
- __xlated_unpriv("nospec") /* inserted to prevent `R0 min value is outside of the allowed memory range` */
--__xlated_unpriv("goto pc-1") /* sanitized dead code */
-+__xlated_unpriv("goto pc-2") /* sanitized dead code */
- __xlated_unpriv("r0 = 0")
- #endif
- __naked void reg_2_reg_xor_3(void)
-@@ -862,7 +862,7 @@ __retval(0)
- #ifdef SPEC_V1
- __xlated_unpriv("if r1 >= 0x0 goto pc+2")
- __xlated_unpriv("nospec") /* inserted to prevent `R0 min value is outside of the allowed memory range` */
--__xlated_unpriv("goto pc-1") /* sanitized dead code */
-+__xlated_unpriv("goto pc-2") /* sanitized dead code */
- __xlated_unpriv("r0 = 0")
- #endif
- __naked void reg_0_reg_xor_3(void)
-@@ -896,7 +896,7 @@ __retval(0)
- #ifdef SPEC_V1
- __xlated_unpriv("if w1 >= 0x0 goto pc+2")
- __xlated_unpriv("nospec") /* inserted to prevent `R0 min value is outside of the allowed memory range` */
--__xlated_unpriv("goto pc-1") /* sanitized dead code */
-+__xlated_unpriv("goto pc-2") /* sanitized dead code */
- __xlated_unpriv("r0 = 0")
- #endif
- __naked void reg32_0_reg32_xor_3(void)
-diff --git a/tools/testing/selftests/bpf/progs/verifier_movsx.c b/tools/testing/selftests/bpf/progs/verifier_movsx.c
-index 6f90dac78fcd..44730109db5d 100644
---- a/tools/testing/selftests/bpf/progs/verifier_movsx.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_movsx.c
-@@ -437,7 +437,7 @@ __success_unpriv
- __xlated_unpriv("w0 = 0")
- __xlated_unpriv("exit")
- __xlated_unpriv("nospec") /* inserted to prevent `frame pointer is read only` */
--__xlated_unpriv("goto pc-1")
-+__xlated_unpriv("goto pc-2")
- #endif
- __naked void mov64sx_s32_varoff_2(void)
- {
-@@ -465,7 +465,7 @@ __success_unpriv
- __xlated_unpriv("w0 = 0")
- __xlated_unpriv("exit")
- __xlated_unpriv("nospec") /* inserted to prevent `frame pointer is read only` */
--__xlated_unpriv("goto pc-1")
-+__xlated_unpriv("goto pc-2")
- #endif
- __naked void mov64sx_s32_varoff_3(void)
- {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_patch_list.c b/tools/testing/selftests/bpf/progs/verifier_patch_list.c
-index aada57330ff2..445d3aed0a05 100644
---- a/tools/testing/selftests/bpf/progs/verifier_patch_list.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_patch_list.c
-@@ -126,29 +126,123 @@ __naked void patch_list_may_goto(void)
- 	: __clobber_all);
+ 
+@@ -5447,122 +5385,75 @@ static int round_up_stack_depth(struct bpf_verifier_env *env, int stack_depth)
+ 	return round_up(max_t(u32, stack_depth, 1), 32);
  }
  
 -/*
-- * The conditional jump skips 8200 divisions, which their patches turn into
-- * 32800 insns, too far for its 16-bit offset.
+- * A set of subprogs is a bitmap. The call graph has a set for every subprog:
+- * calls + s * BITS_TO_LONGS(cnt) are the subprogs that s calls. Make it
+- * the subprogs that s gets to, through any number of calls.
 - */
--SEC("raw_tp")
--__description("patch list: jump pushed out of range by patches")
--__failure __msg("insn 2 cannot be patched due to 16-bit range")
--__naked void patch_list_jump_out_of_range(void)
-+/* the JITs that support gotol */
-+#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-+	defined(__TARGET_ARCH_powerpc) || defined(__TARGET_ARCH_s390) || \
-+	defined(__TARGET_ARCH_loongarch) || \
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)
-+
-+/* The patches turn 8200 divisions into 32800 insns, too far for a 16-bit offset. */
-+#define DIVS ".rept 8200; r7 /= r6; .endr;"
-+
-+/* len is not 0 and mark is 0, which the verifier doesn't know */
-+#define FAR_JUMP(name, field)				\
-+__naked void name(void)					\
-+{							\
-+	asm volatile (					\
-+	"r6 = *(u32 *)(r1 + %[off]);"			\
-+	"r7 = 1;"					\
-+	"r0 = 1;"					\
-+	"if r6 == 0 goto 0f;"				\
-+	DIVS						\
-+	"r0 = 2;"					\
-+"0:	exit;"						\
-+	:						\
-+	: __imm_const(off, offsetof(struct __sk_buff, field)) \
-+	: __clobber_all);				\
-+}
-+
-+SEC("tc")
-+__description("patch list: far jump, taken")
-+__success __retval(1)
-+__arch_x86_64
-+__arch_arm64
-+__xlated("3: if r6 == 0x0 goto pc+1")
-+__xlated("4: goto pc+1")
-+__xlated("5: gotol pc+32801")
-+FAR_JUMP(patch_list_far_jump_taken, mark)
-+
-+SEC("tc")
-+__description("patch list: far jump, not taken")
-+__success __retval(2)
-+FAR_JUMP(patch_list_far_jump_not_taken, len)
-+
-+/* The first jump is in range until the second one gets two more insns. */
-+SEC("tc")
-+__description("patch list: far jump over a far jump")
-+__success __retval(1)
-+__naked void patch_list_far_jump_over_far_jump(void)
+-static void close_call_graph(unsigned long *calls, int cnt)
+-{
+-	int words = BITS_TO_LONGS(cnt);
+-	int j, s;
++enum {
++	CG_LIVE		= BIT(0), /* what the kernel calls and what that gets to */
++	CG_IN_CB	= BIT(1), /* callbacks and what they get to */
++	CG_IN_ASYNC_CB	= BIT(2), /* async callbacks and what they get to */
++	CG_IN_RECURSION	= BIT(3), /* recursive subprogs and what they get to */
++	CG_TAIL_CALL	= BIT(4), /* subprogs that get to a tail call */
++	CG_ARENA_SP	= BIT(5), /* subprogs that get to r12 */
++	CG_CB		= BIT(6),
++	CG_GLOBAL	= BIT(7),
++};
+ 
+-	for (j = 0; j < cnt; j++)
+-		for (s = 0; s < cnt; s++)
+-			if (test_bit(j, calls + s * words))
+-				bitmap_or(calls + s * words, calls + s * words,
+-					  calls + j * words, cnt);
+-}
++#define for_each_marked_subprog(cg, s, mark) \
++	for (s = 0; s < (cg)->cnt; s++) if (!((cg)->marks[s] & (mark))) {} else
+ 
+ /*
+  * Who calls whom. It's known after the main verification pass, which finds out
+- * what callx and the helpers that take callbacks call.
++ * what callx and the helpers that take callbacks call, and what is dead code.
+  *
+  * What follows for a subprog from its callers, or from what it calls, is computed
+  * over this graph and not by a walk of one chain of calls after another: the
+  * number of chains grows exponentially, and there is no end to them when subprogs
+  * call themselves.
+  */
+-struct bpf_call_graph {
+-	int cnt; /* subprogs */
+-	int words; /* longs in a set of subprogs */
+-	unsigned long *calls; /* calls + s * words: the subprogs that s calls */
+-	unsigned long *reach; /* reach + s * words: the subprogs that s gets to */
+-	unsigned long *live; /* what the kernel calls and what that gets to */
+-	unsigned long *in_cb; /* callbacks and what they get to */
+-	unsigned long *in_async_cb; /* async callbacks and what they get to */
+-	unsigned long *in_recursion; /* recursive subprogs and what they get to */
+-	unsigned long *tail_calls; /* subprogs that have a tail call */
+-	unsigned long *arena_sp; /* subprogs that count on r12 of the caller */
+-};
+-
+-static unsigned long *subprog_calls(struct bpf_call_graph *cg, int s)
+-{
+-	return cg->calls + s * cg->words;
+-}
+-
+-static unsigned long *subprog_reach(struct bpf_call_graph *cg, int s)
+-{
+-	return cg->reach + s * cg->words;
+-}
+-
+-/* add the subprog and what it gets to */
+-static void add_reach(struct bpf_call_graph *cg, unsigned long *set, int s)
+-{
+-	__set_bit(s, set);
+-	bitmap_or(set, set, subprog_reach(cg, s), cg->cnt);
+-}
+-
+ static int build_call_graph(struct bpf_verifier_env *env, struct bpf_call_graph *cg)
  {
--	asm volatile ("					\
--	call %[bpf_get_prandom_u32];			\
--	r1 = r0;					\
--	if r0 == 0 goto 0f;				\
--	.rept 8200;					\
--	r0 /= r1;					\
--	.endr;						\
--0:	r0 = 0;						\
--	exit;						\
--"	:
--	: __imm(bpf_get_prandom_u32)
-+	asm volatile (
-+	"r6 = *(u32 *)(r1 + %[mark]);"
-+	"r7 = 1;"
-+	"r0 = 1;"
-+	"if r6 == 0 goto 0f;"
-+	"if r6 == 1 goto 1f;"
-+	".rept 8191; r7 /= r6; .endr;"
-+	"r0 = 2;"
-+	"r0 = 2;"
-+"0:	exit;"
-+"1:	r0 = 3;"
-+	"exit;"
-+	:
-+	: __imm_const(mark, offsetof(struct __sk_buff, mark))
-+	: __clobber_all);
-+}
-+
-+SEC("tc")
-+__description("patch list: far goto, far jump back, far may_goto")
-+__success __retval(3)
-+__naked void patch_list_far_loop(void)
-+{
-+	asm volatile (
-+	"r6 = *(u32 *)(r1 + %[len]);"
-+	"r7 = 1;"
-+	"r0 = 0;"
-+	"goto 1f;"
-+"0:	.8byte %[may_goto];"
-+	DIVS
-+	"r0 += 1;"
-+"1:	if r0 < 3 goto 0b;"
-+	"exit;"
-+	:
-+	: __imm_const(len, offsetof(struct __sk_buff, len)),
-+	  __imm_insn(may_goto, BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, 8202, 0))
- 	: __clobber_all);
+ 	struct bpf_subprog_info *si = env->subprog_info;
+ 	struct bpf_insn *insn = env->prog->insnsi;
+-	int cnt = env->subprog_cnt, words = BITS_TO_LONGS(cnt);
+-	int i, j, s;
+-
+-	cg->cnt = cnt;
+-	cg->words = words;
+-	cg->calls = kvcalloc((2 * cnt + 6) * words, sizeof(long), BPF_VERIFIER_GFP);
+-	if (!cg->calls)
+-		return -ENOMEM;
+-	cg->reach = cg->calls + cnt * words;
+-	cg->live = cg->reach + cnt * words;
+-	cg->in_cb = cg->live + words;
+-	cg->in_async_cb = cg->in_cb + words;
+-	cg->in_recursion = cg->in_async_cb + words;
+-	cg->tail_calls = cg->in_recursion + words;
+-	cg->arena_sp = cg->tail_calls + words;
++	int cnt = env->subprog_cnt, i, s, err;
+ 
++	err = bpf_call_graph_init(cg, cnt);
+ 	for (s = 0; s < cnt; s++) {
+-		for (i = si[s].start; i < si[s + 1].start; i++) {
+-			/* the subprog that takes the address of a subprog counts as its caller */
+-			if (!bpf_pseudo_call(insn + i) && !bpf_pseudo_func(insn + i))
+-				continue;
+-			j = bpf_find_subprog(env, i + insn[i].imm + 1);
+-			if (verifier_bug_if(j < 0, env, "callee not found at insn %d",
+-					    i + insn[i].imm + 1))
+-				return -EFAULT;
+-			/*
+-			 * async callbacks don't increase bpf prog stack size
+-			 * unless called directly
+-			 */
+-			if (si[j].is_async_cb && !bpf_pseudo_call(insn + i))
+-				continue;
+-			__set_bit(j, subprog_calls(cg, s));
+-		}
+-		/* the callees of callx and the callbacks of helpers, see record_callx_edge() */
+-		for (j = next_callx_callee(env, s, 0); j >= 0; j = next_callx_callee(env, s, j + 1))
+-			__set_bit(j, subprog_calls(cg, s));
++		for (i = si[s].start; i < si[s + 1].start && !err; i++)
++			if (bpf_pseudo_call(insn + i) && env->insn_aux_data[i].seen)
++				err = bpf_call_graph_add(cg, s, bpf_find_subprog(env,
++							 i + insn[i].imm + 1));
++		/* the callees of callx and the callbacks of helpers */
++		for (i = si[s].callx_edge; i && !err; i = env->callx_edges[i - 1].next)
++			err = bpf_call_graph_add(cg, s, env->callx_edges[i - 1].callee);
+ 	}
+-	memcpy(cg->reach, cg->calls, cnt * words * sizeof(long));
+-	close_call_graph(cg->reach, cnt);
++	if (err)
++		return err;
++	bpf_call_graph_sort(cg, 0);
+ 
+ 	for (s = 0; s < cnt; s++)
+ 		if (!s || si[s].is_async_cb)
+-			add_reach(cg, cg->live, s);
+-	for_each_set_bit(s, cg->live, cnt) {
+-		if (si[s].is_cb)
+-			add_reach(cg, cg->in_cb, s);
+-		if (si[s].is_async_cb)
+-			add_reach(cg, cg->in_async_cb, s);
+-		if (test_bit(s, subprog_reach(cg, s)))
+-			add_reach(cg, cg->in_recursion, s);
+-		if (si[s].has_tail_call)
+-			__set_bit(s, cg->tail_calls);
+-	}
++			cg->marks[s] = CG_LIVE;
++	bpf_call_graph_mark_callees(cg, CG_LIVE);
++	for_each_marked_subprog(cg, s, CG_LIVE)
++		cg->marks[s] |= (si[s].is_cb ? CG_CB | CG_IN_CB : 0) |
++				(si[s].is_async_cb ? CG_IN_ASYNC_CB : 0) |
++				(bpf_call_graph_recursive(cg, s) ? CG_IN_RECURSION : 0) |
++				(si[s].has_tail_call ? CG_TAIL_CALL : 0) |
++				(si[s].uses_arena_sp ? CG_ARENA_SP : 0) |
++				(bpf_subprog_is_global(env, s) ? CG_GLOBAL : 0);
++	bpf_call_graph_mark_callees(cg, CG_IN_CB | CG_IN_ASYNC_CB | CG_IN_RECURSION);
++	bpf_call_graph_mark_callers(cg, CG_TAIL_CALL, 0);
+ 	return 0;
  }
  
-+/* The loop has no bound. The verifier adds may_goto at its head, the exit is far. */
-+#define FAR_GUARD(name, off, expect)				\
-+__naked __noinline __used static unsigned long name##_func(void) \
-+{							\
-+	asm volatile (					\
-+"0:	call %[bpf_get_prandom_u32];"			\
-+	"if r0 != 1 goto +1;"				\
-+	"goto 0b;"					\
-+	".rept 33000; r3 = 0; .endr;"			\
-+	"if r0 != 2 goto +1;"				\
-+	".8byte %[back];"				\
-+	"r1 = %[far_data] ll;"				\
-+	"r0 = *(u8 *)(r1 + " #off ");"			\
-+	"exit;"						\
-+	:						\
-+	: __imm(bpf_get_prandom_u32),			\
-+	  __imm_addr(far_data),				\
-+	  __imm_insn(back, BPF_JMP32_A(-33005))		\
-+	: __clobber_all);				\
-+}							\
-+SEC("tc") expect					\
-+__naked void name(void)					\
-+{							\
-+	asm volatile ("call " #name "_func; exit;" ::: __clobber_all); \
++static bool subprog_calls(struct bpf_call_graph *cg, u32 caller, u32 callee)
++{
++	u32 j;
++
++	bpf_for_each_callee(cg, caller, j)
++		if (j == callee)
++			return true;
++	return false;
 +}
 +
-+char far_data[8] SEC(".data.far") = { [7] = 9 };
-+
-+FAR_GUARD(patch_list_far_guard, 7, __success __retval(9))
-+FAR_GUARD(patch_list_far_guard_bad, 8, __failure __msg("invalid access to map value"))
-+#endif
-+
- /* the JITs that support gotox, as in verifier_gotox.c */
- #if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
- 	defined(__TARGET_ARCH_powerpc) || \
-@@ -220,8 +314,9 @@ __arch_arm64
- __success
- __xlated("12: if r6 != 0x0 goto pc-3")
- __xlated("...")
--__xlated("32783: if r13 != 0x0 goto pc+1")
--__xlated("32784: gotol pc-32773")
-+__xlated("32783: if r13 == 0x0 goto pc+1")
-+__xlated("32784: goto pc+1")
-+__xlated("32785: gotol pc-32774")
- __naked void patch_list_may_goto_gotol(void)
+ /* the insn of subprog 'caller' that is the edge to subprog 'callee' */
+ static int find_call_insn(struct bpf_verifier_env *env, int caller, int callee)
  {
- 	asm volatile ("					\
-diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-index 62f998216d4b..7406e8a7d180 100644
---- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-@@ -615,7 +615,7 @@ __retval(0)
- #ifdef SPEC_V1
- __xlated_unpriv("if r0 == 0x0 goto pc+2")
- __xlated_unpriv("nospec") /* inserted to prevent `R7 invalid mem access 'scalar'` */
--__xlated_unpriv("goto pc-1") /* sanitized dead code */
-+__xlated_unpriv("goto pc-2") /* sanitized dead code */
- __xlated_unpriv("exit")
- #endif
- __naked void alu32_mov_u32_const(void)
+@@ -5570,13 +5461,9 @@ static int find_call_insn(struct bpf_verifier_env *env, int caller, int callee)
+ 	struct bpf_insn *insn = env->prog->insnsi;
+ 	int i, end = si[caller + 1].start;
+ 
+-	for (i = si[caller].start; i < end; i++) {
+-		if (!bpf_pseudo_call(insn + i) &&
+-		    (!bpf_pseudo_func(insn + i) || si[callee].is_async_cb))
+-			continue;
+-		if (i + insn[i].imm + 1 == si[callee].start)
++	for (i = si[caller].start; i < end; i++)
++		if (bpf_pseudo_call(insn + i) && i + insn[i].imm + 1 == si[callee].start)
+ 			return i;
+-	}
+ 	/* It's not recorded which callx or helper calls what. Take the first one. */
+ 	for (i = si[caller].start; i < end - 1; i++)
+ 		if (bpf_is_callx(insn + i) || bpf_calls_callback(env, i))
+@@ -5589,8 +5476,8 @@ static int check_exception_cb(struct bpf_verifier_env *env, struct bpf_call_grap
+ {
+ 	int cb = env->exception_callback_subprog, s;
+ 
+-	for_each_set_bit(s, cg->live, cg->cnt) {
+-		if (!cb || !test_bit(cb, subprog_calls(cg, s)))
++	for_each_marked_subprog(cg, s, CG_LIVE) {
++		if (!cb || !subprog_calls(cg, s, cb))
+ 			continue;
+ 		verbose(env, "insn %d cannot call exception cb directly\n",
+ 			find_call_insn(env, s, cb));
+@@ -5611,8 +5498,8 @@ static int check_recursion(struct bpf_verifier_env *env, struct bpf_call_graph *
+ {
+ 	int j, s;
+ 
+-	for_each_set_bit(s, cg->live, cg->cnt) {
+-		if (!test_bit(s, subprog_reach(cg, s))) {
++	for_each_marked_subprog(cg, s, CG_LIVE) {
++		if (!bpf_call_graph_recursive(cg, s)) {
+ 			env->subprog_info[s].recursive = false;
+ 			continue;
+ 		}
+@@ -5641,9 +5528,8 @@ static int check_recursion(struct bpf_verifier_env *env, struct bpf_call_graph *
+ 			return -EOPNOTSUPP;
+ 		}
+ 		/* the last call of the cycle */
+-		for_each_set_bit(j, subprog_reach(cg, s), cg->cnt)
+-			if (test_bit(s, subprog_calls(cg, j)))
+-				break;
++		for (j = 0; cg->cycle[j] != cg->cycle[s] || !subprog_calls(cg, j, s); j++)
++			;
+ 		verbose(env, "recursive call from %s() to %s()\n",
+ 			bpf_subprog_name(env, j), bpf_subprog_name(env, s));
+ 		bpf_diag_program_structure(
+@@ -5662,13 +5548,13 @@ static int check_callbacks(struct bpf_verifier_env *env, struct bpf_call_graph *
+ 	struct bpf_insn *insn = env->prog->insnsi;
+ 	int i, s;
+ 
+-	for_each_set_bit(s, cg->in_cb, cg->cnt) {
++	for_each_marked_subprog(cg, s, CG_IN_CB) {
+ 		if (si[s].has_ld_abs) {
+ 			verbose(env, "cannot use BPF_LD_[ABS|IND] within callback\n");
+ 			return -EINVAL;
+ 		}
+ 		for (i = si[s].start; i < si[s + 1].start; i++) {
+-			if (!bpf_is_throw_kfunc(insn + i))
++			if (!bpf_is_throw_kfunc(insn + i) || !env->insn_aux_data[i].seen)
+ 				continue;
+ 			verbose(env,
+ 				"bpf_throw kfunc (insn %d) cannot be called from callback subprog %d\n",
+@@ -5689,9 +5575,8 @@ static int check_tail_calls(struct bpf_verifier_env *env, struct bpf_call_graph
+ 	struct bpf_subprog_info *si = env->subprog_info;
+ 	int s;
+ 
+-	for_each_set_bit(s, cg->live, cg->cnt) {
+-		if (!si[s].has_tail_call &&
+-		    !bitmap_intersects(subprog_reach(cg, s), cg->tail_calls, cg->cnt))
++	for_each_marked_subprog(cg, s, CG_LIVE) {
++		if (!(cg->marks[s] & CG_TAIL_CALL))
+ 			continue;
+ 		if (si[s].is_cb) {
+ 			verbose(env, "cannot tail call within callback\n");
+@@ -5723,32 +5608,18 @@ static int check_tail_calls(struct bpf_verifier_env *env, struct bpf_call_graph
+  */
+ static void mark_arena_stack_entries(struct bpf_verifier_env *env, struct bpf_call_graph *cg)
+ {
+-	struct bpf_subprog_info *si = env->subprog_info;
+-	bool changed;
+ 	int s;
+ 
+-	do {
+-		changed = false;
+-		for_each_set_bit(s, cg->live, cg->cnt) {
+-			if (test_bit(s, cg->arena_sp) || si[s].arena_stack_entry)
+-				continue;
+-			if (!si[s].uses_arena_sp &&
+-			    !bitmap_intersects(subprog_calls(cg, s), cg->arena_sp, cg->cnt))
+-				continue;
+-			if (si[s].is_cb) {
+-				si[s].arena_stack_entry = true;
+-				continue;
+-			}
+-			__set_bit(s, cg->arena_sp);
+-			changed = true;
+-		}
+-	} while (changed);
++	bpf_call_graph_sort(cg, CG_CB);
++	bpf_call_graph_mark_callers(cg, CG_ARENA_SP, CG_CB);
++	for_each_marked_subprog(cg, s, CG_CB)
++		env->subprog_info[s].arena_stack_entry = cg->marks[s] & CG_ARENA_SP;
+ }
+ 
+ /* temporary state used for call frame depth calculation */
+ struct bpf_subprog_call_depth_info {
+-	int caller; /* the caller that has the most on the stack. -1: the kernel */
+-	int depth; /* the most that the frames of the callers take. -1: not known yet */
++	int calls; /* the number of frames that take the most on the stack */
++	int depth; /* the most that the frames of the callers take */
+ 	int arena_depth; /* the same in the stack in arena */
+ 	int frame; /* the most consecutive static call stack frames on top of stack */
+ };
+@@ -5763,53 +5634,67 @@ static int subprog_stack_size(struct bpf_verifier_env *env, int s)
+ 	return round_up_stack_depth(env, sub->stack_depth);
+ }
+ 
++static void max_call_depth(struct bpf_subprog_call_depth_info *to,
++			   const struct bpf_subprog_call_depth_info *from)
++{
++	if (from->depth > to->depth || !to->calls) {
++		to->depth = max(to->depth, from->depth);
++		to->calls = from->calls;
++	}
++	to->arena_depth = max(to->arena_depth, from->arena_depth);
++}
++
+ /*
+  * A subprog is entered with no more than what one of its callers is entered with plus
+  * the frame of that caller. Not when both are recursive: the callee checks the stack at run
+- * time. A cycle adds nothing, so this comes to an end.
++ * time. A cycle adds nothing: all subprogs on it have the same.
++ * The count of frames starts anew in a global subprog.
+  */
+ static void compute_call_depth(struct bpf_verifier_env *env, struct bpf_call_graph *cg,
+ 			       struct bpf_subprog_call_depth_info *dinfo)
+ {
++	struct bpf_subprog_call_depth_info in, out, *callee;
+ 	struct bpf_subprog_info *si = env->subprog_info;
+-	struct bpf_subprog_call_depth_info *callee;
+-	int depth, arena_depth, frame, j, s;
+-	bool changed;
+-
+-	for (s = 0; s < cg->cnt; s++) {
+-		dinfo[s].caller = -1;
+-		dinfo[s].depth = !s || si[s].is_async_cb ? 0 : -1;
+-	}
+-	do {
+-		cond_resched();
+-		changed = false;
+-		for_each_set_bit(s, cg->live, cg->cnt) {
+-			if (dinfo[s].depth < 0)
++	u32 start, end, i, j, s;
++	int frame;
++
++	memset(dinfo, 0, cg->cnt * sizeof(*dinfo));
++	bpf_call_graph_sort(cg, 0);
++	for (end = cg->cnt; end; end = start) {
++		start = cg->cycle[cg->order[end - 1]];
++		for (i = start, in = dinfo[cg->order[i]]; i < end; i++)
++			max_call_depth(&in, &dinfo[cg->order[i]]);
++		for (i = start; i < end; i++) {
++			s = cg->order[i];
++			if (!(cg->marks[s] & CG_LIVE))
+ 				continue;
+-			for_each_set_bit(j, subprog_calls(cg, s), cg->cnt) {
+-				callee = &dinfo[j];
+-				depth = dinfo[s].depth;
+-				arena_depth = dinfo[s].arena_depth;
++			bpf_for_each_callee(cg, s, j) {
++				out = in;
++				out.calls++;
+ 				if (!si[s].recursive || !si[j].recursive) {
+-					depth += subprog_stack_size(env, s);
+-					arena_depth += si[s].arena_stack_depth;
++					out.depth += subprog_stack_size(env, s);
++					out.arena_depth += si[s].arena_stack_depth;
+ 				}
+-				frame = dinfo[s].frame + !si[j].recursive;
+-				if (bpf_subprog_is_global(env, j))
+-					frame = 0;
+-				if (depth <= callee->depth && arena_depth <= callee->arena_depth &&
+-				    frame <= callee->frame)
++				max_call_depth(&dinfo[j], &out);
++			}
++		}
++	}
++
++	bpf_call_graph_sort(cg, CG_GLOBAL);
++	for (end = cg->cnt; end; end = start) {
++		start = cg->cycle[cg->order[end - 1]];
++		for (i = start, frame = 0; i < end; i++)
++			frame = max(frame, dinfo[cg->order[i]].frame);
++		for (i = start; i < end; i++) {
++			bpf_for_each_callee(cg, cg->order[i], j) {
++				callee = &dinfo[j];
++				if (!(cg->marks[cg->order[i]] & CG_LIVE) ||
++				    (cg->marks[j] & CG_GLOBAL))
+ 					continue;
+-				if (depth > callee->depth) {
+-					callee->depth = depth;
+-					callee->caller = s;
+-				}
+-				callee->arena_depth = max(callee->arena_depth, arena_depth);
+-				callee->frame = max(callee->frame, frame);
+-				changed = true;
++				callee->frame = max(callee->frame, frame + !si[j].recursive);
+ 			}
+ 		}
+-	} while (changed);
++	}
+ }
+ 
+ /*
+@@ -5827,7 +5712,7 @@ static int pad_recursive_frames(struct bpf_verifier_env *env, struct bpf_call_gr
+ 	u32 arena_frame = 0, depth = 0, room, frame;
+ 	int s;
+ 
+-	for_each_set_bit(s, cg->live, cg->cnt) {
++	for_each_marked_subprog(cg, s, CG_LIVE) {
+ 		depth = max_t(u32, depth, dinfo[s].arena_depth + si[s].arena_stack_depth);
+ 		if (si[s].recursive)
+ 			arena_frame = max(arena_frame, si[s].arena_stack_depth);
+@@ -5839,7 +5724,7 @@ static int pad_recursive_frames(struct bpf_verifier_env *env, struct bpf_call_gr
+ 	room = BPF_ARENA_STACK_MAX - depth - 2 * arena_frame;
+ 	env->max_arena_stack_depth = BPF_ARENA_STACK_MAX;
+ 
+-	for_each_set_bit(s, cg->live, cg->cnt) {
++	for_each_marked_subprog(cg, s, CG_LIVE) {
+ 		if (!si[s].recursive)
+ 			continue;
+ 		frame = DIV_ROUND_UP(si[s].arena_stack_depth * (THREAD_SIZE / 2), room);
+@@ -5857,7 +5742,7 @@ static int check_call_depth(struct bpf_verifier_env *env, struct bpf_call_graph
+ {
+ 	struct bpf_subprog_info *si = env->subprog_info;
+ 	struct bpf_subprog_call_depth_info *dinfo;
+-	int depth, total, tmp, s, err;
++	int depth, s, err;
+ 
+ 	dinfo = kvzalloc_objs(*dinfo, cg->cnt, BPF_VERIFIER_GFP);
+ 	if (!dinfo)
+@@ -5869,7 +5754,7 @@ static int check_call_depth(struct bpf_verifier_env *env, struct bpf_call_graph
+ 	if (err)
+ 		compute_call_depth(env, cg, dinfo);
+ 
+-	for_each_set_bit(s, cg->live, cg->cnt) {
++	for_each_marked_subprog(cg, s, CG_LIVE) {
+ 		/* A caller of it is over a limit. That one is reported, not what it calls. */
+ 		if (dinfo[s].frame > MAX_CALL_FRAMES || dinfo[s].depth > env->stack_limit ||
+ 		    dinfo[s].arena_depth > BPF_ARENA_STACK_MAX)
+@@ -5924,7 +5809,7 @@ static int check_call_depth(struct bpf_verifier_env *env, struct bpf_call_graph
+ 		 */
+ 		depth = dinfo[s].depth;
+ 		/* nor of the frames of recursive subprogs, see bpf_insert_recursion_checks() */
+-		si[s].in_recursion = test_bit(s, cg->in_recursion);
++		si[s].in_recursion = cg->marks[s] & CG_IN_RECURSION;
+ 		if (si[s].in_recursion)
+ 			depth += THREAD_SIZE / 2;
+ 		if (s && si[s].has_tail_call && depth >= 256) {
+@@ -5949,12 +5834,8 @@ static int check_call_depth(struct bpf_verifier_env *env, struct bpf_call_graph
+ 		if (depth > env->max_stack_depth)
+ 			env->max_stack_depth = depth;
+ 		if (depth > env->stack_limit) {
+-			total = 0;
+-			for (tmp = s; tmp >= 0; tmp = dinfo[tmp].caller)
+-				total++;
+-
+ 			verbose(env, "combined stack size of %d calls is %d. Too large\n",
+-				total, depth);
++				dinfo[s].calls + 1, depth);
+ 			goto out;
+ 		}
+ 	}
+@@ -5999,22 +5880,16 @@ static int mark_recursive_subprogs(struct bpf_verifier_env *env)
+ {
+ 	struct bpf_subprog_info *si = env->subprog_info;
+ 	struct bpf_insn *insn = env->prog->insnsi;
+-	int cnt = env->subprog_cnt, words = BITS_TO_LONGS(cnt);
+-	unsigned long *calls, *taken, *callx;
++	int cnt = env->subprog_cnt, i, j, s, err;
++	struct bpf_call_graph cg;
+ 	bool plain_callx = false;
+-	int i, j, s, err = 0;
+-
+-	/* calls + s * words: the subprogs that s calls */
+-	calls = kvcalloc((cnt + 2) * words, sizeof(long), BPF_VERIFIER_GFP);
+-	if (!calls)
+-		return -ENOMEM;
+-	taken = calls + cnt * words;
+-	callx = taken + words;
+ 
++	/* callx calls node 'cnt', which calls each subprog whose address is taken */
++	err = bpf_call_graph_init(&cg, cnt + 1);
+ 	for (s = 0; s < cnt; s++) {
+-		for (i = si[s].start; i < si[s + 1].start; i++) {
++		for (i = si[s].start; i < si[s + 1].start && !err; i++) {
+ 			if (bpf_is_callx(&insn[i])) {
+-				__set_bit(s, callx);
++				err = bpf_call_graph_add(&cg, s, cnt);
+ 				if (!bpf_is_unwind_goto(&insn[i + 1]))
+ 					plain_callx = true;
+ 			}
+@@ -6028,8 +5903,8 @@ static int mark_recursive_subprogs(struct bpf_verifier_env *env)
+ 				 */
+ 				if (!j && bpf_pseudo_call(&insn[i])) {
+ 					verbose(env, "recursive call of the main program\n");
+-					kvfree(calls);
+-					return -EINVAL;
++					err = -EINVAL;
++					goto out;
+ 				}
+ 				/* the helper that calls a callback doesn't expect it to unwind */
+ 				if (bpf_pseudo_func(&insn[i]) || !bpf_is_unwind_goto(&insn[i + 1]))
+@@ -6040,9 +5915,9 @@ static int mark_recursive_subprogs(struct bpf_verifier_env *env)
+ 				 */
+ 				if (bpf_pseudo_call(&insn[i]) ||
+ 				    !func_is_kept_for_later(env, i, si[s + 1].start))
+-					__set_bit(j, calls + s * words);
++					err = bpf_call_graph_add(&cg, s, j);
+ 				if (bpf_pseudo_func(&insn[i]))
+-					__set_bit(j, taken);
++					si[j].addr_taken = true;
+ 			}
+ 			if (bpf_is_ldimm64(&insn[i]))
+ 				i++;
+@@ -6051,19 +5926,20 @@ static int mark_recursive_subprogs(struct bpf_verifier_env *env)
+ 	for (i = 0; i < env->func_ptr_cnt; i++) {
+ 		j = bpf_find_subprog(env, env->func_ptrs[i].xlated_off);
+ 		if (j >= 0)
+-			__set_bit(j, taken);
++			si[j].addr_taken = true;
+ 	}
+-	for_each_set_bit(s, callx, cnt)
+-		bitmap_or(calls + s * words, calls + s * words, taken, cnt);
+-	for_each_set_bit(s, taken, cnt)
+-		si[s].addr_taken = true;
++	for (s = 0; s < cnt && !err; s++)
++		if (si[s].addr_taken)
++			err = bpf_call_graph_add(&cg, cnt, s);
++	if (err)
++		goto out;
+ 
+ 	/*
+ 	 * Callers of a global subprog look at can_unwind before the subprog is verified.
+ 	 * The main prog returns to the kernel.
+ 	 */
+ 	for (s = 0; s < cnt; s++) {
+-		if (plain_callx && test_bit(s, taken))
++		if (plain_callx && si[s].addr_taken)
+ 			si[s].plain_call = true;
+ 		si[s].bail_unwinds = si[s].can_unwind ||
+ 				     (s && !si[s].plain_call && !bpf_subprog_is_global(env, s) &&
+@@ -6071,10 +5947,10 @@ static int mark_recursive_subprogs(struct bpf_verifier_env *env)
+ 				      !bpf_prog_is_offloaded(env->prog->aux));
+ 	}
+ 
+-	close_call_graph(calls, cnt);
++	bpf_call_graph_sort(&cg, 0);
+ 
+ 	for (s = 0; s < cnt; s++) {
+-		if (!test_bit(s, calls + s * words))
++		if (!bpf_call_graph_recursive(&cg, s))
+ 			continue;
+ 		err = -EINVAL;
+ 		if (!s) {
+@@ -6107,7 +5983,8 @@ static int mark_recursive_subprogs(struct bpf_verifier_env *env)
+ 		si[s].recursive = true;
+ 		err = 0;
+ 	}
+-	kvfree(calls);
++out:
++	bpf_call_graph_free(&cg);
+ 	return err;
+ }
+ 
+@@ -6115,9 +5992,10 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
+ {
+ 	enum priv_stack_mode priv_stack_mode = PRIV_STACK_UNKNOWN;
+ 	struct bpf_subprog_info *si = env->subprog_info;
+-	struct bpf_call_graph cg = {};
++	struct bpf_call_graph cg;
+ 	int s, ret;
+ 
++	find_subprog_properties(env, true);
+ 	for (int i = 0; i < env->subprog_cnt; i++) {
+ 		if (si[i].has_tail_call) {
+ 			/* the stack in arena wouldn't be returned */
+@@ -6146,7 +6024,7 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
+ 		goto out;
+ 	mark_arena_stack_entries(env, &cg);
+ 
+-	for_each_set_bit(s, cg.live, cg.cnt) {
++	for_each_marked_subprog(&cg, s, CG_LIVE) {
+ 		/*
+ 		 * All async_cb subprogs use normal kernel stack. If a particular
+ 		 * subprog appears in both main prog and async_cb subtree, that
+@@ -6154,7 +6032,7 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
+ 		 * The private stack has room for one frame of a subprog.
+ 		 * x86-64 uses R9 for both private stack frame pointer and arg6.
+ 		 */
+-		if (priv_stack_mode != PRIV_STACK_ADAPTIVE || test_bit(s, cg.in_async_cb) ||
++		if (priv_stack_mode != PRIV_STACK_ADAPTIVE || (cg.marks[s] & CG_IN_ASYNC_CB) ||
+ 		    si[s].recursive || (IS_ENABLED(CONFIG_X86_64) && si[s].stack_arg_cnt)) {
+ 			si[s].priv_stack_mode = NO_PRIV_STACK;
+ 			continue;
+@@ -6172,7 +6050,7 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
+ 
+ 	ret = check_call_depth(env, &cg);
+ out:
+-	kvfree(cg.calls);
++	bpf_call_graph_free(&cg);
+ 	return ret;
+ }
+ 
+@@ -25199,7 +25077,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	if (ret < 0)
+ 		goto skip_full_check;
+ 
+-	find_subprog_properties(env);
++	find_subprog_properties(env, false);
+ 
+ 	/* Validate BTF before reporting subprogram layout errors. */
+ 	ret = bpf_check_btf_info(env, attr, uattr);
+@@ -25478,6 +25356,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	kvfree(env->succ);
+ 	kvfree(env->gotox_tmp_buf);
+ 	kvfree(env->callx_edges);
++	kvfree(env->callx_index.slots);
+ 	kvfree(env->func_ptrs);
+ 	for (i = 0; i < env->func_set_cnt; i++)
+ 		kvfree(env->func_sets[i]);
+diff --git a/tools/testing/selftests/bpf/progs/test_global_func_deep_stack.c b/tools/testing/selftests/bpf/progs/test_global_func_deep_stack.c
+index 11af79aa2ced..2a763f6db693 100644
+--- a/tools/testing/selftests/bpf/progs/test_global_func_deep_stack.c
++++ b/tools/testing/selftests/bpf/progs/test_global_func_deep_stack.c
+@@ -125,7 +125,8 @@ int global_func_many_chains(void *ctx)
+ 
+ /*
+  * r1 is the number of calls that follow, so main -> fs15 .. fs0 and main -> fs31 .. fs16
+- * are executed: 17 frames each. main -> fs31 .. fs0 is in the call graph: 33 frames.
++ * are executed: 17 frames each. With main -> fs16 -> fs15 no call is dead code, and
++ * main -> fs31 .. fs0 is in the call graph: 33 frames.
+  * libbpf puts fs15() .. fs0() in front of their second caller fs16().
+  */
+ #undef F_0
+@@ -138,6 +139,15 @@ SEC("syscall")
+ __failure __msg("the call stack of 32 frames is too deep !")
+ __load_if_JITed()
+ __naked int static_func_deep_stack_second_caller(void)
++{
++	asm volatile ("r1 = 15; call fs15; r1 = 15; call fs31; r1 = 1; call fs16; exit;"
++		      ::: __clobber_all);
++}
++
++SEC("syscall")
++__success
++__load_if_JITed()
++__naked int static_func_deep_stack_dead_call(void)
+ {
+ 	asm volatile ("r1 = 15; call fs15; r1 = 15; call fs31; exit;" ::: __clobber_all);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_tailcall.c b/tools/testing/selftests/bpf/progs/verifier_tailcall.c
+index 81be4ef8c321..a272795781e4 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_tailcall.c
++++ b/tools/testing/selftests/bpf/progs/verifier_tailcall.c
+@@ -137,8 +137,8 @@ int exception_cb_tail_call(__u64 cookie)
+ }
+ 
+ SEC("tc")
+-__description("tail call in an async callback that calls nothing")
+-__failure __msg("cannot tail call within callback")
++__description("dead tail call in an async callback")
++__success
+ __attribute__((btf_decl_tag("exception_callback:exception_cb_tail_call")))
+ __naked void tail_call_in_async_callback(void)
+ {
+diff --git a/tools/testing/selftests/bpf/verifier/calls.c b/tools/testing/selftests/bpf/verifier/calls.c
+index bb2b9e8c71df..5357d667fa04 100644
+--- a/tools/testing/selftests/bpf/verifier/calls.c
++++ b/tools/testing/selftests/bpf/verifier/calls.c
+@@ -1526,8 +1526,7 @@
+ 	},
+ 	.prog_type = BPF_PROG_TYPE_XDP,
+ 	.flags = F_NEEDS_JIT_ENABLED,
+-	.errstr = "call stack",
+-	.result = REJECT,
++	.result = ACCEPT,
+ },
+ {
+ 	"calls: spill into caller stack frame",
 -- 
 2.55.0
 
