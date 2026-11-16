@@ -1,57 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794837540;
-	b=0BGFFmtLDCDHNaZTHZ6jzC95bnM1RrRqohpMEzLRnuZgCR9A080r+mpgkDjwQshWE/bU
-	 XqkqkAGNkJCBkjSAwxZVBUpxPj/fbuaOWG6iJ5rMlgDDTTzt/HhP1H9zgLaaWZ9ihbS7W
-	 iqMsB54TL6XT+X+W+oyMxcVOaBLGlR6aBoLzVsCHeL15BQ7vdDiVwsVYXBHeHIgTRZLCr
-	 HoN0eNDw5zWRoprGHnmfV5Cn/4prfablWhk7n1oNaror4V3LOS/TvqL8GGFoRoD9oid67
-	 etUe8Z8gOvH0nxCacOw8dufjLx3S9Oizkwteu+hwAd3b5HxCUc5RBruedSNppa2CBYQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794837540;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=Vu9toh12u7Lv/UthPhq34qD9yhrT7ZAWt48XjCyR8ZE=;
-	b=kkIP08Gb2Ykg9I94AZqsGTY2jTOExqKtHwWkh2BYWbxuTMz18+4EbQ4XzH1V01k94VnI
-	 FQzDf0KNGrHiW2H81zy2yfHy2z3rA6KtxIAPQCc+oJAPXMZZ+vwYs2lkyFUWGRh7LgVUh
-	 4Gy7fTPcvYvvRjYg+cMk7wx1c1y7vezDkHt5SrlyPd+OYa9gcfYRg7uhpFlw7CcYwBh49
-	 Tkn4ONdeHU8jVFKquOhBuApDdNlDAyDkvv7JbIZ+gu9vxm0FigQyypnoQUmmLVlhH2I0B
-	 O3ChkdEAhV/vQiVM5qtLbolAnVvn1JuGRYiPZDdFOeAA0FifpxBd7/6jjzflB2rVCxg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dgRFhjcr;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.44
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794837903;
+	b=Yhmm0oSOdxWSB/wvC/M3iy5WtQW1t6GKtdxGXOJgVI559g1Qjh2SFjmIl4fCvJtx+m58
+	 Gu1wILTJ9ofkFuzwRVlJJJiRmi/cJji3zDFubnK4wqXWhvjgIJlKvvZBboy2EuDlNCHTk
+	 C7tTmBsXld8M+06iXBxv6nAAnZFOVwyrzQLKXY0iFb/Vd22i2rvHN3MrWhvt4WrmGfvf9
+	 O4VhN4uROeqZJLfGq/ydj1Q4WScHIDsej7loRqZmab2Zgn1YmmjaQ8s50/W3Aumpmz9Zj
+	 h939If7pLu+74SVU1woq9fQcar40+2EQfunW0/YJjv2RT15uPEpj796ruHq/1qtLoiw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794837903;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=IiIU9t/pme/D3WoLNwnnikBF+jtcauKxTw3ofmYpCiU=;
+	b=K2MY4J1/pFPfW0ZCQiIHv/n8xH7ipWPkTAW4WClScmPDy8dT2gNIqt7PPIYeR3N/J61E
+	 6clo0lq49t0rM5xuBkWali5Mg+uHpeCKyYXg90j0od694+mI3U/T/8JcjiYAQIpwXCxuN
+	 GR0QO4mu0GD9VKWLZHgYR6s7w3mkz8GnBDD7qZAPLC2CTKnRjSAtxTMa1IV0CyHruR7t7
+	 LK5Lf0AWlu/M9iIDwC/JqMZNs4fzTeIeNfpsd0suaXIKJcf1BjF2Teeyvzyc9y13maE7H
+	 RLxOPKd8wA63DIPyHlHkwKVTaIg4ONg8YvDxiz/wj5/9YdsdGTu8Mfe5NwIFa8oAGbg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=cloudflare.com;
+	spf=pass smtp.mailfrom=cloudflare.com;
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b="RDRD/OcL";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.44
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D93D606A31C
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 13:58:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F81A606A31C
+	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 14:05:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5F81A606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dgRFhjcr
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63AC21F000C4;
-	Mon, 16 Nov 2026 13:58:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794837539;
-	bh=Vu9toh12u7Lv/UthPhq34qD9yhrT7ZAWt48XjCyR8ZE=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=dgRFhjcruhel4YrLPs3x8/nwG6HjvwkW8N/kIai2I1M9iuncWj1So6ycgFZab3xkq
-	 olVnta6HGpsPz7y5Na6pyuLiOPehT+9ZwH3LkaGyKN2wEK2pFdybnlIepvINgPS6ni
-	 YoNY1h7DCDXCVS5Xvqxu4RK1yYColXN91OgC9en3uDaeoAoolrXsoyUfeAfK3jAnBx
-	 zYtAQqyk7Jhkseb5L+15wmq+lF0i9iGlhcGFaG2HwtNnrZQ52gI/FRXSBJ8gIgcWDd
-	 i0rdm4msURfecu5KGgQYlVod0OVq9kOyUpGM/uFV1R16oZcDUQNfJGyEH2IjLu71pm
-	 fL6wHFjBDM1rA==
-Message-ID: <sashiko-outbox-217122@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v8] bpf: tcp: add ecn_init callback to
- bpf_tcp_ops for per-connection ECN
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Irlanki Sandeep" <irlanki.s@samsung.com>, bpf@vger.kernel.org
-In-Reply-To: <20261116134652.322156-1-irlanki.s@samsung.com>
-References: <DM6GLQVDXGWL.1ZV7PCL5B2B0K@gmail.com>
- <CGME20261116134521epcas5p1feade37999749181544983efe729600a@epcas5p1.samsung.com>
- <20261116134652.322156-1-irlanki.s@samsung.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 16 Nov 2026 13:58:58 +0000
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=RDRD/OcL
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-86156cf8a7eso3575824a34.1
+        for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 06:05:03 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794837902; cv=none;
+        d=google.com; s=arc-20260327;
+        b=jrCIubecpROv5Lt2ETyrmyWTZXOMPvvdMOBKoWJjX6M4lh15O4euR4cVeQlEgWIcjP
+         qMMZ991X06yI7z/pqnu2fm0q4ZFn4qAQgJPbhJ5W0eSNNUKEhRl0TAyGgdUh4mcyOCRH
+         tqof83ujEWd40q8Bp6c7cYWt1coCPtkGCQXGgFqhEhYg2FtupUYjcGE4oNzDEIeEEqUb
+         Mwy5Y5uyMKhD4IogJNWjBuI364IJvTowvksloPD6hlu1PE7IHql6R0mGcFqiBYOgR8Pe
+         90ze/77gHxCblx7Kd7okVgTmSTmwZIg3MDGdAJNq6q7nnjO+Eqrjbbf6l9AbXemAUQ8P
+         NbaA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=IiIU9t/pme/D3WoLNwnnikBF+jtcauKxTw3ofmYpCiU=;
+        fh=LwXPgq+a3FRoTtz1AxeBOeAOLTVsjw5BH2byS1C1X9M=;
+        b=VQAxUD4MpTh6e5QfiRQqRwqJeoPtp4ANrg7ig+rClftAbPK3qNJDt3WPeNgh/qovJr
+         i5/59h2z7z5nzN1hVpuYCnbO+BH/hyj1lw5Ww9dZVap5Z2Q+hWOLK2vtKmaGuFhMWbnB
+         +dNn+vAzBnJ3m7X4uLElSSUU62kpb451qXkHVJwZVaApy9SnbmOOyg7CYnfcEn8MFssl
+         1TSrO2qKghK2+ZlQBnHOSg/MsYJRM8ifdBMoAO/1QXgoUbn9JrQdcMZv68s5SX/3ohBt
+         XTiunSB9KCGuNahBuBVOxzQuv55OnJa6wfkk77usopC+HXBmr4TtCSlGknA9rTxNZmtX
+         WesA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1794837902; x=1795442702; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=IiIU9t/pme/D3WoLNwnnikBF+jtcauKxTw3ofmYpCiU=;
+        b=RDRD/OcLdIq6BBPMomGGzPawAcj++fY9/uI9T/1dA72dsAu8agY8Cu6695ALuLwM0n
+         8y09N3w3OnPRYtLA+0e+4U9RcOnky1LhgUOxXzhjjfWtcgZu2/11KvN+/ArJuO0D3/uL
+         AyPFayZijP6GzDPeUrJPAizS+wLTSC4SmUVsvfBY1Ile6aaQ9CPg/kv99IdzqKSiLgcp
+         KkL/sqlkUbnuggAYKTgRgmfPG3aEwE4AOQ8e2We0/RHTjfPWdEnjmhtf16f6MefhQPs8
+         wjXI5xul/QtA/M+DzPqpAjwMvOpyB7m+LDtVfZ6yuRFcXnnU7LE7HpmL5egmcfFarZcf
+         uaBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794837902; x=1795442702;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=IiIU9t/pme/D3WoLNwnnikBF+jtcauKxTw3ofmYpCiU=;
+        b=lV9Au128Z+Dl9d7EBwPBrm4JaHU1ReT1dG7/beFOfOHHh5XFPLDcupUOGg5JNUVmhT
+         uGr0SzoUHLP8oHuf1JlwGeSD6XhlLAwg9Q/7ok/c3YnoB6Tjbjc0541zVTXCxONi5IlX
+         UIDzOmT+6S/KpBSef1qxMxPnnB6Ws7dba0mE7iARrxEcx2tJWWxRd8ebWbJcRpZnUiAw
+         WZjjpAYBRFZtt6e07brDY++kEepDXcZOBCaXTDZz6uBhDo9IhuJuY2Y3ZGsWxXjihVGf
+         kQ5RtwvMEL26RDYLfg+3JD3+DurBridBcDDan84E8iBtMzi8M8uE+69U448FL+6MFavW
+         2H3A==
+X-Forwarded-Encrypted: i=1; AL+hErHfXy23nFt4LAPS3iXmxZ3u7h9psBqIyeWeO98ao6CSzDCS2juGqVI+vg7jVtkEP4gSNtA=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+Asq/hj/FuJkD+U3QU7o9D2IgOGYBpsMPSdS5KO9bEgDSGokQp
+	ZiITxIdth5vmX8piR6ss5yqja3N03k/0+ynLacWyuD/JFb/IXPlxZhB/+xCloQewUUlRrii4ppi
+	GYRCDMMXoNq5zF9yY2WpLQKwYwcQ2e+XnBIMJx3zdsw==
+X-Gm-Gg: AYBFou3VbKCKmE37PQlDGwa33NL/DVAc0Nq0oDzSW8BftT8bnJieupnt85aqnmv5UzL
+	Znwt3M2NVOHrrqnvNPwCL5ltXWbWNmiVLMcJXkXqAEN53d05I560CKTCnuwQsn+d5IxtnFYH6iv
+	G1vKBqCFQxKvpedC7Wlzd2sAo15lrt2uXT7jse6Clyic0PwP7fG5spTUZguh0ioNIPE+1OnD74u
+	uXgerh4LE9N6fqH3YBwg/ObdOo4gsBWpN6tQiKbTFcij7oHkvSU+sHUEBMi/mnI0dWv5Tyf4f0H
+	V4wc+70zSIqkWXNDOogIfUJ9ykS6S5wOQ2f22jRfrz2S7y3tvmRgENzh9SuVSeJgHcGsOMoEFk4
+	ifIFVhbcMk8thISciyCmdvqt8rAgpRS6r116TeL+3V59QKHFlnUwnm/2bvdQaW072WqyBxsRZnM
+	Cm2tH2StW5dv4i/dOwWmvTIVSOGm1ng9c=
+X-Received: by 2002:a05:6820:7093:10b0:71a:ea6a:4f51 with SMTP id
+ 006d021491bc7-71aea6a5809mr1437630eaf.14.1794837902102; Mon, 16 Nov 2026
+ 06:05:02 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,119 +103,36 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+References: <CAG4wq-cd01i7YrcFPmma=BXUcwn_PK=wneKW=vyEBYzQ3Bn7QA@mail.gmail.com>
+ <20261116084107.6675-1-emmaonana18@gmail.com> <20261116084107.6675-3-emmaonana18@gmail.com>
+In-Reply-To: <20261116084107.6675-3-emmaonana18@gmail.com>
+From: Tianyi Gao <tianyi@cloudflare.com>
+Date: Mon, 16 Nov 2026 14:04:50 +0000
+X-Gm-Features: Aa3M54qRdeOnU1gJ7x3s56OW-hJCPdbvkrK8BlxFfQsIh19-OFAy7vmiVdSA8Lw
+Message-ID: <CAG4wq-d_30-B4wQZu48ZQXAORM4QxRqPfmYsmoHS0hiYp1EtTA@mail.gmail.com>
+Subject: Re: [PATCH net v3 2/2] selftests: net: veth: propagate bad-settings
+ check failures to exit status
+To: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
+Cc: Hangbin Liu <hangbin.liu@linux.dev>, netdev@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Low] selftests/bpf: multi-line comment style in bpf_tcp_ops_ecn.c
---
+On Mon, 16 Nov 2026 09:41:07 +0100 Omokefe Emmanuel Onanaroghene wrote:
+> -             echo "fail - set operation successful ?!?" || echo " ok "
+> +             { echo "fail - set operation successful ?!?"; ret=1; } || echo " ok "
 
-commit 826a67ec5267cf10887c1bb0ea3883a7cff12093
-Author: Irlanki Sandeep <irlanki.s@samsung.com>
+Two small suggestions:
 
-bpf: tcp: add ecn_init callback to bpf_tcp_ops for per-connection ECN
+1. These lines are 85 columns wide, over the 80-column limit.
+2. The style is inconsistent with the rest of the file. Other checks
+   use if/else instead of a "cmd && { ...; } || ..." chain.
 
-This commit adds an ecn_init callback to struct bpf_tcp_ops so cgroup
-BPF programs can override net.ipv4.tcp_ecn per connection during TCP
-handshakes, along with documentation and BPF selftests.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ops_ecn.c b/t=
-ools/testing/selftests/bpf/prog_tests/bpf_tcp_ops_ecn.c
-> new file mode 100644
-> index 0000000000000..077148a6127c1
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ops_ecn.c
-
-[ ... ]
-
-> +/* net.ipv4.tcp_ecn / ecn_init() values (enum tcp_ecn_mode): 0 =3D=3D no=
- ECN,
-> + * 1 =3D=3D accept + request RFC3168 ECN, 3 =3D=3D accept + request AccE=
-CN.
-> + */
-> +static const struct ecn_case ecn_cases[] =3D {
-> +	{
-> +		/* The sysctl disables ECN; BPF negotiates RFC3168 ECN. */
-> +		.name =3D "bpf_enables_classic",
-> +		.sysctl_ecn =3D 0,
-> +		.retval_active =3D 1,
-> +		.retval_passive =3D 1,
-> +		.mode_client =3D TCP_ECN_MODE_RFC3168,
-> +		.mode_server =3D TCP_ECN_MODE_RFC3168,
-> +	},
-> +	{
-> +		/* The sysctl disables ECN; BPF negotiates AccECN. */
-> +		.name =3D "bpf_enables_accecn",
-> +		.sysctl_ecn =3D 0,
-> +		.retval_active =3D 3,
-> +		.retval_passive =3D 3,
-> +		.mode_client =3D TCP_ECN_MODE_ACCECN,
-> +		.mode_server =3D TCP_ECN_MODE_ACCECN,
-> +	},
-> +	{
-> +		/* The client requests AccECN but the server only accepts
-> +		 * RFC3168 ECN (< 3): negotiation degrades to RFC3168.
-> +		 */
-> +		.name =3D "passive_clamps_accecn",
-> +		.sysctl_ecn =3D 0,
-> +		.retval_active =3D 3,
-> +		.retval_passive =3D 1,
-> +		.mode_client =3D TCP_ECN_MODE_RFC3168,
-> +		.mode_server =3D TCP_ECN_MODE_RFC3168,
-> +	},
-> +	{
-> +		/* The server refuses ECN although the sysctl allows it. */
-> +		.name =3D "passive_refuses_ecn",
-> +		.sysctl_ecn =3D 1,
-> +		.retval_active =3D 3,
-> +		.retval_passive =3D 0,
-> +		.mode_client =3D TCP_ECN_MODE_DISABLED,
-> +		.mode_server =3D TCP_ECN_MODE_DISABLED,
-> +	},
-> +	{
-> +		/* The client does not request ECN although the sysctl
-> +		 * allows it, so there is nothing for the server to accept.
-> +		 */
-> +		.name =3D "active_disables_ecn",
-> +		.sysctl_ecn =3D 1,
-> +		.retval_active =3D 0,
-> +		.retval_passive =3D 3,
-> +		.mode_client =3D TCP_ECN_MODE_DISABLED,
-> +		.mode_server =3D TCP_ECN_MODE_DISABLED,
-> +	},
-> +	{
-> +		/* Return values above TCP_ECN_IN_ACCECN_OUT_NOECN fall back
-> +		 * to the sysctl on both sides.
-> +		 */
-> +		.name =3D "fallback_above_range",
-> +		.sysctl_ecn =3D 1,
-> +		.retval_active =3D 6,
-> +		.retval_passive =3D 6,
-> +		.mode_client =3D TCP_ECN_MODE_RFC3168,
-> +		.mode_server =3D TCP_ECN_MODE_RFC3168,
-> +	},
-> +	{
-> +		/* Negative return values fall back to the sysctl too. */
-> +		.name =3D "fallback_negative",
-> +		.sysctl_ecn =3D 1,
-> +		.retval_active =3D -1,
-> +		.retval_passive =3D -1,
-> +		.mode_client =3D TCP_ECN_MODE_RFC3168,
-> +		.mode_server =3D TCP_ECN_MODE_RFC3168,
-> +	},
-> +};
-> +
-> +/* Connect over loopback and accept() the child socket, so that
-> + * passive_established is guaranteed to have run: the listener is woken
-> + * up only after tcp_rcv_state_process() moved the child to established.
-> + */
-> +static void do_ecn_connect(int family)
-
-[Severity: Low]
-This isn't a bug, but BPF code uses the multi-line comment style where
-the opening /* sits on its own line with the comment text starting on
-the next line. Could the multi-line comments in ecn_cases[] and above
-do_ecn_connect() be formatted that way?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261116134652.3221=
-56-1-irlanki.s@samsung.com?part=3D1
+Cheers,
+Tianyi
