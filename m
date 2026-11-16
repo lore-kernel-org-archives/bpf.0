@@ -1,45 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.218
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794811946;
-	b=UEmnn57P2EAcWrl1fuWU+tvW0GCDs7hah8oJc5l0tEGIuAbWjPpwHuYILlHJE8exNSwV
-	 n8D6xa0CYd/L7sxNGRVWsfUt6qDxxaS9IQSBqGd63FxSWJr/lH9qab9A2K/dRzFFMYnSW
-	 7F9/UCgSj0WwGEQVaU7IFhjl60RaM9B3ewETG5l7Hp1wVKaS2UoQk4Tl9tWp633YPEO/f
-	 d562tgwqxdNPp6S7ERQ1Te+bjhf18mEYuEjAjPzYJJvQcR38HkzocyT5CD997pHhe6Dkd
-	 5umqhQD1GMtfMOdYvqInrbTncFy6KmFH8vjmR/2vF3cOsSamtGaycbk7Zlb8Vwco3OQ==
+	t=1794814254;
+	b=Nn+BWfAtDuJmPrksSyIgNcTADGGzji8zgcZUL16SzvcBoykOJqHc1BbbyOOoSTu+tSmm
+	 lE43yJA6W39ijHz2lYP9Bz9oRMSowykUx6PLu0tKUBZ2J0NL8PdB0VIYjBTBajD4Uuf9k
+	 +DDm3IXiqib7hfI6vxTZHAm3bun+fBB8NwipC7Wt5ZCt057oKE3TlvSgFioUAdDyrllgg
+	 NawRj3/sYkGfhNSkNSCkhL2q/aRhNHszzn3Z25pf4wdA/iDUGulmWwGoQuG+KJwkw5Efi
+	 hZm0BI7P1xA0IAOtEePfJ0ozVCw4UuR/YDUg/rEXBmhLubfs1hi4NWm3RFu7EyL3u8w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794811946;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=FPqqu9XU8w0LvYNwsknyQ+lUEZw9t875ZNSJjnFWcbY=;
-	b=jSGGW5CevMdgjaPqBNBxeY89TuH/cNPY0IvntxhiK0QS5Ia2R7vnTHtUEehKlC6zNqzc
-	 0p4laQNkSlC4sXqoERcrrHcuJz9SJ/6r54euVFn7E8NPPXjjwcO8BSMiB6bqsFLbvpzEF
-	 Ni9tZM/fSEhHGJih7PTk48UIOQ+xMLhi3DjneoLFq8RhE0myPwHLfPq/yP4ONbwQhVjUM
-	 Axs5v9Iv5jORyeod5JnKUaYlM3hBa5PEyVWnyWw7UbzvFEu1SWGSZ5PnAMQ9L0i/CmJr1
-	 mKRBIdcc0Vo8ReBHKMiui46f8jDIEjqOAwjGgMBRYx2wlTHnzYxRSOmBoK+sOWEizUA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794814254;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=RsZWTmj3iECRzeLYzMxjiBI7jRR7JOFGd0yktvO+2WE=;
+	b=UQuEWpoYb57Z3/Oxh3R2N3xcfH/DVsTQWvAu+rWoQPpLGVAhZUmEi5gD2GfkY9Ueh8cF
+	 2SB61sToYc1EWWYKU3+UO/GWbsMLg2NjEJ6BBeRh8djVxegZ7cdjWlC2tHkhEYCa2OasV
+	 tia7zv+zrplMrgk3pcXWLdti2KWDI6UHHlEkjG6aBVeWEjJvNvGW7YI4fLnujLwzHDZs9
+	 jwOGU9F6JMx30yaCz7LsoG0GuiNC3lLgQfzvWCjeA6pFgO/K4IG5xXD0joGfBltFaPOC7
+	 oP1m0F4WiIHF8nwBniQApD1wge9VZDZrVgxsav7ic6Vt9ELfJ5SuhTvDVW4L02K6YdQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OmzWqZBB;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=MOPFCDsf;
+	arc=none smtp.remote-ip=91.218.175.218
+Received: from mta0.migadu.com (out-218.mta0.migadu.com [91.218.175.218])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 617AD606A323
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 06:52:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9E2A606A31C
+	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 07:30:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E9E2A606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OmzWqZBB
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 783DA1F000C4;
-	Mon, 16 Nov 2026 06:52:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794811946;
-	bh=FPqqu9XU8w0LvYNwsknyQ+lUEZw9t875ZNSJjnFWcbY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=OmzWqZBBI52tI69zE9ijihgqfpwVkPaPcObQEdnEDz130G+rbV+XhgUPo2gMKX1xz
-	 Rx1so9YQeysVbOfPpA6SqJq2hKr4PNALb9x9tVDSrtunr+KxefJoG0KnvaQs00FeiS
-	 2iwlxppx6HzVCpw8vcjcmPdlp96rDl8W2kxGdFGRJ5hWgxg1UCgOidvjB90G9Fl6JS
-	 4uFdQMRrQYljoSKwDcBoZRGnYiEG5AoOvHt/H6GcSYOqk0HFB5Dq2UBy0fq/6l7WBt
-	 +ASscLAsOtK4+0QiE04MuBF9NSNLkVjwXkr+VjC3JHKyfQSOckBTzmbsI9Vf4qRtR4
-	 8yxs4vOnDfD8Q==
-Content-Type: multipart/mixed; boundary="===============6720613513868525539=="
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=MOPFCDsf
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Ry9yBMCBwp3nSnzP3KHOZ1Uq3e0bH9SyWtuodwQExwE=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794814252; v=1; x=1795419052;
+ b=MOPFCDsfS4DjoRebt4WMbecTiAUgRSoknL/MLxxULJR+x97yFJYLB9CEFsdjmljd51OlTQhY
+ 98gzlW4mQtyUMJQLJm3QUQJqlFkD5+Iu2UwLJocojp8bGh5DXgbRWgT0GVUEtnk7uy0PJL8GAeA
+ m/P9UkZAsGZLJJkayvNIayB8=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id da558d5e7fa220f7;
+	Mon, 16 Nov 2026 07:30:51 +0000
+X-Mizu-Trace-ID: da558d5e7fa220f7
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <f2c69ae2-4da6-4203-8201-04fd4a1c2742@linux.dev>
+Date: Mon, 16 Nov 2026 15:30:43 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,139 +58,75 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <a3a1ca28288ea76b09a3bb234a67d2093f25590310741d66c1f67b2fd6f498f4@mail.kernel.org>
-In-Reply-To: <20261116055638.4171529-13-alexei.starovoitov@gmail.com>
-References: <20261116055638.4171529-13-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next 12/21] bpf: Relax jumps that patches push out of range
-From: bot+bpf-ci@kernel.org
-To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 16 Nov 2026 06:52:25 +0000 (UTC)
-
---===============6720613513868525539==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 8/9] selftests/bpf: Verify iter link_create
+ logs
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Steven Rostedt
+ <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ KP Singh <kpsingh@kernel.org>, Matt Bobrowski <matt@bobrowski.net>,
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ netdev@vger.kernel.org
+References: <20261114150610.84507-1-leon.hwang@linux.dev>
+ <20261114150610.84507-9-leon.hwang@linux.dev>
+Content-Language: en-US
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <20261114150610.84507-9-leon.hwang@linux.dev>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-> bpf: Relax jumps that patches push out of range
+On 14/11/26 23:06, Leon Hwang wrote:
 
-TL;DR:
-- Selftest "far jump over a far jump" likely doesn't exercise the cascading
-  relaxation it claims; both offsets equal S16_MAX, and there is no __xlated
-  check
-- Nit: "last" variable and comments in patch_list_adj_aux() are stale
+[...]
 
-> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> --- a/kernel/bpf/fixups.c
-> +++ b/kernel/bpf/fixups.c
+> +
+> +static void test_log_invalid_iter_info(void)
 
-[ ... ]
+As sashiko pointed out, the function name should be
+test_log_invalid_iter_info_len.
 
-> @@ -255,20 +262,24 @@ static void patch_list_adj_aux(struct bpf_prog *prog, struct bpf_insn_patch *p,
->  			       const struct bpf_insn_aux_data *old,
->  			       struct bpf_insn_aux_data *slot)
->  {
-> -	struct bpf_insn_aux_data *last = slot + p->len - 1;
-> +	struct bpf_insn_aux_data *last = slot + p->self;
->  	struct bpf_insn *orig = &p->orig;
->  	u32 i;
->
-> +	memset(slot, 0, sizeof(*slot) * p->len);
->  	*last = *old;
->  	/* Recompute zext_dst: the last insn of the patch need not be the patched one. */
-> -	last->zext_dst = bpf_insn_def32(prog, &patch[p->len - 1]) >= 0;
-> -	memset(slot, 0, sizeof(*slot) * (p->len - 1));
-> +	last->zext_dst = bpf_insn_def32(prog, &patch[p->self]) >= 0;
+Please update the function name when applying.
 
-this isn't a bug, but now that bpf_patch_list_append() exists, p->self is no
-longer the last insn of the patch, so the variable name "last" and the
-comment "the last insn of the patch need not be the patched one" read
-oddly.
+> +{
+> +	unsigned char info[sizeof(union bpf_iter_link_info) + 1] = {};
+> +	const char *msg = "Invalid iter_info_len.\n";
 
-For example, bpf_insert_loop_guards() calls:
+[...]
 
-    bpf_patch_list_append(env, i - 1, leave, n)
-
-which gives [last insn of the subprog, r0 = 0, (r2 = 0), exit] with self = 0,
-so "last" here points at the first insn of the patch, not the last one.
-
-The same applies to add_hidden_subprog(), which gives
-[last insn, r0 = r1, exit] with self = 0.
-
-The same wording remains in the comment further down in this function:
-
-    The last insn could be a newly generated BPF_ST/BPF_LDX/BPF_STX, ...
-
-Could "last" be renamed (for example to "self") and these comments reworded
-to cover appended insns?
-
-The comment "Expand the seen count of the patched insn to the patch" also
-does not explain the new "?: i > p->self" case, where appended insns behind
-a dead insn are marked seen.
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_patch_list.c b/tools/testing/selftests/bpf/progs/verifier_patch_list.c
-> --- a/tools/testing/selftests/bpf/progs/verifier_patch_list.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_patch_list.c
-
-[ ... ]
-
-> +/* The first jump is in range until the second one gets two more insns. */
-> +SEC("tc")
-> +__description("patch list: far jump over a far jump")
-> +__success __retval(1)
-> +__naked void patch_list_far_jump_over_far_jump(void)
->  {
-> +	asm volatile (
-> +	"r6 = *(u32 *)(r1 + %[mark]);"
-> +	"r7 = 1;"
-> +	"r0 = 1;"
-> +	"if r6 == 0 goto 0f;"
-> +	"if r6 == 1 goto 1f;"
-> +	".rept 8191; r7 /= r6; .endr;"
-> +	"r0 = 2;"
-> +	"r0 = 2;"
-> +"0:	exit;"
-> +"1:	r0 = 3;"
-> +	"exit;"
-
-Does this test exercise the case its comment describes, where relaxing one
-jump pushes a second jump out of range?
-
-The jump "if r6 == 0 goto 0f" starts at old index 3 and the jump
-"if r6 == 1 goto 1f" at index 4.  Each skips 8194 old insns, 8191 of which
-are "r7 /= r6".  bpf_do_misc_fixups() replaces each division with a 4-insn
-guard, which adds 3 insns, so both offsets come out the same:
-
-    8194 + 3 * 8191 = 32767
-
-Both equal S16_MAX, so in bpf_patch_list_build() this never becomes true:
-
-    far |= is_short_jump(&src[n]) && rel != (s16)rel;
-
-and patch_image_relax() is not called.  The second jump starts one insn
-after the first and lands one insn after the first one's target, so the two
-offsets are always equal and the second can never be far while the first is
-in range.
-
-On JITs that need zext, the zext after each "w7 ^= w7" raises both offsets
-to 40958, so both are far on their own and the cascade is still not
-exercised.
-
-The only check is __retval(1), with no __xlated, so the test passes whether
-or not the relaxation works.  As far as I can tell no other test in this
-series builds a jump that becomes far only because a jump it skips was
-relaxed.
-
-Could one more reachable insn be placed between the two jump targets so that
-the first offset is 32766 or 32767 and the second is at least 32768, and an
-__xlated check added for the relaxed first jump?
+> +out:
+> +	bpf_iter_bpf_map__destroy(skel);
+> +}
+> +
+> +static void test_log_invalid_iter_info_len(void)
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+As sashiko pointed out, the function name should be
+test_log_invalid_iter_info.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43815411838
---===============6720613513868525539==--
+Please update the function name when applying.
+
+Thanks,
+Leon
+
+> +{
+> +	const char *msg = "Invalid iter_info.\n";
+> +	LIBBPF_OPTS(bpf_link_create_opts, opts,
+> +		    .iter.info = (union bpf_iter_link_info *)1,
+> +		    .iter.len = sizeof(union bpf_iter_link_info),
+> +	);
+> +
+> +	test_iter_link_create_log(0, &opts, 0, -EFAULT, msg);
+> +}
+> +
+[...]
+
