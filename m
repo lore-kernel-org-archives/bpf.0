@@ -1,101 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.53
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794853878;
-	b=AGKOPAKcqdFDkHmK9bWHDuKfYp5eCpAzzatWT615jGQSGuQ06c1dbm0icUnN2ARAC+Nc
-	 rPbW6fu1e5k8K/GML0IRyQm8e4Xr3ctiJdST9qyumzoS4H92hq/WDIFOQ9JZQjcoGEf+i
-	 LYjtFnWRy0iexJWV44lDaISy4HBp4bCa8WoN3oLsuykwWS8gZGyH0/xFQB+anlVGsr6Es
-	 wBfEpDuSClIIwuesxaPQ7/SgvmI+K5gASGigolrkRUCAVVJ0Gm4F4MSojofWuA2Zczs7K
-	 ErwCbG53GPOJPbNTmWbk5mVqVQabCtFDJzdFySP25QPxu791tPzHEt4KNUk+p1YWeiw==
+	t=1794854274;
+	b=sERFJb4vimEnrmnkbhr6zFG5BjysLGgXGuJkRIehihpPjXVvW9hCCihkjKXDGwHyzmgB
+	 pXkqYx/4H3xo7pq5rs8bEYEjaTkWhoW6WJot+x275+dFYOTMPn8S+cappmEref5ykGTbX
+	 rL9VXA7O4l96Z84/bphQ89BdosNuZnvYk58InWnsKMLTukEbZH4KKoHGi/ri+p0hY8t0m
+	 FgETiOMubYpgeUCARlb05/nddo6W6DbyyqPincqJ9Fx2XMhXXYOeTPcnB0ou178r/S+1z
+	 vwNFkAnRaqxYLDR0k06rW4/VRE4mX3rZRpQZL+Iao3y/L/6O1nRdYEOE0WTK0J0RuEg==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794853878;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794854274;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=13+u0g0+oDlzUbJhGCsHPWLuoZRTBcZlGfDcseo9APc=;
-	b=VFzSaoC8bjta77f0xTTJD2PsDHGzJtvyxZq8juQcbj+OWPeXIALULI4Pz6uNQMUcPZUX
-	 U8jgnKsFU4dz4A3grDtpwlO9dt//hZrnNCOcSvsZrnEm2TayQ+ZS6IVK/T9pcXKMMExv6
-	 qv+W75U57Z6EwTIIGMBe/7Az9q8gw3Hf+NNwlIRGZICyFX+E2+ppDd+3Xg9dw8Ia0vBN8
-	 r5pvdunIK92TyLBOhyfIu6Cbmp9ijiMzWjBggx73ppIr1mxk7GjkLbZBAq0e5JR+vX8Tf
-	 MjFcW6qpVZecwKC7zZfa9hHEROhxgRYicHkvEN33i4WofVlo6HbIlWRxWYoxxGskqZQ==
+	bh=KR1B9yXoxe/iiaTpqvoEiLZa1nEPM31hRnKDTA2GAXA=;
+	b=Iv7PAZzWIWVT3ahAwCwTwUU43Hu5y/N+GhUke+eESa50yP29CJ8pw8eQNdawyOm9rh+y
+	 wpr/zqftNI8ov616KBBJLYRy5uqO6COGKW9MY75A1BIQ1X3LmlklPhI/zEd0+p7+CpBjk
+	 gf8rq/00HTVDjb+vn83susUJCgX48xFruPERzVItqdtuzskdKhupMMnZh94l69OD6mxyk
+	 8HTvhWvsFrdQyFmSR+S4sWzkhIEZaiCYVG/YPOxoBvjQR3E4UjKqhGshHS1xfK4advR3N
+	 ycXlpsiVe9xi8Jqq+j4wlV6T9s06cmQt4UulOgJmUJyFlJFaAHhM4gtgs1GMeRjoq9Q==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ZzAV1qVS;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.43
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JcnW7rKg;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.53
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B5C1606A32C
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 18:31:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1B5C1606A32C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAC1C606A330
+	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 18:37:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AAC1C606A330
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ZzAV1qVS
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4a9a8d6cea8so1714825e9.1
-        for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 10:31:17 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794853876; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JcnW7rKg
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4bb606491faso12680985e9.3
+        for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 10:37:53 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794854272; cv=none;
         d=google.com; s=arc-20260327;
-        b=k/Ad4iDWaH35s0YmZFiQy1BmRO2ZTZ/c9QlTohtX37js1HSITUcKnE1r3Jzfa4T66s
-         FGoRBQenc/8+u2nODtuvlKaioSKdZMvNDGetDIHhO4Ec7V8gZpCcOT4p5f7KHzmjSsFH
-         J5t601p/+fgttq1lgoyvoNOLGuVCCaIhh8wajLvnzjzKDiTc8RwC9SxtYfVDscUFuFf4
-         OafuGTl6oPbhKsUtyvtkRGKFnkLyza4x2QXpFGnhGj8LVhuHt1ubGXZwLehQVB+AKjp4
-         DhMPVj2H33ropnpg73mVfwLD84kWgttGc18QADrY87AlA1KnR2Tztlw4Qpj0EQjw2L7a
-         IrHA==
+        b=mTZ0/Dti26mimfvAKWeQE3LAxUi/rbZr1BlwR4BJDzDK+NfEet2wFY3/D36ZHKiu6w
+         QPTq0ZWZiuSkw0Ke1TwWeyaQ+Pw5KjPM+0wBlDfuQOBhAHKGpl+zybJmhfDmSaCEUgK3
+         ABG0Qmkh022oLF8aDGo/Qy4Pl0gnQdzhU3jbkIbk5L2mSOP21cV/KdjZS54fJm/sMkiv
+         +FKHvw5jL0booYpox5rwv24V47DhynfTUZ+LbbRn+wC8md39b/QuX85yAhEgib5Iau1a
+         IMogUovGKFAx4v44JskjpJhJ7Qb4hGyR+cQBqcp5Cj8W6sA/guXLwQsPfQurT25PoSz9
+         IC6Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=13+u0g0+oDlzUbJhGCsHPWLuoZRTBcZlGfDcseo9APc=;
-        fh=nZI9M7L3wt9Prswc8Z5IYEm20vJZzoUZmNuBHErrBwg=;
-        b=hy8q85dPfWPemS4bsDf9stBKCttVAHilDidzpT5TqOCWMSbpU/9BLEOmixnYzpAcae
-         B74n41c9ylQ7M+6x6lBiBLs7GjFFvR8AxCHhyLiDEVJRpVN0O4Ub/aW1asXxq9tBt5wz
-         u6YH4kWelQW52+z14Z9a2iHIhrfzGsG2nPgDIUkfUeo0ut19/YQZEuNvYLTvzo6okKpz
-         5N2M0pxnqOUvDbbDvw7yosG7l66NGjaPYZQmqia7RfvH4vJt4+1zO2J/uhNVtTLyQk6a
-         cQcON0akUj4g3lxLEh141G0Dn/YZCbAD3hdhlfPNs4/GnxkuYmy18dzaZdE98qjk/rxT
-         L6kg==;
+        bh=KR1B9yXoxe/iiaTpqvoEiLZa1nEPM31hRnKDTA2GAXA=;
+        fh=uJxYm875QlU7D3XTIz/xrxFJ9bREF84qfTXVgyz2eO4=;
+        b=BFcCce2S3klxiCc+uUQrMhW+jW1FlM/l3MHYzUGIjRLkP5skI80JfxHpYtzV/JPEru
+         Dv4JEZ+9peMn3UTYvM/tVDIE/0azKoI16TDp97oTGGKj7igAl1hPW19SO1PhCdIRFEMe
+         MOqMy7t4IOt+wJu2o7rHGBlzhuIdJuUTGPeyyVxIElU0qGhsfQgeE/h2yhAi9TyiUTpD
+         RYe6Rq5TbKN3mJMEAPcTX2hW5Tj1N4N1pIw0gqeQ2cDtvn4SMXt91xT7mNYLrqzpZhYR
+         Glk5ic6/4V4eZ37KPIh2U6vQ1HEdObSQZ4kcy7aV9dDb1CFU7XDMxS2VNCsC8WLS9GE8
+         vrAw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794853876; x=1795458676; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794854272; x=1795459072; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=13+u0g0+oDlzUbJhGCsHPWLuoZRTBcZlGfDcseo9APc=;
-        b=ZzAV1qVSVfuzgmNbZoOKoRVJW1PcFYJThO/T4EE3lha/hH2M1tUDD4Zif5X8jXruyJ
-         3c9MEB4oyQ9nsiuGY9QQ7SbuGV79WzKRklCAL/g2efhn41bFFTc92sakvMsjOlrXA8AA
-         Von4j35nxID+//wFZC4/3tBOONdYcHeiLUNAIEyUHdXNHaBSyfWbSXm5Kt7vjgajkFVL
-         wtxoq3FlKLshkKyG+lYd/l908C9u3yX7N2wpaa6yJfvd0aWPC+f6Z5BHz1TcvH4wPbts
-         F7/a/1eqWTSkdPwsb2K738idNL3QdkCqFSVLvEM3BrCfIb5sgWZQtLV2f/oBwaHSt9bq
-         q+jQ==
+        bh=KR1B9yXoxe/iiaTpqvoEiLZa1nEPM31hRnKDTA2GAXA=;
+        b=JcnW7rKgXvUSyJ0m6cFXSUbtEFS+MeUbRgWICS1c0XoKk031VYU86s7LLC5UNUdRpq
+         AQB0TagEIm5+ME+4yiw4gudTWOfnQ9tNoubCy9FsQA85vlmnHqTCDse/X55VQ6Vc24AF
+         IHyFgHtwR1HT5Mr59+J2SZiCmP3Z9sFPI1RbtuzYGRCtE0HfJrtb7ehd/35MRmPZc5za
+         mxVjnGm5CPUevLoUyPO1KVML5+tUWATUfik7/T1VpjDEs+sZtN3evtLKIIERYLcaUUWz
+         z7vfy9uw0RQH4NEm3kVmIfhp0JlYmkhtHaHHLTp/8FIu6CdldnkO2GKQooxqlhmHWRHZ
+         TolQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794853876; x=1795458676;
+        d=1e100.net; s=20260707; t=1794854272; x=1795459072;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=13+u0g0+oDlzUbJhGCsHPWLuoZRTBcZlGfDcseo9APc=;
-        b=LQ6ExpgmjcDL/P9+XxKblhVeI+rAcCBJGsrTK957A6ondNGp2rE/WCYH7bfh2kJwlI
-         aT+gRiKgFqVnRs2OqI95yLzHjGpkLXYAMGp4aZPOXews9WS8/Xo6gjl47DG8dxQ83HMZ
-         86BviiisXDew/CwmjHaJ4Uc1jhWAzPZuXlXTZKVGyQdi2M4/08Z+Ju3O79UhfWqw2Tci
-         i0jyrsvANf+NBJx1+KigEeDZmaVU9VmcfXyWeI3Xo7OXxWNz2exArCGv72+HvCNmkH7r
-         wW5bjhYMJJ0ZCR1QSF97xNJJiSqGomqltTdHHGF4p/nP5SMkBWfRkd6QhQCIdMLeQRtd
-         rJzA==
-X-Forwarded-Encrypted: i=1; AL+hErECnliEiztHKUwnlZ4SQCAB2uu2b7In7BH6XlOy0FaQ88oj35Hn0JU3cs7uofoTXvH4Ogg=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+zJXC0G86p/nxXhGXW25posqP4BrwDS+L1NaD12DAs8AkcMhi8
-	tRGDi3wzJIWiSY1o03rF1YmwtGQWvijSc+cTbyQ6r5bQGND4PdzcxtMA/pCIZxIcCV3Rkzs7XpY
-	xh8Q7qpONqKl0QS9Ct4QmwJVN+XtsUeA=
-X-Gm-Gg: AYBFou3uMFcwfm5Gq5CdDMxHShR+FMwvLiivifTNtsL9+T3yI9ottJNGjMKm/zpWTWO
-	bTucjNK9wNqmA5cP03ZozRPXXIPSzEwQGfG4OKzvDjPO81rihCEsn0OWfOAzMtlElf3ugKxYA55
-	KMBulbYDwWO+ABIcCWr16SYJB37cWibjEXoWHhcnCTvkEjyk896RWp1/eaBUafK+aZmPA0MOeQu
-	zQr1P6TvX3hvUwDIvYG8luzBRlebL6qEX+++rI7SSZkVnAtAVd+CqWas31vsKE1N3+8kfmsVJpT
-	V50n51l6u3kjTfo9Sa1RSaWHhDTDynCrS5EZo4AR2c/LcCJBaXnYD6BYnWb+ywX41q4RGOWcLdg
-	ASJqF01of5HMiyvzRr6gN7R1dculhhR1lzy0UZZC/tGYIi7Bv8Q8BkXXw/ctMgKWEY3u0c+LG9t
-	BMyaP8BPBhhw7OKxPJN0Q=
-X-Received: by 2002:a05:600c:3ac6:b0:4ba:7a0:7b67 with SMTP id
- 5b1f17b1804b1-4bb783aeb29mr8252075e9.3.1794853876371; Mon, 16 Nov 2026
- 10:31:16 -0800 (PST)
+        bh=KR1B9yXoxe/iiaTpqvoEiLZa1nEPM31hRnKDTA2GAXA=;
+        b=hdwLovO4eIaK9iXJZ38dQfgVkNz076rV4R946rrLAPrliHwmbDV7Z6t1jHUYSwQPnL
+         /gGW99ZbxzyHnz6QDHvGg4l1jAGiYz5ubN5yrX0ExhOA9lJO9KVeWbuulh8QcekFqVVM
+         rT3ClVc3hqst50M5lWNZ04De+auFcXpBOjK8kUcU5kDwz1AM9n/WZefSXgeWc6wTh4+M
+         7xmjf3jU3OD6NrE/t1XI53N4oJYHs6sgVR6zY+N5PoDLGKiTWwJiuMBwbBJoZjp3Wj8M
+         vhRbXw3NUZVimV+RJ78xoqxjZNwy+Fr4Gb35vx7U37h5jJ4nj+fy6Bs/moQUHlsfuOcb
+         X+Ow==
+X-Forwarded-Encrypted: i=1; AL+hErHmXOBRPObOV8b1z2Q//aO3tru9QH0o5sS/pmWJdNlxgz/6ngFDKGVO/BnSaystvw1kEuI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+ZbSkmuZSzVF5fqKEoUH2JqZmIS61UXWwHZqnttJAqgL0ZXcHO
+	+3sD+DtYQzf73pVm1DfIjbD/GgIBLTp4sMCrcPKqvRHz9nwqVlbsgiejEGGtAmTPFFQD+81/udm
+	M1dS/1v5u/K2fYggkMwG5JYRpnh5WNmk=
+X-Gm-Gg: AYBFou15rGwwHy4eAZMsxvefqxdDRXPufi6QXNI0C7tlbo6jUX4Pbwm0B6dxGtJb73q
+	IA4typ6n8u3SKGuSIUkWTpXmeMnMjIpd93sH0t+FcB15WFDDrdQGzTQwRkYnAkSxVVcGPJBu7Pv
+	GorcaFAxR04feJuySvaY/G5q7y1gZdrkGhRFf9SM9ctcgl3d291tN1g+uZtlBKK45f+p/XvvgHs
+	rnQQO5JL+kYVChytaCTEi+AbCQJQ/GrbAfcGNoP8C3gfg2+oZxMOyzzOuklslKVLL8UTclsPqrc
+	GxhdIIXzGrZG9zFQeTphD9tYCEavy4f9DnbZ3Gbi8luOS4pnSSr3EZ/UZJ8Fc3ZZejT9h9DLFql
+	fuazWJB+iVtqoJcOIrOc9lAbQxtVfuF6j7G/a7I/flwA0lEwEMjto5iRZGxanx4KFpn0yLGa2tS
+	LDkNgTU3Ghja7Sa4alxqA=
+X-Received: by 2002:a05:600c:1c17:b0:4bb:6752:8400 with SMTP id
+ 5b1f17b1804b1-4bb6752853emr183093415e9.17.1794854272188; Mon, 16 Nov 2026
+ 10:37:52 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,66 +105,45 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <cover.1794269506.git.memxor@gmail.com> <DMUHWUF1OF82.3VM2D2YIBY40V@gmail.com>
-In-Reply-To: <DMUHWUF1OF82.3VM2D2YIBY40V@gmail.com>
+References: <30318.1794850523@30-11-166.wireless.csail.mit.edu>
+In-Reply-To: <30318.1794850523@30-11-166.wireless.csail.mit.edu>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 16 Nov 2026 10:31:04 -0800
-X-Gm-Features: Aa3M54qhYew7E_m2iR65kDcczhQJIgtrj34vBgaYScrVh6U549xPXqWUOex_yBA
-Message-ID: <CAEf4BzYAS8V=XcULjRvL=v0ffn6T_HOQVAxDkBy4mC+mwaQ_Uw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 00/20] BPF kthreads and waitqueues
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Tejun Heo <tj@kernel.org>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, kkd@meta.com, kernel-team@meta.com
+Date: Mon, 16 Nov 2026 10:37:40 -0800
+X-Gm-Features: Aa3M54oflzVkGHmqRvikK5C4CgsXPYy3AjtiaSrLIBI6Ky3leAmWFtLbIBAZwaQ
+Message-ID: <CAEf4Bzb03De+sraR6q+w8xTNHqp6vMQ5S52cYW2PWAR3jviuhw@mail.gmail.com>
+Subject: Re: a riscv ebpf uprobe can wedge the machine by writing pt_regs.status
+To: rtm@csail.mit.edu, Jiri Olsa <jolsa@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 13, 2026 at 4:09=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Mon, Nov 16, 2026 at 9:35=E2=80=AFAM <rtm@csail.mit.edu> wrote:
 >
-> On Mon, Nov 09, 2026 at 04:27 PM Kumar Kartikeya Dwivedi <memxor@gmail.co=
-m> wrote:
-> > A syscall program parks the same way, in the user thread that runs it.
+> On riscv, kprobe_prog_is_valid_access() allows a "uprobe" ebpf program
+> to write ctx at offset 256, which is pt_regs.status. When returning to
+> user space, ret_from_exception copies whatever value the ebpf program
+> provided to the CPU's sstatus. One way this can cause trouble is if
+> the ebpf program sets sstatus.SPP to 1, indicating that the trap
+> should return to user space in supervisor mode rather than user mode.
 >
-> I'm missing something. What's the point of bpf kthreads if only syscall
-> progs can do them?
-> It feels less intrusive to start smaller and allow parking of
-> user threads from syscall progs only... for now.
 
-I had a slightly different idea at the back of my mind, I wonder if
-that could fly.
+We do allow BPF program to overwrite pt_regs and cause user space
+program to jump to a different location (or even crash if we modify
+registers incorrectly), assuming CAP_PERFMON + CAP_BPF. But yeah, we
+shouldn't let it just wedge the host..
 
-What if we allow creating dedicatd "BPF kthreads" that would have
-"exclusive" BPF ringbuf (because it needs to be single consumer) in
-front of it, and for each submitted ringbuf record that kthread would
-run an attached BPF program. Associated BPF link will keep kthread
-alive until destroyed/detached.
+cc'ing Jiri, should we add some arch-specific range checks for uprobes
+and limit it to general-purpose registers and IP?..
 
-This will allow multiple BPF programs to communicate with each other
-by submitting BPF ringbuf records and basically doing async data
-processing. With this capability it's conceivable to have a pretty
-sophisticated kernel-resident implementations of services like
-memcache/redis. These BPF ringbuf submissions can come from any
-context, of course, not just other BPF kthread programs. So network
-packet arriving on some socket could be "offloaded" to be processed by
-a BPF worker program.
-
-Kumar, Alexei, thoughts?
-
+> An ebpf program can do this if it starts with
 >
-> kthreads have no limits it seems. memcg is probably not aware.
-> I didn't check all release mechanisms and cleanups.
-> I'd think syscall prog can signal to user space to create a new user
-> thread and start bpf syscall prog there.
-> It's less flexible, but at least the ownership of threads and their
-> resources are clear and contained.
-> We kinda do bpf_wq() already, so one car argue that bpf can consume
-> a bunch of cpus too, but wq is really for short term work and
-> the rest of wq machinery will yell if bpf is abuses it.
-> Here kthreads suppose to be long lived. It feels too amitious
-> to let bpf lose on them. Let them be user threads for now?
+>   7a 01 00 01 00 01 00 00
 >
-> pw-bot: cr
+> i.e. {code =3D 0x7a, dst_reg =3D 0x1, src_reg =3D 0x0, off =3D 0x100, imm=
+ =3D 0x100}
+>
+> Robert Morris
+> rtm@mit.edu
+>
 >
