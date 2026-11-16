@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.200
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794815111;
-	b=m6ePZurmS/5QiuBmKJbuzrSloBOGi4yD0SKmSeKaIFJ6HGE1IK0MhSC92M7mWKgtrNQb
-	 mVGb6YAJh3tgzOKTM9u4MP/HFXjkaZnJdhTfl3PdNBVXB4l7It5a3xGSZUX2caMM8H2K+
-	 reqAVh2ekk7MkcHapdsLZ4sH+XedzT7kIzFJUYe5qf2/akukXs1rBBVPZ6RzZ0wrQ83RM
-	 Kite9KP6O4CdB57UcInEkGGdI9DnGliidh025DifvyYfsgtVl61KMzxssEwWPUhiQbpN+
-	 w0GbdyCKw+hX4cKllDtJsnS69KYvosTDS2XiHLLRBrRkVFTkkG/VqNAS2zUBsIF/Ihg==
+	t=1794815113;
+	b=AYmAMPrWcHsePbH17h4ydsQn+zwnhIsytLzMmW2P4OzdoLJooMETtx8R33kovBG4//Sx
+	 HvCtkKOiP/qFAZCmE+o6KhPu00MQjTd8S/LmuSlKC41M0e/vzMNx3u+hAQlIgdpoTT8q9
+	 D9K9VmpRJ/Lvsa8ZwT4hahs0Yyj2wnzV7J2FCodSu182Aq3XyPFbRMy7heFt8+Ck0aymP
+	 FfGBcoQvgNpE4lnHZPSRxCwKQFy7O++Pninv48Jq4X7u0anZyVDu9lrxajBBvqMP4PF0u
+	 UoVyj8Ug8vOBVXgztFNivYqaQEB9QTqOH/0KooJ243mDl9XLSCvfubaD903FeKf2lmQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794815111;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794815113;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=VhmVWVRrk2339BmZFkj7hmAbe8j2FMXF93AwQ4jIvsU=;
-	b=doKDqH4NXwdVho9CXN0a8mA7XxHHRYiVVQut8ocPC0uIZ/ssSh0E80cfcaK24L0LUUpr
-	 3J0ufzpb6mtUR0bKTOBmC+/maB3cYdFbbiAgCWOwLzjAaysWOxZuWVE8jtbSlTHOzgaOW
-	 2bM+Wj1eu9uIERWwqMHjaOK6retUNgHNJVFScad7cckc4x8wvdR3i1h9KIGazixlSrfcM
-	 BVlFmHHSRujWvZpBKwDdOMbJbgBDHDtPJhkLvogOMiqaIqZmbhi+lsTjqam7w/PvDzxD2
-	 fMHRmcOwce9+SY22qPW9wt7nRH3gdRuZ1saBu6k9x82IBJ6UOzKaBCfKELbG2MXXkcw==
+	bh=fi+3u17y7wvoAtVtKo+5P36PWlBbkMmWpTM+zRtf1CI=;
+	b=SPTdFoyAOXLK/MBnfgEr7Haqsws0B6xxuhjH2u8YYtnylNxzZ3cOej2KLbwnvvAO+x0Y
+	 NnHiYtUwGHBawr4I2pdsX2O0kB445YcnO9DbtX9sRch46ZYCagCTwPhEWNeNxtUlfWjzF
+	 kUNJmRC9kqOW785TtqJFBLeQ+PSEKz9Q0iUecBk0WW1dfJd/3PC7DqRWySKK2gzQfSH7L
+	 UkP6CHKi9P4WBh76MpJjK18vNMs6+RKPw8xJOXDLUbajqBn6DvZaIBmuuDPhxMGMuwjRr
+	 5ZC2fB6jEj28sZxd6p8Dc+Pe4gsei9FKo2HxySb68YcBseQgAlfSp+1c+WjDAqILfsg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=TpYUQ9mr;
-	arc=none smtp.remote-ip=74.125.82.200
-Received: from mail-dy1-f200.google.com (mail-dy1-f200.google.com [74.125.82.200])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=L8gvW0Ia;
+	arc=none smtp.remote-ip=74.125.82.199
+Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com [74.125.82.199])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56DF6606A33D
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 07:45:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 56DF6606A33D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76C7D606A331
+	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 07:45:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 76C7D606A331
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=TpYUQ9mr
-Received: by mail-dy1-f200.google.com with SMTP id 5a478bee46e88-37549877380so4364000eec.0
-        for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 23:45:10 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=L8gvW0Ia
+Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-36ecd5db581so3147327eec.0
+        for <bpf@vger.kernel.org>; Sun, 15 Nov 2026 23:45:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794815109; x=1795419909; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1794815111; x=1795419911; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=VhmVWVRrk2339BmZFkj7hmAbe8j2FMXF93AwQ4jIvsU=;
-        b=TpYUQ9mrYK18ylzU/qW2jN4cLwlmXwHRsuugDsgXNoihNQW29xUQbGlyihr+RIJcCl
-         y3zxNpG5aUMRY7Ka1GuvmCBEKRa+4XHhA/W7GLr1wjZReFN74YtwIvdnXOi7KtSfOS/9
-         /hJCbYzAw76Bg1SlS+pujjgp6ol/afwLkTf+aRpdDLNGaCEZOpKjq7TCTSwHJa/sYTRo
-         QnzfaA8zcc/b+jqbIT0m7XYrDmnLI1jHBrbOAEEKzkxgUtnd/MBb67ZsAiU+zS/Tp15u
-         0S12vuK6VfirFt88KjTh1NZMQeI/tltZorhOg+0vvqbeEHfnij6Yci6OfJFYgMbChHhY
-         evFw==
+        bh=fi+3u17y7wvoAtVtKo+5P36PWlBbkMmWpTM+zRtf1CI=;
+        b=L8gvW0Iadb94iA+kpPaV1ebIqatTEoVLO/aSaAvQihWHzsFQbgZVUbs68KH2FCvL2J
+         mvztilRzHT6GgNAwMRWm8I6AnwhwRRU5/N70QXVIKmYGBYFEpWECMBh6fAz79nTIamv8
+         xPA7es+6x5frYqRdMc0mrsQ/81jyurduyHj64zPBdUyk4uS4ygQLLkBtlF38vX+WtMR6
+         ojfjuSzAVLA54i92t8oXTKdkLI3rDaVbgE6KGGZWCPLuPP/d5Cp6Yj+6xytnFPor1IaJ
+         b0LouXpX9wzyk5XFDlXeebDUcE0OCa1t436du7eF9UTffN6s24G2rIZXGKPEqHD90nEn
+         B77A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794815109; x=1795419909;
+        d=1e100.net; s=20260707; t=1794815111; x=1795419911;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=VhmVWVRrk2339BmZFkj7hmAbe8j2FMXF93AwQ4jIvsU=;
-        b=EfBP8bp+p4t0kYqcdkb2CcHjDgApRYC9auxebNVpMrGwZlDB+zWadL2flEqbl2ne6r
-         TaQYSSyHZ3lI/N4z/cn3WFIMk5itLfksPTY9nLkQHmsYJQUl2fDCR7l8cEV92r7KZ4I+
-         K4MhmmRZ+0z1nTNmP9DnIHlV4vASuvYvv+PG/HA/gSdZpL2QPqvv9kHf28vpZwxSo5ra
-         +3BJpJ7stKHm6awzjc1McifwDhFYtfwaLzC8YrSrsrFwgB08Y+fQduqcEs4ffEVPh1OE
-         HC225EcfGho28FVqUzZKNeegQJgUf/b5loK4kpQZqDo35E1YoMjVXaa427IFvhpdqaCB
-         /gTw==
-X-Forwarded-Encrypted: i=1; AL+hErHrXt/xuvGV7v8gyMNJR7ka59P6fKKdQ+V63fJdqoptyrWuizflwij9SrWi50RnSjQbkPs=@vger.kernel.org
-X-Gm-Message-State: APuU4Z96hHGu6U45uUwOsJyp+mQLzTm9xKqPqQ/NoLtNYrLYAhOpvdHQ
-	gwaBqTl05AX5uLxKLBIhvRe5KMPe7Ez8VRZAjACJAevUcayZ7hHNsqSpYYCc9NdaYXbMiY0E3pb
-	RPulK94k8DQ==
-X-Received: from dlgx28-n1.prod.google.com ([2002:a05:701a:ccdc:10b0:1b5:345d:ed30])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7023:d0c:b0:1a2:fa1d:1de5
- with SMTP id a92af1059eb24-1b5030f284cmr11497837c88.20.1794815108990; Sun, 15
- Nov 2026 23:45:08 -0800 (PST)
-Date: Sun, 15 Nov 2026 23:43:56 -0800
+        bh=fi+3u17y7wvoAtVtKo+5P36PWlBbkMmWpTM+zRtf1CI=;
+        b=ClRGQQDYZD2ppOXSiKI8jNVQh3B3K0tyMsXD/ji0WoSp+Vs42EZDkgl8HVP0ovo9NX
+         vZsN3D9sEYJfO2dZnWnp9vt2544CsYTnKUpPUw8njtoGfOR+gnz3/iEbyOChwJDQhFTk
+         AEpOl5reinyKoIl7rz2RnvkAOaWEv9as18kxnn5PHIfB/31xyqXGlZemlNrgLMsbyc9V
+         4M/8aum/R7lBNUisUsaw3FRF07c/W18qxL1UK54R6N1Yhrhw1WUclOj22OzqlPntVC8g
+         hVvMlezwmQS1Lz/bW0rH5i8GmRi4orZptZ0NzUbmNCToDli6FJx7ZGrx4Iiol7VBe6Qo
+         qA/w==
+X-Forwarded-Encrypted: i=1; AL+hErF3YYV4i1qcmvkQLHNiyw/cjqcOSkad/LGRQ7hAFjhTD24W8B3AXdvIGvytcDVXBSCYCzg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9LMgdX+O9guZEYqhXSGUT9REPN6BLE6vqLG02zzF8syv6dJOSd
+	vYambh8X8JX+uNiaIugCrueJrOM27e7ZwFOb+L9bzbinwf8BrUA8rF9ibv9soqOQBzzJD1eKKww
+	LeKlX1A7wjw==
+X-Received: from dybrp12.prod.google.com ([2002:a05:7301:460c:b0:355:e5a8:715f])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:cc9e:b0:372:2ed7:8f89
+ with SMTP id 5a478bee46e88-3796702a36amr9735755eec.34.1794815111073; Sun, 15
+ Nov 2026 23:45:11 -0800 (PST)
+Date: Sun, 15 Nov 2026 23:43:57 -0800
 In-Reply-To: <20261116074414.3174737-1-irogers@google.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -81,8 +81,9 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261116074414.3174737-1-irogers@google.com>
 X-Mailer: git-send-email 2.56.1.703.gf848ed807c-goog
-Message-ID: <20261116074414.3174737-2-irogers@google.com>
-Subject: [PATCH v3 01/19] perf/core: Protect per-CPU callchain buffer across bpf_overflow_handler()
+Message-ID: <20261116074414.3174737-3-irogers@google.com>
+Subject: [PATCH v3 02/19] perf/uapi: Factor perf_build_id out into its own
+ top-level struct
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -100,53 +101,46 @@ Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
 	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-In bpf_overflow_handler(), perf_prepare_sample() runs before bpf_prog_run()
-and saves data->callchain pointing into the current CPU's callchain buffer
-for the active interrupt_context_level(), after get_perf_callchain() has
-already released its callchain_recursion slot.
+Document struct perf_build_id as a top-level structure in the perf_event
+UAPI comment and add it to the PERF_RECORD_MMAP2 union comment so future
+sample types can reference struct perf_build_id directly.
 
-If the attached BPF_PROG_TYPE_PERF_EVENT program invokes a helper at the
-same interrupt_context_level() that calls get_callchain_entry() (such as
-bpf_perf_event_output() on a PERF_COUNT_SW_BPF_OUTPUT event configured with
-PERF_SAMPLE_CALLCHAIN and a larger stack, or bpf_get_task_stack()), it
-re-acquires the same per-CPU callchain buffer and overwrites
-data->callchain->nr in place. When bpf_prog_run() returns non-zero and
-__perf_event_output() emits the outer event's sample, perf_output_begin()
-reserves only the smaller dyn_size computed earlier while
-perf_output_sample() copies the overwritten larger data->callchain->nr
-entries, overflowing the ring-buffer reservation.
-
-Hold the callchain recursion slot via get_callchain_entry() across
-bpf_prog_run() when PERF_SAMPLE_CALLCHAIN has been prepared so nested
-callers at the same context level cannot overwrite the active per-CPU
-callchain buffer.
-
-Fixes: 0eed28220598 ("perf/core: Call perf_prepare_sample() before running BPF")
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- kernel/events/core.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ include/uapi/linux/perf_event.h | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 614f9f0e6500..fd9f654de269 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -10818,8 +10818,15 @@ static int bpf_overflow_handler(struct perf_event *event,
- 	rcu_read_lock();
- 	prog = READ_ONCE(event->prog);
- 	if (prog) {
-+		struct perf_callchain_entry *callchain = NULL;
-+		int callchain_rctx;
+diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
+index c49fc76292f7..deb7c42d109b 100644
+--- a/include/uapi/linux/perf_event.h
++++ b/include/uapi/linux/perf_event.h
+@@ -1099,6 +1099,18 @@ enum perf_event_type {
+ 	 */
+ 	PERF_RECORD_SAMPLE			= 9,
+ 
++	/*
++	 * Build IDs may be present in a number of events. They have a
++	 * consistent encoding of:
++	 *
++	 * struct perf_build_id {
++	 *	u8		size;
++	 *	u8		__reserved_1;
++	 *	u16		__reserved_2;
++	 *	u8		data[20];
++	 * };
++	 */
 +
- 		perf_prepare_sample(data, event, regs);
-+		if (data->sample_flags & PERF_SAMPLE_CALLCHAIN)
-+			callchain = get_callchain_entry(&callchain_rctx);
- 		ret = bpf_prog_run(prog, &ctx);
-+		if (callchain)
-+			put_callchain_entry(callchain_rctx);
- 	}
- 	rcu_read_unlock();
- out:
+ 	/*
+ 	 * The MMAP2 records are an augmented version of MMAP, they add
+ 	 * maj, min, ino numbers to be used to uniquely identify each mapping
+@@ -1123,6 +1135,7 @@ enum perf_event_type {
+ 	 *			u16		__reserved_2;
+ 	 *			u8		build_id[20];
+ 	 *		};
++	 *		struct perf_build_id	bid;
+ 	 *	};
+ 	 *	u32				prot, flags;
+ 	 *	char				filename[];
 -- 
 2.56.1.703.gf848ed807c-goog
 
