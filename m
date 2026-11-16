@@ -1,54 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.64
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794865750;
-	b=WQIHbi46YlU7HdOCvfHw5nc9FUCX6i7wvAf0gDowhvI81Qmq5bBkHQUdkeLmboTDiS23
-	 5zQ1TnuL4X5E9LOU60k6eaboW2d7mG8i05IAY/U8c+QsE6Ai6D/gfBL1V1+r+wd3Dr+sV
-	 MwimKol+B9lYUGoATlFTp8w96gQ3jwDrhtYao1aL582vLO40X9W6oEEtLiYHAufwwre+i
-	 tfFR2YzM9dnw4lMrmN8y6WHlXORvW6fR/onG096uG4S6pgEXoZSfKq1e7Mnv1zJEk4pN6
-	 OwZylTJqi3XrUs3R9JiPc4ywWBhf/QTte12xsfajb5RekmTimEqI3o6obXjPN2vcirA==
+	t=1794865803;
+	b=ginaVK4Z59tvW7RP7+AlcFadLZ9OnMwfCSkw71LfJdfKrkP/nj3VbKXqfxEZGpZyH2rK
+	 yWC/R9FOJGSRp56kOD3hJGuRR+X6uk6h1q+7NBahFSGjTTwHKMBEr9wVWxAlrRnFGqjmH
+	 z0jkQYZ65WauJIObhy9DNcRpifo1FnelO1i7Dj2cOa8+1puYfC7J5eqep+SfN2SP1sDsD
+	 Vx82ZGWZ2qBTyAAddlrGeL1Q1yHmMjYIzg5tbamsi/bQZmOYGwgZ0eLqt2uis500ykYot
+	 rubXA4Qjj2He3rfkkrYsrFE7DMhfZsQNagSdrstZvWbc4bXwAqm7EX+7FYBMF5ht/tg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794865750;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=yJuKOBNNYnk1ty+KHw/zCYtkc5H0NaB5Yj6zALlwHps=;
-	b=zKWl25v1oK0Fqm4p6f/Gp2rIAAAzv+cyLfzJO82YlGnwS+SeGs2ldvSkfdLeLys27sJ9
-	 ObnTgKd1fqyDjMZshcn2muptCRZp7SQXsyX2Oirj8HgqS3YnHd+Mxy+BquOwXF4mZKsV7
-	 9suorX4UQ2zu1TclCyKKvwgVuQJQVXu/TXDGwuOc+KSCKz8hx05bzcUkVbgv667diWhDV
-	 2gW78XUUBVx5S3Q2FwCsbzieRcekKLEsRizlab3729w2G3CanP1SUHWgjfKejk+fjbGjK
-	 6g7Dtdq25BarkXXgEXHM/idj7UMEVln91WogmNZ+UesF9WrBsvrd8qmZoMzMxRtAR8w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794865803;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=+jsFqFzKZSD9MdsyE3tmoUMLAK/UTPTcstylH2JUgu4=;
+	b=xlCVtH9p2PHmtG/Z92wZSENW+93MWdobb3BRblIUvbRCQeyK7CIs11O7SbwJCKWjRcwo
+	 cGit9/hXHPdxYpogQkLp7QQ/FzFdIT66u57m5eOpBLJzXiVEoZPThPTy65xK0os1LgOw4
+	 hN/hY9AoJ9ClrFIBv5OBsnZBSlapjSo53m2mLZBB7Hbi+Y5yTn8MMCJKeM5H9bocdJIKF
+	 mldrEj2tZ36gCb7eEVCl0cclmOMfFnUOnEmw2G1gD/y7HotwlCpDtTDw9wyqXwZ2KmLAl
+	 cUUIhVeqvvbCir+9mQn4vcMLcBKUGN+wsgKKOnu5lEg9ZwP37d/FqGMgZAnSU2x9R5A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="J1UhoB/9";
-	arc=none smtp.remote-ip=91.218.175.64
-Received: from mta0.migadu.com (out-64.mta0.migadu.com [91.218.175.64])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=k37Bv7TF;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE6F9606A31C
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 21:49:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CE6F9606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24A04606A31C;
+	Mon, 16 Nov 2026 21:50:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=J1UhoB/9
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Oi5wYhbLjwdZu+R9/Qn3xoP1Vc2SrBmiTpo0zBudxz0=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794865747; v=1; x=1795470547;
- b=J1UhoB/9/+fOB3vHOjJ5A4h6AVVjN3hYuRW08wofnUttUirmkSUBjzTI6JlepQw2+2X8w00F
- qbZoCe52zWoPnLFc3Tah3Vv8LNItCZodcMUgTslNN0BgB9TMjL9NpL/PcPghH8Msfwhbw/cAVm7
- eU/6cwrzJKyL4Rkbhdesh5p0=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 5853fed9c1d37e21;
-	Mon, 16 Nov 2026 21:49:07 +0000
-X-Mizu-Trace-ID: 5853fed9c1d37e21
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <2e6d98fe-527f-4188-bca0-c9db1ad92bce@linux.dev>
-Date: Mon, 16 Nov 2026 13:49:02 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=k37Bv7TF
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1A821F000C4;
+	Mon, 16 Nov 2026 21:50:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794865803;
+	bh=+jsFqFzKZSD9MdsyE3tmoUMLAK/UTPTcstylH2JUgu4=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=k37Bv7TFoT4Ul1KmSwB7KupyTlwJNzDlOaHHOeihdzkaaSpkbBcZ3J9+etgSXHsCW
+	 LQPigaHIBGR7hoYVXT2xaoqFHPdWDdujpYFYva0wTUU3lr4AGFhLB3IMZhZwtzrKop
+	 gcQRKcVKGVWTqi/LPmeXnMSGUGg4UHhuhjOEtT1QTXOhXupyWUDGWf/YfAtSk3sMNV
+	 A2XH1dMEIqloIxM/jZ6tUTM9+Mt6Ts8tiOvU9LF1MvRDzcA0HGe21JXIxRuI6FMHi+
+	 i+t1Gp6HE5HHQKZa8U26AHQwcpsMuUQZolpeeWyClydnidWS5tHg0W9efrQ32wgE4x
+	 I8A8gHaXPZ2NA==
+Subject: Re: [PATCH net v2] selftests: net: veth: propagate channel-check
+ failures to exit status
+From: netdev-bot+sashiko@kernel.org
+To: emmaonana18@gmail.com
+Cc: kuba@kernel.org, tianyi@cloudflare.com, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+ sdf@fomichev.me, skhan@linuxfoundation.org
+Date: Mon, 16 Nov 2026 21:50:01 +0000
+Message-ID: <179486580141.3136.15559598598860423821@kernel.org>
+In-Reply-To: <20261115214702.50817-1-emmaonana18@gmail.com>
+References: <20261115214702.50817-1-emmaonana18@gmail.com>
+X-sashiko-severity: High
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,113 +66,130 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 2/2] local_lock: do not put btf_type_tag on the lock
- guard type
-To: Chris Down <chris@chrisdown.name>
-Cc: dennis@kernel.org, tj@kernel.org, cl@gentwo.org, peterz@infradead.org,
- mingo@redhat.com, will@kernel.org, boqun@kernel.org, longman@redhat.com,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, acme@kernel.org,
- yonghong.song@linux.dev, eddyz87@gmail.com, martin.lau@linux.dev,
- nathan@kernel.org, ndesaulniers@google.com, morbo@google.com,
- justinstitt@google.com, llvm@lists.linux.dev
-References: <20261110012235.1024461-1-vineet.gupta@linux.dev>
- <20261110012235.1024461-3-vineet.gupta@linux.dev>
- <20261113115810.cd33f9ed58c02dd9@chrisdown.name>
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <20261113115810.cd33f9ed58c02dd9@chrisdown.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 11/13/26 11:58 AM, Chris Down wrote:
-> Hi Vineet,
->
-> Vineet Gupta <vineet.gupta@linux.dev> writes:
->> 	typedef local_lock_t __seg_gs
->> 	__attribute__((btf_type_tag("percpu"))) lock_local_lock_t;
->>
->> 	typedef struct { local_lock_t __seg_gs
->> 	__attribute__((btf_type_tag("percpu"))) *lock; } class_local_lock_t;
->>
->> Both put the tag on local_lock_t, an aggregate: the first on a typedef of
->> it, the second on the pointee of the guard's member.
-> The typedef is the aggregate case, and it's the only one of the two that
-> GCC warns about. But the second one is just the "T __percpu *p" spelling
-> that 1/2 keeps the tag for. _T->lock really is a pointer to per-cpu memory,
-> since local_lock() passes it to this_cpu_ptr(). So the tag is correct
-> there. This patch drops it from the guard's lock member and the
-> constructor's argument as well, not only from the typedef. I think it
-> should keep the tag on those two and only drop it from the typedef.
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-Yes you are right, the patch conflated them. And although the warning is 
-same as in patch 1, there typedef is actually involved
+Critical: 0 · High: 1 · Medium: 1 · Low: 0
 
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
->> Every variant of an
->> aggregate shares one DIE, so there is nowhere to record it, exactly as for
->> DECLARE_PER_CPU() of a struct. clang writes the annotation into DWARF
->> without complaint, but pahole does not translate it from that position,
->> so with today's toolchains it reaches BTF from neither compiler.
-> That's true of the typedef, but not of the member. With clang 23 and
-> pahole 1.32 the lock member comes out as PTR -> TYPE_TAG 'percpu' ->
-> local_lock_t, the same as any other per-cpu pointer.
+- [High] The fix is incomplete.
+- [Medium] Because chk_channels() now sets ret=1, the "setting invalid
+  channels nr" check at tools/testing/selftests/net/veth.sh:467-468…
 
-Yep it was wrong for the member. My config was lacking 
-CONFIG_CONTEXT_ANALYSIS_TEST and hence it missed this part.
+--
 
-> For the typedef, clang 23 puts the annotation on the typedef's own DIE, as
-> you say, so there is somewhere to record it. It's only pahole that doesn't
-> pick it up yet. You also mentioned GCC patches for type tags on typedefs
-> in the pahole thread [0]. Once those land, does this warning go away?
+selftests: net: veth: propagate channel-check failures to exit status
 
-Correct, although [0] you referred to is a different, likely won't fix.
-The fix you have in mind is PR125888 [1] and the patches are here [2]
-This addresses the For BTF, as you say, pahole doesn't convert 
-annotation from a typedef DIE so the
+This patch changes chk_channels() in tools/testing/selftests/net/veth.sh
+so that it sets ret=1 when the channel counts reported by ethtool do not
+match the expected values. A channel mismatch now gives the script a
+non-zero exit status.
 
->> Unlike the per-cpu declarations this changes no BTF at all. A tag in that
->> position was never recorded, so there is nothing to remove, and the one
->> percpu TYPE_TAG that does reach a local_lock type comes from those casts,
->> which keep it. An x86 defconfig built with clang is identical with and
->> without this patch: 152551 BTF types and a 6828300 byte .BTF either way,
->> and .text is unchanged. The patch removes a GCC diagnostic and no more.
-> The defconfig BTF only stays the same because nothing in a defconfig uses
-> these guards. lib/test_context-analysis.c is the only user in the tree.
-> With CONFIG_CONTEXT_ANALYSIS_TEST=y, class_local_lock_t,
-> class_local_lock_irq_t, class_local_lock_irqsave_t and
-> class_local_lock_nested_bh_t all lose the percpu tag on lock with this
-> patch applied.
+> diff --git a/tools/testing/selftests/net/veth.sh b/tools/testing/selftests/net/veth.sh
+> index 64c2a5a59821d..5c1dbe1516bb4 100755
+> --- a/tools/testing/selftests/net/veth.sh
+> +++ b/tools/testing/selftests/net/veth.sh
+> @@ -130,6 +130,7 @@ chk_channels() {
+>  		echo " ok "
+>  	else
+>  		echo " fail rx:$rx:$cur_rx tx:$tx:$cur_tx combined:n/a:$cur_combined"
+> +		ret=1
+>  	fi
+>  }
 
-Yep I was missing that.
+[Severity: High]
+Is this fix complete?
 
-> Nothing in BPF looks at those types today, so this doesn't break anything.
-> But it does remove correct annotations to get rid of a warning that is
-> only ever caused by the typedef itself. When the guards were added, the
-> type was only ever used as _type *. The typedef came later with
-> 3931d4b98039 ("cleanup: Basic compatibility with context analysis"). If
-> GCC isn't going to accept the tag on a typedef, could this be limited to
-> that typedef in cleanup.h instead, so the guard's pointer keeps its tag?
-> As far as I can see, lock_##_name##_t is only ever used through a
-> pointer, in DECLARE_LOCK_GUARD_1_ATTRS().
+The commit in the Fixes: tag, 1ec2230fc721 ("selftests: net: veth: add
+tests for set_channel"), also added three inline channel/XDP checks to
+veth.sh. Each of them prints a fail line but never sets ret:
 
-I think GCC supporting them seems like a reasonable ask - fixes have 
-been posted, lets see.
+	printf "%-60s" "bad setting: XDP with RX nr less than TX"
+	ip -n $NS_DST link set dev veth$DST xdp object ${BPF_FILE} \
+		section xdp 2>/dev/null &&\
+		echo "fail - set operation successful ?!?" || echo " ok "
 
-But to recap, I will drop this patch since it only needs to handle the 
-warning which can't be fixed in source and relies on the GCC fix.
+	printf "%-60s" "bad setting: reducing RX nr below peer TX with XDP set"
+	ip netns exec $NS_DST ethtool -L veth$DST rx 1 2>/dev/null &&\
+		echo "fail - set operation successful ?!?" || echo " ok "
 
-The point of this series was to do any needed kernel source changes 
-which can't be addresses in GCC.
-e.g. PR128480 [3] was deemed invalid/wont-fix on GCC side.
+	printf "%-60s" "bad setting: increasing peer TX nr above RX with XDP set"
+	ip netns exec $NS_SRC ethtool -L veth$SRC tx 3 2>/dev/null &&\
+		echo "fail - set operation successful ?!?" || echo " ok "
 
-> [0] https://lore.kernel.org/r/252c53f3-3f06-40f4-9cd3-795eb298687c@linux.dev
+These checks test the queue count limits in drivers/net/veth.c:
 
-[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=125888
-[2] 
-https://inbox.sourceware.org/gcc-patches/20261112191815.884167-1-vineet.gupta@linux.dev/
-[3] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=128480
+veth_xdp_set():
+	if (dev->real_num_rx_queues < peer->real_num_tx_queues) {
+		...
+		err = -ENOSPC;
 
-Thanks again for chiming in.
--Vineet
+veth_set_channels():
+	if (priv->_xdp_prog && peer && ch->rx_count < peer->real_num_tx_queues)
+		return -EINVAL;
+
+	if (peer && peer_priv && peer_priv->_xdp_prog && ch->tx_count > peer->real_num_rx_queues)
+		return -EINVAL;
+
+Suppose a kernel change lets one of these invalid configurations
+through. The script prints "fail - set operation successful ?!?", but it
+still reaches exit $ret with ret=0.
+
+The subject says channel-check failures now reach the exit status.
+Should these three sites set ret=1 too?
+
+[Severity: Medium]
+Now that this sets ret=1, can the "setting invalid channels nr" check
+fail the whole script on hosts where nproc is lower than
+num_possible_cpus()?
+
+The test gets its CPU count from nproc and treats CPUS + 1 as an invalid
+tx count:
+
+readonly CPUS=`nproc`
+[ ... ]
+ip netns exec $NS_DST ethtool -L veth$DST tx $((CPUS + 1)) 2>/dev/null
+chk_channels "setting invalid channels nr" $DST $CUR_RX $CUR_TX
+
+The kernel limit comes from num_possible_cpus() instead:
+
+drivers/net/veth.c:veth_get_num_queues() {
+	int queues = num_possible_cpus();
+	...
+}
+
+drivers/net/veth.c:veth_get_channels() {
+	...
+	channels->max_tx = dev->num_tx_queues;
+	channels->max_rx = dev->num_rx_queues;
+}
+
+ethnl_set_channels() in net/ethtool/channels.c rejects only
+tx_count > max_tx, and the ioctl path does the same.
+veth_set_channels() has no upper bound check of its own.
+
+On some hosts nproc is lower than num_possible_cpus(). Examples are QEMU
+with -smp N,maxcpus=M, firmware that lists hotpluggable CPU slots, or a
+process limited by taskset or cpuset. There the ethtool -L call
+succeeds, ethtool -l reports tx = CPUS + 1, and chk_channels() takes the
+else branch.
+
+Before this patch, that only printed a fail line. With ret=1, the
+selftest now fails even though the kernel behaved correctly.
+
+The commit message says:
+
+    all chk_channels() call sites expect the check to pass
+
+That doesn't hold for this call site on such hosts. Should the test pick
+its out-of-range tx value from the kernel's reported maximum instead of
+from nproc?
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261115214702.50817-1-emmaonana18%40gmail.com
