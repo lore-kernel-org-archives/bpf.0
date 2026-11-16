@@ -1,101 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.53
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794854274;
-	b=sERFJb4vimEnrmnkbhr6zFG5BjysLGgXGuJkRIehihpPjXVvW9hCCihkjKXDGwHyzmgB
-	 pXkqYx/4H3xo7pq5rs8bEYEjaTkWhoW6WJot+x275+dFYOTMPn8S+cappmEref5ykGTbX
-	 rL9VXA7O4l96Z84/bphQ89BdosNuZnvYk58InWnsKMLTukEbZH4KKoHGi/ri+p0hY8t0m
-	 FgETiOMubYpgeUCARlb05/nddo6W6DbyyqPincqJ9Fx2XMhXXYOeTPcnB0ou178r/S+1z
-	 vwNFkAnRaqxYLDR0k06rW4/VRE4mX3rZRpQZL+Iao3y/L/6O1nRdYEOE0WTK0J0RuEg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794854274;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.180
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794854864;
+	b=b1tTRGYtpqpJUURADUDTyODEzO7j8wqIiirwqUiL1UXJlxqDREGjN+6Cqpt6T7P77NEp
+	 dG/jOVLeJ2hpoLQxktZbpAFyQDvlyxVmReY+IoB3RpWnMR3kV2LXM7OtzboWrl7h4lD8M
+	 4fXJPg8V9g7bTNHY1bwA0qXAKUN1ViGV7hP3WyqC+s/YF0dqB2YokgO9gFIbj59UbVR7h
+	 hoJQ4zFgcTqh2fqmR31rgi/gDXGdLrWFbsCNopxKOwlS8Ps9/d7lQ4xcuiOy4Cv8A1rG+
+	 hn2u3sp6JHXN+GiZf0BAC/PXO5XQ7HL1aWzoc3JC0Y9mxGaKIkrbb62ClCXuD9jeoVQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794854864;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=KR1B9yXoxe/iiaTpqvoEiLZa1nEPM31hRnKDTA2GAXA=;
-	b=Iv7PAZzWIWVT3ahAwCwTwUU43Hu5y/N+GhUke+eESa50yP29CJ8pw8eQNdawyOm9rh+y
-	 wpr/zqftNI8ov616KBBJLYRy5uqO6COGKW9MY75A1BIQ1X3LmlklPhI/zEd0+p7+CpBjk
-	 gf8rq/00HTVDjb+vn83susUJCgX48xFruPERzVItqdtuzskdKhupMMnZh94l69OD6mxyk
-	 8HTvhWvsFrdQyFmSR+S4sWzkhIEZaiCYVG/YPOxoBvjQR3E4UjKqhGshHS1xfK4advR3N
-	 ycXlpsiVe9xi8Jqq+j4wlV6T9s06cmQt4UulOgJmUJyFlJFaAHhM4gtgs1GMeRjoq9Q==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
+	 Message-Id:To:Cc:Subject:From:In-Reply-To:References:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=pkGRbtzAUOddYKX69NzivkJyzuDSrRr91G97bv6lnNg=;
+	b=i1PbgjX+0mAKaUV7mWTcIW/+skd8+jvsL2dpMRmUwgtoUbMc1Ytwv4Xh/xoZ9rXiTnFx
+	 zp3VJiwoUQQ5joJfW20Znye0twcxcMe+86zLJ8WftP3PO9yfK/o9rOYYISRavcpharDcA
+	 UCzo4fKROLflXKRgwNoRw4IWoHTrrI3aiZ6kZ6KsXsDSawdZOTCSnuxoqch6pWFQpyE49
+	 FCnjqg+cAYU6m8TfaJhPDU52ZF/5plzpAmcJhzUTtpEqZjBkzZCu2UmUU5qr47oXgwvGQ
+	 zVUyd9MyJRt1ahR+FPQnz05POezs85jOp3Wu8dRQcMa/0ZOs69vZ1n7qJ8S8jGgfwlg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JcnW7rKg;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.53
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DwFuf4J2;
+	arc=none smtp.remote-ip=209.85.214.180
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAC1C606A330
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 18:37:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AAC1C606A330
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D421606A336
+	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 18:47:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6D421606A336
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JcnW7rKg
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4bb606491faso12680985e9.3
-        for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 10:37:53 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794854272; cv=none;
-        d=google.com; s=arc-20260327;
-        b=mTZ0/Dti26mimfvAKWeQE3LAxUi/rbZr1BlwR4BJDzDK+NfEet2wFY3/D36ZHKiu6w
-         QPTq0ZWZiuSkw0Ke1TwWeyaQ+Pw5KjPM+0wBlDfuQOBhAHKGpl+zybJmhfDmSaCEUgK3
-         ABG0Qmkh022oLF8aDGo/Qy4Pl0gnQdzhU3jbkIbk5L2mSOP21cV/KdjZS54fJm/sMkiv
-         +FKHvw5jL0booYpox5rwv24V47DhynfTUZ+LbbRn+wC8md39b/QuX85yAhEgib5Iau1a
-         IMogUovGKFAx4v44JskjpJhJ7Qb4hGyR+cQBqcp5Cj8W6sA/guXLwQsPfQurT25PoSz9
-         IC6Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=KR1B9yXoxe/iiaTpqvoEiLZa1nEPM31hRnKDTA2GAXA=;
-        fh=uJxYm875QlU7D3XTIz/xrxFJ9bREF84qfTXVgyz2eO4=;
-        b=BFcCce2S3klxiCc+uUQrMhW+jW1FlM/l3MHYzUGIjRLkP5skI80JfxHpYtzV/JPEru
-         Dv4JEZ+9peMn3UTYvM/tVDIE/0azKoI16TDp97oTGGKj7igAl1hPW19SO1PhCdIRFEMe
-         MOqMy7t4IOt+wJu2o7rHGBlzhuIdJuUTGPeyyVxIElU0qGhsfQgeE/h2yhAi9TyiUTpD
-         RYe6Rq5TbKN3mJMEAPcTX2hW5Tj1N4N1pIw0gqeQ2cDtvn4SMXt91xT7mNYLrqzpZhYR
-         Glk5ic6/4V4eZ37KPIh2U6vQ1HEdObSQZ4kcy7aV9dDb1CFU7XDMxS2VNCsC8WLS9GE8
-         vrAw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DwFuf4J2
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2e96502e447so39811925ad.1
+        for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 10:47:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794854272; x=1795459072; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=KR1B9yXoxe/iiaTpqvoEiLZa1nEPM31hRnKDTA2GAXA=;
-        b=JcnW7rKgXvUSyJ0m6cFXSUbtEFS+MeUbRgWICS1c0XoKk031VYU86s7LLC5UNUdRpq
-         AQB0TagEIm5+ME+4yiw4gudTWOfnQ9tNoubCy9FsQA85vlmnHqTCDse/X55VQ6Vc24AF
-         IHyFgHtwR1HT5Mr59+J2SZiCmP3Z9sFPI1RbtuzYGRCtE0HfJrtb7ehd/35MRmPZc5za
-         mxVjnGm5CPUevLoUyPO1KVML5+tUWATUfik7/T1VpjDEs+sZtN3evtLKIIERYLcaUUWz
-         z7vfy9uw0RQH4NEm3kVmIfhp0JlYmkhtHaHHLTp/8FIu6CdldnkO2GKQooxqlhmHWRHZ
-         TolQ==
+        d=gmail.com; s=20260707; t=1794854863; x=1795459663; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:from
+         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=pkGRbtzAUOddYKX69NzivkJyzuDSrRr91G97bv6lnNg=;
+        b=DwFuf4J2lx6Mkje+7VG6pLEhFMX4BMBdwc6QFs/Mv+Q4IIyV8t/L+EJ4ik2cQ6DrZi
+         F1mLPayiuW92DwvXjhOGYPBI9YoypCzZ5mzvWbxqdLEd6+fhaI4vaSjRuLiwJRox1vmb
+         1HbM1vaxaX7YngWJ6L4X0uJkUHI98Ekpw8WqymFOxWK2E2tXhhzSP76iUIQNyRTLQquV
+         klypLyG1NEHXmBC/5MwVCdttPEeCT5l8qymmQgzRZeR9mbAfiv9MYWQR7GppOXJ1Bxli
+         ZgFwYj9erK3XfwhYWldNAcN67IQ9elT1UU3cNRTs5uJKo21k1sU0+KQWKN5XR2sKM65C
+         hbIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794854272; x=1795459072;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1794854863; x=1795459663;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:from
+         :subject:cc:to:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=KR1B9yXoxe/iiaTpqvoEiLZa1nEPM31hRnKDTA2GAXA=;
-        b=hdwLovO4eIaK9iXJZ38dQfgVkNz076rV4R946rrLAPrliHwmbDV7Z6t1jHUYSwQPnL
-         /gGW99ZbxzyHnz6QDHvGg4l1jAGiYz5ubN5yrX0ExhOA9lJO9KVeWbuulh8QcekFqVVM
-         rT3ClVc3hqst50M5lWNZ04De+auFcXpBOjK8kUcU5kDwz1AM9n/WZefSXgeWc6wTh4+M
-         7xmjf3jU3OD6NrE/t1XI53N4oJYHs6sgVR6zY+N5PoDLGKiTWwJiuMBwbBJoZjp3Wj8M
-         vhRbXw3NUZVimV+RJ78xoqxjZNwy+Fr4Gb35vx7U37h5jJ4nj+fy6Bs/moQUHlsfuOcb
-         X+Ow==
-X-Forwarded-Encrypted: i=1; AL+hErHmXOBRPObOV8b1z2Q//aO3tru9QH0o5sS/pmWJdNlxgz/6ngFDKGVO/BnSaystvw1kEuI=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+ZbSkmuZSzVF5fqKEoUH2JqZmIS61UXWwHZqnttJAqgL0ZXcHO
-	+3sD+DtYQzf73pVm1DfIjbD/GgIBLTp4sMCrcPKqvRHz9nwqVlbsgiejEGGtAmTPFFQD+81/udm
-	M1dS/1v5u/K2fYggkMwG5JYRpnh5WNmk=
-X-Gm-Gg: AYBFou15rGwwHy4eAZMsxvefqxdDRXPufi6QXNI0C7tlbo6jUX4Pbwm0B6dxGtJb73q
-	IA4typ6n8u3SKGuSIUkWTpXmeMnMjIpd93sH0t+FcB15WFDDrdQGzTQwRkYnAkSxVVcGPJBu7Pv
-	GorcaFAxR04feJuySvaY/G5q7y1gZdrkGhRFf9SM9ctcgl3d291tN1g+uZtlBKK45f+p/XvvgHs
-	rnQQO5JL+kYVChytaCTEi+AbCQJQ/GrbAfcGNoP8C3gfg2+oZxMOyzzOuklslKVLL8UTclsPqrc
-	GxhdIIXzGrZG9zFQeTphD9tYCEavy4f9DnbZ3Gbi8luOS4pnSSr3EZ/UZJ8Fc3ZZejT9h9DLFql
-	fuazWJB+iVtqoJcOIrOc9lAbQxtVfuF6j7G/a7I/flwA0lEwEMjto5iRZGxanx4KFpn0yLGa2tS
-	LDkNgTU3Ghja7Sa4alxqA=
-X-Received: by 2002:a05:600c:1c17:b0:4bb:6752:8400 with SMTP id
- 5b1f17b1804b1-4bb6752853emr183093415e9.17.1794854272188; Mon, 16 Nov 2026
- 10:37:52 -0800 (PST)
+        bh=pkGRbtzAUOddYKX69NzivkJyzuDSrRr91G97bv6lnNg=;
+        b=Tw9HUmhFT0i/RTnifRdNgGcBaP3cxUGMwCkz6cTujhtFl+eynJ6f+3AJOe2SKI52ZZ
+         pdgksWED0OxW7KxUX76gS4auCVVqxHF4dnmJ7PJRdtjuDJhvSJv7kBtz62TvublxKjTF
+         TI3HgMiBEDE4JpHjMu3sF01qOSLCnkc8/MndkwDvSp5yqwraSQ+UtA1aeC1aYOBCwEod
+         GmifENsl4p4EFOIr4d4tvpC+2ruyh6Ea3ePCPHLDg5u3+eF8f9o+/rSmzRketq11JlQf
+         D8B0Kkwpi31KXA89GjJtFPERpDLraAfGQpGOZOrgZbhNQnqVkUm5YwFAJ4Yyzyqb24UL
+         DQqw==
+X-Gm-Message-State: APuU4Z/b+DWH06w/LJQtS1WQmyzCVmhSHStEY6TnNjt5BmEp8iZq9ZmY
+	Y/Jbu3oJT7+w19h1z91wyK7glMNk/C0KUC2ftORFDNjTRAuIuDxYUkUmD7tsGA==
+X-Gm-Gg: AZFdTZeLBYlnzXfmd0OkKiekb8Rdr5RqdojOxgrttA56ewXw2jw1PU0+a0Vk1prgw8K
+	xDgiWVeUlycMuJS7RiacGjmeYKpzcdT1PX+aRqJ8REbDzn1bHuUcixjuxeUwKBpnK+56CGiR6nY
+	MqrCoV8vEpuGaNaj1sB8nw95Mccn3aJ80eHDnweX0lv1IDu2V1Hzl3LKtlID/6lSQfrtCYacqPZ
+	HF/UxXUF1eMqunhUGlHUMXYVvPmHW/HTKB5JzKvpYL/IQ08c5bPw4DdDQp2JIYqyyuHZKQWrAQe
+	lmXBz4nh1TbhScqsc9gA0g84l9zfH9MuIsLbElYDCDdr33VnLZzcVr9V8dktk0vknKV3rM0cHjd
+	4V6gRSA6pr5YHIz3BE7DwmbpSjwWJ51h5E3vct408eEqvvJMsXCpXg8MGZhTJSIEtCJbQWmPUDl
+	cYVGI0CrXEFArbPLDx/VRpdPGw/T0U/QXIlGdRVaV5uAJrIZyfsJB/CmSm1bi1SRoQU+/DWQezA
+	wcsvmhhYJBiqpIjE+CvmfUaFbyoueluZUBp65KQxmUQX4djvN5oP+z98HNeaY3HyxGeTkRniuPk
+	PcV1sp+gJBMO9Ef54g8vplp6x065kfEx2hL5A1XG6xlvtTKko28KnulOUCXn/HSYb2b1OZRdWPM
+	Dv96klY3OioYLWh09q5w/SLcN5SUCknrdIvm0SHrY3KkrJu6hUdnOrRw=
+X-Received: by 2002:a17:902:db02:b0:2dd:c053:a6ee with SMTP id d9443c01a7336-2ee0dadc350mr100928425ad.32.1794854863379;
+        Mon, 16 Nov 2026 10:47:43 -0800 (PST)
+Received: from localhost ([153.61.198.251])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2efd7a11be4sm3125495ad.12.2026.11.16.10.47.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Nov 2026 10:47:42 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 16 Nov 2026 18:47:41 +0000
+Message-Id: <DMWUY4M0QXMH.33XAPR76ZXKRT@gmail.com>
+To: <rtm@csail.mit.edu>, "Daniel Borkmann" <daniel@iogearbox.net>, "John
+ Fastabend" <john.fastabend@gmail.com>
+Cc: <bpf@vger.kernel.org>
+Subject: Re: a riscv ebpf uprobe can wedge the machine by writing
+ pt_regs.status
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+In-Reply-To: <30318.1794850523@30-11-166.wireless.csail.mit.edu>
+References: <30318.1794850523@30-11-166.wireless.csail.mit.edu>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,45 +100,154 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <30318.1794850523@30-11-166.wireless.csail.mit.edu>
-In-Reply-To: <30318.1794850523@30-11-166.wireless.csail.mit.edu>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 16 Nov 2026 10:37:40 -0800
-X-Gm-Features: Aa3M54oflzVkGHmqRvikK5C4CgsXPYy3AjtiaSrLIBI6Ky3leAmWFtLbIBAZwaQ
-Message-ID: <CAEf4Bzb03De+sraR6q+w8xTNHqp6vMQ5S52cYW2PWAR3jviuhw@mail.gmail.com>
-Subject: Re: a riscv ebpf uprobe can wedge the machine by writing pt_regs.status
-To: rtm@csail.mit.edu, Jiri Olsa <jolsa@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 16, 2026 at 9:35=E2=80=AFAM <rtm@csail.mit.edu> wrote:
->
+On Mon, Nov 16, 2026 at 09:35 AM rtm@csail.mit.edu <rtm@csail.mit.edu> wrote:
 > On riscv, kprobe_prog_is_valid_access() allows a "uprobe" ebpf program
 > to write ctx at offset 256, which is pt_regs.status. When returning to
 > user space, ret_from_exception copies whatever value the ebpf program
 > provided to the CPU's sstatus. One way this can cause trouble is if
 > the ebpf program sets sstatus.SPP to 1, indicating that the trap
 > should return to user space in supervisor mode rather than user mode.
->
 
-We do allow BPF program to overwrite pt_regs and cause user space
-program to jump to a different location (or even crash if we modify
-registers incorrectly), assuming CAP_PERFMON + CAP_BPF. But yeah, we
-shouldn't let it just wedge the host..
+Yes. It's a real bug, and it's not only riscv.
+The exit path trusts some of the fields. ptrace guards the same fields:
 
-cc'ing Jiri, should we add some arch-specific range checks for uprobes
-and limit it to general-purpose registers and IP?..
+  arch    field   exit path                       ptrace
+  ------  ------  ------------------------------  -------------------
+  riscv   status  csrw CSR_STATUS, a0             not in the regset
+  arm64   pstate  msr spsr_el1, x22               valid_user_regs()
+  x86-64  cs, ss  (cs & 3) == 0: iretq to ring 0  set_segment_reg()
+  x86-64  flags   iretq loads IF and IOPL         set_flags()
 
-> An ebpf program can do this if it starts with
->
->   7a 01 00 01 00 01 00 00
->
-> i.e. {code =3D 0x7a, dst_reg =3D 0x1, src_reg =3D 0x0, off =3D 0x100, imm=
- =3D 0x100}
->
-> Robert Morris
-> rtm@mit.edu
->
->
+A uprobe prog should write only the registers that ptrace sets to any
+value. The verifier can reject the other offsets at load time.
+Each arch lists its registers. An arch without a list gets no writes.
+flags and pstate become read-only, the condition bits too.
+
+Jiri,
+pls commandeer the following:
+
+diff --git a/arch/arm64/kernel/probes/uprobes.c b/arch/arm64/kernel/probes/uprobes.c
+index 2a9b0bc..1e6ac47 100644
+--- a/arch/arm64/kernel/probes/uprobes.c
++++ b/arch/arm64/kernel/probes/uprobes.c
+@@ -152,6 +152,12 @@ bool arch_uretprobe_is_alive(struct return_instance *ret, enum rp_check ctx,
+ 		return regs->sp < ret->stack;
+ }
+ 
++bool arch_uprobe_regs_writable(int off, int size)
++{
++	/* From x0 to x30, sp, pc. */
++	return off + size <= offsetof(struct pt_regs, pstate);
++}
++
+ unsigned long
+ arch_uretprobe_hijack_return_addr(unsigned long trampoline_vaddr,
+ 				  struct pt_regs *regs)
+diff --git a/arch/riscv/kernel/probes/uprobes.c b/arch/riscv/kernel/probes/uprobes.c
+index eb177d0..dbb1534 100644
+--- a/arch/riscv/kernel/probes/uprobes.c
++++ b/arch/riscv/kernel/probes/uprobes.c
+@@ -126,6 +126,12 @@ bool arch_uretprobe_is_alive(struct return_instance *ret, enum rp_check ctx,
+ 		return regs->sp < ret->stack;
+ }
+ 
++bool arch_uprobe_regs_writable(int off, int size)
++{
++	/* epc, from ra to t6. */
++	return off + size <= offsetof(struct pt_regs, status);
++}
++
+ unsigned long
+ arch_uretprobe_hijack_return_addr(unsigned long trampoline_vaddr,
+ 				  struct pt_regs *regs)
+diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
+index 0f60c0d..fc07bcd 100644
+--- a/arch/x86/kernel/uprobes.c
++++ b/arch/x86/kernel/uprobes.c
+@@ -1888,6 +1888,21 @@ bool arch_uretprobe_is_alive(struct return_instance *ret, enum rp_check ctx,
+ 		return regs->sp <= ret->stack;
+ }
+ 
++bool arch_uprobe_regs_writable(int off, int size)
++{
++	int end = off + size;
++
++	/* The 32-bit pt_regs has segments in front of orig_ax. */
++	if (!IS_ENABLED(CONFIG_X86_64))
++		return false;
++	/* From r15 to di. Not orig_ax, cs, flags, ss. */
++	if (end <= offsetof(struct pt_regs, orig_ax))
++		return true;
++	if (off >= offsetof(struct pt_regs, ip) && end <= offsetofend(struct pt_regs, ip))
++		return true;
++	return off >= offsetof(struct pt_regs, sp) && end <= offsetofend(struct pt_regs, sp);
++}
++
+ /*
+  * Heuristic-based check if uprobe is installed at the function entry.
+  *
+diff --git a/include/linux/uprobes.h b/include/linux/uprobes.h
+index d34dbc0..43b250b 100644
+--- a/include/linux/uprobes.h
++++ b/include/linux/uprobes.h
+@@ -239,6 +239,7 @@ extern void uprobe_copy_from_page(struct page *page, unsigned long vaddr, void *
+ extern void handle_syscall_uprobe(struct pt_regs *regs, unsigned long bp_vaddr);
+ extern void arch_uprobe_optimize(struct arch_uprobe *auprobe, unsigned long vaddr);
+ extern unsigned long arch_uprobe_get_xol_area(void);
++extern bool arch_uprobe_regs_writable(int off, int size);
+ #else /* !CONFIG_UPROBES */
+ struct uprobes_state {
+ };
+@@ -300,5 +301,9 @@ static inline void uprobe_copy_process(struct task_struct *t, u64 flags)
+ static inline void uprobe_clear_state(struct mm_struct *mm)
+ {
+ }
++static inline bool arch_uprobe_regs_writable(int off, int size)
++{
++	return false;
++}
+ #endif /* !CONFIG_UPROBES */
+ #endif	/* _LINUX_UPROBES_H */
+diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
+index caf4447..c47b1ee 100644
+--- a/kernel/events/uprobes.c
++++ b/kernel/events/uprobes.c
+@@ -2703,6 +2703,15 @@ void __weak arch_uprobe_optimize(struct arch_uprobe *auprobe, unsigned long vadd
+ {
+ }
+ 
++/*
++ * Can a bpf prog write these bytes of pt_regs? An arch opts in and lists the
++ * registers that ptrace can set to any value.
++ */
++bool __weak arch_uprobe_regs_writable(int off, int size)
++{
++	return false;
++}
++
+ /*
+  * Run handler and ask thread to singlestep.
+  * Ensure all non-fatal signals cannot interrupt thread while it singlesteps.
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index b4ff9d4..4f1be6c 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1398,8 +1398,16 @@ static bool kprobe_prog_is_valid_access(int off, int size, enum bpf_access_type
+ 	if (off + size > sizeof(struct pt_regs))
+ 		return false;
+ 
+-	if (type == BPF_WRITE)
++	if (type == BPF_WRITE) {
++		/*
++		 * pt_regs also holds what the kernel restores on the way to
++		 * user space: cs and flags on x86, pstate on arm64, status on
++		 * riscv. A prog can write the registers of the task only.
++		 */
++		if (!arch_uprobe_regs_writable(off, size))
++			return false;
+ 		prog->aux->kprobe_write_ctx = true;
++	}
+ 
+ 	return true;
+ }
