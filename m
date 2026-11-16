@@ -1,55 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794818959;
-	b=LxB+cZyi+Fos/E2cmPm55qekTB+vubpR64sXjP2xAqE1qon5GowuQQVCx7cGIrPojQYd
-	 cDrSBkALJp6pOWyAojNUdqksnIteI0cRnDHm89MQ9XrIaw7JKMTMOFlW8dPV1Ju57QBTv
-	 72YkGFhid2zxQ2bJCtPrWxAojsFEMqjR7uh0G3m0I/n2+aYixGwqOJiM5v7fK8EqfUvVB
-	 O32d6oLRZgPaLHdSGz7K67qOrazCTbQA3FJY1ktcAw2Lrd0ZupXw1FVVyEwbpyDb8cgJ3
-	 y+yyXL1dnCRLDRtFXTLF06pKF9GMUh9SweMjuk9eql61GuOFe0ujq1JW7ldMLFnqV5w==
+	t=1794819089;
+	b=F8xyxHtRy/53uhi23mtI4fJ04CHw+DepU1f7HAEs+ma//9Pstd8AnFwD8eCL1NXyYzJZ
+	 Om3Sap3Z78VBiWYMEyk/fDKpxtLI3+U6sXINzcx9rojoFM/eWpWAF892TQ2kvVNesfJVF
+	 8e6jEwiRihcAxjit3v1URmj1yHufBu13o1MP6tLv4XZX6rVwHtqDx2zU121qWaFYIVzq5
+	 rd/wZ+04Ub6hXVsBP8iAefn2VOm0m8Fz/drx4Wt/mklRQiXhjDciHu+OIjykgmjF3HPlj
+	 7P9I5MnooOcn3d4T+3SlwJKOBh6+JmUWpoY7GaDa8LMHhjd8YKv8hed8D17Ml9BQAvQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794818959;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=Hnbuqwmr0A2P9VRwKK4OoUKdKMsipLDCPIoemKhSJ6M=;
-	b=PuY4kM1IXK7Ixc0W1qzj7jGtsZdeybcLjFshxwnfWq9AR0uxHvm/Rz9I5DnJyLxKLGjF
-	 y9p0lKHAg612F/mgiLB1ITob7OcVa4xN/E7aiNWAS9MIBL7Bl8zPZf6zHZvwMLi5kWN2b
-	 byKI8q3U1SYiTlLFlXdmyyqFWSBaLo2QVar5AMjWVEKfl6GQAeULn3g9QWLaej4o/X1Za
-	 kotAJENfhl0NRBH2lcRZ4sM595To9fAoCIqBVGLTi0agpR249T4rRyRfzPKsDdBE5ovEc
-	 vfS7/HHV09SSjfs7VdTBzaVF5Qky9RusY/IBPuRI6VHUX8V6dvafuWAI7oNGx7ygdyQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794819089;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=ACLCxlZdo4jn/v9m2NaMncu0yD18ZRXzPUQulAzS5AQ=;
+	b=2eEbkQXh8/QWqvqyr2FydzJlbIR/dq3/iSLBB+tnaTMnFjw6Fe6pfMX4NbXtl9EtvXL+
+	 +zmzlIinyGZ7rHhtHbJMOk0SeNl/1zI1Sm2DHcjt+ZVxzTUKBB2zUtpiUHKU57+tc/X++
+	 Bi67Ju5eFfyAy59CMCTIeeV3eqDZf40RqoVmVxQD+pEcim0VdJDi5SxNseTkJoaf/6klk
+	 9UrJhWpK0WpMkFHbOgWZRUQ9xiN4UE/0jZNFuluA+URW5qf2ViZnWf6/GZkWJBCyyHiZT
+	 m1TlcJnxIl3FUkYI00LA0ILJ03cfAuPe5MKq2BxN7KbKrBefC1e0d484FqXDbpMiK1A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DDYh+Hq6;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VclwZr8Z;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86E0B606A323
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 08:49:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE872606A323;
+	Mon, 16 Nov 2026 08:51:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DDYh+Hq6
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A56251F000C6;
-	Mon, 16 Nov 2026 08:49:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VclwZr8Z
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BAC21F000C4;
+	Mon, 16 Nov 2026 08:51:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794818958;
-	bh=Hnbuqwmr0A2P9VRwKK4OoUKdKMsipLDCPIoemKhSJ6M=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=DDYh+Hq618gFqrIcnGF1Yra1NDcs44dOrQDPl12acBXmJaA9O+y9oJ1p5NK8V56Iw
-	 YdfKKNIpYPbreppyLLTENWaF5aScThhGDHct/1/QWR/FASZVzmPIlptcBPfw5r6LYH
-	 8DbTdd869+qeaGan0xNif1m1S+ULSW3J0pm+8ndLb0ysCcH+Cbuyk34pxUQ2h8GiLJ
-	 e3sqJBu4yopCZhqxRPnDSxWcmHjfLIJ5PNXzMhpPMqWghKNqCotEzc/9ZgBhqIO3wW
-	 +NTEAb5mhvIgtsVQNIcHcvkWuqaK+9VwCps2mhlSWHc6I+y0bek+w5jwPUKvNXhWHd
-	 wOeBr2dQLzlOw==
-Message-ID: <sashiko-outbox-216566@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v17 07/16] atomic: Add atomic_cond_read_*_timeout()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ankur Arora" <ankur.a.arora@oracle.com>, bpf@vger.kernel.org
-In-Reply-To: <20261116082437.66739-8-ankur.a.arora@oracle.com>
-References: <20261116082437.66739-1-ankur.a.arora@oracle.com>
- <20261116082437.66739-8-ankur.a.arora@oracle.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 16 Nov 2026 08:49:18 +0000
+	s=k20260515; t=1794819089;
+	bh=ACLCxlZdo4jn/v9m2NaMncu0yD18ZRXzPUQulAzS5AQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=VclwZr8ZCOVme+6P3kh47MSJXBrC1P3aNMCglm4oFUxakXYsi9+u/qBUpeZJDsbCP
+	 yOq7oEA3QQiU7pMtc5yu5PpwPgupENN2+ogi9WC4bmSbhWxYO+h3I9oRe2KeWMjBT7
+	 xZygWzoxUsPW+FNYjpTphNa3fCbrQabkm3cOOCgcrF7opYPdKHfIzhzKEbOLa8sy85
+	 hpHMbZcFIHim+j6TGIIJCF/C06xYoHTnrMc+umxLSgpA62Lye3LvFEcUrCpfb5bLdM
+	 uV7SggCskfRR+kgZMYoDBngq3fXQNB29DqCdIoH/T8WKoD1MHwdXmvwYfPzUi72opZ
+	 b/9DZ3eJVr80Q==
+Message-ID: <7a931778-2a99-4b33-8d1e-97f9b061fb02@kernel.org>
+Date: Mon, 16 Nov 2026 08:51:24 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,75 +50,82 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 5.10-6.18] libbpf: fix cross-endian build with newer
+ libbpf
+To: Dominique Martinet <asmadeus@codewreck.org>, stable@vger.kernel.org,
+ Alan Maguire <alan.maguire@oracle.com>, andrii@kernel.org, eddyz87@gmail.com
+Cc: ast@kernel.org, ihor.solodrai@linux.dev, daniel@iogearbox.net,
+ memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ dwarves@vger.kernel.org, bpf@vger.kernel.org
+References: <20261115200505.1494710-2-asmadeus@codewreck.org>
+Content-Language: en-GB
+From: Alan Maguire <almagui@kernel.org>
+In-Reply-To: <20261115200505.1494710-2-asmadeus@codewreck.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Low] Documentation/atomic_t: inaccurate non-atomic_t and conditional
-  store text
---
+On 11/15/26 8:05 PM, Dominique Martinet wrote:
+> commit 087f3964f4b3 ("libbpf: Support layout section handling in BTF")
+> added extra data to the BTF header.
+> 
+> This extra data is ignored in the native case, but when building with
+> different endianness the bswap code in old libbpf would check for strict
+> size equality, leading to build failures such as this when BTF data is
+> generated with a newer version of libbpf (through pahole)
+>     BTFIDS  vmlinux.unstripped
+>   libbpf: Can't load BTF with non-native endianness due to unsupported header length 32
+>   FAILED: load BTF from vmlinux.unstripped: Operation not supported
+>   make[2]: *** [../scripts/Makefile.vmlinux:72: vmlinux.unstripped] Error 255
+> 
+> Newer libbpf versions also properly ignore trailing data in the bswap
+> case, but the patch is too intrusive to backport, just fix the header
+> length comparison.
+> 
+> Link: https://github.com/NixOS/nixpkgs/pull/570639
+> Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+> ---
+> Hey,
+> 
+> we've got a cross build failure report for ppc64 in nixpkgs (link in
+> commit message), that turned out as described above.
+> (build broke for all kernels before 7.1)
+> 
+> In this case I believe it's easier to just fix the check than backport
+> the full layout section handling support, is that ok?
+> I've confirmed the build succeeds with this, I assume the reporter will
+> eventually also boot check but from my understanding of the code this
+> should be fine.
+> 
+> Feel free to throw this away if there's a better way, just let me know
+> if I can help.
+> 
+> Thanks
+> 
+>  tools/lib/bpf/btf.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+> index 9f141395c074..ae344cf58e85 100644
+> --- a/tools/lib/bpf/btf.c
+> +++ b/tools/lib/bpf/btf.c
+> @@ -236,7 +236,7 @@ static int btf_parse_hdr(struct btf *btf)
+>  
+>  	if (hdr->magic == bswap_16(BTF_MAGIC)) {
+>  		btf->swapped_endian = true;
+> -		if (bswap_32(hdr->hdr_len) != sizeof(struct btf_header)) {
+> +		if (bswap_32(hdr->hdr_len) < sizeof(struct btf_header)) {
 
-commit d324a5d412956ca2cd74e953ba1e9d33ac409b28
-Author: Ankur Arora <ankur.a.arora@oracle.com>
+Thanks for the fix! A small suggestion; what about matching the upstream test instead; i.e.
 
-atomic: Add atomic_cond_read_*_timeout()
+		if (bswap_32(hdr->hdr_len) < offsetofend(struct btf_header, str_len)) {
 
-This commit adds atomic_cond_read_{acquire,relaxed}_timeout() and
-atomic64_cond_read_{acquire,relaxed}_timeout() wrappers around the
-smp_cond_load_*_timeout() helpers, and documents the conditional read
-interfaces in Documentation/atomic_t.txt.
+That approach is a bit more portable as the str_len field was the last field in the
+original BTF header, and it will work regardless of the size of struct btf_header.
 
-> diff --git a/Documentation/atomic_t.txt b/Documentation/atomic_t.txt
-> index bee3b1bca9a7b..0e53f6ccb5580 100644
-> --- a/Documentation/atomic_t.txt
-> +++ b/Documentation/atomic_t.txt
-> @@ -16,6 +16,10 @@ Non-RMW ops:
->    atomic_read(), atomic_set()
->    atomic_read_acquire(), atomic_set_release()
-> =20
-> +Non-RMW, non-atomic_t ops:
-> +
-> +  atomic_cond_read_{relaxed,acquire}()
-> +  atomic_cond_read_{relaxed,acquire}_timeout()
-> =20
->  RMW atomic operations:
-> =20
-> @@ -79,11 +83,11 @@ SEMANTICS
-> =20
->  Non-RMW ops:
-> =20
-> -The non-RMW ops are (typically) regular LOADs and STOREs and are canonic=
-ally
-> -implemented using READ_ONCE(), WRITE_ONCE(), smp_load_acquire() and
-> -smp_store_release() respectively. Therefore, if you find yourself only u=
-sing
-> -the Non-RMW operations of atomic_t, you do not in fact need atomic_t at =
-all
-> -and are doing it wrong.
-> +The non-RMW ops are (typically) regular, or conditional LOADs and STOREs=
- and
-> +are canonically implemented using READ_ONCE(), WRITE_ONCE(),
-> +smp_load_acquire() and smp_store_release() respectively. Therefore, if y=
-ou
-> +find yourself only using the Non-RMW operations of atomic_t, you do not =
-in
-> +fact need atomic_t at all and are doing it wrong.
+>  			pr_warn("Can't load BTF with non-native endianness due to unsupported header length %u\n",
+>  				bswap_32(hdr->hdr_len));
+>  			return -ENOTSUP;
 
-[Severity: Low]
-Are these two documentation updates accurate?
-
-First, atomic_cond_read_{relaxed,acquire}() and
-atomic_cond_read_{relaxed,acquire}_timeout() take an atomic_t pointer and
-dereference &(v)->counter, so labeling them "non-atomic_t ops" seems
-misleading (the underlying non-atomic_t primitives are
-smp_cond_load_{relaxed,acquire}() and
-smp_cond_load_{relaxed,acquire}_timeout()).
-
-Second, in the semantics paragraph, there are no conditional non-RMW store
-operations, and inserting "or conditional" breaks the "respectively" mapping
-between the four regular non-RMW operations and READ_ONCE(), WRITE_ONCE(),
-smp_load_acquire(), and smp_store_release() while omitting
-smp_cond_load_*().
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261116082437.6673=
-9-1-ankur.a.arora@oracle.com?part=3D7
