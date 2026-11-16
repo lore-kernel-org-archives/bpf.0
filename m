@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794810006;
-	b=AXJ1piWwPk6jTH/o0Zp3FmEmWFa15k6HQUQzrmWCt3VQquZ5yylPfnYbV2e9tuFizUGu
-	 3abZb1beZm6MzFhrcs3OdGe8GfzY7dvVv96kSoAigzeslgDC0n1M/VCeLi+jN8xmNxiAR
-	 hfA8Wu1TX3phW9msoDBK+qJovsiEygzCSCd4FtdaNroiPnYCaLzLQZOQplOGcHOu2Zpeu
-	 sL8yUTVh0CTVFqwu7pbUIYPkgsXzP8d12dbfIiJl0sior1WYBPsRHI7Cdm8nZGgFOtJ1e
-	 uMEO5V3u2rbKCNjAKrujgk2gSIgUyjPG+siUCHJzI7TxFSLsJXj8ZSVEAmDULhkH+jQ==
+	t=1794810553;
+	b=0xMSAE3krKaoKHNG63+zWxiD+iv+uUGBCG2m6ZtRlq4BfOvuKTGgqhUtSndMiq1yQByz
+	 syy2UJSWIk77Wy+1u7PPR46oKxsPpPwtdywUHU4Zj5bIak2gznTYsS3THMyurcxOg4RLI
+	 /9JN0NnJNc8CODeZ2P5hgfEvT5ap9gsYr/NrFnB16ceCijtl3G8sVNTMC42D3riIot/Tl
+	 0X/8ES+45stsXXnyMhFf8PBX8xJCedsa81rzNKhnws9CaqEHPjdBDdwDZiqKfQtSUOBmW
+	 /7qA3TgBZyYwXkW5pozearYWYqeYQ5NhCy/ZL0n8X6huXpmsqQJNQSRzY2QeNzmiKQA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794810006;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794810553;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=AFezbAGYbwpztDIlTc28Vrh8mASElApTiqeOHUMwVug=;
-	b=2lwxfSyI2PyFB36tmChL6xo7bi+f0sLANs3C2hF1Hm89rcI9hinzT25p4z1/nU39mkuM
-	 quB4Lc3qCrRn9kc7KVGn80R1hTi7p15pxXdMTyjcmUFFsoCw6CM5RxXHO4wzMAwseGGqD
-	 AODtTHHIvT2TqnUJiIURo1FyD5Ey7ciFXDHwKZVIsAK0yWlS3G1V4SU0gWTWxqrXY9mpF
-	 8Trpi4xi2BxbgfKj02gcancodE0iLQtmVC8K6Y5DVeUrZuMIYV3Rg2PN30rLcHaWQjx4k
-	 cEGKALGhSDYYCTWl/7HlsqTz0YaUV/L3MHkzqhahBRX3ZUNGL7Z6dbwkpXzgxmv6Q7g==
+	bh=LTAVHE6/GL0wGVtmbeT8xVN8zwKKeUHOOlCbteemRPc=;
+	b=C/a4Aw/fbTaBYR8HCZKWZ4hsf97i9VoMohlVgw1xYeFxZ4VpBjbJAmgs2698ZyEIOOe1
+	 S73giF68DTPYwrSziy45/o+qkP7rugbs38/Dn++QT7n8L7fYMAqLygVviqeOSgG7MT7g3
+	 3F2x9Va/V65L+wbH/lEnNRyzipBn3qQATNsyvZYw9WhxSJXMjF0VSpVZK7aBIlGC9WLSj
+	 ZjKdfXNgNPwiMfKQp3oGJ/OHtuNWvxY9PhrhpO1MOs6vzB8OJF/gzNKC+VYulrBhgLtPn
+	 TJ4lVGX4+KIa1BRn7R3tcryRiZHKDqVFAbACKZfpefefUFNgYkA13tlwgCbHSRpWZPw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GwOIYLSo;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f4URsPtr;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDB28606A31C
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 06:20:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA086606A329
+	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 06:29:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GwOIYLSo
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2375B1F000C4;
-	Mon, 16 Nov 2026 06:20:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f4URsPtr
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61AE91F000C4;
+	Mon, 16 Nov 2026 06:29:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794810006;
-	bh=AFezbAGYbwpztDIlTc28Vrh8mASElApTiqeOHUMwVug=;
+	s=k20260515; t=1794810553;
+	bh=LTAVHE6/GL0wGVtmbeT8xVN8zwKKeUHOOlCbteemRPc=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=GwOIYLSobwGR+e7ICxfDxIgDOoCCqzZBM6YTQAd6hazYiiDN+jAuM12nuUqwuUHW/
-	 87YQqfRPXCzD5yQzrfaFtVW0XjT6ZLQr6YqyTWur+tS2tLY0CJfo3IhaWjqeVGbq6I
-	 PIGfFfIXf7gRmX3ctWII6L5sedWpTNnHtBsb8d941QNqwv+18SggI6KsZsV2NUseXU
-	 8mt0Fh4vdJp6koey0L2I9XUTUN/OkA67DOSiB5vbvfpUmqCeLRwtqiNWGqQPjDk8gC
-	 VzwJymQgfBxzxxq3piJ1ZlDvueMKzCVCDTQwyh6OQe+mIGOY5c8DaFJaK2T+Q+O9Uo
-	 SDNtFwIMOKWow==
-Message-ID: <sashiko-outbox-216265@kernel.org>
+	b=f4URsPtrdaJEjswVz5W5942jRfiE1c5FCm93EzEwUvtecek1Y0hEbEFG8jkGfBMXd
+	 O3RLD2aegVW1ofEhDrNlNRjsjO6GI3BiDQadkMBnmSM28ynp0UVsHV+7gMBMZ5cR/H
+	 M7CN3diljzzgGYea3szQhP5gzaSLCh0W6cwWvyNsnFcGinjrL1kpYfewAE7VJA30ZC
+	 04Mtg43P6XLKh/nRlokQrxBqPkFc8HzlXxTNrNC8WbsZfYYDkquvszhNbeRhp26r8J
+	 Z/St0ppk5ppJEbejzp2RPuf6n6pyF5/LBYVTObn8JS2PaCCkjjsixybhX+lagI8EAK
+	 RuVsrGqPVSjjA==
+Message-ID: <sashiko-outbox-216279@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 11/21] libbpf: Size the tables of the loader
- program from the object
+Subject: Re: [PATCH bpf-next 02/21] bpf: Fail the load when there is no
+ memory
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261116055638.4171529-12-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261116055638.4171529-3-alexei.starovoitov@gmail.com>
 References: <20261116055638.4171529-1-alexei.starovoitov@gmail.com>
- <20261116055638.4171529-12-alexei.starovoitov@gmail.com>
+ <20261116055638.4171529-3-alexei.starovoitov@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 16 Nov 2026 06:20:05 +0000
+Date: Mon, 16 Nov 2026 06:29:12 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -63,98 +63,114 @@ Precedence: list
 Thank you for your contribution! Sashiko AI review found no new issues
 in this patch, but noticed 2 related pre-existing issues it does not
 introduce:
-- [Medium] libbpf: skeleton prog_fd corruption in
-  bpf_object__gen_loader() [1]
-- [Medium] libbpf: unhandled copy error in bpf_gen__map_update_elem()
-  [2]
+- [Critical] bpf: kernel map pointer leak in bpf_prog_calc_tag() [1]
+- [Medium] bpf: unjoined spills in compute_subprog_args() cause false
+  FM_MUST_WRITE [2]
 --
 
-commit 90aed32e47532de6cf9729d6808a9ae7a545ec5c
+commit 7ed141586457177ae6d6a4df96dc2819c9dd9563
 Author: Alexei Starovoitov <ast@kernel.org>
 
-libbpf: Size the tables of the loader program from the object
+bpf: Fail the load when there is no memory
 
-This commit sizes the loader program's fd_array and prog_fds tables from
-the BPF object's counts instead of fixed maximum constants, moves prog_fds
-from the loader stack into the data blob, and handles >16-bit offsets via
-BPF_JMP32_A and a temporary context register.
+This commit adds __GFP_RETRY_MAYFAIL | __GFP_NOWARN to BPF verifier and
+program load allocations so that hitting a memory cgroup limit returns
+-ENOMEM instead of invoking the OOM killer.
 
-> diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
-> index 555d4757a898c..27b4bc9e55acd 100644
-> --- a/tools/lib/bpf/gen_loader.c
-> +++ b/tools/lib/bpf/gen_loader.c
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index b407b2393ac3e..09abfed83109c 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
 [ ... ]
-> @@ -401,12 +386,12 @@ int bpf_gen__finish(struct bpf_gen *gen, int nr_pro=
-gs, int nr_maps)
->  	for (i =3D 0; i < gen->nr_func_ptr_maps; i++)
->  		emit_sys_close_blob(gen, blob_fd_array_off(gen, gen->nr_obj_maps + i));
->  	for (i =3D 0; i < gen->nr_progs; i++)
-> -		move_stack2ctx(gen,
-> -			       sizeof(struct bpf_loader_ctx) +
-> -			       sizeof(struct bpf_map_desc) * gen->nr_maps +
-> -			       sizeof(struct bpf_prog_desc) * i +
-> -			       offsetof(struct bpf_prog_desc, prog_fd), 4,
-> -			       stack_off(prog_fd[i]));
-> +		move_blob2ctx(gen,
-> +			      sizeof(struct bpf_loader_ctx) +
-> +			      sizeof(struct bpf_map_desc) * gen->nr_maps +
-> +			      sizeof(struct bpf_prog_desc) * i +
-> +			      offsetof(struct bpf_prog_desc, prog_fd), 4,
-> +			      blob_prog_fd_off(gen, i));
+> @@ -309,7 +309,7 @@ int bpf_prog_calc_tag(struct bpf_prog *fp)
+>  	bool was_ld_map;
+>  	u32 i;
+> =20
+> -	dst =3D __vmalloc(size, GFP_KERNEL_ACCOUNT);
+> +	dst =3D __vmalloc(size, BPF_VERIFIER_GFP);
+>  	if (!dst)
+>  		return -ENOMEM;
 
-[Severity: Medium]
-This problem wasn't introduced by this patch, but can a non-autoloaded
-program (such as one marked with SEC("?...")) shift the prog_fd slots in
-the loader context [1]?
+[Severity: Critical]
+This problem wasn't introduced by this patch, but can bpf_prog_calc_tag()
+leak kernel map pointers [1] when hashing subprograms that use
+BPF_PSEUDO_MAP_IDX or BPF_PSEUDO_MAP_IDX_VALUE?
 
-bpf_object__load_progs() skips programs with !prog->autoload without
-calling bpf_gen__prog_load(), so gen->nr_progs only counts loaded programs
-while the generated light skeleton includes descriptors for all main
-programs.  Because bpf_gen__finish() only rejects nr_progs < gen->nr_progs
-and then copies gen->nr_progs file descriptors sequentially starting at
-index 0, any skipped program shifts subsequent prog_fd values into the
-wrong skeleton slots.
+check_and_resolve_insns() replaces the immediate fields of those pseudo map
+instructions with kernel map pointers while keeping their original src_reg,
+and jit_subprogs() later calls bpf_prog_calc_tag() on each subprogram.
+Because the loop right below only zeroes dst[i].imm for BPF_PSEUDO_MAP_FD
+and BPF_PSEUDO_MAP_VALUE:
 
-[ ... ]
-
-> @@ -1159,10 +1135,11 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
->  static void emit_copy_initial_value(struct bpf_gen *gen, int map_idx, in=
-t value,
->  				    __u32 value_size, int nr_more_insns)
->  {
-> -	emit(gen, BPF_LDX_MEM(BPF_DW, BPF_REG_3, BPF_REG_6,
-> -			      sizeof(struct bpf_loader_ctx) +
-> -			      sizeof(struct bpf_map_desc) * map_idx +
-> -			      offsetof(struct bpf_map_desc, initial_value)));
-> +	int off =3D sizeof(struct bpf_loader_ctx) + sizeof(struct bpf_map_desc)=
- * map_idx +
-> +		  offsetof(struct bpf_map_desc, initial_value);
-> +	int ctx =3D emit_ctx_reg(gen, BPF_REG_3, &off);
-> +
-> +	emit(gen, BPF_LDX_MEM(BPF_DW, BPF_REG_3, ctx, off));
->  	emit(gen, BPF_JMP_IMM(BPF_JEQ, BPF_REG_3, 0, 8 + nr_more_insns));
->  	emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX_VALUE,
->  					 0, 0, 0, value));
-
-[Severity: Medium]
-This problem wasn't introduced by this patch, but should
-emit_copy_initial_value() check the return value of BPF_FUNC_copy_from_user
-and BPF_FUNC_probe_read_kernel [2]?
-
-tools/lib/bpf/gen_loader.c:emit_copy_initial_value() {
+kernel/bpf/core.c:bpf_prog_calc_tag() {
 	...
-	emit(gen, BPF_EMIT_CALL(BPF_FUNC_copy_from_user));
-	emit(gen, BPF_JMP_IMM(BPF_JA, 0, 0, 1));
-	emit(gen, BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel));
+	for (i =3D 0, was_ld_map =3D false; i < fp->len; i++) {
+		dst[i] =3D fp->insnsi[i];
+		if (!was_ld_map &&
+		    dst[i].code =3D=3D (BPF_LD | BPF_IMM | BPF_DW) &&
+		    (dst[i].src_reg =3D=3D BPF_PSEUDO_MAP_FD ||
+		     dst[i].src_reg =3D=3D BPF_PSEUDO_MAP_VALUE)) {
+			was_ld_map =3D true;
+			dst[i].imm =3D 0;
+	...
 }
 
-If copying initial_value fails at runtime, the error in BPF_REG_0 is
-ignored and the loader proceeds to update or populate the map with stale
-or uninitialized data from the value blob.
+the resolved kernel map pointers for BPF_PSEUDO_MAP_IDX and
+BPF_PSEUDO_MAP_IDX_VALUE are hashed directly into the subprogram digest
+exposed via bpf_prog_info, allowing userspace to recover kernel map
+addresses and making subprogram tags non-deterministic across reloads.
 
-[1] https://sashiko.dev/#/bug/linux-2d41a5d8-8f8a-4d8a-830c-c6296f3d3c04
-[2] https://sashiko.dev/#/bug/linux-fccc70c7-8ac5-4839-9aed-2cbf7835e292
+> diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+> index 2c771b936d654..053b3875cde69 100644
+> --- a/kernel/bpf/liveness.c
+> +++ b/kernel/bpf/liveness.c
+[ ... ]
+> @@ -2190,7 +2190,7 @@ static noinline_for_stack int compute_subprog_args(=
+struct bpf_verifier_env *env,
+>  			struct spill_snapshot *snap;
+> =20
+>  			kvfree(env->callsite_at_stack[idx]);
+> -			env->callsite_at_stack[idx] =3D kvmalloc_flex(*snap, at, nslots, GFP_=
+KERNEL_ACCOUNT);
+> +			env->callsite_at_stack[idx] =3D kvmalloc_flex(*snap, at, nslots, BPF_=
+VERIFIER_GFP);
+>  			snap =3D env->callsite_at_stack[idx];
+>  			if (!snap) {
+>  				err =3D -ENOMEM;
+
+[Severity: Medium]
+This problem wasn't introduced by this patch, but can snapshotting
+at_stack_in into env->callsite_at_stack[idx] without joining spilled slots
+with ARG_NONE [2] cause a callee to falsely mark a caller's stack slot
+with FM_MUST_WRITE?
+
+arg_track_xfer() only updates local stack slots on stores or calls, leaving
+ancestor frame snapshots in env->callsite_at_stack unchanged:
+
+kernel/bpf/liveness.c:arg_track_deref() {
+	...
+	if (ptr->frame >=3D 0 && ptr->frame < depth) {
+		struct spill_snapshot *parent =3D env->callsite_at_stack[callsites[ptr->f=
+rame]];
+
+		return fill_from_stack(insn, at_out, reg, parent->at, parent->slots, ptr-=
+>frame);
+	}
+	...
+}
+
+If a caller spills a frame pointer to its stack and passes a frame pointer
+to a callee that overwrites that spill slot with a non-frame pointer (such
+as a map value pointer), loads it back, and stores through it,
+fill_from_stack() still returns the original single-offset spill from
+parent->at.  record_stack_access_off() then sets FM_MUST_WRITE on the
+originally spilled caller slot, killing FM_LIVE_BEFORE at callee entry so
+clean_verifier_state() poisons the live slot with STACK_POISON and rejects
+valid programs.
+
+[1] https://sashiko.dev/#/bug/linux-3631fcb7-6cc6-4103-b924-aa236118faf7
+[2] https://sashiko.dev/#/bug/linux-770fd7fa-a8be-43e6-aced-6a3500427b32
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261116055638.4171=
-529-1-alexei.starovoitov@gmail.com?part=3D11
+529-1-alexei.starovoitov@gmail.com?part=3D2
