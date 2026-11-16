@@ -1,58 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794832001;
-	b=kJ6APrgT7gMWJAN4nbNGJWzX3dT6YI+j7imlimx0v46IO1lI2CEUc8nf1Hb07WwE70UW
-	 bJXWYSnfxLwtgjbGOPVVYkzxa3PZJxYIZhg/s9HIQIw/BReG7/R5jomdltRUFYkp75khq
-	 a0k1YJPexiC4m01fw3TcDUpR0IKyyFYngKaHniBvcMjTwRi+vy+yrV55ruuFZs89f6zbW
-	 Ky6ZY9tix8QwM/HKfM4JPW6B6l2mbrU6bhweNx+s1kd7dB/4pGKcPdjOf/zYClbFtsQwS
-	 w6hcVGW1AzjPw9LBBNIEu1Fm4282/Xo1PW2T1LXY7FYyXfjO0zT7hiGh9aJ407yY9ZQ==
+	t=1794832899;
+	b=lAVh5DKJ/TUEtoe/46OEQuLzpLphvsYkZmV7KOkYn8fsIFWJpdz++N5w2Q6iCZadyQC+
+	 Q3xkuQEGoJ71JArl5YkJ2JhB6WmN3zO7i2tewR8syOmyN/zVJFAuxd2boJx9axEeHIBcl
+	 w8gSvZm0H7YNtUPmMcPuOafvq/jAvzyi76DJYGn00o1pQSJo2A5DGdrCdKFmKnZseG+nE
+	 9cax7PuGDXam0MV0Np2UiZ9nwClUaRErFKDBJN+oNmgm8q3hUrAm9OisCTOQ2qYe660v7
+	 C2MPY8NhUTHBzhiTSNsvP/8gUeN2+SIdoobSKZf62aq1//a4JrpyN0f+MyXncUiT7Ig==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794832001;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=k+87reHipvnWHviybduV9ukgK/qmYE98Nf2tsuR13f8=;
-	b=b5pl8nTCSFeCnPqF6sMLiuB47wTSLU+Re2ETc2wrJhX7MLuC881eM+NJmO/Kwj4WXlY5
-	 eiGZ4llQ0SUwFx6jKgzMzfMLES/KP9XV89Ml+UKbfNTX3/lAph77kUWyTRB/UjQZqKkz7
-	 4FXlZagxjHDhhhePWKchfIZro0IVhJqWRKQdh7UyngJDs0rX0/yO3eEZ3taHHb4ZnjAcf
-	 IWzlKTcKU8PG8ywlO9Ve2Jl4CoJXUhqyqsBj88ev1Imn2dCSS7wbJudIgPwkKk5ESMIyU
-	 OaQRFGNU+Bx0KowRvKB69UNKINZK1oxfhvXuzTdaJP7l9jPJAQaV5Si0Cu0yjfFZPMw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794832899;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
+	 To:Cc:Subject:From:X-Mailer:References:In-Reply-To;
+	bh=Zv1d6vvRKz0euN6zrXybl1bD0UkhPFP+MSK0/brc4zE=;
+	b=YMAzgcGePMlhieOwp9utjQ7koyyVyE0WYxtaY6LDsCurqb6osX/K3/xNM+msiMA/HpBS
+	 uMItplbLPo5f2o2pZWJtF1iCOXqWNJVld1Ma+dNz+lxSUKQK2VuAx4Jmj0I9GJyC95M7F
+	 Zna/hpRnJMcPo6RzMdv9t5auARMtQx3eyGrC2wuMOftiQJs2lJc8FFOwUnPYJXMoNom/i
+	 p+P1RyvfO11PJFFogEgzp3yCGDjacB0ZaTT+Fz4eG3V4pW7S1H+ZgRZuYVvYtSqxp2lVW
+	 fStHI+wXBq9S9+35wwj8JTvKUvJPP0UP8ZbKIGrCrZ8nvRvZ98EKB5hUI6TZQDW3vfA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZmAoOzxI;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xN3B7Lud;
+	arc=none smtp.remote-ip=209.85.222.171
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32A7D606A31C
-	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 12:26:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4840606A329
+	for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 12:41:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D4840606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZmAoOzxI
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A15051F000C4;
-	Mon, 16 Nov 2026 12:26:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794832000;
-	bh=k+87reHipvnWHviybduV9ukgK/qmYE98Nf2tsuR13f8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ZmAoOzxIOcBIviW2X3e7yR+rdA9NXomKFdcayRbTzC3yrSjQwiKwkW9epKadS19MB
-	 kALPkxJYfXfXMcqzwO3TfubNMI6HJ3oCxl5IpUaw6k1Ywm6NA+68WGtbYR4vVtC4uu
-	 eRbpR/3HtZzi4OJamKGK9EXRK+Uzls3lEZTl9+4zFJHTvXH/KsK8zgjYYZ1BOoTIxw
-	 xVdVB65elKWguE/qAdTKoQAGYlGgdAmHnsuQEQvdomba66XyiLP6WjmdcoyvMdLkQE
-	 PvG+D3zr35d/b0P17hE+FovsLcKumfJaHiQ8RVxma5MatEt9zH0rKQjqtHy7WfLpdQ
-	 D5qrhvjuJFVUQ==
-Message-ID: <sashiko-outbox-217010@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 5.10-6.18] libbpf: fix cross-endian build with newer
- libbpf
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Dominique Martinet" <asmadeus@codewreck.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <avryc0j9LwdUUGl7@codewreck.org>
-References: <20261115200505.1494710-2-asmadeus@codewreck.org>
- <7a931778-2a99-4b33-8d1e-97f9b061fb02@kernel.org>
- <avryc0j9LwdUUGl7@codewreck.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 16 Nov 2026 12:26:40 +0000
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xN3B7Lud
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-9495f083657so323232685a.0
+        for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 04:41:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794832898; x=1795437698; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=Zv1d6vvRKz0euN6zrXybl1bD0UkhPFP+MSK0/brc4zE=;
+        b=xN3B7LudVvKrw3MwnajaarcX91x2+u1HXG/hvHMEH3ZnHJFdDpZBBcRtAqROyBktko
+         X46g4lw7rRY4EZfOp3U9VNr6Ww9uTMObjYHuKm64PuVS6VZiijyYuVGHs7X5V0C9S2sH
+         x1mxiPCTUha5+oNdEVrKnYfP19epAeCiRmmWntH6obG78ytEzkwYSmqTjW3Hw4HoLh3X
+         A5SxyRIs01z3DowJd6F9SfiCmRrBIb9SignCreduEbMv4AiCUejw40piWsIP9NWhlFMc
+         JSmxkHyWstT7aLbb2I7brvegGr9bpfFwWSZB9k+n5CKscylv6nxsyvHA5E8qXKFV3wL4
+         fvYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794832898; x=1795437698;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Zv1d6vvRKz0euN6zrXybl1bD0UkhPFP+MSK0/brc4zE=;
+        b=q+/HIGAkAGTzQS7MyYmaXjkVp+qhnjEekvLL/RATCh6/Phc/yMhcU1a94MRa/61pij
+         zsgqdlvBwXyqgosIdyxr1DRNtW8mj74q6B5LdmvkhaPdK92zsEgnlVYeJYhTsX/a06Fp
+         XOHpyMM/bpUEIDXfNLRkPJamid8yhjzIpDyVjS6afi7gUCCx9W5hDPF5dKITqoBTQBiK
+         MECh6aLssOFvjz6XzUWAv3VITRq7QWbfYtW4PxlB6gFyVd+Grmtp0ToztwOfVFY0x1dL
+         MK+XXkyvdAWVl9VNysdEkCUSYXmGAsYFvJX++QZDGZm0gqAIOa712RKl5gGZyLt8KqJo
+         gICw==
+X-Forwarded-Encrypted: i=1; AL+hErFGFDVWTEr5luogMFvl3Ro323beAamUdBPoD0ucIsMsQpzCgmMW2bd0ZobI+g0k0Me1NKU=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/msnlZX3sjwG0kB+RATpccJngncwmmdXgQq29lPQJA5hB6zSll
+	zdqWATS+uOuVzUyKu0Kl9R5OQ2PC5/W016Tib+Ij1r44TEVAGW97zbFp
+X-Gm-Gg: AYBFou3c/C0gxxxPph7UIG5D7mBTiayRe+bJDh9hLpCmuMWzemwxDPuuhqCu42DmGJR
+	1vnK0jc7gEYGHUp8OKHDE0RGEiuLns1t5bGialrNHbjhCFTupRQbB9vml8aB7eZOINhS0EH/GwZ
+	aq75CLWLTKsCLYXTT4VgP6g9S1nKTU/DHP/LKVAf2UyvA0HB0oDt5xOgsN4LJ45vYXiFA5Vdn5/
+	R+Bju/Yv+wLUw2Ik76epZon1iUq7TBRtSVtrnVj4OhpXGygkwMBJnatQhNf8c4CIo5jcWeS0L6D
+	Bh6sGD2xV2kloJPW0Sgq8VU0KwMRAZj0bltoKR1rnwaJFts3jPPELNOMU15RBPerNSU9zVQtzjH
+	SVpLnXr/BDMCouChdrd0I7AE9mN/5LkLJ0hqxLKgdQ7RQ7Mxg2x2XTifZNZcLW7N7zKfQ7YgZuU
+	B4sR+8k1iRYCsleHfOFlFuFZDbWORzszUxKQuSYhMsY72b0m/Rtyms/yfjumG4U05aGeQYx5aSj
+	X/1XqO3x28l/IGFxljhBIRfa9LlDNxStmOck8uzFhXpYkEboBeI+zKJGFV8RgA48iep5BF35tOu
+	5hea2cdldf7T2kyYLOyOK76+xdXX+eSVew==
+X-Received: by 2002:a05:620a:2903:b0:93c:a40d:e3cf with SMTP id af79cd13be357-9494b9c78a6mr1739169585a.1.1794832897831;
+        Mon, 16 Nov 2026 04:41:37 -0800 (PST)
+Received: from localhost ([2600:4040:9399:4000:e553:72e5:7d37:c7ef])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-9494c870ad4sm830567185a.26.2026.11.16.04.41.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Nov 2026 04:41:33 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -61,79 +87,77 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 16 Nov 2026 07:41:30 -0500
+Message-Id: <DMWN5R6QVUPN.1KP7SYYHHU71U@gmail.com>
+To: "Todd Freed" <toddfreed@meta.com>, <netdev@vger.kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>, "Eric Dumazet"
+ <edumazet@kernel.org>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni"
+ <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>, "Daniel Zahka"
+ <daniel.zahka@gmail.com>, "Willem de Bruijn"
+ <willemdebruijn.kernel@gmail.com>, "Wei Wang" <weiwan@google.com>, "Jamal
+ Hadi Salim" <jhs@mojatatu.com>, "Jiri Pirko" <jiri@resnulli.us>, "Alexei
+ Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Stanislav Fomichev" <sdf@fomichev.me>, "Sabrina Dubroca"
+ <sd@queasysnail.net>, "Boris Pismenny" <borisp@nvidia.com>,
+ <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net 3/3] psp: only give time-wait sockets of PSP
+ connections a validator
+From: "Daniel Zahka" <daniel.zahka@gmail.com>
+X-Mailer: aerc 0.21.0-threadmapfix
+References: <20261113185553.171059-1-toddfreed@meta.com>
+ <20261113185553.171059-4-toddfreed@meta.com>
+In-Reply-To: <20261113185553.171059-4-toddfreed@meta.com>
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issues to consider:
-- [High] libbpf: missing Signed-off-by trailer and raw email reply as
-  commit log
-- [Low] libbpf: missing Fixes trailer for btf_parse_hdr() endianness
-  check
---
-
-commit bf42d3c49f2ac6667938fafec9c2e11053665406
-Author: Dominique Martinet <asmadeus@codewreck.org>
-
-> libbpf: fix cross-endian build with newer libbpf
+On Fri Nov 13, 2026 at 1:55 PM EST, Todd Freed wrote:
+> psp_twsk_init() sets tw_validate_xmit_skb on TCP time-wait sockets.
+> Today, that becomes set whether or not the socket has PSP offload, which
+> is not needed but is harmless. psp_validate_xmit() passes such packets.
 >
-> Alan Maguire wrote on Mon, Nov 16, 2026 at 08:51:24AM +0000:
-> > >     if (hdr->magic =3D=3D bswap_16(BTF_MAGIC)) {
-> > >             btf->swapped_endian =3D true;
-> > > -           if (bswap_32(hdr->hdr_len) !=3D sizeof(struct btf_header)=
-) {
-> > > +           if (bswap_32(hdr->hdr_len) < sizeof(struct btf_header)) {
-> >
-> > Thanks for the fix! A small suggestion; what about matching the upstrea=
-m test instead; i.e.
-> >
-> >               if (bswap_32(hdr->hdr_len) < offsetofend(struct btf_heade=
-r, str_len)) {
-> >
-> > That approach is a bit more portable as the str_len field was the last =
-field in the
-> > original BTF header, and it will work regardless of the size of struct =
-btf_header.
->
-> Thanks for the look!
->
-> I wouldn't expect the struct to change in stable trees and favored a
-> minimal patch; my opinion being that if someone does take the time to
-> backport layout section handling or another btf_header extension in old
-> trees then they can also fix the check properly...
->
-> I actually prepared a v2 with this, but then noticed the raw_size check
-> also ought to be updated if you want to handle struct btf_header changes:
+> But a validator makes a socket look like it has an encryption offload of
+> its own. The tc psp action in the net-next series "psp: introduce
+> socket-less associations" relies on the presence of the validator to
+> determine whether the socket has an encryption offload.
 
-[Severity: High]
-The commit message is an unedited mailing-list reply that ends
-mid-sentence rather than a standalone changelog description, and it is
-missing a Signed-off-by trailer.
+I don't think this is relevant.
 
-> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> index 231b07203e3d2..2dddee4870343 100644
-> --- a/tools/lib/bpf/btf.c
-> +++ b/tools/lib/bpf/btf.c
-> @@ -191,14 +191,14 @@ static int btf_parse_hdr(struct btf *btf)
->  	struct btf_header *hdr =3D btf->hdr;
->  	__u32 meta_left;
+>
+> Set the validator only when the socket has a PSP association with a Tx
+> key, as psp_sock_set_tx_key() does for full sockets.
+>
+> Fixes: 6b46ca260e22 ("net: psp: add socket security association code")
+> Signed-off-by: Todd Freed <toddfreed@meta.com>
+> ---
+>  net/psp/psp_sock.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+>
+> diff --git a/net/psp/psp_sock.c b/net/psp/psp_sock.c
+> index a6b1c42dd626..1df65505f1c6 100644
+> --- a/net/psp/psp_sock.c
+> +++ b/net/psp/psp_sock.c
+> @@ -314,10 +314,13 @@ void psp_twsk_init(struct inet_timewait_sock *tw, c=
+onst struct sock *sk)
+>  {
+>  	struct psp_assoc *pas =3D psp_sk_assoc(sk);
 > =20
-> -	if (btf->raw_size < sizeof(struct btf_header)) {
-> +	if (btf->raw_size < offsetofend(struct btf_header, str_len)) {
->  		pr_debug("BTF header not found\n");
->  		return -EINVAL;
->  	}
+> -	if (pas)
+> +	if (pas) {
+>  		refcount_inc(&pas->refcnt);
+> +		/* like the full socket case in psp_sock_set_tx_key() */
+
+I'm not a fan of this kind of comment, but that's my own preference.
+
+> +		if (pas->tx.spi)
+> +			tw->tw_validate_xmit_skb =3D psp_validate_xmit;
+> +	}
+>  	rcu_assign_pointer(tw->psp_assoc, pas);
+> -	tw->tw_validate_xmit_skb =3D psp_validate_xmit;
+>  }
 > =20
->  	if (hdr->magic =3D=3D bswap_16(BTF_MAGIC)) {
->  		btf->swapped_endian =3D true;
-> -		if (bswap_32(hdr->hdr_len) !=3D sizeof(struct btf_header)) {
-> +		if (bswap_32(hdr->hdr_len) < offsetofend(struct btf_header, str_len)) {
+>  void psp_twsk_assoc_free(struct inet_timewait_sock *tw)
 
-[Severity: Low]
-This fixes the strict cross-endian header length check in btf_parse_hdr().
-Should the commit message include:
-
-  Fixes: 3289959b97ca ("libbpf: Support BTF loading and raw data output in =
-both endianness")
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/avryc0j9LwdUUGl7@co=
-dewreck.org?part=3D1
+Reviewed-by: Daniel Zahka <daniel.zahka@gmail.com>
