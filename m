@@ -1,101 +1,64 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.48
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794936224;
-	b=Ei3Ompu2p9N5iLURlyAhJMED0e/WznOONQXy94EPoROsV1D022ut7pTCzIY5eV1dXejo
-	 jvxynn0QJw03k/xwo6xPVrrJMT7iCEI7N2v4NRHxdqBXnDcofeyHonPFNEV5GVJmu1I/4
-	 Cfxpyg0jcn6Dj5wZ1Md3xIPZ03aQM1g32cznPBVi178GjQccmNtmmHLqXiVZz1hVw2FJ4
-	 ITMhguwnDin1Py4SELEYubJWWR5Ua2ZgOzqBXIZ8MN8Bl23O22CrmWci7tNhHkDCwQGW1
-	 hOzFHG5UExQ+Z76nmLFX2e6KFBxd/L3nIVbQwc7s3krPdEzA4h1PFepbVLOOPFi2HSg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794936224;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=vG0ERfGqtPpbt9YFDEN1CgPSxrt5MeiDqzo+7XubqQs=;
-	b=PIxMBoPZ8HTff5ulBUtwZRscAdwDgancP3xAKZfq+BHAy4mMsp5BtAytSvY3Ks34Pm3R
-	 c4F7d2ECXoHxV7vfnnaeZlQMFhRZc2K9t0ZWf2FtESEpWZuhlAO973Dqh6TvbJXw1o0Ew
-	 kRwBKpF7/BPnJSY627giJjfEFVM3xZN/n2O1f5jbajwynD4mHLjH/zpKN7VTzGRgVuSbI
-	 d/Ss/RSzfCsr8n9P4HGQQo5kL0f72A5mPUiAkNIFYT/v9PLNjgixqMqvsKwegOBdK5Jg4
-	 wO5KPR3dZvc3AKWuHl/uaHIc+mRPXt10gnUOWXRdlwbF5mmUItSjd2kIBRzCLjdMvVw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=riRd6YW3;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.48
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDB0E606A32A
-	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 17:23:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CDB0E606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794936236;
+	b=2pGoCWXgtKRVhXt2uCrCGBCn0q2BzvoTwuBEdy/z54ZukHEHqJ88blr+yv0wkPYH+HXE
+	 p/gYMnh1pICF2ZEkPnT0QDiehM5WS+x9rRp5+uTqo+9MU/Bb3sR1gibukz75EvAoXCkpa
+	 HeMoHnxFYRxSk1xMBS1ypR4JGUuM1leC8LmoUXIozLJhVCCNmLHlpYErFAggoytUMEguU
+	 sGtJoTZGMnB23H0KtxWtyXj6Id17tIXnkKLgelIgJhFeIVWYjWE7ALb2CuZTvR3HCyR3x
+	 VeGZQNy83uRuviFyXlfKO8XV9r20b22f88dEUKB7F1mCjynoGGSMFMPXoxi+fr5OD8w==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794936236;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=+1CUcFNE7JwfSHGV62hBf/oteDplXzPtQU4sFGBvXqM=;
+	b=0aBkCLHEv2kE88jjUzHMDc2v34pMwp34/lPCRxNGNUbmi6OlLEC//+m5QLgEcKqI/mTn
+	 B8UhZ4xeFomZgQHhw1OPNHU/wgAl/e+q4qLg5PZt3YE5s0fxsgt/Md+52HUL9222+oblg
+	 xVEykLAbbqPAzjGUZhQDRnLb92DjInPrYqXS83uZLKPsY09DnWtLvuBOXCAUKDO5ch9/S
+	 Aga1SJ4JYewRY1DVzlpdJ4vYLJ0liKhUKcFi+QAbtezwZyGb6SdiXf2PZQ4I1pynLjc6k
+	 0lz2wxTX+aLMgXG1GYMyBuU4g0dxrTKCisx8WzDdakqGZqowJt2d3KV5NFob0dwjnMQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=arm.com;
+	spf=pass smtp.mailfrom=arm.com;
+	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=X26tYuWa;
+	arc=none smtp.remote-ip=217.140.110.172
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51B62606A32A;
+	Tue, 17 Nov 2026 17:23:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 51B62606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=riRd6YW3
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-48dfc0421d9so6765f8f.1
-        for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 09:23:43 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794936222; cv=none;
-        d=google.com; s=arc-20260327;
-        b=P8GqfCxSHasf2RrDZcpov1LIo4EA0cdL/0vhScSjpuFLge6RprLqtPnJz66U4PToXL
-         sx2qjVB+zla1fNA7b6JknHH3yN82ud0yiYajbVdMjRm3vhZ4gO+x/O3bVwKKvWIqijXy
-         Ivjgzf9NDsb49EElbmW/p4k1suw2RkCMHnofPFKN2XEQSDN0JqrstIQeerAfBCpneGdR
-         Ig5CfMgxw07XWftACSvN8NJAxIdmqYvrjTD+2yBdcIiPmqAIacJG7PZWpg1zX0E6rK2k
-         JVpYWLFpeZYnosWSmqKH2k8o474P6wZwJ3+au+sj6/xHNH43mAx4cfZSo7Xfrq3Qp8Q0
-         I7dg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=vG0ERfGqtPpbt9YFDEN1CgPSxrt5MeiDqzo+7XubqQs=;
-        fh=njbzxkU5zQ8kE0raPX82s1WkWCvl49kLdJoc3G58m7Q=;
-        b=J8Ayjhtp5wgBvfIt2wtGuNkKk6xJtQE+mQTxouvY+ky23llIJLCG1oZTJvm8cbL6rl
-         by4C+waa5F6QyU9Aj7FtL3gTHB7xDg7VkMzm55BTFwVAjNLb4lOFEnpaIfbbfPjRqWJz
-         wI13cxqQ2myoiRpLDTZ31FCqwVzwCd4KxuN0vEYXNGqIlQG4y3kA/o83fJSDuRhqrRHN
-         KOt0pgYICXKQ2gef2WKeBXEax/q1VisAyBsw/1MJDZJCC77Av/0CLE06tCfeST/pmLpD
-         tmOQFafDUEhQHlgddv006gpvHOZTOWHZdkNZ/iqxEnIC8hazwBNB/FdBY6LtElD0S5XL
-         hgYA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794936222; x=1795541022; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=vG0ERfGqtPpbt9YFDEN1CgPSxrt5MeiDqzo+7XubqQs=;
-        b=riRd6YW3pKJmrKmwrQqs/CVt7lN0aLDbPkARf0OEgPA/lTDRllwOLQHArBv+F5Nm/V
-         cXK7sGWZlMUJYs4I2xSrt+aIlowp0HrEWM26Cdljs98+qiGeiUxjtdPkHAy/jfjFhiv0
-         WZG9AVCoS7MSAOgd+amn5mM/5xTArMeUxTMpGh9npbbMBJ5uvXrDC7ar7+HZYeyddyTq
-         8P8tYzwY3z4Dmz1tKOosGt/9OeCeDago2yOSjy8eBkLi1vhtx0hFVx4juyz+6rvPJ4Qx
-         HEevxAwVJQTtqwQtL6zyjlOwOSAdWjV148Y1r6n7a3QLBz4zJXYamtf1PCHP1d6hwmr/
-         vxQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794936222; x=1795541022;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=vG0ERfGqtPpbt9YFDEN1CgPSxrt5MeiDqzo+7XubqQs=;
-        b=NRPu4YY7MGQdxW9YsnhIJuSNYCzYaW6X/O83PvoXdhwPRGWJYX+CJ7HEiUgJVkcDBL
-         j+mVyCvCNcNI40J5GHDbo0YFrUa6YB5FPU11h7sGceKFGG7AmVJOP8DO2Z5CLmpsp1/3
-         Joo7+4xLkc0RzO/AmBtrSwPbskcpTmB1msYQB7kwSVMtT2E1csXNjaqe58my4dMpFjSU
-         TkB8+y4Tq4vuMJKsmooBKrVYMoi3FPDbQzfSLtRoK1z4vlAN1lrCN/Ga8bMyvTqdw/Fl
-         aftnUjF5y9miuZSYx/Zostche7TikUs01HXBLNJK4ieZ8ibRg2H3v3iBjjo78z0oKJaD
-         XcVQ==
-X-Forwarded-Encrypted: i=1; AL+hErHVg5cBxxBrdTbtqZZjkCtpJ0Tx28CQls5K240ev7QxTTo76BrRLddpZ/fApBSj0B2qWmk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/ZO06PIZ0uNAU8SDLN7s+BY63SObDVGCqIvHpsxwt29eeU53Li
-	SMGkziv0R1BptC3k1ZGIEcN80SUpRz6mSDbdcbC+U5K3LcaEU9Tv90L8hNChx9g1ro4YUriK1SD
-	xyr7dQWG2S6oROOGqi5e8l9Xv59ECWoKJ6DDJCb8=
-X-Gm-Gg: AZFdTZfVNvC0bK/AA/7sHBmoE88+HJreM+KUrvU3nzkZ34h+9vmi8Nk9YvVLgOH1P4+
-	o7/5OcffCFBa+YFusEueRzI4LvK6JpH12bk+c6V9lrZnQ/Khup6urN77LlbZ+0eD1N5ZTEAGpNd
-	sLeOs56V/2w2/6vPL2GBkibgy+ZYtpLSD8fbgHI0/lcNkWLvBj4IT/FTFmYct4eEmOAL/FHgHpw
-	3jvtPGH5eOHYI+RmyjDLG2Za8C5NTgJvZDNlgxb1D38IF04lUj4b5VYAw90hPTx6i81w5VMqjLM
-	Q7u6B+Lc62dGWyJViIZBIhtkm59pYdSedWucVhUeWjP97HSRYPmNEg/Z2JcN1HpVG1hGIYDwK63
-	SQeEg7ljJTZRrmcNBI5tQnHzA2F27ZzSoOLKSMppHWMesmfhBrjWkvTsDM7X79fNSCv5QvTA/RU
-	R2yczSUgg30A+q2BxsC+Or7GVkMTt5IEnQyg==
-X-Received: by 2002:a05:6000:4b1e:b0:4a6:b87:d799 with SMTP id
- ffacd0b85a97d-4a6380582f8mr278310f8f.17.1794936221985; Tue, 17 Nov 2026
- 09:23:41 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=X26tYuWa
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B615E1A00;
+	Tue, 17 Nov 2026 09:23:52 -0800 (PST)
+Received: from e144440.cambridge.arm.com (e144440.arm.com [10.2.199.104])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AE1CD3F632;
+	Tue, 17 Nov 2026 09:23:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1794936235; bh=nuuxNabwLDGMU43xHBMlv65TOjY4YdPO5UFA/AgDsmQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=X26tYuWa+ayRlYoEsgE88VEUuQSKMuliPzXKPOx6yh/KWkxN39IiELtTfcS2gRk3J
+	 6SmATcQOc+s/hgPrJ2rIOdWmsmZjONdKMp3qu4lS9iHVksalcZjuqR3cNGG1+ne+gb
+	 N4PM08YSNtMxOaR3KFb20OenFJijKD09w0Es5IQ8=
+From: Ryan Roberts <ryan.roberts@arm.com>
+To: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: Ryan Roberts <ryan.roberts@arm.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH v1] arm64: Mitigate Spectre v1 in the BPF interpreter
+Date: Tue, 17 Nov 2026 17:23:40 +0000
+Message-ID: <20261117172341.3152407-1-ryan.roberts@arm.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,82 +68,146 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <cover.1794269506.git.memxor@gmail.com> <DMUHWUF1OF82.3VM2D2YIBY40V@gmail.com>
- <CAEf4BzYAS8V=XcULjRvL=v0ffn6T_HOQVAxDkBy4mC+mwaQ_Uw@mail.gmail.com> <DMX8CTRXDMKG.2SGJHE0H48TBK@gmail.com>
-In-Reply-To: <DMX8CTRXDMKG.2SGJHE0H48TBK@gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 17 Nov 2026 09:23:30 -0800
-X-Gm-Features: Aa3M54r7SQzdkrpOjur5XVVdduA6tGw7BrcPQIfs96bbbehBH1GQr_jx3Vn7NpU
-Message-ID: <CAEf4BzYKN1eqbXsRSwVgUE6L6ZbdRrJ+PB1nwGSek_sx6dt-5w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 00/20] BPF kthreads and waitqueues
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Tejun Heo <tj@kernel.org>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, kkd@meta.com, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, Nov 16, 2026 at 9:18=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Mon, Nov 16, 2026 at 10:31 AM Andrii Nakryiko <andrii.nakryiko@gmail.c=
-om> wrote:
-> > What if we allow creating dedicatd "BPF kthreads" that would have
-> > "exclusive" BPF ringbuf (because it needs to be single consumer) in
-> > front of it, and for each submitted ringbuf record that kthread would
-> > run an attached BPF program. Associated BPF link will keep kthread
-> > alive until destroyed/detached.
->
-> Such thing already exists today in the form of cpumap.
-> xdp prog redirects to it and kthreads handle the traffic.
+The BPF verifier can accept programs with unsafe speculative paths by
+inserting BPF_NOSPEC instructions instead of rejecting them. It relies
+on those instructions to prevent execution of the unsafe paths.
 
-that's just one example and it's too limited for general use, of course
+The arm64 JIT implements BPF_NOSPEC with a speculation barrier, but the
+interpreter calls barrier_nospec(), which falls back to a no-op on
+arm64. Programs executed by the interpreter therefore lack the
+Spectre-v1 barriers assumed by the verifier. Contrary to the code
+comment, kernel-wide SSBD does not provide this protection, since it
+mitigates Spectre v4 rather than Spectre v1.
 
-> Such ringbuf+kthread setup won't work as a replacemnt,
-> since ringbuf cannot pass xdp_frame pointers (yet).
+Rename spec_bar() to barrier_nospec() so that the interpreter and other
+callers receive SB if supported, or DSB NSH followed by ISB otherwise.
 
-yep, but we can copy data out of xdp_frame into ringbuf, for example
-(if that works for a particular use case user has). but to be clear, I
-didn't have packet routing as the main use case for this, it's more of
-a generic application logic with communication channels between
-multiple BPF worker threads.
+Defining barrier_nospec() would also add barriers to the generic
+copy_from_user() and copy_from_user_iter() paths. These are unnecessary
+on arm64: its uaccess primitives mask user pointers so that they cannot
+address kernel memory even when an access_ok() check is mispredicted.
 
-> Another analogy is golang channels.
+Introduce user_access_may_speculate_kernel_addr(), defaulting to true,
+and have arm64 return false. Then update the uaccess sites to call
+barrier_nospec() conditionally on the macro.
 
-exactly, except channels have fixed value type, while with BPF ringbuf
-we have more flexibility (which can be an advantage or disadvantage,
-but it's generic and well-known interface we have, so...)
+Cc: stable@vger.kernel.org
+Fixes: d6f1c85f2253 ("bpf: Fall back to nospec for Spectre v1")
+Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+---
+ arch/arm64/include/asm/barrier.h | 6 +++---
+ arch/arm64/include/asm/uaccess.h | 3 +++
+ arch/arm64/kernel/proton-pack.c  | 2 +-
+ include/linux/uaccess.h          | 7 ++++++-
+ kernel/bpf/core.c                | 9 +--------
+ lib/iov_iter.c                   | 3 ++-
+ 6 files changed, 16 insertions(+), 14 deletions(-)
 
-> if we can make them generic to pass kptr, then sure, why not.
+diff --git a/arch/arm64/include/asm/barrier.h b/arch/arm64/include/asm/barrier.h
+index 9495c4441a46..088ee29d36f4 100644
+--- a/arch/arm64/include/asm/barrier.h
++++ b/arch/arm64/include/asm/barrier.h
+@@ -40,9 +40,9 @@
+  */
+ #define dgh()		asm volatile("hint #6" : : : "memory")
 
-Is it really a requirement? kptr can be stashed in BPF map (or arena,
-or wherever we can stash kptr into today) and ringbuf record will pass
-a look up key. BPF worker program will lookup any necessary extra data
-when processing a message.
+-#define spec_bar()	asm volatile(ALTERNATIVE("dsb nsh\nisb\n",		\
+-						 SB_BARRIER_INSN"nop\n",	\
+-						 ARM64_HAS_SB))
++#define barrier_nospec() asm volatile(ALTERNATIVE("dsb nsh\nisb\n",		\
++						  SB_BARRIER_INSN"nop\n",	\
++						  ARM64_HAS_SB) : : : "memory")
 
->
-> but pls not a kthread.
+ #define gsb_ack()	asm volatile(GSB_ACK_BARRIER_INSN : : : "memory")
+ #define gsb_sys()	asm volatile(GSB_SYS_BARRIER_INSN : : : "memory")
+diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
+index 9f5bd9c69c24..6fd03dc1ae76 100644
+--- a/arch/arm64/include/asm/uaccess.h
++++ b/arch/arm64/include/asm/uaccess.h
+@@ -174,6 +174,9 @@ static inline void __user *__uaccess_mask_ptr(const void __user *ptr)
+ 	return safe_ptr;
+ }
 
-I see, PF_USER_WORKER thread. That might work as well, although it
-would be nice to keep BPF worker program (and its link) pinned in
-bpffs and allow it outlive user space application that loaded and
-attached it. If I understand correctly, user worker thread is part of
-the process and will have to die when user space process dies, rigth?
++/* __uaccess_mask_ptr() prevents speculative accesses to kernel addresses. */
++#define user_access_may_speculate_kernel_addr() false
++
+ /*
+  * The "__xxx" versions of the user access functions do not verify the address
+  * space - it must have been done previously with a separate "access_ok()"
+diff --git a/arch/arm64/kernel/proton-pack.c b/arch/arm64/kernel/proton-pack.c
+index 3bcf86154d95..c96e93eca3b9 100644
+--- a/arch/arm64/kernel/proton-pack.c
++++ b/arch/arm64/kernel/proton-pack.c
+@@ -559,7 +559,7 @@ static enum mitigation_state spectre_v4_enable_hw_mitigation(void)
+ 	 * could mis-speculate branches and bypass a conditional barrier.
+ 	 */
+ 	if (IS_ENABLED(CONFIG_ARM64_ERRATUM_3194386))
+-		spec_bar();
++		barrier_nospec();
 
-I mean, it's technical details that will need to be worked out, but
-seems like the general "worker thread with BPF-based event handler
-fronted by queue" idea is workable, right?
+ 	return SPECTRE_MITIGATED;
+ }
+diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
+index 67cdb0a4f583..5a1fa4f48c77 100644
+--- a/include/linux/uaccess.h
++++ b/include/linux/uaccess.h
+@@ -50,6 +50,10 @@
+  #define mask_user_address(src) (src)
+ #endif
 
->
-> vhost moved from kthreads to threads to do proper limits.
-> commit 6e890c5d5021 ("vhost: use vhost_tasks for worker threads").
->
-> There are also i/o threads that io_uring is using for similar
-> accounting reasons.
->
++#ifndef user_access_may_speculate_kernel_addr
++#define user_access_may_speculate_kernel_addr() true
++#endif
++
+ /*
+  * Architectures should provide two primitives (raw_copy_{to,from}_user())
+  * and get rid of their private instances of copy_{to,from}_user() and
+@@ -179,7 +183,8 @@ _inline_copy_from_user(void *to, const void __user *from, unsigned long n)
+ 		 * lead to nasty side effects *after* the copy is
+ 		 * finished:
+ 		 */
+-		barrier_nospec();
++		if (user_access_may_speculate_kernel_addr())
++			barrier_nospec();
+ 	}
+ 	instrument_copy_from_user_before(to, from, n);
+ 	res = raw_copy_from_user(to, from, n);
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 0b8456f2dce9..abd938d310bb 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2250,14 +2250,7 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
+ 	/* ST, STX and LDX*/
+ 	ST_NOSPEC:
+ 		/* Speculation barrier for mitigating Speculative Store Bypass,
+-		 * Bounds-Check Bypass and Type Confusion. In case of arm64, we
+-		 * rely on the firmware mitigation as controlled via the ssbd
+-		 * kernel parameter. Whenever the mitigation is enabled, it
+-		 * works for all of the kernel code with no need to provide any
+-		 * additional instructions here. In case of x86, we use 'lfence'
+-		 * insn for mitigation. We reuse preexisting logic from Spectre
+-		 * v1 mitigation that happens to produce the required code on
+-		 * x86 for v4 as well.
++		 * Bounds-Check Bypass and Type Confusion.
+ 		 */
+ 		barrier_nospec();
+ 		CONT;
+diff --git a/lib/iov_iter.c b/lib/iov_iter.c
+index fa4fe2e92383..abd27189beff 100644
+--- a/lib/iov_iter.c
++++ b/lib/iov_iter.c
+@@ -60,7 +60,8 @@ size_t copy_from_user_iter(void __user *iter_from, size_t progress,
+ 		 * lead to nasty side effects *after* the copy is
+ 		 * finished:
+ 		 */
+-		barrier_nospec();
++		if (user_access_may_speculate_kernel_addr())
++			barrier_nospec();
+ 	}
+ 	to += progress;
+ 	instrument_copy_from_user_before(to, iter_from, len);
+--
+2.43.0
 
-yep, I agree, having better accounting story than kthread is great.
-lifetime is the only hiccup, but maybe that can be solved somehow even
-without kthreads, we'll see
