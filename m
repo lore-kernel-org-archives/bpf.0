@@ -1,60 +1,60 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.226.149.37
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1794911674;
-	b=5pjYE3fFAlSyz8cpa9VEqgjXPTUDXxBlTc/YyKG0z0TZaUewzh55H+fy4ihoGucswCBm
-	 i/zBsXqJcYJ7uzV+JEiu4QVXehKMGe6JZrE7ijnkwWxuJPnBs/CqUQqNpqKnzBfRqx7/p
-	 f+AcvzhVwx4CvtSMahUT/c0pZWFrzLIwi3IqeorerCO+wEXjf/o9RVd9jXu+HPfdpV40p
-	 eE97kFQ72lrANSvDOo5cE9myo+u87cJvGOVuYH70uu2S91621O04Y7PLHku8DLTnX4FLQ
-	 kU89vHwgYMIz30p5Yw281v6/T4XOTGAJqeXCMN+B5WmjVEc5rwm5TRIUOSt1tj6dXvA==
+	b=JQd/ujxPfxH6qkxWOKbOa2XGwrXc7YM6WADsRM11XjqQZsdhrfIIGchLPZjsROKuRSpX
+	 Ix3AvDxDSFO1hGln1VfKQfieSDBCTxzeiPGmYCfe6OOMEtopWvUFy5pYXEEaGIk+MfGYk
+	 zxdU879LpKjMqt73ICMEweFbiKhfsr6KC99Nh4grDg5O3qhz2merLJ0wVNdqauwF+hGn7
+	 PwaVvIsjfH3iXllEWOfs1z9yQIrLjsl1TUurdsyIxTQqyJiD3qFgklwL30q3P5akB1+if
+	 AH7kTJEs2zEDZJj3IJ1jKzML5KOzY2ef/Lvnm84PZp0uuZBWHobIGCBzlAGTBuOQN1g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1794911674;
 	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:To:Cc:
 	 Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=5og5gbIFuLrK4odCnF2cFU+0oOHDzasvRkpi1DDbr2I=;
-	b=2oQvUp6ZnEsojPIsJC/17CkP8KFXePugK9HiYQnTA2pGq8et5z2sKH9QSr8pGxJRSBzW
-	 yoKu1OxbQ3Rumj0E0dAIpBeJTuPy9BOfLWVX0gXAwdxyPrz9y96ql9xmRqEIjlw09Cnjq
-	 QkRA1cBe2vY0UvKcxVNtEsxKlstS368NCKfpZMW7/djR1+vsGM079wHb1o1OrABj+9x8X
-	 pcXid8u1T3Ub/ooaBiUkz0aOhhdlwv7FpCYI8yk6Offn66GE6RF2k5Nc3+Hp93Lfuya7h
-	 0BNWvsGaSIYzQ+Z30/mhn13kt2qOJjUPKP1Ve7LVjc+KMlmp40W5AWgwaj1BqwgPImA==
+	bh=ocZ/46a5ph+IliKAbBgAKYE9a/QLwfo6JXh2Uy8J9xw=;
+	b=At9/1TSkXpYHEdSANONVIsLba5dagEu2fJsvdP0n3/rOyp3yO8z1ahxYH0Cj950IZYjU
+	 tgamI341f3usNAGGZ++sK/HumTJHB75306OUPWz45Dy02OiHS00W5E5nAeT13pYEbhHHk
+	 nQQNUqZxLeYu/1PlpNXY7WIOL7LCoCIJnVXJVd85dnfFTwJDmPgrlNzcVzlZx5a6fBskl
+	 s2H2IW/X8ikbW8TlaKRX/0e74f0nViEGv43RFv4BWLQuSRLx2NeSV206Iu9Ah3Qninf28
+	 6O4v3inkLewOIXlE9o8V+Vl9osY6rYZ2iEUn6DRKqxX4pFN0J1/UiNUqX219SnAVczw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=fail header.from=gmail.com;
 	spf=pass smtp.mailfrom=runbox.com;
-	dkim=pass header.d=runbox.com header.i=@runbox.com header.a=rsa-sha256 header.s=selector1 header.b=nHjFWE76;
+	dkim=pass header.d=runbox.com header.i=@runbox.com header.a=rsa-sha256 header.s=selector1 header.b="Soe9/nM2";
 	arc=none smtp.remote-ip=185.226.149.37
 Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57BD460A2604;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 871C660A260D;
 	Tue, 17 Nov 2026 10:34:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 57BD460A2604
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 871C660A260D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=runbox.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=runbox.com header.i=@runbox.com header.a=rsa-sha256 header.s=selector1 header.b=nHjFWE76
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	dkim=pass (2048-bit key, unprotected) header.d=runbox.com header.i=@runbox.com header.a=rsa-sha256 header.s=selector1 header.b=Soe9/nM2
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
 	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <david.laight.linux_spam@runbox.com>)
-	id 1xTGW8-001QXp-Fe; Tue, 17 Nov 2026 11:34:24 +0100
+	id 1xTGW8-001QXd-5k; Tue, 17 Nov 2026 11:34:24 +0100
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
 	 s=selector1; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To
 	:Message-Id:Date:Subject:Cc:To:From;
-	bh=5og5gbIFuLrK4odCnF2cFU+0oOHDzasvRkpi1DDbr2I=; b=nHjFWE76JFPXgbBj/GeNNNvAxS
-	rCElX7eBJuvMRBI2r0YgBwqdDHlcd9GW9k6/LLuvu1OwgHhlKoU+l9rRWm7yCBshvzmWvvIBlKlM0
-	K8xGP8ToMETKCwq2SXPoUKChDlUHLJee29V7kuvfrFa+7/Hs+PER1gEfjMElwidyVTVbIicZuU3+f
-	JiEMt+qiIQG53/dQMi4dPdRmxdGgEGjKnnahjPpF5M2d4qbMnV4yIeJoSso0Licvv25SFUtQL1flb
-	FYSnK7T/LwGjdizJeVxdFJUPpYsqIudunBFDBEgC8OMl+iRCIieKjYXAzipEgqUo7mGsXW8u8WLeP
-	ddpPFdMA==;
+	bh=ocZ/46a5ph+IliKAbBgAKYE9a/QLwfo6JXh2Uy8J9xw=; b=Soe9/nM2GGKaLIEMBSSo9TrYuX
+	s6r/WKHrjtZ/40Z8msgZrlcT/PtRQ34N9Sf7g06j1cYgcrPmEyw1fXw0ZzSE8j2yYVi9heF+hZQUT
+	fbS5/zpeJqXF9BHPdxpicWi5zWEe+Pw8/X/3sGx4+qTDHBqWEY8jFVZbNBSB8rf91zbjOxCRue7vh
+	Uv+sZ3fZZOmL1RXuPHglUj+pFs+UQR3s5iauLNLjNalIrCirvXCM2QZFTVMGwHjhbh81FrHabq0Fr
+	mXkWN4vCSYSWr15VMU85pp6e/KZtapM6qXVyZ2/LfBraNxb0SKdWjUMcdo3nhVkG/9Fshsctts/la
+	IeDqzZ4g==;
 Received: from [10.9.9.74] (helo=submission03.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <david.laight.linux_spam@runbox.com>)
-	id 1xTGW3-0002FD-2J; Tue, 17 Nov 2026 11:34:19 +0100
+	id 1xTGW2-0002fE-Fo; Tue, 17 Nov 2026 11:34:18 +0100
 Received: by submission03.runbox with esmtpsa  [Authenticated ID (1493616)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.95)
-	id 1xTGVk-005qHU-1t;
-	Tue, 17 Nov 2026 11:34:00 +0100
+	id 1xTGVl-005qHU-E1;
+	Tue, 17 Nov 2026 11:34:01 +0100
 From: David Laight <david.laight.linux@gmail.com>
 To: Petr Mladek <pmladek@suse.com>,
 	Kees Cook <kees@kernel.org>,
@@ -70,9 +70,9 @@ Cc: Luis Chamberlain <mcgrof@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Samuel Wu <wusamuel@google.com>,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v4 next 01/13] scripts/kallsyms: Avoid overrunning on-stack buffer
-Date: Tue, 17 Nov 2026 10:33:40 +0000
-Message-Id: <20261117103352.1244657-2-david.laight.linux@gmail.com>
+Subject: [PATCH v4 next 03/13] scripts/elf-parse: add elf_map_big_endian() helper
+Date: Tue, 17 Nov 2026 10:33:42 +0000
+Message-Id: <20261117103352.1244657-4-david.laight.linux@gmail.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20261117103352.1244657-1-david.laight.linux@gmail.com>
 References: <20261117103352.1244657-1-david.laight.linux@gmail.com>
@@ -87,41 +87,73 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A maximum length symbol can be KSYM_NAME_LEN long (including the '\0').
-But the name being compressed contains a leading symbol type (e.g. T).
-So when the compressed name is expanded (after the hex is written out)
-the buffer needs to be KSYM_NAME_LEN+1 bytes long to allow to both the
-symbol type and the '\0'.
-But it is declared 'char buf[KSYM_NAME_LEN] so a maximal length name
-overwrites something on stack.
+Returns 1 for big-endian, 0 for little-endian.
+While the tools are compiled for a specific architecture the target
+endianness isn't easily obtainable.
 
-Found by code inspection, seems to have been broken before the code
-was imported into git.
+Use 'const Elf_Ehdr *ehdr' for the argument, change the argument of the
+very similar elf_map_machine() and elf_map_long_size() to be the same.
+All the callers either pass the correct type or 'void *'.
 
-I expect there aren't any maximal length symbols and/or the byte that
-is overwritten is something that is either zero or 'don't care'.
+Will be used by kallsyms.
 
 Signed-off-by: David Laight <david.laight.linux@gmail.com>
 ---
 
-Unchanged from v2.
+New patch for v3, unchanged in v4.
 
- scripts/kallsyms.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ scripts/elf-parse.c | 13 +++++++------
+ scripts/elf-parse.h |  5 +++--
+ 2 files changed, 10 insertions(+), 8 deletions(-)
 
-diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-index ecb444078c1c..140e888bf713 100644
---- a/scripts/kallsyms.c
-+++ b/scripts/kallsyms.c
-@@ -398,7 +398,7 @@ static void write_src(FILE *out_bin_file, const char *out_bin_name)
- 	unsigned int best_idx[256];
- 	unsigned int *markers, markers_cnt;
- 	long bin_start;
--	char buf[KSYM_NAME_LEN];
-+	char buf[1 + KSYM_NAME_LEN];
+diff --git a/scripts/elf-parse.c b/scripts/elf-parse.c
+index ce1c2a670244..24d99ab9adc0 100644
+--- a/scripts/elf-parse.c
++++ b/scripts/elf-parse.c
+@@ -170,20 +170,21 @@ static int elf_parse(const char *fname, void *addr, uint32_t types)
+ 	return 0;
+ }
  
- 	printf("\t.section .rodata, \"a\"\n");
+-int elf_map_machine(void *addr)
++int elf_map_machine(const Elf_Ehdr *ehdr)
+ {
+-	Elf_Ehdr *ehdr = addr;
+-
+ 	return elf_parser.r2(&ehdr->e32.e_machine);
+ }
  
+-int elf_map_long_size(void *addr)
++int elf_map_long_size(const Elf_Ehdr *ehdr)
+ {
+-	Elf_Ehdr *ehdr = addr;
+-
+ 	return ehdr->e32.e_ident[EI_CLASS] == ELFCLASS32 ? 4 : 8;
+ }
+ 
++int elf_map_big_endian(const Elf_Ehdr *ehdr)
++{
++	return ehdr->e32.e_ident[EI_DATA] ==  ELFDATA2MSB;
++}
++
+ static void *__elf_map(char const *fname, size_t *size, uint32_t types,
+ 		       bool writable)
+ {
+diff --git a/scripts/elf-parse.h b/scripts/elf-parse.h
+index c5ad754da254..72c78da5cb3a 100644
+--- a/scripts/elf-parse.h
++++ b/scripts/elf-parse.h
+@@ -318,8 +318,9 @@ static inline void w8le(uint64_t val, uint64_t *x)
+ void *elf_map(char const *fname, size_t *size, uint32_t types);
+ void *elf_map_ro(char const *fname, size_t *size, uint32_t types);
+ void elf_unmap(void *addr, size_t size);
+-int elf_map_machine(void *addr);
+-int elf_map_long_size(void *addr);
++int elf_map_machine(const Elf_Ehdr *ehdr);
++int elf_map_long_size(const Elf_Ehdr *ehdr);
++int elf_map_big_endian(const Elf_Ehdr *ehdr);
+ 
+ /* A mapped file with its section headers, section names and symbol table. */
+ struct elf_file {
 -- 
 2.39.5
 
