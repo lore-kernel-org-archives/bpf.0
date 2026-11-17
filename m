@@ -1,52 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=129.217.128.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794941668;
-	b=sAI5+IvlTIvgDXS8tLRYxuXa5Hljh6JKZ/ubShhllHoJjAZbNs9Lt+s5UiQHopTsewB8
-	 s9vSAqFzxmwk0NNHKB545Wea9tybHWgWew9TKeri9ZRueLl613NwybdtgfwDWHaACAQr/
-	 +gA/u1TjDvq2Kk6Kc0S3N2y2sFFfhauxlF0OeMv4BTV3YnrnTd1D6VGWbsIbDEws6TU89
-	 NhkStdKf766WMa2waNp3BNZFRqNunkiEognCsS3dStoNnQzEviU9plo8N6K9QcLeKcyN1
-	 ds8v4jjwiH4F4m7AKWkKRRDPSGrdaNGvA8j4X29Ki5SX6467NdjidmYcWKqBGt5dXmg==
+	t=1794942150;
+	b=YJzALkxojeXM304ti4rAhvBW6hzl1hzLx0GhF7AhxXp4sv6k8gj09r2o80eZ7eZIiaEX
+	 smvBZgnc0D5iGGRyyZCnDenJUbOpYxA0jwOOG6yGYNOhjVkzhtOdNrHk7w/Wepm2ZI9KU
+	 AXn3FQGs8O/tQC+FeKBsGisJOfPnh9CJAcd0ittQ6bfksMMH6Rxw5O+g4PsGdeE9dn7Wy
+	 9emv+H0+9cgRXgNx8Ka5p7A/IIDT/xRXEPj00K9bD4I7SnGrWCA5p8p3jVF2qIF+TakXr
+	 xGB1f86KtX1lb9YEcv8IzS08BlvN419uB7SoqsDoskVsEL3MM96zLbWV8Ul+4NNDTHg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794941668;
-	h=DMARC-Filter:DKIM-Signature:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=oyXfSxY1SC5sSASaK9sor3nEs3De0DC+JXPLMJXd4kw=;
-	b=jaalEh77NKg671alAxoJsGwQNQZ+tVni+52+sahwBejBNVjPo2qsvqwkgFd0ciCZSBIW
-	 YGW6eplZfkkbKfv/RZRFRNyXDIpttBuJxX3gyqeH6fSUF33M3FCyU+TDtFV5IXZaLWHkv
-	 vJCjmG7fQWguijvjck8cGwAb8XKnc57G/4QazK0gLWnvdPFIKZqHUPh1+i7+v2rjOa5JN
-	 IftD4UGJfz50oV7Ngdis0JORp8gwkLrCgYoctwn3FGj0oaSlGRsvwqaGUyL5ve+RmLqhD
-	 +WVFprF2DKc9hsug7yaEhG9ibvcX0/GQk3AsJb3MxoFz82xxwaXHfmmBk5nrtdZOGHA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794942150;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=cjJKDO3z17r3ImfcCAiBzdR7K2OUqeLGGM67X8WWLAo=;
+	b=LagZriHV5/I6Y+UtMKUrA3nlPDoqv96cP+yu/mfyksZK9UNmRIce/wzLQ9VPUwq94dhc
+	 4HPie0U6HF1hK46V8WsF4QbWLjcCCKtpTXstsUTXvNEg26jJN65WOeTIIMKvg7gIRRkup
+	 UInE/eZa30TRic6e7qs1iV2iHIbtFDRO5JJSoWNvJm6c4uP67He3lQG6ZEKHDdzVy8QpB
+	 dVmahqkRn9OxvZQD+TH4D4oVBVV7Db1bebrWUYAOjQ+5XroN2u5z7urKuuHnxdn9omLBr
+	 /VfvSoHjQjB8dzi6difUgKhg2V52/mQzU5Gh41rSeE0BseAv58nEjNe5Qs0LMjGyxHA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=tu-dortmund.de;
-	spf=pass smtp.mailfrom=tu-dortmund.de;
-	dkim=pass header.d=tu-dortmund.de header.i=@tu-dortmund.de header.a=rsa-sha256 header.s=unimail header.b=pWRCdIsA;
-	arc=none smtp.remote-ip=129.217.128.51
-Received: from unimail.uni-dortmund.de (mx1.hrz.uni-dortmund.de [129.217.128.51])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UQsiP4Xb;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA0CD606A32A;
-	Tue, 17 Nov 2026 18:54:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AA0CD606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-dortmund.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C25CB606A31C
+	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 19:02:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=tu-dortmund.de header.i=@tu-dortmund.de header.a=rsa-sha256 header.s=unimail header.b=pWRCdIsA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tu-dortmund.de;
-	s=unimail; t=1794941635;
-	bh=oyXfSxY1SC5sSASaK9sor3nEs3De0DC+JXPLMJXd4kw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=pWRCdIsA1hx7NU9gQn6CuN4ZRk8OSoF+AMDAtuTp/Oa/E0Pw9cUEbL03OaEDKH0Yn
-	 F92g5I4l3UjO+kpOh/GaR5rUN4vt+hyNse4azoY2L1G/sbwAt0KocTlrQeA0q6Tym7
-	 H7nGhDzGakSkptxhC1wBCK+Bbs037Gr7y5PHP0qg=
-Received: from [192.168.0.202] (ipservice-092-208-185-164.092.208.pools.vodafone-ip.de [92.208.185.164])
-	(authenticated bits=0)
-	by unimail.uni-dortmund.de (8.19.0.2/8.19.0.2) with ESMTPSA id 6AHIrrEg001015
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Tue, 17 Nov 2026 19:53:53 +0100 (CET)
-Message-ID: <ab31c0a9-8e3a-4c24-9570-7baf91c22288@tu-dortmund.de>
-Date: Tue, 17 Nov 2026 19:53:53 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UQsiP4Xb
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 832B81F000C5;
+	Tue, 17 Nov 2026 19:02:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794942150;
+	bh=cjJKDO3z17r3ImfcCAiBzdR7K2OUqeLGGM67X8WWLAo=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=UQsiP4Xb9wiI25ERC+IJ9PFAjCcyAGV5NwNXXVtw7SBlwYgMYAzvIzDU7LAF2rSAM
+	 +UfrmG/loyG4wIwGwHJRnTuVng6/liTnReiMtJ547hdd+ouExf/UZ1wp+cV81qy0E1
+	 Q3ZnNOKLNvK0VTYtQGm/SYc2LByhn8vZV0km+PyzNWaBNf/j5RTReO7yDUYriV86Qq
+	 5mhAZYRXAAyb6LbZbCmxM1+3kBmxkYvTQZ25amvhgwA24jUGJvJaDDyd9pTZ1mlKQx
+	 X7/yIj5qd/Yf83Ggytf8bPUkWXR3k1VpqM24+bQyGVvDFHn20UYPXTSx8nI6NZ8jWj
+	 WUBHmc7P8+a5w==
+Message-ID: <sashiko-outbox-219422@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next v4 1/4] net: xfrm: interface: restore dst_orig
+ on every xfrm interface
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jamal Hadi Salim" <jhs@mojatatu.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <CORE-9NOG.v4.r0.20261116135311-1@mojatatu.com>
+References: <CORE-9NOG.v4.r0.20261116135311@mojatatu.com>
+ <CORE-9NOG.v4.r0.20261116135311-1@mojatatu.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 17 Nov 2026 19:02:30 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -55,56 +60,97 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: [PATCH net 1/2] veth: wake a stopped peer txq beyond
- real_num_tx_queues
-To: Tianyi Gao <tianyi@cloudflare.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet
- <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Toshiaki Makita <toshiaki.makita1@gmail.com>,
-        =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@cloudflare.com, tianyi.gao@linux.dev
-References: <20261113104648.225983-1-simon.schippers@tu-dortmund.de>
- <20261113104648.225983-2-simon.schippers@tu-dortmund.de>
- <20261117181607.30219-1-tianyi@cloudflare.com>
-Content-Language: en-US
-From: Simon Schippers <simon.schippers@tu-dortmund.de>
-In-Reply-To: <20261117181607.30219-1-tianyi@cloudflare.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 11/17/26 19:16, Tianyi Gao wrote:
-> Hi Simon,
-> 
-> On Fri, Nov 13, 2026 at 11:46:47AM +0100, Simon Schippers wrote:
->> Fixes: dc82a33297fc ("veth: apply qdisc backpressure on full ptr_ring to reduce TX drops")
-> 
-> I agree with Sashiko on the Fixes tag.
-> 
-> I have reproduced the stall with your script (stuck after 2 cycles) and
-> confirmed this patch fixes it (all 30 cycles pass).
-> It is tested with veth from net at 5e9b2ad9b838, as a module on an arm64
-> VM with 8 vCPUs.
-> 
-> Reviewed-by: Tianyi Gao <tianyi@cloudflare.com>
-> Tested-by: Tianyi Gao <tianyi@cloudflare.com>
-> 
-> Cheers,
-> Tianyi
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Low] xfrm: interface: missing Fixes trailer in bug-fix commit message
+--
 
-Hi, thanks for your testing!
+commit b05c45811463aad7e54095fcda3e363d3e6cefe2
+Author: Jamal Hadi Salim <jhs@mojatatu.com>
 
-Yes, I should have referenced the other commit, will post a v2
-if requested :)
+> net: xfrm: interface: restore dst_orig on every xfrm interface
+>
+> Found while testing the dst release for the two producers that steer a
+> packet to another device, fixed later in this series. One of the consumers
+> of the metadata such a release installs is an xfrm interface, which
+> restores the original route before the xfrm lookup; the swap warned on the
+> metadata dst still installed in the skb, and only the collect_md arm
+> restored the route at all.
+>
+> The issue:
+> An xfrm interface takes the if_id and the underlying device either from i=
+ts
+> configuration or, in collect_md mode, from the xfrm metadata on the skb.
+> When that metadata also carries the route the packet arrived through,
+> xfrmi_xmit2() puts the route back on the skb, because the xfrm lookup tak=
+es
+> the address family from it. skb_dst_set() expects the dst slot to be empty
+> for a reference counted dst and warns when it is not, so the route landed
+> over a metadata dst that was still there; a kernel built with
+> CONFIG_DEBUG_NET=3Dy panics on the first packet that takes this path when
+> panic_on_warn is set.
+>
+> Two more defects sit in the same place. An interface with a configured
+> if_id never restores the route: it takes the metadata dst as it is, whose
+> address family is AF_UNSPEC, so the lookup finds no policy and the packet
+> is dropped as a link failure instead of being transformed. And the restore
+> moved the route out of the metadata dst, which a clone of the skb shares,
+> so the clone that reached the interface first left the original packet wi=
+th
+> nothing to restore.
+>
+> The same slot overwrite is in the unstable helper a tc-bpf program uses to
+> attach that metadata: bpf_skb_set_xfrm_info() records the route as dst_or=
+ig
+> and installs a per-cpu metadata dst over it. The per-cpu dst is shared by
+> every invocation of the program, so the restore cannot keep anything in i=
+t.
+>
+> The Fix:
+> Restore dst_orig in both arms of xfrmi_xmit2(), taking a reference with
+> dst_clone() so the metadata dst keeps its own, and empty the counted slot
+> with skb_dst_drop() before the route is installed. The helper allocates a
+> metadata dst per skb instead of a per-cpu one, so the route it records
+> belongs to that skb and is released with it; the per-cpu allocation is no
+> longer used and goes away.
+>
+> Conditions to recreate the bug:
+> A tc-bpf program that records the route as dst_orig with
+> bpf_skb_set_xfrm_info() is self-contained: the overwrite is in the helper,
+> so the first packet that calls it panics inside bpf_skb_set_xfrm_info() on
+> a CONFIG_DEBUG_NET=3Dy build with panic_on_warn=3D1.
+>
+> The netdev egress arm needs the rest of the series: it reaches the same
+> place once the dst release later in this series keeps the route, and the
+> interface takes if_id from the skb there, so it has to be the collect_md
+> shape:
+>
+>     ip link add xf0 type xfrm external
+>     ip link set xf0 up
+>     ip neigh replace 10.20.0.1 lladdr 02:aa:00:00:00:ab \
+>             dev va nud permanent
+>     ip route add 10.20.0.1/32 dev va encap xfrm if_id 42
+>     nft add rule netdev t c fwd ip to 10.1.0.2 device xf0
+>
+> Send one packet to 10.20.0.1. The kernel panics in xfrmi_xmit2() with the
+> metadata dst still installed while the route is put back.
+>
+> An interface with a configured if_id shows its own defect without any
+> other patch: it drops the packet as a link failure without consulting the
+> outbound policy. And a clone made after the metadata was attached consumes
+> the route before the original packet arrives.
+>
+> Reviewed-by: Victor Nogueira <victor@mojatatu.com>
+> Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
 
-Cheers!
+[Severity: Low]
+Since this fixes standalone bugs in bpf_skb_set_xfrm_info() and
+xfrmi_xmit2(), should the commit message include a Fixes tag?
+
+  Fixes: 94151f5aa966 ("xfrm: interface: Add unstable helpers for setting/g=
+etting XFRM metadata from TC-BPF")
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/CORE-9NOG.v4.r0.202=
+61116135311@mojatatu.com?part=3D1
