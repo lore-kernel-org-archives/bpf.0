@@ -1,79 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794914969;
-	b=bogAUY1eKJCKUvQ51j6NbFHaYx6L+7XTXdKax2jJrMmDYEuxkxaAf1cmcPmdiU5nteDu
-	 v1aNxiMsylME0yi52ghOSvkRiMSSAPXNUrrQcfeD64yJsk/NRUWWFJdmcZbjp/YM5K2h9
-	 RY2KNNBkIVaLQif2hwCVL6IOzxqFvMtoICkr8h6OlZV5L7XzpY6ikW1c56wA+xhPc/kUR
-	 CSPeoKc5Ebu20f4WDTOGBaNHPlWT5oaND4q6FeyZ6kz2ZReE9pVKsXsHZuCrItbD7MAKv
-	 LxPDSlaIbIri38qEBNRnxkhS7Ba0RpZVZYEGlcWc4BPO+UcbSnqFEdSCBk9E2wWUOWg==
+	t=1794914968;
+	b=0fZNK8JD8VyRA7TO/KNaaFL0ZYlnQX6r6ljICzdcj/iPpiUobVJF9UR0FAFNeTFgQf0p
+	 g8Rw/T/WvSyUVksAvG8s2D21jcNXYEs+It8TXWE4A3sNQ+VBLKTm9S1nqGeIRL03yamRd
+	 cuhVbU/UDk0J9ZVp7YxAkZU6slS7GMpGiGuuoz1JRnDHwvMnUqdzi9spjB+q/zdtYu67P
+	 71hoir+13gstyFC4dCmpejZ7skTrY/eg/JjfnIU+h54zRQX+CNGYlf6MM6kKo0/dq7JM5
+	 fqSSm0zfqy7xQNsiRbUeaoawrq/A7TYtBHCgk8gY03X+mLVYgD1heJDN2Qo0tnqTgLg==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794914969;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794914968;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=rnjIGD2YdKsa52ue5MICqC7hLOLlar3vwjpOBu/rqFE=;
-	b=E3Tp0+1YaKxHqxbNyy4TT5jhFeLgX5fxY1s9nr61+M+JOa5MAqvjlDpfzp7fnHOK5FXo
-	 +/IYKrpMnEnejfC2ktFXNE32E3ZizVsvXGC2B0fFkvW3LxLrK1C72L1ePkzp/hdBEJu8z
-	 KZfKIvtlC1fOl2Vz83QPPWf5JcqH/0KaX1Fm5DxN9iDaDhTY1IIFulLjveEvl1mfoBZKJ
-	 bcVPJ0vt4+INZSlMt5yu+CR8fppfuut14JA8/lzBtDVvmTtQFUapUmELKJSqK2FHac0X6
-	 9lAxTOhosqAuj1P+glL+cDpHd81SKpIRoRP6U63TZs5spOvE1QdHUR1o8A/EBtyGZ+A==
+	bh=4KuZbt8qk757WoUx9e/EpsmePxX67EEHrDlfplwuKhM=;
+	b=ufxX3lByrezCiaExUnrenVUF23hQUxoqQm2TJeX/0CKCu6cD/pANI70CphDFWLzC9R3i
+	 m6pv66BQVDzb5A/EZJxDRCSFc8/fHr6fSmQYo6u7ZlIpQPc7ms3DMGWuOiNs8BaKhqe81
+	 uZwwT6+bVkyGgraymC1/r3ibJpvJUNXDOc/KfTqlBseNxrJo6M39y5W/EsTCabPy4Yl+o
+	 /jchJntoi9JYdPQC4zJOBEUBLameKRvZUfUR7R5U/YXSw64bVSPUiS/qbjB4sTSZA+dqg
+	 We+0Ld8Z4t5w7ElbiFHWMnb7PlKxsad5ltAKBsw/7aP+DSnr+I4AveCvSB6HdRLeVMw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aAmIJ+a8;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="NzkU/PKO";
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBCD5606A8AB;
-	Tue, 17 Nov 2026 11:29:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F6A1606A884;
+	Tue, 17 Nov 2026 11:29:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aAmIJ+a8
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NzkU/PKO
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1794914969;
-	b=UeRMwqKfV97ISt3JrNdACAFfgfqGP2wbUFEmMrSdahjYgROGOnbI98oKdfNM1Pka2BPj
-	 5CV8zAw2gNb1NoYq08Hc2sCnE57Wi8O3BnuiHeS9mHbYy8o0yvTP2y6BYBOyiqJi4RXa6
-	 Cxs8ELKnE3j066BBkwHWehsXFG6QNRwTsgryiBko86DWpDLIUOtkH0hgT27rw+ibdlao8
-	 WUHF9Na0JUgJJ7aCpKaCzc+xE9P5v0nTGcyQa9QmQRkoawGxvhtYfz4no+bjsDFJo95Fe
-	 +NjmgVQm03hvMP4N/WR0DokRA8F46aW/qO6G1DGLH69mTnMkDlpXNNCb5Po1BHCweCQ==
+	t=1794914968;
+	b=z6wGcK7HRhMTanZx1Rx4vm0sKK/QhsvOI5VJPCNJ4cPj2UhALK2vWUR+bdy441K8GidH
+	 KEhqxytHuMMwoY/x3u3jYNwPDw8nKPFN7211euYrTM5ZrPvzl+oVIqjrMDFfoyT2j8PxE
+	 uFnT2b0WJeQ+gmQnWLCV/d5f2hut1Lx0XKy4uKhugWtu+EIBGn/eeDZCjsKdL/ChPO1hq
+	 MBGoIYDZotXt9W4R7yVWKkp+FjDFEM4ss3i8DqoXr0n9m4G981MYeXasnxd9HaY+lZkuQ
+	 jWwvdUpv1uLH0qLqDHoX6l9fFgSNZENFXlALe7QkjVulqSfVbeRY/d0XRxihionfTCg==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794914969;
+	c=relaxed/relaxed; t=1794914968;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=rnjIGD2YdKsa52ue5MICqC7hLOLlar3vwjpOBu/rqFE=;
-	b=RSkMG/2R1QrmiPLXBbi0WW7pbLPTQbh69PNitUBjM8Wj6ksLrO1MQJwbzxab7LP0qG9O
-	 8fE34RsTt0oc/ZRPFYCeK2zlMuTGig4CUxHX6qGbazAZMWB6WlMUC1UQH2dHW146iq+Ac
-	 3CQeE1fu9JPXDlnwAL2l5+16dNBASAA0Xv0kIEExMhHtogxo535TxWzpv/BxV+25JdOSk
-	 L3DVWIqTlNm42JJsULGXniPcRr4Ss59tV9Rc/kuYbvf7mLxEewvsy2qJrfwlcGyErD+ZW
-	 7Dr6M9Nm+oTDDnrdAHGqU2SmdvNjAbeumPcQwNP0cZ67Zuu9ZCTnf/i4urTRxySvWGA==
+	bh=4KuZbt8qk757WoUx9e/EpsmePxX67EEHrDlfplwuKhM=;
+	b=TqHKrDVIpMnXeC0wSMbqSSBVT13//rS7oNu2QUyNHDn1bbMU/H+/ut1iNdi6Pqs2Qszc
+	 8ANumsfHWUD4gL+V6V+gjuxBDzp56q2YFXYFxgZHd09GkHLwO80XJ5TIzmDxFR7V150jx
+	 OWSZC4n+ohs//Yj+SOrSmJZojzEVOc4okUn2sgNZWeNzmhKQftrP69b2+RUnYNKgmlEMl
+	 vRtHq4ZYDOFqlbD17UVEEn/NeEa7UfkF6DEmzfdIN9msUAqaQN41kR4sI8le79v0ZKRKi
+	 24nux5VkaghZxvcW6OWfo2CVZReFw/7th4khLxEfw7iAP3s30JyF22OjWZkVtJ5EGvA==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id F1E1D1F000C8;
+	by smtp.kernel.org (Postfix) with ESMTPS id BAF5E1F000C4;
 	Tue, 17 Nov 2026 11:29:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794914969;
-	bh=rnjIGD2YdKsa52ue5MICqC7hLOLlar3vwjpOBu/rqFE=;
+	s=k20260515; t=1794914968;
+	bh=4KuZbt8qk757WoUx9e/EpsmePxX67EEHrDlfplwuKhM=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=aAmIJ+a8CzMy+hpYgicv1XhIKzVd2pDt+E251TMjjqiWaKLfsv4HDRFs+hFubGSat
-	 tVCNzyQsKIkGg+NH8v8M8rPfQ2FuUtfs5w2Rply/k1c2pQYkJ05+wCm1psMAITAskE
-	 WG0Uuy4nU7uFp4DsD7RYk27QV7lP9w++xebOuhQjLfbXYBQ/WaIsrnQIE36AAPdsv4
-	 VRKvuibzUIaKPXrtreIKtEuTbOBmT125v2FRRCd76i37Bx/czt8Ef8fB/0PrCFOBof
-	 lHWv1pavr0vWeUBaMwZ1qAsqRVbLNUECxt+hE78MhGeNZ+WA+afAkt+YntOxL4ao4t
-	 0ZPIcIrTp9M3g==
+	b=NzkU/PKOq2c2d7k48+GoDw3aRBU0KPKsY9mEi1iStewvoNwOozc/8Axb6ljERCjXz
+	 7MBuluLwwG1pS4M4UccDexvDLWoX3iaa7q9u8niKxzxxBKiKF6N2/B8YqishAChHuZ
+	 YKLF8Q1q44vkvMG5d3iyC+HYS8i+RKwc91hbfF/pc7WhoTVorlHBjgBGl85GzEkF+L
+	 qbCwWo/mzqXHx4Bj4r1VCL6E/G4qCR0sxVgNUTMMHO/2MVKEkvpYD62KR36QmA//5Y
+	 I+4ebOEx/39rD+9R6c0+Am2WCSQBPCm2KzoUnHEDQKpVp6HHrqgECxjKRqCeJOQlBK
+	 U1AWnhEVfYDLg==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 7DD0F4A803;
+	by lkml.kernel.org (Postfix) with ESMTP id 37FFB4A7CA;
 	Tue, 17 Nov 2026 11:29:26 +0000 (UTC)
 From: Mike Bazov via B4 Relay <devnull+mikeba.sentinelone.com@kernel.org>
-Date: Tue, 17 Nov 2026 13:29:17 +0200
-Subject: [PATCH bpf-next v3 4/4] selftests/bpf: Add preemption recursion
- test for tracing programs
+Date: Tue, 17 Nov 2026 13:29:14 +0200
+Subject: [PATCH bpf-next v3 1/4] bpf: Avoid per-CPU private stack in
+ preemptible tracing progs
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -84,7 +84,7 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261117-bpf-preempt-v2-r2-v3-4-586376ec3672@sentinelone.com>
+Message-Id: <20261117-bpf-preempt-v2-r2-v3-1-586376ec3672@sentinelone.com>
 References: <20261117-bpf-preempt-v2-r2-v3-0-586376ec3672@sentinelone.com>
 In-Reply-To: <20261117-bpf-preempt-v2-r2-v3-0-586376ec3672@sentinelone.com>
 To: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
@@ -102,11 +102,11 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
  JP Kobryn <jp.kobryn@linux.dev>, linux-trace-kernel@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Mike Bazov <mikeba@sentinelone.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1794914965; l=21631;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794914965; l=18050;
  i=mikeba@sentinelone.com; s=20261022; h=from:subject:message-id;
- bh=WjiK8dAWhVcaMSoACIh3b5DIFIqls0LN19VE1gGzYZ4=;
- b=7Z/XyOWfdaRq3/wHpnlRJIC6ejDQJVsFzo+tWWPcHSKEuENvShRp/tyR0Blkia6g7YXGV+RJI
- zGv7rP1JrQ8AQTqn9dfiBci1bzJNoE0lXXTG4VwKplTHrCTbFBJciar
+ bh=AU+wRk3IVAF1GjcOGXeFD+qNUOD1TGUKzmJ6SD1XBjg=;
+ b=SljU3LQmrALUELLQgzsm+gVXJ6VXKOCzTbQuTja1hbwlb49grBxj0B0BwHCBuY7GlvRcT3LV3
+ Qu4bsyxNaRmBt5VN7RG7EG57zsneXYAOGhYuK34bT7VuF5qPAzKiVqi
 X-Developer-Key: i=mikeba@sentinelone.com; a=ed25519;
  pk=DBXcQ0qoCkgacRsRwT1JU7oOWpWSYuTyLiXMfNLcP+A=
 X-Endpoint-Received: by B4 Relay for mikeba@sentinelone.com/20261022 with
@@ -117,658 +117,523 @@ Content-Transfer-Encoding: 7bit
 
 From: Mike Bazov <mikeba@sentinelone.com>
 
-Pin two threads to one CPU. Thread B is SCHED_FIFO and waits for a
-signal that thread A sends from inside the program under test, so B
-preempts A there and enters the same program on the same CPU. Each
-subtest runs 20 rounds and checks in every round that A was inside the
-program when B ran. It is skipped if that never happens, as on a kernel
-that doesn't preempt kernel code.
+A per-CPU private stack is only safe if a program never runs in two
+tasks at once on one CPU. Commit a76ab5731e32 ("bpf: Find eligible
+subprogs for private stack support") gave one to tracing, raw_tp and
+tracepoint programs, but they run preemptibly, and two tasks can
+already be inside one of them on a CPU:
 
-- fentry, fentry_s, raw_tp, raw_tp_s, tp_syscall: a program without
-  per-CPU state. Both threads must run it in every round, without
-  recursion misses.
-- *_percpu, percpu_var, this_cpu_ptr, tail_call, may_goto: a program
-  with a per-CPU map, a per-CPU variable, bpf_this_cpu_ptr(), a tail
-  call or timed may_goto. B must be dropped and counted in every
-  round. A constant selects the per-CPU state that the handler
-  touches; with none selected, the same code doesn't mark the program.
-- two_dispatchers: two raw tracepoint programs tail-call one handler.
-  Both threads run it at once, and A checks that the stack buffer it
-  filled before B ran is intact.
-- recursion_raw_tp, recursion_two_hops, recursion_test_run: true
-  recursion is still dropped and counted: directly, through a second
-  program, and from BPF_PROG_TEST_RUN.
-- ext_attach: an extension that uses a per-CPU map can't be attached
-  to a raw tracepoint program that doesn't, while one without can.
+- Two raw_tp dispatchers that tail-call the same handler each pass
+  their own per-CPU recursion check, so both tasks run the handler.
+- A tracepoint program attached to a syscall tracepoint and to a
+  regular tracepoint can be entered by a second task through the
+  regular one, which only checks bpf_prog_active.
+
+The second task then overwrites the preempted task's stack. Neither
+case can be seen when the program is loaded, so never give these
+program types a private stack. The next patches make such overlap the
+normal case.
+
+check_recursion() told tracing programs apart by whether they can get a
+private stack. Make it check the program type instead, so that
+recursive subprograms stay rejected in these program types.
+
+Move the selftests that relied on these program types having a private
+stack to kprobe.multi and perf_event programs.
+
+Trade-offs:
+
+- These programs use the kernel stack again.
+- A program with two 2000-byte frames no longer loads: "combined stack
+  size of 2 calls is 4000. Too large".
+- Unwinding on a private stack is no longer tested at run time: raw_tp
+  was the only such program type that BPF_PROG_TEST_RUN runs.
 
 Signed-off-by: Mike Bazov <mikeba@sentinelone.com>
 ---
- .../selftests/bpf/prog_tests/trampoline_preempt.c  | 352 +++++++++++++++++++++
- .../selftests/bpf/progs/trampoline_preempt.c       | 258 +++++++++++++++
- 2 files changed, 610 insertions(+)
+ kernel/bpf/verifier.c                              | 42 +++++++----
+ .../selftests/bpf/prog_tests/may_goto_priv_stack.c |  6 +-
+ .../selftests/bpf/prog_tests/timed_may_goto.c      |  6 +-
+ .../selftests/bpf/progs/may_goto_priv_stack.c      | 14 +++-
+ .../selftests/bpf/progs/test_global_func3.c        |  9 +++
+ .../selftests/bpf/progs/timed_may_goto_user.c      | 16 ++++-
+ .../selftests/bpf/progs/verifier_private_stack.c   | 81 ++++++++++++----------
+ .../testing/selftests/bpf/progs/verifier_unwind.c  | 33 +++++++--
+ 8 files changed, 146 insertions(+), 61 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/trampoline_preempt.c b/tools/testing/selftests/bpf/prog_tests/trampoline_preempt.c
-new file mode 100644
-index 000000000000..f282fdba5d16
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/trampoline_preempt.c
-@@ -0,0 +1,352 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#include <pthread.h>
-+#include <sched.h>
-+#include <signal.h>
-+#include <sys/prctl.h>
-+#include <sys/syscall.h>
-+#include <unistd.h>
-+#include <test_progs.h>
-+#include "trampoline_preempt.skel.h"
-+
-+#define NR_ROUNDS 20
-+
-+/* The kernel's own "not supported" error, which the libc headers don't have */
-+#ifndef ENOTSUPP
-+#define ENOTSUPP 524
-+#endif
-+
-+/*
-+ * Threads A and B are pinned to one CPU. B is SCHED_FIFO and waits for a signal:
-+ *
-+ *   A: prctl() -> enters the program under test
-+ *                 the program sends B the signal
-+ *   B:            wakes up and preempts A, which is still inside the program
-+ *                 prctl() -> enters the same program on the same CPU
-+ *
-+ * A program whose recursion is checked per task runs for B too. A program that
-+ * keeps per-CPU state keeps the per-CPU check: B's run is dropped and counted
-+ * as a recursion miss.
-+ */
-+
-+/* The per-CPU state that a program touches, see progs/trampoline_preempt.c */
-+enum { NO_PERCPU, PERCPU_MAP, PERCPU_VAR, THIS_CPU_PTR };
-+
-+enum expect {
-+	B_RUNS,		/* B runs the program, without recursion misses */
-+	B_DROPPED,	/* B's runs are dropped and counted as recursion misses */
-+	B_RUNS_HANDLER,	/* two_dispatchers: dropped by one dispatcher, runs through the other */
-+};
-+
-+/* What threads A and B share */
-+struct ctx {
-+	struct trampoline_preempt *skel;
-+	sigset_t sigset;
-+	int cpu, err_a, err_b;
-+	int overlaps;	/* rounds in which B found A still inside the program */
-+};
-+
-+/* Only timed may_goto keeps its budget per CPU, and only these JITs have it */
-+static bool has_timed_may_goto(void)
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 1a8e5a108a68..2ca1469d8dee 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5331,9 +5331,15 @@ static enum priv_stack_mode bpf_enable_priv_stack(struct bpf_prog *prog)
+ 	if (!bpf_jit_supports_private_stack())
+ 		return NO_PRIV_STACK;
+ 
+-	/* bpf_prog_check_recur() checks all prog types that use bpf trampoline
+-	 * while kprobe/tp/perf_event/raw_tp don't use trampoline hence checked
+-	 * explicitly.
++	/*
++	 * A private stack is per CPU, so a program using it must never run in two
++	 * tasks at once on one CPU. Tracing, raw_tp and tracepoint programs run
++	 * preemptibly, and the same program can be entered by another task on the
++	 * same CPU, e.g. through a second tail-call dispatcher, or as a tracepoint
++	 * program attached to both a syscall and a regular tracepoint. They always
++	 * use the task's kernel stack. Kprobe multi, kprobe session and perf_event
++	 * programs are serialized per CPU by bpf_prog_active, and struct_ops
++	 * programs that request a private stack keep per-CPU recursion protection.
+ 	 */
+ 	switch (prog->type) {
+ 	case BPF_PROG_TYPE_KPROBE:
+@@ -5346,14 +5352,10 @@ static enum priv_stack_mode bpf_enable_priv_stack(struct bpf_prog *prog)
+ 		    prog->expected_attach_type != BPF_TRACE_KPROBE_SESSION)
+ 			return NO_PRIV_STACK;
+ 		fallthrough;
+-	case BPF_PROG_TYPE_TRACEPOINT:
+ 	case BPF_PROG_TYPE_PERF_EVENT:
+-	case BPF_PROG_TYPE_RAW_TRACEPOINT:
+ 		return PRIV_STACK_ADAPTIVE;
+-	case BPF_PROG_TYPE_TRACING:
+-	case BPF_PROG_TYPE_LSM:
+ 	case BPF_PROG_TYPE_STRUCT_OPS:
+-		if (prog->aux->priv_stack_requested || bpf_prog_check_recur(prog))
++		if (prog->aux->priv_stack_requested)
+ 			return PRIV_STACK_ADAPTIVE;
+ 		fallthrough;
+ 	default:
+@@ -5363,6 +5365,22 @@ static enum priv_stack_mode bpf_enable_priv_stack(struct bpf_prog *prog)
+ 	return NO_PRIV_STACK;
+ }
+ 
++/* Progs that run on top of other progs, whose frames are still on the stack */
++static bool bpf_prog_runs_nested(struct bpf_prog *prog)
 +{
-+#if defined(__x86_64__) || defined(__aarch64__) || defined(__s390x__) || \
-+	defined(__powerpc64__) || (defined(__riscv) && __riscv_xlen == 64) || \
-+	(defined(__loongarch__) && __loongarch_grlen == 64)
-+	return is_jit_enabled();
-+#else
-+	return false;
-+#endif
++	switch (prog->type) {
++	case BPF_PROG_TYPE_KPROBE:
++	case BPF_PROG_TYPE_PERF_EVENT:
++	case BPF_PROG_TYPE_TRACEPOINT:
++	case BPF_PROG_TYPE_RAW_TRACEPOINT:
++		return true;
++	case BPF_PROG_TYPE_TRACING:
++		return bpf_prog_check_recur(prog);
++	default:
++		return false;
++	}
 +}
 +
-+static int pin_to_cpu(int cpu)
-+{
-+	cpu_set_t set;
-+
-+	CPU_ZERO(&set);
-+	CPU_SET(cpu, &set);
-+	return sched_setaffinity(0, sizeof(set), &set) ? -errno : 0;
-+}
-+
-+/* A enters the program under test, which wakes B from inside it */
-+static void *worker_a(void *arg)
-+{
-+	struct ctx *c = arg;
-+	int i;
-+
-+	c->err_a = pin_to_cpu(c->cpu);
-+	c->skel->bss->tid_a = syscall(SYS_gettid);
-+	for (i = 0; i < NR_ROUNDS && !c->err_a; i++) {
-+		/* Passes every hook that the programs under test are attached to */
-+		if (prctl(PR_SET_NAME, "worker_a"))
-+			c->err_a = -errno;
-+	}
-+	return NULL;
-+}
-+
-+/* B is SCHED_FIFO on A's CPU: A runs only while B waits, and B preempts A as soon as A wakes it */
-+static void *worker_b(void *arg)
-+{
-+	struct sched_param sp = { .sched_priority = 1 };
-+	struct timespec ts = { .tv_sec = 5 };	/* give up if the signal never comes */
-+	struct ctx *c = arg;
-+	int i;
-+
-+	c->err_b = pin_to_cpu(c->cpu);
-+	if (!c->err_b && sched_setscheduler(0, SCHED_FIFO, &sp))
-+		c->err_b = -errno;
-+	c->skel->bss->tid_b = syscall(SYS_gettid);
-+	for (i = 0; i < NR_ROUNDS && !c->err_b; i++) {
-+		while (sigtimedwait(&c->sigset, NULL, &ts) < 0) {
-+			if (errno != EINTR) {
-+				c->err_b = -errno;
-+				return NULL;
-+			}
-+		}
-+		/* B preempted A only if A is still inside the program */
-+		if (*(volatile int *)&c->skel->bss->a_inside)
-+			c->overlaps++;
-+		/* B's own run of the program, while A is preempted inside it */
-+		if (prctl(PR_SET_NAME, "worker_b"))
-+			c->err_b = -errno;
-+	}
-+	return NULL;
-+}
-+
-+/* Load and attach only programs @a, @b and @c. NULL after a failure or a skip. */
-+static struct trampoline_preempt *load_progs(const char *a, const char *b, const char *c,
-+					      int percpu)
-+{
-+	struct trampoline_preempt *skel = trampoline_preempt__open();
-+	struct bpf_program *p;
-+	const char *name;
-+	int err;
-+
-+	if (!ASSERT_OK_PTR(skel, "open"))
-+		return NULL;
-+	bpf_object__for_each_program(p, skel->obj) {
-+		name = bpf_program__name(p);
-+		bpf_program__set_autoload(p, !strcmp(name, a) || (b && !strcmp(name, b)) ||
-+					     (c && !strcmp(name, c)));
-+	}
-+	skel->bss->sig = SIGUSR1;
-+	skel->rodata->percpu = percpu;
-+	err = trampoline_preempt__load(skel);
-+	/* The kernel or its JIT doesn't support one of the programs */
-+	if (err == -EOPNOTSUPP || err == -ENOTSUPP)
-+		test__skip();
-+	else if (ASSERT_OK(err, "load") && ASSERT_OK(trampoline_preempt__attach(skel), "attach"))
-+		return skel;
-+	trampoline_preempt__destroy(skel);
-+	return NULL;
-+}
-+
-+static const struct subtest {
-+	const char *name;
-+	const char *prog;	/* A enters it; its recursion misses are checked */
-+	int percpu;		/* the per-CPU state that the program touches */
-+	enum expect expect;
-+	const char *prog_b;	/* two_dispatchers: B reaches the handler through this one */
-+	const char *handler;	/* two_dispatchers: the target of both tail calls */
-+} subtests[] = {
-+	/* Each kind of program, without per-CPU state and with a per-CPU map lookup */
-+	{ "fentry",		"on_fentry",		NO_PERCPU,	B_RUNS },
-+	{ "fentry_percpu",	"on_fentry",		PERCPU_MAP,	B_DROPPED },
-+	{ "fentry_s",		"on_fentry_s",		NO_PERCPU,	B_RUNS },
-+	{ "fentry_s_percpu",	"on_fentry_s",		PERCPU_MAP,	B_DROPPED },
-+	{ "raw_tp",		"on_raw_tp",		NO_PERCPU,	B_RUNS },
-+	{ "raw_tp_percpu",	"on_raw_tp",		PERCPU_MAP,	B_DROPPED },
-+	{ "raw_tp_s",		"on_raw_tp_s",		NO_PERCPU,	B_RUNS },
-+	{ "raw_tp_s_percpu",	"on_raw_tp_s",		PERCPU_MAP,	B_DROPPED },
-+	{ "tp_syscall",		"on_tp_syscall",	NO_PERCPU,	B_RUNS },
-+	{ "tp_syscall_percpu",	"on_tp_syscall",	PERCPU_MAP,	B_DROPPED },
-+	/* The other things that keep a program on the per-CPU check */
-+	{ "percpu_var",		"on_raw_tp",		PERCPU_VAR,	B_DROPPED },
-+	{ "this_cpu_ptr",	"on_raw_tp",		THIS_CPU_PTR,	B_DROPPED },
-+	{ "tail_call",		"on_tail_call",		NO_PERCPU,	B_DROPPED },
-+	{ "may_goto",		"on_may_goto",		NO_PERCPU,	B_DROPPED },
-+	/* Both threads are inside the handler at once, and A's stack must stay intact */
-+	{ "two_dispatchers",	"dispatcher_a",		NO_PERCPU,	B_RUNS_HANDLER,
-+	  "dispatcher_b", "handler" },
-+};
-+
-+static void run_subtest(const struct subtest *t)
-+{
-+	struct bpf_prog_info info = {};
-+	__u32 info_len = sizeof(info), zero = 0;
-+	struct ctx c = {};
-+	sigset_t oldset;
-+	pthread_t ta, tb;
-+	int err, fd;
-+
-+	if (!strcmp(t->name, "may_goto") && !has_timed_may_goto()) {
-+		test__skip();
-+		return;
-+	}
-+	c.skel = load_progs(t->prog, t->prog_b, t->handler, t->percpu);
-+	if (!c.skel)
-+		return;
-+	if (t->handler) {
-+		/* Both dispatchers tail-call the handler through the prog array */
-+		fd = bpf_program__fd(bpf_object__find_program_by_name(c.skel->obj, t->handler));
-+		err = bpf_map_update_elem(bpf_map__fd(c.skel->maps.prog_array), &zero, &fd,
-+					  BPF_ANY);
-+		if (!ASSERT_OK(err, "prog_array_update"))
-+			goto out;
-+	}
-+
-+	/* Both threads go on this CPU. B takes the signal with sigtimedwait(), so block it. */
-+	c.cpu = sched_getcpu();
-+	sigemptyset(&c.sigset);
-+	sigaddset(&c.sigset, SIGUSR1);
-+	if (!ASSERT_OK(pthread_sigmask(SIG_BLOCK, &c.sigset, &oldset), "sigmask"))
-+		goto out;
-+	if (ASSERT_OK(pthread_create(&tb, NULL, worker_b, &c), "pthread_b")) {
-+		/* A's program needs tid_b to wake B */
-+		while (!c.skel->bss->tid_b)
-+			usleep(1000);
-+		if (ASSERT_OK(pthread_create(&ta, NULL, worker_a, &c), "pthread_a"))
-+			pthread_join(ta, NULL);
-+		pthread_join(tb, NULL);
-+	}
-+	pthread_sigmask(SIG_SETMASK, &oldset, NULL);
-+
-+	/* B may not be allowed to become SCHED_FIFO */
-+	if (c.err_b == -EPERM || c.err_b == -EACCES) {
+ static int round_up_stack_depth(struct bpf_verifier_env *env, int stack_depth)
+ {
+ 	if (env->prog->jit_requested)
+@@ -5494,12 +5512,10 @@ static int check_recursion(struct bpf_verifier_env *env, struct bpf_call_graph *
+ 		}
+ 		if (env->subprog_info[s].recursive) {
+ 			/*
+-			 * These progs run on top of other progs. Their frames belong in the
+-			 * private stack, which has room for one frame of a subprog. A kprobe prog
+-			 * that can be attached to a uprobe has no private stack, and is no better.
++			 * These progs run on top of other progs. A private stack has room for one
++			 * frame of a subprog, and the kernel stack under them is already in use.
+ 			 */
+-			if ((bpf_enable_priv_stack(env->prog) != NO_PRIV_STACK ||
+-			     env->prog->type == BPF_PROG_TYPE_KPROBE) &&
++			if (bpf_prog_runs_nested(env->prog) &&
+ 			    !env->prog->aux->priv_stack_requested) {
+ 				verbose(env, "recursive %s() in a tracing program\n",
+ 					bpf_subprog_name(env, s));
+diff --git a/tools/testing/selftests/bpf/prog_tests/may_goto_priv_stack.c b/tools/testing/selftests/bpf/prog_tests/may_goto_priv_stack.c
+index 4f8476d36250..b4aab50b8a77 100644
+--- a/tools/testing/selftests/bpf/prog_tests/may_goto_priv_stack.c
++++ b/tools/testing/selftests/bpf/prog_tests/may_goto_priv_stack.c
+@@ -24,13 +24,17 @@ void test_may_goto_priv_stack(void)
+ 		return;
+ 
+ 	err = may_goto_priv_stack__attach(skel);
++	if (err == -EOPNOTSUPP) {
 +		test__skip();
 +		goto out;
 +	}
-+	ASSERT_OK(c.err_a, "worker_a");
-+	ASSERT_OK(c.err_b, "worker_b");
-+	ASSERT_EQ(c.skel->bss->sig_err, 0, "sig_err");
-+	if (!c.overlaps) {
-+		/* B never preempted A inside the program, so nothing was tested */
+ 	if (!ASSERT_OK(err, "attach"))
+ 		goto out;
+ 
+ 	memset(skel->bss->regs_64, 0xff, sizeof(skel->bss->regs_64));
+ 	memset(skel->bss->regs_128, 0xff, sizeof(skel->bss->regs_128));
+ 
+-	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.priv_stack_64), &topts);
++	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.trigger), &topts);
+ 	if (!ASSERT_OK(err, "test_run"))
+ 		goto out;
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/timed_may_goto.c b/tools/testing/selftests/bpf/prog_tests/timed_may_goto.c
+index 3da3f33a2898..ee7b79ef77e0 100644
+--- a/tools/testing/selftests/bpf/prog_tests/timed_may_goto.c
++++ b/tools/testing/selftests/bpf/prog_tests/timed_may_goto.c
+@@ -131,10 +131,14 @@ static void test_user_ringbuf(struct timed_may_goto_user *skel)
+ static void test_priv_stack(struct timed_may_goto_user *skel)
+ {
+ 	LIBBPF_OPTS(bpf_test_run_opts, opts);
+-	int fd = bpf_program__fd(skel->progs.priv_stack);
++	int fd = bpf_program__fd(skel->progs.trigger);
+ 	struct bpf_link *link;
+ 
+ 	link = bpf_program__attach(skel->progs.priv_stack);
++	if (!link && errno == EOPNOTSUPP) {
 +		test__skip();
-+		goto out;
-+	}
-+	ASSERT_EQ(c.overlaps, NR_ROUNDS, "overlaps");
-+	ASSERT_EQ(c.skel->bss->runs_a, NR_ROUNDS, "runs_a");
-+	ASSERT_EQ(c.skel->bss->runs_b, t->expect == B_DROPPED ? 0 : NR_ROUNDS, "runs_b");
-+	if (t->handler)
-+		ASSERT_EQ(c.skel->bss->stack_corrupt, 0, "stack_corrupt");
-+	fd = bpf_program__fd(bpf_object__find_program_by_name(c.skel->obj, t->prog));
-+	err = bpf_prog_get_info_by_fd(fd, &info, &info_len);
-+	if (!ASSERT_OK(err, "prog_info"))
-+		goto out;
-+	/* A program on sys_enter also misses B's other syscalls: at least one miss per round */
-+	if (t->expect == B_RUNS)
-+		ASSERT_EQ(info.recursion_misses, 0, "recursion_misses");
-+	else
-+		ASSERT_GE(info.recursion_misses, NR_ROUNDS, "recursion_misses");
-+out:
-+	trampoline_preempt__destroy(c.skel);
-+}
-+
-+/*
-+ * The program calls bpf_printk(), which fires the bpf_trace_printk tracepoint
-+ * that it is attached to: the nested run must be rejected as recursion. With a
-+ * hop, a second program runs in between, so the check has to look past the
-+ * frame right below.
-+ */
-+static const struct recursion {
-+	const char *name, *prog, *hop;
-+	bool test_run;	/* Start the outer run with BPF_PROG_TEST_RUN of @prog */
-+} recursions[] = {
-+	{ "recursion_raw_tp", "recur_raw_tp" },
-+	{ "recursion_two_hops", "recur_two_hops", "recur_hop" },
-+	{ "recursion_test_run", "recur_raw_tp", .test_run = true },
-+};
-+
-+static void run_recursion(const struct recursion *t)
-+{
-+	struct trampoline_preempt *skel = load_progs(t->prog, t->hop, "recur_trigger", NO_PERCPU);
-+	LIBBPF_OPTS(bpf_test_run_opts, opts);
-+	struct bpf_prog_info info = {};
-+	__u32 info_len = sizeof(info);
-+	int err, fd, run_fd;
-+
-+	if (!skel)
 +		return;
-+	fd = bpf_program__fd(bpf_object__find_program_by_name(skel->obj, t->prog));
-+	/* The outer run: of @prog itself, or of a program that fires its tracepoint */
-+	run_fd = t->test_run ? fd : bpf_program__fd(skel->progs.recur_trigger);
-+	skel->bss->recur_tid = syscall(SYS_gettid);
-+	err = bpf_prog_test_run_opts(run_fd, &opts);
-+	skel->bss->recur_tid = 0;
-+	/* The outer run got in; the nested one was dropped and counted */
-+	if (ASSERT_OK(err, "test_run")) {
-+		ASSERT_EQ(skel->bss->recur_runs, 1, "recur_runs");
-+		ASSERT_EQ(skel->bss->hop_runs, t->hop ? 1 : 0, "hop_runs");
-+		err = bpf_prog_get_info_by_fd(fd, &info, &info_len);
-+		if (ASSERT_OK(err, "prog_info"))
-+			ASSERT_EQ(info.recursion_misses, 1, "recursion_misses");
 +	}
-+	trampoline_preempt__destroy(skel);
-+}
-+
+ 	if (!ASSERT_OK_PTR(link, "attach"))
+ 		return;
+ 	ASSERT_OK(bpf_prog_test_run_opts(fd, &opts), "test_run");
+diff --git a/tools/testing/selftests/bpf/progs/may_goto_priv_stack.c b/tools/testing/selftests/bpf/progs/may_goto_priv_stack.c
+index 5c2aa0aa5055..e11a7f7493a6 100644
+--- a/tools/testing/selftests/bpf/progs/may_goto_priv_stack.c
++++ b/tools/testing/selftests/bpf/progs/may_goto_priv_stack.c
+@@ -10,11 +10,11 @@ __u64 regs_64[7];
+ __u64 regs_128[7];
+ 
+ /*
+- * fentry prog with 64 or more bytes of stack uses private stack.
++ * kprobe.multi prog with 64 or more bytes of stack uses private stack.
+  * Loop until may_goto expires. r0-r5 should stay zero.
+  */
+ #define TIMED_MAY_GOTO_PRIV_STACK(size, func)				\
+-SEC("fentry/" #func)							\
++SEC("kprobe.multi/" #func)						\
+ __naked void priv_stack_##size(void)					\
+ {									\
+ 	asm volatile (							\
+@@ -49,4 +49,14 @@ __naked void priv_stack_##size(void)					\
+ TIMED_MAY_GOTO_PRIV_STACK(64, bpf_fentry_test1)
+ TIMED_MAY_GOTO_PRIV_STACK(128, bpf_fentry_test2)
+ 
 +/*
-+ * An extension runs under the recursion check of its target. A target that
-+ * keeps no per-CPU state is checked per task, so an extension that does keep
-+ * such state can't be attached to it.
++ * No tests in here, just to trigger 'bpf_fentry_test*'
++ * through tracing test_run
 + */
-+static void run_ext_subtest(void)
++SEC("fentry/bpf_modify_return_test")
++int trigger(void *ctx)
 +{
-+	static const struct {
-+		const char *prog;
-+		int err;
-+	} exts[] = {
-+		{ "ext_plain", 0 },		/* no per-CPU state: attaches */
-+		{ "ext_percpu", -EINVAL },	/* a per-CPU map lookup: rejected */
-+	};
-+	struct trampoline_preempt *tgt_skel, *skel = NULL;
-+	struct bpf_program *ext, *p;
-+	struct bpf_link *link;
-+	int i, err, tgt_fd;
-+
-+	tgt_skel = trampoline_preempt__open();
-+	if (!ASSERT_OK_PTR(tgt_skel, "open_tgt"))
-+		return;
-+	bpf_object__for_each_program(p, tgt_skel->obj)
-+		bpf_program__set_autoload(p, p == tgt_skel->progs.ext_target);
-+	if (!ASSERT_OK(trampoline_preempt__load(tgt_skel), "load_tgt"))
-+		goto out;
-+	tgt_fd = bpf_program__fd(tgt_skel->progs.ext_target);
-+
-+	for (i = 0; i < ARRAY_SIZE(exts); i++) {
-+		skel = trampoline_preempt__open();
-+		if (!ASSERT_OK_PTR(skel, "open_ext"))
-+			goto out;
-+		ext = bpf_object__find_program_by_name(skel->obj, exts[i].prog);
-+		bpf_object__for_each_program(p, skel->obj)
-+			bpf_program__set_autoload(p, p == ext);
-+		err = bpf_program__set_attach_target(ext, tgt_fd, "ext_target");
-+		if (!ASSERT_OK(err, "set_attach_target"))
-+			goto out;
-+		if (!ASSERT_OK(trampoline_preempt__load(skel), "load_ext"))
-+			goto out;
-+
-+		link = bpf_program__attach_freplace(ext, tgt_fd, "ext_target");
-+		ASSERT_EQ(libbpf_get_error(link), exts[i].err, "attach_ext");
-+		bpf_link__destroy(link);
-+		trampoline_preempt__destroy(skel);
-+		skel = NULL;
-+	}
-+out:
-+	trampoline_preempt__destroy(skel);
-+	trampoline_preempt__destroy(tgt_skel);
-+}
-+
-+void test_trampoline_preempt(void)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(subtests); i++) {
-+		if (test__start_subtest(subtests[i].name))
-+			run_subtest(&subtests[i]);
-+	}
-+	for (i = 0; i < ARRAY_SIZE(recursions); i++) {
-+		if (test__start_subtest(recursions[i].name))
-+			run_recursion(&recursions[i]);
-+	}
-+	if (test__start_subtest("ext_attach"))
-+		run_ext_subtest();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/trampoline_preempt.c b/tools/testing/selftests/bpf/progs/trampoline_preempt.c
-new file mode 100644
-index 000000000000..ce596528c8a5
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/trampoline_preempt.c
-@@ -0,0 +1,258 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <asm/unistd.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_misc.h"
-+#include "bpf_compiler.h"
-+#include <bpf_may_goto.h>
-+
-+/* The programs of prog_tests/trampoline_preempt.c. The comment there describes the test. */
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct task_struct *bpf_task_from_pid(s32 pid) __ksym;
-+void bpf_task_release(struct task_struct *p) __ksym;
-+int bpf_send_signal_task(struct task_struct *task, int sig, enum pid_type type, u64 value) __ksym;
-+
-+/* The target of the tail calls: empty for tail_call, the handler for two_dispatchers */
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} prog_array SEC(".maps");
-+
-+/* recur_two_hops deletes from it, which runs recur_hop */
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, int);
-+} recur_map SEC(".maps");
-+
-+/* The three kinds of per-CPU state: a map, a variable, and a kernel variable for the helper */
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, __u64);
-+} percpu_map SEC(".maps");
-+
-+__u64 percpu_var SEC(".percpu");
-+extern const struct rq runqueues __ksym;
-+
-+/* The per-CPU state that a program touches. The test picks one before the load. */
-+enum { NO_PERCPU, PERCPU_MAP, PERCPU_VAR, THIS_CPU_PTR };
-+const volatile int percpu;
-+
-+/* Set by the test */
-+int tid_a, tid_b, sig, recur_tid;
-+int loops;	/* 0, read at run time so that the may_goto loop is not optimized away */
-+
-+/* Read by the test */
-+int runs_a, runs_b, sig_err, stack_corrupt, recur_runs, hop_runs;
-+int a_inside;	/* A is inside the program: B reads it to see that it preempted A there */
-+
-+static void signal_worker_b(void)
-+{
-+	struct task_struct *task = bpf_task_from_pid(tid_b);
-+
-+	if (!task || bpf_send_signal_task(task, sig, PIDTYPE_PID, 0))
-+		sig_err = 1;
-+	if (task)
-+		bpf_task_release(task);
-+}
-+
-+/*
-+ * The body of every program under test: count the run of A or of B. A also
-+ * wakes B from here, so B preempts A inside the program and enters it too.
-+ */
-+static __always_inline int record_run(void)
-+{
-+	__u32 tid = (__u32)bpf_get_current_pid_tgid();
-+	int zero = 0;
-+
-+	/* The verifier walks only the selected branch, so only that one marks the program */
-+	switch (percpu) {
-+	case PERCPU_MAP:
-+		bpf_map_lookup_elem(&percpu_map, &zero);
-+		break;
-+	case PERCPU_VAR:
-+		percpu_var++;
-+		break;
-+	case THIS_CPU_PTR:
-+		bpf_this_cpu_ptr(&runqueues);
-+		break;
-+	}
-+
-+	if (tid == tid_a) {
-+		runs_a++;
-+		/* volatile: both stores must stay, B reads a_inside between them */
-+		*(volatile int *)&a_inside = 1;
-+		signal_worker_b();
-+		*(volatile int *)&a_inside = 0;
-+	} else if (tid == tid_b) {
-+		runs_b++;
-+	}
 +	return 0;
 +}
 +
-+/* Both threads call prctl(PR_SET_NAME), which passes each of the hooks below */
-+
-+SEC("fentry/__set_task_comm")
-+int BPF_PROG(on_fentry)
-+{
-+	return record_run();
-+}
-+
-+SEC("fentry.s/" SYS_PREFIX "sys_prctl")
-+int BPF_PROG(on_fentry_s)
-+{
-+	return record_run();
-+}
-+
-+SEC("raw_tp/task_rename")
-+int BPF_PROG(on_raw_tp)
-+{
-+	return record_run();
-+}
-+
-+SEC("raw_tp.s/sys_enter")
-+int BPF_PROG(on_raw_tp_s, struct pt_regs *regs, long id)
-+{
-+	return id == __NR_prctl ? record_run() : 0;
-+}
-+
-+SEC("tp/syscalls/sys_enter_prctl")
-+int on_tp_syscall(void *ctx)
-+{
-+	return record_run();
-+}
-+
-+/* The prog array is empty, so the tail call does nothing */
-+SEC("raw_tp/task_rename")
-+int on_tail_call(void *ctx)
-+{
-+	bpf_tail_call(ctx, &prog_array, 0);
-+	return record_run();
-+}
-+
-+/* can_loop is a may_goto. With timed may_goto its time budget is per CPU. */
-+SEC("raw_tp/task_rename")
-+int on_may_goto(void *ctx)
-+{
-+	int i;
-+
-+	for (i = loops; i < 1 && can_loop; i++)
-+		;
-+	return record_run();
-+}
-+
-+/* Two dispatchers tail-call one handler: A enters through dispatcher_a, B through dispatcher_b */
-+SEC("raw_tp/task_rename")
-+int dispatcher_a(void *ctx)
-+{
-+	if ((__u32)bpf_get_current_pid_tgid() == tid_a)
-+		bpf_tail_call(ctx, &prog_array, 0);
-+	return 0;
-+}
-+
-+SEC("raw_tp/sys_enter")
-+int BPF_PROG(dispatcher_b, struct pt_regs *regs, long id)
-+{
-+	if (id == __NR_prctl && (__u32)bpf_get_current_pid_tgid() == tid_b)
-+		bpf_tail_call(ctx, &prog_array, 0);
-+	return 0;
-+}
-+
-+/* The handler keeps 64 bytes of stack across the point where B runs it too */
+ char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/test_global_func3.c b/tools/testing/selftests/bpf/progs/test_global_func3.c
+index b916355c5e59..a473bed346d2 100644
+--- a/tools/testing/selftests/bpf/progs/test_global_func3.c
++++ b/tools/testing/selftests/bpf/progs/test_global_func3.c
+@@ -267,6 +267,15 @@ int global_func3_recursion_in_tracing_prog(void *ctx)
+ 	return depth(again + 7);
+ }
+ 
 +SEC("raw_tp")
-+int handler(void *ctx)
++__arch_x86_64
++__arch_arm64
++__failure __msg("recursive depth() in a tracing program")
++int global_func3_recursion_in_raw_tp(void *ctx)
 +{
-+	__u32 tid = (__u32)bpf_get_current_pid_tgid();
-+	__u64 buf[8];
-+
-+	__pragma_loop_unroll
-+	for (int i = 0; i < 8; i++)
-+		buf[i] = ((__u64)tid << 32) | i;
-+	/* Make the compiler keep buf on the stack across record_run() */
-+	asm volatile("" : "+m"(buf));
-+
-+	record_run();
-+
-+	asm volatile("" : "+m"(buf));
-+	/* Don't trust a copy of tid that may have been spilled to the stack under test */
-+	tid = (__u32)bpf_get_current_pid_tgid();
-+	__pragma_loop_unroll
-+	for (int i = 0; i < 8; i++) {
-+		if (buf[i] != (((__u64)tid << 32) | i))
-+			stack_corrupt = 1;
-+	}
-+	return 0;
++	return depth(again + 7);
 +}
 +
-+/* bpf_printk() fires the bpf_trace_printk tracepoint that the program is attached to */
-+SEC("raw_tp/bpf_trace_printk")
-+int recur_raw_tp(void *ctx)
-+{
-+	/* Other tasks print too: only the runs of the test's thread count */
-+	if ((__u32)bpf_get_current_pid_tgid() != recur_tid)
-+		return 0;
-+	recur_runs++;
-+	bpf_printk("recur");
-+	return 0;
-+}
+ __attribute__ ((noinline))
+ int redirects(struct __sk_buff *skb, int n)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/timed_may_goto_user.c b/tools/testing/selftests/bpf/progs/timed_may_goto_user.c
+index 8b85815d45d2..ed56b6afb607 100644
+--- a/tools/testing/selftests/bpf/progs/timed_may_goto_user.c
++++ b/tools/testing/selftests/bpf/progs/timed_may_goto_user.c
+@@ -277,7 +277,7 @@ int drain(void *ctx)
+ }
+ 
+ /*
+- * A tracing prog with large frames: they are in a private stack.
++ * A kprobe.multi prog with large frames: they are in a private stack.
+  */
+ int priv_stack_spun, priv_stack_cb_spun;
+ 
+@@ -296,8 +296,8 @@ static int priv_stack_cb(__u64 i, int *spun)
+ 	return 0;
+ }
+ 
+-SEC("fentry/bpf_fentry_test1")
+-int BPF_PROG(priv_stack)
++SEC("kprobe.multi/bpf_fentry_test1")
++int BPF_KPROBE(priv_stack)
+ {
+ 	volatile char buf[128] = {};
+ 	int i, n = buf[zero & 127], spun = 0;
+@@ -309,3 +309,13 @@ int BPF_PROG(priv_stack)
+ 	priv_stack_cb_spun = spun;
+ 	return 0;
+ }
 +
-+/* The test runs it with BPF_PROG_TEST_RUN to fire the tracepoint once */
-+SEC("syscall")
-+int recur_trigger(void *ctx)
-+{
-+	bpf_printk("trigger");
-+	return 0;
-+}
-+
-+/* The same through a second program: recur_two_hops -> recur_hop -> recur_two_hops */
-+SEC("raw_tp/bpf_trace_printk")
-+int recur_two_hops(void *ctx)
-+{
-+	int zero = 0;
-+
-+	if ((__u32)bpf_get_current_pid_tgid() != recur_tid)
-+		return 0;
-+	recur_runs++;
-+	bpf_map_delete_elem(&recur_map, &zero);
-+	return 0;
-+}
-+
-+SEC("fentry/htab_map_delete_elem")
-+int BPF_PROG(recur_hop, struct bpf_map *map)
-+{
-+	if (map != (struct bpf_map *)&recur_map || (__u32)bpf_get_current_pid_tgid() != recur_tid)
-+		return 0;
-+	hop_runs++;
-+	bpf_printk("hop");
-+	return 0;
-+}
-+
-+/* For ext_attach: a target without per-CPU state, and an extension without and with it */
-+SEC("raw_tp/task_rename")
-+int ext_target(struct bpf_raw_tracepoint_args *ctx)
++/*
++ * No tests in here, just to trigger 'bpf_fentry_test*'
++ * through tracing test_run
++ */
++SEC("fentry/bpf_modify_return_test")
++int BPF_PROG(trigger)
 +{
 +	return 0;
 +}
-+
-+SEC("freplace")
-+int ext_plain(struct bpf_raw_tracepoint_args *ctx)
+diff --git a/tools/testing/selftests/bpf/progs/verifier_private_stack.c b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
+index e7f410a74a21..299ce68cb212 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_private_stack.c
++++ b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
+@@ -52,7 +52,7 @@ __naked void private_stack_single_prog(void)
+ "	::: __clobber_all);
+ }
+ 
+-SEC("raw_tp")
++SEC("kprobe.multi")
+ __description("No private stack")
+ __success
+ __arch_x86_64
+@@ -82,7 +82,7 @@ __naked static long subprog_6args(long a, long b, long c, long d, long e, long f
+ }
+ 
+ /* x86-64 has one register for the private stack and for the sixth argument */
+-SEC("raw_tp")
++SEC("kprobe.multi")
+ __description("No private stack, stack arguments")
+ __success
+ __load_if_JITed()
+@@ -100,7 +100,7 @@ __naked void no_private_stack_stack_args(void)
+ "	::: __clobber_all);
+ }
+ #else
+-SEC("raw_tp")
++SEC("kprobe.multi")
+ __description("No private stack, stack arguments")
+ __skip("stack_arg is not supported by compiler")
+ __success
+@@ -127,6 +127,23 @@ __naked void no_private_stack_kprobe(void)
+ "	::: __clobber_all);
+ }
+ 
++SEC("fentry/bpf_fentry_test9")
++__description("No private stack, fentry")
++__success
++__arch_x86_64
++__jited("	subq	$0x100, %rsp")
++__arch_arm64
++__jited("	sub	sp, sp, #0x100")
++__naked void no_private_stack_fentry(void)
 +{
-+	return 0;
++	asm volatile ("			\
++	r1 = 42;			\
++	*(u64 *)(r10 - 256) = r1;	\
++	r0 = 0;				\
++	exit;				\
++"	::: __clobber_all);
 +}
 +
-+SEC("freplace")
-+int ext_percpu(struct bpf_raw_tracepoint_args *ctx)
+ SEC("uprobe")
+ __description("No private stack, uprobe")
+ __success
+@@ -215,7 +232,7 @@ static unsigned long loop_callback(void)
+ 	: __clobber_common);
+ }
+ 
+-SEC("raw_tp")
++SEC("kprobe.multi")
+ __description("Private stack, callback")
+ __success
+ __arch_x86_64
+@@ -273,9 +290,9 @@ __naked void private_stack_callback(void)
+ 	: __clobber_common);
+ }
+ 
+-SEC("fentry/bpf_fentry_test9")
++SEC("perf_event")
+ __description("Private stack, exception in main prog")
+-__success __retval(0)
++__success
+ __arch_x86_64
+ __jited("	pushq	%r9")
+ __jited("...")
+@@ -321,9 +338,9 @@ __used static int subprog_exception(void)
+ 	return 0;
+ }
+ 
+-SEC("fentry/bpf_fentry_test9")
++SEC("perf_event")
+ __description("Private stack, exception in subprog")
+-__success __retval(0)
++__success
+ __arch_x86_64
+ __jited("	movq	%rdi, -0x200(%r9)")
+ __jited("	pushq	%r9")
+@@ -355,20 +372,16 @@ int private_stack_exception_sub_prog(void)
+ }
+ 
+ /*
+- * Nothing attaches the two fentry progs above, so they are loaded, but never
+- * run. BPF_PROG_TEST_RUN does run a raw_tp prog. The default exception callback
+- * returns the cookie of bpf_throw().
++ * Nothing attaches the two perf_event progs above, so they are loaded, but
++ * never run. BPF_PROG_TEST_RUN does run a raw_tp prog. The default exception
++ * callback returns the cookie of bpf_throw().
+  */
+ SEC("raw_tp")
+-__description("Private stack, run, exception in main prog")
++__description("No private stack, run, exception in main prog")
+ __success __retval(1)
+ __arch_x86_64
+-__jited("	movq	%rdi, -0x200(%r9)")
+-__jited("	movl	$0x1, %edi")
+-__jited("	pushq	%r9")
+-__jited("...")
+-__jited("	callq")
+-__naked void private_stack_run_exception_main_prog(void)
++__jited("	subq	$0x200, %rsp")
++__naked void big_stack_run_exception_main_prog(void)
+ {
+ 	asm volatile ("			\
+ 	r1 = 42;			\
+@@ -396,15 +409,11 @@ __naked static void subprog_throw(void)
+ }
+ 
+ SEC("raw_tp")
+-__description("Private stack, run, exception in subprog")
++__description("No private stack, run, exception in subprog")
+ __success __retval(2)
+ __arch_x86_64
+-__jited("	movq	%rdi, -0x200(%r9)")
+-__jited("	pushq	%r9")
+-__jited("...")
+-__jited("	callq")
+-__jited("	popq	%r9")
+-__naked void private_stack_run_exception_sub_prog(void)
++__jited("	subq	$0x200, %rsp")
++__naked void big_stack_run_exception_sub_prog(void)
+ {
+ 	asm volatile ("			\
+ 	r1 = 42;			\
+@@ -416,7 +425,7 @@ __naked void private_stack_run_exception_sub_prog(void)
+ }
+ 
+ __used
+-__naked static void private_stack_subprog_throw(void)
++__naked static void big_stack_subprog_throw(void)
+ {
+ 	asm volatile ("			\
+ 	r1 = 42;			\
+@@ -430,24 +439,22 @@ __naked static void private_stack_subprog_throw(void)
+ 	: __clobber_all);
+ }
+ 
+-/* Only the frame of the main prog counts, and it has nothing pushed at the call */
++/* The subprog that throws has a large frame, the main prog a small one */
+ SEC("raw_tp")
+-__description("Private stack, run, exception in subprog, no private stack in main prog")
++__description("No private stack, run, exception in subprog with a large stack")
+ __success __retval(3)
+ __arch_x86_64
+ __jited("	subq	$0x8, %rsp")
+ __jited("...")
+ __jited("func #1")
+ __jited("...")
+-__jited("	movq	%rdi, -0x200(%r9)")
+-__jited("	movl	$0x3, %edi")
+-__jited("	pushq	%r9")
++__jited("	subq	$0x200, %rsp")
+ __naked void no_private_stack_run_exception_sub_prog(void)
+ {
+ 	asm volatile ("				\
+ 	r1 = 42;				\
+ 	*(u64 *)(r10 - 8) = r1;			\
+-	call private_stack_subprog_throw;	\
++	call big_stack_subprog_throw;	\
+ 	r0 = 0;					\
+ 	exit;					\
+ "	::: __clobber_all);
+@@ -478,9 +485,9 @@ __noinline static int timer_cb2(void *map, int *key, struct bpf_timer *timer)
+ 	return 0;
+ }
+ 
+-SEC("fentry/bpf_fentry_test9")
++SEC("kprobe.multi")
+ __description("Private stack, async callback, not nested")
+-__success __retval(0)
++__success
+ __arch_x86_64
+ __jited("	movabsq	$0x{{.*}}, %r9")
+ __arch_arm64
+@@ -503,9 +510,9 @@ int private_stack_async_callback_1(void)
+ 	return 0;
+ }
+ 
+-SEC("fentry/bpf_fentry_test9")
++SEC("kprobe.multi")
+ __description("Private stack, async callback, potential nesting")
+-__success __retval(0)
++__success
+ __load_if_JITed()
+ __log_level(4) __msg("stack depth max 272")
+ __msg("subprog 0 (private_stack_async_callback_2) main {{.*}} stack 8")
+@@ -532,7 +539,7 @@ int private_stack_async_callback_2(void)
+ 	return 0;
+ }
+ 
+-SEC("fentry/bpf_fentry_test9")
++SEC("kprobe.multi")
+ __description("private stack, max stack depth is private stack")
+ __success
+ __log_level(4) __msg("stack depth max 256")
+diff --git a/tools/testing/selftests/bpf/progs/verifier_unwind.c b/tools/testing/selftests/bpf/progs/verifier_unwind.c
+index 596e5e0301e5..c779b455e1db 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_unwind.c
++++ b/tools/testing/selftests/bpf/progs/verifier_unwind.c
+@@ -1197,9 +1197,9 @@ static unsigned long may_unwind_big_stack(void)
+  * x86-64 keeps the pointer to the private stack in r9 and saves it around a call.
+  * The value that is read back in the pad is there only when r9 is restored.
+  */
+-SEC("raw_tp")
++SEC("kprobe.multi")
+ __description("unwind: private stack, the callee unwinds")
+-__success __retval(47)
++__success
+ __load_if_JITed()
+ __arch_x86_64
+ __jited("	movl	$0x1234, %esi") /* past the load, see above */
+@@ -1232,12 +1232,37 @@ __naked int private_stack_unwinds(void)
+ }
+ 
+ SEC("raw_tp")
+-__description("unwind: private stack, the callee returns")
++__description("unwind: big stack, the callee unwinds")
++__success __retval(47)
++__load_if_JITed()
++__arch_x86_64
++__arch_arm64
++__naked int big_stack_unwinds(void)
 +{
-+	int zero = 0;
-+
-+	bpf_map_lookup_elem(&percpu_map, &zero);
-+	return 0;
++	asm volatile (
++		"*(u64 *)(r10 - 200) = 42;"
++		"r1 = %[one] ll;"
++		"r1 = *(u64 *)(r1 + 0);"
++		"call may_unwind_big_stack;"
++		unwind_goto(1)
++		"exit;"
++		"r1 = *(u64 *)(r10 - 200);"
++		"r0 += r1;"
++		"exit;"
++		:
++		: __imm_addr(one),
++		  __imm_unwind_goto(1)
++		: __clobber_all
++	);
 +}
++
++SEC("raw_tp")
++__description("unwind: big stack, the callee returns")
+ __success __retval(49)
+ __load_if_JITed()
+ __arch_x86_64
+ __arch_arm64
+-__naked int private_stack_returns(void)
++__naked int big_stack_returns(void)
+ {
+ 	asm volatile (
+ 		"*(u64 *)(r10 - 200) = 42;"
 
 -- 
 2.43.0
