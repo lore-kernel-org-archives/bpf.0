@@ -1,98 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.180
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794924017;
-	b=jqZKXIXkcVzb51lEoQ2bB9Cr4mI1JDbe3BUK7lQGFsCOt1BPyJ0XWwq/sbGFYdbTM3I5
-	 e0KTAMtuFW4A8sZDOsVrYyyAC1p1kr3UaxwxZqVUQcl3COSX9eHJXUWVVXiNoBmDcMPOs
-	 8FjmAR8fIGA8ZhWsedKJsyq7ZaIv9Agfeyg8qAM1/Y6AeCn1FxavmSib2t78vJOguP9Lv
-	 X+fNfAn0E2BhHMLKxxYTWS/NgxKDOXlHTOlh6KAZQrVrF7iDekRcwfeF7UUOLnDWpXuYT
-	 25uTrb2Q5zrdqsYP9tB/P7eS0yoYE5sSi4p5fhwlcy/6jOJgl3wcxKIiRwGW/KojhFQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794924017;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=toeVTsCBGnzPd1bYnIUruWVWZ7PF2L9oaPIgH25BZdA=;
-	b=eU1+pxIltRsAMuNQau+dV0DZOCaGqtsw11cqsApsCF1TpjM+ico1gzsecqZ6dYLm9Xwj
-	 kgWmlB7+UMDn/0wBso948uGZ96BluhDWOJ+o6YUYKLtBf9bu1y+tE1rAfGlEdEBWXkRE0
-	 Ccl8UrDW46O5SE9yZhRXk1nboWflY5kI0VIWt9VWNZrRSArCD/qdaVeFqMNMbbMwDT7cL
-	 SWvXF/ymuzWKmSLtoTdtzy8USwD8Vr6SyXIAzOlTxkqgWls2OwPzzZY7o9MollNhK6OuX
-	 xBmBgm+HYFfp0CoCIcW6w1p5H0ptBLgEXJGeIkKXD9RZbW1Y/8dx/IPMaj8c6ShJUYw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=none header.from=mojatatu.com;
-	spf=none smtp.mailfrom=mojatatu.com;
-	dkim=pass header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=iSf1vEtO;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.180
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.217
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794926019;
+	b=pFmSiYRBrYCv/w8WTxBg36P9TQfr/d6kcdgAhNYiZsZ+irgjou0ImbCaXoKWDZuGjakU
+	 RcU7h22z9LTNSW0C403ipBUZLvf6cFQd16oXZ2FJVxPzMKBCiWSZNKl217vNx5+Kszo5R
+	 UwozkVQ5DS+mJ2PbFgcQGgEqZ/mHwOkDjvPNz8mXOUFUSsO0nkWC3Jl8MfzDGMzAcZ1Fh
+	 8d6pIksm7IGse2uOWyR+VZkk/SIwRuQ/CMaH74ntNytt/4+Sp0qXHm/wI1eNfR8sFj60P
+	 jFAyOWSBaIUYMtRmgeL4zNU5VppQrnJ9AAU1IUdujRSrzm6MKjipz23yNYFB8cOGyqQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794926019;
+	h=DMARC-Filter:dkim-signature:Received:Received:Received:From:To:CC:
+	 Subject:Date:Message-ID:X-Mailer:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
+	bh=By2TgM9Xeiq5fwyI6d3OB7CNRr7DwQCDNevlT/7vutY=;
+	b=1lmiG/sUBHJEkcbeRUXDRODjtrzpGl8f76dPrZX0JxcWGSOEq4PwxFRY1kmfRYqVlGNR
+	 ACGZ/LCRNVqdlVgdSKs7zh3n/sDp29Ejtl3oY5OJsOcRQKund5rQYzxq1jo1AOucltwSI
+	 sXRrpegTF215zSi1NCINQQT4edAp4RBfdki2aKjaXjLeEuvXFw4zMLqDJwuiZxau6yHZP
+	 i17byLJYbmEXi1FEVoXtL3N9RbLYtS8O7vt45K2ZbXZcBMo9sz8zfKT/8qxZb8KTuNZ1C
+	 NqzyEcaW+4Pr+MkVmqRehDYV3GYaC8JtstBZXoaMayapg0LQa0V22fMxclabC8tGOSQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=huawei.com;
+	spf=pass smtp.mailfrom=huawei.com;
+	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=fmE8M1h5;
+	arc=none smtp.remote-ip=113.46.200.217
+Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 885FD606A332
-	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 14:00:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 885FD606A332
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23CB7606A882;
+	Tue, 17 Nov 2026 14:33:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 23CB7606A882
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=iSf1vEtO
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-8a052aff9e9so4070976b3a.0
-        for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 06:00:16 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794924016; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ncyr39iTtrPhPfVH5TMqk0lTG6NTtoTabndZ3QPBLQy2dc65/1SMCFBCTs2WcKmlHP
-         clnCTvwSos70fIRwetZuxiJSrxJwIL4bBFD0z1wydMNDPRqTWruLfDNP4a5pGrOQNJfm
-         2rVeLxZc+jGrYo5IVufuVbEPotO7MC4agg8mtinoeTdIuTEdf8W1F7ncmuqNfeQM4Jr7
-         jNOdaaQUkY58WOa+Sdy4PX3a00Ws6sn/s2/f+3tf03sT+gWWxxfpUdiLmrjc3G0Ysedj
-         /duDpqqMZRiHHfDpCIjIdv9uGA3vCUxzdhMsKLSiZARDgFgZ8l5p4ET1NGZ5igX7bTQ0
-         /cVg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=toeVTsCBGnzPd1bYnIUruWVWZ7PF2L9oaPIgH25BZdA=;
-        fh=m1Qvyqr7EQaLyzGTkkL3QXW/1OEOu/XN2Fdmq5cbO98=;
-        b=fL4y6tMYOrUZVi/P5K0Bl2lRxNW8nqHyG4xT+djwTaluRLgReP5nXnncHZ9ETlDhHh
-         6V4UabUUdnW5/Y+bAnBZiihxR9VBngWw6n+CcQDRmxR41jPa0BgUJrzHK9imJNKURe5c
-         GTKmT1o0cl49hav2jgPFyND2ufF+NiHDobCRpSFeCvyXBOuK9kMMhp+KhhpvFxGOulPl
-         KSABBU12oES/W/Jgcs/6E78/0wemc1SaEgk2RJJ7DE8bZgOA2c2GS2SA5V8TMsxmbeb5
-         ujN/sOpRoMGH6w8B4jjiQK01r29bpL0AGwy8zQwhfwMM1FJs7UJigU2ZpOCf/++Q65w0
-         WmnA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1794924016; x=1795528816; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=toeVTsCBGnzPd1bYnIUruWVWZ7PF2L9oaPIgH25BZdA=;
-        b=iSf1vEtOgCV5zFdc2hdbGG7AaaBHRJ1JECVp3Lr7GLwd25xCPn4j9fOt3SNSDmwc6/
-         iK2Gd3WVEvyTOVBsomfzTOOI/Wh0iKOIqDkXZ0gad3wU5JhcRt2MHZFLWGaD3vrheXaq
-         brciqxn4fBKW9qdMUDPfDep6TkOr9BKEmpqm8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794924016; x=1795528816;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=toeVTsCBGnzPd1bYnIUruWVWZ7PF2L9oaPIgH25BZdA=;
-        b=SwCHqc+y9ihoBvOeIBn9X84ml3SU7EnS7uGEZiaVamvbEMgy0oYe+vt1WQgvKrbLBN
-         dTu+QSRM418qtqS7piXT8ClQLaGpYniSsNVc5PSIGMopGtoxcYxmIw+wpQUwf1wQxFvv
-         EKbiIkX8vyQHwEZg4CPTah/RFMxDYVswHH15AvxTDuiSLEDM2tPLhDy0bC5PE5r9aPQh
-         mxdlmYFNVDc5Fv/SXMts+WeGPZR4vvG3hKpydhiuQQNbuv/F6O3/pj1yu9FYDEbQp0QE
-         Aaf9pWx6ali4F5nDOSAhRbOx8i95YZE8GHNrNDuctZtH5tZp9iEvsImvof1MhBw1idgn
-         qKOw==
-X-Forwarded-Encrypted: i=1; AL+hErEEmczFknjAO7uCCxSqhmWyvQotQc2LsYVBTjmBR3kbPZhzmQSNt6YLiXbs1wgrIiE5/b8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8qVTyNBvSrY6Ns+XS0Bu+kKR90aoZcIei0lRUP6SnQ4CfIvOIn
-	zb8nKXF5RlihvjTLnThNUWMe4hsFw3k/9cvvPZ9NIgT3Eso8BzF1xAJ2vAtmfsEOvvUFGye/mRB
-	qKzJA0Xfb0VOQvKTbI3noFUDqjjPh0binbzWJvbff
-X-Gm-Gg: AYBFou2AVCs9Gq3dO0kFzjDjnyJnk2WKDnmSY6z2TCcEB5ul2dvGm6xHMLExqwDcu6J
-	4fPweTeDLM1mZaHL6NC01CRrUncwaIwhwLRdK8JbeUTase7N6EfQjsOKntTwlMHfHQ7GZdZ2OP9
-	YmT0RQg0tEWh9Obe9ViKD1qHH+Cca+UAekBInOrAesbJhYNXH7RobPppPmV4gte6UgHSuJ83/Pb
-	n9b38nwdKdu4XJVPrgYiG55wzu22ku3e4P3y0ovF2cTKt2kqR4XPWjdOWIkiLSOCp2iQvERypMO
-	I46e70gz8flx5tmgVvkZ3p05cwDQg2xSo63ifeAR/h6q1DZDjjqQdFrf0XVKHcvaK9/CMLLK/Dh
-	xNZ2AicGnwwLMLaGX4CJegUUqMXjZcr4nqa77nK5COIdLPc6xjuns+DqByPc/eT1ZRKzNTnOwX/
-	GZNeAgUAaFp/s8bBw=
-X-Received: by 2002:a05:6a00:1a8f:b0:8b6:12fd:7285 with SMTP id
- d2e1a72fcca58-8beb21cd241mr13169857b3a.2.1794924015427; Tue, 17 Nov 2026
- 06:00:15 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=fmE8M1h5
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=By2TgM9Xeiq5fwyI6d3OB7CNRr7DwQCDNevlT/7vutY=;
+	b=fmE8M1h5jCOHDWXgeJCJFeb0hX7leMPaHPbVAUYxGt8hzFBowo9Z2rEnwEM2Ez5r8Ka6rpuE6
+	fQfdQkYAzFq3InspAmYMT/Q1LWAGscF3EBrD7IpGRyf97gtdnnwp61LHAuyS/9PH/5bg4Hjc0Wp
+	6DdiHT2efGkXmfXx1MI9Whg=
+Received: from mail.maildlp.com (unknown [172.19.163.104])
+	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4jTRym4C4Gzcb3H;
+	Tue, 17 Nov 2026 22:32:32 +0800 (CST)
+Received: from whupemk100010.china.huawei.com (unknown [7.152.184.41])
+	by mail.maildlp.com (Postfix) with ESMTPS id A5EA34057F;
+	Tue, 17 Nov 2026 22:33:23 +0800 (CST)
+Received: from octopus.huawei.com (10.67.174.191) by
+ whupemk100010.china.huawei.com (7.152.184.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Tue, 17 Nov 2026 22:33:17 +0800
+From: Cai Xinchen <caixinchen1@huawei.com>
+To: <mic@digikod.net>, <gnoack@google.com>, <paul@paul-moore.com>,
+	<brauner@kernel.org>, <jack@suse.cz>, <caixinchen1@huawei.com>
+CC: <amir73il@gmail.com>, <andrii@kernel.org>, <apparmor@lists.ubuntu.com>,
+	<ast@kernel.org>, <axboe@kernel.dk>, <bpf@vger.kernel.org>,
+	<casey@schaufler-ca.com>, <cel@kernel.org>, <cem@kernel.org>,
+	<chenxiaosong@chenxiaosong.com>, <code@tyhicks.com>, <corbet@lwn.net>,
+	<Dai.Ngo@oracle.com>, <dakr@kernel.org>, <daniel@iogearbox.net>,
+	<dhowells@redhat.com>, <dlemoal@kernel.org>, <dmitry.kasatkin@gmail.com>,
+	<driver-core@lists.linux.dev>, <dsterba@suse.com>,
+	<ecryptfs@vger.kernel.org>, <eddyz87@gmail.com>, <emil@etsalapatis.com>,
+	<eric.snowberg@oracle.com>, <exfat@lists.linux.dev>,
+	<georgia.garcia@canonical.com>, <gregkh@linuxfoundation.org>, <hch@lst.de>,
+	<hirofumi@mail.parknet.co.jp>, <hyc.lee@gmail.com>,
+	<ihor.solodrai@linux.dev>, <jlayton@kernel.org>, <jmorris@namei.org>,
+	<johan@kernel.org>, <john.fastabend@gmail.com>,
+	<john.johansen@canonical.com>, <jolsa@kernel.org>, <kpsingh@kernel.org>,
+	<linkinjeon@kernel.org>, <linux-api@vger.kernel.org>,
+	<linux-block@vger.kernel.org>, <linux-btrfs@vger.kernel.org>,
+	<linux-cifs@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-fsdevel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-nfs@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
+	<linux-trace-kernel@vger.kernel.org>, <linux-unionfs@vger.kernel.org>,
+	<linux-xfs@vger.kernel.org>, <liubaolin12138@163.com>,
+	<martin.lau@linux.dev>, <mason@kernel.org>, <mathieu.desnoyers@efficios.com>,
+	<matt@bobrowski.net>, <memxor@gmail.com>, <mhiramat@kernel.org>,
+	<miklos@szeredi.hu>, <neil@brown.name>, <netfs@lists.linux.dev>,
+	<ntfs@lists.linux.dev>, <okorniev@redhat.com>, <omosnacek@gmail.com>,
+	<penguin-kernel@I-love.SAKURA.ne.jp>, <rafael@kernel.org>,
+	<rdunlap@infradead.org>, <roberto.sassu@huawei.com>, <rostedt@goodmis.org>,
+	<selinux@vger.kernel.org>, <senozhatsky@chromium.org>, <serge@hallyn.com>,
+	<sj1557.seo@samsung.com>, <skhan@linuxfoundation.org>, <song@kernel.org>,
+	<stephen.smalley.work@gmail.com>, <takedakn@nttdata.co.jp>, <tom@talpey.com>,
+	<viro@zeniv.linux.org.uk>, <yonghong.song@linux.dev>, <yuezhang.mo@sony.com>,
+	<zohar@linux.ibm.com>, <utilityemal77@gmail.com>, <lujialin4@huawei.com>
+Subject: [PATCH -next -v4 00/17] landlock: Add READ_METADATA and WRITE_METADATA access rights
+Date: Tue, 17 Nov 2026 23:05:25 +0800
+Message-ID: <20261117150542.1169451-1-caixinchen1@huawei.com>
+X-Mailer: git-send-email 2.18.0.huawei.25
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -102,165 +99,312 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <CORE-9NOG.v4.r0.20261116135311@mojatatu.com> <CORE-9NOG.v4.r0.20261116135311-4@mojatatu.com>
- <DMWXH28YQDYH.1SI4Y5WQ7EPSR@gmail.com> <CAM0EoMk10vCoAKZq0P=8A_jed=Z3SudLEUV8uvXO5F=ewNjnGQ@mail.gmail.com>
- <DMX7RM93TMGR.AXFN4YJ55REF@gmail.com> <CAM0EoMkqwoJdzChpCVcw+c_XXsR7hw1_Wy6J-zQbq4JjogqTSA@mail.gmail.com>
-In-Reply-To: <CAM0EoMkqwoJdzChpCVcw+c_XXsR7hw1_Wy6J-zQbq4JjogqTSA@mail.gmail.com>
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-Date: Tue, 17 Nov 2026 09:00:03 -0500
-X-Gm-Features: AclHuK9CfZthz6j1EC-BGKHuAHo1niCjgl5St1TdPP-FTsHNCovLTpcJrywdai0
-Message-ID: <CAM0EoMnngtO+nt7OWHNKY9DYW05Prow_A32nstsxOkbZF8U6bA@mail.gmail.com>
-Subject: Re: [PATCH net-next v4 4/4] bpf: drop the stale dst when redirecting
- to an explicit nexthop
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: netdev@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	bpf@vger.kernel.org, Jiri Pirko <jiri@resnulli.us>, 
-	Victor Nogueira <victor@mojatatu.com>, Sashiko <sashiko-bot@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
+ whupemk100010.china.huawei.com (7.152.184.41)
 
-On Tue, Nov 17, 2026 at 8:15=E2=80=AFAM Jamal Hadi Salim <jhs@mojatatu.com>=
- wrote:
->
-> On Mon, Nov 16, 2026 at 11:50=E2=80=AFPM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Mon, Nov 16, 2026 at 02:06 PM Jamal Hadi Salim <jhs@mojatatu.com> wr=
-ote:
-> > > encap ip/ip6 or encap xfrm template the tunnel template lives in
-> > > dst->lwtstate  that wont work (packet reaches the tunnel or xfrm
-> > > device with no encapsulation).
-> >
-> > ok. agree.
-> >
-> > > For that reason we cant drop 3 and 4. I see the change in 2/4 (I see
-> > > 1/4 not changing either) .  The change is not that small because it
-> > > will have to touch multiple core files (although just small mechanica=
-l
-> > > surgeries). Summary it will still be 4 patches..
-> >
-> > can we keep the route and fix neigh_update_process_arp_queue() instead =
-?
-> > The bug is its lookup via dst. Only teql needs that lookup, I think.
->
-> Didn't look closely - eql moves skb->dev to a slave the same way, but
-> has no neighbour code of its own, so it looks like teql is the main
-> player.
-> But the drain is not the only reader: skb_tunnel_info() reads
-> skb_dst(skb)->lwtstate, so keeping the route leaves dst->dev=3DA on a
-> skb bound for B. With the 2/4 I was planniong for v5 no drain change
-> is needed at all, since dst_neigh_lookup_skb() returns NULL on the
-> replacement metadata dst and the existing n2 =3D=3D NULL path already
-> outputs on the parking neighbour.
->
-> > A is the device of the route, B is the target of the redirect:
-> >
-> >   skb is queued by        skb->dev  neigh->dev  lookup via dst gives
-> >   ----------------------  --------  ----------  --------------------
-> >   ip_finish_output2()     A         A           the same neigh
-> >   bpf_redirect_neigh(nh)  B         B           neigh on A, the bug
-> >   nft fwd                 B         B           neigh on A, the bug
-> >   __teql_resolve()        master    slave       neigh on master
-> >
-> > The diff skips the lookup when skb->dev is neigh->dev.
-> > lwtstate, NBMA tunnels, realm and ICMP errors work as today.
-> > The fast path doesn't change. No need for patches 2, 3 and 4.
-> > and 1/4 is not a prerequisite.
-> >
-> > Your teql 3/3 queues the skb with skb->dev =3D=3D slave. With this diff
-> > the neigh of the slave adds the header and sends the skb.
-> >
-> > thoughts?
-> >
-> > diff --git a/net/core/neighbour.c b/net/core/neighbour.c
-> > index d6e9c7c..04758ca 100644
-> > --- a/net/core/neighbour.c
-> > +++ b/net/core/neighbour.c
-> > @@ -1331,9 +1331,11 @@ static void neigh_update_process_arp_queue(struc=
-t neighbour *neigh)
-> >                  * the packet in the output path.  So what we need to d=
-o
-> >                  * here is re-lookup the top-level neigh in the path so
-> >                  * we can reinject the packet there.
-> > +                * When skb->dev is neigh->dev 'neigh' is the top-level=
- one.
-> > +                * dst can be a route via another device after a redire=
-ct.
-> >                  */
-> >                 n2 =3D NULL;
-> > -               if (dst &&
-> > +               if (dst && skb->dev !=3D neigh->dev &&
-> >                     READ_ONCE(dst->obsolete) !=3D DST_OBSOLETE_DEAD) {
-> >                         n2 =3D dst_neigh_lookup_skb(dst, skb);
-> >                         if (n2)
->
-> This will fix the cases you showed in the table above i.e nft(6),
-> bpf(6) but will break any xfrm and many lwt paths (including
-> bpf_lwt/6).
+This series adds two new Landlock filesystem access rights,
+LANDLOCK_ACCESS_FS_READ_METADATA and LANDLOCK_ACCESS_FS_WRITE_METADATA,
+which control access to file and directory metadata such as inode
+attributes (mode, ownership, timestamps), extended attributes, POSIX
+ACLs and chattr(1)-style flags.  It picks up the work from the
+"landlock: add chmod and chown support" series [1] and follows the
+coarse-grained grouping discussed in that thread [2]: instead of
+separate chmod/chown rights, metadata operations are grouped into one
+read and one write right.
 
-After more coffee: let me correct myself on "will break any xfrm and
-many lwt paths" after re-reading your first sentence in the response.
-The guard keeps the route, so the encapsulation is still there:
-lwtstate survives and skb_tunnel_info() / skb_xfrm_md_info() find
-their templates. So i take back what i said there.
+Landlock evaluates access rights on a per-path basis, but the
+metadata related LSM hooks (inode_setattr, inode_setsecctx, the inode
+xattr, POSIX ACL and fileattr hooks) only receive the dentry of the
+accessed object.  Patches 1-8 therefore first pass struct path
+instead of dentry through the metadata-related VFS helpers and LSM
+hooks.  The hooks also receive a struct file argument, set by the
+VFS to the file through which the operation is requested when there
+is one (i.e. for the file descriptor-based system calls such as
+fchmod(2), fchown(2), fgetxattr(2), utimensat(2) on an empty path,
+and for the FS_IOC_* ioctls and file_[gs]etattr(2) with
+AT_EMPTY_PATH), and NULL otherwise (i.e. for the path-based system
+calls and for kernel-internal accesses).  This is a pure refactoring
+with no behavior change for the other LSMs, which only have their
+hook implementations' signatures updated; the file argument is only
+consumed by Landlock (patch 14).  The series is split so that every
+patch builds on its own:
 
-What the guard changes is only which neighbour the drain picks where
-skb->dev =3D=3D neigh->dev while dst->dev differs. Everything else the
-route carries stays on the packet.
+  1: notify_change() and its callers
+  2: inode_setsecctx hook (must come before 3: the SELinux and Smack
+     implementations call __vfs_setxattr_locked internally)
+  3: xattr helpers, which also drops a redundant EVM xattr size sanity
+     check whose vfs_getxattr() call only has a dentry and therefore
+     cannot be migrated to the new path-based signature
+  4: POSIX ACL helpers
+  5: inode xattr hooks, threaded through the xattr helpers so that
+     the f[gs]etxattr(2) and io_uring flows pass their file
+  6: inode POSIX ACL hooks, threaded through do_set_acl()/do_get_acl()
+  7: inode fileattr hooks (FS_IOC_[GS]ETFLAGS, FS_IOC_FS[SG]ETXATTR,
+     file_[gs]etattr(2)), which also adds a __vfs_fileattr_get()
+     counterpart without security checks for the kernel-internal
+     readers (nfsd), and removes the ovl_security_fileattr() hack by
+     forwarding the real upper/lower path to the checked
+     vfs_fileattr_get()/_set() from ecryptfs and overlayfs
+  8: inode_setattr hook, which now receives the struct file held by
+     the fd-based callers (fchmod(2), fchown(2), fchmodat2(2) and
+     fchownat(2) with AT_EMPTY_PATH, utimensat(2) on an empty path);
+     do_truncate() passes NULL because size changes are governed by
+     the truncate hooks.  The hook is renamed to path_setattr in the
+     same patch, so that a stale BPF LSM program attaching to
+     lsm/inode_setattr fails to load instead of reading dentry->d_flags
+     where it expects iattr->ia_valid (see below)
 
-On re-evaluation, I agree that 1/4 is not a prerequisite for the
-guard: it stands on the bpf_skb_set_xfrm_info() overwrite, which warns
-on DEBUG_NET by itself. It is a prerequisite for 2/4's xfrm case,
-though: 2/4 hands the route to the interface as dst_orig on a metadata
-dst, and an interface with a configured if_id only puts that route
-back if 1/4 restores it. Without it the dst is the metadata one, whose
-family is AF_UNSPEC, and the packet is dropped as a link failure.
+Three deliberate scoping decisions for this refactor:
 
-The rest of what I said is the reason 3/4 and 4/4 release the dst
-instead of leaving it on the packet. If your answer is that a route
-for A is acceptable on a frame leaving B, then they have nothing left
-to fix - I'll drop them and the metadata helper they use, keep the
-xfrm fix in 1/4, and we can take your guard as its own change.
+- The hooks consistently take struct path rather than struct file as
+  their primary object.  The VFS call sites involved (chmod(2),
+  chown(2), utimensat(2), xattr(2) and ACL syscalls) operate on
+  paths, and several of them (lstat(2), lchown(2), llistxattr(2),
+  ...) have no struct file to begin with.  The optional struct file
+  argument carries the open-time semantic described below.
 
-Boils down to: is a route for A acceptable on a frame leaving B?
+- struct inode_operations->setattr still receives (idmap, dentry, attr).
+  Only the VFS boundary (notify_change()) and the LSM hook layer see the
+  path, which keeps the refactor contained to fs/attr.c and the LSM
+  infrastructure instead of touching every filesystem.
 
-cheers,
-jamal
+- The path argument of the hooks is only meant to be handed to VFS
+  helpers taking a struct path (e.g., notify_change(), the xattr
+  helpers): the VFS makes no guarantees with regard to path->mnt,
+  whose layout and implementation details are subject to change, and
+  implementations must not rely on its properties.  The idmap, in
+  contrast, is passed separately so that the VFS and the filesystem
+  are guaranteed to see the same idmap.
 
->Apologies if i am stating something that might be already
-> obvious, but let me illustrate with one example: lwt.
->
-> A is the device of the route, B is the target of the redirect, and lwt
-> is the lwtstate that route carries (encap type ip/ip6).
->
-> skb is queued by nft_fwd_neigh_eval(), skb->dev=3DB, neigh->dev =3D B
-> Lookup via dst gives neigh on A  - because the dst is still the
-> arrival route and dst->dev is A; ipv4_dst_neigh_lookup() takes the
-> device from the dst and the address from the skb  _ only when the
-> route has no gw_  (the device is never taken from the skb)
-> (Essentially, this is the bug) i.e a non-NULL neigh means the drain
-> reinjects on A's neighbour, so the frame leaves B with A's neighbour
-> and A's source.
-> dst also carries lwtstate (outer endpoints) that B's tunnel needs.  A
-> drop takes it down with the route.
-> Note on skb_valid_dst(): "true" means only "the slot is a route", not
-> "the route carries nothing". A route may carry an lwtstate that this
-> test cannot rule out.
->
-> So a skb_dst_drop() will result in dropping the packet in the cases i
-> described. Example for gre:
-> skb_tunnel_info() then finds neither a METADATA_IP_TUNNEL template nor
-> a dst->lwtstate(encap type ip/6) and gre tx will then drop the skb
->
-> I have a patch for 2/4 i can share if it would help the discussion.
+Unlike what was done for LANDLOCK_ACCESS_FS_TRUNCATE, no new file_*
+hooks are introduced for the file descriptor flows: the metadata
+hooks are already consumed by other LSMs (SELinux, Smack, EVM, IMA,
+AppArmor, TOMOYO) on these flows, and routing them to new hooks
+would either silently remove the other LSMs' checks, or keep the
+path_* hooks as well and check twice with Landlock.  Passing the
+struct file to the existing path_* hooks instead keeps the pipeline
+and the other LSMs' behavior unchanged, while giving Landlock the
+information it needs to apply the open-time semantic below.
 
+Since these hooks now operate on paths rather than inodes, patches
+8-13 rename them to the path_* naming convention used by the other
+hooks that take a struct path (path_chmod, path_chown, path_link,
+...).  The inode_setattr hook is renamed in patch 8, in the same patch
+that changes its ctx layout: BPF LSM program arguments are retyped
+from the hook prototype at verification time and are not checked
+against a versioned ABI, so leaving the old name in place for a few
+patches would let a stale program read dentry->d_flags where it
+expects iattr->ia_valid, silently inverting a deny rule.  The
+inode_getattr hook, which already received a struct path, is renamed
+to path_getattr as well; patch 9 also threads the struct file held by
+the fd-based vfs_fstat() and vfs_statx_fd() callers through it, while
+the many kernel-internal vfs_getattr() callers keep a wrapper which
+passes NULL.  Apart from patch 8 and the file threading in patch 9,
+these renames are purely mechanical and can be reviewed independently.
 
-cheers,
-jamal
+Patch 14 then adds the access rights and implements their
+enforcement, and patches 15-17 add the selftests, the sandboxer
+sample update and the documentation.
+
+Patch 14 applies the LANDLOCK_ACCESS_FS_TRUNCATE mechanic to the
+new rights, following Mickaël's confirmation [4]: for operations on
+already opened files, it is the access rights at the time of open(2)
+which decide whether a metadata operation is permitted, not the
+rights of the current thread.  READ_METADATA and WRITE_METADATA are
+looked up at open time, recorded in the opened file, and consumed by
+the metadata hooks when they are called with a file.  As a
+consequence:
+
+- A file descriptor opened before sandboxing keeps allowing metadata
+  operations whatever the current domain is, which resolves the
+  "catch-22" raised by Justin [5]: an already opened file descriptor
+  keeps working, it is not an escape hatch because its rights were
+  fixed when it was legitimate to open the file.
+- Conversely, a restricted file descriptor passed to another
+  (possibly non-landlocked) process keeps denying metadata
+  operations: the file descriptor carries the rights of the process
+  which opened it.
+- ioctl(FS_IOC_GETFLAGS) and friends on a file descriptor opened
+  without READ_METADATA are now denied, which closes the metadata
+  leak Justin was concerned about.
+- O_PATH file descriptors are an exception: they are not opened
+  through the open permission checks (cf. do_dentry_open()) and
+  carry no recorded rights; metadata accesses through them are
+  checked against the current domain, like path-based accesses.
+- File descriptors obtained without going through the file_open
+  hook (e.g. memfd_create(2), pipes, sockets) keep the full access
+  rights granted at file allocation time, consistent with the
+  truncate behavior.
+- deny_masks_t is widened from u8 to u16 to keep tracking one
+  nibble per optional access right for the audit logs.
+
+The Landlock ABI version is incremented from 12 to 13; ABI 12 was
+taken by the capability and namespace use restrictions that are
+already in linux-next.
+
+The series is based on linux-next commit 749a4de37040 ("Add linux-next
+specific files for 20261116").
+
+Changes since v3 [6]:
+
+- The empty-path branch of do_fchmodat(), do_fchownat() and
+  do_utimes_path() used fdget(), which rejects O_PATH file
+  descriptors.  It now uses fd_raw, the same lookup path_init() uses
+  for an empty path, so AT_EMPTY_PATH metadata operations work again
+  on O_PATH descriptors; futimens(2) keeps rejecting O_PATH, and a
+  NULL pathname returns -EFAULT instead of being turned into an empty
+  path (patch 8).
+- Every hook that gained a struct file argument is declared with a
+  strong file__nullable definition in kernel/bpf/bpf_lsm_proto.c, so
+  the verifier requires a NULL check before dereferencing it
+  (patches 5-12).
+- The ntfs named stream setattr no longer bypasses the hooks: it goes
+  through notify_change_target(), which performs the path-based LSM
+  checks on the caller-supplied path while the attributes land on the
+  base inode, and the borrowed path is dropped from the caller-owned
+  struct iattr before notify_change() returns (patch 1).
+- ecryptfs and overlayfs run the fileattr hooks on the real
+  upper/lower path instead of calling unchecked helpers, and the
+  ksmbd xattr helper passes the file it was given instead of NULL
+  (patches 5 and 7).
+- Since a trusted struct path lets BPF LSM programs reach path->dentry
+  and call the dentry xattr kfuncs, the sleepable path hooks that
+  always run under i_rwsem use the _locked kfunc variants, while the
+  hooks that can run either way (path_link, path_rename, path_rmdir,
+  path_unlink and path_getattr, which nfsd reaches with the inode
+  already locked) reject both variants (patch 8).
+- fchmod(2) and fchown(2) are not O_PATH-capable metadata interfaces
+  and are no longer listed as such in the UAPI header and in the
+  userspace documentation (patches 14 and 17).
+- The setattr hook rename is folded into the patch that changes its
+  ctx layout, so that a stale BPF LSM program cannot be silently
+  reinterpreted, and that patch now comes right before the getattr
+  rename (patch 8).
+- ksmbd reports the share root for the ".." entry when follow_up()
+  cannot leave a mount that was detached, instead of using a parent
+  which that mount does not cover (patch 3).
+- The Landlock changelog states that kernel-internal getattr calls
+  made under the caller's credentials, such as NFS localio's
+  post-write attribute refresh, are subject to READ_METADATA too, and
+  that localio discards the resulting error (patch 14).
+
+[1]
+https://lore.kernel.org/all/20220827111215.131442-1-xiujianfeng@huawei.com/
+[2]
+https://lore.kernel.org/all/abc960a1-e66e-792e-6869-cfd201c29dbe@digikod.net/
+[3]
+https://lore.kernel.org/all/20261015125425.3246251-1-caixinchen1@huawei.com/
+[4] https://lore.kernel.org/all/20260929.Ahgoo4yeetai@digikod.net/
+[5] https://lore.kernel.org/all/arvjb0HJYh1KyEBB@suesslenovo/
+[6]
+https://lore.kernel.org/all/20261027121151.1887650-1-caixinchen1@huawei.com/
+
+Cai Xinchen (17):
+  fs: pass struct path to notify_change()
+  LSM: pass struct path to the inode_setsecctx hook
+  fs: pass struct path to xattr helpers
+  fs: pass struct path to POSIX ACL helpers
+  LSM: pass struct path and struct file to the inode xattr hooks
+  LSM: pass struct path and struct file to the inode posix acl hooks
+  LSM: pass struct path and struct file to the inode fileattr hooks
+  LSM: rename inode_setattr to path_setattr and pass struct path and
+    file
+  LSM: rename inode_getattr to path_getattr and pass struct file
+  LSM: rename the inode xattr hooks to path_xattr hooks
+  LSM: rename the inode posix acl hooks to path_*_acl hooks
+  LSM: rename the inode fileattr hooks to path_file_* hooks
+  LSM: rename inode_setsecctx to path_setsecctx
+  landlock: Add READ_METADATA and WRITE_METADATA access rights
+  selftests/landlock: Add tests for metadata access rights
+  samples/landlock: Add metadata rights to sandboxer
+  Documentation: Update landlock doc for metadata rights
+
+ Documentation/admin-guide/LSM/landlock.rst    |   2 +
+ Documentation/bpf/fs_kfuncs.rst               |   2 +-
+ Documentation/filesystems/porting.rst         |  63 ++
+ Documentation/trace/events-landlock.rst       |  18 +-
+ Documentation/userspace-api/landlock.rst      | 148 ++-
+ drivers/base/devtmpfs.c                       |   6 +-
+ drivers/block/loop.c                          |  12 +-
+ drivers/block/zloop.c                         |  23 +-
+ fs/attr.c                                     | 119 ++-
+ fs/bpf_fs_kfuncs.c                            |  58 +-
+ fs/btrfs/volumes.c                            |   2 +-
+ fs/cachefiles/xattr.c                         |  45 +-
+ fs/coredump.c                                 |   2 +-
+ fs/ecryptfs/inode.c                           |  48 +-
+ fs/exfat/file.c                               |   5 +-
+ fs/fat/file.c                                 |   5 +-
+ fs/file_attr.c                                | 136 ++-
+ fs/init.c                                     |   6 +-
+ fs/inode.c                                    |   7 +-
+ fs/internal.h                                 |  26 +-
+ fs/namei.c                                    |   5 +-
+ fs/nfsd/nfs4ctl.h                             |   5 +-
+ fs/nfsd/nfs4state.c                           |  16 +-
+ fs/nfsd/nfs4xdr.c                             |   2 +-
+ fs/nfsd/state.h                               |   2 +-
+ fs/nfsd/vfs.c                                 |  87 +-
+ fs/ntfs/named_stream.c                        |  14 +-
+ fs/open.c                                     |  77 +-
+ fs/overlayfs/copy_up.c                        |   4 +-
+ fs/overlayfs/inode.c                          |  27 +-
+ fs/overlayfs/overlayfs.h                      |  44 +-
+ fs/overlayfs/xattrs.c                         |  12 +-
+ fs/posix_acl.c                                |  61 +-
+ fs/smb/server/smb2pdu.c                       |  59 +-
+ fs/smb/server/smb_common.c                    |  59 +-
+ fs/smb/server/smbacl.c                        |  12 +-
+ fs/smb/server/vfs.c                           | 101 +-
+ fs/smb/server/vfs.h                           |  19 +-
+ fs/stat.c                                     |  82 +-
+ fs/utimes.c                                   |  38 +-
+ fs/xattr.c                                    | 114 ++-
+ fs/xfs/xfs_ioctl.c                            |   2 +-
+ include/linux/fileattr.h                      |  10 +-
+ include/linux/fs.h                            |  30 +-
+ include/linux/landlock.h                      |   4 +-
+ include/linux/lsm_hook_defs.h                 |  66 +-
+ include/linux/posix_acl.h                     |  25 +-
+ include/linux/security.h                      | 131 +--
+ include/linux/xattr.h                         |  32 +-
+ include/uapi/linux/landlock.h                 |  47 +-
+ init/initramfs.c                              |   2 +-
+ kernel/bpf/bpf_lsm.c                          |  10 +-
+ kernel/bpf/bpf_lsm_proto.c                    | 108 ++
+ kernel/bpf/verifier.c                         |  13 +
+ kernel/trace/bpf_trace.c                      |   2 +-
+ samples/landlock/sandboxer.c                  |  16 +-
+ security/apparmor/lsm.c                       |   5 +-
+ security/commoncap.c                          |  17 +-
+ security/integrity/evm/evm_crypto.c           |   8 +-
+ security/integrity/evm/evm_main.c             |  77 +-
+ security/integrity/ima/ima_appraise.c         |  41 +-
+ security/landlock/access.h                    |  13 +-
+ security/landlock/fs.c                        | 235 ++++-
+ security/landlock/limits.h                    |   2 +-
+ security/landlock/syscalls.c                  |   2 +-
+ security/security.c                           | 179 ++--
+ security/selinux/hooks.c                      | 105 +-
+ security/smack/smack_lsm.c                    | 128 ++-
+ security/tomoyo/tomoyo.c                      |   8 +-
+ .../testing/selftests/bpf/prog_tests/d_path.c |   2 +-
+ .../selftests/bpf/prog_tests/fs_kfuncs.c      |  10 +-
+ .../testing/selftests/bpf/progs/test_d_path.c |   5 +-
+ .../bpf/progs/test_d_path_check_rdonly_mem.c  |   5 +-
+ .../bpf/progs/test_d_path_check_types.c       |   5 +-
+ .../selftests/bpf/progs/test_get_xattr.c      |   7 +-
+ .../bpf/progs/test_set_remove_xattr.c         |  34 +-
+ .../bpf/progs/verifier_lsm_init_xattr.c       |   8 +-
+ .../selftests/bpf/progs/verifier_vfs_accept.c |   2 +-
+ .../selftests/bpf/progs/verifier_vfs_reject.c |   2 +-
+ tools/testing/selftests/landlock/base_test.c  |   2 +-
+ tools/testing/selftests/landlock/fs_test.c    | 932 +++++++++++++++++-
+ .../selftests/landlock/trace_fs_test.c        |   3 +-
+ 82 files changed, 3003 insertions(+), 905 deletions(-)
+
+-- 
+2.18.0.huawei.25
+
