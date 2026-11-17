@@ -1,75 +1,72 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.72
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794919646;
-	b=3qgPoZ2VINOwxZOvou7yM1rS9Mymjo8djIesOu1Sn/kf0JHySZ17rVDUNbJkxX8h7GQu
-	 7ScGhuPsySd5t0s3l7bFi//AFvUf5Ntvq35KgDuvx2th3uogfevwV6P7ii94l/vdSFhSY
-	 Lrkf5d/NtaqriuIjLN+n0n5Lh7Svr8UwfYUqokwBCr85OZsSizhs7RJjF7oVfRVt/sRgx
-	 TQ9CLNa2yyufskpyv+xkts2tF4fuOvqN5w4kCp+KiZG4EuvnmbNSBGPFmIgl7qOcF889/
-	 dYvUPf8semx4YXxnbm1jPlffa1TnpBquYYOXGaB5t1mVcdE5JGbNnfhBvchHjwJ2h2g==
+	t=1794919643;
+	b=yoNG9ODQKZInGF3EEs64GjnJOPu74XH/DzIe1t0DnTFXJN0UA6Kar+hPYv9BGRCN5gtY
+	 XNQC9Ldtezh09D2qWpZxV4ECDvXkxd0LZiNDQ1JYae8ViO/SipIOgMlkSPrw705/jVP/R
+	 g2SV74j1tpgF28NwSLOvDmRGIsbTtbI+7qwsgGGgRghwY7EM6DI7qAXb8/lLTgP8bsHiN
+	 XxgU+WpOwxa8aOokXgGa9uHUlXrS+OQh25268P3cSPfbHVB4Qr9qh7353Kfl0hi3fZ8C/
+	 s1dEimPFJoHex3sT6w4hcfFRgFR2PqdmWQRdFWz2LbE2+3btZZIze1JgMUtU55x6G+A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794919646;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794919643;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=pey3AXivEIPkS803BEXqY1Wb6Um3mvfRZTuqrf6x1Q8=;
-	b=N2Q0ufkZS4DdpFoUo74cpZ8JsBT4m6oeQrSFIG71Aw4J48OHDGbeEXhXq2tXgjyupXFA
-	 jzVIM8KAsEeTHKx522431PVvz+m3hsybTW+p9RMd1jMcsBfOeP/6L6+vHd6gNhrNcHHSf
-	 1/VzLzjtY2cVXGko4ban1sU8vnMv1NL7PwDHEzUQYbEw6DITiuIx/DGzhpZ4AwMD+3agM
-	 jiHZ3IQ7uBmERO3utwaJQ90m9ghtXbwXzVM5cAZWPdJ/YZHKsEuf5KsN2vZ3+3PygjTRf
-	 Lyc582JCfoMJwxjkVGjm/vM1cTLbvgMS4zpvrkrsprSfeU2xoHd6gwjgwIYzoXaagCg==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=xPLY7t7bHKZomsKY+G59dgn7EtH6VF5+4KkiJGl79f0=;
+	b=ZV7oHI1H7Wg3U4N9ZieLGCbGIFs4k/b2ugzqiL6JNuo9P0UagymaE3n9A69DB625Dj53
+	 JNyvJ/nctPJJqLF8xr+WHg28z1MW5NC0egytQnVTYUtq/c16KKvWcdWma/oe4yqK7k5Ty
+	 VLED5LAqsQo3KoT4Fm7/roJMh1oKc57lJKQCW2QYeMc51E98QPeDwT7uMnRvABS1qyYXI
+	 J33nCEHqdlfgDPBdqjVEWovVDsbT0/NEKuQnQxDt4KZIxIJJvPfK3whePqwXDhGEe1K4k
+	 R1CPYy+7CPOwsNKrfxH1TlFnFfVigvziMTbmXyqOokHJ/eQtBlr93KycyL6IT+Y37wg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--thaisonphan.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=To3UIYjd;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=dS2L1iO4;
 	arc=none smtp.remote-ip=209.85.222.72
 Received: from mail-ua1-f72.google.com (mail-ua1-f72.google.com [209.85.222.72])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82B93606A88C
-	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 12:47:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 82B93606A88C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0857606A31C
+	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 12:47:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F0857606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--thaisonphan.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=To3UIYjd
-Received: by mail-ua1-f72.google.com with SMTP id a1e0cc1a2514c-99062be02ddso751675241.3
-        for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 04:47:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=dS2L1iO4
+Received: by mail-ua1-f72.google.com with SMTP id a1e0cc1a2514c-99063f4065eso1193841241.3
+        for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 04:47:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794919644; x=1795524444; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=pey3AXivEIPkS803BEXqY1Wb6Um3mvfRZTuqrf6x1Q8=;
-        b=To3UIYjdPEAyPbw3qcZfxGVZiWl/clOJ7HZsQaT2mwgD/TQcdpR1G1hhS1av3Mf0pB
-         kg9IIVr5/cMlJ5Fl1UVpC2Yv1YZRiikvhGW/1X68BeIrGIgq0kn1tPqRyg0hmsNI5sYI
-         0GcFosR0CBgNJfxShY3X5NXEq+34gMSBKmHtu3ljbbYR0mok/XVxzsk3pRXBV1bQd0kI
-         n4QqBY4luczdXUxgvjiiUZsSUzE8cW0JabBX+UQLoFCCtXtb6zatXIozZh4CZ+4nVfK+
-         BapfmM0XFTWkJdAomVlFTrAURY29RQ94VF+JMMMhJHeIfdGMhOTqS+Cna+VGbEznEx+L
-         Xe5w==
+        d=google.com; s=20260707; t=1794919642; x=1795524442; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=xPLY7t7bHKZomsKY+G59dgn7EtH6VF5+4KkiJGl79f0=;
+        b=dS2L1iO4rOaMxm4v0JD+RkqQ8oAkda8BFIrZ3PLxJ/LIbESehE7PjZ7TaoZ7hRIf1v
+         +x37Au0lh+8aAITx/tpJMBajQZyJzusSMx6o1r9JA94NGL7nnuF0I0VcP/xOEJBhoKIY
+         bW0PeCpLDEsKbkNoVRCHciaDpyUEMtzAugCIIZhzh5QS/QJFY2VU7mKv1FUJo7ZKGir/
+         qW1PF+VgUgXd4o8Ma7DGue55yfEXd3+AfYR/usy1dCLRpCslIAK1r4PPKGfK+WODt7Wh
+         gy7YPalmZwi72Tk1bEZHAxjYtRcHYMErO88WaiODIzJ4PWRnQA9VQKWui7pIGStlQhXo
+         OOzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794919644; x=1795524444;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=pey3AXivEIPkS803BEXqY1Wb6Um3mvfRZTuqrf6x1Q8=;
-        b=QPsEzbPEL2prQLmKZtfvwVvsQ29O6xgv4cTdHuOOM/1sIjZW1Ch5N/ViDv83kEcs2a
-         LNrNkZc3ixO8aib4RQ65Z2K9ttG3A4nRgxFbjTtP5Ohr7QlUFp41aycdqMvNKO1Afh/h
-         5L4p5sbKrmT4NRIa1H0ueOI5bWeBueNZv0xaWb0eaPz+0cQeh+E0VeUyte0+uVb+XPRU
-         JoWsHZs+N0i7KO9Z5H3vGveJDiGdIolbhPv7LVRCTrToplaSW0045emNKhX0VUDVdfiv
-         0tdRAYiHxm0Ta5Ly9otWqfZnlSFPLS0Nym2PY8LmGyuUTtLanR3Cq373Djo+K7XdCg8c
-         kDxQ==
-X-Forwarded-Encrypted: i=1; AL+hErH+In0O5TKw872ZZ0+lh+urGp/5PcKGfROAMksaIl71yYpB4xryEn2xUjKzS5gc4Tr+QXo=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8oHDdINxS5KZOiw84UH54eUc9qHw1RTBUZct8lHAGafmViOpv5
-	GCRI5glo3oKS8VrmoyV05QWpWDTikAmVnCTD7Dfa1fhLvsQDc44SYneaxDKnanl/1eZ6ItA9M3O
-	ZKlBp/QEc5yma9HYNlj73VwA/Mg==
-X-Received: from vsbjy25.prod.google.com ([2002:a05:6102:4c19:b0:7aa:fcdb:c675])
+        d=1e100.net; s=20260707; t=1794919642; x=1795524442;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=xPLY7t7bHKZomsKY+G59dgn7EtH6VF5+4KkiJGl79f0=;
+        b=Y8tuhZdBEqO9hu1EtEbWxkzodkmT+G6/GiXNa+6hUGFaH6VtVoCAeXeWYQ77Ac8HZt
+         OjnLgpsf3V6/r8e5RZIRT0p3tq2hCG0ofnxgDI0uFODwaSthCRUzO2tl25pLVOm8S1po
+         FcOrrp1K8SxGaUEQPZZBgeEqVhAs646ox/gelMh8ZORRx6d0p9pALlgFt/+5W9tFKPxg
+         RUlqihhJUlsa/zhUML28nW9iCVn9f91mCDq+ikQsyXDsqEC7BSaAipmivo08F+E+lxH0
+         LkdYUxkNd5G5UFQpM/U2sSWDQDL/xGbW8+zbv34OZtVQsACDSObLTlqYGUdaHMxInN8w
+         57yA==
+X-Forwarded-Encrypted: i=1; AL+hErEVFwTnO1dEdZJLtF9ncirOMIPAjKEyrdsCosxMZSk5B6rYlO4k32eClKrLxOdWwiWbQ2s=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8v21BKqlKUKpytW5V/yyh9b/LdyrpiPmAcp9AHrGMYv9Rn7PoO
+	tyJ79zB5errlkkaBZQiITwUKz7+3MN2EcER+QCHvXCmEWRkwSLe+7IpdVc825v1sl6Z5HRwc8oj
+	ol0z9WORorfMiuKX9VWAxQx60Dw==
+X-Received: from uapj19.prod.google.com ([2002:ab0:6453:0:b0:99e:daf:a436])
  (user=thaisonphan job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6102:84c2:b0:7bf:74c1:b606 with SMTP id ada2fe7eead31-7d64d8abce4mr3262568137.34.1794919644167;
- Tue, 17 Nov 2026 04:47:24 -0800 (PST)
-Date: Tue, 17 Nov 2026 12:47:09 +0000
-In-Reply-To: <20261117124710.1338951-1-thaisonphan@google.com>
+ 2002:a05:6102:6894:b0:7a7:5355:7fb6 with SMTP id ada2fe7eead31-7d64d82affcmr3760790137.24.1794919641586;
+ Tue, 17 Nov 2026 04:47:21 -0800 (PST)
+Date: Tue, 17 Nov 2026 12:47:08 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -79,10 +76,10 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 Mime-Version: 1.0
-References: <20261117124710.1338951-1-thaisonphan@google.com>
 X-Mailer: git-send-email 2.56.1.703.gf848ed807c-goog
-Message-ID: <20261117124710.1338951-2-thaisonphan@google.com>
-Subject: [PATCH net v3 1/2] tcp: initialize ir_rmt_addr and ir_loc_addr in cookie_v6_check()
+Message-ID: <20261117124710.1338951-1-thaisonphan@google.com>
+Subject: [PATCH net v3 0/2] tcp: initialize missing request_sock fields in
+ syncookie path
 From: Thaison Phan <thaisonphan@google.com>
 To: Eric Dumazet <edumazet@kernel.org>, Neal Cardwell <ncardwell@google.com>, 
 	Kuniyuki Iwashima <kuniyu@google.com>, "David S . Miller" <davem@davemloft.net>, 
@@ -94,75 +91,44 @@ Cc: Simon Horman <horms@kernel.org>, "=?UTF-8?q?Ilpo=20J=C3=A4rvinen?=" <ij@kern
 	Thaison Phan <thaisonphan@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Commit a3a128f611a9 ("inet: consolidate inet_csk_clone_lock()") moved
-the LOOPBACK4_IPV6 initialization for passive IPv6 TCP sockets from
-tcp_v6_syn_recv_sock() to tcp_v6_init_req().
+Initialize missing request_sock fields for TCP connections accepted via
+SYN cookies, where cookie_tcp_reqsk_alloc() and
+bpf_sk_assign_tcp_reqsk() allocate without __GFP_ZERO:
 
-IPv6 SYN cookie connections allocate a fresh request_sock without
-__GFP_ZERO and call tcp_v6_syn_recv_sock() without tcp_v6_init_req(),
-leaving ireq->ir_rmt_addr and ireq->ir_loc_addr uninitialized in
-cookie_v6_check(). inet_csk_clone_lock() then copies uninitialized slab
-bytes into sk_daddr, sk_rcv_saddr, and inet_saddr, exposing them to
-tracepoints and bpf_sock and causing inet_daddr != LOOPBACK4_IPV6 checks
-(such as IP_OPTIONS in do_ip_setsockopt()) to misclassify native IPv6
-child sockets as IPv4-mapped.
+- Patch 1 initializes ireq->ir_rmt_addr and ireq->ir_loc_addr to
+  LOOPBACK4_IPV6 in cookie_v6_check(), matching tcp_v6_init_req().
+- Patch 2 initializes saw_accecn_opt, accecn_fail_mode, and syn_ect_rcv
+  in cookie_tcp_reqsk_init() and sets syn_ect_snt in
+  cookie_{v4,v6}_check(), matching tcp_openreq_init() and
+  tcp_{v4,v6}_send_synack().
 
-This was originally noticed via an out-of-tree socket hook observing
-inet_sk(sk)->inet_saddr != LOOPBACK4_IPV6 on KASAN test runs. KASAN
-enables SLUB_RCU_DEBUG by default, introducing an RCU grace period that
-prevents cookie_v6_check() from reusing the warm request_sock initialized
-during the initial SYN. Upstream, with tcp_syncookies=2,
-SLUB_RCU_DEBUG=y, and slub_debug=P, sock:inet_sock_set_state shows slab
-poison instead of 127.0.0.6:
+An AI coding assistant helped audit the request_sock initialization
+paths, write the QEMU reproducer, and draft the changelogs.
 
-  ... sock:inet_sock_set_state: family=AF_INET6 protocol=IPPROTO_TCP \
-      sport=59839 dport=41050 \
-      saddr=90.90.90.90 daddr=90.90.90.90 \
-      saddrv6=::1 daddrv6=::1 \
-      oldstate=TCP_LISTEN newstate=TCP_SYN_RECV
-
-Initialize ireq->ir_rmt_addr and ireq->ir_loc_addr to LOOPBACK4_IPV6 in
-cookie_v6_check() to match tcp_v6_init_req(). Tested against a QEMU
-reproducer checking inet_sock_set_state and IP_OPTIONS, as well as the
-packetdrill syncookie selftests.
-
-Fixes: a3a128f611a9 ("inet: consolidate inet_csk_clone_lock()")
-Signed-off-by: Thaison Phan <thaisonphan@google.com>
-Reviewed-by: Eric Dumazet <edumazet@kernel.org>
----
 v3:
-  - no changes
-v2: https://lore.kernel.org/netdev/20261116023709.132684-2-thaisonphan@google.com/
-  - clarify how KASAN (via SLUB_RCU_DEBUG) exposed the uninitialized
-    request_sock, how the issue was observed, and include the
-    inet_sock_set_state trace line (Eric Dumazet)
-  - add Reviewed-by tag from Eric Dumazet
-v1: https://lore.kernel.org/netdev/20261114161248.3428695-2-thaisonphan@google.com/
+  - Patch 2: clarify syn_ect_snt / tcp_accecn_third_ack() description
+    for AccECN connections and reference RFC 9768 Table 4
+    (Chia-Yu Chang)
+v2: https://lore.kernel.org/netdev/20261116023709.132684-1-thaisonphan@google.com/
+  - Patch 1: clarify how KASAN (via SLUB_RCU_DEBUG) exposed the bug,
+    explain how it was observed, and include the inet_sock_set_state
+    trace line (Eric Dumazet)
+  - Patch 2: drop redundant treq->syn_ect_snt = 0 in
+    cookie_tcp_reqsk_init() and clarify how the bug was found and
+    observed via TCP_INFO (Eric Dumazet)
+  - Add Eric Dumazet's Reviewed-by tags
+v1: https://lore.kernel.org/netdev/20261114161248.3428695-1-thaisonphan@google.com/
 
- net/ipv6/syncookies.c | 3 +++
- 1 file changed, 3 insertions(+)
+Thaison Phan (2):
+  tcp: initialize ir_rmt_addr and ir_loc_addr in cookie_v6_check()
+  tcp: accecn: initialize AccECN fields in syncookie path
 
-diff --git a/net/ipv6/syncookies.c b/net/ipv6/syncookies.c
-index b581cb1ee2e8..b33011b71fff 100644
---- a/net/ipv6/syncookies.c
-+++ b/net/ipv6/syncookies.c
-@@ -17,6 +17,7 @@
- #include <net/ipv6.h>
- #include <net/tcp.h>
- #include <net/tcp_ecn.h>
-+#include <net/transp_v6.h>
- 
- #define COOKIEBITS 24	/* Upper bits store count */
- #define COOKIEMASK (((__u32)1 << COOKIEBITS) - 1)
-@@ -205,6 +206,8 @@ struct sock *cookie_v6_check(struct sock *sk, struct sk_buff *skb)
- 
- 	ireq->ir_v6_rmt_addr = ipv6_hdr(skb)->saddr;
- 	ireq->ir_v6_loc_addr = ipv6_hdr(skb)->daddr;
-+	ireq->ir_rmt_addr = LOOPBACK4_IPV6;
-+	ireq->ir_loc_addr = LOOPBACK4_IPV6;
- 
- 	if (security_inet_conn_request(sk, skb, req)) {
- 		SKB_DR_SET(reason, SECURITY_HOOK);
+ net/ipv4/syncookies.c | 4 ++++
+ net/ipv6/syncookies.c | 4 ++++
+ 2 files changed, 8 insertions(+)
+
+
+base-commit: aa40afa831ebfe45e40a23721711059f2ac584d4
 -- 
 2.56.1.703.gf848ed807c-goog
 
