@@ -1,61 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794913079;
-	b=Ucjfp9tfRrBXuUFENs/nmgkaM5yp2gyKcUyBHtCBvtnmpF7cHouYBCG96MJaArZ/wsUH
-	 dPvXa2I1PD7BitbdQ6zhj3GgN//dSz+9xL8DV+mx1OW+Q5EWkfIqMScydfewDIGbtWZrV
-	 02RfjrROCLSa8xhIUf30WR49ohIpU5Op0MYXC0rnMcUD9JOAnpzwTPDh4MRiDTLakDKXf
-	 fdp/RRstRVr60g7XZlofLutbSvQBaj4+00QvURgkuiHyjtddKNQkr23TdDl7DkfeNr5WR
-	 H3eGHZQ0Eu5yLK2yavYUVPKuMjm37C7mWK6DFBUWJ+8TfIjqysC5B9yhcMvE3/axXXw==
+	t=1794913348;
+	b=Sbca9pmDprwKbhcxwEG7YQvxc2lxnjhHB1IrnT5pORFcftuQuJTiO5weY6ysU5wbN4+1
+	 zIgkMIIEVLpCY9IDdWGbKho3ttd8GOwsJSMWcubvYBtNeku40eSje48ggEqt8UahvoD+L
+	 Jn7dcQ4PzjXgE07WYwmvvvPW6OzelBOPLlqiGCGpMJoPGmtSZv/QH9bYau65Ogb0hWZOq
+	 qWJTrvAOHlVGqXArXNyBt47rUDn1Zzzix/jaecAmcpUBuwAssiGLYYjSaU2HEGHkGUg2L
+	 n/2mHXPTLMxcqr12/XGMfLwYG554qcxnspSS6TVN6kT7Pd5VrNKmj00nBU2cLxQ7DNg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794913079;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=jjGcLqLSpT1TELS2zikK9sk5Rkc+9/nweF6Eai9yQNM=;
-	b=1D8OuNL4C+VgxfEWzPOpyLJ2puLerE4Lexrcsfq1kaMibatCJYoi5F3Vu/ERmbApQZ3U
-	 11NqNkQPFxlZKetawrH8Y8kNNg47MEGY+N95Lu1JiUQx1m4jsIH9p+/dPyBs/NpedHnd+
-	 ESpkEXEqzizfSBlYfdsOFzQ9FiZ3hA4nr8IVoPrd9x4gULoRiVpcryTyiwJ//OucSI9by
-	 DW9rjwjefLM+3OHUKRWbpGCpYEid9whhlqESwca9/KXLLEXNhX5ANgtvR5BSofNmezDTv
-	 0GoSR4WysywO9sLMaH2+IiwpvCmlEv1JF8a+UkDGHtxiQggsUpA4M3xIJX2UzDJbvAw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794913348;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=N5sxGVFeVAGuxm/pXRnwfOqfgMH816WuDeBFHMyVy4A=;
+	b=GehBUMKepTKVw9E3slv9tLm0MORGWL/6h9KcGtue3FwP9A5IR3PWfppokN+z0BkSWGg+
+	 oFR9yZBVKF5rH16d0wfmpbImsgz/suGnFqrSQTq85aWh7AH7QktjNvRnqC70sQeRVGDOS
+	 n8Sz8wfnqdTc48tbmRFycw56F0kUyvHEma3U/9wIHch0SD0HL2gUZZ8J7YgSLKkU9KYMJ
+	 kwPrvsa3SSk32WAtHo8WE79KJVanp/Y2YQNpKh3sEtjy9J0X7GgON8ymCxLZJQFJxpANF
+	 z1SlzYP+FMFfJhQVc7NnurkuL57YwdoEvR8+TGCxiDtJ5UAn2x1xwobeL+mm4zqMqdw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hIB6Ijgc;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VXviWfPs;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46B25606A31C;
-	Tue, 17 Nov 2026 10:57:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3260606A31C;
+	Tue, 17 Nov 2026 11:02:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hIB6Ijgc
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 459CA1F000C5;
-	Tue, 17 Nov 2026 10:57:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VXviWfPs
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 923AD1F000C4;
+	Tue, 17 Nov 2026 11:02:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794913079;
-	bh=jjGcLqLSpT1TELS2zikK9sk5Rkc+9/nweF6Eai9yQNM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=hIB6IjgchFEArgu4TdxRRlH9FQjxh+P/l/G8z/zfHYVP2aLUbn1XxGoUU5iSFixc0
-	 kkcDnqBlFVhlsB05LqBeiSza6QSjBRd/Nh4JLe7sTOPOsJHGGthOOi0sxP8471EKfU
-	 Qgf+isTgLQ8q48+x2T/UHQ/BKd76pWDuE4UzOTralFKNnp1CVrdP+WSA0imWfCz9V3
-	 EQ2K+EY+wkpuLJ2/8Z8ZEU3j4BMSCwaCoir5o4OyEu8yGQcHAPlsJ+myT4bHYQ/wDk
-	 hAwWTid4WwEB8nA0TDLkA9ucAY2uFEKkhMElVNhTFdyS4n8tbQ7tA0ntq3SR9+rAhl
-	 yo/9nxbjV1zuw==
-Message-ID: <sashiko-outbox-218682@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 next 13/13] scripts/kallsyms: Reuse little-used
- compression tokens
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "David Laight" <david.laight.linux@gmail.com>, "Petr Mladek" <pmladek@suse.com>, "Kees
- Cook" <kees@kernel.org>, linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, "Jim
- Cromie" <jim.cromie@gmail.com>, "Lorenzo Stoakes" <ljs@kernel.org>
-Cc: "Luis Chamberlain" <mcgrof@kernel.org>, "Andrey Grodzovsky" <andrey.grodzovsky@crowdstrike.com>, "Steven
- Rostedt" <rostedt@goodmis.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Samuel
- Wu" <wusamuel@google.com>, nathan@kernel.org, nsc@kernel.org
-In-Reply-To: <20261117103352.1244657-14-david.laight.linux@gmail.com>
-References: <20261117103352.1244657-1-david.laight.linux@gmail.com>
- <20261117103352.1244657-14-david.laight.linux@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 17 Nov 2026 10:57:57 +0000
+	s=k20260515; t=1794913348;
+	bh=N5sxGVFeVAGuxm/pXRnwfOqfgMH816WuDeBFHMyVy4A=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=VXviWfPsapXpHiX51cNBX0pMOtZm2H9VfY0Pf6fl6lQOWwi8M6w8S1L0FuAZpz1YP
+	 R9HmiVW1ehQdR9VqLaJxvW41LhePNgDXvUlKk3dlFb4sz+a1JUGqMM2+DYdmx25lOp
+	 qNtxfSqzLUp7geoPJv0nXheT3C9Co18bYivTWVekN5+5up0HNVFPwTrggzM6MESfVq
+	 I5wKDyNGM9HXWRCGbh8p5b+dwrpjVd3Gj7bL2vAkiG9zFkDGwMjh5VBgZ1j6ePLOs1
+	 RZemf5d009JbYcKgcaN6mGXFS/wsDe+Jnfn+hNFlZpVV2qwv36XgYk6ol2N6VZLS5z
+	 AX65fgVZpu5nQ==
+Content-Type: multipart/mixed; boundary="===============1861414329617790077=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -64,101 +48,110 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Message-Id: <0e602faa04ade005445a5dba3c1cebb690e5daefa30f24b07a12a3bbcff6ab61@mail.kernel.org>
+In-Reply-To: <20261117103028.4105609-3-arighi@nvidia.com>
+References: <20261117103028.4105609-3-arighi@nvidia.com>
+Subject: Re: [PATCH 2/3] bpf: Allow importing device-dax pages into an arena
+From: bot+bpf-ci@kernel.org
+To: arighi@nvidia.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
+Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,john.fastabend@gmail.com,tj@kernel.org,void@manifault.com,changwoo@igalia.com,joshdon@google.com,vineethrp@google.com,yepeilin@google.com,zhiw@nvidia.com,ltrager@nvidia.com,balbirs@nvidia.com,skolothumtho@nvidia.com,himadrics@protonmail.com,royfru44@gmail.com,bpf@vger.kernel.org,sched-ext@lists.linux.dev,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue, 17 Nov 2026 11:02:25 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Medium] scripts/kallsyms: missing syms update on split in
-  uncompress_symbols()
---
+--===============1861414329617790077==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 33aea03661ccead3785f7f56d31a3c8974eb8710
-Author: David Laight <david.laight.linux@gmail.com>
+> bpf: Allow importing device-dax pages into an arena
 
-scripts/kallsyms: Reuse little-used compression tokens
+TL;DR:
+- Possible ABBA deadlock: get_online_mems() then mmap_read_lock() inverts the
+  order nouveau/dmirror use, so a hang looks possible
+- Minor: tagged user pointers are not untagged before vma_lookup()
 
-This commit reuses compression tokens that have few remaining references by
-expanding them back into their component tokens or three-character strings
-when a more common token pair is available.
-
-> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-> index 42a7c99585c56..976b525c4366d 100644
-> --- a/scripts/kallsyms.c
-> +++ b/scripts/kallsyms.c
+> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+> --- a/kernel/bpf/arena.c
+> +++ b/kernel/bpf/arena.c
 
 [ ... ]
 
-> @@ -855,6 +954,125 @@ compress_symbols(unsigned int token_idx, int compre=
-ssed_chr)
->  	return subs;
->  }
-> =20
-> +/* Change every occurance of idx back to token_pair/triple.
-> + * This extends all the symbol table entries but frees up a token. */
-> +static __attribute__((noinline)) void
-> +uncompress_symbols(unsigned int token_pair, int idx)
+> +static int arena_import_dax(struct bpf_arena *arena, long uaddr, u32 page_cnt, u64 src)
 > +{
-> +	struct best_table *bt =3D best_table + idx;
-> +	unsigned int sym_idx, len;
-> +	unsigned char *sym, *p, *end;
-> +	unsigned int substitutions;
-> +	unsigned int third_char;
-> +
-> +	third_char =3D token_pair >> 16;
-> +	token_pair &=3D 0xffff;
-> +
-> +	for (int j =3D 0; j < bt->syms.cnt; j++) {
-> +		sym_idx =3D bt->syms.sym_indexes[j];
-> +
-> +		sym =3D table[sym_idx]->sym;
-> +		len =3D table[sym_idx]->len;
-> +		end =3D sym + len;
-> +
-> +		for (p =3D sym; (p =3D memchr(p, idx, len)); p +=3D 2) {
-> +			len =3D end - p - 1;
-> +			if (len) {
-> +				if (third_char) {
-> +					/* Adding three characters */
-> +					adjust_profit(sym_idx, idx, third_char, p[1], p[1]);
-> +					memmove(p + 3, p + 1, len);
-> +				} else {
-> +					adjust_profit(sym_idx, idx, token_second(token_pair), p[1], p[1]);
-> +					memmove(p + 2, p + 1, len);
-> +				}
-> +			}
-> +			if (p !=3D sym)
-> +				adjust_profit(sym_idx, p[-1], p[-1], idx, token_first(token_pair));
-> +			token_add_symbol(token_pair, sym_idx);
-> +			p[0] =3D token_first(token_pair);
-> +			p[1] =3D token_second(token_pair);
-> +			end++;
-> +			if (third_char) {
-> +				token_add_symbol(token_index(p[1], third_char), sym_idx);
-> +				p[2] =3D third_char;
-> +				end++;
-> +				p++;
-> +			}
-> +		}
-> +		/* sym_idx is already in best_table[].syms from earlier. */
-> +		table[sym_idx]->len =3D end - sym;
-> +	}
 
-[Severity: Medium]
-Can uncompress_symbols() leave sym_idx missing from best_table[].syms for
-token_first(token_pair) or token_second(token_pair)?
+[ ... ]
 
-sym_arr_free_all() clears best_table[ch].syms.cnt when a token slot loses
-all references or is uncompressed, while split_token() only checks that
-first->str and second->str still concatenate to bt->str.  If a component
-slot is freed and later reused such that first->str and second->str still
-match bt->str (either reused for the same substring or for a different
-length split of bt->str), its syms array only tracks symbols from the new
-compression and no longer contains sym_idx where bt remained compressed.
+> +	/* A sleepable callback, like a bpf_wq one, may run without an address space */
+> +	if (!mm || (src & ~PAGE_MASK))
+> +		return -EINVAL;
 
-Expanding bt back into those component tokens without adding sym_idx to
-their best_table[].syms arrays triggers the errx() in check_best_refs(), or
-leaves stale token bytes in table[sym_idx]->sym if that component token is
-split again before check_tables() runs.
+[ ... ]
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261117103352.1244=
-657-1-david.laight.linux@gmail.com?part=3D13
+> +	/*
+> +	 * A pin doesn't keep the memmap of device pages: an unbind can free it
+> +	 * until a dev_pagemap reference is held, but only under mem_hotplug_lock,
+> +	 * which nests outside of mmap_lock
+> +	 */
+> +	get_online_mems();
+> +	mmap_read_lock(mm);
+
+Is the lock order stated in this comment correct?  The tree also has paths
+that take mem_hotplug_lock for write while holding a user mmap_read_lock:
+
+  nouveau_svmm_bind()            mmap_read_lock(mm)
+    nouveau_dmem_migrate_vma() -> nouveau_dmem_migrate_chunk() ->
+    nouveau_dmem_migrate_copy_one() -> nouveau_dmem_page_alloc_locked() ->
+    nouveau_dmem_chunk_alloc() -> memremap_pages() -> pagemap_range() ->
+    mem_hotplug_begin() -> percpu_down_write(&mem_hotplug_lock)
+
+  dmirror_migrate_to_device()    mmap_read_lock(mm)
+    dmirror_migrate_alloc_and_copy() -> dmirror_devmem_alloc_page() ->
+    dmirror_allocate_chunk() -> memremap_pages()
+
+That is the opposite order from get_online_mems() followed by
+mmap_read_lock(mm) here, so lockdep should report an ABBA cycle once both
+chains are seen.
+
+A hang with a single mm looks possible with three threads.  T1 holds
+mmap_read_lock and waits in percpu_down_write() for T2.  T2, in this kfunc,
+holds mem_hotplug_lock for read and calls mmap_read_lock(mm).  T3 waits in
+mmap_write_lock() on T1's read hold, and once it sets the rwsem handoff flag
+T2 can no longer take the read lock and queues behind T3.  No thread can
+make progress.
+
+The x86 ptdump debugfs path already uses the same order as this patch, so
+the inversion is not new, but this kfunc makes it reachable from a much more
+common path.
+
+Could the dev_pagemap reference be taken without holding mem_hotplug_lock
+across mmap_lock, for example by taking the dev_dax pgmap from the VMA's
+file before pinning?
+
+> +	vma = vma_lookup(mm, src);
+
+A subsystem pattern flags this as potentially concerning: src is a
+user-supplied u64 that goes to vma_lookup() and to the vma->vm_end - src
+range check without untagged_addr(), and the only earlier test is
+(src & ~PAGE_MASK).  A tagged pointer (arm64 TBI/MTE, x86 LAM) is above every
+VMA, so vma_lookup() returns NULL and the import fails with -EINVAL, while
+pin_user_pages() would have accepted the same address because
+__get_user_pages() untags it.
+
+This fails closed, so the checked VMA and the pinned range cannot diverge,
+and addresses returned by mmap() of /dev/daxX.Y are untagged.  Should this
+use untagged_addr(src) on a copy before vma_lookup() and the range check, or
+should the kdoc say that @src must be untagged?
+
+> +	if (!vma || !vma_is_devdax(vma) ||
+> +	    ((unsigned long)page_cnt << PAGE_SHIFT) > vma->vm_end - src)
+> +		goto out_unlock;
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/44067070819
+--===============1861414329617790077==--
