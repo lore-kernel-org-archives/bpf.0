@@ -1,75 +1,52 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=129.217.128.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794941391;
-	b=4hG5Ajyqn0gtqUCAv6pVVag3oA+SJ2RnIGQ3AQ1Pr5ZEh7fhRVlUJbKQIMWGPQkdmRkF
-	 V4qjVvedXToOPphAfQMk3wdL6qOR1B6cGmc3QcEYq5YFVjnT/oyfAov/TYBwE9Js40fZn
-	 Tu9U5DVpIpKRn9dkMoZdH06OaZLU76RRPUxop7id0wGBSC9ZbbpviUUQ/zRi2l5Dy/AY/
-	 C1F7HBHOeMpy4xKU9QxIE/rtiVdStLnTPy/P7n4TYbbgLTifPxU5+i2QG9M721b9OTZGj
-	 kYOewytje5EAdGp2j3uf1TwLgyC71/QbaDux2yFhWpBI3+gR/ZojsZF1B0DZTpJd1rw==
+	t=1794941668;
+	b=sAI5+IvlTIvgDXS8tLRYxuXa5Hljh6JKZ/ubShhllHoJjAZbNs9Lt+s5UiQHopTsewB8
+	 s9vSAqFzxmwk0NNHKB545Wea9tybHWgWew9TKeri9ZRueLl613NwybdtgfwDWHaACAQr/
+	 +gA/u1TjDvq2Kk6Kc0S3N2y2sFFfhauxlF0OeMv4BTV3YnrnTd1D6VGWbsIbDEws6TU89
+	 NhkStdKf766WMa2waNp3BNZFRqNunkiEognCsS3dStoNnQzEviU9plo8N6K9QcLeKcyN1
+	 ds8v4jjwiH4F4m7AKWkKRRDPSGrdaNGvA8j4X29Ki5SX6467NdjidmYcWKqBGt5dXmg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794941391;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=fE96Bwoq4dvubLO/ytQscTwlirtJcyD7QHCmaubFJQM=;
-	b=rEPN7Xm+5ZZlkdK+xzJlJG+Ss3pCWy/0LYSle7peSYS4GWA5t0NhttWAeSSX40gBVNol
-	 QDcU2Ggu77b3zQKlRJVCrzNzrL+iZpS8FH64iSeAdMXFzmqgj0QRRr71aFwXQsf8LHMey
-	 BLud34Zjgg3Kws2siA/ooX35yrBmdbUaPNvNRyAAjwg0jWEQAXulfu6U7puC3gvimho5i
-	 zVXLpfVL6aiaiYOxdDX/c+dK3Dn3cxRdmOdwaRdYLn38+rgFLdYSHbpTumyLbeGj9iqmn
-	 Wsoz/k82l0SKXNrDhTs0Alf9LhiSMerirKGxJPJWAiEOmajWsNZ7qzbcaF+cQen/PcA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794941668;
+	h=DMARC-Filter:DKIM-Signature:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=oyXfSxY1SC5sSASaK9sor3nEs3De0DC+JXPLMJXd4kw=;
+	b=jaalEh77NKg671alAxoJsGwQNQZ+tVni+52+sahwBejBNVjPo2qsvqwkgFd0ciCZSBIW
+	 YGW6eplZfkkbKfv/RZRFRNyXDIpttBuJxX3gyqeH6fSUF33M3FCyU+TDtFV5IXZaLWHkv
+	 vJCjmG7fQWguijvjck8cGwAb8XKnc57G/4QazK0gLWnvdPFIKZqHUPh1+i7+v2rjOa5JN
+	 IftD4UGJfz50oV7Ngdis0JORp8gwkLrCgYoctwn3FGj0oaSlGRsvwqaGUyL5ve+RmLqhD
+	 +WVFprF2DKc9hsug7yaEhG9ibvcX0/GQk3AsJb3MxoFz82xxwaXHfmmBk5nrtdZOGHA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=WW1MgN0E;
-	arc=none smtp.remote-ip=74.125.82.199
-Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com [74.125.82.199])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=tu-dortmund.de;
+	spf=pass smtp.mailfrom=tu-dortmund.de;
+	dkim=pass header.d=tu-dortmund.de header.i=@tu-dortmund.de header.a=rsa-sha256 header.s=unimail header.b=pWRCdIsA;
+	arc=none smtp.remote-ip=129.217.128.51
+Received: from unimail.uni-dortmund.de (mx1.hrz.uni-dortmund.de [129.217.128.51])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DC7560A3802
-	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 18:49:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4DC7560A3802
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA0CD606A32A;
+	Tue, 17 Nov 2026 18:54:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AA0CD606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-dortmund.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=WW1MgN0E
-Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-3821eb27024so220892eec.1
-        for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 10:49:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794941390; x=1795546190; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=fE96Bwoq4dvubLO/ytQscTwlirtJcyD7QHCmaubFJQM=;
-        b=WW1MgN0E610Ng/mUsdrMraSskJo17fZb1fON7UEmlBFyhEVKKchyibrIoPxMSyHET5
-         thKIRP1YEZt79vZKCCim/zvSYsvxMduKm31ec5DGc2qP9ZWg3WrzigM8Oh4bA4SXU1QH
-         HC49ZsHIKiK2gk+hqXR68p4l2XWMI3a0vTDWF6g+nskYW2WyEo40yskAlm/R6fhdzFiF
-         pUV98xaovmjJqptj08FUKzpRz9Yp7oKtoEjH8u/g1db9D+gBDegs9yU6/yRkvCmQh9M6
-         AEPcRMMf8dKHJMveKVvJH8jadIt/Ium6pGwaj8yTUWmHr49Jybhij42eDvL/d+Q55Hvk
-         P3yA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794941390; x=1795546190;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=fE96Bwoq4dvubLO/ytQscTwlirtJcyD7QHCmaubFJQM=;
-        b=l72yy+f6jU4HzPn4BLLUhwXayOMDJyI38oB9OHSo8LffAvf5EuZ8uf9oAH9Mh4cfZ+
-         bP7iMkRozTpZg2jxKcrCFREw2IsQYxKZS0xtoSr/Vs+Pz9wWGbn03P8epewvXmiX+V+H
-         sIEwm3QfAlGppc47psBbasoWy7/GMgIFCwafJgvEgaUHox+1xT7LjiZLQtQzv1KujIHt
-         AEc0ce4LiqUhQ+B0BzVkVrZ0EWXRsMyJhT8CKf5Cvp0z9/mBjWTgEWYdkrHamZlygmtW
-         y9BrfA0EtWC2z5pdAmYfr9X6+vISjLdHCY8HAZdnsp7wphUzj6LmF5b3PHu6n57JIBat
-         nS6Q==
-X-Forwarded-Encrypted: i=1; AL+hErEBtanGBzLJMaTlxYciBfgT/rPQZLvvtgvE626P1x68yj5g/BSIbWLGeCJVwukR+DD6200=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9KRn0PWnRzoqv3roC5yAGh8x5/LM9K7CsqESbkMvzHlrCUMd+Q
-	sruYVvDCezozqtypXQFAn0lj4zoRtGKlm9TlsKWXwtzT+DrSVmNAm/nnCN0rnWXctjJXXzMkUFH
-	E9DQcp5gq9g==
-X-Received: from dycnd10.prod.google.com ([2002:a05:7301:c0a:b0:343:520f:7a80])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:693c:804c:b0:378:2e89:3958
- with SMTP id 5a478bee46e88-38280f22793mr277558eec.19.1794941389993; Tue, 17
- Nov 2026 10:49:49 -0800 (PST)
-Date: Tue, 17 Nov 2026 10:48:44 -0800
-In-Reply-To: <20261117184844.99889-1-irogers@google.com>
+	dkim=pass (1024-bit key, unprotected) header.d=tu-dortmund.de header.i=@tu-dortmund.de header.a=rsa-sha256 header.s=unimail header.b=pWRCdIsA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tu-dortmund.de;
+	s=unimail; t=1794941635;
+	bh=oyXfSxY1SC5sSASaK9sor3nEs3De0DC+JXPLMJXd4kw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=pWRCdIsA1hx7NU9gQn6CuN4ZRk8OSoF+AMDAtuTp/Oa/E0Pw9cUEbL03OaEDKH0Yn
+	 F92g5I4l3UjO+kpOh/GaR5rUN4vt+hyNse4azoY2L1G/sbwAt0KocTlrQeA0q6Tym7
+	 H7nGhDzGakSkptxhC1wBCK+Bbs037Gr7y5PHP0qg=
+Received: from [192.168.0.202] (ipservice-092-208-185-164.092.208.pools.vodafone-ip.de [92.208.185.164])
+	(authenticated bits=0)
+	by unimail.uni-dortmund.de (8.19.0.2/8.19.0.2) with ESMTPSA id 6AHIrrEg001015
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Tue, 17 Nov 2026 19:53:53 +0100 (CET)
+Message-ID: <ab31c0a9-8e3a-4c24-9570-7baf91c22288@tu-dortmund.de>
+Date: Tue, 17 Nov 2026 19:53:53 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -78,63 +55,56 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261117184844.99889-1-irogers@google.com>
-X-Mailer: git-send-email 2.56.1.703.gf848ed807c-goog
-Message-ID: <20261117184844.99889-24-irogers@google.com>
-Subject: [PATCH v14 23/23] perf machine: Add __guarded_by annotation to machines->guests
-From: Ian Rogers <irogers@google.com>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Marco Elver <elver@google.com>
-Cc: Bart Van Assche <bvanassche@acm.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, 
-	Weilin Wang <weilin.wang@intel.com>, linux-perf-users@vger.kernel.org, 
-	llvm@lists.linux.dev, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: [PATCH net 1/2] veth: wake a stopped peer txq beyond
+ real_num_tx_queues
+To: Tianyi Gao <tianyi@cloudflare.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet
+ <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Toshiaki Makita <toshiaki.makita1@gmail.com>,
+        =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@cloudflare.com, tianyi.gao@linux.dev
+References: <20261113104648.225983-1-simon.schippers@tu-dortmund.de>
+ <20261113104648.225983-2-simon.schippers@tu-dortmund.de>
+ <20261117181607.30219-1-tianyi@cloudflare.com>
+Content-Language: en-US
+From: Simon Schippers <simon.schippers@tu-dortmund.de>
+In-Reply-To: <20261117181607.30219-1-tianyi@cloudflare.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Annotate guests in struct machines with __guarded_by(&lock) and mark
-machines__init() with __context_unsafe().
+On 11/17/26 19:16, Tianyi Gao wrote:
+> Hi Simon,
+> 
+> On Fri, Nov 13, 2026 at 11:46:47AM +0100, Simon Schippers wrote:
+>> Fixes: dc82a33297fc ("veth: apply qdisc backpressure on full ptr_ring to reduce TX drops")
+> 
+> I agree with Sashiko on the Fixes tag.
+> 
+> I have reproduced the stall with your script (stuck after 2 cycles) and
+> confirmed this patch fixes it (all 30 cycles pass).
+> It is tested with veth from net at 5e9b2ad9b838, as a module on an arm64
+> VM with 8 vCPUs.
+> 
+> Reviewed-by: Tianyi Gao <tianyi@cloudflare.com>
+> Tested-by: Tianyi Gao <tianyi@cloudflare.com>
+> 
+> Cheers,
+> Tianyi
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/util/machine.c | 1 +
- tools/perf/util/machine.h | 3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+Hi, thanks for your testing!
 
-diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
-index 0cc593d5372a..70870baa157e 100644
---- a/tools/perf/util/machine.c
-+++ b/tools/perf/util/machine.c
-@@ -234,6 +234,7 @@ void machine__delete(struct machine *machine)
- }
- 
- int machines__init(struct machines *machines, struct perf_session *session)
-+	__context_unsafe(/* initialization */)
- {
- 	int err = machine__init(&machines->host, "", HOST_KERNEL_ID);
- 
-diff --git a/tools/perf/util/machine.h b/tools/perf/util/machine.h
-index 80191545ee8a..67d517742fb6 100644
---- a/tools/perf/util/machine.h
-+++ b/tools/perf/util/machine.h
-@@ -3,6 +3,7 @@
- #define __PERF_MACHINE_H
- 
- #include <sys/types.h>
-+#include <linux/compiler-context-analysis.h>
- #include <linux/rbtree.h>
- #include "maps.h"
- #include "dsos.h"
-@@ -153,7 +154,7 @@ struct machines {
- 	struct perf_session *session;
- 	struct rw_semaphore lock;
- 	struct machine host;
--	struct rb_root_cached guests;
-+	struct rb_root_cached guests __guarded_by(&lock);
- };
- 
- int machines__init(struct machines *machines, struct perf_session *session);
--- 
-2.56.1.703.gf848ed807c-goog
+Yes, I should have referenced the other commit, will post a v2
+if requested :)
 
+Cheers!
