@@ -1,73 +1,73 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=83.166.143.170
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.125.25.14
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794910671;
-	b=QSv/7mcd2F5nyhshRljFrSvEyfcwwZOijHhEZoxJ5nahJxg8g5GecVGfApYSagdPN3a+
-	 wvthkopIsk719RWM1iIklAd43vIhU8BEqLMLM1/xRCsnm3yOrUcwuWC4ypmP6nSs+C30g
-	 NirtmfHGRMG/y4wjbFb9Cl61y2+tLCTSk09LZCyBw/8XEQa1B+ZUKM0N5cD0uCzML1xbf
-	 D3Tj7PT5pYQ+/97zq2cfiIQmX0l10yROZpmQzG3q3pLa42QEwj+x8CxAcrx5MrSdpvlt0
-	 zVyzLf+MkqSwwZNDhGkwBqxfwWPUT7aFQIX/VAG1YmvH9BmHxY1K2us//Gk2eMLzPeA==
+	t=1794910732;
+	b=QinNpN4sI7iw1YQ0w8HSGVyWtC6SiVTjzcLwiAFqCaUuSLxnN4WgY5nfjIC80N7IZStg
+	 t57etbmfRf5tmcEbtkx/Wc4SEXBsYLxTTzxwcWltABa9uGRnLm7cXTxvANK9tJqaWTkic
+	 QPTooI8jj5jJHJ5UJd/2NinwlsDw+onk1VetugTS/ksH6GXfuDkKhuqp1CWbuD8185tBv
+	 bA/o45IjoHF9D1x8xwmeV+b4eGcTYYrvC9gHQW3jGtD0wWRZehQ5sMOWahdsSI+PL/AXq
+	 otJYyIplYS2qifbHr1eYl8/APwoAgQgz10zgP0UIt+JMhPQc03PlE2cOgPFrIW15Agw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794910671;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794910732;
 	h=DMARC-Filter:Received:DKIM-Signature:Received:From:To:Cc:Subject:
-	 Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-Infomaniak-Routing;
-	bh=diZz0z/ARVlxmVWHhnTctsthFSMRnacZCsupfkvb0xg=;
-	b=tPFym+N8C7E0y0hyXvinHfYsJl0NbF5CCi44Uv3QL64U8eDYHVE693UM1fTwICAQsSHj
-	 Xrz0WPavYRESxnkOzlQ/B/Aqj1lNvjcaPvyOpiwpYmc9ZEEleExN+U8KQZHhuSWFDxYhk
-	 VCLr7JCLBBXxU6VYw03KGqE+ISjrIQ1fWL0U4Sn44xFln/rL9m8bsQK77bmbKrHKI0Ea3
-	 QD2S3A9uHHxmJvV+vQM0eRUC3yr35Jzp/KXaXYxOl5r2VyQnU6YHSOmmIrcJs+BZxU6XI
-	 UP20/RYjy4WqTlPkgFmAiGfu4igjXYch9IH/5qXSaH7674srd9jv/MLHfabXFt8tHdA==
+	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 X-Infomaniak-Routing;
+	bh=ChHC2pG1ERdXi+oTY1FkF++RG4lH/5E3W8mTcB8dgwM=;
+	b=YESQwuO87i9I4C7N8Aw40h9OoR/tnc+yYeU9zMgrFcqDqGjrMUJy4D32ULzAopEeayLo
+	 GV5GUY0BDr6VspCQsTYhZ7RhHWK7Zw7+sTfwjRKAd6seclOYlyy/t/r1F4q6/v/N7fXRL
+	 NM4Mu65QPy2vQjp3twu6Gvub+2XfVgpADxAYjmDdkAYSP1wupNHnffpgLDYzDm2ocQ+7c
+	 ePa7qVIJ/ovA05j7GSkkPi1/2dsb/gkUPmo5oAiIB9v+9tMbVdJ5BBGHD6pgCiDn7g64A
+	 TCOwgLsCC1ZGwlapY1aDQ6whQfXqUENSxzWGmLWwhBTV23bO8ODfYMES4Q4AqWamWzw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=digikod.net;
 	spf=pass smtp.mailfrom=digikod.net;
-	dkim=pass header.d=digikod.net header.i=@digikod.net header.a=rsa-sha256 header.s=20191114 header.b=KZGGvwMz;
-	arc=none smtp.remote-ip=83.166.143.170
-Received: from smtp-8faa.mail.infomaniak.ch (smtp-8faa.mail.infomaniak.ch [83.166.143.170])
+	dkim=pass header.d=digikod.net header.i=@digikod.net header.a=rsa-sha256 header.s=20191114 header.b=Q6yLxN+8;
+	arc=none smtp.remote-ip=185.125.25.14
+Received: from smtp-190e.mail.infomaniak.ch (smtp-190e.mail.infomaniak.ch [185.125.25.14])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B32A606A332
-	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 10:17:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1B32A606A332
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0EDF606A330
+	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 10:18:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B0EDF606A330
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.a=rsa-sha256 header.s=20191114 header.b=KZGGvwMz
-Received: from smtp-4-0001 (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4jTLJm2cvtz18Z;
-	Tue, 17 Nov 2026 11:17:44 +0100 (CET)
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.a=rsa-sha256 header.s=20191114 header.b=Q6yLxN+8
+Received: from smtp-4-0001 (unknown [IPv6:2001:1600:7:10::a6c])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4jTLL04GkJz1b7;
+	Tue, 17 Nov 2026 11:18:48 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1794910664;
-	bh=diZz0z/ARVlxmVWHhnTctsthFSMRnacZCsupfkvb0xg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KZGGvwMzQfa9rBW6OKQ7AYbKPcHsWgmseosOfEDsJ1UGj6fhiTFMhgxVKHTLMfs6k
-	 074N9DBRNBvAcSkZb6WCPlBZbVlXfH+207nJXtQwnu2NE8NWr8fjwFDWbJ1v1F14pm
-	 3zdeaaw9uGhN99JIINkoXO27c/ZLRaf/ICFmwBUw=
-Received: from unknown by smtp-4-0001 (Postfix) with ESMTPA id 4jTLJk6jtfzPTf;
-	Tue, 17 Nov 2026 11:17:42 +0100 (CET)
+	s=20191114; t=1794910728;
+	bh=ChHC2pG1ERdXi+oTY1FkF++RG4lH/5E3W8mTcB8dgwM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Q6yLxN+8p94eq4eTWoh/lkjpxIn/U+IwWRYIrBovY9PD/mhN0tTERgC6mjnLA0qnC
+	 e1pcB0MDoLWbYcrUAPhEnEpRndJokemiQ67sW+Lzen4RtWp7pPrRJQaMnUkNw120aH
+	 Qooh8aq0wyIwJ0AFMjbGkBAyNNRuqzzMKlMJLiWM=
+Received: from unknown by smtp-4-0001 (Postfix) with ESMTPA id 4jTLKy6pWJzVLq;
+	Tue, 17 Nov 2026 11:18:46 +0100 (CET)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To: Paul Moore <paul@paul-moore.com>,
-	Serge Hallyn <sergeh@kernel.org>
-Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	Ada Smith <adasmithgt@gmail.com>,
-	Christian Brauner <brauner@kernel.org>,
+To: Casey Schaufler <casey@schaufler-ca.com>,
+	Georgia Garcia <georgia.garcia@canonical.com>,
 	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	James Morris <jmorris@namei.org>,
 	John Johansen <john.johansen@canonical.com>,
+	=?UTF-8?q?Ondrej=20Mosn=C3=A1=C4=8Dek?= <omosnacek@gmail.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Serge Hallyn <serge@hallyn.com>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	Christian Brauner <brauner@kernel.org>,
 	KP Singh <kpsingh@kernel.org>,
 	Matt Bobrowski <matt@bobrowski.net>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>,
 	apparmor@lists.ubuntu.com,
 	bpf@vger.kernel.org,
 	kernel-team@cloudflare.com,
 	linux-kernel@vger.kernel.org,
 	linux-security-module@vger.kernel.org,
-	selinux@vger.kernel.org,
-	Serge Hallyn <serge@hallyn.com>
-Subject: [PATCH v2 2/2] selftests/landlock: Test PR_SET_SECUREBITS mediation
-Date: Tue, 17 Nov 2026 11:17:37 +0100
-Message-ID: <20261117101738.2523492-3-mic@digikod.net>
-In-Reply-To: <20261117101738.2523492-1-mic@digikod.net>
-References: <20261117101738.2523492-1-mic@digikod.net>
+	selinux@vger.kernel.org
+Subject: [PATCH v2 0/6] Fix Landlock mediation of capabilities guarding LSM policies
+Date: Tue, 17 Nov 2026 11:18:37 +0100
+Message-ID: <20261117101845.2523770-1-mic@digikod.net>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -81,111 +81,107 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-The preceding commoncap fix routes the CAP_SETPCAP check for privileged
-PR_SET_SECUREBITS requests through the ordinary capable hooks.  Add a
-focused Landlock regression test for this path.
+Hi,
 
-Keep CAP_SETPCAP effective to isolate Landlock mediation and run the
-audit case in a child domain.  A privileged change returns EPERM and
-emits an exact CAP_SETPCAP record, then an unprivileged-only change
-succeeds.  After the child exits, require the domain deallocation record
-to report exactly one denial; this proves that the second operation did
-not create a hidden denial without relying on an asynchronous no-record
-timeout.
+This is series 3 of 3:
 
-The existing check-exec securebits fixture already covers commoncap's
-privileged, unprivileged, locked, and user-namespace semantics.  Without
-the preceding fix, this Landlock audit test fails.
+  1. fix Landlock mediation of commoncap's capability checks;
+  2. fix PR_SET_SECUREBITS mediation and add focused Landlock tests;
+* 3. fix Landlock mediation of capabilities guarding LSM policies.
 
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: Günther Noack <gnoack@google.com>
-Cc: Paul Moore <paul@paul-moore.com>
-Cc: Serge Hallyn <serge@hallyn.com>
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
----
- tools/testing/selftests/landlock/cap_test.c | 69 +++++++++++++++++++++
- 1 file changed, 69 insertions(+)
+This series applies on top of series 2:
+https://patch.msgid.link/20261117101738.2523492-1-mic@digikod.net
 
-diff --git a/tools/testing/selftests/landlock/cap_test.c b/tools/testing/selftests/landlock/cap_test.c
-index 39ef57a49dc9..144ae866c3bd 100644
---- a/tools/testing/selftests/landlock/cap_test.c
-+++ b/tools/testing/selftests/landlock/cap_test.c
-@@ -1075,6 +1075,75 @@ TEST_F(cap_audit, denied)
- 	EXPECT_EQ(0, records.domain);
- }
- 
-+/*
-+ * A privileged denial allocates the domain ID.  The following unprivileged-only
-+ * change must not create a hidden Landlock denial, so the domain's deallocation
-+ * record must report exactly one denial.
-+ */
-+TEST_F(cap_audit, securebits)
-+{
-+	const unsigned long unpriv = SECBIT_EXEC_RESTRICT_FILE |
-+				     SECBIT_EXEC_RESTRICT_FILE_LOCKED;
-+	__u64 *domain_id, deallocated_dom = 0;
-+	unsigned long bits;
-+	int err, ruleset_fd, status;
-+	pid_t child;
-+
-+	domain_id = mmap(NULL, sizeof(*domain_id), PROT_READ | PROT_WRITE,
-+			 MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-+	ASSERT_NE(MAP_FAILED, domain_id);
-+	*domain_id = 0;
-+
-+	ruleset_fd = create_cap_ruleset();
-+	ASSERT_LE(0, ruleset_fd);
-+	/* Allow the child to replace the audit filter before exiting. */
-+	ASSERT_EQ(0, add_cap_rule(ruleset_fd, CAP_AUDIT_CONTROL));
-+
-+	child = fork();
-+	ASSERT_LE(0, child);
-+	if (child == 0) {
-+		enforce_ruleset(_metadata, ruleset_fd);
-+		EXPECT_EQ(0, close(ruleset_fd));
-+
-+		set_cap(_metadata, CAP_SETPCAP);
-+		bits = prctl(PR_GET_SECUREBITS);
-+		EXPECT_EQ(-1, prctl(PR_SET_SECUREBITS,
-+				    bits | SECBIT_NO_CAP_AMBIENT_RAISE));
-+		EXPECT_EQ(EPERM, errno);
-+
-+		EXPECT_EQ(0, matches_log_cap(self->audit_fd, CAP_SETPCAP));
-+		EXPECT_EQ(0, matches_log_domain_allocated(self->audit_fd,
-+							  getpid(), domain_id));
-+
-+		EXPECT_EQ(0, prctl(PR_SET_SECUREBITS, bits | unpriv));
-+		clear_cap(_metadata, CAP_SETPCAP);
-+
-+		/* Receive the asynchronous domain deallocation record. */
-+		set_cap(_metadata, CAP_AUDIT_CONTROL);
-+		EXPECT_EQ(0, audit_filter_drop(self->audit_fd, AUDIT_ADD_RULE));
-+		EXPECT_EQ(0,
-+			  audit_filter_exe(self->audit_fd, &self->audit_filter,
-+					   AUDIT_DEL_RULE));
-+		clear_cap(_metadata, CAP_AUDIT_CONTROL);
-+
-+		_exit(_metadata->exit_code);
-+		return;
-+	}
-+
-+	ASSERT_EQ(child, waitpid(child, &status, 0));
-+	if (WIFSIGNALED(status) || !WIFEXITED(status) ||
-+	    WEXITSTATUS(status) != EXIT_SUCCESS)
-+		_metadata->exit_code = KSFT_FAIL;
-+
-+	EXPECT_NE(0, *domain_id);
-+	err = matches_log_domain_deallocated(self->audit_fd, 1, *domain_id,
-+					     &deallocated_dom);
-+	EXPECT_EQ(0, err);
-+	EXPECT_EQ(*domain_id, deallocated_dom);
-+	EXPECT_EQ(0, munmap(domain_id, sizeof(*domain_id)));
-+	EXPECT_EQ(0, close(ruleset_fd));
-+}
-+
- /*
-  * Denials in the capset and mmap_addr paths are audited like capable hook
-  * denials.  The vm_enough_memory hook only withholds the admin reserve, with
+AppArmor, Smack and SELinux deliberately check the capabilities that
+guard their own policy with cap_capable() instead of capable(), so that
+other LSMs do not have to authorize them:
+
+- commit db59000ab760 ("selinux: only invoke capabilities and selinux
+  for CAP_MAC_ADMIN checks");
+- commit f28e783ff668 ("Smack: Use cap_capable in privilege check");
+- commit 31ec99e13346 ("apparmor: switch to apparmor to internal capable
+  check for policy management").
+
+However, LANDLOCK_PERMISSION_CAPABILITY_USE, merged for v7.4, restricts
+capability use in general through the capable hook, so a domain that
+denies CAP_MAC_ADMIN can still load AppArmor policy, change a file's
+Smack label, or set SELinux contexts unknown to the loaded policy.
+
+Patch 1 adds security_capable_lsm(), which these LSMs call instead of
+cap_capable().  It checks the capability with commoncap, then calls a
+new capable_lsm hook with the LSM_ID_* of the LSM whose policy the
+capability guards.  LSMs that only implement the capable hook still do
+not see these checks.  Patch 2 implements the hook in Landlock, patches
+3 to 5 switch AppArmor, Smack and SELinux to the new helper, and patch 6
+adds tests.
+
+Calling the other LSMs' capable hooks instead, possibly with a new
+CAP_OPT_* flag, would change what the capable hook sees for its current
+users, including BPF LSM programs, and would require every MAC LSM to
+ignore these checks.  The new hook keeps the choice of the commits above
+by default and follows the hook guidelines.  The trade-off is that an LSM
+restricting capability use in general needs to implement both hooks, as the
+kerneldoc says.
+
+As the capable hook, the new hook can be called in atomic context and
+with another task's credentials (Smack's SIGIO check and ptrace rule).
+Smack passes CAP_OPT_NONE, so Landlock logs every denial of these
+capabilities, including for the override checks that some Smack hooks
+make before their label rules.
+
+The new tests are skipped unless Smack or AppArmor is active.  With
+lsm=landlock,smack and lsm=landlock,apparmor, they fail without these
+patches and pass with them.  SELinux only checks CAP_MAC_ADMIN this way
+with a loaded policy, so it is only build- and boot-tested.
+
+Paul, an Acked-by for the LSM and SELinux patches, and for taking this
+series through the Landlock tree, would be welcome.
+
+Stephen, a review of the LSM and SELinux patches would be welcome.
+
+John, a review of the AppArmor patch would be welcome.
+
+Casey, a review of the Smack patch would be welcome.
+
+KP and Matt, a review of the new BPF LSM attach point would be welcome.
+
+Changes since v1:
+https://patch.msgid.link/20261110203042.2410140-1-mic@digikod.net
+- Fix the AppArmor test for users without the root UID or GID (reported
+  by Sashiko).
+
+Regards,
+
+Mickaël Salaün (6):
+  lsm: Add a capable_lsm hook for capabilities guarding an LSM's policy
+  landlock: Restrict capabilities guarding other LSMs' policies
+  apparmor: Use security_capable_lsm() for policy capabilities
+  smack: Use security_capable_lsm() for privilege checks
+  selinux: Use security_capable_lsm() for CAP_MAC_ADMIN checks
+  selftests/landlock: Test capabilities guarding other LSMs' policies
+
+ include/linux/lsm_hook_defs.h               |   2 +
+ include/linux/security.h                    |   9 +
+ security/apparmor/domain.c                  |   9 +-
+ security/apparmor/policy.c                  |   7 +-
+ security/landlock/cap.c                     |  23 ++
+ security/security.c                         |  47 ++++
+ security/selinux/hooks.c                    |   3 +-
+ security/smack/smack_access.c               |   3 +-
+ tools/testing/selftests/landlock/cap_test.c | 240 +++++++++++++++++++-
+ tools/testing/selftests/landlock/common.h   |   2 +
+ 10 files changed, 331 insertions(+), 14 deletions(-)
+
+
+base-commit: 7475ea8b58616b33c04afb976cf0fbaad9dd63fb
+prerequisite-patch-id: 365071039dd2be439f67707944d12edbe1422d60
+prerequisite-patch-id: 021705fb5147cdc8edcac9dbe53c06b854cf976a
+prerequisite-patch-id: 1dfd782b28feeac47423e702764778031b850d6c
+prerequisite-patch-id: 0bf745b08b99168d266461ef5b0b943a2b71eceb
+prerequisite-patch-id: ad96449ac2b66342bdc171582d400276372ce386
+prerequisite-patch-id: 39d6ce2bdfc170b545eb2d275ab781e15c9e887a
+prerequisite-patch-id: 8b180590cb598fc5be4aa403be233b80e0de8dcd
+prerequisite-patch-id: e56fbdef4bd6316e80e50ec8e8493ffb707dc76d
 -- 
 2.56.0
 
