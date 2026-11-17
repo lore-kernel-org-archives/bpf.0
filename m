@@ -1,57 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.72
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794918836;
-	b=l7ddJRRQD1/lgotRzJg45rUOBfwnkWocZ88ETMkJMH/sVbHFZxnYVUf9vAmoc+fFCrFB
-	 0VT6ZrOBKDpN5kEYG1K1aG2FWi/I6JJDIFCTZ4f0zuWRez6tSVAeM/+Uz2TVVBttLS+fV
-	 5pnDA+2wqO8mnOFAddv8Y0JAohxlbK6Ym0K6//9cJP1QJk73P5pbzugyoDq7YBjnUeEoU
-	 RhDkQ0i14tuWl+Z3A2K9E4hJDKIy8qhx9HpWzdPZL+n4PsQ+SMCkN+Mcw04Claej61YvB
-	 KsRP79wGGu96hXzNsnR8AwLYuQARAaC3+BXbKpV0nP9BFr6zTrlS/YUlt8yk4sWjlLw==
+	t=1794919646;
+	b=3qgPoZ2VINOwxZOvou7yM1rS9Mymjo8djIesOu1Sn/kf0JHySZ17rVDUNbJkxX8h7GQu
+	 7ScGhuPsySd5t0s3l7bFi//AFvUf5Ntvq35KgDuvx2th3uogfevwV6P7ii94l/vdSFhSY
+	 Lrkf5d/NtaqriuIjLN+n0n5Lh7Svr8UwfYUqokwBCr85OZsSizhs7RJjF7oVfRVt/sRgx
+	 TQ9CLNa2yyufskpyv+xkts2tF4fuOvqN5w4kCp+KiZG4EuvnmbNSBGPFmIgl7qOcF889/
+	 dYvUPf8semx4YXxnbm1jPlffa1TnpBquYYOXGaB5t1mVcdE5JGbNnfhBvchHjwJ2h2g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794918836;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=adJlCMc/x5vh5hhPkeNSjJ1CaT5lEnc4+iZowhfe3qs=;
-	b=OJDM97zMPZ2CqXYzyyR1lP9aQv5NCWSoo2wwGaThVyucm2FCTT7kHazxj7cevFe9d/+l
-	 WN2Utpjh6TPlWIhmo6VwHxR0YeYhLG7BFzi1f1ednlWvp3dLxlQuRzMva5zMaPHiPAkun
-	 4XltzgCNJxWGHzD/vRh4LH4KbialXw+4B7AMfGg1B8z8M32Lq43f04GKY1c3oBKHvq0TU
-	 ZbyftLDIWQW4huO0J+TnQEo55TsLbiM+9zwF0aadxAvOu40P7gu0ZH/2UkDDvgw0u7nSC
-	 uTOw+gitifjgj0UUFx5HgSo6GMMvA4eotugEbP471gpYKfR2DvPziIp4qUQiJOzR/7w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794919646;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
+	 Content-Type;
+	bh=pey3AXivEIPkS803BEXqY1Wb6Um3mvfRZTuqrf6x1Q8=;
+	b=N2Q0ufkZS4DdpFoUo74cpZ8JsBT4m6oeQrSFIG71Aw4J48OHDGbeEXhXq2tXgjyupXFA
+	 jzVIM8KAsEeTHKx522431PVvz+m3hsybTW+p9RMd1jMcsBfOeP/6L6+vHd6gNhrNcHHSf
+	 1/VzLzjtY2cVXGko4ban1sU8vnMv1NL7PwDHEzUQYbEw6DITiuIx/DGzhpZ4AwMD+3agM
+	 jiHZ3IQ7uBmERO3utwaJQ90m9ghtXbwXzVM5cAZWPdJ/YZHKsEuf5KsN2vZ3+3PygjTRf
+	 Lyc582JCfoMJwxjkVGjm/vM1cTLbvgMS4zpvrkrsprSfeU2xoHd6gwjgwIYzoXaagCg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Vho7oZPk;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--thaisonphan.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=To3UIYjd;
+	arc=none smtp.remote-ip=209.85.222.72
+Received: from mail-ua1-f72.google.com (mail-ua1-f72.google.com [209.85.222.72])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D2AC606A31C;
-	Tue, 17 Nov 2026 12:33:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82B93606A88C
+	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 12:47:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 82B93606A88C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--thaisonphan.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Vho7oZPk
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B9011F000C4;
-	Tue, 17 Nov 2026 12:33:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794918836;
-	bh=adJlCMc/x5vh5hhPkeNSjJ1CaT5lEnc4+iZowhfe3qs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Vho7oZPkqfoiJj76Vcv5A/zl1ZmtxAhm+LVC6njmn/QuQMqsxiTKSgSJA+bc3xivR
-	 H/NWybKgwbouR+Ca20ijSsjx09E80FGepJGppIz/gOsdIe3ByJD9hp6cEmyf36UgFy
-	 UDQJF46KBJUqZKLf+l2o2TZ+x85ic6P19wVZNvRMjmRUaqy7yyqTYe8zpDJVvxua08
-	 O9KqqIoTA7Mk50eekb8/lIaZmVTzYjwwEvaLebQybLCBwhLy82F5svlMZNOI77lLTF
-	 t7QATowifNI0eqS+9XxKGMAn2Q53VEKR/IKOaQegOlddQDTuVC1NOpKWY5lhmzcmtA
-	 KxsAyk4TB9cwg==
-Date: Tue, 17 Nov 2026 12:33:50 +0000
-From: Will Deacon <will@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-	mark.rutland@arm.com, linux-perf-users@vger.kernel.org,
-	peterz@infradead.org, jolsa@kernel.org, rostedt@goodmis.org
-Subject: Re: [PATCH bpf-next 1/3] arm64: perf: Don't report the caller twice
- in caller-regs callchains
-Message-ID: <avxJrsiT5vdFESFO@willie-the-truck>
-References: <20261114001846.873499-1-andrii@kernel.org>
- <20261114001846.873499-2-andrii@kernel.org>
- <DMUJKFF59EU0.3D4OXJLXB2N6B@gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=To3UIYjd
+Received: by mail-ua1-f72.google.com with SMTP id a1e0cc1a2514c-99062be02ddso751675241.3
+        for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 04:47:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1794919644; x=1795524444; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=pey3AXivEIPkS803BEXqY1Wb6Um3mvfRZTuqrf6x1Q8=;
+        b=To3UIYjdPEAyPbw3qcZfxGVZiWl/clOJ7HZsQaT2mwgD/TQcdpR1G1hhS1av3Mf0pB
+         kg9IIVr5/cMlJ5Fl1UVpC2Yv1YZRiikvhGW/1X68BeIrGIgq0kn1tPqRyg0hmsNI5sYI
+         0GcFosR0CBgNJfxShY3X5NXEq+34gMSBKmHtu3ljbbYR0mok/XVxzsk3pRXBV1bQd0kI
+         n4QqBY4luczdXUxgvjiiUZsSUzE8cW0JabBX+UQLoFCCtXtb6zatXIozZh4CZ+4nVfK+
+         BapfmM0XFTWkJdAomVlFTrAURY29RQ94VF+JMMMhJHeIfdGMhOTqS+Cna+VGbEznEx+L
+         Xe5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794919644; x=1795524444;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=pey3AXivEIPkS803BEXqY1Wb6Um3mvfRZTuqrf6x1Q8=;
+        b=QPsEzbPEL2prQLmKZtfvwVvsQ29O6xgv4cTdHuOOM/1sIjZW1Ch5N/ViDv83kEcs2a
+         LNrNkZc3ixO8aib4RQ65Z2K9ttG3A4nRgxFbjTtP5Ohr7QlUFp41aycdqMvNKO1Afh/h
+         5L4p5sbKrmT4NRIa1H0ueOI5bWeBueNZv0xaWb0eaPz+0cQeh+E0VeUyte0+uVb+XPRU
+         JoWsHZs+N0i7KO9Z5H3vGveJDiGdIolbhPv7LVRCTrToplaSW0045emNKhX0VUDVdfiv
+         0tdRAYiHxm0Ta5Ly9otWqfZnlSFPLS0Nym2PY8LmGyuUTtLanR3Cq373Djo+K7XdCg8c
+         kDxQ==
+X-Forwarded-Encrypted: i=1; AL+hErH+In0O5TKw872ZZ0+lh+urGp/5PcKGfROAMksaIl71yYpB4xryEn2xUjKzS5gc4Tr+QXo=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8oHDdINxS5KZOiw84UH54eUc9qHw1RTBUZct8lHAGafmViOpv5
+	GCRI5glo3oKS8VrmoyV05QWpWDTikAmVnCTD7Dfa1fhLvsQDc44SYneaxDKnanl/1eZ6ItA9M3O
+	ZKlBp/QEc5yma9HYNlj73VwA/Mg==
+X-Received: from vsbjy25.prod.google.com ([2002:a05:6102:4c19:b0:7aa:fcdb:c675])
+ (user=thaisonphan job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6102:84c2:b0:7bf:74c1:b606 with SMTP id ada2fe7eead31-7d64d8abce4mr3262568137.34.1794919644167;
+ Tue, 17 Nov 2026 04:47:24 -0800 (PST)
+Date: Tue, 17 Nov 2026 12:47:09 +0000
+In-Reply-To: <20261117124710.1338951-1-thaisonphan@google.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,57 +78,91 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DMUJKFF59EU0.3D4OXJLXB2N6B@gmail.com>
+Mime-Version: 1.0
+References: <20261117124710.1338951-1-thaisonphan@google.com>
+X-Mailer: git-send-email 2.56.1.703.gf848ed807c-goog
+Message-ID: <20261117124710.1338951-2-thaisonphan@google.com>
+Subject: [PATCH net v3 1/2] tcp: initialize ir_rmt_addr and ir_loc_addr in cookie_v6_check()
+From: Thaison Phan <thaisonphan@google.com>
+To: Eric Dumazet <edumazet@kernel.org>, Neal Cardwell <ncardwell@google.com>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, "David S . Miller" <davem@davemloft.net>, 
+	David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: Simon Horman <horms@kernel.org>, "=?UTF-8?q?Ilpo=20J=C3=A4rvinen?=" <ij@kernel.org>, 
+	Olivier Tilmans <olivier.tilmans@nokia.com>, 
+	Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>, Stan Iliev <stani@google.com>, 
+	netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Thaison Phan <thaisonphan@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Sat, Nov 14, 2026 at 01:27:16AM +0000, Alexei Starovoitov wrote:
-> On Fri, Nov 13, 2026 at 04:18 PM Andrii Nakryiko <andrii@kernel.org> wrote:
-> > perf_arch_fetch_caller_regs() sets regs->pc to the return address of
-> > the function it is used in (CALLER_ADDR0), but points regs->regs[29]
-> > at that function's own frame record, whose saved LR is that same
-> > return address. perf_callchain_kernel() reports regs->pc and then
-> > unwinds from the frame record at x29, so the caller shows up twice at
-> > the top of every kernel callchain built from perf_fetch_caller_regs():
-> > tracepoint events, software events emitted by __perf_sw_event_sched()
-> > (context-switches, cgroup-switches, cpu-migrations), and
-> > bpf_get_stack() and bpf_get_stackid() in tracepoint, raw tracepoint,
-> > tp_btf and fentry/fexit programs. E.g., for a tracepoint program
-> > attached to sched_process_fork:
-> >
-> >   __traceiter_sched_process_fork+0x44
-> >   __traceiter_sched_process_fork+0x44
-> >   kernel_clone+0x250
-> >   ...
-> >
-> > Use __builtin_frame_address(1), the caller's frame record, the same
-> > way kunwind_init_from_caller() does, so that pc and x29 describe the
-> > same frame.
-> >
-> > x86 had the same duplicate entry, fixed by commit 6d08340d1e35
-> > ("Revert "perf/x86: Always store regs->ip in perf_callchain_kernel()"").
-> 
-> riscv has the same duplicate it seems.
-> Its perf_arch_fetch_caller_regs() stores __builtin_frame_address(0)
-> in s0. walk_stackframe() reports epc, then frame->ra of that frame.
-> Can be a follow up by riscv folks.
-> 
-> > @@ -15,7 +15,7 @@
-> >
-> >  #define perf_arch_fetch_caller_regs(regs, __ip) { \
-> >  	(regs)->pc = (__ip);    \
-> > -	(regs)->regs[29] = (unsigned long) __builtin_frame_address(0); \
-> > +	(regs)->regs[29] = (unsigned long) __builtin_frame_address(1); \
-> >  	(regs)->sp = current_stack_pointer; \
-> >  	(regs)->pstate = PSR_MODE_EL1h;	\
-> >  }
-> 
-> Will, Mark,
-> this looks correct to me.
-> Mind if I take it via bpf-next together with the selftests?
+Commit a3a128f611a9 ("inet: consolidate inet_csk_clone_lock()") moved
+the LOOPBACK4_IPV6 initialization for passive IPv6 TCP sockets from
+tcp_v6_syn_recv_sock() to tcp_v6_init_req().
 
-Please don't pick this up, as I don't think it's quite right. I replied
-on the patch itself.
+IPv6 SYN cookie connections allocate a fresh request_sock without
+__GFP_ZERO and call tcp_v6_syn_recv_sock() without tcp_v6_init_req(),
+leaving ireq->ir_rmt_addr and ireq->ir_loc_addr uninitialized in
+cookie_v6_check(). inet_csk_clone_lock() then copies uninitialized slab
+bytes into sk_daddr, sk_rcv_saddr, and inet_saddr, exposing them to
+tracepoints and bpf_sock and causing inet_daddr != LOOPBACK4_IPV6 checks
+(such as IP_OPTIONS in do_ip_setsockopt()) to misclassify native IPv6
+child sockets as IPv4-mapped.
 
-Will
+This was originally noticed via an out-of-tree socket hook observing
+inet_sk(sk)->inet_saddr != LOOPBACK4_IPV6 on KASAN test runs. KASAN
+enables SLUB_RCU_DEBUG by default, introducing an RCU grace period that
+prevents cookie_v6_check() from reusing the warm request_sock initialized
+during the initial SYN. Upstream, with tcp_syncookies=2,
+SLUB_RCU_DEBUG=y, and slub_debug=P, sock:inet_sock_set_state shows slab
+poison instead of 127.0.0.6:
+
+  ... sock:inet_sock_set_state: family=AF_INET6 protocol=IPPROTO_TCP \
+      sport=59839 dport=41050 \
+      saddr=90.90.90.90 daddr=90.90.90.90 \
+      saddrv6=::1 daddrv6=::1 \
+      oldstate=TCP_LISTEN newstate=TCP_SYN_RECV
+
+Initialize ireq->ir_rmt_addr and ireq->ir_loc_addr to LOOPBACK4_IPV6 in
+cookie_v6_check() to match tcp_v6_init_req(). Tested against a QEMU
+reproducer checking inet_sock_set_state and IP_OPTIONS, as well as the
+packetdrill syncookie selftests.
+
+Fixes: a3a128f611a9 ("inet: consolidate inet_csk_clone_lock()")
+Signed-off-by: Thaison Phan <thaisonphan@google.com>
+Reviewed-by: Eric Dumazet <edumazet@kernel.org>
+---
+v3:
+  - no changes
+v2: https://lore.kernel.org/netdev/20261116023709.132684-2-thaisonphan@google.com/
+  - clarify how KASAN (via SLUB_RCU_DEBUG) exposed the uninitialized
+    request_sock, how the issue was observed, and include the
+    inet_sock_set_state trace line (Eric Dumazet)
+  - add Reviewed-by tag from Eric Dumazet
+v1: https://lore.kernel.org/netdev/20261114161248.3428695-2-thaisonphan@google.com/
+
+ net/ipv6/syncookies.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/net/ipv6/syncookies.c b/net/ipv6/syncookies.c
+index b581cb1ee2e8..b33011b71fff 100644
+--- a/net/ipv6/syncookies.c
++++ b/net/ipv6/syncookies.c
+@@ -17,6 +17,7 @@
+ #include <net/ipv6.h>
+ #include <net/tcp.h>
+ #include <net/tcp_ecn.h>
++#include <net/transp_v6.h>
+ 
+ #define COOKIEBITS 24	/* Upper bits store count */
+ #define COOKIEMASK (((__u32)1 << COOKIEBITS) - 1)
+@@ -205,6 +206,8 @@ struct sock *cookie_v6_check(struct sock *sk, struct sk_buff *skb)
+ 
+ 	ireq->ir_v6_rmt_addr = ipv6_hdr(skb)->saddr;
+ 	ireq->ir_v6_loc_addr = ipv6_hdr(skb)->daddr;
++	ireq->ir_rmt_addr = LOOPBACK4_IPV6;
++	ireq->ir_loc_addr = LOOPBACK4_IPV6;
+ 
+ 	if (security_inet_conn_request(sk, skb, req)) {
+ 		SKB_DR_SET(reason, SECURITY_HOOK);
+-- 
+2.56.1.703.gf848ed807c-goog
+
