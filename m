@@ -1,55 +1,70 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=84.16.66.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794910558;
-	b=g1lV7oyvo15ServXYUdk2PG1C68fxoIS+E5cfw+bvoRQ+9FdaBI2H8b1fl3TvFIqp6DM
-	 nTfjd3So7mKxkPVjx6sKGIeb/AgtvtMtRj+1l9oOlRnJDG9huBNOXaEjzYLTwRFFhXP52
-	 XNKCPIbJixTya1UI2/NlmNyv9lqw6TrisjWDq6uPI4sbkGv/QxKDCJuLHteARsm5kOMIK
-	 nuhbiFGC38RN26MUiiwKRU5nui1+2X2nRVvDRzQI0Ts22gTOYMyOYeXQfsPbCkPG7mCIG
-	 F+cmDmIHdhWDiVKSOLg5zd/E/vOk8FLsM5gvdNDjeuAKrpDbKK8iMauzYoi3asr6rEQ==
+	t=1794910664;
+	b=OyLQqTYqkO90QjTaK9uzREvO9xN6Jpv3TEfcoYvBlqRWc78Rd/iyVHEULCeKK+Xsf7iz
+	 FZtq6ePPzm1NjAnrEq1rsx2UYpCvAr10isCuyXT62l1c7CzXGYoTMEB+ZIvJtIwQJvW0A
+	 I9FWmsjvY06fQcy0UXWf+jXc8AaPUhWaulvVYzdf8vbiLUl8/BAfRXgWgPt5o7NSFbN7l
+	 Al+xqz+zbptB3Rh4bMVFPyij/cBOMx85LOeLEHCa4DV+qHGLdw9QbNpxBCD7QLJcBwLhz
+	 v/ncS4VywlnAEIycIHy/FyWvkTi+ovQXD/b6qnUy1tXZKzqnXcKHDbARNylMM0oW29Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794910558;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=cqNFlhZFtaF6NhalgUXNQFVaNzn3J4vmFMkG6jX+QrI=;
-	b=HbUOybuUPO2R3aVIO9TUy+VivhcwD3MUWH5T8MtIS+IzGieYYMBYyztwIUIKjAMgpDUQ
-	 fhoh9iHcAVHHk5e5NphT4JpdDVAPujNG95PZlBZnqyusYdJWeUswOUbQycmbRI/Huwk8o
-	 NBmHIRrbsAMLP2sV4jAcK03Mh+5rp2qg7uYkf6KMta08hca03Ct8HlyecAr1k4t/A/C7d
-	 oKkQT2DQ25YBPpm/s0qZj7+WnlXVXthazVQBRTvCI/K0AQyZNdH1BOZ7oOgf44liMWHdy
-	 HtqwJG/v1PMeMlFkIOe2CDE6yL6cGfi90Q/asqW37ovThgPRmBiuFoCT75PHKsZzhrg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794910664;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:From:To:Cc:Subject:
+	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 X-Infomaniak-Routing;
+	bh=CjEYOMn7s2iP08mjBQD8eE6pg/Zhs1AQoF4Jq89bkWI=;
+	b=sp7s0tf9j1257hrXHK63iBiz9IrKPW4O63rlVOvZxAVvKGI4AoIuH9Z4R1N1YEctxQ+z
+	 nyWidhfhF/7PfVeDXHoeUdHbgOVbbSxnZqwaYBef2XB4NeZZirBVD/Ag/PBH+m6PBCFss
+	 kIFL3ggS/0fXDveRtFn/taP3lf7zTbMNR3ggHTA0L52zaPSUSwwIgdCH++YvXV7spN0Al
+	 Q8SLKGaXAH+wTWpZl/d4m6cveCh7oHxK6R1g47toiMXqaDdwforv2AXpnmEPy2EdBaJff
+	 pxODvaiL8TxknfTImXH6QhpTkjb1opZ4E9upnff11iM2h1cERCzqep1TRNarSJ3sztQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mlSVEzXK;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=digikod.net;
+	spf=pass smtp.mailfrom=digikod.net;
+	dkim=pass header.d=digikod.net header.i=@digikod.net header.a=rsa-sha256 header.s=20191114 header.b=Iic7KIp4;
+	arc=none smtp.remote-ip=84.16.66.171
+Received: from smtp-42ab.mail.infomaniak.ch (smtp-42ab.mail.infomaniak.ch [84.16.66.171])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B998606A31C
-	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 10:15:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF44C606A323
+	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 10:17:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BF44C606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mlSVEzXK
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F7C01F000C4;
-	Tue, 17 Nov 2026 10:15:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794910557;
-	bh=cqNFlhZFtaF6NhalgUXNQFVaNzn3J4vmFMkG6jX+QrI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=mlSVEzXKWL/jCbXT5+40/xpKrw8mFFqYIwyM7lsRiHe0My3JsOEPAzl6Qrx0Qvn7+
-	 Et6BVqeCKKivxpJhbxPU4e/Xs3vQVWToUQ8VP6BUMkggwhvdzNr7+THhftUvnhEQsk
-	 Tl2o6g1U3XI2CfaViNS63ivAUf9ChFQhzKqGBsj/wSC4tePF8rWZl5hm1DlL9e7tvL
-	 f1W5hquRn25i/Y6AWNjHnYThHUlusx2XNgZ8fDVGPP3TZgDUaCDI3AloGU/UJHgDrG
-	 AQ605z936OXyJ9Pwfl8ubAqv3S8QwyBfZeLuEGOz7+qiXl5PEvB64VKZ8utarm7hPB
-	 2WzlwGW33EO1g==
-Message-ID: <sashiko-outbox-218581@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v10] m68k, bpf: Add initial BPF JIT compiler support
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kuan-Wei Chiu" <visitorckw@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261117095110.2736779-1-visitorckw@gmail.com>
-References: <20261117095110.2736779-1-visitorckw@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 17 Nov 2026 10:15:57 +0000
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.a=rsa-sha256 header.s=20191114 header.b=Iic7KIp4
+Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4jTLJh55RzzTwd;
+	Tue, 17 Nov 2026 11:17:40 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1794910660;
+	bh=CjEYOMn7s2iP08mjBQD8eE6pg/Zhs1AQoF4Jq89bkWI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Iic7KIp4Wr4+ClB9QUgXC0Hsr9GxBqLKiJ1bWSEDtLqt9YavaYTav3QUymLY/de8w
+	 rMeOwLvKjAlKyDP1a7Jioc/knJPaBou8THSaSp5XBvi9oU3+W+uN9rItovvsr8fbEq
+	 QiW1x+V1Kj/7qUTWwaCmT72ZRdpcMSqSc/6G3iYY=
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4jTLJf6yVkzF7p;
+	Tue, 17 Nov 2026 11:17:38 +0100 (CET)
+From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To: Paul Moore <paul@paul-moore.com>,
+	Serge Hallyn <sergeh@kernel.org>
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	Ada Smith <adasmithgt@gmail.com>,
+	Christian Brauner <brauner@kernel.org>,
+	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	John Johansen <john.johansen@canonical.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Matt Bobrowski <matt@bobrowski.net>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>,
+	apparmor@lists.ubuntu.com,
+	bpf@vger.kernel.org,
+	kernel-team@cloudflare.com,
+	linux-kernel@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	selinux@vger.kernel.org
+Subject: [PATCH v2 0/2] Fix LSM mediation of PR_SET_SECUREBITS
+Date: Tue, 17 Nov 2026 11:17:35 +0100
+Message-ID: <20261117101738.2523492-1-mic@digikod.net>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,71 +73,66 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Medium] m68k, bpf: premature tail-call counter decrement in
-  emit_tail_call()
---
+Hi,
 
-commit 1499906cea3bda86a820cc6d5342bc01d96944c1
-Author: Kuan-Wei Chiu <visitorckw@gmail.com>
+This is series 2 of 3:
 
-m68k, bpf: Add initial BPF JIT compiler support
+  1. fix Landlock mediation of commoncap's capability checks;
+* 2. fix PR_SET_SECUREBITS mediation and add focused Landlock tests;
+  3. fix Landlock mediation of capabilities guarding LSM policies.
 
-This commit adds an eBPF JIT compiler for m68k targeting m68020+ and MMU
-ColdFire processors.
+This series applies on top of series 1:
+https://patch.msgid.link/20261117101157.2520463-1-mic@digikod.net
 
-> diff --git a/arch/m68k/net/bpf_jit_comp.c b/arch/m68k/net/bpf_jit_comp.c
-> new file mode 100644
-> index 0000000000000..d5b818ffa7e22
-> --- /dev/null
-> +++ b/arch/m68k/net/bpf_jit_comp.c
+Since per-process securebits were introduced, PR_SET_SECUREBITS checks
+CAP_SETPCAP with cap_capable() instead of ns_capable(), so LSMs
+restricting capabilities through the capable hook (SELinux, AppArmor,
+Landlock and BPF LSM programs) cannot deny it.  A task with CAP_SETPCAP
+can therefore change privileged securebits, and thus how its
+capabilities evolve across UID changes and execve(), without the
+expected denial or audit record.
 
-[ ... ]
+Patch 1 uses ns_capable(), as PR_CAPBSET_DROP already does, for the
+changes that require CAP_SETPCAP; changes limited to the unprivileged
+securebits still do not check a capability.  It applies cleanly to the
+6.18 and 7.2 stable branches; older ones need a simpler adapted
+backport.  Patch 2 adds a Landlock audit test that fails without patch
+1.  It shares cap_test.c with series 1, which is the only reason for the
+ordering.
 
-> +static void emit_tail_call(const struct bpf_insn *insn, struct jit_ctx *=
-ctx)
-> +{
-> +	const s8 *r2 =3D bpf2m68k[BPF_REG_2];
-> +	const s8 *r3 =3D bpf2m68k[BPF_REG_3];
-> +	int jmp_out_1, jmp_out_2, jmp_out_3;
+Paul, John, Stephen, KP and Matt, please check the AppArmor, SELinux and
+BPF LSM implications of exposing this CAP_SETPCAP check to the capable
+hook.
 
-[ ... ]
+Changes since v1:
+https://patch.msgid.link/20261110202811.2409395-1-mic@digikod.net
+- Shorten the commit message of patch 1 and check the non-change case
+  separately (suggested by Serge Hallyn).
+- Add Serge Hallyn's Reviewed-by.
 
-> +	emit_16(ctx, 0x262e);					/* move.l d16(%fp), %d3 */
-> +	emit_16(ctx, (u16)STACK_OFFSET(BPF_TC_LO));
-> +	emit_16(ctx, 0x4a83);					/* tst.l %d3 */
-> +	emit_16(ctx, 0x6700);					/* beq.w jmp_out_2 */
-> +	jmp_out_2 =3D ctx->idx;
-> +	emit_16(ctx, 0);
-> +
-> +	emit_16(ctx, 0x5383);					/* subq.l #1, %d3 */
-> +	emit_16(ctx, 0x2d43);					/* move.l %d3, d16(%fp) */
-> +	emit_16(ctx, (u16)STACK_OFFSET(BPF_TC_LO));
-> +
-> +	emit_16(ctx, 0xd482);					/* add.l %d2, %d2 */
-> +	emit_16(ctx, 0xd482);					/* add.l %d2, %d2 */
-> +	emit_16(ctx, 0x43e8);					/* lea d16(%a0), %a1 */
-> +	emit_16(ctx, offsetof(struct bpf_array, ptrs));
-> +	emit_16(ctx, 0xd3c2);					/* adda.l %d2, %a1 */
-> +
-> +	emit_16(ctx, 0x2051);					/* movea.l (%a1), %a0 */
-> +
-> +	emit_16(ctx, 0x2408);					/* move.l %a0, %d2 */
-> +	emit_16(ctx, 0x4a82);					/* tst.l %d2 */
-> +	emit_16(ctx, 0x6700);					/* beq.w jmp_out_3 */
-> +	jmp_out_3 =3D ctx->idx;
-> +	emit_16(ctx, 0);
+Regards,
 
-[Severity: Medium]
-Should BPF_TC_LO be decremented and stored back to the stack only after
-checking that the target bpf_prog pointer in (%a1) is non-NULL?  As
-written, attempting a tail call on an empty prog-array slot branches to
-jmp_out_3 after already decrementing the counter, so failed tail calls to
-NULL slots consume remaining tail-call attempts and exhaust
-MAX_TAIL_CALL_CNT early.
+Mickaël Salaün (2):
+  capabilities: Check PR_SET_SECUREBITS with ns_capable()
+  selftests/landlock: Test PR_SET_SECUREBITS mediation
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261117095110.2736=
-779-1-visitorckw@gmail.com?part=3D1
+ security/commoncap.c                        | 45 +++++++-------
+ tools/testing/selftests/landlock/cap_test.c | 69 +++++++++++++++++++++
+ 2 files changed, 92 insertions(+), 22 deletions(-)
+
+
+base-commit: 7475ea8b58616b33c04afb976cf0fbaad9dd63fb
+prerequisite-patch-id: 365071039dd2be439f67707944d12edbe1422d60
+prerequisite-patch-id: 021705fb5147cdc8edcac9dbe53c06b854cf976a
+prerequisite-patch-id: 1dfd782b28feeac47423e702764778031b850d6c
+prerequisite-patch-id: 0bf745b08b99168d266461ef5b0b943a2b71eceb
+prerequisite-patch-id: ad96449ac2b66342bdc171582d400276372ce386
+prerequisite-patch-id: 39d6ce2bdfc170b545eb2d275ab781e15c9e887a
+-- 
+2.56.0
+
