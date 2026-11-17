@@ -1,54 +1,54 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794942150;
-	b=YJzALkxojeXM304ti4rAhvBW6hzl1hzLx0GhF7AhxXp4sv6k8gj09r2o80eZ7eZIiaEX
-	 smvBZgnc0D5iGGRyyZCnDenJUbOpYxA0jwOOG6yGYNOhjVkzhtOdNrHk7w/Wepm2ZI9KU
-	 AXn3FQGs8O/tQC+FeKBsGisJOfPnh9CJAcd0ittQ6bfksMMH6Rxw5O+g4PsGdeE9dn7Wy
-	 9emv+H0+9cgRXgNx8Ka5p7A/IIDT/xRXEPj00K9bD4I7SnGrWCA5p8p3jVF2qIF+TakXr
-	 xGB1f86KtX1lb9YEcv8IzS08BlvN419uB7SoqsDoskVsEL3MM96zLbWV8Ul+4NNDTHg==
+	t=1794942151;
+	b=ONJeBYIAc0h+GFYbOeUp3VUTemgh2fRXWTUiC1K2E7k0ZXART946ha0WvRnzXZVvYoAC
+	 4dnVr1KcJGY3NZxIrcAxvKcxOHhubQPq7YaihBSUYellfOhl1bvPRn58RyX0ro8peT8wu
+	 i71rZuT6HgPJNL/TYhmsJOVcg3DHVszLcjJXfXrXnKuxOtpMmscF1Sw/DyQtoHlaEod19
+	 rRHyNoMi8RsaNksYFIG2Amy/hBebtnAwx09nYwqQcVCt9S8WyJOIiH6Xnt02uzBPyJj5E
+	 F7z7VsL3AzcRv2mRNb/URlIURt9qFv4KYC7oPnN8hfKL4dTQ9IsSPi1e6iiuTEwgsQQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794942150;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794942151;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=cjJKDO3z17r3ImfcCAiBzdR7K2OUqeLGGM67X8WWLAo=;
-	b=LagZriHV5/I6Y+UtMKUrA3nlPDoqv96cP+yu/mfyksZK9UNmRIce/wzLQ9VPUwq94dhc
-	 4HPie0U6HF1hK46V8WsF4QbWLjcCCKtpTXstsUTXvNEg26jJN65WOeTIIMKvg7gIRRkup
-	 UInE/eZa30TRic6e7qs1iV2iHIbtFDRO5JJSoWNvJm6c4uP67He3lQG6ZEKHDdzVy8QpB
-	 dVmahqkRn9OxvZQD+TH4D4oVBVV7Db1bebrWUYAOjQ+5XroN2u5z7urKuuHnxdn9omLBr
-	 /VfvSoHjQjB8dzi6difUgKhg2V52/mQzU5Gh41rSeE0BseAv58nEjNe5Qs0LMjGyxHA==
+	bh=oWuKKdSkyE+20Q/Vozl4QSvd0BV8EIG0iBEggAImaWc=;
+	b=zwC6+4rNosdcmP8HdFf3xM7I+N6OESqiqA3rqNbD1TZ/qrDzaJdKcKCrpuTONlqsOC3l
+	 P8v3CYq8DWyc0iTfBpQg4GnwriH0PNCl5cSjlQQ36B2GhAjYWe6LCFizFlriSKAE4/SW/
+	 YTBNKxHSCszG2TlCotYJ6MtcoRKe9nqFMB8KLUB2bjLrsdAtuPFyO4+emfei7EZLanOwg
+	 kC3oFZuj6dL6bkb/2zC5lkD5N+fmddV/NzvQORfRZUTlPFug36eNKeJF91jLTgh9II/eP
+	 rVjz4XSt1GbM1/dIDdR9dKMFs9l5aVF2FhqcclyiXmImol0u59etP1TQwwhv9GA54Fg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UQsiP4Xb;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=idSt9OSA;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C25CB606A31C
-	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 19:02:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 696AD606A335
+	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 19:02:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UQsiP4Xb
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 832B81F000C5;
-	Tue, 17 Nov 2026 19:02:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=idSt9OSA
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FC8A1F000C4;
+	Tue, 17 Nov 2026 19:02:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794942150;
-	bh=cjJKDO3z17r3ImfcCAiBzdR7K2OUqeLGGM67X8WWLAo=;
+	s=k20260515; t=1794942151;
+	bh=oWuKKdSkyE+20Q/Vozl4QSvd0BV8EIG0iBEggAImaWc=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=UQsiP4Xb9wiI25ERC+IJ9PFAjCcyAGV5NwNXXVtw7SBlwYgMYAzvIzDU7LAF2rSAM
-	 +UfrmG/loyG4wIwGwHJRnTuVng6/liTnReiMtJ547hdd+ouExf/UZ1wp+cV81qy0E1
-	 Q3ZnNOKLNvK0VTYtQGm/SYc2LByhn8vZV0km+PyzNWaBNf/j5RTReO7yDUYriV86Qq
-	 5mhAZYRXAAyb6LbZbCmxM1+3kBmxkYvTQZ25amvhgwA24jUGJvJaDDyd9pTZ1mlKQx
-	 X7/yIj5qd/Yf83Ggytf8bPUkWXR3k1VpqM24+bQyGVvDFHn20UYPXTSx8nI6NZ8jWj
-	 WUBHmc7P8+a5w==
-Message-ID: <sashiko-outbox-219422@kernel.org>
+	b=idSt9OSAvqhNmOFnHJLbwCYvX5zIbGdzZHKd/t1TVkdnlzBBA6jwOfvdZP8m4ygoc
+	 jKRZc7onu8LBVc0kacnpjlDp3HdiOkWYug4TiZu2XvbZ4anpowW1P9ddhgHB8v4ckB
+	 qCAKSglTmnATMl0LztcRDqcRtr7YWf0xoPKpiZrvNnDRHOK/BAqpFX6YvyNyQGUScn
+	 +2voVMOmNM2mEVGcjbapSylNimwF83n5myjg1Z3k9xobcHbPOU0DfkNEJxxuRBEB6A
+	 S8WhYAqAoJnfgQlm13hkHYTkr1UDbwpbCnVgmAE3Dqj9E3tDTHzQ3aIbZ7B1h7JhI3
+	 oOv3m1SRykZ2w==
+Message-ID: <sashiko-outbox-219424@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v4 1/4] net: xfrm: interface: restore dst_orig
- on every xfrm interface
+Subject: Re: [PATCH net-next v4 3/4] netfilter: nft_fwd_netdev: drop the
+ stale dst when steering to a device
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jamal Hadi Salim" <jhs@mojatatu.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <CORE-9NOG.v4.r0.20261116135311-1@mojatatu.com>
+In-Reply-To: <CORE-9NOG.v4.r0.20261116135311-3@mojatatu.com>
 References: <CORE-9NOG.v4.r0.20261116135311@mojatatu.com>
- <CORE-9NOG.v4.r0.20261116135311-1@mojatatu.com>
+ <CORE-9NOG.v4.r0.20261116135311-3@mojatatu.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Date: Tue, 17 Nov 2026 19:02:30 +0000
@@ -63,94 +63,106 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue to consider:
-- [Low] xfrm: interface: missing Fixes trailer in bug-fix commit message
+- [Low] netfilter: nft_fwd_netdev: missing Fixes trailer in commit
+  message
 --
 
-commit b05c45811463aad7e54095fcda3e363d3e6cefe2
+commit 8509c3096bc9c51dfee6568ce51166947c0741cf
 Author: Jamal Hadi Salim <jhs@mojatatu.com>
 
-> net: xfrm: interface: restore dst_orig on every xfrm interface
+> netfilter: nft_fwd_netdev: drop the stale dst when steering to a device
 >
-> Found while testing the dst release for the two producers that steer a
-> packet to another device, fixed later in this series. One of the consumers
-> of the metadata such a release installs is an xfrm interface, which
-> restores the original route before the xfrm lookup; the swap warned on the
-> metadata dst still installed in the skb, and only the collect_md arm
-> restored the route at all.
+> This is a followup of the review of the teql arp-queue fix as reported
+> by Sashiko.
 >
 > The issue:
-> An xfrm interface takes the if_id and the underlying device either from i=
-ts
-> configuration or, in collect_md mode, from the xfrm metadata on the skb.
-> When that metadata also carries the route the packet arrived through,
-> xfrmi_xmit2() puts the route back on the skb, because the xfrm lookup tak=
-es
-> the address family from it. skb_dst_set() expects the dst slot to be empty
-> for a reference counted dst and warns when it is not, so the route landed
-> over a metadata dst that was still there; a kernel built with
-> CONFIG_DEBUG_NET=3Dy panics on the first packet that takes this path when
-> panic_on_warn is set.
->
-> Two more defects sit in the same place. An interface with a configured
-> if_id never restores the route: it takes the metadata dst as it is, whose
-> address family is AF_UNSPEC, so the lookup finds no policy and the packet
-> is dropped as a link failure instead of being transformed. And the restore
-> moved the route out of the metadata dst, which a clone of the skb shares,
-> so the clone that reached the interface first left the original packet wi=
-th
-> nothing to restore.
->
-> The same slot overwrite is in the unstable helper a tc-bpf program uses to
-> attach that metadata: bpf_skb_set_xfrm_info() records the route as dst_or=
-ig
-> and installs a per-cpu metadata dst over it. The per-cpu dst is shared by
-> every invocation of the program, so the restore cannot keep anything in i=
-t.
+> The neighbour variant of fwd rewrites skb->dev to the configured output
+> device and calls neigh_xmit(), but leaves the skb's dst untouched. If that
+> device's neighbour for the configured nexthop is incomplete, the packet is
+> parked on the neighbour's arp_queue while the stale dst still describes t=
+he
+> device the packet was routed through. Draining the queue re-looks the
+> neighbour up from that dst, so the frame is built with the routed device's
+> link-layer header and then transmitted on the configured device. The pack=
+et
+> leaves with another device's addresses.
 >
 > The Fix:
-> Restore dst_orig in both arms of xfrmi_xmit2(), taking a reference with
-> dst_clone() so the metadata dst keeps its own, and empty the counted slot
-> with skb_dst_drop() before the route is installed. The helper allocates a
-> metadata dst per skb instead of a per-cpu one, so the route it records
-> belongs to that skb and is released with it; the per-cpu allocation is no
-> longer used and goes away.
+> Release the dst before the device switch. Both inputs the neighbour
+> transmission needs, the device and the nexthop, are supplied by the rule,
+> so the queue drain keeps the parking neighbour and the frame carries the
+> configured device's addresses.
+>
+> The release goes through skb_dst_drop_keep_metadata(), so encapsulation
+> parameters a route carries are handed over to a metadata dst instead of
+> being lost, and a metadata dst already on the packet is left in place. If
+> that copy cannot be allocated the packet is dropped, never sent with the
+> stale route.
+>
+> What the configured device's transmit path still sees:
+> The released dst is the route of the device the packet arrived on, and the
+> packet leaves through another one, so consumers of that route on the way
+> out lose it:
+>
+>   - a tunnel with no configured remote takes its outer endpoint from the
+>     route: ip_tunnel_xmit() reads the route's next hop, and ip6_tnl_xmit()
+>     and sit derive it from the route as well. A steered packet whose route
+>     carried no encapsulation parameters is left with no dst, so it is
+>     dropped and counted as a transmit error instead of being encapsulated
+>     towards an endpoint that belongs to another device's path.
+>   - the route realm goes with it: a realm is a property of the route the
+>     packet took, so nft meta rtclassid and nft rt classid stop matching on
+>     that packet, and bpf_get_route_realm() returns 0.
+>   - encapsulation parameters are not lost: they moved onto the metadata
+>     dst, so a tunnel or an xfrm interface downstream still finds them.
+>
+> Taking the outer endpoint or the realm from another device's route is the
+> same cross-device reuse this patch removes at the neighbour lookup: those
+> values were never the configured device's to use.
+>
+> One consumer is older than this series. When a tunnel cannot take an
+> endpoint from the skb, ip_tunnel_xmit() and ip6_tnl_xmit() fall back to
+> skb_rtable(), a container_of() over whatever dst the skb carries, and a
+> metadata dst is not an rtable. That fallback is reachable without this
+> series: a tc-bpf program that calls bpf_skb_set_tunnel_key() with no
+> remote already hands an NBMA tunnel such a dst. The release here can leave
+> one behind as well, when the parameters a route carries are not usable for
+> the payload. The cast is repaired separately.
 >
 > Conditions to recreate the bug:
-> A tc-bpf program that records the route as dst_orig with
-> bpf_skb_set_xfrm_info() is self-contained: the overwrite is in the helper,
-> so the first packet that calls it panics inside bpf_skb_set_xfrm_info() on
-> a CONFIG_DEBUG_NET=3Dy build with panic_on_warn=3D1.
+> Two network namespaces, A (10.10.0.1/24) and B (10.1.0.1/24) in one, their
+> veth peers in the other with only A's peer addressed (10.10.0.2/24) so B's
+> nexthop cannot be resolved by ARP. Resolve A's neighbour for 10.10.0.2 as
+> permanent, then load this ruleset on A:
 >
-> The netdev egress arm needs the rest of the series: it reaches the same
-> place once the dst release later in this series keeps the route, and the
-> interface takes if_id from the skb there, so it has to be the collect_md
-> shape:
+>     table netdev t {
+>             chain c {
+>                     type filter hook egress device va priority 0
+>                     policy accept
+>                     fwd ip to 10.1.0.2 device vb
+>             }
+>     }
 >
->     ip link add xf0 type xfrm external
->     ip link set xf0 up
->     ip neigh replace 10.20.0.1 lladdr 02:aa:00:00:00:ab \
->             dev va nud permanent
->     ip route add 10.20.0.1/32 dev va encap xfrm if_id 42
->     nft add rule netdev t c fwd ip to 10.1.0.2 device xf0
+> Send one packet to 10.10.0.2. It is parked on B's incomplete neighbour
+> for 10.1.0.2; once that neighbour becomes valid the frame leaves B
+> carrying A's source address and A's neighbour as the destination.
 >
-> Send one packet to 10.20.0.1. The kernel panics in xfrmi_xmit2() with the
-> metadata dst still installed while the route is put back.
->
-> An interface with a configured if_id shows its own defect without any
-> other patch: it drops the packet as a link failure without consulting the
-> outbound policy. And a clone made after the metadata was attached consumes
-> the route before the original packet arrives.
->
+> Reported-by: Sashiko (nipa) <sashiko-bot@kernel.org>
+> Closes: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-6HS9.v3=
+.r0.20261103062649-2@mojatatu.com
+> Link: https://lore.kernel.org/netdev/QDISC-6HS9.v3.r0.20261103062649-2@mo=
+jatatu.com/
+> Link: https://lore.kernel.org/netdev/avTfQjFQYR2NNdRg@chamomile/
+> Reviewed-by: Pablo Neira Ayuso <pablo@netfilter.org>
 > Reviewed-by: Victor Nogueira <victor@mojatatu.com>
 > Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
 
 [Severity: Low]
-Since this fixes standalone bugs in bpf_skb_set_xfrm_info() and
-xfrmi_xmit2(), should the commit message include a Fixes tag?
+Since this fixes a bug in nft_fwd_neigh_eval(), should it include:
 
-  Fixes: 94151f5aa966 ("xfrm: interface: Add unstable helpers for setting/g=
-etting XFRM metadata from TC-BPF")
+  Fixes: d32de98ea70f ("netfilter: nft_fwd_netdev: allow to forward packets=
+ via neighbour layer")
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/CORE-9NOG.v4.r0.202=
-61116135311@mojatatu.com?part=3D1
+61116135311@mojatatu.com?part=3D3
