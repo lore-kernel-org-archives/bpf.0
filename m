@@ -1,59 +1,109 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=205.220.168.131
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794930545;
-	b=xY0Mjlw2AnI/aTiTORhKGRu0IhKYmdLETfnBft977l/F8ghivtByCLJAGto6LqIT+z/e
-	 IYlpF9R9vxCIYlY9I4gYlb3bBHbMXltEDZznKHqZugKxZMR+lJ/79Z8s9250I/7rVTUnJ
-	 AuuArRnrPfXtBVxHXLMTVukXS3kKkcEHNaetJNPKvUfuC+IQcSFjc/qA6n0zm0Dos4gkV
-	 pybNsoXBi0IY2eGFNSnaNmIXK+VZUcs3svuSmyp2Bp/WhFHGT7HaRwBxKfoNMqPoAY3nF
-	 AQixQjRMC31xDrRdQ7cKRr+nxnIKHQfe4+RFNXihdO53IuXjhG1935mx5enBwc0S8kQ==
+	t=1794930726;
+	b=to4srATPJk2jkVFpvDvJT8spJAW+CK26a81i1wzOpWRwIom4VKP+h1JmDSu/RiVlVnWL
+	 RaQoAeqoHQSniZog1cOcR3XAJ9JXXnk8VVLTWgbXKRqDKOwcCoflV20/ZrkvyHhf2bqP8
+	 h0Nvv+GdY+k0GOS0gkQQeiBULlspAxM9itwBx0nfRjVJrjPjonPydlzIgCrpZubD89QQ0
+	 iI2H8BdhXvHyiZeQFWBC+idvKnEEU00TEyRpuJUG/RNNZtanjSx4JEgNDKEOOl92K2RaJ
+	 Mm7L40P6rXgv7TQgg4sTQjdCeTeBZuEnnYh5+kzc9L9tZg+Q0r/jLOuG/maerxRtObw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794930545;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=4DJPkMczLaDQ70H15IFg1AlU5VteqCjp1AFarhCcIsI=;
-	b=cZ2LEN2dOKJwX5n11pR8M6k9WJ0EjvLyH29nczKVz5KwkH9CdQVoMB00Eu5RbCsHnZFF
-	 roM0gDJlUKl0EgPP9yCHWHRm1n348SBqkbpkuLmMpivmkHmuUwuMZ70+JTJU+Ejc6MVHU
-	 r5vCo9xg8HZPWF9cQdBTgSPUFdv3f7uRkR3Q+QQUqIa278f9+ApgKqZwrrM7H61b7ecrv
-	 Kse75ZRsyFh5Bk5l/EVt2jvJYWL9BsTUkxeT3lIla7RfT4+t0XyUSjdX6UG6iL2mipOAD
-	 4PVUwkhZ2IsQHkkUzHR6jc/58Xg/KUP7Vpqm3s54NiwJqgg/KKactOLYIEPP6I2aoqw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794930726;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:Received:From:Date:
+	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Proofpoint-Spam-Info:X-Proofpoint-ORIG-GUID:X-Proofpoint-GUID:
+	 X-Authority-Analysis:X-Proofpoint-Spam-Details-Enc:
+	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
+	bh=d7zSyNw6qz1m1x7CMIoGYOav8WM1/EyZq/PX2PCxZm8=;
+	b=IgN+Htva7SgF4OXlkGvsWnvRZOlAIgTQ3NisnVmP8cNYmKbUUsTi0SsSxd4eBGQ58Oug
+	 HNcn6hct61lybYlFxzWi8MFVaFPJRIOYFmM2D5kBwBGlm3cuksfZmFiAorIAeS63lmjWS
+	 397VSHTMUDsqWjgWvVG57mjBaocXpuKCORC5/m87LTO3T1lwxvav8Z7HT1pIfq0bOFkHJ
+	 Vke0EvPiq4R/EER7ys0dA39L7ufbrmsN6NJsW4PffIYvYe2kNxUUH6HQ4C8+zAmpENjcY
+	 CqESMhE8CgsNONtJXBOGiaMTyK1rGZvh0+cnTXKEskp2jz7NjGRVzA08fZs1WAyGAfw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iH5Hcv5y;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=oss.qualcomm.com;
+	spf=pass smtp.mailfrom=oss.qualcomm.com;
+	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=OF3R7XS2;
+	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=ZupGZDs4;
+	arc=none smtp.remote-ip=205.220.168.131
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30740606A31C;
-	Tue, 17 Nov 2026 15:49:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68D33606A32A
+	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 15:52:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 68D33606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iH5Hcv5y
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BD411F000C6;
-	Tue, 17 Nov 2026 15:49:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794930544;
-	bh=4DJPkMczLaDQ70H15IFg1AlU5VteqCjp1AFarhCcIsI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=iH5Hcv5y4mYAIi8SBXdqHq984QFBp4gSp0WabnNEFbyqTOJoa7OAijSfocOEp5lTH
-	 srIt2Muir6hkAQBXsB35xRXR1hotY3C6Dw/As4pyyM5KXky9Y7DabLtnZ+2HCSb+c2
-	 XMSDYMggJmxCUWZ36tMV0J4gLZjYYcnqU38EGclE51FE9xu7YKMfwT1odKWs6+fq7U
-	 oMP2s3ZktzFzrFrUymiM/o/O5y9mumtmKRKuXDo3fCK13KSd0oP+suHVxzvXK/KUOJ
-	 OcmwEm8RzqjdnvmJVLRLQ96/FsaCrqkGiF4oB5zrfgPPBi3frC4kLjJHVSJZy1tjcE
-	 nQ/mWkRunJteA==
-Message-ID: <sashiko-outbox-219110@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH -next -v4 14/17] landlock: Add READ_METADATA and
- WRITE_METADATA access rights
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Cai Xinchen" <caixinchen1@huawei.com>
-Cc: bpf@vger.kernel.org, linux-security-module@vger.kernel.org, linux-trace-kernel@vger.kernel.org, selinux@vger.kernel.org, dsterba@suse.cz, "Chuck
- Lever" <cel@kernel.org>, "Jeff Layton" <jlayton@kernel.org>, "Anna
- Schumaker" <anna@kernel.org>
-In-Reply-To: <20261117150542.1169451-15-caixinchen1@huawei.com>
-References: <20261117150542.1169451-1-caixinchen1@huawei.com>
- <20261117150542.1169451-15-caixinchen1@huawei.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 17 Nov 2026 15:49:03 +0000
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=OF3R7XS2;
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=ZupGZDs4
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AHFQRIJ923737
+	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 15:52:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=d7zSyNw6qz1m1x7CMIoGYO
+	av8WM1/EyZq/PX2PCxZm8=; b=OF3R7XS2UREI0oox314bHvrnPsSIkDr3bYdZ9D
+	u78uE3IygWn9V+LjEhSZlC1ZQGDl2xt+QPF/b2jsO86p9IcZ7H+hPfHRBES/zvSm
+	1aD1nurnfPUBGOBM9cZLefjAzqntSskvFsLrcnY6rnjw/fB+/eofg2cr1lz8EH6t
+	GSJpMnlnQ9nIVQlOCQNbHHFPd3nInsN0a4OpV8KzGSjqWf5/sJdTFZZ/pY94WwM5
+	FUUxbnh/ZesueNsr0cppHw6phJ9UsXuLI9GF1Lgrq1NZYKQduW4hfCNp7TUIygrj
+	/gfROIOd4gCFcufw+SmZuVBVL2IyOg8za107u4prwew1Vg4w==
+Received: from mail-ua1-f70.google.com (mail-ua1-f70.google.com [209.85.222.70])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4j0qms0qx4-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 15:52:05 +0000 (GMT)
+Received: by mail-ua1-f70.google.com with SMTP id a1e0cc1a2514c-99062be02ddso805825241.3
+        for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 07:52:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1794930724; x=1795535524; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=d7zSyNw6qz1m1x7CMIoGYOav8WM1/EyZq/PX2PCxZm8=;
+        b=ZupGZDs4+1po9ZR0MwGvLYz2NmNY4OJocydg892eSBGHBu8U/j7VqvVIH92iYq6cfD
+         NSGh6Nyi1jvDtltZoKLUfKKU1REi5nlCmAOzF4bXIRRgecOyB0jpM2VioXBrpd13U8Ox
+         r1mkBZxn6j/0bNiv0qefKEoefpQy/WjbbewDrlTFoqnImU0B6rJHc3dYVCfNbdYh3Zcw
+         i0D73Aqz78vfj+HFMUldCYX/pjwHNrkh9o+cINXoRC1hv0R0W7jsux4j4vvntTIM+T7/
+         O6DlSzHo3CuVpYYshL/VJCR4Yd2Ih6jDVT081ATNwjEwB7+H3lkJta51tQjMSO+Jr42B
+         NROw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794930724; x=1795535524;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=d7zSyNw6qz1m1x7CMIoGYOav8WM1/EyZq/PX2PCxZm8=;
+        b=v8LB5PiGMGeKzZakb8KfKL8buRyjz3I2DuyKjRT5qUU7FmWYe44QQs6w/4ObxlSjVB
+         ptP1IYlj4AIBPr6LcwnuQebN5LQiZoHtP5l5MTaeR9esyKAGJ34rbWEJz9wYxMPjTrxU
+         wxI2ofxhBTtGh5DHhy7eha06u4WeFVWgawVEOrCcDNyfLhuQJKxVaylYnc78C7Tae0Xw
+         G+ymZYGq/ZMjhyGXTjMdxUVqRGBOIljva+PTQ77DusVyihNtq2zVRMO+k9YtIJ20vKWU
+         zm7JCFjDn27soNYKW15CYC2a6+jGafF87Mvff0DElEe6T64XIyCr50RDJ0XaBfdgCeMy
+         mA+Q==
+X-Forwarded-Encrypted: i=1; AL+hErHPSuG07oHJRpLhNINga823mo74EE8ENvpSrKA0DFqj9T/f79ghkugCA354zLw+EoQq7DY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+/u2yKFmETWxH/vAVMLCtvz69mmGFdYK7Bkhli3xgJ9f5lXYKO
+	xJBdG2qA8tQGCIJDmo3m+iTwpU/qXYA+4RiY0E8gToW8QBkrfNaZr4zjviicRni08R7tu18meAY
+	Uvbl1PdAmB9rYxpYkQM+53fkorT5VL5XjEMx9ObJGI7jsQcDQztUWtfg=
+X-Gm-Gg: AYBFou3VTfMmfnjAhd/ERoiuL2eojsvSUjhXVIEQTtCT2/PEz+0KL5LPODWz0rJfs2V
+	5DHm9uaOBCENKKuLomjxSGi+J2mzvlAUtjr78RHhoK7I5JYuuTPl4k61dmoXO2P4hdg0cqeEdkN
+	ukh9P0mGoVv4FY0j2qBTOBKDlAWpDMagRUPaltK6dnRHVs8ClHCLFWliu4fiGeBcs88xtSjELcP
+	MrvjpmJ5DxYLKl3FEl5jM5pOIATvOCEKfgnL9ifeazN0k9/7J0ZlA9DgnvRBlnVDL1T6ZXluZmx
+	icg3NuNp74+pgf+ddJxdN2EiwPlMYd2kbLNChQNQhIpjd4ouyjmAJE3cocZTmavjohPSbJHAn+z
+	OjTIHYG0XsYPSrw1EwE7aoVThqP6ZRif8VpxlH+35p0l7y5C1NxZozvAhssUE378=
+X-Received: by 2002:a05:6102:6f07:b0:7d2:7827:c01 with SMTP id ada2fe7eead31-7d64d82be4emr3297220137.28.1794930724344;
+        Tue, 17 Nov 2026 07:52:04 -0800 (PST)
+X-Received: by 2002:a05:6102:6f07:b0:7d2:7827:c01 with SMTP id ada2fe7eead31-7d64d82be4emr3297198137.28.1794930723711;
+        Tue, 17 Nov 2026 07:52:03 -0800 (PST)
+Received: from localhost ([188.152.73.83])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb7840b05bsm111211405e9.7.2026.11.17.07.52.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Nov 2026 07:52:02 -0800 (PST)
+From: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+Date: Tue, 17 Nov 2026 16:51:53 +0100
+Subject: [PATCH net] net: stmmac: fix num tx queues in
+ stmmac_xdp_get_tx_queue()
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -62,183 +112,103 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261117-stmmac-fix-xdp_get_tx_queue-v1-1-4cd74ee7a76c@oss.qualcomm.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MQQqDMBBG4avIrB1wrFjwKkVCML92FkabRAmId
+ 29w+cHjXRQRFJGG6qKAU6NuvkDqiqav9QtYXTG1TduLyJtjWlc78ayZs9vNgmRSNr8DB7iBsy9
+ xtu9kpnLYA0r33D/kkWi87z+oQ4kHcgAAAA==
+X-Change-ID: 20261117-stmmac-fix-xdp_get_tx_queue-0eda31da641f
+To: Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        Andrew Lunn <andrew+netdev@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@fomichev.me>,
+        Vladimir Oltean <olteanv@gmail.com>, Furong Xu <0x1207@gmail.com>
+Cc: netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        bpf@vger.kernel.org,
+        Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+X-Mailer: b4 0.14.3
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTE3MDA2MyBTYWx0ZWRfX03ziVYIa2P8C
+ hmFlC5QFsBykotXQJmLRmIHL1PfiBpZaIVjkCSi6Lm/erE1A0DpdMhI3Js4hOZPRarUIV3JD6ii
+ lhRQGREY7/66XELEzVQAKP1zwBA85WE=
+X-Proofpoint-ORIG-GUID: 1lEH9aBUGMucwL_Qa7U8enMFfNjiNUKc
+X-Proofpoint-GUID: 1lEH9aBUGMucwL_Qa7U8enMFfNjiNUKc
+X-Authority-Analysis: v=2.4 cv=BIEmP1QG c=1 sm=1 tr=0 ts=6afc7825 cx=c_pps
+ a=R6oCqFB+Yf/t2GF8e0/dFg==:117 a=mlS0om9xteqVCAF/aDpb2g==:17
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=yOCtJkima9RkubShWh1s:22
+ a=EUspDBNiAAAA:8 a=EjEmtv2rKBG8bDbUgTQA:9 a=QEXdDO2ut3YA:10
+ a=TD8TdBvy0hsOASGTdmB-:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTE3MDA2MyBTYWx0ZWRfX067oNjHAzaYt
+ Sx1AUAJSrnPDVRmKVTaestsSjehsxjC6r9Eehp6rrqrsDwMqZC1hHauAvzlO2CCCU23CCxrqyRX
+ 9hr/K2Olnv8c4XHwL3Ig57Es1DXuscd2iY4s5gafpRfHw89LuZLFPIy9d7Q8KgDzB59mQidB+qO
+ io9QKgLQaxSileT/oCNKZZxoTUlQibYdNrfi8wGtPzDa/kIGQKLKaBtr+82LmBHbFyPHGn+KqiY
+ 5WYqhwNyGaQTnPVnK1AyiHlLX8mYOW85tFEnUOAmUCsDjyketBTKM5mkm+f2OexRSfrw6DoaULI
+ IXiMFSbDFaazUsrpShwxbZYouHKlflMxJKm0TbCYbBwQt9bdWfA18dimj4gqRfmVhA+Gi/WetBm
+ iABn8e3HUqUqeIfGxsXs8vbaXHUtiJS/MB4HbJ4CkvpDc3b4bFjwaHkO7+iT7JQFukycwpeBlNJ
+ 6xNjS2gYc9h9KpS7iLQ==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-17_03,2026-11-16_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 adultscore=0 bulkscore=0 clxscore=1015 malwarescore=0
+ phishscore=0 spamscore=0 impostorscore=0 lowpriorityscore=0 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2611040001 definitions=main-2611170063
 
-Thank you for your contribution! Sashiko AI review found 3 potential
-issues to consider:
-- [Medium] landlock: open-fd setattr denied on NTFS streams in
-  hook_path_setattr()
-- [Medium] fs/stat: duplicate and broken audit_names entries in
-  vfs_statx_fd()
-- [Medium] selftests/landlock: audit_layout1 tests broken by
-  READ_METADATA in ACCESS_FILE
---
+The TX queue returned by stmmac_xdp_get_tx_queue() is passed to
+netdev_get_tx_queue(), so it must be lower than dev->real_num_tx_queues.
+Since mqprio offload can reduce real_num_tx_queues below
+plat->tx_queues_to_use, wrapping the CPU index by plat->tx_queues_to_use
+can select a TX queue that is not part of the real queue set when the
+offload is active.
 
-commit 14db7d890cf459274a57d8c4bb2e8249b1cd4223
-Author: Cai Xinchen <caixinchen1@huawei.com>
+Use priv->xmit_qdisc.num_tx_queues instead, which is the value
+stmmac_hw_setup() installs as real_num_tx_queues and is guaranteed to
+never exceed plat->tx_queues_to_use.
 
-landlock: Add READ_METADATA and WRITE_METADATA access rights
+Fixes: 195e4f409a40 ("net: stmmac: support fp parameter of tc-mqprio")
+Signed-off-by: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+---
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-This commit introduces the LANDLOCK_ACCESS_FS_READ_METADATA and
-LANDLOCK_ACCESS_FS_WRITE_METADATA access rights and hooks the corresponding
-VFS metadata paths to enforce them on paths and opened files.
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index 25894771e9e9..cf87afd27343 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -5408,13 +5408,14 @@ static int stmmac_xdp_xmit_xdpf(struct stmmac_priv *priv, int queue,
+ static int stmmac_xdp_get_tx_queue(struct stmmac_priv *priv,
+ 				   int cpu)
+ {
++	unsigned int num_tx_queues = priv->xmit_qdisc.num_tx_queues;
+ 	int index = cpu;
+ 
+ 	if (unlikely(index < 0))
+ 		index = 0;
+ 
+-	while (index >= priv->plat->tx_queues_to_use)
+-		index -= priv->plat->tx_queues_to_use;
++	while (index >= num_tx_queues)
++		index -= num_tx_queues;
+ 
+ 	return index;
+ }
 
-> diff --git a/fs/stat.c b/fs/stat.c
-> index e68dc17f23c46..a1a5bd83b5079 100644
-> --- a/fs/stat.c
-> +++ b/fs/stat.c
-> @@ -19,6 +19,7 @@
->  #include <linux/pagemap.h>
->  #include <linux/compat.h>
->  #include <linux/iversion.h>
-> +#include <linux/audit.h>
-> =20
->  #include <linux/uaccess.h>
->  #include <asm/unistd.h>
-> @@ -361,6 +362,7 @@ static int vfs_statx_fd(int fd, int flags, struct kst=
-at *stat,
->  	CLASS(fd_raw, f)(fd);
->  	if (fd_empty(f))
->  		return -EBADF;
-> +	audit_file(fd_file(f));
->  	return vfs_statx_path(&fd_file(f)->f_path, flags, stat, request_mask,
->  			      fd_file(f));
->  }
-> @@ -391,6 +393,18 @@ static int vfs_statx(int dfd, struct filename *filen=
-ame, int flags,
->  		      AT_STATX_SYNC_TYPE))
->  		return -EINVAL;
-> =20
-> +	/*
-> +	 * An empty pathname with AT_EMPTY_PATH refers to the file descriptor
-> +	 * itself.  Resolve it as such so that the struct file is passed down
-> +	 * to the LSM hooks, like sys_statx() does for a NULL pathname and
-> +	 * unlike a plain path lookup from the file descriptor.  This branch
-> +	 * replaces a path lookup, so vfs_statx_fd() keeps auditing the file
-> +	 * descriptor as that lookup would have.
-> +	 */
-> +	if ((flags & AT_EMPTY_PATH) && dfd >=3D 0 && !IS_ERR_OR_NULL(filename) =
-&&
-> +	    !filename->name[0])
-> +		return vfs_statx_fd(dfd, flags, stat, request_mask);
+---
+base-commit: 5e9b2ad9b8384cd3c417cd5e2c3bc7eee4a72791
+change-id: 20261117-stmmac-fix-xdp_get_tx_queue-0eda31da641f
 
-[Severity: Medium]
-Does dropping filename when redirecting to vfs_statx_fd() produce duplicate
-and incomplete AUDIT_PATH records for IORING_OP_STATX with AT_EMPTY_PATH and
-an empty string?
+Best regards,
+-- 
+Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
 
-io_statx_prep() and io_statx() allocate filename via delayed_getname_uflags=
-()
-and complete_getname(), which calls audit_getname() and attaches an
-unpopulated audit_names entry (filename->aname) to the audit context.
-Previously, filename_lookup() called audit_inode(filename, path.dentry, 0) =
-to
-populate filename->aname in place.  With this change, vfs_statx_fd() calls
-audit_file() instead, which passes name =3D NULL to __audit_inode():
-
-kernel/auditsc.c:__audit_inode() {
-    ...
-	if (!name)
-		goto out_alloc;
-
-	/*
-	 * If we have a pointer to an audit_names entry already, then we can
-	 * just use it directly if the type is correct.
-	 */
-	n =3D name->aname;
-    ...
-}
-
-Because name is NULL, __audit_inode() allocates a second audit_names entry
-with name=3D(null) and nametype=3DNORMAL while leaving filename->aname
-unpopulated with nametype=3DUNKNOWN.
-
-> diff --git a/security/landlock/fs.c b/security/landlock/fs.c
-> index 2ab67bcad1983..7d0e539b4cda7 100644
-> --- a/security/landlock/fs.c
-> +++ b/security/landlock/fs.c
-[ ... ]
-> +static int hook_path_setattr(const struct mnt_idmap *const idmap,
-> +			     const struct path *const path,
-> +			     struct dentry *const dentry,
-> +			     struct iattr *const attr,
-> +			     struct file *const file)
-> +{
-> +	unsigned int ia_valid =3D attr->ia_valid;
-> +
-[ ... ]
-> +	if (ia_valid & ATTR_FORCE)
-> +		ia_valid &=3D ~(ATTR_KILL_SUID | ATTR_KILL_SGID |
-> +			      ATTR_KILL_PRIV | ATTR_MODE);
-> +
-> +	if (!(ia_valid & (ATTR_MODE | ATTR_UID | ATTR_GID |
-> +			  ATTR_TIMES_SET | ATTR_TOUCH | ATTR_KILL_PRIV)))
-> +		return 0;
-> +
-> +	return check_access_path_or_file(path, file,
-> +					 LANDLOCK_ACCESS_FS_WRITE_METADATA);
-> +}
-
-[Severity: Medium]
-Can hook_path_setattr() reject fchmod(), fchown(), or futimens() on an
-already-opened NTFS named stream file descriptor with -EACCES when the
-calling thread's current domain denies LANDLOCK_ACCESS_FS_WRITE_METADATA?
-
-When notify_change() is called with a non-NULL file, the outer
-do_notify_change() call authorizes the operation against
-landlock_file(file)->allowed_access, stores only path in attr->ia_path, and
-invokes inode->i_op->setattr().  On NTFS named streams,
-ntfs_stream_setattr_common() then propagates shared attribute changes to the
-base inode without a file pointer:
-
-fs/ntfs/named_stream.c:ntfs_stream_setattr_common() {
-    ...
-			err =3D notify_change_target(idmap, attr->ia_path,
-						   base_dentry, &base_attr,
-						   NULL, NULL);
-    ...
-}
-
-That second do_notify_change() call invokes hook_path_setattr() with
-path =3D attr->ia_path, dentry =3D base_dentry, and file =3D NULL, causing
-check_access_path_or_file() to check attr->ia_path against current_cred()
-instead of the open file's credentials and emit a false audit denial.
-
-> diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/s=
-elftests/landlock/fs_test.c
-> index 48c1f896dc9a0..2593db7ef25c1 100644
-> --- a/tools/testing/selftests/landlock/fs_test.c
-> +++ b/tools/testing/selftests/landlock/fs_test.c
-> @@ -571,11 +571,13 @@ TEST_F_FORK(layout1, inval)
->  	LANDLOCK_ACCESS_FS_EXECUTE | \
->  	LANDLOCK_ACCESS_FS_WRITE_FILE | \
->  	LANDLOCK_ACCESS_FS_READ_FILE | \
-> +	LANDLOCK_ACCESS_FS_READ_METADATA | \
-> +	LANDLOCK_ACCESS_FS_WRITE_METADATA | \
->  	LANDLOCK_ACCESS_FS_TRUNCATE | \
->  	LANDLOCK_ACCESS_FS_IOCTL_DEV | \
->  	LANDLOCK_ACCESS_FS_RESOLVE_UNIX)
-
-[Severity: Medium]
-Does adding LANDLOCK_ACCESS_FS_READ_METADATA to ACCESS_FILE (and therefore
-ACCESS_ALL) break the audit_layout1 tests in fs_test.c?
-
-Tests in audit_layout1 such as execute_read, write_file, and read_file call
-enforce_fs(_metadata, ACCESS_ALL, NULL) with no allow rules, and then call
-matches_log_fs() or matches_log_fs_extra() from the same sandboxed process:
-
-tools/testing/selftests/landlock/fs_test.c:matches_log_fs_extra() {
-    ...
-	absolute_path =3D realpath(path, NULL);
-	if (!absolute_path)
-		return -errno;
-    ...
-}
-
-Because LANDLOCK_ACCESS_FS_READ_METADATA is now denied by ACCESS_ALL, the
-stat calls inside realpath() fail with EACCES and generate unexpected
-fs.read_metadata audit records, causing those 18 audit_layout1 tests to fai=
-l.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261117150542.1169=
-451-1-caixinchen1@huawei.com?part=3D14
