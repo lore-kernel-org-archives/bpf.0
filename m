@@ -1,112 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.196
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794905085;
-	b=loRCvdK3sQkTUKnBudDHpaxNEPaf+p3LB6fVxhMk2qIrkT97SMFEJHiiEbgEDEXoQsfj
-	 Jz4T4gX8dZjTkRD3MrRFkn3dU2pD5ZfxTSDqHEaEfFrsYuzmnEBCvlnaIOOHgIqHlHA1T
-	 43NbnjvNSRtINwPZjKl2oxSW/l/0iv6/qDVk3Qwvc+VzSJSh6jQHQ03FWR5lnSGRbPVAQ
-	 QnEU+LVkbXfuhX532DloRK/Gprb3UUMOuET90NhDtQ/+TfVDO0SoBNiBM/Wm8xizQR6bz
-	 ea/9jgVV3O0HLZ02fWv1ooLDZWcX4Qi/gzpZt+e2malEJF+KEJ3Tu4Gl/8Kgmp0GBpg==
+	t=1794908760;
+	b=Kc+AY+dkeI7VbAHFe6KAc7HmEk0WTDpx7CMPSliCeK+ob40BmNFfUgJYPW+5ztsGDzke
+	 t6s9kP6cM9St0jtkSyBSEeDqnPjwWATIvkyqzgT7oHqu3Ela1nII0d1Y+qw+7goLmxTAy
+	 68LsVU6YD7EcqqkWl+oNZ2CHWtEmqSJ2EbXGSISA75GBdfQpS5AovXrLgulYy5/axEjAj
+	 Bpw69G6U7Y1D+UOahUSOV/i/DRmn18u94pVrQUzIUNHx9v1tWx1fyOiwi31j5kIgRe6NJ
+	 V7SkFHLONNIAs520+o/cAWZcjV/LZv+WKCZZLJZcCwK659xUxBMF/zyXpDIn8CByJHw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794905085;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:Content-Transfer-Encoding:User-Agent:MIME-Version;
-	bh=YtgOPMlBsDbDRTTami0iaeC2PfdAlPMUJ3BhZBWqnDY=;
-	b=c8U/xXReHXZeJW0w5OBxGfvxA09450kd8akHESJsknuRgH8RAFyuoo2cMKTck1NFLxnI
-	 dhRnrUCexqL+KofRNn9uFVyHMIEzEaUenZmT9Wjq0BqLIiHX9dzIlYBcS25CnPvmUamkV
-	 qmOQCJTUYl1P2Jak/NuPAOfN7yXFZ7IquEjB79DkN0WcBl9ecRv2+Ub3qlicrhNfzXoKY
-	 Ir6IeTa+5XhenX/CJ7m2aC0Iie3zM78QXT7zTbXOZz+BYl2ZRJ6XV66E4/RTd7eRF5p76
-	 UQJNNfPMwq3HamEGLFH+Eg4PXh9cRBJaY8OZyF6NjeSIrRXu6O2DX3hOnUa7CmqBhqA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794908760;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=AQAqYl2tn6009DL8HqBJOMfPKmQERaYIFx8LZttnag8=;
+	b=g2eQ+YMm8BwzULYgB98lPENRWNC1d5QHCzv/ZnlbRcIgOJ7XVyfNKnQNUodvqws6yTMt
+	 MSM8qLnUXSlHGCt4kW5G38jYpw7gS2aTK7x7pUnaKEl52LbSAdCqcRXARdiPO/lQZdgCN
+	 6qXmLgZ6cJKBAke/WPoq/1pG3SltL8Vw7OV3rk1Rniqd9x1Y86FpbU7a6A99DBZz2grMq
+	 TEBV2TEq1K5qSUBr49H4q53bP5nUB4iC/hMdNUS8IMlsKAodCRBxvmSFHeyePWL+jX/dl
+	 NxVkQK3FTXqLgTTDjYBCIStCdKykVmgtZMXG9yy2ZTvfscpXQnwVoIazLcSJat4W1cA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=amutable.com;
-	spf=pass smtp.mailfrom=amutable.com;
-	dkim=pass header.d=amutable-com.20260707.gappssmtp.com header.i=@amutable-com.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=qPWJSshs;
-	arc=none smtp.remote-ip=209.85.221.47
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=An4M923y;
+	arc=none smtp.remote-ip=91.218.175.196
+Received: from mta0.migadu.com (out-196.mta0.migadu.com [91.218.175.196])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E51DE606A88A
-	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 08:44:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E51DE606A88A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amutable.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amutable.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA299606A32C
+	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 09:45:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AA299606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amutable-com.20260707.gappssmtp.com header.i=@amutable-com.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=qPWJSshs
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-48dfc0421d9so3880507f8f.1
-        for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 00:44:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amutable-com.20260707.gappssmtp.com; s=20260707; t=1794905081; x=1795509881; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=YtgOPMlBsDbDRTTami0iaeC2PfdAlPMUJ3BhZBWqnDY=;
-        b=qPWJSshsn8vVlxONBkwnt0Rrdn9d5F3Qc4ul63isG/q9SzfN/YeX6Opt0gSo3Jew6G
-         TPoHc3exB3o1TVJHb31ucJURrMLm+X5ZLvKQdkLiUwsGhwj3/4jXaF9QxR3XbUAvZwOE
-         a/cd4y1UcgXoBr9kVgdvuhJuBveUAauSYuunqpBOO8ny5BuS4lSdHT4xtCJFDNjS8url
-         r/ZKVJBRzaToW1BBIq0cKvkP0/i/p+OipahpXpiSl0PGBR9WYmSpn39e8LKnYXYjrWjD
-         bzQp5gYJPTRPzgdIgnmtc42HrrCv5BgaqLA/tsUHs3tWdIoSQrhFLq1gvYrghbRPmmpF
-         EcZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794905081; x=1795509881;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=YtgOPMlBsDbDRTTami0iaeC2PfdAlPMUJ3BhZBWqnDY=;
-        b=EPzX9WCfLwsFjwYRdM/68xX2yBWz3RGUNevzz+AZTtLgtVLFOUq8uY7WvBqN7p+XV0
-         K8ssbkPcIObBOETyas7apVteXLSV8yRfQcPZtF+LNxfXVODkfvebNJBjv/LhWMOvpKFf
-         mnHZBAmI4MqoDfD+upJXWemcPQf/x97YBpfAv7c93kyFpFqlIjAdea6ol17XCmyqDyTn
-         MijEEY/gOlCj/JpRFkjC4tTm+POjP3HxyO3wi6CGn/rvKV0ZengQVRvDvDMLC1ZLF0qA
-         QCjMZxMvFQL9I2ZreU9rlLkkVRfLVwfpnllRNmpA1BNZ5q9umscPjOPP0LIg7wudh2IK
-         96mA==
-X-Forwarded-Encrypted: i=1; AL+hErH0DDku8z1VX3YXhayjnqJZ6NaiUae+FzKgAxL7f3hEbTiRoaMiRSouIHZo3A1B4X48LRM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+jNtkQ2e4wGI4pMBLUuooNBo61GKaOHybDOBU8Mkf9egi1nGNS
-	gf2xH2eBNsSzCOOWiCz1OsE2E/8fzfSirNG6DpvdpQXyyzcxYotKSj8ag1ptiBCOaA3v
-X-Gm-Gg: AZFdTZdk/ZXOk+lCdBx/AWvADib8hiDfl9b59DqAlXSimK/GCv5lSOFMTdcf4YBnl2F
-	KR3ck2UJcHdai81WEyN4Q05LLUlzFuBuLhtqZ9hTtWTnfKlI1WZmBR9YJoqZVnmp3X+MPrFnRQQ
-	bxpgSpjB/cg67xWs3Kb0WVKCbMGz5ZV7AVoVIv5AWAFx6VwsNjixa7f7Waep7VjDchh2Q254wct
-	DkFIXjiYscDFs+YI126DXEDCy2ebQYVNxSOTlXPjQk6WTnRHiScuZdMHE7yYh9qhQTyl5fsKrqF
-	nh8ZaPS+k6m1tuQvSkv05E72Z/BMOdXvU0iMWrb6O7q19VviyDJGXoxbGp085+0OTEHsVpAVOnR
-	g62BVC3EScm84g+Z6Ah3ngc03SaQu5D72Qy9dZ7PRSlPMzSPMMxTNaXLtjNs7PGP2Q3Qc/kXFSc
-	daTEL9VLWROI5Sw+sSfqoLXrFAgcbgSRWf3t2CHujh4HZVe0EW9Zx2hlLCFr9yMU2oOS560ICGc
-	r4zQ5s4mW8vCWA8Mys2XKn+08K1JQA916jBqJCDOZ0F3064OBw48L+ATzysJMtD77Mf4u8deW5Y
-	ZIXGn6tQzCb/15QLYTXwnSbu5QEynEAss939cYOXb5K6VfYXjAMb95Iudkzm3Y/rXyHZveo6UDk
-	3sqBsQBsFJwo//k902yRn+mW+1rTIchTVke2RGRlMnr4DqPluBNC+Pxkq3AIc7uQ4Yc49SLJqmn
-	KdAQ==
-X-Received: by 2002:a05:6000:2411:b0:48f:f26d:c5c with SMTP id ffacd0b85a97d-49c70b051d1mr27471178f8f.9.1794905081269;
-        Tue, 17 Nov 2026 00:44:41 -0800 (PST)
-Received: from ?IPv6:2003:cf:572c:2800:de4c:6789:33ce:97c2? (p200300cf572c2800de4c678933ce97c2.dip0.t-ipconnect.de. [2003:cf:572c:2800:de4c:6789:33ce:97c2])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49d673ce75fsm19982260f8f.55.2026.11.17.00.44.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Nov 2026 00:44:40 -0800 (PST)
-Message-ID: <d18a972cfc6a7d6da39ab9674903d7ae6e4c1826.camel@amutable.com>
-Subject: Re: [PATCH RFC v3 35/44] fs: add file_check_backing()
-From: Alexander Mikhalitsyn <alex@amutable.com>
-To: Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org
-Cc: Jann Horn <jannh@google.com>, Chris Mason <mason@kernel.org>, Josef
- Bacik	 <josef@toxicpanda.com>, Christoph Hellwig <hch@lst.de>, 
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-nvme@lists.infradead.org, Alexander Viro <viro@zeniv.linux.org.uk>,
- Jan Kara <jack@suse.cz>, linux-scsi@vger.kernel.org,
- target-devel@vger.kernel.org, 	driver-core@lists.linux.dev,
- linux-mm@kvack.org, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, 
-	apparmor@lists.ubuntu.com, linux-nfs@vger.kernel.org,
- netdev@vger.kernel.org, 	fuse-devel@lists.linux.dev,
- linux-efi@vger.kernel.org, 	xen-devel@lists.xenproject.org,
- ocfs2-devel@lists.linux.dev, 	linux-s390@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, 	linux-usb@vger.kernel.org, Amir Goldstein
- <amir73il@gmail.com>, 	linux-erofs@lists.ozlabs.org,
- linux-kselftest@vger.kernel.org
-Date: Tue, 17 Nov 2026 09:44:39 +0100
-In-Reply-To: <20261116-work-loop-pseudo-v3-35-8cbbea1cf34f@kernel.org>
-References: <20261116-work-loop-pseudo-v3-0-8cbbea1cf34f@kernel.org>
-	 <20261116-work-loop-pseudo-v3-35-8cbbea1cf34f@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-0+deb13u1 
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=An4M923y
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=eNKitI6OumQU1ILYmuf2OVKQGpBdNX+qex8fxTVDt9Y=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794908757; v=1; x=1795513557;
+ b=An4M923y6tVn0cvQtIzVOW56SKglefgWaW93LqGgzrJqjKExXFLQ0jBl3o5vFrr/wvt0mgoM
+ 4AX9Rm+HK1foBGutlL7uY3ul6opAvQtQojpevrKVzGmQIKdqUXZbN2LNIK/X3iYYnm49+NffUyT
+ NZJ8Jpo5++xKyQvjLcTu4rQo=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id dac5996b5fb42819;
+	Tue, 17 Nov 2026 09:45:57 +0000
+X-Mizu-Trace-ID: dac5996b5fb42819
+X-Migadu-Flow: FLOW_OUT
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org,
+	ast@kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Michal Luczaj <mhal@rbox.co>,
+	Sechang Lim <rhkrqnwk98@gmail.com>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf v1] selftests/bpf: Fix CO-RE relocation of anonymous unions for bpf-gcc
+Date: Tue, 17 Nov 2026 17:45:38 +0800
+Message-ID: <20261117094544.148437-1-jiayuan.chen@linux.dev>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -116,172 +79,61 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Mon, 2026-11-16 at 12:05 +0100, Christian Brauner wrote:
-> Loop, zloop, the nvme target, the scsi target, fuse passthrough, the
-> usb
-> mass storage gadget, erofs and acct all take a file from userspace
-> and
-> use it as storage. Currently, each of them has its own idea of what
-> to
-> check before using a file like that:
->=20
-> - loop and the gadget check for a regular file or a block device, the
-> =C2=A0 nvme target, the scsi target and zloop take any file type
-> - loop checks the open mode, the gadget checks FMODE_CAN_READ, the
-> nvme
-> =C2=A0 target, the scsi target and zloop only check for ->read_iter() and
-> =C2=A0 ->write_iter()
-> - apart from acct which refuses procfs and sysfs files none of them
-> =C2=A0 cares whether the file is a kernel interface
->=20
-> Add a helper that does all of it in one place. It only accepts
-> regular
-> files and, if the caller passes S_IFBLK, block devices. It refuses
-> files
-> on pseudo filesystems. And it checks that the file is open for what
-> the
-> caller is going to do with it and implements ->read_iter() for
-> reading
-> and ->write_iter() for writing.
->=20
-> O_PATH files are refused unless the caller passes FMODE_PATH. That is
-> for callers that only need the path of the file. fuse passthrough is
-> one of them and has accepted O_PATH file descriptors since commit
-> efad7153bf93 ("fuse: allow O_PATH fd for FUSE_DEV_IOC_BACKING_OPEN").
->=20
-> Block devices are fine even though bdevfs is a pseudo filesystem. A
-> block device that userspace hands in is a device node on devtmpfs or
-> some other filesystem. Files on bdevfs only come from
-> bdev_file_open_by_*() and never end up here.
->=20
-> The pseudo filesystem check looks at the inode that actually provides
-> the data via d_real_data_inode(). overlayfs accepts sysfs, cgroup2,
-> debugfs, tracefs, configfs and securityfs as lower layers and reads
-> of
-> such an overlayfs file are served by the file on the pseudo
-> filesystem.
-> Checking the overlayfs inode would miss that.
->=20
-> For an O_PATH file nothing might have looked up the data yet.
-> overlayfs
-> only looks up the data of a metacopy file in a data-only layer when
-> the
-> file is opened. d_real_data_inode() does the lookup then and if that
-> fails we return the error.
->=20
-> Note that the file type is taken from the inode of the file and not
-> from
-> the host of ->f_mapping like loop and the gadget do it. A driver can
-> point ->f_mapping somewhere else in ->open(). It makes no difference
-> for
-> block devices as both inodes are block devices.
->=20
-> No functional changes. Nothing calls the helper yet.
->=20
+bpf-gcc fails to load test_trace_iter_unix:
 
-Reviewed-by: Alexander Mikhalitsyn <alex@amutable.com>
+  Error: #766/6 verifier_sockmap_mutate/test_trace_iter_unix
+  libbpf: elf: skipping section(3) .data (size 0)
+  libbpf: elf: skipping unrecognized data section(18) .comment
+  run_subtest:PASS:obj_open_mem 0 nsec
+  libbpf: prog 'test_trace_iter_unix': relo #0: insn #0 (LDX/ST/STX) accesses field incorrectly. ...
+  libbpf: prog 'test_trace_iter_unix': BPF program load failed: -EINVAL
+  libbpf: prog 'test_trace_iter_unix': failed to load: -EINVAL
+  libbpf: failed to load object 'verifier_sockmap_mutate'
+  run_subtest:PASS:unexpected_load_success 0 nsec
+  validate_msgs:FAIL:1014 expect_msg
+  VERIFIER LOG:
+  =============
+  0: R1=ctx() R10=fp0
+  ;  @ verifier_sockmap_mutate.c:124
+  0: <invalid CO-RE relocation>
+  failed to resolve CO-RE relocation <byte_off> [4] struct bpf_iter__unix (0:0 @ offset 0)
+  processed 1 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
+  =============
+  EXPECTED   SUBSTR: 'cannot update sockmap in this context'
 
-> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
-> ---
-> =C2=A0fs/read_write.c=C2=A0=C2=A0=C2=A0 | 53
-> +++++++++++++++++++++++++++++++++++++++++++++++++++++
-> =C2=A0include/linux/fs.h |=C2=A0 2 ++
-> =C2=A02 files changed, 55 insertions(+)
->=20
-> diff --git a/fs/read_write.c b/fs/read_write.c
-> index 6767283108991..9f1e7bfcbd4f1 100644
-> --- a/fs/read_write.c
-> +++ b/fs/read_write.c
-> @@ -866,6 +866,59 @@ static ssize_t do_loop_readv_writev(struct file
-> *filp, struct iov_iter *iter,
-> =C2=A0	return ret;
-> =C2=A0}
-> =C2=A0
-> +/**
-> + * file_check_backing - check that the kernel can use a file as
-> storage
-> + * @file: file that userspace handed in
-> + * @mode: FMODE_READ and/or FMODE_WRITE the kernel will do I/O with,
-> or
-> + *=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 FMODE_PATH if only the path=
- of @file is used
-> + * @type: S_IFBLK if a block device is fine as well, 0 otherwise
-> + *
-> + * Call this where a file from userspace is taken as a backing file.
-> Only
-> + * regular files and, if @type is S_IFBLK, block devices are
-> storage. Files
-> + * on pseudo filesystems are kernel interfaces and are refused. The
-> file
-> + * must be open for @mode and implement ->read_iter() for reading
-> and
-> + * ->write_iter() for writing. O_PATH files are only fine with
-> FMODE_PATH.
-> + *
-> + * Return: 0 on success, -EBADF if @file isn't open for @mode, -
-> EINVAL if it
-> + * can't be used as storage, or the error from looking up the data
-> of @file
-> + * on a stacking filesystem.
-> + */
-> +int file_check_backing(const struct file *file, fmode_t mode,
-> umode_t type)
-> +{
-> +	fmode_t io =3D mode & (FMODE_READ | FMODE_WRITE);
-> +	/* Drivers may point ->f_mapping at something else. */
-> +	umode_t fmt =3D file_inode(file)->i_mode & S_IFMT;
-> +	struct inode *real_inode;
-> +
-> +	/* O_PATH files are only fine for callers that just use the
-> path. */
-> +	if ((file->f_mode & FMODE_PATH) && !(mode & FMODE_PATH))
-> +		return -EBADF;
-> +
-> +	if ((file->f_mode & io) !=3D io)
-> +		return -EBADF;
-> +
-> +	if (fmt !=3D S_IFREG && !(type =3D=3D S_IFBLK && fmt =3D=3D S_IFBLK))
-> +		return -EINVAL;
-> +
-> +	/* Look through stacking filesystems at the inode with the
-> data. */
-> +	real_inode =3D d_real_data_inode(file->f_path.dentry);
-> +	if (IS_ERR(real_inode))
-> +		return PTR_ERR(real_inode);
-> +	if (real_inode->i_sb->s_iflags & SB_I_PSEUDO)
-> +		return -EINVAL;
-> +
-> +	if ((mode & FMODE_READ) &&
-> +	=C2=A0=C2=A0=C2=A0 (!(file->f_mode & FMODE_CAN_READ) || !file->f_op-
-> >read_iter))
-> +		return -EINVAL;
-> +
-> +	if ((mode & FMODE_WRITE) &&
-> +	=C2=A0=C2=A0=C2=A0 (!(file->f_mode & FMODE_CAN_WRITE) || !file->f_op-
-> >write_iter))
-> +		return -EINVAL;
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(file_check_backing);
-> +
-> =C2=A0ssize_t vfs_iocb_iter_read(struct file *file, struct kiocb *iocb,
-> =C2=A0			=C2=A0=C2=A0 struct iov_iter *iter)
-> =C2=A0{
-> diff --git a/include/linux/fs.h b/include/linux/fs.h
-> index 99caef43ff3c4..b1c7ebafbadbe 100644
-> --- a/include/linux/fs.h
-> +++ b/include/linux/fs.h
-> @@ -2553,6 +2553,8 @@ static inline const struct inode
-> *file_user_inode(const struct file *f)
-> =C2=A0	return file_inode(f);
-> =C2=A0}
-> =C2=A0
-> +int file_check_backing(const struct file *file, fmode_t mode,
-> umode_t type);
-> +
-> =C2=A0static inline struct file *file_clone_open(struct file *file)
-> =C2=A0{
-> =C2=A0	return dentry_open(&file->f_path, file->f_flags, file-
-> >f_cred);
+GCC only applies preserve_access_index to types that carry the attribute
+themselves. The anonymous union holding the sock pointer doesn't, so the
+CO-RE access stops at the union ("0:0") instead of reaching the pointer
+("0:0:0"), and libbpf rejects the relocation. Mark the unions too.
+
+Fixes: e16c83fa764f ("selftests/bpf: Add negative test for sockmap update from non-sockmap iter")
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+---
+ tools/testing/selftests/bpf/progs/verifier_sockmap_mutate.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/progs/verifier_sockmap_mutate.c b/tools/testing/selftests/bpf/progs/verifier_sockmap_mutate.c
+index 1516fe1524bb..68b1a5323470 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_sockmap_mutate.c
++++ b/tools/testing/selftests/bpf/progs/verifier_sockmap_mutate.c
+@@ -16,13 +16,13 @@ struct sock {
+ struct bpf_iter__sockmap {
+ 	union {
+ 		struct sock *sk;
+-	};
++	} __attribute__((preserve_access_index));
+ } __attribute__((preserve_access_index));
+ 
+ struct bpf_iter__unix {
+ 	union {
+ 		struct sock *unix_sk;
+-	};
++	} __attribute__((preserve_access_index));
+ } __attribute__((preserve_access_index));
+ 
+ struct {
+-- 
+2.43.0
+
