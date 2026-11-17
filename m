@@ -1,46 +1,46 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794926413;
-	b=ZkE2+/GA8dbq+en89B9l9bsWUENPVerOjOeiorzX5tioAD9s+oZy3tqmABmvxf1NN7yr
-	 sWBxrnr/CUNOtRVPQeesAyB2UhR7fhJ6n+PnIZ12VQQgNWZFau63nZZ+Lk2RN+80hLQuv
-	 725eqRD25Od36kLzJ5puVzoaD/kheE8yUgWBfCAENuBp5/ni06fI4ctbChxagrGE81VCH
-	 uQ4sWqpT26GBXZ6tFjidXCldsJEh7GWdLk7DjJ9PB48kLu6PkJdewEEt2MzDU5mk+1wRV
-	 cVc82OsIaexVRelhOSZhE2PU+TpUbNujydpDOFw3T6BeOcFycIvJxKUHOU72Q4af/tA==
+	t=1794926414;
+	b=JfZ3GdlNpMvYMQ9EejZahmNJZYWcTvIX+BrMxPdxpVy5Z4XZRq9ikcyKGNhmnIoo5ebU
+	 ocsPraBTLpy+XlVZoqdiOLfBVsiHdyuxE8mGcc8CsKFTd4vstObP74roUFsRnS0/toUsJ
+	 XUmnSCyvIuMArneWhegre2N8NviDSCW1EU6yW5R4FBk0uyDZKBGWZgD6Im1+kIN1xzbbW
+	 6fJms2HeK8lRL5tQq293Weha/N1N2jPUpBrOcyzBf4hIlJAkcRxRZvqXSwxhA2xe1m3Ix
+	 qvmhELteRltSjgdKi7vqtzi2vS4e2hzPtpPNxgI+CecLyhecsYfvIMZ00IfWqINbziw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794926413;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794926414;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=nHWPW4VdSrJJatZiB9Q4c/ci+6thEbpBkkx8hkoBRWU=;
-	b=Bhush7YCTWbT0bES8hPuVVUbiAw92RJbe2yAaViSbZenu4ixtaUa1a+rzizsOnx263tO
-	 65V0rD+IauDMCR5uYXJ+nDyHN9yLsQTmU2FvTDqD3cM7czT/Ae9YinRl0PHDjACzx6lZ2
-	 c3GRRsACdl6C4ctvaMTutDbuMY1XYBGPuZAYbMc4wmnLeyvPN567dF4AUtj5mILKmD0z4
-	 QniYb2r7tJiG+G1e0AJ/PUvCVwjZulGJCZhWG1lMNebx8ebGBZvfpbWDk5C3hFGyrm5XY
-	 bYhGu4Lx+nppFEZX58eCbdkRZzgGQ0urISm9QaNPulzx7e5Pi9tdDpC0F+00ReitpDA==
+	bh=WthlfORmHr381B6mMH+xwS5vVfrpofwjdyuXKbp+s14=;
+	b=TzqzKreyeHSrKKVntOvLDSLA/xt4DqKfbkB017ztnNoCmkVL3QpzdAzybJkVYfQ84Hud
+	 3UAl7eKEl2MHcCSQ+xcXVidoQWtC9pG91wAbNDHMCgKyCn35GLex3/kj7kkKsUV7hvqZP
+	 RjdzKKQlUcOmsWupz1q/zBlSdTMhNJ+09kstKXjbOiBnNxcYsdfUL+aAUaKkaTBoIjVwr
+	 vGBDPSsFvAZ1sfNb4vaRcc7Nafrue0KFIHYfwmVOVGnDJO7WNixXsLpc3sxzUz38p1z4y
+	 w0TdvLgoH4DeN6heAX6SC4cy85XGA2Vv5WUx8Hgc0O0lIaRR7ebd0qH5Tco7Zd9Rv8Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TQo4pYXH;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SF4UFEju;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66E27606A31C;
-	Tue, 17 Nov 2026 14:40:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5B55606A88A;
+	Tue, 17 Nov 2026 14:40:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TQo4pYXH
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74F2A1F000C4;
-	Tue, 17 Nov 2026 14:40:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SF4UFEju
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE5521F000C4;
+	Tue, 17 Nov 2026 14:40:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794926413;
-	bh=nHWPW4VdSrJJatZiB9Q4c/ci+6thEbpBkkx8hkoBRWU=;
+	s=k20260515; t=1794926414;
+	bh=WthlfORmHr381B6mMH+xwS5vVfrpofwjdyuXKbp+s14=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=TQo4pYXH1QA18aakyvBJ2E80M8uA19DCBq1jaTFZJk+q4y8LiRCDZNOSN7o9yoeuy
-	 B4GoG4r086s90D1ftPWB0MRn7PO67sIXCu98xwm85TXjUBN6eKRqhFsG/6gHgrXoMC
-	 3dX2A7H5CFtkxgVi2ncHaY3vEB5wD1fm8Trshhn6mgmFc5JQ5Y4D3Vbt0T+vM7IiL2
-	 xSCb55hFnexsvG8p6MFmaxYf81PvcIuh8fNbd+mVX43wo6B3WAaMfJd9NguG2h1Aau
-	 a7zsNdap1RWb9XQgqz4P3O4Y55vVk8BLXEQRWVqfXGOBT7sAo9y66ApSBNvlyfMscV
-	 yd8FGkCIhTqKw==
-Subject: Re: [PATCH net-next 4/6] bonding: factor out slave publication
+	b=SF4UFEjunxygYzlzdr2ZZ1qyS6uV97tC+HamldVnYUmAo8epAwNKOJDgqQBbjAfgV
+	 L5aQ0TFL4OxEnBSZsgmTcDv1QPtFQYjmXZVi1hodepSXmVWd61n/WJ0KaIF0RivKpZ
+	 6zxI2uQSs2yO8JuwS9/B93jdORcpp58q9Zl2gPzQPpsm7oBq5AsVQzgaSMKIlIk9uT
+	 emuJ1XSy0qwLn4+XGA6U0b+Csph+C+pNjlLW9x+oDOpugQVm0u6jmRfufC6tnuOSQa
+	 7ZEDz9TthdcPvEFuvF6ZlfpNU8GkCk269U/R87veEkDsljpyaJOaqRJEaVZmISEprT
+	 /ZnHmPNZEyk7g==
+Subject: Re: [PATCH net-next 6/6] bonding: factor out bond_enslave_validate
 From: netdev-bot+sashiko@kernel.org
 To: hangbin.liu@linux.dev
 Cc: jv@jvosburgh.net, andrew+netdev@lunn.ch, davem@davemloft.net,
@@ -48,10 +48,10 @@ Cc: jv@jvosburgh.net, andrew+netdev@lunn.ch, davem@davemloft.net,
  daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
  sdf@fomichev.me, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  bpf@vger.kernel.org
-Date: Tue, 17 Nov 2026 14:40:12 +0000
-Message-ID: <179492641202.3136.3136612053973913945@kernel.org>
-In-Reply-To: <20261113-bond_enslave_restruct-v1-4-364c549e78db@kylinos.cn>
-References: <20261113-bond_enslave_restruct-v1-4-364c549e78db@kylinos.cn>
+Date: Tue, 17 Nov 2026 14:40:13 +0000
+Message-ID: <179492641344.3136.5360540192397591551@kernel.org>
+In-Reply-To: <20261113-bond_enslave_restruct-v1-6-364c549e78db@kylinos.cn>
+References: <20261113-bond_enslave_restruct-v1-6-364c549e78db@kylinos.cn>
 X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -71,154 +71,75 @@ you want to address the nit picks below when you respin.
 
 Low priority / nit picks for your consideration:
 
-- [Low] The new comment on bond_publish_slave() in
-  drivers/net/bonding/bond_main.c says the helper will "Make the fully…
-- [Low] The commit message calls bond_publish_slave() the "infallible
-  'commit point'", and the new comment says "All fallible steps of…
-- [Low] The commit author is 'Hangbin Liu <hangbin.liu@linux.dev>', but
-  the only Signed-off-by is 'Hangbin Liu <liuhangbin@kylinos.cn>'.
+- [Low] The commit message says the new bond_enslave_validate() helper
+  (drivers/net/bonding/bond_main.c) does "all read-only checks".
 
 --
 
-bonding: factor out slave publication
+bonding: factor out bond_enslave_validate
 
-This commit moves the final block of bond_enslave() into a new helper,
-bond_publish_slave(). That block bumps slave_cnt, recomputes upper
-features and carrier, adds NS maddrs, selects the active slave and
-rebuilds the xmit slave arrays. The commit message calls this the
-infallible commit point of the function and says there is no functional
-change.
+This commit moves the fail-fast checks at the top of bond_enslave() into
+a new static helper, bond_enslave_validate(), in
+drivers/net/bonding/bond_main.c. Behavior does not change. The moved
+block runs from the ARPHRD_CAN check through the bond_slave_xdp_check()
+call.
 
-> Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
-
-[Severity: Low]
-This isn't a bug, but the Author address (hangbin.liu@linux.dev) does not
-match the only Signed-off-by (liuhangbin@kylinos.cn). checkpatch reports
-this as "From:/Signed-off-by: email address mismatch".
-
-The same mismatch shows up on all six patches in the series, from
-"bonding: check XDP support before enslaving changes state" through
-"bonding: factor out bond_enslave_validate".
-
-Could the addresses be made to match, or a From: line or Signed-off-by
-be added for the author address?
-
-> diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-> index f696a0d150346..bb37526834562 100644
-> --- a/drivers/net/bonding/bond_main.c
-> +++ b/drivers/net/bonding/bond_main.c
-> @@ -1884,6 +1884,34 @@ void bond_xdp_set_features(struct net_device *bond_dev)
->  	xdp_set_features_flag(bond_dev, val);
->  }
->  
-> +/* Make the fully prepared slave visible to the rest of the bonding
-> + * code.  All fallible steps of bond_enslave() must have completed
-> + * before this runs: error paths never undo the publication.
-> + */
+> bond_enslave() is a long linear function whose flow is hard to see
+> behind the inline blocks. Factor out bond_enslave_validate to do
+> all read-only checks.
 
 [Severity: Low]
-Is "visible to the rest of the bonding code" accurate here? By the time
-bond_publish_slave() runs, bond_enslave() has already made the slave
-reachable:
+Is "all read-only checks" accurate here? The patch moves only the checks
+that already ran before the first mutation. Several other checks that
+only read state are still inline in bond_enslave().
 
-    res = netdev_rx_handler_register(slave_dev, bond_handle_frame,
-                                     new_slave);
+Two of them run before any mutation:
+
+drivers/net/bonding/bond_main.c:bond_enslave() {
     ...
-    res = bond_master_upper_dev_link(bond, new_slave, extack);
+	if (!bond_has_slaves(bond)) {
+		if (bond_dev->type != slave_dev->type) {
+			if (slave_dev->type != ARPHRD_ETHER &&
+			    BOND_MODE(bond) == BOND_MODE_8023AD) {
+				SLAVE_NL_ERR(bond_dev, slave_dev, extack,
+					     "8023AD mode requires Ethernet devices");
+				return -EINVAL;
+			}
     ...
-    res = bond_sysfs_slave_add(new_slave);
-
-bond_for_each_slave() is netdev_for_each_lower_private(). So once
-bond_master_upper_dev_link() returns, every bond_for_each_slave() walker
-sees the new slave. bond_xdp_set_features(), called just before this
-helper, already iterates over it.
-
-In the default (trunk) mode, the switch in bond_enslave() also publishes
-the slave as curr_active_slave. That happens before several steps that
-can still fail (netpoll, rx_handler, upper link, sysfs, promisc/allmulti,
-XDP):
-
-    if (!rcu_access_pointer(bond->curr_active_slave) &&
-        new_slave->link == BOND_LINK_UP)
-        rcu_assign_pointer(bond->curr_active_slave, new_slave);
-
-The err_detach path then undoes that:
-
-    if (rcu_access_pointer(bond->curr_active_slave) == new_slave) {
-        block_netpoll_tx();
-        bond_change_active_slave(bond, NULL);
-        bond_select_active_slave(bond);
-        unblock_netpoll_tx();
-    }
-
-So "error paths never undo the publication" does not seem to hold either.
-
-The helper actually commits slave_cnt and rebuilds derived state: upper
-features, carrier, NS maddrs, active slave selection and the xmit slave
-arrays. Between bond_master_upper_dev_link() and bond_publish_slave(),
-list walkers see N+1 slaves while slave_cnt is still N.
-
-Could the comment say that instead? Otherwise a later change might assume
-the slave cannot be reached before this point.
-
-> +static void bond_publish_slave(struct bonding *bond, struct slave *slave)
-> +{
-
-[ ... ]
-
-> +	/* broadcast mode uses the all_slaves to loop through slaves. */
-> +	if (bond_mode_can_use_xmit_hash(bond) ||
-> +	    BOND_MODE(bond) == BOND_MODE_BROADCAST)
-> +		bond_update_slave_arr(bond, NULL);
-> +}
-
-[Severity: Low]
-The commit message calls this the infallible "commit point", and the
-comment above says all fallible steps must be done before this runs. Can
-bond_update_slave_arr() still fail here?
-
-drivers/net/bonding/bond_main.c:bond_update_slave_arr() {
-    ...
-	usable_slaves = kzalloc_flex(*usable_slaves, arr, bond->slave_cnt);
-	all_slaves = kzalloc_flex(*all_slaves, arr, bond->slave_cnt);
-	if (!usable_slaves || !all_slaves) {
-		ret = -ENOMEM;
-		goto out;
+	} else if (bond_dev->type != slave_dev->type) {
+		SLAVE_NL_ERR(bond_dev, slave_dev, extack,
+			     "Device type is different from other slaves");
+		return -EINVAL;
 	}
     ...
 }
 
-On that path bond_set_slave_arr() is never called. Since skipslave is
-NULL, nothing else makes up for it.
+The infiniband mode check only reads slave_dev->type and BOND_MODE(bond).
+It runs after the first-slave type change block, though, and exits
+through err_undo_flags:
 
-bond_publish_slave() returns void, so the error is dropped and the
-slave_arr work is not re-armed. bond_slave_arr_handler() does re-arm it
-when the same call fails:
-
-	ret = bond_update_slave_arr(bond, NULL);
-	rtnl_unlock();
-	if (ret) {
-		pr_warn_ratelimited("Failed to update slave array from WT\n");
-		goto err;
+	if (slave_dev->type == ARPHRD_INFINIBAND &&
+	    BOND_MODE(bond) != BOND_MODE_ACTIVEBACKUP) {
+		SLAVE_NL_ERR(bond_dev, slave_dev, extack,
+			     "Only active-backup mode is supported for infiniband slaves");
+		res = -EOPNOTSUPP;
+		goto err_undo_flags;
 	}
-	return;
 
-err:
-	bond_slave_arr_work_rearm(bond, 1);
+For a first slave, the bond has already gone through
+NETDEV_PRE/POST_TYPE_CHANGE, dev_uc_flush()/dev_mc_flush() and
+bond_setup_by_slave() at that point. err_undo_flags then calls
+dev_close(bond_dev) and bond_ether_setup(bond_dev). This behaves the same
+before and after the patch.
 
-If the allocation fails, bond_enslave() still returns 0 and slave_cnt
-has already been incremented. all_slaves and usable_slaves still hold
-the old slave set. bond_xmit_broadcast() skips the new slave, and
-XOR/3ad/TLB hashing never picks it, until some unrelated event rebuilds
-the arrays.
+The fail_over_mac check after it also only reads state.
 
-The unchecked call was already inline in bond_enslave() before this
-patch. What is new is the void helper and the comment that call it
-infallible.
+The helper's own code comment, and the "Failures return directly, no
+undo needed at that point" sentence, are accurate for what the helper
+contains.
 
-Should the comment and commit message be corrected? Or should the helper
-call bond_slave_arr_work_rearm(bond, 1) when bond_update_slave_arr()
-fails?
+Could the commit message say that the helper holds the checks that run
+before the first mutation, rather than all read-only checks?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261113-bond_enslave_restruct-v1-0-364c549e78db%40kylinos.cn
