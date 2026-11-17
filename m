@@ -1,87 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.47
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794904594;
-	b=LQm05QvzJjAQNRfjxH9FA3KAUMX42PmOZv4XDrcF65dg3tBsUPOtBtr2IUYF8qAVTr4U
-	 4WEURcUrF/wD6KFRbzF6EtXhyxr1KSzmPTFzxnWAma3IYWoTPa6jplw6L6qhtnOHb5kjQ
-	 9QMqq+aSwyd+0JLsIbAyCL2gEaSsFk1PGBK0zc0ZLccA8ZPFj5RmMln1gKjkcUAfpTqZp
-	 tOTYsSQPkebYl8VJ9b/5foRebn55H+aM41ojW7lg8lMZwxdGpAi4O24jLj7i/9LFmhqwj
-	 qFbcPVqB/6BnGs1jp/1fSMLnVmNI12aLnhKpzpchDu/XUfaM8vq9TIdYtHziM39seAg==
+	t=1794905085;
+	b=loRCvdK3sQkTUKnBudDHpaxNEPaf+p3LB6fVxhMk2qIrkT97SMFEJHiiEbgEDEXoQsfj
+	 Jz4T4gX8dZjTkRD3MrRFkn3dU2pD5ZfxTSDqHEaEfFrsYuzmnEBCvlnaIOOHgIqHlHA1T
+	 43NbnjvNSRtINwPZjKl2oxSW/l/0iv6/qDVk3Qwvc+VzSJSh6jQHQ03FWR5lnSGRbPVAQ
+	 QnEU+LVkbXfuhX532DloRK/Gprb3UUMOuET90NhDtQ/+TfVDO0SoBNiBM/Wm8xizQR6bz
+	 ea/9jgVV3O0HLZ02fWv1ooLDZWcX4Qi/gzpZt+e2malEJF+KEJ3Tu4Gl/8Kgmp0GBpg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794904594;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794905085;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
 	 Content-Type:Content-Transfer-Encoding:User-Agent:MIME-Version;
-	bh=u/hxpfxH2Ygjpkkpn+gEQ4NFMpeA+YPAHTw9d0qdSc4=;
-	b=mM8+ia/QZ+NIOSKoqPhW7CzEFajN279iUOivxghg38UB3ieaa25kVsy3n7gxzaxR5f0b
-	 wCCMzS2iZSXJw/OMX1hQkFfeeelhJONh7PUr9GGDNjg2emLy1J2C3EjnN6Jqb/SzbRBQH
-	 FLVtPyOK1Zx6HCpmhK+vrEzbkAuleDDtvPEsBaSHVVzT9C8WvbSgWYTiRz68JkVKeSyQ8
-	 wKSDcyM04WcWTcqluorKb5D7/Y1T8Q1as6vWMjpVw4jKL5S7nhTAnVVlomdppI4bouTuL
-	 n3+A18C/vk6c2En3ce9oLmPlAXeISFh1yd9/ngqSGGAmP04GfNgd4YVX51iEmmtKRHg==
+	bh=YtgOPMlBsDbDRTTami0iaeC2PfdAlPMUJ3BhZBWqnDY=;
+	b=c8U/xXReHXZeJW0w5OBxGfvxA09450kd8akHESJsknuRgH8RAFyuoo2cMKTck1NFLxnI
+	 dhRnrUCexqL+KofRNn9uFVyHMIEzEaUenZmT9Wjq0BqLIiHX9dzIlYBcS25CnPvmUamkV
+	 qmOQCJTUYl1P2Jak/NuPAOfN7yXFZ7IquEjB79DkN0WcBl9ecRv2+Ub3qlicrhNfzXoKY
+	 Ir6IeTa+5XhenX/CJ7m2aC0Iie3zM78QXT7zTbXOZz+BYl2ZRJ6XV66E4/RTd7eRF5p76
+	 UQJNNfPMwq3HamEGLFH+Eg4PXh9cRBJaY8OZyF6NjeSIrRXu6O2DX3hOnUa7CmqBhqA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=amutable.com;
 	spf=pass smtp.mailfrom=amutable.com;
-	dkim=pass header.d=amutable-com.20260707.gappssmtp.com header.i=@amutable-com.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=VB84C1sh;
-	arc=none smtp.remote-ip=209.85.128.42
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	dkim=pass header.d=amutable-com.20260707.gappssmtp.com header.i=@amutable-com.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=qPWJSshs;
+	arc=none smtp.remote-ip=209.85.221.47
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0599606A897
-	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 08:36:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C0599606A897
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E51DE606A88A
+	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 08:44:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E51DE606A88A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amutable.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amutable.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amutable-com.20260707.gappssmtp.com header.i=@amutable-com.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=VB84C1sh
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4b467581b98so39088965e9.0
-        for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 00:36:33 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=amutable-com.20260707.gappssmtp.com header.i=@amutable-com.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=qPWJSshs
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-48dfc0421d9so3880507f8f.1
+        for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 00:44:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amutable-com.20260707.gappssmtp.com; s=20260707; t=1794904592; x=1795509392; darn=vger.kernel.org;
+        d=amutable-com.20260707.gappssmtp.com; s=20260707; t=1794905081; x=1795509881; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=u/hxpfxH2Ygjpkkpn+gEQ4NFMpeA+YPAHTw9d0qdSc4=;
-        b=VB84C1shjSG034pSk2oK3egXlQwWjuu3VjrdbAKPawk/Twv4Yif6yhPlbROFWtMgPQ
-         3tz2NQZOgPBk3fq0QRZC/paJXFCSb8aJt/mhh+A0iXMTZvR4a2C4xo37cxqDT+bS5wyK
-         cFfqQ64HX4H+WtOYlqmaNWk53bLD4rVzH3Dam/22N7EldMgTIeT60YiznWNjIzN+eEJD
-         Zc6kl9xoD3REW2KAU35dfm9/7zuNgWUL6hteTTxoqyJmYKiacM/NYuvwNSKHsMwzezat
-         1L4qftGlpMPZouPAaee8sA2dATEpRVvU+RzrgkUS2mvSj/+KFRi5Npjbd19v9tUdsF88
-         Zbrw==
+        bh=YtgOPMlBsDbDRTTami0iaeC2PfdAlPMUJ3BhZBWqnDY=;
+        b=qPWJSshsn8vVlxONBkwnt0Rrdn9d5F3Qc4ul63isG/q9SzfN/YeX6Opt0gSo3Jew6G
+         TPoHc3exB3o1TVJHb31ucJURrMLm+X5ZLvKQdkLiUwsGhwj3/4jXaF9QxR3XbUAvZwOE
+         a/cd4y1UcgXoBr9kVgdvuhJuBveUAauSYuunqpBOO8ny5BuS4lSdHT4xtCJFDNjS8url
+         r/ZKVJBRzaToW1BBIq0cKvkP0/i/p+OipahpXpiSl0PGBR9WYmSpn39e8LKnYXYjrWjD
+         bzQp5gYJPTRPzgdIgnmtc42HrrCv5BgaqLA/tsUHs3tWdIoSQrhFLq1gvYrghbRPmmpF
+         EcZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794904592; x=1795509392;
+        d=1e100.net; s=20260707; t=1794905081; x=1795509881;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=u/hxpfxH2Ygjpkkpn+gEQ4NFMpeA+YPAHTw9d0qdSc4=;
-        b=XjO8nmRt5SoWxPn+MZWrfQ/5iJU+UnLHKUUFz+Lec2Y6Un0B3O4nm+Lo+NQiLFm7aE
-         YFJ/1jnAum3xbY+RP2I1yt5b5wYthd4mGH/zQBZcA+r3yLIQk2B2ofwx+cNXmbW/Da40
-         VmLb3TzAkbAzRD3WXQcSBIb8YIuIwEkxZ5Rj1PG1gyWqS0C1V6hC4EYAcv0sPN3nSMJx
-         8m6D1gpfw6z2/h7CgshL2aWS7SOmnOekfqECYJiUtH5a437xZnfBox3UClv51bO31j/K
-         vlsnezArPuxknBjhMPsaRlHVlPUTx3JkKyhNzNeruFLd7cxrbfH7aZTIQUs4ThCs4JYi
-         zIPA==
-X-Forwarded-Encrypted: i=1; AL+hErHoeqkP27vzKDj+keEvJHYImADTy4HD0rVjAyDCfmq0ntr2bkWIriPBF5g8ufCaxxbtT+s=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8yNlkNJtGNJtsG5ucnExP46EJhsPzQC/M+kM1nmEa08AW9iGlV
-	emzvrzgK7mMixrsuYx4/ccCDG8AtJOiZ8DUdshhYrYs67LyOHYn1NgLscSIqs25yim9f
-X-Gm-Gg: AYBFou1wcZX1CwO6zn8GjXrcuY6FBvb94MqxMK0o8ZSbGxpKsf4T6LDgvJ5P5M1iTs2
-	MWcs/oQtkeUUHAY/81cjgE4Ffrj9qqsmPiQsblfnuzZKElFmYgBn5c2T0alfnIM287Mromuyr38
-	yLPik5G6F72xasHQeRLZb/bkiissXIf+1dG13e7oBKDqRbOn8BtFCMry4p8hfbj7I7CnSSkPmaI
-	lAvumXLxXFLbodI79Qc5B1y1x6SbosUUFdd1qr9PNUGak7puVpOQeNkT+tFsDvWo9F6mqZL4LRO
-	bVmecmhdCZj91Q1lLzJhnte9mwympwsRZwoIgPPJ3bhk0CH5Dnl9b4DEQcFRBanH+vP/bXecUl4
-	lyztasZzN1LqQJfwCCLTND7YLfmVm2vz5zK7a/GhwodNw9lrAEeJVo1hdzN5p5kKK9SGlb2OWdy
-	L4PbReiXQKdTLg26WU80GVKuExsiPOp8thoQhJ6Kemdar1VD7WXgtCVg3/wgl7/DFrcFiBd7q+8
-	8OnewRWwUbd7qtBfD2bXzQz988lwkHzA06mqEdIUx/NNe8vhOcDVG37hfGCtn1yOwRCsxFQTqEX
-	a0/ppIHdctoKUk/dtcsFvQfLGlLfLFUCZn2WdOYir+Ovq742tLjvuWVJRHW8vWQTuL8q5hQCUgr
-	giA6NlPQMqwR7AzBJI49Cgm8X6R0sX6CZ6W2NcPTyGU6BUU212JUPqYwr
-X-Received: by 2002:a05:600c:1f90:b0:4a7:76fa:87e9 with SMTP id 5b1f17b1804b1-4bb55ab281bmr266345525e9.21.1794904592167;
-        Tue, 17 Nov 2026 00:36:32 -0800 (PST)
+        bh=YtgOPMlBsDbDRTTami0iaeC2PfdAlPMUJ3BhZBWqnDY=;
+        b=EPzX9WCfLwsFjwYRdM/68xX2yBWz3RGUNevzz+AZTtLgtVLFOUq8uY7WvBqN7p+XV0
+         K8ssbkPcIObBOETyas7apVteXLSV8yRfQcPZtF+LNxfXVODkfvebNJBjv/LhWMOvpKFf
+         mnHZBAmI4MqoDfD+upJXWemcPQf/x97YBpfAv7c93kyFpFqlIjAdea6ol17XCmyqDyTn
+         MijEEY/gOlCj/JpRFkjC4tTm+POjP3HxyO3wi6CGn/rvKV0ZengQVRvDvDMLC1ZLF0qA
+         QCjMZxMvFQL9I2ZreU9rlLkkVRfLVwfpnllRNmpA1BNZ5q9umscPjOPP0LIg7wudh2IK
+         96mA==
+X-Forwarded-Encrypted: i=1; AL+hErH0DDku8z1VX3YXhayjnqJZ6NaiUae+FzKgAxL7f3hEbTiRoaMiRSouIHZo3A1B4X48LRM=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+jNtkQ2e4wGI4pMBLUuooNBo61GKaOHybDOBU8Mkf9egi1nGNS
+	gf2xH2eBNsSzCOOWiCz1OsE2E/8fzfSirNG6DpvdpQXyyzcxYotKSj8ag1ptiBCOaA3v
+X-Gm-Gg: AZFdTZdk/ZXOk+lCdBx/AWvADib8hiDfl9b59DqAlXSimK/GCv5lSOFMTdcf4YBnl2F
+	KR3ck2UJcHdai81WEyN4Q05LLUlzFuBuLhtqZ9hTtWTnfKlI1WZmBR9YJoqZVnmp3X+MPrFnRQQ
+	bxpgSpjB/cg67xWs3Kb0WVKCbMGz5ZV7AVoVIv5AWAFx6VwsNjixa7f7Waep7VjDchh2Q254wct
+	DkFIXjiYscDFs+YI126DXEDCy2ebQYVNxSOTlXPjQk6WTnRHiScuZdMHE7yYh9qhQTyl5fsKrqF
+	nh8ZaPS+k6m1tuQvSkv05E72Z/BMOdXvU0iMWrb6O7q19VviyDJGXoxbGp085+0OTEHsVpAVOnR
+	g62BVC3EScm84g+Z6Ah3ngc03SaQu5D72Qy9dZ7PRSlPMzSPMMxTNaXLtjNs7PGP2Q3Qc/kXFSc
+	daTEL9VLWROI5Sw+sSfqoLXrFAgcbgSRWf3t2CHujh4HZVe0EW9Zx2hlLCFr9yMU2oOS560ICGc
+	r4zQ5s4mW8vCWA8Mys2XKn+08K1JQA916jBqJCDOZ0F3064OBw48L+ATzysJMtD77Mf4u8deW5Y
+	ZIXGn6tQzCb/15QLYTXwnSbu5QEynEAss939cYOXb5K6VfYXjAMb95Iudkzm3Y/rXyHZveo6UDk
+	3sqBsQBsFJwo//k902yRn+mW+1rTIchTVke2RGRlMnr4DqPluBNC+Pxkq3AIc7uQ4Yc49SLJqmn
+	KdAQ==
+X-Received: by 2002:a05:6000:2411:b0:48f:f26d:c5c with SMTP id ffacd0b85a97d-49c70b051d1mr27471178f8f.9.1794905081269;
+        Tue, 17 Nov 2026 00:44:41 -0800 (PST)
 Received: from ?IPv6:2003:cf:572c:2800:de4c:6789:33ce:97c2? (p200300cf572c2800de4c678933ce97c2.dip0.t-ipconnect.de. [2003:cf:572c:2800:de4c:6789:33ce:97c2])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb78430752sm52548565e9.12.2026.11.17.00.36.30
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49d673ce75fsm19982260f8f.55.2026.11.17.00.44.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Nov 2026 00:36:31 -0800 (PST)
-Message-ID: <411502f9a4f940c223b2b88d7e19fafdce63172e.camel@amutable.com>
-Subject: Re: [PATCH RFC v3 29/44] s390/hypfs: use fc_init_pseudo()
+        Tue, 17 Nov 2026 00:44:40 -0800 (PST)
+Message-ID: <d18a972cfc6a7d6da39ab9674903d7ae6e4c1826.camel@amutable.com>
+Subject: Re: [PATCH RFC v3 35/44] fs: add file_check_backing()
 From: Alexander Mikhalitsyn <alex@amutable.com>
 To: Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org
 Cc: Jann Horn <jannh@google.com>, Chris Mason <mason@kernel.org>, Josef
@@ -99,10 +100,10 @@ Cc: Jann Horn <jannh@google.com>, Chris Mason <mason@kernel.org>, Josef
  linuxppc-dev@lists.ozlabs.org, 	linux-usb@vger.kernel.org, Amir Goldstein
  <amir73il@gmail.com>, 	linux-erofs@lists.ozlabs.org,
  linux-kselftest@vger.kernel.org
-Date: Tue, 17 Nov 2026 09:36:30 +0100
-In-Reply-To: <20261116-work-loop-pseudo-v3-29-8cbbea1cf34f@kernel.org>
+Date: Tue, 17 Nov 2026 09:44:39 +0100
+In-Reply-To: <20261116-work-loop-pseudo-v3-35-8cbbea1cf34f@kernel.org>
 References: <20261116-work-loop-pseudo-v3-0-8cbbea1cf34f@kernel.org>
-	 <20261116-work-loop-pseudo-v3-29-8cbbea1cf34f@kernel.org>
+	 <20261116-work-loop-pseudo-v3-35-8cbbea1cf34f@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.2-0+deb13u1 
@@ -117,36 +118,170 @@ Precedence: list
 MIME-Version: 1.0
 
 On Mon, 2026-11-16 at 12:05 +0100, Christian Brauner wrote:
-> Initialize hypfs as a pseudo filesystem. This raises SB_I_PSEUDO and
-> also SB_I_NOEXEC and SB_I_NODEV. hypfs never holds executables or
-> device nodes.
+> Loop, zloop, the nvme target, the scsi target, fuse passthrough, the
+> usb
+> mass storage gadget, erofs and acct all take a file from userspace
+> and
+> use it as storage. Currently, each of them has its own idea of what
+> to
+> check before using a file like that:
+>=20
+> - loop and the gadget check for a regular file or a block device, the
+> =C2=A0 nvme target, the scsi target and zloop take any file type
+> - loop checks the open mode, the gadget checks FMODE_CAN_READ, the
+> nvme
+> =C2=A0 target, the scsi target and zloop only check for ->read_iter() and
+> =C2=A0 ->write_iter()
+> - apart from acct which refuses procfs and sysfs files none of them
+> =C2=A0 cares whether the file is a kernel interface
+>=20
+> Add a helper that does all of it in one place. It only accepts
+> regular
+> files and, if the caller passes S_IFBLK, block devices. It refuses
+> files
+> on pseudo filesystems. And it checks that the file is open for what
+> the
+> caller is going to do with it and implements ->read_iter() for
+> reading
+> and ->write_iter() for writing.
+>=20
+> O_PATH files are refused unless the caller passes FMODE_PATH. That is
+> for callers that only need the path of the file. fuse passthrough is
+> one of them and has accepted O_PATH file descriptors since commit
+> efad7153bf93 ("fuse: allow O_PATH fd for FUSE_DEV_IOC_BACKING_OPEN").
+>=20
+> Block devices are fine even though bdevfs is a pseudo filesystem. A
+> block device that userspace hands in is a device node on devtmpfs or
+> some other filesystem. Files on bdevfs only come from
+> bdev_file_open_by_*() and never end up here.
+>=20
+> The pseudo filesystem check looks at the inode that actually provides
+> the data via d_real_data_inode(). overlayfs accepts sysfs, cgroup2,
+> debugfs, tracefs, configfs and securityfs as lower layers and reads
+> of
+> such an overlayfs file are served by the file on the pseudo
+> filesystem.
+> Checking the overlayfs inode would miss that.
+>=20
+> For an O_PATH file nothing might have looked up the data yet.
+> overlayfs
+> only looks up the data of a metacopy file in a data-only layer when
+> the
+> file is opened. d_real_data_inode() does the lookup then and if that
+> fails we return the error.
+>=20
+> Note that the file type is taken from the inode of the file and not
+> from
+> the host of ->f_mapping like loop and the gadget do it. A driver can
+> point ->f_mapping somewhere else in ->open(). It makes no difference
+> for
+> block devices as both inodes are block devices.
+>=20
+> No functional changes. Nothing calls the helper yet.
 >=20
 
 Reviewed-by: Alexander Mikhalitsyn <alex@amutable.com>
 
 > Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 > ---
-> =C2=A0arch/s390/hypfs/inode.c | 2 ++
-> =C2=A01 file changed, 2 insertions(+)
+> =C2=A0fs/read_write.c=C2=A0=C2=A0=C2=A0 | 53
+> +++++++++++++++++++++++++++++++++++++++++++++++++++++
+> =C2=A0include/linux/fs.h |=C2=A0 2 ++
+> =C2=A02 files changed, 55 insertions(+)
 >=20
-> diff --git a/arch/s390/hypfs/inode.c b/arch/s390/hypfs/inode.c
-> index 559b011e68800..8662169de477a 100644
-> --- a/arch/s390/hypfs/inode.c
-> +++ b/arch/s390/hypfs/inode.c
-> @@ -12,6 +12,7 @@
-> =C2=A0#include <linux/errno.h>
-> =C2=A0#include <linux/fs.h>
-> =C2=A0#include <linux/fs_context.h>
-> +#include <linux/pseudo_fs.h>
-> =C2=A0#include <linux/fs_parser.h>
-> =C2=A0#include <linux/namei.h>
-> =C2=A0#include <linux/vfs.h>
-> @@ -301,6 +302,7 @@ static int hypfs_init_fs_context(struct
-> fs_context *fc)
-> =C2=A0	sbi->gid =3D current_gid();
-> =C2=A0
-> =C2=A0	fc->s_fs_info =3D sbi;
-> +	fc_init_pseudo(fc);
-> =C2=A0	fc->ops =3D &hypfs_context_ops;
-> =C2=A0	return 0;
+> diff --git a/fs/read_write.c b/fs/read_write.c
+> index 6767283108991..9f1e7bfcbd4f1 100644
+> --- a/fs/read_write.c
+> +++ b/fs/read_write.c
+> @@ -866,6 +866,59 @@ static ssize_t do_loop_readv_writev(struct file
+> *filp, struct iov_iter *iter,
+> =C2=A0	return ret;
 > =C2=A0}
+> =C2=A0
+> +/**
+> + * file_check_backing - check that the kernel can use a file as
+> storage
+> + * @file: file that userspace handed in
+> + * @mode: FMODE_READ and/or FMODE_WRITE the kernel will do I/O with,
+> or
+> + *=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 FMODE_PATH if only the path=
+ of @file is used
+> + * @type: S_IFBLK if a block device is fine as well, 0 otherwise
+> + *
+> + * Call this where a file from userspace is taken as a backing file.
+> Only
+> + * regular files and, if @type is S_IFBLK, block devices are
+> storage. Files
+> + * on pseudo filesystems are kernel interfaces and are refused. The
+> file
+> + * must be open for @mode and implement ->read_iter() for reading
+> and
+> + * ->write_iter() for writing. O_PATH files are only fine with
+> FMODE_PATH.
+> + *
+> + * Return: 0 on success, -EBADF if @file isn't open for @mode, -
+> EINVAL if it
+> + * can't be used as storage, or the error from looking up the data
+> of @file
+> + * on a stacking filesystem.
+> + */
+> +int file_check_backing(const struct file *file, fmode_t mode,
+> umode_t type)
+> +{
+> +	fmode_t io =3D mode & (FMODE_READ | FMODE_WRITE);
+> +	/* Drivers may point ->f_mapping at something else. */
+> +	umode_t fmt =3D file_inode(file)->i_mode & S_IFMT;
+> +	struct inode *real_inode;
+> +
+> +	/* O_PATH files are only fine for callers that just use the
+> path. */
+> +	if ((file->f_mode & FMODE_PATH) && !(mode & FMODE_PATH))
+> +		return -EBADF;
+> +
+> +	if ((file->f_mode & io) !=3D io)
+> +		return -EBADF;
+> +
+> +	if (fmt !=3D S_IFREG && !(type =3D=3D S_IFBLK && fmt =3D=3D S_IFBLK))
+> +		return -EINVAL;
+> +
+> +	/* Look through stacking filesystems at the inode with the
+> data. */
+> +	real_inode =3D d_real_data_inode(file->f_path.dentry);
+> +	if (IS_ERR(real_inode))
+> +		return PTR_ERR(real_inode);
+> +	if (real_inode->i_sb->s_iflags & SB_I_PSEUDO)
+> +		return -EINVAL;
+> +
+> +	if ((mode & FMODE_READ) &&
+> +	=C2=A0=C2=A0=C2=A0 (!(file->f_mode & FMODE_CAN_READ) || !file->f_op-
+> >read_iter))
+> +		return -EINVAL;
+> +
+> +	if ((mode & FMODE_WRITE) &&
+> +	=C2=A0=C2=A0=C2=A0 (!(file->f_mode & FMODE_CAN_WRITE) || !file->f_op-
+> >write_iter))
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(file_check_backing);
+> +
+> =C2=A0ssize_t vfs_iocb_iter_read(struct file *file, struct kiocb *iocb,
+> =C2=A0			=C2=A0=C2=A0 struct iov_iter *iter)
+> =C2=A0{
+> diff --git a/include/linux/fs.h b/include/linux/fs.h
+> index 99caef43ff3c4..b1c7ebafbadbe 100644
+> --- a/include/linux/fs.h
+> +++ b/include/linux/fs.h
+> @@ -2553,6 +2553,8 @@ static inline const struct inode
+> *file_user_inode(const struct file *f)
+> =C2=A0	return file_inode(f);
+> =C2=A0}
+> =C2=A0
+> +int file_check_backing(const struct file *file, fmode_t mode,
+> umode_t type);
+> +
+> =C2=A0static inline struct file *file_clone_open(struct file *file)
+> =C2=A0{
+> =C2=A0	return dentry_open(&file->f_path, file->f_flags, file-
+> >f_cred);
