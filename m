@@ -1,85 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794913576;
-	b=DsnYtlcA/I2WIuXkcqIiQKNgz2VL/dHQJBVhYvoPApr7eeqOQiWr2KHOF0UtepQHtQfS
-	 jXwYoJCUYZeezYxTn5nVWK+SnnPcaR+FnJ0yE9xb8MMgu7RrtcLCt4/QqY/1gU/MekECB
-	 Gm9CKmwbWWr16JnSXOOlgsE9SLfEqIKFWiOS2tIKDzIGmX8iL+g95dTflu9qIstt697cr
-	 aT/+XiYS1gK9Eq04lWvpO8VAA6ukZyGUMMxDhwLmhj9EE3NuAnLpojr3fPp6MJiCOTiGP
-	 OIU5UbfHQVa6uwX/SvhcqUyr/gRNQ1A2fYKZNx1/pwIzAuuJ306+71gpSWnrImwSFIg==
+	t=1794913619;
+	b=pSZcnKRYFg00Y2VB7nUwtgNeFyM0h4ZWPiQkKVL9aVtlVOwuvWeAjMsZLWGHAGMeS9pl
+	 z02mCGIl6N9QzlYy2lAogzG/SgIbcJfmnSv38Gr6eBhJ5hCMxTC5D1ex8xL1NvsRgo9Xr
+	 z3aPVrR1gUu1o23NOR0WSmJ+UCWSUiFuiIBIJDniSnS1ZSIQmWzuNwQDDVyGdynSIesvP
+	 TIv+m3YQ292lK+SlByCcxYbQ8KGc+PkZd7yrXzyJBK3XQXwFldJkTn8JTvRgdqFvGHpEm
+	 ZMNt+kX0UbTzsRIwEmsqpUa2VupVRCXfrOIytgnPfW8hXpOymNhaRRWCOcQVD/oWX3Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794913576;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794913619;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
 	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=ChkKaHHAKUklGidpwJFPREnCjwZb6wuXyqrdGtCbZ5c=;
-	b=IXvMRWnrGHBujdWlzexiC1UQoOAGvnOhTcQN5ZUaIKbQmFNMXVll4fIGvH7jihxKP8ZM
-	 KK4kA732z6XDLxJV8O4vj8EhYJoL2SgcpzE2r+GMXamARjhSsei9NVP74AQQf1KV86ZK1
-	 gLdIIPiSoIbMXw5yaukFL0P8R0C3G2KqTgrrbDFZjtntxLAJIcDR6AfqQ2VqcxPfUHV5A
-	 Rbz+tuJBC8Lw67gttE2aubtHiLY/iXwsspdgyq7CEVXY9W3LksWeyjy2BsyrfE6y70HNC
-	 vuOFVmgSK35hsS1MIYJoXkrEYvIlHSdHriKRFZAlttvhBYcP4E/N1qsC4g+uIReewsQ==
+	bh=UCYoCA0l50BOe6cq00vn96utGEICr0hjnvRC24q3j5Y=;
+	b=tswKbh3g6D9EFS6Ltwy3kNHfQmrMWaHzDXPB8hDhXP72HcHKvdCHoKncXa3LYJFvTkra
+	 EbN5owjasZtDyywu/1N+nrfdQXYnmt3hg7vK+feZVEEHN8cowIQc2wEbC/F+yRlzEOnbM
+	 sDipazkIhfNGFVKEy0mrMwtsd/Ca2DQ35yPdyTo41LUYb5zHikAnKA3/1vci7eCWDdOfM
+	 GPr4W16oHqw6uAcxC56vtmAXPfyQJm6as+nPuGWt+uSYGLZ/GwgoVKdjtrHWhFqsRuL3d
+	 dP5O8cx00l3IMY459NfiOwUPe2Rz2I8XYKQMu8QuM4b9aoMBvvWmc0t3O5mAQthad+A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JVjQKwXi;
-	arc=none smtp.remote-ip=209.85.221.50
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ERd9NLfR;
+	arc=none smtp.remote-ip=209.85.221.49
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 939DF606A31C
-	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 11:06:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 939DF606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32E1F606A329
+	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 11:06:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 32E1F606A329
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JVjQKwXi
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-490f38e9688so623421f8f.0
-        for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 03:06:15 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ERd9NLfR
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-498f5fa4f70so4671262f8f.0
+        for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 03:06:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794913574; x=1795518374; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794913616; x=1795518416; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=ChkKaHHAKUklGidpwJFPREnCjwZb6wuXyqrdGtCbZ5c=;
-        b=JVjQKwXiRy8XPxYTeUjq7l5tiyCjUt7YGOzTla9jHdUnMrkmhfCR4t7M2If0v8s945
-         F9TXMBxpxt5QZgL6sJnghTgjBGn36kT80CXs9R9oaOrzqUvLsXYxqtHOr+y9K3nLAWwS
-         j7CqR8FWHBqZDqxP1NFGm2EzjQBBNa3Bc0ZcBZ2+nirtHhEecVH4Zzno8qwhjZ/z7QAx
-         ccIgxn3UFeEcrAdEYU+P7EodkaE7fBA2tJItJ0phlUztTqYfNe0cFdyCdwt2PRhCraEL
-         aR4RegYCM9nfTwcUspoN1ih5bRI+1Pj35/WWwzl0O3zQN7vgAscg7ZszlfUf/Ps3RKR3
-         GaIA==
+        bh=UCYoCA0l50BOe6cq00vn96utGEICr0hjnvRC24q3j5Y=;
+        b=ERd9NLfR0pXJagwWvhCwABitOLBLt99KRZJyMnlbJx3QkPTEnz2OAOlvdRN5Y7Q33E
+         5A8T4Ygqarhd+LytItApv5IflFvZt/PJCh7vEm9nknfttEqnFeDLgbI4h+zqep0PVwuS
+         OyN+W+Kvgo/ZhljH4+JqJpUWlGF8yIXTF7ufZ7mkVAHLc5ryi9uESOR5reZfWBFDn691
+         bO1SE2Z+zYR3deDigYXEW7m3TTRZ4x4SNQAK5a1RKuaa7i/bmZUsSHrJ3ylOCUtEfpdM
+         G1+4WrfcdzpNwcPMjKaVoSdaLd6b2Ib2etqKWEJMo2SU0rVB/KFLS+7ozC7vSQkgf+0I
+         +SGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794913574; x=1795518374;
+        d=1e100.net; s=20260707; t=1794913616; x=1795518416;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ChkKaHHAKUklGidpwJFPREnCjwZb6wuXyqrdGtCbZ5c=;
-        b=vcbgsPf2AeRXkOZWgToOliSiII5sXnbtregNzBMWBGR0MLHXvmzuWCA7WgLJd8APti
-         T3DXEkM3mNKDKevXpH51TRj3d+3RE6hz0bk1LB710L83HgiOmMtCea/wHAtRZSQWJRcA
-         acE22hV9fBmZ1pVbkpHjZTaF8gxOXYiSeimBNrhxNQe1FX60tw7TErvPWy967eQrnZS2
-         pWLUMyqO2VFZVSHANtdpJe6HOetkYIstPWV8fIi9sNh6Q/hqZjFSsxWMraA9W9yVrgXN
-         9czhiRw6x4nX7og94sYf1YnOLyXCm1MsyoWgPc018VZS+clIKJQ53+jKNJ9cht1HS5eL
-         7hmw==
-X-Forwarded-Encrypted: i=1; AL+hErH2NU0Bq3rvpX6xUnZxHuukFfvJZar+iGk4XhI45TQi526I3KsyvtjELnONxpjh4sdBuZ8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9Q/AUNZSTPb4CgWJeZHSdgCJXjtgnd+ZbDyloQl4ecC5VcEi0t
-	V5e3il3XjwZIU/Nhdh4mW824OKaOlkfAZ1HuLqEBeOFi19oKbFjlxupW
-X-Gm-Gg: AZFdTZcZBYpgNrooDPwkA6itwU8V5BSoiZx098pcah0AsafQlVTrXXiD1sg/MwrPQ5Q
-	NusOpdmEyPwFqp5B7VCYH88r860I/kSUbpr4P2WqpCHtZYILZ5mKzfDpJAk1KZ/8CMEZQ6AKlgF
-	AMmZlmiB9JcZiHJ8z2fEMP5zssGKZROcItxsWofBgGMAaIo8edaR7DHZ496rfhIO6Nluz34UCAY
-	rJCOrfAblYPFBQugziNoPnv+/doQp2HF26XeWiMy24jqVtwjWHIvvWwh0CF3x7mExUyCwD+dyDG
-	Lf1iNbcEAqrcbKSpnkGG6rJM9RWDcmxm5EBheMmcMl8iXr9btgdB8TTmvXKyB8WRrsjiFo00ZI4
-	v7WmLdt9Z7TpVzEOoCG1lZGALJbqB6oZs8VwQ93FNRMrEfVgq+z+joDM/8ShAc95vm0YEiJbvYk
-	nvbUS+sPh+gp8i61cpCYDYco3z3dVHoCFa6C//tStQO1bKPQUt3MkMcJqhCiYLkWIewhxRL/jKq
-	DcMTlksFMRR0vTQ0nYasfujiOojIiW5+8KFBWzHZzth0YM7oaXsyt71Z4qmP2yG9wxXvFviML9V
-	XtatCnmG2kigkkW6Pueda8+qYoC4NyxXHqx7PhPJKPGu1wj715aZSKMzJzoyu4yHPw==
-X-Received: by 2002:adf:e18a:0:b0:48e:3c5f:a24e with SMTP id ffacd0b85a97d-4a3735b4249mr4831257f8f.11.1794913573701;
-        Tue, 17 Nov 2026 03:06:13 -0800 (PST)
+        bh=UCYoCA0l50BOe6cq00vn96utGEICr0hjnvRC24q3j5Y=;
+        b=a/9CAvQRLbEf9Ec8Z3gQuC2e8etKhcVOzVCdUUdEorItcVsRieNr1RRIF2FyCEmxrl
+         XYB0H6IY9V6l2/r5wjX6AiqYgvumr8BeLN2KY4jSERZWLxrKFka3ZOBlXIOut3fywT8N
+         j6ZKSDLgs2KLbU/crtRW2wTX4+5L8y5/Kbge+7aZoQX0fqM/oiPIoAErtxS1YUpXmTey
+         ry8s+meqBwsAH9xNt3QXOyxQhVLEQj4m5eYYzJg2k95hhkx4N018FBwxkEA9mMuu1B17
+         ZV1WZFLADn/L0QEDLXYcvLPA7LVbuZoGEGlBSYxbogHh1RhP+rzTDDeMReQ3X4NWwctP
+         lQUQ==
+X-Forwarded-Encrypted: i=1; AL+hErFH36g2Wu0c6RGXePhkv5k+x1LJtb+fFVISJBcCtSPi4zOsZQKy9b8X4HSuGZCw76qX5K0=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/vpvQmK9VgaN5ceZtDFMZvTodXO63NVSUt3s/ZDWyehA94Wlp9
+	FqmJBjP/0lry4HKFTDJkxOzCSUxMlT2lDFcbBsLdEWmk8n3D8Av/fm/K
+X-Gm-Gg: AZFdTZfvo3bUxi3/njCYRQq4wkcBV7N6LiVuqnc8rjIfUKRaRQp3RstQKKXdHK+cDCE
+	071eO1kLNNShAi24lpk7s19nveSKgMV8Jg21h8QC2hRhQlEf35DVdmbijH/dAiT/73DHFx5Mr7g
+	55UELPXXCpswNht2KRUGNHavl8XRYj2mMnyziy2GEUGdU4TqSf1JfLBVdFXsP1RVwbNn+4k6yCQ
+	Sxu6R2w56MNok37nB0Ky6anXi/JnShOcSZo92ylhBmIfpuuFfrDpntqmsumRPBZMg5q9GovTV1X
+	xFRSjELEr0+REAzEOJay9IqYdwwKhAr8Zs9wDpiP18EhtClzevpcyUQp7l69Ps6PFvMtiH+Ryij
+	Mk0aLJYzHy3H94hBFW0j0kwep+hecj19C8X0oSxZcxiM8thtsbBUE5M6vWX6GwJtTbTPqaqkp0v
+	P7JOPSRPj20n6Di3zmPOF0Yb3pp4eHzs5/gOEObqSRF7JYeRwc4dZ8/FiskBrcRktFoBV02sLQU
+	5okjL7mQVYB8L4sIc6/YTes0q3OT2S0dkFsHGhtPAnmux0RMRyCnPNep5xkGuO7b6EM5F+mNars
+	FzDLveRhAg3u1OypMI+nPc+2raJYZjfWJ6jVf8EXzj40ElaIxGZNwdQt1GIMn35Nhg==
+X-Received: by 2002:a5d:5d0a:0:b0:491:6b1b:7f25 with SMTP id ffacd0b85a97d-49c72e85578mr29909972f8f.45.1794913616294;
+        Tue, 17 Nov 2026 03:06:56 -0800 (PST)
 Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49c69406640sm27345536f8f.12.2026.11.17.03.06.13
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49c60da0a03sm22300526f8f.53.2026.11.17.03.06.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Nov 2026 03:06:13 -0800 (PST)
-Date: Tue, 17 Nov 2026 11:06:12 +0000
+        Tue, 17 Nov 2026 03:06:56 -0800 (PST)
+Date: Tue, 17 Nov 2026 11:06:55 +0000
 From: David Laight <david.laight.linux@gmail.com>
 To: sashiko-bot@kernel.org
 Cc: sashiko-reviews@lists.linux.dev, "Petr Mladek" <pmladek@suse.com>, "Kees
@@ -89,13 +89,12 @@ Cc: sashiko-reviews@lists.linux.dev, "Petr Mladek" <pmladek@suse.com>, "Kees
  <andrey.grodzovsky@crowdstrike.com>, "Steven Rostedt"
  <rostedt@goodmis.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Samuel Wu"
  <wusamuel@google.com>, nathan@kernel.org, nsc@kernel.org
-Subject: Re: [PATCH v4 next 13/13] scripts/kallsyms: Reuse little-used
- compression tokens
-Message-ID: <20261117110612.1d61025a@pumpkin>
-In-Reply-To: <sashiko-outbox-218682@kernel.org>
+Subject: Re: [PATCH v4 next 05/13] kallsyms: Fix selftest startup delay
+Message-ID: <20261117110655.1294a95f@pumpkin>
+In-Reply-To: <sashiko-outbox-218653@kernel.org>
 References: <20261117103352.1244657-1-david.laight.linux@gmail.com>
-	<20261117103352.1244657-14-david.laight.linux@gmail.com>
-	<sashiko-outbox-218682@kernel.org>
+	<20261117103352.1244657-6-david.laight.linux@gmail.com>
+	<sashiko-outbox-218653@kernel.org>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -109,106 +108,42 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Tue, 17 Nov 2026 10:57:57 +0000
+On Tue, 17 Nov 2026 10:40:36 +0000
 sashiko-bot@kernel.org wrote:
 
 > Thank you for your contribution! Sashiko AI review found 1 potential
 > issue to consider:
-> - [Medium] scripts/kallsyms: missing syms update on split in
->   uncompress_symbols()
+> - [Low] kallsyms: missing Fixes trailer for schedule_timeout() bug in
+>   test_entry()
 > --
 > 
-> commit 33aea03661ccead3785f7f56d31a3c8974eb8710
+> commit e7ea6257d7756e16690d0150d840ede1f6384772
 > Author: David Laight <david.laight.linux@gmail.com>
 > 
-> scripts/kallsyms: Reuse little-used compression tokens
+> > kallsyms: Fix selftest startup delay
+> >
+> > The kallsym_selftest code clearly intends to sleep until initialisation
+> > is complete in order to get more reproducable timings.
+> >
+> > Replace the schedule_timeout() calls with schedule_timeout_idle()
+> > so that the thread actually sleeps.
+> > Poll every second (not every 5) for SYSTEM_RUNNING and then wait
+> > another 10 seconds before starting the tests, otherwise the tests
+> > start as soon an init is executed.
+> >
+> > This code is in the initial 2022 import of the tests.
+> >
+> > Signed-off-by: David Laight <david.laight.linux@gmail.com>  
 > 
-> This commit reuses compression tokens that have few remaining references by
-> expanding them back into their component tokens or three-character strings
-> when a more common token pair is available.
+> [Severity: Low]
+> Since this fixes test_entry() calling schedule_timeout() in TASK_RUNNING
+> state and busy-looping instead of sleeping, should this include:
 > 
-> > diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-> > index 42a7c99585c56..976b525c4366d 100644
-> > --- a/scripts/kallsyms.c
-> > +++ b/scripts/kallsyms.c  
+>   Fixes: 30f3bb09778d ("kallsyms: Add self-test facility")
 > 
-> [ ... ]
-> 
-> > @@ -855,6 +954,125 @@ compress_symbols(unsigned int token_idx, int compressed_chr)
-> >  	return subs;
-> >  }
-> >  
-> > +/* Change every occurance of idx back to token_pair/triple.
-> > + * This extends all the symbol table entries but frees up a token. */
-> > +static __attribute__((noinline)) void
-> > +uncompress_symbols(unsigned int token_pair, int idx)
-> > +{
-> > +	struct best_table *bt = best_table + idx;
-> > +	unsigned int sym_idx, len;
-> > +	unsigned char *sym, *p, *end;
-> > +	unsigned int substitutions;
-> > +	unsigned int third_char;
-> > +
-> > +	third_char = token_pair >> 16;
-> > +	token_pair &= 0xffff;
-> > +
-> > +	for (int j = 0; j < bt->syms.cnt; j++) {
-> > +		sym_idx = bt->syms.sym_indexes[j];
-> > +
-> > +		sym = table[sym_idx]->sym;
-> > +		len = table[sym_idx]->len;
-> > +		end = sym + len;
-> > +
-> > +		for (p = sym; (p = memchr(p, idx, len)); p += 2) {
-> > +			len = end - p - 1;
-> > +			if (len) {
-> > +				if (third_char) {
-> > +					/* Adding three characters */
-> > +					adjust_profit(sym_idx, idx, third_char, p[1], p[1]);
-> > +					memmove(p + 3, p + 1, len);
-> > +				} else {
-> > +					adjust_profit(sym_idx, idx, token_second(token_pair), p[1], p[1]);
-> > +					memmove(p + 2, p + 1, len);
-> > +				}
-> > +			}
-> > +			if (p != sym)
-> > +				adjust_profit(sym_idx, p[-1], p[-1], idx, token_first(token_pair));
-> > +			token_add_symbol(token_pair, sym_idx);
-> > +			p[0] = token_first(token_pair);
-> > +			p[1] = token_second(token_pair);
-> > +			end++;
-> > +			if (third_char) {
-> > +				token_add_symbol(token_index(p[1], third_char), sym_idx);
-> > +				p[2] = third_char;
-> > +				end++;
-> > +				p++;
-> > +			}
-> > +		}
-> > +		/* sym_idx is already in best_table[].syms from earlier. */
-> > +		table[sym_idx]->len = end - sym;
-> > +	}  
-> 
-> [Severity: Medium]
-> Can uncompress_symbols() leave sym_idx missing from best_table[].syms for
-> token_first(token_pair) or token_second(token_pair)?
 
-Read the comment - it is still in the list.
-Quite subtle.
+No, selftest, doesn't need back porting.
+
+(Did I say that before?)
 
 David
-
-> 
-> sym_arr_free_all() clears best_table[ch].syms.cnt when a token slot loses
-> all references or is uncompressed, while split_token() only checks that
-> first->str and second->str still concatenate to bt->str.  If a component
-> slot is freed and later reused such that first->str and second->str still
-> match bt->str (either reused for the same substring or for a different
-> length split of bt->str), its syms array only tracks symbols from the new
-> compression and no longer contains sym_idx where bt remained compressed.
-> 
-> Expanding bt back into those component tokens without adding sym_idx to
-> their best_table[].syms arrays triggers the errx() in check_best_refs(), or
-> leaves stale token bytes in table[sym_idx]->sym if that component token is
-> split again before check_tables() runs.
-> 
-
