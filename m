@@ -1,57 +1,70 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.195
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794942152;
-	b=dC3iM0baM0Xq0+HIVgQuO9iymw9A06XmQa3oS5mQwhQM/X3AaSPXYBz6cVwBAPgzwAH6
-	 xxV8uNm/qJLpwD3TcUZURcGRmfeq5zyY25QsPLzohzNm+dMKVReMkCgdXWelrmzT5vkat
-	 26F6rQ+4/K89fX4BjiyjfH45vznjLtRkYIimqOn7YRhC/E9PnezIN13bnp+MQQck4hBvl
-	 dauBacm03yO0M9p87iFvh3tcfv7zM/ILcg8YrbDpGL3cfHlSHUi6D/OxEq4Qn1wYC0USv
-	 3FyMoyy4wTGlEyI4HxRw1n1DvJAAEwB1/I9mswmnryUUgZ3WFDa0F17amfonQU/m4rA==
+	t=1794943325;
+	b=twy5dRHie6NMY6Kg04YKBy4KnjLGeXWa/kLj7mtd9T4vNItcMCFAcsI7AeCMP/Ih0RDV
+	 sIG6yuQ/WIMklcyl84esBvmOhjROSvLxIeWZ5GpjFXEsYxgHgsIgnPFiY9tFnVLEbMtqW
+	 VOKVi9oQXyXyno8rFn1Hcn/FafzZoWyHPhynkhBFUuit5NCzCnek9G5rktvi1lkXBKBnT
+	 vbkqxy1fpq/NYGYRmjNCtL6YmkJWIPYy2ePQ7b0GU0nIGiexqdd5IWYqL4N9L+EFS4lCX
+	 9NGOpCNTZ04lpTbLQ08VEugzuxuS4MTRLeiHsMG3UTw3ZKveXrRrSChLaJGQVWVWRig==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794942152;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=GlBIhRY3Akk9PwEAdoz2L3EtKZsCS5JmgcAXMjTju5s=;
-	b=5F0vwoqwb5jA1qLgbvabQzIUNbuVrGNHaLX7m8vxxpuN/woBbS74LKO+mwzzkt/ir6rD
-	 gjhm0vLTscaZSIc/eByrZawwynWNgGZwCF8gRqDfZvfpYtJUVJi8zz5DsOwjelsetod/y
-	 xYXqFuamHJ/rXYePjC+FeDvyR+ehqoj0yEEVuKGBAP7rd7fvIrvps3yUvWTTlhI6a0rxC
-	 Nn2ECW9RyEB3/2hMzQ40655UdRn2S9seaFlyTFW2WyLXZhedxvNpfuoemTnJ/sx47zoYY
-	 y8X1MyArt+1LJijQMlqwB8zZUNTcOReM+P5VPh2UUJiWWhKSrU4m87vkDkhVmqtGkJA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794943325;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=9J7aBELj60r07PeTpxglJaszz6bHKixvkUGAvEmKE1w=;
+	b=UDfwtldIu/WJIthae4XYxTkLsgA4+q/hRkg04mb1oXMSvey7ZyQ2g1Ldq0qzfJCM4nZJ
+	 PYtcauQcu32pDgQjUx6y1icahtTiLiUBbWF9twGaBsCaW0/SpUGnneg3pK6RdBXpXCbOm
+	 esrUpGFLCA6L/zDJPAweGTuYybHR2pg4U3+6+I1R6Nn6AMbuv+Ja1EkDMTKg46DNIvVqF
+	 9nJ/xRoPlk4rhDvyB+3sDvRwveT9+lLFT0W0ZOdf9y686m64impOEHJ13KZFl74bB23Mf
+	 A7Gk/bJ1s3EfqmaR6bEQ2cVr4SGiuQnZGheBWtLrbFGjYMPh8AEO2oMTtY18W4K8p6Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FOiM6urS;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=sDfwqaoU;
+	arc=none smtp.remote-ip=91.218.175.195
+Received: from mta0.migadu.com (out-195.mta0.migadu.com [91.218.175.195])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1104C606A330
-	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 19:02:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA300606A32F
+	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 19:22:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EA300606A32F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FOiM6urS
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC1651F000C5;
-	Tue, 17 Nov 2026 19:02:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794942151;
-	bh=GlBIhRY3Akk9PwEAdoz2L3EtKZsCS5JmgcAXMjTju5s=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=FOiM6urSdbDa6+EGKDZ/n6TQ/ggBxcbVXn9BZCuGeb07ltQXgOAPPouAcu154ElEh
-	 LLarwsrgI8pPI41aa91m//zw56jJlXa2EZQO5UBVW5JGH7uLk93bQ5/dG83rqLJ8Fl
-	 nYPbLFiWK8zjpD+U8dHW7hysakCkTqBXVCDwJ8JUUfGo79w9qV1yIHbLaGuyA0bl/h
-	 6guRJs7RDsiJQ927GlnhOgAguqHB2HkoiKqU62jYBtE3ihR2VEbpZLZ23kl7rspz+v
-	 Uqs0jlZR26l5ZHoDIyxKsJsVN2IaPsdpRpvyHIEfWi/TqOYpTmkZsAGm62DqctLXog
-	 d6M1Xg79uKQPQ==
-Message-ID: <sashiko-outbox-219425@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v4 4/4] bpf: drop the stale dst when
- redirecting to an explicit nexthop
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jamal Hadi Salim" <jhs@mojatatu.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <CORE-9NOG.v4.r0.20261116135311-4@mojatatu.com>
-References: <CORE-9NOG.v4.r0.20261116135311@mojatatu.com>
- <CORE-9NOG.v4.r0.20261116135311-4@mojatatu.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 17 Nov 2026 19:02:31 +0000
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=sDfwqaoU
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=pq/onNLVdm06BkPABGrLiWH2w6igbMq4jJsu4mQ3hxE=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794943321; v=1; x=1795548121;
+ b=sDfwqaoUTtb9rTR8UTP7dLI25qhzqdS70UMe/TY70Sq3EJRKkJ9zxYba3G8dqKlaQEwcf/n8
+ dWK2tZ4/aa0sBxXLEq49rtA0C8zL7soaeWEsicnYYxfwKUBpLUjSZ4gBiyX0YwGrQJPgffBc1Eh
+ mXA+tSBWxJe6fuE7O57IsHLw=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id a62ad20f2c5ecfb0;
+	Tue, 17 Nov 2026 19:22:01 +0000
+X-Mizu-Trace-ID: a62ad20f2c5ecfb0
+X-Migadu-Flow: FLOW_OUT
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Alan Maguire <alan.maguire@oracle.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Song Liu <song@kernel.org>,
+	Tejun Heo <tj@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	sched-ext@lists.linux.dev
+Subject: [PATCH bpf-next v1 0/4] libbpf: Support kernel-side kfunc flavors
+Date: Tue, 17 Nov 2026 12:21:49 -0700
+Message-ID: <20261117192153.3384031-1-ihor.solodrai@linux.dev>
+X-Mailer: git-send-email 2.56.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,112 +73,73 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Low] bpf: missing Fixes trailer for commit ba452c9e996d in commit
-  message
---
+An incompatible change to a kfunc's prototype, such as an added
+parameter, breaks BPF programs built against the old one. libbpf
+ignores the ___<flavor> suffix of a kfunc declared in a BPF program,
+but makes an exact name look up on the kernel side, so the kernel
+can't keep the old prototype available under the kfunc's name.
 
-commit 1e3c3c3419fd5f480aa33958ee629429b62a0379
-Author: Jamal Hadi Salim <jhs@mojatatu.com>
+sched_ext ran into this. cded46d97159 ("sched_ext: Make
+scx_bpf_dsq_insert*() return bool") kept the old prototype as
+scx_bpf_dsq_insert___compat, expecting libbpf to bind old binaries to
+it, and broke them. 2dbbdeda77a6 ("sched_ext: Fix scx_bpf_dsq_insert()
+backward binary compatibility") reversed the naming. A ___v2 kfunc
+declared as vmlinux.h spells it doesn't bind: 56bbc91219c0
+("sched_ext: Fix scx_bpf_dsq_move_to_local___v2 compat detection")
+fixed a compat macro that silently dropped enq_flags because of this.
 
-> bpf: drop the stale dst when redirecting to an explicit nexthop
->
-> This is a followup of the review of the teql arp-queue fix as reported
-> by Sashiko.
->
-> The issue:
-> __bpf_redirect_neigh_v4() and __bpf_redirect_neigh_v6() install a dst for
-> the redirect target only when the program lets the helper do the FIB
-> lookup. With BPF_F_NEXTHOP the program supplies the nexthop, the lookup is
-> skipped, and whatever dst the packet arrived with stays attached while
-> bpf_out_neigh_v{4,6}() switch skb->dev to the target device. If that
-> device's neighbour is incomplete the packet is parked on its arp_queue wi=
-th
-> the original route's dst; draining the queue re-looks the neighbour up fr=
-om
-> that dst and builds the frame with the original device's link-layer heade=
-r,
-> then transmits it on the target device.
->
-> The Fix:
-> Release the dst when the nexthop is supplied, so the queue drain keeps the
-> target device's parking neighbour and the frame carries that device's
-> addresses.
->
-> The release goes through skb_dst_drop_keep_metadata(), so encapsulation
-> parameters a route carries are handed over to a metadata dst instead of
-> being lost, and a metadata dst already on the packet is left in place. Bo=
-th
-> wrappers take their existing drop path when that copy cannot be allocated,
-> so a packet is never sent with the stale route.
->
-> What the target device's transmit path still sees:
-> The released dst is the route of the device the packet arrived on, and the
-> packet leaves through the redirect target, so consumers of that route on
-> the way out lose it:
->
->   - a tunnel with no configured remote takes its outer endpoint from the
->     route, as it does for the netfilter producer: ip_tunnel_xmit() reads
->     the route's next hop, and ip6_tnl_xmit() and sit derive it from the
->     route as well. A redirected packet whose route carried no encapsulati=
-on
->     parameters is left with no dst, so it is counted as a transmit error
->     and dropped instead of being encapsulated towards an endpoint that
->     belongs to another device's path.
->   - the route realm goes with it, so nft meta rtclassid, nft rt classid
->     and bpf_get_route_realm() stop matching on that packet.
->   - encapsulation parameters are not lost: they moved onto the metadata
->     dst, so a tunnel or an xfrm interface downstream still builds its out=
-er
->     header.
->
-> Taking the outer endpoint or the realm from another device's route is the
-> same cross-device reuse this patch removes at the neighbour lookup.
->
-> One consumer is older than this series. When a tunnel cannot take an
-> endpoint from the skb, ip_tunnel_xmit() and ip6_tnl_xmit() fall back to
-> skb_rtable(), a container_of() over whatever dst the skb carries, and a
-> metadata dst is not an rtable. That fallback is reachable without this
-> series: a tc-bpf program that calls bpf_skb_set_tunnel_key() with no
-> remote already hands an NBMA tunnel such a dst. The release here can leave
-> one behind as well, when the parameters a route carries are not usable for
-> the payload. The cast is repaired separately.
->
-> Conditions to recreate the bug:
-> Two network namespaces, A (10.10.0.1/24) and B (10.1.0.1/24) in one, their
-> veth peers in the other with only A's peer addressed (10.10.0.2/24) so B's
-> nexthop cannot be resolved by ARP. Resolve A's neighbour for 10.10.0.2 as
-> permanent and attach a cls_bpf egress program to A, with vb the index of =
-B:
->
->     struct bpf_redir_neigh nh =3D { .nh_family =3D AF_INET,
->                                   .ipv4_nh =3D htonl(0x0a010002) };
->
->     return bpf_redirect_neigh(vb, &nh, sizeof(nh), 0);
->
-> Send one packet to 10.10.0.2. It is parked on B's incomplete neighbour
-> for 10.1.0.2; once that neighbour becomes valid the frame leaves B
-> carrying A's source address and A's neighbour as the destination.
->
-> Reported-by: Sashiko (nipa) <sashiko-bot@kernel.org>
-> Closes: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-6HS9.v3=
-.r0.20261103062649-2@mojatatu.com
-> Link: https://lore.kernel.org/netdev/QDISC-6HS9.v3.r0.20261103062649-2@mo=
-jatatu.com/
-> Link: https://lore.kernel.org/netdev/avTfQjFQYR2NNdRg@chamomile/
-> Reviewed-by: Victor Nogueira <victor@mojatatu.com>
-> Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
+With this series, if the kernel's bpf_foo kfunc is missing or its
+prototype is incompatible with the declaration, libbpf binds the
+bpf_foo___<flavor> that has a compatible prototype. So a changed kfunc
+can keep its name, and the old prototype stays available as foo___v1.
 
-[Severity: Low]
-Since this fixes the explicit nexthop path in __bpf_redirect_neigh_v4()
-and __bpf_redirect_neigh_v6(), should the commit message include a Fixes
-tag?
+resolve_btfids fails the build if two of bpf_foo and its flavors have
+compatible prototypes, unless both have foo's exact prototype
+(aliases), so the fallback finds at most one match.  This ensures at
+kernel / module build time that no ambigous kfunc flavors exist.
+Documentation/bpf/kfuncs.rst describes the rules.
 
-  Fixes: ba452c9e996d ("bpf: Fix bpf_redirect_neigh helper api to support s=
-upplying nexthop")
+Compatibility is determined by bpf_core_types_are_compat(), the check
+libbpf already applies to kfuncs. Of the 70 same-name kfunc prototype
+changes between v6.6 and bpf-next, it finds 8 incompatible (arity,
+return kind, callback prototype). The other 62 (const, typedefs,
+parameter names, integer widths, pointee struct names, annotation
+suffixes) were made in place without breaking old callers.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/CORE-9NOG.v4.r0.202=
-61116135311@mojatatu.com?part=3D4
+The flavors feature is backwards compatible: declarations that resolve
+today bind the same kernel function. The exact name lookup is
+attempted first. Declarations rejected today for an incompatible
+prototype, or left unresolved if __weak, may now bind to a flavor, for
+example scx_bpf_dsq_insert___v2 as vmlinux.h declares it. Older libbpf
+and light skeletons don't get the fallback.
+
+---
+
+Ihor Solodrai (4):
+  libbpf: Fall back to kernel ___ flavors when resolving kfuncs
+  selftests/bpf: Test kfunc flavor resolution
+  resolve_btfids: Reject kfunc families that libbpf can't disambiguate
+  docs/bpf: Describe how to change a kfunc's prototype
+
+ Documentation/bpf/kfuncs.rst                  |  83 +++++++++++
+ tools/bpf/resolve_btfids/btf_colors.c         |  11 ++
+ tools/bpf/resolve_btfids/btf_colors.h         |   3 +
+ tools/bpf/resolve_btfids/main.c               | 134 +++++++++++++++++
+ tools/lib/bpf/btf.c                           |  26 ++++
+ tools/lib/bpf/libbpf.c                        | 140 +++++++++++++++++-
+ tools/lib/bpf/libbpf_internal.h               |   1 +
+ .../selftests/bpf/prog_tests/verifier.c       |   3 +
+ .../selftests/bpf/progs/kfunc_flavors.c       |  55 +++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |  24 +++
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        |   4 +
+ 11 files changed, 482 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/kfunc_flavors.c
+
+
+base-commit: 32b66b94c86f009b49668de7340f2ed65aad2dc5
+-- 
+2.56.1
+
