@@ -1,13 +1,13 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.201.15
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.194.69
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794911458;
-	b=RsM16KFNaquf9dKAl4aHrtBVHCrc+tZoE9V8/JdQFvxwnN/3CTzxj2cE3HZyUivWwgHf
-	 7tD19ZVZU71jtgCX+CuYA8WlQnKDhAdadUFol0pjy/60GytssZGlnb16iEikVXL2tPzKh
-	 T9dAiictaZdnX8eZ1iwvqrcAB3IWChQzo0D0IBLmfNqft3XI/V+i3XGeNnldJAuSHRKpu
-	 rMne8vyeV1jyEfEcL7SFLrpFB/QIDKpVj58TahGYMhsRxuui4Fwa3JigS/kb0WU9tUIdZ
-	 xdRZPHL7eGc7ytOAZfSm3TTqmPIp4+ko36VhegwkUCZGWXlU8ugFVk1CPDRF0JPGq7A==
+	t=1794911463;
+	b=zeeX8eKX5CCcpxHApDSVyMq+14wkECwLOV05KjxeSrJ9AmolQk/lk2gmtyPqu1opLzkA
+	 LuwHQPT2aRvnRU8oLGVfDx6FvYies8DT43FXK140/3oJ71eQ4I4hniYBI71tBrqjW8YbI
+	 lNZc/dLGNNBSkb7etqFctrcNBbDBpJu+sv7uilzfQGXxE70dCP7fHYQrg7r2E/uuj3bi/
+	 Wbi0IWAOqgsH3J21iQychadLrOl3oV/zdd676S0E3IniBV6TSHj7usvoAFuQV143yqZf7
+	 NJH9l86On44HXmlWriGS1VOEOceKTyRolvNB49jVSInxwt3JMbZfSwwYNMrffDOVAww==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794911458;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794911463;
 	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 Content-Transfer-Encoding:Content-Type:X-ClientProxiedBy:MIME-Version:
@@ -24,54 +24,54 @@ ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
 	 X-MS-Exchange-CrossTenant-UserPrincipalName:
 	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=N+S6HeGqjWEQqo20pp8YYIk0JXAHiLz/wOsnWap8Jx4=;
-	b=0tprmHVPfxNd0VSLTBgpGICCjxREb6Y9eHPP+B9ecUx9Tb1NjOEByEVQDag0ZWmgycXV
-	 ykd/mlt3u4V+e1AEBXB3k5UAjZYbRlmnxZ1/h99Gn8qAVRvNK8LeN+eByLXOP/1mHUGm9
-	 c7e9lEdHZGiZ3cyXW7VCQ2BlXuUyVvEwkGIdF6yZ4w/1YgnKOhfOVeeWgu9H5WvJX/rd4
-	 Eqxdd3vu3LARcM05y5tMTRyVwXkA9AMGxXCdgGtTKqnSapdDMwE3SItDETdUT0PpRU/L8
-	 ZKWwsxinBSg4HJeQo/dB7qwl6p2l6OnBboq10cs93Ocnc6XbmiigD2maYGQ98D9PPcw==
+	bh=RbuUQ/q5+Ci5j7ofk/zbFxif3MkE1CpANG4IjEGPf2s=;
+	b=L33E0XY86HUxLybUbcJsc878972iuHp0p+cKXLdPSJ2X7jbZnE8zeOUyHcoiRq/wtL0z
+	 d6dmq8Qy4ivTmtviaF45nAlgg/n+8jtSFi2jkmKxAozQuwSL8AD6QpcQwBUVmYrTjniPA
+	 ugEb4VfqHmWStML89yDaDYl/aZESxdFLQkMNWTtos19h+iML0Tff8HOlS35+YKz7qugLJ
+	 aAr+4M9Qw4y0MyfZXkxXGVSxW9CaYSGQWL600or5i5aLmQGDrxH2scY580+RYgYXqcbAA
+	 vMMfJLJQKx40A2Yc4oIspaNK+gcnaNgO8gOi56m9W62VtJfnVNSAmvFQvoJM0HDokKQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=nvidia.com;
 	spf=fail smtp.mailfrom=nvidia.com;
-	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=EttP77Va;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.201.15
-Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11013015.outbound.protection.outlook.com [40.93.201.15])
+	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=f19CQM1g;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.194.69
+Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011069.outbound.protection.outlook.com [40.93.194.69])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D442B606A32F;
-	Tue, 17 Nov 2026 10:30:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D442B606A32F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CAE1606A323;
+	Tue, 17 Nov 2026 10:31:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7CAE1606A323
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=EttP77Va
+	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=f19CQM1g
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=EYeniI7erSWuJf2F/Smf8A+AxIILpW3NV/3Rxl6sOtTSnBD+RZjFTqH1/5mqpIHurq4hPRLzR6ZyYcys6aWjl2ZJE7yY8weDvpFXKrBI1Uys7NWRRgslpZWMk2ncUNufl5uzw9lhADO+naf0swtOzCGoiA4Ulvjn2XjdU1intn6I2t7ezB2W0/8i8I2pGFrYhI6/3FUmB9Tu/d/dXIY+VbbjaGyUIktKTl5WpQc+we3Lz/QORF7VeK1M6NWUR5NmjE25Qj0cUR/9YKq2mTVNnZHr5y6lBQfXU3ic0SbPsx0pXP45U7tAP0GeC0fJD1s/lEcbEgnlwMTtbmNDjgByOA==
+ b=YMgMs3m8rg9fIEPYB84Ngw1FCWNvB6v/rY9qByGqRUdujHXIPdR1gKAouhw+ZcBZBGwGFY9PEB/QU0wpIQssDU6XWedsQ3X4+lDqsBpHe8b8MzCLjhEdJl2MWw2jWFeZ3KhZm1dxyI7eSC5tqeQ+pKYMRRdOL9NewLY14y8JCyh74Ggl7qdqgiU1h7/8mzVRqwT1ShZRRuPeqNXVxU1UUCfeuiAYMM8iPsnv3wEcNyvywHp2fWOrLuvCrWdlz+McfU3pMPZyUNnFGnznwbeeHst9D8J/xQIVZT1GgcidJLo3k5zARUO8YjOrEX/HIFKeBPrRE1UrzNtke4T8fQwwIA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=N+S6HeGqjWEQqo20pp8YYIk0JXAHiLz/wOsnWap8Jx4=;
- b=vp22AlbvQX6zQay4vYRok9SXZcQlJD3LXSDaIp38cSJNZFN548BW7O69fmapO0xHlIvkYhCwkDAD8pt8uwwSjKSnhaRSOVsRWVs18KmByTCbum715qx6b36eT/gWxX+QH0uxilPrEpp1h+5UkKhxAOSz9ANP76q/lAc5mAyvDu+iStKNaHE2L6lS9JDe2yOTifuMwkrnIQukm3iTBU4pVIkOoASQ+Oi8EJp5h5Y39YFo4nu65rN1fsiU+CA8FhOdgLOVgjxbGL2V35Nw3LW5P0UOkqNvPVc8B9xy3RxZkbPbGIhlZl30Ew51yxjryKvQqi04TxtANBG2Y9DU2q8BEA==
+ bh=RbuUQ/q5+Ci5j7ofk/zbFxif3MkE1CpANG4IjEGPf2s=;
+ b=w/DL849xTyy/11JKNDAuqRA+UkQHE67jLVmLozMRZjogCLWoZjxFlVPjv+H8BxHgqsrjOShNpTEQ5IQeFK31WteHR21vzTfzbE1z3AKtXxYP+ZrrKWnBZrn2tO+lusWDo6wIBAqlhsRC/FW/ANa0mW8WH1TkbvPlt4GpUw559qPB5FnQDHmY+zkZud3MbSmr+yeZSOLcj1MAiFPpk/FoaKi9sQcZ3atmCQKfsfCrZTI3Mhp8qVUs6P6SObjX2oyLrW3981h1hppNGIWpCkdW5Aj7lGLnUkJFLr16BFclZTyi5vBwG1kvOfKKux51i0rSH4g7KF0nUJUq79MbQrH2OA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=N+S6HeGqjWEQqo20pp8YYIk0JXAHiLz/wOsnWap8Jx4=;
- b=EttP77VaZbfvCfpCuMzxpigBuYRVT8AJSdNBTe0le7mLIZKMuTOrdSQx766jiBfqOoHHHgR2DRqcP+2jfWhVA37CixyHofhTyPhApw+4FxxKG7yWy5UchxcTSjgIdUC6vx2FAAo+UbdlgBgzUNSlP9gPRjZrTo03b4m7cbZyKtt8a0a/Fqkb+G29LdOGq8revil2Bd2zcQo8gy0WmQHB+ErwwAjCeomXBQJJtVLmnGdwnQZVTZr6g9E3mTc6B63RFYYA+03jW0w8McTay201n/nRT4AOFqzObJZsYZbkOxW1eBrRDZVygo/CeUbR9sQESIBIkz9X6veYB23IikFAbw==
+ bh=RbuUQ/q5+Ci5j7ofk/zbFxif3MkE1CpANG4IjEGPf2s=;
+ b=f19CQM1gT3xTEi8qx8BiIOQk0U04TLruG/98BBe/daLxuxHKSaC3QhkWxJT3xQFpfjMLLNOdGJiaccxFuRkNGqGQ/SNKvsN+LQ/7HQUTE8rAdeXEigxUUrOmAxTZ7YfAY/2mIFrPlqP+DdKSW2eFXd+UOwEE5TO3tryS6PoFtdxOV8c5QEgNjB3/KEMVDO+f2eRm2Z0igsZu4LaE4PS4dS78M+m9uJZNcsQMncebz9zRdWLFQjwwtbQOCdxkKpZ2pVY9j7Iq22sg4oJvZ4Z2soqBSN4tuRzyQoUsvqb9xp9rbKyCN2ASrqn1ockpif+Cvp2EU/DEyyyTIGuRa3Cp+g==
 Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from BL1PR12MB5174.namprd12.prod.outlook.com (2603:10b6:208:31c::19)
  by CH1PPF189669351.namprd12.prod.outlook.com (2603:10b6:61f:fc00::608) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.14; Tue, 17 Nov
- 2026 10:30:51 +0000
+ 2026 10:30:56 +0000
 Received: from BL1PR12MB5174.namprd12.prod.outlook.com
  ([fe80::58de:822b:868:96e9]) by BL1PR12MB5174.namprd12.prod.outlook.com
  ([fe80::58de:822b:868:96e9%6]) with mapi id 15.21.0615.013; Tue, 17 Nov 2026
- 10:30:51 +0000
+ 10:30:56 +0000
 From: Andrea Righi <arighi@nvidia.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -100,16 +100,16 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	bpf@vger.kernel.org,
 	sched-ext@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] bpf: Allow importing memfd pages into an arena
-Date: Tue, 17 Nov 2026 11:28:06 +0100
-Message-ID: <20261117103028.4105609-2-arighi@nvidia.com>
+Subject: [PATCH 2/3] bpf: Allow importing device-dax pages into an arena
+Date: Tue, 17 Nov 2026 11:28:07 +0100
+Message-ID: <20261117103028.4105609-3-arighi@nvidia.com>
 X-Mailer: git-send-email 2.56.1
 In-Reply-To: <20261117103028.4105609-1-arighi@nvidia.com>
 References: <20261117103028.4105609-1-arighi@nvidia.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: FR4P281CA0176.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:b7::7) To BL1PR12MB5174.namprd12.prod.outlook.com
+X-ClientProxiedBy: SN7PR04CA0074.namprd04.prod.outlook.com
+ (2603:10b6:806:121::19) To BL1PR12MB5174.namprd12.prod.outlook.com
  (2603:10b6:208:31c::19)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -122,604 +122,305 @@ Precedence: list
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: BL1PR12MB5174:EE_|CH1PPF189669351:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8644c5e8-2a75-4f3a-9f0d-08df4495da79
+X-MS-Office365-Filtering-Correlation-Id: a05442ac-376a-4b1e-8835-08df4495dd28
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|23010399003|10067099003|5023799004|11063799006|56012099006|261022075727099003|261026140227099003|261021121427099003|261026121527099003|261021123027099003|261022113327099003|261022105027099003|261102123227099003|261028144727099003|261009223027099003|18002099003|22082099003|6133799003|3023799007;
+	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|23010399003|10067099003|11063799006|56012099006|261026140227099003|261021121427099003|261026121527099003|261021123027099003|261022115727099003|261022105027099003|261102123227099003|261028144727099003|261009223027099003|18002099003|22082099003|6133799003|3023799007;
 X-Microsoft-Antispam-Message-Info:
-	d5Trf1JJvCp81UwiSh5I3oS4jr0IDcBJs6p6BWlpMHP0UFSUvN3UvJ28gz4vpw5oGJk7CIQXJpxYWoMLVW9c4DrI7cZMpqvLw8x81KyJv4gCGjSz5Dw8rA8h7CcrdJribgTLA93mW/F0byRDFYBuntgls+xjZJV8VRd/tJxeRQZyjkfZMNFcBR2HhOX/AUgSelmvNQn9b++QIuWSLPAeEok/waP/Xp6djWb+HBitm2V1p9uEYXLVgp9JOvklDysfVU9Y4JL+H1GqE8ZsrpkhapmBbdb40X+g9nTspfwvQWkeSyTngjlv+spxl9SWYreZx8CskJQ9YBdZEB/eOHbYqlkvbXfXjn1sponSaiXOh6xzM5AcXJwg72/bGfZUrh/Wp7tX+XfbLgm0ytSAgqQyQpuiM9HNfMmGfPXBOMFlxxQo6M8Xfm0wy38ragPmlMe+TI4DgrKGM9GyERCU0lVJDoLXxBZFgi2+RDjTgyu5v+H2OD9COani93+hxIaztDGQGdocFeS4g5i07LAHku6nvbCflXyLXs6utJAniELR5jsPOXPfQ7Vqov/Vaaqqax6DNR+JrORJ8IKXkJlHkuAJN5IVLaJ91JRnDjMNuvgkcbwpZhtM0rKX9XEV+5KlQnVW+zWwNUMFi2Up9fj2936mIgTxzpMNsV7tJAeTbMV1Mxg=
+	1ITl5tUT39fpHNpBs8Ot+kpfqcP5I6mPrPOvKxqxwdo46JVZiXU4RxzyXfOl5LlMUm5hzlbD0qaziv4pN/c9Od5PPmK1FfGhrn3CR7HUcQK9wOpmkjNbR1kRadCAxXpFg2iKVKPX7JrPXLyluwb+uVPNgWm8N9GuwyguQZCfisJeR6v0G9RLaWyaZ9O3kqLKwRfZuvAbu3lNSnZq8DN4C6/xE862u/Qog9omeZUaDQhyKKE3bKzfE3FljJ0In0kOqxMGpavCPHHWjrO5BvkrUUlf7c1U5QUub1/peK8YzNndNuyjOfWZ9M2fr67oju69lq2/zyglvKo7goNwQI4ym+juXN9JbO36t8hf5HxGnqKXbIra/xTCLTJ3LJIyHUjUOICtuCoGtGF1kmClzUJbdnRMoJJdX6cJ5XdjyVyN+3MaTgZ4wCnWxdj9bStBuKEOq/aQdF/pI5jxG5qam2GtJI8/ss47P0IbG/H7GicOwYmdslMWii73T/AkPhCc8esHWYKlFFkVRB7fg3WFOI6ank3+8eJC6LJEPzRq4VfVxnmbTHKuD3hmH4kGyomqjRF/6WXS8kR9rireCoXcURxhH3HlXhapCJu2LRIEakd/n5fWAxXKjqK58/1zGieP9R5oTQdM2kDff1sfrLYAuoQoRqLaDvVmCxque6y1xda54hU=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5174.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(23010399003)(10067099003)(5023799004)(11063799006)(56012099006)(261022075727099003)(261026140227099003)(261021121427099003)(261026121527099003)(261021123027099003)(261022113327099003)(261022105027099003)(261102123227099003)(261028144727099003)(261009223027099003)(18002099003)(22082099003)(6133799003)(3023799007);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5174.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(23010399003)(10067099003)(11063799006)(56012099006)(261026140227099003)(261021121427099003)(261026121527099003)(261021123027099003)(261022115727099003)(261022105027099003)(261102123227099003)(261028144727099003)(261009223027099003)(18002099003)(22082099003)(6133799003)(3023799007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?qGg4rXHT8d289MTfIdZ215Xz5X7MLbvqOEfVt5wt16HhVJlqPLn6R9nc0hR+?=
- =?us-ascii?Q?ANUgIcm3gNqNFql4PgbxhVbElrFUDWPedACuZQ/5oflGREKwe1soPHpCBk+u?=
- =?us-ascii?Q?UFC/KdZqYctnOw3s3hViFFYCRv2zkE1lAG/8Y1Doz+Qet9jO2T+SlTkAPdIO?=
- =?us-ascii?Q?qPHwx/A0AzjRf3f8+Bj/kRBs2uSmcXTuRgPpqkoC/r+bKvcpOtFQlQKXWLgn?=
- =?us-ascii?Q?wm4dgi+4KNg5OIGyZO0sU5lWXOXEYwZo+eYPCsWQH5rFacZRCtudJ2LDt5Au?=
- =?us-ascii?Q?+Z39NYFtdLCBmzVp5obHzj5Yeot+L6y006DGRzFc/Y8vy+6wqMCCK4EOh7ul?=
- =?us-ascii?Q?WLR8OrWbXi/SKuFHrNvMXmCJC48oWLcE9a8YSmdsczd7w1Spw6MjsU3R2Pdx?=
- =?us-ascii?Q?ZR4k9xSGPDWngDN9W948wnnGMdaACoNrbtS0yyT1+BdBh0isTls2nyxNntkC?=
- =?us-ascii?Q?12jjUHByg8YEXRBCKSv3YEe6ouF3LstcPCEgq9E5FTC8bYHlv0hHE6BO8XH5?=
- =?us-ascii?Q?/JNz6ej6O6BPvBh38MAGABHaK3438dqbAASm/lm0eZn1vj8y+a9ZxMaYV1pO?=
- =?us-ascii?Q?lh7VwPy3ZOKREKWzZYOaJkK4mKsizxbYSDr0YJ1XSJtElzKk+yVNikYvrtRC?=
- =?us-ascii?Q?tiytIB/yZdciy1fbssKJD4+MmCONG7pwI+/4XJcmevH7gFawfBsrEFkn6GxR?=
- =?us-ascii?Q?OgSObnZwtDcBIq7WUEk8YaD4CbuM0LvMSD9G1mKhwC1SuhNktlmxI0VPTdFN?=
- =?us-ascii?Q?RdNMbK4kcGZpThekFWhy2JQfO8U8EfNwuQa1SU5O3Y0s+wEqnls3oerROJo0?=
- =?us-ascii?Q?/Cgi80lZN6W2UkOM8ntFhMca9Eon/bvcDQ9r0WoM+ePYbL4UiV24RV9WzvN+?=
- =?us-ascii?Q?4e3hbDNGiess8JWOEVSNEw4VlHnWZ7bxq+lh9oSxb2vaJXanKINx78ZfThrl?=
- =?us-ascii?Q?i3xIzHTuqdG7S9KdSzpiVMt82w/64e9UDrYPU0ONVlM9NfNT3qAnYFIxMGbg?=
- =?us-ascii?Q?hR+7bvesf23/0AOVi7PpR1YxmlVxAayhK3sYJRst/bTdKTEG3B9ZN1xGsPWR?=
- =?us-ascii?Q?9Cy62hvLUm+uvRmDA7oXAWaRphCEXjY9SZMMKdZ07jNSgGI/d4ojqgUojIgO?=
- =?us-ascii?Q?lc26ZHSErSCS7KHTgjYrnMV3jZfDwMyZ7ldRkYHLkHV4ZeEEvnFGWJvwwRFX?=
- =?us-ascii?Q?4SeHzH5pO0wkztNsXq+pClmEnejosLQa0QGlDC/o7tcqSwj2qLG5IIsydFjz?=
- =?us-ascii?Q?LlRJLl9Hjq64Wf1UvWVNpgQhGN5lhLsg+HB4s5K6hOzIKFwgW+ODMbTd3uYs?=
- =?us-ascii?Q?zCS7P6ddaPJ8K/DJY2yZPx+dEbg93f4r6eBnMvy+3+eNpy4ewTf1baBN9LQd?=
- =?us-ascii?Q?64TAh6s1epu0qgQGlfXVvNA+j3SxLDDnY/FwO32fDflsq849zv/tTtzmtO7D?=
- =?us-ascii?Q?FkX+f1m0Dvw/OZkr+Se5wT404XBGwzLWVsTWhsqnNuapl7kTL94p2K5Vbw2j?=
- =?us-ascii?Q?poVEAm81fqP0Czfv67dvJ+5E+iC4g7ipP+jzq+wGenMdrnCPeMCmplvhYUch?=
- =?us-ascii?Q?HVC/t1FwnxOzhn3J4yhmlDzrFP8tZ4MCYimcxYcZwZAGN8i1rf6pgeVLpTKC?=
- =?us-ascii?Q?wn33NDc6NP+2ofzqWLDiSqL2hjqSB01ag7V/ZXzkuQuY+Gopt3EX+IP1YPXy?=
- =?us-ascii?Q?dXM6gIiXc5CDnKn3PsfHgPYAnPvQKadG9hgyhGK3aXeBdxij?=
+	=?us-ascii?Q?E2YbFZqyfipMw2nRa4r1L/RBg2dAe4NSdqoY0R5IZnANsT5QSxd4YDJkDB0q?=
+ =?us-ascii?Q?An5RiNFdy72SXZyZTHaYpGmVbDlglCWpAaG0oJK9wKs/6kf6xAjTBLLpKojR?=
+ =?us-ascii?Q?LEAH7BvFmLzPfhuWd8ow0K3m+Dlwq21XMtzU0dwb5Sj8iew6pNuJ9nwGTKSM?=
+ =?us-ascii?Q?3gH0AciijTe6xyFuLOlxyjV28EGsjtzf62lr7AR1IsHR4ZF0uWJb1AHWPVVo?=
+ =?us-ascii?Q?Rl02CTOPeFncZa8MPnwEMMu04MVheq4I8seB9SyT7lS9M1zBBslabDqE/1+8?=
+ =?us-ascii?Q?QzDJhoUmOcLRD844CHgiRediKeK7UL3whhxUziYabe+YEhQQVUx0NIgteHwc?=
+ =?us-ascii?Q?GXMsumD3N2Vy0u1gLIbl/2/NjiL7YmGBG0Zd7e8S4+4kRqRypgFeLrAlRlNS?=
+ =?us-ascii?Q?A3fL8x1twnOf7yTYAJvq17mC9H/qUtGWxnCqw6bE2fOjDf+5vhu27c6D223Y?=
+ =?us-ascii?Q?UCGVKfCuUt91iwdZlGTu/+g8S5uRSCgGRuNviVR1SUMp/dOYRGGhcxQTwg2Q?=
+ =?us-ascii?Q?/SERSU22CBteOKSdWs7KrFJQJyoJBeYZyrsCC8MqrbED3+xVxNq/16xAZwsg?=
+ =?us-ascii?Q?v/aai+kljw8Kh6NY5uFskhpd9cMKK9ZinA8QIrpj+HJCprjpebkOboUlZQ9d?=
+ =?us-ascii?Q?+7raorW5KS4uakHHMiefuadOA/6J884dp0tAHkGdajQBgYE5xn4HpykEIfHy?=
+ =?us-ascii?Q?9rxricDQhqVV5JaqYAF6wNXxaze/Gv7BaycMUXFxTUz8xmS0HR+fbWuY6SiV?=
+ =?us-ascii?Q?x85SB+IV2tRv5KenF1FrTuG1kDUdm2jyJHib6M0u5E4KhOVvPvflSoL2CGPb?=
+ =?us-ascii?Q?x2cA7Jo7enbhbHwZhuAMJFFpemO5vS3GrwYCO/xitYEDrZBEH6L9cERnA/6R?=
+ =?us-ascii?Q?Joki2QcxY5cHHS7em4ftB127J50z7nudbz6mTPAAjmJ7UzdEtt2qvnNfj8KK?=
+ =?us-ascii?Q?MQivwAolxyf4Q0pLDtrUxC3k+pZiCI94+4N/R7i7BTFKTrk9ixr3GLnogjdF?=
+ =?us-ascii?Q?keKAaJEwrJG2wLTm73/J16XlziP0jXxSoKKwKZJj4N0xUMXPTZq/6THC5Vrd?=
+ =?us-ascii?Q?rZUoTHgabmZF/4Icvxg/0+VEXDXIEiml4tradkjfAnMDlxEnpu/+S4E2kdHe?=
+ =?us-ascii?Q?VvVARndFJe12A32wZ1cUW6dOJm2kpFYsdSrTLSJkIYnjOjcgA9ukfY1GTNBq?=
+ =?us-ascii?Q?ifoTRMeEA/GDJguwdsH92Dh8Vg/oxIsJHONpYWQPMx24MuWD8sPyX8jAtzHn?=
+ =?us-ascii?Q?HiTEoYqPj5dsVo4SUINR5du2e6R5oQG3gqgob3tNYexY8L9CaCTH+WxM4Cwx?=
+ =?us-ascii?Q?zQiEXlHivLtr1M3hqZ++kygD3WejsmgdoU1S863THfkO1yj+8PmP/sZPnih3?=
+ =?us-ascii?Q?N+OTLOlkD8NR76sy9iRIIg8/tVmCRfoDwMd9muQjmPezVzbQQVzZzYM/DRmB?=
+ =?us-ascii?Q?g+oufIbtVsJF26w8XdljsMRA/4nAqxQTbQR11nFJcvJSBpO39SxuU2l461sp?=
+ =?us-ascii?Q?QTsN8629evnjpVUIWBiz7SatvEsmuh8CqN1hQ8ZboNXFlPsFhvjWmxpXbILt?=
+ =?us-ascii?Q?Hxq+fkEmMREFCxz7hUBYs4QabTMkiB5IZdNUWOsBkhHY3lWp48z7GlZ+Ak/q?=
+ =?us-ascii?Q?kFa7UKiCeWOwA34BRaS20X8zj3CA4fADHVyZqMXDrXbIzT6pQNy/eSI4b8CZ?=
+ =?us-ascii?Q?gG9LVfRYb6nNdUD42AzJR3fcnjl9tCJKZ74O2fCesem8uxy9?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8644c5e8-2a75-4f3a-9f0d-08df4495da79
+X-MS-Exchange-CrossTenant-Network-Message-Id: a05442ac-376a-4b1e-8835-08df4495dd28
 X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5174.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2026 10:30:51.8461
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2026 10:30:56.4102
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2xts0GSFGhkeo45nUFvyNr/jTk6BTPzuiF51hDCd9wmN4mbCeyVrclxgXMjpBmowgAJnMZzOUpm2dhiadditGw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: A7O2bc9OyyrxBt4+aiFKhREe7P/Yo6PD3tJ1jFlyCFe1UhT5+dtWVYHONLc5GWOzeY9TNnZTgRZYcgJDTj5Sbw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH1PPF189669351
 
-An arena can only map pages it allocated itself, so its memory can be
-shared only with the BPF programs and the user space that map the arena.
+bpf_arena_import_memfd() covers the host side of a host/guest shared
+arena: the host imports a memfd and hands the same file to the VMM. The
+guest has no such file. The host memory can be exposed to the guest as
+a virtio-pmem or NVDIMM device, which the guest turns into a device-dax
+device, /dev/daxX.Y.
 
-Teach the arena to map pages that it didn't allocate and add a sleepable
-kfunc for syscall programs that imports the pages of a memfd, or of any
-file on tmpfs or hugetlbfs:
+Add a sleepable kfunc for syscall programs that imports the device-dax
+pages mapped at an address of the calling task:
 
-  int bpf_arena_import_memfd(void *map, void __arena *addr,
-                             u32 page_cnt, int fd, u64 off);
+  int bpf_arena_import_dax(void *map, void __arena *addr,
+                           u32 page_cnt, u64 src);
 
-The folios are pinned with memfd_pin_folios(), like udmabuf does, and
-mapped at addr. Whatever maps the file then sees the same pages as the
-BPF programs, for example a VMM that maps it into a guest.
+The pages are pinned with pin_user_pages(FOLL_LONGTERM) and mapped like
+memfd imports. Only a device-dax mapping is accepted, checked under
+mmap_lock together with the pin.
 
-Each import is kept in an interval tree with its pages, which belong to
-the file, not to the arena:
- - bpf_arena_free_pages() over any of them releases the whole import:
-   the pages are unmapped and unpinned, the data stays in the file,
- - they are released when the arena is destroyed,
- - they are not counted in the arena memory usage,
- - the arena mapping raises SIGBUS on them (SIGSEGV with
-   BPF_F_SEGV_ON_FAULT): user space accesses them by mapping the file.
+A pin doesn't keep the dev_pagemap of device pages alive, so the import
+holds a reference on it until the pages are released: unbinding the
+device waits until then. Until the reference is held, an unbind could
+free the memmap of the pinned pages, so mem_hotplug_lock is held from
+the pin until then.
 
-The file must be open for reading and writing and the LSMs must allow a
-shared mapping of it. It must not be append-only or sealed against
-writes.
+So removing the device waits for the arena: an unbind blocks until the
+pages are freed or the arena is destroyed. Revoking the pages instead
+would need a notification from the dax core and a way to tell the BPF
+programs that their shared memory is gone, rather than remapping it
+under them.
 
-F_SEAL_SHRINK is not required, unlike udmabuf: a file on tmpfs, such as
-a VMM memory backend, can't be sealed. If the supplier shrinks the file
-or punches a hole in the imported range, the arena keeps the pages it
-pinned, which are no longer the file's.
-
-While its pages are imported, the file can't be executed, as when it's
-open for writing.
-
-The pins aren't charged to locked_vm: like the rest of BPF memory, the
-pages are accounted to a memory cgroup, the one of the supplier that
-allocated them (hugetlbfs pages come from the hugetlb pool). Pinning
-them adds no memory, but keeps it from being swapped out until the
-arena releases it. Only a program with CAP_BPF, or a BPF token, can
-import pages.
-
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Andrea Righi <arighi@nvidia.com>
 ---
- kernel/bpf/arena.c | 340 +++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 329 insertions(+), 11 deletions(-)
+ kernel/bpf/arena.c | 137 ++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 129 insertions(+), 8 deletions(-)
 
 diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-index aff231922e114..799a8cf1ee728 100644
+index 799a8cf1ee728..8635bba7907ac 100644
 --- a/kernel/bpf/arena.c
 +++ b/kernel/bpf/arena.c
-@@ -4,7 +4,10 @@
- #include <linux/btf.h>
- #include <linux/cacheflush.h>
- #include <linux/err.h>
-+#include <linux/file.h>
-+#include <linux/interval_tree_generic.h>
+@@ -7,7 +7,10 @@
+ #include <linux/file.h>
+ #include <linux/interval_tree_generic.h>
  #include <linux/irq_work.h>
-+#include <linux/memfd.h>
++#include <linux/magic.h>
+ #include <linux/memfd.h>
++#include <linux/memory_hotplug.h>
++#include <linux/memremap.h>
  #include "linux/filter.h"
  #include <linux/llist.h>
  #include <linux/mman.h>
-@@ -14,6 +17,7 @@
- #include <linux/printk.h>
- #include <linux/ratelimit.h>
- #include <linux/rbtree_latch.h>
-+#include <linux/security.h>
- #include <asm/tlbflush.h>
- #include "range_tree.h"
- 
-@@ -64,7 +68,9 @@ struct bpf_arena {
- 	struct vm_struct *kern_vm;
- 	struct page *scratch_page;
- 	struct range_tree rt;
--	/* protects rt and nr_pages */
-+	/* pages the arena didn't allocate, see struct arena_import */
-+	struct rb_root_cached imports;
-+	/* protects rt, imports and nr_pages */
- 	rqspinlock_t spinlock;
- 	/* number of pages currently populated in the arena */
- 	u64 nr_pages;
-@@ -114,6 +120,28 @@ struct arena_free_span {
- 	u32 page_cnt;
- };
- 
-+/*
-+ * Pages mapped by one import, pinned once each. They are released together,
-+ * when the arena frees any of them or is destroyed.
-+ */
-+struct arena_import {
-+	struct rb_node rb;
-+	long subtree_last;
-+	/* on a list while being released */
-+	struct list_head head;
-+	struct page **pages;
-+	/* the file, with write access on its inode */
-+	struct file *file;
-+	long pgoff;
-+	long page_cnt;
-+	u32 uaddr;	/* lower 32 bits of the user address */
-+};
-+
-+#define IMPORT_START(imp)	((imp)->pgoff)
-+#define IMPORT_LAST(imp)	((imp)->pgoff + (imp)->page_cnt - 1)
-+INTERVAL_TREE_DEFINE(struct arena_import, rb, long, subtree_last, IMPORT_START, IMPORT_LAST,
-+		     static inline __maybe_unused, arena_import_it)
-+
- u64 bpf_arena_get_kern_vm_start(struct bpf_arena *arena)
+@@ -130,7 +133,9 @@ struct arena_import {
+ 	/* on a list while being released */
+ 	struct list_head head;
+ 	struct page **pages;
+-	/* the file, with write access on its inode */
++	/* device pages: one reference keeps them all, NULL otherwise */
++	struct dev_pagemap *pgmap;
++	/* file pages: the file, with write access on its inode, NULL otherwise */
+ 	struct file *file;
+ 	long pgoff;
+ 	long page_cnt;
+@@ -396,8 +401,12 @@ static void arena_release_import(struct arena_import *imp)
  {
- 	return arena ? (u64) (long) arena->kern_vm->addr + GUARD_SZ / 2 : 0;
-@@ -210,6 +238,8 @@ static long compute_pgoff(struct bpf_arena *arena, long uaddr)
- struct apply_range_data {
- 	struct bpf_arena *arena;
- 	struct llist_head *pages;
-+	/* imported pages, they can't be linked through pcp_llist */
-+	struct page **ext_pages;
- 	int i;
- };
- 
-@@ -221,17 +251,21 @@ struct clear_range_data {
- static int apply_range_set_cb(pte_t *pte, unsigned long addr, void *data)
- {
- 	struct apply_range_data *d = data;
--	struct llist_node *node;
-+	struct llist_node *node = NULL;
- 	struct page *page;
- 	pte_t pteval;
- 
- 	if (!data)
- 		return 0;
- 
--	node = READ_ONCE(d->pages->first);
--	if (WARN_ON_ONCE(!node))
--		return -EINVAL;
--	page = llist_entry(node, struct page, pcp_llist);
-+	if (d->ext_pages) {
-+		page = d->ext_pages[d->i];
-+	} else {
-+		node = READ_ONCE(d->pages->first);
-+		if (WARN_ON_ONCE(!node))
-+			return -EINVAL;
-+		page = llist_entry(node, struct page, pcp_llist);
+ 	/* BPF programs write through the kernel mapping, which doesn't track dirty */
+ 	unpin_user_pages_dirty_lock(imp->pages, imp->page_cnt, true);
+-	put_write_access(file_inode(imp->file));
+-	fput(imp->file);
++	/* After the pins: the memmap of device pages goes away with it */
++	put_dev_pagemap(imp->pgmap);
++	if (imp->file) {
++		put_write_access(file_inode(imp->file));
++		fput(imp->file);
 +	}
- 	/* paranoia, similar to vmap_pages_pte_range() */
- 	if (WARN_ON_ONCE(!pfn_valid(page_to_pfn(page))))
- 		return -EINVAL;
-@@ -264,8 +298,11 @@ static int apply_range_set_cb(pte_t *pte, unsigned long addr, void *data)
- 		return -EBUSY;
- 	set_pte_at(&init_mm, addr, pte, pteval);
- #endif
--	WARN_ON_ONCE(llist_del_first(d->pages) != node);
- 	d->i++;
-+	/* Imported pages are accounted to their supplier */
-+	if (!node)
-+		return 0;
-+	WARN_ON_ONCE(llist_del_first(d->pages) != node);
- 	WRITE_ONCE(d->arena->nr_pages, d->arena->nr_pages + 1);
- 	return 0;
+ 	kvfree(imp->pages);
+ 	kfree(imp);
  }
-@@ -324,6 +361,47 @@ static int apply_range_set_scratch_cb(pte_t *pte, unsigned long addr, void *data
- 	return 0;
- }
+@@ -1392,11 +1401,11 @@ static int arena_reserve_pages(struct bpf_arena *arena, long uaddr, u32 page_cnt
  
-+static int apply_range_clear_ext_cb(pte_t *pte, unsigned long addr, void *data)
-+{
-+	ptep_get_and_clear(&init_mm, addr, pte);
-+	return 0;
-+}
-+
-+/* Under arena->spinlock, or when nothing else can use the arena anymore */
-+static struct arena_import *arena_find_import(struct bpf_arena *arena, long pgoff)
-+{
-+	return arena_import_it_iter_first(&arena->imports, pgoff, pgoff);
-+}
-+
-+static u64 arena_import_kaddr(struct bpf_arena *arena, struct arena_import *imp)
-+{
-+	return bpf_arena_get_kern_vm_start(arena) + imp->uaddr;
-+}
-+
-+/* Like arena_find_import(), the caller flushes the TLB after */
-+static void arena_unmap_import(struct bpf_arena *arena, struct arena_import *imp)
-+{
-+	apply_to_existing_page_range(&init_mm, arena_import_kaddr(arena, imp),
-+				     imp->page_cnt << PAGE_SHIFT, apply_range_clear_ext_cb, NULL);
-+}
-+
-+static void arena_flush_import(struct bpf_arena *arena, struct arena_import *imp)
-+{
-+	u64 kaddr = arena_import_kaddr(arena, imp);
-+
-+	flush_tlb_kernel_range(kaddr, kaddr + (imp->page_cnt << PAGE_SHIFT));
-+}
-+
-+static void arena_release_import(struct arena_import *imp)
-+{
-+	/* BPF programs write through the kernel mapping, which doesn't track dirty */
-+	unpin_user_pages_dirty_lock(imp->pages, imp->page_cnt, true);
-+	put_write_access(file_inode(imp->file));
-+	fput(imp->file);
-+	kvfree(imp->pages);
-+	kfree(imp);
-+}
-+
- static int populate_pgtable_except_pte(struct bpf_arena *arena)
+ /*
+  * Map @page_cnt pages that the arena didn't allocate at @uaddr, which must be
+- * free. On success the arena keeps @pages, their pins and the write access on
+- * @file until it releases them, see struct arena_import.
++ * free. On success the arena keeps @pages, their pins, @pgmap and the write
++ * access on @file until it releases them, see struct arena_import.
+  */
+ static int arena_map_ext_pages(struct bpf_arena *arena, long uaddr, struct page **pages,
+-			       long page_cnt, struct file *file)
++			       long page_cnt, struct dev_pagemap *pgmap, struct file *file)
  {
- 	/* Populate intermediates for the recovery range (4 GiB + upper half-guard). */
-@@ -375,6 +453,7 @@ static struct bpf_map *arena_map_alloc(union bpf_attr *attr)
- 		arena->user_vm_end = arena->user_vm_start + vm_range;
- 
- 	INIT_LIST_HEAD(&arena->vma_list);
-+	arena->imports = RB_ROOT_CACHED;
- 	init_llist_head(&arena->free_spans);
- 	init_irq_work(&arena->free_irq, arena_free_irq);
- 	INIT_WORK(&arena->free_work, arena_free_worker);
-@@ -443,6 +522,15 @@ static void arena_map_destroy(struct work_struct *work)
- {
- 	struct bpf_arena *arena = container_of(to_rcu_work(work), struct bpf_arena,
- 					     destroy_work);
-+	struct arena_import *imp;
-+
-+	/* Imported pages go back to their supplier */
-+	while ((imp = arena_import_it_iter_first(&arena->imports, 0, LONG_MAX))) {
-+		arena_import_it_remove(imp, &arena->imports);
-+		arena_unmap_import(arena, imp);
-+		arena_flush_import(arena, imp);
-+		arena_release_import(imp);
-+	}
- 
- 	/*
- 	 * free_vm_area() calls remove_vm_area() that calls free_unmap_vmap_area().
-@@ -569,7 +657,7 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
- 	struct mem_cgroup *new_memcg, *old_memcg;
- 	LLIST_HEAD(pages);
- 	struct page *page, *new_page = NULL;
--	struct apply_range_data data;
-+	struct apply_range_data data = {};
- 	vm_fault_t fault_ret;
- 	long kbase, kaddr;
- 	unsigned long flags;
-@@ -605,6 +693,15 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
- 
- 	page = vmalloc_to_page((void *)kaddr);
- 	if (page) {
-+		/*
-+		 * Not the arena's: user space maps the file or the device the
-+		 * pages come from
-+		 */
-+		if (arena_find_import(arena, vmf->pgoff)) {
-+			fault_ret = (arena->map.map_flags & BPF_F_SEGV_ON_FAULT)
-+				    ? VM_FAULT_SIGSEGV : VM_FAULT_SIGBUS;
-+			goto out_err_locked;
-+		}
- 		if (page == arena->scratch_page) {
- 			/* BPF triggered scratch here; don't lazy-alloc over it */
- 			fault_ret = (arena->map.map_flags & BPF_F_SEGV_ON_FAULT)
-@@ -855,7 +952,7 @@ static long arena_alloc_pages(struct bpf_arena *arena, long uaddr, long page_cnt
- 	long page_cnt_max = (arena->user_vm_end - arena->user_vm_start) >> PAGE_SHIFT;
- 	u64 kern_vm_start = bpf_arena_get_kern_vm_start(arena);
- 	struct mem_cgroup *new_memcg, *old_memcg;
--	struct apply_range_data data;
-+	struct apply_range_data data = {};
- 	LLIST_HEAD(pages);
- 	long mapped = 0;
- 	unsigned long flags;
-@@ -1010,9 +1107,12 @@ static int arena_free_range(struct bpf_arena *arena, long uaddr, long page_cnt)
- 	u64 full_uaddr = clear_lo32(arena->user_vm_start) + uaddr;
- 	long kaddr = bpf_arena_get_kern_vm_start(arena) + uaddr;
- 	long pgoff = compute_pgoff(arena, uaddr);
-+	long first = pgoff, last = pgoff + page_cnt - 1;
-+	struct arena_import *imp, *tmp;
- 	struct clear_range_data cdata;
- 	struct llist_node *pos, *t;
- 	LLIST_HEAD(free_pages);
-+	LIST_HEAD(imports);
- 	unsigned long flags;
- 	struct page *page;
- 	int ret;
-@@ -1033,6 +1133,15 @@ static int arena_free_range(struct bpf_arena *arena, long uaddr, long page_cnt)
- 		return 0;
+ 	/* The first mmap() may be setting the user range: a non-zero start is final */
+ 	u64 user_vm_start = READ_ONCE(arena->user_vm_start);
+@@ -1421,6 +1430,7 @@ static int arena_map_ext_pages(struct bpf_arena *arena, long uaddr, struct page
+ 	if (!imp)
+ 		return -ENOMEM;
+ 	imp->pages = pages;
++	imp->pgmap = pgmap;
+ 	imp->file = file;
+ 	imp->pgoff = pgoff;
+ 	imp->page_cnt = page_cnt;
+@@ -1438,7 +1448,8 @@ static int arena_map_ext_pages(struct bpf_arena *arena, long uaddr, struct page
+ 		WARN_ON_ONCE(apply_to_page_range(&init_mm, kaddr, page_cnt << PAGE_SHIFT,
+ 						 apply_range_set_cb, &data));
+ 		flush_vmap_cache(kaddr, page_cnt << PAGE_SHIFT);
+-		get_file(file);
++		if (file)
++			get_file(file);
+ 		arena_import_it_insert(imp, &arena->imports);
+ 	}
+ 	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
+@@ -1513,7 +1524,8 @@ static int arena_import_file(struct bpf_arena *arena, long uaddr, u32 page_cnt,
+ 		}
  	}
  
-+	/* Imports are released whole, also the ones that are only partly in the range */
-+	while ((imp = arena_import_it_iter_first(&arena->imports, pgoff, pgoff + page_cnt - 1))) {
-+		first = min(first, IMPORT_START(imp));
-+		last = max(last, IMPORT_LAST(imp));
-+		arena_import_it_remove(imp, &arena->imports);
-+		arena_unmap_import(arena, imp);
-+		list_add(&imp->head, &imports);
-+	}
-+
- 	cdata.arena = arena;
- 	cdata.free_pages = &free_pages;
- 	/* clear ptes and collect struct pages */
-@@ -1050,6 +1159,8 @@ static int arena_free_range(struct bpf_arena *arena, long uaddr, long page_cnt)
- 
- 	/* ensure no stale TLB entries */
- 	flush_tlb_kernel_range(kaddr, kaddr + (page_cnt * PAGE_SIZE));
-+	list_for_each_entry(imp, &imports, head)
-+		arena_flush_import(arena, imp);
- 
- 	if (page_cnt > 1)
- 		/* bulk zap if multiple pages being freed */
-@@ -1070,8 +1181,15 @@ static int arena_free_range(struct bpf_arena *arena, long uaddr, long page_cnt)
- 	/* The callers hold no other rqspinlock, so this one can only time out */
- 	while (raw_res_spin_lock_irqsave(&arena->spinlock, flags))
- 		cond_resched();
--	range_tree_set(&arena->rt, pgoff, page_cnt);
-+	/*
-+	 * The range and the imports it overlaps are contiguous: set them at once,
-+	 * so that the imports need no more range tree nodes than the range alone
-+	 */
-+	range_tree_set(&arena->rt, first, last - first + 1);
- 	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
-+
-+	list_for_each_entry_safe(imp, tmp, &imports, head)
-+		arena_release_import(imp);
- 	return 0;
- }
- 
-@@ -1272,6 +1390,160 @@ static int arena_reserve_pages(struct bpf_arena *arena, long uaddr, u32 page_cnt
- 	return ret;
+-	ret = cnt == page_cnt ? arena_map_ext_pages(arena, uaddr, pages, page_cnt, file) : -EINVAL;
++	ret = cnt == page_cnt ? arena_map_ext_pages(arena, uaddr, pages, page_cnt, NULL, file) :
++	      -EINVAL;
+ out:
+ 	if (ret) {
+ 		unpin_user_pages(pages, cnt);
+@@ -1544,6 +1556,82 @@ static int arena_import_memfd(struct bpf_arena *arena, long uaddr, u32 page_cnt,
+ 	return arena_import_file(arena, uaddr, page_cnt, fd_file(f), off);
  }
  
 +/*
-+ * Map @page_cnt pages that the arena didn't allocate at @uaddr, which must be
-+ * free. On success the arena keeps @pages, their pins and the write access on
-+ * @file until it releases them, see struct arena_import.
++ * A device-dax file maps the inode of its dax_device, which lives on the dax
++ * pseudo filesystem, whatever CONFIG_FS_DAX says (S_DAX is 0 without it).
 + */
-+static int arena_map_ext_pages(struct bpf_arena *arena, long uaddr, struct page **pages,
-+			       long page_cnt, struct file *file)
++static bool vma_is_devdax(struct vm_area_struct *vma)
 +{
-+	/* The first mmap() may be setting the user range: a non-zero start is final */
-+	u64 user_vm_start = READ_ONCE(arena->user_vm_start);
-+	struct apply_range_data data = { .arena = arena, .ext_pages = pages };
-+	struct mem_cgroup *new_memcg, *old_memcg;
-+	long page_cnt_max, pgoff, kaddr;
-+	struct arena_import *imp;
-+	unsigned long flags;
-+	int ret;
++	struct file *file = vma->vm_file;
 +
-+	if (!user_vm_start)
-+		return -EINVAL;
-+	page_cnt_max = ((long)READ_ONCE(arena->user_vm_end) - (long)user_vm_start) >> PAGE_SHIFT;
-+	if (!uaddr || (uaddr & ~PAGE_MASK) || page_cnt > page_cnt_max)
-+		return -EINVAL;
-+	pgoff = (u32)(uaddr - (u32)user_vm_start) >> PAGE_SHIFT;
-+	if (pgoff > page_cnt_max - page_cnt)
-+		return -EINVAL;
-+	kaddr = bpf_arena_get_kern_vm_start(arena) + (u32)uaddr;
-+
-+	imp = kmalloc_obj(*imp, GFP_KERNEL_ACCOUNT);
-+	if (!imp)
-+		return -ENOMEM;
-+	imp->pages = pages;
-+	imp->file = file;
-+	imp->pgoff = pgoff;
-+	imp->page_cnt = page_cnt;
-+	imp->uaddr = (u32)uaddr;
-+
-+	bpf_map_memcg_enter(&arena->map, &old_memcg, &new_memcg);
-+	if (raw_res_spin_lock_irqsave(&arena->spinlock, flags)) {
-+		ret = -EBUSY;
-+		goto out;
-+	}
-+	ret = is_range_tree_set(&arena->rt, pgoff, page_cnt) ? -EBUSY :
-+	      range_tree_clear(&arena->rt, pgoff, page_cnt);
-+	if (!ret) {
-+		/* The page tables are there, and a free range has no pages */
-+		WARN_ON_ONCE(apply_to_page_range(&init_mm, kaddr, page_cnt << PAGE_SHIFT,
-+						 apply_range_set_cb, &data));
-+		flush_vmap_cache(kaddr, page_cnt << PAGE_SHIFT);
-+		get_file(file);
-+		arena_import_it_insert(imp, &arena->imports);
-+	}
-+	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
-+out:
-+	bpf_map_memcg_exit(old_memcg, new_memcg);
-+	if (ret)
-+		kfree(imp);
-+	return ret;
++	return file && file->f_mapping->host->i_sb->s_magic == DAXFS_MAGIC;
 +}
 +
 +/*
-+ * Import the pages of a memfd or of a file on tmpfs or hugetlbfs. Every file
-+ * there has seals: one that isn't a memfd reports F_SEAL_SEAL alone. Other
-+ * files have none and can't be imported.
++ * Import the device-dax pages mapped at [src, src + page_cnt * PAGE_SIZE) in
++ * the calling task. Only device-dax is accepted: other drivers hand out
++ * MEMORY_DEVICE_GENERIC pages too (e.g. Xen grants).
 + */
-+static int arena_import_file(struct bpf_arena *arena, long uaddr, u32 page_cnt,
-+			     struct file *file, u64 off)
++static int arena_import_dax(struct bpf_arena *arena, long uaddr, u32 page_cnt, u64 src)
 +{
-+	long i, nr_folios, first, cnt = 0;
-+	struct folio **folios;
++	struct mm_struct *mm = current->mm;
++	struct dev_pagemap *pgmap = NULL;
++	struct vm_area_struct *vma;
++	long i, pinned = 0;
 +	struct page **pages;
-+	pgoff_t folio_off;
-+	int seals, ret;
++	int ret = -EINVAL;
 +
-+	/*
-+	 * Like a writable open: exec of the file fails with -ETXTBSY until the
-+	 * pages are released, and a file being executed can't be imported.
-+	 * Keeping the file open isn't enough, a memfd holds no write access.
-+	 */
-+	ret = get_write_access(file_inode(file));
-+	if (ret)
-+		return ret;
-+
-+	folios = kvmalloc_array(page_cnt, sizeof(*folios), GFP_KERNEL_ACCOUNT);
-+	pages = kvmalloc_array(page_cnt, sizeof(*pages), GFP_KERNEL_ACCOUNT);
-+	if (!folios || !pages) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
-+	/*
-+	 * Adding F_SEAL_WRITE takes the inode lock and fails while pages are
-+	 * pinned: hold it until they are, like udmabuf
-+	 */
-+	inode_lock_shared(file_inode(file));
-+	seals = memfd_get_seals(file);
-+	if (seals < 0)
-+		nr_folios = -EINVAL;
-+	else if ((seals & (F_SEAL_WRITE | F_SEAL_FUTURE_WRITE)) || IS_APPEND(file_inode(file)))
-+		nr_folios = -EPERM;
-+	else
-+		nr_folios = memfd_pin_folios(file, off,
-+					     off + ((u64)page_cnt << PAGE_SHIFT) - 1,
-+					     folios, page_cnt, &folio_off);
-+	inode_unlock_shared(file_inode(file));
-+	if (nr_folios <= 0) {
-+		ret = nr_folios ?: -EINVAL;
-+		goto out;
-+	}
-+
-+	/* One pin per page, like pin_user_pages() */
-+	for (i = 0; i < nr_folios; i++, folio_off = 0) {
-+		first = cnt;
-+		for (; folio_off < folio_size(folios[i]) && cnt < page_cnt;
-+		     folio_off += PAGE_SIZE)
-+			pages[cnt++] = folio_page(folios[i], folio_off >> PAGE_SHIFT);
-+		if (cnt - first > 1 && folio_add_pins(folios[i], cnt - first - 1)) {
-+			unpin_folios(folios + i, nr_folios - i);
-+			cnt = first;
-+			ret = -ENOMEM;
-+			goto out;
-+		}
-+	}
-+
-+	ret = cnt == page_cnt ? arena_map_ext_pages(arena, uaddr, pages, page_cnt, file) : -EINVAL;
-+out:
-+	if (ret) {
-+		unpin_user_pages(pages, cnt);
-+		kvfree(pages);
-+		put_write_access(file_inode(file));
-+	}
-+	kvfree(folios);
-+	return ret;
-+}
-+
-+static int arena_import_memfd(struct bpf_arena *arena, long uaddr, u32 page_cnt, int fd,
-+			      u64 off)
-+{
-+	int ret;
-+
-+	if (off & ~PAGE_MASK)
++	/* A sleepable callback, like a bpf_wq one, may run without an address space */
++	if (!mm || (src & ~PAGE_MASK))
 +		return -EINVAL;
 +
-+	CLASS(fd, f)(fd);
-+	if (fd_empty(f))
-+		return -EBADF;
-+	/* BPF programs read and write it like a shared mapping, which needs the same */
-+	if ((fd_file(f)->f_mode & (FMODE_READ | FMODE_WRITE)) != (FMODE_READ | FMODE_WRITE))
-+		return -EPERM;
-+	ret = security_mmap_file(fd_file(f), PROT_READ | PROT_WRITE, MAP_SHARED);
-+	if (ret)
-+		return ret;
-+	return arena_import_file(arena, uaddr, page_cnt, fd_file(f), off);
++	pages = kvmalloc_array(page_cnt, sizeof(*pages), GFP_KERNEL_ACCOUNT);
++	if (!pages)
++		return -ENOMEM;
++
++	/*
++	 * A pin doesn't keep the memmap of device pages: an unbind can free it
++	 * until a dev_pagemap reference is held, but only under mem_hotplug_lock,
++	 * which nests outside of mmap_lock
++	 */
++	get_online_mems();
++	mmap_read_lock(mm);
++	vma = vma_lookup(mm, src);
++	if (!vma || !vma_is_devdax(vma) ||
++	    ((unsigned long)page_cnt << PAGE_SHIFT) > vma->vm_end - src)
++		goto out_unlock;
++	pinned = pin_user_pages(src, page_cnt, FOLL_WRITE | FOLL_LONGTERM, pages);
++	if (pinned < 0)
++		ret = pinned;
++	else if (pinned == page_cnt && is_zone_device_page(pages[0]))
++		pgmap = get_dev_pagemap(page_to_pfn(pages[0]));
++	if (pgmap && pgmap->type == MEMORY_DEVICE_GENERIC) {
++		ret = 0;
++		/* All of the pages are on the device of the mapping */
++		for (i = 1; i < pinned; i++)
++			if (!is_zone_device_page(pages[i]) || page_pgmap(pages[i]) != pgmap)
++				ret = -EINVAL;
++	}
++	/* Still under the lock: there may be no dev_pagemap reference */
++	if (ret && pinned > 0) {
++		unpin_user_pages(pages, pinned);
++		pinned = 0;
++	}
++out_unlock:
++	mmap_read_unlock(mm);
++	put_online_mems();
++
++	if (!ret)
++		ret = arena_map_ext_pages(arena, uaddr, pages, page_cnt, pgmap, NULL);
++	if (ret) {
++		if (pinned > 0)
++			unpin_user_pages(pages, pinned);
++		put_dev_pagemap(pgmap);
++		kvfree(pages);
++	}
++	return ret;
 +}
 +
  static void arena_free_worker(struct work_struct *work)
  {
  	struct bpf_arena *arena = container_of(work, struct bpf_arena, free_work);
-@@ -1369,6 +1641,42 @@ __bpf_kfunc int bpf_arena_reserve_pages(void *p__map, void *ptr__ign, u32 page_c
- 
- 	return arena_reserve_pages(arena, (long)ptr__ign, page_cnt);
+@@ -1677,6 +1765,38 @@ __bpf_kfunc int bpf_arena_import_memfd(void *p__map, void *addr__ign, u32 page_c
+ 		return -EINVAL;
+ 	return arena_import_memfd(arena, (long)addr__ign, page_cnt, fd, off);
  }
 +
 +/**
-+ * bpf_arena_import_memfd - map the pages of a memfd into an arena
++ * bpf_arena_import_dax - map device-dax pages of the calling task into an arena
 + * @p__map: the arena
 + * @addr__ign: page-aligned arena address where the pages are mapped
 + * @page_cnt: number of pages to import
-+ * @fd: memfd, or file on tmpfs or hugetlbfs, open for reading and writing
-+ * @off: page-aligned offset in the file
++ * @src: page-aligned address of a writable device-dax mapping in the calling task
 + *
-+ * Pin the pages of @fd at @off and map them at @addr__ign, which must be free.
-+ * They stay until bpf_arena_free_pages() frees any of them, which releases the
-+ * whole import, or until the arena is destroyed. Their content stays in the
-+ * file. User space accesses them by mapping @fd: the arena mapping raises
-+ * SIGBUS (SIGSEGV with BPF_F_SEGV_ON_FAULT) at their addresses. The first page
-+ * of an arena that starts on a 4GB boundary can't be imported: its address
-+ * reaches the kfunc as NULL.
++ * Pin the pages backing @src and map them at @addr__ign, like
++ * bpf_arena_import_memfd() does with the pages of a file. The whole range must
++ * be in one mapping of a device-dax device, e.g. the /dev/daxX.Y that a guest
++ * gets from a virtio-pmem or NVDIMM device backed by host memory, which the
++ * host imports by file. User space keeps accessing the pages through @src.
 + *
-+ * F_SEAL_SHRINK is not required, a file on tmpfs can't be sealed. The supplier
-+ * must not shrink the file below the imported range or punch holes in it: the
-+ * arena would keep the pages it pinned, which are no longer the file's.
++ * Imported pages keep the device in use: unbinding or removing it blocks until
++ * the arena releases them, for as long as a map fd or a bpffs pin keeps the
++ * arena alive.
 + *
-+ * While its pages are imported, the file can't be executed, as when it's open
-+ * for writing, and a file being executed can't be imported.
++ * BPF programs have no machine check recovery: on a real NVDIMM, the supplier
++ * has to keep bad pages out of the arena.
 + *
 + * Return: 0 on success, negative error code otherwise.
 + */
-+__bpf_kfunc int bpf_arena_import_memfd(void *p__map, void *addr__ign, u32 page_cnt,
-+				       int fd, u64 off)
++__bpf_kfunc int bpf_arena_import_dax(void *p__map, void *addr__ign, u32 page_cnt, u64 src)
 +{
 +	struct bpf_map *map = p__map;
 +	struct bpf_arena *arena = container_of(map, struct bpf_arena, map);
 +
 +	if (map->map_type != BPF_MAP_TYPE_ARENA || !page_cnt || page_cnt > map->max_entries)
 +		return -EINVAL;
-+	return arena_import_memfd(arena, (long)addr__ign, page_cnt, fd, off);
++	return arena_import_dax(arena, (long)addr__ign, page_cnt, src);
 +}
  __bpf_kfunc_end_defs();
  
  BTF_KFUNCS_START(arena_kfuncs)
-@@ -1382,9 +1690,19 @@ static const struct btf_kfunc_id_set common_kfunc_set = {
- 	.set   = &arena_kfuncs,
- };
+@@ -1692,6 +1812,7 @@ static const struct btf_kfunc_id_set common_kfunc_set = {
  
-+BTF_KFUNCS_START(arena_syscall_kfuncs)
-+BTF_ID_FLAGS(func, bpf_arena_import_memfd, KF_ARENA_ARG2 | KF_SLEEPABLE)
-+BTF_KFUNCS_END(arena_syscall_kfuncs)
-+
-+static const struct btf_kfunc_id_set syscall_kfunc_set = {
-+	.owner = THIS_MODULE,
-+	.set   = &arena_syscall_kfuncs,
-+};
-+
- static int __init kfunc_init(void)
- {
--	return register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC, &common_kfunc_set);
-+	return register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC, &common_kfunc_set) ?:
-+	       register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &syscall_kfunc_set);
- }
- late_initcall(kfunc_init);
+ BTF_KFUNCS_START(arena_syscall_kfuncs)
+ BTF_ID_FLAGS(func, bpf_arena_import_memfd, KF_ARENA_ARG2 | KF_SLEEPABLE)
++BTF_ID_FLAGS(func, bpf_arena_import_dax, KF_ARENA_ARG2 | KF_SLEEPABLE)
+ BTF_KFUNCS_END(arena_syscall_kfuncs)
  
+ static const struct btf_kfunc_id_set syscall_kfunc_set = {
 -- 
 2.56.1
 
