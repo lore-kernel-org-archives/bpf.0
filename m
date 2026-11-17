@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794934069;
-	b=V+jJdjaUZPiCj/WK5f9VkH8lgMbY3PJYe/fUIrY+sJxek5YUOqqrfBk6AV8P8TMVG0wL
-	 Fm9R3Sn6HfWncGhOpirQWHTmQNuoITSxNBdRFt/rLtVSk8RJVHnMGKuzJ6mmHQ1JvSTVI
-	 IF79FLqhQGIATOFlhYNiQXpXZLilICJz+HruJptY6ziAec3Flq5w5Mr9F7y/oqJw1UXNb
-	 PJkUp0KyAvnUrgrjAo3ZAzH4WE8h82Qpd+UOlFYlSkrjVtryV1NjRJaV/DkSNpaXf8Tkn
-	 6XeLRqUrIqlo7+3GxTUsZM73nYC5tOGH56RPMi9rPzyGXb3uNX54AXlfhkfkvmRf7kA==
+	t=1794934077;
+	b=RGig6LgPcp8GlhHHpGhPM78aRwnnb+wkwGijSU6bYfu0nr/s7DoYne5JqJWKYdJgiM4D
+	 4bXE5kfWMvVn2lSd94RlWF244/vpehgvzM7w3vzrrmxZrG4je9d6mAfS1NmNwktEuuSVY
+	 hzavvUkE3UUEPqUl3vufoCM+c25/8MwBrfklkYBZm+K/+Zixf2BKlHTArfpGOGw90MVU1
+	 AiF4dnZcYImtm2mE0EQK0UoGac0ExKNecZlKG7QJU7/2NNWoSwWV1TM54qJM0QaINNrrK
+	 E+bqV7JPA5rdB7aUvuaWGsA0mmS7WBwb54LutH03x3S7mSU62su7VVaLk90oDC/nUtQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794934069;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794934077;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=1khiZZjBHzBppzrHl4yMbJ8OMpTERWke5/22g0Tto2Y=;
-	b=G2Jwus+qkFZ1qF7S/n7ZarivoPkTfop7TthAgex5M24QkeDw2J7sEvWfv+549J3AJa8O
-	 QC9joLXRWmGyPC6JyL1LVAYzP3jpJyz2ofsxj8KVv/TiZvfxIxmOuG5GE8LIW1lhJv6RK
-	 xYr0wFB3+4aOBSdFMEK7rW6Dj/smAkl0whTZq/2ppmT+0X5HJLur3RR/0EpekQhUzCXPB
-	 IATKe1zMVfQi5WXEy7LPPSaYCe0khCHsOubvWfPvs4hetV9QScX9/6k19xVJH2aGrDwuy
-	 01+TwW8Oimsab89McXx3XNwl9ehW/90yFDS/YF15TaUQtkWeWkLR7YsQomfcs4Mtw6Q==
+	bh=YLFFgzpWj7A4Qoim2g57jQzVKXzhgMc409wqmO8WDvs=;
+	b=1Nxx7rOpZIalgl/3IkDwNXHBQ6aL6MkVQKYFl6PyOwMBNvOns/N80tenNOiPJtrNCRCF
+	 jNIXaGiWHUxqW40PdyQ15QB17qJkWlMXVkHyiHBweMPgONmOL5ZqFLoTKYGw2Qlo2ns7R
+	 5f30yIc/38pXoAA9p7AN78jMWHJD5btwsjZkPgYpGhfGXIcpZCHUTynqu/nf3pQ2Lx3LN
+	 gc+xwzymL6EYkaJ0GRPz29SmrZ2RBkRI7w8x5yOdcNRZK0NUGwz4F6ycbe69BRLwTQmTR
+	 u0CqO5UstrKLa8I0L+MY+FdQsaoK9m/Ow7NKeYi6NHiQCQhvwW5ZwpouUZhLAlXQXFQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QGPuHQD4;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Y+phX/0q";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A92F606A31C;
-	Tue, 17 Nov 2026 16:47:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21FD9606A330;
+	Tue, 17 Nov 2026 16:47:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QGPuHQD4
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7915A1F000C8;
-	Tue, 17 Nov 2026 16:47:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Y+phX/0q
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B8261F000C5;
+	Tue, 17 Nov 2026 16:47:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794934069;
-	bh=1khiZZjBHzBppzrHl4yMbJ8OMpTERWke5/22g0Tto2Y=;
+	s=k20260515; t=1794934077;
+	bh=YLFFgzpWj7A4Qoim2g57jQzVKXzhgMc409wqmO8WDvs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=QGPuHQD4JxZIoU587hPkekEou9Hb9GJKY3uPiPNwyziUqS8K+uJzynupWjYLiH98p
-	 e+JPq13roehpKhdknAXnusBH+GFlOFrNpqI+FQAtYiV1JTpRq0Io1l1tBVcXQEcQfO
-	 dvHjGBXbWQG4gajOlRWKS1TisK4LcR1eRK1PnqAUNuX20nWKF80z7Zdbqkvh3GPlg5
-	 xDQ6RBI7/gu71ZCnRUTVfqq7nkZhzeNASZU2/xEqU7PyQOF6qJhZtbd3XQliSmUtjn
-	 jLPQIijSvss7kmW5Wbg8t18Kp8FFo3XrCgVHSG/IPxk2NRb/BhKgs6/zHsXHW/7tFT
-	 8V/ykCbmNfc9w==
+	b=Y+phX/0qw9/NDsfjegcHIwWfTf4W1bsyQNxa/Daa6zlvulikl+YiNR8cACxNJ5T29
+	 a65/BOTZdcoLBUXbN3PC8JkBvzV+Os6zoyN8BrRjNx5p6nNdkq4NtwY86Q0/0tqxZA
+	 s7W2Tnj6NgHcGTkryvAd5md3UIyb+IDPRtNSd1txzROia2+gdbjUehS7YFhmsnhWmr
+	 pvmo3eSGv4OHPZxeQjiZe8iQqr1/qCM63bIghmtb/dXLks5O7/Tst5oCYXtQEuS8UI
+	 qBP5N8FGB26ER/T0qoTeYe/uvuhh9YMoDeo5fLoUSWk53db8WnJjcc1Va9QEDZv77t
+	 z1G8XjUXhjwUQ==
 From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
 To: "David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@kernel.org>,
@@ -81,9 +81,9 @@ Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	Mina Almasry <almasrymina@google.com>
-Subject: [PATCH net-next 4/7] eth: fbnic: Run XDP on provider queues
-Date: Tue, 17 Nov 2026 17:46:55 +0100
-Message-ID: <20261117164700.2157816-5-bjorn@kernel.org>
+Subject: [PATCH net-next 5/7] netdevsim: Run native XDP next to devmem
+Date: Tue, 17 Nov 2026 17:46:56 +0100
+Message-ID: <20261117164700.2157816-6-bjorn@kernel.org>
 X-Mailer: git-send-email 2.56.1
 In-Reply-To: <20261117164700.2157816-1-bjorn@kernel.org>
 References: <20261117164700.2157816-1-bjorn@kernel.org>
@@ -99,39 +99,32 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-fbnic keeps headers in normal pages and attaches provider payload as
-XDP fragments. The payload is mapped only for receive and must not be
-sent with XDP_TX.
+The attachment rules need a test driver that accepts native XDP and
+devmem bindings together. netdevsim runs XDP on ordinary skbs sent by
+its peer, not on provider payload.
 
-Drop XDP_TX while unreadable fragments remain and declare native XDP
-support on provider queues. Normal page-backed packets keep their
-existing behavior.
+Declare native XDP support alongside devmem bindings so selftests can
+check both attach orders. This tests configuration, not access to
+provider data.
 
 Signed-off-by: Björn Töpel <bjorn@kernel.org>
 ---
- drivers/net/ethernet/meta/fbnic/fbnic_txrx.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/net/netdevsim/netdev.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-index 07d4b2e92362..52f461bdc62a 100644
---- a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-+++ b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-@@ -1130,7 +1130,8 @@ static long fbnic_pkt_tx(struct fbnic_napi_vector *nv,
- 		frag = &shinfo->frags[0];
- 	}
- 
--	if (fbnic_desc_unused(ring) < nsegs) {
-+	if (unlikely(xdp_buff_is_frag_unreadable(&pkt->buff)) ||
-+	    fbnic_desc_unused(ring) < nsegs) {
- 		u64_stats_update_begin(&ring->stats.syncp);
- 		ring->stats.dropped++;
- 		u64_stats_update_end(&ring->stats.syncp);
-@@ -3124,4 +3125,5 @@ const struct netdev_queue_mgmt_ops fbnic_queue_mgmt_ops = {
- 	.ndo_default_qcfg	= fbnic_default_qcfg,
- 	.ndo_validate_qcfg	= fbnic_validate_qcfg,
- 	.supported_params	= QCFG_RX_PAGE_SIZE,
+diff --git a/drivers/net/netdevsim/netdev.c b/drivers/net/netdevsim/netdev.c
+index 0372a9bd63bb..3d1657d24f60 100644
+--- a/drivers/net/netdevsim/netdev.c
++++ b/drivers/net/netdevsim/netdev.c
+@@ -880,6 +880,8 @@ static const struct netdev_queue_mgmt_ops nsim_queue_mgmt_ops = {
+ 	.ndo_queue_mem_free	= nsim_queue_mem_free,
+ 	.ndo_queue_start	= nsim_queue_start,
+ 	.ndo_queue_stop		= nsim_queue_stop,
++	/* XDP runs on the skbs of the peer, never on provider memory */
 +	.xdp_unreadable		= true,
  };
+ 
+ static ssize_t
 -- 
 2.56.1
 
