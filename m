@@ -1,124 +1,108 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=205.220.177.32
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794893033;
-	b=o10t+jy5tAc+NpSHY9f8IGi3r8BPxDL2RU4AaHh1n3qDCoklevXidFsNZKvYStTSMTtV
-	 CpkisWK2hjlJNlSDidHNNf0+hFdKkJX7EBC8M+hIk0pSHzmQ29TGmO3jF7FLDE4iooqdX
-	 wjnbZIqiYlA1F5kxzZb+jLHac1cXVy/subtrT9Em9judfVwHfdWTzBymKYEQBYW8AB+Pm
-	 dlsNTg7kZw2XYebhwWWkVBVhzyciv2iT35nJP8m4/cNKWqdBUIiz3qgtaJBS05CAU/zqO
-	 IgMNhNan1aeCVmzMjcYCj4euHROG7fQZ5WRfKg+51HPGXw4e78Vihew4mlAa9sKb1nQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794893033;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
-	 DKIM-Signature:Received:Received:References:User-agent:From:To:Cc:
-	 Subject:In-reply-to:Date:Message-ID:Content-Type:X-ClientProxiedBy:
-	 MIME-Version:X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-Exchange-RoutingPolicyChecked:
-	 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped:
-	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details:
-	 X-Proofpoint-GUID:X-Proofpoint-Spam-Info:
-	 X-Proofpoint-Spam-Details-Enc:X-Authority-Analysis:
-	 X-Proofpoint-ORIG-GUID;
-	bh=OGNAjlqam3lTwcaMcLj91eU9Rx36mXoMZIuHJDXUVz8=;
-	b=Jw/NVBGYDnvlT0qd014Uiu1JlD3OaAmmXdqiZXiAW6W9KzUi4tG4apgDBUeodQlsaq4F
-	 peD7n7ODzBgC5rpp7a+nIco6Or3hWcZbBOYIoCorwMdhGWAKB4li2Fmnd5UJqfZC3KsQ+
-	 VM0++2KcSPWaNqou/H17c0ZBGtgPJH/TieuPK+S7l1bKXzZXWqxPK+EraF+Rl/8945urE
-	 yfRMQ7TVSp8Z7AP9mUJutZ8zW7ed6VNLYo3A5q/kofKz/Iz4YOmaqWB5inFWKVOWBJARy
-	 0dw8coTAp/8f+mXToiK3Y/futcTKTzLRDxWkXLAqHx60av9N9xF1Rd+sVgcSULX0+xA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=oracle.com;
-	spf=pass smtp.mailfrom=oracle.com;
-	dkim=pass header.d=oracle.com header.i=@oracle.com header.a=rsa-sha256 header.s=corp-2025-04-25 header.b=O747JuEu;
-	dkim=pass header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.a=rsa-sha256 header.s=selector2-oracle-onmicrosoft-com header.b=gOyhHjqV;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=205.220.177.32
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.172
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794893077;
+	b=XepQtS8trFE6Ye0HdVQj3+s8Zk9LM+Yrcv2yI0kknPFEPRo2P0o9KvhUu924+eNy92FB
+	 X3UjIDkVmWMtQ3IMgTt6HhZo4Uj+5XiJeOpiZyzRLGVtB1Z7YWo2sL2R8UfwGrsJW2FX9
+	 ih+CiipyWCWS7dU7LNafPPcR20SSdfL3VyjOJZSKWuZYQAmNMFyMFhftdboKaw6z4pQQD
+	 hmA7dwY5GPdYTNms3ciaV+W1COGWKms3UuMZNzsNkDx+LqqHFUPW7haN+TGz+5XUci66P
+	 ju9bhQ8UVo/fe6q19KxdC5qT6II/fkCQMsmhqTkeB4mjFphrlYsy5zBBNI5TH6XqZpA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794893077;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=92iLM9PE3+0NUQh9S/WcBgYVX45/LD+uF4QmzjutD40=;
+	b=BOCWSGuOOOQ3U6Lw0j5bqSIIV5Njqso65ZHNNgzMqDNKfAJnS7w6H7pYPeGrHvORloxQ
+	 Q7oyWywLjH/0jSueOe4RKtLOOwYbDguxW3/ezAWD/wbmaDj7ij6mWZ1beq9Jn3YbeClEU
+	 vS7e5CZM1SBdaWiypC/lTNiWro/pFqEwcrUPuy+3PTq7R4/EsSWun7vMPEKmfe/94PYVw
+	 JztdtKHQlzAficyYTYgdjSrykWAV9Da9LtVj7U5sseHj9v5gj3sRSbT8+ZU5ozH7QV9+V
+	 wgsebJ7SLk4fqFpnUhepVe1pf9zGxMWd/fxfdNl76W3adL3Jnf0b9kF+yfPowfxWDjQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ZN5eayI2;
+	arc=none smtp.remote-ip=209.85.215.172
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB4E5606A323;
-	Tue, 17 Nov 2026 05:23:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BB4E5606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95A87606A333
+	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 05:24:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 95A87606A333
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=oracle.com header.i=@oracle.com header.a=rsa-sha256 header.s=corp-2025-04-25 header.b=O747JuEu;
-	dkim=pass (1024-bit key, unprotected) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.a=rsa-sha256 header.s=selector2-oracle-onmicrosoft-com header.b=gOyhHjqV
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AGKoijd2600403;
-	Tue, 17 Nov 2026 05:23:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=corp-2025-04-25; bh=OGNAjlqam3lTwcaMcL
-	j91eU9Rx36mXoMZIuHJDXUVz8=; b=O747JuEu16pjPSCMkdGYUjLnjbd1kDys/i
-	FUyjX7AnVnAzZcdIEF34O4yVvwL7p7nBUk4S/1KagIGiVzvBe/s/ENAOqgw3pd5b
-	esj5SX83fYIRjDFocTL9l6vJLTgqt/TC6e4tr6ynGs267c72S/IJImBk5mRRE8GG
-	lv/1og9lxNDwrz/eNL52eo4FVdRYxY//Hzkw6gbmy0xM+AuR4ACb2Zwgk1gtyAeK
-	gHXBvH7BDz/H/qyD7Xv1RsKa9wL825cZWD/TsCdCMxtWkZs5j6Mt3TCQ2OqbVQcB
-	P+Zj7NeJyw+gdJi0g1te1P7Nugcw+E4Zw8V4DVmEqhL6HquYAW3A==
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4hxee43btu-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-	Tue, 17 Nov 2026 05:23:51 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.11/8.18.1.11) with ESMTP id 6AH3gw704036815;
-	Tue, 17 Nov 2026 05:23:51 GMT
-Received: from bl0pr03cu003.outbound.protection.outlook.com (mail-eastusazon11012047.outbound.protection.outlook.com [52.101.53.47])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4j0f8y2n8c-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=FAIL);
-	Tue, 17 Nov 2026 05:23:51 +0000 (GMT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VKiHhspn2A7sNa1G07+782pScjvDASvNnG1CqG/+Mt8+tlabQjrcaT4e+054Cwvu3VjpmYwyHv9tQYK5pBWP9xpMdZHV17CNwNcaDfiMs+Jo45ugsqJu/9asGSoQ5krsibto/4X4dm0o+Tj4SFx13UOeVIzlvmr+6dUOrJ6+vOJNWmUI/cFG3LxUJa9C7/mVYELfPCE9el0sCD0xZlNXyfM9EoRpsbzZjztv511KqWZduE6op4fbGxWdsnADoDdgdaB78p3xPj0Y6zJkwApb/1C9hc0b1aDTs+iTi7Bzr9h62BQIM9TdDtRAYKwyKHBziQz6/mMcTdlDQcZvXgFs4Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OGNAjlqam3lTwcaMcLj91eU9Rx36mXoMZIuHJDXUVz8=;
- b=v4NPiEXDNFwfyuT1Mw51PYs0hTdZcxw0N8AJRqaCtMUnAIfbhD0Hzy3rY+wuBbhDQgHd+kM2miPTI/zJ2YdmPGypuGc2OCt2LxEbChNznreuAHABD5iCfSHN1IWarEel3PdzWvmWaugYpkW2+geHkBNFUfLKwq8Un4uooy9jmSk2H2TNyQ2OKuh4o7upFNM2yW2k//oy8qr0nmX/e12fOD6y4FNvtF//x6v4ozOO4QgpJnc+jktPSwq9whpgYeOB0Z0KWgUjsNNdDBtGl3Pvtl5tmdZm9zz7iSJWnIu2+7+O88U6Dej7CJbdM6KsbClnvw0Osa8islcORhU+tDAhZg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ZN5eayI2
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-cc758830601so3928305a12.2
+        for <bpf@vger.kernel.org>; Mon, 16 Nov 2026 21:24:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OGNAjlqam3lTwcaMcLj91eU9Rx36mXoMZIuHJDXUVz8=;
- b=gOyhHjqVSrydTLK6LX1DH2PbXnMgbYdgEmGIaqbA4cjYTBCAyiipaQNZ0QfJafohgvuKmP6WAMEDPhbaVkIjSLaL7hcLpPrgkRNfvCI5uBFRY6tFhPUDQ8H8RrR6bT8Mrt1C6fi5CKR5haP4mwCSI92mjGb4mNBxNlftx1Aw9gU=
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oracle.com;
-Received: from CO6PR10MB5409.namprd10.prod.outlook.com (2603:10b6:5:357::14)
- by DS0PR10MB6751.namprd10.prod.outlook.com (2603:10b6:8:136::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.13; Tue, 17 Nov
- 2026 05:23:47 +0000
-Received: from CO6PR10MB5409.namprd10.prod.outlook.com
- ([fe80::3c92:21f3:96a:b574]) by CO6PR10MB5409.namprd10.prod.outlook.com
- ([fe80::3c92:21f3:96a:b574%5]) with mapi id 15.21.0615.013; Tue, 17 Nov 2026
- 05:23:47 +0000
-References: <20261116082437.66739-1-ankur.a.arora@oracle.com>
- <20261116082437.66739-5-ankur.a.arora@oracle.com>
- <sashiko-outbox-216562@kernel.org>
-User-agent: mu4e 1.4.10; emacs 27.2
-From: Ankur Arora <ankur.a.arora@oracle.com>
-To: sashiko-reviews@lists.linux.dev
-Cc: Ankur Arora <ankur.a.arora@oracle.com>, bpf@vger.kernel.org
-Subject: Re: [PATCH v17 04/16] arm64: support WFET in
- smp_cond_load_relaxed_timeout()
-In-reply-to: <sashiko-outbox-216562@kernel.org>
-Date: Mon, 16 Nov 2026 23:23:45 -0600
-Message-ID: <878q2s2fq6.fsf@oracle.com>
-Content-Type: text/plain
-X-ClientProxiedBy: MW4PR04CA0122.namprd04.prod.outlook.com
- (2603:10b6:303:84::7) To CO6PR10MB5409.namprd10.prod.outlook.com
- (2603:10b6:5:357::14)
+        d=gmail.com; s=20260707; t=1794893076; x=1795497876; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=92iLM9PE3+0NUQh9S/WcBgYVX45/LD+uF4QmzjutD40=;
+        b=ZN5eayI2Xlw1biAy43IblBYsfXrWirhPgtWguYGIMxCMTNw2ar3F3eICDg66bXGkfz
+         a5T/JO97wWmOSgRwl/L0B8y4UmeM16L6Kz38SEZ+pMzD1M9z1XxYrqHWcIolZGMVDzEc
+         CMYOnCWlxIRfoJ+ltZWf1qZ+h3JM/69OxOLPylJCnIY0Tjos7bBfhx3yPyA0+uRZKD+1
+         JZFyY2PF0ppO4QTrSN5tCV/4jHfhzi5dng7zrqShksCEwvV7lfEwqZS0x0O9nBnwQLMZ
+         q4LSIkg/9IGTJrnlclNkB7n6BE+r9jjOLizBx6xn2ouv7drX+j3feBkz+51rnKDw1/Hq
+         gOPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794893076; x=1795497876;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=92iLM9PE3+0NUQh9S/WcBgYVX45/LD+uF4QmzjutD40=;
+        b=ZoMkzyBVW2ykXmlej68nL/jfj/RtKJQjm0EHmswTC6HOq73x/hPJ71C4fvR8opzoOY
+         SuYll1PiX+aamOks2RKLBr3Kbt63hj4VInnDH/cgy9xyO3MXIfwuWH0L9j3Th9DAkOVu
+         TvmHfkyU16XlXQTitAr3glgU04OLU46HgPe2sT29tPrxfMoXULm2ZDhf42UUQRoN1PBp
+         zr1Pr6/LM6Od5RmeIjPYAfxXaCzdAPuqfVOtZ/nKIYs8sqVMFtNG/yavYfzrCkx9O0d7
+         BurzssWLJtOgSHAXcAoGc4PLX5AklWlrxxqGcEd8tNJsHWBALVshQapSK56SHcejSB16
+         /JcA==
+X-Forwarded-Encrypted: i=1; AL+hErElsI93NS7SqKUUknQoQ7BV0VVWP0sRsSA/pnMvOmBPaqc55QFE5eV0GeKmz/abNq3Wwmo=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+2sxXHiP8mYkIybY+upRqFl27kQsLdt8W/Eh+VdKPj4P55sv9Q
+	Wh3yTwMxFGj3+RnmQPPMu74h9Sl5o+IUzEyyocUTkXTUmCOKYGEopjsd
+X-Gm-Gg: AZFdTZdzlgf3M4ujkCM/AIy/JjdAW230O08xXhjtAj8ueMfeCRr6k5nIsTf+lRRxxZQ
+	PRI5/Gi8vROPUriViRaZFWCE+c6DLUDH2LYgMmvE90S/1+U9Nu22BxCiAtezW6eLhqZqzsLG/vo
+	VlKMYJ9Hlt76/sfExclIyvVR+zCgsaGNPqH87SWlhmLgDXF7mqgGGvRsWmfyaPehqhVjSzNBoaj
+	DZUEIU//m297qOsynDJOyaheEoTmSVgMNISk38Mbh1+yAwlUdeXoEjS+j2d7M9zFpcUA+Tc5ktZ
+	Ttz1Ih9EsplY3rXAJli/NiwqHBy7lNcd7NBGEPjLAQVoHsWhDTMHeV1ltYoQeMOfBmxuUaxqKgz
+	DNmhrireQqvV1tBAI/l1YOz5QC2c5NagZ4RBiSifD4QyOYYGrzE292wMBevQnPPqtYjGsbNEyVs
+	UfvikkO9zf8EZ2BjFjpn8UazXXPNa8awi8cZWGYukPe4bMKF01vzOrRutoswGjb7KR27UYx7qKp
+	+lsUprb9xSDKlgQaakPQjHHEDdphGF9lXzzhKpRYBtzvesBMufBHE5UYbX3+tHGO3Pdc7qt4L8K
+	vvOPuCiD61BXYO4czyo9cesiJi3BbpEjQTm/8xNdUuql+cyg7r4NMXPtsSEmlriHsjSS0BugUUY
+	465sJn1ktwxVb+2rGUJv6wxCf+H/kANFfC38=
+X-Received: by 2002:a17:90b:1dc8:b0:3a8:9d0d:ca50 with SMTP id 98e67ed59e1d1-3b1b0b5b89dmr12632432a91.10.1794893075609;
+        Mon, 16 Nov 2026 21:24:35 -0800 (PST)
+Received: from localhost ([153.61.198.247])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b3ac29a846sm2093493a91.9.2026.11.16.21.24.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Nov 2026 21:24:35 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 17 Nov 2026 05:24:34 +0000
+Message-Id: <DMX8HR7NDP9V.CDDWGLZ98C0K@gmail.com>
+Cc: "Daniel Borkmann" <daniel@iogearbox.net>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
+ <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor
+ Solodrai" <ihor.solodrai@linux.dev>, "Steven Rostedt"
+ <rostedt@goodmis.org>, "Masami Hiramatsu" <mhiramat@kernel.org>, "Mathieu
+ Desnoyers" <mathieu.desnoyers@efficios.com>, "KP Singh"
+ <kpsingh@kernel.org>, "Matt Bobrowski" <matt@bobrowski.net>, "Shuah Khan"
+ <shuah@kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-trace-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <netdev@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v2 2/9] bpf: Add log support for tracing_multi
+ link_create
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Leon Hwang" <leon.hwang@linux.dev>, <bpf@vger.kernel.org>
+In-Reply-To: <20261114150610.84507-3-leon.hwang@linux.dev>
+References: <20261114150610.84507-1-leon.hwang@linux.dev> <20261114150610.84507-3-leon.hwang@linux.dev>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -128,194 +112,207 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR10MB5409:EE_|DS0PR10MB6751:EE_
-X-MS-Office365-Filtering-Correlation-Id: e8e9b9ad-6a48-4574-a43e-08df446af49d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|23010399003|10067099003|4143699003|56012099006|261021123027099003|261021135927099003|261009223027099003|261102130727099003|261022075727099003|261026121527099003|261026140227099003|261022105027099003|261028144727099003|22082099003|18002099003|3023799007;
-X-Microsoft-Antispam-Message-Info:
-	TTWp1TlEaZ28W8rA8oidy2zfQHPKEbAM8o0EWYsi6fib5S6CumfVLiNXuARSVIoOUotqaJDKbBl/iltO072U2Dw8lWbpHuJEStnMI63ymQqPxniZIrHS86KrPGSlrS/WrB26M2idM8qupjB8uLb/+/3GgSlzohelRC2RyTuvtSHW2pBbGkGcRHIDvr70KXPYkgZIvm2rHUT0po8V9HM9v78vhWrirzM297TU1GAUNCfOEJ3XOEhiFjunJHhomoKs+YFyKeU8GcE/tB7HKcwru7L2W1oAr6rXS1duiM9+UCwZFHW5WrWMZJRGk6iq72upldsCOWb0b3nYsh6cyi7s7iQsiQspYGfIJQasasLDDN6+5gWeCt1ig7AvEXZV8iauu5laxW9wmcFabPQE96qIr4r4vS4O0nLs09rgkYMyYdC3EavH+TDz5heu2GDsC2ubRpL2GwP9Nnc4+vuyhsryEKCnEkTMwbEuF9sQH4azmK3WuOhzACGjgRJ3VRzcAOibERX9kx7qeXvPysaBkz1EFeo2+0kXVuhj3xBzUHE4ZGX98UwTvD1LIUqFciyDK3kSWxV0G8TLi2V8PBwU2yjoMaV2w1mUAdw85YNXnb+Qfq4=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR10MB5409.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(23010399003)(10067099003)(4143699003)(56012099006)(261021123027099003)(261021135927099003)(261009223027099003)(261102130727099003)(261022075727099003)(261026121527099003)(261026140227099003)(261022105027099003)(261028144727099003)(22082099003)(18002099003)(3023799007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?keNXfAWLmdmN5hYmIoIaPmVK5aa2RLM0v43QTl1ToyIjTRz3OVzEdF9zX/yu?=
- =?us-ascii?Q?Tv7Uc3mN8nzQq85paPqWj5tDXWVJWXJ+AD8NqlaXIFdW43x7EBzsK1tpasVl?=
- =?us-ascii?Q?sqC0PIT+blm0xNz7gj9WKF5y7DoZebkTgNtqcYDVF4wJKYsdRFZbdUYicq7+?=
- =?us-ascii?Q?rRqlcR++bGvTfOCzFWiS1QLeiI1B+f5Kpz5yKDV5IBK9Yz3ep4pS/dPG8cp2?=
- =?us-ascii?Q?8wB0Z0TsY1ShRdqZ1F2718dvlGq1MBiNJWIt44sdX4MRUllXAAXxUToWIVmb?=
- =?us-ascii?Q?TwuGUH91O5a9IqVluOAYqjSyx+5rR5+SoR+OqI8kOoVSqpxz11VvL5XOfHej?=
- =?us-ascii?Q?qSWQss3jD/IsWd1jaGq2ikrcqHJFP59k0FFRgn+F3gTP6xTjm0dV1N5rT2r1?=
- =?us-ascii?Q?rT5M/e+kUAAvwpleBXAprU7ei/Ng5Es9YMNP5Et7DkP9h2spMXu5RKJG5Oaa?=
- =?us-ascii?Q?4zOP+OnJ9s9L0xbzV/k9z9D3U2ru+b67H66BFRM4LTFP32B+uGqDYyE/x6O/?=
- =?us-ascii?Q?+Wj9yWRvWFurQHo3Zo0UzQSPMITa6x3i0RDV9P5TlYKSoZO0mdos/iOIM4NA?=
- =?us-ascii?Q?3GSdlPgXPGEekXRvU0/eqKK88wgYwNEF30UcquAbAsEW9R0KNuZN5P7ksaQq?=
- =?us-ascii?Q?uYM2tSaNZ1OWv4GP7vwIknyS7GRaDE1Maqm6nD7fQ0iVZ4zDpdxyKTK0Ezf1?=
- =?us-ascii?Q?dgqYDzIq2W+FoTxPabKw/SxwJicw0H9rGv3nZTTBme9HvUauC5/FmTpIs5YL?=
- =?us-ascii?Q?/S7lHIo1IAUeQMaUVioKne6jCLEOyFkZVlhJOzERkCIay/gk9p08rg/RIKUD?=
- =?us-ascii?Q?bP6cE4t5TKWsD41GWTVO/zIwOwt2z58Z2vcoDtUKsXbeZmJsIKHobAneQI1g?=
- =?us-ascii?Q?VfISYn6b0p+ARUI3CB/VBbdW9g5QT5VftIDOO5YKgY7bLLqcieLebplQhUCG?=
- =?us-ascii?Q?XhDaW5izAVkdbsttDKD4gbTbvckUPCv6V6K08W8LPiqfV7mRqWO4vXxdZgZP?=
- =?us-ascii?Q?EuWNvbYcqKaF2wBo8FUg0GOCeT1cEfDjvaNx5IbjjyaBgnqg9HvyrazsP1Dk?=
- =?us-ascii?Q?P4dE7PXGpPiNvgbztP0vOT3x5gy2ri/UcsO5Q5szczRhduMq6c8ieRQfQpUb?=
- =?us-ascii?Q?h+izanDXSXo0vQ7y14woaMOaaiHnIKZFHy+rzz/XiDakNwEVJiB2juGybNJS?=
- =?us-ascii?Q?1zuk51eBL5PbyAMIZFJzFH84Ne7cZpxLuZW+A6KlT9JNQGpTcwbwPXEIPqeZ?=
- =?us-ascii?Q?p7NA92UcIFIkgDyZCS/QowYZ4MEnLT17eq8Zsnwlm2qu7bw7m56fAv+sMEKm?=
- =?us-ascii?Q?K/EcMrx4OCg1YbEE0+qXDN2UBU1pQyMsU9tWA5w+KHc/aLwOU7CM+SldwFjc?=
- =?us-ascii?Q?yDR0QfEDRCLBp3gsEH5ZvnHqQWcNNAdNIVI7G18tbYerOfn6XysMFD2ZovnJ?=
- =?us-ascii?Q?Ruf795/EH0+4+FwpAUh4gJrtWE0sM5HEwm4uX2HyNth1Wrqe61kjP1cEgxMx?=
- =?us-ascii?Q?TMKIKSEgPoKUwtAH/rmi6tYdrI/ATXCNGoAhqcfJzhsWTW06lGw60K3h8mpQ?=
- =?us-ascii?Q?gDkYYH+OSfZvzkKt2A7etoITyDYEn6xmZ/5ytFyYO0vF6q+TjqtFV9+HCblJ?=
- =?us-ascii?Q?5H6LauOiKigBQ+sp9f0h7/jiS4TWyzmmOjQgbgIHaR7APOruMXX5M4a90VM8?=
- =?us-ascii?Q?FKrnbSvEmO66QKlPaQnRau1WEH9j3q1YOUKKJSSkIgwmFNTklQOYIpcJWTUO?=
- =?us-ascii?Q?ap6KNIdjJVe/mk2uxmH5XNppwmQNWFU=3D?=
-X-Exchange-RoutingPolicyChecked:
-	nLIbXXutBmn+f7W8uYU+ICTJf7wMpF/iLVWJbCCtMq9lUI5hUVu0n8KSiv0n3hFF+p4h/UmNCQmUFOXQ2i9yUG1+s0E3Hu+UGVvw7qul9dzDL5isfRPsrW6ILAh+dl6MO8bF+zGe8W4OD4GmHtw2yt4bQKfDmGoL5neFqR0wIb+67LfT6kDUWL87iodGlr0N833ZGUfuo5nYeMmNh3hr/Lx6DXXMpw6WNq9Nwwvip+DOFwgbq8QwOKUbl5rYSJ4f2w2CTuFiq3/pdKOnOybJ8qFK+DAeuNmaVZlLUHq8Ubc5eNJ83Irp0vvwgNqdnD2Ztqnn3a1POqttnGlGYSJA8g==
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	LVsLpRQtuLq3WzKLlhZB9QleSBmaUcx6QlfUEmSamyx/faxDPsAvh9qkIb7Qm9eAXNoGvA4DB3LQ3PjpAxrRERuoP9MdAbMGi4IfYNuRRK77iZiQ7XejskGBVwlVqjubpjGYdNjABNMBx6cNnHEdhVRI+UhmBhnOUMNC92phpe8VWe8e4okrTqJ4x68WfyWQ5NiH4BsHV6u05FYw6XPbGFPxrln678ioM2QQsPewZiaqQD9hE6a0Q3/0gMF5sxaYKWRkBX6pWM9RJ00MyP5YJtzYZ5qV2/+2lPEVC1N6Oes0vTdG7s1XXGfNXDCUkYcwIh+vt74Pn6HPzeZz8oe/sV/gJXT8ReBOH0DBIG8YCuwqZNyTsCS2ynfWTuaZVOioH3pDwKvSIsgPkqeuEVyHA4BMSOSd5eHpTRrWbHQUm9YfJAoNIfxC/QLSD3UPrOFLETj6an26oWZZ4zTqOzNhelXK8TkZbyjcX1t1F3dtaRST2bvMIQAlCG8gvVOlUBfZhshWfHz+RGpXqJ4huIriFIXCGwhjtV7gQD6QVh6AtYpE1XzXGATW9PIO6fWMwFGhDWaCDB0u8609TpVfqT7rzGEPIn/bzdrABIOnZPXSNk4=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e8e9b9ad-6a48-4574-a43e-08df446af49d
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR10MB5409.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2026 05:23:47.2507
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7QpC+08n7uO2DSbFQyrjGl8UeBfxTFBQqSvTwAaIgyZAU12iSvHAwDH8veyPWP0Y3T/VN/wsJxX/Q7r3BpuqL6QSI+zN1t20ZRjRNEGU1XM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR10MB6751
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-17_01,2026-11-16_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999
- lowpriorityscore=0 malwarescore=0 suspectscore=0 bulkscore=0 mlxscore=0
- phishscore=0 spamscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.22.0-2611040001 definitions=main-2611170021
-X-Proofpoint-GUID: Uxb6LlBImwWP3xI9D4NY2V1Q1JkhRpJZ
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTE3MDAyMSBTYWx0ZWRfX/SV+DBn0Xs2T
- r1gMurL1vRIOdKXq5rW6jfIsoPGjviwIlRapNxUZOuLX0aiQVIQllq8oPOd0Dn12u6AuWQYPdcB
- jNEBar/GT+KMpqRW+Cpwwy9bh1o0ZwGtf/rdoO1ljv6OlDNT/lpk
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTE3MDAyMSBTYWx0ZWRfXzTtXLMaH8GD6
- zPAB+MIk9VRYdzuZfgd6qpchh8g0N+pKl9752XMnRophoqlQnNig2VjoTq3CTY/xe0HINy35KDI
- wfaAKf1tRHik8o3eNTM0ikXVoYkVAk9L0O2WiZcAFjOFeffNSE2HNEVvv/4EhdsHGDStbshXpfg
- Ez79mCZObvTbcWpmPS69J8jcW2ar2bkiW6zqZkBvKLD6/RIxou+b1NxuQmmN/PGIElvirLD7mBL
- GvOCq52s5laESWhuMab1dZ7kfs0NPyx8U05H67mF4DeaKH64OCqOs4azBOrrrFrM9DdLDEn7bZR
- Xgs07WQbQTQ48Ma9POcTkFst1ptsPVkaCXHFhcQ7jHzX7C4ETKNoE/yq7wkz62RMZQO8K8Ze/WG
- j97n9JRMmRnKj2ZgD8jfOkkRMtRgrelW8fik3uqIoXTY5Tlp0QRxx93SMv9np1JXhqEVnirv8/D
- PwSvbDW9Cz/CWN/1w9xFyHcJwRnqHZgQ3ru+NS4k=
-X-Authority-Analysis: v=2.4 cv=W7utxhWk c=1 sm=1 tr=0 ts=6afbe4e7 b=1 cx=c_pps
- a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=zJRp6_cAMcgA:10
- a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=o5oIOnhZENCTenyL_yNV:22 a=VwQbUJbxAAAA:8 a=yPCof4ZbAAAA:8
- a=Y9Lqq_cyp_RBOQrdPzQA:9 a=5yU3S35YU4bGjq-dph-N:22 a=Bho9c0fBagfJEIQBS7DQ:22
- cc=ntf awl=host:12101
-X-Proofpoint-ORIG-GUID: Uxb6LlBImwWP3xI9D4NY2V1Q1JkhRpJZ
 
+On Sat, Nov 14, 2026 at 07:06 AM Leon Hwang <leon.hwang@linux.dev> wrote:
+> -	if (!cnt || !uids)
+> +	if (!cnt) {
+> +		bpf_log(log, "tracing_multi.cnt cannot be zero.\n");
+>  		return -EINVAL;
 
-sashiko-bot@kernel.org writes:
+The user sees cnt == 0 in his own code.
+He can't see which of up to 1 << 20 ids the kernel refuses.
+That part stays silent:
 
-> Thank you for your contribution! Sashiko AI review found 2 potential
-> issues to consider:
-> - [Medium] arm64: cpu_poll_relax() calls non-noinstr
->   arm64_wfet_deadline()
-> - [Low] arm64: unexported arch_timer_evtstrm_available() in
->   cpu_poll_relax()
-> --
->
-> commit 0bd9d96e9ca449b0fa90386c0f9dafaac6bd9c03
-> Author: Ankur Arora <ankur.a.arora@oracle.com>
->
-> arm64: support WFET in smp_cond_load_relaxed_timeout()
->
-> This commit adds WFET support to cpu_poll_relax() on arm64 via
-> __cmpwait_relaxed_timeout() and __cmpwait_case_timeout_##sz(), using
-> arm64_wfet_deadline() to compute the wait deadline when ARM64_HAS_WFXT is
-> present.
->
->> diff --git a/arch/arm64/include/asm/barrier.h b/arch/arm64/include/asm/barrier.h
->> index e2263c754a550..3b024058cf2f6 100644
->> --- a/arch/arm64/include/asm/barrier.h
->> +++ b/arch/arm64/include/asm/barrier.h
->> @@ -224,8 +224,8 @@ do {									\
->>  extern bool arch_timer_evtstrm_available(void);
->>
->>  /*
->> - * In the common case, cpu_poll_relax() sits waiting in __cmpwait_relaxed()
->> - * for @ptr value to change.
->> + * In the common case, cpu_poll_relax() sits waiting in __cmpwait_relaxed()/
->> + * __cmpwait_relaxed_timeout() for the ptr value to change.
->>   *
->>   * State this by defining CPU_POLL_RELAX_WAITS. This enables a time-check
->>   * optimization in smp_cond_load_{relaxed,acquire}_timeout(). Note that this
->> @@ -235,7 +235,9 @@ extern bool arch_timer_evtstrm_available(void);
->>  #define CPU_POLL_RELAX_WAITS
->>
->>  #define cpu_poll_relax(ptr, val, timeout_ns) do {			\
->> -	if (arch_timer_evtstrm_available())				\
->> +	if (alternative_has_cap_unlikely(ARM64_HAS_WFXT))		\
->> +		__cmpwait_relaxed_timeout(ptr, val, timeout_ns);	\
->> +	else if (arch_timer_evtstrm_available())			\
->>  		__cmpwait_relaxed(ptr, val);				\
->>  	else								\
->>  		cpu_relax();						\
->
-> [Severity: Low]
-> Should arch_timer_evtstrm_available() be exported with EXPORT_SYMBOL_GPL()
-> like arm64_wfet_deadline()?
+  bpf_tracing_multi_attach()
+    check_dup_ids()                      -EINVAL
+    bpf_trampoline_multi_attach()
+      bpf_check_attach_btf_id_multi()    -EINVAL, -ENOENT, -EOPNOTSUPP
+        btf_attach_func_proto(NULL, btf, btf_id)
+        btf_distill_func_proto(NULL, btf, t, tname, &tgt_info->fmodel)
 
-> [ ... ] any non-KUnit loadable module using
-> smp_cond_load_relaxed_timeout() or smp_cond_load_acquire_timeout() will
-> fail to link with an unresolved reference to
-> arch_timer_evtstrm_available().
+The last two have messages. They get NULL.
+That loop runs before trampoline_lock_all(), so bpf_log() is fine there.
+can we pass the log down and name the id ?
 
-smp_cond_load_*_timeout() is a fairly niche interface. Let's not invent
-hypothetical modules that use this until they actually appear.
+> +	if (cnt > MAX_TRACING_MULTI_CNT) {
+> +		bpf_log(log, "tracing_multi.cnt is too large.\n");
+>  		return -E2BIG;
 
->
->> diff --git a/arch/arm64/include/asm/cmpxchg.h b/arch/arm64/include/asm/cmpxchg.h
->> index 6cf3cd6873f5f..e543366801ce4 100644
->> --- a/arch/arm64/include/asm/cmpxchg.h
->> +++ b/arch/arm64/include/asm/cmpxchg.h
-> [ ... ]
->> @@ -235,20 +236,55 @@ __CMPWAIT_CASE( ,  , 64);
->>
->>  #undef __CMPWAIT_CASE
->>
->> -#define __CMPWAIT_GEN(sfx)						\
->> -static __always_inline void __cmpwait##sfx(volatile void *ptr,		\
->> -				  unsigned long val,			\
->> -				  int size)				\
->> +/* Declared locally to avoid recursive include dependency */
->> +u64 arm64_wfet_deadline(u64 timeout_ns);
->> +
->> +#define __CMPWAIT_TIMEOUT_CASE(w, sfx, sz)				\
->> +static inline void __cmpwait_case_timeout_##sz(volatile void *ptr,	\
->> +					       unsigned long val,	\
->> +					       u64 timeout_ns)		\
->> +{									\
->> +	unsigned long tmp;						\
->> +	u64 ecycles = arm64_wfet_deadline(timeout_ns);			\
->
-> [Severity: Medium]
-> Does calling arm64_wfet_deadline() from cpu_poll_relax() ->
-> __cmpwait_relaxed_timeout() -> __cmpwait_case_timeout_##sz() violate
-> noinstr constraints when smp_cond_load_relaxed_timeout() is used from
-> cpuidle?
+that's not a helpful message. -E2BIG says the same.
 
-As the previous patch notes, I plan to handle this when adding the
-poll_idle() user (updated version of [1]).
+> +	if (attr->link_create.flags) {
+> +		bpf_log(log, "Invalid flags.\n");
+>  		return -EINVAL;
 
-  - note that the eventual intent is to use smp_cond_load_relaxed_timeout()
-    and thus arm64_wfet_deadline() from poll_idle() (which is noinstr).
-    Will do handling for noinstr in arm64_wfet_deadline() (and
-    __delay_cycles() etc) as part of that series.
+Each value but zero is refused. "flags must be zero." would make it clear.
 
-[1] https://lore.kernel.org/all/20250218213337.377987-1-ankur.a.arora@oracle.com/
+> -int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr)
+> +int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr,
+> +			     struct bpf_verifier_log *log)
+>  {
+>  	return -EOPNOTSUPP;
 
---
-ankur
+The stub has the log now and knows the reason.
+
+Consider something like:
+
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index c3f6364..efff0fa 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1646,7 +1646,8 @@ void bpf_trampoline_put(struct bpf_trampoline *tr);
+ int arch_prepare_bpf_dispatcher(void *image, void *buf, s64 *funcs, int num_funcs);
+ 
+ int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
+-				struct bpf_tracing_multi_link *link);
++				struct bpf_tracing_multi_link *link,
++				struct bpf_verifier_log *log);
+ void bpf_trampoline_multi_detach(struct bpf_prog *prog,
+ 				 struct bpf_tracing_multi_link *link);
+ void bpf_trampoline_set_flags(struct bpf_trampoline *tr, u32 flags);
+@@ -1764,7 +1765,8 @@ static inline bool bpf_prog_has_trampoline(const struct bpf_prog *prog)
+ 	return false;
+ }
+ static inline int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
+-					      struct bpf_tracing_multi_link *link)
++					      struct bpf_tracing_multi_link *link,
++					      struct bpf_verifier_log *log)
+ {
+ 	return -ENOTSUPP;
+ }
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 716330b..bf2aef5 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -2183,7 +2183,8 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 			 struct bpf_insn *insn_buf, int insn_idx, int *cnt);
+ 
+ /* Functions exported from verifier.c, used by trampoline.c */
+-int bpf_check_attach_btf_id_multi(struct btf *btf, struct bpf_prog *prog, u32 btf_id,
++int bpf_check_attach_btf_id_multi(struct bpf_verifier_log *log, struct btf *btf,
++				  struct bpf_prog *prog, u32 btf_id,
+ 				  struct bpf_attach_target_info *tgt_info);
+ 
+ /* Functions in fixups.c, called from bpf_check() */
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index 21d4608..93fead8 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -1724,7 +1724,8 @@ static void bpf_trampoline_multi_attach_rollback(struct bpf_trampoline *tr)
+ 	for_each_mnode_cnt(mnode, link, link->nodes_cnt)
+ 
+ int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
+-				struct bpf_tracing_multi_link *link)
++				struct bpf_tracing_multi_link *link,
++				struct bpf_verifier_log *log)
+ {
+ 	struct bpf_tracing_multi_data *data = &link->data;
+ 	struct bpf_attach_target_info tgt_info = {};
+@@ -1737,9 +1738,11 @@ int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
+ 	for_each_mnode(mnode, link) {
+ 		rollback_cnt = i;
+ 
+-		err = bpf_check_attach_btf_id_multi(btf, prog, ids[i], &tgt_info);
+-		if (err)
++		err = bpf_check_attach_btf_id_multi(log, btf, prog, ids[i], &tgt_info);
++		if (err) {
++			bpf_log(log, "Cannot attach to btf_id %u.\n", ids[i]);
+ 			goto rollback_put;
++		}
+ 
+ 		key = bpf_trampoline_compute_key(NULL, btf, ids[i]);
+ 
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index ce11e78..ce7f530 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -24420,7 +24422,8 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
+ 	return 0;
+ }
+ 
+-int bpf_check_attach_btf_id_multi(struct btf *btf, struct bpf_prog *prog, u32 btf_id,
++int bpf_check_attach_btf_id_multi(struct bpf_verifier_log *log, struct btf *btf,
++				  struct bpf_prog *prog, u32 btf_id,
+ 				  struct bpf_attach_target_info *tgt_info)
+ {
+ 	const struct btf_type *t;
+@@ -24447,10 +24450,10 @@ int bpf_check_attach_btf_id_multi(struct btf *btf, struct bpf_prog *prog, u32 bt
+ 	tname = btf_name_by_offset(btf, t->name_off);
+ 	if (!tname)
+ 		return -EINVAL;
+-	t = btf_attach_func_proto(NULL, btf, btf_id);
++	t = btf_attach_func_proto(log, btf, btf_id);
+ 	if (!t || !btf_type_is_func_proto(t))
+ 		return -EINVAL;
+-	err = btf_distill_func_proto(NULL, btf, t, tname, &tgt_info->fmodel);
++	err = btf_distill_func_proto(log, btf, t, tname, &tgt_info->fmodel);
+ 	if (err < 0)
+ 		return err;
+ 	if (tgt_info->fmodel.ret_size > 8 &&
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index a3964d7..a7954e0 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -3890,7 +3890,7 @@ static void ids_swap_r(void *a, void *b, int size __maybe_unused,
+ 	swap(*id_a, *id_b);
+ }
+ 
+-static int check_dup_ids(u32 *ids, u64 *cookies, u32 cnt)
++static int check_dup_ids(u32 *ids, u64 *cookies, u32 cnt, struct bpf_verifier_log *log)
+ {
+ 	void *data[2] = { ids, cookies };
+ 	int err = 0;
+@@ -3904,6 +3904,7 @@ static int check_dup_ids(u32 *ids, u64 *cookies, u32 cnt)
+ 
+ 	for (int i = 1; i < cnt; i++) {
+ 		if (ids[i] == ids[i - 1]) {
++			bpf_log(log, "btf_id %u is in tracing_multi.ids twice.\n", ids[i]);
+ 			err = -EINVAL;
+ 			break;
+ 		}
+@@ -3935,15 +3936,16 @@ int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr,
+ 		return -EINVAL;
+ 	}
+ 	if (cnt > MAX_TRACING_MULTI_CNT) {
+-		bpf_log(log, "tracing_multi.cnt is too large.\n");
++		bpf_log(log, "tracing_multi.cnt %u is above the limit %u.\n",
++			cnt, MAX_TRACING_MULTI_CNT);
+ 		return -E2BIG;
+ 	}
+ 	if (attr->link_create.flags) {
+-		bpf_log(log, "Invalid flags.\n");
++		bpf_log(log, "flags must be zero.\n");
+ 		return -EINVAL;
+ 	}
+ 	if (attr->link_create.target_fd) {
+-		bpf_log(log, "Invalid target_fd.\n");
++		bpf_log(log, "target_fd must be zero.\n");
+ 		return -EINVAL;
+ 	}
+ 
+@@ -3969,7 +3971,7 @@ int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr,
+ 		}
+ 	}
+ 
+-	err = check_dup_ids(ids, cookies, cnt);
++	err = check_dup_ids(ids, cookies, cnt, log);
+ 	if (err)
+ 		goto error;
+ 
+@@ -3998,7 +4000,7 @@ int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr,
+ 	link->cookies = cookies;
+ 	link->fexits = fexits;
+ 
+-	err = bpf_trampoline_multi_attach(prog, ids, link);
++	err = bpf_trampoline_multi_attach(prog, ids, link, log);
+ 	kvfree(ids);
+ 	if (err) {
+ 		bpf_link_cleanup(&link_primer);
+@@ -4019,6 +4021,7 @@ error:
+ int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr,
+ 			     struct bpf_verifier_log *log)
+ {
++	bpf_log(log, "This kernel does not support tracing_multi.\n");
+ 	return -EOPNOTSUPP;
+ }
+ 
