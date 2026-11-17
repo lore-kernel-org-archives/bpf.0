@@ -1,57 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794942151;
-	b=ONJeBYIAc0h+GFYbOeUp3VUTemgh2fRXWTUiC1K2E7k0ZXART946ha0WvRnzXZVvYoAC
-	 4dnVr1KcJGY3NZxIrcAxvKcxOHhubQPq7YaihBSUYellfOhl1bvPRn58RyX0ro8peT8wu
-	 i71rZuT6HgPJNL/TYhmsJOVcg3DHVszLcjJXfXrXnKuxOtpMmscF1Sw/DyQtoHlaEod19
-	 rRHyNoMi8RsaNksYFIG2Amy/hBebtnAwx09nYwqQcVCt9S8WyJOIiH6Xnt02uzBPyJj5E
-	 F7z7VsL3AzcRv2mRNb/URlIURt9qFv4KYC7oPnN8hfKL4dTQ9IsSPi1e6iiuTEwgsQQ==
+	t=1794942152;
+	b=dC3iM0baM0Xq0+HIVgQuO9iymw9A06XmQa3oS5mQwhQM/X3AaSPXYBz6cVwBAPgzwAH6
+	 xxV8uNm/qJLpwD3TcUZURcGRmfeq5zyY25QsPLzohzNm+dMKVReMkCgdXWelrmzT5vkat
+	 26F6rQ+4/K89fX4BjiyjfH45vznjLtRkYIimqOn7YRhC/E9PnezIN13bnp+MQQck4hBvl
+	 dauBacm03yO0M9p87iFvh3tcfv7zM/ILcg8YrbDpGL3cfHlSHUi6D/OxEq4Qn1wYC0USv
+	 3FyMoyy4wTGlEyI4HxRw1n1DvJAAEwB1/I9mswmnryUUgZ3WFDa0F17amfonQU/m4rA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794942151;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794942152;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=oWuKKdSkyE+20Q/Vozl4QSvd0BV8EIG0iBEggAImaWc=;
-	b=zwC6+4rNosdcmP8HdFf3xM7I+N6OESqiqA3rqNbD1TZ/qrDzaJdKcKCrpuTONlqsOC3l
-	 P8v3CYq8DWyc0iTfBpQg4GnwriH0PNCl5cSjlQQ36B2GhAjYWe6LCFizFlriSKAE4/SW/
-	 YTBNKxHSCszG2TlCotYJ6MtcoRKe9nqFMB8KLUB2bjLrsdAtuPFyO4+emfei7EZLanOwg
-	 kC3oFZuj6dL6bkb/2zC5lkD5N+fmddV/NzvQORfRZUTlPFug36eNKeJF91jLTgh9II/eP
-	 rVjz4XSt1GbM1/dIDdR9dKMFs9l5aVF2FhqcclyiXmImol0u59etP1TQwwhv9GA54Fg==
+	bh=GlBIhRY3Akk9PwEAdoz2L3EtKZsCS5JmgcAXMjTju5s=;
+	b=5F0vwoqwb5jA1qLgbvabQzIUNbuVrGNHaLX7m8vxxpuN/woBbS74LKO+mwzzkt/ir6rD
+	 gjhm0vLTscaZSIc/eByrZawwynWNgGZwCF8gRqDfZvfpYtJUVJi8zz5DsOwjelsetod/y
+	 xYXqFuamHJ/rXYePjC+FeDvyR+ehqoj0yEEVuKGBAP7rd7fvIrvps3yUvWTTlhI6a0rxC
+	 Nn2ECW9RyEB3/2hMzQ40655UdRn2S9seaFlyTFW2WyLXZhedxvNpfuoemTnJ/sx47zoYY
+	 y8X1MyArt+1LJijQMlqwB8zZUNTcOReM+P5VPh2UUJiWWhKSrU4m87vkDkhVmqtGkJA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=idSt9OSA;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FOiM6urS;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 696AD606A335
-	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 19:02:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1104C606A330
+	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 19:02:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=idSt9OSA
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FC8A1F000C4;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FOiM6urS
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC1651F000C5;
 	Tue, 17 Nov 2026 19:02:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1794942151;
-	bh=oWuKKdSkyE+20Q/Vozl4QSvd0BV8EIG0iBEggAImaWc=;
+	bh=GlBIhRY3Akk9PwEAdoz2L3EtKZsCS5JmgcAXMjTju5s=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=idSt9OSAvqhNmOFnHJLbwCYvX5zIbGdzZHKd/t1TVkdnlzBBA6jwOfvdZP8m4ygoc
-	 jKRZc7onu8LBVc0kacnpjlDp3HdiOkWYug4TiZu2XvbZ4anpowW1P9ddhgHB8v4ckB
-	 qCAKSglTmnATMl0LztcRDqcRtr7YWf0xoPKpiZrvNnDRHOK/BAqpFX6YvyNyQGUScn
-	 +2voVMOmNM2mEVGcjbapSylNimwF83n5myjg1Z3k9xobcHbPOU0DfkNEJxxuRBEB6A
-	 S8WhYAqAoJnfgQlm13hkHYTkr1UDbwpbCnVgmAE3Dqj9E3tDTHzQ3aIbZ7B1h7JhI3
-	 oOv3m1SRykZ2w==
-Message-ID: <sashiko-outbox-219424@kernel.org>
+	b=FOiM6urSdbDa6+EGKDZ/n6TQ/ggBxcbVXn9BZCuGeb07ltQXgOAPPouAcu154ElEh
+	 LLarwsrgI8pPI41aa91m//zw56jJlXa2EZQO5UBVW5JGH7uLk93bQ5/dG83rqLJ8Fl
+	 nYPbLFiWK8zjpD+U8dHW7hysakCkTqBXVCDwJ8JUUfGo79w9qV1yIHbLaGuyA0bl/h
+	 6guRJs7RDsiJQ927GlnhOgAguqHB2HkoiKqU62jYBtE3ihR2VEbpZLZ23kl7rspz+v
+	 Uqs0jlZR26l5ZHoDIyxKsJsVN2IaPsdpRpvyHIEfWi/TqOYpTmkZsAGm62DqctLXog
+	 d6M1Xg79uKQPQ==
+Message-ID: <sashiko-outbox-219425@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v4 3/4] netfilter: nft_fwd_netdev: drop the
- stale dst when steering to a device
+Subject: Re: [PATCH net-next v4 4/4] bpf: drop the stale dst when
+ redirecting to an explicit nexthop
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jamal Hadi Salim" <jhs@mojatatu.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <CORE-9NOG.v4.r0.20261116135311-3@mojatatu.com>
+In-Reply-To: <CORE-9NOG.v4.r0.20261116135311-4@mojatatu.com>
 References: <CORE-9NOG.v4.r0.20261116135311@mojatatu.com>
- <CORE-9NOG.v4.r0.20261116135311-3@mojatatu.com>
+ <CORE-9NOG.v4.r0.20261116135311-4@mojatatu.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 17 Nov 2026 19:02:30 +0000
+Date: Tue, 17 Nov 2026 19:02:31 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -63,62 +63,66 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue to consider:
-- [Low] netfilter: nft_fwd_netdev: missing Fixes trailer in commit
+- [Low] bpf: missing Fixes trailer for commit ba452c9e996d in commit
   message
 --
 
-commit 8509c3096bc9c51dfee6568ce51166947c0741cf
+commit 1e3c3c3419fd5f480aa33958ee629429b62a0379
 Author: Jamal Hadi Salim <jhs@mojatatu.com>
 
-> netfilter: nft_fwd_netdev: drop the stale dst when steering to a device
+> bpf: drop the stale dst when redirecting to an explicit nexthop
 >
 > This is a followup of the review of the teql arp-queue fix as reported
 > by Sashiko.
 >
 > The issue:
-> The neighbour variant of fwd rewrites skb->dev to the configured output
-> device and calls neigh_xmit(), but leaves the skb's dst untouched. If that
-> device's neighbour for the configured nexthop is incomplete, the packet is
-> parked on the neighbour's arp_queue while the stale dst still describes t=
-he
-> device the packet was routed through. Draining the queue re-looks the
-> neighbour up from that dst, so the frame is built with the routed device's
-> link-layer header and then transmitted on the configured device. The pack=
-et
-> leaves with another device's addresses.
+> __bpf_redirect_neigh_v4() and __bpf_redirect_neigh_v6() install a dst for
+> the redirect target only when the program lets the helper do the FIB
+> lookup. With BPF_F_NEXTHOP the program supplies the nexthop, the lookup is
+> skipped, and whatever dst the packet arrived with stays attached while
+> bpf_out_neigh_v{4,6}() switch skb->dev to the target device. If that
+> device's neighbour is incomplete the packet is parked on its arp_queue wi=
+th
+> the original route's dst; draining the queue re-looks the neighbour up fr=
+om
+> that dst and builds the frame with the original device's link-layer heade=
+r,
+> then transmits it on the target device.
 >
 > The Fix:
-> Release the dst before the device switch. Both inputs the neighbour
-> transmission needs, the device and the nexthop, are supplied by the rule,
-> so the queue drain keeps the parking neighbour and the frame carries the
-> configured device's addresses.
+> Release the dst when the nexthop is supplied, so the queue drain keeps the
+> target device's parking neighbour and the frame carries that device's
+> addresses.
 >
 > The release goes through skb_dst_drop_keep_metadata(), so encapsulation
 > parameters a route carries are handed over to a metadata dst instead of
-> being lost, and a metadata dst already on the packet is left in place. If
-> that copy cannot be allocated the packet is dropped, never sent with the
-> stale route.
+> being lost, and a metadata dst already on the packet is left in place. Bo=
+th
+> wrappers take their existing drop path when that copy cannot be allocated,
+> so a packet is never sent with the stale route.
 >
-> What the configured device's transmit path still sees:
+> What the target device's transmit path still sees:
 > The released dst is the route of the device the packet arrived on, and the
-> packet leaves through another one, so consumers of that route on the way
-> out lose it:
+> packet leaves through the redirect target, so consumers of that route on
+> the way out lose it:
 >
 >   - a tunnel with no configured remote takes its outer endpoint from the
->     route: ip_tunnel_xmit() reads the route's next hop, and ip6_tnl_xmit()
->     and sit derive it from the route as well. A steered packet whose route
->     carried no encapsulation parameters is left with no dst, so it is
->     dropped and counted as a transmit error instead of being encapsulated
->     towards an endpoint that belongs to another device's path.
->   - the route realm goes with it: a realm is a property of the route the
->     packet took, so nft meta rtclassid and nft rt classid stop matching on
->     that packet, and bpf_get_route_realm() returns 0.
+>     route, as it does for the netfilter producer: ip_tunnel_xmit() reads
+>     the route's next hop, and ip6_tnl_xmit() and sit derive it from the
+>     route as well. A redirected packet whose route carried no encapsulati=
+on
+>     parameters is left with no dst, so it is counted as a transmit error
+>     and dropped instead of being encapsulated towards an endpoint that
+>     belongs to another device's path.
+>   - the route realm goes with it, so nft meta rtclassid, nft rt classid
+>     and bpf_get_route_realm() stop matching on that packet.
 >   - encapsulation parameters are not lost: they moved onto the metadata
->     dst, so a tunnel or an xfrm interface downstream still finds them.
+>     dst, so a tunnel or an xfrm interface downstream still builds its out=
+er
+>     header.
 >
 > Taking the outer endpoint or the realm from another device's route is the
-> same cross-device reuse this patch removes at the neighbour lookup: those
-> values were never the configured device's to use.
+> same cross-device reuse this patch removes at the neighbour lookup.
 >
 > One consumer is older than this series. When a tunnel cannot take an
 > endpoint from the skb, ip_tunnel_xmit() and ip6_tnl_xmit() fall back to
@@ -133,15 +137,13 @@ et
 > Two network namespaces, A (10.10.0.1/24) and B (10.1.0.1/24) in one, their
 > veth peers in the other with only A's peer addressed (10.10.0.2/24) so B's
 > nexthop cannot be resolved by ARP. Resolve A's neighbour for 10.10.0.2 as
-> permanent, then load this ruleset on A:
+> permanent and attach a cls_bpf egress program to A, with vb the index of =
+B:
 >
->     table netdev t {
->             chain c {
->                     type filter hook egress device va priority 0
->                     policy accept
->                     fwd ip to 10.1.0.2 device vb
->             }
->     }
+>     struct bpf_redir_neigh nh =3D { .nh_family =3D AF_INET,
+>                                   .ipv4_nh =3D htonl(0x0a010002) };
+>
+>     return bpf_redirect_neigh(vb, &nh, sizeof(nh), 0);
 >
 > Send one packet to 10.10.0.2. It is parked on B's incomplete neighbour
 > for 10.1.0.2; once that neighbour becomes valid the frame leaves B
@@ -153,16 +155,17 @@ et
 > Link: https://lore.kernel.org/netdev/QDISC-6HS9.v3.r0.20261103062649-2@mo=
 jatatu.com/
 > Link: https://lore.kernel.org/netdev/avTfQjFQYR2NNdRg@chamomile/
-> Reviewed-by: Pablo Neira Ayuso <pablo@netfilter.org>
 > Reviewed-by: Victor Nogueira <victor@mojatatu.com>
 > Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
 
 [Severity: Low]
-Since this fixes a bug in nft_fwd_neigh_eval(), should it include:
+Since this fixes the explicit nexthop path in __bpf_redirect_neigh_v4()
+and __bpf_redirect_neigh_v6(), should the commit message include a Fixes
+tag?
 
-  Fixes: d32de98ea70f ("netfilter: nft_fwd_netdev: allow to forward packets=
- via neighbour layer")
+  Fixes: ba452c9e996d ("bpf: Fix bpf_redirect_neigh helper api to support s=
+upplying nexthop")
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/CORE-9NOG.v4.r0.202=
-61116135311@mojatatu.com?part=3D3
+61116135311@mojatatu.com?part=3D4
