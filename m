@@ -1,107 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794935239;
-	b=szb+ZgqdzVDNYJoW2RypYp1aZ+8STELr0RJqiUakvxBKV/XPtzgpAujW4xolGYAvtE06
-	 tf2jXAfePvhUv7FlmyJzRYOG7eFdg5jpi7v5LN8+nUODelb4uNYNKcF8m1GPNNlTxzBS3
-	 Q7M6PjO/JDkaeZW+MPMdln99j2vkQ4hSdRfu6D6QjPyzQGGPRqmUyKvV84Lk7x+S8rurq
-	 4GpJGdWEK13tjY5VS4eNxWLs8ljsz6eTvL2eG+4mSDR2O8JCzEmojMdo5QY+WbeVH+9EU
-	 VTJXAfox712CbUxvR+XhRphlGsq5/eKwMZ0pQZCF9/RQlE12tWlgNG5+Hjer/gxULmw==
+	t=1794935647;
+	b=heMBlxDOUa+Xv6b5dIR8ZXUL34Hq5hZvzRZEzcugHzyB1zWSs0RT+Nk3k62/1hb6NhNq
+	 Seu0S+3mf1U2yXG9/3P0tTDUC6z6j+Lzl13+SIUTLX7OQlU1/90UpZ3PttduiycrFtkuJ
+	 VRxlI1ptXE0EuvEUz6ev0GUqmZCAbM8RKhuxOsVneRhutBEAUdE2gmp1LzqKKjTjlNsfM
+	 fIHAVQHfORd7JJosWrXr5UC+iMNmSjqKgY3eMP5S9y3gy9/QNsouqHwtKjgwbX7bDuwtn
+	 Lba0W8q9NYZ/98P9JUUk9ezS1WuYu64i4MwIeqaLgBRLKofutS2MSJ6AkESPt/FowMg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794935239;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=HDIw7LkPraP3MsfSq3lN0iboBUNVAlrEnjCuPbmeHg0=;
-	b=Tbc2fKr2GJOKd26X/WKP9+gudeu1y7nZ7Ngs2KxXtP8DKdPHtu77WmRA2/yZxrMiF0tZ
-	 SC9vrcXdH/JLgrGVlTPNU0W83G1pj2pnqDPLK0gk+knEmxkivndAsaP/Hca8VvtXUUYUY
-	 0IZ/UXHd8zmuKxOM8DJONfT63VQ/1PfSvb3nRjhmklhsQZ+Q3mf8kJVpGy3WdF/mHYlxT
-	 lNI6+V/hBWbPMdH9usjzOQkdd05NXR0uXGyYnQLrf+DJZDLqMkteJtyzymDEnDfkdd5jU
-	 hvh5SFmJpTl0x9bODCbMzdNluUwlzJauyzUOFzEzgpd9HMxLs1zrNV2GxGchvnXH4GA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794935647;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
+	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=NRyU0VXlTkdP1/qvlbXfSzmeB6PM6cbuXEo4V1pctGY=;
+	b=4o0M1A629nW4WQ2646DyW7W/Q7mgkWZRFblBxRmcjlw6D7wvhQLOVKSsHCPln8jmcrj7
+	 Pwzo2K8Cn6IBulPYvG6rXTexlFCZPZzdMgEB6I8KxT6mbtSAqJ+RIp6I9ECVmaRhdP5Eh
+	 j7Iy9+1Wso4zXkPVLPKZmKH0ARlT4sV3k/8zi1ng1ucN1PerYYS11SgKQ6nNUXuIbvw8N
+	 WSDj1FxA0gew55UThnK6chOb2d3ODj8WgH69PTb2VD7/HERN9DNEVh14XN2LviYnQIxed
+	 5TqXaMgPG5vI70zyyEzenzi0EBtnwUKUi/lIurSb12KQ+GI4lQEhnxLDX+E4AXKgmvw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Yt84R+mR;
-	arc=none smtp.remote-ip=209.85.216.41
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="TNwd9t9/";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2C15606A31C
-	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 17:07:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B2C15606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85ECB606A31C;
+	Tue, 17 Nov 2026 17:14:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Yt84R+mR
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3b3be948e60so410165a91.3
-        for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 09:07:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794935238; x=1795540038; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=HDIw7LkPraP3MsfSq3lN0iboBUNVAlrEnjCuPbmeHg0=;
-        b=Yt84R+mRj17Vuxy9vCcizubVYtzU50MDSATSlafYcv7qpRjQv/rCvbTdhu91t/HI2h
-         umhUvo9sssSp2MbJK19YfIJfbaHHJY793yfi/5vfcYZCpijnrzBZ1XmEjVRAcUerMLzf
-         puasXqREteE0r2y4rj8AMYR2YDwugW+rXLnvQyRTebMFwG1OruPLFjvQevFTFaRmv0DG
-         /QuskO9gLF/qlsR5iXhZGJon0c3FY2WjmcLAL7CeuJxfsn6w2VkdqIhaXPzGyA3o8BFZ
-         EK/ey1U1xs3Y4MmN8l1h06vXq6qzLM23hpoWH/kwbmMzC8W0dZzMrXKXfTFkn7U/ERZj
-         G/mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794935238; x=1795540038;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=HDIw7LkPraP3MsfSq3lN0iboBUNVAlrEnjCuPbmeHg0=;
-        b=uPxAQPsrgFFsx9Hxa89PXbwCN5gbYkeec8TLYlNI4n66D2XNqwxhYpnEfPqBgLeCla
-         cblzrSy6iSeKIWJt2G1a9Ntkmm6cj/RP8ysxhPMZc6TIa0WM0FWOMh5P5j7gWyfnhzbv
-         ZSQ0jmV8EicjvKQYf+xrRHdhCJ7ENEoGjqwF7+vKFQdwoIB7zRJi6kEWuJP4IaNiuSV3
-         /9Ymk02rvo5i+Vboq4JhJMjzavLAIKQYGXGBpT5zxvaWYnAyBHpm4TywnAa+KI5deNWF
-         LFM1XW9QeYdq8v5EMFlr34PHEzFwsZ8gEsJiukP58W2u4tMKWXD1mRPrhSeB/mJPlVT9
-         I9nA==
-X-Forwarded-Encrypted: i=1; AL+hErFq6HvX5vWdfgGPtxM4d08x61DAYf3YUUtOEbDQc5khR0cJmETLfoq8sU80U1EUizMMov8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9r6q1eqcqSNRAkFG5IugDw2kOh1FcLxd7b2XZi9BEeD3Azb/JW
-	sBuvowGgvAKkzqR9bYSDs/BChLs764phN0E23h2CfDPrTttn7VzDkUJ7
-X-Gm-Gg: AZFdTZe+69NNxfnOSQUpci3DKssX2tymi4o8MCNhu2x0x/N4B6t2LgSur5eLF3o7nem
-	LASyggw1k5fr/56NbXCdXnZtavvIMap15Ppdk7pm2MWewKiqHM9yvZkKE2SHzaj/bSCcfa6bCqk
-	SnaVxOlTOY2I03Z9U8qjhP9QTfa3apAJ6M8ImPDAvdqjuBpMPruoexnucvtKTolGwlu3trwFm+T
-	qHD+yxLfkM+8Jm2XWWONOV+6eQ628dA6WlG5W1mnDfri/TrjcpaWOGkxHlX+FqFxgz7vhdWKwLx
-	4p/20vAFYA7emOiwM/iBW2Lc4q2TMwF7aDCvtWXRh9eacKbvnVbwICokXUY6aeBgHZDkcxd0lfy
-	zrJYDMozuXeil/MKXLlo/LCeeRExbghVJ16pvOtJeb/ENi7c9U7SjW7FB8YBY7+JRQ22JKjQmQb
-	jFLK43xqOJ8TqqFa+MGs1ipjtufdY1xrpAosUbJtZGETdPxrQgAGm8qUfgOurLw2IbWs48MPtfs
-	/Ot1yWwUo4HoRPbA0DWpTNkZ1fIPteZNRDOquy9qrRb+GDVbkcfb9WJDuU6DLvyqQ/f0OXNzDtW
-	LtVFuTp0KTdk+e0mloUcIT5ccC2agXstAp80wvD9f5mPK1bZKu4fHHQO2qKxQ0kCCNnb7pMP1IA
-	OFnhy6T0KjzyRNQnx
-X-Received: by 2002:a17:90b:4cc4:b0:3b3:b5e5:3592 with SMTP id 98e67ed59e1d1-3b3d06a2559mr99784a91.9.1794935237917;
-        Tue, 17 Nov 2026 09:07:17 -0800 (PST)
-Received: from localhost (218-35-178-218.cm.dynamic.apol.com.tw. [218.35.178.218])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b3abbad970sm4925368a91.4.2026.11.17.09.07.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Nov 2026 09:07:16 -0800 (PST)
-From: Kurt Lin <lylin1023@gmail.com>
-To: Hui Zhu <hui.zhu@linux.dev>,
-	Hui Zhu <zhuhui@kylinos.cn>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Barry Song <baohua@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Kurt Lin <lylin1023@gmail.com>
-Subject: [PATCH bpf-next v2] selftests/bpf: Fall back when memcg_proactive_reclaim data lands in shmem
-Date: Wed, 18 Nov 2026 01:07:04 +0800
-Message-ID: <20261117170704.1146730-1-lylin1023@gmail.com>
-X-Mailer: git-send-email 2.56.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TNwd9t9/
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4F061F000C5;
+	Tue, 17 Nov 2026 17:14:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794935647;
+	bh=NRyU0VXlTkdP1/qvlbXfSzmeB6PM6cbuXEo4V1pctGY=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=TNwd9t9/XGKlncwoxJPsyje6+O4dpP5ku58Mpp7QpykW21hRU24e7OyhFQOFLciD3
+	 29wDKM5s9fQuNCM01MGCMTwcBZHTKwQdsNtqa7KbaUKomgmrOjw4ONVzwknMHgSKWG
+	 1/ngYLQ7fkk6zwnEFmvEkhsBFU0rrWBDVK01KIhZAY8wwmSD8BfUnHzr3O6ECtL3IE
+	 u1gWEaoZknei2o6RPefiK6Y9Pv118lQd9Tbgj+OxIU/l4ZeNMJUeOk7Seiwb4Z23fa
+	 avUcbgeGAljAO6nP3GxtzkHh3NhCflawy+bc6tSkh2Am7hoM2GVwuD99dWB//R/78k
+	 9Tnxc6+M677Ag==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>, Magnus Karlsson
+ <magnus.karlsson@intel.com>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jonathan Corbet
+ <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
+ <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>,
+ kernel-team@meta.com, Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard
+ Brouer <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Pavel
+ Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, Andrii
+ Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar
+ Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
+ <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, io-uring@vger.kernel.org,
+ Mina Almasry <almasrymina@google.com>
+Cc: "Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>, Weiming Shi
+ <bestswngs@gmail.com>, Nikolay Aleksandrov <razor@blackwall.org>, David
+ Wei <dw@davidwei.uk>, Alexander Lobakin <aleksander.lobakin@intel.com>,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, Stuart Clark
+ <stuclar@meta.com>
+Subject: Re: [PATCH net-next v1 11/11] eth: fbnic: Support AF_XDP page pool
+ zero copy
+In-Reply-To: <6303b161-0f35-47ee-ab70-ebd4e802ae09@gmail.com>
+References: <20261110102039.1002605-1-bjorn@kernel.org>
+ <20261110102039.1002605-12-bjorn@kernel.org>
+ <6303b161-0f35-47ee-ab70-ebd4e802ae09@gmail.com>
+Date: Tue, 17 Nov 2026 18:14:04 +0100
+Message-ID: <87se0z1iub.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -111,268 +82,59 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-workload_dir() keeps the data file off tmpfs because shmem cannot be
-reclaimed without swap. But statfs() only sees the top of a stacking
-filesystem: with /tmp on overlayfs over tmpfs, as in virtme-ng guests,
-the check passes and all 32 MiB are still charged as shmem. Whether the
-test then passes depends on unrelated page cache in the cgroup; in a
-full test_progs run it fails with:
+Dimitri Daskalakis <dimitri.daskalakis1@gmail.com> writes:
 
-  test_memcg_proactive_reclaim:FAIL:reclaimed unexpected reclaimed: actual 0 <= expected 0
+> On 11/10/26 2:20 AM, Bj=C3=B6rn T=C3=B6pel wrote:
+>> Header and payload rings share one provider page pool, so refills even
+>> them out, and a short pool does not starve one of them. Payload
+>> buffers start at chunk offset 0, and the UMEM headroom rules require
+>> headroom only in the first buffer. A chunk is one 4 KiB device page,
+>> also with larger kernel pages, so rings fed by the provider post one
+>> descriptor per chunk.
+>>=20
+> [...]
+>>  	qt->sub0.page_pool =3D pp;
+>> +	fbnic_bdq_set_page_size(&qt->sub0, xsk ? rx_page_size : PAGE_SIZE);
+>>  	qt->hdr_max =3D 0;
+>>  	if (!page_pool_supports_frag(pp))
+>> -		qt->hdr_max =3D fbnic_whole_hdr_max(FBNIC_RX_HROOM);
+>> +		qt->hdr_max =3D fbnic_whole_hdr_max(qt->rx_hroom);
+>>  	if (netif_rxq_has_unreadable_mp(fbn->netdev, rxq_idx)) {
+>>  		pp_params.order =3D get_order(rx_page_size);
+>>  		pp_params.max_len =3D rx_page_size;
+>>  		pp_params.flags |=3D PP_FLAG_ALLOW_UNREADABLE_NETMEM;
+>>  		pp_params.dma_dir =3D DMA_FROM_DEVICE;
+>>=20=20
+>> +		pp =3D page_pool_create(&pp_params);
+>> +		if (IS_ERR(pp))
+>> +			goto err_destroy_sub0;
+>> +	} else if (xsk && !xsk_pool_uses_sg(xsk)) {
+>> +		pp_params.flags &=3D ~PP_FLAG_MEM_PROVIDER;
+>> +		pp_params.rx_roles =3D 0;
+>> +		pp_params.max_len =3D PAGE_SIZE;
+>> +		rx_page_size =3D PAGE_SIZE;
+>> +
+>>  		pp =3D page_pool_create(&pp_params);
+>>  		if (IS_ERR(pp))
+>>  			goto err_destroy_sub0;
+>
+> Maybe I'm misunderstanding, but why is it necessary to create a new page =
+pool for
+> sub1 if !sg? All frames should be sent to sub0, and the buffers in sub1 s=
+hould sit idle.
 
-After writing the file, check memory.stat and move on to the next
-candidate directory if most of the data was charged as shmem; skip only
-when none is left. Give each candidate its own cgroup so that stale
-stats from a previous attempt cannot interfere, and poll memory.stat
-until the write shows up, as reading it does not force a stats flush.
-Fail the test if memory.stat cannot be read or never shows the write.
+(BTW, the reply to your other mail didn't show up on lore for some
+reason, but I hope you got it! If not, holler!)
 
-An AI coding assistant (Claude) was used to find and analyze the
-failure and to draft the fix and this changelog.
+You're right, it is not needed. I'll fix this in the next version. Every
+frame fits in one chunk on the header ring, and the device drops bigger
+frames. With SG, both rings share one pool.
 
-Fixes: 0f9b1e9ef584 ("selftests/bpf: Add bpf_proactive_reclaim test")
-Signed-off-by: Kurt Lin <lylin1023@gmail.com>
----
+I first tried sharing the pool for non-SG too. But then up to 255 chunks
+sit unused in the payload ring :P
 
-Notes:
-    Changes in v2:
-    - Try the next candidate directory instead of skipping right away, with
-      a fresh cgroup per candidate (sashiko)
-    - Poll memory.stat until the write is visible: reading it does not force
-      a flush, so it can still show 0 right after the write when many CPUs
-      are online (sashiko)
-    - Fail the test instead of silently running on when memory.stat cannot
-      be read or parsed, or never shows the write (Hui)
-    - Comment on the FILE_SIZE / 2 threshold and print the measured shmem
-      charge (Hui)
-    - Subject was "Skip memcg_proactive_reclaim when data lands in shmem"
-    
-    Tested in a virtme-ng guest without swap:
-    - /tmp on overlayfs over tmpfs: falls back to "." and passes
-    - /tmp on tmpfs: uses "." and passes
-    - both on overlayfs over tmpfs: skips
-    - full test_progs run with /tmp on overlayfs over tmpfs: passes
-    
-    To exercise the polling, FILE_SIZE was temporarily cut to 2 MiB in a
-    128-vCPU guest, which keeps the write below the flush threshold.
-    memory.stat read 0 right after the write and the data showed up after
-    2-6 s, once the periodic flusher had run.
-    
-    v1: https://lore.kernel.org/bpf/20261113180159.602033-1-lylin1023@gmail.com/
 
- .../bpf/prog_tests/memcg_proactive_reclaim.c  | 161 ++++++++++++++----
- 1 file changed, 125 insertions(+), 36 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c b/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
-index c22dcfabe856..23ca1075f260 100644
---- a/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
-+++ b/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
-@@ -19,6 +19,15 @@
- #define FILE_SIZE (32 * 1024 * 1024UL)
- #define BUF_SIZE (64 * 1024)
- 
-+/*
-+ * memcg stats are flushed lazily: reading memory.stat only flushes once
-+ * pending updates exceed MEMCG_CHARGE_BATCH * num_online_cpus(), so on a
-+ * large machine the write may only show up after the periodic flusher
-+ * (every 2s, later on a busy machine) has run.
-+ */
-+#define MEMCG_STAT_RETRIES		40
-+#define MEMCG_STAT_RETRY_DELAY_US	(250 * 1000)
-+
- struct reclaim_args {
- 	__u64 cgroup_id;
- 	__u64 size;
-@@ -32,18 +41,79 @@ struct reclaim_args {
-  * routinely run from a tmpfs working directory, so both candidates need the
-  * check.
-  */
--static const char *workload_dir(void)
-+static const char * const workload_dirs[] = { "/tmp", "." };
-+
-+static bool usable_dir(const char *dir)
- {
--	static const char * const dirs[] = { "/tmp", "." };
- 	struct statfs st;
-+
-+	return !statfs(dir, &st) && st.f_type != TMPFS_MAGIC &&
-+	       st.f_type != RAMFS_MAGIC && !access(dir, W_OK);
-+}
-+
-+static bool memcg_stat(const char *stat, const char *key,
-+		       unsigned long long *val)
-+{
-+	char needle[32];
-+	const char *p;
-+
-+	snprintf(needle, sizeof(needle), "\n%s ", key);
-+	p = strstr(stat, needle);
-+	return p && sscanf(p + strlen(needle), "%llu", val) == 1;
-+}
-+
-+/*
-+ * statfs() only sees the top of a stacking filesystem: when /tmp is an
-+ * overlayfs over tmpfs, as in virtme-ng guests, the check above passes but
-+ * the data still ends up as shmem. Wait for the write to show up in the
-+ * cgroup's stats ("file" includes shmem) and report how much of it is shmem.
-+ * Both keys are always present, so failing to read them is an error.
-+ */
-+static int read_shmem_charge(const char *cg, unsigned long long *shmem)
-+{
-+	static char buf[8192];
-+	unsigned long long file = 0;
- 	int i;
- 
--	for (i = 0; i < ARRAY_SIZE(dirs); i++)
--		if (!statfs(dirs[i], &st) && st.f_type != TMPFS_MAGIC &&
--		    st.f_type != RAMFS_MAGIC && !access(dirs[i], W_OK))
--			return dirs[i];
-+	for (i = 0; i < MEMCG_STAT_RETRIES; i++) {
-+		if (!ASSERT_OK(read_cgroup_file(cg, "memory.stat", buf,
-+						sizeof(buf)), "read memory.stat") ||
-+		    !ASSERT_TRUE(memcg_stat(buf, "file", &file), "parse file") ||
-+		    !ASSERT_TRUE(memcg_stat(buf, "shmem", shmem), "parse shmem"))
-+			return -1;
-+		if (file >= FILE_SIZE / 2)
-+			return 0;
-+		usleep(MEMCG_STAT_RETRY_DELAY_US);
-+	}
- 
--	return NULL;
-+	ASSERT_GE(file, FILE_SIZE / 2, "file in memory.stat");
-+	return -1;
-+}
-+
-+/* Charge FILE_SIZE of clean page cache to the current cgroup. */
-+static int write_data_file(const char *dir, char *path, size_t len)
-+{
-+	static char buf[BUF_SIZE];
-+	off_t off;
-+	int fd;
-+
-+	snprintf(path, len, "%s/memcg_proactive_reclaim_XXXXXX", dir);
-+	fd = mkstemp(path);
-+	if (!ASSERT_GE(fd, 0, "mkstemp"))
-+		return -1;
-+
-+	for (off = 0; off < (off_t)FILE_SIZE; off += sizeof(buf))
-+		if (!ASSERT_EQ(write(fd, buf, sizeof(buf)),
-+			       (ssize_t)sizeof(buf), "write"))
-+			goto err;
-+	if (!ASSERT_OK(fsync(fd), "fsync"))
-+		goto err;
-+
-+	return fd;
-+err:
-+	close(fd);
-+	unlink(path);
-+	return -1;
- }
- 
- void test_memcg_proactive_reclaim(void)
-@@ -55,35 +125,62 @@ void test_memcg_proactive_reclaim(void)
- 		    .ctx_in = &args,
- 		    .ctx_size_in = sizeof(args));
- 
--	char data_file[PATH_MAX];
--	static char buf[BUF_SIZE];
-+	char data_file[PATH_MAX], cg[64];
-+	unsigned long long shmem;
- 	__u64 cgroup_id;
--	const char *dir;
--	off_t off;
--	int cg_fd = -1, data_fd = -1, err;
-+	int cg_fd = -1, data_fd = -1, err, i;
-+
-+	if (!ASSERT_OK(setup_cgroup_environment(), "setup_cgroup_environment"))
-+		return;
- 
- 	/*
--	 * Both candidate directories can be unusable: tmpfs (initramfs-based
--	 * CI, for instance) or a read-only mount. That is an environment
--	 * limitation, not a test failure.
-+	 * Try each candidate in a cgroup of its own, so that the stats of one
-+	 * attempt do not leak into the next.
- 	 */
--	dir = workload_dir();
--	if (!dir) {
--		test__skip();
--		return;
--	}
-+	for (i = 0; i < ARRAY_SIZE(workload_dirs); i++) {
-+		if (!usable_dir(workload_dirs[i]))
-+			continue;
- 
--	snprintf(data_file, sizeof(data_file),
--		 "%s/memcg_proactive_reclaim_XXXXXX", dir);
--	data_fd = mkstemp(data_file);
--	if (!ASSERT_GE(data_fd, 0, "mkstemp"))
--		return;
-+		snprintf(cg, sizeof(cg), CG_PATH "_%d", i);
-+		cg_fd = create_and_get_cgroup(cg);
-+		if (!ASSERT_OK_FD(cg_fd, "create_and_get_cgroup"))
-+			goto out;
-+		if (!ASSERT_OK(join_cgroup(cg), "join_cgroup"))
-+			goto out;
-+
-+		data_fd = write_data_file(workload_dirs[i], data_file,
-+					  sizeof(data_file));
-+		if (data_fd < 0 || read_shmem_charge(cg, &shmem))
-+			goto out;
- 
--	cg_fd = cgroup_setup_and_join(CG_PATH);
--	if (!ASSERT_OK_FD(cg_fd, "cgroup_setup_and_join"))
-+		/*
-+		 * All or nothing: the file is either entirely shmem (tmpfs,
-+		 * possibly under a stacking filesystem) or not shmem at all
-+		 * (disk-backed), so half of FILE_SIZE is a safe midpoint.
-+		 */
-+		if (shmem < FILE_SIZE / 2)
-+			break;
-+
-+		printf("%s: %s is backed by shmem (%llu MiB charged)\n",
-+		       __func__, workload_dirs[i], shmem >> 20);
-+		close(data_fd);
-+		unlink(data_file);
-+		data_fd = -1;
-+		close(cg_fd);
-+		cg_fd = -1;
-+	}
-+
-+	/*
-+	 * No candidate is usable: tmpfs (initramfs-based CI, for instance),
-+	 * a read-only mount, or a stacking filesystem on top of tmpfs. That is
-+	 * an environment limitation, not a test failure.
-+	 */
-+	if (data_fd < 0) {
-+		test__skip();
- 		goto out;
-+	}
- 
--	cgroup_id = get_cgroup_id(CG_PATH);
-+	cgroup_id = get_cgroup_id(cg);
- 	if (!ASSERT_GT(cgroup_id, 0, "get_cgroup_id"))
- 		goto out;
- 
-@@ -91,14 +188,6 @@ void test_memcg_proactive_reclaim(void)
- 	if (!ASSERT_OK_PTR(skel, "open_and_load"))
- 		goto out;
- 
--	/* Charge FILE_SIZE of clean page cache to the cgroup. */
--	for (off = 0; off < (off_t)FILE_SIZE; off += sizeof(buf))
--		if (!ASSERT_EQ(write(data_fd, buf, sizeof(buf)),
--			       (ssize_t)sizeof(buf), "write"))
--			goto out;
--	if (!ASSERT_OK(fsync(data_fd), "fsync"))
--		goto out;
--
- 	args.cgroup_id = cgroup_id;
- 	args.size = FILE_SIZE;
- 	skel->bss->reclaimed = 0;
-
-base-commit: 0021f17128de5dc0b19f1a523f448df2440d8088
--- 
-2.56.1
-
+Bj=C3=B6rn
