@@ -1,60 +1,60 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.226.149.38
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1794911673;
-	b=KqTjMv6Jscd9ZwiFtxD9Fmz70054Tii41aGnkPsW3b/+ppTyNVShW0eJklbfjZ6RwNl/
-	 KKCKFlKEye+rU++4Iwel+FS4x/74zWAgri/Kw+JxCdBBk8lSnOcCMgoeCTXRpim7Dnb2c
-	 faPnoX3w+SgBgN5vFQh3JMq9evxdtXgN0ppc1KH9iCMhhq34bWGVCGIITVFEY2QCqpNs/
-	 fN1oyKrzF/W23hDFMSM4rOI6IFwIHjTy8Ea8Jo52MFaCoda9fNCsuCHRnIrnTZ02ZcJL6
-	 0vm6FYRF1xk/ElYnu7aKEN3fkOfSgVmc12HLHUJJ44jRNUBdpL8mUybQ0+9SnGVYSDg==
+	b=j8AHMLw2VYjKWQBcgU4gEtrKyQWVRUdNcmsMhXO3XgvpmJzYD0zikP97orGOWZ+foZNU
+	 jtKvwM6h21Ad1O77z1uuSpeOK6M6a2URPflrcOyR0gCPPEX+2Spy08FcYS77p5SkzNzwm
+	 sXbJhWT8+0Dslt+IPiKC0/HDpraTirMsaJEBWscXCQ+BoUSJsrsYDA1pQixKWXTDp1bit
+	 tSpymJbdv9vYpIEoQt3hUnGrm35jg4WQDq9a5C4BwiRAMUYS1c+pktRLBllcltm88LWqd
+	 TRVJfO//sJYaHHOohnvnT4gjhwVrSWB4PmsSSVU6BXynNuzMMvTZSTBfo413EupVB+A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1794911673;
 	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:To:Cc:
 	 Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=37iDBptCE2ZrJlMFxYJAk0bxOtV0FMRo/dCU28/YQmE=;
-	b=xEZ3wB5YWRWFlwIXuFxuydVst1zknRxiZtAZOO1P/gGukDQ5FXaOsI1eynhX7yViX//+
-	 /edUSN107ChosP9KzdY+fRplWv9WofQVdcikdcMLKhHT21jgWQjzY5dWnSgh7qG4AhrWs
-	 SyWcACMIunlvXhDt3GT/IMI77gh6RxjQMUmfCZS8Vidg+CFED/h3JwNiA9PMmPIYj/HVw
-	 H01NPE7osF8LRVBN0V6vvmtKd7ZzGCc7zvoEZH6am2PjSUgkxHsFIYcPavtIuQeWtW9oa
-	 aVi8xiZ9UCr6X4Ch+tps8qVBENSJVhNPAnt0jvqYuhMV92G8t58gwOKrIR95tLUymdw==
+	bh=sFNt0Koi/2M6IdVQwCsZOwpSYWaWTzSemdGZ9efK1dk=;
+	b=PDPxLXcrVt+qKooWBRz6NGRKkwYWvJf6xrq8auvjtRoqZjZRkjUdXncET+e8b8+5czZJ
+	 KqbXgoFi34HT+d+DGjEkpxWuZS4/l8kyvenrKRIH7PzAKi3iL+8OrEOAOE689sECUV5Sy
+	 q5XsWAW5q/BLEirGysfhJqlG10/QJTv2KnxSUVqiBlBc0pj/7Y6Cbou/2sltTSYNDHE8Z
+	 yeuKBxGbkTSHkX/ezuiCkuGAZCMteKSGuF0gM2cwwPnBhg2wOr1IVvd+UOgB6KAl/v105
+	 tenzOKuLGQz0TAyPbdRGv7hw1tZvAWx7qrgbIbROBvKQ7n7i3q8QBLhuconwOmzcXLw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=fail header.from=gmail.com;
 	spf=pass smtp.mailfrom=runbox.com;
-	dkim=pass header.d=runbox.com header.i=@runbox.com header.a=rsa-sha256 header.s=selector1 header.b=NtJQ2PlI;
+	dkim=pass header.d=runbox.com header.i=@runbox.com header.a=rsa-sha256 header.s=selector1 header.b=d7NIkJkW;
 	arc=none smtp.remote-ip=185.226.149.38
 Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2760606A31C;
-	Tue, 17 Nov 2026 10:34:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F2760606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 720DC606A33A
+	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 10:34:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 720DC606A33A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=runbox.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=runbox.com header.i=@runbox.com header.a=rsa-sha256 header.s=selector1 header.b=NtJQ2PlI
+	dkim=pass (2048-bit key, unprotected) header.d=runbox.com header.i=@runbox.com header.a=rsa-sha256 header.s=selector1 header.b=d7NIkJkW
 Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
 	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <david.laight.linux_spam@runbox.com>)
-	id 1xTGW6-002LjL-Nw; Tue, 17 Nov 2026 11:34:22 +0100
+	id 1xTGWD-002LlF-OA; Tue, 17 Nov 2026 11:34:29 +0100
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
 	 s=selector1; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To
 	:Message-Id:Date:Subject:Cc:To:From;
-	bh=37iDBptCE2ZrJlMFxYJAk0bxOtV0FMRo/dCU28/YQmE=; b=NtJQ2PlIj3OofBz3PApFqWRCWB
-	h1a4Gq3WFCjRojbEPMOywpLSDMfnn8RVPXaVpETZ0F9lLwVhj4E43EI1HJWUFePmkxyDnjd1NjCXE
-	AwYXQove47MsQfXAf8RpgzNA/FJFE62sRbI5N0zIbAr8WRNitqynR1Hq+O5qnp6LdBSjbpykEPWGH
-	HZKQddNYr0TzRPtJbeybe+ewgbMnu21icrRquwN3toOTENuAmjGejqsW0jaHnZxfpC+xqCln5Ordy
-	nipPaDHq6CuVxPdBhf7olIElpWqNisKxdTr/hjxnUWk5ePo6mUuN23nRBw3AZhJ1Q20pWlA3b7Wsr
-	lEoPrZsQ==;
+	bh=sFNt0Koi/2M6IdVQwCsZOwpSYWaWTzSemdGZ9efK1dk=; b=d7NIkJkWGRvwe6YQZWOdyP+vZZ
+	A382Z5Yoy9kc3sfHN6W2AS849JBrlUvFFAvZ6yDGKDz36T/TLCZ4LCZ6t/xTLzptFqbw1VsfgvkW5
+	YJOtmzKarau2lIO5E7xdB0FSj7ux0Qh/z4uOksodKZneeGQMRDL7cdRwNEaYlmhioO5HQ+wk1G/WF
+	ujf1KcrzGP+kWqWREQWogzFReG9wZ9dSpJTDbpP33TtGGfl2ACcKrN9Gw94sJskdj2uu3fqqWx+Wg
+	vxbX5vae+3ZO2wot+gHeMPkeVWU2lo0tyROY3/Y9bBrI9QfHpQZDlAgyfJwz1HpkCccUMgyo+C++j
+	RZfzyMyw==;
 Received: from [10.9.9.74] (helo=submission03.runbox)
 	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <david.laight.linux_spam@runbox.com>)
-	id 1xTGW1-0002ex-A6; Tue, 17 Nov 2026 11:34:17 +0100
+	id 1xTGW3-0002fP-A2; Tue, 17 Nov 2026 11:34:19 +0100
 Received: by submission03.runbox with esmtpsa  [Authenticated ID (1493616)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.95)
-	id 1xTGVo-005qHU-Kk;
-	Tue, 17 Nov 2026 11:34:04 +0100
+	id 1xTGVm-005qHU-1k;
+	Tue, 17 Nov 2026 11:34:02 +0100
 From: David Laight <david.laight.linux@gmail.com>
 To: Petr Mladek <pmladek@suse.com>,
 	Kees Cook <kees@kernel.org>,
@@ -70,9 +70,9 @@ Cc: Luis Chamberlain <mcgrof@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Samuel Wu <wusamuel@google.com>,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v4 next 08/13] kallsyms: Optimise symbol name search
-Date: Tue, 17 Nov 2026 10:33:47 +0000
-Message-Id: <20261117103352.1244657-9-david.laight.linux@gmail.com>
+Subject: [PATCH v4 next 04/13] scripts/kallsyms: make use of binary data output optional
+Date: Tue, 17 Nov 2026 10:33:43 +0000
+Message-Id: <20261117103352.1244657-5-david.laight.linux@gmail.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20261117103352.1244657-1-david.laight.linux@gmail.com>
 References: <20261117103352.1244657-1-david.laight.linux@gmail.com>
@@ -87,391 +87,615 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Change the alphabetically ordered lookup table (kallsyms_seqs_of_names)
-to one that indexes the table of compressed names rather than the
-array of symbol values.
-This removes all the linear scans during the binary search for the symbol
-name.
-Once the name has been found a second binary search of the 'markers' array
-followed by a linear scan for the symbols address gives the symbol value.
+While writing some of the output in binary (and using the .incbin directive
+to get the assembler to read it) speeds up normal kernel builds, it makes
+debugging kallsyms almost impossible.
 
-This linear scan is done once for each address returned, whereas the old
-code did the scan for each of the ~17 comparisons in the binary search
-(and the binary search was done twice for a symbol that appears once).
+Change the command line processing so that the out.bin file is optional,
+if absent everything is written to out.S (at is was prior to 83da9f3197e5).
 
-For normal kernels the index table stays at 24 bits per symbol (now host
-ordered), but a 32 bit table is used if necessary (probably only for
-allyesconfig builds - which needs 26 bits on x86-64).
+To make the command line parsing possible the argument to --sysmap is made
+optional, if absent the sysmap output is written to stdout and the
+compression code skipped.
 
-Use the low bit of the index table value to indicate that the symbol has
-the same name as the previous one.
-Use this to avoid the second lookup to find if the name is unique, speed
-up the search for the first symbol with a given name, and simplify
-kallsyms_on_each_match_symbol().
+Instead of requiring an empty input file when generating .tmp_vmlinux0.kallsyms
+make the input file itself optional.
 
-Speeds up lookup by name by a factor of about 12, and makes a massive
-difference to the time taken to lookup symbols that occur 100s or
-1000s (or maybe 10000s) of times.
+There is no need to use ftell() to find the offset in the out.bin file
+(and worry about it failing), the code knows exactly how many bytes have
+been written to the file - so use that instead.
 
-The slowest 'lookup by name' changes being a symbol that is duplicated a lot
-to one that is very long.
+To help anyone who ends up looking an hexdump of out.bin, add a text header
+and 16 byte align each table.
+The size is noise and it doesn't affect the assembler.
 
-Build for BE kernels correctly flips the byte order in the index table.
+Extract the target endianness from the elf input file and use it to write
+the 'markers' table array to the out.bin file.
+Use fwrite() for all the symbols entries - faster than printf().
+
+Reduces the time on my system for:
+scripts/kallsyms --all-symbols --pc-relative .tmp_vmlinux2 /dev/null >/dev/null
+from 194 ms to 185ms.
+
+Output the token table first and always to out.S (it doesn't take long).
+This makes the out.S file diffable even with minor changes.
+
+The re-instated printf() use %u for bytes, shorter than 0x%02x and just
+as good since the data isn't really a table with columns.
+But don't worry too much about the file size when the binary file isn't
+specified.
+
+Add sym_entry_type() helper, use it and sym_entry_name() when printing
+symbol names.
 
 Signed-off-by: David Laight <david.laight.linux@gmail.com>
 ---
 
 v3:
-- Use a discrimant union for the name table instead of weak symbols.
-  Undefined weak symbols can't be guaranteed to be zero and a build
-  mismatch left both undefined.
-- Patch the kallsyms_off_size_24 static key from an initcall,
-  the first name lookup might not be allowed to sleep.
-  Leave a conditional in the 32bit offset case, it is unlikely
-  to be needed for a real kernel.
-- Merge in the following patch that optimised the scan for duplicates.
-
+- New patch, makes the old patch 4 redundant.
 v4:
-- Fix build for BE kernels on BE hosts.
-- Use helpers sym_entry_type() and sym_entry_name().
+- Fix kallsyms_offsets for negative offsets and values above 1GB
+- Fix #includes
+- Add sym_entry_type() helper.
 
- kernel/kallsyms.c          | 162 ++++++++++++++++++++++++-------------
- kernel/kallsyms_internal.h |   7 +-
- scripts/kallsyms.c         |  49 +++++++----
- 3 files changed, 148 insertions(+), 70 deletions(-)
+ scripts/kallsyms-sysmap.c |   1 +
+ scripts/kallsyms.c        | 299 ++++++++++++++++++++++++--------------
+ scripts/kallsyms.h        |   1 +
+ scripts/link-vmlinux.sh   |   7 +-
+ 4 files changed, 197 insertions(+), 111 deletions(-)
 
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index d18d78e626db..fd42a1a8ed3e 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -177,6 +177,36 @@ static unsigned int get_symbol_offset(unsigned long pos)
- 	return name - kallsyms_names;
+diff --git a/scripts/kallsyms-sysmap.c b/scripts/kallsyms-sysmap.c
+index a482968eba51..6897eddd724f 100644
+--- a/scripts/kallsyms-sysmap.c
++++ b/scripts/kallsyms-sysmap.c
+@@ -224,6 +224,7 @@ struct sysmap *sysmap_read(const char *path)
+ 		exit(EXIT_FAILURE);
+ 	map->syms = elf_read_symbols(&map->elf, &map->nr_syms);
+ 	map->addr_width = elf_map_long_size(map->elf.base) * 2;
++	map->big_endian = elf_map_big_endian(map->elf.base);
+ 
+ 	return map;
  }
- 
-+/*
-+ * Find the value of a symbol given the offset in the compressed stream.
-+ */
-+static unsigned long get_name_address(unsigned int name_offset)
-+{
-+	unsigned int low, pos, high;
-+
-+	low = 0;
-+	high = ((kallsyms_num_syms - 1) >> 8) + 1;
-+
-+	while (high - low > 1) {
-+		pos = low + (high - low) / 2;
-+		if (name_offset >= kallsyms_markers[pos])
-+			low = pos;
-+		else
-+			high = pos;
-+	}
-+
-+	pos = kallsyms_markers[low];
-+	for (low <<= 8; pos < name_offset; low++) {
-+		unsigned int len = kallsyms_names[pos];
-+		if (len & 0x80)
-+			len += (kallsyms_names[pos + 1] << 7) - 0x7f;
-+		pos += 1 + len;
-+	}
-+
-+	return kallsyms_sym_address(low);
-+}
-+
-+
- unsigned long kallsyms_sym_address(int idx)
- {
- 	/* non-relocatable 32-bit kernels just embed the value directly */
-@@ -185,66 +215,87 @@ unsigned long kallsyms_sym_address(int idx)
- 	return (unsigned long)offset_to_ptr(kallsyms_offsets + idx);
- }
- 
--static unsigned int get_symbol_seq(int index)
--{
--	unsigned int i, seq = 0;
-+static DEFINE_STATIC_KEY_FALSE(kallsyms_off_size_24);
- 
--	for (i = 0; i < 3; i++)
--		seq = (seq << 8) | kallsyms_seqs_of_names[3 * index + i];
-+/*
-+ * Get the offset into the compressed list of names for the n'th
-+ * symbol in the 'sorted by name' list.
-+ * Returns 'offset << 1 | is_duplicate_name'.
-+ * To save memory (the array can have 200k+ entries) the values are usually
-+ * 24 bit (host ordered) but will be 32 bit if necessary.
-+ */
-+static inline unsigned int get_symbol_name_offset(unsigned long index)
-+{
-+	if (static_branch_likely(&kallsyms_off_size_24) ||
-+	    unlikely(kallsyms_offs_of_names.size == 24)) {
-+		u8 *off = kallsyms_offs_of_names.offs + index * 3;
-+#if !defined(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS)
-+		return ((struct {unsigned int v:24 __packed; } __packed *)off)->v;
-+#else
-+#if defined(__BIG_ENDIAN)
-+		return (*(u32 *)(off - 1)) & 0xffffff;
-+#else
-+		return (*(u32 *)(off - 1)) >> 8;
-+#endif
-+#endif
-+	}
- 
--	return seq;
-+	return ((u32 *)&kallsyms_offs_of_names.offs)[index];
- }
- 
--static int kallsyms_lookup_names(const char *name,
--				 unsigned int *start,
--				 unsigned int *end)
-+static int kallsyms_set_kallsyms_off_size(void)
- {
-+	if (kallsyms_offs_of_names.size == 24)
-+		static_branch_enable(&kallsyms_off_size_24);
-+
-+	return 0;
-+}
-+early_initcall(kallsyms_set_kallsyms_off_size);
-+
-+static int kallsyms_lookup_names(const char *name, unsigned int *start)
-+{
-+	unsigned int mid, off;
-+	int low, high;
- 	int ret;
--	int low, mid, high;
--	unsigned int seq, off;
- 
- 	low = 0;
- 	high = kallsyms_num_syms - 1;
- 
--	while (low <= high) {
-+	for (;;) {
-+		if (low > high)
-+			return -1;
- 		mid = low + (high - low) / 2;
--		seq = get_symbol_seq(mid);
--		off = get_symbol_offset(seq);
--		ret = kallsyms_strcmp_symbol(off, name);
--		if (ret > 0)
-+		off = get_symbol_name_offset(mid);
-+		ret = kallsyms_strcmp_symbol(off >> 1, name);
-+		if (ret > 0) {
- 			low = mid + 1;
--		else if (ret < 0)
--			high = mid - 1;
--		else
--			break;
--	}
--
--	if (low > high)
--		return -ESRCH;
--
--	low = mid;
--	while (low) {
--		seq = get_symbol_seq(low - 1);
--		off = get_symbol_offset(seq);
--		if (kallsyms_strcmp_symbol(off, name) != 0)
--			break;
--		low--;
--	}
--	*start = low;
--
--	if (end) {
--		high = mid;
--		while (high < kallsyms_num_syms - 1) {
--			seq = get_symbol_seq(high + 1);
--			off = get_symbol_offset(seq);
--			if (kallsyms_strcmp_symbol(off, name) != 0)
-+			continue;
-+		}
-+		if (!ret) {
-+			/*
-+			 * Found a match, but need the first one.
-+			 * Most symbols (and all exported/global ones) only occur
-+			 * once, most of the others only occur a small number of
-+			 * times so it is worth doing a linear scan that avoids the
-+			 * kallsyms_strcmp_symbol() call.
-+			 * However some symbols occur a large number of times
-+			 * (_sub_D_65535_0 is repeated 24610 times in an x86-64
-+			 * allyesconfig, __func__.0 442 in a more normal kernel).
-+			 * Avoid a long linear scan by returning to the binary
-+			 * search if a short linear search is fruitless.
-+			 */
-+			unsigned int scan = 16;
-+			while ((off & 1) && scan--)
-+				off = get_symbol_name_offset(--mid);
-+			if (!(off & 1))
- 				break;
--			high++;
- 		}
--		*end = high;
-+		high = mid - 1;
- 	}
- 
--	return 0;
-+	*start = mid;
-+
-+	return off;
- }
- 
- /* Lookup the address for this symbol. Returns 0 if not found. */
-@@ -257,9 +308,9 @@ unsigned long kallsyms_lookup_name(const char *name)
- 	if (!*name)
- 		return 0;
- 
--	ret = kallsyms_lookup_names(name, &i, NULL);
--	if (!ret)
--		return kallsyms_sym_address(get_symbol_seq(i));
-+	ret = kallsyms_lookup_names(name, &i);
-+	if (ret >= 0)
-+		return get_name_address(ret >> 1);
- 
- 	return module_kallsyms_lookup_name(name);
- }
-@@ -289,17 +340,20 @@ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, unsigned long),
- int kallsyms_on_each_match_symbol(int (*fn)(void *, unsigned long),
- 				  const char *name, void *data)
- {
--	int ret;
--	unsigned int i, start, end;
-+	int name_offset, ret;
-+	unsigned int sym_number;
- 
--	ret = kallsyms_lookup_names(name, &start, &end);
--	if (ret)
-+	name_offset = kallsyms_lookup_names(name, &sym_number);
-+	if (name_offset < 0)
- 		return 0;
- 
--	for (i = start; !ret && i <= end; i++) {
--		ret = fn(data, kallsyms_sym_address(get_symbol_seq(i)));
-+	do {
-+		ret = fn(data, get_name_address(name_offset >> 1));
-+		if (ret)
-+			break;
- 		cond_resched();
--	}
-+		name_offset = get_symbol_name_offset(++sym_number);
-+	} while (name_offset & 1);
- 
- 	return ret;
- }
-diff --git a/kernel/kallsyms_internal.h b/kernel/kallsyms_internal.h
-index 81a867dbe57d..11fb0de92ede 100644
---- a/kernel/kallsyms_internal.h
-+++ b/kernel/kallsyms_internal.h
-@@ -13,6 +13,11 @@ extern const char kallsyms_token_table[];
- extern const u16 kallsyms_token_index[];
- 
- extern const unsigned int kallsyms_markers[];
--extern const u8 kallsyms_seqs_of_names[];
-+
-+/* Although constant, size is volatile for better code generation. */
-+extern struct {
-+	volatile unsigned int size;	/* 24 or 32 */
-+	unsigned char offs[];		/* int:24[] or int:32[] */
-+} kallsyms_offs_of_names;
- 
- #endif // LINUX_KALLSYMS_INTERNAL_H_
 diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-index 77a4c964f1b8..39426f736cb7 100644
+index ee2438a4aca0..77a4c964f1b8 100644
 --- a/scripts/kallsyms.c
 +++ b/scripts/kallsyms.c
-@@ -408,7 +408,7 @@ static void sort_symbols_by_name(void)
+@@ -19,6 +19,7 @@
+  */
  
- static void write_src(void)
+ #include <err.h>
++#include <endian.h>
+ #include <getopt.h>
+ #include <stdbool.h>
+ #include <stdio.h>
+@@ -27,7 +28,6 @@
+ #include <time.h>
+ #include <ctype.h>
+ #include <limits.h>
+-#include <sys/stat.h>
+ #include <xalloc.h>
+ 
+ #include "kallsyms.h"
+@@ -60,6 +60,11 @@ static int all_symbols;
+ static int pc_relative;
+ static int verbose;
+ 
++static int big_endian;	/* Extracted from the elf file */
++
++static const char *out_bin_name;
++static FILE *out_bin_file;
++
+ /* A dynamic array of symbols, encoded by symbol index. */
+ struct sym_arr {
+ 	unsigned int *sym_indexes;
+@@ -127,6 +132,11 @@ static char *sym_entry_name(const struct sym_entry *s)
+ 	return (char *)s->sym + 1;
+ }
+ 
++static char sym_entry_type(const struct sym_entry *s)
++{
++	return s->sym[0];
++}
++
+ static bool is_ignored_symbol(const char *name, char type)
  {
--	unsigned int i, k, len, off, seq;
-+	unsigned int i, k, len, off, off_size, table_size;
+ 	if (type == 'u' || type == 'n')
+@@ -278,26 +288,16 @@ static void add_table_entry(struct sym_entry *sym)
+ 	table[table_cnt++] = sym;
+ }
+ 
+-static bool file_is_empty(const char *path)
+-{
+-	struct stat st;
+-
+-	if (stat(path, &st))
+-		err(EXIT_FAILURE, "stat(%s) failed", path);
+-
+-	return st.st_size == 0;
+-}
+-
+ /*
+- * Read the symbols from vmlinux, writing System.map if asked to. The first
+- * link has no symbols yet: an empty file gives an empty table.
++ * Read the symbols from vmlinux, writing System.map if asked to.
++ * The first link has no symbols yet: an absent file gives an empty table.
+  */
+ static void read_elf(const char *path, FILE *sysmap_out)
+ {
+ 	struct sysmap *map;
+ 	size_t i;
+ 
+-	if (file_is_empty(path))
++	if (!path || !*path)
+ 		return;
+ 
+ 	map = sysmap_read(path);
+@@ -312,6 +312,8 @@ static void read_elf(const char *path, FILE *sysmap_out)
+ 			add_table_entry(sym);
+ 	}
+ 
++	big_endian = map->big_endian;
++
+ 	sysmap_free(map);
+ }
+ 
+@@ -322,22 +324,34 @@ static void output_label(const char *label)
+ 	printf("%s:\n", label);
+ }
+ 
+-static long bin_pos(FILE *file)
++static void write_incbin_header(const char *msg, unsigned long *bin_offset)
+ {
+-	const long pos = ftell(file);
++	static unsigned char marker[18] = "################" "#";
++	static unsigned char nulls[16];
++	unsigned long off;
++
++	if (!out_bin_file)
++		return;
++
++	off = *bin_offset;
+ 
+-	if (pos < 0)
+-		err(EXIT_FAILURE, "ftell on out.bin file failed");
++	/* 16 byte align and add header for diagnostic hexdumps */
++	off += fwrite(nulls, 1, -off & 15, out_bin_file);
++	off += fwrite(marker, 1, 16 + 2, out_bin_file);
++	off += fwrite(msg, 1, strlen(msg), out_bin_file);
++	off += fwrite(nulls, 1, -off & 15, out_bin_file);
++	off += fwrite(marker, 1, 16, out_bin_file);
+ 
+-	return pos;
++	*bin_offset = off;
+ }
+ 
+-static void write_incbin(const char *filename, long start, long end)
++static void write_incbin(unsigned long *bin_offset, unsigned long size)
+ {
+-	if (start >= end)
++	if (!out_bin_name || !size)
+ 		return;
+ 
+-	printf("\t.incbin \"%s\", %ld, %ld\n", filename, start, end - start);
++	printf("\t.incbin \"%s\", %ld, %ld\n", out_bin_name, *bin_offset, size);
++	*bin_offset += size;
+ }
+ 
+ /* uncompress a compressed symbol. When this function is called, the best table
+@@ -392,13 +406,15 @@ static void sort_symbols_by_name(void)
+ 	qsort(table, table_cnt, sizeof(table[0]), compare_names);
+ }
+ 
+-static void write_src(FILE *out_bin_file, const char *out_bin_name)
++static void write_src(void)
+ {
+-	unsigned int i, off;
++	unsigned int i, k, len, off, seq;
  	unsigned int best_idx[256];
  	unsigned int *markers, markers_cnt;
- 	unsigned long bin_offset = 0;
-@@ -458,7 +458,7 @@ static void write_src(void)
- 		unsigned char len[2];
+-	long bin_start;
++	unsigned long bin_offset = 0;
+ 	char buf[1 + KSYM_NAME_LEN];
++	struct sym_entry *se;
++	const char *sep;
  
- 		se = table[i];
--		se->seq = i;
-+		se->seq = off;
+ 	printf("\t.section .rodata, \"a\"\n");
+ 
+@@ -406,51 +422,105 @@ static void write_src(FILE *out_bin_file, const char *out_bin_name)
+ 	printf("\t.long\t%u\n", table_cnt);
+ 	printf("\n");
+ 
++	output_label("kallsyms_token_table");
++	off = 0;
++	for (i = 0; i < 256; i++) {
++		len = expand_symbol(best_table[i], best_table_len[i], buf);
++		best_idx[i] = off;
++		off += len + 1;
++		printf("\t.asciz\t\"%s\"\n", buf);
++	}
++	printf(".size kallsyms_token_table, . - kallsyms_token_table\n");
++	printf("\n");
++
++	output_label("kallsyms_token_index");
++	sep = "\t.short\t";
++	for (i = 0; i < 256; i++) {
++		printf("%s%d", sep, best_idx[i]);
++		sep = (i + 1) & 15 ? "," : "\n\t.short\t";
++	}
++	printf("\n");
++	printf(".size kallsyms_token_index, . - kallsyms_token_index\n");
++	printf("\n");
++
++	stamp("write token table");
++
+ 	/* table of offset markers, that give the offset in the compressed stream
+ 	 * every 256 symbols */
+ 	markers_cnt = (table_cnt + 255) / 256;
+ 	markers = xmalloc(sizeof(*markers) * markers_cnt);
+ 
+ 	output_label("kallsyms_names");
+-	bin_start = bin_pos(out_bin_file);
++	write_incbin_header("names", &bin_offset);
+ 	off = 0;
+ 	for (i = 0; i < table_cnt; i++) {
+-		if ((i & 0xFF) == 0)
+-			markers[i >> 8] = off;
+-		table[i]->seq = i;
++		unsigned int se_len, len_len;
++		unsigned char len[2];
++
++		se = table[i];
++		se->seq = i;
  
  		/* The length must be less than that of the original symbol. */
- 		if (!se->len || se->len > KSYM_NAME_LEN)
-@@ -490,7 +490,7 @@ static void write_src(void)
- 			if ((i & 0xFF) == 0)
- 				markers[i >> 8] = off;
+-		if (!table[i]->len || table[i]->len > KSYM_NAME_LEN)
++		if (!se->len || se->len > KSYM_NAME_LEN)
+ 			errx(EXIT_FAILURE, "symbol %d has corrupt compressed length %d",
+-			     i, table[i]->len);
++			     i, se->len);
++
++		/* Generate the original name */
++		se_len = expand_symbol(se->sym, se->len, buf);
  
--			printf("\t.byte\t%u", len[0]);
-+			printf("\t/* n:%u */\t.byte\t%u", off, len[0]);
- 			if (len_len == 2)
- 				printf(",%u", len[1]);
+ 		/* Encode length with ULEB128. */
+-		if (table[i]->len <= 0x7F) {
++		if (se->len <= 0x7F) {
+ 			/* Most symbols use a single byte for the length. */
+-			fputc(table[i]->len, out_bin_file);
+-			off += table[i]->len + 1;
++			len[0] = se->len;
++			len_len = 1;
+ 		} else {
+ 			/* "Big" symbols use two bytes. */
+-			fputc((table[i]->len & 0x7F) | 0x80, out_bin_file);
+-			fputc((table[i]->len >> 7) & 0x7F, out_bin_file);
+-			off += table[i]->len + 2;
++			len[0] = 0x80 | se->len;
++			len[1] = se->len >> 7;
++			len_len = 2;
+ 		}
+-		fwrite(table[i]->sym, 1, table[i]->len, out_bin_file);
  
-@@ -505,6 +505,7 @@ static void write_src(void)
- 		memcpy(se->sym, buf, se_len + 1);
+-		/*
+-		 * Now that we wrote out the compressed symbol name, restore the
+-		 * original name for the comments below.
+-		 */
+-		expand_symbol(table[i]->sym, table[i]->len, buf);
+-		strcpy((char *)table[i]->sym, buf);
++		if (out_bin_file) {
++			if ((i & 0xFF) == 0)
++				markers[i >> 8] = big_endian ? htobe32(off) : htole32(off);
++
++			fwrite(len, 1, len_len, out_bin_file);
++			fwrite(se->sym, 1, se->len, out_bin_file);
++		} else {
++			if ((i & 0xFF) == 0)
++				markers[i >> 8] = off;
++
++			printf("\t.byte\t%u", len[0]);
++			if (len_len == 2)
++				printf(",%u", len[1]);
++
++			for (k = 0; k < se->len; k++)
++				printf(",%u", se->sym[k]);
++			printf("\t/* %c %s */\n", buf[0], buf + 1);
++		}
++		off += len_len + se->len;
++
++		/* Restore the original name. */
++		se->len = se_len;
++		memcpy(se->sym, buf, se_len + 1);
  	}
- 	write_incbin(&bin_offset, off);
-+	table_size = off;
+-	write_incbin(out_bin_name, bin_start, bin_pos(out_bin_file));
++	write_incbin(&bin_offset, off);
  	printf(".size kallsyms_names, . - kallsyms_names\n");
  	printf("\n");
  
-@@ -563,7 +564,7 @@ static void write_src(void)
- 			       out_bin_file ? '\n' : '\t');
+ 	output_label("kallsyms_markers");
+-	for (i = 0; i < markers_cnt; i++)
+-		printf("\t.long\t%u\n", markers[i]);
++	if (out_bin_file) {
++		write_incbin_header("markers", &bin_offset);
++		fwrite(markers, sizeof(*markers), markers_cnt, out_bin_file);
++		write_incbin(&bin_offset, sizeof(*markers) * markers_cnt);
++	} else {
++		sep = "\t.long\t";
++		for (i = 0; i < markers_cnt; i++) {
++			printf("%s%u", sep, markers[i]);
++			sep = (i + 1) & 7 ? "," : "\n\t.long\t";
++		}
++		printf("\n");
++	}
+ 	printf(".size kallsyms_markers, . - kallsyms_markers\n");
+ 	printf("\n");
+ 
+@@ -458,42 +528,43 @@ static void write_src(FILE *out_bin_file, const char *out_bin_name)
+ 
+ 	stamp("write compressed names");
+ 
+-	output_label("kallsyms_token_table");
+-	bin_start = bin_pos(out_bin_file);
+-	off = 0;
+-	for (i = 0; i < 256; i++) {
+-		best_idx[i] = off;
+-		expand_symbol(best_table[i], best_table_len[i], buf);
+-		fwrite(buf, 1, strlen(buf) + 1, out_bin_file);
+-		off += strlen(buf) + 1;
+-	}
+-	write_incbin(out_bin_name, bin_start, bin_pos(out_bin_file));
+-	printf(".size kallsyms_token_table, . - kallsyms_token_table\n");
+-	printf("\n");
+-
+-	output_label("kallsyms_token_index");
+-	for (i = 0; i < 256; i++)
+-		printf("\t.short\t%d\n", best_idx[i]);
+-	printf("\n");
+-
+-	stamp("write token table");
+-
+ 	output_label("kallsyms_offsets");
+ 
+ 	for (i = 0; i < table_cnt; i++) {
++		static char line[] = "\t.long\t_text - . +1234567890";
++
++		line[sizeof(line) - 1] = out_bin_file ? '\n' : '\t';
+ 		if (pc_relative) {
++			/* All 64 bit builds and (at least) relocatable 32 bit ones */
++			char *end = line + sizeof(line) - 2;
+ 			long long offset = table[i]->addr - _text;
++			unsigned int off32;
+ 
+ 			if (offset < INT_MIN || offset > INT_MAX)
+ 				errx(EXIT_FAILURE, "relative symbol %s value %#llx out of range",
+ 				     sym_entry_name(table[i]), table[i]->addr);
+ 
+-			printf("\t.long\t_text - . + (%d)\t/* %s */\n",
+-			       (int)offset, table[i]->sym);
++			/* Build the line so the the faster fwrite() can be used */
++			memset(end - 9, ' ', 9);
++			if (offset < 0) {
++				end[-10] = '-';
++				off32 = -offset;
++			} else {
++				end[-10] = '+';
++				off32 = offset;
++			}
++			do
++				*end-- = '0' + off32 % 10;
++			while (off32 /= 10);
++
++			fwrite(line, 1, sizeof(line), stdout);
+ 		} else {
+-			printf("\t.long\t%#x\t/* %s */\n",
+-			       (unsigned int)table[i]->addr, table[i]->sym);
++			printf("\t.long\t%#x%c", (unsigned int)table[i]->addr,
++			       out_bin_file ? '\n' : '\t');
  		}
- 		if (!out_bin_file)
--			printf("/* %c %s */\n",
-+			printf("/* n:%u %c %s */\n", table[i]->seq,
- 			       sym_entry_type(table[i]), sym_entry_name(table[i]));
++		if (!out_bin_file)
++			printf("/* %c %s */\n",
++			       sym_entry_type(table[i]), sym_entry_name(table[i]));
  	}
  	printf(".size kallsyms_offsets, . - kallsyms_offsets\n");
-@@ -574,23 +575,41 @@ static void write_src(void)
- 	sort_symbols_by_name();
- 	stamp("sort by name");
+ 	printf("\n");
+@@ -501,17 +572,29 @@ static void write_src(FILE *out_bin_file, const char *out_bin_name)
+ 	stamp("write symbol values");
  
--	output_label("kallsyms_seqs_of_names");
--	write_incbin_header("seq_of_names", &bin_offset);
-+	off_size = table_size < (1u << 23) ? 24 : 32;
-+	output_label("kallsyms_offs_of_names");
-+	printf("\t.long\t%u\n", off_size);
-+	write_incbin_header("offs_of_names", &bin_offset);
+ 	sort_symbols_by_name();
++	stamp("sort by name");
++
+ 	output_label("kallsyms_seqs_of_names");
+-	bin_start = bin_pos(out_bin_file);
++	write_incbin_header("seq_of_names", &bin_offset);
  	for (i = 0; i < table_cnt; i++) {
- 		se = table[i];
--		seq = se->seq;
-+		off = se->seq << 1;
-+		if (i && se->len == table[i - 1]->len &&
-+		    !memcmp(sym_entry_name(se), sym_entry_name(table[i - 1]), se->len - 1))
-+			/* Mark that this is a duplicate of the previous symbol */
-+			off |= 1;
- 		if (out_bin_file) {
--			unsigned int seq_be = htobe32(seq);
--			fwrite((char *)&seq_be + 1, 1, 3, out_bin_file);
-+			unsigned int off_te = big_endian ? htobe32(off << (32 - off_size)): htole32(off);
-+			fwrite(&off_te, 1, off_size / 8 , out_bin_file);
- 		} else {
--			/* The three spaces before the tab line up the comments */
--			printf("\t.byte\t%u,%u,%u   \t/* %8d %c %s */\n",
--				seq >> 16, (seq >> 8) & 0xff, seq & 0xff,
--				seq, sym_entry_type(se), sym_entry_name(se));
-+			if (off_size == 32) {
-+				printf("\t.long\t%#4x", off);
-+			} else {
-+				if (big_endian)
-+					off = __builtin_bswap32(off) >> 8;
-+				/* The trailing three spaces line up the comments */
-+				printf("\t.byte\t%u,%u,%u   ",
-+					off & 0xff, (off >> 8) & 0xff, off >> 16);
-+			}
-+			printf("\t/* n:%-8d %c %s */\n",
-+				se->seq, sym_entry_type(se), sym_entry_name(se));
- 		}
+-		fputc(table[i]->seq >> 16, out_bin_file);
+-		fputc(table[i]->seq >> 8, out_bin_file);
+-		fputc(table[i]->seq >> 0, out_bin_file);
++		se = table[i];
++		seq = se->seq;
++		if (out_bin_file) {
++			unsigned int seq_be = htobe32(seq);
++			fwrite((char *)&seq_be + 1, 1, 3, out_bin_file);
++		} else {
++			/* The three spaces before the tab line up the comments */
++			printf("\t.byte\t%u,%u,%u   \t/* %8d %c %s */\n",
++				seq >> 16, (seq >> 8) & 0xff, seq & 0xff,
++				seq, sym_entry_type(se), sym_entry_name(se));
++		}
  	}
--	write_incbin(&bin_offset, table_cnt * 3);
--	printf(".size kallsyms_seqs_of_names, . - kallsyms_seqs_of_names\n");
-+	write_incbin(&bin_offset, table_cnt * (off_size / 8));
-+	/* Add a terminator without the 'duplicate' flag. */
-+	if (off_size == 24)
-+		printf("\t.byte\t0,0,0\n");
-+	else
-+		printf("\t.long\t0\n");
-+	printf(".size kallsyms_offs_of_names, . - kallsyms_offs_of_names\n");
+-	write_incbin(out_bin_name, bin_start, bin_pos(out_bin_file));
+-	printf("\n");
++	write_incbin(&bin_offset, table_cnt * 3);
++	printf(".size kallsyms_seqs_of_names, . - kallsyms_seqs_of_names\n");
  
  	stamp("write name index");
++
++	write_incbin_header("end", &bin_offset);
+ }
  
+ static unsigned int token_index(unsigned char first, unsigned char second)
+@@ -825,13 +908,13 @@ static void sort_symbols(void)
+ static void usage(void)
+ {
+ 	fprintf(stderr,
+-		"Usage: kallsyms [options] vmlinux out.bin > out.S\n"
+-		"       kallsyms --sysmap=out.map vmlinux\n"
++		"Usage: kallsyms [options] [vmlinux [out.bin]] > out.S\n"
++		"       kallsyms --sysmap vmlinux > out.map\n"
+ 		"           --all-symbols     Include all local symbols\n"
+ 		"           --pc-relative     Output symbol offsets\n"
+ 		"           --sysmap=out.map  Text map file\n"
+ 		"           --verbose         Extra diagnostic output\n"
+-		"           vmlinux: File to read, can be empty\n"
++		"           vmlinux: File to read\n"
+ 		"           out.S: Assembler source output file.\n"
+ 		"           out.bin: Binary data; included in out.S using .incbin\n"
+ 		"       In the second form only the symbol table out.map is generated,\n"
+@@ -843,14 +926,14 @@ static void usage(void)
+ 
+ int main(int argc, char **argv)
+ {
+-	const char *in, *sysmap = NULL, *out_bin_name;
+-	FILE *sysmap_out = NULL, *out_bin_file;
++	const char *sysmap = NULL;
++	FILE *sysmap_out = NULL;
+ 
+ 	while (1) {
+ 		static const struct option long_options[] = {
+ 			{"all-symbols",     no_argument, &all_symbols,     1},
+ 			{"pc-relative",     no_argument, &pc_relative,     1},
+-			{"sysmap",    required_argument, NULL,           's'},
++			{"sysmap",    optional_argument, NULL,           's'},
+ 			{"verbose",         no_argument, &verbose,         1},
+ 			{},
+ 		};
+@@ -860,44 +943,44 @@ int main(int argc, char **argv)
+ 		if (c == -1)
+ 			break;
+ 		if (c == 's')
+-			sysmap = optarg;
++			sysmap = optarg ?: "";
+ 		else if (c != 0)
+ 			usage();
+ 	}
+ 
+ 	stamp(NULL);
+ 
+-	if (optind + 2 != argc && !(sysmap && optind + 1 == argc))
++	if (argc - optind > 2)
+ 		usage();
+ 
+-	in = argv[optind];
+ 	if (sysmap) {
+-		sysmap_out = fopen(sysmap, "w");
+-		if (!sysmap_out)
+-			err(EXIT_FAILURE, "failed to open sysmap output file %s", sysmap);
+-	}
+-
+-	if (optind + 1 == argc) {
+-		read_elf(in, sysmap_out);
+-		fflush(sysmap_out);
+-		if (ferror(sysmap_out) || fclose(sysmap_out))
+-			errx(EXIT_FAILURE, "error writing sysmap file %s", sysmap);
+-		return 0;
++		if (*sysmap) {
++			sysmap_out = fopen(sysmap, "w");
++			if (!sysmap_out)
++				err(EXIT_FAILURE, "failed to open sysmap output file %s", sysmap);
++		} else {
++			/* Compressed output supressed */
++			sysmap_out = stdout;
++		}
+ 	}
+ 
+-	out_bin_name = argv[optind + 1];
+-	out_bin_file = fopen(out_bin_name, "w");
+-	if (!out_bin_file)
+-		err(EXIT_FAILURE, "failed to open out.bin file %s", out_bin_name);
+-
+-	read_elf(in, sysmap_out);
++	read_elf(argv[optind], sysmap_out);
+ 	if (sysmap_out) {
+ 		fflush(sysmap_out);
+ 		if (ferror(sysmap_out) || fclose(sysmap_out))
+ 			errx(EXIT_FAILURE, "error writing sysmap file %s", sysmap);
++		if (sysmap_out == stdout)
++			exit(0);
+ 	}
+ 	stamp("read elf");
+ 
++	if (argc - optind >= 2) {
++		out_bin_name = argv[optind + 1];
++		out_bin_file = fopen(out_bin_name, "w");
++		if (!out_bin_file)
++			err(EXIT_FAILURE, "failed to open out.bin file %s", out_bin_name);
++	}
++
+ 	shrink_table();
+ 	stamp("shrink table");
+ 
+@@ -906,12 +989,14 @@ int main(int argc, char **argv)
+ 
+ 	optimize_token_table();
+ 
+-	write_src(out_bin_file, out_bin_name);
++	write_src();
+ 
+ 	/* Write errors are latched in the stream, so one check at the end covers them all. */
+-	fflush(out_bin_file);
+-	if (ferror(out_bin_file) || fclose(out_bin_file))
+-		errx(EXIT_FAILURE, "error writing out.bin file %s", out_bin_name);
++	if (out_bin_file) {
++		fflush(out_bin_file);
++		if (ferror(out_bin_file) || fclose(out_bin_file))
++			errx(EXIT_FAILURE, "error writing out.bin file %s", out_bin_name);
++	}
+ 
+ 	fflush(stdout);
+ 	if (ferror(stdout))
+diff --git a/scripts/kallsyms.h b/scripts/kallsyms.h
+index 4b2801ba6285..c5ead7e60570 100644
+--- a/scripts/kallsyms.h
++++ b/scripts/kallsyms.h
+@@ -34,6 +34,7 @@ struct sysmap {
+ 	struct sysmap_symbol *syms;
+ 	size_t nr_syms;
+ 	int addr_width;		/* hex digits of an address */
++	int big_endian;
+ 	struct elf_file elf;	/* the mapping the names point into */
+ };
+ 
+diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+index d5710e900bd4..44b5a6d78ce5 100755
+--- a/scripts/link-vmlinux.sh
++++ b/scripts/link-vmlinux.sh
+@@ -141,7 +141,7 @@ kallsyms()
+ 	fi
+ 
+ 	info KSYMS "${2}.S"
+-	scripts/kallsyms ${kallsymopt} "${1}" "${2}.bin" > "${2}.S"
++	scripts/kallsyms ${kallsymopt} ${1:+"${1}" "${2}.bin"} > "${2}.S"
+ 
+ 	info AS "${2}.o"
+ 	${CC} ${NOSTDINC_FLAGS} ${LINUXINCLUDE} ${KBUILD_CPPFLAGS} \
+@@ -162,7 +162,7 @@ sysmap_and_kallsyms()
+ mksysmap()
+ {
+ 	info SYSMAP ${2}
+-	scripts/kallsyms --sysmap="${2}" "${1}"
++	scripts/kallsyms --sysmap "${1}" >"${2}"
+ }
+ 
+ sorttable()
+@@ -213,8 +213,7 @@ case "${WARN_ON_UNUSED_TRACEPOINTS}" in
+ esac
+ 
+ if is_enabled CONFIG_KALLSYMS; then
+-	true > .tmp_vmlinux0.syms
+-	kallsyms .tmp_vmlinux0.syms .tmp_vmlinux0.kallsyms
++	kallsyms "" .tmp_vmlinux0.kallsyms
+ fi
+ 
+ if is_enabled CONFIG_KALLSYMS || is_enabled CONFIG_DEBUG_INFO_BTF; then
 -- 
 2.39.5
 
