@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794934077;
-	b=RGig6LgPcp8GlhHHpGhPM78aRwnnb+wkwGijSU6bYfu0nr/s7DoYne5JqJWKYdJgiM4D
-	 4bXE5kfWMvVn2lSd94RlWF244/vpehgvzM7w3vzrrmxZrG4je9d6mAfS1NmNwktEuuSVY
-	 hzavvUkE3UUEPqUl3vufoCM+c25/8MwBrfklkYBZm+K/+Zixf2BKlHTArfpGOGw90MVU1
-	 AiF4dnZcYImtm2mE0EQK0UoGac0ExKNecZlKG7QJU7/2NNWoSwWV1TM54qJM0QaINNrrK
-	 E+bqV7JPA5rdB7aUvuaWGsA0mmS7WBwb54LutH03x3S7mSU62su7VVaLk90oDC/nUtQ==
+	t=1794934085;
+	b=nkKwHPUkFEayv391EbO3VzRL9vA2vVu1ER+/Pr+IyqawB9sJrDKjbEvmh+JC0fBXyfSx
+	 nanSNkC3oQKJxWcqHUo2sZygjoHsyePNE4ThXh2vjMJRYMu6r1hwNfwgtdEv/0x27WcbM
+	 yxVo4F6Sc+McKON/Or3hVj8U62ZXIM5cGigwr3lzzNjGIpgfwdirX6bxni62zg9AGIW6u
+	 7A+RdSzdmLnt5BGZ9LHSdzs6nBPDEvP56P8aH6ETD2s+KzNAb1zSiO5oGKPs5mgRLCdNo
+	 lgymHfnUgY577VifRigeFHZ4KzGfCHwYDa7FkSJo2EFap9tFwhc22ri3UGRGMsMGsMg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794934077;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794934085;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=YLFFgzpWj7A4Qoim2g57jQzVKXzhgMc409wqmO8WDvs=;
-	b=1Nxx7rOpZIalgl/3IkDwNXHBQ6aL6MkVQKYFl6PyOwMBNvOns/N80tenNOiPJtrNCRCF
-	 jNIXaGiWHUxqW40PdyQ15QB17qJkWlMXVkHyiHBweMPgONmOL5ZqFLoTKYGw2Qlo2ns7R
-	 5f30yIc/38pXoAA9p7AN78jMWHJD5btwsjZkPgYpGhfGXIcpZCHUTynqu/nf3pQ2Lx3LN
-	 gc+xwzymL6EYkaJ0GRPz29SmrZ2RBkRI7w8x5yOdcNRZK0NUGwz4F6ycbe69BRLwTQmTR
-	 u0CqO5UstrKLa8I0L+MY+FdQsaoK9m/Ow7NKeYi6NHiQCQhvwW5ZwpouUZhLAlXQXFQ==
+	bh=VbXKrQKq0kT3v+sZX5j8TvDREdq0v6Q82Hyvv20liuM=;
+	b=HJDdLOxhbotenl8KjFV34W3OMSWtgA18Kv/iiZcskSoRxgs4xi1Jk0rdUN60NhagCgay
+	 KH/ltmKMoqDa6xsHhzkTr8kEz+oDe+D+EGCmYaJZ40gHfcfvtKmUFvbxDCuTKjar7WC3D
+	 o6ukiViM4FrzL77ovx1CbhcJB8NunGXwRN2ULLUWMRZLke9xk9DeKu+s7k79y4OWlNElt
+	 OywP3bn2YZGmKKOQxihmEgZV6yEMlJGiMNTrPPMXXSkW3n4QsiiD+L8IaPqOfN4o8z8O9
+	 OzCA4q53owd6EffGBsJfa3JQCaFNfD2qwc+81oAYtWbrj7InBUHiwDZD9dHXm4XhfJg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Y+phX/0q";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=I22sDu06;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21FD9606A330;
-	Tue, 17 Nov 2026 16:47:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CB9D606A884;
+	Tue, 17 Nov 2026 16:48:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Y+phX/0q
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B8261F000C5;
-	Tue, 17 Nov 2026 16:47:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=I22sDu06
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FB051F000C4;
+	Tue, 17 Nov 2026 16:47:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794934077;
-	bh=YLFFgzpWj7A4Qoim2g57jQzVKXzhgMc409wqmO8WDvs=;
+	s=k20260515; t=1794934085;
+	bh=VbXKrQKq0kT3v+sZX5j8TvDREdq0v6Q82Hyvv20liuM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Y+phX/0qw9/NDsfjegcHIwWfTf4W1bsyQNxa/Daa6zlvulikl+YiNR8cACxNJ5T29
-	 a65/BOTZdcoLBUXbN3PC8JkBvzV+Os6zoyN8BrRjNx5p6nNdkq4NtwY86Q0/0tqxZA
-	 s7W2Tnj6NgHcGTkryvAd5md3UIyb+IDPRtNSd1txzROia2+gdbjUehS7YFhmsnhWmr
-	 pvmo3eSGv4OHPZxeQjiZe8iQqr1/qCM63bIghmtb/dXLks5O7/Tst5oCYXtQEuS8UI
-	 qBP5N8FGB26ER/T0qoTeYe/uvuhh9YMoDeo5fLoUSWk53db8WnJjcc1Va9QEDZv77t
-	 z1G8XjUXhjwUQ==
+	b=I22sDu06MENQAYlSnRI0soekbX5y5EJHNc+7vuv7N+asRZMX56++sAzcTR7Dv49FX
+	 jqvSxopem6/+nDIcfhGgWWq6EawvkxYLnxcl41RdEKKbV2NGUK4cQH9oG+Lk4TfHu1
+	 PWepBEfbTh/xdt7Azi42AHHGip2pebSWLFRnockYwh79st2BZjnEcQKF+JvOh8y5oN
+	 OxRKKZxEsbOAPmmJ5gBNKYklKYFUbwoZ13QJk5UKqtdR1hnzqV8IcEUhnvDWHLy8ZQ
+	 b6UCgv2KqM1G+8TfjdYDngmnQ0Yx5oFwgPLoAmNCI4Tn4c5p6dzaVWUBgcn3qK+2EQ
+	 bCSaF8LeyL72g==
 From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
 To: "David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@kernel.org>,
@@ -81,9 +81,9 @@ Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	Mina Almasry <almasrymina@google.com>
-Subject: [PATCH net-next 5/7] netdevsim: Run native XDP next to devmem
-Date: Tue, 17 Nov 2026 17:46:56 +0100
-Message-ID: <20261117164700.2157816-6-bjorn@kernel.org>
+Subject: [PATCH net-next 6/7] selftests: net: Test XDP with devmem bindings
+Date: Tue, 17 Nov 2026 17:46:57 +0100
+Message-ID: <20261117164700.2157816-7-bjorn@kernel.org>
 X-Mailer: git-send-email 2.56.1
 In-Reply-To: <20261117164700.2157816-1-bjorn@kernel.org>
 References: <20261117164700.2157816-1-bjorn@kernel.org>
@@ -99,32 +99,97 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The attachment rules need a test driver that accepts native XDP and
-devmem bindings together. netdevsim runs XDP on ordinary skbs sent by
-its peer, not on provider payload.
+The XDP and devmem attachment rules must work in either order. A
+native program with frags support should coexist with a devmem RX
+binding; generic and single-buffer programs must remain rejected.
 
-Declare native XDP support alongside devmem bindings so selftests can
-check both attach orders. This tests configuration, not access to
-provider data.
+Test these rules on netdevsim with header split enabled. The test does
+not send packets with provider fragments.
 
 Signed-off-by: Björn Töpel <bjorn@kernel.org>
 ---
- drivers/net/netdevsim/netdev.c | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/testing/selftests/net/nl_netdev.py | 54 +++++++++++++++++++++++-
+ 1 file changed, 52 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/netdevsim/netdev.c b/drivers/net/netdevsim/netdev.c
-index 0372a9bd63bb..3d1657d24f60 100644
---- a/drivers/net/netdevsim/netdev.c
-+++ b/drivers/net/netdevsim/netdev.c
-@@ -880,6 +880,8 @@ static const struct netdev_queue_mgmt_ops nsim_queue_mgmt_ops = {
- 	.ndo_queue_mem_free	= nsim_queue_mem_free,
- 	.ndo_queue_start	= nsim_queue_start,
- 	.ndo_queue_stop		= nsim_queue_stop,
-+	/* XDP runs on the skbs of the peer, never on provider memory */
-+	.xdp_unreadable		= true,
- };
+diff --git a/tools/testing/selftests/net/nl_netdev.py b/tools/testing/selftests/net/nl_netdev.py
+index dd0321c0b463..15326fb66362 100755
+--- a/tools/testing/selftests/net/nl_netdev.py
++++ b/tools/testing/selftests/net/nl_netdev.py
+@@ -13,7 +13,8 @@ import struct
+ from os import system
+ from lib.py import ksft_run, ksft_exit, KsftFailEx, KsftSkipEx
+ from lib.py import ksft_eq, ksft_ge, ksft_ne, ksft_raises, ksft_busy_wait
+-from lib.py import EthtoolFamily, NetdevFamily, NetdevSimDev, NlError, defer, ip
++from lib.py import CmdExitFailure, EthtoolFamily, NetdevFamily, NetdevSimDev
++from lib.py import NlError, defer, ip
  
- static ssize_t
+ 
+ def empty_check(nf) -> None:
+@@ -483,6 +484,54 @@ def devmem_bind_tx_unregister_check(_nf) -> None:
+     nf_priv.close()
+ 
+ 
++def devmem_xdp_check(_nf) -> None:
++    """Native XDP with frags runs next to a devmem binding, in either order."""
++    prog = os.path.join(os.path.dirname(os.path.abspath(__file__)),
++                        "lib", "xdp_dummy.bpf.o")
++    if not os.path.exists(prog):
++        raise KsftSkipEx(f"{prog} is not built")
++
++    dmabuf_fd = _create_udmabuf()
++    defer(os.close, dmabuf_fd)
++    nf_priv = NetdevFamily()
++    defer(nf_priv.close)
++    nsimdev = NetdevSimDev(queue_count=2)
++    defer(nsimdev.remove)
++    nsim = nsimdev.nsims[0]
++    dev = nsim.ifname
++
++    ip(f"link set dev {dev} up")
++    with EthtoolFamily() as ef:
++        ef.rings_set({"header": {"dev-index": nsim.ifindex},
++                      "tcp-data-split": "enabled"})
++
++    # A generic program keeps the provider away
++    ip(f"link set dev {dev} xdpgeneric obj {prog} sec xdp.frags")
++    with ksft_raises(NlError) as cm:
++        nf_priv.bind_rx({"ifindex": nsim.ifindex, "fd": dmabuf_fd,
++                         "queues": [{"id": 1, "type": "rx"}]})
++    ksft_eq(cm.exception.nl_msg.error, -errno.EEXIST)
++    ip(f"link set dev {dev} xdpgeneric off")
++
++    # A native program first, then the provider
++    ip(f"link set dev {dev} xdpdrv obj {prog} sec xdp.frags")
++    _devmem_bind(nf_priv.bind_rx, {
++        "ifindex": nsim.ifindex,
++        "fd": dmabuf_fd,
++        "queues": [{"id": 1, "type": "rx"}],
++    })
++    ip(f"link set dev {dev} xdpdrv off")
++
++    # The provider first: native programs with frags only. Header split
++    # already refuses single-buffer programs.
++    ip(f"link set dev {dev} xdpdrv obj {prog} sec xdp.frags")
++    ip(f"link set dev {dev} xdpdrv off")
++    with ksft_raises(CmdExitFailure):
++        ip(f"link set dev {dev} xdpdrv obj {prog} sec xdp")
++    with ksft_raises(CmdExitFailure):
++        ip(f"link set dev {dev} xdpgeneric obj {prog} sec xdp.frags")
++
++
+ def main() -> None:
+     """ Ksft boiler plate main """
+     nf = NetdevFamily()
+@@ -498,7 +547,8 @@ def main() -> None:
+               page_pool_ifindex_leak_check,
+               page_pool_stats_ifindex_check,
+               devmem_bind_rx_unregister_check,
+-              devmem_bind_tx_unregister_check
++              devmem_bind_tx_unregister_check,
++              devmem_xdp_check
+               ],
+              args=(nf, ))
+     ksft_exit()
 -- 
 2.56.1
 
