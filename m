@@ -1,112 +1,89 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794932186;
-	b=QSkv4Dbh/hJ92yR4PC+flNvcKcSJnGTNO7sZ7Zt/hREADPjFpcqPlBbVINFkr/EqSUkF
-	 gYmSTo2Pmopy8Vnh/f18Ud1HTvyW0nNWQ3I9HoyQKnO/imWaGtBBFKuzQglvVWbBmLAX6
-	 xdqV9pk6kd4tHSaKIhZNdJxQBzIAcfWvpGntbBgiRkLbC/8UgAZ9/0nRQaLOXQFsNJ8IO
-	 0l7ik63XgOLDAudzH4U9HXkVTOkwEu8LApgpPtoTZFiovljgkRaNgm5BwgoDwdNxjykdH
-	 UK8ytb7BdTqZ+DUih8CQIXTYXWzLLRrw9OfqFM0expY5Riq2zFyxL1ycotZD4QR+eXw==
+	t=1794934037;
+	b=ptOxKPinqeyYJ1n81UZMEAYzV1gSv9Ijw8GqfzJJiaeH0StQphf3es1GcSn9Nj6T7bvk
+	 gCnaw/CzrHLIRpVOtfoYMyu62Nt5lCV3pzpBkTzzxM1gZtA/SoqKfe+OKiWcphd/zy23d
+	 AcNJ/BsN5VannXci95mrKqdqXiIMDuNKQwSmNQtpRHxy8K+zZ4lJ/y0XEZ3Dd880RcoLp
+	 meUAVT/S+aQFp9tJ0cx+JCJEjlYZmIanQyKyNzu/mUdMcswfCC6tj1+DKYZRwcIyKc1bl
+	 pOWuhCwFSQCnIbaXDkfNBSDJ8bLghFGqy82aJkTj3MQdfB3Fd4e/6DSHoXCmBqVaolg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794932186;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	a=rsa-sha256; c=relaxed/relaxed; t=1794934037;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=3epTVbKPJVG8iTt/z4MHuDPL8RwQKn3lHAOFYRFX2uc=;
-	b=dt5K7RvcWB667dUhN2kM9PloA8NaaYoQVfbmrq1IXiO5lwUiS1YZFtHCbLRcg9iONxAC
-	 sEEXwAcHwQ9/ji9k60IUyZZTxchcNybJ2wk031I4Xs53J9pSwOv7vEszPTJq84NjssuXL
-	 6nRHmOokKKCEnRZ5FWlFpK8u2nBFxT6/P3P3Nq2LQKNPndukd83usxicjimAdr8kYLNSp
-	 Tw+gp1Lq8Vit+Ls0hTu018Lhlu+vM0qrJa4M7xNC6VDsfXHSof3AINn0kEfrj4B3T1+9j
-	 Q/gzi9NIyvTjOm19Aqs9Ac7Ye/MRyoiXA/EsUwYGIeUYtmZoZVrw2EfbUokfv8LEqkA==
+	bh=Fco+UlnINs31RhLyhKfNSsZubf2jNgBWY6vfGvE0k4A=;
+	b=e7zn3sEuiXisjbm5ozvwOtReeUigBYanjxC55AbhrJA1YsmdtZESClwTdE0EAlKZSpIi
+	 f+UF7qDyH+DkQP376/zIVHZ5o6wgTWpCbKxMHj/qugEuMCllxbhkR82doJa4GO2Oq/5Zs
+	 hwXo3V9Te9DLSl++ffbbUNIGIGxFdxKCirEUw+pCwctqZ9VTrAXSptzlPX0BZygO4YydO
+	 vUfKfG4voe/tmBDINy84V8zjHV3ImCi4UVVySexKyHAZQM11fCFQ/gRcBNKP/Oq0TbMjj
+	 0uKFUpeIwDyiUzlsYw9q3x0CwrvqAEL0Cw8Yizn1UJCh52mbWQnrtLCezXOKE6buKMw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cloudflare.com;
-	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=UpSR2Myj;
-	arc=none smtp.remote-ip=209.85.218.51
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iDPwpT4H;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8518E606A32F
-	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 16:16:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8518E606A32F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E223606A889;
+	Tue, 17 Nov 2026 16:47:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=UpSR2Myj
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-c4d427836e9so657115766b.1
-        for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 08:16:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1794932185; x=1795536985; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=3epTVbKPJVG8iTt/z4MHuDPL8RwQKn3lHAOFYRFX2uc=;
-        b=UpSR2MyjHvrEaRxBPQUaVNwY5hXBUuG7pyxygzHG8O1OlkFcTtvImstuQRqRpLBA4r
-         d8ujp2NOgvsfRkCgBHT99e6DvBL3yjoZG+IRzwPN1ecpq8Zu1gziqA/LJJbKmUU32L96
-         +j5J/XDhamhmyebOPpBG6lvLVHypiH9s5zxH4yI6N81cQPeunv+Y+9WbmyCs01sxiCoX
-         E93SVwIf7wxbx0XWpPk+aocZMK9ejnb/JEglkxAcxqwse1Z8hwdGohRj63Nd4/PwWHJk
-         /kSuhuk8KNpLagBGeAGXgI3LSl3mMI3oB4+FQfhFlZpxkA8lCcHoxW090cLST8CcTcKZ
-         OhEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794932185; x=1795536985;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=3epTVbKPJVG8iTt/z4MHuDPL8RwQKn3lHAOFYRFX2uc=;
-        b=WtW9wthG6FxlhyoUcLUb6kkcRGKRu69V4wFw5c5ww9lEuOeTorZIH3CXMIsbUvXyLm
-         vXTEb/SOxVMHW4OKxZpZHyikyoFVEVMPfcksLrWAOtoRjvqnaPxpCqnXW1LxzwUlhCzv
-         Xb2MWk3EiXMbH/f2tKdT6Sd4hlely9XPYBgVDxSIFxLVgT8UYCkwxW27/NhVqzAIUbnO
-         jnEQNkUx62KKDL3SeL092WAK8k7AwqAOH/UXr5Ndwo4a2oFEDixSS5nyN6Eb+ISiWzkZ
-         8KToTov4fBR0m3UR9N8Rrqc0Pj2s9xy5R5xBn1X7rCtiHMqkiv3jevEmGfaEfrWHiJCT
-         UJrw==
-X-Forwarded-Encrypted: i=1; AL+hErEwbG8bgw+ch3qAqMPknoD2TMGcj0Sno7mOLwFqs4h7mWBJIES3nWx/dw9yCU6JL79M4Wc=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+uf+vN9yghDb7qFpzFCRRPqQMC535gdeJ9y8sKjWuYPVVbsymL
-	Oq2Eq8kESLTDZw9AQPpyEMa9L9iN6pZ2JDsZTItC7QDosG197mbHs0FLSGk8kJXcsgE=
-X-Gm-Gg: AYBFou2hkPBmL5gZ3W7hzLJZHF0j1D2BevrgYM8zQniHRs9tePVF4IXD3oeUbWahlU2
-	tRJTTrUqax8aBo3eyxjisVMjV3+s0E+pZxQ3GlpCqrGLhlM87vITRvgiyCRbJM+fMxQMryH7HBi
-	WxIvGdk7uTIhXACWslwL7WdV+AMSK9gPDxJAkoL5YbcniW1LSidnbGG+c0qeBHp55x3eo4g16tS
-	iqHlp78/hbS1ZwvddXEfdqUaa5Ixoehftk4hGLIFGPqAq+ZxZUbCIuOoGcXbaZQ3f5HWr5s8KqI
-	20M4x6Bj98zmQMyZnl60r57Ru6i25c8mSFAURul06sVGojP0f0WQMAIhwUsbF0jj8UzV4X+H8FI
-	8IJMa3AytyJZXN6TSXxXZ4DhHU4vGwEwLGlh7+oTCkD0IKbvV93jb0OyRjH6MOUi1xnwxKAULF2
-	gdUbAKR4pOLIRuztZ6fe+D8mLAxGX8ia8LWLTP3APm9t/S1TKX23USqUMKPzmPKtBIe4hgQc9Xh
-	S4UbY8SnS7SnZFsLP78kT+uI88s7zlwNgN7DoR4B04Hy3nKS0q6vZoIB14xnOIVU3EDQIwNfRJD
-	/pe/a0/mynSPQzlWpXw3sgXuKQSXBU5EWLPboyHcmiEfD7Q=
-X-Received: by 2002:a17:907:dab:b0:c49:df8f:3c79 with SMTP id a640c23a62f3a-c50963b88f3mr1191532666b.34.1794932184976;
-        Tue, 17 Nov 2026 08:16:24 -0800 (PST)
-Received: from L9JK9NPFH9 ([2a09:bac6:37ad:1e5a::306:c])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c510cab33aasm857666b.52.2026.11.17.08.16.22
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 17 Nov 2026 08:16:24 -0800 (PST)
-From: Tianyi Gao <tianyi@cloudflare.com>
-To: Slawomir Stepien <sst@poczta.fm>
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iDPwpT4H
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E0541F000C5;
+	Tue, 17 Nov 2026 16:47:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794934036;
+	bh=Fco+UlnINs31RhLyhKfNSsZubf2jNgBWY6vfGvE0k4A=;
+	h=From:To:Cc:Subject:Date;
+	b=iDPwpT4HdexXsiGZ4nqwW9ju6XomdL9Mw3q2pwnUf3nGxM5O4Tv2DqZO4tmlmEaky
+	 gQxkzAocgG1wTOARZLMae7SolEpZ4NV2F4bf73cN07EAeIvWbwidolW6/gk4BVgmbZ
+	 66KCxVsQJYoaTz8GqfyMWu/przkFfgCIdiz99eDosesQ+Sz9DFh6IbnOLk3y+aJhxe
+	 EmZdZC9K5Ixc35fHjPlGDBqsyY4g16Foc4tw++GdO4H7aSQfQcC6gcucJqy8RwIJBF
+	 00SL4BEcgYQvBMAVfG1i4EIIQSmbaRIjvEI8H6XfpS3+bff9pHdrU7rd0zOwU0dZep
+	 1n2Dod1G6s7dA==
+From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
+To: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Alexander Duyck <alexanderduyck@fb.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Magnus Karlsson <magnus.karlsson@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Pavel Begunkov <asml.silence@gmail.com>,
 	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	magnus.karlsson@intel.com,
-	aleksander.lobakin@intel.com,
-	ilias.apalodimas@linaro.org,
-	toke@redhat.com,
-	lorenzo@kernel.org,
-	ihor.solodrai@linux.dev,
-	tavip@google.com,
-	maciej.fijalkowski@intel.com,
-	stable@vger.kernel.org,
-	kernel-team@cloudflare.com,
-	tianyi.gao@linux.dev
-Subject: Re: [PATCH v6 bpf 2/3] veth: use the frame mem type when running XDP on an xdp_frame
-Date: Tue, 17 Nov 2026 16:16:20 +0000
-Message-ID: <20261117161620.62739-1-tianyi@cloudflare.com>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261104121316.1155680-3-sst@poczta.fm>
-References: <20261104121316.1155680-1-sst@poczta.fm> <20261104121316.1155680-3-sst@poczta.fm>
+	bpf@vger.kernel.org
+Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	kernel-team@meta.com,
+	John Fastabend <john.fastabend@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Weiming Shi <bestswngs@gmail.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	David Wei <dw@davidwei.uk>,
+	Bobby Eshleman <bobbyeshleman@meta.com>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	io-uring@vger.kernel.org,
+	Mina Almasry <almasrymina@google.com>
+Subject: [PATCH net-next 0/7] XDP with io_uring zero-copy RX and devmem
+Date: Tue, 17 Nov 2026 17:46:51 +0100
+Message-ID: <20261117164700.2157816-1-bjorn@kernel.org>
+X-Mailer: git-send-email 2.56.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -116,7 +93,92 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Reviewed-by: Tianyi Gao <tianyi@cloudflare.com>
+Hi!
+
+I had a long chat on page-pool providers with Magnus and Maciej
+earlier this week, and the topic of "XDP on unreadable providers" came
+up. Magnus suggested building on the xdp.frags mode, to support this.
+
+Here goes...
+
+Devmem and io_uring zero-copy RX place packet payload in memory that the
+kernel cannot read through the normal packet APIs. Header split keeps
+the headers in ordinary kernel memory. Today, the core rejects XDP and
+these memory providers on the same device, in either attach order.
+
+A program that checks headers should not need to copy the payload or
+turn off zero-copy receive. Keep the payload in fragments and run a
+native XDP program with frags support. Frags support means that the
+program accepts a packet whose data_end does not cover the whole
+packet. It does not give the program permission to read provider data.
+
+Kuba added XDP_FLAGS_FRAGS_UNREADABLE, which already records this kind
+of payload. xdp_buff_add_frag() sets it for net_iov fragments, and skb
+construction copies it to skb->unreadable. Drivers use this path even
+without an XDP program. The series uses the same flag to stop helpers
+from reading or writing provider fragments. Header access still works.
+
+XDP_PASS keeps the payload for the normal receive path. XDP_DROP frees
+it without reading it. Frame redirects and AF_XDP copies reject a
+buffer while the flag is set. The driver must also reject XDP_TX:
+provider payload is mapped for receive, not transmit. Tail trimming
+can remove the payload without reading it; after the last fragment is
+removed, the remaining header buffer has no unreadable fragments.
+
+Only drivers that declare xdp_unreadable support accept the combination.
+fbnic is the real driver in this series. Its XDP_TX path drops packets
+while unreadable fragments remain. netdevsim tests the attachment
+rules, but it does not test packet access to provider memory.
+
+Generic XDP remains rejected. Its receive path first copies or
+linearizes nonlinear skbs, which fails when it reaches provider data.
+Even if that step were skipped, skb-to-XDP conversion does not carry
+the unreadable flag, and generic transmit and redirect use skb paths
+outside the native driver's XDP_TX guard. Supporting generic XDP needs
+separate handling; admitting it here would not be enough.
+
+
+Björn
+
+Björn Töpel (7):
+  bpf: Keep XDP helpers within readable data
+  xdp: Reject frames with unreadable fragments
+  net: Admit native XDP on provider queues
+  eth: fbnic: Run XDP on provider queues
+  netdevsim: Run native XDP next to devmem
+  selftests: net: Test XDP with devmem bindings
+  selftests: net: Test XDP on io_uring RX
+
+ Documentation/networking/netmem.rst           |   8 +
+ MAINTAINERS                                   |   2 +
+ drivers/net/ethernet/meta/fbnic/fbnic_txrx.c  |   4 +-
+ drivers/net/netdevsim/netdev.c                |   2 +
+ include/linux/filter.h                        |   9 +-
+ include/net/netdev_queues.h                   |   6 +
+ include/net/xdp.h                             |  20 +-
+ kernel/bpf/helpers.c                          |   4 +-
+ net/core/dev.c                                |  28 +-
+ net/core/dev.h                                |   1 +
+ net/core/filter.c                             |  37 ++-
+ net/core/netdev_rx_queue.c                    |   2 +-
+ net/xdp/xsk.c                                 |   5 +
+ .../selftests/drivers/net/hw/.gitignore       |   1 +
+ .../testing/selftests/drivers/net/hw/Makefile |  10 +-
+ tools/testing/selftests/drivers/net/hw/config |   5 +
+ .../selftests/drivers/net/hw/iou-zcrx.c       | 242 +++++++++++++++++-
+ .../selftests/drivers/net/hw/iou-zcrx.py      | 108 +++++++-
+ .../selftests/drivers/net/hw/iou_zcrx.bpf.c   | 111 ++++++++
+ .../selftests/drivers/net/hw/iou_zcrx.h       |  34 +++
+ tools/testing/selftests/net/nl_netdev.py      |  54 +++-
+ 21 files changed, 646 insertions(+), 47 deletions(-)
+ create mode 100644 tools/testing/selftests/drivers/net/hw/iou_zcrx.bpf.c
+ create mode 100644 tools/testing/selftests/drivers/net/hw/iou_zcrx.h
+
+
+base-commit: f23dcd8055612eb37c666c67fe0cfe38b3c65021
+-- 
+2.56.1
+
