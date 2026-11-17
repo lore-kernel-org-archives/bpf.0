@@ -1,100 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.172
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794943828;
-	b=3kVHPzMrKvLa2YnI9Vosgf+Y99649M7D2MHvG/a9UQskOrAXtychj3ud9/N7/ARJuXIF
-	 dDGK2CuB6G0g1LICWeipqco1Qn4W8qWjQeBTs5rcRxAG3vzRHcmJN8zGO22xbkoujEol7
-	 UA3tjDD0iwbmM9ScejoluhA9SVv55z6g3FXScT+OnUl42Q/7K5A9axXXBXqn2u+SDcODb
-	 sOuQgtikYcJhB2a4wuKJw4ALhLY86zbqiO0zvnx9IIj1dCK6CITucv9lEbVtnTcpec0dA
-	 AtaTobLjSNN1LWMjah11pmjp9NijIM8a97SZBaSdGnf6fETZYxTGvqRMX7u48ogRhqg==
+	t=1794945014;
+	b=5mHN82CFEqboXyr0oIrzLhxdLQdL8Iom949CbfMYukWe/L+pysjYnfIHbghWWnFfYyaZ
+	 UV3KsY1IG+lIzoAah4Km0bhZheZKyCvsB5TxB6VxtMlbUQJtSpmbDdIrEGcRTQqGahnb8
+	 IXCgbSAVedelSXUUhl+WJtwZHxYYVK2LklKwSLVc97fs7SE+hVmEu5EOOUrgEuz3ns3wI
+	 GPRTdx5Fy7/Zrrt1TXgGuuTFDAJUQa1gaBbS7jj2X9Kwr6Ywd5PXPNk9fta5DXAQaQ0Ju
+	 40dZe6UXG5faiEeicl84ZwTgZwiOWEcmkpm1aOP7xsZl8KbVJYQQsmddXtX3hNFkk0A==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794943828;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794945014;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=sj3hBjgFsqV+K2H84i9mKjEVi7Hj254h9Ue/yqcHRR8=;
-	b=mWqfSmvl/SWKkrmg6nXSkrwyuci4AF055RMeeIGRtan7S5OduIqZdvsjbKbOpjNQWA6n
-	 iJE7baVVeTnRkK4PshobpV0YeEiu6VmtZPDmc7obsXRaKWUSfpfLBaFooCgvGkdXjfh4+
-	 HSZNpSQEfbYQCS6zlD05fnILcn6MYUXXQOAFQAzjUkH6Rd+DTY+JWfRH0hoepCt9NRazC
-	 t9XyDtQHL9juKXtPE3C+YS6qyJu+AEb8JtYuPjJopJfJ7BX7ul0awRGLWpCTyCX2pzb5I
-	 g66I2vkM7yMDewSIwMeTnXA/9OvEIgZ5iN7iQZHgh7KGKucqgc9Db0hmyvIy5iTF4nw==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:From:Date:
+	 X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type;
+	bh=YJnDVGxHWCga0DMzSISwU7Rjw8JZrBWf9jVM4Nuybjg=;
+	b=FikiJcjk+qdZBogf7sajN4ELu/Z7RUOnh9ZzU+rJhDSlMx88ZJtWpF8U1EHNxJtqSHcG
+	 bGjd+1iYm2RzDGlMlQsskPAvJdYoy4mbDadOge/2XlkZ0gJl05nTDM+dUiQprLQeQw5Ki
+	 UN/DCbknWfCNkM0V/9177uSmXoe2x+qf998IKDeGCRgScKaazwfY8F+n6G8JQye3kxl2M
+	 esbJg5ddTJimZxm8tgduaqZ93aSG+54UlpxraQjM/lrxY5gEY9F7N94TnQaQu4x3EKy2L
+	 sNw3BDL7EkEFY5RtzuSwN/8fNFMvoCzl/hS9Vn+SR0cDZApUGF0YqOVGygsVEchfVmQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=paul-moore.com;
-	spf=pass smtp.mailfrom=paul-moore.com;
-	dkim=pass header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=VR8IlJuU;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.177
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	dmarc=pass header.from=scarletmail.rutgers.edu;
+	spf=pass smtp.mailfrom=scarletmail.rutgers.edu;
+	dkim=pass header.d=scarletmail.rutgers.edu header.i=@scarletmail.rutgers.edu header.a=rsa-sha256 header.s=google-20180529 header.b=ebdhYfE0;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.172
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 412CD606A32A
-	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 19:30:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 412CD606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50B6C606A31C
+	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 19:50:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 50B6C606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=scarletmail.rutgers.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=scarletmail.rutgers.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=VR8IlJuU
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-89d6bd67045so50276b3a.0
-        for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 11:30:28 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794943827; cv=none;
+	dkim=pass (2048-bit key) header.d=scarletmail.rutgers.edu header.i=@scarletmail.rutgers.edu header.a=rsa-sha256 header.s=google-20180529 header.b=ebdhYfE0
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-537548b811aso1637181cf.3
+        for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 11:50:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794945013; cv=none;
         d=google.com; s=arc-20260327;
-        b=gBJiwPzok8oIg+nqDLIlyAcy5omy6WIil/QwxXoA3KpYjrY7vTlyDiha6QaAfZ30Ne
-         Bw7dem5+dndPap1924ygDlCEkuSVg/7CE3fApbxfKLwzJ7PmbyuMFh5lpCCqdhnlYpYb
-         H1EqoQJoXmzJHHE9mgpWn7ZU8Vcf8hu4JYo14e3namjO//EQqNGdQOOAPY1yD2AUKQNk
-         YFB2xMLyIqwppBZo0FbQZa6qQ4n6Cx8vgUXjJ6LaNOGcE9Nfhk1KPySE5Hq01rL1GHUC
-         yVSvtZfYN4GURSeBysvfumwW/52FaVMm7Hxx1wDe0pSinniF4UozltQfqzxGa317RQGu
-         6SuA==
+        b=ZwczZbkoKOtVM7rnL8/9oRotrnv+0funhPjlWIzy7RVdhqvlp5uZ7LU9x7qO64sntT
+         NvtIUyxG6sKFXW/zjMKs8IoJSxqAivu+LfrH76KszSjFzCqOnr0XOlkeTgEeymAydUtF
+         bkeLALwm5bwe8dMZ5S1QmII3NYjIjN/kQ78lZaDGslKCEXZvxr676gUOo4Zjp0XlT16o
+         OdybHoNh2qzhmJKxk1RCBHx8KJ7TX+3d+SJyBjKplEA5lAv1iAJMsWTD0CKaUOZ6vid0
+         j8KQRdBKwq1Yq/KmAmm3XO4+oYRC+Pn9dPiehg2ukiDxin32/QGWG4RSuUAI+I/GD+Yh
+         0z7Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=sj3hBjgFsqV+K2H84i9mKjEVi7Hj254h9Ue/yqcHRR8=;
-        fh=a/kl9pwQlRa72DsbPS2NODc2ufvM6XRbgoQPX1E3ttQ=;
-        b=eOv2UE/wbTTxzzfaIm/MZ9st861pIKZS61uuWAX8YgoCSsbA7jS+CU1X5wpOB6p49v
-         gcQMbK8Oxl9i9vu1G/Kl+mBhfyTAi7i7ZmXvJo8GgmFIZViQYvq38HXgwCKVAJjFF8OF
-         rf7+d9qjUrPvJBHNjijqljr4fHOOX8cB+X7v05XUA2yBXMRu3xS7cJVnNQdyaTElUr7j
-         6am5GZtSp1LWa6BRLKNPPaHr2IYf6tryBr/M56PTKWGxEwDC620JfcC4url/jgXObx9A
-         8Me6RHFryrmqYh/spL9IWgiWeh6zutV7/QqRzDPSVtbulF/r1dhbAuwd4Ka3wRlVb6vo
-         T82g==;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=YJnDVGxHWCga0DMzSISwU7Rjw8JZrBWf9jVM4Nuybjg=;
+        fh=DVImKLhcKuounm3K9Xgg4J3osERFJhthSzUJqfpBQU4=;
+        b=UOp8xEtk4MM603RtBT2bh5Pj+9BeGBbi9K1DcWfggcl/Vetqu2XIG4oniTlbeh0OXk
+         rIh5RF4AGPGYyw+uDXTFLw4CyoGv4PPNa7lh8vV2obppP9pzewUSImCIbo5uNZcqzX9b
+         AmRKguP1ywbjORFZh9sQNTjyH7DKkPn0pR3AUd/V+p2sITZgbi3mSmBrDim+u5O8iRuU
+         MaC+RBjWggHZnRTwLQtWUVFG0k/ygc8lDWGY0zO9pclf8jEHBisRNz7MEUbP0CjKBdru
+         FZvOt16q3Q0qGXR4iy5CIf/msOuyLPx8a9/v81fuU1egDj5m67Mtz6FE7U1iMO+qtWZQ
+         /5bQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1794943827; x=1795548627; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=sj3hBjgFsqV+K2H84i9mKjEVi7Hj254h9Ue/yqcHRR8=;
-        b=VR8IlJuUxEu9TYzVDniE5LhVZ+4g7Nr7Fd7jiQAG2y+N/K5TwpW3dJQNxvjxL9x9Yc
-         +/LAooYdXV5cRrLaQgZlAAgRbONAt9gBIuqKMTtyIvJByYGewNc0cGzjkkJlCyenH09E
-         73gfP+kxEkfcIEEdvAjz8Xt6zrVvuiIIqhOx1qZYt6o/SQYoeIeiSGiuTqScWZhhCCO7
-         U4QMhJAeN1EXrwhX92FMUIb7d+vlrGGqcG+Tvg2bxgxRo6DIj1686baaVBKFXKA2ef6+
-         3qPQ6s2zWSAqNdbNHheWFCbTUdmtVaxhlKbtz/qkAp7qAPyaoR+Xq638oKhLGTwZ3fjO
-         gNEQ==
+        d=scarletmail.rutgers.edu; s=google-20180529; t=1794945013; x=1795549813; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=YJnDVGxHWCga0DMzSISwU7Rjw8JZrBWf9jVM4Nuybjg=;
+        b=ebdhYfE0Alkdl1oplo5e4RFns8w/BMEocQNDYzDyBaTuu6c6hbHi4nSWX+tCR97ks8
+         +WwciCQnBh+PUBmZ6ibmYJRUf16pbKh7HkUtNTCX7BHznxUJUAjBldhOndAGhjmFXuEI
+         3iShed8HqTAbg2h5MiqjuctgcFUd2vCoq/qU/Un6SHJ+Cw30bEMAHBOtm6dBJOsUKUeb
+         +IV1IHhFtaUKa4Fc38eeUzgqGu09guEsmbBMe2fzmazITrV2aQg+y3dX27JSB4UIo1cl
+         1dWt5A4ABb4KaLU/XBGMl1zaT55m8TmOIELVZ3m7GzEoqRKbUsbzf4XVh0daiqdWc76X
+         5l5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794943827; x=1795548627;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=sj3hBjgFsqV+K2H84i9mKjEVi7Hj254h9Ue/yqcHRR8=;
-        b=IB3ScL5KxkHOQr1V3XEtv/MWF35xhmo5S3YOCia+vs+Md6yVQreJMoJg0OjEaCzoZf
-         3ksPfJOGht5xzNi/vXB0gFfbZjMGTD7J7Lmanw+aKqu73YzSJKpmt14atqp0DiWp2D1/
-         87IjNu3/9CXXUQ68LxG6HtMXyDtztoCb3M88tbWmUBQ2LPqZ8cCBf2bAx6VqAIuBmogs
-         rGTzQVQgdNtUz8ZhhZrHz73JwjCe+ukcGcO4hdKxxhjiElmfY/ozQEuPabTHU+8eNurT
-         O0oldegWsMcm/7f1hLHfqbGPFx5hHWtvDuw8rwbwAsbTqkV9TWaGch4dr0IjjuvJ4kpN
-         dP3w==
-X-Forwarded-Encrypted: i=1; AL+hErFk3DpWbpeyTjJTCzWpySlMjyCmvC9AllqcSXkiuYZ5VLtnez4ovtMzGMouW+jBhC6Y0J0=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8k2qOh3O+DAi3sDx9nGufrq1mhghdeQioPfS43dzRyXtttvj98
-	zIsog3X7+N9O+BVQS4iLB+vRYAOk+I03pDtydu0eraoIz7yZBpmSClaXngbSpLDQLlCPHoovgKC
-	/3xaWeLjivciSU2UXUBP7Js+PUXB2CulidMpd153S
-X-Gm-Gg: AYBFou2nP9P0EI7qhfiZJQtL2ir9R7bF8/yu9aQ6guAE/Bu77ALAyt02wLu3zlWbBDf
-	3qqmK4M3ObpMcGwRg05w9fEc8lm4MItChB+SqczdLkH1Jz4//JK4vsaA7jJqnMznL9XEQq6loVz
-	qvLCrAvZP8ssDKXQ61sB4kk0zjNhD07LYB6bieRWYw2sFu/A9BfgGC34YaididRmOkRLcqKY9lf
-	oRpgpGFax9gLQRI98UvPKpssLUZJicLtoOW6QPeAsGQ9e9AxU+to+mA1aQd0nyXEAx5jpv2hGUQ
-	jRRYHUiPnyUDLShvLiMuGob/E5LmrE2t7faGGMLYnyncgooHzG+TrPZJU6aLwA6aAeH9/sSupY8
-	i+u5/SviIVysCb47QOqIYIJjoGp9+vH6k/4KLYw+hRGlVgZad4qkJYwTQDJvfboT2CqxQ
-X-Received: by 2002:a05:6a00:1f11:b0:8b5:a10a:a3e8 with SMTP id
- d2e1a72fcca58-8c457e2e17amr2269626b3a.44.1794943827559; Tue, 17 Nov 2026
- 11:30:27 -0800 (PST)
+        d=1e100.net; s=20260707; t=1794945013; x=1795549813;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=YJnDVGxHWCga0DMzSISwU7Rjw8JZrBWf9jVM4Nuybjg=;
+        b=XKHYQbBW8AYta/VjzfTOskWNRMZqtZ+u26pV0qepmQ0IPAT8j6kTg4Tpi9AFVRZ8xM
+         b08BN44fM8YvJy/uUbrAsnb9a1Y0u1fjMVkDdrPlugMN0cNbV4gylcuIYDc8kNwfyury
+         h84eb8/0H+1VOkeRicn2z0WipzOgz41v7vhzJcsdSLqj/kmMACKhpjbsmqByHXD7O18p
+         KYF/uSVdG+BblFV0+Pappk8PIXi++B8wN2hddxIATVBmpvSvb0jVLHeDZ1pget2aQLBg
+         b/imG/Y7uRDsuUbytbRiIYSf3alnKJOAtp2wC/lOxZkOBNdZYUQ6PSUhrhSQ/8nBgXBI
+         vGBA==
+X-Gm-Message-State: APuU4Z/AnQaqaU3Jwj0HeiBrbHC9RMifB+z8uDGlLg4Yi8/uOs4vIveA
+	ih/YO4UPiFtakEXn0KW9/4HTije8m5ykbXUvwPg86L8LzxyVNKES91mFaSL2BuJjHNDbqizJGwD
+	8Bk1X0ccHs1SD5/5yOBeTWCY5zhWJne4QdYuGTmlo/q6WQwNtUSpwk866+A==
+X-Gm-Gg: AYBFou2djLWUKUhqCZM6APVhVCi0QOm38ofXpC2WdWrCZA8enXerhaET+l7OJ0B3bXn
+	xmxTDIEWXZ8pR5ABIMbF2rvs4u8+YRruqNB5hiLFVtMHCajcCxiNupQIh1MTwv2Zp39/U5M33Ay
+	r3D/8DdzCJVoXCP8K68KkJ/zBhSIcNlDt7HYbUG4pG2BAsAr4F94MaZSGBGXelEAMsR52BkoFgd
+	wUk3HzbYEaHZLs4eYJ5nk/gCyj4/V11vEoFYyhs68Ii/+D6YiicUKkwrZnhctOgLiT+h4IbfkCN
+	ZlO00AmObYqx6w+si7FqEbzs/DYJC5U+7U+k2N2otQ2D8NFNLsk63h2UECj0Li43eKIbDQp8X7d
+	pwDtvxs1U2RfUeWuKCcLY7w8YlqN/n8FtfvtBNQn9hAdQHSx0oFwc2gvr6ujyhN8XslRBt4o=
+X-Received: by 2002:a05:622a:389:b0:55c:cfd:3bd4 with SMTP id
+ d75a77b69052e-55d5a6dfadcmr5584161cf.72.1794945012714; Tue, 17 Nov 2026
+ 11:50:12 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,110 +99,112 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <d85ece6e-27f9-4d9f-83af-4101bc76fef6@app.fastmail.com>
- <356db94e-f5d6-4fb2-839a-b97aef72256b@app.fastmail.com> <CAHC9VhR9sjunJRnM9gy-BkBZkapQTrr8a8FtmaK7JkAmUqTrLA@mail.gmail.com>
- <CAEf4BzZKmn6g0SK8OddjKFj_vAmZFvpZv32Hs_S+GHgT7VNfrg@mail.gmail.com>
- <9d6bdc31-e57c-4187-be78-29d82471f710@app.fastmail.com> <CAEf4Bzb+oYDqO20v4YbJ45wdtcGgJT3xVse822P+=oA7fpFAOA@mail.gmail.com>
- <CAHC9VhRcT3rmdpeadwi2avhwvr7aEZYStZ3bbEEx1hm=wtBGhQ@mail.gmail.com> <CAEf4BzZ120age2-M-a_TJ07xohb7-s=xn3e1W_-V0kopnATq6A@mail.gmail.com>
-In-Reply-To: <CAEf4BzZ120age2-M-a_TJ07xohb7-s=xn3e1W_-V0kopnATq6A@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 17 Nov 2026 14:30:15 -0500
-X-Gm-Features: AclHuK-RtKReAlxzWgT2ghpIFsZj6qbY4_JP5P0ehVqwzT5eB9L_2z4RTCFLPcA
-Message-ID: <CAHC9VhThV9xiXr8j5_+W__CBKn0JqUiZ-RGZpF4Nz-i_RZprAQ@mail.gmail.com>
-Subject: Re: [BUG] bpf, lsm: new first argument in 7.4 inode hooks silently
- breaks BPF LSMs
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: roblabla <linux@roblab.la>, Daan De Meyer <daan@amutable.com>, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, paul.mabileau@harfanglab.fr, 
-	linux-kernel@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>, 
-	Christian Brauner <brauner@kernel.org>
+From: Yalu Cai <yc1795@scarletmail.rutgers.edu>
+Date: Tue, 17 Nov 2026 14:50:01 -0500
+X-Gm-Features: Aa3M54o1WehE7pPO70ZZ7jw_-GD7ppIvrVXgoW7F7c1bxYXFjB-tmWDugLlNfVQ
+Message-ID: <CAPUfTJOD==vidMeytY5vo4h2qZPdM=n5CRUtJttZ5N4oD6Fo1A@mail.gmail.com>
+Subject: tracing progs can take a bpf_spin_lock in an inner map -> NMI deadlock
+To: bpf@vger.kernel.org
+Cc: santosh.nagarakatte@cs.rutgers.edu
+Content-Type: multipart/mixed; boundary="000000000000e10f7906607e3362"
+
+--000000000000e10f7906607e3362
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 17, 2026 at 11:51=E2=80=AFAM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
-> On Thu, Nov 12, 2026 at 6:41=E2=80=AFPM Paul Moore <paul@paul-moore.com> =
-wrote:
-> > On Thu, Nov 12, 2026 at 6:00=E2=80=AFPM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> > > On Mon, Nov 9, 2026 at 7:08=E2=80=AFAM roblabla <linux@roblab.la> wro=
-te:
-> > > >
-> > > > Hi,
-> > > >
-> > > > Thanks for the replies!
-> > > >
-> > > > > LSMs that need to provide a stable API must provide an abstractio=
-n
-> > > > > layer between the LSM hook callbacks and their stable API.  The L=
-SM
-> > > > > framework is not responsible for the stability of individual LSM =
-APIs.
-> > > >
-> > > > Understood, that lines up with my expectations. I think the biggest
-> > > > thing here would not necessarily be stability guarantees, but rathe=
-r to
-> > > > make sure that the eBPFs fail to load when the compatibility is bro=
-ken.
-> > > > But that's probably a problem for the eBPF side, and not LSM, I ass=
-ume.
-> > > >
-> > > > > So, in short, would it be possible to send a follow up to Daan's
-> > > > > commit and move `struct mnt_idmap *idmap` to the end of LSM argum=
-ent
-> > > > > list?
-> > > >
-> > > > If this is possible, that'd be nice so that we avoid this breakage =
-in
-> > > > the short term, since the change isn't in a released kernel yet.
-> > >
-> > > can you please send a patch proposing that and we can continue
-> > > discussion there? please cc me so I can follow along
-> >
-> > Considering the original patch was submitted, reviewed, and merged
-> > with the BPF LSM being the only user (none of the existing in-tree
-> > LSMs use the idmap parameter at present), I'm a little surprised this
-> > wasn't brought up earlier.
->
-> Yeah, unfortunately this was missed. Not sure it's surprising that it
-> wasn't detected immediately, though, because unlikely someone tested
-> an unreleased kernel in production. Luckily, this was still detected
-> early enough before the final release and this gives us a chance to
-> fix a mistake.
+Hi,
 
-I've been surprised lately by apparently how little the BPF LSM
-program interface is tested with real BPF programs before landing in
-Linus' tree.  I know the BPF folks have a pretty good set of CI tests,
-bots, etc. but there do seem to be gaps relating to real world usage.
+As part of a research project, we have been trying to formally verify
+parts of the eBPF verifier. We found a bug that deadlocks the machine.
+Below is the concrete description of the bug:
 
-> > Beyond that, from a style perspective, I think I prefer the idmap at
-> > the front of the parameter list in most (all?) of the hooks where it
-> > was added.  I'm not interested in moving it at this point in time.
->
-> So on one hand we have a real user pain which is easily fixable
-> without burdening kernel and LSM subsystem in particular, right?
+A perf_event program can take a bpf_spin_lock in a map-in-map's inner map,
+even though the verifier rejects the same lock in a directly referenced map.
+bpf_spin_lock disables IRQs but not NMIs (local_irq_save()). A cycles NMI can
+interrupt the lock holder on the same CPU and spin forever.
+Reproduced on 7.4-rc3 and bpf-next (ea80d2afd285), x86_64.
 
-Arguably changes that negatively impact code style and readability do
-affect developers and maintainers.
+check_map_prog_compatibility() rejects a bpf_spin_lock in a tracing program.
 
-> On
-> the other hand there is a minor issue of argument ordering with
-> mnt_idmap preferably as a first argument. I get the preference, but I
-> think fixing an unnecessary (but easily fixable!) user pain should
-> come first, don't you agree?
->
-> Can you please reconsider?
+if (btf_record_has_field(map->record, BPF_SPIN_LOCK)) {
+if (is_tracing_prog_type(prog_type)) {
+verbose(env, "tracing progs cannot use bpf_spin_lock yet\n");
+return -EINVAL;
 
-The user pain exists because there is no abstraction layer between the
-LSM hook callbacks and what the BPF LSM makes available to BPF
-programs.  That's a choice made by the BPF LSM devs, and while it's a
-valid choice, it does have drawbacks like we are seeing here.  Changes
-to the callback arguments and/or the semantic behavior of the LSM
-hooks are going to continue to happen regardless of what we do here.
-It's better if the BPF LSM figures out how to deal with problems like
-these rather than relying on a set of bandaids at the LSM framework
-layer.  If the decision is to push the pain up to the user to keep the
-BPF program interface thin and flexible, that is their choice.
+This check only sees maps referenced directly by the program. It runs from
+__add_used_map() while resolving pseudo_ldimm64 references. The inner map of
+an ARRAY_OF_MAPS or HASH_OF_MAPS is not on this path. A lookup through the
+outer map gets the inner-map metadata from inner_map_meta, so the check never
+examines the inner map. A perf_event program can therefore lock it.
 
---=20
-paul-moore.com
+The reproducer has two programs sharing one inner map:
+
+  - hold_lock, SEC("tc"), takes inner0's lock directly in a loop under
+    BPF_PROG_TEST_RUN.
+  - lock_inner_nmi, SEC("perf_event") on PERF_COUNT_HW_CPU_CYCLES on every
+    CPU, reaches the same lock through the ARRAY_OF_MAPS and takes it.
+
+With the lock in a plain array, the perf_event program is rejected. Through
+the map-in-map, it is accepted. Either program runs alone, but together
+they deadlock the machine.
+
+There is no console output. On a 4-CPU QEMU guest, the monitor shows all four
+vCPUs stuck in the same lock path:
+
+__pv_queued_spin_lock_slowpath
+__bpf_spin_lock_irqsave
+bpf_spin_lock
+bpf_prog_...lock_inner_nmi
+__perf_event_overflow
+perf_event_overflow
+handle_pmi_common
+
+It needs a PMU that delivers cycles NMIs (kvm -cpu host here). Loading the
+programs requires CAP_BPF and CAP_PERFMON.
+
+The inner-map lock was enabled by b7ff97925b55 ("bpf: Allow locking
+bpf_spin_lock in inner map values", 2022), without carrying over the
+program-type restriction.
+
+The program-type check needs to cover the inner map when a map-in-map is
+used.
+
+Thanks,
+Yalu Cai
+
+--000000000000e10f7906607e3362
+Content-Type: application/octet-stream; name="prog.c"
+Content-Disposition: attachment; filename="prog.c"
+Content-Transfer-Encoding: base64
+Content-ID: <f_mwl3nzhg0>
+X-Attachment-Id: f_mwl3nzhg0
+
+Ly8gQSBwZXJmX2V2ZW50IHByb2dyYW0sIHJ1biBpbiBOTUkgY29udGV4dCwgdGFrZXMgYSBicGZf
+c3Bpbl9sb2NrIGluIHRoZQovLyB2YWx1ZSBvZiBhIG1hcCBvZiBtYXBzJyBpbm5lciBtYXAuIGNo
+ZWNrX21hcF9wcm9nX2NvbXBhdGliaWxpdHksIHdoaWNoCi8vIHJlZnVzZXMgYSBsb2NrIGluIGEg
+dHJhY2luZyBwcm9ncmFtIGJlY2F1c2UgYSB0cmFjaW5nIHByb2dyYW0gaW4gTk1JCi8vIGNvbnRl
+eHQgaW50ZXJydXB0aW5nIHRoZSBsb2NrJ3MgaG9sZGVyIGRlYWRsb2NrcywgcnVucyBvbmx5IG9u
+IHRoZSBtYXBzIGEKLy8gNjQtYml0IGxvYWQgbmFtZXMsIG5ldmVyIG9uIGFuIGlubmVyIG1hcC4K
+Ly8KLy8gaG9sZF9sb2NrLCBhIHRjIHByb2dyYW0sIHRha2VzIHRoZSBzYW1lIGxvY2ssIHdoaWNo
+IGl0IG1heTogaXQgbmFtZXMgdGhlCi8vIGlubmVyIG1hcCBkaXJlY3RseS4gUnVuIGJ5IEJQRl9Q
+Uk9HX1RFU1RfUlVOLCBpdCBob2xkcyB0aGUgbG9jayBtb3N0IG9mCi8vIHRoZSB0aW1lOyBhIGN5
+Y2xlcyBOTUkgb24gaXRzIENQVSBydW5zIGxvY2tfaW5uZXJfbm1pLCB3aGljaCBzcGlucyBvbiB0
+aGUKLy8gbG9jayBpdHMgb3duIENQVSBob2xkcywgaW5zaWRlIHRoZSBOTUksIGZvciBnb29kLgoj
+aW5jbHVkZSAicG9jLmgiCgpzdHJ1Y3QgdmFsIHsKCXN0cnVjdCBicGZfc3Bpbl9sb2NrIGxvY2s7
+CglfX3U2NCBuWzMyXTsKfTsKCnN0cnVjdCBpbm5lciB7CglfX3VpbnQodHlwZSwgQlBGX01BUF9U
+WVBFX0FSUkFZKTsKCV9fdWludChtYXhfZW50cmllcywgMSk7CglfX3R5cGUoa2V5LCBfX3UzMik7
+CglfX3R5cGUodmFsdWUsIHN0cnVjdCB2YWwpOwp9IGlubmVyMCBTRUMoIi5tYXBzIik7CgpzdHJ1
+Y3QgewoJX191aW50KHR5cGUsIEJQRl9NQVBfVFlQRV9BUlJBWV9PRl9NQVBTKTsKCV9fdWludCht
+YXhfZW50cmllcywgMSk7CglfX3R5cGUoa2V5LCBfX3UzMik7CglfX2FycmF5KHZhbHVlcywgc3Ry
+dWN0IGlubmVyKTsKfSBvdXRlciBTRUMoIi5tYXBzIikgPSB7CgkudmFsdWVzID0geyBbMF0gPSAm
+aW5uZXIwIH0sCn07CgpTRUMoInBlcmZfZXZlbnQiKQppbnQgbG9ja19pbm5lcl9ubWkodm9pZCAq
+Y3R4KQp7CglfX3UzMiBrID0gMDsKCXZvaWQgKm0gPSBicGZfbWFwX2xvb2t1cF9lbGVtKCZvdXRl
+ciwgJmspOwoJc3RydWN0IHZhbCAqdjsKCglpZiAoIW0pCgkJcmV0dXJuIDA7Cgl2ID0gYnBmX21h
+cF9sb29rdXBfZWxlbShtLCAmayk7CglpZiAoIXYpCgkJcmV0dXJuIDA7CglicGZfc3Bpbl9sb2Nr
+KCZ2LT5sb2NrKTsKCXYtPm5bMF0rKzsKCWJwZl9zcGluX3VubG9jaygmdi0+bG9jayk7CglyZXR1
+cm4gMDsKfQoKU0VDKCJ0YyIpCmludCBob2xkX2xvY2soc3RydWN0IF9fc2tfYnVmZiAqc2tiKQp7
+CglfX3UzMiBrID0gMDsKCXN0cnVjdCB2YWwgKnYgPSBicGZfbWFwX2xvb2t1cF9lbGVtKCZpbm5l
+cjAsICZrKTsKCglpZiAoIXYpCgkJcmV0dXJuIDA7CglicGZfc3Bpbl9sb2NrKCZ2LT5sb2NrKTsK
+CS8vIHdpZGVuIHRoZSB0aW1lIHRoZSBsb2NrIGlzIGhlbGQ6IHN0cmFpZ2h0LWxpbmUgc3RvcmVz
+LCBubyBjYWxscwojcHJhZ21hIHVucm9sbAoJZm9yIChpbnQgaSA9IDE7IGkgPCAzMjsgaSsrKQoJ
+CXYtPm5baV0gKz0gaTsKCWJwZl9zcGluX3VubG9jaygmdi0+bG9jayk7CglyZXR1cm4gMDsKfQo=
+--000000000000e10f7906607e3362--
