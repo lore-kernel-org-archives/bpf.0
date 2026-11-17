@@ -1,49 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.2
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794874816;
-	b=yhIVLf20b28o3BoQIAI1l8E3kqgzhpO4QwgepZHRYbbv3KG3RMc8WyaFx2YXQOg/0W3y
-	 pASohtpUzmSLXZftd6NW2FGmGP2Wgefz/fNf/smINxyZwItxzGVz9dBrMhApQg/4o9ZDP
-	 tGwwinxttVNAd78sARIrvWE0WLokr/Adb4S8T8f8rmjA5KoUOijyJ2o5rrYltaYXcilxc
-	 rwnYAXl7EOeBooMePqpoeU7TlPWiKLV0gb/Gq2cJDyX7nILLy4gT/y+mjMZMRhKSBpZFQ
-	 k7z2uTOVBRB2JmvbKLgi89R4yO0EB5m7l7VdYYxq4T1mD6bxna1p3A9Jj1A6VQ9nm3g==
+	t=1794879070;
+	b=zOYgwLwyx9agc3XV+Z7+Hzj6WzbThyA9pezqRwdrm4nhm4sGlG9wY2DdnGzNdk34VreQ
+	 qG4MReuClemXgKuf3HIaNKe9wMEUNu98bRrGyKkBwNzXhZGYqRze53wWnGXyNNxPXv5hl
+	 I98D28g8an9TGw4VeZW6YTaztDCCNiehCVtm2zBVjkdXFlFzWUs48tCSVbj5r1ECRfJaS
+	 OE3tPJ9A+G8RI2ipW0pnwLvKPuyg+0N3JmZ2/oIK8vHFFVNg6EN0rFlWJXJsvvTOIUPY5
+	 +7Uo8mbKfspqWZyKGi3TBD/ef9OAvRx31Mh4Mjtagb9EQewKvD791OKjdhcoPA74DYA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794874816;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=uP7hcZkT230kP7rxF93VkubUnO4lWwFxbpZ6S50BNq8=;
-	b=ON3y0EN76MS/Pd2KUopG7mz9TEQW8Ja38Z7ZkAi9xOlpDALRMTZ59/hK/Bgz5iPljU7N
-	 MLeyQ8a32hzVCMElSAl+rTNOQQc6DsSbDBQ5mFZJ0PhjSdCAUjjlokb4Ce7X5kb/kjCLt
-	 dAiF1jbenOLoirly4KDFlQ1H9z4bq95GdjM3Y4xpDD7GfuE5DVhJ/E73rkcjzTiIE6NYu
-	 gtKs++quEWEVfZbaiEt7KWbnNd3myhAwD9mOVYhjmkxtgOAUA5b6F0ZhovwHAX2cbnWn1
-	 YSLV4UDPZScW8Wg0sNLTLgVTDQhffgvKU4PlWCWWUOoj2xUct2tdR6WBZ/KZ7YnsG9A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794879070;
+	h=DMARC-Filter:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-CM-TRANSID:
+	 X-Coremail-Antispam:X-CM-SenderInfo;
+	bh=qYRGI+XzUctQbj0xrSR8pkRusIWSVpK3hTtQzfb40+I=;
+	b=EYFx6g658ick/JAyzofghcB0+fF3e0z8ZDd5gMHu4GDE6Mv2ODOPArKE0umRAV2bqGEt
+	 x3h2zNaAzymyECPlrLaDRdGTz4/qJPZA/0i/TJ2asGgv+oGnl1benbTJmB/0LjzD4Rop4
+	 ILAJLStSfLHUkizFXXSv56FbpRnVw66ss+SdRNoVcdtBgcyrEEfBFmCaaANpd/8gqvV8+
+	 gcglf5jlyBjtjlKQmYlfyuRH5k4QFlJmrVxHWWBx0e1YZbJIzv15SCymMGwTEXDhe48ib
+	 OSWj0BuZGjAk2ri030XiM2Upi0ype0ocoaxuwdgRokr7k8baACPxZng2xfikohso6jA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YgbcV909;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=163.com;
+	spf=pass smtp.mailfrom=163.com;
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=BoX902gI;
+	arc=none smtp.remote-ip=220.197.31.2
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB54B606A332;
-	Tue, 17 Nov 2026 00:20:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FA3C606A31C;
+	Tue, 17 Nov 2026 01:31:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2FA3C606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YgbcV909
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEA4C1F000C7;
-	Tue, 17 Nov 2026 00:20:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794874815;
-	bh=uP7hcZkT230kP7rxF93VkubUnO4lWwFxbpZ6S50BNq8=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=YgbcV9091h3ApXJGeCwLZCN3HaswL0Oyj0F2hufau4bmHLaeX9Y7ycxUB1oJUaWtI
-	 8cR8njJzvRA6CBd+F+KNzOlaxXqsng0gHiyLGe+QwMcxNVs61Vm5W4FsCKmkbzXJAX
-	 92lINtoePfXaHtA5OmdE+/zI8yo+p/10hiRG7yTEfoK4xhYLDFZ1u4PimzH5J+AY8o
-	 kRXNGdljIta9XPVtbd9HGrMm/7r6fhT9Gm5Xn34J0xpdWw7PqwnuvyYpGJhEGp3nZv
-	 uLiVP3zYj1FEWGvfiWjQAWXc5uAuZKgV8bY8CG5mOvDnwR2+tfZBJEUwU6XUvqNzLe
-	 hml4C5WKHiVEQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B43AD391AFE7;
-	Tue, 17 Nov 2026 00:20:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=BoX902gI
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
+	Content-Type; bh=qYRGI+XzUctQbj0xrSR8pkRusIWSVpK3hTtQzfb40+I=;
+	b=BoX902gIGtdyPrqHfeL3q0Hvu2JKECSuzDeQV/wJhnyWzQVYW0hnp3Z55ONWjd
+	kAb4OI2x0Ird2xPyv6zg4e5igCkCLXKKJAVvigYoffnEDRvuOKN7wETYiSBLbLp6
+	DbKygzwO7pXgRG7Zp6qQPs6WYL/Ef6lLxcDEzNNVwmEBI=
+Message-ID: <974f55cf-66d8-4ff7-a4f3-5362df1b4af8@163.com>
+Date: Tue, 17 Nov 2026 09:30:07 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -53,48 +51,259 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v3 0/2] virtio_net: AF_XDP zero-copy fixes for arm64
- and
- XDP queues
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179487481427.257811.11536645665053197427.git-patchwork-notify@kernel.org>
-Date: Tue, 17 Nov 2026 00:20:14 +0000
-References: <20261110153003.23731-1-yanhaishuang@cmss.chinamobile.com>
-In-Reply-To: <20261110153003.23731-1-yanhaishuang@cmss.chinamobile.com>
-To: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-Cc: mst@redhat.com, jasowangio@gmail.com, xuanzhuo@linux.alibaba.com,
- eperezma@redhat.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, netdev@vger.kernel.org, virtualization@lists.linux.dev,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net v10 1/2] tun: keep a kernel copy of the socket filter
+ program
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
+ willemdebruijn.kernel@gmail.com, jasowangio@gmail.com,
+ andrew+netdev@lunn.ch, davem@davemloft.net, daniel@iogearbox.net,
+ andrii@kernel.org, eddyz87@gmail.com, Rongguang Wei
+ <weirongguang@kylinos.cn>, Willem de Bruijn <willemb@google.com>
+References: <20261109023848.59575-1-clementwei90@163.com>
+ <20261109023848.59575-2-clementwei90@163.com>
+ <20261113162751.309d3544@kernel.org> <DMUJISP1U0SF.2VE8F3IUBU0F0@gmail.com>
+Content-Language: en-US
+From: Rongguang Wei <clementwei90@163.com>
+In-Reply-To: <DMUJISP1U0SF.2VE8F3IUBU0F0@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:_____wDHpREfrvtqd+FpIA--.26271S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxtr4rCFy8Aw18Ar1fXF4fZrb_yoW3JFyUpF
+	W5Ga4jyrW5JF40gr1qvF48ZF1avw1Ig34xu348G34Y9F1qgr1rCayUKryYvwn8CrWDuF1I
+	qa12gr9xW34vqFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07U5sqAUUUUU=
+X-CM-SenderInfo: 5fohzv5qwzvxizq6il2tof0z/xtbC-QFNuGr7riHlywAA35
 
-Hello:
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
 
-On Wed, 11 Nov 2026 00:29:59 +0900 you wrote:
-> Two AF_XDP zero-copy fixes for virtio_net.
+Alexei Starovoitov wrote:
+> On Fri, Nov 13, 2026 at 04:27 PM Jakub Kicinski <kuba@kernel.org> wrote:
+>> Alexei, would you mind glancing over this one?
+>> Nothing stands out but the net/core/filter.c changes deserve a BPF ack.
+>> (Or feel free to take it via bpf if you prefer.)
 > 
-> Patch 1: on arm64, binding a zero-copy socket fails with -ENOMEM and a
-> "rejecting DMA map of vmalloc memory" warning whenever the device uses
-> the DMA API (e.g. VIRTIO_F_ACCESS_PLATFORM), because the static TX
-> header lives in the kernel image, which arm64 maps in the vmalloc area.
+> Ohh. Thanks for flagging. I completely missed it,
+> since it was '[PATCH net] tun: ..' I didn't notice that it touches key sk_filter pieces.
 > 
-> [...]
+> And, yeah, I don't like it.
+> It exports too much bpf internal stuff into tun device.
+> Here is an alternative that my bot came up with and
+> imo it's much better.
+> Especially the part where EXPORT_SYMBOLs are removed.
+> 
+> pw-bot: cr
+> 
+> The diff is on top of bpf-next. It builds, and that is as far as I took it.
+> 
+> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+> index dcec731..324acba 100644
+> --- a/drivers/net/tun.c
+> +++ b/drivers/net/tun.c
+> @@ -142,6 +142,7 @@ struct tun_file {
+>  	struct napi_struct napi;
+>  	bool napi_enabled;
+>  	bool napi_frags_enabled;
+> +	bool nofilter;			/* attached with IFF_NOFILTER */
+>  	struct mutex napi_mutex;	/* Protects access to the above napi */
+>  	struct list_head next;
+>  	struct tun_struct *detached;
+> @@ -176,7 +177,7 @@ struct tun_prog {
+>  };
+> 
+>  /* Since the socket were moved to tun_file, to preserve the behavior of persist
+> - * device, socket filter, sndbuf and vnet header size were restore when the
+> + * device, sndbuf and vnet header size were restore when the
+>   * file were attached to a persist device.
+>   */
+>  struct tun_struct {
+> @@ -197,8 +198,6 @@ struct tun_struct {
+>  	int			sndbuf;
+>  	struct tap_filter	txflt;
+>  	struct sock_fprog	fprog;
+> -	/* protected by rtnl lock */
+> -	bool			filter_attached;
+>  	u32			msg_enable;
+>  	spinlock_t lock;
+>  	struct hlist_head flows[TUN_NUM_FLOW_ENTRIES];
+> @@ -213,6 +212,7 @@ struct tun_struct {
+>  	struct bpf_prog __rcu *xdp_prog;
+>  	struct tun_prog __rcu *steering_prog;
+>  	struct tun_prog __rcu *filter_prog;
+> +	struct tun_prog __rcu *cbpf_prog;
+>  	struct ethtool_link_ksettings link_ksettings;
+>  	/* init args */
+>  	struct file *file;
+> @@ -756,15 +756,7 @@ static int tun_attach(struct tun_struct *tun, struct file *file,
+>  		goto out;
+> 
+>  	err = 0;
+> -
+> -	/* Re-attach the filter to persist device */
+> -	if (!skip_filter && (tun->filter_attached == true)) {
+> -		lock_sock(tfile->socket.sk);
+> -		err = sk_attach_filter(&tun->fprog, tfile->socket.sk);
+> -		release_sock(tfile->socket.sk);
+> -		if (!err)
+> -			goto out;
+> -	}
+> +	tfile->nofilter = skip_filter;
+> 
+>  	if (!tfile->detached &&
+>  	    ptr_ring_resize(&tfile->tx_ring, dev->tx_queue_len,
+> @@ -1071,6 +1063,7 @@ static netdev_tx_t tun_net_xmit(struct sk_buff *skb, struct net_device *dev)
+>  	int txq = skb->queue_mapping;
+>  	struct netdev_queue *queue;
+>  	struct tun_file *tfile;
+> +	struct tun_prog *prog;
+>  	int len = skb->len;
+>  	int ret;
+> 
+> @@ -1096,10 +1089,13 @@ static netdev_tx_t tun_net_xmit(struct sk_buff *skb, struct net_device *dev)
+>  		goto drop;
+>  	}
+> 
+> -	if (tfile->socket.sk->sk_filter) {
+> -		drop_reason = sk_filter_reason(tfile->socket.sk, skb);
+> -		if (drop_reason)
+> +	prog = rcu_dereference(tun->cbpf_prog);
+> +	if (prog && !READ_ONCE(tfile->nofilter)) {
+> +		len = bpf_prog_run_clear_cb(prog->prog, skb);
+> +		if (len == 0 || pskb_trim(skb, len)) {
+> +			drop_reason = SKB_DROP_REASON_SOCKET_FILTER;
+>  			goto drop;
+> +		}
+>  	}
+> 
+>  	len = run_ebpf_filter(tun, skb, len);
+> @@ -2410,6 +2406,7 @@ static void tun_free_netdev(struct net_device *dev)
+>  	security_tun_dev_free_security(tun->security);
+>  	__tun_set_ebpf(tun, &tun->steering_prog, NULL);
+>  	__tun_set_ebpf(tun, &tun->filter_prog, NULL);
+> +	__tun_set_ebpf(tun, &tun->cbpf_prog, NULL);
+>  }
+> 
+>  static void tun_setup(struct net_device *dev)
+> @@ -2964,7 +2961,6 @@ static int tun_set_iff(struct net *net, struct file *file, struct ifreq *ifr)
+>  		tun->vnet_hdr_sz = sizeof(struct virtio_net_hdr);
+> 
+>  		tun->align = NET_SKB_PAD;
+> -		tun->filter_attached = false;
+>  		tun->sndbuf = tfile->socket.sk->sk_sndbuf;
+>  		tun->rx_batched = 0;
+>  		RCU_INIT_POINTER(tun->steering_prog, NULL);
+> @@ -3068,39 +3064,34 @@ static int set_offload(struct tun_struct *tun, unsigned long arg)
+>  	return 0;
+>  }
+> 
+> -static void tun_detach_filter(struct tun_struct *tun, int n)
+> +static int tun_attach_filter(struct tun_struct *tun, void __user *data)
+>  {
+> -	int i;
+> +	struct sock_fprog fprog;
+>  	struct tun_file *tfile;
+> +	struct bpf_prog *prog;
+> +	int i, ret;
+> 
+> -	for (i = 0; i < n; i++) {
+> -		tfile = rtnl_dereference(tun->tfiles[i]);
+> -		lock_sock(tfile->socket.sk);
+> -		sk_detach_filter(tfile->socket.sk);
+> -		release_sock(tfile->socket.sk);
+> -	}
+> +	if (copy_from_user(&fprog, data, sizeof(fprog)))
+> +		return -EFAULT;
+> 
+> -	tun->filter_attached = false;
+> -}
+> +	ret = bpf_prog_create_from_user(&prog, &fprog, NULL, false);
+> +	if (ret)
+> +		return ret;
+> 
+> -static int tun_attach_filter(struct tun_struct *tun)
+> -{
+> -	int i, ret = 0;
+> -	struct tun_file *tfile;
+> +	ret = __tun_set_ebpf(tun, &tun->cbpf_prog, prog);
+> +	if (ret) {
+> +		bpf_prog_destroy(prog);
+> +		return ret;
+> +	}
+> 
+>  	for (i = 0; i < tun->numqueues; i++) {
+>  		tfile = rtnl_dereference(tun->tfiles[i]);
+> -		lock_sock(tfile->socket.sk);
+> -		ret = sk_attach_filter(&tun->fprog, tfile->socket.sk);
+> -		release_sock(tfile->socket.sk);
+> -		if (ret) {
+> -			tun_detach_filter(tun, i);
+> -			return ret;
+> -		}
+> +		WRITE_ONCE(tfile->nofilter, false);
+>  	}
+> 
+> -	tun->filter_attached = true;
+> -	return ret;
+> +	/* Only TUNGETFILTER reads it */
+> +	tun->fprog = fprog;
+> +	return 0;
+>  }
+> 
+>  static void tun_set_sndbuf(struct tun_struct *tun)
+> @@ -3296,7 +3287,7 @@ static long __tun_chr_ioctl(struct file *file, unsigned int cmd,
+> 
+>  		if (tfile->detached)
+>  			ifr.ifr_flags |= IFF_DETACH_QUEUE;
+> -		if (!tfile->socket.sk->sk_filter)
+> +		if (tfile->nofilter || !rcu_access_pointer(tun->cbpf_prog))
+>  			ifr.ifr_flags |= IFF_NOFILTER;
+> 
+>  		if (copy_to_user(argp, &ifr, ifreq_len))
+> @@ -3439,11 +3430,7 @@ static long __tun_chr_ioctl(struct file *file, unsigned int cmd,
+>  		ret = -EINVAL;
+>  		if ((tun->flags & TUN_TYPE_MASK) != IFF_TAP)
+>  			break;
+> -		ret = -EFAULT;
+> -		if (copy_from_user(&tun->fprog, argp, sizeof(tun->fprog)))
+> -			break;
+> -
+> -		ret = tun_attach_filter(tun);
+> +		ret = tun_attach_filter(tun, argp);
+>  		break;
+> 
+>  	case TUNDETACHFILTER:
+> @@ -3451,8 +3438,7 @@ static long __tun_chr_ioctl(struct file *file, unsigned int cmd,
+>  		ret = -EINVAL;
+>  		if ((tun->flags & TUN_TYPE_MASK) != IFF_TAP)
+>  			break;
+> -		ret = 0;
+> -		tun_detach_filter(tun, tun->numqueues);
+> +		ret = __tun_set_ebpf(tun, &tun->cbpf_prog, NULL);
+>  		break;
+> 
+>  	case TUNGETFILTER:
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 9245009..1c742f2 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -1565,7 +1565,6 @@ int sk_attach_filter(struct sock_fprog *fprog, struct sock *sk)
+> 
+>  	return 0;
+>  }
+> -EXPORT_SYMBOL_GPL(sk_attach_filter);
+> 
+>  int sk_reuseport_attach_filter(struct sock_fprog *fprog, struct sock *sk)
+>  {
+> @@ -11779,7 +11778,6 @@ int sk_detach_filter(struct sock *sk)
+> 
+>  	return ret;
+>  }
+> -EXPORT_SYMBOL_GPL(sk_detach_filter);
+> 
+>  int sk_get_filter(struct sock *sk, sockptr_t optval, unsigned int len)
+>  {
+Hi Alexei,
 
-Here is the summary with links:
-  - [net,v3,1/2] virtio_net: Don't DMA map the kernel image for the AF_XDP TX header
-    https://git.kernel.org/netdev/net-next/c/5d761fccffdf
-  - [net,v3,2/2] virtio_net: Disable AF_XDP pools on queues above curr_queue_pairs
-    (no matching commit)
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Thanks, this is much cleaner. I'll rework the series this way with nothing from the BPF core exported.
 
