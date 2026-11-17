@@ -1,93 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.153.30
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794943831;
-	b=larqVKovQ53YPUHh+PXJDUXr7PmZOsdkxyGCusWhdT+vq1Fovny7tfzE5olZj59dZKOS
-	 SacuNfdiLnF4NEW8lqCm9CC/Q0KOSotSO0mIcFzypFKetFwlqCZVZr1bMxGlKODhpLlbP
-	 76m/OPhi544cblDljdiNLP7/Fa8u23dq3WZvcOrjRg32r5boyYtjBpsg5m+tqSkyyeh/C
-	 6eY3TiCwGTRgdHvtO1iw/wICmDKIqELq1QodKkEJX7u3MGExx87f5tuSgBNUqUNy9EDG+
-	 WjwHy+LpwvqLkvBt2TVzJ6TShw2pH1FvpNAN6hduL96cYaR0uNG3GsOFR+1v/+iMSbA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794943831;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:To:CC:
-	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:Content-Type:X-Originating-IP:
-	 X-Authority-Analysis:X-Proofpoint-GUID:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-Spam-Info:X-Proofpoint-ORIG-GUID:
-	 X-Proofpoint-Virus-Version;
-	bh=vDzK/5X2Ogr9kNQjuXLS2GZMirjcfJzOOHYV6KRLP44=;
-	b=E009wSk1iPPDuTzEoEB+f+C3+zc1b5FwGPAoYpf41sPQcHqe7WLWwQTU0bzDvLRH/bL9
-	 ii1bvHMOZa0zCYXZPI3q89U2uASrLA/jmL6awtukd3YGHcTP+4iUQZw+zg7utEcPZ67sG
-	 sav5CFCY2wxT3Uo1xrFPsi5Iqj2j3e9Ihxb+W/+gTniBXOfi/XtkE24LOyIohvYe5QA+z
-	 yHQLzJZYhi0oFdaWprotqeLJEvPzGoR5qcnsfRuyaUK6wpT98YBWjSQ37Df7VgvnvRGEI
-	 Lp2TLKU4yPobYf4V4bVaN9nAO5Qe8NRGENBKIQotoADU+ZwT+V8DixBBhvIbQMvufxA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=meta.com;
-	spf=pass smtp.mailfrom=meta.com;
-	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b="Lnh/w4Rl";
-	arc=none smtp.remote-ip=67.231.153.30
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.177
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794943828;
+	b=3kVHPzMrKvLa2YnI9Vosgf+Y99649M7D2MHvG/a9UQskOrAXtychj3ud9/N7/ARJuXIF
+	 dDGK2CuB6G0g1LICWeipqco1Qn4W8qWjQeBTs5rcRxAG3vzRHcmJN8zGO22xbkoujEol7
+	 UA3tjDD0iwbmM9ScejoluhA9SVv55z6g3FXScT+OnUl42Q/7K5A9axXXBXqn2u+SDcODb
+	 sOuQgtikYcJhB2a4wuKJw4ALhLY86zbqiO0zvnx9IIj1dCK6CITucv9lEbVtnTcpec0dA
+	 AtaTobLjSNN1LWMjah11pmjp9NijIM8a97SZBaSdGnf6fETZYxTGvqRMX7u48ogRhqg==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794943828;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=sj3hBjgFsqV+K2H84i9mKjEVi7Hj254h9Ue/yqcHRR8=;
+	b=mWqfSmvl/SWKkrmg6nXSkrwyuci4AF055RMeeIGRtan7S5OduIqZdvsjbKbOpjNQWA6n
+	 iJE7baVVeTnRkK4PshobpV0YeEiu6VmtZPDmc7obsXRaKWUSfpfLBaFooCgvGkdXjfh4+
+	 HSZNpSQEfbYQCS6zlD05fnILcn6MYUXXQOAFQAzjUkH6Rd+DTY+JWfRH0hoepCt9NRazC
+	 t9XyDtQHL9juKXtPE3C+YS6qyJu+AEb8JtYuPjJopJfJ7BX7ul0awRGLWpCTyCX2pzb5I
+	 g66I2vkM7yMDewSIwMeTnXA/9OvEIgZ5iN7iQZHgh7KGKucqgc9Db0hmyvIy5iTF4nw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=paul-moore.com;
+	spf=pass smtp.mailfrom=paul-moore.com;
+	dkim=pass header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=VR8IlJuU;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.177
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D91EF606A33F;
-	Tue, 17 Nov 2026 19:30:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D91EF606A33F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 412CD606A32A
+	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 19:30:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 412CD606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=Lnh/w4Rl
-Received: from pps.filterd (m0528006.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AHJ9Wh8740559;
-	Tue, 17 Nov 2026 11:29:34 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	pps82601-s2048-2026-q3; bh=vDzK/5X2Ogr9kNQjuXLS2GZMirjcfJzOOHYV6
-	KRLP44=; b=Lnh/w4RlRhaG4N6nyc1DFwrGcMiXkUsXKgukNwGbMh+xnsaMTuQpx
-	ZHdb+ka7mmOcwlTF9BGMO5zfbqKHvwTic2WkcDXQEcTbfddU3GiyoHTxnuHcsn+R
-	aihgLE2NU/HuQBy4nZlRBmJfcUriXX8gUuvbma1HN+Dr3U7VJSn6G7ogtEwoiYCP
-	iP4W9dgtY85RI+P/RuCiZpVNlTyqDG28f2fMHDmDPdw2hyfsQyfpB3OZgX8VJvKR
-	cgH7Lf4+FIIzbOBLQEXl3ZeUUvTnbzySWJ2b2NJzMS3QdixRjcKxA6DM8jAkL+Mp
-	fGrgAzdO+Aucw/ZXtKP+lNcSrczs0xpyA==
-Received: from mail.thefacebook.com ([163.114.134.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4j0r2u3nnj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Tue, 17 Nov 2026 11:29:31 -0800 (PST)
-Received: from localhost (2620:10d:c085:108::4) by mail.thefacebook.com
- (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.56; Tue, 17 Nov
- 2026 19:24:22 +0000
-From: Todd Freed <toddfreed@meta.com>
-To: <netdev@vger.kernel.org>
-CC: "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet
-	<edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni
-	<pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-        Daniel Zahka
-	<daniel.zahka@gmail.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Wei Wang <weiwan@google.com>, Jamal Hadi Salim <jhs@mojatatu.com>,
-        Jiri Pirko
-	<jiri@resnulli.us>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann
-	<daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau
-	<martin.lau@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav
- Fomichev <sdf@fomichev.me>,
-        Sabrina Dubroca <sd@queasysnail.net>,
-        Boris
- Pismenny <borisp@nvidia.com>, <bpf@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH net v2 3/3] psp: only give time-wait sockets of PSP connections a validator
-Date: Tue, 17 Nov 2026 11:24:11 -0800
-Message-ID: <20261117192411.247117-4-toddfreed@meta.com>
-X-Mailer: git-send-email 2.53.1
-In-Reply-To: <20261117192411.247117-1-toddfreed@meta.com>
-References: <20261117192411.247117-1-toddfreed@meta.com>
+	dkim=pass (2048-bit key, unprotected) header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=VR8IlJuU
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-89d6bd67045so50276b3a.0
+        for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 11:30:28 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794943827; cv=none;
+        d=google.com; s=arc-20260327;
+        b=gBJiwPzok8oIg+nqDLIlyAcy5omy6WIil/QwxXoA3KpYjrY7vTlyDiha6QaAfZ30Ne
+         Bw7dem5+dndPap1924ygDlCEkuSVg/7CE3fApbxfKLwzJ7PmbyuMFh5lpCCqdhnlYpYb
+         H1EqoQJoXmzJHHE9mgpWn7ZU8Vcf8hu4JYo14e3namjO//EQqNGdQOOAPY1yD2AUKQNk
+         YFB2xMLyIqwppBZo0FbQZa6qQ4n6Cx8vgUXjJ6LaNOGcE9Nfhk1KPySE5Hq01rL1GHUC
+         yVSvtZfYN4GURSeBysvfumwW/52FaVMm7Hxx1wDe0pSinniF4UozltQfqzxGa317RQGu
+         6SuA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=sj3hBjgFsqV+K2H84i9mKjEVi7Hj254h9Ue/yqcHRR8=;
+        fh=a/kl9pwQlRa72DsbPS2NODc2ufvM6XRbgoQPX1E3ttQ=;
+        b=eOv2UE/wbTTxzzfaIm/MZ9st861pIKZS61uuWAX8YgoCSsbA7jS+CU1X5wpOB6p49v
+         gcQMbK8Oxl9i9vu1G/Kl+mBhfyTAi7i7ZmXvJo8GgmFIZViQYvq38HXgwCKVAJjFF8OF
+         rf7+d9qjUrPvJBHNjijqljr4fHOOX8cB+X7v05XUA2yBXMRu3xS7cJVnNQdyaTElUr7j
+         6am5GZtSp1LWa6BRLKNPPaHr2IYf6tryBr/M56PTKWGxEwDC620JfcC4url/jgXObx9A
+         8Me6RHFryrmqYh/spL9IWgiWeh6zutV7/QqRzDPSVtbulF/r1dhbAuwd4Ka3wRlVb6vo
+         T82g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1794943827; x=1795548627; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=sj3hBjgFsqV+K2H84i9mKjEVi7Hj254h9Ue/yqcHRR8=;
+        b=VR8IlJuUxEu9TYzVDniE5LhVZ+4g7Nr7Fd7jiQAG2y+N/K5TwpW3dJQNxvjxL9x9Yc
+         +/LAooYdXV5cRrLaQgZlAAgRbONAt9gBIuqKMTtyIvJByYGewNc0cGzjkkJlCyenH09E
+         73gfP+kxEkfcIEEdvAjz8Xt6zrVvuiIIqhOx1qZYt6o/SQYoeIeiSGiuTqScWZhhCCO7
+         U4QMhJAeN1EXrwhX92FMUIb7d+vlrGGqcG+Tvg2bxgxRo6DIj1686baaVBKFXKA2ef6+
+         3qPQ6s2zWSAqNdbNHheWFCbTUdmtVaxhlKbtz/qkAp7qAPyaoR+Xq638oKhLGTwZ3fjO
+         gNEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794943827; x=1795548627;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=sj3hBjgFsqV+K2H84i9mKjEVi7Hj254h9Ue/yqcHRR8=;
+        b=IB3ScL5KxkHOQr1V3XEtv/MWF35xhmo5S3YOCia+vs+Md6yVQreJMoJg0OjEaCzoZf
+         3ksPfJOGht5xzNi/vXB0gFfbZjMGTD7J7Lmanw+aKqu73YzSJKpmt14atqp0DiWp2D1/
+         87IjNu3/9CXXUQ68LxG6HtMXyDtztoCb3M88tbWmUBQ2LPqZ8cCBf2bAx6VqAIuBmogs
+         rGTzQVQgdNtUz8ZhhZrHz73JwjCe+ukcGcO4hdKxxhjiElmfY/ozQEuPabTHU+8eNurT
+         O0oldegWsMcm/7f1hLHfqbGPFx5hHWtvDuw8rwbwAsbTqkV9TWaGch4dr0IjjuvJ4kpN
+         dP3w==
+X-Forwarded-Encrypted: i=1; AL+hErFk3DpWbpeyTjJTCzWpySlMjyCmvC9AllqcSXkiuYZ5VLtnez4ovtMzGMouW+jBhC6Y0J0=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8k2qOh3O+DAi3sDx9nGufrq1mhghdeQioPfS43dzRyXtttvj98
+	zIsog3X7+N9O+BVQS4iLB+vRYAOk+I03pDtydu0eraoIz7yZBpmSClaXngbSpLDQLlCPHoovgKC
+	/3xaWeLjivciSU2UXUBP7Js+PUXB2CulidMpd153S
+X-Gm-Gg: AYBFou2nP9P0EI7qhfiZJQtL2ir9R7bF8/yu9aQ6guAE/Bu77ALAyt02wLu3zlWbBDf
+	3qqmK4M3ObpMcGwRg05w9fEc8lm4MItChB+SqczdLkH1Jz4//JK4vsaA7jJqnMznL9XEQq6loVz
+	qvLCrAvZP8ssDKXQ61sB4kk0zjNhD07LYB6bieRWYw2sFu/A9BfgGC34YaididRmOkRLcqKY9lf
+	oRpgpGFax9gLQRI98UvPKpssLUZJicLtoOW6QPeAsGQ9e9AxU+to+mA1aQd0nyXEAx5jpv2hGUQ
+	jRRYHUiPnyUDLShvLiMuGob/E5LmrE2t7faGGMLYnyncgooHzG+TrPZJU6aLwA6aAeH9/sSupY8
+	i+u5/SviIVysCb47QOqIYIJjoGp9+vH6k/4KLYw+hRGlVgZad4qkJYwTQDJvfboT2CqxQ
+X-Received: by 2002:a05:6a00:1f11:b0:8b5:a10a:a3e8 with SMTP id
+ d2e1a72fcca58-8c457e2e17amr2269626b3a.44.1794943827559; Tue, 17 Nov 2026
+ 11:30:27 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -97,63 +104,110 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Authority-Analysis: v=2.4 cv=fuhJ914f c=1 sm=1 tr=0 ts=6afcab1d cx=c_pps
- a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
- a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22
- a=kkcUborcUVj0H7zxAXTl:22 a=VabnemYjAAAA:8 a=pGLkceISAAAA:8
- a=gxZvXKzzpFbKsGQtWD4A:9 a=gKebqoRLp9LExxC7YDUY:22
-X-Proofpoint-GUID: 7TGuGGhg92bHct8VuVKRvtKR4evfqnpA
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTE3MDA3NyBTYWx0ZWRfX47SlYJSEqV3x
- ZyoVtD+42qewQ7pHFPBtWwopul4QalVAcYw3IV0iCVaPMH3FAJ2bZTlEVBQi4qi55N6Vh8ZllVG
- ph9k+6IdkhBWtjyhhuhTuqaQ4+h/1gc46rh6HT35yR0kHM//mTva2orJi+ahrauwek0nUDvpt2Z
- PSgv9WzBNFIHVxGrVtiG496zOrfrCBp0QRNpoVkV0uk6ISBSGF3bJ7p0/OSauy+NyCqLHBV0qdg
- XxxhgUSQ2PpqB5i6hNoUQeFMtDwNw7zw/dmRwWXJO2bERuwFULTxKjd/qr8iza4PP+NmGvZZXtf
- WC5Sy/hEwcuYCzQr8TbrYo0WM2fM8LXwcHv9zOn/WaTQn70p/0bX/azs5w+aB8RnXazSSHFOX1T
- H1DDPraKsVExHsL+lJEg0fMM6S32LqRT2hMH9DgZwUVLqpjsFGVEvGBqzD9Zb+wNyJ+F9IbIgF2
- 41LTkUndhJy/jUOQ3SQ==
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTE3MDA3NyBTYWx0ZWRfX0vPdHjS6a2/i
- JNOkh+OtGn94rkeHeaoSQw8NtfPjZxz8EzWUqFuSMCy+3TfRxeUrIuGSZJwkm8cjVLXR+R/WRVT
- w+h5EP/3dndu7zYzAXRWWfIqQTbfH4A=
-X-Proofpoint-ORIG-GUID: 7TGuGGhg92bHct8VuVKRvtKR4evfqnpA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-17_04,2026-11-16_01,2025-10-01_01
+References: <d85ece6e-27f9-4d9f-83af-4101bc76fef6@app.fastmail.com>
+ <356db94e-f5d6-4fb2-839a-b97aef72256b@app.fastmail.com> <CAHC9VhR9sjunJRnM9gy-BkBZkapQTrr8a8FtmaK7JkAmUqTrLA@mail.gmail.com>
+ <CAEf4BzZKmn6g0SK8OddjKFj_vAmZFvpZv32Hs_S+GHgT7VNfrg@mail.gmail.com>
+ <9d6bdc31-e57c-4187-be78-29d82471f710@app.fastmail.com> <CAEf4Bzb+oYDqO20v4YbJ45wdtcGgJT3xVse822P+=oA7fpFAOA@mail.gmail.com>
+ <CAHC9VhRcT3rmdpeadwi2avhwvr7aEZYStZ3bbEEx1hm=wtBGhQ@mail.gmail.com> <CAEf4BzZ120age2-M-a_TJ07xohb7-s=xn3e1W_-V0kopnATq6A@mail.gmail.com>
+In-Reply-To: <CAEf4BzZ120age2-M-a_TJ07xohb7-s=xn3e1W_-V0kopnATq6A@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 17 Nov 2026 14:30:15 -0500
+X-Gm-Features: AclHuK-RtKReAlxzWgT2ghpIFsZj6qbY4_JP5P0ehVqwzT5eB9L_2z4RTCFLPcA
+Message-ID: <CAHC9VhThV9xiXr8j5_+W__CBKn0JqUiZ-RGZpF4Nz-i_RZprAQ@mail.gmail.com>
+Subject: Re: [BUG] bpf, lsm: new first argument in 7.4 inode hooks silently
+ breaks BPF LSMs
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: roblabla <linux@roblab.la>, Daan De Meyer <daan@amutable.com>, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, paul.mabileau@harfanglab.fr, 
+	linux-kernel@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>, 
+	Christian Brauner <brauner@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-psp_twsk_init() sets tw_validate_xmit_skb on TCP time-wait sockets.
-Today, that becomes set whether or not the socket has PSP offload, which
-is not needed but is harmless. psp_validate_xmit() passes such packets.
+On Tue, Nov 17, 2026 at 11:51=E2=80=AFAM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+> On Thu, Nov 12, 2026 at 6:41=E2=80=AFPM Paul Moore <paul@paul-moore.com> =
+wrote:
+> > On Thu, Nov 12, 2026 at 6:00=E2=80=AFPM Andrii Nakryiko
+> > <andrii.nakryiko@gmail.com> wrote:
+> > > On Mon, Nov 9, 2026 at 7:08=E2=80=AFAM roblabla <linux@roblab.la> wro=
+te:
+> > > >
+> > > > Hi,
+> > > >
+> > > > Thanks for the replies!
+> > > >
+> > > > > LSMs that need to provide a stable API must provide an abstractio=
+n
+> > > > > layer between the LSM hook callbacks and their stable API.  The L=
+SM
+> > > > > framework is not responsible for the stability of individual LSM =
+APIs.
+> > > >
+> > > > Understood, that lines up with my expectations. I think the biggest
+> > > > thing here would not necessarily be stability guarantees, but rathe=
+r to
+> > > > make sure that the eBPFs fail to load when the compatibility is bro=
+ken.
+> > > > But that's probably a problem for the eBPF side, and not LSM, I ass=
+ume.
+> > > >
+> > > > > So, in short, would it be possible to send a follow up to Daan's
+> > > > > commit and move `struct mnt_idmap *idmap` to the end of LSM argum=
+ent
+> > > > > list?
+> > > >
+> > > > If this is possible, that'd be nice so that we avoid this breakage =
+in
+> > > > the short term, since the change isn't in a released kernel yet.
+> > >
+> > > can you please send a patch proposing that and we can continue
+> > > discussion there? please cc me so I can follow along
+> >
+> > Considering the original patch was submitted, reviewed, and merged
+> > with the BPF LSM being the only user (none of the existing in-tree
+> > LSMs use the idmap parameter at present), I'm a little surprised this
+> > wasn't brought up earlier.
+>
+> Yeah, unfortunately this was missed. Not sure it's surprising that it
+> wasn't detected immediately, though, because unlikely someone tested
+> an unreleased kernel in production. Luckily, this was still detected
+> early enough before the final release and this gives us a chance to
+> fix a mistake.
 
-Set the validator only when the socket has a PSP association with a Tx
-key, as psp_sock_set_tx_key() does for full sockets.
+I've been surprised lately by apparently how little the BPF LSM
+program interface is tested with real BPF programs before landing in
+Linus' tree.  I know the BPF folks have a pretty good set of CI tests,
+bots, etc. but there do seem to be gaps relating to real world usage.
 
-Fixes: 6b46ca260e22 ("net: psp: add socket security association code")
-Signed-off-by: Todd Freed <toddfreed@meta.com>
-Reviewed-by: Daniel Zahka <daniel.zahka@gmail.com>
----
- net/psp/psp_sock.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+> > Beyond that, from a style perspective, I think I prefer the idmap at
+> > the front of the parameter list in most (all?) of the hooks where it
+> > was added.  I'm not interested in moving it at this point in time.
+>
+> So on one hand we have a real user pain which is easily fixable
+> without burdening kernel and LSM subsystem in particular, right?
 
-diff --git a/net/psp/psp_sock.c b/net/psp/psp_sock.c
-index a6b1c42dd626..5043df0bf711 100644
---- a/net/psp/psp_sock.c
-+++ b/net/psp/psp_sock.c
-@@ -314,10 +314,12 @@ void psp_twsk_init(struct inet_timewait_sock *tw, const struct sock *sk)
- {
- 	struct psp_assoc *pas = psp_sk_assoc(sk);
- 
--	if (pas)
-+	if (pas) {
- 		refcount_inc(&pas->refcnt);
-+		if (pas->tx.spi)
-+			tw->tw_validate_xmit_skb = psp_validate_xmit;
-+	}
- 	rcu_assign_pointer(tw->psp_assoc, pas);
--	tw->tw_validate_xmit_skb = psp_validate_xmit;
- }
- 
- void psp_twsk_assoc_free(struct inet_timewait_sock *tw)
--- 
-2.53.1-Meta
+Arguably changes that negatively impact code style and readability do
+affect developers and maintainers.
 
+> On
+> the other hand there is a minor issue of argument ordering with
+> mnt_idmap preferably as a first argument. I get the preference, but I
+> think fixing an unnecessary (but easily fixable!) user pain should
+> come first, don't you agree?
+>
+> Can you please reconsider?
+
+The user pain exists because there is no abstraction layer between the
+LSM hook callbacks and what the BPF LSM makes available to BPF
+programs.  That's a choice made by the BPF LSM devs, and while it's a
+valid choice, it does have drawbacks like we are seeing here.  Changes
+to the callback arguments and/or the semantic behavior of the LSM
+hooks are going to continue to happen regardless of what we do here.
+It's better if the BPF LSM figures out how to deal with problems like
+these rather than relying on a set of bandaids at the LSM framework
+layer.  If the decision is to push the pain up to the user to keep the
+BPF program interface thin and flexible, that is their choice.
+
+--=20
+paul-moore.com
