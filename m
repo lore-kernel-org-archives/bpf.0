@@ -1,101 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.52
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794934315;
-	b=c+gN3TI3Srr0kx+ZGVE+qKSNO15PH+T7TI1Gd0QEKpOGVjHP3zDCmXwaUtK7+HAz5Dni
-	 VleFUBsY33go+dynst0SMORk5GprChx1vzWyiEZt1SbCty7K87YKcUr1h3ZqgtwkPtdZf
-	 nO/LPn7SpmoR1v7ITIgSju6AxCzhSYQX+bufd1iAtG3RjFHcCTqLMH0OCI/FiIe0BS/aY
-	 zNM9LmuRlFJeE42L42/SHfu4yj/FyrVcrUTeTXRdnCLD7MBfDZFAQyYVV/QT7/a08ek0D
-	 Q2nW247eC20g9B1yYm+8z4XWo2rjuO13Js29XuI9YxJHo+iv8kutw2+d+BOt5CuBf6Q==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794934315;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=7JRaWtwwi9S7Z5KFGKcQeTS6a+RchtYr83xPGWINYgo=;
-	b=cjayjAlhBaj4c7K6D/5IyyutI5PXm0LBfzDXJWcCaQC0qRvT3mnaLJgBc46QFbydK2hr
-	 /jDxLKQDe24h2Qz17xNYZxWwJUKspjnYbZtDRpgB7SHtTPG9GVNs8YVXX8v44vupekFQu
-	 sj+5cGVTYrAWvIy56nKS5jF/pAW0yCD8UfLsDOK8huawTPHZJ5D3Uhbgw/i2RseNV+f8Q
-	 WfopSJRLS8j7NbBxnCdJVOqzLkozIrABrvfE2lXF9lh2trqD+r6xLva+YLI35ghoea9Se
-	 s+PJQ+r7xGLwj4a2nkPEBeclNtmswnpgkSy0I7hLF6mxvk3ndItXwNCPaQSGYSh5duA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=0cG9HEID;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.52
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794935215;
+	b=cNy6dqcKPXcRwJ24yByTtVv9qRcrTlX1/XdG2Z/ZmeJoo6kX+ycbUrFYQJOB/2QhNaVe
+	 CrYr1ERYoGEYbHQzC/z0upv2OzdmwaLjqFZWaDb9e9CBpJXtjAQuDYoOnK+TlkSYxodWC
+	 jVjURMLJJFE+R53iMcqQbV/OecfdoULv45cu0LOHezgOq/0yZk0ppqoelp98I8ro+cP6u
+	 4Va/eoRKRS/8Z0NyLFYeJ11HfLUtqv+ceDl2Z3jvPI4mXZ0bGOWoJSN8oa8/zD0w2ewge
+	 xSlxds3fiBlFkvkIpcJaDPmYtkzdZFzPc0HzkFGjE5XUEVCw32OdI44toHk4Me2mKGw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794935215;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
+	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=3x+0jlSrgAaHaiAOabPc8qLStc9/QqPozrpSv+XIEh0=;
+	b=XwK5V1e/sJXQUP5Mj6pxTxr5EuBlikX90BHtBL+1n31ioUwXuamwQGMSJJQrIia2rBuY
+	 szdohztqufBPDaVfR0vId1pQ7Q6aVBLrEJtF3ljI4RM8NyFU2W1884FE8963RhPsy2jm7
+	 SDKORORQ1EUzNeqPuribsa5nbbYzNAg7wLbCK8ImWBh22K1wHETDbr+joUkkjwUr62Kx4
+	 S5Bp+ofxBAzD1G7UhkzTcISIz9wAA/Z0yl5sYf5YGfAUv1dafiK3eE7H4MP4FsOpRUqKS
+	 XTR9pWRgqz3GAoVzbzW3eGgdmVTM0oSFk9cCNNBLSum1FNTbYt9UeSEn71QprO0dv6w==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=P1CFB4aJ;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D538A606A330
-	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 16:51:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D538A606A330
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDC16606A880;
+	Tue, 17 Nov 2026 17:06:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=0cG9HEID
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4bb5b8ef642so701925e9.1
-        for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 08:51:54 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794934313; cv=none;
-        d=google.com; s=arc-20260327;
-        b=TzmH2uwc3fMK0KSgmfCfr8+fapRIye1ELr+dWIrm6sOpYPqgwzCeTGXeoUbamqhZns
-         88Fu/5cPsupth2E/I0VENmkWky4GwU7gQhSJtrp2BR+2ivq7TfDd6sVkbAc8hO+/7W7F
-         Uk+TV3hq8AYg2kCtegtHYZ6RtR97N0w41zlj5E9ytXP+MkoSDRO/QM7C0kp3DgfunElw
-         EGr4ZtWiFdjdSvVIi21R18K/5Mke7R/26BIxXvi6eWKiyBXHg/q2LMzct9wJ6MSo1Ls5
-         hRORBl4b+aAsbOOUDWFYPHnAd78WFC08VM1bKF2ZIUS5vte4Zg+aykE00E7keP1ramSx
-         fFTA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=7JRaWtwwi9S7Z5KFGKcQeTS6a+RchtYr83xPGWINYgo=;
-        fh=RsONygZfwwFuESnEHAhsSjtTtn09dQWhPM5ViHqwZtQ=;
-        b=dxuYfCHPV07LQ9Qznj51zyD3dhKZY1vXQ1qMTy0eFtw8VBWbJsgHJmzP8ZbnZ5o7jX
-         APJmoncEtHq82Wocl8CY5shSVJAzeksjrQXZ0PoRNAHKTqlxBtP7G67DzgNu0O5dy4dQ
-         onZcMR+cjxtWZp5wEyJF45hhLU2MV7elUHSgySfjM7So5nZwIAtjAeFkNwMZPU/YpzSL
-         eSljBQIV1OTnAfNNVYfchHYhv1EK9wp0i0MvbclodZW3/QmAZu/Cd0Arcy1z4J1pFQsN
-         JEO1iVbXxj9AuPuzc5Qntc+kVzf+SjFCQAGTUThEe9SQ7kmL3h7/H0bVUiCMs7W6Zcnk
-         NgmQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794934313; x=1795539113; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=7JRaWtwwi9S7Z5KFGKcQeTS6a+RchtYr83xPGWINYgo=;
-        b=0cG9HEIDKPN1IRLjWvhck/vln6wEcHrnV5TJWeVj5j0UGAlYiT9dy4RQ4G83AKqrBO
-         wfsqNqc0iqHE8NzVxg0qUKPI8/LOLteUkakQPojwzPDBrP2C3rLnPG9CT6GwlMZEYofq
-         tcqpIIhzFLtMFED//3XgkKb66wWor2VcJ8LUpV75RqG0Saq1eJdRPJqb3tku52GJg+oi
-         xkk85GAhMopSY6zJmS2QPb0i9y4L/erFssmbWusTmAx2d+sIDjCFIY3R2Rxrb0aAhMkD
-         KpoRygRV23IzbzvfZBw0Gt3VetYHpCk+74d5nQybBylkvNjT5fcJqhmbGpbe2s7Tu5oK
-         7UbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794934313; x=1795539113;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=7JRaWtwwi9S7Z5KFGKcQeTS6a+RchtYr83xPGWINYgo=;
-        b=1zyhmZsjJK2dGjaAokz24rHiLbY9e8W0qYCfDZhFuN43AiTpgt/8PLy93RZW/Tsp5W
-         S8VZFYE5dO/+i1RpnmrjhXPQjrlH8ewbxTlkmYQzdfsm5v1W4tYBiVjrdg2mLKYWNIDf
-         zef3Cn502Wr87M/eLysb8TnUWIugZBF+4mH5Msu47AbRwVZQ0rmu2JZcMA97M1AkNYex
-         xFuhlxNm/e+jwt68LTZ3zz3E7u/6Qgr/xCCixJV+NPEGwu9DPPhvFzzz4ffZ7YSQ5Vww
-         7S9uSjJumO8IHJIzxGjRu5mpHjev23yn6TcKfd9ivguWmjcr4xJX0ro1bD3VQ9n59krK
-         X8Xg==
-X-Forwarded-Encrypted: i=1; AL+hErHtk5Z1HPojPvJstXtadqzRM29zbnxstRlrzfhIU1TGRA2Jd/YedWs/rlQHKhFGfly/PTw=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+cyK1n/lcBhliozGrXBHw55Puuy4Mt0xC8kPweXdFNQ8rFD/ho
-	NljZyYF6s1jFqntBoGEDkWd/S+cIRbBwuCLFg876S1gNJZOP4n3QdtZUyw3X6J+jC059bk3gEX0
-	ZOimmhAFOoIc/Hf+6uVyVfwVhTLe81Yo=
-X-Gm-Gg: AYBFou3bqOV8OihuTrTZj9xjr7zVTg26d/NCFeu+iAcogogu8jPyb5FfH+M/7wLZAE8
-	6oj3K5Ki4zjJuw9fkrrogRnvsIc6SlWg4SdSw4tGnz/4oCNbyeqyXQcbWLr2Am/JMLIxoM2SW15
-	WZmVuQlLLBrpNZ5Gz15JUi/OblY7qLx/qKo6HThRAXFFeJ0mUpU0t2A9k+rdsz7NXznnkmO80LS
-	3t4L1OOFyAgHngNKNasaSLgE7Fd0kWgxheFxwXM7yv6W5KfzNnGu1+Pu0HmQwkkvyrgMkqZ5PKl
-	/SCOMQIc3F9Gw56qW1ZFoZ6wGr532scTs6fHx+gz+Itw0j31xIRUny1rQsJFtjgCUbkOP8AEtfy
-	zByE8/r5PodFTvYt2GbYaeeP6m2xJTWBiYRuKRmwZkzqRwh+KFduwmJM/UnqooLQcjvjhTGjXko
-	YXXAl4Q0SrkWZQryyzFqUsdolu7QGegrRKhQ==
-X-Received: by 2002:a05:600c:3e1a:b0:4a2:191f:7cbd with SMTP id
- 5b1f17b1804b1-4bb55a3e31emr267364685e9.11.1794934312966; Tue, 17 Nov 2026
- 08:51:52 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=P1CFB4aJ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1EC61F000C5;
+	Tue, 17 Nov 2026 17:06:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794935215;
+	bh=3x+0jlSrgAaHaiAOabPc8qLStc9/QqPozrpSv+XIEh0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=P1CFB4aJGuX0QRQ3pAADWjoP02+tKboFVQQ03fUP+1g3874UOV1Dpkehu7J0kv3oZ
+	 QESyyaeevXRFo87s6sdstC4TY8S1xeMtU0fa3VEfzwsqQ43p9h5dIVADe6sONUAV+D
+	 Odc7FepYb4Jam0Ha00wlGoNW/2eFNfFc+CW2RXzqFOYWD8rYbjeKAlcUREHZLjA9P3
+	 de01no0XzXMKJk2hhYrjl0X0QGgOjofLHCB2NFjoWIUV9VtD9ZU1gI35uwSG+SowfV
+	 fg+GSWh5zVKjOXRZ1TnttX8oiib8kdCqMZBDLmKEXaP366RKvOcSjN+SZEEKD/xkGo
+	 ++lP1oIISjMnQ==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jonathan Corbet
+ <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
+ <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>,
+ kernel-team@meta.com, Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard
+ Brouer <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Pavel
+ Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, Andrii
+ Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar
+ Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
+ <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, io-uring@vger.kernel.org,
+ "Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>, Weiming Shi
+ <bestswngs@gmail.com>, Nikolay Aleksandrov <razor@blackwall.org>, David
+ Wei <dw@davidwei.uk>, Alexander Lobakin <aleksander.lobakin@intel.com>,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, Stuart Clark
+ <stuclar@meta.com>
+Subject: Re: [PATCH net-next v1 02/11] net: Add memory provider capabilities
+In-Reply-To: <CAHS8izNVDU8+JzeuwDBmF24C-XqkO+ox01qnTvK665Y8pyWNLA@mail.gmail.com>
+References: <20261110102039.1002605-1-bjorn@kernel.org>
+ <20261110102039.1002605-3-bjorn@kernel.org>
+ <CAHS8izMaAv6gX1NeJR+QCf43CL+DC4DgePRNNxSLoE31jxHU0g@mail.gmail.com>
+ <87fqx2j5jx.fsf@all.your.base.are.belong.to.us>
+ <CAHS8izNVDU8+JzeuwDBmF24C-XqkO+ox01qnTvK665Y8pyWNLA@mail.gmail.com>
+Date: Tue, 17 Nov 2026 18:06:52 +0100
+Message-ID: <87zev71j6b.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,87 +82,102 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <d85ece6e-27f9-4d9f-83af-4101bc76fef6@app.fastmail.com>
- <356db94e-f5d6-4fb2-839a-b97aef72256b@app.fastmail.com> <CAHC9VhR9sjunJRnM9gy-BkBZkapQTrr8a8FtmaK7JkAmUqTrLA@mail.gmail.com>
- <CAEf4BzZKmn6g0SK8OddjKFj_vAmZFvpZv32Hs_S+GHgT7VNfrg@mail.gmail.com>
- <9d6bdc31-e57c-4187-be78-29d82471f710@app.fastmail.com> <CAEf4Bzb+oYDqO20v4YbJ45wdtcGgJT3xVse822P+=oA7fpFAOA@mail.gmail.com>
- <CAHC9VhRcT3rmdpeadwi2avhwvr7aEZYStZ3bbEEx1hm=wtBGhQ@mail.gmail.com>
-In-Reply-To: <CAHC9VhRcT3rmdpeadwi2avhwvr7aEZYStZ3bbEEx1hm=wtBGhQ@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 17 Nov 2026 08:51:40 -0800
-X-Gm-Features: Aa3M54rjJelQoMCxfJbdMIri9nRD0cwaH3YE08B27J2GSDu0HswQ_b0L7fMjvps
-Message-ID: <CAEf4BzZ120age2-M-a_TJ07xohb7-s=xn3e1W_-V0kopnATq6A@mail.gmail.com>
-Subject: Re: [BUG] bpf, lsm: new first argument in 7.4 inode hooks silently
- breaks BPF LSMs
-To: Paul Moore <paul@paul-moore.com>
-Cc: roblabla <linux@roblab.la>, Daan De Meyer <daan@amutable.com>, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, paul.mabileau@harfanglab.fr, 
-	linux-kernel@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>, 
-	Christian Brauner <brauner@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 12, 2026 at 6:41=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
-ote:
+Mina Almasry <almasrymina@google.com> writes:
+
+> On Sun, Nov 15, 2026 at 10:47=E2=80=AFAM Bj=C3=B6rn T=C3=B6pel <bjorn@ker=
+nel.org> wrote:
+>>
+>> Mina Almasry <almasrymina@google.com> writes:
+>>
+>> > On Tue, Nov 10, 2026 at 2:21=E2=80=AFAM Bj=C3=B6rn T=C3=B6pel <bjorn@k=
+ernel.org> wrote:
+>> >>
+>> >> The core treats every memory provider as unreadable: installing one
+>> >> needs header split and no XDP program, and any page pool that allows
+>> >> unreadable netmem takes it. An AF_XDP UMEM provider is readable, needs
+>> >> XDP, and hands out whole buffers.
+>> >>
+>> >> Describe providers by MP_CAP_READABLE and MP_CAP_FRAG; devmem and
+>> >> io_uring keep their behavior with MP_CAP_FRAG. A page pool takes a
+>> >> readable provider only with the new PP_FLAG_MEM_PROVIDER:
+>> >
+>> > Why do we need this? I thought whatever creates the pool actually
+>> > shouldn't get to pick whether the pool picks up the memory provider. I
+>> > thought if core has configured the rxq for a memory provider then the
+>> > pool is forced to take it.
+>>
+>> Thanks for looking at series, Mina. ...this needed some thinking.
+>>
+>> It isn't forced today either: only pools with
+>> PP_FLAG_ALLOW_UNREADABLE_NETMEM take the queue's provider. Drivers set
+>> it on the pool that holds payloads, and keep headers in host memory: in
+>> a separate pool (fbnic, bnxt), or outside the page pool (gve, mlx5).
+>> That works because every provider so far backs payloads only.
+>>
+>> UMEM doesn't. The socket gets whole packets, so UMEM has to back the
+>> header buffers, and with multi-buffer the payloads too. The flag was my
+>> way to get it there, but you're right that it's the wrong knob: it lets
+>> the driver opt in, where it should only say what each pool holds.
+>>
+>> How about this instead. Both sides use the rx_roles bits from patch 5,
+>> HEAD and PAYLOAD:
+>>
+>>  - The provider says which buffers it backs, next to rx_page_size in
+>>    pp_memory_provider_params: devmem and io_uring zcrx PAYLOAD, AF_XDP
+>>    HEAD, or HEAD|PAYLOAD with multi-buffer.
+>>  - The driver says what each pool holds, in rx_roles. A pool without
+>>    roles but with PP_FLAG_ALLOW_UNREADABLE_NETMEM holds PAYLOAD, so
+>>    existing drivers don't change.
+>>  - page_pool_create() gives the provider to a pool whose roles are all
+>>    backed; the others get host pages. No opt-in.
+>>  - After ndo_queue_mem_alloc(), the core checks that the new pools that
+>>    took the provider cover everything it backs, or fails the restart.
+>>
+>> With fbnic's header and payload pools:
+>>
+>>   devmem:                header pool host, payload pool devmem
+>>   AF_XDP single-buffer:  header pool UMEM, payload pool host
+>>   AF_XDP multi-buffer:   one shared pool, UMEM
+>>
+>> A shared pool on a devmem queue doesn't take devmem, since devmem
+>> doesn't back HEAD, so the check fails and the driver has to split.
+>> That's the "headers in host memory" rule, without the driver asking
+>> which provider it is.
+>>
+>> Wdyt?
+>>
 >
-> On Thu, Nov 12, 2026 at 6:00=E2=80=AFPM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> > On Mon, Nov 9, 2026 at 7:08=E2=80=AFAM roblabla <linux@roblab.la> wrote=
-:
-> > >
-> > > Hi,
-> > >
-> > > Thanks for the replies!
-> > >
-> > > > LSMs that need to provide a stable API must provide an abstraction
-> > > > layer between the LSM hook callbacks and their stable API.  The LSM
-> > > > framework is not responsible for the stability of individual LSM AP=
-Is.
-> > >
-> > > Understood, that lines up with my expectations. I think the biggest
-> > > thing here would not necessarily be stability guarantees, but rather =
-to
-> > > make sure that the eBPFs fail to load when the compatibility is broke=
-n.
-> > > But that's probably a problem for the eBPF side, and not LSM, I assum=
-e.
-> > >
-> > > > So, in short, would it be possible to send a follow up to Daan's
-> > > > commit and move `struct mnt_idmap *idmap` to the end of LSM argumen=
-t
-> > > > list?
-> > >
-> > > If this is possible, that'd be nice so that we avoid this breakage in
-> > > the short term, since the change isn't in a released kernel yet.
-> >
-> > can you please send a patch proposing that and we can continue
-> > discussion there? please cc me so I can follow along
+> Hmm, I think maybe the exsiting knobs PP_FLAG_ALLOW_UNREADABLE +
+> CAP_READABLE covers your needs.
 >
-> Considering the original patch was submitted, reviewed, and merged
-> with the BPF LSM being the only user (none of the existing in-tree
-> LSMs use the idmap parameter at present), I'm a little surprised this
-> wasn't brought up earlier.
-
-Yeah, unfortunately this was missed. Not sure it's surprising that it
-wasn't detected immediately, though, because unlikely someone tested
-an unreleased kernel in production. Luckily, this was still detected
-early enough before the final release and this gives us a chance to
-fix a mistake.
-
+> The pp says whether the memory it provides is readable or not via
+> CAP_READABLE (or !CAP_UNREADABLE).
 >
-> Beyond that, from a style perspective, I think I prefer the idmap at
-> the front of the parameter list in most (all?) of the hooks where it
-> was added.  I'm not interested in moving it at this point in time.
-
-So on one hand we have a real user pain which is easily fixable
-without burdening kernel and LSM subsystem in particular, right? On
-the other hand there is a minor issue of argument ordering with
-mnt_idmap preferably as a first argument. I get the preference, but I
-think fixing an unnecessary (but easily fixable!) user pain should
-come first, don't you agree?
-
-Can you please reconsider?
-
+> The driver says whether it will allow unreadable memory for this pool.
+> For header pools, it doesn't specfiy PP_FLAG_ALLOW_UNREADABLE and for
+> paylaod pools it specifies ALLOW_UNREADABLE.
 >
-> --
-> paul-moore.com
+> The change I think you need to make is: today we disallow any
+> providers if the caller did not specify ALLOW_UNREADABLE (because we
+> assume mp's are unreadable). After your series we only need to
+> disallow memory providers if the mp is unreadable and the caller said
+> it's not fine with unreadable.
+
+I'm all in on making v1 simpler -- I'll try this path! So, an unreadable
+provider still goes only to pools that set ALLOW_UNREADABLE. A readable
+provider goes to all RX pools of the queue. The roles and
+PP_FLAG_MEM_PROVIDER are gone.
+
+One addition: a driver must opt in with a readable_mp flag in its
+queue ops. Without it, its pools don't look for a provider. The reason
+is that today only ALLOW_UNREADABLE pools must set queue_idx and be
+created under the instance lock. Other pools may not, so they could
+pick up the wrong queue's provider. Maybe there's a better way?
+
+Thanks!
+
+
+Bj=C3=B6rn
