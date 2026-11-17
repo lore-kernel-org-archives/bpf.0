@@ -1,101 +1,107 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=67.231.145.42
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794951887;
-	b=TyB25YlPij3K7k+02d4QZ0hoFYThgZ/slhKFxepTRvLfciFwq7COA4SSmesdWluB100n
-	 TrjFwWYV6yR2TKQ06vM0gWhSKYnvC9qwKmiI/SCh8uXtz1DkKq2pZKLpge0GASl9Auqgw
-	 gajPvIQI6BGjQDCv+y6iSfqIg7L4iRTETJ87JN7mlWUYcf79E3W6wNdT5pnvSBMp2/MkA
-	 IpwQ2Wd8UCt56iD10JxVrN6FO0Z/gECntOWfqUHQKDjlyRCg6rUNl1toxQXmF1qAFvESn
-	 W7skIsJkYLPU3GoFYJiSKloCYgUD7tK/IprFVAXW7kc2uTxXwIVC0xzcv3z9BoGSQgg==
+	t=1794953064;
+	b=EzmVherg4ng5guM+okzIWU04wSRZjJAh/kS9fESIpCQ0T9JO4JcRzqcYcG3nLFY718Uy
+	 0EfmI7EVPSw49ct4bbwgWsrTIUc4aQV/dy82bJuptwi26DwWfqV34laj7SS/BZyqQzkvh
+	 ZDVxiFTGDF7x4P8OKzQtUFhQ7rNjHJAxq9GgqoKucWuTo8IldteYraW9A1zelo4wEVrt1
+	 YUjV4FMg8PxsST+PuFkLCJsMLm4rX5BvJ858IQfCMjpmtDAZGBfLXyc6/FHbsoLMB2n9i
+	 ENPXZWdF85a/PWROFNp8+Uo0SJCVckAFZ4WKQGL4WO6VSwFatW0gqIk213XVvcetMPw==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794951887;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=QCHf0rhDeEETaZD4vNh0xBLfMvMYAYCFBm3oqRl3Mdw=;
-	b=jnyJyF1C7xNqcHdM+NiR/MkV05Yd7hmnPy/S9d13/yuY6eXdF03riK5619vFN+G63YLc
-	 JW1SMri1KBW45aD0UwT0JSE7eIIp5Ko2cjDP5iBzbNRZn3fkzj941jufVPdGvTdT7m0cg
-	 b2GK/s8UJZlJmFNCGuWwha1b8OFLnf9C6ZFq8e7L7Js4WJFvKUuL33yXLSST1EWdNldzk
-	 r3gnqstrdSW7ukFgbA7yq3Mo9LNKk5ig6+zUHXzPYkm0Mudl5KGladtsZNNMDAicbA6XB
-	 kzTzn3MB0311chAn3iWIyMBVU2HSEiBK7QMWnRFDZx6Enm4sV3uHA+s0O40zj2L/vSA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794953064;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
+	 X-Google-DKIM-Signature:X-Forwarded-Encrypted:X-Gm-Message-State:
+	 X-Gm-Gg:X-Received:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type:
+	 X-Proofpoint-ORIG-GUID:X-Authority-Analysis:X-Proofpoint-GUID:
+	 X-Proofpoint-Spam-Info:X-Proofpoint-Spam-Details-Enc:
+	 X-Proofpoint-Virus-Version;
+	bh=F0h8eziyjQaKcApZn3rXwi6/D2KTrjlf79mLv/zsAlo=;
+	b=FM6HrrtgJyrgPUeCVhn0f+LsR0iR7uWuIzds9o1v13qlpEUNOE6x+nysvpFQCjtA3OMg
+	 WZsELebGZXt5tK/YA1RXoJVOXyCg1BMdQwyw5em9N9cZu082EEHMvFIOuhzmPvPjHD0hd
+	 NmyGlgQVF5JK9GaLkADj90KgU44pmHfTRqucyINQ9IA79WysM9I0YesCMEuWdFLM+sfWG
+	 FvP9zv7uYLf2Vv5EWSwcvPuEOk8y/LxLruPUaLzxCZZLTGyUJZbk5T4my2mDSmTqb6Fow
+	 zuP1wGdY1wTqOlUGH5kwJf9PK9UuyptniWOGMDXnb4XW6cFz5LuQwGvXa3INDmvRd5A==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Q4akuTuj;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.54
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=meta.com;
+	spf=pass smtp.mailfrom=meta.com;
+	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=l7uGjHqQ;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=67.231.145.42
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B7A1606A338
-	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 21:44:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8B7A1606A338
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CBB0606A31C
+	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 22:04:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3CBB0606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Q4akuTuj
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-48dee593f18so181676f8f.3
-        for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 13:44:47 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794951886; cv=none;
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=l7uGjHqQ
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AHM1xkH579815
+	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 14:04:23 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pps82601-s2048-2026-q3; bh=F0h8eziyjQa
+	KcApZn3rXwi6/D2KTrjlf79mLv/zsAlo=; b=l7uGjHqQiohs5ekfiARvjRSqonZ
+	vfWTdNRDAMTgYbwgHd2DiCaSQiby1P8w8eUQPRR+TIo9nRLlBQFNdDnVag4VjV5v
+	zrbZw23J8ETzA0nATXP0IVDkySa05zQZtoRlDwRuy1a2ZoxUH4Pp1yJR43RsCUgv
+	tl+xcJlH6woyek733bANbYzH8HReXmgA4za22Txg6BnnOkOdLsXPCv3qcCky4PEl
+	oTyV9zDt2xSDfhUpHFVmZaywQ69nMGDlbBxkhLjsgqHBVVkUhwg+7DJBMhDNzWHE
+	pFQ8H/gSSYpsYTJQrKrhs1zeRTZ+DY87ItQdcFZRO3NzTPrKdYV1xdB2t8g==
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com [209.85.221.71])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4j0rduw1tf-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 14:04:23 -0800 (PST)
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-499ca65ae87so83353f8f.1
+        for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 14:04:22 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794953061; cv=none;
         d=google.com; s=arc-20260327;
-        b=UbYwfVeWMbDYAbtMl5za8LJCOdlX7J/Ktzia5L2IXnKNSFl/s5CSKvGbaNMMNC/Rq4
-         DCH/wrg3fVx/VqECBmbD/mggmPHXOnV/+AUu90uWIB1bqEDLARGjqSq3y3HP/xB3aCpl
-         +6nedMF1PqH1PIV+xKa9/x3mvDpa6vK6KeriicaEFE+BgIlmgl3pBBei73Xx4FseZW6f
-         DrIzaXjp2KdoWaial8tpO2w9WjwwCAmTtG8HZCV6VvZiIOugIE2WYmtFiYPxfX0WFfHN
-         TzkFdU33uIgyrGjlJZOMbPLc3vEidGzxuyB8CukOSEsW6jhaXp8+/+CY4Bct6cIPIcvF
-         eh7g==
+        b=Dn1C8nX27YiFKZzbhg3W0b62vQjaDtixbvovFex9xv9QslFh8RJSkH9UNiLBB8MMUu
+         6LnplFeO6VJ6J2WfMwTkixp7kT7Y03zuV8DYtejkiq37EUjIRWXoAZky5WP4VHrRVIXn
+         YTJA3b6Dwy5kX1C3uE/dxN1XqSSsXrTtuHQSeNpKeTXHm0QajYHNuXqezg7meBvQGp2Y
+         kJo+a+0T+FeS1trDJysPOl6TchpnZBKp2nXtnDuPepxTSCOaaNQzisKpdk9FT4DZmP12
+         Qon8OznL3EvanprrJQ3vRXivSk24oF4hjzMBnhvSKCLYrJuTgyeMRkYDXg8HSrftsIMj
+         R+rA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=QCHf0rhDeEETaZD4vNh0xBLfMvMYAYCFBm3oqRl3Mdw=;
-        fh=M6U1DWtidgwLaTaznhLwIFZU9g4aY4HcRT+tn4lWgWo=;
-        b=S/r5vUS/jYUo4I0/yDXWX1i/Csnjt+JDZHHUMFvGdtKUycIAgr8GBMEfKNCnjsEgHq
-         SZPCbLP75PdxoQGA4HJwBQaotyRs3UouHI+w54z34RrfWqB1TLmOLCvYP+8nTCcFCvC8
-         nCf1nNkLZIAo1yUd8byisaJj71C4ZV8+0ESnVxuwn6uAhLT2+Nsu0ReUuTj0wMH6drXp
-         OOACAPvR5awVI+er6j8ExDwJICAPEz5v73DSwMjQOJMvcJmla76G0WJXpWk97naPJWt6
-         Iq6hVfO91zCfb1YKF7pqPuIkPEi69oi8Xihqmtt6EqbS5sO1AfZuWXFp85BLvC3UA3J+
-         iXqA==;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version;
+        bh=F0h8eziyjQaKcApZn3rXwi6/D2KTrjlf79mLv/zsAlo=;
+        fh=YUSdRp71XYT11Nxkud4+gIzTvod/IwDBCjZTQw0FrLQ=;
+        b=cji2xnuKiqoPxmMgvDnluZk0xVW0hyOuLnwqQ/H7ODnqGCD/5y6vW09PrAghQxBhY3
+         kXYy8R6nSYMurwAk3KaI4M2eotN4tjJxeFmXd7HSPyDAAtcYNXI+iH+Hp5hgTjSPfczV
+         wKNPjI20kv4JeAI2yV+mBPV6zm6jIMq6UXpZcCLv8MrOPunqOVeiicgWW/ArvtR1UBEF
+         2EIrIdrjK+/8xSg9m86/lDDDHEI1FCx8LfdxTz2F8pzIHO/44exR1FaNp5xw7kKkYwmz
+         U5jGEIfinOnxUi1RV1JeqdhUwaclZxip/9XHHMMoi+nc7R6ltJZ0fhpWVmdX3Skj2tSr
+         Qhnw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794951886; x=1795556686; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=QCHf0rhDeEETaZD4vNh0xBLfMvMYAYCFBm3oqRl3Mdw=;
-        b=Q4akuTujr5pbvaLa0lhDO0YCADGQAgjj8c2bG0N995NS/8kAVFkkoWtJjNIQKLY5fT
-         4ickiyj2FfqJOk8tH16u9eywWyjjuOmFE2Z76cJqYpJth3IvCSP6L/HCPzEW3Ho9Hm9R
-         tVV8fupVGdTK9lKvreeZp+la3khqvF/seI5TtqQYoDGbT3AdKpvkVfS4+/OLrjJtWqFm
-         UtMTRjJm6oOzhtgyNQyGNCyQanScn66u9qQY/VN7Qc05wwVkkDuuToTv5Je99B09RCnZ
-         qaWDLTWuUDigZ0f0SuJLY+eUXdEfA0Fv2meq2PbnYvGEcToaK1tcPcGI2VgejyWZ0b6Q
-         Li5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794951886; x=1795556686;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=QCHf0rhDeEETaZD4vNh0xBLfMvMYAYCFBm3oqRl3Mdw=;
-        b=jmIc3Sxjn0svtRQ9J/sOrs3PBNvR2ji9pKZOAKZZQfw3IgAyG41lRoqBEQT72acSoK
-         Bp6CI+u2JY93nrThx/jwS47bisA/aFqWI6c5d0DUpFu6HWEDeyA7iKjNI8VJM9R1qBFz
-         9lpLCT1eqsTVC1bSGaedLBBEYnMApDBRvVz1zoNfTrzka/u5BKwA4XfVQ/tn8ONIZBOa
-         CBynWzsfJJFNUbodcYqDWgbiK0P+w/W5VtI0yQX+fLZkvIPwpga5F7C35dp6KgZryDmn
-         lOv+Mwzpye1wqCkrrhRsDXG0UAO8aRUoTjkIldKcit8q7AcGtXeX/hvjvyuPF9WGUdz3
-         MkJA==
-X-Forwarded-Encrypted: i=1; AL+hErEewFceQVxmFO102GFJFRHCccuH/V3rqdf+OK7q3iVvkXspr9k7ITVENrT/jSToGSAhy30=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+LwJhFvCTb8Tin0lxGWKy/Tr6xiDBy2nnwRefraJVhuEtqX3Yb
-	eQ/UsaiHwBAhOvm/eaKSaO5dHUgByUr45Xpnp7uHKG/j42kab6r9Es9wgePt7G7HF0LotnDpHhd
-	FCZxUKNdv6Po8trztmFvIBUjnftKPxe0=
-X-Gm-Gg: AZFdTZdQ19hZqXjAFpAW7AO+I69YNYF9K17PcKw2u3vwdNCXrTSC0U1vU3LRHTmVv0P
-	3CrfPiP5iijUZnw0tQ1kHs52T8T052p/csOOvkvAyOWXyn+xicIDSU/qsEapM78rqYQNyLQ6QrA
-	0najHL/Mkxzveg8aFIJGgP9n/eFyuj+KRnrxs4ud7xkqffJOQScpm8r5Yt5hHIeYXQmKs37gzYn
-	ih1sztHLLJNr6CPo08cKo3bXdbrwl1LAwaocrQzSDSd8JDWNKYoHQJXCdMLcxSF9kIOa/v2C0YL
-	HTK2HY0tYsyRDCfcbITtyvX0O5+PTVMwCwdHy3YaB2icuwjnpVlenA8ZJNeo1YMqgisdeFWGNZG
-	ubPl9flTIyb8ixbnZXbPfwflRG398PfdEsJKOeHDgPgOol09xD+iaJE4nKxBNa/ExH4k/8zGzDn
-	bdpUB2TaDsPxJ+r/N9p6eO5kxeOxmjxY5hJCm/SlSqJm5pZ6h5vrLIxJI=
-X-Received: by 2002:a5d:5f05:0:b0:48f:cb37:3ec3 with SMTP id
- ffacd0b85a97d-4a63b22de8emr1573091f8f.41.1794951885727; Tue, 17 Nov 2026
- 13:44:45 -0800 (PST)
+        d=1e100.net; s=20260707; t=1794953061; x=1795557861;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=F0h8eziyjQaKcApZn3rXwi6/D2KTrjlf79mLv/zsAlo=;
+        b=1JQIflQ5qnnnKKmdu6o2oBlmD14q0S9XM0QXRuXSUGqrWRA8rdP+yJVBsWHUOGm/M7
+         mjy/K4rnzfHBhb8QxQeRlmfMU0AE8cQ4+4CHLn1ka5oHnQrqXbDGs47kBKtpE6qNMB2z
+         sauxV2vU1fg4VgoqISWW1y0kTbuKn5HxYpL+l7hHH0hgKkqvlh0cYVexGO+NC35xwC1A
+         79T6tyboy2DPKUO8fSRhv5hMMEM9FpH2ZRmx1M/ZGNOTs7bzh7DUU8Bq7TSwySZ/WMjo
+         b86FNNiUDHTP6TooH9x+2rMD6E7He3NL6783ccNYScyofKhWMS+fHriBdaV7Oc7SPrIq
+         vdTQ==
+X-Forwarded-Encrypted: i=1; AL+hErF55gx4EZEHxK3EnkmJHL9E/lB6zJqzwC+ObHAgqELFTGzzlivqkFJLOJE9bCWnVcgA1fE=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/+79vMK37pYd7suhD73IDlu1t8mfuzy4dolCKoaSCoA8O/sEH5
+	HP6TnIdE2cIYFFITK5Lrw71XSVFmiRqH/M+/tUbNjwH4bTSWBN0C3PoUm3/ZBTywgsPcvzALfp0
+	wYg3X69tCJ6sfqObMmf234/j8X8kOe4GBpRUjLrhA6g/JBNfp3U21D9Kh3TDhjvoIzBYtrdSKrV
+	us5gVNM0rxR8WcNpSMQgCuFSvM0k8=
+X-Gm-Gg: AZFdTZfAdG9qCQ33K8W/aYbDYCo1Nks/3pROn5o7n81kyu+ORqp3q/y3yU2lM81w3mP
+	2jikX5edIC00MP820E1oXOwRuUJr3SpGP0i9fPOidXuY3Q400zw5sgUe7dGmqBM1t4WZBo44+Yh
+	Nf8K0crN+EhojQ8aBVICqaU4DIaZjUWSyCaB/7JckKb1D8tpxF6BlCitzr4dOyokvEH1H1hzGT4
+	59JlFf1bDRbe2tYZF7Ex1/gFNz9UXZm0vYxnVwEDQL78RgcUMA=
+X-Received: by 2002:a05:6000:4213:b0:49a:94e6:378d with SMTP id ffacd0b85a97d-4a377f4f68bmr8136030f8f.30.1794953061547;
+        Tue, 17 Nov 2026 14:04:21 -0800 (PST)
+X-Received: by 2002:a05:6000:4213:b0:49a:94e6:378d with SMTP id
+ ffacd0b85a97d-4a377f4f68bmr8135992f8f.30.1794953061161; Tue, 17 Nov 2026
+ 14:04:21 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,148 +111,54 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <d85ece6e-27f9-4d9f-83af-4101bc76fef6@app.fastmail.com>
- <356db94e-f5d6-4fb2-839a-b97aef72256b@app.fastmail.com> <CAHC9VhR9sjunJRnM9gy-BkBZkapQTrr8a8FtmaK7JkAmUqTrLA@mail.gmail.com>
- <CAEf4BzZKmn6g0SK8OddjKFj_vAmZFvpZv32Hs_S+GHgT7VNfrg@mail.gmail.com>
- <9d6bdc31-e57c-4187-be78-29d82471f710@app.fastmail.com> <CAEf4Bzb+oYDqO20v4YbJ45wdtcGgJT3xVse822P+=oA7fpFAOA@mail.gmail.com>
- <CAHC9VhRcT3rmdpeadwi2avhwvr7aEZYStZ3bbEEx1hm=wtBGhQ@mail.gmail.com>
- <CAEf4BzZ120age2-M-a_TJ07xohb7-s=xn3e1W_-V0kopnATq6A@mail.gmail.com> <CAHC9VhThV9xiXr8j5_+W__CBKn0JqUiZ-RGZpF4Nz-i_RZprAQ@mail.gmail.com>
-In-Reply-To: <CAHC9VhThV9xiXr8j5_+W__CBKn0JqUiZ-RGZpF4Nz-i_RZprAQ@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 17 Nov 2026 13:44:33 -0800
-X-Gm-Features: Aa3M54qGP8nd7yA_gOyJhY4In2fLuAhhx8Joode7Q3Ty5mdfX54Ucq86pk3FqTg
-Message-ID: <CAEf4Bzb5Y5TUbN3kLBJNPn5Ae+_nbc7YhJice_wUzqdvpjFr_A@mail.gmail.com>
-Subject: Re: [BUG] bpf, lsm: new first argument in 7.4 inode hooks silently
- breaks BPF LSMs
-To: Paul Moore <paul@paul-moore.com>
-Cc: roblabla <linux@roblab.la>, Daan De Meyer <daan@amutable.com>, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, paul.mabileau@harfanglab.fr, 
-	linux-kernel@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>, 
-	Christian Brauner <brauner@kernel.org>
+References: <20261111005533.6436-9-toddfreed@meta.com> <179471270271.2199510.4403404984222798506@kernel.org>
+In-Reply-To: <179471270271.2199510.4403404984222798506@kernel.org>
+From: Todd Bert Freed <toddfreed@meta.com>
+Date: Tue, 17 Nov 2026 14:04:09 -0800
+X-Gm-Features: Aa3M54r8wXLJNYnHzeKDYLuWuEkGFgDFBdsvsZ-D9Jbgov-qnF9vSIAxOghmZf8
+Message-ID: <CADh2yMyL_SSJqD4=H4zkzmUCJCL4OwxeY+iPq5FQrBZyCb8+tg@mail.gmail.com>
+Subject: Re: [PATCH net-next v1 08/15] psp: only give time-wait sockets of psp
+ connections a validator
+To: netdev-bot+sashiko@kernel.org
+Cc: netdev@vger.kernel.org, davem@davemloft.net, andrew+netdev@lunn.ch,
+        bjorn@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+        daniel.zahka@gmail.com, donald.hunter@gmail.com, edumazet@kernel.org,
+        kuba@kernel.org, jhs@mojatatu.com, jiri@resnulli.us,
+        john.fastabend@gmail.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-rdma@vger.kernel.org, martin.lau@linux.dev, pabeni@redhat.com,
+        saeedm@nvidia.com, horms@kernel.org, tariqt@nvidia.com,
+        weiwan@google.com, willemdebruijn.kernel@gmail.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-ORIG-GUID: N7YKZlQb0sEQ8hbBXIs3Kd_VJuTjlEtx
+X-Authority-Analysis: v=2.4 cv=Apx7T+9P c=1 sm=1 tr=0 ts=6afccf67 cx=c_pps
+ a=pX1sPZUoWPGeQgUnKQNIgA==:117 a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22 a=8elwO82fXORLTBIkMd32:22
+ a=kH2YsCX8xyqK-3fOXDQA:9 a=QEXdDO2ut3YA:10 a=zgiPjhLxNE0A:10
+ a=XGGHjNwGSpTZ5T66x7Ix:22
+X-Proofpoint-GUID: N7YKZlQb0sEQ8hbBXIs3Kd_VJuTjlEtx
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTE3MDA4NyBTYWx0ZWRfXxkrHy2rFoQKK
+ tVobtcGm5+jDqHjVJeacVsC5G0ks6Jj7Ftmzit4WEqprNI1RpK1z+ruUZVFndIe4VRz1HjlfB/a
+ pQFVLPdLI9b5AEpSQ6XuJENVTvFF5ew=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTE3MDA4NyBTYWx0ZWRfX9TGcQ3ZMpTiA
+ Ljh9eqQsSt+kTBW+jveECgCN92N+CWzLAfAS+yWZxEpumLVs699L3vYqj0sH+cihArUc4oKkFvH
+ zY17gDovD5joNgtNmbsHQP0+cfDnnTWfiey7avlZad9SqVsyUr01eJg/ld3A6+7/fP0cIJz6FDx
+ cLG5k5JlO4VNRylIpF1irC57olsz8AJN77x0AyZaViLpZW6GdsnWpWzwsrIwbSVB040w0LOv6q5
+ JECc7fmUboKO5pUe66or20mut/h/bS2L1CssYcujJoklW2pIEtnqYG55GoY+c136vj3zZlZxyjM
+ q8bdHLbDCMesXk0D0Ifa09dD94KzcQHuu5fYL34ByVEcyWlLoUOSDmcN/pSQeAo2lUMnp+yNM2Y
+ GkD2QiCPHvp6jHEgyZ0pt2ehn6KSabxUccxoXJwdt/m+j+UvQpqdii24tSt6yRvAgMk8MBywu4U
+ 8abD6AmHt7/3Df1yTKQ==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-17_04,2026-11-16_01,2025-10-01_01
 
-On Tue, Nov 17, 2026 at 11:30=E2=80=AFAM Paul Moore <paul@paul-moore.com> w=
-rote:
->
-> On Tue, Nov 17, 2026 at 11:51=E2=80=AFAM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> > On Thu, Nov 12, 2026 at 6:41=E2=80=AFPM Paul Moore <paul@paul-moore.com=
-> wrote:
-> > > On Thu, Nov 12, 2026 at 6:00=E2=80=AFPM Andrii Nakryiko
-> > > <andrii.nakryiko@gmail.com> wrote:
-> > > > On Mon, Nov 9, 2026 at 7:08=E2=80=AFAM roblabla <linux@roblab.la> w=
-rote:
-> > > > >
-> > > > > Hi,
-> > > > >
-> > > > > Thanks for the replies!
-> > > > >
-> > > > > > LSMs that need to provide a stable API must provide an abstract=
-ion
-> > > > > > layer between the LSM hook callbacks and their stable API.  The=
- LSM
-> > > > > > framework is not responsible for the stability of individual LS=
-M APIs.
-> > > > >
-> > > > > Understood, that lines up with my expectations. I think the bigge=
-st
-> > > > > thing here would not necessarily be stability guarantees, but rat=
-her to
-> > > > > make sure that the eBPFs fail to load when the compatibility is b=
-roken.
-> > > > > But that's probably a problem for the eBPF side, and not LSM, I a=
-ssume.
-> > > > >
-> > > > > > So, in short, would it be possible to send a follow up to Daan'=
-s
-> > > > > > commit and move `struct mnt_idmap *idmap` to the end of LSM arg=
-ument
-> > > > > > list?
-> > > > >
-> > > > > If this is possible, that'd be nice so that we avoid this breakag=
-e in
-> > > > > the short term, since the change isn't in a released kernel yet.
-> > > >
-> > > > can you please send a patch proposing that and we can continue
-> > > > discussion there? please cc me so I can follow along
-> > >
-> > > Considering the original patch was submitted, reviewed, and merged
-> > > with the BPF LSM being the only user (none of the existing in-tree
-> > > LSMs use the idmap parameter at present), I'm a little surprised this
-> > > wasn't brought up earlier.
-> >
-> > Yeah, unfortunately this was missed. Not sure it's surprising that it
-> > wasn't detected immediately, though, because unlikely someone tested
-> > an unreleased kernel in production. Luckily, this was still detected
-> > early enough before the final release and this gives us a chance to
-> > fix a mistake.
->
-> I've been surprised lately by apparently how little the BPF LSM
-> program interface is tested with real BPF programs before landing in
-> Linus' tree.  I know the BPF folks have a pretty good set of CI tests,
-> bots, etc. but there do seem to be gaps relating to real world usage.
+> [Severity: High]
+> Should this also check pas->tx.spi? As written, an Rx-only association
+> (pas->tx.spi == 0) also gets the validator here.
 
-I think it's a hard problem, yes. BPF selftests test latest kernel, so
-this issue we are discussing here just won't come up there. Then,
-e.g., for Meta, we do have internal tests that validate existing BPF
-LSM programs across different kernel versions, but unless our internal
-BPF LSM programs utilize specific LSMs, this won't be caught either.
+This patch has been re-posted to net, as patch 3 in the series "net: don't
+redirect decrypted skbs to ingress, psp time-wait validator".
 
->
-> > > Beyond that, from a style perspective, I think I prefer the idmap at
-> > > the front of the parameter list in most (all?) of the hooks where it
-> > > was added.  I'm not interested in moving it at this point in time.
-> >
-> > So on one hand we have a real user pain which is easily fixable
-> > without burdening kernel and LSM subsystem in particular, right?
->
-> Arguably changes that negatively impact code style and readability do
-> affect developers and maintainers.
+It is now checking pas->tx.spi, as suggested here.
 
-I agree, but argument order is not that big of an issue
-
->
-> > On
-> > the other hand there is a minor issue of argument ordering with
-> > mnt_idmap preferably as a first argument. I get the preference, but I
-> > think fixing an unnecessary (but easily fixable!) user pain should
-> > come first, don't you agree?
-> >
-> > Can you please reconsider?
->
-> The user pain exists because there is no abstraction layer between the
-> LSM hook callbacks and what the BPF LSM makes available to BPF
-> programs.  That's a choice made by the BPF LSM devs, and while it's a
-> valid choice, it does have drawbacks like we are seeing here.  Changes
-> to the callback arguments and/or the semantic behavior of the LSM
-> hooks are going to continue to happen regardless of what we do here.
-
-Yes, just like it will for tracepoints, kprobes, etc. Sometimes it's
-inevitable and BPF ecosystem does have tools to deal with. It's still
-a friction and pain and burden to do this, so if it's avoidable at low
-cost to the kernel, we should try to minimize unnecessary pain.
-
-That's really what I'm asking about here. We did do that with
-scheduling tracepoints, I think it's reasonable to do this here as
-well.
-
-> It's better if the BPF LSM figures out how to deal with problems like
-> these rather than relying on a set of bandaids at the LSM framework
-> layer.  If the decision is to push the pain up to the user to keep the
-> BPF program interface thin and flexible, that is their choice.
-
-Yes, thin (and thus performant) and flexible is the design choice and
-I think it's fine. That's not really the crux of the problem here. As
-I mentioned, users have tools to work around changing unstable kernel
-interfaces that BPF programs rely on.
-
-But in this case we are discussing reordering a few arguments *before
-they even get into final release* just to avoid unnecessary pain and
-workaround. *Unnecessary* is the key here.
-
-I really don't think that's too much to ask in this situation.
-
->
-> --
-> paul-moore.com
+-Todd
