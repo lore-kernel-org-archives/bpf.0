@@ -1,107 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=67.231.145.42
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.215.171
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794956107;
-	b=go48Zl+8SDVPtn1wgC9dDzYzuF0RcViYEFyceNBnBTXL9tbjm2ZD46l0TI+bgxlhAY8r
-	 Ckqb+m0IzqTlXMGWS0P8qUkrrvPOFTKfLTh6ZUnIrWOVNeJJH7jwQYDRghiUnyJExFBhS
-	 HOaYny3W5UDejI44YlJHfId7dGIQy0H8L9VMkexyiABEYS76W3SAktIfDSQ/GeYMDiX1u
-	 M87m8VK+R51pTbXWJnH/BTb2kpZzRyB26M8U5g9LCW7FTVYZcGKGqgQfukjkZTFrVa+2K
-	 vgPkCjK+iAuGqP89xRj9PcVqGSrAYZ4Orb7ZSyl7cedTMREl5D+VbX3plOfl90FZiCg==
+	t=1794956686;
+	b=0bvbxOOZeEycVUUNuAZDW+6mFEfSeaC8gt33VwxxCuZ8zI2u7D0H/kfuJsHsfa46+vFu
+	 ay9JZDh1yFLA2MbaOpzfgx+R5qMDxHYNIqod+yGQJVdQM7TlrSdLUwQZZ5dMikOvPYtcX
+	 SyUAR7aOj03pCnnzKgg+930AFhJzu9c5NmBkle1LrcGqzkJQfKyHce3M2ZS6MLO/v3Jv7
+	 Q/MwANfl51r7rzediveeNjJ/tmZgJ03YZiwi3HdcdvIXz2S3e8xEQ9Xm0p19BFsz3CRmo
+	 jTKcwt+LY9HvfbJ9YRZ1R9bfxakomBYuH39nLsfQJJ7jM21HXUuoapvKSqwTVbKFkpQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794956107;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
-	 X-Google-DKIM-Signature:X-Forwarded-Encrypted:X-Gm-Message-State:
-	 X-Gm-Gg:X-Received:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type:
-	 X-Authority-Analysis:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-Spam-Info:X-Proofpoint-ORIG-GUID:X-Proofpoint-GUID:
-	 X-Proofpoint-Virus-Version;
-	bh=XTWULvHY5M+9jFlLZATjLnhYmcapf/iX/XpM8N+MwzI=;
-	b=Hw+o1UFQdiNS9YvSjS+L/86CJX6RL6b3ktWzYJe9dK5Iy5McQh24HG4B0y+MUxIvtq9R
-	 LTjrqJyz0wo78+VhU/BvTEnTsgz/Ky46AqQxlwe232qjeaIJyM3Yb0dY28M1vFKCqyIlC
-	 tkkrwGYFhxPFEYMPUsYSlGar3m63oLVWsYrzQ82IopMenJZau2GGacEuLTFIWl9F9sV+9
-	 S2QQALfIvAzYhu6KCYDOSMCLm5+hE6LgBjA7nJhwWfTaNlYhzocdu13rDW4tjXsJWStMS
-	 QQcKm5ym6GK6dS8j0YwECTtRcRhwIj2o+2+V8hAQkO911FaTGBTc3K+d6nlfF/CcQRQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794956686;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=MF/4k//GXIWfSvHONQUa2JD9KuKF6Feudyoe3NRA47U=;
+	b=13wHw7UQCQFTqprCc+TX4bpra2Tadz35mmnW+rnSRUrD3CvrJQ8lodvQm0JIWsC7nhNz
+	 6aH9Xa1JEmwQmWPQNWKvZQN3IWyRoyhfusLdw2xlbwgZcRBupL0WgNaQ7sJa5HlEkJ/Te
+	 qZ5PRFqQIZ7wx8Dwmn3pQfuk7Fg3L9LzStOYIPkmTyxUa43XLIhXcDJYVNylnkjGfWLAU
+	 zYNRdcic3Kniy4iK6qvHV8bz7FC2wMvGD7zQVKfMSez0p6DPQeePPir5HYFXGfNJuMWpo
+	 +lO8k07VhpW7PNfPQvigzQiwU4h/yi0l90P3DmZu2+ls3k18Wqoqe0s+xdO7UbTCOQw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=meta.com;
-	spf=pass smtp.mailfrom=meta.com;
-	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=NPDWNUn6;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=67.231.145.42
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=paul-moore.com;
+	spf=pass smtp.mailfrom=paul-moore.com;
+	dkim=pass header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=Qe5+c2FS;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.215.171
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2074606A32C
-	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 22:55:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A2074606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C6B2606A330
+	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 23:04:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5C6B2606A330
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=NPDWNUn6
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AHMgKYV667340
-	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 14:55:06 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pps82601-s2048-2026-q3; bh=XTWULvHY5M+
-	9jFlLZATjLnhYmcapf/iX/XpM8N+MwzI=; b=NPDWNUn628COc0atYZ/CbMaWxG+
-	0TNGfxRCGsv1WrYANoIZaC+tKoYjD5X8kNmyXR8dpBZayuNDuuUCja+hWrjMqbQc
-	XxkpdvsWiVArTT9UJfikfZbnelRb/DRpVlYgtxXFa3XtPyVF0540TWjYmvrsqO+P
-	R+hi3LRmruY6Y/3r56HGQKoFy0CaepMpMmZG4klMBviT1U+1fEaeySnvKUF8n+Z1
-	Wfi1IZWcGzocGnaz/SNYLQqLT3qgJR8XlBsQ+qKgyEYQQVpJE2NW3vnlCVKHFSdC
-	M3nFonl+TButab+DN9Vmtl2UIUTzMNzzvKDIVO34G60V2AXaydz6Pdka2IA==
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4j0yuj05a5-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 14:55:05 -0800 (PST)
-Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-cd5fd34fee0so224981a12.3
-        for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 14:55:05 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794956105; cv=none;
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=Qe5+c2FS
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-cddac941ed1so155181a12.2
+        for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 15:04:46 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794956686; cv=none;
         d=google.com; s=arc-20260327;
-        b=QKLSqOOCK5PgmMjlC73QqwLDJAdgr8l931gGYxBfMJd8zEtvKVB2at1Dqy0PaypczX
-         dVuTsTrrq2CT/SZl9O46zBrfdKlMPUWszQ2lhUA0w+Jz7sbk/w0SMunWp//Actnof2on
-         2K8Ng2Ja5WlLRq0kRyCbNc6h2cMEFooOpwv0R+kuqGfIx1SLnMXQjKKL6KOlgenB6t1Z
-         TrvKfXum+cR3x4wgYXkvQhhLAwyUEGFK8bD3McQgjJUHzIi/maIoN/T7bN5BQ2PtMNlu
-         FXkJVy6VZzYXLSrM35OpmWTVwZoKXHfIegqPGSNNKx5Ys8wAIfxMOrQK8/IB+JyOAysv
-         KJGg==
+        b=kD9+TNKyF2ilG0SwSfVihCYm2Owq040Xe4ZVnp029aAh6YufYY8y36bFppSsIGh6ZR
+         69ww6DvEnLLBmaj5tVrnKZSDwM2eCQ7eoNbKn67Oxr8hEZW2T9KxXmNJsPzMDaXjGNOk
+         ZlH8c5NLCUeXISRiLAkH8YsPLVwD40aPiY7bL/BxRTGRcIzHqw1A1GrEeZ4iOIHsO7tH
+         /mjy1FQ2pg1icV7X20pZQv6nJ3dsIg/QS9w8fje+VqLPkVpNSOjNhGhNaJ6neNCxR7Jc
+         /u6EtdU3s3rm5pYzL3FaeLpAK7eKbGSZneTImKcXshhdA2rtg82I0PtXgchjoyPJqUng
+         wAUg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version;
-        bh=XTWULvHY5M+9jFlLZATjLnhYmcapf/iX/XpM8N+MwzI=;
-        fh=bLBIlWeRzSDctK5HioFsgLj6Oj7IoObdmvfpfzw+g5U=;
-        b=OiXdRNzWN8R0dCDsLJZkREVWTlMj9OLpm0WnXqhyHRiTOnK0YQKddSF8KdS4AQTL68
-         NCk++2DDwj6nPUzykYR9CPCzSP6bsfSoD73NaLelK7JelTdXj9TSb9cO4PoJPpdDLfbb
-         yuxoyMRi0fiZUAYAcJ+t9JV0EeU4VQy0Cil2+zmu/D5laudHRiP0SDV27oE7Qa7dvHOy
-         thyETPxyA4yoYI34vb1xSoQywP+opk2llQ3Swud3ohOVZf0DmBFLsJtW9/TguFcPJUOt
-         /RfNVc3CUXR3bq30Mbx1vOgPRzmLAudw9MDBcuVNbht2X+L8SAtAAMZ1ie61GgCDfRE7
-         59WQ==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=MF/4k//GXIWfSvHONQUa2JD9KuKF6Feudyoe3NRA47U=;
+        fh=DSQUHpQdKEQW1in5sOk8AC2qcbItTLVt1mHSB/E/4CY=;
+        b=hhpLti1Fp/XfWa4xauHOwBHguyN5R/y0MgYVgCPdNcHc5MdfKw5zEBCXOMrPYA07sm
+         pybNTI0/rLoZ2tn894vBc4W+GPDQmmBrk8QBJScTz5oigpwbLupTmSNAzKWZF4JmhT45
+         O261AN7Vk/eWNSgmrviOpQUS9R6We5ZQyev9r+py2IDQt4sjNTAxnSSjDRqlTGIK4bYP
+         GZb8B/q4ILrjnHjuy3V03QFVvaym+qVIzbw40SOfj60WYpQb+mYlZ8aFnVeUrfr5Nxap
+         zW4TE9G57JubZE5qklD+zg3nSsOQbBniG02ZV0ht2OXV84yIb1z2XKSEwbre1HhHmpc/
+         q29w==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1794956686; x=1795561486; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=MF/4k//GXIWfSvHONQUa2JD9KuKF6Feudyoe3NRA47U=;
+        b=Qe5+c2FSJotbj6ldw2lk/0EX2sA4jyvKDd7kSr8ybfRXP++RVUKrchJpRNNgGFhYEM
+         zuX3j/KYi2VzWIw+tHJoCbjW3SaqetVEVC7PwIQuTU6aUC4H9dr1rcsmMRm5VnyaA17/
+         +QkQgvoiDWgmV5ue/hmxGSStsQzTdyQusSzg7I7t4syqiD9BY8hpzveJcjYYNkcnWiYj
+         ajj0pbf4jMCpr9sDqZqZZtM7aEc8KPkk7V8mv8NfIq9sIe4SgXE8w0rfKaQjGxsvPQiM
+         tp1P1r4f5nYBZdjyiqzhm3saMAxPyvbIxaiwr0Clw+hKl4UNQfhUJSXdNHqd/fgKb5CH
+         zsRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794956105; x=1795560905;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=XTWULvHY5M+9jFlLZATjLnhYmcapf/iX/XpM8N+MwzI=;
-        b=oV+WQfjMnX9h6rzN+0Q2UUMsEv0GKac0YRhTGNT+3hD4NtY7wH0ppuYAa5JJ2nSXNr
-         95+DzGg5F3rAUUAV4DP+9+XrmHBfnNPE2vRVGadJeoN0Y9RNrJBSSqET2umBDgqKfVMF
-         dITj13kNR4FozsHLoHHtG3+hGocjq7Az2RMklICHr4UE5L6a88kMS+BAyfFTfEcdhiD7
-         Pjyr5ND3s4TkuVoIjZjjItcFH17RWgDtblep957HKQEJf5KSTKh12BbE7KVYaMWAIpRS
-         iiwUkP3SvYvkTZ4Mmmzd2YB1hcs3QRzyZdDkGsdvBU2y+eJc92ebB0z2D/nNwuutegG5
-         Nl3g==
-X-Forwarded-Encrypted: i=1; AL+hErF0JVskM+15ETBGQClZg5DMplPCkSvr54/A3AzddHdMu66lCZs5Sa17agrX+Bx3GARcE/E=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+qIbzLw2nlUxXyaPNciWQZRjkRxpzq6W+kmOVtjskvLx6djNVf
-	0xrVyjd4LJP2H7Ry+4LyLgZ2oMAGCmU2jm4kEBtx+pj9+sdlywm5EPrZgixK8ccpeaUXTzDeUke
-	b6n14Eq7BntIzxnnSVlievGwD1o3+9GbcREPh81xuWKCXyiD64DyGNfltQjWDRyRS+7GCGQw0Lc
-	xyo8A37kLBw/eRgSGtYrihrqHwNlA=
-X-Gm-Gg: AZFdTZdwyrfvDBW8gKgh+7TZ2dU1033BIG95ISzD10AVsGUv++JYAMGB6N1mUPqSKyG
-	5MlGovSVO0w2vLsl9XDyOOoezccmv3Uqz/mUqfwhnLueBvs1Dk0UFZ/gz9J07fMhEsiJOefMkpt
-	PRC2CBlRgGrAHPPYWOfkydNiHMy9+LdZirayyg6cmMZvr9YZYoPuhl7/s1L5g5LS+4hGi3DEVrj
-	G7JYx3ztYUl5Wm+F/TyqgglneUzzKn3LjRElMQOWjlwCohul1o=
-X-Received: by 2002:a17:90b:5390:b0:3ab:2d17:51c5 with SMTP id 98e67ed59e1d1-3b3d0640f3bmr891151a91.6.1794956105122;
-        Tue, 17 Nov 2026 14:55:05 -0800 (PST)
-X-Received: by 2002:a17:90b:5390:b0:3ab:2d17:51c5 with SMTP id
- 98e67ed59e1d1-3b3d0640f3bmr891106a91.6.1794956104611; Tue, 17 Nov 2026
- 14:55:04 -0800 (PST)
+        d=1e100.net; s=20260707; t=1794956686; x=1795561486;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=MF/4k//GXIWfSvHONQUa2JD9KuKF6Feudyoe3NRA47U=;
+        b=X/JzFNhXxz01uNDlROZbUQqW7XnISt05Rf1yGP4rSANLAdFS9PO7sQfqGlwoieYQ9v
+         5HeU8J0usrh9zNsudOvRnoN8Blmqe8l4+fl915b0UVMRkuORZkoZ1nMuF6nJJrXbB/+v
+         pQ7wEED/oDnxCXnE4KhuXR6HcEuxQfCbtXMJBYoLqlp12jD06yhA2EJRcF1s15ZiAKsG
+         gd3j62oyGiKz3y9plZZq8MnnpFF244aRAPWE9Eb/aJex/6tLaR157s6rUJc83gexwNmo
+         xA930ynVIjftVbeyITqLOpXDskuNsGusZBbEOjXRo8YHuOLbLnDyW6hpisGcmHsdpoUp
+         RGQQ==
+X-Forwarded-Encrypted: i=1; AL+hErGm3rE8m7kvH9y5cPYu8QUvFgGiiOO1nzoyOYBKVusZ/3qhtmLA2a1fhXTurmajHG4SVxk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9f9MVU7vsO5bKjZUJe2NAX3gHzNbgiqRKwvoK4XbiHQUsKwfKv
+	rTSHQlgkKUKLBbhElfTLo88HzxLbwOZ1WX0Z3JFSdMApgt/ok2jn9RT46WgV81DedDuit8hxn/n
+	x4oYfhmkgDQi71pZNCT6I84p7SesWH04P2icBMhTY
+X-Gm-Gg: AZFdTZeF9W8hGEjcnhZ3BLJTVY/90snoPkMXXWrJeI5KrCiqX1uHqwLzgC7isRAuIR/
+	B7DxKak2yetB8HGz0swaTR3iZGoQwfe5l0E1W4u7BUTy2T/YNlcALuW584y7BUW0nve7kRP4wsa
+	OUNoinA/AOqxJMYmFv436foBUWGJ+2GpbWRrPu48nw62S1EvgVtN9mfc19cmiThTBh7GRxzYyZv
+	GGeqRjvtLz3BxM9y3eDa+fYo9pS2EjMXjvYdI6518ZO0D9QutoYTD6tQgptydoRzFf/m9+XFl4t
+	OACZ1oHKSvitd7crzGw3ZE69fe7KrT6Zv7vtmdAffTjwVL6qQM0TV7Vxn053BM5i+y9nMtO0S93
+	Bi5sWefNL8gZdJQ6cOlGjZ7Rr9bT83aKCPbtwJtUbDxHzOcDZIHKlGFUpM4Un1W8Z3azJ
+X-Received: by 2002:a17:90b:3f88:b0:3b1:3e7a:6d8e with SMTP id
+ 98e67ed59e1d1-3b3d0763251mr719188a91.10.1794956685614; Tue, 17 Nov 2026
+ 15:04:45 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -111,71 +104,158 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261111005533.6436-11-toddfreed@meta.com> <179471270629.2199510.9480561958902023552@kernel.org>
-In-Reply-To: <179471270629.2199510.9480561958902023552@kernel.org>
-From: Todd Bert Freed <toddfreed@meta.com>
-Date: Tue, 17 Nov 2026 14:54:52 -0800
-X-Gm-Features: Aa3M54pEdqPp10DAjnIjgsYaaHWMRisY79HeZKYFQbRbnu5DENxcJuo9y0o8SvU
-Message-ID: <CADh2yMxPrJZNtVdCgQWkHsKBk0cnAZ-0RiVaCMquQNSH8K32Mw@mail.gmail.com>
-Subject: Re: [PATCH net-next v1 10/15] net/sched: flower: add psp_spi,
- psp_ver, and psp_dev matches
-To: netdev-bot+sashiko@kernel.org
-Cc: netdev@vger.kernel.org, davem@davemloft.net, andrew+netdev@lunn.ch,
-        bjorn@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
-        daniel.zahka@gmail.com, donald.hunter@gmail.com, edumazet@kernel.org,
-        kuba@kernel.org, jhs@mojatatu.com, jiri@resnulli.us,
-        john.fastabend@gmail.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-rdma@vger.kernel.org, martin.lau@linux.dev, pabeni@redhat.com,
-        saeedm@nvidia.com, horms@kernel.org, tariqt@nvidia.com,
-        weiwan@google.com, willemdebruijn.kernel@gmail.com
+References: <d85ece6e-27f9-4d9f-83af-4101bc76fef6@app.fastmail.com>
+ <356db94e-f5d6-4fb2-839a-b97aef72256b@app.fastmail.com> <CAHC9VhR9sjunJRnM9gy-BkBZkapQTrr8a8FtmaK7JkAmUqTrLA@mail.gmail.com>
+ <CAEf4BzZKmn6g0SK8OddjKFj_vAmZFvpZv32Hs_S+GHgT7VNfrg@mail.gmail.com>
+ <9d6bdc31-e57c-4187-be78-29d82471f710@app.fastmail.com> <CAEf4Bzb+oYDqO20v4YbJ45wdtcGgJT3xVse822P+=oA7fpFAOA@mail.gmail.com>
+ <CAHC9VhRcT3rmdpeadwi2avhwvr7aEZYStZ3bbEEx1hm=wtBGhQ@mail.gmail.com>
+ <CAEf4BzZ120age2-M-a_TJ07xohb7-s=xn3e1W_-V0kopnATq6A@mail.gmail.com>
+ <CAHC9VhThV9xiXr8j5_+W__CBKn0JqUiZ-RGZpF4Nz-i_RZprAQ@mail.gmail.com> <CAEf4Bzb5Y5TUbN3kLBJNPn5Ae+_nbc7YhJice_wUzqdvpjFr_A@mail.gmail.com>
+In-Reply-To: <CAEf4Bzb5Y5TUbN3kLBJNPn5Ae+_nbc7YhJice_wUzqdvpjFr_A@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 17 Nov 2026 18:04:32 -0500
+X-Gm-Features: Aa3M54qoHQOE3oB857KKbkDUHADETGjWV_M0UNRiQstMuTOvLZrm0nW0htwepiY
+Message-ID: <CAHC9VhRRe8xOmSAdmEWOwHiEDrZ96ZamH_stLPAvw6jYny7Gww@mail.gmail.com>
+Subject: Re: [BUG] bpf, lsm: new first argument in 7.4 inode hooks silently
+ breaks BPF LSMs
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: roblabla <linux@roblab.la>, Daan De Meyer <daan@amutable.com>, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, paul.mabileau@harfanglab.fr, 
+	linux-kernel@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>, 
+	Christian Brauner <brauner@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Authority-Analysis: v=2.4 cv=TasDJhQh c=1 sm=1 tr=0 ts=6afcdb49 cx=c_pps
- a=Oh5Dbbf/trHjhBongsHeRQ==:117 a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22 a=8elwO82fXORLTBIkMd32:22
- a=e8l9bKk9WhIOE85pT1MA:9 a=QEXdDO2ut3YA:10 a=_Vgx9l1VpLgwpw_dHYaR:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTE3MDA5MSBTYWx0ZWRfX5s8yzkEiF1T2
- XeynaJgDxaUzbyD9727llvjp7uZERzProLfpd0HvNV6YzMIZfEXUtoNkUgbX7APqaS9SvozfMKn
- IcSq005MQDSV0QEg6rQmGccUdp/DwHSQMK9+QymvuCITHI1509/uk0BoVYZlBE/VChVicdhDtho
- KKD6cQ4YB2pOr3LFc787UMWuv/ZSEkVQ4PZVapxVpvvpRuz7PZ3KM5zJR3ESM4x3yrxDiF2ZQcB
- E+XvkpN/5ZojqByg/BbGuH+XPzm6mQQP0DyOBTtuDa5zvzQrBL8RDsx3+eKQlmyDOHNPsh4ImUA
- RfR9D6espVOXESeAhkhcTcFpD6NTUFZBdnUfRSNjtQmVuiwMEncx99PoElgxDHSRneyeThlqqrG
- rHKIKx9j3i59yDbXpCXF1Hy+SnD5vljmZQxVddt+Q5GXkmZdltlg0md+jEZ9XyeyTQjQtxUdHLz
- iDhBxaya2P9djIvSUhA==
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTE3MDA5MSBTYWx0ZWRfXwy8Dd2w721Cu
- ops3zMbO7k2LZ2KwJGAD7y2qMy2xmhzib0V6plNhnPqhnTzbN7Psp9GOrd1LgTbzwUWSLK8Raa4
- 3nnsl9C1Ec5p+VrsgYxjLzN+8m0YDOU=
-X-Proofpoint-ORIG-GUID: _MBO6UJ-otXenz1r--ihvmR8iaI474FU
-X-Proofpoint-GUID: _MBO6UJ-otXenz1r--ihvmR8iaI474FU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-17_05,2026-11-16_01,2025-10-01_01
+Content-Transfer-Encoding: quoted-printable
 
-> [Severity: Medium]
-> Does the commit message describe the right failure mode for rules that
-> are still installed after two key rotations?
+On Tue, Nov 17, 2026 at 4:44=E2=80=AFPM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+> On Tue, Nov 17, 2026 at 11:30=E2=80=AFAM Paul Moore <paul@paul-moore.com>=
+ wrote:
+> > On Tue, Nov 17, 2026 at 11:51=E2=80=AFAM Andrii Nakryiko
+> > <andrii.nakryiko@gmail.com> wrote:
+> > > On Thu, Nov 12, 2026 at 6:41=E2=80=AFPM Paul Moore <paul@paul-moore.c=
+om> wrote:
+> > > > On Thu, Nov 12, 2026 at 6:00=E2=80=AFPM Andrii Nakryiko
+> > > > <andrii.nakryiko@gmail.com> wrote:
+> > > > > On Mon, Nov 9, 2026 at 7:08=E2=80=AFAM roblabla <linux@roblab.la>=
+ wrote:
+> > > > > >
+> > > > > > Hi,
+> > > > > >
+> > > > > > Thanks for the replies!
+> > > > > >
+> > > > > > > LSMs that need to provide a stable API must provide an abstra=
+ction
+> > > > > > > layer between the LSM hook callbacks and their stable API.  T=
+he LSM
+> > > > > > > framework is not responsible for the stability of individual =
+LSM APIs.
+> > > > > >
+> > > > > > Understood, that lines up with my expectations. I think the big=
+gest
+> > > > > > thing here would not necessarily be stability guarantees, but r=
+ather to
+> > > > > > make sure that the eBPFs fail to load when the compatibility is=
+ broken.
+> > > > > > But that's probably a problem for the eBPF side, and not LSM, I=
+ assume.
+> > > > > >
+> > > > > > > So, in short, would it be possible to send a follow up to Daa=
+n's
+> > > > > > > commit and move `struct mnt_idmap *idmap` to the end of LSM a=
+rgument
+> > > > > > > list?
+> > > > > >
+> > > > > > If this is possible, that'd be nice so that we avoid this break=
+age in
+> > > > > > the short term, since the change isn't in a released kernel yet=
+.
+> > > > >
+> > > > > can you please send a patch proposing that and we can continue
+> > > > > discussion there? please cc me so I can follow along
+> > > >
+> > > > Considering the original patch was submitted, reviewed, and merged
+> > > > with the BPF LSM being the only user (none of the existing in-tree
+> > > > LSMs use the idmap parameter at present), I'm a little surprised th=
+is
+> > > > wasn't brought up earlier.
+> > >
+> > > Yeah, unfortunately this was missed. Not sure it's surprising that it
+> > > wasn't detected immediately, though, because unlikely someone tested
+> > > an unreleased kernel in production. Luckily, this was still detected
+> > > early enough before the final release and this gives us a chance to
+> > > fix a mistake.
+> >
+> > I've been surprised lately by apparently how little the BPF LSM
+> > program interface is tested with real BPF programs before landing in
+> > Linus' tree.  I know the BPF folks have a pretty good set of CI tests,
+> > bots, etc. but there do seem to be gaps relating to real world usage.
 >
-> The commit message says:
+> I think it's a hard problem, yes. BPF selftests test latest kernel, so
+> this issue we are discussing here just won't come up there. Then,
+> e.g., for Meta, we do have internal tests that validate existing BPF
+> LSM programs across different kernel versions, but unless our internal
+> BPF LSM programs utilize specific LSMs, this won't be caught either.
 >
->   Together these matches tie a rule to one association, ...
+> >
+> > > > Beyond that, from a style perspective, I think I prefer the idmap a=
+t
+> > > > the front of the parameter list in most (all?) of the hooks where i=
+t
+> > > > was added.  I'm not interested in moving it at this point in time.
+> > >
+> > > So on one hand we have a real user pain which is easily fixable
+> > > without burdening kernel and LSM subsystem in particular, right?
+> >
+> > Arguably changes that negatively impact code style and readability do
+> > affect developers and maintainers.
 >
-> and:
->
->   this means that a rule matching packets that correspond to an rx
->   association which is stale (two rotations have passed), can still match.
->
-> The "Socket-less associations" text that a later patch in this series
-> adds to Documentation/networking/psp.rst has the same gap. It only says
-> userspace should replace such rules before two rotations, and it repeats
-> that the matches tie a decap rule to one Rx association. No later patch
-> in the series adds a generation match or any enforcement.
->
-> Could the commit message and the documentation say that a stale rule can
-> end up matching a different association that reused the SPI, rather
-> than the stale association itself?
+> I agree, but argument order is not that big of an issue
 
-In v2, there are no Rx associations. It will be more clear that matches tie a
-rule to a SPI not to an association. And the reliance on userspace to replace
-rules before that SPI could be re-used, will be further highlighted.
+It can be for me, and in this case it is.
 
--Todd
+> > > On
+> > > the other hand there is a minor issue of argument ordering with
+> > > mnt_idmap preferably as a first argument. I get the preference, but I
+> > > think fixing an unnecessary (but easily fixable!) user pain should
+> > > come first, don't you agree?
+> > >
+> > > Can you please reconsider?
+> >
+> > The user pain exists because there is no abstraction layer between the
+> > LSM hook callbacks and what the BPF LSM makes available to BPF
+> > programs.  That's a choice made by the BPF LSM devs, and while it's a
+> > valid choice, it does have drawbacks like we are seeing here.  Changes
+> > to the callback arguments and/or the semantic behavior of the LSM
+> > hooks are going to continue to happen regardless of what we do here.
+>
+> Yes, just like it will for tracepoints, kprobes, etc. Sometimes it's
+> inevitable and BPF ecosystem does have tools to deal with. It's still
+> a friction and pain and burden to do this, so if it's avoidable at low
+> cost to the kernel, we should try to minimize unnecessary pain.
+>
+> That's really what I'm asking about here. We did do that with
+> scheduling tracepoints, I think it's reasonable to do this here as
+> well.
+>
+> > It's better if the BPF LSM figures out how to deal with problems like
+> > these rather than relying on a set of bandaids at the LSM framework
+> > layer.  If the decision is to push the pain up to the user to keep the
+> > BPF program interface thin and flexible, that is their choice.
+>
+> Yes, thin (and thus performant) and flexible is the design choice and
+> I think it's fine. That's not really the crux of the problem here. As
+> I mentioned, users have tools to work around changing unstable kernel
+> interfaces that BPF programs rely on.
+>
+> But in this case we are discussing reordering a few arguments *before
+> they even get into final release* just to avoid unnecessary pain and
+> workaround. *Unnecessary* is the key here.
+>
+> I really don't think that's too much to ask in this situation.
+
+As I said previously, the current ordering makes much more sense to me
+than moving it to the end of the list.  I'm not interested in moving
+the parameter.
+
+--=20
+paul-moore.com
