@@ -1,47 +1,46 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794926412;
-	b=l5M4BfNIrIAO1SQiriBfcyIqW02U7X1N5ZC1qxcHNiNYWnb8JIVGB0877X5tnQUI2GvM
-	 l35xY2jmebxN3NM0uxxDiVoiMrrBbV+ycVwd6zacA69KQef/i+Z7rJlZK3SqS4bu+jge1
-	 pXEiMaavlUYd9N16mAO944OCTrBZK63EmekKvRDidF1rdoQ4Aul0d+f/rf1taEsOzSFGt
-	 2cIrLdMpGVwvIlG46YSCMfHtkSmEjq99L/IT4gaJgBMrsr6rdBEnghbG6BCC37eh/g6TV
-	 BcZOpF1VsNBFqAzNFu/6cpPfLVlJLcYJZMqMMDishM1FaP4sM+HhOtj07qK64IJqfUw==
+	t=1794926413;
+	b=ZkE2+/GA8dbq+en89B9l9bsWUENPVerOjOeiorzX5tioAD9s+oZy3tqmABmvxf1NN7yr
+	 sWBxrnr/CUNOtRVPQeesAyB2UhR7fhJ6n+PnIZ12VQQgNWZFau63nZZ+Lk2RN+80hLQuv
+	 725eqRD25Od36kLzJ5puVzoaD/kheE8yUgWBfCAENuBp5/ni06fI4ctbChxagrGE81VCH
+	 uQ4sWqpT26GBXZ6tFjidXCldsJEh7GWdLk7DjJ9PB48kLu6PkJdewEEt2MzDU5mk+1wRV
+	 cVc82OsIaexVRelhOSZhE2PU+TpUbNujydpDOFw3T6BeOcFycIvJxKUHOU72Q4af/tA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794926412;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794926413;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=TWnxaf/P2LbxkzV1C/GOLBHBzl9offsC1DgYq3tjTuU=;
-	b=0OjhVMiAZIvmiEKI6mFbTulGMoVtAVk8Xqk93yFpN9VFMVn2sCqOBo2Wl8Yu5A1FxYLI
-	 Jp3qHLXKYw6ipDTHqCGlRqbYAh49jMHNJhf/CGOFsNKNqvZcLG7cdOwalb5sS8ChFdBCD
-	 6ryEHUH3MHYvz9RRVPorLDf3pOt1cffSKzJrYSv5wl1gDj8F5rXW4Si0BZ9s9GWc7LO16
-	 cT4tLvJkMa1j6VN3SVg4cbztPh9kQwF3xOIae0DnIRH11D+LPwnbrWyK5xH7kZjoHqqFN
-	 kJ/PIHmKq8BktEngogoWO+/GFOfv3Pc/T0GERdsJ97CfNz4NcYrpU/lsnd4iKfSA8uw==
+	bh=nHWPW4VdSrJJatZiB9Q4c/ci+6thEbpBkkx8hkoBRWU=;
+	b=Bhush7YCTWbT0bES8hPuVVUbiAw92RJbe2yAaViSbZenu4ixtaUa1a+rzizsOnx263tO
+	 65V0rD+IauDMCR5uYXJ+nDyHN9yLsQTmU2FvTDqD3cM7czT/Ae9YinRl0PHDjACzx6lZ2
+	 c3GRRsACdl6C4ctvaMTutDbuMY1XYBGPuZAYbMc4wmnLeyvPN567dF4AUtj5mILKmD0z4
+	 QniYb2r7tJiG+G1e0AJ/PUvCVwjZulGJCZhWG1lMNebx8ebGBZvfpbWDk5C3hFGyrm5XY
+	 bYhGu4Lx+nppFEZX58eCbdkRZzgGQ0urISm9QaNPulzx7e5Pi9tdDpC0F+00ReitpDA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RTWrjZew;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TQo4pYXH;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01F99606A8A9;
-	Tue, 17 Nov 2026 14:40:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66E27606A31C;
+	Tue, 17 Nov 2026 14:40:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RTWrjZew
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EB9B1F000C4;
-	Tue, 17 Nov 2026 14:40:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TQo4pYXH
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74F2A1F000C4;
+	Tue, 17 Nov 2026 14:40:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794926411;
-	bh=TWnxaf/P2LbxkzV1C/GOLBHBzl9offsC1DgYq3tjTuU=;
+	s=k20260515; t=1794926413;
+	bh=nHWPW4VdSrJJatZiB9Q4c/ci+6thEbpBkkx8hkoBRWU=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=RTWrjZew0Pc9G0ciPptxBVLDE8GmsMEu3Ph4bb3YuQutnQ7TM7ACq52ZgOAJLNo4w
-	 bcXdP8aRXFzjolvvHJtHdj1CJxxejDbqFFbZzbK9C4R6uHzcePk8qbAwvIsV7mSmKT
-	 jy9mD4hxi1AfDByMT7gi9P0VuRXphaz1/cRG8JN5M7MzTEXjXIrYFFTeW7qweoSYC2
-	 +/fT1JFL0NzOYIhDBiOkd4ECDV2ODmWjHdqkO4xaI0Y2HhvdPm1t6VWUdYPUKa2KQL
-	 t3cnb94uzFHR42QAftI50SI5kIhU/vO0hQCW2jjGXa1izeihg4wdmxqBGzQvGFk95p
-	 rSgXLDCxL4gng==
-Subject: Re: [PATCH net-next 3/6] bonding: complete rollback of bond_enslave()
- error paths
+	b=TQo4pYXH1QA18aakyvBJ2E80M8uA19DCBq1jaTFZJk+q4y8LiRCDZNOSN7o9yoeuy
+	 B4GoG4r086s90D1ftPWB0MRn7PO67sIXCu98xwm85TXjUBN6eKRqhFsG/6gHgrXoMC
+	 3dX2A7H5CFtkxgVi2ncHaY3vEB5wD1fm8Trshhn6mgmFc5JQ5Y4D3Vbt0T+vM7IiL2
+	 xSCb55hFnexsvG8p6MFmaxYf81PvcIuh8fNbd+mVX43wo6B3WAaMfJd9NguG2h1Aau
+	 a7zsNdap1RWb9XQgqz4P3O4Y55vVk8BLXEQRWVqfXGOBT7sAo9y66ApSBNvlyfMscV
+	 yd8FGkCIhTqKw==
+Subject: Re: [PATCH net-next 4/6] bonding: factor out slave publication
 From: netdev-bot+sashiko@kernel.org
 To: hangbin.liu@linux.dev
 Cc: jv@jvosburgh.net, andrew+netdev@lunn.ch, davem@davemloft.net,
@@ -49,11 +48,11 @@ Cc: jv@jvosburgh.net, andrew+netdev@lunn.ch, davem@davemloft.net,
  daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
  sdf@fomichev.me, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  bpf@vger.kernel.org
-Date: Tue, 17 Nov 2026 14:40:10 +0000
-Message-ID: <179492641070.3136.17249256302231076989@kernel.org>
-In-Reply-To: <20261113-bond_enslave_restruct-v1-3-364c549e78db@kylinos.cn>
-References: <20261113-bond_enslave_restruct-v1-3-364c549e78db@kylinos.cn>
-X-sashiko-severity: High
+Date: Tue, 17 Nov 2026 14:40:12 +0000
+Message-ID: <179492641202.3136.3136612053973913945@kernel.org>
+In-Reply-To: <20261113-bond_enslave_restruct-v1-4-364c549e78db@kylinos.cn>
+References: <20261113-bond_enslave_restruct-v1-4-364c549e78db@kylinos.cn>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
@@ -66,278 +65,160 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 6 potential
-issue(s) to consider.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Critical: 0 · High: 2 · Medium: 2 · Low: 2
+Low priority / nit picks for your consideration:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [High] The bond_enslave() unwind (err_set_xdp → err_sysfs_del →
-  err_upper_unlink → err_unregister → err_detach) clears…
-- [High] The new bond_alb_deinit_slave() call sits at err_close (line
-  2411).
-- [Medium] bond_3ad_unbind_slave() discards the 'slave array needs
-  update' result of ad_agg_selection_logic().
-- [Medium] The commit message says all three added cleanups are ones
-  "that the release path (__bond_release_one) already performs".
-- [Low] The commit describes its changes as cleanups that are "missing"
-  and state "left behind", and it has no Fixes: tag or stable Cc.
-- [Low] The commit author address (Hangbin Liu <hangbin.liu@linux.dev>)
-  does not match the Signed-off-by address (Hangbin Liu…
+- [Low] The new comment on bond_publish_slave() in
+  drivers/net/bonding/bond_main.c says the helper will "Make the fully…
+- [Low] The commit message calls bond_publish_slave() the "infallible
+  'commit point'", and the new comment says "All fallible steps of…
+- [Low] The commit author is 'Hangbin Liu <hangbin.liu@linux.dev>', but
+  the only Signed-off-by is 'Hangbin Liu <liuhangbin@kylinos.cn>'.
 
 --
 
-bonding: complete rollback of bond_enslave() error paths
+bonding: factor out slave publication
 
-This patch adds three steps to the bond_enslave() error unwind:
-bond_alb_deinit_slave() for TLB/ALB, bond_3ad_unbind_slave() for 802.3ad,
-and restoring bond->params.fail_over_mac after it was automatically set to
-"active". The goal is to match what __bond_release_one() does on release.
+This commit moves the final block of bond_enslave() into a new helper,
+bond_publish_slave(). That block bumps slave_cnt, recomputes upper
+features and carrier, adds NS maddrs, selects the active slave and
+rebuilds the xmit slave arrays. The commit message calls this the
+infallible commit point of the function and says there is no functional
+change.
 
-> The bond_enslave() undo labels are missing three cleanups that the
-> release path (__bond_release_one) already performs:
->
-> - If bond_alb_init_slave() succeeds but a later step fails, the
->   slave is never passed to bond_alb_deinit_slave(), leaving TLB/RLB
->   state and a possibly borrowed MAC address behind.
-
-[ ... ]
-
-> - When fail_over_mac is automatically set to "active" because the
->   first slave cannot change its MAC address, a subsequent failure
->   leaves the modified parameter on the bond.
-
-[Severity: Medium]
-Is it accurate that all three cleanups are ones the release path already
-performs? __bond_release_one() never writes bond->params.fail_over_mac.
-The only writers are the automatic setting in bond_enslave(), the restore
-added here, and the module parameter init. So the restore looks like new
-behaviour rather than parity with release.
-
-The "possibly borrowed MAC address" part also looks off. In TLB/ALB mode
-BOND_MODE() is not BOND_MODE_ACTIVEBACKUP, so err_restore_mac already puts
-perm_hwaddr back on the slave:
-
-err_restore_mac:
-	slave_dev->priv_flags &= ~IFF_NO_ADDRCONF;
-	if (!bond->params.fail_over_mac ||
-	    BOND_MODE(bond) != BOND_MODE_ACTIVEBACKUP) {
-		...
-		bond_hw_addr_copy(ss.__data, new_slave->perm_hwaddr,
-				  new_slave->dev->addr_len);
-		ss.ss_family = slave_dev->type;
-		dev_set_mac_address(slave_dev, &ss, NULL);
-	}
-
-The message does not mention what the new bond_alb_deinit_slave() call
-does change. If the bond already has slaves, it calls
-alb_change_hw_addr_on_detach():
-
-drivers/net/bonding/bond_alb.c:alb_change_hw_addr_on_detach() {
-	...
-	if (perm_curr_diff && perm_bond_diff) {
-		found_slave = bond_slave_has_mac(bond, slave->perm_hwaddr);
-
-		if (found_slave) {
-			alb_swap_mac_addr(slave, found_slave);
-			alb_fasten_mac_swap(bond, slave, found_slave);
-		}
-	}
-}
-
-Can a failed enslave now change the MAC address of an existing slave that
-is still enslaved, and send learning packets? Here is how that could
-happen in TLB/ALB mode:
-
-- The new slave's MAC matches an existing slave's current MAC, so
-  alb_handle_addr_collision_on_attach() gives it a free address.
-- vlan_vids_add_by_dev() or bond_sysfs_slave_add() then fails.
-
-Could the commit message be updated to describe what these changes
-actually do?
-
-> Add undo steps for these 3 cleanups when error out.
->
 > Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
 
 [Severity: Low]
-Should this carry Fixes: tags? The message calls these missing cleanups
-and leftover state. At least two of them are dangling pointers to a
-struct slave that err_free has already freed through
-kobject_put()->slave_kobj_release()->kfree().
+This isn't a bug, but the Author address (hangbin.liu@linux.dev) does not
+match the only Signed-off-by (liuhangbin@kylinos.cn). checkpatch reports
+this as "From:/Signed-off-by: email address mismatch".
 
-In 802.3ad mode, bond_3ad_state_machine_handler() runs under RCU and
-mode_lock without RTNL. After bond_master_upper_dev_link() it can link the
-new port into an aggregator's lag_ports chain.
+The same mismatch shows up on all six patches in the series, from
+"bonding: check XDP support before enslaving changes state" through
+"bonding: factor out bond_enslave_validate".
 
-In TLB/ALB mode, tlb_get_least_loaded_slave() can cache the new slave in
-tx_hashtbl[].tx_slave, and the RLB code can cache it in rx_hashtbl and
-rx_slave.
-
-Without Fixes: tags and a mention of the use-after-free, stable tooling
-may never pick these fixes up.
-
-[Severity: Low]
-This isn't a bug, but the Signed-off-by address (liuhangbin@kylinos.cn)
-does not match the author address (hangbin.liu@linux.dev). checkpatch
-reports this as FROM_SIGN_OFF_MISMATCH. The other patches in the series
-have the same mismatch.
+Could the addresses be made to match, or a From: line or Signed-off-by
+be added for the author address?
 
 > diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-> index 80b6c18ee9c28..f696a0d150346 100644
+> index f696a0d150346..bb37526834562 100644
 > --- a/drivers/net/bonding/bond_main.c
 > +++ b/drivers/net/bonding/bond_main.c
+> @@ -1884,6 +1884,34 @@ void bond_xdp_set_features(struct net_device *bond_dev)
+>  	xdp_set_features_flag(bond_dev, val);
+>  }
+>  
+> +/* Make the fully prepared slave visible to the rest of the bonding
+> + * code.  All fallible steps of bond_enslave() must have completed
+> + * before this runs: error paths never undo the publication.
+> + */
+
+[Severity: Low]
+Is "visible to the rest of the bonding code" accurate here? By the time
+bond_publish_slave() runs, bond_enslave() has already made the slave
+reachable:
+
+    res = netdev_rx_handler_register(slave_dev, bond_handle_frame,
+                                     new_slave);
+    ...
+    res = bond_master_upper_dev_link(bond, new_slave, extack);
+    ...
+    res = bond_sysfs_slave_add(new_slave);
+
+bond_for_each_slave() is netdev_for_each_lower_private(). So once
+bond_master_upper_dev_link() returns, every bond_for_each_slave() walker
+sees the new slave. bond_xdp_set_features(), called just before this
+helper, already iterates over it.
+
+In the default (trunk) mode, the switch in bond_enslave() also publishes
+the slave as curr_active_slave. That happens before several steps that
+can still fail (netpoll, rx_handler, upper link, sysfs, promisc/allmulti,
+XDP):
+
+    if (!rcu_access_pointer(bond->curr_active_slave) &&
+        new_slave->link == BOND_LINK_UP)
+        rcu_assign_pointer(bond->curr_active_slave, new_slave);
+
+The err_detach path then undoes that:
+
+    if (rcu_access_pointer(bond->curr_active_slave) == new_slave) {
+        block_netpoll_tx();
+        bond_change_active_slave(bond, NULL);
+        bond_select_active_slave(bond);
+        unblock_netpoll_tx();
+    }
+
+So "error paths never undo the publication" does not seem to hold either.
+
+The helper actually commits slave_cnt and rebuilds derived state: upper
+features, carrier, NS maddrs, active slave selection and the xmit slave
+arrays. Between bond_master_upper_dev_link() and bond_publish_slave(),
+list walkers see N+1 slaves while slave_cnt is still N.
+
+Could the comment say that instead? Otherwise a later change might assume
+the slave cannot be reached before this point.
+
+> +static void bond_publish_slave(struct bonding *bond, struct slave *slave)
+> +{
 
 [ ... ]
 
-> @@ -2388,6 +2391,8 @@ int bond_enslave(struct net_device *bond_dev, struct net_device *slave_dev,
->  	netdev_rx_handler_unregister(slave_dev);
->  
->  err_detach:
-> +	if (BOND_MODE(bond) == BOND_MODE_8023AD)
-> +		bond_3ad_unbind_slave(new_slave);
+> +	/* broadcast mode uses the all_slaves to loop through slaves. */
+> +	if (bond_mode_can_use_xmit_hash(bond) ||
+> +	    BOND_MODE(bond) == BOND_MODE_BROADCAST)
+> +		bond_update_slave_arr(bond, NULL);
+> +}
 
-[Severity: Medium]
-Does this need a bond_update_slave_arr() call afterwards?
+[Severity: Low]
+The commit message calls this the infallible "commit point", and the
+comment above says all fallible steps must be done before this runs. Can
+bond_update_slave_arr() still fail here?
 
-bond_3ad_unbind_slave() ignores the update result from
-ad_agg_selection_logic() and leaves the array rebuild to its caller:
-
-drivers/net/bonding/bond_3ad.c:bond_3ad_unbind_slave() {
-	...
-	bool dummy_slave_update; /* Ignore this value as caller updates array */
-	...
+drivers/net/bonding/bond_main.c:bond_update_slave_arr() {
+    ...
+	usable_slaves = kzalloc_flex(*usable_slaves, arr, bond->slave_cnt);
+	all_slaves = kzalloc_flex(*all_slaves, arr, bond->slave_cnt);
+	if (!usable_slaves || !all_slaves) {
+		ret = -ENOMEM;
+		goto out;
+	}
+    ...
 }
 
-__bond_release_one() rebuilds the array right after the unbind:
+On that path bond_set_slave_arr() is never called. Since skipslave is
+NULL, nothing else makes up for it.
 
-	if (BOND_MODE(bond) == BOND_MODE_8023AD)
-		bond_3ad_unbind_slave(slave);
+bond_publish_slave() returns void, so the error is dropped and the
+slave_arr work is not re-armed. bond_slave_arr_handler() does re-arm it
+when the same call fails:
 
-	bond_upper_dev_unlink(bond, slave);
+	ret = bond_update_slave_arr(bond, NULL);
+	rtnl_unlock();
+	if (ret) {
+		pr_warn_ratelimited("Failed to update slave array from WT\n");
+		goto err;
+	}
+	return;
 
-	if (bond_mode_can_use_xmit_hash(bond) ||
-	    BOND_MODE(bond) == BOND_MODE_BROADCAST)
-		bond_update_slave_arr(bond, slave);
+err:
+	bond_slave_arr_work_rearm(bond, 1);
 
-The bond_enslave() unwind never calls bond_update_slave_arr(). Suppose
-unbinding the half-enslaved port makes ad_agg_selection_logic() choose a
-new active aggregator. Could the usable_slaves and all_slaves arrays then
-stay stale until some unrelated event rebuilds them?
-bond_slave_arr_work_rearm() from the state machine may cover some of
-these cases, but it is not clear that it covers all of them.
+If the allocation fails, bond_enslave() still returns 0 and slave_cnt
+has already been incremented. all_slaves and usable_slaves still hold
+the old slave set. bond_xmit_broadcast() skips the new slave, and
+XOR/3ad/TLB hashing never picks it, until some unrelated event rebuilds
+the arrays.
 
-The ordering also differs from release. Here the unbind runs after
-err_upper_unlink, so the bond_for_each_slave() loops inside
-bond_3ad_unbind_slave() no longer see the departing slave's own
-aggregator. Is that intended?
+The unchecked call was already inline in bond_enslave() before this
+patch. What is new is the void helper and the comment that call it
+infallible.
 
->  	vlan_vids_del_by_dev(slave_dev, bond_dev);
->  	if (rcu_access_pointer(bond->primary_slave) == new_slave)
->  		RCU_INIT_POINTER(bond->primary_slave, NULL);
-
-[Severity: High]
-Since this patch completes the rollback against __bond_release_one(),
-should bond->current_arp_slave also be cleared here? The release path
-clears it unconditionally:
-
-	RCU_INIT_POINTER(bond->current_arp_slave, NULL);
-
-The unwind only clears primary_slave and curr_active_slave before
-synchronize_rcu().
-
-In active-backup mode with arp_interval set, bond_ab_arp_probe() runs from
-arp_work with only rcu_read_lock() held. Once bond_master_upper_dev_link()
-has linked new_slave, the probe can publish it while bond_enslave() still
-holds RTNL:
-
-bond_activebackup_arp_mon()
-  bond_ab_arp_probe()
-    curr_arp_slave = bond_first_slave_rcu(bond);
-    ...
-    rcu_assign_pointer(bond->current_arp_slave, new_slave);
-
-For the first slave there is no curr_active_slave yet, because
-bond_select_active_slave() only runs from bond_publish_slave().
-
-If dev_xdp_propagate() or bond_sysfs_slave_add() then fails, err_free
-calls kobject_put(&new_slave->kobj) and the slave is freed. But
-bond->current_arp_slave still points at it, and later users dereference
-it:
-
-bond_ab_arp_commit():
-	current_arp_slave = rtnl_dereference(bond->current_arp_slave);
-	...
-	bond_set_slave_inactive_flags(
-		current_arp_slave,
-		BOND_SLAVE_NOTIFY_NOW);
-
-bond_arp_rcv():
-	else if (curr_arp_slave && (arp->ar_op == htons(ARPOP_REPLY)) &&
-		 bond_time_in_interval(bond, slave_last_tx(curr_arp_slave), 1))
-
-Can this cause a use-after-free of the freed struct slave? A received ARP
-reply is enough to reach the bond_arp_rcv() read, and bond_na_rcv() and
-the netdev_info() print of curr_arp_slave->dev->name in
-bond_ab_arp_probe() follow the same pattern.
-
-[ ... ]
-
-> @@ -2402,6 +2407,8 @@ int bond_enslave(struct net_device *bond_dev, struct net_device *slave_dev,
->  	slave_disable_netpoll(new_slave);
->  
->  err_close:
-> +	if (alb_initialized)
-> +		bond_alb_deinit_slave(bond, new_slave);
-
-[Severity: High]
-Does this call come after the grace period it depends on? The only
-synchronize_rcu() in the unwind is in err_detach, above this label. After
-bond_alb_deinit_slave() clears tx_hashtbl and rx_hashtbl, nothing waits
-for readers before err_free calls kobject_put(&new_slave->kobj) and frees
-the slave.
-
-In TLB/ALB mode the new slave can transmit once
-bond_master_upper_dev_link() has linked it, so
-tlb_get_least_loaded_slave() can cache it in tx_hashtbl[].tx_slave.
-
-Suppose bond_sysfs_slave_add() fails. A transmit can start after
-synchronize_rcu() returns but before tlb_clear_slave() takes mode_lock.
-It picks up the cached pointer and keeps using it after dropping the
-lock:
-
-bond_tlb_xmit() / bond_alb_xmit()
-  bond_xmit_tlb_slave_get() / bond_xmit_alb_slave_get()
-    tlb_choose_channel()
-	spin_lock(&bond->mode_lock);
-	tx_slave = __tlb_choose_channel(bond, hash_index, skb_len);
-	spin_unlock(&bond->mode_lock);
-  bond_do_alb_xmit()
-	if (tx_slave && bond_slave_can_tx(tx_slave)) {
-	...
-	if (tx_slave && bond->params.tlb_dynamic_lb) {
-		spin_lock(&bond->mode_lock);
-		__tlb_clear_slave(bond, tx_slave, 0);
-
-tlb_clear_slave() only takes mode_lock, so it cannot wait for a reader
-that has already dropped the lock. dev_close(slave_dev) does not guarantee
-a grace period either. dev_deactivate_many() only calls synchronize_net()
-when sync_needed is set, and it is not set for noqueue slaves.
-
-__bond_release_one() calls bond_alb_deinit_slave() before its
-synchronize_rcu(). Should this call move into err_detach, ahead of the
-synchronize_rcu() there, so new_slave cannot be used after it is freed?
-
->  	if (!netif_is_bond_master(slave_dev))
->  		slave_dev->priv_flags &= ~IFF_BONDING;
->  	dev_close(slave_dev);
-
-[ ... ]
+Should the comment and commit message be corrected? Or should the helper
+call bond_slave_arr_work_rearm(bond, 1) when bond_update_slave_arr()
+fails?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261113-bond_enslave_restruct-v1-0-364c549e78db%40kylinos.cn
