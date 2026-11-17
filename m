@@ -1,95 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.172
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.225.139
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794945014;
-	b=5mHN82CFEqboXyr0oIrzLhxdLQdL8Iom949CbfMYukWe/L+pysjYnfIHbghWWnFfYyaZ
-	 UV3KsY1IG+lIzoAah4Km0bhZheZKyCvsB5TxB6VxtMlbUQJtSpmbDdIrEGcRTQqGahnb8
-	 IXCgbSAVedelSXUUhl+WJtwZHxYYVK2LklKwSLVc97fs7SE+hVmEu5EOOUrgEuz3ns3wI
-	 GPRTdx5Fy7/Zrrt1TXgGuuTFDAJUQa1gaBbS7jj2X9Kwr6Ywd5PXPNk9fta5DXAQaQ0Ju
-	 40dZe6UXG5faiEeicl84ZwTgZwiOWEcmkpm1aOP7xsZl8KbVJYQQsmddXtX3hNFkk0A==
+	t=1794945793;
+	b=abV4JTmf3LOBniZb33aPoJGPzr7whPBw0V4EwivSaqRJSYPv2owOGq8xBXFdryczr6nj
+	 LjMD+JwyAjzKVY+KkKQ0pHF1tZltrjczbAvpJ/UyFJuzMrmwhjQ2gpKf8eyHY64as1abD
+	 IYoMJRjGj9kHBud2lF85RpjyqNGo1XkUnofcr33JxP50kjbFFYaotf1u+xOjvC3JV0sQL
+	 YcZFiiCuYtVi8Ai1DBUCEdv5rkwBoLElWlWoFhHXEq3NgM2UVWyP7HyoJymU2fWnjI4Dm
+	 hfHi3+iMitUY4pEdbC4jgxm666k4TdFIUuUiTo24r2otmxvio9V9DvWeN0Pzyr20UoQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794945014;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794945793;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:From:Date:
-	 X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type;
-	bh=YJnDVGxHWCga0DMzSISwU7Rjw8JZrBWf9jVM4Nuybjg=;
-	b=FikiJcjk+qdZBogf7sajN4ELu/Z7RUOnh9ZzU+rJhDSlMx88ZJtWpF8U1EHNxJtqSHcG
-	 bGjd+1iYm2RzDGlMlQsskPAvJdYoy4mbDadOge/2XlkZ0gJl05nTDM+dUiQprLQeQw5Ki
-	 UN/DCbknWfCNkM0V/9177uSmXoe2x+qf998IKDeGCRgScKaazwfY8F+n6G8JQye3kxl2M
-	 esbJg5ddTJimZxm8tgduaqZ93aSG+54UlpxraQjM/lrxY5gEY9F7N94TnQaQu4x3EKy2L
-	 sNw3BDL7EkEFY5RtzuSwN/8fNFMvoCzl/hS9Vn+SR0cDZApUGF0YqOVGygsVEchfVmQ==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
+	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
+	 Content-Type;
+	bh=XMmcubV/Xh6V68YkctEJnHn5BnOQfFlM7RtTyGkJh+4=;
+	b=dCXEiUaFuuec4Sqo1qgTgso/n5//SWQVjaGMY9ljcFWoNm8raLkFgOkp591vwT8WoOzB
+	 wVTgT+6Pxbh+HlpISG/qQWHY8mix2HRyj1+5xrjl3UKmimH2IAvcnRkM3YbhjnrpjmJxd
+	 dld7HOjP9T6XMBOPzkMn5VOBqgsBG/uibZ43n5TW/6qU5LrMMXzgNtae47MEh7ppuAL+v
+	 edZfkO/zfinGvjQqqncfbIiuT6j0tLOptgqBQ43e+t9bo6EDHYk53EQWP1H3QfGoj2sNm
+	 Ye7ZPMNG0Ri7nKExiEJVjNfPKE9COsmvebiz1sotdIc4SM3nYlpWg3PO0UR45WeECvA==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=scarletmail.rutgers.edu;
-	spf=pass smtp.mailfrom=scarletmail.rutgers.edu;
-	dkim=pass header.d=scarletmail.rutgers.edu header.i=@scarletmail.rutgers.edu header.a=rsa-sha256 header.s=google-20180529 header.b=ebdhYfE0;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.172
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DwFWggd5;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.225.139
+Received: from mail-wm2-f11.google.com (mail-wm2-f11.google.com [74.125.225.139])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50B6C606A31C
-	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 19:50:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 50B6C606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=scarletmail.rutgers.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=scarletmail.rutgers.edu
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8444606A31C
+	for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 20:03:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A8444606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=scarletmail.rutgers.edu header.i=@scarletmail.rutgers.edu header.a=rsa-sha256 header.s=google-20180529 header.b=ebdhYfE0
-Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-537548b811aso1637181cf.3
-        for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 11:50:14 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794945013; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DwFWggd5
+Received: by mail-wm2-f11.google.com with SMTP id 5b1f17b1804b1-4a611dcb60dso353965e9.0
+        for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 12:03:12 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794945791; cv=none;
         d=google.com; s=arc-20260327;
-        b=ZwczZbkoKOtVM7rnL8/9oRotrnv+0funhPjlWIzy7RVdhqvlp5uZ7LU9x7qO64sntT
-         NvtIUyxG6sKFXW/zjMKs8IoJSxqAivu+LfrH76KszSjFzCqOnr0XOlkeTgEeymAydUtF
-         bkeLALwm5bwe8dMZ5S1QmII3NYjIjN/kQ78lZaDGslKCEXZvxr676gUOo4Zjp0XlT16o
-         OdybHoNh2qzhmJKxk1RCBHx8KJ7TX+3d+SJyBjKplEA5lAv1iAJMsWTD0CKaUOZ6vid0
-         j8KQRdBKwq1Yq/KmAmm3XO4+oYRC+Pn9dPiehg2ukiDxin32/QGWG4RSuUAI+I/GD+Yh
-         0z7Q==
+        b=V8mZucWn9VsgItjr2MJYLlc+2JO5dDnIqiBOvt7mZvGEBneq/p6ATPyczkv2lMcBWV
+         GZ1MliOggxbzptC/Tl8a3XeqhiBt+jp25AbXplj4u/eH5NJlBybn3byHBkHkJ4DNhI6W
+         YjZXzzz4o3LaBXBilnm/3LzRNvZwv+axkhZPzPtk9c18qFp09nnLI50tlO4bv4GJFKVF
+         Lmw1JqXlPjqRufTEPl8KEL69WcrNmLVjsF+ns1EtO8fOCJzMHlaBu1aFPOB0HwS36iUW
+         yEwmm7G1x2NQEDYnvPzLCt0WpagFJwfpSYdDlvlFLrraaO7QydS8KiPVUUG3yq+r2u7u
+         ZMJw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=YJnDVGxHWCga0DMzSISwU7Rjw8JZrBWf9jVM4Nuybjg=;
-        fh=DVImKLhcKuounm3K9Xgg4J3osERFJhthSzUJqfpBQU4=;
-        b=UOp8xEtk4MM603RtBT2bh5Pj+9BeGBbi9K1DcWfggcl/Vetqu2XIG4oniTlbeh0OXk
-         rIh5RF4AGPGYyw+uDXTFLw4CyoGv4PPNa7lh8vV2obppP9pzewUSImCIbo5uNZcqzX9b
-         AmRKguP1ywbjORFZh9sQNTjyH7DKkPn0pR3AUd/V+p2sITZgbi3mSmBrDim+u5O8iRuU
-         MaC+RBjWggHZnRTwLQtWUVFG0k/ygc8lDWGY0zO9pclf8jEHBisRNz7MEUbP0CjKBdru
-         FZvOt16q3Q0qGXR4iy5CIf/msOuyLPx8a9/v81fuU1egDj5m67Mtz6FE7U1iMO+qtWZQ
-         /5bQ==;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=XMmcubV/Xh6V68YkctEJnHn5BnOQfFlM7RtTyGkJh+4=;
+        fh=h1+4BZy/nT1xMqFWAoQ+9v1BbUFhvmMIKJGENaKLNgw=;
+        b=c4vO6r0v4eOMBDuWfubnQ2KSNuAvMHjqkEcY+tj7iB7Y0TVbkMrgQhmh2Djo2qwGAj
+         lJyCxQ9mjPovjspB7oBpqPvCWctQN64Kf8rBJGO07Inp+bbMBERjWVQaQlXsbzHh7Wyz
+         aI/Mzybg7KVEIMRdGee+W6J8/lCYtC8RzSRDEgrIZB0aHU8eZgAKoAC5FLoBsiU3fPup
+         kCd32HU+6pdqAiQC9Sp/v9SMc09wzRJzHa8CvvyUgtb1QGHa+q7bx6w3C+GdlWXX268t
+         ObjidzWMn34AXW6b5buIuTWheAlmZ3ZXXyMUtkDtDNYSEwzH6pr/9X9zyk40Om2sDDQg
+         /kig==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=scarletmail.rutgers.edu; s=google-20180529; t=1794945013; x=1795549813; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=YJnDVGxHWCga0DMzSISwU7Rjw8JZrBWf9jVM4Nuybjg=;
-        b=ebdhYfE0Alkdl1oplo5e4RFns8w/BMEocQNDYzDyBaTuu6c6hbHi4nSWX+tCR97ks8
-         +WwciCQnBh+PUBmZ6ibmYJRUf16pbKh7HkUtNTCX7BHznxUJUAjBldhOndAGhjmFXuEI
-         3iShed8HqTAbg2h5MiqjuctgcFUd2vCoq/qU/Un6SHJ+Cw30bEMAHBOtm6dBJOsUKUeb
-         +IV1IHhFtaUKa4Fc38eeUzgqGu09guEsmbBMe2fzmazITrV2aQg+y3dX27JSB4UIo1cl
-         1dWt5A4ABb4KaLU/XBGMl1zaT55m8TmOIELVZ3m7GzEoqRKbUsbzf4XVh0daiqdWc76X
-         5l5A==
+        d=gmail.com; s=20260707; t=1794945791; x=1795550591; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=XMmcubV/Xh6V68YkctEJnHn5BnOQfFlM7RtTyGkJh+4=;
+        b=DwFWggd52CdNykCm9JsJOIHzkq+4IGQaeOlJuLEncBHmK/DKjk2M5JamcD3VFV4FSh
+         wbrVl1wOfiEici3DaVuLbO1mUCcWuskr2SmvTyQ5UXm+1UrIO9Xplc+wELEOrrw8RUxI
+         7lzq932BVi0jObCwm+QA6QttY81bZr1qJCgPrZLBGyyRLplHpeBS6DwWmSfd0/lSeCgq
+         6QIR3OKfx2fDFxAVsiRkG0wn8/ZiSXG7+Hs/qJc3itVF0LPJCbGYsKBS6z1RboJ5hStU
+         FzTk+6Ztb/bNrcYulDLSN39g9ATYS+F3fj4YoKxKNmwzWfqrIU7hDMS94S9/XTA1BGCi
+         cJPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794945013; x=1795549813;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=YJnDVGxHWCga0DMzSISwU7Rjw8JZrBWf9jVM4Nuybjg=;
-        b=XKHYQbBW8AYta/VjzfTOskWNRMZqtZ+u26pV0qepmQ0IPAT8j6kTg4Tpi9AFVRZ8xM
-         b08BN44fM8YvJy/uUbrAsnb9a1Y0u1fjMVkDdrPlugMN0cNbV4gylcuIYDc8kNwfyury
-         h84eb8/0H+1VOkeRicn2z0WipzOgz41v7vhzJcsdSLqj/kmMACKhpjbsmqByHXD7O18p
-         KYF/uSVdG+BblFV0+Pappk8PIXi++B8wN2hddxIATVBmpvSvb0jVLHeDZ1pget2aQLBg
-         b/imG/Y7uRDsuUbytbRiIYSf3alnKJOAtp2wC/lOxZkOBNdZYUQ6PSUhrhSQ/8nBgXBI
-         vGBA==
-X-Gm-Message-State: APuU4Z/AnQaqaU3Jwj0HeiBrbHC9RMifB+z8uDGlLg4Yi8/uOs4vIveA
-	ih/YO4UPiFtakEXn0KW9/4HTije8m5ykbXUvwPg86L8LzxyVNKES91mFaSL2BuJjHNDbqizJGwD
-	8Bk1X0ccHs1SD5/5yOBeTWCY5zhWJne4QdYuGTmlo/q6WQwNtUSpwk866+A==
-X-Gm-Gg: AYBFou2djLWUKUhqCZM6APVhVCi0QOm38ofXpC2WdWrCZA8enXerhaET+l7OJ0B3bXn
-	xmxTDIEWXZ8pR5ABIMbF2rvs4u8+YRruqNB5hiLFVtMHCajcCxiNupQIh1MTwv2Zp39/U5M33Ay
-	r3D/8DdzCJVoXCP8K68KkJ/zBhSIcNlDt7HYbUG4pG2BAsAr4F94MaZSGBGXelEAMsR52BkoFgd
-	wUk3HzbYEaHZLs4eYJ5nk/gCyj4/V11vEoFYyhs68Ii/+D6YiicUKkwrZnhctOgLiT+h4IbfkCN
-	ZlO00AmObYqx6w+si7FqEbzs/DYJC5U+7U+k2N2otQ2D8NFNLsk63h2UECj0Li43eKIbDQp8X7d
-	pwDtvxs1U2RfUeWuKCcLY7w8YlqN/n8FtfvtBNQn9hAdQHSx0oFwc2gvr6ujyhN8XslRBt4o=
-X-Received: by 2002:a05:622a:389:b0:55c:cfd:3bd4 with SMTP id
- d75a77b69052e-55d5a6dfadcmr5584161cf.72.1794945012714; Tue, 17 Nov 2026
- 11:50:12 -0800 (PST)
+        d=1e100.net; s=20260707; t=1794945791; x=1795550591;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=XMmcubV/Xh6V68YkctEJnHn5BnOQfFlM7RtTyGkJh+4=;
+        b=UZ3E5sJe37a9U4GTwqzkMr405xsFf/j1gWSMHzBM/EBcj5K/MnewK8aUGaca9QHZyM
+         iYpPOKYJJLu4vICqIwo132Cf+SsSBpEy2Ltg509x3RFyFyqApnI/28KW2TEcUQG6YKN4
+         L1bm2y2lHnbNaxlUWF7jhGAzMwweM/jbSnsoupuBjMTFX9kVKNNhhf3fVTab5mQl9T5v
+         wrc1BLMzrRUX8leVLCVEgU2EuY5cq2BAlqXtFf74X4sNRnpMj95mU+UzP06mISSztmJ1
+         y+etb2gdz8eR9dQYlBiPoYSM6f7ZKudhdoUGQE/P0qbLrfVWPDZ+x733EJKVOZutzoaG
+         uYQA==
+X-Gm-Message-State: APuU4Z8mp83l6ibOjDPSGGeaKPwl9b+ikHmIU5TPtM8g5zMTDxhlnFiB
+	rNP+bfXki5eh8KZCKMi5vb35c9AnXh0+laz8grYJjex7LgelV7Osvmee34W12JOFYeMLQqUqLsh
+	g3CJ5EiqxGwank1D5SNOydSDhmW3Fe5g=
+X-Gm-Gg: AZFdTZeyKMF/El02GecVV4R6EKCnEFrB5GIlyc+4bxAxP3EMJxkWV7h+lNdtAfhpDpl
+	EUHG9IaZTWXoBdIXUHC5IV6BH4uttGj7z6TLKZ852hd4UlRua9s9tdYivAbXrs9OyA+Ktn9PQRK
+	8m1t8GSE3T38aoBNN76T1cb15N76njEpDz6sLK3KM2WSkqlr6EumolYuZVtEz7qZLh8XfZAbmqa
+	GJlJ/K7Au32K5upgUta6ragDsQhPnT/8H9Ft6AZuW45Chqkg0qBSBVTMTo+dEfs7tFzrJ4LQgBw
+	YwXFD6cdOMLjC4oad8LGqZqybp/WTI+/PUbtnteYU06W1s2XobfXIKNtoow1rlDcUz6iWDIkT0w
+	tiOAdYgotbmQi2BKQCD6PQGONzoT5Q58+fxPOkewa/WDBt3AV9RNoU9vm+m3UKJXHRHmzjDgE1V
+	7NvvIQuc9AeMjutv1CkZMb/O6tS/ESlzVNQyPT4kO4oCQiyZuDzeutWPS0
+X-Received: by 2002:a5d:64ed:0:b0:4a4:14db:233b with SMTP id
+ ffacd0b85a97d-4a638ae26abmr1092371f8f.12.1794945790693; Tue, 17 Nov 2026
+ 12:03:10 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -99,112 +103,89 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-From: Yalu Cai <yc1795@scarletmail.rutgers.edu>
-Date: Tue, 17 Nov 2026 14:50:01 -0500
-X-Gm-Features: Aa3M54o1WehE7pPO70ZZ7jw_-GD7ppIvrVXgoW7F7c1bxYXFjB-tmWDugLlNfVQ
-Message-ID: <CAPUfTJOD==vidMeytY5vo4h2qZPdM=n5CRUtJttZ5N4oD6Fo1A@mail.gmail.com>
-Subject: tracing progs can take a bpf_spin_lock in an inner map -> NMI deadlock
-To: bpf@vger.kernel.org
-Cc: santosh.nagarakatte@cs.rutgers.edu
-Content-Type: multipart/mixed; boundary="000000000000e10f7906607e3362"
-
---000000000000e10f7906607e3362
+References: <CAPUfTJOD==vidMeytY5vo4h2qZPdM=n5CRUtJttZ5N4oD6Fo1A@mail.gmail.com>
+In-Reply-To: <CAPUfTJOD==vidMeytY5vo4h2qZPdM=n5CRUtJttZ5N4oD6Fo1A@mail.gmail.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Tue, 17 Nov 2026 21:02:33 +0100
+X-Gm-Features: Aa3M54pnScSruE_tkELDmz5eQmkwId0aqNkNfqIo8cqSdHL2DLynP40_zWegvvI
+Message-ID: <CAP01T74NiVAzW_vczZaOSniFh+=ddta2ThbXM_NB+mtv82pGaQ@mail.gmail.com>
+Subject: Re: tracing progs can take a bpf_spin_lock in an inner map -> NMI deadlock
+To: Yalu Cai <yc1795@scarletmail.rutgers.edu>
+Cc: bpf@vger.kernel.org, santosh.nagarakatte@cs.rutgers.edu
 Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+On Tue, 17 Nov 2026 at 20:50, Yalu Cai <yc1795@scarletmail.rutgers.edu> wrote:
+>
+> Hi,
+>
+> As part of a research project, we have been trying to formally verify
+> parts of the eBPF verifier. We found a bug that deadlocks the machine.
+> Below is the concrete description of the bug:
+>
+> A perf_event program can take a bpf_spin_lock in a map-in-map's inner map,
+> even though the verifier rejects the same lock in a directly referenced map.
+> bpf_spin_lock disables IRQs but not NMIs (local_irq_save()). A cycles NMI can
+> interrupt the lock holder on the same CPU and spin forever.
+> Reproduced on 7.4-rc3 and bpf-next (ea80d2afd285), x86_64.
+>
+> check_map_prog_compatibility() rejects a bpf_spin_lock in a tracing program.
+>
+> if (btf_record_has_field(map->record, BPF_SPIN_LOCK)) {
+> if (is_tracing_prog_type(prog_type)) {
+> verbose(env, "tracing progs cannot use bpf_spin_lock yet\n");
+> return -EINVAL;
+>
+> This check only sees maps referenced directly by the program. It runs from
+> __add_used_map() while resolving pseudo_ldimm64 references. The inner map of
+> an ARRAY_OF_MAPS or HASH_OF_MAPS is not on this path. A lookup through the
+> outer map gets the inner-map metadata from inner_map_meta, so the check never
+> examines the inner map. A perf_event program can therefore lock it.
+>
+> The reproducer has two programs sharing one inner map:
+>
+>   - hold_lock, SEC("tc"), takes inner0's lock directly in a loop under
+>     BPF_PROG_TEST_RUN.
+>   - lock_inner_nmi, SEC("perf_event") on PERF_COUNT_HW_CPU_CYCLES on every
+>     CPU, reaches the same lock through the ARRAY_OF_MAPS and takes it.
+>
+> With the lock in a plain array, the perf_event program is rejected. Through
+> the map-in-map, it is accepted. Either program runs alone, but together
+> they deadlock the machine.
+>
+> There is no console output. On a 4-CPU QEMU guest, the monitor shows all four
+> vCPUs stuck in the same lock path:
+>
+> __pv_queued_spin_lock_slowpath
+> __bpf_spin_lock_irqsave
+> bpf_spin_lock
+> bpf_prog_...lock_inner_nmi
+> __perf_event_overflow
+> perf_event_overflow
+> handle_pmi_common
+>
+> It needs a PMU that delivers cycles NMIs (kvm -cpu host here). Loading the
+> programs requires CAP_BPF and CAP_PERFMON.
+>
+> The inner-map lock was enabled by b7ff97925b55 ("bpf: Allow locking
+> bpf_spin_lock in inner map values", 2022), without carrying over the
+> program-type restriction.
+>
+> The program-type check needs to cover the inner map when a map-in-map is
+> used.
 
-As part of a research project, we have been trying to formally verify
-parts of the eBPF verifier. We found a bug that deadlocks the machine.
-Below is the concrete description of the bug:
+Thanks for the report. We are planning to make some changes to allow
+aborting a program at any point. Once that is in, a follow up will be
+to rewrite bpf_spin_lock(...) as follows:
 
-A perf_event program can take a bpf_spin_lock in a map-in-map's inner map,
-even though the verifier rejects the same lock in a directly referenced map.
-bpf_spin_lock disables IRQs but not NMIs (local_irq_save()). A cycles NMI can
-interrupt the lock holder on the same CPU and spin forever.
-Reproduced on 7.4-rc3 and bpf-next (ea80d2afd285), x86_64.
+unsigned flags; // extra 8 bytes on stack inserted by verifier
+if (bpf_res_spin_lock(&lock, &flags)) bpf_throw(...); // abort if
+deadlock is detected
 
-check_map_prog_compatibility() rejects a bpf_spin_lock in a tracing program.
+Then we can fix this and remove the restriction on calling
+bpf_spin_lock() from anywhere. If a user needs to handle AA deadlocks
+etc. they can use the kfunc that returns an error instead and handle
+it in the program.
 
-if (btf_record_has_field(map->record, BPF_SPIN_LOCK)) {
-if (is_tracing_prog_type(prog_type)) {
-verbose(env, "tracing progs cannot use bpf_spin_lock yet\n");
-return -EINVAL;
-
-This check only sees maps referenced directly by the program. It runs from
-__add_used_map() while resolving pseudo_ldimm64 references. The inner map of
-an ARRAY_OF_MAPS or HASH_OF_MAPS is not on this path. A lookup through the
-outer map gets the inner-map metadata from inner_map_meta, so the check never
-examines the inner map. A perf_event program can therefore lock it.
-
-The reproducer has two programs sharing one inner map:
-
-  - hold_lock, SEC("tc"), takes inner0's lock directly in a loop under
-    BPF_PROG_TEST_RUN.
-  - lock_inner_nmi, SEC("perf_event") on PERF_COUNT_HW_CPU_CYCLES on every
-    CPU, reaches the same lock through the ARRAY_OF_MAPS and takes it.
-
-With the lock in a plain array, the perf_event program is rejected. Through
-the map-in-map, it is accepted. Either program runs alone, but together
-they deadlock the machine.
-
-There is no console output. On a 4-CPU QEMU guest, the monitor shows all four
-vCPUs stuck in the same lock path:
-
-__pv_queued_spin_lock_slowpath
-__bpf_spin_lock_irqsave
-bpf_spin_lock
-bpf_prog_...lock_inner_nmi
-__perf_event_overflow
-perf_event_overflow
-handle_pmi_common
-
-It needs a PMU that delivers cycles NMIs (kvm -cpu host here). Loading the
-programs requires CAP_BPF and CAP_PERFMON.
-
-The inner-map lock was enabled by b7ff97925b55 ("bpf: Allow locking
-bpf_spin_lock in inner map values", 2022), without carrying over the
-program-type restriction.
-
-The program-type check needs to cover the inner map when a map-in-map is
-used.
-
-Thanks,
-Yalu Cai
-
---000000000000e10f7906607e3362
-Content-Type: application/octet-stream; name="prog.c"
-Content-Disposition: attachment; filename="prog.c"
-Content-Transfer-Encoding: base64
-Content-ID: <f_mwl3nzhg0>
-X-Attachment-Id: f_mwl3nzhg0
-
-Ly8gQSBwZXJmX2V2ZW50IHByb2dyYW0sIHJ1biBpbiBOTUkgY29udGV4dCwgdGFrZXMgYSBicGZf
-c3Bpbl9sb2NrIGluIHRoZQovLyB2YWx1ZSBvZiBhIG1hcCBvZiBtYXBzJyBpbm5lciBtYXAuIGNo
-ZWNrX21hcF9wcm9nX2NvbXBhdGliaWxpdHksIHdoaWNoCi8vIHJlZnVzZXMgYSBsb2NrIGluIGEg
-dHJhY2luZyBwcm9ncmFtIGJlY2F1c2UgYSB0cmFjaW5nIHByb2dyYW0gaW4gTk1JCi8vIGNvbnRl
-eHQgaW50ZXJydXB0aW5nIHRoZSBsb2NrJ3MgaG9sZGVyIGRlYWRsb2NrcywgcnVucyBvbmx5IG9u
-IHRoZSBtYXBzIGEKLy8gNjQtYml0IGxvYWQgbmFtZXMsIG5ldmVyIG9uIGFuIGlubmVyIG1hcC4K
-Ly8KLy8gaG9sZF9sb2NrLCBhIHRjIHByb2dyYW0sIHRha2VzIHRoZSBzYW1lIGxvY2ssIHdoaWNo
-IGl0IG1heTogaXQgbmFtZXMgdGhlCi8vIGlubmVyIG1hcCBkaXJlY3RseS4gUnVuIGJ5IEJQRl9Q
-Uk9HX1RFU1RfUlVOLCBpdCBob2xkcyB0aGUgbG9jayBtb3N0IG9mCi8vIHRoZSB0aW1lOyBhIGN5
-Y2xlcyBOTUkgb24gaXRzIENQVSBydW5zIGxvY2tfaW5uZXJfbm1pLCB3aGljaCBzcGlucyBvbiB0
-aGUKLy8gbG9jayBpdHMgb3duIENQVSBob2xkcywgaW5zaWRlIHRoZSBOTUksIGZvciBnb29kLgoj
-aW5jbHVkZSAicG9jLmgiCgpzdHJ1Y3QgdmFsIHsKCXN0cnVjdCBicGZfc3Bpbl9sb2NrIGxvY2s7
-CglfX3U2NCBuWzMyXTsKfTsKCnN0cnVjdCBpbm5lciB7CglfX3VpbnQodHlwZSwgQlBGX01BUF9U
-WVBFX0FSUkFZKTsKCV9fdWludChtYXhfZW50cmllcywgMSk7CglfX3R5cGUoa2V5LCBfX3UzMik7
-CglfX3R5cGUodmFsdWUsIHN0cnVjdCB2YWwpOwp9IGlubmVyMCBTRUMoIi5tYXBzIik7CgpzdHJ1
-Y3QgewoJX191aW50KHR5cGUsIEJQRl9NQVBfVFlQRV9BUlJBWV9PRl9NQVBTKTsKCV9fdWludCht
-YXhfZW50cmllcywgMSk7CglfX3R5cGUoa2V5LCBfX3UzMik7CglfX2FycmF5KHZhbHVlcywgc3Ry
-dWN0IGlubmVyKTsKfSBvdXRlciBTRUMoIi5tYXBzIikgPSB7CgkudmFsdWVzID0geyBbMF0gPSAm
-aW5uZXIwIH0sCn07CgpTRUMoInBlcmZfZXZlbnQiKQppbnQgbG9ja19pbm5lcl9ubWkodm9pZCAq
-Y3R4KQp7CglfX3UzMiBrID0gMDsKCXZvaWQgKm0gPSBicGZfbWFwX2xvb2t1cF9lbGVtKCZvdXRl
-ciwgJmspOwoJc3RydWN0IHZhbCAqdjsKCglpZiAoIW0pCgkJcmV0dXJuIDA7Cgl2ID0gYnBmX21h
-cF9sb29rdXBfZWxlbShtLCAmayk7CglpZiAoIXYpCgkJcmV0dXJuIDA7CglicGZfc3Bpbl9sb2Nr
-KCZ2LT5sb2NrKTsKCXYtPm5bMF0rKzsKCWJwZl9zcGluX3VubG9jaygmdi0+bG9jayk7CglyZXR1
-cm4gMDsKfQoKU0VDKCJ0YyIpCmludCBob2xkX2xvY2soc3RydWN0IF9fc2tfYnVmZiAqc2tiKQp7
-CglfX3UzMiBrID0gMDsKCXN0cnVjdCB2YWwgKnYgPSBicGZfbWFwX2xvb2t1cF9lbGVtKCZpbm5l
-cjAsICZrKTsKCglpZiAoIXYpCgkJcmV0dXJuIDA7CglicGZfc3Bpbl9sb2NrKCZ2LT5sb2NrKTsK
-CS8vIHdpZGVuIHRoZSB0aW1lIHRoZSBsb2NrIGlzIGhlbGQ6IHN0cmFpZ2h0LWxpbmUgc3RvcmVz
-LCBubyBjYWxscwojcHJhZ21hIHVucm9sbAoJZm9yIChpbnQgaSA9IDE7IGkgPCAzMjsgaSsrKQoJ
-CXYtPm5baV0gKz0gaTsKCWJwZl9zcGluX3VubG9jaygmdi0+bG9jayk7CglyZXR1cm4gMDsKfQo=
---000000000000e10f7906607e3362--
+>
+> Thanks,
+> Yalu Cai
