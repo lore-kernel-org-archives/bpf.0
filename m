@@ -1,116 +1,81 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.201.25
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794911469;
-	b=LO6Kq1t3MQTu6804LVOd3kG6OfK40f3TAEVnYdit3xVzcZgTbWk0SoK+LXS4i33HAfTM
-	 QTLu+bMEPlrBReQqz6/4YEX2Dq3/++hxYV8HI3ejpvq0Ym350j6UK9UeX80E5UWgqoAwA
-	 fjUJaLQ1EMLezesLCNzE/5Nj+Zi81em4BErIRyMC4H02fmJqAOYLmVV37yGaK3Mg36VjA
-	 9R4jOue8qhZgL57FWZfMUT8LVV9Apo3/0NvNz5d1vPeyJdr95BPvH4KM+/1u77ps5Xyca
-	 9afd7f1OihHzb4Ngrw6rLpdmQFLUoH1YtcxEn1xGZUcOU5lCSwsaG9610a15M+y0C5Q==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794911469;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 Content-Transfer-Encoding:Content-Type:X-ClientProxiedBy:MIME-Version:
-	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=8tjgMnV7vc1cazJn97XnF/RT7CnHOXJb8Vx3nA/7Z64=;
-	b=lSrGBUoCLjMIkxAmKeUh/4cNNAWj1d9yodqduVZ0QbrvgMLEchexm67I9dkUKzTShWZb
-	 9RKOB6TVE6HgBRfqoDf3+vdvOonghbZqmBwNoJBlYs+OvhSzv6ma6yKQKcYVDQFIy/AhU
-	 qZKNb2x+ns1ovwX2VtyEkmaalJ8bpcm0t4g637uVB7BZ9cCDmCGe2xOlNnBWC4BKTtfgJ
-	 xPk1k7XUSqZwkB+lEFO9c2ZtYcF6DamxZdRIzLaxbZ0ll3Qw2AZWl3RTJct9Lh5dAxYtG
-	 Qhc1VMEFzd3eiZ6Gts5ieu+00z/Lo/F0Tkm3UZMA5oDkVIUl29F+j1mj8RbQK+Ba8RA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=nvidia.com;
-	spf=fail smtp.mailfrom=nvidia.com;
-	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=GEWLQ5uY;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.201.25
-Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013025.outbound.protection.outlook.com [40.107.201.25])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.226.149.38
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794911672;
+	b=1lBECtge8AabIgtDnchklAc9hNoPL0KVB8ZrbRH4H0o9bYmTI0VGlkuTGCEuOUOUJSXZ
+	 C5kaekRLQlDVgsqNC00U3+RiRckgSezwtdogoEm+eV2LvnsK6su0NVUpTleYYnNgiVzdF
+	 sVtQzis0EyD0YMfb7ltpWay7qvAiGZ/pYjedgUZ0F45xbEHsy/RA9EmNNPLy4tqkAtwGf
+	 471sOhAuoxQydnGngwfTgtiY17wtSBEbhX9ir1b4BepJ5ffgV2ICEW9VWbizfPY/Og8Kt
+	 zd35I7wmL5sBY1NLJlay1OkH7DlZpPozkJhUS9UTa0BSpIQQGN+EmB+r0B0Y9YUZ+bQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794911672;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:To:Cc:
+	 Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=9MJrcZ1ojZlX1FTxvVn2f3i7uCSB0bosDH9zsPLqw8s=;
+	b=p50MYUn81KWrOI+tQM5qes8usi0nYYetBH5YrsE9UxCin352LG1HyCuUvGy7d8PCExde
+	 SJImiXC8JoKBzPN9Nl+tjSbwg4pWdcF/Z9caSwpeCU/+4q1YVbeWxfxHWoWkH4QeeDz6x
+	 +xtBdXD/K+L+7R58MmqVNZdI6876Qz3D0FKPHHVW1d0kmLXHLE8/n8PHVbJ9JAVGfcFAt
+	 HPPlgmCHJLWGYgDKrK3ptX1hb/YSFbuDWNAJ6Ps/qH8D5j9gOMXEEgr3EPjD/R8Rw2cCs
+	 /gVDhGsGPaEwFazsbqqOxkeVzfu7MU4N/F1S6ZlCamNPqRwR0fOcSiAiFMiW0BVugRg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=fail header.from=gmail.com;
+	spf=pass smtp.mailfrom=runbox.com;
+	dkim=pass header.d=runbox.com header.i=@runbox.com header.a=rsa-sha256 header.s=selector1 header.b=e+gOGl+m;
+	arc=none smtp.remote-ip=185.226.149.38
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1754E606A886;
-	Tue, 17 Nov 2026 10:31:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1754E606A886
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F281D606A332;
+	Tue, 17 Nov 2026 10:34:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F281D606A332
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=runbox.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=GEWLQ5uY
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=AZd4nyTU+hyvkzrG179qCJqof32zH+RU/S6svdn6cPKmxjWTfAFCmDkTCMaJwvSJa307cO1tGBjbneFQHKLolc9NdzZjUeZw4YMBg2x4+UF4O1GtYZZkEMhvQDCj3XmEvB3LzcUmKzkHhE0cdsD9AVfkPnZKAM5pX8t9HhCMpOeb1hFYDg/m5bkuoBarxwKKeCtBKQlwlrJuVr1jqY2kMC39A+5aGhYtZ1Jk2H5O7WL0gMbkYcv4zPTnoCyeY6hqfN+Mb6/dNEiJ3uQMdSBh5FujZ8pr2E9li7XWEMehlNaSoEeWDxTRnnMzwWDmPjZKClRxftkm4ob8CbVWXQqhTQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8tjgMnV7vc1cazJn97XnF/RT7CnHOXJb8Vx3nA/7Z64=;
- b=fe7eFZyUhVNeNcon312UduxSIy1GApeuLFR7Fo1sBNqr0W5KAp4lW6ySbEvEB/76AXzjPsFaY2Mth2AUR2WpnV/d60BuO5O22ymZWK0CHyXkVWPrlBWaqB6Sc8sC/JiOAroIq1Gnw3FoZ4rFVdusemszQA4WkdcOSW7SSgOMRyyE7IhUNckSrbZKSLIMFyLqafFyimpAsZ4t0+FF+RA0xp+T5UJmTYGlyEFGohCeJ0j5EU7rZgVkrivBYTyWc225ltFLJdIB4RLF+fa6dHHv2toclGr8KNqkqm1WnVb21z24xtTeKPmVj6IriUV29zeasXTwMZzCFu9BL/byESvQCA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8tjgMnV7vc1cazJn97XnF/RT7CnHOXJb8Vx3nA/7Z64=;
- b=GEWLQ5uYctiYmize84NTpYMHqKN3XIVlp7n619TJFOjWW1S3pFBUX/gSolbnr6KqaNobcwUkgbccfOe4cStyJQtZFO1R1x/Cm73+N6LrUe2IWZBEeo4x2DlJv5X991Q79Rvv0ZdeP+00JPRmyNGzSMM0JGu/v+P8Q1I8KrlAdOD4mFSmE8Gcr9KRdPuKCmeMffSd6KedelUSURvzJlYq0MYcif/xXmJ0Ebn7zhZrkkyPJh45vxvP4yI+Ed+t8qwFEAeW4KlYlQKJ2REK0ldhPMAK+tcJtSF55lQ+Lo5/IGccVvLvknIV60DhenLuBtREDFcgiNNZY+fNYzcMcacENg==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL1PR12MB5174.namprd12.prod.outlook.com (2603:10b6:208:31c::19)
- by CH1PPF189669351.namprd12.prod.outlook.com (2603:10b6:61f:fc00::608) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.14; Tue, 17 Nov
- 2026 10:31:02 +0000
-Received: from BL1PR12MB5174.namprd12.prod.outlook.com
- ([fe80::58de:822b:868:96e9]) by BL1PR12MB5174.namprd12.prod.outlook.com
- ([fe80::58de:822b:868:96e9%6]) with mapi id 15.21.0615.013; Tue, 17 Nov 2026
- 10:31:02 +0000
-From: Andrea Righi <arighi@nvidia.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Tejun Heo <tj@kernel.org>,
-	David Vernet <void@manifault.com>,
-	Changwoo Min <changwoo@igalia.com>,
-	Josh Don <joshdon@google.com>,
-	Vineeth Pillai <vineethrp@google.com>,
-	Peilin Ye <yepeilin@google.com>,
-	Zhi Wang <zhiw@nvidia.com>,
-	Lee Trager <ltrager@nvidia.com>,
-	Balbir Singh <balbirs@nvidia.com>,
-	Shameer Kolothum <skolothumtho@nvidia.com>,
-	Himadri Chhaya-Shailesh <himadrics@protonmail.com>,
-	NchangRoy <royfru44@gmail.com>,
+	dkim=pass (2048-bit key, unprotected) header.d=runbox.com header.i=@runbox.com header.a=rsa-sha256 header.s=selector1 header.b=e+gOGl+m
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <david.laight.linux_spam@runbox.com>)
+	id 1xTGW6-002LjE-Hl; Tue, 17 Nov 2026 11:34:22 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
+	 s=selector1; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To
+	:Message-Id:Date:Subject:Cc:To:From;
+	bh=9MJrcZ1ojZlX1FTxvVn2f3i7uCSB0bosDH9zsPLqw8s=; b=e+gOGl+miKSeeZfAt7BgYzQ6+R
+	Ii1lLL2KRY6cn6uGZt6JrvSHJhBNBun60q0YvnTyRpLv68ftCvlLWXLJJA2N36fq52/krLalKQZNd
+	QNkYrofBH5K8/ERFgaW7D5z6762siXE5YMLpzgxSs1ozYwJEocuRJIKKpHdzZtNRXfbd0knHmLuEe
+	WWVYG5lHrFXYxykigMMvXgF4bURotUFH6J1fT9Uxt5L22EkzIEvk9jzdxY2MyOVtm1At0stpMAEK/
+	Z0o6gu2cIp3ZwL6YZbfdUd9W+Pn7LU8HvBFncCz43DDEn6anEOdSbjQ/JR0B48qo1GfRxC5dC/JBD
+	/8gvA0aw==;
+Received: from [10.9.9.74] (helo=submission03.runbox)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <david.laight.linux_spam@runbox.com>)
+	id 1xTGW1-0002et-3g; Tue, 17 Nov 2026 11:34:17 +0100
+Received: by submission03.runbox with esmtpsa  [Authenticated ID (1493616)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.95)
+	id 1xTGVn-005qHU-AV;
+	Tue, 17 Nov 2026 11:34:03 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Petr Mladek <pmladek@suse.com>,
+	Kees Cook <kees@kernel.org>,
+	David Laight <david.laight.linux@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
 	bpf@vger.kernel.org,
-	sched-ext@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] selftests/bpf: Test importing pages into an arena
-Date: Tue, 17 Nov 2026 11:28:08 +0100
-Message-ID: <20261117103028.4105609-4-arighi@nvidia.com>
-X-Mailer: git-send-email 2.56.1
-In-Reply-To: <20261117103028.4105609-1-arighi@nvidia.com>
-References: <20261117103028.4105609-1-arighi@nvidia.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: FR4P281CA0180.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:b7::13) To BL1PR12MB5174.namprd12.prod.outlook.com
- (2603:10b6:208:31c::19)
+	Jim Cromie <jim.cromie@gmail.com>,
+	Lorenzo Stoakes <ljs@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>,
+	Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Samuel Wu <wusamuel@google.com>,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v4 next 06/13] kallsyms: Improve selftest test_perf_kallsyms_lookup_name() output
+Date: Tue, 17 Nov 2026 10:33:45 +0000
+Message-Id: <20261117103352.1244657-7-david.laight.linux@gmail.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20261117103352.1244657-1-david.laight.linux@gmail.com>
+References: <20261117103352.1244657-1-david.laight.linux@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -120,633 +85,335 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5174:EE_|CH1PPF189669351:EE_
-X-MS-Office365-Filtering-Correlation-Id: 150838f1-3d7b-43f4-b8dc-08df4495e0e8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|23010399003|10067099003|5023799004|11063799006|56012099006|261026140227099003|261021121427099003|261026121527099003|261022113327099003|261022105027099003|261102123227099003|261028144727099003|261009223027099003|18002099003|22082099003|6133799003;
-X-Microsoft-Antispam-Message-Info:
-	H64wNv1S5FDdngBQJNkp5/1/JA6QbtFDyna3sT+POhCCt/xv4Z0Y1B9LtBKEPlBelJj7HoSwwCfj5oW547tkagDvEq30C16D8DTxuSOjVD2no6ZKoXx29N/wUFp5SlNuMAHw8dGWhxvZ952hU5Kpp+L+ulAcG88+lVRGDoR4SBlG/DJMfvIwc3nMB//yjtXfPClbt3nqbEQrgdygICwgFrOmHV/u74HnItmvAdFkTmF+1RI/gUIVUzqIIJrP0Ogw1b23PgbX1Yb+T0D15AhKBnZ5Gg56alJyWQZHRfExvkG88UpgvR4dzWKBVVDqgqb7gwVRtJM0MMR287u6EN6+BbyJuS/l27IJwYu4MxurEklYed0r7zW4VE1Bt9Q6js8hIBgODNw32Mc0o/Oyq66IE9iQ748UqwCQbT+7nXrdG/ZSpSWuD+osYCX3WWSoNidhuZjEn6uEhgwSD2xk1q1bTWqHHOs/o9PacG8TD2ClqHl3tlIsM4N8W8VKOdPhftvMPKpHS8l/4GWgapVEBzb1nLsuZSGCuwA1/dbJso0ZHRYi9RKJKhyYH1w8Iz0bfPcGhmpg3teeExv/WP+Fo0zySINMcWtGo6oD4HHGj51ponms8lL1gogcbgesL3NS1j13hDl6uSadWpy3+Ya5TiNzKyZmB4yeGS1u0j+qCIBhvPw=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5174.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(23010399003)(10067099003)(5023799004)(11063799006)(56012099006)(261026140227099003)(261021121427099003)(261026121527099003)(261022113327099003)(261022105027099003)(261102123227099003)(261028144727099003)(261009223027099003)(18002099003)(22082099003)(6133799003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?XuBw2TsNn3q0sT1yLw6hVDZrqgMtIEdTWg2P4ygRiIBuS7JheeMtoBtIGV4r?=
- =?us-ascii?Q?Lc+im+QCzrwYJ+p9bWd8pIED3tfc13dBEK6lLjIS6i9AWIZZLTFtDg9+d4wf?=
- =?us-ascii?Q?vzqNULixmNXZu0wQizJzQDxxSEXStK0uPaP6y8DqlwlTHAsbMUatK7lA5D9l?=
- =?us-ascii?Q?gNfUsTJAdYAndWaU2wlQKd05uJ+k/Dn4qh0k8F0fHP0y84e2tDL/2JIJig0/?=
- =?us-ascii?Q?fks1F6FB01yUViRQik5HdxxO1CGK3DdlpB0wJbTtZtbKirsEPywb6o5Oen1c?=
- =?us-ascii?Q?GDPRDZrLPqQM0PdcLSuHv3hqjc3RrSsc8+w1xDYWTwW70hMbZ/TiC4lE37yT?=
- =?us-ascii?Q?eKmPx8mRU1CsIj74N+lUtHfWB+Ryq421J85PpopRCH6eWevEiahb6Vekkuvi?=
- =?us-ascii?Q?/HjVYCGgVanuBdfV1A9qTqQVKuriZovpTzFHBRRqchUfJzAsfSc40QELb2cM?=
- =?us-ascii?Q?NpM5sGbQoh8T7FDZyUYMjrMeLEV0rhPmKvbGfVd0+ls5g1dPyc/GT4Psj2in?=
- =?us-ascii?Q?C6Y8yhDzZFtjj4V0XIPNWVHDr746o/dOR0ktF2rtU4Gtde0W33eg2ic9dmHM?=
- =?us-ascii?Q?8Xxl7QP7XMfr4NQtLVmEghoXw9QfcSJW5kra+YANzgLjyA65kiL1rbwT63ys?=
- =?us-ascii?Q?LysMtouU1TpZk457EgY5qgoeJ4iVG4ZxROGzS9AD/xN/Apq6YWGgfc5pR7MW?=
- =?us-ascii?Q?LWgYKfFQ6n9LsuCu1n22dykB3mKLDu73dxQ9sWrU+S67gaH9E1N6DTkyKfGl?=
- =?us-ascii?Q?JurYvc0dEFI6QaX7vBhuRYdmoYP+pzekY1XfDD8ozTtTRs9fXU60jbso9rah?=
- =?us-ascii?Q?LUJvw2rU7EjXs3yYbnqJDKbSCgqPmi5TsTUeNiEhxgs4qb8F0cFA9eDWwiUS?=
- =?us-ascii?Q?2fepigqVjBAkNak6UK+BKF3y3Exu31upEc/QaLJBs4rx0WG1po8G+itVF8IW?=
- =?us-ascii?Q?e5xI2B1eBx/5uXnt7AlvMVNiZY2iv/wiH1wFxRSA7VXpPEJfEd45lfGMB3Y6?=
- =?us-ascii?Q?BtVpLNIU/kldmaoiwPQnJmIiecLB4gM+kMKZ6jwyh7c7cvrYaKI28ATnip19?=
- =?us-ascii?Q?C8jupF6733B93jRZaLp4lznRsvZaf9m27ZtdgmierYnqzaQTx9p7fI3ukv4T?=
- =?us-ascii?Q?r2JveU9rubp562VJy/uTTnXGBHzZT0mXsl9sbY6/oAjDw1JDk1DJHiAbTTrb?=
- =?us-ascii?Q?lUfm5N8ey6ZL3qR6rDc6EHbIzangpgVtgYn4Gq02peU0Vitc+hdsP7ZfqqnB?=
- =?us-ascii?Q?zPkBr3bCTT9p7u9xydByrlqfVy79OBCZldPSE34MIiRt79A5vsgDxZSqc7tE?=
- =?us-ascii?Q?D4ZGxLCBmMfkm9bueWQGBSU0zJZ6ruJMLn0B5Kut2tS8McutQ9MHQLxTf+2F?=
- =?us-ascii?Q?OhwkerkLwIZdZND42fdbJo9JoRrylz/JKh8aCkbwY4w5oIJrWQcqzhAvz4Bq?=
- =?us-ascii?Q?Y30p2vfr/qCTpoV2arMo6fH5R0GfBn1hzOKQPmgoTUa4BJLZs3JYGyZh+r+q?=
- =?us-ascii?Q?cCOtYbAb1POP5656PO3JtA2LOSETjK1Dd3d24nUIzr66g92u8b6ud/yFEqdB?=
- =?us-ascii?Q?4HpSahVOO/bXGQGnR8/hDtluHfgudWJ1vW8Oym2E3Qf15H6pSNQ/p7PntsGV?=
- =?us-ascii?Q?jFHK6JeT70IvCwg6v3+OsyaF8XBQIWx1yVFgeZFcM7/DNcUeGsN2FFCStPYT?=
- =?us-ascii?Q?xaVhAp21nFrq8pjnJ/sqYW7RbridBx+/L5C1D4LAG23rmrUO?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 150838f1-3d7b-43f4-b8dc-08df4495e0e8
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5174.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2026 10:31:02.8880
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1xyNyFDjVtjuiWRXJqWb19NnEt9Hes3uFXVQRn7gGD9hD8i8duaADvBNqfhQD6IbrVmc7oxVK6gB06VPthMbDw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH1PPF189669351
+Content-Transfer-Encoding: 8bit
 
-Check that pages imported with bpf_arena_import_memfd() are shared
-between BPF programs and user space mapping the memfd, that they outlive
-the arena, that freeing any of them releases the whole import while
-their data stays in the memfd, that invalid or overlapping imports are
-rejected, and that user space faults on them through the arena mapping.
+- Fix the compression percentage output to show 50.05% not 60.5%.
+- Improve the test stability/reproducability by taking the faster of
+  two calls to kallsyms_lookup_name().
+- Check that kallsyms_lookup_name() returns the expected address
+  unless the symbol is duplicated.
+- Report the names of the min/max symbols.
+- Output an 8 line 64 entry histogram of the times taken.
+- This shows there is a reasonably normal distribution with a small
+  number of much slower outliers that don't really affect the average.
 
-Also check that bpf_arena_import_dax() rejects anything but a device-dax
-mapping. Importing device-dax pages needs a device-dax device.
+Additionally:
+- Add a very long symbol to check the handling of two byte lengths.
+- Do the test_perf_kallsyms_lookup_name() last because it can take long
+  enough that the CPU frequency changes and the times reported by the
+  other tests can change.
+- Mark all the test functions noinline_for_stack since they all have a
+  quite large on-stack structure.
 
-Signed-off-by: Andrea Righi <arighi@nvidia.com>
+Example output (after all these patches)
+kallsyms_on_each_symbol() traverse all: 7742950 ns
+kallsyms_on_each_match_symbol() traverse all: 951 ns
+kallsyms_lookup_name() looked up 123312 symbols, average 200 ns
+        fastest 60 ns (_rs.0)
+        slowest 662 ns (The_time_has_come_the_Walrus_said_To_talk_of_many_things_Of_sho)
+        Distribution, 20ns per column, 2916 counts per *:
+        |         **
+        |        ****
+        |        ****
+        |        ****
+        |       ******
+        |       *******
+        |      *********
+        |   ******************  **    * * *
+
+Signed-off-by: David Laight <david.laight.linux@gmail.com>
 ---
- .../selftests/bpf/prog_tests/arena_import.c   | 451 ++++++++++++++++++
- .../selftests/bpf/progs/arena_import.c        |  93 ++++
- 2 files changed, 544 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_import.c
- create mode 100644 tools/testing/selftests/bpf/progs/arena_import.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/arena_import.c b/tools/testing/selftests/bpf/prog_tests/arena_import.c
-new file mode 100644
-index 0000000000000..1ba2c45d122e0
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/arena_import.c
-@@ -0,0 +1,451 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 NVIDIA Corporation */
+v3:
+- Previously patch 3.
+- Fix build when CONFIG_KALLSYMS_ALL set.
+- Fix compression ratio print (50.05% not 50.5%)
+Unchanged in v4 (apart from a minor change to the commit message).
+
+ kernel/kallsyms_selftest.c | 169 ++++++++++++++++++++++++++++---------
+ 1 file changed, 127 insertions(+), 42 deletions(-)
+
+diff --git a/kernel/kallsyms_selftest.c b/kernel/kallsyms_selftest.c
+index 0db79237fe54..f7fef70ed2c8 100644
+--- a/kernel/kallsyms_selftest.c
++++ b/kernel/kallsyms_selftest.c
+@@ -22,6 +22,8 @@
+ 
+ 
+ #define MAX_NUM_OF_RECORDS		64
++#define HISTOGRAM_BUCKETS		64
++#define HISTOGRAM_RESOLUTION		10
+ 
+ struct test_stat {
+ 	int min;
+@@ -29,39 +31,60 @@ struct test_stat {
+ 	int save_cnt;
+ 	int real_cnt;
+ 	int perf;
+-	u64 sum;
+ 	char *name;
+ 	unsigned long addr;
+ 	unsigned long addrs[MAX_NUM_OF_RECORDS];
+ };
+ 
++struct lookup_name_info {
++	unsigned int count;
++	unsigned int min;
++	unsigned int max;
++	u64 sum;
++	char min_name[64];
++	char max_name[64];
++	unsigned int histogram[HISTOGRAM_BUCKETS];
++	unsigned int scale;
++};
 +
-+#include <test_progs.h>
-+#include <fcntl.h>
-+#include <signal.h>
-+#include <stdatomic.h>
-+#include <sys/mman.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
+ struct test_item {
+ 	char *name;
+ 	unsigned long addr;
+ };
+ 
+-#define ITEM_FUNC(s)				\
+-	{					\
+-		.name = #s,			\
+-		.addr = (unsigned long)s,	\
+-	}
+-
+-#define ITEM_DATA(s)				\
++#define _TEST_ITEM(s)				\
+ 	{					\
+ 		.name = #s,			\
+ 		.addr = (unsigned long)&s,	\
+ 	}
+ 
++#define TEST_ITEM(s) _TEST_ITEM(s)
+ 
+ static int kallsyms_test_var_bss_static;
+ static int kallsyms_test_var_data_static = 1;
+ int kallsyms_test_var_bss;
+ int kallsyms_test_var_data = 1;
+ 
++/* This is 509 characters, compresses to about 330 */
++#define kallsyms_very_long_name \
++The_time_has_come_the_Walrus_said_To_talk_of_many_things\
++_Of_shoes_and_ships_and_sealing_wax_Of_cabbages_and_kings\
++_And_why_the_sea_is_boiling_hot_And_whether_pigs_have_wings\
++\
++_O_Oysters_said_the_Carpenter_Youve_had_a_pleasant_run\
++_Shall_we_be_trotting_home_again_But_answer_came_there_none\
++_And_this_was_scarcely_odd_because_Theyd_eaten_every_one\
++\
++_The_moon_was_shining_sulkily_Because_she_thought_the_sun\
++_Had_got_no_business_to_be_there_After_the_day_was_done\
++_Its_very_rude_of_him_she_said_To_come_and_spoil_the_fun
 +
-+#include "arena_import.skel.h"
++static int kallsyms_very_long_name = 1;
 +
-+#define MEMFD_PAGES	4
-+
-+#ifndef F_SEAL_FUTURE_WRITE
-+#define F_SEAL_FUTURE_WRITE	0x0010
-+#endif
-+
-+static long ps;
-+
-+static int run(struct bpf_program *prog)
+ static int kallsyms_test_func_static(void)
+ {
+ 	kallsyms_test_var_bss_static++;
+-	kallsyms_test_var_data_static++;
++	kallsyms_test_var_data_static += kallsyms_very_long_name;
+ 
+ 	return 0;
+ }
+@@ -79,16 +102,17 @@ __weak int kallsyms_test_func_weak(void)
+ }
+ 
+ static struct test_item test_items[] = {
+-	ITEM_FUNC(kallsyms_test_func_static),
+-	ITEM_FUNC(kallsyms_test_func),
+-	ITEM_FUNC(kallsyms_test_func_weak),
+-	ITEM_FUNC(vmalloc_noprof),
+-	ITEM_FUNC(vfree),
++	TEST_ITEM(kallsyms_test_func_static),
++	TEST_ITEM(kallsyms_test_func),
++	TEST_ITEM(kallsyms_test_func_weak),
++	TEST_ITEM(vmalloc_noprof),
++	TEST_ITEM(vfree),
+ #ifdef CONFIG_KALLSYMS_ALL
+-	ITEM_DATA(kallsyms_test_var_bss_static),
+-	ITEM_DATA(kallsyms_test_var_data_static),
+-	ITEM_DATA(kallsyms_test_var_bss),
+-	ITEM_DATA(kallsyms_test_var_data),
++	TEST_ITEM(kallsyms_test_var_bss_static),
++	TEST_ITEM(kallsyms_test_var_data_static),
++	TEST_ITEM(kallsyms_very_long_name),
++	TEST_ITEM(kallsyms_test_var_bss),
++	TEST_ITEM(kallsyms_test_var_data),
+ #endif
+ };
+ 
+@@ -101,7 +125,7 @@ static int stat_symbol_len(void *data, const char *name, unsigned long addr)
+ 	return 0;
+ }
+ 
+-static void test_kallsyms_compression_ratio(void)
++static noinline_for_stack void test_kallsyms_compression_ratio(void)
+ {
+ 	u32 pos, off, len, num;
+ 	u32 ratio, total_size, total_len = 0;
+@@ -148,43 +172,104 @@ static void test_kallsyms_compression_ratio(void)
+ 	pr_info("| nr_symbols | compressed size | original size | ratio(%%) |\n");
+ 	pr_info("|---------------------------------------------------------|\n");
+ 	ratio = (u32)div_u64(10000ULL * total_size, total_len);
+-	pr_info("| %10d |    %10d   |   %10d  |  %2d.%-2d   |\n",
++	pr_info("| %10d |    %10d   |   %10d  |  %2d.%02d   |\n",
+ 		kallsyms_num_syms, total_size, total_len, ratio / 100, ratio % 100);
+ 	pr_info(" ---------------------------------------------------------\n");
+ }
+ 
++static int is_duplicate(void *data, unsigned long addr)
 +{
-+	LIBBPF_OPTS(bpf_test_run_opts, opts);
-+	int err;
-+
-+	err = bpf_prog_test_run_opts(bpf_program__fd(prog), &opts);
-+	if (!ASSERT_OK(err, bpf_program__name(prog)))
-+		return -1;
-+	return opts.retval;
++	return (*(int *)data)++;
 +}
 +
-+static int do_import(struct arena_import *skel, int fd, long fd_off, __u32 pg, __u32 cnt)
-+{
-+	skel->bss->fd = fd;
-+	skel->bss->fd_off = fd_off;
-+	skel->bss->pg = pg;
-+	skel->bss->page_cnt = cnt;
-+	skel->bss->ret = 1;
-+	if (run(skel->progs.op_import))
-+		return 1;
-+	return skel->bss->ret;
-+}
-+
-+static int do_import_dax(struct arena_import *skel, void *src, __u32 pg, __u32 cnt)
-+{
-+	skel->bss->src = (unsigned long)src;
-+	skel->bss->pg = pg;
-+	skel->bss->page_cnt = cnt;
-+	skel->bss->ret = 1;
-+	if (run(skel->progs.op_import_dax))
-+		return 1;
-+	return skel->bss->ret;
-+}
-+
-+static int do_alloc(struct arena_import *skel, __u32 pg, __u32 cnt)
-+{
-+	skel->bss->pg = pg;
-+	skel->bss->page_cnt = cnt;
-+	skel->bss->ret = 1;
-+	if (run(skel->progs.op_alloc))
-+		return 1;
-+	return skel->bss->ret;
-+}
-+
-+static void do_free(struct arena_import *skel, __u32 pg, __u32 cnt)
-+{
-+	skel->bss->pg = pg;
-+	skel->bss->page_cnt = cnt;
-+	run(skel->progs.op_free);
-+}
-+
-+static void do_write(struct arena_import *skel, __u32 pg, __u64 val)
-+{
-+	skel->bss->pg = pg;
-+	skel->bss->val = val;
-+	run(skel->progs.op_write);
-+}
-+
-+static __u64 do_read(struct arena_import *skel, __u32 pg)
-+{
-+	skel->bss->pg = pg;
-+	skel->bss->val = 0;
-+	run(skel->progs.op_read);
-+	return skel->bss->val;
-+}
-+
-+static int make_memfd(unsigned int seals)
-+{
-+	int fd;
-+
-+	fd = memfd_create("arena_import", MFD_ALLOW_SEALING);
-+	if (fd < 0 && errno == ENOSYS) {
-+		printf("%s:SKIP:no memfd_create()\n", __func__);
-+		test__skip();
-+		return -1;
-+	}
-+	if (!ASSERT_OK_FD(fd, "memfd_create"))
-+		return -1;
-+	if (!ASSERT_OK(ftruncate(fd, MEMFD_PAGES * ps), "ftruncate"))
-+		goto err;
-+	if (seals && !ASSERT_OK(fcntl(fd, F_ADD_SEALS, seals), "add_seals"))
-+		goto err;
-+	return fd;
-+err:
-+	close(fd);
-+	return -1;
-+}
-+
-+static struct arena_import *open_skel(void)
-+{
-+	struct arena_import *skel;
-+	size_t sz;
-+
-+	skel = arena_import__open_and_load();
-+	if (!skel && errno == EOPNOTSUPP) {
-+		printf("%s:SKIP:no arena support\n", __func__);
-+		test__skip();
-+		return NULL;
-+	}
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return NULL;
-+	if (skel->rodata->skip) {
-+		printf("%s:SKIP:the compiler lacks arena address space casts\n", __func__);
-+		test__skip();
-+		arena_import__destroy(skel);
-+		return NULL;
-+	}
-+	skel->bss->base = bpf_map__initial_value(skel->maps.arena, &sz);
-+	if (!ASSERT_OK_PTR(skel->bss->base, "arena_base")) {
-+		arena_import__destroy(skel);
-+		return NULL;
-+	}
-+	skel->bss->page_size = ps;
-+	return skel;
-+}
-+
-+/* Imported pages are not allocated by the arena and must not be counted */
-+static long map_memlock(int map_fd)
-+{
-+	char path[64], line[128];
-+	long memlock = -1;
-+	FILE *f;
-+
-+	snprintf(path, sizeof(path), "/proc/self/fdinfo/%d", map_fd);
-+	f = fopen(path, "r");
-+	if (!ASSERT_OK_PTR(f, "open_fdinfo"))
-+		return -1;
-+	while (fgets(line, sizeof(line), f)) {
-+		if (sscanf(line, "memlock:\t%ld", &memlock) == 1)
-+			break;
-+	}
-+	fclose(f);
-+	return memlock;
-+}
-+
-+/* Data written on either side is visible on the other one */
-+static void test_share(void)
-+{
-+	struct arena_import *skel;
-+	__u64 *shm = MAP_FAILED;
-+	__u64 val;
-+	int fd, i;
-+
-+	fd = make_memfd(F_SEAL_SHRINK);
-+	if (fd < 0)
-+		return;
-+	skel = open_skel();
-+	if (!skel)
-+		goto out;
-+
-+	/* Import memfd pages 1-2 at test pages 2-3, see page_addr() */
-+	if (!ASSERT_OK(do_import(skel, fd, ps, 2, 2), "import"))
-+		goto out;
-+	ASSERT_EQ(map_memlock(bpf_map__fd(skel->maps.arena)), 0, "memlock");
-+
-+	shm = mmap(NULL, MEMFD_PAGES * ps, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-+	if (!ASSERT_NEQ(shm, MAP_FAILED, "mmap_memfd"))
-+		goto out;
-+
-+	do_write(skel, 2, 0xcafe);
-+	do_write(skel, 3, 0xbeef);
-+	ASSERT_EQ(shm[ps / sizeof(*shm)], 0xcafe, "bpf_to_user_pg2");
-+	ASSERT_EQ(shm[2 * ps / sizeof(*shm)], 0xbeef, "bpf_to_user_pg3");
-+
-+	shm[ps / sizeof(*shm)] = 0xf00d;
-+	ASSERT_EQ(do_read(skel, 2), 0xf00d, "user_to_bpf");
-+
-+	/* Pages outside of the imported range are not shared */
-+	if (!ASSERT_OK(do_alloc(skel, 0, 1), "alloc"))
-+		goto out;
-+	do_write(skel, 0, 0xdead);
-+	ASSERT_EQ(do_read(skel, 0), 0xdead, "allocated");
-+	ASSERT_EQ(shm[0], 0, "not_shared");
-+
-+	/*
-+	 * The data outlives the arena. The arena releases the pages after an
-+	 * RCU grace period: sealing the memfd against writes fails while they
-+	 * are pinned, so wait until it works (no writable mapping either).
-+	 */
-+	arena_import__destroy(skel);
-+	skel = NULL;
-+	munmap(shm, MEMFD_PAGES * ps);
-+	shm = MAP_FAILED;
-+	for (i = 0; i < 500 && fcntl(fd, F_ADD_SEALS, F_SEAL_WRITE); i++)
-+		usleep(10000);
-+	if (ASSERT_LT(i, 500, "released") &&
-+	    ASSERT_EQ(pread(fd, &val, sizeof(val), 2 * ps), sizeof(val), "pread"))
-+		ASSERT_EQ(val, 0xbeef, "after_destroy");
-+out:
-+	if (shm != MAP_FAILED)
-+		munmap(shm, MEMFD_PAGES * ps);
-+	arena_import__destroy(skel);
-+	close(fd);
-+}
-+
-+/* Freeing any imported page releases the whole import, the data stays in the memfd */
-+static void test_free(void)
-+{
-+	struct arena_import *skel;
-+	__u64 *shm = MAP_FAILED;
-+	int fd;
-+
-+	fd = make_memfd(F_SEAL_SHRINK);
-+	if (fd < 0)
-+		return;
-+	skel = open_skel();
-+	if (!skel)
-+		goto out;
-+
-+	shm = mmap(NULL, MEMFD_PAGES * ps, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-+	if (!ASSERT_NEQ(shm, MAP_FAILED, "mmap_memfd"))
-+		goto out;
-+
-+	/* Allocated page 0, memfd pages 0-1 imported at 1-2, allocated page 3 */
-+	if (!ASSERT_OK(do_alloc(skel, 0, 1), "alloc_pg0") ||
-+	    !ASSERT_OK(do_import(skel, fd, 0, 1, 2), "import") ||
-+	    !ASSERT_OK(do_alloc(skel, 3, 1), "alloc_pg3"))
-+		goto out;
-+	do_write(skel, 0, 0x1);
-+	do_write(skel, 1, 0x1234);
-+	do_write(skel, 2, 0x5678);
-+	do_write(skel, 3, 0x3);
-+
-+	/* Page 2 only: pages 1-2 go away, 0 and 3 stay */
-+	do_free(skel, 2, 1);
-+	ASSERT_EQ(do_read(skel, 1), 0, "pg1_unmapped");
-+	ASSERT_EQ(do_read(skel, 2), 0, "pg2_unmapped");
-+	ASSERT_EQ(do_read(skel, 0), 0x1, "pg0_kept");
-+	ASSERT_EQ(do_read(skel, 3), 0x3, "pg3_kept");
-+	ASSERT_EQ(shm[0], 0x1234, "memfd_kept");
-+
-+	/* The range can be imported again */
-+	if (!ASSERT_OK(do_import(skel, fd, 0, 1, 2), "reimport"))
-+		goto out;
-+	ASSERT_EQ(do_read(skel, 2), 0x5678, "reimported");
-+
-+	/* Across allocated and imported pages, then the whole arena is free */
-+	do_free(skel, 0, 4);
-+	ASSERT_EQ(map_memlock(bpf_map__fd(skel->maps.arena)), 0, "memlock");
-+	ASSERT_OK(do_alloc(skel, 0, 8), "alloc_all");
-+out:
-+	if (shm != MAP_FAILED)
-+		munmap(shm, MEMFD_PAGES * ps);
-+	arena_import__destroy(skel);
-+	close(fd);
-+}
-+
-+static void test_invalid(void)
-+{
-+	int fd, ro_fd = -1, wo_fd = -1, null_fd = -1;
-+	struct arena_import *skel;
-+	char path[64];
-+
-+	skel = open_skel();
-+	if (!skel)
-+		return;
-+
-+	/* Write seals are not allowed */
-+	fd = make_memfd(F_SEAL_SHRINK | F_SEAL_FUTURE_WRITE);
-+	if (fd >= 0) {
-+		ASSERT_EQ(do_import(skel, fd, 0, 0, 1), -EPERM, "write_seal");
-+		close(fd);
+ static int lookup_name(void *data, const char *name, unsigned long addr)
+ {
+-	u64 t0, t1, t;
+-	struct test_stat *stat = (struct test_stat *)data;
++	struct lookup_name_info *info = data;
++	unsigned int i, t0, t1, t;
++	unsigned long got_addr;
+ 
++	/* Improve the stability by taking the fastest of two calls. */
+ 	t0 = ktime_get_ns();
+ 	(void)kallsyms_lookup_name(name);
+ 	t1 = ktime_get_ns();
+-
+ 	t = t1 - t0;
+-	if (t < stat->min)
+-		stat->min = t;
++	got_addr = kallsyms_lookup_name(name);
++	t0 = ktime_get_ns();
++	if (t0 - t1 < t)
++		t = t0 - t1;
+ 
+-	if (t > stat->max)
+-		stat->max = t;
++	if (addr != got_addr) {
++		int c = 0;
+ 
+-	stat->real_cnt++;
+-	stat->sum += t;
++		if (!kallsyms_on_each_match_symbol(is_duplicate, name, &c)) {
++			pr_info("got %ld not %ld for %s\n", got_addr, addr, name);
++			return 1;
++		}
 +	}
 +
-+	fd = make_memfd(F_SEAL_SHRINK);
-+	if (fd < 0)
-+		goto out;
++	info->count++;
++	info->sum += t;
 +
-+	/* The memfd must be open for reading and writing, like for a shared mapping */
-+	snprintf(path, sizeof(path), "/proc/self/fd/%d", fd);
-+	ro_fd = open(path, O_RDONLY);
-+	if (ASSERT_OK_FD(ro_fd, "open_ro"))
-+		ASSERT_EQ(do_import(skel, ro_fd, 0, 0, 1), -EPERM, "read_only");
-+	wo_fd = open(path, O_WRONLY);
-+	if (ASSERT_OK_FD(wo_fd, "open_wo"))
-+		ASSERT_EQ(do_import(skel, wo_fd, 0, 0, 1), -EPERM, "write_only");
-+
-+	/* Not a memfd */
-+	null_fd = open("/dev/null", O_RDWR);
-+	if (ASSERT_OK_FD(null_fd, "open_null"))
-+		ASSERT_EQ(do_import(skel, null_fd, 0, 0, 1), -EINVAL, "not_memfd");
-+
-+	ASSERT_EQ(do_import(skel, -1, 0, 0, 1), -EBADF, "bad_fd");
-+	ASSERT_EQ(do_import(skel, fd, 1, 0, 1), -EINVAL, "unaligned_off");
-+	ASSERT_EQ(do_import(skel, fd, 0, 0, MEMFD_PAGES + 1), -EINVAL, "beyond_memfd");
-+	ASSERT_EQ(do_import(skel, fd, 0, 7, 2), -EINVAL, "beyond_arena");
-+	ASSERT_EQ(do_import(skel, fd, 0, 0, 0), -EINVAL, "zero_pages");
-+
-+	/* The range must be free */
-+	if (ASSERT_OK(do_alloc(skel, 0, 1), "alloc"))
-+		ASSERT_EQ(do_import(skel, fd, 0, 0, 2), -EBUSY, "over_allocated");
-+	if (ASSERT_OK(do_import(skel, fd, 0, 2, 2), "import"))
-+		ASSERT_EQ(do_import(skel, fd, 0, 3, 1), -EBUSY, "over_imported");
-+	do_free(skel, 0, 4);
-+
-+	/* Nothing above may leave a range behind */
-+	ASSERT_OK(do_alloc(skel, 0, 8), "alloc_all");
-+out:
-+	if (null_fd >= 0)
-+		close(null_fd);
-+	if (ro_fd >= 0)
-+		close(ro_fd);
-+	if (wo_fd >= 0)
-+		close(wo_fd);
-+	if (fd >= 0)
-+		close(fd);
-+	arena_import__destroy(skel);
-+}
-+
-+static char *fault_expected;
-+
-+static void fault_handler(int sig, siginfo_t *si, void *uc)
-+{
-+	_exit(si->si_addr == fault_expected ? 3 : 4);
-+}
-+
-+/* User space accesses imported pages through the memfd, not through the arena */
-+static void test_user_fault(void)
-+{
-+	struct arena_import *skel;
-+	int fd, status, ret;
-+	pid_t pid;
-+
-+	fd = make_memfd(F_SEAL_SHRINK);
-+	if (fd < 0)
-+		return;
-+	skel = open_skel();
-+	if (!skel)
-+		goto out;
-+
-+	if (!ASSERT_OK(do_import(skel, fd, 0, 1, 1), "import"))
-+		goto out;
-+
-+	pid = fork();
-+	if (!ASSERT_GE(pid, 0, "fork"))
-+		goto out;
-+	if (!pid) {
-+		/* The arena mapping is not inherited, map it again */
-+		struct sigaction sa = { .sa_sigaction = fault_handler, .sa_flags = SA_SIGINFO };
-+		size_t sz = bpf_map__max_entries(skel->maps.arena) * ps;
-+		char *p;
-+
-+		p = mmap(skel->bss->base, sz, PROT_READ | PROT_WRITE,
-+			 MAP_SHARED | MAP_FIXED, bpf_map__fd(skel->maps.arena), 0);
-+		if (p == MAP_FAILED || sigaction(SIGBUS, &sa, NULL))
-+			_exit(1);
-+		/* Test pages 0 and 1, see page_addr() */
-+		p[ps] = 1;	/* allocated on demand */
-+		fault_expected = p + 2 * ps;
-+		/* Set before the store that faults */
-+		atomic_signal_fence(memory_order_seq_cst);
-+		p[2 * ps] = 1;	/* imported */
-+		_exit(2);
++	if (t < info->min) {
++		info->min = t;
++		strscpy(info->min_name, name);
 +	}
-+	/* The watchdog of the runner interrupts system calls */
-+	do {
-+		ret = waitpid(pid, &status, 0);
-+	} while (ret < 0 && errno == EINTR);
-+	if (ASSERT_EQ(ret, pid, "waitpid")) {
-+		ASSERT_TRUE(WIFEXITED(status), "exited");
-+		/* 3: SIGBUS on the imported page, 4: elsewhere, 2: no fault */
-+		ASSERT_EQ(WEXITSTATUS(status), 3, "sigbus_on_imported");
++
++	if (t > info->max) {
++		info->max = t;
++		strscpy(info->max_name, name);
 +	}
-+out:
-+	arena_import__destroy(skel);
-+	close(fd);
-+}
 +
-+/*
-+ * Only a device-dax mapping can be imported by address. This needs no
-+ * device-dax device: it only checks that everything else is refused.
-+ */
-+static void test_dax_invalid(void)
-+{
-+	char *anon = MAP_FAILED, *shm = MAP_FAILED;
-+	struct arena_import *skel;
-+	int fd = -1;
++	/* Create a histogram of the times */
++	t = (t / HISTOGRAM_RESOLUTION) >> info->scale;
++	while (t >= HISTOGRAM_BUCKETS) {
++		t >>= 1;
++		info->scale++;
++		for (i = 0; i < HISTOGRAM_BUCKETS / 2; i++)
++			info->histogram[i] = info->histogram[2 * i] + info->histogram[2 * i + 1];
++		for (; i < HISTOGRAM_BUCKETS; i++)
++			info->histogram[i] = 0;
++	}
++	info->histogram[t]++;
+ 
+ 	return 0;
+ }
+ 
+-static void test_perf_kallsyms_lookup_name(void)
++static noinline_for_stack void test_perf_kallsyms_lookup_name(void)
+ {
+-	struct test_stat stat;
+-
+-	memset(&stat, 0, sizeof(stat));
+-	stat.min = INT_MAX;
+-	kallsyms_on_each_symbol(lookup_name, &stat);
+-	pr_info("kallsyms_lookup_name() looked up %d symbols\n", stat.real_cnt);
+-	pr_info("The time spent on each symbol is (ns): min=%d, max=%d, avg=%lld\n",
+-		stat.min, stat.max, div_u64(stat.sum, stat.real_cnt));
++	struct lookup_name_info info;
++	unsigned int idx, scale, row;
++	char line[HISTOGRAM_BUCKETS];
++	int len;
 +
-+	skel = open_skel();
-+	if (!skel)
-+		return;
++	memset(&info, 0, sizeof(info));
++	info.min = ~0u;
++	kallsyms_on_each_symbol(lookup_name, &info);
++	pr_info("kallsyms_lookup_name() looked up %d symbols, average %lld ns\n",
++		info.count, div_u64(info.sum, info.count));
++	pr_info("\tfastest %u ns (%s)\n", info.min, info.min_name);
++	pr_info("\tslowest %u ns (%s)\n", info.max, info.max_name);
 +
-+	anon = mmap(NULL, 2 * ps, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	if (!ASSERT_NEQ(anon, MAP_FAILED, "mmap_anon"))
-+		goto out;
-+	anon[0] = 1;
-+	ASSERT_EQ(do_import_dax(skel, anon, 0, 1), -EINVAL, "anon");
-+	ASSERT_EQ(do_import_dax(skel, anon + 1, 0, 1), -EINVAL, "unaligned_src");
-+	ASSERT_EQ(do_import_dax(skel, anon, 0, 0), -EINVAL, "zero_pages");
-+	ASSERT_EQ(do_import_dax(skel, anon, 0, bpf_map__max_entries(skel->maps.arena) + 1),
-+		  -EINVAL, "too_many_pages");
-+	if (ASSERT_OK(munmap(anon + ps, ps), "munmap"))
-+		ASSERT_EQ(do_import_dax(skel, anon + ps, 0, 1), -EINVAL, "unmapped");
-+
-+	/* Memory with a file behind it is imported by file */
-+	fd = make_memfd(F_SEAL_SHRINK);
-+	if (fd < 0)
-+		goto out;
-+	shm = mmap(NULL, ps, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-+	if (ASSERT_NEQ(shm, MAP_FAILED, "mmap_memfd"))
-+		ASSERT_EQ(do_import_dax(skel, shm, 0, 1), -EINVAL, "memfd");
-+
-+	/* Nothing above may leave a range behind */
-+	ASSERT_OK(do_alloc(skel, 0, 8), "alloc_all");
-+out:
-+	if (shm != MAP_FAILED)
-+		munmap(shm, ps);
-+	/* Both pages, the second one may still be mapped */
-+	if (anon != MAP_FAILED)
-+		munmap(anon, 2 * ps);
-+	if (fd >= 0)
-+		close(fd);
-+	arena_import__destroy(skel);
-+}
-+
-+void serial_test_arena_import(void)
-+{
-+	ps = sysconf(_SC_PAGESIZE);
-+
-+	if (test__start_subtest("share"))
-+		test_share();
-+	if (test__start_subtest("free"))
-+		test_free();
-+	if (test__start_subtest("invalid"))
-+		test_invalid();
-+	if (test__start_subtest("user_fault"))
-+		test_user_fault();
-+	if (test__start_subtest("dax_invalid"))
-+		test_dax_invalid();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/arena_import.c b/tools/testing/selftests/bpf/progs/arena_import.c
-new file mode 100644
-index 0000000000000..db9cac832a043
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/arena_import.c
-@@ -0,0 +1,93 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 NVIDIA Corporation */
-+
-+#define BPF_NO_KFUNC_PROTOTYPES
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf_arena_common.h>
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARENA);
-+	__uint(map_flags, BPF_F_MMAPABLE);
-+	__uint(max_entries, 9); /* number of pages, page 0 is left unused */
-+} arena SEC(".maps");
-+
-+int bpf_arena_import_memfd(void *map, void __arena *addr, __u32 page_cnt,
-+			   int fd, __u64 off) __ksym;
-+int bpf_arena_import_dax(void *map, void __arena *addr, __u32 page_cnt,
-+			 __u64 src) __ksym;
-+
-+char __arena *base;	/* in:  user address of the arena */
-+__u64 page_size;	/* in:  page size */
-+__u32 pg;		/* in:  arena page index */
-+__u32 page_cnt;		/* in:  number of pages */
-+int fd;			/* in:  memfd to import */
-+__u64 fd_off;		/* in:  byte offset in the memfd */
-+__u64 src;		/* in:  user address of the pages to import by address */
-+__u64 val;		/* in/out: value written/read at the start of page pg */
-+int ret;		/* out: result of the last operation */
-+
-+#ifdef __BPF_FEATURE_ADDR_SPACE_CAST
-+const volatile bool skip = false;
-+#define ARENA_OP(stmt)	stmt
-+
-+/*
-+ * Page pg of the tests is arena page pg + 1. Arena page 0 is left unused: its
-+ * address is NULL to the kfuncs when the arena starts on a 4GB boundary.
-+ */
-+static __always_inline char __arena *page_addr(void)
-+{
-+	/* Programs that only dereference arena pointers must still use the map */
-+	asm volatile("" :: "r"(&arena));
-+	return base + (pg + 1) * page_size;
-+}
-+#else
-+/* Arena pointers need the compiler's address space casts, the tests skip */
-+const volatile bool skip = true;
-+#define ARENA_OP(stmt)
-+#endif
-+
-+SEC("syscall")
-+int op_import(void *ctx)
-+{
-+	ARENA_OP(ret = bpf_arena_import_memfd(&arena, page_addr(), page_cnt, fd, fd_off));
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int op_import_dax(void *ctx)
-+{
-+	ARENA_OP(ret = bpf_arena_import_dax(&arena, page_addr(), page_cnt, src));
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int op_alloc(void *ctx)
-+{
-+	ARENA_OP(ret = bpf_arena_alloc_pages(&arena, page_addr(), page_cnt, NUMA_NO_NODE, 0) ?
-+		       0 : -1);
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int op_free(void *ctx)
-+{
-+	ARENA_OP(bpf_arena_free_pages(&arena, page_addr(), page_cnt));
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int op_write(void *ctx)
-+{
-+	ARENA_OP(*(__u64 __arena *)page_addr() = val);
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int op_read(void *ctx)
-+{
-+	ARENA_OP(val = *(__u64 __arena *)page_addr());
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
++	scale = 0;
++	for (idx = 0; idx < HISTOGRAM_BUCKETS; idx++) {
++		if (scale < info.histogram[idx])
++			scale = info.histogram[idx];
++	}
++	row = 8;
++	scale /= row;
++	pr_info("\tDistribution, %uns per column, %u counts per *:\n",
++		HISTOGRAM_RESOLUTION << info.scale, scale);
++	while (row--) {
++		memset(line, ' ', sizeof(line));
++		len = 0;
++		for (idx = 0; idx < HISTOGRAM_BUCKETS; idx++) {
++			if (info.histogram[idx] > row * scale) {
++				len = idx + 1;
++				line[idx] = '*';
++			}
++		}
++		pr_info("\t|%.*s\n", len, line);
++	}
+ }
+ 
+ static int find_symbol(void *data, const char *name, unsigned long addr)
+@@ -207,7 +292,7 @@ static int find_symbol(void *data, const char *name, unsigned long addr)
+ 	return 0;
+ }
+ 
+-static void test_perf_kallsyms_on_each_symbol(void)
++static noinline_for_stack void test_perf_kallsyms_on_each_symbol(void)
+ {
+ 	u64 t0, t1;
+ 	struct test_stat stat;
+@@ -240,7 +325,7 @@ static int match_symbol(void *data, unsigned long addr)
+ 	return 0;
+ }
+ 
+-static void test_perf_kallsyms_on_each_match_symbol(void)
++static noinline_for_stack void test_perf_kallsyms_on_each_match_symbol(void)
+ {
+ 	u64 t0, t1;
+ 	struct test_stat stat;
+@@ -254,7 +339,7 @@ static void test_perf_kallsyms_on_each_match_symbol(void)
+ 	pr_info("kallsyms_on_each_match_symbol() traverse all: %lld ns\n", t1 - t0);
+ }
+ 
+-static int test_kallsyms_basic_function(void)
++static noinline_for_stack int test_kallsyms_basic_function(void)
+ {
+ 	int i, j, ret;
+ 	int next = 0, nr_failed = 0;
+@@ -425,9 +510,9 @@ static int test_entry(void *p)
+ 	}
+ 
+ 	test_kallsyms_compression_ratio();
+-	test_perf_kallsyms_lookup_name();
+ 	test_perf_kallsyms_on_each_symbol();
+ 	test_perf_kallsyms_on_each_match_symbol();
++	test_perf_kallsyms_lookup_name();
+ 	pr_info("finish\n");
+ 
+ 	return 0;
 -- 
-2.56.1
+2.39.5
 
