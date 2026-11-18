@@ -1,64 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.203
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.7
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794970961;
-	b=ev86OyfCplK0scms9C4tlOvCqra7k3OiKPS94/GuBG3MJkQ9/VqBS8tooc55dye4kxzD
-	 VPw4DYhc86pEbilfb5WqLrTMwUAVoIEvzmFsaV9U9V1045SkXaWdZ91U3fji2RN+Quxn/
-	 PZDbs4ZryAiDPPg8c/1SjD9F1VZV2x6Irw5hNGSOoWHP/IT1C6lzrRssN6iXoK8dIIG04
-	 Twc6Lkoj3EU39tzdHrTy8SwFrashl0RAusqtwL6DSqTC3Tn6Rw+vflr82lwuNWtpV1mL6
-	 4y1lEriXgo8rchIj4yqE+X3o94/XXGJThZDkwoANvCNdYJOM33YtlxGMQdum1TDtU2g==
+	t=1794972202;
+	b=28MArhTJibEer4pAjtQOiYmUdMC8k/g7XfYcOPi5PjoeAOSPYcXsgChr1CHAUcXzFkXJ
+	 7zfXrkYLZJbjuIRAlZhByOeT4MByk7Nzx0fPVIR9auiyg5PtVanCmiN1uKki2u/29PJBN
+	 U6GaNI73Cfc0D39PZybXMEfLgDvypdhZzQoTi7Mw7VLLgskVVq0rvzCz+AJ2HJ4oTEnPz
+	 xeHIlTX9qTmvcwvt5wbPmoPahRWAT/MIiX5IV+K+riaszQv96qc8BZA2Skgz6ZkMbOghG
+	 wzft0TRtg8ztmE4JVE1OyhCiEgyrrkMOXRf7soGo66ObUcwR8fP5pNL4OCGIKNBjpog==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794970961;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=QBDyWzDsJEXBE+HUMN83GaHrQvFEUg2tZXZUzLfc4I8=;
-	b=QFERpuQl7OG1Wcf7zgl2Ofq40Bup9x92y1djwOIbOHKb2mAywbnnVZAeNhzU/+tkwv8u
-	 MB1JzVjFde9o/yDX7V+Jlz56uqrXm3oTcwS9lkhrdFAlrjZMNEIAaLKSdJ2d+eSqylfI3
-	 UYF3JJYqhA/lmjnSttnYgMjzt0+RJMFxd0NgGzMu9Zmb+HxtxxYVYjQrbRM7SMZvwGfuQ
-	 em3nyisob/nbDYPmao32FHZ+yBdPX2Wi64SDrEVEbjzFGssrFdyYzSAE6A/WwkF/L9I7U
-	 ZH6qp6lsV7uwzT3R80YiYEvwjDq+9SeC1lqEChoC02i3Q+7Mm6dzRWW2t1T1T5R7x8g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794972202;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:From:To:Cc:Subject:
+	 Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=V+GRT8jmmR2U3WQugHms8GO9CFAw66uZfviPgj8Fkc4=;
+	b=H8exJrr2MrQAExFDYU1FTZd9xVilu5aPa5pnBjSWaeWvlKPCM1lJWah4eBePMCQygP6a
+	 4Cj+gCAg7KAH0YvIghgRlzhIatHo17Qt3SuCqsXZehDJsminBIhAgsuzHHMSHxIrNJlaV
+	 9FNd5wqtxlEgwJvmVI3rIv6VuaUHZuhfrJF2e4PaW0v+XTFia5cULoVwkVR1nw2dvSzkK
+	 BGYp8lUGXZs/gzEaZWYKOYd7YpGRuDCQcdBjNWalkghHVXSM0BJhmQX7Y5aq+UbqOsY15
+	 GdxV40RHDDBnBd+tymEmNCrA3V1cNaFJNnO11FwE4Tiz5BJCqdP9puXswDyA6KUmGnA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=mbCXTH6K;
-	arc=none smtp.remote-ip=91.218.175.203
-Received: from mta0.migadu.com (out-203.mta0.migadu.com [91.218.175.203])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=linux.intel.com;
+	spf=pass smtp.mailfrom=linux.intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=c57gXhmC;
+	arc=none smtp.remote-ip=192.198.163.7
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48D2B606A331
-	for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 03:02:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 48D2B606A331
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CCCF606A334;
+	Wed, 18 Nov 2026 03:23:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0CCCF606A334
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=mbCXTH6K
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=RfydaBjTvqp0ShnNlaeJnvlPZ3CZOLNGFmInsl50U98=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794970959; v=1; x=1795575759;
- b=mbCXTH6KEBNLQKqghEfJNW//WuPDRk1gq3mzbVQiepxryrwR19BTZbpaD+yrrTaGWbVxez/L
- PBU62/HDuLzCtPgN/9spIe1eEC5v7Zcch5tiZ9OQpmJjGxvZmUODNshuumHfZDQaTfe302Z4NDj
- 4JvP4u9e7V2t1UqQsZ98L7ig=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 18f3657c6622a384;
-	Wed, 18 Nov 2026 03:02:39 +0000
-X-Mizu-Trace-ID: 18f3657c6622a384
-X-Migadu-Flow: FLOW_OUT
-From: George Guo <dongtai.guo@linux.dev>
-To: chenhuacai@kernel.org,
-	yangtiezhu@loongson.cn
-Cc: hengqi.chen@gmail.com,
-	guodongtai@kylinos.cn,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=c57gXhmC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794972203; x=1826508203;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=7OgCwOWMH7Rv9ak/pARtImDYvl5rqIdloRm+k7LX1VE=;
+  b=c57gXhmCjLYSNG8BdiK4+hJ0hvvF/uiDVw5T8UtvnElh6GP1AdI7dMjo
+   jqBnDWllOQwQfP8S4GVyWwpIFDg+jfviyAZLqUqT6PMIqVL9uabZvXRTD
+   b7zlo2dUP10kf8RPtCetw6SMmKA1G0d5CDB6rSL4VMjIJBsm5Cn4xPrYI
+   UY6vRFolkHaV9X+a2e/2tSGbABtWz6/8S8ZmG0Ho57R9LqN68uTeI/g8R
+   E0JQAyYHHLJhMi4CIdM6q44SWim0NQNd2dmsZAZLsy0bWLu19RdF7qXT+
+   b5nbr58d74ZwfaEormGdh4W68FEdpijISlR2P+1Cd8TfWX8oaVudNwPYb
+   Q==;
+X-CSE-ConnectionGUID: rSGsTOLkRjmlDyomelwKkw==
+X-CSE-MsgGUID: 6MofE8QdSw++BHGfgrvl0g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11969"; a="3629817"
+X-IronPort-AV: E=Sophos;i="6.27,219,1787036400"; 
+   d="scan'208";a="3629817"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2026 19:23:00 -0800
+X-CSE-ConnectionGUID: QnfkzL9VQ+qCUnhMb5SBNw==
+X-CSE-MsgGUID: 8mR/2qOITWK33ptx4iibyQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,219,1787036400"; 
+   d="scan'208";a="9894122"
+Received: from spr.sh.intel.com ([10.112.229.196])
+  by orviesa004.jf.intel.com with ESMTP; 17 Nov 2026 19:22:55 -0800
+From: Dapeng Mi <dapeng1.mi@linux.intel.com>
+To: Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Andi Kleen <ak@linux.intel.com>,
+	Eranian Stephane <eranian@google.com>,
+	Sandipan Das <sandipan.das@amd.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Song Liu <song@kernel.org>,
+	Ravi Bangoria <ravi.bangoria@amd.com>,
+	Ananth Narayan <ananth.narayan@amd.com>
+Cc: linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
 	bpf@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH] LoongArch: BPF: Fix the offset of stptr.w and stptr.d stores
-Date: Wed, 18 Nov 2026 12:02:18 +0900
-Message-ID: <20261118030219.6230-1-dongtai.guo@linux.dev>
-X-Mailer: git-send-email 2.53.0
+	Dapeng Mi <dapeng1.mi@intel.com>,
+	Zide Chen <zide.chen@intel.com>,
+	Falcon Thomas <thomas.falcon@intel.com>,
+	Xudong Hao <xudong.hao@intel.com>,
+	Dapeng Mi <dapeng1.mi@linux.intel.com>
+Subject: [Patch v7 02/24] perf/x86/intel: Validate LBR XSAVE state before updating LBR stack
+Date: Wed, 18 Nov 2026 11:14:31 +0800
+Message-Id: <20261118031453.1353625-3-dapeng1.mi@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20261118031453.1353625-1-dapeng1.mi@linux.intel.com>
+References: <20261118031453.1353625-1-dapeng1.mi@linux.intel.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -70,116 +101,51 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: George Guo <guodongtai@kylinos.cn>
+intel_pmu_arch_lbr_read_xsave() did not verify whether LBR data was
+actually present in the XSAVE area. When the LBR state was in the INIT
+state, the hardware might not have written valid data to the XSAVE
+buffer, allowing stale or incomplete data to be cached.
 
-When testing bpf selftests "jit_insns" and "jit_insns_blinded", the
-"ldst_offsets" subtest fails for word and doubleword stores:
+Add an explicit presence check for the LBR XSAVE state before updating
+the cached LBR stack. Also clear the cached LBR stack in
+intel_pmu_lbr_reset() to prevent stale entries from being reused across
+context switches and similar transitions.
 
-  store_offsets:FAIL:stx size=24 base=r9 src=r0: byte at offset -16384
-  unexpected ... actual 255 != expected 67
-  ...
-  #197/11  jit_insns_blinded/ldst_offsets:FAIL
-
-This is because the JIT emits stptr.w or stptr.d for store offsets
-that do not fit a signed 12-bit immediate but fit a signed 14-bit
-immediate, and passes the byte offset directly to the instruction
-encoder. However, these instructions scale their signed 14-bit
-immediate by 4 when calculating the memory address. For example, a
-store at offset -4096 writes at offset -16384 instead, outside the
-memory range checked by the verifier.
-
-Pass the offset in units of 4 bytes when emitting stptr.w and stptr.d
-for both immediate and register stores. Use these instructions only
-for offsets that are multiples of 4 in the range [-32768, 32764], and
-keep the register-offset fallback for other offsets that do not fit
-the signed 12-bit immediate of st.w or st.d.
-
-With this patch, both "ldst_offsets" subtests pass:
-
-  $ sudo ./test_progs -t jit_insns -t jit_insns_blinded
-  ...
-  #196/26  jit_insns/ldst_offsets:OK
-  ...
-  #197/11  jit_insns_blinded/ldst_offsets:OK
-
-Cc: stable@vger.kernel.org
-Fixes: 5dc615520c4d ("LoongArch: Add BPF JIT support")
-Signed-off-by: George Guo <guodongtai@kylinos.cn>
+Fixes: c085fb877467 ("perf/x86/intel/lbr: Support XSAVES for arch LBR read")
+Signed-off-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
 ---
- arch/loongarch/net/bpf_jit.c | 16 ++++++++--------
- arch/loongarch/net/bpf_jit.h |  9 +++++++++
- 2 files changed, 17 insertions(+), 8 deletions(-)
+ arch/x86/events/intel/lbr.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-index 15af1abb5cb6..16e59722620f 100644
---- a/arch/loongarch/net/bpf_jit.c
-+++ b/arch/loongarch/net/bpf_jit.c
-@@ -1400,8 +1400,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
- 			move_imm(ctx, t1, imm);
- 			if (is_signed_imm12(off)) {
- 				emit_insn(ctx, stw, t1, dst, off);
--			} else if (is_signed_imm14(off)) {
--				emit_insn(ctx, stptrw, t1, dst, off);
-+			} else if (is_ptr_off(off)) {
-+				emit_insn(ctx, stptrw, t1, dst, off >> 2);
- 			} else {
- 				move_imm(ctx, t2, off);
- 				emit_insn(ctx, stxw, t1, dst, t2);
-@@ -1411,8 +1411,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
- 			move_imm(ctx, t1, imm);
- 			if (is_signed_imm12(off)) {
- 				emit_insn(ctx, std, t1, dst, off);
--			} else if (is_signed_imm14(off)) {
--				emit_insn(ctx, stptrd, t1, dst, off);
-+			} else if (is_ptr_off(off)) {
-+				emit_insn(ctx, stptrd, t1, dst, off >> 2);
- 			} else {
- 				move_imm(ctx, t2, off);
- 				emit_insn(ctx, stxd, t1, dst, t2);
-@@ -1460,8 +1460,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
- 		case BPF_W:
- 			if (is_signed_imm12(off)) {
- 				emit_insn(ctx, stw, src, dst, off);
--			} else if (is_signed_imm14(off)) {
--				emit_insn(ctx, stptrw, src, dst, off);
-+			} else if (is_ptr_off(off)) {
-+				emit_insn(ctx, stptrw, src, dst, off >> 2);
- 			} else {
- 				move_imm(ctx, t1, off);
- 				emit_insn(ctx, stxw, src, dst, t1);
-@@ -1470,8 +1470,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
- 		case BPF_DW:
- 			if (is_signed_imm12(off)) {
- 				emit_insn(ctx, std, src, dst, off);
--			} else if (is_signed_imm14(off)) {
--				emit_insn(ctx, stptrd, src, dst, off);
-+			} else if (is_ptr_off(off)) {
-+				emit_insn(ctx, stptrd, src, dst, off >> 2);
- 			} else {
- 				move_imm(ctx, t1, off);
- 				emit_insn(ctx, stxd, src, dst, t1);
-diff --git a/arch/loongarch/net/bpf_jit.h b/arch/loongarch/net/bpf_jit.h
-index 2bd0dc5b911c..5207ad30fade 100644
---- a/arch/loongarch/net/bpf_jit.h
-+++ b/arch/loongarch/net/bpf_jit.h
-@@ -52,6 +52,15 @@ do {										\
- #define is_signed_imm52(val)	signed_imm_check(val, 52)
- #define is_unsigned_imm12(val)	unsigned_imm_check(val, 12)
+diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
+index 0b446d8912e4..3d41385c4924 100644
+--- a/arch/x86/events/intel/lbr.c
++++ b/arch/x86/events/intel/lbr.c
+@@ -198,6 +198,7 @@ void intel_pmu_lbr_reset(void)
  
-+/*
-+ * ldptr.{w,d} and stptr.{w,d} take a 14-bit signed immediate in units of
-+ * 4 bytes: they reach a multiple of 4 in [-32768, 32764], passed as off >> 2.
-+ */
-+static inline bool is_ptr_off(int off)
-+{
-+	return !(off & 3) && is_signed_imm16(off);
-+}
-+
- static inline int bpf2la_offset(int bpf_insn, int off, const struct jit_ctx *ctx)
- {
- 	/* BPF JMP offset is relative to the next instruction */
-
-base-commit: aebb7274476403040d582c61478df8f4a7bf9cd3
+ 	x86_pmu.lbr_reset();
+ 
++	cpuc->lbr_stack.nr = 0;
+ 	cpuc->last_task_ctx = NULL;
+ 	cpuc->last_log_id = 0;
+ 	if (!cpu_feature_enabled(X86_FEATURE_ARCH_LBR) && cpuc->lbr_select)
+@@ -1010,9 +1011,15 @@ static void intel_pmu_arch_lbr_read_xsave(struct cpu_hw_events *cpuc)
+ 		intel_pmu_store_lbr(cpuc, NULL);
+ 		return;
+ 	}
++	xsave->header.xfeatures = 0;
+ 	xsaves(&xsave->xsave, XFEATURE_MASK_LBR);
+ 
+-	intel_pmu_store_lbr(cpuc, xsave->lbr.entries);
++	if (xsave->header.xfeatures & XFEATURE_MASK_LBR) {
++		intel_pmu_store_lbr(cpuc, xsave->lbr.entries);
++	} else {
++		/* Clear the LBR stack to avoid leaking stale entries. */
++		cpuc->lbr_stack.nr = 0;
++	}
+ }
+ 
+ void intel_pmu_lbr_read(void)
 -- 
-2.53.0
+2.34.1
 
