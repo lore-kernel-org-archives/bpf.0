@@ -1,140 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.134.164.83
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795010894;
-	b=KWbMdUxZStBczeeoNgIZb9SScHt4ybvJ/FYtaFQ19RPVG2XuuKKOe0HsPpvgoYaFhvgT
-	 E/rnp0dc6NfRB8aeUIgQtKnrjO5/MzghY40eobaZHhAY4pGilaTxRZbuuVHgxhBhue0VI
-	 H16K9UXrFY46KOOu1YTuZD6pAlET6UhKqQu4XEqMJHlvovqc9xHHTkuy15SMSGBmum8T6
-	 0vUFbi5ChCnwDrEHspR3yOKZWoNPISefxodaHiPLt8AZBf4ApBW7x+TpDP+NDuZTFrRnL
-	 CvNnr+c7ThoCzUMfcSRqJWpVkdEYfk5BUUIM4EjPmVeylgg/KDmmTvcacHSrYDTyC9Q==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795010894;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:Received:Date:From:To:cc:Subject:In-Reply-To:Message-ID:
-	 References:MIME-Version:Content-Type;
-	bh=kSUE/o5CqDYurph69R6wpud9Np7SIjoEFQ7s0L3TdZE=;
-	b=4EMIilZ8cQtQTU/9VXo4mmb8fbzLhKV+0okgLf0eKcOJXybmFA9VHsYRhNlbxqjq4+r9
-	 LWB2NKL62TBtc5gSUJVelUH9mxw3kwCj0gq+I1ejZItlHBAxodJUo+tzzaxLGQqnv6y2R
-	 OTOubtdXh1IT87QU24bIMWOfVggy+ObAODJZ4Ro71J4bTd0UZxjIckWs3GLj8vt/UhcF3
-	 kwfgkw+8Jx1wpv4BeCUD3WQGWsS1k4KUbOCsjoXtHiTnV02MgNTPmXWZ3/jAKSiKIPhOf
-	 YWcmltS3oip51jspxf3tqTjJnvMihuC6xyliU2UP8NmTvu6kwtuEfpbNzdj+kTsNeKw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=inria.fr;
-	spf=pass smtp.mailfrom=inria.fr;
-	dkim=pass header.d=inria.fr header.i=@inria.fr header.a=rsa-sha256 header.s=dc header.b=lO8vUGAB;
-	arc=none smtp.remote-ip=192.134.164.83
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.43
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795011498;
+	b=VNO+tbFLDuRrEJ3yAub9NWQwFTejUSQyHjB13zYwscZeXHHqkJJK5R0KC+DGZ+pP7KxA
+	 YBytGX4g+5utp1VzKqUNWY3X60Dd8qcNlYMupYb1Cvz3x+3L0GvliN3HJraUwBFq4BDUJ
+	 u/QCrf9TMVIWt2O5pv/eHTOjC0WvhN/P4qBGwqh/INQjus24edrSWB1mt1pgONglmG+3r
+	 x77xaHipkpXdDAC/FKS+od6hicY5FSxKJnSbyHLcleDdd3z7gMepF4Czv6zpovEOXFXnQ
+	 FK3igD+Vl8S59mV0FsMt940zd7HTEn0CgAlm6fAjw13juD02zwMwvtIB+tbTq603gPw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795011498;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=E995rutgSzyg1i9LNX9zVJhyluCmPXgjFoQIxd7q954=;
+	b=1jtHjPwq9ewoIV8Ykmm7YjjRJxIFC9iIz1YMIW22/we+38tmbmGu65t6SbJf/EnUZkO4
+	 /K3lT+rAHwjPcXeJcUBCnihxLlux6oZAmPpYfVjM6sx77RV4hKlQpXp5tms0/VY0txEAQ
+	 1Wb7vkJxRlD6J55tGafqcdWeBpH1AosLdE37I8GaX5RAal/U9twT3KpniQvbJ2Aj5+8p3
+	 4XiQHr3TaE62w9FfE9P1SEN2VdGzesz1vox/5zanqWaFBsWQiUTjhoUi5mQ3oAUgmH0KG
+	 NWZiFevNVgdI5ywr4useRdfZUyevJej9eb501gHEyehKm+pA4Mog1V9VIO5jh6r7qew==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=none header.from=amutable.com;
+	spf=pass smtp.mailfrom=amutable.com;
+	dkim=pass header.d=amutable-com.20260707.gappssmtp.com header.i=@amutable-com.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=AUModmDo;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.43
+Received: from mail-yx1-f43.google.com (mail-yx1-f43.google.com [74.125.224.43])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3878B606A31C;
-	Wed, 18 Nov 2026 14:08:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3878B606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inria.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inria.fr
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E0D60A2601
+	for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 14:18:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A6E0D60A2601
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amutable.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amutable.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=inria.fr header.i=@inria.fr header.a=rsa-sha256 header.s=dc header.b=lO8vUGAB
+	dkim=pass (2048-bit key, unprotected) header.d=amutable-com.20260707.gappssmtp.com header.i=@amutable-com.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=AUModmDo
+Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-67da62357acso1351107d50.0
+        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 06:18:17 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795011496; cv=none;
+        d=google.com; s=arc-20260327;
+        b=ABtaindXrlKoZhzkxCDb9Wwf2vwp5nJze5me+YqbMuPW9h3hepO/XNsenxbOvRKv9n
+         jjiWMiQHeF7uhXxDZ2EM6syHa7QjWvi5wEABKhBvJNha9iWgmGngXw+74sTt4zUo3Kq4
+         l0fYcir0/ZK+UL+qdBaIr05Hkw9pKx7wXZvLcvhnfk7qsM5ouQkT+NOEqkH04ebyLbRY
+         YbyRlJ5Re5cunhCpJcN+Ori0RakaBI0lZM2RJGd/rkHoa+d/FvurnUKN7R9Dzr/P1f2R
+         XhxPhmxa+wr8Wq7b+r4iui+GzB+GDcZhDa+RNJKzaQ1YtxEN1j5pVRUGcARM7G3SYm6O
+         EONg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=E995rutgSzyg1i9LNX9zVJhyluCmPXgjFoQIxd7q954=;
+        fh=GE/BhCRMi/jygplqNyU4h7J6avkHwfmBoOozJdHASSI=;
+        b=d3n1LUfKAS/xBb2V1F+XlbYmoaAQ7XrzFGTWWuqcN/j4CTkOyPcIL2SXjk2YCaP/iO
+         +6uZn7n2UwT33YtoHLn1YlhYf4xWUZbweMpAOcw6+tX8AvcaK05JzUS6lKCMdhToHRlp
+         iRScDNpjgbdgwjxaNTOunL4hkMY2aSoYHTnBLbJV3OyahmIWw53G1lEQeoBpSjzp8vIb
+         GD7jVu/XiFgqcJQn2LCY8dLKkkXaV6M6I5iDo6ehRL7CYiatmW/w2rj9Wnkxe5w/x2ZP
+         L994Ppic1MVG4ji9Ojz+qQJskWN6lznXc2wgg+BPzX3W5c/jUTrlwPuQ44SG0lFnj6TL
+         dDRg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=kSUE/o5CqDYurph69R6wpud9Np7SIjoEFQ7s0L3TdZE=;
-  b=lO8vUGABN3SRz8stmFI6GOw5EdtNndRF+CQvv0/fdjATmxkGTAFZQyyX
-   q3S3Iji9niTjJuaRWhbudJSEAZZKtnIYWDJnU5+hLPXuIFXtC4McFue5K
-   zJmH9mSahEE3uuCKvqXtwc7RUVjEQny86msZaIn/W22PRg53MToih5RN6
-   4=;
-X-CSE-ConnectionGUID: NpDResvMRHWEoFCgk5A11w==
-X-CSE-MsgGUID: tkj3zeBCTZKFS5tJsQM2+w==
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="6.27,219,1787004000"; 
-   d="scan'208";a="306121450"
-Received: from 72-255-236-003.static.imsbiz.com (HELO hadrien) ([72.255.236.3])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2026 15:07:35 +0100
-Date: Wed, 18 Nov 2026 22:07:31 +0800 (+08)
-From: Julia Lawall <julia.lawall@inria.fr>
-To: Bence Csokas <bence.csokas@arm.com>
-cc: Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
-    Marcel Holtmann <marcel@holtmann.org>, 
-    Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
-    Sumit Semwal <sumit.semwal@linaro.org>, 
-    =?ISO-8859-15?Q?Christian_K=F6nig?= <christian.koenig@amd.com>, 
-    Philipp Stanner <phasta@kernel.org>, 
-    Sudeep Holla <sudeep.holla@kernel.org>, 
-    Cristian Marussi <cristian.marussi@arm.com>, 
-    Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-    Maxime Ripard <mripard@kernel.org>, 
-    Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
-    Simona Vetter <simona@ffwll.ch>, Jani Nikula <jani.nikula@linux.intel.com>, 
-    Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, 
-    Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-    Tvrtko Ursulin <tursulin@ursulin.net>, Lyude Paul <lyude@redhat.com>, 
-    Danilo Krummrich <dakr@kernel.org>, Zack Rusin <zack.rusin@broadcom.com>, 
-    Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
-    Selvin Xavier <selvin.xavier@broadcom.com>, 
-    Kalesh AP <kalesh-anakkur.purayil@broadcom.com>, 
-    Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
-    Chengchang Tang <tangchengchang@huawei.com>, 
-    Junxian Huang <huangjunxian6@hisilicon.com>, 
-    Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
-    Hans de Goede <hansg@kernel.org>, 
-    Mauro Carvalho Chehab <mchehab@kernel.org>, 
-    Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
-    Dexuan Cui <decui@microsoft.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-    "David S. Miller" <davem@davemloft.net>, 
-    Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
-    Paolo Abeni <pabeni@redhat.com>, 
-    Miri Korenblit <miriam.rachel.korenblit@intel.com>, 
-    Jes Sorensen <Jes.Sorensen@gmail.com>, Ping-Ke Shih <pkshih@realtek.com>, 
-    Johannes Berg <johannes@sipsolutions.net>, 
-    Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
-    Guenter Roeck <groeck@chromium.org>, Nilesh Javali <njavali@marvell.com>, 
-    GR-QLogic-Storage-Upstream@marvell.com, 
-    "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
-    "Martin K. Petersen" <mkp@kernel.org>, 
-    Julia Lawall <Julia.Lawall@inria.fr>, 
-    Nicolas Palix <nicolas.palix@imag.fr>, 
-    Alexander Viro <viro@zeniv.linux.org.uk>, 
-    Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-    Paulo Alcantara <pc@manguebit.org>, Namjae Jeon <linkinjeon@kernel.org>, 
-    Ronnie Sahlberg <ronniesahlberg@gmail.com>, 
-    Shyam Prasad N <sprasad@microsoft.com>, Tom Talpey <tom@talpey.com>, 
-    Bharath SM <bharathsm@microsoft.com>, Carlos Maiolino <cem@kernel.org>, 
-    Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-    Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>, 
-    Davidlohr Bueso <dave@stgolabs.net>, 
-    =?ISO-8859-15?Q?Andr=E9_Almeida?= <andrealmeid@igalia.com>, 
-    Alexei Starovoitov <ast@kernel.org>, 
-    Daniel Borkmann <daniel@iogearbox.net>, 
-    Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-    Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-    Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-    Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-    Emil Tsalapatis <emil@etsalapatis.com>, 
-    Ihor Solodrai <ihor.solodrai@linux.dev>, Simon Horman <horms@kernel.org>, 
-    David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
-    Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
-    Steffen Klassert <steffen.klassert@secunet.com>, 
-    Herbert Xu <herbert@gondor.apana.org.au>, 
-    =?ISO-8859-15?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>, 
-    =?ISO-8859-15?Q?G=FCnther_Noack?= <gnoack@google.com>, 
-    Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-    "Serge E. Hallyn" <serge@hallyn.com>, "Geoffrey D. Bennett" <g@b4.vu>, 
-    Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
-    linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org, 
-    linux-bluetooth@vger.kernel.org, linux-media@vger.kernel.org, 
-    dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
-    arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-    intel-gfx@lists.freedesktop.org, nouveau@lists.freedesktop.org, 
-    linux-rdma@vger.kernel.org, linux-hyperv@vger.kernel.org, 
-    netdev@vger.kernel.org, linux-wireless@vger.kernel.org, 
-    chrome-platform@lists.linux.dev, linux-scsi@vger.kernel.org, 
-    cocci@inria.fr, linux-fsdevel@vger.kernel.org, linux-cifs@vger.kernel.org, 
-    samba-technical@lists.samba.org, linux-xfs@vger.kernel.org, 
-    bpf@vger.kernel.org, ipsec@lists.linux.dev, 
-    linux-security-module@vger.kernel.org, linux-sound@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] overflow: Add offsetofend() variant of
- struct_offset()
-In-Reply-To: <20261118-offsetof-v4-1-95b385c10b22@arm.com>
-Message-ID: <c6fbb025-8de-b716-5d32-877c3d3fa2a6@inria.fr>
-References: <20261118-offsetof-v4-0-95b385c10b22@arm.com> <20261118-offsetof-v4-1-95b385c10b22@arm.com>
+        d=amutable-com.20260707.gappssmtp.com; s=20260707; t=1795011496; x=1795616296; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=E995rutgSzyg1i9LNX9zVJhyluCmPXgjFoQIxd7q954=;
+        b=AUModmDof6ErWSMGyCdXNcxfTkCwx7QQL2OOBXQ7guAC6qyj7WSCpZaWOY6QzreIOx
+         4pS1K2knwQavnNNBqwkB7+CVuy4nIAO47uvqWWVcKyxSaO6HjJtoc//F5a0pyaE8S01s
+         /czjdm/4IH2mCCMXcGgJ+GZqDBEUEiy7q/sTAICpTY1pUfq86x1hJs/saKnvMVve4VAU
+         dhgD9wlXcDkxqLBCRCjgiv0lYbOp/01AnpGqDAN4hs0GNRXnJ/5567cggS43udDzh4hT
+         S1mqoJlVcJcBRP7sAPAVEiqwKlHWhgOXZR0SkDez/xXmjrYfV8KYm/x8HKsnMN15yy24
+         SeHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795011496; x=1795616296;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=E995rutgSzyg1i9LNX9zVJhyluCmPXgjFoQIxd7q954=;
+        b=w+Tbwz+fGw0nDj9mdv/A+xw32TFhKthZcp13q/ynnyRN9BK8npvaSsBvqsfYMC06sX
+         1UV3OQCbxpPjn5LBGzvEmh1yhwdWz39NKAKsaVkxTKYJo+IwlqmDujvUb+UOKHlBkEGz
+         H4/O43T6l4ZG0+EpJWf4aHlX74Fw8UGedJDn+kosSh99i53T+Sex30Sxw0yoIOzvhWQN
+         0j+A4oIPBYJ0mVtvFGK72gpgXmc89/ECrhw2Gngg1WIcxZRRP5xB2XmiriObyWbUf+yV
+         tL5oxyspK8qtYnDoIlkP8C6OSfM64dToKumHc1l3vGCLm8rlYExRM6T0IWBojvp4v4Fi
+         ib+A==
+X-Forwarded-Encrypted: i=1; AL+hErF7IsFJIELVPKsvnSqjrFMxPDaAr84I9yI1HX1eVegwU80V7zTIJh0tKZf+TvfCWvd6lHk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+F+/dTeklTJNUFApSvBYb9i9MqkdZiGPg62QzDUoxsS+150hbQ
+	5nEhbznVwLlLDUGD6C8ZTgWFGZfQWScYI8eagmDbJ2Rye6IbEndK2U7HGQcDN2bAeIJ/zOiy8GX
+	XF2563s+ByBjhylAi2PQ48iy3RwmvEMxR+Olt7tlmJ7Tg7bkq9CAUEA==
+X-Gm-Gg: AZFdTZce8dV0/d1O/E5EfAPosQkV5fcP9JaFJVfwl7CiZNwekhRYKfYQnt22M0peE1Q
+	tVSDLAuDpSU88eqotkMqk3l2tjbarmhcW+Vw0FVB7pb+xnU8be+uW3HUUcyglTtwkzQJfjianPo
+	XHKKLHYWuvytCM+gcYGYyn1ftmyd3DQsrzcAWp6M8VmVBqNEiXpbGYk2VRpD9zBLL2AhNbhlic+
+	ra4AdGHzqt9q+aMIhHxVcDKKGskj2VTMuQs9Qlm8RI5o2CtxiH1D7c+/IQdXWztE0tKNb7DMrke
+	EZtEMltVIdT2MZNUJZ6Pdn97f7BxJhJcjpXLz37CfNSaNfhAzKhrR6yqP014tLPeZvRhH0YDlhI
+	525vaKfp0TFjVEIrM/rKQ8ifHaznBJhaxtnrb73KO0/u8Mx8506zfR4tP7gN/BNqNCUYbHhM=
+X-Received: by 2002:a05:690e:190d:b0:679:a42b:f0dd with SMTP id
+ 956f58d0204a3-67dd3cf9efcmr1187071d50.14.1795011496626; Wed, 18 Nov 2026
+ 06:18:16 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -144,78 +104,194 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <d85ece6e-27f9-4d9f-83af-4101bc76fef6@app.fastmail.com>
+ <356db94e-f5d6-4fb2-839a-b97aef72256b@app.fastmail.com> <CAHC9VhR9sjunJRnM9gy-BkBZkapQTrr8a8FtmaK7JkAmUqTrLA@mail.gmail.com>
+ <CAEf4BzZKmn6g0SK8OddjKFj_vAmZFvpZv32Hs_S+GHgT7VNfrg@mail.gmail.com>
+ <9d6bdc31-e57c-4187-be78-29d82471f710@app.fastmail.com> <9695ec3d-7b81-488d-989f-0bd411d673f2@linux.dev>
+In-Reply-To: <9695ec3d-7b81-488d-989f-0bd411d673f2@linux.dev>
+From: Daan De Meyer <daan@amutable.com>
+Date: Wed, 18 Nov 2026 15:18:05 +0100
+X-Gm-Features: AclHuK_kSwvu5Jj3k6C9_kA8WpAYJGoXqqdOwo0daouusPGhJdTvAUCcGkN4sy0
+Message-ID: <CAPa8sAh6b5xn4rZzPfM0nZ+_kkywWj22fy8deLq+6qYews0rdQ@mail.gmail.com>
+Subject: Re: [BUG] bpf, lsm: new first argument in 7.4 inode hooks silently
+ breaks BPF LSMs
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: roblabla <linux@roblab.la>, Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
+	Paul Moore <paul@paul-moore.com>, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, paul.mabileau@harfanglab.fr, 
+	linux-kernel@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+Note that we've already merged code in systemd that depends on the
+current argument order, so I'd really prefer if it didn't change. If
+it does, do cc me on the patch so I can fix the issue in systemd.
 
+Cheers,
 
-On Wed, 18 Nov 2026, Bence Csokas wrote:
+Daan
 
-> Many call sites of offsetofend() use it for the purpose of pointer
-> artihmetic. Thus, a common usage pattern is:
+On Wed, Nov 18, 2026 at 1:52=E2=80=AFAM Ihor Solodrai <ihor.solodrai@linux.=
+dev> wrote:
 >
->   offsetofend(typeof(*ptr), member)
+> On 11/9/26 8:07 AM, roblabla wrote:
+> > Hi,
+> >
+> > Thanks for the replies!
+> >
+> >> [...]
+> >
+> > So what would be really nice is a way to make eBPF code robust against
+> > kernel changes such that it either works, or fails to load, but doesn't
+> > do the halfway "loads but silently misbehaves". Here are two ideas that
+> > have been in the back of my mind that could help solve this issue (thou=
+gh
+> > I understand that they may be rather large changes, I'm putting them ou=
+t
+> > there mostly as a conversation starter):
+> >
+> > 1. Could libbpf/the kernel have a mismatch check on hook arguments? I
+> >    understand that libbpf and the verifier don't know the types a
+> >    program expects, since BPF_PROG() only casts u64s. But the macro
+> >    does know the types at compile time. Could it (or an opt-in variant)
+> >    record the expected prototype in the program's BTF, so that libbpf
+> >    can compare it against the LSM hook's prototype in vmlinux BTF and
+> >    refuse to load on a mismatch?
+> >
+> > 2. Since kernel BTF has parameter names for the bpf_lsm_* functions,
+> >    could we maybe have CO-RE-style relocation to resolve "the argument
+> >    named dentry" to the argument index at load time? This way, adding a
+> >    new argument could happen anywhere in the argument list without
+> >    breaking eBPFs, and removing an argument will (correctly) cause our
+> >    eBPF to stop loading. It does mean the eBPF programs must provide th=
+e
+> >    same argument names, but maybe that's an acceptable tradeoff?
 >
-> Capturing this in one macro helps keep lines short and terse, while
-> still making the purpose clear. It also helps discourage spelling out
-> the type name on every callsite, leading to more maintainable code.
+> Hi everyone.
 >
-> A similar struct_offset() macro already exists, so add an offsetofend()
-> variant in the same spirit.
+> roblabla's comments got me curious, and I spent some time with my
+> helpful assistants poking at the problem.
 >
-> Signed-off-by: Bence Csokas <bence.csokas@arm.com>
+> There is another workaround in addition to what Andrii suggested.
+> A program can already make itself fail to load on a signature
+> mismatch:
+>
+>         union security_list_options___mine {
+>                 int (*inode_create)(struct inode *dir,
+>                                     struct dentry *dentry, umode_t mode);
+>         };
+>
+>         extern void lsm_proto_mismatch__inode_create(void) __ksym __weak;
+>
+>         SEC("lsm/inode_create")
+>         int BPF_PROG(deny_create, struct inode *dir, struct dentry *dentr=
+y)
+>         {
+>                 if (!bpf_core_type_matches(union security_list_options___=
+mine))
+>                         lsm_proto_mismatch__inode_create();
+>                 ...
+>         }
+>
+> bpf_core_type_matches() checks the expected prototype against the
+> hook's member of union security_list_options in kernel BTF.
+> On a mismatch the call to the unresolved weak kfunc stays reachable,
+> so the verifier rejects the program, and libbpf reports:
+>
+>   kfunc 'lsm_proto_mismatch__inode_create' is referenced but wasn't resol=
+ved
+>
+> It's positional and needs the exact argument count, but it turns
+> silent misbehavior into a load failure. The same should work for
+> tp_btf with the btf_trace_<tp> typedefs.
+>
+> But of course it's just a workaround..
+>
+> A bit more generally, expanding on roblabla's second idea, I think libbpf
+> could resolve hook arguments by name with the existing CO-RE machinery,
+> without kernel, verifier or LSM changes.
+>
+> The BPF side could look like this:
+>
+>         SEC("lsm/inode_create")
+>         int BPF_PROG_ARGS(deny_create, struct inode *, dir,
+>                           struct dentry *, dentry)
+>         { ... }
+>
+> BPF_PROG_ARGS() (name TBD) takes (type, name) pairs like BPF_PROG2(),
+> but instead of casting ctx[0], ctx[1], ... it reads each argument
+> through a local preserve_access_index-marked struct, so every argument
+> access is a regular CO-RE field relocation:
+>
+>         struct bpf_func_args___deny_create {
+>                 const struct mnt_idmap *idmap;  /* 7.4+ */
+>                 struct inode *dir;
+>                 struct dentry *dentry;
+>         } __attribute__((preserve_access_index));
+>
+>         SEC("lsm/inode_create")
+>         int deny_create(u64 *ctx)
+>         {
+>                 struct bpf_func_args___deny_create *args =3D (void *)ctx;
+>
+>                 if (bpf_core_field_exists(args->idmap))
+>                         /* use args->idmap */;
+>
+>                 return check(args->dir, args->dentry);
+>         }
+>
+> Nothing changes on the loader side:
+>
+>         skel =3D deny_create__open_and_load();
+>         if (!skel)      /* mismatch: load fails, libbpf logs why */
+>                 return -errno;
+>         err =3D deny_create__attach(skel);
+>
+> To achieve this libbpf would need to do the following at load time:
+>
+>   - treat bpf_func_args___* as a reserved type in CO-RE relocations;
+>   - find the program's attach target in kernel (or module) BTF:
+>     bpf_lsm_<hook>, the fentry/fexit target, or the tracepoint stub for
+>     tp_btf;
+>   - build a struct from the target's prototype: one member per
+>     parameter, named after it, at the parameter's ctx offset, plus 'ret'
+>     for fexit, fmod_ret and LSM;
+>   - resolve the relocations against it by name, with a strict type check
+>     (pointee types must match, qualifiers ignored), since CO-RE normally
+>     treats any two pointers as compatible.
+>
+> A missing argument or a type mismatch is a normal CO-RE relocation
+> failure: the program fails to load with an error naming the argument,
+> unless the access is guarded by bpf_core_field_exists().
+>
+> And this is not LSM specific, fentry/fexit/fmod_ret and tp_btf would
+> work the same way.
+>
+> It doesn't help if a hook keeps its signature but changes semantics,
+> or if the attach point goes away (that already fails to attach).
+>
+> Here is a vibe-coded prototype of the above:
+> https://github.com/kernel-patches/bpf/compare/bpf-next_base...theihor:bpf=
+:bpf-named-args
+>
+> It's an entirely new libbpf feature though.
+>
+> Andrii, what do you think of it?
+>
 > ---
->  include/linux/overflow.h                     | 12 ++++++++++++
->  scripts/coccinelle/api/struct_offsetof.cocci | 18 ++++++++++++++++++
->  2 files changed, 30 insertions(+)
 >
-> diff --git a/include/linux/overflow.h b/include/linux/overflow.h
-> index d0f04436343e..c029d68daeca 100644
-> --- a/include/linux/overflow.h
-> +++ b/include/linux/overflow.h
-> @@ -464,6 +464,18 @@ static __always_inline size_t __must_check size_sub(size_t minuend, size_t subtr
->   */
->  #define struct_offset(p, member) (offsetof(typeof(*(p)), member))
+> And just my 2c re argument ordering:
 >
-> +/**
-> + * struct_offsetofend() - Calculate the end of a member within a struct
-> + * @p: Pointer to the struct
-> + * @member: Name of the member to get the end offset of
-> + *
-> + * Calculates the offset of the end of a particular @member of the structure
-> + * pointed to by @p.
-> + *
-> + * Return: number of bytes to the end of @member.
-> + */
-> +#define struct_offsetofend(p, member) (offsetofend(typeof(*(p)), member))
-> +
->  /**
->   * __DEFINE_FLEX() - helper macro for DEFINE_FLEX() family.
->   * Enables caller macro to pass arbitrary trailing expressions
-> diff --git a/scripts/coccinelle/api/struct_offsetof.cocci b/scripts/coccinelle/api/struct_offsetof.cocci
-> new file mode 100644
-> index 000000000000..5a30647d3787
-> --- /dev/null
-> +++ b/scripts/coccinelle/api/struct_offsetof.cocci
-> @@ -0,0 +1,18 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/// Use struct_offset() family of macros
-> +///
-> +// Confidence: High
-> +// Options: --no-includes --ignore ./tools/
-> +
-> +virtual patch
-> +
-> +@offsetof depends on patch@
-> +expression ptr, member;
-> +@@
-> +- offsetof(typeof(*(ptr)), member)
-> ++ struct_offset(ptr, member)
-> +@offsetofend depends on patch@
-> +expression ptr, member;
-> +@@
-> +- offsetofend(typeof(*(ptr)), member)
-> ++ struct_offsetofend(ptr, member)
-
-Coccinelle script
-
-Reviewed-by: Julia Lawall <julia.lawall@inria.fr>
+> Paul, with all due respect, prioritizing code style and personal
+> preferences over backwards compatibility is unreasonable even for
+> unimportant applications. And here we are talking about apps
+> implementing security policies, which many organizations (not just
+> companies) in the world rely on. Given the recent flood of
+> cybersecurity issues (in Linux and beyond), I don't see why would we,
+> as in kernel devs, intentionally make the defenders' job harder.
+>
+>
+> >
+> > Thanks,
+> > roblabla
+>
