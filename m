@@ -1,96 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.161.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.137
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794997081;
-	b=ytsdqrfnTN5Eyx1OEl72I7tdSj6UdoStsAqCDM9pJO3zZ/wqefAN6bR0nrxRe+lPlque
-	 3FJUZXuiWdfTUFyi510VqnEbQ03zW8OgFWXFiRjxidXVLWMlJxiTVXZjWF0XKD790b119
-	 bP4s5lCAw02tMkFtYNbdDiFXXWHM2cGC/mQcoq6XOHvxcgPxhzSq5OmgAy5qHsHbekv/g
-	 0wCHXUp8YhRvcr1j2OAX2OO+gkyyysmTs6zi1iGF0pdyhVy77kTUvTMCncIADta9Og/vv
-	 tkcZhnAgJGkxNMBS1aoY6+x3on8X3UynQiSPP8a8fP+4v+nYW1Fm9IdBx/LdBvei4uQ==
+	t=1794998115;
+	b=Bf89FgkjcdbeWhvC7sA0O40l1Qr+6/r7t6/GeGg3WHcdCz7lz1pMi6i6Ce9hBAM2vCd9
+	 pLhqpjCYD2c/B8yqvS+q3Q9fbQObo5Od5gV7IOyj8nOfTQjax90ccNM6XD2ttqMpIhaHE
+	 ZLYSLmXfhdSkUIiIbFKuI1xbQ2+iFTo1/K1Jcw7b9Go+BAPIyRSPu7A91fuFEZ4/AmsvM
+	 2Hr7GKLEKR3/hKIop1Jka+YjlBhtOUkAnxfEcFMbRWKeL4Xj8OPS6LE88be1Vji6IrfMV
+	 H/fUj31eBME4SmE1qTL4Nz5FUD43IzaE+QjOkNRp+hHATbYlidz/0uI28WSPZYi+Ptw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794997081;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794998115;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=m9nxtzxZNBF3WBJsdKrWnkE6fbrAAwaEK/yK704NFP4=;
-	b=Jf6WeZ1kBL+AigXPpmC7zx8tdsbDL+CGGWmMVqH9/zzSaTXQQbK4F34RlXWmQkHGjw2X
-	 sBE+u5TtHVA99a4GPa6BVGLzYN1ibl77ralZ9N9Bxub/kMbiV80W3V5g04lHo4MzwBCKW
-	 2MeuUrvfNTELlEuj0lfZ+DfvOoNkxKZNeeJFp8OfemVEtp80Hlte7Xb5Aj88j3bAkiRTH
-	 C9oC8wdsP9lGMNDU3Rfl/NWRRcxgnbHkZopYw5AQbMmowcOGghmuVD3ZiRTyMFKi3cJth
-	 JCW8SFFbtWZSBjblN//D/XxMHMH6PuCHSTmoBhjDFVQwTPZbxsPRbOOldaYG0uKaqWQ==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
+	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
+	bh=V/rcDmWi1GhtPKbEjFzCUZhJ8UrOGyK/nBYXCR03k6k=;
+	b=BLT9gVNN82Bjaa1TjSni249VHEVILPThDEkFEKqMAGaN8tEz77oRkJfLN+qs3kSeHplb
+	 K62AhGikLoVDF99zQW1in+FA6QN76CLDrrek6/pRWv1bjacVz5zFZR8coGHcc3l4F2Bl7
+	 y76tT41VEdaNDexMvKoJWGRjsgP+MOYn5HqnZO7kGZECUJ0M7dAV0Y+Cv2fQjn7jkGrlw
+	 szd2Nm4fgBBd7x1ZxHojIXOWKJ82AQXhNMRS2sVjF038ZOZZbvTxKTlDcL+LaeblVDpwn
+	 CngNFLVYF3/7UzDhYL2v7fNdAW1uSStPVD6FF8+sLflb1eAOS0IRYinsl8WdpjjzAUA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ob97kGp5;
-	arc=none smtp.remote-ip=209.85.161.46
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eEQaPypI;
+	arc=none smtp.remote-ip=74.125.225.137
+Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C34E606A31C
-	for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 10:18:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5C34E606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F5D8606A31C
+	for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 10:35:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4F5D8606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ob97kGp5
-Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-71ae5389c00so541612eaf.2
-        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 02:18:01 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eEQaPypI
+Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49e6eb11e9cso1933355e9.1
+        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 02:35:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794997080; x=1795601880; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=m9nxtzxZNBF3WBJsdKrWnkE6fbrAAwaEK/yK704NFP4=;
-        b=ob97kGp5SBgiDnJ3pS1DBEfZvQ7EMm+NKaQK7Kq65fETrLQz2J/d/L2Oe0iz8lWAjV
-         JoWUp5mVskJ6KtyWFqGhevJjN8Lz+WDioQwWZt/QLQnjUv2WSjDx8Pk3Q33mdoyTTn4Q
-         PEq2dLl1xR33OfscDqznt7CY3ijlNUxEavNB8x2lyN4chZ+hbIq29Jn3lSpS3Zm0Av/5
-         kGajT0l/vOCbw9KsnRu+1nwq7NbXSYgvAgTc2Hm32GhDnhNYXD7qwtA94Dxc9M4pDnbN
-         4szFO4DhKs9aehLR82LkT0wdw+MCDqwKdPubc0vu933kJ9nOMCpOuO+/8IWsEZf0Nflr
-         lM6g==
+        d=gmail.com; s=20260707; t=1794998113; x=1795602913; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=V/rcDmWi1GhtPKbEjFzCUZhJ8UrOGyK/nBYXCR03k6k=;
+        b=eEQaPypIwfhomdAqEvFeeYyFXJIk1zUNJ4899C3azLdFLU3mWkK9maUI1it27Aopnf
+         Yizybi1/pD9i0ZCeQITUUuNG8TntDtwcqEbtyVwbh58Xwd5n9dG+A+BEsRPPgxbkaLkB
+         ySRo4NRcQh2C1mKZvddkxfB/au0fyXHnAh68lVNdDTRbVW+fc11Sksno+oER3qnxUNgH
+         pAsP8hvtnKppFMoqZGOGNyLDYukOVcJJrVuSb/9HTWERBnsN+5IyI1O6Ol1Ot2Ieef9L
+         zvR52lKXr7fiB/GWfn1C7aidLj0NBH/uWMnEG41mlTIhuKwbVrxEPac4eMA4r9U+c8qr
+         o+tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794997080; x=1795601880;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=m9nxtzxZNBF3WBJsdKrWnkE6fbrAAwaEK/yK704NFP4=;
-        b=XXCyoV8F0b136TS4NvhvBPA3C4K0xcyrRoM+fMjb7iaTFjF9VyKr1KW+uOe3TzWU8Q
-         kqoL2qT7XZ5aOl2A2ro28PA1W+Y4jiISaCA8GWBdGF5e9k/ZiJHM8K7+FaEATX0L3kA6
-         16qJwd+HKpN0g7T49QpzutqjR8AOJMbd534xUN4e2/S+ARXbrJSXhbk6ppvI53QkD2+/
-         tIqIDHdvspD/A17WO/edXlzneLWQHtXKl6bU6LAXAXPJkHdNLb4j9oeAcrH70/lweAsl
-         Es4WsE0qWyEteo9c4/TkxnV3aAnfq68qxTQGqubQmeJ4xGB7YN5S1p3XY2tzmpRpdLEy
-         wYJQ==
-X-Gm-Message-State: APuU4Z8/7DImghHk3uEJG3sBt2lq26cberct4enbpROGYLVbL5gyd/j3
-	dpcRbBmJ1UbRRPxgaAbXQEpV5v7f8+oiHCTA7f/AqeOqw9eBNkGXhc9o
-X-Gm-Gg: AYBFou0PiaRI5blFuqO6Ef+lfQ1aEaRGSRAc3ye9eXMki1p51+fDCejGV7QMqxzwFoE
-	6d9Xhx4PLJ7tXOELfE1EZSUWjcRacote7lseSFESBdgs/IFZYKVvPJs0wAQJ6IoBdPZLjCFhhLi
-	etIvfRnIXOMu4jIWi1CCuLfYrqJQBNC9ItXh8aHlneX1OW4mBv90v+M3oePz3avdvKLbAibxV7q
-	Um82IIHvD9yqlIEoWWquOeKTQofu/Ya0Wq46cJ5awNMoa08WsBJvBvO5VfcMGW2tZTl1c+BfNd+
-	kxtADVXpM5twjIZSSUjmTxQZKudAlaIs2ZSUtB8CGzZs62K0WuwmQJmst4yxnuMXBbUa4NUcjDe
-	wP8QPicG2hAappppGIzCryYnhV8iC3ZyDFwSqZdRqzIxgdVfRgs7tWeKXJ+NuhghFDIe+8jGx3e
-	l8rj7cX9cfJ88dgQ7SIp15khqGGT21VfiW73sfbm1FKD8EJdSTzaGVlhc7jViqkeSNzNYdzTJEY
-	X3+NAOL9u+XWwTZdHc24DsAxQBYKxScbV5oY2EnNvtjyECEsiUxzHiXtiTpVobXVNxxJ9DqtCtA
-	M/rYnchf/UPEE0D2bmliAcCj1dYKZbPQqVexVi4oIhibCiTaCkE9HtD2D0PczyE=
-X-Received: by 2002:a05:6820:1391:b0:71a:f498:3048 with SMTP id 006d021491bc7-71b1853a5eamr1698465eaf.25.1794997080164;
-        Wed, 18 Nov 2026 02:18:00 -0800 (PST)
-Received: from localhost ([216.128.135.139])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4b7449282c8sm1781869fac.11.2026.11.18.02.17.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Nov 2026 02:17:57 -0800 (PST)
-From: asatsuyu.liu@gmail.com
-To: stable@vger.kernel.org
-Cc: bpf@vger.kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	puranjay@kernel.org,
-	vadim.fedorenko@linux.dev,
-	Yi Liu <asatsuyu.liu@gmail.com>
-Subject: [RFC PATCH 6.18.y 1/1] bpf: Reject NULL arguments to four kfuncs
-Date: Wed, 18 Nov 2026 10:17:48 +0000
-Message-Id: <20261118101748.2335815-2-asatsuyu.liu@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20261118101748.2335815-1-asatsuyu.liu@gmail.com>
-References: <20261118101748.2335815-1-asatsuyu.liu@gmail.com>
+        d=1e100.net; s=20260707; t=1794998113; x=1795602913;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=V/rcDmWi1GhtPKbEjFzCUZhJ8UrOGyK/nBYXCR03k6k=;
+        b=EGpMU67U22+AfJJEk9jmkdbls111TMTE1DxwukgVLHKCV00JI9V/8fGl1MpznXRTY+
+         R7BKlSHcK7kPPcQYRDrAFpK5GD8i5ibilwCbSmCC/S6rfW+fDawTbNkhc0H3XJJZckdI
+         317d4eu/imdgsm1tkeueYuA2LBsYpeQM2OkPLaZfKp0gYfWBD0uOtPujQdzeZztqRn+A
+         B8PQ0Ff9F3AraJXcJVgE5d2FEzIt3WJ7b6hHTRlrJzI+Vh7BK0dHWjJM3PzENMu4pGRz
+         ZAImxwxtd/kqpb418BC6mb3lFmTFZ3myoaZqyk9YPFOuxH7LQgN5oOe2jxGuyv2wUuPV
+         yecA==
+X-Forwarded-Encrypted: i=1; AL+hErEfDOlQp9CDMo8TZWir3KezqzyPvosLxTmPlXiNA+F5rVif+PBK2d1NTi3OzYYriYIM5ww=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/i35IL47bjhi0LR6txwYwTVBRx9NszqRr0zQ4z79Xk22xZQ/TH
+	8JJ6kLdYqnNWTx7xryIAz0olUoo3+PgCjT8gS/oW5LyJlHDnxqFGJhzd
+X-Gm-Gg: AYBFou2kCaUHRADVxdlQC6pbz7+cGFm1QQjH/pEm9B+d4gJLoDJ9EvxDmjApAG5bReV
+	V1LBSC2RiVZR+wHhbUXMcajtCcqN+txkDDtVaRGrToUImdwiHYXCfRYyGpEV80Yzi+/04rKWFRL
+	WcbccVEjZiVrePmHJG+YsXNGCSt9hZGkpws3yVdKTLT9o/dnt/UeFkbGzrpo0yO+quWhepErWyp
+	m8Bz46w/TfzJ74cw4z4mIN6FFiQ5dI1Rn3nuVeVAYgKCXq/+RSTj3hSchFInjgfIuL8tnYfOJEt
+	5hDO+UOwdBDmxDifyrRVxo/mqHR5+Fum/J6Cy8rxsndZYmogLLusxT3buMqeMUBkJ/igZKyJs6g
+	ht94it/284ttPln3faIwYN1PqHFpDoUs0sBdPzwxRNeSeY0Ye2P4C9umqRfDbcqILa8sfrc7Y8s
+	DyfDyWkkl6+qpQWgMSLQ1l0p/xF5PO5dt8zRQPrNNREiAWiWqbLc8yeJzYrYX4E4s+p8sIYGGu8
+	0CbuDwXWnqlSj8Bdp8tGC95wgVaY3UYwXj4SDlXOe+WyR3SntKD6D1jIFzTUi7NbvB0QXZMXzZj
+	WYCCAE+MCPzBO40DZnkL8B6ks9gj1SRZU0IG/aTMMuN0ffS5ER2shc5t80QFGHwFbQf/5Y7MoX3
+	TVMHR87MpTc+h/P9e7HlXTkwA6vuvlPmMQKr2M9IqG92kbenA4jF9XEMIVepFNZp3FGxY
+X-Received: by 2002:a05:600c:4e02:b0:4bb:6b59:aac3 with SMTP id 5b1f17b1804b1-4bb7da44054mr39406725e9.29.1794998113097;
+        Wed, 18 Nov 2026 02:35:13 -0800 (PST)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb78346f4asm144465015e9.0.2026.11.18.02.35.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Nov 2026 02:35:12 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -99,93 +88,142 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 18 Nov 2026 11:35:11 +0100
+Message-Id: <DMY9Q4RMBKLM.2F6A6DVPXCTOH@gmail.com>
+Cc: "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Martin KaFai
+ Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf] rqspinlock: Reset tail if no waiter queues behind
+ the queue head
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Shashank Mohan Jain" <jain.sm@gmail.com>, "Alexei Starovoitov"
+ <ast@kernel.org>
+X-Mailer: aerc 0.21.0
+References: <20261117225023.36660-1-jain.sm@gmail.com>
+In-Reply-To: <20261117225023.36660-1-jain.sm@gmail.com>
 
-From: Yi Liu <asatsuyu.liu@gmail.com>
+On Tue Nov 17, 2026 at 11:50 PM CET, Shashank Mohan Jain wrote:
+> When the head of the wait queue claims the lock and its cmpxchg from
+> n,0,0 to 0,0,1 fails, it sets the locked bit and waits for node->next,
+> with no timeout. The comment, taken from qspinlock, says the cmpxchg
+> can only fail if somebody queued behind us, or if a waiter set PENDING,
+> which will then see our tail and queue behind us.
+>
+> In rqspinlock that waiter does not always queue. After clear_pending()
+> it goes to queue:, and two paths return -EDEADLK there before
+> xchg_tail():
+>
+>  - the trylock fallback for an NMI waiter whose per-CPU node is busy
+>    (in_nmi() && idx > 0), or when idx >=3D _Q_MAX_NODES;
+>  - check_deadlock_AA(), when this CPU already holds an entry for the
+>    lock.
+>
+> For example, with the queue head H alone in the queue:
+>
+>   CPU 0 (H, head)                    CPU 1 (NMI, idx 1 on another lock)
+>   reads lock->val =3D=3D H,0,0
+>                                      queued_fetch_set_pending_acquire()
+>                                        sees tail H
+>   try_cmpxchg(H,0,0 -> 0,0,1) fails
+>   set_locked()          -> H,1,1
+>                                      clear_pending()   -> H,0,1
+>                                      in_nmi() && idx > 0, trylock fails
+>                                      return -EDEADLK
+>   waits for node->next ...
+>
+> H now owns the lock and spins until another context queues on the same
+> lock. For a lock that is rarely taken, such as a hash map bucket lock,
+> that can be a long time, with interrupts disabled, so it shows up as an
+> RCU stall or a hard lockup. The same happens on v6.17 and v6.18 for any
+> NMI waiter, as the trylock fallback was used for all of them.
+>
+> The AA path needs the interrupted context to have taken its entry for
+> the lock and not to try the lock again, so it is much narrower.
+>
+> While waiting for the successor, reset the tail if it still points to
+> us, as the deadlock and timeout exits already do, and keep the lock. If
+> the tail has moved, a waiter has done xchg_tail() and will link into
+> our node, so keep waiting for it. try_cmpxchg_tail() reads the lock
+> word first, so the loop only adds a plain load while a successor
+> finishes linking.
+>
+> Found with a TLA+ model of the slow path. A userspace port of the slow
+> path, driven through the interleaving above, hangs without this change
+> and completes with the lock word clean with it. I have not reproduced
+> the hang on a running kernel.
+>
+> Fixes: 0d80e7f951be ("rqspinlock: Choose trylock fallback for NMI waiters=
+")
+> Fixes: 087849cca31d ("rqspinlock: Precede non-head waiter queueing with A=
+A check")
+> Cc: stable@vger.kernel.org
+> Assisted-by: LLM
+> Signed-off-by: Shashank Mohan Jain <jain.sm@gmail.com>
+> ---
 
-6.18.y only applies the kfunc NULL-argument check to functions carrying
-KF_TRUSTED_ARGS or KF_RCU.  Four kfuncs dereference pointer arguments
-unconditionally but do not carry either flag:
+I am aware of this one, but I don't think it's that serious (of course, nee=
+ds to
+be fixed). I was going to send it in a couple weeks with some other changes=
+ for
+rqspinlock. For the next version, let's drop Cc to stable and target bpf-ne=
+xt.
 
-  bpf_copy_from_user_str()
-  bpf_copy_from_user_task_str()
-  bpf_crypto_ctx_create()
-  bpf_rbtree_remove()
+How about the approach below instead that I have? You could check whether t=
+he
+violation in your TLA+ model goes away. The benefit is that we don't penali=
+ze
+the loop that waits for next, for this very rare condition that is not like=
+ly to
+be hit.
 
-A BPF program can therefore pass a NULL or PTR_MAYBE_NULL argument and
-trigger a kernel NULL dereference.  Mark the four kfuncs KF_TRUSTED_ARGS
-so the existing verifier check rejects such calls.
+diff --git a/kernel/bpf/rqspinlock.c b/kernel/bpf/rqspinlock.c
+index 111ec80ea958..f6a938ee7ab4 100644
+--- a/kernel/bpf/rqspinlock.c
++++ b/kernel/bpf/rqspinlock.c
+@@ -624,20 +624,23 @@ int __lockfunc resilient_queued_spin_lock_slowpath(rq=
+spinlock_t *lock, u32 val)
+         * Otherwise, we only need to grab the lock.
+         */
 
-Skip __ign parameters in that check.  bpf_copy_from_user_str() and
-bpf_copy_from_user_task_str() intentionally accept
-unsafe_ptr__ign == NULL together with BPF_F_PAD_ZEROS, which is used to
-clear the destination buffer.  Without the skip, the new flag would
-reject this valid use.
+-       /*
+-        * Note: at this point: (val & _Q_PENDING_MASK) =3D=3D 0, because o=
+f the
+-        *       above wait condition, therefore any concurrent setting of
+-        *       PENDING will make the uncontended transition fail.
+-        */
+        if ((val & _Q_TAIL_MASK) =3D=3D tail) {
+-               if (atomic_try_cmpxchg_relaxed(&lock->val, &val, _Q_LOCKED_=
+VAL))
+-                       goto release; /* No contention */
++               u32 new =3D _Q_LOCKED_VAL;
++
++               for (;;) {
++                       if (atomic_try_cmpxchg_relaxed(&lock->val, &val, ne=
+w))
++                               goto release; /* No queued successor */
++                       if ((val & _Q_TAIL_MASK) !=3D tail)
++                               break;
++                       /* A pending claimant can abandon before publishing=
+ a tail. */
++                       new =3D _Q_LOCKED_VAL | (val & _Q_PENDING_MASK);
++               }
+        }
 
-The patch is intended as a minimal 6.18.y stable fix; mainline has
-already made KF_TRUSTED_ARGS the default in v7.0.
-
-Fixes: 65ab5ac4df01 ("bpf: Add bpf_copy_from_user_str kfunc")
-Fixes: f0f8a5b58f78 ("bpf: Add bpf_copy_from_user_task_str() kfunc")
-Fixes: 3e1c6f35409f ("bpf: make common crypto API for TC/XDP programs")
-Fixes: bd1279ae8a69 ("bpf: Add bpf_rbtree_{add,remove,first} kfuncs")
-Signed-off-by: Yi Liu <asatsuyu.liu@gmail.com>
----
- kernel/bpf/crypto.c   | 2 +-
- kernel/bpf/helpers.c  | 6 +++---
- kernel/bpf/verifier.c | 1 +
- 3 files changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/bpf/crypto.c b/kernel/bpf/crypto.c
-index 3837d4dcf48d..d1566f76a2c1 100644
---- a/kernel/bpf/crypto.c
-+++ b/kernel/bpf/crypto.c
-@@ -353,7 +353,7 @@ __bpf_kfunc int bpf_crypto_encrypt(struct bpf_crypto_ctx *ctx,
- __bpf_kfunc_end_defs();
- 
- BTF_KFUNCS_START(crypt_init_kfunc_btf_ids)
--BTF_ID_FLAGS(func, bpf_crypto_ctx_create, KF_ACQUIRE | KF_RET_NULL | KF_SLEEPABLE)
-+BTF_ID_FLAGS(func, bpf_crypto_ctx_create, KF_ACQUIRE | KF_RET_NULL | KF_SLEEPABLE | KF_TRUSTED_ARGS)
- BTF_ID_FLAGS(func, bpf_crypto_ctx_release, KF_RELEASE)
- BTF_ID_FLAGS(func, bpf_crypto_ctx_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
- BTF_KFUNCS_END(crypt_init_kfunc_btf_ids)
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 72757f7290ec..d9e0c95bce02 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -4278,7 +4278,7 @@ BTF_ID_FLAGS(func, bpf_list_front, KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_list_back, KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_task_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_task_release, KF_RELEASE)
--BTF_ID_FLAGS(func, bpf_rbtree_remove, KF_ACQUIRE | KF_RET_NULL)
-+BTF_ID_FLAGS(func, bpf_rbtree_remove, KF_ACQUIRE | KF_RET_NULL | KF_TRUSTED_ARGS)
- BTF_ID_FLAGS(func, bpf_rbtree_add_impl)
- BTF_ID_FLAGS(func, bpf_rbtree_first, KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_rbtree_root, KF_RET_NULL)
-@@ -4365,8 +4365,8 @@ BTF_ID_FLAGS(func, bpf_preempt_enable)
- BTF_ID_FLAGS(func, bpf_iter_bits_new, KF_ITER_NEW)
- BTF_ID_FLAGS(func, bpf_iter_bits_next, KF_ITER_NEXT | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_iter_bits_destroy, KF_ITER_DESTROY)
--BTF_ID_FLAGS(func, bpf_copy_from_user_str, KF_SLEEPABLE)
--BTF_ID_FLAGS(func, bpf_copy_from_user_task_str, KF_SLEEPABLE)
-+BTF_ID_FLAGS(func, bpf_copy_from_user_str, KF_SLEEPABLE | KF_TRUSTED_ARGS)
-+BTF_ID_FLAGS(func, bpf_copy_from_user_task_str, KF_SLEEPABLE | KF_TRUSTED_ARGS)
- BTF_ID_FLAGS(func, bpf_get_kmem_cache)
- BTF_ID_FLAGS(func, bpf_iter_kmem_cache_new, KF_ITER_NEW | KF_SLEEPABLE)
- BTF_ID_FLAGS(func, bpf_iter_kmem_cache_next, KF_ITER_NEXT | KF_RET_NULL | KF_SLEEPABLE)
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index b89a5d717e42..aac687b81b84 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -13494,6 +13494,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 		}
- 
- 		if ((is_kfunc_trusted_args(meta) || is_kfunc_rcu(meta)) &&
-+		    !is_kfunc_arg_ignore(meta->btf, &args[i]) &&
- 		    (register_is_null(reg) || type_may_be_null(reg->type)) &&
- 			!is_kfunc_arg_nullable(meta->btf, &args[i])) {
- 			verbose(env, "Possibly NULL pointer passed to trusted arg%d\n", i);
--- 
-2.34.1
-
+        /*
+-        * Either somebody is queued behind us or _Q_PENDING_VAL got set
+-        * which will then detect the remaining tail and queue behind us
+-        * ensuring we'll see a @next.
++        * A different tail proves that a successor will publish node->next=
+.
++        * Preserve pending while installing ownership; a racing claimant m=
+ay
++        * still be undoing its speculative reservation against this queue.
+         */
+        set_locked(lock);
