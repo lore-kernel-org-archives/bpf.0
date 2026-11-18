@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795044274;
-	b=hJVODXeJsBL+aaFOiqk1yWat+2/oOae+KN8fi3eLHLcdFFHGxyDhsQ6oK24jJMcaov/J
-	 UOj0u1B3m8y7FKtsrjIEM+lwO1eD8+KzVVTlZaAAOaQMtH85cHWeid9XqGUC2fn5ioS5Y
-	 kRHrE78Oaw+pPEq52cOq1/fPsmtVKyy8xSp8vCt1R2TINM0CJqjdyZPEtdBGfZpng8767
-	 4v65GI0NzXQyEE5rWlobEhMpdsjy6mF8VYWTwYYAz8eNYPEInJpVZbG5k7Y4z7jhAcqmV
-	 4hE+b6URGUEW/S8ZzvWCiKPlBJyTnsGWyOoOmi44nWcCDb3gs8XJCpKPsnzr5rVaiNA==
+	t=1795044269;
+	b=MI1uzKpU94j9jWizIHp2tVEsgKktjXdzSWdVnAbg9kw82b8pWYu6VwtUylFI0e8u0pib
+	 8nw2G+j3P92LCo3faJ7SVHexMrxi7uKXKMwgqiY6Ra9AhAd0ziG78+/ypKc6Wn8MDs7sK
+	 LrmPl2fFhoGLX9NhAb+YROgXP3ttZBpYvHg6OUaR8mWNJyZXFQpQgMX08foVcMHVUdwLl
+	 RYr3CzLjy5TP6AKFWtrwzGz8l0JEI3FvDrB77Sdw6M6U5j34ZfSdi3ZWfkZV8TtEpW0Cw
+	 JhyC8BMBhiOe1LCsQBlUNSzRtPf089koAW2b1pyfCV5wKdZXB5XTTic0xmf9DpYimHA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795044274;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795044269;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=fgsdcO4ceTyInzcJdtVRddqvxepwU6JaTVCwA65yP7w=;
-	b=p8cqZ+X1cipbpHyDNdrJ79ahJqW6DFkr+Ex/vbci3oDmSzeE0RxFbh0wp8r6Z2Inr5HV
-	 M5hGi/Eqr9iqZ1C9IqWa7rp35i3j2AZJpHL3dV0JBhrjv9zaJTrLqrvANfNRs40cascYA
-	 dM95kHd67pv4BN8GaHmDj5Gut89pa1+GytphM5PxQP3an3qy5Vgm8Rk3GT1Cdau3ywc1A
-	 WTIBGgT4Q6DELhgmIPjgB8St1/+9aj48FOnMxkIsmbdX5c5euHlb6PpM/5oZ6mkc1IGBI
-	 4c6KNmFvmKx61GjH2fCxO/H9ET3K/TwglqBOsdGuLPS9HsoiwnQa2P040vd9RWGu/Aw==
+	bh=BSCa59sPJ/PSZfMTVFZuayrd2SH02jn2s/5XOxmFNtM=;
+	b=F0ck5suWrmbuHcQY+rf51JYpxohsObmgzuK55A3WD+WTUFv1yxHHockq78+v+F1hy2Dv
+	 XNnA3PUfEZNfEidPoeI1tLlg3X4cp/5tTGq1zkxH/27UO+jHpuyKSd9HHecZnBFgGPso5
+	 J7/UiU/4typ4EwHZLGR57KLxLjIvJN/stHAFyowgHbOhL0hPNMzLoK0cMymw4K4cEXpBS
+	 N60KcHQQ8uOW2IXVP3qfbThSpb913AcSqmvgckd6s/Ovw5JPKM4UQC1Xy5VHw9UPu+8L+
+	 2ZHcGaBPIFlGLJya+RUiMP7m6O4lyI3c8TScHUt779aOh2Ji/xH43bISgoWzLNFgxZA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nkdr8mb5;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ayTrHnCo;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FF7A60A2611;
-	Wed, 18 Nov 2026 23:24:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45783606A32C;
+	Wed, 18 Nov 2026 23:24:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nkdr8mb5
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78E2F1F000CC;
-	Wed, 18 Nov 2026 23:24:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ayTrHnCo
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9016C1F000C9;
+	Wed, 18 Nov 2026 23:24:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795044274;
-	bh=fgsdcO4ceTyInzcJdtVRddqvxepwU6JaTVCwA65yP7w=;
+	s=k20260515; t=1795044269;
+	bh=BSCa59sPJ/PSZfMTVFZuayrd2SH02jn2s/5XOxmFNtM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=nkdr8mb549Xvw8Qr7KmixcWkI3liQ4mGasVtS3awitJ/p4806gxUH6gfG+KbXOM/+
-	 jHpb+oe3IKkPGCs4elrOSG6BdIC5f2ohtq/ildJhzBEJ1sIvewN2llaOd5KVig4NEI
-	 bQUa9+Hy10Hg+rCIxy3EakmIu1+6kYAit9ocN8/6TvKVwmzh90xjaGYxKtuJU/KjSJ
-	 vp/haQClNMYl3Aogr8VtzmlgFVVLKcXscUItmt9VjwpjIUivXtL8+6bnE8uCZaoSFQ
-	 03NxoyyemxYadHMoPAlC+MF4yQRgnrMAkO/RJWdwCf9H+1SHI5QvbnJzZxm0lTw+wj
-	 EJfsciKm+TgJw==
+	b=ayTrHnCoFeBBil7bSuDZjmnbE1M64UrIRQj1MkXyFQjpSQ/vUCud0XFPCeZMhBaV6
+	 SCy0MofY2ikikERAIjGc3G39JNhGJN8E8REpYzp3C6s11yq2qCwUW06jhRr7tJJkXy
+	 dDFa967q5tVVVjF26stEpVfr2UchqYibrGAo9dfnOkzeDsR10g1z8qDinqk+CIWj/3
+	 fAWhlkWJ/sCv+9dUKf/T6TJ4R/BPxJWHwzHEVaFQ41Z5RvzbEB0w9ndvQzoyIe2J8I
+	 FprG+p6b6snt2G1acc1u9FCnRi2pO0mH2XamgFQDcwBsRNS4/NT/4qtODsFODPjWXt
+	 1HlEXZNX3m7IA==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -59,9 +59,9 @@ Cc: netdev@vger.kernel.org,
 	przemyslaw.kitszel@intel.com,
 	bpf@vger.kernel.org,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 8/8] eth: gve: drop the now-dead HW-GRO vs XDP interlock
-Date: Wed, 18 Nov 2026 15:23:15 -0800
-Message-ID: <20261118232315.3593731-9-kuba@kernel.org>
+Subject: [PATCH net-next 1/8] net: stop making HW-GRO depend on SW GRO
+Date: Wed, 18 Nov 2026 15:23:08 -0800
+Message-ID: <20261118232315.3593731-2-kuba@kernel.org>
 X-Mailer: git-send-email 2.56.1
 In-Reply-To: <20261118232315.3593731-1-kuba@kernel.org>
 References: <20261118232315.3593731-1-kuba@kernel.org>
@@ -76,54 +76,70 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The core clears NETIF_F_GRO_HW before ndo_bpf runs and refuses to turn
-it back on while a program is attached, so neither of these can fire
-any more. That holds for a program an upper device pushes down as well,
-which is why this comes last - gve_verify_xdp_configuration() was the
-only thing standing between a bonded gve port and XDP running with RSC
-still on.
+bnxt, qede and bnx2x clear NETIF_F_GRO_HW whenever NETIF_F_GRO is off.
+Nothing in the stack needs that. HW-GRO'd skbs arrive already coalesced
+with gso_size set, exactly like LRO frames, and LRO never depended on
+the software GRO bit. netif_elide_gro() only gates the software path,
+and the in-driver consumers of the offload key off the feature bit
+itself, not off NETIF_F_GRO.
 
-The user visible behavior changes as intended: attaching XDP to a gve
-device with HW-GRO on used to fail with -EOPNOTSUPP and now succeeds
-with HW-GRO turned off, which is what bnxt and qede have always done.
-The header-data split refusal right below keys off
-priv->header_split_enabled and stays.
+The coupling gets in the way of exercising the offload on its own:
+turning SW GRO off to isolate HW GRO takes HW GRO down with it on these
+three drivers, which is why the GRO selftests carry a generic XDP hack.
+The core only ever constrained GRO_HW on RXCSUM, RXFCS and LRO, and the
+other HW-GRO capable drivers do not couple the two either.
+
+User visible change: "ethtool -K $dev gro off" no longer implies
+"rx-gro-hw off" on bnxt, qede and bnx2x.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- drivers/net/ethernet/google/gve/gve_main.c | 12 ------------
- 1 file changed, 12 deletions(-)
+ drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c | 2 +-
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c       | 3 ---
+ drivers/net/ethernet/qlogic/qede/qede_filter.c  | 3 +--
+ 3 files changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/ethernet/google/gve/gve_main.c
-index 0ee69bc11d83..8b65b8119662 100644
---- a/drivers/net/ethernet/google/gve/gve_main.c
-+++ b/drivers/net/ethernet/google/gve/gve_main.c
-@@ -1798,12 +1798,6 @@ static int gve_verify_xdp_configuration(struct net_device *dev,
- 	struct gve_priv *priv = netdev_priv(dev);
- 	u16 max_xdp_mtu;
+diff --git a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c
+index 6fb0619731ae..5686c4ecb944 100644
+--- a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c
++++ b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c
+@@ -4934,7 +4934,7 @@ netdev_features_t bnx2x_fix_features(struct net_device *dev,
+ 	if (!(features & NETIF_F_RXCSUM))
+ 		features &= ~NETIF_F_LRO;
  
--	if (dev->features & NETIF_F_GRO_HW) {
--		NL_SET_ERR_MSG_MOD(extack,
--				   "XDP is not supported when HW-GRO is on.");
--		return -EOPNOTSUPP;
--	}
+-	if (!(features & NETIF_F_GRO) || !bnx2x_mtu_allows_gro(dev->mtu))
++	if (!bnx2x_mtu_allows_gro(dev->mtu))
+ 		features &= ~NETIF_F_GRO_HW;
+ 	if (features & NETIF_F_GRO_HW)
+ 		features &= ~NETIF_F_LRO;
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+index 6846a27bfef4..27c53db2c9e4 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+@@ -14092,9 +14092,6 @@ static netdev_features_t bnxt_fix_features(struct net_device *dev,
+ 	if ((bp->flags & BNXT_FLAG_NO_AGG_RINGS) || bp->xdp_prog)
+ 		features &= ~(NETIF_F_LRO | NETIF_F_GRO_HW);
+ 
+-	if (!(features & NETIF_F_GRO))
+-		features &= ~NETIF_F_GRO_HW;
 -
- 	if (priv->header_split_enabled) {
- 		NL_SET_ERR_MSG_MOD(extack,
- 				   "XDP is not supported when header-data split is enabled.");
-@@ -2212,12 +2206,6 @@ static int gve_set_features(struct net_device *netdev,
- 	if ((netdev->features & NETIF_F_GRO_HW) !=
- 	    (features & NETIF_F_GRO_HW)) {
- 		netdev->features ^= NETIF_F_GRO_HW;
--		if (priv->xdp_prog && (netdev->features & NETIF_F_GRO_HW)) {
--			netdev_warn(netdev,
--				    "HW-GRO is not supported when XDP is on.");
--			err = -EOPNOTSUPP;
--			goto revert_features;
--		}
- 		if (netif_running(netdev)) {
- 			err = gve_adjust_config(priv, &tx_alloc_cfg, &rx_alloc_cfg);
- 			if (err)
+ 	if (features & NETIF_F_GRO_HW)
+ 		features &= ~NETIF_F_LRO;
+ 
+diff --git a/drivers/net/ethernet/qlogic/qede/qede_filter.c b/drivers/net/ethernet/qlogic/qede/qede_filter.c
+index 5bf32f1034e0..d0e203167e35 100644
+--- a/drivers/net/ethernet/qlogic/qede/qede_filter.c
++++ b/drivers/net/ethernet/qlogic/qede/qede_filter.c
+@@ -915,8 +915,7 @@ netdev_features_t qede_fix_features(struct net_device *dev,
+ {
+ 	struct qede_dev *edev = netdev_priv(dev);
+ 
+-	if (edev->xdp_prog || edev->ndev->mtu > PAGE_SIZE ||
+-	    !(features & NETIF_F_GRO))
++	if (edev->xdp_prog || edev->ndev->mtu > PAGE_SIZE)
+ 		features &= ~NETIF_F_GRO_HW;
+ 
+ 	return features;
 -- 
 2.56.1
 
