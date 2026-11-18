@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1795044273;
-	b=gkYwuFRSPyRsQkppClioyTxLYSnc0g/OddgczBUStJ+5uRWgs0kxuE9hwo+0SZRM86EI
-	 7dDkF/Y6UU9k2P9XRzNk0CRisdQwlliqBcrKVQf16IcooUG8IXEMd2YbYKmfox0G8heVf
-	 asGcmQfvPBsoSE4q7wK1F6z5tNEFElU9UYsEDEDd0ehxEhEelY7O729MiYu/cXR7UqKi/
-	 ESDGbc13/mlYJp4qyjUrnDjAIx4ntM81yO21yicSxAnz0pLYccbOR8pYoADXZ8nr6/0+J
-	 uSxfDMSjpgEHO2In05iSco6x9wvDMXChQTDd+jvcjUl8/x7GWDqQdtQw4XhDMw+Wbkw==
+	b=c6x6A+qASyT1vx4A0ZYdA73lr3cbXlAemQcuR3iXmRHcWeAg0yPqbaV8nULjx2QMd8i0
+	 eK0VUfMiWMQHjIEprMNFwn9CzIGi22GiRJKtL1ov/eZWtm4TIbltY8lchhDOSAO95cHIp
+	 pswmxCCfTFDGFM1cYfXH0wW5ppjoLgcFaMKwHhswCHd7uBNrXgbrQW0U28fsge43LuDN3
+	 OYsBOtSMOBX/TK8G7XAEf7gZex9GxutzYVr8MDc0++wOSuchUZ5D0XQMpynxJENDjKmvE
+	 xAym6YoHodRyw2go6Vlt1lppbAfmWyOuo9ka+6jrKk3XuRmGVBGCihmbuT39VPkUR0w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1795044273;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=zx6OBGdvEDvh9cmjAyJHGKhXvKgD1pi9OX/jAhRPu3E=;
-	b=kRNyiwWaNTI5ZgOSer0W4iInydPN4TB5qOlpeg9Uifir4MEOkQgTHw7Z1wG2CbZvvu2Z
-	 aeLh/GUZPcjTJFjtNHMYtJHPP6SKUc5KbunWbV13aHayNP7mu29viKfIxgEZ7nD5YU3Eo
-	 yKA26GsiR39f8ArfLZcP/BIQnzpcWC4s971uncJEBdngIC2SxJgjCBJrKAS3DNZiWTyne
-	 ytChayWdUdEdgAwbMZX71ux1tnKXiFqUDHm5MtSvwU2KWV4AhTC/UtH9RflHzS0fc9S2o
-	 28L1YT/DKBCDTmTcumakNq8s9NjZnOK/9funmiJ6NqRGJQBMAxPtFbG8HNyp87rjlzw==
+	bh=vi/WasS0CpRGjKcIMOrhTUSVMrXdYfJHtXqklKK25fA=;
+	b=b6cju6mIIYtcW4MpdDs5vXAvw06v/de/0PPQ3akdKTRmXAMm9iKEyCG68TU6NG+V4Wmc
+	 TrIou/5abtUdS578oRJqEgHR3ve52k2CTi9/scgZQk5HDOgaZog91bXbfioaamMUaqh6C
+	 f9R/DY4RZln77O66PPDsbRQ/L6geBaECQY9a61vD2ZrhgxQw2Kx3wletit5hIjiGlxfVt
+	 rCIhR8ZWs3k2EoE1I12J7WyGQ8vSMxIpUHjdhb7OfklrKBU/z4Cisz3U+GBYEBgoAR5tG
+	 dkU9SmFLyrWJnsIcAXPQHn6VNKpfAvGnoPllTkjMo6cbJp8HKB3prVU4XMn6QrR5/Bw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Ca/ABPKg";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Lg1N+8C4;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C17606A339;
-	Wed, 18 Nov 2026 23:24:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7719B60A2600;
+	Wed, 18 Nov 2026 23:24:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ca/ABPKg
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 142BB1F000D0;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Lg1N+8C4
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C06FC1F000C7;
 	Wed, 18 Nov 2026 23:24:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795044272;
-	bh=zx6OBGdvEDvh9cmjAyJHGKhXvKgD1pi9OX/jAhRPu3E=;
+	s=k20260515; t=1795044273;
+	bh=vi/WasS0CpRGjKcIMOrhTUSVMrXdYfJHtXqklKK25fA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Ca/ABPKgBAN9TDiDdeyoNduwupBaXoomXQaq5qMUEfmsRMO5BVScj7BgivCjuxoyr
-	 vhGCA/tH74uAUq9jvnsfys2N6XVW1dQ4jhZ/td5JL1knHDe0MP15jn0YOmvD8O6fH5
-	 y91jUz09Guw8fPUy12VRXO5roeyJR6y7mz4SF2C7Ctcq3dbML947AUYUbg6YJ9hIRl
-	 nc7dP8f0VVsFHaao7zV7FjlGCxVSZagZ/GPTgkdwwKxtI5K8I84s8I+MtuxvF929YD
-	 Iop2cn0KvdBDI7H7ufjEK0yHTILea4M0hS5vN0YWecV3qcwU+6MXvSvPzck2t57zE9
-	 XOMRbtRWvCjDw==
+	b=Lg1N+8C4AdGju8lTyYqQy6oHAEcYfiPJNE/XjFp4wemAwXezHm8OJDXHw4XwMkF7o
+	 yxlDGiGeqx4HOp5UaeCHVlZlP76IKAbHftmleV77x/IIsOseP9Sc7MxELwz//KKOSz
+	 oLbK8JWVKIu/GfTGGfRu+R7HIvFtYTtA42J0Am6ieRmzyB5myt9QUGUUgT5zf6NNlh
+	 Q6DORxt3C1AGFym3QjbETQ33Zd2zL8hNgcZfUN7uJucHiZJ5r/lHOUFGAK/KC0+BsL
+	 k2GtNmO3DSCySxe8PDRx74pSorVTq7oUlT1IP59CZ7omUlwsE901y6Oyx9lCaP9l9E
+	 dLBvEoXZM2TQQ==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -59,9 +59,9 @@ Cc: netdev@vger.kernel.org,
 	przemyslaw.kitszel@intel.com,
 	bpf@vger.kernel.org,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 6/8] eth: bnxt_en: don't clear HW-GRO and LRO for XDP in ndo_fix_features
-Date: Wed, 18 Nov 2026 15:23:13 -0800
-Message-ID: <20261118232315.3593731-7-kuba@kernel.org>
+Subject: [PATCH net-next 7/8] eth: qede: drop the now-dead HW-GRO vs XDP handling
+Date: Wed, 18 Nov 2026 15:23:14 -0800
+Message-ID: <20261118232315.3593731-8-kuba@kernel.org>
 X-Mailer: git-send-email 2.56.1
 In-Reply-To: <20261118232315.3593731-1-kuba@kernel.org>
 References: <20261118232315.3593731-1-kuba@kernel.org>
@@ -76,30 +76,68 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The core keeps HW-GRO and LRO off while a program is attached, from
-before ndo_bpf is called until it's gone. The xdp_prog check in
-bnxt_fix_features() never changes the outcome any more. Without agg
-rings, which single-buffer XDP at a small MTU implies, neither offload
-works, so that part stays.
+The core clears HW-GRO before ndo_bpf runs and keeps it off for as long
+as a program is attached, which makes three bits of qede dead:
+
+ - the xdp_prog check in qede_fix_features();
+ - qede_alloc_mem_rxq() clearing NETIF_F_GRO_HW from dev->features
+   directly, the feature is already off by the time the reload for
+   the program allocates the rings;
+ - qede_set_features() skipping the reload when a program is attached,
+   HW-GRO can't change while edev->xdp_prog is set any more.
+
+The direct write in qede_alloc_mem_rxq() is also why HW-GRO used to
+stay off after the program was removed - nothing recomputed the
+features. The core does that on detach now.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- drivers/net/ethernet/broadcom/bnxt/bnxt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/qlogic/qede/qede_filter.c | 11 ++---------
+ drivers/net/ethernet/qlogic/qede/qede_main.c   |  1 -
+ 2 files changed, 2 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-index 27c53db2c9e4..a5d22198aa11 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-@@ -14089,7 +14089,7 @@ static netdev_features_t bnxt_fix_features(struct net_device *dev,
- 	    bp->tx_ring_size < 2 * BNXT_SW_USO_MAX_DESCS)
- 		features &= ~NETIF_F_GSO_UDP_L4;
+diff --git a/drivers/net/ethernet/qlogic/qede/qede_filter.c b/drivers/net/ethernet/qlogic/qede/qede_filter.c
+index d0e203167e35..9c68579c5b33 100644
+--- a/drivers/net/ethernet/qlogic/qede/qede_filter.c
++++ b/drivers/net/ethernet/qlogic/qede/qede_filter.c
+@@ -915,7 +915,7 @@ netdev_features_t qede_fix_features(struct net_device *dev,
+ {
+ 	struct qede_dev *edev = netdev_priv(dev);
  
--	if ((bp->flags & BNXT_FLAG_NO_AGG_RINGS) || bp->xdp_prog)
-+	if (bp->flags & BNXT_FLAG_NO_AGG_RINGS)
- 		features &= ~(NETIF_F_LRO | NETIF_F_GRO_HW);
+-	if (edev->xdp_prog || edev->ndev->mtu > PAGE_SIZE)
++	if (edev->ndev->mtu > PAGE_SIZE)
+ 		features &= ~NETIF_F_GRO_HW;
  
- 	if (features & NETIF_F_GRO_HW)
+ 	return features;
+@@ -936,15 +936,8 @@ int qede_set_features(struct net_device *dev, netdev_features_t features)
+ 		args.u.features = features;
+ 		args.func = &qede_set_features_reload;
+ 
+-		/* Make sure that we definitely need to reload.
+-		 * In case of an eBPF attached program, there will be no FW
+-		 * aggregations, so no need to actually reload.
+-		 */
+ 		__qede_lock(edev);
+-		if (edev->xdp_prog)
+-			args.func(edev, &args);
+-		else
+-			qede_reload(edev, &args, true);
++		qede_reload(edev, &args, true);
+ 		__qede_unlock(edev);
+ 
+ 		return 1;
+diff --git a/drivers/net/ethernet/qlogic/qede/qede_main.c b/drivers/net/ethernet/qlogic/qede/qede_main.c
+index 7ed17faced54..b24baf0e808e 100644
+--- a/drivers/net/ethernet/qlogic/qede/qede_main.c
++++ b/drivers/net/ethernet/qlogic/qede/qede_main.c
+@@ -1571,7 +1571,6 @@ static int qede_alloc_mem_rxq(struct qede_dev *edev, struct qede_rx_queue *rxq)
+ 		rxq->rx_buf_seg_size = roundup_pow_of_two(size);
+ 	} else {
+ 		rxq->rx_buf_seg_size = PAGE_SIZE;
+-		edev->ndev->features &= ~NETIF_F_GRO_HW;
+ 	}
+ 
+ 	/* Allocate the parallel driver ring for Rx buffers */
 -- 
 2.56.1
 
