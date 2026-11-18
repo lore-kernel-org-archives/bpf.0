@@ -1,95 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794972283;
-	b=bKxJKxFne83p1PM41D8rKGeprBuNp2uE5eOCYHR8XIrwiWzxm+pGViGQ4i6APf0jjvRW
-	 VM6uy6757ykJOyBBACXjEph3BBkvKkzXhQb1C44SmaCvbCcssHpGPZ9/I89zT3BPhzjGM
-	 nMWUH8Us4KA4iWGxTcFOpAydSSPtsoui9eeT2Y+zmXSj3J1+OrMftb0hI3vrPLPsnqNAN
-	 kC8K+MvhB8p2B2o8uHMvFIOr8jrHmS74tlkyUk2qOklaL8X7TkUHokxCYf+CXMzOIQPP9
-	 ccb9gdDL4+VRZ2jeWZBQ1ipDb4ff4UNBGWFSFXCNi50ONX2ONrcE1Zl9VBXIB+xmV4Q==
+	t=1794973413;
+	b=G9s1ryx7slZttHrhdjuCjnr0giY34AobJ6AQK6LrFQyYxP7IXoO6enqZ9y6upKglsA9Y
+	 /oOUyH4KAOMprImWsCqbEfx7uv7VYG/3oZ3q9Nn8nfIsrObJkMAWkYa9b9Dr4QQEACm0/
+	 1c+bYoOMKLT0tDHwU66NLciB61v9ig/20xZ1S7wpqEAKJJDtZgCy1dOq+cSK4Nm9rK4bm
+	 xah/lE0wOD6UAbRa/OXrEnf+H5re5SRNA3/KgVQ3rCeS3bVzrU529eJVRwI7vINjgqPvl
+	 Ct5rCcaHAU+blTR2e2ZEqGwdghQuzWPclrHkz5c82ymPwk28njZJ5xfpIkcja0PcyJQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794972283;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:From:To:Cc:Subject:
-	 Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=rAUAXOcU6+Prm2JvcPZ/ODIqquGi1OM+kWs7VyD5IU4=;
-	b=zoS0vPjHNQ0n3zYmoHfljzOwCoFXMN1iabm3hewHwcoCmagICriXTlhPjBsDtlHXPipD
-	 DnhYiCC9yoxHZYQps972JB+IktEhA77to8MB37qr17oP90trENp7rQHl90wv1dH3/8db7
-	 cjAYAcqz4MHW7gkQAEBZTkLzX7jlQXbMWkR0dch8+q+6/eUVeono2x7q6cEw9cMQWp5R/
-	 AF5KGia8cyGHOnu8lUg/P02WNgWhDgY7JWXTz4paQKulgwpqw0ygkYlhKRWGVC+UJZe4e
-	 mMyMDN6DS/GIj0+MMZq/lq4iH1FHpJz6bS16Ht1vN2xdv5CZGPa9OreOEPwmfJ9rm2g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794973413;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=+p5MlAGzvw71fdo0AWFOJilWn1c85StymLp8MpQlwaQ=;
+	b=j+zinWmg6u4xzAAd7JHJmcaiEF5mKJQM6girFRBn8SNTmDwBN2wc9KrO7tBThWMy8suH
+	 ZiFSE/iOaGVQ92Ub5yXxy/H8uHiElPeXq6s/bjQkj6Ovg6PM33R9XC9zjYIxeGlTtgm4m
+	 3iJf7eqF+qHiHsp5dj82YkaSmjhCnEgOZoaSUxOAA+0s2Ji+DTN2hJDHyvE3CvI0oHznU
+	 oWyU2FxJGYyjKCXaV+D/bcBOgvDO7I/5quzGdLhAfWQp4tFTruSCWT4Yd9D/EIfP2Jkn9
+	 VVPtF0MjAE7CcWy28/1zc+YEYY46KM4XNPoHLeWtXeRJKERnxaN9Is9ZnsNqnwjlXTA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.intel.com;
-	spf=pass smtp.mailfrom=linux.intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=BeGMoYC5;
-	arc=none smtp.remote-ip=192.198.163.7
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=L5364VZS;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA33606A8A6;
-	Wed, 18 Nov 2026 03:24:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AEA33606A8A6
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E3FF606A31C;
+	Wed, 18 Nov 2026 03:43:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=BeGMoYC5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794972283; x=1826508283;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=YDl84zl28gaxmAiCJSGxYZF0/CVDkgZbO5ihfBzmIeU=;
-  b=BeGMoYC5h8IBOk9bv02aqWVJaTiN8h3t9R0WhHZKzby6dL8mcpPgeoay
-   KcyrzurQEv4gCTWQ5lwwVq0qqZ+AYs/rBl6V+BeqAEPxbB+AEgOEgaTPI
-   ia8bRw88qwUViTEsVKVE3ZHW3RONc+0YkyFzBD4NcSiH3t1SdDgomWtSf
-   OZ84q76OvaF/u26ROgY1hm85sX4yNtXNST7dA5+O3O0gX77tfzviBtskD
-   bNddMh1yC4a0yvjNFohjEPgkUJpknVQ9wiRoWHFh6HSeR1A18Y4Ethidg
-   LmvnKeZ+GtRIsRshXtzTPc5z5caR3n8KtVegxvT6U5940andGeUp3IklZ
-   A==;
-X-CSE-ConnectionGUID: puarUi9/TU6Sp1gInu7BOg==
-X-CSE-MsgGUID: B6jm7IopQTOisNsBA+wU0A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11969"; a="3630100"
-X-IronPort-AV: E=Sophos;i="6.27,219,1787036400"; 
-   d="scan'208";a="3630100"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2026 19:24:43 -0800
-X-CSE-ConnectionGUID: xyBkXW03Q+qVes2AKU7vTw==
-X-CSE-MsgGUID: SPAPZzuFSxOHmbxEkLOJXw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,219,1787036400"; 
-   d="scan'208";a="9894448"
-Received: from spr.sh.intel.com ([10.112.229.196])
-  by orviesa004.jf.intel.com with ESMTP; 17 Nov 2026 19:24:38 -0800
-From: Dapeng Mi <dapeng1.mi@linux.intel.com>
-To: Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Andi Kleen <ak@linux.intel.com>,
-	Eranian Stephane <eranian@google.com>,
-	Sandipan Das <sandipan.das@amd.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Song Liu <song@kernel.org>,
-	Ravi Bangoria <ravi.bangoria@amd.com>,
-	Ananth Narayan <ananth.narayan@amd.com>
-Cc: linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Dapeng Mi <dapeng1.mi@intel.com>,
-	Zide Chen <zide.chen@intel.com>,
-	Falcon Thomas <thomas.falcon@intel.com>,
-	Xudong Hao <xudong.hao@intel.com>,
-	Dapeng Mi <dapeng1.mi@linux.intel.com>
-Subject: [Patch v7 24/24] perf/x86/intel: Fix incorrect PERF_METRICS overflow bit clearing
-Date: Wed, 18 Nov 2026 11:14:53 +0800
-Message-Id: <20261118031453.1353625-25-dapeng1.mi@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20261118031453.1353625-1-dapeng1.mi@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=L5364VZS
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3B791F000C4;
+	Wed, 18 Nov 2026 03:43:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794973413;
+	bh=+p5MlAGzvw71fdo0AWFOJilWn1c85StymLp8MpQlwaQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=L5364VZSxLNMpLMVDd8LvQvQ49CxoEoQkOAiWs5+k1YzxCDoR6WFX/TgC+h3JAAs6
+	 hCIe7SFGee0C7cAhN9z3T+KS0dxfxPk6eGBWVJhBvvHlG+WI36iPqZeI2XT9ikVlZa
+	 SFSoqROvBCK+u6TufnzLvZJodeE7adru1tclWBHFMw04gBhT8ojSI+aViNBI8doYJ7
+	 yaNzjd1KQRhiTfPyauCn7iGvWjbMcj7efXaw/4C+IBnSMQw4lrk3rA+Z7XnRxpWYwd
+	 mKOLIG5+YU/qpQlu9ZP2XEGvYhW0KeX5Ji155eS16fMnSsG1enlcYWavhBik2iZida
+	 5rc7Fv5KV+uSQ==
+Message-ID: <sashiko-outbox-220035@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [Patch v7 06/24] perf/x86/amd: Avoid re-enabling PMU and LBR
+ for BPF when disabled
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Dapeng Mi" <dapeng1.mi@linux.intel.com>
+Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20261118031453.1353625-7-dapeng1.mi@linux.intel.com>
 References: <20261118031453.1353625-1-dapeng1.mi@linux.intel.com>
+ <20261118031453.1353625-7-dapeng1.mi@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 18 Nov 2026 03:43:32 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -98,59 +60,70 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-The overflow status bit for PERF_METRICS is cleared incorrectly in
-handle_pmi_common(). The code clears the raw bit index value instead of
-the corresponding BIT_ULL(...) mask, which leaves the overflow flag in
-an incorrect state.
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Low] perf/x86/amd: PMU enabled before LBR in
+  amd_pmu_v2_snapshot_branch_stack()
+--
 
-Define GLOBAL_STATUS_PERF_METRICS_OVF as the proper bit mask and use it
-when clearing the PERF_METRICS overflow bit in handle_pmi_common().
+commit 496e4315c6fe26a4c320a0d5de1185d312c47c38
+Author: Dapeng Mi <dapeng1.mi@linux.intel.com>
 
-Fixes: a5f5e1238f4f ("perf/x86/intel: Don't clear perf metrics overflow bit unconditionally")
-Fixes: d21954c8a0ff ("perf/x86/intel: Process arch-PEBS records or record fragments")
-Signed-off-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
----
- arch/x86/events/intel/core.c      | 4 ++--
- arch/x86/include/asm/perf_event.h | 1 +
- 2 files changed, 3 insertions(+), 2 deletions(-)
+perf/x86/amd: Avoid re-enabling PMU and LBR for BPF when disabled
 
-diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-index b4632b791e26..d7284eb73227 100644
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -3972,7 +3972,7 @@ static int handle_pmi_common(struct pt_regs *regs, u64 status)
- 		 */
- 		if (cpuc->events[INTEL_PMC_IDX_FIXED_SLOTS] &&
- 		    is_pebs_counter_event_group(cpuc->events[INTEL_PMC_IDX_FIXED_SLOTS]))
--			status &= ~GLOBAL_STATUS_PERF_METRICS_OVF_BIT;
-+			status &= ~GLOBAL_STATUS_PERF_METRICS_OVF;
- 	}
- 
- 	/*
-@@ -3987,7 +3987,7 @@ static int handle_pmi_common(struct pt_regs *regs, u64 status)
- 
- 		if (cpuc->events[INTEL_PMC_IDX_FIXED_SLOTS] &&
- 		    is_pebs_counter_event_group(cpuc->events[INTEL_PMC_IDX_FIXED_SLOTS]))
--			status &= ~GLOBAL_STATUS_PERF_METRICS_OVF_BIT;
-+			status &= ~GLOBAL_STATUS_PERF_METRICS_OVF;
- 	}
- 
- 	/*
-diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
-index 5c92d43bbef8..63e1d1bcd01a 100644
---- a/arch/x86/include/asm/perf_event.h
-+++ b/arch/x86/include/asm/perf_event.h
-@@ -452,6 +452,7 @@ static inline bool is_topdown_idx(int idx)
- #define GLOBAL_STATUS_ARCH_PEBS_THRESHOLD_BIT	54
- #define GLOBAL_STATUS_ARCH_PEBS_THRESHOLD	BIT_ULL(GLOBAL_STATUS_ARCH_PEBS_THRESHOLD_BIT)
- #define GLOBAL_STATUS_PERF_METRICS_OVF_BIT	48
-+#define GLOBAL_STATUS_PERF_METRICS_OVF		BIT_ULL(GLOBAL_STATUS_PERF_METRICS_OVF_BIT)
- 
- #define GLOBAL_CTRL_EN_PERF_METRICS		BIT_ULL(48)
- /*
--- 
-2.34.1
+This commit saves the enabled states of the core PMU and LBR in
+amd_pmu_v2_snapshot_branch_stack() and only restores them if they were
+enabled before the snapshot was taken.
 
+> diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
+> index bf631f60757cc..dd0e24f26c6b0 100644
+> --- a/arch/x86/events/amd/core.c
+> +++ b/arch/x86/events/amd/core.c
+> @@ -932,22 +932,31 @@ static int amd_pmu_v2_snapshot_branch_stack(struct =
+perf_branch_entry *entries, u
+>  {
+>  	struct cpu_hw_events *cpuc;
+>  	unsigned long flags;
+> +	int pmu_enabled;
+> +	int lbr_enabled;
+> =20
+>  	/*
+>  	 * The sequence of steps to freeze LBR should be completely inlined
+>  	 * and contain no branches to minimize contamination of LBR snapshot
+>  	 */
+>  	local_irq_save(flags);
+> +	cpuc =3D this_cpu_ptr(&cpu_hw_events);
+> +	pmu_enabled =3D cpuc->enabled;
+> +	lbr_enabled =3D cpuc->lbr_enabled;
+> +	cpuc->enabled =3D 0;
+>  	amd_pmu_core_disable_all();
+>  	__amd_pmu_lbr_disable();
+> =20
+> -	cpuc =3D this_cpu_ptr(&cpu_hw_events);
+> -
+>  	amd_pmu_lbr_read();
+>  	cnt =3D min(cnt, cpuc->lbr_stack.nr);
+>  	memcpy(entries, cpuc->lbr_entries, sizeof(struct perf_branch_entry) * c=
+nt);
+> =20
+> -	amd_pmu_v2_enable_all(0);
+> +	if (pmu_enabled) {
+> +		cpuc->enabled =3D 1;
+> +		amd_pmu_core_enable_all();
+> +	}
+> +	if (lbr_enabled)
+> +		amd_pmu_lbr_enable_all();
+
+[Severity: Low]
+Should amd_pmu_lbr_enable_all() run before amd_pmu_core_enable_all(),
+matching amd_pmu_v2_enable_all()?
+
+Calling amd_pmu_core_enable_all() first restarts the hardware PMCs while
+amd_pmu_lbr_enable_all() is still reprogramming the LBR MSRs, so the PMCs
+count the MSR accesses in amd_pmu_lbr_enable_all() and can overflow before
+DEBUGCTLMSR_FREEZE_LBRS_ON_PMI and DBG_EXTN_CFG_LBRV2EN are restored.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261118031453.1353=
+625-1-dapeng1.mi@linux.intel.com?part=3D6
