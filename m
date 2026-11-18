@@ -1,100 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.54
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794962587;
-	b=lzKEPsa0FhyxTJRwBdVbt68sfc21OOq85AbwfUicWxoCswhvV7mmxXxuuA/sy69pP9tg
-	 KYCwx2KlWctTAf949BiVgXwofS02TEGW/bV51Ivi267JydlkInTDyl86QBR2hzjpB9Up2
-	 w3uKlPXO+2o3+inX4wC6S6u7qgp0GZmMexByq099nbJIsqcJAG/TO1uWre60zkL3FqDzA
-	 q9EMcnwvSyM/vtcfqVjYiFpA4r7live4FluNZrKVm3xUZV21WagSJb14cKvRfPpWnhruG
-	 6bC8v2ZKZh/mU3ohZcHdr8si/F8f5WzxlGtCY/62GS4TpgUKRxbL3qzrFp7L0KXNq1w==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794962587;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=puGtQjs5QpcXV8o0ei3pWVAJkBqePYnUROGDguXC5No=;
-	b=Ejf8c5fb5MaDQwxWpLBVxrJOuwrfkswK4yscP8d00TMr3opD9rBH1GIRlJNQzyxb2ixn
-	 xlLfdnDXWY+50tDBhtnWdAM2/hcq7ZI6gnrfQZr9hQ/SPNWFlJyKXS5aOV26oEXlRzU+R
-	 Ezt5xSWMNQObkgGPR/LYTIG0XL9PORDGkekaArjsWZhag9kDX+3DYuDxbyy5vdAkVA+jd
-	 1B3BOpqquXOY3QFsuLUBaEQwXhFomdkDMgOv0AsesvotYtiZoe5xSqwJ+QXtVESHDvDsM
-	 BEHvRy+nrwxAsQmJSpD9HnMUlvXjBbIZmBgK4LNpz2U5uroHNIVUorMyMWpBuMqTmHA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cloudflare.com;
-	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=QoQgSM7k;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.54
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.240
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794963165;
+	b=wjWiOf+VycaXWqzWuh06KDvU1g51ueeR1EQGx8med8ONq+PpJg0e686w2ihDtC4e9ZjY
+	 D237Ko/d9z4NZcaaY8LucljzHvlOrZV4fuXbvUdkG/TmDgAowhzQPMeNM5RMYqgBq/aDr
+	 ZtMVotKAlDt7pofpjRwcNXJlciidLUoM7cnIh0toauoyjimu5yBtVJq8fc2+o3Bc4aSl6
+	 J6DT2gLAWJj6AYlrQU3LL9YZBh3f9PUG+LJ1b6rei2inXTe2ssTN9ISYz36Dei4Ew4RWT
+	 05JfTU5JQqvQ93YG0veiIwP6U3mItGYkYBJNnjfkqcy0EnKEwwdcpxj5jvicmpvHW6g==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794963165;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=u4E0fQhmGCeFsbiKHI/HoTeHZ7lq7KvgeuRTX4/oJSY=;
+	b=YQSQw9M8kafCoPsI0TVbnJlY6m6f/wUBzvNMivtP2n78LW4SLKZl4PC+juzkO5I+nVdl
+	 fbLziRrVBA7K0606/fp6vB2oIH8bPt1040cmlD1NYdv+WD6vHwOBYdPTKgYaixTyxJe/Y
+	 4diVNISM6b4Gel+Y81/nCXsHFHWUcBpLMYnR6MGf+XtQ1LtsgJ+9bGLLdGklic6WHB3TR
+	 YpI0FAumVFEaTxxKhTAZEyWJI3H1uVxC7UlBGeqLi7qYCQ6OMdRF400MZdo8JdqZ/1UAq
+	 EimT9bDlDr+7BFzKN/r3nNfBDljQSoyr5Eaz7jilcGpBW+X0ViUDGdVUTKWNBnQjvOw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=tOC4QT1z;
+	arc=none smtp.remote-ip=91.218.175.240
+Received: from mta0.migadu.com (out-240.mta0.migadu.com [91.218.175.240])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F072606A886
-	for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 00:43:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5F072606A886
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDAEF606A31C
+	for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 00:52:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CDAEF606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=QoQgSM7k
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-48eee44b908so264819fac.1
-        for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 16:43:07 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794962586; cv=none;
-        d=google.com; s=arc-20260327;
-        b=RD1ZUJOu7di2+t2ixKwnjumIrr5hooVnL96ebtKTedbl2N4LX0vjAbdg3iUvJFhQsT
-         xveUqvYqnN5E5qihA18lQJATIG+PuDQu0Got8GszBebNd7AexFKTs5q7JuOqO5Q6ia9P
-         utvOMFrXVLt+GGlhmmO4PnIIvoGAFvUF3VXZs0TA8/dMbB9JX6pY6EdNDzqr6aKtVtpa
-         UZEOVAq79k618f2BGhgE5bs8LBeklJHHloEZoTyzGbvHppn0QGpWkwXiUCssr9lMuOrp
-         bKXbLhFWyr2oCT8YyWYT9vl3xnUPkE89bYTFioxtwHmvMYSdEFcApD7aOJoqfSbOvFtt
-         /YIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=puGtQjs5QpcXV8o0ei3pWVAJkBqePYnUROGDguXC5No=;
-        fh=SCPCvGrDnObqt2tUXLsqnp05PlBxlEwB244ee2Hev3g=;
-        b=VQJBx/xBWJOP2zhL3kWxtvWehPsZf+hG31iuE6w6HYQOKdptflYnk1V5YL8UEsVHl/
-         Cl2l8bB2St1plzNeuOPz9owNekWa/RJYSo7VQQKMy5q+yjlc5TzhmQCfEHHK0cW1KvxG
-         AOpL8yJvhPu7JFen2wJe6TnB7tMVjXQHZMXmY2yXRLgr8gYn/jcdX0QEX0RWm4fFV6bN
-         eal+5FR0LdjMXnZ/JI6fVWRgGbSzfc9LO1jEFeTtwlWrxdyHH9+8ylG/uf0969R565Sf
-         m/KH4wGALVHs9+r8dJL6qBSUzmJX6EyEL1nMdgeR38Qr8FC5ZEUTLkOcajJFqPjReYiN
-         PWMg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1794962586; x=1795567386; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=puGtQjs5QpcXV8o0ei3pWVAJkBqePYnUROGDguXC5No=;
-        b=QoQgSM7knlmQduEbalOghi/sOtbUt1RV5d9sPkjYyyVMIE6R1Kp7b4wimTkhe2Yx9I
-         bQMdOzdqMed+XivU6bq71iIaeaVoVc7sZyWfap2u6yi7mll11YX8P49J3lvA0YXdc+nX
-         ZTDSbaBadvIpnnxmFa+Tri/OuLybsQtUe8BaIEz6Et+INEWS1J9mO6tqyrP5pRBfS2ys
-         K8BEF2IqiQQrqxBY/1lNDNLhABCxpAGq06QUY+MXEHZICS9TzjnYQKppfWjSpaRhGIBF
-         ogBWvrfRSzVZPHTPGNTRNdjyZ58WBn0UWOcANINrg0lCJV4LPen6qxERF29IH31qzMuS
-         ngZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794962586; x=1795567386;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=puGtQjs5QpcXV8o0ei3pWVAJkBqePYnUROGDguXC5No=;
-        b=y3mUqNlYpwLJk2wshS0iR90KUHwO1FyJL/xK0G6eA6+Fa4zEFhm6aKflW2BwL1Wwpg
-         fVmo0H5zGZYnHbvbeZ1IfeVZfbvucgWTGkJYsXULsr4Zs68LUWHbUiv6KtvjVj4O3JNO
-         bN1SxJ4iu8CwSRw0v0DbhbCSNKU32BZTuFBi5RCY50cYM/EQgISMwcjhn2vejFWMIJKs
-         90kmWASQ+dCvVrJMG9rBvzu+bTEfh/lLFv95YQDo//6EEHNunTeGxcZaaviRNQGIoeY3
-         1tzoFz/St/T38prPfZif3tZB7TTvn2SPaXEBDN/5bJThMolWNI+gnfK/MA3sjixS5Jzj
-         UaaA==
-X-Forwarded-Encrypted: i=1; AL+hErFTkgBIvxKVJtSp7t8QenPSyEa9GdRR5/e2La0HLp44FYiGiHZ3wZfFY88t0WCvBsTAeXw=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/1cy6SXeE/iJZsDG9a32dXu2PtilZyro+tM2RlUGTG0tNl6iV0
-	BM62w0cCR6pwD8qKBgeS0HUsNVhmyhMAZ+X/AalaJs2Reitl+92h20eBe4IVeXMJPvK2Nku4EDF
-	1V9mi/mIi4hbO8eCGG+pjMMz7HeAn9QP2UnjhPnnUwA==
-X-Gm-Gg: AYBFou1kSYqocl1IaRFeHKUqGy6nA637tp93Ytq91GSi9qqeEsK5BtFylmHPWu5K1xZ
-	ToqFEL9drc4Q6R7LGXqE1X4mjEeBN+T+JqNgzHqbfh4BMfiFQzAm2FusEvQgXDYvHWrvhoJQ2jl
-	xRlSMWv9Lh7UvYEGrM5EKocL6crEsF3c24tlaGRPPQqsInzRcIa38PYqmKoFc82nhnqInuKvjXi
-	Tv8B9CUYsxpzRtnqhSZWzu+rd0/X0RB/hiTpnpwOp3ibcbp7lAmEKeQFmFmDWCQgunLILfVrgp8
-	KAK8JkGevdh5v0EITeE4GkTgOSug4azE7fCqRWkhkqymIl3l/NWFMbaqIjqMaK+4U3Rb6XTmG4Z
-	UdP0bsELnSM/Y/q+0RiizG2jaGqfYFdxOxUcAMiPJRqq1SSFAmlB6xiqiqPJzWO19vDszQnTrJy
-	dk0wet8nrKGA==
-X-Received: by 2002:a05:6871:b11:b0:491:47e1:6280 with SMTP id
- 586e51a60fabf-4b75bb74ec7mr770348fac.15.1794962586147; Tue, 17 Nov 2026
- 16:43:06 -0800 (PST)
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=tOC4QT1z
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=jAcKC7XNRVh0GKcOuxn1Fu7bTvbspwLeOY4x6dh/4d4=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794963163; v=1; x=1795567963;
+ b=tOC4QT1z8jK2RG9eRb9Ibc70UQ38UNsYD2ncTafZVocMYFKDQVVZNcRrCtZZKGBpBINLUGu7
+ sxYkJz9l3DHtZCWCh21VQCm8Li49LLHKQyfcMt4DdyxpbyjW+1m4WR33PNKshm6SKBAermUeaF7
+ hMX6Akw9TjYfKdGzJwO20LPo=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id c0217c32623d0320;
+	Wed, 18 Nov 2026 00:52:42 +0000
+X-Mizu-Trace-ID: c0217c32623d0320
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <9695ec3d-7b81-488d-989f-0bd411d673f2@linux.dev>
+Date: Tue, 17 Nov 2026 17:52:38 -0700
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,70 +58,176 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <cover.1794281983.git.tianyi@cloudflare.com> <avOvI8xrHI0dwyHj@devvm16445.scu0.facebook.com>
- <CAG4wq-egD55NZDw+OKVKTKN2tQJ9oKEC504wFv=xoMXyJ-0z4g@mail.gmail.com>
- <20261115113902.4834dda6@kernel.org> <CAG4wq-dhd5a5zxQcSShaKifYd2z+pMpHaCYtZJRX1QCxEH4dfg@mail.gmail.com>
- <20261116142710.347e8571@kernel.org> <CAG4wq-cDYa2GkpWSYeOLwEPv45BtucZk+r=N2b1Srd=gUUO4MQ@mail.gmail.com>
- <20261117161856.6f6c2ce9@kernel.org>
-In-Reply-To: <20261117161856.6f6c2ce9@kernel.org>
-From: Tianyi Gao <tianyi@cloudflare.com>
-Date: Wed, 18 Nov 2026 00:42:55 +0000
-X-Gm-Features: Aa3M54r-Qn1bATmm01-LGWkLr4tuoSPVNlK5FfS3xcLFtqloul4EQ0s5CX5Sq4I
-Message-ID: <CAG4wq-cQVUJgizeowhr4s4Z2Q_o0_dWfAwzXthpBATBB-7edLQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 00/15] xdp: add SKB core extensions to keep RX
- metadata until skb creation
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Stanislav Fomichev <sdf.kernel@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Lorenzo Bianconi <lorenzo@kernel.org>, 
-	Vladimir Vdovin <deliran@verdict.gg>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Donald Hunter <donald.hunter@gmail.com>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
-	Alexander Lobakin <aleksander.lobakin@intel.com>, Magnus Karlsson <magnus.karlsson@intel.com>, 
-	Tushar Vyavahare <tushar.vyavahare@intel.com>, Jason Xing <kerneljasonxing@gmail.com>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, Madalin Bucur <madalin.bucur@nxp.com>, 
-	Ioana Ciornei <ioana.ciornei@nxp.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Chris J Arges <carges@cloudflare.com>, 
-	Jakub Sitnicki <jakub@cloudflare.com>, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, intel-wired-lan@lists.osuosl.org, 
-	llvm@lists.linux.dev, kernel-team@cloudflare.com, 
-	Tianyi Gao <tianyi.gao@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [BUG] bpf, lsm: new first argument in 7.4 inode hooks silently
+ breaks BPF LSMs
+To: roblabla <linux@roblab.la>, Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+ Paul Moore <paul@paul-moore.com>, Daan De Meyer <daan@amutable.com>
+Cc: bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+ paul.mabileau@harfanglab.fr, linux-kernel@vger.kernel.org,
+ Andrii Nakryiko <andrii@kernel.org>
+References: <d85ece6e-27f9-4d9f-83af-4101bc76fef6@app.fastmail.com>
+ <356db94e-f5d6-4fb2-839a-b97aef72256b@app.fastmail.com>
+ <CAHC9VhR9sjunJRnM9gy-BkBZkapQTrr8a8FtmaK7JkAmUqTrLA@mail.gmail.com>
+ <CAEf4BzZKmn6g0SK8OddjKFj_vAmZFvpZv32Hs_S+GHgT7VNfrg@mail.gmail.com>
+ <9d6bdc31-e57c-4187-be78-29d82471f710@app.fastmail.com>
+Content-Language: en-US
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <9d6bdc31-e57c-4187-be78-29d82471f710@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Jakub,
+On 11/9/26 8:07 AM, roblabla wrote:
+> Hi,
+> 
+> Thanks for the replies!
+> 
+>> [...]
+> 
+> So what would be really nice is a way to make eBPF code robust against
+> kernel changes such that it either works, or fails to load, but doesn't
+> do the halfway "loads but silently misbehaves". Here are two ideas that
+> have been in the back of my mind that could help solve this issue (though
+> I understand that they may be rather large changes, I'm putting them out
+> there mostly as a conversation starter):
+> 
+> 1. Could libbpf/the kernel have a mismatch check on hook arguments? I
+>    understand that libbpf and the verifier don't know the types a
+>    program expects, since BPF_PROG() only casts u64s. But the macro
+>    does know the types at compile time. Could it (or an opt-in variant)
+>    record the expected prototype in the program's BTF, so that libbpf
+>    can compare it against the LSM hook's prototype in vmlinux BTF and
+>    refuse to load on a mismatch?
+> 
+> 2. Since kernel BTF has parameter names for the bpf_lsm_* functions,
+>    could we maybe have CO-RE-style relocation to resolve "the argument
+>    named dentry" to the argument index at load time? This way, adding a
+>    new argument could happen anywhere in the argument list without
+>    breaking eBPFs, and removing an argument will (correctly) cause our
+>    eBPF to stop loading. It does mean the eBPF programs must provide the
+>    same argument names, but maybe that's an acceptable tradeoff?
 
-Thank you so much. I am really grateful for your comments, and for
-spelling out your views on this problem. I learnt a lot.
+Hi everyone.
 
-I would like to share how I see the problem. I understand that you
-want the setters to mirror the existing getters, so that the metadata
-stays with the driver. But I see a fundamental mismatch between
-reading and writing the RX metadata:
+roblabla's comments got me curious, and I spent some time with my
+helpful assistants poking at the problem.
 
-- To read it, we must go through the driver callbacks, because each
-  driver keeps it in its own descriptor format.
+There is another workaround in addition to what Andrii suggested.
+A program can already make itself fail to load on a signature
+mismatch:
 
-- To write it, the target is always the xdp_frame or the skb, and
-  both are the same for every driver.
+	union security_list_options___mine {
+		int (*inode_create)(struct inode *dir,
+				    struct dentry *dentry, umode_t mode);
+	};
 
-So to me it is natural to set it all at once in one helper function.
-This also makes it much easier to support a new driver than
-implementing three callbacks in each one.
+	extern void lsm_proto_mismatch__inode_create(void) __ksym __weak;
 
-Overall, I feel this has turned into a deeper difference in design
-direction. The same question has come up in several earlier series
-too. I will discuss it with Jesper, and we will come back to this in
-the near future.
+	SEC("lsm/inode_create")
+	int BPF_PROG(deny_create, struct inode *dir, struct dentry *dentry)
+	{
+		if (!bpf_core_type_matches(union security_list_options___mine))
+			lsm_proto_mismatch__inode_create();
+		...
+	}
 
-Thanks,
-Tianyi
+bpf_core_type_matches() checks the expected prototype against the
+hook's member of union security_list_options in kernel BTF.
+On a mismatch the call to the unresolved weak kfunc stays reachable,
+so the verifier rejects the program, and libbpf reports:
+
+  kfunc 'lsm_proto_mismatch__inode_create' is referenced but wasn't resolved
+
+It's positional and needs the exact argument count, but it turns
+silent misbehavior into a load failure. The same should work for
+tp_btf with the btf_trace_<tp> typedefs.
+
+But of course it's just a workaround..
+
+A bit more generally, expanding on roblabla's second idea, I think libbpf
+could resolve hook arguments by name with the existing CO-RE machinery,
+without kernel, verifier or LSM changes.
+
+The BPF side could look like this:
+
+	SEC("lsm/inode_create")
+	int BPF_PROG_ARGS(deny_create, struct inode *, dir,
+			  struct dentry *, dentry)
+	{ ... }
+
+BPF_PROG_ARGS() (name TBD) takes (type, name) pairs like BPF_PROG2(),
+but instead of casting ctx[0], ctx[1], ... it reads each argument
+through a local preserve_access_index-marked struct, so every argument
+access is a regular CO-RE field relocation:
+
+	struct bpf_func_args___deny_create {
+		const struct mnt_idmap *idmap;	/* 7.4+ */
+		struct inode *dir;
+		struct dentry *dentry;
+	} __attribute__((preserve_access_index));
+
+	SEC("lsm/inode_create")
+	int deny_create(u64 *ctx)
+	{
+		struct bpf_func_args___deny_create *args = (void *)ctx;
+
+		if (bpf_core_field_exists(args->idmap))
+			/* use args->idmap */;
+
+		return check(args->dir, args->dentry);
+	}
+
+Nothing changes on the loader side:
+
+	skel = deny_create__open_and_load();
+	if (!skel)	/* mismatch: load fails, libbpf logs why */
+		return -errno;
+	err = deny_create__attach(skel);
+
+To achieve this libbpf would need to do the following at load time:
+
+  - treat bpf_func_args___* as a reserved type in CO-RE relocations;
+  - find the program's attach target in kernel (or module) BTF:
+    bpf_lsm_<hook>, the fentry/fexit target, or the tracepoint stub for
+    tp_btf;
+  - build a struct from the target's prototype: one member per
+    parameter, named after it, at the parameter's ctx offset, plus 'ret'
+    for fexit, fmod_ret and LSM;
+  - resolve the relocations against it by name, with a strict type check
+    (pointee types must match, qualifiers ignored), since CO-RE normally
+    treats any two pointers as compatible.
+
+A missing argument or a type mismatch is a normal CO-RE relocation
+failure: the program fails to load with an error naming the argument,
+unless the access is guarded by bpf_core_field_exists().
+
+And this is not LSM specific, fentry/fexit/fmod_ret and tp_btf would
+work the same way.
+
+It doesn't help if a hook keeps its signature but changes semantics,
+or if the attach point goes away (that already fails to attach).
+
+Here is a vibe-coded prototype of the above:
+https://github.com/kernel-patches/bpf/compare/bpf-next_base...theihor:bpf:bpf-named-args
+
+It's an entirely new libbpf feature though.
+
+Andrii, what do you think of it?
+
+---
+
+And just my 2c re argument ordering:
+
+Paul, with all due respect, prioritizing code style and personal
+preferences over backwards compatibility is unreasonable even for
+unimportant applications. And here we are talking about apps
+implementing security policies, which many organizations (not just
+companies) in the world rely on. Given the recent flood of
+cybersecurity issues (in Linux and beyond), I don't see why would we,
+as in kernel devs, intentionally make the defenders' job harder.
+
+
+> 
+> Thanks,
+> roblabla
+
