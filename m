@@ -1,49 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794994007;
-	b=kpjSJN/rcJdE7dPrDazzThzHLev7IGs0tuNf7JO2Stj5Zi0xo/KoAhcBYjYEouboOiBY
-	 DhYN/FtmSXPPx5QJzIRvPBn1567dOWePbpyFpwzw0vVUjT7kuhnUj47x//K7duA1GdCnl
-	 dLS7TFfEYr9tg0K7Y36sofv5C7ig0MVklWup7GIQQFMbiNBg1FoYfYSQrsVeNG6wAAHzs
-	 bmCRc0CDJrWXLrRaEmeBgy8lL+uSYTIsMSJ1b04EeQNabnrQhu4q4rZ2rNg+r8zvsRJhc
-	 FdNyy7FljiXqGHASwN2hNCJ6M5gnS/779+oFspBnXHCSPXJeFd816StfEE/3GtnZxTQ==
+	t=1794994563;
+	b=uige0oKgeJWHNoG03Q1AnC9RbaARJdL19qZ9Cg6wcaiovz6lJg0OI4jSfLdshI6pv/KA
+	 jNTbX25cpcj4qJwBTfPw+8JDoufK3Fvp/jbnvx0D+tUohfBDDtOjT6dOISs3ecs2GGbYo
+	 G5AThHr8o3ab/U7fSBbVlYmKRXC77kzPLvdQgTB7LxWQH9yN/WhNIVZugbODndFujLfNz
+	 mBMbC3/TqZPWxIx7G3SPse7KNk8zpjbUjizLLu+bDk9ihboeT//pRIrBRvxjDfgQgjgpS
+	 zYvse4vQKSHZ1TPSXiDV5BeuXCMzxHxJKoPJumVuTsxW5B82CRCALk/SKsDf13HgYPA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794994007;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:From:
-	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=YyTnj21z1o7e2B9mOs4PYUHbERAya5hpvioQJuyfVS0=;
-	b=Jqwo4F/QxOGDGZgrXCR3EOWPjhWV8ApZfuApOVEZTslybATxGukfO6HoXbyHl1htn3PC
-	 vbQvn0ID0MKHDAe1uPH4esK4vPmkGu4IdvYo1G5jc/T9kjXIVi8Cnbune++MKY+RpWpTX
-	 aqh3LDjK7lcuQmL7CJaYXQJ37tLPT5zVFS5TaPW2iVLRBmgr433v48KXuxUK50zPKlIR+
-	 qMZ5YcUa+FE0SVda/4gPfuYC+ja7UHzOx0BOigtUc2CUNhE2os8aDO0YIpcV43YYh0guY
-	 KNmt3GJRgEB/ugTsmE3x+6VkXXM5+Z/Csi0TM5H+Av2m38KbNSNTSP5+j95c7OjnLgA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794994563;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=oEtrs9YN++TIvppEtfu/diqt2HKppGf1oq8L8HaJ3VE=;
+	b=JHHT6GeaZBO6zG1NBYKWec1cXinR97AX7khOViQRUydYGKs8oRGE8KnVjaK8LhOUL+ZW
+	 rYalF4yIvB1/GcW3Gh6XFeHnIQQU1RrVXzJKOiPSF/tmESHYxAltdbu8PyNrFbZKEOwoW
+	 ieHmCdmJqFi16QijcxgD4pZ7esxPiMB3xrxcFcFAMWg8QhqrDXE/hVlLi7NE9PhfQa48N
+	 m0UHIkDkylbLWRYiv7HzD98MIKFWkl4feBVjd+nwcBXkE1hu2exRzTREtQqK1NE7gs8si
+	 zlGbHK7KLZ6EWISue9p52Vro7wvl3vAtremgw33zWnDqWGo+aPs65LeSnimlleR9NSw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b="b/M8ZsTX";
-	arc=none smtp.remote-ip=217.140.110.172
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37167606A320
-	for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 09:26:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 37167606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nahPYjtB;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8235B606A31C;
+	Wed, 18 Nov 2026 09:36:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=b/M8ZsTX
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5838F1596;
-	Wed, 18 Nov 2026 01:26:42 -0800 (PST)
-Received: from [10.57.91.192] (unknown [10.57.91.192])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AEFBA3F673;
-	Wed, 18 Nov 2026 01:26:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1794994005; bh=N1QB5zcQkhEUye/mlGIOnn4jhu5njvHRiwWIoEGXYEM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=b/M8ZsTXaSr+CoRWeIGkYmAwCHHfj9AomXN+jaqHtIRFtSUX3mYfCGV3j7waYyb7S
-	 afl2wpimOTXVQ6t9vcpBgLPUPTnvVk98pYEiQUbimyrjLL8v1OEX/qRu2h4SXgrJVn
-	 5b4nZz2bRMYnQ1qB8L0NFQCMQ2B5PtjV4GvWumRE=
-Message-ID: <66972dce-b645-4083-bae4-dc8109ff5fe2@arm.com>
-Date: Wed, 18 Nov 2026 09:26:42 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nahPYjtB
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48F321F000C4;
+	Wed, 18 Nov 2026 09:35:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794994563;
+	bh=oEtrs9YN++TIvppEtfu/diqt2HKppGf1oq8L8HaJ3VE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=nahPYjtBD1Iaas2FHy09zfnsVzzPWV2xfnaZM4o2uDixquvqwuHvQ+/o6Lx3RmcT7
+	 A5MLlaaWHi5zeDFe6Pr6Zu/1tZf365UdM7zLPXtacuahcYasmLgD5icYRCqSxPoOAQ
+	 apSPaDPnXbhT/Rjv6/c4yyGGAb3a6EIjZs+gpHbG4KtSnFEboWn87xat6LJyla++Jd
+	 yjbLXh2HQKcIglQe/QgOIjdxO0MlY4PzADbD2mLPuxiLGazQOP1N6OqiCY11zDd0cS
+	 +PtK7soRS49YQWtEbo0XhLlRb2q60FYLSeh5q1DNqhKbRWl7YpSpO779dHK9eKPFp5
+	 s/bgKJ6Xw8nfA==
+Date: Wed, 18 Nov 2026 10:35:40 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Cai Xinchen <caixinchen1@huawei.com>
+Cc: Al Viro <viro@zeniv.linux.org.uk>, mic@digikod.net, gnoack@google.com, 
+	paul@paul-moore.com, jack@suse.cz, amir73il@gmail.com, andrii@kernel.org, 
+	apparmor@lists.ubuntu.com, ast@kernel.org, axboe@kernel.dk, bpf@vger.kernel.org, 
+	casey@schaufler-ca.com, cel@kernel.org, cem@kernel.org, chenxiaosong@chenxiaosong.com, 
+	code@tyhicks.com, corbet@lwn.net, Dai.Ngo@oracle.com, dakr@kernel.org, 
+	daniel@iogearbox.net, dhowells@redhat.com, dlemoal@kernel.org, 
+	dmitry.kasatkin@gmail.com, driver-core@lists.linux.dev, dsterba@suse.com, 
+	ecryptfs@vger.kernel.org, eddyz87@gmail.com, emil@etsalapatis.com, 
+	eric.snowberg@oracle.com, exfat@lists.linux.dev, georgia.garcia@canonical.com, 
+	gregkh@linuxfoundation.org, hch@lst.de, hirofumi@mail.parknet.co.jp, hyc.lee@gmail.com, 
+	ihor.solodrai@linux.dev, jlayton@kernel.org, jmorris@namei.org, johan@kernel.org, 
+	john.fastabend@gmail.com, john.johansen@canonical.com, jolsa@kernel.org, 
+	kpsingh@kernel.org, linkinjeon@kernel.org, linux-api@vger.kernel.org, 
+	linux-block@vger.kernel.org, linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-nfs@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-unionfs@vger.kernel.org, linux-xfs@vger.kernel.org, liubaolin12138@163.com, 
+	martin.lau@linux.dev, mason@kernel.org, mathieu.desnoyers@efficios.com, 
+	matt@bobrowski.net, memxor@gmail.com, mhiramat@kernel.org, miklos@szeredi.hu, 
+	neil@brown.name, netfs@lists.linux.dev, ntfs@lists.linux.dev, okorniev@redhat.com, 
+	omosnacek@gmail.com, penguin-kernel@i-love.sakura.ne.jp, rafael@kernel.org, 
+	rdunlap@infradead.org, roberto.sassu@huawei.com, rostedt@goodmis.org, 
+	selinux@vger.kernel.org, senozhatsky@chromium.org, serge@hallyn.com, 
+	sj1557.seo@samsung.com, skhan@linuxfoundation.org, song@kernel.org, 
+	stephen.smalley.work@gmail.com, takedakn@nttdata.co.jp, tom@talpey.com, yonghong.song@linux.dev, 
+	yuezhang.mo@sony.com, zohar@linux.ibm.com, utilityemal77@gmail.com, 
+	lujialin4@huawei.com
+Subject: Re: [PATCH -next -v4 02/17] LSM: pass struct path to the
+ inode_setsecctx hook
+Message-ID: <20261118-nordlicht-badeort-daumen-813a1e9fd0b3@brauner>
+References: <20261117150542.1169451-1-caixinchen1@huawei.com>
+ <20261117150542.1169451-3-caixinchen1@huawei.com>
+ <20261117184342.GR989762@ZenIV>
+ <20261118001641.GA1669148@ZenIV>
+ <bdc22808-9f22-46f7-b42d-e6bd8e1eeaca@huawei.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -53,60 +87,24 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] arm64: Mitigate Spectre v1 in the BPF interpreter
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20261117172341.3152407-1-ryan.roberts@arm.com>
- <sashiko-outbox-219240@kernel.org>
-From: Ryan Roberts <ryan.roberts@arm.com>
-Content-Language: en-GB
-In-Reply-To: <sashiko-outbox-219240@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <bdc22808-9f22-46f7-b42d-e6bd8e1eeaca@huawei.com>
 
-On 17/11/2026 17:34, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential
-> issue to consider:
-> - [Low] bpf: non-standard multi-line comment style in ___bpf_prog_run()
-> --
-> 
-> commit ac6a06b7dc1000d82907323434c2003bed5a8873
-> Author: Ryan Roberts <ryan.roberts@arm.com>
-> 
-> arm64: Mitigate Spectre v1 in the BPF interpreter
-> 
-> This commit renames spec_bar() to barrier_nospec() on arm64 so that the BPF
-> interpreter emits a speculation barrier for BPF_NOSPEC, while avoiding
-> unnecessary barriers in uaccess paths where user pointers are already masked.
-> 
->> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
->> index fc8b133c15f90..adf7ba0cdb06c 100644
->> --- a/kernel/bpf/core.c
->> +++ b/kernel/bpf/core.c
->> @@ -2251,14 +2251,7 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
->>  	/* ST, STX and LDX*/
->>  	ST_NOSPEC:
->>  		/* Speculation barrier for mitigating Speculative Store Bypass,
->> -		 * Bounds-Check Bypass and Type Confusion. In case of arm64, we
->> -		 * rely on the firmware mitigation as controlled via the ssbd
->> -		 * kernel parameter. Whenever the mitigation is enabled, it
->> -		 * works for all of the kernel code with no need to provide any
->> -		 * additional instructions here. In case of x86, we use 'lfence'
->> -		 * insn for mitigation. We reuse preexisting logic from Spectre
->> -		 * v1 mitigation that happens to produce the required code on
->> -		 * x86 for v4 as well.
->> +		 * Bounds-Check Bypass and Type Confusion.
->>  		 */
-> 
-> [Severity: Low]
-> This isn't a bug, but BPF code uses the multi-line comment style where the
-> opening /* goes on its own line with the comment text starting on the next
-> line.
+On Wed, Nov 18, 2026 at 04:59:29PM +0800, Cai Xinchen wrote:
+> There are two places that violate (1), both introduced by this series of
+> patches in ksmbd:
+>
+> smb2_parent_compressed() and smb_inherit_dacl() pair the directory entry
+> returned by dget_parent()
+>
+> with path->mnt, and problems arise once that directory entry becomes the
+> root of its mount point.
 
-All other multi-line comments in this file use this more compact style; I was
-trying to be consistent.
+No, (1) holds there. dget_parent() never leaves the superblock so the
+parent has the same ->d_sb as path->dentry.
 
-Thanks,
-Ryan
-
+What happens at the root of a mount is that the parent isn't below
+path->mnt->mnt_root anymore. That's a different property and struct path
+doesn't guarantee that (open_by_handle_at(), nfsd with
+no_subtree_check). So there's nothing to fix for (1) in those two.
