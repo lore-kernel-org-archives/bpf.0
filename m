@@ -1,56 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795017143;
-	b=t/DAHeuPeeJiv8YgKRy4/W1jf+tows+0JTJlqa/BXqbwF0MwgfBQJpcl88tKgimLkGzb
-	 5asfB+F70dpLzzMqcaHctXvaKs5USQkw8VjbDgEY9Izntjy5X7+avDEmPWrfjie9Egu7z
-	 6WOq71aXzJCn/fV6EueCUMh7dGs+p4lwWHQDhPDpORL7afBPRVL965ANEm/cxvwJKHaBI
-	 9Aksenjeck/rUEH+BRUzPqxtHHxoqGCC5CWB3iyprraBZfew2W0QV/DmbZaOCbtjwt9QA
-	 CQRyFGOICrF4m65FPc3cCSY0nzOVasr6RfRyFT3Cm4Zu4gesI2LGZysDCLjzUuhel0Q==
+	t=1795017747;
+	b=H2tBcrIvZRiH+x5GKVn1UWLVTJwqb/yiR9wVviOhHbVIVQT6EwYIZF6KABAIXJYYzHKO
+	 eDU5XYu9dAQRvDZhwbV+fXGyHqjpBgAZhz7aHBjUgwK8prxHatxRB/u4R5JpPxfsW6dDb
+	 JQxWvLnaREAYYuL4vZNAv+z/kWSp0xa6aTSMXJgEq6MQfgJikvau74zf8EVwdKPK+hdok
+	 6udAwQ7dK5oqGBHTAUdfPw+miQZ8vu1ZwK47qyft/6edJOlVAdXGk12gbBOV1iF8L+SLD
+	 dHcjQtnT5CfKPK7dsPEr5JZHP8p4rE2OFZjl6bATRcWi7Upr4D6n8a9b3Ky14p9EqYA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795017143;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=RPckgaKl6DdNmGkCsATLYf2QdOonPmpdoOfSlrReJ98=;
-	b=Ly2zhNEb1NHseFoZcqIUJQTbhKZGZzudDFfsrRyTZV6YnrnRX9j7tPJ5kipelcaHs0Xh
-	 kJDCs6B6cEo8azJbzyqX5LghUaXMROM0KMd5v51CYrgiCdF+S2oOViQill3dFHBVCPtfu
-	 d+3AFSV1kVMhXz7JTl+kC7MWYAhuJ+ilDQ5N71uQTpIkuYKm43QjXirDhk8koY0jJimIX
-	 u4GF7FbG3DZUiNnbMo/eW7kvrtEUF+hadivdgF5xj54phVpJvsesU7BDybil6nBbyAj+/
-	 35Exo5WefHwrKKYbAM0bNBnjNvK4N1mVN/571O9eWS7p6hsCaDDB61/FU1SDaZh+DBw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795017747;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=XrdabjoeKoqZWgiPzIuL3cPjSBYVcnxPS9RnfVz1GGs=;
+	b=HR347RzXF4FMUACgdNiIH3moKNroK7uV41dHqeEtgc2H0t/cxNpflWJi9m8/sZZed5QF
+	 2qs7BtISbyh2kRnFnUMZKtVe2H2fr9L9r6HWhyMQjxfbQx1Q3rdDV0t4lnCTY1cWUl/6r
+	 mEAgU7WcLuFWuUqEFwNxyu73GiJbj7FVwVTFOLdbnl7bTQ5rZ3lThHBJKY1OkWTWc3o4u
+	 9y7tDNVxERM9BAiV5Vj3za8xR/e1Oa5i7SAo7tHppFtaQVh43BCqPzd+jr/DoUJrvE3t0
+	 S/d6sCcGVF6vUNAfxqmLN+gOKVSD2V/ihJAppH02cuTWqxeoUxYpod6R2J73NsUKc1A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ka8WmrpJ;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WU1Tfeou;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16801606A333
-	for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 15:52:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7900606A320;
+	Wed, 18 Nov 2026 16:02:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ka8WmrpJ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C94B61F000C7;
-	Wed, 18 Nov 2026 15:52:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WU1Tfeou
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA9531F000C5;
+	Wed, 18 Nov 2026 16:02:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795017142;
-	bh=RPckgaKl6DdNmGkCsATLYf2QdOonPmpdoOfSlrReJ98=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ka8WmrpJ7vBCO+u3qqCBpzGeZjJ1IkMaPVP8E0Ebz/iaJdd1/1oIjWVeqM/2b/bGc
-	 UDdLFPTjtglFsckNg7b2MuvKJadv2UL/cuxBacWZo20yQsHQzwea/RHtVET1DUZEuP
-	 CHBSQnagDBuJ1e4W3CEfIrGcwlO0WY/iJGK/9eEcS5stj0x9qeg8qmnTcB9lPIdkRG
-	 G+RdHyl3FGO/4jKasXLc3zDGanQJXkJYB8LdfXFBnsEuDaUM8QRzA7rKjDmcVt5J3k
-	 FTYDnbqQwwBcQH+CxSxLIZj59G32I6YDXF5qxkx3dKsOc7SeHLEd1iJGhRFe8nj2gf
-	 m06VDlwg6Yvlw==
-Message-ID: <sashiko-outbox-221383@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net] net: stmmac: fix num tx queues in
- stmmac_xdp_get_tx_queue()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Lorenzo Bianconi" <lorenzo.bianconi@oss.qualcomm.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261117-stmmac-fix-xdp_get_tx_queue-v1-1-4cd74ee7a76c@oss.qualcomm.com>
-References: <20261117-stmmac-fix-xdp_get_tx_queue-v1-1-4cd74ee7a76c@oss.qualcomm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 18 Nov 2026 15:52:21 +0000
+	s=k20260515; t=1795017746;
+	bh=XrdabjoeKoqZWgiPzIuL3cPjSBYVcnxPS9RnfVz1GGs=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=WU1TfeoutT9TRUjHxlvhGm9LpJKpy+H4cCwsKZ3CtgcKFzxOVt8QTF3OsSPY+3SqT
+	 aAdu9dQt8z+RBpbVA/FbYcUwIRmBLVvlyc5kQrdWtafZ6KLOVJTvIPVYFojOIf30AZ
+	 7lgsg7/pnxk15kCBZHn80H92G3q8ZpEvUEzxElp9QZrPkHSaLvjOYd5ZGhHU42H8G4
+	 VyW/r0O/Bq1+6SqgxasiVU+YChY67/DuTQsRwj4ySZ3cbDQSvl1wIaiTAE/9/SSC/J
+	 gb1Tik48CySE8lgtyKNxCxwfEza8wnMmpe0Cl9c0+K6Gt1nSwS89PVGSXbdeAhmNjx
+	 j2BjueANmd9RA==
+Content-Type: multipart/mixed; boundary="===============3130468370452098512=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,97 +48,68 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Message-Id: <b65ecbc71f53e21edd402d078451459002dd39941b1dda46aaa0572bdd66b484@mail.kernel.org>
+In-Reply-To: <20261118152054.999990-1-visitorckw@gmail.com>
+References: <20261118152054.999990-1-visitorckw@gmail.com>
+Subject: Re: [PATCH] m68k, bpf: Add initial BPF JIT compiler support
+From: bot+bpf-ci@kernel.org
+To: visitorckw@gmail.com,corbet@lwn.net,geert@linux-m68k.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,gerg@linux-m68k.org
+Cc: skhan@linuxfoundation.org,rdunlap@infradead.org,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,marscheng@google.com,eleanor15x@gmail.com,jserv@ccns.ncku.edu.tw,linux-doc@vger.kernel.org,linux-kernel@vger.kernel.org,linux-m68k@lists.linux-m68k.org,bpf@vger.kernel.org,visitorckw@gmail.com,daniel@thingy.jp,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed, 18 Nov 2026 16:02:23 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Medium] net: stmmac: race on num_tx_queues in
-  stmmac_xdp_get_tx_queue() skips txtimer
-It also noticed 1 related pre-existing issue this patch does not
-introduce:
-- [High] net: stmmac: unchecked return value of
-  netif_set_real_num_tx_queues() [1]
---
+--===============3130468370452098512==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit f55af370614a4d0bb79d7ac40f036cd36c0c9e78
-Author: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+> m68k, bpf: Add initial BPF JIT compiler support
 
-net: stmmac: fix num tx queues in stmmac_xdp_get_tx_queue()
+TL;DR: Nit only: the "bne.s .+8" style comments in the m68k JIT's 64-bit
+compare code are off by 2 (should be .+10); the emitted encoding looks
+correct.
 
-This commit bounds the CPU-based TX queue selection in
-stmmac_xdp_get_tx_queue() by priv->xmit_qdisc.num_tx_queues instead of
-priv->plat->tx_queues_to_use to stay within dev->real_num_tx_queues when
-tc-mqprio offload is active.
+> diff --git a/arch/m68k/net/bpf_jit_comp.c b/arch/m68k/net/bpf_jit_comp.c
+> new file mode 100644
+> --- /dev/null
+> +++ b/arch/m68k/net/bpf_jit_comp.c
 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/=
-net/ethernet/stmicro/stmmac/stmmac_main.c
-> index 25894771e9e9f..cf87afd273439 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> @@ -5408,13 +5408,14 @@ static int stmmac_xdp_xmit_xdpf(struct stmmac_pri=
-v *priv, int queue,
->  static int stmmac_xdp_get_tx_queue(struct stmmac_priv *priv,
->  				   int cpu)
->  {
-> +	unsigned int num_tx_queues =3D priv->xmit_qdisc.num_tx_queues;
->  	int index =3D cpu;
-> =20
->  	if (unlikely(index < 0))
->  		index =3D 0;
-> =20
-> -	while (index >=3D priv->plat->tx_queues_to_use)
-> -		index -=3D priv->plat->tx_queues_to_use;
-> +	while (index >=3D num_tx_queues)
-> +		index -=3D num_tx_queues;
-> =20
->  	return index;
->  }
+[ ... ]
 
-[Severity: Medium]
-Can stmmac_finalize_xdp_rx() arm txtimer on the wrong TX queue if
-priv->xmit_qdisc.num_tx_queues changes during an RX NAPI poll?
+> +	} else {
+> +		emit_16(ctx, 0xb080 | (d_hi << 9) | s_hi);	/* cmp.l s_hi, d_hi */
+> +
+> +		switch (op) {
+> +		case BPF_JEQ:
+> +			emit_16(ctx, 0x6608);			/* bne.s .+8 */
+> +			emit_16(ctx, 0xb080 | (d_lo << 9) | s_lo); /* cmp.l s_lo, d_lo */
+> +			EMIT_JMP32(0x6700);			/* beq.l */
+> +			break;
 
-Unlike priv->plat->tx_queues_to_use, priv->xmit_qdisc.num_tx_queues is
-updated on a running interface by tc_setup_dwmac510_mqprio() and
-stmmac_reset_tc_mqprio() without stopping RX NAPI:
+[ ... ]
 
-CPU0                              CPU1 (<softirq>)
-                                  stmmac_rx()
-                                    stmmac_xdp_xmit_back()
-                                      q =3D stmmac_xdp_get_tx_queue()
-                                      stmmac_xdp_xmit_xdpf(..., q, ...)
-tc_setup_dwmac510_mqprio()
-  priv->xmit_qdisc.num_tx_queues =3D n
-                                    stmmac_finalize_xdp_rx()
-                                      q' =3D stmmac_xdp_get_tx_queue()
-                                      stmmac_tx_timer_arm(..., q')
-                                      <-- q' !=3D q; q's txtimer not armed
+> +		case BPF_JGT:
+> +			EMIT_JMP32(0x6200);			/* bhi.l */
+> +			emit_16(ctx, 0x6508);			/* bcs.s .+8 */
 
-Because stmmac_xdp_xmit_xdpf() only sets interrupt-on-completion every
-priv->tx_coal_frames[queue] frames, uncoalesced XDP_TX descriptors queued
-on the old queue can be left without a completion interrupt or timer
-cleanup.
+This isn't a bug, but are the "bne.s .+8" style comments accurate?
 
-[Severity: High]
-This problem wasn't introduced by this patch, but stmmac_hw_setup()
-ignores the return value of netif_set_real_num_tx_queues() [1]:
+In m68k assembler syntax "." is the address of the current instruction, so
+"bne.s .+8" would assemble to 0x6606, since the 8-bit displacement is
+relative to the opcode address + 2.
 
-drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:stmmac_hw_setup() {
-	...
-	/* Configure real RX and TX queues */
-	netif_set_real_num_rx_queues(dev, priv->plat->rx_queues_to_use);
-	netif_set_real_num_tx_queues(dev, priv->xmit_qdisc.num_tx_queues);
+The emitted word 0x6608 has a displacement of 8, so the branch target is
+".+10".  It skips the 2-byte cmp.l and the 6-byte b<cc>.l, so the code
+looks correct and only the comment is off by 2.
 
-	/* Start the ball rolling... */
-	stmmac_start_all_dma(priv);
-	...
-}
+The same comment pattern appears for bne.s, bcs.s, bhi.s, blt.s and bgt.s in
+the other 64-bit compare cases of emit_jmp().  Would ".+10", or something
+like "bne.s +8: skip cmp.l + b<cc>.l", match the encoding better?
 
-Can netif_set_real_num_tx_queues() fail with -ENOMEM during stmmac_open()
-or stmmac_resume(), leaving dev->real_num_tx_queues out of sync with
-priv->xmit_qdisc.num_tx_queues while DMA is started anyway?
 
-[1] https://sashiko.dev/#/bug/linux-1bc77f7b-c8d8-4341-a8a0-49092e607be6
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261117-stmmac-fix=
--xdp_get_tx_queue-v1-1-4cd74ee7a76c@oss.qualcomm.com?part=3D1
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/44337242298
+--===============3130468370452098512==--
