@@ -1,103 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.96
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795042800;
-	b=BjCGDvZAOnIbyYkZLfyg2bmXyzWEMY+W76xiE4FKoiMwisYnhj7q+FkIZ7S9jwHlp5zN
-	 NsMqkSYG8oD2i/h8gDCmTU97uTcLB8IiAy3E5sfm6VKenOy0RhN40x5fJ51j8QuSA5sOV
-	 Xi5FJPoKa8drnYZjgouD4/L8F3aQhqyLVXyKHo7Hr3thilUomPW19WFkZnjS9CrbnQvpV
-	 fZiSueYxyf66048FSX70/hpScmbZcDVcyUX7ozPFU5/Pc3VVycHkwxdVycb4it2/I3Z9I
-	 wL0XCWEL9U44X+wS2uJIFE7iw8oJPUpl2biqrZBRA3F+YZsWNy8KHOaq5gwgCvx1ong==
+	t=1795043632;
+	b=yr0MD4RwMH8El4eCQ/BQPsqrzyhIQ6L72wA+lH0roMK3ckh+0ri0hqYBjRasYF0Hr3R1
+	 whNp2uLTbhNasDYts4e0OXBB32QAS2cAIgtIkgLTXngWhLFN0WyYF3IJA1BR1G4WSKWEI
+	 RKMsLU6xreLS7ZfGmIqQCjWVF1v2WowPEaLsFOHogj/wJWXvBbckZ01Ua6AAyA1gjlerH
+	 EkAhToxRxbMoFw3hiswmZ9VBJ3ZHhZqLGbJ7aHtNRiOsgELGBxf1oqx+tAMkfS74L5tbr
+	 HqdLg/zfVqkT/gbxCVVrKv0qxvT2yhoT/r5xGK4Npm4CssGYYFm9dA+Tr/nhx088rdw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795042800;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:Content-Transfer-Encoding:User-Agent:MIME-Version;
-	bh=LBiQjXroGIgbRFbCXNC43q/C52U0JtTLkOoI/rutDOc=;
-	b=VE21DCwybA4uE1GItmoVLGPmpcueU55F1x3kodyLu0IsBr6w0K1Wg7BQbdtmkml1/EDn
-	 6yf1rxirtKdn2E7rOKvySqNaNnDzzaPE8mExuEkyY3YZ0Xjpm65yBi+MRuFaJRH3VZfM6
-	 2XmTNisIgKsV6gKzqy7KsINM2DqJ1X5go7QRqu5jzWWbTgLvlbUZwlgcnlycMMCCtWA/a
-	 8Vi3POzsuCvS7o+wAQ2tUIBBDM0gpU0Dynb+aPCIwIa9W6ek/5mnRXfJ72Eg7h28nf4jh
-	 Ki9thzoPCzsSM4u5zydhCQG8EJB371ieCby2jMnaMLU84EstLGD9yXlyDkC8KRYQviw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795043632;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=ffLc8M6kgUXDxTvAEIl4EfnyU6vkbLzw92jR7anCh+k=;
+	b=fBwfjRmEEm0Y+AspYGJXDdKQG8KqgkpbGu8VN6k9lZUPVh65l0eq0tzuxnzRPW0VzVHl
+	 Vj512S7B+CwQjZdCCcxRfW5nxEZOoSoaJeiVci3rHJQhAt4E9xJa9aEK11nV/pxoTn0bd
+	 ZBP0b8Gmlcb0mG7ak6uDBGNFvA3nrAcxRhwxg+mtHYcEYbfF1Z/jNDjVAtqYm9m6CFA3T
+	 QopbmDXN7hCPBwwXpXCAZkacfdBaJxxDso8yg7K8AGwsHLYI+hkX5RK1XSdnhwCPUWmwr
+	 wE1ZNh2nX6RbUiq3dvW0Gh8ZDhAQrT1TiaAZjPQmPVMhsd5tIADMxQFQQTTrBvxQ7jg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=fK2Nph+L;
-	arc=none smtp.remote-ip=209.85.216.43
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=pkNX7Yzw;
+	arc=none smtp.remote-ip=95.215.58.96
+Received: from mta1.migadu.com (out-96.mta1.migadu.com [95.215.58.96])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65CEB606A335
-	for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 22:59:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 65CEB606A335
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3B75606A331
+	for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 23:13:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B3B75606A331
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=fK2Nph+L
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3b10ca4e3f9so907561a91.0
-        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 14:59:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795042799; x=1795647599; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=LBiQjXroGIgbRFbCXNC43q/C52U0JtTLkOoI/rutDOc=;
-        b=fK2Nph+LESqq7ov6ugJUsX0MzNHngmSsLwq4j3z9Ls+6kKA0V7OWOjf2BI8RW7bYfw
-         eISYq3SbxZjr1dIfgpUkaYPAFAE0fXzXpIrDbATgeT4Cv6NYCrU9QALE+6avPv7yVW1E
-         +2DPIYTnXqsrJINH17hg8VK3NeFXcnHgeOw4fsKrIOnZH7lYybYBnAeXSpXJGT/VyLMy
-         SDrLkERtVIs8K4lNUA2LyOBQNvM+N1k/T9Wu2wemwuli14YawPEho9RV3hJe+QLZGmci
-         aG5km4/kZZN6RLlSxfx5mKdLVDu1aKDkT41DSBrIgSHVOv1FnI8vgOxX6rHRz2w13Qbl
-         t2Wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795042799; x=1795647599;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=LBiQjXroGIgbRFbCXNC43q/C52U0JtTLkOoI/rutDOc=;
-        b=ui6pAE3phzKNhP8uYs5y/73RNDCXqoGpiCl/kaCYm72pPuhztFrSGBtW6jcZZqt9c1
-         JAZc5gWpRVV2W36JZseufcGEtWp662svI7baFZhhW7FqB6F/UQ1cv3Jn5wPc4EQRGaMg
-         qwKdkj2QaIeulb0zTTXcg0her+Gct0sMfdk2JXw5oTJ3wbmO6RAHNwtonYWxdiuW3QyB
-         VVtTpcz1AhmyHu6GZG9k4YWZyiPGPQVJnVrMYbnC0r/j4lu/7GgWUv3W+o6v92Iv31Ub
-         pvWZZeTqMMTnB0RaMxUAVDlOQcHHqYYopsF/aigSyflVeQcagW7QkRn5QY9P02CLPW4A
-         /0vw==
-X-Forwarded-Encrypted: i=1; AL+hErGgbt8mSAPYtEAORkCQDC/8uz5x632H5exmwDrghCwA6tM0mOy8eCANWkL8GZURqHs/7r4=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+4LPGPuDWtw5+ZP9YPZ5xlS8KYNiZTHi2L7m89Z4+VF3FSpX+0
-	418mNyN3LQsRQ4PqK8RT1W8Pek6qxCEUP1U9e3BtVAivKhXwvXzHUh6V
-X-Gm-Gg: AZFdTZfCpo9Y/OTROEkBRjXvYBi0/Kt+LvMe8Egu8EBtQnzSuCu0KqLBCY/J/dpcoVV
-	7bsjKESJepxEaE3BxeUX6S7SyyX4oTGMrnqU0b4VC/R5ysxWljtun9gUFXUhODDBMXQIyPEOrDn
-	fNPq3kxpTCxZgd4qcI5A7AOAwlJFm0NyDKXafYYvDVsMR+aaPahy0sRn+vLmlWHkloPX4Q/1UCT
-	5agWdMrD4UCLGxskFGhlUoF18ctNj+AqoGJzQp7FSDk7o3cdoJhdXwrh+azS7rdGpWHOWDkHM7c
-	aSxqWv87lAiWGhsIx1WV/VGuNeZucOgTn7ADiZtMcD76BlcHiGmjT2rrM7D0/RBL+lTn9uvhpwp
-	OZzwRHOsoRmY8Bwg3H84Zc+PRf5J0K8SMf7U4q5wBtdx3/hnLwehCnLL+ag4LZLYTHJN1Qt9r3f
-	n6MlznEgCeCHLCq3nJoctMDjjJFeGwIOEWh4OIJbBk+R40wj5KkdZo6WnMF1tK0EJnElRJQKNNw
-	rWj6V958GjQIcwu5ft5NDZOJ5TRy7VKLHHPQW++k/FsIlWqKnQtpxYpFk3Vmi4x7NAB4bQuEEr/
-	7Oyp0b/KEyuhEpRHJ1ceb5DpsfetGK6JU10Owo5ciGC+qep8UaZFjrqX
-X-Received: by 2002:a17:90a:e7cf:b0:3ac:8dfe:8ec9 with SMTP id 98e67ed59e1d1-3b3d07d45ffmr3520075a91.47.1795042798682;
-        Wed, 18 Nov 2026 14:59:58 -0800 (PST)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cde534de506sm595959a12.27.2026.11.18.14.59.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Nov 2026 14:59:57 -0800 (PST)
-Message-ID: <a838d40d84ccf3115faac3d3b7b4d91b923b03ff.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v1 3/4] resolve_btfids: Reject kfunc families
- that libbpf can't disambiguate
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
- <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>, Emil Tsalapatis	
- <emil@etsalapatis.com>, Jiri Olsa <jolsa@kernel.org>, Song Liu
- <song@kernel.org>,  Tejun Heo <tj@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, sched-ext@lists.linux.dev
-Date: Wed, 18 Nov 2026 15:59:56 -0700
-In-Reply-To: <20261117192153.3384031-4-ihor.solodrai@linux.dev>
-References: <20261117192153.3384031-1-ihor.solodrai@linux.dev>
-	 <20261117192153.3384031-4-ihor.solodrai@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10+b1 
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=pkNX7Yzw
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=tQf2RroZFgidYhH8VlIC9DnLVfLCV5SLUf0kaG6u5o8=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795043629; v=1; x=1795648429;
+ b=pkNX7YzwK+FuVIyZfuh5RjJtDnRvtBq+7ZddG4QVLwCF9uT8BupvhW/uLdI4cBZwoGEcRDBM
+ vIq5v4fDzsNHFN+ygqXlBv5iKS7uBPpK1NKr+sPVsRE4k80UtSn5QtCWgwJWngejOO4iRwiOgIw
+ Iid1i5Gt9taTIgFrkozNOEMc=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id db2b73d50699373c;
+	Wed, 18 Nov 2026 23:13:49 +0000
+X-Mizu-Trace-ID: db2b73d50699373c
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <a54689c5-83d8-4a81-a8a2-ba971793d981@linux.dev>
+Date: Wed, 18 Nov 2026 16:13:44 -0700
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -107,66 +58,131 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v1 0/4] libbpf: Support kernel-side kfunc flavors
+To: Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov
+ <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Alan Maguire <alan.maguire@oracle.com>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Jiri Olsa <jolsa@kernel.org>,
+ Song Liu <song@kernel.org>, Tejun Heo <tj@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, sched-ext@lists.linux.dev
+References: <20261117192153.3384031-1-ihor.solodrai@linux.dev>
+ <df72a9ab1ebcebff573485a808e45cd493665e75.camel@gmail.com>
+ <6a1b6f05-448e-461c-bd79-0acd67fb7edc@linux.dev>
+ <d2f665211f7c294bf7a8f3897b247863090e4e19.camel@gmail.com>
+Content-Language: en-US
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <d2f665211f7c294bf7a8f3897b247863090e4e19.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, 2026-11-17 at 12:21 -0700, Ihor Solodrai wrote:
-> Kfuncs sharing an essential name, foo and foo___<flavor>, form a family.
-> When resolving a kfunc foo, libbpf binds the kernel's foo if the
-> prototypes are compatible, and otherwise the only family member whose
-> prototype passes bpf_core_types_are_compat() against the declaration.
-> That is only safe if no declaration can be compatible with two members
-> at once.
->=20
-> bpf_core_types_are_compat() compares prototypes kind by kind, so it
-> acts as an equivalence and a pairwise check is enough. Run it on every
-> pair of family members after dedup, using libbpf's own function, and
-> fail the build if any pair is compatible. A foo___<flavor> with the
-> same deduplicated FUNC_PROTO as foo is an alias and is allowed: libbpf
-> binds foo first, so the alias is never picked in its place. There is
-> only one foo: btf_check_kfunc_name() refuses to register a module kfunc
-> named like a function in vmlinux or in another module. Dedup compares
-> parameter names too, so an alias has to copy the signature verbatim.
->=20
-> Recognize family members by their bpf_kfunc decl tags rather than by
-> the BTF ID sets. The tags are what libbpf filters candidates on, and for
-> a module they also cover the vmlinux kfuncs in base BTF, so module
-> kfuncs get checked against vmlinux kfuncs of the same family.
->=20
-> The bpf_kfunc_flavor family in bpf_testmod passes: ___v1 differs in
-> arity and ___v2 is an alias.
->=20
-> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-> ---
+On 2026-11-18 3:11 p.m., Eduard Zingerman wrote:
+> On Wed, 2026-11-18 at 14:37 -0700, Ihor Solodrai wrote:
+>> On 2026-11-18 2:12 p.m., Eduard Zingerman wrote:
+>>> On Tue, 2026-11-17 at 12:21 -0700, Ihor Solodrai wrote:
+>>>> An incompatible change to a kfunc's prototype, such as an added
+>>>> parameter, breaks BPF programs built against the old one. libbpf
+>>>> ignores the ___<flavor> suffix of a kfunc declared in a BPF program,
+>>>> but makes an exact name look up on the kernel side, so the kernel
+>>>> can't keep the old prototype available under the kfunc's name.
+>>>>
+>>>> sched_ext ran into this. cded46d97159 ("sched_ext: Make
+>>>> scx_bpf_dsq_insert*() return bool") kept the old prototype as
+>>>> scx_bpf_dsq_insert___compat, expecting libbpf to bind old binaries to
+>>>> it, and broke them. 2dbbdeda77a6 ("sched_ext: Fix scx_bpf_dsq_insert()
+>>>> backward binary compatibility") reversed the naming. A ___v2 kfunc
+>>>> declared as vmlinux.h spells it doesn't bind: 56bbc91219c0
+>>>> ("sched_ext: Fix scx_bpf_dsq_move_to_local___v2 compat detection")
+>>>> fixed a compat macro that silently dropped enq_flags because of this.
+>>>
+>>> Please prefer examples to prose in cover letters.
+>>
+>> The sched_ext story above narrates the commit history to illustrate
+>> the motivation for the feature.  Would you like to see code samples
+>> from there, or are you suggesting to drop the paragraph?
+>>
+>> The documentation patch includes code examples of the new binding
+>> rules, I didn't want to duplicate that in the cover.
+> 
+> There are two ways to act while reading the above paragraph:
+> - follow the referenced commits and reconstruct the issue (time consuming).
+> - ignore it (not helpful).
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+sigh... There are more:
 
-> =C2=A0tools/bpf/resolve_btfids/btf_colors.c |=C2=A0 11 +++
-> =C2=A0tools/bpf/resolve_btfids/btf_colors.h |=C2=A0=C2=A0 3 +
-> =C2=A0tools/bpf/resolve_btfids/main.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- | 134 ++++++++++++++++++++++++++
-> =C2=A03 files changed, 148 insertions(+)
->=20
-> diff --git a/tools/bpf/resolve_btfids/btf_colors.c b/tools/bpf/resolve_bt=
-fids/btf_colors.c
-> index 5d307d70e7f2..91c10106319e 100644
-> --- a/tools/bpf/resolve_btfids/btf_colors.c
-> +++ b/tools/bpf/resolve_btfids/btf_colors.c
-> @@ -13,6 +13,17 @@ void btf_sha256(const void *data, size_t len,
-> =C2=A0	libbpf_sha256(data, len, out);
-> =C2=A0}
-> =C2=A0
-> +size_t btf_essential_name_len(const char *name)
-> +{
-> +	return bpf_core_essential_name_len(name);
-> +}
-> +
-> +int btf_types_are_compat(const struct btf *btf1, __u32 id1,
-> +			 const struct btf *btf2, __u32 id2)
-> +{
-> +	return bpf_core_types_are_compat(btf1, id1, btf2, id2);
-> +}
+- Read the paragraph to understand the issue on the high level,
+   without loading the entirety of the details into your head.
+   Example interpretation:
+   - sched-ext had a problem with scx_bpf_dsq_insert() changing the
+     return type, which led to reverts and inconvenient hacks
+- Give the paragraph to your helpful assistant and ask it exact
+   questions that interest you. Since the paragraph has commit hashes,
+   it's trivial for ai to navigate this.
 
-Can main.c include bpf/relo_core.h instead of this symbol-laundering scheme=
-?
-Or just define two extern prototypes?
+And other approaches in between. It all depends on how deeply do you
+want/need to understand the specific thing.
 
-...
+> 
+>>> Also, please de-Claude the included prose.
+>>
+>> Please be more specific. Which "included prose"?
+> 
+>    sched_ext ran into this. cded46d97159 ... kept the old prototype as
+>    scx_bpf_dsq_insert___compat, expecting libbpf to bind old binaries to
+>    it, and broke them. 2dbbdeda77a6 ... reversed the naming. A ___v2
+>    kfunc declared as vmlinux.h spells it doesn't bind: 56bbc91219c0 ...
+>    fixed a compat macro that silently dropped enq_flags because of this.
+> 
+> This screams Claude from 1000 miles distance.
+
+Sure. So what? Have you read the bpf list lately?
+(I also use Codex and Muse btw, not only Claude)
+
+AI-generated prose is not a bad thing by itself. It can be no less
+useful than human-written prose. Yes there is a wide spectrum of
+slopiness, and submitters need to know what they are posting.
+
+Personally, I try to be careful about commit messages and cover
+letters. I iterate on them multiple times with AI, then I read them
+and edit by hand. If I posted the first generated thing it would look
+much worse.
+
+Look around on the list. Do you think this paragraph is the worst slop
+cover letter compared to things that have been landed already?
+
+I'm a little annoyed by your comment, because the slop filter you are
+applying now is not applied uniformly on the list. It's not fair.
+
+I would write the cover entirely by hand if that was a strict rule
+here, because I respect the rules. But it's not.
+
+> Maybe I have reading comprehension issues, but in order to decipher it
+> one has to:
+> - "kept old prototype" - figure out that two functions were declared
+>    "scx_bpf_dsq_insert" and "scx_bpf_dsq_insert___compat"
+> - "bind old binaries to it and broke them" - figure out that existing
+>    bpf programs referred to "scx_bpf_dsq_insert" and libbpf mechanics
+>    didn't work as expected.
+> - "reversed the naming" - like a new function became ___compat or what
+>    happened?
+> - "A ___v2 kfunc declared as vmlinux.h spells it ..."
+>    Now there is a ___v2 in the picture.
+> - "... doesn't bind" - figure out that this refers to libbpf mechanics.
+> - "fixed a compat macro that silently dropped enq_flags because of this."
+>    Incomprehensible w/o looking in the code.
+
+Your reading is a valid approach to understand the history in more
+details, and you are correct that the paragraph does not provide them.
+
+However IMO those details are unnecessary in the cover, but pointers
+are useful. Which is why I left this ai-generated paragraph be.
+
+It's a minor issue, however. I'm happy to drop the paragraph, I just
+disagree that "it screams Claude" is a valid reason.
+
+> 
+>>>
+>>>> [...]
