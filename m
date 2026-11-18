@@ -1,85 +1,167 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=160.80.4.37
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795014507;
-	b=jAG89oBAP9LZtEwmER94lfnPkLN9m83m8qYJ5yp8JjGmwfGfMFch24oem/dnbN9Rw+Y9
-	 Bgl1D6+snypxiMZFzSIzRfrIR5irYaDWiSiZIwBgi9TZh9kvpucFImjllMS+jBYG1pYE9
-	 d7H06QHEyhKWE7sTOiLIEQeFUYAvV/dJs0whJMAneqZMURexkoc901/lAN5U0l3R6OiO3
-	 5MQeuRLkPzuUPZbiSiErbKrttraqLNXYz79FQt9U26Ws0OZH7u5ohmddARCmsBG46QXxl
-	 motTnb7rA+q26cFJ6ey0o0SHO9Mpg2O/Esh+Hb08DiAJq4nOBi9+s7z3gd7BtAP5fBA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795014507;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:From:To:
-	 Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding:X-Virus-Scanned:
-	 X-Virus-Status;
-	bh=3rSKKcOzFng0M9AKi0Z2RIUayRVuSQJhfFNu/CcXx+U=;
-	b=owSS5MBt9yXaLXTy0bc7aDbVbW4O75tEIWSMfUcBgJqeVDDVQnY9CbPhh15q66eQOBzh
-	 T6T1zeGXwCpm+TiC8VBVIJI5zZ5wu22ULWhYoahONTWlIXB8KiZrW+DEFBZElPNqJvqLE
-	 sxCK0QIbBHQop4PPvG1xsxEX0J+wOj1ws5LMOQX+4oxthbuIzYuXWWe470gygK9VUfQUO
-	 sixgwBFWgGK13ZKGOJ+n6j/cWVu7oAqcqaO1Uhd9Z88SltdCGWKYMI/AKmCuWeBx4FQHJ
-	 7qX8mD3e05R75GSD2HBZ6yIskTKPTJMmQsrLjSMSl3V+ysG6gI+uEiIIOLpgs2q0BEg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=uniroma2.it;
-	spf=pass smtp.mailfrom=uniroma2.it;
-	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=ed25519-sha256 header.s=ed201904 header.b=3xclmsb+;
-	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=rsa-sha256 header.s=rsa201904 header.b=TaDp+HIK;
-	arc=none smtp.remote-ip=160.80.4.37
-Received: from smtp.uniroma2.it (smtp.uniroma2.it [160.80.4.37])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18CDF606A320;
-	Wed, 18 Nov 2026 15:08:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 18CDF606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniroma2.it
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.165.109
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795014875;
+	b=eylq8dCVQTxivEkKLR4UHfIsfXwKlcDthNEb+Mm2MZW1R+u6gvWl4Rkr51CDvnWMp58z
+	 9+9umJ7lhcgpXppSY1aoLxAZAUxPO5l0eYfMdlfQSDOpoAdUtdhxSfw9x+VFvgDaAuklv
+	 IithvM3VuNp2oSZdO/8J8B3bA5mFen9qxz/U5aesUEYGaWgskYmJ8p2xQW0aQulf4BY2v
+	 A/exUAel0Pe/s0wYCKaxsa5mRppTld+UAP4gV/FTQ6tkvOhul0JvFBBkQcYrUCAClBBgo
+	 Y6nUftb90Lwo04jXiM7E0zyavPdMKgrG1dmMJDTPCYmw9ZE6AN9/6E8tZdtJhrjymgw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795014875;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:CC:Subject:
+	 Thread-Topic:Thread-Index:Date:Message-ID:References:In-Reply-To:
+	 Accept-Language:Content-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:
+	 msip_labels:x-ms-publictraffictype:x-ms-traffictypediagnostic:
+	 x-ms-office365-filtering-correlation-id:
+	 x-ms-exchange-atpmessageproperties:x-ms-exchange-senderadcheck:
+	 x-ms-exchange-antispam-relay:x-microsoft-antispam:
+	 x-microsoft-antispam-message-info:x-forefront-antispam-report:
+	 x-ms-exchange-antispam-messagedata-chunkcount:
+	 x-ms-exchange-antispam-messagedata-0:
+	 x-ms-exchange-antispam-messagedata-1:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-AuthAs:X-MS-Exchange-CrossTenant-AuthSource:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-originalarrivaltime:
+	 X-MS-Exchange-CrossTenant-fromentityheader:
+	 X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
+	 X-MS-Exchange-CrossTenant-userprincipalname:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=hNdoNcvQe0PvL879L75x/xzdgSb5z0OE5tRK+ptI0Qc=;
+	b=RO6vlNFMmk9h8rXKPP9E4kgVAtbV/mah9I9n2JLr687TK/OU5P6PAUqpOyNtB3cNAFEe
+	 m/j0PtsGDRhlOCfZJDCf2VOJzI8/P/sGszMn0sZHWn82Alp/r2HcZ0+YIRoHGpLpxzqQk
+	 swOfff1KdoVYkyxilQIx7na3UHopqyitnFpXDbYAitQqtX2+wxV0uYbxiWcsB8n8bSqkx
+	 EPrbrAtXR+utxU+94f92NHJtasMKV7IR2BB34X8jb5mCMHtm39m2sHOW6czGmOFZLLOf0
+	 G4kCooCIJimWvW47iV+MCvL++khqN239P07DZcJMhBvaX9WS2VL9Ye9jfl6lA6WrAyA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=harfanglab.fr;
+	spf=pass smtp.mailfrom=harfanglab.fr;
+	dkim=pass header.d=harfanglab.fr header.i=@harfanglab.fr header.a=rsa-sha256 header.s=selector1 header.b=DMDPTvIq;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.165.109
+Received: from MRZP264CU002.outbound.protection.outlook.com (mail-francesouthazon11020109.outbound.protection.outlook.com [52.101.165.109])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0016606A31C;
+	Wed, 18 Nov 2026 15:14:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A0016606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=harfanglab.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=harfanglab.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=ed25519-sha256 header.s=ed201904 header.b=3xclmsb+;
-	dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.a=rsa-sha256 header.s=rsa201904 header.b=TaDp+HIK
-Received: from smtpauth-2019-1.uniroma2.it (smtpauth.uniroma2.it [160.80.5.46])
-	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 6AIF7YVF012194;
-	Wed, 18 Nov 2026 16:07:39 +0100
-Received: from localhost.localdomain (unknown [160.80.105.87])
-	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id A2A23122959;
-	Wed, 18 Nov 2026 16:07:30 +0100 (CET)
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
-	s=ed201904; t=1795014450; h=from:from:sender:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3rSKKcOzFng0M9AKi0Z2RIUayRVuSQJhfFNu/CcXx+U=;
-	b=3xclmsb+zxqlhvQfMDj3Puqn3aGRXjz21i/9qBTDpILExopU1Wd+RaR96cBUu7DcRhpYDJ
-	SEBKNoW/xXp8+SBQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
-	t=1795014450; h=from:from:sender:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3rSKKcOzFng0M9AKi0Z2RIUayRVuSQJhfFNu/CcXx+U=;
-	b=TaDp+HIKBw03D7Xbt1f21mhkTcN/5cZTIuBFVHVWAkyUw+HFvyC+UUEKsFVSwzwO4uSfn+
-	6ypZza93DN+e9s2gBIYSvFBImaaZIIP7He6TPIyDFA3dDw1j9iEgMpaEv9arfG/e/2gks0
-	Pc3ed50cPwH5K91Mwqu/QzFhPy15ESY7QT7hKXYxjW1B5j/uazxNiJQOjImQv08mqecjmm
-	B5lcNSPsQlYGf85O8CPcA0T9StfwQUDqiWuorUE21+CxmB9dkMxKvKD+BVpVngthr/P69B
-	L1b3KHDBIahx4YFPHMosNTxQkg4Jxb4YilmT29rKTTzRs61aV1aIQD07uJE2Fg==
-From: Andrea Mayer <andrea.mayer@uniroma2.it>
-To: "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-        David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
-        David Lebrun <david.lebrun@uclouvain.be>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Mathieu Xhonneux <m.xhonneux@gmail.com>,
-        David Lebrun <dlebrun@google.com>, Hangbin Liu <hangbin.liu@linux.dev>,
-        Justin Iurman <justin.iurman@gmail.com>,
-        Stefano Salsano <stefano.salsano@uniroma2.it>,
-        Andrea Mayer <andrea@common-net.org>,
-        Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: [PATCH net v2 6/6] selftests: seg6: add test for skb checksum with CHECKSUM_COMPLETE
-Date: Wed, 18 Nov 2026 16:02:51 +0100
-Message-Id: <20261118150251.65-7-andrea.mayer@uniroma2.it>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20261118150251.65-1-andrea.mayer@uniroma2.it>
-References: <20261118150251.65-1-andrea.mayer@uniroma2.it>
+	dkim=pass (1024-bit key, unprotected) header.d=harfanglab.fr header.i=@harfanglab.fr header.a=rsa-sha256 header.s=selector1 header.b=DMDPTvIq
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=jV0PxoZkFDhEBI0gF/Lg3wI9Wq72ER1DNGQM/cxCsgcGiTfw9C6rBLt/7t7OhN9FsJLpMcXmU471PvJXefy42+Cggcokd6DR+D35e2SUDGsyuRkpvjv1iQhIIkbXudIHMEW4YaU34Jw/HawD9BmkSqg1cU9zyFquMwVm7hB+DlrhxhRGHSaC8l6d7imapSpGsxpa5+RHVMw+9hUx8ls+2FMM8irK3E7v+EphfTgb1TNesbSKmRlUTTU0NT+sSRH7tfauKqB9NmF//9lwH8CfUxq4KlG7xelwE6psKREbfuHlYXa7PK8CUEF5JArWka9d9XavUbyOKMpCUma2jskmOw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hNdoNcvQe0PvL879L75x/xzdgSb5z0OE5tRK+ptI0Qc=;
+ b=bGeHXwWI+OIhuQwsY0Kgg57TfSEXRB83RVocg5h5+knSsffmlvtj4HRl4FmTGfZEZeMXjHGomBAP9Vmo21j64Y+6mhkIjN05KT0sef4pHriL1VhlUQS4UqdWEm/z9O1J2+SBMkyHRcyUADFeS6rV5WtrBRSGedb6AEUM/rrJpN9dih1gyK/spHzuTcDkJeVpoVC2u0JGwyshnIEN4Z+w9dXlLEsZ00Ov3pSZXVkqe8HhEB4zNhvO7FA02z2OZ9Cfnkln7lHiZN2+k0FBN2NNW1/snAH54WxpVFchOgXDPhwUvaWFFhw4iqLcYjF9V8DmQoj+RzNb0x6K4up9U00Gzw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=harfanglab.fr; dmarc=pass action=none
+ header.from=harfanglab.fr; dkim=pass header.d=harfanglab.fr; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=harfanglab.fr;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hNdoNcvQe0PvL879L75x/xzdgSb5z0OE5tRK+ptI0Qc=;
+ b=DMDPTvIqiPY+nIc2VRQ1NuQ3WsMonwgqtWpsSmGRR2mqMtBHUTP4mv+DRimf8cH2RWkpmc4ogALK8ho3/0LXW2zq0//QBpIYiyinZDo0EiwzuweW3E4OxgVfqmvNlxL2mRowRheRwiE6Aj8/QXqeMhqW1qnckMqYYyG7Zmg2sBE=
+Received: from MRYP264MB7057.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:a2::15)
+ by PR0P264MB1609.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:166::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.14; Wed, 18 Nov
+ 2026 15:14:28 +0000
+Received: from MRYP264MB7057.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::bb0d:a51e:4e9c:30f2]) by MRYP264MB7057.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::bb0d:a51e:4e9c:30f2%5]) with mapi id 15.21.0615.013; Wed, 18 Nov 2026
+ 15:14:28 +0000
+From: Paul Mabileau <paul.mabileau@harfanglab.fr>
+To: Daan De Meyer <daan@amutable.com>, Ihor Solodrai <ihor.solodrai@linux.dev>
+CC: roblabla <linux@roblab.la>, Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+	Paul Moore <paul@paul-moore.com>, "bpf@vger.kernel.org"
+	<bpf@vger.kernel.org>, "linux-security-module@vger.kernel.org"
+	<linux-security-module@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>
+Subject: Re: [BUG] bpf, lsm: new first argument in 7.4 inode hooks silently
+ breaks BPF LSMs
+Thread-Topic: [BUG] bpf, lsm: new first argument in 7.4 inode hooks silently
+ breaks BPF LSMs
+Thread-Index:
+ AQHdbfDE9Jlf+EqtCUW8vlHUqmZ7eLchDG2AgAAiUwCAAECqgIAEbM0AgA02HgCAAOEKgIAACnv6
+Date: Wed, 18 Nov 2026 15:14:27 +0000
+Message-ID:
+ <MRYP264MB7057096D13282544720793F2E67A2@MRYP264MB7057.FRAP264.PROD.OUTLOOK.COM>
+References: <d85ece6e-27f9-4d9f-83af-4101bc76fef6@app.fastmail.com>
+ <356db94e-f5d6-4fb2-839a-b97aef72256b@app.fastmail.com>
+ <CAHC9VhR9sjunJRnM9gy-BkBZkapQTrr8a8FtmaK7JkAmUqTrLA@mail.gmail.com>
+ <CAEf4BzZKmn6g0SK8OddjKFj_vAmZFvpZv32Hs_S+GHgT7VNfrg@mail.gmail.com>
+ <9d6bdc31-e57c-4187-be78-29d82471f710@app.fastmail.com>
+ <9695ec3d-7b81-488d-989f-0bd411d673f2@linux.dev>
+ <CAPa8sAh6b5xn4rZzPfM0nZ+_kkywWj22fy8deLq+6qYews0rdQ@mail.gmail.com>
+In-Reply-To:
+ <CAPa8sAh6b5xn4rZzPfM0nZ+_kkywWj22fy8deLq+6qYews0rdQ@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+authentication-results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=harfanglab.fr;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRYP264MB7057:EE_|PR0P264MB1609:EE_
+x-ms-office365-filtering-correlation-id: 25b2bd1d-35b6-4ee5-cd24-08df4586a365
+x-ms-exchange-atpmessageproperties: SA
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|10070799003|1800799024|376014|23010399003|366016|6133799003|22082099003|18002099003|261009223027099003|55112099003|4143699003|56012099006|5023799004|11063799006|261102123227099003|261026121527099003|261028144727099003|261026140227099003|261021121427099003|261022105027099003|261021135927099003|38070700021|261022075727099003|10067099003;
+x-microsoft-antispam-message-info:
+ zNcuCRBl9fXp7doEfJxRNB3/swAAosWCqvRwEIlkcX/m6atitZxsx9EbI2KlLROiFnt9lrAInVK1MUpYeRvSymcvBB3CHeof2ShrAdqWP0Yzju6/NaAquRPVYTyA/JTDpTWedvFocmXM2zMTYDz0O1P4F8ioETT2J+onQaz6YwqHlLr/v4xeq/fnd+F95sV2v2wfG9auhCfCSbEolRnfnFL4WR/RbeLOCP6b9h/GB2IeH5uIprVwNxfglJiupLSIpNRs5sDWA53NHKaS3lVkxkGeqIMY+2VLshC09Pa7YFU1gb2JLReB7WGFptrDWp+SyUvjMy0sGY2z5UYzU2Hk6HFCd/F3fJVGv9ZZcdiB+SUOrcC2gXdDfCDnLGj/UcpR65fkSbnJPchgU2GBRuAreuzRMSn2MVLKhtLyHY/ctrCl2FDXoISd3oQf9IWIubnqQ8s+63PyxPj6OT3XC/fj7VYlHWWHiks10m+PbK5zHVsCQYx/kVZ2rT0AG4mbfSvKIx+Zal6sPzdookxaj7XGoS5njUFrp0kxWHkb06JBbGlt02pMUxxccAruzubSeTUhrJnqa7NZX/KxTXrkt0f7lY3UxR07Og0+KEQ2FEGrFNX9CcG5roD9SH8pOWWpQNxlfufHOTrSwluYfnEl6VV+A72LXzlRhUMBb3kXgswbV4I1hmAI4g7BpKwbj051OBy0sjWBQIDnEnw1n5HRx2KNkEi4XKNfahWHOVcY2T16n2k=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRYP264MB7057.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(1800799024)(376014)(23010399003)(366016)(6133799003)(22082099003)(18002099003)(261009223027099003)(55112099003)(4143699003)(56012099006)(5023799004)(11063799006)(261102123227099003)(261026121527099003)(261028144727099003)(261026140227099003)(261021121427099003)(261022105027099003)(261021135927099003)(38070700021)(261022075727099003)(10067099003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 2
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?b2ZqL3pFblFTRW9pbUkvbWtXRkJDbEFiV25HQXJ1dDZRVmZzSGJwVXY5c2kr?=
+ =?utf-8?B?emdOeWJraTRDWW9kSVZtTGhmNGF5Q1pQc3VJNitMMmJkQXBnb1ZuQWpVM2ht?=
+ =?utf-8?B?bDdsaEpLT24rZk9QMDFxckd1Y2ZKdmxOTmh1VlZYSmRsbUJLOEYvUHJpc2FS?=
+ =?utf-8?B?ZHdoOTA4ZzJza0gzeEF5Rk1QT2pwTlRaUnNtOEJNRG1VblBHYzdpWVNhNENy?=
+ =?utf-8?B?RnNvT0h1d2xUWEUyTXRaQnNpUHlrTE55YnVjT2RSMmpEcFl1OU5JRWFJdElu?=
+ =?utf-8?B?OWcxVzVGTVJCZDVXbHlYRjMwcFZpRmVJcmhYRm1VV2lESnhlUHNUU2Q0NGdj?=
+ =?utf-8?B?djYrb0dka0E2S3RHWVFsT1dTOVF3L3Vhb2xFcWVVZFh1c3NzanpqdTAxOWU1?=
+ =?utf-8?B?VjV3ZkxJb21YbGE0U3BJZ2JxZC9INnIyODNuVk5Lb1VDQ29sRjFSNm9JWXZE?=
+ =?utf-8?B?VmF3UWdqT1FVMVgzc0xXOFVwR2VwdTY2ZnJ1c21pTCtucnltMVFJZHNyZEZ1?=
+ =?utf-8?B?N09saGxrQ2tHd1NBMHd5NmNMTnRERVRDRitCWjhDaEZseG90QWROMnpwUXli?=
+ =?utf-8?B?VHk3ZVBmNHlVeGVzdmZPL09EWEVhSXNDelhHdHV0Q3R1dzVFU0RibitsMmRT?=
+ =?utf-8?B?SUdXUHN5TzlvcjdZRW95Um05bWtPdXp4N0x5Ym9ackRpanIvKzFNdms1YjQ3?=
+ =?utf-8?B?OXhDejRIOHdjckhocjhpWDNheEtpcFlMQStCOTZJT0RBSnlYbUFCVHNiZDh3?=
+ =?utf-8?B?a3JUcEx2NU9Pd0gvcjdmeFJvMDdlcWpJUktPYXRWdWhBQzJLdW5sNWRxZk5w?=
+ =?utf-8?B?S2JLL2p2ZkNPYkF1R0Y5SnhZVGhVNllHSmxLM3p6Qm9mUTFKU0MzSTVQT1Nk?=
+ =?utf-8?B?QTJvRnZxTEdlaHBJc1o3SC9TSGJVR0ZXd2R3SGFJWllEV2dtMGh2b2cveCt6?=
+ =?utf-8?B?cWRXdVhTQXI3OXdnTGxtQ3RkUkx6YXJ1blZZOVFDQk1aenJXZ1FVYkdkK0tC?=
+ =?utf-8?B?RTVLMWpabHdpYklIL1FDblBIUnA0OWx2d0ViS0hFUzY4Z2trOWwvZXpBNHNj?=
+ =?utf-8?B?N25vV09YYVk1V2xSZGxxaDZPQlZvT0g1b25HdUR0enZzb2NIV29TdGozWTdy?=
+ =?utf-8?B?VVhOdVVtUWpId3oyenZYd0daWEJqSzdkZDIrOWlENEVwa2pQNUZ4eUNZYmdl?=
+ =?utf-8?B?QUNJVStOb2hzR2dTL1JrUjM3eTlLRERUaXU4RUd0cDEweUI3aHRFWlRra1Bq?=
+ =?utf-8?B?SDVYTjlPZkNMNVlGQkZpcEF3RzFGV3Y3eFJVYkdHZkJqa0UvUUFnOUhaNldn?=
+ =?utf-8?B?ZS9ldGNjT01SOHVjcld1SGVDNlc2VElzekVKMXcxRVlpcTlvSHhyUzlPSStv?=
+ =?utf-8?B?QlUxSkx4NVZYVHEzOFNGTUgyR0JUZHV4cU02NEZGa3RZTVZEdzZ3d3VoODlJ?=
+ =?utf-8?B?cWVodjJGdzVQeU5QR0Q3bFdsUXBJSVlVRjNPVXl0QU9QODdSbExmUFc0Y1lm?=
+ =?utf-8?B?b2M1dVZzRXB1QkRadDJsNFVxL20rQUhPcVV2WnRQc2tBaHpvWDhPajJRdkN2?=
+ =?utf-8?B?TzNIcEEraXdNUlNHV1NuVXFjajFYNlk1SUQ3NWhkM0k5OWoyem9Ec2FRTU1B?=
+ =?utf-8?B?VU5PcXljWjB0cXNaWm9CVjVXaUNheWJYcEFnTWJDOXAwOTI4SGF0VFRLUVo4?=
+ =?utf-8?B?MFNVK2dPYm9Mdk5YYi8vSlpEcU43bWtlM3kwdDV0TkZXVDJySjF1aitDdHpT?=
+ =?utf-8?B?OS9lQUZzT0hrd3J3Sm5oWkRuTVZrd2N2MWVWQXQwakkwNXVLTGFxMVVFZE5R?=
+ =?utf-8?B?bnBaVmQvc3ZkY3ZocGhsU2xWc0FMTkdJL2lGVldWY0RVc25JNnYxQUgyUkho?=
+ =?utf-8?B?cnNUV2hINldTYTVrVjlyelBEUTVXalIwUXhRZDZCUHFSa3l0dGpiQit2bE8w?=
+ =?utf-8?B?TDk3d3FtVDF6YVhZT0RtQUFiMDhqRVM1YkFHdjI0a1hhK0dPdGR0TnQ2SFNB?=
+ =?utf-8?B?M1BEYzhZeU9Db1lGL3BPTGFDUXlQRXBGMS9MSFJ3UG43TmdSaFE1UktDV2NT?=
+ =?utf-8?B?ekp3ZGFwYlRsNG94T0wxSy9CK2ZFNlVHM1d3MDF3QmFnV21Fb3BNWVV2b1RT?=
+ =?utf-8?B?S3V0ODlyN0t3UElIYTg2L1FEVEY0V3p3ejdhNkZrKzkwWjBnaTRXODhUQSt2?=
+ =?utf-8?B?R1ZxSDFzUWJJbUxudUpibXc5MHY0YW5GZnhWcXdOcEVmalQwaEo3SnJwTVc2?=
+ =?utf-8?B?enpnSTNRS1dCYW1EeXNUNFBzOUduQjZiN2JBd0hXRisySHY0TEZ0Y2RKaXBG?=
+ =?utf-8?B?VW1ZWVV6K0lySWVMNXJFYVFnSTJnOW4raEFUbmIwK3ZnQkZOd1UwakVnbUdH?=
+ =?utf-8?Q?sIHqe17OOCxzpPomqujPCP0WdpQKeG89Ju7YyK1SQvOhY?=
+x-ms-exchange-antispam-messagedata-1: yux30tFx4SF6IQ==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -89,756 +171,158 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
-X-Virus-Status: Clean
+X-OriginatorOrg: harfanglab.fr
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRYP264MB7057.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 25b2bd1d-35b6-4ee5-cd24-08df4586a365
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Nov 2026 15:14:27.8803
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: e072cd9e-210a-496b-aa68-c0965404b8f9
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: +ygHhS7KWvvZLGJ2AUAj4u2smTCzhZwlt1lqj5goS+pthl9aDZPtTwTgHQ85NP+6hFPoUk34c/5hakc993yRK7LyJce+T5xCNgXGQ8Z/7oQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB1609
 
-Add a selftest for received packets with CHECKSUM_COMPLETE that the SRv6
-code processes before they are delivered on the same node. The test checks
-that, after the node changes the packet, UDP does not read a wrong
-skb->csum.
-
-The test uses a host and a router connected through a veth pair. Since veth
-does not provide CHECKSUM_COMPLETE, a tc ct action on the router computes
-skb->csum in software.
-
-The host sends a UDP datagram to the router along five paths: no SRH (the
-reference), an SRH with local segments, End.B6.Encaps with End.DT6, End
-with the next-csid flavor, and End.BPF. Each datagram is expected to be
-delivered, not dropped as a checksum error. Without the previous patches,
-every path except the reference fails. With them, every path passes.
-
-The host also sends a control datagram. It checks that the test detects a
-wrong skb->csum after a change to the packet. After the ct action, a BPF
-program on the router changes the Flow Label of the control datagram
-without updating skb->csum, and UDP must drop it. If UDP accepts it, the
-paths above may report a false pass, and the test fails.
-
-Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
----
- tools/testing/selftests/net/Makefile          |   1 +
- .../selftests/net/srv6_csum_complete.bpf.c    |  65 ++
- .../selftests/net/srv6_csum_complete_test.sh  | 627 ++++++++++++++++++
- 3 files changed, 693 insertions(+)
- create mode 100644 tools/testing/selftests/net/srv6_csum_complete.bpf.c
- create mode 100755 tools/testing/selftests/net/srv6_csum_complete_test.sh
-
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index baea3e7f0f8f..46fa754bf0e9 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -94,6 +94,7 @@ TEST_PROGS := \
- 	sctp_ifwdtsn.sh \
- 	sctp_vrf.sh \
- 	skf_net_off.sh \
-+	srv6_csum_complete_test.sh \
- 	srv6_encap_lookup_l3vpn_test.sh \
- 	srv6_end_dt46_l3vpn_test.sh \
- 	srv6_end_dt4_l3vpn_test.sh \
-diff --git a/tools/testing/selftests/net/srv6_csum_complete.bpf.c b/tools/testing/selftests/net/srv6_csum_complete.bpf.c
-new file mode 100644
-index 000000000000..281b0361f976
---- /dev/null
-+++ b/tools/testing/selftests/net/srv6_csum_complete.bpf.c
-@@ -0,0 +1,65 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Author: Andrea Mayer <andrea.mayer@uniroma2.it>
-+ */
-+#include <stddef.h>
-+#include <linux/bpf.h>
-+#include <linux/if_ether.h>
-+#include <linux/ipv6.h>
-+#include <linux/pkt_cls.h>
-+#include <linux/seg6.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_endian.h>
-+
-+/* On the tc ingress, skb->data points to the Ethernet header */
-+#define TC_IPV6_OFF		ETH_HLEN
-+/* Byte with the lowest 8 bits of the Flow Label */
-+#define TC_FLOW_LBL_OFF		(TC_IPV6_OFF + \
-+				 offsetof(struct ipv6hdr, flow_lbl) + 2)
-+/* Bit of the Flow Label changed in the control datagram */
-+#define CTRL_FLOW_LBL_BIT	0x01
-+
-+/* In End.BPF, skb->data points to the IPv6 header, followed by the SRH */
-+#define SRH_TAG_OFF		(sizeof(struct ipv6hdr) + \
-+				 offsetof(struct ipv6_sr_hdr, tag))
-+/* Value written in the SRH Tag, test case (vi) */
-+#define SRH_TAG			0x1234
-+
-+/* Test case (v) of srv6_csum_complete_test.sh. The program runs on the tc
-+ * ingress of rt, after the ct action, only for the control datagram. It
-+ * changes one bit of the Flow Label, without updating the receive checksum
-+ * (skb->csum). The Flow Label is not part of the UDP checksum, which stays
-+ * correct. UDP must drop the datagram because the receive checksum no longer
-+ * matches the packet.
-+ */
-+SEC("tc")
-+int ctrl_flow_label(struct __sk_buff *skb)
-+{
-+	__u8 lbl;
-+
-+	/* Read the byte with the lowest 8 bits of the Flow Label */
-+	if (bpf_skb_load_bytes(skb, TC_FLOW_LBL_OFF, &lbl, sizeof(lbl)))
-+		return TC_ACT_SHOT;
-+
-+	lbl ^= CTRL_FLOW_LBL_BIT;
-+
-+	/* Write the byte back, flags 0 do not update the receive checksum */
-+	if (bpf_skb_store_bytes(skb, TC_FLOW_LBL_OFF, &lbl, sizeof(lbl), 0))
-+		return TC_ACT_SHOT;
-+
-+	return TC_ACT_OK;
-+}
-+
-+/* Test case (vi), the End.BPF program writes the SRH Tag */
-+SEC("lwt_seg6local")
-+int end_bpf_tag(struct __sk_buff *skb)
-+{
-+	__u16 tag = bpf_htons(SRH_TAG);
-+
-+	if (bpf_lwt_seg6_store_bytes(skb, SRH_TAG_OFF, &tag, sizeof(tag)))
-+		return BPF_DROP;
-+
-+	return BPF_OK;
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/net/srv6_csum_complete_test.sh b/tools/testing/selftests/net/srv6_csum_complete_test.sh
-new file mode 100755
-index 000000000000..d72a13041d80
---- /dev/null
-+++ b/tools/testing/selftests/net/srv6_csum_complete_test.sh
-@@ -0,0 +1,627 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# author: Andrea Mayer <andrea.mayer@uniroma2.it>
-+
-+# This test checks the receive checksum of an SRv6 packet that is processed and
-+# then delivered on the same node. The node changes the Segments Left and the
-+# destination address of the packet, and can also change the Hop Limit.
-+#
-+# The receive checksum (CHECKSUM_COMPLETE) is the checksum of the whole packet,
-+# kept with the received packet. When the node changes the packet, it must also
-+# update this sum, or discard it.
-+#
-+# Network topology
-+# ================
-+#
-+# The test uses a host (hs) and a router (rt) connected through a veth pair. In
-+# each test case, hs sends one UDP datagram to an address of rt.
-+#
-+# +--------------------+                    +--------------------------+
-+# |        hs          |                    |           rt             |
-+# |                    |                    |                          |
-+# |  veth-hs           +--------------------+ veth-rt                  |
-+# |  fd00::1/64        |                    | fd00::2/64               |
-+# |  tx checksum off   |                    | tc ingress: ct, then bpf |
-+# +--------------------+                    |                          |
-+#                                           | lo: fc00::1 ... fc00::4  |
-+#                                           |     cafe::1 ... cafe::6  |
-+#                                           +--------------------------+
-+#
-+# Receive checksum
-+# ================
-+#
-+# veth does not provide the receive checksum. For this reason, a tc ct action
-+# runs on the ingress of rt. The ct action checks the UDP checksum, and in this
-+# way computes the receive checksum in software. If the receive checksum does
-+# not match the packet, UDP drops the datagram as a checksum error.
-+#
-+# The ct action computes the receive checksum when hs computes the UDP checksum
-+# in software, before the datagram crosses the veth. For this reason, hs has
-+# transmit checksumming off.
-+#
-+# Each datagram is longer than 76 bytes, UDP header included. For datagrams of
-+# 76 bytes or less, UDP computes the checksum again from the packet, and accepts
-+# the datagram even with a wrong receive checksum.
-+#
-+# UDP counters
-+# ============
-+#
-+# Each datagram goes to a port with no listener. If the UDP checksum check
-+# passes, rt counts the datagram in Udp6NoPorts. If it fails, rt counts it in
-+# Udp6InCsumErrors.
-+#
-+# Control datagram
-+# ================
-+#
-+# A control datagram checks that the test detects a wrong receive checksum after
-+# a change to the packet. After the ct action, a tc bpf filter on rt changes one
-+# bit of its Flow Label, without updating the receive checksum. The Flow Label
-+# is not part of the UDP checksum, which stays correct. UDP must drop the
-+# datagram because the receive checksum no longer matches the packet. If UDP
-+# accepts it, the test cannot detect a wrong receive checksum. The other test
-+# cases may then pass even when their receive checksum is wrong, and for this
-+# reason the test fails.
-+#
-+# Routes and tc filters
-+# =====================
-+#
-+# hs: encap (main table)
-+# +---------+-----------------------------------------------------+
-+# | dst     | action                                              |
-+# +---------+-----------------------------------------------------+
-+# | cafe::1 | via fd00::2                                         |
-+# | cafe::2 | encap seg6 mode inline segs fc00::1,fc00::2         |
-+# | cafe::3 | encap seg6 mode inline segs fcbb:0:0200::           |
-+# | cafe::4 | encap seg6 mode inline segs fcbb:0:0100:0200::      |
-+# | cafe::5 | encap seg6 mode inline segs fc00::3,fc00::4         |
-+# | cafe::6 | encap seg6 mode inline segs fc00::b0,fcbb:0:0200::  |
-+# +---------+-----------------------------------------------------+
-+#
-+# rt: SRv6 behaviors (main table)
-+# +------------------+------------------------------------------------+
-+# | SID              | action                                         |
-+# +------------------+------------------------------------------------+
-+# | fcbb:0:0100::/48 | End flavors next-csid lblen 32 nflen 16        |
-+# | fcbb:0:0200::/48 | End.B6.Encaps srh segs fc00::d6                |
-+# | fc00::d6         | End.DT6 table 255 (local)                      |
-+# | fc00::b0         | End.BPF, the program writes the SRH Tag        |
-+# +------------------+------------------------------------------------+
-+#
-+# rt: tc ingress of veth-rt
-+# +-------+------+---------------------------------------------------+
-+# | chain | prio | filter                                            |
-+# +-------+------+---------------------------------------------------+
-+# | 0     | 1    | matchall, action ct, goto chain 1                 |
-+# | 1     | 1    | flower dst_ip fc00::3, goto chain 2               |
-+# | 2     | 1    | bpf, changes one bit of the Flow Label            |
-+# +-------+------+---------------------------------------------------+
-+#
-+# Test cases
-+# ==========
-+#
-+# hs applies the SRv6 Policies in inline mode, i.e. the original destination
-+# becomes the last SID of the SID List.
-+#
-+#   i) cafe::1, no SRH, used as a reference.
-+#
-+#  ii) cafe::2, SID List=fc00::1,fc00::2,cafe::2
-+#      fc00::1 and fc00::2 are addresses of rt. rt processes the SRH twice. Each
-+#      time, it also decrements the Hop Limit.
-+#
-+# iii) cafe::3, SID List=fcbb:0:0200::,cafe::3
-+#      End.B6.Encaps advances the SRH and adds an outer IPv6 header with an SRH.
-+#      The outer header goes to the End.DT6 SID fc00::d6, which removes it.
-+#
-+#  iv) cafe::4, SID List=fcbb:0:0100:0200::,cafe::4
-+#      End with the NEXT-C-SID flavor changes the DA to the next C-SID,
-+#      fcbb:0:0200::. Then the datagram follows the same path as in (iii).
-+#
-+#   v) cafe::5, SID List=fc00::3,fc00::4,cafe::5, control.
-+#      The tc flower filter matches the first segment, fc00::3, and the tc bpf
-+#      filter changes the Flow Label. Then rt processes the SRH as in (ii).
-+#
-+#  vi) cafe::6, SID List=fc00::b0,fcbb:0:0200::,cafe::6
-+#      End.BPF writes the SRH Tag. Then the datagram follows the same path as in
-+#      (iii).
-+#
-+# In the test case (v), the datagram is expected to be dropped as a checksum
-+# error. In all the other test cases, the datagram is expected to be delivered
-+# on rt.
-+
-+# shellcheck source=lib.sh
-+source lib.sh
-+
-+readonly IPv6_RT_NETWORK=fd00
-+readonly IPv6_DST_NETWORK=cafe
-+readonly SID_LOCATOR=fc00
-+readonly CSID_BLOCK=fcbb:0
-+readonly CSID_LBLEN=32
-+readonly CSID_NFLEN=16
-+readonly CSID_BLOCK_FUNC_LEN=$((CSID_LBLEN + CSID_NFLEN))
-+readonly B6_FUNC=0200
-+readonly CSID_FUNC=0100
-+readonly DT6_FUNC=d6
-+readonly BPF_FUNC=b0
-+readonly DUMMY_DEVNAME=dum0
-+readonly UDP_PORT=9
-+readonly UDP_PAYLOAD_LEN=200
-+readonly WAIT_TIMEOUT_SEC=5
-+
-+# destination of the control datagram on the veth, test case (v)
-+readonly CTRL_DST="${SID_LOCATOR}::3"
-+# tc chain of the flower filter that selects the control datagram
-+readonly CTRL_CHAIN=1
-+# tc chain of the bpf filter that changes the Flow Label
-+readonly BPF_CHAIN=2
-+
-+readonly BPF_FILE=srv6_csum_complete.bpf.o
-+readonly BPF_TC_SEC=tc
-+readonly BPF_END_SEC=lwt_seg6local
-+
-+# return values of check_udp_delivery()
-+readonly UDP_DELIVERED=0
-+readonly UDP_LOST=1
-+readonly UDP_CSUM_ERROR=2
-+
-+SETUP_ERR=1
-+
-+ret=${ksft_skip}
-+nsuccess=0
-+nfail=0
-+
-+print_log_test_results()
-+{
-+	printf "\nTests passed: %3d\n" "${nsuccess}"
-+	printf "Tests failed: %3d\n"   "${nfail}"
-+
-+	# when a test fails, the value of 'ret' is set to 1 (error code).
-+	# Conversely, when all tests are passed successfully, the 'ret' value
-+	# is set to 0 (success code).
-+	if [ "${ret}" -ne 1 ]; then
-+		ret=0
-+	fi
-+}
-+
-+log_section()
-+{
-+	echo
-+	echo "################################################################################"
-+	echo "TEST SECTION: $*"
-+	echo "################################################################################"
-+}
-+
-+cleanup()
-+{
-+	cleanup_all_ns
-+
-+	# check whether the setup phase was completed successfully or not. In
-+	# case of an error during the setup phase of the testing environment,
-+	# the selftest is considered as "skipped".
-+	if [ "${SETUP_ERR}" -ne 0 ]; then
-+		echo "SKIP: Setting up the testing environment failed"
-+		exit "${ksft_skip}"
-+	fi
-+
-+	exit "${ret}"
-+}
-+
-+# add on hs the SRv6 Policy for cafe::<id>, in inline mode
-+# args:
-+#  $1 - destination id
-+#  $2 - segments, comma separated
-+set_hs_policy()
-+{
-+	local dstid="$1"
-+	local segs="$2"
-+
-+	ip -netns "${NS_HS}" -6 route add "${IPv6_DST_NETWORK}::${dstid}/128" \
-+		encap seg6 mode inline segs "${segs}" \
-+		via "${IPv6_RT_NETWORK}::2" dev veth-hs
-+}
-+
-+setup_hs()
-+{
-+	ip -netns "${NS_HS}" link set veth-hs up
-+	ip -netns "${NS_HS}" addr add "${IPv6_RT_NETWORK}::1/64" \
-+		dev veth-hs nodad
-+
-+	# with transmit checksumming on, conntrack on rt does not compute the
-+	# receive checksum
-+	ip netns exec "${NS_HS}" ethtool -K veth-hs tx off >/dev/null
-+
-+	# routes to the SIDs, used after the SRH is inserted
-+	ip -netns "${NS_HS}" -6 route add "${SID_LOCATOR}::/16" \
-+		via "${IPv6_RT_NETWORK}::2" dev veth-hs
-+	ip -netns "${NS_HS}" -6 route add "${CSID_BLOCK}::/${CSID_LBLEN}" \
-+		via "${IPv6_RT_NETWORK}::2" dev veth-hs
-+
-+	# test case (i), the reference, no SRH
-+	ip -netns "${NS_HS}" -6 route add "${IPv6_DST_NETWORK}::1/128" \
-+		via "${IPv6_RT_NETWORK}::2" dev veth-hs
-+
-+	# the SRv6 Policies of the test cases (ii) to (vi)
-+	set_hs_policy 2 "${SID_LOCATOR}::1,${SID_LOCATOR}::2"
-+	set_hs_policy 3 "${CSID_BLOCK}:${B6_FUNC}::"
-+	set_hs_policy 4 "${CSID_BLOCK}:${CSID_FUNC}:${B6_FUNC}::"
-+	set_hs_policy 5 "${SID_LOCATOR}::3,${SID_LOCATOR}::4"
-+	set_hs_policy 6 "${SID_LOCATOR}::${BPF_FUNC},${CSID_BLOCK}:${B6_FUNC}::"
-+}
-+
-+setup_rt()
-+{
-+	local dstid
-+	local dev
-+
-+	ip -netns "${NS_RT}" link set veth-rt up
-+	ip -netns "${NS_RT}" addr add "${IPv6_RT_NETWORK}::2/64" \
-+		dev veth-rt nodad
-+
-+	# local segments of the test case (ii)
-+	ip -netns "${NS_RT}" addr add "${SID_LOCATOR}::1/128" dev lo nodad
-+	ip -netns "${NS_RT}" addr add "${SID_LOCATOR}::2/128" dev lo nodad
-+	# local segments of the test case (v)
-+	ip -netns "${NS_RT}" addr add "${SID_LOCATOR}::3/128" dev lo nodad
-+	ip -netns "${NS_RT}" addr add "${SID_LOCATOR}::4/128" dev lo nodad
-+	for dstid in 1 2 3 4 5 6; do
-+		ip -netns "${NS_RT}" addr add \
-+			"${IPv6_DST_NETWORK}::${dstid}/128" dev lo nodad
-+	done
-+
-+	for dev in all veth-rt lo; do
-+		ip netns exec "${NS_RT}" sysctl -wq \
-+			net.ipv6.conf."${dev}".seg6_enabled=1
-+	done
-+
-+	# SRv6 behaviors used by the test cases (iii), (iv) and (vi)
-+	ip -netns "${NS_RT}" -6 route \
-+		add "${CSID_BLOCK}:${CSID_FUNC}::/${CSID_BLOCK_FUNC_LEN}" \
-+		encap seg6local action End flavors next-csid \
-+		lblen "${CSID_LBLEN}" nflen "${CSID_NFLEN}" dev veth-rt
-+	ip -netns "${NS_RT}" -6 route \
-+		add "${CSID_BLOCK}:${B6_FUNC}::/${CSID_BLOCK_FUNC_LEN}" \
-+		encap seg6local action End.B6.Encaps \
-+		srh segs "${SID_LOCATOR}::${DT6_FUNC}" dev veth-rt
-+	ip -netns "${NS_RT}" -6 route add "${SID_LOCATOR}::${DT6_FUNC}/128" \
-+		encap seg6local action End.DT6 table 255 dev veth-rt
-+	ip -netns "${NS_RT}" -6 route add "${SID_LOCATOR}::${BPF_FUNC}/128" \
-+		encap seg6local action End.BPF endpoint obj "${BPF_FILE}" \
-+		sec "${BPF_END_SEC}" dev veth-rt
-+
-+	tc -netns "${NS_RT}" qdisc add dev veth-rt clsact
-+	# the bpf filter changes the Flow Label of the control datagram
-+	tc -netns "${NS_RT}" filter add dev veth-rt ingress \
-+		chain "${BPF_CHAIN}" prio 1 protocol ipv6 \
-+		bpf object-file "${BPF_FILE}" section "${BPF_TC_SEC}" \
-+		direct-action
-+	# the control datagram goes to the bpf filter
-+	tc -netns "${NS_RT}" filter add dev veth-rt ingress \
-+		chain "${CTRL_CHAIN}" prio 1 protocol ipv6 \
-+		flower dst_ip "${CTRL_DST}" \
-+		action goto chain "${BPF_CHAIN}"
-+	# every packet goes to the ct action, which computes the receive
-+	# checksum, then to the chain of the flower filter
-+	tc -netns "${NS_RT}" filter add dev veth-rt ingress prio 1 \
-+		protocol ipv6 matchall \
-+		action ct pipe action goto chain "${CTRL_CHAIN}"
-+	ip netns exec "${NS_RT}" sysctl -wq \
-+		net.netfilter.nf_conntrack_checksum=1
-+}
-+
-+setup()
-+{
-+	setup_ns NS_HS NS_RT
-+
-+	ip -netns "${NS_HS}" link add veth-hs type veth \
-+		peer name veth-rt netns "${NS_RT}"
-+
-+	setup_hs
-+	setup_rt
-+
-+	# testing environment was set up successfully
-+	SETUP_ERR=0
-+}
-+
-+# print the value of a counter of rt in /proc/net/snmp6
-+# args:
-+#  $1 - counter name in /proc/net/snmp6
-+get_rt_udp6_counter()
-+{
-+	local name="$1"
-+
-+	ip netns exec "${NS_RT}" cat /proc/net/snmp6 | \
-+		awk -v k="${name}" '$1 == k { print $2 }'
-+}
-+
-+# number of datagrams that UDP on rt counted in Udp6NoPorts or Udp6InCsumErrors
-+get_rt_udp6_received()
-+{
-+	echo $(( $(get_rt_udp6_counter Udp6NoPorts) +
-+		 $(get_rt_udp6_counter Udp6InCsumErrors) ))
-+}
-+
-+check_hs_rt_connectivity()
-+{
-+	ip netns exec "${NS_HS}" ping -c 1 -W 1 "${IPv6_RT_NETWORK}::2" \
-+		>/dev/null 2>&1
-+}
-+
-+check_and_log_hs_rt_connectivity()
-+{
-+	check_hs_rt_connectivity
-+	log_test_expected $? 0 "Connectivity: hs -> rt"
-+}
-+
-+connectivity_tests()
-+{
-+	log_section "IPv6 connectivity test between host and router"
-+
-+	check_and_log_hs_rt_connectivity
-+}
-+
-+# Send one UDP datagram from hs to a port with no listener on rt.
-+# args:
-+#  $1 - destination id
-+# return:
-+#  - UDP_DELIVERED if rt counts the datagram as delivered
-+#  - UDP_CSUM_ERROR if rt drops it for a bad checksum
-+#  - UDP_LOST if the datagram cannot be sent, or if it does not arrive
-+check_udp_delivery()
-+{
-+	local dstid="$1"
-+	local noports
-+	local payload
-+	local errors
-+	local recv
-+	local dst
-+
-+	dst="${IPv6_DST_NETWORK}::${dstid}"
-+	noports="$(get_rt_udp6_counter Udp6NoPorts)"
-+	errors="$(get_rt_udp6_counter Udp6InCsumErrors)"
-+	recv=$((noports + errors))
-+	payload="$(printf '%*s' "${UDP_PAYLOAD_LEN}" '')"
-+
-+	# send the datagram with the /dev/udp redirection of bash
-+	if ! ip netns exec "${NS_HS}" bash -c "printf '%s' '${payload}' > \
-+			/dev/udp/${dst}/${UDP_PORT}"; then
-+		return "${UDP_LOST}"
-+	fi
-+
-+	# wait until rt counts the datagram in Udp6NoPorts or Udp6InCsumErrors
-+	if ! slowwait "${WAIT_TIMEOUT_SEC}" until_counter_is \
-+			">= $((recv + 1))" get_rt_udp6_received >/dev/null; then
-+		return "${UDP_LOST}"
-+	fi
-+
-+	if [ "$(get_rt_udp6_counter Udp6InCsumErrors)" -ne "${errors}" ]; then
-+		return "${UDP_CSUM_ERROR}"
-+	fi
-+
-+	if [ "$(get_rt_udp6_counter Udp6NoPorts)" -ne "$((noports + 1))" ]; then
-+		return "${UDP_LOST}"
-+	fi
-+
-+	return "${UDP_DELIVERED}"
-+}
-+
-+# check the delivery of a datagram to cafe::<id> and log the result
-+# args:
-+#  $1 - destination id
-+#  $2 - expected return value of check_udp_delivery()
-+#  $3 - description of the path
-+check_and_log_udp_delivery()
-+{
-+	local dstid="$1"
-+	local expected="$2"
-+	local desc="$3"
-+
-+	check_udp_delivery "${dstid}"
-+	log_test_expected $? "${expected}" \
-+		"UDP: hs -> ${IPv6_DST_NETWORK}::${dstid} (${desc})"
-+}
-+
-+udp_delivery_tests()
-+{
-+	log_section "UDP delivery test with CHECKSUM_COMPLETE"
-+
-+	check_and_log_udp_delivery 1 "${UDP_DELIVERED}" "no SRH"
-+	check_and_log_udp_delivery 2 "${UDP_DELIVERED}" "SRH, local segments"
-+	check_and_log_udp_delivery 3 "${UDP_DELIVERED}" "End.B6.Encaps, End.DT6"
-+	check_and_log_udp_delivery 4 "${UDP_DELIVERED}" \
-+		"End next-csid, End.B6.Encaps, End.DT6"
-+	check_and_log_udp_delivery 5 "${UDP_CSUM_ERROR}" "control, csum error"
-+	check_and_log_udp_delivery 6 "${UDP_DELIVERED}" \
-+		"End.BPF, End.B6.Encaps, End.DT6"
-+}
-+
-+test_dummy_dev_or_ksft_skip()
-+{
-+	local test_netns
-+
-+	setup_ns test_netns
-+
-+	modprobe dummy &>/dev/null || true
-+	if ! ip -netns "${test_netns}" link add "${DUMMY_DEVNAME}" \
-+			type dummy; then
-+		cleanup_ns "${test_netns}"
-+		echo "SKIP: dummy dev not supported"
-+		exit "${ksft_skip}"
-+	fi
-+
-+	cleanup_ns "${test_netns}"
-+}
-+
-+test_iproute2_supp_or_ksft_skip()
-+{
-+	if ! ip route help 2>&1 | grep -qo next-csid; then
-+		echo "SKIP: Missing SRv6 next-csid flavor support in iproute2"
-+		exit "${ksft_skip}"
-+	fi
-+}
-+
-+test_kernel_supp_or_ksft_skip()
-+{
-+	local test_netns
-+
-+	setup_ns test_netns
-+
-+	ip -netns "${test_netns}" link add "${DUMMY_DEVNAME}" type dummy
-+	ip -netns "${test_netns}" link set "${DUMMY_DEVNAME}" up
-+
-+	if ! ip -netns "${test_netns}" -6 route \
-+			add "${CSID_BLOCK}::/${CSID_LBLEN}" encap seg6local \
-+			action End flavors next-csid dev "${DUMMY_DEVNAME}" \
-+			2>/dev/null; then
-+		cleanup_ns "${test_netns}"
-+		echo "SKIP: SRv6 next-csid flavor not supported"
-+		exit "${ksft_skip}"
-+	fi
-+
-+	cleanup_ns "${test_netns}"
-+}
-+
-+test_veth_tx_csum_off_or_ksft_skip()
-+{
-+	local test_netns
-+
-+	setup_ns test_netns
-+
-+	if ! ip -netns "${test_netns}" link add veth-t0 type veth \
-+			peer name veth-t1 2>/dev/null; then
-+		cleanup_ns "${test_netns}"
-+		echo "SKIP: veth dev not supported"
-+		exit "${ksft_skip}"
-+	fi
-+
-+	# setup_hs() turns off transmit checksumming on veth-hs. If it stays on,
-+	# conntrack does not compute the receive checksum and the test cannot
-+	# see the error.
-+	ip netns exec "${test_netns}" ethtool -K veth-t0 tx off >/dev/null 2>&1
-+
-+	if ! ip netns exec "${test_netns}" ethtool -k veth-t0 | \
-+			grep -q "^tx-checksumming: off"; then
-+		cleanup_ns "${test_netns}"
-+		echo "SKIP: Cannot turn off transmit checksumming on veth"
-+		exit "${ksft_skip}"
-+	fi
-+
-+	cleanup_ns "${test_netns}"
-+}
-+
-+test_bpf_file_or_ksft_skip()
-+{
-+	if [ ! -f "${BPF_FILE}" ]; then
-+		echo "SKIP: Missing ${BPF_FILE}, run 'make' first"
-+		exit "${ksft_skip}"
-+	fi
-+}
-+
-+test_tc_or_ksft_skip()
-+{
-+	local test_netns
-+
-+	setup_ns test_netns
-+
-+	ip -netns "${test_netns}" link add "${DUMMY_DEVNAME}" type dummy
-+
-+	if ! tc -netns "${test_netns}" qdisc add dev "${DUMMY_DEVNAME}" \
-+			clsact 2>/dev/null; then
-+		cleanup_ns "${test_netns}"
-+		echo "SKIP: tc clsact qdisc not supported"
-+		exit "${ksft_skip}"
-+	fi
-+
-+	if ! tc -netns "${test_netns}" filter add dev "${DUMMY_DEVNAME}" \
-+			ingress chain "${BPF_CHAIN}" protocol ipv6 \
-+			bpf object-file "${BPF_FILE}" section "${BPF_TC_SEC}" \
-+			direct-action 2>/dev/null; then
-+		cleanup_ns "${test_netns}"
-+		echo "SKIP: tc bpf filter not supported"
-+		exit "${ksft_skip}"
-+	fi
-+
-+	if ! tc -netns "${test_netns}" filter add dev "${DUMMY_DEVNAME}" \
-+			ingress chain "${CTRL_CHAIN}" protocol ipv6 \
-+			flower dst_ip "${CTRL_DST}" \
-+			action goto chain "${BPF_CHAIN}" 2>/dev/null; then
-+		cleanup_ns "${test_netns}"
-+		echo "SKIP: tc flower filter or goto chain action not supported"
-+		exit "${ksft_skip}"
-+	fi
-+
-+	if ! tc -netns "${test_netns}" filter add dev "${DUMMY_DEVNAME}" \
-+			ingress protocol ipv6 matchall \
-+			action ct pipe action goto chain "${CTRL_CHAIN}" \
-+			2>/dev/null; then
-+		cleanup_ns "${test_netns}"
-+		echo "SKIP: tc matchall filter or ct action not supported"
-+		exit "${ksft_skip}"
-+	fi
-+
-+	# setup_rt() turns on nf_conntrack_checksum. If it is off, conntrack
-+	# does not check the UDP checksum and does not compute the receive
-+	# checksum. The test cannot see the error.
-+	if ! ip netns exec "${test_netns}" sysctl -wq \
-+			net.netfilter.nf_conntrack_checksum=1 2>/dev/null; then
-+		cleanup_ns "${test_netns}"
-+		echo "SKIP: nf_conntrack_checksum sysctl not available"
-+		exit "${ksft_skip}"
-+	fi
-+
-+	cleanup_ns "${test_netns}"
-+}
-+
-+test_end_bpf_or_ksft_skip()
-+{
-+	local test_netns
-+
-+	setup_ns test_netns
-+
-+	ip -netns "${test_netns}" link add "${DUMMY_DEVNAME}" type dummy
-+	ip -netns "${test_netns}" link set "${DUMMY_DEVNAME}" up
-+
-+	if ! ip -netns "${test_netns}" -6 route \
-+			add "${SID_LOCATOR}::${BPF_FUNC}/128" encap seg6local \
-+			action End.BPF endpoint obj "${BPF_FILE}" \
-+			sec "${BPF_END_SEC}" dev "${DUMMY_DEVNAME}" \
-+			2>/dev/null; then
-+		cleanup_ns "${test_netns}"
-+		echo "SKIP: SRv6 End.BPF not supported"
-+		exit "${ksft_skip}"
-+	fi
-+
-+	cleanup_ns "${test_netns}"
-+}
-+
-+if [ "$(id -u)" -ne 0 ]; then
-+	echo "SKIP: Need root privileges"
-+	exit "${ksft_skip}"
-+fi
-+
-+# required programs to carry out this selftest
-+require_command ip
-+require_command tc
-+require_command ethtool
-+require_command ping
-+require_command sysctl
-+require_command awk
-+require_command grep
-+
-+test_dummy_dev_or_ksft_skip
-+test_iproute2_supp_or_ksft_skip
-+test_kernel_supp_or_ksft_skip
-+test_veth_tx_csum_off_or_ksft_skip
-+test_bpf_file_or_ksft_skip
-+test_tc_or_ksft_skip
-+test_end_bpf_or_ksft_skip
-+
-+set -e
-+trap cleanup EXIT
-+
-+setup
-+set +e
-+
-+connectivity_tests
-+udp_delivery_tests
-+
-+print_log_test_results
--- 
-2.43.0
-
+SGVsbG8sDQoNCk9uIG91ciBlbmQsIHdlIGFsc28gaGF2ZSBhbHJlYWR5IG1lcmdlZCBjb2RlIHRv
+IGFkYXB0IG91ciBlQlBGcyB0byB0aGUgYXJndW1lbnQgb3JkZXIgY2hhbmdlLiBIb3dldmVyLCB3
+ZSB3b3VsZCBzdGlsbCBwcmVmZXIgaWYgdGhpcyBlYXNpbHktYXZvaWRhYmxlIGJyZWFrYWdlIGNv
+dWxkIGJlIGZpeGVkIGJ5IG1vdmluZyB0aGUgYXJndW1lbnQgdG8gdGhlIGVuZCwgZXZlbiBpZiBp
+dCBtZWFucyBoYXZpbmcgdG8gcmV2ZXJ0IG91ciBmaXguDQoNClRoaXMgaXMgbW90aXZhdGVkIGJ5
+IHRoZSBmYWN0IHRoYXQgc3VjaCBhIGNoYW5nZSBpcyBub3QgbWFkZSBpbiBwbGFjZSBvbiBvdXIg
+ZW5kIGJlY2F1c2Ugd2Ugc2hpcCBvdXIgc29mdHdhcmUgdG8gZW52aXJvbm1lbnRzIHdlIGRvbid0
+IGNvbnRyb2wsIG1lYW5pbmcgdGhhdCBhbnkgYW5kIHBvdGVudGlhbGx5IGFsbCB2ZXJzaW9ucyBy
+YW5naW5nIGZyb20gNC4xMSB0byB0aGUgdmVyeSBsYXRlc3Qgc2hvdWxkIGJlIHN1cHBvcnRlZCwg
+c28gdGhlIGNoYW5nZSBpcyBtYWRlIGJ5IGNvbXBpbGluZyBhbmQgc2hpcHBpbmcgYSBuZXcgdmFy
+aWFudCBvZiB0aGUgY29uY2VybmVkIGVCUEZzIGZvciB0aGUgdmVyc2lvbiBpbnRlcnZhbCBpdCBp
+cyB2YWxpZCBmb3IgKDcuNCsgaW4gdGhpcyBjYXNlKS4gQW5kIHRoYXQgaGFzIHRvIGJlIGRvbmUg
+ZXZlcnkgdGltZSB0aGVyZSBpcyBhbiB1cHN0cmVhbSBjaGFuZ2UgbGlrZSB0aGlzLCBzbyB0aGUg
+dG90YWwgaW5zdGFsbGF0aW9uIHNpemUgYW5kIG92ZXJhbGwgY29tcGxleGl0eSBncm93cyBhY2Nv
+cmRpbmdseS4NCg0KSWYgd2UgY291bGQgYXZvaWQgdGhhdCwgZXNwZWNpYWxseSBmb3Igc3VjaCB0
+cml2aWFsIHJvb3QgY2F1c2VzLCBpdCB3b3VsZCBiZSBuaWNlLg0KDQpCZXN0IHJlZ2FyZHMsDQpQ
+YXVsLg0KDQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fDQpGcm9tOiBE
+YWFuIERlIE1leWVyIDxkYWFuQGFtdXRhYmxlLmNvbT4NClNlbnQ6IFdlZG5lc2RheSwgTm92ZW1i
+ZXIgMTgsIDIwMjYgMzoxOCBQTQ0KVG86IElob3IgU29sb2RyYWkNCkNjOiByb2JsYWJsYTsgQW5k
+cmlpIE5ha3J5aWtvOyBQYXVsIE1vb3JlOyBicGZAdmdlci5rZXJuZWwub3JnOyBsaW51eC1zZWN1
+cml0eS1tb2R1bGVAdmdlci5rZXJuZWwub3JnOyBQYXVsIE1hYmlsZWF1OyBsaW51eC1rZXJuZWxA
+dmdlci5rZXJuZWwub3JnOyBBbmRyaWkgTmFrcnlpa28NClN1YmplY3Q6IFJlOiBbQlVHXSBicGYs
+IGxzbTogbmV3IGZpcnN0IGFyZ3VtZW50IGluIDcuNCBpbm9kZSBob29rcyBzaWxlbnRseSBicmVh
+a3MgQlBGIExTTXMNCg0KTm90ZSB0aGF0IHdlJ3ZlIGFscmVhZHkgbWVyZ2VkIGNvZGUgaW4gc3lz
+dGVtZCB0aGF0IGRlcGVuZHMgb24gdGhlDQpjdXJyZW50IGFyZ3VtZW50IG9yZGVyLCBzbyBJJ2Qg
+cmVhbGx5IHByZWZlciBpZiBpdCBkaWRuJ3QgY2hhbmdlLiBJZg0KaXQgZG9lcywgZG8gY2MgbWUg
+b24gdGhlIHBhdGNoIHNvIEkgY2FuIGZpeCB0aGUgaXNzdWUgaW4gc3lzdGVtZC4NCg0KQ2hlZXJz
+LA0KDQpEYWFuDQoNCk9uIFdlZCwgTm92IDE4LCAyMDI2IGF0IDE6NTLigK9BTSBJaG9yIFNvbG9k
+cmFpIDxpaG9yLnNvbG9kcmFpQGxpbnV4LmRldj4gd3JvdGU6DQo+DQo+IE9uIDExLzkvMjYgODow
+NyBBTSwgcm9ibGFibGEgd3JvdGU6DQo+ID4gSGksDQo+ID4NCj4gPiBUaGFua3MgZm9yIHRoZSBy
+ZXBsaWVzIQ0KPiA+DQo+ID4+IFsuLi5dDQo+ID4NCj4gPiBTbyB3aGF0IHdvdWxkIGJlIHJlYWxs
+eSBuaWNlIGlzIGEgd2F5IHRvIG1ha2UgZUJQRiBjb2RlIHJvYnVzdCBhZ2FpbnN0DQo+ID4ga2Vy
+bmVsIGNoYW5nZXMgc3VjaCB0aGF0IGl0IGVpdGhlciB3b3Jrcywgb3IgZmFpbHMgdG8gbG9hZCwg
+YnV0IGRvZXNuJ3QNCj4gPiBkbyB0aGUgaGFsZndheSAibG9hZHMgYnV0IHNpbGVudGx5IG1pc2Jl
+aGF2ZXMiLiBIZXJlIGFyZSB0d28gaWRlYXMgdGhhdA0KPiA+IGhhdmUgYmVlbiBpbiB0aGUgYmFj
+ayBvZiBteSBtaW5kIHRoYXQgY291bGQgaGVscCBzb2x2ZSB0aGlzIGlzc3VlICh0aG91Z2gNCj4g
+PiBJIHVuZGVyc3RhbmQgdGhhdCB0aGV5IG1heSBiZSByYXRoZXIgbGFyZ2UgY2hhbmdlcywgSSdt
+IHB1dHRpbmcgdGhlbSBvdXQNCj4gPiB0aGVyZSBtb3N0bHkgYXMgYSBjb252ZXJzYXRpb24gc3Rh
+cnRlcik6DQo+ID4NCj4gPiAxLiBDb3VsZCBsaWJicGYvdGhlIGtlcm5lbCBoYXZlIGEgbWlzbWF0
+Y2ggY2hlY2sgb24gaG9vayBhcmd1bWVudHM/IEkNCj4gPiAgICB1bmRlcnN0YW5kIHRoYXQgbGli
+YnBmIGFuZCB0aGUgdmVyaWZpZXIgZG9uJ3Qga25vdyB0aGUgdHlwZXMgYQ0KPiA+ICAgIHByb2dy
+YW0gZXhwZWN0cywgc2luY2UgQlBGX1BST0coKSBvbmx5IGNhc3RzIHU2NHMuIEJ1dCB0aGUgbWFj
+cm8NCj4gPiAgICBkb2VzIGtub3cgdGhlIHR5cGVzIGF0IGNvbXBpbGUgdGltZS4gQ291bGQgaXQg
+KG9yIGFuIG9wdC1pbiB2YXJpYW50KQ0KPiA+ICAgIHJlY29yZCB0aGUgZXhwZWN0ZWQgcHJvdG90
+eXBlIGluIHRoZSBwcm9ncmFtJ3MgQlRGLCBzbyB0aGF0IGxpYmJwZg0KPiA+ICAgIGNhbiBjb21w
+YXJlIGl0IGFnYWluc3QgdGhlIExTTSBob29rJ3MgcHJvdG90eXBlIGluIHZtbGludXggQlRGIGFu
+ZA0KPiA+ICAgIHJlZnVzZSB0byBsb2FkIG9uIGEgbWlzbWF0Y2g/DQo+ID4NCj4gPiAyLiBTaW5j
+ZSBrZXJuZWwgQlRGIGhhcyBwYXJhbWV0ZXIgbmFtZXMgZm9yIHRoZSBicGZfbHNtXyogZnVuY3Rp
+b25zLA0KPiA+ICAgIGNvdWxkIHdlIG1heWJlIGhhdmUgQ08tUkUtc3R5bGUgcmVsb2NhdGlvbiB0
+byByZXNvbHZlICJ0aGUgYXJndW1lbnQNCj4gPiAgICBuYW1lZCBkZW50cnkiIHRvIHRoZSBhcmd1
+bWVudCBpbmRleCBhdCBsb2FkIHRpbWU/IFRoaXMgd2F5LCBhZGRpbmcgYQ0KPiA+ICAgIG5ldyBh
+cmd1bWVudCBjb3VsZCBoYXBwZW4gYW55d2hlcmUgaW4gdGhlIGFyZ3VtZW50IGxpc3Qgd2l0aG91
+dA0KPiA+ICAgIGJyZWFraW5nIGVCUEZzLCBhbmQgcmVtb3ZpbmcgYW4gYXJndW1lbnQgd2lsbCAo
+Y29ycmVjdGx5KSBjYXVzZSBvdXINCj4gPiAgICBlQlBGIHRvIHN0b3AgbG9hZGluZy4gSXQgZG9l
+cyBtZWFuIHRoZSBlQlBGIHByb2dyYW1zIG11c3QgcHJvdmlkZSB0aGUNCj4gPiAgICBzYW1lIGFy
+Z3VtZW50IG5hbWVzLCBidXQgbWF5YmUgdGhhdCdzIGFuIGFjY2VwdGFibGUgdHJhZGVvZmY/DQo+
+DQo+IEhpIGV2ZXJ5b25lLg0KPg0KPiByb2JsYWJsYSdzIGNvbW1lbnRzIGdvdCBtZSBjdXJpb3Vz
+LCBhbmQgSSBzcGVudCBzb21lIHRpbWUgd2l0aCBteQ0KPiBoZWxwZnVsIGFzc2lzdGFudHMgcG9r
+aW5nIGF0IHRoZSBwcm9ibGVtLg0KPg0KPiBUaGVyZSBpcyBhbm90aGVyIHdvcmthcm91bmQgaW4g
+YWRkaXRpb24gdG8gd2hhdCBBbmRyaWkgc3VnZ2VzdGVkLg0KPiBBIHByb2dyYW0gY2FuIGFscmVh
+ZHkgbWFrZSBpdHNlbGYgZmFpbCB0byBsb2FkIG9uIGEgc2lnbmF0dXJlDQo+IG1pc21hdGNoOg0K
+Pg0KPiAgICAgICAgIHVuaW9uIHNlY3VyaXR5X2xpc3Rfb3B0aW9uc19fX21pbmUgew0KPiAgICAg
+ICAgICAgICAgICAgaW50ICgqaW5vZGVfY3JlYXRlKShzdHJ1Y3QgaW5vZGUgKmRpciwNCj4gICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc3RydWN0IGRlbnRyeSAqZGVudHJ5LCB1
+bW9kZV90IG1vZGUpOw0KPiAgICAgICAgIH07DQo+DQo+ICAgICAgICAgZXh0ZXJuIHZvaWQgbHNt
+X3Byb3RvX21pc21hdGNoX19pbm9kZV9jcmVhdGUodm9pZCkgX19rc3ltIF9fd2VhazsNCj4NCj4g
+ICAgICAgICBTRUMoImxzbS9pbm9kZV9jcmVhdGUiKQ0KPiAgICAgICAgIGludCBCUEZfUFJPRyhk
+ZW55X2NyZWF0ZSwgc3RydWN0IGlub2RlICpkaXIsIHN0cnVjdCBkZW50cnkgKmRlbnRyeSkNCj4g
+ICAgICAgICB7DQo+ICAgICAgICAgICAgICAgICBpZiAoIWJwZl9jb3JlX3R5cGVfbWF0Y2hlcyh1
+bmlvbiBzZWN1cml0eV9saXN0X29wdGlvbnNfX19taW5lKSkNCj4gICAgICAgICAgICAgICAgICAg
+ICAgICAgbHNtX3Byb3RvX21pc21hdGNoX19pbm9kZV9jcmVhdGUoKTsNCj4gICAgICAgICAgICAg
+ICAgIC4uLg0KPiAgICAgICAgIH0NCj4NCj4gYnBmX2NvcmVfdHlwZV9tYXRjaGVzKCkgY2hlY2tz
+IHRoZSBleHBlY3RlZCBwcm90b3R5cGUgYWdhaW5zdCB0aGUNCj4gaG9vaydzIG1lbWJlciBvZiB1
+bmlvbiBzZWN1cml0eV9saXN0X29wdGlvbnMgaW4ga2VybmVsIEJURi4NCj4gT24gYSBtaXNtYXRj
+aCB0aGUgY2FsbCB0byB0aGUgdW5yZXNvbHZlZCB3ZWFrIGtmdW5jIHN0YXlzIHJlYWNoYWJsZSwN
+Cj4gc28gdGhlIHZlcmlmaWVyIHJlamVjdHMgdGhlIHByb2dyYW0sIGFuZCBsaWJicGYgcmVwb3J0
+czoNCj4NCj4gICBrZnVuYyAnbHNtX3Byb3RvX21pc21hdGNoX19pbm9kZV9jcmVhdGUnIGlzIHJl
+ZmVyZW5jZWQgYnV0IHdhc24ndCByZXNvbHZlZA0KPg0KPiBJdCdzIHBvc2l0aW9uYWwgYW5kIG5l
+ZWRzIHRoZSBleGFjdCBhcmd1bWVudCBjb3VudCwgYnV0IGl0IHR1cm5zDQo+IHNpbGVudCBtaXNi
+ZWhhdmlvciBpbnRvIGEgbG9hZCBmYWlsdXJlLiBUaGUgc2FtZSBzaG91bGQgd29yayBmb3INCj4g
+dHBfYnRmIHdpdGggdGhlIGJ0Zl90cmFjZV88dHA+IHR5cGVkZWZzLg0KPg0KPiBCdXQgb2YgY291
+cnNlIGl0J3MganVzdCBhIHdvcmthcm91bmQuLg0KPg0KPiBBIGJpdCBtb3JlIGdlbmVyYWxseSwg
+ZXhwYW5kaW5nIG9uIHJvYmxhYmxhJ3Mgc2Vjb25kIGlkZWEsIEkgdGhpbmsgbGliYnBmDQo+IGNv
+dWxkIHJlc29sdmUgaG9vayBhcmd1bWVudHMgYnkgbmFtZSB3aXRoIHRoZSBleGlzdGluZyBDTy1S
+RSBtYWNoaW5lcnksDQo+IHdpdGhvdXQga2VybmVsLCB2ZXJpZmllciBvciBMU00gY2hhbmdlcy4N
+Cj4NCj4gVGhlIEJQRiBzaWRlIGNvdWxkIGxvb2sgbGlrZSB0aGlzOg0KPg0KPiAgICAgICAgIFNF
+QygibHNtL2lub2RlX2NyZWF0ZSIpDQo+ICAgICAgICAgaW50IEJQRl9QUk9HX0FSR1MoZGVueV9j
+cmVhdGUsIHN0cnVjdCBpbm9kZSAqLCBkaXIsDQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAg
+c3RydWN0IGRlbnRyeSAqLCBkZW50cnkpDQo+ICAgICAgICAgeyAuLi4gfQ0KPg0KPiBCUEZfUFJP
+R19BUkdTKCkgKG5hbWUgVEJEKSB0YWtlcyAodHlwZSwgbmFtZSkgcGFpcnMgbGlrZSBCUEZfUFJP
+RzIoKSwNCj4gYnV0IGluc3RlYWQgb2YgY2FzdGluZyBjdHhbMF0sIGN0eFsxXSwgLi4uIGl0IHJl
+YWRzIGVhY2ggYXJndW1lbnQNCj4gdGhyb3VnaCBhIGxvY2FsIHByZXNlcnZlX2FjY2Vzc19pbmRl
+eC1tYXJrZWQgc3RydWN0LCBzbyBldmVyeSBhcmd1bWVudA0KPiBhY2Nlc3MgaXMgYSByZWd1bGFy
+IENPLVJFIGZpZWxkIHJlbG9jYXRpb246DQo+DQo+ICAgICAgICAgc3RydWN0IGJwZl9mdW5jX2Fy
+Z3NfX19kZW55X2NyZWF0ZSB7DQo+ICAgICAgICAgICAgICAgICBjb25zdCBzdHJ1Y3QgbW50X2lk
+bWFwICppZG1hcDsgIC8qIDcuNCsgKi8NCj4gICAgICAgICAgICAgICAgIHN0cnVjdCBpbm9kZSAq
+ZGlyOw0KPiAgICAgICAgICAgICAgICAgc3RydWN0IGRlbnRyeSAqZGVudHJ5Ow0KPiAgICAgICAg
+IH0gX19hdHRyaWJ1dGVfXygocHJlc2VydmVfYWNjZXNzX2luZGV4KSk7DQo+DQo+ICAgICAgICAg
+U0VDKCJsc20vaW5vZGVfY3JlYXRlIikNCj4gICAgICAgICBpbnQgZGVueV9jcmVhdGUodTY0ICpj
+dHgpDQo+ICAgICAgICAgew0KPiAgICAgICAgICAgICAgICAgc3RydWN0IGJwZl9mdW5jX2FyZ3Nf
+X19kZW55X2NyZWF0ZSAqYXJncyA9ICh2b2lkICopY3R4Ow0KPg0KPiAgICAgICAgICAgICAgICAg
+aWYgKGJwZl9jb3JlX2ZpZWxkX2V4aXN0cyhhcmdzLT5pZG1hcCkpDQo+ICAgICAgICAgICAgICAg
+ICAgICAgICAgIC8qIHVzZSBhcmdzLT5pZG1hcCAqLzsNCj4NCj4gICAgICAgICAgICAgICAgIHJl
+dHVybiBjaGVjayhhcmdzLT5kaXIsIGFyZ3MtPmRlbnRyeSk7DQo+ICAgICAgICAgfQ0KPg0KPiBO
+b3RoaW5nIGNoYW5nZXMgb24gdGhlIGxvYWRlciBzaWRlOg0KPg0KPiAgICAgICAgIHNrZWwgPSBk
+ZW55X2NyZWF0ZV9fb3Blbl9hbmRfbG9hZCgpOw0KPiAgICAgICAgIGlmICghc2tlbCkgICAgICAv
+KiBtaXNtYXRjaDogbG9hZCBmYWlscywgbGliYnBmIGxvZ3Mgd2h5ICovDQo+ICAgICAgICAgICAg
+ICAgICByZXR1cm4gLWVycm5vOw0KPiAgICAgICAgIGVyciA9IGRlbnlfY3JlYXRlX19hdHRhY2go
+c2tlbCk7DQo+DQo+IFRvIGFjaGlldmUgdGhpcyBsaWJicGYgd291bGQgbmVlZCB0byBkbyB0aGUg
+Zm9sbG93aW5nIGF0IGxvYWQgdGltZToNCj4NCj4gICAtIHRyZWF0IGJwZl9mdW5jX2FyZ3NfX18q
+IGFzIGEgcmVzZXJ2ZWQgdHlwZSBpbiBDTy1SRSByZWxvY2F0aW9uczsNCj4gICAtIGZpbmQgdGhl
+IHByb2dyYW0ncyBhdHRhY2ggdGFyZ2V0IGluIGtlcm5lbCAob3IgbW9kdWxlKSBCVEY6DQo+ICAg
+ICBicGZfbHNtXzxob29rPiwgdGhlIGZlbnRyeS9mZXhpdCB0YXJnZXQsIG9yIHRoZSB0cmFjZXBv
+aW50IHN0dWIgZm9yDQo+ICAgICB0cF9idGY7DQo+ICAgLSBidWlsZCBhIHN0cnVjdCBmcm9tIHRo
+ZSB0YXJnZXQncyBwcm90b3R5cGU6IG9uZSBtZW1iZXIgcGVyDQo+ICAgICBwYXJhbWV0ZXIsIG5h
+bWVkIGFmdGVyIGl0LCBhdCB0aGUgcGFyYW1ldGVyJ3MgY3R4IG9mZnNldCwgcGx1cyAncmV0Jw0K
+PiAgICAgZm9yIGZleGl0LCBmbW9kX3JldCBhbmQgTFNNOw0KPiAgIC0gcmVzb2x2ZSB0aGUgcmVs
+b2NhdGlvbnMgYWdhaW5zdCBpdCBieSBuYW1lLCB3aXRoIGEgc3RyaWN0IHR5cGUgY2hlY2sNCj4g
+ICAgIChwb2ludGVlIHR5cGVzIG11c3QgbWF0Y2gsIHF1YWxpZmllcnMgaWdub3JlZCksIHNpbmNl
+IENPLVJFIG5vcm1hbGx5DQo+ICAgICB0cmVhdHMgYW55IHR3byBwb2ludGVycyBhcyBjb21wYXRp
+YmxlLg0KPg0KPiBBIG1pc3NpbmcgYXJndW1lbnQgb3IgYSB0eXBlIG1pc21hdGNoIGlzIGEgbm9y
+bWFsIENPLVJFIHJlbG9jYXRpb24NCj4gZmFpbHVyZTogdGhlIHByb2dyYW0gZmFpbHMgdG8gbG9h
+ZCB3aXRoIGFuIGVycm9yIG5hbWluZyB0aGUgYXJndW1lbnQsDQo+IHVubGVzcyB0aGUgYWNjZXNz
+IGlzIGd1YXJkZWQgYnkgYnBmX2NvcmVfZmllbGRfZXhpc3RzKCkuDQo+DQo+IEFuZCB0aGlzIGlz
+IG5vdCBMU00gc3BlY2lmaWMsIGZlbnRyeS9mZXhpdC9mbW9kX3JldCBhbmQgdHBfYnRmIHdvdWxk
+DQo+IHdvcmsgdGhlIHNhbWUgd2F5Lg0KPg0KPiBJdCBkb2Vzbid0IGhlbHAgaWYgYSBob29rIGtl
+ZXBzIGl0cyBzaWduYXR1cmUgYnV0IGNoYW5nZXMgc2VtYW50aWNzLA0KPiBvciBpZiB0aGUgYXR0
+YWNoIHBvaW50IGdvZXMgYXdheSAodGhhdCBhbHJlYWR5IGZhaWxzIHRvIGF0dGFjaCkuDQo+DQo+
+IEhlcmUgaXMgYSB2aWJlLWNvZGVkIHByb3RvdHlwZSBvZiB0aGUgYWJvdmU6DQo+IGh0dHBzOi8v
+Z2l0aHViLmNvbS9rZXJuZWwtcGF0Y2hlcy9icGYvY29tcGFyZS9icGYtbmV4dF9iYXNlLi4udGhl
+aWhvcjpicGY6YnBmLW5hbWVkLWFyZ3MNCj4NCj4gSXQncyBhbiBlbnRpcmVseSBuZXcgbGliYnBm
+IGZlYXR1cmUgdGhvdWdoLg0KPg0KPiBBbmRyaWksIHdoYXQgZG8geW91IHRoaW5rIG9mIGl0Pw0K
+Pg0KPiAtLS0NCj4NCj4gQW5kIGp1c3QgbXkgMmMgcmUgYXJndW1lbnQgb3JkZXJpbmc6DQo+DQo+
+IFBhdWwsIHdpdGggYWxsIGR1ZSByZXNwZWN0LCBwcmlvcml0aXppbmcgY29kZSBzdHlsZSBhbmQg
+cGVyc29uYWwNCj4gcHJlZmVyZW5jZXMgb3ZlciBiYWNrd2FyZHMgY29tcGF0aWJpbGl0eSBpcyB1
+bnJlYXNvbmFibGUgZXZlbiBmb3INCj4gdW5pbXBvcnRhbnQgYXBwbGljYXRpb25zLiBBbmQgaGVy
+ZSB3ZSBhcmUgdGFsa2luZyBhYm91dCBhcHBzDQo+IGltcGxlbWVudGluZyBzZWN1cml0eSBwb2xp
+Y2llcywgd2hpY2ggbWFueSBvcmdhbml6YXRpb25zIChub3QganVzdA0KPiBjb21wYW5pZXMpIGlu
+IHRoZSB3b3JsZCByZWx5IG9uLiBHaXZlbiB0aGUgcmVjZW50IGZsb29kIG9mDQo+IGN5YmVyc2Vj
+dXJpdHkgaXNzdWVzIChpbiBMaW51eCBhbmQgYmV5b25kKSwgSSBkb24ndCBzZWUgd2h5IHdvdWxk
+IHdlLA0KPiBhcyBpbiBrZXJuZWwgZGV2cywgaW50ZW50aW9uYWxseSBtYWtlIHRoZSBkZWZlbmRl
+cnMnIGpvYiBoYXJkZXIuDQo+DQo+DQo+ID4NCj4gPiBUaGFua3MsDQo+ID4gcm9ibGFibGENCj4N
+Cg==
