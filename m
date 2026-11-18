@@ -1,66 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=117.135.210.3
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794987259;
-	b=Fz2/vCW2822VYQzGgubq1Zist3M6WyzQu/ah22JyblNkZFgN3xXsgi/1QibJIBVY0/0h
-	 ccbtFYm/q+USJlNCXtmVL86HT2lg/PcK2o93GSRiX1NJi+BG6NSO8adYkl60/Wra3UCjQ
-	 IO/WlbXVrInZ2gtHea6ymyHnwrgu3WHTXiLzKZPG73A+uHIRia8eqipHOZnzupYXPt+4X
-	 mqoxU4VF3qcA3GZUVTGc+jd7cUU1JsoyYhZyfV+/BOlYNrd55E/iL1Nm6JwJ10uYVNfSt
-	 UV2JNwWRQ3NQGXDtOg2BndQWMDm3RlaPyieFUVChdy7LQ1Br72VuH+4okMx55jjPe9w==
+	t=1794988264;
+	b=ahlRStQaz58MJhwR+T0/cJr9APTEHHJKEG9WY/RTyKWJ7mVTi19v89WoOjMBypiusSv6
+	 aWt2iZ7vh8MPj4V+oPCbsEHbiko7KlQNPkiuEzxzC++GmXV4OZywiLcx12Bi4+PgWKvJP
+	 wa7RQ8jKf1CPdEYtYbUGBvbSn0hy0lgaRRh3ySLl5fCB6POYJ9IG4v7Dd77WIP/+ylwud
+	 KBwq4qroRQY2XdOyGS2u6mBQMcxMBUrAFszPSnuTIkyFwsRd8NQdjlpUUGAHtcPoMpKup
+	 /0M7VnuJKRayoLvzX3zyz8vDnv7rktp1j0B5pP9XYdws5JLx0D7okAbak8lCKyNXlMA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794987259;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
-	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
-	bh=ZlM43h4YcZYPb2lh6vOLR1Gxai+gJzcwC6njybeWZ7w=;
-	b=w5Mq/fvc7HguQD8xIAmzx3CopeDyKgOu64A3wP5ZUNi/OphvuIeuFdMHpjuG8h8udfk6
-	 n4cYplojtHbCLScEkFxSaJTS+9uik6MM/ResEWUhnJUW6eSEzI/rZjtJJeGNs2DJyKsUm
-	 NJSzfJuDEhy/EeKzg1KfDBGmnGmVOVGANoiD0zt1+xCBsBF8INXfNRGdexwGcyzlU8w2R
-	 e9M9VnUtwh6gJbfStzg4T4AwLZkWA7zYUPczfhxARYkxQSU00ABA0ZRZNg90fimlhq3Wx
-	 J/JAJnMxbPX8fVf7m16FFMLnSyRxAdrUWeJW9D6zACA1uejjONDxtGuDd05ZTJaEgXw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794988264;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=9Gz9IBeSccjjCHOtf0va00995nWsD5fHKwWB7RAq70w=;
+	b=AZ2cP0AYW+1mJLTzHWbfKcmsVsjbSyIqIYP1Flz3et6ErVcpKQeCmaWunrXSiRqTmeSv
+	 R6uze/DOSKx222AJEn6t+ELftYlyOSMk2c4WHu8BotK/QFsaro3Ihdh6J9ud8tW5hjHvj
+	 hsBmdw4ho/hqIw1NasB+8bLqRObCmzXi9z2Wn0sQRzE1kaxA8012Up6IBdOrwPoIYYLHS
+	 fOzMit/KPrBiGsUQTGyWgvRjtUTdtKh09WJ4AIXw7A7U2R+wx+ph2cAkmlFpLAHLWa1OM
+	 yNJcggiIkahg+eYoOMbhWilf54DkTemYGE9OLb6JONkYx/Zl3q4sGZpF5VVjq2gM+OA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=163.com;
-	spf=pass smtp.mailfrom=163.com;
-	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=ScVdSO0q;
-	arc=none smtp.remote-ip=117.135.210.3
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="EZOl1dB/";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F81F606A32A;
-	Wed, 18 Nov 2026 07:34:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8F81F606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59A87606A31C;
+	Wed, 18 Nov 2026 07:51:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=ScVdSO0q
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Zl
-	M43h4YcZYPb2lh6vOLR1Gxai+gJzcwC6njybeWZ7w=; b=ScVdSO0qXDDdpswZ/M
-	Bssbn1RMH47NixMv4jOh/NJ10vaFWywuaNx4+puS+MKavlgEbA7L9aC0Si7/69Z1
-	klBuKZYoPCwlQBX7M8lGSA50pqou1yrVI9I+no+st9+3CP5+PiJ7N2hl9aUoQOh9
-	aLSzqToQQRuYE2mQ/K5uXg7SI=
-Received: from kylin-ERAZER-H610M.. (unknown [])
-	by gzga-smtp-mtada-g1-1 (Coremail) with SMTP id _____wDX39q9VP1q6+71Hw--.26225S2;
-	Wed, 18 Nov 2026 15:33:19 +0800 (CST)
-From: Yun Lu <luyun_611@163.com>
-To: andrii@kernel.org,
-	eddyz87@gmail.com,
-	ihor.solodrai@linux.dev,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	shuah@kernel.org
-Cc: bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next] selftests/bpf: Run all summarization freplace cases
-Date: Wed, 18 Nov 2026 15:33:09 +0800
-Message-ID: <20261118073309.125424-1-luyun_611@163.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EZOl1dB/
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 017641F000CA;
+	Wed, 18 Nov 2026 07:51:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794988263;
+	bh=9Gz9IBeSccjjCHOtf0va00995nWsD5fHKwWB7RAq70w=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=EZOl1dB/r549l0Cjg4hv5vm3frN1mJhwKzcv8N+U0AfAdGRph2GCf+cfu9tPRWU9a
+	 +iCkKFQvCFAKu4hmxbhrZ1HBbCOvZn7HvTKwXBL6rJINM1HKL5Lpj1P+5AmplPMrit
+	 ndP3VQ6rNSZPsZzMnnGQHEeuQ+wKq26psutOxsBQSkJW4fcb8OeKdBBdUgcYSrDR40
+	 rcrTsLIIO9bzklbHVpRok+xnIID2lDMGcagJVlnxq5brnkZPK8NAYnbnaSWx7IIPv7
+	 YyXivQtxkN2o03cJUEz5It4N0IMH7IYyAVPbddcS0pHGBvIO6HEqxd6Zt2zEr+X9Ve
+	 66RS8xK5egR3g==
+Subject:
+ Re: [PATCH v2] net: stmmac: Disable checksum insertion for XDP frame TX
+From: netdev-bot+sashiko@kernel.org
+To: jszhang@kernel.org
+Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+ sdf@fomichev.me, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Date: Wed, 18 Nov 2026 07:51:02 +0000
+Message-ID: <179498826255.3136.11066531883770287407@kernel.org>
+In-Reply-To: <20261116134848.4793-1-jszhang@kernel.org>
+References: <20261116134848.4793-1-jszhang@kernel.org>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -70,49 +66,89 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDX39q9VP1q6+71Hw--.26225S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Wry7Ar47JF1ktF13XryxKrg_yoW8Wr48pa
-	s3WrWktFyfGF17tw1Ikw47XFWfuFWkXrW5Gr40qr1DZws5J392gryxKw43JFykuFWfXw1F
-	v3ZIkr1Y9wsFvrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UD739UUUUU=
-X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbC6x9eLWr9VL8OvwAA3K
 
-From: Yun Lu <luyun@kylinos.cn>
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue(s) to consider.
 
-The test matrix groups targets by the side effect under test.
-ARRAY_SIZE(mains) gives the number of groups, so using it as the
-target loop bound skips the two standalone entry-point targets in
-each group.
+Critical: 0 · High: 0 · Medium: 1 · Low: 0
 
-Use the target and replacement counts from the current group and
-derive the group count from mains. This restores four packet-data
-cases and enables four sleepable-program cases.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-Fixes: 72ed076abf54 ("selftests/bpf: Add tests for extending sleepable global subprogs")
-Reported-by: Jackie Liu <liuyun01@kylinos.cn>
-Signed-off-by: Yun Lu <luyun@kylinos.cn>
----
- tools/testing/selftests/bpf/prog_tests/summarization.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+- [Medium] The patch hard-codes csum=false in stmmac_xdp_xmit_xdpf()
+  (drivers/net/ethernet/stmicro/stmmac/stmmac_main.c).
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/summarization.c b/tools/testing/selftests/bpf/prog_tests/summarization.c
-index 3e4bcf071735..f51b203eca8a 100644
---- a/tools/testing/selftests/bpf/prog_tests/summarization.c
-+++ b/tools/testing/selftests/bpf/prog_tests/summarization.c
-@@ -116,9 +116,9 @@ void test_summarization_freplace(void)
- 	};
- 	char buf[64];
- 
--	for (int t = 0; t < 2; t++) {
--		for (int i = 0; i < ARRAY_SIZE(mains); ++i) {
--			for (int j = 0; j < ARRAY_SIZE(replacements); ++j) {
-+	for (int t = 0; t < ARRAY_SIZE(mains); t++) {
-+		for (int i = 0; i < ARRAY_SIZE(mains[t]); ++i) {
-+			for (int j = 0; j < ARRAY_SIZE(replacements[t]); ++j) {
- 				snprintf(buf, sizeof(buf), "%s_with_%s",
- 					 mains[t][i].to_be_replaced, replacements[t][j].func);
- 				if (!test__start_subtest(buf))
+--
+
+net: stmmac: Disable checksum insertion for XDP frame TX
+
+This commit stops stmmac from requesting hardware checksum insertion for
+frames sent through XDP_TX and ndo_xdp_xmit. It does this by passing false
+as the csum argument to stmmac_prepare_tx_desc() in stmmac_xdp_xmit_xdpf().
+The bugged_jumbo special case is removed because it is no longer needed.
+
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> index 25894771e9e9f..aa73801119be8 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -5284,7 +5284,6 @@ static int stmmac_xdp_xmit_xdpf(struct stmmac_priv *priv, int queue,
+>  {
+>  	struct skb_shared_info *sinfo = xdp_get_shared_info_from_frame(xdpf);
+>  	struct stmmac_tx_queue *tx_q = &priv->dma_conf.tx_queue[queue];
+> -	bool csum = !priv->plat->tx_queues_cfg[queue].coe_unsupported;
+
+[ ... ]
+
+> @@ -5353,7 +5344,7 @@ static int stmmac_xdp_xmit_xdpf(struct stmmac_priv *priv, int queue,
+>  		stmmac_set_tx_dma_entry(tx_q, entry, buf_type, dma_addr, len,
+>  					dma_map && frag);
+>  		stmmac_set_desc_addr(priv, desc, dma_addr);
+> -		stmmac_prepare_tx_desc(priv, desc, !i, len, csum,
+> +		stmmac_prepare_tx_desc(priv, desc, !i, len, false,
+>  				       priv->descriptor_mode, !!i, last_frame,
+>  				       xdp_get_frame_len(xdpf));
+
+[Severity: Medium]
+Could this break existing XDP setups that rely on the MAC to fix up
+checksums?
+
+Since be8b38a722e6 and 8b278a5b69a2, stmmac_xdp_xmit_xdpf() has asked for
+hardware checksum insertion on every XDP_TX and redirected frame. At first
+it passed true, and since b1eded580ab2 it has passed:
+
+    !priv->plat->tx_queues_cfg[queue].coe_unsupported
+
+Some XDP programs rewrite L3/L4 headers without updating the checksums,
+for example NAT, L4 load balancers that rewrite addresses or ports, and
+encapsulation. On COE-capable dwmac queues these have worked because the
+hardware recomputed the checksums. With csum hard-coded to false, it looks
+like those frames would go out with stale checksums and receivers would
+drop them.
+
+The code change itself seems reasonable, given the stmmac_has_ip_ethertype()
+limitation and the lack of checksum metadata on XDP frames. The concern is
+how the change is labelled.
+
+The commit carries two Fixes: tags pointing at 2021 commits and has no
+stable annotation, so it is likely to be picked up for stable backports.
+The commit message says the packet is sent "with its checksum fields
+unchanged", but it doesn't mention that this changes on-wire behaviour for
+existing users.
+
+For comparison, the earlier commit ecf5985006dd ("net: stmmac: Disable
+unsolicited checksum insertion for AF_XDP TX") made the same kind of change
+on the AF_XDP zero-copy path. That commit included:
+
+    Cc: stable+noautosel@kernel.org # high regression risk
+
+and the note "Applications must supply complete checksums".
+
+Would it make sense to add a similar noautosel annotation here? Should the
+commit message also say that XDP programs must now supply complete
+checksums?
+
 -- 
-2.43.0
-
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261116134848.4793-1-jszhang%40kernel.org
