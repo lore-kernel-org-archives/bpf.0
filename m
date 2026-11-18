@@ -1,69 +1,82 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794991521;
-	b=VAZ88cARKLMzp1/8PCM6OFm9xxsquN/Z2K5Fv42YFajWr7tkU/pbU6tRka55LZibuE8l
-	 OO3Bwb6pzSETEm10O5ZF+Gjd7yABTDS8m1r9lS9HP7X7F9oMCi502pf2s1gPZXPhRO4yo
-	 lNPliLD66FV9ppzLpIcWegFJixO6ZpFwkanXqjmjIav7y5BSO87tW0u2JHitdQyQLbwQs
-	 adW2628AS/dEMD9PCAM/0isWfqHfIolDlCseSJky2kvi61jmHpv5fvCYUfITwLnbfQZJi
-	 pc5S3Qycab0uc6KZSSmsmaM0kLcsZ5KheVFZBUMtsgAjzx6yQO2M+HMRKAXukaMbxxg==
+	t=1794991916;
+	b=BAcA6bBNnhpuhaB8nQp5C2ZfxL04/0F//2yzKnmaRV0A8EcuexIp1ajQykEN24/SJ64m
+	 qbyBVZOKjCs/CkM/LgXAcbdfqguggfSOl/5NpmQtdmoFOdgLnZLxqHUpXnZxBPKpmzgNt
+	 sc0eh+hPVjrzTlmCT6/JXLrfkjOx9+oiQ4EGGKbg+7rj3BTRgQ9zhk89yWU82kYLFWNF0
+	 WkPRtJ11H1QGt8Lq5Xj6+wIkNc5aHn1mI/HbVRdEkLfYqwDABTfSTmZCqNZg03syEOoyg
+	 7YZaS8uHBaJGQYrRyLV2Uk+7ulSFJUrjulaWMnjm21U+ZMtLHr4+2MmOvoB0MqcP7KA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794991521;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=pwLw1PN0N5G0/zB/Y6J6/hvuDTRFVTY/2ACWaIVrQfg=;
-	b=E7kyXyL8Ye5M0/UXJLQ6fMQ5K+eECUFzQvZ6H8ILtdVaOiLSA0OdTydXoqAaCXxWjCVB
-	 0t3YIjimbjtDa+mqWEd3keKaBrw6zxu7DVq/kY6sQRV5gkcl0LFwvheKEAie8z3VEhR9t
-	 XM74wYbdlr0/tiH/3sBsU9tQLoJkRsC0WAeZHViLE1zg/k1qdUWXTyCploGMOAakrkvdG
-	 8hVjyS8cZGq0G+Aqcb5k0TRyAtPR1oYM4Psutyk8vPCQDMdUAuHzsh4sh3+eqadiXJtM+
-	 jzxahwt8isXJn8Z+ifxz/fDlfXkRn4dJp8tN9BCOhnks8Fn21nmfECoOytfWjSSpo+w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794991916;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=JNjLV1RqoW47n1WZbcGqB7KkS7CtRm0tXFkupGF+cOc=;
+	b=cDSBW6hKU1kX1GaO7FT2PFRUv7PJmndjZ9lPRltkno5sd+pzbTmyN0YF6drGrpKNOCy1
+	 SoG+xJrT8hxd9ZqHFja6wsmRt7ZKTqOt/7tGOxZOYEWzstJMGMkpvO+dtgRRcYpQNSVfO
+	 /gCp3WgYrbfM18o8hIsF8OVx0zJb/DWx+i8kAI8amhDa64J787soL0VlSzzDzZCwUhVsa
+	 6oAcn/wWCFIStoy0KetCStk8RLq4sDDkTnaEnNDJeNeulU/tmd86/sMbERkfxdVek/Tb0
+	 mJ5xbsRXj1TQcxz1yK1AQiZpl8Ic2i7R62XfBfEnFsD2RSssPwO/3doRsO9CcWT0tdQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XEXixdfx;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RsvXsDlx;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5A08606A32A;
-	Wed, 18 Nov 2026 08:45:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9911606A31C;
+	Wed, 18 Nov 2026 08:51:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XEXixdfx
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13FF81F000C4;
-	Wed, 18 Nov 2026 08:45:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RsvXsDlx
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09B8F1F000C4;
+	Wed, 18 Nov 2026 08:51:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794991521;
-	bh=pwLw1PN0N5G0/zB/Y6J6/hvuDTRFVTY/2ACWaIVrQfg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=XEXixdfxIzWEjdmYVlLVXQKKC/1OSeLK4Dd2KI/ueBBJ2zsxZdV01ZPnYYNWVPzEW
-	 aKSn5DRrdjMn96VrFDKoBWo3Ev/LzcHi2s7mSQnjtViNEbm+GleedWTNvwp3fG08CN
-	 1CQJJbNAg0dO84aDdBlajIscTmlxNv9LWlsjdZFS7d5lSVLTM1V0u0I9hAGxeXFkxc
-	 OlNJ/zRLaG0REmdXEZ4lNqW8+0MERdiuohXnQQzCK/SidctsNm/jJPr9Ex5b5O4NK6
-	 7iK5eLYGfDfHBYuFeF3s34LutpI/mxoKWZ2XrZBmyPmEsMCjW1AO97sGOfu/9uhrnL
-	 WWoLktO2YGCJQ==
-From: Jiri Olsa <jolsa@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Oleg Nesterov <oleg@redhat.com>
-Cc: bpf@vger.kernel.org,
-	x86@kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-trace-kernel@vger.kernel.org,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Will Deacon <will@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	rtm@csail.mit.edu
-Subject: [PATCH bpf 2/2] selftests/bpf: Test which ctx registers a uprobe prog can write
-Date: Wed, 18 Nov 2026 09:44:50 +0100
-Message-ID: <20261118084451.12590-3-jolsa@kernel.org>
-X-Mailer: git-send-email 2.56.1
-In-Reply-To: <20261118084451.12590-1-jolsa@kernel.org>
-References: <20261118084451.12590-1-jolsa@kernel.org>
+	s=k20260515; t=1794991916;
+	bh=JNjLV1RqoW47n1WZbcGqB7KkS7CtRm0tXFkupGF+cOc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=RsvXsDlxdennVdRZIxtMAO9aTlSCgDU/aRN5nXveVTZaO8kYi5t/Rvtr1wiGCEzHY
+	 wP+UMH5gw4T4/2fTW2DI4qwJLAdO/5trCEHdMii87scJ3uqddgNDM1Mu5RIia93hGF
+	 Ln1RRmOUcu0iL91VGTmqYQUocfRz6a0kQj1ekzCQiO1Kij5+KjAGbHWQ5Di/UV62Ha
+	 AFc19FgOWt5HM+MKdo0fX+KnLQwogg86N+lTKzPrFvOseBVp7lm3DwPnqk6Mb4sLS/
+	 q/l1Oj/bKGcluhytkTpuajG1Lv845vosUAR4klQLitOlxelkTCEePyXqhQGZ6u5wiZ
+	 4vkK4MG8ZsTLA==
+Date: Wed, 18 Nov 2026 09:51:27 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Al Viro <viro@zeniv.linux.org.uk>, 
+	Cai Xinchen <caixinchen1@huawei.com>
+Cc: mic@digikod.net, gnoack@google.com, paul@paul-moore.com, jack@suse.cz, 
+	amir73il@gmail.com, andrii@kernel.org, apparmor@lists.ubuntu.com, ast@kernel.org, 
+	axboe@kernel.dk, bpf@vger.kernel.org, casey@schaufler-ca.com, cel@kernel.org, 
+	cem@kernel.org, chenxiaosong@chenxiaosong.com, code@tyhicks.com, corbet@lwn.net, 
+	Dai.Ngo@oracle.com, dakr@kernel.org, daniel@iogearbox.net, dhowells@redhat.com, 
+	dlemoal@kernel.org, dmitry.kasatkin@gmail.com, driver-core@lists.linux.dev, 
+	dsterba@suse.com, ecryptfs@vger.kernel.org, eddyz87@gmail.com, 
+	emil@etsalapatis.com, eric.snowberg@oracle.com, exfat@lists.linux.dev, 
+	georgia.garcia@canonical.com, gregkh@linuxfoundation.org, hch@lst.de, 
+	hirofumi@mail.parknet.co.jp, hyc.lee@gmail.com, ihor.solodrai@linux.dev, jlayton@kernel.org, 
+	jmorris@namei.org, johan@kernel.org, john.fastabend@gmail.com, 
+	john.johansen@canonical.com, jolsa@kernel.org, kpsingh@kernel.org, linkinjeon@kernel.org, 
+	linux-api@vger.kernel.org, linux-block@vger.kernel.org, linux-btrfs@vger.kernel.org, 
+	linux-cifs@vger.kernel.org, linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-unionfs@vger.kernel.org, linux-xfs@vger.kernel.org, 
+	liubaolin12138@163.com, martin.lau@linux.dev, mason@kernel.org, 
+	mathieu.desnoyers@efficios.com, matt@bobrowski.net, memxor@gmail.com, mhiramat@kernel.org, 
+	miklos@szeredi.hu, neil@brown.name, netfs@lists.linux.dev, ntfs@lists.linux.dev, 
+	okorniev@redhat.com, omosnacek@gmail.com, penguin-kernel@i-love.sakura.ne.jp, 
+	rafael@kernel.org, rdunlap@infradead.org, roberto.sassu@huawei.com, 
+	rostedt@goodmis.org, selinux@vger.kernel.org, senozhatsky@chromium.org, 
+	serge@hallyn.com, sj1557.seo@samsung.com, skhan@linuxfoundation.org, 
+	song@kernel.org, stephen.smalley.work@gmail.com, takedakn@nttdata.co.jp, 
+	tom@talpey.com, yonghong.song@linux.dev, yuezhang.mo@sony.com, 
+	zohar@linux.ibm.com, utilityemal77@gmail.com, lujialin4@huawei.com
+Subject: Re: [PATCH -next -v4 02/17] LSM: pass struct path to the
+ inode_setsecctx hook
+Message-ID: <20261118-woher-duften-bejubeln-7a8a2099f89f@brauner>
+References: <20261117150542.1169451-1-caixinchen1@huawei.com>
+ <20261117150542.1169451-3-caixinchen1@huawei.com>
+ <20261117184342.GR989762@ZenIV>
+ <20261118001641.GA1669148@ZenIV>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -73,251 +86,176 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20261118001641.GA1669148@ZenIV>
 
-A uprobe program can write only the pt_regs fields that ptrace can set
-to any value. Add verifier tests for x86-64, arm64 and riscv:
+On Wed, Nov 18, 2026 at 12:16:41AM +0000, Al Viro wrote:
+> On Tue, Nov 17, 2026 at 06:43:42PM +0000, Al Viro wrote:
+> > > + * Hooks that take a struct path argument: the VFS only sanctions passing
+> > > + * the path to VFS helpers that take a struct path (e.g. notify_change());
+> > > + * it makes no guarantees with regard to path->mnt, whose layout and
+> > > + * implementation details are subject to change.  Implementations must
+> > > + * not rely on its properties.
 
-  - writes to the general registers, the stack pointer and the
-    instruction pointer load
-  - writes to cs, ss, flags and orig_ax on x86-64, to pstate and
-    orig_x0 on arm64, and to status, badaddr and cause on riscv fail
-    with "invalid bpf_context access"
-  - a 4-byte write to the low half of a read-only field fails too
-  - reading a read-only field still works
-  - on x86-64, a kprobe program that writes ctx->flags fails to load
+That comment is a garbled version of an earlier review. It meant that
+LSMs get no guarantees about struct vfsmount internals and don't get to
+poke at them. I'm not sure how this can be read as path->mnt being a
+random mount.
 
-Other arches get one test that just loads.
+> > If that kind of stuff actually does get passed to any existing hooks, we need
+> > to fix that ASAP.
 
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- .../bpf/progs/verifier_uprobe_write_ctx.c     | 196 ++++++++++++++++++
- 2 files changed, 198 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_uprobe_write_ctx.c
+Of course there is one...
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 6a494c381266..5a31f04677e0 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -131,6 +131,7 @@
- #include "verifier_unpriv.skel.h"
- #include "verifier_unwind.skel.h"
- #include "verifier_unpriv_perf.skel.h"
-+#include "verifier_uprobe_write_ctx.skel.h"
- #include "verifier_value_adj_spill.skel.h"
- #include "verifier_value.skel.h"
- #include "verifier_value_illegal_alu.skel.h"
-@@ -321,6 +322,7 @@ void test_verifier_uninit(void)               { RUN(verifier_uninit); }
- void test_verifier_unpriv(void)               { RUN(verifier_unpriv); }
- void test_verifier_unwind(void)               { RUN(verifier_unwind); }
- void test_verifier_unpriv_perf(void)          { RUN(verifier_unpriv_perf); }
-+void test_verifier_uprobe_write_ctx(void)     { RUN(verifier_uprobe_write_ctx); }
- void test_verifier_value_adj_spill(void)      { RUN(verifier_value_adj_spill); }
- void test_verifier_value(void)                { RUN(verifier_value); }
- void test_verifier_value_illegal_alu(void)    { RUN(verifier_value_illegal_alu); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_uprobe_write_ctx.c b/tools/testing/selftests/bpf/progs/verifier_uprobe_write_ctx.c
-new file mode 100644
-index 000000000000..f5ed453b1798
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_uprobe_write_ctx.c
-@@ -0,0 +1,196 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+/*
-+ * A uprobe prog can write only the registers that ptrace can set to any
-+ * value. The fields the kernel restores on the way to user space (segments,
-+ * flags, privilege state) are read-only.
-+ */
-+
-+#define WRITE_CTX(name, field, sz)					\
-+__naked void name(void)							\
-+{									\
-+	asm volatile ("							\
-+	r2 = 0;								\
-+	*(" #sz " *)(r1 + %[off]) = r2;					\
-+	r0 = 0;								\
-+	exit;								\
-+"	:								\
-+	: __imm_const(off, offsetof(struct pt_regs, field))		\
-+	: __clobber_all);						\
-+}
-+
-+#define READ_CTX(name, field)						\
-+__naked void name(void)							\
-+{									\
-+	asm volatile ("							\
-+	r0 = *(u64 *)(r1 + %[off]);					\
-+	r0 = 0;								\
-+	exit;								\
-+"	:								\
-+	: __imm_const(off, offsetof(struct pt_regs, field))		\
-+	: __clobber_all);						\
-+}
-+
-+#if defined(__TARGET_ARCH_x86)
-+
-+SEC("uprobe")
-+__description("uprobe: write ctx->ax")
-+__success
-+WRITE_CTX(write_ax, ax, u64)
-+
-+SEC("uprobe")
-+__description("uprobe: write ctx->r15")
-+__success
-+WRITE_CTX(write_r15, r15, u64)
-+
-+SEC("uprobe")
-+__description("uprobe: write ctx->di")
-+__success
-+WRITE_CTX(write_di, di, u64)
-+
-+SEC("uprobe")
-+__description("uprobe: write ctx->ip")
-+__success
-+WRITE_CTX(write_ip, ip, u64)
-+
-+SEC("uprobe")
-+__description("uprobe: write ctx->sp")
-+__success
-+WRITE_CTX(write_sp, sp, u64)
-+
-+SEC("uprobe")
-+__description("uprobe: write lower half of ctx->ax")
-+__success
-+WRITE_CTX(write_ax_u32, ax, u32)
-+
-+SEC("uprobe")
-+__description("uprobe: write ctx->orig_ax")
-+__failure __msg("invalid bpf_context access")
-+WRITE_CTX(write_orig_ax, orig_ax, u64)
-+
-+SEC("uprobe")
-+__description("uprobe: write ctx->cs")
-+__failure __msg("invalid bpf_context access")
-+WRITE_CTX(write_cs, cs, u64)
-+
-+SEC("uprobe")
-+__description("uprobe: write lower half of ctx->cs")
-+__failure __msg("invalid bpf_context access")
-+WRITE_CTX(write_cs_u32, cs, u32)
-+
-+SEC("uprobe")
-+__description("uprobe: write ctx->flags")
-+__failure __msg("invalid bpf_context access")
-+WRITE_CTX(write_flags, flags, u64)
-+
-+SEC("uprobe")
-+__description("uprobe: write ctx->ss")
-+__failure __msg("invalid bpf_context access")
-+WRITE_CTX(write_ss, ss, u64)
-+
-+SEC("uprobe")
-+__description("uprobe: read ctx->flags")
-+__success
-+READ_CTX(read_flags, flags)
-+
-+SEC("kprobe")
-+__description("kprobe: write ctx->flags")
-+__failure __msg("invalid bpf_context access")
-+WRITE_CTX(kprobe_write_flags, flags, u64)
-+
-+#elif defined(__TARGET_ARCH_arm64)
-+
-+SEC("uprobe")
-+__description("uprobe: write ctx->regs[0]")
-+__success
-+WRITE_CTX(write_x0, regs[0], u64)
-+
-+SEC("uprobe")
-+__description("uprobe: write ctx->regs[30]")
-+__success
-+WRITE_CTX(write_x30, regs[30], u64)
-+
-+SEC("uprobe")
-+__description("uprobe: write ctx->sp")
-+__success
-+WRITE_CTX(write_sp, sp, u64)
-+
-+SEC("uprobe")
-+__description("uprobe: write ctx->pc")
-+__success
-+WRITE_CTX(write_pc, pc, u64)
-+
-+SEC("uprobe")
-+__description("uprobe: write ctx->pstate")
-+__failure __msg("invalid bpf_context access")
-+WRITE_CTX(write_pstate, pstate, u64)
-+
-+SEC("uprobe")
-+__description("uprobe: write lower half of ctx->pstate")
-+__failure __msg("invalid bpf_context access")
-+WRITE_CTX(write_pstate_u32, pstate, u32)
-+
-+SEC("uprobe")
-+__description("uprobe: write ctx->orig_x0")
-+__failure __msg("invalid bpf_context access")
-+WRITE_CTX(write_orig_x0, orig_x0, u64)
-+
-+SEC("uprobe")
-+__description("uprobe: read ctx->pstate")
-+__success
-+READ_CTX(read_pstate, pstate)
-+
-+#elif defined(__TARGET_ARCH_riscv)
-+
-+SEC("uprobe")
-+__description("uprobe: write ctx->epc")
-+__success
-+WRITE_CTX(write_epc, epc, u64)
-+
-+SEC("uprobe")
-+__description("uprobe: write ctx->a0")
-+__success
-+WRITE_CTX(write_a0, a0, u64)
-+
-+SEC("uprobe")
-+__description("uprobe: write ctx->t6")
-+__success
-+WRITE_CTX(write_t6, t6, u64)
-+
-+SEC("uprobe")
-+__description("uprobe: write ctx->status")
-+__failure __msg("invalid bpf_context access")
-+WRITE_CTX(write_status, status, u64)
-+
-+SEC("uprobe")
-+__description("uprobe: write ctx->badaddr")
-+__failure __msg("invalid bpf_context access")
-+WRITE_CTX(write_badaddr, badaddr, u64)
-+
-+SEC("uprobe")
-+__description("uprobe: write ctx->cause")
-+__failure __msg("invalid bpf_context access")
-+WRITE_CTX(write_cause, cause, u64)
-+
-+SEC("uprobe")
-+__description("uprobe: read ctx->status")
-+__success
-+READ_CTX(read_status, status)
-+
-+#else
-+
-+SEC("uprobe")
-+__description("uprobe: ctx writes not checked on this arch")
-+__success
-+__naked void unsupported(void)
-+{
-+	asm volatile ("r0 = 0; exit;" ::: __clobber_all);
-+}
-+
-+#endif
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.43.0
+  dent = lookup_one_unlocked(idmap, &QSTR_LEN(...),
+                             priv->dir_fp->filp->f_path.dentry);
+  [...].
+  rc = ksmbd_vfs_fill_dentry_attrs(priv->work, idmap, dent, &ksmbd_kstat);
+
+It passes only the bare dentry, and ksmbd_vfs_fill_dentry_attrs() then
+makes up a path from the share's root mount:
+
+  struct path path = {
+          .mnt = share_conf->vfs_path.mnt,   /* mount the share is exported from */
+          .dentry = dentry,                  /* entry inside the listed dir */
+  };
+  rc = vfs_getattr(&path, ...);
+
+since 5614c8c487f6 ("ksmbd: replace generic_fillattr with vfs_getattr").
+
+So a client that lists a directory on a submount below the share then
+that dentry belongs to another superblock. So security_inode_getattr()
+and ->getattr() get a mixed path.
+
+The third patch in this series fixes this. But we should make this a
+Fixes: patch really... Something like [1].
+
+> To elaborate a bit: correctness of quite a few places does depend upon the
+> following invaraint:
+> 	path->mnt->mnt_sb == path->dentry->d_sb		(1)
+> for all struct path pointers they might possibly run into.
+>
+> _IF_ you can guarantee that (1) is not violated, we have something to
+> talk about; otherwise, don't call your object struct path and don't
+> pass it to anything that expects to deal with struct path.
+
+Every struct path the series constructs:
+
+  - devtmpfs
+  - nfsd
+  - cachefiles
+  - ecryptfs
+  - overlayfs
+  - ksmbd
+
+doesn't have this bug.
+
+[1]:
+
+  --- a/fs/smb/server/smb2pdu.c
+  +++ b/fs/smb/server/smb2pdu.c
+  @@ -6375,13 +6375,14 @@ static int process_query_dir_entries(struct smb2_query_dir_private *priv)
+                          continue;
+                  }
+
+  +               path.mnt = priv->dir_fp->filp->f_path.mnt;
+  +               path.dentry = dent;
+  +
+                  if (test_share_config_flag(priv->work->tcon->share_conf,
+                                             KSMBD_SHARE_FLAG_HIDE_UNREADABLE)) {
+                          __le32 daccess = FILE_READ_DATA_LE | FILE_READ_EA_LE |
+                                  FILE_READ_ATTRIBUTES_LE;
+
+  -                       path.mnt = priv->dir_fp->filp->f_path.mnt;
+  -                       path.dentry = dent;
+                          rc = smb_check_perm_dacl(priv->work->conn, &path,
+                                                   &daccess, daccess,
+                                                   priv->work->sess->user->uid,
+  @@ -6397,7 +6398,7 @@ static int process_query_dir_entries(struct smb2_query_dir_private *priv)
+  @@ -6397,7 +6398,7 @@ static int process_query_dir_entries(struct smb2_query_dir_private *priv)
+                  if (priv->info_level != FILE_NAMES_INFORMATION) {
+                          rc = ksmbd_vfs_fill_dentry_attrs(priv->work,
+                                                           idmap,
+  -                                                        dent,
+  +                                                        &path,
+                                                           &ksmbd_kstat);
+                          if (rc) {
+                                  dput(dent);
+  --- a/fs/smb/server/smb_common.c
+  +++ b/fs/smb/server/smb_common.c
+  @@ -472,32 +472,36 @@ int ksmbd_populate_dot_dotdot_entries(struct ksmbd_work *work, int info_level,
+          for (i = 0; i < 2; i++) {
+                  struct kstat kstat;
+                  struct ksmbd_kstat ksmbd_kstat;
+  -               struct dentry *dentry;
+  +               struct path path = { .mnt = dir->filp->f_path.mnt };
+
+                  if (!dir->dot_dotdot[i]) { /* fill dot entry info */
+                          if (i == 0) {
+                                  d_info->name = ".";
+                                  d_info->name_len = 1;
+  -                               dentry = dget(dir->filp->f_path.dentry);
+  +                               path.dentry = dget(dir->filp->f_path.dentry);
+                          } else {
+                                  d_info->name = "..";
+                                  d_info->name_len = 2;
+  -                               dentry = dget_parent(dir->filp->f_path.dentry);
+  +                               /*
+  +                                * The parent never leaves the superblock, so
+  +                                * the directory's mount stays consistent with it.
+  +                                */
+  +                               path.dentry = dget_parent(dir->filp->f_path.dentry);
+                          }
+
+                          if (!match_pattern(d_info->name, d_info->name_len,
+                                             search_pattern)) {
+                                  dir->dot_dotdot[i] = 1;
+  -                               dput(dentry);
+  +                               dput(path.dentry);
+                                  continue;
+                          }
+
+                          ksmbd_kstat.kstat = &kstat;
+                          rc = ksmbd_vfs_fill_dentry_attrs(work,
+                                                           idmap,
+  -                                                        dentry,
+  +                                                        &path,
+                                                           &ksmbd_kstat);
+  -                       dput(dentry);
+  +                       dput(path.dentry);
+                          if (rc)
+                                  break;
+
+  --- a/fs/smb/server/vfs.c
+  +++ b/fs/smb/server/vfs.c
+  @@ -1897,18 +1897,14 @@
+
+   int ksmbd_vfs_fill_dentry_attrs(struct ksmbd_work *work,
+                                  const struct mnt_idmap *idmap,
+  -                               struct dentry *dentry,
+  +                               const struct path *path,
+                                  struct ksmbd_kstat *ksmbd_kstat)
+   {
+  -       struct ksmbd_share_config *share_conf = work->tcon->share_conf;
+  +       struct dentry *dentry = path->dentry;
+          u64 time;
+          int rc;
+  -       struct path path = {
+  -               .mnt = share_conf->vfs_path.mnt,
+  -               .dentry = dentry,
+  -       };
+
+  -       rc = vfs_getattr(&path, ksmbd_kstat->kstat,
+  +       rc = vfs_getattr(path, ksmbd_kstat->kstat,
+                           STATX_BASIC_STATS | STATX_BTIME,
+                           AT_STATX_SYNC_AS_STAT);
+          if (rc)
+  --- a/fs/smb/server/vfs.h
+  +++ b/fs/smb/server/vfs.h
+  @@ -154,7 +154,7 @@ void *ksmbd_vfs_init_kstat(char **p, struct ksmbd_kstat *ksmbd_kstat);
+   int ksmbd_vfs_fill_dentry_attrs(struct ksmbd_work *work,
+                                  const struct mnt_idmap *idmap,
+                                  const struct path *path,
+                                  struct ksmbd_kstat *ksmbd_kstat);
 
