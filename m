@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795044272;
-	b=sEbIufDY7oCqVQjTIO3jRBDgvH3MuCDkgfbv66NZNqX6uwenmsRh7s/6dcSqvj+fgvgU
-	 N38SnHLeQRvbUglkLC1KUsM9IyVQHrygAIsRVJadJM4pX8B8jwHK+06Hf6Mlk2DCg1LY3
-	 sM47YRu3QKtEKKIsiNZ3NwmMlqG7Pdzg4s9yQMapiAwzAcgOCE8rC3P2PK1szVou4ztjK
-	 SZEDW+UaGp7JloIdisPPGJkQS+Lvhlb97m8mKlOX7I0Vo+wJI4Tg3i3r00Of3Dy6cbQ3b
-	 nF5+Wjnp7cBXRaBvDFjdS4OeD+2qKawxOlAOoM4wbzrJ5B+SmQH9b3VwFd5UY/JeJmA==
+	t=1795044273;
+	b=gkYwuFRSPyRsQkppClioyTxLYSnc0g/OddgczBUStJ+5uRWgs0kxuE9hwo+0SZRM86EI
+	 7dDkF/Y6UU9k2P9XRzNk0CRisdQwlliqBcrKVQf16IcooUG8IXEMd2YbYKmfox0G8heVf
+	 asGcmQfvPBsoSE4q7wK1F6z5tNEFElU9UYsEDEDd0ehxEhEelY7O729MiYu/cXR7UqKi/
+	 ESDGbc13/mlYJp4qyjUrnDjAIx4ntM81yO21yicSxAnz0pLYccbOR8pYoADXZ8nr6/0+J
+	 uSxfDMSjpgEHO2In05iSco6x9wvDMXChQTDd+jvcjUl8/x7GWDqQdtQw4XhDMw+Wbkw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795044272;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795044273;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=rav6v48qD7cYLa24exBaWsIPllVCGyuXU88Mz1O+RVk=;
-	b=cHB48U0g2YU/DciVs67JhBXbJgK/bVDkRNfAoHdtc2iU4Gffxp/9fjuemJDAiPd8K2DN
-	 P6HpK/dmz72OM5gg07taB1ISGaPWHfxqPB86JpSzX17/qy4nxbwBy/T2Zb8WHqHsvKmpT
-	 FJgP6DdKj6ZoFoyvKvyBe7lmnC9PBcP7cMNfzHnEj7OG36+KYdbjynU73gY0tPbik/8hS
-	 LooCN8ZBzJBVSSyUAXCoxWkHKLYKGN9OYtAjZdYLzX1E2XXLuOlE+o/s+PuFvT1FVHWls
-	 LGYGEzEVrRBnS+yZGjE5O1b1NPwgMAyIt2jY/6ZW5so6Wvf+1c2B3FUzwSOTV1SbSYg==
+	bh=zx6OBGdvEDvh9cmjAyJHGKhXvKgD1pi9OX/jAhRPu3E=;
+	b=kRNyiwWaNTI5ZgOSer0W4iInydPN4TB5qOlpeg9Uifir4MEOkQgTHw7Z1wG2CbZvvu2Z
+	 aeLh/GUZPcjTJFjtNHMYtJHPP6SKUc5KbunWbV13aHayNP7mu29viKfIxgEZ7nD5YU3Eo
+	 yKA26GsiR39f8ArfLZcP/BIQnzpcWC4s971uncJEBdngIC2SxJgjCBJrKAS3DNZiWTyne
+	 ytChayWdUdEdgAwbMZX71ux1tnKXiFqUDHm5MtSvwU2KWV4AhTC/UtH9RflHzS0fc9S2o
+	 28L1YT/DKBCDTmTcumakNq8s9NjZnOK/9funmiJ6NqRGJQBMAxPtFbG8HNyp87rjlzw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="ZAqmhA/H";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Ca/ABPKg";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23FE660A262D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C17606A339;
 	Wed, 18 Nov 2026 23:24:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZAqmhA/H
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ED031F000C9;
-	Wed, 18 Nov 2026 23:24:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ca/ABPKg
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 142BB1F000D0;
+	Wed, 18 Nov 2026 23:24:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795044271;
-	bh=rav6v48qD7cYLa24exBaWsIPllVCGyuXU88Mz1O+RVk=;
+	s=k20260515; t=1795044272;
+	bh=zx6OBGdvEDvh9cmjAyJHGKhXvKgD1pi9OX/jAhRPu3E=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=ZAqmhA/HQdNYmU+1yvuVKyC1fcm1QSrXThuSecwXI5wEDaJH9kh7hlrmH7CU6RXrv
-	 vjUxq8XJJJi8lDRzSwCte3NahxmvRmt+EB7YfXyBa23wYjSeIxHbbTjLepf6Y18h3b
-	 ZFefTmd3QWcXqYDT5a2MeKxp1JZHyj4J9xmMkpk1yIxyIF/CoEn3lvK6jat9eB5tF3
-	 nT/Oxm8CflUNwYZrtfCKN5BytuE4dJOxLJ/TiM8u5Xeet9qF1M3Wd9YRc7aJKWuwC2
-	 GCT5iy4Snfnmz34hiYeHV6ZfiVbcstrP/dcTHkSIX2P6KsJYPIKb/SzEY6II5Lo9S3
-	 2DHBsMkfZq1yQ==
+	b=Ca/ABPKgBAN9TDiDdeyoNduwupBaXoomXQaq5qMUEfmsRMO5BVScj7BgivCjuxoyr
+	 vhGCA/tH74uAUq9jvnsfys2N6XVW1dQ4jhZ/td5JL1knHDe0MP15jn0YOmvD8O6fH5
+	 y91jUz09Guw8fPUy12VRXO5roeyJR6y7mz4SF2C7Ctcq3dbML947AUYUbg6YJ9hIRl
+	 nc7dP8f0VVsFHaao7zV7FjlGCxVSZagZ/GPTgkdwwKxtI5K8I84s8I+MtuxvF929YD
+	 Iop2cn0KvdBDI7H7ufjEK0yHTILea4M0hS5vN0YWecV3qcwU+6MXvSvPzck2t57zE9
+	 XOMRbtRWvCjDw==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -59,9 +59,9 @@ Cc: netdev@vger.kernel.org,
 	przemyslaw.kitszel@intel.com,
 	bpf@vger.kernel.org,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 5/8] eth: mlx5e: drop the now-dead HW-GRO and LRO vs XDP handling
-Date: Wed, 18 Nov 2026 15:23:12 -0800
-Message-ID: <20261118232315.3593731-6-kuba@kernel.org>
+Subject: [PATCH net-next 6/8] eth: bnxt_en: don't clear HW-GRO and LRO for XDP in ndo_fix_features
+Date: Wed, 18 Nov 2026 15:23:13 -0800
+Message-ID: <20261118232315.3593731-7-kuba@kernel.org>
 X-Mailer: git-send-email 2.56.1
 In-Reply-To: <20261118232315.3593731-1-kuba@kernel.org>
 References: <20261118232315.3593731-1-kuba@kernel.org>
@@ -76,80 +76,30 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The core clears HW-GRO and LRO before ndo_bpf runs and keeps them off
-for as long as a program is attached. mlx5e_fix_features() never sees
-either with params->xdp_prog set, and packet merge is always off by the
-time mlx5e_xdp_set() gets called, packet_merge.type only follows the two
-feature handlers. If tcp-data-split keeps HW-GRO on, the core refuses
-the attach with -EBUSY before calling the driver.
-
-The AF_XDP check stays, the core doesn't know about XSK pools.
-
-This does change user visible behavior: attaching XDP with HW-GRO or LRO
-on used to fail with -EINVAL and now succeeds with them turned off.
+The core keeps HW-GRO and LRO off while a program is attached, from
+before ndo_bpf is called until it's gone. The xdp_prog check in
+bnxt_fix_features() never changes the outcome any more. Without agg
+rings, which single-buffer XDP at a small MTU implies, neither offload
+works, so that part stays.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- .../net/ethernet/mellanox/mlx5/core/en_main.c | 32 ++-----------------
- 1 file changed, 3 insertions(+), 29 deletions(-)
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-index d8563f863844..e462dfc725ae 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-@@ -4585,17 +4585,6 @@ static netdev_features_t mlx5e_fix_features(struct net_device *netdev,
- 		}
- 	}
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+index 27c53db2c9e4..a5d22198aa11 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+@@ -14089,7 +14089,7 @@ static netdev_features_t bnxt_fix_features(struct net_device *dev,
+ 	    bp->tx_ring_size < 2 * BNXT_SW_USO_MAX_DESCS)
+ 		features &= ~NETIF_F_GSO_UDP_L4;
  
--	if (params->xdp_prog) {
--		if (features & NETIF_F_LRO) {
--			netdev_warn(netdev, "LRO is incompatible with XDP\n");
--			features &= ~NETIF_F_LRO;
--		}
--		if (features & NETIF_F_GRO_HW) {
--			netdev_warn(netdev, "HW GRO is incompatible with XDP\n");
--			features &= ~NETIF_F_GRO_HW;
--		}
--	}
--
- 	if (priv->xsk.refcnt) {
- 		if (features & NETIF_F_LRO) {
- 			netdev_warn(netdev, "LRO is incompatible with AF_XDP (%u XSKs are active)\n",
-@@ -5177,20 +5166,6 @@ static void mlx5e_tx_timeout(struct net_device *dev, unsigned int txqueue)
- 	queue_work(priv->wq, &priv->tx_timeout_work);
- }
+-	if ((bp->flags & BNXT_FLAG_NO_AGG_RINGS) || bp->xdp_prog)
++	if (bp->flags & BNXT_FLAG_NO_AGG_RINGS)
+ 		features &= ~(NETIF_F_LRO | NETIF_F_GRO_HW);
  
--static int mlx5e_xdp_allowed(struct net_device *netdev, struct mlx5_core_dev *mdev,
--			     struct mlx5e_params *params)
--{
--	if (params->packet_merge.type != MLX5E_PACKET_MERGE_NONE) {
--		netdev_warn(netdev, "can't set XDP while HW-GRO/LRO is on, disable them first\n");
--		return -EINVAL;
--	}
--
--	if (!mlx5e_params_validate_xdp(netdev, mdev, params))
--		return -EINVAL;
--
--	return 0;
--}
--
- static void mlx5e_rq_replace_xdp_prog(struct mlx5e_rq *rq, struct bpf_prog *prog)
- {
- 	struct bpf_prog *old_prog;
-@@ -5215,10 +5190,9 @@ static int mlx5e_xdp_set(struct net_device *netdev, struct bpf_prog *prog)
- 	new_params = priv->channels.params;
- 	new_params.xdp_prog = prog;
- 
--	if (prog) {
--		err = mlx5e_xdp_allowed(netdev, priv->mdev, &new_params);
--		if (err)
--			goto unlock;
-+	if (prog && !mlx5e_params_validate_xdp(netdev, priv->mdev, &new_params)) {
-+		err = -EINVAL;
-+		goto unlock;
- 	}
- 
- 	/* no need for full reset when exchanging programs */
+ 	if (features & NETIF_F_GRO_HW)
 -- 
 2.56.1
 
