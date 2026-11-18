@@ -1,56 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.74.67.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795009269;
-	b=nh0GfEdCz6WLKnnN5p17Zx182joqfL6zbHZzlCvdqZr+jZzzjVUp14vtRc6pPliUzDhF
-	 KufUecB4cwtvAO9UZr6Xu2wUujBMoPICVcH8PEA38VzSytlrTRFznM0A2QQjp2ImkLfY3
-	 fceLhA6KKhFDEyJ9QK2lyQke/Edu+PV2mKmU5fGa916qX3HQEfZ7jqO9pL8t5FwkggZYs
-	 7odbtRAP2hdKKPH9vSEcuTtavY+JLeMQfl5iIb9sJJ5Dwj2yy0lMNDHAK/buiARQ9n0ae
-	 0MumWNzuy33risULIpWspw9vH0T0vxSXX/ylKTjPrLHQrM0aCinjeqqmSn8W6Rt6lSA==
+	t=1795009647;
+	b=3W+lS+yw53TTNYDXAvSj1oWUhSN5lQq63XNorjDeEgUy3scKtB9g8dy1JaeDPK2sccTi
+	 rNDxlZ7W9WqYizRXYFN283Q1rOUnkxgwdOMiO7Ri1YEL58PgG1MvqGlEQlIERfZz9B5Sm
+	 fqEQMnhF3G8VAROHVwE2tKWFG39+kaQxmQGom92rVLMB8bAnC4+zHQd3pUI+y9JQdW21h
+	 B2BZrEUd1RJrbyF3Ar3sIlExd9BEXW3GQnXRrmweznv6u1X5X40E7I6q89s0BI3p6fljl
+	 FmiuSj+/6UoC4cCHEhNmNuAPjlKMfziQ6WC0K+lmwHLJHRp0KgbZTqxKgPcTHyRULSw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795009269;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=UT7QiqHDaSMeRbrm9j69O8HfZ1aUJbjp72iuovVz/JI=;
-	b=Q16u2U2e9vDHojMy8+MsOMfXQSAY90PwnW3Vym+yBtZGLGXeUS+N9ePR0y9ZIMoYC/Ga
-	 7K/Y20IcXdd160fyVjBYaUGJd+UD0n8ZrNO+jOeZLHdAZiT+KCYB3qPNVzUSIFpxXZDv4
-	 KBONYAcC/gD2WCfXmqIQXJCee6cVkm73g2VkHOnhZDdk9Qzzvw5Aa76V5GdpYyBUTfO/S
-	 ixQ05whhDIedDx8/fSrgAyXyakknuNSZC2WM4HXfGN3g1+1in5/O+D2OmCBM8TGxNsKHn
-	 YNAEW+YJya3zbwyGuSDaWtoTRvQJXrKNAfv0rEiPxYq/cHwZ3G3+MEoEBf1RiJo0F8w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795009647;
+	h=DMARC-Filter:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To:
+	 DKIM-Signature;
+	bh=4/ODT45glGpVts+HhR52SLxZS1RNaASLefRBRlHkmHQ=;
+	b=wFfgJNJ3J9OEZZFtbBAX0TPqE5VxMC6YTyYYobQuJoO1zEbwgf8KoXsi426yO7Hff4fJ
+	 Xpa15WEZybYW849mkZGL+yzidxI6tqJ6ghJTYJQinjpclfODwookxvPzDJCIEVNL/wVPh
+	 NQ5YOKg29buXP5t/PdsJbex3n74+OF9hGLWvSJwfa+HjQ2UK4z4S6dozgbR3NZm06B8aW
+	 cZQGv14uIOwWj9rpG9gIgVCAiyYPBcaIHeMCu3QS5v956EFEzW6R+gBZsfDB/eqBFnXtM
+	 J0JEcHNTA23n1pb18gOaPSeGKdajIOM/IDB7Lm/BLBtxWe17CeRKkB+avGkuXApa7yQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iaUhBJsh;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=poczta.fm;
+	spf=pass smtp.mailfrom=poczta.fm;
+	dkim=pass header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b=ovf5mrMc;
+	arc=none smtp.remote-ip=217.74.67.49
+Received: from smtpo49.interia.pl (smtpo49.interia.pl [217.74.67.49])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E36F606A338
-	for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 13:41:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA1A2606A31C
+	for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 13:47:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EA1A2606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=poczta.fm
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=poczta.fm
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iaUhBJsh
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 973AD1F000CA;
-	Wed, 18 Nov 2026 13:41:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795009268;
-	bh=UT7QiqHDaSMeRbrm9j69O8HfZ1aUJbjp72iuovVz/JI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=iaUhBJshYL53T4aIbLLmHwjBbtgyNCS9Th6oJs5R9wgkndxTvdRjoCisv0xjOCB2b
-	 yfkZS+AMRbnSPjNoycU0Xs9XhmFlcAZuPc37NIozp3RIXASY+nzhAU579Qch/+l7ic
-	 lIiYu2fdIJbSGOKDAFK50OPoYFqmsxoawlQw4NRKkyMljyooZs9FeQSNDkkcef95Hn
-	 UHv2ck6TO8hRZ3F++EkQp4prNedEaPa38RN6OHAv/AxP3e+hGktI8JqLhIv7SqJqEZ
-	 sE/GYK7/7ImyjGzi/NFdPBGkvWC2hI1Tt2RuxxPvUAnXpDTNQua4JIcgTQzJskRBEj
-	 BbMzAJMXxAJuQ==
-Message-ID: <sashiko-outbox-221050@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH v14 3/4] selftests/bpf: add iocost cost model test
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Tao Cui" <cui.tao@linux.dev>
-Cc: bpf@vger.kernel.org, tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com
-In-Reply-To: <20261118131029.797007-4-cui.tao@linux.dev>
-References: <20261118131029.797007-1-cui.tao@linux.dev>
- <20261118131029.797007-4-cui.tao@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 18 Nov 2026 13:41:08 +0000
+	dkim=pass (1024-bit key) header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b=ovf5mrMc
+Received: from nr200 (unknown [80.68.231.31])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by poczta.interia.pl (INTERIA.PL) with ESMTPSA;
+	Wed, 18 Nov 2026 14:47:13 +0100 (CET)
+Date: Wed, 18 Nov 2026 14:47:11 +0100
+From: Slawomir Stepien <sst@poczta.fm>
+To: Tianyi Gao <tianyi@cloudflare.com>
+Cc: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+	davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
+	john.fastabend@gmail.com, sdf@fomichev.me, netdev@vger.kernel.org,
+	bpf@vger.kernel.org, magnus.karlsson@intel.com,
+	aleksander.lobakin@intel.com, ilias.apalodimas@linaro.org,
+	toke@redhat.com, lorenzo@kernel.org, ihor.solodrai@linux.dev,
+	tavip@google.com, maciej.fijalkowski@intel.com,
+	syzbot+ff145014d6b0ce64a173@syzkaller.appspotmail.com,
+	andrii@kernel.org, martin.lau@kernel.org, eddyz87@gmail.com,
+	yonghong.song@linux.dev, mason@kernel.org,
+	kernel-team@cloudflare.com, tianyi.gao@linux.dev
+Subject: Re: [PATCH v6 bpf 1/3] xdp: introduce xdp_convert_skb_to_buff()
+Message-ID: <av2sXwW83oI4SLx-@nr200>
+References: <20261104121316.1155680-2-sst@poczta.fm>
+ <9b616d465e6f88aab813a79cc84c51ed358861e201bfb23921864e62fc9dc023@mail.kernel.org>
+ <20261117161602.62553-2-tianyi@cloudflare.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,147 +65,28 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261117161602.62553-2-tianyi@cloudflare.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=poczta.fm; s=dk;
+	t=1795009637; bh=4/ODT45glGpVts+HhR52SLxZS1RNaASLefRBRlHkmHQ=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+	b=ovf5mrMczfFIQ+lDnzpE8bQrz8XBJef5ryzlnwG1fAYmc07ySkp0VDYFREhWzRuYl
+	 SsMyc2AL+WJ7k9HVoA49B4CpVkn+KBcGHAPlLyvAqucb8cUEQXGzfziSKR1CrnA83P
+	 yo/qCuUGjvf9r4D7IlWjGVSvdxO8QPGZb/2mi0ck=
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issues to consider:
-- [Medium] selftests/bpf: iocost_test_env() hardcodes /sys/fs/cgroup
-  without mounting
-- [Low] selftests/bpf: open_nullb_dev() callers check -errno instead of
-  fd
---
+On lis 17, 2026 16:16, Tianyi Gao wrote:
+> On Wed, Nov 04, 2026 at 12:53:35PM +0000, bot+bpf-ci@kernel.org wrote:
+> > Could mem.type be saved and restored around the program run, or could
+> > bpf_prog_test_run_xdp() set the mem type it needs (or use its own
+> > xdp_rxq_info)?  The later veth commits in this series only touch
+> > drivers/net/veth.c and do not address this.
+> 
+> I think test_run should just use its own copy of the rxq, which is also
+> easier to backport.
 
-commit 7c8a11566574f6e4224eb8a8a97b22da0b3eb991
-Author: Tao Cui <cuitao@kylinos.cn>
+Ok, I will go with that. Also thanks for the review!
 
-selftests/bpf: add iocost cost model test
-
-This commit adds two BPF struct_ops iocost cost models and selftests that
-attach them to a configfs-created null_blk device and verify model
-selection, IO pricing, tracepoint firing, and device removal.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/iocost_model.c b/tool=
-s/testing/selftests/bpf/prog_tests/iocost_model.c
-> new file mode 100644
-> index 0000000000000..0fbaeb7c5b7ef
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/iocost_model.c
-[ ... ]
-> +/* open the nullb device node, creating it manually when udev hasn't */
-> +static int open_nullb_dev(const char *name, int flags)
-> +{
-> +	char path[32], syspath[64], devtok[32];
-> +	unsigned int maj, min;
-> +	dev_t dev;
-> +	struct stat st;
-> +	int fd;
-> +
-> +	snprintf(syspath, sizeof(syspath), "/sys/block/%s/dev", name);
-> +	if (read_file_token(syspath, devtok, sizeof(devtok)) ||
-> +	    sscanf(devtok, "%u:%u", &maj, &min) !=3D 2)
-> +		return -1;
-> +	dev =3D makedev(maj, min);
-> +
-> +	snprintf(path, sizeof(path), "/dev/%s", name);
-> +	fd =3D open(path, flags);
-> +	if (fd >=3D 0 && fstat(fd, &st) =3D=3D 0 && S_ISBLK(st.st_mode) &&
-> +	    st.st_rdev =3D=3D dev)
-> +		return fd;
-> +	if (fd >=3D 0) {
-> +		/* a stale node from a previous run, drop and recreate */
-> +		close(fd);
-> +		fd =3D -1;
-> +	}
-> +	if (unlink(path) && errno !=3D ENOENT)
-> +		return -1;
-> +	if (mknod(path, S_IFBLK | 0600, dev))
-> +		return -1;
-> +	fd =3D open(path, flags);
-> +	if (fd < 0)
-> +		unlink(path);
-> +	return fd;
-> +}
-
-[Severity: Low]
-Can ASSERT_OK(devfd < 0 ? -errno : 0, ...) in serial_test_iocost_model()
-and serial_test_iocost_model_streams() pass when open_nullb_dev() fails?
-
-If read_file_token() hits EOF without setting errno, sscanf() fails to
-match two tokens, or unlink(path) succeeds and leaves errno at 0 after
-the second open() fails, open_nullb_dev() returns -1 with errno =3D=3D 0.
-The callers then pass 0 to ASSERT_OK() and proceed to call
-posix_fadvise(), read(), pread(), and close() on fd -1.  Using
-ASSERT_OK_FD(devfd, ...) in the callers (or returning a negative error
-code from open_nullb_dev()) would catch any failure directly.
-
-[ ... ]
-> +static bool iocost_test_env(void)
-> +{
-> +	static bool ready;
-> +	struct statfs sf;
-> +	int orig_ns =3D -1, supported;
-> +	bool ok =3D false;
-> +
-> +	if (geteuid() !=3D 0) {
-> +		printf("%s:SKIP:needs root\n", __func__);
-> +		test__skip();
-> +		return false;
-> +	}
-> +
-> +	if (statfs("/sys/fs/cgroup", &sf) ||
-> +	    sf.f_type !=3D CGROUP2_SUPER_MAGIC) {
-> +		printf("%s:SKIP:needs cgroup v2 at /sys/fs/cgroup\n",
-> +		       __func__);
-> +		test__skip();
-> +		return false;
-> +	}
-[ ... ]
-> +	/*
-> +	 * Isolate the configfs and cgroup mounts from the host. A
-> +	 * failed setup unwinds the namespace so that a later retry does
-> +	 * not stack private namespaces.
-> +	 */
-> +	orig_ns =3D open("/proc/self/ns/mnt", O_RDONLY);
-> +	if (unshare(CLONE_NEWNS) ||
-> +	    mount(NULL, "/", NULL, MS_REC | MS_PRIVATE, NULL)) {
-> +		printf("%s:SKIP:cannot make mounts private: %s\n",
-> +		       __func__, strerror(errno));
-> +		test__skip();
-> +		goto out;
-> +	}
-> +	mkdir("/sys/kernel/config", 0755);
-> +	(void)mount("none", "/sys/kernel/config", "configfs", 0, NULL);
-
-[Severity: Medium]
-Will all three iocost tests skip when /sys/fs/cgroup is not already a
-cgroup2 mount or after an earlier cgroup v1 test runs in the same
-test_progs process?
-
-iocost_test_env(), cgroupfs_has_controller(), readback_model(),
-write_cost_model(), and the io.cost.qos writes all access /sys/fs/cgroup
-directly without mounting cgroup2 there, while cgroup_setup_and_join() in
-tools/testing/selftests/bpf/cgroup_helpers.c mounts cgroup2 at /mnt
-(CGROUP_MOUNT_PATH).  In addition, setup_classid_environment() in
-cgroup_helpers.c mounts tmpfs at /sys/fs/cgroup (CGROUP_MOUNT_DFLT) and
-cleanup_classid_environment() leaves that tmpfs mounted:
-
-tools/testing/selftests/bpf/cgroup_helpers.c:setup_classid_environment() {
-	...
-	if (mount("tmpfs", CGROUP_MOUNT_DFLT, "tmpfs", 0, NULL) &&
-	    errno !=3D EBUSY) {
-		log_err("mount cgroup base");
-		return 1;
-	}
-	...
-}
-
-When a test using setup_classid_environment() runs before
-serial_test_iocost_model*, statfs("/sys/fs/cgroup", &sf) sees TMPFS_MAGIC
-instead of CGROUP2_SUPER_MAGIC and skips the tests.  Using the cgroup2
-mount managed by cgroup_helpers.c (via get_root_cgroup() or
-write_cgroup_file("", ...) / read_cgroup_file("", ...)), or mounting
-cgroup2 inside the private mount namespace created by iocost_test_env(),
-would avoid relying on the host's /sys/fs/cgroup mount state.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261118131029.7970=
-07-1-cui.tao@linux.dev?part=3D3
+-- 
+Slawomir Stepien
