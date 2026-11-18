@@ -1,54 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.240
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.161
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794963165;
-	b=wjWiOf+VycaXWqzWuh06KDvU1g51ueeR1EQGx8med8ONq+PpJg0e686w2ihDtC4e9ZjY
-	 D237Ko/d9z4NZcaaY8LucljzHvlOrZV4fuXbvUdkG/TmDgAowhzQPMeNM5RMYqgBq/aDr
-	 ZtMVotKAlDt7pofpjRwcNXJlciidLUoM7cnIh0toauoyjimu5yBtVJq8fc2+o3Bc4aSl6
-	 J6DT2gLAWJj6AYlrQU3LL9YZBh3f9PUG+LJ1b6rei2inXTe2ssTN9ISYz36Dei4Ew4RWT
-	 05JfTU5JQqvQ93YG0veiIwP6U3mItGYkYBJNnjfkqcy0EnKEwwdcpxj5jvicmpvHW6g==
+	t=1794963987;
+	b=Nle6jyiJ+FW77W9qQ7/xayOmZjNTxUGa3exgzZHkR0CHHOD9NI9MLGVT4KFAU8yHxH4W
+	 WOFV9Cb2HDUN9QTlRItQyGuNsm52IIgNUOmS/Y5OI2fKSJ1EUDqSeFTVJGvYxrY++2aZS
+	 lmxiGBjKw9tR79MhEnBGYeRzDmuAJV2QgFZZKoPCT5wkxnKx6L62twoavO5lOtyEYauil
+	 7D/PFjDXSlFQ0RLuGmujLq4Z3wDnoy3ba6fSZdlyxbPiEgFEi1VJeIJ73AB7SX+sd5YJm
+	 L2pVhJU/NyU+z0E+crGxSHP1ipcYeDNgg+qeDdkHLnwph7aDW0PQmVAHolJoBFeFYCg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794963165;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794963987;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=u4E0fQhmGCeFsbiKHI/HoTeHZ7lq7KvgeuRTX4/oJSY=;
-	b=YQSQw9M8kafCoPsI0TVbnJlY6m6f/wUBzvNMivtP2n78LW4SLKZl4PC+juzkO5I+nVdl
-	 fbLziRrVBA7K0606/fp6vB2oIH8bPt1040cmlD1NYdv+WD6vHwOBYdPTKgYaixTyxJe/Y
-	 4diVNISM6b4Gel+Y81/nCXsHFHWUcBpLMYnR6MGf+XtQ1LtsgJ+9bGLLdGklic6WHB3TR
-	 YpI0FAumVFEaTxxKhTAZEyWJI3H1uVxC7UlBGeqLi7qYCQ6OMdRF400MZdo8JdqZ/1UAq
-	 EimT9bDlDr+7BFzKN/r3nNfBDljQSoyr5Eaz7jilcGpBW+X0ViUDGdVUTKWNBnQjvOw==
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=60m7KcRIF+636nFMfThPXFQN3d/l9dTK+27x5s5xATE=;
+	b=ol7pcskkrh/rWcg65dPmdvS0rpsl5ANKJWUOAG/qE4/0JmBHzOUw7O8hKEqcrI94FZX7
+	 WVrlzz7tEl/lGFbJaWF6C8sXHAh2ej6tWwsj2MS5inIaBurEjerrTcNVl0FpCL9HlAhfB
+	 k863/M+zAJnUomHj2M7BrfYL9L9NsxaB3JwzKkfWoOPCEVc1+vtulwB0yqE5+GTWHmuvd
+	 iaZwgFXB9pjSLMTHikPkw1wTbmEd1St8iJe9YQXrrIoL4V72zVRidSAfcKkyspWi8Dtfg
+	 Jo+fV/KxBBmKYWRS12SU5/kEEYHZBPzumn1IzggtV/DYOhlFO1fsgiJXsxfLdYw/5VQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=tOC4QT1z;
-	arc=none smtp.remote-ip=91.218.175.240
-Received: from mta0.migadu.com (out-240.mta0.migadu.com [91.218.175.240])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=G2ShfEuZ;
+	arc=none smtp.remote-ip=95.215.58.161
+Received: from mta1.migadu.com (out-161.mta1.migadu.com [95.215.58.161])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDAEF606A31C
-	for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 00:52:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CDAEF606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64E54606A31C
+	for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 01:06:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 64E54606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=tOC4QT1z
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=G2ShfEuZ
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=jAcKC7XNRVh0GKcOuxn1Fu7bTvbspwLeOY4x6dh/4d4=;
+DKIM-Signature: a=rsa-sha256; bh=P+w583ycCexQeOOWJwBcF8zhG/qFNQ+UKx5LbN5dQA4=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794963163; v=1; x=1795567963;
- b=tOC4QT1z8jK2RG9eRb9Ibc70UQ38UNsYD2ncTafZVocMYFKDQVVZNcRrCtZZKGBpBINLUGu7
- sxYkJz9l3DHtZCWCh21VQCm8Li49LLHKQyfcMt4DdyxpbyjW+1m4WR33PNKshm6SKBAermUeaF7
- hMX6Akw9TjYfKdGzJwO20LPo=
+ t=1794963983; v=1; x=1795568783;
+ b=G2ShfEuZTCDHBerSf+ZH5QaosvG2IN7tMAc/GWDm4c8He5RpXlca19ua9UQiSKYAjSCBVpe1
+ AEYaTE/Ip/CZ1qUtPdxTdikFMJckbCnUHHZHbHOd54ZaeVj5K0zVGo2jKnkbsVeNTjkxJiDHeYN
+ 3Sacr8Yu3w5jcEA621NCLyaQ=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id c0217c32623d0320;
-	Wed, 18 Nov 2026 00:52:42 +0000
-X-Mizu-Trace-ID: c0217c32623d0320
+Received: by mta12.migadu.com with ESMTPS id 825b9c48667a5f11;
+	Wed, 18 Nov 2026 01:06:22 +0000
+X-Mizu-Trace-ID: 825b9c48667a5f11
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <9695ec3d-7b81-488d-989f-0bd411d673f2@linux.dev>
-Date: Tue, 17 Nov 2026 17:52:38 -0700
+Date: Wed, 18 Nov 2026 09:06:09 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: netdev-bot+sashiko@kernel.org
+Cc: jv@jvosburgh.net, andrew+netdev@lunn.ch, davem@davemloft.net,
+	edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+	john.fastabend@gmail.com, sdf@fomichev.me, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH net-next 1/6] bonding: check XDP support before enslaving
+ changes state
+Message-ID: <avz6AQetwPAY--Mt@fedora>
+References: <20261113-bond_enslave_restruct-v1-1-364c549e78db@kylinos.cn>
+ <179492640769.3136.3241898567283164730@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,176 +69,177 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [BUG] bpf, lsm: new first argument in 7.4 inode hooks silently
- breaks BPF LSMs
-To: roblabla <linux@roblab.la>, Andrii Nakryiko <andrii.nakryiko@gmail.com>,
- Paul Moore <paul@paul-moore.com>, Daan De Meyer <daan@amutable.com>
-Cc: bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
- paul.mabileau@harfanglab.fr, linux-kernel@vger.kernel.org,
- Andrii Nakryiko <andrii@kernel.org>
-References: <d85ece6e-27f9-4d9f-83af-4101bc76fef6@app.fastmail.com>
- <356db94e-f5d6-4fb2-839a-b97aef72256b@app.fastmail.com>
- <CAHC9VhR9sjunJRnM9gy-BkBZkapQTrr8a8FtmaK7JkAmUqTrLA@mail.gmail.com>
- <CAEf4BzZKmn6g0SK8OddjKFj_vAmZFvpZv32Hs_S+GHgT7VNfrg@mail.gmail.com>
- <9d6bdc31-e57c-4187-be78-29d82471f710@app.fastmail.com>
-Content-Language: en-US
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <9d6bdc31-e57c-4187-be78-29d82471f710@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <179492640769.3136.3241898567283164730@kernel.org>
 
-On 11/9/26 8:07 AM, roblabla wrote:
-> Hi,
+On Tue, Nov 17, 2026 at 02:40:07PM +0000, netdev-bot+sashiko@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 3 potential
+> issue(s) to consider.
 > 
-> Thanks for the replies!
+> Critical: 0 · High: 1 · Medium: 0 · Low: 2
 > 
->> [...]
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwork
+> know by including "pw-bot: cr" as a separate line at the end of your reply
+> (one such reply per series is enough).
 > 
-> So what would be really nice is a way to make eBPF code robust against
-> kernel changes such that it either works, or fails to load, but doesn't
-> do the halfway "loads but silently misbehaves". Here are two ideas that
-> have been in the back of my mind that could help solve this issue (though
-> I understand that they may be rather large changes, I'm putting them out
-> there mostly as a conversation starter):
+> - [High] The fix is incomplete: a slave without ndo_xdp_xmit can still be
+>   reached by bond_xdp_xmit() whenever the bond has no XDP program.
+> - [Low] The commit message presents this as a crash fix ("bond_xdp_xmit()
+>   may call a NULL ndo_xdp_xmit"), but the commit has no Fixes: tag (and…
+> - [Low] The commit author (From:) is "Hangbin Liu
+>   <hangbin.liu@linux.dev>", but the only Signed-off-by line is "Hangbin…
 > 
-> 1. Could libbpf/the kernel have a mismatch check on hook arguments? I
->    understand that libbpf and the verifier don't know the types a
->    program expects, since BPF_PROG() only casts u64s. But the macro
->    does know the types at compile time. Could it (or an opt-in variant)
->    record the expected prototype in the program's BTF, so that libbpf
->    can compare it against the LSM hook's prototype in vmlinux BTF and
->    refuse to load on a mismatch?
+> --
 > 
-> 2. Since kernel BTF has parameter names for the bpf_lsm_* functions,
->    could we maybe have CO-RE-style relocation to resolve "the argument
->    named dentry" to the argument index at load time? This way, adding a
->    new argument could happen anywhere in the argument list without
->    breaking eBPFs, and removing an argument will (correctly) cause our
->    eBPF to stop loading. It does mean the eBPF programs must provide the
->    same argument names, but maybe that's an acceptable tradeoff?
+> bonding: check XDP support before enslaving changes state
+> 
+> This commit moves two XDP checks in bond_enslave() to the validation
+> section at the top of the function: the ndo_bpf/ndo_xdp_xmit capability
+> check and the slave XDP program count check. They now run before the slave
+> is opened, attached and made visible to the datapath. The
+> dev_xdp_propagate() setup stays where it was.
+> 
+> > In particular
+> > the slave can become bond->curr_active_slave, or be published via
+> > bond->slave_cnt, before we verify that slave_dev->netdev_ops->ndo_xdp_xmit
+> > exists, so bond_xdp_xmit() may call a NULL ndo_xdp_xmit.
+> 
+> [Severity: Low]
+> The commit message describes this as a fix for a NULL ndo_xdp_xmit call,
+> but there is no Fixes: tag and no Cc: stable. Should there be a Fixes:
+> tag?
+> 
+> git blame shows the late capability and prog-count checks came from commit
+> 9e2ee5c7e7c3 ("net, bonding: Add XDP support to the bonding driver"), and
+> commit 6d5f1ef83868 later restructured them.
+> 
+> > Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
+> 
+> [Severity: Low]
+> The author is Hangbin Liu <hangbin.liu@linux.dev>, but the only
+> Signed-off-by line uses <liuhangbin@kylinos.cn>. checkpatch reports this
+> as a From:/Signed-off-by: email address mismatch. Could the two addresses
+> be made to match?
+> 
+> > diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+> > index 9249a79a168e4..340af4c3fa201 100644
+> > --- a/drivers/net/bonding/bond_main.c
+> > +++ b/drivers/net/bonding/bond_main.c
+> > @@ -1948,6 +1948,23 @@ int bond_enslave(struct net_device *bond_dev, struct net_device *slave_dev,
+> >  		return -EPERM;
+> >  	}
+> >  
+> > +	/* Check XDP support before any state change, so a slave without
+> > +	 * XDP can never become visible to bond_xdp_xmit().
+> > +	 */
+> > +	if (bond->xdp_prog) {
+> > +		if (!slave_ops->ndo_bpf || !slave_ops->ndo_xdp_xmit) {
+> > +			SLAVE_NL_ERR(bond_dev, slave_dev, extack,
+> > +				     "Slave does not support XDP");
+> > +			return -EOPNOTSUPP;
+> > +		}
+> 
+> [Severity: High]
+> Does the "can never become visible" claim still hold when bond->xdp_prog
+> is NULL?
+> 
+> bond_xdp_xmit() is the bond's ndo_xdp_xmit. Devmap and bpf_redirect reach
+> it after only this check:
+> 
+> kernel/bpf/devmap.c:__xdp_enqueue() {
+>     ...
+> 	if (!(dev->xdp_features & NETDEV_XDP_ACT_NDO_XMIT))
+> 		return -EOPNOTSUPP;
+>     ...
+> }
+> 
+> bond_xdp_set_features() builds that flag from bond_xdp_check() and the
+> slaves' xdp_features. It never looks at bond->xdp_prog:
+> 
+> 	if (!bond_xdp_check(bond, BOND_MODE(bond)) || !bond_has_slaves(bond)) {
+> 		xdp_clear_features_flag(bond_dev);
+> 		return;
+> 	}
+> 
+> 	bond_for_each_slave(bond, slave, iter)
+> 		val &= slave->dev->xdp_features;
+> 
+> Take a round-robin, active-backup, XOR or 802.3ad bond with no XDP
+> program, where all current slaves advertise NDO_XMIT and another device
+> redirects XDP frames into the bond. Enslaving a device with a NULL
+> ndo_xdp_xmit skips this check.
+> 
+> The new slave then becomes visible before bond_xdp_set_features() clears
+> NDO_XMIT on the bond:
+> 
+>   - the default case of the mode switch in bond_enslave() does
+>     rcu_assign_pointer(bond->curr_active_slave, new_slave)
+>   - bond_master_upper_dev_link() puts the slave on the lower list that
+>     bond_get_slave_by_id() walks
+>   - slave_cnt++ and bond_update_slave_arr() also run before
+>     bond_xdp_set_features()
+> 
+> A redirect on another CPU runs under RCU only, without RTNL. It could pick
+> the new slave, for example through the IGMP path of
+> bond_xdp_xmit_roundrobin_slave_get():
+> 
+> 	if (iph->protocol == IPPROTO_IGMP) {
+> 		slave = rcu_dereference(bond->curr_active_slave);
+> 		if (slave)
+> 			return slave;
+> 
+> bond_xdp_xmit() then makes the call without a NULL check:
+> 
+> 	err = slave_dev->netdev_ops->ndo_xdp_xmit(slave_dev, 1, frames1, flags);
+> 
+> Can this call a NULL ndo_xdp_xmit in softirq context?
+> 
+> There seems to be a second window as well. __xdp_enqueue() checks
+> xdp_features when a frame is queued, but the bulk queue is flushed later
+> without a recheck:
+> 
+> kernel/bpf/devmap.c:bq_xmit_all() {
+>     ...
+> 	sent = dev->netdev_ops->ndo_xdp_xmit(dev, to_send, bq->q, flags);
+>     ...
+> }
+> 
+> No RCU grace period follows xdp_set_features_flag() either.
+> 
+> The later patches in the series don't close this. At the end of the
+> series:
+> 
+>   - the check is still gated on bond->xdp_prog, now in
+>     bond_enslave_validate()
+>   - bond_xdp_xmit() is unchanged
+>   - bond_xdp_set_features() now runs before bond_publish_slave(), but
+>     still after the curr_active_slave assignment and the lower-list link
+> 
+> One option is to guard the call in bond_xdp_xmit(), or to select only
+> slaves that advertise NDO_XMIT. Another is to clear the bond's NDO_XMIT
+> and wait for in-flight readers before any slave without XDP support
+> becomes visible, whether or not bond->xdp_prog is set. Would one of these
+> be a better fit?
+> 
 
-Hi everyone.
+As I mentioned in the previous mail[1], we may need a check like
 
-roblabla's comments got me curious, and I spent some time with my
-helpful assistants poking at the problem.
+  if (likely(slave_dev->netdev_ops->ndo_xdp_xmit))
+      err = slave_dev->netdev_ops->ndo_xdp_xmit(slave_dev, 1, frames1, flags);
 
-There is another workaround in addition to what Andrii suggested.
-A program can already make itself fail to load on a signature
-mismatch:
+On the other hand, should we call bond_xdp_xmit() without a bond->xdp_prog?
+I need to check if we should move the bond_xdp_set_features(bond_dev);
+inside the if (bond->xdp_prog) checking. So when we build the bond xdp
+features, we can make sure there is a bond->xdp_prog set.
 
-	union security_list_options___mine {
-		int (*inode_create)(struct inode *dir,
-				    struct dentry *dentry, umode_t mode);
-	};
+[1] https://lore.kernel.org/netdev/aqokD2avF7B7Towi@fedora/
 
-	extern void lsm_proto_mismatch__inode_create(void) __ksym __weak;
-
-	SEC("lsm/inode_create")
-	int BPF_PROG(deny_create, struct inode *dir, struct dentry *dentry)
-	{
-		if (!bpf_core_type_matches(union security_list_options___mine))
-			lsm_proto_mismatch__inode_create();
-		...
-	}
-
-bpf_core_type_matches() checks the expected prototype against the
-hook's member of union security_list_options in kernel BTF.
-On a mismatch the call to the unresolved weak kfunc stays reachable,
-so the verifier rejects the program, and libbpf reports:
-
-  kfunc 'lsm_proto_mismatch__inode_create' is referenced but wasn't resolved
-
-It's positional and needs the exact argument count, but it turns
-silent misbehavior into a load failure. The same should work for
-tp_btf with the btf_trace_<tp> typedefs.
-
-But of course it's just a workaround..
-
-A bit more generally, expanding on roblabla's second idea, I think libbpf
-could resolve hook arguments by name with the existing CO-RE machinery,
-without kernel, verifier or LSM changes.
-
-The BPF side could look like this:
-
-	SEC("lsm/inode_create")
-	int BPF_PROG_ARGS(deny_create, struct inode *, dir,
-			  struct dentry *, dentry)
-	{ ... }
-
-BPF_PROG_ARGS() (name TBD) takes (type, name) pairs like BPF_PROG2(),
-but instead of casting ctx[0], ctx[1], ... it reads each argument
-through a local preserve_access_index-marked struct, so every argument
-access is a regular CO-RE field relocation:
-
-	struct bpf_func_args___deny_create {
-		const struct mnt_idmap *idmap;	/* 7.4+ */
-		struct inode *dir;
-		struct dentry *dentry;
-	} __attribute__((preserve_access_index));
-
-	SEC("lsm/inode_create")
-	int deny_create(u64 *ctx)
-	{
-		struct bpf_func_args___deny_create *args = (void *)ctx;
-
-		if (bpf_core_field_exists(args->idmap))
-			/* use args->idmap */;
-
-		return check(args->dir, args->dentry);
-	}
-
-Nothing changes on the loader side:
-
-	skel = deny_create__open_and_load();
-	if (!skel)	/* mismatch: load fails, libbpf logs why */
-		return -errno;
-	err = deny_create__attach(skel);
-
-To achieve this libbpf would need to do the following at load time:
-
-  - treat bpf_func_args___* as a reserved type in CO-RE relocations;
-  - find the program's attach target in kernel (or module) BTF:
-    bpf_lsm_<hook>, the fentry/fexit target, or the tracepoint stub for
-    tp_btf;
-  - build a struct from the target's prototype: one member per
-    parameter, named after it, at the parameter's ctx offset, plus 'ret'
-    for fexit, fmod_ret and LSM;
-  - resolve the relocations against it by name, with a strict type check
-    (pointee types must match, qualifiers ignored), since CO-RE normally
-    treats any two pointers as compatible.
-
-A missing argument or a type mismatch is a normal CO-RE relocation
-failure: the program fails to load with an error naming the argument,
-unless the access is guarded by bpf_core_field_exists().
-
-And this is not LSM specific, fentry/fexit/fmod_ret and tp_btf would
-work the same way.
-
-It doesn't help if a hook keeps its signature but changes semantics,
-or if the attach point goes away (that already fails to attach).
-
-Here is a vibe-coded prototype of the above:
-https://github.com/kernel-patches/bpf/compare/bpf-next_base...theihor:bpf:bpf-named-args
-
-It's an entirely new libbpf feature though.
-
-Andrii, what do you think of it?
+Thanks
+Hangbin
 
 ---
-
-And just my 2c re argument ordering:
-
-Paul, with all due respect, prioritizing code style and personal
-preferences over backwards compatibility is unreasonable even for
-unimportant applications. And here we are talking about apps
-implementing security policies, which many organizations (not just
-companies) in the world rely on. Given the recent flood of
-cybersecurity issues (in Linux and beyond), I don't see why would we,
-as in kernel devs, intentionally make the defenders' job harder.
-
-
-> 
-> Thanks,
-> roblabla
-
+pw-bot: cr
