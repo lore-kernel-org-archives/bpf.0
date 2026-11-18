@@ -1,167 +1,113 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.165.109
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795014875;
-	b=eylq8dCVQTxivEkKLR4UHfIsfXwKlcDthNEb+Mm2MZW1R+u6gvWl4Rkr51CDvnWMp58z
-	 9+9umJ7lhcgpXppSY1aoLxAZAUxPO5l0eYfMdlfQSDOpoAdUtdhxSfw9x+VFvgDaAuklv
-	 IithvM3VuNp2oSZdO/8J8B3bA5mFen9qxz/U5aesUEYGaWgskYmJ8p2xQW0aQulf4BY2v
-	 A/exUAel0Pe/s0wYCKaxsa5mRppTld+UAP4gV/FTQ6tkvOhul0JvFBBkQcYrUCAClBBgo
-	 Y6nUftb90Lwo04jXiM7E0zyavPdMKgrG1dmMJDTPCYmw9ZE6AN9/6E8tZdtJhrjymgw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795014875;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:CC:Subject:
-	 Thread-Topic:Thread-Index:Date:Message-ID:References:In-Reply-To:
-	 Accept-Language:Content-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:
-	 msip_labels:x-ms-publictraffictype:x-ms-traffictypediagnostic:
-	 x-ms-office365-filtering-correlation-id:
-	 x-ms-exchange-atpmessageproperties:x-ms-exchange-senderadcheck:
-	 x-ms-exchange-antispam-relay:x-microsoft-antispam:
-	 x-microsoft-antispam-message-info:x-forefront-antispam-report:
-	 x-ms-exchange-antispam-messagedata-chunkcount:
-	 x-ms-exchange-antispam-messagedata-0:
-	 x-ms-exchange-antispam-messagedata-1:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-AuthAs:X-MS-Exchange-CrossTenant-AuthSource:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-originalarrivaltime:
-	 X-MS-Exchange-CrossTenant-fromentityheader:
-	 X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
-	 X-MS-Exchange-CrossTenant-userprincipalname:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=hNdoNcvQe0PvL879L75x/xzdgSb5z0OE5tRK+ptI0Qc=;
-	b=RO6vlNFMmk9h8rXKPP9E4kgVAtbV/mah9I9n2JLr687TK/OU5P6PAUqpOyNtB3cNAFEe
-	 m/j0PtsGDRhlOCfZJDCf2VOJzI8/P/sGszMn0sZHWn82Alp/r2HcZ0+YIRoHGpLpxzqQk
-	 swOfff1KdoVYkyxilQIx7na3UHopqyitnFpXDbYAitQqtX2+wxV0uYbxiWcsB8n8bSqkx
-	 EPrbrAtXR+utxU+94f92NHJtasMKV7IR2BB34X8jb5mCMHtm39m2sHOW6czGmOFZLLOf0
-	 G4kCooCIJimWvW47iV+MCvL++khqN239P07DZcJMhBvaX9WS2VL9Ye9jfl6lA6WrAyA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=harfanglab.fr;
-	spf=pass smtp.mailfrom=harfanglab.fr;
-	dkim=pass header.d=harfanglab.fr header.i=@harfanglab.fr header.a=rsa-sha256 header.s=selector1 header.b=DMDPTvIq;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.165.109
-Received: from MRZP264CU002.outbound.protection.outlook.com (mail-francesouthazon11020109.outbound.protection.outlook.com [52.101.165.109])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.161.50
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795015275;
+	b=FxwpbUy5GjtJavmUIiXxYp40B9iVWZDfamIUQPnowqYjLg4Wk426kgNiPUH6afFWkoEy
+	 3oa5ABDyWS0P3ZVc0vcuIwSsptfS+hopWRU/w4FawXs/e0rqeDl2w65AvA3d1x5zOuT+Y
+	 hvM6iJw6K15ASCygwoowAzmtTEZDIUbub8HeCNvIVtpFjoXFKyWR+gF6ThWXiIsTGQEWG
+	 5QQuyktUEYt+4hnVixyYp0HKlsIfHQS+VoIjsdgqfN8lnt8I2zsJAx+SHn4fiMQY3wp+c
+	 NaF8d/epS9VHNUAax+/MijBQsQ2Oxv3WPl65NFDc9ucjUhu25oX7dVMzhxGJiHBGt8Q==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795015275;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=QDOqhONWca8lFUkqw1VExgQBB70zOD5j+JNGK/QGOk0=;
+	b=pOQpC9vBQVpQDOEEGXRHCs45YTvdbrTcXaXr0THor0f/zs76esqotYxeQsKvz82HUJ6R
+	 3JZHyFORN4nXtGtDpoTp2DZlfaQoxpz4fYMW1rpCnoKFLHv6EOsomsWuN0XvpT2Cm/xYZ
+	 GZdkvzgJQ1UYlO+0fnjgGREbh3A3EG9yshMBb2PreSxkcUTjf4Eui5cD3+jKmDRdchvLp
+	 2sbTvSTLkNe6+zDFJhSORVuT1PsbsZBl0ENLq6HBZa+0Xo1CKrAg46d8Kof603tAsecvS
+	 EmuUEFneTMTTkpZ6f5WXvXcMtbc3iseJAG4Fm7EpbpzlYbb5t7JXJ10ZZmreep1ZAMw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PhHPIrkO;
+	arc=none smtp.remote-ip=209.85.161.50
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0016606A31C;
-	Wed, 18 Nov 2026 15:14:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A0016606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=harfanglab.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=harfanglab.fr
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 571DA606A32C
+	for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 15:21:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 571DA606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=harfanglab.fr header.i=@harfanglab.fr header.a=rsa-sha256 header.s=selector1 header.b=DMDPTvIq
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=jV0PxoZkFDhEBI0gF/Lg3wI9Wq72ER1DNGQM/cxCsgcGiTfw9C6rBLt/7t7OhN9FsJLpMcXmU471PvJXefy42+Cggcokd6DR+D35e2SUDGsyuRkpvjv1iQhIIkbXudIHMEW4YaU34Jw/HawD9BmkSqg1cU9zyFquMwVm7hB+DlrhxhRGHSaC8l6d7imapSpGsxpa5+RHVMw+9hUx8ls+2FMM8irK3E7v+EphfTgb1TNesbSKmRlUTTU0NT+sSRH7tfauKqB9NmF//9lwH8CfUxq4KlG7xelwE6psKREbfuHlYXa7PK8CUEF5JArWka9d9XavUbyOKMpCUma2jskmOw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hNdoNcvQe0PvL879L75x/xzdgSb5z0OE5tRK+ptI0Qc=;
- b=bGeHXwWI+OIhuQwsY0Kgg57TfSEXRB83RVocg5h5+knSsffmlvtj4HRl4FmTGfZEZeMXjHGomBAP9Vmo21j64Y+6mhkIjN05KT0sef4pHriL1VhlUQS4UqdWEm/z9O1J2+SBMkyHRcyUADFeS6rV5WtrBRSGedb6AEUM/rrJpN9dih1gyK/spHzuTcDkJeVpoVC2u0JGwyshnIEN4Z+w9dXlLEsZ00Ov3pSZXVkqe8HhEB4zNhvO7FA02z2OZ9Cfnkln7lHiZN2+k0FBN2NNW1/snAH54WxpVFchOgXDPhwUvaWFFhw4iqLcYjF9V8DmQoj+RzNb0x6K4up9U00Gzw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=harfanglab.fr; dmarc=pass action=none
- header.from=harfanglab.fr; dkim=pass header.d=harfanglab.fr; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=harfanglab.fr;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hNdoNcvQe0PvL879L75x/xzdgSb5z0OE5tRK+ptI0Qc=;
- b=DMDPTvIqiPY+nIc2VRQ1NuQ3WsMonwgqtWpsSmGRR2mqMtBHUTP4mv+DRimf8cH2RWkpmc4ogALK8ho3/0LXW2zq0//QBpIYiyinZDo0EiwzuweW3E4OxgVfqmvNlxL2mRowRheRwiE6Aj8/QXqeMhqW1qnckMqYYyG7Zmg2sBE=
-Received: from MRYP264MB7057.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:a2::15)
- by PR0P264MB1609.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:166::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.14; Wed, 18 Nov
- 2026 15:14:28 +0000
-Received: from MRYP264MB7057.FRAP264.PROD.OUTLOOK.COM
- ([fe80::bb0d:a51e:4e9c:30f2]) by MRYP264MB7057.FRAP264.PROD.OUTLOOK.COM
- ([fe80::bb0d:a51e:4e9c:30f2%5]) with mapi id 15.21.0615.013; Wed, 18 Nov 2026
- 15:14:28 +0000
-From: Paul Mabileau <paul.mabileau@harfanglab.fr>
-To: Daan De Meyer <daan@amutable.com>, Ihor Solodrai <ihor.solodrai@linux.dev>
-CC: roblabla <linux@roblab.la>, Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-	Paul Moore <paul@paul-moore.com>, "bpf@vger.kernel.org"
-	<bpf@vger.kernel.org>, "linux-security-module@vger.kernel.org"
-	<linux-security-module@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>
-Subject: Re: [BUG] bpf, lsm: new first argument in 7.4 inode hooks silently
- breaks BPF LSMs
-Thread-Topic: [BUG] bpf, lsm: new first argument in 7.4 inode hooks silently
- breaks BPF LSMs
-Thread-Index:
- AQHdbfDE9Jlf+EqtCUW8vlHUqmZ7eLchDG2AgAAiUwCAAECqgIAEbM0AgA02HgCAAOEKgIAACnv6
-Date: Wed, 18 Nov 2026 15:14:27 +0000
-Message-ID:
- <MRYP264MB7057096D13282544720793F2E67A2@MRYP264MB7057.FRAP264.PROD.OUTLOOK.COM>
-References: <d85ece6e-27f9-4d9f-83af-4101bc76fef6@app.fastmail.com>
- <356db94e-f5d6-4fb2-839a-b97aef72256b@app.fastmail.com>
- <CAHC9VhR9sjunJRnM9gy-BkBZkapQTrr8a8FtmaK7JkAmUqTrLA@mail.gmail.com>
- <CAEf4BzZKmn6g0SK8OddjKFj_vAmZFvpZv32Hs_S+GHgT7VNfrg@mail.gmail.com>
- <9d6bdc31-e57c-4187-be78-29d82471f710@app.fastmail.com>
- <9695ec3d-7b81-488d-989f-0bd411d673f2@linux.dev>
- <CAPa8sAh6b5xn4rZzPfM0nZ+_kkywWj22fy8deLq+6qYews0rdQ@mail.gmail.com>
-In-Reply-To:
- <CAPa8sAh6b5xn4rZzPfM0nZ+_kkywWj22fy8deLq+6qYews0rdQ@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
-authentication-results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=harfanglab.fr;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRYP264MB7057:EE_|PR0P264MB1609:EE_
-x-ms-office365-filtering-correlation-id: 25b2bd1d-35b6-4ee5-cd24-08df4586a365
-x-ms-exchange-atpmessageproperties: SA
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|10070799003|1800799024|376014|23010399003|366016|6133799003|22082099003|18002099003|261009223027099003|55112099003|4143699003|56012099006|5023799004|11063799006|261102123227099003|261026121527099003|261028144727099003|261026140227099003|261021121427099003|261022105027099003|261021135927099003|38070700021|261022075727099003|10067099003;
-x-microsoft-antispam-message-info:
- zNcuCRBl9fXp7doEfJxRNB3/swAAosWCqvRwEIlkcX/m6atitZxsx9EbI2KlLROiFnt9lrAInVK1MUpYeRvSymcvBB3CHeof2ShrAdqWP0Yzju6/NaAquRPVYTyA/JTDpTWedvFocmXM2zMTYDz0O1P4F8ioETT2J+onQaz6YwqHlLr/v4xeq/fnd+F95sV2v2wfG9auhCfCSbEolRnfnFL4WR/RbeLOCP6b9h/GB2IeH5uIprVwNxfglJiupLSIpNRs5sDWA53NHKaS3lVkxkGeqIMY+2VLshC09Pa7YFU1gb2JLReB7WGFptrDWp+SyUvjMy0sGY2z5UYzU2Hk6HFCd/F3fJVGv9ZZcdiB+SUOrcC2gXdDfCDnLGj/UcpR65fkSbnJPchgU2GBRuAreuzRMSn2MVLKhtLyHY/ctrCl2FDXoISd3oQf9IWIubnqQ8s+63PyxPj6OT3XC/fj7VYlHWWHiks10m+PbK5zHVsCQYx/kVZ2rT0AG4mbfSvKIx+Zal6sPzdookxaj7XGoS5njUFrp0kxWHkb06JBbGlt02pMUxxccAruzubSeTUhrJnqa7NZX/KxTXrkt0f7lY3UxR07Og0+KEQ2FEGrFNX9CcG5roD9SH8pOWWpQNxlfufHOTrSwluYfnEl6VV+A72LXzlRhUMBb3kXgswbV4I1hmAI4g7BpKwbj051OBy0sjWBQIDnEnw1n5HRx2KNkEi4XKNfahWHOVcY2T16n2k=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRYP264MB7057.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(1800799024)(376014)(23010399003)(366016)(6133799003)(22082099003)(18002099003)(261009223027099003)(55112099003)(4143699003)(56012099006)(5023799004)(11063799006)(261102123227099003)(261026121527099003)(261028144727099003)(261026140227099003)(261021121427099003)(261022105027099003)(261021135927099003)(38070700021)(261022075727099003)(10067099003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 2
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?b2ZqL3pFblFTRW9pbUkvbWtXRkJDbEFiV25HQXJ1dDZRVmZzSGJwVXY5c2kr?=
- =?utf-8?B?emdOeWJraTRDWW9kSVZtTGhmNGF5Q1pQc3VJNitMMmJkQXBnb1ZuQWpVM2ht?=
- =?utf-8?B?bDdsaEpLT24rZk9QMDFxckd1Y2ZKdmxOTmh1VlZYSmRsbUJLOEYvUHJpc2FS?=
- =?utf-8?B?ZHdoOTA4ZzJza0gzeEF5Rk1QT2pwTlRaUnNtOEJNRG1VblBHYzdpWVNhNENy?=
- =?utf-8?B?RnNvT0h1d2xUWEUyTXRaQnNpUHlrTE55YnVjT2RSMmpEcFl1OU5JRWFJdElu?=
- =?utf-8?B?OWcxVzVGTVJCZDVXbHlYRjMwcFZpRmVJcmhYRm1VV2lESnhlUHNUU2Q0NGdj?=
- =?utf-8?B?djYrb0dka0E2S3RHWVFsT1dTOVF3L3Vhb2xFcWVVZFh1c3NzanpqdTAxOWU1?=
- =?utf-8?B?VjV3ZkxJb21YbGE0U3BJZ2JxZC9INnIyODNuVk5Lb1VDQ29sRjFSNm9JWXZE?=
- =?utf-8?B?VmF3UWdqT1FVMVgzc0xXOFVwR2VwdTY2ZnJ1c21pTCtucnltMVFJZHNyZEZ1?=
- =?utf-8?B?N09saGxrQ2tHd1NBMHd5NmNMTnRERVRDRitCWjhDaEZseG90QWROMnpwUXli?=
- =?utf-8?B?VHk3ZVBmNHlVeGVzdmZPL09EWEVhSXNDelhHdHV0Q3R1dzVFU0RibitsMmRT?=
- =?utf-8?B?SUdXUHN5TzlvcjdZRW95Um05bWtPdXp4N0x5Ym9ackRpanIvKzFNdms1YjQ3?=
- =?utf-8?B?OXhDejRIOHdjckhocjhpWDNheEtpcFlMQStCOTZJT0RBSnlYbUFCVHNiZDh3?=
- =?utf-8?B?a3JUcEx2NU9Pd0gvcjdmeFJvMDdlcWpJUktPYXRWdWhBQzJLdW5sNWRxZk5w?=
- =?utf-8?B?S2JLL2p2ZkNPYkF1R0Y5SnhZVGhVNllHSmxLM3p6Qm9mUTFKU0MzSTVQT1Nk?=
- =?utf-8?B?QTJvRnZxTEdlaHBJc1o3SC9TSGJVR0ZXd2R3SGFJWllEV2dtMGh2b2cveCt6?=
- =?utf-8?B?cWRXdVhTQXI3OXdnTGxtQ3RkUkx6YXJ1blZZOVFDQk1aenJXZ1FVYkdkK0tC?=
- =?utf-8?B?RTVLMWpabHdpYklIL1FDblBIUnA0OWx2d0ViS0hFUzY4Z2trOWwvZXpBNHNj?=
- =?utf-8?B?N25vV09YYVk1V2xSZGxxaDZPQlZvT0g1b25HdUR0enZzb2NIV29TdGozWTdy?=
- =?utf-8?B?VVhOdVVtUWpId3oyenZYd0daWEJqSzdkZDIrOWlENEVwa2pQNUZ4eUNZYmdl?=
- =?utf-8?B?QUNJVStOb2hzR2dTL1JrUjM3eTlLRERUaXU4RUd0cDEweUI3aHRFWlRra1Bq?=
- =?utf-8?B?SDVYTjlPZkNMNVlGQkZpcEF3RzFGV3Y3eFJVYkdHZkJqa0UvUUFnOUhaNldn?=
- =?utf-8?B?ZS9ldGNjT01SOHVjcld1SGVDNlc2VElzekVKMXcxRVlpcTlvSHhyUzlPSStv?=
- =?utf-8?B?QlUxSkx4NVZYVHEzOFNGTUgyR0JUZHV4cU02NEZGa3RZTVZEdzZ3d3VoODlJ?=
- =?utf-8?B?cWVodjJGdzVQeU5QR0Q3bFdsUXBJSVlVRjNPVXl0QU9QODdSbExmUFc0Y1lm?=
- =?utf-8?B?b2M1dVZzRXB1QkRadDJsNFVxL20rQUhPcVV2WnRQc2tBaHpvWDhPajJRdkN2?=
- =?utf-8?B?TzNIcEEraXdNUlNHV1NuVXFjajFYNlk1SUQ3NWhkM0k5OWoyem9Ec2FRTU1B?=
- =?utf-8?B?VU5PcXljWjB0cXNaWm9CVjVXaUNheWJYcEFnTWJDOXAwOTI4SGF0VFRLUVo4?=
- =?utf-8?B?MFNVK2dPYm9Mdk5YYi8vSlpEcU43bWtlM3kwdDV0TkZXVDJySjF1aitDdHpT?=
- =?utf-8?B?OS9lQUZzT0hrd3J3Sm5oWkRuTVZrd2N2MWVWQXQwakkwNXVLTGFxMVVFZE5R?=
- =?utf-8?B?bnBaVmQvc3ZkY3ZocGhsU2xWc0FMTkdJL2lGVldWY0RVc25JNnYxQUgyUkho?=
- =?utf-8?B?cnNUV2hINldTYTVrVjlyelBEUTVXalIwUXhRZDZCUHFSa3l0dGpiQit2bE8w?=
- =?utf-8?B?TDk3d3FtVDF6YVhZT0RtQUFiMDhqRVM1YkFHdjI0a1hhK0dPdGR0TnQ2SFNB?=
- =?utf-8?B?M1BEYzhZeU9Db1lGL3BPTGFDUXlQRXBGMS9MSFJ3UG43TmdSaFE1UktDV2NT?=
- =?utf-8?B?ekp3ZGFwYlRsNG94T0wxSy9CK2ZFNlVHM1d3MDF3QmFnV21Fb3BNWVV2b1RT?=
- =?utf-8?B?S3V0ODlyN0t3UElIYTg2L1FEVEY0V3p3ejdhNkZrKzkwWjBnaTRXODhUQSt2?=
- =?utf-8?B?R1ZxSDFzUWJJbUxudUpibXc5MHY0YW5GZnhWcXdOcEVmalQwaEo3SnJwTVc2?=
- =?utf-8?B?enpnSTNRS1dCYW1EeXNUNFBzOUduQjZiN2JBd0hXRisySHY0TEZ0Y2RKaXBG?=
- =?utf-8?B?VW1ZWVV6K0lySWVMNXJFYVFnSTJnOW4raEFUbmIwK3ZnQkZOd1UwakVnbUdH?=
- =?utf-8?Q?sIHqe17OOCxzpPomqujPCP0WdpQKeG89Ju7YyK1SQvOhY?=
-x-ms-exchange-antispam-messagedata-1: yux30tFx4SF6IQ==
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PhHPIrkO
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-70059e4dab6so658898eaf.3
+        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 07:21:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795015272; x=1795620072; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=QDOqhONWca8lFUkqw1VExgQBB70zOD5j+JNGK/QGOk0=;
+        b=PhHPIrkOwtThoGKmYymKIAuNsvVQYTH5T7A1EjICucgvaIw2exW0uN19NrhbsOmA++
+         cfWlZYRGBHyym1YFAkxZ0y+fWGsw9ITdohwaf3ic8Yo54fzZOTCQHkmSkCqLywyrcTM9
+         +O0aDLk0ZM2aqn/RPiGKRGoj3cLYCEmMv5vs2Wnt5FzuWBchNAJV6EIYzTqtzkz+Ki0F
+         NpEc0vQ/1y1LNUUz9+B7itTDPoEeqnJIphg7UKAWlOAnd/ebDk1q536sV8z70gO8cdop
+         a+X7YD0wEnWvJ5XWCXNhPy85xyVJxyb8Qy1wnyVJ1oC3r7rW4AFo8G47zL/IKQsH7eeZ
+         JRiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795015272; x=1795620072;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=QDOqhONWca8lFUkqw1VExgQBB70zOD5j+JNGK/QGOk0=;
+        b=k3pAF4H+ZFkBfzCc9/Z7OT8xoWYLuh8r+AmHx0fIBNORH3WaTuTzEJBurbMnX9Pd4m
+         AM9QLlrOoJ8FcehttMfyL6twF6Tu5jPJJHIEXCn2GDRKGvpWlAl/4/MHkKGR/2Be4Si5
+         Q34qAH9qKBh3iMd92X5uKa8UhXMCnkj1nqqilzTrN2CCXoUoJ8tVEe0kyHuzVG/Hwvp0
+         7fR0G0KqxJhQa67JekI0ItrbKWl1n0C5KeEREE81kfdzQ9n6mmelTES/XsXM3o2EcabF
+         KDjaGpp1ReDhhfWccRLgiAfSiTEpuWcqcBUthb6ZcEKZOVFBM5wZ6iLzzASRXlugqDgc
+         ed2Q==
+X-Forwarded-Encrypted: i=1; AL+hErE4ualTNJjuiJ6E8q6BkXE3KHQZOB4fcKlJi2/C5u0ISYpaK9N+qWKunnbBwx2xekdFrtE=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+fJKHnAVLSZnzJVhsJldi+Cr7bbvQdujU8ljf+RfGg8pZzs32B
+	IIR/Qlhp0lKmdSVS+801J/uLF7BrECyPxKO46M0UOcCV6E16GB3C0wJb
+X-Gm-Gg: AYBFou03zNDT6AuygLupx1CpEtAJlPuJaEb6HsA/VDLRP1xXzwI+YoAskbR709l820x
+	43nLiJat44cBU9HUke9/mkasgXCdkKHbKo0m1S18QJbnX59geyAttLHtb6lARjVsRx2UcPZXjqD
+	t+3noPV9Tymjvttscl/0h/bLSNQVSC6si+Jgp7ZzOSo1zmBPp9pBR1vSFnpwmIoNOEgEY+Hvow3
+	LkNDgtAkjBSJdAWIzAcUlnC0dwFbEcY5l6Jr/u7oA4ZVp88H+rKdJNwAFVH1IftSLihaZA6R17F
+	8+Rds6TVbfWxufAvCs210ERSpuEzz4AATDAMh6LFpCYpyPL7eqLPoWt7+uAeP4RyYfl/nj/1kjQ
+	2+wUmTsmedTvTvimj/EnY33f6Oe580Tkezt6Stkn0nrz9REmViu8PknhRT/MlArH5XVvVmg+0Lb
+	/zIGgClNY5NxlsvYjJjJN4qF7mG3Iql4fHUoMXJIB5XoX1aJbRqVlqbNW8ZVbLfRAO4EajPzVl9
+	HxogZ8m0F9cpPLer4nPct03q5TH3oHajP2dEH3xprBJ3Cw2hGq68qVD5b4z2VzqcQID1hXmYiSP
+	xv2UBTUOuVRfOlv/VC9kA22PKNYLq9TFJDIN1oHA55NXhGHDiC5R+3HK+MKtzQOTb4xYTXlYdCu
+	3bZq6YsJ0AIztIukinYU94IM=
+X-Received: by 2002:a05:6820:4912:b0:715:1fca:76b with SMTP id 006d021491bc7-71b18527aeemr2010172eaf.49.1795015271528;
+        Wed, 18 Nov 2026 07:21:11 -0800 (PST)
+Received: from visitorckw-work01.c.googlers.com.com (55.11.81.34.bc.googleusercontent.com. [34.81.11.55])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-71b19450af7sm2230792eaf.4.2026.11.18.07.21.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Nov 2026 07:21:11 -0800 (PST)
+From: Kuan-Wei Chiu <visitorckw@gmail.com>
+To: corbet@lwn.net,
+	geert@linux-m68k.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	gerg@linux-m68k.org
+Cc: skhan@linuxfoundation.org,
+	rdunlap@infradead.org,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	marscheng@google.com,
+	eleanor15x@gmail.com,
+	jserv@ccns.ncku.edu.tw,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-m68k@lists.linux-m68k.org,
+	bpf@vger.kernel.org,
+	Kuan-Wei Chiu <visitorckw@gmail.com>,
+	Daniel Palmer <daniel@thingy.jp>
+Subject: [PATCH] m68k, bpf: Add initial BPF JIT compiler support
+Date: Wed, 18 Nov 2026 15:20:54 +0000
+Message-ID: <20261118152054.999990-1-visitorckw@gmail.com>
+X-Mailer: git-send-email 2.56.1.703.gf848ed807c-goog
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -171,158 +117,1858 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-OriginatorOrg: harfanglab.fr
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRYP264MB7057.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 25b2bd1d-35b6-4ee5-cd24-08df4586a365
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Nov 2026 15:14:27.8803
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: e072cd9e-210a-496b-aa68-c0965404b8f9
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +ygHhS7KWvvZLGJ2AUAj4u2smTCzhZwlt1lqj5goS+pthl9aDZPtTwTgHQ85NP+6hFPoUk34c/5hakc993yRK7LyJce+T5xCNgXGQ8Z/7oQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB1609
+Content-Transfer-Encoding: 8bit
 
-SGVsbG8sDQoNCk9uIG91ciBlbmQsIHdlIGFsc28gaGF2ZSBhbHJlYWR5IG1lcmdlZCBjb2RlIHRv
-IGFkYXB0IG91ciBlQlBGcyB0byB0aGUgYXJndW1lbnQgb3JkZXIgY2hhbmdlLiBIb3dldmVyLCB3
-ZSB3b3VsZCBzdGlsbCBwcmVmZXIgaWYgdGhpcyBlYXNpbHktYXZvaWRhYmxlIGJyZWFrYWdlIGNv
-dWxkIGJlIGZpeGVkIGJ5IG1vdmluZyB0aGUgYXJndW1lbnQgdG8gdGhlIGVuZCwgZXZlbiBpZiBp
-dCBtZWFucyBoYXZpbmcgdG8gcmV2ZXJ0IG91ciBmaXguDQoNClRoaXMgaXMgbW90aXZhdGVkIGJ5
-IHRoZSBmYWN0IHRoYXQgc3VjaCBhIGNoYW5nZSBpcyBub3QgbWFkZSBpbiBwbGFjZSBvbiBvdXIg
-ZW5kIGJlY2F1c2Ugd2Ugc2hpcCBvdXIgc29mdHdhcmUgdG8gZW52aXJvbm1lbnRzIHdlIGRvbid0
-IGNvbnRyb2wsIG1lYW5pbmcgdGhhdCBhbnkgYW5kIHBvdGVudGlhbGx5IGFsbCB2ZXJzaW9ucyBy
-YW5naW5nIGZyb20gNC4xMSB0byB0aGUgdmVyeSBsYXRlc3Qgc2hvdWxkIGJlIHN1cHBvcnRlZCwg
-c28gdGhlIGNoYW5nZSBpcyBtYWRlIGJ5IGNvbXBpbGluZyBhbmQgc2hpcHBpbmcgYSBuZXcgdmFy
-aWFudCBvZiB0aGUgY29uY2VybmVkIGVCUEZzIGZvciB0aGUgdmVyc2lvbiBpbnRlcnZhbCBpdCBp
-cyB2YWxpZCBmb3IgKDcuNCsgaW4gdGhpcyBjYXNlKS4gQW5kIHRoYXQgaGFzIHRvIGJlIGRvbmUg
-ZXZlcnkgdGltZSB0aGVyZSBpcyBhbiB1cHN0cmVhbSBjaGFuZ2UgbGlrZSB0aGlzLCBzbyB0aGUg
-dG90YWwgaW5zdGFsbGF0aW9uIHNpemUgYW5kIG92ZXJhbGwgY29tcGxleGl0eSBncm93cyBhY2Nv
-cmRpbmdseS4NCg0KSWYgd2UgY291bGQgYXZvaWQgdGhhdCwgZXNwZWNpYWxseSBmb3Igc3VjaCB0
-cml2aWFsIHJvb3QgY2F1c2VzLCBpdCB3b3VsZCBiZSBuaWNlLg0KDQpCZXN0IHJlZ2FyZHMsDQpQ
-YXVsLg0KDQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fDQpGcm9tOiBE
-YWFuIERlIE1leWVyIDxkYWFuQGFtdXRhYmxlLmNvbT4NClNlbnQ6IFdlZG5lc2RheSwgTm92ZW1i
-ZXIgMTgsIDIwMjYgMzoxOCBQTQ0KVG86IElob3IgU29sb2RyYWkNCkNjOiByb2JsYWJsYTsgQW5k
-cmlpIE5ha3J5aWtvOyBQYXVsIE1vb3JlOyBicGZAdmdlci5rZXJuZWwub3JnOyBsaW51eC1zZWN1
-cml0eS1tb2R1bGVAdmdlci5rZXJuZWwub3JnOyBQYXVsIE1hYmlsZWF1OyBsaW51eC1rZXJuZWxA
-dmdlci5rZXJuZWwub3JnOyBBbmRyaWkgTmFrcnlpa28NClN1YmplY3Q6IFJlOiBbQlVHXSBicGYs
-IGxzbTogbmV3IGZpcnN0IGFyZ3VtZW50IGluIDcuNCBpbm9kZSBob29rcyBzaWxlbnRseSBicmVh
-a3MgQlBGIExTTXMNCg0KTm90ZSB0aGF0IHdlJ3ZlIGFscmVhZHkgbWVyZ2VkIGNvZGUgaW4gc3lz
-dGVtZCB0aGF0IGRlcGVuZHMgb24gdGhlDQpjdXJyZW50IGFyZ3VtZW50IG9yZGVyLCBzbyBJJ2Qg
-cmVhbGx5IHByZWZlciBpZiBpdCBkaWRuJ3QgY2hhbmdlLiBJZg0KaXQgZG9lcywgZG8gY2MgbWUg
-b24gdGhlIHBhdGNoIHNvIEkgY2FuIGZpeCB0aGUgaXNzdWUgaW4gc3lzdGVtZC4NCg0KQ2hlZXJz
-LA0KDQpEYWFuDQoNCk9uIFdlZCwgTm92IDE4LCAyMDI2IGF0IDE6NTLigK9BTSBJaG9yIFNvbG9k
-cmFpIDxpaG9yLnNvbG9kcmFpQGxpbnV4LmRldj4gd3JvdGU6DQo+DQo+IE9uIDExLzkvMjYgODow
-NyBBTSwgcm9ibGFibGEgd3JvdGU6DQo+ID4gSGksDQo+ID4NCj4gPiBUaGFua3MgZm9yIHRoZSBy
-ZXBsaWVzIQ0KPiA+DQo+ID4+IFsuLi5dDQo+ID4NCj4gPiBTbyB3aGF0IHdvdWxkIGJlIHJlYWxs
-eSBuaWNlIGlzIGEgd2F5IHRvIG1ha2UgZUJQRiBjb2RlIHJvYnVzdCBhZ2FpbnN0DQo+ID4ga2Vy
-bmVsIGNoYW5nZXMgc3VjaCB0aGF0IGl0IGVpdGhlciB3b3Jrcywgb3IgZmFpbHMgdG8gbG9hZCwg
-YnV0IGRvZXNuJ3QNCj4gPiBkbyB0aGUgaGFsZndheSAibG9hZHMgYnV0IHNpbGVudGx5IG1pc2Jl
-aGF2ZXMiLiBIZXJlIGFyZSB0d28gaWRlYXMgdGhhdA0KPiA+IGhhdmUgYmVlbiBpbiB0aGUgYmFj
-ayBvZiBteSBtaW5kIHRoYXQgY291bGQgaGVscCBzb2x2ZSB0aGlzIGlzc3VlICh0aG91Z2gNCj4g
-PiBJIHVuZGVyc3RhbmQgdGhhdCB0aGV5IG1heSBiZSByYXRoZXIgbGFyZ2UgY2hhbmdlcywgSSdt
-IHB1dHRpbmcgdGhlbSBvdXQNCj4gPiB0aGVyZSBtb3N0bHkgYXMgYSBjb252ZXJzYXRpb24gc3Rh
-cnRlcik6DQo+ID4NCj4gPiAxLiBDb3VsZCBsaWJicGYvdGhlIGtlcm5lbCBoYXZlIGEgbWlzbWF0
-Y2ggY2hlY2sgb24gaG9vayBhcmd1bWVudHM/IEkNCj4gPiAgICB1bmRlcnN0YW5kIHRoYXQgbGli
-YnBmIGFuZCB0aGUgdmVyaWZpZXIgZG9uJ3Qga25vdyB0aGUgdHlwZXMgYQ0KPiA+ICAgIHByb2dy
-YW0gZXhwZWN0cywgc2luY2UgQlBGX1BST0coKSBvbmx5IGNhc3RzIHU2NHMuIEJ1dCB0aGUgbWFj
-cm8NCj4gPiAgICBkb2VzIGtub3cgdGhlIHR5cGVzIGF0IGNvbXBpbGUgdGltZS4gQ291bGQgaXQg
-KG9yIGFuIG9wdC1pbiB2YXJpYW50KQ0KPiA+ICAgIHJlY29yZCB0aGUgZXhwZWN0ZWQgcHJvdG90
-eXBlIGluIHRoZSBwcm9ncmFtJ3MgQlRGLCBzbyB0aGF0IGxpYmJwZg0KPiA+ICAgIGNhbiBjb21w
-YXJlIGl0IGFnYWluc3QgdGhlIExTTSBob29rJ3MgcHJvdG90eXBlIGluIHZtbGludXggQlRGIGFu
-ZA0KPiA+ICAgIHJlZnVzZSB0byBsb2FkIG9uIGEgbWlzbWF0Y2g/DQo+ID4NCj4gPiAyLiBTaW5j
-ZSBrZXJuZWwgQlRGIGhhcyBwYXJhbWV0ZXIgbmFtZXMgZm9yIHRoZSBicGZfbHNtXyogZnVuY3Rp
-b25zLA0KPiA+ICAgIGNvdWxkIHdlIG1heWJlIGhhdmUgQ08tUkUtc3R5bGUgcmVsb2NhdGlvbiB0
-byByZXNvbHZlICJ0aGUgYXJndW1lbnQNCj4gPiAgICBuYW1lZCBkZW50cnkiIHRvIHRoZSBhcmd1
-bWVudCBpbmRleCBhdCBsb2FkIHRpbWU/IFRoaXMgd2F5LCBhZGRpbmcgYQ0KPiA+ICAgIG5ldyBh
-cmd1bWVudCBjb3VsZCBoYXBwZW4gYW55d2hlcmUgaW4gdGhlIGFyZ3VtZW50IGxpc3Qgd2l0aG91
-dA0KPiA+ICAgIGJyZWFraW5nIGVCUEZzLCBhbmQgcmVtb3ZpbmcgYW4gYXJndW1lbnQgd2lsbCAo
-Y29ycmVjdGx5KSBjYXVzZSBvdXINCj4gPiAgICBlQlBGIHRvIHN0b3AgbG9hZGluZy4gSXQgZG9l
-cyBtZWFuIHRoZSBlQlBGIHByb2dyYW1zIG11c3QgcHJvdmlkZSB0aGUNCj4gPiAgICBzYW1lIGFy
-Z3VtZW50IG5hbWVzLCBidXQgbWF5YmUgdGhhdCdzIGFuIGFjY2VwdGFibGUgdHJhZGVvZmY/DQo+
-DQo+IEhpIGV2ZXJ5b25lLg0KPg0KPiByb2JsYWJsYSdzIGNvbW1lbnRzIGdvdCBtZSBjdXJpb3Vz
-LCBhbmQgSSBzcGVudCBzb21lIHRpbWUgd2l0aCBteQ0KPiBoZWxwZnVsIGFzc2lzdGFudHMgcG9r
-aW5nIGF0IHRoZSBwcm9ibGVtLg0KPg0KPiBUaGVyZSBpcyBhbm90aGVyIHdvcmthcm91bmQgaW4g
-YWRkaXRpb24gdG8gd2hhdCBBbmRyaWkgc3VnZ2VzdGVkLg0KPiBBIHByb2dyYW0gY2FuIGFscmVh
-ZHkgbWFrZSBpdHNlbGYgZmFpbCB0byBsb2FkIG9uIGEgc2lnbmF0dXJlDQo+IG1pc21hdGNoOg0K
-Pg0KPiAgICAgICAgIHVuaW9uIHNlY3VyaXR5X2xpc3Rfb3B0aW9uc19fX21pbmUgew0KPiAgICAg
-ICAgICAgICAgICAgaW50ICgqaW5vZGVfY3JlYXRlKShzdHJ1Y3QgaW5vZGUgKmRpciwNCj4gICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc3RydWN0IGRlbnRyeSAqZGVudHJ5LCB1
-bW9kZV90IG1vZGUpOw0KPiAgICAgICAgIH07DQo+DQo+ICAgICAgICAgZXh0ZXJuIHZvaWQgbHNt
-X3Byb3RvX21pc21hdGNoX19pbm9kZV9jcmVhdGUodm9pZCkgX19rc3ltIF9fd2VhazsNCj4NCj4g
-ICAgICAgICBTRUMoImxzbS9pbm9kZV9jcmVhdGUiKQ0KPiAgICAgICAgIGludCBCUEZfUFJPRyhk
-ZW55X2NyZWF0ZSwgc3RydWN0IGlub2RlICpkaXIsIHN0cnVjdCBkZW50cnkgKmRlbnRyeSkNCj4g
-ICAgICAgICB7DQo+ICAgICAgICAgICAgICAgICBpZiAoIWJwZl9jb3JlX3R5cGVfbWF0Y2hlcyh1
-bmlvbiBzZWN1cml0eV9saXN0X29wdGlvbnNfX19taW5lKSkNCj4gICAgICAgICAgICAgICAgICAg
-ICAgICAgbHNtX3Byb3RvX21pc21hdGNoX19pbm9kZV9jcmVhdGUoKTsNCj4gICAgICAgICAgICAg
-ICAgIC4uLg0KPiAgICAgICAgIH0NCj4NCj4gYnBmX2NvcmVfdHlwZV9tYXRjaGVzKCkgY2hlY2tz
-IHRoZSBleHBlY3RlZCBwcm90b3R5cGUgYWdhaW5zdCB0aGUNCj4gaG9vaydzIG1lbWJlciBvZiB1
-bmlvbiBzZWN1cml0eV9saXN0X29wdGlvbnMgaW4ga2VybmVsIEJURi4NCj4gT24gYSBtaXNtYXRj
-aCB0aGUgY2FsbCB0byB0aGUgdW5yZXNvbHZlZCB3ZWFrIGtmdW5jIHN0YXlzIHJlYWNoYWJsZSwN
-Cj4gc28gdGhlIHZlcmlmaWVyIHJlamVjdHMgdGhlIHByb2dyYW0sIGFuZCBsaWJicGYgcmVwb3J0
-czoNCj4NCj4gICBrZnVuYyAnbHNtX3Byb3RvX21pc21hdGNoX19pbm9kZV9jcmVhdGUnIGlzIHJl
-ZmVyZW5jZWQgYnV0IHdhc24ndCByZXNvbHZlZA0KPg0KPiBJdCdzIHBvc2l0aW9uYWwgYW5kIG5l
-ZWRzIHRoZSBleGFjdCBhcmd1bWVudCBjb3VudCwgYnV0IGl0IHR1cm5zDQo+IHNpbGVudCBtaXNi
-ZWhhdmlvciBpbnRvIGEgbG9hZCBmYWlsdXJlLiBUaGUgc2FtZSBzaG91bGQgd29yayBmb3INCj4g
-dHBfYnRmIHdpdGggdGhlIGJ0Zl90cmFjZV88dHA+IHR5cGVkZWZzLg0KPg0KPiBCdXQgb2YgY291
-cnNlIGl0J3MganVzdCBhIHdvcmthcm91bmQuLg0KPg0KPiBBIGJpdCBtb3JlIGdlbmVyYWxseSwg
-ZXhwYW5kaW5nIG9uIHJvYmxhYmxhJ3Mgc2Vjb25kIGlkZWEsIEkgdGhpbmsgbGliYnBmDQo+IGNv
-dWxkIHJlc29sdmUgaG9vayBhcmd1bWVudHMgYnkgbmFtZSB3aXRoIHRoZSBleGlzdGluZyBDTy1S
-RSBtYWNoaW5lcnksDQo+IHdpdGhvdXQga2VybmVsLCB2ZXJpZmllciBvciBMU00gY2hhbmdlcy4N
-Cj4NCj4gVGhlIEJQRiBzaWRlIGNvdWxkIGxvb2sgbGlrZSB0aGlzOg0KPg0KPiAgICAgICAgIFNF
-QygibHNtL2lub2RlX2NyZWF0ZSIpDQo+ICAgICAgICAgaW50IEJQRl9QUk9HX0FSR1MoZGVueV9j
-cmVhdGUsIHN0cnVjdCBpbm9kZSAqLCBkaXIsDQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAg
-c3RydWN0IGRlbnRyeSAqLCBkZW50cnkpDQo+ICAgICAgICAgeyAuLi4gfQ0KPg0KPiBCUEZfUFJP
-R19BUkdTKCkgKG5hbWUgVEJEKSB0YWtlcyAodHlwZSwgbmFtZSkgcGFpcnMgbGlrZSBCUEZfUFJP
-RzIoKSwNCj4gYnV0IGluc3RlYWQgb2YgY2FzdGluZyBjdHhbMF0sIGN0eFsxXSwgLi4uIGl0IHJl
-YWRzIGVhY2ggYXJndW1lbnQNCj4gdGhyb3VnaCBhIGxvY2FsIHByZXNlcnZlX2FjY2Vzc19pbmRl
-eC1tYXJrZWQgc3RydWN0LCBzbyBldmVyeSBhcmd1bWVudA0KPiBhY2Nlc3MgaXMgYSByZWd1bGFy
-IENPLVJFIGZpZWxkIHJlbG9jYXRpb246DQo+DQo+ICAgICAgICAgc3RydWN0IGJwZl9mdW5jX2Fy
-Z3NfX19kZW55X2NyZWF0ZSB7DQo+ICAgICAgICAgICAgICAgICBjb25zdCBzdHJ1Y3QgbW50X2lk
-bWFwICppZG1hcDsgIC8qIDcuNCsgKi8NCj4gICAgICAgICAgICAgICAgIHN0cnVjdCBpbm9kZSAq
-ZGlyOw0KPiAgICAgICAgICAgICAgICAgc3RydWN0IGRlbnRyeSAqZGVudHJ5Ow0KPiAgICAgICAg
-IH0gX19hdHRyaWJ1dGVfXygocHJlc2VydmVfYWNjZXNzX2luZGV4KSk7DQo+DQo+ICAgICAgICAg
-U0VDKCJsc20vaW5vZGVfY3JlYXRlIikNCj4gICAgICAgICBpbnQgZGVueV9jcmVhdGUodTY0ICpj
-dHgpDQo+ICAgICAgICAgew0KPiAgICAgICAgICAgICAgICAgc3RydWN0IGJwZl9mdW5jX2FyZ3Nf
-X19kZW55X2NyZWF0ZSAqYXJncyA9ICh2b2lkICopY3R4Ow0KPg0KPiAgICAgICAgICAgICAgICAg
-aWYgKGJwZl9jb3JlX2ZpZWxkX2V4aXN0cyhhcmdzLT5pZG1hcCkpDQo+ICAgICAgICAgICAgICAg
-ICAgICAgICAgIC8qIHVzZSBhcmdzLT5pZG1hcCAqLzsNCj4NCj4gICAgICAgICAgICAgICAgIHJl
-dHVybiBjaGVjayhhcmdzLT5kaXIsIGFyZ3MtPmRlbnRyeSk7DQo+ICAgICAgICAgfQ0KPg0KPiBO
-b3RoaW5nIGNoYW5nZXMgb24gdGhlIGxvYWRlciBzaWRlOg0KPg0KPiAgICAgICAgIHNrZWwgPSBk
-ZW55X2NyZWF0ZV9fb3Blbl9hbmRfbG9hZCgpOw0KPiAgICAgICAgIGlmICghc2tlbCkgICAgICAv
-KiBtaXNtYXRjaDogbG9hZCBmYWlscywgbGliYnBmIGxvZ3Mgd2h5ICovDQo+ICAgICAgICAgICAg
-ICAgICByZXR1cm4gLWVycm5vOw0KPiAgICAgICAgIGVyciA9IGRlbnlfY3JlYXRlX19hdHRhY2go
-c2tlbCk7DQo+DQo+IFRvIGFjaGlldmUgdGhpcyBsaWJicGYgd291bGQgbmVlZCB0byBkbyB0aGUg
-Zm9sbG93aW5nIGF0IGxvYWQgdGltZToNCj4NCj4gICAtIHRyZWF0IGJwZl9mdW5jX2FyZ3NfX18q
-IGFzIGEgcmVzZXJ2ZWQgdHlwZSBpbiBDTy1SRSByZWxvY2F0aW9uczsNCj4gICAtIGZpbmQgdGhl
-IHByb2dyYW0ncyBhdHRhY2ggdGFyZ2V0IGluIGtlcm5lbCAob3IgbW9kdWxlKSBCVEY6DQo+ICAg
-ICBicGZfbHNtXzxob29rPiwgdGhlIGZlbnRyeS9mZXhpdCB0YXJnZXQsIG9yIHRoZSB0cmFjZXBv
-aW50IHN0dWIgZm9yDQo+ICAgICB0cF9idGY7DQo+ICAgLSBidWlsZCBhIHN0cnVjdCBmcm9tIHRo
-ZSB0YXJnZXQncyBwcm90b3R5cGU6IG9uZSBtZW1iZXIgcGVyDQo+ICAgICBwYXJhbWV0ZXIsIG5h
-bWVkIGFmdGVyIGl0LCBhdCB0aGUgcGFyYW1ldGVyJ3MgY3R4IG9mZnNldCwgcGx1cyAncmV0Jw0K
-PiAgICAgZm9yIGZleGl0LCBmbW9kX3JldCBhbmQgTFNNOw0KPiAgIC0gcmVzb2x2ZSB0aGUgcmVs
-b2NhdGlvbnMgYWdhaW5zdCBpdCBieSBuYW1lLCB3aXRoIGEgc3RyaWN0IHR5cGUgY2hlY2sNCj4g
-ICAgIChwb2ludGVlIHR5cGVzIG11c3QgbWF0Y2gsIHF1YWxpZmllcnMgaWdub3JlZCksIHNpbmNl
-IENPLVJFIG5vcm1hbGx5DQo+ICAgICB0cmVhdHMgYW55IHR3byBwb2ludGVycyBhcyBjb21wYXRp
-YmxlLg0KPg0KPiBBIG1pc3NpbmcgYXJndW1lbnQgb3IgYSB0eXBlIG1pc21hdGNoIGlzIGEgbm9y
-bWFsIENPLVJFIHJlbG9jYXRpb24NCj4gZmFpbHVyZTogdGhlIHByb2dyYW0gZmFpbHMgdG8gbG9h
-ZCB3aXRoIGFuIGVycm9yIG5hbWluZyB0aGUgYXJndW1lbnQsDQo+IHVubGVzcyB0aGUgYWNjZXNz
-IGlzIGd1YXJkZWQgYnkgYnBmX2NvcmVfZmllbGRfZXhpc3RzKCkuDQo+DQo+IEFuZCB0aGlzIGlz
-IG5vdCBMU00gc3BlY2lmaWMsIGZlbnRyeS9mZXhpdC9mbW9kX3JldCBhbmQgdHBfYnRmIHdvdWxk
-DQo+IHdvcmsgdGhlIHNhbWUgd2F5Lg0KPg0KPiBJdCBkb2Vzbid0IGhlbHAgaWYgYSBob29rIGtl
-ZXBzIGl0cyBzaWduYXR1cmUgYnV0IGNoYW5nZXMgc2VtYW50aWNzLA0KPiBvciBpZiB0aGUgYXR0
-YWNoIHBvaW50IGdvZXMgYXdheSAodGhhdCBhbHJlYWR5IGZhaWxzIHRvIGF0dGFjaCkuDQo+DQo+
-IEhlcmUgaXMgYSB2aWJlLWNvZGVkIHByb3RvdHlwZSBvZiB0aGUgYWJvdmU6DQo+IGh0dHBzOi8v
-Z2l0aHViLmNvbS9rZXJuZWwtcGF0Y2hlcy9icGYvY29tcGFyZS9icGYtbmV4dF9iYXNlLi4udGhl
-aWhvcjpicGY6YnBmLW5hbWVkLWFyZ3MNCj4NCj4gSXQncyBhbiBlbnRpcmVseSBuZXcgbGliYnBm
-IGZlYXR1cmUgdGhvdWdoLg0KPg0KPiBBbmRyaWksIHdoYXQgZG8geW91IHRoaW5rIG9mIGl0Pw0K
-Pg0KPiAtLS0NCj4NCj4gQW5kIGp1c3QgbXkgMmMgcmUgYXJndW1lbnQgb3JkZXJpbmc6DQo+DQo+
-IFBhdWwsIHdpdGggYWxsIGR1ZSByZXNwZWN0LCBwcmlvcml0aXppbmcgY29kZSBzdHlsZSBhbmQg
-cGVyc29uYWwNCj4gcHJlZmVyZW5jZXMgb3ZlciBiYWNrd2FyZHMgY29tcGF0aWJpbGl0eSBpcyB1
-bnJlYXNvbmFibGUgZXZlbiBmb3INCj4gdW5pbXBvcnRhbnQgYXBwbGljYXRpb25zLiBBbmQgaGVy
-ZSB3ZSBhcmUgdGFsa2luZyBhYm91dCBhcHBzDQo+IGltcGxlbWVudGluZyBzZWN1cml0eSBwb2xp
-Y2llcywgd2hpY2ggbWFueSBvcmdhbml6YXRpb25zIChub3QganVzdA0KPiBjb21wYW5pZXMpIGlu
-IHRoZSB3b3JsZCByZWx5IG9uLiBHaXZlbiB0aGUgcmVjZW50IGZsb29kIG9mDQo+IGN5YmVyc2Vj
-dXJpdHkgaXNzdWVzIChpbiBMaW51eCBhbmQgYmV5b25kKSwgSSBkb24ndCBzZWUgd2h5IHdvdWxk
-IHdlLA0KPiBhcyBpbiBrZXJuZWwgZGV2cywgaW50ZW50aW9uYWxseSBtYWtlIHRoZSBkZWZlbmRl
-cnMnIGpvYiBoYXJkZXIuDQo+DQo+DQo+ID4NCj4gPiBUaGFua3MsDQo+ID4gcm9ibGFibGENCj4N
-Cg==
+Add a BPF JIT compiler for the m68k architecture.
+
+The JIT generates m68k machine code targeting m68020+ processors and
+coldfire parts with an mmu (ISA_B/ISA_C). It excludes plain 68000/68010
+and non-mmu coldfire processors, as it relies on 32-bit branch
+displacements (b<cc>.l) to handle large bpf programs.
+
+Tested with bpf selftests jit_insns and jit_insns_blinded, excluding
+64 bit, kfunc, and bpf subprogram call subtests:
+Summary: 2/41 PASSED, 0 SKIPPED, 0/0 FAILED
+
+Tested-by: Daniel Palmer <daniel@thingy.jp>
+Co-developed-by: Greg Ungerer <gerg@linux-m68k.org>
+Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
+Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
+---
+Changes in v11:
+- Move the tail call counter decrement after the NULL prog check in
+emit_tail_call().
+- Reject subprograms upfront in bpf_int_jit_compile() via prog->is_func
+
+ .../features/core/eBPF-JIT/arch-support.txt   |    2 +-
+ MAINTAINERS                                   |    6 +
+ arch/m68k/Kbuild                              |    2 +-
+ arch/m68k/Kconfig                             |    1 +
+ arch/m68k/net/Makefile                        |    2 +
+ arch/m68k/net/bpf_jit_comp.c                  | 1752 +++++++++++++++++
+ 6 files changed, 1763 insertions(+), 2 deletions(-)
+ create mode 100644 arch/m68k/net/Makefile
+ create mode 100644 arch/m68k/net/bpf_jit_comp.c
+
+diff --git a/Documentation/features/core/eBPF-JIT/arch-support.txt b/Documentation/features/core/eBPF-JIT/arch-support.txt
+index 83f77f55fc87..dacb50aef055 100644
+--- a/Documentation/features/core/eBPF-JIT/arch-support.txt
++++ b/Documentation/features/core/eBPF-JIT/arch-support.txt
+@@ -13,7 +13,7 @@
+     |        csky: | TODO |
+     |     hexagon: | TODO |
+     |   loongarch: |  ok  |
+-    |        m68k: | TODO |
++    |        m68k: |  ok  |
+     |  microblaze: | TODO |
+     |        mips: |  ok  |
+     |       nios2: | TODO |
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d738990161bd..bf5ded204037 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4997,6 +4997,12 @@ L:	bpf@vger.kernel.org
+ S:	Maintained
+ F:	arch/loongarch/net/
+ 
++BPF JIT for M68K
++M:	Kuan-Wei Chiu <visitorckw@gmail.com>
++L:	bpf@vger.kernel.org
++S:	Maintained
++F:	arch/m68k/net/
++
+ BPF JIT for MIPS (32-BIT AND 64-BIT)
+ M:	Johan Almbladh <johan.almbladh@anyfinetworks.com>
+ M:	Paul Burton <paulburton@kernel.org>
+diff --git a/arch/m68k/Kbuild b/arch/m68k/Kbuild
+index 7762af9f6def..058ad41a728c 100644
+--- a/arch/m68k/Kbuild
++++ b/arch/m68k/Kbuild
+@@ -1,5 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-obj-y				+= kernel/ mm/
++obj-y				+= kernel/ mm/ net/
+ obj-$(CONFIG_Q40)		+= q40/
+ obj-$(CONFIG_AMIGA)		+= amiga/
+ obj-$(CONFIG_ATARI)		+= atari/
+diff --git a/arch/m68k/Kconfig b/arch/m68k/Kconfig
+index eb84c3af92c0..b403a1b5c9ff 100644
+--- a/arch/m68k/Kconfig
++++ b/arch/m68k/Kconfig
+@@ -32,6 +32,7 @@ config M68K
+ 	select HAVE_ARCH_TLB_REMOVE_TABLE if MMU_MOTOROLA
+ 	select HAVE_ASM_MODVERSIONS
+ 	select HAVE_DEBUG_BUGVERBOSE
++	select HAVE_EBPF_JIT if MMU
+ 	select HAVE_EFFICIENT_UNALIGNED_ACCESS if !CPU_HAS_NO_UNALIGNED
+ 	select HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+ 	select HAVE_MOD_ARCH_SPECIFIC
+diff --git a/arch/m68k/net/Makefile b/arch/m68k/net/Makefile
+new file mode 100644
+index 000000000000..ec5b14763316
+--- /dev/null
++++ b/arch/m68k/net/Makefile
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-$(CONFIG_BPF_JIT) += bpf_jit_comp.o
+diff --git a/arch/m68k/net/bpf_jit_comp.c b/arch/m68k/net/bpf_jit_comp.c
+new file mode 100644
+index 000000000000..bf95d03ebb20
+--- /dev/null
++++ b/arch/m68k/net/bpf_jit_comp.c
+@@ -0,0 +1,1752 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * BPF JIT compiler for m68k
++ *
++ * Copyright (C) 2026 Kuan-Wei Chiu <visitorckw@gmail.com>
++ */
++
++#include <linux/bpf.h>
++#include <linux/filter.h>
++#include <linux/irqflags.h>
++#include <linux/slab.h>
++#include <asm/cacheflush.h>
++#include <linux/math64.h>
++#include <linux/limits.h>
++
++#define STACK_OFFSET(k) (-4 - (4 * (k)))
++
++enum {
++	BPF_R1_HI, BPF_R1_LO,
++	BPF_R2_HI, BPF_R2_LO,
++	BPF_R3_HI, BPF_R3_LO,
++	BPF_R4_HI, BPF_R4_LO,
++	BPF_R5_HI, BPF_R5_LO,
++	BPF_R6_HI, BPF_R6_LO,
++	BPF_R7_HI, BPF_R7_LO,
++	BPF_R8_HI, BPF_R8_LO,
++	BPF_R9_HI, BPF_R9_LO,
++	BPF_R10_HI, BPF_R10_LO,
++	BPF_AX_HI, BPF_AX_LO,
++	BPF_TC_HI, BPF_TC_LO,
++	BPF_JIT_SCRATCH_REGS,
++};
++
++#define SCRATCH_SIZE (BPF_JIT_SCRATCH_REGS * 4)
++
++#define TMP_REG_1 14
++#define TMP_REG_2 15
++
++#define M68K_D0 0
++#define M68K_D1 1
++#define M68K_D2 2
++#define M68K_D3 3
++#define M68K_D4 4
++#define M68K_D5 5
++
++static const s8 bpf2m68k[16][2] = {
++	[BPF_REG_0]  = {M68K_D1, M68K_D0},
++	[BPF_REG_1]  = {STACK_OFFSET(BPF_R1_HI),  STACK_OFFSET(BPF_R1_LO)},
++	[BPF_REG_2]  = {STACK_OFFSET(BPF_R2_HI),  STACK_OFFSET(BPF_R2_LO)},
++	[BPF_REG_3]  = {STACK_OFFSET(BPF_R3_HI),  STACK_OFFSET(BPF_R3_LO)},
++	[BPF_REG_4]  = {STACK_OFFSET(BPF_R4_HI),  STACK_OFFSET(BPF_R4_LO)},
++	[BPF_REG_5]  = {STACK_OFFSET(BPF_R5_HI),  STACK_OFFSET(BPF_R5_LO)},
++	[BPF_REG_6]  = {STACK_OFFSET(BPF_R6_HI),  STACK_OFFSET(BPF_R6_LO)},
++	[BPF_REG_7]  = {STACK_OFFSET(BPF_R7_HI),  STACK_OFFSET(BPF_R7_LO)},
++	[BPF_REG_8]  = {STACK_OFFSET(BPF_R8_HI),  STACK_OFFSET(BPF_R8_LO)},
++	[BPF_REG_9]  = {STACK_OFFSET(BPF_R9_HI),  STACK_OFFSET(BPF_R9_LO)},
++	[BPF_REG_10] = {STACK_OFFSET(BPF_R10_HI), STACK_OFFSET(BPF_R10_LO)},
++	[BPF_REG_AX] = {STACK_OFFSET(BPF_AX_HI),  STACK_OFFSET(BPF_AX_LO)},
++	[TMP_REG_1]  = {M68K_D3, M68K_D2},
++	[TMP_REG_2]  = {M68K_D5, M68K_D4},
++};
++
++struct jit_ctx {
++	const struct bpf_prog *prog;
++	u16 *target;
++	unsigned int idx;
++	int *offsets;
++};
++
++static noinline u32 jit_mul32(u32 a, u32 b)
++{
++	return a * b;
++}
++
++static noinline u32 jit_div32(u32 a, u32 b)
++{
++	return b ? a / b : 0;
++}
++
++static noinline u32 jit_mod32(u32 a, u32 b)
++{
++	return b ? a % b : a;
++}
++
++static noinline s32 jit_sdiv32(s32 a, s32 b)
++{
++	if (b == 0)
++		return 0;
++	if (a == S32_MIN && b == -1)
++		return S32_MIN;
++	return a / b;
++}
++
++static noinline s32 jit_smod32(s32 a, s32 b)
++{
++	if (b == 0)
++		return a;
++	if (a == S32_MIN && b == -1)
++		return 0;
++	return a % b;
++}
++
++static noinline u64 jit_mul64(u64 a, u64 b)
++{
++	return a * b;
++}
++
++static noinline u64 jit_div64(u64 a, u64 b)
++{
++	return b ? div64_u64(a, b) : 0;
++}
++
++static noinline s64 jit_sdiv64(s64 a, s64 b)
++{
++	if (b == 0)
++		return 0;
++	if (a == S64_MIN && b == -1)
++		return S64_MIN;
++	return div64_s64(a, b);
++}
++
++static noinline u64 jit_mod64(u64 a, u64 b)
++{
++	u64 rem;
++
++	if (b == 0)
++		return a;
++	div64_u64_rem(a, b, &rem);
++	return rem;
++}
++
++static noinline s64 jit_smod64(s64 a, s64 b)
++{
++	if (b == 0)
++		return a;
++	if (a == S64_MIN && b == -1)
++		return 0;
++	return a - div64_s64(a, b) * b;
++}
++
++static u32 jit_atomic32(u32 *ptr, u32 val, u32 op, u32 cmp)
++{
++	unsigned long flags;
++	u32 old;
++
++	local_irq_save(flags);
++	old = *ptr;
++	switch (op) {
++	case BPF_ADD:
++	case BPF_ADD | BPF_FETCH:
++		*ptr += val;
++		break;
++	case BPF_AND:
++	case BPF_AND | BPF_FETCH:
++		*ptr &= val;
++		break;
++	case BPF_OR:
++	case BPF_OR | BPF_FETCH:
++		*ptr |= val;
++		break;
++	case BPF_XOR:
++	case BPF_XOR | BPF_FETCH:
++		*ptr ^= val;
++		break;
++	case BPF_XCHG:
++		*ptr = val;
++		break;
++	case BPF_CMPXCHG:
++		if (old == cmp)
++			*ptr = val;
++		break;
++	}
++	local_irq_restore(flags);
++
++	return old;
++}
++
++static u64 jit_atomic64(u32 *ptr, u32 val_hi, u32 val_lo, u32 op, u32 cmp_hi, u32 cmp_lo)
++{
++	unsigned long flags;
++	u64 old, val, cmp;
++	u64 *ptr64 = (u64 *)ptr;
++
++	val = ((u64)val_hi << 32) | val_lo;
++	cmp = ((u64)cmp_hi << 32) | cmp_lo;
++
++	local_irq_save(flags);
++	old = *ptr64;
++	switch (op) {
++	case BPF_ADD:
++	case BPF_ADD | BPF_FETCH:
++		*ptr64 += val;
++		break;
++	case BPF_AND:
++	case BPF_AND | BPF_FETCH:
++		*ptr64 &= val;
++		break;
++	case BPF_OR:
++	case BPF_OR | BPF_FETCH:
++		*ptr64 |= val;
++		break;
++	case BPF_XOR:
++	case BPF_XOR | BPF_FETCH:
++		*ptr64 ^= val;
++		break;
++	case BPF_XCHG:
++		*ptr64 = val;
++		break;
++	case BPF_CMPXCHG:
++		if (old == cmp)
++			*ptr64 = val;
++		break;
++	}
++	local_irq_restore(flags);
++
++	return old;
++}
++
++static inline void emit_16(struct jit_ctx *ctx, u16 inst)
++{
++	if (ctx->target)
++		ctx->target[ctx->idx] = inst;
++	ctx->idx++;
++}
++
++static inline void emit_32(struct jit_ctx *ctx, u32 val)
++{
++	emit_16(ctx, val >> 16);
++	emit_16(ctx, val & 0xffff);
++}
++
++static inline bool is_stacked(s8 reg)
++{
++	return reg < 0;
++}
++
++static s8 bpf_get_reg32(s8 bpf_reg, s8 tmp_reg, struct jit_ctx *ctx)
++{
++	if (is_stacked(bpf_reg)) {
++		emit_16(ctx, 0x202e | (tmp_reg << 9));		/* move.l d16(%fp), reg */
++		emit_16(ctx, (u16)bpf_reg);
++		return tmp_reg;
++	}
++	return bpf_reg;
++}
++
++static void bpf_put_reg32(s8 bpf_reg, s8 src_reg, struct jit_ctx *ctx)
++{
++	if (is_stacked(bpf_reg)) {
++		emit_16(ctx, 0x2d40 | src_reg);			/* move.l reg, d16(%fp) */
++		emit_16(ctx, (u16)bpf_reg);
++	} else if (bpf_reg != src_reg) {
++		emit_16(ctx, 0x2000 | (bpf_reg << 9) | src_reg); /* move.l src, dst */
++	}
++}
++
++static void emit_alu32_neg(const struct bpf_insn *insn, struct jit_ctx *ctx)
++{
++	const s8 *dst = bpf2m68k[insn->dst_reg];
++	const s8 *tmp1 = bpf2m68k[TMP_REG_1];
++	s8 d_reg = bpf_get_reg32(dst[1], tmp1[1], ctx);
++
++	emit_16(ctx, 0x4480 | d_reg);				/* neg.l d_reg */
++
++	bpf_put_reg32(dst[1], d_reg, ctx);
++	emit_16(ctx, 0x7000 | (tmp1[0] << 9));			/* moveq #0, tmp1 */
++	bpf_put_reg32(dst[0], tmp1[0], ctx);
++}
++
++static void emit_alu64_neg(const struct bpf_insn *insn, struct jit_ctx *ctx)
++{
++	const s8 *dst = bpf2m68k[insn->dst_reg];
++	const s8 *tmp1 = bpf2m68k[TMP_REG_1];
++	s8 d_lo = bpf_get_reg32(dst[1], tmp1[1], ctx);
++	s8 d_hi = bpf_get_reg32(dst[0], tmp1[0], ctx);
++
++	emit_16(ctx, 0x4480 | d_lo);				/* neg.l d_lo */
++	emit_16(ctx, 0x4080 | d_hi);				/* negx.l d_hi */
++
++	bpf_put_reg32(dst[1], d_lo, ctx);
++	bpf_put_reg32(dst[0], d_hi, ctx);
++}
++
++static void emit_alu32_x(const struct bpf_insn *insn, struct jit_ctx *ctx)
++{
++	const s8 *dst = bpf2m68k[insn->dst_reg];
++	const s8 *src = bpf2m68k[insn->src_reg];
++	const s8 *tmp1 = bpf2m68k[TMP_REG_1];
++	const s8 *tmp2 = bpf2m68k[TMP_REG_2];
++	s8 d_reg, s_reg;
++
++	d_reg = bpf_get_reg32(dst[1], tmp1[1], ctx);
++	s_reg = bpf_get_reg32(src[1], tmp2[1], ctx);
++
++	switch (BPF_OP(insn->code)) {
++	case BPF_MOV:
++		if (insn->off == 8 || insn->off == 16) {
++			if (d_reg != s_reg)
++				emit_16(ctx, 0x2000 | (d_reg << 9) | s_reg); /* move.l src, dst */
++			if (insn->off == 8)
++				emit_16(ctx, 0x49c0 | d_reg);	/* extb.l d_reg */
++			else
++				emit_16(ctx, 0x48c0 | d_reg);	/* ext.l d_reg */
++		} else {
++			if (d_reg != s_reg)
++				emit_16(ctx, 0x2000 | (d_reg << 9) | s_reg); /* move.l src, dst */
++		}
++		break;
++	case BPF_ADD:
++		emit_16(ctx, 0xd080 | (d_reg << 9) | s_reg);	/* add.l src, dst */
++		break;
++	case BPF_SUB:
++		emit_16(ctx, 0x9080 | (d_reg << 9) | s_reg);	/* sub.l src, dst */
++		break;
++	case BPF_AND:
++		emit_16(ctx, 0xc080 | (d_reg << 9) | s_reg);	/* and.l src, dst */
++		break;
++	case BPF_OR:
++		emit_16(ctx, 0x8080 | (d_reg << 9) | s_reg);	/* or.l src, dst */
++		break;
++	case BPF_XOR:
++		emit_16(ctx, 0xb180 | (s_reg << 9) | d_reg);	/* eor.l src, dst */
++		break;
++	case BPF_LSH:
++	case BPF_RSH:
++	case BPF_ARSH: {
++		s8 count_reg = tmp2[1];
++
++		if (s_reg != count_reg)
++			emit_16(ctx, 0x2000 | (count_reg << 9) | s_reg); /* move.l src, count */
++
++		emit_16(ctx, 0x0280 | count_reg);		/* andi.l #imm, count */
++		emit_32(ctx, 0x1f);
++
++		if (BPF_OP(insn->code) == BPF_LSH)
++			emit_16(ctx, 0xe1a8 | (count_reg << 9) | d_reg); /* lsl.l count, dst */
++		else if (BPF_OP(insn->code) == BPF_RSH)
++			emit_16(ctx, 0xe0a8 | (count_reg << 9) | d_reg); /* lsr.l count, dst */
++		else
++			emit_16(ctx, 0xe0a0 | (count_reg << 9) | d_reg); /* asr.l count, dst */
++		break;
++	}
++	}
++
++	bpf_put_reg32(dst[1], d_reg, ctx);
++	emit_16(ctx, 0x7000 | (tmp1[0] << 9));			/* moveq #0, tmp1 */
++	bpf_put_reg32(dst[0], tmp1[0], ctx);
++}
++
++static void emit_alu32_k(const struct bpf_insn *insn, struct jit_ctx *ctx)
++{
++	const s8 *dst = bpf2m68k[insn->dst_reg];
++	const s8 *tmp1 = bpf2m68k[TMP_REG_1];
++	const s8 *tmp2 = bpf2m68k[TMP_REG_2];
++	s8 d_reg;
++	s32 imm = insn->imm;
++	bool is_moveq = (imm >= -128 && imm <= 127);
++
++	d_reg = bpf_get_reg32(dst[1], tmp1[1], ctx);
++
++	switch (BPF_OP(insn->code)) {
++	case BPF_MOV:
++		if (is_moveq) {
++			emit_16(ctx, 0x7000 | (d_reg << 9) | (imm & 0xff)); /* moveq #imm, dst */
++		} else {
++			emit_16(ctx, 0x203c | (d_reg << 9));		/* move.l #imm, dst */
++			emit_32(ctx, imm);
++		}
++		break;
++	case BPF_ADD:
++		if (is_moveq) {
++			emit_16(ctx, 0x7000 | (tmp2[1] << 9) | (imm & 0xff)); /* moveq #imm, tmp2 */
++			emit_16(ctx, 0xd080 | (d_reg << 9) | tmp2[1]);	/* add.l tmp2, dst */
++		} else {
++			emit_16(ctx, 0x0680 | d_reg);			/* addi.l #imm, dst */
++			emit_32(ctx, imm);
++		}
++		break;
++	case BPF_SUB:
++		if (is_moveq) {
++			emit_16(ctx, 0x7000 | (tmp2[1] << 9) | (imm & 0xff)); /* moveq #imm, tmp2 */
++			emit_16(ctx, 0x9080 | (d_reg << 9) | tmp2[1]);	/* sub.l tmp2, dst */
++		} else {
++			emit_16(ctx, 0x0480 | d_reg);			/* subi.l #imm, dst */
++			emit_32(ctx, imm);
++		}
++		break;
++	case BPF_AND:
++		if (is_moveq) {
++			emit_16(ctx, 0x7000 | (tmp2[1] << 9) | (imm & 0xff)); /* moveq #imm, tmp2 */
++			emit_16(ctx, 0xc080 | (d_reg << 9) | tmp2[1]);	/* and.l tmp2, dst */
++		} else {
++			emit_16(ctx, 0x0280 | d_reg);			/* andi.l #imm, dst */
++			emit_32(ctx, imm);
++		}
++		break;
++	case BPF_OR:
++		if (is_moveq) {
++			emit_16(ctx, 0x7000 | (tmp2[1] << 9) | (imm & 0xff)); /* moveq #imm, tmp2 */
++			emit_16(ctx, 0x8080 | (d_reg << 9) | tmp2[1]);	/* or.l tmp2, dst */
++		} else {
++			emit_16(ctx, 0x0080 | d_reg);			/* ori.l #imm, dst */
++			emit_32(ctx, imm);
++		}
++		break;
++	case BPF_XOR:
++		if (is_moveq) {
++			emit_16(ctx, 0x7000 | (tmp2[1] << 9) | (imm & 0xff)); /* moveq #imm, tmp2 */
++			emit_16(ctx, 0xb180 | (tmp2[1] << 9) | d_reg);	/* eor.l tmp2, dst */
++		} else {
++			emit_16(ctx, 0x0a80 | d_reg);			/* eori.l #imm, dst */
++			emit_32(ctx, imm);
++		}
++		break;
++	case BPF_LSH:
++	case BPF_RSH:
++	case BPF_ARSH:
++		emit_16(ctx, 0x7000 | (tmp2[1] << 9) | (imm & 0x1f));	/* moveq #imm, count */
++
++		if (BPF_OP(insn->code) == BPF_LSH)
++			emit_16(ctx, 0xe1a8 | (tmp2[1] << 9) | d_reg);	/* lsl.l count, dst */
++		else if (BPF_OP(insn->code) == BPF_RSH)
++			emit_16(ctx, 0xe0a8 | (tmp2[1] << 9) | d_reg);	/* lsr.l count, dst */
++		else
++			emit_16(ctx, 0xe0a0 | (tmp2[1] << 9) | d_reg);	/* asr.l count, dst */
++		break;
++	}
++
++	bpf_put_reg32(dst[1], d_reg, ctx);
++	emit_16(ctx, 0x7000 | (tmp1[0] << 9));				/* moveq #0, tmp1 */
++	bpf_put_reg32(dst[0], tmp1[0], ctx);
++}
++
++static void emit_alu64_x(const struct bpf_insn *insn, struct jit_ctx *ctx)
++{
++	const s8 *dst = bpf2m68k[insn->dst_reg];
++	const s8 *src = bpf2m68k[insn->src_reg];
++	const s8 *tmp1 = bpf2m68k[TMP_REG_1];
++	const s8 *tmp2 = bpf2m68k[TMP_REG_2];
++	s8 d_lo, d_hi, s_lo, s_hi;
++
++	d_lo = bpf_get_reg32(dst[1], tmp1[1], ctx);
++	d_hi = bpf_get_reg32(dst[0], tmp1[0], ctx);
++	s_lo = bpf_get_reg32(src[1], tmp2[1], ctx);
++	s_hi = bpf_get_reg32(src[0], tmp2[0], ctx);
++
++	switch (BPF_OP(insn->code)) {
++	case BPF_MOV:
++		if (insn->off == 8 || insn->off == 16 || insn->off == 32) {
++			if (d_lo != s_lo)
++				emit_16(ctx, 0x2000 | (d_lo << 9) | s_lo); /* move.l src, dst */
++
++			if (insn->off == 8)
++				emit_16(ctx, 0x49c0 | d_lo);		/* extb.l d_lo */
++			else if (insn->off == 16)
++				emit_16(ctx, 0x48c0 | d_lo);		/* ext.l d_lo */
++
++			emit_16(ctx, 0x4a80 | d_lo);			/* tst.l d_lo */
++			emit_16(ctx, 0x5bc0 | d_hi);			/* smi d_hi */
++			emit_16(ctx, 0x49c0 | d_hi);			/* extb.l d_hi */
++		} else {
++			if (d_lo != s_lo)
++				emit_16(ctx, 0x2000 | (d_lo << 9) | s_lo); /* move.l s_lo, d_lo */
++			if (d_hi != s_hi)
++				emit_16(ctx, 0x2000 | (d_hi << 9) | s_hi); /* move.l s_hi, d_hi */
++		}
++		break;
++	case BPF_ADD:
++		emit_16(ctx, 0xd080 | (d_lo << 9) | s_lo);		/* add.l s_lo, d_lo */
++		emit_16(ctx, 0xd180 | (d_hi << 9) | s_hi);		/* addx.l s_hi, d_hi */
++		break;
++	case BPF_SUB:
++		emit_16(ctx, 0x9080 | (d_lo << 9) | s_lo);		/* sub.l s_lo, d_lo */
++		emit_16(ctx, 0x9180 | (d_hi << 9) | s_hi);		/* subx.l s_hi, d_hi */
++		break;
++	case BPF_AND:
++		emit_16(ctx, 0xc080 | (d_lo << 9) | s_lo);		/* and.l s_lo, d_lo */
++		emit_16(ctx, 0xc080 | (d_hi << 9) | s_hi);		/* and.l s_hi, d_hi */
++		break;
++	case BPF_OR:
++		emit_16(ctx, 0x8080 | (d_lo << 9) | s_lo);		/* or.l s_lo, d_lo */
++		emit_16(ctx, 0x8080 | (d_hi << 9) | s_hi);		/* or.l s_hi, d_hi */
++		break;
++	case BPF_XOR:
++		emit_16(ctx, 0xb180 | (s_lo << 9) | d_lo);		/* eor.l s_lo, d_lo */
++		emit_16(ctx, 0xb180 | (s_hi << 9) | d_hi);		/* eor.l s_hi, d_hi */
++		break;
++	}
++
++	bpf_put_reg32(dst[1], d_lo, ctx);
++	bpf_put_reg32(dst[0], d_hi, ctx);
++}
++
++static void emit_alu64_k(const struct bpf_insn *insn, struct jit_ctx *ctx)
++{
++	const s8 *dst = bpf2m68k[insn->dst_reg];
++	const s8 *tmp1 = bpf2m68k[TMP_REG_1];
++	const s8 *tmp2 = bpf2m68k[TMP_REG_2];
++	s8 d_lo, d_hi, s_lo, s_hi;
++	u32 imm_lo = insn->imm;
++	u32 imm_hi = insn->imm < 0 ? 0xffffffff : 0;
++
++	d_lo = bpf_get_reg32(dst[1], tmp1[1], ctx);
++	d_hi = bpf_get_reg32(dst[0], tmp1[0], ctx);
++
++	if (BPF_OP(insn->code) == BPF_MOV) {
++		emit_16(ctx, 0x203c | (d_lo << 9));			/* move.l #imm, d_lo */
++		emit_32(ctx, imm_lo);
++		emit_16(ctx, 0x203c | (d_hi << 9));			/* move.l #imm, d_hi */
++		emit_32(ctx, imm_hi);
++		bpf_put_reg32(dst[1], d_lo, ctx);
++		bpf_put_reg32(dst[0], d_hi, ctx);
++		return;
++	}
++
++	s_lo = tmp2[1];
++	s_hi = tmp2[0];
++
++	emit_16(ctx, 0x203c | (s_lo << 9));				/* move.l #imm, s_lo */
++	emit_32(ctx, imm_lo);
++	emit_16(ctx, 0x203c | (s_hi << 9));				/* move.l #imm, s_hi */
++	emit_32(ctx, imm_hi);
++
++	switch (BPF_OP(insn->code)) {
++	case BPF_ADD:
++		emit_16(ctx, 0xd080 | (d_lo << 9) | s_lo);		/* add.l s_lo, d_lo */
++		emit_16(ctx, 0xd180 | (d_hi << 9) | s_hi);		/* addx.l s_hi, d_hi */
++		break;
++	case BPF_SUB:
++		emit_16(ctx, 0x9080 | (d_lo << 9) | s_lo);		/* sub.l s_lo, d_lo */
++		emit_16(ctx, 0x9180 | (d_hi << 9) | s_hi);		/* subx.l s_hi, d_hi */
++		break;
++	case BPF_AND:
++		emit_16(ctx, 0xc080 | (d_lo << 9) | s_lo);		/* and.l s_lo, d_lo */
++		emit_16(ctx, 0xc080 | (d_hi << 9) | s_hi);		/* and.l s_hi, d_hi */
++		break;
++	case BPF_OR:
++		emit_16(ctx, 0x8080 | (d_lo << 9) | s_lo);		/* or.l s_lo, d_lo */
++		emit_16(ctx, 0x8080 | (d_hi << 9) | s_hi);		/* or.l s_hi, d_hi */
++		break;
++	case BPF_XOR:
++		emit_16(ctx, 0xb180 | (s_lo << 9) | d_lo);		/* eor.l s_lo, d_lo */
++		emit_16(ctx, 0xb180 | (s_hi << 9) | d_hi);		/* eor.l s_hi, d_hi */
++		break;
++	}
++
++	bpf_put_reg32(dst[1], d_lo, ctx);
++	bpf_put_reg32(dst[0], d_hi, ctx);
++}
++
++static inline void emit_lsh64(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
++{
++	if (CPU_IS_COLDFIRE) {
++		emit_16(ctx, 0xd080 | (d_lo << 9) | d_lo);		/* add.l d_lo, d_lo */
++		emit_16(ctx, 0xd180 | (d_hi << 9) | d_hi);		/* addx.l d_hi, d_hi */
++	} else {
++		emit_16(ctx, 0xe388 | d_lo);				/* lsll #1, d_lo */
++		emit_16(ctx, 0xe390 | d_hi);				/* roxl.l #1, d_hi */
++	}
++}
++
++static inline void emit_rsh64(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
++{
++	if (CPU_IS_COLDFIRE) {
++		emit_16(ctx, 0xe288 | d_lo);				/* lsr.l #1, d_lo */
++		emit_16(ctx, 0xe288 | d_hi);				/* lsr.l #1, d_hi */
++		emit_16(ctx, 0x6400);					/* bcc 1f */
++		emit_16(ctx, 0x0006);
++		emit_16(ctx, 0x08c0 | d_lo);				/* bset #31, d_lo */
++		emit_16(ctx, 0x001f);
++	} else {
++		emit_16(ctx, 0xe288 | d_hi);				/* lsrl #1, d_hi */
++		emit_16(ctx, 0xe290 | d_lo);				/* roxr.l #1, d_lo */
++	}
++}
++
++static inline void emit_arsh64(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
++{
++	if (CPU_IS_COLDFIRE) {
++		emit_16(ctx, 0xe288 | d_lo);				/* lsr.l #1, d_lo */
++		emit_16(ctx, 0xe280 | d_hi);				/* asr.l #1, d_hi */
++		emit_16(ctx, 0x6400);					/* bcc 1f */
++		emit_16(ctx, 0x0006);
++		emit_16(ctx, 0x08c0 | d_lo);				/* bset #31, d_lo */
++		emit_16(ctx, 0x001f);
++	} else {
++		emit_16(ctx, 0xe280 | d_hi);				/* asrl #1, d_hi */
++		emit_16(ctx, 0xe290 | d_lo);				/* roxr.l #1, d_lo */
++	}
++}
++
++static void emit_alu64_shift(const struct bpf_insn *insn, struct jit_ctx *ctx, bool is_imm)
++{
++	const s8 *dst = bpf2m68k[insn->dst_reg];
++	const s8 *tmp1 = bpf2m68k[TMP_REG_1];
++	const s8 *tmp2 = bpf2m68k[TMP_REG_2];
++	s8 d_lo, d_hi, count_reg;
++	int loop_start, done_idx;
++
++	d_lo = bpf_get_reg32(dst[1], tmp1[1], ctx);
++	d_hi = bpf_get_reg32(dst[0], tmp1[0], ctx);
++	count_reg = tmp2[1];
++
++	if (is_imm) {
++		emit_16(ctx, 0x203c | (count_reg << 9));		/* move.l #imm, count_reg */
++		emit_32(ctx, insn->imm);
++	} else {
++		const s8 *src = bpf2m68k[insn->src_reg];
++		s8 s_lo = bpf_get_reg32(src[1], tmp2[1], ctx);
++
++		if (count_reg != s_lo)
++			emit_16(ctx, 0x2000 | (count_reg << 9) | s_lo);	/* move.l s_lo, count_reg */
++	}
++
++	emit_16(ctx, 0x0280 | count_reg);			/* andi.l #0x3f, count_reg */
++	emit_32(ctx, 0x3f);
++
++	emit_16(ctx, 0x4a80 | count_reg);				/* tst.l count_reg */
++	emit_16(ctx, 0x6700);						/* beq.w done_idx */
++	done_idx = ctx->idx;
++	emit_16(ctx, 0);
++
++	loop_start = ctx->idx;
++
++	if (BPF_OP(insn->code) == BPF_LSH)
++		emit_lsh64(ctx, d_lo, d_hi);
++	else if (BPF_OP(insn->code) == BPF_RSH)
++		emit_rsh64(ctx, d_lo, d_hi);
++	else if (BPF_OP(insn->code) == BPF_ARSH)
++		emit_arsh64(ctx, d_lo, d_hi);
++
++	emit_16(ctx, 0x5380 | count_reg);				/* subq.l #1, count_reg */
++	emit_16(ctx, 0x6600);						/* bne.w loop_start */
++	emit_16(ctx, (loop_start - (int)ctx->idx) * 2);
++
++	if (ctx->target)
++		ctx->target[done_idx] = (ctx->idx - done_idx) * 2;
++
++	bpf_put_reg32(dst[1], d_lo, ctx);
++	bpf_put_reg32(dst[0], d_hi, ctx);
++}
++
++static inline void emit_cf_swap16(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
++{
++	emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);			/* mvz.w d_lo, d_lo */
++	emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);			/* mvz.b d_lo, d_hi */
++	emit_16(ctx, 0xe088 | d_lo);					/* lsr.l #8, d_lo */
++	emit_16(ctx, 0xe188 | d_hi);					/* lsl.l #8, d_hi */
++	emit_16(ctx, 0x8080 | (d_lo << 9) | d_hi);			/* or.l d_hi, d_lo */
++}
++
++static inline void emit_to_le16(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
++{
++	if (CPU_IS_COLDFIRE) {
++		emit_cf_swap16(ctx, d_lo, d_hi);
++	} else {
++		emit_16(ctx, 0x0280 | d_lo);				/* andi.l #0xffff, d_lo */
++		emit_32(ctx, 0xffff);
++		emit_16(ctx, 0xe058 | d_lo);				/* ror.w #8, d_lo */
++	}
++
++	emit_16(ctx, 0x7000 | (d_hi << 9));				/* moveq #0, d_hi */
++}
++
++static inline void emit_cf_swap32(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
++{
++	emit_16(ctx, 0x2f00 | d_lo);					/* move.l d_lo, -(%sp) */
++	emit_16(ctx, 0x4840 | d_lo);					/* swap d_lo */
++	emit_cf_swap16(ctx, d_lo, d_hi);
++	emit_16(ctx, 0x2000 | (d_hi << 9) | d_lo);			/* move.l d_lo, d_hi */
++	emit_16(ctx, 0x2017 | (d_lo << 9));				/* move.l (%sp), d_lo */
++	emit_16(ctx, 0x2e80 | d_hi);					/* move.l d_hi, (%sp) */
++	emit_cf_swap16(ctx, d_lo, d_hi);
++	emit_16(ctx, 0x4840 | d_lo);					/* swap d_lo */
++	emit_16(ctx, 0x809f | (d_lo << 9));				/* or.l (%sp)+, d_lo */
++}
++
++static inline void emit_to_le32(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
++{
++	if (CPU_IS_COLDFIRE) {
++		emit_cf_swap32(ctx, d_lo, d_hi);
++	} else {
++		emit_16(ctx, 0xe058 | d_lo);				/* ror.w #8, d_lo */
++		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
++		emit_16(ctx, 0xe058 | d_lo);				/* ror.w #8, d_lo */
++	}
++
++	emit_16(ctx, 0x7000 | (d_hi << 9));				/* moveq #0, d_hi */
++}
++
++static inline void emit_to_le64(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
++{
++	if (CPU_IS_COLDFIRE) {
++		emit_16(ctx, 0x2f00 | d_hi);				/* move.l d_hi, -(%sp) */
++		emit_cf_swap32(ctx, d_lo, d_hi);
++		emit_16(ctx, 0x2000 | (d_hi << 9) | d_lo);		/* move.l d_lo, d_hi */
++		emit_16(ctx, 0x2017 | (d_lo << 9));			/* move.l (%sp), d_lo */
++		emit_16(ctx, 0x2e80 | d_hi);				/* move.l d_hi, (%sp) */
++		emit_cf_swap32(ctx, d_lo, d_hi);
++		emit_16(ctx, 0x201f | (d_hi << 9));			/* move.l (%sp)+, d_hi */
++	} else {
++		emit_16(ctx, 0xe058 | d_lo);				/* ror.w #8, d_lo */
++		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
++		emit_16(ctx, 0xe058 | d_lo);				/* ror.w #8, d_lo */
++
++		emit_16(ctx, 0xe058 | d_hi);				/* ror.w #8, d_hi */
++		emit_16(ctx, 0x4840 | d_hi);				/* swap d_hi */
++		emit_16(ctx, 0xe058 | d_hi);				/* ror.w #8, d_hi */
++
++		emit_16(ctx, 0xc140 | (d_hi << 9) | d_lo);		/* exg d_lo, d_hi */
++	}
++}
++
++static void emit_bpf_end(const struct bpf_insn *insn, struct jit_ctx *ctx)
++{
++	const s8 *dst = bpf2m68k[insn->dst_reg];
++	const s8 *tmp1 = bpf2m68k[TMP_REG_1];
++	s8 d_lo, d_hi;
++	bool to_le = BPF_SRC(insn->code) == BPF_TO_LE;
++	int imm = insn->imm;
++
++	d_lo = bpf_get_reg32(dst[1], tmp1[1], ctx);
++	d_hi = bpf_get_reg32(dst[0], tmp1[0], ctx);
++
++	if (to_le) {
++		switch (imm) {
++		case 16:
++			emit_to_le16(ctx, d_lo, d_hi);
++			break;
++		case 32:
++			emit_to_le32(ctx, d_lo, d_hi);
++			break;
++		case 64:
++			emit_to_le64(ctx, d_lo, d_hi);
++			break;
++		}
++	} else {
++		switch (imm) {
++		case 16:
++			emit_16(ctx, 0x0280 | d_lo);			/* andi.l #0xffff, d_lo */
++			emit_32(ctx, 0xffff);
++			emit_16(ctx, 0x7000 | (d_hi << 9));		/* moveq #0, d_hi */
++			break;
++		case 32:
++			emit_16(ctx, 0x7000 | (d_hi << 9));		/* moveq #0, d_hi */
++			break;
++		case 64:
++			break;
++		}
++	}
++
++	bpf_put_reg32(dst[1], d_lo, ctx);
++	bpf_put_reg32(dst[0], d_hi, ctx);
++}
++
++static void emit_math_call(const struct bpf_insn *insn, struct jit_ctx *ctx, bool is_64)
++{
++	const s8 *dst = bpf2m68k[insn->dst_reg];
++	const s8 *src = bpf2m68k[insn->src_reg];
++	const s8 *tmp1 = bpf2m68k[TMP_REG_1];
++	const s8 *tmp2 = bpf2m68k[TMP_REG_2];
++	s8 d_lo, d_hi, s_lo, s_hi = 0;
++	void *func = NULL;
++	u8 op = BPF_OP(insn->code);
++
++	d_lo = bpf_get_reg32(dst[1], tmp1[1], ctx);
++	d_hi = bpf_get_reg32(dst[0], tmp1[0], ctx);
++
++	if (BPF_SRC(insn->code) == BPF_X) {
++		s_lo = bpf_get_reg32(src[1], tmp2[1], ctx);
++		if (is_64)
++			s_hi = bpf_get_reg32(src[0], tmp2[0], ctx);
++	} else {
++		s_lo = tmp2[1];
++		emit_16(ctx, 0x203c | (s_lo << 9));			/* move.l #imm, s_lo */
++		emit_32(ctx, insn->imm);
++		if (is_64) {
++			s_hi = tmp2[0];
++			emit_16(ctx, 0x203c | (s_hi << 9));		/* move.l #imm, s_hi */
++			emit_32(ctx, insn->imm < 0 ? 0xffffffff : 0);
++		}
++	}
++
++	if (is_64) {
++		switch (op) {
++		case BPF_MUL:
++			func = (void *)jit_mul64;
++			break;
++		case BPF_DIV:
++			func = insn->off == 1 ? (void *)jit_sdiv64 : (void *)jit_div64;
++			break;
++		case BPF_MOD:
++			func = insn->off == 1 ? (void *)jit_smod64 : (void *)jit_mod64;
++			break;
++		}
++	} else {
++		switch (op) {
++		case BPF_MUL:
++			func = (void *)jit_mul32;
++			break;
++		case BPF_DIV:
++			func = insn->off == 1 ? (void *)jit_sdiv32 : (void *)jit_div32;
++			break;
++		case BPF_MOD:
++			func = insn->off == 1 ? (void *)jit_smod32 : (void *)jit_mod32;
++			break;
++		}
++	}
++
++	if (is_64) {
++		emit_16(ctx, 0x2f01);					/* move.l d1, -(%sp) */
++		emit_16(ctx, 0x2f00);					/* move.l d0, -(%sp) */
++
++		emit_16(ctx, 0x2f00 | s_lo);				/* move.l s_lo, -(%sp) */
++		emit_16(ctx, 0x2f00 | s_hi);				/* move.l s_hi, -(%sp) */
++		emit_16(ctx, 0x2f00 | d_lo);				/* move.l d_lo, -(%sp) */
++		emit_16(ctx, 0x2f00 | d_hi);				/* move.l d_hi, -(%sp) */
++
++		emit_16(ctx, 0x207c);					/* movea.l #func, %a0 */
++		emit_32(ctx, (u32)func);
++		emit_16(ctx, 0x4e90);					/* jsr (%a0) */
++
++		emit_16(ctx, 0x4fef);					/* lea 16(%sp), %sp */
++		emit_16(ctx, 16);
++
++		emit_16(ctx, 0x2601);					/* move.l %d1, %d3 */
++		emit_16(ctx, 0x2400);					/* move.l %d0, %d2 */
++
++		emit_16(ctx, 0x201f);					/* move.l (%sp)+, d0 */
++		emit_16(ctx, 0x221f);					/* move.l (%sp)+, d1 */
++	} else {
++		emit_16(ctx, 0x2f01);					/* move.l d1, -(%sp) */
++		emit_16(ctx, 0x2f00);					/* move.l d0, -(%sp) */
++
++		emit_16(ctx, 0x2f00 | s_lo);				/* move.l s_lo, -(%sp) */
++		emit_16(ctx, 0x2f00 | d_lo);				/* move.l d_lo, -(%sp) */
++
++		emit_16(ctx, 0x207c);					/* movea.l #func, %a0 */
++		emit_32(ctx, (u32)func);
++		emit_16(ctx, 0x4e90);					/* jsr (%a0) */
++
++		emit_16(ctx, 0x4fef);					/* lea 8(%sp), %sp */
++		emit_16(ctx, 8);
++
++		emit_16(ctx, 0x2600);					/* move.l %d0, %d3 */
++		emit_16(ctx, 0x7400);					/* moveq #0, %d2 */
++
++		emit_16(ctx, 0x201f);					/* move.l (%sp)+, d0 */
++		emit_16(ctx, 0x221f);					/* move.l (%sp)+, d1 */
++	}
++
++	bpf_put_reg32(dst[1], M68K_D3, ctx);
++	bpf_put_reg32(dst[0], M68K_D2, ctx);
++}
++
++static void emit_ldx(const struct bpf_insn *insn, struct jit_ctx *ctx)
++{
++	const s8 *dst = bpf2m68k[insn->dst_reg];
++	const s8 *src = bpf2m68k[insn->src_reg];
++	const s8 *tmp1 = bpf2m68k[TMP_REG_1];
++	s8 d_lo, d_hi;
++	bool is_mem_sx = BPF_MODE(insn->code) == BPF_MEMSX;
++
++	if (is_stacked(src[1])) {
++		emit_16(ctx, 0x206e);				/* movea.l d16(%fp), %a0 */
++		emit_16(ctx, (u16)src[1]);
++	} else {
++		emit_16(ctx, 0x2040 | src[1]);			/* movea.l src, %a0 */
++	}
++
++	d_lo = is_stacked(dst[1]) ? tmp1[1] : dst[1];
++	d_hi = is_stacked(dst[0]) ? tmp1[0] : dst[0];
++
++	switch (BPF_SIZE(insn->code)) {
++	case BPF_B:
++		if (!is_mem_sx)
++			emit_16(ctx, 0x7000 | (d_lo << 9));	/* moveq #0, d_lo */
++		emit_16(ctx, 0x1028 | (d_lo << 9));		/* move.b d16(%a0), d_lo */
++		emit_16(ctx, insn->off);
++		if (is_mem_sx)
++			emit_16(ctx, 0x49c0 | d_lo);	/* extb.l d_lo */
++		break;
++	case BPF_H:
++		if (!is_mem_sx)
++			emit_16(ctx, 0x7000 | (d_lo << 9));	/* moveq #0, d_lo */
++		emit_16(ctx, 0x3028 | (d_lo << 9));		/* move.w d16(%a0), d_lo */
++		emit_16(ctx, insn->off);
++		if (is_mem_sx)
++			emit_16(ctx, 0x48c0 | d_lo);	/* ext.l d_lo */
++		break;
++	case BPF_W:
++		emit_16(ctx, 0x2028 | (d_lo << 9));		/* move.l d16(%a0), d_lo */
++		emit_16(ctx, insn->off);
++		break;
++	case BPF_DW:
++		emit_16(ctx, 0x2028 | (d_hi << 9));		/* move.l d16(%a0), d_hi */
++		emit_16(ctx, insn->off);
++		emit_16(ctx, 0x41e8);				/* lea 4(%a0), %a0 */
++		emit_16(ctx, 4);
++		emit_16(ctx, 0x2028 | (d_lo << 9));		/* move.l d16(%a0), d_lo */
++		emit_16(ctx, insn->off);
++		break;
++	}
++
++	if (BPF_SIZE(insn->code) != BPF_DW) {
++		if (is_mem_sx) {
++			emit_16(ctx, 0x4a80 | d_lo);			/* tst.l d_lo */
++			emit_16(ctx, 0x5bc0 | d_hi);			/* smi d_hi */
++			emit_16(ctx, 0x49c0 | d_hi);			/* extb.l d_hi */
++		} else {
++			emit_16(ctx, 0x7000 | (d_hi << 9));	/* moveq #0, d_hi */
++		}
++	}
++
++	bpf_put_reg32(dst[1], d_lo, ctx);
++	bpf_put_reg32(dst[0], d_hi, ctx);
++}
++
++static void emit_stx(const struct bpf_insn *insn, struct jit_ctx *ctx)
++{
++	const s8 *dst = bpf2m68k[insn->dst_reg];
++	const s8 *src = bpf2m68k[insn->src_reg];
++	const s8 *tmp2 = bpf2m68k[TMP_REG_2];
++	s8 s_lo, s_hi;
++
++	if (is_stacked(dst[1])) {
++		emit_16(ctx, 0x206e);				/* movea.l d16(%fp), %a0 */
++		emit_16(ctx, (u16)dst[1]);
++	} else {
++		emit_16(ctx, 0x2040 | dst[1]);			/* movea.l dst, %a0 */
++	}
++
++	s_lo = bpf_get_reg32(src[1], tmp2[1], ctx);
++
++	switch (BPF_SIZE(insn->code)) {
++	case BPF_B:
++		emit_16(ctx, 0x1140 | s_lo);			/* move.b s_lo, d16(%a0) */
++		emit_16(ctx, insn->off);
++		break;
++	case BPF_H:
++		emit_16(ctx, 0x3140 | s_lo);			/* move.w s_lo, d16(%a0) */
++		emit_16(ctx, insn->off);
++		break;
++	case BPF_W:
++		emit_16(ctx, 0x2140 | s_lo);			/* move.l s_lo, d16(%a0) */
++		emit_16(ctx, insn->off);
++		break;
++	case BPF_DW:
++		s_hi = bpf_get_reg32(src[0], tmp2[0], ctx);
++		emit_16(ctx, 0x2140 | s_hi);			/* move.l s_hi, d16(%a0) */
++		emit_16(ctx, insn->off);
++		emit_16(ctx, 0x41e8);				/* lea 4(%a0), %a0 */
++		emit_16(ctx, 4);
++		emit_16(ctx, 0x2140 | s_lo);			/* move.l s_lo, d16(%a0) */
++		emit_16(ctx, insn->off);
++		break;
++	}
++}
++
++static void emit_st(const struct bpf_insn *insn, struct jit_ctx *ctx)
++{
++	const s8 *dst = bpf2m68k[insn->dst_reg];
++	const s8 *tmp = bpf2m68k[TMP_REG_1];
++
++	if (is_stacked(dst[1])) {
++		emit_16(ctx, 0x206e);				/* movea.l d16(%fp), %a0 */
++		emit_16(ctx, (u16)dst[1]);
++	} else {
++		emit_16(ctx, 0x2040 | dst[1]);			/* movea.l dst, %a0 */
++	}
++
++	emit_16(ctx, 0x203c | (tmp[1] << 9));			/* move.l #imm, tmp */
++	emit_32(ctx, insn->imm);
++
++	switch (BPF_SIZE(insn->code)) {
++	case BPF_B:
++		emit_16(ctx, 0x1140 | tmp[1]);			/* move.b tmp, d16(%a0) */
++		emit_16(ctx, insn->off);
++		break;
++	case BPF_H:
++		emit_16(ctx, 0x3140 | tmp[1]);			/* move.w tmp, d16(%a0) */
++		emit_16(ctx, insn->off);
++		break;
++	case BPF_W:
++		emit_16(ctx, 0x2140 | tmp[1]);			/* move.l tmp, d16(%a0) */
++		emit_16(ctx, insn->off);
++		break;
++	case BPF_DW:
++		emit_16(ctx, 0x203c | (tmp[0] << 9));		/* move.l #imm, tmp */
++		emit_32(ctx, insn->imm < 0 ? 0xffffffff : 0);
++
++		emit_16(ctx, 0x2140 | tmp[0]);			/* move.l tmp, d16(%a0) */
++		emit_16(ctx, insn->off);
++		emit_16(ctx, 0x41e8);				/* lea 4(%a0), %a0 */
++		emit_16(ctx, 4);
++		emit_16(ctx, 0x2140 | tmp[1]);			/* move.l tmp, d16(%a0) */
++		emit_16(ctx, insn->off);
++		break;
++	}
++}
++
++static int emit_atomic(const struct bpf_insn *insn, struct jit_ctx *ctx)
++{
++	const s8 *dst = bpf2m68k[insn->dst_reg];
++	const s8 *src = bpf2m68k[insn->src_reg];
++	const s8 *tmp2 = bpf2m68k[TMP_REG_2];
++
++	switch (insn->imm) {
++	case BPF_ADD:
++	case BPF_ADD | BPF_FETCH:
++	case BPF_AND:
++	case BPF_AND | BPF_FETCH:
++	case BPF_OR:
++	case BPF_OR | BPF_FETCH:
++	case BPF_XOR:
++	case BPF_XOR | BPF_FETCH:
++	case BPF_XCHG:
++	case BPF_CMPXCHG:
++		break;
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	if (is_stacked(dst[1])) {
++		emit_16(ctx, 0x206e);				/* movea.l d16(%fp), %a0 */
++		emit_16(ctx, (u16)dst[1]);
++	} else {
++		emit_16(ctx, 0x2040 | dst[1]);			/* movea.l dst, %a0 */
++	}
++
++	if (insn->off) {
++		emit_16(ctx, 0x41e8);				/* lea d16(%a0), %a0 */
++		emit_16(ctx, insn->off);
++	}
++
++	if (BPF_SIZE(insn->code) == BPF_W) {
++		s8 s_lo = bpf_get_reg32(src[1], tmp2[1], ctx);
++
++		if (insn->imm != BPF_CMPXCHG) {
++			emit_16(ctx, 0x2f01);			/* move.l d1, -(%sp) */
++			emit_16(ctx, 0x2f00);			/* move.l d0, -(%sp) */
++		}
++
++		emit_16(ctx, 0x2f00 | M68K_D0);			/* move.l %d0, -(%sp) */
++		emit_16(ctx, 0x2f3c);				/* move.l #imm, -(%sp) */
++		emit_32(ctx, insn->imm);
++		emit_16(ctx, 0x2f00 | s_lo);			/* move.l s_lo, -(%sp) */
++		emit_16(ctx, 0x2f08);				/* move.l %a0, -(%sp) */
++
++		emit_16(ctx, 0x207c);				/* movea.l #func, %a0 */
++		emit_32(ctx, (u32)jit_atomic32);
++		emit_16(ctx, 0x4e90);				/* jsr (%a0) */
++
++		emit_16(ctx, 0x4fef);				/* lea 16(%sp), %sp */
++		emit_16(ctx, 16);
++
++		if (insn->imm == BPF_CMPXCHG) {
++			emit_16(ctx, 0x7200);			/* moveq #0, %d1 */
++		} else {
++			bool is_fetch = (insn->imm & BPF_FETCH) || insn->imm == BPF_XCHG;
++
++			if (is_fetch)
++				emit_16(ctx, 0x2600);		/* move.l %d0, %d3 */
++
++			emit_16(ctx, 0x201f);			/* move.l (%sp)+, d0 */
++			emit_16(ctx, 0x221f);			/* move.l (%sp)+, d1 */
++
++			if (is_fetch) {
++				bpf_put_reg32(src[1], M68K_D3, ctx);
++				emit_16(ctx, 0x7400);		/* moveq #0, %d2 */
++				bpf_put_reg32(src[0], M68K_D2, ctx);
++			}
++		}
++
++	} else if (BPF_SIZE(insn->code) == BPF_DW) {
++		s8 s_lo = bpf_get_reg32(src[1], tmp2[1], ctx);
++		s8 s_hi = bpf_get_reg32(src[0], tmp2[0], ctx);
++
++		if (insn->imm != BPF_CMPXCHG) {
++			emit_16(ctx, 0x2f01);			/* move.l d1, -(%sp) */
++			emit_16(ctx, 0x2f00);			/* move.l d0, -(%sp) */
++		}
++
++		emit_16(ctx, 0x2f00 | M68K_D0);			/* move.l %d0, -(%sp) */
++		emit_16(ctx, 0x2f00 | M68K_D1);			/* move.l %d1, -(%sp) */
++		emit_16(ctx, 0x2f3c);				/* move.l #imm, -(%sp) */
++		emit_32(ctx, insn->imm);
++		emit_16(ctx, 0x2f00 | s_lo);			/* move.l s_lo, -(%sp) */
++		emit_16(ctx, 0x2f00 | s_hi);			/* move.l s_hi, -(%sp) */
++		emit_16(ctx, 0x2f08);				/* move.l %a0, -(%sp) */
++
++		emit_16(ctx, 0x207c);				/* movea.l #func, %a0 */
++		emit_32(ctx, (u32)jit_atomic64);
++		emit_16(ctx, 0x4e90);				/* jsr (%a0) */
++
++		emit_16(ctx, 0x4fef);				/* lea 24(%sp), %sp */
++		emit_16(ctx, 24);
++
++		if (insn->imm == BPF_CMPXCHG) {
++			if (CPU_IS_COLDFIRE) {
++				emit_16(ctx, 0x2f00);		/* move.l %d0, -(%sp) */
++				emit_16(ctx, 0x2001);		/* move.l %d1, %d0 */
++				emit_16(ctx, 0x221f);		/* move.l (%sp)+, %d1 */
++			} else {
++				emit_16(ctx, 0xc141);		/* exg %d0, %d1 */
++			}
++		} else {
++			bool is_fetch = (insn->imm & BPF_FETCH) || insn->imm == BPF_XCHG;
++
++			if (is_fetch) {
++				emit_16(ctx, 0x2600);		/* move.l %d0, %d3 */
++				emit_16(ctx, 0x2401);		/* move.l %d1, %d2 */
++			}
++
++			emit_16(ctx, 0x201f);			/* move.l (%sp)+, d0 */
++			emit_16(ctx, 0x221f);			/* move.l (%sp)+, d1 */
++
++			if (is_fetch) {
++				bpf_put_reg32(src[1], M68K_D2, ctx);
++				bpf_put_reg32(src[0], M68K_D3, ctx);
++			}
++		}
++	}
++
++	return 0;
++}
++
++static void emit_tail_call(const struct bpf_insn *insn, struct jit_ctx *ctx)
++{
++	const s8 *r2 = bpf2m68k[BPF_REG_2];
++	const s8 *r3 = bpf2m68k[BPF_REG_3];
++	int jmp_out_1, jmp_out_2, jmp_out_3;
++
++	if (is_stacked(r2[1])) {
++		emit_16(ctx, 0x206e);				/* movea.l d16(%fp), %a0 */
++		emit_16(ctx, (u16)r2[1]);
++	} else {
++		emit_16(ctx, 0x2040 | r2[1]);			/* movea.l r2, %a0 */
++	}
++
++	if (is_stacked(r3[1])) {
++		emit_16(ctx, 0x242e);				/* move.l d16(%fp), %d2 */
++		emit_16(ctx, (u16)r3[1]);
++	} else {
++		emit_16(ctx, 0x2400 | r3[1]);			/* move.l r3, %d2 */
++	}
++
++	emit_16(ctx, 0xb4a8);					/* cmp.l d16(%a0), %d2 */
++	emit_16(ctx, offsetof(struct bpf_array, map.max_entries));
++	emit_16(ctx, 0x6400);					/* bcc.w jmp_out_1 */
++	jmp_out_1 = ctx->idx;
++	emit_16(ctx, 0);
++
++	emit_16(ctx, 0x262e);					/* move.l d16(%fp), %d3 */
++	emit_16(ctx, (u16)STACK_OFFSET(BPF_TC_LO));
++	emit_16(ctx, 0x4a83);					/* tst.l %d3 */
++	emit_16(ctx, 0x6700);					/* beq.w jmp_out_2 */
++	jmp_out_2 = ctx->idx;
++	emit_16(ctx, 0);
++
++	emit_16(ctx, 0xd482);					/* add.l %d2, %d2 */
++	emit_16(ctx, 0xd482);					/* add.l %d2, %d2 */
++	emit_16(ctx, 0x43e8);					/* lea d16(%a0), %a1 */
++	emit_16(ctx, offsetof(struct bpf_array, ptrs));
++	emit_16(ctx, 0xd3c2);					/* adda.l %d2, %a1 */
++
++	emit_16(ctx, 0x2051);					/* movea.l (%a1), %a0 */
++
++	emit_16(ctx, 0x2408);					/* move.l %a0, %d2 */
++	emit_16(ctx, 0x4a82);					/* tst.l %d2 */
++	emit_16(ctx, 0x6700);					/* beq.w jmp_out_3 */
++	jmp_out_3 = ctx->idx;
++	emit_16(ctx, 0);
++
++	emit_16(ctx, 0x5383);					/* subq.l #1, %d3 */
++	emit_16(ctx, 0x2d43);					/* move.l %d3, d16(%fp) */
++	emit_16(ctx, (u16)STACK_OFFSET(BPF_TC_LO));
++
++	emit_16(ctx, 0x2068);					/* movea.l d16(%a0), %a0 */
++	emit_16(ctx, offsetof(struct bpf_prog, bpf_func));
++
++	emit_16(ctx, 0x4ee8);					/* jmp d16(%a0) */
++	emit_16(ctx, CPU_IS_COLDFIRE ? 48 : 44);
++
++	if (ctx->target) {
++		ctx->target[jmp_out_1] = (ctx->idx - jmp_out_1) * 2;
++		ctx->target[jmp_out_2] = (ctx->idx - jmp_out_2) * 2;
++		ctx->target[jmp_out_3] = (ctx->idx - jmp_out_3) * 2;
++	}
++}
++
++static int emit_jmp(const struct bpf_insn *insn, struct jit_ctx *ctx, int curr_i)
++{
++	const s8 *dst = bpf2m68k[insn->dst_reg];
++	const s8 *src = bpf2m68k[insn->src_reg];
++	const s8 *tmp1 = bpf2m68k[TMP_REG_1];
++	const s8 *tmp2 = bpf2m68k[TMP_REG_2];
++	s8 d_lo, d_hi = 0, s_lo, s_hi = 0;
++	bool is_jmp32 = BPF_CLASS(insn->code) == BPF_JMP32;
++	u8 op = BPF_OP(insn->code);
++	int target_insn;
++
++	if (is_jmp32 && op == BPF_JA)
++		target_insn = curr_i + 1 + insn->imm;
++	else
++		target_insn = curr_i + 1 + insn->off;
++
++	if (target_insn < 0 || target_insn > ctx->prog->len)
++		return -EOPNOTSUPP;
++
++	#define EMIT_JMP32(op_base) \
++		do { \
++			int disp = (ctx->offsets[target_insn] - (ctx->idx + 1)) * 2; \
++			emit_16(ctx, (op_base) | 0x00ff); \
++			emit_32(ctx, disp); \
++		} while (0)
++
++	if (op == BPF_JA) {
++		EMIT_JMP32(0x6000);				/* bra.l */
++		return 0;
++	}
++
++	d_lo = bpf_get_reg32(dst[1], tmp1[1], ctx);
++	if (!is_jmp32)
++		d_hi = bpf_get_reg32(dst[0], tmp1[0], ctx);
++
++	if (BPF_SRC(insn->code) == BPF_X) {
++		s_lo = bpf_get_reg32(src[1], tmp2[1], ctx);
++		if (!is_jmp32)
++			s_hi = bpf_get_reg32(src[0], tmp2[0], ctx);
++	} else {
++		s_lo = tmp2[1];
++		emit_16(ctx, 0x203c | (s_lo << 9));		/* move.l #imm, s_lo */
++		emit_32(ctx, insn->imm);
++		if (!is_jmp32) {
++			s_hi = tmp2[0];
++			emit_16(ctx, 0x203c | (s_hi << 9));	/* move.l #imm, s_hi */
++			emit_32(ctx, insn->imm < 0 ? 0xffffffff : 0);
++		}
++	}
++
++	if (op == BPF_JSET) {
++		emit_16(ctx, 0x2000 | (tmp1[1] << 9) | d_lo);	/* move.l d_lo, tmp1_lo */
++		emit_16(ctx, 0xc080 | (tmp1[1] << 9) | s_lo);	/* and.l s_lo, tmp1_lo */
++
++		if (!is_jmp32) {
++			EMIT_JMP32(0x6600);			/* bne.l */
++			emit_16(ctx, 0x2000 | (tmp1[0] << 9) | d_hi); /* move.l d_hi, tmp1_hi */
++			emit_16(ctx, 0xc080 | (tmp1[0] << 9) | s_hi); /* and.l s_hi, tmp1_hi */
++		}
++		EMIT_JMP32(0x6600);				/* bne.l */
++		return 0;
++	}
++
++	if (is_jmp32) {
++		emit_16(ctx, 0xb080 | (d_lo << 9) | s_lo);	/* cmp.l s_lo, d_lo */
++		switch (op) {
++		case BPF_JEQ:
++			EMIT_JMP32(0x6700);			/* beq.l */
++			break;
++		case BPF_JNE:
++			EMIT_JMP32(0x6600);			/* bne.l */
++			break;
++		case BPF_JGT:
++			EMIT_JMP32(0x6200);			/* bhi.l */
++			break;
++		case BPF_JGE:
++			EMIT_JMP32(0x6400);			/* bcc.l */
++			break;
++		case BPF_JLT:
++			EMIT_JMP32(0x6500);			/* bcs.l */
++			break;
++		case BPF_JLE:
++			EMIT_JMP32(0x6300);			/* bls.l */
++			break;
++		case BPF_JSGT:
++			EMIT_JMP32(0x6e00);			/* bgt.l */
++			break;
++		case BPF_JSGE:
++			EMIT_JMP32(0x6c00);			/* bge.l */
++			break;
++		case BPF_JSLT:
++			EMIT_JMP32(0x6d00);			/* blt.l */
++			break;
++		case BPF_JSLE:
++			EMIT_JMP32(0x6f00);			/* ble.l */
++			break;
++		}
++	} else {
++		emit_16(ctx, 0xb080 | (d_hi << 9) | s_hi);	/* cmp.l s_hi, d_hi */
++
++		switch (op) {
++		case BPF_JEQ:
++			emit_16(ctx, 0x6608);			/* bne.s .+8 */
++			emit_16(ctx, 0xb080 | (d_lo << 9) | s_lo); /* cmp.l s_lo, d_lo */
++			EMIT_JMP32(0x6700);			/* beq.l */
++			break;
++		case BPF_JNE:
++			EMIT_JMP32(0x6600);			/* bne.l */
++			emit_16(ctx, 0xb080 | (d_lo << 9) | s_lo); /* cmp.l s_lo, d_lo */
++			EMIT_JMP32(0x6600);			/* bne.l */
++			break;
++		case BPF_JGT:
++			EMIT_JMP32(0x6200);			/* bhi.l */
++			emit_16(ctx, 0x6508);			/* bcs.s .+8 */
++			emit_16(ctx, 0xb080 | (d_lo << 9) | s_lo); /* cmp.l s_lo, d_lo */
++			EMIT_JMP32(0x6200);			/* bhi.l */
++			break;
++		case BPF_JGE:
++			EMIT_JMP32(0x6200);			/* bhi.l */
++			emit_16(ctx, 0x6508);			/* bcs.s .+8 */
++			emit_16(ctx, 0xb080 | (d_lo << 9) | s_lo); /* cmp.l s_lo, d_lo */
++			EMIT_JMP32(0x6400);			/* bcc.l */
++			break;
++		case BPF_JLT:
++			EMIT_JMP32(0x6500);			/* bcs.l */
++			emit_16(ctx, 0x6208);			/* bhi.s .+8 */
++			emit_16(ctx, 0xb080 | (d_lo << 9) | s_lo); /* cmp.l s_lo, d_lo */
++			EMIT_JMP32(0x6500);			/* bcs.l */
++			break;
++		case BPF_JLE:
++			EMIT_JMP32(0x6500);			/* bcs.l */
++			emit_16(ctx, 0x6208);			/* bhi.s .+8 */
++			emit_16(ctx, 0xb080 | (d_lo << 9) | s_lo); /* cmp.l s_lo, d_lo */
++			EMIT_JMP32(0x6300);			/* bls.l */
++			break;
++		case BPF_JSGT:
++			EMIT_JMP32(0x6e00);			/* bgt.l */
++			emit_16(ctx, 0x6d08);			/* blt.s .+8 */
++			emit_16(ctx, 0xb080 | (d_lo << 9) | s_lo); /* cmp.l s_lo, d_lo */
++			EMIT_JMP32(0x6200);			/* bhi.l */
++			break;
++		case BPF_JSGE:
++			EMIT_JMP32(0x6e00);			/* bgt.l */
++			emit_16(ctx, 0x6d08);			/* blt.s .+8 */
++			emit_16(ctx, 0xb080 | (d_lo << 9) | s_lo); /* cmp.l s_lo, d_lo */
++			EMIT_JMP32(0x6400);			/* bcc.l */
++			break;
++		case BPF_JSLT:
++			EMIT_JMP32(0x6d00);			/* blt.l */
++			emit_16(ctx, 0x6e08);			/* bgt.s .+8 */
++			emit_16(ctx, 0xb080 | (d_lo << 9) | s_lo); /* cmp.l s_lo, d_lo */
++			EMIT_JMP32(0x6500);			/* bcs.l */
++			break;
++		case BPF_JSLE:
++			EMIT_JMP32(0x6d00);			/* blt.l */
++			emit_16(ctx, 0x6e08);			/* bgt.s .+8 */
++			emit_16(ctx, 0xb080 | (d_lo << 9) | s_lo); /* cmp.l s_lo, d_lo */
++			EMIT_JMP32(0x6300);			/* bls.l */
++			break;
++		}
++	}
++	#undef EMIT_JMP32
++	return 0;
++}
++
++static int emit_call(const struct bpf_insn *insn, struct jit_ctx *ctx)
++{
++	const s8 arg_regs[] = { BPF_REG_5, BPF_REG_4, BPF_REG_3, BPF_REG_2, BPF_REG_1 };
++	const s8 *tmp1 = bpf2m68k[TMP_REG_1];
++	u64 func_addr;
++	bool fixed;
++	int i, err;
++
++	if (insn->src_reg == BPF_PSEUDO_CALL)
++		return -EOPNOTSUPP;
++
++	err = bpf_jit_get_func_addr(ctx->prog, insn, false, &func_addr, &fixed);
++	if (err)
++		return err;
++
++	for (i = 0; i < 5; i++) {
++		const s8 *reg = bpf2m68k[arg_regs[i]];
++		s8 d_lo = bpf_get_reg32(reg[1], tmp1[1], ctx);
++		s8 d_hi = bpf_get_reg32(reg[0], tmp1[0], ctx);
++
++		emit_16(ctx, 0x2f00 | d_lo);			/* move.l d_lo, -(%sp) */
++		emit_16(ctx, 0x2f00 | d_hi);			/* move.l d_hi, -(%sp) */
++	}
++
++	emit_16(ctx, 0x207c);					/* movea.l #func_addr, %a0 */
++	emit_32(ctx, (u32)func_addr);
++
++	emit_16(ctx, 0x4e90);					/* jsr (%a0) */
++
++	emit_16(ctx, 0x4fef);					/* lea 40(%sp), %sp */
++	emit_16(ctx, 40);
++
++	if (CPU_IS_COLDFIRE) {
++		emit_16(ctx, 0x2f00);				/* move.l %d0, -(%sp) */
++		emit_16(ctx, 0x2001);				/* move.l %d1, %d0 */
++		emit_16(ctx, 0x221f);				/* move.l (%sp)+, %d1 */
++	} else {
++		emit_16(ctx, 0xc340);				/* exg %d0, %d1 */
++	}
++
++	return 0;
++}
++
++static void build_prologue(struct jit_ctx *ctx)
++{
++	int total_stack = SCRATCH_SIZE + MAX_BPF_STACK + 8;
++
++	emit_16(ctx, 0x7021);					/* moveq #33, %d0 */
++
++	emit_16(ctx, 0x4e56);					/* link %a6, #-total_stack */
++	emit_16(ctx, -total_stack);
++
++	if (CPU_IS_COLDFIRE) {
++		emit_16(ctx, 0x4fef);				/* lea -16(%sp), %sp */
++		emit_16(ctx, 0xfff0);
++		emit_16(ctx, 0x48d7);				/* movem.l d2-d5, (%sp) */
++		emit_16(ctx, 0x003c);
++	} else {
++		emit_16(ctx, 0x48e7);				/* movem.l d2-d5, -(%sp) */
++		emit_16(ctx, 0x3c00);
++	}
++
++	emit_16(ctx, 0x2d40);					/* move.l %d0, off(%fp) */
++	emit_16(ctx, (u16)STACK_OFFSET(BPF_TC_LO));
++
++	emit_16(ctx, 0x202e);					/* move.l 8(%fp), %d0 */
++	emit_16(ctx, 8);
++	bpf_put_reg32(bpf2m68k[BPF_REG_1][1], M68K_D0, ctx);
++
++	emit_16(ctx, 0x7000 | (M68K_D0 << 9));			/* moveq #0, %d0 */
++	bpf_put_reg32(bpf2m68k[BPF_REG_1][0], M68K_D0, ctx);
++
++	emit_16(ctx, 0x41ee);					/* lea -SCRATCH_SIZE(%fp), %a0 */
++	emit_16(ctx, -SCRATCH_SIZE);
++	emit_16(ctx, 0x2008);					/* move.l %a0, %d0 */
++
++	bpf_put_reg32(bpf2m68k[BPF_REG_10][1], M68K_D0, ctx);
++	emit_16(ctx, 0x7000 | (M68K_D0 << 9));			/* moveq #0, %d0 */
++	bpf_put_reg32(bpf2m68k[BPF_REG_10][0], M68K_D0, ctx);
++}
++
++static void build_epilogue(struct jit_ctx *ctx)
++{
++	if (CPU_IS_COLDFIRE) {
++		emit_16(ctx, 0x4cd7);				/* movem.l (%sp), d2-d5 */
++		emit_16(ctx, 0x003c);
++		emit_16(ctx, 0x4fef);				/* lea 16(%sp), %sp */
++		emit_16(ctx, 0x0010);
++	} else {
++		emit_16(ctx, 0x4cdf);				/* movem.l (%sp)+, d2-d5 */
++		emit_16(ctx, 0x003c);
++	}
++
++	emit_16(ctx, 0x4e5e);					/* unlk %fp */
++	emit_16(ctx, 0x4e75);					/* rts */
++}
++
++static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, int i)
++{
++	u8 code = insn->code;
++
++	switch (code) {
++	case BPF_ALU | BPF_NEG:
++		emit_alu32_neg(insn, ctx);
++		break;
++	case BPF_ALU64 | BPF_NEG:
++		emit_alu64_neg(insn, ctx);
++		break;
++
++	case BPF_ALU | BPF_MOV | BPF_X:
++	case BPF_ALU | BPF_ADD | BPF_X:
++	case BPF_ALU | BPF_SUB | BPF_X:
++	case BPF_ALU | BPF_AND | BPF_X:
++	case BPF_ALU | BPF_OR  | BPF_X:
++	case BPF_ALU | BPF_XOR | BPF_X:
++	case BPF_ALU | BPF_LSH | BPF_X:
++	case BPF_ALU | BPF_RSH | BPF_X:
++	case BPF_ALU | BPF_ARSH | BPF_X:
++		emit_alu32_x(insn, ctx);
++		break;
++
++	case BPF_ALU | BPF_MOV | BPF_K:
++	case BPF_ALU | BPF_ADD | BPF_K:
++	case BPF_ALU | BPF_SUB | BPF_K:
++	case BPF_ALU | BPF_AND | BPF_K:
++	case BPF_ALU | BPF_OR  | BPF_K:
++	case BPF_ALU | BPF_XOR | BPF_K:
++	case BPF_ALU | BPF_LSH | BPF_K:
++	case BPF_ALU | BPF_RSH | BPF_K:
++	case BPF_ALU | BPF_ARSH | BPF_K:
++		emit_alu32_k(insn, ctx);
++		break;
++
++	case BPF_ALU64 | BPF_MOV | BPF_X:
++	case BPF_ALU64 | BPF_ADD | BPF_X:
++	case BPF_ALU64 | BPF_SUB | BPF_X:
++	case BPF_ALU64 | BPF_AND | BPF_X:
++	case BPF_ALU64 | BPF_OR  | BPF_X:
++	case BPF_ALU64 | BPF_XOR | BPF_X:
++		emit_alu64_x(insn, ctx);
++		break;
++
++	case BPF_ALU64 | BPF_MOV | BPF_K:
++	case BPF_ALU64 | BPF_ADD | BPF_K:
++	case BPF_ALU64 | BPF_SUB | BPF_K:
++	case BPF_ALU64 | BPF_AND | BPF_K:
++	case BPF_ALU64 | BPF_OR  | BPF_K:
++	case BPF_ALU64 | BPF_XOR | BPF_K:
++		emit_alu64_k(insn, ctx);
++		break;
++
++	case BPF_ALU64 | BPF_LSH | BPF_X:
++	case BPF_ALU64 | BPF_RSH | BPF_X:
++	case BPF_ALU64 | BPF_ARSH | BPF_X:
++		emit_alu64_shift(insn, ctx, false);
++		break;
++
++	case BPF_ALU64 | BPF_LSH | BPF_K:
++	case BPF_ALU64 | BPF_RSH | BPF_K:
++	case BPF_ALU64 | BPF_ARSH | BPF_K:
++		emit_alu64_shift(insn, ctx, true);
++		break;
++
++	case BPF_ALU | BPF_MUL | BPF_X:
++	case BPF_ALU | BPF_DIV | BPF_X:
++	case BPF_ALU | BPF_MOD | BPF_X:
++	case BPF_ALU | BPF_MUL | BPF_K:
++	case BPF_ALU | BPF_DIV | BPF_K:
++	case BPF_ALU | BPF_MOD | BPF_K:
++		emit_math_call(insn, ctx, false);
++		break;
++
++	case BPF_ALU64 | BPF_MUL | BPF_X:
++	case BPF_ALU64 | BPF_DIV | BPF_X:
++	case BPF_ALU64 | BPF_MOD | BPF_X:
++	case BPF_ALU64 | BPF_MUL | BPF_K:
++	case BPF_ALU64 | BPF_DIV | BPF_K:
++	case BPF_ALU64 | BPF_MOD | BPF_K:
++		emit_math_call(insn, ctx, true);
++		break;
++
++	case BPF_ALU | BPF_END | BPF_TO_BE:
++	case BPF_ALU | BPF_END | BPF_TO_LE:
++	case BPF_ALU64 | BPF_END | BPF_TO_BE:
++	case BPF_ALU64 | BPF_END | BPF_TO_LE:
++		emit_bpf_end(insn, ctx);
++		break;
++
++	case BPF_LD | BPF_IMM | BPF_DW: {
++		const struct bpf_insn *insn1 = insn + 1;
++		const s8 *dst = bpf2m68k[insn->dst_reg];
++		const s8 *tmp1 = bpf2m68k[TMP_REG_1];
++		s8 d_lo = bpf_get_reg32(dst[1], tmp1[1], ctx);
++		s8 d_hi = bpf_get_reg32(dst[0], tmp1[0], ctx);
++
++		if (insn->src_reg == BPF_PSEUDO_FUNC)
++			return -EOPNOTSUPP;
++
++		emit_16(ctx, 0x203c | (d_lo << 9));			/* move.l #imm, d_lo */
++		emit_32(ctx, insn->imm);
++		emit_16(ctx, 0x203c | (d_hi << 9));			/* move.l #imm, d_hi */
++		emit_32(ctx, insn1->imm);
++
++		bpf_put_reg32(dst[1], d_lo, ctx);
++		bpf_put_reg32(dst[0], d_hi, ctx);
++		break;
++	}
++
++	case BPF_LDX | BPF_MEM | BPF_B:
++	case BPF_LDX | BPF_MEM | BPF_H:
++	case BPF_LDX | BPF_MEM | BPF_W:
++	case BPF_LDX | BPF_MEM | BPF_DW:
++	case BPF_LDX | BPF_MEMSX | BPF_B:
++	case BPF_LDX | BPF_MEMSX | BPF_H:
++	case BPF_LDX | BPF_MEMSX | BPF_W:
++		emit_ldx(insn, ctx);
++		break;
++
++	case BPF_STX | BPF_MEM | BPF_B:
++	case BPF_STX | BPF_MEM | BPF_H:
++	case BPF_STX | BPF_MEM | BPF_W:
++	case BPF_STX | BPF_MEM | BPF_DW:
++		emit_stx(insn, ctx);
++		break;
++
++	case BPF_ST | BPF_MEM | BPF_B:
++	case BPF_ST | BPF_MEM | BPF_H:
++	case BPF_ST | BPF_MEM | BPF_W:
++	case BPF_ST | BPF_MEM | BPF_DW:
++		emit_st(insn, ctx);
++		break;
++
++	case BPF_ST | BPF_NOSPEC:
++		break;
++
++	case BPF_STX | BPF_ATOMIC | BPF_W:
++	case BPF_STX | BPF_ATOMIC | BPF_DW:
++		return emit_atomic(insn, ctx);
++
++	case BPF_JMP | BPF_TAIL_CALL:
++		emit_tail_call(insn, ctx);
++		break;
++
++	case BPF_JMP | BPF_JA:
++	case BPF_JMP32 | BPF_JA:
++	case BPF_JMP | BPF_JEQ | BPF_X:
++	case BPF_JMP | BPF_JEQ | BPF_K:
++	case BPF_JMP | BPF_JNE | BPF_X:
++	case BPF_JMP | BPF_JNE | BPF_K:
++	case BPF_JMP | BPF_JGT | BPF_X:
++	case BPF_JMP | BPF_JGT | BPF_K:
++	case BPF_JMP | BPF_JGE | BPF_X:
++	case BPF_JMP | BPF_JGE | BPF_K:
++	case BPF_JMP | BPF_JLT | BPF_X:
++	case BPF_JMP | BPF_JLT | BPF_K:
++	case BPF_JMP | BPF_JLE | BPF_X:
++	case BPF_JMP | BPF_JLE | BPF_K:
++	case BPF_JMP | BPF_JSGT | BPF_X:
++	case BPF_JMP | BPF_JSGT | BPF_K:
++	case BPF_JMP | BPF_JSGE | BPF_X:
++	case BPF_JMP | BPF_JSGE | BPF_K:
++	case BPF_JMP | BPF_JSLT | BPF_X:
++	case BPF_JMP | BPF_JSLT | BPF_K:
++	case BPF_JMP | BPF_JSLE | BPF_X:
++	case BPF_JMP | BPF_JSLE | BPF_K:
++	case BPF_JMP | BPF_JSET | BPF_X:
++	case BPF_JMP | BPF_JSET | BPF_K:
++	case BPF_JMP32 | BPF_JEQ | BPF_X:
++	case BPF_JMP32 | BPF_JEQ | BPF_K:
++	case BPF_JMP32 | BPF_JNE | BPF_X:
++	case BPF_JMP32 | BPF_JNE | BPF_K:
++	case BPF_JMP32 | BPF_JGT | BPF_X:
++	case BPF_JMP32 | BPF_JGT | BPF_K:
++	case BPF_JMP32 | BPF_JGE | BPF_X:
++	case BPF_JMP32 | BPF_JGE | BPF_K:
++	case BPF_JMP32 | BPF_JLT | BPF_X:
++	case BPF_JMP32 | BPF_JLT | BPF_K:
++	case BPF_JMP32 | BPF_JLE | BPF_X:
++	case BPF_JMP32 | BPF_JLE | BPF_K:
++	case BPF_JMP32 | BPF_JSGT | BPF_X:
++	case BPF_JMP32 | BPF_JSGT | BPF_K:
++	case BPF_JMP32 | BPF_JSGE | BPF_X:
++	case BPF_JMP32 | BPF_JSGE | BPF_K:
++	case BPF_JMP32 | BPF_JSLT | BPF_X:
++	case BPF_JMP32 | BPF_JSLT | BPF_K:
++	case BPF_JMP32 | BPF_JSLE | BPF_X:
++	case BPF_JMP32 | BPF_JSLE | BPF_K:
++	case BPF_JMP32 | BPF_JSET | BPF_X:
++	case BPF_JMP32 | BPF_JSET | BPF_K:
++		return emit_jmp(insn, ctx, i);
++
++	case BPF_JMP | BPF_CALL:
++		return emit_call(insn, ctx);
++
++	case BPF_JMP | BPF_EXIT:
++		build_epilogue(ctx);
++		break;
++
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	return 0;
++}
++
++static int build_body(struct jit_ctx *ctx)
++{
++	const struct bpf_prog *prog = ctx->prog;
++	int i;
++
++	for (i = 0; i < prog->len; i++) {
++		const struct bpf_insn *insn = &prog->insnsi[i];
++		int ret;
++
++		if (!ctx->target)
++			ctx->offsets[i] = ctx->idx;
++
++		ret = build_insn(insn, ctx, i);
++		if (ret < 0)
++			return ret;
++
++		if (insn->code == (BPF_LD | BPF_IMM | BPF_DW)) {
++			i++;
++			if (!ctx->target)
++				ctx->offsets[i] = ctx->idx;
++		}
++	}
++
++	if (!ctx->target)
++		ctx->offsets[prog->len] = ctx->idx;
++
++	return 0;
++}
++
++static void jit_fill_hole(void *area, unsigned int size)
++{
++	u16 *ptr;
++
++	for (ptr = area; size >= 2; size -= 2)
++		*ptr++ = 0x4afc;
++}
++
++struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_prog *prog)
++{
++	struct bpf_binary_header *header;
++	struct jit_ctx ctx;
++	unsigned int image_size;
++	u8 *image_ptr;
++
++	if (!prog->jit_requested || prog->is_func)
++		return prog;
++
++	memset(&ctx, 0, sizeof(ctx));
++	ctx.prog = prog;
++
++	ctx.offsets = kvcalloc(prog->len + 1, sizeof(int), GFP_KERNEL);
++	if (!ctx.offsets)
++		return prog;
++
++	build_prologue(&ctx);
++	if (build_body(&ctx) < 0)
++		goto out_off;
++	build_epilogue(&ctx);
++
++	image_size = ctx.idx * 2;
++	header = bpf_jit_binary_alloc(image_size, &image_ptr, 2, jit_fill_hole);
++	if (!header)
++		goto out_off;
++
++	ctx.target = (u16 *)image_ptr;
++	ctx.idx = 0;
++
++	build_prologue(&ctx);
++	if (build_body(&ctx) < 0)
++		goto out_free_hdr;
++	build_epilogue(&ctx);
++
++	flush_icache_range((u32)header, (u32)(ctx.target + ctx.idx));
++
++	if (bpf_jit_enable > 1)
++		bpf_jit_dump(prog->len, image_size, 2, ctx.target);
++
++	if (bpf_jit_binary_lock_ro(header))
++		goto out_free_hdr;
++
++	prog->bpf_func = (void *)ctx.target;
++	prog->jited = 1;
++	prog->jited_len = image_size;
++	goto out_off;
++
++out_free_hdr:
++	bpf_jit_binary_free(header);
++out_off:
++	kvfree(ctx.offsets);
++	return prog;
++}
+-- 
+2.56.1.703.gf848ed807c-goog
+
