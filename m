@@ -1,101 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.227.136
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=23.90.104.144
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795018880;
-	b=aVQ6OVWPakfHvPKl+JcXnmLUb+stFCxbFl7N/ihXsUO3PcrmtjqQkl90gTnC2vAxBuHy
-	 tHb/NHAf6UrIMZzwyzAq4xYcFP0riwi0Kq0ZX1b9UJpN44+5L2641afrJU4ddAeDOrHIS
-	 odnHGrugOW7P2mR/FEfwwee/9PutinTDKCEACy+jFKQKyLTON/SI9RFNSZwmMdeikWJQe
-	 fbxDPEevu7tQOcxWJp84yWpzP8V9ae9DZ0N0Cgk52AFCtfsC9AiHh7psvPlx0qcQEI6Oo
-	 HJXGut1gW2ryDgdZGLFE2aPD3cqHSqO6r8+v/QZC1gdU/XLDskVsNyzOsMb5Al0iy+g==
+	t=1795019062;
+	b=QYRhaLeGAdOLvS7wFKChSB3Lg+Gy6ppg3Os9pUcBXcDDexsXlRF5KqD4H9B8Uas7NH4r
+	 ZGYEudMOpkEtIXiSkF7eoLbyDvz4ITIj/MuSuaEA45WO09C4hgzhJ0xXhwBF7MOzsq5jv
+	 OiwFEcMoEb4GEikwyZittsnvwE7DAmauKLfKfYajazagu9Y8YjvY80GJRehrWxdMyG8Zk
+	 OhEo5mYqLFwJFjNSFvwl1TWNO04S+x4lz+S9AmfknbH6rv/tHVMddxg833+TzTiiAJCc1
+	 zPRb6R/yThXWDb9j6e57MiJxgdxcZwdi3rS6K36+z/K2D+HNqAR6KN1Nd3VEPaL2Q2Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795018880;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=9Y8VdWExV2s5qhyyjyIKU7zN98yjprl+AvhFl87ZyxE=;
-	b=j/rSshKEEiSr4H57WSYW9+q2FowVyueWMeWkIl2agkAEvw1QCDdrSJfFBjsEaXXcGhjC
-	 9wwoWvYiYnnILBCJzAJ23nKYn5tPo1IZC133CcKZyi9/Y7CAPkqXinh7xFBwbU2MvrYN2
-	 fRDdgQiatE7yEe95quLYQp7yj+LjBXpxIHnjz9ZBBL03i+rmd/8cunBGc7mSOvUqNkJjL
-	 sDo0fu+/3399bLCQKnj4J+jAStR2z/J8Y3G0VvWKPvwce1lAvX8SMNliBnbBS6wCjrlg1
-	 WTqu7fZQVFEuzkOMsVd6rO7+c/6m0JVGnupDflNvCyD+bozgukG31Y9ek4wGvCwE4ew==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795019062;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-Amp-Result:X-Amp-File-Uploaded:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:Received:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:Message-Id:References:
+	 In-Reply-To:To:Cc:X-Mailer;
+	bh=Hc+GRQf85ac47RtK8OhCLnptL/mAmCv9Je5+UXZVi14=;
+	b=ntB5jeLTD9/zB5D0VFnDGh8C3puj7Z0OjAIhKx+2Di/Ya9Fa+u3kAGqtReahkMQttkun
+	 R2mOgGFSYX8DpIifXOduosrNwUUIrHjvI8K5OZQ3D0+aeYlxM4cTB9ij/7XU2X4WYHE0d
+	 h3mtIlJUUvqvjkd3hEGXtrVHoAcrViWmiFnB0KOk78Mg+FRArR5CYOQCHz+WOdu/lL+wJ
+	 etdN8klwLwEwyMQeUnv1CijWj9OFQofkMrgB1YldLEPRYM54W8lSG/pnNErZ5M9M2/NaS
+	 uga2Gbg/Zlw3SleNtkCL0jo6cz5/oFfkY+JoELugMbAjLnS33lacahVyw8kNNajJOcw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Jfq63qoG;
-	arc=none smtp.remote-ip=74.125.227.136
-Received: from mail-pj2-f8.google.com (mail-pj2-f8.google.com [74.125.227.136])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4A6C606A32C
-	for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 16:21:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D4A6C606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Jfq63qoG
-Received: by mail-pj2-f8.google.com with SMTP id d9443c01a7336-2e93d9c7973so7036575ad.1
-        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 08:21:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795018879; x=1795623679; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=9Y8VdWExV2s5qhyyjyIKU7zN98yjprl+AvhFl87ZyxE=;
-        b=Jfq63qoGEId37G82E6uYvzHf8pdskudj9McZuaFxc1FZcxCN+RjMvdu3cYp6bbb3qU
-         m10nUwMkKlBa/uxYKDm1H989OVqOq1QZmVxzR4SAQxP4w5HDDGa+Iq/2F5fQJOf2C7hz
-         Fd4OkBaw362R8a77eJs7wi8cZI2xI/F6H4J68iItnNWShWrqCoG30Hpuz47hgXV3i+LH
-         QtPdM0b/AkU88ykJrj9VSuWQOMGig+qFC9MC2GLtyyWNwDolFTGQqOs5lAaIEz27MVLj
-         6YEKTldPU+GoWXXyvVx4Jwp8Jp3Q2fnQmSpWTfDrvjONIlF9g0MQrZ8roi0S0xiNNrcb
-         Ndww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795018879; x=1795623679;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=9Y8VdWExV2s5qhyyjyIKU7zN98yjprl+AvhFl87ZyxE=;
-        b=STRd1Kdg0X7UF7dyN41ugS8l0RJ4k+0dcNWSqpOHAJy1ctJ73s5ZFI6TWrMXp7x1tW
-         RXnTsJ+MDEhlz8+/6y1ui25veBB6bZN4utudUotiIlOCcwzTlCZ8/R8RMLm5Uvo+hOk4
-         PEKDQbO0fM5vum23eIUj3cKiwZEe+6mpYivWS1KUn7Tja1afrVFgFoMczJYORu4rFFyt
-         vz3WH+lfF7M15Q818N5JqGLPtx3fZ7qHkeFxCje61rmaEhhnZuCeTGLWc0xjZNlEMhFz
-         m8mYamL3qz2Xl6tB0D7pqecypdehUmk+F5lnnZHt6rNDgVsEQtFGUZ9ZXn+6xf+STH9a
-         EMZQ==
-X-Forwarded-Encrypted: i=1; AL+hErHSZZqTdA/EpLYDvtmTj7lLCql7cYVT736ShIM50ML4URuYXne8B7cwES/kxaq9oVhpcic=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/UyV3rT39nGWgjfkr3ABrQ9NCJ/AtdGjiXHTB5m9aCaHaGHue7
-	OFH+l50EIeeQ9+DU1om60TeGDHkx73YK+bFWcmDWkDPVuumzCnOqpdOEZHEamDEIbqPNXg==
-X-Gm-Gg: AZFdTZeXP6DGXwchnYV6XRbjbl49MHpH5puu0MpRrW/FFTpsUp20WBmDtPV0CXPsBFe
-	qaevi9Em7Gzyg6SXvByVecZ/4DVaFlC8NhRHJ6OAHVgH8eCoaB3XpF5LJf29Z+KvuTtB2itE+KV
-	zcAuCidFaXf2BMzh2WMAikudBUbm1doXKMWyc2mwwrDnuMLsN9aT9mRPY5zk4qy3iz4pYyEImmQ
-	140m2nWwPv1hDFe7x1KT7xYl2sombaoTrMCWkNHBC5P8nQVJXpf/CsNT/zOf3Y5eL4AniMlxsP9
-	/Og14KMEn+ZxLPQ8eWqduBCBmTDHctXAJaqhCFoP9i/e8aYyA0wXw3wEe6HdMEOmkvB9y/5Edh8
-	1OLSNRavMIgkM6KCeiFn4zjDpYFbmFhosxsdnmUb2shRIvoslMLe2Y/2Q/CahMhsCIwnJz2vLLR
-	iG7Kb3Q/YFtvtRlalGNpeFD5pPCfeK/Kj8/hIMxuEN8wl9yCD44NVpkTdBsqLg216nOye8P1xp1
-	qOJmEfD/Do24scGuNLxWciU/5BLXFQE5BXgCSJWdC5z2t34tLEWafE9ZWkzESAriGhBjezKd+Jo
-	Z4qXPoRePkuKhNz3eteVXV7eYuXBTATm0DWNIFAEyBxDyco=
-X-Received: by 2002:a17:903:18b:b0:2ed:130f:869d with SMTP id d9443c01a7336-2eff753bb92mr32182765ad.43.1795018878947;
-        Wed, 18 Nov 2026 08:21:18 -0800 (PST)
-Received: from J4f-Laptop.localdomain ([183.36.237.113])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eff6183f8csm16251145ad.31.2026.11.18.08.21.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Nov 2026 08:21:18 -0800 (PST)
-From: Shihuang Liu <shlomojune6@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Mark Brown <broonie@kernel.org>,
-	bpf@vger.kernel.org,
-	Shihuang Liu <shlomojune6@gmail.com>
-Subject: [PATCH bpf-next v4] bpf: Check variable-offset accesses against special fields
-Date: Thu, 19 Nov 2026 00:21:08 +0800
-Message-ID: <20261118162108.178069-1-shlomojune6@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dmarc=pass header.from=mobileye.com;
+	spf=pass smtp.mailfrom=mobileye.com;
+	arc=none smtp.remote-ip=23.90.104.144
+Received: from esa1.hc555-34.eu.iphmx.com (esa1.hc555-34.eu.iphmx.com [23.90.104.144])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C70C1606A331;
+	Wed, 18 Nov 2026 16:24:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C70C1606A331
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mobileye.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mobileye.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=mobileye.com; i=@mobileye.com; q=dns/txt; s=MoEyIP;
+  t=1795019061; x=1826555061;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:references:in-reply-to:to:cc;
+  bh=Y2NXF97jr/EMfkddUR0y1/iyEyI2iou2lHNRhWG3x9A=;
+  b=fXKb9ZETq50qYrA1FkWEuwVIfeL2pswvIG+CTWT+97ZQvsRn2y2LIZUu
+   PTnJTHM4c1ObCxQigQV+NzhcCpbFHyZ0EUI/knt0YmmlhyU01C5uS9GNm
+   9WfobxJfBUIx7Hzk2YTFY13KQot8Kpp7asgqMifJ8vqsIXsRikRvtWRqy
+   pvGx5jR7Mw+MrXFxb5TBOZlP8jKQ8YvZKrBOebVutIiUfSaGt2WnbIO9s
+   cPDsL9v9j2j8i4xqjl2lIlwiaFx3LykH12pIwsnORQ/Sq7LUnD2iY4ecl
+   sfXdPj4rMGEiz0afNJPSXida6LxfByalKJPXF1Zs4iT+eVEcZAkXr+Ugy
+   A==;
+X-CSE-ConnectionGUID: hvdSMKaJR56I2tA7APiISg==
+X-CSE-MsgGUID: 2iwMGUxQRsi1E5zz/LHXQQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from unknown (HELO ces04_data.me-crop.lan) ([146.255.191.134])
+  by esa1.hc555-34.eu.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2026 18:24:12 +0200
+X-CSE-ConnectionGUID: knD40QT9QMWt1KzuzQos8Q==
+X-CSE-MsgGUID: eHI3YtK0SuKlMyZPPZY9ow==
+Received: from unknown (HELO epgd071.me-corp.lan) ([10.154.54.2])
+  by ces04_data.me-crop.lan with SMTP; 18 Nov 2026 18:32:25 +0200
+Received: by epgd071.me-corp.lan (sSMTP sendmail emulation); Wed, 18 Nov 2026 18:24:11 +0200
+From: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
+Date: Wed, 18 Nov 2026 18:23:59 +0200
+Subject: [PATCH v7 3/6] riscv: report the A extension when Zaamo and Zalrsc
+ are both present
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,75 +66,92 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261118-lrsc-only-v7-3-602dcf4c1921@mobileye.com>
+References: <20261118-lrsc-only-v7-0-602dcf4c1921@mobileye.com>
+In-Reply-To: <20261118-lrsc-only-v7-0-602dcf4c1921@mobileye.com>
+To: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+ Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
+ Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+ Mark Rutland <mark.rutland@arm.com>, Gary Guo <gary@garyguo.net>, 
+ Yury Norov <yury.norov@gmail.com>, 
+ Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
+ Chao-ying Fu <chao-ying.fu@globalfoundries.com>, 
+ Conor Dooley <conor.dooley@microchip.com>, torvalds@linux-foundation.org, 
+ olof@lixom.net, aleksa.paunovic@htecgroup.com, arikalo@gmail.com, 
+ Boqun Feng <boqun@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>, 
+ =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
+ Pu Lehui <pulehui@huawei.com>, Puranjay Mohan <puranjay@kernel.org>, 
+ Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
+ Miguel Ojeda <ojeda@kernel.org>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Danilo Krummrich <dakr@kernel.org>, 
+ Daniel Almeida <daniel.almeida@collabora.com>, 
+ Tamir Duberstein <tamird@kernel.org>, 
+ Alexandre Courbot <acourbot@nvidia.com>, 
+ =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
+ Shuah Khan <skhan@linuxfoundation.org>, 
+ Randy Dunlap <rdunlap@infradead.org>, 
+ Andrew Jones <ajones@ventanamicro.com>, Boqun Feng <boqun@kernel.org>
+Cc: Jisheng Zhang <jszhang@kernel.org>, linux-riscv@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, Vladimir.Kondratiev@mobileye.com, 
+ bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+ linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, 
+ Charlie Jenkins <thecharlesjenkins@gmail.com>, 
+ Nam Cao <namcao@linutronix.de>, rust-for-linux@vger.kernel.org, 
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
+X-Mailer: b4 0.16.0
 
-btf_struct_access() rejects direct access to special fields (kptr, ...)
-of program allocated objects, but for a variable offset it only checks
-the access at min_off.  This is enough for compiler generated BTF where
-members don't overlap, but btf_struct_check_meta() allows overlapping
-members in hand-written BTF:
+A hart may describe its atomics as "a", or as "zaamo" and "zalrsc".
+The two are the same thing: the A extension is defined as Zaamo plus
+Zalrsc. The kernel already expands "a" into both sub-extensions, but
+not the other way round, so a hart that lists the sub-extensions ends
+up without RISCV_ISA_EXT_A. /proc/cpuinfo then shows rv64imfdc... and
+the A bit is missing from ELF hwcap, although the hardware is the
+same as one that lists "a".
 
-  struct node {
-          int arr[4];             /* offset 0, size 16 */
-          struct foo __kptr *p;   /* offset 8 */
-  };
+Set A in the source ISA bitmap when both Zaamo and Zalrsc are there,
+before the bitmap is resolved, so that hwcap and cpuinfo do not depend
+on how the firmware spelled it. This covers the "riscv,isa" string and
+ACPI as well as "riscv,isa-extensions".
 
-A 4-byte store to arr[i] passes the check at offset 0 and overwrites
-p at run time for i == 2 or 3; bpf_obj_free_fields() then frees the
-corrupted pointer.
-
-btf_record_first_field() returns the first field that ends after
-min_off: it is where the check has to start, not where it can end:
-every field up to max_off + size can be reached.  Check the offsets the
-register can really take, min_off + k * step.  No separate constant
-offset path is needed: reg->step is never 0 (___mark_reg_known() sets
-it to 1), so a constant offset is k == 0.
-
-Verified with hand-written BTF: a variable-offset store to arr[i] is
-now rejected with "direct access to kptr is disallowed".
-
-Fixes: 89e72f81a455 ("bpf: Varying offset access support for PTR_TO_BTF_ID pointers")
-Link: https://lore.kernel.org/bpf/20261109094723.14614-1-shlomojune6@gmail.com/
-Link: https://lore.kernel.org/all/avzIz70qnJIA2t3x@sirena.org.uk/
-Signed-off-by: Shihuang Liu <shlomojune6@gmail.com>
-
+Signed-off-by: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
 ---
-Changes since v3:
-- Rebased on bpf-next to resolve the merge conflict with ca4395aade31a
-  ("bpf: Walk each type once when looking for special fields").
----
- kernel/bpf/btf.c | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
+ arch/riscv/kernel/cpufeature.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index e95ca39f990c6e..ffdf12db1f87cd 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -8126,11 +8126,19 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 		if (!meta)
- 			break;
- 		rec = meta->record;
--		i = btf_record_first_field(rec, off);
--		if (i < rec->cnt && rec->fields[i].offset < off + size) {
--			bpf_log(log, "direct access to %s is disallowed\n",
--				btf_field_type_name(rec->fields[i].type));
--			return -EACCES;
-+		for (i = btf_record_first_field(rec, min_off);
-+		     i < rec->cnt && rec->fields[i].offset < max_off + size; i++) {
-+			struct btf_field *field = &rec->fields[i];
-+			/* An access at 'lo' or above ends after the start of the field. */
-+			s64 lo = max(min_off, (s64)field->offset - size + 1);
+diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+index 7329792978cc..45684e129be1 100644
+--- a/arch/riscv/kernel/cpufeature.c
++++ b/arch/riscv/kernel/cpufeature.c
+@@ -682,6 +682,15 @@ static void __init riscv_resolve_isa(unsigned long *source_isa,
+ 	int max_loop_count = riscv_isa_ext_count, ret;
+ 	unsigned int bit;
+ 
++	/*
++	 * "a" is exactly Zaamo plus Zalrsc. A hart that lists both has A,
++	 * however the firmware spelled it, so report it the same way in
++	 * ELF hwcap and /proc/cpuinfo.
++	 */
++	if (test_bit(RISCV_ISA_EXT_ZAAMO, source_isa) &&
++	    test_bit(RISCV_ISA_EXT_ZALRSC, source_isa))
++		set_bit(RISCV_ISA_EXT_A, source_isa);
 +
-+			/* Round up to min_off + k * step. The step is never 0. */
-+			lo += imod(min_off - lo, reg->step);
-+			if (lo <= max_off && lo < field->offset + field->size) {
-+				bpf_log(log, "direct access to %s is disallowed\n",
-+					btf_field_type_name(field->type));
-+				return -EACCES;
-+			}
- 		}
- 		break;
- 	}
+ 	do {
+ 		loop = false;
+ 		if (max_loop_count-- < 0) {
+
 -- 
 2.43.0
 
