@@ -1,64 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.65
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795006729;
-	b=Co9dTaOVCfqnULECVAvXSgk1DvCydVj/gT33bNQKNclW7utGkg8LZQaT9Vs9wN3Uu6yQ
-	 QjTS+EGs7XE8E8UkHcFqJj3lx04GfvTEAXtHmPt9MSOBFSp1z0cfvYpJMmLcb7sUBM8wR
-	 bKvO1rFtnhFYVe/xIc3YWAxP2S6N4WaWK3JHwgzFH6PJgrn/uI+IkGRcJLRrXuLsEaAQ2
-	 IKvtL1T8JaY7NVYvDs/YwpzkUCiH5W/eASYLgrVVs4meEHITMpwN2Fg/HZpn3ApDTa+xh
-	 CoF01U4IVUiDQJcqsa0/vlSYRkg8qogFl9EdmyQR5A676ydEDxxOy6cxpEOU9FpYDCA==
+	t=1795007447;
+	b=xbqyuR7qC18NpgDBB704SliB5H/qnUsIU7ivKSSRdpkwvSMawQctL9qHYH+1jFrOB4W6
+	 tI84QN+sq4SRtBm9hIt/rSR4FhcOyR3YhT+OQyNH/72zCp6ZFqc7u/vPGPCxz9VYU811F
+	 zKPX8rT3QbzdEY9/QBaDKBCMzifn3F6bBvr6QaTPjF12ykYFwECaJPTz+9FcDAJjY9flh
+	 PU5O/kEpOyeaZ2JMSUeo1q63DUKsgfTRFMJK/jtbx2GGndN42exKeFxsyk1pNItG2riKA
+	 bthVm7Hxbw9ZauwrKeKdpZLmjADpchQFziOFHjhsEq6d5kv2B0w5yn8YNF0SU5dYMgw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795006729;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
-	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 X-Virus-Scanned;
-	bh=zmvoEpqpabGUDsHZXTw1VbdurVjwfR2E9sHZpTo3HYM=;
-	b=WKmPttozYCo1Wp7TV45T+E+PUvBptnxDcEEZphLzFlEk94mVYS3OWdUfm0v3jZ3KGxqq
-	 XG+t5FUXYHAkMtALlo0fBpOiPSNgLAFPCcznsUsSaJjEsFhu4XJvDDHXHtqQzGuRs0pfz
-	 MRopzYTXSeLgNCzFXNAYgccrHtwkvvkAFc8GAfWqlj3+eFFGT6z3eLQ6bzxlMZEg6EYI+
-	 FQE7X8wHKneW3Xi+cmgxrR6ckZyYypWxQAjNkGYieUvVx8u6x0okegxVP6wVRYF0gLGCB
-	 1ylGJ/4IimIWkIF5gxurNrEhQ41yzzpzfANicabmJnfAWN3QRv9oep5JQFWkM/LUcNw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795007447;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=G+7Zvegs7qt1nRSh/wHg70utm6ALKh4FLelSbXl2gqk=;
+	b=Adr+/Rw3l1U6e3X2CW/AOoTKRWsmNykKlUCnxWAMTA5Yq+KNHiC7JAyNbG4+CUqN+gnL
+	 oMdvWbKCAzcscgClbJZ/tOG7i+d5ZLwWyLgy45ReAJnQqZ57wzfUEciiZzcUcsqA30wKE
+	 EP0orVnGF/odRR7LVlj53SiiGuRRq03dVKIBkEKqWtVXoVnj9oi66Vo8E9uet6Nm1jFsX
+	 V+36+H3p9yKy5rj17iyALBC4krvzOXtUPi9MUA06UME+ccsTxeWh2Ry5ywQzepOvpXI9g
+	 gofKhfovHPTUBMlNP7+FBWo+GLG8ku/rnIFZ19EiNzhLenX8nfUlKKwmsrVzJFwfN4w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=iogearbox.net;
-	spf=pass smtp.mailfrom=iogearbox.net;
-	dkim=pass header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=IMyNwftp;
-	arc=none smtp.remote-ip=213.133.104.62
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=LDfbnx6K;
+	arc=none smtp.remote-ip=91.218.175.65
+Received: from mta0.migadu.com (out-65.mta0.migadu.com [91.218.175.65])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2101F606A31C;
-	Wed, 18 Nov 2026 12:58:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2101F606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B65F9606A32A
+	for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 13:10:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B65F9606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=IMyNwftp
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=zmvoEpqpabGUDsHZXTw1VbdurVjwfR2E9sHZpTo3HYM=; b=IMyNwftpJQEBaOtzIEomo/t7jA
-	vkVKeXPQoA7pYiC+2twrNnhLQd0YAs50KQTXzTqZiThLSUfCT1V4bIO7I5nMCrTp/q3y126Ybxpxc
-	ZMTMSnsF6ALNVgk7NgX+3RbTNP3WiPz2npr/YzHgA0+l3ke+Z609hcLwKu4Iy6BGCSTtfB/AFrSI5
-	hIh/fW5DPOyJSsCCTwsSeNRzviEHBJ8FA6IHpNfLZKc4EZ+EkVuYyRoYck4Yse4V6JB0cLquUNXpE
-	UZduZCDYsp+NWVFgNswnfYTezTQ6PBxc45a+Ic7sGpfxKmSVwd7Hwh/XuxD3cn3RHh5IxdTd8AdxK
-	TchBa8SQ==;
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1xTfF7-000KaM-0J;
-	Wed, 18 Nov 2026 13:58:29 +0100
-Received: from localhost ([127.0.0.1])
-	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1xTfF6-000PVf-0a;
-	Wed, 18 Nov 2026 13:58:27 +0100
-Message-ID: <ea8a18e0-12cc-48e0-903e-325a8ece5a0f@iogearbox.net>
-Date: Wed, 18 Nov 2026 13:58:26 +0100
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=LDfbnx6K
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Fi9zG0kILVgw7gwn3q1iC/p76/mjXn21af0ZN83dwgk=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795007445; v=1; x=1795612245;
+ b=LDfbnx6KGfk6PJriUbvh9bZ00uaP9OFWpBtEhY8kZZaZN9inW9U02hbfKof1i6akpmW3gkeL
+ NEbxUw/qYgFRamC5NKCGBx3//uBZ4RAcfQAF75Bg6FgQ1Tq0EWCMGzgjDi23gzpF+RA3QsHezCU
+ 191xZcq0vQQzmrKbPTSZTYk4=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 95c49d686309c77b;
+	Wed, 18 Nov 2026 13:10:42 +0000
+X-Mizu-Trace-ID: 95c49d686309c77b
+X-Migadu-Flow: FLOW_OUT
+From: Tao Cui <cui.tao@linux.dev>
+To: tj@kernel.org,
+	josef@toxicopanda.com,
+	axboe@kernel.dk,
+	ast@kernel.org,
+	alexei.starovoitov@gmail.com
+Cc: cgroups@vger.kernel.org,
+	linux-block@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	daniel@iogearbox.net,
+	linux-kselftest@vger.kernel.org,
+	cui.tao@linux.dev,
+	cuitao@kylinos.cn,
+	ameryhung@gmail.com
+Subject: [RFC PATCH v14 0/4] blk-iocost: BPF struct_ops cost model
+Date: Wed, 18 Nov 2026 21:10:25 +0800
+Message-ID: <20261118131029.797007-1-cui.tao@linux.dev>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -68,83 +76,74 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v1 07/15] bpf: don't redirect decrypted skbs from
- egress to ingress
-To: Todd Freed <toddfreed@meta.com>, netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
- Andrew Lunn <andrew+netdev@lunn.ch>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
- <bjorn@kernel.org>, bpf@vger.kernel.org,
- Daniel Zahka <daniel.zahka@gmail.com>,
- Donald Hunter <donald.hunter@gmail.com>, Eric Dumazet <edumazet@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, Jamal Hadi Salim <jhs@mojatatu.com>,
- Jiri Pirko <jiri@resnulli.us>, John Fastabend <john.fastabend@gmail.com>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
- Martin KaFai Lau <martin.lau@linux.dev>, Paolo Abeni <pabeni@redhat.com>,
- Saeed Mahameed <saeedm@nvidia.com>, Simon Horman <horms@kernel.org>,
- Tariq Toukan <tariqt@nvidia.com>, Wei Wang <weiwan@google.com>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-References: <20261111005533.6436-1-toddfreed@meta.com>
- <20261111005533.6436-8-toddfreed@meta.com>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-In-Reply-To: <20261111005533.6436-8-toddfreed@meta.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.6/28187/Wed Nov 18 07:28:39 2026)
+Content-Transfer-Encoding: 8bit
 
-On 11/11/26 1:55 AM, Todd Freed wrote:
-> on transmit, skb->decrypted means the device must encrypt the packet.
-> For example, a packet of a ktls or psp offload socket, or, with the tc
-> psp action added later in this series, one which psp encap attached a
-> tx association to.
-> 
-> on receive, skb->decrypted means the device decrypted the packet.
-> 
-> bpf_redirect() and bpf_clone_redirect() with BPF_F_INGRESS send the
-> packet to a device's receive path with the bit still set, where it
-> indicates the packet was decrypted by the device.
-> 
-> this is less of a problem with socket offloads, whose packets are by
-> definition generated locally; more of a problem with socket-less psp,
-> which can also apply to forwarded traffic.
-> 
-> in addition, the redirect drops the dst (skb_scrub_packet()), which for
-> socket-less psp carries the tx association.
-> 
-> drop decrypted skbs which bpf redirects from egress to ingress. this
-> matches the behavior of mirred, since the previous patch.
-> 
-> Signed-off-by: Todd Freed <toddfreed@meta.com>
-> ---
->   net/core/filter.c | 9 +++++++++
->   1 file changed, 9 insertions(+)
-> 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index aca8160b26a1..a178a9dd3007 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -2226,6 +2226,15 @@ static int __bpf_redirect_common(struct sk_buff *skb, struct net_device *dev,
->   static int __bpf_redirect(struct sk_buff *skb, struct net_device *dev,
->   			  u32 flags)
->   {
-> +	/* On transmit, decrypted asks the device to encrypt the packet. Sent
-> +	 * to ingress, the packet would read as decrypted by the device.
-> +	 */
-> +	if (unlikely((flags & BPF_F_INGRESS) && !skb_at_tc_ingress(skb) &&
-> +		     skb_is_decrypted(skb))) {
-> +		kfree_skb(skb);
-> +		return -EINVAL;
+From: Tao Cui <cuitao@kylinos.cn>
 
-This check should rather live in the bpf_redirect (and friends) helper e.g. after
-we check for invalid params, etc, rather than here which feels off. Also, it would
-probably make sense to refactor this condition into a small inline helper so you
-don't have to open code it multiple times.
+This series lets a BPF program take over the cost model of one
+device. The BPF model provides calc_cost() for charged IOs plus two
+transfer coefficients for the completion-time sizing, io.cost.model
+selects between the attached model and the builtin one, and enabling
+and disabling the controller stays with io.cost.qos.
 
-> +	}
-> +
->   	if (dev_is_mac_header_xmit(dev))
->   		return __bpf_redirect_common(skb, dev, flags);
->   	else
+The builtin model is a linear formula derived from a handful of device
+parameters, and the right formula is device specific. A BPF model can
+be adapted to the device and updated without rebuilding the kernel.
 
+The series is based on next-20261117.
+
+Changes since v13:
+ - p1: stop updating attached and attached_link under ioc->lock;
+   rq_qos_mutex already orders all their accessors (review from tj)
+ - p1: name the calc_cost flags enum iocost_calc_flags and rename
+   ioc_model()/model to ioc_bpf_model()/bpf_model so that the
+   builtin model isn't called a NULL model (review from tj)
+ - p1: document why iocost holds its own model reference, the
+   field locking and the merge flag semantics, and reword the
+   commit message to describe guarantees instead of code paths
+   (review from tj)
+ - p1: clear the autop stepping timestamps when a BPF model is
+   attached; without this, the timestamps from before the attach
+   survive until a model=linear switchback and can trigger an
+   immediate profile step on that stale pre-attach evidence
+   (report from sashiko)
+ - p1: align the BPF pricing scope with the builtin model:
+   dataless bios with no flush state and ops other than reads,
+   writes and zone appends cost nothing, completion-time sizing
+   prices reads, writes and zone appends, and a dead owning map no
+   longer reports -EBUSY (report from sashiko)
+ - p3: probe the iocost_ioc_tick tracepoint, unwind the private
+   mount namespace on setup failure, report fopen errors faithfully
+   and fix an inverted posix_memalign() assertion that made the
+   streams test skip its whole IO block (report from sashiko)
+ - p2/p4: document the iocost_ioc_tick fields in the trace header
+   and extend the io.cost.model docs with the dev supply and the
+   -ENODEV attach conditions (report from sashiko)
+
+Tested on next-20261117 (qemu x86_64): the selftests pass, and the 2x
+example model doubles the charged cost over the builtin on a
+rotational device (2.00x measured), returning to 1.00x after
+"model=linear".
+
+Link: https://lore.kernel.org/r/20261106122356.3224638-1-cui.tao@linux.dev # v13
+
+Tao Cui (4):
+  blk-iocost: add BPF struct_ops cost model support
+  blk-iocost: add iocost_ioc_tick tracepoint for per-period device
+    summary
+  selftests/bpf: add iocost cost model test
+  docs: cgroup-v2: document the iocost BPF cost model attachment
+
+ Documentation/admin-guide/cgroup-v2.rst       |  55 +-
+ MAINTAINERS                                   |   1 +
+ block/Kconfig                                 |   4 +
+ block/blk-iocost.c                            | 360 ++++++-
+ include/trace/events/iocost.h                 |  57 ++
+ tools/testing/selftests/bpf/config            |   2 +
+ .../selftests/bpf/prog_tests/iocost_model.c   | 947 ++++++++++++++++++
+ .../selftests/bpf/progs/iocost_model.c        | 188 ++++
+ tools/testing/selftests/bpf/progs/iocost_ms.c | 195 ++++
+ 9 files changed, 1797 insertions(+), 12 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/iocost_model.c
+ create mode 100644 tools/testing/selftests/bpf/progs/iocost_model.c
+ create mode 100644 tools/testing/selftests/bpf/progs/iocost_ms.c
