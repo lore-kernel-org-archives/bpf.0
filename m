@@ -1,46 +1,46 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794961980;
-	b=tMfmFCRbTYD+MVZYWdopWZZHjaejNvQIFRXTYRXM1cw9HhcugnKB/l/wIHOJiAYbNYKO
-	 3Kfus2Jw2Wd3zYCUVm+5hXYJsGef9fHPyVZ4RH8Ct3G6vEZykD2R5Otc0vUPbaHSy3LDC
-	 LfxJi65PhZtqHqBVVOmfSdBB2WY1/T6LT8LYNFNexTS6vMf7pz59+V/nkUaeNeX/iBFFC
-	 CnMYNuelWG4zd56q2LaIEyPEIAcjCSOhalY0Tis98OJdaWMS0dhcjrpq8CrJ+JuH+wR+L
-	 BCbHPIGWod2ACZ8HAIgbeFQSk5cDhOwpBM9acPVzH3UdhiXL/4DVPOclIeZD6t3oYuA==
+	t=1794962103;
+	b=EdowqCE7apHOPyE5iDJNTHrOydzGmfv+AfDjrm9a4/7f4sI1x2NqKtOoA+Udjcj+xV+i
+	 iZ/O2tw95SbK0gIHKGadAURYN+WxVoSp4ySEZZt8qwN8QLmUdyNZDgeKeS9ZKD+iYMSzX
+	 byWT7c0zQfmzUf/NlqrSYAR8W/YVUpvP5jgthqDimOTBWxhVITEkQKfcla4INyD3u404X
+	 JnlAZnKi0kFXcfEGIDqwvPtFPwWWHH1c4hKvqPdlxeeReVK/ez2JmDt2wD2Y6w8vIxKsg
+	 2wQIXINyAF6DSJIp30gJISNvTruHvnOAXPklktkr2savNHlWMPc6BoUVKKgPC2YEQjA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794961980;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794962103;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 In-Reply-To:References:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=WrMWW3SDQuTYveumv1s0qvBg0urq2O5dXdgqjDAwdQE=;
-	b=Tf/QVfkZgWmKRx+RlF8WHHYKOAqp54mZ16lCZrAs+KcWlisk/ROfO1u4rCvuLY8eB+//
-	 yqHih7/6FCk9nSUG6FtUwb890jAphuHxf4YM7WMJA0pyK4ImwZNIC0uc1gUftKCkKEfMW
-	 z9sCZqrn8BGoAPgyJNs5apPsPSymN1RQGg5fbfbcREdtfy9H8QaOhwbc0zsRMTUpu8vtS
-	 wX7tCllrhJwwaGmzQhEKKFHS/M4BIOO5EJsosrBlCYfLvWKiiLlyx4IuRk//LXSfzQyri
-	 inq3BJwtURfHnWaV6oEL1/tJ5umMcRefD7lsfty3Hxe7e4QtAE8y4iOQNF30ATqv+YQ==
+	bh=VgMyiF3aoeCpbyadb6K+nSJ1MEgNf4FaQsw83jeO3OU=;
+	b=HR2eNfprTmEqCe+8Qyd5XX8ASsXw2IGpb9751YQmnpOw0RJmw8Odlks8eWW9VbsCl1AA
+	 +KBcv7x8ZHOyVJ2FGfu50/0L/x6qxtPRWAaD4QxU9OEWIBIHX/sXM3Gh/XGUtktQN/WYk
+	 izvCpROFSv3R497pOkvwPH/gj7pCrSDuM/DCVTGEmFgbMRHSDp4BuCZooF86/4esEF7hE
+	 0M39sdN2Jan9VKLSI4D9NjD3YeF23ek1SHRwvPUlTZjf6sAMXeMSuNPExvPm2AE68NH3N
+	 OJ5/4Oc7gZ7XaE8YwWRoP7w5XZ83aevdvK0pUZ+BSI3LqNZTjYzoc9Dnfa/Qguj1tEg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lk4AwVO2;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OfYWL+LO;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7D4B606A32A;
-	Wed, 18 Nov 2026 00:33:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55D37606A31C;
+	Wed, 18 Nov 2026 00:35:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lk4AwVO2
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 342F21F000C4;
-	Wed, 18 Nov 2026 00:32:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OfYWL+LO
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E4791F000C4;
+	Wed, 18 Nov 2026 00:35:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794961980;
-	bh=WrMWW3SDQuTYveumv1s0qvBg0urq2O5dXdgqjDAwdQE=;
+	s=k20260515; t=1794962102;
+	bh=VgMyiF3aoeCpbyadb6K+nSJ1MEgNf4FaQsw83jeO3OU=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=lk4AwVO2HBWZ3onOdeP+RP5VJDhfEkRUA/45iStCPEDAHQ7xTVNRXjEH2PLsecq1w
-	 MkFqP3Amj6vdR6c+9Iw5lLVDCc3Q4uPqBq6rJx4CkdC6iIlUPHc6WO3XcyMXJsXHd9
-	 k2JGvv35OacEXCU/QULyoss/SmCTdsx7XCRxYrj7dJhzFGCG/IRVN1qAJlCYczeo1i
-	 M9gAG1tdwTXDJ7ySUAB9OU0gkoxKee5ftF81/KWLH/J+S1E2wDThzJSBbkcXzTNotP
-	 k7TWztca0esadecq5JSkL/+GzpRQiLA43QCAzGQLWOnrpav1FSiM9f+zgIspJEKwaZ
-	 f7ScJNUljQIig==
-Date: Tue, 17 Nov 2026 16:32:58 -0800
+	b=OfYWL+LOLJ2u+qULY9cJBoNtsqLIdb/wqbSKgQtU0N9a/8fCQuriXv9wBzxv2wz0S
+	 I1M36vyB4T4Ly8OOGZ05B4RxUO7v3Z5P++XW53BNSCN9461fWnXM0PBuznXKPHN5yb
+	 6bHo1REbFVmZXrPgYzzTsSEiRqJpnrV/2kgoqHTprNqxE3mrt29oc663+jVPC8AZEF
+	 +Rt5evDuG2o7ts4KShpIXpfc/aC91p+t2sq49VO495OmVxU1SItEN3IvYdbrKkp/yy
+	 OnJn1mmRXIVz8xAD3S21OFZQdtOaZBzzXjapeJlRWMOLEpD4M6jGsTz0vdxLX+GVfy
+	 mbr25MNMS5iEA==
+Date: Tue, 17 Nov 2026 16:35:00 -0800
 From: Jakub Kicinski <kuba@kernel.org>
 To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
 Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski
@@ -65,14 +65,11 @@ Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski
  Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, Alexander
  Lobakin <aleksander.lobakin@intel.com>, linux-doc@vger.kernel.org,
  linux-kernel@vger.kernel.org, Stuart Clark <stuclar@meta.com>
-Subject: Re: [PATCH net-next v1 01/11] net: Get skb fragment addresses
- through netmem
-Message-ID: <20261117163258.446a0c45@kernel.org>
-In-Reply-To: <87wlqcg85c.fsf@all.your.base.are.belong.to.us>
+Subject: Re: [PATCH net-next v1 00/11] xsk: Zero copy through page-pool
+ memory providers
+Message-ID: <20261117163500.63593c03@kernel.org>
+In-Reply-To: <20261110102039.1002605-1-bjorn@kernel.org>
 References: <20261110102039.1002605-1-bjorn@kernel.org>
-	<20261110102039.1002605-2-bjorn@kernel.org>
-	<20261115131314.2d3ab96f@kernel.org>
-	<87wlqcg85c.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -85,13 +82,10 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, 16 Nov 2026 15:31:27 +0100 Bj=C3=B6rn T=C3=B6pel wrote:
-> > IIRC netmem is supposed to be used for frags and memory CPU never needs
-> > to access. =20
->=20
-> netmem covers pages too, and netmem.rst already allows readable net_iovs
-> ("Decouple net_iov from unreadability"); the in-tree ones just happen to
-> be unreadable.
+On Tue, 10 Nov 2026 11:20:21 +0100 Bj=C3=B6rn T=C3=B6pel wrote:
+>  38 files changed, 2159 insertions(+), 225 deletions(-)
+>  create mode 100644 net/xdp/xsk_pp.c
 
-Ugh, slop got in :/ I really don't think "the in-tree ones just happen
-to be unreadable." I seem to recall being involved in that design.
+This is much larger than I expected, and doesn't seem to be a natural
+extension of memory providers. For reference - did you vibe code fbnic
+AF_XDP support without this set? What's the LoC?
