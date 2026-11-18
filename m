@@ -1,66 +1,66 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.7
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794972268;
-	b=Vx3z/V3bVOxaEtqe8GZuXfwIecv+NWg8x1vgPuGnJEMo6wM8NL/hhyxlVc34E/3AW45Y
-	 mMGzWtAYFKfQrN6LOPGuboF4UVX/0eKEiZmJIqLaGHNDAU7WFnv6xhdrnmg5cI/fkKgy+
-	 /GAma5zMBgSQP5ts04lB8okSoNQXo+eNN8UWbWb+oFTKTp8GGxNwTrT6mkVoHbVlmzQVi
-	 EVqlUNdiyGkhddKVfxECvj5FnN0blb5ZKUF9LZAD0cMM2wTEAItB6TYz6e8qnLq61+J6S
-	 mx2RxcfmW3jSOkax17JOMNyPjDs/s0p+VHx9dbL0VrXCYIvY8pvYjuuroe9uqkl6h/A==
+	t=1794972279;
+	b=C2WtH9yxqb/b7mMJX9K9IZAB4i/+ZaTD5sPbg6Kn2/QRNZGnErEokjn/M9YvZKBWVB6T
+	 /NC34Nua1Fixkr4k2XIvDsuYpQLkJcuedSkhY30lEJyYt3KuEU21o8KcLX75+tgajU2Sh
+	 WSgCUcNapW35p1r78KvzyuiBnGgydBduYuTHP+y0qLJmiJBx0V5wawjE6VLzxgJQChDd1
+	 EQtEaQadpFweEwREdTOVeBTSDx63oRBwOMVSB13OTLi5Xl8nqpkAj+WoZAFBP12NDO8D+
+	 LdGd7aYcGXEjfPg7e1bfviFHGqur9uAmb+mHhxIsmycfeVktwsW3EEZU4t/xoEPryWQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794972268;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794972279;
 	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
 	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
 	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:From:To:Cc:Subject:
 	 Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=EpHjCmtVuQPRi1F1S9LTAYhtf44z2tPz47nz4SFlWV0=;
-	b=o3FyJIH4kuINAa5mU21KZTJS86CwpYBoiIJfV8lQ9jq0MzDG06lG94l2YUawKKdVZz70
-	 neJ/3702fFBADU5g+9tO5WVfFXt1ywftZFBdRoG2PFgcN24i/aLvBrJren8FzsFD9pptT
-	 0Dor976zn7EelRe7e9yskRUqSmgauLeQEx5RDlrbtf56OhVi3ABB4cxEn01BOmyH6ruSr
-	 YTPRcDN5rrV5zNA3N/jCBRHSSx60pYTKpUfF3ttqVcbu85S20DCac8QjQykK40/FSQCni
-	 yMo9YMJj6KhPmB5BlyVbS8A3y2379BceHGj0xiPOEdamRyEo2I2PgXwNOu7mGzJEPfg==
+	bh=rL6L8y1zrpK7esXdTjhPIB0PUAKdunj7De32hbYk/Jk=;
+	b=ZHBQEZ6q1VR/Ejs219J8I9xBHmhx1JGbfoGaeImN1Cs39h6c2+jpDSQ0M45+uH2UnIvp
+	 uUZMrlKc/7s/rxu/IVTUoUsXZcVEljNs5DImYW4zhfNUUG1R0Qu/+gVgu4+XelainGuLP
+	 hx2BHUsDKZ4WNzcNdcNhBEitpltXLDtUejWfQlYjRbw6bnja2wtqV+ewqbEoyiXewl2bm
+	 17FV97GQpPcceezKRCAZ/vNgYfBMdhyXx+1cIIit0RZ24C+xffDhe1fBd2KIsL1gOzFrw
+	 aoopBi8RnPKQSwJ1TqK3hBHTGLf0aU+gur8XTAbZWX0EuNlimgmQkVKWjXpgx6AEaFQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.intel.com;
 	spf=pass smtp.mailfrom=linux.intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=HvYO0NUU;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=IaqpW+Lp;
 	arc=none smtp.remote-ip=192.198.163.7
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DC83606A8A6;
-	Wed, 18 Nov 2026 03:24:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0DC83606A8A6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 023C1606A32F;
+	Wed, 18 Nov 2026 03:24:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 023C1606A32F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=HvYO0NUU
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=IaqpW+Lp
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794972269; x=1826508269;
+  t=1794972280; x=1826508280;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=DVC7kDm+4suO6uWI6KKVmTqXSE7QAnET6vKWju4nsY4=;
-  b=HvYO0NUU5P49Kuubru9oEclEEK1Xay5n56ln8NmaPYa/tsHuJzxiPFYH
-   BNQvBykD4VgEEQ6sPPxQMsO0UB8DZxCAop/NUQ7SezHogrifogpjhtVGg
-   U3WWWku6kw3dqtq20ckLspsS50oB8zMUapT7RpXkVVH9rOgAGw4oJ8oiX
-   33iI4bSUrP4SwfDARfSJZAAAeaPaRJSsLMK6ywCGlRu5l7JMBo4QurM7P
-   0QMCT5f+FRM+4Y6kMGASOSYZXK1nZbGNrVE0U86Gh8YxiXcrs+YabyHcd
-   IzJY/iDUz4y2KVGyCIALQ6G7VFNgcF97rT2/g2Zv5a9ofmXjlG7ppQGpY
-   Q==;
-X-CSE-ConnectionGUID: lV7mEl8cSBek4PBfbn/R8g==
-X-CSE-MsgGUID: DGH5ApoEShCyEi6i3tNUMw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11969"; a="3630038"
+  bh=fD4T+p+Cfd6aQCEOqE6uCFNJMlR/I8y/8hhudmZUxFM=;
+  b=IaqpW+Lpp9n143E6ghwTyL0LGnUDadhb3XwaxW7l37kt2GF51F3EHJbB
+   VqEExncI2YhN2rF9AZXU/YH2swyqQ0ry2jB6xWPwBx8E4Pupmttjbl229
+   ebd2o5g7dkq1rT5CX2NgXmBfEIvLYXESoKJWOCoxDrD1U3W1FHh8Dpsa0
+   15UkwfN4EE0NErydw+s7/SCsjBaIbyGwNPhRIcqBI2lc617YtGEKk/ZJj
+   C1FHfG4x4kUyrcoh4AXPB1+vd2KdLYSLsfL1KkLL4uHynmuRNM1WIwkgB
+   g8NgwRs9JXWDl1IGYk9wY2c5P1/k3a5g0GEZu1OomnP4rqvHef2iLWCct
+   w==;
+X-CSE-ConnectionGUID: 0m8URZC+QaaB8xkHpz6wWg==
+X-CSE-MsgGUID: 4rWR7qgsTciJQsq0bjEyHQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11969"; a="3630070"
 X-IronPort-AV: E=Sophos;i="6.27,219,1787036400"; 
-   d="scan'208";a="3630038"
+   d="scan'208";a="3630070"
 Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2026 19:24:28 -0800
-X-CSE-ConnectionGUID: 6lBZ6z7TSkWJAzoOef0YTQ==
-X-CSE-MsgGUID: QV+ika2tSp2W3wXT1dTkOw==
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2026 19:24:39 -0800
+X-CSE-ConnectionGUID: qvuYME5VSUWlJRXDlk7/6w==
+X-CSE-MsgGUID: og+qwVkAQR+ulngClJqX1w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,219,1787036400"; 
-   d="scan'208";a="9894371"
+   d="scan'208";a="9894435"
 Received: from spr.sh.intel.com ([10.112.229.196])
-  by orviesa004.jf.intel.com with ESMTP; 17 Nov 2026 19:24:24 -0800
+  by orviesa004.jf.intel.com with ESMTP; 17 Nov 2026 19:24:33 -0800
 From: Dapeng Mi <dapeng1.mi@linux.intel.com>
 To: Peter Zijlstra <peterz@infradead.org>,
 	Ingo Molnar <mingo@redhat.com>,
@@ -84,10 +84,15 @@ Cc: linux-kernel@vger.kernel.org,
 	Falcon Thomas <thomas.falcon@intel.com>,
 	Xudong Hao <xudong.hao@intel.com>,
 	Dapeng Mi <dapeng1.mi@linux.intel.com>,
-	Sashiko <sashiko-bot@kernel.org>
-Subject: [Patch v7 21/24] perf/x86/intel: Refresh LBR stack for LBR counter events in PMI handler
-Date: Wed, 18 Nov 2026 11:14:50 +0800
-Message-Id: <20261118031453.1353625-22-dapeng1.mi@linux.intel.com>
+	Sashiko <sashiko-bot@kernel.org>,
+	KP Singh <kpsingh@kernel.org>,
+	Matt Bobrowski <matt@bobrowski.net>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Daniel Xu <dxu@dxuuu.xyz>
+Subject: [Patch v7 23/24] perf/core: Don't mutate shared branch stack depth
+Date: Wed, 18 Nov 2026 11:14:52 +0800
+Message-Id: <20261118031453.1353625-24-dapeng1.mi@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20261118031453.1353625-1-dapeng1.mi@linux.intel.com>
 References: <20261118031453.1353625-1-dapeng1.mi@linux.intel.com>
@@ -102,65 +107,140 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When handling an LBR counter event, the raw LBR counters in the reserved
-field of each LBR entry are cleared after the stack is processed and
-reported to userspace. This prevents raw counter data from leaking.
+perf_sample_save_brstack() clamps the branch stack depth by directly
+overwriting brs->nr with min(event->attr.sample_max_stack, brs->nr).
+This is unsafe because the branch stack buffer is shared by all branch
+events in the same PMI: once one event with a small sample_max_stack
+truncates brs->nr, every subsequent event processed in that PMI sees
+the shrunken depth and silently loses branch records it asked for.
 
-However, if multiple events overflow in the same PMI, an LBR counter
-event may not be the first one processed. In that case, the raw LBR
-counters may already have been cleared by the previous LBR event, so the
-later LBR counter event cannot read the correct values.
+Add perf_event_brstack_depth(), which computes the per-event depth
+without modifying the shared branch stack. Use it in the relevant callers
+so each event is limited only by its own sample_max_stack, without
+clobbering the shared LBR state.
 
-Refresh the LBR stack before processing an LBR counter event when
-multiple events are handled in a single PMI. This restores the correct
-raw LBR counter data for the event in this corner case.
+bpf_read_branch_records() also relied on the clamped brs->nr, so switch
+it to perf_event_brstack_depth() to preserve the same per-event limit for
+records returned to BPF programs.
 
-This situation is rare, so the extra refresh should have negligible
-performance impact.
-
-Fixes: 33744916196b ("perf/x86/intel: Support branch counters logging")
+Fixes: c53e14f1ea4a ("perf: Extend per event callchain limit to branch stack")
 Reported-by: Sashiko <sashiko-bot@kernel.org>
 Signed-off-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: Matt Bobrowski <matt@bobrowski.net>
+Cc: Song Liu <song@kernel.org>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Daniel Xu <dxu@dxuuu.xyz>
 ---
- arch/x86/events/intel/core.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ include/linux/perf_event.h | 13 ++++++++++---
+ kernel/events/core.c       |  8 ++++----
+ kernel/trace/bpf_trace.c   |  6 ++++--
+ 3 files changed, 18 insertions(+), 9 deletions(-)
 
-diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-index fc672bc69ae3..b4632b791e26 100644
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -3906,8 +3906,9 @@ static int handle_pmi_common(struct pt_regs *regs, u64 status)
+diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+index 19de3f1cbd6e..35d3cc4cc07e 100644
+--- a/include/linux/perf_event.h
++++ b/include/linux/perf_event.h
+@@ -1424,12 +1424,19 @@ static inline bool has_branch_stack(struct perf_event *event)
+ 	return event->attr.sample_type & PERF_SAMPLE_BRANCH_STACK;
+ }
+ 
++static inline u64 perf_event_brstack_depth(struct perf_event *event,
++					   struct perf_branch_stack *brs)
++{
++	return min_t(u16, event->attr.sample_max_stack, brs->nr);
++}
++
+ static inline void perf_sample_save_brstack(struct perf_sample_data *data,
+ 					    struct perf_event *event,
+ 					    struct perf_branch_stack *brs,
+ 					    u64 *brs_cntr)
  {
- 	struct perf_sample_data data;
- 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
--	int bit;
-+	bool lbr_counter_cleared = false;
- 	int handled = 0;
-+	int bit;
+ 	int size = sizeof(u64); /* nr */
++	u64 nr;
  
- 	inc_perf_irq_stat();
+ 	if (!has_branch_stack(event))
+ 		return;
+@@ -1439,9 +1446,9 @@ static inline void perf_sample_save_brstack(struct perf_sample_data *data,
+ 	if (branch_sample_hw_index(event))
+ 		size += sizeof(u64);
  
-@@ -4080,12 +4081,19 @@ static int handle_pmi_common(struct pt_regs *regs, u64 status)
- 		perf_sample_data_init(&data, 0, last_period);
+-	brs->nr = min_t(u16, event->attr.sample_max_stack, brs->nr);
++	nr = perf_event_brstack_depth(event, brs);
  
- 		if (has_branch_stack(event)) {
--			if (!cpuc->lbr_stack_live) {
-+			/*
-+			 * Re-read the LBR stack if it no longer holds the live state,
-+			 * or if an earlier LBR event already cleared the raw counters
-+			 * that this event needs.
-+			 */
-+			if (!cpuc->lbr_stack_live ||
-+			    (lbr_counter_cleared && is_branch_counters_group(event))) {
- 				intel_pmu_lbr_read(cpu_lbr_stack(cpuc),
- 						   cpuc->lbr_counters);
- 				cpuc->lbr_stack_live = true;
+-	size += brs->nr * sizeof(struct perf_branch_entry);
++	size += nr * sizeof(struct perf_branch_entry);
+ 
+ 	/*
+ 	 * The extension space for counters is appended after the
+@@ -1449,7 +1456,7 @@ static inline void perf_sample_save_brstack(struct perf_sample_data *data,
+ 	 * of events of each branch.
+ 	 */
+ 	if (brs_cntr)
+-		size += brs->nr * sizeof(u64);
++		size += nr * sizeof(u64);
+ 
+ 	data->br_stack = brs;
+ 	data->br_stack_cntr = brs_cntr;
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 457d75ea7142..8b80ca788523 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -8462,12 +8462,12 @@ void perf_output_sample(struct perf_output_handle *handle,
+ 
+ 	if (sample_type & PERF_SAMPLE_BRANCH_STACK) {
+ 		if (data->br_stack) {
++			u64 nr = perf_event_brstack_depth(event, data->br_stack);
+ 			size_t size;
+ 
+-			size = data->br_stack->nr
+-			     * sizeof(struct perf_branch_entry);
++			size = nr * sizeof(struct perf_branch_entry);
+ 
+-			perf_output_put(handle, data->br_stack->nr);
++			perf_output_put(handle, nr);
+ 			if (branch_sample_hw_index(event))
+ 				perf_output_put(handle, data->br_stack->hw_idx);
+ 			perf_output_copy(handle, data->br_stack->entries, size);
+@@ -8476,7 +8476,7 @@ void perf_output_sample(struct perf_output_handle *handle,
+ 			 * right after the struct perf_branch_stack.
+ 			 */
+ 			if (data->br_stack_cntr) {
+-				size = data->br_stack->nr * sizeof(u64);
++				size = nr * sizeof(u64);
+ 				perf_output_copy(handle, data->br_stack_cntr, size);
  			}
- 			intel_pmu_lbr_save_brstack(&data, cpuc, event);
-+			lbr_counter_cleared = true;
- 		}
+ 		} else {
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 2aec56d7f3d3..7c42bbf05c2f 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1549,6 +1549,7 @@ BPF_CALL_4(bpf_read_branch_records, struct bpf_perf_event_data_kern *, ctx,
+ 	static const u32 br_entry_size = sizeof(struct perf_branch_entry);
+ 	struct perf_branch_stack *br_stack = ctx->data->br_stack;
+ 	u32 to_copy;
++	u64 nr;
  
- 		x86_pmu_clear_perf_regs(regs);
+ 	if (unlikely(flags & ~BPF_F_GET_BRANCH_RECORDS_SIZE))
+ 		return -EINVAL;
+@@ -1559,13 +1560,14 @@ BPF_CALL_4(bpf_read_branch_records, struct bpf_perf_event_data_kern *, ctx,
+ 	if (unlikely(!br_stack))
+ 		return -ENOENT;
+ 
++	nr = perf_event_brstack_depth(ctx->event, br_stack);
+ 	if (flags & BPF_F_GET_BRANCH_RECORDS_SIZE)
+-		return br_stack->nr * br_entry_size;
++		return nr * br_entry_size;
+ 
+ 	if (!buf || (size % br_entry_size != 0))
+ 		return -EINVAL;
+ 
+-	to_copy = min_t(u32, br_stack->nr * br_entry_size, size);
++	to_copy = min_t(u32, nr * br_entry_size, size);
+ 	memcpy(buf, br_stack->entries, to_copy);
+ 
+ 	return to_copy;
 -- 
 2.34.1
 
