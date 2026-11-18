@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795044268;
-	b=bjc4wCYk6/yS5gxKjQZLXidh2sIsEvv/gvoNoE0YOxci46p3CkrlidFsdQbEL1467KQe
-	 Gv4nP/Jd3F88sYCPoeryopEEVoSG1OZ50/v3c+gHEUZxqqmX1CBQuQCA4xTdNAS9bhhg0
-	 h/uSAd++lNwnht6uCx41OmZomm5MqLbISWewSCDkgSmiXdCuyqVjasZMfzVacn/IqXkud
-	 u+BKtnyEy6nN8CSEFsnEv0dO6eV3XAWSG8A2BrZVIBHfZSgjnVTuRXeE55K72kDkVDZRm
-	 I/T+vOX1IiXdFx+TRs7c5m0TRONkVW9u22yhC3loGFsL5rAA4WFGKdW+tanURkNa5VQ==
+	t=1795044270;
+	b=W20zcaK/M1nFo38uDo7Pahj1ffYcspoMWePFgQLka1BrGwhFMv8eXLAX4R/J4Hw6AIEd
+	 FEnmVhqbCJjSkvQWY1ZsoErG0cKDT28I3y9x5c5sJuHeYOKUjJ6+lDTXS7y3AHM/pAmxR
+	 qORe+S9N6NDmNL4J0LgSVHfdGPTGFV7D8X1WyFulLvSY/3UN/QwhQRVV5paZRnFraq4F2
+	 GStxzwIxmVl599QVF/ew9y8AS4CGdln3CfYIRd9RXCpQA2us3nxM7ZnFw6PLHAmbkHryl
+	 LJROSozyL7tyYgGl2+QUvJWrZMQvDBqQuZ7lwsASuwXeMLqmuaw34DrPsTFLlX0B0XQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795044268;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795044270;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=7ESInaSDuDYul1nQI9PNiMra/oVQ5owBjeZDU6MC7kA=;
-	b=NllKV29Dqk050bBVkPecIcNdXOgZTC4DJEx2wq5RUoMLsxNyqH4FoYpLuA7/76J12yv4
-	 gv7jTP0cRSKnR+btr3UTWUcv5fFT+1ig735qpy/uMfKiadRzzG+Vzk0OBSeGl1yKxoHGz
-	 ZnbldJe8DoHfchLH+WHUtyPgDOXSXxxDyvVSyVpShafT2jEmwoFyb5Ro/Js+iokDGuaCV
-	 hfr3XDxgaGvHLrjF4UpvPFrpZKyDSjUQCT5kI0CoARZBUvJhGo6to+61R2f8kgrLBSUIj
-	 J5dePT0wpK8WuFVVlNr0ecdMjqZpNsD62PmVCpQJ+pE0rwXVu6hNd5D1rbaOvOCpfRA==
+	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+	bh=16EfIIHV3SinIjErQNoIN26xXbHmz7jMom6Zh+p2ulY=;
+	b=FktCzMSzL2sGcBVhAQjwa7D2ITyCuTVMX5oazNcIFUQF6MJZr5wWbeKkmY/BujgcpHcQ
+	 PAgBpELgPGvJyBoXsUiKyDFMNCzOy927KaaG3zV82hzlRvwIojXU0Idn1aBWld4me+ncB
+	 vcAHyMISMq1A2wQsdaL2cN3CnwjSn9/FTG0uPW/eu4DQ6/4wvrbOt6uZevpCGzQoi/Moa
+	 y3RdduT5HMU+Zgmgm22wMcxmGFXDmdloxtU3nrLI8SHm07QJtCpBhmQuxIHNvczMDL3BU
+	 vtpO0nh+lLIpcbTJ5EunG84xjVr5zZrVADebeHMYsLRPVl2+vuTmhn3XBPOAcotpZSQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SMc0ZYoS;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TsXoXNrK;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5515606A320;
-	Wed, 18 Nov 2026 23:24:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 372DC60A2602;
+	Wed, 18 Nov 2026 23:24:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SMc0ZYoS
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D82E11F000C5;
-	Wed, 18 Nov 2026 23:24:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TsXoXNrK
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 467741F000C5;
+	Wed, 18 Nov 2026 23:24:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795044268;
-	bh=7ESInaSDuDYul1nQI9PNiMra/oVQ5owBjeZDU6MC7kA=;
-	h=From:To:Cc:Subject:Date;
-	b=SMc0ZYoSNyPsW/NvIz8/KsSGEgjcgioN1VbZ8ucaSuOBhZiXnyxS+59OehD3bMelD
-	 neSbr6iAhs84QFbcTcbeNPRjGaO3wpLNzTbyzdcGk6sWktv/8ggJVD3KQRS5+DBd7j
-	 V/D9J842EiyWLxefv4fetGhsL2xJZqqndpNszI2epYp2OhKRXoM56fQbzkg+jT320/
-	 r9XUEOj0z/TqhvQq3XrEoWiTOBn1h7Er9zu0Nwh0kgIbqMv9kO+jG3ZwB6eUalhISn
-	 VJlXnVxZAu42iMOLW01GQs88aqjF3BsCuJP7+ix63IY5O39iVM83f5UQax/iySmZPe
-	 hHQGxhc8EPuOA==
+	s=k20260515; t=1795044269;
+	bh=16EfIIHV3SinIjErQNoIN26xXbHmz7jMom6Zh+p2ulY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=TsXoXNrKyFfzCKUPGyLtKYlLMkEWEUmP4tjIdDNkjULu8X+WclVns+NpOpESmUP5Q
+	 GbKtwdD9/Zc+bj44fY5cJOK3/tOpBN6NYLxNp5rz54pvkGLlYK0ixcwW5OQGk6pHTx
+	 dy+I9CSGy8MfTxc5AwLjEdJpkSyd/xLmJllJC4KMin2uGgMzfqKsciaeCbj0VcKjfG
+	 uK41yH43WkXE3/MC+izT8+caR21Q6DNT3r1688aTr3Kos4ZYczYb6AvHttHLNebBhJ
+	 M2+EiubRAvsD4L4DZOoHlOSkSETtCXDCcbRjkD7Dh3nc6BEGqJPtyk7qC9kca/RxnW
+	 BZGj0CJdwhNDw==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -59,10 +59,12 @@ Cc: netdev@vger.kernel.org,
 	przemyslaw.kitszel@intel.com,
 	bpf@vger.kernel.org,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 0/8] net: adjust HW GRO and LRO feature handling
-Date: Wed, 18 Nov 2026 15:23:07 -0800
-Message-ID: <20261118232315.3593731-1-kuba@kernel.org>
+Subject: [PATCH net-next 2/8] selftests: drv-net: drop the generic XDP hack from the HW GRO setup
+Date: Wed, 18 Nov 2026 15:23:09 -0800
+Message-ID: <20261118232315.3593731-3-kuba@kernel.org>
 X-Mailer: git-send-email 2.56.1
+In-Reply-To: <20261118232315.3593731-1-kuba@kernel.org>
+References: <20261118232315.3593731-1-kuba@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -74,54 +76,82 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-XDP has no understanding of GSO frames. GSO frame looks to XDP
-like a large packet. Pushing / popping headers cannot be reflected
-in GSO metadata. XDP redirect is completely blind to GSO since
-struct xdp_frame carries no GSO fields.
+The HW GRO tests want SW GRO out of the way so that what they observe
+can only have come from the device. On drivers which keyed HW GRO off
+NETIF_F_GRO that was not expressible with ethtool alone, so the setup
+fell back to attaching a generic XDP program, which suppresses SW GRO
+as a side effect.
 
-For those reasons most (read: all well behaved?) drivers disable
-LRO and HW GRO when XDP is attached.
+Those drivers no longer tie the two features together, so ask for the
+feature combination directly.
 
-This series lifts the auto-clearing of HW-GRO and LRO from drivers
-up to netdev core. This gives us uniform behavior - previously some
-drivers would reject XDP attach w/ HW-GRO and others would auto-
--clear the HW-GRO features.
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+ .../testing/selftests/drivers/net/gro_lib.py  | 21 +------------------
+ .../selftests/drivers/net/hw/gro_stats.py     | 18 ----------------
+ 2 files changed, 1 insertion(+), 38 deletions(-)
 
-More importantly (for me) after this series the HW-GRO/LRO features
-should consistently remain in wanted_features, and get re-enabled
-after XDP is detached. I started looking at this because XDP generic
-tests in NIPA unintentionally clear HW-GRO, which in turn makes devmem
-tests fail / skip on mlx5.
-
-Note that XDP generic mangling GSO state is its own can of worms this
-series doesn't try to address. There are multiple paths (xdpgeneric,
-tun, veth...) which end up calling XDP on skbs, with varying level
-of assurance that the skb is not a GSO super-frame...
-
-Jakub Kicinski (8):
-  net: stop making HW-GRO depend on SW GRO
-  selftests: drv-net: drop the generic XDP hack from the HW GRO setup
-  net: state the "XDP excludes HW-GRO" rule in the core
-  net: state the "XDP excludes LRO" rule in the core
-  eth: mlx5e: drop the now-dead HW-GRO and LRO vs XDP handling
-  eth: bnxt_en: don't clear HW-GRO and LRO for XDP in ndo_fix_features
-  eth: qede: drop the now-dead HW-GRO vs XDP handling
-  eth: gve: drop the now-dead HW-GRO vs XDP interlock
-
- .../networking/net_cachelines/net_device.rst  |   1 +
- include/linux/netdev_features.h               |   6 +
- include/linux/netdevice.h                     |   6 +
- .../net/ethernet/broadcom/bnx2x/bnx2x_cmn.c   |   2 +-
- drivers/net/ethernet/broadcom/bnxt/bnxt.c     |   5 +-
- drivers/net/ethernet/google/gve/gve_main.c    |  12 --
- .../net/ethernet/mellanox/mlx5/core/en_main.c |  32 +-----
- .../net/ethernet/qlogic/qede/qede_filter.c    |  12 +-
- drivers/net/ethernet/qlogic/qede/qede_main.c  |   1 -
- net/core/dev.c                                | 107 ++++++++++++++----
- .../testing/selftests/drivers/net/gro_lib.py  |  21 +---
- .../selftests/drivers/net/hw/gro_stats.py     |  18 ---
- 12 files changed, 104 insertions(+), 119 deletions(-)
-
+diff --git a/tools/testing/selftests/drivers/net/gro_lib.py b/tools/testing/selftests/drivers/net/gro_lib.py
+index 875a715b2ae1..6eff19db3541 100644
+--- a/tools/testing/selftests/drivers/net/gro_lib.py
++++ b/tools/testing/selftests/drivers/net/gro_lib.py
+@@ -263,26 +263,7 @@ def _run_gro_bin(cfg, test_name, protocol=None, num_flows=None,
+         set_ethtool_feat(cfg.ifname, cfg.feat,
+                          {"generic-receive-offload": False,
+                           "rx-gro-hw": True,
+-                          "large-receive-offload": False},
+-                          check=False)
+-
+-        # Some NICs treat HW GRO as a GRO sub-feature so disabling GRO
+-        # will also clear HW GRO. Use a hack of installing XDP generic
+-        # to skip SW GRO, even when enabled.
+-        feat = ethtool(f"-k {cfg.ifname}", json=True)[0]
+-        if not feat["rx-gro-hw"]["active"]:
+-            ksft_pr("Driver clears HW GRO and SW GRO is cleared, using generic XDP workaround")
+-            prog = cfg.net_lib_dir / "xdp_dummy.bpf.o"
+-            ip(f"link set dev {cfg.ifname} xdpgeneric obj {prog} sec xdp")
+-            defer(ip, f"link set dev {cfg.ifname} xdpgeneric off")
+-
+-            # Attaching XDP may change features, fetch the latest state
+-            feat = ethtool(f"-k {cfg.ifname}", json=True)[0]
+-
+-            set_ethtool_feat(cfg.ifname, feat,
+-                             {"generic-receive-offload": True,
+-                              "rx-gro-hw": True,
+-                              "large-receive-offload": False})
++                          "large-receive-offload": False})
+     elif mode == "lro":
+         # netdevsim advertises LRO for feature inheritance testing with
+         # bonding/team tests but it doesn't actually perform the offload
+diff --git a/tools/testing/selftests/drivers/net/hw/gro_stats.py b/tools/testing/selftests/drivers/net/hw/gro_stats.py
+index 70e76e3888bd..569ca81368e6 100755
+--- a/tools/testing/selftests/drivers/net/hw/gro_stats.py
++++ b/tools/testing/selftests/drivers/net/hw/gro_stats.py
+@@ -173,24 +173,6 @@ def _run_gro_test(cfg, test_name, num_flows=None, ignore_fail=False,
+                        "rx-gro-hw": True,
+                        "large-receive-offload": False})
+ 
+-    # Some NICs treat HW GRO as a GRO sub-feature so disabling GRO
+-    # will also clear HW GRO. Use a hack of installing XDP generic
+-    # to skip SW GRO, even when enabled.
+-    feat = ethtool(f"-k {cfg.ifname}", json=True)[0]
+-    if not feat["rx-gro-hw"]["active"]:
+-        ksft_pr("Driver clears HW GRO when SW GRO is cleared, using generic XDP workaround")
+-        prog = cfg.net_lib_dir / "xdp_dummy.bpf.o"
+-        ip(f"link set dev {cfg.ifname} xdpgeneric obj {prog} sec xdp")
+-        defer(ip, f"link set dev {cfg.ifname} xdpgeneric off")
+-
+-        # Attaching XDP may change features, fetch the latest state
+-        feat = ethtool(f"-k {cfg.ifname}", json=True)[0]
+-
+-        _set_ethtool_feat(cfg, feat,
+-                          {"generic-receive-offload": True,
+-                           "rx-gro-hw": True,
+-                           "large-receive-offload": False})
+-
+ 
+ def _check_gro_stats(cfg, test_queue, stats_before,
+                      expect_rx, expect_gro, expect_wire):
 -- 
 2.56.1
 
