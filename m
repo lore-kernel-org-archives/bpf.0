@@ -1,68 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.8
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794981726;
-	b=urtvq/UdahFD3xlbtutgtBJPD0UT5EeUJC30ScDB6th/GdeYtz5BzjXYRPlNR2U4KpPi
-	 JnAKfZyq3RrjiLWwWFFPzHcKiAxTS4vpQv7XPu8fvxqz4npb6HMJp7cB6ghXoCssiDMIF
-	 Ga0Y7YC40YgJXfS3eT3qe9/GNB8x4bfniVnph3KpchNA61C6B31t5ndSZJlYujTGlvpnQ
-	 6vTECWKwX6Oae5seQgd4jqOY8H368H2rV7BKTuNKtPollisyK4XEXIDxn5+bI20KIcxbz
-	 zQYpntG7sg8YQDi4B9/Ax9ux2UN6/mKVI2X55w9SomCh8bzefmHT/i1/XQedIo8GL5Q==
+	t=1794983324;
+	b=DISrBIk4uPFUjDeGwuMg8p/PFG8PWJI/VzUBDowGHW/MMToX4JIpPHYDm+rDG2KLtTW6
+	 7xtUgAzAkTwfRM1VZdp+HTyl4bGFN1ZkigNU+NkGoGQ7hG+Py0Jj1/dy/T5XMOUOQMLia
+	 DW6m+LeJ6l73ZfcHF0sC/uUdJ3sLhPXdLW4660LcICb5CQYuocEMxN1Ywfd397NQ8TR3s
+	 PZtVNRxOCxlDRO91WiBjVa6qHuL9yXWcI717eWXx9lNt7YY3RCwrcqbRycinr6sofZdWB
+	 6+3iGfff5p2iCiyfS10vbSQxm00EoYpQlb49a/WbF5nHT6MIrpN44iRVHcKpgfX4C4A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794981726;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794983324;
 	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
 	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
 	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Message-ID:Date:
 	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
 	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=KaVB9aQueRrDHM8zzK1HKjvmCb5KTm+vzXMLRGqV+PI=;
-	b=i8xTcgeDld6lams1zgksTllRaxscR1tubsZ94KEm/BKPdGOqyKvlyaqkGaQ8f9eZbhc0
-	 7fyj4CFiN3Df+lVjqGmTp26mLYmVyXoc49TCJ12K87Ou19Cd82+aGVh8vwkRTPBQ0l0SX
-	 faKXq935cV9xyxznubfuHCRFh3ohY6PLKt/d7kMFOQ6tFkilMUFZdedj7N+fzfbxURW1N
-	 ZTWxvDvciFJIG0sCbRqbzpyadx9euxXzPMMhTDuWN8we/sctLx6IOfcfUnjValWmxn/zy
-	 h1Ki1r66xTvZjmvD4lFplGuzO/X4kQsUn1y4X8MAD1jD4GckJXJToeTYy2CKmY3Yv6w==
+	bh=h4eSDXcesypgTvBv1Ru4BHDaBWBHqHbkwH6cBiVPIr0=;
+	b=0yrb8aShgTxMLV7z3PqP5SIbY70oLVd7zGFrCjYPNhj9tCuzMCYJblVg5QDyM5UqY4Mx
+	 qLuWkwnUniJ3l0eENg1uNsTAB2FmSasXuAFOtO9DfeTdoofG3nDnrijHFcAv0TE3xGd2v
+	 1ZkTHTiBtR9qavMQRzyJ3kOp7hplpTOeLGVACbG9QSbc0WxGgUzfdZYOFz56dQMXnXioX
+	 MH6Enza8rtbQYrVIq+vcFatWDBGN1AxMQ0wMJa95TzUvWAc1Kx9a/lw2sGAklqQsEfrB0
+	 As900R6auDluQi9ATC5n465e9kgSnevbJEdcwSOEYqzU9W0taUc/Jnv/gpi0PXZ33IQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.intel.com;
 	spf=pass smtp.mailfrom=linux.intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=lvz3snR7;
-	arc=none smtp.remote-ip=198.175.65.14
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=WrYMo4TX;
+	arc=none smtp.remote-ip=192.198.163.8
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E89D8606A336;
-	Wed, 18 Nov 2026 06:02:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E89D8606A336
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7E1E606A31C;
+	Wed, 18 Nov 2026 06:28:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E7E1E606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=lvz3snR7
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=WrYMo4TX
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794981726; x=1826517726;
+  t=1794983323; x=1826519323;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=8F/6G5/GHxCIt7vwPlD6K7Cor0Kb2dXbkqf4sGKH3T0=;
-  b=lvz3snR7eaicxUYHJk/WLcA6QB7lxj6c+ZVZuPO0VeINDjWUEp6ROGxS
-   EM6BC0DD4C8BVzGuOVIq0ve8q4MSqtny++GJfOxM30vwITYmieGHiChrK
-   orPdtkJv0sQNxQ0xRvTOOEdTcNI7DZ0aYv6hoiUVftcO3ZYlTGfamOzjT
-   SoAgOafSFrlfVRarztbnmRPG9wn+OEH6gsElke/YZRtVJQO4lsAuaF+LR
-   9u95aPys61Q9+ngxcdQ21ptNU0Bt4kgkF+qAFTOOrrxZma8V6+31Wd1CH
-   awwcmT6/4eJoYowBca2IM2ESVkwxYShUsXpl08MB3VfWcw6nkA+Kara3i
+  bh=jWZJboTc/5i1V3mEny3o1ig0m8S+eBjQShbqXeCRKxE=;
+  b=WrYMo4TXRWdF3ubCZthaiFnC75hArpAeYoTKs/0Ek8G+ldO8VZonrRLX
+   kHMZb4yzFqB48jrXCXh6LnUaPT8GagdD8iLwHJe8wER8XbMxdWcJLyuLH
+   34Z/4RxlSvFMBye7MoaRkUR6vwcDYnfrilcHzEmvUFqflXFe2+1z4eTtX
+   mA9sn7XceyNes9H2JZTg6uLRh8nbWXbXpfwTu6xSHjBPFqCM4ZUFVAFzF
+   kKHZT19vpVapfRkckLCNFY9s/DzBo4U/2klwJnEazkfa1Xe+VrSEocHJf
+   aVj7fyngWdWkLbaVwQcWJL6wm/YJ1zBafOdeBGsrWO8OxC9Iz/CdJmIik
    w==;
-X-CSE-ConnectionGUID: wJlO30BiTXmzM1zZIyscpw==
-X-CSE-MsgGUID: NMC91AKTR4aWdZ/7jQSLqg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11969"; a="3666229"
+X-CSE-ConnectionGUID: HZNEdOpyS/SK13MJUmqUTA==
+X-CSE-MsgGUID: mwnOywugRj+NEZAaDDkBvA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11969"; a="3673512"
 X-IronPort-AV: E=Sophos;i="6.27,219,1787036400"; 
-   d="scan'208";a="3666229"
-Received: from fmviesa013.fm.intel.com ([10.60.135.153])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2026 22:02:05 -0800
-X-CSE-ConnectionGUID: KauGCPQSThWd3JMzOY7ekw==
-X-CSE-MsgGUID: 7yU9sM28TvyeYUYDqcjmSg==
+   d="scan'208";a="3673512"
+Received: from fmviesa011.fm.intel.com ([10.60.135.151])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2026 22:28:42 -0800
+X-CSE-ConnectionGUID: kzdW81zRRRGke6p/jmW2pA==
+X-CSE-MsgGUID: qGrdfkJxR225Js+GXTi1Yg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,219,1787036400"; 
-   d="scan'208";a="11958009"
+   d="scan'208";a="11855620"
 Received: from dapengmi-mobl1.ccr.corp.intel.com (HELO [10.124.241.239]) ([10.124.241.239])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2026 22:01:57 -0800
-Message-ID: <a4decd8d-0eb4-41f8-b106-446ab6d3d4df@linux.intel.com>
-Date: Wed, 18 Nov 2026 14:01:54 +0800
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2026 22:28:35 -0800
+Message-ID: <51f9a700-bd38-4187-87b6-f0fa3534bdb5@linux.intel.com>
+Date: Wed, 18 Nov 2026 14:28:32 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -73,103 +73,133 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [Patch v7 04/24] perf/x86/intel: Limit branch snapshots to valid
- entries
+Subject: Re: [Patch v7 14/24] perf/x86/intel: Account lbr_pebs_users for
+ arch-PEBS events
 To: bot+bpf-ci@kernel.org, peterz@infradead.org, mingo@redhat.com,
  acme@kernel.org, namhyung@kernel.org, irogers@google.com,
  adrian.hunter@intel.com, alexander.shishkin@linux.intel.com,
- ak@linux.intel.com, eranian@google.com, sandipan.das@amd.com,
- andrii@kernel.org, song@kernel.org, ravi.bangoria@amd.com,
- ananth.narayan@amd.com
+ ak@linux.intel.com, eranian@google.com, andrii@kernel.org, song@kernel.org,
+ ravi.bangoria@amd.com, ananth.narayan@amd.com
 Cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
  bpf@vger.kernel.org, dapeng1.mi@intel.com, zide.chen@intel.com,
  thomas.falcon@intel.com, xudong.hao@intel.com, sashiko-bot@kernel.org,
  ast@kernel.org, daniel@iogearbox.net, martin.lau@kernel.org,
  eddyz87@gmail.com, yonghong.song@linux.dev, mason@kernel.org,
  ihor.solodrai@linux.dev
-References: <20261118031453.1353625-5-dapeng1.mi@linux.intel.com>
- <61848b4bb02d2dcb5f78b813f31a4f395805c864c1152c52374abc2ca1a1ff51@mail.kernel.org>
+References: <20261118031453.1353625-15-dapeng1.mi@linux.intel.com>
+ <913204cab6fa4a1068980a05e1f85a400d7cadc0d2f60a818cd61f227cdb2e15@mail.kernel.org>
 Content-Language: en-US
 From: "Mi, Dapeng" <dapeng1.mi@linux.intel.com>
-In-Reply-To: <61848b4bb02d2dcb5f78b813f31a4f395805c864c1152c52374abc2ca1a1ff51@mail.kernel.org>
+In-Reply-To: <913204cab6fa4a1068980a05e1f85a400d7cadc0d2f60a818cd61f227cdb2e15@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 
 On 11/18/2026 12:10 PM, bot+bpf-ci@kernel.org wrote:
->> perf/x86/intel: Limit branch snapshots to valid entries
-> TL;DR: Resetting the shared lbr_stack.nr in intel_pmu_lbr_read() may corrupt
-> an in-flight host adaptive-PEBS branch-stack sample when KVM vLBR is active
-> and a BPF program calls bpf_get_branch_snapshot(); a later patch fixes it.
+>> perf/x86/intel: Account lbr_pebs_users for arch-PEBS events
+> TL;DR:
+> - On arch-PEBS, a non-PEBS branch-counter sibling event may report a stale
+>   branch stack with zero counters until a later patch fixes it; consider
+>   reordering
+> - Fixes tag may point to the wrong commit
+>
+>>     perf/x86/intel: Account lbr_pebs_users for arch-PEBS events
+>>
+>>     lbr_pebs_users tracks how many PEBS events are currently using LBR.
+>>     It is updated for legacy PEBS events, but arch-PEBS events were missing
+>>     from that accounting.
+>>
+>>     Add the missing lbr_pebs_users accounting for arch-PEBS as well.
+>>
+>>     Fixes: d243d0bb64af ("perf/x86/intel: Initialize architectural PEBS")
+>>     [ ... ]
+>>     Signed-off-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
+> d243d0bb64af only parses the arch-PEBS CPUID leaves and adds the
+> enable/disable callbacks, it does not make arch-PEBS use LBR.  The
+> ARCH_PEBS_LBR handling and PERF_SAMPLE_BRANCH_STACK in large_pebs_flags
+> came with 52448a0a7390, which predates this series.
+>
+> Should the tag point there instead:
+>
+>   Fixes: 52448a0a7390 ("perf/x86/intel: Setup PEBS data configuration and enable legacy groups")
+
+Not exactly. The arch-PEBS feature including the arch-PEBS assisted LBR
+snapshotting is supported by a bunch of patches instead of a single patch,
+e.g., the commit d243d0bb64af enumerates if the arch-PEBS has the
+capability to support LBR snapshot, it's a more appropriate and accurate
+commit comparing with 52448a0a7390.
+
+
 >
 >> diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
 >> --- a/arch/x86/events/intel/lbr.c
 >> +++ b/arch/x86/events/intel/lbr.c
 > [ ... ]
 >
->> @@ -1026,14 +1026,19 @@ void intel_pmu_lbr_read(void)
->>  {
->>  	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
->>  
->> +	if (!cpuc->lbr_users || vlbr_exclude_host()) {
->> +		/* Reset lbr_stack.nr to prevent stale data leakage. */
->> +		cpuc->lbr_stack.nr = 0;
->> +		return;
->> +	}
->> +
-> Can this reset of cpuc->lbr_stack.nr corrupt a host adaptive-PEBS sample
-> that is still in flight?
+>> @@ -616,7 +616,7 @@ void intel_pmu_lbr_add(struct perf_event *event)
+>>  	 * be 'new'. Conversely, a new event can get installed through the
+>>  	 * context switch path for the first time.
+>>  	 */
+>> -	if (x86_pmu.intel_cap.pebs_baseline && event->attr.precise_ip > 0)
+>> +	if (intel_pmu_has_pebs_lbr(event->pmu) && event->attr.precise_ip > 0)
+>>  		cpuc->lbr_pebs_users++;
+>>  	perf_sched_cb_inc(event->pmu);
+>>  	if (!cpuc->lbr_users++ && !event->total_time_running)
+> Can this make a non-PEBS branch counter event report a stale branch stack
+> on arch-PEBS platforms?
 >
-> Before this patch the vlbr_exclude_host() case returned without writing
-> anything.  Now the BPF snapshot path writes to the same per-CPU struct
-> that a PMI-time sample may still point at:
+> With lbr_pebs_users now non-zero on arch-PEBS, the existing shortcut in
+> intel_pmu_handle_irq() is taken:
 >
-> intel_pmu_handle_irq()
->   handle_pmi_common() -> x86_pmu_drain_pebs
->     __intel_pmu_pebs_last_event()
->       setup_pebs_adaptive_sample_data()
->         intel_pmu_store_pebs_lbrs(lbr)   /* cpuc->lbr_stack.nr = N */
->         intel_pmu_lbr_save_brstack()
->           perf_sample_save_brstack()     /* data->dyn_size += N entries */
->                                          /* data->br_stack = &cpuc->lbr_stack */
->       perf_event_overflow()
->         __perf_event_overflow()
->           bpf_overflow_handler()
->             BPF prog -> bpf_get_branch_snapshot()
->               __intel_pmu_snapshot_branch_stack()
->                 intel_pmu_lbr_read()     /* vlbr_exclude_host(): nr = 0 */
->           overflow_handler() -> perf_output_sample()
->             perf_output_put(handle, data->br_stack->nr);       /* now 0 */
->             perf_output_copy(handle, data->br_stack->entries, ...);
+>     if (cpuc->lbr_users != cpuc->lbr_pebs_users)
+>         intel_pmu_lbr_read(cpu_lbr_stack(cpuc), cpuc->lbr_counters);
 >
-> The record header was sized for N branch entries, but nr is now 0 and no
-> entries are written, so the PEBS LBR data for that sample is lost and the
-> tail of the record is never written.
+> That shortcut assumes every consumer of the LBR stack is counted in
+> lbr_users.  An event whose branch_sample_type is only
+> PERF_SAMPLE_BRANCH_COUNTERS plus PLM bits has
+> PERF_X86_EVENT_NEEDS_BRANCH_STACK cleared in intel_pmu_hw_config(), so
+> intel_pmu_add_event() never calls intel_pmu_lbr_add() for it and it is not
+> counted in lbr_users.  It still has has_branch_stack() set and samples
+> through the non-PEBS path in handle_pmi_common():
 >
-> This looks reachable when KVM's vLBR event is active (it sets
-> INTEL_PMC_IDX_FIXED_VLBR in intel_ctrl_exclude_host_mask) alongside a host
-> PEBS event using PERF_SAMPLE_BRANCH_STACK, with a perf_event BPF program
-> calling bpf_get_branch_snapshot().  Before this patch the same sequence
-> produced a consistent sample.
+>     if (has_branch_stack(event))
+>         intel_pmu_lbr_save_brstack(&data, cpuc, event);
 >
-> The !cpuc->lbr_users half of the condition does not look affected, since
-> any event whose sample references cpuc->lbr_stack is counted in lbr_users.
+> Consider a group on an arch-PEBS CPU with ARCH_PEBS_LBR and PMU_FL_BR_CNTR,
+> with a precise leader using branch_type=any,counter and a non-precise
+> sampling sibling using only branch_type=counter.  After this patch
+> lbr_users == 1 and lbr_pebs_users == 1.  If only the sibling overflows,
+> intel_pmu_lbr_read() is skipped, and intel_pmu_lbr_save_brstack() ->
+> intel_pmu_lbr_counters_reorder() works on whatever cpu_lbr_stack(cpuc)
+> last held.  That is either nr == 0 after intel_pmu_lbr_reset(), or the
+> leader's last PEBS-record snapshot from intel_pmu_store_pebs_lbrs(),
+> whose raw counters in entries[i].reserved were already zeroed when the
+> leader's sample was saved.
 >
-> The series appears to fix this later in 61909a79de63 ("perf/x86/intel:
-> Use a dedicated LBR stack for BPF snapshotting"), where
-> intel_pmu_lbr_read() takes the stack to fill as a parameter.  Is it worth
-> avoiding the shared-stack write in this patch, so that the intermediate
-> commit does not have this window?
+> So the sibling would report a stale branch stack with all branch counters
+> zero, where before this patch it got the live LBR state.  The same
+> problem already exists for legacy adaptive PEBS (pebs_baseline), and this
+> patch extends it to arch-PEBS.
+>
+> This looks to be addressed later in the series by 0479605ddd39
+> ("perf/x86/intel: Account LBR user counts for pure branch counter
+> events"), and 9edb70d448eb ("perf/x86/intel: Refresh LBR stack for
+> non-PEBS LBR events when needed") replaces the lbr_users != lbr_pebs_users
+> check at PMI entry with an on-demand re-read.  Would it make sense to
+> order 0479605ddd39 before this patch so the intermediate state does not
+> regress?
 
-Yeah, the patch order can be refined. But I'm not sure if it's worthy to
-post a new version just for the patch sequence. Anyway, I would refine this
-patch order if there is a new version. Thanks.
+Hmm, I don't think the patch order matters. If we put the commit
+9edb70d448eb ahead before this patch, the whole arch-PEBS assisted LBR
+snapshot won't be counted without this patch regardless of it's a pure
+branch counter event. It seems worse. 
+
+Thanks.
+
 
 
 >
->>  	/*
->>  	 * Don't read when all LBRs users are using adaptive PEBS.
->>  	 *
+>
 > ---
 > AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 > See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
