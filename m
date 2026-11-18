@@ -1,56 +1,67 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794990150;
-	b=pIg+UyiLRAcWcb7SgEE3CHr5aSddQkSoMy11trDeM4YLsSH/wpQks1kX6x8s2Pl4ik+0
-	 q5xkUpWI7Ma3aVLDOq9GPfRgXmCCYAmSyoN9vfC+h7IW50zVSJB+Uxxv1uPlrbWaCr/Rg
-	 TK7PFrhgUG69+3bkhBbXQYpQ1Ucbf1Mijb0GHenWLbzVo5QlELSAAyIUjGM22qZ18V201
-	 p4gSMMJ5pjFuICRmYTr1kNeoYg9oD+51KoViQ8oHo9o88k+qo3SzGhv6Gkno1nNFVxi1Q
-	 Ulcio8fRB9jyVpy0vHq1PKihSR2h7+kFDcXp/RKV/zyU9LBtUVXtKIEPlmYxNn9EjSQ==
+	t=1794991498;
+	b=JtBMNgOpAD2RN5BS6ZSVfqtHobrNis+Ba18edYcalceTVV0uQsq5T/6CAnl/utc95LVQ
+	 zZa9LKSbvadaIhoLu/XtyQzjVERFKzWaYxm5q3EbuGgktLE3mUBwjajZkKziC/BuCuvAz
+	 gdQPYRVzQkSr2kxGBA79BOAVALxLqMkvGzehU6zpXcxnZ7onDSRA7cqThgRNlOIrU1dz2
+	 R0hpdzarnmLW+R2BJJKQP+jFNTbHmenTh9/9KHXAIWKM/w3MOcRmlFVQacufnTFOUeu8Y
+	 XO4rV5qbgYq1+2bNoNbvkzn7TH903q6+vq8pAsjkcumf5YF6zaOKroe5Sgr9Sq4YUBQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794990150;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=YY7OhV17wHxskwjQGjuNIBBpGZWHtiDuvNk3SBEA90w=;
-	b=ImRTiPkdLH6cA6ZDgq10l2yoZewh/K5sa1gLiwxBMVAm9oQJK0JnQXP8hpt13+nHhr7C
-	 Q7e2zNDqmiRCH7sp3zzxISY1mwTRz+Qi85u8qJndYLXwIrEdikNiCKX6JrG3z7JLIGgJU
-	 kerzCnNThbImMP66xT+OCr0JUd/X0bQXFUhYq3bUGM/gvYxKw4i1BXyz9l85bHvJsVC6T
-	 8pj6ewfqzkd56RjteToX500RSCOO2dMM3cr3N7qvBp0iM7DtXAGK9DcZlWVYpyJ21xJoT
-	 6hs/0Ez5axD2UdEvyX8mfwSwAh8/P6VywuqzjU35/Ypi1vL5XAcOFOBsNwzl03SURjw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794991498;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=N1sGH4N/SXZ2PEylzDQSbka+G8mKbWTDfMxnhcO/bOI=;
+	b=FfPaXblNKc5pluYmsP5EoGt50E+PGHjSAtEQfXfkViaP8HmHeDRezHp+VNgF4sMC9/AG
+	 UYtbE5TN6uPKyiDUMnwGe5UucGtxgH+f9PYVF9QYiGA2+/m9nJCrFW2VsBnWDuHaG1UZj
+	 2e60ZDlCH7BZrYNKyKWwroDBjPxMq87jqgXXWWM0h7DgFeVqeNEYtyhWaohDM2iOngKmI
+	 iA01l+OLSqp4sf5Fk0py49mGGj1jYdBR1LVyw3cn8Fi5fjDaRFR3gNrmEQvu+3ZVJU6qJ
+	 RVYrW28EMAAUahqqUtoqo43XV6bIiiEuvpW8y8BxAVQAcdJTJ5SAVv5cHTfSIgiWyFQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Uc/Ea46X";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dGD7mkyb;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 696F0606A325
-	for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 08:22:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8413F606A31C;
+	Wed, 18 Nov 2026 08:44:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Uc/Ea46X
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB8EA1F000C4;
-	Wed, 18 Nov 2026 08:22:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dGD7mkyb
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22C501F000CA;
+	Wed, 18 Nov 2026 08:44:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794990150;
-	bh=YY7OhV17wHxskwjQGjuNIBBpGZWHtiDuvNk3SBEA90w=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Uc/Ea46XGbh3Joa+xoXmCELIxVLiXqf4vCmLY5GU7x0gbIm8Hvi9sAwmBkaYRTafL
-	 FCMijSW/OuwXSB4JsMv5muDkwx2gYk8Fqa1kj1lEelOsHJ2m6mh6K8o2etX/beqBi8
-	 hQ7SbBVzXnQpUaIC5stK8JwWSBZBvqMXLH1bGzAv0R4De9w3on6168kpWfnsvdIWAF
-	 4qoi3cDGB4NUfxlxF/vcv7ZFGbkTfLw4H+vt/5bl3zp6dZf+LeR4AjMx/8q/gL5T8p
-	 sywrJiveAfQU/355CwWltXR4en9QX3B9N1A0r0EbA5Oe1sY2d5u+mFBTLqO0dDpUSR
-	 bhtXZ0QI0Ox8A==
-Message-ID: <sashiko-outbox-220432@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] LoongArch: BPF: Optimize doubleword loads with ld.d and
- ldptr.d
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Tiezhu Yang" <yangtiezhu@loongson.cn>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261118081201.10498-1-yangtiezhu@loongson.cn>
-References: <20261118081201.10498-1-yangtiezhu@loongson.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 18 Nov 2026 08:22:29 +0000
+	s=k20260515; t=1794991498;
+	bh=N1sGH4N/SXZ2PEylzDQSbka+G8mKbWTDfMxnhcO/bOI=;
+	h=From:To:Cc:Subject:Date;
+	b=dGD7mkybV8hQ9Llilny4jnyX3zQT0Ep2HY++G1vuIMeixLzwoyK9sNKrxLwcrKWQN
+	 emllvu4pbdquNod7Hx9FgiIoOU9Zd+4skmIOVpQTSWxXveVf2yN9WeFzDATL5KrhKS
+	 MgjoZsAeS5Zxh01cDqv3SR3Wv48Wxwza3jqYT832xXOtKqvbB6GUeFtf2ZrLiSLaUZ
+	 /UHzPCif2KRBYmQQvehes3R7fSGJPUFhT0O33gF+7buYD5RzICjcbUwiuBCG/8YKKf
+	 QdLfBN6Kj1BMYKCzIpb72hYCwqwixDKEWPhwx3Cs83oya/cvb+Fo04xbCgfNB8ozCq
+	 /PcxyBMVA9WCw==
+From: Jiri Olsa <jolsa@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Oleg Nesterov <oleg@redhat.com>
+Cc: bpf@vger.kernel.org,
+	x86@kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Will Deacon <will@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	rtm@csail.mit.edu
+Subject: [PATCH bpf 0/2] bpf: Limit writable registers in uprobe context
+Date: Wed, 18 Nov 2026 09:44:48 +0100
+Message-ID: <20261118084451.12590-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.56.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,44 +70,43 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [High] loongarch: bpf: call to undeclared is_aligned_signed_imm16() in
-  build_insn()
---
+Hi,
+a uprobe BPF program can currently write fields in struct pt_regs that
+are loaded directly by the architecture’s return-to-user path. Some of
+these fields are restricted by ptrace, but the BPF verifier does not
+apply the same restrictions.
 
-commit 6d9b52d1b981a940a37fd81d368c20f9bfdc04fb
-Author: Tiezhu Yang <yangtiezhu@loongson.cn>
+This series limits uprobe context writes to registers that ptrace can
+set to arbitrary values. It adds architecture-specific writable-register
+checks for arm64, riscv, and x86-64; other architectures default to
+allowing no writes. Reads are unchanged.
 
-LoongArch: BPF: Optimize doubleword loads with ld.d and ldptr.d
+The second patch adds verifier tests for writable and read-only registers
+on x86-64, arm64, and riscv.
 
-This commit optimizes 64-bit BPF doubleword loads in the LoongArch JIT by
-emitting ld.d or ldptr.d when the offset fits in a signed 12-bit or aligned
-signed 16-bit immediate.
+Patch 1 fixes the issue reported by rtm and is marked for stable consideration.
+Patch 2 adds the regression tests.
 
-> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-> index 15af1abb5cb69..15f40b570b9af 100644
-> --- a/arch/loongarch/net/bpf_jit.c
-> +++ b/arch/loongarch/net/bpf_jit.c
-> @@ -1352,8 +1352,14 @@ static int build_insn(const struct bpf_insn *insn,=
- struct jit_ctx *ctx, bool ext
->  			}
->  			break;
->  		case BPF_DW:
-> -			move_imm(ctx, t1, off);
-> -			emit_insn(ctx, ldxd, dst, src, t1);
-> +			if (is_signed_imm12(off)) {
-> +				emit_insn(ctx, ldd, dst, src, off);
-> +			} else if (is_aligned_signed_imm16(off)) {
-> +				emit_insn(ctx, ldptrd, dst, src, off >> 2);
+thanks,
+jirka
 
-[Severity: High]
-Does this break the build when CONFIG_BPF_JIT is enabled because
-is_aligned_signed_imm16() is not defined in arch/loongarch/net/bpf_jit.h?
-The prerequisite commit "LoongArch: BPF: Fix the offset of stptr.w and
-stptr.d stores" noted below the --- separator is not applied in this tree.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261118081201.1049=
-8-1-yangtiezhu@loongson.cn?part=3D1
+---
+Jiri Olsa (2):
+      bpf: Restrict uprobe ctx writes to the registers ptrace can set
+      selftests/bpf: Test which ctx registers a uprobe prog can write
+
+ arch/arm64/kernel/probes/uprobes.c                            |   6 ++
+ arch/riscv/kernel/probes/uprobes.c                            |   6 ++
+ arch/x86/kernel/uprobes.c                                     |  15 ++++
+ include/linux/uprobes.h                                       |   5 ++
+ kernel/events/uprobes.c                                       |   9 +++
+ kernel/trace/bpf_trace.c                                      |  10 ++-
+ tools/testing/selftests/bpf/prog_tests/verifier.c             |   2 +
+ tools/testing/selftests/bpf/progs/verifier_uprobe_write_ctx.c | 196 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 8 files changed, 248 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_uprobe_write_ctx.c
