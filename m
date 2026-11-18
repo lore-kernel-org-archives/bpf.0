@@ -1,68 +1,64 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.201
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794984503;
-	b=RZ42tVfZfuz86hQ1hbMy50Qs/3XvFyNFi7P2q/Gv3OnZQWc+iEm0gVJlaO2cYYPt+nfP
-	 v4nFpi0MAY3rJ5qw+MlzeERuJS9HvnOtXgAZHJeLtQKCFPqqqBJyCpdczRg49vVcG9N1z
-	 4Z17xWRFdLufmb55/eRQxvanIYaT6RxMm6LP6BPCilJE/pc9SfdomcoUm+ySWEdLEB7dh
-	 qAztm17OC2Ej+Xe+ZHwPz9evRe82Bh741MgA3BNT1Ng46GbpM7ubmf785cvp+a9MMY/qa
-	 ++l5Gy0GE0vDO7PaI85pV/umL9HdBq2qJH3Me5sNoMgEDIaEEKnwA0EhCm5aVxm09hA==
+	t=1794986116;
+	b=MqOGdTMGXFbHsfued/H9yRgPeaa03TCejwXGKfuqW25Vb4W2hadxPJ2RlAxHYGFq9itd
+	 NmGJIiHXMgSsPfKQpngAiMXzaFR3YVbovvZiKO1hHTr43SRVO3/jO/W19UZgeK30uBBKG
+	 MaEAE7Wa+HWUhxKSgJhOpeQFG7b9+tkIFuO2/a419lLHBDAURtFQJ5jbY3gfSlkY7025T
+	 G6dMtyu4NBixUEY0KtZfHJ8id9GQzO/eZAkd0OmjANZkA2EC04DBRaX+zc+nvp/1vwLlE
+	 gYM+3NVfsjm1V2wPoTWs4V4/Zkk2Isk2tHWXZijXVbXPni6J3RSwdpiuwypILYx2BTg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794984503;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
-	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=vgwgCvpswtJRWR2a83jgVRcIOlLkVvQPyoIjj5/btfw=;
-	b=mDn/ocMlAYUzFN55QLTMSvSsNzApAmvL47M/K41SmmkJqCBSNu1LmUPd1harkllpkGZ8
-	 gABCaVXdXxRFCIynOddMLkDAQaEhPieVZRucRyZSAa7ssz6gnytOb68Zd3soCEUaPWRNo
-	 RRc465Y9rh71WapqRqNI3MKj5Ju0iHZXu/ILrPocJfakSocefU11CxDGTxYpVzu/NPoRW
-	 3uwDxNRujrIuvYhioONluW85Tqw32Yz8cxJgJOf3DXW09zNOix0Tnzl2ZOsgd3hui7fSP
-	 MrGxvN0mDYxHY259pX4LMqEqQj4u5MPcaai5PDZFDf3IhbjpB0ucqf6fBSnFGk3tovQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794986116;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=ji0XZgDQd7ghLSiQktNtImFvdtMgYQ130FYZVNbr8qM=;
+	b=mPCfO9m+Gdi2PQU6JyiZTv1Eszou/7M3J5XoFrQ+1+YpFBoQBANkKyJ5a0Z3K6VE0AF9
+	 LU6cgbTMj2POEnznGah+CF9a5Ru+vLM3M430JY+n14ENdz+Wi1hEMxqY0+xETlxnRDa8a
+	 mMUr9WojsfX0UeOQxNdGdfTdEGPwpQMqcr4IReNbZjdBJVomCBlx96v6qYYj78Je8ZirN
+	 rEnMUlgc/uzyIYAoV+B594s+fMtSSuSN8qQWMcNaTsBVkX1tFEYVdBAg/2JaOAcyhv4WF
+	 /c1mJTjir/w4EpCwi//5MtZeHAkKJyUcpJhBEh7wsdqpc3s2fDkE1GRV5oZan3I6LtQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.intel.com;
-	spf=pass smtp.mailfrom=linux.intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b="mB/5QKel";
-	arc=none smtp.remote-ip=192.198.163.17
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=PObKyjeD;
+	arc=none smtp.remote-ip=91.218.175.201
+Received: from mta0.migadu.com (out-201.mta0.migadu.com [91.218.175.201])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B458606A32A;
-	Wed, 18 Nov 2026 06:48:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4B458606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8B04606A31C
+	for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 07:15:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D8B04606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=mB/5QKel
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794984503; x=1826520503;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=mZA3G0uEhW7Xobr9BK0nooFcChQvCLwKszT8JnEeXW8=;
-  b=mB/5QKelnfmZjXHyxEEAy0DHU+2/FIMmWVhirZPfWFDSBb6XMcvQ16fR
-   99ai+0HTl8yozuNFboBKEV7YB/CyNcgulp/J0mrvST7b0WAFd1iYQ1t7M
-   zfKMiwimne2COGrngJlxlt0DKX96znR2STD3MQKe0nWdxBWBwBrHRx2Wc
-   a40+1Wjqqe7yUgCB0HYPHJ/hRhV+lCq7yf45cIJ7mQjsWWGNj7TjSQqyy
-   WIMnKdpzvrPZWQIsDk7je9bsT2ykUwg6fSkVrB+JCKVI3vEt5+v0xG/7S
-   d07WepQo9NdXjZoiCFLy78icCeQyzfib9+nlJfhC3dkpvRi7pNfprKWqX
-   Q==;
-X-CSE-ConnectionGUID: t7QL/xr4SOakb6j+f8OPyw==
-X-CSE-MsgGUID: OA8+tGh0QVCwZzLKH9YJHQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11969"; a="3772828"
-X-IronPort-AV: E=Sophos;i="6.27,219,1787036400"; 
-   d="scan'208";a="3772828"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2026 22:48:22 -0800
-X-CSE-ConnectionGUID: ZA24Y1gqSOytFHBaUOYmKw==
-X-CSE-MsgGUID: WSI4gld1RRO9UN6hj7Rmmg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,219,1787036400"; 
-   d="scan'208";a="10434622"
-Received: from dapengmi-mobl1.ccr.corp.intel.com (HELO [10.124.241.239]) ([10.124.241.239])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2026 22:48:14 -0800
-Message-ID: <acbc31bb-d752-4394-a0bc-5cf24ffc7300@linux.intel.com>
-Date: Wed, 18 Nov 2026 14:48:11 +0800
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=PObKyjeD
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=JTaKwGCI/m+yFoX0PfLwq4ulDMkGkwlRqIMjjylQBII=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794986113; v=1; x=1795590913;
+ b=PObKyjeDQ4cKXAmLXsT3Vihx8BVQEfqFFkTArl8SzZL/36oQ2iV3+vtCB32QSsp05VWD4YTC
+ Da6qpd6TE3M4w1FixtgcnaMP+vdzchAqth2OPJIMlaWEvAt9FekmhqQoPf3dQTUkJvMBvyPBwu4
+ PZlKUC+9YyyB5c7FucvRAeVo=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 85aeb9bfd93c480a;
+	Wed, 18 Nov 2026 07:15:12 +0000
+X-Mizu-Trace-ID: 85aeb9bfd93c480a
+X-Migadu-Flow: FLOW_OUT
+From: George Guo <dongtai.guo@linux.dev>
+To: chenhuacai@kernel.org,
+	yangtiezhu@loongson.cn
+Cc: hengqi.chen@gmail.com,
+	guodongtai@kylinos.cn,
+	bpf@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH v2] LoongArch: BPF: Fix the offset of stptr.w and stptr.d stores
+Date: Wed, 18 Nov 2026 16:14:44 +0900
+Message-ID: <20261118071444.10258-1-dongtai.guo@linux.dev>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -72,94 +68,125 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [Patch v7 20/24] perf/x86/intel: Clear raw LBR counters in the
- LBR stack
-To: bot+bpf-ci@kernel.org, peterz@infradead.org, mingo@redhat.com,
- acme@kernel.org, namhyung@kernel.org, irogers@google.com,
- adrian.hunter@intel.com, alexander.shishkin@linux.intel.com,
- ak@linux.intel.com, eranian@google.com, andrii@kernel.org, song@kernel.org,
- ravi.bangoria@amd.com, ananth.narayan@amd.com
-Cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
- bpf@vger.kernel.org, dapeng1.mi@intel.com, zide.chen@intel.com,
- thomas.falcon@intel.com, xudong.hao@intel.com, sashiko-bot@kernel.org,
- ast@kernel.org, daniel@iogearbox.net, martin.lau@kernel.org,
- eddyz87@gmail.com, yonghong.song@linux.dev, mason@kernel.org,
- ihor.solodrai@linux.dev
-References: <20261118031453.1353625-21-dapeng1.mi@linux.intel.com>
- <cc3a05a38e308aa20c6b9886b4cd3e5f403287627b44f30ce07cb7607329ea13@mail.kernel.org>
-Content-Language: en-US
-From: "Mi, Dapeng" <dapeng1.mi@linux.intel.com>
-In-Reply-To: <cc3a05a38e308aa20c6b9886b4cd3e5f403287627b44f30ce07cb7607329ea13@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
+From: George Guo <guodongtai@kylinos.cn>
 
-On 11/18/2026 11:54 AM, bot+bpf-ci@kernel.org wrote:
->> perf/x86/intel: Clear raw LBR counters in the LBR stack
-> TL;DR: Clearing raw LBR counters in the shared stack may zero them before a
-> later branch-counter event in the same PMI reads them, giving all-zero counter
-> samples until a later commit fixes it.
->
->> diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
->> --- a/arch/x86/events/intel/lbr.c
->> +++ b/arch/x86/events/intel/lbr.c
-> [ ... ]
->
->> @@ -1001,6 +1013,7 @@ void intel_pmu_lbr_save_brstack(struct perf_sample_data *data,
->>  		return;
->>  	}
->>
->> +	intel_pmu_lbr_clear_raw_counters(cpu_lbr_stack(cpuc));
->>  	perf_sample_save_brstack(data, event, cpu_lbr_stack(cpuc), NULL);
->>  }
-> Can this clear the counters before a later event in the same PMI has
-> consumed them?
->
-> handle_pmi_common() reads the LBR stack only once per PMI and reuses it for
-> every overflowing branch event:
->
->     if (has_branch_stack(event)) {
->         if (!cpuc->lbr_stack_live) {
->             intel_pmu_lbr_read(cpu_lbr_stack(cpuc), cpuc->lbr_counters);
->             cpuc->lbr_stack_live = true;
->         }
->         intel_pmu_lbr_save_brstack(&data, cpuc, event);
->     }
->
-> Suppose event A is an ordinary LBR event on counter 0 and event B is the
-> sampling event of a branch counters group on counter 1, and both overflow in
-> the same PMI.  A is handled first, and intel_pmu_lbr_save_brstack() calls
-> intel_pmu_lbr_clear_raw_counters(), which zeroes entries[i].reserved in the
-> shared cpu_lbr_stack().
->
-> When B is handled, lbr_stack_live is still true so the stack is not re-read,
-> and intel_pmu_lbr_counters_reorder() reads reserved == 0 for every entry.
-> B's sample then reports all-zero branch counters.
->
-> Before this patch the non-counters path left reserved alone, so B got the
-> correct counters in this ordering.
->
-> The later commit 57fc5222dbd3 ("perf/x86/intel: Refresh LBR stack for LBR
-> counter events in PMI handler") addresses this case by re-reading the LBR
-> stack before a branch counters group event once an earlier LBR event has
-> cleared it.  Until that commit, a bisect landing on this patch would see
-> wrong branch counter samples in this scenario.
+When testing bpf selftests "jit_insns" and "jit_insns_blinded", the
+"ldst_offsets" subtest fails for word and doubleword stores:
 
-Per my understanding, we'd better keep current patch order. Without this
-patch, the LBR stack needs to be refreshed only when there are two and more
-LBR counter events, so the patch 57fc5222dbd3 needs to refresh LBR stack
-only for the cases that there are 2 and more LBR counter events, and we
-have to add a new patch to relax the condition, the LBR stack should be
-refreshed as long as there are 1 LBR counter event and other LBR events. 
+  $ sudo ./test_progs -t jit_insns/ldst_offsets | grep FAIL | head -1
+  store_offsets:FAIL:stx size=0 base=r0 src=r1: byte at offset -16384
 
-It introduce unnecessary complexity. Thanks.
+The JIT incorrectly treats the signed 14-bit immediate of stptr.w
+and stptr.d as a byte offset. For offsets outside the signed 12-bit
+range of st.w and st.d, it checks the byte offset with
+is_signed_imm14() and encodes it unchanged. However, the hardware
+scales the encoded immediate by 4 when calculating the memory
+address. For example, a store at offset -4096 writes at offset -16384
+instead, outside the memory range checked by the verifier.
 
+Pass the offset in units of 4 bytes when emitting stptr.w and stptr.d
+for both immediate and register stores. Use these instructions only
+for offsets that are multiples of 4 in the range [-32768, 32764], and
+keep the register-offset fallback for other offsets that do not fit
+the signed 12-bit immediate of st.w or st.d.
 
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/44231525404
+Before:
+  $ sudo ./test_progs -t jit_insns/ldst_offsets | tail -1
+  Summary: 0/0 PASSED, 0 SKIPPED, 2/2 FAILED
+
+After:
+  $ sudo ./test_progs -t jit_insns/ldst_offsets | tail -1
+  Summary: 2/2 PASSED, 0 SKIPPED, 0/0 FAILED
+
+Cc: stable@vger.kernel.org
+Fixes: 5dc615520c4d ("LoongArch: Add BPF JIT support")
+Signed-off-by: George Guo <guodongtai@kylinos.cn>
+---
+v2:
+- Rename is_ptr_off() to is_aligned_signed_imm16() and drop its comment (Tiezhu)
+- Remove the now unused is_signed_imm14() (Tiezhu)
+- Reword the commit message
+v1: https://lore.kernel.org/all/20261118030219.6230-1-dongtai.guo@linux.dev/
+
+ arch/loongarch/net/bpf_jit.c | 16 ++++++++--------
+ arch/loongarch/net/bpf_jit.h |  6 +++++-
+ 2 files changed, 13 insertions(+), 9 deletions(-)
+
+diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+index 15af1abb5cb6..906f34f420f1 100644
+--- a/arch/loongarch/net/bpf_jit.c
++++ b/arch/loongarch/net/bpf_jit.c
+@@ -1400,8 +1400,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 			move_imm(ctx, t1, imm);
+ 			if (is_signed_imm12(off)) {
+ 				emit_insn(ctx, stw, t1, dst, off);
+-			} else if (is_signed_imm14(off)) {
+-				emit_insn(ctx, stptrw, t1, dst, off);
++			} else if (is_aligned_signed_imm16(off)) {
++				emit_insn(ctx, stptrw, t1, dst, off >> 2);
+ 			} else {
+ 				move_imm(ctx, t2, off);
+ 				emit_insn(ctx, stxw, t1, dst, t2);
+@@ -1411,8 +1411,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 			move_imm(ctx, t1, imm);
+ 			if (is_signed_imm12(off)) {
+ 				emit_insn(ctx, std, t1, dst, off);
+-			} else if (is_signed_imm14(off)) {
+-				emit_insn(ctx, stptrd, t1, dst, off);
++			} else if (is_aligned_signed_imm16(off)) {
++				emit_insn(ctx, stptrd, t1, dst, off >> 2);
+ 			} else {
+ 				move_imm(ctx, t2, off);
+ 				emit_insn(ctx, stxd, t1, dst, t2);
+@@ -1460,8 +1460,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 		case BPF_W:
+ 			if (is_signed_imm12(off)) {
+ 				emit_insn(ctx, stw, src, dst, off);
+-			} else if (is_signed_imm14(off)) {
+-				emit_insn(ctx, stptrw, src, dst, off);
++			} else if (is_aligned_signed_imm16(off)) {
++				emit_insn(ctx, stptrw, src, dst, off >> 2);
+ 			} else {
+ 				move_imm(ctx, t1, off);
+ 				emit_insn(ctx, stxw, src, dst, t1);
+@@ -1470,8 +1470,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 		case BPF_DW:
+ 			if (is_signed_imm12(off)) {
+ 				emit_insn(ctx, std, src, dst, off);
+-			} else if (is_signed_imm14(off)) {
+-				emit_insn(ctx, stptrd, src, dst, off);
++			} else if (is_aligned_signed_imm16(off)) {
++				emit_insn(ctx, stptrd, src, dst, off >> 2);
+ 			} else {
+ 				move_imm(ctx, t1, off);
+ 				emit_insn(ctx, stxd, src, dst, t1);
+diff --git a/arch/loongarch/net/bpf_jit.h b/arch/loongarch/net/bpf_jit.h
+index 2bd0dc5b911c..777c76112d95 100644
+--- a/arch/loongarch/net/bpf_jit.h
++++ b/arch/loongarch/net/bpf_jit.h
+@@ -45,13 +45,17 @@ do {										\
+ } while (0)
+ 
+ #define is_signed_imm12(val)	signed_imm_check(val, 12)
+-#define is_signed_imm14(val)	signed_imm_check(val, 14)
+ #define is_signed_imm16(val)	signed_imm_check(val, 16)
+ #define is_signed_imm26(val)	signed_imm_check(val, 26)
+ #define is_signed_imm32(val)	signed_imm_check(val, 32)
+ #define is_signed_imm52(val)	signed_imm_check(val, 52)
+ #define is_unsigned_imm12(val)	unsigned_imm_check(val, 12)
+ 
++static inline bool is_aligned_signed_imm16(int off)
++{
++	return !(off & 3) && is_signed_imm16(off);
++}
++
+ static inline int bpf2la_offset(int bpf_insn, int off, const struct jit_ctx *ctx)
+ {
+ 	/* BPF JMP offset is relative to the next instruction */
+
+base-commit: aebb7274476403040d582c61478df8f4a7bf9cd3
+-- 
+2.53.0
+
