@@ -1,62 +1,48 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.242.206.163
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794988264;
-	b=ahlRStQaz58MJhwR+T0/cJr9APTEHHJKEG9WY/RTyKWJ7mVTi19v89WoOjMBypiusSv6
-	 aWt2iZ7vh8MPj4V+oPCbsEHbiko7KlQNPkiuEzxzC++GmXV4OZywiLcx12Bi4+PgWKvJP
-	 wa7RQ8jKf1CPdEYtYbUGBvbSn0hy0lgaRRh3ySLl5fCB6POYJ9IG4v7Dd77WIP/+ylwud
-	 KBwq4qroRQY2XdOyGS2u6mBQMcxMBUrAFszPSnuTIkyFwsRd8NQdjlpUUGAHtcPoMpKup
-	 /0M7VnuJKRayoLvzX3zyz8vDnv7rktp1j0B5pP9XYdws5JLx0D7okAbak8lCKyNXlMA==
+	t=1794989528;
+	b=swUP14K2e01ea0u+QK0lj4B0XErxBEk9IbcI8Ny69Lj7Apyx3DA1AZwuxvRET1vpiEwv
+	 JkWQzGX+hxFJWvzWrZkM1axbSi/YR3Re3fh9XwYgBuLP4m5WywwSPfcNmCsOGW9IBURET
+	 NMHGXKFwhFwWQegN0hBvFl1T3MNRtOE0AgGWf6TQQUFG9zsJ1gtaTC9ei+SGIcBm7HQI7
+	 z/JOMikyxi7YCkALxlx6r62waQp/wtL5XV6rpoNM/pXFZIzx35BoT7RYQxncazoINiwNF
+	 mE1ZCS6yBd/OdlvCa9ZNCfGWIJ14RZ9isx4STI8scFxAgzFZkIkKZBA0KL0unzOX7AA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794988264;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=9Gz9IBeSccjjCHOtf0va00995nWsD5fHKwWB7RAq70w=;
-	b=AZ2cP0AYW+1mJLTzHWbfKcmsVsjbSyIqIYP1Flz3et6ErVcpKQeCmaWunrXSiRqTmeSv
-	 R6uze/DOSKx222AJEn6t+ELftYlyOSMk2c4WHu8BotK/QFsaro3Ihdh6J9ud8tW5hjHvj
-	 hsBmdw4ho/hqIw1NasB+8bLqRObCmzXi9z2Wn0sQRzE1kaxA8012Up6IBdOrwPoIYYLHS
-	 fOzMit/KPrBiGsUQTGyWgvRjtUTdtKh09WJ4AIXw7A7U2R+wx+ph2cAkmlFpLAHLWa1OM
-	 yNJcggiIkahg+eYoOMbhWilf54DkTemYGE9OLb6JONkYx/Zl3q4sGZpF5VVjq2gM+OA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794989528;
+	h=DMARC-Filter:Received:Received:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding:X-CM-TRANSID:
+	 X-CM-SenderInfo:X-Coremail-Antispam;
+	bh=vTPzdvuJQqBp5xH9v4iHahHPRW4Vz6i/Z2rINVyIBeg=;
+	b=EGnQ2/p5qBK79fvV9sySpoobglDHkkbud+5xXTAxKKe8jZTtl0MfPKDjmTZhzvwVCwM/
+	 ggZBisfg/YNIPpUBrKDiugLtjQ26smSgc+Oxn9Om2Dl3Fzec2WGj0tqXYyE+XEb1iIKrC
+	 8wGvEo/Iz8V14uVOi5TGsdzF/EeGJtyuOsQlv1xwpohuMHz4fzkkEGQaASIknIIOEWhY8
+	 xZEfsapyNfxMS907UYJbcyYgpAkzJslXV76c0PjVNmOkFEr93fZk5PVx9qUH3G6x5qeYT
+	 LQWArSXDhBma4DTRwzh9vR1qU4CbX40/C1mqClQzFbQfCpujJ3MTxovehyjnOuV3xsg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="EZOl1dB/";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59A87606A31C;
-	Wed, 18 Nov 2026 07:51:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EZOl1dB/
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 017641F000CA;
-	Wed, 18 Nov 2026 07:51:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794988263;
-	bh=9Gz9IBeSccjjCHOtf0va00995nWsD5fHKwWB7RAq70w=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=EZOl1dB/r549l0Cjg4hv5vm3frN1mJhwKzcv8N+U0AfAdGRph2GCf+cfu9tPRWU9a
-	 +iCkKFQvCFAKu4hmxbhrZ1HBbCOvZn7HvTKwXBL6rJINM1HKL5Lpj1P+5AmplPMrit
-	 ndP3VQ6rNSZPsZzMnnGQHEeuQ+wKq26psutOxsBQSkJW4fcb8OeKdBBdUgcYSrDR40
-	 rcrTsLIIO9bzklbHVpRok+xnIID2lDMGcagJVlnxq5brnkZPK8NAYnbnaSWx7IIPv7
-	 YyXivQtxkN2o03cJUEz5It4N0IMH7IYyAVPbddcS0pHGBvIO6HEqxd6Zt2zEr+X9Ve
-	 66RS8xK5egR3g==
-Subject:
- Re: [PATCH v2] net: stmmac: Disable checksum insertion for XDP frame TX
-From: netdev-bot+sashiko@kernel.org
-To: jszhang@kernel.org
-Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Date: Wed, 18 Nov 2026 07:51:02 +0000
-Message-ID: <179498826255.3136.11066531883770287407@kernel.org>
-In-Reply-To: <20261116134848.4793-1-jszhang@kernel.org>
-References: <20261116134848.4793-1-jszhang@kernel.org>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dmarc=none header.from=loongson.cn;
+	spf=pass smtp.mailfrom=loongson.cn;
+	arc=none smtp.remote-ip=114.242.206.163
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62B51606A325;
+	Wed, 18 Nov 2026 08:12:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 62B51606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [123.138.236.242])
+	by gateway (Coremail) with SMTP id _____8DxjdLTXf1qV8AgAA--.28504S3;
+	Wed, 18 Nov 2026 16:12:03 +0800 (CST)
+Received: from linux.localdomain (unknown [123.138.236.242])
+	by front1 (Coremail) with SMTP id qMiowJAxX8_RXf1qZI41AA--.41807S2;
+	Wed, 18 Nov 2026 16:12:02 +0800 (CST)
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+To: Huacai Chen <chenhuacai@kernel.org>,
+	Hengqi Chen <hengqi.chen@gmail.com>
+Cc: loongarch@lists.linux.dev,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] LoongArch: BPF: Optimize doubleword loads with ld.d and ldptr.d
+Date: Wed, 18 Nov 2026 16:12:01 +0800
+Message-ID: <20261118081201.10498-1-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.42.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -66,89 +52,70 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJAxX8_RXf1qZI41AA--.41807S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7KF4kJr1xur1rKF4fKF4xZrc_yoW8WrW3pr
+	n7Cr4Skr4rXr95XF1xJa97Wr1xKFsa9r13WF43KayrAwnxXFW3WF1fKanI9F15J39YgF1k
+	XFySyFn0vFWDXagCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv
+	67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2
+	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
+	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0x
+	vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE
+	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
+	kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU24SoDUUUU
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+Currently, 64-bit doubleword loads (BPF_DW) unconditionally load the
+offset into a temporary register with move_imm() and emit ldx.d.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+Optimize these loads by emitting ld.d for signed 12-bit offsets and
+ldptr.d for 4-byte aligned signed 16-bit offsets, or falling back to
+move_imm() + ldx.d when necessary.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+With this patch, only a single load instruction is emitted in most
+cases.
 
-- [Medium] The patch hard-codes csum=false in stmmac_xdp_xmit_xdpf()
-  (drivers/net/ethernet/stmicro/stmmac/stmmac_main.c).
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+This is based on the patch:
+LoongArch: BPF: Fix the offset of stptr.w and stptr.d stores
+https://lore.kernel.org/loongarch/20261118071444.10258-1-dongtai.guo@linux.dev/T/#u
 
---
+Note that BPF_W is left unchanged because LoongArch provides ldptr.w
+(which sign-extends to 64 bits) but lacks an unsigned zero-extending
+ldptr.wu instruction required by standard 32-bit BPF loads.
 
-net: stmmac: Disable checksum insertion for XDP frame TX
+ arch/loongarch/net/bpf_jit.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-This commit stops stmmac from requesting hardware checksum insertion for
-frames sent through XDP_TX and ndo_xdp_xmit. It does this by passing false
-as the csum argument to stmmac_prepare_tx_desc() in stmmac_xdp_xmit_xdpf().
-The bugged_jumbo special case is removed because it is no longer needed.
-
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> index 25894771e9e9f..aa73801119be8 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> @@ -5284,7 +5284,6 @@ static int stmmac_xdp_xmit_xdpf(struct stmmac_priv *priv, int queue,
->  {
->  	struct skb_shared_info *sinfo = xdp_get_shared_info_from_frame(xdpf);
->  	struct stmmac_tx_queue *tx_q = &priv->dma_conf.tx_queue[queue];
-> -	bool csum = !priv->plat->tx_queues_cfg[queue].coe_unsupported;
-
-[ ... ]
-
-> @@ -5353,7 +5344,7 @@ static int stmmac_xdp_xmit_xdpf(struct stmmac_priv *priv, int queue,
->  		stmmac_set_tx_dma_entry(tx_q, entry, buf_type, dma_addr, len,
->  					dma_map && frag);
->  		stmmac_set_desc_addr(priv, desc, dma_addr);
-> -		stmmac_prepare_tx_desc(priv, desc, !i, len, csum,
-> +		stmmac_prepare_tx_desc(priv, desc, !i, len, false,
->  				       priv->descriptor_mode, !!i, last_frame,
->  				       xdp_get_frame_len(xdpf));
-
-[Severity: Medium]
-Could this break existing XDP setups that rely on the MAC to fix up
-checksums?
-
-Since be8b38a722e6 and 8b278a5b69a2, stmmac_xdp_xmit_xdpf() has asked for
-hardware checksum insertion on every XDP_TX and redirected frame. At first
-it passed true, and since b1eded580ab2 it has passed:
-
-    !priv->plat->tx_queues_cfg[queue].coe_unsupported
-
-Some XDP programs rewrite L3/L4 headers without updating the checksums,
-for example NAT, L4 load balancers that rewrite addresses or ports, and
-encapsulation. On COE-capable dwmac queues these have worked because the
-hardware recomputed the checksums. With csum hard-coded to false, it looks
-like those frames would go out with stale checksums and receivers would
-drop them.
-
-The code change itself seems reasonable, given the stmmac_has_ip_ethertype()
-limitation and the lack of checksum metadata on XDP frames. The concern is
-how the change is labelled.
-
-The commit carries two Fixes: tags pointing at 2021 commits and has no
-stable annotation, so it is likely to be picked up for stable backports.
-The commit message says the packet is sent "with its checksum fields
-unchanged", but it doesn't mention that this changes on-wire behaviour for
-existing users.
-
-For comparison, the earlier commit ecf5985006dd ("net: stmmac: Disable
-unsolicited checksum insertion for AF_XDP TX") made the same kind of change
-on the AF_XDP zero-copy path. That commit included:
-
-    Cc: stable+noautosel@kernel.org # high regression risk
-
-and the note "Applications must supply complete checksums".
-
-Would it make sense to add a similar noautosel annotation here? Should the
-commit message also say that XDP programs must now supply complete
-checksums?
-
+diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+index 906f34f420f1..d36891db1179 100644
+--- a/arch/loongarch/net/bpf_jit.c
++++ b/arch/loongarch/net/bpf_jit.c
+@@ -1352,8 +1352,14 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 			}
+ 			break;
+ 		case BPF_DW:
+-			move_imm(ctx, t1, off);
+-			emit_insn(ctx, ldxd, dst, src, t1);
++			if (is_signed_imm12(off)) {
++				emit_insn(ctx, ldd, dst, src, off);
++			} else if (is_aligned_signed_imm16(off)) {
++				emit_insn(ctx, ldptrd, dst, src, off >> 2);
++			} else {
++				move_imm(ctx, t1, off);
++				emit_insn(ctx, ldxd, dst, src, t1);
++			}
+ 			break;
+ 		}
+ 
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261116134848.4793-1-jszhang%40kernel.org
+2.42.0
+
