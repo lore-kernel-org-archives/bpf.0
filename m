@@ -1,78 +1,78 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794961382;
-	b=uFP58sTFC7istJ6Fhtg5msNfwaoZ9PiqT7K2b2CP5a4InCcA7JOIqLr/QnyeKGA1Cugf
-	 quVlxXrgp7575pc4VvLnEVFYWHAVV/1o0FmtccBYA2NF9m4IhcTyoFDmgDC9Mc3Aj90LM
-	 fgHWdXZR8AQsx3p2rOLuqlTP+XtTENKaA6XrsnkDBogOrvWq6IWuXB98xYwZF+i+iiLFx
-	 a9q2iTxOszr6twMqmnQlbeu0XHznY7Jt2CFrX6Wq5Dkj2kCvfuFRS4R62UDEPZaY+eYnz
-	 QdWJqtghdQOyFpPxY3134fQvuBLy2B/6u5O4IXD1HLLwzssPCIYHdPPYBMEnigmHjLg==
+	t=1794961980;
+	b=tMfmFCRbTYD+MVZYWdopWZZHjaejNvQIFRXTYRXM1cw9HhcugnKB/l/wIHOJiAYbNYKO
+	 3Kfus2Jw2Wd3zYCUVm+5hXYJsGef9fHPyVZ4RH8Ct3G6vEZykD2R5Otc0vUPbaHSy3LDC
+	 LfxJi65PhZtqHqBVVOmfSdBB2WY1/T6LT8LYNFNexTS6vMf7pz59+V/nkUaeNeX/iBFFC
+	 CnMYNuelWG4zd56q2LaIEyPEIAcjCSOhalY0Tis98OJdaWMS0dhcjrpq8CrJ+JuH+wR+L
+	 BCbHPIGWod2ACZ8HAIgbeFQSk5cDhOwpBM9acPVzH3UdhiXL/4DVPOclIeZD6t3oYuA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794961382;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=oy0tZArTQ8iY4s0PSPsEHwXzkcjVeEK/EWogk8QKuFE=;
-	b=AH1CfGUP2InEZXhcto9rP14myKryyFJVMDrFQ29l/jD3dJRbVZDhY+dmBJ/HkBI1//bf
-	 ryb9PUe3UIX4YfxCia95+z2uaNKoQmEW259d4rKg+qb+57c/bjXEZNEwcO3ZSjekgg1kG
-	 E+j9N9Ogkd3BSLpJHkPyO4t/V1qZMAX2hrntmeSI5KMnEQ00UVQ7HdFMj3X34PtQ+FWTJ
-	 LJ8ZI2HHb6INqlStluwL/McelrD0WagDcnWpWlF9J/PHbMZcY++mwkGLsfpn71KpdOr7a
-	 0iiRoMcPgtUsjd2GxjGjONgrv8tLUt1W4iN0eYYkCUsXjIFAZj9PKJyX64jfUhJZB9g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794961980;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=WrMWW3SDQuTYveumv1s0qvBg0urq2O5dXdgqjDAwdQE=;
+	b=Tf/QVfkZgWmKRx+RlF8WHHYKOAqp54mZ16lCZrAs+KcWlisk/ROfO1u4rCvuLY8eB+//
+	 yqHih7/6FCk9nSUG6FtUwb890jAphuHxf4YM7WMJA0pyK4ImwZNIC0uc1gUftKCkKEfMW
+	 z9sCZqrn8BGoAPgyJNs5apPsPSymN1RQGg5fbfbcREdtfy9H8QaOhwbc0zsRMTUpu8vtS
+	 wX7tCllrhJwwaGmzQhEKKFHS/M4BIOO5EJsosrBlCYfLvWKiiLlyx4IuRk//LXSfzQyri
+	 inq3BJwtURfHnWaV6oEL1/tJ5umMcRefD7lsfty3Hxe7e4QtAE8y4iOQNF30ATqv+YQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=N6Kadfqw;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lk4AwVO2;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75AC8606A31C;
-	Wed, 18 Nov 2026 00:23:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7D4B606A32A;
+	Wed, 18 Nov 2026 00:33:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=N6Kadfqw
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DA821F000C7;
-	Wed, 18 Nov 2026 00:22:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lk4AwVO2
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 342F21F000C4;
+	Wed, 18 Nov 2026 00:32:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794961382;
-	bh=oy0tZArTQ8iY4s0PSPsEHwXzkcjVeEK/EWogk8QKuFE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=N6Kadfqwpfv/pGQ0wbQSrHki8QAA64Obzd0jDazYYcjyw3uObaNDeGJZ8ROsf/nsP
-	 Hpciy6rJer6vdiu4lHcMEIuI80nSElpixOVVuWs5ZnCXASv50e1esRo8TqIv6ASzzX
-	 J0NS/reN/W1//y0rkWMm39Cxzf2zNhx6IUa82lH8oOU3XxW41Y8+F6Zr6+PCljEdpD
-	 fJIWZGXa4WUnim/G2nyYrqjKfd/4faIsmEm+aAIL3uwFGzKI8nz77SFJPs2e3UcUbX
-	 rCXUuUDGZmshyVMIlwLyE6mxXPL4uhj7BL4sGzwF1r8MSIipjQpTsxn0s4aSKysA5Q
-	 s1YYIGy501r0g==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Tejun Heo <tj@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	reinette.chatre@intel.com,
-	tglx@linutronix.de,
-	mingo@redhat.com,
-	bp@alien8.de,
-	dave.hansen@linux.intel.com,
-	x86@kernel.org,
-	rafael@kernel.org,
-	dakr@kernel.org,
-	hannes@cmpxchg.org,
-	mkoutny@suse.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	shuah@kernel.org,
-	jolsa@kernel.org,
-	alan.maguire@oracle.com,
-	cgroups@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Christian Loehle <christian.loehle@arm.com>
-Subject: Re: [PATCH AUTOSEL 6.12 486/486] kernfs: Use RCU to access kernfs_node::parent.
-Date: Tue, 17 Nov 2026 19:22:57 -0500
-Message-ID: <2026-11-17-1-daily-reply-0006@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <c6918c4e-060a-4968-a43a-1b1cbdafd27b@arm.com>
-References: <c6918c4e-060a-4968-a43a-1b1cbdafd27b@arm.com>
+	s=k20260515; t=1794961980;
+	bh=WrMWW3SDQuTYveumv1s0qvBg0urq2O5dXdgqjDAwdQE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=lk4AwVO2HBWZ3onOdeP+RP5VJDhfEkRUA/45iStCPEDAHQ7xTVNRXjEH2PLsecq1w
+	 MkFqP3Amj6vdR6c+9Iw5lLVDCc3Q4uPqBq6rJx4CkdC6iIlUPHc6WO3XcyMXJsXHd9
+	 k2JGvv35OacEXCU/QULyoss/SmCTdsx7XCRxYrj7dJhzFGCG/IRVN1qAJlCYczeo1i
+	 M9gAG1tdwTXDJ7ySUAB9OU0gkoxKee5ftF81/KWLH/J+S1E2wDThzJSBbkcXzTNotP
+	 k7TWztca0esadecq5JSkL/+GzpRQiLA43QCAzGQLWOnrpav1FSiM9f+zgIspJEKwaZ
+	 f7ScJNUljQIig==
+Date: Tue, 17 Nov 2026 16:32:58 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+ <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>,
+ Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, Andrew Lunn
+ <andrew+netdev@lunn.ch>, Jesper Dangaard Brouer <hawk@kernel.org>, Ilias
+ Apalodimas <ilias.apalodimas@linaro.org>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
+ <john.fastabend@gmail.com>, Pavel Begunkov <asml.silence@gmail.com>, Jens
+ Axboe <axboe@kernel.dk>, Andrii Nakryiko <andrii@kernel.org>, Eduard
+ Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil
+ Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, io-uring@vger.kernel.org, Mina
+ Almasry <almasrymina@google.com>, "Mike Marciniszyn (Meta)"
+ <mike.marciniszyn@gmail.com>, Weiming Shi <bestswngs@gmail.com>, Nikolay
+ Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, Alexander
+ Lobakin <aleksander.lobakin@intel.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Stuart Clark <stuclar@meta.com>
+Subject: Re: [PATCH net-next v1 01/11] net: Get skb fragment addresses
+ through netmem
+Message-ID: <20261117163258.446a0c45@kernel.org>
+In-Reply-To: <87wlqcg85c.fsf@all.your.base.are.belong.to.us>
+References: <20261110102039.1002605-1-bjorn@kernel.org>
+	<20261110102039.1002605-2-bjorn@kernel.org>
+	<20261115131314.2d3ab96f@kernel.org>
+	<87wlqcg85c.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -82,22 +82,16 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Message-ID: <20261118002257.8J0Hx6m5tGzALTBeIGOqKbPOrAmprGTL6yIh9GottK4@z>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-> Sorry, my bad, this should've been to ::name, later in the series.
-> Here's a lockdep:
+On Mon, 16 Nov 2026 15:31:27 +0100 Bj=C3=B6rn T=C3=B6pel wrote:
+> > IIRC netmem is supposed to be used for frags and memory CPU never needs
+> > to access. =20
+>=20
+> netmem covers pages too, and netmem.rst already allows readable net_iovs
+> ("Decouple net_iov from unreadability"); the in-tree ones just happen to
+> be unreadable.
 
-Thanks for the splat. The fix for it is not one patch but the whole kernfs RCU
-series, from 400188ae361a ("kernfs: Acquire kernfs_rwsem in
-kernfs_notify_workfn().") through 741c10b096bc ("kernfs: Use RCU to access
-kernfs_node::name."), plus its follow-ups. None of it is tagged for stable, and
-one follow-up, 6034974e3aec ("kernfs: take kernfs_rename_lock for same-parent
-renames too"), is not in 7.3 or 6.18 yet.
-
-That is too invasive for 6.12 for a lockdep report, so I'm not queueing it. A
-tested backport of the series would be considered.
-
--- 
-Thanks,
-Sasha
+Ugh, slop got in :/ I really don't think "the in-tree ones just happen
+to be unreadable." I seem to recall being involved in that design.
