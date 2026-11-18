@@ -1,58 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795020092;
-	b=0mzdvtV8NxT9y4m7PS4y5eGAkJLNiboYhdtbU8Nznb+Rlzn+6Wxw0o1F+KUHxW3s5ioh
-	 rFbYV7i276vzh6Vjltkom+BtqVNQc1/NMdz/G1sviAqQ1ppSKLCbXJkixXyuFjPMIIk1W
-	 vZLTKDt02nxO4l6BtknX3U68N7Bj544aSCvjghE+8S7zZKljxt4pO2muW6gXORx27KAnl
-	 kUuJGQ/5793rwa2BfKbde8rP1QvN7t3aeBVQQAcNSJIS/0eiSP2s/Qjg1euL159e3q/s6
-	 7JWzIAR9A077aXND//L7YQ36vdUxqIEyKn21uKwk0yH5ZIP+eOyNXkv7mMMi2tQQpIQ==
+	t=1795020508;
+	b=e2zhEMI9lqOlrZS6/viry2vwJvovOjse8d6TzbaaGWXMm0s4CfKtuxORIja8W/dLRLN6
+	 YeulXn0SfgXhxOiOdcJUOS3e/gukJDsMsD+Izk2b2mlo8Wy0HBMXpp4SJQl6EEZNLNuhF
+	 0fvxkL/2FbEq3PDBzEbWGPL0AdWkfPTYpjT9emBZvzvNqVxjapYDNsFDWKkoFY0uHjSu8
+	 9BleN85aKseOXpo7KB5vZLzHSmB5R7KYSCIsNvVZayV6iPnsCwFLbtzI3y0frfHxtd/PT
+	 07cGHK53Zpjn4REcqz0gy06C7V3TjgFjJlemwMGl1zLJS/V35gYHxkpx/iTXDYgT8KQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795020092;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=KpCOWgYItNRFdCHLthVjrjZj9hh3G9ExdOPVMRYpXJw=;
-	b=eExjBAljpbvf3g/N8hhVAkzy1DLHXIT8uGVz+B8nOeAGwHJEEOEOURJNRRIaS9x5CJQK
-	 NgXKkaQl9UVZFibuIqIW44AgKmO8M2qfYTpCEDZx2Z/ssWvwWHPKkvS1XcQQ3M/SfVVtC
-	 JQU9T7NSMde589/RCLKCMS7bE6X3BWYaI4hD0KPINxTpLYBJ9//mrx+qGtkBFVHpEzp+2
-	 rhiDcqt2c/CyvKYm/oNtWiT7JoKMh3u5Orx7XCIZmNQ3YXl/ALCn9dPkGzpV48nqJlPqd
-	 cU/6dskUBSgjUTORUSURE+XOWyNn7uCwTYpMuCpU+TA8d9VzIEULS/h2Je2cSOoiUZg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795020508;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=pYuJyNf6uglr1k9kUC9MC9isl/PA99Yw95AuSGe1Ckw=;
+	b=ZZBdyK42eVO2CmoAkHNfGN+UES/4V44GxQ7C0Dw6dFMFFtFeF3umemnh1LeoTPItyDsT
+	 2tG8EFPDtEjHg+JTB2x0mm+DlcI5l4j4IHbTANbgcqg7H9VunFxpt6BL+0UlWxJEwxkzD
+	 CP2ZpMo9RRe2FgDYaz8Xe6tUpuXolqwFiKTtQHHXCNKV8+R1EKu78bk2MD8HBcVpiCSsS
+	 jDXe8t4jK6xE9GKCbaKQAxNflGSAzy4HE8h5USnjf5WpbOlKAOYWSQNv6BjavqrhZcPrb
+	 DRX9ea8jWRzi31qvCz7j3lv510kubS5SZyB+pxcrDv1DTqOEkTzx2ui5mDXexRUa5pA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=etms+rmi;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BG2x6erD;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFEF8606A320;
-	Wed, 18 Nov 2026 16:41:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17ACB606A32F
+	for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 16:48:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=etms+rmi
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34E0B1F000C4;
-	Wed, 18 Nov 2026 16:41:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BG2x6erD
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2DF71F000C8;
+	Wed, 18 Nov 2026 16:48:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795020092;
-	bh=KpCOWgYItNRFdCHLthVjrjZj9hh3G9ExdOPVMRYpXJw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=etms+rmi+8L/OLERxU+EOMiH1yzh7QvrCedbLLFvfyOXftr1190X213cLfSMIdQhc
-	 xktDkWAsGluc5sjs6Q+0xPnu0cRRv8WL1LtgbH7hhvypFoq0KCjcNGSmDaySPjxe57
-	 KSVCR2Ief3MVz6qMcEC3A89jIrfeeEJz4Oisdraf0VRAKp9ACtii9Nc+6p0hWsiOHC
-	 cOA3QRG4XS4ZJ0/KN+/71smKz//P77MiR2wPC2xQXa/VFXn7cC4W+hKsihDTtUOf3q
-	 FbeaJe4k0/kwhoD/wk2H7C/C6O6Lmm8fqXI0k6UkmMQ6tQVBRU1FPwwdFAJCOA/i5u
-	 /z3SJ8YKVa3QA==
-Date: Wed, 18 Nov 2026 17:41:26 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Amir Goldstein <amir73il@gmail.com>, linux-fsdevel@vger.kernel.org, 
-	Chris Down <chris@chrisdown.name>, Miklos Szeredi <mszeredi@redhat.com>, 
-	linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v2 03/13] tracing/uprobes: handle errors from resolving
- the real inode
-Message-ID: <20261118-beenden-wirken-halsschlagader-00aa2083c904@brauner>
-References: <20261116-work-ovl-d_real-v2-0-90564c4ae347@kernel.org>
- <20261116-work-ovl-d_real-v2-3-90564c4ae347@kernel.org>
- <undine-1794965448776121119-595ee1289c37e7d3@undined.local>
+	s=k20260515; t=1795020508;
+	bh=pYuJyNf6uglr1k9kUC9MC9isl/PA99Yw95AuSGe1Ckw=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=BG2x6erDzJyzSC3MjFfe9Gv1M36G9VfLVMnk5IuUJJcwPRr4IN1MKuvkLTM6SXKrz
+	 iGJyrIFWSV+jIbty/Cpd+e7sW7q2ytFhoe/ug9CM6wL0qVReTCRRCbf6Bx9vPzcUdU
+	 XnnYz0jPzECGY4zaRLaN9hu6klFdVYGBNeMjI+8eZ40YYsnsuXa4OMB9ooCg6+JK1V
+	 GDUB/u69Ao6UDEJx0JmZm+hj1syNEB0B1e56bScNBJsFL2tjOpGOLQwlwLW9UO2H0K
+	 8b3N3KMM7aa30J7kXW5dAo3yFG3hH2WM3Kzifbze27EX7k0UnIq1Q66Nwcy3JnjVFQ
+	 Uq3ASQmAi63XA==
+Message-ID: <sashiko-outbox-221553@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next 3/7] net: Admit native XDP on provider queues
+Reply-To: sashiko-reviews@lists.linux.dev
+To: =?utf-8?b?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, bpf@vger.kernel.org
+In-Reply-To: <20261117164700.2157816-4-bjorn@kernel.org>
+References: <20261117164700.2157816-1-bjorn@kernel.org>
+ <20261117164700.2157816-4-bjorn@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 18 Nov 2026 16:48:27 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -61,57 +58,88 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <undine-1794965448776121119-595ee1289c37e7d3@undined.local>
 
-On Wed, Nov 18, 2026 at 10:30:48AM +0900, Masami Hiramatsu (Google) wrote:
-> On Mon, 16 Nov 2026 10:44:00 +0100, Christian Brauner <brauner@kernel.org> wrote:
-> > d_real() is about to be able to fail for D_REAL_DATA. So switch
-> > trace_uprobe from d_real_inode() to d_real_data_inode() and deal with
-> > the error.
-> >
-> > Currently, nothing checks whether the data can be resolved when a uprobe
-> > is created. The first resolution happens in validate_ref_ctr_offset()
-> > under event_mutex and the last one when the event is enabled. If the
-> > data of a metacopy file in an overlayfs data-only layer can't be found
-> > the event is created just fine and enabling it fails later with an -EIO
-> > from uprobe_register() because the overlayfs inode has no
-> > ->read_folio().
-> >
-> > Instead, resolve the inode hosting the data once in
-> > __trace_uprobe_create() right after kern_path(). That happens outside
-> > of event_mutex and if it fails the write to uprobe_events or
-> > dynamic_events fails with the actual error and a new NO_FILE_DATA entry
-> > in the error log. The resolved inode is passed down to
-> > validate_ref_ctr_offset() and trace_uprobe_has_same_uprobe() so we don't
-> > resolve it again under event_mutex.
-> >
-> > Both functions still resolve the existing probes they compare against.
-> > If that fails the existing probe can't be on the same inode so we just
-> > skip it. For validate_ref_ctr_offset() that's fine because
-> > uprobe_register() refuses a mismatching reference counter offset for the
-> > same uprobe anyway.
-> >
-> > trace_uprobe_enable() returns the error and probe_event_enable()
-> > already unwinds the probes that were enabled before.
-> >
-> > While at it, resolve the data in create_local_trace_uprobe() as well.
-> > perf_event_open() of a uprobe PMU event registers the probe right away
-> > so it would fail in trace_uprobe_enable() anyway. But this way the first
-> > resolution happens before perf_uprobe_init() takes event_mutex just like
-> > for uprobes created through tracefs.
-> >
-> > This is a no-op until d_real() can actually fail.
-> >
-> 
-> Looks good to me.
-> 
-> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> However, since this conflict with commit 72d3a5cb0cd7 ("tracing/probes:
-> Enable newly appended probe when target event is enabled"), please
-> rebase it on v7.4-rc3.
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Medium] net: missing propagated XDP check in netif_xdp_mp_ok()
+--
 
-Yeah, I had already done that.
+commit d33c78f94dc0fb7af8ecef5adb0fc4ff90275bda
+Author: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
+
+net: Admit native XDP on provider queues
+
+This commit allows native XDP programs to run alongside unreadable memory
+providers on drivers that set netdev_queue_mgmt_ops.xdp_unreadable.
+
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index a230ecce9327d..f0c3d56d5b832 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -10575,6 +10575,27 @@ u8 dev_xdp_sb_prog_count(struct net_device *dev)
+>  	return count;
+>  }
+> =20
+> +/* Only native programs run next to unreadable memory providers. Drivers=
+ must
+> + * mark unreadable fragments and reject XDP_TX while they remain attache=
+d.
+> + * Tcp-data-split, which these providers need, also needs frags support.
+> + */
+> +static bool netif_xdp_mp_mode_ok(const struct net_device *dev,
+> +				 enum bpf_xdp_mode mode)
+> +{
+> +	return mode =3D=3D XDP_MODE_DRV && dev->queue_mgmt_ops->xdp_unreadable;
+> +}
+> +
+> +/* Can the XDP programs of @dev run next to a new memory provider? */
+> +bool netif_xdp_mp_ok(struct net_device *dev)
+> +{
+> +	int i;
+> +
+> +	for (i =3D 0; i < __MAX_XDP_MODE; i++)
+> +		if (dev_xdp_prog(dev, i) && !netif_xdp_mp_mode_ok(dev, i))
+> +			return false;
+> +	return true;
+> +}
+> +
+>  int netif_xdp_propagate(struct net_device *dev, struct netdev_bpf *bpf)
+>  {
+>  	if (!dev->netdev_ops->ndo_bpf)
+> @@ -10588,7 +10609,9 @@ int netif_xdp_propagate(struct net_device *dev, s=
+truct netdev_bpf *bpf)
+>  		return -EBUSY;
+>  	}
+> =20
+> -	if (dev_get_min_mp_channel_count(dev)) {
+> +	if (dev_get_min_mp_channel_count(dev) &&
+> +	    (bpf->command !=3D XDP_SETUP_PROG ||
+> +	     !netif_xdp_mp_mode_ok(dev, XDP_MODE_DRV))) {
+>  		NL_SET_ERR_MSG(bpf->extack, "unable to propagate XDP to device using m=
+emory provider");
+>  		return -EBUSY;
+>  	}
+
+[Severity: Medium]
+Does netif_xdp_mp_ok() miss native XDP programs propagated from an upper
+device such as bonding or hv_netvsc?
+
+When an upper device propagates XDP via netif_xdp_propagate(), the
+program is stored in the upper device's xdp_state[] while the lower
+device's dev->xdp_state[] remains empty.  If native XDP is attached to
+the upper device first and a memory provider is then opened on the lower
+device via __netif_mp_open_rxq(), netif_xdp_mp_ok() sees no program on
+the lower device and returns true without checking
+dev->queue_mgmt_ops->xdp_unreadable.
+
+On a lower driver with xdp_unreadable set to false, this lets native XDP
+run on queues with unreadable net_iov fragments (which can cause a NULL
+pointer dereference when XDP_TX or XDP_DROP paths call skb_frag_page()).
+In addition, while the memory provider remains bound,
+netif_xdp_propagate() rejects even bpf->prog =3D=3D NULL with -EBUSY,
+preventing the upper device from detaching the propagated XDP program and
+leaking the bpf_prog reference.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261117164700.2157=
+816-1-bjorn@kernel.org?part=3D3
