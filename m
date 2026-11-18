@@ -1,64 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.201
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=117.135.210.3
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794986116;
-	b=MqOGdTMGXFbHsfued/H9yRgPeaa03TCejwXGKfuqW25Vb4W2hadxPJ2RlAxHYGFq9itd
-	 NmGJIiHXMgSsPfKQpngAiMXzaFR3YVbovvZiKO1hHTr43SRVO3/jO/W19UZgeK30uBBKG
-	 MaEAE7Wa+HWUhxKSgJhOpeQFG7b9+tkIFuO2/a419lLHBDAURtFQJ5jbY3gfSlkY7025T
-	 G6dMtyu4NBixUEY0KtZfHJ8id9GQzO/eZAkd0OmjANZkA2EC04DBRaX+zc+nvp/1vwLlE
-	 gYM+3NVfsjm1V2wPoTWs4V4/Zkk2Isk2tHWXZijXVbXPni6J3RSwdpiuwypILYx2BTg==
+	t=1794987259;
+	b=Fz2/vCW2822VYQzGgubq1Zist3M6WyzQu/ah22JyblNkZFgN3xXsgi/1QibJIBVY0/0h
+	 ccbtFYm/q+USJlNCXtmVL86HT2lg/PcK2o93GSRiX1NJi+BG6NSO8adYkl60/Wra3UCjQ
+	 IO/WlbXVrInZ2gtHea6ymyHnwrgu3WHTXiLzKZPG73A+uHIRia8eqipHOZnzupYXPt+4X
+	 mqoxU4VF3qcA3GZUVTGc+jd7cUU1JsoyYhZyfV+/BOlYNrd55E/iL1Nm6JwJ10uYVNfSt
+	 UV2JNwWRQ3NQGXDtOg2BndQWMDm3RlaPyieFUVChdy7LQ1Br72VuH+4okMx55jjPe9w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794986116;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=ji0XZgDQd7ghLSiQktNtImFvdtMgYQ130FYZVNbr8qM=;
-	b=mPCfO9m+Gdi2PQU6JyiZTv1Eszou/7M3J5XoFrQ+1+YpFBoQBANkKyJ5a0Z3K6VE0AF9
-	 LU6cgbTMj2POEnznGah+CF9a5Ru+vLM3M430JY+n14ENdz+Wi1hEMxqY0+xETlxnRDa8a
-	 mMUr9WojsfX0UeOQxNdGdfTdEGPwpQMqcr4IReNbZjdBJVomCBlx96v6qYYj78Je8ZirN
-	 rEnMUlgc/uzyIYAoV+B594s+fMtSSuSN8qQWMcNaTsBVkX1tFEYVdBAg/2JaOAcyhv4WF
-	 /c1mJTjir/w4EpCwi//5MtZeHAkKJyUcpJhBEh7wsdqpc3s2fDkE1GRV5oZan3I6LtQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794987259;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
+	bh=ZlM43h4YcZYPb2lh6vOLR1Gxai+gJzcwC6njybeWZ7w=;
+	b=w5Mq/fvc7HguQD8xIAmzx3CopeDyKgOu64A3wP5ZUNi/OphvuIeuFdMHpjuG8h8udfk6
+	 n4cYplojtHbCLScEkFxSaJTS+9uik6MM/ResEWUhnJUW6eSEzI/rZjtJJeGNs2DJyKsUm
+	 NJSzfJuDEhy/EeKzg1KfDBGmnGmVOVGANoiD0zt1+xCBsBF8INXfNRGdexwGcyzlU8w2R
+	 e9M9VnUtwh6gJbfStzg4T4AwLZkWA7zYUPczfhxARYkxQSU00ABA0ZRZNg90fimlhq3Wx
+	 J/JAJnMxbPX8fVf7m16FFMLnSyRxAdrUWeJW9D6zACA1uejjONDxtGuDd05ZTJaEgXw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=PObKyjeD;
-	arc=none smtp.remote-ip=91.218.175.201
-Received: from mta0.migadu.com (out-201.mta0.migadu.com [91.218.175.201])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=163.com;
+	spf=pass smtp.mailfrom=163.com;
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=ScVdSO0q;
+	arc=none smtp.remote-ip=117.135.210.3
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8B04606A31C
-	for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 07:15:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D8B04606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F81F606A32A;
+	Wed, 18 Nov 2026 07:34:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8F81F606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=PObKyjeD
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=JTaKwGCI/m+yFoX0PfLwq4ulDMkGkwlRqIMjjylQBII=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794986113; v=1; x=1795590913;
- b=PObKyjeDQ4cKXAmLXsT3Vihx8BVQEfqFFkTArl8SzZL/36oQ2iV3+vtCB32QSsp05VWD4YTC
- Da6qpd6TE3M4w1FixtgcnaMP+vdzchAqth2OPJIMlaWEvAt9FekmhqQoPf3dQTUkJvMBvyPBwu4
- PZlKUC+9YyyB5c7FucvRAeVo=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 85aeb9bfd93c480a;
-	Wed, 18 Nov 2026 07:15:12 +0000
-X-Mizu-Trace-ID: 85aeb9bfd93c480a
-X-Migadu-Flow: FLOW_OUT
-From: George Guo <dongtai.guo@linux.dev>
-To: chenhuacai@kernel.org,
-	yangtiezhu@loongson.cn
-Cc: hengqi.chen@gmail.com,
-	guodongtai@kylinos.cn,
-	bpf@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH v2] LoongArch: BPF: Fix the offset of stptr.w and stptr.d stores
-Date: Wed, 18 Nov 2026 16:14:44 +0900
-Message-ID: <20261118071444.10258-1-dongtai.guo@linux.dev>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=ScVdSO0q
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Zl
+	M43h4YcZYPb2lh6vOLR1Gxai+gJzcwC6njybeWZ7w=; b=ScVdSO0qXDDdpswZ/M
+	Bssbn1RMH47NixMv4jOh/NJ10vaFWywuaNx4+puS+MKavlgEbA7L9aC0Si7/69Z1
+	klBuKZYoPCwlQBX7M8lGSA50pqou1yrVI9I+no+st9+3CP5+PiJ7N2hl9aUoQOh9
+	aLSzqToQQRuYE2mQ/K5uXg7SI=
+Received: from kylin-ERAZER-H610M.. (unknown [])
+	by gzga-smtp-mtada-g1-1 (Coremail) with SMTP id _____wDX39q9VP1q6+71Hw--.26225S2;
+	Wed, 18 Nov 2026 15:33:19 +0800 (CST)
+From: Yun Lu <luyun_611@163.com>
+To: andrii@kernel.org,
+	eddyz87@gmail.com,
+	ihor.solodrai@linux.dev,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	shuah@kernel.org
+Cc: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next] selftests/bpf: Run all summarization freplace cases
+Date: Wed, 18 Nov 2026 15:33:09 +0800
+Message-ID: <20261118073309.125424-1-luyun_611@163.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -69,124 +71,48 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wDX39q9VP1q6+71Hw--.26225S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Wry7Ar47JF1ktF13XryxKrg_yoW8Wr48pa
+	s3WrWktFyfGF17tw1Ikw47XFWfuFWkXrW5Gr40qr1DZws5J392gryxKw43JFykuFWfXw1F
+	v3ZIkr1Y9wsFvrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UD739UUUUU=
+X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbC6x9eLWr9VL8OvwAA3K
 
-From: George Guo <guodongtai@kylinos.cn>
+From: Yun Lu <luyun@kylinos.cn>
 
-When testing bpf selftests "jit_insns" and "jit_insns_blinded", the
-"ldst_offsets" subtest fails for word and doubleword stores:
+The test matrix groups targets by the side effect under test.
+ARRAY_SIZE(mains) gives the number of groups, so using it as the
+target loop bound skips the two standalone entry-point targets in
+each group.
 
-  $ sudo ./test_progs -t jit_insns/ldst_offsets | grep FAIL | head -1
-  store_offsets:FAIL:stx size=0 base=r0 src=r1: byte at offset -16384
+Use the target and replacement counts from the current group and
+derive the group count from mains. This restores four packet-data
+cases and enables four sleepable-program cases.
 
-The JIT incorrectly treats the signed 14-bit immediate of stptr.w
-and stptr.d as a byte offset. For offsets outside the signed 12-bit
-range of st.w and st.d, it checks the byte offset with
-is_signed_imm14() and encodes it unchanged. However, the hardware
-scales the encoded immediate by 4 when calculating the memory
-address. For example, a store at offset -4096 writes at offset -16384
-instead, outside the memory range checked by the verifier.
-
-Pass the offset in units of 4 bytes when emitting stptr.w and stptr.d
-for both immediate and register stores. Use these instructions only
-for offsets that are multiples of 4 in the range [-32768, 32764], and
-keep the register-offset fallback for other offsets that do not fit
-the signed 12-bit immediate of st.w or st.d.
-
-Before:
-  $ sudo ./test_progs -t jit_insns/ldst_offsets | tail -1
-  Summary: 0/0 PASSED, 0 SKIPPED, 2/2 FAILED
-
-After:
-  $ sudo ./test_progs -t jit_insns/ldst_offsets | tail -1
-  Summary: 2/2 PASSED, 0 SKIPPED, 0/0 FAILED
-
-Cc: stable@vger.kernel.org
-Fixes: 5dc615520c4d ("LoongArch: Add BPF JIT support")
-Signed-off-by: George Guo <guodongtai@kylinos.cn>
+Fixes: 72ed076abf54 ("selftests/bpf: Add tests for extending sleepable global subprogs")
+Reported-by: Jackie Liu <liuyun01@kylinos.cn>
+Signed-off-by: Yun Lu <luyun@kylinos.cn>
 ---
-v2:
-- Rename is_ptr_off() to is_aligned_signed_imm16() and drop its comment (Tiezhu)
-- Remove the now unused is_signed_imm14() (Tiezhu)
-- Reword the commit message
-v1: https://lore.kernel.org/all/20261118030219.6230-1-dongtai.guo@linux.dev/
+ tools/testing/selftests/bpf/prog_tests/summarization.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- arch/loongarch/net/bpf_jit.c | 16 ++++++++--------
- arch/loongarch/net/bpf_jit.h |  6 +++++-
- 2 files changed, 13 insertions(+), 9 deletions(-)
-
-diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-index 15af1abb5cb6..906f34f420f1 100644
---- a/arch/loongarch/net/bpf_jit.c
-+++ b/arch/loongarch/net/bpf_jit.c
-@@ -1400,8 +1400,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
- 			move_imm(ctx, t1, imm);
- 			if (is_signed_imm12(off)) {
- 				emit_insn(ctx, stw, t1, dst, off);
--			} else if (is_signed_imm14(off)) {
--				emit_insn(ctx, stptrw, t1, dst, off);
-+			} else if (is_aligned_signed_imm16(off)) {
-+				emit_insn(ctx, stptrw, t1, dst, off >> 2);
- 			} else {
- 				move_imm(ctx, t2, off);
- 				emit_insn(ctx, stxw, t1, dst, t2);
-@@ -1411,8 +1411,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
- 			move_imm(ctx, t1, imm);
- 			if (is_signed_imm12(off)) {
- 				emit_insn(ctx, std, t1, dst, off);
--			} else if (is_signed_imm14(off)) {
--				emit_insn(ctx, stptrd, t1, dst, off);
-+			} else if (is_aligned_signed_imm16(off)) {
-+				emit_insn(ctx, stptrd, t1, dst, off >> 2);
- 			} else {
- 				move_imm(ctx, t2, off);
- 				emit_insn(ctx, stxd, t1, dst, t2);
-@@ -1460,8 +1460,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
- 		case BPF_W:
- 			if (is_signed_imm12(off)) {
- 				emit_insn(ctx, stw, src, dst, off);
--			} else if (is_signed_imm14(off)) {
--				emit_insn(ctx, stptrw, src, dst, off);
-+			} else if (is_aligned_signed_imm16(off)) {
-+				emit_insn(ctx, stptrw, src, dst, off >> 2);
- 			} else {
- 				move_imm(ctx, t1, off);
- 				emit_insn(ctx, stxw, src, dst, t1);
-@@ -1470,8 +1470,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
- 		case BPF_DW:
- 			if (is_signed_imm12(off)) {
- 				emit_insn(ctx, std, src, dst, off);
--			} else if (is_signed_imm14(off)) {
--				emit_insn(ctx, stptrd, src, dst, off);
-+			} else if (is_aligned_signed_imm16(off)) {
-+				emit_insn(ctx, stptrd, src, dst, off >> 2);
- 			} else {
- 				move_imm(ctx, t1, off);
- 				emit_insn(ctx, stxd, src, dst, t1);
-diff --git a/arch/loongarch/net/bpf_jit.h b/arch/loongarch/net/bpf_jit.h
-index 2bd0dc5b911c..777c76112d95 100644
---- a/arch/loongarch/net/bpf_jit.h
-+++ b/arch/loongarch/net/bpf_jit.h
-@@ -45,13 +45,17 @@ do {										\
- } while (0)
+diff --git a/tools/testing/selftests/bpf/prog_tests/summarization.c b/tools/testing/selftests/bpf/prog_tests/summarization.c
+index 3e4bcf071735..f51b203eca8a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/summarization.c
++++ b/tools/testing/selftests/bpf/prog_tests/summarization.c
+@@ -116,9 +116,9 @@ void test_summarization_freplace(void)
+ 	};
+ 	char buf[64];
  
- #define is_signed_imm12(val)	signed_imm_check(val, 12)
--#define is_signed_imm14(val)	signed_imm_check(val, 14)
- #define is_signed_imm16(val)	signed_imm_check(val, 16)
- #define is_signed_imm26(val)	signed_imm_check(val, 26)
- #define is_signed_imm32(val)	signed_imm_check(val, 32)
- #define is_signed_imm52(val)	signed_imm_check(val, 52)
- #define is_unsigned_imm12(val)	unsigned_imm_check(val, 12)
- 
-+static inline bool is_aligned_signed_imm16(int off)
-+{
-+	return !(off & 3) && is_signed_imm16(off);
-+}
-+
- static inline int bpf2la_offset(int bpf_insn, int off, const struct jit_ctx *ctx)
- {
- 	/* BPF JMP offset is relative to the next instruction */
-
-base-commit: aebb7274476403040d582c61478df8f4a7bf9cd3
+-	for (int t = 0; t < 2; t++) {
+-		for (int i = 0; i < ARRAY_SIZE(mains); ++i) {
+-			for (int j = 0; j < ARRAY_SIZE(replacements); ++j) {
++	for (int t = 0; t < ARRAY_SIZE(mains); t++) {
++		for (int i = 0; i < ARRAY_SIZE(mains[t]); ++i) {
++			for (int j = 0; j < ARRAY_SIZE(replacements[t]); ++j) {
+ 				snprintf(buf, sizeof(buf), "%s_with_%s",
+ 					 mains[t][i].to_be_replaced, replacements[t][j].func);
+ 				if (!test__start_subtest(buf))
 -- 
-2.53.0
+2.43.0
 
