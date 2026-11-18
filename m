@@ -1,100 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.43
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795011498;
-	b=VNO+tbFLDuRrEJ3yAub9NWQwFTejUSQyHjB13zYwscZeXHHqkJJK5R0KC+DGZ+pP7KxA
-	 YBytGX4g+5utp1VzKqUNWY3X60Dd8qcNlYMupYb1Cvz3x+3L0GvliN3HJraUwBFq4BDUJ
-	 u/QCrf9TMVIWt2O5pv/eHTOjC0WvhN/P4qBGwqh/INQjus24edrSWB1mt1pgONglmG+3r
-	 x77xaHipkpXdDAC/FKS+od6hicY5FSxKJnSbyHLcleDdd3z7gMepF4Czv6zpovEOXFXnQ
-	 FK3igD+Vl8S59mV0FsMt940zd7HTEn0CgAlm6fAjw13juD02zwMwvtIB+tbTq603gPw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795011498;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.172
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795012019;
+	b=NyIqw4aOSlsgMiy4mynfynzepkpCKZn0lHQPa+jVr6240cVVX8SJXAkDEL6Q0brBvxN9
+	 wCQc/5I97Yg4XcQF77QaN0NAYNOrEQb4bM+IGKF1jRoXRIxcewlZF31NKMBO2zlWoat0b
+	 YcH+X/udWegIdQu3oL9cjoBJ8NKB1rmJ+heuqw+Yn2wwRLIddpLfugab0ilNEwR6sP3mQ
+	 zc/Bq9KvwjY1Ybt4+gEUVpk12vDTdCB0yVCyDLv2907/448sCzdXZ28zr9D3Vg/gT5HUq
+	 lhno1p/6JhUQFlQWS6aVH5oWhyu9Qtjf4P/dUoduk7Vj0rhH9MsVkXl66ENxILmtOlA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795012019;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=E995rutgSzyg1i9LNX9zVJhyluCmPXgjFoQIxd7q954=;
-	b=1jtHjPwq9ewoIV8Ykmm7YjjRJxIFC9iIz1YMIW22/we+38tmbmGu65t6SbJf/EnUZkO4
-	 /K3lT+rAHwjPcXeJcUBCnihxLlux6oZAmPpYfVjM6sx77RV4hKlQpXp5tms0/VY0txEAQ
-	 1Wb7vkJxRlD6J55tGafqcdWeBpH1AosLdE37I8GaX5RAal/U9twT3KpniQvbJ2Aj5+8p3
-	 4XiQHr3TaE62w9FfE9P1SEN2VdGzesz1vox/5zanqWaFBsWQiUTjhoUi5mQ3oAUgmH0KG
-	 NWZiFevNVgdI5ywr4useRdfZUyevJej9eb501gHEyehKm+pA4Mog1V9VIO5jh6r7qew==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=none header.from=amutable.com;
-	spf=pass smtp.mailfrom=amutable.com;
-	dkim=pass header.d=amutable-com.20260707.gappssmtp.com header.i=@amutable-com.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=AUModmDo;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.43
-Received: from mail-yx1-f43.google.com (mail-yx1-f43.google.com [74.125.224.43])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=y7AldnFPFwd28q9Fb7JfwOQSIJZmwrcTj9ZEfGyxga8=;
+	b=S9nGVrxr0ZXPjeIvSe80fJbS6h+GSbmY03a8zBOg8pGguFg6zdGvayOrfwQApLEusuXI
+	 9kiWDmm7KmDnFXlCYyrAusJq6GfDmqaL1HsmzPPtx81u2M4TkzJsKC63ezayG7kPKjfN8
+	 bkNvjq2bL3Mu2VLcfhhhS1lT5aqM+bpqi8uVVvgLMh5I89TP/I+rRV4a92smd4bNPY4Nr
+	 xx1awS/yCjAQ+U788XusAIsXf69lErNpavHOc06IK9z2s1hWPfbVN2EqpxXJHOgy2LYlJ
+	 NxF+MOND3e52LCMP1fEB6qhOKB7I8DFY2pJZNX7mMBHda3aM4yDKuVJGbesYWweJHwQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=0STMB6LJ;
+	arc=none smtp.remote-ip=209.85.167.172
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E0D60A2601
-	for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 14:18:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A6E0D60A2601
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amutable.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amutable.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B81B60A2602
+	for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 14:26:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6B81B60A2602
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=amutable-com.20260707.gappssmtp.com header.i=@amutable-com.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=AUModmDo
-Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-67da62357acso1351107d50.0
-        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 06:18:17 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795011496; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ABtaindXrlKoZhzkxCDb9Wwf2vwp5nJze5me+YqbMuPW9h3hepO/XNsenxbOvRKv9n
-         jjiWMiQHeF7uhXxDZ2EM6syHa7QjWvi5wEABKhBvJNha9iWgmGngXw+74sTt4zUo3Kq4
-         l0fYcir0/ZK+UL+qdBaIr05Hkw9pKx7wXZvLcvhnfk7qsM5ouQkT+NOEqkH04ebyLbRY
-         YbyRlJ5Re5cunhCpJcN+Ori0RakaBI0lZM2RJGd/rkHoa+d/FvurnUKN7R9Dzr/P1f2R
-         XhxPhmxa+wr8Wq7b+r4iui+GzB+GDcZhDa+RNJKzaQ1YtxEN1j5pVRUGcARM7G3SYm6O
-         EONg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=E995rutgSzyg1i9LNX9zVJhyluCmPXgjFoQIxd7q954=;
-        fh=GE/BhCRMi/jygplqNyU4h7J6avkHwfmBoOozJdHASSI=;
-        b=d3n1LUfKAS/xBb2V1F+XlbYmoaAQ7XrzFGTWWuqcN/j4CTkOyPcIL2SXjk2YCaP/iO
-         +6uZn7n2UwT33YtoHLn1YlhYf4xWUZbweMpAOcw6+tX8AvcaK05JzUS6lKCMdhToHRlp
-         iRScDNpjgbdgwjxaNTOunL4hkMY2aSoYHTnBLbJV3OyahmIWw53G1lEQeoBpSjzp8vIb
-         GD7jVu/XiFgqcJQn2LCY8dLKkkXaV6M6I5iDo6ehRL7CYiatmW/w2rj9Wnkxe5w/x2ZP
-         L994Ppic1MVG4ji9Ojz+qQJskWN6lznXc2wgg+BPzX3W5c/jUTrlwPuQ44SG0lFnj6TL
-         dDRg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=0STMB6LJ
+Received: by mail-oi1-f172.google.com with SMTP id 5614622812f47-4a451915d8aso539385b6e.2
+        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 06:26:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amutable-com.20260707.gappssmtp.com; s=20260707; t=1795011496; x=1795616296; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=E995rutgSzyg1i9LNX9zVJhyluCmPXgjFoQIxd7q954=;
-        b=AUModmDof6ErWSMGyCdXNcxfTkCwx7QQL2OOBXQ7guAC6qyj7WSCpZaWOY6QzreIOx
-         4pS1K2knwQavnNNBqwkB7+CVuy4nIAO47uvqWWVcKyxSaO6HjJtoc//F5a0pyaE8S01s
-         /czjdm/4IH2mCCMXcGgJ+GZqDBEUEiy7q/sTAICpTY1pUfq86x1hJs/saKnvMVve4VAU
-         dhgD9wlXcDkxqLBCRCjgiv0lYbOp/01AnpGqDAN4hs0GNRXnJ/5567cggS43udDzh4hT
-         S1mqoJlVcJcBRP7sAPAVEiqwKlHWhgOXZR0SkDez/xXmjrYfV8KYm/x8HKsnMN15yy24
-         SeHg==
+        d=gmail.com; s=20260707; t=1795012018; x=1795616818; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=y7AldnFPFwd28q9Fb7JfwOQSIJZmwrcTj9ZEfGyxga8=;
+        b=0STMB6LJinF6MkDTzbvwqB+W3FJpKiki0kxpinxHUSf/5iAM9Bfa3syLvlxqyRqQhy
+         BVUwooiEm+P90TZ3GB2qoAj6owdVwi9GT3zgzP/H5lT3q6KI32GGcpZufXjMiMrxNLmM
+         4lr7xaZBf1QpYjxcylmO0zzW5ZQOBUoKfMLLzD9ik8HH5CeStlgL/BQ917X/1+4T/j5u
+         s1MCIMYksILaHpAeWbp+SAG7lIGyZZC/O7bestAyuqgrIqItQehRl8N2K90I9vG02WzI
+         bQXZyh8v8mOIWRWUVZ+yR6uiCe5SHpvqkPiL7agvO9gnCAnD0K44XSQCRjy+i5joLkQD
+         rwrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795011496; x=1795616296;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=E995rutgSzyg1i9LNX9zVJhyluCmPXgjFoQIxd7q954=;
-        b=w+Tbwz+fGw0nDj9mdv/A+xw32TFhKthZcp13q/ynnyRN9BK8npvaSsBvqsfYMC06sX
-         1UV3OQCbxpPjn5LBGzvEmh1yhwdWz39NKAKsaVkxTKYJo+IwlqmDujvUb+UOKHlBkEGz
-         H4/O43T6l4ZG0+EpJWf4aHlX74Fw8UGedJDn+kosSh99i53T+Sex30Sxw0yoIOzvhWQN
-         0j+A4oIPBYJ0mVtvFGK72gpgXmc89/ECrhw2Gngg1WIcxZRRP5xB2XmiriObyWbUf+yV
-         tL5oxyspK8qtYnDoIlkP8C6OSfM64dToKumHc1l3vGCLm8rlYExRM6T0IWBojvp4v4Fi
-         ib+A==
-X-Forwarded-Encrypted: i=1; AL+hErF7IsFJIELVPKsvnSqjrFMxPDaAr84I9yI1HX1eVegwU80V7zTIJh0tKZf+TvfCWvd6lHk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+F+/dTeklTJNUFApSvBYb9i9MqkdZiGPg62QzDUoxsS+150hbQ
-	5nEhbznVwLlLDUGD6C8ZTgWFGZfQWScYI8eagmDbJ2Rye6IbEndK2U7HGQcDN2bAeIJ/zOiy8GX
-	XF2563s+ByBjhylAi2PQ48iy3RwmvEMxR+Olt7tlmJ7Tg7bkq9CAUEA==
-X-Gm-Gg: AZFdTZce8dV0/d1O/E5EfAPosQkV5fcP9JaFJVfwl7CiZNwekhRYKfYQnt22M0peE1Q
-	tVSDLAuDpSU88eqotkMqk3l2tjbarmhcW+Vw0FVB7pb+xnU8be+uW3HUUcyglTtwkzQJfjianPo
-	XHKKLHYWuvytCM+gcYGYyn1ftmyd3DQsrzcAWp6M8VmVBqNEiXpbGYk2VRpD9zBLL2AhNbhlic+
-	ra4AdGHzqt9q+aMIhHxVcDKKGskj2VTMuQs9Qlm8RI5o2CtxiH1D7c+/IQdXWztE0tKNb7DMrke
-	EZtEMltVIdT2MZNUJZ6Pdn97f7BxJhJcjpXLz37CfNSaNfhAzKhrR6yqP014tLPeZvRhH0YDlhI
-	525vaKfp0TFjVEIrM/rKQ8ifHaznBJhaxtnrb73KO0/u8Mx8506zfR4tP7gN/BNqNCUYbHhM=
-X-Received: by 2002:a05:690e:190d:b0:679:a42b:f0dd with SMTP id
- 956f58d0204a3-67dd3cf9efcmr1187071d50.14.1795011496626; Wed, 18 Nov 2026
- 06:18:16 -0800 (PST)
+        d=1e100.net; s=20260707; t=1795012018; x=1795616818;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=y7AldnFPFwd28q9Fb7JfwOQSIJZmwrcTj9ZEfGyxga8=;
+        b=QlzEYPy1PcvneGmq9/zuT/HJ9SK8+HVVJGdqP3r6DELNQOmab1iC4RXOiH5Ou/UjeO
+         S8HOeLekt0zjOCHbS0zL/186uZLc7tPViE3rQyiw3444LrkbFaUPB4zqsNMzFpQ6fs96
+         h7bHrQRE/Bt36IdEk2Rw4sTjAntFepVhtBJ6t0R8CZ76WdPvsrqcAR5ANPcXJX0zp5GP
+         pRSrOWvAwdG8ttISC5E+xURRQbwmdXPW5DKe84y2aMwTjMlEARu4raW0BJFa29zM4oJo
+         L3ZnyRFDBUFd8sr8PNRKdyswpspOIOTwvN3/ToqqdfMXDWjmRCd8PLYWteY3odibsQqm
+         PL7w==
+X-Forwarded-Encrypted: i=1; AL+hErHqboVSpcPt2hKWfpRv0fET9qiSVnnZIop8pKIXaGsgVN0cYyCzVdg6Mh7gudai0WzxgJo=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8zkcLJhNLWSsSZS13lhBCsf5MuN5gQ/I+uDR9aMHWAeWWtdv3M
+	fPWx5dF5fR9lm2GKFmm72ZR7fYS+O/UuqtblEiGcHLo7SkEapRcCtpIG
+X-Gm-Gg: AYBFou0DhACXUh2oYp/Rm4eJ32pGaUdZcmsOXYQoJTkFGPmSD45Z1GH6Hd8uf8yCyxP
+	C/QaaPmv0q0xFjarW/X/mfjIbMfbNQQsFeQXDxKfBkfAg5hmUBg5J3Fz4ZsqDeKrPBxHQi0ei0k
+	6Glo4RxJv+KHF76CQg63Gyu4MgtNJXlJsxIA+HKDBNa61vDB+R8zZmGiAS67GyvxFXqiNe0Uz49
+	1BZLBfz8hD4fev2CCq52Pp5IAZ+E7xkR0DLyHl3asI+dbEmJ2o9ZP7/Z1rvSM412f225Z3VwzNv
+	JIgcA6LrXSIiAYtxsQZ2e5s95vdrn6lewbgJFKpwvXC7AUvtQpI4fleyDD5dyWJ3eMSlYDvbOm4
+	YsxgoQdH2U6opYtHMMWZLJlSdccco8Qc0391Z3MZjXzwd/4bYQ4gcNwXkGKadP9CR7I+pWJHi5T
+	UaWDe2v0fSx/NZOMhFNmBzD4J7wV9/Iy9u80Xm2AIeDnIyN1hmCZMkWr35vL8fwPeyKEnQJHbzq
+	/M6EfNny4A0qeM0egg+C3CsorAnrplTG/3tTcPPjWwJWi7mDv7+iP6cL3Cf46iuSkWkcCrWM7UC
+	Jqme3jwcje1d29J3WSKBrVtnaidHTCByt0F8UjHWpexgKwroeYyPbXDHLxmXEAMiGD2BEwFoXAr
+	T4WGn7pXL
+X-Received: by 2002:a05:6808:f04:b0:568:3866:d1b5 with SMTP id 5614622812f47-5773fb4cbf9mr2975057b6e.46.1795012018160;
+        Wed, 18 Nov 2026 06:26:58 -0800 (PST)
+Received: from localhost ([216.128.135.139])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4b74372cb6bsm2197869fac.4.2026.11.18.06.26.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Nov 2026 06:26:56 -0800 (PST)
+From: asatsuyu.liu@gmail.com
+To: gregkh@linuxfoundation.org
+Cc: asatsuyu.liu@gmail.com,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	puranjay@kernel.org,
+	stable@vger.kernel.org,
+	vadim.fedorenko@linux.dev
+Subject: [PATCH 6.18.y 0/2] bpf: Make KF_TRUSTED_ARGS the default for all kfuncs
+Date: Wed, 18 Nov 2026 14:26:52 +0000
+Message-Id: <20261118142654.3098395-1-asatsuyu.liu@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <2026111850-shiftless-popcorn-a566@gregkh>
+References: <2026111850-shiftless-popcorn-a566@gregkh>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,194 +103,69 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <d85ece6e-27f9-4d9f-83af-4101bc76fef6@app.fastmail.com>
- <356db94e-f5d6-4fb2-839a-b97aef72256b@app.fastmail.com> <CAHC9VhR9sjunJRnM9gy-BkBZkapQTrr8a8FtmaK7JkAmUqTrLA@mail.gmail.com>
- <CAEf4BzZKmn6g0SK8OddjKFj_vAmZFvpZv32Hs_S+GHgT7VNfrg@mail.gmail.com>
- <9d6bdc31-e57c-4187-be78-29d82471f710@app.fastmail.com> <9695ec3d-7b81-488d-989f-0bd411d673f2@linux.dev>
-In-Reply-To: <9695ec3d-7b81-488d-989f-0bd411d673f2@linux.dev>
-From: Daan De Meyer <daan@amutable.com>
-Date: Wed, 18 Nov 2026 15:18:05 +0100
-X-Gm-Features: AclHuK_kSwvu5Jj3k6C9_kA8WpAYJGoXqqdOwo0daouusPGhJdTvAUCcGkN4sy0
-Message-ID: <CAPa8sAh6b5xn4rZzPfM0nZ+_kkywWj22fy8deLq+6qYews0rdQ@mail.gmail.com>
-Subject: Re: [BUG] bpf, lsm: new first argument in 7.4 inode hooks silently
- breaks BPF LSMs
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: roblabla <linux@roblab.la>, Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
-	Paul Moore <paul@paul-moore.com>, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, paul.mabileau@harfanglab.fr, 
-	linux-kernel@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Note that we've already merged code in systemd that depends on the
-current argument order, so I'd really prefer if it didn't change. If
-it does, do cc me on the patch so I can fix the issue in systemd.
+From: Yi Liu <asatsuyu.liu@gmail.com>
 
-Cheers,
+Hi Greg,
 
-Daan
+Thanks for the guidance.  Here is a direct backport of upstream commit
+1a5c01d2508a ("bpf: Make KF_TRUSTED_ARGS the default for all kfuncs")
+to v6.18.64.
 
-On Wed, Nov 18, 2026 at 1:52=E2=80=AFAM Ihor Solodrai <ihor.solodrai@linux.=
-dev> wrote:
->
-> On 11/9/26 8:07 AM, roblabla wrote:
-> > Hi,
-> >
-> > Thanks for the replies!
-> >
-> >> [...]
-> >
-> > So what would be really nice is a way to make eBPF code robust against
-> > kernel changes such that it either works, or fails to load, but doesn't
-> > do the halfway "loads but silently misbehaves". Here are two ideas that
-> > have been in the back of my mind that could help solve this issue (thou=
-gh
-> > I understand that they may be rather large changes, I'm putting them ou=
-t
-> > there mostly as a conversation starter):
-> >
-> > 1. Could libbpf/the kernel have a mismatch check on hook arguments? I
-> >    understand that libbpf and the verifier don't know the types a
-> >    program expects, since BPF_PROG() only casts u64s. But the macro
-> >    does know the types at compile time. Could it (or an opt-in variant)
-> >    record the expected prototype in the program's BTF, so that libbpf
-> >    can compare it against the LSM hook's prototype in vmlinux BTF and
-> >    refuse to load on a mismatch?
-> >
-> > 2. Since kernel BTF has parameter names for the bpf_lsm_* functions,
-> >    could we maybe have CO-RE-style relocation to resolve "the argument
-> >    named dentry" to the argument index at load time? This way, adding a
-> >    new argument could happen anywhere in the argument list without
-> >    breaking eBPFs, and removing an argument will (correctly) cause our
-> >    eBPF to stop loading. It does mean the eBPF programs must provide th=
-e
-> >    same argument names, but maybe that's an acceptable tradeoff?
->
-> Hi everyone.
->
-> roblabla's comments got me curious, and I spent some time with my
-> helpful assistants poking at the problem.
->
-> There is another workaround in addition to what Andrii suggested.
-> A program can already make itself fail to load on a signature
-> mismatch:
->
->         union security_list_options___mine {
->                 int (*inode_create)(struct inode *dir,
->                                     struct dentry *dentry, umode_t mode);
->         };
->
->         extern void lsm_proto_mismatch__inode_create(void) __ksym __weak;
->
->         SEC("lsm/inode_create")
->         int BPF_PROG(deny_create, struct inode *dir, struct dentry *dentr=
-y)
->         {
->                 if (!bpf_core_type_matches(union security_list_options___=
-mine))
->                         lsm_proto_mismatch__inode_create();
->                 ...
->         }
->
-> bpf_core_type_matches() checks the expected prototype against the
-> hook's member of union security_list_options in kernel BTF.
-> On a mismatch the call to the unresolved weak kfunc stays reachable,
-> so the verifier rejects the program, and libbpf reports:
->
->   kfunc 'lsm_proto_mismatch__inode_create' is referenced but wasn't resol=
-ved
->
-> It's positional and needs the exact argument count, but it turns
-> silent misbehavior into a load failure. The same should work for
-> tp_btf with the btf_trace_<tp> typedefs.
->
-> But of course it's just a workaround..
->
-> A bit more generally, expanding on roblabla's second idea, I think libbpf
-> could resolve hook arguments by name with the existing CO-RE machinery,
-> without kernel, verifier or LSM changes.
->
-> The BPF side could look like this:
->
->         SEC("lsm/inode_create")
->         int BPF_PROG_ARGS(deny_create, struct inode *, dir,
->                           struct dentry *, dentry)
->         { ... }
->
-> BPF_PROG_ARGS() (name TBD) takes (type, name) pairs like BPF_PROG2(),
-> but instead of casting ctx[0], ctx[1], ... it reads each argument
-> through a local preserve_access_index-marked struct, so every argument
-> access is a regular CO-RE field relocation:
->
->         struct bpf_func_args___deny_create {
->                 const struct mnt_idmap *idmap;  /* 7.4+ */
->                 struct inode *dir;
->                 struct dentry *dentry;
->         } __attribute__((preserve_access_index));
->
->         SEC("lsm/inode_create")
->         int deny_create(u64 *ctx)
->         {
->                 struct bpf_func_args___deny_create *args =3D (void *)ctx;
->
->                 if (bpf_core_field_exists(args->idmap))
->                         /* use args->idmap */;
->
->                 return check(args->dir, args->dentry);
->         }
->
-> Nothing changes on the loader side:
->
->         skel =3D deny_create__open_and_load();
->         if (!skel)      /* mismatch: load fails, libbpf logs why */
->                 return -errno;
->         err =3D deny_create__attach(skel);
->
-> To achieve this libbpf would need to do the following at load time:
->
->   - treat bpf_func_args___* as a reserved type in CO-RE relocations;
->   - find the program's attach target in kernel (or module) BTF:
->     bpf_lsm_<hook>, the fentry/fexit target, or the tracepoint stub for
->     tp_btf;
->   - build a struct from the target's prototype: one member per
->     parameter, named after it, at the parameter's ctx offset, plus 'ret'
->     for fexit, fmod_ret and LSM;
->   - resolve the relocations against it by name, with a strict type check
->     (pointee types must match, qualifiers ignored), since CO-RE normally
->     treats any two pointers as compatible.
->
-> A missing argument or a type mismatch is a normal CO-RE relocation
-> failure: the program fails to load with an error naming the argument,
-> unless the access is guarded by bpf_core_field_exists().
->
-> And this is not LSM specific, fentry/fexit/fmod_ret and tp_btf would
-> work the same way.
->
-> It doesn't help if a hook keeps its signature but changes semantics,
-> or if the attach point goes away (that already fails to attach).
->
-> Here is a vibe-coded prototype of the above:
-> https://github.com/kernel-patches/bpf/compare/bpf-next_base...theihor:bpf=
-:bpf-named-args
->
-> It's an entirely new libbpf feature though.
->
-> Andrii, what do you think of it?
->
-> ---
->
-> And just my 2c re argument ordering:
->
-> Paul, with all due respect, prioritizing code style and personal
-> preferences over backwards compatibility is unreasonable even for
-> unimportant applications. And here we are talking about apps
-> implementing security policies, which many organizations (not just
-> companies) in the world rely on. Given the recent flood of
-> cybersecurity issues (in Linux and beyond), I don't see why would we,
-> as in kernel devs, intentionally make the defenders' job harder.
->
->
-> >
-> > Thanks,
-> > roblabla
->
+The series has two direct cherry-picks:
+
+  1. 1a5c01d2508a  bpf: Make KF_TRUSTED_ARGS the default for all kfuncs
+  2. cf503eb2c6c3  selftests: bpf: Fix test_bpf_nf for trusted args
+                   becoming default
+
+Both apply cleanly to v6.18.64. Patch 2 is the immediate upstream selftest
+fix for the behavior change: 6.18's test_bpf_nf still passed a NULL tuple
+to the conntrack lookup kfunc to test a runtime error, and after patch 1
+that program is rejected at verification time.
+
+I tested the code backport in QEMU with the same reproducers:
+
+  test                           unpatched 6.18.64       backport
+  ---------------------------------------------------------------------
+  copy_str_null_dst              LOAD_OK + oops          LOAD_FAIL -EACCES (arg0)
+  copy_task_str_null_dst         LOAD_OK + oops          LOAD_FAIL -EACCES (arg0)
+  crypto_null_err                LOAD_OK + oops          LOAD_FAIL -EACCES (arg2)
+  rbtree_null_first              LOAD_OK + oops          LOAD_FAIL -EACCES (arg1)
+  copy_str_safe (NULL src)       LOAD_OK, RUN_DONE       LOAD_OK, RUN_DONE
+  copy_task_str_safe (NULL src)  LOAD_OK, RUN_DONE       LOAD_OK, RUN_DONE
+  crypto_safe                    LOAD_OK, RUN_DONE       LOAD_OK, RUN_DONE
+  rbtree_valid_remove            LOAD_OK, RUN_DONE       LOAD_OK, RUN_DONE
+  rbtree_safe                    LOAD_OK, RUN_DONE       LOAD_OK, RUN_DONE
+  copy_str_zero_null             LOAD_OK, RUN_DONE       LOAD_FAIL -EACCES
+
+No oops with the backport.  As documented in the upstream commit, this
+is a verifier behavior change: kfuncs that previously accepted NULL
+without KF_TRUSTED_ARGS now reject it.
+
+The commit message specifically mentions the netfilter kfuncs affected
+by this, so I ran the targeted selftests in the BPF CI container:
+
+  bpf_nf: 14/14 PASSED, including lookup_null_bpf_tuple/opts and
+  xdp_lookup_null_bpf_tuple/opts.
+
+
+Thanks,
+Yi Liu
+
+
+Puranjay Mohan (2):
+  bpf: Make KF_TRUSTED_ARGS the default for all kfuncs
+  selftests: bpf: Fix test_bpf_nf for trusted args becoming default
+
+ Documentation/bpf/kfuncs.rst                  | 184 +++++++++---------
+ fs/bpf_fs_kfuncs.c                            |  10 +-
+ kernel/bpf/verifier.c                         |  14 +-
+ .../testing/selftests/bpf/prog_tests/bpf_nf.c |   5 +-
+ .../testing/selftests/bpf/progs/test_bpf_nf.c |   7 -
+ .../selftests/bpf/progs/test_bpf_nf_fail.c    |  57 ++++++
+ 6 files changed, 158 insertions(+), 119 deletions(-)
+
+-- 
+2.34.1
+
