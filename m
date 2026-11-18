@@ -1,75 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.72
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.180
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795036190;
-	b=jXACKAeOaxW6wRraCgJuGgn70K+z6+EyHWTXEYE087lhNI+jq32MRB+dXO/Dph+0hp3a
-	 NqcxQrH+rVjiH8+RcFmaMNfOIYqENhnc6c/r05ZeUkXKq9F0HAIGevlcLR2XptemOu7ne
-	 E2oMmB04Oe9E5mKitIViVZUhcRuts/6+SqqWuG0UusGxhbiuPQUcHVJKQu57GyJWu1OSV
-	 Ekecov5MMBYh81TYStGrLBrJuNxjBHkTgvMnsE8gTtcMwaMAYN1vULgSKVupuW/sheU6p
-	 6auSLq/aTL+KcI4yCXVqrHwU7NnklDxxLrJD/I1HeK4kMdsYW0VnDUw2GmTRA8EpNWQ==
+	t=1795036369;
+	b=4SwM5uOZg6SX7l9mAePEkxCVeDUxjLJn88mhTrOuK4ALpoEGxFpMhMWOIubQ4kyf7jX/
+	 YtzJWhar17Hpwm/YYl09kTxCHMGpzmmngMbKiIzDRYLC5zKKS7ClsHJsdNlHNZCvXq2kn
+	 jQFVPNbhfjIUeacasbzdNVQdEZn3++J+76Ws1NwHiKcepAF0je6CNTWxJH4RJra/CDOyL
+	 o/SjX2Eewni1UmD65WcTvcLnYBixvmhV1AmUQLp2HyyPCMWouALNYfN9VIDKA9vTNSiDX
+	 oy5DiyF66JiW/ccaIsQMS7WGeYSoUK6wTRs+imZEC/2WjLBksJSFFtE4jC8cLJR9xXQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795036190;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795036369;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=INm/FnEpTCfTyow7VOum/3qmO9+j35dJqSIb5QUtmvg=;
-	b=QKd18viwszPKCUMut/JzyMfVXmqu4QGlGjfo9/e8QxTlpJdvlomzvV73pPwSWGp4cXxR
-	 Fk+6+FwD/7xx8Rb/qu2YIVAaqzEtF1NdorIB1IZUn4J+NuZMH2GEaiZZ83aQSAhJWEUo8
-	 xHoY8pWgb2MvSATBGbfdYghqoydUjmIkKXWfM2jf0nPh40aPaQLZpcaUmXGj19tmR+akY
-	 NIT5vNaP2lW9Iy7gF6UwwHgdrSTSKQdX1Ir3ChbHB8YAQ1z1AGZnPXQOYZFkmlS7FTlaZ
-	 BPP5VmG29vy56btREvF7MosXeHNlwY/YRmSCptvYyJDi27AL827a4rx0MGxV+Zbu3eA==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Content-Transfer-Encoding:User-Agent:MIME-Version;
+	bh=1e/TvLg+e+Z3bp3zIHk3TfdEQA+k1gn8aVFItKGNB84=;
+	b=ah00nflENrKwdBa+sbpJW7ozbql4ghyopIhb52gUgt4cuCwndK80xdiNS1gLr4GaCCap
+	 PJyn6tDtkWPuuoFKaHwG9JIXl9RObRKR4QhxVYzx7XLiitCzHyjvPu9G/vFiWPJ8SQkuv
+	 NAIUVjxR4+WQuhW7UYb7TOFB0yifjW/Jnq9kor3fUTuwxoC5LWhvvCQHi39StG3efdy8H
+	 3IsLXsLLQ04/4RllD5KD4kdzcGUkIZCFi8kloguPh8WFvMTuCo8ziXq1wSD2FI8ZtCYaM
+	 pVa6cKSixgrxiR9jQvqqCv3Am3OrJyguzcBdIMDXgdVcMTlrlQ0qyDsvRRyAElMTDxg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--thaisonphan.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=EEHEWhA1;
-	arc=none smtp.remote-ip=209.85.222.72
-Received: from mail-ua1-f72.google.com (mail-ua1-f72.google.com [209.85.222.72])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=C2zY5yEh;
+	arc=none smtp.remote-ip=209.85.210.180
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F8EF60A260C
-	for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 21:09:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5F8EF60A260C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--thaisonphan.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B17F3606A320
+	for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 21:12:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B17F3606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=EEHEWhA1
-Received: by mail-ua1-f72.google.com with SMTP id a1e0cc1a2514c-9806756ea40so1052365241.1
-        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 13:09:50 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=C2zY5yEh
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-8a05b210703so918882b3a.0
+        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 13:12:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795036189; x=1795640989; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=INm/FnEpTCfTyow7VOum/3qmO9+j35dJqSIb5QUtmvg=;
-        b=EEHEWhA1wUvsfNWjiWjO8Btw4tCYofSgDkVStNN+MPTXz1TUEM+a7g26y/lO4VSZE2
-         PLW7N9U4/nIwLw/yUf/UNYhvt3rBs9fSMXnVW5JRv19r4S0lNcV88821rj5zQFFO1KPV
-         fVlT3qTZORCDQEG8l4nnEy9TGplQoHk5udO6/akwUAVB5uqEQuawfO1S4L6VhWnffN5s
-         u7WIhm8yfIyodg5yNOQHX4S8S7mWiBVS0whd0AKDNUVD53A2G8E/MvHK1RotSqOlKwzg
-         3mA588qLmM5Sp/xHUcfb7d0LdjFNCUG73SC8zJ/2yJE79eOGW9bCKQvWr4u+Fc6EQH/c
-         BDIA==
+        d=gmail.com; s=20260707; t=1795036368; x=1795641168; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=1e/TvLg+e+Z3bp3zIHk3TfdEQA+k1gn8aVFItKGNB84=;
+        b=C2zY5yEhV0jVQa5Es4QLgNKBGwQt5BR94udPyNfmkDm+V05flNM8YhTf+QIt2XRj6B
+         56Q8j7JOInZWEyEwyEL7G7G1ZsUnrujxZri83UvI4dVnpWiNLyhE8LdNEJpLjh6W0TrC
+         DyA1/cgmArj4XvejyCEaLIzYYS6E1fwWAMjtJH7mMbgFud/TBleVSKCDZpMwVI0ZU9pv
+         p3Y0ebhVSbhT8awd0Wdg8gqgE8CIXSwB9Pi3x1UzuJBzh00WgqIHd53gtT+ZCDwP55Zm
+         v2uGfUDvrBoGCNBNk1RZ5ZywB4goCyfEsKvsxMVVuPdDQ1kLq9C34JWblm19J/p/ktHw
+         LCuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795036189; x=1795640989;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=INm/FnEpTCfTyow7VOum/3qmO9+j35dJqSIb5QUtmvg=;
-        b=HphX8oRUUc19bLoq8+KtdDhqeI56/fA7TK1Ous1Tpv+yeD5LmeHi7APkZEU91NBSc7
-         enTiwopvOSRAdsdApBtgLSrRa/f0o+33xMCOrQb6r4Jkn8nCtE1T2KSexdUCC6t+L8ua
-         4RWEHoOuY7VDcGFbUm/G8wj4e0Y0fg30GsbiibaNZgzQQwiYZhhii21qIkXXZ18rdomi
-         yLOBeKA+uU9dA4S8Bv/oBjAzJwWATKpKB6/B3LOgmFeVHjWXHv8q1S8CI7zHzT8/ddYx
-         VAjOqwLLgkBjIwi71cVll3YwLFWn8+PZe5Xn0txENO0qFAbjZH9kYxxHfqAkHGbifKjr
-         Kgaw==
-X-Forwarded-Encrypted: i=1; AL+hErHAob102qtmYoWzRVMHBnE281LkhHMJ8x4mRXG2XklNbBhAyu9Lfkc/u7zfYRQITyxYS4c=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/ADNIlWAKi0ZSS4SMKAQX+8DgHFov1Cs/1+O8yaFmMSsnCf8fu
-	JYj+OgVp4Sc3k9zphrS6D/OWOvObhOxZYGbC4UbdWoyEzpeRSGpXVceA8dUB293bDOTAET0WQhb
-	0NRXAk+Al5IkyrK7Idb35Sjkdhw==
-X-Received: from uabjw11.prod.google.com ([2002:a05:6130:8b:b0:998:b46f:334d])
- (user=thaisonphan job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6102:50a3:b0:7ab:af4a:f2f3 with SMTP id ada2fe7eead31-7d6ba43ebc0mr1873249137.26.1795036189080;
- Wed, 18 Nov 2026 13:09:49 -0800 (PST)
-Date: Wed, 18 Nov 2026 21:09:33 +0000
-In-Reply-To: <20261118210933.2477423-1-thaisonphan@google.com>
+        d=1e100.net; s=20260707; t=1795036368; x=1795641168;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=1e/TvLg+e+Z3bp3zIHk3TfdEQA+k1gn8aVFItKGNB84=;
+        b=qNUtaH/sPOarrmfEaAbepmT9BO4eQbJ+rz04x3J68xtgb+50i/EIJ9j78PDPtClEF7
+         2PIo310ZiHFxo0QZzSheQ7eOle06j8AlmroxXQD2nz6LSup4W9o//Bmz7+CLgzEVdYxp
+         zs4G+JUrsq5dqjMNW3zlvUQ9reN/m/aQjei7BdjAto2BOo81m6Jz0dQuq2Nl7MikUCj6
+         cSEa0yHA0wtJ6TCD+2kMppgRFmHM0Jy8LWMHtL5PvoY8rJYl47dR3B8B3Z8FKM4C22OA
+         ovjpPjtq6hQX9La16dGpS5HaBJY4haV0AnTQGqpcCZ3e37qlnmSyAlsM57oyPtI9nWbJ
+         /ANg==
+X-Forwarded-Encrypted: i=1; AL+hErGpdLDjwjsrM+5zBI8DtJMP7hAmeTITV2gORkFrdbBkrbUuNs7LSbv9j4PneI5TOtY/0oc=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9jsplaBRxtkP1T5/ExvUb764MQCHsdLLmsZa12CAEt/VedNk96
+	YrcPQCCACDHrnpMr3QmOsMWjAT3sDrzF5e0TGaLTK+ZCsNCac55u1W85Ebd74q+S
+X-Gm-Gg: AYBFou2Q9zzsd0Y2H7oquRJDX/+JQI1ARVWCiQkzAHOuYj5Yp/U3GIrVoRMg/q+HI1f
+	4vgfCXvlMIUbIhgzUPCzwSeAmHm0WaaBRMfHKY8sU7dnIRNYJN66bsh/fGfnK836lAaEto/U6y2
+	UttSM22lgFLfaWIrOtIdoXpE22IV49vOa1o+tntI6aISP/8aG2lSZ7UBKnhSy0y6tJC5DSe9LEM
+	Ycul5TksVRbEe3iVLckeUaFviknnSQx/x59mcm+AogSq5n9HcTUiQzp/WG7eyFYZVsS05gnwqdS
+	/J8dAmjK/GIKftVg5wiLbBEuLDfBrXz2imoWKPuotG5Nc6UWXQNTg3yACtFI9IKaUtP5W+2Xz4h
+	zzQVVG6IaZSlPW7SOcORguMBFM1LSBWCiH9E/NZ1585ADECl1dPJEd4VjS5OqokHxqmJXcMMsLE
+	Q2zpzRkiYPywrD7oQIuTG7oHqVs2H9dljUpbkhJiyjT8y79GtjhQZDYkz3sZs/KoOcrGpu0s3Ia
+	eMsWV1fH3DQjMMhovPeTdSaSlxJqvn2yHCQYGuhpbdnFeKwjw6J/vhZbIxtXaqKSxhgEYm3NKK7
+	/CfPqf4AdyboOzJUj+mD3dA5NRDCxXJEgZ51W4njRdDD2AWMPXYJxCer
+X-Received: by 2002:a05:6a21:880a:b0:3f9:9114:8045 with SMTP id adf61e73a8af0-3fe980f701emr3110108637.43.1795036367942;
+        Wed, 18 Nov 2026 13:12:47 -0800 (PST)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c5cb35da49sm1732055b3a.38.2026.11.18.13.12.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Nov 2026 13:12:47 -0800 (PST)
+Message-ID: <df72a9ab1ebcebff573485a808e45cd493665e75.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v1 0/4] libbpf: Support kernel-side kfunc
+ flavors
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
+ <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>
+Cc: Alan Maguire <alan.maguire@oracle.com>, Emil Tsalapatis	
+ <emil@etsalapatis.com>, Jiri Olsa <jolsa@kernel.org>, Song Liu
+ <song@kernel.org>,  Tejun Heo <tj@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, sched-ext@lists.linux.dev
+Date: Wed, 18 Nov 2026 14:12:45 -0700
+In-Reply-To: <20261117192153.3384031-1-ihor.solodrai@linux.dev>
+References: <20261117192153.3384031-1-ihor.solodrai@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-10+b1 
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -78,119 +105,49 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261118210933.2477423-1-thaisonphan@google.com>
-X-Mailer: git-send-email 2.56.1.831.g720f3f5937-goog
-Message-ID: <20261118210933.2477423-3-thaisonphan@google.com>
-Subject: [PATCH net v4 2/2] tcp: accecn: initialize AccECN fields in syncookie path
-From: Thaison Phan <thaisonphan@google.com>
-To: Eric Dumazet <edumazet@kernel.org>, Neal Cardwell <ncardwell@google.com>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, "David S . Miller" <davem@davemloft.net>, 
-	David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: Matthieu Baerts <matttbe@kernel.org>, Simon Horman <horms@kernel.org>, 
-	"=?UTF-8?q?Ilpo=20J=C3=A4rvinen?=" <ij@kernel.org>, Olivier Tilmans <olivier.tilmans@nokia.com>, 
-	Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>, Stan Iliev <stani@google.com>, 
-	netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Thaison Phan <thaisonphan@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
 
-cookie_tcp_reqsk_alloc() and bpf_sk_assign_tcp_reqsk() allocate struct
-request_sock without __GFP_ZERO, leaving saw_accecn_opt,
-accecn_fail_mode, syn_ect_rcv, and syn_ect_snt uninitialized. When
-accecn_ok is negotiated in cookie_{v4,v6}_check(),
-tcp_ecn_openreq_child() reads all four fields to initialize the child
-socket's AccECN state.
+On Tue, 2026-11-17 at 12:21 -0700, Ihor Solodrai wrote:
+> An incompatible change to a kfunc's prototype, such as an added
+> parameter, breaks BPF programs built against the old one. libbpf
+> ignores the ___<flavor> suffix of a kfunc declared in a BPF program,
+> but makes an exact name look up on the kernel side, so the kernel
+> can't keep the old prototype available under the kfunc's name.
+>=20
+> sched_ext ran into this. cded46d97159 ("sched_ext: Make
+> scx_bpf_dsq_insert*() return bool") kept the old prototype as
+> scx_bpf_dsq_insert___compat, expecting libbpf to bind old binaries to
+> it, and broke them. 2dbbdeda77a6 ("sched_ext: Fix scx_bpf_dsq_insert()
+> backward binary compatibility") reversed the naming. A ___v2 kfunc
+> declared as vmlinux.h spells it doesn't bind: 56bbc91219c0
+> ("sched_ext: Fix scx_bpf_dsq_move_to_local___v2 compat detection")
+> fixed a compat macro that silently dropped enq_flags because of this.
 
-In addition, because the temporary request_sock used to send a cookie
-SYN-ACK is immediately freed, treq->syn_ect_snt is lost. For AccECN
-connections where the listener marks ECT on the SYN-ACK, leaving
-syn_ect_snt as 0 causes tcp_accecn_third_ack() to see a mismatch between
-the expected Not-ECT and the peer's reflected ECT in the ACE field,
-erroneously flagging TCP_ACCECN_ACE_FAIL_RECV in accecn_fail_mode. Refer
-to Table 4 of RFC 9768 for more details.
+Please prefer examples to prose in cover letters.
+Also, please de-Claude the included prose.
 
-Initialize the AccECN fields in cookie_tcp_reqsk_init() to match
-tcp_openreq_init(). For kernel-generated cookies (!req->syncookie), set
-syn_ect_snt from the listener's TOS/tclass in cookie_{v4,v6}_check() to
-match tcp_{v4,v6}_send_synack(); for BPF custom syncookies
-(req->syncookie), leave syn_ect_snt at 0 (Not-ECT) since the SYN-ACK was
-built by the BPF program rather than the kernel and bpf_tcp_req_attrs
-does not report the SYN-ACK ECN codepoint.
+> With this series, if the kernel's bpf_foo kfunc is missing or its
+> prototype is incompatible with the declaration, libbpf binds the
+> bpf_foo___<flavor> that has a compatible prototype. So a changed kfunc
+> can keep its name, and the old prototype stays available as foo___v1.
+>=20
+> resolve_btfids fails the build if two of bpf_foo and its flavors have
+> compatible prototypes, unless both have foo's exact prototype
+> (aliases), so the fallback finds at most one match.=C2=A0 This ensures at
 
-Found by AI-assisted code inspection comparing tcp_openreq_init() and
-cookie_tcp_reqsk_init() while investigating the cookie_v6_check()
-LOOPBACK4_IPV6 bug. Reproduced in a QEMU VM with tcp_syncookies=2,
-tcp_ecn=3, SLUB_RCU_DEBUG=y, and slub_debug=P, observing bogus
-tcpi_accecn_fail_mode and tcpi_accecn_opt_seen values in TCP_INFO on the
-accepted child socket (and tcpi_accecn_fail_mode=0x2 on ECT(0)
-listeners), and tested with packetdrill AccECN and syncookie selftests.
+Why is an exception for kfuncs with identical prototypes necessary?
 
-Fixes: 3cae34274c79 ("tcp: accecn: AccECN negotiation")
-Fixes: b40671b5ee58 ("tcp: accecn: AccECN option failure handling")
-Signed-off-by: Thaison Phan <thaisonphan@google.com>
-Reviewed-by: Eric Dumazet <edumazet@kernel.org>
-Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
----
-v4:
-  - restore treq->syn_ect_snt = 0 in cookie_tcp_reqsk_init() and guard
-    syn_ect_snt updates in cookie_{v4,v6}_check() with !req->syncookie
-    for BPF custom syncookies; document in changelog (Sashiko,
-    Eric Dumazet)
-  - add Reviewed-by tag from Matthieu Baerts
-v3: https://lore.kernel.org/netdev/20261117124710.1338951-3-thaisonphan@google.com/
-  - clarify syn_ect_snt / tcp_accecn_third_ack() description for
-    AccECN connections and reference RFC 9768 Table 4 (Chia-Yu Chang)
-v2: https://lore.kernel.org/netdev/20261116023709.132684-3-thaisonphan@google.com/
-  - drop redundant treq->syn_ect_snt = 0 in cookie_tcp_reqsk_init()
-    (Eric Dumazet)
-  - clarify how the bug was discovered and observed via TCP_INFO
-    (Eric Dumazet)
-  - add Reviewed-by tag from Eric Dumazet
-v1: https://lore.kernel.org/netdev/20261114161248.3428695-3-thaisonphan@google.com/
+> kernel / module build time that no ambigous kfunc flavors exist.
+> Documentation/bpf/kfuncs.rst describes the rules.
+>=20
+> Compatibility is determined by bpf_core_types_are_compat(), the check
+> libbpf already applies to kfuncs. Of the 70 same-name kfunc prototype
+> changes between v6.6 and bpf-next, it finds 8 incompatible (arity,
+> return kind, callback prototype). The other 62 (const, typedefs,
+> parameter names, integer widths, pointee struct names, annotation
+> suffixes) were made in place without breaking old callers.
 
- net/ipv4/syncookies.c | 7 +++++++
- net/ipv6/syncookies.c | 3 +++
- 2 files changed, 10 insertions(+)
+Do you mean that without this series programs referring old prototypes
+are broken?
 
-diff --git a/net/ipv4/syncookies.c b/net/ipv4/syncookies.c
-index 4e0ff3b82062..89169c82431c 100644
---- a/net/ipv4/syncookies.c
-+++ b/net/ipv4/syncookies.c
-@@ -290,6 +290,10 @@ static int cookie_tcp_reqsk_init(struct sock *sk, struct sk_buff *skb,
- 	 */
- 	treq->txhash = treq->snt_isn;
- 	treq->syn_tos = TCP_SKB_CB(skb)->ip_dsfield;
-+	treq->saw_accecn_opt = TCP_ACCECN_OPT_NOT_SEEN;
-+	treq->accecn_fail_mode = 0;
-+	treq->syn_ect_rcv = 0;
-+	treq->syn_ect_snt = 0;
- 
- #if IS_ENABLED(CONFIG_MPTCP)
- 	treq->is_mptcp = sk_is_mptcp(sk);
-@@ -502,6 +506,9 @@ struct sock *cookie_v4_check(struct sock *sk, struct sk_buff *skb)
- 		ireq->rcv_wscale = rcv_wscale;
- 	ireq->ecn_ok &= cookie_ecn_ok(net, &rt->dst);
- 	treq->accecn_ok = ireq->ecn_ok && cookie_accecn_ok(th);
-+	/* SYN-ACK was not sent by the kernel if req->syncookie is set. */
-+	if (!req->syncookie)
-+		treq->syn_ect_snt = READ_ONCE(inet_sk(sk)->tos) & INET_ECN_MASK;
- 
- 	ret = tcp_get_cookie_sock(sk, skb, req, &rt->dst);
- 	/* ip_queue_xmit() depends on our flow being setup
-diff --git a/net/ipv6/syncookies.c b/net/ipv6/syncookies.c
-index b33011b71fff..e8d45a627ca2 100644
---- a/net/ipv6/syncookies.c
-+++ b/net/ipv6/syncookies.c
-@@ -276,6 +276,9 @@ struct sock *cookie_v6_check(struct sock *sk, struct sk_buff *skb)
- 		ireq->rcv_wscale = rcv_wscale;
- 	ireq->ecn_ok &= cookie_ecn_ok(net, dst);
- 	tcp_rsk(req)->accecn_ok = ireq->ecn_ok && cookie_accecn_ok(th);
-+	/* SYN-ACK was not sent by the kernel if req->syncookie is set. */
-+	if (!req->syncookie)
-+		tcp_rsk(req)->syn_ect_snt = READ_ONCE(np->tclass) & INET_ECN_MASK;
- 
- 	ret = tcp_get_cookie_sock(sk, skb, req, dst);
- 	if (!ret) {
--- 
-2.56.1.831.g720f3f5937-goog
-
+...
