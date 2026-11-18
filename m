@@ -1,58 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.224
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794993434;
-	b=SZjtEk4+03rUjxb6jpY8KjvCwW8Iu9cWIZJGAu0BCSaRC33vxYDYr385MdAePDR3Zerv
-	 Y1b5/3TBUCenZ9ipuVeHPvFdMSyiHXu54geZHeojvBy305gS2w/NQWV2HVOldhBko47S9
-	 p+T09XKMxkpGq0ghzD7NxwMKDtjYRh8HNs5Ng8SCYFiqVwRq/uyShKvZDhdnzKCmOSV1z
-	 4LEiWkgnP6h1o7XO19bvcGiG8Tj0/SV7kms6nk5801SGtxCefPloGDCDnocHqmzzrL92m
-	 GzpKa7aA2hCXsm5dMSAn8yucmFz19jEtHcY7vZUyouEoZdRbPIy7KJfr5G/LEkvMR7A==
+	t=1794994007;
+	b=kpjSJN/rcJdE7dPrDazzThzHLev7IGs0tuNf7JO2Stj5Zi0xo/KoAhcBYjYEouboOiBY
+	 DhYN/FtmSXPPx5QJzIRvPBn1567dOWePbpyFpwzw0vVUjT7kuhnUj47x//K7duA1GdCnl
+	 dLS7TFfEYr9tg0K7Y36sofv5C7ig0MVklWup7GIQQFMbiNBg1FoYfYSQrsVeNG6wAAHzs
+	 bmCRc0CDJrWXLrRaEmeBgy8lL+uSYTIsMSJ1b04EeQNabnrQhu4q4rZ2rNg+r8zvsRJhc
+	 FdNyy7FljiXqGHASwN2hNCJ6M5gnS/779+oFspBnXHCSPXJeFd816StfEE/3GtnZxTQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794993434;
-	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:CC:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
-	bh=xsIsDZiCZyB7+lKhnSB47LX6hbKq7VMg+O30s3v8xU0=;
-	b=5gGwX4qeeuNA0xE4XiLnTNe6+OuoMxrBar7wo0rKhrIQrXUKaBJopV7ClykQyawWgYIN
-	 QTpUaGXNPCc3yb7/JoDRa1MsRVwohSgje4p8jcGXiTjR4zcK7NKTa57UzhYs2PXVaBMFC
-	 ICDAAG50uvl95Mr1Mu/pcFX/Dg+Nop555aSZx7VK0TbOnx9uJpJrgRTUI5cQqt3k1xt+M
-	 jgE+p96MvtX8QNUXtaR3INblbJEAyrWl8sfJDkI7ZzIBzp/cAZG/1ciAuLzD5XR9it8nw
-	 wXMiFbKPZ0jWoBX+xYXyGGj1CosrE1v2c58A/yJEmldtupyd90BNDO+hmqBsXPBBPyw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794994007;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:From:
+	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=YyTnj21z1o7e2B9mOs4PYUHbERAya5hpvioQJuyfVS0=;
+	b=Jqwo4F/QxOGDGZgrXCR3EOWPjhWV8ApZfuApOVEZTslybATxGukfO6HoXbyHl1htn3PC
+	 vbQvn0ID0MKHDAe1uPH4esK4vPmkGu4IdvYo1G5jc/T9kjXIVi8Cnbune++MKY+RpWpTX
+	 aqh3LDjK7lcuQmL7CJaYXQJ37tLPT5zVFS5TaPW2iVLRBmgr433v48KXuxUK50zPKlIR+
+	 qMZ5YcUa+FE0SVda/4gPfuYC+ja7UHzOx0BOigtUc2CUNhE2os8aDO0YIpcV43YYh0guY
+	 KNmt3GJRgEB/ugTsmE3x+6VkXXM5+Z/Csi0TM5H+Av2m38KbNSNTSP5+j95c7OjnLgA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=huawei.com;
-	spf=pass smtp.mailfrom=huawei.com;
-	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=PV3E+oEf;
-	arc=none smtp.remote-ip=113.46.200.224
-Received: from canpmsgout09.his.huawei.com (canpmsgout09.his.huawei.com [113.46.200.224])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0925606A31C;
-	Wed, 18 Nov 2026 09:17:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B0925606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	dmarc=pass header.from=arm.com;
+	spf=pass smtp.mailfrom=arm.com;
+	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b="b/M8ZsTX";
+	arc=none smtp.remote-ip=217.140.110.172
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37167606A320
+	for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 09:26:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 37167606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=PV3E+oEf
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=xsIsDZiCZyB7+lKhnSB47LX6hbKq7VMg+O30s3v8xU0=;
-	b=PV3E+oEfe6GWTlN7IzcOZNtMuGokpGaMaE5HT+w5Vk98jOWnb53YzhdAAkTed93AvGp6D+ngZ
-	ftGk2P047j6/rbz8Ke0Kewk86yZLKYBKuM/FH/uksdfAvh6qdTvxfoyU41EsmNujsw5oLc+20hb
-	oGEWnwe8RZuneZEt42a2+8c=
-Received: from mail.maildlp.com (unknown [172.19.162.92])
-	by canpmsgout09.his.huawei.com (SkyGuard) with ESMTPS id 4jTww23GW7z1cySm;
-	Wed, 18 Nov 2026 17:16:50 +0800 (CST)
-Received: from whupemk100010.china.huawei.com (unknown [7.152.184.41])
-	by mail.maildlp.com (Postfix) with ESMTPS id 41D7540586;
-	Wed, 18 Nov 2026 17:17:10 +0800 (CST)
-Received: from [10.67.110.140] (10.67.110.140) by
- whupemk100010.china.huawei.com (7.152.184.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Wed, 18 Nov 2026 17:17:02 +0800
-Message-ID: <61823b38-032d-4e4c-bcbb-82fe83c34ade@huawei.com>
-Date: Wed, 18 Nov 2026 17:17:01 +0800
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=b/M8ZsTX
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5838F1596;
+	Wed, 18 Nov 2026 01:26:42 -0800 (PST)
+Received: from [10.57.91.192] (unknown [10.57.91.192])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AEFBA3F673;
+	Wed, 18 Nov 2026 01:26:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1794994005; bh=N1QB5zcQkhEUye/mlGIOnn4jhu5njvHRiwWIoEGXYEM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=b/M8ZsTXaSr+CoRWeIGkYmAwCHHfj9AomXN+jaqHtIRFtSUX3mYfCGV3j7waYyb7S
+	 afl2wpimOTXVQ6t9vcpBgLPUPTnvVk98pYEiQUbimyrjLL8v1OEX/qRu2h4SXgrJVn
+	 5b4nZz2bRMYnQ1qB8L0NFQCMQ2B5PtjV4GvWumRE=
+Message-ID: <66972dce-b645-4083-bae4-dc8109ff5fe2@arm.com>
+Date: Wed, 18 Nov 2026 09:26:42 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -63,62 +54,59 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH -next -v4 01/17] fs: pass struct path to notify_change()
-To: Al Viro <viro@zeniv.linux.org.uk>
-CC: <mic@digikod.net>, <gnoack@google.com>, <paul@paul-moore.com>,
-	<brauner@kernel.org>, <jack@suse.cz>, <amir73il@gmail.com>,
-	<andrii@kernel.org>, <apparmor@lists.ubuntu.com>, <ast@kernel.org>,
-	<axboe@kernel.dk>, <bpf@vger.kernel.org>, <casey@schaufler-ca.com>,
-	<cel@kernel.org>, <cem@kernel.org>, <chenxiaosong@chenxiaosong.com>,
-	<code@tyhicks.com>, <corbet@lwn.net>, <Dai.Ngo@oracle.com>,
-	<dakr@kernel.org>, <daniel@iogearbox.net>, <dhowells@redhat.com>,
-	<dlemoal@kernel.org>, <dmitry.kasatkin@gmail.com>,
-	<driver-core@lists.linux.dev>, <dsterba@suse.com>,
-	<ecryptfs@vger.kernel.org>, <eddyz87@gmail.com>, <emil@etsalapatis.com>,
-	<eric.snowberg@oracle.com>, <exfat@lists.linux.dev>,
-	<georgia.garcia@canonical.com>, <gregkh@linuxfoundation.org>, <hch@lst.de>,
-	<hirofumi@mail.parknet.co.jp>, <hyc.lee@gmail.com>,
-	<ihor.solodrai@linux.dev>, <jlayton@kernel.org>, <jmorris@namei.org>,
-	<johan@kernel.org>, <john.fastabend@gmail.com>,
-	<john.johansen@canonical.com>, <jolsa@kernel.org>, <kpsingh@kernel.org>,
-	<linkinjeon@kernel.org>, <linux-api@vger.kernel.org>,
-	<linux-block@vger.kernel.org>, <linux-btrfs@vger.kernel.org>,
-	<linux-cifs@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-fsdevel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-nfs@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
-	<linux-trace-kernel@vger.kernel.org>, <linux-unionfs@vger.kernel.org>,
-	<linux-xfs@vger.kernel.org>, <liubaolin12138@163.com>,
-	<martin.lau@linux.dev>, <mason@kernel.org>, <mathieu.desnoyers@efficios.com>,
-	<matt@bobrowski.net>, <memxor@gmail.com>, <mhiramat@kernel.org>,
-	<miklos@szeredi.hu>, <neil@brown.name>, <netfs@lists.linux.dev>,
-	<ntfs@lists.linux.dev>, <okorniev@redhat.com>, <omosnacek@gmail.com>,
-	<penguin-kernel@i-love.sakura.ne.jp>, <rafael@kernel.org>,
-	<rdunlap@infradead.org>, <roberto.sassu@huawei.com>, <rostedt@goodmis.org>,
-	<selinux@vger.kernel.org>, <senozhatsky@chromium.org>, <serge@hallyn.com>,
-	<sj1557.seo@samsung.com>, <skhan@linuxfoundation.org>, <song@kernel.org>,
-	<stephen.smalley.work@gmail.com>, <takedakn@nttdata.co.jp>, <tom@talpey.com>,
-	<yonghong.song@linux.dev>, <yuezhang.mo@sony.com>, <zohar@linux.ibm.com>,
-	<utilityemal77@gmail.com>, <lujialin4@huawei.com>
-References: <20261117150542.1169451-1-caixinchen1@huawei.com>
- <20261117150542.1169451-2-caixinchen1@huawei.com>
- <20261117183059.GP989762@ZenIV> <20261117183440.GQ989762@ZenIV>
-Content-Language: en-US
-From: Cai Xinchen <caixinchen1@huawei.com>
-In-Reply-To: <20261117183440.GQ989762@ZenIV>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
- whupemk100010.china.huawei.com (7.152.184.41)
+Subject: Re: [PATCH v1] arm64: Mitigate Spectre v1 in the BPF interpreter
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20261117172341.3152407-1-ryan.roberts@arm.com>
+ <sashiko-outbox-219240@kernel.org>
+From: Ryan Roberts <ryan.roberts@arm.com>
+Content-Language: en-GB
+In-Reply-To: <sashiko-outbox-219240@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Yes.  ovl_do_notify_change() passes
-ovl_upper_mnt(ofs) together with the real upperdentry, so the sb matches,
-and the idmap handed down is ovl_upper_mnt_idmap(ofs), i.e. taken from
-that very mount.  It runs under with_ovl_creds(), like the other ovl_do_*
-forwards, so an LSM sees a genuine upper-layer path instead of a merged
-dentry whose mount we cannot name - which is the point of converting the
-metadata helpers.
+On 17/11/2026 17:34, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential
+> issue to consider:
+> - [Low] bpf: non-standard multi-line comment style in ___bpf_prog_run()
+> --
+> 
+> commit ac6a06b7dc1000d82907323434c2003bed5a8873
+> Author: Ryan Roberts <ryan.roberts@arm.com>
+> 
+> arm64: Mitigate Spectre v1 in the BPF interpreter
+> 
+> This commit renames spec_bar() to barrier_nospec() on arm64 so that the BPF
+> interpreter emits a speculation barrier for BPF_NOSPEC, while avoiding
+> unnecessary barriers in uaccess paths where user pointers are already masked.
+> 
+>> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+>> index fc8b133c15f90..adf7ba0cdb06c 100644
+>> --- a/kernel/bpf/core.c
+>> +++ b/kernel/bpf/core.c
+>> @@ -2251,14 +2251,7 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
+>>  	/* ST, STX and LDX*/
+>>  	ST_NOSPEC:
+>>  		/* Speculation barrier for mitigating Speculative Store Bypass,
+>> -		 * Bounds-Check Bypass and Type Confusion. In case of arm64, we
+>> -		 * rely on the firmware mitigation as controlled via the ssbd
+>> -		 * kernel parameter. Whenever the mitigation is enabled, it
+>> -		 * works for all of the kernel code with no need to provide any
+>> -		 * additional instructions here. In case of x86, we use 'lfence'
+>> -		 * insn for mitigation. We reuse preexisting logic from Spectre
+>> -		 * v1 mitigation that happens to produce the required code on
+>> -		 * x86 for v4 as well.
+>> +		 * Bounds-Check Bypass and Type Confusion.
+>>  		 */
+> 
+> [Severity: Low]
+> This isn't a bug, but BPF code uses the multi-line comment style where the
+> opening /* goes on its own line with the comment text starting on the next
+> line.
 
-On 11/18/2026 2:34 AM, Al Viro wrote:
-> Incidentally, will the mount reference you are supplying in case of overlayfs
-> upper layer be any good for LSM users?
+All other multi-line comments in this file use this more compact style; I was
+trying to be consistent.
+
+Thanks,
+Ryan
+
