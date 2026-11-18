@@ -1,79 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=131.188.11.21
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795012060;
-	b=2gv1jxDStlSkyf2IDcvrtoeCHSSU5MdojkSoJcXwdQ/W5kqEcxsZ/dgrc+YA9xHrcJ4Q
-	 qSD8LAsrxpDUPrjaGljaoZ+HiEdnNcHB8RjwCNOZupmFw5go7/SHhwBwKqai5wBig7rOT
-	 8ELQgiKiORrlCmZeOGbkzALWCOJcnrJybrRsAMEeq9pqMJIq5sle0botZFgfimrj2o/04
-	 RXkxR4nFoctiwJyyL6dMKT989uR2OVvsM2McfxNAIug14EMJwiS6GCfhATdEAhLfmKlAH
-	 IHj0yaD72ZYke1hj5/f7WhAJ7a+1kuP/vAgXlc6my1zOWK+4iojAPm+9bVezPTqlMVg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795012060;
-	h=DMARC-Filter:DKIM-Signature:Received:X-Virus-Scanned:X-RRZE-Flag:
-	 X-RRZE-Submit-IP:Received:From:To:Cc:Subject:In-Reply-To:References:
-	 User-Agent:Date:Message-ID:MIME-Version:Content-Type;
-	bh=nV1O6jvV7LY84nmyWvTeb3FZb9IncqxS3F8jpRloohk=;
-	b=NyY5PxrxDZqnhDl3hRxCVv09Vjbm+c0vmBEKTdO0zhO44AqI10zx1CA8+2apdOeArPPD
-	 Y1DgcYWwBWO5BJiDNrXnnQ/BSKpYyADrd7OXmsm+0h4ydWcIeXBVBQChjar6Hm8AtMfTh
-	 Bz8OaviZSTJAQwpO+Gj4Km26qHKAk1v2BXlmCnnYcIazLjkYCbTfv/3g+jg6jRUSJiX+1
-	 5VwGJ/fsi5F7lVpFbqURHfrR8fR3vMCXuae18snMGHPzEo2L9oQWqUxG0Wa2w3hT6WgVt
-	 7fsxG8p2o3o+r6jVNJcZV8+eFlm8Bh7eOYJs4wLUbzcRr6NwJ1/B8G+tohvrlq+S9XQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=fau.de;
-	spf=pass smtp.mailfrom=fau.de;
-	dkim=pass header.d=fau.de header.i=@fau.de header.a=rsa-sha256 header.s=fau-2021 header.b=XVzbMVpL;
-	arc=none smtp.remote-ip=131.188.11.21
-Received: from mx-rz-2.rrze.uni-erlangen.de (mx-rz-2.rrze.uni-erlangen.de [131.188.11.21])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.67
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795012918;
+	b=bbBena2cGk2GtiocmhiwhiSuhz0+YsDrHEFbFMZ1fs4IG713BNspWPYuwOUCRINuGIzB
+	 LbNhg1j9mDRlp1xgzwCLu7nMbpTGCHmA4SqlAftkz4NeI1hJxktZJMs53N5UffE986CgX
+	 Zk20ZPwdCkiqddfOnKUnvbtTVB/BGiJhYihtxbkrg44v9us/ZhPM7wxy5Pqezc5BUjXLN
+	 5BzzDBl//au306ALhLkhvbaKeyPYAxfbHFwC+W6FDp+hi5O2+kXupB7jZx3YPiRokqsFn
+	 WRxn3FaOCHR7QZSNqZ19OGOKxmaiwHcl86hJ0CnrUi8wVi6fsg5fUPHwKdCX2jXg7Jw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795012918;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
+	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
+	 Content-Type;
+	bh=WRSAwcPpVvVL9pia2YQzeThyWzOEL1AWKpkFwsSYKqY=;
+	b=oQvHSnolD7l7rUG1ooQQa8XnS155bT7kE77EFZKXaBJiboZ56Sjqprj284S0GnBNh/Ro
+	 93sSp1oaYebWGDEFGC7ohr41qNrxT/Nmh4D0Z3STN9ZxMSTPeDasExz5FXYcU1ZFybWO2
+	 AoYGpG0X5UsGYaOwpF9Ujrr1d5mye8RpN7QvpbSU9Pw9bMYmDp84VssU5w0m8yamQSdB4
+	 69BjYgVlpPDSIPuRYP0VSXGoDTWMKB3b/c19kf9Kk+ActwYGfCIw54Q0KGhyz8fW4B0ej
+	 kOXn33Lxf8OyLTg5rjszR/o5biJjuaSZo3q8qeMSrgnE2az3dx3f8T/WNPE3DjLdjlA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=c7+eyrcC;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.67
+Received: from mail-lf1-f67.google.com (mail-lf1-f67.google.com [209.85.167.67])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC5D060A2608;
-	Wed, 18 Nov 2026 14:27:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AC5D060A2608
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A074606A338
+	for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 14:41:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6A074606A338
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=fau.de header.i=@fau.de header.a=rsa-sha256 header.s=fau-2021 header.b=XVzbMVpL
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
-	t=1795012049; bh=nV1O6jvV7LY84nmyWvTeb3FZb9IncqxS3F8jpRloohk=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From:To:CC:
-	 Subject;
-	b=XVzbMVpLS0l21PdU1UrLo6qa5n5nJURXRUjkvdjgVEmnHTJFU8iodHSziacY9VHGS
-	 t2HmIyq98BqtfM7s6ch/h15TFlHdNMEnOLmFl91exGNxTrEWsgWkrM6gO8nH54aeUi
-	 DxD6G+yAbzkoSDOcVm7phlcBbl3uEnmZP4bi02nCkBlYmsWwQzMYrnUSTPlVSqoDXb
-	 LeCMCEs4St4+v119DuF24wHaIh5tMhdoLgYaegoKVAnAdoM0JxtfZJMu+EqVT2L80i
-	 avoZMyImbN4EqJhKWX/wGHNhGIxpxCFP8K5W+Wm6dqDbCIngYMen31tvxBIpoy6SOL
-	 WLcEuB7zQOOXg==
-Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-rz-2.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4jV3pT4tyFzPjlr;
-	Wed, 18 Nov 2026 15:27:29 +0100 (CET)
-X-Virus-Scanned: amavisd-new at boeck4.rrze.uni-erlangen.de (RRZE)
-X-RRZE-Flag: Not-Spam
-X-RRZE-Submit-IP: 2001:620:618:5b8:2:80b3:0:385
-Received: from localhost (unknown [IPv6:2001:620:618:5b8:2:80b3:0:385])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: U2FsdGVkX18FgheTGs5bb6/Cj/sYgy4rpAX9+EqkDi0=)
-	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4jV3pQ4jwyzPjjf;
-	Wed, 18 Nov 2026 15:27:26 +0100 (CET)
-From: Luis Gerhorst <luis.gerhorst@fau.de>
-To: Ryan Roberts <ryan.roberts@arm.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,  Will Deacon
- <will@kernel.org>,  Mark Rutland <mark.rutland@arm.com>,  Alexei
- Starovoitov <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
-  John Fastabend <john.fastabend@gmail.com>,  Andrew Morton
- <akpm@linux-foundation.org>,  Alexander Viro <viro@zeniv.linux.org.uk>,
-  linux-arm-kernel@lists.infradead.org,  linux-kernel@vger.kernel.org,
-  bpf@vger.kernel.org,  stable@vger.kernel.org
-Subject: Re: [PATCH v1] arm64: Mitigate Spectre v1 in the BPF interpreter
-In-Reply-To: <20261117172341.3152407-1-ryan.roberts@arm.com>
-References: <20261117172341.3152407-1-ryan.roberts@arm.com>
-User-Agent: mu4e 1.12.12; emacs 31.1
-Date: Wed, 18 Nov 2026 15:27:25 +0100
-Message-ID: <871p8ib4fm.fsf@fau.de>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=c7+eyrcC
+Received: by mail-lf1-f67.google.com with SMTP id 2adb3069b0e04-5c14f3dab66so989783e87.0
+        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 06:41:58 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795012916; cv=none;
+        d=google.com; s=arc-20260327;
+        b=eex/mIZRB2yILdbGQazg6ERk+i6+qL4/2kEGl2cuq3BCNfv1o+uZZ8pBxL7vRkBdeE
+         IauCz9RQELPcEa+sy3d7l/jHCa3jGiYvYa+VdbG0ZIHrOAPxCNRorPpQarmDoMkJ3CXZ
+         CLhkI0TvTrNn8PJCJgUyMd43unMnwTQ4KRG1Zy2nnRiN7VPq3JH34WLlvKswEF6Ercsa
+         6tPF6ecdkqXPgt5nA/trSSOyYmlGZrHKesQ7oUtqnG8h2QlDX1xiQ3SNizOnZcYogvQX
+         /x6OA/98TlcSL7YyYqI4hr5Y0C/TpNlZMmJdlXQfUMLW3vmqS5ug8MJwaLdgtGMUyv9D
+         EiYw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=WRSAwcPpVvVL9pia2YQzeThyWzOEL1AWKpkFwsSYKqY=;
+        fh=rpprWDXgiOO6TlCZVomi1Otx+vFQp2vp6uJmDRhY+mc=;
+        b=IxVaNJvIjyrOdq6tJOzH7SprgojjkmemiAwfkQj3Qj6zWNCFQESqyHPv3FsRumS0Bq
+         7fF9+uCQjRLyr7WKvX6Mv0g/yiMswq0TxZsF1LEjGk/tIgvLyK/qhfqJeOGZr/8Zb5Qc
+         chmJkgY+d4IIrq1oE/Pjj/cthlX7uz03QZN0YDvXZwwgM867yZHbi6NCP9fRXN5k7x+g
+         B7qsd4EKPM94gLPiS1pFfZszVfOjqHwvhnHdslG2c1d2YPIhTHkioL1+BVedehP1SrB7
+         iF6tJNF6zqt+uaA+koud0ewa2uW9BR8OMI5tB1EZaS/s/BrrZwyGq82Zr5yREEes5m8B
+         BVlg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795012916; x=1795617716; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=WRSAwcPpVvVL9pia2YQzeThyWzOEL1AWKpkFwsSYKqY=;
+        b=c7+eyrcCPVtSUQWEPiyBFza2kV+CTuG0CYzia9HuYEnrbJRjBecC0oApUOiMMJ0de/
+         j1dJIEnJZAugQKEkMsU7yWgAlmSeQD2c10BBNSqGW3fbUN6UTLMXTMwzm/HOKc2NLXLW
+         GXQ2yY4B2N/6r/wgaadoxPCl7J7+W7X53tkGx3LKH4ocNo4gPcQHPKkiDYAUOF6EYB+L
+         RWavboIDzIw7hLEBczoWznRRf0OOBDJHCYkXup3S+s+oj7i3tP8niyqqtaAGSMFfVdTn
+         F5bG0c5yNVvrMV3Y7RKnHjwSvJI4tSXlmleAfN4EeDrGbXmiYylBFOU9VXoUQDk8/SxW
+         wIxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795012916; x=1795617716;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=WRSAwcPpVvVL9pia2YQzeThyWzOEL1AWKpkFwsSYKqY=;
+        b=vEOxM3RgORbXoHxEmUZ56odjihautYcAgfBD08XGMQR09KH920Cpjt91+8Wa2Ekp68
+         BcHSXElHIEmeUeFrCnYfitaUB3nssFSFobF1tEx6RSus8Nledc7BBYxMq4H8uyDT7ENc
+         duUzk6TSYP4HA1j+WGYV3ohRFNocJ8YDChtL/LycfK37sRcJLOe2V/JtWVJCZ7+b90zw
+         eYwDNb4P51874lwHYY10j8jAI/o3m3nsXtgyDDw2oqmfytsFqNL5mCdwFeKpyMy1Evlq
+         Kt+Q2tPs+qkq2/PDSfGDOMX02BIol4Ui4fUD+Gz7LF+rYXBBsErjOg80x0AOb0HSkVvU
+         XRfw==
+X-Gm-Message-State: APuU4Z/kvk3eWqwT/yeHRzobDeGd/lC0VV5D6bbT1yvlr+HhRtTDNMjk
+	f2hO6mCeLdXvey1v6QJlqHm4Y46eEmeHJA+Ku0yFXv/f4SVWRAaa+C7SFtjAgYKbIIcClSjpnW0
+	6rnhf7gCo1upCBhYpq1H2oetihmz0SVM=
+X-Gm-Gg: AYBFou1akyD8nC5pUBAV9zfJugGuRiAbu03H1h02QY01I1qqJ94An7MvcKfXVrQsOCZ
+	WSY51wQB0FRO7JSwN9vimEKN0Fw5MJJ2sJM7DV5vsdUfjUxNVAUOrqTnKq3kLtus1FXGCC0ZwwI
+	N7/JtnUTqOauAhScPyPCp32FJXt3aYSEY0RKlIcBta9utH2MxCyRYFuFmz/I2xUT/EhHWHoFnbK
+	iUTzXN277wVF3QDUc+9VUUMD27dpX8XGRqA1+e8t+e7JG/nbKF2w8LsVYEUrxwy/Qu/egj0qM2u
+	7cB6E4X5Cv7QaX3kUP0+L/viPN61VVwAl628nUX84W0K/lbhiBJPTcWiyj6sFeJomB/wGsm8ZLC
+	QT70FZr+dAzw7xsFgKS/Y5FfPnAmWWjNslxdxUQ==
+X-Received: by 2002:a05:6512:3f28:b0:5bf:a34f:14ce with SMTP id
+ 2adb3069b0e04-5c1a0ef79e6mr1989965e87.11.1795012915416; Wed, 18 Nov 2026
+ 06:41:55 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -83,152 +102,58 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20261112134942.288831-1-shlomojune6@gmail.com> <DMTHXFS504S9.2BU4PDLEWG3PX@gmail.com>
+In-Reply-To: <DMTHXFS504S9.2BU4PDLEWG3PX@gmail.com>
+From: J4f J4f <shlomojune6@gmail.com>
+Date: Wed, 18 Nov 2026 22:41:43 +0800
+X-Gm-Features: AclHuK9QDHo1yz09H2q8rKyDe22fgjuz0dzQ2yBYPTf4oQjXMD1IbeM927twSjI
+Message-ID: <CAE_LbwmtogEFvk5jDUcYhjSaX7_5bsHy-OWxCKPxmiBVDcjj_w@mail.gmail.com>
+Subject: Re: [PATCH] bpf: Fix cgroup link update after a failed effective
+ array rebuild
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Tadeusz Struk <tadeusz.struk@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Ryan Roberts <ryan.roberts@arm.com> writes:
+On Fri, 13 Nov 2026 at 03:57, Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Thu Nov 12, 2026 at 1:49 PM UTC, Shihuang Liu wrote:
+> > replace_effective_prog() uses the position of a cgroup program list
+> > entry as a physical index into the effective program array.  When an
+> > OOM detach falls back to purge_effective_progs(), the detached entry is
+> > replaced by a dummy but the other entries keep their position, so the
+> > list position no longer matches the array index.  A later link update
+> > then writes the new program into the wrong slot, leaving the old
+> > program pointer in the array.  The array does not hold a reference, so
+> > the old program can be freed while it is still published.
+>
+> I doubt you managed to reproduce such scenario.
+> So wont-fix until there is one.
+>
+> pw-bot: cr
 
-> The BPF verifier can accept programs with unsafe speculative paths by
-> inserting BPF_NOSPEC instructions instead of rejecting them. It relies
-> on those instructions to prevent execution of the unsafe paths.
->
-> The arm64 JIT implements BPF_NOSPEC with a speculation barrier, but the
-> interpreter calls barrier_nospec(), which falls back to a no-op on
-> arm64. Programs executed by the interpreter therefore lack the
-> Spectre-v1 barriers assumed by the verifier. Contrary to the code
-> comment, kernel-wide SSBD does not provide this protection, since it
-> mitigates Spectre v4 rather than Spectre v1.
->
-> Rename spec_bar() to barrier_nospec() so that the interpreter and other
-> callers receive SB if supported, or DSB NSH followed by ISB otherwise.
->
-> Defining barrier_nospec() would also add barriers to the generic
-> copy_from_user() and copy_from_user_iter() paths. These are unnecessary
-> on arm64: its uaccess primitives mask user pointers so that they cannot
-> address kernel memory even when an access_ok() check is mispredicted.
->
-> Introduce user_access_may_speculate_kernel_addr(), defaulting to true,
-> and have arm64 return false. Then update the uaccess sites to call
-> barrier_nospec() conditionally on the macro.
->
-> Cc: stable@vger.kernel.org
-> Fixes: d6f1c85f2253 ("bpf: Fall back to nospec for Spectre v1")
-> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+I reproduced it on f66469d9905b39 (7.4.0-rc1).
 
-Thanks! Tested that this prevents the attack (just recovery of OOB
-value, did not aim for real secret) on Cavium ThunderX2 (no FEAT_SB) as
-expected.
-
-Tested-by: Luis Gerhorst <luis.gerhorst@fau.de>
-
-> ---
->  arch/arm64/include/asm/barrier.h | 6 +++---
->  arch/arm64/include/asm/uaccess.h | 3 +++
->  arch/arm64/kernel/proton-pack.c  | 2 +-
->  include/linux/uaccess.h          | 7 ++++++-
->  kernel/bpf/core.c                | 9 +--------
->  lib/iov_iter.c                   | 3 ++-
->  6 files changed, 16 insertions(+), 14 deletions(-)
->
-> diff --git a/arch/arm64/include/asm/barrier.h b/arch/arm64/include/asm/barrier.h
-> index 9495c4441a46..088ee29d36f4 100644
-> --- a/arch/arm64/include/asm/barrier.h
-> +++ b/arch/arm64/include/asm/barrier.h
-> @@ -40,9 +40,9 @@
->   */
->  #define dgh()		asm volatile("hint #6" : : : "memory")
->
-> -#define spec_bar()	asm volatile(ALTERNATIVE("dsb nsh\nisb\n",		\
-> -						 SB_BARRIER_INSN"nop\n",	\
-> -						 ARM64_HAS_SB))
-> +#define barrier_nospec() asm volatile(ALTERNATIVE("dsb nsh\nisb\n",		\
-> +						  SB_BARRIER_INSN"nop\n",	\
-> +						  ARM64_HAS_SB) : : : "memory")
->
->  #define gsb_ack()	asm volatile(GSB_ACK_BARRIER_INSN : : : "memory")
->  #define gsb_sys()	asm volatile(GSB_SYS_BARRIER_INSN : : : "memory")
-> diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
-> index 9f5bd9c69c24..6fd03dc1ae76 100644
-> --- a/arch/arm64/include/asm/uaccess.h
-> +++ b/arch/arm64/include/asm/uaccess.h
-> @@ -174,6 +174,9 @@ static inline void __user *__uaccess_mask_ptr(const void __user *ptr)
->  	return safe_ptr;
->  }
->
-> +/* __uaccess_mask_ptr() prevents speculative accesses to kernel addresses. */
-> +#define user_access_may_speculate_kernel_addr() false
-> +
->  /*
->   * The "__xxx" versions of the user access functions do not verify the address
->   * space - it must have been done previously with a separate "access_ok()"
-> diff --git a/arch/arm64/kernel/proton-pack.c b/arch/arm64/kernel/proton-pack.c
-> index 3bcf86154d95..c96e93eca3b9 100644
-> --- a/arch/arm64/kernel/proton-pack.c
-> +++ b/arch/arm64/kernel/proton-pack.c
-> @@ -559,7 +559,7 @@ static enum mitigation_state spectre_v4_enable_hw_mitigation(void)
->  	 * could mis-speculate branches and bypass a conditional barrier.
->  	 */
->  	if (IS_ENABLED(CONFIG_ARM64_ERRATUM_3194386))
-> -		spec_bar();
-> +		barrier_nospec();
->
->  	return SPECTRE_MITIGATED;
->  }
-> diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
-> index 67cdb0a4f583..5a1fa4f48c77 100644
-> --- a/include/linux/uaccess.h
-> +++ b/include/linux/uaccess.h
-> @@ -50,6 +50,10 @@
->   #define mask_user_address(src) (src)
->  #endif
->
-> +#ifndef user_access_may_speculate_kernel_addr
-> +#define user_access_may_speculate_kernel_addr() true
-> +#endif
-> +
->  /*
->   * Architectures should provide two primitives (raw_copy_{to,from}_user())
->   * and get rid of their private instances of copy_{to,from}_user() and
-> @@ -179,7 +183,8 @@ _inline_copy_from_user(void *to, const void __user *from, unsigned long n)
->  		 * lead to nasty side effects *after* the copy is
->  		 * finished:
->  		 */
-> -		barrier_nospec();
-> +		if (user_access_may_speculate_kernel_addr())
-> +			barrier_nospec();
->  	}
->  	instrument_copy_from_user_before(to, from, n);
->  	res = raw_copy_from_user(to, from, n);
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 0b8456f2dce9..abd938d310bb 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -2250,14 +2250,7 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
->  	/* ST, STX and LDX*/
->  	ST_NOSPEC:
->  		/* Speculation barrier for mitigating Speculative Store Bypass,
-> -		 * Bounds-Check Bypass and Type Confusion. In case of arm64, we
-> -		 * rely on the firmware mitigation as controlled via the ssbd
-> -		 * kernel parameter. Whenever the mitigation is enabled, it
-> -		 * works for all of the kernel code with no need to provide any
-> -		 * additional instructions here. In case of x86, we use 'lfence'
-> -		 * insn for mitigation. We reuse preexisting logic from Spectre
-> -		 * v1 mitigation that happens to produce the required code on
-> -		 * x86 for v4 as well.
-> +		 * Bounds-Check Bypass and Type Confusion.
->  		 */
->  		barrier_nospec();
->  		CONT;
-> diff --git a/lib/iov_iter.c b/lib/iov_iter.c
-> index fa4fe2e92383..abd27189beff 100644
-> --- a/lib/iov_iter.c
-> +++ b/lib/iov_iter.c
-> @@ -60,7 +60,8 @@ size_t copy_from_user_iter(void __user *iter_from, size_t progress,
->  		 * lead to nasty side effects *after* the copy is
->  		 * finished:
->  		 */
-> -		barrier_nospec();
-> +		if (user_access_may_speculate_kernel_addr())
-> +			barrier_nospec();
->  	}
->  	to += progress;
->  	instrument_copy_from_user_before(to, iter_from, len);
+[    4.307527] BUG: KASAN: vmalloc-out-of-bounds in
+cgroup_bpf_prog_query+0xdf1/0x10a0
+[    4.307589] Read of size 8 at addr ffffc90000073050 by task exp/74
+[    4.307593]
+[    4.307597] CPU: 0 UID: 0 PID: 74 Comm: exp Not tainted
+7.4.0-rc1-00536-gf66469d9905b #3 PREEMPT(lazy)
+[    4.307602] Hardware name: QEMU Ubuntu 24.04 PC v2 (i440FX + PIIX,
+arch_caps fix, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+[    4.307605] Call Trace:
+[    4.307610]  <TASK>
+[    4.307613]  dump_stack_lvl+0x53/0x70
+[    4.307622]  print_report+0xd0/0x630
+[    4.307628]  ? __pfx__raw_spin_lock_irqsave+0x10/0x10
+[    4.307633]  ? cgroup_bpf_prog_query+0xdf1/0x10a0
+[    4.307637]  kasan_report+0xce/0x100
+[    4.307641]  ? cgroup_bpf_prog_query+0xdf1/0x10a0
+[    4.307645]  cgroup_bpf_prog_query+0xdf1/0x10a0
