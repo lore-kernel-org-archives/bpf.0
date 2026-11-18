@@ -1,57 +1,105 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794973413;
-	b=G9s1ryx7slZttHrhdjuCjnr0giY34AobJ6AQK6LrFQyYxP7IXoO6enqZ9y6upKglsA9Y
-	 /oOUyH4KAOMprImWsCqbEfx7uv7VYG/3oZ3q9Nn8nfIsrObJkMAWkYa9b9Dr4QQEACm0/
-	 1c+bYoOMKLT0tDHwU66NLciB61v9ig/20xZ1S7wpqEAKJJDtZgCy1dOq+cSK4Nm9rK4bm
-	 xah/lE0wOD6UAbRa/OXrEnf+H5re5SRNA3/KgVQ3rCeS3bVzrU529eJVRwI7vINjgqPvl
-	 Ct5rCcaHAU+blTR2e2ZEqGwdghQuzWPclrHkz5c82ymPwk28njZJ5xfpIkcja0PcyJQ==
+	t=1794973748;
+	b=fdSWLomSZWHDkTlarWB4j86wtFiPxx0UtLwy5FkwPX2TrpONg62NYY9Blas3fToC500I
+	 W2NN7a09MfndAJ/Nt0tddSsqlfkS7FAgVmfa9TJauKbGnOvzdfN+4DiYEy1mwXTcqGJ0o
+	 mnlR82efPikoaRHdxlo4gNUg1flakOTgySNAPEguHnhwr92xohmmWM+b14gayVe/3rP3b
+	 WqvvPiPBa0BsMvFfMHiV6o5O5IGLNzuSM1OFMZHzShreNUN9TC2ydmNEeGaqwj0MZMf/p
+	 +KyjqPDgxNKO5IZncsvBHj5xz0zLyeUiOwQI1cxL00H5hhqtBPQZ2hCnQv4ICqCHFKA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794973413;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=+p5MlAGzvw71fdo0AWFOJilWn1c85StymLp8MpQlwaQ=;
-	b=j+zinWmg6u4xzAAd7JHJmcaiEF5mKJQM6girFRBn8SNTmDwBN2wc9KrO7tBThWMy8suH
-	 ZiFSE/iOaGVQ92Ub5yXxy/H8uHiElPeXq6s/bjQkj6Ovg6PM33R9XC9zjYIxeGlTtgm4m
-	 3iJf7eqF+qHiHsp5dj82YkaSmjhCnEgOZoaSUxOAA+0s2Ji+DTN2hJDHyvE3CvI0oHznU
-	 oWyU2FxJGYyjKCXaV+D/bcBOgvDO7I/5quzGdLhAfWQp4tFTruSCWT4Yd9D/EIfP2Jkn9
-	 VVPtF0MjAE7CcWy28/1zc+YEYY46KM4XNPoHLeWtXeRJKERnxaN9Is9ZnsNqnwjlXTA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794973748;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:From:To:Cc:Subject:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=IGZ1LY0R7muEviWN7fb4euvV9psptmj/QGERpFprukU=;
+	b=MdAKfKQ1MbgmurTx/jmz74RqZUqcq8uRE6oxgX+3jIaFDjQUAhIA04dvK8tfTZY73dmu
+	 rEjd57G19bKcXWpwQz0bjA4xWE9/IQ70xuUug2naAfLMtz4qNxkcj5ZMTcv1gcgCFcs7b
+	 Z25U+gWehJiF9GOxBSLhcTdp4SkiQs6fOW3S18ZgqYuUMPJSngsMrsir3C+vGSPK5p/ZJ
+	 pLnDzJo89tFHYLabJf55n7QLgMQAQmg5nTauHvK/qEHV67Eq+NW/LFzvLdNEZGmQ/iGNv
+	 F0MQhQNHzbuuGkR29UaYp1ekDpIigO8rOSReVvd+1Z6yDFMGQnd4dUaL2S9TDoNsUEA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=L5364VZS;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mPeUg6R9;
+	arc=none smtp.remote-ip=209.85.216.49
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E3FF606A31C;
-	Wed, 18 Nov 2026 03:43:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99FB9606A325
+	for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 03:49:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 99FB9606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=L5364VZS
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3B791F000C4;
-	Wed, 18 Nov 2026 03:43:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794973413;
-	bh=+p5MlAGzvw71fdo0AWFOJilWn1c85StymLp8MpQlwaQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=L5364VZSxLNMpLMVDd8LvQvQ49CxoEoQkOAiWs5+k1YzxCDoR6WFX/TgC+h3JAAs6
-	 hCIe7SFGee0C7cAhN9z3T+KS0dxfxPk6eGBWVJhBvvHlG+WI36iPqZeI2XT9ikVlZa
-	 SFSoqROvBCK+u6TufnzLvZJodeE7adru1tclWBHFMw04gBhT8ojSI+aViNBI8doYJ7
-	 yaNzjd1KQRhiTfPyauCn7iGvWjbMcj7efXaw/4C+IBnSMQw4lrk3rA+Z7XnRxpWYwd
-	 mKOLIG5+YU/qpQlu9ZP2XEGvYhW0KeX5Ji155eS16fMnSsG1enlcYWavhBik2iZida
-	 5rc7Fv5KV+uSQ==
-Message-ID: <sashiko-outbox-220035@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [Patch v7 06/24] perf/x86/amd: Avoid re-enabling PMU and LBR
- for BPF when disabled
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Dapeng Mi" <dapeng1.mi@linux.intel.com>
-Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20261118031453.1353625-7-dapeng1.mi@linux.intel.com>
-References: <20261118031453.1353625-1-dapeng1.mi@linux.intel.com>
- <20261118031453.1353625-7-dapeng1.mi@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 18 Nov 2026 03:43:32 +0000
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mPeUg6R9
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3b3af93b85cso241071a91.1
+        for <bpf@vger.kernel.org>; Tue, 17 Nov 2026 19:49:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794973747; x=1795578547; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=IGZ1LY0R7muEviWN7fb4euvV9psptmj/QGERpFprukU=;
+        b=mPeUg6R9421yjKq8HMJfXGFNR/USS3ajLsGgaBCPa0Q8VD7nlR8WjXM7Z0LUUEYO5b
+         zlu1yzTVKPYq0F4/VffGAv7KubezEqz7lZxCe7VznHjTq9Mq7O8DAHujtwQm6COtW2aV
+         9YR0hsFNVrx8akhxKC3YqjyEJq36tFpF+fweqCJy4jfb8exhV6O7P6Jd3zVYk1CSIuTy
+         IBIfd4mp44R6kJ9u2l7R3+H3QHsKPE32fiClZIWvfmkwDo6U5Idx3aulU1TrFCWdoC4i
+         nwST+zuFxDOdrUK2FjQ96XHNxlkLjyZnVV/eUhz51A1LJdz3gwQEWTXKHNraRj8ZXxuP
+         ieSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794973747; x=1795578547;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=IGZ1LY0R7muEviWN7fb4euvV9psptmj/QGERpFprukU=;
+        b=VkOEbahSrfBTEF/kmSz/cqgfjYuvYlXTpXiI/LwDaDMAQgZswvqR4JJAL7b+F3UjAY
+         hP6me3Pe/jpKyMvqvXtsFrOf5+klMz0B4nSc7hjePJHtYPFldzlVUQmKL5r44zfgnJXC
+         yjwmWVFMyn5F4r9qFCyogHBTozRfO0ZZofYdPzqBmxQe1F2CkqbV/KH8zwCmLg7vGApr
+         GvMgbHz/OhUV8f4QCCqcYlbxWZ5BCQGn9f6h/HNHRBn/K2DouzZkkPnimQkvmmQ8BRZI
+         lCe3eRrUJP4Wr2Kdx3BFra4i4VlkSAE5S5a4hGg9UL+KF2dA6MjiDiUMA91iLR666upL
+         xEFw==
+X-Forwarded-Encrypted: i=1; AL+hErHLVkfWllYop4+j4FcDeWxUk0Z22Hu31ZMYZvQqHdSkkSj4DBdKXrpgVoSUhGJaYcp+ikA=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9OqcVaJjcoThCBbua+SA59c9O2wk1Lh+VMcdU9x9HJZ7m8Hlop
+	i5Iww581Xp7enpngk2RzRT6+0thXlJEso1OHE1V6hYCPU1pK2LdlS1B+
+X-Gm-Gg: AZFdTZf32lVpgKbiP196QfOj6Qlwg5gMk8bsW+J8V8GvN4l+vFBO3VFpNqrDZ5XD1WB
+	juTXxXnOXVofl106r47kXjKESBsRPDCaSi8+l1RE6VTiGWsSw7fK8Cja/WQTGEw9kbU63/akV28
+	f1BCzZ53g0nD3TZD4RVJDPHzrse28v/Ba+QGcJUi3BcSlFj04pn9POHlY84MktyWm9XucwGVRck
+	WF8k4VEsgoK36Xl+1+070nr127mL82dQYK2uUR4CBTiMDAsexjxob2B9RHclDRKBTH9L6OUdROB
+	Zl2lRh4DjK5OW4Gxt+t/w+hWz/gR0615QjZad/8Gch48z3+GPqcrAVwaftGHPZ9KR5s1UGriqUq
+	mXzbGx9/QCD9CHqyUCDj8Tm1XkE80rCyh+B/dbZbOjN/cLuR69k1u8jYbHZfNw6LUOnJmljPhPZ
+	ES9QSEseNpEcTnLXpO9P6q+BT/34aUvJeYiCnOSdyDIyc6K/FurNJ1QFmzn4l7iadNJbh3e0VWE
+	UArFxv1im1dTTTk2G1MzWLrpv+SWakXf8ZUSBM/KwFvVv69u72zd4YhcI9KwmPGhbm3qy3+hiba
+	nAabH9OUvQvafjP5OBU3QydsGN2PHBcDqe82TlUc6L65MNYTPuVIahpq/v5V+9j7twP6E2K8cJB
+	EMS7zJEm4xbmY49O9kTnTqOQb3sWLGyDUeQE=
+X-Received: by 2002:a17:90b:384b:b0:3b3:be94:8ddc with SMTP id 98e67ed59e1d1-3b3d074d683mr1339461a91.12.1794973746755;
+        Tue, 17 Nov 2026 19:49:06 -0800 (PST)
+Received: from localhost ([153.61.198.252])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eff62930a5sm5279125ad.66.2026.11.17.19.49.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Nov 2026 19:49:05 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 18 Nov 2026 03:49:05 +0000
+Message-Id: <DMY136RTAL9Q.2WQSZ57W1YLV2@gmail.com>
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Kurt Lin" <lylin1023@gmail.com>, "Hui Zhu" <hui.zhu@linux.dev>, "Hui
+ Zhu" <zhuhui@kylinos.cn>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
+ <bpf@vger.kernel.org>
+Cc: "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong
+ Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Ihor
+ Solodrai" <ihor.solodrai@linux.dev>, "Emil Tsalapatis"
+ <emil@etsalapatis.com>, "Barry Song" <baohua@kernel.org>, "Shuah Khan"
+ <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Fall back when
+ memcg_proactive_reclaim data lands in shmem
+In-Reply-To: <20261117170704.1146730-1-lylin1023@gmail.com>
+References: <20261117170704.1146730-1-lylin1023@gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,70 +108,68 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Low] perf/x86/amd: PMU enabled before LBR in
-  amd_pmu_v2_snapshot_branch_stack()
---
+On Tue, Nov 17, 2026 at 09:07 AM Kurt Lin <lylin1023@gmail.com> wrote:
+> After writing the file, check memory.stat and move on to the next
+> candidate directory if most of the data was charged as shmem; skip only
+> when none is left. Give each candidate its own cgroup so that stale
+> stats from a previous attempt cannot interfere, and poll memory.stat
+> until the write shows up, as reading it does not force a stats flush.
+> Fail the test if memory.stat cannot be read or never shows the write.
 
-commit 496e4315c6fe26a4c320a0d5de1185d312c47c38
-Author: Dapeng Mi <dapeng1.mi@linux.intel.com>
+This is overkill.
 
-perf/x86/amd: Avoid re-enabling PMU and LBR for BPF when disabled
+>     To exercise the polling, FILE_SIZE was temporarily cut to 2 MiB in a
+>     128-vCPU guest, which keeps the write below the flush threshold.
 
-This commit saves the enabled states of the core PMU and LBR in
-amd_pmu_v2_snapshot_branch_stack() and only restores them if they were
-enabled before the snapshot was taken.
+So the test with 32 MiB didn't hit it.
+Pls don't add code just because a bot said so.
 
-> diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
-> index bf631f60757cc..dd0e24f26c6b0 100644
-> --- a/arch/x86/events/amd/core.c
-> +++ b/arch/x86/events/amd/core.c
-> @@ -932,22 +932,31 @@ static int amd_pmu_v2_snapshot_branch_stack(struct =
-perf_branch_entry *entries, u
->  {
->  	struct cpu_hw_events *cpuc;
->  	unsigned long flags;
-> +	int pmu_enabled;
-> +	int lbr_enabled;
-> =20
->  	/*
->  	 * The sequence of steps to freeze LBR should be completely inlined
->  	 * and contain no branches to minimize contamination of LBR snapshot
->  	 */
->  	local_irq_save(flags);
-> +	cpuc =3D this_cpu_ptr(&cpu_hw_events);
-> +	pmu_enabled =3D cpuc->enabled;
-> +	lbr_enabled =3D cpuc->lbr_enabled;
-> +	cpuc->enabled =3D 0;
->  	amd_pmu_core_disable_all();
->  	__amd_pmu_lbr_disable();
-> =20
-> -	cpuc =3D this_cpu_ptr(&cpu_hw_events);
-> -
->  	amd_pmu_lbr_read();
->  	cnt =3D min(cnt, cpuc->lbr_stack.nr);
->  	memcpy(entries, cpuc->lbr_entries, sizeof(struct perf_branch_entry) * c=
-nt);
-> =20
-> -	amd_pmu_v2_enable_all(0);
-> +	if (pmu_enabled) {
-> +		cpuc->enabled =3D 1;
-> +		amd_pmu_core_enable_all();
-> +	}
-> +	if (lbr_enabled)
-> +		amd_pmu_lbr_enable_all();
+Here is what I mean. I didn't compile it:
 
-[Severity: Low]
-Should amd_pmu_lbr_enable_all() run before amd_pmu_core_enable_all(),
-matching amd_pmu_v2_enable_all()?
+diff --git a/tools/testing/selftests/bpf/prog_tests/arena_memcg.c b/tools/testing/selftests/bpf/prog_tests/arena_memcg.c
+index c76a7eb..334bfa6 100644
+--- a/tools/testing/selftests/bpf/prog_tests/arena_memcg.c
++++ b/tools/testing/selftests/bpf/prog_tests/arena_memcg.c
+@@ -53,8 +53,12 @@ static int alloc_pagecache(size_t size)
+ 	fd = open(".", O_TMPFILE | O_RDWR | O_EXCL, 0600);
+ 	if (fd < 0)
+ 		return errno == EOPNOTSUPP ? -EOPNOTSUPP : -1;
+-	/* tmpfs hands out shmem pages, which are not reclaimable without swap */
+-	if (fstatfs(fd, &stfs) || stfs.f_type == TMPFS_MAGIC) {
++	/*
++	 * tmpfs hands out shmem pages, which are not reclaimable without swap.
++	 * overlayfs hides the type of its upper layer, which can be tmpfs.
++	 */
++	if (fstatfs(fd, &stfs) || stfs.f_type == TMPFS_MAGIC ||
++	    stfs.f_type == OVERLAYFS_SUPER_MAGIC) {
+ 		close(fd);
+ 		return -EOPNOTSUPP;
+ 	}
+diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c b/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
+index c22dcfa..2ba0791 100644
+--- a/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
++++ b/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
+@@ -30,7 +30,8 @@ struct reclaim_args {
+  * being available, and a read-only mount cannot host the file at all (EROFS
+  * applies to root too). /tmp is tmpfs on many systems, and test_progs is
+  * routinely run from a tmpfs working directory, so both candidates need the
+- * check.
++ * check. overlayfs hides the type of its upper layer, which is tmpfs for /tmp
++ * in virtme-ng guests.
+  */
+ static const char *workload_dir(void)
+ {
+@@ -40,7 +41,8 @@ static const char *workload_dir(void)
 
-Calling amd_pmu_core_enable_all() first restarts the hardware PMCs while
-amd_pmu_lbr_enable_all() is still reprogramming the LBR MSRs, so the PMCs
-count the MSR accesses in amd_pmu_lbr_enable_all() and can overflow before
-DEBUGCTLMSR_FREEZE_LBRS_ON_PMI and DBG_EXTN_CFG_LBRV2EN are restored.
+ 	for (i = 0; i < ARRAY_SIZE(dirs); i++)
+ 		if (!statfs(dirs[i], &st) && st.f_type != TMPFS_MAGIC &&
+-		    st.f_type != RAMFS_MAGIC && !access(dirs[i], W_OK))
++		    st.f_type != RAMFS_MAGIC &&
++		    st.f_type != OVERLAYFS_SUPER_MAGIC && !access(dirs[i], W_OK))
+ 			return dirs[i];
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261118031453.1353=
-625-1-dapeng1.mi@linux.intel.com?part=3D6
+ 	return NULL;
+
+pw-bot: cr
