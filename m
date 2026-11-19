@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795056137;
-	b=GdJp+mQiIZ1j0augACKemtJ1KYhwy+p0OyxZu5usD422GBacvURgHs3rcE5u9n1yTktI
-	 tcNzyt4Ty4/kvjwe7dsC62k3AFt/fLqHIqMMKpo8kwfelfIfNRiH9Comb0FE6/MJyllQH
-	 IF2NQa54HLRg7tyRI/soJj7ZsXe18jgg8R5dqVcpV0OJ/rk6HTcVbMcqcim2X6K+sbCr5
-	 Uefd/21iQsIqimqGNO1eyZdsO7NNo0Jx97UlafpokxRJe5t1rK/78CB8LWc3iDg/xRia/
-	 WKuwMmFO0sbjGzur6hgOuomVQk/tGyhPV9RUDOyVuaDhlJzuz0ToavesohZGK/EBytQ==
+	t=1795056143;
+	b=EuEQDGUZ9W59CucvYaFNlrctqxreXN4FGgXXzPXiZ/fATZla9/T3FBBQwZzLvAkdxz5P
+	 DVjUMUCbXqpj2njjmKC5N1aw+c+Vhct/72KpWRBxaQBOJQrSXTL5DlW8RqhffvN9Aggzn
+	 xxEtvYJM8EwaUte1XIlknZE+dInjDzYV5qJ2RfQf5sWNgJj/mwODBoLcXVudIF5Zkvoq9
+	 zCOPI8rYTCo/H19PDo6+2ofZg0JUilKh14ooH7tw51b12B+247gykUgmIGlvzbutnTtt1
+	 YW6tyUiXsUV09qz0PqEBKa2u//TXr4/+zSpJC7KXVGb5X/I5V7v2O45eqIeExh5eawA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795056137;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795056143;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=7PrCGvnr7G/KmCreNp2UYPB6uS4z4RXQM4X6KtcUfX0=;
-	b=kgWBnzXexqnmbPwl42d36YqpfwNyQoh7yRyDg4qxTS6NpyKY6ofj/cJ7VL1yhkwijvwi
-	 uT2wxv//OcpJSgFY5I2bN0g2vjoNiFaK5zUdCLxRd9SujaZHDIMk0g6PdWFf/+7A3LVr4
-	 0DzBo7raQyB7CtnbothcM2NsM1zPXB7EA1V2V2HcVoFDm7TRcfuGPXOuqTsyU0xib/IWy
-	 kFfXKyU4SuloEYM4EBqd1JCq+kl2JrnfMCVogGipbMhH7dsl51KeldqvWlX/mSmCnUOYH
-	 NcNJoz4igHTcYNbgrcSLsv6CwZL4Q39/ZlI4kpr4x6GbzjllZ6IcjgtW22e7IQEHtUg==
+	bh=3CQPIa4o2CrpiWm8PlWKCAD284FccKFzo/5k21RIILY=;
+	b=4AR1jezbGJsdiCimcBBNuyHE87SqqW4ej8mbY5Un/dKWJQVrdRzEzZokYK/Cv8gB91lA
+	 OCKDM+lLUivO5jS3HxcA6KAie2LcF6p6oe493us0Y+RApzLShqvmVHi2YuJIY2kqsfwrW
+	 vVJApPXP5NnHoggwynvCiX2iwg2Kb2Kg0Tl980tZlyMnLa1HZR8l1oGHcYSdpnciCuUvs
+	 xIsLhzgjAAJb5fDFK7pvPiqBojjRz9NbxBXUpW58w42nGqDmOfmg+ZTzTVz1ZvqyiX39O
+	 /Vn6Gh+gSwZ3WtgFOb+v+woriDZX+RlVkhyDErC60xPK8CAagewqJNiF8WvcAkZXW8g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=nebusec.ai;
 	spf=pass smtp.mailfrom=nebusec.ai;
-	dkim=pass header.d=nebusec.ai header.i=@nebusec.ai header.a=rsa-sha256 header.s=google header.b="DWL+A/eb";
-	arc=none smtp.remote-ip=209.85.215.176
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	dkim=pass header.d=nebusec.ai header.i=@nebusec.ai header.a=rsa-sha256 header.s=google header.b=KGjbmVBN;
+	arc=none smtp.remote-ip=209.85.216.50
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A101606A32F
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 02:42:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5A101606A32F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABB2C606A320
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 02:42:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ABB2C606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nebusec.ai
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nebusec.ai
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nebusec.ai header.i=@nebusec.ai header.a=rsa-sha256 header.s=google header.b=DWL+A/eb
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cdb2893531bso1193061a12.1
-        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 18:42:17 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=nebusec.ai header.i=@nebusec.ai header.a=rsa-sha256 header.s=google header.b=KGjbmVBN
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3b0ae87069dso846088a91.2
+        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 18:42:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nebusec.ai; s=google; t=1795056137; x=1795660937; darn=vger.kernel.org;
+        d=nebusec.ai; s=google; t=1795056142; x=1795660942; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=7PrCGvnr7G/KmCreNp2UYPB6uS4z4RXQM4X6KtcUfX0=;
-        b=DWL+A/ebi0fqz8t1xpVXfERBmFyezX4Xi/qxBh0dYP8v9bI5wHBll2vz7IDqvbiGVK
-         AB58/O5bHd8x2QkvZtyfYDwy18Bbx0HffFanc7s9LJbRdrhn+NIztnD7aeFStjHH6M/S
-         Y9cmOD9I+eoiZqKjXLeAsS4O9Pgfw5kahWZKrd0xWK6qdYlWsJSnIF7N5Uj7G17F5AO0
-         I2lC7RKaZKK/dek/RkVQgqo7GoGlaV/wkZZZUcXBYFFJMTqezbqs3fiZ5cciiKEkfGjR
-         +Q5HlZvmzIjm0hj4FrP4gTcgSQgoJna09c2nB30JBrwGauZJZ5cw/f4N6sgYpqn5xbXD
-         aHYQ==
+        bh=3CQPIa4o2CrpiWm8PlWKCAD284FccKFzo/5k21RIILY=;
+        b=KGjbmVBN6JsWyIEQhpzhZbTSWmnlzdpBKja0AXNa06hjBmyShYS+9jful5ShSqfJd2
+         sGt69Ryt5eIGCgVYTyJk5pp6SfsFKWykwjSb51Oxngra9djaTKiBoKFBp+8T6IyQyX06
+         VQUaXBDE+DvD24L1saG/Bvw0q0e3JCR7ntGeMEF7CPcxa+GjO61PWb4jg9Qkh7KujU4y
+         Uo8lvqzWA56FXvOoTRPBCqi8sm9FE1akpgCzyo7ngm1Mz+hsCyNGndh4g1CLDRBOLHAG
+         McbyjM5Xx3x6nwzEGyDs5NpYW/RRK/+ZRhbxeWif6I/5fSSqyLs6sLqbnNhtolq992gR
+         tbyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795056137; x=1795660937;
+        d=1e100.net; s=20260707; t=1795056142; x=1795660942;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=7PrCGvnr7G/KmCreNp2UYPB6uS4z4RXQM4X6KtcUfX0=;
-        b=DKzSZLqwilPcZDbQV2WUu+R1j6P0zchWACOYcLC3eLESLf6uPdjysEzn9u93mnrtHX
-         fCkBDGdJ1C6a6eaN/T/IqTUy8rVzJ4PjwFlpIu4/Whc1Vh5uZBc1iEKcwjjVGFJpQzBO
-         bn+wZ49g/DEIh48Hom6fhsbTcCqXu1CfTtYIcCcTIrjt7XKj8+NLC55bRBHH5YNlRjnV
-         24/fhZON0LLcSrWLG1uxP6CjKkte4fasYiJ2OCVV/HJ3aPrjWEOJx5U8ViDHyxfpBz+K
-         iDTheCszzAEiSa7wlVVgcrZaKxh2PYWJe1vqHFhdPyFvpMjwP+GgjGcPhx8b2/aXgqE3
-         M+Sg==
-X-Gm-Message-State: APuU4Z/SzJcjpgpvDlknY8GLF2eIsROAdG5veEi/8ESPvE7AnVVOjTga
-	UKJk0YDa6v/VSPvGr/7U0udrexbv+rm470egDxSI+gWdfF/ytuEuT+E28EUxAsAUBpoi1ilU0+w
-	zrhxzEQ==
-X-Gm-Gg: AZFdTZe7bQfuXrJ+We/NW+IEyFsU/c4krbLBlDeNcF3fRk+eL5yow4yuvHMi03KuW0N
-	8M9Mb4xCVdEBS12YDo2uetsJBu6qx77aMRBsTVHoY33asV8vgg2bwud2OoemumU8TobsGCXZYxG
-	/1AAg3xgcPdYBRzmcngUIXSMEiN9eWAaC3DwQV67AS4tUSzifxlhPfS+wCEbk4445JcUOvVC8rT
-	xW8Gxdmx3MXnrFztqoaH1vdPlYvLxIssZHVdWH8pCzM76LJaBdgcUJPsUvLTvkLjcyZG9XwD4IY
-	k9Y1i859W+9QoMZK1y0+dGgorI/WVjAw6YLdSsF18+7o8hzBfM3UnrPkApnBEWHuQiDphdEyjNA
-	hTOuFt7P9nsExx036oItFWK+lJr7QGe3fRPdZ+QEIGgJJQv7w+qU9p326dP8VKl7TmsJdJrk5H8
-	aWuk8lUhLiXk5sTp5Et8Rlb1ghRqSoaKDbiJ2mdCtdw88HcZ8NSw0xoSO9kVIdGGzEmQ2LOYNnw
-	LtfaRysHLCeaAqHncKWmUWGoO/wYl+gMuCcn+Zgpw1YneA1LW4rHE54SrzdeChNY+R2nom4WEaj
-	TGlvbVcBprMpbnK7olB7iYXsIY+OGKjCbOYc
-X-Received: by 2002:a17:90b:3e4e:b0:3ac:b145:8f4 with SMTP id 98e67ed59e1d1-3b3d07a7195mr4896956a91.41.1795056136622;
-        Wed, 18 Nov 2026 18:42:16 -0800 (PST)
+        bh=3CQPIa4o2CrpiWm8PlWKCAD284FccKFzo/5k21RIILY=;
+        b=ageToMnrLHg1DTmntIObpb7W3nnOYVpTZ88w22T+nqXAdDk8oQhb7kXmK3DPqoJkDk
+         tJDfbGX6wpj+pcYMN8XqbH+Viih3X/Yc/fNiz30nAyk4PtjYwPzKas1wffDXrY06OnPB
+         HuwP4gfJuoOMmEIGoxUmK72OqdJUTm5RYC4hBiaYbCs1OD3Cg3hBF3C+6onMYTM5TdGM
+         YlQixr8AnDcpBWaK+/Juc8x0xNd0OIp5ckQVWUBXoaPptchTEi2Yfi3SF4VawxDooSWC
+         NMQ6wm/sQJBWQYMUCIQXf2NX+VOjdcMu4msbKrGqdE9zf0ikGGut+cD2dliCmXh7RtSt
+         WI4w==
+X-Gm-Message-State: APuU4Z989AM/OTGRRb2Qcj6GUl5O4gbi0wFZ+thVNIEa9EOBCynD6ykX
+	qeyEUnb2KDUNimXLGxt+tpFq1gYyrohX4pd7RlRs9gQaT5Sc0Dmy9SgFUceI/V9KqGsO3Yi4rFN
+	SfkRRgg==
+X-Gm-Gg: AYBFou31pkdO6j4c0dKUcMt+36NoSIWY2XF5xPyGqsDS/rPeVlWfMTu1VhQ/j7U1VyV
+	kAnxpFgGVX5OiiAe7s4wFHtSvdEe6dAmUlD38KZEdtQi5/p8M9FqU3zY+gCHTYz0utUg3beEPbc
+	Tlj3s1bo0WVbUo9x0hxx58ou07PoU0wHPFck7kfBcpBC6wamAqp4sXI1FGImNkU7NBtF88NwDvM
+	XrEldufUrLoafxg8oWRv81QZ6yrM18cACGqnFee+NMRCimfyc0zdJjVsd0IJV77flZ02A0Pq8Hj
+	Fdc7qi2UzUQOANWpUj+/6TO0N6o7958ePAtz8m+BmehF8WoErjoab4FzNfLXpZ9VKTqvAQS0tco
+	Bgt3LmUvcg8PIpEyqvM1c2j0kRquLVErDgzIqJqz2+CFrzTJT5aFSuHAWkL6N+FskWZG3SCyoJd
+	3nRjG+61ZSTp9OHa8+3jVwGHnhoXCVDqgQFO/RshU+V4Yrnk7PXtcIrTGZJwaQp25zEAkykH0u+
+	6gMdWzOMwkWZF774tFNV96aM6FkNXA9ttf0NhfXHGcODFLgObKqUj6Bt3FJT9CtafrwmaULNL3s
+	QOAHFxuOdEQb9LsVOd3midlOOmGAu54blgbZ
+X-Received: by 2002:a17:90b:3943:b0:3b0:a7b5:c046 with SMTP id 98e67ed59e1d1-3b3d07e09f4mr4730277a91.54.1795056141961;
+        Wed, 18 Nov 2026 18:42:21 -0800 (PST)
 Received: from enjou-Legion-Y7000P-2019 ([74.52.12.168])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b4028576e5sm242879a91.2.2026.11.18.18.42.11
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b4028576e5sm242879a91.2.2026.11.18.18.42.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Nov 2026 18:42:16 -0800 (PST)
+        Wed, 18 Nov 2026 18:42:21 -0800 (PST)
 From: Ren Wei <weir@nebusec.ai>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -99,9 +99,9 @@ Cc: ast@kernel.org,
 	sashiko-bot@kernel.org,
 	rakukuip@gmail.com,
 	weir@nebusec.ai
-Subject: [PATCH bpf 1/2] bpf: Fix scratch buffer cursor overflow in bpf_bprintf_prepare()
-Date: Thu, 19 Nov 2026 10:42:02 +0800
-Message-ID: <4b2d82631c485580b1f31da9bf9c7cccdf2626e4.1794974103.git.rakukuip@gmail.com>
+Subject: [PATCH bpf 2/2] selftests/bpf: Test bpf_bprintf_prepare() scratch buffer overflow
+Date: Thu, 19 Nov 2026 10:42:03 +0800
+Message-ID: <ba8b1a0bd63de5eff88f73df1bec0f7f01a13ca6.1794974103.git.rakukuip@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1794974103.git.rakukuip@gmail.com>
 References: <cover.1794974103.git.rakukuip@gmail.com>
@@ -118,86 +118,76 @@ Content-Transfer-Encoding: 8bit
 
 From: Luxiao Xu <rakukuip@gmail.com>
 
-In bpf_bprintf_prepare(), the %pB and %pI4/%pI6 branches pre-format their
-arguments into the per-CPU bin_args scratch buffer using snprintf() and
-then advance tmp_buf by (err + 1). However, snprintf() returns the full
-length that would have been produced excluding the trailing NUL byte, not
-the number of bytes actually stored.
+Add test cases to test_snprintf verifying that bpf_snprintf() returns
+-ENOSPC instead of overflowing the per-CPU bin_args scratch buffer when
+%pi4, %pI6, or %pB formatted output exceeds the remaining space.
 
-The %pB branch performs no bounds check at all, and the %pI4/%pI6 branch
-only checks that the remaining space is at least sizeof_cur_ip (4 or 16
-bytes), which is smaller than formatted IP strings (up to 16 bytes for
-IPv4 and 40 bytes for IPv6). When the remaining buffer space is smaller
-than err + 1, tmp_buf advances past tmp_buf_end.
+Also cover the boundary where bin_args is completely full before %pB and
+cases where a truncated %pI6 is followed by %lld.
 
-On subsequent format specifiers, the signed difference
-(tmp_buf_end - tmp_buf) becomes negative and converts to a large
-unsigned size_t in later bounds checks and snprintf() calls. This allows
-subsequent arguments to bypass remaining-space checks, write past the
-end of bin_args into adjacent per-CPU memory, and trigger the
-WARN_ON_ONCE(size > INT_MAX) check in vsnprintf().
-
-Check whether err >= tmp_buf_end - tmp_buf after snprintf() in both the
-%pB and %pI4/%pI6 branches, and return -ENOSPC when the formatted output
-does not fit. Also cast sizeof_cur_ip and sizeof_cur_arg to ptrdiff_t in
-the remaining-space comparisons so they perform signed comparisons and
-never wrap negative differences into large unsigned sizes.
-
-Fixes: 48cac3f4a96d ("bpf: Implement formatted output helpers with bstr_printf")
-Cc: stable@vger.kernel.org
-Reported-by: VEGA <vega@nebusec.ai>
-Reported-by: Sashiko <sashiko-bot@kernel.org>
-Closes: https://sashiko.dev/#/patchset/20260619205934.1312876-1-memxor@gmail.com
 Signed-off-by: Luxiao Xu <rakukuip@gmail.com>
 Signed-off-by: Ren Wei <weir@nebusec.ai>
 ---
- kernel/bpf/helpers.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ .../selftests/bpf/prog_tests/snprintf.c       |  6 ++++++
+ .../selftests/bpf/progs/test_snprintf.c       | 21 +++++++++++++++++++
+ 2 files changed, 27 insertions(+)
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 6788489a2608..6ff07090468c 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -963,6 +963,10 @@ int bpf_bprintf_prepare(const char *fmt, u32 fmt_size, const u64 *raw_args,
- 						       (tmp_buf_end - tmp_buf),
- 						       "%pB",
- 						       (void *)(long)raw_args[num_spec]);
-+					if (err >= tmp_buf_end - tmp_buf) {
-+						err = -ENOSPC;
-+						goto out;
-+					}
- 					tmp_buf += (err + 1);
- 				}
+diff --git a/tools/testing/selftests/bpf/prog_tests/snprintf.c b/tools/testing/selftests/bpf/prog_tests/snprintf.c
+index ccfb02bd4e7c..dfcb68b36304 100644
+--- a/tools/testing/selftests/bpf/prog_tests/snprintf.c
++++ b/tools/testing/selftests/bpf/prog_tests/snprintf.c
+@@ -79,6 +79,12 @@ static void test_snprintf_positive(void)
  
-@@ -983,7 +987,7 @@ int bpf_bprintf_prepare(const char *fmt, u32 fmt_size, const u64 *raw_args,
- 				goto nocopy_fmt;
+ 	ASSERT_EQ(skel->bss->nobuf_ret, EXP_NO_BUF_RET, "no_buf_ret");
  
- 			sizeof_cur_ip = (fmt[i] == '4') ? 4 : 16;
--			if (tmp_buf_end - tmp_buf < sizeof_cur_ip) {
-+			if (tmp_buf_end - tmp_buf < (ptrdiff_t)sizeof_cur_ip) {
- 				err = -ENOSPC;
- 				goto out;
- 			}
-@@ -1002,6 +1006,10 @@ int bpf_bprintf_prepare(const char *fmt, u32 fmt_size, const u64 *raw_args,
- 			ip_spec[3] = fmt[i];
- 			err = snprintf(tmp_buf, tmp_buf_end - tmp_buf,
- 				       ip_spec, &cur_ip);
-+			if (err >= tmp_buf_end - tmp_buf) {
-+				err = -ENOSPC;
-+				goto out;
-+			}
++	ASSERT_EQ(skel->bss->ip4_ovf_ret, -ENOSPC, "ip4_ovf_ret");
++	ASSERT_EQ(skel->bss->ip6_ovf_ret, -ENOSPC, "ip6_ovf_ret");
++	ASSERT_EQ(skel->bss->sym_ovf_ret, -ENOSPC, "sym_ovf_ret");
++	ASSERT_EQ(skel->bss->sym_full_ret, -ENOSPC, "sym_full_ret");
++	ASSERT_EQ(skel->bss->ip6_tail_ovf_ret, -ENOSPC, "ip6_tail_ovf_ret");
++
+ cleanup:
+ 	test_snprintf__destroy(skel);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_snprintf.c b/tools/testing/selftests/bpf/progs/test_snprintf.c
+index 48a0025cf2ca..3ef50868dced 100644
+--- a/tools/testing/selftests/bpf/progs/test_snprintf.c
++++ b/tools/testing/selftests/bpf/progs/test_snprintf.c
+@@ -32,6 +32,14 @@ long noarg_ret = 0;
  
- 			tmp_buf += err + 1;
- 			num_spec++;
-@@ -1076,7 +1084,7 @@ int bpf_bprintf_prepare(const char *fmt, u32 fmt_size, const u64 *raw_args,
- nocopy_fmt:
- 		if (tmp_buf) {
- 			tmp_buf = PTR_ALIGN(tmp_buf, sizeof(u32));
--			if (tmp_buf_end - tmp_buf < sizeof_cur_arg) {
-+			if (tmp_buf_end - tmp_buf < (ptrdiff_t)sizeof_cur_arg) {
- 				err = -ENOSPC;
- 				goto out;
- 			}
+ long nobuf_ret = 0;
+ 
++char fill_511[512] = {};
++char ovf_out[64] = {};
++long ip4_ovf_ret = 0;
++long ip6_ovf_ret = 0;
++long sym_ovf_ret = 0;
++long sym_full_ret = 0;
++long ip6_tail_ovf_ret = 0;
++
+ extern const void schedule __ksym;
+ 
+ SEC("raw_tp/sys_enter")
+@@ -70,6 +78,19 @@ int handler(const void *ctx)
+ 	noarg_ret = BPF_SNPRINTF(noarg_out, sizeof(noarg_out), "simple case");
+ 	/* No buffer */
+ 	nobuf_ret = BPF_SNPRINTF(NULL, 0, "only interested in length %d", 60);
++	/* Scratch buffer overflow checks */
++	__builtin_memset(fill_511, 'A', sizeof(fill_511) - 1);
++	ip4_ovf_ret = BPF_SNPRINTF(ovf_out, sizeof(ovf_out), "%s%pi4%pi4",
++				   fill_511 + 7, &ex_ipv4, &ex_ipv4);
++	ip6_ovf_ret = BPF_SNPRINTF(ovf_out, sizeof(ovf_out), "%s%pI6%pI6",
++				   fill_511 + 21, &ex_ipv6, &ex_ipv6);
++	sym_ovf_ret = BPF_SNPRINTF(ovf_out, sizeof(ovf_out), "%s%pB%pB",
++				   fill_511 + 7, &schedule, &schedule);
++	sym_full_ret = BPF_SNPRINTF(ovf_out, sizeof(ovf_out), "%s%pB",
++				    fill_511, &schedule);
++	ip6_tail_ovf_ret = BPF_SNPRINTF(ovf_out, sizeof(ovf_out), "%s%pI6%lld",
++					fill_511 + 21, &ex_ipv6,
++					0x123456789abcdef0ULL);
+ 
+ 	return 0;
+ }
 -- 
 2.43.0
 
