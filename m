@@ -1,45 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795067691;
-	b=0tLpj/lGfjscj3nZXfOQDYgNdYg5jcQBZ6rUiZdnc7sWcFYsNEaNTLNzLatm1i6T97Uf
-	 R5Zg8i8oW2ZyFaVDa7HzKoSSYUHqRzcwAlPl2tpO5g6P4pkzPqsW2JZBGKSyTcqObsCc0
-	 u43L6ZnOaOZGNj6rK43PWlWgBOcvhSuMiAtP2xL8sUxpn1JdExWez3iAPd+2Kdao3e5lm
-	 lHRAEEnV0BCvhU/ZJwsYaiw58CT9W6iPxO3U769ybFhnVID1keTQ+ZXTXRtAcCcDefoHA
-	 6FowwiLpYNk5l28/3Tgg2ofWbsNKx6a0adSLoN/JcW3jnkMZm5EGrI5LIgjICN4Nbfg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795067691;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=UwyCHZ5Si8ZvWhJjHvroOZ9yrZ7pvY5Qd7BfWI8Qgts=;
-	b=CgiUwTmuW/EFIA5w3LAHW9vteIrI8OWI3EMNKDTSpMyARFdTKShhJpkZh3nVhCLcOyqr
-	 nxmBZf++KYZn2YG6Y1hze1+411JTdF9EPtYvgYDeuuBLrrbDByFka3E6VdjhP26+TscZq
-	 KVfvPvt8gOU8XPzMp3utHyXPizhoyQstGIclye8713KKFEEqVKVCL/TUoqL6uIvQ/wp7Y
-	 KY1Ie/ysMvfVkui5t3+FTL7FLZge4WfbWzWzYDfmcMnb1I3jlt+oPFGhDN165LM5JPSHT
-	 HsJWQqn+2aiXXXBfR00CVLEEae0+dH5IIGsmFp+fpdAmlTSmzcjYA8hKQ6ve09E+OCg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CrMGOfsD;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.180
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795067738;
+	b=vYbopP/NYp3X11HFmT8/xtYQw0QW/m4Q4iOya1Y97qKB7/dK25G04EtK1mgPbaJwCRS7
+	 XC5eG9OTKpZuolL2jtP+bXy1K8odlHtGfj5BU3gWefPviRsfMpIFDBtkC7G013WU+M7ss
+	 bgVwwq4NdZh3C3ElYZz8ybnANJ0WmMW1ox/2IIp9/bOyLOXzu9djYXw0XNNpF9kOVEl3c
+	 Ill0qJKZmSXl0LfNJhfD7vq3gNYd5PtUhoOAaO9y7sAvXKkvYLgNvT/dlHfYqStbFEhxG
+	 OClBwS0pPIY+w3JY8LlTGTA1fRoOYQLrBRNkk0gFaROz6dnXyGiErMl3h00FkdPXjYA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795067738;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:From:Date:
+	 X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type;
+	bh=DjEQLmEJOM/wymBBE+U6O32DcFNbSABmNjSjqPA8HkI=;
+	b=5a5wdGHEBdYQAff74SFXta0MOywBxvd1E3g7t1fgrzY/48Z+RrkT/ocskog2VCZSgfQh
+	 XSIczqKWFHWbT3oggRhCjlB6qGIp0kzvsTmBhxgAgmI15ZbzOhvQIETFXxIjlTxwtCvOZ
+	 NJYeDDRFZ5BzHBeidESbsUoCDNfLpsRiRmamgo6LSWJ6YTkTwhqHy7rZsX15cFANmpWZ9
+	 UdQD70EXGjP7vJccFHAj4BF/Ox5Me/S4Hj155AI9PM19VSwqmU5NJ6wRFaw4GbUuJ6bYp
+	 xr8KUUGJHgg+gH4FpXaRgZEn9XGXsXxgylMY5z2tZzCp3OhwHN4+qk9CxNyMtSzI/aA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YbuOgokn;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.180
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0E12606A332
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 05:54:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 920CF606A325
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 05:55:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 920CF606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CrMGOfsD
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 379EF1F000C4;
-	Thu, 19 Nov 2026 05:54:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795067690;
-	bh=UwyCHZ5Si8ZvWhJjHvroOZ9yrZ7pvY5Qd7BfWI8Qgts=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=CrMGOfsD3PnbiXU2yHbMXnf8d05mr2lK3LgjvS6O8FYVbpYpU4KxEXdAopyEK6qXh
-	 Ff/7GoMUnLBI/4wYaFPfxARJ9i457qgKq7RZmCol28m+oLnEqJC2RuPegnulm8LSyI
-	 yl2KXO5I19mUAC13FgO3Xab2Hahl70MVf0MIqbhFM17aAdhccESEsxkQvQMxnlYMMI
-	 6aISRSKI37MZR+Ts5ydR/K3ATzHV76H0h3PkjUBppTDUvUnY9wB/U+t4YDsOINL6CX
-	 adL07Bzbw1O+KajswA8yzvR/0Pk+ZzaBHyMmllFmw/rlK+E4AoXMaFjW+7jtMM752O
-	 zdgdUrXtqLXwg==
-Content-Type: multipart/mixed; boundary="===============0023687075468440993=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YbuOgokn
+Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-55c4e670fc6so17351941cf.0
+        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 21:55:38 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795067737; cv=none;
+        d=google.com; s=arc-20260327;
+        b=maUGBK8USSJTJ3sRmjUzLf9yPFQw1zmd8zZL5Dx1CaJ29L2ryWThpBs89RO+eJL9uW
+         bUsSDeQd6gNKkiXIipENzB9lDkhpfrsXM+qJZkL9qwkWYEVC4UCqROSUnUmPK0+sfqQ6
+         f705Xn/c4Ke8aFH/ON8YqmULKts6ukr/jA+j44w8sOMAmNnrPqDXMmflaiRfOZsW2/EU
+         hqGPxzAYGYDORS+cD3VspdmsTn4Pjz+K2j+nI81sL9KILpSeWzIp9pL/X7nOy17q5PBm
+         zmM+cotWr77oQyrBhKUcnCNVJsRjAphE2tIXELIx7pNVjka8gqJQEqIUYO5PFAmLUlSo
+         wOGg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=DjEQLmEJOM/wymBBE+U6O32DcFNbSABmNjSjqPA8HkI=;
+        fh=hh64WXw32xDCPRIwo8kqdpPDKtEO7rcNvFi6kTS088k=;
+        b=ZlzmQlAv/fciOSF9Nku9oVYpVbuVznsRIhqZgJTXM+6f+qy32bo8ZD4Sb2O733hd9Q
+         82PYFEUXnSVtclQKQjFFiy7tAw6sOcIAcQezE/yN6z3a6kDwdx/9PmTGqT9dLYBMMMAv
+         LETCUjAH1TEf3EqrECjscaaOICFivim6LBj4N7X4kmF9x3EzVlJEK/pEjVbS7/wP2xvi
+         YnYmJQF+XJVoXtNpHRK0nS23bixVjpFtv32JsNqitQWwLlFh7qAsknrTNDAgzJuYsszX
+         ZuOgb+ZQQcR6Wvo661RUZrGWexTY5hlUQbIvhlzDP0rTJ8dENWmyyYV/ESj00JflzRIy
+         4cSA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795067737; x=1795672537; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=DjEQLmEJOM/wymBBE+U6O32DcFNbSABmNjSjqPA8HkI=;
+        b=YbuOgoknImPI74dkeDko9dpj5c4Cb5rCJh+DtFAF1+VA5OoZsNx6xZ7ahto3GzLFj3
+         Nfgd+11PhrZRn3OBt1TZZ3QunJv8ZhlbyZt6uqgH8AswyRUREOyfCUyM3j8vXKuXWGCf
+         56dR3A91S0TTcCwV8dl4vTvXxLoloTAfyu9WzQOgiY1HFqE1BDdpRiRqHzJEOpY5yFP2
+         YPDmXK2360I0/kUVaA6oy6fyTy/Y0eBGty845OASH/pKckqUPkO0KxaYsZV9IN5Dd2xV
+         rA8CmzOYY4LEINVPttDRQ4OHja7FMva1I0+IkIOgMThd6nrb7EvnYvEgXhQF8lF+kumc
+         c2MA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795067737; x=1795672537;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=DjEQLmEJOM/wymBBE+U6O32DcFNbSABmNjSjqPA8HkI=;
+        b=yr0qVw59PFrykGXKmDE0jP2wMo4BhFxP5bqfKqbbETt5V+qqn9GhqPfYlw4H8WSORP
+         Btix2PI6tbH3Qx6FaljKD8MJHdvTMbT/4u8mBNIlJ/X7YnaITF3tkvMY1UnX0vih8AL5
+         3dozvhNoteidMjOrZW29kawCwHUDkrfc0vuzS6TJuH8k+w8rsdGSpofUR1J8j2Hri/45
+         ehwrYlt9RKtJkkS3qi3T63Pb/HqVT4FHNthEhKn/76oDbHR9keDO9SLCN9vIuSNSsSkN
+         RCqnkde43+b7B183ZygjkKWmeAwH0QLEQZWiTymTNPZlNOlNwH179RCpVq2Rr6CVl7v1
+         N+0Q==
+X-Gm-Message-State: APuU4Z+4LDO7o+v8sCTMVNgxk+9RkLR52LX26mbiKbyu452J2t9yk+2+
+	VttVV0PW/6Mckt8MG/3G1afTwr7qs8BMfOQKRrtUp+0a3934qPvy+Qh79tGon5BM/bKDbQmOGN5
+	Dh7jF5saHokN3KAAC2SSqqgWTUQMCP8k=
+X-Gm-Gg: AYBFou1dLc3b0fjTvjulmO80uVUMTbSsjH2RiKbABrre7ZoHcM8et6ZBfSPeemAgvnD
+	spfjJ6gEbUlv6tvdRfwOiGrF+0plJDDJ5YX8q6AFBSuEsSFH0TA1pVXz5BaAePgncMezlrSpZ+T
+	jutYi7BJi68vGE1xI3uW4BFNDkOvaIfVuBVxTciTwP3XJEYL7VqRW/5IcCtAjMgl4TVEnLEZaPq
+	YY74SvqbsKWYwJN4TN6GgxRG6nz/t2VFqfOnyPvpkABzgwDKYsA9Cdc/pXKun4Z+I87Swnk7Q7+
+	R0Atx7ulbeoWjpYQCNZ4kEnlMKyraQbNGKFQ5qoFpBPCVMpwoEeAi8LQQCeKho6H2m7dEf1he0r
+	wbnYEYUGe4jSu6D4NfexjEqMs0crNf4ZYY+RDmJXp/D4jW1OuFo71OSbXlYAbWd7gf4OQoczXyy
+	7UUPm6QgSZsxKGn31KSw==
+X-Received: by 2002:a05:622a:1a90:b0:536:352d:65f6 with SMTP id
+ d75a77b69052e-55d5a62eb65mr76732251cf.64.1795067737385; Wed, 18 Nov 2026
+ 21:55:37 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,54 +100,56 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <d711aef177c86b8b225bdf52e9b0a47894d8ec2f2b5432010c78f3a275501d43@mail.kernel.org>
-In-Reply-To: <20261119051448.1902442-1-yonghong.song@linux.dev>
-References: <20261119051448.1902442-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v2 1/4] libbpf: Zero-extend unsigned 32-bit enum values in CO-RE relocations
-From: bot+bpf-ci@kernel.org
-To: yonghong.song@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 19 Nov 2026 05:54:50 +0000 (UTC)
+From: =?UTF-8?B?5qKT5bed5ZKy5aSq?= <inkxiao12@gmail.com>
+Date: Thu, 19 Nov 2026 00:55:26 -0500
+X-Gm-Features: Aa3M54pnSDUBBRf3lpLwcke7tzjfHBwFC7TFUZGPR-wTAHAk3o_xI9NvaAJLh0g
+Message-ID: <CAMcAce8eFDXx_BqjMPd-94uX5Hk4KNxkjPtRXW7wOvy_hWjAHA@mail.gmail.com>
+Subject: [PATCH 6.12.y] Backport request: 49b18315be4e ("bpf: Add NULL check
+ for dynptr in bpf_verify_pkcs7_signature")
+To: stable@vger.kernel.org
+Cc: bpf@vger.kernel.org, gregkh@linuxfoundation.org, sashal@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
---===============0023687075468440993==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hi Stable Maintainers,
 
-> libbpf: Zero-extend unsigned 32-bit enum values in CO-RE relocations
+Please consider backporting upstream commit:
 
-TL;DR: Commit message only: the Fixes tag may be wrong, since the
-sign-extending enum read predates 23b2a3a8f63a and was introduced by
-eacaaed784e2; the tag may need to change.
+  49b18315be4e590fae0fc39c87d46c87e9ec903c ("bpf: Add NULL check for
+dynptr in bpf_verify_pkcs7_signature")
 
-> libbpf: Zero-extend unsigned 32-bit enum values in CO-RE relocations
->
-> [ ... ]
->
-> Fixes: 23b2a3a8f63a ("libbpf: Add enum64 relocation support")
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+to linux-6.12.y.
 
-The sign-extending read of btf_enum->val in bpf_core_calc_enumval_relo()
-predates 23b2a3a8f63a, which only wrapped the existing read in an
-if (btf_is_enum(t)) branch.  The old code already had the same __s32 to
-u64 sign extension:
+In v6.12.118, bpf_verify_pkcs7_signature() dereferences data_ptr->data
+without checking whether the dynptr is empty/null, which allows an attached
+eBPF program to trigger a NULL pointer dereference in kernel space.
 
-    e = btf_enum(t) + idx;
-    *val = e->val;
+Upstream commit 49b18315be4e applies to kernel/bpf/helpers.c, whereas in
+v6.12.118 this function resides in kernel/trace/bpf_trace.c:1403. The patch
+logic is identical.
 
-The sign-extending read was introduced by eacaaed784e2 ("libbpf: Implement
-enum value-based CO-RE relocations").  Should the tag be:
+Verified on x86_64 QEMU v6.12.118: passing an uninitialized/empty dynptr to
+bpf_verify_pkcs7_signature() loads cleanly under lsm.s/file_open pre-patch;
+with this check backported, the verifier/helper rejects it safely.
 
-  Fixes: eacaaed784e2 ("libbpf: Implement enum value-based CO-RE relocations")
-
-The unsigned-enum (kflag) distinction was added later, so the unsigned
-symptom could arguably be dated to that, but the faulty read itself comes
-from eacaaed784e2.
-
-
+Fixes: e917c6999a09 ("bpf: Add bpf_verify_pkcs7_signature() kfunc")
+Signed-off-by: BoBppy <inkxiao12@gmail.com>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+ kernel/trace/bpf_trace.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/44465301903
---===============0023687075468440993==--
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1384,8 +1384,12 @@ __bpf_kfunc int
+bpf_verify_pkcs7_signature(struct bpf_dynptr *data_p,
+
+  data_len = __bpf_dynptr_size(data_ptr);
+  data = __bpf_dynptr_data(data_ptr, data_len);
++ if (!data)
++ return -EINVAL;
++
+  sig_len = __bpf_dynptr_size(sig_ptr);
+  sig = __bpf_dynptr_data(sig_ptr, sig_len);
++ if (!sig)
++ return -EINVAL;
+
+  return verify_pkcs7_signature(data, data_len, sig, sig_len,
