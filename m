@@ -1,61 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.74.67.75
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795092446;
-	b=BlOSeIzVm6SZKYV8WntRcs1TXmgr7W9EIQgVASZsPpPJwn9oPlBQ97OgPIBQJyDaBicp
-	 mxR3tgcj49CdhMFc3q5AxZjRtfIFbU+OgXnGwfDSBpuDw4VV5rl94ESRwOoXvzkWeKjA1
-	 3Sw51dF3CdQTl/hhVwW2+g5UTBS8DhHw60jrgSDgRsrNYM21t5xmULw+6U/fjVkzIXAq3
-	 6l5Ysw0AZJcmO3Y4SacvIuOer09JZWuUd0AvK2gBR+AOjTNjwr9LpXahh+8thrsJz2U5t
-	 x7Kd7/rJVmA39BQIZynrkF987rVf9hVs0JY8ZqeFchTeYr2o17bLKofZN3lbTqp7LlQ==
+	t=1795095062;
+	b=RnKwll3yquFT5lIIFdzsAQybwBqiSdN3LXm2ybkW2AUgPyi7S90M9dyi74Pe0pFG8CJ/
+	 i/6NsHHFhz7LzHVOgoVJ1ahNFHFY0Zvnr26YoPUp/ybupMMvYVZPpVaoqfR3ZdvI0AZJ3
+	 NyxnLC4J8VAyN+v8Bs/+M4c6LclcFWQQdhfCs5VHoApjFjngOIoCmbdc6sQOC9OBdrW9U
+	 uuoLtKwK5TuI0hAFbtEXeasNXCdSxotE1NNDBNfMq0BHZ5A1jPT7xFfctrSRJASrW1RyT
+	 j8YODya2Q7s2EEpRwQsIa2jFMYAIUlLroJmfGN5tCS0VmNXf4lb+D4Z8TGQ7dN0/qZA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795092446;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=rVqv6cMnMJmJyMaeUNnqrTWyRG9aoHyUEoKzK90L2Yc=;
-	b=alCayhQSqniz8NgAVq6lO5OF9rjMycLZrf361x8vCXoIFM1P186/s+PRqeAQYN0U6FbF
-	 0IwT/Yk/3vvlHxMppBXpG6D/eQ2ESx4BiXA8Jp0ztdnPWBHliADWdjZOlI44gboNWpLDC
-	 0YO9PvwPYe7PwGgKFAesTz7oQqpVQHaGVZMH3WrO8UmOCE8YvMvulTeW2Sdt9SNFUfJ7P
-	 bws11zKSg9sN6uzHz/qacKWyUafqHu7RyN5kJK8neFSNe8f1/l/1PC3L4D7Afy1P4hF75
-	 +YYYVecp/XUs9RV5dWgeOJWqhkhEgl+vFRb6IGHDgw0ynIhUnStdjMjE0MZUVz8c97A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795095062;
+	h=DMARC-Filter:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding:DKIM-Signature;
+	bh=cOT01Eu5jIELCRSIZb2i7NtTdpX4y4H3A3WVilRs+LA=;
+	b=h0b9mkPmvRXRuHP/siB3vI8ZohgIUlWe2Z/TgkCngabcCnduLkE3SXvVADTpLfXbk0hH
+	 Bs1rXDpabrZgADC8raWVJ121TPw4+VOD5ILw+QVwsoVOnu77c+9qDu4cU/hVXOSKdTAn8
+	 ceQg6qr0IeYghjsiFtiz4478KHuXGjIkgSUT4TpZ+rkMglwtFjjCxO1SCKUNLuOTLRLmh
+	 cY+y1VhdOxekIsIlgdwShIvyLm9N+K6Fk656xDP/8WuYVwoc48e5BqqS3jSstRJCFTkx4
+	 IQHRoRAi7iULLWZePRzEX/snF2cFedgs9x7aq9ja0OhbG46LaZFA6lZ3+5nTlRAyn0A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Kf9C+Lfx;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=poczta.fm;
+	spf=pass smtp.mailfrom=poczta.fm;
+	dkim=pass header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b="s/F9hBTK";
+	arc=none smtp.remote-ip=217.74.67.75
+Received: from smtpo75.interia.pl (smtpo75.interia.pl [217.74.67.75])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A8BD606A32A;
-	Thu, 19 Nov 2026 12:47:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA454606A326
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 13:31:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BA454606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=poczta.fm
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=poczta.fm
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Kf9C+Lfx
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F03CB1F000C4;
-	Thu, 19 Nov 2026 12:47:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795092445;
-	bh=rVqv6cMnMJmJyMaeUNnqrTWyRG9aoHyUEoKzK90L2Yc=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Kf9C+LfxLK+jbKCM/dMadCkX6r2Bp8cYJ0gIjnVucPSfgIhGGx6ZoqrKwt/tzmsme
-	 EiAAxB4ywBXraUF+7/OzMrFMpRhzc+MxLhuWSifQX95xpIkYVh5OrdXR4VuiMfC6xy
-	 J6kuCARjxacBn28iYfgZjo8o4DhW7CeaM469B3BAalrbo/qDeUwqbbi690SnmDlmp9
-	 3tx/HcVdk/ooRIs78YqHXt6JnMkni/evh0I16OGR/Vb09ojHVApwyAE7fnD/2dKObS
-	 /mdrdX891R4yXi+HMsjjdWbxmd4fSjTedVmg2hy1pxDhZ/1u5q6MxLaDnb0vOlJ5+1
-	 ujPEvt+6I+maQ==
-Subject: Re: [PATCH net v3 2/2] tcp: accecn: initialize AccECN fields in
- syncookie path
-From: netdev-bot+sashiko@kernel.org
-To: thaisonphan@google.com
-Cc: edumazet@kernel.org, ncardwell@google.com, kuniyu@google.com,
- davem@davemloft.net, dsahern@kernel.org, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, ij@kernel.org, olivier.tilmans@nokia.com,
- chia-yu.chang@nokia-bell-labs.com, stani@google.com, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Thu, 19 Nov 2026 12:47:24 +0000
-Message-ID: <179509244451.3136.7632749576749189281@kernel.org>
-In-Reply-To: <20261117124710.1338951-3-thaisonphan@google.com>
-References: <20261117124710.1338951-3-thaisonphan@google.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key) header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b=s/F9hBTK
+Received: from localhost (unknown [80.68.231.31])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by poczta.interia.pl (INTERIA.PL) with ESMTPSA;
+	Thu, 19 Nov 2026 14:30:50 +0100 (CET)
+From: Slawomir Stepien <sst@poczta.fm>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>
+Cc: bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Tianyi Gao <tianyi@cloudflare.com>,
+	Octavian Purdila <tavip@google.com>,
+	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Magnus Karlsson <magnus.karlsson@intel.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Simon Horman <horms@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	Slawomir Stepien <sst@poczta.fm>
+Subject: [PATCH v7 bpf 0/5] xdp: fix page_pool leaks
+Date: Thu, 19 Nov 2026 14:30:27 +0100
+Message-ID: <20261119133032.2015656-1-sst@poczta.fm>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -65,171 +83,315 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=poczta.fm; s=dk;
+	t=1795095053; bh=cOT01Eu5jIELCRSIZb2i7NtTdpX4y4H3A3WVilRs+LA=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=s/F9hBTKziauUr20KegK7ZRFIMQPPBJ/XlaXAyNdflYaGX0lQ3isViFhN8KaErgIL
+	 xF2WM0OPeynNBN2Oq8WMHnMtFIQdZ8WG6QMnBd4/J82TA/34qgcct8f6qd69VpOMUq
+	 xuK/P8eQMiSXFyc3dLZkMk32iH1HuZZzbNhDPTs4=
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+v1:
+https://lore.kernel.org/bpf/20251003140243.2534865-1-maciej.fijalkowski@intel.com/
+v1->v2:
+- add skb to xdp_buff converter (Jakub)
+- postpone restoration of veth's xdp_rxq_info mem model (AI)
 
-Critical: 0 · High: 0 · Medium: 2 · Low: 0
+v2:
+https://lore.kernel.org/bpf/20251017143103.2620164-1-maciej.fijalkowski@intel.com/T/
+v2->v3:
+- make skb->xdp_buff conversion agnostic of current skb->data position
+  (Toke)
+- do not pull mac header in veth (Toke)
+- use virt_to_head_page() when checking if xdp->data comes from
+  page_pool (Olek)
+- add ack from Toke
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+v3:
+https://lore.kernel.org/bpf/20251022125209.2649287-1-maciej.fijalkowski@intel.com/
+v3->v4:
+- include skb->head when calculating packet length (Toke, lkp)
 
-- [Medium] On the BPF custom-syncookie path (bpf_sk_assign_tcp_reqsk() ->
-  cookie_bpf_check()), the patch sets syn_ect_snt from a SYN-ACK the…
-- [Medium] tcp: accecn: missing 3rd ACK option init in
-  cookie_tcp_reqsk_init()
+v4:
+https://lore.kernel.org/bpf/20251027121318.2679226-1-maciej.fijalkowski@intel.com/
+v4->v5:
+- rely again on sk_buff::pp_recycle when setting mem type on rxq
+  (Jesper, Jakub)
+- add ack from Toke on patch 2 and restore it on patch 1
 
---
+v5:
+https://lore.kernel.org/bpf/20251029221315.2694841-1-maciej.fijalkowski@intel.com/
+v5->v6:
+- rebase onto bpf/master
+- patch 1: set MEM_TYPE_PAGE_POOL unconditionally in
+  xdp_convert_skb_to_buff(); mem type only matters for frags consumed
+  by the program, and those always come from skb_pp_cow_data() (Jakub)
+- patch 1: add DEBUG_NET_WARN_ON_ONCE() for a non-linear skb without
+  pp_recycle and document the expectation in kdoc (Jakub); the warning
+  is limited to non-linear skbs since linear ones legitimately skip
+  the CoW
+- new patch 2: veth_xdp_rcv_one() ran the program on an xdp_frame with
+  whatever mem type the previous packet left on rq->xdp_rxq; use the
+  frame's mem type instead, as cpumap and devmap do. With patch 3 alone
+  veth sends page_pool frames to its peer and the peer's program
+  trimming frags crashed the kernel, so this comes first
+- patch 3 (was 2): veth turns the buff into an xdp_frame on
+  XDP_{TX,REDIRECT}, so the head is released through mem type too;
+  keep the queue's original model unless the buffer was copied into
+  rq->page_pool (Jakub)
+- patch 3: take page_pool refs on compound heads via netmem helpers
+- patch 3: do not restore the rxq mem model after XDP_{TX,REDIRECT}
+  and on the error path; with patch 2 every path sets its own mem type
+- patch 3: veth can now redirect MEM_TYPE_PAGE_POOL frames, which needs
+  commit b3ca872947ef ("bpf: Use the frame mem type in devmap egress
+  XDP") in devmap; list it as a stable prerequisite
+- drop Reviewed-by/Tested-by tags as patches 1 and 3 changed
 
-tcp: accecn: initialize AccECN fields in syncookie path
+v6:
+https://lore.kernel.org/bpf/20261104121316.1155680-1-sst@poczta.fm/
+v6->v7:
+- rebase onto bpf/master
+- new patch 1: bpf_prog_test_run_xdp() borrowed the rxq info of lo's
+  queue 0 (or of the ingress_ifindex queue) for its alloc_page() frags;
+  once patch 2 makes generic XDP set MEM_TYPE_PAGE_POOL on that queue,
+  a later test run freed the frags as page_pool pages (WARN in
+  page_pool_unref_netmem(), reported by Sashiko and BPF CI); use a
+  private copy of the rxq info with MEM_TYPE_PAGE_SHARED (BPF CI,
+  Tianyi)
+- new patch 5: selftest that runs generic XDP on lo before shrinking
+  test_run frags, so the ordering behind patch 1 no longer depends on
+  which tests ran before
+- patch 2: reword the description of the mem type and drop the stale
+  BPF CI remark in the commit message; Cc stable, as patch 4 needs it
+  (BPF CI)
+- patch 3: add Reviewed-by from Tianyi
+- patch 4: list the backport prerequisites in the commit message
+  (BPF CI)
+- new performance numbers; the ones in the v6 cover letter were wrong:
+  the XDP_REDIRECT run was broken (the devmap entry pointed to a device
+  in the wrong netns, so no packet reached the target) and the kernels
+  still had debug options (KCOV, page_owner, INIT_ON_ALLOC) enabled
 
-This patch initializes saw_accecn_opt, accecn_fail_mode and syn_ect_rcv in
-cookie_tcp_reqsk_init(). That function is shared by the regular syncookie
-path and the bpf_sk_assign_tcp_reqsk() path. The patch also sets
-syn_ect_snt from the listener's TOS/tclass in cookie_{v4,v6}_check(), to
-match what tcp_{v4,v6}_send_synack() would have sent on the wire.
+Hi,
 
-> diff --git a/net/ipv4/syncookies.c b/net/ipv4/syncookies.c
-> index 4e0ff3b820627..1a837ed6efa00 100644
-> --- a/net/ipv4/syncookies.c
-> +++ b/net/ipv4/syncookies.c
-> @@ -290,6 +290,9 @@ static int cookie_tcp_reqsk_init(struct sock *sk, struct sk_buff *skb,
->  	 */
->  	treq->txhash = treq->snt_isn;
->  	treq->syn_tos = TCP_SKB_CB(skb)->ip_dsfield;
-> +	treq->saw_accecn_opt = TCP_ACCECN_OPT_NOT_SEEN;
-> +	treq->accecn_fail_mode = 0;
-> +	treq->syn_ect_rcv = 0;
->  
->  #if IS_ENABLED(CONFIG_MPTCP)
->  	treq->is_mptcp = sk_is_mptcp(sk);
-> @@ -502,6 +505,7 @@ struct sock *cookie_v4_check(struct sock *sk, struct sk_buff *skb)
->  		ireq->rcv_wscale = rcv_wscale;
->  	ireq->ecn_ok &= cookie_ecn_ok(net, &rt->dst);
->  	treq->accecn_ok = ireq->ecn_ok && cookie_accecn_ok(th);
-> +	treq->syn_ect_snt = READ_ONCE(inet_sk(sk)->tos) & INET_ECN_MASK;
+here we fix page_pool leaks which happen when fragment is released
+within XDP program and memory type is set incorrectly. The reports come
+from syzbot and AF_XDP test suite.
 
-[Severity: Medium]
-Does the syncookie path ever look at the AccECN option carried on
-the third ACK?
+Most of the changes are about pulling out the common code for
+init/prepare xdp_buff based on existing skb and supplying it with
+correct xdp_rxq_info's mem_type that is assigned to xdp_buff. A bit more
+stuff, page_pool related, had to be done on veth side.
 
-On the normal SYN-RECV path, tcp_openreq_init() also sets
-saw_accecn_opt to TCP_ACCECN_OPT_NOT_SEEN. tcp_check_req() then
-checks tmp_opt.accecn on the third ACK and calls
-tcp_accecn_option_init() before syn_recv_sock() runs. That updates
-tcp_rsk(req)->saw_accecn_opt and, when the option was zeroed, ORs
-TCP_ACCECN_OPT_FAIL_RECV into accecn_fail_mode.
-tcp_ecn_openreq_child() then copies both fields into the child.
+Originally, this work was started by Octavian Purdila and continued by
+Maciej up to v5. v6 picked up the v5 series, with Maciej's agreement, as
+the minimal fix for bpf and stable, and addressed the v5 review. Maciej
+stays the author of patches 2 and 4 and my changes are noted in their
+commit messages; patches 1, 3 and 5 are new.
 
-cookie_v4_check() and cookie_v6_check() process the third ACK
-directly and never go through tcp_check_req(). cookie_tcp_check()
-does call tcp_parse_options(), so tcp_opt.accecn is filled in.
-Nothing passes it to tcp_accecn_option_init(), though. With this
-patch, saw_accecn_opt is always TCP_ACCECN_OPT_NOT_SEEN when the
-child is created, even when the peer did send an AccECN option on
-the third ACK.
+For veth, Jakub listed three options: stop turning skbs into xdp_frames
+in veth, decide the head's mem type when the CoW was skipped, or CoW the
+head on the Tx/Redirect path. The first one changes veth's XDP handling
+beyond a fix, so patch 4 takes the second: veth knows whether it just
+copied the buffer into rq->page_pool, and only then advertises
+MEM_TYPE_PAGE_POOL. An skb that skipped the CoW is linear and keeps the
+queue's original model, as before this series. This keeps the series a
+minimal fix that is easy to reason about and to backport.
 
-The child also does not seem to catch up when it processes the same
-skb. In tcp_child_process() -> tcp_rcv_state_process() -> tcp_ack():
+Patch 3 fixes the same problem for frames in veth_xdp_rcv_one() that
+commit b3ca872947ef ("bpf: Use the frame mem type in devmap egress
+XDP") fixed for devmap; cpumap already handled it.
 
-  - snd_una already equals the ACK sequence and there are no packets
-    in flight, so FLAG_FORWARD_PROGRESS is not set.
-  - ts_recent was already copied from req->ts_recent, so
-    FLAG_TS_PROGRESS is not set either.
+Patch 1 prepares bpf_prog_test_run_xdp() for patch 2. Generic XDP runs
+on the rxq info of the device queue, which is shared with test_run; with
+patch 2 alone, any packet through generic XDP on lo makes later
+multi-buffer test runs free their frags as page_pool pages. Restoring
+the mem type after generic XDP would still race with test runs on other
+CPUs, so test_run gets its own copy, like devmap and cpumap. Patch 1
+has no Fixes: tag since nothing changes the shared mem type before
+patch 2, but it has to be backported together with patch 2.
 
-__tcp_accecn_process() therefore returns before it calls
-tcp_accecn_process_option().
+Performance (QEMU/KVM, 8 vCPUs pinned 1:1 to host cores, the same
+kernel config without debug options for both kernels; base is
+bpf/master 4b4eb7f44ee0):
 
-As a result, tp->saw_accecn_opt stays at 0 on the child:
+pktgen sends skbs into veth v0 and the XDP program runs on its peer
+v1, on the skb path (native veth XDP, or xdpgeneric where noted).
+XDP_TX sends the packets back to v0, devmap redirects them to a second
+veth pair and cpumap to the network stack on another CPU. The tables
+show packets/s that reach the destination (for XDP_DROP: packets the
+program saw), the median of 8 runs of 8 s over 4 boots per kernel.
+Changes of up to about 2 % are noise in this setup: a kernel rebuilt
+with an unrelated one-line change moved single results by up to 3 %.
 
-  - tcp_established_options() requires tp->saw_accecn_opt to be
-    non-zero, so no AccECN options are sent even though
-    accecn_opt_demand is set.
-  - A zeroed option on the third ACK is never detected as
-    TCP_ACCECN_OPT_FAIL_SEEN, and TCP_ACCECN_OPT_FAIL_RECV is never
-    set.
-  - tcpi_accecn_opt_seen in TCP_INFO reads 0 even when an option was
-    received. It is no longer random, but it is still wrong.
+Why it is faster: on XDP_TX and XDP_REDIRECT, veth turns the skb into
+an xdp_frame. On base, it takes plain page references for that
+(veth_xdp_get()) and the frame is released as MEM_TYPE_PAGE_SHARED, so
+v1's page_pool never gets its pages back: the pool hands every page of
+an 8000 B packet to the page allocator and allocates a new one, 4.2-6.1
+M pages/s in these runs. With the series the frame is released as
+MEM_TYPE_PAGE_POOL, the pages go back into the pool's ring and are
+reused, and the pool no longer releases any page. One page holds many
+64 B packets, so at 64 B base released only 20-37 k pages/s and the
+gain is small.
 
-Should cookie_v4_check() and cookie_v6_check() repeat the
-tcp_accecn_option_init() step from tcp_check_req() once accecn_ok is
-known? That would mean passing tcp_opt.accecn out of
-cookie_tcp_check(), or parsing the options again. The
-cookie_bpf_check() path would presumably need the same handling.
+One sender, softirq NAPI:
 
-[Severity: Medium]
-Is this value correct on the BPF custom syncookie path?
+                              64 B                      8000 B (3 frags)
+  XDP_TX                      4.40 -> 4.39 Mpps (0%)    2.20 -> 2.37 (+7%)
+  REDIRECT devmap -> veth     4.18 -> 4.22 (+1%)        2.14 -> 2.29 (+7%)
+  REDIRECT cpumap             4.60 -> 4.61 (0%)         1.97 -> 2.12 (+8%)
+  XDP_DROP (native veth)      5.74 -> 5.76 (0%)         2.77 -> 2.80 (+1%)
+  XDP_DROP (xdpgeneric)       5.70 -> 5.75 (+1%)        2.97 -> 2.95 (-1%)
 
-When cookie_bpf_ok(skb) is true, req comes from cookie_bpf_check(). In that
-case a tc ingress BPF program built and sent the SYN-ACK.
-tcp_v4_send_synack() and tcp_v6_send_synack() never run for that
-connection, so the listener's tos/tclass may not match the ECN codepoint
-that was actually sent. The same question applies to the new
-tcp_rsk(req)->syn_ect_snt assignment in cookie_v6_check(), and to
-syn_ect_rcv = 0 in cookie_tcp_reqsk_init(), which the BPF path also uses
-whatever the SYN's ECN field was.
+What it shows: the cost of one packet when nothing is batched. v1's
+NAPI runs on pktgen's CPU and each poll sees a single packet.
 
-bpf_sk_assign_tcp_reqsk() fills the request sock only from
-struct bpf_tcp_req_attrs:
+Why: 8000 B XDP_TX and the redirects are 7-8 % faster from page
+recycling; the per-packet work of one poll per packet and the copy of
+8000 B into the page_pool still dominate. XDP_DROP does not change, as
+dropped pages were recycled on base too, and 64 B does not change.
 
-net/core/filter.c:bpf_sk_assign_tcp_reqsk() {
-    ...
-	ireq->wscale_ok = !!attrs->wscale_ok;
-	ireq->ecn_ok = !!attrs->ecn_ok;
-    ...
-}
+Four senders, softirq NAPI:
 
-and that struct has no field for the SYN-ACK or SYN ECN codepoint:
+                              64 B                      8000 B (3 frags)
+  XDP_TX                     12.07 -> 12.48 Mpps (+3%)  2.65 -> 3.71 (+40%)
+  REDIRECT devmap -> veth    11.69 -> 12.17 (+4%)       2.65 -> 3.66 (+38%)
+  REDIRECT cpumap             5.31 -> 5.36 (+1%)        2.56 -> 3.69 (+44%)
+  XDP_DROP (native veth)     14.85 -> 14.62 (-2%)       4.31 -> 4.31 (0%)
+  XDP_DROP (xdpgeneric)      22.32 -> 21.97 (-2%)      11.63 -> 11.42 (-2%)
 
-include/net/tcp.h:
-struct bpf_tcp_req_attrs {
-	...
-	u8 ecn_ok;
-	...
-	u8 usec_ts_ok;
-	u8 reserved[3];
-};
+What it shows: a busy veth. Four CPUs send at once, so v1 and the
+destination process several packets per NAPI poll, as under real
+load.
 
-The in-tree example already chooses its SYN-ACK TOS without looking at the
-listener:
+Why: at 8000 B the gain grows to 38-44 %: on base, the pages went
+through the page allocator on four CPUs at once (5.4-5.8 M pages/s).
+At 64 B, XDP_TX and devmap gain 3-4 % as the pages of the frames now
+return to the pool's ring as well. cpumap is limited by the network
+stack on the target CPU, about 5.3 Mpps on both kernels. The XDP_DROP
+differences are within the noise: a profile of 64 B generic XDP_DROP
+shows the extra cycles in pktgen and the senders' locks, not in code
+that the series changes.
 
-tools/testing/selftests/bpf/progs/test_tcp_custom_syncookie.c:
-		ctx->ipv4->tos = 0;
+Two senders, threaded NAPI (v1 on its own CPU, the bottleneck):
 
-Here is one example:
+                              64 B                      8000 B (3 frags)
+  XDP_TX                     12.76 -> 12.06 Mpps (-5%)  2.75 -> 3.91 (+43%)
+  REDIRECT devmap -> veth    12.95 -> 13.58 (+5%)       2.75 -> 3.87 (+41%)
+  REDIRECT cpumap             5.33 -> 5.47 (+3%)        2.70 -> 3.85 (+42%)
+  XDP_DROP (native veth)     11.39 -> 11.27 (-1%)       4.50 -> 4.46 (-1%)
+  XDP_DROP (xdpgeneric)      11.41 -> 11.21 (-2%)       5.93 -> 5.88 (-1%)
 
-  - The listener has ECT bits in IP_TOS or IPV6_TCLASS (for example a
-    DCTCP listener, which gets ECT(0)), and tcp_ecn >= 3.
-  - The BPF program sends a Not-ECT SYN-ACK that negotiates AccECN and
-    passes ecn_ok=1.
-  - The peer's third ACK reflects Not-ECT (ACE=0b010), so
-    cookie_accecn_ok() is true and accecn_ok=1.
+What it shows: the cost on v1 itself. v1's NAPI thread has a CPU of
+its own and runs at 100 %; v0 and the devmap target have NAPI threads
+on their own CPUs too.
 
-The child socket setup then goes:
+Why: at 8000 B, XDP_TX and both redirects are 41-43 % faster from page
+recycling on the bottleneck CPU. At 64 B, devmap and cpumap gain 3-5 %.
+XDP_TX at 64 B loses 5 %, but not from more work per packet: a profile
+shows the same cycles per packet on v1's CPU (322 vs 320), and fewer
+on the CPU of v0's NAPI thread, which frees the frames (152 -> 138
+cycles: page_pool recycling instead of page_frag_free() and page
+allocator frees). That thread then empties its ring sooner, sleeps
+more often and has to be woken by an IPI more often (idle and wake-up
+75 -> 118 cycles per packet). In a VM each wake-up also costs exits
+that the guest does not see; this was not measured on bare metal.
 
-tcp_ecn_openreq_child()
-  tcp_accecn_third_ack()
-    tcp_accecn_validate_syn_feedback()
-      tcp_ect_transition_valid(ECT_0, NOT_ECT) returns false
-      tcp_accecn_fail_mode_set(tp, TCP_ACCECN_ACE_FAIL_RECV)
+With one sender and threaded NAPI, 64 B changes by -2 % to +3 %, and at
+8000 B XDP_TX gains 42 %, devmap 37 % and cpumap 38 %.
 
-With the default tcp_ecn_fallback=1, this sets TCP_ACCECN_ACE_FAIL_RECV.
-After that, tcp_ecn_send() uses INET_ECN_dontxmit() for the rest of the
-connection.
+Testing (x86_64, QEMU via virtme-ng, KASAN + DEBUG_VM + DEBUG_NET; the
+whole series on bpf/master 4b4eb7f44ee0, and before on 05441d697f7f,
+where the reproducers, kprobe path checks, devmap test and selftests
+below gave the same results; patches 2-4 also on fb7bd3a2aad7; the runs
+without the series on bpf/master c8a8a68d3ab4 and 05441d697f7f):
+- test_run after generic XDP: send one packet through generic XDP on lo,
+  then run xdp_adjust_tail; with patches 2-4 only:
+  "WARNING: include/net/page_pool/helpers.h:305 at __xdp_return" from
+  bpf_xdp_adjust_tail() under bpf_prog_test_run_xdp(), as in BPF CI;
+  the new xdp_adjust_frags_tail_shrink_after_generic subtest hits the
+  same warning; with the whole series no splat
+- full ./test_progs run (with panic_on_warn=0): all xdp, xsk and veth
+  tests pass and there are no page_pool or __xdp_return warnings;
+  fs_kfuncs, kfree_skb, kprobe_multi_bench_attach,
+  memcg_proactive_reclaim, test_ima, uprobe_syscall and
+  verifier_live_stack fail the same way on 4b4eb7f44ee0 without the
+  series, and rhash_timer is flaky on both kernels (it failed in 10 of
+  20 runs without the series and in 14 of 20 with it)
+- reproducer: an xdp.frags program that trims all frags with
+  bpf_xdp_adjust_tail() on 8000-byte pings over a 9000 MTU veth pair;
+  without the series both generic XDP and native veth XDP hit
+  "BUG: Bad page state ... page_pool leak" followed by
+  VM_BUG_ON_PAGE(page_ref_count(page) == 0) and a panic; with the
+  series 20/20 packets are trimmed with no splat
+- native veth XDP_TX of multi-buffer packets, with and without
+  trimming frags first (200 large + 200 small pings each), then veth
+  teardown and a 75s wait for page_pool "stalled pool shutdown" or
+  negative inflight warnings: none
+- BPF selftests on bpf/master with tools/testing/selftests/bpf/config:
+  ./test_progs -t ns_xsk,xdp: all 34 tests passed, no splats, with the
+  series (206 subtests, with the new one from patch 5) and without it
+  (205)
+- the standalone AF_XDP suite (test_xsk.sh) also runs the tests that
+  test_progs skips as flaky; XDP_ADJUST_TAIL_SHRINK_MULTI_BUFF reports
+  PASS either way, but without the series dmesg shows 60 "page_pool
+  leak" splats from generic XDP (bpf_xdp_adjust_tail -> __xdp_return ->
+  page_frag_free on pages allocated by skb_pp_cow_data()); with the
+  series there are none
+- frame path: one veth bounces 8000-byte pings with XDP_TX, its peer
+  trims all frags of the resulting frames (IPv6 off, so no skb touches
+  the peer's rxq first); with patches 2+4 only: "page_pool leak",
+  VM_BUG_ON_PAGE() and a panic in veth_xdp_rcv_one(); with the whole
+  series 50/50 frames are trimmed, kprobes show all __xdp_return() calls
+  with MEM_TYPE_PAGE_POOL, no splat, also with IPv6 on so that skbs and
+  frames interleave on the peer's queue; bpf/master alone passes as well
+  since veth only sends MEM_TYPE_PAGE_SHARED frames there
+- remaining veth paths, each confirmed with kprobes: skbs that skip the
+  CoW (frames passed up by one veth and forwarded back into it: 1229 of
+  1260 runs without skb_pp_cow_data(), heads from the page_pool),
+  XDP_REDIRECT failing on the skb path (40 xdp_return_buff()) and on the
+  frame path (40 xdp_return_frame()), XDP_PASS of 20 frames after their
+  frags were trimmed; no splat, and none of the page_pool shutdown or
+  inflight warnings 75s after teardown
+- devmap egress after patch 4: veth redirects copied skbs through a
+  devmap whose egress program trims all frags; with the series 20/20
+  trimmed, all __xdp_return() calls with MEM_TYPE_PAGE_POOL, no splat,
+  nothing 75s after teardown; with b3ca872947ef reverted on top of the
+  series: "page_pool leak" from page_frag_free() under
+  dev_map_bpf_prog_run(), VM_BUG_ON_PAGE() and a panic, hence the
+  stable prerequisite in patch 4
+- W=1 builds of the touched files with LLVM=1 and with DEBUG_NET=n: no
+  warnings
+- XDP_ADJUST_TAIL_GROW fails in DRV mode with and without the series,
+  so it is unrelated
+- not tested: page_pool frames from hardware drivers redirected into
+  veth, bpf_xdp_pull_data(), multi-queue load
 
-This looks like the same false ACE_FAIL_RECV that the commit message says
-it fixes, and it can still happen through bpf_sk_assign_tcp_reqsk(). Does
-the BPF path need a way to pass the SYN-ACK (and SYN) ECN codepoint in
-through bpf_tcp_req_attrs, instead of using the listener's tos/tclass?
+This series was prepared with an AI coding assistant (Claude) from the
+v5 and v6 review threads; the assistant wrote the code changes, all of
+patches 1, 3 and 5, the changelog updates, and ran the tests listed
+above.
 
->  
->  	ret = tcp_get_cookie_sock(sk, skb, req, &rt->dst);
->  	/* ip_queue_xmit() depends on our flow being setup
 
-[ ... ]
+Maciej Fijalkowski (2):
+  xdp: introduce xdp_convert_skb_to_buff()
+  veth: update mem type in xdp_buff
 
+Slawomir Stepien (3):
+  bpf: test_run: Use a private rxq info for XDP test runs
+  veth: use the frame mem type when running XDP on an xdp_frame
+  selftests/bpf: Shrink test_run frags after generic XDP ran on lo
+
+ drivers/net/veth.c                            | 56 ++++++++++++-------
+ include/net/xdp.h                             | 36 ++++++++++++
+ net/bpf/test_run.c                            |  9 +++
+ net/core/dev.c                                | 25 ++-------
+ .../bpf/prog_tests/xdp_adjust_tail.c          | 51 +++++++++++++++++
+ 5 files changed, 137 insertions(+), 40 deletions(-)
+
+
+base-commit: 4b4eb7f44ee05754339d07e9df649809f45d14c5
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261117124710.1338951-1-thaisonphan%40google.com
+2.56.0
+
