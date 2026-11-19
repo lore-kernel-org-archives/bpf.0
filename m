@@ -1,102 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.153.30
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795125116;
-	b=CUfQ2A0BGa2YR/JUogDorgZHOeBfZcpaOPhPLB7vmsLLaDyhuiWPD8agkny9YDnz7TlB
-	 8mrwr3LQpKBaQfr94H2/hlMywEh1Yd9LT9Myd5et/XbBQMBcuTl4P+l6Jala6qs9OiHtG
-	 peBmuvPvzb2/qheo9K8/RgKn/OJUl7jq/YAZ5fLD5TSUkjCRk89Fh8WURdcsnZIfwepL1
-	 9DRtUTj6iox6L8BtsMq82UVp2MIZiKC/NL5AKQX0HzbAgLT3/OyDaE7JxA3HcmoEgIjjs
-	 MzxMyoocG7/otF4Pb9TajVnPXguu/6q5Uw3Hzlf7FJZyMVENtEYJ+SN+GTxsvHbAwiw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795125116;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Date:From:To:
-	 CC:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To:X-Originating-IP:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-GUID:
-	 X-Proofpoint-Spam-Info:X-Authority-Analysis:X-Proofpoint-ORIG-GUID:
-	 X-Proofpoint-Virus-Version;
-	bh=Ri8CK3ItJsJssm9R2a+AMX7zfGjjWTKSLJi5tTs2ofs=;
-	b=1HfJWHFeV7d3lOFqG2H4NmMIQj1PaxpPXnbwZlfyGronodFSj7o9R54E2FH7x6bo+ND1
-	 +yL/YdRaLQWPCZae1N8eKzEHYFImE1+lv4DA+VDKniCMNJwjDM4dpTL6q6wfRffA7ma14
-	 XHcHVwvh6dV1nTxeJzIfwwLLxZG60OjX221fSFqz0i6AoeOdAODw3rWzFCH/GvWnhLpEe
-	 2wOQfEmFblv3NYhHsaiGb1H0qjzlgZkuIWZi/BqwxiWIxBgu6/kicTkOOtNaxN026ecQR
-	 linb0BUqkhjvPA/fLfALaol06CeH2gTNIPcKuDjm8qxipKW+AKPLRKSscNMh5gzbQVg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=meta.com;
-	spf=pass smtp.mailfrom=meta.com;
-	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=DHGBUcJM;
-	arc=none smtp.remote-ip=67.231.153.30
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.54
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795126194;
+	b=Xc5OTAZRwWdGd4O1jlKoyEt8WTt67j46L9H2s30fZJIC6qKP/XVYj+MJdHpFHnIYE4sX
+	 eiCQnV7Jyu2qC7E0xokim+706Wi9jABvmoNivfhBN1yBRMLCqdqS2VgPBrok+0fGd5b4N
+	 eXfD5nrEKibLn/uiSHQHOuR3Qb+P++yRwFU5x9hwo0AhV8IwBBvRdqyZ4nFWT1y9IUzpc
+	 nihHQEzTVsWrHu7H7DH7oV0eerlLunR+qwXgeaukRxpuzAPa1QxfbPCIH0wU+zW9kP7N8
+	 KyCdVcGca1qBCz+zDSHgRE+PkphICFLsiSPsPh8q7lPSM4CQ4EiLDk2hW/jpO6oKJHw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795126194;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=c99oiFB+0aG9pcFd5KmDCTgPzdI/PgGeBz4H+HHEqzs=;
+	b=0mpZdPqW/IEiBYw1okBN5zDyZM75NCDK7dwh5S3vEOA7plnl5SnpU168V3UZ2Iv3XWn0
+	 oTJ9jjJ5KrCrbXa9eM9RY6YSZllhcKPucC6oLmqzQ0rXDa6JnpogOfWeqQeQ11x91eJkL
+	 VjeqMKmdytQ/ZssZCChNW/9SmwEVQLllh2uSn/S3mntjgqHv8C3n8M3m0it2prrdlZJHa
+	 7ljF8OCwcd1MmmU6ONfC6M1EWIme2KvsvpZqv5ae8VTkSduogBI8qsYdyjiuiARBQyAmT
+	 mc8K3wy3A3j7njkHR7T45tw70ujqI6oIw813CNN4Xw29bpXjM8IrMLRc2UMChSl0Zlg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=CGYLUo9D;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.54
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA1C060A381E;
-	Thu, 19 Nov 2026 21:51:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BA1C060A381E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7670560A2603
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 22:09:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7670560A2603
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=DHGBUcJM
-Received: from pps.filterd (m0528005.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AJJ1LkI2754408;
-	Thu, 19 Nov 2026 13:51:24 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pps82601-s2048-2026-q3; bh=Ri8CK3ItJsJ
-	ssm9R2a+AMX7zfGjjWTKSLJi5tTs2ofs=; b=DHGBUcJMMYXzIekxH9QyMTq7eci
-	SVZVf1xD6/O7voHLqsj3TWCiHW0pTsTwkmp/Sp9PwtUka34/b6VZNoQ3XhAegWHp
-	XpONuZUN0BT5PbMkq0U9Jw5rxaNbEH6ZM45118sUHONBJw1PZ/EDqM1N8pENELLL
-	6rSXBjtU4zfkfEQuuysIkDiL3qzIAJ1VUpSH/voGd5OhHjcVxH6uqOIL4qV94Mts
-	8l4+IRAgaR0HPmmg+KnSAl3PoeGsapIjh+W+qZj8eqd7rRovRjydI6BAwRArFP5o
-	k1nsJTlzvDeQ2/EH+QAf3DQtrrgl4w5/oY/3h1+h7MQ3JGWzNvfsRrvodKA==
-Received: from maileast.thefacebook.com ([163.114.135.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4j228kvma1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Thu, 19 Nov 2026 13:51:23 -0800 (PST)
-Received: from localhost (2620:10d:c0a8:1b::8e35) by mail.thefacebook.com
- (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.56; Thu, 19 Nov
- 2026 21:51:22 +0000
-Date: Thu, 19 Nov 2026 13:51:21 -0800
-From: Bobby Eshleman <bobbyeshleman@meta.com>
-To: Sergio Lopez Pascual <slp@redhat.com>
-CC: Stefano Garzarella <sgarzare@redhat.com>,
-        Alexei Starovoitov
-	<ast@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet
-	<edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni
-	<pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-        Bryan Tan
-	<bryan-bt.tan@broadcom.com>,
-        Vishnu Dasa <vishnu.dasa@broadcom.com>,
-        Broadcom
- internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-        Stefan
- Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason
- Wang <jasowangio@gmail.com>,
-        Eugenio =?iso-8859-1?Q?P=E9rez?=
-	<eperezma@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Haiyang Zhang
-	<haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
-        Dexuan Cui
-	<decui@microsoft.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Randy Dunlap
-	<rdunlap@infradead.org>,
-        <virtualization@lists.linux.dev>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <linux-hyperv@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH RFC v3 0/8] vsock: add datagram support to virtio and
- vhost
-Message-ID: <av9vWRXli+JmYO8A@devvm29614.prn0.facebook.com>
-References: <20261113-vsock-dgram-support-v3-0-1523c8e9b27e@redhat.com>
- <aveMxDqYQobWwXd/@devvm29614.prn0.facebook.com>
- <CAAiTLFUQMyQXHAw1DbDKfJYus-Se+QA_SSHWQymQ9dK6-UmRTQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=CGYLUo9D
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-c50933bdf4bso45302566b.1
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 14:09:50 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795126189; cv=none;
+        d=google.com; s=arc-20260327;
+        b=ifMdhaUGFUlYX29KMMUJjOS8AcD+mAqGbQUv5lH5QcxN4fL1M7WHIJ++KaobhONfcp
+         gRaq2pli89iY3GkvA/jGZgi/QM6Zh/yJgMx48x1hPtXyBOTSwxlEKc0sgbif3MUjL0ox
+         l2OzygalUeRcLi1r4ediGPjJRESnLujClbVcaHWK5BRm0jLu95A7ilkqZ4kApcJM/qQQ
+         p2I7YVo/UtO2H+P9hCupB1iYeH6iFl1Ip4MGRP0TGyyrqRGw+8zIGbPEBt9Mxdfoeyvd
+         9IXq2+QbE2tOrfpzpVcYvar5Tx7HqpWx5UdPSjmNCFYU73ZI4iycHLKTEhylKgH/z7A3
+         BM+g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=c99oiFB+0aG9pcFd5KmDCTgPzdI/PgGeBz4H+HHEqzs=;
+        fh=QIDsVuwrg0nEVHsfF8pTM56lOtqkJS87O+crC4oJHnw=;
+        b=g1G5mVMPxN23r1OpBmcnxYD8fMfAh/KLrD2w5v3C5OaJ90QT3xXi/0Wp0DJj13lwRO
+         e+UOWI51VWnqgZc9Q+Ei1sW+9+bYRhwAXldJNKkhGhcjIFDiaa1gZX7aokGFgHcTO7iJ
+         LzJgay/RX992G7y43zpKmQbq33LqaZE4mOKBN1DTWIhrWXtiyr+qwdGOgKJ3vRfGVaHg
+         amBWfm0dtrKI3l2+SCGNcnD+5DaCSQwj4keW46Kvs6c9ZIFo2jrqIbZcYjwZUIm4RVlr
+         /oiql2jwaJo2PituNY9P5902XndP85ez0UHNBMD6lv+hNWZJ+bbPWDAl+/Hg8NG07PRZ
+         SmTw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1795126189; x=1795730989; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=c99oiFB+0aG9pcFd5KmDCTgPzdI/PgGeBz4H+HHEqzs=;
+        b=CGYLUo9DZDeYmALCEQayCsscdSVef1/dU4OE/3esvvjflQnrsZ+nYjVaBDY+HqskQd
+         e6O6+Iv6Z4e8XchMRpjPV0R2wn+0KtB8dufkDxCUjqlkUJjPeC9xb15+J8oThSv/YU3q
+         Kt1YUdqMSJ5H3Tx3nXanufMTGbrBTZ4Ycz2iDBZwz1JH3QfIZe+1Nz7RNdiGTbsxkBon
+         HNT+g+EPV5XSj/6XmkgEP3ANumYipMGdvp3Q6+0NVZMV9ef/9Jbe5VhacAuScDm9Dkii
+         o1vDi09m5dHXSUSZjXMSKBhmljuKoOaF/EjCvAy8KcfPTNcGhxM4wN4ZlxSUn5wfWQPo
+         lKZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795126189; x=1795730989;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=c99oiFB+0aG9pcFd5KmDCTgPzdI/PgGeBz4H+HHEqzs=;
+        b=WOf/lDLf2p5A++ZpPz29ZgzMmlZtgB9FHew86a84REo6p6MGnYm2izbvuNQp02Y+xz
+         Jz+ZJnQ0NUMSZ7Xu3puY9OdyT5NH8FanswFCJJ3+6QQltday+6QMWAzYBr0jydT+YFRG
+         nwut32aev/aEQOmiaPcFMebM9dpmPkKuf30un23HdIwDX5vFlaGeXuU7UVMOAP/HGq8n
+         O7WWzW5QbWY5/n68soC/nnfSTs00nz5GEuBFFHwh3eNKyM7Dscv64J7OceWrLPJ9G7TR
+         ipH/oExyHZEn0CftpqCxHUIWWnqfvGQdObJh5YFrzeHjlyPVx3oPBw/35qp3ghhDqGua
+         LjDA==
+X-Forwarded-Encrypted: i=1; AL+hErFqlXLZKKLweBH5k0F1YzWxoLKLqtkixxNEYpYrYReiOZOcQlSI5ql9R5klrgybnf7SdjI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/lbn1l6SzNEZnCRYNMTJDUefh/7mb7zpuwK97U4d5rZ8IVP+Pw
+	yrV/FFtGlX1oqXboHN5DoosWpAzff//IveIZb3kqVh9Jf9c/cndd5rgGXbgCM98hAiB0a2vDOOn
+	HLlbguPBdgw5R4ePUJYxKja4YgUORhpD4as6Xvh9j
+X-Gm-Gg: AYBFou3eeu59/mm55VoXLHDX7Lbk1NTGSu4sq39V7FQyrjEzxxJYilZBEtK9Q+HywtF
+	8LE48FPtEOGFemYUz+eQEQJOJnemn57NcQi4q3R1ByBPUDtHYg7seJfDgTXeR9a/Lw9CtIu10aR
+	SUi0yifeJKG47Y+eG8CXu3jFqEPCuAi/1gCP/DCZcE6NwvQY4Pxo/RPm6sePu9MFNCVmNj91d8u
+	d6QQguX2wcd27i6KL7+eeHkOpO7CbAildL0CfXh1b0fJ5DNqEcH37ccLwm8aMExkPPmWQWyoftm
+	2cOakrIKnaX0wxfzni+aDt+zyxnNIlRMiupxyqXxBxQ/sAmIY32SR1iS8XLenHHbMSdM/qedfv6
+	H4Q8AMinbVl0Kl2CVzQmvOgAIFWAebIC74Rx0domi8WcsWvc3R7j73bbe74rMyO8r
+X-Received: by 2002:a17:906:a158:b0:c3e:d0ca:d30a with SMTP id
+ a640c23a62f3a-c513a5e6b79mr95025566b.4.1795126188297; Thu, 19 Nov 2026
+ 14:09:48 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -106,202 +104,441 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAAiTLFUQMyQXHAw1DbDKfJYus-Se+QA_SSHWQymQ9dK6-UmRTQ@mail.gmail.com>
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTE5MDA4NyBTYWx0ZWRfXwzIa7BHDzrhI
- V9NPLugZeX0Dem605ATYIgoQU8DX72WI9bBs9VHmBqBAZcwlUI4+xKCLGec3yqad6e9XNHuQUKf
- wh8/Z1Mk/yEYchU1ELul3oyezvQPlMuTsK6aw11IrS/iZG2ky0YHPQ5x2fDjJxe01HuGKZlID1n
- bHRiO20kWrSLZK4gz9ob3EKfJCQ+sOo9P4S7G27w3umfmXytFXum9tJ/HanNivge0nqvRbrcLuJ
- gA5mT4Wg7ZPOq05ccIQNX2ksv3x0dRPyiOMSJ0rrulluGOEJigLTb8HpiGCpoUiziVUM9XNcjy3
- 1eWA60wrpqu5Qfr1NHxKeA8KK0UhAQZs2ign8WT+c4ph6c6rH1+NFA6L/zLq1aLANdVep2Lm5XV
- HjICGVvLKwUIxJ3LSS5blwdHhxNf41mYiTRHaqmzf4ysQYa+mVHLxeWUEJRY/H+HxjOmG7yAUPQ
- pBlTEVLGOEG9QGMJvTA==
-X-Proofpoint-GUID: EKMxB3j1syV6aAXBL7ADcf_4KtTeg0Sh
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTE5MDA4NyBTYWx0ZWRfXwKAReosY9zZa
- bBwoIH2U7bvtKc0Z4koR1XE6E6nLpYuJxcDsR5HFruBknRfag+QQB5Dtcl9NFmzvJqBczeAlmXp
- QcRk/8QcO5bLyBaKyd3NyJUPaB/1FsQ=
-X-Authority-Analysis: v=2.4 cv=cYxHPXDM c=1 sm=1 tr=0 ts=6aff6f5b cx=c_pps
- a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
- a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=7x6HtfJdh03M6CCDgxCd:22 a=jCddH8ec0KUNCymVuxII:22 a=VwQbUJbxAAAA:8
- a=20KFwNOVAAAA:8 a=968KyxNXAAAA:8 a=NEAV23lmAAAA:8 a=mDV3o1hIAAAA:8
- a=KMMIYZg5AAAA:8 a=VabnemYjAAAA:8 a=lvHqt9aMAKSFOjNFyPAA:9 a=CjuIK1q_8ugA:10
- a=dU3it2pj8zK4A0baVwjB:22 a=gKebqoRLp9LExxC7YDUY:22
-X-Proofpoint-ORIG-GUID: EKMxB3j1syV6aAXBL7ADcf_4KtTeg0Sh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-19_05,2026-11-19_01,2025-10-01_01
+References: <20261117103352.1244657-1-david.laight.linux@gmail.com> <20261117103352.1244657-9-david.laight.linux@gmail.com>
+In-Reply-To: <20261117103352.1244657-9-david.laight.linux@gmail.com>
+From: Samuel Wu <wusamuel@google.com>
+Date: Thu, 19 Nov 2026 14:09:35 -0800
+X-Gm-Features: AclHuK8wRtC3LEXmfZuaR0HmHzvlHy6ntbJo_CfyWnZuJZ2YExQQDAKded9hxs4
+Message-ID: <CAG2Kctqr-tu21s-9p5NFT=gbk0wg9P-BqjC5U-khTGBEmytVTQ@mail.gmail.com>
+Subject: Re: [PATCH v4 next 08/13] kallsyms: Optimise symbol name search
+To: David Laight <david.laight.linux@gmail.com>
+Cc: Petr Mladek <pmladek@suse.com>, Kees Cook <kees@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, 
+	Jim Cromie <jim.cromie@gmail.com>, Lorenzo Stoakes <ljs@kernel.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Andrii Nakryiko <andrii@kernel.org>, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 19, 2026 at 08:06:44AM -0800, Sergio Lopez Pascual wrote:
-> Bobby Eshleman <bobbyeshleman@meta.com> writes:
-> 
-> > On Fri, Nov 13, 2026 at 06:15:40PM +0100, Sergio Lopez wrote:
-> >> This RFC adds SOCK_DGRAM support to virtio-vsock and vhost-vsock through
-> >> the existing AF_VSOCK API. It is intended for guest and host services
-> >> that exchange independent requests, responses, or events and need message
-> >> boundaries and sender addresses without a stream connection or application
-> >> framing.
-> >>
-> >> VIRTIO_VSOCK_F_DGRAM gates virtio traffic in both directions. Each virtio
-> >> send carries zero to 64 KiB of payload in one VIRTIO_VSOCK_TYPE_DGRAM
-> >> packet. On the RX virtqueue, the device may split a datagram across
-> >> page-sized guest buffers.
-> >> START and EOM delimit the message; the guest reassembles at most 64
-> >> fragments and 64 KiB before delivering it to a socket. Invalid or
-> >> incomplete messages are discarded. Datagram delivery is best effort:
-> >> there are no peer credits, acknowledgements, or retransmissions. Send
-> >> admission uses the socket send-memory limit, and SIOCOUTQ reports charged
-> >> send memory.
-> >>
-> >> Datagram sockets have a separate port space from stream and seqpacket
-> >> sockets. The latter two continue to share their port space. Datagram
-> >> routes are chosen per destination among guest-to-host, host-to-guest, and
-> >> loopback transports, with VMCI as a fallback. VMCI still owns its socket
-> >> handle when it is present; loopback works without a directional transport.
-> >> Hyper-V continues to reject datagram sockets.
-> >>
-> >> The Sashiko review of v2 also reported that a VMCI datagram bind in a
-> >> local-mode network namespace creates a receive handle in VMCI's global
-> >> port space, so a sender outside the namespace can deliver datagrams
-> >> across the namespace isolation boundary. The issue predates this series
-> >> and it's getting addressed in a separate patch:
-> >>
-> >> https://lore.kernel.org/all/20261113-vsock-vmci-netns-isolation-v1-1-ced02054ea61@redhat.com
-> >>
-> >> Within this series, local-mode namespaces bind datagrams only in the
-> >> core table and never create a VMCI handle.
-> >>
-> >> Bobby Eshleman and Amery Hung explored this feature in their v6 series
-> >> and v7 work-in-progress branch. This series is a fresh implementation
-> >> against the current vsock code. It follows the separate datagram port
-> >> space, per-destination routing, and VMCI fallback requirements discussed
-> >> there. For guest receive buffers, it uses bounded fragmentation and
-> >> reassembly rather than full-message buffers or the earlier drop/error
-> >> queue approach:
-> >>
-> >> https://lore.kernel.org/r/20240710212555.1617795-1-amery.hung@bytedance.com
-> >> https://github.com/ameryhung/linux/tree/vsock-dgram-v7
-> >>
-> >> A corresponding virtio specification update has been drafted separately.
-> >> The wire format and feature negotiation still need specification review
-> >> before this series can be considered for merging.
-> >>
-> >> The first patches expose the core port allocator and add datagram queue
-> >> reporting, then implement the common data path, guest and host feature
-> >> negotiation, routing, and RX fragmentation. The last patch extends
-> >> vsock_test with local and peer tests for message boundaries, routing,
-> >> connected peers, port sharing, queue accounting, and delayed reads.
-> >>
-> >> Testing used QEMU with the F_DGRAM property patch below, an x86-64
-> >> KASAN/lockdep kernel, paired guest tests, and a nested Linux vhost-vsock
-> >> backend. The tested paths include 64 KiB messages, delayed-read bursts,
-> >> feature-disabled ingress, stream and seqpacket controls, and header-only
-> >> guest RX buffers. A temporary userspace backend still fails stream test
-> >> 21 on both the series base and tip; that case passes with Linux vhost.
-> >> VMCI's host personality was exercised in a QEMU guest, including
-> >> coexistence with virtio and self-send without loopback. A VMware VMCI guest
-> >> device and Hyper-V hardware were not exercised.
-> >>
-> >> https://lists.gnu.org/archive/html/qemu-devel/2026-10/msg08074.html
-> >>
-> >> Code was written and reviewed both manually and assisted by Codex
-> >> (GPT-6.1-Sol) and Claude (Opus 4.6).
-> >>
-> >> Signed-off-by: Sergio Lopez <slp@redhat.com>
-> >> ---
-> >> Changes in v3:
-> >> - Preserve Hyper-V stream routing and prefer virtio for guest CID_HOST
-> >>   datagrams (thanks to Sashiko AI bot).
-> >> - Bind explicit non-VMCI CIDs and local-mode sockets without a VMCI
-> >>   handle, resolve wildcard destinations, and retain VMCI self routes
-> >>   (thanks to Sashiko AI bot).
-> >> - Recheck bound addresses after receive takes the socket lock and set
-> >>   TO_HOST only for forwarded guest sources (thanks to Sashiko AI bot).
-> >> - Probe negotiated virtio datagrams and numeric local CIDs before running
-> >>   dependent tests; cover wildcard and VMCI coexistence (thanks to Sashiko
-> >>   AI bot).
-> >> - Link to v2: https://lore.kernel.org/r/20261113-vsock-dgram-support-v2-0-bacfc85b71ce@redhat.com
-> >>
-> >> Changes in v2:
-> >> - Keep guest RX buffers page-sized; add START/EOM framing and bounded
-> >>   datagram reassembly (thanks to Alexei Starovoitov and Bobby Eshleman).
-> >> - Preserve stream and seqpacket data when an RX buffer has no payload
-> >>   room.
-> >> - Separate datagram and connection-oriented port spaces, and share
-> >>   receive metadata and queueing (thanks to Alexei Starovoitov).
-> >> - Check negotiated support and destination CID on ingress, and require
-> >>   an exact connected peer CID and port (thanks to Sashiko AI bot).
-> >> - Select a capable route for each destination, retain VMCI as fallback,
-> >>   and support loopback-only sockets (thanks to Alexei Starovoitov).
-> >> - Preserve the connected peer address across temporary parent fallback
-> >>   (thanks to Sashiko AI bot).
-> >> - Use socket write-memory accounting for datagram SIOCOUTQ instead of
-> >>   separate transport counters (thanks to Alexei Starovoitov).
-> >> - Extend selftests for fragmentation, delayed reads, port sharing,
-> >>   connected peers, and capability-based skips; fix the test build and
-> >>   README entries (thanks to Alexei Starovoitov, Bobby Eshleman,
-> >>   and Sashiko AI bot).
-> >> - Link to v1: https://lore.kernel.org/r/20261028-vsock-dgram-support-v1-0-e457cf7cee78@sinrega.org
-> >>
-> >> ---
-> >> Sergio Lopez (8):
-> >>       vsock: expose the core port allocator to transports
-> >>       vsock: report datagram receive and send queue state
-> >>       vsock/virtio: implement the datagram data path
-> >>       vsock/virtio: negotiate datagram support on the guest
-> >>       vhost/vsock: negotiate datagram support with guests
-> >>       vsock: allow datagrams to use directional transports
-> >>       vsock: fragment datagrams across receive buffers
-> >>       vsock: add datagram tests to vsock_test
-> >>
-> >>  Documentation/admin-guide/sysctl/net.rst |    8 +-
-> >>  drivers/vhost/vsock.c                    |   51 +-
-> >>  include/linux/virtio_vsock.h             |    8 +-
-> >>  include/net/af_vsock.h                   |   31 +-
-> >>  include/uapi/linux/virtio_vsock.h        |   10 +
-> >>  net/vmw_vsock/af_vsock.c                 |  526 +++++++++++----
-> >>  net/vmw_vsock/hyperv_transport.c         |   11 +-
-> >>  net/vmw_vsock/virtio_transport.c         |  167 ++++-
-> >>  net/vmw_vsock/virtio_transport_common.c  |  172 ++++-
-> >>  net/vmw_vsock/vmci_transport.c           |  124 ++--
-> >>  net/vmw_vsock/vsock_bpf.c                |    3 +-
-> >>  net/vmw_vsock/vsock_loopback.c           |    2 +-
-> >>  tools/testing/vsock/Makefile             |    3 +-
-> >>  tools/testing/vsock/README               |   33 +-
-> >>  tools/testing/vsock/util.c               |   62 +-
-> >>  tools/testing/vsock/util.h               |   10 +
-> >>  tools/testing/vsock/vsock_test.c         |  175 ++++-
-> >>  tools/testing/vsock/vsock_test_dgram.c   | 1061 ++++++++++++++++++++++++++++++
-> >>  tools/testing/vsock/vsock_test_dgram.h   |   30 +
-> >>  19 files changed, 2195 insertions(+), 292 deletions(-)
-> >> ---
-> >> base-commit: 65ba8f34ec886ec72b2c07ddc8cf3d815c32869d
-> >> change-id: 20261027-vsock-dgram-support-683a4e0aebe7
-> >>
-> >> Best regards,
-> >> --
-> >> Sergio Lopez <slp@redhat.com>
-> >>
-> >
-> > Hey Sergio,
-> >
-> > Just a gentle heads up that net-next asks for 24hrs before reposting.
-> 
-> Whoops, sorry!
-> 
-> > I'll start working my way through the series, sorry if my reviews come
-> > back spread out across a few days, not sure I'll have enough time in a
-> > single sitting.
-> 
-> I was planning on sending a v4 fixing Sashiko's issues. Should I wait
-> for your review first?
-> 
-> Thanks!
-> Sergio.
-> 
+On Tue, Nov 17, 2026 at 2:34=E2=80=AFAM David Laight
+<david.laight.linux@gmail.com> wrote:
+>
+> Change the alphabetically ordered lookup table (kallsyms_seqs_of_names)
+> to one that indexes the table of compressed names rather than the
+> array of symbol values.
+> This removes all the linear scans during the binary search for the symbol
+> name.
+> Once the name has been found a second binary search of the 'markers' arra=
+y
+> followed by a linear scan for the symbols address gives the symbol value.
+>
+> This linear scan is done once for each address returned, whereas the old
+> code did the scan for each of the ~17 comparisons in the binary search
+> (and the binary search was done twice for a symbol that appears once).
+>
+> For normal kernels the index table stays at 24 bits per symbol (now host
+> ordered), but a 32 bit table is used if necessary (probably only for
+> allyesconfig builds - which needs 26 bits on x86-64).
+>
+> Use the low bit of the index table value to indicate that the symbol has
+> the same name as the previous one.
+> Use this to avoid the second lookup to find if the name is unique, speed
+> up the search for the first symbol with a given name, and simplify
+> kallsyms_on_each_match_symbol().
+>
+> Speeds up lookup by name by a factor of about 12, and makes a massive
+> difference to the time taken to lookup symbols that occur 100s or
+> 1000s (or maybe 10000s) of times.
+>
+> The slowest 'lookup by name' changes being a symbol that is duplicated a =
+lot
+> to one that is very long.
+>
+> Build for BE kernels correctly flips the byte order in the index table.
+>
+> Signed-off-by: David Laight <david.laight.linux@gmail.com>
+> ---
+>
+> v3:
+> - Use a discrimant union for the name table instead of weak symbols.
+>   Undefined weak symbols can't be guaranteed to be zero and a build
+>   mismatch left both undefined.
+> - Patch the kallsyms_off_size_24 static key from an initcall,
+>   the first name lookup might not be allowed to sleep.
+>   Leave a conditional in the 32bit offset case, it is unlikely
+>   to be needed for a real kernel.
+> - Merge in the following patch that optimised the scan for duplicates.
+>
+> v4:
+> - Fix build for BE kernels on BE hosts.
+> - Use helpers sym_entry_type() and sym_entry_name().
+>
+>  kernel/kallsyms.c          | 162 ++++++++++++++++++++++++-------------
+>  kernel/kallsyms_internal.h |   7 +-
+>  scripts/kallsyms.c         |  49 +++++++----
+>  3 files changed, 148 insertions(+), 70 deletions(-)
+>
+> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> index d18d78e626db..fd42a1a8ed3e 100644
+> --- a/kernel/kallsyms.c
+> +++ b/kernel/kallsyms.c
+> @@ -177,6 +177,36 @@ static unsigned int get_symbol_offset(unsigned long =
+pos)
+>         return name - kallsyms_names;
+>  }
+>
+> +/*
+> + * Find the value of a symbol given the offset in the compressed stream.
+> + */
+> +static unsigned long get_name_address(unsigned int name_offset)
+> +{
+> +       unsigned int low, pos, high;
+> +
+> +       low =3D 0;
+> +       high =3D ((kallsyms_num_syms - 1) >> 8) + 1;
+> +
+> +       while (high - low > 1) {
+> +               pos =3D low + (high - low) / 2;
+> +               if (name_offset >=3D kallsyms_markers[pos])
+> +                       low =3D pos;
+> +               else
+> +                       high =3D pos;
+> +       }
+> +
+> +       pos =3D kallsyms_markers[low];
+> +       for (low <<=3D 8; pos < name_offset; low++) {
+> +               unsigned int len =3D kallsyms_names[pos];
+> +               if (len & 0x80)
+> +                       len +=3D (kallsyms_names[pos + 1] << 7) - 0x7f;
+> +               pos +=3D 1 + len;
+> +       }
+> +
+> +       return kallsyms_sym_address(low);
+> +}
+> +
+> +
+>  unsigned long kallsyms_sym_address(int idx)
+>  {
+>         /* non-relocatable 32-bit kernels just embed the value directly *=
+/
+> @@ -185,66 +215,87 @@ unsigned long kallsyms_sym_address(int idx)
+>         return (unsigned long)offset_to_ptr(kallsyms_offsets + idx);
+>  }
+>
+> -static unsigned int get_symbol_seq(int index)
+> -{
+> -       unsigned int i, seq =3D 0;
+> +static DEFINE_STATIC_KEY_FALSE(kallsyms_off_size_24);
+>
+> -       for (i =3D 0; i < 3; i++)
+> -               seq =3D (seq << 8) | kallsyms_seqs_of_names[3 * index + i=
+];
+> +/*
+> + * Get the offset into the compressed list of names for the n'th
+> + * symbol in the 'sorted by name' list.
+> + * Returns 'offset << 1 | is_duplicate_name'.
+> + * To save memory (the array can have 200k+ entries) the values are usua=
+lly
+> + * 24 bit (host ordered) but will be 32 bit if necessary.
+> + */
+> +static inline unsigned int get_symbol_name_offset(unsigned long index)
+> +{
+> +       if (static_branch_likely(&kallsyms_off_size_24) ||
+> +           unlikely(kallsyms_offs_of_names.size =3D=3D 24)) {
+> +               u8 *off =3D kallsyms_offs_of_names.offs + index * 3;
+> +#if !defined(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS)
+> +               return ((struct {unsigned int v:24 __packed; } __packed *=
+)off)->v;
+> +#else
+> +#if defined(__BIG_ENDIAN)
+> +               return (*(u32 *)(off - 1)) & 0xffffff;
+> +#else
+> +               return (*(u32 *)(off - 1)) >> 8;
+> +#endif
+> +#endif
+> +       }
+>
+> -       return seq;
+> +       return ((u32 *)&kallsyms_offs_of_names.offs)[index];
+>  }
+>
+> -static int kallsyms_lookup_names(const char *name,
+> -                                unsigned int *start,
+> -                                unsigned int *end)
+> +static int kallsyms_set_kallsyms_off_size(void)
+>  {
+> +       if (kallsyms_offs_of_names.size =3D=3D 24)
+> +               static_branch_enable(&kallsyms_off_size_24);
+> +
+> +       return 0;
+> +}
+> +early_initcall(kallsyms_set_kallsyms_off_size);
+> +
+> +static int kallsyms_lookup_names(const char *name, unsigned int *start)
+> +{
+> +       unsigned int mid, off;
+> +       int low, high;
+>         int ret;
+> -       int low, mid, high;
+> -       unsigned int seq, off;
+>
+>         low =3D 0;
+>         high =3D kallsyms_num_syms - 1;
+>
+> -       while (low <=3D high) {
+> +       for (;;) {
+> +               if (low > high)
+> +                       return -1;
+>                 mid =3D low + (high - low) / 2;
+> -               seq =3D get_symbol_seq(mid);
+> -               off =3D get_symbol_offset(seq);
+> -               ret =3D kallsyms_strcmp_symbol(off, name);
+> -               if (ret > 0)
+> +               off =3D get_symbol_name_offset(mid);
+> +               ret =3D kallsyms_strcmp_symbol(off >> 1, name);
+> +               if (ret > 0) {
+>                         low =3D mid + 1;
+> -               else if (ret < 0)
+> -                       high =3D mid - 1;
+> -               else
+> -                       break;
+> -       }
+> -
+> -       if (low > high)
+> -               return -ESRCH;
+> -
+> -       low =3D mid;
+> -       while (low) {
+> -               seq =3D get_symbol_seq(low - 1);
+> -               off =3D get_symbol_offset(seq);
+> -               if (kallsyms_strcmp_symbol(off, name) !=3D 0)
+> -                       break;
+> -               low--;
+> -       }
+> -       *start =3D low;
+> -
+> -       if (end) {
+> -               high =3D mid;
+> -               while (high < kallsyms_num_syms - 1) {
+> -                       seq =3D get_symbol_seq(high + 1);
+> -                       off =3D get_symbol_offset(seq);
+> -                       if (kallsyms_strcmp_symbol(off, name) !=3D 0)
+> +                       continue;
+> +               }
+> +               if (!ret) {
+> +                       /*
+> +                        * Found a match, but need the first one.
+> +                        * Most symbols (and all exported/global ones) on=
+ly occur
+> +                        * once, most of the others only occur a small nu=
+mber of
+> +                        * times so it is worth doing a linear scan that =
+avoids the
+> +                        * kallsyms_strcmp_symbol() call.
+> +                        * However some symbols occur a large number of t=
+imes
+> +                        * (_sub_D_65535_0 is repeated 24610 times in an =
+x86-64
+> +                        * allyesconfig, __func__.0 442 in a more normal =
+kernel).
+> +                        * Avoid a long linear scan by returning to the b=
+inary
+> +                        * search if a short linear search is fruitless.
+> +                        */
+> +                       unsigned int scan =3D 16;
+> +                       while ((off & 1) && scan--)
+> +                               off =3D get_symbol_name_offset(--mid);
+> +                       if (!(off & 1))
+>                                 break;
+> -                       high++;
+>                 }
+> -               *end =3D high;
+> +               high =3D mid - 1;
+>         }
+>
+> -       return 0;
+> +       *start =3D mid;
+> +
+> +       return off;
+>  }
+>
+>  /* Lookup the address for this symbol. Returns 0 if not found. */
+> @@ -257,9 +308,9 @@ unsigned long kallsyms_lookup_name(const char *name)
+>         if (!*name)
+>                 return 0;
+>
+> -       ret =3D kallsyms_lookup_names(name, &i, NULL);
+> -       if (!ret)
+> -               return kallsyms_sym_address(get_symbol_seq(i));
+> +       ret =3D kallsyms_lookup_names(name, &i);
+> +       if (ret >=3D 0)
+> +               return get_name_address(ret >> 1);
+>
+>         return module_kallsyms_lookup_name(name);
+>  }
+> @@ -289,17 +340,20 @@ int kallsyms_on_each_symbol(int (*fn)(void *, const=
+ char *, unsigned long),
+>  int kallsyms_on_each_match_symbol(int (*fn)(void *, unsigned long),
+>                                   const char *name, void *data)
+>  {
+> -       int ret;
+> -       unsigned int i, start, end;
+> +       int name_offset, ret;
+> +       unsigned int sym_number;
+>
+> -       ret =3D kallsyms_lookup_names(name, &start, &end);
+> -       if (ret)
+> +       name_offset =3D kallsyms_lookup_names(name, &sym_number);
+> +       if (name_offset < 0)
+>                 return 0;
+>
+> -       for (i =3D start; !ret && i <=3D end; i++) {
+> -               ret =3D fn(data, kallsyms_sym_address(get_symbol_seq(i)))=
+;
+> +       do {
+> +               ret =3D fn(data, get_name_address(name_offset >> 1));
+> +               if (ret)
+> +                       break;
+>                 cond_resched();
+> -       }
+> +               name_offset =3D get_symbol_name_offset(++sym_number);
+> +       } while (name_offset & 1);
+>
+>         return ret;
+>  }
+> diff --git a/kernel/kallsyms_internal.h b/kernel/kallsyms_internal.h
+> index 81a867dbe57d..11fb0de92ede 100644
+> --- a/kernel/kallsyms_internal.h
+> +++ b/kernel/kallsyms_internal.h
+> @@ -13,6 +13,11 @@ extern const char kallsyms_token_table[];
+>  extern const u16 kallsyms_token_index[];
+>
+>  extern const unsigned int kallsyms_markers[];
+> -extern const u8 kallsyms_seqs_of_names[];
+> +
+> +/* Although constant, size is volatile for better code generation. */
+> +extern struct {
+> +       volatile unsigned int size;     /* 24 or 32 */
+> +       unsigned char offs[];           /* int:24[] or int:32[] */
+> +} kallsyms_offs_of_names;
+>
+>  #endif // LINUX_KALLSYMS_INTERNAL_H_
+> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> index 77a4c964f1b8..39426f736cb7 100644
+> --- a/scripts/kallsyms.c
+> +++ b/scripts/kallsyms.c
+> @@ -408,7 +408,7 @@ static void sort_symbols_by_name(void)
+>
+>  static void write_src(void)
+>  {
+> -       unsigned int i, k, len, off, seq;
+> +       unsigned int i, k, len, off, off_size, table_size;
+>         unsigned int best_idx[256];
+>         unsigned int *markers, markers_cnt;
+>         unsigned long bin_offset =3D 0;
+> @@ -458,7 +458,7 @@ static void write_src(void)
+>                 unsigned char len[2];
+>
+>                 se =3D table[i];
+> -               se->seq =3D i;
+> +               se->seq =3D off;
+>
+>                 /* The length must be less than that of the original symb=
+ol. */
+>                 if (!se->len || se->len > KSYM_NAME_LEN)
+> @@ -490,7 +490,7 @@ static void write_src(void)
+>                         if ((i & 0xFF) =3D=3D 0)
+>                                 markers[i >> 8] =3D off;
+>
+> -                       printf("\t.byte\t%u", len[0]);
+> +                       printf("\t/* n:%u */\t.byte\t%u", off, len[0]);
+>                         if (len_len =3D=3D 2)
+>                                 printf(",%u", len[1]);
+>
+> @@ -505,6 +505,7 @@ static void write_src(void)
+>                 memcpy(se->sym, buf, se_len + 1);
+>         }
+>         write_incbin(&bin_offset, off);
+> +       table_size =3D off;
+>         printf(".size kallsyms_names, . - kallsyms_names\n");
+>         printf("\n");
+>
+> @@ -563,7 +564,7 @@ static void write_src(void)
+>                                out_bin_file ? '\n' : '\t');
+>                 }
+>                 if (!out_bin_file)
+> -                       printf("/* %c %s */\n",
+> +                       printf("/* n:%u %c %s */\n", table[i]->seq,
+>                                sym_entry_type(table[i]), sym_entry_name(t=
+able[i]));
+>         }
+>         printf(".size kallsyms_offsets, . - kallsyms_offsets\n");
+> @@ -574,23 +575,41 @@ static void write_src(void)
+>         sort_symbols_by_name();
+>         stamp("sort by name");
+>
+> -       output_label("kallsyms_seqs_of_names");
+> -       write_incbin_header("seq_of_names", &bin_offset);
+> +       off_size =3D table_size < (1u << 23) ? 24 : 32;
+> +       output_label("kallsyms_offs_of_names");
+> +       printf("\t.long\t%u\n", off_size);
+> +       write_incbin_header("offs_of_names", &bin_offset);
+>         for (i =3D 0; i < table_cnt; i++) {
+>                 se =3D table[i];
+> -               seq =3D se->seq;
+> +               off =3D se->seq << 1;
+> +               if (i && se->len =3D=3D table[i - 1]->len &&
+> +                   !memcmp(sym_entry_name(se), sym_entry_name(table[i - =
+1]), se->len - 1))
+> +                       /* Mark that this is a duplicate of the previous =
+symbol */
+> +                       off |=3D 1;
+>                 if (out_bin_file) {
+> -                       unsigned int seq_be =3D htobe32(seq);
+> -                       fwrite((char *)&seq_be + 1, 1, 3, out_bin_file);
+> +                       unsigned int off_te =3D big_endian ? htobe32(off =
+<< (32 - off_size)): htole32(off);
+> +                       fwrite(&off_te, 1, off_size / 8 , out_bin_file);
+>                 } else {
+> -                       /* The three spaces before the tab line up the co=
+mments */
+> -                       printf("\t.byte\t%u,%u,%u   \t/* %8d %c %s */\n",
+> -                               seq >> 16, (seq >> 8) & 0xff, seq & 0xff,
+> -                               seq, sym_entry_type(se), sym_entry_name(s=
+e));
+> +                       if (off_size =3D=3D 32) {
+> +                               printf("\t.long\t%#4x", off);
+> +                       } else {
+> +                               if (big_endian)
+> +                                       off =3D __builtin_bswap32(off) >>=
+ 8;
+> +                               /* The trailing three spaces line up the =
+comments */
+> +                               printf("\t.byte\t%u,%u,%u   ",
+> +                                       off & 0xff, (off >> 8) & 0xff, of=
+f >> 16);
+> +                       }
+> +                       printf("\t/* n:%-8d %c %s */\n",
+> +                               se->seq, sym_entry_type(se), sym_entry_na=
+me(se));
+>                 }
+>         }
+> -       write_incbin(&bin_offset, table_cnt * 3);
+> -       printf(".size kallsyms_seqs_of_names, . - kallsyms_seqs_of_names\=
+n");
+> +       write_incbin(&bin_offset, table_cnt * (off_size / 8));
+> +       /* Add a terminator without the 'duplicate' flag. */
+> +       if (off_size =3D=3D 24)
+> +               printf("\t.byte\t0,0,0\n");
+> +       else
+> +               printf("\t.long\t0\n");
+> +       printf(".size kallsyms_offs_of_names, . - kallsyms_offs_of_names\=
+n");
+>
+>         stamp("write name index");
+>
+> --
+> 2.39.5
+>
 
-Feel free to send without my review, I'm lagging behind!
-
-Best,
-Bobby
+Reviewed-by: Samuel Wu <wusamuel@google.com>
