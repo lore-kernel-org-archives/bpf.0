@@ -1,114 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.161.54
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795117005;
-	b=U0iyx/79/uud2kXubQiws6316fpNTGQoLuuChLMe5VUn49iykREZQVghwsHDM02x3SO5
-	 qcCx3u8Y2PbNmfFcgp/tQ/3WuZhtPpFZ+XY/BjfF2dTbf0k/f6DGh/gl5P27lZSaOAP+o
-	 ZPNc69ItUu4ODTdrOY5uqwDcbm4kcnDBayY5D5wcNM+8oKGHqr9mQ7lrfsI+SjcVwM76K
-	 acOqCtcGTyfQUIDW9UpvayQBIkBjBdE9nw2qhQ73vJ/fLI+gm8ol/KeDd7T3ofNXx7XR7
-	 DltfIIW8sIll07al8bpEPw6CVApDHtJ1pbw7ICMK+6J/ThEdu1Dz8JpL3rpSZ5S/IcQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795117005;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.54
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795117043;
+	b=kEUpACiFaGyJCHDiIE2ABujOdiMUkoNTqQoQJMqGj6R2Bn+jzMk0lC30t3FZcAHgz4H5
+	 B3sDQR/gR4w1o0zoA7ZJt6fkKnKVXVA9Newy24OehP4EqH7fZeBCGbEu7YFzCPS8jAo9a
+	 kJZSLetVjbJMdaCnJgecsS1z3vrms9CAFG5tu2/b6dw4rOxlaIlzurSZfK/U+8s/bf6qr
+	 DTFWIFJaHRfjFxkpf9rPzIieduwDA9ke+bGht6aOWRngr1GidDvsWd2xfGlVpKSs0F1+d
+	 v/KtznZ2SKopR0JvonPg5qvKmGDq/9tQraG1k2TyiVejDc8+BOb7/RLrP3Tdm2lnDUQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795117043;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=Z/2L9IovMD4zBIgZcsGeAkwPGqc72zduF1TmecAsP2U=;
-	b=4ksRVDcyB/n4SmSQarp5ZFtgt7HrZTpExw0g2tAvSZlI8UjJFZ1o4CtSpeB/bhsSc7FF
-	 5Q1FJ8vkd0yi+VFobzUCd/w5kM7gitFCMseUw3uhop7XGENe/qcT4jALYBAn0ntxbw70k
-	 PZAkYxlu6uwLa3pERRzu7YhPlh1E9c13U4ykmr7NvAnSZj2JALAl0CMoYtPKl4A43Mvri
-	 1PeFrmBmRY4A/tsdcYpaA2e+npUkcLGksq8e/wdoWuKzJzDlYsGuUgAfIq0wSrtVkaP56
-	 tCvIRDZyW05pZAmZBZ6SVkzV/uZ/uGSq0ZwgH6I/BjoTNDcTGX2EQ2yxBv+us6vm1Ng==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WUKTHXmP;
-	arc=none smtp.remote-ip=209.85.161.54
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=ki7N7oUyczI7L7J7QNsuIKVYOIpUcziCfllCfxy/ZJM=;
+	b=nvcW8WVZ1i6OTiTryFLGJQqcjHsGKRdBy9ZO3jFBdtWtobIJZkIwZW+Looq3qaIch8Qv
+	 O9Cwy5agkvelYq120u6k2vbEJFeqrlngz4Y7kJR9yON6QsILkeenSiOxt+4vgC6wsH5Ci
+	 LuQFwQTIiQ3xezCW+ELwai8DQ1YRO1Rie6xETMBQxTef8xP2shuWNtwcdnku+JUgYJvBp
+	 KUiV9EDx6O3XF51cc5LXcaRRYy76/A7ChSlCjlzBL4zQbbpCFatSQATSYoAwaz/Bsmwjl
+	 oNVjj4iw11EHsSvFYBrQIRd+iRI+/QGDtODjdgI6l1rGbfeMeL+A2qGLt83+eW3us3Q==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=paul-moore.com;
+	spf=pass smtp.mailfrom=paul-moore.com;
+	dkim=pass header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=XodjmMdN;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.54
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8332606A324
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 19:36:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E8332606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFCB7606A325
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 19:37:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EFCB7606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WUKTHXmP
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-716d052dc23so57381eaf.1
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 11:36:44 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=XodjmMdN
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3ae1da332bcso98251a91.2
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 11:37:22 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795117042; cv=none;
+        d=google.com; s=arc-20260327;
+        b=l6EQoI2EYy8C1clNNzzibDKuJMik5LzmQZkk6yiyZjVpRqSc/dOBBKpIgRr+ajLDj0
+         N/7WerIUE4bpwCWfBS5tcvJMQX2VQCzH4UKm59SYU2hUObyuqntOT38yJUu0P+7/yFTC
+         iLWCXP6nLmxt2XOILa9cKGT36B8V/QxQ0qZKLevTjD4kxB4hu4/DuF1ZZAAZiG9MaNm1
+         4dW8txIvFVhP83NI1g6AD40qzQ4fPtQBEBhz10pRce9emIM4e+3J54CEDxUkvwU421NV
+         WzcmIFZ+RwfFE4R6/jjIVpqxUP5ywcnKAk2DJzTeMxmXHRaabte5A+qsbjfV2dwMPLjg
+         mgqw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ki7N7oUyczI7L7J7QNsuIKVYOIpUcziCfllCfxy/ZJM=;
+        fh=yBnd25xPzoptXt8cKxg04hRiQ2n61JfD3ME91He8AiA=;
+        b=XH8aDgJuKTNih8pPXk/+dDchX+0z9udgu89z+JpNB8Y2s72t0yMoPy/iWwxWi38YaP
+         vmTPa9N450iTWbOXjGpLaZBQ/3t8jRy0DFaNZqc44uPGJ+RNdJoePKVq543aNj/6dodY
+         U/ACKTj0yKrKgZCD7MyZbKuchYoBxUlkPh6VEbRbPBDzm1Jnc/g+41lGS8564VCEvER8
+         FkUSfV/Q/TQ6N4tDZqkl1YqOWxSTlXo7KgrWVBKth8JZDjGbmasZac7iHPlFnCCDIDfE
+         ndlbKJTfZSvoOc3W7pdSlsBIMpJWZMaLCFG39eiKRGUgTQlYin4WeTeOy91iErGk3H8/
+         gIMA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795117004; x=1795721804; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:subject
-         :references:in-reply-to:message-id:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=Z/2L9IovMD4zBIgZcsGeAkwPGqc72zduF1TmecAsP2U=;
-        b=WUKTHXmPDsd8bmISSW+LqyZEPEQsRE4kJ67FPXvLSxtN1Gmsu2ddKXNZgsXZUWUwlX
-         hTP0Lu5Przzo9ho8j1uFMOKolRcvpszRuWOMtitvNE/J1tAcwKrhu0FSRXVHewX0bpZZ
-         MiI5q131r/I2/UIgTUYGB9lP3lSqudnWHs3z44w403i5AG6QNxSi9KLbJluult3ciAPo
-         EyC+BJGtrDCIm4Ic2a4gLUJfDPHa0JxqcSU+gbl9CWU9kLRa+YzsMc1xfQeqrH9Ug+XP
-         Flg/hRH7BCgRObF84+fpRBD3MaLKpk8+hIE/dzkyEXUIeDrdOhUEKV+ZkaCdvAeJkX9H
-         xsrw==
+        d=paul-moore.com; s=google; t=1795117042; x=1795721842; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=ki7N7oUyczI7L7J7QNsuIKVYOIpUcziCfllCfxy/ZJM=;
+        b=XodjmMdNd66sSQHPxgX0Iw77xrzUpXmpUh6FvrO/B/Hk8c1K7J/ubNP1xulYRVIUn7
+         0zNyz12Ie31a/acpAaE2JdzOyVZ1FIPVGXO2gq3/Xb7Bd1z8v8sJz+XnGPwAxvBt8xIt
+         nRTm2fO0Elbyrfw7YtQ+JmWuR1ealDi/ibMo7Imi71oY+hqZsiiaQQ9dG+C12cSBrwK/
+         yX57pzVy1ZeFaPnMkTQAWdMaSdjisCW3A9pZcG19vKHgRG7aioh+XHJFJMVZ6Bw9H536
+         yCz7GWX5rzmqjUzUXrTu98st6r2v67k8vlpr+1E/DOMY+/p5qBpWJAVdWcPbbrF9cIW6
+         mN0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795117004; x=1795721804;
-        h=content-transfer-encoding:content-type:mime-version:subject
-         :references:in-reply-to:message-id:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20260707; t=1795117042; x=1795721842;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Z/2L9IovMD4zBIgZcsGeAkwPGqc72zduF1TmecAsP2U=;
-        b=q3IIMD7wQAKDDSJcZiQtql4urHnCCy+92EAF9GCSsgONiuT5bAmEBhbDYiI4xoMrqB
-         +TQEXmiOO5Te5h4PF4nKqBBd70vXGKiaGVP+tNPwosl9ccdcjyLgiR/n8z/F7rw/+doc
-         WMEC/fyWxDGf/z07J1YsOL5qrqTm5W51Sx2o9g2ME9QpMHqijds970gYL2hmvQB7U8LT
-         W800pCr07dHweGU1KBNqQeyol9P/Bw1hltPB8FWqrWUpZUQ8PxKX0iQ/QIlVj3Bz1avo
-         bq6Ynp1yy7bLNe4xqHozDCNV2KFFigPoRfo+K9qm5yIZq9NPab9pTuK9gFmTUYXOJISr
-         Bx0w==
-X-Forwarded-Encrypted: i=1; AL+hErFhOraTEg2IDFszqEbTqTdjtnucdicY58y7/HlFFpoZMXcndzZGnoNjHz+nnUkC0LJcT4M=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+vjPO4prv6JY+ZkuAUZ9EeboWEsbPemAU0zle17BS3+csDG6MH
-	eq7GVm+IJn6/zl9w/F0oWf2tU/5ZqaFOooQQl3k7+tywqzKStk7G2xQU
-X-Gm-Gg: AYBFou1r8Fv5lQ6rrm/oGgbxF3/ZSIEdwOPVbTRJ8+qXi1G009E5xmixOEnCxZ8k45m
-	28Kj4HIkQAr/H93UhVBsC82AMUPT4twAHZpqFu0sqZdiMcG0tozyR9/9Gseh+YJBuMVoe/26PjU
-	6FyuN8tEFmCICXXg/0e6h8eKKha9Os+W4bPE3xgbHFKq8QW9vNblICjsJM6ESE1JiIvJ1M0LPx3
-	GxXUYfWaXtq0qC0D6Z9aLaZyIRoCuId5RE42kuVPYdzcUqOpf1ZdK+5zKTk6Qj23eVoJhBbBAAY
-	1kLfno8oVhps/uKIKr+8qX/NUv2ZcIAp6zjUr4qGSEQ2JO49mmAo2f4Iq5Ml+0T25QkAwe/lDtZ
-	5tDxRQWBmQ42ZlYe56tsG/cl/3Zl4Vjy+hs55a89KMhD2eAQzh6XvQlcvoTEP7YgNFoKonSWpY6
-	M+7cy49RB4x2tr2dwiZvXjjKqtSFqUzUnOjPF8iknThwLXd9i3SfIyGd6gzcu3h8jvnyt39vWQ2
-	jUQXwgy+RGdbGogL6TOf2Ock/sKvpBozh4Etwit02iATsh2MXeAbNTuMIYboO5GIAPHnfD6DNCz
-	nrl43Jk1P59jnRO7w+WUwZAC+p1bq7Gnm9CG5BiPkU5XXa4Ik0gncmxU1MXJPAECZeVAsmNEZhR
-	2OcKSrZ/B/Z4BfgCZ3M6EASGPqDl3tuE5J/xwUsc9UlIn8Ud1V0+SIoOT0x5bPtcG/XuAXoXfnl
-	QU7XnITBiUIg==
-X-Received: by 2002:a05:6820:1c98:b0:6b1:bb82:f7a3 with SMTP id 006d021491bc7-71b39209557mr740286eaf.5.1795117003758;
-        Thu, 19 Nov 2026 11:36:43 -0800 (PST)
-Received: from gmail.com (15.60.86.34.bc.googleusercontent.com. [34.86.60.15])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-863168dd6e7sm435223a34.12.2026.11.19.11.36.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2026 11:36:43 -0800 (PST)
-Date: Thu, 19 Nov 2026 14:36:42 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Antonio Quartulli <antonio@mandelbit.com>, 
- willemdebruijn.kernel@gmail.com, 
- jasowangio@gmail.com
-Cc: Antonio Quartulli <antonio@mandelbit.com>, 
- andrew+netdev@lunn.ch, 
- davem@davemloft.net, 
- edumazet@kernel.org, 
- kuba@kernel.org, 
- pabeni@redhat.com, 
- horms@kernel.org, 
- mst@redhat.com, 
- eperezma@redhat.com, 
- ast@kernel.org, 
- daniel@iogearbox.net, 
- hawk@kernel.org, 
- john.fastabend@gmail.com, 
- sdf@fomichev.me, 
- maheshb@google.com, 
- peterpenkov96@gmail.com, 
- netdev@vger.kernel.org, 
- virtualization@lists.linux.dev, 
- bpf@vger.kernel.org
-Message-ID: <willemdebruijn.kernel.24840892273e@gmail.com>
-In-Reply-To: <20261119153056.353156-1-antonio@mandelbit.com>
-References: <20261119153056.353156-1-antonio@mandelbit.com>
-Subject: Re: [PATCH net v7] tun: bound the NAPI receive queue
+        bh=ki7N7oUyczI7L7J7QNsuIKVYOIpUcziCfllCfxy/ZJM=;
+        b=aHmeutswMloT1FM8ZqdWveDHAFtvDygWnGJZAliefLjynyZ/vGaK4H01svGMXdEybf
+         KtALdzV6QVi9ur6lzd2V8z95ZNz8B0y5xQryIKA8SelGoWhT63vDwzmB1ba9nShrN/L5
+         Y4FtTlSlsK+EdNafZLs/PAsXciIul1etrPYGe2iTiyG8RHkq2ly09TpRkPhNqGSZUbnw
+         TxIFv+48t0M1/HgLZshVjt+BlEtNUGNWhYlXncAjfwql06tgriO973dPndhOq0mRJMoM
+         80e53rNBxCuTT/+Rm2SgBxmYcYLN70uKpzlhOhis3OA4Zu8y7wu9Xv+IZ6TiwEnJ8LiW
+         mzbg==
+X-Forwarded-Encrypted: i=1; AL+hErHP9QQxpJPJdSQHvJFvvu7uNXEblgaaEyJGNil/BXUCmxY4a4vAs4S4vdLkpjDzzxxCln4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+t99/5JHtIWipa263XTWCdD7SIH5u/mgHjjy+O+HrvD5u+JAvE
+	iSi7XZfQtYiXOEXtU0yTjclxzQAUH33UTAu88LFVgnBWKBjbM2rOC65YmOxrVlwKb9+E36zQ8Wr
+	sjuc7fEDKaVZFb1kzDEtOgKRYZ+a9e8KmE2BdCKhu
+X-Gm-Gg: AZFdTZdxeqOWstlaK28zbHCeZnxmEtjcgOjKzjlWTB1PMpOj2P4Dka2NpanEanDMeCk
+	AeCMjglWf1kWi6maVehyrSzBp2fS4icMm2HsEOVxFz97Jk5wDY+PN9QOwJCRznNz1J2aepw2bdF
+	scwRfoxNBXpGilL7EO54SU4pA09rHqn5jpAZ6wKi5Msul15qGdZ0Xl65MqzUgsPN9hGU4acK2N3
+	VbMKopMPz8MhSaUV4i2i/EIezYBmVaFfx4fo6wfJgxnT/csv7SW7cqBYNkbtq7Z0f5I1EiAAAXQ
+	pBKYdFeZ+AfNwDCuLm4aO2bbQvDV6Uvqv7W6cObW2y6bmlXH1/GWD5YutVOxUAsfDPQXuz2xx8O
+	1Glfu/E03yfrBQZH6MoN3K/qSaEnP6X/kMjyjAYZnTki1aS3HYGUbilmaGnpSrR7HN1k++A==
+X-Received: by 2002:a17:90b:4a48:b0:3ab:2d17:51c5 with SMTP id
+ 98e67ed59e1d1-3b41c7b60b5mr394543a91.6.1795117042197; Thu, 19 Nov 2026
+ 11:37:22 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -118,71 +104,69 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+References: <d85ece6e-27f9-4d9f-83af-4101bc76fef6@app.fastmail.com>
+ <356db94e-f5d6-4fb2-839a-b97aef72256b@app.fastmail.com> <CAHC9VhR9sjunJRnM9gy-BkBZkapQTrr8a8FtmaK7JkAmUqTrLA@mail.gmail.com>
+ <CAEf4BzZKmn6g0SK8OddjKFj_vAmZFvpZv32Hs_S+GHgT7VNfrg@mail.gmail.com>
+ <9d6bdc31-e57c-4187-be78-29d82471f710@app.fastmail.com> <9695ec3d-7b81-488d-989f-0bd411d673f2@linux.dev>
+ <CAPa8sAh6b5xn4rZzPfM0nZ+_kkywWj22fy8deLq+6qYews0rdQ@mail.gmail.com>
+ <MRYP264MB7057096D13282544720793F2E67A2@MRYP264MB7057.FRAP264.PROD.OUTLOOK.COM>
+ <CAEf4BzZWEU24+ZC0W_20hc3t+qnEHncQA1ztTF7ZPPOf3DDPVA@mail.gmail.com>
+In-Reply-To: <CAEf4BzZWEU24+ZC0W_20hc3t+qnEHncQA1ztTF7ZPPOf3DDPVA@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Thu, 19 Nov 2026 14:37:06 -0500
+X-Gm-Features: AclHuK8huO5hL8Cq37FykvhPQRmji6J0FCQEXOUl5eyoX-lYuZrqwKkD8osBd6E
+Message-ID: <CAHC9VhSFvOiP5Tyt=rOFMwg=Ro1jRw+hfcw4AdCkEyftZJHQCQ@mail.gmail.com>
+Subject: Re: [BUG] bpf, lsm: new first argument in 7.4 inode hooks silently
+ breaks BPF LSMs
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Paul Mabileau <paul.mabileau@harfanglab.fr>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Daan De Meyer <daan@amutable.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, roblabla <linux@roblab.la>, 
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
+	"linux-security-module@vger.kernel.org" <linux-security-module@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Antonio Quartulli wrote:
-> With IFF_NAPI, tun_get_user() queues every written packet for NAPI on
-> an unbounded list. When the poll runs asynchronously (threaded NAPI or
-> ksoftirqd) and is slower than the writer, the queue grows until the
-> system runs out of memory. An unprivileged user can do this from its own
-> user and network namespaces, and the queued skbs are not charged to its
-> memcg: in a test VM, a uid 1000 process limited to 128 MB caused a
-> global OOM in ~6 seconds. The socket send buffer does not help: tun sets
-> it to INT_MAX by default, the build_skb() path is only used while it is
-> INT_MAX, and the XDP batch path never checks it.
-> 
-> Drop packets once more than netdev_max_backlog of them are queued, like
-> enqueue_to_backlog() does, and count them as rx_dropped; the write still
-> reports success, as for a full backlog. The check sits where packets are
-> queued for NAPI, in tun_get_user() and in tun_xdp_one() for the batches
-> vhost-net passes, so packets consumed by XDP or delivered through
-> IFF_NAPI_FRAGS are not affected. A dropped zerocopy skb completes its
-> buffer when freed. The check is lockless, so concurrent writers can each
-> still add one packet.
-> 
-> The NAPI poll moved the whole queue out, processed up to its budget and
-> put the rest back: while it ran, the queue looked empty to writers, so
-> with the poll on another CPU the backlog could still grow without limit.
-> Take at most budget packets instead: the rest stays on the queue writers
-> check.
-> 
-> Dropping also schedules NAPI. vhost-net sends with MSG_MORE while it has
-> more packets, and tun_get_user() schedules NAPI only for a packet
-> without it or once more than NAPI_POLL_WEIGHT are queued. With a
-> netdev_max_backlog below that, the queue fills first and the packet
-> without MSG_MORE is dropped too: nothing would schedule NAPI, and the
-> queued packets, with zerocopy also their buffers, would wait forever.
-> 
-> Reproducer, as an unprivileged user in a new user and network
-> namespace, without kernel modifications or fault injection:
->   ip tuntap add t0 mode tun; ip addr add 10.11.0.1/24 dev t0
->   ip link add d0 type dummy; ip addr add 10.20.0.1/24 dev d0
->   ip link set t0 up; ip link set d0 up; sysctl net.ipv4.ip_forward=1
->   install ~500 iptables FORWARD rules, to slow down the poll, and a
->   MASQUERADE rule on d0
->   open t0 with IFF_TUN | IFF_NO_PI | IFF_NAPI
->   echo 1 > /sys/class/net/t0/threaded
->   write() 1400-byte IPv4 packets for 10.20.0.2 in a loop
-> 
-> Found by code inspection while analysing the performance of the tun
-> write path. Tested in an x86-64 VM on net, with 1 and 2 vCPUs: the
-> reproducer causes a global OOM without the patch, while with it memory
-> use stays flat and the forwarding rate is unchanged; the tun kselftest
-> passes; a local vhost-net test of the batch, copy and zerocopy paths
-> with netdev_max_backlog set to 8 passes, and fails without the patch;
-> an XDP program on the device sees every packet while the excess is
-> dropped.
-> 
-> Still open: neither the packet size nor the queued memory is bounded,
-> and the skbs are not charged to the writer's memcg. A single write can
-> create an skb of several hundred KB, so even one queue can hold a lot,
-> and IFF_MULTI_QUEUE (allowed in a user namespace) and more devices
-> multiply it. This bounds the queue as enqueue_to_backlog() bounds the
-> per-CPU backlog; charging the skbs to the writer is left to a follow-up.
-> 
-> Fixes: 943170998b20 ("tun: enable NAPI for TUN/TAP driver")
-> Signed-off-by: Antonio Quartulli <antonio@mandelbit.com>
+On Thu, Nov 19, 2026 at 12:59=E2=80=AFPM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+> On Wed, Nov 18, 2026 at 7:14=E2=80=AFAM Paul Mabileau
+> <paul.mabileau@harfanglab.fr> wrote:
+> >
+> > Hello,
+> >
+> > On our end, we also have already merged code to adapt our eBPFs to the =
+argument order change. However, we would still prefer if this easily-avoida=
+ble breakage could be fixed by moving the argument to the end, even if it m=
+eans having to revert our fix.
+> >
+> > This is motivated by the fact that such a change is not made in place o=
+n our end because we ship our software to environments we don't control, me=
+aning that any and potentially all versions ranging from 4.11 to the very l=
+atest should be supported, so the change is made by compiling and shipping =
+a new variant of the concerned eBPFs for the version interval it is valid f=
+or (7.4+ in this case). And that has to be done every time there is an upst=
+ream change like this, so the total installation size and overall complexit=
+y grows accordingly.
+> >
+> > If we could avoid that, especially for such trivial root causes, it wou=
+ld be nice.
+> >
+>
+> I agree, and that's why I'm asking Paul to accept the patch reordering
+> the newly added argument before 7.4 final is released.
+>
+> I do not think that the maintainer's personal preference for argument
+> ordering beats real user pain.
 
-Reviewed-by: Willem de Bruijn <willemb@google.com>
+As stated several times in the past, the problem lies not with the LSM
+framework but with the lack of an abstraction layer in the BPF LSM
+providing a stable API.  As far as I can tell the lack of an
+abstraction layer in the BPF LSM is by design, and while that does
+provide some advantages, one of the notable disadvantages is that the
+API is unstable.  If you want to be upset at anyone, direct your
+frustrations towards the design and current implementation of the BPF
+LSM.
+
+--=20
+paul-moore.com
