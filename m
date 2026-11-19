@@ -1,60 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=124.126.103.232
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795082264;
-	b=Z9R9OGl4kj0rzagIvirEmB1y8VNiZT44mBtvB/Kp1oTXWzmNVeOrNefrRIrLmmRdp78q
-	 SWUiDGTJ6uSN5qEaiQLS/Dp5FyL0XWU9HcSzJ3dQZQacthas/m6+ngjG9PZLaKO70V/4R
-	 uETTxj8Xo7MrVKdKIx1YNkkaCgfA4+23+yIF1J5fua2AqBI6ltSP0SskmzFiAhdoSDwjn
-	 7Cq97hJYzWRk+yPqhvlXxHYj6C8AcsaE+QtCm+2crCD1QkwK5HBGLthw7XH/mcrPDeVLM
-	 CrmmQi43d0VmepLaYSmJUgl6VWhYY9CeDfaeB1An8IyHeSpzxpf76uUlgW9QgpB1/Jg==
+	t=1795083999;
+	b=IpdtT22yHrVeL+OdDQYD6ACeJVaPl0WMZ07+jmjl80gu6xG0DfKAIlLbOP2HmXUYQyRL
+	 dnfxiJuXLccrV3Gpgfiv1/9V0/fcW7fLm2XhD5R+m9O7tXwj+FqAMT7gFxZQ+23N4nB6Q
+	 OoEvOARCNc0g3Op/BTFunaitjTjWuMVZPs9b4YQlJNoNxUbk9dM87KfcgtI7bn8EDqbuh
+	 6XP5loa0XAGbno+XzZhMSNZziXbS3oEePll/CBthg1i8xcowuRXg6o8CpJeIvg7x5rT5z
+	 EgzEZrhftLOPPBnEx6AgyGK+bvyBPVffTf8bfCc+l0bD3XuEJOCa4pRqD0M4Daw3BDQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795082264;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=lOEEb3xkcDjySa+zz1fKZtGI0y7c9MFtdo/OrpAicu0=;
-	b=e3758HdQasvmcS4etzbbMVHz5vBSD+nfPtyVlIe6I1xuUGCi4jBIgPNzRzGV2qekxNEz
-	 5+CceS1QO70NZrQOds0o3S57KR184Jf0OxYsz3lCmrrkoRRwN/vivwYOzw13ad0haedQP
-	 h0YAv7A7kyHG/zdxSFdR/8xdShxaHOgD1ppK8wyCgsFacTl3QynXt4yZ6e7om7lhXT/GT
-	 IT+d6pCf0ORY5rbKRAK3Vg017oS/uNl+rKVIBiTIWHzc54svtdmEc9RKC7BQzf8g7Euka
-	 VoPd8u4oPm/B9N8L6j029rnqZGqJdBmialkaaJiMCr7qL8iCbzeqiiNaBJcmORKLggw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795083999;
+	h=DMARC-Filter:X-UUID:X-CTIC-Tags:X-CID-P-RULE:X-CID-O-INFO:X-CID-INFO:
+	 X-CID-META:X-CID-BVR:X-CID-BAS:X-CID-FACTOR:X-CID-RHF:X-UUID:X-User:
+	 Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=oc6G57aJ5jyx8uF5OH6WP1h7cyMUxr7ghlowhU0lmDo=;
+	b=mwLJIL+uhl/usquoeYaNuAk2d1SfQJqYTPgTkPoVPFAGS2zV7x7HP34/bc5y5a+lkPi3
+	 EiS9O3cLHtNUpadlEccEFIfR1PJpFjsv3bh2mSrzjTe1Sh/tyEX2kGzf3Edx6Z+RrswvV
+	 aunZpekmA+5jGuYPV1MbCmGlJJ7unFdWhHskfbdnuxcltyHMkOZ1tybLRhV3NmzF3mHXS
+	 eWgKcATNMTMPxQ5Ij4A3bOu+E9CtVgJwjHUELqPRFWiV/Xny967CDWKPEKUDihu6I85Y3
+	 5ZTREmriJ/AviNB+4uZ7PxqOq1aoceDuDofQIK+8ybEOM88W6Vc4QT/z5j7jxOj7OIA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=B66W5Anj;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=kylinos.cn;
+	spf=pass smtp.mailfrom=kylinos.cn;
+	arc=none smtp.remote-ip=124.126.103.232
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90E6C60A2607;
-	Thu, 19 Nov 2026 09:57:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=B66W5Anj
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA56D1F000C4;
-	Thu, 19 Nov 2026 09:57:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795082264;
-	bh=lOEEb3xkcDjySa+zz1fKZtGI0y7c9MFtdo/OrpAicu0=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=B66W5AnjvREPognEqYec8dNFLWaVQhvqSRV8xcZpHLfbmA6o87wy5yoxNHtnD5M5c
-	 xvmWDrjiy7S/SFDxFB7+nN4VQpcObAFiDZ93Lv5BAFZmfXuzNjTrnwWppgW+HNgLB8
-	 xtI7dfaw4FT/oTvALrf3nmWiR4Ebi5Bm7i/RAaLA4/0zugLVN7uZEv2Pgf2o2e/OL0
-	 R9xTvjG22tTVBMPV/qtb5E7za7OhOA43us9ZhaOyPiI3nh7uXYVq1Ou7d3WFHdrc6U
-	 mFd7dHF7V13lMydBW+P6OzWtsfYvocnv+E/0+zaLQ/pyDGayTq2GkAmHIeeVLqLNYN
-	 tY0qhBBUzXjbA==
-Subject:
- Re: [PATCH net 2/2] selftests: net: cover connected UDP reuseport rescore
-From: netdev-bot+sashiko@kernel.org
-To: zihanx@nebusec.ai
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- bpf@vger.kernel.org, willemdebruijn.kernel@gmail.com, davem@davemloft.net,
- edumazet@kernel.org, pabeni@redhat.com, horms@kernel.org, benh@amazon.com,
- kuniyu@google.com, shuah@kernel.org, vega@nebusec.ai, kuba@kernel.org
-Date: Thu, 19 Nov 2026 09:57:43 +0000
-Message-ID: <179508226333.3136.7134798566838618368@kernel.org>
-In-Reply-To: <4302d941304941ea6059b3d1fa167236635686c6.1794759652.git.zihanx@nebusec.ai>
-References: <4302d941304941ea6059b3d1fa167236635686c6.1794759652.git.zihanx@nebusec.ai>
-X-sashiko-severity: High
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 741AA606A320;
+	Thu, 19 Nov 2026 10:26:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 741AA606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: ad4c1b9ce40311f19a56ed5b684f684d-20261119
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
+	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NAME
+	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, SA_TRUSTED, SA_EXISTED
+	SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
+	CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO
+	GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.19,REQID:ff4b9b0c-43b6-4374-9440-ffd438ac93bd,IP:10,
+	URL:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:35
+X-CID-INFO: VERSION:1.3.19,REQID:ff4b9b0c-43b6-4374-9440-ffd438ac93bd,IP:10,UR
+	L:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:35
+X-CID-META: VersionHash:7db8b62,CLOUDID:52a90a38478e9960218b8d7adf6809df,BulkI
+	D:261119182631G2FE9PWT,BulkQuantity:0,SF:10|38|66|78|102|127|153|865|898,T
+	C:nil,Content:0|15|50|99,EDM:5,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil
+	,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: ad4c1b9ce40311f19a56ed5b684f684d-20261119
+X-User: sunshaojie@kylinos.cn
+Received: from sunshaojie-pc [(114.244.3.119)] by mailgw.kylinos.cn
+	(envelope-from <sunshaojie@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 930805105; Thu, 19 Nov 2026 18:26:26 +0800
+From: Shaojie Sun <sunshaojie@kylinos.cn>
+To: Tejun Heo <tj@kernel.org>,
+	sched-ext@lists.linux.dev,
+	David Vernet <void@manifault.com>,
+	Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>
+Cc: linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Shaojie Sun <sunshaojie@kylinos.cn>
+Subject: [PATCH] tools/sched_ext: Add "arena" BTF type tag to the __arena qualifier
+Date: Thu, 19 Nov 2026 18:26:13 +0800
+Message-ID: <20261119102613.811845-1-sunshaojie@kylinos.cn>
+X-Mailer: git-send-email 2.50.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -64,197 +84,46 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 3 potential
-issue(s) to consider.
+tools/testing/selftests/bpf/libarena marks __arena types with
+btf_type_tag("arena") so that whether a type belongs to an arena can be
+determined from BTF alone:
 
-Critical: 0 · High: 1 · Medium: 1 · Low: 1
+  commit a0fa68d8ce75 ("selftests/bpf: libarena: Add "arena" BTF type
+  tag to __arena qualifier")
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+tools/sched_ext defines the same __arena qualifier but without the
+"arena" BTF type tag.  Add the tag so that both describe arena types the
+same way.
 
-- [High] This patch's parent commit in the series, "udp: fix reuseport
-  rescore fallback", changes the rescore branch in udp4_lib_lookup2()…
-- [Medium] On the default CONFIG_BASE_SMALL=n kernel,
-  test_connected_reuseport_rescore() never has a BPF program select the…
-- [Low] The comment on the second assertion in
-  test_connected_reuseport_rescore()…
+checkpatch reports a false positive on the new definition:
 
---
+  ERROR: Macros with complex values should be enclosed in parentheses
 
-selftests: net: cover connected UDP reuseport rescore
+The macro value is a sequence of declaration attributes, not an
+expression, so it can neither be parenthesized nor wrapped in a
+do-while loop.  The selftests copy of the qualifier has the very same
+definition and triggers the same warning.
 
-This adds a reuseport_bpf selftest in which a constant classic BPF
-program selects a connected UDP socket in a reuseport group. A packet
-from a different peer should go to the unconnected socket, and a packet
-from the connected peer should still reach the connected socket. The
-test runs for both IPv4 and IPv6.
+Signed-off-by: Shaojie Sun <sunshaojie@kylinos.cn>
+---
+ tools/sched_ext/include/scx/bpf_arena_common.bpf.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> diff --git a/tools/testing/selftests/net/reuseport_bpf.c b/tools/testing/selftests/net/reuseport_bpf.c
-> index 12e48b97b8625..fbfe73dce2111 100644
-> --- a/tools/testing/selftests/net/reuseport_bpf.c
-> +++ b/tools/testing/selftests/net/reuseport_bpf.c
-> @@ -303,6 +303,154 @@ static void test_reuseport_cbpf(struct test_params p)
-
-[ ... ]
-
-> +static void test_connected_reuseport_rescore(int family)
-> +{
-
-[ ... ]
-
-> +	good_addr = new_loopback_sockaddr(family, 0);
-> +	if (bind(good_fd, good_addr, sockaddr_size()))
-> +		error(1, errno, "failed to bind good reuseport socket");
-> +	if (getsockname(good_fd, good_addr, (socklen_t []){ sockaddr_size() }))
-> +		error(1, errno, "failed to get reuseport port");
-> +	recv_port = get_sockaddr_port(good_addr);
-> +	if (bind(connected_fd, good_addr, sockaddr_size()))
-> +		error(1, errno, "failed to bind connected reuseport socket");
-> +
-> +	match_src = new_loopback_sockaddr(family, 0);
-
-[ ... ]
-
-> +	peer_addr = new_loopback_sockaddr(family, peer_port);
-> +	if (connect(connected_fd, peer_addr, sockaddr_size()))
-> +		error(1, errno, "failed to connect reuseport socket");
-> +
-> +	/* Bind order makes good_fd index 0 and connected_fd index 1. */
-> +	attach_cbpf_index(good_fd, 1);
-
-[Severity: Medium]
-Is connected_fd still in the reuseport group at this point?
-
-On a default CONFIG_BASE_SMALL=n kernel, connected_fd is bound to
-127.0.0.1 or ::1. So udp_connect() calls udp4_hash4() (udpv6_connect()
-calls udp6_hash4()), and udp_lib_hash4() detaches the socket:
-
-net/ipv4/udp.c:udp_lib_hash4() {
-    ...
-	spin_lock_bh(&hslot->lock);
-	if (rcu_access_pointer(sk->sk_reuseport_cb))
-		reuseport_detach_sock(sk);
-    ...
-}
-
-That leaves good_fd as the only member (num_socks == 1), while has_conns
-stays set from __ip4_datagram_connect(). The cBPF return value of 1 is
-then out of range, and run_bpf_filter() rejects it:
-
-net/core/sock_reuseport.c:run_bpf_filter() {
-    ...
-	if (index >= socks)
-		return NULL;
-    ...
-}
-
-reuseport_select_sock_by_hash() then picks good_fd.
-
-As a result, the mismatch packet reaches good_fd on both the old and the
-new code. A good_fd rescored to an equal score is kept either way. The
-match packet is resolved by udp4_lib_lookup4() or udp6_lib_lookup4() in
-__udp4_lib_lookup() or __udp6_lib_lookup(), before udp*_lib_lookup2()
-runs.
-
-The case the test is named after, a BPF-selected connected socket kept as
-a stale result, only seems to reproduce on CONFIG_BASE_SMALL=y kernels.
-There udp_lib_hash4() is a stub and connected_fd stays at index 1.
-
-Could the setup keep a connected socket in the group on hash4 kernels?
-One option is to bind and connect connected_fd before good_fd binds, so
-that reuseport_add_sock() rebuilds the group around it, and then set
-has_conns. Failing that, could the test at least check the group
-membership it assumes, rather than passing silently?
-
-[ ... ]
-
-> +	/* An unmatched BPF-selected socket must not replace the valid candidate. */
-> +	send_udp_packet(other_send_fd, dst, mismatch_payload);
-> +	expect_udp_socket(epfd, good_fd, connected_fd, good_fd,
-> +			  mismatch_payload);
-
-[Severity: High]
-This is about the parent commit 33c2c891d6d7 ("udp: fix reuseport rescore
-fallback"), but this test can't detect it. That commit changes the
-rescore branch in udp4_lib_lookup2() and udp6_lib_lookup2() to:
-
-		if (need_rescore) {
-			if (score > badness)
-				badness = score;
-			else
-				result = sk;
-			continue;
-		}
-
-Suppose the socket picked by the reuseport program or hash scores the
-same as sk, the socket that set badness. Won't the pick then be dropped
-and sk returned instead?
-
-Before that change, an equal score left result unchanged, so the pick
-was kept. Only a lower score, the stale connected socket case, seems to
-need the fallback.
-
-Unconnected sockets have sk_incoming_cpu == -1 unless SO_INCOMING_CPU is
-set, and only connected sockets update it. So equal scores are the usual
-case.
-
-reuseport_has_conns_set() sets has_conns in __ip4_datagram_connect() and
-__ip6_datagram_connect() when a member bound to a specific address
-connects. The flag is never cleared, and it stays set after
-udp_lib_hash4() detaches the connected socket.
-
-For example, take unconnected A and B plus connected C, all bound to
-127.0.0.1:X, with the BPF program or hash picking B. B rescores equal to
-A, the else branch sets result = A, and A gets every packet from
-unconnected peers.
-
-Does this override hash load balancing and cBPF/eBPF steering in every
-group with has_conns set? One such setup is a QUIC-style server with
-several unconnected workers and per-connection connected sockets on the
-same address and port.
-
-The parent is tagged Cc: stable. Should it keep the pick unless
-score < badness?
-
-This test uses only one unconnected and one connected socket, so it
-can't catch this. Could it add a second unconnected socket and have the
-BPF program select that one?
-
-> +
-> +	/* A matching selected socket must still win the positive rescore path. */
-> +	send_udp_packet(match_send_fd, dst, match_payload);
-> +	expect_udp_socket(epfd, good_fd, connected_fd, connected_fd,
-> +			  match_payload);
-
-[Severity: Low]
-Is this comment accurate? On every config, the match packet seems to be
-decided by something other than the positive rescore branch
-(score > badness).
-
-On default CONFIG_BASE_SMALL=n kernels, connected_fd is in the 4-tuple
-hash. __udp4_lib_lookup() returns it from udp4_lib_lookup4() before
-udp4_lib_lookup2() runs, and IPv6 does the same through
-udp6_lib_lookup4().
-
-On IPv4 with CONFIG_BASE_SMALL=y, connected_fd is bound second, and
-udp_lib_get_port() adds it at the head of hslot2. It is scanned first and
-taken by this shortcut, with no reuseport selection or rescore:
-
-		if (sk->sk_state == TCP_ESTABLISHED) {
-			result = sk;
-			continue;
-		}
-
-On IPv6 with CONFIG_BASE_SMALL=y, the rescore does run. But connected_fd
-outscores good_fd on its own merits. Even if the positive branch fell
-back to result = sk, the next iteration would still pick connected_fd
-through the TCP_ESTABLISHED shortcut.
-
-So can this assertion catch a regression in the badness = score branch?
-
+diff --git a/tools/sched_ext/include/scx/bpf_arena_common.bpf.h b/tools/sched_ext/include/scx/bpf_arena_common.bpf.h
+index 2043d66940ea..fb796b356f86 100644
+--- a/tools/sched_ext/include/scx/bpf_arena_common.bpf.h
++++ b/tools/sched_ext/include/scx/bpf_arena_common.bpf.h
+@@ -16,7 +16,7 @@
+ 
+ #if defined(__BPF_FEATURE_ADDR_SPACE_CAST) && !defined(BPF_ARENA_FORCE_ASM)
+ #ifndef __arena
+-#define __arena __attribute__((address_space(1)))
++#define __arena __attribute__((address_space(1))) __attribute__((btf_type_tag("arena")))
+ #endif
+ #define __arena_global __attribute__((address_space(1)))
+ #define cast_kern(ptr) /* nop for bpf prog. emitted by LLVM */
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/cover.1794759652.git.zihanx%40nebusec.ai
+2.50.1
+
