@@ -1,101 +1,109 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.50
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795046828;
-	b=sqnJm4+ASr8fOUKCiKZ3yfKsMS+P1NXmHRMhXs2Ykv8tQ6C6KsTisXqWVo47rFD0lpoD
-	 MiQiWLKGLk3ogbiR1CMPY7smbD1WlH8rA+05B9GBUDGkKbTUhxwvlxuSM7oxnIDWe66dR
-	 OXNdRjhFJk/6aja9hxC6xh21Bcy8mjXHZTYm0pauG39Gfve0ZWhaSkAfzfYKDtumpcJbf
-	 5wGc+d/3SYLUAev/76aFwuutOBbkjshKOJzsRGg/qTDCDlbqzGKcGdpCHTS7/nRiTRzyt
-	 cD3dO+MGW37RrQPDoAUbavI+5OSHJA4NLrEgocuNxHYL2L+zeaDyTP/H+386ZWx45cA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795046828;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.52
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795048215;
+	b=a2Qkvlw98OqIQyxGDU3EMOzcBZUY2I5bI9Ur0VeuF5aDC+N/aIXVOD9Fh5y3KOSyynQ6
+	 wWU2mJ2eeC8TK0JlzkXLUpNOcw03WnMOOu8hLp+HMRNqjWIxbE4GpQSDdVzdlpzWvjPOr
+	 AbS/LkS/qkSZtNlFasBrnsHmDHUOumZD9cdteYXb3PI5PA44cIf9UJs8ZNfgf2Ecl9BQy
+	 mDPEX4qR9lG3tUo0neYCLItdmyj4kUydWxRGtVkBhTNZqo/TmbK7lb6Nao6sw6x6JR85o
+	 Z10BXP1nnbXi9zIZKeFxe0DJZ4w6qTCvkTOcGE/+jbnFMM26DK/cQGokvxlbiVAat4Q==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795048215;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=EWi8bkR9h3tHXm8j7DxgMM6UdzZIdJvfItB6nSFm4tY=;
-	b=WOjamu4/vJ4PwwSiL1VO2OIEcBiHK8BWI81GsdZ2PgSY+1UDbXVsRdvK/2mGRrOGx20C
-	 3/kJHJbRHYAs9qdKK5s1iJOCVVkv2mp+n/sWmBNMOt8VabXAqv1vsz67Gr+hnE5Ev5n0V
-	 +rqrGhSdDvOuRV2i8hMXDT6GgvC73o/0Nnqihl0fpkA/iI9P4rQNHShvBOu21lEnubsox
-	 utwhY4m7+31S+QNjnkY+FqDB2KiRaXspZxP6h8YTypJ4dewTMyScMvMrqj0ann87nE6K6
-	 CI+UV2hwHxqZn4Bc8exLRm/3GVfl4pIFswd+o6WXv0zU/Rin8+vwW7AIbP4ZhEsEaEg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=6bMRA063A3AaOLf4nBgKeunZjhvNaz9Ho8DKakkM8c8=;
+	b=MhsujvLxrhwcsiDl0PN/iWO2z6GBp4LbNf34u3Ei+qJPOnRYd2LeV3dgd4vJ/bPUX4fW
+	 5xvJBQz2QSJSgPuCDyX709t2hHjbeVQ1wg7TMHl5rkLHBCqPjzWn3Y9a++vRIm9pVsSwd
+	 GmUylx98xiMie24yB00fOmU0Pv6+SG+TKXb1XHK+NthOezmX4lgpUaBmgPPnvL1qbN1fU
+	 grsQdBv5YSUYggFLgl+saB+P+nhb41pgL7VYaf/smC8QvfaVUZK4foGZTkRcTtUkfn6F/
+	 O81fMtTv4Th33P7FvCygEHpY0nyD20TU46iNGjUeTL+84f5LFONGj9sGYH3QgwyRY3Q==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cP9p8f46;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.50
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="UG3Eh/SQ";
+	arc=none smtp.remote-ip=209.85.218.52
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E84EA606A333
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 00:07:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E84EA606A333
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 673AE60A260B
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 00:30:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 673AE60A260B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cP9p8f46
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-492f0a1b685so1152861f8f.0
-        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 16:07:07 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795046826; cv=none;
-        d=google.com; s=arc-20260327;
-        b=HH1LrbQ6GTX99dlMXyBYo0dDe4XyJihFmpcNi87jQhYzGRI84AXnV/iK1GYofbfvB3
-         p995i5Zr6OEDAngcNh6ej0A3St3L2S2bA9oQWLuR45ahCklpefN19aiZC/s6CXdrsHES
-         H54Gt5m+AA6kHGmiS7GEE2B3XMBZfEWTuqKjyU7Ab6Hh2YZWtFKJMS/43yVXv9q4hUtq
-         Sts8Kq2e7GJ8taN/KvpofId41KXhhma+79RYemIUHYBM2XwxYL1lNBEWVmhIcquqyP3n
-         NxlOamSHIeHHX8pYO7CB2rVRMnla7hQouBYK88P7GZKS5tXuqvQ0Hnq7PwgHD1FUGW5c
-         mawg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=EWi8bkR9h3tHXm8j7DxgMM6UdzZIdJvfItB6nSFm4tY=;
-        fh=L5m0YfpZti5yXZXJSICTzxAGVVIOZds/N/bplyjUi1U=;
-        b=oOwNNQv8fCnMiBwZuDT0F9ilO8MNMKKm0OgDRsL5ohVe5FaEp/y62O174a6wBc2jEI
-         I9DkndXgNx3LjhGicgYmPjvYWn5m5JzzwfxgIJZMri4TWnboI2t+EkpKSSywbZmFDCbg
-         Wq4sPO6ClqOf2EZAOHafHN45OdzhuOHuhUG7M5joE0fp0yjsqFDMMOuKsC/5dSNtNrxf
-         v52KrRTXAij9CAo7JzOa7W1O5vIZxvzkHhXj53YK24dq8d7IwL7cFt7uGwP8VUgVvgLB
-         QAXarXmDBJ47TH4JkayJQRxKHXcVkfMyd/oQA+0kSkgn6C3KpThyId7TyToTPOadhO9d
-         JYMw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UG3Eh/SQ
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-c504707acfeso36731166b.1
+        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 16:30:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795046826; x=1795651626; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=EWi8bkR9h3tHXm8j7DxgMM6UdzZIdJvfItB6nSFm4tY=;
-        b=cP9p8f46PWAzvIwsal+Oj/JMpU7RCpSeHhsiOV8GbRs14hBLT3UDPNgmzghKA1f3VO
-         aBvC0BHG76DlFMTY/ByIoGmL9yUqTGSD5OqHLDUxXFKB6drwrKN3PMGhzNzM9azOdsIk
-         71V2W+QrflObnpqCmyAdMmNbQXVvbWurS2v1dCxda2JQ9jkDOeVm1NUmaHzBxI6V4lmy
-         nrlzzyKCpLjUf4FJHGPsgWOwBMpGR1h5PNu0HwDchTqdHngaI8cwf1qo6YmNJ2mMhYoC
-         /EILkvbnJpXvZ1CzlWJy/PL3sJAssRwFETE0NazzRYwTzFYSmLD+GwW4h1tc+hVoo6+1
-         ECvg==
+        d=gmail.com; s=20260707; t=1795048214; x=1795653014; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=6bMRA063A3AaOLf4nBgKeunZjhvNaz9Ho8DKakkM8c8=;
+        b=UG3Eh/SQUGCBKdVHe8THw0oF1joQ0Y2EbkldtFzyon8Ud1qfZ0vF/2rOG1imp6Qfoi
+         3nsJXuyQpPY6pzvC1NxI6mC/O/aTjVMnen4tckd1G1//jAAaTMzyh1dg+48lNNgoxZ7m
+         rTcMET2GtgASluuAmA24qN0JrCrcQ9A0gVze2pVC3lofr5fe7ha+OqUh/nBnpR1DOvXz
+         9nanKjn7kn8z1Z7eFpcAirXsfjLAyftZCmJHa/zHCjnQwfmYBhiCXcj/LPAcuXFA2zx8
+         tmXPC6sqQKl6MbKwMOs0bNaWEd5ysoAkI/KUs5I/lgvxDF4bnA2JXCLz3KAaNb36nEvH
+         IZIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795046826; x=1795651626;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=EWi8bkR9h3tHXm8j7DxgMM6UdzZIdJvfItB6nSFm4tY=;
-        b=rJstqCI7R5XBpybbXlbwNL9ynMILL6NEbl2BQwUIhlhfYlXHpY4YvNWEnG8gRgETtH
-         dJeBIjWzMCdC1sy/hkOV3rFT2KNyWJnxwBfhNCqyNUPWHcsEWGE6XPK2AY2SnodQwcDQ
-         L9fKUAY402nN/vE2soRZn1G0ptBz6HmCvuLie9Zn6ZKXdYdDCr9rbJIkJEsOz7gxte57
-         8trwmeThkys36kU9O3iekri92jmy3EeRUDlx/CtDs4AWrd9cCcNZe18rPNkNRqaNqlhH
-         Scr2KBOEx152oIwGnKvfOEEY/9znWRP4e/ic/ZdKmQR5FN6pm2H71sBFQPqKo11aGTOa
-         f+Ng==
-X-Forwarded-Encrypted: i=1; AL+hErE6MjXu9uoE09FusJajAIxBUqmSx+3IxxoPtstGAm5jSDP6ql6DP7CXF2IurKhyNPssGS8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/NmKCzj+15oTKDeEF0Jc/QhzIEtrrERvDm28BOKE9+9REfhJOP
-	j+faQ6qItI8xV7irWfjGOA1J92hL86T0xFDNnEHmF2vz7HYIm3uwK+9xGpCVIY+/rliECHA++b6
-	JXzr9+zbU+PAc8y3TEhZ8XSNdS+hUTKM=
-X-Gm-Gg: AZFdTZd51qvTgWcLOobsb1oYAHB06cVthlKpFeo7VVry+nX/JuMVfoNbXHayHFzXkea
-	rYFQabzIxvpvJj8+sQ1WP/BA5U+W4z/MX3fFxNmaTVTbz7DGf5QoZ9xO2W+SMze43MzulsKKyGA
-	PjqYgalrZFCi+BqAtohBVSoHkv3qdNBiOGp6UzjDM/6G3F77zvBes5nXoGf5/5ysyIhlxE0GBjk
-	HXlHUey67YqERqtVaPLD7rm4lOJHTOpdRFHeypXdNHA0+ab0DmsxWiMA6J8RO5w9rZ9YZudEzI6
-	XmfIMZor6fk9Sso8CRYvprzY+SAmjoCDRl8vyo24lyBG7Bybf+jAFYVISywMTO+eCfSZx5kYV8x
-	qyNd6m84XNGE5wUsXWHFIgYEy2b2pXh7aiLXzW6jTVWOIN5bXVau/VnVSC11Z73UiDBzsfQ+ckT
-	qd8hx1pW7ZR02tI3cdhHw=
-X-Received: by 2002:a05:6000:26c4:b0:4a4:1267:350a with SMTP id
- ffacd0b85a97d-4a6331c6d5fmr10036299f8f.5.1795046826107; Wed, 18 Nov 2026
- 16:07:06 -0800 (PST)
+        d=1e100.net; s=20260707; t=1795048214; x=1795653014;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=6bMRA063A3AaOLf4nBgKeunZjhvNaz9Ho8DKakkM8c8=;
+        b=foQYwoEXjO3zwfYMNW3TrtZOsJmBLrAv+3SePP4DE7KQEnGjAgPy2EaMDEHuBjiz0u
+         i/YkLq4sx7+fvgUeWTB8ZVggjQBhE1fbWDrwAQFS5h4qQQVrESznxddVdoRoMH/XoN8t
+         deNvYXsSyxuadCU5CPFqDFIY9cL5Uyb/dviKiJ9LTfsMtToUHGu9dKyo+ZQI+loJgRJN
+         MbCoOfjmA6xyTKqeucikyS0kpxWSqEvhkrR7YglgWC4btug0Tm/vfaQRA4ugU6RtxzkE
+         56UHTsI/UyL4HuR9CPblSS9uOkyISQU97krgSnqnM261S46JlQGT5e1gNtbu1XfnBraw
+         eREA==
+X-Forwarded-Encrypted: i=1; AL+hErGliHfsHiM6lEzIGUk5aGnNdzi9kJs3sZFEcEUD5YE6FTdj73uv1FaLvsylbb6kYhDR3Kw=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/RfZbXV0QdDIH1Xj+Gzw9GbpftIYLd2JDvu8akDhFjKNhBnG2y
+	70uH72q0Yd245vJQPeJF9+Ajrv4sFPo9XJSIARdkRgrRLVXVXQ+JPPu3
+X-Gm-Gg: AYBFou06xwV6Ip+vdAq5yNs8eM2w7+AHHB1pkRAIIaH8zFxWAj4OtaT11YlCbSTeRmG
+	Te0NtpZ/LyPHpo09DeP8IHEFyFXxteoCZSaLBwm0+i+67CI8D8Bw3mYBmYZaQrNIV81UwSgikRE
+	U/hwvWjJ6AsT/c3SV3qkosBfXdZE5sco/kIuaTAp5bVyX4JH74QvurzkebI/CD/Y5mNFr9fhipW
+	GnY3qf5fnWtULpv3HRoNfwhYLwR7Fp0xaS58MlQ0EVlFRIJJqXPl1cfBFskV6a4fB88gZ2FqCvf
+	Mujv7H0MZKI6sCCEhVBxtIF9t9VI+ficrc8LG+r6+jH1QWciShkEHJBkbs4cHHktWKTGMDYzh/l
+	meU9cprIP1VK/3qOp3KJMFB3T0/vDZAeo4gB7AFabTU7xnUWzFCqumHJ5egwtG8EYEY/9kVImJo
+	L11M/P4kURIne/iYEjH7qzHVQqV/JIyxc/qZzYB7pud3EyNLgffuXi3IJJAy5gV0/WUhxk2FoVz
+	SZIelUnnHNuXXW2FeXsf2NUM/+psA7isg9s76fWLDjrBE7Z6iCMymR37B7FmRXOh0Z2zrGA3Cqx
+	PmmygNPTp/0AKSYHE1v9HKi5O5bZpFpugNeXcXe50Q9htH1ip81A9A==
+X-Received: by 2002:aa7:d152:0:b0:6b8:7d2e:838 with SMTP id 4fb4d7f45d1cf-6b887c69449mr3774897a12.1.1795048213632;
+        Wed, 18 Nov 2026 16:30:13 -0800 (PST)
+Received: from Nuel20.localdomain ([105.112.208.161])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b88a001123sm1729744a12.21.2026.11.18.16.30.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Nov 2026 16:30:12 -0800 (PST)
+From: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
+To: tianyi@cloudflare.com,
+	hangbin.liu@linux.dev
+Cc: kuba@kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	davem@davemloft.net,
+	edumazet@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	shuah@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	skhan@linuxfoundation.org,
+	Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
+Subject: [PATCH net v4 0/3] selftests: net: veth: propagate check failures to exit status
+Date: Thu, 19 Nov 2026 01:29:59 +0100
+Message-ID: <20261119003003.40482-1-emmaonana18@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <CAG4wq-d_30-B4wQZu48ZQXAORM4QxRqPfmYsmoHS0hiYp1EtTA@mail.gmail.com>
+References: <CAG4wq-d_30-B4wQZu48ZQXAORM4QxRqPfmYsmoHS0hiYp1EtTA@mail.gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,88 +113,45 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261114001846.873499-1-andrii@kernel.org> <20261114001846.873499-2-andrii@kernel.org>
- <avxJjTWOp250aDYC@willie-the-truck>
-In-Reply-To: <avxJjTWOp250aDYC@willie-the-truck>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 18 Nov 2026 16:06:55 -0800
-X-Gm-Features: Aa3M54ohy-eIhH22eDuxovMjFXOGOFVwvlzmEgw11hhd4u67Vz7wgMvDgsfWW0g
-Message-ID: <CAEf4BzY7bs2y70tb7cSFrWiTZuhNkfqqVOiTL2WnawMxCFnn3A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/3] arm64: perf: Don't report the caller twice
- in caller-regs callchains
-To: Will Deacon <will@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com, 
-	mark.rutland@arm.com, linux-perf-users@vger.kernel.org, peterz@infradead.org, 
-	jolsa@kernel.org, rostedt@goodmis.org, ardb@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 17, 2026 at 4:33=E2=80=AFAM Will Deacon <will@kernel.org> wrote=
-:
->
-> On Fri, Nov 13, 2026 at 04:18:44PM -0800, Andrii Nakryiko wrote:
-> > perf_arch_fetch_caller_regs() sets regs->pc to the return address of
-> > the function it is used in (CALLER_ADDR0), but points regs->regs[29]
-> > at that function's own frame record, whose saved LR is that same
-> > return address. perf_callchain_kernel() reports regs->pc and then
-> > unwinds from the frame record at x29, so the caller shows up twice at
-> > the top of every kernel callchain built from perf_fetch_caller_regs():
-> > tracepoint events, software events emitted by __perf_sw_event_sched()
-> > (context-switches, cgroup-switches, cpu-migrations), and
-> > bpf_get_stack() and bpf_get_stackid() in tracepoint, raw tracepoint,
-> > tp_btf and fentry/fexit programs. E.g., for a tracepoint program
-> > attached to sched_process_fork:
-> >
-> >   __traceiter_sched_process_fork+0x44
-> >   __traceiter_sched_process_fork+0x44
-> >   kernel_clone+0x250
-> >   ...
-> >
-> > Use __builtin_frame_address(1), the caller's frame record, the same
-> > way kunwind_init_from_caller() does, so that pc and x29 describe the
-> > same frame.
-> >
-> > x86 had the same duplicate entry, fixed by commit 6d08340d1e35
-> > ("Revert "perf/x86: Always store regs->ip in perf_callchain_kernel()"")=
-.
-> >
-> > Fixes: 5b09a094f2fb ("arm64: perf: Fix callchain parse error with kerne=
-l tracepoint events")
-> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> > ---
-> >  arch/arm64/include/asm/perf_event.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/arch/arm64/include/asm/perf_event.h b/arch/arm64/include/a=
-sm/perf_event.h
-> > index ee45b4e77347..13efb46f0fe8 100644
-> > --- a/arch/arm64/include/asm/perf_event.h
-> > +++ b/arch/arm64/include/asm/perf_event.h
-> > @@ -15,7 +15,7 @@
-> >
-> >  #define perf_arch_fetch_caller_regs(regs, __ip) { \
-> >       (regs)->pc =3D (__ip);    \
-> > -     (regs)->regs[29] =3D (unsigned long) __builtin_frame_address(0); =
-\
-> > +     (regs)->regs[29] =3D (unsigned long) __builtin_frame_address(1); =
-\
-> >       (regs)->sp =3D current_stack_pointer; \
-> >       (regs)->pstate =3D PSR_MODE_EL1h; \
->
-> This doesn't look right to me. Presumably, the compiler is now going to
-> emit the first step of the unwind, but it has no idea about the different
-> stacks that we have, the meta frames or the invariants that the walker
-> in arch/arm64/kernel/stacktrace.c takes care of.
->
-> So we should continue to unwind from the current frame, but then perf
-> can discard the duplicate leaf entry if we don't want it. After all,
-> it's perf that's passing in CALLER_ADDR0 for __ip.
+Four checks in tools/testing/selftests/net/veth.sh report failures
+without setting ret, allowing the script to exit 0 even when a check
+fails. Set ret=1 in chk_channels() and the three "bad setting"
+negative tests identified by Tianyi during review of v2.
 
-Thanks for feedback! I just sent v2 which follows (conceptually) what
-x86-64 does, please take a look when you get a chance. I'm not sure
-about PSR_MODE_EL1h vs PSR_MODE_EL1t hackery, but that's what my AI
-suggested and it promised it's fine :)
+Patch 3 fixes the invalid TX channel test, which used nproc + 1
+to determine an out-of-range value. However, nproc can be lower
+than num_possible_cpus() when CPU affinity or cpusets restrict
+a process, meaning the kernel may accept the requested queue count.
+This could cause false failures on a correctly functioning
+kernel once earlier patches propagated test failures.
 
->
-> Will
+Use the kernel-reported max_tx + 1 instead, ensuring the
+attempted value always exceeds the device's supported maximum.
+Spotted by Sashiko AI review of v2.
+
+Changes v3 -> v4:
+- Patch 2: use if/else instead of "&& { ...; } ||" chains, keep
+  lines within 80 columns (thanks Tianyi for the review).
+- Add patch 3 deriving the invalid tx value from the kernel maximum.
+
+Changes v2 -> v3:
+- Add Tianyi Gao's Tested-by to patch 1 (thanks!).
+- Add patch 2 fixing the remaining three checks.
+
+Changes v1 -> v2:
+- Correct Fixes tag to 1ec2230fc721.
+
+Omokefe Emmanuel Onanaroghene (3):
+  selftests: net: veth: propagate channel-check failures to exit status
+  selftests: net: veth: propagate bad-settings check failures to exit
+    status
+  selftests: net: veth: derive invalid-tx test value from kernel max
+
+ tools/testing/selftests/net/veth.sh | 31 +++++++++++++++++++++--------
+ 1 file changed, 23 insertions(+), 8 deletions(-)
+
+-- 
+2.43.0
+
