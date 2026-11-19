@@ -1,55 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.180
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795089147;
-	b=TdVAY1t7kyY0c3Aa05cserxJiiHAUg0jytkJgd9C45jyu/3vQc6vELkGdAOugQY3BmLK
-	 7rIFXMdDADlu0kbhXDdw3Y4P5BuIo2fiuhF17Q2+BfjmkOCixtaFj3pPCfKbMCL3Rf4Xm
-	 vUvFgOapqXxc256xe3LLs4VVqWDcg3ots+Ivh+pEU0pOstD29C1SxcEojUQh7Iq60Nxyz
-	 ildqnZamJHsKrFEmOQVXfJ+21F2LodQHmnDARos3VStx1mCkHxwI12P8lIUCAYJxS6OyE
-	 GeVO9NoKENvhqgZ+V5eShY3Q3t6OvdLHFrBE22vjpo7mnQiZ+Ilf1OqVMQw2E02QLLg==
+	t=1795089619;
+	b=UDZiASBiQrKgaexKz407S2AL7CzMZ2lR1azBWUS03k6NcwNkQgP7XAabWJACtakvSO1W
+	 CUTgrO/IkraxSS+V2Os95dHd4AMXws5fI7Q2/QkE+5QlCn4c5KmTMkuVdlfub50ROzA94
+	 aCTmvGlsep2x+t3nAF+XJQEobDds5RNL/tUnz/nO1ZX1+0L/r5P9ysUJ3x99oJ2cqXma/
+	 3da5jZ2GVzf0cYxgfaWkzogXiK54hQP/cdZGgJ9cINxng1lBjGwA52FrtfYN5kUcmsB3q
+	 8TlbKrdKFNgFg3GIjps0CT7Ssel3wVrq3c3Qzz74L+2VxAFq/RcWdtPuLWUyz0TK+CQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795089147;
-	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=b2nlTxRHLxUzz9SMo1MtlIFyMY2HxFy4FtJp9Rq7rss=;
-	b=frLc80k+Z2ErZmtLImJ87I5jAnjTAbwO5tsdp1EZk1rfei/UJ7RPXuTOcDCM9LtKVttd
-	 9HV4LxgXSfv71R6KfKNhcnvRGwU/4gWWoR5h5G2CugNcz3hUG4G1Ji1t1l12LstpOTX71
-	 NyqDfinEan3a41tzlyZbQ833QtB8+ebDrENmSvQ8b7PoYEC9i4YRAOP7kNq2bx9nmUNZX
-	 3VbIMDt3Ia7pMT5Af+t3koap9fMVETwPV022n+VwZc0NU8izxw4dHnNjqCJvY4YuwWMN6
-	 1soycuuCgJIxaf+EQfEstJsCdKW0yBXK92By8mD+lGrXwxpwpqMuadlnvtcH7sAbOLg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795089619;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=9gIVlXgPEmkZGmA453gdpvq+MACAnZz6AjvCWRUAbDQ=;
+	b=Xje/dfZL0lx4Y3/ilLUm1oIasNV4Mzrvp3IzqwUBmDMDIWRMG5MT29D+Xoe1Dia41/Hz
+	 MJQbGqUqBv+UyuKFMTrwTd//xLqS4ri+raORF8ZFpVtNLuF+dHe/OdSnVXY6JpxugQwJl
+	 FGF2Vk42f1FeLvsDq+FQFW2kpnVDncw0fJok+mO7BekuwdUHhrZ25xYY83JnDB24HUkhK
+	 Ha5qK1J6pX66l5NiKJ2WFMkUxF1bS3c0KNWlhT9ZEOQOpFj4cdKOZwvJFIzBNcIE01VCV
+	 PFmLBJ5M3HXgxxaUtD60BFjLGegzXT4AGtBHPkfjCWWEP62LPw9GP72nEXqCVNLlQGQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fMzC65+w;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="MTPwBz/J";
+	arc=none smtp.remote-ip=209.85.210.180
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E68B606A32A
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 11:52:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6369B606A325
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 12:00:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6369B606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fMzC65+w
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 099361F000C5
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 11:52:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795089147;
-	bh=b2nlTxRHLxUzz9SMo1MtlIFyMY2HxFy4FtJp9Rq7rss=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=fMzC65+wDLVYxkRWtrrel5Gz3z1gdzPEBWCD79LTgUuDlvj3XkVjLJNZ8lupjHd5h
-	 Ft2FkxSQL+6qxq1cCIErKl3YYlo6zpykWHZlFrW9UA68ou1WlxWiTu9/ndxZoS6bl2
-	 RoJUPVXScjPTUm1EZvSPLMRyI1TR71y6cGjBwOBdsCmk8yIEr3i26fPdXIur5HsA14
-	 vLB3n8mYYVxUgKPNzLaFfAkw4HIHnuR848hQ7ixWaSkyL5NwvIPNXi8m7s5e6jxVPl
-	 zpIE9DiRnYJXOZDcPVMtKAAnxJ+JOMOj2I6LMZXtL9oaM63tqfsiEf4Csa1iQ+vyh1
-	 6Iji3qMKOPeUA==
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-6b86fcbd647so1672171a12.1
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 03:52:26 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AL+hErEIo1OpN+2EUH8N1i+ldaW/85iJ0kGGw/ZD5OcASsuHA9C0C0bmo11f1PoP5rwYqli8FWs=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+J4RRupaTcm2cQKcu6qvd2I3n5lExwa666n1/PQ/CJzE/sR6HD
-	zN9+MN5JfhUyOt481d+lxM0Ep8SV3rkPTfCiT60BDt5N+8S6H2odR+UHZl1ih3LIsnjAayfRa54
-	S3fESs3U48lkD6P3K9H4Ecd7vhHUqu/Q=
-X-Received: by 2002:a05:6402:3642:b0:6b8:b0d6:53e4 with SMTP id
- 4fb4d7f45d1cf-6ba1f76a935mr1052480a12.3.1795089145657; Thu, 19 Nov 2026
- 03:52:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MTPwBz/J
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-8a070755c8cso1301566b3a.0
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 04:00:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795089618; x=1795694418; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=9gIVlXgPEmkZGmA453gdpvq+MACAnZz6AjvCWRUAbDQ=;
+        b=MTPwBz/JY27HN3sgRWUZI0tlkBcWXxf7M7RAXN68cgdg1Am8p7kKnqmSmbk9i3paIX
+         nxuGPCiyFzKnbLXHTcpkZL9Jl05xOmooAxQ4ClctRHIr5+ntBgvY4iRhOPPxeMYmnypY
+         1SPlY1JPWNh72h0Le+gSG7pxiVUY6/xphqQkwjAhgBiRQ9xfq4MSEwQT4mtoTarBFDIM
+         pA2OfASffwaYexAEuos0xfq9yHeB+zfhsnIZivL5ud55stPCuYqdAMDCI4dK5GuB2BAI
+         rsecijok4RzXP6n9QVIouU2C2dsMFACTuLaYblKxFjsHNOIT7edbPt+7lOVID009Ys9C
+         aFiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795089618; x=1795694418;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=9gIVlXgPEmkZGmA453gdpvq+MACAnZz6AjvCWRUAbDQ=;
+        b=Q+SfmsU3rbY1zY42WwyZxX0UfM3DoL/yIOeQSJ0oNuiXyT3LaD/gdXOR7S1fN02doP
+         Q6+we8loKfcGqnebzGUaZMv+Y52dobMaU6tHBMOfKzuHmbSxxPHIeusJ9EX5eWSQ1FP8
+         v4wKX0c8I+CAF3wwx9APpaS3BJOMUELjEZGVU5itlZlEihDOc0zazyEapzQ3iZQgE1pi
+         W8Ou6GEONvkfTqLndrpviq2SPc5LY9JCUFQV4q+xQ/xbdy+1ly3FOD6KkAspMKD52HB4
+         SFDWqHR2bhHbnKXIjj/jsXsN4/ta5t7j7lVWbq5GyjpujrE/ZfJKuoZcF6sOVZRF2qZq
+         Hg0A==
+X-Forwarded-Encrypted: i=1; AL+hErHCiftVvtOUm+L/F4rKcL04Ml1tuP2YFODZ0eul6uznFG5T6coUjjcN4oA5f/n+wH60DFw=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8Hp3CgG5I9+FDxksOJuXATPXCWnlCoxix0vCzZrCGePs0G19tS
+	8+xlwBQJSGvrfHLmr9GHozXm0XGVFeUXY6o9aQhOEQeK9T2SNk99SS+csvz6LA==
+X-Gm-Gg: AYBFou3ZCSF8xzGVXVgWh2JPpJc6hADQCaD1988DX/mJHMUa8bAeyobzTnLCGiBBpJZ
+	eF9O1sqONzWkS+YrYawJiwlq+IpEBPD9LTcVDvwEOGaAmZ0EgqsFsV9iup9xEok+1VivEiKbb8p
+	C7thbdR4qDK3TEEgM/89XyLW+UmokpNhkP4I0wrNK62mpvnT0+lpx629KMIt6Udag+syQBIjnXf
+	vRzYhN4cm1slCGzZjdIqgoZ1unuHbNCzbs4HspyJ9tT1imh0p1VQoLrdO+enAI9JjT5HHbwyG4Y
+	913dLXV6UalN0gpkT0X0GwWANzQoVIu+9kpb4ANMkouRRy5mvMBv6rvlLGIKsZ3Psshi0Hxk/8b
+	eMKSafC67gF74MDVkWg+kSspHCJTSvsnnUKWgRGGFlOiFDtpwbUH5d0iQ/jkAXp3kxsoBOS7WXV
+	Vn5wkEb+uy65TUnBxAFSkNaKwIrHwhZELr6Rw1MUhH+GmJuTjBUHIUNRuv0zLUadmFxKo3KIctP
+	ltWJ0F9X5jCEJm4OvbwmPT4VDub0XkCH7B0hLAjl0IleymvhIp04xaabXkIxvFatfxK7bxPbUqk
+	qbsLBAxzsrBGHm/VD20wWBaoI1OSzj1R5UQJn7oqiofqTk15+OWyu1A9lPxwS9No
+X-Received: by 2002:a05:6a00:2d86:b0:878:3538:8f7a with SMTP id d2e1a72fcca58-8c5d51a37ccmr4621024b3a.40.1795089617602;
+        Thu, 19 Nov 2026 04:00:17 -0800 (PST)
+Received: from cps-manycore-1 ([147.46.174.222])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c5cb93d04bsm2665088b3a.49.2026.11.19.04.00.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Nov 2026 04:00:17 -0800 (PST)
+From: Sechang Lim <rhkrqnwk98@gmail.com>
+To: asml.silence@gmail.com,
+	axboe@kernel.dk
+Cc: io-uring@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] io_uring/bpf-ops: validate loop_step before registration
+Date: Thu, 19 Nov 2026 11:59:29 +0000
+Message-ID: <20261119115942.3613868-1-rhkrqnwk98@gmail.com>
+X-Mailer: git-send-email 2.56.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,63 +96,51 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261118071444.10258-1-dongtai.guo@linux.dev> <CAAhV-H4TNuXk60LyzZhFwQTfNtdzLEFQTwS84u3ZMQ6b=8S0NA@mail.gmail.com>
- <0f79389b-ceb3-8c2f-16bb-1111ac40fc43@loongson.cn>
-In-Reply-To: <0f79389b-ceb3-8c2f-16bb-1111ac40fc43@loongson.cn>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Thu, 19 Nov 2026 19:52:10 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5F-T1QqnKaz9GY12qmx-NMFQxw5VOPvkkhWee9tiJBkQ@mail.gmail.com>
-X-Gm-Features: AclHuK_c3lTQadkoQKEF9eyTGKOydeIat8h__CjivNc1X8M3Ip0VknAEs3E4RMY
-Message-ID: <CAAhV-H5F-T1QqnKaz9GY12qmx-NMFQxw5VOPvkkhWee9tiJBkQ@mail.gmail.com>
-Subject: Re: [PATCH v2] LoongArch: BPF: Fix the offset of stptr.w and stptr.d stores
-To: Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: George Guo <dongtai.guo@linux.dev>, hengqi.chen@gmail.com, guodongtai@kylinos.cn, 
-	bpf@vger.kernel.org, loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Nov 19, 2026 at 9:11=E2=80=AFAM Tiezhu Yang <yangtiezhu@loongson.cn=
-> wrote:
->
-> On 11/18/26 7:59 PM, Huacai Chen wrote:
-> > On Wed, Nov 18, 2026 at 3:15=E2=80=AFPM George Guo <dongtai.guo@linux.d=
-ev> wrote:
-> >>
-> >> From: George Guo <guodongtai@kylinos.cn>
-> >>
-> >> When testing bpf selftests "jit_insns" and "jit_insns_blinded", the
-> >> "ldst_offsets" subtest fails for word and doubleword stores:
->
-> ...
->
-> >>   #define is_signed_imm12(val)   signed_imm_check(val, 12)
-> >> -#define is_signed_imm14(val)   signed_imm_check(val, 14)
-> > Is there instructions really take a 14bit imm (not something like
-> > ldptr.d/stptr.d)?
-> > If yes, I suggest keeping is_signed_imm14() because maybe we need it in=
- future.
->
-> According to the LoongArch Reference Manual, there are 8 instructions
-> in total that take a 14-bit signed immediate (si14):
-> ldptr.{w,d}, stptr.{w,d}, ll.{w,d}, and sc.{w,d}.
->
-> All of them implicitly shift si14 left by 2 bits when calculating the
-> virtual address (vaddr =3D GR[rj] + SignExtend({si14, 2'b0}, GRLEN)),
-> so none of them take an unscaled 14-bit immediate directly.
->
-> In the JIT, byte offsets for all these instructions should be validated
-> with is_aligned_signed_imm16() and encoded as (off >> 2). Removing the
-> unused is_signed_imm14() macro also helps prevent similar misuse in the
-> future.
->
-> So there is no need to keep is_signed_imm14(), and v2 should be good
-> to go.
-OK, make sense, queued.
+A struct_ops map with only ring_fd set leaves loop_step NULL. The
+struct_ops update path skips a zero program fd, and bpf_ring_ops does
+not validate the completed value. Without BPF_F_LINK, the update then
+calls bpf_io_reg(), where io_install_bpf() triggers a kernel warning
+before returning -EINVAL. With BPF_F_LINK, the warning occurs when the
+link is created.
 
-Huacai
+Validate loop_step before either registration path. Reject an incomplete
+value with -EINVAL so malformed userspace input cannot trigger the
+warning.
 
->
-> Thanks,
-> Tiezhu
->
+Fixes: 98f37634b12b ("io_uring/bpf-ops: implement bpf ops registration")
+Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+---
+ io_uring/bpf-ops.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/io_uring/bpf-ops.c b/io_uring/bpf-ops.c
+index 6c2a587fb1bf..dfa93144b090 100644
+--- a/io_uring/bpf-ops.c
++++ b/io_uring/bpf-ops.c
+@@ -157,6 +157,13 @@ static int bpf_io_check_member(const struct btf_type *t,
+ 	return 0;
+ }
+ 
++static int bpf_io_validate(void *kdata)
++{
++	const struct io_uring_bpf_ops *ops = kdata;
++
++	return ops->loop_step ? 0 : -EINVAL;
++}
++
+ static int bpf_io_init_member(const struct btf_type *t,
+ 			       const struct btf_member *member,
+ 			       void *kdata, const void *udata)
+@@ -269,6 +276,7 @@ static struct bpf_struct_ops bpf_ring_ops = {
+ 	.check_member = bpf_io_check_member,
+ 	.init_member = bpf_io_init_member,
+ 	.init = bpf_io_init,
++	.validate = bpf_io_validate,
+ 	.cfi_stubs = &io_bpf_ops_stubs,
+ 	.name = "io_uring_bpf_ops",
+ 	.owner = THIS_MODULE,
+-- 
+2.43.0
+
