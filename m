@@ -1,98 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.53
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795087319;
-	b=buIdr3VpPhD+qE2keNltD5AdIycF0mD67PR5e8fUjlrrWMVEIeG0cgxPce6BD5kgh+C6
-	 YtUX5QLtuE+OJOJZWUQvMjozYQozWiqY1hnO7yAeqdaN2AP0DxtkXtNaYks5p5A7bj7Bw
-	 rkUV6LIvhAdECaXbyDoWKKIVZ5IdzqkSyDaBe62BCeW/DwZ5qoYZknc7fFnNHxchW2ugz
-	 MhoeKudzh9d8hX99Eh/9n0nO/Gq6ievay4w4Ab9xQn08NzxHXhq1JR7XDIfkOe6AmicPe
-	 GxSmEg5jLMCsW3e0+L5nWpWKELv03IhWqhBpJXcmHX+jmKcoWXuUrxkYYI8+uwsB0jw==
+	t=1795087399;
+	b=4t4a0Yb7UbgzS/UAgLi6NGJGeU1icD9uheeejujjyd0nWoOSi0MGrG1lVAtzXi81PQWN
+	 YftYlL/doBBdq4+Qu7eqh38TL4o/9hk8rGnps8TDC96Mr87uHfJnAstTal/HxQw4tJlSA
+	 kQcRlQTzcNEw0EgP7ZR4Tf6vUP2B3iQE/jZ6rlGfKyzITsofk9doy3B9EIC0MaHZMygN0
+	 ZgjaoJjHEgw1BIg3JS8eg2wBv7ExExwxv3avtJkkFVQqQwRbg+5pzmVdJHGKHChIAJ3Zr
+	 zgpfGaqYfgV0FgGqcVg3Yki71t86haQnXGYvRhd833pzWEKgfYgun9tmBErhoGyQdrQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795087319;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795087399;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
 	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
 	 Content-Type;
-	bh=e7QbyMAcdTPueERTIe2W8rC7FaSuEijLUH0VfDQBIQI=;
-	b=sPSol3fckOhnGrJFV/ZNr5xUNjwTZCQjtuGpNeFVNh6/MFQtjlJ+O6Sd6oYTa6ofs0+b
-	 /g8xnXBIVycD1nFhYrKt4s+aSkb29SrbMpfjhVYydS9kqx8CS9bpdkpKtRpzjO3KGIXHY
-	 eur2lIhmvnXfvU8J5c9tybNROArgCHu5VeCBciqBkBUB0rnpO6wrP70I0r3wEBn4jzD+k
-	 238NBMHWMySwhjUPz20njd2UgYHPawKGO+mhvVDmEGzCnPVbfzASmtgQ4soJ01orDJeAl
-	 wII4Z/iuN/aCvBwLJ+x4M3g7BUPXRZy1tFaueZQzzdPD9NoPuegopAtGJompUjJXuZA==
+	bh=CNGbqnTZ1olkQY7Z2o/JWgpP8+K0KLvFPBkRnaSJ2gU=;
+	b=BO289QIlBK2R7VKJ33Fl0s2cG0h/mopnfvoW0l2LFFsWOOQsEp5e0Fs9q45BHVw96DuT
+	 wNFKlsVjemZLLYiroSYehVCZe8B6l7s21S7oewq2oeBQ2XtWDKWUoRbvO5uVtbK3jBPnk
+	 Xbgv9qqwSrbEJTte3lSlKDDY3Iw5zY+x8IK7aJUr6J9CrJQUKIifkWxg9321zvO1sxGiW
+	 hGUJd6rSUmw2gF32MZaEuc1RvvWm2zG6cyIduIGnCZnomVgmLAngDujTAQVxPd2h1gqKu
+	 TLOraMPp30EROSHsziSQgZw2LdzhOGYxEV1vxUDIidS81iyFIOuMcTfWiAZIC2X7yaA==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=sentinelone.com;
 	spf=pass smtp.mailfrom=sentinelone.com;
-	dkim=pass header.d=sentinelone.com header.i=@sentinelone.com header.a=rsa-sha256 header.s=google header.b=Z4mols3g;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.46
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	dkim=pass header.d=sentinelone.com header.i=@sentinelone.com header.a=rsa-sha256 header.s=google header.b=l37DDBeX;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.53
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0580E606A332
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 11:21:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0580E606A332
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B82F606A320
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 11:23:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7B82F606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sentinelone.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sentinelone.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sentinelone.com header.i=@sentinelone.com header.a=rsa-sha256 header.s=google header.b=Z4mols3g
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3ac847f9d78so170398a91.1
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 03:21:58 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795087318; cv=none;
+	dkim=pass (2048-bit key) header.d=sentinelone.com header.i=@sentinelone.com header.a=rsa-sha256 header.s=google header.b=l37DDBeX
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-3ac847f9d78so170559a91.1
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 03:23:19 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795087399; cv=none;
         d=google.com; s=arc-20260327;
-        b=qTRXZo8tCv3InLD7+Bgq4DanZ7/IN7NC1D6rlAd/LKjgUmWdDrVIJyOMeJXKwa79st
-         X/fX72yypJHY1KFRwQnqzKpqgCGJFCmyBxAOXASQa+gLMHfRiMRXydYQkkgk2ExP64jd
-         W+1ScFsdaSmDFTK5WKK1KD9TWljVFy+NfYq/oL6CN4Uph2WqjgXp+8qeviaDWQ9GXuWT
-         jd4DVYzc4BYqH2uerzxQ2HiK1mUycp5vtCPeNax7bdPIFSDAmi3tUnerDWCl714hDRZa
-         SaqHYXnnaQdzvXlGTVV+9C4/caQ1Ayn5g7UGeG2+JrQClPjreIWklEztFnsbgKKOyWfx
-         MNIg==
+        b=PB9R1MpYzPvgXZ5sgETT92MWfg9devy3SwK5O5r7W6vrSkbVLwQeaf097BtcYQ2/ZO
+         eaKES27gAkTSPd98bXUatjmDIAVp29n/KZhdZ6PlCktDzZudmdNWc901It+ZfNg+tSlW
+         JdqKWS7i8sUIQcBqsJ9Cp3pxOpvFBd4xbpEglD1UlzxtVztE6s20sV7oaoyNObeI/IWh
+         mtu5zhpZopbHFV68HfWE8G2B/WpqzcmsT2idvhNiGcicLMaljWKj+EoS6odpje/WPiKP
+         QfUrDgruwnbeLAKaclcYP4VchWXThvkOuxtVGdackYU78yU0lCdHVE1AiuqbpojF8ctj
+         qfww==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:dkim-signature;
-        bh=e7QbyMAcdTPueERTIe2W8rC7FaSuEijLUH0VfDQBIQI=;
+        bh=CNGbqnTZ1olkQY7Z2o/JWgpP8+K0KLvFPBkRnaSJ2gU=;
         fh=SP9MQuLGLKwYAkAMPXZZy/g7jD0jDxqmFswXJ38n1oQ=;
-        b=ZK1AxlMv4L3NMBqyLUe25GBOek95+c0sZ/rwZrdTaLWLwsgznMNmPGf/AYmpE7ZYHo
-         aMt8cNwBmED6wbhiOZe2bS/xa4neJItvz0i+Cj6ki+cq2S+sCJQNNRhp5EX5skqaWlob
-         LEO3xGSIZcb9J4mk9t8wyt412RU1jHtcPTnAADsLjsxTXDOX+Djswk7+QmLwf6kSgNcl
-         u1ZvF0cJ7emWIjI7ve/JZNVYQZzlr+80Sl6CPH1sRzVBrZD2zPs50onWZ8Agkcgfb4d7
-         Z7klMixMK1+IOWbuH9+wi2ogxCTp71jPjRrfufd6jXCUpAbD6Ia4Mrbpd+WnJ8e2qB/k
-         pzRQ==;
+        b=RcXgeoUk5mqgEWFpgp/ET9Lp/yteEGNA7HKyHe2u57pP6zGzpIw4W61qhbh3M6nG5k
+         n/rnHcPD2iG2Jtl8alvV9nntagAUZ27uqpJcoV+Enpv1Lst2BnwEJvBbf/FrqD3qSoBA
+         dAn49fu9MUjPSFcvz7pRLTqMABAAnITLmH4jmAaVNDvRtAuRlEIMLKb7YiDB0E+pR35E
+         D6lPxisJFt+5x4l1OISmodKv8qFXDit5kRSsuJ/BeM84Xf1CurQzESbeKOHpUCAD27g+
+         v9+10XRRAXbeWtD3dEnPFbOIagxV5cCU+1157H/UJZL0WHCZqv1vI1n4sSrou+o8aFm8
+         KcPA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sentinelone.com; s=google; t=1795087318; x=1795692118; darn=vger.kernel.org;
+        d=sentinelone.com; s=google; t=1795087399; x=1795692199; darn=vger.kernel.org;
         h=content-type:cc:to:subject:message-id:date:from:in-reply-to
          :references:mime-version:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=e7QbyMAcdTPueERTIe2W8rC7FaSuEijLUH0VfDQBIQI=;
-        b=Z4mols3gn9bqimDi52cguSw/2T0WTaWDVxdxz6zcyZXyPgg4sGM6Q+/r5Aj7Rzapp4
-         h4quJH7omFkk7iE4D1JVrPEgmWV4GrtURSbA15/kDOpfGZpA58rouU/VUzeMHkx1S+F7
-         Hz9s26xztX/RE7p9nVIAfXB7l4QoNZ8jWho+SKI9PJDvV8FShCDPYBBuiOZ3HvFMBFhO
-         v3hpLPm3gIQEI07GGdkMFokdCQWvgs1JkPg/mR2mEUTp972OXoxMqhkZvLvtSKmLROjZ
-         b2Ss1p4URUlPL5cH7XnchQ8UvXl/BfSjp0iGlBz6WajH/WD0dm7i8pvOrVqQJWga0A5w
-         J7Pw==
+        bh=CNGbqnTZ1olkQY7Z2o/JWgpP8+K0KLvFPBkRnaSJ2gU=;
+        b=l37DDBeX6BLHDrkTWQMXuxzojs056iL2RxA5zvzDgwUEMIqnfYNY0TRkfHchtXJmeO
+         VKpH3cgTQ58pMyY6pvZ5HqOZi9xa696QKQviWaPGo2N9/9aY2AHUwchwBP8gQwsGsuC9
+         CYdg8iPsIs3G2A0YH5TjC480+PYSZbTcwf/VJVB+mGylkKGmvjy8QMbHRzfMexzoeP5i
+         D1LYI3p/14q06ICAkRJQsOltmONqwAiyQ9QiRhHvwxzwC4nx9qmrDRGr/WB0F+ge3OMt
+         fOeQuFmNfsPprwWcClxJfLxoOwq17T/luu4kb/19RkleCSw2F6AA6zuYj3QEZsgBdUy5
+         VIiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795087318; x=1795692118;
+        d=1e100.net; s=20260707; t=1795087399; x=1795692199;
         h=content-type:cc:to:subject:message-id:date:from:in-reply-to
          :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=e7QbyMAcdTPueERTIe2W8rC7FaSuEijLUH0VfDQBIQI=;
-        b=TMzkamkcQMhg+hDMc+Hm/8TnJ0JOVSIuXHmQNugcOzBitHAWmrBzonXb/5cMY4pSeK
-         AgUym+AzYOLd5Yj7mljlbDYlXxSj0a9UJCnoPCPTj4WVsQ1f+8c2qgF+sJ2CqHY8bsJx
-         u53ukJaaIOt4PHbgbHLvqXabhZEE9PDKX7vizqXMCYGaDNreBfH/f2OnvpJDUbLP5gjD
-         D2iybNIlDD9r7KnxcDKZozeiIgxycV4fu7MOXUr/MAPr0OASo/ledEOn/7ylrPC15bRu
-         n4o+1SDuUFHDxi9B9/YRxITsfAG8qsl6DuvVkRtFK/HJxY2FgR1sLagLQG33HK+LiDg3
-         2mTQ==
-X-Gm-Message-State: APuU4Z9BUkYGolfZmYNUAi036F9Ee8yaZBUlCUuc6+mB6Wkr4Jvvc5nh
-	ODqb8Ya6kB2HJnY9xWct3+tdMyWDjJjezX9wJrNNYnrAKdrxX5B9/UBLdQrg35B8cLHcuAssarz
-	ukNyxP/ZXWM5gzqG/I6VYlcqQw+kYPg1a0lYQqG0HQg==
-X-Gm-Gg: AZFdTZdHmqShwNWAtyibyz2giuJygJ1sKLVWhT8B7ca7OiePCEwCG2ucDKtbEfu5K8a
-	DBWsLC2K/BBYfPVhljpdtE6srujEYqmm1oWLsP6xY6DPQbiCqqId5neYJEsA+8p0Pv36148Ezd+
-	ZuII9wR70/zB1RBSJcOIG9jzP7IcEpHcc2uCAkKFjVagTUy2JXdluvwZP2KSBVQMWAPGSobOh90
-	yWmBZRSTqo0fkQBiozBIyaS6M+O7gzAnJ/Mi1JyhSfetE0P3md7ikuN0L+tlYZasatSKEohV/S7
-	oKv1cvF1MOwMX97lmut1Gr9EGQD9/cbEIlSZqF4hqsFCuU0lQJTx4kY1UTVEuDXdjnYev51Ta2Y
-	EInrj5YKhtNSnmf7tbEWKX/BABdG9synkaj1jRcUaFPBN38zq8FW+pG0=
+        bh=CNGbqnTZ1olkQY7Z2o/JWgpP8+K0KLvFPBkRnaSJ2gU=;
+        b=GXI0X7FWLDJ/+rdBehsl47nijDSWzz9RmFHyP08yIL8W9TDbZjt0wgNIAc03BwHUgq
+         EkTKjaatW5ZPvfwN7g/E0XX5yI9YaS7hzt0kH7BjGkQ5Wshg5SVgBDqQB0YQL5Hsepsc
+         JWRJBYUXC/rrpGe/pMB4QC4QR53aNZZyxaTgWo3Z/D1yn5CwFSdmaDjEHdsqcFuv5eA2
+         bQbCFi6spV5VC4EcRuMa0jWRl0Q+q/36dBJZh16jHEvrku7kQkFWVMaruo99oGARRwyr
+         JlUMxAOWlaSu+B57HMhp8rw9fBfpGqoM7GhL/XHaZior6PUZiqU6uWoHlGcuI7oynr5I
+         6p5w==
+X-Gm-Message-State: APuU4Z/rAZN+unPg5QkEwNaKj9D2Y+v4cVxCG8toE/nlJlA8A2TM4mus
+	gwSZ1y5Sdt6/GNUD1MPBJNsfdhyscxOaOKnQQCICBvhfOKOOOFcSMQnvKb3d+L/FgBZvOeqmr6y
+	G+vOJTPsbIJfrpll7KVsRF4TS8oV7lYUUkE4PDsTt0Q==
+X-Gm-Gg: AZFdTZcgBsES7OspTvQt8KTfIpfRLOaDiI6ubYblqDcRdqQTHYahdQnpnkE0KD0K025
+	qotuvcdufIaIA6WFkMwaynda9FvDUb1zU8FthWIxjAbg+mm1XE/lzeQKIVNqIwxsZv3suyvuLxJ
+	WwD/ETZGQIsBRnZg1XU8u6jBBgjLdiShgtzYaw1jHP0qjEfJNbelqsyNVGHvIsm0l5HjpYhg9bu
+	KZBB8W4Gf8Cc4DYzyJqnQ+mZIIWadVGyeH2kUCJph5tEP/3MnKCLGjsfkvpHF5X5yvOetqIPZQP
+	MbgjEVdHubfCxIqGcGrzL6zbjI5bXeWpsw92YqlGwwvc//Ig+KbdRWzc4zIZsS8fXPxVXTJa5hN
+	YF//3ysBKebeK+lWuC/3zTvFunTrf0/nMpoOZpy2JpoKDudGyCRgP8Yc=
 X-Received: by 2002:a17:90b:4c11:b0:3b0:9e2c:9b55 with SMTP id
- 98e67ed59e1d1-3b3d06bcc48mr9840688a91.2.1795087318201; Thu, 19 Nov 2026
- 03:21:58 -0800 (PST)
+ 98e67ed59e1d1-3b3d06bcc48mr9846006a91.2.1795087398721; Thu, 19 Nov 2026
+ 03:23:18 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,14 +103,14 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 References: <20261117-bpf-preempt-v2-r2-v3-0-586376ec3672@sentinelone.com>
- <9a47ede3-24fa-4fa3-8d7e-50f221de0929@linux.dev> <CAPnbwjpmRCR3F4V3StUz=702AdWZzHHZjP68GepnYdYykjoC8g@mail.gmail.com>
-In-Reply-To: <CAPnbwjpmRCR3F4V3StUz=702AdWZzHHZjP68GepnYdYykjoC8g@mail.gmail.com>
+ <20261117-bpf-preempt-v2-r2-v3-2-586376ec3672@sentinelone.com> <a51c74ab-35c4-4b7f-b269-cd650700a632@linux.dev>
+In-Reply-To: <a51c74ab-35c4-4b7f-b269-cd650700a632@linux.dev>
 From: Mike Bazov <mikeba@sentinelone.com>
-Date: Thu, 19 Nov 2026 13:22:00 +0200
-X-Gm-Features: AclHuK9_wchn9jrgtgMQTEmt7b1vm1t-1CBFRs79WS1-atFN5hx7C0543m1ETUI
-Message-ID: <CAPnbwjrQcd5R0aqNKeJV3wWuMcTTsxsamxpKVpKY7Za2xKB1gA@mail.gmail.com>
-Subject: Re: [EXT.MSG] Re: [PATCH bpf-next v3 0/4] bpf: Check recursion per
- task for preemptible programs
+Date: Thu, 19 Nov 2026 13:23:20 +0200
+X-Gm-Features: AclHuK-d4tp1E6L1c3S28pHL6JMWNb87DDYIA46WIXFDMbqGTV_so9pDSZPVRWI
+Message-ID: <CAPnbwjrDV4nSyvL5cXEkdFZw+cq9RjWJN+mrs-vJu_M63x6EOA@mail.gmail.com>
+Subject: Re: [EXT.MSG] Re: [PATCH bpf-next v3 2/4] bpf: Mark programs whose
+ runs must not overlap on a CPU
 To: "JP Kobryn (CrowdStrike)" <jp.kobryn@linux.dev>
 Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
 	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
@@ -125,10 +125,13 @@ Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
 	Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>, tyler.wilson@crowdstrike.com
 Content-Type: text/plain; charset="UTF-8"
 
-Thanks for testing, JP.
+> Would explicitly opting in avoid unexpected regressions?
 
-> fexit (marked)                61      135
+Yes: a new kind of per-CPU state needs a new mark, and an opt-in flag
+avoids that. But existing programs keep losing runs until they are
+rebuilt with it. That is the question at the end of the cover letter,
+and I'll do what the maintainers prefer.
 
-Marked programs take the same per-CPU counter as before, so I expect no
-change there. How many runs are behind these numbers, and how much do
-they vary from run to run?
+> would it make sense to make it visible via bpftool?
+
+i think so. I'd add it once the marking is agreed.
