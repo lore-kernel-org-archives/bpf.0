@@ -1,47 +1,48 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.3
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=117.135.210.5
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1795059110;
-	b=AfTlYx7bStATR+wKHu1fI0//Hd5ZzHCjbpR72XmTCpHurPhl2v8UCWIiAkxoRojLbVU9
-	 8jrRwXs6YE4t7dpsjq0uvYwMNCVwm1FjdSFLzNoBYX2PpxQBzBmx0AvEpd5DRGoEtvWoB
-	 D5oWjY7iG/ltinYuNX1w2zMCghEN8hcS9Z+TCic8m12wBwlIu5t+NcJn4hVSFz3uWBRxQ
-	 FXQ8RmnJ6gr3CsX+eOz5SqKG7wjQwwEoVqQKQtKLbSJYxVNDqt4efOqOZ+sCz2yFTYOe0
-	 j67KouMln4cre2JYIflV+MOwznwbUr6+O53SV9Is/WhljETu+Utz1kgVCqTeAkTux7A==
+	b=AcnrRgRQXHnbzuZuxFK+Lv349TWjePknazQsi8lb9B0IRNSNHaU2vstfCZU2wLQvV6Ip
+	 P6jMCYQ+lCWToHaLHOjd5YfzlxbG/faeGOb4DLCEUIGS79i6Wqa1yJwxYnZzfOhrxVPRC
+	 USPbo0bO0HmxxI4+BH9HXMz22XwfUhOx53MlBc6FEpLWlTjHICoLqgrAluN9/vVnV+SNU
+	 wFuVKt32qvxAljriAn8cmsNwZJOAJ7LgDy9qBvVOtSpttX8qua7hZxerDp6xxb2H7hpsJ
+	 1xfAfpWDEf7vxQatLaxU9kGLfXiGjcOZm4MTte0EGDjrB8TaJa5FuLkn6BVVj8CDSPg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1795059110;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
-	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
-	bh=yHDnaNhr910/gUuGeXasS7El/214pG/VLEb6ikiaCGU=;
-	b=OmF7fMxpkydOkXu2twOKsnr2ydmTcUnITtJGdwDC9qbPc9EFllrGex+YwldNTy5+KSwR
-	 tB14K95VaUV/7Kuz8he6x+jnG13P2vBHCOJ+GR2TWIjNcmld14EF2zvLmVka4CzqinTAA
-	 Es0cWVkpvXOS9Hhc3S+z9+gqfs7hY7BZGSoaNRbdvA1PHl80xMsPdMxW1UtdP/h2nL2wO
-	 8yxWnoPrCjEmCtohGpyL/8P+vn+2iwfJ3jXAhCcr8rOmPB8Jf7QKQu9LUPLxx8Jds2R5E
-	 qWJO446GbLnmYpDvDz2yCrBVpWhKpqqxOBe61cdXNSRZtxjCNBMkcdrwyLaX4Zo7ZcQ==
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:
+	 X-CM-SenderInfo;
+	bh=3FPKyBYFk8lcy3Z0WKdisCLfmQV/nc5CpqYBfY/L4GQ=;
+	b=AAAk40wKY5bJRAK4w6UhvGH5ZqNyibr4b9L+4gpyeP6wH286Qkz42DanKiYG0sms5ztm
+	 5YkBNFIV1cEweIjFzZLmSTffBsDrnAQScXTgIbZ5c+rtvMJ7pAP/MZPONuENSHIcGmwEI
+	 o16cYAQ4ckCYnhU7DGcEycjwk/s/pIF3+1SoLMj68fMAYWom/MmC14ScK9ZaAhYkhvyhG
+	 PyT75oO5fvAhQxCReWpUpARNFHXAf3Qds6B/OsnLBQPtfJM6Dfo4gGJOMda2AYPigwSfV
+	 pHR6ncgqNguZ7zj0Ka1gYj08tGCmwrTCVB707mL0H1FCxI5t3lzv2gXsvF5uqRg4JMQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=163.com;
 	spf=pass smtp.mailfrom=163.com;
-	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=KoOcIc60;
-	arc=none smtp.remote-ip=220.197.31.3
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=NHe0B8DG;
+	arc=none smtp.remote-ip=117.135.210.5
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 326CD606A325
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88DC8606A32C
 	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 03:31:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 326CD606A325
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 88DC8606A32C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=KoOcIc60
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=NHe0B8DG
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=yH
-	DnaNhr910/gUuGeXasS7El/214pG/VLEb6ikiaCGU=; b=KoOcIc60rPUGBhF5xc
-	WsVzbJMCk7GCK6gjrDKmQQKO4PKQuDajqahtScW+K5kvXKtmHj5GejZ9DpCVhvuq
-	HBt6WaPPrXXwOvFi9TLGX6B7yjpyafx+3cAaydIljBLmAvI6if6ESVSwBSudqSkn
-	p7S0XD8dqy1NGeRY/aEH8Tvno=
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=3F
+	PKyBYFk8lcy3Z0WKdisCLfmQV/nc5CpqYBfY/L4GQ=; b=NHe0B8DGtvEHIrh5Cc
+	7CEAZ6Es2SzW36OeYF8/RUHIVsnCic14DV5An/78yLR7/BcK73v0NvhRw5d1CPwa
+	wC/Cx/Xl6wteac1MHyCg08c8a/0coVYiaOIi6Qh+xlZ3FkAHMY+QWIQIKxi1j3V4
+	GQQH9ruHz9ivqKTHoZNPIUSFI=
 Received: from kylin-ERAZER-H610M.. (unknown [])
-	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wD3Xzx1bf5qM8OwJA--.54798S2;
-	Thu, 19 Nov 2026 11:31:03 +0800 (CST)
+	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wD3Xzx1bf5qM8OwJA--.54798S7;
+	Thu, 19 Nov 2026 11:31:08 +0800 (CST)
 From: Yun Lu <luyun_611@163.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -56,10 +57,12 @@ To: ast@kernel.org,
 	ihor.solodrai@linux.dev
 Cc: yatsenko@meta.com,
 	bpf@vger.kernel.org
-Subject: [PATCH bpf-next v4 0/6] bpf: Fix async callback use-after-free on map deletion
-Date: Thu, 19 Nov 2026 11:30:45 +0800
-Message-ID: <20261119033051.196177-1-luyun_611@163.com>
+Subject: [PATCH bpf-next v4 5/6] bpf: Check async callback membership and user references
+Date: Thu, 19 Nov 2026 11:30:50 +0800
+Message-ID: <20261119033051.196177-6-luyun_611@163.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261119033051.196177-1-luyun_611@163.com>
+References: <20261119033051.196177-1-luyun_611@163.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -70,93 +73,266 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3Xzx1bf5qM8OwJA--.54798S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxuF18CFykCFy3KFWruFWfKrg_yoWrJryxpa
-	yFq3sxKr48Ga4xtws7Gw48ZFyrWwn5X3WYk3saqryYyrn8Xr18AryI9r1jgFZxCrZYgw4a
-	vr1Iqana93Wjv37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jbiSLUUUUU=
-X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbC6xfSoWr+bXcYJgAA3-
+X-CM-TRANSID:_____wD3Xzx1bf5qM8OwJA--.54798S7
+X-Coremail-Antispam: 1Uf129KBjvJXoW3WFWxtFy5tr1fWw13KFy7Awb_yoWfKFW5pa
+	yfXry7Jr18XF42vr1Iqw4kCFyrXrs5Jry5GF9agr15ur42grn3JF1xKF15tFW3JrWkZFsa
+	ya4Igr43Za4UCrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jeuWLUUUUU=
+X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbC7BzUo2r+bXwkCAAA3u
 
 From: Yun Lu <luyun@kylinos.cn>
 
-This series fixes a use-after-free when a BPF program schedules task
-work, workqueue work or a timer through a value pointer retained across
-map deletion. Review of the earlier task-work series [1] pointed out
-that cancellation can leave the deleted value open to reinitialization.
+A BPF program can retain a value pointer across deletion, initialize a
+new timer or workqueue object on it, and configure and start a callback.
+That callback can run outside the grace period freeing the element and
+access its freed key or value. Keeping the callback object alive does not
+keep the element alive.
 
-The original reader keeps the element alive while it queues new work,
-but the new callback can start outside the grace period that protects
-the element and access the freed key or value. Patch 2 describes the
-race and includes a KASAN report from an unmodified kernel.
+Check membership in __bpf_async_set_callback(), which installs cb->prog
+and cb->callback_fn. Order the slot load before the lookup with a full
+barrier. Return -ENOENT if the object was invalidated or the lookup no
+longer returns cb->value.
 
-Mark task work FREED or clear cb->map before detaching the context.
-Following Alexei's suggestions [2, 3], check task-work membership after
-claiming PENDING and check wq/timer membership in the shared setter.
-The setter also rejects zero usercnt. An idle callback can survive in
-an unlinked cached element past the last user reference and be reused
-when the element is inserted again.
+An idle callback object can survive in an unlinked, cached element when
+the last map user reference is released. A later insertion can reuse the
+element and its callback object, so membership succeeds with usercnt at
+zero. If the program holds a reference to the map, installing cb->prog
+would form a reference cycle. The init-time usercnt check does not cover
+this reuse. Reject it with -EPERM before taking a program reference.
 
-Patches 1-3 fix task work and add its regression test. Patches 4-6 fix
-the shared wq/timer paths and cover both in the wq and rhash_timer
-selftests.
+The first smp_mb() orders the callback slot load before the lookup.
+The second provides cumulative ordering between the observed insertion
+and the usercnt read. A read barrier does not provide the cumulative
+ordering needed here.
 
-Testing on x86-64 QEMU/KVM with KASAN, PROVE_LOCKING, PROVE_RCU and
-DEBUG_ATOMIC_SLEEP:
+Leave __bpf_async_init() unchanged. An unconfigured object cannot start a
+BPF callback. Document the setter errors and adjust rhash_timer to expect
+-ENOENT while retaining its recycled timer-field check.
 
-- task_work_stress, wq, rhash_timer, timer and timer_mim pass.
-- With the same test binary on v3, the new wq test fails as expected:
-  the setter returns 0 instead of -EPERM.
-- A reduced LKMM model rules out the stale usercnt result with the full
-  barrier after the membership check.
+Fixes: 1bfbc267ec91 ("bpf: Enable bpf_timer and bpf_wq in any context")
+Suggested-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Yun Lu <luyun@kylinos.cn>
+---
+ include/uapi/linux/bpf.h                      |  2 ++
+ kernel/bpf/helpers.c                          | 35 +++++++++++++++++++
+ tools/include/uapi/linux/bpf.h                |  2 ++
+ .../selftests/bpf/prog_tests/rhash_timer.c    | 24 +++++--------
+ .../testing/selftests/bpf/progs/rhash_timer.c | 26 ++++----------
+ 5 files changed, 55 insertions(+), 34 deletions(-)
 
-Changes since v3:
-- Reject zero usercnt in the shared setter (Sashiko), order the check
-  after lookup with a full barrier, and add a wq regression for reuse.
-- Consolidate the task-work return value documentation (bpf-ci).
-
-v3: https://lore.kernel.org/all/20261111024333.228633-1-luyun_611@163.com/
-
-Changes since v2:
-- Use the existing map lookup and move the wq/timer check to the shared
-  setter (Alexei).
-- Give slot detachment to the first invalidator and reuse the existing
-  task-work, wq and timer selftests.
-
-v2: https://lore.kernel.org/all/20261106095747.471718-1-luyun_611@163.com/
-
-Changes since v1:
-- Replace slot poisoning and allocator hooks with lookup checks
-  and split out cancellation ordering (Alexei).
-- Extend the fix and regression coverage to wq and timers (Alexei,
-  Mykyta).
-
-v1: https://lore.kernel.org/all/20261028073525.1035605-1-luyun_611@163.com/
-
-[1] https://lore.kernel.org/all/20261012061915.231254-1-luyun_611@163.com/
-[2] https://lore.kernel.org/all/DMGN8VM2BAOR.28NRNN51MCI8I@gmail.com/
-[3] https://lore.kernel.org/all/DMOAQI1S0JBS.3N3WETHD2L6KQ@gmail.com/
-
-Yun Lu (6):
-  bpf: Mark task work FREED before detaching it
-  bpf: Check task work value membership before scheduling
-  selftests/bpf: Test task work scheduling on a deleted value
-  bpf: Invalidate async callbacks before detaching them
-  bpf: Check async callback membership and user references
-  selftests/bpf: Test wq callback setup after deletion and user release
-
- include/uapi/linux/bpf.h                      |   2 +
- kernel/bpf/helpers.c                          |  89 +++++++++++++--
- tools/include/uapi/linux/bpf.h                |   2 +
- .../selftests/bpf/prog_tests/rhash_timer.c    |  24 ++--
- .../bpf/prog_tests/task_work_stress.c         |  18 +++
- tools/testing/selftests/bpf/prog_tests/wq.c   | 103 +++++++++++++++++-
- .../testing/selftests/bpf/progs/rhash_timer.c |  26 ++---
- .../selftests/bpf/progs/task_work_stress.c    |  17 +++
- tools/testing/selftests/bpf/progs/wq.c        |  62 +++++++++++
- 9 files changed, 299 insertions(+), 44 deletions(-)
-
-
-base-commit: bd75869299f1d4ff6e9f45117cce28f8badee1cd
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 62de0919db72..0d0d56f87e09 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -5478,6 +5478,8 @@ union bpf_attr {
+  *	Return
+  *		0 on success.
+  *		**-EINVAL** if *timer* was not initialized with bpf_timer_init() earlier.
++ *		**-ENOENT** if the containing map element is no longer in the map
++ *		or the timer was invalidated by map cleanup.
+  *		**-EPERM** if *timer* is in a map that doesn't have any user references.
+  *		The user space should either hold a file descriptor to a map with timers
+  *		or pin such map in bpffs. When map is unpinned or file descriptor is
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index fa7e514ffd19..029f60b9e3df 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1552,11 +1552,34 @@ static int __bpf_async_set_callback(struct bpf_async_kern *async, void *callback
+ 				    struct bpf_prog *prog)
+ {
+ 	struct bpf_async_cb *cb;
++	struct bpf_map *map;
+ 
+ 	cb = READ_ONCE(async->cb);
+ 	if (!cb)
+ 		return -EINVAL;
+ 
++	/*
++	 * The prog can still hold a value of an element that was deleted from the map.
++	 * bpf_async_cancel_and_free() is done with it and nothing stops a new callback
++	 * when the element is freed. cb is published at this point: either the lookup
++	 * doesn't find the element or bpf_async_cancel_and_free() finds cb.
++	 * Nothing runs without callback_fn. An idle cb stays in the element until the
++	 * element is reused or freed.
++	 */
++	smp_mb();
++	map = READ_ONCE(cb->map);
++	if (!map || !bpf_map_value_is_linked(map, cb->value))
++		return -ENOENT;
++	/*
++	 * Dropping the last user reference sets usercnt to zero before the cleanup walk.
++	 * The walk can miss a cached element that another CPU later reinserts. If our
++	 * lookup finds that element, the usercnt check must not see the old nonzero
++	 * count and allow a callback to be installed after cleanup.
++	 */
++	smp_mb();
++	if (!atomic64_read(&map->usercnt))
++		return -EPERM;
++
+ 	return bpf_async_update_prog_callback(cb, prog, callback_fn);
+ }
+ 
+@@ -3530,6 +3553,18 @@ __bpf_kfunc int bpf_wq_start(struct bpf_wq *wq, unsigned int flags)
+ 	}
+ }
+ 
++/**
++ * bpf_wq_set_callback - Set the callback of a BPF workqueue
++ * @wq: pointer to the bpf_wq field
++ * @callback_fn: callback function
++ * @flags: must be zero
++ * @aux: implicit program metadata
++ *
++ * Return: 0 on success, -EINVAL for invalid flags or an uninitialized @wq,
++ * -ENOENT if the containing map element is no longer in the map or the
++ * workqueue was invalidated by map cleanup, -EPERM if the map has no user
++ * references, or another negative error.
++ */
+ __bpf_kfunc int bpf_wq_set_callback(struct bpf_wq *wq,
+ 				    int (callback_fn)(void *map, int *key, void *value),
+ 				    unsigned int flags,
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 62de0919db72..0d0d56f87e09 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -5478,6 +5478,8 @@ union bpf_attr {
+  *	Return
+  *		0 on success.
+  *		**-EINVAL** if *timer* was not initialized with bpf_timer_init() earlier.
++ *		**-ENOENT** if the containing map element is no longer in the map
++ *		or the timer was invalidated by map cleanup.
+  *		**-EPERM** if *timer* is in a map that doesn't have any user references.
+  *		The user space should either hold a file descriptor to a map with timers
+  *		or pin such map in bpffs. When map is unpinned or file descriptor is
+diff --git a/tools/testing/selftests/bpf/prog_tests/rhash_timer.c b/tools/testing/selftests/bpf/prog_tests/rhash_timer.c
+index 3aad9fc02e06..87287e038a98 100644
+--- a/tools/testing/selftests/bpf/prog_tests/rhash_timer.c
++++ b/tools/testing/selftests/bpf/prog_tests/rhash_timer.c
+@@ -52,7 +52,7 @@ void test_rhash_timer(void)
+ 	LIBBPF_OPTS(bpf_test_run_opts, opts);
+ 	struct rhash_timer *skel = NULL;
+ 	cpu_set_t old_mask;
+-	int map_fd = -1, arm_fd, cancel_fd;
++	int map_fd = -1, init_fd, cancel_fd;
+ 	bool affinity_set = false;
+ 	__u64 key = 1;
+ 	int attempt, err;
+@@ -69,8 +69,8 @@ void test_rhash_timer(void)
+ 	map_fd = bpf_map__fd(skel->maps.timer_map);
+ 	if (!ASSERT_GE(map_fd, 0, "timer_map fd"))
+ 		goto out;
+-	arm_fd = bpf_program__fd(skel->progs.arm_deleted_timer);
+-	if (!ASSERT_GE(arm_fd, 0, "arm_deleted_timer fd"))
++	init_fd = bpf_program__fd(skel->progs.init_deleted_timer);
++	if (!ASSERT_GE(init_fd, 0, "init_deleted_timer fd"))
+ 		goto out;
+ 	cancel_fd = bpf_program__fd(skel->progs.cancel_recycled_timer);
+ 	if (!ASSERT_GE(cancel_fd, 0, "cancel_recycled_timer fd"))
+@@ -81,28 +81,22 @@ void test_rhash_timer(void)
+ 		goto out;
+ 
+ 	for (attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+-		err = run_prog(arm_fd, &opts);
++		err = run_prog(init_fd, &opts);
+ 		if (err) {
+-			ASSERT_OK(err, "arm_deleted_timer");
++			ASSERT_OK(err, "init_deleted_timer");
+ 			goto out;
+ 		}
+-		if (skel->bss->armed != attempt + 1) {
+-			ASSERT_EQ(skel->bss->armed, attempt + 1, "armed");
++		if (skel->bss->initialized != attempt + 1) {
++			ASSERT_EQ(skel->bss->initialized, attempt + 1, "initialized");
+ 			goto out;
+ 		}
+ 		if (skel->bss->timer_init_err) {
+ 			ASSERT_OK(skel->bss->timer_init_err, "timer_init_err");
+ 			goto out;
+ 		}
+-		if (skel->bss->timer_set_callback_err) {
+-			ASSERT_OK(skel->bss->timer_set_callback_err,
+-				  "timer_set_callback_err");
++		if (!ASSERT_EQ(skel->bss->timer_set_callback_err, -ENOENT,
++			       "deleted setter rejected"))
+ 			goto out;
+-		}
+-		if (skel->bss->timer_start_err) {
+-			ASSERT_OK(skel->bss->timer_start_err, "timer_start_err");
+-			goto out;
+-		}
+ 
+ 		if ((attempt + 1) % RCU_SYNC_INTERVAL == 0) {
+ 			err = kern_sync_rcu();
+diff --git a/tools/testing/selftests/bpf/progs/rhash_timer.c b/tools/testing/selftests/bpf/progs/rhash_timer.c
+index 2e06a463c605..49bc3602fa12 100644
+--- a/tools/testing/selftests/bpf/progs/rhash_timer.c
++++ b/tools/testing/selftests/bpf/progs/rhash_timer.c
+@@ -5,7 +5,6 @@
+ #include <bpf/bpf_helpers.h>
+ 
+ #define CLOCK_MONOTONIC 1
+-#define TIMER_NSEC (60ULL * 1000 * 1000 * 1000)
+ 
+ struct timer_value {
+ 	struct bpf_timer timer;
+@@ -20,11 +19,10 @@ struct {
+ 	__type(value, struct timer_value);
+ } timer_map SEC(".maps");
+ 
+-u64 armed;
++u64 initialized;
+ u64 cancelled;
+ long timer_init_err;
+ long timer_set_callback_err;
+-long timer_start_err;
+ long timer_cancel_err;
+ 
+ static int timer_cb(void *map, u64 *key, struct timer_value *value)
+@@ -32,8 +30,8 @@ static int timer_cb(void *map, u64 *key, struct timer_value *value)
+ 	return 0;
+ }
+ 
+-static long arm_timer_cb(struct bpf_map *map, u64 *key,
+-			 struct timer_value *value, void *ctx)
++static long init_timer_cb(struct bpf_map *map, u64 *key,
++			  struct timer_value *value, void *ctx)
+ {
+ 	u64 key_copy = *key;
+ 	long err;
+@@ -48,19 +46,9 @@ static long arm_timer_cb(struct bpf_map *map, u64 *key,
+ 		return 1;
+ 	}
+ 
+-	err = bpf_timer_set_callback(&value->timer, timer_cb);
+-	if (err) {
+-		timer_set_callback_err = err;
+-		return 1;
+-	}
+-
+-	err = bpf_timer_start(&value->timer, TIMER_NSEC, BPF_F_TIMER_CPU_PIN);
+-	if (err) {
+-		timer_start_err = err;
+-		return 1;
+-	}
++	timer_set_callback_err = bpf_timer_set_callback(&value->timer, timer_cb);
+ 
+-	__sync_fetch_and_add(&armed, 1);
++	__sync_fetch_and_add(&initialized, 1);
+ 	return 1;
+ }
+ 
+@@ -82,9 +70,9 @@ static long cancel_timer_cb(struct bpf_map *map, u64 *key,
+ }
+ 
+ SEC("syscall")
+-int arm_deleted_timer(void *ctx)
++int init_deleted_timer(void *ctx)
+ {
+-	bpf_for_each_map_elem(&timer_map, arm_timer_cb, NULL, 0);
++	bpf_for_each_map_elem(&timer_map, init_timer_cb, NULL, 0);
+ 	return 0;
+ }
+ 
 -- 
 2.43.0
 
