@@ -1,98 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795052985;
-	b=HSxTsJoGo1yG8pTueH1YPjz11mPtes/7QesTsK8LwLVT4E3lWnkzbJTlJuk+Vpr9tfdK
-	 vXtSHf50bH2pWMyxNo1boxkRHPTsEj9KM4iUHzoXjvF6YkyAYQFYRwLpLfe2/CiBQbP4X
-	 LUGBeRhGbPUYUke9m6hfNNukKHDtYWYTci1PmYWhQkdrH8wu/XmYBReve3j2+7KakHUgZ
-	 Idt4vchkoACHb1JkoK3vFy/7KWa8ukSRlVSfx56qNvxnntroXG1qhJ8e1GZPjR1VAjMUN
-	 e/L+ovc05lcLPl2t0EK1awlEwwB2UvtII3h508jlTLhPE/cqoPDBmpXSwa1sOfuUWpA==
+	t=1795053005;
+	b=wcEdq1TfzIJrqVCxFxRLOE9nE4AMPCyl+q3AVkpFqu8VrPmT3rF0HLxlOHT7+yPpsZqT
+	 qikL2t/vL91KVk2nnsr4aNg00Oz22ftTsVaY0DKIBiOKEqaTplnwO4is+OkMy4Ro1haOJ
+	 lIXgz3vWzNVSNWV9TpzURtdPEY8l5dlUaNsVCptjScX18nUFOD/SXQ13+HcIdUuYKnogG
+	 MW0232DWd+YYszEtdBC6js0pw6ErvN23ABSmwYDkVdvyM9jfS+OqhoSHrxoipoLBfPM/i
+	 4/HhbGNVeQxwxwei+9N9d2vse8600EgcoF3ZuKZ4kzy/tVz+YzBXGgsaUcc5ArKVDnQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795052985;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
-	 Message-Id:Cc:Subject:From:To:In-Reply-To:References:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=aiglJxDqvtN3JZZazny7hBMc8RmhFlbOGLZo5lpc8JU=;
-	b=fE6pgZKloSNy51VgSKEzlKpXueU6FEmnJcCL5sk+G/f50nhjyZPaiEMZYAMMj8LjRsyI
-	 sjnUfQCWXpMguAAfiKv9DdM+u004KMOsWAQizuAg+0XFX3xoK15P6DqOonY6FTVSEmeJw
-	 yj6JXYN2sKHVDnfnSzJbiXOmsU9dgucxf0U22tjjGZen3McDqrGcditcbSoOAY8g3LHWM
-	 7ax6we33vZmiupbe13LrM0AjMtfHr8gS87xpDUElKGqSA3++1PXz/U7eOxgE4vcN3TWZ+
-	 7tY7GVn3arK3UFnfBl0zatxGj8Bp3IPZU3qBEgN48RHjbKhX0EqZTwNWawC9cJ53iFw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795053005;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=wtiddpymwR5wAC6z/kTTykt5H1LKvVTKMrPJFDw58JQ=;
+	b=5Bn5awhCaXH2J9j0ZW3OIPtl848bLBFBAas/EdD+vrbhJKm/R5BlS0nS9ehwXbRoWz8C
+	 O32jqH5Gtv2St+FTmX6+KfI85zoqu0ExYuUlgUgEytlcxMofUUC+cSV2yPkeKWQCQkUC9
+	 UGxtAJOY3fNeHvbmHKh+UgKFDN2DvwEu3JlKu4qiWBViL1UHt8My/27kJAd5D18KHG95m
+	 jDKcvn84IXqXeRqO/XF7pDIPpidq1dcCsRGpXU6+taKUMQmvxvFGdHRtYYqZzLuYctBVF
+	 BsxCiw8UfG/P0XyA8/9FryjXhRGaK1UM8CVnDquL5l5X7CliS1OyuSmZ3OmB45xC8OQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vkiu6mw9;
-	arc=none smtp.remote-ip=209.85.210.178
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EJKIQP1c;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 572BA606A32C
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 01:49:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 572BA606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E920606A32C
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 01:50:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vkiu6mw9
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-8b904d10882so737650b3a.0
-        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 17:49:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795052985; x=1795657785; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=aiglJxDqvtN3JZZazny7hBMc8RmhFlbOGLZo5lpc8JU=;
-        b=vkiu6mw9bHVOs37FCJLumqFwCBMUFudfxWFKeBHS6X6Dyz6H5ynzoOVFfqe8Xt1Y0j
-         P42Ia4rK/NnOtIsF/aNmriOf3tGhPIymHDUquSIex7eO8X8CfNXTYbF6I0vbohKRiP61
-         emfv+1tHk9xvYlzvDeeSlLHFUEaO66flClBplwx88Y1CRuFUnYcK+TKNi/Lhd8GN17wQ
-         DObXZfXz4qK6KcVg8aHLfxktgP9dr0Av3paXsq4VFjriLhg0ZSMS4TmSMnZfhtwy43+z
-         0en+kQK1el1wSIzXfeKFloxq7PEN2FocAZ0E5QTGCq6wn4qTcNMt272rZvsaOAK4tdKp
-         LyoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795052985; x=1795657785;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=aiglJxDqvtN3JZZazny7hBMc8RmhFlbOGLZo5lpc8JU=;
-        b=BIV2kGj878CP2lZIY8SCbWozH5W4v3kK2RVFrD58wedpElF9nk7aoXibaml6VdcMbt
-         RF7+2EoAyB1vVz7uKJNSxdC5HXUHs1LtRr1dytZUJR5RxfC+X/DDaq70N5sTci63Yusv
-         I7SqD2O2ROVX7F24Vx7ycQoeigNAQQGYnjLXeS8DTDXcLMIVeCQ7WfbDUwRQvDfp4LWB
-         Lw+G60sZfxjYRIuVp0Vc3IL9llJVnMGTNN9eYRwZFlo8cE3Q7D2up+3l6agLttfqQmK4
-         1zgBwIbPxh45ZdwnN/6tMe4IzRokuu+XjI93tVsK4uqxoegV5weadzpWrh6/YEJ2yTI1
-         hkjg==
-X-Gm-Message-State: APuU4Z9g9uypEGGNhWNVABQQQMBLcEx9sQvlcx0nhDx59N7FORQnlRpi
-	SLK/9I/rXmoVK44sUe6w6DvzEaODqixqcrfserBjzSnV8CbcyX0+3J3N
-X-Gm-Gg: AYBFou1apIeW0z1Lj3q5AcyVHVd0odm3tktlM2PS7zRG2HenwFlo07WkfrHhc7ejRyX
-	5P9kRO84Nh2InsrLdmd3Z6Ruu+l5yChZ+W5t96aIILikOkqve99MfCLeAX7/aRSFyZIdAzq6r8n
-	5NHyw7ZUXU2/AXqh0jirJzdzubV+RUAJhcspquo0Mm8STD4O2LA2YyWpYzAWZVWVeP4FnKBSb/G
-	jjjXNN08mk0OMoL2aVIv32wZrBIQchHhPQv3Ev6+P4CjPFQW82vJ+cA8vMLGasvWSBZQu9n9CUr
-	Od8hevyGnZNz+duGnFdIZj2FeeyyjLm7CWRXxm08qMaLfO7OgHM5ztDZI7xcp98vFco7TV/piSp
-	cWthV/cDxLtFrdivienAWFqC8rQpZV5vh9BaP8/0zn8jqEPW7+JFMazrQW6mv6e+J4R+GPvsDWC
-	PzdOXWUoFvT+Wdg8UFVoAADApE3gmo7+po9wKMPZw4EclrlBMBYXtRXmds5JDVwvhRAsepBH0/z
-	YRKR98/p8GxeWyXKAK8Z1LT8ANu8pMMfp0/5HY7bU/Ei3iJRV6RT62Jrtv+pb80Wlkd0aks0IJz
-	pu+a/hHNL1M+VlgsNWhMF8YFENu8SY5ghv2ra5xg9GhAhYb78mxGSr6aGZVwC7eTRHUcCm2qnCd
-	eA4iIA1Qk3Az7Y9aoJ1m8ooixChPGflxqw1QXPDKXUyM/KnX/NDir/oY=
-X-Received: by 2002:a05:6a21:2d43:b0:3e0:ba43:3d3d with SMTP id adf61e73a8af0-3fe86ecfa2dmr4525393637.9.1795052984493;
-        Wed, 18 Nov 2026 17:49:44 -0800 (PST)
-Received: from localhost ([153.61.198.246])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c5ca7aa769sm1951632b3a.18.2026.11.18.17.49.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Nov 2026 17:49:44 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 19 Nov 2026 01:49:43 +0000
-Message-Id: <DMYT6CELPKLL.3IH95CNKKXFUP@gmail.com>
-Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Run all summarization freplace
- cases
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Yun Lu" <luyun_611@163.com>, <andrii@kernel.org>, <eddyz87@gmail.com>,
- <ihor.solodrai@linux.dev>, <daniel@iogearbox.net>, <memxor@gmail.com>,
- <martin.lau@linux.dev>, <song@kernel.org>, <yonghong.song@linux.dev>,
- <jolsa@kernel.org>, <emil@etsalapatis.com>, <shuah@kernel.org>
-In-Reply-To: <20261118073309.125424-1-luyun_611@163.com>
-References: <20261118073309.125424-1-luyun_611@163.com>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EJKIQP1c
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 484BA1F000C4;
+	Thu, 19 Nov 2026 01:50:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795053005;
+	bh=wtiddpymwR5wAC6z/kTTykt5H1LKvVTKMrPJFDw58JQ=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=EJKIQP1cMXPK4bbJyAV4QDtN3pvAJKp5hsW2URBdghB1I4Vxig1R5WfLvcHOr6fVQ
+	 bL1Mrwwp26oS4Yzyx8wVBM0RJIGufU6JkN6ToNKVmDbbx3+4gBVb9wfytq/EMMwtwa
+	 2BZ5/SL7M49WdJh63FPq79t4EVE1DSBmwWt1RE3foiB6LTIL1SFxLNnIF1/mxTQgX9
+	 drcan73rvlCeRGU4lEte/BiaLBDEg1s7g/zkKxQRBZNxIzrla4XW8nbcCM57i/SqV5
+	 MwZfpSFHJQTVzahDfsIcAEk9jvNHmqCII2FYUexS7uyz0Uz6Z3/8w1DICRiGB9XWFo
+	 lUj425yBpMvzw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3A28F3808210;
+	Thu, 19 Nov 2026 01:50:05 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -102,15 +53,46 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] resolve_btfids: Match the arm64 NOP opcode for
+ LLVM
+ 24 in text_mc
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179505300403.2710764.2827752503626665014.git-patchwork-notify@kernel.org>
+Date: Thu, 19 Nov 2026 01:50:04 +0000
+References: <20261118194030.4103149-1-almagui@kernel.org>
+In-Reply-To: <20261118194030.4103149-1-almagui@kernel.org>
+To: Alan Maguire <almagui@kernel.org>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+ morbo@google.com, justinstitt@google.com, a.s.protopopov@gmail.com,
+ bpf@vger.kernel.org
 
-On Tue, Nov 17, 2026 at 11:33 PM Yun Lu <luyun_611@163.com> wrote:
-> derive the group count from mains. This restores four packet-data
-> cases and enables four sleepable-program cases.
+Hello:
 
-The four sleepable cases will fail on arm64 and s390x.
-Their targets have no __arg_ctx:
+This patch was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-  int main_might_sleep(struct pt_regs *ctx)
-  int main_does_not_sleep(struct pt_regs *ctx)
+On Wed, 18 Nov 2026 19:40:30 +0000 you wrote:
+> PR #170968, “[AArch64] Treat NOP as a separate instruction” [1]
+> gave NOP its own instruction definition; LLVM 24 decodes
+> "1f 20 03 d5" as the opcode NOP. Earlier releases decode it
+> as HINT #0, which is what the arm64 table looks for. So the
+> test of the nop fails, text_arch_init() gives up and a kernel
+> with CONFIG_BPF_FMODRET_SCAN=y cannot be built:
+> 
+> [...]
 
-pw-bot: cr
+Here is the summary with links:
+  - [bpf-next] resolve_btfids: Match the arm64 NOP opcode for LLVM 24 in text_mc
+    https://git.kernel.org/bpf/bpf-next/c/f8c00958c5b9
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
