@@ -1,62 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.111
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795122736;
-	b=TgzpZdgpE6X1mATWG+3rtzyQDCzwn/PC8LaSVuMTCTofT+s+c7iVndiixxncSYVNnUAc
-	 ykrXWkVi4u+dTp+PPch21MeU38MKn0OPNO1Ha785UovVEf2RtDxCPWAjqlzzZ6BQLCnKe
-	 AxfOAvNm/o79KYElbar+pW37la67VoWcGnVwvy8i7gfmkwFuZqzfM383zzr/HnRhdHisd
-	 N2SEnCR6ddgQJaET9cqR3q40OMIVrG6bj9fG1OIKTkYWUMkBmplb2OdclOuy0umvIH/P1
-	 ZIVkYmMY3B1ACziUQjs/G6zXMd0zY2kdlbxqfIVZJxdlZELSa8oLWCOWF6uVSRPdQcg==
+	t=1795122767;
+	b=FAj/Po98CvXU+f76l7Vgv3USkc/8vdUQFULvYTVyqGwmMFZSyJO+pV1O5NxO2Lg2UksL
+	 i5DSoq9iWImr1dTengBe1FHj7daYkRF3bMi5iycPsYvTDMiu1jQDQvNYfIRhyetMQpDmS
+	 mb3A6dmmE9sRi/jyXRnqFufRDhRKfj5JI+IVTklY2VZh1VgHufc+aXnxc64fT8zjDsm1L
+	 El9kAYF9qZTgFeB48mzxIztLEqpHSrQ5TN4lKg6WE53jayvc4b4qdkbmVKWEWDLfSwohE
+	 i8vSOWMMa3r2sMyITT2Gp5l7mkp9p08x0eqPW/G9kinDeFQoRV+LdoHXhjkLauTvsmQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795122736;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=PPsz8EPWKcdeEfKVGYp9pwNeSXYhC2IpPyvOQ8qfLNU=;
-	b=JbmqiDiZTcltR87ei8+enNQsk8SXXWrQIe5+lzeljI5q4TUTPBGFUax0HJm9wiB1Jtgg
-	 F2xRaaZKlzSSoXuJPDmYmb8ffNtgB6Z8NV0YAA+MIDyswznc6NBHrJ958idXn66+KejbY
-	 eaZLCau1lH0u4jj/wRvWUqdC+Ouwtkrukp75NxJSutCh1nVZMxIlI741HhTnMdjQe8db1
-	 9uL+nM5w4TiQgX5RO3qbp1Ek2Yo8xfAWtUuclseMWI/EDZOqzyjlPfCewkOTysH+/DN1v
-	 2zoLRkrgjUrWC2TbVS3Kg3xC9JRpijGdFTWer1Z2qBu0wXf9yWLGZiTZLfCIrHwwrCg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795122767;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=eFBb6ww+Wb+6PdEHxVs1dSR/RKz7OHK6jA6P8dpfeI8=;
+	b=xksFmvbQPbzyqBrmM9OJhfBpWzPQeqd4Fmm28de9pNhGC23vfiG3ksPndcxWFkuhXyWA
+	 xVUQ8mLoyh0aOarmVfWBYLLHPHVl6m2khRqB1AlL1keEIvbRojJBgpVepvbGm3YzjvDmJ
+	 NTHAM+YqvUp8Jq2PUOzs1o5kp7MgeXS4Kv5h+Qx8VBpcPcHxK6ZirbQWba4w8cVjVBTdX
+	 89BcNRUxZPAZxUoImFWZpAnt4XhoK5wvWOjLDg1b1/AL0h73xgpB7raCdYuHtKzG2rzOv
+	 iyh4iy3GjXkK1u/ATCMatvdhzD2vioOTsM14dFh2iYQxyohCZqTt6lKo91zSFeSm5pA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=elTwXLSY;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=uuZE5VTf;
+	arc=none smtp.remote-ip=95.215.58.111
+Received: from mta1.migadu.com (out-111.mta1.migadu.com [95.215.58.111])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61F07606A320;
-	Thu, 19 Nov 2026 21:12:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EA73606A32A
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 21:12:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3EA73606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=elTwXLSY
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E37F1F000C0;
-	Thu, 19 Nov 2026 21:12:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795122736;
-	bh=PPsz8EPWKcdeEfKVGYp9pwNeSXYhC2IpPyvOQ8qfLNU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=elTwXLSY2aQ/A+on2z7+cdJtgueL4VgRLQN+A9ICWwwxPjwPJt5sImilvUU0BuatH
-	 rICfaY7p6i5P5KRW6mdIoaDnnW7oWNd4gFZwrm7vdEPIqvj1sEmabAqPTdYFFHqRMb
-	 W/mMV3GUtefPaqviMy9Jh5qJ8hC/vES7L+FsfjU9OcmczAUVRvCu5dP+UveU4NPV3m
-	 4DlKgRV3Q1pLF/1aGwIh5G7HncJ+2oK3qSBghlTd68IJVccimHqpDBhrkxavVcJJ1f
-	 8IEY6O9MDETdER51fkzGoHiPdwxRG+bfa9mYJOTDcpJW4SyHKg+VVoyEY/+KOq+9hA
-	 CcNfekYXW2rDA==
-Date: Thu, 19 Nov 2026 13:12:14 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
-Cc: Tianyi Gao <tianyi@cloudflare.com>, Hangbin Liu <hangbin.liu@linux.dev>,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
- edumazet@kernel.org, pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
- ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
- john.fastabend@gmail.com, sdf@fomichev.me, skhan@linuxfoundation.org,
- kernel-team@cloudflare.com, tianyi.gao@linux.dev
-Subject: Re: [PATCH net v4 0/3] selftests: net: veth: propagate check
- failures to exit status
-Message-ID: <20261119131214.0b38c1ae@kernel.org>
-In-Reply-To: <20261119012940.32838-1-tianyi@cloudflare.com>
-References: <CAG4wq-d_30-B4wQZu48ZQXAORM4QxRqPfmYsmoHS0hiYp1EtTA@mail.gmail.com>
-	<20261119003003.40482-1-emmaonana18@gmail.com>
-	<20261119012940.32838-1-tianyi@cloudflare.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=uuZE5VTf
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=bX3h7nqhm6aGMMG6byO0ihikKXGFd1peo37c3lSGR8s=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795122764; v=1; x=1795727564;
+ b=uuZE5VTfQGjRZ1L5SBsNVwEBKtSZZ/861ylL/ZXRi7xAVdzBJkI8sAz7LfbbeBlKihBb7K7i
+ f4bHdR1gd9D9c/4hiBU0KUdfhqZcWLE5vWSubbPvtAzb1QJzYcnMBtzj5Evr3zUcMvea4YYL7Bu
+ gLIhN/i5HHKSK6c3XZt86PrU=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta12.migadu.com with ESMTPS id 1079ed9eecef3a2c;
+	Thu, 19 Nov 2026 21:12:44 +0000
+X-Mizu-Trace-ID: 1079ed9eecef3a2c
+X-Migadu-Flow: FLOW_OUT
+From: Usama Arif <usama.arif@linux.dev>
+To: peterz@infradead.org,
+	mingo@redhat.com,
+	acme@kernel.org,
+	namhyung@kernel.org,
+	mark.rutland@arm.com,
+	alexander.shishkin@linux.intel.com,
+	jolsa@kernel.org,
+	irogers@google.com,
+	adrian.hunter@intel.com,
+	james.clark@linaro.org,
+	linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	rkeilty@meta.com,
+	atish.patra@linux.dev,
+	dgreid@meta.com,
+	riel@surriel.com,
+	shakeel.butt@linux.dev,
+	kernel-team@meta.com
+Cc: Usama Arif <usama.arif@linux.dev>
+Subject: [PATCH 0/3] perf/core: Fix software event sample data, then stop zeroing it
+Date: Thu, 19 Nov 2026 13:10:43 -0800
+Message-ID: <20261119211235.99805-1-usama.arif@linux.dev>
+X-Mailer: git-send-email 2.53.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -66,37 +80,50 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Thu, 19 Nov 2026 01:29:40 +0000 Tianyi Gao wrote:
-> On Thu, 19 Nov 2026 01:29:59 +0100 Omokefe Emmanuel Onanaroghene wrote:
-> > Changes v3 -> v4:
-> > - Patch 2: use if/else instead of "&& { ...; } ||" chains, keep
-> >   lines within 80 columns (thanks Tianyi for the review).
-> > - Add patch 3 deriving the invalid tx value from the kernel maximum.  
-> 
-> Sorry for being annoying, but I see three problems with how v4 was
-> sent:
-> 
-> 1. Patch 3 lost its subject prefix. It went out as "[PATCH] selftests:
->    net: veth: derive invalid-tx test value from kernel max", so
->    patchwork put it in a series of its own [1].
-> 
-> 2. Patch 3 should come first. Patch 1 makes a chk_channels() failure
->    fail the script, and from then on the nproc + 1 check can fail on
->    a correct kernel. With the fix first, no commit in the series
->    reports a false failure.
-> 
-> 3. v4 was posted as a reply to my review of v3. A new version should
->    start a new thread, and its change log should link the previous
->    postings [2].
+do_perf_sw_event() builds samples for software events (context switches,
+page faults, ...) in an on-stack struct perf_sample_data. This series
+fixes two bugs around that struct and then stops zero-initializing it,
+a 256-byte memset that every context switch pays once a context-switch
+counter is open anywhere.
 
-On top of the points Tianyi Gao already made:
+Patch 1 initializes the struct for each matching event. Today a sampling
+event inherits the sample ID, timestamp, pid/tid and callchain prepared
+for the event before it, and sometimes a record size smaller than what
+is then written, overrunning the records that follow in its ring buffer.
+Two concurrent "perf record -e page-faults,context-switches -c 1 -a"
+sessions make the older one fail. An unprivileged user's page-fault
+event can do this to root's CPU-wide session. Broken since v6.3.
 
- 4. Please target all your "fixes" for selftests at net-next rather
-    than net and remove the Fixes: tags. None of this is worth applying
-    to the current release.
+Patch 2 stops BPF programs from reading an unset data->addr through
+bpf_perf_event_data::addr. On INIT_STACK_NONE kernels this returned
+leftover stack, mostly kernel pointers, on almost all context-switch
+and cpu-clock samples in my tests. INIT_STACK_ALL_ZERO mostly hides it.
+It affects all event types, needs CAP_BPF and CAP_PERFMON, and has been
+there since v6.1.
 
-I'm tossing all your submissions from patchwork.
-Please don't forget to wait at least 24h before you repost anything.
+Patch 3 marks the struct __uninitialized. On every path from do_perf_sw_event(),
+each field is written before it is read, counting events never read the
+struct, and it is never copied as a whole, so its padding never leaves
+the kernel. A privileged BPF program using bpf_cast_to_kern_ctx() can
+still read unprepared fields, and would see stack contents instead of 0,
+as it already does on INIT_STACK_NONE kernels.
+
+Patches 1-2 are for perf/urgent and stable, patch 3 for perf/core.
+
+Performance: with sched_yield() ping-pong on one CPU, software counters
+add on average 54 ns to a ~627 ns context switch, and patch 3 brings that
+to 44 ns (10 rounds, spec_rstack_overflow=off).
+ 
+Usama Arif (3):
+  perf/core: Fix perf_sample_data reuse across software events
+  perf/core: Don't let BPF programs read an uninitialized sample address
+  perf/core: Don't zero perf_sample_data in do_perf_sw_event()
+
+ kernel/events/core.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
+
+-- 
+2.53.1-Meta
+
