@@ -1,45 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795086894;
-	b=zIiD4XQHoKvt+N92ptSnSJ5CSmvts2dMLQsUPmOM/sXM78oIns8pqj2ipI/Niv2paz+O
-	 bvcnX6kmPmSf0Cd4AiJvuH9Uw+MpoiVveFbiaMmtgMHYSMSTKr1ojVO4v+rxRRP+ZMEAK
-	 gDEJmAvzO+tearnNjNeuLY/dCl1vL8xn1Z8iWq7398BDlEyYJ1aHmfho9JIh00B9w2CQF
-	 5rUVecx+sGErL3gP2/vswiqjGLkHB97fN4zyaV41qlC/VhxBleqeUfryNxMuJBDiTDCV0
-	 B2e6bMtqD6Y/GA+izKphR53JFrDSant6oDBFifklByEB4j+G83V0Ou+7BE9NoKyvkug==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795086894;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=DYwwS3RjGFhHe7GQGIU2RiD97iNHq+hyhTB0qLqdGVk=;
-	b=xrbcLc5pZ/NSyqkHQhRQoblNmZ7f9BdOdwVl5triLs5lHFtGmFl2doiPXTZHQxGn8Mi0
-	 YrAzK7T+u7Ih+yhNBogtpiAZPoylJITT9hBAEQj3hFXcbnSXQpdrG0th/a300q10i0YfM
-	 Zh/r0cisZaI946DDFBxnW3/RztuL9uND8eVgTSPECRWRLhEDPi+4sCWLZvB2tfu3wxy22
-	 wNBKWE6gO5lh8Wb8TyVZ+mGR3c2pkB9cikD+35LLQSLlJMULG8KRcVvb7kJVmneeqFRL0
-	 o0lq5vqQH9V/lJYzv+oLASdJVwkeD/Kg9nI8Pc6BjtrVbDdiz7RqJbl/K0+15hPwyQQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CUQnG7Ei;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.46
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795087319;
+	b=buIdr3VpPhD+qE2keNltD5AdIycF0mD67PR5e8fUjlrrWMVEIeG0cgxPce6BD5kgh+C6
+	 YtUX5QLtuE+OJOJZWUQvMjozYQozWiqY1hnO7yAeqdaN2AP0DxtkXtNaYks5p5A7bj7Bw
+	 rkUV6LIvhAdECaXbyDoWKKIVZ5IdzqkSyDaBe62BCeW/DwZ5qoYZknc7fFnNHxchW2ugz
+	 MhoeKudzh9d8hX99Eh/9n0nO/Gq6ievay4w4Ab9xQn08NzxHXhq1JR7XDIfkOe6AmicPe
+	 GxSmEg5jLMCsW3e0+L5nWpWKELv03IhWqhBpJXcmHX+jmKcoWXuUrxkYYI8+uwsB0jw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795087319;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
+	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
+	 Content-Type;
+	bh=e7QbyMAcdTPueERTIe2W8rC7FaSuEijLUH0VfDQBIQI=;
+	b=sPSol3fckOhnGrJFV/ZNr5xUNjwTZCQjtuGpNeFVNh6/MFQtjlJ+O6Sd6oYTa6ofs0+b
+	 /g8xnXBIVycD1nFhYrKt4s+aSkb29SrbMpfjhVYydS9kqx8CS9bpdkpKtRpzjO3KGIXHY
+	 eur2lIhmvnXfvU8J5c9tybNROArgCHu5VeCBciqBkBUB0rnpO6wrP70I0r3wEBn4jzD+k
+	 238NBMHWMySwhjUPz20njd2UgYHPawKGO+mhvVDmEGzCnPVbfzASmtgQ4soJ01orDJeAl
+	 wII4Z/iuN/aCvBwLJ+x4M3g7BUPXRZy1tFaueZQzzdPD9NoPuegopAtGJompUjJXuZA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=sentinelone.com;
+	spf=pass smtp.mailfrom=sentinelone.com;
+	dkim=pass header.d=sentinelone.com header.i=@sentinelone.com header.a=rsa-sha256 header.s=google header.b=Z4mols3g;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.46
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BA18606A320;
-	Thu, 19 Nov 2026 11:14:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0580E606A332
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 11:21:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0580E606A332
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sentinelone.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sentinelone.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CUQnG7Ei
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0D6E1F000C4;
-	Thu, 19 Nov 2026 11:14:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795086894;
-	bh=DYwwS3RjGFhHe7GQGIU2RiD97iNHq+hyhTB0qLqdGVk=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=CUQnG7EiABomIGTHDj88SO6aR6SQwk3GEgzTKDFJm06uSHpJNvj7HxwnTLOoYNFZn
-	 l+SeaiuX+fI2xukjF78GW+JBa0eTeMUhM4DlK39Y9GPpSwGQSJnE/sx9XAo1SNKg21
-	 mipDFhMKFaJmnhi4bhgNCD/Wfi+QThhCkCmxCI22YBE+wJAXwAzkVUXlfqRZmeqHDr
-	 0hOL8xRf0tUzsTVfKXP4xxzUwcU1DzUi7P0nGOU7h8XRxETPm0F1ISstbqEO0ESXJs
-	 ZeAcvdOR9ZodeNy8HIY3Ri6KcxFzhF/zaQXPmBlzEjemt27CzsWBUz0Tt2y2p5pJSO
-	 IwhzCbyaiWWMA==
-Content-Type: multipart/mixed; boundary="===============1667663467959058832=="
+	dkim=pass (2048-bit key) header.d=sentinelone.com header.i=@sentinelone.com header.a=rsa-sha256 header.s=google header.b=Z4mols3g
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3ac847f9d78so170398a91.1
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 03:21:58 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795087318; cv=none;
+        d=google.com; s=arc-20260327;
+        b=qTRXZo8tCv3InLD7+Bgq4DanZ7/IN7NC1D6rlAd/LKjgUmWdDrVIJyOMeJXKwa79st
+         X/fX72yypJHY1KFRwQnqzKpqgCGJFCmyBxAOXASQa+gLMHfRiMRXydYQkkgk2ExP64jd
+         W+1ScFsdaSmDFTK5WKK1KD9TWljVFy+NfYq/oL6CN4Uph2WqjgXp+8qeviaDWQ9GXuWT
+         jd4DVYzc4BYqH2uerzxQ2HiK1mUycp5vtCPeNax7bdPIFSDAmi3tUnerDWCl714hDRZa
+         SaqHYXnnaQdzvXlGTVV+9C4/caQ1Ayn5g7UGeG2+JrQClPjreIWklEztFnsbgKKOyWfx
+         MNIg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=e7QbyMAcdTPueERTIe2W8rC7FaSuEijLUH0VfDQBIQI=;
+        fh=SP9MQuLGLKwYAkAMPXZZy/g7jD0jDxqmFswXJ38n1oQ=;
+        b=ZK1AxlMv4L3NMBqyLUe25GBOek95+c0sZ/rwZrdTaLWLwsgznMNmPGf/AYmpE7ZYHo
+         aMt8cNwBmED6wbhiOZe2bS/xa4neJItvz0i+Cj6ki+cq2S+sCJQNNRhp5EX5skqaWlob
+         LEO3xGSIZcb9J4mk9t8wyt412RU1jHtcPTnAADsLjsxTXDOX+Djswk7+QmLwf6kSgNcl
+         u1ZvF0cJ7emWIjI7ve/JZNVYQZzlr+80Sl6CPH1sRzVBrZD2zPs50onWZ8Agkcgfb4d7
+         Z7klMixMK1+IOWbuH9+wi2ogxCTp71jPjRrfufd6jXCUpAbD6Ia4Mrbpd+WnJ8e2qB/k
+         pzRQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sentinelone.com; s=google; t=1795087318; x=1795692118; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=e7QbyMAcdTPueERTIe2W8rC7FaSuEijLUH0VfDQBIQI=;
+        b=Z4mols3gn9bqimDi52cguSw/2T0WTaWDVxdxz6zcyZXyPgg4sGM6Q+/r5Aj7Rzapp4
+         h4quJH7omFkk7iE4D1JVrPEgmWV4GrtURSbA15/kDOpfGZpA58rouU/VUzeMHkx1S+F7
+         Hz9s26xztX/RE7p9nVIAfXB7l4QoNZ8jWho+SKI9PJDvV8FShCDPYBBuiOZ3HvFMBFhO
+         v3hpLPm3gIQEI07GGdkMFokdCQWvgs1JkPg/mR2mEUTp972OXoxMqhkZvLvtSKmLROjZ
+         b2Ss1p4URUlPL5cH7XnchQ8UvXl/BfSjp0iGlBz6WajH/WD0dm7i8pvOrVqQJWga0A5w
+         J7Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795087318; x=1795692118;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=e7QbyMAcdTPueERTIe2W8rC7FaSuEijLUH0VfDQBIQI=;
+        b=TMzkamkcQMhg+hDMc+Hm/8TnJ0JOVSIuXHmQNugcOzBitHAWmrBzonXb/5cMY4pSeK
+         AgUym+AzYOLd5Yj7mljlbDYlXxSj0a9UJCnoPCPTj4WVsQ1f+8c2qgF+sJ2CqHY8bsJx
+         u53ukJaaIOt4PHbgbHLvqXabhZEE9PDKX7vizqXMCYGaDNreBfH/f2OnvpJDUbLP5gjD
+         D2iybNIlDD9r7KnxcDKZozeiIgxycV4fu7MOXUr/MAPr0OASo/ledEOn/7ylrPC15bRu
+         n4o+1SDuUFHDxi9B9/YRxITsfAG8qsl6DuvVkRtFK/HJxY2FgR1sLagLQG33HK+LiDg3
+         2mTQ==
+X-Gm-Message-State: APuU4Z9BUkYGolfZmYNUAi036F9Ee8yaZBUlCUuc6+mB6Wkr4Jvvc5nh
+	ODqb8Ya6kB2HJnY9xWct3+tdMyWDjJjezX9wJrNNYnrAKdrxX5B9/UBLdQrg35B8cLHcuAssarz
+	ukNyxP/ZXWM5gzqG/I6VYlcqQw+kYPg1a0lYQqG0HQg==
+X-Gm-Gg: AZFdTZdHmqShwNWAtyibyz2giuJygJ1sKLVWhT8B7ca7OiePCEwCG2ucDKtbEfu5K8a
+	DBWsLC2K/BBYfPVhljpdtE6srujEYqmm1oWLsP6xY6DPQbiCqqId5neYJEsA+8p0Pv36148Ezd+
+	ZuII9wR70/zB1RBSJcOIG9jzP7IcEpHcc2uCAkKFjVagTUy2JXdluvwZP2KSBVQMWAPGSobOh90
+	yWmBZRSTqo0fkQBiozBIyaS6M+O7gzAnJ/Mi1JyhSfetE0P3md7ikuN0L+tlYZasatSKEohV/S7
+	oKv1cvF1MOwMX97lmut1Gr9EGQD9/cbEIlSZqF4hqsFCuU0lQJTx4kY1UTVEuDXdjnYev51Ta2Y
+	EInrj5YKhtNSnmf7tbEWKX/BABdG9synkaj1jRcUaFPBN38zq8FW+pG0=
+X-Received: by 2002:a17:90b:4c11:b0:3b0:9e2c:9b55 with SMTP id
+ 98e67ed59e1d1-3b3d06bcc48mr9840688a91.2.1795087318201; Thu, 19 Nov 2026
+ 03:21:58 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,94 +102,33 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <77d978d7f9343e907651b4d4d81ec1c1405dce42f75e33b169f729f208029fcc@mail.kernel.org>
-In-Reply-To: <20261119-bpf-raw-tp-regs-preempt-v2-1-e1e1b90857d6@gmail.com>
-References: <20261119-bpf-raw-tp-regs-preempt-v2-1-e1e1b90857d6@gmail.com>
-Subject: Re: [PATCH bpf-next v2] bpf: Use an on-stack pt_regs in the raw tracepoint helpers
-From: bot+bpf-ci@kernel.org
-To: mike.bazov@gmail.com,song@kernel.org,jolsa@kernel.org,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,yonghong.song@linux.dev,emil@etsalapatis.com,kpsingh@kernel.org,matt@bobrowski.net,rostedt@goodmis.org,mhiramat@kernel.org,mathieu.desnoyers@efficios.com
-Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-trace-kernel@vger.kernel.org,mike.bazov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 19 Nov 2026 11:14:51 +0000 (UTC)
+References: <20261117-bpf-preempt-v2-r2-v3-0-586376ec3672@sentinelone.com>
+ <9a47ede3-24fa-4fa3-8d7e-50f221de0929@linux.dev> <CAPnbwjpmRCR3F4V3StUz=702AdWZzHHZjP68GepnYdYykjoC8g@mail.gmail.com>
+In-Reply-To: <CAPnbwjpmRCR3F4V3StUz=702AdWZzHHZjP68GepnYdYykjoC8g@mail.gmail.com>
+From: Mike Bazov <mikeba@sentinelone.com>
+Date: Thu, 19 Nov 2026 13:22:00 +0200
+X-Gm-Features: AclHuK9_wchn9jrgtgMQTEmt7b1vm1t-1CBFRs79WS1-atFN5hx7C0543m1ETUI
+Message-ID: <CAPnbwjrQcd5R0aqNKeJV3wWuMcTTsxsamxpKVpKY7Za2xKB1gA@mail.gmail.com>
+Subject: Re: [EXT.MSG] Re: [PATCH bpf-next v3 0/4] bpf: Check recursion per
+ task for preemptible programs
+To: "JP Kobryn (CrowdStrike)" <jp.kobryn@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Martin Kelly <martin.kelly@crowdstrike.com>, 
+	Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>, tyler.wilson@crowdstrike.com
+Content-Type: text/plain; charset="UTF-8"
 
---===============1667663467959058832==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thanks for testing, JP.
 
-> bpf: Use an on-stack pt_regs in the raw tracepoint helpers
+> fexit (marked)                61      135
 
-TL;DR: Without the per-CPU slots, nested raw_tp/fentry programs may hit the
-WARN_ON_ONCE in bpf_perf_event_output() (panic with panic_on_warn); the commit
-message's claim of no more -EBUSY also looks wrong.
-
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-
-[ ... ]
-
->  BPF_CALL_5(bpf_perf_event_output_raw_tp, struct bpf_raw_tracepoint_args *, args,
->  	   struct bpf_map *, map, u64, flags, void *, data, u64, size)
->  {
-> -	struct pt_regs *regs = get_bpf_raw_tp_regs();
-> -	int ret;
-> -
-> -	if (IS_ERR(regs))
-> -		return PTR_ERR(regs);
-> -
-> -	perf_fetch_caller_regs(regs);
-> -	ret = ____bpf_perf_event_output(regs, map, flags, data, size);
-> +	struct pt_regs regs = {};
->  
-> -	put_bpf_raw_tp_regs();
-> -	return ret;
-> +	perf_fetch_caller_regs(&regs);
-> +	return ____bpf_perf_event_output(&regs, map, flags, data, size);
->  }
-
-Can this reach the WARN_ON_ONCE() in bpf_perf_event_output() using only
-raw_tp and tracing programs?
-
-bpf_perf_event_output() still has a three-level limit:
-
-    nest_level = this_cpu_inc_return(bpf_trace_nest_level);
-
-    if (WARN_ON_ONCE(nest_level > ARRAY_SIZE(sds->sds))) {
-        err = -EBUSY;
-        goto out;
-    }
-
-Before this patch, every raw_tp/tracing caller first took a
-bpf_raw_tp_nest_level slot, so a fourth nested caller got a silent -EBUSY
-from get_bpf_raw_tp_regs().  That function's WARN_ON_ONCE was removed by
-commit 3880cdbed1c4 ("bpf: Fix WARN() in get_bpf_raw_tp_regs") after a
-syzbot report of this kind of nesting.  The WARN above could only fire if a
-kprobe, tracepoint or perf_event program was also in the chain.
-
-With the slots gone, a chain of only raw_tp/tracing programs can get there.
-For example, a raw_tp program A calls bpf_perf_event_output() (nest 1),
-and its __bpf_perf_event_output() calls perf_event_output().  Fentry
-programs B, C and D attached to perf_event_output() also call
-bpf_perf_event_output(), and each is let through once by its own
-prog->active check, so they run at nest 2, 3 and 4.  At D the WARN_ON_ONCE
-fires, and with panic_on_warn the kernel panics.  The same depth is
-reachable across task, softirq, hardirq and NMI context.
-
-This also seems to contradict the commit message:
-
-> the helpers no longer fail with -EBUSY when nested more than three deep
-
-For bpf_perf_event_output() the three-level limit remains, coming from
-bpf_trace_sds and bpf_trace_nest_level.
-
-Should the WARN_ON_ONCE in bpf_perf_event_output() be dropped, as
-3880cdbed1c4 did for get_bpf_raw_tp_regs(), and should the commit message
-say that bpf_perf_event_output() keeps its three-level limit?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/44508926690
---===============1667663467959058832==--
+Marked programs take the same per-CPU counter as before, so I expect no
+change there. How many runs are behind these numbers, and how much do
+they vary from run to run?
