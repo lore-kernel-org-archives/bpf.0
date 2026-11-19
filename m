@@ -1,45 +1,89 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795101558;
-	b=x7jQKlbqGoGmBLKvZrrTr+nX/ZEU/ORHtgwR7kPQU+7lJxxi+5PwKhCnNgsGFpOkXGVj
-	 iTK7omWs3inAcTfzb4uQfDKTGATJnq3TqH6gl/KIY+bdiKtRpr58nHIukcUrdH/vNC7Fp
-	 uJTlUY/7YQAxa18cGVPWEjnhddhjAf5L/0Vmrc4g8u9z3NSP76yyzalUtAzCp59GdYxeP
-	 gfxhd0bO3JdexHNU+Ef/GW0NJzCFYRq8B2If3bduIJ2kQ5khG4f57d42PdjaLkdgDNeY6
-	 cmGCG7Iz8/kDhoJrMQ5nF7lemLRJve4+Y0ItzDngGHbOk2hQrpKP54rDZJlaNP9brLA==
+	t=1795101728;
+	b=wBxE4Q91W9jV54SpoiRQ/+Yz6KUjGmUY2NLBk+uXlRTTS4VCY9JzFb+v//A5/8mHO3wa
+	 v9D7p0MkPMz68BEArq9/+Jamgha2Ki6adwE2B+9twIHTvWS+5+fEGXUinjwS/4e068WNH
+	 zbjQ7uSqmrB8HEOcvvecWtRXjdEWZLcf5BGQlBtd5B71+ZscA2YV/gpFcV1qiTn/JgDDK
+	 6zqHjIhbab8Eiz2gMkDTcYqkYn4flixV3AHnfYK1n4jmy50K19g3tJBcsKVgkIDjWByDI
+	 1LLUvN3g9ivOkclbjVWVVoxWJ4QMwDFNWQ8iqKbBGhyxXG4JXBfieNwFk2qLpNt3BOQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795101558;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=M7sCKL1sfvK10u19rDG/6Mu1LXARQdWjOTJLt9g16i4=;
-	b=Mr3JZ8zLrnad+prTfHnpr5q13ZrZonK2rBu6xQsAQMY2EgP25/xOUByoOlHxq+8q0aa5
-	 MVtliO68KGeCb4IwtAGH7flGiwQX5XZ+tfnEprzHwLz4yrXJwUSpA29Fb8otzFOLfQG9k
-	 oXD9HG49fPGsl4DJj9WdWUGuWF1TKCNP7maEbOuwdLxFDKv3TokFlx99+o6Hlc4MGoP+/
-	 NjUC8IW8wm/FsL/oiaudi1RCJBP7sg8HRmC7b1hFFBFS+MEgumGOSMTxya4jNIfzgXQnE
-	 xrpGgVKf04l1f4LBSJjx7OyVOIt0ORHPSSkFdoR72tChEa3U2mN9TPzOf4jRDToJyDA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795101728;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=oV4J42aG7aSlwZmO4hsI4nR3tdj4IKf86NVOjXkIpNI=;
+	b=EVJ0MUowrx3b9w9QsOhGH8uu5peOnV3YHyBKbcrSnq4XEhO5WvdwV1i8Ms6hVSfjs4g8
+	 9tGW6XppNVpCRPy1BtGaAMkmzP8sN1daHH2DvBaBCAIFW6QJwX+9kYCZhIAt/WlYAvVWN
+	 AE4jczD2wAYhOlORilil/hvAAb2XQRjb7c+Y9buz6tV6rYdoroUIw4VTzso9YTgOQ2tNr
+	 fm49R817nM+SgmZ443BqhqSJKh/GHQSWu3X6vEmcpG+Tbx9/tpsPMMubarnzhRmFlfYdh
+	 GP44Fxkp2EE0Df+42Xr9T+tuYtEX6VMPM5sIx5LerbjjcKnVDl8DVa7mPWFydWYzJpQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Lg0JDFKB;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=suse.com;
+	spf=pass smtp.mailfrom=suse.com;
+	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=ed9MC6g+;
+	arc=none smtp.remote-ip=209.85.128.49
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CB63606A325;
-	Thu, 19 Nov 2026 15:19:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 802E2606A324
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 15:22:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 802E2606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Lg0JDFKB
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 504201F000C5;
-	Thu, 19 Nov 2026 15:19:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795101557;
-	bh=M7sCKL1sfvK10u19rDG/6Mu1LXARQdWjOTJLt9g16i4=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Lg0JDFKBjuwS7FakiWE1sm+uH5LVfHqt63AR+fjt5IVyYJ2cgez6hfUzxDeIh04L6
-	 hbMhpZCT54lfwJfrUTZlAQ++RJ/rtanPH4dpkuickkE2ZGrD8XP9qWrOM0tTpRL1XT
-	 5Bb/bARJ7Z4sxepYk2N2p8btO2l9C/F7EPPTtDdRL9LKfxsji0p5JXtgeOLLpCZnQi
-	 jgLqNP2LdUVnEo42oH+zP4c/RR8REdDAegwgM74OczLswvr+9kt3pLcPQv8wGTnl3G
-	 Qxt2x79tZ3M1iYtmVb5sCxZcRnvkBN7+zuhwnQWCieevMT2Dtfb2i//4rQdvSHefXU
-	 RLO6rdJ9vhBlQ==
-Content-Type: multipart/mixed; boundary="===============8478692278203113852=="
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=ed9MC6g+
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4bb666304fdso9059195e9.0
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 07:22:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1795101726; x=1795706526; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=oV4J42aG7aSlwZmO4hsI4nR3tdj4IKf86NVOjXkIpNI=;
+        b=ed9MC6g+5Qtaoy2xB6R75hiktNRHrl7RaNAjvJeRhSHqpYmnLg4iyU3/hdIW4Pu90D
+         a4LQmtDz7S9rGXQd8aG1A/52yzeUu+XvQDN90ggIDTb2We7bKM8vuvXuYrr9v7ehhHXK
+         P7QBdQhyVZmPZydzQW88om3uzIo9thgVho6ku23S1CGgMS4BdIfOIiKtP50+yNHtvxJa
+         KmtxG8XqHOaTzAS7jgYCxmxQTzMgfEsFdZPmlRsYoT29OqJYiNYjWC1tYEqdP0sMJwQc
+         dlWpmyj71nQQ0v8C4hD6MEHQmwQRN2YbJ8uEGM8vF1OWA8ciDyydUn0Duphkcbv01yhy
+         +P1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795101726; x=1795706526;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=oV4J42aG7aSlwZmO4hsI4nR3tdj4IKf86NVOjXkIpNI=;
+        b=uPXIA57yJjtYhjmdhX20LX0F6ImAnVI28Q6Fa0g89wrglUKsTidKyfzU28GJbP/JNS
+         KbeDKe4WCvFISbfOXUuW7gFaO92HO90pjhX67qtdXFsz9qBLUVtBS+a0v5APna8I96WA
+         0fn8FC6zfHyrg9dOjsIiCYMPRlnEXRvuDiWLZAoTpsH/Ex817JW7DLefBEfiv2jeBg/D
+         TDNHypNUEVB7+nx0gH/UujNwcV9e8HFCgX/FsBw7ZRKgjdr3KfNPblYCaC043lCF1QaO
+         K7DM9+iJ+XzkcsEYYfIMaOKqZEU07inj+w3h/angUbWc/gtInkUTgo/kgVQfFhMNsudw
+         bd/w==
+X-Forwarded-Encrypted: i=1; AL+hErFCRNnGOePIbRrrp0O535W24QZyiLxPcBgsI/fQyuzj3AuhH61JWyCtRXAtZQBvlItsH4g=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9Hnp+L72UGiXgxxxn3YMc3PaxC5Hsah3h1tZ0O0ki1jghDQkGu
+	iseXSrYVuB1mFSDXa2WNxKjnGgV1MzAY36n4xDkOUBgFqQLADWWzrOOcFYkLURTzEDHemlPopTt
+	V1mSM/4o=
+X-Gm-Gg: AYBFou1OG0BEI0+iRUlVGT2QYNFsWyvySSKWGht3DOVe5zO+SyV6nzvKyIUjvq07EiS
+	xBZp8P/JWFK0fAzorkIqXgHskVYq2MHtlef+Mjls1Jew96bIbmUU9VpaYyItrPdoD/cRrjMyjf+
+	1bb280sfr/Y7aB64Z/YjoFMoKro9xyxZNJ0jgwrZlVy9hKFQOLCk+Vtrh2cCk/uZByi6S78Hvyf
+	6kIKk1nkEtmFzBBed/TBcz7DpqgJHliLtvghqSALInON4DkeDWT7NGYyPGeg1SjTf88mP/3UOZD
+	T0ljSJdR7weCueWodvscBsEiZ3FeGBfAtB63BT8Ppj3GeAem7o7cjHC5U6cZ4vYQK8obVyI6m93
+	S8P2vEhYvwFmW2IGz1lrIy+BLrFQqm+1VCY0LHQ8oR3DCAtXKgWVcBOsKJv4W0ZYf8rx6XElXGd
+	MkiVit6LEJgDtOPh1j5Kn//d8qUrOmWm7O+qKBXbmN8rKC1wWwAl4ijYDurMunZfikYeVk2oGDI
+	Aml46HXx1uo1u4X80Yul5F2Sb0tEEXXWfTTFCMVYWpw95iGZ1WwWdXuqI5qkgvdVbGHfp7kCybE
+	1Al52E6/mIUqfr9GPNtttdw0S1WQ1ArPVGe9AxVMZ/ENlWbDHvt8yT3J1Kayuaas7w==
+X-Received: by 2002:a05:600c:674b:b0:49e:65f2:db64 with SMTP id 5b1f17b1804b1-4bb860ffbaamr34819435e9.5.1795101725389;
+        Thu, 19 Nov 2026 07:22:05 -0800 (PST)
+Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb84cbc5d3sm29859235e9.0.2026.11.19.07.22.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Nov 2026 07:22:04 -0800 (PST)
+Message-ID: <8b47b628-865a-416d-b9f9-fbeca3f9d649@suse.com>
+Date: Thu, 19 Nov 2026 16:22:04 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,169 +93,52 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <a4c31b033613fa51016f2cf42f90e3f2c61d0e9a8c1012c20e5074a0e92bbe95@mail.kernel.org>
-In-Reply-To: <20261119142231.2612515-4-razor@blackwall.org>
-References: <20261119142231.2612515-4-razor@blackwall.org>
-Subject: Re: [PATCH bpf-next 3/8] bpf: allow bpf_sk_assign on tc egress with refcounted sockets
-From: bot+bpf-ci@kernel.org
-To: razor@blackwall.org,bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,razor@blackwall.org,ayush.sawal@chelsio.com,andrew+netdev@lunn.ch,davem@davemloft.net,edumazet@kernel.org,kuba@kernel.org,pabeni@redhat.com,ast@kernel.org,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,john.fastabend@gmail.com,sdf@fomichev.me,horms@kernel.org,kuniyu@google.com,willemb@google.com,jhs@mojatatu.com,jiri@resnulli.us,sd@queasysnail.net,paul@isovalent.com,alasdair.mcwilliam@isovalent.com,netdev@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 19 Nov 2026 15:19:14 +0000 (UTC)
-
---===============8478692278203113852==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] module: Add stubs.c for CONFIG_MODULES=n
+ module_put_and_kthread_exit()
+To: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>
+Cc: Aaron Tomlin <atomlin@atomlin.com>,
+ John Fastabend <john.fastabend@gmail.com>, linux-modules@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261014-module-stubs-v3-1-319f2a7d4a55@suse.com>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20261014-module-stubs-v3-1-319f2a7d4a55@suse.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-> bpf: allow bpf_sk_assign on tc egress with refcounted sockets
+On 10/14/26 3:34 PM, Petr Pavlu wrote:
+> Module-related stubs for CONFIG_MODULES=n can normally live in
+> linux/module.h. This works well when the stub does nothing or simply
+> returns a constant. However, some non-module implementations may be more
+> expensive, either because they have a real implementation or because they
+> require additional dependencies to be pulled into linux/module.h. This
+> header appears in roughly 15k #include directives across the kernel, so it
+> should avoid bringing in unnecessary definitions.
+> 
+> Specifically, linux/module.h defines module_put_and_kthread_exit() as an
+> alias for kthread_exit() when CONFIG_MODULES=n. That in turn requires
+> linux/kthread.h, even though linux/module.h otherwise has no need for it.
+> Note that linux/module.h currently doesn't include linux/kthread.h and
+> requires its users to pick it up through other paths, which is itself not
+> quite right.
+> 
+> Introduce kernel/module/stubs.c to hold such stubs, built only for
+> CONFIG_MODULES=n. This mirrors kernel/time/posix-stubs.c, which is used for
+> CONFIG_POSIX_TIMERS=n.
+> 
+> Define module_put_and_kthread_exit() in both CONFIG_MODULES configurations
+> to call __module_put_and_kthread_exit() and add a CONFIG_MODULES=n
+> implementation of that function to kernel/module/stubs.c. Since
+> __module_put_and_kthread_exit() is now implemented even when
+> CONFIG_MODULES=n, remove the corresponding '#ifdef CONFIG_MODULES' from the
+> noreturn_deny BPF list.
+> 
+> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+> Reviewed-by: Aaron Tomlin <atomlin@atomlin.com>
 
-TL;DR:
-- bpf_sk_assign() on egress may hit BUG_ON in skb_orphan() for test-run skbs
-  with skb->sk but no destructor
-- skb_do_redirect() may keep a borrowed listener via syncookie reqsk, a
-  possible use-after-free; also possible socket double-put
+I've queued the patch on modules-next.
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -2559,14 +2559,17 @@ int skb_do_redirect(struct sk_buff *skb)
->  	if (unlikely(!dev))
->  		goto out_drop;
->
-> +#ifdef CONFIG_INET
->  	/*
-> -	 * Prefetched sockets may borrow a listener under RCU. Orphan them
-> -	 * before redirects that can outlive this section. Peer ingress
-> -	 * stays in the same RCU section.
-> +	 * Prefetched listeners may be borrowed under RCU. Drop borrowed
-> +	 * assignments before redirects that can outlive this section.
-> +	 * Peer ingress stays in the same RCU section.
->  	 */
-> -	if (skb_sk_is_prefetched(skb) &&
-> +	if (skb->destructor == sock_pfree &&
-> +	    !sk_is_refcounted(skb->sk) &&
->  	    (!(flags & BPF_F_PEER) || (flags & BPF_F_EGRESS)))
->  		skb_orphan(skb);
-> +#endif
-
-Can this leave a borrowed listener behind a redirect?
-
-bpf_sk_assign_tcp_reqsk() installs a syncookie request sock whose
-rsk_listener is a borrowed SOCK_RCU_FREE listener:
-
-    req = inet_reqsk_alloc(ops, sk, false);   /* no ref on sk */
-    req->rsk_listener = sk;
-    skb->sk = req_to_sk(req);
-    skb->destructor = sock_pfree;
-
-skb->sk is a TCP_NEW_SYN_RECV request sock, so sk_is_refcounted(skb->sk)
-is true and the new condition is false.  The skb then keeps the reqsk
-across bpf_redirect(ifindex, BPF_F_INGRESS) and non-peer egress
-redirects.  For example:
-
-    sch_handle_ingress()
-      skb_do_redirect()                    /* no orphan */
-        __bpf_redirect_common()
-          __bpf_rx_skb()
-            dev_forward_skb_nomtu()
-              netif_rx_internal()          /* queued past the RCU section */
-
-Later tcp_v4_rcv() -> __inet_lookup_skb() -> inet_steal_sock() ->
-skb_steal_sock() takes the syncookie branch:
-
-    *refcounted = false;
-    sk = req->rsk_listener;
-    req->rsk_listener = NULL;
-    return sk;
-
-and inet_steal_sock() dereferences that listener.  If the listener was
-closed and its SOCK_RCU_FREE grace period elapsed while the skb sat in
-the backlog or a qdisc, is this a use-after-free?
-
-The updated comment says borrowed listener assignments are dropped, and the
-commit message describes "sock_pfree + !sk_is_refcounted" as "the true
-no-refcount case from ingress", but the reqsk case above is not covered.
-
-Separately, refcounted sock_pfree assignments made at ingress now survive
-non-peer redirects into egress.  complete_skb() and
-chcr_ktls_copy_record_in_skb() treat any destructor other than
-sock_efree/sock_pfree_ref as charged to sk_wmem_alloc, and chcr copies
-sock_pfree to nskb without sock_hold().  Would that double-put the socket
-when both skbs are freed?  The commit message says only sock_pfree_ref
-sockets are meant to be preserved; would testing
-skb->destructor == sock_pfree alone, as before, keep that and close both
-problems?
-
-[ ... ]
-
-> @@ -8115,21 +8118,26 @@ static const struct bpf_func_proto bpf_tcp_gen_syncookie_proto = {
->
->  BPF_CALL_3(bpf_sk_assign, struct sk_buff *, skb, struct sock *, sk, u64, flags)
->  {
-> +	bool egress = !skb_at_tc_ingress(skb);
-> +	bool refcounted;
-> +
->  	if (!sk || flags != 0)
->  		return -EINVAL;
-> -	if (!skb_at_tc_ingress(skb))
-> +	if (egress && (!sk_fullsock(sk) || !sk_is_refcounted(sk) ||
-> +		       skb_is_decrypted(skb)))
->  		return -EOPNOTSUPP;
-> +	refcounted = egress || sk_is_refcounted(sk);
->  	if (unlikely(dev_net(skb->dev) != sock_net(sk)))
->  		return -ENETUNREACH;
->  	if (sk_unhashed(sk))
->  		return -EOPNOTSUPP;
-> -	if (sk_is_refcounted(sk) &&
-> +	if (refcounted &&
->  	    unlikely(!refcount_inc_not_zero_acquire(&sk->sk_refcnt)))
->  		return -ENOENT;
->
->  	skb_orphan(skb);
->  	skb->sk = sk;
-> -	skb->destructor = sock_pfree;
-> +	skb->destructor = egress ? sock_pfree_ref : sock_pfree;
-
-Can skb_orphan() hit BUG_ON(skb->sk) here?
-
-Removing the !skb_at_tc_ingress() rejection lets every non-ingress skb
-reach skb_orphan(), including skbs that have skb->sk set and no
-destructor.  bpf_prog_test_run_skb() builds exactly such an skb:
-
-    sk = sk_alloc(net, AF_UNSPEC, GFP_USER, &bpf_dummy_proto, 1);
-    skb = slab_build_skb(data);
-    skb->sk = sk;          /* no destructor */
-
-tc_at_ingress is zero there and convert___skb_to_skb() never sets it, so
-skb_at_tc_ingress() is false and the new egress branch is taken.  A tc
-program that does bpf_sk_lookup_tcp(skb, &tuple, ..., BPF_F_CURRENT_NETNS,
-0) on an established socket and then bpf_sk_assign(skb, sk, 0) passes
-sk_fullsock(), sk_is_refcounted(), skb_is_decrypted(), the netns check and
-sk_unhashed(), and refcount_inc_not_zero_acquire() succeeds.  Then:
-
-    static __always_inline void skb_orphan(struct sk_buff *skb)
-    {
-        if (skb->destructor) {
-            ...
-        } else {
-            BUG_ON(skb->sk);   /* skb->sk == dummy sk */
-        }
-    }
-
-Before this patch the same program got -EOPNOTSUPP and never reached
-skb_orphan().  The selftest added later in the series (probe_timewait in
-sk_assign_netkit) goes through bpf_prog_test_run_opts() but only avoids
-the BUG because its socket is in TIME_WAIT and fails sk_fullsock().  A
-later patch in the series that accepts listeners does not add a guard
-either.
-
-Could the egress branch reject skbs that have skb->sk set but no
-destructor (or the test-run context) before calling skb_orphan()?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/44548126067
---===============8478692278203113852==--
+-- Petr
