@@ -1,96 +1,73 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.219.41
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795077845;
-	b=DWK6k+d33w+ygC7cyVMCEY1NzbSsv90vHVJfmgyskGnwyq54/GjOrovVQ0Nu1n4jggSD
-	 ApGrMgSmEPIq8UdCxTdXBwPnWmPhRcY1C9DP/IaWCsPjxXcrFRtqBDSfDUhvoBARiDqJ5
-	 JZT23hci0nyxs6bAvBRm5lpJp/ytso+Ge8SCsC7j4h2viJiZH1Ggeq8a/Mrclz8VPC65l
-	 3K/nYWrS33MrKAW1uudBzMXnbla2gahPTirCQEclKsOMyPYvJhAtzbg+JEj2psYJWzib/
-	 XYbbn1+mDY02WfMYoyefdI5ILzxUeN6euCZ0/5vxic1QTFMXfGEUKw0dHM50C9LhS+w==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795077845;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:From:Date:
-	 X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type;
-	bh=/A4ln7oWDupQv8wAGHpGQYZH4Kry63HuaRIfBmRJwfE=;
-	b=0JpRcTheC3kfU/cMnuPRQoJpnZiKV3ybwvpVBUv9Eq/UoQ1D1Ki3lY/IbXlIgiJQhMKY
-	 4Ja6XQTk6AlYsmFfvcmyQjfLLrBRH0M3I/kMIqaxsZbHzhBChilYV5cfzAoOwqu/0S3LB
-	 /eMNxE3sGQsszfX/bM5Lb5SNjmQaY4HIYk6QKpN66ACviOGNBcip5sXkXZPX/TpBQw3xk
-	 S2/q/b7ajAZMgo/ohFv2xABVaRphQQoEGtA2CBWBu5iq0amRtD9KAOTm41LyaQ88710Xl
-	 Q5RuIuz8HYdQxRH32Bl3S79yjKJQvqnK/OVJAgWx9uUfUiy5AczrYIVXUlNAJf9SZ8Q==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qZSekRxy;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.219.41
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.166
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795078086;
+	b=VG1VmscuFBkX30D/I2+P7eHw5pHPwYSK1xPk12R4SyY6H3nV8OZkzydlPvPcxMEtf0qy
+	 QCHJZGJ+248hHWFzxpCkYQCL9UjDDhAC4sbbUw6tUOZaEMXM0y/Hmarz9h5m6SVXkgK6D
+	 T+9GWWxkbctwB6cbhdXJS5oeoimM3M54oryHtzBU7cEVZ1ehfA9C/EovNMEtnjeNm1NtT
+	 Lu0MQnEe2Vn7tcIvHKF0DE2wUIHYYbZR5INAFksrd1DJnwPORW6XnS47ij+wodK+4s+rG
+	 NlrMDQF3ZJsZbVmx4+WdjMbcinwoA1Riagm7IDthBnlNQhG7xKaJC7UIHo7qg5ibE4w==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795078086;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=H1bhQLtIfRhu5KAqAjgC9nCVZmy6r3NXMjolwdRpzaA=;
+	b=c1eN6Mc7sIH4Pl6g/TnTVPRVxH5HMSyFbkaQU4jAaLZWDu7rbskQSCI0mdIBvXlfez4F
+	 3BobwjCfkj8C0CNniFXAbHpoLgMjKxcLnOmjbrH5Bolj2mCBvcGSABdCNmZGCkvs8ODuf
+	 FBAzP5Gjpbp6y1VKDEFZ/DUCTOpIl52ZqUvz/XSzx8Y71QqFSkiYkCoas8MFj2iUYxVj6
+	 3hiQX8y46KNkjbmOAMtEKKWeRQj/fDYZGeaZA1das/0JMvz9XDDDDai1kBwM8HItZa3vf
+	 QEo94km8SWbXtalPIoNbeZv2+p6UOxm1f6DrzXPeTJfIxcqcromRoyPoXMuUyfGk57A==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=X5uQIsei;
+	arc=none smtp.remote-ip=91.218.175.166
+Received: from mta0.migadu.com (out-166.mta0.migadu.com [91.218.175.166])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDFC8606A325
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 08:44:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DDFC8606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BBCB606A326
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 08:48:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4BBCB606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qZSekRxy
-Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-92123588d53so7635736d6.1
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 00:44:04 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795077844; cv=none;
-        d=google.com; s=arc-20260327;
-        b=U4v5tcfY/TCh04+0uuhU13DT6P5/flhL6bpkdPpy5usBKwfqRLaLwr6gp4qCW4AfNr
-         fqGFaqusZG7+7nj2SUdU6maV2Mbbp9az+KTYxVxbjMU4YfxhvqsSMAqzTdBMlZL0StTZ
-         JAH8Ff+kw+p5uEWwfUb07SkXeszlRGK+WzMnI3QM/XnG2NaAA52TgfOw5hs2gYQCmqJD
-         AVw0YQ2yM3kuVcmXUiwdPKTI2U8ChNTE9qHzr3bK6zrM7JLyGe61GtV0H93WlR3YtJKf
-         fW9HvCxEeUEooLs95kDBvtSAIJJR5XFqQqNYXP+bMKPhjeKkfhXdi70VWFw8Yz73lmQ4
-         7n7A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=/A4ln7oWDupQv8wAGHpGQYZH4Kry63HuaRIfBmRJwfE=;
-        fh=v/qBMU4wwadfiVHPQOJnoB8I8DXtsJMiG4gQ2sxzR1Q=;
-        b=qbxhRSOpr4QkU7ghK8GxBrFQM89jFHo8T+XHr9UDr+D7foER5OvGkUg2YXEopuolL0
-         MYJG8coEIUSU2GHbgrpS+lk4JQTugj3pXvKvKo2jV0cC6SnOQEZ9Wqfk+9TjU/65+WRI
-         D1BAIl0SedIHqJ1WQ4L4Rlv4UCIx2PoryT3ungT2gGutNj/fP+fO6O97+VG3sI6FFGsR
-         lztpi5s4qex83X3BVijuYx0lwpoRWWhexVoLN52KP67E3tXfYy1RTl7x0ZO2YqzRirj/
-         xmGZKp1IWDiYpREtL2QBu7o0+4Gb99WLNwHj6TJSoKb9cYQwtXcRP/pLMPO9UhffZKr1
-         r1Tw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795077844; x=1795682644; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=/A4ln7oWDupQv8wAGHpGQYZH4Kry63HuaRIfBmRJwfE=;
-        b=qZSekRxyGBWd9lIKqlMrhoek70YU55c2xT98Splbsv3LHovlnKXPggtQCo1YYVmJre
-         kDLf2gkIOLxy2W1nro6L3L/8BdrrpMJvvJYSOzJDkwQmTjnRF43/+D83UyTTSMVM847R
-         YY9y7yxGI+KMPKKNN5QFaSK05Rfi2IhtXnL+tDwVEDGRSjZUqb0uWow1vqUXn5XoL8Ru
-         lvw3QBYejXH8ODZMSf+sRuSLjPSmJCptKgL8Jsq97/SX6IXW97jyYITU832HZvobEcT7
-         OxnSaU3fXDp1CAY6X+wGDhESegyJAPAbB/9r8jjceZnL0nBn9leg1MjPKVacNdyEfBaS
-         askw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795077844; x=1795682644;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=/A4ln7oWDupQv8wAGHpGQYZH4Kry63HuaRIfBmRJwfE=;
-        b=gsa3+gcevheWsFKz5m/H0OCviXZa2SpTGE8XYHz5l7FBhqSL7jWaWm50jVUW6tZRKB
-         A37mmOxJmhj5VhZML0+b5qegZJ2rgI1eFdoSexm4THOLkR2FSbjnm+usxXHEv8eTbete
-         RETXx4qGFX/EVb2WhyqSlwQs8ZFD7QBemqP6EKHIc/f7S+66CUuOmOX+WLrE++MzGsyj
-         GEhosGGKnEpWJHAb5d7I8rVyvbj+L/7UM+5xb037Cw6r6NZvZJejwEw9KGrI0C6Echcg
-         jX5x9DwiqolZTmJcGZAMpqKPxCMy+hWbYehHxZOIBlAsH7Fxk9Q5Wd1vNVP0vdagZwfy
-         oXlw==
-X-Gm-Message-State: APuU4Z+rpInkdZ17Bdy4BTivCrZSUdskvpOsXytSAnVCz+KQhAQYf9L8
-	EiqX0I60DH24bEEwpDpqXVS+5gc7ZBV7tkYGaVXX+xKX6wKLHbOkBsVdu7WV13ClbkglZNiPcQT
-	fLolfO0soXksHCJ2eTeiLTsCDdi62CeJ34Axp4bKh33aM
-X-Gm-Gg: AZFdTZfJ/6LDKdaO/HWVA6fO2/+igJS61H+9J7WIJBZSR9dp9She//LQ21yilkA/AQc
-	Mw/SU0HeIBj6o8Z8dgcSpD1ScTrwCZoB3tB7QJ/3CDjVRKcDmh/l+dsHk9Cnmrf8cKrBVHx8yTT
-	mzHBT0rtd5DOAb18cbUzR16V7y0TmPz2pmxqRaqMQUWzmDL9W5EzKSuj0hO8HXUjORGcjpxeehi
-	nw6Nz7+Hv29qHOECMQhIliCsCNQ9o4o03Ed/y/yAof4g+heVKfVMel2QDafIhAJRadqE8ex9ru+
-	si3P2rEorZ16Zfv7kyv9SO8LiuE1KFHTl+bFqaAPH/Yp3B1ZatMNZVQ+SjKc7+agYiXOzN4JHTd
-	tOj73BTKDrc8TdD3I3Bix1RhpQWxCwFVSvDbj5jjKJL6P2PXPc/aekGG7lQGEs5IWJWIyq33Q3I
-	+1gyFa2IU3oM3d2tAEIA==
-X-Received: by 2002:a05:6214:27ed:b0:921:d0e:3980 with SMTP id
- 6a1803df08f44-9212e09d4c6mr6709196d6.13.1795077843795; Thu, 19 Nov 2026
- 00:44:03 -0800 (PST)
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=X5uQIsei
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Y9EVLqGCLJb6bEWtsztP5YW7dfjn2JrAKJzkvnEfwzE=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795078083; v=1; x=1795682883;
+ b=X5uQIseiNdtIy5kUc5kkUN0fHVDdotCpin2O6LAb54zpbTe7M5FhgnjCAX5I6iMf5sVh8Akh
+ SN1nOFFeCGfrpDamjcrNbFOWa71kQECZG5eiq0BoXvc0IpGMQ3/4BVf1T7Zz0ZtCh2OxMeKeOCH
+ t63HNmA4ww8XIGjUpfRPpY0E=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id d0654b647b7ec1a7;
+	Thu, 19 Nov 2026 08:48:03 +0000
+X-Mizu-Trace-ID: d0654b647b7ec1a7
+X-Migadu-Flow: FLOW_OUT
+Date: Thu, 19 Nov 2026 16:47:50 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: Andrea Mayer <andrea.mayer@uniroma2.it>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+	David Lebrun <david.lebrun@uclouvain.be>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Mathieu Xhonneux <m.xhonneux@gmail.com>,
+	David Lebrun <dlebrun@google.com>,
+	Justin Iurman <justin.iurman@gmail.com>,
+	Stefano Salsano <stefano.salsano@uniroma2.it>,
+	Andrea Mayer <andrea@common-net.org>
+Subject: Re: [PATCH net v2 5/6] seg6: account for the MAC header in skb
+ checksum on L2 encapsulation
+Message-ID: <av63tgNtC6__wjWS@fedora>
+References: <20261118150251.65-1-andrea.mayer@uniroma2.it>
+ <20261118150251.65-6-andrea.mayer@uniroma2.it>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -100,69 +77,55 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-From: Yingke Xiao <inkxiao12@gmail.com>
-Date: Thu, 19 Nov 2026 03:43:52 -0500
-X-Gm-Features: Aa3M54pzdVub43aRWcLLt_mpg_U50pT-PxWG6mqH_aYeoBXAOv6oz8O-dCuo7qY
-Message-ID: <CAMcAce9MNLam=t_48M0jQDg36GghfAGs=jX7oAejKdUmdCqj4g@mail.gmail.com>
-Subject: [PATCH bpf v3] bpf, lsm: Remove bpf_lsm_release_secctx from sleepable_lsm_hooks
-To: bpf@vger.kernel.org
-Cc: security@kernel.org, kpsingh@kernel.org, matt@bobrowski.net, 
-	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261118150251.65-6-andrea.mayer@uniroma2.it>
 
-security_release_secctx() invokes release_secctx LSM callbacks
-(selinux_release_secctx() and apparmor_release_secctx()), which only
-kfree(cp->context) and never sleep. Because the hook is non-blocking,
-Netfilter callers legitimately invoke security_release_secctx() under
-atomic, RCU, or softirq context:
+On Wed, Nov 18, 2026 at 04:02:50PM +0100, Andrea Mayer wrote:
+> In L2ENCAP and L2ENCAP_RED mode, seg6_do_srh() puts the MAC header back
+> in front of the frame with skb_push(), without adding it to skb->csum.
+> The encapsulation then calls skb_postpush_rcsum() only for the outer
+> headers. With CHECKSUM_COMPLETE the MAC header is missing from
+> skb->csum, which no longer covers the whole packet as required.
+> 
+> For a forwarded packet, ip6_forward() sets ip_summed to CHECKSUM_NONE with
+> skb_forward_csum(), and End.DX2 does the same before sending the frame.
+> When the packet is delivered on the same node, a raw socket with
+> IPV6_CHECKSUM still reads skb->csum. With skb->csum computed by the device,
+> the kernel can then log a "hw csum failure", as if the device had computed
+> a wrong skb->csum.
+> 
+> Use skb_push_rcsum(), which also calls skb_postpush_rcsum() for the MAC
+> header.
+> 
+> Found by manual code inspection of the skb->csum updates in the SRv6 code,
+> and observed in a VM without kernel changes or error injection: with
+> skb->csum computed by a tc ct action, a BPF tracing program on
+> ip6_forward() shows skb->csum missing the MAC header. With this patch,
+> skb->csum covers it. Also tested against the srv6 selftests, and with a
+> ConnectX-6 Lx NIC (mlx5) that provides CHECKSUM_COMPLETE.
+> 
+> Fixes: 38ee7f2d4756 ("ipv6: sr: add support for encapsulation of L2 frames")
+> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
+> ---
+>  net/ipv6/seg6_iptunnel.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/net/ipv6/seg6_iptunnel.c b/net/ipv6/seg6_iptunnel.c
+> index 3bc47c5614ff..82b3c2af03f7 100644
+> --- a/net/ipv6/seg6_iptunnel.c
+> +++ b/net/ipv6/seg6_iptunnel.c
+> @@ -472,7 +472,7 @@ static int seg6_do_srh(struct sk_buff *skb, struct dst_entry *cache_dst)
+>  			return err;
+>  
+>  		skb_mac_header_rebuild(skb);
+> -		skb_push(skb, skb->mac_len);
+> +		skb_push_rcsum(skb, skb->mac_len);
+>  
+>  		if (tinfo->mode == SEG6_IPTUN_MODE_L2ENCAP)
+>  			err = __seg6_do_srh_encap(skb, tinfo->srh,
+> -- 
+> 2.43.0
+> 
 
-  1. net/netfilter/nf_conntrack_standalone.c: ct_seq_start() acquires
-     rcu_read_lock() and holds it across ct_seq_show() ->
-     ct_show_secctx() -> security_release_secctx(&ctx) until ct_seq_stop().
-  2. net/netfilter/nfnetlink_queue.c: nfqnl_enqueue_packet() runs under
-     rcu_read_lock() in packet RX softirq and calls
-     nfqnl_build_packet_message(), which allocates with GFP_ATOMIC and
-     calls security_release_secctx(&ctx).
-  3. net/netfilter/nf_conntrack_netlink.c: ctnetlink_conntrack_event()
-     allocates with GFP_ATOMIC and calls ctnetlink_dump_secctx() ->
-     security_release_secctx(&ctx).
-
-Listing BTF_ID(func, bpf_lsm_release_secctx) in sleepable_lsm_hooks
-lets BPF_PROG_TYPE_LSM sleepable programs (lsm.s/release_secctx) call
-blocking helpers/kfuncs such as bpf_copy_from_user() in atomic/RCU/softirq
-context, causing BUG: scheduling while atomic or RCU stalls.
-
-Remove bpf_lsm_release_secctx from sleepable_lsm_hooks. Verified by
-line inspection and live QEMU BPF verifier runs on x86_64 7.4.0-rc3
-and 6.12.118 (lsm.s/release_secctx: LOADED pre-patch -> REJECTED post-patch
-with -EINVAL, "bpf_lsm_release_secctx is not sleepable").
-
-Fixes: 423f16108c9d ("bpf: Augment the set of sleepable LSM hooks")
-Cc: stable@vger.kernel.org # 5.10+
-Signed-off-by: Yingke Xiao <inkxiao12@gmail.com>
----
-v2 -> v3:
-  - Rebase onto current bpf tree (4b4eb7f44ee0) to resolve merge conflict in CI.
-v1 -> v2:
-  - Correct sender identity and Signed-off-by with real legal name per DCO.
-  - Remove drafting notes.
-  - No functional code changes.
-
- kernel/bpf/bpf_lsm.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-index f39a3766f..791dcad12 100644
---- a/kernel/bpf/bpf_lsm.c
-+++ b/kernel/bpf/bpf_lsm.c
-@@ -368,7 +368,6 @@ BTF_ID(func, bpf_lsm_path_chown)
- BTF_ID(func, bpf_lsm_mmap_file)
- BTF_ID(func, bpf_lsm_netlink_send)
- BTF_ID(func, bpf_lsm_path_notify)
--BTF_ID(func, bpf_lsm_release_secctx)
- BTF_ID(func, bpf_lsm_sb_alloc_security)
- BTF_ID(func, bpf_lsm_sb_eat_lsm_opts)
- BTF_ID(func, bpf_lsm_sb_kern_mount)
--- 
-2.43.0
+Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
