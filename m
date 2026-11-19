@@ -1,66 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.4
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795057040;
-	b=OrmvEDPSBHBNgk70pRwV9FRf8RELCNqXaQjgDJA+DzlmMwjgtfwx0tqMaFfnAjzN3+w4
-	 hEa3rAQWymOqKE0XmzTWSzkSoCVkt5B/01vCFuwcFXuzirE60xQzXPEyAmqfeUomm3vLL
-	 +SDoj6abepiy4cA4CMxnDuMCO/F2Ay89rjyKPI9gs3vbSAYX+of81t/QMGppEFa9coARg
-	 PasRnpPODtA9N+bTKACIRe9mMykg8PrpoDltLU19scuB3XjuoyiRItCyFhT0YYDM+eGs9
-	 GO3QbkF7PTxNQ6Xto1OGXT4meJ6vkAwVuwixqoEFN9xIuBNWAuxdjYh6U9/t/5jHc4w==
+	t=1795057455;
+	b=aX6RXZ1dr1PpZwBlt8p1wC5sbCWFcu2c223Pv1UuoL/6SUod97iGkQKUHBkTLnYL1/GB
+	 XQgkzjMSZhXIfCjokHBhvATixNPM7vgi2lhkSGrnpjbKKyOOztxSQMXY95xUMWnS5DE4b
+	 pdHy84sFrx+2yhRiVODSzEZpFytag9qE99mdw+Aw7Jl/8LYLrZM+6NfHpiZLe3jPva0Oc
+	 GquDomhlS5+q8XfMGLqpKa4wkF8DP4mVYEwQRdJjQ9CeXL6/BXp9Z8UgrlA+QXry4H0Ce
+	 Ljj0BbHbKpgS5vx6/NWv78lYjkBkSOGQfNBwne4tv8v/HLbdpQpshnsqqLM5K4YZ44w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795057040;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
-	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
-	bh=n45qhIWgljouYKMGyLEtTBZkMLiNMOhwqdxxq1twSXI=;
-	b=MpzMDwUFA2xgGXKhudmL4ihfr4DEEevSEeCsYFIJ+qGLGts2ft6eS/Hrp3K+fR9CvjhZ
-	 mr8qsw4l1A4gN1HRRI8nl5VutFWpcJWZtg+DVV2XkJA3kgWDdyJOhVtToRxqyeSmtQXmP
-	 rU8rtH139JHN3ATlWYz4QZ5ZoZCjd1iawX9W6dkFoNKLucBfuNrfrQyDrUyXZbrivRJLQ
-	 XsABKZIDWZTRVcKKlQenYNuvBJoe1HM8pF/7MN+4DyKsfVFfOb8n2FE0C4sf0/klCVsJZ
-	 ekM0nRvyoLvCYvWIaC6qqnWzt5mBa47KWNtu7nHaY5ZQRBOPhjASyuuJYWbtfb2jjwQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795057455;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=0SbJDsJK4PSjk5SKz/IpSKiXp0UG0peF0ib+V6K/eBE=;
+	b=fjgBj7lF/oY/mOaEN/u4VGtlCZpVhfIX9AjCJt4uPvKVHwWv3ODwKEmGBYoJdrkuLuGq
+	 44O1AUfot+PHqqzjjskmBcnR+BZhFN8jaqJrEJjTSUi0R6AhBkWjDRB3H1UsYfK0UVivF
+	 ZHiFeBgYh1ATJnKsu0+7prbk+G10SoEJiSDNJt+agDdohti/9HZ1h5lVP9V4MWAqA+A2g
+	 aEyZ3TSN55SmnhnwhVyFbIF6SaJ7KjcYq3hd0b3XuAmw3QsGpRuvRgBZqnBQqXnOeF/xk
+	 3/yxMbaKpZE2VJWyGHJNZShHmmn50MBsAC9bMiGqkmx8T4cfBZhxbVyumJXpf+F98nA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=163.com;
-	spf=pass smtp.mailfrom=163.com;
-	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=JwN2Kjro;
-	arc=none smtp.remote-ip=220.197.31.4
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DWK3GpEt;
+	arc=none smtp.remote-ip=95.215.58.53
+Received: from mta1.migadu.com (out-53.mta1.migadu.com [95.215.58.53])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2F5F606A31C;
-	Thu, 19 Nov 2026 02:57:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A2F5F606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E067460A260E
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 03:04:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E067460A260E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=JwN2Kjro
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=n4
-	5qhIWgljouYKMGyLEtTBZkMLiNMOhwqdxxq1twSXI=; b=JwN2KjroRV1Jn5JsTH
-	nA+6tSf/0JjkLNNsf8iHugUqSeB0ALRsPgoQiOLwXZjcKMZ4bIQW3e5Z7UEFC6ft
-	gm8OVUj4H61uGthjNT/TSxXLQTir2SLxBsX5+IcySwsEsaw7HpoOcDzVcK7ltFBM
-	OxDT5PMLQ3if/L48KXFKM/yOk=
-Received: from kylin-ERAZER-H610M.. (unknown [])
-	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wDXl39hZf5q5uiiIg--.59922S2;
-	Thu, 19 Nov 2026 10:56:34 +0800 (CST)
-From: Yun Lu <luyun_611@163.com>
-To: andrii@kernel.org,
-	eddyz87@gmail.com,
-	ihor.solodrai@linux.dev,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	shuah@kernel.org
-Cc: bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2] selftests/bpf: Run all summarization freplace cases
-Date: Thu, 19 Nov 2026 10:56:23 +0800
-Message-ID: <20261119025623.192740-1-luyun_611@163.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DWK3GpEt
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=KazbasjxrRYbBydSTs2O2Ixd8P66DwsGYWpJXQkSjv4=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795057450; v=1; x=1795662250;
+ b=DWK3GpEtx6OslLzkWCdUk612hJfK1YdzajCAowfM8hDrqAFe2bKFYuds5eoDrvpUlrsaZ2N+
+ oHrUc2j0j2jxSiTk8FBWrOM3BjM3laE7T2Ge+x1PKYn+99dnkBn/K9WzoI+X70uVs8pvPT+b1h3
+ cfV/KvH/aizE0w6QBEPiN/4Q=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 57bbc1b48389dcb3;
+	Thu, 19 Nov 2026 03:04:10 +0000
+X-Mizu-Trace-ID: 57bbc1b48389dcb3
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <79797479-029f-4e9b-8076-6a92a2a70cdd@linux.dev>
+Date: Thu, 19 Nov 2026 11:04:02 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -70,82 +58,171 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Betterbird (macOS/Intel)
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Fall back when
+ memcg_proactive_reclaim data lands in shmem
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Kurt Lin <lylin1023@gmail.com>, Hui Zhu <zhuhui@kylinos.cn>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Jiri Olsa <jolsa@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Barry Song <baohua@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20261117170704.1146730-1-lylin1023@gmail.com>
+ <DMY136RTAL9Q.2WQSZ57W1YLV2@gmail.com>
+Content-Language: en-US
+From: Hui Zhu <hui.zhu@linux.dev>
+In-Reply-To: <DMY136RTAL9Q.2WQSZ57W1YLV2@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDXl39hZf5q5uiiIg--.59922S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxAFWrCr4xKrW8tw4kuFWrAFb_yoW5Wr4rpa
-	4xX398KFyxKF17Jw10kwsrWFWa9FWvqrW5Ar40g34UZr1kJ34vgryxKF4UJF9a9FWfZr1S
-	vasrKr15ZwsrArDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UD739UUUUU=
-X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbC6wPLmmr+ZWP8PgAA3p
 
-From: Yun Lu <luyun@kylinos.cn>
 
-ARRAY_SIZE(mains) gives the number of groups in the test matrix.
-Using it as the target loop bound skips the two standalone
-entry-point targets in each group.
+2026/11/18 11:49, Alexei Starovoitov:
+> On Tue, Nov 17, 2026 at 09:07 AM Kurt Lin <lylin1023@gmail.com> wrote:
+>> After writing the file, check memory.stat and move on to the next
+>> candidate directory if most of the data was charged as shmem; skip only
+>> when none is left. Give each candidate its own cgroup so that stale
+>> stats from a previous attempt cannot interfere, and poll memory.stat
+>> until the write shows up, as reading it does not force a stats flush.
+>> Fail the test if memory.stat cannot be read or never shows the write.
+> This is overkill.
+>
+>>      To exercise the polling, FILE_SIZE was temporarily cut to 2 MiB in a
+>>      128-vCPU guest, which keeps the write below the flush threshold.
+> So the test with 32 MiB didn't hit it.
+> Pls don't add code just because a bot said so.
+>
+> Here is what I mean. I didn't compile it:
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_memcg.c b/tools/testing/selftests/bpf/prog_tests/arena_memcg.c
+> index c76a7eb..334bfa6 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/arena_memcg.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/arena_memcg.c
+> @@ -53,8 +53,12 @@ static int alloc_pagecache(size_t size)
+>   	fd = open(".", O_TMPFILE | O_RDWR | O_EXCL, 0600);
+>   	if (fd < 0)
+>   		return errno == EOPNOTSUPP ? -EOPNOTSUPP : -1;
+> -	/* tmpfs hands out shmem pages, which are not reclaimable without swap */
+> -	if (fstatfs(fd, &stfs) || stfs.f_type == TMPFS_MAGIC) {
+> +	/*
+> +	 * tmpfs hands out shmem pages, which are not reclaimable without swap.
+> +	 * overlayfs hides the type of its upper layer, which can be tmpfs.
+> +	 */
+> +	if (fstatfs(fd, &stfs) || stfs.f_type == TMPFS_MAGIC ||
+> +	    stfs.f_type == OVERLAYFS_SUPER_MAGIC) {
+>   		close(fd);
+>   		return -EOPNOTSUPP;
+>   	}
+> diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c b/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
+> index c22dcfa..2ba0791 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
+> @@ -30,7 +30,8 @@ struct reclaim_args {
+>    * being available, and a read-only mount cannot host the file at all (EROFS
+>    * applies to root too). /tmp is tmpfs on many systems, and test_progs is
+>    * routinely run from a tmpfs working directory, so both candidates need the
+> - * check.
+> + * check. overlayfs hides the type of its upper layer, which is tmpfs for /tmp
+> + * in virtme-ng guests.
+>    */
+>   static const char *workload_dir(void)
+>   {
+> @@ -40,7 +41,8 @@ static const char *workload_dir(void)
+>
+>   	for (i = 0; i < ARRAY_SIZE(dirs); i++)
+>   		if (!statfs(dirs[i], &st) && st.f_type != TMPFS_MAGIC &&
+> -		    st.f_type != RAMFS_MAGIC && !access(dirs[i], W_OK))
+> +		    st.f_type != RAMFS_MAGIC &&
+> +		    st.f_type != OVERLAYFS_SUPER_MAGIC && !access(dirs[i], W_OK))
+>   			return dirs[i];
+>
+>   	return NULL;
+>
+> pw-bot: cr
 
-Derive the group count from mains and use the target and replacement
-counts from the current group. This restores four packet-data cases
-and enables four sleepable-program cases.
+Hi Alexei,
 
-Tag the context arguments of the standalone sleepable entry points
-with __arg_ctx. On arm64 and s390x, the verifier marks the
-unrecognized entry-point BTF as unreliable and rejects freplace before
-the RCU read-lock check that the test expects.
+What about two things: only check when the test fails, and check
+KPF_SWAPBACKED instead of f_type?
 
-Fixes: 72ed076abf54 ("selftests/bpf: Add tests for extending sleepable global subprogs")
-Reported-by: Jackie Liu <liuyun01@kylinos.cn>
-Signed-off-by: Yun Lu <luyun@kylinos.cn>
----
-v2:
-- Add __arg_ctx to both standalone sleepable entry points.
-- Run summarization_freplace on x86_64 and arm64 QEMU.
+1. Check only when the test fails.
+What the test needs is "these pages are reclaimable", not "these pages
+are not shmem": with swap available shmem reclaims fine, and then
+reclaimed == 0 is a real regression that must not be skipped. So probe on
+the failure path only -- nothing is paid when the test passes, there is
+no polling, and a regression cannot be masked.
 
-v1: https://lore.kernel.org/bpf/20261118073309.125424-1-luyun_611@163.com/
+2. Probe with KPF_SWAPBACKED.
+f_type is a blacklist, so the next stacking filesystem repeats this.
+shmem-ness is a property of the pages rather than of the mount, so ask
+the pages: /proc/self/pagemap for VA -> PFN, /proc/kpageflags for
+PFN -> flags, then test bit 14.
 
- tools/testing/selftests/bpf/prog_tests/summarization.c | 6 +++---
- tools/testing/selftests/bpf/progs/summarization.c      | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+     #define PAGEMAP_PRESENT(e)  (((e) & (1ull << 63)) != 0)
+     #define PAGEMAP_PFN(e)      ((e) & ((1ull << 55) - 1))
+     #define KPF_SWAPBACKED      (1ull << 14)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/summarization.c b/tools/testing/selftests/bpf/prog_tests/summarization.c
-index 3e4bcf071735..f51b203eca8a 100644
---- a/tools/testing/selftests/bpf/prog_tests/summarization.c
-+++ b/tools/testing/selftests/bpf/prog_tests/summarization.c
-@@ -116,9 +116,9 @@ void test_summarization_freplace(void)
- 	};
- 	char buf[64];
- 
--	for (int t = 0; t < 2; t++) {
--		for (int i = 0; i < ARRAY_SIZE(mains); ++i) {
--			for (int j = 0; j < ARRAY_SIZE(replacements); ++j) {
-+	for (int t = 0; t < ARRAY_SIZE(mains); t++) {
-+		for (int i = 0; i < ARRAY_SIZE(mains[t]); ++i) {
-+			for (int j = 0; j < ARRAY_SIZE(replacements[t]); ++j) {
- 				snprintf(buf, sizeof(buf), "%s_with_%s",
- 					 mains[t][i].to_be_replaced, replacements[t][j].func);
- 				if (!test__start_subtest(buf))
-diff --git a/tools/testing/selftests/bpf/progs/summarization.c b/tools/testing/selftests/bpf/progs/summarization.c
-index f89effe82c9e..f08c7a73ad8e 100644
---- a/tools/testing/selftests/bpf/progs/summarization.c
-+++ b/tools/testing/selftests/bpf/progs/summarization.c
-@@ -61,7 +61,7 @@ int main_might_sleep_with_subprogs(struct pt_regs *ctx)
- }
- 
- SEC("?uprobe.s")
--int main_might_sleep(struct pt_regs *ctx)
-+int main_might_sleep(struct pt_regs *ctx __arg_ctx)
- {
- 	int i;
- 
-@@ -70,7 +70,7 @@ int main_might_sleep(struct pt_regs *ctx)
- }
- 
- SEC("?uprobe.s")
--int main_does_not_sleep(struct pt_regs *ctx)
-+int main_does_not_sleep(struct pt_regs *ctx __arg_ctx)
- {
- 	return 0;
- }
--- 
-2.43.0
+     /* 1 if fd is backed by shmem, 0 if not, -1 if it could not tell */
+     static int file_is_shmem(int fd)
+     {
+             unsigned long ps = getpagesize();
+             uint64_t ent = 0, flags = 0;
+             int pfd = -1, kfd = -1, ret = -1;
+             char *addr;
+
+             addr = mmap(NULL, ps, PROT_READ, MAP_SHARED, fd, 0);
+             if (addr == MAP_FAILED)
+                     return -1;
+             *(volatile char *)addr;
+
+             pfd = open("/proc/self/pagemap", O_RDONLY);
+             kfd = open("/proc/kpageflags", O_RDONLY);
+             if (pfd < 0 || kfd < 0)
+                     goto out;
+             if (pread(pfd, &ent, sizeof(ent),
+                       ((uintptr_t)addr / ps) * sizeof(ent)) != sizeof(ent))
+                     goto out;
+             /* unprivileged readers see PM_PRESENT with the PFN zeroed */
+             if (!PAGEMAP_PRESENT(ent) || !PAGEMAP_PFN(ent))
+                     goto out;
+             if (pread(kfd, &flags, sizeof(flags),
+                       PAGEMAP_PFN(ent) * sizeof(flags)) != sizeof(flags))
+                     goto out;
+
+             ret = !!(flags & KPF_SWAPBACKED);
+     out:
+             if (pfd >= 0)
+                     close(pfd);
+             if (kfd >= 0)
+                     close(kfd);
+             munmap(addr, ps);
+             return ret;
+     }
+
+     if (!skel->bss->reclaimed) {
+             struct sysinfo si;
+
+             sysinfo(&si);
+             if (!si.totalswap && file_is_shmem(data_fd) == 1) {
+                     test__skip();
+                     goto out;
+             }
+     }
+     ASSERT_GT(skel->bss->reclaimed, 0, "reclaimed");
+
+What it buys: it sees through any stacking filesystem instead of only the
+listed ones, it is per-page rather than inferred from a magic number, it
+needs no polling and no extra cgroup, and it costs nothing on the success
+path. Returning -1 when it cannot tell keeps the caller conservative --
+a failure beats a silent pass. Both files are root-only, which these tests
+already are, and selftests/mm/vm_util.c already pairs pagemap with
+kpageflags.
+
+Best,
+Hui
+
 
