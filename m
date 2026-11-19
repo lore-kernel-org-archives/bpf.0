@@ -1,45 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795062012;
-	b=TqMP7zQEdR+jyr+qYwhL2VmGXCtIsnw4ZQTnJ5s+REiasL4QiuHzqkiVidrAM7xJrPaM
-	 yEScpEn/d2ZjqaNAko1ExMXM5cCuKbWndTG5uhJOBDDcf8woP+fDeMnNABUbiXlhl0gVr
-	 sQ+SJIOolh+fSwD5RW6BfIQ3K8yOBXvY3SiXpzgfO9Ej6HbRPTndAvgohpMsS2/tCR1fz
-	 EtJ6v1d2SQPEJhSF+/cWy65vyHKzS7tcPxYzXlfWDZmW6WLRj/jZOt658t4zgJR1uiQks
-	 1fzVN8Z05KPg9c40ZRMbbhG4IhFXkp7CZFR+bOtxZkwSd0xhtM8wlYFDdsUEtMfOgpg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795062012;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=7ixHF2HGKlFx8/CYffymgiIc7STbUt+Jrd1wzEkRZ7c=;
-	b=P+DPaMR/i88Uk5OKfzzzyK9vjfWtJVlBvL3Z/gAlzHAeoUw8y+G68Q7or0cPtp1cQYgT
-	 ldli+Gb9giouf/UTTHkVPg4rfcKdQpNH2My/3WGqK9BDtvr1DeWAmWB7wQEVZgewH4O/n
-	 PKdMF9AZTamj06KfJklGuzBpu/wnkgaVVKcxY0CRewM354PDbEcBrAM4FfUYLyugzXQfm
-	 7qgCEhSAFHmCbGpNACTpnum+xxZdhZVRxIkkd4U2pJ2fjHEpKotm2DCpfa30zvXfhjqPe
-	 0HMRciiTqdysehggZIrNIC6Xo4QTUP+OIKUWN5iZEaYqXS5/H9AeJfODvPjbw/+/pIQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OTfTW87y;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.54
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795063544;
+	b=ZuMq/fYurpIOqo6uX2k+uoCFc6rBSLuK2tUWRThy9p8sFW+JkeLPtIrK68cHWUeM4n2I
+	 RQwymAG/XMUgX+0+r5rsEnMxQTUfM9VXmy+WxccjiwCnKCkSmQvvAkTdNa64GfUc7uUXx
+	 W5UNTx72ZmWQxrVXW6jEpdvJB2gzNhLaxrkb6vjzcnp4Xm77TNZV2CmjI+PJ+Xhs50c3y
+	 9jtiD3Bi18BCGA8Fx6hEUGyB9SxGYbL3VhqlCKqn0dDDGMYZXqSUjKjC/A/IY/S3qecB/
+	 cR+IMOh9IlRAoTIYYJqGLDY7JKiiTqAZgmQhVTB8ARSGq7adg4R7ARu/v+jQvH1icaQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795063544;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=LkI7Sy95lBvfbQtMVCxtNAxq0Xj/HDOqrG1KSqd25kM=;
+	b=j3vaG0SR596dlmmrV0eIsS5u+NuH11o3C1aQqAe/PdRKXxgPKE7byxi3G5zZuQQDH6M5
+	 WEal3cHgMCzYqgTCYV39V/5os2xoK7JY5CbloRI0yjJkkCuwAD/LC7cyDvvj4qnG2Jepl
+	 LvPK8UWE9S+Zdxkr3KW6NI6YWh6wbO5a8ePzytyyCgGt4aa2TLD1sV+FCkbJttZAQPyok
+	 msXLJ0VP92kJXqCLBKEF+1YXyeW6YdAfjt0TF6WhSiqzohyorHZLheiSnN1ArmCiIF7rQ
+	 4frczL8PgjHnepOm92Qaq6xW9zKPRo26uEPxW2feefQVJ7vmqWMREAY6xq/OlVcgsFg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pt3Czxvu;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.54
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E560606A331
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 04:20:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20110606A320
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 04:45:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 20110606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OTfTW87y
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8D631F000C4;
-	Thu, 19 Nov 2026 04:20:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795062011;
-	bh=7ixHF2HGKlFx8/CYffymgiIc7STbUt+Jrd1wzEkRZ7c=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=OTfTW87yFOElxvbB1H6HDh/xcez4u1gxKaQNt+xbZVypLM+sMbrgYvoJeTT7V+KmB
-	 S9B+8b86tOE4fC6K2wkUz+hoHtVImq4MOROZt7ClKnJkQC77ip/ibPFO28y/ccIH1M
-	 eCXqx4FE+Icit0Uh1mS18IofLU79cUgBuNo99PaZY8DrA0Ph3yrVJfZ9jGYztk4UuU
-	 CzwUzkSbnyhHlTMXyJlrslDQrYQKDuU0y+n2C7XL4XWKh21cBwuRerfku0TQqc1JT5
-	 UUyisRbnyEYRwQhUo34dccMhvnUhXFfsz0wPs+WOmXPv69aeGYbTC+zJMA0BS7mgrp
-	 NpuI+cihn+yZA==
-Content-Type: multipart/mixed; boundary="===============3763517115450284656=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pt3Czxvu
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4a207b02a2cso12476135e9.1
+        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 20:45:43 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795063542; cv=none;
+        d=google.com; s=arc-20260327;
+        b=kMDDjUSwnFoL7CZQYhBAa6/FeRjqEE0XDABX4+9Oq05k3fVB6bjsyFacnWYhe+Utxv
+         BqInrqJC+t3tpl0OsHXhVCibBwaVyrjh2Xxel0rv4ITK3POsdUlUtM3lUjK+89EIK8DH
+         EZcD98j3yVymYwwhVZ0n2jBcHPsCZ2Rnf2g6+mcb6NFKuMUO18Alsf93oT55ckfU9uQE
+         eTuzvwCt3+8GoFmItonINK9KwymqzBmScZPiacusVfYyY4T35SbDuAF1RYUKLGhojUOO
+         t4fRlt9bLSsk9wEFlWr9rvuiOzNO9UBKHRDQ1MeUROWxyI6vsnIjJBtiVdADIOmgcFPa
+         +ujg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=LkI7Sy95lBvfbQtMVCxtNAxq0Xj/HDOqrG1KSqd25kM=;
+        fh=4uw84coSCmWOj7LdwJRrIzQOX1n0jKyZ+O9ChA6x00s=;
+        b=WmfK24n74/aXKNmoz7kQEWj6f4sxXKvYr0N9xF+bzVQD+GrQ9O63kBmSAV2yHvHBX/
+         qkebNQjSSkUvS8w6S+KClYKqstx9qHG1L0LyufYlfck04XrNPF3AiQWFS7/VSnsdeWqN
+         x5I2JNnK48ggjSpNtjvjiAPZeFILdwFBfLN4FDcAtNwgaEq1GonVhfsGaLpLUVZCwROf
+         PDFcyOYZR+iWfDGz/9aJ3868GrU7OPkJ/HTmQdW/V3mxatniInwxASCBSMswzGAXB7oK
+         uyFbdw7/YeZ0VRY7qluA0pWQd6SBsS17Jt4+Kr+Xv7RXtEzac10VemQ7XxugUPUtwVYt
+         SZfg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795063542; x=1795668342; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=LkI7Sy95lBvfbQtMVCxtNAxq0Xj/HDOqrG1KSqd25kM=;
+        b=pt3CzxvuyBsOj1wsoXny9gI/xTJXqfh4On2chU/g8Il2ASxQE6OOanVQU2Ab1ubqdO
+         lSGjIPvG/YGH5Sv93h5GKiVHjBVfey6dv+l+Xije0UBQUE4CgSM4XETUlFx0YstaQuDl
+         AO3F2ObgGyZSZ0gJw31Fyh3++MuTQ2Vo1YXgsXYC66IhdTeqcPodMyGn5ggtrKWommLt
+         OTPb2TQSfKO5R8JFPPyu0h6Yto6YneLZvl3m898mlMpuMX6h+bulfV7OTFKDFQJ+Gm91
+         XcbnlBbDKsDw0UiYS68R2RXi4OHqt/lTEju39vskepOkvOc2HvDR4d/RGe3UH5Ze+Ugc
+         3FXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795063542; x=1795668342;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=LkI7Sy95lBvfbQtMVCxtNAxq0Xj/HDOqrG1KSqd25kM=;
+        b=s16CQ8CaN8QVnkqefIoZCHxHU1WkCUouvQjgmdazmXWxH2rCnVTP1hWCO4k5A6grNY
+         3yArZIUjU0BjoGm65s3yJ+mcr9jtjZiEBMmYoFhTNE7/bJ4SMMy5cQ22NnHVsFHn7PLF
+         xmdLHs5yIiMpG+gYLMGGUH4EvFfQ0BWd7aRmHjaTpRwUAiDORY5/SrR30N3U3xRMoau6
+         hpV3MfeCrkH05cX/x5xGjQim3ILjnKdC5YZzMOH9ePB00YnQUXeFsbBOVksGYS3v00gk
+         EJa2CQsRNCxJjTPq0OfEA0ZQF/lmWpffxllo5IHoGZSWssNYXVxtuC7r3jJ+q11hISUM
+         7BVA==
+X-Forwarded-Encrypted: i=1; AL+hErG3IBpKLoiTqtPf9cDdb4tNs3YiGPJJjC7j/namRz/qJg8PMSXXEblHMcRa1M+X+b8Y/ko=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8fPigTM4K2VAGySlh3+rK1+JXQGzYidNsJiBywpqYL9XN7Cx61
+	jrP2gGQJKJ+jYA+lDLwyK+tJIMIsfQTdOC4y0dEBNeLa/pPhVPhkcN0gvo7QNw1KBTggQSRAEo1
+	5Gp/n3M9xOe+ruiY65ZQH36Y7qz2qRTfPUQ==
+X-Gm-Gg: AYBFou19EBP694GnE8MUMtl/VeZ1Q3mOggi4KLX32pNQQbztvqz8T2H6BR8FbQXLcbZ
+	dr5wzWHTa4biNy89k82HVjU6aomf+Mgg7ZEoVrPPKqX9dLEK1GKBqNR9zDMyj77EaGFDP2AxsV3
+	pvWr64TEKPEKGkGqJ3AJtJhuOsR1dgzvNH1nQpPd3roY+/cjhIw9KNsq7OF21Cd30skjZl4FaT2
+	7q4mvg6/PdIDK29Q0V+oWL8eRgs/UK1aMKlpgZUriSrzNmNsk8HFz4lAoW6Bo8Cp1MYPHNGmnSx
+	/vLJxPxpCJUPaj7fDgTnNApIjmhVtM2W7+XPNsF1CBSEoxQa9PEiHkp5MgtTr4JNxCs40DlDsjC
+	+z/l3JRzGdGSbhdvksR/DCYnKn/vxmRBMP/jv2S5gzNbW8aGrgEArcJe3eVoGpB2LOAUPaq+qiw
+	eJjGxfGPLI6gmPDqYxSQ==
+X-Received: by 2002:a05:600c:8b5c:b0:4a2:397:73f6 with SMTP id
+ 5b1f17b1804b1-4bb7da13a97mr99793645e9.8.1795063542301; Wed, 18 Nov 2026
+ 20:45:42 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,84 +105,78 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <9c8bd5d33fa804ae1113d006bc1549f6ab8c7a4ed8e6fe2faa586394056010c0@mail.kernel.org>
-In-Reply-To: <20261119033051.196177-6-luyun_611@163.com>
-References: <20261119033051.196177-6-luyun_611@163.com>
-Subject: Re: [PATCH bpf-next v4 5/6] bpf: Check async callback membership and user references
-From: bot+bpf-ci@kernel.org
-To: luyun_611@163.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev
-Cc: yatsenko@meta.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 19 Nov 2026 04:20:10 +0000 (UTC)
+References: <20261119000112.2377949-1-andrii@kernel.org> <20261119000112.2377949-2-andrii@kernel.org>
+ <DMYSXNCMOF26.38XGLPOW4K29X@gmail.com>
+In-Reply-To: <DMYSXNCMOF26.38XGLPOW4K29X@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 18 Nov 2026 20:45:30 -0800
+X-Gm-Features: Aa3M54ru9v9e2z-jn0buLdaQZSqjE5mLeJ2k6xUEdsRdwJ_B7hJSsTaDWvpbQxk
+Message-ID: <CAEf4BzbcPkqX+YncZ+3ysFnXmJWaAUyZiF9BkhbTW27h7MxPxg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/3] arm64: perf: Don't report the caller
+ twice in caller-regs callchains
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com, 
+	will@kernel.org, mark.rutland@arm.com, linux-perf-users@vger.kernel.org, 
+	peterz@infradead.org, jolsa@kernel.org, rostedt@goodmis.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============3763517115450284656==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Wed, Nov 18, 2026 at 5:38=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Wed, Nov 18, 2026 at 04:01 PM Andrii Nakryiko <andrii@kernel.org> wrot=
+e:
+> > Do the same on arm64. Set pstate to PSR_MODE_EL1t, which exceptions
+> > taken from the kernel never have (the kernel runs in EL1h, or EL2h
+> > with VHE), and skip the leaf regs->pc in perf_callchain_kernel() for
+> > regs with that mode. The unwind still starts from regs, with the frame
+> > record at x29 walked by the unwinder.
+>
+> my bot thinks the following will be a more accurate fix...
+>
+> diff --git a/arch/arm64/include/asm/perf_event.h b/arch/arm64/include/asm=
+/perf_event.h
+> index ee45b4e..7c5ab65 100644
+> --- a/arch/arm64/include/asm/perf_event.h
+> +++ b/arch/arm64/include/asm/perf_event.h
+> @@ -13,11 +13,12 @@
+>  #define perf_arch_bpf_user_pt_regs(regs) &regs->user_regs
+>  #endif
+>
+> +/* PSR_MODE_EL1t marks these regs for kunwind_stack_walk() */
+>  #define perf_arch_fetch_caller_regs(regs, __ip) { \
+>         (regs)->pc =3D (__ip);    \
+>         (regs)->regs[29] =3D (unsigned long) __builtin_frame_address(0); =
+\
+>         (regs)->sp =3D current_stack_pointer; \
+> -       (regs)->pstate =3D PSR_MODE_EL1h; \
+> +       (regs)->pstate =3D PSR_MODE_EL1t; \
+>  }
+>
+>  #endif
+> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrac=
+e.c
+> index 3ebcf8c..de394ff 100644
+> --- a/arch/arm64/kernel/stacktrace.c
+> +++ b/arch/arm64/kernel/stacktrace.c
+> @@ -357,6 +357,13 @@ kunwind_stack_walk(kunwind_consume_fn consume_state,
+>                 if (task !=3D current)
+>                         return -EINVAL;
+>                 kunwind_init_from_regs(&state, regs);
+> +               /*
+> +                * With perf_arch_fetch_caller_regs() the PC is a copy of=
+ the
+> +                * LR in the frame record at FP. Start from that record.
+> +                */
+> +               if (processor_mode(regs) =3D=3D PSR_MODE_EL1t &&
+> +                   kunwind_next(&state))
+> +                       return -EINVAL;
 
-> bpf: Check async callback membership and user references
+if arm folks approve, I'm all for this fix deeper in the generic
+unwinder code, smaller and cleaner change, thanks!
 
-TL;DR: The new membership check in __bpf_async_set_callback() may mark LRU
-hash elements as referenced on every timer/wq set_callback, perturbing LRU
-eviction order; a lookup that avoids marking is suggested.
-
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-
-[ ... ]
-
-> @@ -1552,11 +1552,34 @@ static int __bpf_async_set_callback(struct bpf_async_kern *async, void *callback
->  				    struct bpf_prog *prog)
->  {
->  	struct bpf_async_cb *cb;
-> +	struct bpf_map *map;
->  
->  	cb = READ_ONCE(async->cb);
->  	if (!cb)
->  		return -EINVAL;
->  
-> +	/*
-[ ... ]
-> +	 */
-> +	smp_mb();
-> +	map = READ_ONCE(cb->map);
-> +	if (!map || !bpf_map_value_is_linked(map, cb->value))
-> +		return -ENOENT;
-
-bpf_map_value_is_linked() goes through the program-facing
-map->ops->map_lookup_elem().  For BPF_MAP_TYPE_LRU_HASH that is
-htab_lru_map_lookup_elem() -> __htab_lru_map_lookup_elem(map, key, true),
-which does:
-
-    if (l) {
-        if (mark)
-            bpf_lru_node_set_ref(htab_elem_lru_node(l));
-
-Does this mean every bpf_timer_set_callback() and bpf_wq_set_callback() on an
-LRU element now marks it as referenced as a side effect of the membership
-check?
-
-A timer or wq callback gets its value pointer directly from bpf_timer_cb() or
-bpf_wq_work() and can re-set its callback with no lookup beforehand, for
-example when alternating callbacks.  An element that only its own timer
-touches would then be kept alive in the LRU, and an element used by real
-traffic could be evicted in its place.
-
-The syscall path avoids this by using htab_lru_map_lookup_elem_sys()
-(mark == false) through .map_lookup_elem_sys_only, which
-bpf_map_copy_value() prefers.  Could bpf_map_value_is_linked() use
-map_lookup_elem_sys_only when the map provides one, so the membership probe
-does not change LRU eviction order?
-
-The same helper is also used by bpf_task_work_acquire_ctx() earlier in the
-series.
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/44453425101
---===============3763517115450284656==--
+>         } else if (task =3D=3D current) {
+>                 kunwind_init_from_caller(&state);
+>         } else {
+>
