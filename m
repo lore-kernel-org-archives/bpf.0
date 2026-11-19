@@ -1,113 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.219.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.153.30
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795124437;
-	b=kwTZaTqfB0WA+UMphXNJ7uohbdo50lhCcmcfUrsDIJpC7oFdZENcTY+ulyOMPxbZ9I1C
-	 gabUTWm0dduNX1FUSHBwS8u5AFVhYwg6Png80YoMh2wcgoTnFCEpx4iFoUAh8cdzDMeQl
-	 Bg9XxcOqPeAQQ8E9sC7y7wNvljEtqIXYeCDswf5OsF32m2nWLJGM9LOF7E6WSJxCWdhip
-	 pIHD11zPQqg+6mnGbK6Zgi5nyVCegpj8l71NtI2ZplRN5ysQWNU3HK6Nfm+v8O3lXn/7z
-	 s+g2U5vfxeGcBa0V0EuIrUvgbV1aEmbo4TB0jOp70ki6Y5xeMHhPoiWT8UYO2uHA4aw==
+	t=1795125116;
+	b=CUfQ2A0BGa2YR/JUogDorgZHOeBfZcpaOPhPLB7vmsLLaDyhuiWPD8agkny9YDnz7TlB
+	 8mrwr3LQpKBaQfr94H2/hlMywEh1Yd9LT9Myd5et/XbBQMBcuTl4P+l6Jala6qs9OiHtG
+	 peBmuvPvzb2/qheo9K8/RgKn/OJUl7jq/YAZ5fLD5TSUkjCRk89Fh8WURdcsnZIfwepL1
+	 9DRtUTj6iox6L8BtsMq82UVp2MIZiKC/NL5AKQX0HzbAgLT3/OyDaE7JxA3HcmoEgIjjs
+	 MzxMyoocG7/otF4Pb9TajVnPXguu/6q5Uw3Hzlf7FJZyMVENtEYJ+SN+GTxsvHbAwiw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795124437;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=4e/orZcwN4ehEBe5iuQi3ZYyUYANhKYXfnH4tTDCJYY=;
-	b=uCEDj9J0BLHJf1sVLzQUAV2GStFqvNTRfkYdhc0yCy6BSfNceQ5969sT2RS1FneI7Rbf
-	 GaQx24rUs4iXlN3jTt3fRKH1isJJGNo7BY0bAe0KZkWwUMWiFisLwPD7QyvZW5cS2HLGV
-	 akllJRDvUguI5LNFLNUESkygYJA1714qXAJ8QQMS4wPC9l1dCFOhuuJzIr+hLjK+HHClx
-	 mdglPoYyc/AzZjdpfshbd6p+F8G4kF/omTVd4ghPajh9WLVkFz1526gnakF99H4B5DfeW
-	 kE9JF+rkei6obJZWlqsJuRrRm6B8fmROpcZlq0lb18NtCtuW6Ughz/bGQTbk2xF+R1Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795125116;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Date:From:To:
+	 CC:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To:X-Originating-IP:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-GUID:
+	 X-Proofpoint-Spam-Info:X-Authority-Analysis:X-Proofpoint-ORIG-GUID:
+	 X-Proofpoint-Virus-Version;
+	bh=Ri8CK3ItJsJssm9R2a+AMX7zfGjjWTKSLJi5tTs2ofs=;
+	b=1HfJWHFeV7d3lOFqG2H4NmMIQj1PaxpPXnbwZlfyGronodFSj7o9R54E2FH7x6bo+ND1
+	 +yL/YdRaLQWPCZae1N8eKzEHYFImE1+lv4DA+VDKniCMNJwjDM4dpTL6q6wfRffA7ma14
+	 XHcHVwvh6dV1nTxeJzIfwwLLxZG60OjX221fSFqz0i6AoeOdAODw3rWzFCH/GvWnhLpEe
+	 2wOQfEmFblv3NYhHsaiGb1H0qjzlgZkuIWZi/BqwxiWIxBgu6/kicTkOOtNaxN026ecQR
+	 linb0BUqkhjvPA/fLfALaol06CeH2gTNIPcKuDjm8qxipKW+AKPLRKSscNMh5gzbQVg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KmPOrhDQ;
-	arc=none smtp.remote-ip=209.85.219.46
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=meta.com;
+	spf=pass smtp.mailfrom=meta.com;
+	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=DHGBUcJM;
+	arc=none smtp.remote-ip=67.231.153.30
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2D2B60A260F
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 21:40:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E2D2B60A260F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA1C060A381E;
+	Thu, 19 Nov 2026 21:51:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BA1C060A381E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KmPOrhDQ
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-921159376efso3600216d6.2
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 13:40:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795124436; x=1795729236; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:subject
-         :references:in-reply-to:message-id:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=4e/orZcwN4ehEBe5iuQi3ZYyUYANhKYXfnH4tTDCJYY=;
-        b=KmPOrhDQ6Lw4s+NrReazzyihUq8KfNjnn9XwodUbB+B5p7OD24gq4mRolS8MDKeXkU
-         E3lNoiGav+nKXAY9lEqYoRVO3l09upGuiK8V9EmFsJxflDxAfZdn36RLMs9TqjmSVegx
-         ObD++d/HteAD8lSw0DczdlWsMpbs8JRJtNtlcxtn4QhCg+i5B7mOyni7z+p658i1GzjX
-         sB19dVyqm30sEiCLJqoBrCiaaTdYTVXnnhq7TiETzvj+BjBN2VgZN3szvW6uXm+IyaLf
-         XLGTLXOTt0v8fT7E4AFy7cfYSYgipVvBrd7RhYnMNwjRkPD+OZhjNGeVLwoyc2+4Uddv
-         EQew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795124436; x=1795729236;
-        h=content-transfer-encoding:content-type:mime-version:subject
-         :references:in-reply-to:message-id:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=4e/orZcwN4ehEBe5iuQi3ZYyUYANhKYXfnH4tTDCJYY=;
-        b=c2+J+2HK3UPxRTVW6l1LE934ktiF4BrIpfCakYbbKWo7RE1W12lmRNXjWJN5ITToPt
-         h87RlYaxqCdOD6+rdy6hI2VoMqLzFm9uwwxgpnvZYvHVdCdMbdNQrJisKRzzcA4hvtFJ
-         JbE+QVMyyu1iK3Ny5jSvSwxlatLsXme4n+Qo+iPoJu5OSrt79JSP1oshnXnDRYDDEe6c
-         Dq5m3vzOAvFqELLs9ng/nkNj8ADDY/VDTUrEsebOpl6a1NakP4Ixrt9jxCIHPDwdQPXm
-         7pjT4sZaWNSNvilpz8LhbNbvQYWWTpvYhoCzynEhpEePB0ONTzdfnyakU96HJ4UJ5CV3
-         smiw==
-X-Forwarded-Encrypted: i=1; AL+hErE5hHgeRA61ZBtYfnZmOyHBGc1aM92GND6ERZsXGaaXbo8HQoul+cUGioyU9s+JDoUKvAE=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8wmTe6BbAeReaah+8LgkSSDhqQy1789Cgz4eWONouaoaYg+8Xf
-	EXO+y05ALqJq3HRiHj/be4RBW/bGcDWJJhSejHYa/Hl+2W+0HYBnvMHq
-X-Gm-Gg: AYBFou04l/e9E+oiEvakOK8I4lkmkyWxTJPdnIzWPpkKdwlGe9dvdPrWqi1cFIJjaa8
-	+M05ZGGQ5EAdAhykauwO8ekrDBWCv56qxyRkzZ9lMsVpZba55pRqAfodAAWybfLFMX+dO18xLmw
-	E7qJUyaqwbGEToXepPG3CTBk9qF0LxdXlrCb3JXPKgCXhhPczlzPGBdvYRwBgFNkOQWT4WaGddk
-	dom1GobnAgBtguLq31nUrHDBSujzYZAlspJEl5uN5RFN5MTvfZAqA3rUIymKGdcadwHQr71xPW8
-	UKyRI9Jjd1zPaosGV0ohtdrwgp4yOlPrz4KsuzLFRS7HG+34dr/yaAJitXS5XhJw6SfYHJLXeWS
-	YPY7yAXUdmrXhlQPNpmKN9IUAqoapHdKWi7sEw4k3ROa8TWGPBwgOHg+9eaJncsvoZ2PgFFo5kY
-	yVxfgFcoPLWSTYWA/0zNwvZPd+9yplwBcn4SRWmZkaHN03ADkx4GY7eZNB1cWvjGvVzyaeqvlku
-	C9tqEAIggdX36U9+7KFUpTMXDDeT2mwP0cMxbIWNpf0V8CLSi/eJj/SwQkYv1fIiqHIXSbsF161
-	+OQ5O7DyiklFkAgyuEPIeIrKMVZGA386MQzaeiitnmEGIE3pqEzdWJ9LRoTsxQErY5NASH3cESV
-	hGdXsGHztDbhcZBmTQlnskl1XwtgAg/hy8MskcyoEMrXGcQo1tqF/LA3afrjnogY=
-X-Received: by 2002:a05:620a:4591:b0:93e:5060:f929 with SMTP id af79cd13be357-949ba9b64d9mr171849385a.19.1795124435809;
-        Thu, 19 Nov 2026 13:40:35 -0800 (PST)
-Received: from gmail.com (15.60.86.34.bc.googleusercontent.com. [34.86.60.15])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-949bb3f2de5sm52119585a.29.2026.11.19.13.40.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2026 13:40:35 -0800 (PST)
-Date: Thu, 19 Nov 2026 16:40:35 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>, 
- davem@davemloft.net
-Cc: netdev@vger.kernel.org, 
- edumazet@google.com, 
- pabeni@redhat.com, 
- andrew+netdev@lunn.ch, 
- horms@kernel.org, 
- michael.chan@broadcom.com, 
- manishc@marvell.com, 
- joshwash@google.com, 
- hramamurthy@google.com, 
- tariqt@nvidia.com, 
- saeedm@nvidia.com, 
- daniel@iogearbox.net, 
- hawk@kernel.org, 
- sdf@fomichev.me, 
- willemb@google.com, 
- przemyslaw.kitszel@intel.com, 
- bpf@vger.kernel.org, 
- Jakub Kicinski <kuba@kernel.org>
-Message-ID: <willemdebruijn.kernel.66eaabdbc8a1@gmail.com>
-In-Reply-To: <20261118232315.3593731-3-kuba@kernel.org>
-References: <20261118232315.3593731-1-kuba@kernel.org>
- <20261118232315.3593731-3-kuba@kernel.org>
-Subject: Re: [PATCH net-next 2/8] selftests: drv-net: drop the generic XDP
- hack from the HW GRO setup
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=DHGBUcJM
+Received: from pps.filterd (m0528005.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AJJ1LkI2754408;
+	Thu, 19 Nov 2026 13:51:24 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pps82601-s2048-2026-q3; bh=Ri8CK3ItJsJ
+	ssm9R2a+AMX7zfGjjWTKSLJi5tTs2ofs=; b=DHGBUcJMMYXzIekxH9QyMTq7eci
+	SVZVf1xD6/O7voHLqsj3TWCiHW0pTsTwkmp/Sp9PwtUka34/b6VZNoQ3XhAegWHp
+	XpONuZUN0BT5PbMkq0U9Jw5rxaNbEH6ZM45118sUHONBJw1PZ/EDqM1N8pENELLL
+	6rSXBjtU4zfkfEQuuysIkDiL3qzIAJ1VUpSH/voGd5OhHjcVxH6uqOIL4qV94Mts
+	8l4+IRAgaR0HPmmg+KnSAl3PoeGsapIjh+W+qZj8eqd7rRovRjydI6BAwRArFP5o
+	k1nsJTlzvDeQ2/EH+QAf3DQtrrgl4w5/oY/3h1+h7MQ3JGWzNvfsRrvodKA==
+Received: from maileast.thefacebook.com ([163.114.135.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4j228kvma1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Thu, 19 Nov 2026 13:51:23 -0800 (PST)
+Received: from localhost (2620:10d:c0a8:1b::8e35) by mail.thefacebook.com
+ (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.56; Thu, 19 Nov
+ 2026 21:51:22 +0000
+Date: Thu, 19 Nov 2026 13:51:21 -0800
+From: Bobby Eshleman <bobbyeshleman@meta.com>
+To: Sergio Lopez Pascual <slp@redhat.com>
+CC: Stefano Garzarella <sgarzare@redhat.com>,
+        Alexei Starovoitov
+	<ast@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet
+	<edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni
+	<pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+        Bryan Tan
+	<bryan-bt.tan@broadcom.com>,
+        Vishnu Dasa <vishnu.dasa@broadcom.com>,
+        Broadcom
+ internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+        Stefan
+ Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason
+ Wang <jasowangio@gmail.com>,
+        Eugenio =?iso-8859-1?Q?P=E9rez?=
+	<eperezma@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Haiyang Zhang
+	<haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
+        Dexuan Cui
+	<decui@microsoft.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Randy Dunlap
+	<rdunlap@infradead.org>,
+        <virtualization@lists.linux.dev>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <linux-hyperv@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH RFC v3 0/8] vsock: add datagram support to virtio and
+ vhost
+Message-ID: <av9vWRXli+JmYO8A@devvm29614.prn0.facebook.com>
+References: <20261113-vsock-dgram-support-v3-0-1523c8e9b27e@redhat.com>
+ <aveMxDqYQobWwXd/@devvm29614.prn0.facebook.com>
+ <CAAiTLFUQMyQXHAw1DbDKfJYus-Se+QA_SSHWQymQ9dK6-UmRTQ@mail.gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -117,108 +106,202 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAAiTLFUQMyQXHAw1DbDKfJYus-Se+QA_SSHWQymQ9dK6-UmRTQ@mail.gmail.com>
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTE5MDA4NyBTYWx0ZWRfXwzIa7BHDzrhI
+ V9NPLugZeX0Dem605ATYIgoQU8DX72WI9bBs9VHmBqBAZcwlUI4+xKCLGec3yqad6e9XNHuQUKf
+ wh8/Z1Mk/yEYchU1ELul3oyezvQPlMuTsK6aw11IrS/iZG2ky0YHPQ5x2fDjJxe01HuGKZlID1n
+ bHRiO20kWrSLZK4gz9ob3EKfJCQ+sOo9P4S7G27w3umfmXytFXum9tJ/HanNivge0nqvRbrcLuJ
+ gA5mT4Wg7ZPOq05ccIQNX2ksv3x0dRPyiOMSJ0rrulluGOEJigLTb8HpiGCpoUiziVUM9XNcjy3
+ 1eWA60wrpqu5Qfr1NHxKeA8KK0UhAQZs2ign8WT+c4ph6c6rH1+NFA6L/zLq1aLANdVep2Lm5XV
+ HjICGVvLKwUIxJ3LSS5blwdHhxNf41mYiTRHaqmzf4ysQYa+mVHLxeWUEJRY/H+HxjOmG7yAUPQ
+ pBlTEVLGOEG9QGMJvTA==
+X-Proofpoint-GUID: EKMxB3j1syV6aAXBL7ADcf_4KtTeg0Sh
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTE5MDA4NyBTYWx0ZWRfXwKAReosY9zZa
+ bBwoIH2U7bvtKc0Z4koR1XE6E6nLpYuJxcDsR5HFruBknRfag+QQB5Dtcl9NFmzvJqBczeAlmXp
+ QcRk/8QcO5bLyBaKyd3NyJUPaB/1FsQ=
+X-Authority-Analysis: v=2.4 cv=cYxHPXDM c=1 sm=1 tr=0 ts=6aff6f5b cx=c_pps
+ a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
+ a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=7x6HtfJdh03M6CCDgxCd:22 a=jCddH8ec0KUNCymVuxII:22 a=VwQbUJbxAAAA:8
+ a=20KFwNOVAAAA:8 a=968KyxNXAAAA:8 a=NEAV23lmAAAA:8 a=mDV3o1hIAAAA:8
+ a=KMMIYZg5AAAA:8 a=VabnemYjAAAA:8 a=lvHqt9aMAKSFOjNFyPAA:9 a=CjuIK1q_8ugA:10
+ a=dU3it2pj8zK4A0baVwjB:22 a=gKebqoRLp9LExxC7YDUY:22
+X-Proofpoint-ORIG-GUID: EKMxB3j1syV6aAXBL7ADcf_4KtTeg0Sh
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-19_05,2026-11-19_01,2025-10-01_01
 
-Jakub Kicinski wrote:
-> The HW GRO tests want SW GRO out of the way so that what they observe
-> can only have come from the device. On drivers which keyed HW GRO off
-> NETIF_F_GRO that was not expressible with ethtool alone, so the setup
-> fell back to attaching a generic XDP program, which suppresses SW GRO
-> as a side effect.
+On Thu, Nov 19, 2026 at 08:06:44AM -0800, Sergio Lopez Pascual wrote:
+> Bobby Eshleman <bobbyeshleman@meta.com> writes:
 > 
-> Those drivers no longer tie the two features together, so ask for the
-> feature combination directly.
+> > On Fri, Nov 13, 2026 at 06:15:40PM +0100, Sergio Lopez wrote:
+> >> This RFC adds SOCK_DGRAM support to virtio-vsock and vhost-vsock through
+> >> the existing AF_VSOCK API. It is intended for guest and host services
+> >> that exchange independent requests, responses, or events and need message
+> >> boundaries and sender addresses without a stream connection or application
+> >> framing.
+> >>
+> >> VIRTIO_VSOCK_F_DGRAM gates virtio traffic in both directions. Each virtio
+> >> send carries zero to 64 KiB of payload in one VIRTIO_VSOCK_TYPE_DGRAM
+> >> packet. On the RX virtqueue, the device may split a datagram across
+> >> page-sized guest buffers.
+> >> START and EOM delimit the message; the guest reassembles at most 64
+> >> fragments and 64 KiB before delivering it to a socket. Invalid or
+> >> incomplete messages are discarded. Datagram delivery is best effort:
+> >> there are no peer credits, acknowledgements, or retransmissions. Send
+> >> admission uses the socket send-memory limit, and SIOCOUTQ reports charged
+> >> send memory.
+> >>
+> >> Datagram sockets have a separate port space from stream and seqpacket
+> >> sockets. The latter two continue to share their port space. Datagram
+> >> routes are chosen per destination among guest-to-host, host-to-guest, and
+> >> loopback transports, with VMCI as a fallback. VMCI still owns its socket
+> >> handle when it is present; loopback works without a directional transport.
+> >> Hyper-V continues to reject datagram sockets.
+> >>
+> >> The Sashiko review of v2 also reported that a VMCI datagram bind in a
+> >> local-mode network namespace creates a receive handle in VMCI's global
+> >> port space, so a sender outside the namespace can deliver datagrams
+> >> across the namespace isolation boundary. The issue predates this series
+> >> and it's getting addressed in a separate patch:
+> >>
+> >> https://lore.kernel.org/all/20261113-vsock-vmci-netns-isolation-v1-1-ced02054ea61@redhat.com
+> >>
+> >> Within this series, local-mode namespaces bind datagrams only in the
+> >> core table and never create a VMCI handle.
+> >>
+> >> Bobby Eshleman and Amery Hung explored this feature in their v6 series
+> >> and v7 work-in-progress branch. This series is a fresh implementation
+> >> against the current vsock code. It follows the separate datagram port
+> >> space, per-destination routing, and VMCI fallback requirements discussed
+> >> there. For guest receive buffers, it uses bounded fragmentation and
+> >> reassembly rather than full-message buffers or the earlier drop/error
+> >> queue approach:
+> >>
+> >> https://lore.kernel.org/r/20240710212555.1617795-1-amery.hung@bytedance.com
+> >> https://github.com/ameryhung/linux/tree/vsock-dgram-v7
+> >>
+> >> A corresponding virtio specification update has been drafted separately.
+> >> The wire format and feature negotiation still need specification review
+> >> before this series can be considered for merging.
+> >>
+> >> The first patches expose the core port allocator and add datagram queue
+> >> reporting, then implement the common data path, guest and host feature
+> >> negotiation, routing, and RX fragmentation. The last patch extends
+> >> vsock_test with local and peer tests for message boundaries, routing,
+> >> connected peers, port sharing, queue accounting, and delayed reads.
+> >>
+> >> Testing used QEMU with the F_DGRAM property patch below, an x86-64
+> >> KASAN/lockdep kernel, paired guest tests, and a nested Linux vhost-vsock
+> >> backend. The tested paths include 64 KiB messages, delayed-read bursts,
+> >> feature-disabled ingress, stream and seqpacket controls, and header-only
+> >> guest RX buffers. A temporary userspace backend still fails stream test
+> >> 21 on both the series base and tip; that case passes with Linux vhost.
+> >> VMCI's host personality was exercised in a QEMU guest, including
+> >> coexistence with virtio and self-send without loopback. A VMware VMCI guest
+> >> device and Hyper-V hardware were not exercised.
+> >>
+> >> https://lists.gnu.org/archive/html/qemu-devel/2026-10/msg08074.html
+> >>
+> >> Code was written and reviewed both manually and assisted by Codex
+> >> (GPT-6.1-Sol) and Claude (Opus 4.6).
+> >>
+> >> Signed-off-by: Sergio Lopez <slp@redhat.com>
+> >> ---
+> >> Changes in v3:
+> >> - Preserve Hyper-V stream routing and prefer virtio for guest CID_HOST
+> >>   datagrams (thanks to Sashiko AI bot).
+> >> - Bind explicit non-VMCI CIDs and local-mode sockets without a VMCI
+> >>   handle, resolve wildcard destinations, and retain VMCI self routes
+> >>   (thanks to Sashiko AI bot).
+> >> - Recheck bound addresses after receive takes the socket lock and set
+> >>   TO_HOST only for forwarded guest sources (thanks to Sashiko AI bot).
+> >> - Probe negotiated virtio datagrams and numeric local CIDs before running
+> >>   dependent tests; cover wildcard and VMCI coexistence (thanks to Sashiko
+> >>   AI bot).
+> >> - Link to v2: https://lore.kernel.org/r/20261113-vsock-dgram-support-v2-0-bacfc85b71ce@redhat.com
+> >>
+> >> Changes in v2:
+> >> - Keep guest RX buffers page-sized; add START/EOM framing and bounded
+> >>   datagram reassembly (thanks to Alexei Starovoitov and Bobby Eshleman).
+> >> - Preserve stream and seqpacket data when an RX buffer has no payload
+> >>   room.
+> >> - Separate datagram and connection-oriented port spaces, and share
+> >>   receive metadata and queueing (thanks to Alexei Starovoitov).
+> >> - Check negotiated support and destination CID on ingress, and require
+> >>   an exact connected peer CID and port (thanks to Sashiko AI bot).
+> >> - Select a capable route for each destination, retain VMCI as fallback,
+> >>   and support loopback-only sockets (thanks to Alexei Starovoitov).
+> >> - Preserve the connected peer address across temporary parent fallback
+> >>   (thanks to Sashiko AI bot).
+> >> - Use socket write-memory accounting for datagram SIOCOUTQ instead of
+> >>   separate transport counters (thanks to Alexei Starovoitov).
+> >> - Extend selftests for fragmentation, delayed reads, port sharing,
+> >>   connected peers, and capability-based skips; fix the test build and
+> >>   README entries (thanks to Alexei Starovoitov, Bobby Eshleman,
+> >>   and Sashiko AI bot).
+> >> - Link to v1: https://lore.kernel.org/r/20261028-vsock-dgram-support-v1-0-e457cf7cee78@sinrega.org
+> >>
+> >> ---
+> >> Sergio Lopez (8):
+> >>       vsock: expose the core port allocator to transports
+> >>       vsock: report datagram receive and send queue state
+> >>       vsock/virtio: implement the datagram data path
+> >>       vsock/virtio: negotiate datagram support on the guest
+> >>       vhost/vsock: negotiate datagram support with guests
+> >>       vsock: allow datagrams to use directional transports
+> >>       vsock: fragment datagrams across receive buffers
+> >>       vsock: add datagram tests to vsock_test
+> >>
+> >>  Documentation/admin-guide/sysctl/net.rst |    8 +-
+> >>  drivers/vhost/vsock.c                    |   51 +-
+> >>  include/linux/virtio_vsock.h             |    8 +-
+> >>  include/net/af_vsock.h                   |   31 +-
+> >>  include/uapi/linux/virtio_vsock.h        |   10 +
+> >>  net/vmw_vsock/af_vsock.c                 |  526 +++++++++++----
+> >>  net/vmw_vsock/hyperv_transport.c         |   11 +-
+> >>  net/vmw_vsock/virtio_transport.c         |  167 ++++-
+> >>  net/vmw_vsock/virtio_transport_common.c  |  172 ++++-
+> >>  net/vmw_vsock/vmci_transport.c           |  124 ++--
+> >>  net/vmw_vsock/vsock_bpf.c                |    3 +-
+> >>  net/vmw_vsock/vsock_loopback.c           |    2 +-
+> >>  tools/testing/vsock/Makefile             |    3 +-
+> >>  tools/testing/vsock/README               |   33 +-
+> >>  tools/testing/vsock/util.c               |   62 +-
+> >>  tools/testing/vsock/util.h               |   10 +
+> >>  tools/testing/vsock/vsock_test.c         |  175 ++++-
+> >>  tools/testing/vsock/vsock_test_dgram.c   | 1061 ++++++++++++++++++++++++++++++
+> >>  tools/testing/vsock/vsock_test_dgram.h   |   30 +
+> >>  19 files changed, 2195 insertions(+), 292 deletions(-)
+> >> ---
+> >> base-commit: 65ba8f34ec886ec72b2c07ddc8cf3d815c32869d
+> >> change-id: 20261027-vsock-dgram-support-683a4e0aebe7
+> >>
+> >> Best regards,
+> >> --
+> >> Sergio Lopez <slp@redhat.com>
+> >>
+> >
+> > Hey Sergio,
+> >
+> > Just a gentle heads up that net-next asks for 24hrs before reposting.
 > 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
->  .../testing/selftests/drivers/net/gro_lib.py  | 21 +------------------
->  .../selftests/drivers/net/hw/gro_stats.py     | 18 ----------------
->  2 files changed, 1 insertion(+), 38 deletions(-)
+> Whoops, sorry!
 > 
-> diff --git a/tools/testing/selftests/drivers/net/gro_lib.py b/tools/testing/selftests/drivers/net/gro_lib.py
-> index 875a715b2ae1..6eff19db3541 100644
-> --- a/tools/testing/selftests/drivers/net/gro_lib.py
-> +++ b/tools/testing/selftests/drivers/net/gro_lib.py
-> @@ -263,26 +263,7 @@ def _run_gro_bin(cfg, test_name, protocol=None, num_flows=None,
->          set_ethtool_feat(cfg.ifname, cfg.feat,
->                           {"generic-receive-offload": False,
->                            "rx-gro-hw": True,
-> -                          "large-receive-offload": False},
-> -                          check=False)
-> -
-> -        # Some NICs treat HW GRO as a GRO sub-feature so disabling GRO
-> -        # will also clear HW GRO. Use a hack of installing XDP generic
-> -        # to skip SW GRO, even when enabled.
-> -        feat = ethtool(f"-k {cfg.ifname}", json=True)[0]
-> -        if not feat["rx-gro-hw"]["active"]:
-> -            ksft_pr("Driver clears HW GRO and SW GRO is cleared, using generic XDP workaround")
-> -            prog = cfg.net_lib_dir / "xdp_dummy.bpf.o"
-> -            ip(f"link set dev {cfg.ifname} xdpgeneric obj {prog} sec xdp")
-> -            defer(ip, f"link set dev {cfg.ifname} xdpgeneric off")
-> -
-> -            # Attaching XDP may change features, fetch the latest state
-> -            feat = ethtool(f"-k {cfg.ifname}", json=True)[0]
-> -
-> -            set_ethtool_feat(cfg.ifname, feat,
-> -                             {"generic-receive-offload": True,
-> -                              "rx-gro-hw": True,
-> -                              "large-receive-offload": False})
-> +                          "large-receive-offload": False})
->      elif mode == "lro":
->          # netdevsim advertises LRO for feature inheritance testing with
->          # bonding/team tests but it doesn't actually perform the offload
-> diff --git a/tools/testing/selftests/drivers/net/hw/gro_stats.py b/tools/testing/selftests/drivers/net/hw/gro_stats.py
-> index 70e76e3888bd..569ca81368e6 100755
-> --- a/tools/testing/selftests/drivers/net/hw/gro_stats.py
-> +++ b/tools/testing/selftests/drivers/net/hw/gro_stats.py
-> @@ -173,24 +173,6 @@ def _run_gro_test(cfg, test_name, num_flows=None, ignore_fail=False,
->                         "rx-gro-hw": True,
->                         "large-receive-offload": False})
->  
-> -    # Some NICs treat HW GRO as a GRO sub-feature so disabling GRO
-> -    # will also clear HW GRO. Use a hack of installing XDP generic
-> -    # to skip SW GRO, even when enabled.
-> -    feat = ethtool(f"-k {cfg.ifname}", json=True)[0]
-> -    if not feat["rx-gro-hw"]["active"]:
-> -        ksft_pr("Driver clears HW GRO when SW GRO is cleared, using generic XDP workaround")
-> -        prog = cfg.net_lib_dir / "xdp_dummy.bpf.o"
-> -        ip(f"link set dev {cfg.ifname} xdpgeneric obj {prog} sec xdp")
-> -        defer(ip, f"link set dev {cfg.ifname} xdpgeneric off")
-> -
-> -        # Attaching XDP may change features, fetch the latest state
-> -        feat = ethtool(f"-k {cfg.ifname}", json=True)[0]
-> -
-> -        _set_ethtool_feat(cfg, feat,
-> -                          {"generic-receive-offload": True,
-> -                           "rx-gro-hw": True,
-> -                           "large-receive-offload": False})
-> -
-
-Not sure how likely these driver edge cases would be to reach, but FYI:
-
-    gro_stats.py uses its own _set_ethtool_feat(), which, unlike the shared
-    set_ethtool_feat() in lib/py/feat.py, never reads the features back
-    after `ethtool -K`. This removed `if not feat["rx-gro-hw"]["active"]`
-    was the only check that HW GRO actually turned on. Drivers still drop
-    GRO_HW in ndo_fix_features for reasons unrelated to SW GRO:
-      - qede with MTU > PAGE_SIZE;
-      - bnx2x when the MTU doesn't allow GRO;
-      - bnxt with BNXT_FLAG_NO_AGG_RINGS;
-      - mlx5 with legacy RQ or CQE compression;
-      - and, after 3/8, any attached XDP program.
-    In those cases the test now runs with both SW and HW GRO off and fails
-    later in _check_gro_stats() with a confusing count mismatch, instead of
-    skipping. gro_lib.py got that check by dropping check=False, so the two
-    tests now behave differently. Either switch _setup_hw_gro() to the
-    shared set_ethtool_feat() (and delete the local copy), or keep a short
-    read-back
->  
->  def _check_gro_stats(cfg, test_queue, stats_before,
->                       expect_rx, expect_gro, expect_wire):
-> -- 
-> 2.56.1
+> > I'll start working my way through the series, sorry if my reviews come
+> > back spread out across a few days, not sure I'll have enough time in a
+> > single sitting.
+> 
+> I was planning on sending a v4 fixing Sashiko's issues. Should I wait
+> for your review first?
+> 
+> Thanks!
+> Sergio.
 > 
 
+Feel free to send without my review, I'm lagging behind!
 
+Best,
+Bobby
