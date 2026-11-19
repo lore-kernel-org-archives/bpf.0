@@ -1,45 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795063972;
-	b=EQl6vI5EJGFOO+6MlsuZ5ep/W5TciMyu4xf5M3yugeRW0kgvMkWTY1TH6iU9R8QwJQwf
-	 XvSZjjflyK+GLv0+NGiBsEd8acrB18EphNhaIwYWTlLb7B1qu1Si4a6rEO+O6LQkrMM9y
-	 2C8SZRpXD/O95pnqgEDtHvhTt2H1F8qrEkYLRTD8hY9mAmJTV3rFKNtwpQTGGk284/4ON
-	 48rp9LFlLrA37P9+DzNqn+heJmaOD+jExuyqolDVfN/a9jOeJUlp+I2+5dSXsENMk3cyh
-	 OvgukGykxYHRGkABSX2Y++CkQbFLOZtJBOOV9d/EZs3vU+dgDHPp5C21SrHmOp2odAw==
+	t=1795064586;
+	b=Fik5g2oDNHPuoYAsyoLVHcf8ef7hAZYDK7XeAMjLZJrAT9VZFmxlR/QDgX7X4LHII5/J
+	 0Ke7XudkfJA11LzhdybALHwSk+M9oBEFsM2uS++YpObINGuCs4u88YdQnB9AEpgAm94S4
+	 fqvGweKOBCYFjYtiH4UI+K+C8+nMHcST6NrWr5CuZBt91HQxOOefk14L7kgR6HkunqMCF
+	 X4YoWMww8RT56RsAzAtWtdawpVryDhB0o8tTKCrnciePnC8aLRJBlDg/ECxzOuo8rjPPN
+	 kWXmmS41IKEoVCCruAI2Yy8t9Ii2u0eIGXvozr8NyhLScIen35+qd7PiA0KM2PPBULg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795063972;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=9i+UKZPZ3OpK5ILgjI5giVoNBCsGXWxAGZS6reZxXwU=;
-	b=E/uz/8ynhXRDrARTjvvIaSSu0g3lah0HXGmFgmD7bDGIJOV55Yevz4PpM9Dr8vzGrYJZ
-	 EKAK/M5vgjkSQMCTlEioDkg05G5UTwWRSL/LBizcUwjj3c648qEr4VEhdTxJifmbRbA3j
-	 QZo5o2klfzPwq7j9uTiey7kamYkXQN0dZZewLDVxQIhLYKRF9/DD+bbG3WrTs6S5Wkku9
-	 GiZyH60jpzz1LQAo6XUCwAn0ieRRwg82bvH3a9eSg62HBPJWOMd8Ud5o7xPFOamZEDwhp
-	 D+14ujjwihhmCecx11JP0zxrSGkYjSvUMkWFcjeHAiPsr6VSqia23sIS9RR1dQGrQtQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795064586;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=BT7+1r2EbCQwN3k5fIH4q6qWDyQXDFrNj9A0BO8ZTQs=;
+	b=nhygQR0yLdTyq5J/UT2Pd533tcTDONolRnnRK/ZjH5g0dlzsZVeViqK3M8hoWeTU9KMY
+	 VWUOPGpYkjUIwT07jDJAP/NcJ3m62fidMVR6yiABsksdF8+MaUrAt4zHE8/i57AtiAwXK
+	 7MgzJ//QOYyb4wzGVKzWdpfHS3qCB8tHgKE+QEfLwXXg1xYcrSlOpgStFrEepDuC1oewK
+	 BuTB4ksSWBSE7FldxDC9Z3i6kJckZ1ZvQZcEUV5ennjFIEJpoAP0kKass3y1Jbiit8hYZ
+	 QTPu/c3MqLyuAaGU2R9fHUs8FomExOKCZXTvFt9N1zaXYjfATh6RSC977wR5hxx2/cw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="O9/IEtKF";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=eSKM5OO6;
+	arc=none smtp.remote-ip=91.218.175.50
+Received: from mta0.migadu.com (out-50.mta0.migadu.com [91.218.175.50])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED199606A320;
-	Thu, 19 Nov 2026 04:52:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10C67606A326
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 05:02:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 10C67606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=O9/IEtKF
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 554B31F000C4;
-	Thu, 19 Nov 2026 04:52:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795063971;
-	bh=9i+UKZPZ3OpK5ILgjI5giVoNBCsGXWxAGZS6reZxXwU=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=O9/IEtKFhAwxtSQQ20gIkbGS6jtMNiV9GameG4+c4WUkp0KXzIoV56y3DUCygFCne
-	 fLOud+eFCn0vUUTKCcGgs9SDjzHj3MKrR6vyohE+DDLorBYe6DssRYEfq0rgAX0Em3
-	 6y+r3abPLOZCLeXqdFTHbzKnqW4fCjm/eYlKSIaRDVGJgs4Z5XbZA36SFNeZZJEskZ
-	 01aM/ZQl8wSimCP9er9CJuwHazOkfp89Q/0VDE3Pe56NEroDcQy05tSe1gwi047e4D
-	 RWBycPCqVyiiMLFUxjkVeBaCfklppnp9a/xnU/HVQB8P0iwFXchJbxAD4BWDUX7j6y
-	 v617XEMvSWjDQ==
-Content-Type: multipart/mixed; boundary="===============5775708092211357052=="
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=eSKM5OO6
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=J5rUZ6TR2jk9ww8i3KV8RMWzlPBWx7p9zVMYCEJba0U=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795064577; v=1; x=1795669377;
+ b=eSKM5OO6IYnYCnvEcHy2foFsZaFISwpVt7NeNyxFATAkpSv/xHSpXDYLj7xlnKwqYnKyR0RR
+ F0ZVPkmd0rwU4mgO6xxOus6MSuhwucLlf5b+ww4ixMcC+T2IaEgofNbaTvHxVyagxsk83cczENS
+ i2fsx9Ue9ilAJa/ppvGKjq1M=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id b2ce2cbeb8803d33;
+	Thu, 19 Nov 2026 05:02:57 +0000
+X-Mizu-Trace-ID: b2ce2cbeb8803d33
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <9a47ede3-24fa-4fa3-8d7e-50f221de0929@linux.dev>
+Date: Wed, 18 Nov 2026 21:02:52 -0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,71 +58,114 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <c90c3d1dfacea3d6a30445bc33ca8e0de75c9fae953a4b9e842dd3dc887a3dce@mail.kernel.org>
-In-Reply-To: <20261119040705.684987-3-atomlin@atomlin.com>
-References: <20261119040705.684987-3-atomlin@atomlin.com>
-Subject: Re: [PATCH v6 2/2] selftests/bpf: Verify task_setscheduler LSM hook parameters
-From: bot+bpf-ci@kernel.org
-To: atomlin@atomlin.com,tsbogend@alpha.franken.de,paul@paul-moore.com,jmorris@namei.org,serge@hallyn.com,andrii@kernel.org,ast@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,mingo@redhat.com,peterz@infradead.org,juri.lelli@redhat.com,vincent.guittot@linaro.org,stephen.smalley.work@gmail.com,casey@schaufler-ca.com,longman@redhat.com,tj@kernel.org,hannes@cmpxchg.org,mkoutny@suse.com
-Cc: ihor.solodrai@linux.dev,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,chenridong@huaweicloud.com,dietmar.eggemann@arm.com,rostedt@goodmis.org,bsegall@google.com,mgorman@suse.de,vschneid@redhat.com,kprateek.nayak@amd.com,omosnace@redhat.com,kees@kernel.org,atomlin@atomlin.com,neelx@suse.com,sean@ashe.io,chjohnst@gmail.com,steve@abita.co,mproche@gmail.com,nick.lange@gmail.com,cgroups@vger.kernel.org,linux-mips@vger.kernel.org,linux-fsdevel@vger.kernel.org,linux-security-module@vger.kernel.org,selinux@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 19 Nov 2026 04:52:49 +0000 (UTC)
-
---===============5775708092211357052==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 0/4] bpf: Check recursion per task for
+ preemptible programs
+To: mikeba@sentinelone.com, bpf@vger.kernel.org,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Steven Rostedt
+ <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Martin Kelly <martin.kelly@crowdstrike.com>,
+ Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>,
+ tyler.wilson@crowdstrike.com
+References: <20261117-bpf-preempt-v2-r2-v3-0-586376ec3672@sentinelone.com>
+Content-Language: en-US
+From: "JP Kobryn (CrowdStrike)" <jp.kobryn@linux.dev>
+In-Reply-To: <20261117-bpf-preempt-v2-r2-v3-0-586376ec3672@sentinelone.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-> selftests/bpf: Verify task_setscheduler LSM hook parameters
+Hi Mike,
+On 11/17/26 3:29 AM, Mike Bazov via B4 Relay wrote:
+> fentry, fexit, raw_tp and syscall tracepoint programs can be preempted
+> while they run, but their recursion check is a per-CPU counter:
+> 
+>   task A enters prog on CPU 0       prog->active = 1
+>   task A is preempted inside prog
+>   task B enters prog on CPU 0       dropped, counted as recursion miss
+> 
+> Nothing recursed, but B's event is lost. Since 7.0, x86 and arm64 have
+> only lazy and full preemption, so this happens on stock kernels. Our
+> fentry/fexit probe on inet_sendmsg() and inet_recvmsg() loses 9,254 of
+> 8 million runs under HTTP load on a 4-CPU VM. With the series it loses
+> none.
+> 
+> The series checks recursion per task instead: a program is recursing
+> only if the current task is already inside it.
+> 
+> v2 did that for every program, which breaks a program that uses a
+> per-CPU map as scratch space: the second task overwrites its buffer,
+> and nothing counts that. So in v3 the verifier marks the programs that
+> keep per-CPU state, and those keep the per-CPU counter and behave
+> exactly as today:
+> 
+>   - per-CPU maps, bpf_this_cpu_ptr(), bpf_per_cpu_ptr()
+>   - tail calls: the target has no recursion check of its own
+>   - timed may_goto: its budget is per CPU
+>   - a private stack
+> 
+> Trade-offs:
+> 
+> - Marked programs are not fixed. A program with a per-CPU map or a
+>   tail call loses runs to preemption as it does today.
+> - The verifier can't see everything. A program that keeps per-CPU
+>   slots of its own, like array[bpf_get_smp_processor_id()], is not
+>   marked. Today the counter keeps its runs apart. With the series two
+>   runs can write one slot, and nothing counts that.
+> - raw_tp is about 2% slower in bench, see the table below. fentry and
+>   fexit are within noise.
+> - Tracing, raw_tp and tracepoint programs lose the private stack
+>   (patch 1). It is already unsafe for them: two raw_tp programs that
+>   tail-call one handler let two tasks share its stack today. A program
+>   with two 2000-byte frames no longer loads.
+> - A marked freplace program can't be attached to an unmarked raw_tp or
+>   tracepoint program: -EINVAL.
+> 
+> One question: the marking is automatic. A flag that the program's
+> author sets would avoid the second trade-off, but existing programs
+> would keep losing runs until they are rebuilt. Which do you prefer?
+> 
+>   1. bpf: Avoid per-CPU private stack in preemptible tracing progs
+>   2. bpf: Mark programs whose runs must not overlap on a CPU
+>   3. bpf: Check program recursion per task via bpf_ctx
+>   4. selftests/bpf: Add preemption recursion test for tracing programs
+> 
+> Testing, x86-64 VM with 4 vCPUs:
+> 
+> The selftest pins two tasks to one CPU and makes B enter the program
+> while A is preempted inside it, 20 rounds per subtest. With the series
+> all 19 subtests pass. On bpf-next 7 fail: B is dropped in every round
+> (fentry, fentry_s, raw_tp, raw_tp_s, tp_syscall), A's stack is
+> overwritten (two_dispatchers), and the freplace attach is not rejected
+> (ext_attach).
+> 
+> bench -w2 -d12 -a trig-<x>, M/s, median of 10 runs [min-max], lazy
+> preemption, in boot order, on bpf-next 0fb18ce8a2e9:
+> 
+>                trig-fentry          trig-fexit           trig-rawtp
+>   bpf-next     41.65 [40.81-42.14]  38.89 [37.58-39.41]  42.62 [41.95-42.80]
+>   series       42.40 [41.87-43.04]  39.33 [35.24-41.68]  41.31 [40.48-41.74]
+>   bpf-next #2  41.64 [40.87-41.74]  39.29 [35.18-40.62]  42.05 [41.24-42.35]
+>   series #2    42.34 [42.12-42.78]  39.87 [39.46-41.38]  41.53 [40.79-41.75]
 
-TL;DR: Nit only, in the new task_setscheduler selftest: the restore_sched flag
-and the saved_policy initializer look redundant, so the scheduler restore at
-out: could be unconditional.
+We tested this series and wanted to share the data. Overall unmarked LSM/fentry
+hooks previously affected went to zero. Marked hooks remained about the same or
+regressed slightly. Normalized data:
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_lsm.c b/tools/testing/selftests/bpf/prog_tests/test_lsm.c
-> --- a/tools/testing/selftests/bpf/prog_tests/test_lsm.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_lsm.c
+category		before	after
+raw_tp (marked)		240	213
+fexit (marked)		61	135
+fentry (unmarked)	3	0
+other (unmarked)	805	0
 
-[ ... ]
-
-> +static int test_lsm_task_setscheduler(struct lsm *skel)
-> +{
-
-[ ... ]
-
-> +	int cpu, saved_policy = -1;
-> +	pid_t child_pid = -1, waited;
-> +	bool restore_sched = false;
-> +	bool restore_aff = false;
-> +	int len, ret = -1;
-> +
-> +	saved_policy = sched_getscheduler(0);
-> +	if (!ASSERT_GE(saved_policy, 0, "sched_getscheduler"))
-> +		return -1;
-> +	if (!ASSERT_OK(sched_getparam(0, &saved_param), "sched_getparam"))
-> +		return -1;
-> +	restore_sched = true;
-
-this isn't a bug, but since every "goto out" happens after
-"restore_sched = true", could the restore_sched flag (and the
-"saved_policy = -1" initializer, which is overwritten by the next
-statement) be dropped and the restore at out: done unconditionally?
-
-[ ... ]
-
-> +out:
-> +	skel->bss->setsched_deny = 0;
-
-[ ... ]
-
-> +	if (restore_sched)
-> +		sched_setscheduler(0, saved_policy, &saved_param);
-> +	return ret;
-> +}
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/44458173002
---===============5775708092211357052==--
+It's nice to see the series progressing since we are affected by the same issue.
+See some comments on the individual patches.
