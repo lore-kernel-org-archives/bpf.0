@@ -1,21 +1,21 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=66.220.155.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795065297;
-	b=SYj7GFIWFdym1dpmiP1GpIU2E6YLysMLqscbQPdgG1FNQicE/6sdmxb1MZua+V3pA/67
-	 0AH1RURqrh5VN3mzjajNzjDFJMgaK34HCZCV27UcJ38sPOuiCVPcYuM8gx0QEHuzWByN0
-	 Up7JH09B3PHtRyNFIQiusWwoiwnHNv8HAwcwvC60UF843Jg4ThtyEPfv7tdAEL/dEwAuH
-	 qNrUheC6Huz5fUO7eAVhZkA0hZ+jshUEhrI8GdFKjjJs0HV6+jaOn6kOLBbABbAVB2biM
-	 KsACuxWMe+4RZxulCeNMdeDNwMJW/Wet0PD/AHXgNTjYgftRGEhojEQdN1bNnec+cog==
+	t=1795065300;
+	b=mR4TTJdkAAoLVOPyofopAzZj3zrnO66yW+v+sfy0ZefRQENKiIAUJwGUwiXtyj5KnAGS
+	 DGppKG3PQYLrgP5lPCevmhTCoHx2jlOX+cdGNF5+VFMtsSIwnGAulyMfavuK+UV427y/P
+	 TmmEtj58gFP6232LDAXkD7AMA84AlXCSdjhLcn5+MYTfVujny16iMrxj1B4/jXkjwizey
+	 v/79KVFgnqVDSpDCwzFCthD4JdmWwtqe2nmL/BFSI9ymvxneMTDt9cB05BKxtpX/Wfbph
+	 QkWIhyUJj9Ex4pAGkbV07f0z0IpXBWte6Gi/pO65tcBAYscYMbvdTSrnRQwFY5Eok3w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795065297;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795065300;
 	h=DMARC-Filter:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=zvgFRL0R8qNfTIrjmR9pZa9cP8z0qbZZGF0IqcsHhr8=;
-	b=PS3ObeOhJDBUNtKWXW7N0ZGU6oo/rEap5t2vhUe2ISR/JRs6ENkLW8EU6z1sUgoyzEse
-	 Z4bhwk6gU1HqDVflVJNhmifUO0hj5ky0IEjzWJ7vUdbNXQGMkbi7ajBqpXQlKOYo/rSGa
-	 QFjNiW0WNAWaXcyGd9nPCbm407QJtohoGrHkf7HlaebqHhyUrJxOEYp4nhH7HYBMXdTdH
-	 M4D70N7w84DMK8ugI6TbO9bgaQoo9xaDuiDNrCs33EW46F0tIRRuAs/7UjXjeqJl1qvea
-	 LGk278p8VqDEb3CWwuUEuQcc2Z0TKfGNHPdMUWHiWRzbpZaV9+yNisabNhqWKwpQh7g==
+	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+	bh=qEQX/xuxEsyc85D/lXfAfsoyshfmWrWvCcFKiiA3y3o=;
+	b=ne00glS6MQlPiYUAzembKlISG1ZEoaEPTEeD/42n0urAuPc84DqV3nRZctAJF5d8dXyH
+	 4c11Pa8AZVwP7BNvKBl5tigoQsNtjKKFfNXnUj1NAbCZG57TIo2bpaKR3sOkFtyZjoZYU
+	 Z62zJ9+Gy/GC/tqvx2BjiJvgzMT3t0J+DcIBPFTfrZN5u/F4F24kgtAPi260fTFBhF+/9
+	 LIQyhKcqpzamCUPcXefJFLPM+pNuPpaBHOPoVpQKhnvlelF1h+1naiZZAhwcg9dfwIvaa
+	 8muORbx8k3H4qP5KG6FqBlLzuLSFB66sEHWF8xyFf/sr0KSiHOqzPnum26aJS2vqokw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=fail header.from=linux.dev;
 	spf=fail smtp.mailfrom=linux.dev;
@@ -24,13 +24,13 @@ Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10672606A320
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 05:14:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 10672606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE9BB606A320
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 05:14:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BE9BB606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm50310.atn0.facebook.com (Postfix, from userid 128203)
-	id A846559083B83; Wed, 18 Nov 2026 21:14:43 -0800 (PST)
+	id BF50A59083B9F; Wed, 18 Nov 2026 21:14:48 -0800 (PST)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -38,10 +38,12 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v2 0/4] libbpf: Fix CO-RE relocations of unsigned 32-bit enum values
-Date: Wed, 18 Nov 2026 21:14:43 -0800
-Message-ID: <20261119051443.1902163-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v2 1/4] libbpf: Zero-extend unsigned 32-bit enum values in CO-RE relocations
+Date: Wed, 18 Nov 2026 21:14:48 -0800
+Message-ID: <20261119051448.1902442-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.1
+In-Reply-To: <20261119051443.1902163-1-yonghong.song@linux.dev>
+References: <20261119051443.1902163-1-yonghong.song@linux.dev>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -53,43 +55,92 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-For a BPF_CORE_ENUMVAL_VALUE relocation, libbpf sign-extends the value
-of a 32-bit enumerator even if the enum is unsigned. A value in
-[0x80000000, 0xffffffff], e.g., DCACHE_PRIVATE of enum dentry_flags,
-then doesn't match the zero-extended value clang emits, and the whole
-object is refused.
+For a BPF_CORE_ENUMVAL_VALUE relocation, bpf_core_calc_enumval_relo()
+reads the value of a 32-bit enumerator from btf_enum->val, which is
+__s32, so the value is sign-extended to 64 bits even if the enum is
+unsigned. A value in [0x80000000, 0xffffffff] of an unsigned enum
+becomes 0xffffffff80000000 or above.
 
-Patch 1 extends the value as given by the kflag of the enum, which is
-the form clang emits. The kernel builds the same relo_core.c, so it gets
-the fix too. Patch 2 tests it.
+Clang emits such a value zero-extended in the ld_imm64 of the
+relocation, so the check of the original value fails, and the whole
+object is refused even if the target value is the same:
 
-GCC emits every 32-bit enum value sign-extended, since its
-__builtin_preserve_enum_value() returns int. So with patch 1 alone, GCC
-objects that loaded before would be refused. Patch 3 accepts the
-sign-extended form of an unsigned value and patches the target value in
-the same form. Patch 4 makes the test of patch 2 work with GCC.
+  enum dentry_flags { DCACHE_PRIVATE =3D 0x80000000 };
+  out =3D bpf_core_enum_value(enum dentry_flags, DCACHE_PRIVATE);
 
+  libbpf: prog 'p': relo #0: unexpected insn #0 (LDIMM64) value: got
+          2147483648, exp 18446744071562067968 -> 18446744071562067968
+  libbpf: prog 'p': relo #0: failed to patch insn #0: -EINVAL
 
-Changelog:
-  v1 -> v2:
-    - v1: https://lore.kernel.org/bpf/20261118161053.1768878-1-yonghong.s=
-ong@linux.dev/
-    - Accept the sign-extended enum values emitted by GCC (patch 3), and
-      make the new test work with GCC (patch 4).
+And a target value in that range is patched sign-extended, which is
+wrong wherever the program uses it as a 64-bit value. The x86 vmlinux
+has 29 enums with such values, e.g., dentry_flags, init_ns_ino and
+e820_type.
 
-Yonghong Song (4):
-  libbpf: Zero-extend unsigned 32-bit enum values in CO-RE relocations
-  selftests/bpf: Test CO-RE relocations of unsigned 32-bit enum values
-  libbpf: Accept sign-extended 32-bit enum values in CO-RE relocations
-  selftests/bpf: Take unsigned enum values as unsigned int for GCC
+Commit 89e7a42e3030 ("libbpf: Normalize enum values according to
+signedness") added btf_enum_value(), which extends the value as given by
+the kflag of the enum, for btf_dump and map fields, but not for CO-RE
+relocations, whose relo_core.c is also built into the kernel. Use it in
+bpf_core_calc_enumval_relo() as well, and add it to the kernel's
+include/linux/btf.h, so that the kernel gets the same fix.
 
- include/linux/btf.h                           |  5 ++++
- tools/lib/bpf/relo_core.c                     | 30 ++++++++++++++++---
- .../selftests/bpf/prog_tests/core_reloc.c     |  2 ++
- .../selftests/bpf/progs/core_reloc_types.h    |  8 +++++
- .../bpf/progs/test_core_reloc_enumval.c       | 21 +++++++++++++
- 5 files changed, 62 insertions(+), 4 deletions(-)
+Fixes: 23b2a3a8f63a ("libbpf: Add enum64 relocation support")
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ include/linux/btf.h       |  5 +++++
+ tools/lib/bpf/relo_core.c | 12 ++++++++----
+ 2 files changed, 13 insertions(+), 4 deletions(-)
 
+diff --git a/include/linux/btf.h b/include/linux/btf.h
+index 87fad4076f0e..ceb27984df14 100644
+--- a/include/linux/btf.h
++++ b/include/linux/btf.h
+@@ -525,6 +525,11 @@ static inline struct btf_enum *btf_enum(const struct=
+ btf_type *t)
+ 	return (struct btf_enum *)(t + 1);
+ }
+=20
++static inline u64 btf_enum_value(const struct btf_type *t, const struct =
+btf_enum *e)
++{
++	return btf_type_kflag(t) ? (s64)e->val : (u32)e->val;
++}
++
+ static inline struct btf_enum64 *btf_enum64(const struct btf_type *t)
+ {
+ 	return (struct btf_enum64 *)(t + 1);
+diff --git a/tools/lib/bpf/relo_core.c b/tools/lib/bpf/relo_core.c
+index 2672623a4198..7aa7eb4e4021 100644
+--- a/tools/lib/bpf/relo_core.c
++++ b/tools/lib/bpf/relo_core.c
+@@ -861,6 +861,13 @@ static int bpf_core_calc_type_relo(const struct bpf_=
+core_relo *relo,
+ 	return 0;
+ }
+=20
++static __u64 bpf_core_enumval(const struct btf_type *t, int idx)
++{
++	if (btf_is_enum(t))
++		return btf_enum_value(t, btf_enum(t) + idx);
++	return btf_enum64_value(btf_enum64(t) + idx);
++}
++
+ static int bpf_core_calc_enumval_relo(const struct bpf_core_relo *relo,
+ 				      const struct bpf_core_spec *spec,
+ 				      __u64 *val)
+@@ -875,10 +882,7 @@ static int bpf_core_calc_enumval_relo(const struct b=
+pf_core_relo *relo,
+ 		if (!spec)
+ 			return -EUCLEAN; /* request instruction poisoning */
+ 		t =3D btf_type_by_id(spec->btf, spec->spec[0].type_id);
+-		if (btf_is_enum(t))
+-			*val =3D btf_enum(t)[spec->spec[0].idx].val;
+-		else
+-			*val =3D btf_enum64_value(btf_enum64(t) + spec->spec[0].idx);
++		*val =3D bpf_core_enumval(t, spec->spec[0].idx);
+ 		break;
+ 	default:
+ 		return -EOPNOTSUPP;
 --=20
 2.53.1-Meta
 
