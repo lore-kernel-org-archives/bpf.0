@@ -1,89 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795101728;
-	b=wBxE4Q91W9jV54SpoiRQ/+Yz6KUjGmUY2NLBk+uXlRTTS4VCY9JzFb+v//A5/8mHO3wa
-	 v9D7p0MkPMz68BEArq9/+Jamgha2Ki6adwE2B+9twIHTvWS+5+fEGXUinjwS/4e068WNH
-	 zbjQ7uSqmrB8HEOcvvecWtRXjdEWZLcf5BGQlBtd5B71+ZscA2YV/gpFcV1qiTn/JgDDK
-	 6zqHjIhbab8Eiz2gMkDTcYqkYn4flixV3AHnfYK1n4jmy50K19g3tJBcsKVgkIDjWByDI
-	 1LLUvN3g9ivOkclbjVWVVoxWJ4QMwDFNWQ8iqKbBGhyxXG4JXBfieNwFk2qLpNt3BOQ==
+	t=1795101850;
+	b=FaN8yY7JOUD/U/zLf+f2VFe2uJw+Jx9sLi7FJaxX7Z7eouxaVWN0H1M9hGMbKjgsjnHp
+	 m+lO6appMnX7/SgdJBTPU5V0xt98pwK/kBs7K7GmuycTel70dJQzPXd01Wm3vjn+p5wgr
+	 1FPGInZbhYwGZJbg9wYKA9v0WiqXoAPwIcL/wnBRiixGXs7mhks/AUhGMUiNx9DjzT/E/
+	 YBLpLC0qwQxHhTMHJFi/PF6VSWslPm8m+CUwtj4Me4S6IK0qxR/uzu2XksBCaMBTENXDP
+	 w+v1An+nVEvQF44Ps43ZrL0CMzFgpo6Kd86QkndQ7v5QWpFzDLlrNEVcq5zBI7yBCeg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795101728;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=oV4J42aG7aSlwZmO4hsI4nR3tdj4IKf86NVOjXkIpNI=;
-	b=EVJ0MUowrx3b9w9QsOhGH8uu5peOnV3YHyBKbcrSnq4XEhO5WvdwV1i8Ms6hVSfjs4g8
-	 9tGW6XppNVpCRPy1BtGaAMkmzP8sN1daHH2DvBaBCAIFW6QJwX+9kYCZhIAt/WlYAvVWN
-	 AE4jczD2wAYhOlORilil/hvAAb2XQRjb7c+Y9buz6tV6rYdoroUIw4VTzso9YTgOQ2tNr
-	 fm49R817nM+SgmZ443BqhqSJKh/GHQSWu3X6vEmcpG+Tbx9/tpsPMMubarnzhRmFlfYdh
-	 GP44Fxkp2EE0Df+42Xr9T+tuYtEX6VMPM5sIx5LerbjjcKnVDl8DVa7mPWFydWYzJpQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795101850;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=2axt5vu0NQUoXMUudKN7SE3TreXhSEj62FHJAyuTVVI=;
+	b=eVx5lE8s5hxp2zuUcvXQ7Q3riYtqmAzGEZ3L7l65ZsOUxA/a5CM/Zq55DE5Y319hmHKG
+	 qVOwExC4+uY6b4KaO4twCjwToR5PbXrQ9Wliwak/2WAVdKF7kWkPihZcB+hgQ13NF3mWP
+	 9rNrCPJ+huXXqMiaiY2g49G3X6+gbSbCGlmyEcONaGozs2aUYE5n/wPmtLxiaNtN4XF4V
+	 xFnDoXVsPViR++Mt0d1Rs2kCIJvTP1KLPYlxxiKuBz/0ENkM0Mn3qfkiwqvaCOHzXZ8qk
+	 6Ngejo++YMdnrMIlGq2TuW1f5hIl9lrg5v+osGYWXjcPDiILbrAdJO2NxU+/GITLsIA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=suse.com;
-	spf=pass smtp.mailfrom=suse.com;
-	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=ed9MC6g+;
-	arc=none smtp.remote-ip=209.85.128.49
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NEZvF1UF;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 802E2606A324
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 15:22:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 802E2606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D2C8606A320
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 15:24:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=ed9MC6g+
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4bb666304fdso9059195e9.0
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 07:22:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1795101726; x=1795706526; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=oV4J42aG7aSlwZmO4hsI4nR3tdj4IKf86NVOjXkIpNI=;
-        b=ed9MC6g+5Qtaoy2xB6R75hiktNRHrl7RaNAjvJeRhSHqpYmnLg4iyU3/hdIW4Pu90D
-         a4LQmtDz7S9rGXQd8aG1A/52yzeUu+XvQDN90ggIDTb2We7bKM8vuvXuYrr9v7ehhHXK
-         P7QBdQhyVZmPZydzQW88om3uzIo9thgVho6ku23S1CGgMS4BdIfOIiKtP50+yNHtvxJa
-         KmtxG8XqHOaTzAS7jgYCxmxQTzMgfEsFdZPmlRsYoT29OqJYiNYjWC1tYEqdP0sMJwQc
-         dlWpmyj71nQQ0v8C4hD6MEHQmwQRN2YbJ8uEGM8vF1OWA8ciDyydUn0Duphkcbv01yhy
-         +P1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795101726; x=1795706526;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=oV4J42aG7aSlwZmO4hsI4nR3tdj4IKf86NVOjXkIpNI=;
-        b=uPXIA57yJjtYhjmdhX20LX0F6ImAnVI28Q6Fa0g89wrglUKsTidKyfzU28GJbP/JNS
-         KbeDKe4WCvFISbfOXUuW7gFaO92HO90pjhX67qtdXFsz9qBLUVtBS+a0v5APna8I96WA
-         0fn8FC6zfHyrg9dOjsIiCYMPRlnEXRvuDiWLZAoTpsH/Ex817JW7DLefBEfiv2jeBg/D
-         TDNHypNUEVB7+nx0gH/UujNwcV9e8HFCgX/FsBw7ZRKgjdr3KfNPblYCaC043lCF1QaO
-         K7DM9+iJ+XzkcsEYYfIMaOKqZEU07inj+w3h/angUbWc/gtInkUTgo/kgVQfFhMNsudw
-         bd/w==
-X-Forwarded-Encrypted: i=1; AL+hErFCRNnGOePIbRrrp0O535W24QZyiLxPcBgsI/fQyuzj3AuhH61JWyCtRXAtZQBvlItsH4g=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9Hnp+L72UGiXgxxxn3YMc3PaxC5Hsah3h1tZ0O0ki1jghDQkGu
-	iseXSrYVuB1mFSDXa2WNxKjnGgV1MzAY36n4xDkOUBgFqQLADWWzrOOcFYkLURTzEDHemlPopTt
-	V1mSM/4o=
-X-Gm-Gg: AYBFou1OG0BEI0+iRUlVGT2QYNFsWyvySSKWGht3DOVe5zO+SyV6nzvKyIUjvq07EiS
-	xBZp8P/JWFK0fAzorkIqXgHskVYq2MHtlef+Mjls1Jew96bIbmUU9VpaYyItrPdoD/cRrjMyjf+
-	1bb280sfr/Y7aB64Z/YjoFMoKro9xyxZNJ0jgwrZlVy9hKFQOLCk+Vtrh2cCk/uZByi6S78Hvyf
-	6kIKk1nkEtmFzBBed/TBcz7DpqgJHliLtvghqSALInON4DkeDWT7NGYyPGeg1SjTf88mP/3UOZD
-	T0ljSJdR7weCueWodvscBsEiZ3FeGBfAtB63BT8Ppj3GeAem7o7cjHC5U6cZ4vYQK8obVyI6m93
-	S8P2vEhYvwFmW2IGz1lrIy+BLrFQqm+1VCY0LHQ8oR3DCAtXKgWVcBOsKJv4W0ZYf8rx6XElXGd
-	MkiVit6LEJgDtOPh1j5Kn//d8qUrOmWm7O+qKBXbmN8rKC1wWwAl4ijYDurMunZfikYeVk2oGDI
-	Aml46HXx1uo1u4X80Yul5F2Sb0tEEXXWfTTFCMVYWpw95iGZ1WwWdXuqI5qkgvdVbGHfp7kCybE
-	1Al52E6/mIUqfr9GPNtttdw0S1WQ1ArPVGe9AxVMZ/ENlWbDHvt8yT3J1Kayuaas7w==
-X-Received: by 2002:a05:600c:674b:b0:49e:65f2:db64 with SMTP id 5b1f17b1804b1-4bb860ffbaamr34819435e9.5.1795101725389;
-        Thu, 19 Nov 2026 07:22:05 -0800 (PST)
-Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb84cbc5d3sm29859235e9.0.2026.11.19.07.22.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Nov 2026 07:22:04 -0800 (PST)
-Message-ID: <8b47b628-865a-416d-b9f9-fbeca3f9d649@suse.com>
-Date: Thu, 19 Nov 2026 16:22:04 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NEZvF1UF
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21CC31F000C5;
+	Thu, 19 Nov 2026 15:24:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795101850;
+	bh=2axt5vu0NQUoXMUudKN7SE3TreXhSEj62FHJAyuTVVI=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=NEZvF1UF846AmeBEJswQ/X+XU3bwj53k+XDvfd2tDjzVEG3XiJxEw6je01mM5tGdh
+	 0dCimpuLefe7ymzKPCexoOoGoaBH5py4hzU2c3E3X3SvQMFtyASBjwI5r9ao/EhaU4
+	 2+UFrDJn6NGvdBx9m5fy6ETzrTX+Qu79Xr7duScomJCUD+Sf8lI4Ny4Eg4ingA7+GR
+	 AOqDK1X7S24Tm1hxsxfKc53FnGcCKPA7XYq0g1wlGXvri0SHXdDS3bXMWFkrNkzv8g
+	 P4OgzhgKaV0S5neNss0VoKhIqmBfnc3XDaQgoKIqGdtzcsT9OMKpcbt9SRQyQbTh3n
+	 Zdirrx8wvDSlA==
+Message-ID: <sashiko-outbox-223378@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 4/8] bpf: support SOCK_RCU_FREE sockets in
+ bpf_sk_assign on egress
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Nikolay Aleksandrov" <razor@blackwall.org>, bpf@vger.kernel.org
+In-Reply-To: <20261119142231.2612515-5-razor@blackwall.org>
+References: <20261119142231.2612515-1-razor@blackwall.org>
+ <20261119142231.2612515-5-razor@blackwall.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 19 Nov 2026 15:24:09 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -92,53 +59,150 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] module: Add stubs.c for CONFIG_MODULES=n
- module_put_and_kthread_exit()
-To: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>
-Cc: Aaron Tomlin <atomlin@atomlin.com>,
- John Fastabend <john.fastabend@gmail.com>, linux-modules@vger.kernel.org,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20261014-module-stubs-v3-1-319f2a7d4a55@suse.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20261014-module-stubs-v3-1-319f2a7d4a55@suse.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 10/14/26 3:34 PM, Petr Pavlu wrote:
-> Module-related stubs for CONFIG_MODULES=n can normally live in
-> linux/module.h. This works well when the stub does nothing or simply
-> returns a constant. However, some non-module implementations may be more
-> expensive, either because they have a real implementation or because they
-> require additional dependencies to be pulled into linux/module.h. This
-> header appears in roughly 15k #include directives across the kernel, so it
-> should avoid bringing in unnecessary definitions.
-> 
-> Specifically, linux/module.h defines module_put_and_kthread_exit() as an
-> alias for kthread_exit() when CONFIG_MODULES=n. That in turn requires
-> linux/kthread.h, even though linux/module.h otherwise has no need for it.
-> Note that linux/module.h currently doesn't include linux/kthread.h and
-> requires its users to pick it up through other paths, which is itself not
-> quite right.
-> 
-> Introduce kernel/module/stubs.c to hold such stubs, built only for
-> CONFIG_MODULES=n. This mirrors kernel/time/posix-stubs.c, which is used for
-> CONFIG_POSIX_TIMERS=n.
-> 
-> Define module_put_and_kthread_exit() in both CONFIG_MODULES configurations
-> to call __module_put_and_kthread_exit() and add a CONFIG_MODULES=n
-> implementation of that function to kernel/module/stubs.c. Since
-> __module_put_and_kthread_exit() is now implemented even when
-> CONFIG_MODULES=n, remove the corresponding '#ifdef CONFIG_MODULES' from the
-> noreturn_deny BPF list.
-> 
-> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
-> Reviewed-by: Aaron Tomlin <atomlin@atomlin.com>
+Thank you for your contribution! Sashiko AI review found 4 potential
+issues to consider:
+- [High] bpf: BUG_ON(skb->sk) in skb_orphan() via bpf_sk_assign() in
+  bpf_prog_test_run_skb()
+- [High] bpf: cross-netns socket leak on tc egress in bpf_sk_assign()
+- [High] net: uncharged sock_wfree() on frag_list after egress
+  bpf_sk_assign()
+- [High] bpf: sock_pfree_ref ownership and sk_wmem_alloc corruption on
+  egress
+--
 
-I've queued the patch on modules-next.
+commit e7a6cd63b8b9259d47c7f6ec283ab9c14f268028
+Author: Daniel Borkmann <daniel@iogearbox.net>
 
--- Petr
+bpf: support SOCK_RCU_FREE sockets in bpf_sk_assign on egress
+
+This commit removes the sk_is_refcounted() restriction in bpf_sk_assign()
+on TC egress so that full SOCK_RCU_FREE sockets, such as TCP listeners,
+can be assigned with an skb-owned reference.
+
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index feeb752f7a008..4dea2cc84712a 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -8123,8 +8123,7 @@ BPF_CALL_3(bpf_sk_assign, struct sk_buff *, skb, st=
+ruct sock *, sk, u64, flags)
+> =20
+>  	if (!sk || flags !=3D 0)
+>  		return -EINVAL;
+> -	if (egress && (!sk_fullsock(sk) || !sk_is_refcounted(sk) ||
+> -		       skb_is_decrypted(skb)))
+> +	if (egress && (!sk_fullsock(sk) || skb_is_decrypted(skb)))
+>  		return -EOPNOTSUPP;
+>  	refcounted =3D egress || sk_is_refcounted(sk);
+>  	if (unlikely(dev_net(skb->dev) !=3D sock_net(sk)))
+
+[Severity: High]
+Can calling bpf_sk_assign() during BPF_PROG_TEST_RUN trigger BUG_ON(skb->sk)
+in skb_orphan()?
+
+In bpf_prog_test_run_skb(), the test skb is built with skb->tc_at_ingress
+set to 0, skb->sk pointing to a dummy socket, and skb->destructor left as
+NULL:
+
+net/bpf/test_run.c:bpf_prog_test_run_skb() {
+	...
+	skb =3D slab_build_skb(data);
+	if (!skb) {
+		ret =3D -ENOMEM;
+		goto out;
+	}
+	skb->sk =3D sk;
+	...
+}
+
+Because skb_at_tc_ingress(skb) is false, egress is true in bpf_sk_assign().
+With this change, passing any hashed full socket in the current netns
+(such as a TCP listener or UDP socket from bpf_sk_lookup_tcp() or
+bpf_sk_lookup_udp()) now passes the egress check and reaches
+skb_orphan(skb), which hits BUG_ON(skb->sk) when skb->destructor is NULL.
+
+[Severity: High]
+Can assigning a socket on TC egress leak skb->sk across a network
+namespace boundary?
+
+When bpf_sk_assign() runs in sch_handle_egress() on a veth or netkit
+device, skb->dev is still in the sender's network namespace, so
+dev_net(skb->dev) =3D=3D sock_net(sk) succeeds and sets skb->destructor to
+sock_pfree_ref.  When the packet crosses into the peer's network
+namespace, skb_scrub_packet() does not orphan skb->sk, and ip_rcv_core()
+and ip6_rcv_core() skip skb_orphan() because skb_sk_is_prefetched(skb) is
+true.
+
+In the receiving namespace, inet_steal_sock() and inet6_steal_sock()
+return the prefetched socket without checking net_eq(net, sock_net(sk)),
+delivering the peer namespace's packet to the sender namespace's TCP
+listener or UDP socket (and caching the peer namespace's dst_entry in
+sk->sk_rx_dst), while ip_forward() and ip6_forward() drop the packet if
+it is routed because skb->sk is non-NULL.
+
+[Severity: High]
+Can IP fragmentation after an egress bpf_sk_assign() underflow
+sk->sk_wmem_alloc on a frag_list skb?
+
+bpf_sk_assign() attaches sk to skb with destructor sock_pfree_ref and only
+takes an sk_refcnt reference without charging sk->sk_wmem_alloc.  If an
+skb carrying a frag_list later enters the fastpath in ip_do_fragment() or
+ip6_fragment() (for example, after traversing a VRF device with a TC
+egress program attached), each fragment is given sock_wfree without
+checking is_skb_wmem(skb):
+
+net/ipv4/ip_output.c:ip_do_fragment() {
+	...
+			BUG_ON(frag->sk);
+			if (skb->sk) {
+				frag->sk =3D skb->sk;
+				frag->destructor =3D sock_wfree;
+			}
+			skb->truesize -=3D frag->truesize;
+	...
+}
+
+When those fragments are freed, sock_wfree() subtracts their uncharged
+truesize from sk->sk_wmem_alloc, which underflows sk_wmem_alloc on a
+SOCK_RCU_FREE listening socket (preventing sk_free() from freeing the
+socket on close) or triggers a premature __sk_free() while the socket is
+still in use.
+
+[Severity: High]
+Can egress paths that assume skb->sk is a write-charged socket corrupt
+sock_pfree_ref ownership or leak sk->sk_wmem_alloc?
+
+In skb_expand_head() (reachable after TC egress via bpf_redirect_neigh()
+or VRF output when headroom is expanded), is_skb_wmem(skb) is false for
+sock_pfree_ref:
+
+net/core/skbuff.c:skb_expand_head() {
+	...
+	if (skb_shared(skb) || !is_skb_wmem(skb)) {
+		struct sk_buff *nskb =3D skb_clone(skb, GFP_ATOMIC);
+
+		if (unlikely(!nskb))
+			goto fail;
+
+		if (sk)
+			skb_set_owner_w(nskb, sk);
+		consume_skb(skb);
+		skb =3D nskb;
+	}
+	...
+}
+
+skb_set_owner_w() replaces sock_pfree_ref with sock_wfree and charges
+sk->sk_wmem_alloc, while consume_skb(skb) drops the sk_refcnt reference;
+because nskb->destructor is now sock_wfree, skb_sk_is_prefetched(nskb) is
+false and the receive path orphans the assigned socket.
+
+Similarly, esp_output_head() and esp6_output_head() check
+if (sk && sk_fullsock(sk)) rather than is_skb_wmem(skb) before calling
+refcount_add(tailen, &sk->sk_wmem_alloc), adding write memory charges that
+sock_pfree_ref() never releases and preventing sk_free() from freeing the
+socket when closed.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261119142231.2612=
+515-1-razor@blackwall.org?part=3D4
