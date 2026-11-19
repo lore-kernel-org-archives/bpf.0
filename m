@@ -1,163 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.103.39.32
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795097419;
-	b=hYYPINaa1+Npb/xHV2HbM/0aURIj7Nnl+Wy0V4tLvMMk3OKsrJLfSzlZAGJXTypQ1TBo
-	 S9PryDwUTytF5BY6+vEZ2IkspnpvreUb13Q1hXhFixH50NSt0CMODbjaQyuwYuk70sUDM
-	 7CIFzSbG+pGLnpUwYPQs7F4A/mt9BL6jnvF/tsrEgqMJ+hMfh9h30KLvMEaUhbyQ8wH7y
-	 pSEJYEbyrTuLmN396uBs4dJ2ASdUjU60W9uckwNIwXZjKy+q0+uauzLT5mEoSeGAcjX46
-	 dkBH6AtGmCmGmhzfkyScFk2lLqAdLK+aKT0xIbY5NoGdikhz2qIXPmsMUJABzPPGSSA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795097419;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:CC:Subject:
-	 Thread-Topic:Thread-Index:Date:Message-ID:References:In-Reply-To:
-	 Accept-Language:Content-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:
-	 x-ms-exchange-messagesentrepresentingtype:x-ms-publictraffictype:
-	 x-ms-traffictypediagnostic:x-ms-office365-filtering-correlation-id:
-	 x-ms-exchange-slblob-mailprops:x-microsoft-antispam:
-	 x-microsoft-antispam-message-info:
-	 x-ms-exchange-antispam-messagedata-chunkcount:
-	 x-ms-exchange-antispam-messagedata-0:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-AuthAs:X-MS-Exchange-CrossTenant-AuthSource:
-	 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-originalarrivaltime:
-	 X-MS-Exchange-CrossTenant-fromentityheader:
-	 X-MS-Exchange-CrossTenant-id:
-	 X-MS-Exchange-CrossTenant-rms-persistedconsumerorg:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=78qMs8DZoCCDmNgDd9yWZcg5aFhEw1zfoCwIu8VPa4c=;
-	b=piiIsxzZzFlCwE24Cxnsga56oymiRbtaeAii2Pdkv1eW7nN5n6WobdF24lZ3m1HKSd0q
-	 u8gGNTl6e7J7gXk/K4DeNOQiwjERV043tMmv8Glnn70tx+EVpZnRy6WRHqc5DLKF0cYSo
-	 AJHoHBBL1qBOfxRFpT5y75GqKBId23hfbucwJjN5QocFW0RUM73y+SfjMhD5ccOE6jbWs
-	 WKtXPuGw3Dnpj64Jj3AseK6+sVRelVMIwKg0ylSrHq4wcTawfR/GzX59c3H60YdOhIeds
-	 aH+p+oVHdVjLi+JSxbPLM9+/sXqCoUgUiNrSSfJFZaa7NrOmT3GYGKyTGaQ6WN7P2Pg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=outlook.com;
-	spf=pass smtp.mailfrom=outlook.com;
-	dkim=pass header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256 header.s=selector1 header.b=grofrd+3;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.103.39.32
-Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazolkn19011032.outbound.protection.outlook.com [52.103.39.32])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.174
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795097485;
+	b=nHbQimIIw6KF0XMYPTAxbO3FPcMxMhr7SPqPTFyAkfOqzHdBdYPhJKiYOkE7+23yPPmu
+	 a330Mo44pH2VAuzskYR/h38M5tDlm2QxqiI1OkTHq75uHnXuRAxHQJCg0WlXoHzS9vVJt
+	 VPVBQe8SbAhO3O0v793hSnbb13W0j5SWGG2DEEGH2mXLxxIXpB97skqwz/aAthNeSuaTw
+	 5RpgVCzKufpa+89MAUbeYQ4JbZ/sW/HrW6PmjKPSdYY+KbSbi6nTFxQMr8Mmf+dMaz+DI
+	 jhRgJ/bgwcAnZbiKKf4NNe8ZBZrWYRG9gqec5Et3Xy7XXKHgTp31zMeUUTozqU5B05g==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795097485;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=NlHcMsNltoA1RVaZWqS6lSMU0wyom7V9Dy7Nz9l2BTs=;
+	b=UCGbBENZ8B3Em3uw+NzX85zkp78juP7IQ7E6uICpSe4ZrnCSY07MO7eeBTSTkU286N/7
+	 myCRPefB3mWmb7QMGteLhDrRVbL2WhP4vqZL4f85fj5nTH5/8fx9OdcQO4Qxywabhw7TV
+	 YoBqphgGEmSFR5tA3v/8z6WorPKOh9xU2gJ0LctD8I4UEoxxiq+TPyE6C4XcDWp9+LBeu
+	 6+/9Y2feWaijHsHY1aKLtbJoNGzdtUgQLkuLp5FnfqOSxo98Nc/G7nmyWciT5RxMKg5ns
+	 ZDxBENhKN54MqLJtjqmt5yHrJzL1DWFtncUD3TZcg8wL0lFvg1Wi/KhD9EOHorbkI5w==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=cs.unc.edu;
+	spf=pass smtp.mailfrom=cs.unc.edu;
+	dkim=pass header.d=cs.unc.edu header.i=@cs.unc.edu header.a=rsa-sha256 header.s=google header.b=C62OlvOA;
+	arc=none smtp.remote-ip=209.85.222.174
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 814BE606A320;
-	Thu, 19 Nov 2026 14:10:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 814BE606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE576606A336
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 14:11:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EE576606A336
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cs.unc.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cs.unc.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256 header.s=selector1 header.b=grofrd+3
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=MqWZ0alOy8EitfYXlfO7h6vCvqNMDuRAmIyFyA1jq70PViqNBcHEMCWTL65fPS9lyCjfibd4lCLMWPU1YfTv6LkVGApmxEn4UhYiKNcGT7KEJQIvnuF8B8ePaQbADesjnYgeiOykIfclk4e46TTdybUNA1vTezMdoLiCm/xScJ8TF2bVpassN4n7BPvug29DjqqHmd7BGs/bsevImUaFzw2byxBB20pedBMyK69YHlkrWMSDFkJOgqzCIVMDtTqSptzJ/sZ3rG/yeaIp6bAPe9qH5NRiok1Z6A3LBxPdtciv7I+HktIrryjwThwNumpFLmlDXcefv/J9rHxB22cmZw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=78qMs8DZoCCDmNgDd9yWZcg5aFhEw1zfoCwIu8VPa4c=;
- b=Wydbb4HuOy4Jlqcu+bJY/0Lh3YZ90Ig/AeE5E4yV/eKiL2kvgusm2nuCiZEfHsBp0hirHDyrljrbHom5DVDhpAFwWx/yxnlMusUQTd+c96Aa1vsjpPsNbY3la5iBE9MK7h23Bq9C0BwTEP5sdR7wr2ZIzQQS8WnW+EhhRsPGond2l44SBu4SWgslYfg8Soql+yfWi/kcBFvENmPpmuyQKLDlxDPk/yuDK2bBuKAvQluJMQ6vqXvkFk2tbA0LxFsen+QhRtDGpcwPDAuOPlp6qt0oyXWxNHSb35pOBKIh4eXZipCuR9vGdh/173bUl1UKyP07VjWyUUPUi32vO5Ox7A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=78qMs8DZoCCDmNgDd9yWZcg5aFhEw1zfoCwIu8VPa4c=;
- b=grofrd+3BRz4+YuOER4HajW1bt3E0eqnAg4vzmK1AV1pJ9OnodcBrIl3E7q6s4+4BiM8r6wWkuYMdKmAOv5UQFcp6HFKVfNJLJ+9/QDq8FZNE+gnEEBLH/DcAuxXZ2+myeLcsgfXXMHW5GxlCexuuHYg7GNm13jPORGQtstCqCgr88CyCTw7PuVj3NUpwoSMahvjKncMZg0NxRSNb7rtb5JJsisxB+hS0ib1B0nS41doqLaAZnUUiavdlsDhFSYHcjxa0jDI7vJgELRtVKrNKmeGgDdwtKgUQVh1gVF8BIoY+wgyD/mejw6vmo0/ySbJsQXVOhMxadW/C6WRrUC29g==
-Received: from DU4P194MB2971.EURP194.PROD.OUTLOOK.COM (2603:10a6:10:641::19)
- by VI0P194MB2246.EURP194.PROD.OUTLOOK.COM (2603:10a6:800:249::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.14; Thu, 19 Nov
- 2026 14:10:15 +0000
-Received: from DU4P194MB2971.EURP194.PROD.OUTLOOK.COM
- ([fe80::e38e:ed60:52c6:4554]) by DU4P194MB2971.EURP194.PROD.OUTLOOK.COM
- ([fe80::e38e:ed60:52c6:4554%5]) with mapi id 15.21.0639.010; Thu, 19 Nov 2026
- 14:10:15 +0000
-From: James Sawyer <jamessawyer@outlook.com>
-To: Jason Xing <kerneljasonxing@gmail.com>
-CC: Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Eric Dumazet
-	<edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, "David S. Miller" <davem@davemloft.net>, Magnus Karlsson
-	<magnus.karlsson@intel.com>, Bjorn Topel <bjorn@kernel.org>, Jonathan Lemon
-	<jonathan.lemon@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper
- Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>, "bpf@vger.kernel.org"
-	<bpf@vger.kernel.org>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: RE: [PATCH net v2] xsk: set network header on skb at generic transmit
-Thread-Topic: [PATCH net v2] xsk: set network header on skb at generic
- transmit
-Thread-Index: AQHdeC4ypPphz0MtZ0u7s+7q7Zy9Z7c1bwkV
-Date: Thu, 19 Nov 2026 14:10:15 +0000
-Message-ID:
- <DU4P194MB29716D57A08053EAF2AF4F8FA7792@DU4P194MB2971.EURP194.PROD.OUTLOOK.COM>
-References: <20260901083325.3445-1-kerneljasonxing@gmail.com>
- <178847847848.4131868.16090144540850507396@kernel.org>
- <CAL+tcoDpyG-Hy9mtDnLSGu0nvU_VDqTjs-k51r2+OPwVyHtABA@mail.gmail.com>
- <CAL+tcoC=w6j+1p8ovjbLxgb1QdL3ipic0nMOvX_9OJrspSQS2Q@mail.gmail.com>
- <arKm5gCaERk6MaGA@boxer>
- <CAL+tcoB8f7H1ptcEk1iVH065AcUNPEL2V1gKoJacwr3zndfPWA@mail.gmail.com>
-In-Reply-To:
- <CAL+tcoB8f7H1ptcEk1iVH065AcUNPEL2V1gKoJacwr3zndfPWA@mail.gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DU4P194MB2971:EE_|VI0P194MB2246:EE_
-x-ms-office365-filtering-correlation-id: 7ba70778-ed02-4bb2-4157-08df4646d586
-x-ms-exchange-slblob-mailprops:
- feAVlmA1hHWA2BEffU3cZHEVyr7UW34wLpNMP1PuH2CaHteYM1sGkz8P07PqWHBdtNN1JMXO9NURPK3JdVWlvbsWKneghSmTR8Q3ER5bHVOsr1HPwRtkftuOw5PBwTOL1WdrKd+BXrf2ZBxInELDEV3KUnGDIrwXbNiWOUatMz8yFplYSMbWDM4Ox7PjSvcdgexBSx1NelazA4BMHCexdPnTuss8p5G6cJfuW/tYi7Tue6eRJc1zQnuJHLi4wJ5NQCEPw4+9jMcEitE9sR+vLIwB1RI3tL0y49XHmnDwUzOLcDD6CUEIz/jTR+I/vhFw3nXWaxMEGa1VaMat+kXONAFyb5UojoFHJEvDvcchqAAxz1AhtyL45H8Ktm8gxc6iPFUymdkYrqGlV8R6R/NH9wgVyw0PduBGaSBs/DGwf1EBdGmaMPoruMTOMwl2T8EEiftYOm1Cm5q//ASHHNefG24kwsIbG7NYr/2zvFidwbD6t1djoNZzFnwXPMRh10oQgZNCK+7xRp6Bf5tdS3OEktN3v3fSxp7VPe3mT1IlwPGtxCFIK2T4pbQp/U9EXycD4MSmCj1ZlLyBK22bPbDI6xozWJHSARHxGr+Xs6ncGNgJ36dUSwbsLAgUcGkTOk1qCFNzgULtGDdbd066mBqIBWne/5CEfb5DwbNw3ICpMcLbA4WUIpcnYumaNBFVnjuyshbnXdrwJwTq5pz/m9RtBw==
-x-microsoft-antispam:
- BCL:0;ARA:14566002|31061999003|4140399003|25010399006|37011999003|8060799015|55001999006|22091999003|24121999003|19110799012|8062599012|38102599003|15080799012|24021099003|25031999004|40105399003|53005399003|260806224601699006|102099032|3412199025|440099028;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?xEB9mvx60WWAZ2E+4GV2zNZ0M6uRIglwqFOTW02JZSGRYDtV+t7geza1CgcE?=
- =?us-ascii?Q?xdJnEZnoxE+7lDBNV1ZvQrurNw1uoWT8UuQtPMbtYrBSnSRLmYf7+DZy39hF?=
- =?us-ascii?Q?00W0vjOct+0JQddBCpZvkX15DK6Lk9iEI+8ntQkln67ry9D1dPAD2i30yWu/?=
- =?us-ascii?Q?dbfkcu0YcP+PfT6sab7v/X8PYSQtYK/BtZKpDxsIh9gfsP42norZegsNOQFA?=
- =?us-ascii?Q?EHvqd1F0jnnM7o8b863OA4bsAjMxQDWqSTKq+HnAhygqQGTdi41o2V6DjWjc?=
- =?us-ascii?Q?/VXZPZUnaA2yJKkalHosjbe2ppzPT9oKE3hIvJocEXuKEP+zPPPvKzbWc3WF?=
- =?us-ascii?Q?wR0IQ7b9F00kR5FTG4cNYYiSsMgU/B4KkCveGMhiGIhYz6mPEqZ/THFqvNXI?=
- =?us-ascii?Q?TAq4PbmvDz4ZMPXKV2NVsD0XSNem+frzNMMuf9MesV6vcrT454Ol4z54zSNS?=
- =?us-ascii?Q?q9xnm7CvLLUc0eXw26PiZ4c+hP4+iYU8bTst8SqCnczrpJqcvEWHc7ANAoqA?=
- =?us-ascii?Q?E96HKqZKywl0fUAQcUCe5D1rSEEcKkCrKGVLwzurrPR4qBWJqkaTFkDzIsoc?=
- =?us-ascii?Q?XEc3flCBQ5UODwZF4HiFf6MONHyiVhZWI/uB2jivzP8JUsGe3jWxvkkbOvKu?=
- =?us-ascii?Q?M4IGAnhLP35yfp3Wt7eAW952p4A7GdeJzJyT3zVETpSPYb/UlK9GO64o7WFr?=
- =?us-ascii?Q?FDv+GvR+IrChdP/y2HYfieAGUWMSBRomng/xmEJZDjQM/qZI0tnhXB5MbFhO?=
- =?us-ascii?Q?O84MPfnEm7Txviqjvuh0Gzs6qCz6lqNvixIB+jcJrtBiITUaPMsGCBQQOFqH?=
- =?us-ascii?Q?kgk+aMIINtA2uXOdfhpeRos7MSg8YTfGh7ybnQduh3EPIf58mWPpRS7ok8y4?=
- =?us-ascii?Q?oXb2o2AF/xOMWn/Vubd6276VG28MGK7MDdFtpk2d0/mK2rIsy1aHc9WoaKph?=
- =?us-ascii?Q?V+ec8zBMvbfQuRByf2xQaQhtfLcmNLKpT81B5eS6iD+AVoy75+rHONQuea4F?=
- =?us-ascii?Q?ZH+Uvla0lBgluY57YusNuU5XREE0SDEZ0n+JjchRIzcAAQXYbcDFGrXnJx6R?=
- =?us-ascii?Q?AjxLQnMnfezelyoCwdr5XRNcxR4da2ActcBeVUJ91gH/ueaE7Jbbjm6wvIrS?=
- =?us-ascii?Q?P+d9H15LlbtYwfi/80ZB2gUF6mLgTYf7A3rv21Fn7pckrGCAz0xpr1E=3D?=
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?d2Dh25fTOT13deD0RH1rWGiPdkY2k6uYkmSiRgCJluO2ReDingO9oWSk3c8w?=
- =?us-ascii?Q?ZXVQMgvQtQuhWVaVocWxTZybcWQH9PlpcF5qcEOVbIdIbtgmfaBnpn4yuf/m?=
- =?us-ascii?Q?qzK5jDpKITGNuZ3Jl9iW76UFraINBif7l6kxuZhXCwG9E1z7pQdamRd6cYxP?=
- =?us-ascii?Q?KcTPytDvfTcnJIvCIzVMldba++doM76/bcTaHvlBsxNcek5Rn9PNKGmM3tMM?=
- =?us-ascii?Q?5iGPCAQKI64VTc8prJYZsEqkvOQ6RKusAOlzSqOAorOnMujNxMuonpOXqhPH?=
- =?us-ascii?Q?8MPcLUkIFaabI6akZaIu3rQ3FlhtufVyx3wSSSIOnAerg48B9fehpLViVfgY?=
- =?us-ascii?Q?Fsnr7a2NkcdgrbVgWqUqnWfpHH1uv1N9gNieudyalCb0hRKe7f63J7ktVP6C?=
- =?us-ascii?Q?wtr+qdsJXoL89hC2/9o1CSkoNyYXNBPRtVtXSbshCwJPBTIY1W1GwQGmZuH0?=
- =?us-ascii?Q?XNcCVKBeo+Dqty3syIdrLNmUqUeEDgIdhD822Hc5JjMV967twv+pdtWs4aCt?=
- =?us-ascii?Q?F5P1uJrLrxUW5PmqGY3RpeusCAzxeJyVkvn8oy2DR/xr8Kz6mQIdFO+9xjc7?=
- =?us-ascii?Q?07scReUWVUK81DYBslHImP87Gvtjm7iVgzJEntXpmok7HjIVdi4brYJZMzym?=
- =?us-ascii?Q?kheJiUvwsdpZMQNlFH1EN+4mAYbltBwlRylaE/VuUTtvMO0fm66gSlK5NxjW?=
- =?us-ascii?Q?mS815BC2Yl40Ucjlpb2n9ziuoYpWvxgjK9heCF9/JbfMc4WQh6vNBJoaE1wJ?=
- =?us-ascii?Q?BazbQp4F9cewDA9vl/qIYAQ3n4YNMJnt5EgYlbPm3zf3mGoRgLVuO01QcjqW?=
- =?us-ascii?Q?/UToYVqHAemRRaggdyYZaDraAF2xZK1xZG5S5dxPu2Au7BW12iaEG9+eZzUy?=
- =?us-ascii?Q?3M4yfuF4SJ2eicfLt0MhL4thJCpf4tqeZLR64lSjCuLeDTzH+8llf42plLiS?=
- =?us-ascii?Q?ghiQ6GY+JSmEzGFWoq4jwpu0uqGktJGKKuIlpttC2AesvgwDZEA9aNIjycEG?=
- =?us-ascii?Q?+ZiiDpJTVML/UlG/kRW9MncnDxq+hhXFM17Dt1tcsLFUsq9zM4rW03rplzi8?=
- =?us-ascii?Q?YNkLDy9VnA5TNfIWJEzb64IMteoyqOFLYqwqg1mX0PUjep5ai3ITpxr7lINF?=
- =?us-ascii?Q?zRzSAWaaKTrJaKmUKmbEtH7GM8Bwmn5+KYG9z3JO8X8RhPMFJ2unn3L8Rpmv?=
- =?us-ascii?Q?YjtVW+2pPKZdiV9EN94DgFG+Kfpdg4MnucehzsUQhNTy5GXtXY4XtRCJ189y?=
- =?us-ascii?Q?shlO0NVv77NH9+vNAtR8C62v5GyZz6OZLI/P6x6/y9kNTPYy5pqfv8j53pez?=
- =?us-ascii?Q?X6REtWxVgk+cswXlE+2Ls3o1GTa0uQ0cC7jUIiVbtTMTriNoFuFURVmBFay0?=
- =?us-ascii?Q?9kW15++OdtL4omOs3UaMjzH/g0Iz?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=cs.unc.edu header.i=@cs.unc.edu header.a=rsa-sha256 header.s=google header.b=C62OlvOA
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-94961b68685so198301185a.3
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 06:11:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cs.unc.edu; s=google; t=1795097483; x=1795702283; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=NlHcMsNltoA1RVaZWqS6lSMU0wyom7V9Dy7Nz9l2BTs=;
+        b=C62OlvOAXzi4l3BV2Zpwe4h2T9O9R2BzGDUfWmfgpUkF4npm0CMGEV42snp0axiNa3
+         b/klUNHafSiWBMa2qJ75Cn99ns94DPkT6Lb9AcJGAB4o0QToYI0jHQ3KKfOx3OjhwLHu
+         HixNHj6nbJ2L0bkg5u5KbN4/mQXS2IcE7erQkZB5HStMTu7y192zXERmzQHmXxSDZ6Hw
+         x3UC+ccCWjd2Hq2epzA1tRikTa9xgBBwMN140CzcUQ97e3k9QI+5VvnSYHuo42VczYjB
+         w/qUTEfWZzuMyqtUKprESNbwkMaAuMkMkWpwJEh1h0KukeMWzYz5IsW33P+4QRpgRJgr
+         boGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795097483; x=1795702283;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=NlHcMsNltoA1RVaZWqS6lSMU0wyom7V9Dy7Nz9l2BTs=;
+        b=O+3dH5z+uUX0mJlouhJoLs/lMwTkuFktBmfKBa9HyrJzqwINs+2+fsw6Dd+oI9jtog
+         NWjugvVdCI8sJPikZn5bOavWSHImmwUGXlpOXrW8x1RiWj5XMgrhtfRy9DAsfPphjX9O
+         JkIhOO/fol2bJ+tRgeCWNDirDF/1DPUmXbgkSUupOgaBl7zMgSwyFk99VpYwnES30xVd
+         PxUIa9eMek/hQ0hqEhL8UagKIkB/pQrdTs3Qudpq4QFdm/BkSiPSMBsTCXN+/Hg0biZY
+         PunMMuqk8KNBNEyPNA4KSENImf6iIXht82JI1J1llSaOVT+jlDGQDjXwg2+eI3u9WFwd
+         gsKw==
+X-Forwarded-Encrypted: i=1; AL+hErGgYIEJak3guYa+93ttZqt6Ki7lfDlHWJUTo7rJ2mXM8/4OZjbvt+OG3VtYYJOIz6bhwb8=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+qi19oXntYNbOI9YHK/sn8M6Wfy6O4EhIX8YAmW7A/7AvQNfw3
+	BHmgLRKFwJIW3H0P7a8KrIpnr5CypmBW2qvGi3TKenaqlHC8ZHlFHUa2PdScNlwcdA==
+X-Gm-Gg: AYBFou3f1sW6px5vJJO70ueQE8AOPiJVu44WgD/hHzIXVNQQw6ZlZ/p5a28a7GOvTRk
+	xqYC1UK0trvto7AMOD7GfjhwBQadvZp1JGXMgRmT0+Dmw7hKCrMiCNQtKozYmakB3CIJFXn/aNA
+	rMbkLOSAYAhyrk2aauMm2VZ6EvMsQ0aHAjeaP739A3iO6xQTLizuGvEjEOvK6y34w+f8P8hlk3d
+	SmJwtwaThzPheSMMvz6a2oqhbwDsObqojM0Hb3brAYfnmpHxBGNSpGFUZO0MgpiVqskMTSyfekh
+	opt8TNszeS6dV9ruASTkeJJud0yNuwJzPYN261fa64dF/Ql0SIDOUqi5LPvOeQcLd7tFvsCDv9O
+	miGLFMtTfEJd0ksPYGoJAGnQkT+RYdC0lHYcLs4g3ewi9EJIH5E+iAidYEpsQg4Y/8g12ODlijn
+	PE8rrvrVe4wwQrjmRl1av7L6Pvq6cj+sgEGHD/orXekklXIBYcqXEgO59syAzgxS69ZImXzTsdz
+	f/uCs0lnN02D6AlqnH6jlODRM+QGTaIouR7MgdtdrexSn1G/qf0dns+AO6MWXOueMqNft0vYeK1
+	Ehnsm5WrgGrwwiR7PUiowHEA6+hHFFdz7Tsn4o2m/Eu3ZBCrgz0=
+X-Received: by 2002:a05:620a:394c:b0:949:91c6:973e with SMTP id af79cd13be357-94999602219mr1058615385a.65.1795097482486;
+        Thu, 19 Nov 2026 06:11:22 -0800 (PST)
+Received: from cobra01.cs.unc.edu (cobra01.cs.unc.edu. [152.2.130.143])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-949b9ad0cdfsm57885a.39.2026.11.19.06.11.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Nov 2026 06:11:22 -0800 (PST)
+From: Hengyu Liang <hengyul@cs.unc.edu>
+To: John Fastabend <john.fastabend@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Sabrina Dubroca <sd@queasysnail.net>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Benjamin Coddington <bcodding@redhat.com>,
+	Benjamin Coddington <ben.coddington@hammerspace.com>,
+	Rishikesh Jethwani <rjethwani@purestorage.com>,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net v2] tls: fix send() returning success after the TCP send failed
+Date: Thu, 19 Nov 2026 09:11:06 -0500
+Message-ID: <20261119141106.840038-1-hengyul@cs.unc.edu>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -167,32 +104,157 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU4P194MB2971.EURP194.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7ba70778-ed02-4bb2-4157-08df4646d586
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Nov 2026 14:10:15.3656
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI0P194MB2246
+Content-Transfer-Encoding: 8bit
 
-On Thu, Nov 19, 2026, Jason Xing wrote:=0A=
-> James, I would add your tested-by/reported-by tag if you don't mind.=0A=
-=0A=
-Hi Jason,=0A=
-=0A=
-Thank you, I'd be glad to. Please use:=0A=
-=0A=
-Reported-by: James Sawyer <jamessawyer@outlook.com>=0A=
-=0A=
-I tested the v3 hunk (skb_reset_network_header() at the top of=0A=
-xsk_skb_init_misc()) and it closed the issue. I will run v4 through the=0A=
-same test when you post it and reply with Tested-by, so the tag matches=0A=
-the patch that was actually tested.=0A=
-=0A=
-Thanks for taking this forward.=0A=
-=0A=
-James=0A=
+Commit b341ca51d267 ("tls: Fix tls_sw_sendmsg error handling") made
+tls_tx_records() pass the error of the TCP send to tls_err_abort()
+instead of -EBADMSG.
+
+However, the transmit path relied on EBADMSG in two places.
+bpf_exec_tx_verdict() looks for it in sk_err to tell that the record
+was not sent, and sk_stream_error() leaves it in sk_err, so later sends
+failed early. Neither holds for EPIPE. As of now, send() on a kTLS
+socket returns success after the TCP connection can no longer send, for
+example after shutdown(SHUT_WR) or after a reset. Nothing reaches the
+peer, the caller is not told, and every send queues one more record
+until the socket is closed.
+
+The issue can be reproduced with:
+
+    python3 - <<'EOF'
+    import socket, struct
+    l = socket.create_server(("127.0.0.1", 0))
+    c = socket.create_connection(l.getsockname())
+    c.setsockopt(socket.SOL_TCP, 31, b"tls")
+    c.setsockopt(282, 1, struct.pack("HH", 0x0303, 51) + bytes(36))
+    c.shutdown(socket.SHUT_WR)
+    print(c.send(b"hello"))
+    EOF
+
+Before commit b341ca51d267 ("tls: Fix tls_sw_sendmsg error handling"),
+the result is:
+
+    OSError: [Errno 74] Bad message
+
+After that commit, the result is:
+
+    5
+
+Record the error in the TX context when tls_tx_records() aborts the
+connection. Do not count the record as sent, and fail later sends with
+that error before they take any data. The send() above then fails with
+EPIPE, as it does on a plain TCP socket.
+
+Found while comparing the behaviour of different kernel versions. The
+program above reproduces it on an unmodified kernel. Tested with that
+program and with the tls selftests.
+
+Fixes: b341ca51d267 ("tls: Fix tls_sw_sendmsg error handling")
+Signed-off-by: Hengyu Liang <hengyul@cs.unc.edu>
+---
+I found this while comparing the behaviour of different kernel versions.
+I used an LLM to analyse the problem and to draft the patch and this
+message, and I analyzed the result myself.
+
+Changes in v2:
+- Keep the abort in the TX context, so that later sends fail and queue
+  nothing. v1 only fixed the send that hit the error.
+- Tell that the record was not sent from that state, not from sk_err.
+- Cc the address of the fixed commit's author and the bpf list.
+v1: https://lore.kernel.org/netdev/20261113193649.3822306-1-hengyul@cs.unc.edu/
+
+With 20000 sends of 16 KiB after shutdown(SHUT_WR), net reports 19856
+of them as sent and TCP memory grows from 15 to 158882 pages. With this
+patch, all of them fail with EPIPE and TCP memory stays at 0 pages.
+
+Rishikesh's "tls: make the record number wrap abort final" adds a
+similar state for another abort. I can rebase on it if it goes in first.
+
+ include/net/tls.h |  1 +
+ net/tls/tls_sw.c  | 22 +++++++++++++++++++---
+ 2 files changed, 20 insertions(+), 3 deletions(-)
+
+diff --git a/include/net/tls.h b/include/net/tls.h
+index 0b001b8ab1c3..7d43ffe46f33 100644
+--- a/include/net/tls.h
++++ b/include/net/tls.h
+@@ -100,6 +100,7 @@ struct tls_sw_context_tx {
+ 	struct tls_rec *open_rec;
+ 	struct list_head tx_list;
+ 	atomic_t encrypt_pending;
++	int abort_err; /* error of the send that aborted TX, never cleared */
+ 	u8 async_capable:1;
+ 
+ #define BIT_TX_SCHEDULED	0
+diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+index 226e0f176fdc..795cbfe5fb2a 100644
+--- a/net/tls/tls_sw.c
++++ b/net/tls/tls_sw.c
+@@ -413,6 +413,9 @@ int tls_tx_records(struct sock *sk, int flags)
+ 	struct sk_msg *msg_en;
+ 	int tx_flags, rc = 0;
+ 
++	if (unlikely(ctx->abort_err))
++		return ctx->abort_err;
++
+ 	if (tls_is_partially_sent_record(tls_ctx)) {
+ 		rec = list_first_entry(&ctx->tx_list,
+ 				       struct tls_rec, list);
+@@ -459,8 +462,11 @@ int tls_tx_records(struct sock *sk, int flags)
+ 	}
+ 
+ tx_err:
+-	if (rc < 0 && rc != -EAGAIN && rc != -EINTR && rc != -ERESTARTSYS)
++	if (rc < 0 && rc != -EAGAIN && rc != -EINTR && rc != -ERESTARTSYS) {
++		/* sk_err is cleared when it is reported, keep the abort */
++		ctx->abort_err = rc;
+ 		tls_err_abort(sk, rc);
++	}
+ 
+ 	return rc;
+ }
+@@ -636,6 +642,9 @@ static int tls_push_record(struct sock *sk, int flags,
+ 	if (!rec)
+ 		return 0;
+ 
++	if (unlikely(ctx->abort_err))
++		return ctx->abort_err;
++
+ 	msg_pl = &rec->msg_plaintext;
+ 	msg_en = &rec->msg_encrypted;
+ 
+@@ -708,13 +717,15 @@ static int tls_push_record(struct sock *sk, int flags,
+ static int bpf_exec_tx_verdict(struct sk_msg *msg, struct sock *sk,
+ 			       u8 record_type, ssize_t *copied, int flags)
+ {
++	struct tls_sw_context_tx *ctx = tls_sw_ctx_tx(tls_get_ctx(sk));
+ 	int err;
+ 
+ 	err = tls_push_record(sk, flags, record_type);
+-	if (err && err != -EINPROGRESS && sk->sk_err == EBADMSG) {
++	if (err && err != -EINPROGRESS &&
++	    (ctx->abort_err || sk->sk_err == EBADMSG)) {
+ 		*copied -= sk_msg_free(sk, msg);
+ 		tls_free_open_rec(sk);
+-		err = -sk->sk_err;
++		err = ctx->abort_err ?: -EBADMSG;
+ 	}
+ 	return err;
+ }
+@@ -807,6 +818,11 @@ static int tls_sw_sendmsg_locked(struct sock *sk, struct msghdr *msg,
+ 	}
+ 
+ 	while (msg_data_left(msg)) {
++		if (unlikely(ctx->abort_err)) {
++			ret = ctx->abort_err;
++			goto send_end;
++		}
++
+ 		if (sk->sk_err) {
+ 			ret = -sk->sk_err;
+ 			goto send_end;
+
+base-commit: a8aeac0b1883206cf72461258e6bfd991589049e
+-- 
+2.53.0
+
