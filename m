@@ -1,54 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795098592;
-	b=Hc529XujtliSJk01FqT+w/fWi26d+YDRa5asYllNhzDpFbykZArPe5y7No/N8399JxnK
-	 WxhowUthu1KmjHpLp1QsiCU5vd6aCGdwd8sioir1olybYyTa+kZQor3hd57Qd+36tuwfL
-	 u004lyRwf1mV8tmi1Fr+x/AP05SgbX58sqtWCgid380+i+4yj8kAgp4WjbOHz6jW9mqiR
-	 pV3xHaLSCd5HkX//Icy0lGofG8Qg2s8uRmq83MTharauHG5hClOAnrQLxN/cowuvBLWvd
-	 CTfm1M1i3y0Y7Dohgyy/YOuZIowrdEcw+TP3VPx7YTLKz+87vyPB18lcg9i+cSk2vMw==
+	t=1795099931;
+	b=UE9iTCZqGFqE0D/VMc3itsHLujuLsi+UmWD7Rye4GoyAVD5XuC26+lj2JLkEjsf6CuIl
+	 CT7Mq+1nWdoVqcJxRTjAErDx60HPgC6zfwon/V2fAmU8fi/ECRv0+8JyYuBYNj0eAmPSh
+	 WAU27YvaYZStkBa7OIvZUf0j+pJBXyrYGx8HcqalE8c7jk1Q7lCP/kKdc4JU5RG/Du8qd
+	 14OuCItnxoXN+OstX6o6FTkNcJWmLAicQKw/ePtjceszTSTd6BkU08Bb+2Sad4rGj0fKB
+	 ds9OYTHeks1fHlxBC5TwIY0Iu0loLXS3Aee8t80CyP9xuMBP2NBN7/ZclDZTTDdCZ0A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795098592;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Cc:Subject:To:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=IpS+OvTiHBt9cos72bPyyscFetGZCa8xcAWeKuLcovo=;
-	b=Ghv02JeYHlPZl25cNMHJCB0iq+aBEq6V+KQsE8i96qtw/O4WS9zHxc3JvR6cTJFBYZpL
-	 3OpEqR6Wa7zUojBM3MdiS9Waz038jp6g6c9NG7/FVjN6bSO0lLVLr+7+Gc+KgZ4MVUIuh
-	 l0JwwSfiD8JmaaDEm7tGXYQwJHkBUd6QQkzZovx4CQVIBvxWCuHfBQa/ImVa6y/GDX4BK
-	 8dGLZOxzrxvhOJqRtlB38Ta06nCHOE47ZvAOkxdoSORTST4wuCTyDGt7zy9JlF0LrCaBA
-	 5XZzExa+6sqGOALaN/pjGGjIlERSe8HYwWQTKQGQUhsyGr8SMuoEaDXOU2vV+1yndkQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795099931;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=Mg0K4exeuBTaT9Dn1HqWrgGmEV+EtrlkcIhMNn4wlic=;
+	b=BZz/T4o6b5TPTsSoqQdR/2xLOihIZszkST+X0RScjJCbjOFpjqB2y2H/VzWCE3ATlKbo
+	 eKGvd9h6uN89/4C5XUJdTtxZ6R+HHUkKC9e0C+rNXMqbCPWzpM/60EG1nRkiygYeu3CV6
+	 X4CjATSa06QR7KWv22lyKMddE+KgfF22+UC1R8FdT8U1qcNGK5bNxDRGNEyg0B11KFIkJ
+	 MWVEDsIm+bRpF3w6vQQMLD1P+srwiIVCw5KsuMEmtWWfF55dCHKg57OXp/9ZDhnlaziWi
+	 olTnCMVcMZwtEs8FYObhu5mNc4gUm9nnU5qNxnOKWv1zbHhpoDW12i/tLQ07aZFmFIw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ugSMqoCk;
-	arc=none smtp.remote-ip=91.218.175.180
-Received: from mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JJVMqpGH;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B1A9606A320
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 14:29:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3B1A9606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F284606E889
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 14:52:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ugSMqoCk
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=yiF8K9EPXuxHZY+ZjFT8Mm/qvdcpO8uxIa1zzcDtecw=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795098589; v=1; x=1795703389;
- b=ugSMqoCkZvx7zRpLcWqRkrfKZZPhQ6HijDYz7b5lfIVGgOYZtUjwCZdvXDkUDcTrCgV0B9s7
- M7P2I3PxiK7zVEe2I21XlDt8Ef/Mp3la6sQGid0xMRx6C67YUdMZlGHXGd21jPh0iCyF3Rs3bTW
- 2lyPk1pnTMxQ5L1Kd5RNtTvE=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 04f58529dc36ba04;
-	Thu, 19 Nov 2026 14:29:49 +0000
-X-Mizu-Trace-ID: 04f58529dc36ba04
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <8bb22131-7f3b-4b70-a7a6-92f465027350@linux.dev>
-Date: Thu, 19 Nov 2026 22:29:39 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JJVMqpGH
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A45C61F000D1;
+	Thu, 19 Nov 2026 14:52:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795099930;
+	bh=Mg0K4exeuBTaT9Dn1HqWrgGmEV+EtrlkcIhMNn4wlic=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=JJVMqpGH5abW+LIhGrzKpKfkx2y5BYfGyWepvaHTEG0x0OA4uTOu2C9pxBFr0HQN1
+	 ad2NG/iibrFS91fyhtKZrrub/idVQr9Wj95FgmBzejO7+CgGg2nbHuLZUNzM48C+bI
+	 LwN8q/Z9jUmhrjh6lLQt0OZKJRU8/we32nQ9XFskTl1dHH3iGcmIYpu5iKiDC45Ptk
+	 OdEE8Xax8yJR8OeI4V4IL/yj4N3dgH9d8tkuELJ2cgssdSSzEvF5cmRHsdeGNNDwI9
+	 hqEtf2UrMN8QDlxzmy/dsuZ4sjGb2WrKysCER6Pia91n3hAWhs3/guYENx65xPndSj
+	 tuLUV5wHDN9UA==
+Message-ID: <sashiko-outbox-223322@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 1/8] bpf: Orphan prefetched sk on
+ skb_do_redirect()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Nikolay Aleksandrov" <razor@blackwall.org>, bpf@vger.kernel.org
+In-Reply-To: <20261119142231.2612515-2-razor@blackwall.org>
+References: <20261119142231.2612515-1-razor@blackwall.org>
+ <20261119142231.2612515-2-razor@blackwall.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 19 Nov 2026 14:52:10 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -57,76 +59,72 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: cui.tao@linux.dev, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH] tools/sched_ext: Add "arena" BTF type tag to the __arena
- qualifier
-To: Shaojie Sun <sunshaojie@kylinos.cn>, Tejun Heo <tj@kernel.org>,
- sched-ext@lists.linux.dev, David Vernet <void@manifault.com>,
- Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>
-References: <20261119102613.811845-1-sunshaojie@kylinos.cn>
-From: Tao Cui <cui.tao@linux.dev>
-In-Reply-To: <20261119102613.811845-1-sunshaojie@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-Hello, Shaojie,
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [High] bpf: unorphaned prefetched sk on peer-ingress redirect in
+  skb_do_redirect()
+--
 
-在 2026/11/19 18:26, Shaojie Sun 写道:
-> tools/testing/selftests/bpf/libarena marks __arena types with
-> btf_type_tag("arena") so that whether a type belongs to an arena can be
-> determined from BTF alone:
-> 
->   commit a0fa68d8ce75 ("selftests/bpf: libarena: Add "arena" BTF type
->   tag to __arena qualifier")
-> 
-> tools/sched_ext defines the same __arena qualifier but without the
-> "arena" BTF type tag.  Add the tag so that both describe arena types the
-> same way.
-> 
-> checkpatch reports a false positive on the new definition:
-> 
->   ERROR: Macros with complex values should be enclosed in parentheses
-> 
-> The macro value is a sequence of declaration attributes, not an
-> expression, so it can neither be parenthesized nor wrapped in a
-> do-while loop.  The selftests copy of the qualifier has the very same
-> definition and triggers the same warning.
-> 
-Looks good. Tested on sched_ext for-next: all tools/sched_ext scheds
-build and scx_sdt loads and runs fine with the tags present in the
-BTF of the loaded program.
+commit 49a586a8c784f9d116bbf62d9fbeea56cd7faa45
+Author: Daniel Borkmann <daniel@iogearbox.net>
 
-One nit: the patch doesn't apply to the current tree since
-0a5e9cf2525f ("sched_ext: Sync common and compat headers from the scx
-repo") changed the context line to "#elif", please rebase (git am -3
-works meanwhile).
+bpf: Orphan prefetched sk on skb_do_redirect()
 
-Also, this header also lives in the sched-ext/scx repo and the two
-copies get reconciled by hand; the most recent reconciliation went
-from the scx repo into the kernel tree. The scx repo copy doesn't
-have the tag either, so it needs the same change there or the next
-reconciliation will overwrite this one.
+This commit orphans prefetched sockets in skb_do_redirect() before
+redirects other than peer-ingress redirects, preventing RCU-borrowed
+listener sockets from outliving their RCU read-side critical section.
 
-Tested-by: Tao Cui <cuitao@kylinos.cn>
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 946b07a17fcec..1ad57a3715343 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -2558,6 +2558,15 @@ int skb_do_redirect(struct sk_buff *skb)
+>  	ri->flags =3D 0;
+>  	if (unlikely(!dev))
+>  		goto out_drop;
+> +
+> +	/*
+> +	 * Prefetched sockets may borrow a listener under RCU. Orphan them
+> +	 * before redirects that can outlive this section. Peer ingress
+> +	 * stays in the same RCU section.
+> +	 */
+> +	if (skb_sk_is_prefetched(skb) &&
+> +	    (!(flags & BPF_F_PEER) || (flags & BPF_F_EGRESS)))
+> +		skb_orphan(skb);
+>  	if (flags & BPF_F_PEER) {
+>  		dev =3D skb_get_peer_dev(dev);
+>  		if (unlikely(!dev ||
 
-> Signed-off-by: Shaojie Sun <sunshaojie@kylinos.cn>
-> ---
->  tools/sched_ext/include/scx/bpf_arena_common.bpf.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/sched_ext/include/scx/bpf_arena_common.bpf.h b/tools/sched_ext/include/scx/bpf_arena_common.bpf.h
-> index 2043d66940ea..fb796b356f86 100644
-> --- a/tools/sched_ext/include/scx/bpf_arena_common.bpf.h
-> +++ b/tools/sched_ext/include/scx/bpf_arena_common.bpf.h
-> @@ -16,7 +16,7 @@
->  
->  #if defined(__BPF_FEATURE_ADDR_SPACE_CAST) && !defined(BPF_ARENA_FORCE_ASM)
->  #ifndef __arena
-> -#define __arena __attribute__((address_space(1)))
-> +#define __arena __attribute__((address_space(1))) __attribute__((btf_type_tag("arena")))
->  #endif
->  #define __arena_global __attribute__((address_space(1)))
->  #define cast_kern(ptr) /* nop for bpf prog. emitted by LLVM */
+[Severity: High]
+Should skb_orphan(skb) run unconditionally whenever
+skb_sk_is_prefetched(skb) is true, including for peer-ingress redirects
+(flags =3D=3D BPF_F_PEER)?
 
+The BPF_F_PEER path below requires the target peer device to be in a
+different network namespace (!net_eq(net, dev_net(dev))), whereas
+bpf_sk_assign() and bpf_sk_assign_tcp_reqsk() require sock_net(sk) to
+match the pre-redirect device's namespace.  Skipping skb_orphan(skb) on
+peer ingress leaves the source namespace's prefetched socket attached to
+skb when skb_do_redirect() returns -EAGAIN to re-enter
+__netif_receive_skb_core() on the peer device:
+
+- During another_round on the peer device, a TC ingress act_mirred
+  redirect (which sets dont_clone =3D true at TC ingress) or an rx_handler
+  such as a bridge port or macvlan/ipvlan can queue skb to an egress
+  qdisc, backlog, or workqueue without orphaning skb->sk.  An
+  unreferenced RCU-borrowed listener then outlives the RCU section,
+  leading to a use-after-free in sock_pfree() or skb_steal_sock().
+
+- If the packet proceeds up the peer namespace's IP stack, ip_rcv_core()
+  and ip6_rcv_core() preserve prefetched skb->sk.  Packets routed for
+  forwarding in the peer namespace are then dropped by ip_forward() and
+  ip6_forward() at if (unlikely(skb->sk)) goto drop, while local
+  delivery via inet_steal_sock() steals skb->sk without checking
+  net_eq(sock_net(sk), net), delivering the packet to the socket in the
+  source namespace and caching a peer-namespace dst_entry in
+  sk->sk_rx_dst.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261119142231.2612=
+515-1-razor@blackwall.org?part=3D1
