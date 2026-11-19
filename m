@@ -1,63 +1,97 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795118568;
-	b=tzySdFuYWzmJ8oD5G3Hh9AFMmr4CWStu1fpqhoUjA0xdKFsUdTt9A80F5rbLHukeslTB
-	 /oGKrbIjTS/vFyR77OD/6KvHrrHvAHIv8+mC2xDSPsCPjed5vo55Jizqm9vHJUNwm++Lb
-	 7y6b+gLrHxjy/lRQOlIvtrxTa/PEoZ1XnGkojtcEVcw2ESAGEeais4P4yPaPorjtOHcgw
-	 ibFXjaoVNsYcPSbP5j3Ttpid7gBQbgkxJetm2elmoPRJZiM5cPtrk6Q0uJMMo9wimVU0i
-	 C4AR6f/PRiHvYhaodR7OJhkN1j88loEGb0WchP++69tRTSE6HJG1oN0d7lOKygmZgcw==
+	t=1795118752;
+	b=1y3uwG4jNF7qV3xbMbdiQ6S62leZH4cIwCSI9u3Q++dVKS4qSH0UuT/mVSeN1wUmgxJK
+	 U183SQyCPpP39VcKQEFIZReobcMEro/XagzjixmCXkZofOH/CfKs7A0E4mp0O3sirQJXg
+	 tW7hKH6Xc/rdayJxT9Ct+rBsXWKR/kNvQh3okyVQSj938GA/ev5h7e72izagx/U2i5HRj
+	 wGWPjw5X9jDY0EgOQZEQV4hn/BABCoYplKlpcuNupLwIHJMOt50i13MMJNZ4pHm59iwI6
+	 QdD8ifMQ0ydjB1Hc8+BvtWaN3qJgaYcQfP53hGboV0dNc+dTt2psTPPzW7XwOEXlbKg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795118568;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=RKK0OI96pECkHppROmIdESDMy4NSloW0JuhxhC44a4A=;
-	b=joWzqAMuDv3sCA9XffJ+1RY5nBGXEA89Z7bMRHiuSNc6B84JnWmS0dmUBgfYRQTQrgBK
-	 1S/O4iPrWi/xhPk9xZ27aiZSu4MOBh354gaKchRcWPA89ioOatBuLC04qs6lhV4RNGxsI
-	 YrM/F0wKROVmwXzNfM6TJrUdBa8qpensoNaOy3Mc8j6OJlljjLz/ANorxOShEC1+W1MLW
-	 Aj3hur5hapacmkw8SoBlNfB912HJnKYUpHTcrviam/ncc2S20ulndV96UpebtdY4FMnKA
-	 4gFGZY0UL5IKUU9Cl+k9W4eqDbhR00O/ohGs6N7BwRLJjAXgi8Pj8PXzdbwRnKbStyA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795118752;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:
+	 X-Google-Original-From:Date:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=VEkqpd2RoxZ9GRJkgcd4TxF/KKNHXP8mBeFHzci9J80=;
+	b=zXr/Gm16m7aTrTBOO7Q/KCm2zmHJLFHrfb7PdEAsenQ0lQmKMV0mgVJP7AwEMKv3cFm+
+	 9wawNutDQMl07Wol2kbp0ZfgUHpY/8io05nUrqtu/mJzG4B+iILBkeR/YzbQVcL1NFmI8
+	 ejFsmIiVhTO6ateaJywuC4V1mO50xcFBu/J/5O/3puYx5+ECqj6loIGIlT6dWF53E/uWr
+	 QvxqpEjljVNmdQioKXpPPbaGgY3hYBtZ3THacq2Z0t2f1pbTqZJAaW+bE+i1OsNpfu8xA
+	 Ou4pFHk8xiuYOdOsUtO1bHVzX3jO38gntCMZU6U2g0VjkkweMRP1+Rvcz8bxKRftUbw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PpH7DsWN;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=U8kap+ui;
+	arc=none smtp.remote-ip=209.85.128.48
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E09C2606A332;
-	Thu, 19 Nov 2026 20:02:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91257606A32A
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 20:05:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 91257606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PpH7DsWN
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62C9D1F000C7;
-	Thu, 19 Nov 2026 20:02:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795118567;
-	bh=RKK0OI96pECkHppROmIdESDMy4NSloW0JuhxhC44a4A=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=PpH7DsWNKZZ5nDxLnHjF/22h6Rz55sVIj+y3RERJctzTeuY3SOwzt11Ct10nU6qbH
-	 HcxcPbjuGTh3gK9vCn3g7/BLeJVspYOvxE5j1gsVGCHyiP1Om1UT8IE+Bo6u5T5KFb
-	 KBfFMsWRuKIfcUsizdCPgpJh4oSR4fxCa+OntDcPhz0YIcaH3vdl6ujfzhgXXDyHoj
-	 XfdA7QMIE/T3ZetULJxEESYQThEO1iv/kOFhDno1uF55cI3IRxnFY2aLkN9Lwz6Bcu
-	 rL8Oa07Oxvy24cRTiDMZGrFQDNFSUhG3qw0P0wpyEBN+oQ7lnPwvHsCAz9eAZbpthW
-	 zV3YE5OI5MXUA==
-Subject: Re: [PATCH net-next v4 4/4] bpf: drop the stale dst when redirecting
- to an explicit nexthop
-From: netdev-bot+sashiko@kernel.org
-To: jhs@mojatatu.com
-Cc: netdev@vger.kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
- sdf@fomichev.me, martin.lau@linux.dev, ast@kernel.org, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, bpf@vger.kernel.org, jiri@resnulli.us, victor@mojatatu.com,
- sashiko-bot@kernel.org
-Date: Thu, 19 Nov 2026 20:02:45 +0000
-Message-ID: <179511856597.3136.7846835490904436138@kernel.org>
-In-Reply-To: <CORE-9NOG.v4.r0.20261116135311-4@mojatatu.com>
-References: <CORE-9NOG.v4.r0.20261116135311-4@mojatatu.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=U8kap+ui
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4a35d5d4a20so939955e9.2
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 12:05:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795118750; x=1795723550; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:date
+         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=VEkqpd2RoxZ9GRJkgcd4TxF/KKNHXP8mBeFHzci9J80=;
+        b=U8kap+uiMZ33ZZ7fx3ualzidBqymKwK1L+aYTWKFPrQdqccOtZLLGbr5/LBFP6Ry83
+         7Y93SNsln6Fbf+K8GJHPn8iYNAK8PAbHPbrZkhp3bbpPul7MXXJNjDuEVyL0s7Xdm9KB
+         ugPt9d6PP/fSws8kfJLYG3bZtDhSD+aFVZ7t6e4C1XvkRKD962qnZeQEJo36cqsBkZBx
+         QaWqBC5VHKG/iDQWqlOgIXeb+4SsDudqOTBkYTqqJV9IkCf02pnu+xW1b1Mte4OO1qfQ
+         +OzXdUMRH31yEHgOBDXoiu/H57ArVbXCbnNv58mZE9PQKYtD8lS/VBC0aNTSWRCn8pUl
+         pGsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795118750; x=1795723550;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:date
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=VEkqpd2RoxZ9GRJkgcd4TxF/KKNHXP8mBeFHzci9J80=;
+        b=PcCnvwSEnf1W4dTg8EEO4kiWgEV7xcWIhunpDFUATXM+Lq09p2mbACmrWMXjrrHr68
+         PnVn7N663LqITjLiMxE4AvTl/y5r8Ej/wu9AHD4O3akAW4Oj8tJmZ+HXXZ7pH1TxxjqX
+         tI4nCtZ6PA9sxiEMUoMKkFkegcNIZs1M3dMqeH2czWGDJxlgSz7H6CRodoYqqf3ApEzY
+         VoIFHjzws88hFA5OuAZ4H7+Dx9ORO4Ml47/kAXER8/uQD+GBAKeG/OdLItkp5pNkdY84
+         E0jDTJz0crIqhVYT56ggL/7jVjsNxWMOz7iZUkihTmusuXFJ9Erp1+1OwNHc5M1NNzhx
+         xrDA==
+X-Gm-Message-State: APuU4Z8S9Xf3bvr9xIzlhtTPQlyJTWC9ZPylxaORhaLQsHz+itMdZqaa
+	5uhXSd0uxcPJc8iZsAbCAdMhIfV6zpg7hdZ2lyz4EIF8ahfo3oOiQJZa
+X-Gm-Gg: AYBFou0N9CyfdiWXufSXHPuWFP7gFSaZU/FxnDBEHhKoG+TZgncfhnEVbrLlMmyG0Dy
+	nItC2uIhyhBWJXAh8rtHIm+XuVcTA0MGowtH5Z/4DuiFRnwLBtGggFzQQ4CfQAilFXwcwL0PHi/
+	9TxWWGDPeKeESsn1nkoXW5nDkD1x+YAcdfwkxfQfG3v9Ex0bj+hWqditF8G7nlywK7TE8CGhDAO
+	8d95b9jeshAWfvUgy/ETGKEJfbC1ce5Wz59D+vs93Z4Fi4Sb6mlRZf7NJHMyroaoBdEYnNdAqrT
+	wTuFQoiGIX0PJvKgu7EONN7DHWAiOK1X0X1h7yYrIqjrF1jc1rvA7eA73imw8uTP61r4s5ENSUx
+	rRD+rqzKPN66e36tPQmJ5pc7/7aqsIJ1neBYJoh7VjkIk6cDKdlKfddHCdaUtoCIVSkjGc2tMDi
+	YN0dYCU7p49aTO+rvmrzvm6yuznfV+fqH7tq9r/aYj9RIE4LLLOTARW44q4u9PeVGXPzFLH0PMJ
+	nwXH5XTwZelq5EnMJMrACJqLjMBCvu9IO/4kDy5X9ONN3Wlf5Ib4uhobNbJP9lw4wCaSlHz6NXN
+	VQhAe7FSw8r1GSQw
+X-Received: by 2002:a05:600c:3f0a:b0:4a5:75d2:c104 with SMTP id 5b1f17b1804b1-4bb8880cde7mr12400535e9.22.1795118749858;
+        Thu, 19 Nov 2026 12:05:49 -0800 (PST)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb8849e598sm20190405e9.8.2026.11.19.12.05.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Nov 2026 12:05:49 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Thu, 19 Nov 2026 21:05:47 +0100
+To: Yingke Xiao <inkxiao12@gmail.com>
+Cc: bpf@vger.kernel.org, Trond Myklebust <trondmy@kernel.org>,
+	anna@kernel.org, linux-nfs@vger.kernel.org,
+	steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH bpf v2 1/3] bpf: Replace DECLARE_EVENT_CLASS names in
+ raw_tp_null_args[]
+Message-ID: <av9Wm6HQ-DIgFhfw@krava>
+References: <CAMcAce-ytH2Xt_0+1fKXzxy+a8fi0Md-4SSoLZ1RQxKQoLq-tw@mail.gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -67,156 +101,94 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMcAce-ytH2Xt_0+1fKXzxy+a8fi0Md-4SSoLZ1RQxKQoLq-tw@mail.gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+On Thu, Nov 19, 2026 at 02:18:29AM -0500, Yingke Xiao wrote:
+> btf_ctx_access() strips the "btf_trace_" prefix from attach_btf_id
+> and matches tname with strcmp(tname, raw_tp_null_args[i].func). Because
+> each attachable tracepoint typedef corresponds to a DEFINE_EVENT() name
+> rather than its DECLARE_EVENT_CLASS() template, three existing entries
+> in raw_tp_null_args[] never match any program:
+> 
+>   1. "nfs4_inode_callback_event" and "nfs4_inode_stateid_callback_event"
+>      are DECLARE_EVENT_CLASS templates in fs/nfs/nfs4trace.h whose
+>      DEFINE_EVENT instances are nfs4_cb_getattr (:1455) and
+>      nfs4_cb_recall (:1518). fs/nfs/callback_proc.c:50,106 pass literal
+>      NULL for arg 2 (const struct inode *inode), and TP_fast_assign
+>      (:1424, :1481) checks !IS_ERR_OR_NULL(inode). Keeping 0x200
+>      (0x2ULL << (2 * 4)) sets ptr_err_raw_tp = true so btf_ctx_access()
+>      assigns SCALAR_VALUE to ctx[2], rejecting any pointer dereference
+>      even under if (inode) and matching existing raw_tp_null_args[]
+>      0x2-nibble convention (0x300 yields the identical SCALAR_VALUE).
+> 
+>   2. "iptfs_ingress_postq_event" is the DECLARE_EVENT_CLASS template in
+>      net/xfrm/trace_iptfs.h:108 whose DEFINE_EVENT instances (:130-148)
+>      are iptfs_first_dequeue, iptfs_first_fragmenting,
+>      iptfs_first_final_fragment, and iptfs_first_toobig.
+>      net/xfrm/xfrm_iptfs.c:2025 and :2051 pass literal NULL for arg 3
+>      (struct iphdr *iph), requiring mask 0x1000 (PTR_MAYBE_NULL).
+> 
+> Replace these dead template names with their DEFINE_EVENT tracepoints.
+> Verified in QEMU on x86_64 7.4.0-rc3 (iptfs_first_{fragmenting,
+> final_fragment} and nfs4_cb_{getattr,recall} flip from LOADED to
+> REJECTED) and 6.12.118 (nfs4_cb_{getattr,recall} flip from LOADED to
+> REJECTED; iptfs_first_* absent in 6.12).
+> 
+> Fixes: c83e2d970bae ("bpf: Add tracepoints with null-able arguments")
+> Cc: stable@vger.kernel.org # 6.12+ (nfs4_cb_*)
+> Signed-off-by: Yingke Xiao <inkxiao12@gmail.com>
+> ---
+> v1 -> v2:
+>   - Correct sender identity and Signed-off-by with real legal name per DCO.
+>   - Remove drafting notes.
+>   - No functional code changes.
+> 
+>  kernel/bpf/btf.c | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
+> 
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+patch is mangled/broken, can't apply it (check Documentation/process/email-clients.rst)
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index a123456..b234567 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -6605,10 +6605,13 @@ static const struct bpf_raw_tp_null_args
+> raw_tp_null_args[] = {
+>   { "bcache_journal_entry_close", 0x20 },
+>   { "bch2_journal_entry_close", 0x20 },
+>   { "fsnotify_bump_event_seq", 0x20 },
+> - { "nfs4_inode_callback_event", 0x200 },
+> - { "nfs4_inode_stateid_callback_event", 0x200 },
+> + { "nfs4_cb_getattr", 0x200 },
+> + { "nfs4_cb_recall", 0x200 },
 
-- [Medium] In the explicit-nexthop branch of __bpf_redirect_neigh_v4(),
-  the new skb_dst_drop_keep_metadata() call can replace a real struct…
-- [Low] The patch fixes a long-standing, user-visible bug but has no
-  Fixes: tag and no Cc: stable.
+seems correct
 
---
+>   { "nilfs2_transaction_entry", 0x4 },
+> - { "iptfs_ingress_postq_event", 0x1000 },
+> + { "iptfs_first_dequeue", 0x1000 },
+> + { "iptfs_first_fragmenting", 0x1000 },
+> + { "iptfs_first_final_fragment", 0x1000 },
+> + { "iptfs_first_toobig", 0x1000 },
 
-bpf: drop the stale dst when redirecting to an explicit nexthop
+llm says:
 
-This patch changes __bpf_redirect_neigh_v4() and __bpf_redirect_neigh_v6()
-so they release the arrival dst through skb_dst_drop_keep_metadata() when
-the BPF program supplies an explicit nexthop. Without it, a packet parked
-on the target device's incomplete neighbour can later leave with the
-original device's link-layer header. Encapsulation parameters carried by
-the route are moved onto a metadata dst.
+  ▎ Only iptfs_first_fragmenting and iptfs_first_final_fragment pass NULL
+  ▎ for iph (net/xfrm/xfrm_iptfs.c:2024, :2050). iptfs_first_dequeue and
+  ▎ iptfs_first_toobig always pass ip_hdr(skb). Since the old class entry
+  ▎ never matched, adding those two would start rejecting existing
+  ▎ programs that use iph without a NULL check, even though it can't be
+  ▎ NULL there. Should we add only the two NULL-passing events?
 
-Link: https://lore.kernel.org/netdev/QDISC-6HS9.v3.r0.20261103062649-2@mojatatu.com/
-Link: https://lore.kernel.org/netdev/avTfQjFQYR2NNdRg@chamomile/
+jirka
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index bd98d29ed7f8f..ae5346d6abd23 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -2318,6 +2318,8 @@ static int __bpf_redirect_neigh_v6(struct sk_buff *skb, struct net_device *dev,
->  		skb_dst_set(skb, dst);
->  	} else if (nh->nh_family != AF_INET6) {
->  		goto out_drop;
-> +	} else if (!skb_dst_drop_keep_metadata(skb)) {
-> +		goto out_drop;
->  	}
->  
->  	err = bpf_out_neigh_v6(net, skb, dev, nh);
-
-[Severity: Low]
-Should this patch carry a Fixes: tag, and maybe Cc: stable?
-
-The nh != NULL branch in __bpf_redirect_neigh_v4() and
-__bpf_redirect_neigh_v6() skips the FIB lookup and keeps the incoming
-dst. That branch appears to come from commit ba452c9e996d ("bpf: Fix
-bpf_redirect_neigh helper api to support supplying nexthop"). Before that
-commit, bpf_redirect_neigh() always did a FIB lookup on the target device
-and installed the resulting route.
-
-The commit message gives a reproducer that puts wrong addresses on the
-wire. Would a tag like this one help stable trees that carry ba452c9e996d
-pick up the fix?
-
-Fixes: ba452c9e996d ("bpf: Fix bpf_redirect_neigh helper api to support supplying nexthop")
-
-> @@ -2433,6 +2435,8 @@ static int __bpf_redirect_neigh_v4(struct sk_buff *skb, struct net_device *dev,
->  
->  		skb_dst_drop(skb);
->  		skb_dst_set(skb, &rt->dst);
-> +	} else if (!skb_dst_drop_keep_metadata(skb)) {
-> +		goto out_drop;
->  	}
->  
->  	err = bpf_out_neigh_v4(net, skb, dev, nh);
-
-[Severity: Medium]
-Can this pass a metadata_dst to code that still casts the skb dst to a
-struct rtable?
-
-Suppose the arrival route has lwtstate of type LWTUNNEL_ENCAP_IP,
-LWTUNNEL_ENCAP_IP6 or LWTUNNEL_ENCAP_XFRM. Then
-skb_dst_drop_keep_metadata() replaces the rtable with a METADATA_IP_TUNNEL
-or METADATA_XFRM dst, and that dst uses dst_blackhole_ops:
-
-net/core/dst.c:skb_dst_drop_keep_metadata() {
-    ...
-		md_dst = metadata_dst_alloc(src->options_len,
-					    METADATA_IP_TUNNEL, GFP_ATOMIC);
-    ...
-	skb_dst_drop(skb);
-	if (md_dst)
-		skb_dst_set(skb, &md_dst->dst);
-    ...
-}
-
-If the redirect target is a non-collect_md NBMA tunnel, its transmit path
-still calls skb_rtable() on that dst. For an IPv4 payload with raddr set
-to any:
-
-net/ipv6/ip6_tunnel.c:ip6_tnl_xmit() {
-    ...
-		} else if (payload_protocol == htons(ETH_P_IP)) {
-			const struct rtable *rt = skb_rtable(skb);
-
-			if (!rt)
-				goto tx_err_link_failure;
-
-			if (rt->rt_gw_family == AF_INET6)
-				memcpy(&fl6->daddr, &rt->rt_gw6, sizeof(fl6->daddr));
-		}
-    ...
-}
-
-ip_tunnel_xmit() falls back the same way when skb_tunnel_info() gives no
-usable AF_INET key dst. That covers METADATA_XFRM, an AF_INET6 key from
-LWTUNNEL_ENCAP_IP6 on an IPv4 route, and a key.u.ipv4.dst of zero:
-
-net/ipv4/ip_tunnel.c:ip_tunnel_xmit() {
-    ...
-		} else if (payload_protocol == htons(ETH_P_IP)) {
-			rt = skb_rtable(skb);
-			dst = rt_nexthop(rt, inner_iph->daddr);
-		}
-    ...
-}
-
-On 64-bit, rt_gw_family and rt_gw4/rt_gw6 land on the tun_info.key
-address fields in the metadata_dst union. So rt_gw_family reads the first
-byte of key.u.ipv4.src, and rt_gw6 starts at key.u.ipv4.dst.
-
-Here is an example. An IPv4 route carries "encap ip ... src 10.x.x.x dst
-D", and a tc egress program redirects with a supplied nexthop to an NBMA
-ip4ip6 tunnel. Then rt_gw_family reads as 10, which is AF_INET6.
-ip6_tnl_xmit() copies 16 bytes starting at key.u.ipv4.dst into
-fl6->daddr, and the packet is encapsulated towards an outer IPv6 address
-made of tunnel key bytes.
-
-Before this patch the skb kept the real rtable on this path, so the cast
-read real route fields.
-
-The METADATA_XFRM layout does not seem to match AF_INET or AF_INET6.
-IPv6 payloads coming from __bpf_redirect_neigh_v6() look like they are
-dropped, because dst_blackhole_neigh_lookup() returns NULL. So this looks
-limited to IPv4 payloads in the IP/IP6 encap case.
-
-The commit message says:
-
-  The release here can leave one behind as well, when the parameters a
-  route carries are not usable for the payload. The cast is repaired
-  separately.
-
-ip_tunnel_xmit() and ip6_tnl_xmit() are unchanged at this commit. Should
-this patch go after the skb_rtable() fix, or include it? Otherwise this
-path is exposed until that fix lands.
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/CORE-9NOG.v4.r0.20261116135311%40mojatatu.com
+>  };
+> 
+>  static bool is_raw_tp_null_arg(const struct bpf_raw_tp_null_args *entry,
+> -- 
+> 2.43.0
+> 
