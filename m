@@ -1,96 +1,111 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795051783;
-	b=3sL3tMu6Ls3wDTJ1C+JCER+VP99FfwQLa+2U1VzsFUgl47eRUPITXv6HID9Gd6akgz/d
-	 OqMXocy5JE9enw3kkBMy4XHMJ2mHsmKbA2htEtX1j/elOOzbyhbMUN3Yni9CieK0pf8zf
-	 7lZDFK6gVKOfVXcr16yupBA/rf0akMO2B7eNA9cWnCgv3SilsPDmRITWFVQMLY26ASywY
-	 nL3yUWGyR4LMKSjfnwAcaX86thfsoS8TBiGgBOGnPme1+L1IVfuzkKvCzchYUzBUNrLEd
-	 BQGc3851TIv5S8uNWjucKHjUiFaDwbcPeczXgJfXtg3jPLsoVJARY0fI7cIKxLE8v0A==
+	t=1795051789;
+	b=Z6Nr/hLae9w0V1WM+qJDgDavA9z6cyLwcKi9satOg4QpBnHew5aUHtGfWutdE/a8olND
+	 aqqxLIeJWlA9FjEnDLk6oFX6Xrp9/Xy34xvNJ23U13+RDnIZw3/CVOhPz6q2nMANvBGkg
+	 qaaslEFEDcS5ycVx+NZNwkYDI4QZnmftYpVd7+NcXFVveCu3pew5MrLf97BVfDFGRAZrC
+	 +UU8eIZnmXMfiAgqgewF8xMBWK84iMzJNeAUwV8OKaSWfcjJxHg6lwlmbcl8i1mI3LS/p
+	 MBYjKw/jh+FNBiaox7nG8kqVPuo6tU/Wxhm46qRaezO9WbhPCIheQkYal1VzYDz56Uw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795051783;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795051789;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=bKWDXGcZ+IWPbLmfaNnSEgoUNf+dPSDB9zSuraYct+M=;
-	b=XRqZElZWt2bfiIM/SSniItu/0CnB5D9w+jg4iFq5JehtN5WEmgtcxoFzxNZXKOxEkJMD
-	 AHXdSDZAK16spUGcbl0iwcitYmUKWP1ZV2TVeFVmFnwZRhoIwGEX67VnHeKhAqBwQDi4+
-	 cjaM8siNGGCcbiqR/y97gUW9L23s9SYbB208xKC7O9Pk51GbfLKN0onkb+yLdFFio5Oof
-	 vxkwJgYY7EGP26j/rXHpY4ok3lJVjaQwVASLMny9+ZJKrkL6auwddRBubHd7IhyVepzxj
-	 xr/B3tnf+7myXGrOB5frfx5Vk0vdZN6Lbx3J+BHbszyOrlb2bklojJ8wAzEyaj+59gA==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=IMUfFg2iR1Z91GxSjPkov61aiB2ViYWc3Z9M9ZmX54Q=;
+	b=fY5WNy36tkeKIdpIcpeBGNDz2827IvnvmwPptHWHv6YIuBZeEpDotGajnD1luZ/h5sm9
+	 TsN0ngvy5oYbdmN7wi29OMwHLTx/bBZhXIXRb8fMVGOzy7FxT4pSppupWe/D9qxD3ZVnT
+	 bt+QSHrvnGD+bOyrS9REP/t/eknJJWM1d30ZndOudyAh1eJXIJ2kjQ56DeCnbNBSz4hAk
+	 nONQWl+VW5Ho53YnY/pWXxDh5ZLi9T2GZGsT5ZjUDsN2/jhpZalZtrIaKVJaq+yFPBylc
+	 4tBC8O3rSaU2tftlgc32+o/8lbUOditxPIOGJx4vIFyfG8EcHyv2wPx35xcKq1VOscw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=dX3xe5Vd;
-	arc=none smtp.remote-ip=209.85.214.170
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	dmarc=pass header.from=cloudflare.com;
+	spf=pass smtp.mailfrom=cloudflare.com;
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=X6RUl5nX;
+	arc=none smtp.remote-ip=209.85.208.42
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 086FB606A31C
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 01:29:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 086FB606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CA41606A325
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 01:29:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9CA41606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=dX3xe5Vd
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2efcf92af4fso6892835ad.3
-        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 17:29:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=X6RUl5nX
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-6b8b20b2538so1161977a12.3
+        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 17:29:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795051782; x=1795656582; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=bKWDXGcZ+IWPbLmfaNnSEgoUNf+dPSDB9zSuraYct+M=;
-        b=dX3xe5VdQkDGk7Z84WwxBOpM7VSSIGrHu+gGsX59QTFyIW0aa8Bh1MYwSY+VXRd9pG
-         VhiG0Wa8ORg3qLimob33jJVMoJQa0u3hiaGFsso6xUnx0nd2phDMv7Sra+kROviSg7pZ
-         tOWQMfBfJjLSwQwgKAxaUnLXlOqmwf+rOwjWcL7yb+0KwrVNslWvOOJAPyKjDNl5qrOQ
-         nrwXO9CmdOnBnggcJyFlCxgYo+5sKwsyMjoVB8h4geczh9ocJwT6WWZ3RCV673Mkl8yf
-         GVrJsLwsep3cDDlWqou8Zy9XDG2TF4ESxQUoqz7tMIzNoCqo5iX9Gtgm9jD4XbJgPNMP
-         KCsw==
+        d=cloudflare.com; s=google09082023; t=1795051787; x=1795656587; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=IMUfFg2iR1Z91GxSjPkov61aiB2ViYWc3Z9M9ZmX54Q=;
+        b=X6RUl5nXPwSwt5c/kUdF+d/qAIPpu4B78KXEgoYgO1Ifwmp9Un0wXT9O03brHfdkj0
+         Iw/NgiWtHQkg9OjzyksdTG/Yk3SubNSObINPdaZ1LH3tMW9lWXcM2a5r0nkclDrg2smC
+         Zb0YGB4IT7dNKxmFRti4PmVmxBxhrgJIsbGdXjpReO5gHaAFEaHL7kPg6Eg7L+Kh2w1f
+         9UmlkTUkG7mvaMEWNHvsqbuMBWDQO8hWN6c3xb4rEMyQKIx7BNQiPLSzNI0tNGSeJsfo
+         60BiL735Nn8IsGlBj2912I24qTnwkLODMQpnOlSR6NzHZK8QstcQRJPAG1XWTsTRcE5b
+         m+WQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795051782; x=1795656582;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=bKWDXGcZ+IWPbLmfaNnSEgoUNf+dPSDB9zSuraYct+M=;
-        b=m/SzwaseBh2cCUd7wdcnGgORNYDKG3sfAqPHNI4dJlKHf2MWv2By97GWrEPsEon6lG
-         3R/rtm0cx4R4/TK0z/FgmeepVf+krJzgaV7Vzo6Zy4XEZEeXHqiXzB7Ej/YOmWHO2NlW
-         wPj+vHwJUAdJktQtuBEzk9eL+MpnKkWvRXzH++1plCk677pRUfs0TyVyyZ26eMPae+Ge
-         dTgtpkmobes17NOXnqBzUCzwPpwLqJAWBLcw9WiOtMIV6VStwKlw9pX8R8M/y+sQK2I5
-         hzqzMOKDkC5rMbK4yuo8XflCdfoVVkGoW1e6OFpwyWD8g/15FCZMNN8VBcyCXe8pfg2F
-         DQkg==
-X-Gm-Message-State: APuU4Z9k9BdlKn8KFdk9bi4yWdS129Oktx1zcj4qkzpgRffZQrI2vVrV
-	H8VPQVo3hMtJiVl6hE6fvpsBWzTIzLugagBulf5yE/E42s94wpVWGXCYVqK/oQ==
-X-Gm-Gg: AZFdTZcYaSNVS+1bf8AIik7+tW5LLsVBO5ACeFfg+iAu2PmonCTFn3zvGq4wjfsW/Fd
-	JuV0UGz1Qm2hn/7vEmwwoPOGnhewnPOT54TyIZFxX65katQdltBNv9BAIUtQaW8pPKvVWjUHKkv
-	CBc4lQdJVUvoPFD3WfUuS0d3KmUX+3W5ePX5ZiOjLa1pxF6HoFNzL6BKNBUCvjLUS9PlCUMzE4k
-	MXFByXhbn3pUoeDCnhnu58Fxs/miWfgsGW2/qB7MFGdEUq7hBamusaYKZumbScjmnIgzVSogTYE
-	QszeWsK/aIGhOnTezdTTDHqsilhPe/X9/eDI9WKPioujt8cTeH8hnsi1NgJU3+tsYc6FJbEBrkR
-	zb/8KT6CExAlajFwhx66DgwWYNs/HJU+Gm1+YkIom9Ebnu6f3dUee5UaA1py7rjqdlVR8QxxNuA
-	RS16gAqv6rkWh0tavFIM31bYQubtE/aqf2Ia2bAQTO4Ty4OFhBCORuKDkYEl6nzBSXely7mqQmT
-	cKf1knwv7A6dQRhUFpjN4hglDvCK15TAQ7tvgj0j8gnbjXAakMF72JXcd8xCNTYlnGDKsumm1ro
-	9wmCR8RrhPA0zSM6jdDrA2y2SSp4Y7lRUESRqAiE5I6YfBdTh02WmAktN+CKqHJmYE/oIzRoVWt
-	6PXIMvHyBzm7pwwQPVewoA2a+WfLwaDAaiTmIGXT37YM0KVNR8Av93v306kvg51bVpyJ0vwV9WF
-	IVssnrn6QT7Y7AS5hxkqKN
-X-Received: by 2002:a17:902:cf4c:b0:2dd:b6e7:ac1b with SMTP id d9443c01a7336-2eff72051femr43744945ad.2.1795051782169;
-        Wed, 18 Nov 2026 17:29:42 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.248])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eff62842absm20469925ad.61.2026.11.18.17.29.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Nov 2026 17:29:41 -0800 (PST)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com
-Subject: [PATCH bpf-next 5/5] selftests/bpf: Test the width of the value of an fmod_ret program
-Date: Thu, 19 Nov 2026 01:29:09 +0000
-Message-ID: <20261119012909.3657417-6-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261119012909.3657417-1-alexei.starovoitov@gmail.com>
-References: <20261119012909.3657417-1-alexei.starovoitov@gmail.com>
+        d=1e100.net; s=20260707; t=1795051787; x=1795656587;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=IMUfFg2iR1Z91GxSjPkov61aiB2ViYWc3Z9M9ZmX54Q=;
+        b=bJHo3lyXuJGb1csr6tYBOQjFd1H5bs4k0eor7FxQW5XFJVufGoN2WZZvniFpXkyp3R
+         HpaVWU8oKAf5JnmeBTKxW1fxG6hsBAfu6k2JS3JtwAptwL2VD5mX2xTkR1sTDa8nc0nu
+         nLKsaH83cPrYAxPvT4Wxjt6c8qGK9X0dPdHXFTz3urB9+jcFXPaKCAU84EbLzPZL1beG
+         e7F5qcF7lN0myhvUi02YgRmhbyCcUGBjtP20o1gN8RAf5W4hK1V1R2vwuNai4ivKYCtd
+         edMYowfsAdCfJ9X4xVs3DnjkFdlSDQpixzCkzgiY15NcMsJnwuwCDXof+feCjhfHWiPT
+         4BOQ==
+X-Forwarded-Encrypted: i=1; AL+hErGj0cFWX4SLX4iRZM2MzEoSFGf1CXuIcRjDjAT3FCkNGRogl0H/cjXXPI6wV6r9KRqCh0Y=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8HVbYdNKVa/Ic78y5x0Y3+VebyguCFB9hRMSyI3X4NihsfeM4F
+	54Rg5JFC2S4wJKcQb4tdsFP0+p+yBrTG0cvfRcBiBOdiCKtFsCqU6Yfww2HslmIK3GU=
+X-Gm-Gg: AYBFou3xxx6ONC+8bKIpPVKTFqMfECgTpWkXNuURdgFDZQBwgiluzmth5E5SOkJ7BSB
+	GvA9nQ19QNEI4okmifYHBljEYZ2bDgPvN8Jf776vPhzNq+TGvRh9IxfOTTHiizt6lu4kIVaczRs
+	sRzmjt5I/ESL5UVu+3BN6ToglGeKGHgZVYdueIrzn/5gHcjIyDSte5vMdHmfyhuPk9sCZTzARZ+
+	m3J4/9ZBBj0iFQMAKJWTVOynoipsD6p5088WDDXscaU8gn1sAIsUHoSi1EPIwKKl9wkDIN356o8
+	Z6gFbtBlGV3BFgoKQYfqMJqYuklr0RXGRiPaU/bAm6484zpBcq7LdjOTsf/2YLNLuwdnw4Ii1CD
+	C4Xrf/HpYxTcjcvfcr7LM6yqlgX/2tCoQ5+kMdF4zHTwr104pYydEFfljgbJhuRORzlbjf5gOzh
+	LlzjlN6oQm8G1O5sJc/qxA5bZS2AIcUWUeTBjnNgQcMeZmOU3MdK2284Pcak7SJ7VQK51Ob+Q9X
+	hHjEGde13D9SMycLL5+yfJvwYIGIyRClcpk4hSIo5mH152aALQ2MZlJNsm+eXuhR3H6bJcxqJl+
+	7uGnoQf0KCm1yWpSAytToza1vRnL4yfb4b6zSMayOCrxmPs/VDayGDXscg==
+X-Received: by 2002:a05:6402:c4e2:10b0:6b8:afbd:64e6 with SMTP id 4fb4d7f45d1cf-6b8afbd6722mr1777470a12.42.1795051787085;
+        Wed, 18 Nov 2026 17:29:47 -0800 (PST)
+Received: from L9JK9NPFH9 ([104.28.20.56])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b88a1eb813sm1711016a12.26.2026.11.18.17.29.44
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 18 Nov 2026 17:29:45 -0800 (PST)
+From: Tianyi Gao <tianyi@cloudflare.com>
+To: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
+Cc: Hangbin Liu <hangbin.liu@linux.dev>,
+	kuba@kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	davem@davemloft.net,
+	edumazet@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	shuah@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	skhan@linuxfoundation.org,
+	kernel-team@cloudflare.com,
+	tianyi.gao@linux.dev
+Subject: Re: [PATCH net v4 0/3] selftests: net: veth: propagate check failures to exit status
+Date: Thu, 19 Nov 2026 01:29:40 +0000
+Message-ID: <20261119012940.32838-1-tianyi@cloudflare.com>
+X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20261119003003.40482-1-emmaonana18@gmail.com>
+References: <CAG4wq-d_30-B4wQZu48ZQXAORM4QxRqPfmYsmoHS0hiYp1EtTA@mail.gmail.com> <20261119003003.40482-1-emmaonana18@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -100,191 +115,35 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 8bit
 
-From: Alexei Starovoitov <ast@kernel.org>
+Hi Omokefe,
 
-Two fmod_ret programs return the same 64-bit value, one for a function
-that returns int, one for a function that returns bool. The test looks at
-what the trampoline makes of it:
+On Thu, 19 Nov 2026 01:29:59 +0100 Omokefe Emmanuel Onanaroghene wrote:
+> Changes v3 -> v4:
+> - Patch 2: use if/else instead of "&& { ...; } ||" chains, keep
+>   lines within 80 columns (thanks Tianyi for the review).
+> - Add patch 3 deriving the invalid tx value from the kernel maximum.
 
-	value           int function        bool function
-	1 << 32         called              called
-	0x100           skipped, 0x100      called
-	2               skipped, 2          skipped, 1
-	-EINVAL         skipped, -EINVAL    skipped, 1
-	(u32)-EINVAL    skipped, -EINVAL    skipped, 1
+Sorry for being annoying, but I see three problems with how v4 was
+sent:
 
-fexit programs read the value with bpf_get_func_ret(). The side effect of
-bpf_modify_return_test() tells whether it was called. bpf_testmod gets
-the bool function, which returns false.
+1. Patch 3 lost its subject prefix. It went out as "[PATCH] selftests:
+   net: veth: derive invalid-tx test value from kernel max", so
+   patchwork put it in a series of its own [1].
 
-The test runs on x86-64 and arm64. Also update the comment of a test that
-described the trampoline.
+2. Patch 3 should come first. Patch 1 makes a chk_channels() failure
+   fail the script, and from then on the nproc + 1 check can fail on
+   a correct kernel. With the fix first, no commit in the series
+   reports a false failure.
 
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
----
- .../selftests/bpf/prog_tests/modify_return.c  | 51 +++++++++++++++++++
- .../selftests/bpf/progs/fmodret_retval.c      |  2 +-
- .../selftests/bpf/progs/modify_return_width.c | 39 ++++++++++++++
- .../selftests/bpf/test_kmods/bpf_testmod.c    |  9 ++++
- 4 files changed, 100 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/progs/modify_return_width.c
+3. v4 was posted as a reply to my review of v3. A new version should
+   start a new thread, and its change log should link the previous
+   postings [2].
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/modify_return.c b/tools/testing/selftests/bpf/prog_tests/modify_return.c
-index 15681b49f86f..2417030f104a 100644
---- a/tools/testing/selftests/bpf/prog_tests/modify_return.c
-+++ b/tools/testing/selftests/bpf/prog_tests/modify_return.c
-@@ -7,6 +7,7 @@
- #include <test_progs.h>
- #include <unistd.h>
- #include "modify_return.skel.h"
-+#include "modify_return_width.skel.h"
- 
- #define LOWER(x) ((x) & 0xffff)
- #define UPPER(x) ((x) >> 16)
-@@ -66,6 +67,56 @@ void test_modify_return(void)
- 		 -EINVAL * 2 /* want_ret */);
- }
- 
-+/*
-+ * The trampoline fits what an fmod_ret program returns to the return type of
-+ * the function: int for bpf_modify_return_test(), bool for the one of bpf_testmod.
-+ * Serial: get_func_args_test modifies the value of the first one for each task.
-+ */
-+void serial_test_modify_return_width(void)
-+{
-+#if defined(__x86_64__) || defined(__aarch64__)
-+	static const struct {
-+		__u64 value;			/* The fmod_ret programs return it */
-+		bool int_called;		/* Is bpf_modify_return_test() called? */
-+		__u64 int_ret, bool_ret;	/* The fexit programs read it */
-+	} tests[] = {
-+		{ 1ULL << 32,		true,  4,       0 },
-+		{ 0x100,		false, 0x100,   0 },
-+		{ 2,			false, 2,       1 },
-+		{ -EINVAL,		false, -EINVAL, 1 },
-+		{ (__u32)-EINVAL,	false, -EINVAL, 1 },
-+	};
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+	struct modify_return_width *skel;
-+	int i;
-+
-+	skel = modify_return_width__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+	skel->bss->pid = getpid();
-+	if (!ASSERT_OK(modify_return_width__attach(skel), "attach"))
-+		goto out;
-+
-+	for (i = 0; i < ARRAY_SIZE(tests); i++) {
-+		skel->bss->value = tests[i].value;
-+		skel->bss->int_ret = -1;
-+		skel->bss->bool_ret = -1;
-+		ASSERT_OK(bpf_prog_test_run_opts(bpf_program__fd(skel->progs.mod_int), &topts),
-+			  "test_run");
-+		ASSERT_OK(trigger_module_test_read(1), "trigger_read");
-+
-+		/* bpf_modify_return_test2() has the other side effect */
-+		ASSERT_EQ(UPPER(topts.retval), 1 + tests[i].int_called, "int_called");
-+		ASSERT_EQ(skel->bss->int_ret, tests[i].int_ret, "int_ret");
-+		ASSERT_EQ(skel->bss->bool_ret, tests[i].bool_ret, "bool_ret");
-+	}
-+out:
-+	modify_return_width__destroy(skel);
-+#else
-+	test__skip();
-+#endif
-+}
-+
- void test_modify_return_graph(void)
- {
- 	char instance[MAX_INSTANCE_PATH_LEN];
-diff --git a/tools/testing/selftests/bpf/progs/fmodret_retval.c b/tools/testing/selftests/bpf/progs/fmodret_retval.c
-index 1045462a4ec7..112f1575ce1f 100644
---- a/tools/testing/selftests/bpf/progs/fmodret_retval.c
-+++ b/tools/testing/selftests/bpf/progs/fmodret_retval.c
-@@ -85,7 +85,7 @@ __naked void negated_bool(void)
- 	::: __clobber_all);
- }
- 
--/* Not 0, so the function is not called, but the caller would see 0 */
-+/* 0 for the trampoline and for the caller, but not one of the 64-bit values of the list */
- SEC("fmod_ret/bpf_testmod_retval_called")
- __failure __msg("R0 should be 0 or one of -27,-22")
- __naked void high_bits(void)
-diff --git a/tools/testing/selftests/bpf/progs/modify_return_width.c b/tools/testing/selftests/bpf/progs/modify_return_width.c
-new file mode 100644
-index 000000000000..add9e80e6a43
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/modify_return_width.c
-@@ -0,0 +1,39 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* See serial_test_modify_return_width() */
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+int pid;
-+__u64 value;			/* The fmod_ret programs return it */
-+__u64 int_ret, bool_ret;	/* The fexit programs read it */
-+
-+SEC("fmod_ret/bpf_modify_return_test")
-+long BPF_PROG(mod_int, int a, int *b, int ret)
-+{
-+	return bpf_get_current_pid_tgid() >> 32 == pid ? value : 0;
-+}
-+
-+SEC("fexit/bpf_modify_return_test")
-+int BPF_PROG(exit_int, int a, int *b, int ret)
-+{
-+	if (bpf_get_current_pid_tgid() >> 32 == pid)
-+		bpf_get_func_ret(ctx, &int_ret);
-+	return 0;
-+}
-+
-+SEC("fmod_ret/bpf_testmod_modify_return_bool")
-+long BPF_PROG(mod_bool, bool ret)
-+{
-+	return bpf_get_current_pid_tgid() >> 32 == pid ? value : 0;
-+}
-+
-+SEC("fexit/bpf_testmod_modify_return_bool")
-+int BPF_PROG(exit_bool, bool ret)
-+{
-+	if (bpf_get_current_pid_tgid() >> 32 == pid)
-+		bpf_get_func_ret(ctx, &bool_ret);
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index 58846056f667..1fbc0061cc24 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -767,6 +767,13 @@ noinline void bpf_testmod_stacktrace_test_1(void)
- 
- int bpf_testmod_fentry_ok;
- 
-+noinline bool bpf_testmod_modify_return_bool(void)
-+{
-+	asm volatile ("");
-+	return false;
-+}
-+ALLOW_ERROR_INJECTION(bpf_testmod_modify_return_bool, TRUE);
-+
- noinline ssize_t
- bpf_testmod_test_read(struct file *file, struct kobject *kobj,
- 		      const struct bin_attribute *bin_attr,
-@@ -856,6 +863,8 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
- 			21, 22, 23, 24, 25, 26) != 231)
- 		goto out;
- 
-+	(void)bpf_testmod_modify_return_bool();
-+
- 	bpf_testmod_stacktrace_test_1();
- 
- 	bpf_testmod_fentry_ok = 1;
--- 
-2.55.0
+[1] https://patchwork.kernel.org/series/1215530/
+[2] https://docs.kernel.org/process/maintainer-netdev.html#resending-after-review
 
+Cheers,
+Tianyi
