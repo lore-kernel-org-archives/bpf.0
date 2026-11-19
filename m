@@ -1,100 +1,73 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.46
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795080001;
-	b=ZWmCDkl24es6XCtaivstJxmIB03/h9yLeQjH0GxNC5HfyViyhmIeVHY6frB2Rax6X0tB
-	 GSncDBHozyvoEAAApYZwtDrv1BwmlcAK9mIo0KmwHVm6er165tPvCoNvAxAxD+7gRGNtv
-	 DKnogOEP5suAC656oO+BZRSEhg5qXtNTg+4ClHJBuKaYLi3b2hSifAWyCCFb7vzw/o2RT
-	 EO9spKMM2pPyyXkUPYdEb3FqYe0wmdBzgt0CLjh82S2Temn+K9imNXrsu5fvYGijtqWkt
-	 xwYBBfu6Q80IvQy1kZQlKebRfqyOAQOYxJiUL4/erS7ufOLugTC7Ce3J4O7DifarlUA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795080001;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=Ti7zYfewVTPLw6o7ketmyvxMhRKCPMrEBC1dAP5uxT4=;
-	b=V8yxC2XmPOemg1WfFTSiGyZI2wgi/KoW1TL/7yMD2loKKovYjgwmN2H8bLCTvmJj0bSa
-	 ZlieRuhg9Llfj9h2ZMa3k/qP7c/hRjZQyAbaxYreRXfSJiWuyrlduzdD/qyFrSug/XL7S
-	 BgTw/ZBBw79JrXKg/LFqfOtchR1LRw12OCmM6sgrqto693IhpvrYzqgE4vKTbJl2LVZ4N
-	 sQUpTC6MgEI+KmKLruhfmRNRUZeR1m+Oltk6mmSKtUaUAdlf3mWGkUuKxbn6sX2yVRSdt
-	 nhTKOR3uYawxFVsI4MtIpm8fd0DkI69MU8MtG3wDi5Jhd05jvJLNSa31eO7GvhS4XYA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=suse.com;
-	spf=pass smtp.mailfrom=suse.com;
-	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=EkOk1PBC;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.46
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.138
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795080084;
+	b=Saa7jGojGVEmUlN/7vwc2BWoKgkHqjeRITUoFeEEPy5SvVyYSDt0kVn3D1BfwOlnr+dW
+	 wEjQZt1jt+wuIx15IqaAW+nNPu6CphqavFedbWsPmzQpRViDknNkKMn9p4owsfDx4Rpac
+	 Dz/qP0X1BrKoLr9aLDXa3JILR3A43PQkfYQGDc1Q3UeD4WyVq/70Htlc8dFbl9JXelgD0
+	 PpQgCKxsdW53KcjmsD4uoA2LIOdFhYiZECbeEVrdK2shKDwT1wGF7yuGK5MrZL28nMhpm
+	 J8mfGttxtSq95n5rA+687s6RREq5BOfYzYmhJrELhsvI0MRxFtnDCObWEfMMR93YXyw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795080084;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=jwlrWkiL6/bc8bt3jFA1PNWrJYj2IlYZaoWgGCfb8oM=;
+	b=da+s3wKUI6SCTXRtfb1bZx/RACFxhdLD4tKxR3GcHw7DQg/MFrhoQe1Q+Xr3nV9HASQT
+	 faOXsjyugnV3dcFswvKboxtyBkCRWmlsh5ImW6SevEmUVTEZ6H+XzQxEfhN2iPMKIJ5zg
+	 nOaSip9eKTQHm850zr/mRYmrVAyr3OrNWFcAK+xkfR4jcoLDr+p5G7IF1dV5+tVcfklnF
+	 rAZLjZvsxsYpuk6eFU4Z66AkUMBY+PSCCLRX33lAOU96VqCvHPAZ0kms8e4VNAfRfVtnM
+	 SZs13RgMQ1wLoY+EU6UQxgmpA8tiB2SgkSoGK6L0+F2Gifr0LGgWNWsTZo6hjgNkIAw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=aWlX8672;
+	arc=none smtp.remote-ip=95.215.58.138
+Received: from mta1.migadu.com (out-138.mta1.migadu.com [95.215.58.138])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62149606A335
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 09:20:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 62149606A335
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ABA1606A326
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 09:21:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5ABA1606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=EkOk1PBC
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-c40e30c26a4so149587766b.0
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 01:20:01 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795080000; cv=none;
-        d=google.com; s=arc-20260327;
-        b=MsKVHNuuOsPVlIkPHZ7QqsUeM0aoX82jdAcmsnjJsTCy/JYzIUhP5vo7GJGiqW5aBk
-         Qz+31rTJ8Mhj0xywC03YeXMKrWYMFqwIbkwSgxdomsC08k6nrMnznd3JsrcULzTKwoDd
-         Nip/2ZIzq7xKoZgTIILTSx3B7EYAuHGQNujy0zauOckjWXRg2tmahFerg7VZhsuo1qZh
-         kEOA7hqYUJl9izSzYnWqx6ASTyvo5/ykRynV+fjXmpCZXbwO5youkA1WD6Cwci1X21kK
-         XdY2ZOZIuIsb/VSigBRHmGGSFyOyglZA9J0QAp/xVgiwGLsIYQfM+EblX9Do90adOkj/
-         Prnw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Ti7zYfewVTPLw6o7ketmyvxMhRKCPMrEBC1dAP5uxT4=;
-        fh=dTZIjqDE7NWFAIfyb0e3JCqELr8P+687UN4MrHqdLq8=;
-        b=ovdlj5AGHBkQvHPEpsOKvZfEeRkd4n/EsvqtNhGWaEwsRpSIzApJc8lg2hcLNGKwh2
-         t51lYySR7Qgj7RbgZ6Px9g9337OZHcc9LLnP3EkKYEoc865nGUOkdWQfvLAwGUE0XDHJ
-         d3ua34VDn0p6u3MlgiV/JbC+AfbdqRt9dXjVt/CKJ99+zRP0HtbvqigpCjqP9qNefkqj
-         tfwSp/6WVnIfpKYC9FKI8m/OU56lzLHsSDtU7WFUwg2qGcmzbT3kdu8AIMLDTpcxMDWW
-         tatkAcYrbIhW6kxaZ3HGOLsux3zqfKoG7N09usdCyMu5mP335hrJ3lVtKsvxnSEvAVpU
-         fN6A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1795080000; x=1795684800; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Ti7zYfewVTPLw6o7ketmyvxMhRKCPMrEBC1dAP5uxT4=;
-        b=EkOk1PBCMgiSWI/XNDC6j87bo/JDyXhwWSKT7KNf3tIjZn7tp6QFghruYqBhwrnaHh
-         l4wZdzAJmlOIPC8iWaJ7ngwdy1HbOL4Kugu9fvqGhpQht29d9utB/pDKKBVFfYIxjL9F
-         sES+ZEY7KLg3uU24NJyfI6VEygksoQOswuWcQMC5xFUMLihcDekPGXI9MN1T30wP1FbJ
-         mDRuhnxif+ZSVfXF67RgfNJnpFou3Vy2qNQNa4NGt5Hb+iA7sJFxs2gbE4m3MIphzT3W
-         Ul0e5Rdzoacx5eSgIzidb/z7WxKHv9yri14fD+yIxk+ztRXMK0nt2nRw65ZQklBNUFUw
-         mc3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795080000; x=1795684800;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Ti7zYfewVTPLw6o7ketmyvxMhRKCPMrEBC1dAP5uxT4=;
-        b=WqbIXS1iFkxsxibg/tOtLb7zjhqxG/QrVxhJWlMRgBmnE2NR2Q4UpKYEX47vt+N+7s
-         KukAnF2uwcVl5I2i3og90P1stIm/7c9albeuT/xgiIaEg88iB5o7BlpaYvAeUtjcb6Kn
-         Wu3pJjYYFmCVJbUpktvpmmTB6TqrnZ2WxiRSnkrPSMez8pxnMd/k9KFe8VCqSA+RqHs1
-         10eDxOPnQbs3IwhysLMN5JNQdaZG6Vh1bnVCPiJIE4NQkKRZ5QozLShkMII3fuJ/t50I
-         1In0Rp4/lWO7MEbWZ4HEMkQlRnF/fR4C1K6R4gIsFbV+AwpDzzChoe4aZl3dBnog9OAP
-         nbBQ==
-X-Forwarded-Encrypted: i=1; AL+hErECGltrrXvxpVJ6wWNLCwMvODzogvC+AeOsEs89OFU/M/qMrHHtliD3SyyxXoyePMNvlSo=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8odpLBu8j44hshmTJOtmg0lCDQ/sJIXSo8uTjmVLpKtt50UGf+
-	W0iOrMZq9C9c3VkhoamtLW60+pX4lMlMgFqjp7PfN8nwNPC2cqVP7ZoPPeuPvrzJA5RpBpxEb7s
-	KYQBFBQ2O+Zjr5sYVqy5QnPe1lzac94PUyomKoqkKRg==
-X-Gm-Gg: AYBFou1s0r+EoZKa3skep4bj8I+/HLv/4sBdhSQdTKjpHG4j9MptP6T3izhu1xAM4wh
-	nWs7S5jIqEH0N9wvSO7Hwkiz3WxlFDsJdNGdM5Ry5Daty5pIGX0X8kD33i+ZbjOGRWXtexDe0UJ
-	3SQ5cRVVFAXrI0tkeeq7dV7dMQc3dVq/BcPQN+0CWI9HYr4sOIbvHm2W1F0pnRprUZxQATcgkNU
-	OysBxLUVMI6e/Of8nDrNFNg3H2nhFL0Fg1nEAe3QJ9W/7vYvNiFRYmg45O3ljofStuojyVKl+GL
-	wbTam5ezY6YYnyNVFd/RH79gAvqFa1MnhvqRlJS8RatBxlyG8cl/C2lsFVAgR12MTKMSPFDOXTx
-	1uPzHY9PfMT7yduYcD0rOKyKdTgNzjoutNUlsqSyWJNmIs7MlrhV0BkjwgA0oHIVlJ/45zQ==
-X-Received: by 2002:a17:907:9692:b0:c40:9b35:ad91 with SMTP id
- a640c23a62f3a-c51318163ecmr59215466b.13.1795079999707; Thu, 19 Nov 2026
- 01:19:59 -0800 (PST)
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=aWlX8672
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=mPiSiO8g+w2DpPp3GGR8IZ3wJAak28Y/ctpnaig1pAM=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795080081; v=1; x=1795684881;
+ b=aWlX8672Mj+HReGYIkiRRIhO2O6zkeJuL6VhFnecacKIcpMy2KcYJl0JkXPRJ0jF0WUoCHWX
+ UZp2CZnznB6IlqTgWp6la/ZxlGdmw4GmoBiVritBCyH+02wWoB+Yb4mtGqT+mjjfUm/Hc4tgNEi
+ T6rNUYUNQGTJDUl+RDKOLWU8=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id 291b443669a991fd;
+	Thu, 19 Nov 2026 09:21:20 +0000
+X-Mizu-Trace-ID: 291b443669a991fd
+X-Migadu-Flow: FLOW_OUT
+Date: Thu, 19 Nov 2026 17:20:58 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: Andrea Mayer <andrea.mayer@uniroma2.it>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+	David Lebrun <david.lebrun@uclouvain.be>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Mathieu Xhonneux <m.xhonneux@gmail.com>,
+	David Lebrun <dlebrun@google.com>,
+	Justin Iurman <justin.iurman@gmail.com>,
+	Stefano Salsano <stefano.salsano@uniroma2.it>,
+	Andrea Mayer <andrea@common-net.org>
+Subject: Re: [PATCH net v2 6/6] selftests: seg6: add test for skb checksum
+ with CHECKSUM_COMPLETE
+Message-ID: <av6_eqt8yH5qmLYL@fedora>
+References: <20261118150251.65-1-andrea.mayer@uniroma2.it>
+ <20261118150251.65-7-andrea.mayer@uniroma2.it>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,60 +77,151 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261118184729.2302130-1-m-malladi@ti.com> <20261118184729.2302130-3-m-malladi@ti.com>
-In-Reply-To: <20261118184729.2302130-3-m-malladi@ti.com>
-From: Marco Crivellari <marco.crivellari@suse.com>
-Date: Thu, 19 Nov 2026 10:19:48 +0100
-X-Gm-Features: AclHuK8e8ffnAD8pzuAiTxnaJvnDKX5k-oyRRYloR7_BmjnaSSX9Hh_xNi7mzEk
-Message-ID: <CAAofZF4XYd5z8X56DRARMxbu3t7QX48T7V69MPBw9TW1BQAmKg@mail.gmail.com>
-Subject: Re: [PATCH net-next 2/2] net: ti: icssg-prueth: Add ethtool RX flow
- classification support
-To: Meghana Malladi <m-malladi@ti.com>
-Cc: kees+treewide@kernel.org, laixiangwu@cmss.chinamobile.com, 
-	philippe.schenker@impulsing.ch, haokexin@gmail.com, devnexen@gmail.com, 
-	horms@kernel.org, jacob.e.keller@intel.com, sdf@fomichev.me, 
-	john.fastabend@gmail.com, hawk@kernel.org, daniel@iogearbox.net, 
-	ast@kernel.org, pabeni@redhat.com, kuba@kernel.org, edumazet@kernel.org, 
-	davem@davemloft.net, andrew+netdev@lunn.ch, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, srk@ti.com, 
-	Vignesh Raghavendra <vigneshr@ti.com>, danishanwar@ti.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261118150251.65-7-andrea.mayer@uniroma2.it>
 
-Hi,
+Hi Andrea,
+On Wed, Nov 18, 2026 at 04:02:51PM +0100, Andrea Mayer wrote:
+> Add a selftest for received packets with CHECKSUM_COMPLETE that the SRv6
+> code processes before they are delivered on the same node. The test checks
+> that, after the node changes the packet, UDP does not read a wrong
+> skb->csum.
+> 
+> The test uses a host and a router connected through a veth pair. Since veth
+> does not provide CHECKSUM_COMPLETE, a tc ct action on the router computes
+> skb->csum in software.
+> 
+> The host sends a UDP datagram to the router along five paths: no SRH (the
+> reference), an SRH with local segments, End.B6.Encaps with End.DT6, End
+> with the next-csid flavor, and End.BPF. Each datagram is expected to be
+> delivered, not dropped as a checksum error. Without the previous patches,
+> every path except the reference fails. With them, every path passes.
+> 
+> The host also sends a control datagram. It checks that the test detects a
+> wrong skb->csum after a change to the packet. After the ct action, a BPF
+> program on the router changes the Flow Label of the control datagram
+> without updating skb->csum, and UDP must drop it. If UDP accepts it, the
+> paths above may report a false pass, and the test fails.
+> 
+> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
+> ---
 
-On Wed, Nov 18, 2026 at 7:50=E2=80=AFPM Meghana Malladi <m-malladi@ti.com> =
-wrote:
-> [...]
-> +       mutex_lock(&emac->rxnfc.rxnfc_lock);
+Here are some code style comments. You can decide whether to change them or not.
+
+> 
+> +print_log_test_results()
+> +{
+> +	printf "\nTests passed: %3d\n" "${nsuccess}"
+> +	printf "Tests failed: %3d\n"   "${nfail}"
 > +
-> +       /* Check max rules */
-> +       if (emac->rxnfc.rxnfc_rule_count >=3D ICSSG_RXNFC_MAX_RULES) {
-> +               ret =3D -ENOSPC;
-> +               goto unlock;
-> +       }
->  [...]
+> +	# when a test fails, the value of 'ret' is set to 1 (error code).
+> +	# Conversely, when all tests are passed successfully, the 'ret' value
+> +	# is set to 0 (success code).
+> +	if [ "${ret}" -ne 1 ]; then
+> +		ret=0
+> +	fi
+
+Do we need to reset the "ret"? It's $ksft_skip by default. If any test failed,
+it is set to $ksft_fail. We can just exit with $ret at cleanup().
+
 > +
-> +unlock:
-> +       mutex_unlock(&emac->rxnfc.rxnfc_lock);
-> +       return ret;
+> +cleanup()
+> +{
+> +	cleanup_all_ns
+> +
+> +	# check whether the setup phase was completed successfully or not. In
+> +	# case of an error during the setup phase of the testing environment,
+> +	# the selftest is considered as "skipped".
+> +	if [ "${SETUP_ERR}" -ne 0 ]; then
+> +		echo "SKIP: Setting up the testing environment failed"
+> +		exit "${ksft_skip}"
+
+if [ "${SETUP_ERR}" -ne 0 ], the ret should be ${ksft_skip}, right? Cause
+we haven't run any test.
+
+Then we can goto the following exit directly.
+
+> +	fi
+> +
+> +	exit "${ret}"
 > +}
-> +EXPORT_SYMBOL_GPL(icssg_rxnfc_rule_add);
+> +
 
-nit: instead of mutex_lock() you can use guard() [1]:
+[...]
 
-    guard(mutex)(&emac->rxnfc.rxnfc_lock)
+> +test_end_bpf_or_ksft_skip()
+> +{
+> +	local test_netns
+> +
+> +	setup_ns test_netns
+> +
+> +	ip -netns "${test_netns}" link add "${DUMMY_DEVNAME}" type dummy
+> +	ip -netns "${test_netns}" link set "${DUMMY_DEVNAME}" up
+> +
+> +	if ! ip -netns "${test_netns}" -6 route \
+> +			add "${SID_LOCATOR}::${BPF_FUNC}/128" encap seg6local \
+> +			action End.BPF endpoint obj "${BPF_FILE}" \
+> +			sec "${BPF_END_SEC}" dev "${DUMMY_DEVNAME}" \
+> +			2>/dev/null; then
+> +		cleanup_ns "${test_netns}"
+> +		echo "SKIP: SRv6 End.BPF not supported"
+> +		exit "${ksft_skip}"
+> +	fi
+> +
+> +	cleanup_ns "${test_netns}"
+> +}
 
-and remove all the "goto unlock", returning directly. This handles the
-automatic cleanup.
+Maybe move the `trap cleanup EXIT` here.
 
-Same for other places where you're using mutex_lock() / mutex_unlock().
+Then we can just `exit` instead of `exit "${ksft_skip}"` for all the
+test_* functions. The cleanup_all_ns() will just do nothing when the
+NS_LIST is NULL.
 
-- [1] https://docs.kernel.org/core-api/cleanup.html
+If a command missing, or test_* function failed. The report shows
 
---=20
+SKIP: xxx not supported
+SKIP: Setting up the testing environment failed
+# echo $?
+4
 
-Marco Crivellari
+> +
+> +if [ "$(id -u)" -ne 0 ]; then
+> +	echo "SKIP: Need root privileges"
+> +	exit "${ksft_skip}"
+> +fi
+> +
+> +# required programs to carry out this selftest
+> +require_command ip
+> +require_command tc
+> +require_command ethtool
+> +require_command ping
+> +require_command sysctl
+> +require_command awk
+> +require_command grep
+> +
+> +test_dummy_dev_or_ksft_skip
+> +test_iproute2_supp_or_ksft_skip
+> +test_kernel_supp_or_ksft_skip
+> +test_veth_tx_csum_off_or_ksft_skip
+> +test_bpf_file_or_ksft_skip
+> +test_tc_or_ksft_skip
+> +test_end_bpf_or_ksft_skip
+> +
+> +set -e
+> +trap cleanup EXIT
 
-SUSE Labs
+> +
+> +setup
+> +set +e
+> +
+> +connectivity_tests
+> +udp_delivery_tests
+> +
+> +print_log_test_results
+> -- 
+
+Apart from the comments, the test looks good to me.
+
+Tested-by: Hangbin Liu <liuhangbin@kylinos.cn>
+Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
