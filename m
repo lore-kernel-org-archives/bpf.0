@@ -1,49 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795086007;
-	b=0loBa2CPlldSBCfrNhI2UsGmTS6Grhzu0LN6BOszV/2GNqOXPGNw/X4G4eeYlKGBotGD
-	 osKCaSIlBM+ETUeKpP3hEfo6h0LDivoVYnphHWdMhLhaUvugkwfbo0KvhW1KnbbmiDqrn
-	 Yy31Qwio+gxGb+U4kvXzlZDAl2TvTabu4wcmXxDe94xiUZv+iTNR+H+jitRwbWxk5uieA
-	 jNh5rIandq0xiFx4ACJX1cQTQb4va/rwvQKRbz0qkFZpPt8rADUaWQRRgkNXn3DNUcoi0
-	 S1S3RDEViXmyKU/ZgApa9LUM4jiKwBHLbKYmoLAeSoC0w+TaMSZkzBmpd1P+ZHSkMaA==
+	t=1795086894;
+	b=zIiD4XQHoKvt+N92ptSnSJ5CSmvts2dMLQsUPmOM/sXM78oIns8pqj2ipI/Niv2paz+O
+	 bvcnX6kmPmSf0Cd4AiJvuH9Uw+MpoiVveFbiaMmtgMHYSMSTKr1ojVO4v+rxRRP+ZMEAK
+	 gDEJmAvzO+tearnNjNeuLY/dCl1vL8xn1Z8iWq7398BDlEyYJ1aHmfho9JIh00B9w2CQF
+	 5rUVecx+sGErL3gP2/vswiqjGLkHB97fN4zyaV41qlC/VhxBleqeUfryNxMuJBDiTDCV0
+	 B2e6bMtqD6Y/GA+izKphR53JFrDSant6oDBFifklByEB4j+G83V0Ou+7BE9NoKyvkug==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795086007;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=BzVNMLS1qfrHvKiMU+xpkxa4/gmmoxIdRkjq+Jhj9+s=;
-	b=vIQgSJj5yPHVQLWUXK5qvoCVvqd/CmihdpTh/GCtIHR+TzFgRVqK1pSgLHk8afy9INKL
-	 C+S7Yf8yQ9ClhkdsToY/xB+CfRew0W/CSxI5lqnrD7ZxaUUCo1s9hTdpwK3uIIvYxDKDL
-	 fW1r6//3UaWD3l5iT+gtkJvQFmVFLPmbRhoKQ2aBNKF/IGiabeCjLD3PHVycbzxfNRAgp
-	 XLMaLV/ilTLw2+y15/418KU1Ysjz8XQkGOt34w88sL3d/uIWbgrxNylU9DAvafiYI93J2
-	 A8qydE4hG1dS6CPmwS9JLRJIpGmEygzoDm6ttLG3n+l/sW0nVWYLBB/sBGMXFp+QsQA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795086894;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=DYwwS3RjGFhHe7GQGIU2RiD97iNHq+hyhTB0qLqdGVk=;
+	b=xrbcLc5pZ/NSyqkHQhRQoblNmZ7f9BdOdwVl5triLs5lHFtGmFl2doiPXTZHQxGn8Mi0
+	 YrAzK7T+u7Ih+yhNBogtpiAZPoylJITT9hBAEQj3hFXcbnSXQpdrG0th/a300q10i0YfM
+	 Zh/r0cisZaI946DDFBxnW3/RztuL9uND8eVgTSPECRWRLhEDPi+4sCWLZvB2tfu3wxy22
+	 wNBKWE6gO5lh8Wb8TyVZ+mGR3c2pkB9cikD+35LLQSLlJMULG8KRcVvb7kJVmneeqFRL0
+	 o0lq5vqQH9V/lJYzv+oLASdJVwkeD/Kg9nI8Pc6BjtrVbDdiz7RqJbl/K0+15hPwyQQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="VL/J1M3I";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CUQnG7Ei;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0302606A320;
-	Thu, 19 Nov 2026 11:00:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BA18606A320;
+	Thu, 19 Nov 2026 11:14:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VL/J1M3I
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44CB31F000C5;
-	Thu, 19 Nov 2026 11:00:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CUQnG7Ei
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0D6E1F000C4;
+	Thu, 19 Nov 2026 11:14:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795086007;
-	bh=BzVNMLS1qfrHvKiMU+xpkxa4/gmmoxIdRkjq+Jhj9+s=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=VL/J1M3IXvyksRO6nc0sFMOyh9GW7RNVxkOICAxHPhLVQO10MNGBmvRJ4cYBdcNuU
-	 eCniukVA5uGgg0oG102G7oCujWHq1ht3k2hOQKbXqdZWpqyJcsK6/zudDyjiEgSasF
-	 3xgXXVVjz1h8t0jVKsGCMmdXLvWqW8cN+tST+8qvI9r2/yFQKBZ6blFl5tKNpDIu86
-	 nvVTKapmOi0+tAQ6siNt/cNbVML/I85ERDbWUTXFGhOdLQtPuwwvNpuyX/ad211W3k
-	 zTK1NwYOSboydqf3byK0dsyKasqsE9h6zWPWHXU1spsFTDwXxGuMeSil3mrDybdSB0
-	 Z4l5csjKcGt8A==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3A2FC3808210;
-	Thu, 19 Nov 2026 11:00:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1795086894;
+	bh=DYwwS3RjGFhHe7GQGIU2RiD97iNHq+hyhTB0qLqdGVk=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=CUQnG7EiABomIGTHDj88SO6aR6SQwk3GEgzTKDFJm06uSHpJNvj7HxwnTLOoYNFZn
+	 l+SeaiuX+fI2xukjF78GW+JBa0eTeMUhM4DlK39Y9GPpSwGQSJnE/sx9XAo1SNKg21
+	 mipDFhMKFaJmnhi4bhgNCD/Wfi+QThhCkCmxCI22YBE+wJAXwAzkVUXlfqRZmeqHDr
+	 0hOL8xRf0tUzsTVfKXP4xxzUwcU1DzUi7P0nGOU7h8XRxETPm0F1ISstbqEO0ESXJs
+	 ZeAcvdOR9ZodeNy8HIY3Ri6KcxFzhF/zaQXPmBlzEjemt27CzsWBUz0Tt2y2p5pJSO
+	 IwhzCbyaiWWMA==
+Content-Type: multipart/mixed; boundary="===============1667663467959058832=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -53,48 +49,94 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 0/2] veth: fix txqs that are never woken after
- backpressure
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179508600603.3017313.9159228473932241217.git-patchwork-notify@kernel.org>
-Date: Thu, 19 Nov 2026 11:00:06 +0000
-References: <20261113104648.225983-1-simon.schippers@tu-dortmund.de>
-In-Reply-To: <20261113104648.225983-1-simon.schippers@tu-dortmund.de>
-To: Simon Schippers <simon.schippers@tu-dortmund.de>
-Cc: netdev@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, hawk@kernel.org,
- toshiaki.makita1@gmail.com, j.koeppeler@tu-berlin.de, ast@kernel.org,
- daniel@iogearbox.net, john.fastabend@gmail.com, sdf@fomichev.me,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <77d978d7f9343e907651b4d4d81ec1c1405dce42f75e33b169f729f208029fcc@mail.kernel.org>
+In-Reply-To: <20261119-bpf-raw-tp-regs-preempt-v2-1-e1e1b90857d6@gmail.com>
+References: <20261119-bpf-raw-tp-regs-preempt-v2-1-e1e1b90857d6@gmail.com>
+Subject: Re: [PATCH bpf-next v2] bpf: Use an on-stack pt_regs in the raw tracepoint helpers
+From: bot+bpf-ci@kernel.org
+To: mike.bazov@gmail.com,song@kernel.org,jolsa@kernel.org,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,yonghong.song@linux.dev,emil@etsalapatis.com,kpsingh@kernel.org,matt@bobrowski.net,rostedt@goodmis.org,mhiramat@kernel.org,mathieu.desnoyers@efficios.com
+Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-trace-kernel@vger.kernel.org,mike.bazov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu, 19 Nov 2026 11:14:51 +0000 (UTC)
 
-Hello:
+--===============1667663467959058832==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-This series was applied to netdev/net.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+> bpf: Use an on-stack pt_regs in the raw tracepoint helpers
 
-On Fri, 13 Nov 2026 11:46:46 +0100 you wrote:
-> While debugging the veth BQL series [1], I found two ways in which a veth
-> txq that veth_xmit() stopped on a full ptr_ring is never woken again.
-> 
-> Patch 1 lets veth_poll() wake txqs beyond real_num_tx_queues, as a txq
-> stopped before a TX channel shrink is otherwise left stopped.
-> 
-> Patch 2 wakes the peer txq when NAPI is deleted, as veth_xmit() can stop
-> it after the last poll.
-> 
-> [...]
+TL;DR: Without the per-CPU slots, nested raw_tp/fentry programs may hit the
+WARN_ON_ONCE in bpf_perf_event_output() (panic with panic_on_warn); the commit
+message's claim of no more -EBUSY also looks wrong.
 
-Here is the summary with links:
-  - [net,1/2] veth: wake a stopped peer txq beyond real_num_tx_queues
-    https://git.kernel.org/netdev/net/c/8a0b03058ff7
-  - [net,2/2] veth: wake the peer txq when deleting NAPI
-    https://git.kernel.org/netdev/net/c/b2f4c44d7d83
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+[ ... ]
+
+>  BPF_CALL_5(bpf_perf_event_output_raw_tp, struct bpf_raw_tracepoint_args *, args,
+>  	   struct bpf_map *, map, u64, flags, void *, data, u64, size)
+>  {
+> -	struct pt_regs *regs = get_bpf_raw_tp_regs();
+> -	int ret;
+> -
+> -	if (IS_ERR(regs))
+> -		return PTR_ERR(regs);
+> -
+> -	perf_fetch_caller_regs(regs);
+> -	ret = ____bpf_perf_event_output(regs, map, flags, data, size);
+> +	struct pt_regs regs = {};
+>  
+> -	put_bpf_raw_tp_regs();
+> -	return ret;
+> +	perf_fetch_caller_regs(&regs);
+> +	return ____bpf_perf_event_output(&regs, map, flags, data, size);
+>  }
+
+Can this reach the WARN_ON_ONCE() in bpf_perf_event_output() using only
+raw_tp and tracing programs?
+
+bpf_perf_event_output() still has a three-level limit:
+
+    nest_level = this_cpu_inc_return(bpf_trace_nest_level);
+
+    if (WARN_ON_ONCE(nest_level > ARRAY_SIZE(sds->sds))) {
+        err = -EBUSY;
+        goto out;
+    }
+
+Before this patch, every raw_tp/tracing caller first took a
+bpf_raw_tp_nest_level slot, so a fourth nested caller got a silent -EBUSY
+from get_bpf_raw_tp_regs().  That function's WARN_ON_ONCE was removed by
+commit 3880cdbed1c4 ("bpf: Fix WARN() in get_bpf_raw_tp_regs") after a
+syzbot report of this kind of nesting.  The WARN above could only fire if a
+kprobe, tracepoint or perf_event program was also in the chain.
+
+With the slots gone, a chain of only raw_tp/tracing programs can get there.
+For example, a raw_tp program A calls bpf_perf_event_output() (nest 1),
+and its __bpf_perf_event_output() calls perf_event_output().  Fentry
+programs B, C and D attached to perf_event_output() also call
+bpf_perf_event_output(), and each is let through once by its own
+prog->active check, so they run at nest 2, 3 and 4.  At D the WARN_ON_ONCE
+fires, and with panic_on_warn the kernel panics.  The same depth is
+reachable across task, softirq, hardirq and NMI context.
+
+This also seems to contradict the commit message:
+
+> the helpers no longer fail with -EBUSY when nested more than three deep
+
+For bpf_perf_event_output() the three-level limit remains, coming from
+bpf_trace_sds and bpf_trace_nest_level.
+
+Should the WARN_ON_ONCE in bpf_perf_event_output() be dropped, as
+3880cdbed1c4 did for get_bpf_raw_tp_regs(), and should the commit message
+say that bpf_perf_event_output() keeps its three-level limit?
 
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/44508926690
+--===============1667663467959058832==--
