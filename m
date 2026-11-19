@@ -1,49 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=69.171.232.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795065317;
-	b=NYgTDd/w3sDQNfzkEnxF9NjtmaOMl8MJtNPtHS5JK0Cp80DMWMag3LXDXskQMC0eUAXY
-	 nux46D7/Pe2DtEumT5IYNNHXZvPG+4TCb9lQKhPL2MvCglenWMGZqVcdL1O/xISBV7Qa/
-	 7M8MHPbSZtf0adskJyFdST44NCQuJVZVJQceAZHTjwZvrQH1k8ftod5427GFHjcJZV4Lw
-	 mu+VbkmuovrV5MGqtPYUQ3h1cPl2cyfuc759D9RMLA7i3T8clq88Njj6tVub24MqnmzKk
-	 CaLgD/O8Y8a+GMuZoLMWxqbZq5Eu0Sg1Ha+PYFeMo1eldB7YVOCeePZtvnNleVwaUDg==
+	t=1795065699;
+	b=V/Ivv8pb2yUSteAxAcoplJte5sVledocsJyed7b5OI+6r9VCKYoAVCkZo0SsyBS9i0dZ
+	 2vyvW1dCqMzU64hVB098uV6c/FOnfRRkJYcLEBvlOZwplvMKce60RUikUp57XRstc8SAs
+	 17Oa+0rSuT46HePFP9ngYskHybVttQuYl+LGZpjAwL4m98lTMjalEnWkidA/yeahCLlyJ
+	 j9HAjpqlm1KzhEVHtneDwKuPqioQrz49ZrscWUMBI/Uj248NbqC655U7GQBTti46uuLYH
+	 Sv26s/Czr+/asehyWxfy6Z0R2SI5ATd6Ok1Siwo1B6bmclM9Mmdu5QGdF2Zpan2v6EA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795065317;
-	h=DMARC-Filter:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=Ib0MWprGn+ifCOGjBrcNsaa6h4t85ymtvTsqJWMi+uE=;
-	b=PPOSawGqPaCKA4X+mCdSAe+B1dnDrpd/yu6WS2lrQtUYw8HpZ0S6RmM5SEmw8WuCkbFc
-	 BNUOInKAbWGJ/8sXpHe75fdLBSg6ESvStVu+B2fi/AD7Xc3DE1DdGe5OoPmOIetoae5st
-	 qcfJNkWpzwAb34l2m7UfZ3+dNmPFS7rJ85ehxxK6bNESU84h3bxgidah87WbjvBRxA8Ug
-	 f5m893nC2SrrT4ZWdbMYJUtjAywto7PE7x3Jc6/0NwCoWllL3qV9SiAMIx3ObMsnNRkeU
-	 qV1LadsOjQwXs6HtzrH5WN4WZxVNVDvEh8eEm8b/BF0dlDL4lmXZ1zlAMsOVGYmcSJA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795065699;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=/DDSAAcOxTfjcMOcdDdfFUsg08lZcQJaH+m5IcXnapc=;
+	b=djE95xHXBhVfUZoLV1BF9c0+pGf7qFfXmAa79H9BU1+fMHYIRizdCIa6qc++bm8F35I0
+	 zsQzEEp3G0u6CVhTLbPugZJqc4uS4G0uU7IgIRof5ermhod6ApPpApHEgHrMQ6M/goPeY
+	 rLzZt84zPYUGn57pcYr38900cTgFVhtBpHi4TlduH/3kubG7Anj7Ruy9C+AsCi6EaF0g6
+	 C0GohPg0IpfN/6Rq6Zk+1Z+1takoUQPC8/+96nBI7FTfc9OMB2hUkUOuj/IkK7VTw1AV4
+	 JqMjuunL1rt2E/9jBBDlCWK0ww7mcwBcgCTUOdTr63kH78eKhl+OcZ0tQ0O0tXJguZA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=fail header.from=linux.dev;
-	spf=fail smtp.mailfrom=linux.dev;
-	arc=none smtp.remote-ip=69.171.232.180
-Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=K+p8nsZu;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DA20606A320
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 05:15:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9DA20606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm50310.atn0.facebook.com (Postfix, from userid 128203)
-	id 310E259083C25; Wed, 18 Nov 2026 21:15:04 -0800 (PST)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	kernel-team@fb.com
-Subject: [PATCH bpf-next v2 4/4] selftests/bpf: Take unsigned enum values as unsigned int for GCC
-Date: Wed, 18 Nov 2026 21:15:04 -0800
-Message-ID: <20261119051504.1904004-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.53.1
-In-Reply-To: <20261119051443.1902163-1-yonghong.song@linux.dev>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96DB4606A32A
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 05:21:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=K+p8nsZu
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03F6D1F000C6;
+	Thu, 19 Nov 2026 05:21:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795065699;
+	bh=/DDSAAcOxTfjcMOcdDdfFUsg08lZcQJaH+m5IcXnapc=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=K+p8nsZuxJGfxadmGiL45wWaXhYyWMDsZ3INhvrWEdw4qVWiSv8a+aZhS0tF7AJMk
+	 t8gGOPFJWkycM60zop5p6wKf79RSDFn62llmf8NEL+yPuOIICYwzjiqsblAShf8rIy
+	 8R/HedmlkRQjBi2UMYD6tHtwgZfly/capOXi3TK2BN7/ECoSt8B94VrvHPtmtTRTEL
+	 D6tEiL4MuDUijiSxAEqoWVNyjkSq5Vx9j65B6GhGsLwckjsMCGQ+0EQZjgfZn31YRd
+	 BMPAhXdYNbrZWiRw99IiTPuzdqKOF8jcuL1+2mzrxXBm6kLyuLKbTREtvQDltuYpFE
+	 HZ2n7/R9L/Xnw==
+Message-ID: <sashiko-outbox-222472@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 3/4] libbpf: Accept sign-extended 32-bit
+ enum values in CO-RE relocations
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Yonghong Song" <yonghong.song@linux.dev>, bpf@vger.kernel.org
+In-Reply-To: <20261119051459.1902876-1-yonghong.song@linux.dev>
 References: <20261119051443.1902163-1-yonghong.song@linux.dev>
+ <20261119051459.1902876-1-yonghong.song@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 19 Nov 2026 05:21:38 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -52,56 +59,49 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
 
-GCC's __builtin_preserve_enum_value() returns int, so storing the
-value of enum named_uint_enum into a long field sign-extends it. With
-the previous patch, the program built by GCC loads, but uint_val1 reads
-back as 0xffffffff80000001 while the test expects 0x80000001. Convert
-the result to unsigned int for GCC to get the enumerator value. Clang
-still stores the 64-bit relocated value, so its upper 32 bits keep
-being checked.
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Low] libbpf: non-standard multi-line comment style above
+  bpf_core_enumval_is_sext()
+--
 
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- .../selftests/bpf/progs/test_core_reloc_enumval.c     | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+commit 2ec397921876fd311cd75d218c792d79da6cd995
+Author: Yonghong Song <yonghong.song@linux.dev>
 
-diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_enumval.c =
-b/tools/testing/selftests/bpf/progs/test_core_reloc_enumval.c
-index 964297b9bab5..dc15caf8c151 100644
---- a/tools/testing/selftests/bpf/progs/test_core_reloc_enumval.c
-+++ b/tools/testing/selftests/bpf/progs/test_core_reloc_enumval.c
-@@ -49,6 +49,13 @@ struct core_reloc_enumval_output {
- 	long uint_val2;
- };
-=20
-+#ifdef __clang__
-+#define UINT_ENUM_VALUE(v) bpf_core_enum_value(enum named_uint_enum, v)
-+#else
-+/* GCC's __builtin_preserve_enum_value() returns int */
-+#define UINT_ENUM_VALUE(v) (unsigned int)bpf_core_enum_value(enum named_=
-uint_enum, v)
-+#endif
-+
- SEC("raw_tracepoint/sys_enter")
- int test_core_enumval(void *ctx)
- {
-@@ -75,9 +82,9 @@ int test_core_enumval(void *ctx)
-=20
- 	/* enum named_uint_enum is optional */
- 	if (bpf_core_enum_value_exists(enum named_uint_enum, UINT_ENUM_VAL1))
--		out->uint_val1 =3D bpf_core_enum_value(enum named_uint_enum, UINT_ENUM=
-_VAL1);
-+		out->uint_val1 =3D UINT_ENUM_VALUE(UINT_ENUM_VAL1);
- 	if (bpf_core_enum_value_exists(enum named_uint_enum, UINT_ENUM_VAL2))
--		out->uint_val2 =3D bpf_core_enum_value(enum named_uint_enum, UINT_ENUM=
-_VAL2);
-+		out->uint_val2 =3D UINT_ENUM_VALUE(UINT_ENUM_VAL2);
- #else
- 	data.skip =3D true;
- #endif
+libbpf: Accept sign-extended 32-bit enum values in CO-RE relocations
+
+This commit accepts sign-extended 32-bit unsigned enum values in
+BPF_CORE_ENUMVAL_VALUE relocations and sign-extends the patched 32-bit
+target value to match GCC's output.
+
+> diff --git a/tools/lib/bpf/relo_core.c b/tools/lib/bpf/relo_core.c
+> index 7aa7eb4e4021b..76efee8e876f0 100644
+> --- a/tools/lib/bpf/relo_core.c
+> +++ b/tools/lib/bpf/relo_core.c
+> @@ -1032,6 +1032,19 @@ static int insn_bytes_to_bpf_size(__u32 sz)
+>  	}
+>  }
+> =20
+> +/* A 32-bit enum value is in the low 32 bits of the ld_imm64, extended as
+> + * the compiler chooses: clang zero-extends an unsigned value, GCC
+> + * sign-extends every value, as its __builtin_preserve_enum_value() retu=
+rns
+> + * int. Check whether the instruction has the sign-extended form of an
+> + * unsigned value, so that the target value gets that form too.
+> + */
+> +static bool bpf_core_enumval_is_sext(const struct bpf_core_relo *relo,
+> +				     __u64 imm, __u64 orig_val)
+> +{
+> +	return relo->kind =3D=3D BPF_CORE_ENUMVAL_VALUE && orig_val <=3D UINT_M=
+AX &&
+> +	       imm !=3D orig_val && imm =3D=3D (__u64)(__s32)orig_val;
+> +}
+
+[Severity: Low]
+This isn't a bug, but BPF code uses the multi-line comment style where the
+opening /* is placed on its own line.
+
 --=20
-2.53.1-Meta
-
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261119051443.1902=
+163-1-yonghong.song@linux.dev?part=3D3
