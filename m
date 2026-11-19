@@ -1,55 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795052355;
-	b=i0dM5QM73rsgx0JUUXibvEvCVwIv8daC0LyesCZJW1PmZgj73Yo8COlL6QWRNJXzvhrQ
-	 gxr+8qptYmV+BprYek8Oz+YB3fQokJmAVTSBFkkd5KOnxdRnwf2sVDo6u2hcMo+2GQuwY
-	 zUZySBXT5Dtvc71GDvf4XFiVmDO7A+gw3YFdxkOMW+3ihGv9ppYFJH0gEmbP2dinAmEHf
-	 zYj5ldULi+H4zh3/x8tGNTJjsz9gxsfKJfXx1hECpPYdZUiizONTaocXhBmFC8ykRPzft
-	 zvUq/HfaML8ftiVu0EOUX3uwmlJN2rt8fdy4g5LrmTBWQ/vIUnZBrCzEdEFgnhMiIpQ==
+	t=1795052649;
+	b=FGOKeM+TwBgn20QZYEpKjlrdQvHKnblSmQ8WtT1uFIPDs3J9yTVhU5YJ2DPANzKsuOQV
+	 M/4TC2AL0+dxWsL+92Jhdg+GB/s6s2m+wz1+r5OVXzGgRegiwvrDwAAXwUo1F/cvESedS
+	 Hi/wtJhYr89CNBhQyyI1JEm17hCVouiAwinLECM/ckj/yflPeWrfER/dln/AXIvrcAqwZ
+	 QHKQ7TFnD6nAfjPlx50Ykxkll/J01JvR6h03lDO3GGk11ZOYzxTTYHGMlnrf808dcs1HN
+	 VJDSi9w3EBjyyPzG2+fjanmWdM/kcFKOYmmvMw54vV/lDSmDLgudHbcMM5fs4aVieUw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795052355;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=SXeeMNceyQYFO6LuI/tQEAKqdF54TN3vYntI1YBMMnA=;
-	b=MwOBZEFqE7bJq7cus9Jm2Jz+jBQ3G+vlYeDzYFg66YkZxnK1vjKMfo/LwPV1Ds1A/+te
-	 CFVclcl4ffWWcUsa4Qmlh854rSnRu8zo5nngroyaCS98zsG3SDs0Dpe9PJpudFVkk30ZB
-	 Q6qVlDUnwmh3+lTwL22i74WuKn6zkZkp3vvtxRbCSMwytxT2R67xTXQYmHEubID/BA1bE
-	 wGgZSF0W/f32pTP1YMiw6cpxeg7WDcmjqC8ghWG3wU9P+qCGTysgjnFbqOwa+xzzfkHXq
-	 3/lOx2XChjGk1QLZjoKCAaZytppeDrtJhOGAEVdhcbalJ1G/4N7RPwi7D39SP5/H0TA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795052649;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=mPgaLdPVgN+EK8/t5TKiyz/aU8rMoF0nQ5/fzMmP53M=;
+	b=NQGIcSlzU7gDxU8uFHw/FjWERLidbkv0+MXQAh3K3JKzU/v3CZtusxhodg54iOxE5niq
+	 2LAFKnA9U4EBjnwejN8971gu15KA/2uUu4lu/Z5TBff3jyXRcOVR7wOxXPmm9pgRVmwGM
+	 055SvMWMix+rALY/H1CuV8+mZvhxSKYJnuacouMFgMv13piPrlLU2XPfqvjSnkEg9lkO9
+	 giy74cTp12mGqZh5gr1Z756zXF+ZSRD+jw+mGnm7phQ+/e35U2jLfMmfJfRGK80Z1tEbu
+	 3iAEmtdNvKshsyPRo753+LCqRdo1kS0Q0a77QnojsMMwN3E8yMXSwz/ItLcX/h6LT2w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=V9RgF3fT;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hPZvxG7N;
+	arc=none smtp.remote-ip=209.85.214.171
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00FC2606A33F
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 01:39:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D59B606A320
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 01:44:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7D59B606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=V9RgF3fT
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BDEB1F000D0;
-	Thu, 19 Nov 2026 01:39:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795052354;
-	bh=SXeeMNceyQYFO6LuI/tQEAKqdF54TN3vYntI1YBMMnA=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=V9RgF3fT73DC+uWy8+aXr6JcCf5xHlzIs9oZuEVBpz5bvEvNfTOwchkYQi22NvfcG
-	 pMRQVRnenfap7e4ySqU76+60TabR813YKN3pQbi/iCRSzJl7I8pvsqv2ValBaHPOSV
-	 H6ZyEDgROYK1DjI71TonKFYNLhUUh1h1OtiaDnzVWs2QrKDTvTfDXgKX2S0f2BctaB
-	 Q/FeqJtk09HcrTWPj7jwZWGqAmj1zNbyeqn5zzMWVQ37aG29KonfO1QV762z8dAb5j
-	 wZPuUGgj2YkgReux2ILNSZF2TzfRIk8UT5CbqeZ2yMt7oBl36NWk/y1Idi7A+3hi4w
-	 FfdWa7++NUcSg==
-Message-ID: <sashiko-outbox-222288@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 3/5] bpf: Remove BPF_MAX_TRAMP_LINKS
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261119012909.3657417-4-alexei.starovoitov@gmail.com>
-References: <20261119012909.3657417-1-alexei.starovoitov@gmail.com>
- <20261119012909.3657417-4-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 19 Nov 2026 01:39:11 +0000
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hPZvxG7N
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2ed08b07213so8164245ad.2
+        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 17:44:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795052649; x=1795657449; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=mPgaLdPVgN+EK8/t5TKiyz/aU8rMoF0nQ5/fzMmP53M=;
+        b=hPZvxG7Nq3ovIfuB6lp6EIMTPxK7RG+m8SuZW9NaeX4uU+jrvFCPfIbCCdjUJnBs8e
+         /mntY8/SFsKTxD+mWGbM5X1/KKqUxtVc1qiGC9AA19AdM5GGS5nKCD0GhpxAo5HT3LuF
+         jtqBLMTMv7Danpap0vMUuysKhTMF9kOakqUpT/Cc4CEOeFjEulCT+FOllYbeQqEYGwKP
+         QUtGcGJoOMzHmHGP/HDKvqAvZiAK8IPPq4zaY9oKJxtHy4XK8H0LXa7f9AuOkVzU3Y7f
+         I3HUO1qVIfGihmcPMDF4cuz5RpeonovXEMFYjS6QOmSeMfh+d0xbV/vMZcE/cmlaRTxY
+         P2cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795052649; x=1795657449;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=mPgaLdPVgN+EK8/t5TKiyz/aU8rMoF0nQ5/fzMmP53M=;
+        b=gBtVVklLge7zK1iSvDZgxylkA9V5HKAbEAsudbl1qVFw/pUhSEDPrMKm9VsYpHsmlu
+         d3mk6+RW13qM4scqQ8C2g0VW241ZxwC2ill6qTdlir0rJm7Ws2DTckpV25gSqyAX6FOU
+         JQzRZ5dq08Xrg2dQkjyUKdaCT4mvU7Njp3fSBBff7tLljoLo9Ore5HgsPhCmfVCUAQML
+         Sc1leUFVgdvL91W3yJe9+tT37YxrSSA5DYojAIXCsQI2a06oHnw7qyFuutdlDU2DMHH7
+         64f/4ND+zU/OaD79ZnRqU902Ky3VrOStUocxe6Wrz/dR2tB6a0+4nOtSq+k7m93jBNCJ
+         w+ig==
+X-Forwarded-Encrypted: i=1; AL+hErG3XE1Q8iITFdtQvFo6WyeDcr5xC5FabuMrOvzIouuEhEROU7wIn0srXgnjnkBV8VWSWf4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/0vdfV2Ui4WOpGMaTQj7L/1OMDfms5M+Lq2EQXSFf9eKUS8vZg
+	5d4ci6yrCpNSC+sFHLESRQ9gysAGALkANiLt14lhCy8E+3j0TO4XiaH5
+X-Gm-Gg: AZFdTZeNAdNFdrfqnmf8zgnbFVxQhynZIXtzow1xBOLyowTB6F3/vKWaHYfQ380fzsP
+	X0nqanOemy9wSoNtAxLQ8Nvqpggu/4xUIDw7sTpqQbRMlc5d+UFq2BICu+omv3oilgu0BM2ESFd
+	16es+JTDOAxZukLhdNankYOhTpQaWwkRCqZ1L8c23olVgLlMybpUejJOXftUXTTBfo9TmlCc3kV
+	1olcPpsOWOSJ9mAmDdkqCz05g0DrxqPwI8QIJYL7ZgVDJmItbukl3KPUcZC6NnmCuZGKAMQBEwy
+	vk5kchhf8I+m2IBdS1CvsXRC4lit6E90nkFpxDqo87IjxmuxpvyhTgTlrQ1LSERxFtdCyc9PBKQ
+	dCO51m+byCJjdTx98lGBuYmKurpkzH8EX8uxDkgU4P/yIMm2ymM4U+Pi6/O8nfBtTfuow5heh/f
+	LgtL/JP51YNryHy1BRVJUKUKpcCo2V/TrrLeGFtAWcw86DwKuwoDvQ4YkdAnIITKWo61/H9shxI
+	bsZT/IDS4vFAiP7GHvuHjllDrn7Knj0bIIj/Iio8AMXNQ8weS1bTd2+KxTzBGksipz0ZFgD1OEC
+	6puav+mIaZRR0jI+ucpYKQA5Y4Ggp9Fn4BnYqSbnzOQ1aFAKaAyWAv+HQNsftFKCSNXf7dNE0zn
+	ZB9gc7WtX+x/Iiv9lqTnPjahtkRqSvqJCAg==
+X-Received: by 2002:a17:903:ac8:b0:2ef:efaa:17ae with SMTP id d9443c01a7336-2eff7575092mr37768725ad.71.1795052648514;
+        Wed, 18 Nov 2026 17:44:08 -0800 (PST)
+Received: from localhost ([153.61.198.246])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f0114fd607sm10146885ad.73.2026.11.18.17.44.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Nov 2026 17:44:08 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 19 Nov 2026 01:44:07 +0000
+Message-Id: <DMYT224YKW0Z.2NAT6FTR68NQE@gmail.com>
+Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <memxor@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
+ <yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
+ <ihor.solodrai@linux.dev>, <nathan@kernel.org>, <ndesaulniers@google.com>,
+ <morbo@google.com>, <justinstitt@google.com>, <a.s.protopopov@gmail.com>,
+ <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf-next] resolve_btfids: Match the arm64 NOP opcode for
+ LLVM 24 in text_mc
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Alan Maguire" <almagui@kernel.org>
+In-Reply-To: <20261118194030.4103149-1-almagui@kernel.org>
+References: <20261118194030.4103149-1-almagui@kernel.org>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,87 +104,101 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found no new issues
-in this patch, but noticed 1 related pre-existing issue it does not
-introduce:
-- [Critical] bpf: missing list rollback on error in
-  bpf_trampoline_add_prog() [1]
---
+On Wed, Nov 18, 2026 at 11:40 AM Alan Maguire <almagui@kernel.org> wrote:
+>  		if (it == by_name.end()) {
+> +			if (pattern->optional)
+> +				continue;
+>  			error() << "no opcode " << pattern->opcode << "\n";
+>  			ok = false;
 
-commit 6cc47d6522f82133a841a876d884e04a65d2d4b1
-Author: Alexei Starovoitov <ast@kernel.org>
+Thanks for the quick fix. Applied.
 
-bpf: Remove BPF_MAX_TRAMP_LINKS
+But should we go further and skip unknown names? Like:
 
-This commit removes the fixed BPF_MAX_TRAMP_LINKS program count limit on
-BPF trampolines, relying instead on a 4 KB image size limit
-(BPF_TRAMP_IMAGE_MAX_SIZE), dynamically allocating the bpf_tramp_nodes
-arrays, and patching s390 skip branches directly.
+diff --git a/tools/bpf/resolve_btfids/text_mc.cpp b/tools/bpf/resolve_btfids/text_mc.cpp
+index 57f45a4..bfe9824 100644
+--- a/tools/bpf/resolve_btfids/text_mc.cpp
++++ b/tools/bpf/resolve_btfids/text_mc.cpp
+@@ -165,10 +165,9 @@ bool read_regs()
+ 	return ok;
+ }
+ 
+-bool read_opcodes()
++void read_opcodes()
+ {
+ 	std::unordered_map<std::string_view, Opcode *> by_name;
+-	bool ok = true;
+ 
+ 	d.opcodes.resize(d.MII->getNumOpcodes());
+ 	by_name.reserve(d.opcodes.size());
+@@ -194,10 +193,9 @@ bool read_opcodes()
+ 	for (const mc_pattern *pattern = mc_arch.patterns; pattern->opcode; pattern++) {
+ 		auto it = by_name.find(pattern->opcode);
+ 
+-		if (it == by_name.end()) {
+-			error() << "no opcode " << pattern->opcode << "\n";
+-			ok = false;
+-		} else if (pattern->kind == TEXT_RETURN) {
++		if (it == by_name.end())
++			continue;
++		if (pattern->kind == TEXT_RETURN) {
+ 			it->second->is_return = true;
+ 		} else if (pattern->kind != TEXT_OTHER) {
+ 			it->second->patterns.push_back(pattern);
+@@ -208,7 +206,6 @@ bool read_opcodes()
+ 				it->second->nop = pattern;
+ 		}
+ 	}
+-	return ok;
+ }
+ 
+ const Reg &reg_of(const MCInst &inst, const Opcode &o, u8 nr, bool def)
+@@ -422,12 +419,16 @@ bool run_tests()
+ extern "C" const struct text_arch *text_arch_init(unsigned int machine)
+ {
+ 	static text_arch arch = mc_arch.arch;
++	bool ok;
+ 
+ 	if (machine != mc_arch.machine) {
+ 		errs() << "text_mc: built for " << mc_arch.triple << ", not for ELF machine " << machine << "\n";
+ 		return nullptr;
+ 	}
+-	if (!create() || !read_regs() || !read_opcodes() || !run_tests()) {
++	ok = create() && read_regs();
++	if (ok)
++		read_opcodes();
++	if (!ok || !run_tests()) {
+ 		error() << "the table of the arch does not fit it. Set LLVM_CONFIG to the "
+ 			   "llvm-config of another LLVM, or switch CONFIG_BPF_FMODRET_SCAN off\n";
+ 		return nullptr;
+diff --git a/tools/bpf/resolve_btfids/text_mc.h b/tools/bpf/resolve_btfids/text_mc.h
+index f2add1f..914a00a 100644
+--- a/tools/bpf/resolve_btfids/text_mc.h
++++ b/tools/bpf/resolve_btfids/text_mc.h
+@@ -13,8 +13,9 @@
+  * It does not say what an instruction computes: the selection patterns are not
+  * a part of it. And the headers with the enums of a target are not installed.
+  * So opcodes and registers are given by name, as MCInstrInfo::getName() and
+- * MCRegisterInfo::getName() return them, and looked up once. A name which this
+- * LLVM does not have is an error.
++ * MCRegisterInfo::getName() return them, and looked up once. A register which
++ * this LLVM does not have is an error. A pattern for an opcode which it does
++ * not have is left out: each pattern has a test, which fails if it is missed.
+  */
+ 
+ /* A condition on the operands of an MCInst, like an MCInstPredicate of TableGen */
+diff --git a/tools/bpf/resolve_btfids/text_mc_arm64.c b/tools/bpf/resolve_btfids/text_mc_arm64.c
+index 5d2fa8a..31ca6e0 100644
+--- a/tools/bpf/resolve_btfids/text_mc_arm64.c
++++ b/tools/bpf/resolve_btfids/text_mc_arm64.c
+@@ -25,6 +25,7 @@ static const struct mc_pattern arm64_patterns[] = {
+ 	/* HINT: nop, bti, yield, wfe ... */
+ 	{ "HINT", TEXT_OTHER }, { "AUTIASP", TEXT_OTHER }, { "PRFMui", TEXT_OTHER },
+ 	{ "HINT", TEXT_OTHER, .nop = true, .predicates = { IMM(0, 0) } },	/* nop */
++	{ "NOP", TEXT_OTHER, .nop = true },	/* nop since llvm-project PR 170968 */
+ 	{ "DMB", TEXT_OTHER }, { "MRS", TEXT_OTHER }, { "MSR", TEXT_OTHER },
+ 	{ "STLRB", TEXT_OTHER }, { "STLRW", TEXT_OTHER },
+ 	WX("LDXR", "", TEXT_OTHER), WX("STXR", "", TEXT_OTHER), WX("STLXR", "", TEXT_OTHER),
 
-> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-> index 21d460866dfef..4dd4040e784f1 100644
-> --- a/kernel/bpf/trampoline.c
-> +++ b/kernel/bpf/trampoline.c
-[ ... ]
-> @@ -889,22 +893,17 @@ static struct bpf_tramp_node *fsession_exit(struct =
-bpf_tramp_node *node)
->  }
-> =20
->  static int bpf_trampoline_add_prog(struct bpf_trampoline *tr,
-> -				   struct bpf_tramp_node *node,
-> -				   int cnt)
-> +				   struct bpf_tramp_node *node)
->  {
->  	enum bpf_tramp_prog_type kind;
->  	struct bpf_tramp_node *node_existing, *fexit;
->  	struct hlist_head *prog_list;
-> =20
->  	kind =3D bpf_attach_type_to_tramp(node->link->prog);
-> -	if (kind =3D=3D BPF_TRAMP_FSESSION) {
-> +	if (kind =3D=3D BPF_TRAMP_FSESSION)
->  		prog_list =3D &tr->progs_hlist[BPF_TRAMP_FENTRY];
-> -		cnt++;
-> -	} else {
-> +	else
->  		prog_list =3D &tr->progs_hlist[kind];
-> -	}
-> -	if (cnt >=3D BPF_MAX_TRAMP_LINKS)
-> -		return -E2BIG;
->  	if (!hlist_unhashed(&node->tramp_hlist))
->  		/* prog already linked */
->  		return -EBUSY;
-
-[Severity: Critical]
-This problem wasn't introduced by this patch, but can
-bpf_trampoline_add_prog() leave a dangling node on prog_list when
-fsession_exit() fails [1]?
-
-Later in this function, node->tramp_hlist is linked into prog_list and
-tr->progs_cnt[BPF_TRAMP_FENTRY] is incremented before fsession_exit() is
-checked:
-
-kernel/bpf/trampoline.c:bpf_trampoline_add_prog() {
-    ...
-	hlist_add_head(&node->tramp_hlist, prog_list);
-	node->link->prog->aux->tramp_linked =3D true;
-	if (kind =3D=3D BPF_TRAMP_FSESSION) {
-		tr->progs_cnt[BPF_TRAMP_FENTRY]++;
-		fexit =3D fsession_exit(node);
-		if (WARN_ON_ONCE(!fexit))
-			return -EINVAL;
-    ...
-}
-
-If a BPF_TRAMP_FSESSION program is attached with a link type other than
-BPF_LINK_TYPE_TRACING or BPF_LINK_TYPE_TRACING_MULTI, fsession_exit()
-returns NULL and bpf_trampoline_add_prog() returns -EINVAL without
-unlinking node->tramp_hlist, decrementing tr->progs_cnt[BPF_TRAMP_FENTRY],
-or clearing tramp_linked.  Because callers free node on error, subsequent
-trampoline accesses will hit a use-after-free on prog_list.
-
-[1] https://sashiko.dev/#/bug/linux-6367ff56-4b7b-447b-bfcf-d5da9ee421e9
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261119012909.3657=
-417-1-alexei.starovoitov@gmail.com?part=3D3
