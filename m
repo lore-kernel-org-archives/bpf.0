@@ -1,96 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.219.51
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795106770;
-	b=nKC4igBGUmyVFaHCTYW2+FbmIUxr7f52dPMMR54AoTDrebHUJhbpD0IZ2w11+TGWgFyj
-	 in9xyY2OTVIZ8dguk+kNINxcYMhQ/BLB10emsVh4ba7LkoM7K3yzA6bVtkrhavRfLoSmc
-	 82t4T9dsTCWKbF5u9FF5K1Kj9/WEuTHzoo7BjzTVjPv6aQEvcRWdccNMwSumvguQvlP1g
-	 AgNAhhtqyzdBK7pXMb42ionk8aovKcQ0f1MNWrgkL7XU4NYAZpr+YGK2RultvPqA5kPei
-	 8gY0ybiZI7YEt6v80956M0e8ZVn7yy2RKrWh/Xle+YRyQx4m1/DKTY3ZyyGjFJ9EuFQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795106770;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.227.136
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795107078;
+	b=wpUO2pROeHHhNQEAtMdve46b8L9CYPlcPPFDpj8M38yFps2P8pg4LtdAPPwm5ySqzebr
+	 dJGAmLfaKCskAf5w0MikGqsyqIvOUDLaK5j+k1QRgnRCpa7Jc61mQxc++iTdqVSLrmgJV
+	 wENr1BgnUofeaC9P9wn7n/JbON8zTeJr3Cjd1LtealUId4vQ/hBxbmdb2+fvvJuhNHlto
+	 +EoLFT2tzPppmgUdGdnnOSkl65j1C1YLGF2s0EToDNdihQf7r5m659oc4F+pGImHqrevH
+	 pWOuAZ9EFLksm1pCveifOnHA4yux4cj+ApHnBUWWGe3X6X+WHbbnj9Stww1Rhd0/TGw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795107078;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:From:Date:
-	 X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type;
-	bh=g2M9j/VQAVKbvhG6Nn8Y+BAYTfGyHSNRXTF1HZRA0x0=;
-	b=S3o2NXWSw6HV9Igzb7Paodd3iiKwM4eL3GTvOcy/K2HUqUFntgmdLhizFERJhSTvAvd1
-	 THftgYdnpf06XzfAlAV3FGbCA97GpLg0yrXlt5QgqgZk94Y+xuYTveMrVweQKSqEun1pR
-	 maCFsykRan+QnRAm3UHG2cQbOvNNpN6DzbbF0W8F/Uw34e3xig98BT1JQ19wwgnDqpWIG
-	 kZQ0yHJm2lAyrElr8h5Cjp/Qrp78ZJ/MEIl2Jv/TtMS1gEcF5l/V9FVRLP3bGMLpKCRoq
-	 T0tU3jGAk8JnZJ5oY6f28V5+xe431Uu7DhIpwyVT7M618ZocI5wXcVxXg2XU2V461xQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=lRdO4Y9UH2iKezbocQeecDxSl284A9tGk8f3DKBUEvw=;
+	b=KE08Wqr6mqFVaECxPJ+hu0nNxeopP5RaHQblsNl6oYBggtvkEw8TUOQtfQOJCn16dzh9
+	 QvcBVkvCOGM0NTG/vozqTWIeq/QJsERVqwDCo6fFkX5bo7D9aaytAPvt3fUHjUt0JtBRF
+	 eoDpnJoeWDfX04wRP+Kuh0sNXbmwMYXYY0RRU1H3LwtxY4C0ZN8MxHjDs9XKy77A0Zxn4
+	 OG+IEZ7Rp5I3BT9o+l6fDKESqMiL052AygEZWzauh/e0IpdE2sI1Z7TqWMU55+OsmQeCd
+	 K/DCoCsZ3mHOjsiyFMd/Rt7ipAHex4UdDJj5jyKHfqXwQfpvRRb/q7NjiN/r7WnO2oQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VaBHuDmd;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.219.51
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=W5wO6cSp;
+	arc=none smtp.remote-ip=74.125.227.136
+Received: from mail-pj2-f8.google.com (mail-pj2-f8.google.com [74.125.227.136])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F04B606A32A
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 16:46:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7F04B606A32A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3366606A338
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 16:51:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A3366606A338
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VaBHuDmd
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-91c847584b8so12482386d6.0
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 08:46:10 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795106769; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ZD+AO2LAicA6Neyk7Mb3vcYSemsRB8Jk34n++iQZ2LBRyAcdW9yXRQ72FqG0Lv8x0o
-         xRNDdQQ0bOmUj6iovVouMC0Al8xSEmFaqnaXGxtDc1PnIbPEvV7EN+YkxRJ6juN58n+O
-         hzEiZHQol0tBE1lGLx9eYqG4KHWx2yLj9564Zv3JQFkZVCDAgS3tVlVVGs8yIiQ/FZ8U
-         oo/9J2CWjt+yyLLzqKwLigxv6FzwLfwbDU7CR1Pe/5WXfmKKHbIDRRntLaU6SQVtlHt0
-         qBn0FPfy9J/sampVGXVMaD4E4NRx3fQ5CTbtIUiqfHkyv+1vw5MU6ymEH/WVa6dtsKLl
-         TPgQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=g2M9j/VQAVKbvhG6Nn8Y+BAYTfGyHSNRXTF1HZRA0x0=;
-        fh=XMCbGw9rgcQ3w6LyqDABhswCAcowgPCXUGmkOlO9wGk=;
-        b=Fzl5QMb2CXU8Wcba403XDE+3h+2YpWoiU5NW2xYZ0b9EDecdM72300oe2exXtZsdfl
-         EIooE2PxTXFLsVftztO1u/1bxXOgchcfQgrD23qzYogIe18TXqWdS4eh6/Re0cvBeKH/
-         WZXV6XFeV1PpV48q7PfpiEkg+RnjdoR7VxjehBfPrpB5+nt9UFQr7+6aUiwLyfGyBO2J
-         kO6/4oZM5ZlfASCLMa6sjcQ3RU9Wym7U1/YMp/sP83VRNl5EHKsFy+ZlZH2WjKZpikl8
-         MlUzWGWTQ48nFv1PM63IZ+tOS9YupMSWnCheAmDwQccL+QE6PdwFeQDjxoCmuE106jY9
-         czyw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=W5wO6cSp
+Received: by mail-pj2-f8.google.com with SMTP id 98e67ed59e1d1-3b3fb6d5edeso6846a91.0
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 08:51:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795106769; x=1795711569; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=g2M9j/VQAVKbvhG6Nn8Y+BAYTfGyHSNRXTF1HZRA0x0=;
-        b=VaBHuDmdUUoqfJOAQoTQR7FMy8cWXNQy4bPOMeuHmEtAkQgtoskPx9t2bS/f/Tn/xP
-         KO6wZUKkWOIyieKEHBN0nNhZkEJL7qCpavnzBBtSPGMSxWHPU08rj0AIvcX4FntmCILN
-         R6ls9KGCcOirlwaG5x9kduwfrWawyGx3wA0Eo0hWsgK2ayy8XwQ9dqFa0BALo5rkShnv
-         hN4o3KyRHyFpn4KoNEEplIPC+n1LcmQPN4FNeTCutEEPpQBrx+qAR2hJlISMCpniS2P7
-         u5mHWk6sBvqrNYgfZTTGtxAq0Cq607z3vofO1Nnb1OhFtS1LLzniyQks9KlmxZeaWN5X
-         ik1g==
+        d=gmail.com; s=20260707; t=1795107077; x=1795711877; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=lRdO4Y9UH2iKezbocQeecDxSl284A9tGk8f3DKBUEvw=;
+        b=W5wO6cSphMtufLh55O1QNHFTjjb1uZu5SGtB5W7M62SmtljwEGk7x3+bhzJ+DREFK6
+         umUp6pwX5j+HBfVAZA44kvYcenfW2ZXBeKRbIgFV02b5iZ0jdHoB5mQNj9FdjY3Q1vtw
+         bhiqhmaJ3qXePUgF5vYOCQwnUqrgTLMFRkJ2LXEBXHMT5utExV3QpMGWC5UUblaatWXr
+         jPJsVBx48ePyUXCmmGeWvOnStA4jjHK9GMCxpyFdG4QMocQqrY/5IPAsj0+zxTL7GgEe
+         hkthLF2Kph1SFQXMlKWX2vB2SzT9y2FtH/HwmLi8Y1kUI3sVT4mkiJAcUcDqcgFItZ3k
+         tvXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795106769; x=1795711569;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=g2M9j/VQAVKbvhG6Nn8Y+BAYTfGyHSNRXTF1HZRA0x0=;
-        b=hBGyADrESLgY3C4uegXAikYR4kyZF8ty/Iq7K/TWGwvkPVlEinkAXOFpT/L3y49eIm
-         4GCBQsAdbjquIzVKwVJRc/ybAoqDRQG51mwPxcx5fvS0Kf6ok4lzVZPsr5aRN3CL4JqL
-         XW2n2ShTLEUNpDN8FEtX+pr9RmoNHrOnNIlqeHJj4DcWW9pculFWPi3xdo4OwurNwz1K
-         i82P1jgDUr+ojdAj2vjygWqD7FW29d9fKN7q5MULKPlhNZvcvnLNvBdSOz7NXwO/tbpn
-         ACePM7mBmbdh/HAW9zpeDGPk79fs3GwmMhfLEbhaPadnq7ZCuNQU5pptNJxvUk1Eecfb
-         IAuA==
-X-Gm-Message-State: APuU4Z9GizQ5XMvXhpdv1xd3A+NMHaB1c7oa2BjRXH4blj23hjZq23ju
-	MNJ11R26uf+s1SA68g97JGO6pTUu9x6r6Ndy90r7MI+KaarOsxOdXwsrMizrbN3aiAUIdhzIXwz
-	OqZQqMghM6HT8H3sCH5iYfZd5w/Re5kyDbXqu7As+xqTh
-X-Gm-Gg: AZFdTZdAWzQD5I5PYp3yDscsYwswHYoSNKs2Ynu09VAgaEi2Tteqa6Wa5vJ37Ujm6LC
-	yWH7Y2PkhjsN2DU0n4nxPK5pi014hJrk2K7x98Awe24w6BPGScVsl4/E31Sj9Vcid6rfUfguEUa
-	Lo+6q3wIkApvAy57XSYzdaNtaI4IgM6uV+3xjeBmNUQ1n31yswZ2vUYUWizfhmxQQTzoDfVN8qn
-	J0gNojcNR4l3+0yXkWPPWyZjNbReIIbJX8PDVwXNHw+k+7tDGb9KckDrGxrQ1JW2uG6BYkfbSUj
-	/yUX6onavwnYM8Woq1upQwfFXrWOwQJ4X7ugx2tvEYvqKK8UCRnt+N1ZmBc6mMuSSxHmZY9mN/f
-	TaYtbBTrZygmxE/Sj9NrB8sEZRnpvmYxWty0z7jKT/b9ch1i47mnVlYvSOcPRUlEtSZOU0Zsbm7
-	ONCFKnLBIj1v52bijG/Cg=
-X-Received: by 2002:ad4:5d6f:0:b0:91b:9582:d91e with SMTP id
- 6a1803df08f44-92134aa0592mr2182256d6.9.1795106769270; Thu, 19 Nov 2026
- 08:46:09 -0800 (PST)
+        d=1e100.net; s=20260707; t=1795107077; x=1795711877;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=lRdO4Y9UH2iKezbocQeecDxSl284A9tGk8f3DKBUEvw=;
+        b=2SVcp5wY86ZhubQiV9L3GANOk9FuFCzsrS/Tn06unGtlSju8z3rMYZar6hJ/2L0rcm
+         Txu4uV06yNwQMeoKvcLYkzDeKE6LzpZvXPxKldrCWMe06yrj60pyA9S10yGxYm3ge3Ta
+         PXH/W5K7/DxSa2h1UQSR5j3Z890k39lrCkIcGayGHsrq9LQDJYPzDN1ySkELSUko8IRa
+         gHeTp4XiTaeTFnovSrjPw0OQa9DW8J5ssThdyMJ4w54k4NvVTyUv5HQxzoqwEIMf/EXK
+         jm9Oz3flOAZ8J0B8MU+SCtrn0b/dbEQWVW149lcshfReet9kv2Cg42NbJZehwSCGIm0H
+         E+gw==
+X-Forwarded-Encrypted: i=1; AL+hErGrL3zQ7WxZAii+T7gGXFjUu3GZBxZcrwEI2k4gNRcoPD9ufrXcvi7vweKsq+46zpD0ji0=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/9OvE5NN1FQBxs9PqwRTC7erdCFVHdr8zXezgBp3djJaVVMb6B
+	L8yy2AdDoCT1g292504BDtfFC+HeEBOpQZiwHXtEww4Fod5NOA9Xq7/Z
+X-Gm-Gg: AZFdTZdZvj4pjusI2hhMTZnSodpBBXFzDOYGj2CKLMQOVu+3IKLFRxVF2vAITsscOoP
+	3yypPOX6pPvTRSrRP+MTF/qcWiEJvENb2DF+PQmAJao1gzRVQTrhFATZdGZ1Bc0/U91twImyf5G
+	i3qZxWRHiB25mKaCo+N63pH5JrcJ3YXftqOYjj8uYkBv5tpIMyysw2A+WBmadmJsJ7WdycQ9eOX
+	LgAVEy8WLDilFTPbrjNWGc95LO/ZkrIjkQ56q9TgV26MvABdIIfWI+nE9h8unwgZFud0XIldtjs
+	kv7u16kRpTr0k+Wkn3qGnpEKaDBXwp2v+YKhK0I12Fx5G8AK//1Ygaxcu0n1EwB30TWGa9EC8EQ
+	E7s2lqbGcl4UujUgWZfIvx+1FB1s3Zoy0eVgTrubEAjQCTkXJ51fbRuMUCNtDpU+iCo9UH3cpOW
+	YxFQ+azGatQaOrG7dD/plKzIxD6FN6UhlCWnlDIbaHj5vT9aO8b7nMVSJiIrW09BZrGVc0bMlVn
+	CKTQHVHk+D0F0aGZrg5w3PcNRzv/PuqU+ggmUAdC7wDD0JG83oq1K8XQC1yZ1Zzd3ixlA7a+EAT
+	S4g2i49S4rKFCgt5Vo0CVWY=
+X-Received: by 2002:a17:90b:5407:b0:3b3:b0f4:1bf6 with SMTP id 98e67ed59e1d1-3b3d074d82bmr6300014a91.22.1795107076893;
+        Thu, 19 Nov 2026 08:51:16 -0800 (PST)
+Received: from localhost ([2a03:2880:9ff:6a::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41ad92c13sm129647a91.14.2026.11.19.08.51.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Nov 2026 08:51:16 -0800 (PST)
+Date: Thu, 19 Nov 2026 08:51:11 -0800
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Tianyi Gao <tianyi@cloudflare.com>
+Cc: netdev@vger.kernel.org, magnus.karlsson@intel.com, 
+	maciej.fijalkowski@intel.com, sdf@fomichev.me, davem@davemloft.net, edumazet@kernel.org, 
+	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, 
+	yoong.siang.song@intel.com, kerneljasonxing@gmail.com, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, kernel-team@cloudflare.com, tianyi.gao@linux.dev, 
+	Sashiko <sashiko-bot@kernel.org>
+Subject: Re: [PATCH net] xsk: reject TX checksum requests that overflow
+ skb->csum_start
+Message-ID: <av8o-Egamsxv-uWn@devvm16445.scu0.facebook.com>
+References: <20261116162834.30087-1-tianyi@cloudflare.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -100,68 +102,25 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-From: Yingke Xiao <inkxiao12@gmail.com>
-Date: Thu, 19 Nov 2026 11:45:56 -0500
-X-Gm-Features: Aa3M54rJ4NzvBHM56xW7TojSAPs0qqh8iAh_CvhoCd_Zj5g0_53qw97QbIYyhi0
-Message-ID: <CAMcAce-4MeO8rpx2rvDu77r-OpbFd9k0geOs8wZBoaMbYVkpDw@mail.gmail.com>
-Subject: [PATCH 6.12.y] bpf: Add tracepoints with null-able arguments (CVE-2024-56702)
-To: stable@vger.kernel.org
-Cc: bpf@vger.kernel.org, memxor@gmail.com, sashal@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20261116162834.30087-1-tianyi@cloudflare.com>
 
-[ Upstream commit c83e2d970bae ("bpf: Add tracepoints with null-able
-arguments") ]
+On 11/16, Tianyi Gao wrote:
+> xsk_skb_metadata() sets the u16 skb->csum_start to hr + csum_start. With
+> 64K pages, csum_start can be close to U16_MAX, so the sum can overflow.
+> The checksum offset then becomes negative. With XDP_UMEM_TX_SW_CSUM,
+> skb_checksum_help() triggers a warning. Without it, the device gets a
+> CHECKSUM_PARTIAL skb with a negative offset.
+> 
+> Reject this with -EINVAL. Use the limit of skb_partial_csum_set(), which
+> also rejects U16_MAX, the "not set" value of transport_header. That
+> helper cannot be used here, as the skb built for an IFF_TX_SKB_NO_LINEAR
+> device has no linear data.
+> 
+> Fixes: 48eb03dd2630 ("xsk: Add TX timestamp and TX checksum offload support")
+> Reported-by: Sashiko <sashiko-bot@kernel.org>
+> Closes: https://lore.kernel.org/all/sashiko-outbox-203545@kernel.org/
+> Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
 
-In v6.12.118, raw_tp_null_args[] in kernel/bpf/btf.c lacks nullable argument
-masks for nfsd, nfs4, and bcachefs tracepoints introduced by upstream commit
-c83e2d970bae (CVE-2024-56702).
-
-Because the verifier treats raw tracepoint arguments as trusted non-NULL
-pointers by default, explicit NULL checks written in BPF programs can be
-optimized away, triggering kernel null pointer dereferences when tracepoints
-receive NULL arguments.
-
-Add the missing raw_tp_null_args[] entries from upstream commit c83e2d970bae
-to kernel/bpf/btf.c on linux-6.12.y:
-  - nfsd_file_acquire (0x1001)
-  - nfsd_file_insert_err (0x1)
-  - nfsd_file_cons_err (0x1)
-  - nfs4_setup_sequence (0x1)
-  - btree_path_free (0x100)
-
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Signed-off-by: Yingke Xiao <inkxiao12@gmail.com>
----
- kernel/bpf/btf.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index e2fa364..55018cb 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -6498,6 +6498,8 @@ static const struct bpf_raw_tp_null_args
-raw_tp_null_args[] = {
-  { "sched_swap_numa", 0x100 },
-  /* afs */
-  { "afs_make_fs_call", 0x10 },
-+ /* bcachefs */
-+ { "btree_path_free", 0x100 },
-  /* cachefiles */
-  { "cachefiles_lookup", 0x1 | 0x200 },
-  /* netfs */
-@@ -6551,6 +6553,13 @@ static const struct bpf_raw_tp_null_args
-raw_tp_null_args[] = {
-  { "mm_page_alloc_zone_locked", 0x1 },
-  /* netfs */
-  { "netfs_failure", 0x10 },
-+ /* nfsd */
-+ { "nfsd_file_acquire", 0x1001 },
-+ { "nfsd_file_insert_err", 0x1 },
-+ { "nfsd_file_cons_err", 0x1 },
-+ /* nfs4 */
-+ { "nfs4_setup_sequence", 0x1 },
-  /* power */
-  { "device_pm_callback_start", 0x10 },
-  /* qdisc */
--- 
-2.56.1
+Acked-by: Stanislav Fomichev <sdf@fomichev.me>
