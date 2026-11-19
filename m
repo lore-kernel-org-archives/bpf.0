@@ -1,98 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.43
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795090429;
-	b=CMDVA2FkwD9zJtwh3wj+GsgZWTP92xCXHDviQPj7tGYqt1WTXFJLC3IFRdMbij+P1FLo
-	 bx+HZnjv+li4hgVg0M9rQgWwD4cQl8UtQXhcelHUZq7pU+AjUHLN62fTuskC+5tN4U7yM
-	 i5vkoY8OWoZ2qlOM+l9Nj0fijgAoUJ7qb7E8wXYJgainXBkHVWcgbFXRgHwarRg726wG6
-	 /jm9o8Va8z6e/3pFwJTst1b7WCtIEhAHAq+E6l5AEXZfBzQtPlY7GEMvNeURT2D9JBPvi
-	 V0cdOa/bWxY8M7of5bE96RXLqKQPla3cwszksdtdO0+up3AbBdK3J1TEDl1Ccj6tqEA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795090429;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.180
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795092032;
+	b=e7fNcVL0iQ9R+kL4kKNx0u75fNiMZxRvRPddN6GbRSSYb750s/zw9T/0gqTS+qmIjCf2
+	 9amBqvnZSUasdqI6ApChs7a6Qaw+Ux5r2pxS5pYqCaR7DK2VogRw6Ha1bvcOVmMdo8VfT
+	 bn8QTSF5sKXM6H1Dbzdn+FtKbY638fIhs2bzKQj+QmoUazelL71ftWmgEpAUskA9sPZnk
+	 bhaJ/DJ1+YFFTdAJEpuugzh0tRKTbVWBDSs9Zy/pCHjrAGVt7gCWn44CDHkIFysmKWd/J
+	 lt01h6evzIKRPdYUJ9fxtnHED40z7bUtTidTwTVFZiL4jEtSvEMRMS9q9QHbjYFm4AQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795092032;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
-	 Content-Type;
-	bh=JbT2l0hVPosruCtl/bxiI9ZT4pAz+/Pr6yTWwpIv1+Q=;
-	b=ipZNQbjtKUeO3BmScoA+kcOXfcdlB/w97KEdpQhmxo1q3SnIcDBAdnre9qP2xYeZCvww
-	 s6lhXlzPpS50tZOPIX9xsYmKN4ubhCVh2FIKRLVNETOGFxwq9dr2pFr6J3BTn0h2bAqPW
-	 axlTdn/0Jd1D0JXBNmcdxMP5XQIV2MKgc8I2ZtbFCsVw8nWOc2W1thRguX5rcb3RKKJFo
-	 agg6V2w9NEm+kdfOXYPGnmSxC1F4+050l2wZNeMSKxt49hYTOQFZa9stXCxPWk37Fj11G
-	 NOYEDmz21ZcTLTuxehP5I/xPh9T54543MNbMNrwZO3owoLp0UJqA2jA6Js3+N5U39cg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=sentinelone.com;
-	spf=pass smtp.mailfrom=sentinelone.com;
-	dkim=pass header.d=sentinelone.com header.i=@sentinelone.com header.a=rsa-sha256 header.s=google header.b=inLLQQN6;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.43
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=B+OXNLr0kdKkrvvm/CcRnGXdIGMgDEGRb/zrjUPqAT4=;
+	b=JTcWSPIoGrTXDPTbT4aXrhDSxg1UEk7NXn1+gAsVVBIpT5Kabqt9vzTDdDx+t+FR/lka
+	 XhbaS+mneVu43hZHnjNlJgkl51JUwVSMn9U5hauFhOraknUX0Ksj6VjPNQA8K2/eaxa7f
+	 Z8od2rvOPYitTkCbKaOdYChJ1LEk382SMZ7RIuDLVSvw8LZqkcogLvpijaYimZJmZ5AOC
+	 NXqfTy30y4hNoWfAcqwwe/TE4UNHGiZ2Vyrz6wFSyMtPwvme0nhHrlo0EtVba8q+DqVxC
+	 nRQxHP8iUTfl8L41SVYAigznHFaucKIEYJoNjLPiGp1hktoDDC5tspqWNLLpeyqwbrg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=none header.from=mojatatu.com;
+	spf=none smtp.mailfrom=mojatatu.com;
+	dkim=pass header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=HUQzosz2;
+	arc=none smtp.remote-ip=209.85.160.180
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8E86606A320
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 12:13:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D8E86606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sentinelone.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sentinelone.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18875606A325
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 12:40:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 18875606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=sentinelone.com header.i=@sentinelone.com header.a=rsa-sha256 header.s=google header.b=inLLQQN6
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3b40a522c00so54011a91.3
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 04:13:48 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795090428; cv=none;
-        d=google.com; s=arc-20260327;
-        b=fXZ2nJnNEjLdjO30o9RURV68SI5yXPLhBvE2aJXYJ8+KyjzPl+uLKWKB9I8CVLrtNM
-         qmMueW9s7/7b04r7C8ifXP44XSB3yYuz3Zb8nHia/IDov574pV18QBLEn7l47gvNN+gy
-         jOp6oruwgLJJ1/Sdu7Qy+3/7XKAUCsmqcVAWYzaCoOYAbfg3p3FkHsuOQhHp6Bxl80bP
-         ai/zOsvmSxnzd3KK8RmKdARVk4HB6qZWzQD+Lj5h8dL4GNlqPtxjbJ0NhRBwafGk+yDF
-         yhVpFR3gye/zLEBJd8QasssZKP2yHrpFdjzPmjmeX2Pqhcipk3/YLhFyga1WIYk4uLdd
-         n5mQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=JbT2l0hVPosruCtl/bxiI9ZT4pAz+/Pr6yTWwpIv1+Q=;
-        fh=ku+/Yl6EElTk2k+qyBotu9RkzYJWLUlpSFAar1udNy4=;
-        b=Zpa+fbq7EQugcdWZEh6w1nm3U/UhGyH5rzsu8PNQqAkvvIBuLBbsKupRjesCuhT/WS
-         HcobSwEn6J+VpR7v9fERV5VX2M6JzkiK/6ffpquNHEptf3rFqF5+//wto7+XqAFSslN7
-         6z/RnXTDW5f/fFWPVrsDL9Pmzk/Ia0teAVnN5ZERS11a77fC9ePQEps+Kspew0VhDRMV
-         2g8eQ2k/SILMeUGfL+pBiTGz2iMAs6UtEeOFsiA65a95IOu2bm8uHAVjYlGkKyLbX1AP
-         4jtRS/9lsxMNkKKerZ+u3N0YlytMS59YQTCovkZx0i+VBlfxwEgnkVcC/3Dh5E9np1Of
-         Oijw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (1024-bit key, unprotected) header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=HUQzosz2
+Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-53664b4860bso22460681cf.1
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 04:40:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sentinelone.com; s=google; t=1795090428; x=1795695228; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=JbT2l0hVPosruCtl/bxiI9ZT4pAz+/Pr6yTWwpIv1+Q=;
-        b=inLLQQN6+oyuRpEFmArfNCzpH2ozMRZGx89k/DACqwt11IvxS2uk9OtFmBLo4Vhr4J
-         V04tDyjCtChQCMDg+Z0yurrLdLqxBvdkqoQ4yirXWIDrydA7i5COBE+0solb87kLt7dQ
-         BamkEF9vbM8R8qAwhkfuZZHMK4QC397FjZQQNAjNa0eDoqfTF1Ax7RC8Fp6GjNu4oSx7
-         1mc8awM26ZHak6n8f0rMVtyqMPKhGdWnJypjWZJXKS5VQd17VjONQ0CQfcoxeddyjYmf
-         boLx2SRKNBMM/GjEMeYOtSlqhrOcgCl4AV4k7HzYNmibRCx9/H+XYfT1eASGaNsK57GH
-         BwrQ==
+        d=mojatatu.com; s=google; t=1795092031; x=1795696831; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=B+OXNLr0kdKkrvvm/CcRnGXdIGMgDEGRb/zrjUPqAT4=;
+        b=HUQzosz2FBP7Ozg3wh92TixJNdi76eZbRVeBDr9KL1inpC09+GZn7N50LzY73CrlRC
+         nh/FMBhWjdHpER1JYb1oyIcsagvYrGr904tjFODs9sPS8LTkrvkw7IzUFvo++D8ejPoc
+         ANbpimzCQhXkJChEAhWLaQoKbrKkvlIVyluUc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795090428; x=1795695228;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=JbT2l0hVPosruCtl/bxiI9ZT4pAz+/Pr6yTWwpIv1+Q=;
-        b=ctsEZ7ZgFtxZK5fs/TZcyuK71EfbOYCdWIyVIs7xh3UnFcorhGIywKY2qsqxj9F7zp
-         9edU+FpkRA+1DS6K3zX+pzWAnPHTvGtE+YiMxXb4o/dCKa0DhsOwSffmiTO9y2kI/r91
-         AcZxwo6RZzws6p1QiXff32S2OpPVeZJQT3vtUGTHqh5yCuKe0RDPjG1jIfD5g0DJco08
-         uYqTiZ6SxtPtRay5MCgmJBdf2XVTAWoUeEM3VLQ7YsJ9UWZvUoW9HkERkJPLKHO3+jYO
-         aFqxP8aom08Tf1F3KuZira23xqwYdiKVNggntb3ZDYbJ9t0I0WNHkHwOlc1H072CtRJ4
-         1+bg==
-X-Gm-Message-State: APuU4Z+WsiDfwZHe42fQ4YH0brfAhEkd4bIYOVS3BtG5UI1ScsrYo4UW
-	s/rLQ0M7vHMa0W7EW6mcVXL39pVSHt6qJMsm0tOUrDeAmvrtTiY0bE7rVl/Sf+AgPiUp5Z7ZX7F
-	NRbS17nQ1bJ+7cguIoDCAPLzWKil3v9lJUEKJ6gkSbw==
-X-Gm-Gg: AZFdTZdonuFvptOJGUHE+X1PggucohqQ36iW0NVzNr6k57EArQEOuS1IV8r78g6Vsbh
-	fYGxub1Fk1YIP174yWgndvfNe0VV+/ApLvleG/028XJa6c9A5x5oVLeJMJoQ//Ut/xkzZTkcE7q
-	sVN+QJdsC6nFzlagOGhpwTUekpGUXBAlFPeSMK6izvKw+2rczgg1DzNo5lpfeIXOJR/vv/Raklp
-	Puke6dwr0uc01IAlwbu63FX9w9YA2VYgwU2ysetB6ic0TM5h1BPmbVh5e8AtslaJHrPHI5zoy0C
-	TkmW3VoCtgEk50TGdRZEi7F7hlg+u2o5HD1JQK4mvDQWrdLbpEadsRUocJ7ySsRh9//bi5upwLi
-	h773AmkaYzy5Is6Sg7slNelkvsktwth/Scg==
-X-Received: by 2002:a17:90b:4a84:b0:3b3:c107:8458 with SMTP id
- 98e67ed59e1d1-3b3d07d54b3mr9810306a91.5.1795090428106; Thu, 19 Nov 2026
- 04:13:48 -0800 (PST)
+        d=1e100.net; s=20260707; t=1795092031; x=1795696831;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=B+OXNLr0kdKkrvvm/CcRnGXdIGMgDEGRb/zrjUPqAT4=;
+        b=p+D28/brw4Qh+MLRUztQKncHCl4mYCNGKVjwWT3NngodGJTXXdlHFyXKapUxzDmm21
+         7Pny+VyoNBXQckVGmOQlT7YYfL5hMoUgCZ4PyISzqx+AVrJMQ+dXAHJhOXIL9dax6VIH
+         xgYcijL8Y6zXYAwl0P8J11GMnkjHM8GduP8MwLZ7iq+E3H41EXOYHIuaikjrf39sTQyy
+         8NU3nLwz5wWWABN9z8JdNWcZQfOtcRaxVcWKLY8xlIoA0Omo2AgBFzjacE4Z40VM94Hi
+         KGBykW+qO39CTOK+XS4GfsBXQetNazuCRWIqqX2mh1qjem6hbPyqxzKAQuoCZaRfMwtY
+         y7VA==
+X-Forwarded-Encrypted: i=1; AL+hErFJuWiwAc9rDyUpjYat1YtID1OdTigmfuPR8wr/Upet1Yb9YAhfSFdDh5Ia2nAovW1sWDY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/Ty9f9EwE6UdOxVDIh3DfoxU+g5O/SwI0yjal3dzkIG+y51fzD
+	9TRuSKsiX0HM6FaZan80M3A7Vt1RUV/baVFovE3dn4BhB7fv+yaiF3ihBi9AMt9bkA==
+X-Gm-Gg: AYBFou0LN1hpDpyP1NOrPGW5CTE4G3p7JH+VFiWoLTj8a5jREJs7sQE4sHtZ4lY4tQb
+	JIlV8/I2eXsFjt1/KIeSCt06rqj7Khfn12SDBpD1IH01GP+dlpblJya3tHk/oTTvB5iMsllg9oS
+	xWh1jLbRwuE4EqopfUpHJxJw4bTrl815PRu5S8qvEYnmOKcbGpF56ixtFoCW6lHQHey5/ZhyJfQ
+	Hx5euQ7xDX/XW7HAOb2U88UALIEY3IilS+zeiuI3n6ZWHbgGXg6j6V08v50I3tv1H1rL+rInWNz
+	/hYHHK+21wtPHts6qvKXmhDXEmdEV8P1dlnLSZq1lOgboDCF74Im/OhGK6ZEeYY046Mt9xnNUop
+	PRSrEeBl4m3sGgR9wcKJMbiTRlfWvapxpV1ef4hjgZu/TRGdJfQc1Dv+mqo+meYdjwWqqBVDCu/
+	Itx4KJSRc71xjqIxNUNNQY5TsmCQrPPyksW+oY8J+Rwb45MNKY5kmx8RlXqQITsws5vVPv2zmbX
+	2cYwfNd6DNZEz+kYKz4f7HxG02Ig3ZevxSZU7oZwWHbmlBRM2SCVQQQmGD2N1ef9lssxJkSBd+9
+	47KYcLnmxt8Mhx4Mi7ExyZq5N3Zpgn+tPm+fE5Gh7D5+Bfmw8YeicuNiKPGYG/+umAaMQcbcD5U
+	=
+X-Received: by 2002:a05:622a:598d:b0:55c:840:1307 with SMTP id d75a77b69052e-55d5a62fbb3mr85938531cf.20.1795092030871;
+        Thu, 19 Nov 2026 04:40:30 -0800 (PST)
+Received: from mbili.waya ([64.203.83.2])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-55d66b75823sm22370191cf.13.2026.11.19.04.40.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Nov 2026 04:40:29 -0800 (PST)
+From: Jamal Hadi Salim <jhs@mojatatu.com>
+To: netdev@vger.kernel.org
+Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
+	David Ahern <dsahern@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Victor Nogueira <victor@mojatatu.com>,
+	Jiri Pirko <jiri@resnulli.us>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Simon Horman <horms@kernel.org>,
+	bpf@vger.kernel.org,
+	stable@vger.kernel.org,
+	sashiko-bot@kernel.org
+Subject: [PATCH net v6 0/3] net/sched: sch_teql: keep the transmit path's skb geometry and device lifetime intact
+Date: Thu, 19 Nov 2026 07:40:22 -0500
+Message-Id: <QDISC-6HS9.v6.r0.20261119070330@mojatatu.com>
+X-Mailer: git-send-email 2.34.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -102,36 +104,109 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261117-bpf-preempt-v2-r2-v3-0-586376ec3672@sentinelone.com>
- <20261117-bpf-preempt-v2-r2-v3-4-586376ec3672@sentinelone.com> <e3ed9b2d-7778-481b-ba85-2ac3ac5de877@linux.dev>
-In-Reply-To: <e3ed9b2d-7778-481b-ba85-2ac3ac5de877@linux.dev>
-From: Mike Bazov <mikeba@sentinelone.com>
-Date: Thu, 19 Nov 2026 14:13:50 +0200
-X-Gm-Features: AclHuK-Tue_GiMxMNcBIIEZsjERmHRrqNIXs1mIZQ207vV9T_xJnd-gwW1o_iI4
-Message-ID: <CAPnbwjq7TDed+f6dTDfQcdLSZtV=AwDiLVpBK2t7ke6vpngSpw@mail.gmail.com>
-Subject: Re: [EXT.MSG] Re: [PATCH bpf-next v3 4/4] selftests/bpf: Add
- preemption recursion test for tracing programs
-To: "JP Kobryn (CrowdStrike)" <jp.kobryn@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-> > +   return is_jit_enabled();
->
-> Any better precedent for checking this?
+Three pre-existing defects on the teql transmit path, all around
+teql_master_xmit() -> teql_resolve(), plus the core helper they depend on
+all derived from sashiko reports.
 
-I found none. Unfortunately user space can't ask the kernel for it.
+Patch 1 makes the headroom private before the neighbour can write or queue
+the skb, and pulls back only the header that slave added, so a
+header-cloned skb is not corrupted and a userspace-supplied link header
+survives a retry.
 
-> > +   { "fentry_s_percpu",    "on_fentry_s",          PERCPU_MAP,     B_DROPPED },
->
-> Is it worth covering fexit, fmod_ret?
+Patch 2 restores skb->dev at the arp-queue reinjection point when the
+neighbour's device builds no link header. It is the neighbour half of the
+version 3 patch 2, split out on review so it gets its own commit
+log and its own Cc set; requested by Jakub.
 
-They enter through the same __bpf_prog_enter_recur() as fentry, but it
-is two rows each, so adding them is minor.
+Patch 3 moves skb->dev = slave ahead of teql_resolve() so a skb parked on a
+slave's neighbour arp_queue names the device whose neighbour took it, and
+so cannot outlive the master it came from.  With patch 2 in place it is
+reinjected through the master and leaves with a link header.  Its commit
+log carries the KASAN report the unfixed kernel prints when that queue is
+drained.
+
+Patch 3 is a follow-up to commit dc4b95b8fee9 ("net/sched: sch_teql:
+restore skb->dev on the slave failure path") by Victor. Patch 1 is the
+same commit's sibling on the successful-transmit path.
+
+To prempt the sashikos:
+- The pre-existing teql issues reported alongside this series are fixed
+separately. For "the lower-qdisc drop use-after-free" see:
+https://lore.kernel.org/netdev/QDISC-Y0BY.v2.r0.20261024060625-2@mojatatu.com/
+
+- For the pre-existing consumer nft/bpf complaint see:
+https://lore.kernel.org/netdev/CORE-9NOG.v1.r0.20261111073528@mojatatu.com/
+Note: nft/bpf combination _has never worked_: it is a producer-side
+mismatch on two separate entry points, not a regression of anything here -
+hence the net-next target.
+
+Hope the sashikos read these and dont complain again about those issues.
+
+Note also: part of the testing of patch 2 runs for packets that reach
+neigh_xmit() from nft's `fwd ... neigh` statement, or from
+bpf_redirect_neigh() with explicit nexthop parameters. Both keep the
+route's dst attached while replacing skb->dev, so the neighbour that
+queues the packet is not the one the dst names.
+
+Changes v5 -> v6:
+- patch 1 closes the finding Sashiko (nipa) raised on the v5 posting.  The
+  retry no longer strips whatever offset it happens to find: every attempt
+  starts from the network header, as neigh_resolve_output() does, so an skb
+  that arrives with link-layer bytes in front of its network header is
+  given one link header rather than a second one.  The length is recorded
+  as the offset the neighbour built, so only what this slave added is
+  pulled back on retry.  Considered comments from Sashiko (nipa).
+- patches 2 and 3 keep their code, and their commit logs now name the
+  cross-patch dependencies: patch 2 says which patch parks the skb it
+  handles, and patch 3 names the patch 2 prerequisite and the ICMP error
+  routing the skb->dev move also changes.  Considered comments from
+  Sashiko (nipa).
+
+Changes v4 -> v5:
+- patch 1 closes the finding Sashiko (nipa) raised on the v4 posting.  The
+  head is unshared before neigh_event_send(), so a skb parked on the
+  slave's neighbour arp_queue is already private when that queue is
+  drained and the neighbour writes the link header into it.  The retry
+  strip fix is unchanged.  Considered comments from Sashiko (nipa).
+- patches 2 and 3 are unchanged; this resend is for patch 1.
+- patch 2 adds Kuniyuki Iwashima in its Cc set (nipa CI).
+
+Changes v3 -> v4:
+- patch 1, no code changes. Reviewed-by from Simon Horman stays, and a
+  Link to the review of the v3 posting is added.
+- patch 2 is new: the net/core/neighbour.c hunk of the v3 patch 2 is split
+  out into its own fix, with the neighbour maintainers Cc'd.  Asked for on
+  the v3 posting by Jakub.
+- patch 3 is the v3 patch 2 with that hunk removed; the sch_teql change is
+  unchanged in approach. Reviewed-by from Simon Horman stays.
+
+Changes v2 -> v3:
+- patch 1, no code changes.
+- patch 2 corrects the conditions to recreate the bug: reaching a freed
+  master needs sch_teql built as a module, the slave qdisc removed and the
+  module unloaded while the skb still waits.  The message now says which
+  part of it reproduces without the unload, and names the neighbour failure
+  path that drains the same parked skb.  Considered comments from
+  Sashiko (nipa).
+
+Changes v1 -> v2:
+- patch 1, no code changes.
+- patch 2 limits the reinjection restore to a top-level neighbour whose
+  device has no header_ops, the shaper/eql/sch_teql class.  Commit message
+  also describes how a master is freed.  Considered comments from
+  Sashiko (nipa) and Sashiko (gemini).
+
+Jamal Hadi Salim (3):
+  net/sched: sch_teql: unshare the header before writing and fix retry
+    strip
+  net: neighbour: reinject a parked skb through a headerless output
+    device
+  net/sched: sch_teql: keep skb->dev consistent on the arp-queue path
+
+ net/core/neighbour.c |  3 +++
+ net/sched/sch_teql.c | 27 +++++++++++++++++++++------
+ 2 files changed, 29 insertions(+), 6 deletions(-)
+
+Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
