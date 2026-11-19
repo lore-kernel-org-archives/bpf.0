@@ -1,102 +1,52 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.242.206.163
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795050671;
-	b=QPjwdRjnIMVXwtHEesnigFznW/hKjocm+4mXSkX9RY2bwzpWXjnOjejZfaQB38fYX2Z/
-	 tg6OP/h/1M20q7IBP7/h0yWegxpysLgsGLQVyN6z0/vaF6TfdYZlQbTCA+HgDpp9xJcW4
-	 2rl5dlGgi2MWLIw2sI0gB+Bq4mdm5Ie2IkMjhFjRUg8/hI9MzRkNTC64s9AKcCJzvEtVJ
-	 +YtwaPsiKdnax5nwlqatrNEleTthPzPxu5RT1vu2rCdMrSHanomfC7HLBC2LrLLaFsThc
-	 zWaked7ohQGyHX0PALnQlQRUTag8R2huZMM6SWBnsCMdUZHMyHql53Yx8zwRHncDN2g==
+	t=1795050692;
+	b=pCbkctgkFH0HRB+ubNhLysyS/y6c4YWsa3kOiPj1c8DY96uaUcUHAFatQrteZWhKS9hX
+	 gcPi8zVfD6XSh5kX8wgVuYuauQhGTUYvXyG6kM/CVCD5pr2oYnGgtgGXse8Bzg/CwVdnb
+	 kBWxwaRXdZo643ojzsY4ttPEnPI6DVpgqFqwGyk/EB25sl+Jc8PgnKbW1Kkv/U/uiQToN
+	 kzURHUdcqMo9gZHYFW+3kg+imnjjDbpP+FaiyxJI1nep3scdbQL6CGyyxrOE8JdhKdn7z
+	 T+ADvYf5DcEHWU2fKqHSZ/X85Hl+hvWFGZU+G3PpfKqF9w/hQNeWwVstboFd/dY8RPw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795050671;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:To:Cc:Subject:From:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=pSkuji4kXwZcd1ydna+oHa+tnDhj558qTFgbXnb/qHI=;
-	b=vOrl/ReCAZc9bcQZLaf6B1cmWOFlk6sQx+dmfU1aOjLRGh2bPU8u7mO0WF5MJKX0/TCP
-	 KL/d/JhBHl0fQvuetxMbJFN9IXl7KHE80qUcOpbRSiTs0mPMbv9OvGrjIyVMglh0dpM8B
-	 GfFkfVBsgrcGmLJm9YmdYTPzem+VEkGAxUSagvRqrWWzjNQTELyLF4cQ5Djq97BXzgJ1m
-	 kPIu8F2Iqis3xGLyHFnvJ+NOYW59p0L9XS/1Gjs1m14SylOazRScpKzwUJA4tlZ9yQMwU
-	 tAnxhwEvqec+dRZVI0PW1mQTlGLpkeVNMzEb8rd0+eBNhzc4RdF0oVz2o2TLL9sjHrw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795050692;
+	h=DMARC-Filter:Received:Received:Subject:To:Cc:References:From:
+	 Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:Content-Type:
+	 Content-Language:Content-Transfer-Encoding:X-CM-TRANSID:
+	 X-CM-SenderInfo:X-Coremail-Antispam;
+	bh=dqweL7BsG9XRQRfrzEERF8eiQCXHDKK+nX4SLZICRgY=;
+	b=PMYNsb0Fx8bGyWkFGTPMzil35c6AjnP73U44v5KnuNOEukjFpmwLi5xFUIJZHup8IyNN
+	 XeGbRUibDNIk5dgPx90X2hO+an9s6g2W9LdTS2YL1lyKWciroQOjMbnQIvPyHu5+wfZXL
+	 bYuYY9d1hK0rFYyANX3wyhMdM8T33i1mEn13KRU5e67BrUHDZm886+8TkAU6+qa49Hfug
+	 JNcy/cYSt9m+y78V99pKMimpCEAA7RFQydlfUmOzxRKHa+VMtF4hf77M4QUXMmDjjmtgB
+	 OL4VMBZhpwo15tq3v+FpJO7lBRig6ubLFh+7OTFJ6sEvVvF6mtb+PhSmhBAPSjijRxg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=AQxjWr92;
-	arc=none smtp.remote-ip=209.85.216.51
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96EFC606A320
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 01:11:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 96EFC606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=AQxjWr92
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3adac5b29ebso1072443a91.2
-        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 17:11:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795050670; x=1795655470; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=pSkuji4kXwZcd1ydna+oHa+tnDhj558qTFgbXnb/qHI=;
-        b=AQxjWr92FxP60mndSKV1WTxMvlLowBCe4ISf1KUb5lLrWmFDGKOqW+rvkah8HZubyT
-         xmx6n2ONUy5IOJNNxTrL91ftGOtwfB1sWkrm06UxgLyrLdHYWG7i/evZhXDs2j3wm0S4
-         L2/kS8SMInAdFLQOYw5m219eN9iMe/ALzLEZRZ9mzRti9mbEFfMj/hrQMBFR1eoy2op/
-         D5A80+nsjMEDab9wzjTy3BhVjDZbyxNs1wEgLVlN83T+ngwRY+FNpSe8bl/PdZFGHWB9
-         RqCy4BfRqoZJemQ0BRqZAmRaWIvwTnzgWA24Cs1qZkIfMyvmnUeYw50P0z2oABLVlTwy
-         ZvXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795050670; x=1795655470;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=pSkuji4kXwZcd1ydna+oHa+tnDhj558qTFgbXnb/qHI=;
-        b=2Iy0GSG+7G4TydIFeZGHUY2yD/Ir6ogFkab5UKh7RZ0Lsbem+ZP/lknBB1JC1bddGz
-         35JN8loOrVGs9HsNkf+fhA1ukXFXoLoAAMVD5wwHZX5mUwn9ujW2vtISoNKJpoivHm9b
-         cbXwUSuuSNPUaKw+C+Q8VxEP1eEikelM1i+9kdPcz05Tyjrsg1vl9DvLwyAheHq8P4Pi
-         FW7ZU0+W4LLuhR4b7Waczx+X3Hn3oCpvnIzySO4O3zuJNXR7wo5Gf4vABCpcZvOnVqv5
-         e/1iRJ/9Pul3A/6Ukm5yyQ5ejoiGZyKEd7NldAbAnG9sg2R+Je+BQMy7F8Z4iFaMbtl9
-         jTPw==
-X-Forwarded-Encrypted: i=1; AL+hErE3z3Dke+ZYzjrJ/HQyA4fTAzF+WcfQOBYfL9dNfvhbI5pjiuG4PghAITcRkncGuNuajCQ=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9Z3BvhpuXogYmKcEWTOREz8XNM1PEahN8Ue7I5pC38mEogA5Dn
-	2bW6iDTBkwK50ltP3MnO9h88MuXG72pIoiDOsLKkdYbWEo2wm/JEFUBR
-X-Gm-Gg: AZFdTZfnHEX/IUKnCAJEFJ/KOm4l7SIvM1/Anv0CV+yEEQXYoztZAsbzIFsASYYu0Bw
-	BjMyeXtkdsF9QlGiJDF86qAsFmN5G/pqt2akc6acP9FvFnMl2FKPMJzTufxQ1TqxfjHw2F33RW8
-	rql17KKZOQYpBK5mQc7CzOo/9Ddny9D0z1a6R250zzf9UZ+4biWgakJD1m7sImEDSr1jcsfgiiI
-	YcOlu8GAgAb1rqa1csFzJ5W+AQr5+KGfOEf1ulWSiZqlOBFcUas7HkcZsc/6M7Wxke3GCI4marO
-	AdICWl97ly6JRinbZnhynOVmD+9+ciO53X4oNZebEj31gYpboPfONnkjrJkVUGWqpo39TmgHtN7
-	VKiHfsDxrnKz8W7R5N2slqopNnoRxclfuLBD5wnYRVlydhr+8QI3K6cPWte+nuq1lg9nbDN62Gw
-	cegNrzEbs12YiLqQo1Qmtu2FeA/97OFgWVQjaWwqxjbumugq8hC8nB03bUFFVoUkqshPnhaozhE
-	4suhpSry4fsuIygby0WQMtwhay8OPKFxHjKFalhRa7OcDaGnjl2XP8BuiEu4iuSovLduSFS8LgW
-	kpoJKGweqRdlNzvy0DiPdKU6dW5KgoSITvXnODws101ZzV7X/rgfydVb4Frm5thMWZMZbwoWtZk
-	cstoUbVBelvWBxWpo2uHtv+dEETCaeYpVaOew
-X-Received: by 2002:a17:90b:4fc1:b0:3b0:9a0d:b825 with SMTP id 98e67ed59e1d1-3b3d07ab104mr4002171a91.45.1795050669692;
-        Wed, 18 Nov 2026 17:11:09 -0800 (PST)
-Received: from localhost ([153.61.198.249])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b3fdf456d2sm650359a91.13.2026.11.18.17.11.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Nov 2026 17:11:09 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 19 Nov 2026 01:11:08 +0000
-Message-Id: <DMYSCT1OYI5F.2HSYP9MZ2BRJU@gmail.com>
-To: "Maciej Fijalkowski" <maciej.fijalkowski@intel.com>,
- <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
-Cc: <kuba@kernel.org>, <daniel@iogearbox.net>, <pabeni@redhat.com>,
- <edumazet@kernel.org>, <horms@kernel.org>, <davem@davemloft.net>,
- <shuah@kernel.org>, <hawk@kernel.org>, <john.fastabend@gmail.com>,
- <sdf@fomichev.me>, <willemb@google.com>, <petrm@nvidia.com>,
- <bjorn@kernel.org>, <magnus.karlsson@intel.com>,
- <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next] selftests: net: don't warn when bpftool is
- missing
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-In-Reply-To: <20261118165338.1064930-1-maciej.fijalkowski@intel.com>
-References: <20261118165338.1064930-1-maciej.fijalkowski@intel.com>
-Content-Transfer-Encoding: 8bit
+	dmarc=none header.from=loongson.cn;
+	spf=pass smtp.mailfrom=loongson.cn;
+	arc=none smtp.remote-ip=114.242.206.163
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9709B606A31C;
+	Thu, 19 Nov 2026 01:11:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9709B606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [123.138.236.242])
+	by gateway (Coremail) with SMTP id _____8DxTNK+TP5qFwAhAA--.28957S3;
+	Thu, 19 Nov 2026 09:11:26 +0800 (CST)
+Received: from [127.0.0.1] (unknown [123.138.236.242])
+	by front1 (Coremail) with SMTP id qMiowJCx9cy7TP5qNr41AA--.14754S2;
+	Thu, 19 Nov 2026 09:11:25 +0800 (CST)
+Subject: Re: [PATCH v2] LoongArch: BPF: Fix the offset of stptr.w and stptr.d
+ stores
+To: Huacai Chen <chenhuacai@kernel.org>, George Guo <dongtai.guo@linux.dev>
+Cc: hengqi.chen@gmail.com, guodongtai@kylinos.cn, bpf@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org
+References: <20261118071444.10258-1-dongtai.guo@linux.dev>
+ <CAAhV-H4TNuXk60LyzZhFwQTfNtdzLEFQTwS84u3ZMQ6b=8S0NA@mail.gmail.com>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <0f79389b-ceb3-8c2f-16bb-1111ac40fc43@loongson.cn>
+Date: Thu, 19 Nov 2026 09:11:23 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -106,15 +56,62 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+In-Reply-To: <CAAhV-H4TNuXk60LyzZhFwQTfNtdzLEFQTwS84u3ZMQ6b=8S0NA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJCx9cy7TP5qNr41AA--.14754S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7WrW5XryxZry8ZFWUKFy8Zwc_yoW8Jw4kpw
+	4DKw4SyrykArZ3twnxXwn5J3WIyw45Kr45WrW3t34DAw15WFyIgFyxKFW5Kay5XrZ5Zw1U
+	ZFWxtw1xua9xJacCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUBjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
+	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWU
+	AwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
+	k0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_
+	Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67
+	AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8I
+	cVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI
+	8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v2
+	6r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jepB-UUUUU=
 
-On Wed, Nov 18, 2026 at 08:53 AM Maciej Fijalkowski <maciej.fijalkowski@intel.com> wrote:
-> Based on the bpf-net-xsk-move tag so it can go to net-next and bpf-next
-> through another shared branch, as Alexei asked:
+On 11/18/26 7:59 PM, Huacai Chen wrote:
+> On Wed, Nov 18, 2026 at 3:15 PM George Guo <dongtai.guo@linux.dev> wrote:
+>>
+>> From: George Guo <guodongtai@kylinos.cn>
+>>
+>> When testing bpf selftests "jit_insns" and "jit_insns_blinded", the
+>> "ldst_offsets" subtest fails for word and doubleword stores:
 
-Acked-by: Alexei Starovoitov <ast@kernel.org>
+...
 
-Thanks for the quick fix.
+>>   #define is_signed_imm12(val)   signed_imm_check(val, 12)
+>> -#define is_signed_imm14(val)   signed_imm_check(val, 14)
+> Is there instructions really take a 14bit imm (not something like
+> ldptr.d/stptr.d)?
+> If yes, I suggest keeping is_signed_imm14() because maybe we need it in future.
 
-Jakub,
-could you make another stable branch to pull?
+According to the LoongArch Reference Manual, there are 8 instructions
+in total that take a 14-bit signed immediate (si14):
+ldptr.{w,d}, stptr.{w,d}, ll.{w,d}, and sc.{w,d}.
+
+All of them implicitly shift si14 left by 2 bits when calculating the
+virtual address (vaddr = GR[rj] + SignExtend({si14, 2'b0}, GRLEN)),
+so none of them take an unscaled 14-bit immediate directly.
+
+In the JIT, byte offsets for all these instructions should be validated
+with is_aligned_signed_imm16() and encoded as (off >> 2). Removing the
+unused is_signed_imm14() macro also helps prevent similar misuse in the
+future.
+
+So there is no need to keep is_signed_imm14(), and v2 should be good
+to go.
+
+Thanks,
+Tiezhu
 
