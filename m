@@ -1,103 +1,106 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795055600;
-	b=Txm6+JOF72sjBiWrwAZ55+lqmWiP4s4SSomH8MbrQPK9MKTGPpM3OfAwAup3hEz8bXTc
-	 1dWyr36ZQh8QrovR9lxTXVX4emFj8uoq3o1DqP/NBQ4hwxuF3Pk+BuFf03KDrOtNesqo4
-	 8i5oYO1M/EZH7ciPErQ5aWbRGRQE1ru623VIs/iNLv4ryXQDUvdJV7CFTf3NstVjsFKu/
-	 R00fjGBsgL9amCUQH6Zb0NutdYEi5Ex61dpVnyApDItr7RIjFPMDFSrqd79ZybCvd9hU6
-	 T/wbrR0mFJph4rCJ4re2JvsgCvMLoe4FqJtjjVqjwJXGN10DOU1vprDpP6oT3UOxRuA==
+	t=1795056132;
+	b=GH++eyPBM2y2wOd7yRfdcTOw1QaODim+pif9/zZ8pfzuV08yBqTMnAo0J+Df8rDtXOTx
+	 w/h+8KQPuKqi5KTelGFBWTaYxSNBa7wCwoIaY0dnVbMtULxCcANjzV57oW8denC3LNWfo
+	 uPYtYoeyjKAp0m1ixlbfLFan2M7dL5W9T+618VKiaMMpvErgA40nmmdEFEmZd7/yQmMxD
+	 be1DpZjL/kLwZCPL8G25OPVLC4a2FBbss6k/VTTvr9u27dtOZ5YU5i/+7ieqZKnlXZ7OS
+	 K26prCwX4i2HcaOObQPZu0zooFjV9w/Q6Cns9sYoYPoYHOe93/h/rZqWS5stdNSo2yw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795055600;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795056132;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=eSTQlcfr7aWNzCzMGv98ZXpMo4wDZ/dh6OvhB6AdnV8=;
-	b=TBs7jMCjrLK92vWEoiteEOD0pyxMDP54qFLJinGnHCH53nUvtUqTCV/7R+ZjiuIWaEg1
-	 jji3Jf9S6OPtpRJbYCu7m8ED2dreEviY1vJ5qUfygOZs4Mem+8ggz0VVc57RwYtixsfhr
-	 apR5LLg/9VBDeQsE1UMpafLvGzzgsi6quDygDl6RHhmA+q3eFmsKkeqZviAiak3HIRdkO
-	 dRBt0/Huh6gxYsEhyzPmK5MbHjcTupaq3B3xbt6kR0hPBT2bHuEFFhGqldm0uO9IvJCzy
-	 9GSySfF1PpRb7iADpKKf9wfxmQjhw2MgsvhB5uxska20c2CUIWH3dm6aDkQzeEx0tCg==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=H24Hjyj0HAmg9z6gZ8R4LHzeA++oJhSf0CGyWDhP9AU=;
+	b=0DlLrK0+hjPKVAtHsnN7sapmzRR9+LmyAaKEOBtxXxM6nDP1l36xsN5DcaUge21yt/id
+	 wCo4SeYhbJZ/ZqD5INYE+BVb9Gs0USwWhCb5zf8i4ZmHRL0R/O2mRQD4F4FNycfkxVxzH
+	 RBM/LvfftAbrn88GbaSoXU5v9f9E31u0+kKtJXIFvI3QmArQdOuh6sayEfOg593EaW2kd
+	 BwAwGsHsCEk1EBJgaYGPEPv6QBw1BRGJkkRgGIdKmssKWWg2YgMcqmqvuCPQc2cSuDdeL
+	 Ihw2ekBaW7hvQIHxx/iavcLbwl5z7+kzEfiWNx8SyI8O4BIWIEiYvpcmJdAGnzLtnQw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=CLB0O+sz;
-	arc=none smtp.remote-ip=74.125.82.173
-Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
+	dmarc=pass header.from=nebusec.ai;
+	spf=pass smtp.mailfrom=nebusec.ai;
+	dkim=pass header.d=nebusec.ai header.i=@nebusec.ai header.a=rsa-sha256 header.s=google header.b="Jo9k/M6K";
+	arc=none smtp.remote-ip=209.85.216.50
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB506606A335
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 02:33:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AB506606A335
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E1FC606A320
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 02:42:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2E1FC606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nebusec.ai
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nebusec.ai
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=CLB0O+sz
-Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-38431138772so419457eec.1
-        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 18:33:16 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=nebusec.ai header.i=@nebusec.ai header.a=rsa-sha256 header.s=google header.b=Jo9k/M6K
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3b3e85baf7cso654948a91.0
+        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 18:42:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795055596; x=1795660396; darn=vger.kernel.org;
+        d=nebusec.ai; s=google; t=1795056131; x=1795660931; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=eSTQlcfr7aWNzCzMGv98ZXpMo4wDZ/dh6OvhB6AdnV8=;
-        b=CLB0O+szDPkso7maJprAP7ev252n/nLU/zhtaiCLqSUlcfPgkeu+iK6RpQ3nDtG1bv
-         SybxS4LFZBlhQVBD1Y2hVskqA/84SebLzWneh57V0vKkb7pkALV9GyCRBnm8afbEBrfG
-         gcopIjampdhgrlPL3pnXrW+AVOiNPOFrkjUlgAfFQz2mSCIfXtwekITaJNLTX4HfwEJd
-         rJrPy8fMHaEDg/MuxA3gm6YI+B5Bgg2mNcGbUDMATfC5fjlPAubTGs2Uq8cOzBnwTDQg
-         dgPa0kfXpGRrM1I9IYST/6a66cslZVCqQKK05O+tRKTEwpgf7EpPY0lLXnW1cNYQ36sF
-         JTHw==
+        bh=H24Hjyj0HAmg9z6gZ8R4LHzeA++oJhSf0CGyWDhP9AU=;
+        b=Jo9k/M6Ky4tITSrJav5dsKkKA5spuctkf/k8y6kYqot4E3tJwZ9xK/7l0BzhXf9hFi
+         0R7x8rm6M0/pSxFt4Xr9VNr6mE9JkzO4ldOX5KMvV3aU5680riMmylNg1wFRu/+zYGLQ
+         AhYm4dFikbWM3UqlHf6Xf4PmM4f0adhyRT68UxYkbzhvdyJpgY8tJUIacGNDdu1YC+mh
+         bxdDnru5w8oH0uaJ9FC/bBqtrOwQZj4XMtCYey8XoUbjK2LvUyREqv3ohaKQDRUP9Xbi
+         FE05dD5jlycb8VnRcnebVaeAYLt+pBU9OM1UJlsI7wOsKuZURJ7AElc9tRoVIlYbu05+
+         PR5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795055596; x=1795660396;
+        d=1e100.net; s=20260707; t=1795056131; x=1795660931;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=eSTQlcfr7aWNzCzMGv98ZXpMo4wDZ/dh6OvhB6AdnV8=;
-        b=1o3DycodOtRsZcPIZbEDmklAwa31rWMZtogdTeq0lrZUtSMsEUCOIMemMMgHdwYrk4
-         XJjQy216jKFVH3DO3DoKver1ScrS96H7crkZ4eI7XqnfC58N2TMsZ+wlHVp8+/8je/o2
-         Uc7dIBLC4ugN9cwaNdoVZbIE+eaAvx8vCviXRYR7O2FV1OYs5tLn3vfe0XkPTkz85Eck
-         J0OYqCBcNNBQSO85WkmmKhy9KsAErNkUa5c7QwJSr3SpHetcilwoqW5rFNZjNPJkbpqQ
-         xXd/3x8qakVQqZDCz5d4wXv+xTDjfxclu+tmrVuhWVx8jRx9H2IvDtfpt0+OzrfBxCv4
-         Bg+Q==
-X-Forwarded-Encrypted: i=1; AL+hErGdD3Ry8LovwQsV8lkQU6Sk9TpVKGUNxiFX5OJe7BQ2/Uwp3YTEmLJPAukKusRqQHCZHV8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+UC+t54bnBSqRycxX6jGfjccjP7eUtjgNZerS/v6LOQrGuWQZf
-	tChkzH2oxr4Rz+r7js5vZmEe+SejgqkqfjFMIXVJ84RNeLMDIORkgNmW
-X-Gm-Gg: AZFdTZfvabah1WJqKRPaVuUHZMzLqJVpa9YobJnDAkTvJWj2Ru0balo4kL/5sAXRnqu
-	djXanyiTDx/H6yEKlgjtsrD6iMDN1dcsir9GabgW7qV8TciLWv7/D0bBbUfeKS7GjZiOleUZP1N
-	Rw/C8JYw2/I3F/9hnDLt9IKZcrV3DMT0TipRfnfsiXalBxcFVtO/80fv1yTCjlEKLPsl6fbgVH4
-	4p2k7m7Jgob5/j/yTbIBpJmHGWEszXUGw2mKBkVgp5xIveF5E5tKdE/kfmgbCbziH6KnlymkKUl
-	aHOok5TfC7DsHkRUTgI96KbAiIidYov6JnoYQxc9L/bT5dFgKB/hIe0FYlhcAq6Y38wNJEn3h5Z
-	rnTfZpKDgGfzvbyNhPNZDS4RN7E3gILNE6eySS3fP5+1R3ufwpNECCZxAcZt+EihjQUfV+ZeiJY
-	5aJ8JgZWY9kDc/OMOTX/4iwJpjpYgFOiPJI+VnEQxB1rPq3n8VDuaBg2pA3lcywtbW2R6RGQZTq
-	ZA5S4pHII8d+M4rbpMcH7JChXuy7C8rGuqfjamxolVLvn+T09FkTuwDoU1YFGXT81ixxrPsrj+e
-	aMyN8Leu5gxp7smr1i+UiGdsV1AGinqHmCGjRiArXRr9xOsyFHujjN4Y+MMcOKS3VEk0XyDdoNJ
-	zewN9iQXn8+HEM6HUjmmIO4S3wVTAkLINFYugjiiOro4MZO+7gNCplFBHCz48y2EqPJCBvBz5ux
-	gL86F4u/n6RomRHqvJh5U98kfxE6PZbaIH+Y3tGBIctI9DXBeDK4pFaykyEHpBs0NJuwPbkuQWl
-	p1jcpEPR4dP
-X-Received: by 2002:a05:693c:804c:b0:378:2e89:3958 with SMTP id 5a478bee46e88-38280f22793mr3994461eec.19.1795055595568;
-        Wed, 18 Nov 2026 18:33:15 -0800 (PST)
-Received: from FT6N242TWK ([223.181.117.48])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-382a6df02adsm13110627eec.14.2026.11.18.18.33.11
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 18 Nov 2026 18:33:15 -0800 (PST)
-From: Shashank Mohan Jain <jain.sm@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v3] rqspinlock: Keep claiming the lock while the queue head is still the tail
-Date: Thu, 19 Nov 2026 08:03:07 +0530
-Message-ID: <20261119023307.65178-1-jain.sm@gmail.com>
-X-Mailer: git-send-email 2.54.0
+        bh=H24Hjyj0HAmg9z6gZ8R4LHzeA++oJhSf0CGyWDhP9AU=;
+        b=a+97cY9x8AGxG51fbDeYgTgGZOH+1/ozvPMLOPKoj73LkoNQ/ktuMvftkD0+RQjodd
+         Qod66sM81VMuIn+mGujBHDcs/lV9lrQUozYD7k0cdI/rLw1k7P0iWoTEk+TC01Yao/jj
+         CABYd3B62PmL+/gQ6R6DpPZV1WQ3hCxVayZyP8ufGuY5rwi0oCVEyPhQHI/p4xFVV0Um
+         FL9H24zyf2wyNUmciWDnPf0dQ6FwbUYdNBRewqCzUNiqieTvsVWpxrjR5ToSUqYfaV+R
+         0fRjmvdzYOU4rj7deRWe8Vca7gYqjq9gswvTTebjHpDz+hw8dyoGz/SyBwUieMoFjFFt
+         ddAw==
+X-Gm-Message-State: APuU4Z8rQlaxhBtEHovQbBIDhuV5Yq1wjnxQ8EFKVdT+NQBgX4SKXB2n
+	M1xbKf5/XUmDJ5qjTsxwvVBhmZ23LqKVVnhBAmW116m7uacwgTvZmqkXEZ7YO7J0ErecJn37nr8
+	mm8+zig==
+X-Gm-Gg: AZFdTZeXCrcZnqOKgTbf53e+RxZK2ZoM4ezfQbr0eCMv9055pXBgDvYYYlKr7LmX8Dx
+	1nUI59IgDWTwe+dj2w3fUf5Z80bfOVth66pJyY2Z+4uiKvmDbZgaUyhmFp4WGGesuLeNJ4Kehz+
+	mjg36XalsN/HPQ1q+LbZdZn0ZID7tMOUeT0EYc1I991BMwoJe07NlZmSyH5lhJu+gILTGICcQ5N
+	4u66YOFKnhOjHzptTKjAdHE1R9l4DtaEcdvOS7nxehDZdrFReGnckiBttkwdSs8n5/KLDzs/3P8
+	lLlc9rwlbAIjbY38JkwgyX79P0rdCPN9QwHoaDLHT2LgM08aSQrkvMuqEDW6uaAimcseOV3mmsg
+	zlAc9hjptlafHWK8lHnLhLqC8yAgd8rsyIqhIo+YOcsQ3JQAjuUl4esgEO6cGGckucLU6WXCg9L
+	2YQ/Sv2GWS+K1/YcVIogBu9xBXBA8hdCSedz/y6cDoMwjeM/9vlkT6Cu7pm2k7Pvcxqm0/gA+qa
+	VoXyjIFFcmgdobW8xNceLo0/Wksd54DiHbaV5S/Q+0VI4f6rrWs9X597jng7xXNFx5N7wILxdGH
+	McBqQAR1dlofkHDUXmMJFsMXdDIEGmNIzHMD
+X-Received: by 2002:a17:90b:1a8d:b0:3b3:bb55:d9c with SMTP id 98e67ed59e1d1-3b3d0641333mr4513441a91.2.1795056131295;
+        Wed, 18 Nov 2026 18:42:11 -0800 (PST)
+Received: from enjou-Legion-Y7000P-2019 ([74.52.12.168])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b4028576e5sm242879a91.2.2026.11.18.18.42.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Nov 2026 18:42:10 -0800 (PST)
+From: Ren Wei <weir@nebusec.ai>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	revest@chromium.org,
+	dingyihan@uniontech.com,
+	bigeasy@linutronix.de,
+	paul.chaignon@gmail.com,
+	vega@nebusec.ai,
+	sashiko-bot@kernel.org,
+	rakukuip@gmail.com,
+	weir@nebusec.ai
+Subject: [PATCH bpf 0/2] bpf: Fix scratch buffer cursor overflow in bpf_bprintf_prepare()
+Date: Thu, 19 Nov 2026 10:42:01 +0800
+Message-ID: <cover.1794974103.git.rakukuip@gmail.com>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -109,153 +112,372 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+From: Luxiao Xu <rakukuip@gmail.com>
 
-When the head of the wait queue claims the lock and its cmpxchg from
-n,0,0 to 0,0,1 fails, it sets the locked bit and waits for node->next,
-with no timeout. The comment, taken from qspinlock, says the cmpxchg
-can only fail if somebody queued behind us, or if a waiter set PENDING,
-which will then see our tail and queue behind us.
+Hi Linux kernel maintainers,
 
-In rqspinlock that waiter does not always queue. After clear_pending()
-it goes to queue:, and two paths return -EDEADLK there before
-xchg_tail():
+We found and validated an issue in kernel/bpf/helpers.c affecting
+bpf_bprintf_prepare() and all BPF formatted-output helpers that rely on
+it (bpf_snprintf(), bpf_trace_printk(), bpf_trace_vprintk(),
+bpf_seq_printf(), bpf_stream_vprintk(), and scx_bpf_exit_bstr()).
 
- - the trylock fallback for an NMI waiter whose per-CPU node is busy
-   (in_nmi() && idx > 0), or when idx >= _Q_MAX_NODES;
- - check_deadlock_AA(), when this CPU already holds an entry for the
-   lock.
+This bug is tracked at: https://bugtracker.nebusec.ai/f/15629
 
-For example, with the queue head H alone in the queue:
+Privilege requirements & reachability:
+In our validation environment, unprivileged BPF is disabled at runtime
+(kernel.unprivileged_bpf_disabled = 2). Loading the BPF raw tracepoint
+program (SEC("raw_tp/sys_enter")) fails with EPERM (-1) for unprivileged
+users (test_user) and requires root (UID 0) / CAP_BPF + CAP_PERFMON.
+The reproducer therefore runs under UID 0.
 
-  CPU 0 (H, head)                    CPU 1 (NMI, idx 1 on another lock)
-  reads lock->val == H,0,0
-                                     queued_fetch_set_pending_acquire()
-                                       sees tail H
-  try_cmpxchg(H,0,0 -> 0,0,1) fails
-  set_locked()          -> H,1,1
-                                     clear_pending()   -> H,0,1
-                                     in_nmi() && idx > 0, trylock fails
-                                     return -EDEADLK
-  waits for node->next ...
+Impact boundary (vulnerability & fix scope):
+1. Vulnerability impact:
+   When %pB or %pI4/%pI6 truncates in the 512-byte per-CPU bin_args
+   scratch buffer, bpf_bprintf_prepare() advances tmp_buf by (err + 1)
+   using the full untruncated length returned by snprintf(). Once
+   tmp_buf moves past tmp_buf_end, subsequent specifiers compute a
+   negative signed difference (tmp_buf_end - tmp_buf), which converts
+   to a large unsigned size_t in later bounds checks and snprintf()
+   calls. Follow-on specifiers can write past bin_args into adjacent
+   per-CPU bpf_bprintf_buffers storage and trigger WARN_ON_ONCE(size >
+   INT_MAX) in vsnprintf() (panicking when panic_on_warn=1).
 
-H now owns the lock and spins until another context queues on the same
-lock. For a lock that is rarely taken, such as a hash map bucket lock,
-that can be a long time, with interrupts disabled. The same happens on
-v6.17 and v6.18 for any NMI waiter, as the trylock fallback was used
-for all of them. The AA path needs the interrupted context to have
-taken its entry for the lock and not to try the lock again, so it is
-much narrower.
+2. Effect of the fix on non-target paths and all callers:
+   - Load-time format verification (kernel/bpf/verifier.c:
+     check_bpf_snprintf_call(), where data->get_bin_args is false and
+     tmp_buf is NULL): completely unaffected. Both %pB and %pI4/%pI6
+     only execute the snprintf() bounds checks when tmp_buf is non-NULL.
+   - Valid in-bounds %pB / %pI4 / %pi4 / %pI6 / %pi6 calls: unchanged.
+     The MAX_BPRINTF_BIN_ARGS (512-byte) buffer capacity is unchanged.
+     Whenever the formatted string plus NUL fits within the remaining
+     space (err < tmp_buf_end - tmp_buf), execution produces the exact
+     same bin_args layout and formatted output as before.
+   - Truncated %pB / %pI4 / %pi4 / %pI6 / %pi6 calls: instead of
+     advancing tmp_buf past tmp_buf_end and leaving inconsistent cursor
+     state, bpf_bprintf_prepare() now returns -ENOSPC immediately and
+     releases the per-CPU buffers via bpf_bprintf_cleanup() at out:.
+     (Note: %pI4/%pI6 already returned -ENOSPC when fewer than 4 or 16
+     bytes remained.)
+   - Other format specifiers (%s/%pks/%pus, %c, integers, plain/symbol
+     pointers %p/%pK/%px/%ps/%pS): semantics are unchanged. %s continues
+     to use bpf_trace_copy_string(), which safely bounds copies to
+     tmp_buf_end - tmp_buf. Casting sizeof_cur_ip and sizeof_cur_arg to
+     ptrdiff_t in the remaining-space checks is a no-op whenever
+     tmp_buf <= tmp_buf_end and prevents signed/unsigned wraparound if a
+     negative pointer difference were ever observed.
+   - Runtime callers (bpf_snprintf(), bpf_trace_printk(),
+     bpf_trace_vprintk(), bpf_seq_printf(), bpf_stream_vprintk(), and
+     scx_bpf_exit_bstr()): all callers already check for negative return
+     values from bpf_bprintf_prepare() and bail out without invoking
+     bstr_printf()/seq_bprintf() or double-calling bpf_bprintf_cleanup().
 
-Only a different tail shows that a waiter did xchg_tail() and will
-link into our node. So retry the claim as long as the tail is ours,
-and keep PENDING, which belongs to the waiter. That waiter either
-clears the bit, or on x86, where queued_fetch_set_pending_acquire() is
-a lock btsl followed by a separate load, it no longer sees our tail and
-becomes the pending waiter behind the new owner. Update the comments
-that described the old claim.
+This patch series resolves the issue in two commits:
+- Patch 1/2 checks whether err >= tmp_buf_end - tmp_buf after snprintf()
+  in both the %pB and %pI4/%pI6 branches of bpf_bprintf_prepare(),
+  returning -ENOSPC when the formatted output does not fit, and casts
+  sizeof_cur_ip and sizeof_cur_arg to ptrdiff_t in remaining-space
+  comparisons to prevent signed/unsigned wraparound.
+- Patch 2/2 adds regression test cases to tools/testing/selftests/bpf
+  (progs/test_snprintf.c and prog_tests/snprintf.c) covering %pi4, %pI6,
+  and %pB scratch buffer overflow and boundary conditions.
 
-Found with a TLA+ model of the slow path. With this change the model
-has no violation in the configurations where the head hangs without
-it (an NMI waiter using the trylock fallback, and the AA bail-out),
-also with the btsl and the load of queued_fetch_set_pending_acquire()
-modelled as two steps on x86; the model reaches the case above where
-the waiter no longer sees the tail. A userspace port of the slow path,
-driven through the interleaving above, hangs without this change and
-completes with the lock word clean with it. I have not reproduced the
-hang on a running kernel.
+=== details below ===
 
-Fixes: 0d80e7f951be ("rqspinlock: Choose trylock fallback for NMI waiters")
-Fixes: 087849cca31d ("rqspinlock: Precede non-head waiter queueing with AA check")
-Reported-by: Shashank Mohan Jain <jain.sm@gmail.com>
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Assisted-by: LLM
-Signed-off-by: Shashank Mohan Jain <jain.sm@gmail.com>
----
-Changes in v3:
-- Kumar's patch with his authorship and Signed-off-by (Alexei).
-  Kumar, please tell me if you would rather send it yourself.
-- Use Alexei's simpler loop (PENDING is 0 on the first pass, so no
-  separate 'new' and no second tail check) and his comment updates,
-  which also cover the two stale comments (Alexei, BPF CI).
-- Checked the x86 case Alexei raised: the model now has the lock btsl
-  and the load of queued_fetch_set_pending_acquire() as two steps. It
-  reaches the window where the head clears the tail between them and the
-  waiter becomes the pending waiter, with no violation; without the fix
-  the head still hangs.
+Bug details:
 
-Changes in v2:
-- Kumar's approach instead of resetting the tail in the wait for next.
-- Target bpf-next, drop Cc: stable (Kumar).
+In bpf_bprintf_prepare(), the %pB and %pI4/%pI6 branches pre-format
+arguments into the 512-byte per-CPU bin_args scratch buffer via
+snprintf(tmp_buf, tmp_buf_end - tmp_buf, ...) and unconditionally advance:
 
-v2: https://lore.kernel.org/all/20261118104758.98620-1-jain.sm@gmail.com/
-v1: https://lore.kernel.org/all/20261117225023.36660-1-jain.sm@gmail.com/
+    tmp_buf += err + 1;
 
-Prepared with Claude Code (Anthropic), model Claude Opus 5.5
-(claude-opus-5-5).
+However:
+1. The %pB branch performs no remaining-space check at all.
+2. The %pI4/%pI6 branch only checks:
 
- kernel/bpf/rqspinlock.c | 35 ++++++++++++++---------------------
- 1 file changed, 14 insertions(+), 21 deletions(-)
+       if (tmp_buf_end - tmp_buf < sizeof_cur_ip)
 
-diff --git a/kernel/bpf/rqspinlock.c b/kernel/bpf/rqspinlock.c
-index 111ec80..14d3798 100644
---- a/kernel/bpf/rqspinlock.c
-+++ b/kernel/bpf/rqspinlock.c
-@@ -378,9 +378,7 @@ int __lockfunc resilient_queued_spin_lock_slowpath(rqspinlock_t *lock, u32 val)
- 	/*
- 	 * If we observe contention, there is a concurrent locker.
- 	 *
--	 * Undo and queue; our setting of PENDING might have made the
--	 * n,0,0 -> 0,0,0 transition fail and it will now be waiting
--	 * on @next to become !NULL.
-+	 * Undo and queue.
- 	 */
- 	if (unlikely(val & ~_Q_LOCKED_MASK)) {
- 
-@@ -616,29 +614,24 @@ waitq_timeout:
- 	/*
- 	 * claim the lock:
- 	 *
--	 * n,0,0 -> 0,0,1 : lock, uncontended
-+	 * n,*,0 -> 0,*,1 : lock, uncontended
- 	 * *,*,0 -> *,*,1 : lock, contended
- 	 *
--	 * If the queue head is the only one in the queue (lock value == tail)
--	 * and nobody is pending, clear the tail code and grab the lock.
--	 * Otherwise, we only need to grab the lock.
--	 */
--
--	/*
--	 * Note: at this point: (val & _Q_PENDING_MASK) == 0, because of the
--	 *       above wait condition, therefore any concurrent setting of
--	 *       PENDING will make the uncontended transition fail.
-+	 * If the queue head is the only one in the queue, clear the tail code
-+	 * and grab the lock. Otherwise, we only need to grab the lock.
-+	 *
-+	 * A waiter that sets PENDING now may leave with -EDEADLK and never
-+	 * queue behind us, so retry as long as the tail is ours. PENDING
-+	 * belongs to that waiter, keep it. It either clears the bit or, on
-+	 * x86, no longer sees our tail and becomes the pending waiter.
- 	 */
--	if ((val & _Q_TAIL_MASK) == tail) {
--		if (atomic_try_cmpxchg_relaxed(&lock->val, &val, _Q_LOCKED_VAL))
--			goto release; /* No contention */
-+	while ((val & _Q_TAIL_MASK) == tail) {
-+		if (atomic_try_cmpxchg_relaxed(&lock->val, &val,
-+					       (val & _Q_PENDING_MASK) | _Q_LOCKED_VAL))
-+			goto release;
- 	}
- 
--	/*
--	 * Either somebody is queued behind us or _Q_PENDING_VAL got set
--	 * which will then detect the remaining tail and queue behind us
--	 * ensuring we'll see a @next.
--	 */
-+	/* Somebody is queued behind us, ensuring we'll see a @next. */
- 	set_locked(lock);
- 
- 	/*
+   where sizeof_cur_ip is 4 or 16 bytes, whereas the formatted IP string
+   is up to 16 bytes for IPv4 or 40 bytes for IPv6 (including NUL).
+
+If snprintf() returns err >= tmp_buf_end - tmp_buf, tmp_buf jumps past
+tmp_buf_end. Subsequent checks (such as tmp_buf_end - tmp_buf <
+sizeof_cur_arg or tmp_buf_end == tmp_buf) either underflow when
+converted to size_t or fail to match, allowing out-of-bounds writes past
+bin_args and causing subsequent snprintf() calls to pass a wrapped size
+to vsnprintf(), hitting WARN_ON_ONCE(size > INT_MAX).
+
+Testing & Validation:
+We validated both the baseline reproduction and the fix in an x86_64
+QEMU guest (2 vCPUs, 2GB RAM, CONFIG_KASAN=y, CONFIG_BPF_EVENTS=y,
+panic_on_warn=0) built from bpf/master (4b4eb7f44ee0).
+
+1. Pre-fix verification:
+   Running poc_warn triggers the cursor overflow across %pI6, %pI4, and
+   %pB, followed by a WARNING in vsnprintf() (size > INT_MAX with
+   R09 = -19 = 0xffffffffffffffed) and out-of-bounds %lld writes:
+   - case=0 (%s 449B + %pI6 + %s): ret=499 tail=present
+   - case=1 (%s 500B + %pI6 + %s): ret=-28 (-ENOSPC, pre-existing <16 check)
+   - case=2 (%s 491B + %pI6 + %pI6): ret=511 + WARNING at lib/vsprintf.c:2875
+   - case=3 (%s 505B + %pi4/%pI4 + %pI4): ret=511
+   - case=4 (%s 505B + %pB + %pB): ret=511
+   - case=5 (%s 491B + %pI6 + %lld): ret=512 (wrote 8B past bin_args)
+
+2. Post-fix verification:
+   - Running poc_warn returns -28 (-ENOSPC) cleanly for cases 1..5 while
+     preserving case=0 (ret=499 tail=present), with zero kernel warnings
+     or KASAN reports in dmesg.
+   - Running the updated snprintf selftest (snprintf_positive and
+     snprintf_negative) passes all assertions with zero dmesg warnings.
+
+3. Style and patch checks:
+   - git diff --check HEAD~2..HEAD: 0 issues
+   - git apply --check on unpatched bpf/master: clean
+   - scripts/checkpatch.pl --strict: 0 errors
+
+=== BEGIN poc_warn.bpf.c ===
+// SPDX-License-Identifier: GPL-2.0
+#include <linux/bpf.h>
+#include <linux/types.h>
+#include <bpf/bpf_helpers.h>
+
+#define CHUNK64 "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+#define CHUNK42 "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+
+extern const void schedule __ksym;
+
+struct res_entry {
+	__s32 ret;
+	char buf[1024];
+};
+
+struct {
+	__uint(type, BPF_MAP_TYPE_ARRAY);
+	__uint(max_entries, 6);
+	__type(key, __u32);
+	__type(value, struct res_entry);
+} results SEC(".maps");
+
+static const char fill_448[] =
+	CHUNK64 CHUNK64 CHUNK64 CHUNK64 CHUNK64 CHUNK64 CHUNK64;
+static const char fill_490[] =
+	CHUNK64 CHUNK64 CHUNK64 CHUNK64 CHUNK64 CHUNK64 CHUNK64 CHUNK42;
+static const char fill_499[] =
+	CHUNK64 CHUNK64 CHUNK64 CHUNK64 CHUNK64 CHUNK64 CHUNK64 "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC";
+static const char fill_504[] =
+	CHUNK64 CHUNK64 CHUNK64 CHUNK64 CHUNK64 CHUNK64 CHUNK64 CHUNK42 "CCCCCCCCCCCCCC";
+static const char tail_str[] = "TAIL_MARKER";
+
+static const unsigned char ip6[16] = {
+	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+};
+static const unsigned char ip4[4] = { 255, 255, 255, 255 };
+
+__u32 target_pid = 0;
+
+SEC("raw_tp/sys_enter")
+int test_bprintf_warn(void *ctx)
+{
+	__u32 pid = bpf_get_current_pid_tgid() >> 32;
+	unsigned long long args[3];
+	struct res_entry *r;
+	__u32 k;
+
+	if (pid != target_pid)
+		return 0;
+
+	/* case 0: control %s (449B) + %pI6 (40B) + %s (12B) = 501B <= 512B */
+	k = 0;
+	r = bpf_map_lookup_elem(&results, &k);
+	if (r) {
+		args[0] = (unsigned long long)(long)fill_448;
+		args[1] = (unsigned long long)(long)ip6;
+		args[2] = (unsigned long long)(long)tail_str;
+		barrier_var(args[0]);
+		r->ret = bpf_snprintf(r->buf, sizeof(r->buf), "%s%pI6%s", args, sizeof(args));
+	}
+
+	/* case 1: %s (500B) + %pI6 (12B left < 16) + %s -> -ENOSPC (-28) */
+	k = 1;
+	r = bpf_map_lookup_elem(&results, &k);
+	if (r) {
+		args[0] = (unsigned long long)(long)fill_499;
+		args[1] = (unsigned long long)(long)ip6;
+		args[2] = (unsigned long long)(long)tail_str;
+		barrier_var(args[0]);
+		r->ret = bpf_snprintf(r->buf, sizeof(r->buf), "%s%pI6%s", args, sizeof(args));
+	}
+
+	/* case 2: %s (491B) + %pI6 (needs 40B, 21B left >= 16 -> jumps past end!) + %pI6 (WARN!) */
+	k = 2;
+	r = bpf_map_lookup_elem(&results, &k);
+	if (r) {
+		args[0] = (unsigned long long)(long)fill_490;
+		args[1] = (unsigned long long)(long)ip6;
+		args[2] = (unsigned long long)(long)ip6;
+		barrier_var(args[0]);
+		r->ret = bpf_snprintf(r->buf, sizeof(r->buf), "%s%pI6%pI6", args, sizeof(args));
+	}
+
+	/* case 3: %s (505B) + %pI4 (needs 16B, 7B left >= 4 -> jumps past end!) + %pI4 (WARN!) */
+	k = 3;
+	r = bpf_map_lookup_elem(&results, &k);
+	if (r) {
+		args[0] = (unsigned long long)(long)fill_504;
+		args[1] = (unsigned long long)(long)ip4;
+		args[2] = (unsigned long long)(long)ip4;
+		barrier_var(args[0]);
+		r->ret = bpf_snprintf(r->buf, sizeof(r->buf), "%s%pI4%pI4", args, sizeof(args));
+	}
+
+	/* case 4: %s (505B) + %pB (7B left -> jumps past end!) + %pB (WARN!) */
+	k = 4;
+	r = bpf_map_lookup_elem(&results, &k);
+	if (r) {
+		args[0] = (unsigned long long)(long)fill_504;
+		args[1] = (unsigned long long)(long)&schedule;
+		args[2] = (unsigned long long)(long)&schedule;
+		barrier_var(args[0]);
+		r->ret = bpf_snprintf(r->buf, sizeof(r->buf), "%s%pB%pB", args, sizeof(args));
+	}
+
+	/* case 5: %s (491B) + %pI6 (21B left -> jumps -19B past end!) + %lld (writes 8B OOB!) */
+	k = 5;
+	r = bpf_map_lookup_elem(&results, &k);
+	if (r) {
+		args[0] = (unsigned long long)(long)fill_490;
+		args[1] = (unsigned long long)(long)ip6;
+		args[2] = 0x1122334455667788ULL;
+		barrier_var(args[0]);
+		r->ret = bpf_snprintf(r->buf, sizeof(r->buf), "%s%pI6%lld", args, sizeof(args));
+	}
+
+	return 0;
+}
+
+char LICENSE[] SEC("license") = "GPL";
+=== END poc_warn.bpf.c ===
+
+=== BEGIN poc_warn.c ===
+// SPDX-License-Identifier: GPL-2.0
+#define _GNU_SOURCE
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/syscall.h>
+#include <unistd.h>
+#include <bpf/bpf.h>
+#include <bpf/libbpf.h>
+
+struct res_entry {
+	int ret;
+	char buf[1024];
+};
+
+int main(int argc, char **argv)
+{
+	const char *obj_path = argc > 1 ? argv[1] : "./poc_warn.bpf.o";
+	struct bpf_object *obj;
+	struct bpf_program *prog;
+	struct bpf_link *link;
+	struct bpf_map *map;
+	int map_fd, key;
+
+	obj = bpf_object__open_file(obj_path, NULL);
+	if (libbpf_get_error(obj)) {
+		fprintf(stderr, "open failed\n");
+		return 1;
+	}
+	if (bpf_object__load(obj)) {
+		fprintf(stderr, "load failed\n");
+		return 1;
+	}
+	map = bpf_object__find_map_by_name(obj, ".bss");
+	if (map) {
+		__u32 zero = 0;
+		__u32 pid = getpid();
+		bpf_map_update_elem(bpf_map__fd(map), &zero, &pid, BPF_ANY);
+	}
+	prog = bpf_object__find_program_by_name(obj, "test_bprintf_warn");
+	link = bpf_program__attach_raw_tracepoint(prog, "sys_enter");
+	if (libbpf_get_error(link)) {
+		fprintf(stderr, "attach failed: %ld\n", libbpf_get_error(link));
+		return 1;
+	}
+	syscall(SYS_getpid);
+	map = bpf_object__find_map_by_name(obj, "results");
+	map_fd = bpf_map__fd(map);
+	for (key = 0; key < 6; key++) {
+		struct res_entry e = {};
+		bpf_map_lookup_elem(map_fd, &key, &e);
+		printf("case=%d ret=%d tail=%s buf=%.32s\n", key, e.ret,
+		       strstr(e.buf, "TAIL_MARKER") ? "present" : "missing", e.buf);
+	}
+	bpf_link__destroy(link);
+	bpf_object__close(obj);
+	return 0;
+}
+=== END poc_warn.c ===
+
+=== BEGIN warning log ===
+[  319.177942] ------------[ cut here ]------------
+[  319.177950] size > INT_MAX
+[  319.177965] WARNING: lib/vsprintf.c:2875 at vsnprintf+0xfab/0x12a0, CPU#1: poc_warn/9504
+[  319.179703] Modules linked in:
+[  319.180253] CPU: 1 UID: 0 PID: 9504 Comm: poc_warn Not tainted 7.4.0-rc1-00171-g4b4eb7f44ee0 #1 PREEMPT(full)
+[  319.181229] Hardware name: QEMU Ubuntu 24.04 PC v2 (i440FX + PIIX, arch_caps fix, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+[  319.182420] RIP: 0010:vsnprintf+0xfab/0x12a0
+[  319.182902] Code: 0f b6 74 24 18 4c 01 6c 24 40 e8 30 a6 01 f6 c7 44 24 74 00 00 00 00 c7 44 24 18 00 00 00 00 e9 15 f8 ff ff e8 16 a6 01 f6 90 <0f> 0b 90 31 db e9 7a f4 ff ff e8 06 a6 01 f6 90 0f 0b 90 bb ff ff
+[  319.184667] RSP: 0018:ffffc9000419fa28 EFLAGS: 00010293
+[  319.185245] RAX: 0000000000000000 RBX: fffff52000833f62 RCX: 0000000000000001
+[  319.185978] RDX: ffff8880262cddc0 RSI: ffffffff8bc3d6da RDI: 0000000000000007
+[  319.186663] RBP: ffffc9000419fb00 R08: 000000007fffffff R09: ffffffffffffffed
+[  319.187387] R10: ffff8880262cddc7 R11: 66663a666666663a R12: ffff88806a932833
+[  319.188128] R13: ffffc9000419fc80 R14: ffffffffffffffed R15: ffff88806a932833
+[  319.189247] FS:  0000000030fad380(0000) GS:ffff8880d62e4000(0000) knlGS:0000000000000000
+[  319.190229] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  319.190858] CR2: 00007fc8691e9000 CR3: 000000004b566000 CR4: 00000000000506f0
+[  319.191797] Call Trace:
+[  319.192173]  <TASK>
+[  319.192444]  ? __pfx_vsnprintf+0x10/0x10
+[  319.192868]  ? __sys_bpf+0x218/0x4b40
+[  319.193272]  ? widen_string+0xdc/0x2d0
+[  319.193742]  snprintf+0xc7/0x100
+[  319.194111]  ? __pfx_snprintf+0x10/0x10
+[  319.194527]  ? string+0x2c1/0x4f0
+[  319.194936]  ? copy_from_kernel_nofault_allowed+0xf8/0x130
+[  319.195514]  bpf_bprintf_prepare+0x1181/0x13e0
+[  319.196009]  ? __pfx_bpf_bprintf_prepare+0x10/0x10
+[  319.196512]  ? __pfx_bstr_printf+0x10/0x10
+[  319.196957]  ? __lock_acquire+0x5a5/0x1f70
+[  319.197434]  bpf_snprintf+0x120/0x1e0
+[  319.197855]  ? __pfx_bpf_snprintf+0x10/0x10
+[  319.198332]  ? lock_acquire+0x1cb/0x370
+[  319.198782]  ? bpf_trace_run2+0x5e4/0xd40
+[  319.199220]  ? bpf_prog_5c039b4ee422ddd3_test_bprintf_warn+0x23c/0x557
+[  319.199981]  bpf_prog_5c039b4ee422ddd3_test_bprintf_warn+0x2b3/0x557
+[  319.200648]  bpf_trace_run2+0x332/0xd40
+[  319.201103]  ? __pfx_bpf_trace_run2+0x10/0x10
+[  319.201594]  ? __might_fault+0xbc/0x130
+[  319.202088]  ? __might_fault+0x103/0x130
+[  319.202519]  trace_syscall_enter+0xad/0x120
+[  319.202964]  do_syscall_64+0x6c7/0x770
+[  319.203374]  entry_SYSCALL_64_after_hwframe+0x77/0x7f
+=== END warning log ===
+
+Best regards,
+Luxiao Xu
+
+Luxiao Xu (2):
+  bpf: Fix scratch buffer cursor overflow in bpf_bprintf_prepare()
+  selftests/bpf: Test bpf_bprintf_prepare() scratch buffer overflow
+
+ kernel/bpf/helpers.c                          | 12 +++++++++--
+ .../selftests/bpf/prog_tests/snprintf.c       |  6 ++++++
+ .../selftests/bpf/progs/test_snprintf.c       | 21 +++++++++++++++++++
+ 3 files changed, 37 insertions(+), 2 deletions(-)
+
 -- 
-2.54.0 (Apple Git-157)
-
-base-commit: 32b66b94c86f009b49668de7340f2ed65aad2dc5
+2.43.0
