@@ -1,63 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795087994;
-	b=X50EGaqL5+XEEECHx21At0O3h0wJCs/2V+wmuJ2+PXmZrmU1i0wfQuvEFaZJJRqiUJlh
-	 ZhYPLPB9z5Z96ftzR3Rvc+CzvrfllZIRf7ofIaXMUZJX505w+LoxiAizmeBfHWUgGZYiF
-	 ie1D1eB6CUiFdjFhxxCfiMvx+HYXzRN7Q9frf3ZT07YTKm9Yims1RRiXo+OEzOgLn2MLj
-	 9aKROflLQKy/++r9RsZCgXnMGQ1/pKOzr9GYafceQXl+LxsSfmTsQqAFO2Y+ktluYOFUw
-	 BLiHhqzuNGEXbWszEuSMeL0AKEKhgY8KRi8axiHb7jeaweuOyn2VoPwHv+ToAryOZuw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795087994;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=3jA+oZ+5iHu+6qDUVQHLEuIm2QvBD2uST/vEYY3WW1M=;
-	b=dFnVYciJaLRTTYyIKgcLneFomYYpv7q+6lbWjImUWqTbZ1uYOXIxRIcdRDtL5LyMl6p0
-	 OL7O/sGORWxsREzCv2csQzLlrKjmVVOw7ItdCqlpZiv6ud6CL4LRXfUMN7zSYdFvus69s
-	 FN3cB85OyeI+9S6zzhXGIZyyTwgQF6rlLvzDSgMR2TxFaRWZUrmKOxPF1UqfTuPdw2yru
-	 Qn3gu4+QrvHFbiwgGlTasIERlojwmS+TrH/4JJe0tbK7p75QvuBXAZIg+Ayqz5EyVKxo2
-	 WMv+rpVQEkqvRfXkaV3db9aOTrslQLibuOqSxPRfMPTghBvy7T/GL8VRhlx0O9soEGQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GURvDvKB;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.170
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795088156;
+	b=Xfaqd3UTZZudG7/8FXr252VuX28VptlAEHU9GmsZq4v+Rrg1Dg8xcj+qWauu6ldPcMg3
+	 yyEnDsBBPjQhQbhNzL0xu3Sf0n3qCwLELMmL66NzEikLQ6IytopkdkGv+06d2H9TX+L5b
+	 5+q/11SYog80IzYoTaEM7ZZHyNRfh/6kQQoOXpQxNL0tsGmfSJ7RftKfosytIh+xVcWj8
+	 vMOPCHIRomY6Ghr33Zhokh9TzwLHVfJ1EutSboeV19WPFl1KuK8tbfIisNzRrYKd/JqXv
+	 SyckluwP+6cBwV8c+zyCiAt4y2POOFSHcQ2CJMRxC37O1vRhNrMHLsZ4puGRKcPDMpw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795088156;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
+	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
+	 Content-Type;
+	bh=m7U6M/EGmEZmxU1yvdQ7vVBYlQ+ST0xMHMaAKZhcHEc=;
+	b=tU2hsxY8MVNNx1dq7oC6WKljC8N12SubGaJZOjNNP2tGwJ4IRNN7kcG1rsb/ngU8bdMN
+	 EmwlwU57yH2l2Y3FPceZUcSiD/NgM9ELOcxtqTQTeQWqqIHT5KJBVcUntei+uCXSFU2qr
+	 BnEeVZFxZ1BbUwc27gaKzEpGftADANtfhVOzlIVEAFhiXSwEH8ksyNd/XybZEsitZNPTO
+	 TapJl1RvAHhLP/twNhv84nPp38Nwxo3h1u6GtQuGNo9Iz0XgXhKqNHajnrCIId25WHJr+
+	 lXFZkiCmZwtkTi8SOBn9Qxk1ijctnIQRY3ZSgAjeXSelRntMgYMgFVnPMlEJT8TVkDA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=sentinelone.com;
+	spf=pass smtp.mailfrom=sentinelone.com;
+	dkim=pass header.d=sentinelone.com header.i=@sentinelone.com header.a=rsa-sha256 header.s=google header.b=QcPl93oW;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.170
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F575606A320;
-	Thu, 19 Nov 2026 11:33:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10721606A32F
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 11:35:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 10721606A32F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sentinelone.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sentinelone.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GURvDvKB
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B52A61F000C8;
-	Thu, 19 Nov 2026 11:33:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795087994;
-	bh=3jA+oZ+5iHu+6qDUVQHLEuIm2QvBD2uST/vEYY3WW1M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=GURvDvKBbWgEGx0orgwtNauW3gLt2TOPbl2oLQ797swNjSd+tOF6ti/U/myWq/oDx
-	 OePh4v1sE3qP1ttZduAMVjZ3daFXGbkOnFmcsG7H5GKN4Esr7lRaguphv57fT9Pj26
-	 JdLakKqfdjvkVXCK3p1JP0N0RzLjlN83OO8VtiUglo+sQgyvynPVbmkwoUHUk4uSsM
-	 Ift8s/gM+NRwen4hkUOyiCOaieIAW2pT05wgbPR9X88d9J/7+iVKlTp5q6G0EDf2Rp
-	 UGkDxNavpvDyMYUtJsegN6Qw1IgLo2+MKMZnheS68iS/R/HhFaQ5KrzA0cZnDBtGZx
-	 XRxCk8VoWdy7A==
-Date: Thu, 19 Nov 2026 11:33:03 +0000
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Ingo Molnar <mingo@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
-	Kees Cook <kees@kernel.org>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Mathieu Poirier <mathieu.poirier@linaro.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, Ingo Molnar <mingo@kernel.org>, 
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	Chris Mason <mason@kernel.org>, Sashiko <sashiko-bot@kernel.org>, stable@vger.kernel.org
-Subject: Re: [PATCH] fork: clear p->mm when copy_process() fails
-Message-ID: <av7b64FqD9Op5Avz@gremlin>
-References: <20261119-mm_failed_fork-v1-1-b3019f43d197@kernel.org>
+	dkim=pass (2048-bit key) header.d=sentinelone.com header.i=@sentinelone.com header.a=rsa-sha256 header.s=google header.b=QcPl93oW
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-8b77e464208so245455b3a.2
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 03:35:55 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795088155; cv=none;
+        d=google.com; s=arc-20260327;
+        b=iAMJYKf3y3j1taGW/wZvk2rre4X1FrLGeTIwmGrKigVcqoZOIu0a4a0VPuQj1HOGOp
+         hdEvKGRrfjeeinfMIGRFj/6/sdPt2JUGj3Xj0PZntF2MmfWQ641P4Dv9kFepsOewWJWc
+         lMgpNmMyPZIQtOnrEvckQ+MXSLP2dB73eGlSr3ICUwop+tig6lU7QCSxBDQNZmiHTd6U
+         8sR7dc4Yk5RSyWI2SJr2W6vqHNifUq13m/16ZyN15PqeNGKmoow8AcOX9bVqqX8uts+y
+         sBA81EGOWM6tunnIqnJgzTouEKMgtmZN5df3AQ7obgpu6Xm+o4cRHXPUz4vuNY+YYtMe
+         xbTg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=m7U6M/EGmEZmxU1yvdQ7vVBYlQ+ST0xMHMaAKZhcHEc=;
+        fh=SP9MQuLGLKwYAkAMPXZZy/g7jD0jDxqmFswXJ38n1oQ=;
+        b=Q/AVXExG6HNrKFeXcbEbC9lIsHiFWlNL9spDGtY0VeN5GM67N4t35VR778HELwiDLY
+         8vIc+LWARwklPgLYG52tEMa/Xfrd2Ezh4A1d/RDvDj6tvBy1CXliBO9SpNCqKHqT1xG4
+         cBczTPzzI0z2jlVaWjN0xHgprB/gauHaE1EESR1Haz757yBWLZYJ3XaiAOUBJrpLD5WJ
+         oyHYKmoEItOcqRtmKRloIQBdrzusDAUEU0dfIKifSpXTaI312Phoph97WEv0zk5MjpRM
+         rGDZmfBIFlcLrCvFg3UPTnTq0I4dtVbjA0pmOVXT1wrCm+QHbsv9jChC3Fno1mHBstQd
+         Nw3w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sentinelone.com; s=google; t=1795088155; x=1795692955; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=m7U6M/EGmEZmxU1yvdQ7vVBYlQ+ST0xMHMaAKZhcHEc=;
+        b=QcPl93oWLhCfA6leBBUG94g8wJ2Az2pfkebXkNqWqxr2f/4hbVCjDTxj4Wsgb4iD0r
+         nGkRNlVXyaMag+N4sHAeLhHr4fFYUg51fIfhQLYNgG9/GzgqFiZ/4fjhrEe09ii5oSWk
+         t8jvmiKoPyt6+LI7wNnxBX1bCvgbLK6ZjrZQ8f04aTDbIsVzjFvDiJfWdqNiN7iZqfVZ
+         Z0SX1IEAeCCU8Nlb7V0FyKQBiCaDad+dj9zl3js/OW3CO7QzEZkdeWlSdf6r+naAIr/A
+         FCCOZPjt4r6600Vq04BoxThCNOBtD+fxBkHJ75npg5p3lqF+E5+ObmkVKmoawWEJNj0V
+         BfKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795088155; x=1795692955;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=m7U6M/EGmEZmxU1yvdQ7vVBYlQ+ST0xMHMaAKZhcHEc=;
+        b=xE2/yAwAPca/2tInHiJObo5zavWezPomzRTKZw9s2Rl6VOpHAMS7d3M/abEhNt2CjW
+         P0X6NKbc7fQZZ7iOgtIXUxs9HVR+YU9tBTTMafu0P3EDAK9M/p/seooPZVHQQfMkUh5V
+         6tRi9IQBZrzno/SUaaaDRDFud4PBRtUtGJ4eh2GhwAiSYSfaqjHxxLuyr7KKZ1Myb2bC
+         ynTOpuh/4i7nDuFC9dIzydpLmZanXlIKFn/OJASutdSvz86zt0CRTwE4JO7uCdf6Ua/U
+         9Z3EEle4/pKBBESEXEDfqkgys5Q/0xLBjXrUeEn6ikedupcbwYVqZMnlja/M3Nk1Jlq1
+         mhHg==
+X-Gm-Message-State: APuU4Z/8GW1nY74cL97VSkG0y7bitr7pQ8CNDPWdPpv6xcKkNZE9BSXQ
+	W5AJi47fQF1TeZ+o5PNu9ki4e1nP7Zn6hd+fksy9J0rxFe8mdd5jW5zAcJT/2B2QqfPMiZsGm/r
+	31ZfOb1H/58VpFaE1rhIRYfBeD4h8mfhixAOZ5T3wEg==
+X-Gm-Gg: AZFdTZdmbAu+lGhe9hBhFoH1riuDem3XRkc0K2BTi2tURIRT+8oMRCwMvMnssK5GTkz
+	0RDQrxICfRJguR5U74q36V0kptZDSjlZ9QRJlAcbuK8eIgiBaXcCLJygEIuHPLap8kWYdS2kogx
+	2m4EpPwttJLATHSslKKsRz9q6EtCmc5Fh955W3liYMTZ4Hb/5ukaZ0fYDY1Hqut/CshkP3GK1U1
+	jVcCZJDg00wITS/VUKzvU/PbWYaOcfaKabnN5D7MwOr8OddGAJxLhLpRlrM860bNpByy63XjLue
+	bPracefNQeF8dRTn0ncUUBjgTWFr50O8UMt6TmWvCfhf+Phu+6ycZSZ9xBGMOdJXHgrfNQWE0/K
+	ZYuD2abD79fBfBet6K/H5CalZKOj8st6dB3FnaGaIG39B3LfqmCbVl/Y=
+X-Received: by 2002:a17:902:e888:b0:2ed:29a5:782d with SMTP id
+ d9443c01a7336-2eff72e15f0mr91673755ad.2.1795088155325; Thu, 19 Nov 2026
+ 03:35:55 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -67,120 +102,35 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261119-mm_failed_fork-v1-1-b3019f43d197@kernel.org>
+References: <20261117-bpf-preempt-v2-r2-v3-0-586376ec3672@sentinelone.com>
+ <20261117-bpf-preempt-v2-r2-v3-3-586376ec3672@sentinelone.com> <8fa7eb35-950f-49c4-b60a-c00b52cc6e4d@linux.dev>
+In-Reply-To: <8fa7eb35-950f-49c4-b60a-c00b52cc6e4d@linux.dev>
+From: Mike Bazov <mikeba@sentinelone.com>
+Date: Thu, 19 Nov 2026 13:35:56 +0200
+X-Gm-Features: AclHuK_P4lCX2n9SuYxSAwroQnE6rqvhil-JFhCxhFnQsc1M0KgmmeelNAQBEi4
+Message-ID: <CAPnbwjpaTwDH1GqV0Mxtc6VOL7feWTBrQwaMD5bzq1kzDmE3vQ@mail.gmail.com>
+Subject: Re: [EXT.MSG] Re: [PATCH bpf-next v3 3/4] bpf: Check program
+ recursion per task via bpf_ctx
+To: "JP Kobryn (CrowdStrike)" <jp.kobryn@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Martin Kelly <martin.kelly@crowdstrike.com>, 
+	Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>, tyler.wilson@crowdstrike.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Nov 19, 2026 at 09:04:58AM +0100, David Hildenbrand (Arm) wrote:
-> From: Chris Mason <mason@kernel.org>
->
-> When copy_process() fails after copy_mm(), the error path drops the mm
-> reference but leaves p->mm set. Perf and BPF can still reach the
-> task, and take a reference on the already freed mm through get_task_mm()
-> or bpf_find_vma(), resulting in a use-after-free:
+> Was a limit on chain length considered?
 
-Good lord :)
+My proposal in the v1 thread had a cap of 8. If it turns out to be
+needed, I can add one.
 
->
->     copy_process()               PERF_EVENT_IOC_SET_FILTER
->     ==============               =========================
->     perf_event_init_task(p)
->     copy_mm(p)
->     a later step fails
->     mmput(p->mm)
->       /* frees the mm */
->                                  perf_event_addr_filters_apply()
->                                    get_task_mm(p)
->                                      /* use-after-free */
->
-> Similarly, a BPF program on the task_free LSM hook can call bpf_find_vma(p)
-> before the task is freed.
->
-> Fix it by clearing p->mm under task_lock() before dropping the reference,
-> just like exit_mm() does.
+> did you try the array-based approach mentioned and compare perf?
 
-Sounds sensible.
-
->
-> Further, if copy_process() fails before copy_mm(), p->mm is still the
-> parent's mm pointer copied by dup_task_struct(), without having taken a
-> reference. While nobody can access it concurrently, there is the
-> chance that it might get accessed later when a BPF program is attached
-> to free_task().
->
-> With CONFIG_MEMCG the task is freed after an RCU grace period, so the
-> parent might already be gone and p->mm in the child points at something
-> that was already freed. So let's just clear p->mm before freeing the
-> task. No lock is required as there cannot be concurrent access (and we
-> might not even have the lock initialized yet).
->
-> This has medium urgency.
-
-It sounds... horrendous though :) but I guess possibly hard to hit?
-
->
-> Fixes: 375637bc5249 ("perf/core: Introduce address range filtering")
-> Fixes: 7c7e3d31e785 ("bpf: Introduce helper bpf_find_vma")
-> Reported-by: Sashiko <sashiko-bot@kernel.org>
-> Closes: https://lore.kernel.org/sashiko-outbox-180866@kernel.org/
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Chris Mason <mason@kernel.org>
-> [ david: simplify description and comments ]
-> Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
-
-LGTM so:
-
-Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-
-> ---
-> I can take this through my tree (rather soonish) unless someone else
-> wants to pick this up.
-> ---
->  kernel/fork.c | 15 +++++++++++++--
->  1 file changed, 13 insertions(+), 2 deletions(-)
->
-> diff --git a/kernel/fork.c b/kernel/fork.c
-> index 5efceb8d58a78..77d6c8fc38c66 100644
-> --- a/kernel/fork.c
-> +++ b/kernel/fork.c
-> @@ -2628,8 +2628,14 @@ __latent_entropy struct task_struct *copy_process(
->  bad_fork_cleanup_mm:
->  	sched_cache_fork_cleanup(p);
->  	if (p->mm) {
-> -		mm_clear_owner(p->mm, p);
-> -		mmput(p->mm);
-> +		struct mm_struct *mm = p->mm;
-> +
-> +		/* Perf events and BPF programs can still reach p. */
-> +		task_lock(p);
-> +		p->mm = NULL;
-> +		task_unlock(p);
-> +		mm_clear_owner(mm, p);
-> +		mmput(mm);
->  	}
->  bad_fork_cleanup_signal:
->  	if (!(clone_flags & CLONE_THREAD))
-> @@ -2663,6 +2669,11 @@ __latent_entropy struct task_struct *copy_process(
->  	exit_cred_namespaces(p);
->  	exit_creds(p);
->  bad_fork_free:
-> +	/*
-> +	 * If set, p->mm points at the parent's mm without a reference. Nobody
-> +	 * can access it concurrently anymore, but prevent later access.
-> +	 */
-> +	p->mm = NULL;
->  	WRITE_ONCE(p->__state, TASK_DEAD);
->  	exit_task_stack_account(p);
->  	put_task_stack(p);
->
-> ---
-> base-commit: 4405c18c95d2d0f99f6c581ef0ee8591a1aa6ccd
-> change-id: 20261119-mm_failed_fork-a46141b503d0
->
-> Best regards,
-> --
-> David Hildenbrand (Arm) <david@kernel.org>
->
-
---
-Cheers, Lorenzo
+Not measured. I asked in the v2 thread whether it is worth doing.
+I can measure an array against it and post the numbers.
