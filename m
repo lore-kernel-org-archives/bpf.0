@@ -1,87 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=5.135.90.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795102570;
-	b=w96uHw5N1C/dD/VKfMgelKZo8ceMfHjuYu+HpRdg6KymDQmlGhV/D9i3VEhk4jU1VqdT
-	 zVWgluX+05CJaq/yAaKgDlRnAO9OjmSo9s1t5nybo12TYLc/k5LxzZ3uFTLu9RbmCXX4+
-	 ItJ8NWJZ1u7RuK/aCdRytkYq0eS/Cfqk5mUe8xwym/ECMyDbsgj8r25a2koy1A2MJv7+f
-	 iB0msyJWjQnBzRzdwBPNo+FBQCZTE5Vz8iZYcMQE1fbjZ76UJhJx95Z0twY+2fYXX6Ntn
-	 DrvxMJ7V9gD+IehoV2F8EFLSJSaJR514H0gYREfgfwAn7oAo8quwSuctiTgsKxEOZgQ==
+	t=1795102889;
+	b=TZwzNNbqNDRsZG99+8a+WvjETbD1DzQvMPsXby45bIYsMCIk9sEc1LZI0nJpgAysVAdI
+	 UJeKYsJQSkPnVYAZjBy8j8Grb1JiWlo7P4229xrNr3c3sCknJtSIp+FuPREra9IUyEPgt
+	 IAYSLr5ZFXXQdSo/+XpQt7HjHm9+QwecGj8EC3do9StUiixL1/EiQ6AYXXdn5pUbJZfux
+	 xJ9CGboyG9GTATcEJ4Nnp2pXDrrs/BuyUaxUaH1M1uW6vH/VO297atLJDerDYeSWy7Y+9
+	 vdld0s7w6tUeg0wOkcxgFh2CReXJf0uimv1VRwA11Yn34Yy6WW29iXkohP2YHqETJ/A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795102570;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:Content-Language:To:
-	 Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=8q1xFrdKnC97TlJz6hYWenLpJiMoPbfjxZERSrqpSPc=;
-	b=rljipvcYa+HtEhAW36EoSgAF+B9GQFVylZMjTUr8GSPEqgUjVKZrZzKLMnB36QDIDJpI
-	 8pANL6z/qFdKr7SVfix2msxtLifqUNHfC8QniHeFxA7EeSaVyx3VlkkzY8X6EmC0rBvhp
-	 nCXeIsnuCQo0Er/NHtosXBipeztYCy/b1XQBNmXhRniw2oCvgMaBTNQ0dr0hzZnOMPwCx
-	 NAMZl2+4gbrjYPenynk9MZuuJZTxNY1qltFLrwTYIQ6EzEbnmAeoLUCc0G5BLwgIBSQfz
-	 0yuO3N248Ez1gcEzaXXEoMS/Je3eThjepf8lbZC0PYzyRRz/GB4GAUMnC5zuDQInPSg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795102889;
+	h=DMARC-Filter:Received:Received:Received:From:To:CC:Subject:
+	 Thread-Topic:Thread-Index:Date:Message-ID:Accept-Language:
+	 Content-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:
+	 x-originating-ip:x-ovh-corplimit-skip:Content-Type:Content-ID:
+	 Content-Transfer-Encoding:MIME-Version:x-ovh-tracer-id:X-VR-SPAMSTATE:
+	 X-VR-SPAMSCORE:X-VR-SPAMCAUSE:DKIM-Signature;
+	bh=g5gkkEVkUVlnLWuWbnLzxb2apdrxHWRl1ggvMTOuuxM=;
+	b=wQlvKCp/DHlbxiHhDO8sugedL3vzrc94i752NJxtRNbA5kfkzkNMAGUWsJIKSpR9rcSa
+	 70TqydFQN2ajOueffY6fpTrq4pF2ZV9/JAf8WIs1qCZjvfLYH3UmszVtDFocKi/2dq+Rm
+	 DQd9TPR12qzaHZHlVNt2yRzzoGqMiaZajNohFgw990y2j20F7FLnp0FeV7DQSNxsQjcUE
+	 9pYGd2KGIB9ZCiMfBSbn1a8i3RJKjmBHjdmhAVBLebtPgRqQUbL+YKcjo0CtgxrIQ4r0r
+	 K3tudmBld9pAc60i3A61+uarSoJapIZFdE2gE0pSMtWjCE05gJcL6gg8bpa4NYPA4qA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=blackwall.org;
-	spf=none smtp.mailfrom=blackwall.org;
-	dkim=pass header.d=blackwall.org header.i=@blackwall.org header.a=rsa-sha256 header.s=google header.b=RbNoaliO;
-	arc=none smtp.remote-ip=209.85.128.54
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=ovhcloud.com;
+	spf=pass smtp.mailfrom=ovhcloud.com;
+	dkim=pass header.d=ovhcloud.com header.i=@ovhcloud.com header.a=rsa-sha256 header.s=mailout header.b=MLb2lftk;
+	arc=none smtp.remote-ip=5.135.90.179
+Received: from 2.mo15.mail-out.ovh.net (2.mo15.mail-out.ovh.net [5.135.90.179])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0803360A2600
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 15:36:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0803360A2600
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B413606A66C;
+	Thu, 19 Nov 2026 15:41:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7B413606A66C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ovhcloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ovhcloud.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.a=rsa-sha256 header.s=google header.b=RbNoaliO
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4bb6886d30aso21627085e9.3
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 07:36:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall.org; s=google; t=1795102568; x=1795707368; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=8q1xFrdKnC97TlJz6hYWenLpJiMoPbfjxZERSrqpSPc=;
-        b=RbNoaliOxnW4tm3kUubyUdVCFUVyev+F5D1cpuOGzrY7fcR7egnI0M+oo6OFIaQfk1
-         Ww5aJfgeevIOzfLw2rhvpSIv9E8hWiywxxsOkmgiRKahAzUabE5mMuDlou0kNg/NP3Xz
-         iXiYm1FY6Y4IUm4xltk32Qy/MDyOaFyzaL0YYIaWyhZ5joAcDUNssFN62z0oIFlJgog1
-         yekvXjzgwyneFiWX06tIN6/Rq78onkRavgIDQuhGjcuTEwCrGUQK7JEIQI7ORXnVILMY
-         gL1iWswi40Ww+I4oq5BdhUjbFjag7HdYmD5D2LaYP48UxjgY4fIXtCicrGINqS9o9xRY
-         c7Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795102568; x=1795707368;
-        h=content-transfer-encoding:content-type:in-reply-to:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=8q1xFrdKnC97TlJz6hYWenLpJiMoPbfjxZERSrqpSPc=;
-        b=LyiM78gxje76xJ3aKLvDtrjo8NpqnRa5VQ1oAx25uOLIgSDVnv5hr28zWIbOYFsZRa
-         pTMQ01q2CKuRCRWJY1x01xJJhpt7Bs/J2eUkvxvpkPPeJfEoy1JFkxQEuLihJuGMbp5O
-         PmrccTfnf/CoupZHqbZ2bmIi2kp1Pwn+SZEBLj4AA/YYXs9Me8ToSnslW6Cj7nGrQqpI
-         E1DfJN4mmpWifLOWGtPDXYFGhFW0WmFzCIQu4ahRetG0b5w8/J0fTLNR55awqYZ2QEe6
-         63raCfVd74zFwnUQh1NuEwqRuDwDHA1yVKX5/4liBh1DhXZxYDHqJgtsyc02CyxhYNkx
-         6VuA==
-X-Forwarded-Encrypted: i=1; AL+hErEZLRQ7I1Kd2weLTi3xVfnQ59CbYTutJb7/LiB96BIMfoXempkvBYjrhNqdA2gR6UE7CoQ=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+aEfdECwjFIfDMStpQm4vE0Jl1qsBvE2ToGRLFeNpSCC79+8/o
-	OtPvTFgl8wOURSQjrVVbOHpyksQPmglv+lg2GOZpGsmVII6wlSdKYpGal3utXDOAmEg=
-X-Gm-Gg: AYBFou1LwMfQ01zUpRLIOs/jsTCLp/2PAu0Pa3WjrtAKTTcbkBGus2oHkF+XDVMB+oJ
-	5Oq+sNfJbva1UGeIcZlCSAVW/kTRYnz3anuCnO7GsQclJ8M8rzKl5o2XIlRvrxT6USHCQ5jiLix
-	QXEKHW+YfLOPV90iVkX7TTzYTKrwjoSDRI4yI7tnNUjaKsrOzU3pgFqhKBdqKQMfkLFLYC2jCtj
-	LU2v/XJSMNBHfkfCXqawyq6mZdp5EJqGHR6Qw+QarbFCob7d7BjRFHf2w/NyQk2Hg/n9mUxiiHN
-	ai3BTzN9hxTPuvOkn4kIf2FMXO4VFaIg0SnbXRpcXvoEBH3VeLTcVrXDRj/AyTrge8E7FohKRBs
-	qSnV1ZddSR5yg500LJHSLX1HMOIDbwe/LtmDJorvteLw0U4EW9l3KbRy0Cjj64r1qk9osqOtZx0
-	UAI7zD5noTDAGLsueYRP1YS1i7Fg5p0f5Y41k/DOPpq1M+tu02RQg96VooHOjvaiZAtG04QOvep
-	4awm1qvAxTPZrwRZrCJMewfxvrCtgEe8SJUyzPiAukjtlvG4fdWr/0bRFGIo3rGwZBn4iOyki/b
-	SdpAUY82Tuvh8ewcZBAzXx5T2tSTuwZeB1+xXxZBuIrAI2p8FhlsIIr7qQI=
-X-Received: by 2002:a05:600c:4e50:b0:4bb:6a5a:7834 with SMTP id 5b1f17b1804b1-4bb7da1edf4mr120554325e9.20.1795102568093;
-        Thu, 19 Nov 2026 07:36:08 -0800 (PST)
-Received: from [192.168.0.161] (78-154-14-127.ip.btc-net.bg. [78.154.14.127])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb84e58ab3sm28200175e9.4.2026.11.19.07.36.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Nov 2026 07:36:07 -0800 (PST)
-Message-ID: <ada68cd6-93dd-474c-a11c-6a851d9fe3c3@blackwall.org>
-Date: Thu, 19 Nov 2026 17:36:05 +0200
+	dkim=pass (1024-bit key) header.d=ovhcloud.com header.i=@ovhcloud.com header.a=rsa-sha256 header.s=mailout header.b=MLb2lftk
+Received: from DAGFR11EX2.OVH.local (unknown [10.110.0.223])
+	by mo15.mail-out.ovh.net (Postfix) with ESMTPS id 4jVjP90VQKz42NN;
+	Thu, 19 Nov 2026 15:41:16 +0000 (UTC)
+Received: from DAGFR11EX2.OVH.local (172.16.2.112) by DAGFR11EX2.OVH.local
+ (172.16.2.112) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.57; Thu, 19 Nov
+ 2026 16:41:16 +0100
+Received: from DAGFR11EX2.OVH.local ([fe80::5941:bba3:e8f1:7fd2]) by
+ DAGFR11EX2.OVH.local ([fe80::5941:bba3:e8f1:7fd2%8]) with mapi id
+ 15.02.2562.057; Thu, 19 Nov 2026 16:41:16 +0100
+From: Nathan Malo <nathan.malo@ovhcloud.com>
+To: Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau
+	<martin.lau@linux.dev>
+CC: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, "Eric
+ Dumazet" <edumazet@google.com>, Willem de Bruijn
+	<willemdebruijn.kernel@gmail.com>, "bpf@vger.kernel.org"
+	<bpf@vger.kernel.org>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: [BUG] bpf: stale CHECKSUM_COMPLETE skb->csum after
+ bpf_redirect_neigh() into veth
+Thread-Topic: [BUG] bpf: stale CHECKSUM_COMPLETE skb->csum after
+ bpf_redirect_neigh() into veth
+Thread-Index: AQHdeDxpyqMmli5CNk26x3zVsdExZQ==
+Date: Thu, 19 Nov 2026 15:41:15 +0000
+Message-ID: <F6F168C5-A1C7-4029-90D3-CD402BC11E33@corp.ovh.com>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ovh-corplimit-skip: true
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <9AE37C346A3E1F47905CE4D1349B3BDD@corp.ovh.com>
+Content-Transfer-Encoding: base64
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -91,185 +78,132 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 3/8] bpf: allow bpf_sk_assign on tc egress with
- refcounted sockets
-Content-Language: en-US, bg
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: daniel@iogearbox.net, ayush.sawal@chelsio.com, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
- pabeni@redhat.com, ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, john.fastabend@gmail.com, sdf@fomichev.me,
- horms@kernel.org, kuniyu@google.com, willemb@google.com, jhs@mojatatu.com,
- jiri@resnulli.us, sd@queasysnail.net, paul@isovalent.com,
- alasdair.mcwilliam@isovalent.com, netdev@vger.kernel.org,
- martin.lau@kernel.org, mason@kernel.org
-References: <20261119142231.2612515-4-razor@blackwall.org>
- <a4c31b033613fa51016f2cf42f90e3f2c61d0e9a8c1012c20e5074a0e92bbe95@mail.kernel.org>
-From: Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <a4c31b033613fa51016f2cf42f90e3f2c61d0e9a8c1012c20e5074a0e92bbe95@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+x-ovh-tracer-id: 1773573831269076319
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: dmFkZTFb4ykD728crqAoxJnBwFFA4TGmrQ45KIMf7gBRuIqcZ00FD7cPVEvfoUpXOg+g3zf+uhY8aUkwp00r/w4AH/ScelVsN/VnSyLb0sdfwHLzkAtiIUMZPiPSoUBkLko6yXAcfv/IEjohjFE9uLY/DXsdXeQ7viWL4INApC22RQPCbn0SZm+QJ8EA+vGk9oQzDGAt+fWyvW1QnnoMySc6QqtNOEyhdPH9T5En1Gr6+zucT5ob+wAUl/lTMxQ/gezJtOaVs61j1ULK2fWmLkU9qeeFOz/SA4ZPYVcZaO5q7+zUEOUW5sLnIfjbmHa5v92zqoGj9bbJQnlxxu8irXM8R48cPoUBor7MgkZkS7nhuRwYvqLqpHjX/V9gc5o026xuqswpZGl5YMofIFAp35K3G+KwAlct/uVp3Tt5YHxwIP4AaaDWeLq2T7A2W4uOEl0ibwnotffMPozJ/MbwG3cT63EoSeM/kIqWECLIrL6mWIbB8piXFIq2PFWCrfbJIbgnCtg/hZWl+GgXEdPyHolweN+Q9g8QpcYYLagS8sq4I83LKbFI6zZKGvzTsif/SFqmiOtmxoen9CqPeS5vH8cjKhC/MGbDBfsbw6oP1IeDvy2C+0XamPBkxf76UfqoP0Yss3YLIm1VRazA/EmNgTiYDc/9q05BslM54JHb5n7HpdNC/g
+DKIM-Signature: a=rsa-sha256; bh=g5gkkEVkUVlnLWuWbnLzxb2apdrxHWRl1ggvMTOuuxM=;
+ c=relaxed/relaxed; d=ovhcloud.com; h=From; s=mailout; t=1795102877; v=1;
+ b=MLb2lftkAYJBcaxAZxwbbCFWa8SqYNSKJuForAeCLvJ2EtUxT5nsZjdoGZKbGqZE8R8Vejgv
+ ewWc4LxCsuy/41OSCSUMtCVrxRyR2S7Hxne4dvMP5IW4vCvtyI/QP21sjk7Vr1GIq4Io8kT9GGI
+ VXxjyV84P3X71IVVJ/aTXLy0=
 
-On 19/11/2026 17:19, bot+bpf-ci@kernel.org wrote:
->> bpf: allow bpf_sk_assign on tc egress with refcounted sockets
-> 
-> TL;DR:
-> - bpf_sk_assign() on egress may hit BUG_ON in skb_orphan() for test-run skbs
->    with skb->sk but no destructor
-> - skb_do_redirect() may keep a borrowed listener via syncookie reqsk, a
->    possible use-after-free; also possible socket double-put
-> 
-
-oh well, both are good and valid catches, I will take care of them for v2
-my local Sashiko run missed these too
-
-Thanks,
-  Nik
-
->> diff --git a/net/core/filter.c b/net/core/filter.c
->> --- a/net/core/filter.c
->> +++ b/net/core/filter.c
->> @@ -2559,14 +2559,17 @@ int skb_do_redirect(struct sk_buff *skb)
->>   	if (unlikely(!dev))
->>   		goto out_drop;
->>
->> +#ifdef CONFIG_INET
->>   	/*
->> -	 * Prefetched sockets may borrow a listener under RCU. Orphan them
->> -	 * before redirects that can outlive this section. Peer ingress
->> -	 * stays in the same RCU section.
->> +	 * Prefetched listeners may be borrowed under RCU. Drop borrowed
->> +	 * assignments before redirects that can outlive this section.
->> +	 * Peer ingress stays in the same RCU section.
->>   	 */
->> -	if (skb_sk_is_prefetched(skb) &&
->> +	if (skb->destructor == sock_pfree &&
->> +	    !sk_is_refcounted(skb->sk) &&
->>   	    (!(flags & BPF_F_PEER) || (flags & BPF_F_EGRESS)))
->>   		skb_orphan(skb);
->> +#endif
-> 
-> Can this leave a borrowed listener behind a redirect?
-> 
-> bpf_sk_assign_tcp_reqsk() installs a syncookie request sock whose
-> rsk_listener is a borrowed SOCK_RCU_FREE listener:
-> 
->      req = inet_reqsk_alloc(ops, sk, false);   /* no ref on sk */
->      req->rsk_listener = sk;
->      skb->sk = req_to_sk(req);
->      skb->destructor = sock_pfree;
-> 
-> skb->sk is a TCP_NEW_SYN_RECV request sock, so sk_is_refcounted(skb->sk)
-> is true and the new condition is false.  The skb then keeps the reqsk
-> across bpf_redirect(ifindex, BPF_F_INGRESS) and non-peer egress
-> redirects.  For example:
-> 
->      sch_handle_ingress()
->        skb_do_redirect()                    /* no orphan */
->          __bpf_redirect_common()
->            __bpf_rx_skb()
->              dev_forward_skb_nomtu()
->                netif_rx_internal()          /* queued past the RCU section */
-> 
-> Later tcp_v4_rcv() -> __inet_lookup_skb() -> inet_steal_sock() ->
-> skb_steal_sock() takes the syncookie branch:
-> 
->      *refcounted = false;
->      sk = req->rsk_listener;
->      req->rsk_listener = NULL;
->      return sk;
-> 
-> and inet_steal_sock() dereferences that listener.  If the listener was
-> closed and its SOCK_RCU_FREE grace period elapsed while the skb sat in
-> the backlog or a qdisc, is this a use-after-free?
-> 
-> The updated comment says borrowed listener assignments are dropped, and the
-> commit message describes "sock_pfree + !sk_is_refcounted" as "the true
-> no-refcount case from ingress", but the reqsk case above is not covered.
-> 
-> Separately, refcounted sock_pfree assignments made at ingress now survive
-> non-peer redirects into egress.  complete_skb() and
-> chcr_ktls_copy_record_in_skb() treat any destructor other than
-> sock_efree/sock_pfree_ref as charged to sk_wmem_alloc, and chcr copies
-> sock_pfree to nskb without sock_hold().  Would that double-put the socket
-> when both skbs are freed?  The commit message says only sock_pfree_ref
-> sockets are meant to be preserved; would testing
-> skb->destructor == sock_pfree alone, as before, keep that and close both
-> problems?
-> 
-> [ ... ]
-> 
->> @@ -8115,21 +8118,26 @@ static const struct bpf_func_proto bpf_tcp_gen_syncookie_proto = {
->>
->>   BPF_CALL_3(bpf_sk_assign, struct sk_buff *, skb, struct sock *, sk, u64, flags)
->>   {
->> +	bool egress = !skb_at_tc_ingress(skb);
->> +	bool refcounted;
->> +
->>   	if (!sk || flags != 0)
->>   		return -EINVAL;
->> -	if (!skb_at_tc_ingress(skb))
->> +	if (egress && (!sk_fullsock(sk) || !sk_is_refcounted(sk) ||
->> +		       skb_is_decrypted(skb)))
->>   		return -EOPNOTSUPP;
->> +	refcounted = egress || sk_is_refcounted(sk);
->>   	if (unlikely(dev_net(skb->dev) != sock_net(sk)))
->>   		return -ENETUNREACH;
->>   	if (sk_unhashed(sk))
->>   		return -EOPNOTSUPP;
->> -	if (sk_is_refcounted(sk) &&
->> +	if (refcounted &&
->>   	    unlikely(!refcount_inc_not_zero_acquire(&sk->sk_refcnt)))
->>   		return -ENOENT;
->>
->>   	skb_orphan(skb);
->>   	skb->sk = sk;
->> -	skb->destructor = sock_pfree;
->> +	skb->destructor = egress ? sock_pfree_ref : sock_pfree;
-> 
-> Can skb_orphan() hit BUG_ON(skb->sk) here?
-> 
-> Removing the !skb_at_tc_ingress() rejection lets every non-ingress skb
-> reach skb_orphan(), including skbs that have skb->sk set and no
-> destructor.  bpf_prog_test_run_skb() builds exactly such an skb:
-> 
->      sk = sk_alloc(net, AF_UNSPEC, GFP_USER, &bpf_dummy_proto, 1);
->      skb = slab_build_skb(data);
->      skb->sk = sk;          /* no destructor */
-> 
-> tc_at_ingress is zero there and convert___skb_to_skb() never sets it, so
-> skb_at_tc_ingress() is false and the new egress branch is taken.  A tc
-> program that does bpf_sk_lookup_tcp(skb, &tuple, ..., BPF_F_CURRENT_NETNS,
-> 0) on an established socket and then bpf_sk_assign(skb, sk, 0) passes
-> sk_fullsock(), sk_is_refcounted(), skb_is_decrypted(), the netns check and
-> sk_unhashed(), and refcount_inc_not_zero_acquire() succeeds.  Then:
-> 
->      static __always_inline void skb_orphan(struct sk_buff *skb)
->      {
->          if (skb->destructor) {
->              ...
->          } else {
->              BUG_ON(skb->sk);   /* skb->sk == dummy sk */
->          }
->      }
-> 
-> Before this patch the same program got -EOPNOTSUPP and never reached
-> skb_orphan().  The selftest added later in the series (probe_timewait in
-> sk_assign_netkit) goes through bpf_prog_test_run_opts() but only avoids
-> the BUG because its socket is in TIME_WAIT and fails sk_fullsock().  A
-> later patch in the series that accepts listeners does not add a guard
-> either.
-> 
-> Could the egress branch reject skbs that have skb->sk set but no
-> destructor (or the test-run context) before calling skb_orphan()?
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/44548126067
-
+SGkgYWxsLA0KDQpJJ2QgbGlrZSB0byByZXBvcnQgYSBjaGVja3N1bSBpc3N1ZSB3aXRoIGJwZl9y
+ZWRpcmVjdF9uZWlnaCgpIHRoYXQgSQ0KaGl0IG9uIGEgQ2lsaXVtIG5vZGUgYW5kIGNvdWxkIHJl
+cHJvZHVjZSBvbiBhIHZhbmlsbGEga2VybmVsLg0KDQpXaGVuIGEgdGMgaW5ncmVzcyBwcm9ncmFt
+IG9uIGEgTklDIHRoYXQgZGVsaXZlcnMgQ0hFQ0tTVU1fQ09NUExFVEUNCihtbHg1IGhlcmUpIHJl
+ZGlyZWN0cyBhIHBhY2tldCB3aXRoIGJwZl9yZWRpcmVjdF9uZWlnaCgpIHRvIGEgdmV0aCwNCnNr
+Yi0+Y3N1bSBpcyBzdGFsZSB3aGVuIHRoZSBwYWNrZXQgaXMgcmVjZWl2ZWQgb24gdGhlIHZldGgg
+cGVlci4gVGhlDQpmaXJzdCBjaGVja3N1bSB2ZXJpZmljYXRpb24gKGhlcmUgbmZfY29ubnRyYWNr
+KSB0aGVuIHJlcG9ydHMNCiJodyBjc3VtIGZhaWx1cmUiLiBUaGUgcGFja2V0IGl0c2VsZiBpcyB2
+YWxpZCBhbmQgaXMgYWNjZXB0ZWQgYWZ0ZXINCnRoZSBzb2Z0d2FyZSBjaGVjaywgc28gdGhlIGlt
+cGFjdCBpcyBsaW1pdGVkIHRvIHRoZSB3YXJuaW5nIGFuZCBhDQpzb2Z0d2FyZSBjaGVja3N1bS4N
+Cg0KVGhlIHN0YWxlIHZhbHVlIGlzIGV4YWN0bHk6DQoNCiAgc2tiLT5jc3VtID0gcmVhbCBzdW0g
+KyBTKEwyIGhlYWRlciByZWNlaXZlZCBvbiB0aGUgTklDKQ0KICAgICAgICAgICAgICAgICAgICAg
+ICAtIFMoTDIgaGVhZGVyIGJ1aWx0IGZvciB0aGUgdmV0aCkNCg0KRW52aXJvbm1lbnQNCi0tLS0t
+LS0tLS0tDQotIHZhbmlsbGEgNi4xOC42NCwgeDg2XzY0IChBTUQgRVBZQyA5MTI0KQ0KLSBOSUM6
+IE1lbGxhbm94IENvbm5lY3RYLTYgTHggKE1UMjg5NCksIG1seDVfY29yZSwgZmlybXdhcmUgMjYu
+NDAuMTAwMCwNCiAgUlggY2hlY2tzdW0gb2ZmbG9hZCBlbmFibGVkDQotIFRoZSBjb2RlIGludm9s
+dmVkIGlzIHVuY2hhbmdlZCBpbiBjdXJyZW50IG1hc3Rlci4NCg0KUmVwcm9kdWNlcg0KLS0tLS0t
+LS0tLQ0KdGMgaW5ncmVzcyBwcm9ncmFtIG9uIHRoZSBOSUMsIHJlZGlyZWN0aW5nIHBhY2tldHMg
+Zm9yIDEwLjk5LjEuMg0KdG8gYSB2ZXRoIHdob3NlIHBlZXIgaXMgaW4gYSBuZXRucyAod2l0aCBj
+b25udHJhY2sgZW5hYmxlZCk6DQoNCiAgI2luY2x1ZGUgPGxpbnV4L2JwZi5oPg0KICAjaW5jbHVk
+ZSA8bGludXgvcGt0X2Nscy5oPg0KICAjaW5jbHVkZSA8bGludXgvaWZfZXRoZXIuaD4NCiAgI2lu
+Y2x1ZGUgPGxpbnV4L2lwLmg+DQogICNpbmNsdWRlIDxicGYvYnBmX2hlbHBlcnMuaD4NCiAgI2lu
+Y2x1ZGUgPGJwZi9icGZfZW5kaWFuLmg+DQoNCiAgI2RlZmluZSBUQVJHRVRfSVAgMHgwYTYzMDEw
+MiAgLyogMTAuOTkuMS4yICovDQoNCiAgU0VDKCJ0YyIpDQogIGludCByZWRpcihzdHJ1Y3QgX19z
+a19idWZmICpza2IpDQogIHsNCiAgICAgICAgICB2b2lkICpkYXRhID0gKHZvaWQgKikobG9uZylz
+a2ItPmRhdGE7DQogICAgICAgICAgdm9pZCAqZGF0YV9lbmQgPSAodm9pZCAqKShsb25nKXNrYi0+
+ZGF0YV9lbmQ7DQogICAgICAgICAgc3RydWN0IGV0aGhkciAqZXRoID0gZGF0YTsNCiAgICAgICAg
+ICBzdHJ1Y3QgaXBoZHIgKmlwID0gZGF0YSArIHNpemVvZigqZXRoKTsNCg0KICAgICAgICAgIGlm
+ICgodm9pZCAqKShpcCArIDEpID4gZGF0YV9lbmQpDQogICAgICAgICAgICAgICAgICByZXR1cm4g
+VENfQUNUX09LOw0KICAgICAgICAgIGlmIChldGgtPmhfcHJvdG8gIT0gYnBmX2h0b25zKEVUSF9Q
+X0lQKSkNCiAgICAgICAgICAgICAgICAgIHJldHVybiBUQ19BQ1RfT0s7DQogICAgICAgICAgaWYg
+KGlwLT5kYWRkciAhPSBicGZfaHRvbmwoVEFSR0VUX0lQKSkNCiAgICAgICAgICAgICAgICAgIHJl
+dHVybiBUQ19BQ1RfT0s7DQogICAgICAgICAgcmV0dXJuIGJwZl9yZWRpcmVjdF9uZWlnaChUQVJH
+RVRfSUZJTkRFWCwgTlVMTCwgMCwgMCk7DQogIH0NCg0KICBjaGFyIF9saWNlbnNlW10gU0VDKCJs
+aWNlbnNlIikgPSAiR1BMIjsNCg0KU2V0dXA6DQoNCiAgaXAgbmV0bnMgYWRkIGNzdW0NCiAgaXAg
+bGluayBhZGQgdjAgdHlwZSB2ZXRoIHBlZXIgbmFtZSB2MQ0KICBpcCBsaW5rIHNldCB2MSBuZXRu
+cyBjc3VtDQogIGlwIGFkZHIgYWRkIDEwLjk5LjEuMS8zMCBkZXYgdjANCiAgaXAgbGluayBzZXQg
+djAgdXANCiAgaXAgLW4gY3N1bSBhZGRyIGFkZCAxMC45OS4xLjIvMzAgZGV2IHYxDQogIGlwIC1u
+IGNzdW0gbGluayBzZXQgdjEgdXANCiAgaXAgLW4gY3N1bSByb3V0ZSBhZGQgZGVmYXVsdCB2aWEg
+MTAuOTkuMS4xDQogIGlwIG5ldG5zIGV4ZWMgY3N1bSBuZnQgLWYgLSA8PEVPRg0KICB0YWJsZSBp
+cCBjc3VtIHsgY2hhaW4gcHJlIHsgdHlwZSBmaWx0ZXIgaG9vayBwcmVyb3V0aW5nIHByaW9yaXR5
+IDA7IGN0IHN0YXRlIG5ldyBhY2NlcHQ7IH0gfQ0KICBFT0YNCg0KICBjbGFuZyAtTzIgLWcgLXRh
+cmdldCBicGYgXA0KICAgIC1EVEFSR0VUX0lGSU5ERVg9JChjYXQgL3N5cy9jbGFzcy9uZXQvdjAv
+aWZpbmRleCkgLWMgcmVkaXIuYyAtbyByZWRpci5vDQogIHRjIHFkaXNjIGFkZCBkZXYgJE5JQyBj
+bHNhY3QNCiAgdGMgZmlsdGVyIGFkZCBkZXYgJE5JQyBpbmdyZXNzIGJwZiBkYSBvYmogcmVkaXIu
+byBzZWMgdGMNCg0KVGhlbiwgZnJvbSBhIGNsaWVudCBvbiB0aGUgTklDJ3MgTDIgc2VnbWVudCAo
+d2l0aCBhIHJvdXRlIHRvDQoxMC45OS4xLjIgdmlhIHRoZSBOSUMncyBJUCksIG9wZW4gYSBUQ1Ag
+Y29ubmVjdGlvbiB0byAxMC45OS4xLjIuDQoNClJlc3VsdHM6DQotIHByb2dyYW0gbm90IGF0dGFj
+aGVkIChwYWNrZXQgZm9yd2FyZGVkIGJ5IHRoZSBrZXJuZWwpOiBubyBmYXVsdA0KLSBwcm9ncmFt
+IGF0dGFjaGVkOiAiaHcgY3N1bSBmYWlsdXJlIiBvbiB2MQ0KLSBwcm9ncmFtIGF0dGFjaGVkLCAi
+ZXRodG9vbCAtSyAkTklDIHJ4IG9mZiI6IG5vIGZhdWx0DQoNCiAgdjE6IGh3IGNzdW0gZmFpbHVy
+ZQ0KICBza2IgbGVuPTYwIGhlYWRyb29tPTc4IGhlYWRsZW49NjAgdGFpbHJvb209NTQNCiAgbWFj
+PSg2NCwxNCkgbWFjX2xlbj0xNCBuZXQ9KDc4LDIwKSB0cmFucz05OA0KICAuLi4NCiAgY3N1bSgw
+eGJlMDMzOWNhIHN0YXJ0PTE0Nzk0IG9mZnNldD00ODY0MyBpcF9zdW1tZWQ9MiBjb21wbGV0ZV9z
+dz0wIHZhbGlkPTAgbGV2ZWw9MCkNCiAgLi4uDQogIENhbGwgVHJhY2U6DQogICA8SVJRPg0KICAg
+ZHVtcF9zdGFja19sdmwrMHg1ZC8weDgwDQogICBfX3NrYl9jaGVja3N1bV9jb21wbGV0ZSsweGFl
+LzB4YzANCiAgIG5mX2Nvbm50cmFja190Y3BfcGFja2V0KzB4MjAwLzB4MTdkMCBbbmZfY29ubnRy
+YWNrXQ0KICAgbmZfY29ubnRyYWNrX2luKzB4NGZmLzB4NjIwIFtuZl9jb25udHJhY2tdDQogICBu
+Zl9ob29rX3Nsb3crMHg0NS8weGYwDQogICBpcF9yY3YrMHgxMmEvMHgxZTANCiAgIF9fbmV0aWZf
+cmVjZWl2ZV9za2Jfb25lX2NvcmUrMHg4NS8weGEwDQogICBwcm9jZXNzX2JhY2tsb2crMHg4Ny8w
+eDEzMA0KICAgX19uYXBpX3BvbGwrMHgyYi8weDE4MA0KICAgbmV0X3J4X2FjdGlvbisweDJmMC8w
+eDNlMA0KICAgLi4uDQoNCihUaGUgY3N1bSB2YWx1ZSBwcmludGVkIGluIHRoZSBkdW1wIGlzIHRo
+ZSBwc2V1ZG8taGVhZGVyIHNlZWQgc2V0IGJ5DQpuZl9pcF9jaGVja3N1bSgpIGJlZm9yZSB0aGUg
+c29mdHdhcmUgY2hlY2ssIG5vdCB0aGUgc3RhbGUgdmFsdWUuKQ0KDQpNZWFzdXJlbWVudA0KLS0t
+LS0tLS0tLS0NCkkgY2FwdHVyZWQgc2tiLT5jc3VtIGF0IHRoZSBlbnRyeSBvZiBuZl9pcF9jaGVj
+a3N1bSgpIHdpdGggYnBmdHJhY2UNCmFuZCBjb21wYXJlZCBpdCB3aXRoIHRoZSB2YWx1ZSBjb21w
+dXRlZCBieSBfX3NrYl9jaGVja3N1bV9jb21wbGV0ZSgpLg0KDQpCZWxvdywgImh3IiBpcyBza2It
+PmNzdW0gd2hlbiB0aGUgcGFja2V0IHJlYWNoZXMgdjEsICJyZWFsIiBpcyB0aGUNCmNvcnJlY3Qg
+c3VtIHJlY29tcHV0ZWQgaW4gc29mdHdhcmUsIGFuZCBkaWZmID0gaHcgLSByZWFsIGlzIHRoZSBl
+cnJvci4NCiJvbGQiIGlzIHRoZSBMMiBoZWFkZXIgb2YgdGhlIGZyYW1lIGFzIHJlY2VpdmVkIG9u
+IHRoZSBOSUMgKGJlZm9yZQ0KdGhlIHJlZGlyZWN0KSwgYW5kICJuZXciIGlzIHRoZSBMMiBoZWFk
+ZXIgYnVpbHQgYnkgdGhlIG5laWdoYm91cg0Kb3V0cHV0IGZvciB2MCAoYXMgc2VlbiBvbiB2MSku
+IFMoeCkgaXMgdGhlIDE2LWJpdCBvbmVzJyBjb21wbGVtZW50DQpzdW0gb2YgeCwgYXMgY3N1bV9w
+YXJ0aWFsKCkgY29tcHV0ZXMgaXQgb24geDg2Lg0KDQpXaXRoIHRoZSByZXByb2R1Y2VyIGFib3Zl
+LCBldmVyeSBwYWNrZXQgb2YgdGhlIGNvbm5lY3Rpb24gKFNZTiwgQUNLLA0KUFNIL0FDSywgRklO
+L0FDSykgaXMgYWZmZWN0ZWQsIGFuZCB0aGUgZXJyb3IgaXMgdGhlIHNhbWUgZm9yIGFsbCBvZg0K
+dGhlbToNCg0KICBmbGFncz0wMiBodz1hZDQ5IHJlYWw9MDgzMiBkaWZmPWE1MTcNCiAgZmxhZ3M9
+MTAgaHc9YjU0OSByZWFsPTEwMzIgZGlmZj1hNTE3DQogIGZsYWdzPTE4IGh3PTY3NDkgcmVhbD1j
+MjMxIGRpZmY9YTUxNw0KICBmbGFncz0xMSBodz1iNTQ5IHJlYWw9MTAzMiBkaWZmPWE1MTcNCg0K
+SXQgbWF0Y2hlcyBTKG9sZCkgLSBTKG5ldykgZXhhY3RseToNCg0KICBvbGQ6IDdjOGMwOTA0ZWQy
+MCBmYTE2M2VkYjM2MDkgMDgwMCAgKE5JQyBNQUMsIGNsaWVudCBNQUMpICBTID0gYWNlOQ0KICBu
+ZXc6IDkyNzIyNWZlZmY2MCAzYWQ4OWFhMzNjYmEgMDgwMCAgKGRzdCB2MSwgc3JjIHYwKSAgICAg
+ICBTID0gMDdkMg0KICBTKG9sZCkgLSBTKG5ldykgPSBhNTE3IChtZWFzdXJlZCBkaWZmOiBhNTE3
+KQ0KDQpJIGZpcnN0IGhpdCB0aGUgaXNzdWUgd2l0aCBDaWxpdW0sIHdoaWNoIHVzZXMgYnBmX3Jl
+ZGlyZWN0X25laWdoKCkgdG8NCmEgdmV0aCBpbiB0aGUgc2FtZSB3YXkuIFRoZSBmb3JtdWxhIGFs
+c28gbWF0Y2hlZCB0aGVyZSwgd2l0aCB0d28NCmRpZmZlcmVudCBjbGllbnRzIGFuZCB0d28gZGlm
+ZmVyZW50IHNldHMgb2YgdmV0aCBNQUMgYWRkcmVzc2VzOg0KDQogIFMob2xkKSAgUyhuZXcpICBT
+KG9sZCktUyhuZXcpICBtZWFzdXJlZCBkaWZmDQogIDk2ODMgICAgYTgxMyAgICBlZTZmICAgICAg
+ICAgICBlZTZmDQogIDQzNjcgICAgYTgxMyAgICA5YjUzICAgICAgICAgICA5YjUzDQogIDk2ODMg
+ICAgYjFkNSAgICBlNGFkICAgICAgICAgICBlNGFkDQogIDQzNjcgICAgYjFkNSAgICA5MTkxICAg
+ICAgICAgICA5MTkxDQoNCkFuYWx5c2lzDQotLS0tLS0tLQ0KSW4gX19icGZfcmVkaXJlY3RfbmVp
+Z2goKToNCg0KICBicGZfcHVzaF9tYWNfcmNzdW0oc2tiKTsgICAvKiBhdCB0YyBpbmdyZXNzOiBh
+ZGRzIHRoZSBvbGQgTDIgaGVhZGVyICovDQogIC4uLg0KICBza2JfcHVsbChza2IsIEVUSF9ITEVO
+KTsgICAvKiByZW1vdmVzIGl0IGZyb20gdGhlIHBhY2tldCwgbm90IGZyb20gc2tiLT5jc3VtICov
+DQoNClRoZW4gdGhlIG5laWdoYm91ciBvdXRwdXQgcHVzaGVzIHRoZSBuZXcgTDIgaGVhZGVyIHdp
+dGhvdXQgdXBkYXRpbmcNCnNrYi0+Y3N1bSwgYW5kIG9uIHRoZSB2ZXRoIHBlZXIgX19kZXZfZm9y
+d2FyZF9za2IyKCkgZG9lcw0Kc2tiX3Bvc3RwdWxsX3Jjc3VtKCkgb2YgdGhlIG5ldyBoZWFkZXIu
+IFRoZSBuZXQgZWZmZWN0IG9uIHNrYi0+Y3N1bQ0KaXMgKyBTKG9sZCkgLSBTKG5ldyksIHdoaWNo
+IG1hdGNoZXMgdGhlIG1lYXN1cmVtZW50cy4NCg0KV2l0aCBhIHBoeXNpY2FsIGVncmVzcyBkZXZp
+Y2UgdGhpcyBpcyBpbnZpc2libGUsIHNpbmNlIHNrYi0+Y3N1bSBpcw0Kbm90IHVzZWQgb24gVFgu
+IEl0IG9ubHkgc2hvd3MgdXAgd2hlbiB0aGUgdGFyZ2V0IGlzIGEgdmV0aCAob3IgYW55DQpkZXZp
+Y2UgdGhhdCByZS1pbmplY3RzIHRoZSBwYWNrZXQgaW50byB0aGUgc3RhY2spLg0KDQpicGZfcHVz
+aF9tYWNfcmNzdW0oKSBoYXMgYmVlbiBpbiB0aGlzIHBhdGggc2luY2UgdGhlIGhlbHBlciB3YXMg
+YWRkZWQNCmluIGI0YWIzMTQxNDk3MCAoImJwZjogQWRkIHJlZGlyZWN0X25laWdoIGhlbHBlciBh
+cyByZWRpcmVjdCBkcm9wLWluIikuDQoNCkZvciBjb21wYXJpc29uLCBpcF9mb3J3YXJkKCkgY2Fs
+bHMgc2tiX2ZvcndhcmRfY3N1bSgpIGFuZCBkcm9wcw0KQ0hFQ0tTVU1fQ09NUExFVEUgd2hlbiBh
+IHJlY2VpdmVkIHBhY2tldCBpcyByZS1lbWl0dGVkLiBXb3VsZCBkb2luZw0KdGhlIHNhbWUgaW4g
+X19icGZfcmVkaXJlY3RfbmVpZ2goKSBiZSB0aGUgcmlnaHQgZml4Pw0KDQpDb250ZXh0DQotLS0t
+LS0tDQpUaGlzIHdhcyBvcmlnaW5hbGx5IGZvdW5kIHdpdGggQ2lsaXVtOg0KaHR0cHM6Ly9naXRo
+dWIuY29tL2NpbGl1bS9jaWxpdW0vaXNzdWVzLzUwMTMzDQoNClBvc3NpYmx5IHJlbGF0ZWQgKHNh
+bWUgc3ltcHRvbSB3aXRoIG1seDUgYW5kIHZldGgsIGJ1dCB3aXRoIGlwdGFibGVzDQpETkFUIGFu
+ZCBhIGJyaWRnZSBpbnN0ZWFkIG9mIEJQRiwgbm8gcm9vdCBjYXVzZSBmb3VuZCk6DQpodHRwczov
+L2xvcmUua2VybmVsLm9yZy9uZXRkZXYvNjgwNzhiMWU2ZDFhNV8zOTZjYTAyOTRiNEB3aWxsZW1i
+LmMuZ29vZ2xlcnMuY29tLm5vdG11Y2gvDQoNCkRpc2Nsb3N1cmU6IEkgdXNlZCBhbiBBSSBhc3Np
+c3RhbnQgKENsYXVkZSkgdG8gaGVscCByZWFkIHRoZSBrZXJuZWwNCmFuZCBDaWxpdW0gY29kZSwg
+d3JpdGUgdGhlIGJwZnRyYWNlIHNjcmlwdCBhbmQgdGhlIHJlcHJvZHVjZXIsIGFuZA0KZHJhZnQg
+dGhpcyBtYWlsLiBUaGUgcmVwcm9kdWN0aW9uLCB0aGUgbWVhc3VyZW1lbnRzIGFuZCB0aGUgcmVz
+dWx0cw0KYWJvdmUgd2VyZSBydW4gYW5kIGNoZWNrZWQgYnkgbWUgb24gcmVhbCBoYXJkd2FyZS4N
+Cg0KVGhhbmtzLA0KTmF0aGFuIE1hbG8NCg0K
