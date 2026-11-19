@@ -1,79 +1,118 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.196.25
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795084646;
-	b=003BckGd3PAlG8ee3eB/MVCBrvbYryxW0w5RZuG55aO5PIRAGnXs50DwI5LigV55kPQW
-	 Z1aeDOGPRG4fItlQToXU+8NwwIRqsxIcLk6YCB2xXy5IglAIHbbJS4eM+7VWLn3vl4BTV
-	 xlUpdwKqaS2cMMYHP9jYPs47bxg1+EkZ8Y8TTIT4kGUXnEKUDu9d5VLIbQvOPvjx5Vw/L
-	 W/H1WMi+NfURiRLHjl/L4N4aRmJtIxUMnaDqC/PDbvdvuTEynEtCRlSelMDee8r6ZbobD
-	 mm4sAMTLwBybY7nkcr5SEi931vrQSolCYT39JPYCPgJtv9zijJHjif/ZWTbT/XJT/HA==
+	t=1795084818;
+	b=PV4/OO9wwFPhGt7ZLGn33uX8tIUVLhgtb91OCL/v1RNIDMHaybodQJTY58qB/EFu5W6c
+	 e2YKa26SlG3FeCzUJnEuOf+LkqjhnPdez5x75Kj6XFpENL+15IU0P3ifTkp0UfnB+p0GU
+	 /re/68kz66RHLa/q2dpfEknhE3VCZMJTo4XvJSqDyADqj6/ekr9EvpqmWwfv0/dXlJmxR
+	 Oa0ZoMlEKRi1HuOI3DzKl81prtXXZ9vx6IPH/HJ2uE/r6Gg6Xyi0e4fx7Jw0iksswZRqR
+	 IT5x9Mve3ZE6VwGHtExlbSt4jNYAarWoaoVmndVjhKfRZxo1Up9CN4zocLNpp7o3NBQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795084646;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:X-B4-Tracking:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=rk135+iUCLveMrBJB25WQD3aieJX+w/NXoAKptzQUfk=;
-	b=2zgoKzzQvLQ6K20okAqy3oxoHSv+6w7UE1ZIVfWUjgX99Ohd8P3D7Ah9fVHUvTZz1jW2
-	 88pC9120Bs3uOLbBRh90viHJzWKcob31OIz5068bJ+AxZUb0ncdAMxtN27ZG3BfnwZ4D0
-	 MSvplr7WRKArgSSnXaxgkx1e01dHOTh+temnkY8vtu/QXcZGbAPxUymiBCm23jjYLJoLB
-	 qH3Ws4qzKCao2NplvLFxeE388B6prCugHiU0c5Pnv0VLUMNH5Zh0XSRI/cZwh5O4ZK9y5
-	 +mCf8hAGj+L8SpLMnU8Z7ITutoczml0Uev0+HMX+4nvEPU4sJxY9V2KjwKtv1ug6utw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795084818;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:
+	 X-MS-Exchange-Authentication-Results:Received-SPF:Received:Received:
+	 Received:Received:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding:Content-Type:
+	 X-NV-OnPremToCloud:X-EOPAttributedMessage:X-MS-PublicTrafficType:
+	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
+	 X-LD-Processed:X-MS-Exchange-SenderADCheck:
+	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
+	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-Id:
+	 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=iGDF0KbsCmcczrsVrqDKgQeQ+DrvSjv/IBGR3UZqu4E=;
+	b=wL/VvH9rbqc3wJaCOEQmGiGv/lFWDl6RAITffB2qlRW112RUcVfuR1OxhHXQd5EQ4uuH
+	 tUKA6mKXYgIH/zF5jFzBxks1PsTME2MsuyZC6gkFCONTwKCrPdXo46Y/Pm5zcszQL4ahE
+	 iLgUlXf5IRNmU67ZfB18Iciv2bFmkD5ZA3ClGQaK7nXsxgScyKeKAFs4FanImWReSRdvS
+	 KQeEYEgYvoBVzDIT+OQU+5EafhV3Pvaxr2kG9D7FRgJNmbOH7eXvMtSBoaqfJ9rmYXPSi
+	 n5s8/QKHLU8kqcxpVvxlnK46VBZ+XTKTbv5eUWhq+3NF7OwgEnzOuzmKJLmJXTFAQ5A==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="MLJKrL5/";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=nvidia.com;
+	spf=fail smtp.mailfrom=nvidia.com;
+	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=Jucy7cyj;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.196.25
+Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013025.outbound.protection.outlook.com [40.93.196.25])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8624A606A324;
-	Thu, 19 Nov 2026 10:37:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA3A360A260E;
+	Thu, 19 Nov 2026 10:40:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EA3A360A260E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MLJKrL5/
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1795084646;
-	b=V92+qKcMeHIl5px5XGV7jJ+PFksxGYPOWRrY9uP4rr1HAZ7lHY9AzPUb1p7v1xp8nKoo
-	 BX9YQsDdiDZwO368r4a5j+Ne5X/MfYhEElxiACHXUZaxyrDzo3U6+ie3SBCIjXZTLRqPr
-	 ZXVH5zz4jBSsECwzY58Z2llKcqU5ZXC8eafuvEVvV5xGQjM2hul9IIA3jN0zg7cKIIo2Y
-	 R1qpDBwtgjIg/7BUunxBJLsWMWmq9uCtMmSY4I50ZbGj6VYZ6245Xhw0vrSPPLeNFDWg3
-	 OX6KRFxjE5acF/uLRAP44jG4yKgZepbErZm5mOLknKVjPkof+QqiRKDJM0D/yKJtKJQ==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795084646;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:X-B4-Tracking:To:Cc:X-Mailer:X-Developer-Signature:
-	 X-Developer-Key:X-Endpoint-Received:X-Original-From:Reply-To:
-	 Content-Transfer-Encoding;
-	bh=rk135+iUCLveMrBJB25WQD3aieJX+w/NXoAKptzQUfk=;
-	b=cXnKtnV7+cpa1lbi6fiXkakkxdixCS9+g37LFqD8IjIwJNQaCAOFbm2Srp3AX/fu47R1
-	 FVCoCIraQeCZVl+EPwLyvD7NgIf4yPa+8GzqNls+SktPkkZbivOntkdmZur7rHMmgRqrt
-	 fxExon+k90V3CafJRcqFYRJfk6305NPQ38hjXJ+ASR6aLDQm+wjKvBKQ0HGvl8+2z5999
-	 USS03MPEjQxGq3wqvwl0HUTYZE/Uoih7bZMO9J0sVLLozTTGM2SJhgKk4N1vQbQbWsNTX
-	 bjre7aFlo+QEu1DsF8j4FAqVhT/oEBFTkf2131If7fjJ8y3GW2WhBfw/SLyQW/ETPyA==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5DDB41F000C4;
-	Thu, 19 Nov 2026 10:37:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795084646;
-	bh=rk135+iUCLveMrBJB25WQD3aieJX+w/NXoAKptzQUfk=;
-	h=From:Date:Subject:To:Cc:Reply-To;
-	b=MLJKrL5/hhZtiKuqqGRIpP5Zeep9N9nXnMd89dReQeSBmQPNbi+qgERw5ULokojHy
-	 CPigMhF4J9nkbuTcyXux/rPOPHVj6OokOqEZpGoZOfzoXJOw+8kgU1sEWj1tAaghN1
-	 AHVUc9unld8dKM1jgNRkxLPNaySVcch37VwHbUF7D1r4G9SE3Y01+FZGoOy8zI84Te
-	 O379Th8gP7QdEvJSgGJrdcHeyc0Mu1fOs2TbCKm7wi1hYEzUFzs6wMsc+BNmyb+jXw
-	 pb5AzVlv0bm204fDt4imxRDOB/V+IofhCNY2OL2msBwn0GUugoNY4R3+YywaxJTICG
-	 rgcKZoa2UuDAA==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id E0B7E4B244;
-	Thu, 19 Nov 2026 10:37:24 +0000 (UTC)
-From: Mike Bazov via B4 Relay <devnull+mike.bazov.gmail.com@kernel.org>
-Date: Thu, 19 Nov 2026 12:37:24 +0200
-Subject: [PATCH bpf-next v2] bpf: Use an on-stack pt_regs in the raw
- tracepoint helpers
+	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=Jucy7cyj
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=bMa70QYBKPIUhsHjW+nOydwVTcPhcEWt8QdD0+HF54n5h7ib94fy9libqluC6NJiQmo4fLIhr5iFZ/U/vZi1/6ks4YYFaaWHkbNaHZnLf6Sf/l+KjzyQMf6r2A3N7M08/3azn1mu/zhPTczpFZeO+tsK8CPLfJlcawBPoPYgagkeXHBtNMFmpQnrCfI8Zz2U9z/BQNJVP80DcA2yweP/jQK5wDui7hNtGf/gzjhYVcxcOOEhJdkdosyhBlNwe9t/XejIDAMGtC4NOcxbfonXU7/WsjWSE3eYPBGYFYTao4pyZ8JYEaWMzSVnK1/nrBsRBXa1Z47HXTqflcZl6fCEbw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iGDF0KbsCmcczrsVrqDKgQeQ+DrvSjv/IBGR3UZqu4E=;
+ b=EgWCsKc1Q19InrvUBPT4zldOyy2/HCZB0xhm6sNZveo0ewqGICKc5spdlMNGgl2OGULlHs/oAchdfuD3WxzS9b/wJsIqpBvKXxvX0VBDUpmovjw7j86dWEJgmSD4ad6zCwUoEXsL8kAhp0EpJQFtHYbovp8It9wdS3BJL+Ng/3vjYaofnRsBc15KmgWe1/T8sMC6nsDkTj8vAeqaTyY6ENlg1yvadg+Afl72pqazBuRR+zJcQtcIZIB07NnyD72A4gdziQHvE2qBrrOCH+DK/QkLRQau2m5yPpSbCA1MyQkw+/j6M8Xfx6asdRWY25EGv5JPnK5YD2q5a6cbSn5euQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=lunn.ch smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iGDF0KbsCmcczrsVrqDKgQeQ+DrvSjv/IBGR3UZqu4E=;
+ b=Jucy7cyjEYzA9aihTirB7XjGLX6GRDy9Bf7H8XrTd6P2tPUGDUl/9WtJyE6HbAyeCM1IiHm3Asth9cwht40TLHKBMg4shZqYx9sY/jsO7zVT36vfFQJ/R1afeD6b4fH6VMEocavq4uj8/RHnk26FjeF5cNArnAda3N7LcysVdYKvc00LjznM2h4pJBjrIoqux8m0wiBvJDuIggeOQkjRYCEbOkSnFu48cldJTK9+QV1UDS0mzUG1/y18i69s0B1Ihk6VQpkadHrP9pXDIfLdFhPBCgWL3guxp5tsU06deJrGTU+SJ6jAFe8fBZ/nctpzEeoBdMxNjdPenY88Pyb1xw==
+Received: from PH7P220CA0067.NAMP220.PROD.OUTLOOK.COM (2603:10b6:510:32c::9)
+ by MN2PR12MB4061.namprd12.prod.outlook.com (2603:10b6:208:19a::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.14; Thu, 19 Nov
+ 2026 10:40:11 +0000
+Received: from PH1PEPF00062F29.namprd02.prod.outlook.com
+ (2603:10b6:510:32c:cafe::3d) by PH7P220CA0067.outlook.office365.com
+ (2603:10b6:510:32c::9) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.615.10 via Frontend Transport; Thu,
+ 19 Nov 2026 10:40:11 +0000
+X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP
+ is 216.228.117.160) smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ PH1PEPF00062F29.mail.protection.outlook.com (10.167.243.58) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.639.5 via Frontend Transport; Thu, 19 Nov 2026 10:40:10 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.57; Thu, 19 Nov
+ 2026 02:39:54 -0800
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.56; Thu, 19 Nov
+ 2026 02:39:53 -0800
+Received: from vdi.nvidia.com (10.127.8.10) by mail.nvidia.com (10.129.68.7)
+ with Microsoft SMTP Server id 15.2.2562.56 via Frontend Transport; Thu, 19
+ Nov 2026 02:39:48 -0800
+From: Tariq Toukan <tariqt@nvidia.com>
+To: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+	<davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski
+	<kuba@kernel.org>, <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>
+CC: Alexei Starovoitov <ast@kernel.org>, <bpf@vger.kernel.org>, "Carolina
+ Jubran" <cjubran@nvidia.com>, Cosmin Ratiu <cratiu@nvidia.com>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, Dragos Tatulea <dtatulea@nvidia.com>, "Gal
+ Pressman" <gal@nvidia.com>, Jesper Dangaard Brouer <hawk@kernel.org>, "John
+ Fastabend" <john.fastabend@gmail.com>, Kees Cook <kees+treewide@kernel.org>,
+	Leon Romanovsky <leon@kernel.org>, open list <linux-kernel@vger.kernel.org>,
+	<linux-rdma@vger.kernel.org>, Li RongQing <lirongqing@baidu.com>, Mark Bloch
+	<mbloch@nvidia.com>, Richard Cochran <richardcochran@gmail.com>, "Saeed
+ Mahameed" <saeedm@nvidia.com>, Stanislav Fomichev <sdf@fomichev.me>, "Tariq
+ Toukan" <tariqt@nvidia.com>
+Subject: [PATCH net-next V3 0/2] net/mlx5e: Batch RCU grace periods on channel open and close
+Date: Thu, 19 Nov 2026 12:39:33 +0200
+Message-ID: <20261119103935.2190627-1-tariqt@nvidia.com>
+X-Mailer: git-send-email 2.44.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -83,246 +122,119 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261119-bpf-raw-tp-regs-preempt-v2-1-e1e1b90857d6@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAGPR/moC/4WNQQ6CMBBFr0Jm7RgGI1BX3MOwKO0Akwg0bYMYw
- t2tXMDl+z///R0Ce+EAj2wHz6sEWeYExSUDM+p5YBSbGIq8KImoxM716PUbo0PPQ0DnmScXkfo
- qJ6VqpTsFaZ3yXrbT/ITfaOYtQpuaUUJc/Oe8XOns/9pXQkKbU1daW9+rm2mGScvrapYJ2uM4v
- vBaRBzIAAAA
-To: Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- Emil Tsalapatis <emil@etsalapatis.com>, KP Singh <kpsingh@kernel.org>, 
- Matt Bobrowski <matt@bobrowski.net>, Steven Rostedt <rostedt@goodmis.org>, 
- Masami Hiramatsu <mhiramat@kernel.org>, 
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-trace-kernel@vger.kernel.org, Mike Bazov <mike.bazov@gmail.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1795084644; l=7871;
- i=mike.bazov@gmail.com; s=gmail-20261116; h=from:subject:message-id;
- bh=6EzdZ5kXAytUcjASHjJSyHChrRCCQ5aVdBi0WKUNNmo=;
- b=vMA5md7CjaQ3aLL1nyJkX/CdbsbM2YZYb81DrOEviachWJFUb67oHo3Gq+7Olntr3jZO5+BQT
- wEc1LJzi6OTBRw8zF0ZURweTCLE4WvL7DFkOHCIfFdA8+LW06lSI8HY
-X-Developer-Key: i=mike.bazov@gmail.com; a=ed25519;
- pk=Rr9fagn0pNA+bs8tgc6DXZpRAhl/maU6BeqkttIR7DA=
-X-Endpoint-Received: by B4 Relay for mike.bazov@gmail.com/gmail-20261116
- with auth_id=1544
-X-Original-From: Mike Bazov <mike.bazov@gmail.com>
-Reply-To: mike.bazov@gmail.com
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH1PEPF00062F29:EE_|MN2PR12MB4061:EE_
+X-MS-Office365-Filtering-Correlation-Id: dc636065-0a7f-4241-e413-08df46297c6f
+X-LD-Processed: 43083d15-7273-40c1-b7db-39efd9ccc17a,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|7416014|23010399003|36860700016|82310400026|10067099003|261026140227099003|11063799006|56012099006|261026121527099003|261021123027099003|261022075727099003|261021121427099003|261022105027099003|261022113327099003|261028144727099003|261102123227099003|18002099003|6133799003|261009223027099003|13003099007;
+X-Microsoft-Antispam-Message-Info:
+	ed/HQrSP1gDMkpIrTduXzrXZ5k2Q/3iqDt7l2m2piPhjrjseZcxciYEaW6laY53HVGBc/ckjUun/09T48l0hbbcHJkqbPgmPluDrRzyMbcsc+9W6ZnKCy5t1OiZZqNJC8qXxIxI1qKC96ptff216p4f3YG5ggaT4f5dL1UkssSHtI69wIy8g39Z/a72+qpNtpRrNNG+kBHHCIvbJGqNVz9yj9i9VVKtudHFNM9OPuLy6NBHp9UdGAOWFXotUaS9+nPGHYxUz8+OcOKoO4bYGrwTjSGyPLTx2J58w78hqyBb8BLnqCHDKamHRWEKPUZdUiwkp5mvbxEOG5cNN4Wr5PYNHLjvFCo7DdAkfSMnT5cY8so7P9cSkLr1qw2GxLOM4YBa0S2lQIxi9sVdRuXm9irsYgV+OHXCbROgH4c7ne4xhJNwh1fNGbTTImMAq8AvauUQosk3kd/iu7qX12Q8ECq9B/nw9MKJBNndnJllzZUHJxCREB8lV6GsggSxRqji0ZFlsUtIYbLhVe1g0JBpps9Bd6iivZh/y5KdyvuBZjDdpRGrZylyiXC8Kpas/cRHp/YCJQEpixUri5f8o7mjMBqUAZMfy4bm5oc4BdnWwAI2uKgmLQJhZTfh/tHNhO31A13hFGlXpnd7PKpyP6isbaenIyS/1NMEniAkYp9CyEQ1gEMAMvS/oixk6K+yty/IBmLIIH5GuXAfm4fg7KnIRkQ==
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(23010399003)(36860700016)(82310400026)(10067099003)(261026140227099003)(11063799006)(56012099006)(261026121527099003)(261021123027099003)(261022075727099003)(261021121427099003)(261022105027099003)(261022113327099003)(261028144727099003)(261102123227099003)(18002099003)(6133799003)(261009223027099003)(13003099007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	GR+i7OQXsOXI+/Vj3aYWnesMSVqnlmbOAV58kFpFSsy+YKyg+VVhj9LMRJfBmRxursdiqTIEcbDrNCKTOz+ktLObUwkks824iEUt6tHDLKMMr3l2P5OtUILwoDUIBP6NlMfrwyl+u9ozlHF4zAmFNKV8Sq4k5/Lkc7ZAbLnpdyDKOKU4IAO4OLGsVWS1IaB74noxO/mjaOXYgwplK+rsj/QimkTEIReODrDpjJpBqux0W0MxH3N8Xr68fjvK9QHKB3aRy7Sff1+9cSC210ZpwNUAUL1c0GoN41qK/m+K6JTnBe9+2nLuvBmAoaY9lSmdqyV7h2A+OHYc1ZxQLZg4ItkrHeyN9dvT3TW0B33n0ZdPyL28kuoOoHGIDHmdu9cfneiX/dL+InD4/DU8eZr5OR4V/5SwmVkamuClyn2L6Ix4jcc03k4E4NIr+w4fidBq
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2026 10:40:10.4347
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: dc636065-0a7f-4241-e413-08df46297c6f
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	PH1PEPF00062F29.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4061
 
-From: Mike Bazov <mike.bazov@gmail.com>
+Hi,
 
-bpf_perf_event_output(), bpf_get_stackid() and bpf_get_stack() of raw
-tracepoint and tracing programs have no pt_regs, so they fill in one of
-three per-CPU slots, picked by a per-CPU nest counter:
+This series by Carolina reduces the time mlx5e spends waiting for RCU
+grace periods when bringing an interface up or down with many channels.
 
-  get_bpf_raw_tp_regs()   level++, use regs[level - 1]
-  put_bpf_raw_tp_regs()   level--
+Today the channel open and close flows call synchronize_net() per
+object. On close, RQ, ICOSQ, TX SQ and NAPI teardown each require a
+grace period, so the number of waits scales with the number of channels.
+TX SQ teardown adds a wait per traffic class, and XDP and QoS can add
+more. On activation, mlx5e_activate_channels() triggers the ICOSQ of
+every channel, and each trigger waits for its own grace period. With a
+large channel count this makes link down and link up slow.
 
-That only works if the users of a CPU leave in the reverse order they
-came, as a task, an interrupt and an NMI do. These programs run with
-migration disabled but preemption enabled, so tasks can leave in any
-order:
+Patch 1 batches the waits on channel close. Channel deactivate and close
+are split into pre_sync and post_sync phases: the ENABLED state is first
+cleared on all queues of all channels, a single grace period is awaited,
+and only then does the teardown continue. Once NAPI is disabled on all
+channels, one more grace period is awaited, as the poll may still arm
+the CQs after napi_complete_done(). The queues are then closed and the
+NAPI instances are unlinked with __netif_napi_del_locked(), followed by
+one synchronize_net() before the channels are freed. The existing per
+object synchronize_net() calls are kept for single queue paths. The
+change touches the regular channels as well as the PTP, QoS, XDP and XSK
+queues.
 
-  task A              task B              task C
-  get: regs[0]
-  <preempted>
-                      get: regs[1]
-                      <preempted>
-  put: level 1
-                                          get: regs[1]
-                                          fills in its regs
-                      uses regs[1]
+Patch 2 does the same for the ICOSQ trigger on activation: all channel
+ICOSQs are first marked as requiring locking, one grace period is
+awaited, and then all of them are triggered. mlx5e_trigger_napi_icosq()
+keeps its existing semantics for standalone callers.
 
-B sends a sample or a stack trace with the registers of C. Profilers and
-tracers then attribute it to the wrong task, and nothing reports an
-error. The per-CPU recursion counter of a program doesn't prevent it:
-the slots are shared by all programs, so it takes two of them.
+Results with 248 channels and rcu_normal=1:
+- ip link set eth2 down: 11.837s before, 0.817s after.
+- ip link set eth2 up: 4.087s before, 1.080s after.
 
-Fill in a pt_regs on the stack of each helper instead, as
-bpf_get_stack_raw_tp_sleepable() already does, and remove the slots.
-Each caller then has its own registers, however it nests or gets
-preempted, and the helpers no longer fail with -EBUSY when nested more
-than three deep.
+Regards,
+Tariq
 
-The cost is sizeof(struct pt_regs) of stack per call, 168 bytes on
-x86-64, in helpers that can also run in IRQ and NMI context, and
-zeroing it on every call. It has to be zeroed: perf_fetch_caller_regs()
-sets only a few registers, and a sample with PERF_SAMPLE_REGS_INTR
-copies all of them to user space.
+V3:
 
-Signed-off-by: Mike Bazov <mike.bazov@gmail.com>
----
-A reproducer, x86-64: two raw tracepoint programs on sys_enter call
-bpf_perf_event_output() once each, with the program's number as data.
-Two threads make syscalls on CPU 0, and a SCHED_FIFO thread preempts
-them every 20us. The IP of a sample is regs->ip, the return address of
-the helper call. The reproducer reads that address for both programs
-from their JIT images and checks every sample.
+- Wait for one more grace period after napi_disable() in deactivate, so
+  close can destroy the queues before its single synchronize_net().
+  This fixes the page pool and PTP SQ recovery issues from V2, and makes
+  the close path simpler and cleaner, with no separate page pool unlink
+  step.
+- Drop the synchronize_net() in mlx5e_close_xdpsq() instead of splitting
+  it, as its callers already wait for a grace period or run before NAPI
+  is enabled.
+- Test and clear the XSK state bit once on close, instead of using
+  xsk_pool to decide on XSK teardown.
+- Add a sync_needed parameter to mlx5e_qos_close_queues() instead of a
+  separate variant without the wait.
+- Keep the original mlx5e_xdp_tx_disable() name instead of renaming it
+  to _pre_sync, and only drop its synchronize_net().
+- Build the single object paths from pre_sync, synchronize_net() and
+  post_sync, and keep mlx5e_close_locked() calling the existing
+  wrappers.
+- Remove the priv level deactivate wrappers.
+- Order the new functions as pre_sync, post_sync, then the wrapper.
 
-Without this patch, 7 to 18 samples per program and 10s run have the IP
-of the other program, out of 1.4M. With it, none. bpf_get_stack() and
-bpf_get_stackid() in the same setup return an empty kernel stack
-instead: the unwinder looks for the other task's sp on the current
-stack and doesn't find it.
+V2:
+https://lore.kernel.org/all/20261110185005.2932568-1-tariqt@nvidia.com/
 
-5 runs of 10s, debug config, CONFIG_PREEMPT=y, preempt=full, on
-bpf-next 0fb18ce8a2e9:
+V1:
+https://lore.kernel.org/all/20261011133212.807979-1-tariqt@nvidia.com/
 
-                                     without     with
-  bpf_perf_event_output, wrong IP    7-18        0      per program
-  bpf_get_stack, empty stacks        362-535     0
-  bpf_get_stackid, empty stacks      168-364     0
+Carolina Jubran (2):
+  net/mlx5e: Batch NAPI RCU grace periods on channel close
+  net/mlx5e: Batch ICOSQ trigger RCU synchronization
 
-The bpf_get_stackid() case with bpftrace, whose kstack calls it; @a[]
-and @b[] count the empty stacks:
+ drivers/net/ethernet/mellanox/mlx5/core/en.h  |   4 +
+ .../net/ethernet/mellanox/mlx5/core/en/ptp.c  |  27 ++-
+ .../net/ethernet/mellanox/mlx5/core/en/ptp.h  |   4 +-
+ .../net/ethernet/mellanox/mlx5/core/en/qos.c  |  42 ++++-
+ .../net/ethernet/mellanox/mlx5/core/en/qos.h  |   5 +-
+ .../net/ethernet/mellanox/mlx5/core/en/xdp.h  |   2 -
+ .../mellanox/mlx5/core/en/xsk/setup.c         |  22 ++-
+ .../mellanox/mlx5/core/en/xsk/setup.h         |   2 +
+ .../net/ethernet/mellanox/mlx5/core/en_main.c | 154 ++++++++++++++----
+ 9 files changed, 207 insertions(+), 55 deletions(-)
 
-bpftrace -e '
-  rawtracepoint:sys_enter /comm == "dd"/ { @a[kstack(1)] = count(); }
-  rawtracepoint:sys_enter /comm == "dd"/ { @b[kstack(1)] = count(); }' &
-  taskset -c 0 dd if=/dev/zero of=/dev/null bs=1 &
-  taskset -c 0 dd if=/dev/zero of=/dev/null bs=1 &
-  taskset -c 0 chrt -f 1 perl -e 'select(undef, undef, undef, 2e-5) while 1' &
----
-Changes in v2:
-- Use a pt_regs on the stack of each helper and remove the per-CPU
-  slots, instead of disabling preemption while a slot is in use
-  (per Andrii's suggestion).
-- Link to v1: https://lore.kernel.org/r/20261116-bpf-raw-tp-regs-preempt-v1-1-d01b6dd8573c@gmail.com
----
- kernel/trace/bpf_trace.c | 78 +++++++-----------------------------------------
- 1 file changed, 11 insertions(+), 67 deletions(-)
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index b4ff9d4e8..3f1901ae6 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1624,51 +1624,13 @@ pe_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 	}
- }
- 
--/*
-- * bpf_raw_tp_regs are separate from bpf_pt_regs used from skb/xdp
-- * to avoid potential recursive reuse issue when/if tracepoints are added
-- * inside bpf_*_event_output, bpf_get_stackid and/or bpf_get_stack.
-- *
-- * Since raw tracepoints run despite bpf_prog_active, support concurrent usage
-- * in normal, irq, and nmi context.
-- */
--struct bpf_raw_tp_regs {
--	struct pt_regs regs[3];
--};
--static DEFINE_PER_CPU(struct bpf_raw_tp_regs, bpf_raw_tp_regs);
--static DEFINE_PER_CPU(int, bpf_raw_tp_nest_level);
--static struct pt_regs *get_bpf_raw_tp_regs(void)
--{
--	struct bpf_raw_tp_regs *tp_regs = this_cpu_ptr(&bpf_raw_tp_regs);
--	int nest_level = this_cpu_inc_return(bpf_raw_tp_nest_level);
--
--	if (nest_level > ARRAY_SIZE(tp_regs->regs)) {
--		this_cpu_dec(bpf_raw_tp_nest_level);
--		return ERR_PTR(-EBUSY);
--	}
--
--	return &tp_regs->regs[nest_level - 1];
--}
--
--static void put_bpf_raw_tp_regs(void)
--{
--	this_cpu_dec(bpf_raw_tp_nest_level);
--}
--
- BPF_CALL_5(bpf_perf_event_output_raw_tp, struct bpf_raw_tracepoint_args *, args,
- 	   struct bpf_map *, map, u64, flags, void *, data, u64, size)
- {
--	struct pt_regs *regs = get_bpf_raw_tp_regs();
--	int ret;
--
--	if (IS_ERR(regs))
--		return PTR_ERR(regs);
--
--	perf_fetch_caller_regs(regs);
--	ret = ____bpf_perf_event_output(regs, map, flags, data, size);
-+	struct pt_regs regs = {};
- 
--	put_bpf_raw_tp_regs();
--	return ret;
-+	perf_fetch_caller_regs(&regs);
-+	return ____bpf_perf_event_output(&regs, map, flags, data, size);
- }
- 
- static const struct bpf_func_proto bpf_perf_event_output_proto_raw_tp = {
-@@ -1689,18 +1651,12 @@ extern const struct bpf_func_proto bpf_xdp_get_buff_len_trace_proto;
- BPF_CALL_3(bpf_get_stackid_raw_tp, struct bpf_raw_tracepoint_args *, args,
- 	   struct bpf_map *, map, u64, flags)
- {
--	struct pt_regs *regs = get_bpf_raw_tp_regs();
--	int ret;
--
--	if (IS_ERR(regs))
--		return PTR_ERR(regs);
-+	struct pt_regs regs = {};
- 
--	perf_fetch_caller_regs(regs);
-+	perf_fetch_caller_regs(&regs);
- 	/* similar to bpf_perf_event_output_tp, but pt_regs fetched differently */
--	ret = bpf_get_stackid((unsigned long) regs, (unsigned long) map,
--			      flags, 0, 0);
--	put_bpf_raw_tp_regs();
--	return ret;
-+	return bpf_get_stackid((unsigned long) &regs, (unsigned long) map,
-+			       flags, 0, 0);
- }
- 
- static const struct bpf_func_proto bpf_get_stackid_proto_raw_tp = {
-@@ -1715,17 +1671,11 @@ static const struct bpf_func_proto bpf_get_stackid_proto_raw_tp = {
- BPF_CALL_4(bpf_get_stack_raw_tp, struct bpf_raw_tracepoint_args *, args,
- 	   void *, buf, u32, size, u64, flags)
- {
--	struct pt_regs *regs = get_bpf_raw_tp_regs();
--	int ret;
--
--	if (IS_ERR(regs))
--		return PTR_ERR(regs);
-+	struct pt_regs regs = {};
- 
--	perf_fetch_caller_regs(regs);
--	ret = bpf_get_stack((unsigned long) regs, (unsigned long) buf,
--			    (unsigned long) size, flags, 0);
--	put_bpf_raw_tp_regs();
--	return ret;
-+	perf_fetch_caller_regs(&regs);
-+	return bpf_get_stack((unsigned long) &regs, (unsigned long) buf,
-+			     (unsigned long) size, flags, 0);
- }
- 
- static const struct bpf_func_proto bpf_get_stack_proto_raw_tp = {
-@@ -1741,12 +1691,6 @@ static const struct bpf_func_proto bpf_get_stack_proto_raw_tp = {
- BPF_CALL_4(bpf_get_stack_raw_tp_sleepable, struct bpf_raw_tracepoint_args *, args,
- 	   void *, buf, u32, size, u64, flags)
- {
--	/*
--	 * Don't take a per-CPU bpf_raw_tp_regs slot here: those slots are a
--	 * LIFO nest counter and are vulnerable to slot overwrite and
--	 * corruption across sleep.  Sleepable programs never run in
--	 * IRQ/NMI context, so a local pt_regs is sufficient.
--	 */
- 	struct pt_regs regs = {};
- 
- 	perf_fetch_caller_regs(&regs);
-
----
-base-commit: 8835113107b2cf75df33a71e265cdeec5d5d13e0
-change-id: 20261116-bpf-raw-tp-regs-preempt-1f7019989ab9
-
-Best regards,
+base-commit: 7ccc5e05043b1bb84326b19a2b05938d8f7a2ae6
 -- 
-Mike Bazov <mike.bazov@gmail.com>
-
+2.44.0
 
