@@ -1,88 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795098505;
-	b=Bt8+fKlRoB78/a4ZMdLYZ43rzJV+yq0nQIS7SfmGn5alCnJl+C05c/Fk6mF/7AUPhCtp
-	 1X5QqbY+9ptdhExgftfwvfo06IpbZdcT9yXbCJbbtYtRWuYzBJ7mnkjjZqILwP3hWdhRQ
-	 Yc0h/6O4X9z6TK8jwGpaI423UyNUTNK031kQxZvnx1NrzDWio4jIIPRlLSjQZtP+JGLN3
-	 +NacR5Kg/ziCOy1pBTyG+w0M+akHnP28VLxe3aHKLbvGCsOAjjzo2rVqqmmPZi+sKOpNC
-	 aM6LNmDfbW/MGo7mPUu6DylYgJP6pfMMz6uUXhXAMMsiq4I4YAGPHgMGoeCAXAediDQ==
+	t=1795098506;
+	b=ZlYzpj3aR5zkt7Jla4drFQLsnhRf3DW2K/VyeJ95u6NCRI81696Zuxvj85Hjnq8gIHET
+	 6IrH/TQ5uvZabqAvokrOSsa7H/VaZZmzbx5NmZzslEu4FwKf0sHlDoJw1pzsqo3FX7qUy
+	 h24db1YYNspGjhZy6vvycIbngnWpDgmQAm9Be1A0yQBANS9Y1gZzGv7JlrQsvE6nfiHh/
+	 ujUIYhE2GFZV3FmLlLY3AqD+QfDuduWNB7TlQIpV0Qa9pyjA9vBoZolAPkWdQ8ndh6ZUs
+	 XlgxcMpazmAR1O+6cgHx0kp8kXE/Fszyla1FAHlYiXkaXgkkHc+8IUo/LfGVIXjgmMQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795098505;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795098506;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=MN15rtynJucizsmELauHmdt1P7lrQUtZFL6V1R2zVCE=;
-	b=wYeO4pf3xA5HGKNqzA3PIVk62W8KxRwgkW9BQ+IEbLuDmwvE8m+2KMKrDe4Rh9JaphFZ
-	 iGOFCvm3ld+3z1qJDj9m3Bw6AURUPPjGH2yRGjV+h5+AmxRnBFtsCeoeMWzpw5WUHxwtD
-	 DadUnnJpr3aJICpN0rs5ODWmR/kNe+bEys+4q0BdxmyZxOj8Aue3GmIkDXLqKSP+r7iHq
-	 nB/8Iln/E8KXZHsW5e3DVin4rPdEVBIUkMfc1XMnqL29PD6iZwRQkAQVsn9JKl2hKfvmr
-	 KTJ23XmZL1XBdvGrQJ+7YdiqS+t+UioMRh1MFcbWV29Rw+8Bura5omTyHJWyLka4FaQ==
+	bh=aKq5GFCa2wHx+1qOMPWq1YgXXJNmBi0r3D1T/T7rUyE=;
+	b=aHztphsIsA2EjMsRHNqW7ptfYxycVyrMW2K+eKo0DAM+g9uqisv2dIzRfm569L2+XyHH
+	 VZYio5cFm9eFtJqPc+2meG4EBHjBvjy6VJ/00Tx1hjIFyBy8f67Ok4BrHGBtM3zKljx6P
+	 IUKvZIe5uo/VGfk7bkJ3R3i8ooe+GaasMLzkZnF9W0TLUOtUAkvV+56rKxhiN6eIaxR12
+	 fCDVTTQeYrZ65LUq2B7Y7NzFLi0bB4+M+kO8fehsfD6/ys627S9LCI58haRx4KHA6DNH0
+	 RZpWIzNO3AK6TBjIh7glNfHEwIhLqGTt0xcKzLu0UMw6aUUmNBWlr17M6QB4HyzADvQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=blackwall.org;
 	spf=none smtp.mailfrom=blackwall.org;
-	dkim=pass header.d=blackwall.org header.i=@blackwall.org header.a=rsa-sha256 header.s=google header.b="HaTu+e//";
-	arc=none smtp.remote-ip=209.85.128.41
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	dkim=pass header.d=blackwall.org header.i=@blackwall.org header.a=rsa-sha256 header.s=google header.b=UGoymCNa;
+	arc=none smtp.remote-ip=209.85.221.49
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9708606A336
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 14:28:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C9708606A336
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 301F1606A326
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 14:28:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 301F1606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.a=rsa-sha256 header.s=google header.b=HaTu+e//
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4a210470b49so21345985e9.2
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 06:28:24 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.a=rsa-sha256 header.s=google header.b=UGoymCNa
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-48dee593f18so2288939f8f.3
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 06:28:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall.org; s=google; t=1795098503; x=1795703303; darn=vger.kernel.org;
+        d=blackwall.org; s=google; t=1795098504; x=1795703304; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=MN15rtynJucizsmELauHmdt1P7lrQUtZFL6V1R2zVCE=;
-        b=HaTu+e//x8trcNFE+8n3X+Rj5wqLN+MlpnqqCfC6tfIs4fL+CSzuvcvGAAH6MaFGxU
-         7NF0RaBZGSklI4k9eQJHpB8j1rErNuqOft5KQoVAkg7+0M00LiLbboR+d00sCSaS2Py3
-         34d1bzrYRDa5icaRMgZvD0mo28x2nsWvf0z8PFEq+LZsYdPI9d15cPt40uR/AkVpKvJ2
-         FeCV7qy1r9l4WTcukQsacvJCs02UM+G5b6lWXX+9gvFfKC0PB8yVglqr47hYV1oEaiJ7
-         9VU002/Df5fs9IrR3FmkLKDThgg8I2nkl6OZ2xZVHK1SjEpRkWmRe7bQEdsTQXlYVBdM
-         1zEg==
+        bh=aKq5GFCa2wHx+1qOMPWq1YgXXJNmBi0r3D1T/T7rUyE=;
+        b=UGoymCNa+/eN0LXnupX5p/jacH1RyZGH0JMruwtff1DDRmCSeD0h0/maPQIcBzSr2c
+         nAQgbLCiIwZS7i4wBi2OJ5Tk6yTveHda0P7+4mScavr8XAarK0sCDlfqDpCS+3RblsGQ
+         wt66NEYPBdB8e43vl7mERobQVkDoYteznXqay6/ZQSSNe8+GWFg2eYjUstZBsVkJljcP
+         nwtdeWGGZH+xC+7cwj1MwB+Bji15s+AjXDkM7kRTGlj9R2Jk057CvnELRlRsmegnmE6n
+         siwLBPnBubEYhDqYankzaUGuIY90mSrY24I0z534RgSE9+4UBs0s7BBXEZQ9+1EsBBSG
+         b1OA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795098503; x=1795703303;
+        d=1e100.net; s=20260707; t=1795098504; x=1795703304;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=MN15rtynJucizsmELauHmdt1P7lrQUtZFL6V1R2zVCE=;
-        b=Td9ToMEJjtdCSJJQ5V4aznvWnPOSlr+6E8AVXRAYMyb4k9pJUNsSMtFoETRYhRYqLP
-         /7oUZ5V8sKZMAkINr8E9udmtIS0LPlwjH01BEVjNpWIzHZPOvZcTwbp1qG7OFfr4orY7
-         BoaIJIWNJAMWK86DVTtw7syKF3ZNg5DsKjap3yw+Uj7+xX03c/Sw43pvFKM+wHYOpHNg
-         ejzmmiwkzD7z1ic/hwna4Nz7NHKfHSF70rB2rBJZ/jXXCTzwXX+GkyzzhXkefhnjscvf
-         VG3H19jIOUy5za3DvT5+jDgNFhNXy7QNckKd08EyebxQt7hmE+G/74Lw0BEk+FEOhXLt
-         IBAQ==
-X-Gm-Message-State: APuU4Z9wzqaeCYUyqy08+nt6C8vqVxoV6ATGACAN7PyalMvOxB9trQJe
-	+OI+6VaQ+jdxR+bKoV30DqqcE7tX1sgMQcaGOSHLZTAWSqmkBeVb2w+L6ee9HoSk1bLenTlOd70
-	y9TsAGYrdRjKt
-X-Gm-Gg: AYBFou33fgrBseINK7cyJXPRjLgb90nu1PAu6W1AUr0XO1JHZ4bWR+LmmaPwVFXrs4Y
-	Pvla+SYgEhfrQbxrTpduQea7j0e7SakIvtg4vHX5fU1ZTCNWFne/lnC6I4XYHPdy53ztqPUS3f1
-	XiKTcl+SVnV70akEgbP8r7T0ZclHMfv3hXvZcKsmrkXBItd6vHVMhAsHeHUIyIrJGunFNWfyk+L
-	C4e5Vug0zPb4I9Mcwd2UE9PadCfDvgq29OzqywQpAcFuZqBFr1gJ3Vrfy4ysKK1t3Yq9IZ7Vono
-	D0juL+MGiqE8VdxZnPZ2v3BADCfmevA8f3/CrAC4/ocIS5IxRES2rjusnZ0jIxwFuSN/il99jfv
-	HWAFVKDbDMrpQLGw+7V3vazo7BQ21Kf6uTjEg29BDxl/BsPoGYJlOdFsec+bwXB67B05UF/PPpZ
-	GnYupVZi03zn3fUrOuSAeZGUnIj8jlPG2dCqn2vSOHnW529xqX/VSv15fyBfar48pKQ1QrvMLnb
-	Gm8PQkad6jFKiOK+59A/J+5yRB0fMB8+Ft+8MBgWaqY+IDLmX5Z8U8lWkRtXUfOvjMSbjwCOwrD
-	NbVIfkkyamGrgIUnu8BGzWvTxJGRgH+CLE0TWJGuYIYwZ/YV30k=
-X-Received: by 2002:a05:600c:3ac5:b0:4bb:7347:d5c0 with SMTP id 5b1f17b1804b1-4bb7da0f906mr124307595e9.9.1795098503293;
-        Thu, 19 Nov 2026 06:28:23 -0800 (PST)
+        bh=aKq5GFCa2wHx+1qOMPWq1YgXXJNmBi0r3D1T/T7rUyE=;
+        b=VgdW+klK36w8Jz0ZhO01QNtZyHMYq1z3TrKx4jf4RwNLvPKsO5Yw29vkjpG9iegjcs
+         F01UNk6ygzOu2Yqjf4VV5xCPg1UaKvhZSdpoL7JrOcHGg/rhEpB/dXXtt8Dh6Hjar0kz
+         XI7Ka9JHaLYTHW2u/6BOaGmh7h79AYyTBj13zs3uq9pLrnpssGHfMgnQu743+UFYp+F6
+         JmEQjfgX8q7qKKMOSzB50ZFZfoN3jme4nJrQ7TzP91JjtC8pIwkCqyQV7N7uUQuzV0yI
+         I4Bf6vRjvkU9ZMO8ppmv5/nnwXXMVaznUaU41ena29iQJkesXNTVrFFxy/iVduLyGIa9
+         Ci2A==
+X-Gm-Message-State: APuU4Z9owWfCS2vYLHWu605PIFLO6VMZJFIfj2Eb0tVJShOMi8upOsQm
+	3rr/pbaVKZ+/lgT0wO2pOxYsW7MT/EOj3yvutSzVqsSFZBPsCsDtp1i6XP+jmlo3fZSqj5/OOGY
+	NOtRrMbJtZq5T
+X-Gm-Gg: AZFdTZdUXB1sKatIqQWst5OaDi3ITNFYknkO2LS/XJ4jVfzT1UI6AZtnM+1u8vq8zzR
+	7qfBm4qRzS2bn9AM/N7G1fqP382kHbTAhvw7nZTaMDIjlMEKH6xyQpONfJkeDtAUnt6sMLmTGpD
+	yc/N1zfO0e53tfHaodJ86iB60s9rNLZ7dOios7WqburR1Dp6GBLuX0Q9dvDtTZuoBEML0WnYEgf
+	InDPa6ZSXpoHlzzu6sGhFM/RGO/H3i/J1vAuXTlV/IHwEasq9GzT3MKT2Fvg59XCnqnHFEYOY2d
+	9nwkmShyueidpuOGoMGIrS9uszTQvM+dh9hwExHMMIzEcDmRg49ZyJozBrXdrLFQT4Vw9HV3Wof
+	athyd5u4/rORMVyfJGoRP9XtN7dP/HRNduCz5tfGnhZCdltG7Q7j3c61LVIyWNIsi3lWatd16dA
+	TLRWWxVhs7Kju2eeG1XXmP9jbDCifUaONuUqSzJW2Mt4ej3yGLv9JwZNx47+qOGFT9t459wYMWq
+	L/JWK6BmxIMJdfp5rF4ryhskiJYo1B/7YNdAz4jq8/cxbQ6ggepdK/HFGMHIxlWyhNpD198dQpq
+	pIsqQDVzwXxCYsW2CAdlebj8P9FvV7brxGWoNNYkqNBsjmdxr+U=
+X-Received: by 2002:a5d:64ed:0:b0:491:fd47:5e02 with SMTP id ffacd0b85a97d-4a638eb6b36mr12401561f8f.22.1795098504640;
+        Thu, 19 Nov 2026 06:28:24 -0800 (PST)
 Received: from localhost (78-154-14-127.ip.btc-net.bg. [78.154.14.127])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-4ab4ff7073asm176516f8f.8.2026.11.19.06.28.22
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-4ab5539ab89sm116115f8f.40.2026.11.19.06.28.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2026 06:28:22 -0800 (PST)
+        Thu, 19 Nov 2026 06:28:24 -0800 (PST)
 From: Nikolay Aleksandrov <razor@blackwall.org>
 To: bpf@vger.kernel.org
-Cc: Daniel Borkmann <daniel@iogearbox.net>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
+Cc: Nikolay Aleksandrov <razor@blackwall.org>,
 	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
@@ -92,20 +92,11 @@ Cc: Daniel Borkmann <daniel@iogearbox.net>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
 	Paul Chaignon <paul@isovalent.com>,
-	Alasdair McWilliam <alasdair.mcwilliam@isovalent.com>,
-	netdev@vger.kernel.org
-Subject: [PATCH bpf-next 4/8] bpf: support SOCK_RCU_FREE sockets in bpf_sk_assign on egress
-Date: Thu, 19 Nov 2026 16:22:26 +0200
-Message-ID: <20261119142231.2612515-5-razor@blackwall.org>
+	Alasdair McWilliam <alasdair.mcwilliam@isovalent.com>
+Subject: [PATCH bpf-next 5/8] selftests/bpf: Delete assign_reuse namespace when opening it fails
+Date: Thu, 19 Nov 2026 16:22:27 +0200
+Message-ID: <20261119142231.2612515-6-razor@blackwall.org>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20261119142231.2612515-1-razor@blackwall.org>
 References: <20261119142231.2612515-1-razor@blackwall.org>
@@ -120,19 +111,10 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Daniel Borkmann <daniel@iogearbox.net>
+Delete the newly created test namespace when open_netns() fails,
+instead of returning before cleanup.
 
-Accept full SOCK_RCU_FREE sockets, including listeners, on TC egress,
-taking an skb-owned reference. Request and time-wait sockets remain
-unsupported. The BPF TPROXY use case needs to assign a listening socket
-(e.g. Envoy proxy) to an skb from tc egress. With netkit, the BPF program
-runs on the container's egress side and returns NETKIT_PASS, which delivers
-the skb to the host via __netif_rx -> backlog.
-
-The fq qdisc discards listener assignments; ordinary loopback also drops
-egress assignments. Both can miss the selected proxy even without GSO.
-
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Fixes: 22408d58a42c ("selftests/bpf: Test that SO_REUSEPORT can be used with sk_assign helper")
 Signed-off-by: Nikolay Aleksandrov <razor@blackwall.org>
 ---
 CC: Alexei Starovoitov <ast@kernel.org>
@@ -146,83 +128,25 @@ CC: Yonghong Song <yonghong.song@linux.dev>
 CC: Jiri Olsa <jolsa@kernel.org>
 CC: Emil Tsalapatis <emil@etsalapatis.com>
 CC: Ihor Solodrai <ihor.solodrai@linux.dev>
-CC: John Fastabend <john.fastabend@gmail.com>
-CC: Stanislav Fomichev <sdf@fomichev.me>
-CC: David S. Miller <davem@davemloft.net>
-CC: Eric Dumazet <edumazet@kernel.org>
-CC: Jakub Kicinski <kuba@kernel.org>
-CC: Paolo Abeni <pabeni@redhat.com>
-CC: Simon Horman <horms@kernel.org>
-CC: Kuniyuki Iwashima <kuniyu@google.com>
 CC: Paul Chaignon <paul@isovalent.com>
 CC: Alasdair McWilliam <alasdair.mcwilliam@isovalent.com>
-CC: netdev@vger.kernel.org
 
- include/uapi/linux/bpf.h       | 5 +++--
- net/core/filter.c              | 3 +--
- tools/include/uapi/linux/bpf.h | 5 +++--
- 3 files changed, 7 insertions(+), 6 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/assign_reuse.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 45e3018fb2ae..e8a7ebee305c 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -4612,7 +4612,8 @@ union bpf_attr {
-  *		interfere with successful delivery to the socket.
-  *
-  *		This operation is valid from TC ingress and egress paths.
-- *		On egress, only full refcounted sockets are accepted.
-+ *		On egress, only full sockets are accepted. Assignment takes an
-+ *		skb-owned reference and releases any previous send-side owner.
-  *		Software GSO segmentation after assignment is unsupported.
-  *
-  *		The *flags* argument must be zero.
-@@ -4626,7 +4627,7 @@ union bpf_attr {
-  *		**-ENETUNREACH** if the socket is unreachable (wrong netns).
-  *
-  *		**-EOPNOTSUPP** if the socket is unhashed, or TC egress uses
-- *		a non-full or non-refcounted socket or a decrypted packet.
-+ *		a non-full socket or a decrypted packet.
-  *
-  * long bpf_sk_assign(struct bpf_sk_lookup *ctx, struct bpf_sock *sk, u64 flags)
-  *	Description
-diff --git a/net/core/filter.c b/net/core/filter.c
-index feeb752f7a00..4dea2cc84712 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -8123,8 +8123,7 @@ BPF_CALL_3(bpf_sk_assign, struct sk_buff *, skb, struct sock *, sk, u64, flags)
+diff --git a/tools/testing/selftests/bpf/prog_tests/assign_reuse.c b/tools/testing/selftests/bpf/prog_tests/assign_reuse.c
+index 989ee4d9785b..23ed1290957b 100644
+--- a/tools/testing/selftests/bpf/prog_tests/assign_reuse.c
++++ b/tools/testing/selftests/bpf/prog_tests/assign_reuse.c
+@@ -180,7 +180,7 @@ void test_assign_reuse(void)
  
- 	if (!sk || flags != 0)
- 		return -EINVAL;
--	if (egress && (!sk_fullsock(sk) || !sk_is_refcounted(sk) ||
--		       skb_is_decrypted(skb)))
-+	if (egress && (!sk_fullsock(sk) || skb_is_decrypted(skb)))
- 		return -EOPNOTSUPP;
- 	refcounted = egress || sk_is_refcounted(sk);
- 	if (unlikely(dev_net(skb->dev) != sock_net(sk)))
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 45e3018fb2ae..e8a7ebee305c 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -4612,7 +4612,8 @@ union bpf_attr {
-  *		interfere with successful delivery to the socket.
-  *
-  *		This operation is valid from TC ingress and egress paths.
-- *		On egress, only full refcounted sockets are accepted.
-+ *		On egress, only full sockets are accepted. Assignment takes an
-+ *		skb-owned reference and releases any previous send-side owner.
-  *		Software GSO segmentation after assignment is unsupported.
-  *
-  *		The *flags* argument must be zero.
-@@ -4626,7 +4627,7 @@ union bpf_attr {
-  *		**-ENETUNREACH** if the socket is unreachable (wrong netns).
-  *
-  *		**-EOPNOTSUPP** if the socket is unhashed, or TC egress uses
-- *		a non-full or non-refcounted socket or a decrypted packet.
-+ *		a non-full socket or a decrypted packet.
-  *
-  * long bpf_sk_assign(struct bpf_sk_lookup *ctx, struct bpf_sock *sk, u64 flags)
-  *	Description
+ 	tok = open_netns(NS_TEST);
+ 	if (!ASSERT_OK_PTR(tok, "netns token"))
+-		return;
++		goto cleanup;
+ 
+ 	if (test__start_subtest("tcpv4"))
+ 		run_assign_reuse(AF_INET, SOCK_STREAM, "127.0.0.1", PORT);
 -- 
 2.47.3
 
