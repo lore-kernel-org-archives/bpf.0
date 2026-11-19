@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795051771;
-	b=y3sLPLPTk4OvvBqbXY5teAiu+x09mVxIzoluVlOCScHxgUd5k8TXJZCZb4kkDsYKfTLD
-	 Jm7bk1J/hzodGEOiGU1DcHekJHjFBwGr1HAtwfanDtZwfA4l+Sq1IIIZ79/jwNCFjqEgk
-	 TP77uPHDP9GVC1jIydGr5aob9hAWOTEwu0LlSKQDcJHXUdlRuFDm6n3fWP4HGjmx0c53i
-	 X7/7r70/OtOkkz6nInGgAS3wJH3fG1pFKAWZybe2g9Mx/0t17nT8KgkpeJDpWI95D/GbC
-	 quE+0HMzR69LIUyEisnpl5yYO4u8/egP74DMHA4k1ZuHVd+vIfRYOI1oNFOZk7FngWA==
+	t=1795051777;
+	b=mo32gv1twsOtZiskaIos5EkgKI0htxFVw+sNL08tq3d1C4DAiar50pGRvzP2OgDdotga
+	 L4mfxO4IFKmYn5uzTBlWJl04EXc6wkz753eRUKbTd95LObA2osIEZwddCyb507Kc2PojX
+	 TndR5MOT3hvYiJpjLyMJ5mxsHub1pS2AVJ5hv+sNwpE8hCvSxrLO047YMSWM7YhozpycH
+	 BCANQZ6324V4IdTgiQv6qusVeWq4qx7SzPwi4dfg+x8j4fmsjn7zSY9CwriqNoykkrii7
+	 u+odInRAQuDQs/875f+zifjpJCpnv26C9J2tLKLJHmHcvyerfm5eO0EA+pNjlvf/z8A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795051771;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795051777;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=/6GCJ8YiC8sHiOkq+0ugDFoD4azS8dVwUiDj8uwg2XM=;
-	b=MJRZM/URGd//xSvdCj6S3AoAJxUisBOnznylobnHxn9EfmH2x+1/TcnWm6Ls0DRJ5uCQ
-	 UDKcPo0Y4IrDum/pvZu+SQ2cJ2uky2MVVZ3y4qvJdgv0StOCy+ZThw9U8avgQT7Xy14PX
-	 IanbvymjY25tMJPEV02ugWw/MUOXU7Xd6K0TjdUzSi0biAiCmBM1Imjrpskn9bOg7e1vn
-	 k3ZIkuLAe76BXPV5Rhk/R9QjNmtzKSpL6YmRi/xxw7MAv9vI4RJsQc5OfI/DLDdYgTnFO
-	 +3Gfp/RX8BmhCy+7+I8KzhHuKbzJ2E9egEU+NkYQ94k8iboxZaHOOLEGg/mXM56TGpg==
+	bh=mPkIcszleH4UqVzMuyGFNOe9d+Bx16Jai6iLZ61iQ2Q=;
+	b=vec/sSUvP0jD7klAenjN44Z1Q5jxP6oE9fuSHrmxARsEOmNm6G5Fw90TCrZKepTwm+HP
+	 quFqXQK31Ao2tJbIfQAk+E6ly7bV6enRHxCpFjj3ReSfBS/CUfneBvDXJQfvzTots6oDH
+	 KCoipeFwqdMWiDdX1W17TEL3T1VcZr7c0r06eCjlrLUT7hv+ImQm5IfwVBS0MUl0iJdNl
+	 LbE2Rmv6Irsp5g9saCDk/hT8IEb+PCPgxy9x87Ez4DpiEp1FgOGQDKu1tjPylUOW2qtP7
+	 ufBeNhtX5PyCj52TlqBXmGJvWK8UfhU+ZxB8ZB2DxpsheD4mqLxIFqERYUnFNJgfVPg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YlQg4Lrw;
-	arc=none smtp.remote-ip=209.85.214.180
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FGVMgr4D;
+	arc=none smtp.remote-ip=209.85.216.51
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40246606A31C
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 01:29:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 40246606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D7D6606A31C
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 01:29:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7D7D6606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YlQg4Lrw
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2eff92780daso9603365ad.1
-        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 17:29:31 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FGVMgr4D
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3adac5c10e3so1063516a91.0
+        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 17:29:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795051771; x=1795656571; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795051777; x=1795656577; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=/6GCJ8YiC8sHiOkq+0ugDFoD4azS8dVwUiDj8uwg2XM=;
-        b=YlQg4LrwGINm8JOm/HH3p1cIUsHZxkdFdNMJFvEjMKrpWhoM7wJaJzAd/7rrUOmMfn
-         ed4sZm9cpJeUjc4mfF75f7BqS/CkWIYfUFosO3G99rM3+romSRf9urclL58UCj/4ZKmB
-         oN5Hnv0nQRJQHNrsBAxOFZmwQrF2g8HU+gJuArqAJAMdZ5MsmM1cDVtWYChs3yFtRR2U
-         mLNv6++K9gAolOIhkHhAX/LbquQhTXV4pAGzXW5HuM2DURQ3NdhfhMmUnA8mJjz7Xqhj
-         RNPjvqXQraw4AidFMkKbC4I7PBkMXkoEHxcggtsLYdbsGFWVk96Qc50PNeEw22J4Epxi
-         A0NA==
+        bh=mPkIcszleH4UqVzMuyGFNOe9d+Bx16Jai6iLZ61iQ2Q=;
+        b=FGVMgr4DUKiOLGp8hPGJ9wfyl/Q8b4eLsVNqRGGUxYKd1wpz0nLf8nlAdCxw2/0L5B
+         YVF3OVWikbnTU69uUAvpTgfBgRFDckv1QWiUPUAYRcCVHbsaFkxgFfMYeIKn5JgzGtd9
+         5aA3oO4lddxpknQ6kDCBvr/bi5KSBl//Kbc76V04KFc/M7I+CSMSIg6SxQREBfFfR5yU
+         5iJ/NZ6eK7Nx4iX0wI2OBF658NxJWXHnzrxbwE0UjtCd6Xu83RjofLzNeBDFZEie6xR7
+         pJ1ykoR0jMxpK3P8+est998WHKMXwbC4gpJ8Elvz2EJcNsGuVMjtHWZlACFNaAAZhBw4
+         UsJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795051771; x=1795656571;
+        d=1e100.net; s=20260707; t=1795051777; x=1795656577;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=/6GCJ8YiC8sHiOkq+0ugDFoD4azS8dVwUiDj8uwg2XM=;
-        b=eBU6fj6bA+jzT144ZnWUdhIkFI7fA4PTHZ9DT7MZFmYsFGAxW4jfOUMJhPaP4iYsfj
-         U7XFIuGSEtoEHm+QL/iNAVhPmnjnWvfhJEvxR6E4SCtfueK2SrB8zjiVL1IQGbAs2Gd2
-         leVb5O4jbwozo+EjA5qgTYZiGO7Fcbm2FjMYfUbC0c+eAdhMQh28Q7dujvXArO/DE3vq
-         NT8PGqQ4UZu5Bsl5iose7sR+soYWhgSQw+LDSDVPPs/UFwZUxhqT8X9v2m1W337MzrYK
-         r9Xv7v/q0kZc4WS257y/pejo48htWKJ3xu8cBs0CcJC6GhyG2jpcHAvf3SFaN0Kc9eWX
-         0r7g==
-X-Gm-Message-State: APuU4Z96CF0IV5MFfBhUlHi+Q7iW70H+YqNzRhWL/GDeRYuMqjtpiXTW
-	s4hiMLdCPCk+MjynUhuZJ6Vmt7jfNhv5qSwkBjor9TAqRsDjk7S8GjV2a0vhNg==
-X-Gm-Gg: AZFdTZcmX73eUtGIyFkJOo8eRD32+TPvbwI6DGOJ1cgAVDDCRvMe1tHuDoooT6y1NyV
-	7t9EFbND4C0pB7xNlP90C2lqz3MY+00Y8uwvO7GI3jeEOp5Y195dbHIiYnlVdBtLSiLst0AIVSS
-	SeZbvNA1DKw1+Qf0QzLTYN3H2mTPT1RLhp5CSklVGJf9zpfZqd5hbuwOF3GueNtHASj5URTLH/Y
-	R6b0DOspD7VPJZVVLciPnvZpuU2y4nokzx/Fi//sLyRITOr26Lu0i2K+c9qbYhiZkRIAXHeowLd
-	DOixrAya5NVZohamuikNWOtci4bxIeZsJP3JypWw02T4F1triM72kCACttPEfpZ9apEA14EQs0m
-	/RL1Grr0Mo6nzq/sZQBh6rLzxtLd05HtTcu2UlY4gWYrQyUOa3mKtv20nmwO25ie9nsvZiQrGDr
-	2ZXDfQZ1Z8Co9+FO1KEXyP3zvjz2zhRRtJ9FqkZj31S6xOgzhBcS8QrAk2NDQycXqF+lWMXrCPw
-	l4rRx/eui+hPx56l60lo4SD+RIpvOMgMm+8gvJtI5/hKoeuZMjn1F0UJF8QBjiK+B7uVi1jApzf
-	8ACDxorwvDcbeVy34zqnM1p8hymvi30bPJT8ARGxnqHJjWGNIMXH/P+d57G/5tZebhTRcukVPT9
-	GmyWR3mA11MgAU1fp9nPgkE4uuk3nOE+iiZhEHcfX8t2PVsfNSzViji+c7ZC5ZfwqXInJSZT6Jw
+        bh=mPkIcszleH4UqVzMuyGFNOe9d+Bx16Jai6iLZ61iQ2Q=;
+        b=CGy+od+IJEU0XUWgiVRDfvWK1pp4dctshCSQn7gl9zYxj7amo4vmEnUH2IXPElXa3n
+         tf/0ud+pgILxoiWo5yDMKXMbC/76//rtNCo+e+arg4EFcU2nw9JwmpQfKqO3Vk2P/DCJ
+         PJQy0LEGxhnOJe7IVxKKffOUOxv7oRPmsRQKRqxZIO71Rvd3ZAna4F0XiqecKtpQgS6w
+         y6gXZxOeoiom9YlEPD6a9FNfpwtFKiYSw9L4nnWnYP1gBo6xVGYGBzvq7cI0jgKKQ2W9
+         nLv6syx/VRvWP+mBph5qJIZviFRj0kgm94OORPyZGyg00LNHDOxfdqME6PSCKiZm7ZNH
+         CrbA==
+X-Gm-Message-State: APuU4Z/617P98vYfFO7OEl28LRTI2f0z8xkfZ5RKVTsq12g1onAC5U0N
+	5MRQvQc/RikAgVyoAAtFt8VNu3DUsbHgcsb4iPhJ4z67tG8qgjugdpjEIEHqXQ==
+X-Gm-Gg: AZFdTZdl3JLMNH7lzFBdwr8MTomd2XutR9XvjWV6nHgL9UvpOkvjZ7nnRIZVKiXUA6t
+	lX6vmXvQDSNDM3afJ4CgypBqrtTvFyVu8qlLV6g9Kz6YH1XS6NMjSxG8vZyuE0uB193Yr3ofgTd
+	Ogok3iYyZVytLIRFG5rmfRtQuhJohXueeixprXh0u4sdT60Sn/qPttGDDqATVwO0alOEGSiTyel
+	rqSPy22g7cGyifaq0Av1yKq2o+Jeo7Ya8t4vhLdM9yviQQRE41l6ag7TARc5Pj05cg6Yjb/UDNT
+	FNrA7mUTllbLcZxNr7CFdyKEnStem1IHVLNsheP28BAm1XzYWXiIcB+MFXt7XhGvTUaPjZQAEYE
+	Ot1abyOcQXRGHDi0Lp9J23L+j58FZDLqHpCWLt8SKjQBFc6HCu917dAeOrJ/v1XnCqVxxy8BmiO
+	fWHi/DmOtCWkXUStCkwoANdSwudyyDPJz76G9athHhxE5fYjzrNPXsvxOLDCENfqqHU6HpE8sly
+	I+2HCiQT8Z++QBfysZlm7s6CoZtCv+GEFxav7Ri/1TM/lDvYNbW/mdWnyCjLTvHlKYDidTC4JCg
+	wJIcYqUvfUhJnY8YKBzgqtEaKCQZghd/CCITdzaCOoCNEtsqpBy2CwaxVLiZhbLkPpwylH9PR5J
+	MMvYVvbsK212o4+sahhqT5j7gSjeQdJ0AdcG+KMoaI13CX/x4syCMAnk4lXPjFP5UayZreZvrFw
 	==
-X-Received: by 2002:a17:902:f652:b0:2ef:dc24:c72a with SMTP id d9443c01a7336-2eff753cb8cmr37984235ad.56.1795051770529;
-        Wed, 18 Nov 2026 17:29:30 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.248])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f021b95e3asm2528015ad.1.2026.11.18.17.29.29
+X-Received: by 2002:a17:90b:2643:b0:3ac:9e5e:d195 with SMTP id 98e67ed59e1d1-3b3d07cd4b0mr4236322a91.61.1795051776364;
+        Wed, 18 Nov 2026 17:29:36 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.247])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cde5349fbe5sm715969a12.17.2026.11.18.17.29.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Nov 2026 17:29:30 -0800 (PST)
+        Wed, 18 Nov 2026 17:29:36 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 3/5] bpf: Remove BPF_MAX_TRAMP_LINKS
-Date: Thu, 19 Nov 2026 01:29:07 +0000
-Message-ID: <20261119012909.3657417-4-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 4/5] bpf, x86, arm64: Fit the return value of a prog to the return type
+Date: Thu, 19 Nov 2026 01:29:08 +0000
+Message-ID: <20261119012909.3657417-5-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261119012909.3657417-1-alexei.starovoitov@gmail.com>
 References: <20261119012909.3657417-1-alexei.starovoitov@gmail.com>
@@ -104,239 +104,258 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-A trampoline takes the programs that fit into its image. The number
-BPF_MAX_TRAMP_LINKS was picked for each architecture so that this many
-fit, but the code for a program has no fixed size. It depends on the kind
-of the program, on its cookie, on the stack frame, on call depth
-tracking. So the number promises nothing, and it refuses programs that
-would fit:
+A program returns 64 bits. The x86-64 and arm64 trampolines hand them to
+a caller that was compiled for a function that returns int or bool.
 
-	                                          limit    fit
-	x86-64, fentry or fexit                   36       57
-	x86-64, fmod_ret, call depth tracking     36       35
-	arm64, fmod_ret                           37       35
+An fmod_ret program skips the traced function if the 64 bits are not 0.
+The caller of a function that returns int reads the low 32 bits only. So
+the trampoline can skip the function on a value that the caller reads as
+0:
 
-bpf_trampoline_update() asks the JIT for the size of the image and
-returns -E2BIG if it is too large. That is the limit that holds. Remove
-the other one.
+	program             trampoline        caller
+	r0 = 1 << 32        not 0: skip       eax == 0: success
 
-Three things relied on the number:
+That is no fault of the program. Compilers leave the high half of r0
+open for int: "return x >> 8;" is a 64-bit shift. BPF LSM programs go
+through the same code, and the verifier checks only the low 32 bits of
+what they return.
 
- - nodes[] in struct bpf_tramp_nodes. It is a pointer now.
-   bpf_trampoline_get_progs() allocates the arrays behind the headers.
+A compiler may also assume that a function which returns bool leaves 0 or
+1 in the low byte. This is what clang makes of "return f() ? 5 : 7;":
 
- - skip[] in the s390 JIT, a label for each program that the second pass
-   read. Patch the branch when the label is known, as invoke_bpf_prog()
-   does for its other forward branch.
+	x86-64    xor al, 1; movzx eax, al; lea eax, [rax * 2 + 5]
+	arm64     tst w0, #1; csel ..
 
- - Kernels with pages of 16 or 64 KB. An image may fill a page, so only
-   the number kept it small there. bpf_session_cookie() has 8 bits for
-   the index of a cookie, and the JITs have offsets into the stack frame
-   that grows with the cookies. Limit the image to 4 KB on each kernel.
-   These kernels now take what a kernel with 4 KB pages takes. That can
-   be a few programs less than the number, for example 35 instead of 37
-   fmod_ret programs on arm64.
+If the byte is 2, the first returns 11 and the second takes it for false.
+An fmod_ret program on a function like should_fail_alloc_page() and
+a struct_ops program behind a member like sched_ext_ops::yield() can
+return any number.
 
+Before the trampoline stores the value, extend its low ret_size bytes to
+64 bits, with or without the sign, as the return type says. The s390
+trampoline does that already. Make a bool 1 if its low byte is not 0.
+struct btf_func_model does not tell bool from u8, hence
+BTF_FMODEL_BOOL_RET. The trampoline tests, fexit programs read and the
+caller gets the same value.
+
+An fexit program still reads -EINVAL if the fmod_ret program returns it,
+and now reads -EINVAL after "w0 = -22" too. Nothing but bool changes for
+the callers of struct_ops programs: they read the low bytes only.
+
+The price is one instruction behind the call of such a program, three for
+bool. Fewer fmod_ret programs fit into an image: 33 instead of 35 on
+arm64, 31 for bool. The trampolines of the other architectures are not
+changed.
+
+Fixes: ae24082331d9 ("bpf: Introduce BPF_MODIFY_RETURN")
+Fixes: 13fac1d851e0 ("bpf: Fix trampoline generation for fmod_ret programs")
+Fixes: efc9909fdce0 ("bpf, arm64: Add bpf trampoline for arm64")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- arch/s390/net/bpf_jit_comp.c | 18 ++++--------------
- include/linux/bpf.h          | 21 +++++++--------------
- kernel/bpf/bpf_struct_ops.c  |  2 +-
- kernel/bpf/trampoline.c      | 25 ++++++++++++-------------
- 4 files changed, 24 insertions(+), 42 deletions(-)
+ arch/arm64/net/bpf_jit_comp.c | 39 ++++++++++++++++++++++++++++++-----
+ arch/x86/net/bpf_jit_comp.c   | 33 ++++++++++++++++++++++++++++-
+ include/linux/bpf.h           |  3 +++
+ kernel/bpf/btf.c              |  2 ++
+ kernel/bpf/verifier.c         | 12 +++++------
+ 5 files changed, 76 insertions(+), 13 deletions(-)
 
-diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
-index ae89037db87c..d6c3c4270a0b 100644
---- a/arch/s390/net/bpf_jit_comp.c
-+++ b/arch/s390/net/bpf_jit_comp.c
-@@ -2551,8 +2551,6 @@ struct bpf_tramp_jit {
- 	int r14_off;		/* Offset of saved %r14, has to be at the
- 				 * bottom */
- 	int do_fexit;		/* do_fexit: label */
--	int skip[BPF_MAX_TRAMP_LINKS];	/* skip: labels after each prog */
--	int nr_progs;
- };
- 
- static void load_imm64(struct bpf_jit *jit, int dst_reg, u64 val)
-@@ -2580,18 +2578,15 @@ static int invoke_bpf_prog(struct bpf_tramp_jit *tjit,
- 			 offsetof(struct bpf_tramp_run_ctx, bpf_cookie);
- 	struct bpf_prog *p = node->link->prog;
- 	void *skip = jit->prg_buf + jit->prg;
--	int idx = tjit->nr_progs++;
-+	int nop = jit->prg;
- 	int patch;
- 
--	if (idx >= ARRAY_SIZE(tjit->skip))
--		return -E2BIG;
--
- 	/*
- 	 * nop, patched to skip this prog when it is detached
- 	 */
- 
- 	/* brcl 0,skip */
--	EMIT6_PCREL_RILC(0xc0040000, 0, tjit->skip[idx]);
-+	EMIT6_PCREL_RILC(0xc0040000, 0, 0);
- 
- 	/*
- 	 * run_ctx.cookie = node->cookie;
-@@ -2653,7 +2648,8 @@ static int invoke_bpf_prog(struct bpf_tramp_jit *tjit,
- 	EMIT6_PCREL_RILB_PTR(0xc0050000, REG_14, bpf_trampoline_exit(p));
- 
- 	/* skip: */
--	tjit->skip[idx] = jit->prg;
-+	if (jit->prg_buf)
-+		*(u32 *)&jit->prg_buf[nop + 2] = (jit->prg - nop) >> 1;
- 	bpf_tramp_image_add_skip(im, p, skip, jit->prg_buf + jit->prg);
- 
- 	return 0;
-@@ -2717,8 +2713,6 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
- 	u64 func_meta;
- 	int i, j;
- 
--	/* The skip labels are taken from the previous pass. */
--	tjit->nr_progs = 0;
- 	if (im)
- 		im->nr_skips = 0;
- 
-@@ -3043,10 +3037,6 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image,
- 	if (ret < 0)
- 		return ret;
- 	if (tjit.common.prg > (char *)image_end - (char *)image)
--		/*
--		 * Use the same error code as for exceeding
--		 * BPF_MAX_TRAMP_LINKS.
--		 */
- 		return -E2BIG;
- 
- 	tjit.common.prg = 0;
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index a5ad08b7937c..25704de9c4b2 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -24,6 +24,7 @@
- #include <linux/kallsyms.h>
- #include <linux/capability.h>
- #include <linux/sched/mm.h>
-+#include <linux/sizes.h>
- #include <linux/slab.h>
- #include <linux/percpu-refcount.h>
- #include <linux/stddef.h>
-@@ -1343,26 +1344,18 @@ static inline u32 btf_func_model_arg_slots(const struct btf_func_model *m, u32 a
-  */
- #define BPF_TRAMP_F_INDIRECT		BIT(8)
- 
--/* Each call __bpf_prog_enter + call bpf_func + call __bpf_prog_exit is ~50
-- * bytes on x86. The trampoline image has to fit in PAGE_SIZE.
-+/*
-+ * The image of a trampoline is not larger, also where pages are. That limits
-+ * the number of programs: the index of a session cookie fits in its 8 bits,
-+ * and the offsets into the stack frame fit in the instructions of each JIT.
-  */
--enum {
--#if defined(__s390x__) || defined(__powerpc64__)
--	BPF_MAX_TRAMP_LINKS = 27,
--#elif defined(__x86_64__)
--	BPF_MAX_TRAMP_LINKS = 36,
--#elif defined(__aarch64__)
--	BPF_MAX_TRAMP_LINKS = 37,
--#else
--	BPF_MAX_TRAMP_LINKS = 38,
--#endif
--};
-+#define BPF_TRAMP_IMAGE_MAX_SIZE	SZ_4K
- 
- #define BPF_TRAMP_COOKIE_INDEX_SHIFT	8
- #define BPF_TRAMP_IS_RETURN_SHIFT	63
- 
- struct bpf_tramp_nodes {
--	struct bpf_tramp_node *nodes[BPF_MAX_TRAMP_LINKS];
-+	struct bpf_tramp_node **nodes;
- 	int nr_nodes;
- };
- 
-diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-index 7c5cd6086e27..deee5d2e89b2 100644
---- a/kernel/bpf/bpf_struct_ops.c
-+++ b/kernel/bpf/bpf_struct_ops.c
-@@ -646,7 +646,7 @@ int bpf_struct_ops_prepare_trampoline(struct bpf_tramp_nodes *tnodes,
- 	void *image = *_image;
- 	int size;
- 
--	tnodes[BPF_TRAMP_FENTRY].nodes[0] = node;
-+	tnodes[BPF_TRAMP_FENTRY].nodes = &node;
- 	tnodes[BPF_TRAMP_FENTRY].nr_nodes = 1;
- 
- 	if (model->ret_size > 0)
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index 21d460866dfe..4dd4040e784f 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -506,14 +506,18 @@ bpf_trampoline_get_progs(const struct bpf_trampoline *tr, int *total, bool *ip_a
- 	int kind;
- 
- 	*total = 0;
--	tnodes = kzalloc_objs(*tnodes, BPF_TRAMP_MAX);
-+	for (kind = 0; kind < BPF_TRAMP_MAX; kind++)
-+		*total += tr->progs_cnt[kind];
-+
-+	/* The arrays of nodes are behind the BPF_TRAMP_MAX headers */
-+	tnodes = kzalloc(BPF_TRAMP_MAX * sizeof(*tnodes) + *total * sizeof(*nodes), GFP_KERNEL);
- 	if (!tnodes)
- 		return ERR_PTR(-ENOMEM);
-+	nodes = (void *)&tnodes[BPF_TRAMP_MAX];
- 
- 	for (kind = 0; kind < BPF_TRAMP_MAX; kind++) {
- 		tnodes[kind].nr_nodes = tr->progs_cnt[kind];
--		*total += tr->progs_cnt[kind];
--		nodes = tnodes[kind].nodes;
-+		tnodes[kind].nodes = nodes;
- 
- 		hlist_for_each_entry(node, &tr->progs_hlist[kind], tramp_hlist) {
- 			*ip_arg |= node->link->prog->call_get_func_ip;
-@@ -768,7 +772,7 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mut
- 		goto out;
- 	}
- 
--	if (size > PAGE_SIZE) {
-+	if (size > BPF_TRAMP_IMAGE_MAX_SIZE) {
- 		err = -E2BIG;
- 		goto out;
- 	}
-@@ -889,22 +893,17 @@ static struct bpf_tramp_node *fsession_exit(struct bpf_tramp_node *node)
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index b8d765d6ab07..a9a22a2f3d91 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -2980,7 +2980,33 @@ bool bpf_jit_supports_large_stack(void)
+ 	return true;
  }
  
- static int bpf_trampoline_add_prog(struct bpf_trampoline *tr,
--				   struct bpf_tramp_node *node,
--				   int cnt)
-+				   struct bpf_tramp_node *node)
- {
- 	enum bpf_tramp_prog_type kind;
- 	struct bpf_tramp_node *node_existing, *fexit;
- 	struct hlist_head *prog_list;
- 
- 	kind = bpf_attach_type_to_tramp(node->link->prog);
--	if (kind == BPF_TRAMP_FSESSION) {
-+	if (kind == BPF_TRAMP_FSESSION)
- 		prog_list = &tr->progs_hlist[BPF_TRAMP_FENTRY];
--		cnt++;
--	} else {
++/*
++ * A program returns 64 bits. The caller of the traced function, or of the
++ * struct_ops member, reads only the low ret_size bytes of x0. Extend them to
++ * 64 bits as the return type says. That is the value which the trampoline
++ * tests, which fexit programs read and which the caller gets.
++ */
++static void emit_narrow_ret(struct jit_ctx *ctx, const struct btf_func_model *m)
++{
++	int msb = m->ret_size * 8 - 1;
++
++	if (!m->ret_size || m->ret_size >= sizeof(u64))
++		return;
++
++	if (m->ret_flags & BTF_FMODEL_SIGNED_ARG)
++		emit(A64_SBFM(1, A64_R(0), A64_R(0), 0, msb), ctx);
 +	else
- 		prog_list = &tr->progs_hlist[kind];
--	}
--	if (cnt >= BPF_MAX_TRAMP_LINKS)
--		return -E2BIG;
- 	if (!hlist_unhashed(&node->tramp_hlist))
- 		/* prog already linked */
- 		return -EBUSY;
-@@ -1031,7 +1030,7 @@ static int __bpf_trampoline_link_prog(struct bpf_tramp_node *node,
- 		tr->extension_prog = node->link->prog;
- 		return 0;
++		emit(A64_UBFM(1, A64_R(0), A64_R(0), 0, msb), ctx);
++
++	if (m->ret_flags & BTF_FMODEL_BOOL_RET) {
++		/* The caller may assume that a bool is 0 or 1 */
++		emit(A64_CBZ(1, A64_R(0), 2), ctx);
++		emit(A64_MOVZ(1, A64_R(0), 1, 0), ctx);
++	}
++}
++
+ static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_image *im,
++			    const struct btf_func_model *m,
+ 			    struct bpf_tramp_node *node, int bargs_off,
+ 			    int retval_off, int run_ctx_off, bool save_ret)
+ {
+@@ -3034,8 +3060,10 @@ static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ 
+ 	emit_call((const u64)p->bpf_func, ctx);
+ 
+-	if (save_ret)
++	if (save_ret) {
++		emit_narrow_ret(ctx, m);
+ 		emit(A64_STR64I(A64_R(0), A64_SP, retval_off), ctx);
++	}
+ 
+ 	if (ctx->image) {
+ 		int offset = &ctx->image[ctx->idx] - branch;
+@@ -3055,6 +3083,7 @@ static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ }
+ 
+ static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_image *im,
++			       const struct btf_func_model *m,
+ 			       struct bpf_tramp_nodes *tn, int bargs_off,
+ 			       int retval_off, int run_ctx_off, __le32 **branches)
+ {
+@@ -3065,7 +3094,7 @@ static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ 	 */
+ 	emit(A64_STR64I(A64_ZR, A64_SP, retval_off), ctx);
+ 	for (i = 0; i < tn->nr_nodes; i++) {
+-		invoke_bpf_prog(ctx, im, tn->nodes[i], bargs_off, retval_off,
++		invoke_bpf_prog(ctx, im, m, tn->nodes[i], bargs_off, retval_off,
+ 				run_ctx_off, true);
+ 		/* if (*(u64 *)(sp + retval_off) !=  0)
+ 		 *	goto do_fexit;
+@@ -3459,7 +3488,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ 			store_func_meta(ctx, meta, func_meta_off);
+ 			cookie_bargs_off--;
+ 		}
+-		invoke_bpf_prog(ctx, im, fentry->nodes[i], bargs_off,
++		invoke_bpf_prog(ctx, im, m, fentry->nodes[i], bargs_off,
+ 				retval_off, run_ctx_off,
+ 				flags & BPF_TRAMP_F_RET_FENTRY_RET);
  	}
--	err = bpf_trampoline_add_prog(tr, node, cnt);
-+	err = bpf_trampoline_add_prog(tr, node);
- 	if (err)
- 		return err;
- 	err = bpf_trampoline_update(tr, true /* lock_direct_mutex */, ops, data);
+@@ -3470,7 +3499,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ 		if (!branches)
+ 			return -ENOMEM;
+ 
+-		invoke_bpf_mod_ret(ctx, im, fmod_ret, bargs_off, retval_off,
++		invoke_bpf_mod_ret(ctx, im, m, fmod_ret, bargs_off, retval_off,
+ 				   run_ctx_off, branches);
+ 	}
+ 
+@@ -3504,7 +3533,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ 			store_func_meta(ctx, meta, func_meta_off);
+ 			cookie_bargs_off--;
+ 		}
+-		invoke_bpf_prog(ctx, im, fexit->nodes[i], bargs_off, retval_off,
++		invoke_bpf_prog(ctx, im, m, fexit->nodes[i], bargs_off, retval_off,
+ 				run_ctx_off, false);
+ 	}
+ 
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index d10a36daeeec..d51ae52fef71 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -4004,6 +4004,35 @@ static void restore_regs(u8 **prog, const u8 *pos_of_slot, int nr_slots,
+ 	}
+ }
+ 
++/*
++ * A program returns 64 bits. The caller of the traced function, or of the
++ * struct_ops member, reads only the low ret_size bytes of rax. Extend them to
++ * 64 bits as the return type says. That is the value which the trampoline
++ * tests, which fexit programs read and which the caller gets.
++ */
++static void emit_narrow_ret(const struct btf_func_model *m, u8 **pprog)
++{
++	u8 *prog = *pprog;
++
++	if (m->ret_flags & BTF_FMODEL_BOOL_RET) {
++		/* The caller may assume that a bool is 0 or 1 */
++		EMIT2(0x84, 0xC0);       /* test al, al */
++		EMIT3(0x0F, 0x95, 0xC0); /* setne al */
++	}
++
++	/* movsx rax, al | ax | eax. Nothing for 8 bytes */
++	if (m->ret_flags & BTF_FMODEL_SIGNED_ARG)
++		emit_movsx_reg(&prog, m->ret_size * 8, true, BPF_REG_0, BPF_REG_0);
++	else if (m->ret_size == 1)
++		EMIT3(0x0F, 0xB6, 0xC0); /* movzx eax, al */
++	else if (m->ret_size == 2)
++		EMIT3(0x0F, 0xB7, 0xC0); /* movzx eax, ax */
++	else if (m->ret_size == 4)
++		EMIT2(0x89, 0xC0);       /* mov eax, eax */
++
++	*pprog = prog;
++}
++
+ static int invoke_bpf_prog(const struct btf_func_model *m, u8 **pprog,
+ 			   struct bpf_tramp_image *im,
+ 			   struct bpf_tramp_node *node, int stack_size,
+@@ -4075,8 +4104,10 @@ static int invoke_bpf_prog(const struct btf_func_model *m, u8 **pprog,
+ 	 * BPF_TRAMP_FENTRY trampoline may need to return the return
+ 	 * value of BPF_PROG_TYPE_STRUCT_OPS prog.
+ 	 */
+-	if (save_ret)
++	if (save_ret) {
++		emit_narrow_ret(m, &prog);
+ 		emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_0, -8);
++	}
+ 
+ 	/* replace 2 nops with JE insn, since jmp target is known */
+ 	emit_code(jmp_insn, X86_JE + ((prog - jmp_insn - 2) << 8), 2);
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 25704de9c4b2..971e584c6efc 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1285,6 +1285,9 @@ struct bpf_prog_offload {
+ /* The argument is nullable. */
+ #define BTF_FMODEL_NULLABLE_ARG		BIT(3)
+ 
++/* The return value is a bool. */
++#define BTF_FMODEL_BOOL_RET		BIT(4)
++
+ struct btf_func_model {
+ 	u8 ret_size;
+ 	u8 ret_flags;
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index e95ca39f990c..2f28b418a7fc 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -8385,6 +8385,8 @@ int btf_distill_func_proto(struct bpf_verifier_log *log,
+ 	}
+ 	m->ret_size = ret;
+ 	m->ret_flags = __get_type_fmodel_flags(t);
++	if (ret == 1 && btf_type_is_int(t) && (btf_int_encoding(t) & BTF_INT_BOOL))
++		m->ret_flags |= BTF_FMODEL_BOOL_RET;
+ 
+ 	for (i = 0; i < nargs; i++) {
+ 		if (i == nargs - 1 && args[i].type == 0) {
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 1a8e5a108a68..39f1c6eb1131 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -19983,14 +19983,12 @@ static int check_fmodret_retval(struct bpf_verifier_env *env, int regno,
+ 	}
+ 
+ 	/*
+-	 * "w0 = -22" zero-extends, the caller of an int function sees -22. The
+-	 * trampoline tests all 64 bits: 1 << 32 would skip the function, and the
+-	 * caller would see 0. So the low 32 bits decide only if the high ones are 0.
++	 * "w0 = -22" zero-extends. The trampoline sign-extends the low 32 bits of
++	 * the value for an int function, so its caller sees -22. The low 32 bits
++	 * decide if the high ones are 0. Else the 64 bits have to be in the list.
+ 	 *
+-	 * That is right where the ABI leaves the high 32 bits of an int in the
+-	 * return value register open: x86-64, arm64. s390x, riscv64, ppc64 and
+-	 * loongarch want it sign-extended: look here before one of them is added
+-	 * to CONFIG_BPF_FMODRET_SCAN.
++	 * The trampolines of x86-64, arm64 and s390x do that: look here before
++	 * another architecture is added to CONFIG_BPF_FMODRET_SCAN.
+ 	 */
+ 	t = btf_type_skip_modifiers(aux->attach_btf, aux->attach_func_proto->type, NULL);
+ 	if (t->size == 4 && reg_umax(reg) <= U32_MAX) {
 -- 
 2.55.0
 
