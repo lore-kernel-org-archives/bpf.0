@@ -1,74 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.197
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.176
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795069527;
-	b=g2WwF2LhToUvsEY3/M73L49u54VIRrgerU8hElkah8sKiOJ3J7ZZ42n5T5Ig0n/yR2bG
-	 rlb4NELmwK/ogRvxYC7SLAqExKOr/RMcyiZP/GU84n17tMA1y3+WkmRVNvVDaXlXagWlp
-	 kEw7A2KpKLrWaoPF2Im7We74+QA39Lyx2yOrCthlxMmwSsV/dyIXJ7pZ4yA/+QxSVprZk
-	 3soYCpjmBvYVG1D7gccj1xTVfxXggddu30qHiigETrT4EEfEuXvTPB78CAUHdrJ+Widuu
-	 JQVPi4TPRaGh3fCrOI5kitTpRm0mk4+fIzclqNibBbWJaOz+bxX8SKaoL6cwxrq91Lg==
+	t=1795069627;
+	b=r9P7Ch2kx9MNbPnVbzWce0F4gtKN/ngp2mhIT2w88SP18xx/pGZ7ts67p0Szcz0yc/h1
+	 erT9M+1GRQ6PhUD8Y4qzCKjrOYuaGG8huPv0zfhV2U9Zyx71UgfNwSaZMGlYeEZ/fj6Nx
+	 gka0prR/mO6EHYbKbZu2hIrMBrJeZwjon2l4IHNohsLTcM2AEUYxwoC7Pwnz3rz5IxEXf
+	 KdE084ABnU9UXcuqPDnj5vbEW7PJvtr8uJsEy23tK3PCgSxqDwc4SU6doLSjMh6HnltA3
+	 HJSJUqOLoCqNA4gPYhVIe0Iog3IDI8tUmV3SzylN5Htfacs38ClSoQ34zdmhuZ4vIGQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795069527;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795069627;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=3/jCbkLsS4OGDXUOa/6hUNYQQjlO6TzzhZNOu+cYzkc=;
-	b=LHxrmgL2b4e5WAVpP7pW0KM/ggMttbJfa2r+fAJIfOmGDJoRgO3B2v2MBaoskSy8G+sE
-	 yRL8nV1gOtix8d9IW9xLGFcqoMgAeiQIKuferSad57d5CdFlqDhPjQCTgZMrXjarKjBS4
-	 Sd/zOcfXHKmRsKAA5Do9qJs/xPEvNuYrvi89OWlajv7fus5lvPiSk1UQ3p+et+N/v6CJI
-	 6N/o73H2+486Vo96cy7+mP1CF3CqyFUgYskyUE2utm9OEs/5ZM2OZuNk5VyXraT0CtXJi
-	 de2TTJax6Xs4wiNbeQMt4ZxHJ790ijUfHCCvltcQj8L0Yag5dkzS/0/xEGcNbep2Wgw==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
+	 Subject:From:To:Cc:X-Mailer:References:In-Reply-To;
+	bh=QEyBimWiPMZCb/NgBqLydR3KIBuNX/gfzUiZdqnqTSg=;
+	b=3N9SVwfsWWUl6dRj9pYvFJnfdhG++A+fADPCDZiuJTNyEMchGH3py/yAP3BVJEtl+EGC
+	 SoqbeOlifUuVlJzIwXpHoDMuFLBVy17IuhaycDLS1kfPhb17nBXdhoZyRImU3F1RE/IqY
+	 /AmL+jMq0ulPuIad8hnisvbx0Vil0a+QWbmQL/pLI/TbJWer6tpDmuWPb9kzXEWkSDQ/h
+	 OjXx7iOsbXnyGKYVEH+VuDVifSzBNdfQrs+v3XavzAv9Nso6SFke8YLLlk8YPjGMpcDiV
+	 iZGpifelRKw5EGdlWaTKeYLnJeYDGlW26EaIsEPqz7qJEtuPOqWHOOKim/Al3hr6+qQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=DsrNb2t0;
-	arc=none smtp.remote-ip=209.85.214.197
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=avJ1y1hc;
+	arc=none smtp.remote-ip=209.85.215.176
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97E79606A325
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 06:25:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 97E79606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDB86606A326
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 06:27:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CDB86606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=DsrNb2t0
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2ee184a2474so16113225ad.2
-        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 22:25:27 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=avJ1y1hc
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cd61cef87f1so1235553a12.0
+        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 22:27:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795069527; x=1795674327; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=3/jCbkLsS4OGDXUOa/6hUNYQQjlO6TzzhZNOu+cYzkc=;
-        b=DsrNb2t02IODLijhWdu7RKB6d0nUCCWQT9Ri1w3QwWzqQROAWLnzG8L5y5/0yzdkM3
-         Hk6/6M6r6kVP0+k2iA4Z+P0zIm9OzzKb6yXYvCmNShBYqBxperO53Aclo76atEkc7HsL
-         RsZaUAT9ZyRj8AD6GTuCQyTb9zEktyG3JuRBCOhX8/1rE7PHN3i5eQTHPxeOyr6hkpMa
-         W5eOrPgZQ67LztrcdqYopVvXSqFBYNvSCnXwtqHgtwOKS3JXxqg9n2E1L9uxUST6ae77
-         T74V8VZYgC6VjcZmGnLXFjHy0mpDGnts3QcH2fXZhSRxdfiEIn+daLA8kiM3b091lVyK
-         E5mw==
+        d=gmail.com; s=20260707; t=1795069626; x=1795674426; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=QEyBimWiPMZCb/NgBqLydR3KIBuNX/gfzUiZdqnqTSg=;
+        b=avJ1y1hccHAVp2OQEF6HFs7rp+tJ+c6Lsg4YWpNqEUj0mcGZs5E0JoA3GL8/MoukJS
+         ZRbcrvfmw6g/qp1EzYUR8C1lMuFz6/WQBCBtCuRnvddMpKX83KqWaTTKu86i37L7rBP5
+         Wx99kcAZpizEB/DtpChFFjMVNyFDUPUlNS+64QbGUboCHJ5YGZTyI3VluU43hZPu1t2m
+         ZMtPG5S5NZuQcb7c5PhZ7QJ4S8PIOdg7UALNzWz7VfM+GFBfTASEII/f85KdU0VAAVIp
+         IMoNCmMwpwClRvRqsNEvAekNhhXB9eXE6lfoP0zbkYlScNSY7nqS1Ki0UFCG7CokDdu6
+         PHkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795069527; x=1795674327;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=3/jCbkLsS4OGDXUOa/6hUNYQQjlO6TzzhZNOu+cYzkc=;
-        b=SUqgu57LWG24akAiexGTRgeZHG9iA7/8JJjYUW8deT6DzVQqCprRxeBwmiY5LYVY0k
-         hQOQ68Eo0H6VqMSNg7ZgZQxwjtzQhN/CPO39yPNJWd57Wuawe5xHGvWjNm2xiwInjikL
-         sVqDadYgl9fgF2arH6qHZ71fRSMQTBZ0Eb7Zg4ZMALEuwsvKTzUek79cMEi1y+KemEQA
-         YNwPN5ru29WdkcefmIjW2thIwe5qF8hSrl1snect8VuddZeBucbn2PINqpkZ45H/C03Z
-         pA0KF+g3DBWI4cH/9ynwnWIuMh+IpmklIiwnqgALOTEwu2e+Q6rQW8O8Qro972gMqcSd
-         IVDA==
-X-Forwarded-Encrypted: i=1; AL+hErHU6ujNAWYFEUvlsg8M4d7h9qjkb4lorsQw4N0LS+RQN4VFB8ldMXKpTlCHT1zgagdFhik=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+WASTGHaCrtDKBbyLandojOHWIFgx7om3zF8JPbiOoifp5+0Vl
-	q3Pjju+IpYpocwKY9+WmZTSgKFqyh3dyDgNOGJcYzQr1vm+CFdoli2nHT19hmROzdnP+moK4/ns
-	+YMHDdQ==
-X-Received: from plbkp8.prod.google.com ([2002:a17:903:2808:b0:2ef:f76f:c4])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:f54e:b0:2ef:fcd8:df75
- with SMTP id d9443c01a7336-2effcd8e214mr45611785ad.36.1795069526782; Wed, 18
- Nov 2026 22:25:26 -0800 (PST)
-Date: Thu, 19 Nov 2026 06:25:25 +0000
-In-Reply-To: <20261118153541.172499-1-shlomojune6@gmail.com>
+        d=1e100.net; s=20260707; t=1795069626; x=1795674426;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=QEyBimWiPMZCb/NgBqLydR3KIBuNX/gfzUiZdqnqTSg=;
+        b=CO0Dj40pVYCSh4HxiXMerwXPnPWeiT/XY0VAsq47pcuadyA0A8JjhSiuV6twsP5wZe
+         QRBpAFsEDI3MZtrP7IemUYu4IiyWMibjB9kvBX5BrcNLWsHbCrsX3hkb75a5sjO5Tv2j
+         c3J13udhM5CxXuc8MPjwtnyQ0FVLlClzpJrto2GUMNoaU6SKAD8ztynse3qtVXCMtuZR
+         ur5T0DIsq48fmXYB9z+sOsuaEiUfVs6ojil3YeBzNZNAAd/kmb3ClXNWH9NwDrubkZ3W
+         JVLCrlwNE7lHxjSp7r4cDEuI/u+pkzAzpozaWsHI9dy0F3UcySuw0rwMhRHqET2u8+5Q
+         j1hg==
+X-Forwarded-Encrypted: i=1; AL+hErFfB4ZhzbTY0YGQoA3An/Cc/BoF3Du666HFJkthHg+lqJhgW0qXuzj5DhkcfLuSX2LJrII=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/0I9eqms45Juf/dXY093baHqKsT2YzporMKvor7HaxUUHEcZHC
+	SNAV7MLe0uCKiolJFG2vYBkPROdtscX3r/6oU/WzLG11xgULVlNpZnBGen8+KA==
+X-Gm-Gg: AYBFou2zQAQpx8lKchXG94rG5rac3/MB27F6/gDXvmw6uDZajox8l8Xt7rmdA10SKms
+	hk5n9oPsIFN4DNQNAdNvEZtVqOZ2xeWCA7IJYmh2YeAHpLvGPNEx3gUvyuHhsbBKxfd2zIuoXvm
+	4aiMMN96QOLWZMDKuD2sCYq0B+WWN6el05G1aWmcpAEsTk827HvgT9u3IBZT3XhY/Z9RuK4GbIE
+	vq/VWU8/zvFGiXqlbIKj2K1v1UwdE1gTSarZzjbuLIKdFs6tdB5cxIwXgecA18QcXA0Zvdjwy8n
+	So6Y4N1YBC4KMwVbAmEVws9je72hJdEA9WCamanB5giZMjGKaZ92LgQItuVPQvBAS/6NNIC5Cms
+	AIFcLV9EBM+JCi0wOw9LLVppuppphRv/FjlwnXSjC0fR55xNg5Wj7+JJAISHVEjEJj/KdPrra9v
+	urh3kTdkAsR+Jbzj+eB6RhhiUUjYyPt9oE5rHu5+yPImG9R23+vPInWtwOLOUneOXxbAKQsQ8Ss
+	CUvE1Bu33+rD4EzELeme/zQGhpPFzHeVMSQR7OlpDqD0HQUh7H0Cs6luFKm9JDJk6FQ4No2t9Jc
+	9/gzM4rX0Mr893fmtVkiUYDL655Qt+8zs4k3SNP8PRkWCIe/oJpV+IywDzESmwAoZ+uTQBT7H8K
+	BdpPr2j9zmi5M9LWnU4l4kqDiLchX45mzdw==
+X-Received: by 2002:a05:6a21:b8c:b0:3e1:a8fc:18f9 with SMTP id adf61e73a8af0-3fe8b5eea53mr4717482637.62.1795069625749;
+        Wed, 18 Nov 2026 22:27:05 -0800 (PST)
+Received: from localhost ([153.61.198.247])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cde5336475csm1177532a12.3.2026.11.18.22.27.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Nov 2026 22:27:05 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -78,38 +89,62 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 Mime-Version: 1.0
-References: <20261118153541.172499-1-shlomojune6@gmail.com>
-Message-ID: <av6WPnah6aodSmuh@google.com>
-Subject: Re: [PATCH v2] net: sock_reuseport: check program type on the
- migration path
-From: Kuniyuki Iwashima <kuniyu@google.com>
-To: Shihuang Liu <shlomojune6@gmail.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, edumazet@kernel.org, 
-	pabeni@redhat.com, willemb@google.com, davem@davemloft.net, kuba@kernel.org, 
-	horms@kernel.org
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 19 Nov 2026 06:27:05 +0000
+Message-Id: <DMYZ2PEBP5GQ.NPCWIL8HYD9H@gmail.com>
+Subject: Re: [PATCH bpf] bpf, lsm: Remove bpf_lsm_release_secctx from
+ sleepable_lsm_hooks
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: =?utf-8?q?=E6=A2=93=E5=B7=9D=E5=92=B2=E5=A4=AA?= <inkxiao12@gmail.com>,
+ <bpf@vger.kernel.org>
+Cc: <security@kernel.org>, <kpsingh@kernel.org>, <matt@bobrowski.net>,
+ <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+ <stable@vger.kernel.org>
+X-Mailer: aerc 0.20.1-355-gf870624f6c37
+References: <CAMcAce8_ZR9xr8KJe6kvDNxr-JW2A5Ya5tn_2SO86hn7oR1KCQ@mail.gmail.com>
+In-Reply-To: <CAMcAce8_ZR9xr8KJe6kvDNxr-JW2A5Ya5tn_2SO86hn7oR1KCQ@mail.gmail.com>
 
-On Wed, 18 Nov 2026 23:35:41 +0800, Shihuang Liu wrote:
-> A BPF_PROG_TYPE_SOCKET_FILTER program can be loaded with
-> expected_attach_type set to BPF_SK_REUSEPORT_SELECT_OR_MIGRATE and
-> attached to a SO_REUSEPORT TCP group.  Closing a listener that still
-> has queued children then runs it with a struct sk_reuseport_kern
-> context even though it was verified against struct sk_buff, which
-> KASAN reports as a stack-out-of-bounds in ___bpf_prog_run().
-> Reaching this without CAP_BPF requires
-> kernel.unprivileged_bpf_disabled=0; with
-> CONFIG_BPF_UNPRIV_DEFAULT_OFF=y, the Kconfig default, the sysctl
-> starts at 2.
-> 
-> reuseport_migrate_sock() decides from prog->expected_attach_type
-> alone, a field user space sets that does not identify the program
-> type.  Require BPF_PROG_TYPE_SK_REUSEPORT there and in
-> reuseport_stop_listen_sock(); socket filters still work as
-> selectors, so the selection path is unchanged.
-> 
-> Fixes: d5e4ddaeb6ab ("bpf: Support socket migration by eBPF.")
-> Signed-off-by: Shihuang Liu <shlomojune6@gmail.com>
+On Thu Nov 19, 2026 at 6:18 AM UTC, =E6=A2=93=E5=B7=9D=E5=92=B2=E5=A4=AA wr=
+ote:
+> security_release_secctx() invokes release_secctx LSM callbacks
+> (selinux_release_secctx() and apparmor_release_secctx()), which only
+> kfree(cp->context) and never sleep. Because the hook is non-blocking,
+> Netfilter callers legitimately invoke security_release_secctx() under
+> atomic, RCU, or softirq context:
+>
+>   1. net/netfilter/nf_conntrack_standalone.c: ct_seq_start() acquires
+>      rcu_read_lock() and holds it across ct_seq_show() ->
+>      ct_show_secctx() -> security_release_secctx(&ctx) until ct_seq_stop(=
+).
+>   2. net/netfilter/nfnetlink_queue.c: nfqnl_enqueue_packet() runs under
+>      rcu_read_lock() in packet RX softirq and calls
+>      nfqnl_build_packet_message(), which allocates with GFP_ATOMIC and
+>      calls security_release_secctx(&ctx).
+>   3. net/netfilter/nf_conntrack_netlink.c: ctnetlink_conntrack_event()
+>      allocates with GFP_ATOMIC and calls ctnetlink_dump_secctx() ->
+>      security_release_secctx(&ctx).
+>
+> Listing BTF_ID(func, bpf_lsm_release_secctx) in sleepable_lsm_hooks
+> lets BPF_PROG_TYPE_LSM sleepable programs (lsm.s/release_secctx) call
+> blocking helpers/kfuncs such as bpf_copy_from_user() in atomic/RCU/softir=
+q
+> context, causing BUG: scheduling while atomic or RCU stalls.
+>
+> Remove bpf_lsm_release_secctx from sleepable_lsm_hooks. Verified by
+> line inspection on 7.4.0-rc3 (20eef29b7c84), 6.12.118 (bpf_lsm.c:347),
+> and 6.6.162 (bpf_lsm.c:337), and live QEMU BPF verifier runs on
+> x86_64 7.4.0-rc3 and 6.12.118 (lsm.s/release_secctx: LOADED pre-patch ->
+> REJECTED post-patch with -EINVAL, "bpf_lsm_release_secctx is not
+> sleepable").
+>
+> Fixes: 423f16108c9d ("bpf: Augment the set of sleepable LSM hooks")
+> Cc: stable@vger.kernel.org # 5.10+
+> Signed-off-by: BoBppy <inkxiao12@gmail.com>
 
-Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
+This is not a real name.
+I'm dropping all of your patches.
+Teach your bot basics first.
 
-Thanks
+pw-bot: cr
+
