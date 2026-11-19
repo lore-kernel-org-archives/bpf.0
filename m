@@ -1,100 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.54
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795117043;
-	b=kEUpACiFaGyJCHDiIE2ABujOdiMUkoNTqQoQJMqGj6R2Bn+jzMk0lC30t3FZcAHgz4H5
-	 B3sDQR/gR4w1o0zoA7ZJt6fkKnKVXVA9Newy24OehP4EqH7fZeBCGbEu7YFzCPS8jAo9a
-	 kJZSLetVjbJMdaCnJgecsS1z3vrms9CAFG5tu2/b6dw4rOxlaIlzurSZfK/U+8s/bf6qr
-	 DTFWIFJaHRfjFxkpf9rPzIieduwDA9ke+bGht6aOWRngr1GidDvsWd2xfGlVpKSs0F1+d
-	 v/KtznZ2SKopR0JvonPg5qvKmGDq/9tQraG1k2TyiVejDc8+BOb7/RLrP3Tdm2lnDUQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795117043;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=ki7N7oUyczI7L7J7QNsuIKVYOIpUcziCfllCfxy/ZJM=;
-	b=nvcW8WVZ1i6OTiTryFLGJQqcjHsGKRdBy9ZO3jFBdtWtobIJZkIwZW+Looq3qaIch8Qv
-	 O9Cwy5agkvelYq120u6k2vbEJFeqrlngz4Y7kJR9yON6QsILkeenSiOxt+4vgC6wsH5Ci
-	 LuQFwQTIiQ3xezCW+ELwai8DQ1YRO1Rie6xETMBQxTef8xP2shuWNtwcdnku+JUgYJvBp
-	 KUiV9EDx6O3XF51cc5LXcaRRYy76/A7ChSlCjlzBL4zQbbpCFatSQATSYoAwaz/Bsmwjl
-	 oNVjj4iw11EHsSvFYBrQIRd+iRI+/QGDtODjdgI6l1rGbfeMeL+A2qGLt83+eW3us3Q==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=paul-moore.com;
-	spf=pass smtp.mailfrom=paul-moore.com;
-	dkim=pass header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=XodjmMdN;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.54
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795118562;
+	b=cNZ3jwKiorpxrGfbp8CaHbChEcjtXWPU/Uzs1pZJ472zrKdpzlKp5PiQ+3AGymucPcVa
+	 QefD3kzudvHIbHVqDAHQTdc1fyKuY3zbVDgBTVL2PS3xivXjBv0m+cjTPq4MZrVDfSN6c
+	 MtabZbIVeExDNpJja8rcCE5OKpuTqjaYGDPo8apzoF5eXfPLT/DqkybbZA0btLtXjdq98
+	 J352fTbxUCE6MS9rM+DP0DnXPDDkTtJmKHa/vCPOdWwBL6AM8F/iMg7Q2zjLWpB+hWlYm
+	 mH1hKRQQZ4FoXjhGcsmGKeNHFEHuTA8ZpyDN9Oit5FDqekvzuZ++NivLOES4RWFec2w==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795118562;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=yS5HZGb4ZYV7fzhYyCITQ/ILCiUQlwy/aDQIF+31MW8=;
+	b=i31hE0NfRR69/uxeX3XCN8+shdE+Dl8XUq6mPeVaNesWw6frPljEJi2HLK3pTLwR58Yt
+	 II261cAk5mhI6dh2qRdy1nATmUyHBAQHn0hTDIxIrbTnanJAsaGCT29pKFeQ5wA+SCeTu
+	 Y33QtVWt/bK01BJd1l0/71ii8eQ6iZtLXd1+uQHAaYjlSP4Yiixor4OswshooVXDIIzjN
+	 fLghMB0pMx3FquCdQwJEnRjDnNAAvV0hyXv5uZb9OjbKJHVcfo36KZu8mXob2GscXMK6L
+	 ckJ/+CdCl2AqWUVMJmJuyWQGQif7Vu3UUYk/tR4S2s4lqBGdzGsWvEzPTU4NzC4IUgg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="fxU/TGcC";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFCB7606A325
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 19:37:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EFCB7606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B884606A324;
+	Thu, 19 Nov 2026 20:02:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=XodjmMdN
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3ae1da332bcso98251a91.2
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 11:37:22 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795117042; cv=none;
-        d=google.com; s=arc-20260327;
-        b=l6EQoI2EYy8C1clNNzzibDKuJMik5LzmQZkk6yiyZjVpRqSc/dOBBKpIgRr+ajLDj0
-         N/7WerIUE4bpwCWfBS5tcvJMQX2VQCzH4UKm59SYU2hUObyuqntOT38yJUu0P+7/yFTC
-         iLWCXP6nLmxt2XOILa9cKGT36B8V/QxQ0qZKLevTjD4kxB4hu4/DuF1ZZAAZiG9MaNm1
-         4dW8txIvFVhP83NI1g6AD40qzQ4fPtQBEBhz10pRce9emIM4e+3J54CEDxUkvwU421NV
-         WzcmIFZ+RwfFE4R6/jjIVpqxUP5ywcnKAk2DJzTeMxmXHRaabte5A+qsbjfV2dwMPLjg
-         mgqw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ki7N7oUyczI7L7J7QNsuIKVYOIpUcziCfllCfxy/ZJM=;
-        fh=yBnd25xPzoptXt8cKxg04hRiQ2n61JfD3ME91He8AiA=;
-        b=XH8aDgJuKTNih8pPXk/+dDchX+0z9udgu89z+JpNB8Y2s72t0yMoPy/iWwxWi38YaP
-         vmTPa9N450iTWbOXjGpLaZBQ/3t8jRy0DFaNZqc44uPGJ+RNdJoePKVq543aNj/6dodY
-         U/ACKTj0yKrKgZCD7MyZbKuchYoBxUlkPh6VEbRbPBDzm1Jnc/g+41lGS8564VCEvER8
-         FkUSfV/Q/TQ6N4tDZqkl1YqOWxSTlXo7KgrWVBKth8JZDjGbmasZac7iHPlFnCCDIDfE
-         ndlbKJTfZSvoOc3W7pdSlsBIMpJWZMaLCFG39eiKRGUgTQlYin4WeTeOy91iErGk3H8/
-         gIMA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1795117042; x=1795721842; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=ki7N7oUyczI7L7J7QNsuIKVYOIpUcziCfllCfxy/ZJM=;
-        b=XodjmMdNd66sSQHPxgX0Iw77xrzUpXmpUh6FvrO/B/Hk8c1K7J/ubNP1xulYRVIUn7
-         0zNyz12Ie31a/acpAaE2JdzOyVZ1FIPVGXO2gq3/Xb7Bd1z8v8sJz+XnGPwAxvBt8xIt
-         nRTm2fO0Elbyrfw7YtQ+JmWuR1ealDi/ibMo7Imi71oY+hqZsiiaQQ9dG+C12cSBrwK/
-         yX57pzVy1ZeFaPnMkTQAWdMaSdjisCW3A9pZcG19vKHgRG7aioh+XHJFJMVZ6Bw9H536
-         yCz7GWX5rzmqjUzUXrTu98st6r2v67k8vlpr+1E/DOMY+/p5qBpWJAVdWcPbbrF9cIW6
-         mN0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795117042; x=1795721842;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ki7N7oUyczI7L7J7QNsuIKVYOIpUcziCfllCfxy/ZJM=;
-        b=aHmeutswMloT1FM8ZqdWveDHAFtvDygWnGJZAliefLjynyZ/vGaK4H01svGMXdEybf
-         KtALdzV6QVi9ur6lzd2V8z95ZNz8B0y5xQryIKA8SelGoWhT63vDwzmB1ba9nShrN/L5
-         Y4FtTlSlsK+EdNafZLs/PAsXciIul1etrPYGe2iTiyG8RHkq2ly09TpRkPhNqGSZUbnw
-         TxIFv+48t0M1/HgLZshVjt+BlEtNUGNWhYlXncAjfwql06tgriO973dPndhOq0mRJMoM
-         80e53rNBxCuTT/+Rm2SgBxmYcYLN70uKpzlhOhis3OA4Zu8y7wu9Xv+IZ6TiwEnJ8LiW
-         mzbg==
-X-Forwarded-Encrypted: i=1; AL+hErHP9QQxpJPJdSQHvJFvvu7uNXEblgaaEyJGNil/BXUCmxY4a4vAs4S4vdLkpjDzzxxCln4=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+t99/5JHtIWipa263XTWCdD7SIH5u/mgHjjy+O+HrvD5u+JAvE
-	iSi7XZfQtYiXOEXtU0yTjclxzQAUH33UTAu88LFVgnBWKBjbM2rOC65YmOxrVlwKb9+E36zQ8Wr
-	sjuc7fEDKaVZFb1kzDEtOgKRYZ+a9e8KmE2BdCKhu
-X-Gm-Gg: AZFdTZdxeqOWstlaK28zbHCeZnxmEtjcgOjKzjlWTB1PMpOj2P4Dka2NpanEanDMeCk
-	AeCMjglWf1kWi6maVehyrSzBp2fS4icMm2HsEOVxFz97Jk5wDY+PN9QOwJCRznNz1J2aepw2bdF
-	scwRfoxNBXpGilL7EO54SU4pA09rHqn5jpAZ6wKi5Msul15qGdZ0Xl65MqzUgsPN9hGU4acK2N3
-	VbMKopMPz8MhSaUV4i2i/EIezYBmVaFfx4fo6wfJgxnT/csv7SW7cqBYNkbtq7Z0f5I1EiAAAXQ
-	pBKYdFeZ+AfNwDCuLm4aO2bbQvDV6Uvqv7W6cObW2y6bmlXH1/GWD5YutVOxUAsfDPQXuz2xx8O
-	1Glfu/E03yfrBQZH6MoN3K/qSaEnP6X/kMjyjAYZnTki1aS3HYGUbilmaGnpSrR7HN1k++A==
-X-Received: by 2002:a17:90b:4a48:b0:3ab:2d17:51c5 with SMTP id
- 98e67ed59e1d1-3b41c7b60b5mr394543a91.6.1795117042197; Thu, 19 Nov 2026
- 11:37:22 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fxU/TGcC
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13BDA1F000C6;
+	Thu, 19 Nov 2026 20:02:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795118562;
+	bh=yS5HZGb4ZYV7fzhYyCITQ/ILCiUQlwy/aDQIF+31MW8=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=fxU/TGcCrY5xlJwFFLlAn1jTWV0E5hTnmdN+IJB9RNcS+a2vw+7uiwuntML6Sw1d3
+	 Z7fp5QL6FsWvBNluBljxGexs56t7UNh4LZfNHad68IONQMoMsPncnV2376zbbxFwtS
+	 ndGZvc7ZBTPtk5bzUBInv4x19bp1Ach9QXK45SPmNauF4/Y2wGjzEv60klCxoKaoxN
+	 bHT9/bxJEmnW749qgs71MIZE/s+/X2dwZaStZ89ZFDxc/6dMlAd1gR6Nhoh226pkH7
+	 BqmxZxQ7/qDudV1kXRaHI8J4C1bwmMWuAwPSSF0VjaJXN5pO/c2SNOi3b6VhkxcseC
+	 7IVbvd9N+EwPg==
+Subject: Re: [PATCH net-next v4 1/4] net: xfrm: interface: restore dst_orig on
+ every xfrm interface
+From: netdev-bot+sashiko@kernel.org
+To: jhs@mojatatu.com
+Cc: netdev@vger.kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ sdf@fomichev.me, martin.lau@linux.dev, ast@kernel.org, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+ horms@kernel.org, bpf@vger.kernel.org, jiri@resnulli.us, victor@mojatatu.com,
+ sashiko-bot@kernel.org
+Date: Thu, 19 Nov 2026 20:02:40 +0000
+Message-ID: <179511856062.3136.18243971639206515341@kernel.org>
+In-Reply-To: <CORE-9NOG.v4.r0.20261116135311-1@mojatatu.com>
+References: <CORE-9NOG.v4.r0.20261116135311-1@mojatatu.com>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,69 +67,108 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <d85ece6e-27f9-4d9f-83af-4101bc76fef6@app.fastmail.com>
- <356db94e-f5d6-4fb2-839a-b97aef72256b@app.fastmail.com> <CAHC9VhR9sjunJRnM9gy-BkBZkapQTrr8a8FtmaK7JkAmUqTrLA@mail.gmail.com>
- <CAEf4BzZKmn6g0SK8OddjKFj_vAmZFvpZv32Hs_S+GHgT7VNfrg@mail.gmail.com>
- <9d6bdc31-e57c-4187-be78-29d82471f710@app.fastmail.com> <9695ec3d-7b81-488d-989f-0bd411d673f2@linux.dev>
- <CAPa8sAh6b5xn4rZzPfM0nZ+_kkywWj22fy8deLq+6qYews0rdQ@mail.gmail.com>
- <MRYP264MB7057096D13282544720793F2E67A2@MRYP264MB7057.FRAP264.PROD.OUTLOOK.COM>
- <CAEf4BzZWEU24+ZC0W_20hc3t+qnEHncQA1ztTF7ZPPOf3DDPVA@mail.gmail.com>
-In-Reply-To: <CAEf4BzZWEU24+ZC0W_20hc3t+qnEHncQA1ztTF7ZPPOf3DDPVA@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 19 Nov 2026 14:37:06 -0500
-X-Gm-Features: AclHuK8huO5hL8Cq37FykvhPQRmji6J0FCQEXOUl5eyoX-lYuZrqwKkD8osBd6E
-Message-ID: <CAHC9VhSFvOiP5Tyt=rOFMwg=Ro1jRw+hfcw4AdCkEyftZJHQCQ@mail.gmail.com>
-Subject: Re: [BUG] bpf, lsm: new first argument in 7.4 inode hooks silently
- breaks BPF LSMs
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Paul Mabileau <paul.mabileau@harfanglab.fr>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Daan De Meyer <daan@amutable.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, roblabla <linux@roblab.la>, 
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
-	"linux-security-module@vger.kernel.org" <linux-security-module@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 19, 2026 at 12:59=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
-> On Wed, Nov 18, 2026 at 7:14=E2=80=AFAM Paul Mabileau
-> <paul.mabileau@harfanglab.fr> wrote:
-> >
-> > Hello,
-> >
-> > On our end, we also have already merged code to adapt our eBPFs to the =
-argument order change. However, we would still prefer if this easily-avoida=
-ble breakage could be fixed by moving the argument to the end, even if it m=
-eans having to revert our fix.
-> >
-> > This is motivated by the fact that such a change is not made in place o=
-n our end because we ship our software to environments we don't control, me=
-aning that any and potentially all versions ranging from 4.11 to the very l=
-atest should be supported, so the change is made by compiling and shipping =
-a new variant of the concerned eBPFs for the version interval it is valid f=
-or (7.4+ in this case). And that has to be done every time there is an upst=
-ream change like this, so the total installation size and overall complexit=
-y grows accordingly.
-> >
-> > If we could avoid that, especially for such trivial root causes, it wou=
-ld be nice.
-> >
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
+
+Low priority / nit picks for your consideration:
+
+- [Low] This commit fixes real, user-visible bugs but carries no Fixes:
+  tag.
+- [Low] The commit message does not mention that the old per-cpu design
+  leaked a route reference, and that this patch fixes the leak.
+
+--
+
+net: xfrm: interface: restore dst_orig on every xfrm interface
+
+This commit makes xfrmi_xmit2() restore dst_orig from the xfrm metadata
+in both the collect_md arm and the configured if_id arm. It takes its own
+reference with dst_clone() and drops the metadata dst from the slot
+first. It also switches bpf_skb_set_xfrm_info() from a shared per-cpu
+metadata dst to a per-skb one and removes xfrm_bpf_md_dst.
+
+> net: xfrm: interface: restore dst_orig on every xfrm interface
+
+[ ... ]
+
+> The same slot overwrite is in the unstable helper a tc-bpf program uses to
+> attach that metadata: bpf_skb_set_xfrm_info() records the route as dst_orig
+> and installs a per-cpu metadata dst over it. The per-cpu dst is shared by
+> every invocation of the program, so the restore cannot keep anything in it.
 >
-> I agree, and that's why I'm asking Paul to accept the patch reordering
-> the newly added argument before 7.4 final is released.
->
-> I do not think that the maintainer's personal preference for argument
-> ordering beats real user pain.
+> The Fix:
+> Restore dst_orig in both arms of xfrmi_xmit2(), taking a reference with
+> dst_clone() so the metadata dst keeps its own, and empty the counted slot
+> with skb_dst_drop() before the route is installed. The helper allocates a
+> metadata dst per skb instead of a per-cpu one, so the route it records
+> belongs to that skb and is released with it; the per-cpu allocation is no
+> longer used and goes away.
 
-As stated several times in the past, the problem lies not with the LSM
-framework but with the lack of an abstraction layer in the BPF LSM
-providing a stable API.  As far as I can tell the lack of an
-abstraction layer in the BPF LSM is by design, and while that does
-provide some advantages, one of the notable disadvantages is that the
-API is unstable.  If you want to be upset at anyone, direct your
-frustrations towards the design and current implementation of the BPF
-LSM.
+[Severity: Low]
+Should the commit message also say that the per-cpu design leaked the
+route reference, and that this change fixes the leak?
 
---=20
-paul-moore.com
+Before this patch, bpf_skb_set_xfrm_info() moved the skb's reference on
+the route into the shared per-cpu xfrm_md_info:
+
+	skb_dst_force(skb);
+	info->dst_orig = skb_dst(skb);
+
+	dst_hold((struct dst_entry *)md_dst);
+	skb_dst_set(skb, (struct dst_entry *)md_dst);
+
+Only the collect_md arm of xfrmi_xmit2() returned that reference, by
+clearing md_info->dst_orig. Some packets never reach that arm:
+TC_ACT_SHOT, a redirect to a non-xfrm device, an xfrm interface with a
+configured if_id, or any drop before xmit. For those packets, the next
+helper call on the same CPU overwrote info->dst_orig without calling
+dst_release().
+
+xfrm_bpf_md_dst is never freed, so metadata_dst_free_percpu() never runs
+for it. The route therefore leaks, along with the net_device reference it
+holds. That can leave the device stuck in "unregister_netdevice: waiting
+for <dev> to become free".
+
+With the per-skb metadata dst, the route is released when the metadata
+dst is destroyed:
+
+dst_destroy()
+  metadata_dst_free()
+    dst_release(md_dst->u.xfrm_info.dst_orig);
+
+At the moment the message only says the per-cpu allocation goes away.
+Could it mention the leak as well?
+
+[ ... ]
+
+> Reviewed-by: Victor Nogueira <victor@mojatatu.com>
+> Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
+
+[Severity: Low]
+Should this patch have a Fixes: tag?
+
+These three pieces all appear to come from the same commit:
+
+- the per-cpu metadata dst in bpf_skb_set_xfrm_info()
+- the xfrm_bpf_md_dst pointer in net/core/filter.c
+- the collect_md-only dst_orig restore in xfrmi_xmit2()
+
+That commit is:
+
+Fixes: 94151f5aa966 ("xfrm: interface: Add unstable helpers for setting/getting XFRM metadata from TC-BPF")
+
+The configured if_id drop and the clone sharing problem date back to
+that commit as well. The slot overwrite started to warn, or panic with
+panic_on_warn, only after a890348adcc9 ("net: Add skb_dst_check_unset")
+added this check:
+
+	DEBUG_NET_WARN_ON_ONCE((skb->_skb_refdst & SKB_DST_PTRMASK) &&
+			       !(skb->_skb_refdst & SKB_DST_NOREF));
+
+The message says the tc-bpf case needs no other patch from the series.
+Without the tag, stable tooling can't tell how far back the fix applies.
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/CORE-9NOG.v4.r0.20261116135311%40mojatatu.com
