@@ -1,57 +1,107 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795114245;
-	b=p7QsDsDfME9QkHlzbX9eK2VvAURGfRY8N+xGPyKPjNHrgV0IMEA/Loqb1OvIB5WDRLvk
-	 QjEjeFgZ5Wby9kwYrjhfbjGMH48ky+zB/Hxkk4WjqvNBSHs5kY98WiOpbPBYUga5Wurcw
-	 TEeCVrrA2Gg1hDAT2f2TTLZ++YW8eWGWH2GJ7mo0yQwaSwUJAl301u5fL0tV/y1Oky6B+
-	 fIMZoEBEt9dXbbWp2ZlpK4mBiEgen8Vs+GHIi/wsUE3cAWUocHaf4r8js81lQgZTBA2UX
-	 mF43zBbs+KllTZ4VswCV/keKfah9Y/y62JWqijeE86v0nJnVmGMEjM1LpFvlg/RwP2Q==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795114245;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=9e4+IQjeB/o9Yi3faOCevDuYUnllPZqnJ7EeMTDiCuM=;
-	b=dwHwkNrdjIXAmwqxqdO7p56D1YYN/W7PExeRlQs5zKn96YWd5Fw8+iC2bpaln6B1jkm1
-	 /XbzVregTqqyTB0jZ9BdH85+HB54S2lCmMC1WDXNcUW+tUCPfPfGWH/Iir5fbFjmLpNUy
-	 EbPHCz5klePuB5jLV3QZ0I8GpujCUyWhlE/vqWrlbXWZdqlXc96bhkn79hFGPyvtdLJFZ
-	 PH/5R5hqbhKQvDYvRe+a6NAS5/uC2LDfzoxTeQd0TIAbZTwGp/LVn5TUEDrRIkIarE8iR
-	 n2ropAY7lea3aUkEyNZfhnf17zkrJbJgiEJLy0NBNUfxvgwpMzuubeMYBRxa6L9Ng5A==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OTPSxDqF;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=67.231.145.42
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795115213;
+	b=azulQWpuljXNg0zSXTzVeUXeyMR3vQb6wMNkl+Z4Pi6lTgDLZfsNVpj2EEf8uZO84fZH
+	 wbiBiqBD6aP/Q+57L6zB7k1aIBq714vTPFF45YH8MmHGrqltMZRqHDzPkVv5AugrScd4a
+	 n1QK11/DRbTioga9Ur/GKo00osOrOk4pUC+2QuYW5n5FW5f+1If7/NkcQOogwUFNhAGTG
+	 4f36AcymSJDlJ9QEZLOeYkVZihw726zX0IG8EOn/BiJIVMbCvrZ+WZ7EStp6AeKWXI2oY
+	 weFuJAs/ys9idLplI5BwFITZ+h3rne3V09oEqfzuzLyHXVuJD/2gfQB1ReX6CCJO8iA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795115213;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
+	 X-Google-DKIM-Signature:X-Forwarded-Encrypted:X-Gm-Message-State:
+	 X-Gm-Gg:X-Received:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type:
+	 X-Authority-Analysis:X-Proofpoint-ORIG-GUID:X-Proofpoint-GUID:
+	 X-Proofpoint-Spam-Info:X-Proofpoint-Spam-Details-Enc:
+	 X-Proofpoint-Virus-Version;
+	bh=7UOIM1gt/HSVdU/4mq+KVCxj8c2UYFHGAIGtG4eIqGw=;
+	b=FpH3AHCC5a1j3OQAEh373k0Bq71olcY9hQB1pTDRAmNblhjYA7eUrY0bMIWQxDoy7DKg
+	 MBn74CxyEIp0xGD2LdkHzTLYrTOc1YBmDsKVlb8sDPjBRkvQSgti4I0qz8PhPW3+rbUmE
+	 /GXhU8O37nbEYUAYOkutN1i5e7uq8L+oCRRk36YKxr2fQVB3QnaCAgAXS/bqmqHOa3soe
+	 AZpdCFdUdujEOySrlex7ldFMAHzQf2bvdbBbOr4MA5L7x6BMFhtI8gRWWv8kB2CWVjyXU
+	 ZLN1KH3a2KXt/C5mAscl8wSqc4PwqMBchqqXqK8TWF8K2lI8ctIGwGSRAcq9jQQbDMg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=meta.com;
+	spf=pass smtp.mailfrom=meta.com;
+	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=FBS35DIl;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=67.231.145.42
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A93B606A326
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 18:50:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31DAA606A334
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 19:06:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 31DAA606A334
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OTPSxDqF
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD9EB1F000C7;
-	Thu, 19 Nov 2026 18:50:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795114245;
-	bh=9e4+IQjeB/o9Yi3faOCevDuYUnllPZqnJ7EeMTDiCuM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=OTPSxDqFf1ZigD/2P/t4Eoiu/d1unpodkQ6VJm9y2Fav8MqsR+EL0GENwujwMo6Uz
-	 9dVz62glZjC3MBRi7gYSCtvCy+H4H3ZESUdwAjysfHVPkikewfiRfd1/fSQPkw4egX
-	 yLep2RrEy7hDjlwQoEaPZ1Pb62ajjvUFetZAcepaXMO2/5O1M3gMir7jwMFwa9RUU8
-	 xbT6IoMqLpHJa6fWR9SBowiApNT6N8bXISz/X6MzJyi962jwU8VhQuDIKeDQ5XtIpO
-	 zAT7znJmNeVq76gcdiGxhwf2nOBiLG8d/PAkSPUmKfWerrugP3sTNL4JLsxIE+bkLZ
-	 MxZkFjpBCxdXg==
-Message-ID: <sashiko-outbox-223806@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next 2/2] net: ti: icssg-prueth: Add ethtool RX flow
- classification support
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Meghana Malladi" <m-malladi@ti.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261118184729.2302130-3-m-malladi@ti.com>
-References: <20261118184729.2302130-1-m-malladi@ti.com>
- <20261118184729.2302130-3-m-malladi@ti.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 19 Nov 2026 18:50:44 +0000
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=FBS35DIl
+Received: from pps.filterd (m0528008.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AJJ17lK3036427
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 11:06:52 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pps82601-s2048-2026-q3; bh=7UOIM1gt/HS
+	VdU/4mq+KVCxj8c2UYFHGAIGtG4eIqGw=; b=FBS35DIlYfrNJvTrsnesOsZXjHu
+	lShjNbOKcW+4QM1K1aoLTP70qi5tI7RMA2vJwjdT6wVGEM7qbKX7TUCyPn8NYLdN
+	w/Nmgi7S2w/MYm2sVSnArpTHYuEgihfprYzgxh5FAlxnM/HsEAdC+iDwpQq8j91D
+	5DK3IC6Dq31TEkxovREk9wTM61Ha2trluzl8SPTq3cr+nOiKpROIb3P0l+g+1hNI
+	smTrP6XALq2srV1GF94pDR8lBaW/PKZS8xaGmG9b1Y7jfx5W/ycFnN2Xpwp1lGoY
+	cjMfYJ9bQqoSqzD9oUEWt7ktQ7AHIi2ub6t9g2Aqv8VWarmC2C4NrUY8Bhg==
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4j21b93fvx-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 11:06:52 -0800 (PST)
+Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-cdb96533adfso46563a12.3
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 11:06:52 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795115212; cv=none;
+        d=google.com; s=arc-20260327;
+        b=j1168T/5uWTI1s6Q3jJjhWpwVRYCo7Q8zIU0eb6G5ej131R86F1uOcGEmtHRTV0RSb
+         8cchAUqmZQDsAtU1uZtN+aYzEdIxibbCcfOlB95pd2iRqkPnNvOpe6yZNm1IduxLFBfd
+         +wnE12kzj9bym2SHep6h8yCC3D6D2Dq9K5CnWAfmxdF8Gg21sNIvfxCvMeeYYgg9V1lQ
+         SWDy0DmEAwHi7aSU/hPN89A+lIvZ0uSs+im0rgK90yH4z++78739UOUSWPN3g9TDay+a
+         Lb26H19i+fa/DUXOL4xbtWtnDPzN5MyD1xlN0e1dBug1KN1lLx6j02IShpe9APZaoLod
+         y1XQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version;
+        bh=7UOIM1gt/HSVdU/4mq+KVCxj8c2UYFHGAIGtG4eIqGw=;
+        fh=zFMp1b3GB3Y2kPAP1aJjzHPrS0ZijN1TDx2CdbxvsZE=;
+        b=HvjLET1HdVI4noaG6/35f6fzx991LOxopkEwCxvFGoMZFU776tfzGsARB0dAkhvkdc
+         OOoAST8KMM2IcE1J0VyExr6dNfqXB+8cYj8PDxOkAmYzLYn2J/DaFWP0kIuWgySUoQnp
+         PaJVFGayZluJp9S3FpEKSEXSFq449rwJI40NKNyKjNB8VGqY1BZ6+F1n+pR5SsO1mylB
+         hBaS+iSXRK9eLn16jXEqVQ+bK7OM+opdEp2zPsg31cMBnnCt2AdPrCeXwcFjM4BwJ2zP
+         Z/n03yhCr8ZPwSJ5ETPsvNCCuC5/EfKGhZtX3bVBnuWweflPVxgg9eSS3WUzwEZfaLUa
+         GG6g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795115212; x=1795720012;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=7UOIM1gt/HSVdU/4mq+KVCxj8c2UYFHGAIGtG4eIqGw=;
+        b=C0taOe4KwCsf6x+qHIeArBoVbFdOxhfsD1kSH0uif7JpuGlcIykmnIeJtsnf/c64KN
+         ATTY5Vl6PVQpqDSOPtJGSehuGRaKMuE8fP4FrSAWxxArldo5we52iiPEAfhbTDWE9yaD
+         RY8N0hy4mLscXLdJZVulMXU0e5qnLg5V8rOBFl1Llz8WGVQRUjDjoSQ0mFSdNG0I59xc
+         tI/8GCv42/Kli675IL8eQN9bPxYc8N0lHrWQj8oCqikvI1oJ/nNOSlB83K8jNOV+H7A+
+         S+m7EvcGTjgnN+fPnRDAinqqZWVAVhg2PZWODvahG1WYmWNG6sneQXi8blUlpgcvQK8t
+         qboQ==
+X-Forwarded-Encrypted: i=1; AL+hErHcGoarUHmDbEvgOG7+PoQoF8E27N+pVkalbupcdEwWh9qeXGPINbOWV3OT0b5VVPwVGQc=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/6TyL1oGhICMbcb95lhr1Yv/5KrlVm+RDE/+oJvGPRDON9xjQ9
+	0ChHWGalSaQQALoPzvg+OjQPuTKlXl9bRxR6Miq/G8rik1eXuHtSxF/V0WqTU8ay9VGHqFjKJ+y
+	//xfl8ISVHic9c3g1sVqZ1iP2GPCiLPTC7w9EEt1EhF4QAzw/M86pDEw/UtkE5oYkA935YrHPeu
+	2NLRf1Aa9Jisqd8es1jtHqMMtU23Y=
+X-Gm-Gg: AZFdTZeXe9WDKZ1qSASejEVFhCy9gt1DwR4iy+OvRamAKFXsGymg2dHF1OzhR3Vrqp9
+	uWmI86TSUOPQu0WKGyT6SvtA+MCl+QpmYyFDJHnG5sZ0xSOqs/k8KVeiBljdmQ/0UCc09Yf0zdL
+	bg3Kws6k0UcqlxJq6An+x6fFgNWMqB8SqiephpFLu3YU/zWVm6j2I9njg+CTpXKho12ie7D3bUA
+	mYaEMjT785C1Xt25Ukhee/n6KhsBatV
+X-Received: by 2002:a17:90b:4a06:b0:3a4:9dd7:296f with SMTP id 98e67ed59e1d1-3b41caec8a1mr251299a91.40.1795115211592;
+        Thu, 19 Nov 2026 11:06:51 -0800 (PST)
+X-Received: by 2002:a17:90b:4a06:b0:3a4:9dd7:296f with SMTP id
+ 98e67ed59e1d1-3b41caec8a1mr251262a91.40.1795115211062; Thu, 19 Nov 2026
+ 11:06:51 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,319 +110,68 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+References: <20261113185553.171059-1-toddfreed@meta.com> <20261113185553.171059-2-toddfreed@meta.com>
+ <20261118182729.21bcf5f5@kernel.org>
+In-Reply-To: <20261118182729.21bcf5f5@kernel.org>
+From: Todd Bert Freed <toddfreed@meta.com>
+Date: Thu, 19 Nov 2026 11:06:40 -0800
+X-Gm-Features: AclHuK8MIg7IMlCLvugp4MxnFKNBhzqTy9e8on9cRpXBj8Das6tgcuB0baaIcl4
+Message-ID: <CADh2yMx3Fw+Xe3E-hwj_bBMG8Cy_0N8-XfoTZXSxDcQgaSgxuA@mail.gmail.com>
+Subject: Re: [PATCH net 1/3] net/sched: act_mirred: don't send decrypted skbs
+ from egress to ingress
+To: Jakub Kicinski <kuba@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        Simon Horman <horms@kernel.org>, Daniel Zahka <daniel.zahka@gmail.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Wei Wang <weiwan@google.com>, Jamal Hadi Salim <jhs@mojatatu.com>,
+        Jiri Pirko <jiri@resnulli.us>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@fomichev.me>,
+        Sabrina Dubroca <sd@queasysnail.net>,
+        Boris Pismenny <borisp@nvidia.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Authority-Analysis: v=2.4 cv=QJf91QLL c=1 sm=1 tr=0 ts=6aff48cc cx=c_pps
+ a=rz3CxIlbcmazkYymdCej/Q==:117 a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22 a=_1IyUuN4QrATX339ibzo:22
+ a=jjTLAEkg5ClW6PfqSUgA:9 a=QEXdDO2ut3YA:10 a=bFCP_H2QrGi7Okbo017w:22
+X-Proofpoint-ORIG-GUID: GJxKn1ryAn0nr9HbtfGU-h6RuymUwbm4
+X-Proofpoint-GUID: GJxKn1ryAn0nr9HbtfGU-h6RuymUwbm4
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTE5MDA3NSBTYWx0ZWRfX28E6b3ccKNjj
+ 4VzKcrdksZWCRcvU5CqMiSquAON0Spld+V+3y5YBxWiHy8ntz94CSPrieMpi8W9crxuDkaWDBWP
+ ksiDgGL6BTzJLh+IwoULWtvQyGwig6M=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTE5MDA3NSBTYWx0ZWRfX7QgLYu0G+MgK
+ wlD36Fk/+8oA7CkrD92Z40rVS2GodvxNgNkk/Hu9zhOsmdEPyW8Eok6ifW35wgP78MSFE1JnTFe
+ RTP/dRZaKZG0jqZuK82yxMTieJ1ybB4A0Qr2eLt7O03m+Htdy0XFPEK2gAIB0HTUD/z/7FGKLhD
+ olEoIelkHL/YM3V4PEC/mLjFdAYoYpQteV1z6LJGMosLmcDX3RpI4Cj4n4W1gTOs0CoSE7yTilj
+ wI6HWdQBBhpKk0vhEuxP7gTg222pzOZr1BWkvDp6N2x1QSvwyPEKognfts5fylzKckOqm8Cl9zI
+ 6FnsmH3yomnYUwDjNPWY5aq0zocn1zWsJsMZXTwZU/0Tq0iMQowc53smTTk0cm2s6v6ubBjfe5w
+ Zodrqz86qQhhg1U4VjtsnDbhHfk5BTVCNXQeVUjca16lgEIh0q7B6zkfr/JLhq7Z70UeAORISas
+ EnPWMZmOHRFvi6vPq7w==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-19_05,2026-11-19_01,2025-10-01_01
 
-Thank you for your contribution! Sashiko AI review found 5 potential
-issues to consider:
-- [Medium] net: ti: icssg-prueth: slot 15 rejected in
-  icssg_rxnfc_rule_add()
-- [Medium] net: ti: icssg: broken ETHTOOL_GRXCLSRLALL contract in
-  emac_get_rxnfc()
-- [Medium] net: ti: icssg: RXNFC rules wiped and not restored in
-  prueth_emac_restart()
-- [Medium] net: ti: icssg-prueth: missing icssg_rxnfc_rule_restore() on
-  fw restart
-- [Low] net: ti: icssg-prueth: sparse __be16 warning in
-  icssg_ft3_program_filter()
---
+> > A packet which mirred redirects or mirrors from egress to ingress keeps
+> > the bit. On ingress, it then claims to have been decrypted by the device,
+> > although it was never encrypted, and its payload, which was to be
+> > encrypted before leaving the host, could then be forwarded in cleartext.
+>
+> I don't get it, TBH. The bit says the data is in cleartext, and as you
+> flag we can't forget that. But my understanding was that the only thing
+> we have to guarantee about such packet is that never _leaves the host_
+> as clear text. Within the host it is clear text, whether its coming in
+> or going out. Can you ELI5 what the problem is?
 
-commit 9fd710bfddff4882ecad02b113fc08db59485950
-Author: Meghana Malladi <m-malladi@ti.com>
+Ok, redirect from egress to ingress can't leak clear text onto the
+network. I will drop the mirred and bpf patches.
 
-net: ti: icssg-prueth: Add ethtool RX flow classification support
+The clear text leaks have all been fixed in other ways in the net and nf-next
+series (extension headers, fragmentation, icmp quoting). This part is
+not needed.
 
-This commit adds ethtool RX flow classification support (get_rxnfc and
-set_rxnfc) to steer EtherType matches to specific RX flows using the ICSSG
-FT3 hardware filters and RX classifier OR tables.
-
-> diff --git a/drivers/net/ethernet/ti/icssg/icssg_classifier.c b/drivers/n=
-et/ethernet/ti/icssg/icssg_classifier.c
-> index 87a8577093dbb..520b3f3377784 100644
-> --- a/drivers/net/ethernet/ti/icssg/icssg_classifier.c
-> +++ b/drivers/net/ethernet/ti/icssg/icssg_classifier.c
-> @@ -105,6 +105,14 @@ enum ft1_cfg_type {
->  	((BIT(slot) << RX_CLASS_FT_FT1_MATCH_SHIFT) & \
->  	RX_CLASS_FT_FT1_MATCH_MASK)
-> =20
-> +#define RX_CLASS_FT_FT3_MATCH(slot)	\
-> +	((BIT(slot) << RX_CLASS_FT_FT3_MATCH_SHIFT) & \
-> +	RX_CLASS_FT_FT3_MATCH_MASK)
-> +
-> +/* FT3 Configuration registers and modes */
-> +#define FT3_CFG_REGISTER_EQUAL		(1U)
-> +#define FT3_CFG_REGISTER_VLAN_SKIP	BIT(2)
-> +
->  /* HSR/PRP protocol frame filtering */
->  #define HSR_PTP_ETHERTYPE_OFFSET	0x12
->  #define PRP_PTP_ETHERTYPE_OFFSET	0x0C
-> @@ -532,3 +540,402 @@ void icssg_ft3_hsr_configurations(struct regmap *mi=
-ig_rt, int slice,
->  	}
->  }
->  EXPORT_SYMBOL_GPL(icssg_ft3_hsr_configurations);
-> +
-> +/* RX Flow Classification (ethtool) rule management */
-> +
-> +/* Allocate free FT3 slot, avoiding reserved slot 14 */
-> +static int allocate_ft3_slot(struct prueth_emac *emac)
-> +{
-> +	u16 used =3D emac->rxnfc.ft3_slots_used | ICSSG_FT3_RESERVED_SLOTS;
-> +	int slot;
-> +
-> +	for (slot =3D 0; slot < ICSSG_NUM_FT3_SLOTS; slot++) {
-> +		if (!(used & BIT(slot))) {
-> +			emac->rxnfc.ft3_slots_used |=3D BIT(slot);
-> +			return slot;
-> +		}
-> +	}
-> +	return -ENOSPC;
-> +}
-> +
-> +/* Free allocated FT3 slot */
-> +static void free_ft3_slot(struct prueth_emac *emac, int slot)
-> +{
-> +	emac->rxnfc.ft3_slots_used &=3D ~BIT(slot);
-> +}
-> +
-> +/* Program FT3 filter slot with ethertype pattern */
-> +static void icssg_ft3_program_filter(struct regmap *miig_rt, int slice,
-> +				     int slot, struct icssg_rxnfc_rule *rule)
-> +{
-> +	const struct ethtool_rx_flow_spec *fs =3D &rule->flow_spec;
-> +	u16 ether_type;
-> +
-> +	/* Extract EtherType from flow spec (network byte order) */
-> +	ether_type =3D fs->h_u.ether_spec.h_proto;
-> +
-> +	/* Deactivate filter before programming */
-> +	regmap_write(miig_rt, FT3_N_REG(slice, slot, FT3_CFG), 0);
-> +
-> +	/* EtherType is at byte 12 in standard Ethernet frames */
-> +	regmap_write(miig_rt, FT3_N_REG(slice, slot, FT3_START),
-> +		     PRP_PTP_ETHERTYPE_OFFSET);
-> +	regmap_write(miig_rt, FT3_N_REG(slice, slot, FT3_START_AUTO), 0);
-> +	regmap_write(miig_rt, FT3_N_REG(slice, slot, FT3_START_OFFSET), 0);
-> +	regmap_write(miig_rt, FT3_N_REG(slice, slot, FT3_JUMP_OFFSET), 0);
-> +	regmap_write(miig_rt, FT3_N_REG(slice, slot, FT3_LEN), 0);
-> +
-> +	/* FT3 compares a 32-bit LE word at FT3_START. EtherType occupies the
-> +	 * lower 16 bits of that word. FT3_T_MASK=3D0xFFFF0000 masks the upper
-> +	 * 16 bits (payload bytes), so only the lower 16 bits are compared.
-> +	 *
-> +	 * h_proto is __be16 (network byte order). On LE the raw integer value
-> +	 * equals the lower 16 bits of the LE 32-bit word at the EtherType
-> +	 * offset in the frame =E2=80=94 e.g. IPv4 0x0800 BE =E2=86=92 h_proto =
-=3D 0x0008 on LE,
-> +	 * which is exactly what FT3 sees in the lower 16 bits of the word at
-> +	 * byte 12. No conversion needed; using be16_to_cpu() here would invert
-> +	 * the byte order and break the match.
-> +	 * Reference: FT3_PTP_PATTERN =3D 0xF788 =3D htons(0x88F7) =3D raw h_pr=
-oto value.
-> +	 */
-> +	regmap_write(miig_rt, FT3_N_REG(slice, slot, FT3_T),
-> +		     (__force u32)ether_type);
-
-[Severity: Low]
-Does assigning fs->h_u.ether_spec.h_proto (__be16) to ether_type (u16) trig=
-ger
-a sparse endianness warning because the __force cast is placed on the
-subsequent u16-to-u32 conversion instead of on h_proto?  Also,
-FT3_CFG_REGISTER_VLAN_SKIP defined above is unused.
-
-[ ... ]
-
-> +/* Restore RX flow classification hardware state from the in-memory rule=
- list.
-> + * Call after icssg_class_default() resets the classifier registers on o=
-pen or
-> + * after firmware restart so that existing rules take effect again.
-> + */
-> +void icssg_rxnfc_rule_restore(struct prueth_emac *emac)
-> +{
-> +	struct prueth *prueth =3D emac->prueth;
-> +	struct regmap *miig_rt =3D prueth->miig_rt;
-> +	int slice =3D prueth_emac_slice(emac);
-> +	struct icssg_rxnfc_rule *rule;
-> +
-> +	if (slice < 0)
-> +		return;
-> +
-> +	mutex_lock(&emac->rxnfc.rxnfc_lock);
-> +
-> +	list_for_each_entry(rule, &emac->rxnfc.rules, list)
-> +		icssg_ft3_program_filter(miig_rt, slice, rule->ft3_slot, rule);
-> +
-> +	icssg_rxnfc_classifier_update(emac);
-> +
-> +	mutex_unlock(&emac->rxnfc.rxnfc_lock);
-> +}
-> +EXPORT_SYMBOL_GPL(icssg_rxnfc_rule_restore);
-
-[Severity: Medium]
-Should prueth_emac_restart() also call icssg_rxnfc_rule_restore() for both
-ports after prueth_emac_common_start()?  During bridge or HSR mode transiti=
-ons
-on running interfaces, prueth_emac_restart() calls prueth_emac_common_start=
-()
--> icssg_class_default() without going through emac_ndo_open(), which resets
-all RX_CLASS_OR_EN registers and silently disables active RXNFC rules in
-hardware while leaving them in emac->rxnfc.rules.
-
-[ ... ]
-
-> +/* Add a new RX flow classification rule */
-> +int icssg_rxnfc_rule_add(struct prueth_emac *emac, struct ethtool_rxnfc =
-*info)
-> +{
-> +	struct ethtool_rx_flow_spec *fs =3D &info->fs;
-> +	struct prueth *prueth =3D emac->prueth;
-> +	struct regmap *miig_rt =3D prueth->miig_rt;
-> +	int slice =3D prueth_emac_slice(emac);
-> +	struct icssg_rxnfc_rule *rule;
-> +	int ft3_slot;
-> +	int ret;
-> +
-> +	if (slice < 0)
-> +		return -EINVAL;
-> +
-> +	/* Validate rule parameters */
-> +	ret =3D validate_rule(emac, fs);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Validate explicit location: reject special specifiers, out-of-range
-> +	 * values, and the reserved slot 14 used by HSR/PRP.
-> +	 */
-> +	if (fs->location !=3D RX_CLS_LOC_ANY) {
-> +		if (fs->location >=3D ICSSG_RXNFC_MAX_RULES ||
-> +		    BIT(fs->location) & ICSSG_FT3_RESERVED_SLOTS)
-> +			return -EINVAL;
-> +	}
-
-[Severity: Medium]
-Does checking fs->location >=3D ICSSG_RXNFC_MAX_RULES (15) instead of
-ICSSG_NUM_FT3_SLOTS (16) reject valid slot 15 with -EINVAL?  Because slot 14
-is reserved by ICSSG_FT3_RESERVED_SLOTS, the 15 usable FT3 slots are 0..13 =
-and
-15 (which allocate_ft3_slot() assigns for RX_CLS_LOC_ANY), so bounding expl=
-icit
-locations by ICSSG_RXNFC_MAX_RULES restricts explicit insertions to 14 slots
-(0..13).  Similarly, ETHTOOL_GRXCLSRLCNT in emac_get_rxnfc() reports a table
-size of ICSSG_RXNFC_MAX_RULES (15) in info->data instead of
-ICSSG_NUM_FT3_SLOTS (16).
-
-[ ... ]
-
-> +/* Get all RX flow classification rules */
-> +int icssg_rxnfc_rule_get_all(struct prueth_emac *emac, u32 *rule_locs,
-> +			     u32 rule_locs_capacity, u32 *rule_cnt)
-> +{
-> +	struct icssg_rxnfc_rule *rule;
-> +	u32 count =3D 0;
-> +	int ret =3D 0;
-> +
-> +	mutex_lock(&emac->rxnfc.rxnfc_lock);
-> +
-> +	list_for_each_entry(rule, &emac->rxnfc.rules, list) {
-> +		if (!rule_locs) {
-> +			/* Caller passed rule_cnt=3D0: just count active rules */
-> +			count++;
-> +			continue;
-> +		}
-> +		if (count >=3D rule_locs_capacity) {
-> +			ret =3D -EMSGSIZE;
-> +			break;
-> +		}
-> +		rule_locs[count++] =3D rule->location;
-> +	}
-> +
-> +	*rule_cnt =3D count;
-> +
-> +	mutex_unlock(&emac->rxnfc.rxnfc_lock);
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(icssg_rxnfc_rule_get_all);
-> diff --git a/drivers/net/ethernet/ti/icssg/icssg_ethtool.c b/drivers/net/=
-ethernet/ti/icssg/icssg_ethtool.c
-> index 68646cb7df442..35eb056dab6d9 100644
-> --- a/drivers/net/ethernet/ti/icssg/icssg_ethtool.c
-> +++ b/drivers/net/ethernet/ti/icssg/icssg_ethtool.c
-> @@ -300,6 +300,62 @@ static int emac_set_per_queue_coalesce(struct net_de=
-vice *ndev, u32 queue,
->  	return 0;
->  }
-> =20
-> +static u32 emac_get_rx_ring_count(struct net_device *ndev)
-> +{
-> +	struct prueth_emac *emac =3D netdev_priv(ndev);
-> +
-> +	return emac->rx_flow_num;
-> +}
-> +
-> +static int emac_get_rxnfc(struct net_device *ndev, struct ethtool_rxnfc =
-*info,
-> +			  u32 *rule_locs)
-> +{
-> +	struct prueth_emac *emac =3D netdev_priv(ndev);
-> +	int ret =3D 0;
-> +
-> +	if (emac->is_sr1)
-> +		return -EOPNOTSUPP;
-> +
-> +	switch (info->cmd) {
-> +	case ETHTOOL_GRXCLSRLCNT:
-> +		info->rule_cnt =3D emac->rxnfc.rxnfc_rule_count;
-> +		info->data =3D ICSSG_RXNFC_MAX_RULES | RX_CLS_LOC_SPECIAL;
-> +		break;
-> +	case ETHTOOL_GRXCLSRULE:
-> +		ret =3D icssg_rxnfc_rule_get(emac, info->fs.location, &info->fs);
-> +		break;
-> +	case ETHTOOL_GRXCLSRLALL: {
-> +		u32 rule_cnt =3D 0;
-> +
-> +		ret =3D icssg_rxnfc_rule_get_all(emac, rule_locs,
-> +					       info->rule_cnt, &rule_cnt);
-> +		info->rule_cnt =3D rule_cnt;
-> +		break;
-> +	}
-
-[Severity: Medium]
-Does ETHTOOL_GRXCLSRLALL violate the ethtool_rxnfc UAPI contract by leaving
-info->data unset and returning 0 instead of -EMSGSIZE when rule_locs is NULL
-and active rules exist?  For ETHTOOL_GRXCLSRLALL, info->data is supposed to
-return the rule table size, and passing info->rule_cnt =3D=3D 0 (which makes
-ethtool_get_rxnfc() pass rule_locs =3D=3D NULL with capacity 0) should hit =
-the
-count >=3D rule_locs_capacity check and return -EMSGSIZE when rules are pre=
-sent.
-
-[ ... ]
-
-> diff --git a/drivers/net/ethernet/ti/icssg/icssg_prueth.c b/drivers/net/e=
-thernet/ti/icssg/icssg_prueth.c
-> index 716f1b9195d67..b08e74e24a5a3 100644
-> --- a/drivers/net/ethernet/ti/icssg/icssg_prueth.c
-> +++ b/drivers/net/ethernet/ti/icssg/icssg_prueth.c
-> @@ -1101,6 +1101,12 @@ static int emac_ndo_open(struct net_device *ndev)
-> =20
->  	icssg_mii_update_mtu(prueth->mii_rt, slice, ndev->max_mtu);
-> =20
-> +	/* Re-program FT3 filters and classifier OR tables from the persistent
-> +	 * rule list. icssg_class_default() called above resets all classifiers,
-> +	 * so rules must be restored here on every open/restart.
-> +	 */
-> +	icssg_rxnfc_rule_restore(emac);
-
-[Severity: Medium]
-As noted in this comment, rules must be restored on every open or restart,
-yet icssg_rxnfc_rule_restore() is only called here in emac_ndo_open() and n=
-ot
-in prueth_emac_restart().  When prueth_emac_restart() runs (for example, via
-icssg_change_mode(), prueth_netdevice_port_unlink(), or
-prueth_hsr_port_unlink()), prueth_emac_common_start() calls
-icssg_class_default() on both ICSS_SLICE0 and ICSS_SLICE1, resetting
-classifier 0 back to RX_CLASS_FT_BC | RX_CLASS_FT_DA_P and clearing
-classifiers 1..15 without restoring the RXNFC rules for either port.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261118184729.2302=
-130-1-m-malladi@ti.com?part=3D2
+-Todd
