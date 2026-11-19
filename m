@@ -1,47 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.5
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795054231;
-	b=QONDhbMMrHopSdmo4eChIKkNLltE12oAIziWSxqUfIdd33U3dqyYy4lir2TFIdKJ0rwE
-	 AhOjJ/isJ7DlbHIVM+IcGfX3ZT9vuUW9aUDIZ74FGzIhlctrxOxUifrF7EJd0d/yD+Rbf
-	 WAsdNNaq0XgLqOA3qNDJ7Hzj92AQY71J5zi/HOKsclgZvmEWksSn7KvhefEYWr+jCUKXm
-	 Y9jZOPyVgYXdDCv/NrU3Bn/yuAdrTZBOvt0k40vCKnuek4MZZoUuBbTszteq3Ph/gbjsu
-	 avM0pNDt79O/Vx6waO+zOAXz9j89o9ArAjRUwU2KUBTp5gGoNU4MJqmGuKfm7K58GpA==
+	t=1795055250;
+	b=Thyph2gGjsNwlXegr2Ad9wo6FldKhVJpu3u3+to7kVKo6aXXFOd+YgyMgQ2IAX8skJLV
+	 5a52YPwlJSYrkMRNpzlG0Qq7g/mWxDM361w26t370zhCulHWeDKsfiXwOxmtsSvEASvka
+	 COT2YRIXIRbhJDsBqNMQ4OzmMRUzFY500L7B77y5wy4fpldPkWZdc30qm9KYO2r2jc2fL
+	 ffKNyfH1qIuQuF2hutDKIDUNDJYldRr5T3nNItQQEJYhXDMj781ZDGVzS1Wl+eQ8iTeHJ
+	 DWWz5mCmJIP9uDHp0HIUKHblDhLl/yRudGioZuF79Xyon95vfddKdUoAfH1jTR3lxog==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795054231;
-	h=DMARC-Filter:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-CM-TRANSID:
-	 X-Coremail-Antispam:X-CM-SenderInfo;
-	bh=EVb9oTo87qFSpDYevxSBCFoP0b6eBkjgQPT7OWDpQcM=;
-	b=CzOXRQL9OV1couf4jPcyjIEglHbd4PMKEcPwtOzpo9/OhIGTw4G7tQoA3O/fxpEGQsco
-	 RfepIyh7bbz1ME5yHm+xNw/6tr3tEBYll3woYeBXYmWckyxigc0lmcQfOa8f9YL11tFJb
-	 JaYH9wxJrqZHdcYLTiw1u349uGVlEq1T/7B5+AaLcEub2L+hTWfUy1tJ9bRQuHJeI0UUL
-	 +38HgRWYLw4LiOFDw6rlrG0am53DQkrE5PKyhoHWhAeE9OyhWm2bA0MiSWDWmaMQbrs7P
-	 JjGftZ+g3c8bpTlsvtIbZoNASrRY5pIl4YBI9WZJFi8S2PK+/LqjbVs7qv5UQDTRiGQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795055250;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=wEYcI8ZI9y7ywNGs0DfQNK8MaDqc368NRHggaoWZKho=;
+	b=f4habsInBIRo+J81Asn8c1CSBTk/Q0HkouU3q6giQeZ4gDSKgibEGuxCQySKRegJFNc4
+	 2gLjSWTREhHGHWEnU1ywEAOOlIHu7CLCR73L6on+Kxt7Otq0QQY4UVvKl2S6a6mT3V4az
+	 izl73FrUhNovbID7sPJl2iR6BnPpYFIMWNltV3yd+qLSDo5ryJYfB3F8tMsB5W6fQ8INg
+	 Y1t/BayEUPHELB8aTgt7y9LkoSe2OJG29nnhUC5u25B1FgODQc+y01S2G30dpHOuOwd9e
+	 tlz3eAKo/CyO3yunJf3mgjGO8Aa9ITSArr1ci0c7KxQ1WaqWTNA1ziw//jCfUwxAcSg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=163.com;
-	spf=pass smtp.mailfrom=163.com;
-	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=ISiIbAXG;
-	arc=none smtp.remote-ip=220.197.31.5
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="egE0b/qD";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 446E4606A32C;
-	Thu, 19 Nov 2026 02:10:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 446E4606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD263606A33A;
+	Thu, 19 Nov 2026 02:27:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=ISiIbAXG
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
-	Content-Type; bh=EVb9oTo87qFSpDYevxSBCFoP0b6eBkjgQPT7OWDpQcM=;
-	b=ISiIbAXG2okbrip3TxvjkKeiP3+8J5AOr27kQ2IbXcIXttr9xryqwS1EyBrFVn
-	sLlvYHhyIA6zEawsOQml12rSpxVXzNYlSwlKeKw2EA2zd80qi/wuUrgvjQprLsCz
-	qebXEjhQVsf88R41gsRLEXDlx45AsYufuWyCBh9YxkdNs=
-Message-ID: <2d570d81-9773-4104-9475-9f50e359f363@163.com>
-Date: Thu, 19 Nov 2026 10:09:44 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=egE0b/qD
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A9991F000C4;
+	Thu, 19 Nov 2026 02:27:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795055250;
+	bh=wEYcI8ZI9y7ywNGs0DfQNK8MaDqc368NRHggaoWZKho=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=egE0b/qDsY0A71yzb2c39TpIgIPuJabvIZSoXlZAb2g0ZQ467LxImtQV+hewOOUcx
+	 AmqxU30arIrjCofZK/V6HBWJZWe2Uto2N+xf8tjeLQm8vnYWwZr3FxDNEWn3YlWypg
+	 xmjZw9ktgYQ1Zh23rzmDkcRTCq4iTGU02JmXElmovMcTU6k7ZkqgxrDdb1qzhUAAuv
+	 dpp8IZZKITwUQDxmw2aOgVvhX4J7OiM5IZzuMIzM/P8LORq915AeeLeRGNup3C7A70
+	 al8OljM/GT+b9MgQW8iBqp8D5eSz/h0ezL5FbqQYdA3NRAMtDQQrEGY4MtWJSSAkTs
+	 a+3UPKVo/42GA==
+Date: Wed, 18 Nov 2026 18:27:29 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Todd Freed <toddfreed@meta.com>
+Cc: <netdev@vger.kernel.org>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon
+ Horman <horms@kernel.org>, Daniel Zahka <daniel.zahka@gmail.com>, Willem de
+ Bruijn <willemdebruijn.kernel@gmail.com>, Wei Wang <weiwan@google.com>,
+ Jamal Hadi Salim <jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, John Fastabend <john.fastabend@gmail.com>,
+ "Stanislav Fomichev" <sdf@fomichev.me>, Sabrina Dubroca
+ <sd@queasysnail.net>, "Boris Pismenny" <borisp@nvidia.com>,
+ <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net 1/3] net/sched: act_mirred: don't send decrypted
+ skbs from egress to ingress
+Message-ID: <20261118182729.21bcf5f5@kernel.org>
+In-Reply-To: <20261113185553.171059-2-toddfreed@meta.com>
+References: <20261113185553.171059-1-toddfreed@meta.com>
+	<20261113185553.171059-2-toddfreed@meta.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -51,54 +69,23 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next] selftests/bpf: Run all summarization freplace
- cases
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, andrii@kernel.org,
- eddyz87@gmail.com, ihor.solodrai@linux.dev, daniel@iogearbox.net,
- memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- shuah@kernel.org
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20261118073309.125424-1-luyun_611@163.com>
- <DMYT6CELPKLL.3IH95CNKKXFUP@gmail.com>
-Content-Language: en-US
-From: luyun <luyun_611@163.com>
-In-Reply-To: <DMYT6CELPKLL.3IH95CNKKXFUP@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PygvCgAHOX5oWv5q7qg_Gw--.8789S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7Gw4fJF4DAr4DAF4UXw4ruFg_yoW3Jwc_Ar
-	n2grWkuw40g3s7G3W0krnxuryj9F4kXrZxJrs3XrZ8Aa97XrWruFWv9r1S9F4fGFW8JFZI
-	vF1Sqr1Yk3yfujkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xR_qjgDUUUUU==
-X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbC7AkL2Wr+WmkDOQAA3q
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Fri, 13 Nov 2026 10:55:51 -0800 Todd Freed wrote:
+> On transmit, skb->decrypted means that the device must encrypt the
+> packet, e.g. a packet of a kTLS or PSP device offload socket.
+> 
+> On receive, skb->decrypted means that the device decrypted the packet,
+> and kTLS device offload trusts it as such (tls_device_decrypted()).
+> 
+> A packet which mirred redirects or mirrors from egress to ingress keeps
+> the bit. On ingress, it then claims to have been decrypted by the device,
+> although it was never encrypted, and its payload, which was to be
+> encrypted before leaving the host, could then be forwarded in cleartext.
 
-在 2026/11/19 09:49, Alexei Starovoitov 写道:
-> On Tue, Nov 17, 2026 at 11:33 PM Yun Lu <luyun_611@163.com> wrote:
->> derive the group count from mains. This restores four packet-data
->> cases and enables four sleepable-program cases.
-> The four sleepable cases will fail on arm64 and s390x.
-> Their targets have no __arg_ctx:
->
->    int main_might_sleep(struct pt_regs *ctx)
->    int main_does_not_sleep(struct pt_regs *ctx)
->
-> pw-bot: cr
-
-Hi Alexei,
-
-The bpf-ci also confirmed that all four cases fail on arm64 and s390x.
-The verifier rejects the target before it reaches the intended RCU
-read-lock check.
-
-I'll add __arg_ctx to the ctx parameters of main_might_sleep() and
-main_does_not_sleep() in v2 version.
-
----
-
-Thanks,
-
-Yun Lu
-
+I don't get it, TBH. The bit says the data is in cleartext, and as you
+flag we can't forget that. But my understanding was that the only thing
+we have to guarantee about such packet is that never _leaves the host_
+as clear text. Within the host it is clear text, whether its coming in
+or going out. Can you ELI5 what the problem is?
