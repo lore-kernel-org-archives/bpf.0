@@ -1,96 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.219.52
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.219.51
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795069200;
-	b=sLDGHXOGG/CgFZ64uq9xEllksPTZH2tHpK2Edns2AyB9QnxiBerIWbYKZIr35OwPrFCw
-	 RIbrLwcEmKqJh5AWUrTDCUoimoic27Txp1v2w1Na9UD3SbGdwVPfFNcQ6TA6ZJvcJlPzz
-	 Zg6/n4qidsSuWtqS8ciUPtU4hG1igN1Fx/VgGEpRKU2ZX9HgjLyYlal2f6tBOIO85+6e7
-	 4WAaC2PgA6ideLW5vBAzwSYb/LzzWfc99jPVGWzIV/VWPkpm713jRl6yGpqdAcNcUHkOd
-	 Z2l1pUcrcKLA251SSFkFSd7/83qOSsUbq4ftSydqbHcqkuziLE44RxPNZgv/DXvOxuA==
+	t=1795069247;
+	b=rI969/TdFiA/aotYhAQv8Ry2Xx66ehuRFHx+VN5SQwVeip6d2itaUocDWmcWDCgx6CZm
+	 uNr8WFTU+GcghNc7fPQjIECDThPK1qPq9JJKLAc3TCLjtZzsaFr9fBaRq4/sxD50nx6Wm
+	 TKPryi1ePjptP8w1nMplLlw6H8AePQVAJQsFSBCPENrJj8RQuuM5VWrkBBeAVerB63ie1
+	 LTfDYjm6pBGGitB5AddS47qAhH3bawpoy2GHmctgF1QiNUQMOZd1i+WSIKkaLZjCkqdpQ
+	 LN/ddPLLcY3huzPhOjLxJCopvBpIyIw5sUvwyERxTUNyWKx3U038BSrdyGVXs4IK0xw==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795069200;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795069247;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:From:Date:
 	 X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type;
-	bh=xoCndVwrvCSfCd0BaHKCqL9ELaacWGRyWSDCytAWBDI=;
-	b=3sqshCJHSDqKeGz5b1jXs+0uMK1aH3e0RCad/sLsSBkmRixepgWwLDIdR7a203GbkL3I
-	 GqZvMh4OcSQBLmwNH1/mGeao2S+kTnM9lpurAfpp4e5pra8MMPuKh9xMncDoSPLocfvXK
-	 zJfy7aA+FrWyB5fO6JRgM244B3T4szyD+qyc/LupHrZtVcuyWxPEa6tR6RuOsHgTi1vz9
-	 +yVIaawj1Ih5QepAscqKdv5lNPoH9HohDdCxGznRbvJXxHNfa6K4xnFuG33T6Trr5o0Fw
-	 onYY6UblPlfq0pKQmmSjdn8za0IwqDJMdXbYxRj5zmKn2M3rN3axDAjuDcsvmntK28A==
+	bh=R72tSyuvoCt5/QGm7uguOsGtVeCA2C72cLraw6uBskI=;
+	b=iQznB8wpmJ8pbtI1zYr/BwH/yM8X7OGAYBe77wrxMJZmBLMI3yybMA1S5eyz2l1j3Rem
+	 AxuPWvGfzByQj6Uemjtk6W4HD/dGQUo1pEwKlYESt4jjUMUSTjglF3mxdgQBmSof+nTSs
+	 NH//WigYQx+GXMFvI/ChSauZ3q9DgskkXDYCE4jlVQ1zrmhwTXX7yEpDt80buFPLEZZU1
+	 6M0tEkOg9dXzOGES9+CXGgpGQUy5JZbj5lznJJtKKOvgShoHf4kmoKragi94M1cNz6eVb
+	 6tcJ0Gx/2d5AAd1dKJ7tm91l07PdRbqkGTqp3rLcUxSKjgWOUrKpv+i5ld5ZZwakpug==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UT7r6HIM;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.219.52
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=K3oxpHUL;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.219.51
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 130D2606A325
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 06:19:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 130D2606A325
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A469A606A320
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 06:20:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A469A606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UT7r6HIM
-Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-91ccfb88e4dso19677706d6.0
-        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 22:19:59 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795069199; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=K3oxpHUL
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-921276742e3so4308796d6.2
+        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 22:20:46 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795069246; cv=none;
         d=google.com; s=arc-20260327;
-        b=Q1OhKp2mFXHj35Ve6rsE6DwO3ioekScF9Ti1SQNjuXdWLxWhcrTR8OE/SmPMvQw9tc
-         L+dwTD8kLP0i2fsig/npQ/suIuT+0SZ9krMpIVYmOSC3OQ+ffdbRjMJuwmEwyRaR2Ogn
-         inPnPJliNM8lOfntUJtCygHf/wMBXMT/j41Zg5QC6awsnEWbNuLlA2w/8xaLFoIYPh1g
-         vesW8sEa9C9roJYsqPmmPQ7ZD8tDgsRVPyVoxJv/aTS+41eWxJnaBi2TkA0ziCDzuHkA
-         lkVtja5wAE8g+WYBwRm/NrzJhy7IwEYUCY8yqHWEqSVWsOPtDc2ozoqhbxLbDwXJWB6S
-         JsHw==
+        b=EsfMeqPtA4yiFSaniYejLS6XIcXg2wyoKPfMV5J6X+KkvsZZQCqlhB0UZraXzCuDf8
+         +parq5dpheEw05bmFxB887J6xV+/F1f84b/BAEkThsx6XqFmhnbrtKOI09s6P8LDYH2e
+         WE4mXV8Mg2zoe8Be90L4yKrFz5SUXTlTzCytghloxkYDUTOcRNxcpbB2dzFvv4u6mBkB
+         1OjFe9JnrUsXYFJXaHOtGNxSQ2nQztssoZmsMwBNYlKoo1r5QtdcugjcDM5+283Dgp6b
+         qGHKbmG104i0JgjLUscX/ZNwjEdlcTqeApImMHFqHulI2YWADKCiTw83ws66nwalU91K
+         bhTw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=xoCndVwrvCSfCd0BaHKCqL9ELaacWGRyWSDCytAWBDI=;
-        fh=8W/r0CnnlB1OBU5V+CPinxP0lccBAW6JlZ+1QiwmImg=;
-        b=rhGbrzJcMPyudlNTEwS6pm1e9Mx0lnZIu8JgwSsDORRy3XuuIKV2Kygd77Nj6zGkm2
-         VtcqJDWYQzWjcH5aVP3e9FE9xxGv+Pfa2jUM5jHMO4lW7F3okpmU07IU+rYw/KruAfD8
-         P4cTRIFJcNTuepdm+B47TPkq4LzRrnHMNlwDRubhucLlegYxltC8FVa2jm4K5p5Oex72
-         12KjD6IUeBrDICQh5x8hzpYSHxM+8CTbFsMJJ1mu0Ka4rNl8rHVGUK3d+4StwzfmsiLE
-         s/H7IUDnqCLZEWpuYu7Q+k7J9q8GB20kVKJoW8POejVugyRRi/uhsOYIP9nHaLqVfyIL
-         xgQg==;
+        bh=R72tSyuvoCt5/QGm7uguOsGtVeCA2C72cLraw6uBskI=;
+        fh=D5+yd6vJMUvfAp5gnUcHRvIopiYH+v7Nmcr5kof6lik=;
+        b=mVW6kGb8YWuGXs/Fq865VbevXTXZr4wc6zmZphTMEUVguSS33IY0RA3zNrw4fOWiw/
+         HIs/PCGGYkvdZpLxW7fTmeuy6dlSxfoB1FhLuigtVGk9Irxw0rCcA7eZOHUq1qWkIi3o
+         +Z+oL1x1okoa+DssFagggFiMtvPFgiBiuOymcWqtef6V7n2VNlPyVYU09k2/JAzzCpFj
+         R75ts0AIZ7xwRHX3//vE2xrpCUoK7sEgKXWoxdzEJSepG+kAM90IIay7ApWv+rTggaFo
+         kP6Pf2ISCZ5J+m0FD25EkiqmVuCY6MkBOdLQykqDuw3eo9jwSrfaN2yZfqoDoYG3AwLJ
+         6UMQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795069199; x=1795673999; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795069246; x=1795674046; darn=vger.kernel.org;
         h=content-type:cc:to:subject:message-id:date:from:mime-version:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=xoCndVwrvCSfCd0BaHKCqL9ELaacWGRyWSDCytAWBDI=;
-        b=UT7r6HIMP8x6DmYZaQezLkvtfE9jNe8QAZNjoZ+BDLGzqxB4OhFh83dq2c2fciCrs0
-         7fuwCWV8wQqIvxi9O3MUE0IR/oZMWHzvUTGYfc1aN+Z//8i+lhbV8PKSw89euW0ZQk+H
-         8q5pGCTpngISoL3G/Cb+omZLqqhIVPdvAFuv6b2+g7FV5AWky6L+uVa71XJbPqKri9I1
-         dZXoe+f8xzF4CDQJKfgEocHcqWxhEpQOfdD3u1P1GtLbiAv6i41ol3ck/rANGAfP9rnU
-         Gug2I0Kyk+h0n1UkYk86LPFEZ1RNs0GugUbSr7SGaIIAhH6643rg0QYLZACAQp2am9Bp
-         BvdA==
+        bh=R72tSyuvoCt5/QGm7uguOsGtVeCA2C72cLraw6uBskI=;
+        b=K3oxpHULF4L+vV1q+0GdTBv3uOvLHlttlMr7OApOglNWVl+Zu9hnmsfBh8ArpL5nos
+         0Cp5+2skbP0ZCKEDEDLtPxweHy1c/1NSt6N68MGuiUtoCU/ddPCHUsx5Pcx+AJ5lx3l/
+         4f7UJPrMJgYaPHi3y5ZzjqrX8tNmwRvhBoc5WTpy4NoLLVMEo0FHTyqgMPrqR/R0J9XI
+         fJRVS6H1aLtMQwDm4aahimGeHRiCYiipcu0FD0Ll6DtrvUvcqhq9gim+3Y0YzSNYYenN
+         Xh0uaI5/fA8UB01kXzaOOTmXD9Bc97UfjMZ5RrjNmn9ReLJHBkhF4ykhtWf4pNu6tD6c
+         MtDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795069199; x=1795673999;
+        d=1e100.net; s=20260707; t=1795069246; x=1795674046;
         h=content-type:cc:to:subject:message-id:date:from:mime-version
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=xoCndVwrvCSfCd0BaHKCqL9ELaacWGRyWSDCytAWBDI=;
-        b=hWn8ni8WeEH0zBONT85rIwkt0OunLrI1mcE9+XvKdxcclZfwA9wRhn8iAHv8YggucT
-         7Ni7MzpYrhNOL+8q2Ph/KkuJ5FIP6rCaPMcoqk6ll2FbJn+6/nhco0rb5suoBncEYai6
-         hjvUexT6Kul68H6/+1BW9SzkoG605yx3CS1ROSq5Z/FfYEVEGsfK9OwbTQCFfm6eU5nH
-         7mTxiHYhZb7ZepwQCGbZG8lo0SBia8OQ8OaoFzBtQilchIVKjb8S9Clv13h2WI2TStGA
-         bwuFZiI2jiA3fwFVYeHKWmUNkKxChj709Ab0GVCpCJktLm+Z9bVlDU4dPRNi10rxma03
-         cPag==
-X-Gm-Message-State: APuU4Z9CjHoS9S7aPw/6zoYSbuQGZhbNuVjdwaqSc+2uHnkBZNmYlB8Y
-	JNA75COARbbvs9qtFQYVclGklrI70pZCILO+9omL/EHIbBYPHPd5Oxpg5CWr6eXtmkCIc/GNYfy
-	65U3GmXZuz4CjWm3eJEkAqdukBUhD01qu3unraix3zDkN
-X-Gm-Gg: AZFdTZcDsGr5I0mG7Jsooy+f3hFHi8+OaeGf5ubvU8b4CSY4T7QWhThbtt8jTPfX7vH
-	fQSHC7fv/AiuRw2wQXDzgnLRNb0/ELhEfMbJZOqK6uQeKZ2uWU49xKi7IPK+yNTnb5nr2/gD5p3
-	EkD5W0bFFw53E7e84YKpgz1vhRapqrVTIXvAkMpZtmieDoGO6AsFsK8e0LzaMCYvQWkcnyCZJEk
-	VfnxbSf+Df8YAcJO0BlRj/kI0pCwOwNf3jiP/6dTjvJeNMrT40b3yLYRtPo5OYhvb1M677iYKdX
-	BdehWC85ZRWWwfCHGMEsO7U2o/xPRIYUoEbkUbkN1ziKXn3mgmCEBti7Olv+mLURihivpL2w/hI
-	0Q46J1/u8KQBYM3cOUHFvmwXHsM+yJ1QIn6+E8VQk2xfRObN6qnl5tY55WyptT86LHUDpZaSlJY
-	RblfACV88MF4alN7X+Mw==
-X-Received: by 2002:a05:6214:21e3:b0:91c:7a3f:f548 with SMTP id
- 6a1803df08f44-92114f7d496mr80145356d6.49.1795069198906; Wed, 18 Nov 2026
- 22:19:58 -0800 (PST)
+        bh=R72tSyuvoCt5/QGm7uguOsGtVeCA2C72cLraw6uBskI=;
+        b=N9fDcyWz5US850FkdHC+D9jLZHu4Wt7Eu9c4vp4nQ2vbBgGhKQyj1KwEx3CPwkQ2sG
+         vFYWtCrGYSSoJL9+Rik5Nnqletbu46dYAQoY2fqIgX1dxU+73LpW3oj0jhCbOV022P1I
+         vmVKc4jybvZa2lfysat762MrlkJCzAQ4H3RZry2w4zyIUW4fhmuR93pyPfFNLSgJ5ch6
+         41huJf7kzSx4edg59lrWNRPHcL2gk7tZkvBOCmIz+gQEYo68rkeciRgE2erhQgpXma2Y
+         GN3m6Jzr1RQVc1IL7k79eY7OJ/ukA2Wivc+jd1eh+h4KfTRxQqjJDE767Hw53PdCtEk6
+         SPfA==
+X-Gm-Message-State: APuU4Z+cFMCAt81hjnTz1Tbv4MH5UdLP/zQKUX/8OfqN21wpVqPrJwHc
+	imlEIczk3llSC3zrh6e5Z8jyl/eETdg0TdiKSnD7yoOGQo9rYwBkCq+yFoxi3IErn/c8PfXdf5a
+	qGl/I1IO1UEPOjjEjwRnjjfm1Zc/WBhHpFZ5wOw2fX/os
+X-Gm-Gg: AZFdTZfEtWYfU2KDM48ckNcti0spOwgQbL9+5o3fnQp6hPUUyRBzsV81NzKull/czE7
+	2lU72V+3YgGDfVRjCgTaB+WFWCJbkgSemYatTmafxg4VRW1FgOkUNyiuUFQjikkPhcYzd4HTegT
+	OORCkm0JPbH+5XT28YhWwrMDsUtduIv6nwm+Vb9yp921luuPiifvDu41zNOi7fxO8ERCgjR3A2g
+	Wr428Xklwe75qKFR046PZZG3D8HzN1bbw+Ihp48tyCMKi5wRMtQZX6iLsVwce5omkcBQPK2fE0O
+	YciCMXqOnL2nSb8Atzku9eHF5lEtqAcM4Eg50+iDu9gPN04HBqEEwVfVPCm/OTHY0S6qrumJZY8
+	vNbLQHobLV1gwXh+uHhwJ0r4tV8tATKf2fh1xtVSheNpH2DywxXr9lIfzdokwkG5lEas38JNxGy
+	G1sqnLv28PHT76bDeJUQ==
+X-Received: by 2002:a05:6214:8010:b0:921:18e2:4b8 with SMTP id
+ 6a1803df08f44-92118e205f4mr59170016d6.12.1795069245648; Wed, 18 Nov 2026
+ 22:20:45 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -101,81 +101,82 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 From: =?UTF-8?B?5qKT5bed5ZKy5aSq?= <inkxiao12@gmail.com>
-Date: Thu, 19 Nov 2026 01:19:46 -0500
-X-Gm-Features: Aa3M54oxphJvWdfM-fUHq_7nMxHgG-ail465DDEoF5yzwUuPEfq0cOpWCDpLL0o
-Message-ID: <CAMcAce-4z6mGO70Bb32quoTj0aRmVERxPKCfb2VpY_w3wHjaRQ@mail.gmail.com>
-Subject: [PATCH bpf 1/3] bpf: Replace DECLARE_EVENT_CLASS names in raw_tp_null_args[]
+Date: Thu, 19 Nov 2026 01:20:34 -0500
+X-Gm-Features: Aa3M54peGcZ3HW3rbZ6EtpU-sE3Eis0PWV29zDNE9SCTxw0n7cbFv5MbYn1qN6c
+Message-ID: <CAMcAce9pi3BwKUAdsfx8GFwMMFx-=-UkkUkqsCDOqbwaL9eSxA@mail.gmail.com>
+Subject: [PATCH bpf 2/3] bpf: Fix missing raw_tp_null_args masks for NFS and pNFS
 To: bpf@vger.kernel.org
 Cc: Trond Myklebust <trondmy@kernel.org>, anna@kernel.org, linux-nfs@vger.kernel.org, 
-	steffen.klassert@secunet.com, herbert@gondor.apana.org.au, ast@kernel.org, 
-	daniel@iogearbox.net, stable@vger.kernel.org
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-btf_ctx_access() strips the "btf_trace_" prefix from attach_btf_id
-and matches tname with strcmp(tname, raw_tp_null_args[i].func). Because
-each attachable tracepoint typedef corresponds to a DEFINE_EVENT() name
-rather than its DECLARE_EVENT_CLASS() template, three existing entries
-in raw_tp_null_args[] never match any program:
+Audit of NFS/pNFS tracepoint callers against raw_tp_null_args[] reveals
+several missing or incomplete argument masks:
 
-  1. "nfs4_inode_callback_event" and "nfs4_inode_stateid_callback_event"
-     are DECLARE_EVENT_CLASS templates in fs/nfs/nfs4trace.h whose
-     DEFINE_EVENT instances are nfs4_cb_getattr (:1455) and
-     nfs4_cb_recall (:1518). fs/nfs/callback_proc.c:50,106 pass literal
-     NULL for arg 2 (const struct inode *inode), and TP_fast_assign
-     (:1424, :1481) checks !IS_ERR_OR_NULL(inode). Keeping 0x200
-     (0x2ULL << (2 * 4)) sets ptr_err_raw_tp = true so btf_ctx_access()
-     assigns SCALAR_VALUE to ctx[2], rejecting any pointer dereference
-     even under if (inode) and matching existing raw_tp_null_args[]
-     0x2-nibble convention (0x300 yields the identical SCALAR_VALUE).
+  1. pnfs_update_layout (fs/nfs/nfs4trace.h:1990): raw_tp_null_args[]
+     currently sets only 0x10000 (arg 4, lo), omitting arg 5 (lseg).
+     fs/nfs/pnfs.c passes both literal NULL (:2166, :2177, :2337) and
+     ERR_PTR(...) (:2205-2206, :2300-2301) for lseg. Set 0x200000
+     (0x2ULL << (5 * 4)) alongside 0x10000 so btf_ctx_access() marks
+     ctx[5] as SCALAR_VALUE, preventing both NULL and ERR_PTR
+     dereferences even behind a NULL check.
 
-  2. "iptfs_ingress_postq_event" is the DECLARE_EVENT_CLASS template in
-     net/xfrm/trace_iptfs.h:108 whose DEFINE_EVENT instances (:130-148)
-     are iptfs_first_dequeue, iptfs_first_fragmenting,
-     iptfs_first_final_fragment, and iptfs_first_toobig.
-     net/xfrm/xfrm_iptfs.c:2025 and :2051 pass literal NULL for arg 3
-     (struct iphdr *iph), requiring mask 0x1000 (PTR_MAYBE_NULL).
+  2. pnfs_mds_fallback_pg_{init_read,init_write,get_mirror_count}:
+     raw_tp_null_args[] sets only 0x10000 (arg 4, lo). In
+     fs/nfs/flexfilelayout/flexfilelayout.c:1225-1231,
+     ff_layout_pg_get_mirror_count_write() returns early whenever
+     pgio->pg_lseg != NULL, so trace_pnfs_mds_fallback_pg_get_mirror_count()
+     (:1228) unconditionally receives arg 5 (lseg) == NULL.
+     pg_init_read (:1128) and pg_init_write (:1201) are likewise
+     reached when pgio->pg_lseg == NULL. Update all three to 0x110000.
 
-Replace these dead template names with their DEFINE_EVENT tracepoints.
-Verified in QEMU on x86_64 7.4.0-rc3 (iptfs_first_{fragmenting,
-final_fragment} and nfs4_cb_{getattr,recall} flip from LOADED to
-REJECTED) and 6.12.118 (nfs4_cb_{getattr,recall} flip from LOADED to
-REJECTED; iptfs_first_* absent in 6.12).
+  3. nfs4_cb_layoutrecall_file (fs/nfs/nfs4trace.h:1520): absent from
+     raw_tp_null_args[]. fs/nfs/callback_proc.c:262-267,320 passes
+     ino = ERR_PTR(-ENOENT) / ERR_PTR(-EAGAIN) as arg 2 (inode) on the
+     out_noput path; TP_fast_assign (:1546) checks !IS_ERR_OR_NULL(inode).
+     Add { "nfs4_cb_layoutrecall_file", 0x200 }.
+
+  4. nfs4_test_delegation_stateid and nfs4_test_open_stateid
+     (fs/nfs/nfs4trace.h:1119-1120): absent from raw_tp_null_args[]
+     while fs/nfs/nfs4proc.c:2910 and :3003 pass literal NULL for arg 1
+     (const struct nfs4_lock_state *lsp). Add both with mask 0x10.
+
+Verified in QEMU on x86_64 7.4.0-rc3 (20eef29b7c84) and 6.12.118
+when CONFIG_NFS_FS=y and CONFIG_NFS_V4=y (all reproducers flip from
+LOADED pre-patch to REJECTED post-patch, including pnfs_update_layout
+and nfs4_cb_layoutrecall_file under if (!ptr) scalar enforcement).
 
 Fixes: c83e2d970bae ("bpf: Add tracepoints with null-able arguments")
-Cc: stable@vger.kernel.org # 6.12+ (nfs4_cb_*)
+Cc: stable@vger.kernel.org # 6.12+
 Signed-off-by: BoBppy <inkxiao12@gmail.com>
 ---
  kernel/bpf/btf.c | 11 +++++++----
  1 file changed, 7 insertions(+), 4 deletions(-)
 
 diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 7e866bf..0044156 100644
+index 0044156..ef10af2 100644
 --- a/kernel/bpf/btf.c
 +++ b/kernel/bpf/btf.c
-@@ -7403,8 +7403,8 @@ static const struct bpf_raw_tp_null_args
+@@ -7402,13 +7402,16 @@ static const struct bpf_raw_tp_null_args
 raw_tp_null_args[] = {
+  { "nfsd_file_cons_err", 0x1 },
   /* nfs4 */
   { "nfs4_setup_sequence", 0x1 },
-  { "pnfs_update_layout", 0x10000 },
-- { "nfs4_inode_callback_event", 0x200 },
-- { "nfs4_inode_stateid_callback_event", 0x200 },
-+ { "nfs4_cb_getattr", 0x200 },
-+ { "nfs4_cb_recall", 0x200 },
+- { "pnfs_update_layout", 0x10000 },
++ { "pnfs_update_layout", 0x10000 | 0x200000 },
+  { "nfs4_cb_getattr", 0x200 },
+  { "nfs4_cb_recall", 0x200 },
++ { "nfs4_cb_layoutrecall_file", 0x200 },
++ { "nfs4_test_delegation_stateid", 0x10 },
++ { "nfs4_test_open_stateid", 0x10 },
   /* nfs from pnfs_layout_event */
-  { "pnfs_mds_fallback_pg_init_read", 0x10000 },
-  { "pnfs_mds_fallback_pg_init_write", 0x10000 },
-@@ -7441,8 +7441,11 @@ static const struct bpf_raw_tp_null_args
-raw_tp_null_args[] = {
-  { "btree_path_free", 0x100 },
-  /* hfi1_tx */
-  { "hfi1_sdma_progress", 0x1000 },
-- /* iptfs */
-- { "iptfs_ingress_postq_event", 0x1000 },
-+ /* iptfs from iptfs_ingress_postq_event */
-+ { "iptfs_first_dequeue", 0x1000 },
-+ { "iptfs_first_fragmenting", 0x1000 },
-+ { "iptfs_first_final_fragment", 0x1000 },
-+ { "iptfs_first_toobig", 0x1000 },
-  /* neigh */
-  { "neigh_update", 0x10 },
-  /* snd_firewire_lib */
+- { "pnfs_mds_fallback_pg_init_read", 0x10000 },
+- { "pnfs_mds_fallback_pg_init_write", 0x10000 },
+- { "pnfs_mds_fallback_pg_get_mirror_count", 0x10000 },
++ { "pnfs_mds_fallback_pg_init_read", 0x110000 },
++ { "pnfs_mds_fallback_pg_init_write", 0x110000 },
++ { "pnfs_mds_fallback_pg_get_mirror_count", 0x110000 },
+  { "pnfs_mds_fallback_read_done", 0x10000 },
+  { "pnfs_mds_fallback_write_done", 0x10000 },
+  { "pnfs_mds_fallback_read_pagelist", 0x10000 },
