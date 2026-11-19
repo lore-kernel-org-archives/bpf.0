@@ -1,54 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.208
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.58
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795103869;
-	b=eoD4i+EJPLLTSSWTwUDNPjn/dBaHL6AkTRS0NPaGBwtdcpp/wzO8hyrQ8Lwxa7p70ofi
-	 pzj0HDEWKovjvWtKIaj7hoEspiaylLKelUi/0Rm8kpi098rPL2NsdzTMAz30HKyNmdP4R
-	 XAbtMroIWS7WDfJq78uv/F6b24oMCdjkgBvbYa3lIQy+fOHKJkcI24lm5TF+MTkJgUVRI
-	 kHGqVXWf9jcSE5w4f/F47kXrxJ3BtsHpsjo0CmbXpWOLOzS+0SeF2kU6czkV/tIJCDoGJ
-	 rkruaYmnAR6rPqSN07fblk5/4hC270k44c9W10QyL96pUgiZj9Ryj0bdN7Tkp1JMwGQ==
+	t=1795104031;
+	b=iOKHv20pu0DFQUyTdnGVRJEA1FgTnCBq9eLOtIqPpyaGvjIiz09tjJdrKcK1Vc5xwt0X
+	 W6CfzlpdfLniOh/nj3Msvi76r8xq2JY/dkNYl1Xz5WaDC/tzTazV4f/E8vKDgDgcQlzuz
+	 MJXgc8MlU6OXX8cVWc4t/iVncWrVtW3LHmXDpVWvorskgX5270xOMKSF+9IvL6CH1NeK+
+	 9MppdQtewrI1m9RZGwudVyqTPgaLgYq9FYayUJFzJ5IAl4wyN/m3rjpozAMRf6kLQ43Gs
+	 c57cFqHqi2MwzSDU23Fs8kNU8jKjApevmI5vELOzadefGuUY0esE1cexVZgN9v4Qajg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795103869;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795104031;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=6UWrlS/skRUldXJXG7x98Qy8ovQTf/v121kIzkHXTNA=;
-	b=o5pmGGvPAM4p1O/FkFnW7r2Mhnnx1r6iEXBVfIS/BX3/VIU0M9/6jjZAAHBE40+IIww3
-	 cDvc9tlxOqyBXHQPD03OEax+qQYOg60LmPPeMQYj3qjRbh4FuvU46LpuhtM+AT+Q3oLBG
-	 Gp+As4XvlN5TqgoNAJv1JKz8H8GWHfO7UpZs4OLrCbmztN2sQAm62zAHQO6nGFJaBjWtG
-	 BgP2sS04oDFfbnEpJN9q5Pu2Prb8rnJfe9juqivPpShqyGq7g7aLLwBV5rdNSf0YUafrN
-	 SXKmAuEk+oH1q7ty8VvT5gKQ2R8jlGA80mdhWmLiZ4yaSELCNZX5yVyHKSqC8YLgTfw==
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:CC:Subject:In-Reply-To:
+	 Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=ghdvXRs6WeD3J65MxVpuLnA2rqhyvwGZJnk+T3/dQgs=;
+	b=HwNCZTvaAnwHYZhczhXN5C4F+33sUEhFJQiGaWgfZDclU/uu/MqQXyXnX6/3fgBcXY/Y
+	 6n2dTSdmiQ7p2mLDXU+b7nS50YUwLxxlp9ggVNXrBF7nD6owrZWpbebd1o77ccseR4Z2n
+	 DaIh5Kq4mN7Y2LU6LFVKall6tPZVj1sw5tTCXvaEHqMtzSoQcyqOMtRuWzOa4tIVbUIGP
+	 3FnysDMV6mN+Q3l4kCtgzWOY+yqPmDETjrRIiAK++Xb9k3glH6w7uOIMWdXXs5ziEyf1m
+	 5SrRJzGzRy0w/pIPMm2n5tDWiORSPEBAkBUS/WHiIeqMTrW2SsZhNuIlMyQIBKWG8Mw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=OQjrM4Xz;
-	arc=none smtp.remote-ip=95.215.58.208
-Received: from mta1.migadu.com (out-208.mta1.migadu.com [95.215.58.208])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=UoebAUpc;
+	arc=none smtp.remote-ip=95.215.58.58
+Received: from mta1.migadu.com (out-58.mta1.migadu.com [95.215.58.58])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1BC6606A337
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 15:57:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B1BC6606A337
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 827A2606A320
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 16:00:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 827A2606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=OQjrM4Xz
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=UoebAUpc
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=ORueQHtBtDO6jYs9rPSJAwQL8rrlHEyCflNyo/uLzHo=;
+DKIM-Signature: a=rsa-sha256; bh=muSluvC1BBHfMSuECvqWpxXBduhSE0/vxCvegiCzjJc=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795103866; v=1; x=1795708666;
- b=OQjrM4XzL/LD0lTPGisvzBV845fAqForpmdORA8duDtx9HEgv9Rbog6x4QOjcNp1yChSvV1C
- PSmCPRVDPjjJPvb2Ra1hm7M+vmvp+TCi/mmKjswhxPQoqSLDJprxfXP12DY7wd17f0DzAQOx9/r
- JkFFn2YdD1rH8sXc6uJhhulU=
+ t=1795104028; v=1; x=1795708828;
+ b=UoebAUpc9Dovg7tSqjUZM3lF7OlcG3b+G7ban6XEK46pjjJWwV3B+/VNPL3K8EpL7lHmQGa1
+ xbaevpAFmrlU2DB0tu28JUK2StqMgpNtZMQyyRfrDVlh1SJUbkhQCPIlgv9xLgWtMNx8VcwX1aP
+ wPbYDQzZzeyAiWmOTMUOOudY=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id a47f7905d1af218d;
-	Thu, 19 Nov 2026 15:57:46 +0000
-X-Mizu-Trace-ID: a47f7905d1af218d
+Received: by smtp.migadu.com with ESMTPS id d38b154e6baa8d3a;
+	Thu, 19 Nov 2026 16:00:27 +0000
+X-Mizu-Trace-ID: d38b154e6baa8d3a
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <473a226d-311a-43f4-a494-b0ce25862c75@linux.dev>
-Date: Thu, 19 Nov 2026 07:57:42 -0800
+Date: Thu, 19 Nov 2026 16:00:23 +0000
+From: Bradley Morgan <bradley.morgan@linux.dev>
+To: david@kernel.org
+CC: akpm@linux-foundation.org, alexander.shishkin@linux.intel.com, ast@kernel.org,
+ bpf@vger.kernel.org, bsegall@google.com, dietmar.eggemann@arm.com,
+ juri.lelli@redhat.com, kees@kernel.org, kprateek.nayak@amd.com,
+ liam@infradead.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ ljs@kernel.org, mason@kernel.org, mathieu.poirier@linaro.org,
+ mgorman@suse.de, mhocko@suse.com, mingo@kernel.org, mingo@redhat.com,
+ peterz@infradead.org, rostedt@goodmis.org, rppt@kernel.org,
+ sashiko-bot@kernel.org, songliubraving@fb.com, stable@vger.kernel.org,
+ surenb@google.com, vbabka@kernel.org, vincent.guittot@linaro.org,
+ vschneid@redhat.com, yhs@fb.com
+Subject: Re: [PATCH] fork: clear p->mm when copy_process() fails
+In-Reply-To: <20261119-mm_failed_fork-v1-1-b3019f43d197@kernel.org>
+Message-ID: <7F08BE59-B6F6-4884-AD56-8178335F2C15@linux.dev>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,97 +71,114 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 2/4] selftests/bpf: Test CO-RE relocations of
- unsigned 32-bit enum values
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
- mason@kernel.org, ihor.solodrai@linux.dev
-References: <20261119051453.1902726-1-yonghong.song@linux.dev>
- <4b1c106f8c17afddbdacf8814838a3c0aca16456e7655da2be23bad0bc40405f@mail.kernel.org>
-Content-Language: en-GB
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <4b1c106f8c17afddbdacf8814838a3c0aca16456e7655da2be23bad0bc40405f@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 8bit
+
+On 19 November 2026 08:04:58 GMT, "David Hildenbrand (Arm)"
+<david@kernel.org> wrote:
+>From: Chris Mason <mason@kernel.org>
+>
+>When copy_process() fails after copy_mm(), the error path drops the mm
+>reference but leaves p->mm set. Perf and BPF can still reach the
+>task, and take a reference on the already freed mm through get_task_mm()
+>or bpf_find_vma(), resulting in a use-after-free:
+>
+>    copy_process()               PERF_EVENT_IOC_SET_FILTER
+>    ==============               =========================
+>    perf_event_init_task(p)
+>    copy_mm(p)
+>    a later step fails
+>    mmput(p->mm)
+>      /* frees the mm */
+>                                 perf_event_addr_filters_apply()
+>                                   get_task_mm(p)
+>                                     /* use-after-free */
+>
+>Similarly, a BPF program on the task_free LSM hook can call
+>bpf_find_vma(p)
+>before the task is freed.
+>
+>Fix it by clearing p->mm under task_lock() before dropping the reference,
+>just like exit_mm() does.
+>
+>Further, if copy_process() fails before copy_mm(), p->mm is still the
+>parent's mm pointer copied by dup_task_struct(), without having taken a
+>reference. While nobody can access it concurrently, there is the
+>chance that it might get accessed later when a BPF program is attached
+>to free_task().
+>
+>With CONFIG_MEMCG the task is freed after an RCU grace period, so the
+>parent might already be gone and p->mm in the child points at something
+>that was already freed. So let's just clear p->mm before freeing the
+>task. No lock is required as there cannot be concurrent access (and we
+>might not even have the lock initialized yet).
+>
+>This has medium urgency.
+>
+>Fixes: 375637bc5249 ("perf/core: Introduce address range filtering")
+>Fixes: 7c7e3d31e785 ("bpf: Introduce helper bpf_find_vma")
+>Reported-by: Sashiko <sashiko-bot@kernel.org>
+>Closes: https://lore.kernel.org/sashiko-outbox-180866@kernel.org/
+>Cc: stable@vger.kernel.org
+>Signed-off-by: Chris Mason <mason@kernel.org>
+>[ david: simplify description and comments ]
+
+Reviewed-by: Bradley Morgan <bradley.morgan@linux.dev>
 
 
+>Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
+>---
+>I can take this through my tree (rather soonish) unless someone else
+>wants to pick this up.
+>---
+> kernel/fork.c | 15 +++++++++++++--
+> 1 file changed, 13 insertions(+), 2 deletions(-)
+>
+>diff --git a/kernel/fork.c b/kernel/fork.c
+>index 5efceb8d58a78..77d6c8fc38c66 100644
+>--- a/kernel/fork.c
+>+++ b/kernel/fork.c
+>@@ -2628,8 +2628,14 @@ __latent_entropy struct task_struct *copy_process(
+> bad_fork_cleanup_mm:
+> 	sched_cache_fork_cleanup(p);
+> 	if (p->mm) {
+>-		mm_clear_owner(p->mm, p);
+>-		mmput(p->mm);
+>+		struct mm_struct *mm = p->mm;
+>+
+>+		/* Perf events and BPF programs can still reach p. */
+>+		task_lock(p);
+>+		p->mm = NULL;
+>+		task_unlock(p);
+>+		mm_clear_owner(mm, p);
+>+		mmput(mm);
+> 	}
+> bad_fork_cleanup_signal:
+> 	if (!(clone_flags & CLONE_THREAD))
+>@@ -2663,6 +2669,11 @@ __latent_entropy struct task_struct *copy_process(
+> 	exit_cred_namespaces(p);
+> 	exit_creds(p);
+> bad_fork_free:
+>+	/*
+>+	 * If set, p->mm points at the parent's mm without a reference. Nobody
+>+	 * can access it concurrently anymore, but prevent later access.
+>+	 */
+>+	p->mm = NULL;
+> 	WRITE_ONCE(p->__state, TASK_DEAD);
+> 	exit_task_stack_account(p);
+> 	put_task_stack(p);
+>
+>---
+>base-commit: 4405c18c95d2d0f99f6c581ef0ee8591a1aa6ccd
+>change-id: 20261119-mm_failed_fork-a46141b503d0
+>
+>Best regards,
+>--  
+>David Hildenbrand (Arm) <david@kernel.org>
+>
+>
+>
 
-On 11/18/26 9:54 PM, bot+bpf-ci@kernel.org wrote:
->> selftests/bpf: Test CO-RE relocations of unsigned 32-bit enum values
-> TL;DR: The new enum test likely fails core_reloc/enumval on the GCC-BPF flavor
-> at this commit, since GCC sign-extends the value; fixes come later in the
-> series, so it isn't bisectable.
->
->> diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_enumval.c b/tools/testing/selftests/bpf/progs/test_core_reloc_enumval.c
->> --- a/tools/testing/selftests/bpf/progs/test_core_reloc_enumval.c
->> +++ b/tools/testing/selftests/bpf/progs/test_core_reloc_enumval.c
-> [ ... ]
->
->> @@ -64,6 +72,12 @@ int test_core_enumval(void *ctx)
->>   	out->anon_val1 = bpf_core_enum_value(anon, ANON_ENUM_VAL1);
->>   	out->anon_val2 = bpf_core_enum_value(anon, ANON_ENUM_VAL2);
->>   	/* ANON_ENUM_VAL3 value is optional */
->> +
->> +	/* enum named_uint_enum is optional */
->> +	if (bpf_core_enum_value_exists(enum named_uint_enum, UINT_ENUM_VAL1))
->> +		out->uint_val1 = bpf_core_enum_value(enum named_uint_enum, UINT_ENUM_VAL1);
->> +	if (bpf_core_enum_value_exists(enum named_uint_enum, UINT_ENUM_VAL2))
->> +		out->uint_val2 = bpf_core_enum_value(enum named_uint_enum, UINT_ENUM_VAL2);
-> Will this pass for the GCC-BPF flavor of the object (test_progs-bpf_gcc)?
->
-> Under !__clang__, bpf_core_enum_value() expands to
-> __builtin_preserve_enum_value(), which returns int, so GCC emits the
-> ld_imm64 sign-extended (for example lddw %r1,-2147483648 for 0x80000000).
->
-> With f3507c4b38e8 applied, bpf_core_calc_enumval_relo() gets orig_val from
-> btf_enum_value(), which is (__u32)e->val for a kflag 0 enum, and
-> bpf_core_patch_insn() then validates it against the instruction:
->
->      imm = (__u32)insn[0].imm | ((__u64)insn[1].imm << 32);
->      if (res->validate && imm != orig_val) {
->          pr_warn("... unexpected insn #%d (LDIMM64) value: ...");
->          return -EINVAL;
->      }
->
-> For the GCC-built object imm is 0xffffffff80000000 while orig_val is
-> 0x80000000, so bpf_object__load() should fail and ASSERT_OK(err,
-> "obj_load") would fail core_reloc/enumval, and core_reloc_btfgen/enumval
-> the same way.  ENUMVAL_CASE(enumval) does not set .fails, neither subtest
-> is in ci/vmtest/configs/DENYLIST.test_progs-bpf_gcc, and the gcc-bpf job
-> (KERNEL_TEST: test_progs-bpf_gcc) runs on x86_64.
->
-> Even with only the libbpf fix, the int result stored into the new long
-> uint_val1/uint_val2 fields would read back as 0xffffffff80000001, while
-> core_reloc.c expects 0x80000001 and 0xffffffff.
->
-> This looks to be fixed later in the series, and both are needed for GCC:
->
->    aa93e7e947e0 ("libbpf: Accept sign-extended 32-bit enum values in CO-RE
->    relocations") makes libbpf accept the sign-extended form.
->
->    ec81091d83f1 ("selftests/bpf: Take unsigned enum values as unsigned int
->    for GCC") adds UINT_ENUM_VALUE(), which casts to unsigned int under
->    !__clang__.
->
-> Until both land, test_progs-bpf_gcc fails at this commit, so the series is
-> not bisectable for that flavor.  Could those changes be folded into this
-> commit and f3507c4b38e8, or the series reordered?
->
-> The commit message also describes only the clang behaviour ("whose values
-> clang emits zero-extended in the ld_imm64 of the relocations").
 
-You are correct. this will still have gcc test failure.
-So in the next revision, I will merge 1/3 as the first commit
-and 2/4 as the second commit. This way, we can avoid the selftest failure
-during bisecting.
-
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/44465301903
-
+--- Thanks!
