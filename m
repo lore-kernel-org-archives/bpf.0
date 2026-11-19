@@ -1,54 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.84
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795121757;
-	b=xJg6T7Ar0TFa8I+btUipMTHitWwwWj7QeLNPWwORP4bpW4aOXLuEDzEFgBLSbzQHtTVU
-	 MmqRmvrkfCECoUwijD49VTp4HuTXIKo0Bis6zD9xqgF2r5YrKx1BVWamPZ+5vjSj/TKTD
-	 eLT48aJkFywBuGDxU3jQJ5S4H0bHiPjcwehhqd5sEZEQ2R3KeitJM8GadOI0e1QqUfWzv
-	 hcKbXtph6JZmrrumdPJLBoRW/gYYNXfnRxivmQla5zrUil5yVU1/52JSqF3dJuVnf3MOH
-	 lNRRTXbhEgv7a8LuTsOWrEmtP2/n1pi+l1DKBHZ6JvULkcTpJ8v+puSyLAqclhIg3zw==
+	t=1795122736;
+	b=TgzpZdgpE6X1mATWG+3rtzyQDCzwn/PC8LaSVuMTCTofT+s+c7iVndiixxncSYVNnUAc
+	 ykrXWkVi4u+dTp+PPch21MeU38MKn0OPNO1Ha785UovVEf2RtDxCPWAjqlzzZ6BQLCnKe
+	 AxfOAvNm/o79KYElbar+pW37la67VoWcGnVwvy8i7gfmkwFuZqzfM383zzr/HnRhdHisd
+	 N2SEnCR6ddgQJaET9cqR3q40OMIVrG6bj9fG1OIKTkYWUMkBmplb2OdclOuy0umvIH/P1
+	 ZIVkYmMY3B1ACziUQjs/G6zXMd0zY2kdlbxqfIVZJxdlZELSa8oLWCOWF6uVSRPdQcg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795121757;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=RAn8N6gSfkVa4V0mSBkwOuD+bKCvbb3xoXf3f4G383I=;
-	b=aYOAc7zQffMjOim2VBfoTlMglX7PgkpuB0K/vq8s9OH7cKcfkAVGe2tbLxPgRhuNVJ6S
-	 e3duQXrxEp6OJbxtKFBoPgi85c0TR3qKCKzuRUS9QHqWg3plAHVJ398z07AR6kO5HT56e
-	 rcl3LrcZSHtjLWh+nQRdfl1FP7myY2+DGwJR0Aj9WdsRT1AnDmpiIydNm5g/bFbvc2WCw
-	 D6FbTbdfuiYCgXgvwuBd8QMDkw9fQtzNX6RyIijz1gjpaxrAPi660TiR/+H1IpSRrRhYa
-	 ZGki/NmzhoyvPhYQ0WE9OEyCUCLLfFP0oKbO5DsBHE6QoQgIcycmLp/ySxe5fyLLwVQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795122736;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=PPsz8EPWKcdeEfKVGYp9pwNeSXYhC2IpPyvOQ8qfLNU=;
+	b=JbmqiDiZTcltR87ei8+enNQsk8SXXWrQIe5+lzeljI5q4TUTPBGFUax0HJm9wiB1Jtgg
+	 F2xRaaZKlzSSoXuJPDmYmb8ffNtgB6Z8NV0YAA+MIDyswznc6NBHrJ958idXn66+KejbY
+	 eaZLCau1lH0u4jj/wRvWUqdC+Ouwtkrukp75NxJSutCh1nVZMxIlI741HhTnMdjQe8db1
+	 9uL+nM5w4TiQgX5RO3qbp1Ek2Yo8xfAWtUuclseMWI/EDZOqzyjlPfCewkOTysH+/DN1v
+	 2zoLRkrgjUrWC2TbVS3Kg3xC9JRpijGdFTWer1Z2qBu0wXf9yWLGZiTZLfCIrHwwrCg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=cdj+Xl3b;
-	arc=none smtp.remote-ip=91.218.175.84
-Received: from mta0.migadu.com (out-84.mta0.migadu.com [91.218.175.84])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=elTwXLSY;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16095606A32A
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 20:55:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 16095606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61F07606A320;
+	Thu, 19 Nov 2026 21:12:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=cdj+Xl3b
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=m1boHPeRYAz7gh4uxsNHGhcag9dpvPIeasTIYyTZheM=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795121753; v=1; x=1795726553;
- b=cdj+Xl3bjcjTHQV2+Fddn1jTus5cPouyUcbZnMkY7/1ut9KJ4b5Ea8X3Udi1Aa9gPlbjpxXT
- HgV/zjPDkhf1FFuWXhcKLTlCqy2XwkP+aLg8P0tr4Jq7nb78W06g2GfAX6QB1qVoexnEiUswAsU
- RPwOHE9WbOC3DxeIqythObBY=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 9cc57f456e8289a7;
-	Thu, 19 Nov 2026 20:55:50 +0000
-X-Mizu-Trace-ID: 9cc57f456e8289a7
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <b3270941-35e4-4b30-ae0e-9adff152bf5f@linux.dev>
-Date: Thu, 19 Nov 2026 13:55:45 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=elTwXLSY
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E37F1F000C0;
+	Thu, 19 Nov 2026 21:12:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795122736;
+	bh=PPsz8EPWKcdeEfKVGYp9pwNeSXYhC2IpPyvOQ8qfLNU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=elTwXLSY2aQ/A+on2z7+cdJtgueL4VgRLQN+A9ICWwwxPjwPJt5sImilvUU0BuatH
+	 rICfaY7p6i5P5KRW6mdIoaDnnW7oWNd4gFZwrm7vdEPIqvj1sEmabAqPTdYFFHqRMb
+	 W/mMV3GUtefPaqviMy9Jh5qJ8hC/vES7L+FsfjU9OcmczAUVRvCu5dP+UveU4NPV3m
+	 4DlKgRV3Q1pLF/1aGwIh5G7HncJ+2oK3qSBghlTd68IJVccimHqpDBhrkxavVcJJ1f
+	 8IEY6O9MDETdER51fkzGoHiPdwxRG+bfa9mYJOTDcpJW4SyHKg+VVoyEY/+KOq+9hA
+	 CcNfekYXW2rDA==
+Date: Thu, 19 Nov 2026 13:12:14 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
+Cc: Tianyi Gao <tianyi@cloudflare.com>, Hangbin Liu <hangbin.liu@linux.dev>,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
+ edumazet@kernel.org, pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+ ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+ john.fastabend@gmail.com, sdf@fomichev.me, skhan@linuxfoundation.org,
+ kernel-team@cloudflare.com, tianyi.gao@linux.dev
+Subject: Re: [PATCH net v4 0/3] selftests: net: veth: propagate check
+ failures to exit status
+Message-ID: <20261119131214.0b38c1ae@kernel.org>
+In-Reply-To: <20261119012940.32838-1-tianyi@cloudflare.com>
+References: <CAG4wq-d_30-B4wQZu48ZQXAORM4QxRqPfmYsmoHS0hiYp1EtTA@mail.gmail.com>
+	<20261119003003.40482-1-emmaonana18@gmail.com>
+	<20261119012940.32838-1-tianyi@cloudflare.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,64 +66,37 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v2] selftests/bpf: Fix bpf-gcc CO-RE relocation in
- verifier_sockmap_mutate
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org, ast@kernel.org
-Cc: Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
- Sechang Lim <rhkrqnwk98@gmail.com>, Michal Luczaj <mhal@rbox.co>,
- John Fastabend <john.fastabend@gmail.com>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20261117122417.340562-1-jiayuan.chen@linux.dev>
-Content-Language: en-US
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20261117122417.340562-1-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On 11/17/26 5:24 AM, Jiayuan Chen wrote:
-> bpf-gcc fails to load test_trace_iter_unix:
+On Thu, 19 Nov 2026 01:29:40 +0000 Tianyi Gao wrote:
+> On Thu, 19 Nov 2026 01:29:59 +0100 Omokefe Emmanuel Onanaroghene wrote:
+> > Changes v3 -> v4:
+> > - Patch 2: use if/else instead of "&& { ...; } ||" chains, keep
+> >   lines within 80 columns (thanks Tianyi for the review).
+> > - Add patch 3 deriving the invalid tx value from the kernel maximum.  
 > 
->   Error: #766/6 verifier_sockmap_mutate/test_trace_iter_unix
->   libbpf: elf: skipping section(3) .data (size 0)
->   libbpf: elf: skipping unrecognized data section(18) .comment
->   run_subtest:PASS:obj_open_mem 0 nsec
->   libbpf: prog 'test_trace_iter_unix': relo #0: insn #0 (LDX/ST/STX) accesses field incorrectly. ...
->   libbpf: prog 'test_trace_iter_unix': BPF program load failed: -EINVAL
->   libbpf: prog 'test_trace_iter_unix': failed to load: -EINVAL
->   libbpf: failed to load object 'verifier_sockmap_mutate'
->   run_subtest:PASS:unexpected_load_success 0 nsec
->   validate_msgs:FAIL:1014 expect_msg
->   VERIFIER LOG:
->   =============
->   0: R1=ctx() R10=fp0
->   ;  @ verifier_sockmap_mutate.c:124
->   0: <invalid CO-RE relocation>
->   failed to resolve CO-RE relocation <byte_off> [4] struct bpf_iter__unix (0:0 @ offset 0)
->   processed 1 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
->   =============
->   EXPECTED   SUBSTR: 'cannot update sockmap in this context'
+> Sorry for being annoying, but I see three problems with how v4 was
+> sent:
 > 
-> GCC only applies preserve_access_index to types that carry the attribute
-> themselves. The anonymous union holding the sock pointer doesn't, so the
-> CO-RE access stops at the union ("0:0") instead of reaching the pointer
-> ("0:0:0"), and libbpf rejects the relocation.
+> 1. Patch 3 lost its subject prefix. It went out as "[PATCH] selftests:
+>    net: veth: derive invalid-tx test value from kernel max", so
+>    patchwork put it in a series of its own [1].
 > 
-> Fixes: e16c83fa764f ("selftests/bpf: Add negative test for sockmap update from non-sockmap iter")
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> 2. Patch 3 should come first. Patch 1 makes a chk_channels() failure
+>    fail the script, and from then on the nproc + 1 check can fail on
+>    a correct kernel. With the fix first, no commit in the series
+>    reports a false failure.
+> 
+> 3. v4 was posted as a reply to my review of v3. A new version should
+>    start a new thread, and its change log should link the previous
+>    postings [2].
 
-Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+On top of the points Tianyi Gao already made:
 
-CI confirms the patch works:
+ 4. Please target all your "fixes" for selftests at net-next rather
+    than net and remove the Fixes: tags. None of this is worth applying
+    to the current release.
 
-Failing: https://github.com/kernel-patches/bpf/actions/runs/44576883691/job/135760256786
-Passing with the fix: https://github.com/kernel-patches/bpf/actions/runs/44083943280/job/134048457373
-
-Thanks for the fix!
-
-> [...]
+I'm tossing all your submissions from patchwork.
+Please don't forget to wait at least 24h before you repost anything.
