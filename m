@@ -1,68 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795059112;
-	b=KzXrB91dt3CXBJe2x7keFFHTEsTC1Ur3RK9n8tJw0V6NnUMevrdWCSnVoN31fZnz1eZ8
-	 vCh11vOQTgVqEk70aTntDYfyJTvbj1st29AKq5iFdGXgyt0K9iAaCxt5zXU4Vk6fKlgs0
-	 1i9D+XWVk02nDqrvFIc54HhdMVpvFhseG+6XB6EaKhQHOifD47Ej9olZam3sj5Wj7VUMs
-	 qLKO17fKUuAEp4SustaCGnzBcIwgkRXZNfYznMZaESTQgyMi1XLQZN56PTCyqnthEAy2m
-	 kPOfjMHgDyGusK0T5JpVIVvr/z2Jwr5SbO+LYlgY0OxKKlfzIM4ka+89VNEH2xCuyWQ==
+	t=1795059786;
+	b=RWNz3Ij0dgAyCEW6xT6X7H9zO+abBABoBS91oYmEUr5ijoigagHB4x0uRTbgFoZvEf9D
+	 rahHtBGYSrtUoyFjc79l8oL18TCS/9hlIlZ3KCuXE+PbTictYe3F3VPrarSYcPOpynBoR
+	 sxlTrSJECNWYbC9KjFR8M31yiw/5sbq82GASK4tLrT/7cv1BtMCFSsVn/t1iObrdhexnr
+	 xIHAuVwOQpICcpdqkiiHEFHVGnhOWpWWztUBQM5aS/kShvfIKSAfpAAoOeQqTugymjnDg
+	 BRy92RZ0M3i5phuPsb7nvNxnFeuBkFlfP0Ceyb2BLHSP8HMkhSR2htIZEiOtWKI5Gww==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795059112;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:
-	 X-CM-SenderInfo;
-	bh=rjel6/lEJoQu8KrafnH5y+VHs4euFK2Sj7xBNNKiAEU=;
-	b=uYrIWEMp8j1FGO8n2YBZ6/T7yLiDaEUu8hTMANOiEv36as/tokfEDoi6/irOTWX2ROK3
-	 +TFKcQJBWEKcMZJdQdTq0joPnt9UOS5rRoZK1BRyUQLPMTQLUtyJ/xg1RQfGkJ2DC7D8C
-	 UIBEAtIC0y47RrdG9M/hGkKsyxZpOSRgdVq3HNnfQ5QtCzfn2mxVVPP3w/5kdfTo0OKEM
-	 lZMGv19zkcqrHr2rIw2EaVST/SQLdap/STp7eWg5VsQKCAnrWaW+pMjy8oJ0rVyodbde6
-	 17nvjWOly7cuZtzV4BQXYNoRg9t9P6oDl6mP8ckNExEFh0R3LzCd2ovMNWJj2kSxcWQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795059786;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=FYedBz3QmxA+ahAtpKqLbz05VXo08BCPFUCdyls/+Q4=;
+	b=j2+FO+TQaZIEnVvvFOovrQW5Jv6a5kZXrbJC2lDZR+/juwGEom/Pz0tR/NMBloO0OJH0
+	 EFmEgFlU4nRGp16DuypB9JWyNmG/IfizSgDxI03isnvpz2lQgAlN3QHsSkCDIApnt0Jme
+	 9a6zZyuDcWtsrFFE5lk5zbFWUG0K3vYtqtbiV/mLW5/LGaJXw6RHgwT5N8T1+L/S1NKOW
+	 ipKKJsV+PwgS+gHpvwUdDpT0TXOhb2ct/F7gpci9zJ4+5dbfwhBYV0x3Nriq66MT3DOnS
+	 o7bQ1NPLEObjfSMwUYu9rBNHBZZfdyZ/0wM1VtrdeC9MeWKheOX6eJq+X0609JeAXqg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=163.com;
-	spf=pass smtp.mailfrom=163.com;
-	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=AbdGnE6A;
-	arc=none smtp.remote-ip=220.197.31.2
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="aOM/5wNR";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36E7B60A2601
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 03:31:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 36E7B60A2601
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77E1B606A325
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 03:43:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=AbdGnE6A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=rj
-	el6/lEJoQu8KrafnH5y+VHs4euFK2Sj7xBNNKiAEU=; b=AbdGnE6As96uQzpV/T
-	V69EwAAUcIN8AHvG5+nBu3YJxKSnoPaHE3h4VjytMJL9C77GXr856s1LP1Mi0sAH
-	b6x84pbBzOxMuQectd9EsSKTZWxMlL/lIw/vo+duJSTW38yDzJaQHrb31UxVQk4D
-	pKG0SF6icOW1Qt0uiwv+7jJc4=
-Received: from kylin-ERAZER-H610M.. (unknown [])
-	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wD3Xzx1bf5qM8OwJA--.54798S3;
-	Thu, 19 Nov 2026 11:31:04 +0800 (CST)
-From: Yun Lu <luyun_611@163.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev
-Cc: yatsenko@meta.com,
-	bpf@vger.kernel.org
-Subject: [PATCH bpf-next v4 1/6] bpf: Mark task work FREED before detaching it
-Date: Thu, 19 Nov 2026 11:30:46 +0800
-Message-ID: <20261119033051.196177-2-luyun_611@163.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261119033051.196177-1-luyun_611@163.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aOM/5wNR
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D6A31F000C6;
+	Thu, 19 Nov 2026 03:43:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795059786;
+	bh=FYedBz3QmxA+ahAtpKqLbz05VXo08BCPFUCdyls/+Q4=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=aOM/5wNRqafH9TXFWRhN2FWDqKGpHiaM/upZmr09PdRgBILz+hFXsuUy+fQpJH088
+	 19+b1yR1HDilWiRWoWla2vI/zDTgDMGyq+YzDZEzceSnP9Lt6Lty4xUHpfPBQaYloJ
+	 jjTcN4A2JifkeGIjZQ/SEW0v4TTvZYnr2q7TVkjQqwrKQ8Pl52f3c+lMb+kBsgxOYo
+	 ip2P39Gj8p7mEcej7uJ87hCnwXgJAhcYzzWUdTzgrbXpqurYYioF9m510XmfiIJbqG
+	 f5pwGFjZ9zAT7tJdY95Hc0XzTyv9UGKWTi6cRfOhgo/QkVFVRVax33hSzGtSPyCHRO
+	 WGrq1bkoWYxcQ==
+Message-ID: <sashiko-outbox-222403@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v4 6/6] selftests/bpf: Test wq callback setup
+ after deletion and user release
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Yun Lu" <luyun_611@163.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261119033051.196177-7-luyun_611@163.com>
 References: <20261119033051.196177-1-luyun_611@163.com>
+ <20261119033051.196177-7-luyun_611@163.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 19 Nov 2026 03:43:05 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -71,75 +60,46 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3Xzx1bf5qM8OwJA--.54798S3
-X-Coremail-Antispam: 1Uf129KBjvJXoW7KFy3uF1rXF18WrW7WFW8tFb_yoW8tr1Dpr
-	Z8KayjyF45XFZFy3ZFvws2v345uws3tw43GFyvgFyavr43XrsFgr1kKFyagFWDJrWkJF4Y
-	vr4YgrWIvw4UuFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07Upq2_UUUUU=
-X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbC7BjTomr+bXgi6wAA3N
 
-From: Yun Lu <luyun@kylinos.cn>
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Low] selftests/bpf: multi-line comment style in
+  test_wq_usercnt_reuse()
+--
 
-bpf_task_work_cancel_and_free() clears the value's context slot before
-marking the context FREED. A concurrent deletion can observe the empty
-slot and return while the detached context can still enter RUNNING:
+commit c499c2c6b9f5e1ec7aa72bc0571ecd4ff2c11fb1
+Author: Yun Lu <luyun@kylinos.cn>
 
-  uref cleanup                 delete                  target task
-  xchg(slot, NULL) gets C
-                               unlink E
-                               cancel sees NULL
-                               return
-                                                       C -> RUNNING
-  xchg(C->state, FREED)
+selftests/bpf: Test wq callback setup after deletion and user release
 
-A preallocated HASH uref walk racing with deletion allows this missed
-cancellation. This deletion does not itself free the element.
+This commit adds BPF selftests covering bpf_wq_set_callback() on deleted
+hash map elements and on reused elements after the last map user reference
+is dropped.
 
-Mark FREED before clearing the slot. Only the first FREED transition
-clears the slot and drops or transfers its map-owned context reference.
-Until that canceller clears the slot, no replacement can be published,
-so a plain slot store cannot overwrite a new context.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/wq.c b/tools/testing/=
+selftests/bpf/prog_tests/wq.c
+> index a4f71bc34fa6c..f783a91417e00 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/wq.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/wq.c
+> @@ -1,11 +1,109 @@
 
-Reading the slot no longer acquires exclusive ownership of C. Protect
-that access with regular RCU while another canceller can release C, and
-preserve unlink-to-slot ordering with a full barrier, including when the
-slot is NULL.
+[ ... ]
 
-Fixes: 38aa7003e369 ("bpf: task work scheduling kfuncs")
-Signed-off-by: Yun Lu <luyun@kylinos.cn>
----
- kernel/bpf/helpers.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+> +/* Check callback setup after reusing an idle object with no map uref. */
+> +static void test_wq_usercnt_reuse(void)
+> +{
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 937a0d7d6839..b5674be41dab 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -5174,11 +5174,21 @@ void bpf_task_work_cancel_and_free(void *val)
- 	struct bpf_task_work_ctx *ctx;
- 	enum bpf_task_work_state state;
- 
--	ctx = xchg(&twk->ctx, NULL);
-+	/* Another canceller can release the map-owned context reference. */
-+	guard(rcu)();
-+	/* Order a preceding unlink before observing an empty slot. */
-+	smp_mb();
-+	ctx = READ_ONCE(twk->ctx);
- 	if (!ctx)
- 		return;
- 
-+	/* Prevent entry to RUNNING before clearing the slot. */
- 	state = xchg(&ctx->state, BPF_TW_FREED);
-+	/* Only the first FREED transition detaches ctx and owns the map's ref. */
-+	if (state == BPF_TW_FREED)
-+		return;
-+	WRITE_ONCE(twk->ctx, NULL);
-+
- 	if (state == BPF_TW_SCHEDULED) {
- 		/* run in irq_work to avoid locks in NMI */
- 		init_irq_work(&ctx->irq_work, bpf_task_work_cancel_scheduled);
--- 
-2.43.0
+[ ... ]
 
+> +		/* Drop all target-map user FDs; the retained program FD keeps
+> +		 * the map alive through used_maps, but usercnt becomes zero.
+> +		 */
+> +		wq__destroy(skel);
+
+[Severity: Low]
+This isn't a bug, but BPF multi-line comment style puts the opening /* on
+its own line with the comment text starting on the next line.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261119033051.1961=
+77-1-luyun_611@163.com?part=3D6
