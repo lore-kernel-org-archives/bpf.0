@@ -1,58 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.224
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795059983;
-	b=QYt4A8VEMNU2nDiWBjzUQ7PEbKtbfaSd2D4AekzpAzCU4GvL+3+YoXkX6+g0vEvwzx9+
-	 Gf6lw0N0abtxb2Sid24/YKLVoBglkGEbv2POOON+Q7aAVGSfKg9ipmcJmRbOpm3XJ2CtY
-	 t++GrXGtHF4cXHxc0FSsPR+SYj1HwhQ9QbTjrgYGKPh4UOOADFtTAxrvZ3u0Rb9QqfgkB
-	 PfGCHwT1lM5PNwto0BLkoJcmgRqw9v4/4dgdihNEnKQlnpVfInOiyXrfzhDgCMhbWGDkC
-	 AUG0icYznYOT6p0xUdjrgX3PLZmeYtfAHEC8bVZkqoTmtiItMDEItwmMfXs2Bz9Xj0Q==
+	t=1795061127;
+	b=JD9CX+hin+BaVUw5r/8pQ2jjEznNKKj+S0QzRgaZs6/6p5C5vLv6u8mh95uL4F9Pxj3k
+	 KfRLNblUwooSe+YteIwk1wP4tDPOpUy+87fvhR1HBFUpHfdCn7tVLUWSjKX0bc1afh0eJ
+	 7u/TrazuZgBI27H1JZQfw6X3bfO9xLfvV8W5FkeZ+gLbeanM1wljdn45f+GayRj4df2Ho
+	 fPhdooai7QfjiQFtDZAQOo+WzqlnQqHbmRZ7Pn2TxzUQNJdD/gyZvIsjPEZR8a01uKUSL
+	 8sXfF5rjOJPF283PAvCYjknGO+MPcix2dzCzrHsQ7XeBxkONGvbUXrTx1Zav9Er9z1w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795059983;
-	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:CC:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
-	bh=OAbbp57riKGI1fZlq88CcOSg3koPqPRG3juTd/UX3uo=;
-	b=QaeNr5+xsg9u+Rf7J/e/9IDeo3uOfhzzOj8w1nwr4kfUk9+lX7pcWpnvwf4ki60o2Vxp
-	 waauT8pMaEmjFG6oMJwkIKgMuSK4SEPEIM8f5tBySDtSu/BZkC8dN9tQKto/F2a/WhWkQ
-	 puw01L5uYn+S3+hb4TM5Teq86DtGgKLpSqcsSIYtXIBD5Q+qNJAHTIUqiDB4DSXkfuKyu
-	 5xn8Z8hc3h6miOabyk83/zB8L5KNR1CbXYBK28HyMVCaAazkHH4TkK7kTzGv9MwsvfIMh
-	 o4flW/mnYDnxoiEyKn+x5Hu2XrwY2rwjlIabDzSvd5ZVIdlZDgBmE6N2ArXhodyDHeA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795061127;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=Tpcr5Zp4BkOta5iOXgWYc2k+gGkUCm6BwSHGFg57Zz0=;
+	b=ylmNv7PE/luisQK6qGtg2EIXyS6Qi881mg1M6/9yDJEpLoHibcYAnfe+UOAK4fNLGq3O
+	 q0qsa6DXyeBfqUMdw9JcafHqOHgfciCeBMxToFqICflQZDeIu+NJ/o/vrNezsGLcQn3X9
+	 vfkA5jD6CiEdYyj3vsvp1U40Wa0c+Kp0vUTpzvsgTXXleAKP62RQGWBneYnM5gYqIFfnO
+	 +59K1VnSUGJtaZKckvPdMSLgCJEzN4GhLC3lRbBq/FElqfhuWyitaXnFOE+XWtlF4mWHJ
+	 lKgZdssaKmfSFsuTUSpTgHMNCdzdg0jj8Seho3op1l6YbhrMubnGNCOHerxEZ4ezDDQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=huawei.com;
-	spf=pass smtp.mailfrom=huawei.com;
-	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b="V/52GJjf";
-	arc=none smtp.remote-ip=113.46.200.224
-Received: from canpmsgout09.his.huawei.com (canpmsgout09.his.huawei.com [113.46.200.224])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=F5XhGT7m;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CA36606A325;
-	Thu, 19 Nov 2026 03:46:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3CA36606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 768CF606A320
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 04:05:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=V/52GJjf
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=OAbbp57riKGI1fZlq88CcOSg3koPqPRG3juTd/UX3uo=;
-	b=V/52GJjfwvVK8DnDIvM5IQVRHWD6bWwP9aQgdIQW3zyiANrSaj0DY2j7nFjPaV7CdoJkRPEs9
-	j5P3307aBbCQKc9UtkmeUFvURRjxT+IUgrgDq+974N8dU9cb6StPqSQAXioAda0lAeeDVSXW/cF
-	zoa53Mrhki2F1QPx2mEV1j0=
-Received: from mail.maildlp.com (unknown [172.19.163.15])
-	by canpmsgout09.his.huawei.com (SkyGuard) with ESMTPS id 4jVPWm3pc4z1cyPH;
-	Thu, 19 Nov 2026 11:45:56 +0800 (CST)
-Received: from whupemk100010.china.huawei.com (unknown [7.152.184.41])
-	by mail.maildlp.com (Postfix) with ESMTPS id C65134058E;
-	Thu, 19 Nov 2026 11:46:16 +0800 (CST)
-Received: from [10.67.110.140] (10.67.110.140) by
- whupemk100010.china.huawei.com (7.152.184.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Thu, 19 Nov 2026 11:46:09 +0800
-Message-ID: <9787bc85-5b1c-4f13-9b0c-cd027548efa0@huawei.com>
-Date: Thu, 19 Nov 2026 11:46:07 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=F5XhGT7m
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60A091F000C5;
+	Thu, 19 Nov 2026 04:05:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795061127;
+	bh=Tpcr5Zp4BkOta5iOXgWYc2k+gGkUCm6BwSHGFg57Zz0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=F5XhGT7m+NbsMg5nqX+4xMPFxCF8A0mJLdxk1oQAHinIv1FlH2xwsYZMXvOyRQ5i8
+	 BDsDXh+c1ZJ+cbDz0oKl3pln5QHXOg6WLRAmki5JQtm2X2ouH77wiKwBIZwgnyijpH
+	 DGDV7f0B5+7RCOsVLqNIsmFev50/A1hbNtFTcKnuisSTACnqFi/mtIJVx1natm7faf
+	 I+pK8/ntYFhh5LvBC6bL5l0eiB+e1xbnUy1yeSvAxQpRMxYsYopvokb1LzTFtrGZxV
+	 JC2vipz50Y/5jTku62Ym4oEERhN9gscsqjyd6/INZTLRqZ5iqBiIF4mt5iOmUAPI4T
+	 uO/g0quLWLqsw==
+Content-Type: multipart/mixed; boundary="===============5595045659735586197=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -62,78 +49,100 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH -next -v4 02/17] LSM: pass struct path to the
- inode_setsecctx hook
-To: Christian Brauner <brauner@kernel.org>
-CC: Al Viro <viro@zeniv.linux.org.uk>, <mic@digikod.net>, <gnoack@google.com>,
-	<paul@paul-moore.com>, <jack@suse.cz>, <amir73il@gmail.com>,
-	<andrii@kernel.org>, <apparmor@lists.ubuntu.com>, <ast@kernel.org>,
-	<axboe@kernel.dk>, <bpf@vger.kernel.org>, <casey@schaufler-ca.com>,
-	<cel@kernel.org>, <cem@kernel.org>, <chenxiaosong@chenxiaosong.com>,
-	<code@tyhicks.com>, <corbet@lwn.net>, <Dai.Ngo@oracle.com>,
-	<dakr@kernel.org>, <daniel@iogearbox.net>, <dhowells@redhat.com>,
-	<dlemoal@kernel.org>, <dmitry.kasatkin@gmail.com>,
-	<driver-core@lists.linux.dev>, <dsterba@suse.com>,
-	<ecryptfs@vger.kernel.org>, <eddyz87@gmail.com>, <emil@etsalapatis.com>,
-	<eric.snowberg@oracle.com>, <exfat@lists.linux.dev>,
-	<georgia.garcia@canonical.com>, <gregkh@linuxfoundation.org>, <hch@lst.de>,
-	<hirofumi@mail.parknet.co.jp>, <hyc.lee@gmail.com>,
-	<ihor.solodrai@linux.dev>, <jlayton@kernel.org>, <jmorris@namei.org>,
-	<johan@kernel.org>, <john.fastabend@gmail.com>,
-	<john.johansen@canonical.com>, <jolsa@kernel.org>, <kpsingh@kernel.org>,
-	<linkinjeon@kernel.org>, <linux-api@vger.kernel.org>,
-	<linux-block@vger.kernel.org>, <linux-btrfs@vger.kernel.org>,
-	<linux-cifs@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-fsdevel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-nfs@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
-	<linux-trace-kernel@vger.kernel.org>, <linux-unionfs@vger.kernel.org>,
-	<linux-xfs@vger.kernel.org>, <liubaolin12138@163.com>,
-	<martin.lau@linux.dev>, <mason@kernel.org>, <mathieu.desnoyers@efficios.com>,
-	<matt@bobrowski.net>, <memxor@gmail.com>, <mhiramat@kernel.org>,
-	<miklos@szeredi.hu>, <neil@brown.name>, <netfs@lists.linux.dev>,
-	<ntfs@lists.linux.dev>, <okorniev@redhat.com>, <omosnacek@gmail.com>,
-	<penguin-kernel@i-love.sakura.ne.jp>, <rafael@kernel.org>,
-	<rdunlap@infradead.org>, <roberto.sassu@huawei.com>, <rostedt@goodmis.org>,
-	<selinux@vger.kernel.org>, <senozhatsky@chromium.org>, <serge@hallyn.com>,
-	<sj1557.seo@samsung.com>, <skhan@linuxfoundation.org>, <song@kernel.org>,
-	<stephen.smalley.work@gmail.com>, <takedakn@nttdata.co.jp>, <tom@talpey.com>,
-	<yonghong.song@linux.dev>, <yuezhang.mo@sony.com>, <zohar@linux.ibm.com>,
-	<utilityemal77@gmail.com>, <lujialin4@huawei.com>
-References: <20261117150542.1169451-1-caixinchen1@huawei.com>
- <20261117150542.1169451-3-caixinchen1@huawei.com>
- <20261117184342.GR989762@ZenIV> <20261118001641.GA1669148@ZenIV>
- <bdc22808-9f22-46f7-b42d-e6bd8e1eeaca@huawei.com>
- <20261118-nordlicht-badeort-daumen-813a1e9fd0b3@brauner>
-Content-Language: en-US
-From: Cai Xinchen <caixinchen1@huawei.com>
-In-Reply-To: <20261118-nordlicht-badeort-daumen-813a1e9fd0b3@brauner>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Message-Id: <5e345f4c45d534dfd506ecc88fb295ef930d0317d3036845b478e215f1ab261b@mail.kernel.org>
+In-Reply-To: <20261119033051.196177-7-luyun_611@163.com>
+References: <20261119033051.196177-7-luyun_611@163.com>
+Subject: Re: [PATCH bpf-next v4 6/6] selftests/bpf: Test wq callback setup after deletion and user release
+From: bot+bpf-ci@kernel.org
+To: luyun_611@163.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev
+Cc: yatsenko@meta.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu, 19 Nov 2026 04:05:26 +0000 (UTC)
+
+--===============5595045659735586197==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- whupemk100010.china.huawei.com (7.152.184.41)
 
-o, you are right, dentry is borned *self-parented*, and 
-d_alloc()/d_alloc_parallel allocate
-from parent->d_sb, __d_move only re-parent withon on sb. So 
-dget_parent() cannot
-leave the sb.
+> selftests/bpf: Test wq callback setup after deletion and user release
 
-On 11/18/2026 5:35 PM, Christian Brauner wrote:
-> On Wed, Nov 18, 2026 at 04:59:29PM +0800, Cai Xinchen wrote:
->> There are two places that violate (1), both introduced by this series of
->> patches in ksmbd:
->>
->> smb2_parent_compressed() and smb_inherit_dacl() pair the directory entry
->> returned by dget_parent()
->>
->> with path->mnt, and problems arise once that directory entry becomes the
->> root of its mount point.
-> No, (1) holds there. dget_parent() never leaves the superblock so the
-> parent has the same ->d_sb as path->dentry.
+TL;DR: Test issue: ASSERT_FAIL() in the new wq usercnt selftest may not record
+failures, so setup, cleanup or never-reused cases could pass silently. Commit
+message wording is a minor nit.
+
+> selftests/bpf: Test wq callback setup after deletion and user release
 >
-> What happens at the root of a mount is that the parent isn't below
-> path->mnt->mnt_root anymore. That's a different property and struct path
-> doesn't guarantee that (open_by_handle_at(), nfsd with
-> no_subtree_check). So there's nothing to fix for (1) in those two.
+> Use the existing NO_PREALLOC HASH map and callback to test that
+> bpf_wq_set_callback() rejects a deleted value with -ENOENT.
+>
+> Keep the map alive through a program fd after dropping its last user
+> reference. When bpf_wq_init() returns -EBUSY on a reinserted element,
+> the idle callback survived reuse. Check that the setter returns -EPERM.
+> On v3 the same test gets 0. Retry only a cache miss and report cleanup
+> failures separately after attempting to delete each inserted element.
+>
+> Signed-off-by: Yun Lu <luyun@kylinos.cn>
+
+This isn't a bug, but could "On v3 the same test gets 0" be reworded to say
+which kernel behaviour returns 0 (for example, without "bpf: Check async
+callback membership and user references"), with patch-revision notes moved
+below the --- line?
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/wq.c b/tools/testing/selftests/bpf/prog_tests/wq.c
+> --- a/tools/testing/selftests/bpf/prog_tests/wq.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/wq.c
+
+[ ... ]
+
+> +		if (retval == WQ_USERCNT_RETRY) {
+> +			/* The cached element was not reused; try again. */
+> +			continue;
+> +		}
+> +		if (retval > 0) {
+> +			ASSERT_FAIL("usercnt stage error %d", retval);
+> +			break;
+> +		}
+
+Can this ASSERT_FAIL() mark the subtest as failed?  In test_progs.h it
+expands to CHECK(false, "", ...), and _CHECK() only calls test__fail() when
+its condition is true:
+
+    #define ASSERT_FAIL(fmt, args...) ({ static int duration = 0; CHECK(false, "", fmt"\n", ##args); false; })
+
+With a false condition it takes the pass branch, so the message is not
+printed and the failure is not recorded.
+
+If the BPF program returns WQ_USERCNT_SETUP_FAIL or WQ_USERCNT_CLEANUP_FAIL
+(failed update, NULL lookup, bpf_wq_init() returning 0 or -ENOMEM, failed
+bpf_map_delete_elem()), the code reaches this ASSERT_FAIL() and breaks out.
+Since attempt is below WQ_USERCNT_MAX_ATTEMPTS, nothing else fails and the
+subtest reports OK.
+
+> +
+> +		ASSERT_EQ(retval, (__s32)-EPERM, "usercnt_setter_ret");
+> +		break;
+> +	}
+> +
+> +	if (attempt == WQ_USERCNT_MAX_ATTEMPTS)
+> +		ASSERT_FAIL("usercnt reuse not hit after %d attempts",
+> +			    WQ_USERCNT_MAX_ATTEMPTS);
+
+The same applies here.  If all 256 attempts see bpf_wq_init() return
+-EPERM because the cached element is never reused, the loop ends and this
+ASSERT_FAIL() also passes silently.  The subtest then goes green without
+ever reaching the bpf_wq_set_callback() -EPERM check it was added for.
+
+The commit message says the test will "report cleanup failures separately",
+but these failures, the setup failures and the never-reused case all end up
+as a passing usercnt_reuse subtest.
+
+Would PRINT_FAIL() (which calls test__fail() unconditionally) work here, or
+checks such as ASSERT_LE(retval, 0, "usercnt_stage_error") and
+ASSERT_LT(attempt, WQ_USERCNT_MAX_ATTEMPTS, "usercnt_reuse_hit")?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/44453425101
+--===============5595045659735586197==--
