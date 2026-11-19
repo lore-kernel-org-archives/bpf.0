@@ -1,102 +1,61 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795092039;
-	b=SOAlgybtt7NwYz6XnDavJ+SX7UnRpML0luukFf3AWUbgw32RjYK+tCNaYlPLSLY56lL6
-	 80Yh5cM2IW/iMVqm3mhGIIsV9bPCR6O2nRxsB+0BRXAcYMjnKSlt5qD34WEP6qX074Mbx
-	 JxHrgNRHUsuYjP3MC9twVTQFkyGqR2DJMgn3ZjbMW74DXlxm5ANSAA7gJaw+7Au/vjVzD
-	 VVQn7VQxJNl9cRpuzXZgNWBlyIj+nnaFqiFwxmEJsUjiddnQyNKRGwEuK4dEoJDtfrHiI
-	 8NH6RLO0Oz0NLmZE3O14Rv+4DoZTpPVkiUQpyndm6TjhKJ5nWtjw/EdhcgGDNSvBK8A==
+	t=1795092446;
+	b=BlOSeIzVm6SZKYV8WntRcs1TXmgr7W9EIQgVASZsPpPJwn9oPlBQ97OgPIBQJyDaBicp
+	 mxR3tgcj49CdhMFc3q5AxZjRtfIFbU+OgXnGwfDSBpuDw4VV5rl94ESRwOoXvzkWeKjA1
+	 3Sw51dF3CdQTl/hhVwW2+g5UTBS8DhHw60jrgSDgRsrNYM21t5xmULw+6U/fjVkzIXAq3
+	 6l5Ysw0AZJcmO3Y4SacvIuOer09JZWuUd0AvK2gBR+AOjTNjwr9LpXahh+8thrsJz2U5t
+	 x7Kd7/rJVmA39BQIZynrkF987rVf9hVs0JY8ZqeFchTeYr2o17bLKofZN3lbTqp7LlQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795092039;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=/HBktdhhH40COOtgFHhMziUMTJYpM/f/9inUmvkMpn0=;
-	b=ndD4AUneJY3beJB6qkKWxM+XSS/vUCCBzoPBQdgi/Lg6AZOYOA5SAqrbUWWblr9ibubs
-	 JTE4haK9bR/o0PlrAw/ZjvIcQXCmsAfBTklTXGKq8d8mxpC3NtEdR5eAn6UgeKRFwDVsE
-	 RfTBUlbnePeCZ/xIo/CwC4GN6SorRgOVN8Kj++9CWBFciD4aoj5mEzBmoHS+koEq7GgGl
-	 R5uWtmvbjcB3K8fElAldDkU30yt9afseRnJzOD/W7nvN4acGDXstd2SHoCFBertZLg1QQ
-	 fNIJ9f1OoewG5cvSSNwzAW8YVEy67moKxz2T628g3AIsINRtw7pLv59WaHlRitdhG2A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795092446;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=rVqv6cMnMJmJyMaeUNnqrTWyRG9aoHyUEoKzK90L2Yc=;
+	b=alCayhQSqniz8NgAVq6lO5OF9rjMycLZrf361x8vCXoIFM1P186/s+PRqeAQYN0U6FbF
+	 0IwT/Yk/3vvlHxMppBXpG6D/eQ2ESx4BiXA8Jp0ztdnPWBHliADWdjZOlI44gboNWpLDC
+	 0YO9PvwPYe7PwGgKFAesTz7oQqpVQHaGVZMH3WrO8UmOCE8YvMvulTeW2Sdt9SNFUfJ7P
+	 bws11zKSg9sN6uzHz/qacKWyUafqHu7RyN5kJK8neFSNe8f1/l/1PC3L4D7Afy1P4hF75
+	 +YYYVecp/XUs9RV5dWgeOJWqhkhEgl+vFRb6IGHDgw0ynIhUnStdjMjE0MZUVz8c97A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=mojatatu.com;
-	spf=none smtp.mailfrom=mojatatu.com;
-	dkim=pass header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=TG59cT47;
-	arc=none smtp.remote-ip=209.85.160.177
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Kf9C+Lfx;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8266606A324
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 12:40:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A8266606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A8BD606A32A;
+	Thu, 19 Nov 2026 12:47:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=TG59cT47
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-55d03bfd477so22891811cf.1
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 04:40:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1795092037; x=1795696837; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=/HBktdhhH40COOtgFHhMziUMTJYpM/f/9inUmvkMpn0=;
-        b=TG59cT47d78F1RoC28G8m4TwPz6aL4pqdP6Eo2YIKsEOX6vagNfv3qWajo+aP3L6vL
-         bJobuGx0zpMVC8S5LTj4VZvIyTLEPzCcs1u5Pn1oHPdt3yXV2H4YHlQ/lAUaBDuINIhS
-         NTPjMyB8ek/ZQ2OCKgWgzvG06qpqF/XuuLApE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795092037; x=1795696837;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=/HBktdhhH40COOtgFHhMziUMTJYpM/f/9inUmvkMpn0=;
-        b=buTod/aAyY0rNnK9JPYJywZ0HRp9pFpPLkA9NcOsyaxgHyLJ4TlJgDyaQF3IKIi3nh
-         o9CWbJwlpxPfjCQBR5NzvyX9cEU49LHdhMyoKCfUc37ySxQy3x7RKf05r+ds+lFm0MYn
-         wlbK2H6a8wUBUu+uZZtyWZSdTe/Ua/5OtzFO9gc+YK37mz/MngVYLffcfSx+AER1rwSN
-         OqJVswgJMtyIdPrXvrlwl3D71T20GLQ5Pp83iOcVaqDk21FeX00QTmUZaxVqimQnyvVx
-         oLRV1zq1oTZOgptvxq9mkoRdU1eAYcnuiVAV45DEI1WNH4/ZbBpYYB2joaTIQ+T14liG
-         75Yw==
-X-Forwarded-Encrypted: i=1; AL+hErFQ/6r0VpIaqojQ2qyhs6jpRKzz4np/SgcizTMmErKDxgKqnuZWmUMdbKbx1auzUbhoFDM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/9ZqXkJlKZ8PzCtXL5M689Fuu4O38TKJbEIUb3+S0f/SzR6Hhe
-	OBbukh3ooud2zINAXcePR8ypONeHVRX8Yuz3ea9Q79UIYp62VAtaj10Izdu6zBOzLQ==
-X-Gm-Gg: AYBFou3XfP70aOj02K/G2jBubgpx0M0BGaB0PUkoL+zPhwQ8zTUAywtZoRGc71xoxbm
-	MNNC886Ft+XRpwoE21k/dVWuftsH4JY7mB41HwqhyXuhQSxcs15O52C+x6Uf3iEfaCX+stf3G5R
-	fwjukvNsl/JEnfAc9nKt/Sc8inUybvdVPPVQH7KnUvLKVUCSlkHkaeNCeFMn/SXzwNzQqy9zVHc
-	TJP9VMjgVk8u/tBWNp0XfoNtqsoXcLy9SjswMkso/zuoWPk4RtQ+ZHeDHjgyF0OaWeJ9rYXpU01
-	+BrIOCB9Kd+SIaH10S3nkCEUmJ4pdF+ITCmgAPrbYl5tJvFHAOMftMrZtrBdDbxmnC/RQYKCzZa
-	6dd3K73CYW0/0bIb97+q9amylxmJU9rOBtmfo5zP37Py7glfRcAslaFb548Y86qhUxKn1D7N1rX
-	ndeWmvfrDoi1mUHcgL9NZ6oCjiNACyPxDbXM0YEo6uaDkSM/Qa9zraTv8WMANnem7UMmfrty0mg
-	it+4r4IPrDAXPaZiyUQ3kZoQxyW4Kd9q+fKMpXGwMWBEugb2/KJvsxwIy1SAiQRkrcOx70eXec5
-	E4N2bBT+X32DnOyt2WWHDhk5qrJ3VrD3cktfjHvrBFz1uc6PJ8D9STEW+UC3J5IfpUWpuCTs9q1
-	/
-X-Received: by 2002:a05:622a:40b:b0:55d:37d8:5037 with SMTP id d75a77b69052e-55d5a75b268mr87571091cf.77.1795092037457;
-        Thu, 19 Nov 2026 04:40:37 -0800 (PST)
-Received: from mbili.waya ([64.203.83.2])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-55d66b75823sm22370191cf.13.2026.11.19.04.40.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2026 04:40:36 -0800 (PST)
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-To: netdev@vger.kernel.org
-Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
-	David Ahern <dsahern@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Victor Nogueira <victor@mojatatu.com>,
-	Jiri Pirko <jiri@resnulli.us>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Simon Horman <horms@kernel.org>,
-	bpf@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH net v6 2/3] net: neighbour: reinject a parked skb through a headerless output device
-Date: Thu, 19 Nov 2026 07:40:24 -0500
-Message-Id: <QDISC-6HS9.v6.r0.20261119070330-2@mojatatu.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <QDISC-6HS9.v6.r0.20261119070330@mojatatu.com>
-References: <QDISC-6HS9.v6.r0.20261119070330@mojatatu.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Kf9C+Lfx
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F03CB1F000C4;
+	Thu, 19 Nov 2026 12:47:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795092445;
+	bh=rVqv6cMnMJmJyMaeUNnqrTWyRG9aoHyUEoKzK90L2Yc=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=Kf9C+LfxLK+jbKCM/dMadCkX6r2Bp8cYJ0gIjnVucPSfgIhGGx6ZoqrKwt/tzmsme
+	 EiAAxB4ywBXraUF+7/OzMrFMpRhzc+MxLhuWSifQX95xpIkYVh5OrdXR4VuiMfC6xy
+	 J6kuCARjxacBn28iYfgZjo8o4DhW7CeaM469B3BAalrbo/qDeUwqbbi690SnmDlmp9
+	 3tx/HcVdk/ooRIs78YqHXt6JnMkni/evh0I16OGR/Vb09ojHVApwyAE7fnD/2dKObS
+	 /mdrdX891R4yXi+HMsjjdWbxmd4fSjTedVmg2hy1pxDhZ/1u5q6MxLaDnb0vOlJ5+1
+	 ujPEvt+6I+maQ==
+Subject: Re: [PATCH net v3 2/2] tcp: accecn: initialize AccECN fields in
+ syncookie path
+From: netdev-bot+sashiko@kernel.org
+To: thaisonphan@google.com
+Cc: edumazet@kernel.org, ncardwell@google.com, kuniyu@google.com,
+ davem@davemloft.net, dsahern@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+ horms@kernel.org, ij@kernel.org, olivier.tilmans@nokia.com,
+ chia-yu.chang@nokia-bell-labs.com, stani@google.com, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Thu, 19 Nov 2026 12:47:24 +0000
+Message-ID: <179509244451.3136.7632749576749189281@kernel.org>
+In-Reply-To: <20261117124710.1338951-3-thaisonphan@google.com>
+References: <20261117124710.1338951-3-thaisonphan@google.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -106,101 +65,171 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-The issue:
-neigh_update_process_arp_queue() drains a neighbour's arp_queue and
-reinjects every skb through READ_ONCE(n1->output)(n1, skb), where n1 is
-the top-level neighbour re-looked-up from the skb's dst, not the neighbour
-the skb was queued on. skb->dev is whatever the producer left there.
-Note: skb->dev and n1->dev are not guaranteed to be equal.
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-When n1->dev has no header_ops, arp_constructor() and ndisc_constructor()
-install neigh_direct_output(), a plain dev_queue_xmit() that transmits on
-skb->dev and builds no link header. Such an output sends the skb out
-whatever device skb->dev names, not out n1->dev, so a producer that
-parked the skb naming a lower device has it leave without the link header
-its own transmit path builds.
+Critical: 0 · High: 0 · Medium: 2 · Low: 0
 
-sch_teql is the producer that hits this: it parks the skb on the slave's
-neighbour while the top-level neighbour is the master's, so skb->dev and
-n1->dev differ and the reinjection has to come back through the master to
-leave with a header. It names the slave on purpose, so that a parked skb
-does not outlive the master it came from.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-This was split out of the sch_teql fix on review, so that the neighbour
-restore carries its own commit log and its own Cc set. It is the first
-half of that pair and is applied first. The behaviour it describes
-exists once the second half, "net/sched: sch_teql: keep skb->dev
-consistent on the arp-queue path", moves skb->dev = slave ahead of
-teql_resolve(): until then the parked skb still names the master, so the
-assignment is a no-op and the recipe below does not reproduce on this
-patch alone. The two are taken together.
+- [Medium] On the BPF custom-syncookie path (bpf_sk_assign_tcp_reqsk() ->
+  cookie_bpf_check()), the patch sets syn_ect_snt from a SYN-ACK the…
+- [Medium] tcp: accecn: missing 3rd ACK option init in
+  cookie_tcp_reqsk_init()
 
-The Fix:
-Put skb->dev back to n1->dev before the output call when that device
-builds no link header, so a headerless output transmits on the device the
-neighbour belongs to, whatever the producer left in skb->dev.
+--
 
-A forward that steers the skb to another device, nft fwd ... neigh or
-bpf_redirect_neigh() with explicit nexthop parameters, parks it with the
-dst of the original route still attached. When the original route is
-itself a headerless device this gate matches there and the skb goes back
-out the original device, running its egress hook a second time. Those
-forwards supply their own device and nexthop and do not consult the
-retained dst, so dropping it at those two sites is where that is fixed;
-that is a separate change to the producers.
+tcp: accecn: initialize AccECN fields in syncookie path
 
-Conditions to recreate the bug:
-CONFIG_NET_SCH_TEQL=m and CONFIG_VETH=y, run as root. This is the
-neighbour half of the sch_teql parked-skb fix, reached once the sch_teql
-half parks the skb naming the slave: create a veth pair, make one end a
-teql slave, give the master an address and a route, flush the slave's
-neighbour entry and send one packet:
+This patch initializes saw_accecn_opt, accecn_fail_mode and syn_ect_rcv in
+cookie_tcp_reqsk_init(). That function is shared by the regular syncookie
+path and the bpf_sk_assign_tcp_reqsk() path. The patch also sets
+syn_ect_snt from the listener's TOS/tclass in cookie_{v4,v6}_check(), to
+match what tcp_{v4,v6}_send_synack() would have sent on the wire.
 
-  ip link add v0 type veth peer name v0p
-  ip link set v0 up;  ip link set v0p up
-  tc qdisc add dev v0 root teql0
-  ip link set teql0 up
-  ip addr add 10.0.0.1/24 dev teql0
-  ip route add 10.0.0.99/32 dev teql0
-  ip neigh flush dev v0
-  ping -I teql0 -c 1 10.0.0.99
+> diff --git a/net/ipv4/syncookies.c b/net/ipv4/syncookies.c
+> index 4e0ff3b820627..1a837ed6efa00 100644
+> --- a/net/ipv4/syncookies.c
+> +++ b/net/ipv4/syncookies.c
+> @@ -290,6 +290,9 @@ static int cookie_tcp_reqsk_init(struct sock *sk, struct sk_buff *skb,
+>  	 */
+>  	treq->txhash = treq->snt_isn;
+>  	treq->syn_tos = TCP_SKB_CB(skb)->ip_dsfield;
+> +	treq->saw_accecn_opt = TCP_ACCECN_OPT_NOT_SEEN;
+> +	treq->accecn_fail_mode = 0;
+> +	treq->syn_ect_rcv = 0;
+>  
+>  #if IS_ENABLED(CONFIG_MPTCP)
+>  	treq->is_mptcp = sk_is_mptcp(sk);
+> @@ -502,6 +505,7 @@ struct sock *cookie_v4_check(struct sock *sk, struct sk_buff *skb)
+>  		ireq->rcv_wscale = rcv_wscale;
+>  	ireq->ecn_ok &= cookie_ecn_ok(net, &rt->dst);
+>  	treq->accecn_ok = ireq->ecn_ok && cookie_accecn_ok(th);
+> +	treq->syn_ect_snt = READ_ONCE(inet_sk(sk)->tos) & INET_ECN_MASK;
 
-The packet parks on v0's arp_queue. When the solicitation resolves,
-neigh_update_process_arp_queue() reinjects it; without this change it
-leaves v0 directly, with no link header, and never reaches the peer.
+[Severity: Medium]
+Does the syncookie path ever look at the AccECN option carried on
+the third ACK?
 
-The window that frees the master, and the unload recipe that shows it,
-are in the sch_teql patch.
+On the normal SYN-RECV path, tcp_openreq_init() also sets
+saw_accecn_opt to TCP_ACCECN_OPT_NOT_SEEN. tcp_check_req() then
+checks tmp_opt.accecn on the third ACK and calls
+tcp_accecn_option_init() before syn_recv_sock() runs. That updates
+tcp_rsk(req)->saw_accecn_opt and, when the option was zeroed, ORs
+TCP_ACCECN_OPT_FAIL_RECV into accecn_fail_mode.
+tcp_ecn_openreq_child() then copies both fields into the child.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Link: https://lore.kernel.org/netdev/20261110101908.2e64e8e9@kernel.org/
-Cc: stable@vger.kernel.org
-Reviewed-by: Victor Nogueira <victor@mojatatu.com>
-Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
----
-v5 -> v6:
-- the commit log names the sch_teql half this neighbour restore is
-  applied before.  Considered comments from Sashiko (nipa).
+cookie_v4_check() and cookie_v6_check() process the third ACK
+directly and never go through tcp_check_req(). cookie_tcp_check()
+does call tcp_parse_options(), so tcp_opt.accecn is filled in.
+Nothing passes it to tcp_accecn_option_init(), though. With this
+patch, saw_accecn_opt is always TCP_ACCECN_OPT_NOT_SEEN when the
+child is created, even when the peer did send an AccECN option on
+the third ACK.
 
- net/core/neighbour.c | 3 +++
- 1 file changed, 3 insertions(+)
+The child also does not seem to catch up when it processes the same
+skb. In tcp_child_process() -> tcp_rcv_state_process() -> tcp_ack():
 
-diff --git a/net/core/neighbour.c b/net/core/neighbour.c
-index ae2db3912454..d36d86cfc441 100644
---- a/net/core/neighbour.c
-+++ b/net/core/neighbour.c
-@@ -1342,6 +1342,9 @@ static void neigh_update_process_arp_queue(struct neighbour *neigh)
- 			if (n2)
- 				n1 = n2;
- 		}
-+		/* headerless output transmits on skb->dev, not n1->dev */
-+		if (!n1->dev->header_ops)
-+			skb->dev = n1->dev;
- 		READ_ONCE(n1->output)(n1, skb);
- 		if (n2)
- 			neigh_release(n2);
+  - snd_una already equals the ACK sequence and there are no packets
+    in flight, so FLAG_FORWARD_PROGRESS is not set.
+  - ts_recent was already copied from req->ts_recent, so
+    FLAG_TS_PROGRESS is not set either.
+
+__tcp_accecn_process() therefore returns before it calls
+tcp_accecn_process_option().
+
+As a result, tp->saw_accecn_opt stays at 0 on the child:
+
+  - tcp_established_options() requires tp->saw_accecn_opt to be
+    non-zero, so no AccECN options are sent even though
+    accecn_opt_demand is set.
+  - A zeroed option on the third ACK is never detected as
+    TCP_ACCECN_OPT_FAIL_SEEN, and TCP_ACCECN_OPT_FAIL_RECV is never
+    set.
+  - tcpi_accecn_opt_seen in TCP_INFO reads 0 even when an option was
+    received. It is no longer random, but it is still wrong.
+
+Should cookie_v4_check() and cookie_v6_check() repeat the
+tcp_accecn_option_init() step from tcp_check_req() once accecn_ok is
+known? That would mean passing tcp_opt.accecn out of
+cookie_tcp_check(), or parsing the options again. The
+cookie_bpf_check() path would presumably need the same handling.
+
+[Severity: Medium]
+Is this value correct on the BPF custom syncookie path?
+
+When cookie_bpf_ok(skb) is true, req comes from cookie_bpf_check(). In that
+case a tc ingress BPF program built and sent the SYN-ACK.
+tcp_v4_send_synack() and tcp_v6_send_synack() never run for that
+connection, so the listener's tos/tclass may not match the ECN codepoint
+that was actually sent. The same question applies to the new
+tcp_rsk(req)->syn_ect_snt assignment in cookie_v6_check(), and to
+syn_ect_rcv = 0 in cookie_tcp_reqsk_init(), which the BPF path also uses
+whatever the SYN's ECN field was.
+
+bpf_sk_assign_tcp_reqsk() fills the request sock only from
+struct bpf_tcp_req_attrs:
+
+net/core/filter.c:bpf_sk_assign_tcp_reqsk() {
+    ...
+	ireq->wscale_ok = !!attrs->wscale_ok;
+	ireq->ecn_ok = !!attrs->ecn_ok;
+    ...
+}
+
+and that struct has no field for the SYN-ACK or SYN ECN codepoint:
+
+include/net/tcp.h:
+struct bpf_tcp_req_attrs {
+	...
+	u8 ecn_ok;
+	...
+	u8 usec_ts_ok;
+	u8 reserved[3];
+};
+
+The in-tree example already chooses its SYN-ACK TOS without looking at the
+listener:
+
+tools/testing/selftests/bpf/progs/test_tcp_custom_syncookie.c:
+		ctx->ipv4->tos = 0;
+
+Here is one example:
+
+  - The listener has ECT bits in IP_TOS or IPV6_TCLASS (for example a
+    DCTCP listener, which gets ECT(0)), and tcp_ecn >= 3.
+  - The BPF program sends a Not-ECT SYN-ACK that negotiates AccECN and
+    passes ecn_ok=1.
+  - The peer's third ACK reflects Not-ECT (ACE=0b010), so
+    cookie_accecn_ok() is true and accecn_ok=1.
+
+The child socket setup then goes:
+
+tcp_ecn_openreq_child()
+  tcp_accecn_third_ack()
+    tcp_accecn_validate_syn_feedback()
+      tcp_ect_transition_valid(ECT_0, NOT_ECT) returns false
+      tcp_accecn_fail_mode_set(tp, TCP_ACCECN_ACE_FAIL_RECV)
+
+With the default tcp_ecn_fallback=1, this sets TCP_ACCECN_ACE_FAIL_RECV.
+After that, tcp_ecn_send() uses INET_ECN_dontxmit() for the rest of the
+connection.
+
+This looks like the same false ACE_FAIL_RECV that the commit message says
+it fixes, and it can still happen through bpf_sk_assign_tcp_reqsk(). Does
+the BPF path need a way to pass the SYN-ACK (and SYN) ECN codepoint in
+through bpf_tcp_req_attrs, instead of using the listener's tos/tclass?
+
+>  
+>  	ret = tcp_get_cookie_sock(sk, skb, req, &rt->dst);
+>  	/* ip_queue_xmit() depends on our flow being setup
+
+[ ... ]
+
 -- 
-2.34.1
-
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261117124710.1338951-1-thaisonphan%40google.com
