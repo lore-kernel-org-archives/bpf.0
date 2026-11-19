@@ -1,54 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.36
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795067987;
-	b=d3ktnKWRfKKh4dyi/J7NX+fWdwiqtYlcGLjTuQ5toJSpGLmMlts334wwfENG8vq+8d/N
-	 UgrtiroK35D7JOuRd/uFv6b+YlToj/ZZlrBE0EV/ZIjop0rac3msrs/+mFifCZzdF7us+
-	 /ajAuIBSMXvzeB6he+xqSEqJX43FqnPGEEpQbvQ0C+sKEo5CuuEodMC++Hsohnaw/zYMp
-	 dzA+kg74CS9DlJQnx2JaPr52KU3jVQTIHvRQcqgy83fcmzP640mjYD3gCc5KnHBe9ovMf
-	 Xm2ZZbkGKKlyMqyxvIfVuQgezQetB7EwOWwXpWV8UVug947v1knAl3JUKFlihTKebmQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795067987;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=zJJW9ImHGeQI9HkBzIrCR9incErrDrQZ8U5oqxXIi8w=;
-	b=ovUdw2k5j978FhQSBhniwSue1Y2I4xXyNtw/T+ndpdC9ZuTngjUC2GLWNvgO5wuB2DKj
-	 Yi8M+qrddpS8Gdt0/vWHPXEP/LnfBdV0OAfZ1BOQqgEpUyOpAIVeq2WDTDVYOpevvEgJE
-	 +dvb3xXcK56cESdf2Sam1h+YJHRBahAdvrfzwHJ4NGxw3hMk40sy3AAzBFat3+eQHlawN
-	 fC131FMQe3hyUu0Ot7wf4C+EoM0ZaPeASMzlowlktiSQxTdhpXr7F+9NR3LBaJsWSK82M
-	 pkMo4acgPL0sSNgG1JNm3vTPLtMIFh3CvoTJrz+4zERh7IoEs1HP1obTFY0YbVmSfrg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=tpSCjllo;
-	arc=none smtp.remote-ip=91.218.175.36
-Received: from mta0.migadu.com (out-36.mta0.migadu.com [91.218.175.36])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.219.44
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795069115;
+	b=gZ/Ig3cPGyFJTIxfrUV2NDoQyaopZQZvSC1WfKWKW6pAjWNcO5hMr/MaDWQsiNUNv2Jd
+	 Sh1ODNMeI3yaEgd3Xdmj5j2wFNGChyWELIWVge7B8BQSdr6rQc1GAFCkodeQAJkK3y3f/
+	 fDWPhz4jhh5zRQT3/FFyAMnH6t6Z3rWzM7d93aHYd/t31J2iYFaZkYq5TR5AQh1BxPbdg
+	 Ra+mYE8l8pHWcv2LxWDQ58yoyEKIZyo7Iy/6WhXfOhOqDzWN1Uu27pb6WdlAv9bA1rshQ
+	 HyL/IO0O2GaAYmfYwKcuH+P0194TBewWqahd2H0jmZazZBMbSPUm3xMn3A6LQOVUSUA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795069115;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:From:Date:
+	 X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type;
+	bh=FkwRSQFDonsNjEAPB2zFYO6lMt6WVqW7I67T9GbDWzM=;
+	b=ayAUZK1eHtWIwXp2wBCJdYP9gGIA75XcQMllT2M+wU7k8dJoI4mFxSkdCL/aTTH43ElA
+	 r0zv+n0d7ypYEpLP0ml+2Eet9+BxZvUmFFqXuls3OHT7XS21TPfVgoUIKMw6IAPzfQ27I
+	 UzGNJDa8ptgkcrNp8uM2zPvdGhzg/UiKosKrwJCBL+wUXKPwaDi22tFQnJLkda82H8ILG
+	 ELs1wMBPSKKaH6gkkRW1W66bqkLAUY0YaDH4hzsax7uPNQyMHLvazCv52xLCRWKSWoUTc
+	 GcRrDJOmWiz8sY/9LnireWidCPbyj3X05t+n2MEfQ8vK14RsNxGteJUib0RijO5F6Og==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=j7XBeknV;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.219.44
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 097F4606A325
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 05:59:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 097F4606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D896606A320
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 06:18:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4D896606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=tpSCjllo
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=zJJW9ImHGeQI9HkBzIrCR9incErrDrQZ8U5oqxXIi8w=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795067985; v=1; x=1795672785;
- b=tpSCjlloQ6hcZJFh5lmnsxKaU1HKE9z6Vi8cecHmFQOvJvo5kFhedCRr/9oALIMXLHphJc0b
- hJsdumD9/o4vCZrJ4WUNwmM+iu6+2S3wxzQamVOMaTmnGu+dZ/Nn8myjgKeGqzTnd2WvMIwq0RI
- GxjqTCHgIQFzZMpf1OZvvYL8=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id a21f34f1ed7e6d6b;
-	Thu, 19 Nov 2026 05:59:45 +0000
-X-Mizu-Trace-ID: a21f34f1ed7e6d6b
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <01a31252-3194-4b2e-9327-f4eeb7a251ea@linux.dev>
-Date: Thu, 19 Nov 2026 13:59:39 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=j7XBeknV
+Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-91c847584b8so6900746d6.0
+        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 22:18:35 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795069114; cv=none;
+        d=google.com; s=arc-20260327;
+        b=JkP+BgAUUGelNjHSa2NHW9LVt2AzzpFYzgq81+TRxxR/lIN9PaTjbvnXgiEe9Twogq
+         Kyw27dtTnNEDRjG5ewFMA2lFkmc0atmsjuEO6SjbS0/s++3G+RJi3UdIFsR6M5vsKPDG
+         8fk9LNP3zSfa+xnouHhAQvJ/0VvTfRWpBKtc80+gA0X7jD7RyOupV4E6BSBIweuIW04n
+         92S37YW9fdM7OyzuDXs+RPR//An+3593yH6FJrz1HQ2dkOQSzKYhLBymGTztt5s5vmQX
+         eBng8hJcKOu+pjLc/SKikBAAr89meuSPRO4yHSLVNObd7iRimy3G8mjlffsAMXZY5Qs8
+         v5Rg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=FkwRSQFDonsNjEAPB2zFYO6lMt6WVqW7I67T9GbDWzM=;
+        fh=v/qBMU4wwadfiVHPQOJnoB8I8DXtsJMiG4gQ2sxzR1Q=;
+        b=qtDf1lPvM6VdioRUbHfKrDpPQCVjpkTUr4ygAArRMP4pKRei29Q5Z7oHeSPlFFh3n0
+         auKo6haR+B/KZqSTVE7VyUICvXqxWZEu5gBxG0P0h0JmBhsISqaJlRdAK0AGyDSccZ32
+         s8RrlzNz4PzqBsz0ZmUk0lM0PHI37tsrVUde6UfQKCTPnmTmcWVx7MuhBNxjOt65+oPD
+         80tpveE/QvCC1fq42KPi4MGq1M5s86RgiAjQ4RDsvOnhMiS6i7oG15ICRYAFJ/Q3XouJ
+         N5KCxm1CwTdLzI2FVdXGuDX5N0BBWkOoliq3Mp7H4fLCHwSum1UnyrrI1T6NllLrNLQh
+         AJ4Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795069114; x=1795673914; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=FkwRSQFDonsNjEAPB2zFYO6lMt6WVqW7I67T9GbDWzM=;
+        b=j7XBeknV5sIlnxlFuRpkyMchLbY9nrTW1brjVrqw6QAEZr1JwjhL3KEueCnPsuhxTM
+         hrOQJrwovvArkCYAEoSyjQrOADbOS53Ys+HcB61CbRLwrPncMi7Isz8FI3lSSbNNUANJ
+         rGDpTrwmQYHyOUwNwpR19HtOTJVoHb28ANOaJxPaI1eVrEdANXHbOL5BqfvRm7rT9tat
+         okT7uIfrVsHnV6SwOPhAQ7i4xxeXieD6bksBtKvCjuYmNCndxetspKINIZbOJ37mzzjZ
+         eqdtbeipNAx9PmYuGxOqv2mbXFWP/eb4719QqFFDj3lIX7pSSjRLyYrh6F6K21f0vx/h
+         LT3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795069114; x=1795673914;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=FkwRSQFDonsNjEAPB2zFYO6lMt6WVqW7I67T9GbDWzM=;
+        b=rZU3iE8Wl7M/CoiTu3d2eNE+bqX0kFIFJElHZ631r8qU8OchsTltMp23z4bwxfzFMs
+         p7JWA+cMU+wdhCUVSFpcXs4Hqxh38r7C7rhrrGssEWqu0K20VHhaGznyazfS2+URNR81
+         IUfHamEyKW5i7gqEaay4rOufXq0Cvf8vCrMxZ0Jv/Uwc8aw5bfTBCrZZn1GiasgIPaWL
+         0NNExhXuNuUDm1Y9KAgA14fZLHYu+7PzBxHwVlbWB8FZn0eqpXC/0KwkI2ZK3NCj3Baf
+         cOkHUBeTK7rE8uTYZSkMgTdPzFfix0We+qXkPpxD0JMx/Nmhy/l+W99pYFakIq7LzQkE
+         0mkw==
+X-Gm-Message-State: APuU4Z9kMm61Ughz2EiuG/wCh1atwoG44xugZl+p13+Xs/PGsnQXpmKa
+	LY8lfSgmw5dTPAi+l/3aGbyzIemFB/3zgqaWhLb9LcpellKsK9f7awuuGur1XeTSqcjjPDjyqoJ
+	Onj4rnwvYsbPEVNcohRH1+J9aOsV/WjWcwoajs0B668hM
+X-Gm-Gg: AZFdTZe7aupmahIwGPGlToAI24Cqz5xcIx8I93QP/b8bOdvHXFeZmtxavQzmYLYUdC4
+	hhFDXYNqLkqd9dw9Gs/qZ4mkTW1Nh48w5E38cXt5ZBvXxqoZEl+sm6y4zh8VuGjmpDeVYwJ8st9
+	ruZe4O9gHYmvrRdGxMvBfVNWJKy4oy4cXdYb3sfJZ8AJrXX8NilN/ydhsiGbF8eu+KxD5OTem5W
+	RX0GJpLNX8tNMSpn7koECfr0b2XRcNymvdED0ge3S6xPSN4Cggu5dz0H+orREQR1n2Ba6qDFTYt
+	7UdDLPmYoI2/1sPSs7gv23QQxdBGAfwu6JJzD0Sg09Jov7ZBNq2Jjd1hi4cCh+ZupaIHV7j3Vfr
+	UKAN0KrhwLsMhPnbfEpu8VoJbNLg9rvDeaS/ojTKEBC85p+v4A03Ue5fAOCMVZpocoH+ZjtopzD
+	JbsMzsbDwp0qhRoCxQYQ==
+X-Received: by 2002:a05:6214:627:b0:921:2c0:a46 with SMTP id
+ 6a1803df08f44-9212de35a74mr2230366d6.2.1795069114246; Wed, 18 Nov 2026
+ 22:18:34 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,39 +100,62 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [BUG] bpf, sockmap: data left in ingress_msg is dropped without
- moving copied_seq, and TLS RX then warns
-To: Kyuwon Cho <kyuwoncho18@gmail.com>,
- John Fastabend <john.fastabend@gmail.com>,
- Jakub Sitnicki <jakub@cloudflare.com>, Jakub Kicinski <kuba@kernel.org>,
- Sabrina Dubroca <sd@queasysnail.net>
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Jiayuan Chen <jiayuan.chen@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <179505708397.3511192.17406955708229395086@gmail.com>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <179505708397.3511192.17406955708229395086@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From: =?UTF-8?B?5qKT5bed5ZKy5aSq?= <inkxiao12@gmail.com>
+Date: Thu, 19 Nov 2026 01:18:22 -0500
+X-Gm-Features: Aa3M54qvL-gkZG-PDrhf4v1NxnLtVHwK458mPPxFaslFbH2AjBYMlncoZPd-AZU
+Message-ID: <CAMcAce8_ZR9xr8KJe6kvDNxr-JW2A5Ya5tn_2SO86hn7oR1KCQ@mail.gmail.com>
+Subject: [PATCH bpf] bpf, lsm: Remove bpf_lsm_release_secctx from sleepable_lsm_hooks
+To: bpf@vger.kernel.org
+Cc: security@kernel.org, kpsingh@kernel.org, matt@bobrowski.net, 
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+security_release_secctx() invokes release_secctx LSM callbacks
+(selinux_release_secctx() and apparmor_release_secctx()), which only
+kfree(cp->context) and never sleep. Because the hook is non-blocking,
+Netfilter callers legitimately invoke security_release_secctx() under
+atomic, RCU, or softirq context:
 
-On 11/19/26 11:04 AM, Kyuwon Cho wrote:
-> Hi John, Jakub, Jakub, Sabrina,
->
-> While testing v7.4-rc3 with an LLM-guided test generator that we are
-> developing as a research prototype, we found that setting up TLS RX on
-> a TCP socket right after it was removed from a sockmap can find the
-> socket's receive queue and copied_seq out of step.
-> tls_strp_read_sock() sees tcp_inq() > 0, but tcp_recv_skb() finds no
-> skb at copied_seq:
+  1. net/netfilter/nf_conntrack_standalone.c: ct_seq_start() acquires
+     rcu_read_lock() and holds it across ct_seq_show() ->
+     ct_show_secctx() -> security_release_secctx(&ctx) until ct_seq_stop().
+  2. net/netfilter/nfnetlink_queue.c: nfqnl_enqueue_packet() runs under
+     rcu_read_lock() in packet RX softirq and calls
+     nfqnl_build_packet_message(), which allocates with GFP_ATOMIC and
+     calls security_release_secctx(&ctx).
+  3. net/netfilter/nf_conntrack_netlink.c: ctnetlink_conntrack_event()
+     allocates with GFP_ATOMIC and calls ctnetlink_dump_secctx() ->
+     security_release_secctx(&ctx).
 
- 
+Listing BTF_ID(func, bpf_lsm_release_secctx) in sleepable_lsm_hooks
+lets BPF_PROG_TYPE_LSM sleepable programs (lsm.s/release_secctx) call
+blocking helpers/kfuncs such as bpf_copy_from_user() in atomic/RCU/softirq
+context, causing BUG: scheduling while atomic or RCU stalls.
 
-Thanks for the report.
+Remove bpf_lsm_release_secctx from sleepable_lsm_hooks. Verified by
+line inspection on 7.4.0-rc3 (20eef29b7c84), 6.12.118 (bpf_lsm.c:347),
+and 6.6.162 (bpf_lsm.c:337), and live QEMU BPF verifier runs on
+x86_64 7.4.0-rc3 and 6.12.118 (lsm.s/release_secctx: LOADED pre-patch ->
+REJECTED post-patch with -EINVAL, "bpf_lsm_release_secctx is not
+sleepable").
 
-We have too many copied_seq bugs in sockmap now, I think we need to rework it.
+Fixes: 423f16108c9d ("bpf: Augment the set of sleepable LSM hooks")
+Cc: stable@vger.kernel.org # 5.10+
+Signed-off-by: BoBppy <inkxiao12@gmail.com>
+---
+ kernel/bpf/bpf_lsm.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-
+diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+index 468e63d..c7d683e 100644
+--- a/kernel/bpf/bpf_lsm.c
++++ b/kernel/bpf/bpf_lsm.c
+@@ -368,7 +368,6 @@ BTF_ID(func, bpf_lsm_path_chown)
+ BTF_ID(func, bpf_lsm_mmap_file)
+ BTF_ID(func, bpf_lsm_netlink_send)
+ BTF_ID(func, bpf_lsm_path_notify)
+-BTF_ID(func, bpf_lsm_release_secctx)
+ BTF_ID(func, bpf_lsm_sb_alloc_security)
+ BTF_ID(func, bpf_lsm_sb_eat_lsm_opts)
+ BTF_ID(func, bpf_lsm_sb_kern_mount)
