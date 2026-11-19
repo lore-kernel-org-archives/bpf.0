@@ -1,105 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.224
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795059952;
-	b=Fm9cP3uT5wazMLETDH+u6eu63q4Oxuq76Kz87IivdQdlKHrPlacvsEp9krfFMvAkWqju
-	 DYqCit1cC3MgJvEXhVXCYNaH/GgvETrBULjr6t4sLsFiazenGbrFMMv0dGACPLcQ7rqGr
-	 k1OqBLfWcn1BK9jBrcNaiL3Fe1Cu2NIehcJtNnO71vIrU716pocsX11PCCc2Y6iDnhnm1
-	 tvralBAN4MRoWCF+0QPSlpzDYoSUx6OjQ5Xl38wnDh9umEdWnUhcuut+qaKlC02rHf2F4
-	 Nmm937bwW+ifqJ0N+GI+lS2HQMajfu9Db5Xp/59WXKKVo2hAM1VXaMT5Kbhv1qX0yTA==
+	t=1795059983;
+	b=QYt4A8VEMNU2nDiWBjzUQ7PEbKtbfaSd2D4AekzpAzCU4GvL+3+YoXkX6+g0vEvwzx9+
+	 Gf6lw0N0abtxb2Sid24/YKLVoBglkGEbv2POOON+Q7aAVGSfKg9ipmcJmRbOpm3XJ2CtY
+	 t++GrXGtHF4cXHxc0FSsPR+SYj1HwhQ9QbTjrgYGKPh4UOOADFtTAxrvZ3u0Rb9QqfgkB
+	 PfGCHwT1lM5PNwto0BLkoJcmgRqw9v4/4dgdihNEnKQlnpVfInOiyXrfzhDgCMhbWGDkC
+	 AUG0icYznYOT6p0xUdjrgX3PLZmeYtfAHEC8bVZkqoTmtiItMDEItwmMfXs2Bz9Xj0Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795059952;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=8qLgOCLTulYn1+d3HKH9PJ+ODujlzAUfUScnoc6M1Q4=;
-	b=qgBbz41S8K4KXrjyihTfVDY1Q4UxijrErSb+EY2vyKDeulXbNW67P6c2d4u5VyBBqs0i
-	 sPZgZIw0AvlxSAgt++MNRIc/rpEM8Jh2DQ4HPOkurothzK95Tydkskze9mSc2DxBXOF7/
-	 jX33whsLMd2oT7dKV+DvD/RqMF4zxHFeJ+g569wbKd/TbBV+VTY2v44dHjuV18yT286pm
-	 7/dnW6jPieIyQUH5u7D/mDkssZE4O4OCg27gIxmAwadouTj0DL+0p8AYVi8Va6YVNCX00
-	 yADst9fN531pFpLFPNIhugWcO+S0j6LlkTpRWK6DaYVNbtPxIJqAYfOXC/DpXtqHZlQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795059983;
+	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:To:CC:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
+	bh=OAbbp57riKGI1fZlq88CcOSg3koPqPRG3juTd/UX3uo=;
+	b=QaeNr5+xsg9u+Rf7J/e/9IDeo3uOfhzzOj8w1nwr4kfUk9+lX7pcWpnvwf4ki60o2Vxp
+	 waauT8pMaEmjFG6oMJwkIKgMuSK4SEPEIM8f5tBySDtSu/BZkC8dN9tQKto/F2a/WhWkQ
+	 puw01L5uYn+S3+hb4TM5Teq86DtGgKLpSqcsSIYtXIBD5Q+qNJAHTIUqiDB4DSXkfuKyu
+	 5xn8Z8hc3h6miOabyk83/zB8L5KNR1CbXYBK28HyMVCaAazkHH4TkK7kTzGv9MwsvfIMh
+	 o4flW/mnYDnxoiEyKn+x5Hu2XrwY2rwjlIabDzSvd5ZVIdlZDgBmE6N2ArXhodyDHeA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cbOzaWcX;
-	arc=none smtp.remote-ip=209.85.210.169
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=huawei.com;
+	spf=pass smtp.mailfrom=huawei.com;
+	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b="V/52GJjf";
+	arc=none smtp.remote-ip=113.46.200.224
+Received: from canpmsgout09.his.huawei.com (canpmsgout09.his.huawei.com [113.46.200.224])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C4D5606A320
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 03:45:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3C4D5606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CA36606A325;
+	Thu, 19 Nov 2026 03:46:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3CA36606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cbOzaWcX
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-8a07078200fso979809b3a.2
-        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 19:45:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795059951; x=1795664751; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=8qLgOCLTulYn1+d3HKH9PJ+ODujlzAUfUScnoc6M1Q4=;
-        b=cbOzaWcXbcVheE/8dJiWdbmV7ND1PTau00PwNAkfFFOgzBe0y3gTkUsXRdkoVIeOHO
-         VrcxSXC5ebaT4qrKtimClxvPuslbSxyhKy9GASjTFGTFu2dcelOi9xyVsdBxAc/hzED5
-         oRhUxwnUbIIzsswiB/TLHTAPyWXMvfL73E0GTCffu3VCxY9XbaDiaVpf2YbrHmH7mU+y
-         gu8nfT1P4y4gqTAUKJYFBhyh+rnujd43p134tcyfWD+xBMAY7N8eXQofxNUtsVcE0Ev6
-         fWN/ptHi/ZQ5Zgeq9h2Uk73ZFPdC1iZ4gXD+RZQh8QAxb8WNd/rV60t3Gpci0oklxgKB
-         ivZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795059951; x=1795664751;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=8qLgOCLTulYn1+d3HKH9PJ+ODujlzAUfUScnoc6M1Q4=;
-        b=2n4SxThMSEsmSKwxwFp2PDvtVQKNurVy+WE9xxpscgPCmN/mRBc1OPejzjoB5zKwNo
-         sKCRi2s4VZaV0BoHv5G+mMNkpmpF3opbc6sfaxJDaChJPPYp9tWMsw3F/OVUBTo4b3Ph
-         UZUhdY3c99zVbjYTNk6rG4nVPRouIzMtLF6NtEeHql93YqAaqyn4iyXv+lCTLPn87bSb
-         IufdhKfuvKPEYRbNotruzxCb4RaT6zqjZ+/5rRy2zt0sUqdW2+1fY0EKycqdvx0ZJX8W
-         CiuHFUG/GX1o/fFiywI72jXMeaO/1XWobwb1eeszWmb/VnQF3kTpewmZ1LN3UO2+SHDX
-         i6HA==
-X-Forwarded-Encrypted: i=1; AL+hErFcJJbI8JoDhr6qhwa9KhGgHggTHnX+OgYH/OXSTqlICK9BYfL0jOlO/8L7vVmLAeWK6UY=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8FQvuqZUrLjrIX/fXnx8zL0pQELKDNiV65hZEtwMl3LTkiO/dE
-	83scxeGdvLr4bwxfNxau5gLJsikA6KnexuVcvr0xLBFtniTb67j5KNaK
-X-Gm-Gg: AYBFou0SwsMzDA39QgIVAeQNInzyNSegamTI9D922LRCwS9sIF2rPNJ21nF+1utLsIN
-	+0UyT9BHusD1oPlXvAHGtyR1OPawMQ4LVFYuT4HWDUlqiTzes/JDn3uLOtiW97tMyMUN4ApWq0Y
-	9Uj14keT9nj3JwRwCYLnVnR5xQrKCdbKDEOABL2jfFMjAQ3/gv0b0r0EZ0thIttmmSdF4rbzUjb
-	T4PjGM7ZuEzRV1hk+6R9ay6hGc9r86pGTev4mTwu3m4lXdpvFJgPzMLqmeVhyvLc3HeWoWNUoMg
-	KcbA+/rlcRRbPnxvlsKRL4evEZW/R2Ov0Jtpq2HyfKiTkfv85sLwl5Lsi1+WRSnW5iFZhyRnDrD
-	AYfbZDQu+S/EdgO5xk8mF3U/lrvRKYo/9diA+lzndnXguAWbstdeaPQUphFfB6w4+0YfD8x/mc5
-	Bl6L8lyqPzigE7TR22jnk69VER7hmTsPEOoeDaXCJKan2ggsybnXqt6aNxJa7S6InlvYcMRNGm5
-	nBo0vIyRgHQ8VPSQwZVTE9xbxWczUD4ZTjnS6Ch6q4oXunJsTM0ugmhvNYLvCaNZbDv8sf0kn5c
-	KoTEtk9m26dO5TUt9MvbRQqvaYFflAMHfjxXMJGeskcCmA0wPnyZ7g/So9Q4EjYxmWzGfIbPLVL
-	TQ75lSkVspvqP6LydCa4uOImyYT58Va2bz3MU
-X-Received: by 2002:a05:6a21:2d43:b0:3eb:99a9:d3a8 with SMTP id adf61e73a8af0-3fe8b6e4faamr4692271637.64.1795059951330;
-        Wed, 18 Nov 2026 19:45:51 -0800 (PST)
-Received: from localhost ([153.61.198.252])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c5ca5bf959sm2028068b3a.20.2026.11.18.19.45.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Nov 2026 19:45:50 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 19 Nov 2026 03:45:50 +0000
-Message-Id: <DMYVN8WPV380.3ID1QHDI7BKUS@gmail.com>
-Cc: "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong
- Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Ihor
- Solodrai" <ihor.solodrai@linux.dev>, "Emil Tsalapatis"
- <emil@etsalapatis.com>, "Barry Song" <baohua@kernel.org>, "Shuah Khan"
- <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Fall back when
- memcg_proactive_reclaim data lands in shmem
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Hui Zhu" <hui.zhu@linux.dev>, "Kurt Lin" <lylin1023@gmail.com>, "Hui
- Zhu" <zhuhui@kylinos.cn>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
- <bpf@vger.kernel.org>
-In-Reply-To: <79797479-029f-4e9b-8076-6a92a2a70cdd@linux.dev>
-References: <20261117170704.1146730-1-lylin1023@gmail.com> <DMY136RTAL9Q.2WQSZ57W1YLV2@gmail.com> <79797479-029f-4e9b-8076-6a92a2a70cdd@linux.dev>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=V/52GJjf
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=OAbbp57riKGI1fZlq88CcOSg3koPqPRG3juTd/UX3uo=;
+	b=V/52GJjfwvVK8DnDIvM5IQVRHWD6bWwP9aQgdIQW3zyiANrSaj0DY2j7nFjPaV7CdoJkRPEs9
+	j5P3307aBbCQKc9UtkmeUFvURRjxT+IUgrgDq+974N8dU9cb6StPqSQAXioAda0lAeeDVSXW/cF
+	zoa53Mrhki2F1QPx2mEV1j0=
+Received: from mail.maildlp.com (unknown [172.19.163.15])
+	by canpmsgout09.his.huawei.com (SkyGuard) with ESMTPS id 4jVPWm3pc4z1cyPH;
+	Thu, 19 Nov 2026 11:45:56 +0800 (CST)
+Received: from whupemk100010.china.huawei.com (unknown [7.152.184.41])
+	by mail.maildlp.com (Postfix) with ESMTPS id C65134058E;
+	Thu, 19 Nov 2026 11:46:16 +0800 (CST)
+Received: from [10.67.110.140] (10.67.110.140) by
+ whupemk100010.china.huawei.com (7.152.184.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Thu, 19 Nov 2026 11:46:09 +0800
+Message-ID: <9787bc85-5b1c-4f13-9b0c-cd027548efa0@huawei.com>
+Date: Thu, 19 Nov 2026 11:46:07 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -109,46 +62,78 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH -next -v4 02/17] LSM: pass struct path to the
+ inode_setsecctx hook
+To: Christian Brauner <brauner@kernel.org>
+CC: Al Viro <viro@zeniv.linux.org.uk>, <mic@digikod.net>, <gnoack@google.com>,
+	<paul@paul-moore.com>, <jack@suse.cz>, <amir73il@gmail.com>,
+	<andrii@kernel.org>, <apparmor@lists.ubuntu.com>, <ast@kernel.org>,
+	<axboe@kernel.dk>, <bpf@vger.kernel.org>, <casey@schaufler-ca.com>,
+	<cel@kernel.org>, <cem@kernel.org>, <chenxiaosong@chenxiaosong.com>,
+	<code@tyhicks.com>, <corbet@lwn.net>, <Dai.Ngo@oracle.com>,
+	<dakr@kernel.org>, <daniel@iogearbox.net>, <dhowells@redhat.com>,
+	<dlemoal@kernel.org>, <dmitry.kasatkin@gmail.com>,
+	<driver-core@lists.linux.dev>, <dsterba@suse.com>,
+	<ecryptfs@vger.kernel.org>, <eddyz87@gmail.com>, <emil@etsalapatis.com>,
+	<eric.snowberg@oracle.com>, <exfat@lists.linux.dev>,
+	<georgia.garcia@canonical.com>, <gregkh@linuxfoundation.org>, <hch@lst.de>,
+	<hirofumi@mail.parknet.co.jp>, <hyc.lee@gmail.com>,
+	<ihor.solodrai@linux.dev>, <jlayton@kernel.org>, <jmorris@namei.org>,
+	<johan@kernel.org>, <john.fastabend@gmail.com>,
+	<john.johansen@canonical.com>, <jolsa@kernel.org>, <kpsingh@kernel.org>,
+	<linkinjeon@kernel.org>, <linux-api@vger.kernel.org>,
+	<linux-block@vger.kernel.org>, <linux-btrfs@vger.kernel.org>,
+	<linux-cifs@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-fsdevel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-nfs@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
+	<linux-trace-kernel@vger.kernel.org>, <linux-unionfs@vger.kernel.org>,
+	<linux-xfs@vger.kernel.org>, <liubaolin12138@163.com>,
+	<martin.lau@linux.dev>, <mason@kernel.org>, <mathieu.desnoyers@efficios.com>,
+	<matt@bobrowski.net>, <memxor@gmail.com>, <mhiramat@kernel.org>,
+	<miklos@szeredi.hu>, <neil@brown.name>, <netfs@lists.linux.dev>,
+	<ntfs@lists.linux.dev>, <okorniev@redhat.com>, <omosnacek@gmail.com>,
+	<penguin-kernel@i-love.sakura.ne.jp>, <rafael@kernel.org>,
+	<rdunlap@infradead.org>, <roberto.sassu@huawei.com>, <rostedt@goodmis.org>,
+	<selinux@vger.kernel.org>, <senozhatsky@chromium.org>, <serge@hallyn.com>,
+	<sj1557.seo@samsung.com>, <skhan@linuxfoundation.org>, <song@kernel.org>,
+	<stephen.smalley.work@gmail.com>, <takedakn@nttdata.co.jp>, <tom@talpey.com>,
+	<yonghong.song@linux.dev>, <yuezhang.mo@sony.com>, <zohar@linux.ibm.com>,
+	<utilityemal77@gmail.com>, <lujialin4@huawei.com>
+References: <20261117150542.1169451-1-caixinchen1@huawei.com>
+ <20261117150542.1169451-3-caixinchen1@huawei.com>
+ <20261117184342.GR989762@ZenIV> <20261118001641.GA1669148@ZenIV>
+ <bdc22808-9f22-46f7-b42d-e6bd8e1eeaca@huawei.com>
+ <20261118-nordlicht-badeort-daumen-813a1e9fd0b3@brauner>
+Content-Language: en-US
+From: Cai Xinchen <caixinchen1@huawei.com>
+In-Reply-To: <20261118-nordlicht-badeort-daumen-813a1e9fd0b3@brauner>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
+ whupemk100010.china.huawei.com (7.152.184.41)
 
-On Wed, Nov 18, 2026 at 07:04 PM Hui Zhu <hui.zhu@linux.dev> wrote:
-> What about two things: only check when the test fails, and check
-> KPF_SWAPBACKED instead of f_type?
+o, you are right, dentry is borned *self-parented*, and 
+d_alloc()/d_alloc_parallel allocate
+from parent->d_sb, __d_move only re-parent withon on sb. So 
+dget_parent() cannot
+leave the sb.
 
-It's still overkill. 50 lines instead of one more compare per test.
-It doesn't cover arena_memcg. The failure there is a dead child,
-and its O_TMPFILE is gone.
-
-> 1. Check only when the test fails.
-> What the test needs is "these pages are reclaimable", not "these pages
-> are not shmem": with swap available shmem reclaims fine, and then
-> reclaimed == 0 is a real regression that must not be skipped. So probe on
-> the failure path only -- nothing is paid when the test passes, there is
-> no polling, and a regression cannot be masked.
-
-It can. Kurt's guest has no swap, and /tmp is overlayfs over tmpfs.
-Make bpf_proactive_reclaim() return 0 there:
-
-  skel->bss->reclaimed      0
-  si.totalswap              0
-  file_is_shmem(data_fd)    1    -> test__skip()
-
-With the f_type check workload_dir() moves on to "." and the test
-fails as it should.
-
-Swap alone is not enough either. The prog passes swappiness -1.
-With vm.swappiness == 0 get_scan_count() doesn't scan shmem:
-
-	if (cgroup_reclaim(sc) && !swappiness) {
-		scan_balance = SCAN_FILE;
-
-So reclaimed == 0 with swap on is not always a regression.
-
-> 2. Probe with KPF_SWAPBACKED.
-> f_type is a blacklist, so the next stacking filesystem repeats this.
-> shmem-ness is a property of the pages rather than of the mount, so ask
-> the pages: /proc/self/pagemap for VA -> PFN, /proc/kpageflags for
-> PFN -> flags, then test bit 14.
-
-Bit 14 doesn't replace f_type. ramfs pages are unevictable and not
-swapbacked. file_is_shmem() returns 0 and the test fails.
-Let's deal with the next stacking fs when somebody hits it.
+On 11/18/2026 5:35 PM, Christian Brauner wrote:
+> On Wed, Nov 18, 2026 at 04:59:29PM +0800, Cai Xinchen wrote:
+>> There are two places that violate (1), both introduced by this series of
+>> patches in ksmbd:
+>>
+>> smb2_parent_compressed() and smb_inherit_dacl() pair the directory entry
+>> returned by dget_parent()
+>>
+>> with path->mnt, and problems arise once that directory entry becomes the
+>> root of its mount point.
+> No, (1) holds there. dget_parent() never leaves the superblock so the
+> parent has the same ->d_sb as path->dentry.
+>
+> What happens at the root of a mount is that the parent isn't below
+> path->mnt->mnt_root anymore. That's a different property and struct path
+> doesn't guarantee that (open_by_handle_at(), nfsd with
+> no_subtree_check). So there's nothing to fix for (1) in those two.
