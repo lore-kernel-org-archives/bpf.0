@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.180
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795051766;
-	b=bob7Oy8dBqLXk8V1X/InzyC7r+eLWlUtQsepu8ReyzLRLDCta7Q55dmz9ucfhS+fUiue
-	 WTK1bbnCVDJb0JZTWLf7MT99hFhi5g/SpfrUM0+mRm+5B2uqDCACC7MxbmPUQixqN+Jxn
-	 ou82P05CAhdAH8bE7my2LqOHDevgC3BbhoqOpNcxZYQzIdtDAyg/lZ+OeT23Zb+opSx0D
-	 3rbkTW6RAgFC15WOABFtj1NO4HPKeMKb3aVUvX3789ZETO1rppHeSJ8wzbt1R4msv9Cg+
-	 bVAKCtZhq7S3U4rJW7RqbRb2WmkJnoQY03IR/TcRix5EVYMwqh6rAbspAh4gUQmApNw==
+	t=1795051771;
+	b=y3sLPLPTk4OvvBqbXY5teAiu+x09mVxIzoluVlOCScHxgUd5k8TXJZCZb4kkDsYKfTLD
+	 Jm7bk1J/hzodGEOiGU1DcHekJHjFBwGr1HAtwfanDtZwfA4l+Sq1IIIZ79/jwNCFjqEgk
+	 TP77uPHDP9GVC1jIydGr5aob9hAWOTEwu0LlSKQDcJHXUdlRuFDm6n3fWP4HGjmx0c53i
+	 X7/7r70/OtOkkz6nInGgAS3wJH3fG1pFKAWZybe2g9Mx/0t17nT8KgkpeJDpWI95D/GbC
+	 quE+0HMzR69LIUyEisnpl5yYO4u8/egP74DMHA4k1ZuHVd+vIfRYOI1oNFOZk7FngWA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795051766;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795051771;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=YK/3UqG448iTYZMUabnUq8CDRuHGn2unPHOZ2lAdrHg=;
-	b=f5QlIgyiH6eS6HQ/6Op/ZnOHc4eNjWDld5gnpFuCHcp5FNNz/VCjkAgxLD4i0waPcSt8
-	 h5eJvjfjYaqBZhkabzKNxv6FukPmI+ZsGpmVVqKd2tjjkp/2v8CerrOdhWh83D4wpA5bP
-	 uqMO/ah15zjp2W47sdtm87sKljQV1iBO4Mkx5afIB2ZiYWz/UevKDpIECkUyAZHs/aLaV
-	 9v7bCYATANO0uwifqlz/AvcWT83YDjmlMtYIfWaWw1sW8aEpJiffawM3R0w7URt8pr39N
-	 toO/eBRlOqu6EG5Sl64bjXTtP47viqVrbmmTGsxSv2YTcJyLJeH9jgZF6mePPxU+9sA==
+	bh=/6GCJ8YiC8sHiOkq+0ugDFoD4azS8dVwUiDj8uwg2XM=;
+	b=MJRZM/URGd//xSvdCj6S3AoAJxUisBOnznylobnHxn9EfmH2x+1/TcnWm6Ls0DRJ5uCQ
+	 UDKcPo0Y4IrDum/pvZu+SQ2cJ2uky2MVVZ3y4qvJdgv0StOCy+ZThw9U8avgQT7Xy14PX
+	 IanbvymjY25tMJPEV02ugWw/MUOXU7Xd6K0TjdUzSi0biAiCmBM1Imjrpskn9bOg7e1vn
+	 k3ZIkuLAe76BXPV5Rhk/R9QjNmtzKSpL6YmRi/xxw7MAv9vI4RJsQc5OfI/DLDdYgTnFO
+	 +3Gfp/RX8BmhCy+7+I8KzhHuKbzJ2E9egEU+NkYQ94k8iboxZaHOOLEGg/mXM56TGpg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=S06wUJss;
-	arc=none smtp.remote-ip=209.85.210.177
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YlQg4Lrw;
+	arc=none smtp.remote-ip=209.85.214.180
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ADB9606A31C
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 01:29:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8ADB9606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40246606A31C
+	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 01:29:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 40246606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=S06wUJss
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-8a06cc097c7so1312784b3a.0
-        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 17:29:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YlQg4Lrw
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2eff92780daso9603365ad.1
+        for <bpf@vger.kernel.org>; Wed, 18 Nov 2026 17:29:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795051765; x=1795656565; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795051771; x=1795656571; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=YK/3UqG448iTYZMUabnUq8CDRuHGn2unPHOZ2lAdrHg=;
-        b=S06wUJssSJsraZ5soR+dRtUp4Kqyb4rKOBDYPWD9xj4aqzARO5kiR0AOGglwkQCxcm
-         9kj31oQi1cPvRxqNi/xTce0+ipCB9eQUDPkSN2X6njldSCbdaK0wNL6wg6HCCAfcMukq
-         F89b4AVyD2BKYRZG0JIROcabnAPRHNqqnSv0PZG3VmAqMHh1e+/55YlcCVLOvGgtSnU+
-         lbv7gP3VcNqJdZwoburUiKGueHut9gYu6GJ+GxCYsbcQkKpxEKwkqaGGK7wDU7S44/t2
-         6d2cZqUqRboTtypmR7j8/G/a4S4Z31fviQZCG7bRHWWD9rfaycf+GWfjwAkDS/ZVGk34
-         flOQ==
+        bh=/6GCJ8YiC8sHiOkq+0ugDFoD4azS8dVwUiDj8uwg2XM=;
+        b=YlQg4LrwGINm8JOm/HH3p1cIUsHZxkdFdNMJFvEjMKrpWhoM7wJaJzAd/7rrUOmMfn
+         ed4sZm9cpJeUjc4mfF75f7BqS/CkWIYfUFosO3G99rM3+romSRf9urclL58UCj/4ZKmB
+         oN5Hnv0nQRJQHNrsBAxOFZmwQrF2g8HU+gJuArqAJAMdZ5MsmM1cDVtWYChs3yFtRR2U
+         mLNv6++K9gAolOIhkHhAX/LbquQhTXV4pAGzXW5HuM2DURQ3NdhfhMmUnA8mJjz7Xqhj
+         RNPjvqXQraw4AidFMkKbC4I7PBkMXkoEHxcggtsLYdbsGFWVk96Qc50PNeEw22J4Epxi
+         A0NA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795051765; x=1795656565;
+        d=1e100.net; s=20260707; t=1795051771; x=1795656571;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=YK/3UqG448iTYZMUabnUq8CDRuHGn2unPHOZ2lAdrHg=;
-        b=YMXbRk5jBRwTH9/3d2HoGlz6rYoL/3dUYvz4cvKYDD6aCekeiAGPtJzvFbje6UkSr5
-         f1B8kHOpKgep3C2JAHg87tCTU8G2aetkvPleNC+8bAD51d/SaUDVUSUxnmeHEMtHQvVB
-         R9Gc7o9I77NNELWnhGm8Q1BLtH05EBrH0Yqffao5xg1AN/JUeVrv/ac1Z+0G+/XpgMC9
-         Bt/hG4UrGuoOa7QqXatXAbux8d8C7wCT0M3xc46NxUawkGyyu4wa3x+ywE5oTbFGMNJK
-         feIJlnkxUZOXktRfnRg1bGvWOn9MQBYcvnpkmn762OfCScRQnCvTOA0gm45dh9MKuzZs
-         gdVA==
-X-Gm-Message-State: APuU4Z/h4HrZtsCA8oP3fAZ3OSx5IQFW95Y1lE5Fv7DcQcRqUnFHwoBv
-	xS5tMEQ/54ItWR89OMUHm1PjtlZ0O05BcUBLJb1TOzQ7qXhLKxMLBzQNe9o02A==
-X-Gm-Gg: AYBFou2lmwytcH+18QBE4XHb4WEe8q8r/fmr1KPmSoHAwmiySbZsRqmgsxPY38h/jjV
-	tzHNqYF5P9mGjLUXup6TkS0IsV+Vw0h92O0gL2yMkl2ocBA7D7mNXnkHZtAGxgnXUXb+Z5PZpG0
-	Qqx+Xy21bGPEpE1ZqVEsfnJKpUuqd5caP0UlULuePxlr9BRlsQ0SqCK4bG/jM36Qu7T5m+g01SZ
-	REsys9KKX1cEDxEd/H08MQY9P8D+orB0p+aSxIlJ2DKHDS6uFZxMyKowSBgPCd1J6a0fulvKrZF
-	X7Zz9q/WUMDSXoSidhU+BrpSKwrfQm5A5p/GFK3slsBL+D38KLG50DQCs8+uvm7t0GUdI/EfAQw
-	6oxC95UkPLy9fjagAkOabf0iGnDbdR+Rvq2NvUsLPV7oPvBxP5EPQnnj6Hm1iYmQ/4FO9wrcWMD
-	1r6QN0lrAaxuPQDmzgvqxFlrnG7+DfXMMQhRkV26Z0Mh4gDOKaj+n8SgP2eLsQiXLoffpXRS47T
-	aUt6H9PigowtHvPOfCZzvolPVcV9lrkBIz8+blVfXdipKFMalp6U9JL8iDCZmZ7WWwhN1PUpdru
-	SFQ/QdcauYkBmpn9RirYOxaoOLUCtSBEt+8/WsvvxeoTOma6TIuyZgb0pvZtuK5bPeuLexOthAz
-	03MQsPlOKJ9/GkOvmLYDK29nQWoAj/eFxYF9XhAockPfjwtgSLG1qSVXcOpXg4kRvsPNZaNHZuA
+        bh=/6GCJ8YiC8sHiOkq+0ugDFoD4azS8dVwUiDj8uwg2XM=;
+        b=eBU6fj6bA+jzT144ZnWUdhIkFI7fA4PTHZ9DT7MZFmYsFGAxW4jfOUMJhPaP4iYsfj
+         U7XFIuGSEtoEHm+QL/iNAVhPmnjnWvfhJEvxR6E4SCtfueK2SrB8zjiVL1IQGbAs2Gd2
+         leVb5O4jbwozo+EjA5qgTYZiGO7Fcbm2FjMYfUbC0c+eAdhMQh28Q7dujvXArO/DE3vq
+         NT8PGqQ4UZu5Bsl5iose7sR+soYWhgSQw+LDSDVPPs/UFwZUxhqT8X9v2m1W337MzrYK
+         r9Xv7v/q0kZc4WS257y/pejo48htWKJ3xu8cBs0CcJC6GhyG2jpcHAvf3SFaN0Kc9eWX
+         0r7g==
+X-Gm-Message-State: APuU4Z96CF0IV5MFfBhUlHi+Q7iW70H+YqNzRhWL/GDeRYuMqjtpiXTW
+	s4hiMLdCPCk+MjynUhuZJ6Vmt7jfNhv5qSwkBjor9TAqRsDjk7S8GjV2a0vhNg==
+X-Gm-Gg: AZFdTZcmX73eUtGIyFkJOo8eRD32+TPvbwI6DGOJ1cgAVDDCRvMe1tHuDoooT6y1NyV
+	7t9EFbND4C0pB7xNlP90C2lqz3MY+00Y8uwvO7GI3jeEOp5Y195dbHIiYnlVdBtLSiLst0AIVSS
+	SeZbvNA1DKw1+Qf0QzLTYN3H2mTPT1RLhp5CSklVGJf9zpfZqd5hbuwOF3GueNtHASj5URTLH/Y
+	R6b0DOspD7VPJZVVLciPnvZpuU2y4nokzx/Fi//sLyRITOr26Lu0i2K+c9qbYhiZkRIAXHeowLd
+	DOixrAya5NVZohamuikNWOtci4bxIeZsJP3JypWw02T4F1triM72kCACttPEfpZ9apEA14EQs0m
+	/RL1Grr0Mo6nzq/sZQBh6rLzxtLd05HtTcu2UlY4gWYrQyUOa3mKtv20nmwO25ie9nsvZiQrGDr
+	2ZXDfQZ1Z8Co9+FO1KEXyP3zvjz2zhRRtJ9FqkZj31S6xOgzhBcS8QrAk2NDQycXqF+lWMXrCPw
+	l4rRx/eui+hPx56l60lo4SD+RIpvOMgMm+8gvJtI5/hKoeuZMjn1F0UJF8QBjiK+B7uVi1jApzf
+	8ACDxorwvDcbeVy34zqnM1p8hymvi30bPJT8ARGxnqHJjWGNIMXH/P+d57G/5tZebhTRcukVPT9
+	GmyWR3mA11MgAU1fp9nPgkE4uuk3nOE+iiZhEHcfX8t2PVsfNSzViji+c7ZC5ZfwqXInJSZT6Jw
 	==
-X-Received: by 2002:a05:6a00:ab87:b0:89e:fe2d:abe2 with SMTP id d2e1a72fcca58-8c5d4bc1f3emr3594019b3a.44.1795051764649;
-        Wed, 18 Nov 2026 17:29:24 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.254])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c6660c2f1asm1534033b3a.29.2026.11.18.17.29.24
+X-Received: by 2002:a17:902:f652:b0:2ef:dc24:c72a with SMTP id d9443c01a7336-2eff753cb8cmr37984235ad.56.1795051770529;
+        Wed, 18 Nov 2026 17:29:30 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.248])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f021b95e3asm2528015ad.1.2026.11.18.17.29.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Nov 2026 17:29:24 -0800 (PST)
+        Wed, 18 Nov 2026 17:29:30 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 2/5] selftests/bpf: Don't use BPF_MAX_TRAMP_LINKS
-Date: Thu, 19 Nov 2026 01:29:06 +0000
-Message-ID: <20261119012909.3657417-3-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 3/5] bpf: Remove BPF_MAX_TRAMP_LINKS
+Date: Thu, 19 Nov 2026 01:29:07 +0000
+Message-ID: <20261119012909.3657417-4-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261119012909.3657417-1-alexei.starovoitov@gmail.com>
 References: <20261119012909.3657417-1-alexei.starovoitov@gmail.com>
@@ -104,421 +104,239 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-BPF_MAX_TRAMP_LINKS does not tell how many programs a trampoline takes.
-Its image fills up earlier or later: that depends on the programs, on
-the traced function and on the kernel. Three tests read the number from
-the BTF of the kernel.
+A trampoline takes the programs that fit into its image. The number
+BPF_MAX_TRAMP_LINKS was picked for each architecture so that this many
+fit, but the code for a program has no fixed size. It depends on the kind
+of the program, on its cookie, on the stack frame, on call depth
+tracking. So the number promises nothing, and it refuses programs that
+would fit:
 
-fexit_stress and the rollback test of tracing_multi need a trampoline
-that is full. Let them attach programs until the attach fails with
--E2BIG. That is right with the limit and without it, and fexit_stress now
-covers the attach that does not fit.
+	                                          limit    fit
+	x86-64, fentry or fexit                   36       57
+	x86-64, fmod_ret, call depth tracking     36       35
+	arm64, fmod_ret                           37       35
 
-trampoline_count attaches BPF_MAX_TRAMP_LINKS programs and expects -E2BIG
-for the next one. Drop it with its programs and its function in
-bpf_testmod.
+bpf_trampoline_update() asks the JIT for the size of the image and
+returns -E2BIG if it is too large. That is the limit that holds. Remove
+the other one.
+
+Three things relied on the number:
+
+ - nodes[] in struct bpf_tramp_nodes. It is a pointer now.
+   bpf_trampoline_get_progs() allocates the arrays behind the headers.
+
+ - skip[] in the s390 JIT, a label for each program that the second pass
+   read. Patch the branch when the label is known, as invoke_bpf_prog()
+   does for its other forward branch.
+
+ - Kernels with pages of 16 or 64 KB. An image may fill a page, so only
+   the number kept it small there. bpf_session_cookie() has 8 bits for
+   the index of a cookie, and the JITs have offsets into the stack frame
+   that grows with the cookies. Limit the image to 4 KB on each kernel.
+   These kernels now take what a kernel with 4 KB pages takes. That can
+   be a few programs less than the number, for example 35 instead of 37
+   fmod_ret programs on arm64.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- .../selftests/bpf/prog_tests/fexit_stress.c   | 29 +++---
- .../selftests/bpf/prog_tests/tracing_multi.c  | 35 ++++----
- .../bpf/prog_tests/trampoline_count.c         | 89 -------------------
- .../bpf/progs/test_trampoline_count.c         | 24 -----
- .../selftests/bpf/test_kmods/bpf_testmod.c    | 18 ----
- tools/testing/selftests/bpf/test_progs.c      | 37 --------
- tools/testing/selftests/bpf/test_progs.h      |  2 -
- 7 files changed, 32 insertions(+), 202 deletions(-)
- delete mode 100644 tools/testing/selftests/bpf/prog_tests/trampoline_count.c
- delete mode 100644 tools/testing/selftests/bpf/progs/test_trampoline_count.c
+ arch/s390/net/bpf_jit_comp.c | 18 ++++--------------
+ include/linux/bpf.h          | 21 +++++++--------------
+ kernel/bpf/bpf_struct_ops.c  |  2 +-
+ kernel/bpf/trampoline.c      | 25 ++++++++++++-------------
+ 4 files changed, 24 insertions(+), 42 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_stress.c b/tools/testing/selftests/bpf/prog_tests/fexit_stress.c
-index 14c91b6f1e83..929b25d92bb1 100644
---- a/tools/testing/selftests/bpf/prog_tests/fexit_stress.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fexit_stress.c
-@@ -3,19 +3,13 @@
- #include <test_progs.h>
- #include "bpf_util.h"
+diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
+index ae89037db87c..d6c3c4270a0b 100644
+--- a/arch/s390/net/bpf_jit_comp.c
++++ b/arch/s390/net/bpf_jit_comp.c
+@@ -2551,8 +2551,6 @@ struct bpf_tramp_jit {
+ 	int r14_off;		/* Offset of saved %r14, has to be at the
+ 				 * bottom */
+ 	int do_fexit;		/* do_fexit: label */
+-	int skip[BPF_MAX_TRAMP_LINKS];	/* skip: labels after each prog */
+-	int nr_progs;
+ };
  
-+/* More programs than fit into the image of a trampoline */
-+#define CNT 128
-+
- void serial_test_fexit_stress(void)
- {
--	int bpf_max_tramp_links, err, i;
--	int *fd, *fexit_fd, *link_fd;
+ static void load_imm64(struct bpf_jit *jit, int dst_reg, u64 val)
+@@ -2580,18 +2578,15 @@ static int invoke_bpf_prog(struct bpf_tramp_jit *tjit,
+ 			 offsetof(struct bpf_tramp_run_ctx, bpf_cookie);
+ 	struct bpf_prog *p = node->link->prog;
+ 	void *skip = jit->prg_buf + jit->prg;
+-	int idx = tjit->nr_progs++;
++	int nop = jit->prg;
+ 	int patch;
+ 
+-	if (idx >= ARRAY_SIZE(tjit->skip))
+-		return -E2BIG;
 -
--	bpf_max_tramp_links = get_bpf_max_tramp_links();
--	if (!ASSERT_GE(bpf_max_tramp_links, 1, "bpf_max_tramp_links"))
--		return;
--	fd = calloc(bpf_max_tramp_links * 2, sizeof(*fd));
--	if (!ASSERT_OK_PTR(fd, "fd"))
--		return;
--	fexit_fd = fd;
--	link_fd = fd + bpf_max_tramp_links;
-+	int fexit_fd[CNT] = {}, link_fd[CNT] = {};
-+	int err, i;
+ 	/*
+ 	 * nop, patched to skip this prog when it is detached
+ 	 */
  
- 	const struct bpf_insn trace_program[] = {
- 		BPF_MOV64_IMM(BPF_REG_0, 0),
-@@ -34,7 +28,7 @@ void serial_test_fexit_stress(void)
- 		goto out;
- 	trace_opts.attach_btf_id = err;
- 
--	for (i = 0; i < bpf_max_tramp_links; i++) {
-+	for (i = 0; i < CNT; i++) {
- 		fexit_fd[i] = bpf_prog_load(BPF_PROG_TYPE_TRACING, NULL, "GPL",
- 					    trace_program,
- 					    ARRAY_SIZE(trace_program),
-@@ -42,19 +36,22 @@ void serial_test_fexit_stress(void)
- 		if (!ASSERT_GE(fexit_fd[i], 0, "fexit load"))
- 			goto out;
- 		link_fd[i] = bpf_link_create(fexit_fd[i], 0, BPF_TRACE_FEXIT, NULL);
--		if (!ASSERT_GE(link_fd[i], 0, "fexit attach"))
--			goto out;
-+		if (link_fd[i] < 0)
-+			break;
- 	}
-+	/* The image is full */
-+	if (!ASSERT_GT(i, 1, "attached") || !ASSERT_LT(i, CNT, "attached") ||
-+	    !ASSERT_EQ(link_fd[i], -E2BIG, "fexit attach"))
-+		goto out;
- 
- 	err = bpf_prog_test_run_opts(fexit_fd[0], &topts);
- 	ASSERT_OK(err, "bpf_prog_test_run_opts");
- 
- out:
--	for (i = 0; i < bpf_max_tramp_links; i++) {
-+	for (i = 0; i < CNT; i++) {
- 		if (link_fd[i] > 0)
- 			close(link_fd[i]);
- 		if (fexit_fd[i] > 0)
- 			close(fexit_fd[i]);
- 	}
--	free(fd);
- }
-diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
-index cc727011f3a2..51ca65dae6f8 100644
---- a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
-@@ -984,16 +984,20 @@ static struct tracing_multi_rollback *extra_load_and_link(void)
- 	return NULL;
- }
- 
--static struct tracing_multi_rollback **fillers_load_and_link(int max)
-+/* More programs than fit into the image of a trampoline */
-+#define FILLERS_MAX 128
-+
-+/* Attach programs to bpf_fentry_test10 until the image of its trampoline is full */
-+static struct tracing_multi_rollback **fillers_load_and_link(void)
- {
- 	struct tracing_multi_rollback **skels, *skel;
- 	int i, err;
- 
--	skels = calloc(max + 1, sizeof(*skels));
-+	skels = calloc(FILLERS_MAX, sizeof(*skels));
- 	if (!ASSERT_OK_PTR(skels, "calloc"))
- 		return NULL;
- 
--	for (i = 0; i < max; i++) {
-+	for (i = 0; i < FILLERS_MAX; i++) {
- 		skel = skels[i] = tracing_multi_rollback__open();
- 		if (!ASSERT_OK_PTR(skels[i], "tracing_multi_rollback__open"))
- 			goto cleanup;
-@@ -1005,14 +1009,18 @@ static struct tracing_multi_rollback **fillers_load_and_link(int max)
- 			goto cleanup;
- 
- 		skel->links.filler = bpf_program__attach_trace(skel->progs.filler);
--		if (!ASSERT_OK_PTR(skels[i]->links.filler, "bpf_program__attach_trace"))
--			goto cleanup;
-+		err = libbpf_get_error(skel->links.filler);
-+		if (err)
-+			break;
- 	}
- 
-+	if (!ASSERT_EQ(err, -E2BIG, "bpf_program__attach_trace"))
-+		goto cleanup;
-+
- 	return skels;
- 
- cleanup:
--	fillers_cleanup(skels, i + 1);
-+	fillers_cleanup(skels, FILLERS_MAX);
- 	return NULL;
- }
- 
-@@ -1023,14 +1031,9 @@ static void test_rollback_unlink(void)
- 	struct tracing_multi_rollback **fillers;
- 	size_t cnt = FUNCS_CNT;
- 	__u32 *ids = NULL;
--	int err, max;
--
--	max = get_bpf_max_tramp_links();
--	if (!ASSERT_GE(max, 1, "bpf_max_tramp_links"))
--		return;
-+	int err;
- 
--	/* Attach maximum allowed programs to bpf_fentry_test10 */
--	fillers = fillers_load_and_link(max);
-+	fillers = fillers_load_and_link();
- 	if (!ASSERT_OK_PTR(fillers, "fillers_load_and_link"))
- 		return;
- 
-@@ -1047,8 +1050,8 @@ static void test_rollback_unlink(void)
+ 	/* brcl 0,skip */
+-	EMIT6_PCREL_RILC(0xc0040000, 0, tjit->skip[idx]);
++	EMIT6_PCREL_RILC(0xc0040000, 0, 0);
  
  	/*
- 	 * Attach tracing_multi link on bpf_fentry_test1-10, which will
--	 * fail on bpf_fentry_test10 function, because it already has
--	 * maximum allowed programs attached.
-+	 * fail on bpf_fentry_test10 function, because the image of its
-+	 * trampoline is full.
- 	 *
- 	 * The rollback needs to unlink already link-ed trampolines and
- 	 * put all of them.
-@@ -1079,7 +1082,7 @@ static void test_rollback_unlink(void)
- 	tracing_multi_rollback_run(skel);
+ 	 * run_ctx.cookie = node->cookie;
+@@ -2653,7 +2648,8 @@ static int invoke_bpf_prog(struct bpf_tramp_jit *tjit,
+ 	EMIT6_PCREL_RILB_PTR(0xc0050000, REG_14, bpf_trampoline_exit(p));
  
- cleanup:
--	fillers_cleanup(fillers, max);
-+	fillers_cleanup(fillers, FILLERS_MAX);
- 	tracing_multi_rollback__destroy(extra);
- 	tracing_multi_rollback__destroy(skel);
- 	free(ids);
-diff --git a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
-deleted file mode 100644
-index 7321850db75f..000000000000
---- a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
-+++ /dev/null
-@@ -1,89 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--#define _GNU_SOURCE
--#include <test_progs.h>
--
--struct inst {
--	struct bpf_object *obj;
--	struct bpf_link   *link;
--};
--
--static struct bpf_program *load_prog(char *file, char *name, struct inst *inst)
--{
--	struct bpf_object *obj;
--	struct bpf_program *prog;
--	int err;
--
--	obj = bpf_object__open_file(file, NULL);
--	if (!ASSERT_OK_PTR(obj, "obj_open_file"))
--		return NULL;
--
--	inst->obj = obj;
--
--	err = bpf_object__load(obj);
--	if (!ASSERT_OK(err, "obj_load"))
--		return NULL;
--
--	prog = bpf_object__find_program_by_name(obj, name);
--	if (!ASSERT_OK_PTR(prog, "obj_find_prog"))
--		return NULL;
--
--	return prog;
--}
--
--void test_trampoline_count(void)
--{
--	char *file = "test_trampoline_count.bpf.o";
--	char *const progs[] = { "fentry_test", "fmod_ret_test", "fexit_test" };
--	int bpf_max_tramp_links, i;
--	struct bpf_program *prog;
--	struct bpf_link *link;
--	struct inst *inst;
--
--	bpf_max_tramp_links = get_bpf_max_tramp_links();
--	if (!ASSERT_GE(bpf_max_tramp_links, 1, "bpf_max_tramp_links"))
--		return;
--	inst = calloc(bpf_max_tramp_links + 1, sizeof(*inst));
--	if (!ASSERT_OK_PTR(inst, "inst"))
--		return;
--
--	/* attach 'allowed' trampoline programs */
--	for (i = 0; i < bpf_max_tramp_links; i++) {
--		prog = load_prog(file, progs[i % ARRAY_SIZE(progs)], &inst[i]);
--		if (!prog)
--			goto cleanup;
--
--		link = bpf_program__attach(prog);
--		if (!ASSERT_OK_PTR(link, "attach_prog"))
--			goto cleanup;
--
--		inst[i].link = link;
--	}
--
--	/* and try 1 extra.. */
--	prog = load_prog(file, "fmod_ret_test", &inst[i]);
--	if (!prog)
--		goto cleanup;
--
--	/* ..that needs to fail */
--	link = bpf_program__attach(prog);
--	if (!ASSERT_ERR_PTR(link, "attach_prog")) {
--		inst[i].link = link;
--		goto cleanup;
--	}
--
--	/* with E2BIG error */
--	if (!ASSERT_EQ(libbpf_get_error(link), -E2BIG, "E2BIG"))
--		goto cleanup;
--	if (!ASSERT_EQ(link, NULL, "ptr_is_null"))
--		goto cleanup;
--
--	/* and finally execute the probe */
--	ASSERT_OK(trigger_module_test_read(256), "trigger_module_test_read");
--
--cleanup:
--	for (; i >= 0; i--) {
--		bpf_link__destroy(inst[i].link);
--		bpf_object__close(inst[i].obj);
--	}
--	free(inst);
--}
-diff --git a/tools/testing/selftests/bpf/progs/test_trampoline_count.c b/tools/testing/selftests/bpf/progs/test_trampoline_count.c
-deleted file mode 100644
-index 02f52806b1b2..000000000000
---- a/tools/testing/selftests/bpf/progs/test_trampoline_count.c
-+++ /dev/null
-@@ -1,24 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--#include <linux/bpf.h>
--#include <bpf/bpf_helpers.h>
--#include <bpf/bpf_tracing.h>
--
--SEC("fentry/bpf_testmod_trampoline_count_test")
--int BPF_PROG(fentry_test)
--{
--	return 0;
--}
--
--SEC("fmod_ret/bpf_testmod_trampoline_count_test")
--int BPF_PROG(fmod_ret_test, int ret)
--{
--	return 0;
--}
--
--SEC("fexit/bpf_testmod_trampoline_count_test")
--int BPF_PROG(fexit_test, int ret)
--{
--	return 0;
--}
--
--char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index 1f8bc0c99a71..58846056f667 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -767,11 +767,6 @@ noinline void bpf_testmod_stacktrace_test_1(void)
+ 	/* skip: */
+-	tjit->skip[idx] = jit->prg;
++	if (jit->prg_buf)
++		*(u32 *)&jit->prg_buf[nop + 2] = (jit->prg - nop) >> 1;
+ 	bpf_tramp_image_add_skip(im, p, skip, jit->prg_buf + jit->prg);
  
- int bpf_testmod_fentry_ok;
- 
--noinline int bpf_testmod_trampoline_count_test(void)
--{
--	return 0;
--}
--
- noinline ssize_t
- bpf_testmod_test_read(struct file *file, struct kobject *kobj,
- 		      const struct bin_attribute *bin_attr,
-@@ -861,8 +856,6 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
- 			21, 22, 23, 24, 25, 26) != 231)
- 		goto out;
- 
--	bpf_testmod_trampoline_count_test();
--
- 	bpf_testmod_stacktrace_test_1();
- 
- 	bpf_testmod_fentry_ok = 1;
-@@ -2609,16 +2602,6 @@ struct bpf_struct_ops testmod_multi_st_ops = {
- 
- extern int bpf_fentry_test1(int a);
- 
--BTF_KFUNCS_START(bpf_testmod_trampoline_count_ids)
--BTF_ID_FLAGS(func, bpf_testmod_trampoline_count_test)
--BTF_KFUNCS_END(bpf_testmod_trampoline_count_ids)
--
--static const struct
--btf_kfunc_id_set bpf_testmod_trampoline_count_fmodret_set = {
--	.owner = THIS_MODULE,
--	.set = &bpf_testmod_trampoline_count_ids,
--};
--
- static int bpf_testmod_init(void)
- {
- 	const struct btf_id_dtor_kfunc bpf_testmod_dtors[] = {
-@@ -2635,7 +2618,6 @@ static int bpf_testmod_init(void)
- 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &bpf_testmod_kfunc_set);
- 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &bpf_testmod_kfunc_set);
- 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS, &bpf_testmod_kfunc_set);
--	ret = ret ?: register_btf_fmodret_id_set(&bpf_testmod_trampoline_count_fmodret_set);
- 	ret = ret ?: register_bpf_struct_ops(&bpf_bpf_testmod_ops, bpf_testmod_ops);
- 	ret = ret ?: register_bpf_struct_ops(&bpf_testmod_ops2, bpf_testmod_ops2);
- 	ret = ret ?: register_bpf_struct_ops(&bpf_testmod_ops3, bpf_testmod_ops3);
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index 168d84cf4eb7..d19924e87e86 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -1269,43 +1269,6 @@ int write_sysctl(const char *sysctl, const char *value)
  	return 0;
+@@ -2717,8 +2713,6 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
+ 	u64 func_meta;
+ 	int i, j;
+ 
+-	/* The skip labels are taken from the previous pass. */
+-	tjit->nr_progs = 0;
+ 	if (im)
+ 		im->nr_skips = 0;
+ 
+@@ -3043,10 +3037,6 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image,
+ 	if (ret < 0)
+ 		return ret;
+ 	if (tjit.common.prg > (char *)image_end - (char *)image)
+-		/*
+-		 * Use the same error code as for exceeding
+-		 * BPF_MAX_TRAMP_LINKS.
+-		 */
+ 		return -E2BIG;
+ 
+ 	tjit.common.prg = 0;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index a5ad08b7937c..25704de9c4b2 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -24,6 +24,7 @@
+ #include <linux/kallsyms.h>
+ #include <linux/capability.h>
+ #include <linux/sched/mm.h>
++#include <linux/sizes.h>
+ #include <linux/slab.h>
+ #include <linux/percpu-refcount.h>
+ #include <linux/stddef.h>
+@@ -1343,26 +1344,18 @@ static inline u32 btf_func_model_arg_slots(const struct btf_func_model *m, u32 a
+  */
+ #define BPF_TRAMP_F_INDIRECT		BIT(8)
+ 
+-/* Each call __bpf_prog_enter + call bpf_func + call __bpf_prog_exit is ~50
+- * bytes on x86. The trampoline image has to fit in PAGE_SIZE.
++/*
++ * The image of a trampoline is not larger, also where pages are. That limits
++ * the number of programs: the index of a session cookie fits in its 8 bits,
++ * and the offsets into the stack frame fit in the instructions of each JIT.
+  */
+-enum {
+-#if defined(__s390x__) || defined(__powerpc64__)
+-	BPF_MAX_TRAMP_LINKS = 27,
+-#elif defined(__x86_64__)
+-	BPF_MAX_TRAMP_LINKS = 36,
+-#elif defined(__aarch64__)
+-	BPF_MAX_TRAMP_LINKS = 37,
+-#else
+-	BPF_MAX_TRAMP_LINKS = 38,
+-#endif
+-};
++#define BPF_TRAMP_IMAGE_MAX_SIZE	SZ_4K
+ 
+ #define BPF_TRAMP_COOKIE_INDEX_SHIFT	8
+ #define BPF_TRAMP_IS_RETURN_SHIFT	63
+ 
+ struct bpf_tramp_nodes {
+-	struct bpf_tramp_node *nodes[BPF_MAX_TRAMP_LINKS];
++	struct bpf_tramp_node **nodes;
+ 	int nr_nodes;
+ };
+ 
+diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
+index 7c5cd6086e27..deee5d2e89b2 100644
+--- a/kernel/bpf/bpf_struct_ops.c
++++ b/kernel/bpf/bpf_struct_ops.c
+@@ -646,7 +646,7 @@ int bpf_struct_ops_prepare_trampoline(struct bpf_tramp_nodes *tnodes,
+ 	void *image = *_image;
+ 	int size;
+ 
+-	tnodes[BPF_TRAMP_FENTRY].nodes[0] = node;
++	tnodes[BPF_TRAMP_FENTRY].nodes = &node;
+ 	tnodes[BPF_TRAMP_FENTRY].nr_nodes = 1;
+ 
+ 	if (model->ret_size > 0)
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index 21d460866dfe..4dd4040e784f 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -506,14 +506,18 @@ bpf_trampoline_get_progs(const struct bpf_trampoline *tr, int *total, bool *ip_a
+ 	int kind;
+ 
+ 	*total = 0;
+-	tnodes = kzalloc_objs(*tnodes, BPF_TRAMP_MAX);
++	for (kind = 0; kind < BPF_TRAMP_MAX; kind++)
++		*total += tr->progs_cnt[kind];
++
++	/* The arrays of nodes are behind the BPF_TRAMP_MAX headers */
++	tnodes = kzalloc(BPF_TRAMP_MAX * sizeof(*tnodes) + *total * sizeof(*nodes), GFP_KERNEL);
+ 	if (!tnodes)
+ 		return ERR_PTR(-ENOMEM);
++	nodes = (void *)&tnodes[BPF_TRAMP_MAX];
+ 
+ 	for (kind = 0; kind < BPF_TRAMP_MAX; kind++) {
+ 		tnodes[kind].nr_nodes = tr->progs_cnt[kind];
+-		*total += tr->progs_cnt[kind];
+-		nodes = tnodes[kind].nodes;
++		tnodes[kind].nodes = nodes;
+ 
+ 		hlist_for_each_entry(node, &tr->progs_hlist[kind], tramp_hlist) {
+ 			*ip_arg |= node->link->prog->call_get_func_ip;
+@@ -768,7 +772,7 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mut
+ 		goto out;
+ 	}
+ 
+-	if (size > PAGE_SIZE) {
++	if (size > BPF_TRAMP_IMAGE_MAX_SIZE) {
+ 		err = -E2BIG;
+ 		goto out;
+ 	}
+@@ -889,22 +893,17 @@ static struct bpf_tramp_node *fsession_exit(struct bpf_tramp_node *node)
  }
  
--int get_bpf_max_tramp_links_from(struct btf *btf)
--{
--	const struct btf_enum *e;
--	const struct btf_type *t;
--	__u32 i, type_cnt;
--	const char *name;
--	__u32 j, vlen;
--
--	for (i = 1, type_cnt = btf__type_cnt(btf); i < type_cnt; i++) {
--		t = btf__type_by_id(btf, i);
--		if (!t || !btf_is_enum(t) || t->name_off)
--			continue;
--		e = btf_enum(t);
--		for (j = 0, vlen = btf_vlen(t); j < vlen; j++, e++) {
--			name = btf__str_by_offset(btf, e->name_off);
--			if (name && !strcmp(name, "BPF_MAX_TRAMP_LINKS"))
--				return e->val;
--		}
--	}
--
--	return -1;
--}
--
--int get_bpf_max_tramp_links(void)
--{
--	struct btf *vmlinux_btf;
--	int ret;
--
--	vmlinux_btf = btf__load_vmlinux_btf();
--	if (!ASSERT_OK_PTR(vmlinux_btf, "vmlinux btf"))
--		return -1;
--	ret = get_bpf_max_tramp_links_from(vmlinux_btf);
--	btf__free(vmlinux_btf);
--
--	return ret;
--}
--
- static void dump_crash_log(void)
+ static int bpf_trampoline_add_prog(struct bpf_trampoline *tr,
+-				   struct bpf_tramp_node *node,
+-				   int cnt)
++				   struct bpf_tramp_node *node)
  {
- 	fflush(stdout);
-diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
-index adc18f5eceb6..6fd105eed34e 100644
---- a/tools/testing/selftests/bpf/test_progs.h
-+++ b/tools/testing/selftests/bpf/test_progs.h
-@@ -501,8 +501,6 @@ int compare_stack_ips(int smap_fd, int amap_fd, int stack_trace_len);
- int trigger_module_test_read(int read_sz);
- int trigger_module_test_write(int write_sz);
- int write_sysctl(const char *sysctl, const char *value);
--int get_bpf_max_tramp_links_from(struct btf *btf);
--int get_bpf_max_tramp_links(void);
+ 	enum bpf_tramp_prog_type kind;
+ 	struct bpf_tramp_node *node_existing, *fexit;
+ 	struct hlist_head *prog_list;
  
- struct netns_obj;
- struct netns_obj *netns_new(const char *name, bool open);
+ 	kind = bpf_attach_type_to_tramp(node->link->prog);
+-	if (kind == BPF_TRAMP_FSESSION) {
++	if (kind == BPF_TRAMP_FSESSION)
+ 		prog_list = &tr->progs_hlist[BPF_TRAMP_FENTRY];
+-		cnt++;
+-	} else {
++	else
+ 		prog_list = &tr->progs_hlist[kind];
+-	}
+-	if (cnt >= BPF_MAX_TRAMP_LINKS)
+-		return -E2BIG;
+ 	if (!hlist_unhashed(&node->tramp_hlist))
+ 		/* prog already linked */
+ 		return -EBUSY;
+@@ -1031,7 +1030,7 @@ static int __bpf_trampoline_link_prog(struct bpf_tramp_node *node,
+ 		tr->extension_prog = node->link->prog;
+ 		return 0;
+ 	}
+-	err = bpf_trampoline_add_prog(tr, node, cnt);
++	err = bpf_trampoline_add_prog(tr, node);
+ 	if (err)
+ 		return err;
+ 	err = bpf_trampoline_update(tr, true /* lock_direct_mutex */, ops, data);
 -- 
 2.55.0
 
