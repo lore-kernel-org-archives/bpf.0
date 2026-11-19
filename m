@@ -1,73 +1,59 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.138
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795080084;
-	b=Saa7jGojGVEmUlN/7vwc2BWoKgkHqjeRITUoFeEEPy5SvVyYSDt0kVn3D1BfwOlnr+dW
-	 wEjQZt1jt+wuIx15IqaAW+nNPu6CphqavFedbWsPmzQpRViDknNkKMn9p4owsfDx4Rpac
-	 Dz/qP0X1BrKoLr9aLDXa3JILR3A43PQkfYQGDc1Q3UeD4WyVq/70Htlc8dFbl9JXelgD0
-	 PpQgCKxsdW53KcjmsD4uoA2LIOdFhYiZECbeEVrdK2shKDwT1wGF7yuGK5MrZL28nMhpm
-	 J8mfGttxtSq95n5rA+687s6RREq5BOfYzYmhJrELhsvI0MRxFtnDCObWEfMMR93YXyw==
+	t=1795082263;
+	b=Z4Er0hX2TS3URaEcOuAfgOCyJkyPzh3E1/LA4Hhn4F/yxJBgjhm2wfgi0M3+8NXlfrwY
+	 6fnhJ2b6kcX+niix2UDhjuxlm0x18dbBvfkNsoZ0JUwpvNoGuf9Y+WrHcMRSvtioOohzb
+	 JoItI5XhC5jeHjeN86vMydYVZzbMROCYbr9ZF7Y+79mpY5e2qfdgdY4WO8ppYSoov8yue
+	 OezzJVf/n5rtF7/4019M8aLiH9PCS84csYXVZrvBvVT5pAl5/EKR1b7ulerBS6oq07gk2
+	 cBIxVQmrZ4vquIY0gdzKtUsXsoXkYyqmn8EB5TJt5+0aDvVyjatYxtrW4rbnfBGzrwQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795080084;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=jwlrWkiL6/bc8bt3jFA1PNWrJYj2IlYZaoWgGCfb8oM=;
-	b=da+s3wKUI6SCTXRtfb1bZx/RACFxhdLD4tKxR3GcHw7DQg/MFrhoQe1Q+Xr3nV9HASQT
-	 faOXsjyugnV3dcFswvKboxtyBkCRWmlsh5ImW6SevEmUVTEZ6H+XzQxEfhN2iPMKIJ5zg
-	 nOaSip9eKTQHm850zr/mRYmrVAyr3OrNWFcAK+xkfR4jcoLDr+p5G7IF1dV5+tVcfklnF
-	 rAZLjZvsxsYpuk6eFU4Z66AkUMBY+PSCCLRX33lAOU96VqCvHPAZ0kms8e4VNAfRfVtnM
-	 SZs13RgMQ1wLoY+EU6UQxgmpA8tiB2SgkSoGK6L0+F2Gifr0LGgWNWsTZo6hjgNkIAw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795082263;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=y625Etk8u3ex3Tjo/KtPtgnQQJTTr3iIXOZEFCoS/aI=;
+	b=PALSRU8LemJffuMbGnk37mn1rUd5RICviz5K57HkKyS4mjVY+cB0cFiTWLYNt9m46FBZ
+	 uPOwk+6VmAJ2FDNQHj3yq7RGwNu0vwuw2A9dcsUO8b7WxeXy5YRZbtsNstKRnSM5CA5LM
+	 JRdFJUbfeXFn7AfTNLX+lUmgRXveeeoJoCSXAf+LzrSiXCAqRI31p6zIOnjxRsn+E0fP7
+	 sVSJ0v09O9Lcp+wv+XJpJyabWqb/t7WE+KV/5QKPqOqGkI5XjyFei73czT4oJ818CdfWM
+	 7OMZzMpQOSNTViQVGb3Q2m4FUffMar4RD1UnNmuWvkyoKjRIGaCBED9fQnBfnW4YJ2w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=aWlX8672;
-	arc=none smtp.remote-ip=95.215.58.138
-Received: from mta1.migadu.com (out-138.mta1.migadu.com [95.215.58.138])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="ibQzUq/W";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ABA1606A326
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 09:21:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5ABA1606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80A75606A334;
+	Thu, 19 Nov 2026 09:57:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=aWlX8672
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=mPiSiO8g+w2DpPp3GGR8IZ3wJAak28Y/ctpnaig1pAM=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795080081; v=1; x=1795684881;
- b=aWlX8672Mj+HReGYIkiRRIhO2O6zkeJuL6VhFnecacKIcpMy2KcYJl0JkXPRJ0jF0WUoCHWX
- UZp2CZnznB6IlqTgWp6la/ZxlGdmw4GmoBiVritBCyH+02wWoB+Yb4mtGqT+mjjfUm/Hc4tgNEi
- T6rNUYUNQGTJDUl+RDKOLWU8=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by mta10.migadu.com with ESMTPS id 291b443669a991fd;
-	Thu, 19 Nov 2026 09:21:20 +0000
-X-Mizu-Trace-ID: 291b443669a991fd
-X-Migadu-Flow: FLOW_OUT
-Date: Thu, 19 Nov 2026 17:20:58 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: Andrea Mayer <andrea.mayer@uniroma2.it>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
-	David Lebrun <david.lebrun@uclouvain.be>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Mathieu Xhonneux <m.xhonneux@gmail.com>,
-	David Lebrun <dlebrun@google.com>,
-	Justin Iurman <justin.iurman@gmail.com>,
-	Stefano Salsano <stefano.salsano@uniroma2.it>,
-	Andrea Mayer <andrea@common-net.org>
-Subject: Re: [PATCH net v2 6/6] selftests: seg6: add test for skb checksum
- with CHECKSUM_COMPLETE
-Message-ID: <av6_eqt8yH5qmLYL@fedora>
-References: <20261118150251.65-1-andrea.mayer@uniroma2.it>
- <20261118150251.65-7-andrea.mayer@uniroma2.it>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ibQzUq/W
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 771AA1F000C4;
+	Thu, 19 Nov 2026 09:57:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795082263;
+	bh=y625Etk8u3ex3Tjo/KtPtgnQQJTTr3iIXOZEFCoS/aI=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=ibQzUq/WD1r0LCCNo4i7pLHQGP5FKraIKKbL8BLCEx20NkLSPeWkX04Zg6y1k11TX
+	 ecq5T6YUSu5D3nbL73Vr2NxFII6EXoz81xW1BXPq4UryKceAcQKsJYe9+S+ISwJlk9
+	 YxKmPVYIYFUCta1I3TuyYWkG+T/TAwIh+7CkcnwRhlsg+DHmLSgri0PV3n+kcyB70n
+	 vTXjCzReqxFMLltvD2kUKEiEes8TnJSbFdNAYJvWVxcuIhs5LFStxKZ2RHztxv03ty
+	 NRUmuGvO9ARdEn0YViyLmxb50k9bjhwl4g+86sNEGygSk5zDQU1IqIalIn0MD9rNIV
+	 Ymw0FesoPvgig==
+Subject: Re: [PATCH net 1/2] udp: fix reuseport rescore fallback
+From: netdev-bot+sashiko@kernel.org
+To: zihanx@nebusec.ai
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org, willemdebruijn.kernel@gmail.com, davem@davemloft.net,
+ edumazet@kernel.org, pabeni@redhat.com, horms@kernel.org, benh@amazon.com,
+ kuniyu@google.com, shuah@kernel.org, vega@nebusec.ai, kuba@kernel.org
+Date: Thu, 19 Nov 2026 09:57:42 +0000
+Message-ID: <179508226205.3136.710014559426997072@kernel.org>
+In-Reply-To: <8c46325c4a433f02fdc7241c0c3884126cb502af.1794759652.git.zihanx@nebusec.ai>
+References: <8c46325c4a433f02fdc7241c0c3884126cb502af.1794759652.git.zihanx@nebusec.ai>
+X-sashiko-severity: High
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -77,151 +63,121 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261118150251.65-7-andrea.mayer@uniroma2.it>
 
-Hi Andrea,
-On Wed, Nov 18, 2026 at 04:02:51PM +0100, Andrea Mayer wrote:
-> Add a selftest for received packets with CHECKSUM_COMPLETE that the SRv6
-> code processes before they are delivered on the same node. The test checks
-> that, after the node changes the packet, UDP does not read a wrong
-> skb->csum.
-> 
-> The test uses a host and a router connected through a veth pair. Since veth
-> does not provide CHECKSUM_COMPLETE, a tc ct action on the router computes
-> skb->csum in software.
-> 
-> The host sends a UDP datagram to the router along five paths: no SRH (the
-> reference), an SRH with local segments, End.B6.Encaps with End.DT6, End
-> with the next-csid flavor, and End.BPF. Each datagram is expected to be
-> delivered, not dropped as a checksum error. Without the previous patches,
-> every path except the reference fails. With them, every path passes.
-> 
-> The host also sends a control datagram. It checks that the test detects a
-> wrong skb->csum after a change to the packet. After the ct action, a BPF
-> program on the router changes the Flow Label of the control datagram
-> without updating skb->csum, and UDP must drop it. If UDP accepts it, the
-> paths above may report a false pass, and the test fails.
-> 
-> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
-> ---
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue(s) to consider.
 
-Here are some code style comments. You can decide whether to change them or not.
+Critical: 0 · High: 1 · Medium: 0 · Low: 0
 
-> 
-> +print_log_test_results()
-> +{
-> +	printf "\nTests passed: %3d\n" "${nsuccess}"
-> +	printf "Tests failed: %3d\n"   "${nfail}"
-> +
-> +	# when a test fails, the value of 'ret' is set to 1 (error code).
-> +	# Conversely, when all tests are passed successfully, the 'ret' value
-> +	# is set to 0 (success code).
-> +	if [ "${ret}" -ne 1 ]; then
-> +		ret=0
-> +	fi
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-Do we need to reset the "ret"? It's $ksft_skip by default. If any test failed,
-it is set to $ksft_fail. We can just exit with $ret at cleanup().
+- [High] The patch adds a rescore branch to udp4_lib_lookup2()
+  (net/ipv4/udp.c:478-484) and udp6_lib_lookup2()…
 
-> +
-> +cleanup()
-> +{
-> +	cleanup_all_ns
-> +
-> +	# check whether the setup phase was completed successfully or not. In
-> +	# case of an error during the setup phase of the testing environment,
-> +	# the selftest is considered as "skipped".
-> +	if [ "${SETUP_ERR}" -ne 0 ]; then
-> +		echo "SKIP: Setting up the testing environment failed"
-> +		exit "${ksft_skip}"
+--
 
-if [ "${SETUP_ERR}" -ne 0 ], the ret should be ${ksft_skip}, right? Cause
-we haven't run any test.
+udp: fix reuseport rescore fallback
 
-Then we can goto the following exit directly.
+This changes the UDP lookup rescore path in udp4_lib_lookup2() and
+udp6_lib_lookup2(). When the reuseport group has connected sockets, the
+socket selected by reuseport is now kept only if its rescored value is
+strictly higher than the current badness. Otherwise the lookup goes back to
+the socket that set the current score.
 
-> +	fi
-> +
-> +	exit "${ret}"
-> +}
-> +
+Link: https://bugtracker.nebusec.ai/f/net/ipv6/udp.c||udp6_lib_lookup2||socket-hijack||m7q
 
-[...]
+> diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+> index 2e5562f353f85..23a8c951559c7 100644
+> --- a/net/ipv4/udp.c
+> +++ b/net/ipv4/udp.c
+> @@ -475,12 +475,17 @@ static struct sock *udp4_lib_lookup2(const struct net *net,
+>  rescore:
+>  		score = compute_score(need_rescore ? result : sk, net, saddr,
+>  				      sport, daddr, hnum, dif, sdif);
+> +		if (need_rescore) {
+> +			if (score > badness)
+> +				badness = score;
+> +			else
+> +				result = sk;
+> +			continue;
+> +		}
 
-> +test_end_bpf_or_ksft_skip()
-> +{
-> +	local test_netns
-> +
-> +	setup_ns test_netns
-> +
-> +	ip -netns "${test_netns}" link add "${DUMMY_DEVNAME}" type dummy
-> +	ip -netns "${test_netns}" link set "${DUMMY_DEVNAME}" up
-> +
-> +	if ! ip -netns "${test_netns}" -6 route \
-> +			add "${SID_LOCATOR}::${BPF_FUNC}/128" encap seg6local \
-> +			action End.BPF endpoint obj "${BPF_FILE}" \
-> +			sec "${BPF_END_SEC}" dev "${DUMMY_DEVNAME}" \
-> +			2>/dev/null; then
-> +		cleanup_ns "${test_netns}"
-> +		echo "SKIP: SRv6 End.BPF not supported"
-> +		exit "${ksft_skip}"
-> +	fi
-> +
-> +	cleanup_ns "${test_netns}"
-> +}
+[Severity: High]
+Does this throw away the reuseport selection whenever the selected socket
+only ties with sk, and not just when it fails to match the packet?
 
-Maybe move the `trap cleanup EXIT` here.
+All unconnected members of a reuseport group get the same base score from
+compute_score(). udp_reuseport_add_sock() requires the same family,
+ipv6_only, bound device and rcv_saddr, and unconnected sockets have no
+daddr or dport. The only thing that can differ is the incoming CPU bonus:
 
-Then we can just `exit` instead of `exit "${ksft_skip}"` for all the
-test_* functions. The cleanup_all_ns() will just do nothing when the
-NS_LIST is NULL.
+net/ipv4/udp.c:compute_score() {
+    ...
+	if (READ_ONCE(sk->sk_incoming_cpu) == raw_smp_processor_id())
+		score++;
+	return score;
+}
 
-If a command missing, or test_* function failed. The report shows
+The hash path only ever returns a non-established socket:
 
-SKIP: xxx not supported
-SKIP: Setting up the testing environment failed
-# echo $?
-4
+net/core/sock_reuseport.c:reuseport_select_sock_by_hash() {
+    ...
+		if (sk->sk_state != TCP_ESTABLISHED) {
+			if (!READ_ONCE(reuse->incoming_cpu))
+				return sk;
+    ...
+}
 
-> +
-> +if [ "$(id -u)" -ne 0 ]; then
-> +	echo "SKIP: Need root privileges"
-> +	exit "${ksft_skip}"
-> +fi
-> +
-> +# required programs to carry out this selftest
-> +require_command ip
-> +require_command tc
-> +require_command ethtool
-> +require_command ping
-> +require_command sysctl
-> +require_command awk
-> +require_command grep
-> +
-> +test_dummy_dev_or_ksft_skip
-> +test_iproute2_supp_or_ksft_skip
-> +test_kernel_supp_or_ksft_skip
-> +test_veth_tx_csum_off_or_ksft_skip
-> +test_bpf_file_or_ksft_skip
-> +test_tc_or_ksft_skip
-> +test_end_bpf_or_ksft_skip
-> +
-> +set -e
-> +trap cleanup EXIT
+Once the group has at least one connected socket, reuseport_has_conns() is
+true and the lookup goes like this:
+
+udp4_lib_lookup2()
+  first unconnected member sk scores > badness
+  inet_lookup_reuseport() picks unconnected socket X
+  goto rescore
+  compute_score(X) == badness
+  result = sk
+
+If so, all traffic for the unconnected members would go to the first group
+member in the hslot2 chain. Wouldn't SK_REUSEPORT BPF and
+SO_ATTACH_REUSEPORT_CBPF steering to unconnected members also be ignored
+without any warning?
+
+That looks like the behaviour that efc6b6f6c311, the Fixes: target of this
+patch, removed. Its commit message says:
+
+  "unconnected sockets have the same score, hence only does the first
+  unconnected socket in udp_hslot always receive all packets ... the
+  result of reuseport_select_sock() should be used for load balancing."
+
+The old code kept X on a tie. The problem described in this commit message
+is the case where X does not match the packet at all: compute_score()
+returns -1, for example when BPF selects a socket connected to a different
+peer.
+
+Could the fallback to sk happen only when score < 0 (or at most when
+score < badness)? That would fix that case and keep load balancing.
+
+The same logic is added to udp6_lib_lookup2(), where badness starts at -1
+and the rescored unconnected socket also ties with sk.
+
+The commit message says "Keep the selected socket only when its score is
+higher". It does not mention the effect on load balancing or BPF steering.
+Also, the selftest added later in this series ("selftests: net: cover
+connected UDP reuseport rescore") only checks a CBPF program that selects
+the connected socket. It never selects an unconnected peer, so it would not
+catch this.
 
 > +
-> +setup
-> +set +e
-> +
-> +connectivity_tests
-> +udp_delivery_tests
-> +
-> +print_log_test_results
-> -- 
+>  		if (score > badness) {
+>  			badness = score;
+>  
 
-Apart from the comments, the test looks good to me.
+[ ... ]
 
-Tested-by: Hangbin Liu <liuhangbin@kylinos.cn>
-Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/cover.1794759652.git.zihanx%40nebusec.ai
