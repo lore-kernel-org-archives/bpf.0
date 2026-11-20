@@ -1,84 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795166315;
-	b=bP1KSV4NLXSsukS9Sj0845A4JFk7kVA+ycQOJ87jjTLmC9zOM/9WqFv4Tr/aEs9caO7j
-	 bo49j3S48uR4tZp16VltB0T2/toKw0aiM87fA6jpeo1Yr66PwdM98WBAS8k+gdCqi+oRr
-	 oYi2R3CdOVquWuB1GJYl08u0KMHMI4NLs8jFU0ubRbznNOQUL3VbDPWZiuai/dZmxyPSm
-	 MZ+XQeeTWRLVvBbhLg9g4sQ4jMQvutl2l9/Sz9bpoh7ojq20pZMLdovIZJTELBWZbDoYI
-	 MyIS59us/X9n/aXCQf+G2bXlpO58sBGfZhLhqu+XtkdtVlrBhC423/jHZq2APxPLhNQ==
+	t=1795168122;
+	b=sBoFRmCh2feB3FMQ+YTmwVWtsCjNaE5mW1qqIIiGYK58+wK4LHhRKThcDEhfP8yLzeUi
+	 hTEFu8r/T8bOw4P+9sl+rL3Mzr8mQnftKP0I2a92RwgvAYkLKAZCeOsH4vpHQYFsHGI0Y
+	 rQfuXtBBlS0XM2t8yjJ4Fd8RPNUrCOvP7n5FZzIP33Ryzbk2TayTrzmXF4/0DWIW17H+Q
+	 bR9eK1mZbozLktK66Y4cVMcWxRjWiGgahXzZnR9v0RJ7dez83aRjesHc7PTEscuohsKb6
+	 3XjCkPUFYygo32XzggSWwdmYJax/D9U8eAb7qvfjAwLttIXLmfOBFSH91GA5OwEi8ng==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795166315;
-	h=DMARC-Filter:X-UUID:X-CTIC-Tags:X-CID-P-RULE:X-CID-O-INFO:X-CID-INFO:
-	 X-CID-META:X-CID-BVR:X-CID-BAS:X-CID-FACTOR:X-CID-RHF:X-UUID:X-User:
-	 Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
-	 References:MIME-Version:Content-Transfer-Encoding;
-	bh=F8c0szBg9qBHwMYngo+k10AIndbBzGKinqqurrP/q1M=;
-	b=Wyk0DcYmnsbPhhf4liw8aX1EvMoWCT2e2ekPauildCInf+N2vocHJIk7RknUoYbSEsdZ
-	 AlUSOGelCyYaCoAOInquXBkepFt0FiPFow941/FNW1iOvkaz3rREIOpoJVutzPaGLWMej
-	 ZByxim0tcFx14Oif71FFFTuHYJFv1fNmA8c+lfhtW4P7Uc1X6m4bjZzqk7Q+0dCbnTnDY
-	 4JAEW6/HSCmmI+xLvdNkLihFDSYZl7AjbAIGXTYvUfIKoNaoju5Ze8zYQk9lziVxTA+D5
-	 QDJzCwjYJucKV6bRH2wtVuBSH93ds/Pwj07NoiRJ0oV0K2VxBXcJpbmj6yG4xxwSDfA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795168122;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=LrQEkt8HXk1ed1syfHwtkDqVdWgo9sprdy8k9nccOT4=;
+	b=Ua4opyXl1F0b+tBMVt2s1bdUzjbxtqOdpQS0VDq2+pEWHCQtt+fQbciI3HJENBIIXl+x
+	 3CbaYgOZF0kxaB3DgoE3dwi3tTysB66X6nPQoCTAFth0BqYZruaz4qFw6S6265vxSaljP
+	 hZuhk2t+b+OjVhu4cuMY0WHLQEpBb8bZ0mpPuFauyyPtAIhsSzDVn8JbE4mkWCzMm+orY
+	 KMJAI+Oehw+x0W3/2Ca19UnUdoCdvo/uYpfh6Hc/NMy9vMVWXJVMMnRkZ4j1+6abiDl1I
+	 Tl3DZQmgvvKa5E+FutVAlKkuc8yzkUwyYG8ZBbyoaXdfK9fStYpEJGMWlHR4YPbPT0A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=kylinos.cn;
-	spf=pass smtp.mailfrom=kylinos.cn;
-	arc=none smtp.remote-ip=124.126.103.232
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QxSXBoWw;
+	arc=none smtp.remote-ip=209.85.128.43
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99B13606A325;
-	Fri, 20 Nov 2026 09:18:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 99B13606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 56812648e4c311f19a56ed5b684f684d-20261120
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
-	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_LANG
-	HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE, HR_SJ_PHRASE_LEN
-	HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
-	IP_TRUSTED, SRC_TRUSTED, SA_TRUSTED, SA_EXISTED, SN_TRUSTED
-	SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_BAD
-	CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU
-	AMN_GOOD, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.19,REQID:0a05b280-e42b-4f50-97dc-55faa032f0cf,IP:10,
-	URL:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:35
-X-CID-INFO: VERSION:1.3.19,REQID:0a05b280-e42b-4f50-97dc-55faa032f0cf,IP:10,UR
-	L:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:35
-X-CID-META: VersionHash:7db8b62,CLOUDID:b1673874644b880c8c8dde93e9a7f8fb,BulkI
-	D:261119223002FMBWSIFN,BulkQuantity:3,SF:10|66|78|81|82|83|101|102|127|153
-	|865|898,TC:nil,Content:0|15|50|99,EDM:5,IP:-2,URL:0,File:nil,RT:nil,Bulk:
-	40,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BR
-	E:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 56812648e4c311f19a56ed5b684f684d-20261120
-X-User: sunshaojie@kylinos.cn
-Received: from sunshaojie-pc [(114.244.3.119)] by mailgw.kylinos.cn
-	(envelope-from <sunshaojie@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1708704801; Fri, 20 Nov 2026 17:18:24 +0800
-From: Shaojie Sun <sunshaojie@kylinos.cn>
-To: arighi@nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 770B9606A32C
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 09:48:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 770B9606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QxSXBoWw
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4ba013938d7so6157815e9.2
+        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 01:48:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795168120; x=1795772920; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=LrQEkt8HXk1ed1syfHwtkDqVdWgo9sprdy8k9nccOT4=;
+        b=QxSXBoWwFNgSQtDk7FgcCwW7Iu7sNYfShCcuyAaffjRYinW70R31yZM+yPr6wrXjjt
+         Bf4ypvCIuYxbTCzsUWJFeRf8AEu0GkpIeBMjk838RaohymTeJ++xhTBHw1EGTGpu9XMz
+         KXgyco+DZVAyVTUlpBQv65z13lX7OxIRmbehC1C7HySWbZUnk+JvFvoOo+RW/RhbZuXT
+         LJEU4DHn35FBs0y7+1rXo6NntmSmoLsAwh/KcXyBPBt6Rm8I14A6JYeYi/6dOtC8/ig/
+         /z56iB3LRlXa9yM8UWdWuNHaZ+ijxWjp2HKs7NWwO7xKLQzFisYDnwLFhf9tfVPaeW4W
+         ICMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795168120; x=1795772920;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=LrQEkt8HXk1ed1syfHwtkDqVdWgo9sprdy8k9nccOT4=;
+        b=VYbmEH3d8UcYCG7pETvQpb62xeZrFPYKL+tfiOTBxk5Nlzo02M1nO/vCuRwb7JT+1q
+         qpswG7g3KxA+9tCdgLdikt1IckzWuc/JJf3FKFmIjPZBnFRWXNEY0DSiKGYQh824nyku
+         xcPzD5Hs3emNitUKDdbOZW4wQXcPUp9UFPNPYZynSNcoJGofOLH67KQ2dm4Aj4SAJxST
+         UhViNvyjcekYCi2jDHQcsSSSxZGePSFR3gsSzGhz5qfxg+8QIaQ/99Y2KAaY0QlL9NXu
+         7cJ3uzE9FzTSk4ztsS2Vg0Ez2ZEtKIS+FCInvdG8R1KJMsoEsN6+NR2rcQGYKj2V1ajg
+         SYUw==
+X-Gm-Message-State: APuU4Z+3+FtFZME3xUFQFOxvxc9nl/RZ5eA0hh2OoWWDJgxlumD22bea
+	NTCB9GlH9DBhmpNwPxicBb7R8AL4tn5uFmk831miwPDYOQkjiCfwU0/7
+X-Gm-Gg: AYBFou1xYMZCyOs3gnhPi8E50HhiVLCvH71mXTwJTLM/HJMTCf2NFtVj4gcWZd8blbI
+	6tsQmyJWrI7Qz5erKox4GqmXPvJR1A4lIdJNUF3mkANszSSnvMpWafhdYvoMwa6bx2QceWrffz2
+	k4TCZoDbJtkmaKcRUWqFCOIppR11y+fb4JGaYFbrFRhMyR0t/mo2Kw+6TBL6VzvzjFeUNG9tCJG
+	+NrZqTEQH544SxsHdcmMLVYz5gcHn+G8pZDsuPX9DpBFtcdT7hGs9D71eNvupMme3cd+ar9ThIZ
+	tOA2wZ2QlHjL0uVSnSSC0flMCKaXevcTs3d3tc8GM0L+BuHX14UjXcjHk30s+mu1qD0ftOO/o7V
+	xzT3FXt1mwEPiSTZNuFIz7Kom3QFjNm4a326ZF5Oyztzqcc31F3o5cBul8JpmYWk0kQFwB3so08
+	H0WlyhCQbBFwkDcWoni6ouvG0jjd3oey+v5LJlt6rS/i1WtNCcxcgs9ahwf1Lm7HCUz13zAQZ5e
+	16MIlSqcJqaqLgBpJ45DLyJfJXfuneUBDiUtTFibD7A6Rn6naJAFYh7lqhpS2djC66gTclGeozZ
+	oBU6r2cBWHnNIUfcbfKvE1o+juX7Mu360019nwNym8A=
+X-Received: by 2002:a05:600c:4e87:b0:4a7:6bc7:f778 with SMTP id 5b1f17b1804b1-4bb88938d38mr55542695e9.30.1795168119561;
+        Fri, 20 Nov 2026 01:48:39 -0800 (PST)
+Received: from dell-desktop ([2a02:587:4b42:1400:8199:c552:2b9e:c33])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb88f635ffsm45137535e9.4.2026.11.20.01.48.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Nov 2026 01:48:39 -0800 (PST)
+From: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
+To: linux-security-module@vger.kernel.org
 Cc: bpf@vger.kernel.org,
-	changwoo@igalia.com,
-	emil@etsalapatis.com,
 	linux-kernel@vger.kernel.org,
-	sched-ext@lists.linux.dev,
-	sunshaojie@kylinos.cn,
-	tj@kernel.org,
-	void@manifault.com
-Subject: Re: [PATCH] tools/sched_ext: Add "arena" BTF type tag to the __arena qualifier
-Date: Fri, 20 Nov 2026 17:18:12 +0800
-Message-ID: <20261120091812.968482-1-sunshaojie@kylinos.cn>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <av_lQuuL5lgbW1BW@gpd4>
-References: <av_lQuuL5lgbW1BW@gpd4>
+	linux-fsdevel@vger.kernel.org,
+	paul@paul-moore.com,
+	jmorris@namei.org,
+	serge@hallyn.com,
+	brauner@kernel.org,
+	viro@zeniv.linux.org.uk,
+	jack@suse.cz,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	kpsingh@kernel.org,
+	matt@bobrowski.net,
+	eddyz87@gmail.com,
+	tasos.papagiannnis@gmail.com
+Subject: [RFC PATCH 0/2] security: Add pre-lookup pathname open check
+Date: Fri, 20 Nov 2026 11:48:18 +0200
+Message-ID: <20261120094820.11929-1-tasos.papagiannnis@gmail.com>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -90,10 +108,45 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi Andrea,
+Some security policies need to inspect the original open pathname, for
+example to report or block suspected path traversal attempts. A resolved
+pathname no longer preserves components such as "..", and requests that
+fail lookup may never reach a hook exposing the resolved target.
 
-Thanks for the review.  I'll add the tag to the fallback definition of
-__arena in v2 as you suggested.
+Today, in Tetragon[1] we capture kernel-copied names through
+getname/getname_flags probes and correlates them with open
+results. Enforcement additionally probes do_open and passes decisions
+through BPF maps to the file_open LSM hook. This requires correlating
+state across several internal probes and the enforcement hook.
 
-Thanks!
-Shaojie
+This series proposes security_file_open_name(), an LSM hook exposing
+the kernel-copied pathname, the VFS-selected starting path, effective
+open flags, creation mode and lookup flags before pathname traversal.
+BPF LSM programs can inspect these arguments and reject requests before
+file creation or truncation. Existing checks on the resolved object
+continue to apply.
+
+This is submitted as an RFC in order to get feedback on whether the
+proposed LSM hook is a reasonable addition.
+
+[1] https://github.com/cilium/tetragon
+
+Anastasios Papagiannis (2):
+  security: Add hook for unresolved pathname opens
+  selftests/bpf: Test pathname open enforcement
+
+ fs/namei.c                                    |  15 ++-
+ include/linux/lsm_hook_defs.h                 |   2 +
+ include/linux/security.h                      |  10 ++
+ security/security.c                           |  27 +++++
+ .../selftests/bpf/prog_tests/file_open_name.c | 103 ++++++++++++++++++
+ .../selftests/bpf/progs/file_open_name.c      |  56 ++++++++++
+ 6 files changed, 211 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/file_open_name.c
+ create mode 100644 tools/testing/selftests/bpf/progs/file_open_name.c
+
+
+base-commit: 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
+-- 
+2.56.0
+
