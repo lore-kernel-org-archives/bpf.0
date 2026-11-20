@@ -1,93 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.173
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795207833;
-	b=5XBMuCK9gGR/CA4b7Z/wvHb0rFUhWArD66DglHCIACIwDO1xR+RAvp/DmBMCxyYM3baY
-	 OYOZzvfGi38jZVJio7vrw9gWZ7wcQ+IzUy9I+a83CXKCnq4LC3yMPI2Dm1Db1+BXV7bCI
-	 /e0z3luLqjbTYTE1ggMX1/pNjY9zapvEphNSN50RzX0btqNcO8KKnyiv70fLN/7TSr0OM
-	 fRR4LSuxNNwgs5Hfx3p/9sEKShMqotpLCHGwZZsTOxDcx85JTD2U2X8NAVo2xpBa+VmtA
-	 Qq087wcut/0lxk6KKnZEP7wd9tu3PA2gwC/bFrFPB39Wvop7deNeBlRl3qY6WN+Ba+Q==
+	t=1795207840;
+	b=h0QpRQgywlho94f7JtqkyjtLKY19BqiAoGkm6TR1EEq2Q03cIUA2tHGuYyt2vNng9DhZ
+	 dr+yTp3xW3aOBTVO+ZEHsySki+A8fjyZWSwR0lX8jEIb48NvYWe4FfN1J+Mw3wPlNHZ1z
+	 MsHMUM4W0rzQJCunFVN/s5yWfx97r9YN3+2QLUoa8iXeWVWs4jaQYkCgOXd6naMjO6v5f
+	 qq+S8Vgur+iq4FSgvebf79LXcNJ6TZ1/5iKDqRR88xwe1Xl7BSVRt8MPCUqPSSDnMmo9N
+	 akxfoPeMQJGBFgT3mO4UmNWaKAYq+gmNpyeJtCe0Vrh0IhbyOfG5DYIh1mhiCgjnbvg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795207833;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795207840;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=cWlWahaZ4vGYj38dgZeAE/wbm/mq3nZdzAWFiDiUZ/0=;
-	b=UJD5Y0cZSnT2a2DDghM3IKrcTIIk10ZmW4dmMTKYh8zGrbLfgM58qy8GoH92WklhYJRU
-	 3+4AyaE8MwW868Z1tulel2TOFoArS42wGtPHHPbDk4g5EQM6GEgGcdtr/r7dSmSxdri+f
-	 6RyUnV1jYowaWbJFNTP9EJUmYBtzO/D81Rrit50K5dFuv2007pXuT/9R+5R9XTYz9l0eK
-	 S33C2eOTJadIeaQTbQl+vNt4/bwItEW1F5+ggIsOfqdSRlnzp5w7Sb0Bw5rmYkAJecuMc
-	 Nkw/GTdZMPwQT2OxWjlPY1YFuVNYN1i6R/sP/ZikdoY9IGqyZ6dh6HlCI3FnbrwhVjw==
+	 Content-Type:Content-Transfer-Encoding;
+	bh=K5i3EukcA/pjMomhTkYDOOgFao068N7EISJEKKiPypQ=;
+	b=keFWNoPvu9v7ZoQoxctW1GpiTMLjJt98+fy0lBvFMIdrAhCCKLHGWJf69+n42Vh7zB97
+	 ZSeYEryyWTKa0Hx4IHITDyQ7G2JhNWeQixF0wyg63Dq+/SitQu97Jbk12CodR3GCv4GBX
+	 fUGQCMxgC+XkzY3HAggpKW57B0bNt6owzrfQ7RsIApyjZAsPYUNpM6VjytDJL3669zNWi
+	 aAf/nFktLz6hUAzgSH5nT5WyQkWFh8O6l/h8y2BWRGbMrFkBzuhfeTOQJfu6SfhZ/wv/Q
+	 d/crENh9HmI42MEmy84L6Uf7GnwPvycT/EExFAutDQuU29KUlFk5kGPi8L/CV1CVS8g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YDRqgqUu;
-	arc=none smtp.remote-ip=209.85.215.174
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=LlcZOFY1;
+	arc=none smtp.remote-ip=209.85.214.173
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB273606A690
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 20:50:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BB273606A690
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F652606A69F
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 20:50:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2F652606A69F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YDRqgqUu
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-cddc250d815so554312a12.2
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 12:50:24 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=LlcZOFY1
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2f037bc348dso12090245ad.0
+        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 12:50:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795207824; x=1795812624; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=cWlWahaZ4vGYj38dgZeAE/wbm/mq3nZdzAWFiDiUZ/0=;
-        b=YDRqgqUuwLKzVUgjfFaoSYHbZONjUQ4GstPlOpeBvgRbUcw3NycAOSZNZm1R+3b16W
-         dBg/p0exJN8UHdGjduf+YnCw5vS2Cae2QelunZrVcA6gTZy0auWS87eaCUj10mgKe1xH
-         vgyQkJJKK9dLX1kG7r+7eEIgK0MV7lk9PQJQOnRHbsORia8nQT4x4EUdFB9AdnXA4/vi
-         11SRdfqjgUpbEMEj8jXSe5JJgOk0CXllb7Cm9OJiVWAXWjZ9Ja2kVvAD1R//xBqmB0bS
-         Y66w7Iwf99be8SzywGLMOiWWkOzT7CpXP1ejbsQ0hgKZaq1somG31h1aU0DBlMWrZ751
-         dsgQ==
+        d=gmail.com; s=20260707; t=1795207830; x=1795812630; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=K5i3EukcA/pjMomhTkYDOOgFao068N7EISJEKKiPypQ=;
+        b=LlcZOFY1FTK3TPgY9wJL7h+JDdRmcZdWYzKRtbB+t6R+KpiaxU8c2JIw57t9d214f+
+         39vcATLL0nepHkEjn71kPfhyBoGKLW5TsCHE/NdZk5mBR+QMoZrMzBm/Amxr2+RSqbYH
+         uJHgUDCKdhmm9Iant57hqrux3Wj9/vZyovAWPoYqu6L4/dLlOWhsUMJHL0nqdbgcp6Bx
+         KSZeZEybv56tqIMww6sCkZAzb+3YLnVOtZEOd9QT5/BZYvXEu3h82e7DIHl2Pm1TF8Je
+         3p0iTBJsglLe7p9CAgyIZ6IYAwVzsYngP1WYa3yWnOni1eQJ46Dp5vy4ceAXg7ikrp9t
+         +jag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795207824; x=1795812624;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=cWlWahaZ4vGYj38dgZeAE/wbm/mq3nZdzAWFiDiUZ/0=;
-        b=hwwlgzD6GPA9hkeS0YoP5ZOKs38cWJX5DCV4plOjCxn7ecz41URnrmhZrdvu9ZQGlh
-         pw/HZ2o/cHx/xcA1S2RTCVpGZ/g/yzVr9jZGxZV6jS/y9HIv83WKqJR+fHybc0Rfy5ZW
-         qcZLqHMh+h5/sDhJKcX3+uZtyVDDve0IeoV/5agj2X3+86jD+4hrS/g6MV2XWjHPQY3n
-         5RJz3AUVTNWllDVU1SLK6JdnesrLBRohca1ox6L4vTBEuRuaHz5fFurYgA0ZdSrp7xnd
-         6eH15CRySQVvHPaHatkRUrpBa1+RbZCYXsDn+8xl+fFr9cBnAX2phCtQphHs+q/gPbF/
-         SeUg==
-X-Gm-Message-State: APuU4Z/3X6GxNoMjAwMhHHEyC0JlYu8thZLtcwOlBGMMpszd/OR+oioS
-	4oXwuMcSHh+YRaodF6q8cUhJvez+vimkGROrtXgo+lXq2fmPU6Ovmd+9R7tvFA==
-X-Gm-Gg: AZFdTZdjMLK+0G8sf+NSe6PN1BHAlN1Zx/gqKE45wY6WI8p0IobKIlNG2814/8QTXJ0
-	L8Krt3oWg7ljV4SP541Ijy7aSXR7gfi8Gnx4MclkCVPfpTStbrHl1uK33NWke0t9KM1sjWNXZZn
-	6OmBa0zqOlSkhjhfVrXoRQGxBkaPkqa7qgYAGCvjPTk8fr4pTUnWxK2g/BvpCVLb5WaeOHQ8Eh/
-	WiarH/+qVLy1BFJKil5lmmLd/ufOa+h3YriRuucy3vJFFcYx9H8y6WuYkIZDPUKdbIcHRYskD9o
-	CTNddrXRo3GrwiSWhVJJC3lgLDzhMPJgAUUwKnMz6FcIOfDrFxcg1ixsEtqV/ovxVQmf0r3eAKO
-	LTBl9dL4hr3o348f5qv392QMq97fIvPSu4a5Vdeg7QMDKBQDmVGMjt/j2r+qz0GYTdu9N0zECaB
-	C3HlJfkC+i+zMfaG48EADqksI9+NxDs6SF0gYJANNZpWS/q/s676QA0TnW5u8mTakU6NHwnQMJ5
-	+IsEY9tGk/UyOpr5tF6Cn1mRhkoVXvFOggbO9oQs97lzz01bwhsqKh+l9yY2hXMfE/2+8ip/NzX
-	+QT8mVxSti7LxR9QtF+rRZEAucXuIhUJWeTbdWSzyvqFslwnrEs2kPzW6EiHg6RwJMgUoWGJ0bw
-	4lz9egaOKLWRYsZs/HzlpLBV+3FpjZOEcBci5LvrfqYXXxBGg+pLMxlTa8jiBYGYtL28cVjxmfQ
+        d=1e100.net; s=20260707; t=1795207830; x=1795812630;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=K5i3EukcA/pjMomhTkYDOOgFao068N7EISJEKKiPypQ=;
+        b=AofbMaTettbRlSLOKEKF7sZISgstFq3VqzVVJvJgoU+HXPRFR58Tz9ZwiNjum18tJJ
+         yOu26sV9O6Hlh5NSI0UtvHSwP6CKd6L7dnynt/x35yjDZSNwkej+aK2HrKnq1eKvAJSQ
+         5jKEEui5c4gs836F+VHBjDbikwRshncWbuaQxwN8mapOCRDEZ4WnC0YmtQ9ly6lp1oKw
+         NHDEl3qO5LRgWd6W/GzA0u1+cv4j4DBwk6+/Nx25uBZtLO72Plh7tXel2i9CC0siq+DX
+         aMuHLrHFdbHT07Roow4qwwz9xka8OH1r6Wx97Rce7yTTLiwX7nmCxEmICOYStPSr7sCm
+         MNfQ==
+X-Gm-Message-State: APuU4Z+OTI+y/1NsR0Ul+eUQ/CjSk+3+aYPeTs/z59qeu7T+KlYkQf7r
+	+5I0Go2zcK2mkb+ggvVfLO0LGjkSmqzQe/bLg9h1YklKgXotmnHsoUckcCwD6A==
+X-Gm-Gg: AZFdTZcuCjrkEtS3whjPCdXnAR21GBVRg61pwAvkEzVSAM16ZHmKm160GRa+zjGpFQn
+	GXuLgzhujQXOLBvANEUm4rGUlDnyzluk+Yu7hNSj/4aJTMC8BtFrMR1pccGLIdtLQYWeGNdUG4w
+	gEkeKWfwAS/AkiMtz+3zJTN2+c6ZTZqoJI6ddfBm7IHGuFyqjJIOVj+iPk30JSDL6XfHy0h/5ME
+	v1pMo5OckGLWsI/xEN8hbF9jUvuxJs6Bgxvi5KVYaHM50qHb9+q8EW3yBd4MINFG+H5fnb4Vr/Q
+	4YMJ0R1zTHoDUIVMkkcNnJn50m0x46PSRcYuMTGb6Nhpx3slJskkpFjgvN/83lHCAmxdGGYvMMj
+	6YtNuUTm3AgwRosGbeIijbawsLlnkzbREdYo5FazamoDlBkEVZzz9bzdHCfcnipmrU+z3lXhWuV
+	LLpls13Uib/Oqx7269hvpTSTwNJSOrcrcF55P6mOqbDKa5VdyB7GRrKS6KZYEpi5ve+e25vKWoi
+	qaSSX9ovUcjUCEgMaQARDBXcHp7Zkc5iMeA7sGvZKuvFb8GXrRMjPMC+Z00QbtRdtN0MrSzcQO4
+	Y5iBKwpFf7MwFrQXlJmVHWluZhs91CsnKUTMDFAuQ9zdJ1VM5te/8hfducSHeQbucjdJHQ8UPNQ
+	2X7lXmmOSjhmFgVLbt4akXdeCHvQzKNmQMZDrQSGZnCSYPHkRafXbaWhwjuObTs860m/pEPhSzw
 	==
-X-Received: by 2002:a17:90a:e70c:b0:3b1:ba59:56a1 with SMTP id 98e67ed59e1d1-3b41c939b8cmr3811226a91.39.1795207820764;
-        Fri, 20 Nov 2026 12:50:20 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b44b73b2b3sm357647a91.2.2026.11.20.12.50.19
+X-Received: by 2002:a17:902:e551:b0:2d7:107c:917b with SMTP id d9443c01a7336-2f03ee6f09dmr49444775ad.0.1795207827135;
+        Fri, 20 Nov 2026 12:50:27 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.251])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f105b66sm18769325ad.51.2026.11.20.12.50.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2026 12:50:20 -0800 (PST)
+        Fri, 20 Nov 2026 12:50:26 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 03/49] bpf: Delete the old main pass of the verifier
-Date: Fri, 20 Nov 2026 20:49:11 +0000
-Message-ID: <20261120204959.614908-4-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 04/49] bpf: Delete scalar evolution
+Date: Fri, 20 Nov 2026 20:49:12 +0000
+Message-ID: <20261120204959.614908-5-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261120204959.614908-1-alexei.starovoitov@gmail.com>
 References: <20261120204959.614908-1-alexei.starovoitov@gmail.com>
@@ -100,4994 +101,7199 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The main pass decides at each join point if two states become one. It
-decides before it knows if the join does harm. So it guesses, with one
-table or one rule for each shape of code:
+scev.c computes an expression for each register at each insn, before
+the main pass. The expression is the same for all paths. It has three
+users:
 
-  what decides             where
-  8 tables of "need"       flow_compute_need_const()
-  kinds of values          bpf_flow_compute_kinds()
-  bounds for widening      flow_compute_rungs()
-  rules for two states     flow_join_makes_up(), flow_*_differs()
-  walks of loops           flow_try_walk()
-  caps on states           1024 at an insn, 256 for each insn, ...
+  what                          code
+  linked registers at a jump    refine_linked_regs()
+  ranges in a loop              bpf_widen_scev_regs(), the clamps
+  trip count                    bpf_compute_loop_iters()
 
-A valid program that no rule fits is rejected, or it runs into a cap.
+The trip count is a proof with a case for each form of a loop:
 
-This series changes the order. Join first, and decide after an error.
-An insn whose check fails is "unproven". The next run can prove it:
+  compute_backedge_taken_count()  <, <=, >, >=, != and how each wraps
+  bound_of_zext32()               a 64-bit jump on a 32-bit counter
+  bpf_compute_leave_conds()       a condition is stored, a later
+                                  jump tests it and leaves
+  fresh_regs, mask_regs, ...      values that are not linear
 
-  join all states --> error ? --no--> accept
-                       ^   | yes
-                       |   v
-                       keep apart what the unproven insn depends on
+Nothing checks the count. If it is too small, the verifier does not
+check a trip that runs.
 
-Delete the tables, the rules, the caps, the work list, the join, the
-walks, the compare of registers and references, and the code that
-builds the log from kept states. flow.c keeps the order of the insns
-and the places for may_goto.
+Later patches replace all of that with one mechanism: equations in the
+state. A join guesses them, and a prune checks them. Delete scev.c, its
+callers, and the helpers that only it uses.
 
-What the remaining code uses stays until the patch that replaces it:
-do_check(), do_check_all(), check_ids(), regs_exact(), the default case
-of regsafe(), bpf_loop_rungs, bpf_guard_edge and a part of
-loop_stack_entry.
-
-There is no main pass until "bpf: Verify in passes". Until then
-bpf_check() refuses each load with -EOPNOTSUPP. The code after that
-return is dead, so a call of a function that comes later needs only a
-prototype. Later patches add static functions before their callers, so
--Wunused-function is off until then.
+What is not a plain deletion:
+- Only scev.c needs all exits and all latches of a loop. The other
+  users need the first one. exit_to replaces exits[], latch replaces
+  latches[]. MAX_LOOP_EXITS and MAX_LATCHES go away.
+- find_latch() counts its steps with bpf_add_cost(). The next patch adds
+  the other weights and the limits.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h |   83 -
- kernel/bpf/Makefile          |    1 +
+ include/linux/bpf_verifier.h |  144 +-
+ include/linux/cnum.h         |    3 -
+ include/linux/tnum.h         |    2 -
+ kernel/bpf/Makefile          |    2 +-
+ kernel/bpf/cnum.c            |   37 -
+ kernel/bpf/const_fold.c      |  265 +-
  kernel/bpf/fixups.c          |    1 -
- kernel/bpf/flow.c            | 3099 ----------------------------------
- kernel/bpf/join.c            |  622 -------
- kernel/bpf/log.c             |   47 -
- kernel/bpf/scev.c            |   15 -
- kernel/bpf/states.c          |  187 --
- kernel/bpf/verifier.c        |  506 +-----
- 9 files changed, 4 insertions(+), 4557 deletions(-)
+ kernel/bpf/flow.c            |   11 +-
+ kernel/bpf/liveness.c        |   18 -
+ kernel/bpf/log.c             |   18 +-
+ kernel/bpf/loops.c           |  267 +-
+ kernel/bpf/scev.c            | 5489 ----------------------------------
+ kernel/bpf/tnum.c            |   11 -
+ kernel/bpf/verifier.c        |  324 +-
+ 14 files changed, 67 insertions(+), 6525 deletions(-)
+ delete mode 100644 kernel/bpf/scev.c
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index f45c18b3cfa..df72a25764b 100644
+index df72a25764b..06429f57c39 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -421,7 +421,6 @@ enum bpf_guard_edge {
+@@ -113,8 +113,6 @@ struct bpf_reg_state {
+ 	 * the dynptr to determine proper reference freeing.
+ 	 * Similarly to dynptrs, we use ID to track "belonging" of a reference
+ 	 * to a specific instance of bpf_iter.
+-	 * A scalar has no id. The scalars that it is linked to are static: computed before the
+-	 * main pass, see bpf_scev_next_linked_reg().
+ 	 */
+ 	u32 id;
+ 	union {
+@@ -384,33 +382,6 @@ struct bpf_retval_range {
+ 	bool return_32bit;
+ };
+ 
+-/* SCEV/widening register space: r0..r10 plus every stack slot of a frame. */
+-#define BPF_SCEV_REGS_NUM (MAX_BPF_REG + MAX_BPF_STACK_SLOTS)
+-
+-struct bpf_loop_iters {
+-	u32 min_header_count;   /* min number of times header is executed */
+-	u32 max_header_count;   /* max number of times header is executed */
+-	/* live, changed by the loop, no summary of how: left to the join at the head */
+-	unsigned long forget_regs[BITS_TO_LONGS(BPF_SCEV_REGS_NUM)];
+-	/*
+-	 * live, made anew in every iteration: the first one tells what it is in the rest.
+-	 * Or not set at the entry, and also in forget_regs: the first one sets it.
+-	 */
+-	unsigned long fresh_regs[BITS_TO_LONGS(BPF_SCEV_REGS_NUM)];
+-	/* [0, max] at the entry, and the loop only clears bits */
+-	unsigned long mask_regs[BITS_TO_LONGS(BPF_SCEV_REGS_NUM)];
+-	/*
+-	 * The variable that the latches of all back edges test, or -1, and what
+-	 * it can be at the loop header: what it is at the entry or what one of
+-	 * the latches lets through. A 32-bit latch bounds its low 32 bits only.
+-	 */
+-	int iv_reg;
+-	struct scalar iv_range;
+-	/* a jump that counts: it leaves the loop in the last iteration, if not before. Or -1 */
+-	int count_insn;
+-	/* a pointer to the stack that stores go through moves in the loop */
+-	bool spill_base;
+-};
+ 
+ /* Where may_goto that the verifier adds goes, see check_loop_guard() */
+ enum bpf_guard_edge {
+@@ -420,8 +391,6 @@ enum bpf_guard_edge {
+ };
  
  struct loop_stack_entry {
- 	struct bpf_verifier_state *entry_state;
--	u32 min_header_count;
- 	u32 max_header_count;
+-	struct bpf_verifier_state *entry_state;
+-	u32 max_header_count;
  	u32 loop_id:23;
  	u32 terminates:1;
-@@ -434,15 +433,6 @@ struct loop_stack_entry {
- 	u32 apart:1;
- 	/* max_header_count follows from the state at the entry, not from patience */
- 	u32 counted:1;
--	/* the walk goes on for as long as each iteration decides a jump that leaves the loop */
--	u32 probe:1;
--	/* this one did */
--	u32 decided:1;
--	/*
--	 * The state is kept apart from one with the other value of a flag, see
--	 * flow_join_makes_up(). The test of the flag is decided in both, and decides nothing.
--	 */
--	u32 flag_apart:1;
- 	/*
- 	 * The first iteration of a counted loop is kept apart. The state that comes back
- 	 * to the head is made to stand for the rest.
-@@ -454,19 +444,6 @@ struct loop_stack_entry {
+ 	/* the loop had may_goto when the state entered it, see check_loop_guard() */
+@@ -444,9 +413,6 @@ struct loop_stack_entry {
  	 * the largest number of the states that it is made of.
  	 */
  	u32 trip;
--	/* the number of references that the state had when it entered the loop */
--	u32 refs;
--	/*
--	 * Which of the states that entered the loop this one comes from. What comes back to
--	 * the head is for that state, see flow_merge(). A join has the number of one of the two.
--	 */
--	u32 entry_id;
--	/*
--	 * A walk on patience: which one it is, and how many insns may be looked at in it, see
--	 * env->walk_insns. The size of the loop says nothing about the functions that it calls.
--	 */
--	u32 walk_id;
--	u32 walk_patience;
- 	int iv_reg;
- 	struct scalar iv_range;
- 	int count_insn;
-@@ -529,8 +506,6 @@ struct bpf_func_state {
- 	 *                           | number of simulations is tracked in frame N
- 	 */
- 	u32 callback_depth;
--	/* Which of the states that got to the call this one comes from, see flow_merge() */
--	u32 callback_entry_id;
- 	/* Instructions processed in this frame and callees on the current path. */
- 	u32 insns_subtotal;
- 	/*
-@@ -828,21 +803,11 @@ struct bpf_loop_exit {
- 	int to; /* instruction outside the loop */
+-	int iv_reg;
+-	struct scalar iv_range;
+-	int count_insn;
  };
  
--/* The places that the table of a loop knows: registers, then stack slots, fp-8 first */
--#define BPF_LOOP_SLOT	64
--#define BPF_LOOP_PLACES	128
+ /* The state is in a walk on patience, which may not get to the end of the loop */
+@@ -776,31 +742,11 @@ void bpf_call_graph_free(struct bpf_call_graph *cg);
+ 	     ___idx++)
+ 
+ #define MAX_BACKEDGES 16
+-#define MAX_LOOP_EXITS 256
 -
--/*
-- * Where the bounds of the number in @place may come to rest at the head of a loop: the lowest and
-- * the highest upper bound, the highest and the lowest lower bound that the jumps of the loop
-- * let come back to the head, see flow_compute_rungs().
-- */
- struct bpf_loop_rungs {
- 	s64 max[2];
- 	s64 min[2];
- 	bool has_max;
- 	bool has_min;
--	u8 place;
+-/* Number of exit conditions dominating a backedge. */
+-#define MAX_LATCHES 4
+ 
+ struct bpf_backedge {
+ 	int from;
+-	/*
+-	 * Conditional jumps within the loop that dominate 'from' and have
+-	 * a successor outside the loop, nearest first. latches[0] is the
+-	 * latch; the remaining entries are additional exit conditions.
+-	 * After scalar evolution: those that test a counter, see bpf_scev_jump_counts().
+-	 * One of them may leave the loop by way of a flag, see bpf_edge_leaves_loop().
+-	 * Each usable condition tells iterations in which the back edge is
+-	 * not taken, so keeping only a subset is sound.
+-	 */
+-	int latches[MAX_LATCHES];
+-	u8 latches_cnt;
+-	/* bit k: the loop is left on the edge of latches[k] that is taken, not on the other one */
+-	u8 taken_leaves;
+-};
+-
+-struct bpf_loop_exit {
+-	int from; /* instruction inside the loop */
+-	int to; /* instruction outside the loop */
++	/* the nearest conditional jump of the loop that dominates 'from' and leaves it, or -1 */
++	int latch;
  };
+ 
+ struct bpf_loop_rungs {
+@@ -812,16 +758,10 @@ struct bpf_loop_rungs {
  
  struct bpf_loop {
-@@ -861,19 +826,9 @@ struct bpf_loop {
+ 	struct bpf_backedge backedges[MAX_BACKEDGES];
+-	/* edges exiting from this loop, includes edges from nested loops */
+-	struct bpf_loop_exit *exits;
++	int exit_to;		/* where the first edge that leaves the loop goes, or -1 */
+ 	int backedges_cnt;
+-	int exits_cnt;
+ 	bool irreducible;
+ 	bool backedges_overflow;
+-	/* @exits is cut at MAX_LOOP_EXITS. Only a loop around this one needs all of them. */
+-	bool exits_overflow;
+-	/* @exits of a loop in this one is cut. Then @exits of this loop can lack exits too. */
+-	bool nested_exits_overflow;
+ 	/* every trip goes through an insn that stops the loop, see flow_is_bound() */
  	bool rt_bounded;
  	/* insns in the loop, nested loops included */
- 	u32 nr_insns;
--	/*
--	 * a walk on patience whose jumps were all decided, or the two trips of a loop with calls,
--	 * didn't get to the end of the loop: there is no other try
--	 */
--	bool walk_failed;
--	/* functions of the program are called in the loop */
--	bool has_calls;
+@@ -829,23 +769,6 @@ struct bpf_loop {
  	/* not rt_bounded: there are places for may_goto, see guard_to in bpf_insn_aux_data */
  	bool has_guards;
--	/* and it is going to be there, see bpf_flow_loop_gets_guards() */
  	bool guarded;
--	/* a state went through it without the edges of may_goto, see bpf_flow_loop_gets_guards() */
--	bool no_guard_edges;
- 	/*
- 	 * Loop-entry registers used to compute stack addresses for loads,
- 	 * stores and calls requiring fixed stack offsets, in this and nested
-@@ -891,10 +846,6 @@ struct bpf_loop {
- 	 */
- 	unsigned long linear_regs[BITS_TO_LONGS(BPF_SCEV_REGS_NUM)];
- 	unsigned long linear32_regs[BITS_TO_LONGS(BPF_SCEV_REGS_NUM)];
--	/* the places that insns of the loop write, as far as the insns tell */
--	unsigned long writes[BITS_TO_LONGS(BPF_LOOP_PLACES)];
--	struct bpf_loop_rungs *rungs;
--	u32 rungs_cnt;
+-	/*
+-	 * Loop-entry registers used to compute stack addresses for loads,
+-	 * stores and calls requiring fixed stack offsets, in this and nested
+-	 * loops.
+-	 */
+-	unsigned long store_base_regs[BITS_TO_LONGS(BPF_SCEV_REGS_NUM)];
+-	/*
+-	 * Loop-entry registers used to compute the operands of conditional jumps, in this and
+-	 * nested loops.
+-	 */
+-	unsigned long tested_regs[BITS_TO_LONGS(BPF_SCEV_REGS_NUM)];
+-	/*
+-	 * what gets a constant added in every iteration, in 64 and in 32 bits. A sum that is
+-	 * not among tested_regs is taken for that too: nothing stops it either
+-	 */
+-	unsigned long linear_regs[BITS_TO_LONGS(BPF_SCEV_REGS_NUM)];
+-	unsigned long linear32_regs[BITS_TO_LONGS(BPF_SCEV_REGS_NUM)];
  };
  
  struct bpf_insn_aux_data {
-@@ -936,9 +887,6 @@ struct bpf_insn_aux_data {
- 	DECLARE_BITMAP(may_write_mask, MAX_BPF_STACK_SLOTS);
- 	DECLARE_BITMAP(live_stack_before, MAX_BPF_STACK_SLOTS);
- 	u16 stack_ptrs; /* bitmask of regs that may hold a frame pointer here (arg_track) */
--	/* regs that hold a number or a pointer to arena; that, or a pointer to a plain map value */
--	u16 plain_regs;
--	u16 value_regs;
- 	int ctx_field_size; /* the ctx field size for load insn, maybe 0 */
- 	u32 seen; /* this insn was processed by the verifier at env->pass_cnt */
- 	u64 nospec:1; /* do not execute this instruction speculatively */
-@@ -1310,8 +1258,6 @@ struct bpf_verifier_env {
+@@ -905,9 +828,6 @@ struct bpf_insn_aux_data {
+ 	u64 guard_no_unwind:1; /* it cannot unwind from here, at least sometimes */
+ 	u64 guard_unset_reg:1; /* where it goes a register is read that is not set here */
+ 	u64 guard_edge_dropped:1; /* an edge of may_goto from here was dropped */
+-	u64 need_scev:1;
+-	/* a jump in a loop: the edge that is not taken, bit 0, or the other one leaves the loop */
+-	u64 edge_leaves:2;
+ 	u64 alu_state:5; /* used in combination with alu_limit */
+ 	/* true if STX or LDX instruction is a part of a spill/fill
+ 	 * pattern for a bpf_fastcall call.
+@@ -943,14 +863,12 @@ struct bpf_insn_aux_data {
+ 	/*
+ 	 * Bitmask of R0-R9 that hold known values at this instruction.
+ 	 * const_reg_mask: scalar constants that fit in 32 bits.
+-	 * const_reg_wide_mask: scalar constants that don't, there is no val.
+ 	 * const_reg_map_mask: map pointers, val is map_index into used_maps[].
+ 	 * const_reg_subprog_mask: subprog pointers, val is subprog number.
+ 	 * const_reg_vals[i] holds the 32-bit value for register i.
+ 	 * Populated by compute_const_regs() pre-pass.
+ 	 */
+ 	u16 const_reg_mask;
+-	u16 const_reg_wide_mask;
+ 	u16 const_reg_map_mask;
+ 	u16 const_reg_subprog_mask;
+ 	u32 const_reg_vals[10];
+@@ -1164,7 +1082,6 @@ struct bpf_idmap {
+ };
+ 
+ struct bpf_liveness;
+-struct scev;
+ 
+ struct bpf_fd_array {
+ 	union {
+@@ -1255,6 +1172,7 @@ struct bpf_verifier_env {
+ 	bool strict_alignment;		/* perform strict pointer alignment checks */
+ 	bool test_reg_invariants;	/* fail verification on register invariants violations */
+ 	bool uses_arena_sp;		/* the program has insns with BPF_REG_ARENA_SP */
++	u64 cost, mem;			/* see bpf_check_limits() */
  	bool restart;			/* see bpf_flow_next_is_no_bound() */
  	bool guards_late;		/* see bpf_flow_loop_gets_guards() */
  	u32 loop_entry_cnt;		/* see loop_stack_entry.entry_id, callback_entry_id */
--	u32 walk_cnt;			/* see loop_stack_entry.walk_id */
--	u32 *walk_insns;		/* the insns that were looked at in each of them */
- 	u32 max_arena_stack_depth;	/* of all call chains */
- 	struct bpf_verifier_state *cur_state; /* current verifier state */
- 	struct bpf_map **used_maps;	/* array of map's used by eBPF program */
-@@ -1450,7 +1396,6 @@ struct bpf_verifier_env {
- 	struct bpf_leave_cond *leave_conds;
- 	struct scev *scev;
+@@ -1392,9 +1310,6 @@ struct bpf_verifier_env {
+ 	struct bpf_iarray *succ;
+ 	struct bpf_iarray *gotox_tmp_buf;
+ 	int *idoms;
+-	/* per insn, while bpf_compute_leave_conds() runs */
+-	struct bpf_leave_cond *leave_conds;
+-	struct scev *scev;
  	struct bpf_flow *flow;
--	struct bpf_join_state *join;
  };
  
- static inline struct bpf_func_info_aux *subprog_aux(struct bpf_verifier_env *env, int subprog)
-@@ -1509,15 +1454,6 @@ __printf(2, 3) void bpf_log(struct bpf_verifier_log *log,
- int bpf_vlog_init(struct bpf_verifier_log *log, u32 log_level,
- 		  char __user *log_buf, u32 log_size);
- void bpf_vlog_reset(struct bpf_verifier_log *log, u64 new_pos);
--
--/* The end of the log, taken out of it by bpf_vlog_stash() */
--struct bpf_vlog_stash {
--	char *buf;
--	u64 len, lost_start, lost_end;
--};
--
--int bpf_vlog_stash(struct bpf_verifier_log *log, u64 pos, struct bpf_vlog_stash *stash);
--void bpf_vlog_unstash(struct bpf_verifier_log *log, struct bpf_vlog_stash *stash);
- int bpf_vlog_finalize(struct bpf_verifier_log *log, u32 *log_size_actual);
- 
+@@ -1459,8 +1374,6 @@ int bpf_vlog_finalize(struct bpf_verifier_log *log, u32 *log_size_actual);
  __printf(3, 4) void verbose_linfo(struct bpf_verifier_env *env,
-@@ -1621,44 +1557,26 @@ int bpf_clean_verifier_state(struct bpf_verifier_env *env, struct bpf_verifier_s
+ 				  u32 insn_off,
+ 				  const char *prefix_fmt, ...);
+-void bpf_verbose_snum(struct bpf_verifier_env *env, s64 num);
+-void bpf_verbose_snum32(struct bpf_verifier_env *env, s32 num);
+ 
+ #define verifier_bug_if(cond, env, fmt, args...)						\
+ 	({											\
+@@ -1557,7 +1470,14 @@ int bpf_clean_verifier_state(struct bpf_verifier_env *env, struct bpf_verifier_s
  bool bpf_state_subsumes(struct bpf_verifier_env *env, struct bpf_verifier_state *old,
  			struct bpf_verifier_state *cur);
  
--/* join.c */
--int bpf_states_join(struct bpf_verifier_env *env, struct bpf_verifier_state *dst,
--		    const struct bpf_verifier_state *a, const struct bpf_verifier_state *b,
--		    bool widen);
--void bpf_join_free(struct bpf_verifier_env *env);
--
++#define BPF_COST_SCAN	1	/* one step of a scan */
++
  /* flow.c */
++static inline void bpf_add_cost(struct bpf_verifier_env *env, u64 cnt, u32 weight)
++{
++	env->cost += cnt * weight;
++}
++
  int bpf_flow_prepare(struct bpf_verifier_env *env);
  void bpf_flow_reset(struct bpf_verifier_env *env);
  void bpf_flow_free(struct bpf_verifier_env *env);
- bool bpf_flow_is_point(struct bpf_verifier_env *env, int insn_idx);
--struct bpf_verifier_state *bpf_flow_keep_state(struct bpf_verifier_env *env,
--					       const struct bpf_verifier_state *st);
- int bpf_flow_deliver(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
- 		     int insn_idx, int prev_insn_idx);
- int bpf_flow_guard_edge(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
- 			int insn_idx, int prev_insn_idx, enum bpf_guard_edge edge);
- int bpf_flow_next(struct bpf_verifier_env *env, int *prev_insn_idx);
--void bpf_flow_print_way(struct bpf_verifier_env *env, u64 log_pos, int head, int i);
- int bpf_flow_call(struct bpf_verifier_env *env, struct bpf_verifier_state *caller,
- 		  struct bpf_verifier_state *entry, int subprog, int call_idx);
- int bpf_flow_exit(struct bpf_verifier_env *env, struct bpf_verifier_state *st, int exit_idx);
- void bpf_flow_next_is_no_bound(struct bpf_verifier_env *env, int insn_idx, int h);
- bool bpf_flow_loops_lost_bound(struct bpf_verifier_env *env);
--void bpf_flow_loop_gets_guards(struct bpf_verifier_env *env, int h);
- void bpf_flow_new_round(struct bpf_verifier_env *env);
- int bpf_flow_place_guards(struct bpf_verifier_env *env);
--int bpf_flow_compute_kinds(struct bpf_verifier_env *env);
--u16 bpf_flow_flag_regs(struct bpf_verifier_env *env, int idx);
--bool bpf_flow_is_needed(struct bpf_verifier_env *env, int idx, u32 r);
--/* verifier.c, for flow.c */
--int bpf_flow_loop_leave(struct bpf_verifier_env *env, bool *enters);
--int bpf_flow_loop_enter(struct bpf_verifier_env *env, bool *backedge, bool *drop, bool *ends_walk);
- int bpf_flow_return(struct bpf_verifier_env *env, struct bpf_verifier_state *caller,
- 		    const struct bpf_verifier_state *exit, int call_idx);
+@@ -1579,10 +1499,6 @@ int bpf_flow_return(struct bpf_verifier_env *env, struct bpf_verifier_state *cal
  int bpf_insert_loop_guards(struct bpf_verifier_env *env);
--u16 bpf_call_const_arg_regs(struct bpf_verifier_env *env, struct bpf_insn *insn);
--u16 bpf_call_checked_arg_regs(struct bpf_verifier_env *env, struct bpf_insn *insn);
  bool bpf_insn_is_iter_next(struct bpf_verifier_env *env, struct bpf_insn *insn);
  bool bpf_insn_leaves_loop(struct bpf_verifier_env *env, int h, int n);
- int bpf_compute_leave_conds(struct bpf_verifier_env *env);
-@@ -2133,7 +2051,6 @@ static inline bool bpf_is_kfunc_sleepable(struct bpf_call_arg_meta *meta)
- 	return meta->kfunc_flags & KF_SLEEPABLE;
- }
- bool bpf_is_kfunc_pkt_changing(struct bpf_call_arg_meta *meta);
--bool bpf_is_cast_kfunc(const struct bpf_call_arg_meta *meta);
- struct bpf_iarray *bpf_iarray_realloc(struct bpf_iarray *old, size_t n_elem);
- int bpf_copy_insn_array_uniq(struct bpf_map *map, u32 start, u32 end, u32 *off);
- bool bpf_insn_is_cond_jump(u8 code);
+-int bpf_compute_leave_conds(struct bpf_verifier_env *env);
+-bool bpf_edge_leaves_loop(struct bpf_verifier_env *env, int h, int n, int t);
+-int bpf_find_latches(struct bpf_verifier_env *env, bool flags);
+-bool bpf_jump_leaves_loop(struct bpf_verifier_env *env, int h, int n);
+ int bpf_insert_recursion_checks(struct bpf_verifier_env *env);
+ 
+ int bpf_copy_verifier_state(struct bpf_verifier_state *dst_state,
+@@ -1920,7 +1836,6 @@ u32 btf_func_arg_align(const struct btf *btf, const struct btf_type *t);
+ 
+ int bpf_find_subprog(struct bpf_verifier_env *env, int off);
+ bool bpf_is_throw_kfunc(struct bpf_insn *insn);
+-bool bpf_is_dynptr_slice_rdwr_kfunc(struct bpf_insn *insn);
+ int bpf_compute_const_regs(struct bpf_verifier_env *env);
+ int bpf_prune_dead_branches(struct bpf_verifier_env *env);
+ int bpf_check_cfg(struct bpf_verifier_env *env);
+@@ -2085,26 +2000,15 @@ void scalar_set_unknown(struct scalar *s);
+ void scalar_set_const(struct scalar *s, u64 imm);
+ void scalar_add(struct scalar *dst, const struct scalar *a, const struct scalar *b);
+ void scalar_alu(struct scalar *dst, const struct scalar *src, const struct bpf_insn *insn);
+-void scalar_zext32(struct scalar *s);
+-void scalar_ext(struct scalar *s, u32 bits, bool sign);
+ bool scalar_intersect(struct scalar *dst, const struct scalar *src, u32 bits);
+ void scalar_union(struct scalar *acc, const struct scalar *src);
+-int bpf_set_reg_range(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+-		      const struct scalar *range);
+-bool bpf_reg_union_compatible(const struct bpf_reg_state *a, const struct bpf_reg_state *b);
+ void scalar_widen(struct scalar *s, const struct scalar *old,
+ 		  const struct bpf_loop_rungs *rungs, int linear);
+-int bpf_reg_union(struct bpf_verifier_env *env, struct bpf_reg_state *acc,
+-		  const struct bpf_reg_state *src);
+-
+ int bpf_stack_liveness_init(struct bpf_verifier_env *env);
+ void bpf_stack_liveness_free(struct bpf_verifier_env *env);
+ int bpf_live_stack_query_init(struct bpf_verifier_env *env, struct bpf_verifier_state *st);
+-const unsigned long *bpf_may_write_mask(struct bpf_verifier_env *env, u32 insn_idx);
+-bool bpf_needs_fixed_stack_off(struct bpf_verifier_env *env, int insn_idx);
+ bool bpf_stack_slot_alive(struct bpf_verifier_env *env, u32 frameno, u32 spi);
+ bool bpf_stack_slot_filled(struct bpf_verifier_env *env, u32 frameno, u32 spi);
+-bool bpf_half_slot_live_before(struct bpf_verifier_env *env, u32 insn_idx, u32 half_spi);
+ int bpf_compute_live_registers(struct bpf_verifier_env *env);
+ 
+ #define BPF_MAP_KEY_POISON	(1ULL << 63)
+@@ -2241,31 +2145,5 @@ int bpf_compute_loops(struct bpf_verifier_env *env);
+ int bpf_loop_at_index(struct bpf_verifier_env *env, u32 idx);
+ bool bpf_is_nested_loop(struct bpf_verifier_env *env, int inner_header, int outer_header);
+ 
+-int bpf_init_scev(struct bpf_verifier_env *env);
+-void bpf_free_scev(struct bpf_verifier_env *env);
+-int bpf_compute_scev(struct bpf_verifier_env *env);
+-int bpf_scev_jump_counts(struct bpf_verifier_env *env, int header, int n, bool taken_leaves);
+-/* What is known about a scalar or about the offset of a pointer. */
+-struct scev_value {
+-	struct scalar;
+-	int ptr_reg;	/* SCEV register identifying the pointer origin, or -1. */
+-	u8 bits;	/* The value is known modulo 2^bits. 0: nothing is known. */
+-	bool refined;	/* It depends on a register that the jump refined. */
+-};
+-bool bpf_scev_next_linked_reg(struct bpf_verifier_env *env, struct bpf_func_state *st, int insn_idx,
+-			      int next_idx, u16 refined_regs, u32 *pos, u32 *linked_regno,
+-			      u32 *fill_off, struct scev_value *val);
+-bool bpf_scev_mem_addr(struct bpf_verifier_env *env, int insn_idx, u32 regno, u32 *base_regno,
+-		       s64 *off);
+-bool bpf_is_widenable_reg_type(const struct bpf_reg_state *reg);
+-bool bpf_scev_in_slice_slots(struct bpf_verifier_env *env, int off, u32 size, bool fixed_off);
+-
+-int bpf_compute_loop_iters(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
+-			   struct bpf_loop_iters *iters);
+-int bpf_widen_scev_regs(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
+-			struct bpf_verifier_state *loop_entry, struct bpf_loop_iters *iters,
+-			bool back);
+-int bpf_clamp_scev_regs(struct bpf_verifier_env *env, struct bpf_func_state *st, u32 insn_idx,
+-			const struct loop_stack_entry *entry, bool behind);
+ 
+ #endif /* _LINUX_BPF_VERIFIER_H */
+diff --git a/include/linux/cnum.h b/include/linux/cnum.h
+index e00148d352e..d31e5fcb2cb 100644
+--- a/include/linux/cnum.h
++++ b/include/linux/cnum.h
+@@ -84,9 +84,6 @@ bool cnum64_is_subset(struct cnum64 outer, struct cnum64 inner);
+ 
+ struct cnum32 cnum32_from_cnum64(struct cnum64 cnum);
+ struct cnum64 cnum64_zext32(struct cnum32 cnum);
+-struct cnum64 cnum64_sext32(struct cnum32 cnum);
+-struct cnum64 cnum64_lshift32(struct cnum32 cnum);
+-struct cnum32 cnum32_rshift32(struct cnum64 cnum);
+ struct cnum64 cnum64_cnum32_intersect(struct cnum64 a, struct cnum32 b);
+ struct cnum64 cnum64_intersect_linear(struct cnum64 in, u16 base, u16 step);
+ 
+diff --git a/include/linux/tnum.h b/include/linux/tnum.h
+index 16682248f96..ca2cfec8de0 100644
+--- a/include/linux/tnum.h
++++ b/include/linux/tnum.h
+@@ -134,6 +134,4 @@ static inline bool tnum_subreg_is_const(struct tnum a)
+ /* Returns the smallest member of t larger than z */
+ u64 tnum_step(struct tnum t, u64 z);
+ 
+-u32 tnum_alignment(struct tnum a);
+-
+ #endif /* _LINUX_TNUM_H */
 diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-index d26c62326e5..e0fb2e01403 100644
+index e0fb2e01403..5cf89286df9 100644
 --- a/kernel/bpf/Makefile
 +++ b/kernel/bpf/Makefile
-@@ -5,6 +5,7 @@ ifneq ($(CONFIG_BPF_JIT_ALWAYS_ON),y)
- cflags-nogcse-$(CONFIG_X86)$(CONFIG_CC_IS_GCC) := -fno-gcse
- endif
+@@ -7,7 +7,7 @@ endif
  CFLAGS_core.o += -Wno-override-init $(cflags-nogcse-yy)
-+ccflags-y += -Wno-unused-function
+ ccflags-y += -Wno-unused-function
  
- obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o cnum.o log.o token.o liveness.o const_fold.o diagnostics.o loops.o scev.o
+-obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o cnum.o log.o token.o liveness.o const_fold.o diagnostics.o loops.o scev.o
++obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o cnum.o log.o token.o liveness.o const_fold.o diagnostics.o loops.o
  obj-$(CONFIG_BPF_SYSCALL) += bpf_iter.o map_iter.o task_iter.o prog_iter.o link_iter.o
+ obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o percpu_freelist.o bpf_lru_list.o lpm_trie.o map_in_map.o bloom_filter.o
+ obj-$(CONFIG_BPF_SYSCALL) += local_storage.o queue_stack_maps.o ringbuf.o bpf_insn_array.o
+diff --git a/kernel/bpf/cnum.c b/kernel/bpf/cnum.c
+index e64c09a37cc..a298753158d 100644
+--- a/kernel/bpf/cnum.c
++++ b/kernel/bpf/cnum.c
+@@ -31,43 +31,6 @@ struct cnum64 cnum64_zext32(struct cnum32 cnum)
+ 	return cnum64_from_urange(cnum32_umin(cnum), cnum32_umax(cnum));
+ }
+ 
+-/*
+- * The sign extension of each value of 'cnum'.
+- * An arc that crosses S32_MAX/S32_MIN gives [S32_MIN, S32_MAX].
+- */
+-struct cnum64 cnum64_sext32(struct cnum32 cnum)
+-{
+-	if (cnum32_is_empty(cnum))
+-		return CNUM64_EMPTY;
+-	return cnum64_from_srange(cnum32_smin(cnum), cnum32_smax(cnum));
+-}
+-
+-/*
+- * The smallest arc with { x << 32 : x in 'cnum' }. The circle of 2^32 numbers is laid on the circle
+- * of 2^64 numbers: sums, the order of signed and of unsigned numbers and the places where they wrap
+- * stay.
+- */
+-struct cnum64 cnum64_lshift32(struct cnum32 cnum)
+-{
+-	if (cnum32_is_empty(cnum))
+-		return CNUM64_EMPTY;
+-	return (struct cnum64){ .base = (u64)cnum.base << 32, .size = (u64)cnum.size << 32 };
+-}
+-
+-/* { x >> 32 : x in 'cnum' } */
+-struct cnum32 cnum32_rshift32(struct cnum64 cnum)
+-{
+-	u32 base = cnum.base >> 32;
+-	u32 size = ((cnum.base + cnum.size) >> 32) - base;
+-
+-	if (cnum64_is_empty(cnum))
+-		return CNUM32_EMPTY;
+-	/* less than 1 << 32 numbers are missing, or the arc ends one before its base */
+-	if (cnum.size >> 32 == U32_MAX || size == U32_MAX)
+-		return CNUM32_UNBOUNDED;
+-	return (struct cnum32){ .base = base, .size = size };
+-}
+-
+ /*
+  * Suppose 'a' and 'b' are laid out as follows:
+  *
+diff --git a/kernel/bpf/const_fold.c b/kernel/bpf/const_fold.c
+index 1fd97f624b9..bf81bd54232 100644
+--- a/kernel/bpf/const_fold.c
++++ b/kernel/bpf/const_fold.c
+@@ -8,7 +8,7 @@
+  * instruction. Tracks 64-bit constant values in R0-R9 through the program,
+  * using a fixed-point iteration in reverse postorder. Records which registers
+  * hold known constants and their values in
+- * env->insn_aux_data[].{const_reg_mask, const_reg_wide_mask, const_reg_vals}.
++ * env->insn_aux_data[].{const_reg_mask, const_reg_vals}.
+  */
+ 
+ enum const_arg_state {
+@@ -301,7 +301,7 @@ int bpf_compute_const_regs(struct bpf_verifier_env *env)
+ 
+ 	/* Save computed constants into insn_aux[]: the value if it fits into 32-bit */
+ 	for (i = 0; i < insn_cnt; i++) {
+-		u16 mask = 0, wide_mask = 0, map_mask = 0, subprog_mask = 0;
++		u16 mask = 0, map_mask = 0, subprog_mask = 0;
+ 		struct bpf_insn_aux_data *aux = &insn_aux[i];
+ 		struct const_arg_info *ci = ci_in[i];
+ 
+@@ -312,10 +312,8 @@ int bpf_compute_const_regs(struct bpf_verifier_env *env)
+ 			case CONST_ARG_CONST: {
+ 				u64 val = c->val;
+ 
+-				if (val != (u32)val) {
+-					wide_mask |= BIT(r);
++				if (val != (u32)val)
+ 					break;
+-				}
+ 				mask |= BIT(r);
+ 				aux->const_reg_vals[r] = val;
+ 				break;
+@@ -333,7 +331,6 @@ int bpf_compute_const_regs(struct bpf_verifier_env *env)
+ 			}
+ 		}
+ 		aux->const_reg_mask = mask;
+-		aux->const_reg_wide_mask = wide_mask;
+ 		aux->const_reg_map_mask = map_mask;
+ 		aux->const_reg_subprog_mask = subprog_mask;
+ 	}
+@@ -360,262 +357,6 @@ static int eval_const_branch(u8 opcode, u64 dst_val, u64 src_val)
+ 	}
+ }
+ 
+-/* 1: the registers @ci take the conditional jump @insn, 0: they don't, -1: not known */
+-static int const_branch_taken(const struct bpf_insn *insn, const struct const_arg_info *ci)
+-{
+-	u64 dst = ci[insn->dst_reg].val, src = insn->imm;
+-
+-	if (!ci_is_const(&ci[insn->dst_reg]))
+-		return -1;
+-	if (BPF_SRC(insn->code) == BPF_X) {
+-		if (!ci_is_const(&ci[insn->src_reg]))
+-			return -1;
+-		src = ci[insn->src_reg].val;
+-	}
+-	/* see bpf_prune_dead_branches() */
+-	if (BPF_CLASS(insn->code) == BPF_JMP32) {
+-		dst = (s32)dst;
+-		src = (s32)src;
+-	}
+-	return eval_const_branch(insn->code, dst, src);
+-}
+-
+-/*
+- * When is the program that stands in front of an insn of a loop sure to leave the loop?
+- * Always, or when one register holds a number of a set, whatever the other registers hold.
+- * A set has one bit per range of numbers of 32 bits. A flag is a small number: each of 0 - 31
+- * is a range. An error code or a size is not: 32 - 63, 64 - 127, ... are the other ranges.
+- */
+-struct bpf_leave_cond {
+-	u64 vals[MAX_BPF_REG];
+-	bool always;
+-};
+-
+-#define LEAVE_SMALL	32
+-#define LEAVE_RANGES	(LEAVE_SMALL + 32 - ilog2(LEAVE_SMALL))
+-
+-static const struct bpf_leave_cond leave_never;
+-static const struct bpf_leave_cond leave_always = {
+-	.vals = { [0 ... MAX_BPF_REG - 1] = U64_MAX },
+-	.always = true,
+-};
+-
+-static u64 leave_val_bit(u64 val)
+-{
+-	if (val > U32_MAX)
+-		return 0;
+-	return BIT_ULL(val < LEAVE_SMALL ? val : ilog2(val) + LEAVE_SMALL - ilog2(LEAVE_SMALL));
+-}
+-
+-/* The condition for the loop at @h in front of @t, where an insn of that loop goes on */
+-static const struct bpf_leave_cond *leave_cond_at(struct bpf_verifier_env *env, int h, int t)
+-{
+-	int l = bpf_loop_at_index(env, t);
+-
+-	if (l != h)
+-		return bpf_is_nested_loop(env, l, h) ? &leave_never : &leave_always;
+-	return t == h || !env->leave_conds ? &leave_never : &env->leave_conds[t];
+-}
+-
+-/* The same when the jump at @n goes on at @t: always, if the constants at @n meet it */
+-static const struct bpf_leave_cond *leave_cond_edge(struct bpf_verifier_env *env, int h, int n,
+-						    int t)
+-{
+-	const struct bpf_insn_aux_data *aux = &env->insn_aux_data[n];
+-	const struct bpf_leave_cond *p = leave_cond_at(env, h, t);
+-	int r;
+-
+-	for (r = 0; r < ARRAY_SIZE(aux->const_reg_vals); r++)
+-		if ((aux->const_reg_mask & BIT(r)) &&
+-		    (p->vals[r] & leave_val_bit(aux->const_reg_vals[r])))
+-			return &leave_always;
+-	return p;
+-}
+-
+-/* Is what the insn at @idx makes of @reg == @val in the set @vals? @ci: nothing is known. */
+-static bool insn_makes(struct bpf_verifier_env *env, struct const_arg_info *ci, int idx,
+-		       int reg, u64 val, u64 vals)
+-{
+-	struct const_arg_info unknown = { .state = CONST_ARG_UNKNOWN, .val = 0 };
+-	struct bpf_insn *insns = env->prog->insnsi;
+-	struct const_arg_info *dst = &ci[insns[idx].dst_reg];
+-	bool ret;
+-
+-	if (reg >= 0) {
+-		ci[reg].state = CONST_ARG_CONST;
+-		ci[reg].val = val;
+-	}
+-	const_reg_xfer(env, ci, &insns[idx], insns, idx);
+-	ret = ci_is_const(dst) && (vals & leave_val_bit(dst->val));
+-	*dst = unknown;
+-	if (reg >= 0)
+-		ci[reg] = unknown;
+-	return ret;
+-}
+-
+-/* @p holds behind the insn at @idx. Make it what holds in front of it. */
+-static void leave_cond_insn(struct bpf_verifier_env *env, int idx, struct bpf_leave_cond *p)
+-{
+-	struct bpf_insn *insns = env->prog->insnsi, *insn = &insns[idx];
+-	int r, v, dst = insn->dst_reg, src = insn->src_reg;
+-	struct const_arg_info ci[MAX_BPF_REG] = {};
+-	u8 class = BPF_CLASS(insn->code);
+-	u64 vals;
+-
+-	/* Nothing is known about a register that is no constant although all were constants */
+-	for (r = 0; r < MAX_BPF_REG; r++)
+-		ci[r].state = CONST_ARG_CONST;
+-	const_reg_xfer(env, ci, insn, insns, idx);
+-	for (r = 0; r < MAX_BPF_REG; r++) {
+-		if (!ci_is_const(&ci[r]))
+-			p->vals[r] = 0;
+-		ci[r].state = CONST_ARG_UNKNOWN;
+-	}
+-	if ((class != BPF_ALU && class != BPF_ALU64 && class != BPF_LD) ||
+-	    dst >= MAX_BPF_REG || !p->vals[dst])
+-		return;
+-	vals = p->vals[dst];
+-	p->vals[dst] = 0;
+-	if (insn_makes(env, ci, idx, -1, 0, vals)) {
+-		*p = leave_always;
+-		return;
+-	}
+-	for (v = 0; v < LEAVE_SMALL && class != BPF_LD; v++) {
+-		if (insn_makes(env, ci, idx, dst, v, vals))
+-			p->vals[dst] |= BIT_ULL(v);
+-		if (BPF_SRC(insn->code) == BPF_X && src != dst && src < MAX_BPF_REG &&
+-		    insn_makes(env, ci, idx, src, v, vals))
+-			p->vals[src] |= BIT_ULL(v);
+-	}
+-}
+-
+-/*
+- * const_branch_taken() for all of @lo - @hi in the register that @insn compares with a number.
+- * The range has numbers of 32 bits of one sign. So '<' and the like treat all of them alike
+- * if they treat both ends alike. '==' and '!=' single out the number that they compare with.
+- * '&': @lo is the bit that all of them have, @hi has the bits that any of them has.
+- */
+-static int range_branch_taken(const struct bpf_insn *insn, struct const_arg_info *ci, u64 lo,
+-			      u64 hi)
+-{
+-	u64 vals[] = { lo, hi, clamp_t(u64, (u32)insn->imm, lo, hi) };
+-	int i, taken[ARRAY_SIZE(vals)];
+-
+-	for (i = 0; i < ARRAY_SIZE(vals); i++) {
+-		ci[insn->dst_reg].val = vals[i];
+-		taken[i] = const_branch_taken(insn, ci);
+-	}
+-	return taken[0] == taken[1] && taken[0] == taken[2] ? taken[0] : -1;
+-}
+-
+-/*
+- * @p is what is enough on both edges of the jump at @idx. If the jump compares a register
+- * with a number then a number in the register goes one way: enough on that edge is enough.
+- */
+-static void leave_cond_jump(struct bpf_verifier_env *env, int h, int idx,
+-			    struct bpf_leave_cond *p)
+-{
+-	struct bpf_insn *insn = &env->prog->insnsi[idx];
+-	struct const_arg_info ci[MAX_BPF_REG] = {};
+-	u64 t, f, lo, go = 0, stay = 0;
+-	int i, taken;
+-
+-	if (BPF_SRC(insn->code) != BPF_K)
+-		return;
+-	t = leave_cond_edge(env, h, idx, idx + insn->off + 1)->vals[insn->dst_reg];
+-	f = leave_cond_edge(env, h, idx, idx + 1)->vals[insn->dst_reg];
+-	if (t == f)
+-		return;
+-	ci[insn->dst_reg].state = CONST_ARG_CONST;
+-	for (i = 0; i < LEAVE_RANGES; i++) {
+-		lo = i < LEAVE_SMALL ? i : BIT_ULL(i - LEAVE_SMALL + ilog2(LEAVE_SMALL));
+-		taken = range_branch_taken(insn, ci, lo, i < LEAVE_SMALL ? lo : 2 * lo - 1);
+-		if (taken > 0)
+-			go |= BIT_ULL(i);
+-		else if (!taken)
+-			stay |= BIT_ULL(i);
+-	}
+-	p->vals[insn->dst_reg] |= (t & go) | (f & stay);
+-}
+-
+-/*
+- * A compiler makes
+- *	w1 = 0; if w7 > 255 goto l; ...; w1 = 1; l: ...; w1 &= 1; if w1 != 0 goto head;
+- * of 'do { ...; more = ++i < 256 && ...; ...; } while (more);'. The jump that leaves the loop
+- * looks at 1 or 0. The jump that counts stays in the loop on both edges.
+- *
+- * So find for every insn of a loop when the loop is left from there on. Go against the edges:
+- *	if w1 != 0 goto head	w1 is 0		the numbers that don't go to the head
+- *	w1 &= 1			w1 is even	the numbers that the insn turns into 0
+- *	l: ...			w1 is even	nothing writes w1
+- *	w1 = 1			never		1 is not even
+- * w1 is 0 at the jump that counts and 0 is even: the edge to l leaves the loop.
+- *
+- * An insn that is not in the loop: always. The head: never. More than one successor: what is
+- * enough for each of them. Every insn has one turn, in post order. A cycle without the head is
+- * a nested loop, so the successors in the loop itself had their turn. One that didn't: never.
+- * The jumps on the way know constants too: 'r7 = 0; if w1 != 0 goto a; ...; a: if r7 == 2 goto
+- * head' leaves the loop when w1 is not 0.
+- *
+- * Every edge that the program has at run time counts, the edges of may_goto that the verifier
+- * adds too. May_goto of the loop and of the loops around it leaves the loop. A nested loop can
+- * get one in front of a jump that the numbers decide the other way. So a nested loop: never.
+- *
+- * What is kept is the answer for the two edges of each jump: insn_aux_data->edge_leaves.
+- */
+-int bpf_compute_leave_conds(struct bpf_verifier_env *env)
+-{
+-	const struct bpf_leave_cond *q;
+-	struct bpf_leave_cond *p;
+-	struct bpf_iarray *succ;
+-	int i, r, s, h, idx;
+-	bool jump;
+-	u64 any;
+-
+-	env->leave_conds = kvcalloc(env->prog->len, sizeof(*p), BPF_VERIFIER_GFP);
+-	if (!env->leave_conds)
+-		return -ENOMEM;
+-	for (i = 0; i < env->cfg.cur_postorder; i++) {
+-		idx = env->cfg.insn_postorder[i];
+-		h = bpf_loop_at_index(env, idx);
+-		if (h < 0)
+-			continue;
+-		p = &env->leave_conds[idx];
+-		*p = leave_always;
+-		jump = bpf_insn_is_cond_jump(env->prog->insnsi[idx].code);
+-		succ = bpf_insn_successors(env, idx);
+-		iarray_for_each(s, succ) {
+-			q = jump ? leave_cond_edge(env, h, idx, s) : leave_cond_at(env, h, s);
+-			for (r = 0; r < MAX_BPF_REG; r++)
+-				p->vals[r] &= q->vals[r];
+-			p->always &= q->always;
+-			if (jump && q->always)
+-				env->insn_aux_data[idx].edge_leaves |= BIT(s != idx + 1);
+-		}
+-		if (jump) {
+-			leave_cond_jump(env, h, idx, p);
+-			continue;
+-		}
+-		for (r = 0, any = 0; r < MAX_BPF_REG; r++)
+-			any |= p->vals[r];
+-		if (any && !p->always)
+-			leave_cond_insn(env, idx, p);
+-	}
+-	kvfree(env->leave_conds);
+-	env->leave_conds = NULL;
+-	return 0;
+-}
+-
+-/*
+- * Does the program leave the loop at @h when the conditional jump at @n goes on at @t?
+- * @h is the innermost loop around @n.
+- */
+-bool bpf_edge_leaves_loop(struct bpf_verifier_env *env, int h, int n, int t)
+-{
+-	return leave_cond_at(env, h, t)->always ||
+-	       (env->insn_aux_data[n].edge_leaves & BIT(t != n + 1));
+-}
+-
+ /*
+  * Rewrite conditional branches with constant outcomes into unconditional
+  * jumps using register values resolved by bpf_compute_const_regs() pass.
 diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index 4d9b6798152..aca3c7a53b6 100644
+index aca3c7a53b6..bd47a38c7bc 100644
 --- a/kernel/bpf/fixups.c
 +++ b/kernel/bpf/fixups.c
-@@ -755,7 +755,6 @@ void bpf_clear_insn_aux_data(struct bpf_verifier_env *env, int start, int len)
+@@ -754,7 +754,6 @@ void bpf_clear_insn_aux_data(struct bpf_verifier_env *env, int start, int len)
+ 
  	for (i = start; i < end; i++) {
  		if (aux_data[i].loop) {
- 			kvfree(aux_data[i].loop->exits);
--			kvfree(aux_data[i].loop->rungs);
+-			kvfree(aux_data[i].loop->exits);
  			kvfree(aux_data[i].loop);
  			aux_data[i].loop = NULL;
  		}
 diff --git a/kernel/bpf/flow.c b/kernel/bpf/flow.c
-index 70766ee48eb..060bdff7f29 100644
+index 060bdff7f29..d2248745fdd 100644
 --- a/kernel/bpf/flow.c
 +++ b/kernel/bpf/flow.c
-@@ -1,28 +1,4 @@
- // SPDX-License-Identifier: GPL-2.0-only
--/*
-- * The main pass of the verifier as a fixpoint over the control flow graph.
-- *
-- * Every insn that starts a basic block has a set of states. The state that
-- * arrives there is
-- * - dropped, if it is within a state of the set,
-- * - joined with a state of the set, if there is a join, see bpf_states_join(),
-- *   that doesn't make up what neither of them has, see flow_join_makes_up(),
-- * - added to the set otherwise.
-- * What is new in the set is pending. Pending states are processed in the order
-- * of the program in which a loop is done with before what follows it, see
-- * flow_compute_order(). The pass ends when nothing is pending.
-- *
-- * Loops. The state that enters a loop is made to stand for all iterations with
-- * what scalar evolution knows about the loop, see bpf_flow_loop_enter().
-- * The state that comes back to the loop head is expected to be within it.
-- * If it is not, the two are joined, what grew is forgotten, and the loop is
-- * done again.
-- *
-- * Functions. A static function that gets nothing but numbers and pointers to
-- * what is not the stack is verified on its own, for the states at its entry
-- * and not for every chain of calls. The call waits. What comes out of the
-- * function goes to all calls that wait for the states it comes from.
-- */
- #include <linux/bpf.h>
- #include <linux/bpf_verifier.h>
- #include <linux/filter.h>
-@@ -32,155 +8,14 @@
+@@ -158,8 +158,7 @@ static void flow_place_guards(struct bpf_verifier_env *env, int h, u32 *seen)
+ 	 */
+ 	if (loop->irreducible) {
+ 		for (i = 0; i < loop->backedges_cnt; i++)
+-			if (!loop->backedges[i].latches_cnt ||
+-			    loop->backedges[i].latches[0] != loop->backedges[i].from)
++			if (loop->backedges[i].latch != loop->backedges[i].from)
+ 				goto header;
+ 		for (i = 0; i < loop->backedges_cnt; i++)
+ 			flow_set_guard(env, h, loop->backedges[i].from);
+@@ -182,10 +181,10 @@ static void flow_place_guards(struct bpf_verifier_env *env, int h, u32 *seen)
+ 	}
  
- #define verbose(env, fmt, args...) bpf_verifier_log_write(env, fmt, ##args)
+ 	for (i = 0; i < loop->backedges_cnt; i++)
+-		if (!loop->backedges[i].latches_cnt)
++		if (loop->backedges[i].latch < 0)
+ 			goto header;
+ 	for (i = 0; i < loop->backedges_cnt; i++)
+-		flow_set_guard(env, h, loop->backedges[i].latches[0]);
++		flow_set_guard(env, h, loop->backedges[i].latch);
+ 	return;
  
--/*
-- * States at an insn that have no join: kinds of values, references, chains of calls.
-- * A state that arrives is compared with those that it may be related to, see flow_may_relate().
-- * At worst that is all of them, and the work is the square of it.
-- */
--#define BPF_FLOW_MAX_STATES	1024
--/*
-- * All states in the sets at a time: that many for every insn of the prog, and some. Not counted:
-- * calls that wait, what came out of a function, the states that loops were entered with.
-- */
--#define BPF_FLOW_LIVE_PER_INSN	16
--#define BPF_FLOW_LIVE_BASE	4096
--/* All states that were ever there. It bounds the work by the size of the prog. */
--#define BPF_FLOW_TOTAL_PER_INSN	256
--#define BPF_FLOW_TOTAL_BASE	65536
--/*
-- * What comes out of a function is joined that many times. Then it is widened, like what
-- * comes back to a loop head: the exit states have to stop changing.
-- */
--#define BPF_FLOW_MAX_JOINS	16
--/* With fewer states at an insn it's faster to compare them than to look at their shapes. */
--#define BPF_FLOW_MIN_SHAPES	8
--/* bpf_loop() with that many iterations at most is walked. */
--#define BPF_FLOW_MAX_CALLBACKS	8
--/* What a callback returns to the helper with is joined that many times before it is widened. */
--#define BPF_FLOW_CALLBACK_JOINS	4
--
--enum flow_cycle {
--	FLOW_NO_CYCLE,
--	/* what grew is forgotten */
--	FLOW_CYCLE,
--	/* after a while. A flag that a callback sets doesn't grow any further. */
--	FLOW_CALLBACK_CYCLE,
--};
--
--/* See flow_may_relate() */
--enum flow_word {
--	FLOW_CHAIN,
--	FLOW_CTX,
--	FLOW_LAYOUT,
--	FLOW_PTRS,
--	FLOW_OFFS,
--	FLOW_SHAPE_WORDS,
--};
--
--struct flow_shape {
--	u32 word[FLOW_SHAPE_WORDS];
--	/* how much of the packet is checked, the sum over the pointers to the packet */
--	u32 pkt_range;
--	/* what comes after FLOW_CTX is computed */
--	bool places;
--};
--
--struct flow_state {
--	struct bpf_verifier_state st;
--	/* states at the insn, see struct flow_set, calls of struct flow_entry */
--	struct list_head node;
--	struct rb_node rb;		/* pending states */
--	int prev_insn_idx;
--	u32 seq;
--	u32 from;			/* seq of the last state on the way to it that is kept */
--	struct flow_shape shape;
--	u16 joins;
--	bool pending;
--	/* the order of pending states, see flow_set_pending() */
--	u8 key_len;
--	u32 key[MAX_CALL_FRAMES + 1];
--};
--
--/* what came out of a function that is verified on its own */
--struct flow_exit {
--	struct list_head node;
--	struct bpf_verifier_state st;
--	u16 joins;
--};
--
--/*
-- * Every call that waits makes an entry of the function: the state at its first insn and what
-- * becomes of it. Entries whose states met are one set: what comes out of the function for one of
-- * them is for the calls of all of them. One entry stands for the set and has its lists.
-- */
--struct flow_entry {
--	struct flow_entry *up;		/* towards the one that stands for the set: up == itself */
--	struct list_head calls;		/* struct flow_state: the calls that wait */
--	struct list_head exits;		/* struct flow_exit: what came out */
--};
--
--struct flow_func {
--	int exit_idx;			/* all exits are compared as if they were here */
--};
--
--/* States at an insn, in the order in which they came. */
--struct flow_set {
--	struct list_head list;
--};
--
--struct flow_united {
--	u32 a, b;
--};
--
- struct flow_kept {
- 	struct list_head node;
- 	struct bpf_verifier_state st;
- };
+ header:
+@@ -202,9 +201,9 @@ static void flow_place_guards(struct bpf_verifier_env *env, int h, u32 *seen)
+ 	for (o = h; aux[o].loop_header >= 0; o = aux[o].loop_header)
+ 		;
+ 	/* a loop that has no exit can only be stopped together with the program */
+-	if (!aux[o].loop->exits_cnt)
++	t = aux[o].loop->exit_to;
++	if (t < 0)
+ 		return;
+-	t = aux[o].loop->exits[0].to;
+ 	aux[h].guard_place = true;
+ 	aux[h].guard_at_header = true;
+ 	aux[h].guard_to = t;
+diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+index d78a8ee0bbf..711f9da2b26 100644
+--- a/kernel/bpf/liveness.c
++++ b/kernel/bpf/liveness.c
+@@ -795,24 +795,6 @@ static void compute_may_write_masks(struct bpf_verifier_env *env)
+ 	}
+ }
  
--/* What the checks ahead of an insn look at, see enum flow_need_kind */
--struct flow_need {
--	u64 slots;			/* of the stack, fp-8 is bit 0 */
--	u16 regs;
--};
+-/* live_stack_before of the insn at @insn_idx for one half-slot */
+-bool bpf_half_slot_live_before(struct bpf_verifier_env *env, u32 insn_idx, u32 half_spi)
+-{
+-	struct func_instance *instance;
+-	int bkt;
 -
--/* see flow_compute_need_const() */
--enum flow_need_kind {
--	FLOW_NEED_ARG,
--	FLOW_NEED_STACK_OFF,
--	FLOW_NEED_PTR_OFF,
--	FLOW_NEED_JUMP,
--	FLOW_NEED_FLAG,
--	FLOW_NEED_VALUE_OFF,
--	FLOW_NEED_BASE,
--	FLOW_NEED_JUMP_ALU,
--	FLOW_NEED_KINDS,
--};
+-	hash_for_each(env->liveness->func_instances, bkt, instance, hl_node)
+-		if (insn_idx - instance->subprog_start < instance->insn_cnt &&
+-		    is_live_before(instance, insn_idx, instance->depth, half_spi, FM_LIVE_BEFORE))
+-			return true;
+-	return false;
+-}
 -
- struct bpf_flow {
- 	/* computed once */
--	u32 len;			/* of the prog during the pass */
--	u32 nr_funcs;
- 	u32 *pos;			/* place of the insn in the order */
--	u32 *rank;			/* callers go first */
--	struct flow_need *need[FLOW_NEED_KINDS];
--	unsigned long *point;		/* insn starts a basic block */
--	unsigned long *keep;		/* states that were processed are compared with */
+-const unsigned long *bpf_may_write_mask(struct bpf_verifier_env *env, u32 insn_idx)
+-{
+-	return env->insn_aux_data[insn_idx].may_write_mask;
+-}
 -
--	/* of the pass */
--	struct flow_set *states;	/* per insn */
--	struct flow_set *enter;		/* per insn: the states that enter the loop at its head */
--	u32 *nr_states;			/* per insn: the two sets are counted together */
--	struct rb_root_cached pending;
--	struct flow_func *funcs;
--	struct flow_entry **entries;	/* bpf_verifier_state.flow_entry is the index, 0 is none */
--	u32 entry_cnt, entry_cap;
--	struct flow_united *united;
--	u32 united_cnt, united_cap;
--	struct list_head kept;
--	struct bpf_verifier_state tmp;
--	u32 seq;
--	u32 from;			/* flow_state.from of what comes from the current state */
--	u32 live_states;
- };
+ /* print use/def slots for all instances ordered by callsite first, then by depth */
+ static int print_instances(struct bpf_verifier_env *env)
+ {
+diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
+index 20820098c6b..e58202955f1 100644
+--- a/kernel/bpf/log.c
++++ b/kernel/bpf/log.c
+@@ -527,7 +527,7 @@ static void verbose_unum(struct bpf_verifier_env *env, u64 num)
+ 		verbose(env, "%#llx", num);
+ }
+ 
+-void bpf_verbose_snum(struct bpf_verifier_env *env, s64 num)
++static void verbose_snum(struct bpf_verifier_env *env, s64 num)
+ {
+ 	if (is_snum_decimal(num))
+ 		verbose(env, "%lld", num);
+@@ -535,14 +535,6 @@ void bpf_verbose_snum(struct bpf_verifier_env *env, s64 num)
+ 		verbose(env, "%#llx", num);
+ }
+ 
+-void bpf_verbose_snum32(struct bpf_verifier_env *env, s32 num)
+-{
+-	if (is_snum_decimal(num))
+-		verbose(env, "%d", num);
+-	else
+-		verbose(env, "%#x", (u32)num);
+-}
+-
+ int tnum_strn(char *str, size_t size, struct tnum a)
+ {
+ 	/* print as a constant, if tnum is fully known */
+@@ -617,7 +609,7 @@ static void print_scalar_ranges(struct bpf_verifier_env *env,
+ 		}
+ 
+ 		if (m1->name[0] == 's')
+-			bpf_verbose_snum(env, m1->val);
++			verbose_snum(env, m1->val);
+ 		else
+ 			verbose_unum(env, m1->val);
+ 	}
+@@ -638,7 +630,7 @@ static void print_reg_state(struct bpf_verifier_env *env,
+ 
+ 	t = reg->type;
+ 	if (t == SCALAR_VALUE && tnum_is_const(reg->var_off)) {
+-		bpf_verbose_snum(env, reg->var_off.value);
++		verbose_snum(env, reg->var_off.value);
+ 		return;
+ 	}
+ 
+@@ -649,7 +641,7 @@ static void print_reg_state(struct bpf_verifier_env *env,
+ 		if (state->frameno != reg->frameno)
+ 			verbose(env, "[%d]", reg->frameno);
+ 		if (tnum_is_const(reg->var_off)) {
+-			bpf_verbose_snum(env, reg->var_off.value);
++			verbose_snum(env, reg->var_off.value);
+ 			return;
+ 		}
+ 	}
+@@ -687,7 +679,7 @@ static void print_reg_state(struct bpf_verifier_env *env,
+ 		/* a pointer register with fixed offset */
+ 		if (reg->var_off.value) {
+ 			verbose_a("imm=");
+-			bpf_verbose_snum(env, reg->var_off.value);
++			verbose_snum(env, reg->var_off.value);
+ 		}
+ 	} else {
+ 		print_scalar_ranges(env, reg, &sep);
+diff --git a/kernel/bpf/loops.c b/kernel/bpf/loops.c
+index 11019768505..8a63bb1799a 100644
+--- a/kernel/bpf/loops.c
++++ b/kernel/bpf/loops.c
+@@ -237,32 +237,9 @@ static void add_backedge(struct bpf_verifier_env *env, int from, int h)
+ 		return;
+ 	}
+ 	loop->backedges[cnt].from = from;
+-	loop->backedges[cnt].latches_cnt = 0;
+ 	loop->backedges_cnt++;
+ }
+ 
+-static int add_exit(struct bpf_loop *loop, int from, int to)
+-{
+-	if (loop->exits_overflow)
+-		return 0;
+-	if (loop->exits_cnt == MAX_LOOP_EXITS) {
+-		loop->exits_overflow = true;
+-		return 0;
+-	}
+-	if (!loop->exits) {
+-		loop->exits = kvzalloc_objs(*loop->exits, MAX_LOOP_EXITS,
+-					    BPF_VERIFIER_GFP);
+-		if (!loop->exits)
+-			return -ENOMEM;
+-	}
+-	loop->exits[loop->exits_cnt] = (struct bpf_loop_exit) {
+-		.from = from,
+-		.to = to,
+-	};
+-	loop->exits_cnt++;
+-	return 0;
+-}
+-
+ static int mark_as_header(struct bpf_verifier_env *env, int h)
+ {
+ 	struct bpf_insn_aux_data *aux = env->insn_aux_data;
+@@ -306,32 +283,6 @@ static int assign_header(struct bpf_verifier_env *env, struct loops_dfs *dfs, in
+ 	return 0;
+ }
+ 
+-static bool is_cond_jmp_insn(struct bpf_insn *insn)
+-{
+-	u8 class = BPF_CLASS(insn->code);
+-	u8 opcode = BPF_OP(insn->code);
+-
+-	if (class != BPF_JMP && class != BPF_JMP32)
+-		return false;
+-
+-	switch (opcode) {
+-	case BPF_JEQ:
+-	case BPF_JGE:
+-	case BPF_JGT:
+-	case BPF_JLE:
+-	case BPF_JLT:
+-	case BPF_JNE:
+-	case BPF_JSET:
+-	case BPF_JSGE:
+-	case BPF_JSGT:
+-	case BPF_JSLE:
+-	case BPF_JSLT:
+-		return true;
+-	default:
+-		return false;
+-	}
+-}
+-
+ int bpf_loop_at_index(struct bpf_verifier_env *env, u32 idx)
+ {
+ 	struct bpf_insn_aux_data *aux = env->insn_aux_data;
+@@ -340,100 +291,23 @@ int bpf_loop_at_index(struct bpf_verifier_env *env, u32 idx)
+ }
  
  /*
-@@ -428,45 +263,6 @@ bool bpf_flow_loops_lost_bound(struct bpf_verifier_env *env)
+- * Collect conditional jumps within n's loop that dominate 'n' and leave
+- * the loop on one edge, see bpf_edge_leaves_loop(), nearest first.
+- * A jump that cannot count the iterations takes no place, see bpf_scev_jump_counts().
++ * The backedge->from and its latch can reside in an inner loop of @h, e.g.:
++ *
++ *  1:  r7 += 1;
++ *  2:  r6 += 1;
++ *      if r7 == 2 goto 1b;
++ *      if r6 < 2 goto 2b;
++ *
++ * For now, let's assume that latches are unknown for such cases.
++ * (GCC/LLVM handle this by inserting artificial cfg nodes).
+  */
+-static int find_dominating_conditions(struct bpf_verifier_env *env, int n,
+-				      struct bpf_backedge *backedge)
++static int find_latch(struct bpf_verifier_env *env, int h, int n)
+ {
+-	struct bpf_insn *insns = env->prog->insnsi;
+-	bool t_exits_loop, f_exits_loop;
+-	int *idoms = env->idoms;
+-	int n_loop, counts;
+-
+-	n_loop = bpf_loop_at_index(env, n);
+-	if (idoms_intersect(env, n, n_loop) != n_loop)
+-		return 0;
+-	while (n >= 0) {
+-		if (is_cond_jmp_insn(&insns[n]) && bpf_loop_at_index(env, n) == n_loop) {
+-			t_exits_loop = bpf_edge_leaves_loop(env, n_loop, n, n + insns[n].off + 1);
+-			f_exits_loop = bpf_edge_leaves_loop(env, n_loop, n, n + 1);
+-			/* latches[0] is the latch: it has to leave the loop itself */
+-			if ((t_exits_loop || f_exits_loop) &&
+-			    (backedge->latches_cnt || bpf_jump_leaves_loop(env, n_loop, n))) {
+-				counts = !backedge->latches_cnt ? 1 :
+-					 bpf_scev_jump_counts(env, n_loop, n, t_exits_loop);
+-				if (counts < 0)
+-					return counts;
+-				if (!counts)
+-					goto next;
+-				if (backedge->latches_cnt == MAX_LATCHES)
+-					return 0;
+-				if (t_exits_loop)
+-					backedge->taken_leaves |= BIT(backedge->latches_cnt);
+-				backedge->latches[backedge->latches_cnt++] = n;
+-			}
+-		}
+-next:
+-		if (n == n_loop)
+-			break;
+-		n = idoms[n];
+-	}
+-	return 0;
+-}
+-
+-/*
+- * Without @flags: the jumps that leave a loop themselves. That tells where the verifier may add
+- * may_goto. It takes the constants that hold with these edges to follow a flag.
+- * Once more after scalar evolution, which knows the jumps that count. The flags that were found
+- * are remembered.
+- */
+-int bpf_find_latches(struct bpf_verifier_env *env, bool flags)
+-{
+-	struct bpf_insn_aux_data *aux = env->insn_aux_data;
+-	struct bpf_backedge *backedge;
+-	struct bpf_loop *loop;
+-	int i, j, k, err;
+-
+-	if (flags) {
+-		err = bpf_compute_leave_conds(env);
+-		if (err)
+-			return err;
+-	}
+-	for (i = 0; i < env->prog->len; i++) {
+-		loop = aux[i].loop;
+-		if (!loop)
+-			continue;
+-		for (j = 0; j < loop->backedges_cnt; j++) {
+-			backedge = &loop->backedges[j];
+-			backedge->latches_cnt = 0;
+-			backedge->taken_leaves = 0;
+-			/*
+-			 * In theory, the backedge->from and it's latch can reside in
+-			 * an inner loop of `i`, e.g.:
+-			 *
+-			 *  1:  r7 += 1;
+-			 *  2:  r6 += 1;
+-			 *      if r7 == 2 goto 1b;
+-			 *      if r6 < 2 goto 2b;
+-			 *
+-			 * For now, let's assume that latches are unknown for such cases.
+-			 * (GCC/LLVM handle this by inserting artificial cfg nodes).
+-			 */
+-			if (bpf_loop_at_index(env, backedge->from) != i)
+-				continue;
+-			err = find_dominating_conditions(env, backedge->from, backedge);
+-			if (err)
+-				return err;
+-			for (k = 1; flags && k < backedge->latches_cnt; k++)
+-				if ((env->log.level & BPF_LOG_LEVEL2) &&
+-				    !bpf_jump_leaves_loop(env, i, backedge->latches[k]))
+-					bpf_log(&env->log, "loop at %d, exit by way of a flag at %d\n",
+-						i, backedge->latches[k]);
+-		}
+-	}
+-	return 0;
++	if (bpf_loop_at_index(env, n) != h || idoms_intersect(env, n, h) != h)
++		return -1;
++	for (; n >= 0 && !bpf_insn_leaves_loop(env, h, n); n = n == h ? -1 : env->idoms[n])
++		bpf_add_cost(env, 1, BPF_COST_SCAN);
++	return n;
+ }
+ 
+ /*
+@@ -547,13 +421,15 @@ bool bpf_is_nested_loop(struct bpf_verifier_env *env, int inner_header, int oute
  	return false;
  }
  
--/*
-- * A state is in the loop @h without a count, so the loop gets may_goto. At run time may_goto is
-- * there for everybody, also for those who know the number of trips or got to the end of the loop
-- * trip by trip. It can be out of budget in the first trip, because of a loop before this one.
-- *
-- * So a loop has may_goto or it has not, and a state takes the edges of may_goto if the loop had
-- * it when the state entered. If a state entered without it, with a count or on a walk that may
-- * give up, all is done again, and the loop has may_goto from the start.
-- */
--void bpf_flow_loop_gets_guards(struct bpf_verifier_env *env, int h)
+-/* Whether the conditional jump at @n, in the loop @h or in a loop nested in it, leaves @h */
+-bool bpf_jump_leaves_loop(struct bpf_verifier_env *env, int h, int n)
++/* Whether @n is a conditional jump in the loop @h itself that leaves @h */
++bool bpf_insn_leaves_loop(struct bpf_verifier_env *env, int h, int n)
+ {
+ 	struct bpf_insn *insn = &env->prog->insnsi[n];
+ 	u8 class = BPF_CLASS(insn->code), op = BPF_OP(insn->code);
+ 	int t, f;
+ 
++	if (bpf_loop_at_index(env, n) != h)
++		return false;
+ 	if ((class != BPF_JMP && class != BPF_JMP32) || op == BPF_JA || op == BPF_CALL ||
+ 	    op == BPF_EXIT || op == BPF_JCOND)
+ 		return false;
+@@ -563,17 +439,9 @@ bool bpf_jump_leaves_loop(struct bpf_verifier_env *env, int h, int n)
+ 	       (f != h && !bpf_is_nested_loop(env, f, h));
+ }
+ 
+-/* The same for an insn that is in the loop @h itself */
+-bool bpf_insn_leaves_loop(struct bpf_verifier_env *env, int h, int n)
 -{
--	struct bpf_loop *loop = env->insn_aux_data[h].loop;
--
--	if (loop->guarded)
--		return;
--	loop->guarded = true;
--	if (loop->no_guard_edges)
--		env->guards_late = true;
+-	if (bpf_loop_at_index(env, n) != h)
+-		return false;
+-	return bpf_jump_leaves_loop(env, h, n);
 -}
 -
--/* The main prog and the global functions are about to be verified, maybe not for the first time */
--void bpf_flow_new_round(struct bpf_verifier_env *env)
--{
--	struct bpf_insn_aux_data *aux = env->insn_aux_data;
--	int i;
--
--	env->restart = false;
--	env->guards_late = false;
--	for (i = 0; i < env->prog->len; i++) {
--		aux[i].guard_edge_dropped = false;
--		if (!aux[i].loop)
+ int bpf_compute_loops(struct bpf_verifier_env *env)
+ {
+-	int i, j, k, s, t, iloop, sloop, err = 0, len = env->prog->len;
++	int i, j, s, t, iloop, sloop, err = 0, len = env->prog->len;
+ 	struct bpf_insn_aux_data *aux = env->insn_aux_data;
+ 	struct bpf_verifier_log *log = &env->log;
+ 	struct bpf_backedge *backedge;
+@@ -595,9 +463,15 @@ int bpf_compute_loops(struct bpf_verifier_env *env)
+ 		if (err)
+ 			goto out;
+ 	}
+-	err = bpf_find_latches(env, false);
+-	if (err)
+-		goto out;
++	for (i = 0; i < len; i++) {
++		loop = aux[i].loop;
++		if (!loop)
++			continue;
++		loop->exit_to = -1;
++		for (j = 0; j < loop->backedges_cnt; j++) {
++			loop->backedges[j].latch = find_latch(env, i, loop->backedges[j].from);
++		}
++	}
+ 	/* find exits */
+ 	for (i = 0; i < len; i++) {
+ 		iloop = aux[i].loop ? i : aux[i].loop_header;
+@@ -605,68 +479,15 @@ int bpf_compute_loops(struct bpf_verifier_env *env)
+ 			continue;
+ 		succ = bpf_insn_successors(env, i);
+ 		iarray_for_each(s, succ) {
+-			/*
+-			 * Nothing left to record once the innermost loop of 'i'
+-			 * overflowed: the walk below would stop at it right away.
+-			 */
+-			if (aux[iloop].loop->exits_overflow)
+-				break;
+-			sloop = aux[s].loop ? s : aux[s].loop_header;
+-			if (iloop == sloop)
+-				continue;
+-			if (bpf_is_nested_loop(env, sloop, iloop))
+-				continue;
+-			/*
+-			 * At this point 'sloop' is either -1, an outer loop,
+-			 * or a loop in another branch of the loop hierarchy.
+-			 */
+-			for (t = iloop; t >= 0 && t != sloop; t = aux[t].loop_header) {
+-				/*
+-				 * Account for the following configuration:
+-				 *
+-				 *   tloop {
+-				 *     iloop {
+-				 *       ... i: goto s;
+-				 *     }
+-				 *     sloop {
+-				 *   s:
+-				 *       ...
+-				 *     }
+-				 *   }
+-				 */
+-				if (bpf_is_nested_loop(env, sloop, t))
+-					break;
+-				/*
+-				 * Record edges i -> s as exits from tloop when:
+-				 *
+-				 *   sloop {
+-				 *     tloop {
+-				 *       iloop {
+-				 *         ... i: goto s;
+-				 *       }
+-				 *     }
+-				 *  s: ...
+-				 *   }
+-				 */
+-				/* Enclosing loops get nested_exits_overflow, see below */
+-				if (aux[t].loop->exits_overflow)
+-					break;
+-				err = add_exit(aux[t].loop, i, s);
+-				if (err)
+-					goto out;
+-			}
++			sloop = bpf_loop_at_index(env, s);
++			for (t = iloop; t >= 0 && t != sloop && !bpf_is_nested_loop(env, sloop, t);
++			     t = aux[t].loop_header)
++				if (aux[t].loop->exit_to < 0)
++					aux[t].loop->exit_to = s;
+ 		}
+ 		if (bpf_is_ldimm64(env->prog->insnsi + i))
+ 			i++;
+ 	}
+-	/* A nested loop with a truncated exit list can't be abstracted by SCEV */
+-	for (i = 0; i < len; i++) {
+-		loop = aux[i].loop;
+-		if (!loop || !loop->exits_overflow)
 -			continue;
--		aux[i].loop->no_guard_edges = false;
--		/* what the last round found out */
--		if (aux[i].loop->rt_bounded)
--			aux[i].loop->rt_bounded = flow_loop_is_bounded(env, i);
+-		for (t = aux[i].loop_header; t >= 0; t = aux[t].loop_header)
+-			aux[t].loop->nested_exits_overflow = true;
 -	}
--}
--
- /*
-  * Which loops have something that stops them at run time, and where may_goto goes in the others.
-  * Returns 1 if a place is at the head of a loop.
-@@ -493,9 +289,6 @@ int bpf_flow_place_guards(struct bpf_verifier_env *env)
- 				return -E2BIG;
+ 
+ 	if (env->log.level & BPF_LOG_LEVEL2) {
+ 		for (i = 0; i < len; i++) {
+@@ -678,28 +499,16 @@ int bpf_compute_loops(struct bpf_verifier_env *env)
+ 				bpf_log(log, ", nested in %d", aux[i].loop_header);
+ 			if (loop->irreducible)
+ 				bpf_log(log, ", irreducible");
+-			if (loop->exits_overflow)
+-				bpf_log(log, ", too many exits");
+-			if (loop->nested_exits_overflow)
+-				bpf_log(log, ", too many exits of a nested loop");
+ 			bpf_log(log, "\n");
+ 			for (j = 0; j < loop->backedges_cnt; j++) {
+ 				backedge = &loop->backedges[j];
+ 				bpf_log(log, "  backedge from %d", backedge->from);
+-				for (k = 0; k < backedge->latches_cnt; k++) {
+-					if (k == 0)
+-						bpf_log(log, ", latch at ");
+-					if (k == 1)
+-						bpf_log(log, ", dominating exits at ");
+-					if (k > 1)
+-						bpf_log(log, ", ");
+-					bpf_log(log, "%d", backedge->latches[k]);
+-				}
++				if (backedge->latch >= 0)
++					bpf_log(log, ", latch at %d", backedge->latch);
+ 				bpf_log(log, "\n");
  			}
- 			aux[h].loop->nr_insns++;
--			if (bpf_pseudo_call(&env->prog->insnsi[i]) ||
--			    bpf_is_callx(&env->prog->insnsi[i]))
--				aux[h].loop->has_calls = true;
+-			for (j = 0; j < loop->exits_cnt; j++)
+-				bpf_log(log, "  exit from %d to %d\n",
+-					loop->exits[j].from, loop->exits[j].to);
++			if (loop->exit_to >= 0)
++				bpf_log(log, "  first exit to %d\n", loop->exit_to);
  		}
  	}
  
-@@ -517,2895 +310,3 @@ int bpf_flow_place_guards(struct bpf_verifier_env *env)
- 	kvfree(seen);
- 	return ret;
- }
+diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
+deleted file mode 100644
+index abae5fc58ab..00000000000
+--- a/kernel/bpf/scev.c
++++ /dev/null
+@@ -1,5489 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
 -
--/* The slot that @insn spills to or fills from, if it's one that struct flow_need has a bit for */
--static int flow_fp_slot(const struct bpf_insn *insn, u8 base)
--{
--	u8 mode = BPF_MODE(insn->code);
+-#include "linux/cnum.h"
+-#include <linux/bpf_verifier.h>
+-#include <linux/gcd.h>
+-#include <linux/jhash.h>
+-#include <linux/log2.h>
+-#include <linux/math64.h>
+-#include <linux/min_heap.h>
+-#include <linux/bug.h>
+-#include <linux/tnum.h>
+-#include <linux/overflow.h>
 -
--	if (base != BPF_REG_FP || (mode != BPF_MEM && mode != BPF_MEMSX) ||
--	    insn->off >= 0 || insn->off < -64 * BPF_REG_SIZE || insn->off % BPF_REG_SIZE)
--		return -1;
--	return -insn->off / BPF_REG_SIZE - 1;
--}
--
--/*
-- * A number is added to a pointer to the stack. A store at an offset that is not known
-- * forgets what the slots it may hit hold, pointers above all.
-- */
--static u16 flow_stack_off_regs(struct bpf_verifier_env *env, int idx)
--{
--	u16 ptrs = env->insn_aux_data[idx].stack_ptrs;
--	struct bpf_insn *insn = &env->prog->insnsi[idx];
--	u8 op = BPF_OP(insn->code);
--
--	if (BPF_CLASS(insn->code) != BPF_ALU64 || BPF_SRC(insn->code) != BPF_X ||
--	    (op != BPF_ADD && op != BPF_SUB))
--		return 0;
--	if ((ptrs & BIT(insn->dst_reg)) && !(ptrs & BIT(insn->src_reg)))
--		return BIT(insn->src_reg);
--	if (op == BPF_ADD && (ptrs & BIT(insn->src_reg)) && !(ptrs & BIT(insn->dst_reg)))
--		return BIT(insn->dst_reg);
--	return 0;
--}
+-#define REGS_NUM BPF_SCEV_REGS_NUM
+-/* The SCEV registers of an env: r0 - r10, the stack slots and memory locations, see struct env */
+-#define MEM_REGS_NUM 16
+-#define ENV_REGS_NUM (REGS_NUM + MEM_REGS_NUM)
+-#define UNKNOWN_EXPR_ID 0
+-#define OPAQUE_EXPR_ID  1
+-/* (REG r). UNKNOWN, OPAQUE and (REG r) have fixed ids and are not in the hash table. */
+-#define REG_EXPR_ID(r)  (2 + (r))
 -
 -/*
-- * A jump that compares a register with a constant, which may be in the other register.
-- * A call does the same: the verifier compares a size, or what bpf_set_retval() or bpf_throw()
-- * takes, with what is allowed. So does the exit of the prog, see flow_compute_need_const().
+- * BPF instructions use 'code', 'src_reg', 'off' and 'imm' fields for instruction encoding.
+- * For scalar evolution purpose we want to reuse most of the opcode definitions,
+- * but also add a few custom operations (REG and IMM).
+- * Use the enum below to uniformly represent all operations relevant for SCEV.
 - */
--static u16 flow_tested_regs(struct bpf_verifier_env *env, int idx)
--{
--	struct bpf_insn_aux_data *aux = &env->insn_aux_data[idx];
--	u16 consts = aux->const_reg_mask | aux->const_reg_wide_mask;
--	struct bpf_insn *insn = &env->prog->insnsi[idx];
--	u8 class = BPF_CLASS(insn->code), op = BPF_OP(insn->code);
--
--	if (bpf_helper_call(insn) || bpf_pseudo_kfunc_call(insn))
--		return bpf_call_checked_arg_regs(env, insn);
--	if ((class != BPF_JMP && class != BPF_JMP32) ||
--	    op == BPF_JA || op == BPF_CALL || op == BPF_EXIT || op == BPF_JCOND)
--		return 0;
--	if (BPF_SRC(insn->code) == BPF_K || (consts & BIT(insn->src_reg)))
--		return BIT(insn->dst_reg);
--	return consts & BIT(insn->dst_reg) ? BIT(insn->src_reg) : 0;
--}
--
--/* A jump that compares a register with 0 or 1 */
--u16 bpf_flow_flag_regs(struct bpf_verifier_env *env, int idx)
--{
--	struct bpf_insn *insn = &env->prog->insnsi[idx];
--
--	if (BPF_SRC(insn->code) != BPF_K || !bpf_insn_is_cond_jump(insn->code) ||
--	    BPF_OP(insn->code) == BPF_JCOND)
--		return 0;
--	if (BPF_OP(insn->code) == BPF_JSET ? !(insn->imm & 1) : (u32)insn->imm > 1)
--		return 0;
--	return BIT(insn->dst_reg);
--}
--
--/* With or without sign extension */
--static bool flow_is_copy(const struct bpf_insn *insn)
--{
--	return BPF_OP(insn->code) == BPF_MOV && BPF_SRC(insn->code) == BPF_X && !insn->imm &&
--	       (!insn->off || insn->off == 8 || insn->off == 16 || insn->off == 32);
--}
--
--static bool flow_is_shift(const struct bpf_insn *insn)
--{
--	u8 class = BPF_CLASS(insn->code), op = BPF_OP(insn->code);
--
--	return (class == BPF_ALU || class == BPF_ALU64) &&
--	       (op == BPF_LSH || op == BPF_RSH || op == BPF_ARSH);
--}
--
--/*
-- * The places of a function that hold a value: the registers, the arguments on the stack that it
-- * got and those that it hands over, the slots of the stack that struct flow_need has a bit for.
-- */
--enum {
--	FLOW_ARG_IN	= 16,
--	FLOW_ARG_OUT	= FLOW_ARG_IN + MAX_STACK_ARG_SLOTS,
--	FLOW_SLOT	= 64,
--	FLOW_PLACES	= 128,
--};
--static_assert(FLOW_ARG_OUT + MAX_STACK_ARG_SLOTS <= FLOW_SLOT);
--
--enum flow_kind {
--	FLOW_IS_PLAIN,	/* a number or a pointer to arena: nothing checks where it points to */
--	FLOW_IS_VALUE,	/* that, or a pointer to a map value that holds nothing but numbers */
--	FLOW_IS_CTX,	/* the context, as the prog or a global function got it */
--	FLOW_KINDS,
--	FLOW_IS_OTHER = FLOW_KINDS,
--};
--
--/* What the places hold for sure in front of an insn */
--struct flow_kinds {
--	unsigned long is[FLOW_KINDS][BITS_TO_LONGS(FLOW_PLACES)];
--};
--
--static void flow_kind_set(struct flow_kinds *k, u32 place, enum flow_kind kind)
--{
--	int i;
--
--	for (i = 0; i < FLOW_KINDS; i++)
--		__assign_bit(place, k->is[i], i == kind);
--	if (kind == FLOW_IS_PLAIN)
--		__set_bit(place, k->is[FLOW_IS_VALUE]);
--}
--
--static void flow_kind_copy(struct flow_kinds *to, u32 place, const struct flow_kinds *from,
--			   u32 from_place)
--{
--	int i;
--
--	for (i = 0; i < FLOW_KINDS; i++)
--		__assign_bit(place, to->is[i], test_bit(from_place, from->is[i]));
--}
--
--/* What holds on both ways to an insn. Returns true if that is less than before. */
--static bool flow_kinds_meet(struct flow_kinds *to, const struct flow_kinds *from)
--{
--	unsigned long lost = 0;
--	int i, j;
--
--	for (i = 0; i < FLOW_KINDS; i++) {
--		for (j = 0; j < ARRAY_SIZE(to->is[i]); j++) {
--			lost |= to->is[i][j] & ~from->is[i][j];
--			to->is[i][j] &= from->is[i][j];
--		}
--	}
--	return lost;
--}
--
--/* The first insn of a function that is called from @k */
--static bool flow_kinds_enter(struct flow_kinds *to, const struct flow_kinds *k)
--{
--	struct flow_kinds e = {};
--	int i;
--
--	/* r12 points to arena. The rest is not set. */
--	bitmap_fill(e.is[FLOW_IS_PLAIN], FLOW_PLACES);
--	bitmap_fill(e.is[FLOW_IS_VALUE], FLOW_PLACES);
--	flow_kind_set(&e, BPF_REG_FP, FLOW_IS_OTHER);
--	for (i = BPF_REG_1; i <= BPF_REG_5; i++)
--		flow_kind_copy(&e, i, k, i);
--	for (i = 0; i < MAX_STACK_ARG_SLOTS; i++)
--		flow_kind_copy(&e, FLOW_ARG_IN + i, k, FLOW_ARG_OUT + i);
--	return flow_kinds_meet(to, &e);
--}
--
--/* The place that @insn loads from or stores to through r10 or r11, -1 if it's something else */
--static int flow_mem_place(const struct bpf_insn *insn, u8 base)
--{
--	int n = (abs(insn->off) - 1) / BPF_REG_SIZE;
--
--	if (!insn->off)
--		return -1;
--	if (base == BPF_REG_FP && insn->off < 0 && n < 64)
--		return FLOW_SLOT + n;
--	if (base == BPF_REG_PARAMS && n < MAX_STACK_ARG_SLOTS)
--		return (insn->off < 0 ? FLOW_ARG_OUT : FLOW_ARG_IN) + n;
--	return -1;
--}
--
--static enum flow_kind flow_map_value_kind(const struct bpf_map *map)
--{
--	if (map->map_type == BPF_MAP_TYPE_ARENA)
--		return FLOW_IS_PLAIN;
--	/* what is at a known offset of a read-only map is known: a number, a string, a function */
--	if (map->map_flags & BPF_F_RDONLY_PROG)
--		return FLOW_IS_OTHER;
--	return IS_ERR_OR_NULL(map->record) && !map->inner_map_meta ? FLOW_IS_VALUE : FLOW_IS_OTHER;
--}
--
--/* What @insn loads through the register @base */
--static enum flow_kind flow_loaded_kind(struct bpf_verifier_env *env, const struct flow_kinds *k,
--				       const struct bpf_insn *insn, u8 base)
--{
--	struct bpf_insn_access_aux info = { .reg_type = SCALAR_VALUE };
--	int size = bpf_size_to_bytes(BPF_SIZE(insn->code));
--	bool tstamp = env->prog->tstamp_type_access, valid;
--
--	/* a number that is good for a load is an address in arena */
--	if (test_bit(base, k->is[FLOW_IS_VALUE]))
--		return FLOW_IS_PLAIN;
--	if (size == BPF_REG_SIZE && !test_bit(base, k->is[FLOW_IS_CTX]))
--		return FLOW_IS_OTHER;
--	valid = env->ops->is_valid_access &&
--		env->ops->is_valid_access(insn->off, size, BPF_READ, env->prog, &info);
--	/* it notes what the prog reads, and this is a question */
--	env->prog->tstamp_type_access = tstamp;
--	if (valid && info.reg_type == PTR_TO_PACKET_END)
--		bpf_find_containing_subprog(env, insn - env->prog->insnsi)->loads_pkt_end = true;
+-enum expr_op {
+-	/* leave range 0..255 for standard bpf opcodes */
+-	UNKNOWN = 256, /* start custom opcodes from the second byte */
+-	REG,
+-	IMM,
+-	SDIV, SMOD,
+-	SEXT8, SEXT16, SEXT32,
+-	ZEXT8, ZEXT16, ZEXT32,
+-	BSWAP16, BSWAP32, BSWAP64,
+-	/* during the loop body execution the value can be either of param[0] or param[1] */
+-	ANY,
+-	/* some value that verifier is not going to track precisely */
+-	OPAQUE,
+-	/* '*(u8/16/32 *)(r10 + X) = Y' writes define slot contents only partially */
+-	SPILL8, SPILL16, SPILL32,
 -	/*
--	 * Only the context has pointers that are shorter than a register. A base that nothing is
--	 * known about can be the context: it came out of a struct, or only some paths have it.
+-	 * SCEV expression corresponding to linear equation 'param[0] + param[1] * k',
+-	 * where k is a loop iteration number. Loop here refers to innermost loop
+-	 * containing instruction associated with this expression, as returned by
+-	 * bpf_loop_at_index().
 -	 */
--	if (size < BPF_REG_SIZE)
--		return valid && info.reg_type != SCALAR_VALUE ? FLOW_IS_OTHER : FLOW_IS_PLAIN;
--	return valid && info.reg_type == SCALAR_VALUE ? FLOW_IS_PLAIN : FLOW_IS_OTHER;
--}
--
--/* What a helper or a kfunc returns */
--static enum flow_kind flow_returned_kind(struct bpf_verifier_env *env, int idx)
--{
--	struct bpf_insn_aux_data *aux = &env->insn_aux_data[idx];
--	struct bpf_insn *insn = &env->prog->insnsi[idx];
--	const struct bpf_func_proto *fn;
--	struct bpf_call_arg_meta meta;
--	const struct btf_type *t;
--
--	if (bpf_pseudo_kfunc_call(insn)) {
--		if (bpf_fetch_kfunc_arg_meta(env, insn->imm, insn->off, &meta) < 0)
--			return FLOW_IS_OTHER;
--		t = btf_type_skip_modifiers(meta.btf, meta.func_proto->type, NULL);
--		if (!btf_type_is_ptr(t))
--			return FLOW_IS_PLAIN;
--		/* void * is a number, unless the verifier knows the kfunc: it may fail, or casts */
--		t = btf_type_skip_modifiers(meta.btf, t->type, NULL);
--		return btf_type_is_void(t) && !(meta.kfunc_flags & KF_RET_NULL) &&
--		       !bpf_is_cast_kfunc(&meta) ? FLOW_IS_PLAIN : FLOW_IS_OTHER;
--	}
--	if (bpf_get_helper_proto(env, insn->imm, &fn) < 0)
--		return FLOW_IS_OTHER;
--	if (fn->ret_type == RET_INTEGER || fn->ret_type == RET_VOID)
--		return FLOW_IS_PLAIN;
--	if (base_type(fn->ret_type) == RET_PTR_TO_MAP_VALUE &&
--	    (aux->const_reg_map_mask & BIT(BPF_REG_1)))
--		return flow_map_value_kind(env->used_maps[aux->const_reg_vals[BPF_REG_1]]);
--	return FLOW_IS_OTHER;
--}
--
--/*
-- * @k is what holds in front of the insn at @idx. Make it what holds behind it.
-- * @ret: the registers that are FLOW_IS_PLAIN at all exits of a subprog.
-- * Returns true if less is known than before at the entry or about the exits of a subprog.
-- */
--static bool flow_kinds_step(struct bpf_verifier_env *env, struct flow_kinds *kinds, u16 *ret,
--			    struct flow_kinds *k, int idx)
--{
--	struct bpf_subprog_info *sub = env->subprog_info;
--	struct bpf_insn *insn = &env->prog->insnsi[idx];
--	u8 class = BPF_CLASS(insn->code), op = BPF_OP(insn->code);
--	u8 dst = insn->dst_reg, src = insn->src_reg;
--	bool wide = BPF_SIZE(insn->code) == BPF_DW && BPF_MODE(insn->code) == BPF_MEM &&
--		    !(insn->off % BPF_REG_SIZE);
--	bool lost = false;
--	u16 regs = U16_MAX;
--	int i, s;
--
--	if (class == BPF_ALU64 && (op == BPF_ADD || op == BPF_SUB)) {
--		__clear_bit(dst, k->is[FLOW_IS_CTX]);
--		for (i = 0; BPF_SRC(insn->code) == BPF_X && i < FLOW_IS_CTX; i++)
--			if (!test_bit(src, k->is[i]))
--				__clear_bit(dst, k->is[i]);
--	} else if (insn->code == (BPF_ALU64 | BPF_MOV | BPF_X) && !insn->off) {
--		flow_kind_copy(k, dst, k, src);
--	} else if (class == BPF_ALU || class == BPF_ALU64) {
--		/*
--		 * addr_space_cast too. It leaves a pointer that is not in arena as it is, and
--		 * a compiler casts what it cannot know. Nearly all of that is in arena.
--		 */
--		flow_kind_set(k, dst, FLOW_IS_PLAIN);
--	} else if (class == BPF_LDX) {
--		s = flow_mem_place(insn, src);
--		if (wide && s >= 0)
--			flow_kind_copy(k, dst, k, s);
--		else
--			flow_kind_set(k, dst, flow_loaded_kind(env, k, insn, src));
--	} else if (class == BPF_STX || class == BPF_ST) {
--		i = bpf_atomic_load_reg(insn);
--		if (i >= 0)
--			flow_kind_set(k, i, flow_loaded_kind(env, k, insn,
--						insn->imm == BPF_LOAD_ACQ ? src : dst));
--		s = flow_mem_place(insn, dst);
--		if (class == BPF_STX && wide && s >= 0)
--			flow_kind_copy(k, s, k, src);
--		else if (s >= 0)
--			flow_kind_set(k, s, FLOW_IS_PLAIN);
--	} else if (bpf_is_ldimm64(insn)) {
--		if (src == BPF_PSEUDO_MAP_VALUE || src == BPF_PSEUDO_MAP_IDX_VALUE)
--			flow_kind_set(k, dst, flow_map_value_kind(
--					env->used_maps[env->insn_aux_data[idx].map_index]));
--		else
--			flow_kind_set(k, dst, src ? FLOW_IS_OTHER : FLOW_IS_PLAIN);
--	} else if (insn->code == (BPF_JMP | BPF_EXIT) && !bpf_is_unwind_exit(insn)) {
--		s = bpf_find_containing_subprog(env, idx) - sub;
--		lost = ret[s] & ~k->is[FLOW_IS_PLAIN][0];
--		ret[s] &= k->is[FLOW_IS_PLAIN][0];
--	} else if (class == BPF_LD || (class == BPF_JMP && op == BPF_CALL)) {
--		s = bpf_pseudo_call(insn) ? bpf_find_subprog(env, idx + insn->imm + 1) : -1;
--		if (s >= 0 && !bpf_subprog_is_global(env, s)) {
--			lost = flow_kinds_enter(&kinds[sub[s].start], k);
--			regs = ret[s];
--		} else if (bpf_is_callx(insn)) {
--			regs = 0;
--		}
--		/* a subprog may return a pair in R0 and R2, the rest is not set */
--		regs |= ~(BIT(BPF_REG_0) | BIT(BPF_REG_2));
--		for (i = BPF_REG_0; i <= BPF_REG_5; i++)
--			flow_kind_set(k, i, regs & BIT(i) ? FLOW_IS_PLAIN : FLOW_IS_OTHER);
--		for (i = 0; i < MAX_STACK_ARG_SLOTS; i++)
--			flow_kind_set(k, FLOW_ARG_OUT + i, FLOW_IS_PLAIN);
--		if (bpf_helper_call(insn) || bpf_pseudo_kfunc_call(insn))
--			flow_kind_set(k, BPF_REG_0, flow_returned_kind(env, idx));
--	}
--	return lost;
--}
--
--/*
-- * Find the registers that hold a number or a pointer to arena, and those that point to the value
-- * of a map that holds nothing but numbers at worst, whichever way the prog gets to an insn:
-- * plain_regs and value_regs of struct bpf_insn_aux_data. The others may hold any pointer.
-- *
-- * Forwards, from "all is known" down, until nothing changes. Arguments go from the callers to
-- * the callees and results the other way, so the subprogs are looked at in both orders in turn.
-- *
-- * Nothing depends on it but which states are kept apart. A pointer that is taken for
-- * a number costs a rule. A number that is taken for a pointer costs states. So it's fine to
-- * miss a store through a pointer to the stack, and to take what callx calls for unknown.
-- *
-- * The edges that the verifier adds, see bpf_head_guard_target(): may_goto at the head of a loop
-- * takes what holds there to its target. A subprog that is out of budget goes to an exit with 0
-- * in place of the result, a number.
-- */
--int bpf_flow_compute_kinds(struct bpf_verifier_env *env)
--{
--	struct bpf_subprog_info *sub = env->subprog_info;
--	int len = env->prog->len, cnt = env->subprog_cnt, i, j, n, s, t, idx, err = 0;
--	struct flow_kinds *kinds, k = {};
--	struct bpf_iarray *succ;
--	bool lost = true;
--	u16 *ret;
--
--	kinds = kvmalloc_array(len, sizeof(*kinds), BPF_VERIFIER_GFP);
--	ret = kvmalloc_array(env->subprog_cnt, sizeof(*ret), BPF_VERIFIER_GFP);
--	if (!kinds || !ret) {
--		kvfree(kinds);
--		kvfree(ret);
--		return -ENOMEM;
--	}
--	memset(kinds, 0xff, len * sizeof(*kinds));
--	memset(ret, 0xff, env->subprog_cnt * sizeof(*ret));
--
--	/* what the kernel, a helper, callx or another prog calls: only the context is known */
--	for (s = 0; s < env->subprog_cnt; s++) {
--		if (s && !bpf_subprog_is_global(env, s) && !sub[s].addr_taken)
--			continue;
--		flow_kinds_enter(&kinds[sub[s].start], &k);
--		for (i = 0; i < MAX_BPF_FUNC_REG_ARGS; i++)
--			if (sub[s].args[i].arg_type == ARG_PTR_TO_CTX ||
--			    (!s && !i && env->prog->type != BPF_PROG_TYPE_EXT))
--				flow_kind_set(&kinds[sub[s].start], BPF_REG_1 + i, FLOW_IS_CTX);
--	}
--
--	for (n = 0; lost; n++) {
--		lost = false;
--		/* a chain of calls takes a round for each link */
--		if (bpf_must_abort()) {
--			err = -EINTR;
--			break;
--		}
--		for (j = 0; j < cnt; j++) {
--			/* it has callees first */
--			s = env->subprog_topo_order[n & 1 ? j : cnt - 1 - j];
--			for (i = sub[s + 1].postorder_start; i-- > sub[s].postorder_start;) {
--				idx = env->cfg.insn_postorder[i];
--				k = kinds[idx];
--				lost |= flow_kinds_step(env, kinds, ret, &k, idx);
--				succ = bpf_insn_successors(env, idx);
--				iarray_for_each(t, succ)
--					lost |= flow_kinds_meet(&kinds[t], &k);
--				t = bpf_head_guard_target(env, idx);
--				if (t >= 0)
--					lost |= flow_kinds_meet(&kinds[t], &kinds[idx]);
--			}
--		}
--	}
--	for (i = 0; i < len; i++) {
--		env->insn_aux_data[i].plain_regs = kinds[i].is[FLOW_IS_PLAIN][0];
--		env->insn_aux_data[i].value_regs = kinds[i].is[FLOW_IS_VALUE][0];
--	}
--	kvfree(kinds);
--	kvfree(ret);
--	return err;
--}
--
--/*
-- * A number is added to what may be a pointer whose offset the verifier looks at:
-- * - An object of the kernel, the context, a socket take a known offset only.
-- * - The packet: the offset was compared with the end of the packet before the states met.
-- * - The value of a map that has a timer, a lock, a pointer in the middle.
-- * - The value of a read-only map: what is loaded from a known offset is known.
-- * Not a value that holds nothing but numbers. Only the lowest and the highest offset
-- * count there, and the join of two constants has both. @any_value: that one too.
-- */
--static u16 flow_ptr_off_regs(struct bpf_verifier_env *env, int idx, bool any_value)
--{
--	struct bpf_insn_aux_data *aux = &env->insn_aux_data[idx];
--	struct bpf_insn *insn = &env->prog->insnsi[idx];
--	u16 both = BIT(insn->dst_reg) | BIT(insn->src_reg), ptrs;
--	u8 op = BPF_OP(insn->code);
--
--	if (BPF_CLASS(insn->code) != BPF_ALU64 || BPF_SRC(insn->code) != BPF_X ||
--	    (op != BPF_ADD && op != BPF_SUB) || (aux->stack_ptrs & both))
--		return 0;
--	ptrs = both & ~(any_value ? aux->plain_regs : aux->value_regs);
--	if (op == BPF_SUB)
--		ptrs &= BIT(insn->dst_reg);
--	/* the one that may be the pointer makes the other one the number */
--	return ptrs && ptrs != both ? both ^ ptrs : ptrs;
--}
--
--/* The base of a load or a store, unless it's a number or a pointer to arena for sure */
--static u16 flow_base_regs(struct bpf_verifier_env *env, int idx)
--{
--	struct bpf_insn *insn = &env->prog->insnsi[idx];
--	u8 class = BPF_CLASS(insn->code);
--	u16 regs = 0;
--
--	if (class == BPF_LDX || bpf_atomic_is_load_acq(insn))
--		regs = BIT(insn->src_reg);
--	else if (class == BPF_ST || class == BPF_STX)
--		regs = BIT(insn->dst_reg);
--	return regs & ~env->insn_aux_data[idx].plain_regs & GENMASK(BPF_REG_9, BPF_REG_0);
--}
--
--/*
-- * Some arguments of kfuncs and helpers have to be known constants: the id of a type,
-- * the size of what is reserved in a ring buffer, the size of a slice of a dynptr.
-- * A compiler makes one call of
-- *	if (x) p = bpf_rdonly_cast(q, ID); else p = bpf_rdonly_cast(q, 0);
-- * and one store of
-- *	if (x) a[n++] = p; else b[m++] = p;
-- * where a and b are on the stack.
-- * and one load of
-- *	x = ipv6 ? *(u16 *)(pkt + 54) : *(u16 *)(pkt + 34);	y = z ? task->pid : task->tgid;
-- * The join of two constants is not a constant. Find the registers and the slots of the stack
-- * that end up in such arguments, or in offsets in the stack or from a pointer,
-- * like live registers are found: backwards, until nothing changes.
-- * States in which they differ are not joined.
-- * Nothing depends on it but what is known: it's fine to miss a store through a pointer.
-- *
-- * FLOW_NEED_JUMP: those that a jump ahead compares with a constant, see flow_join_makes_up().
-- * As they are, or extended: without 32-bit insns a compiler tests
-- *	r7 = r8; r7 <<= 32; r7 >>= 32;
-- * and goes on with r8.
-- * A slot that is filled through another pointer to the stack than r10 is not one of them, and
-- * flow_null_differs() counts on that.
-- *
-- * FLOW_NEED_FLAG: those of which a jump tells 0 from 1, see flow_join_makes_up(). As they are,
-- * extended, or masked: a bool is tested as "w1 &= 1; if w1 != 0". Not through a call.
-- * The jump ends the basic block of the insn, or a block that this block leads to. Not further:
-- * every state that is kept apart goes through all that is on the way to the jump once more.
-- * So there are two rounds. In the first one nothing comes from the blocks ahead. What it finds
-- * at the first insn of a block is what the second one takes at the end of the blocks that lead
-- * there. In both a block depends on nothing that the round itself computes for another block,
-- * so the order in which the insns are looked at doesn't matter.
-- *
-- * The last three kinds keep no states apart. They are for bpf_flow_is_needed(), which asks
-- * whether anything ahead looks at a number that a loop changes from iteration to iteration.
-- * FLOW_NEED_VALUE_OFF: FLOW_NEED_PTR_OFF, and the offset in a map value that holds nothing but
-- * numbers. It has to be in the value. It can be an argument, or what a function returns:
-- *	return v->hist[count_bits(x)];
-- * So can an offset in the stack. FLOW_NEED_STACK_OFF doesn't follow it through a return, so this
-- * table has it too.
-- * FLOW_NEED_BASE: the base of a load or a store, as it is, behind a cast, moved by a constant:
-- *	p = NULL; for (i = 0; i < 3; i++) { if (p) n += p->len; p = next(); }
-- * FLOW_NEED_JUMP_ALU: FLOW_NEED_JUMP, and what the tested number is made of step by step:
-- *	for (i = 0; i < 3; i++) x /= 10; if (x < 8) ...
-- * In x op= y that is x. y is not followed.
-- * What is stored through a pointer to the stack other than r10 counts as tested. It's a result
-- * for the caller, and no table follows it from the store to the fill:
-- *	count_bits(x, &n); return v->hist[n];
-- * These two go through callx, to every function whose address is taken.
-- */
--static int flow_compute_need_const(struct bpf_verifier_env *env, struct flow_need **pneed,
--				   enum flow_need_kind kind)
--{
--	struct bpf_insn *insns = env->prog->insnsi, *insn;
--	struct flow_need in, out, *need, *from, *ahead = NULL;
--	struct bpf_iarray *succ;
--	bool jump = kind == FLOW_NEED_JUMP || kind == FLOW_NEED_JUMP_ALU;
--	bool callx = kind == FLOW_NEED_BASE || kind == FLOW_NEED_JUMP_ALU;
--	bool flag = kind == FLOW_NEED_FLAG, second = false;
--	bool changed = true, any = false, keep, from_src, reg;
--	int i, s, idx, slot, err = 0;
--	u16 *gen, callx_regs = 0, pair = BIT(BPF_REG_0) | BIT(BPF_REG_2);
--	u8 *ret, class, op;
--
--	need = kvcalloc(env->prog->len, sizeof(*need), BPF_VERIFIER_GFP);
--	gen = kvcalloc(env->prog->len, sizeof(u16), BPF_VERIFIER_GFP);
--	/* the callers need what the subprog returns: r0, and r2 of a pair */
--	ret = kvcalloc(env->subprog_cnt, sizeof(u8), BPF_VERIFIER_GFP);
--	if (flag)
--		ahead = kvcalloc(env->prog->len, sizeof(*need), BPF_VERIFIER_GFP);
--	*pneed = need;
--	if (!need || !gen || !ret || (flag && !ahead)) {
--		kvfree(ahead);
--		kvfree(gen);
--		kvfree(ret);
--		return -ENOMEM;
--	}
--	for (i = 0; i < env->prog->len; i++) {
--		if (jump)
--			gen[i] = flow_tested_regs(env, i);
--		else if (flag)
--			gen[i] = bpf_flow_flag_regs(env, i);
--		else if (kind == FLOW_NEED_STACK_OFF)
--			gen[i] = flow_stack_off_regs(env, i);
--		else if (kind == FLOW_NEED_PTR_OFF || kind == FLOW_NEED_VALUE_OFF)
--			gen[i] = flow_ptr_off_regs(env, i, kind == FLOW_NEED_VALUE_OFF);
--		else if (kind == FLOW_NEED_BASE)
--			gen[i] = flow_base_regs(env, i);
--		else if (bpf_helper_call(&insns[i]) || bpf_pseudo_kfunc_call(&insns[i]))
--			gen[i] = bpf_call_const_arg_regs(env, &insns[i]);
--		if (kind == FLOW_NEED_JUMP_ALU && BPF_CLASS(insns[i].code) == BPF_STX &&
--		    insns[i].dst_reg != BPF_REG_FP &&
--		    (env->insn_aux_data[i].stack_ptrs & BIT(insns[i].dst_reg)))
--			gen[i] = BIT(insns[i].src_reg);
--		if (kind == FLOW_NEED_VALUE_OFF)
--			gen[i] |= flow_stack_off_regs(env, i);
--		any |= gen[i];
--	}
--	if (jump) {
--		/* the verifier compares what the prog and its callbacks return with a range */
--		ret[0] = BIT(BPF_REG_0);
--		/* no insn takes the address of this one. It's 0 if there is none */
--		ret[env->exception_callback_subprog] = BIT(BPF_REG_0);
--		for (i = 0; i < env->prog->len; i++) {
--			if (!bpf_pseudo_func(&insns[i]))
--				continue;
--			s = bpf_find_subprog(env, i + insns[i].imm + 1);
--			if (s >= 0)
--				ret[s] = BIT(BPF_REG_0);
--		}
--		any = true;
--	}
--again:
--	while (any && changed) {
--		changed = false;
--		if (bpf_must_abort()) {
--			err = -EINTR;
--			break;
--		}
--		for (s = 0; callx && s < env->subprog_cnt; s++)
--			if (env->subprog_info[s].addr_taken)
--				callx_regs |= need[env->subprog_info[s].start].regs;
--		for (i = 0; i < env->cfg.cur_postorder; i++) {
--			idx = env->cfg.insn_postorder[i];
--			insn = &insns[idx];
--			class = BPF_CLASS(insn->code);
--			succ = bpf_insn_successors(env, idx);
--			out.regs = 0;
--			out.slots = 0;
--			from = flag && env->insn_aux_data[idx].bb_end ? ahead : need;
--			for (s = 0; s < succ->cnt; s++) {
--				out.regs |= from[succ->items[s]].regs;
--				out.slots |= from[succ->items[s]].slots;
--			}
--			in = out;
--			if (class == BPF_JMP && BPF_OP(insn->code) == BPF_CALL) {
--				in.regs &= ~GENMASK(BPF_REG_5, BPF_REG_0);
--				if (bpf_is_callx(insn))
--					in.regs |= callx_regs & GENMASK(BPF_REG_5, BPF_REG_1);
--				s = idx + insn->imm + 1;
--				if (bpf_pseudo_call(insn) && !flag &&
--				    !bpf_subprog_is_global(env, bpf_find_subprog(env, s))) {
--					if (kind != FLOW_NEED_PTR_OFF)
--						in.regs |= need[s].regs &
--							   GENMASK(BPF_REG_5, BPF_REG_1);
--					s = bpf_find_subprog(env, s);
--					/*
--					 * Not for an index where states are kept apart: that is
--					 * one of many numbers.
--					 */
--					if ((kind == FLOW_NEED_ARG || kind == FLOW_NEED_VALUE_OFF ||
--					     jump) &&
--					    (out.regs & pair & ~ret[s])) {
--						ret[s] |= out.regs & pair;
--						changed = true;
--					}
--				}
--			} else if (insn->code == (BPF_JMP | BPF_EXIT)) {
--				s = bpf_find_containing_subprog(env, idx) - env->subprog_info;
--				in.regs |= ret[s];
--			} else if (class == BPF_LDX || class == BPF_LD) {
--				slot = class == BPF_LDX ? flow_fp_slot(insn, insn->src_reg) : -1;
--				if (slot >= 0 && (out.regs & BIT(insn->dst_reg)))
--					in.slots |= BIT_ULL(slot);
--				in.regs &= ~BIT(insn->dst_reg);
--			} else if (class == BPF_STX || class == BPF_ST) {
--				slot = flow_fp_slot(insn, insn->dst_reg);
--				if (slot >= 0 && (out.slots & BIT_ULL(slot))) {
--					in.slots &= ~BIT_ULL(slot);
--					if (class == BPF_STX)
--						in.regs |= BIT(insn->src_reg);
--				}
--			} else if ((class == BPF_ALU || class == BPF_ALU64) &&
--				   (out.regs & BIT(insn->dst_reg))) {
--				op = BPF_OP(insn->code);
--				reg = BPF_SRC(insn->code) == BPF_X;
--				/* the result is known when what it is made of is */
--				keep = op != BPF_MOV;
--				from_src = reg;
--				if (jump || flag)
--					from_src = flow_is_copy(insn);
--				if (kind == FLOW_NEED_JUMP || flag)
--					keep = flow_is_shift(insn) && !reg;
--				if (flag && op == BPF_AND && !reg)
--					keep = insn->imm & 1;
--				if (kind == FLOW_NEED_BASE) {
--					keep = !reg && (op == BPF_ADD || op == BPF_SUB);
--					from_src = reg && op == BPF_MOV;
--				}
--				if (!keep)
--					in.regs &= ~BIT(insn->dst_reg);
--				if (from_src)
--					in.regs |= BIT(insn->src_reg);
--			}
--			in.regs |= gen[idx];
--			if (in.regs != need[idx].regs || in.slots != need[idx].slots) {
--				need[idx] = in;
--				changed = true;
--			}
--		}
--	}
--	if (flag && !err && !second) {
--		memcpy(ahead, need, env->prog->len * sizeof(*need));
--		second = changed = true;
--		goto again;
--	}
+-	LINEAR_SCEV,
 -	/*
--	 * An offset that is an argument: not through the call, see above, and not where the calls
--	 * meet. A function would be looked at once for each offset that it's called with.
+-	 * (add rB rC) is the SCEV of rA: rA == rB + rC at the header in every iteration. rB and rC
+-	 * are the header phis here, not the entry values as below LINEAR_SCEV.
 -	 */
--	for (s = 0; kind == FLOW_NEED_PTR_OFF && s < env->subprog_cnt; s++)
--		need[env->subprog_info[s].start].regs = 0;
--	kvfree(ahead);
--	kvfree(gen);
--	kvfree(ret);
--	if (!any) {
--		kvfree(need);
--		*pneed = NULL;
--	}
--	return err;
--}
+-	ADD_SCEV,
+-};
 -
 -/*
-- * Does anything ahead of the insn at @idx look at what @r holds there? @r is a register or a stack
-- * slot of the function as scev.c counts them. See flow_compute_need_const(): it's a guess.
+- * An SSA name for a value that no expression describes: the def of the SCEV register 'reg'
+- * - by the insn at 'idx'. An insn that may write defines too (may_def in liveness.c). A nested loop
+- *   defines at its header what it leaves.
+- * - by a phi before the insn at 'idx': a join point, a loop header.
+- * Without its backedges and with nested loops collapsed the body of a loop is acyclic: an insn
+- * executes at most once per iteration, so a def is one value per iteration. A name is unique within
+- * the env of one loop.
+- * The operands of a phi are a set, 8 at most; a phi(a, b) among them is expanded. They have no
+- * defs, see strip_defs(): (+ r6 %r2.4) and (+ r6 %r2.7) are one operand, (+ r6 _). So they don't
+- * tell one phi from another: phis are value numbered by their bases, see mk_phi().
+- * In the env of loop H a phi at H merges the backedge values only, the header phi itself is
+- * (REG r). In the env of the enclosing loop a phi at H merges the entering edges.
+- * Op and params of a def by an insn are what that insn computes, see alu64_with_def():
+- * set_expr_base() looks through such an add, eval_linked_exprs() evaluates it, split_const_offset()
+- * and eval_linked_exprs() check prevent_zext of the insn. Those of a phi are the shape that its
+- * operands share, no insn computes them: nothing looks through a phi.
 - */
--bool bpf_flow_is_needed(struct bpf_verifier_env *env, int idx, u32 r)
--{
--	const struct flow_need *need;
--	int i;
+-struct expr_def {
+-	u32 set:1;	/* 0: the expression has no def */
+-	u32 phi:1;
+-	u32 reg:9;
+-	u32 idx:21;
+-};
+-/* def.reg of the phi of two bases, see mk_phi() */
+-#define BASE_REG ENV_REGS_NUM
+-static_assert(BASE_REG < 1 << 9 && BPF_COMPLEXITY_LIMIT_INSNS <= 1 << 21);
 -
--	/* no table has a bit for it */
--	if (r >= MAX_BPF_REG + 64)
+-static const struct expr_def no_def;
+-
+-struct expr {
+-	u16 op:15;
+-	/* A value number: all SCEV registers of an env that have this id hold the same value */
+-	u16 is_vn:1;
+-	/* Where find_linked_expr() looks for this id */
+-	u16 linked_expr;
+-	/*
+-	 * UNKNOWN, OPAQUE and ANY don't describe a value. With a def the id stands for one value,
+-	 * see struct expr_def. Without a def every use of the id can be another value.
+-	 */
+-	struct expr_def def;
+-	union {
+-		u32 params[2];
+-		s64 imm;
+-	};
+-	/* expr == base + off, see set_expr_base() */
+-	u32 base;
+-	/*
+-	 * id of the first add on the way to 'base' whose insn may still become ALU32, see
+-	 * prevent_zext. 0: none
+-	 */
+-	u32 arena_add;
+-	s64 off;
+-};
+-
+-struct env {
+-	bool empty;
+-	u32 reg2expr[ENV_REGS_NUM];
+-	u32 reg2scev[REGS_NUM];
+-	/*
+-	 * Register promotion of memory that is not behind r10. The SCEV register REGS_NUM + i is
+-	 * the memory at the address mem_addr[i], a value number of this env. 0: not in use.
+-	 * - A store through a pointer defines it like a spill defines a stack slot.
+-	 * - A load defines its register as before, and the memory gets that value number: it holds
+-	 *   what a store of the register would leave. No expression of a register depends on
+-	 *   memory, which is private only if it is stack. That is not known here.
+-	 * - A join point has a phi. An insn that may write is a may-def, see forget_mem_regs().
+-	 * - A store through r10 is not: the main pass takes the stack of a caller only.
+-	 * A value number of a loop means nothing in the enclosing loop: no memory is tracked at
+-	 * a header, a nested loop is a may-def.
+-	 */
+-	u32 mem_addr[MEM_REGS_NUM];
+-};
+-
+-/*
+- * A SCEV register and the id of its expression before a conditional jump. 'addr' is mem_addr[] of
+- * a memory location.
+- */
+-struct scev_linked_reg {
+-	u32 reg;
+-	u32 id;
+-	u32 addr;
+-	/* The jump refines it. Otherwise it is a leader, or it holds the address of memory. */
+-	bool refine;
+-	/* At a visit: it is the linked expression 'expr' + a constant. NO_IDX: not evaluated. */
+-	u16 expr;
+-};
+-
+-#define NO_IDX U16_MAX
+-#define LEADERS_NUM 3
+-
+-/*
+- * The expressions of the linked registers of a jump are a DAG. Its nodes are bases, see
+- * set_expr_base(): (+ x 4) and (+ x 8) are one node, x. A visit of the jump lists them in
+- * post-order: every base is there once, after its operands. The list is not kept.
+- */
+-struct scev_linked_expr {
+-	u32 id;
+-	/* The bases of the operands: positions among the linked expressions of the jump */
+-	u16 params[2];
+-	/*
+-	 * GVN's leader table. The SCEV registers that hold 'id' + a constant (mod 2^N): positions
+-	 * among the linked registers of the jump. First the tested registers: they have news in any
+-	 * number of bits. The last one is the widest of the others, in 'leader_bits' bits.
+-	 */
+-	u16 leaders[LEADERS_NUM];
+-	u8 leader_bits;
+-	/* It can be evaluated: it has a leader, or its operands can be evaluated */
+-	u8 has_value:1;
+-	/* find_linked_regs(): a register that the jump refines is made of it */
+-	u8 needed:1;
+-	/* By its innermost base it can have a constant difference to a tested register */
+-	u8 tested_base:1;
+-	/*
+-	 * LLVM: SCEVExprContains(). By its bases a tested register can be among the
+-	 * operands. Once the leaders are known: the value depends on a tested register.
+-	 */
+-	u8 has_tested:1;
+-};
+-
+-struct insn_envs {
+-	u32 cnt;
+-	/* The linked registers of a jump, see find_linked_regs(): linked_cnt of scev->linked[] */
+-	u32 linked_first;
+-	u32 linked_cnt;
+-	struct {
+-		int loop_header;
+-		struct env *env;
+-	} entries[];
+-};
+-
+-#define EXPR_STACK_DEPTH 8
+-
+-struct expr_stack_elt {
+-	u32 id:28;
+-	u32 pre:1;
+-	u32 next_param:2;
+-};
+-
+-DEFINE_MIN_HEAP(int, scev_worklist);
+-
+-struct scev {
+-	/* Read-only representatives for stack slots without a saved register. */
+-	struct bpf_reg_state zero_reg;
+-	struct bpf_reg_state unknown_reg;
+-	/* r -> (REG r): before the first insn of a loop every SCEV register is its header phi */
+-	struct env identity_env;
+-	/*
+-	 * Expressions are identified by id, exprs_ht ensures that
+-	 * each expression exists as a unique instance.
+-	 * This allows for fast equivalence check: id1 === id2.
+-	 * exprs_ht[hash] is the first id of a chain, exprs_next[id] is the next one, 0 ends it.
+-	 * Both have exprs_cap elements, like exprs[].
+-	 */
+-	u32 *exprs_ht;
+-	u32 *exprs_next;
+-	struct scev_worklist worklist;
+-	struct insn_envs **envs;
+-	struct expr *exprs;
+-	struct scev_linked_reg *linked;
+-	/* The linked expressions of the jump at hand and their values, see eval_linked_exprs() */
+-	struct scev_linked_expr *linked_exprs;
+-	struct scev_value *vals;
+-	/* The stack slots that a store through a dynptr slice may alias, see expr_is_vn() */
+-	DECLARE_BITMAP(slice_slots, MAX_BPF_STACK_SLOTS);
+-	/*
+-	 * Loops are analyzed one by one, this array keeps track if a particular
+-	 * instruction was visited on a current pass.
+-	 */
+-	u32 *discovered;
+-	int exprs_cnt;
+-	int exprs_cap;
+-	u32 linked_cnt;
+-	u32 linked_cap;
+-	u32 linked_exprs_cnt;
+-	u32 linked_exprs_cap;
+-	u32 vals_cap;
+-	int envs_cnt;
+-	int stack_sz;
+-	int simplify_depth;
+-	struct expr_stack_elt expr_stack[EXPR_STACK_DEPTH];
+-	u32 ids_buf[EXPR_STACK_DEPTH];
+-};
+-
+-static u32 expr_hash(struct expr *e)
+-{
+-	/* def.phi is not hashed: the def by an insn and the phi before it share a chain */
+-	return jhash_3words(e->op, e->params[0], e->params[1],
+-			    e->def.idx * REGS_NUM + e->def.reg);
+-}
+-
+-static bool same_def(struct expr_def a, struct expr_def b)
+-{
+-	return a.set == b.set && a.phi == b.phi && a.reg == b.reg && a.idx == b.idx;
+-}
+-
+-/* Is @e the expression @id? The base of a phi is a part of its key. 0: the phi is its own base. */
+-static int expr_eq(struct scev *scev, struct expr *e, u32 id)
+-{
+-	struct expr *x = &scev->exprs[id];
+-
+-	if (e->op != x->op || e->imm != x->imm || !same_def(e->def, x->def))
+-		return false;
+-	if (!e->def.phi)
 -		return true;
--	for (i = 0; i < FLOW_NEED_KINDS; i++) {
--		need = env->flow->need[i];
--		if (need && (r < MAX_BPF_REG ? need[idx].regs & BIT(r) :
--					       need[idx].slots & BIT_ULL(r - MAX_BPF_REG)))
--			return true;
--	}
--	return false;
+-	return e->base ? e->base == x->base && e->off == x->off : x->base == id;
 -}
 -
--/*
-- * A number that grows from one iteration of a loop to the next is not followed step by step. The
-- * bound that moved is put where it may come to rest, see scalar_widen(). The jumps of
-- * the loop tell where that is:
-- *	do { a[i] = 0; i += 3; } while (i < 30);		29 at most comes back to the head
-- *	while (i < 30) { a[i] = 0; i += 3; }			32
-- *	loop { if (...) { if (n >= 64) break; a[n++] = x; } }	64
-- *
-- * One iteration is looked at, from the head to the jumps back. What a register or a stack slot
-- * holds is written as root + constant. A root is what a place held at the head, or what was made
-- * in a place since. A copy, an extension, a spill and a fill keep the root. += and -= of a constant
-- * change the constant. Everything else makes a new root. Where paths meet two constants become
-- * a range of them, and two roots a new one.
-- * A jump that compares root + c with a constant bounds the root on each of its edges that stays in
-- * the loop. What comes back to the head in a place is root + c again: that, with the bounds of
-- * the root, is where the place may come to rest.
-- *
-- * It's a guess. The state that comes back to the head is compared with it like with any other
-- * state. So it's fine to take a 32-bit add for an add, to miss a store through a pointer, to mix up
-- * two numbers that are made in one place, and to know nothing of the edges that the verifier adds.
-- */
--struct flow_sym {
--	s32 lo, hi;
--	u8 root;
--};
--
--#define FLOW_NO_PLACE	U8_MAX
--/* How many of them the look at one loop may take. A loop that needs more has no table. */
--#define BPF_FLOW_MAX_SYMS	(4 << 20)
--
--static_assert(FLOW_SLOT == BPF_LOOP_SLOT && FLOW_PLACES == BPF_LOOP_PLACES);
--
--/* @insn makes the place *@to a copy of the place *@from, extended or cut to its low bits */
--static bool flow_copies_place(const struct bpf_insn *insn, u8 *to, u8 *from)
+-static void exprs_ht_add(struct scev *scev, u32 id)
 -{
--	u8 class = BPF_CLASS(insn->code);
--	int slot;
+-	u32 *bucket = &scev->exprs_ht[expr_hash(&scev->exprs[id]) & (scev->exprs_cap - 1)];
 -
--	if (class == BPF_ALU || class == BPF_ALU64) {
--		*to = insn->dst_reg;
--		*from = insn->src_reg;
--		return flow_is_copy(insn) && *to < BPF_REG_FP && *from < BPF_REG_FP;
--	}
--	if (class != BPF_LDX && class != BPF_STX)
--		return false;
--	slot = flow_fp_slot(insn, class == BPF_LDX ? insn->src_reg : insn->dst_reg);
--	if (slot < 0)
--		return false;
--	*to = class == BPF_LDX ? insn->dst_reg : FLOW_SLOT + slot;
--	*from = class == BPF_LDX ? FLOW_SLOT + slot : insn->src_reg;
--	return *to != BPF_REG_FP && *from != BPF_REG_FP;
+-	scev->exprs_next[id] = *bucket;
+-	*bucket = id;
 -}
 -
--/* An ALU insn that leaves a small number as it is: an extension, or half of one */
--static bool flow_extends(const struct bpf_insn *insn)
+-/* @cap is a power of two. No warning for a size that kvmalloc() rejects. */
+-static int grow_exprs(struct scev *scev, u32 cap)
 -{
--	if (BPF_SRC(insn->code) != BPF_K)
--		return false;
--	if (flow_is_shift(insn))
--		return insn->imm == 32 || insn->imm == 48 || insn->imm == 56;
--	return BPF_OP(insn->code) == BPF_AND &&
--	       (insn->imm == 0xff || insn->imm == 0xffff || insn->imm == -1);
+-	gfp_t gfp = BPF_VERIFIER_GFP;
+-	void *tmp;
+-	u32 id;
+-
+-	tmp = kvrealloc(scev->exprs, array_size(cap, sizeof(*scev->exprs)), gfp);
+-	if (!tmp)
+-		return -ENOMEM;
+-	scev->exprs = tmp;
+-	tmp = kvrealloc(scev->exprs_next, array_size(cap, sizeof(u32)), gfp);
+-	if (!tmp)
+-		return -ENOMEM;
+-	scev->exprs_next = tmp;
+-	tmp = kvrealloc(scev->exprs_ht, array_size(cap, sizeof(u32)), gfp);
+-	if (!tmp)
+-		return -ENOMEM;
+-	scev->exprs_ht = tmp;
+-	scev->exprs_cap = cap;
+-	memset(scev->exprs_ht, 0, array_size(cap, sizeof(u32)));
+-	for (id = REG_EXPR_ID(REGS_NUM); id < scev->exprs_cnt; id++)
+-		exprs_ht_add(scev, id);
+-	return 0;
 -}
 -
--static void flow_written_places(const struct bpf_insn *insn, unsigned long *places)
+-static u32 op_params_num(u32 op);
+-
+-static bool expr_is_vn(struct scev *scev, struct expr *e)
 -{
--	u8 class = BPF_CLASS(insn->code);
--	int p;
--
--	bitmap_zero(places, FLOW_PLACES);
--	if (class == BPF_ALU || class == BPF_ALU64 || class == BPF_LDX || bpf_is_ldimm64(insn)) {
--		__set_bit(insn->dst_reg, places);
--	} else if (class == BPF_LD || (class == BPF_JMP && BPF_OP(insn->code) == BPF_CALL)) {
--		bitmap_set(places, BPF_REG_0, BPF_REG_5 + 1);
--	} else if (class == BPF_ST || class == BPF_STX) {
--		p = bpf_atomic_load_reg(insn);
--		if (p >= 0)
--			__set_bit(p, places);
--		p = flow_mem_place(insn, insn->dst_reg);
--		if (p >= FLOW_SLOT)
--			__set_bit(p, places);
--	}
--}
--
--/*
-- * The jump at @idx compares the register *@reg with a constant: it's taken if "reg op k".
-- * The constant has 32 bits, so does what is added to it below: nothing wraps.
-- */
--static bool flow_jump_cmp(struct bpf_verifier_env *env, int idx, u8 *reg, u8 *op, s64 *k)
--{
--	const struct bpf_insn_aux_data *aux = &env->insn_aux_data[idx];
--	const struct bpf_insn *insn = &env->prog->insnsi[idx];
--	u8 class = BPF_CLASS(insn->code);
--
--	*op = BPF_OP(insn->code);
--	if ((class != BPF_JMP && class != BPF_JMP32) || *op == BPF_JA || *op == BPF_CALL ||
--	    *op == BPF_EXIT || *op == BPF_JCOND || *op == BPF_JSET)
--		return false;
--	*reg = insn->dst_reg;
--	if (BPF_SRC(insn->code) == BPF_K) {
--		*k = insn->imm;
--	} else if (aux->const_reg_mask & BIT(insn->src_reg)) {
--		*k = aux->const_reg_vals[insn->src_reg];
--	} else if (aux->const_reg_mask & BIT(insn->dst_reg)) {
--		*k = aux->const_reg_vals[insn->dst_reg];
--		*reg = insn->src_reg;
--		*op = bpf_flip_opcode(*op);
--	} else {
--		return false;
--	}
--	if (class == BPF_JMP32)
--		*k = *op == BPF_JSGT || *op == BPF_JSGE || *op == BPF_JSLT || *op == BPF_JSLE ?
--		     (s64)(s32)*k : (s64)(u32)*k;
--	return *reg < BPF_REG_FP;
--}
--
--static void flow_add_max(struct bpf_loop_rungs *r, s64 max)
--{
--	r->max[0] = r->has_max ? min(r->max[0], max) : max;
--	r->max[1] = r->has_max ? max(r->max[1], max) : max;
--	r->has_max = true;
--}
--
--static void flow_add_min(struct bpf_loop_rungs *r, s64 min)
--{
--	r->min[0] = r->has_min ? max(r->min[0], min) : min;
--	r->min[1] = r->has_min ? min(r->min[1], min) : min;
--	r->has_min = true;
--}
--
--/* "x op k" holds. What does that say about the root of @x? */
--static void flow_note_cmp(struct bpf_loop_rungs *root, const struct flow_sym *x, u8 op, s64 k)
--{
--	bool has_max = true, has_min = true;
--	s64 max = k, min = k;
--
--	switch (op) {
--	case BPF_JEQ:
--		break;
--	case BPF_JNE:
--		/* it cuts off the end of a range */
--		max = k - 1;
--		min = k + 1;
--		break;
--	case BPF_JLT:
--		max = k - 1;
--		fallthrough;
--	case BPF_JLE:
--		/* the ranges are signed: nothing is said by a constant above S64_MAX */
--		min = 0;
--		has_max = max >= 0;
--		has_min = max >= 0;
--		break;
--	case BPF_JGT:
--		min = k + 1;
--		fallthrough;
--	case BPF_JGE:
--		has_max = false;
--		has_min = k >= 0;
--		break;
--	case BPF_JSLT:
--		max = k - 1;
--		fallthrough;
--	case BPF_JSLE:
--		has_min = false;
--		break;
--	case BPF_JSGT:
--		min = k + 1;
--		fallthrough;
--	case BPF_JSGE:
--		has_max = false;
--		break;
--	default:
--		return;
--	}
--	if (has_max)
--		flow_add_max(root, max - x->lo);
--	if (has_min)
--		flow_add_min(root, min - x->hi);
--}
--
--/* @cur is what the @n places hold in front of @insn. Make it what they hold behind it. */
--static void flow_sym_step(const struct bpf_insn *insn, struct flow_sym *cur, const u8 *idx, u32 n)
--{
--	u8 class = BPF_CLASS(insn->code), op = BPF_OP(insn->code), to, from;
--	DECLARE_BITMAP(written, FLOW_PLACES);
--	struct flow_sym *x;
--	s64 c = insn->imm;
--	int p;
--
--	/* both are among the places or none is, see flow_compute_loop_rungs() */
--	if (flow_copies_place(insn, &to, &from)) {
--		if (idx[to] != FLOW_NO_PLACE)
--			cur[idx[to]] = cur[idx[from]];
--		return;
--	}
--	if ((class == BPF_ALU || class == BPF_ALU64) && idx[insn->dst_reg] != FLOW_NO_PLACE) {
--		x = &cur[idx[insn->dst_reg]];
--		if (flow_extends(insn))
--			return;
--		if (op == BPF_SUB)
--			c = -c;
--		if ((op == BPF_ADD || op == BPF_SUB) && BPF_SRC(insn->code) == BPF_K &&
--		    x->lo + c >= S32_MIN && x->hi + c <= S32_MAX) {
--			x->lo += c;
--			x->hi += c;
--			return;
--		}
--	}
--	flow_written_places(insn, written);
--	for_each_set_bit(p, written, FLOW_PLACES)
--		if (idx[p] != FLOW_NO_PLACE)
--			cur[idx[p]] = (struct flow_sym){ .root = n + idx[p] };
--}
--
--/* One more path leads to where @to holds */
--static void flow_sym_meet(struct flow_sym *to, const struct flow_sym *from, u32 n)
--{
--	u32 j;
--
--	if (to[0].root == FLOW_NO_PLACE) {
--		memcpy(to, from, n * sizeof(*to));
--		return;
--	}
--	for (j = 0; j < n; j++) {
--		if (to[j].root != from[j].root) {
--			to[j] = (struct flow_sym){ .root = n + j };
--			continue;
--		}
--		to[j].lo = min(to[j].lo, from[j].lo);
--		to[j].hi = max(to[j].hi, from[j].hi);
--	}
--}
--
--static u8 flow_place_set(u8 *set, u8 p)
--{
--	while (set[p] != p) {
--		set[p] = set[set[p]];
--		p = set[p];
--	}
--	return p;
--}
--
--/* @at: the insns in the order. The insns of a loop are next to each other, the head first. */
--static int flow_compute_loop_rungs(struct bpf_verifier_env *env, const u32 *at, u32 total, int h)
--{
--	const struct bpf_insn *insns = env->prog->insnsi, *insn;
--	struct bpf_insn_aux_data *aux = env->insn_aux_data;
--	struct bpf_loop_rungs *roots = NULL, *rungs, *r;
--	u8 set[FLOW_PLACES], idx[FLOW_PLACES], to, from, reg, op;
--	u32 first = env->flow->pos[h], nr, n = 0, back_cnt = 0, cnt = 0, j, k;
--	DECLARE_BITMAP(tested, FLOW_PLACES) = {};
--	DECLARE_BITMAP(moves, FLOW_PLACES) = {};
--	struct flow_sym *syms, *cur, *back, *x;
--	struct bpf_loop *loop = aux[h].loop;
--	const u32 *pos = env->flow->pos;
--	struct bpf_iarray *succ;
--	int i, p, t, err = -ENOMEM;
--	bool carry = false;
--	s64 c;
--
--	nr = min(loop->nr_insns, total - first);
+-	u32 i, reg = e->def.reg;
 -
 -	/*
--	 * The places to look at: what a jump compares with a constant, and what that is copied
--	 * from and to. One of them has to change in the loop.
+-	 * bpf_dynptr_slice_rdwr() can return the buffer that it got. A store through that slice may
+-	 * alias the slots of the buffer and is in no bpf_may_write_mask(): it is no def, so a def
+-	 * of such a slot is no value number. A spill through r10 has the expression of the
+-	 * register, and invalidate_stack_slices() invalidates the slices there. The next slice
+-	 * comes from a call that may write to the slot.
 -	 */
--	for (p = 0; p < FLOW_PLACES; p++)
--		set[p] = p;
--	for (k = 0; k < nr; k++) {
--		i = at[first + k];
--		if (flow_copies_place(&insns[i], &to, &from))
--			set[flow_place_set(set, to)] = flow_place_set(set, from);
--		else if (flow_jump_cmp(env, i, &reg, &op, &c))
--			__set_bit(reg, tested);
+-	if (e->def.set)
+-		return reg < MAX_BPF_REG || reg >= REGS_NUM ||
+-		       !test_bit(reg - MAX_BPF_REG, scev->slice_slots);
+-	switch (e->op) {
+-	case UNKNOWN:
+-	case OPAQUE:
+-	case ANY:
+-	/* a partial spill: the other bits of the slot are not known */
+-	case SPILL8:
+-	case SPILL16:
+-	case SPILL32:
+-	/* a function of the iteration number */
+-	case LINEAR_SCEV:
+-	/* a relation between header phis */
+-	case ADD_SCEV:
+-		return false;
 -	}
--	for_each_set_bit(p, tested, FLOW_PLACES)
--		__set_bit(flow_place_set(set, p), moves);
--	bitmap_copy(tested, moves, FLOW_PLACES);
--	bitmap_zero(moves, FLOW_PLACES);
--	for_each_set_bit(p, loop->writes, FLOW_PLACES)
--		__set_bit(flow_place_set(set, p), moves);
--	for (p = 0; p < FLOW_PLACES; p++) {
--		i = flow_place_set(set, p);
--		idx[p] = test_bit(i, tested) && test_bit(i, moves) ? n++ : FLOW_NO_PLACE;
--	}
--	if (!n || (u64)n * nr > BPF_FLOW_MAX_SYMS)
--		return 0;
--
--	/* for each insn, for the current insn, for each jump back */
--	syms = kvmalloc_array((size_t)nr + 1 + loop->backedges_cnt, n * sizeof(*syms),
--			      BPF_VERIFIER_GFP);
--	/* for each root, and the result for each place */
--	roots = kvcalloc(3 * n, sizeof(*roots), BPF_VERIFIER_GFP);
--	if (!syms || !roots)
--		goto out;
--	memset(syms, 0xff, (size_t)nr * n * sizeof(*syms));
--	cur = syms + (size_t)nr * n;
--	back = cur + n;
--	rungs = roots + 2 * n;
--	for (j = 0; j < n; j++)
--		syms[j] = (struct flow_sym){ .root = j };
--
--	for (k = 0; k < nr; k++) {
--		i = at[first + k];
--		insn = &insns[i];
--		if (!carry)
--			memcpy(cur, syms + (size_t)k * n, n * sizeof(*cur));
--		/* nothing but a jump back leads here */
--		for (j = 0; !carry && j < n; j++)
--			if (cur[j].root == FLOW_NO_PLACE)
--				cur[j] = (struct flow_sym){ .root = n + j };
--		/* a loop in the loop: nobody knows how many times it does what it does */
--		if (k && aux[i].loop)
--			for_each_set_bit(p, aux[i].loop->writes, FLOW_PLACES)
--				if (idx[p] != FLOW_NO_PLACE)
--					cur[idx[p]] = (struct flow_sym){ .root = n + idx[p] };
--
--		if (flow_jump_cmp(env, i, &reg, &op, &c) && idx[reg] != FLOW_NO_PLACE) {
--			x = &cur[idx[reg]];
--			if (pos[i + insn->off + 1] - first < nr)
--				flow_note_cmp(&roots[x->root], x, op, c);
--			if (pos[i + 1] - first < nr)
--				flow_note_cmp(&roots[x->root], x, bpf_rev_opcode(op), c);
--		}
--		flow_sym_step(insn, cur, idx, n);
--
--		succ = bpf_insn_successors(env, i);
--		carry = succ->cnt == 1 && !test_bit(succ->items[0], env->flow->point) &&
--			pos[succ->items[0]] == first + k + 1;
--		if (carry)
--			continue;
--		iarray_for_each(t, succ) {
--			if (t == h && back_cnt < loop->backedges_cnt)
--				memcpy(back + (size_t)back_cnt++ * n, cur, n * sizeof(*cur));
--			else if (pos[t] > pos[i] && pos[t] - first < nr)
--				flow_sym_meet(syms + (size_t)(pos[t] - first) * n, cur, n);
--			if (t == h || pos[t] > pos[i] || pos[t] - first >= nr)
--				continue;
--			/* jump back of an inner loop: what it adds moves the bounds of the root */
--			for (j = 0; j < n; j++) {
--				r = &roots[cur[j].root];
--				if (r->has_max && cur[j].hi > 0)
--					flow_add_max(r, r->max[1] + cur[j].hi);
--				if (r->has_min && cur[j].lo < 0)
--					flow_add_min(r, r->min[1] + cur[j].lo);
--			}
--		}
--	}
--
--	for (k = 0; k < back_cnt; k++) {
--		for (j = 0; j < n; j++) {
--			x = &back[(size_t)k * n + j];
--			r = &roots[x->root];
--			/* it is what it was */
--			if (x->root == j && !x->lo && !x->hi)
--				continue;
--			if (r->has_max) {
--				flow_add_max(&rungs[j], r->max[0] + x->hi);
--				flow_add_max(&rungs[j], r->max[1] + x->hi);
--			}
--			if (r->has_min) {
--				flow_add_min(&rungs[j], r->min[0] + x->lo);
--				flow_add_min(&rungs[j], r->min[1] + x->lo);
--			}
--		}
--	}
--	for (j = 0; j < n; j++)
--		cnt += rungs[j].has_max || rungs[j].has_min;
--	err = 0;
--	if (!cnt)
--		goto out;
--	loop->rungs = kvcalloc(cnt, sizeof(*loop->rungs), BPF_VERIFIER_GFP);
--	if (!loop->rungs) {
--		err = -ENOMEM;
--		goto out;
--	}
--	for (p = 0; p < FLOW_PLACES; p++) {
--		if (idx[p] == FLOW_NO_PLACE || (!rungs[idx[p]].has_max && !rungs[idx[p]].has_min))
--			continue;
--		loop->rungs[loop->rungs_cnt] = rungs[idx[p]];
--		loop->rungs[loop->rungs_cnt++].place = p;
--	}
--out:
--	kvfree(syms);
--	kvfree(roots);
--	return err;
+-	for (i = 0; i < op_params_num(e->op); i++)
+-		if (!scev->exprs[e->params[i]].is_vn)
+-			return false;
+-	return true;
 -}
 -
--static int flow_compute_rungs(struct bpf_verifier_env *env)
+-/*
+- * @e gets the id @id. (+ x imm) has the base of x, which was constructed earlier. mk_phi() sets the
+- * base of a phi that it value numbers. Every other expression is its own base, an extension and a
+- * partial spill too, see next_base(). So split_const_offset() does not traverse the expression.
+- */
+-static void set_expr_base(struct scev *scev, struct expr *e, u32 id)
 -{
--	struct bpf_insn_aux_data *aux = env->insn_aux_data;
--	u32 total = env->cfg.cur_postorder, depth, k, *at;
--	DECLARE_BITMAP(written, FLOW_PLACES);
--	struct bpf_loop *loop;
--	int h, i, err = 0;
+-	struct expr *x;
 -
--	for (h = 0; h < env->prog->len && !aux[h].loop; h++)
+-	e->arena_add = 0;
+-	/* mk_phi() found the base */
+-	if (e->def.phi && e->base)
+-		return;
+-	e->base = id;
+-	e->off = 0;
+-	/* nothing looks through a phi, see struct expr_def */
+-	if (e->def.phi || e->op != BPF_ADD || scev->exprs[e->params[1]].op != IMM)
+-		return;
+-	x = &scev->exprs[e->params[0]];
+-	e->base = x->base;
+-	e->off = (u64)x->off + scev->exprs[e->params[1]].imm;
+-	e->arena_add = e->def.set ? id : x->arena_add;
+-}
+-
+-static int add_expr(struct scev *scev, struct expr e)
+-{
+-	u32 id;
+-
+-	if (e.op == REG)
+-		return REG_EXPR_ID(e.params[0]);
+-	if (!e.def.set && !e.imm && (e.op == UNKNOWN || e.op == OPAQUE))
+-		return e.op == UNKNOWN ? UNKNOWN_EXPR_ID : OPAQUE_EXPR_ID;
+-
+-	id = scev->exprs_ht[expr_hash(&e) & (scev->exprs_cap - 1)];
+-	for (; id; id = scev->exprs_next[id])
+-		if (expr_eq(scev, &e, id))
+-			return id;
+-
+-	if (scev->exprs_cnt == scev->exprs_cap && grow_exprs(scev, scev->exprs_cap * 2))
+-		return -ENOMEM;
+-
+-	id = scev->exprs_cnt++;
+-	e.is_vn = expr_is_vn(scev, &e);
+-	set_expr_base(scev, &e, id);
+-	scev->exprs[id] = e;
+-	exprs_ht_add(scev, id);
+-	return id;
+-}
+-
+-static int simplify(struct scev *scev, u32 id);
+-
+-/*
+- * An expression is simplified at construction. Its params are simplified already, so simplify()
+- * rewrites the root only, whatever the depth of the expression.
+- * The rules construct expressions too, and one rule can enable the next: the depth of (zext32
+- * (spill32 (+ (spill32 (+ ..) 1)) 1)) is up to the prog. Beyond depth EXPR_STACK_DEPTH an
+- * expression is correct, but not simplified.
+- */
+-static int expr2(struct scev *scev, u32 op, int a, int b)
+-{
+-	int id;
+-
+-	if (a < 0)
+-		return a;
+-	if (b < 0)
+-		return b;
+-	id = add_expr(scev, (struct expr){ .op = op, .params = {a, b} });
+-	if (id < 0 || scev->simplify_depth == EXPR_STACK_DEPTH)
+-		return id;
+-	scev->simplify_depth++;
+-	id = simplify(scev, id);
+-	scev->simplify_depth--;
+-	return id;
+-}
+-
+-static int expr1(struct scev *scev, u32 op, int a)
+-{
+-	if (a < 0)
+-		return a;
+-	return expr2(scev, op, a, 0);
+-}
+-
+-static int imm_expr(struct scev *scev, s64 value)
+-{
+-	return add_expr(scev, (struct expr){ .op = IMM, .imm = value });
+-}
+-
+-/*
+- * The insn at @idx defines @reg. Without its backedges and with nested loops collapsed the body is
+- * acyclic: an insn executes at most once per iteration, so a def is one value per iteration. A
+- * subprog is the outermost loop, which runs once.
+- */
+-static struct expr_def insn_def(int idx, u32 reg)
+-{
+-	return (struct expr_def){ .set = 1, .reg = reg, .idx = idx };
+-}
+-
+-/* The phi of @reg before the insn at @idx. One value per iteration for the same reason. */
+-static struct expr_def phi_def(int idx, u32 reg)
+-{
+-	return (struct expr_def){ .set = 1, .phi = 1, .reg = reg, .idx = idx };
+-}
+-
+-/* @id with another def */
+-static int expr_with_def(struct scev *scev, int id, struct expr_def def)
+-{
+-	struct expr e;
+-
+-	if (id < 0)
+-		return id;
+-	e = scev->exprs[id];
+-	e.def = def;
+-	e.base = 0;
+-	return add_expr(scev, e);
+-}
+-
+-static bool same_exprs(struct scev *scev, int id_a, int id_b)
+-{
+-	return id_a == id_b;
+-}
+-
+-static bool is_imm(struct scev *scev, int id, s64 *imm)
+-{
+-	if (scev->exprs[id].op != IMM)
+-		return false;
+-	*imm = scev->exprs[id].imm;
+-	return true;
+-}
+-
+-static bool is_op(struct scev *scev, int id, u32 op)
+-{
+-	if (scev->exprs[id].op != op)
+-		return false;
+-	return true;
+-}
+-
+-static bool is_unop(struct scev *scev, enum expr_op op, int id, u32 *p0)
+-{
+-	if (scev->exprs[id].op != op)
+-		return false;
+-	*p0 = scev->exprs[id].params[0];
+-	return true;
+-}
+-
+-static bool is_binop(struct scev *scev, enum expr_op op, int id, u32 *p0, u32 *p1)
+-{
+-	if (scev->exprs[id].op != op)
+-		return false;
+-	*p0 = scev->exprs[id].params[0];
+-	*p1 = scev->exprs[id].params[1];
+-	return true;
+-}
+-
+-static bool is_reg(struct scev *scev, int id, u32 *reg)
+-{
+-	return is_unop(scev, REG, id, reg);
+-}
+-
+-static bool is_add(struct scev *scev, int id, u32 *left, u32 *right)
+-{
+-	return is_binop(scev, BPF_ADD, id, left, right);
+-}
+-
+-static bool is_zext32(struct scev *scev, int id, u32 *left)
+-{
+-	return is_unop(scev, ZEXT32, id, left);
+-}
+-
+-/* (zextN x), (sextN x) and (spillN x) depend on the low N bits of x only */
+-static u32 op_low_bits(u32 op)
+-{
+-	switch (op) {
+-	case ZEXT8:
+-	case SEXT8:
+-	case SPILL8:
+-		return 8;
+-	case ZEXT16:
+-	case SEXT16:
+-	case SPILL16:
+-		return 16;
+-	case ZEXT32:
+-	case SEXT32:
+-	case SPILL32:
+-		return 32;
+-	}
+-	return 0;
+-}
+-
+-static bool is_zext(u32 op)
+-{
+-	return op == ZEXT8 || op == ZEXT16 || op == ZEXT32;
+-}
+-
+-/* The low @bits bits of the slot are those of @left. The other bits are not known. */
+-static bool is_spill(struct scev *scev, int id, u32 *bits, u32 *left)
+-{
+-	u32 op = scev->exprs[id].op;
+-
+-#ifdef __BIG_ENDIAN
+-	/* '*(u32 *)(r10 - 8) = rX' writes the high half, see mk_fill() */
+-	return false;
+-#endif
+-	if (op != SPILL8 && op != SPILL16 && op != SPILL32)
+-		return false;
+-	*bits = op_low_bits(op);
+-	*left = scev->exprs[id].params[0];
+-	return true;
+-}
+-
+-static bool is_spill32(struct scev *scev, int id, u32 *left)
+-{
+-	u32 bits;
+-
+-	return is_spill(scev, id, &bits, left) && bits == 32;
+-}
+-
+-/* (zextN x), (sextN x) or (spillN x) with N >= @bits: the low @bits bits are those of @left */
+-static bool is_low_bits(struct scev *scev, int id, u32 bits, u32 *left)
+-{
+-	u32 op = scev->exprs[id].op;
+-
+-#ifdef __BIG_ENDIAN
+-	/* see is_spill() */
+-	if (op == SPILL8 || op == SPILL16 || op == SPILL32)
+-		return false;
+-#endif
+-	/* nothing looks through a phi, see struct expr_def */
+-	if (op_low_bits(op) < bits || scev->exprs[id].def.phi)
+-		return false;
+-	*left = scev->exprs[id].params[0];
+-	return true;
+-}
+-
+-/*
+- * A value is *@base + *@off (mod 2^*@bits). An extension and a partial spill are values of their
+- * own, and they have the low N bits of their operand: go on to the base of the operand, modulo 2^N.
+- * Only to fewer bits: three steps at most. N is 32 or less: it does not matter if an add on the way
+- * becomes ALU32, see split_const_offset().
+- */
+-static bool next_base(struct scev *scev, u32 *base, s64 *off, u32 *bits)
+-{
+-	struct expr *x, *e = &scev->exprs[*base];
+-	u32 low = op_low_bits(e->op);
+-
+-	/* nothing looks through a phi, see struct expr_def */
+-	if (!low || low >= *bits || e->def.set)
+-		return false;
+-	x = &scev->exprs[e->params[0]];
+-	*base = x->base;
+-	*off = (u64)*off + x->off;
+-	*bits = low;
+-	return true;
+-}
+-
+-/* Two expressions that have a constant difference in some bits have the same one, or two REGs */
+-static u32 innermost_base(struct scev *scev, u32 id)
+-{
+-	u32 base = scev->exprs[id].base, bits = 64;
+-	s64 off = 0;
+-
+-	while (next_base(scev, &base, &off, &bits))
 -		;
--	if (h == env->prog->len)
--		return 0;
--	at = kvmalloc_array(total, sizeof(*at), BPF_VERIFIER_GFP);
--	if (!at)
--		return -ENOMEM;
--	for (k = 0; k < total; k++) {
--		i = env->cfg.insn_postorder[k];
--		at[env->flow->pos[i]] = i;
--		flow_written_places(&env->prog->insnsi[i], written);
--		for (h = bpf_loop_at_index(env, i); h >= 0; h = aux[h].loop_header)
--			bitmap_or(aux[h].loop->writes, aux[h].loop->writes, written, FLOW_PLACES);
--	}
--	for (h = 0; h < env->prog->len && !err; h++) {
--		loop = aux[h].loop;
--		/* the order says little about a loop with more than one entry */
--		if (!loop || loop->irreducible || loop->backedges_overflow)
--			continue;
--		/* the main pass doesn't get that deep */
--		depth = 0;
--		for (i = aux[h].loop_header; i >= 0; i = aux[i].loop_header)
--			depth++;
--		if (depth >= LOOP_STACK_SIZE)
--			continue;
--		if (bpf_must_abort()) {
--			err = -EINTR;
--			break;
--		}
--		err = flow_compute_loop_rungs(env, at, total, h);
--	}
--	kvfree(at);
--	return err;
+-	return base;
 -}
 -
--int bpf_flow_prepare(struct bpf_verifier_env *env)
+-static bool is_any(struct scev *scev, int id, u32 *left, u32 *right)
+-{
+-	return is_binop(scev, ANY, id, left, right);
+-}
+-
+-static bool is_linear(struct scev *scev, int id, u32 *base, u32 *slope)
+-{
+-	return is_binop(scev, LINEAR_SCEV, id, base, slope);
+-}
+-
+-static bool is_linear_or_linear32(struct scev *scev, int id, u32 *base, u32 *slope, bool *zext32)
+-{
+-	u32 t;
+-
+-	*zext32 = is_zext32(scev, id, &t);
+-	return is_linear(scev, *zext32 ? t : id, base, slope);
+-}
+-
+-/* What a register is at the entry of the loop, or the low half of that. */
+-static bool is_reg_or_low32(struct scev *scev, int id, u32 *reg)
+-{
+-	u32 t;
+-
+-	return is_reg(scev, id, reg) || (is_zext32(scev, id, &t) && is_reg(scev, t, reg));
+-}
+-
+-static bool is_opaque(struct scev *scev, int id)
+-{
+-	return is_op(scev, id, OPAQUE);
+-}
+-
+-static void log_reg(struct bpf_verifier_env *env, u32 reg)
+-{
+-	if (reg < MAX_BPF_REG)
+-		bpf_log(&env->log, "r%d", reg);
+-	else if (reg < REGS_NUM)
+-		bpf_log(&env->log, "*fp%d", (MAX_BPF_REG - reg - 1) * 8);
+-	else
+-		bpf_log(&env->log, "mem%d", reg - REGS_NUM);
+-}
+-
+-static const char *op_str(u32 op)
+-{
+-	switch (op) {
+-	case BPF_ADD:  return "+";
+-	case BPF_SUB:  return "-";
+-	case BPF_MUL:  return "*";
+-	case BPF_DIV:  return "/";
+-	case SDIV:     return "s/";
+-	case BPF_OR:   return "|";
+-	case BPF_AND:  return "&";
+-	case BPF_LSH:  return "<<";
+-	case BPF_RSH:  return ">>";
+-	case BPF_NEG:  return "-";
+-	case BPF_MOD:  return "%";
+-	case SMOD:     return "s%";
+-	case BPF_XOR:  return "^";
+-	case BPF_ARSH: return "s>>";
+-	case SEXT8:    return "sext8";
+-	case SEXT16:   return "sext16";
+-	case SEXT32:   return "sext32";
+-	case ZEXT8:    return "zext8";
+-	case ZEXT16:   return "zext16";
+-	case ZEXT32:   return "zext32";
+-	case BSWAP16:  return "bswap16";
+-	case BSWAP32:  return "bswap32";
+-	case BSWAP64:  return "bswap64";
+-	case SPILL8:   return "spill8";
+-	case SPILL16:  return "spill16";
+-	case SPILL32:  return "spill32";
+-	case ANY:      return "any";
+-	case LINEAR_SCEV:  return "linear";
+-	case ADD_SCEV:     return "add";
+-	}
+-	return NULL;
+-}
+-
+-static u32 op_params_num(u32 op)
+-{
+-	switch (op) {
+-	case BPF_ADD:
+-	case BPF_SUB:
+-	case BPF_MUL:
+-	case BPF_DIV:
+-	case BPF_MOD:
+-	case BPF_OR:
+-	case BPF_XOR:
+-	case BPF_AND:
+-	case BPF_LSH:
+-	case BPF_RSH:
+-	case BPF_ARSH:
+-	case SDIV:
+-	case SMOD:
+-	case ANY:
+-	case LINEAR_SCEV:
+-	case ADD_SCEV:
+-		return 2;
+-	case BPF_NEG:
+-	case SEXT8:
+-	case SEXT16:
+-	case SEXT32:
+-	case ZEXT8:
+-	case ZEXT16:
+-	case ZEXT32:
+-	case BSWAP16:
+-	case BSWAP32:
+-	case BSWAP64:
+-	case SPILL8:
+-	case SPILL16:
+-	case SPILL32:
+-		return 1;
+-	case REG:
+-	case IMM:
+-	case OPAQUE:
+-		return 0;
+-	default:
+-		return 0;
+-	}
+-}
+-
+-static bool expr_stack_push(struct scev *scev, u32 id)
+-{
+-	if (scev->stack_sz >= EXPR_STACK_DEPTH)
+-		return false;
+-	scev->expr_stack[scev->stack_sz].id = id;
+-	scev->expr_stack[scev->stack_sz].pre = true;
+-	scev->expr_stack[scev->stack_sz].next_param = 0;
+-	scev->stack_sz++;
+-	return true;
+-}
+-
+-enum {
+-	PRE = BIT(1), POST = BIT(2), DEPTH_LIMIT = BIT(3)
+-};
+-
+-static bool expr_next(struct scev *scev, u32 *id, u32 *order)
+-{
+-	struct expr_stack_elt *elt;
+-	struct expr *expr;
+-	u32 num_params;
+-
+-	if (scev->stack_sz == 0)
+-		return false;
+-
+-	elt = &scev->expr_stack[scev->stack_sz - 1];
+-	*id = elt->id;
+-	*order = 0;
+-	expr = &scev->exprs[elt->id];
+-	num_params = op_params_num(expr->op);
+-	if (elt->pre) {
+-		elt->pre = false;
+-		*order = PRE;
+-		return true;
+-	}
+-	if (elt->next_param == num_params) {
+-		*order = POST;
+-		scev->stack_sz--;
+-		return true;
+-	}
+-	if (scev->stack_sz == EXPR_STACK_DEPTH) {
+-		*order = POST | DEPTH_LIMIT;
+-		scev->stack_sz--;
+-		return true;
+-	}
+-	expr_stack_push(scev, expr->params[elt->next_param]);
+-	elt->next_param++;
+-	return expr_next(scev, id, order);
+-}
+-
+-/*
+- * An SSA name is printed as '%', the SCEV register, '.', the insn. A def is printed in full at
+- * every use: (+ %r8.7=phi(1, 2) 4).
+- *	%r0.6			insn 6 defines r0. The value is OPAQUE, '_' without a def
+- *	%fp-8.8?		insn 8 may write fp-8. The value is UNKNOWN, '?' without a def
+- *	%r8.7=phi(1, 2)		the phi of r8 before insn 7
+- *	%r0.7=phi(_)		a phi of distinct OPAQUE values
+- *	%r6.9=phi(?)		a phi of distinct UNKNOWN values, or of more than 8 values
+- *	%r2.12=(+ x 4)		insn 12 defines r2, see alu64_with_def()
+- *	%r2.25=phi((+ x 4))	two adds of one shape, each may have been converted to ALU32:
+- *				the phi is not (+ x 4)
+- * A name is unique within the env of one loop. In the env of loop H a phi at H merges the backedge
+- * values only, the header phi itself is (REG r): in 'scev at header 1: r6=%r6.1=phi(r6, (+ r6 1))'
+- * one backedge leaves r6 as it is, the other one adds 1.
+- * '%' in front of r or fp is a name, followed by a blank it is BPF_MOD.
+- */
+-static void log_def(struct bpf_verifier_env *env, struct expr_def def)
+-{
+-	if (!def.set)
+-		return;
+-	if (def.reg < MAX_BPF_REG)
+-		bpf_log(&env->log, "%%r%d.%d", def.reg, def.idx);
+-	else if (def.reg < REGS_NUM)
+-		bpf_log(&env->log, "%%fp%d.%d", (MAX_BPF_REG - def.reg - 1) * 8, def.idx);
+-	else
+-		bpf_log(&env->log, "%%mem%d.%d", def.reg - REGS_NUM, def.idx);
+-}
+-
+-static void log_expr(struct bpf_verifier_env *env, u32 id)
+-{
+-	struct bpf_verifier_log *log = &env->log;
+-	bool operand, bare, first = false;
+-	struct scev *scev = env->scev;
+-	u32 order, d, bare_any = 0;
+-	struct expr_def def;
+-	struct expr *expr;
+-	const char *str;
+-
+-	scev->stack_sz = 0;
+-	expr_stack_push(scev, id);
+-	while (expr_next(scev, &id, &order)) {
+-		expr = &scev->exprs[id];
+-		def = expr->def;
+-		/* the depth of @id in expr_stack[], expr_next() pops it before POST */
+-		d = order & PRE ? scev->stack_sz - 1 : scev->stack_sz;
+-		operand = d && (bare_any & BIT(d - 1));
+-		/* No '(any' for the operands of phi(a, b). (any a b) among them is expanded. */
+-		if (order & PRE) {
+-			bare_any &= ~BIT(d);
+-			if (expr->op == ANY && (def.set ? def.phi : operand))
+-				bare_any |= BIT(d);
+-		}
+-		bare = bare_any & BIT(d);
+-		if ((order & PRE) && (def.set || !bare)) {
+-			if (d)
+-				bpf_log(log, "%s", !operand ? " " : first ? "" : ", ");
+-			log_def(env, def);
+-			if (def.phi)
+-				bpf_log(log, "=phi(");
+-			first = bare;
+-		}
+-		switch (expr->op) {
+-		case UNKNOWN:
+-			if (order & PRE)
+-				bpf_log(log, "?");
+-			break;
+-		case OPAQUE:
+-			if ((order & PRE) && (!def.set || def.phi))
+-				bpf_log(log, "_");
+-			break;
+-		case REG:
+-			if (order & PRE)
+-				log_reg(env, expr->params[0]);
+-			break;
+-		case IMM:
+-			if (order & PRE)
+-				bpf_log(log, "%lld", expr->imm);
+-			break;
+-		default:
+-			if ((order & PRE) && !bare) {
+-				str = op_str(expr->op);
+-				bpf_log(log, def.set && !def.phi ? "=(" : "(");
+-				if (str)
+-					bpf_log(log, "%s", str);
+-				else
+-					bpf_log(log, "bad-expr-op %x", expr->op);
+-			}
+-			if (order & DEPTH_LIMIT) {
+-				bpf_log(log, bare && !def.set && !first ? ", ..." : "...");
+-				first = false;
+-			}
+-			if ((order & POST) && !bare)
+-				bpf_log(log, ")");
+-		}
+-		if ((order & POST) && def.phi)
+-			bpf_log(log, ")");
+-	}
+-}
+-
+-static bool reg_alive_at(struct bpf_verifier_env *env, u32 reg, u32 insn_idx)
 -{
 -	struct bpf_insn_aux_data *aux = env->insn_aux_data;
--	struct bpf_insn *insns = env->prog->insnsi;
--	/* the rest is for loops */
--	int len = env->prog->len, kinds = FLOW_NEED_VALUE_OFF, i, s, err;
--	struct bpf_iarray *succ;
--	struct bpf_flow *flow;
--	u8 *preds;
+-	u16 live_regs = aux[insn_idx].live_regs_before;
 -
--	flow = kzalloc_obj(*flow, BPF_VERIFIER_GFP);
--	if (!flow)
--		return -ENOMEM;
--	env->flow = flow;
--	INIT_LIST_HEAD(&flow->kept);
--	flow->pending = RB_ROOT_CACHED;
--
--	flow->pos = kvcalloc(len, sizeof(u32), BPF_VERIFIER_GFP);
--	flow->rank = kvcalloc(env->subprog_cnt + 1, sizeof(u32), BPF_VERIFIER_GFP);
--	flow->point = kvcalloc(BITS_TO_LONGS(len), sizeof(long), BPF_VERIFIER_GFP);
--	flow->keep = kvcalloc(BITS_TO_LONGS(len), sizeof(long), BPF_VERIFIER_GFP);
--	flow->states = kvmalloc_array(len, sizeof(*flow->states), BPF_VERIFIER_GFP);
--	flow->enter = kvmalloc_array(len, sizeof(*flow->enter), BPF_VERIFIER_GFP);
--	flow->nr_states = kvcalloc(len, sizeof(u32), BPF_VERIFIER_GFP);
--	flow->funcs = kvcalloc(env->subprog_cnt + 1, sizeof(*flow->funcs), BPF_VERIFIER_GFP);
--	preds = kvcalloc(len, 1, BPF_VERIFIER_GFP);
--	if (!flow->pos || !flow->rank || !flow->point || !flow->keep || !flow->states ||
--	    !flow->enter ||
--	    !flow->nr_states || !flow->funcs || !preds) {
--		kvfree(preds);
--		return -ENOMEM;
--	}
--	for (i = 0; i < len; i++) {
--		INIT_LIST_HEAD(&flow->states[i].list);
--		INIT_LIST_HEAD(&flow->enter[i].list);
--	}
--	for (i = 0; i <= env->subprog_cnt; i++)
--		flow->funcs[i].exit_idx = -1;
--	/* from here on there is something for bpf_flow_reset() to look at */
--	flow->len = len;
--	flow->nr_funcs = env->subprog_cnt + 1;
--
--	/* subprog_topo_order[] has callees first */
--	for (i = 0; i < env->subprog_cnt; i++)
--		flow->rank[env->subprog_topo_order[i]] = env->subprog_cnt - i;
--
--	for (i = 0; i < len; i++) {
--		succ = bpf_insn_successors(env, i);
--		iarray_for_each(s, succ) {
--			if (preds[s] < 2)
--				preds[s]++;
--			if (aux[i].bb_end)
--				__set_bit(s, flow->point);
--		}
--		/* where the callees come back to */
--		if (bpf_pseudo_call(&insns[i]) || bpf_is_callx(&insns[i])) {
--			if (i + 1 < len) {
--				__set_bit(i + 1, flow->point);
--				__set_bit(i + 1, flow->keep);
--			}
--		}
--		if (aux[i].calls_callback) {
--			__set_bit(i, flow->point);
--			__set_bit(i, flow->keep);
--		}
--		if (aux[i].loop) {
--			__set_bit(i, flow->point);
--			__set_bit(i, flow->keep);
--			kinds = FLOW_NEED_KINDS;
--		}
--		if (bpf_is_ldimm64(&insns[i]))
--			i++;
--	}
--	for (i = 0; i < len; i++)
--		if (preds[i] > 1)
--			__set_bit(i, flow->keep);
--	for (i = 0; i < env->subprog_cnt; i++) {
--		__set_bit(env->subprog_info[i].start, flow->point);
--		__set_bit(env->subprog_info[i].start, flow->keep);
--	}
--	kvfree(preds);
--
--	err = flow_compute_order(env, flow);
--	if (err)
--		return err;
--	for (i = 0; !err && i < kinds; i++)
--		err = flow_compute_need_const(env, &flow->need[i], i);
--	err = err ?: flow_compute_rungs(env);
--	if (err)
--		return err;
--	return 0;
+-	/* memory */
+-	if (reg >= REGS_NUM)
+-		return true;
+-	return reg < MAX_BPF_REG
+-	       ? (BIT(reg) & live_regs)
+-	       : test_bit(reg - MAX_BPF_REG, aux[insn_idx].live_stack_before);
 -}
 -
--static void flow_free_state(struct bpf_verifier_env *env, struct flow_state *s)
+-/* The first bytes of a stack slot are its high bits */
+-static bool is_big_endian_slot(u32 reg)
 -{
--	bpf_free_verifier_state(&s->st, false);
--	kfree(s);
--	env->flow->live_states--;
+-	return IS_ENABLED(CONFIG_CPU_BIG_ENDIAN) && reg >= MAX_BPF_REG;
 -}
 -
--/* What a pass leaves behind. */
--void bpf_flow_reset(struct bpf_verifier_env *env)
+-/* Are the upper 32 bits of @reg live before the insn at @insn_idx? */
+-static bool hi32_alive_at(struct bpf_verifier_env *env, u32 reg, u32 insn_idx)
 -{
--	struct bpf_flow *flow = env->flow;
--	struct flow_state *s, *sn;
--	struct flow_kept *k, *kn;
--	struct flow_exit *x, *xn;
--	struct flow_entry *e;
--	int i;
+-	return reg < MAX_BPF_REG || is_big_endian_slot(reg) ||
+-	       bpf_half_slot_live_before(env, insn_idx, (reg - MAX_BPF_REG) * 2);
+-}
 -
--	if (!flow || !flow->states || !flow->enter)
+-static void print_env(struct bpf_verifier_env *env, struct env *e, u32 insn_idx)
+-{
+-	struct bpf_verifier_log *log = &env->log;
+-	struct scev *scev = env->scev;
+-	bool printed_some = false;
+-	bool is_self_scev;
+-	bool is_self_reg;
+-	int i, r;
+-
+-	if (e->empty) {
+-		bpf_log(log, "  <empty>\n");
 -		return;
--	for (i = 0; i < flow->len; i++) {
--		list_for_each_entry_safe(s, sn, &flow->states[i].list, node) {
--			list_del(&s->node);
--			flow_free_state(env, s);
--		}
--		list_for_each_entry_safe(s, sn, &flow->enter[i].list, node) {
--			list_del(&s->node);
--			flow_free_state(env, s);
--		}
--		flow->nr_states[i] = 0;
 -	}
--	flow->pending = RB_ROOT_CACHED;
--	for (i = 0; i < flow->nr_funcs && flow->funcs; i++)
--		flow->funcs[i].exit_idx = -1;
--	for (i = 1; i <= flow->entry_cnt; i++) {
--		e = flow->entries[i];
--		list_for_each_entry_safe(s, sn, &e->calls, node) {
--			bpf_free_verifier_state(&s->st, false);
--			kfree(s);
+-
+-	for (i = 0; i < REGS_NUM; i++) {
+-		if (!reg_alive_at(env, i, insn_idx))
+-			continue;
+-		is_self_reg = is_reg(scev, e->reg2expr[i], &r) && i == r;
+-		is_self_scev = is_reg(scev, e->reg2scev[i], &r) && i == r;
+-		if (is_self_reg && is_self_scev)
+-			continue;
+-		printed_some = true;
+-		bpf_log(log, "  ");
+-		log_reg(env, i);
+-		bpf_log(log, "=");
+-		log_expr(env, e->reg2expr[i]);
+-		if (!is_op(scev, e->reg2expr[i], UNKNOWN)) {
+-			bpf_log(log, " / ");
+-			log_expr(env, e->reg2scev[i]);
 -		}
--		list_for_each_entry_safe(x, xn, &e->exits, node) {
--			bpf_free_verifier_state(&x->st, false);
--			kfree(x);
--		}
+-		bpf_log(log, "\n");
+-	}
+-	if (!printed_some)
+-		bpf_log(log, "  <all regs unchanged>\n");
+-}
+-static struct env *find_loop_env(struct scev *scev, int loop_header, int insn_idx)
+-{
+-	struct insn_envs *envs = scev->envs[insn_idx];
+-	u32 i;
+-
+-	if (!envs)
+-		return NULL;
+-	for (i = 0; i < envs->cnt; i++)
+-		if (envs->entries[i].loop_header == loop_header)
+-			return envs->entries[i].env;
+-	return NULL;
+-}
+-
+-static struct env *find_header_env(struct scev *scev, int header)
+-{
+-	return find_loop_env(scev, header, header);
+-}
+-
+-static struct env *get_loop_env(struct scev *scev, int loop_header, int insn_idx)
+-{
+-	struct insn_envs *envs = scev->envs[insn_idx];
+-	u32 cnt = envs ? envs->cnt : 0;
+-	struct insn_envs *tmp;
+-	struct env *e;
+-
+-	e = find_loop_env(scev, loop_header, insn_idx);
+-	if (e)
+-		return e;
+-
+-	e = kzalloc_obj(*e, BPF_VERIFIER_GFP);
+-	if (!e)
+-		return NULL;
+-
+-	tmp = krealloc(envs, struct_size(envs, entries, cnt + 1), BPF_VERIFIER_GFP | __GFP_ZERO);
+-	if (!tmp) {
 -		kfree(e);
--	}
--	list_for_each_entry_safe(k, kn, &flow->kept, node) {
--		bpf_free_verifier_state(&k->st, false);
--		kfree(k);
--	}
--	INIT_LIST_HEAD(&flow->kept);
--	bpf_free_verifier_state(&flow->tmp, false);
--	memset(&flow->tmp, 0, sizeof(flow->tmp));
--	flow->entry_cnt = 0;
--	flow->united_cnt = 0;
--}
--
--void bpf_flow_free(struct bpf_verifier_env *env)
--{
--	struct bpf_flow *flow = env->flow;
--	int i;
--
--	if (!flow)
--		return;
--	bpf_flow_reset(env);
--	kvfree(flow->pos);
--	kvfree(flow->rank);
--	for (i = 0; i < FLOW_NEED_KINDS; i++)
--		kvfree(flow->need[i]);
--	kvfree(flow->point);
--	kvfree(flow->keep);
--	kvfree(flow->states);
--	kvfree(flow->enter);
--	kvfree(flow->nr_states);
--	kvfree(flow->funcs);
--	kvfree(flow->entries);
--	kvfree(flow->united);
--	kfree(flow);
--	env->flow = NULL;
--}
--
--bool bpf_flow_is_point(struct bpf_verifier_env *env, int insn_idx)
--{
--	return test_bit(insn_idx, env->flow->point);
--}
--
--/* A copy of @st that lives as long as the pass. */
--struct bpf_verifier_state *bpf_flow_keep_state(struct bpf_verifier_env *env,
--					       const struct bpf_verifier_state *st)
--{
--	struct flow_kept *k = kzalloc_obj(*k, BPF_VERIFIER_GFP);
--
--	if (!k)
 -		return NULL;
--	list_add(&k->node, &env->flow->kept);
--	if (bpf_copy_verifier_state(&k->st, st))
--		return NULL;
--	return &k->st;
--}
--
--/*
-- * Both are in a loop whose iterations are kept apart: an iteration is done with before
-- * the next one begins. A back edge in the middle of the loop would run ahead otherwise and
-- * leave the rest of every iteration behind, see flow_earlier_trip(). The state that stands
-- * for all iterations comes last.
-- */
--static int flow_cmp_trips(const struct bpf_func_state *fa, const struct bpf_func_state *fb)
--{
--	const struct loop_stack_entry *ea, *eb;
--	u32 i, ta, tb;
--
--	for (i = 0; i < fa->loop_stack_cnt && i < fb->loop_stack_cnt; i++) {
--		ea = &fa->loop_stack[i];
--		eb = &fb->loop_stack[i];
--		if (ea->loop_id != eb->loop_id)
--			break;
--		ta = ea->apart ? ea->trip : U32_MAX;
--		tb = eb->apart ? eb->trip : U32_MAX;
--		if (ta != tb)
--			return ta < tb ? -1 : 1;
 -	}
--	return 0;
--}
 -
--static bool flow_less(struct rb_node *na, const struct rb_node *nb)
--{
--	const struct flow_state *a = rb_entry(na, struct flow_state, rb);
--	const struct flow_state *b = rb_entry(nb, struct flow_state, rb);
--	int cmp;
--	u32 i;
--
--	for (i = 0; i < a->key_len && i < b->key_len; i++) {
--		/* key[i] is the place in frame[i - 1] */
--		if (i) {
--			cmp = flow_cmp_trips(a->st.frame[i - 1], b->st.frame[i - 1]);
--			if (cmp)
--				return cmp < 0;
--		}
--		if (a->key[i] != b->key[i])
--			return a->key[i] < b->key[i];
--	}
--	if (a->key_len != b->key_len)
--		return a->key_len < b->key_len;
--	return a->seq < b->seq;
--}
--
--/*
-- * Callers first, so that the calls of a function get to it before it is looked
-- * at. Then by the place of the call in every frame: what is called in the frames of
-- * its callers is done with before what follows the call. What follows the call of
-- * a function that is verified on its own goes on with every state that comes out.
-- */
--static void flow_set_pending(struct bpf_flow *flow, struct flow_state *s)
--{
--	const struct bpf_verifier_state *st = &s->st;
--	u32 i;
--
--	s->key[0] = flow->rank[st->frame[0]->subprogno];
--	/* the place in the function makes the rank of the function redundant below */
--	for (i = 0; i < st->curframe && i + 2 < ARRAY_SIZE(s->key); i++)
--		s->key[i + 1] = flow->pos[st->frame[i + 1]->callsite];
--	s->key[i + 1] = flow->pos[st->insn_idx];
--	s->key_len = i + 2;
--	s->pending = true;
--	rb_add_cached(&s->rb, &flow->pending, flow_less);
--}
--
--static void flow_unlink(struct bpf_verifier_env *env, struct flow_state *s)
--{
--	struct bpf_flow *flow = env->flow;
--
--	if (s->pending)
--		rb_erase_cached(&s->rb, &flow->pending);
--	s->pending = false;
--	list_del(&s->node);
--	flow->nr_states[s->st.insn_idx]--;
--}
--
--/* The entry that stands for the set that entry @id is in */
--static struct flow_entry *flow_entry_find(struct bpf_flow *flow, u32 id)
--{
--	struct flow_entry *e = flow->entries[id];
--
--	while (e->up != e) {
--		e->up = e->up->up;
--		e = e->up;
--	}
+-	e->empty = true;
+-	tmp->entries[cnt].loop_header = loop_header;
+-	tmp->entries[cnt].env = e;
+-	tmp->cnt = cnt + 1;
+-	scev->envs[insn_idx] = tmp;
 -	return e;
 -}
 -
--static int flow_entry_new(struct bpf_flow *flow)
+-/* The env has no users any more */
+-static void free_loop_env(struct scev *scev, int loop_header, int insn_idx)
 -{
--	struct flow_entry **entries, *e;
--	u32 cap;
+-	struct insn_envs *envs = scev->envs[insn_idx];
+-	u32 i;
 -
--	if (flow->entry_cnt + 1 >= flow->entry_cap) {
--		cap = max(64U, flow->entry_cap * 2);
--		entries = kvrealloc(flow->entries, cap * sizeof(*entries), BPF_VERIFIER_GFP);
--		if (!entries)
--			return -ENOMEM;
--		flow->entries = entries;
--		flow->entry_cap = cap;
+-	for (i = 0; i < envs->cnt; i++) {
+-		if (envs->entries[i].loop_header != loop_header)
+-			continue;
+-		kfree(envs->entries[i].env);
+-		envs->entries[i] = envs->entries[--envs->cnt];
+-		break;
 -	}
--	e = kmalloc_obj(*e, BPF_VERIFIER_GFP);
--	if (!e)
--		return -ENOMEM;
--	e->up = e;
--	INIT_LIST_HEAD(&e->calls);
--	INIT_LIST_HEAD(&e->exits);
--	flow->entries[++flow->entry_cnt] = e;
--	return flow->entry_cnt;
--}
--
--/* It delivers states, so it is done when nothing is in the middle of that. */
--static int flow_unite(struct bpf_flow *flow, u32 a, u32 b)
--{
--	struct flow_united *u;
--	u32 cap;
--
--	if (!a || !b || flow_entry_find(flow, a) == flow_entry_find(flow, b))
--		return 0;
--	if (flow->united_cnt == flow->united_cap) {
--		cap = max(16U, flow->united_cap * 2);
--		u = kvrealloc(flow->united, cap * sizeof(*u), BPF_VERIFIER_GFP);
--		if (!u)
--			return -ENOMEM;
--		flow->united = u;
--		flow->united_cap = cap;
--	}
--	u = &flow->united[flow->united_cnt++];
--	u->a = a;
--	u->b = b;
--	return 0;
--}
--
--/*
-- * What is known about a counted loop comes from the state it was entered
-- * with. @t stands for @s only if that holds for these states too.
-- */
--static bool flow_loops_within(struct bpf_verifier_env *env, const struct bpf_verifier_state *t,
--			      const struct bpf_verifier_state *s)
--{
--	const struct loop_stack_entry *lt, *ls;
--	u32 fr, i;
--
--	for (fr = 0; fr <= t->curframe; fr++) {
--		if (t->frame[fr]->loop_stack_cnt != s->frame[fr]->loop_stack_cnt)
--			return false;
--		for (i = 0; i < t->frame[fr]->loop_stack_cnt; i++) {
--			lt = &t->frame[fr]->loop_stack[i];
--			ls = &s->frame[fr]->loop_stack[i];
--			if (!lt->terminates || lt->entry_state == ls->entry_state)
--				continue;
--			if (!ls->terminates ||
--			    !bpf_state_subsumes(env, lt->entry_state, ls->entry_state))
--				return false;
--		}
--	}
--	return true;
--}
--
--static bool flow_within(struct bpf_verifier_env *env, struct bpf_verifier_state *t,
--			struct bpf_verifier_state *s)
--{
--	return t->curframe == s->curframe &&
--	       t->frame[0]->subprogno == s->frame[0]->subprogno &&
--	       /* an async callback returns to the kernel, a call of the function to its caller */
--	       !t->flow_entry == !s->flow_entry &&
--	       bpf_state_subsumes(env, t, s) && flow_loops_within(env, t, s);
--}
--
--/*
-- * How many iterations is @t behind @s, in the loop in which that is the most? Only the loops
-- * whose iterations are kept apart are looked at.
-- * 0 if both are in the same iteration of every loop, U32_MAX if @t is ahead of @s in a loop.
-- */
--static u32 flow_trips_behind(const struct bpf_verifier_state *t, const struct bpf_verifier_state *s)
--{
--	const struct loop_stack_entry *lt, *ls;
--	u32 fr, i, behind = 0;
--
--	if (t->curframe != s->curframe)
--		return U32_MAX;
--	for (fr = 0; fr <= t->curframe; fr++) {
--		if (t->frame[fr]->loop_stack_cnt != s->frame[fr]->loop_stack_cnt)
--			return U32_MAX;
--		for (i = 0; i < t->frame[fr]->loop_stack_cnt; i++) {
--			lt = &t->frame[fr]->loop_stack[i];
--			ls = &s->frame[fr]->loop_stack[i];
--			if (!lt->apart && !ls->apart)
--				continue;
--			if (lt->trip > ls->trip)
--				return U32_MAX;
--			behind = max(behind, ls->trip - lt->trip);
--		}
--	}
--	return behind;
--}
--
--/*
-- * A state is compared with the states of its own iteration and of the two before it. The older ones
-- * are gone, see flow_earlier_trip(), but for what is pending or waits: every iteration of a loop
-- * calls a recursive function, and what comes out of it goes to all the calls at once.
-- */
--static bool flow_trips_near(const struct bpf_verifier_state *t, const struct bpf_verifier_state *s)
--{
--	return flow_trips_behind(t, s) <= 2;
--}
--
--/*
-- * @s is within @t, and from now on @t stands for it.
-- *
-- * A walk on patience gets to the end of a loop when no state comes back to the head any more.
-- * Then the loop ends at run time too: the number of the iteration grows at the head, nothing makes
-- * it smaller, and there is a largest one.
-- * If @t is of an earlier iteration than @s that is not true any more. What becomes of @t got to @s
-- * and is @t again: as far as the verifier can see the program goes around for ever. A spin lock
-- * is such a loop. So the loop gets may_goto.
-- *
-- * It's asked for every loop that @t is behind in, not only for the outermost one. This is the only
-- * way for the number of a loop to get smaller. In a walk it doesn't change in another way but at
-- * the head: a state never stands for a state of an earlier iteration, see loop_stack_safe(), and it
-- * takes the place of, or is joined with, states of its own iterations only, see flow_merge().
-- * Where the iterations are not kept apart a join has the larger number, and a state may stand
-- * for one with a smaller number. Such loop has a count or may_goto, or something stops it, since
-- * the state entered it.
-- */
--static int flow_cycle_closed(struct bpf_verifier_env *env, const struct bpf_verifier_state *t,
--			     const struct bpf_verifier_state *s)
--{
--	const struct loop_stack_entry *lt, *ls;
--	struct bpf_loop *loop;
--	u32 fr, i;
--
--	for (fr = 0; fr <= t->curframe; fr++) {
--		for (i = 0; i < t->frame[fr]->loop_stack_cnt; i++) {
--			lt = &t->frame[fr]->loop_stack[i];
--			ls = &s->frame[fr]->loop_stack[i];
--			if (lt->trip >= ls->trip)
--				continue;
--			/* counted: what comes back is expected to be within what is at the head */
--			if (lt->terminates && !bpf_loop_walk_may_give_up(lt))
--				continue;
--			loop = env->insn_aux_data[lt->loop_id].loop;
--			/* it goes around for as long as the iterator has elements or may_goto budget */
--			if (loop->rt_bounded)
--				continue;
--			if (!loop->has_guards) {
--				verbose(env, "loop at insn %d never exits\n", lt->loop_id);
--				return -EINVAL;
--			}
--			bpf_flow_loop_gets_guards(env, lt->loop_id);
--		}
--	}
--	return 0;
--}
--
--/*
-- * @t is of an earlier iteration of a loop whose iterations are kept apart than @s.
-- * What comes after @s is of later iterations too, so @t is not going to be
-- * of use. If something of its iteration does come it is looked at again.
-- *
-- * Not so where a state stands for many iterations. States of different kinds are at the head of
-- * such loop. One of them comes to rest early, and what comes around is within it for as long as
-- * the others take.
-- */
--static bool flow_earlier_trip(const struct bpf_verifier_state *t,
--			      const struct bpf_verifier_state *s)
--{
--	const struct bpf_func_state *ft, *fs;
--	u32 fr, i;
--
--	if (t->curframe != s->curframe)
--		return false;
--	for (fr = 0; fr <= t->curframe; fr++) {
--		ft = t->frame[fr];
--		fs = s->frame[fr];
--		if (ft->subprogno != fs->subprogno || ft->callsite != fs->callsite ||
--		    ft->loop_stack_cnt != fs->loop_stack_cnt)
--			return false;
--		for (i = 0; i < ft->loop_stack_cnt; i++) {
--			if (ft->loop_stack[i].loop_id != fs->loop_stack[i].loop_id ||
--			    ft->loop_stack[i].apart != fs->loop_stack[i].apart)
--				return false;
--			if (ft->loop_stack[i].apart &&
--			    ft->loop_stack[i].trip != fs->loop_stack[i].trip)
--				return ft->loop_stack[i].trip + 1 < fs->loop_stack[i].trip;
--		}
--	}
--	return false;
--}
--
--/* Can flow_earlier_trip() be true for a state and @s? */
--static bool flow_has_earlier_trips(const struct bpf_verifier_state *s)
--{
--	const struct loop_stack_entry *entry;
--	u32 fr, i;
--
--	for (fr = 0; fr <= s->curframe; fr++) {
--		for (i = 0; i < s->frame[fr]->loop_stack_cnt; i++) {
--			entry = &s->frame[fr]->loop_stack[i];
--			if (entry->apart && entry->trip > 1)
--				return true;
--		}
--	}
--	return false;
--}
--
--/* @flag: 0 and 1 */
--static bool flow_two_consts(const struct bpf_reg_state *ra, const struct bpf_reg_state *rb,
--			    bool flag)
--{
--	return ra->type == SCALAR_VALUE && rb->type == SCALAR_VALUE &&
--	       tnum_is_const(ra->var_off) && tnum_is_const(rb->var_off) &&
--	       ra->var_off.value != rb->var_off.value &&
--	       (!flag || (ra->var_off.value | rb->var_off.value) == 1);
--}
--
--/* Constants that have to stay constants, see flow_compute_need_const() */
--static bool flow_needed_consts_differ(const struct bpf_flow *flow, enum flow_need_kind kind,
--				      const struct bpf_verifier_state *a,
--				      const struct bpf_verifier_state *b)
--{
--	const struct flow_need *needs = flow->need[kind], *need;
--	const struct bpf_stack_state *sa, *sb;
--	const struct bpf_func_state *fa, *fb;
--	bool flag = kind == FLOW_NEED_FLAG;
--	u32 fr, i, nr;
--
--	if (!needs || a->curframe != b->curframe)
--		return false;
--	for (fr = 0; fr <= a->curframe; fr++) {
--		/* the callers need what they need when the call returns */
--		need = &needs[fr == a->curframe ? a->insn_idx : a->frame[fr + 1]->callsite + 1];
--		fa = a->frame[fr];
--		fb = b->frame[fr];
--		for (i = BPF_REG_0; need->regs && i < BPF_REG_FP; i++)
--			if ((need->regs & BIT(i)) &&
--			    flow_two_consts(&fa->regs[i], &fb->regs[i], flag))
--				return true;
--		nr = min(bpf_stack_nr_slots(fa), bpf_stack_nr_slots(fb));
--		for (i = 0; i < nr && i < 64 && need->slots >> i; i++) {
--			sa = bpf_stack_slot(fa, i);
--			sb = bpf_stack_slot(fb, i);
--			if ((need->slots & BIT_ULL(i)) &&
--			    bpf_is_spilled_scalar_reg(sa) && bpf_is_spilled_scalar_reg(sb) &&
--			    flow_two_consts(&sa->spilled_ptr, &sb->spilled_ptr, flag))
--				return true;
--		}
--	}
--	return false;
--}
--
--/* flow_shape_ptr() hashes a struct scalar up to its padding: there is no hole in front of it */
--static_assert(offsetofend(struct scalar, step) == sizeof(struct tnum) + sizeof(struct cnum64) +
--						  sizeof(struct cnum32) + 2 * sizeof(u16));
--
--/* regsafe() and join_reg() say what each type needs */
--static void flow_shape_ptr(struct flow_shape *sh, u32 place, const struct bpf_reg_state *reg)
--{
--	u32 ids = (reg->id != 0) | (reg->parent_id != 0) << 1 | (reg->map_uid != 0) << 2;
--	bool fixed_part = true, exact = false, has_off = false, var_off = false;
--	u32 *ptrs = &sh->word[FLOW_PTRS];
--	u64 off = reg->var_off.value;
--
--	switch (base_type(reg->type)) {
--	case NOT_INIT:
--	case SCALAR_VALUE:
+-	if (envs->cnt || envs->linked_cnt)
 -		return;
--	case PTR_TO_ARENA:
--		/* the offset is not tracked */
--		fixed_part = false;
--		ids = 0;
+-	kfree(envs);
+-	scev->envs[insn_idx] = NULL;
+-}
+-
+-static int replace_reg(struct scev *scev, struct env *e, u32 reg, int id)
+-{
+-	if (id < 0)
+-		return id;
+-	e->reg2expr[reg] = id;
+-	return 0;
+-}
+-
+-/* The insn at @idx defines @reg. The value is not tracked: @id is UNKNOWN or OPAQUE. */
+-static int forget_reg(struct scev *scev, struct env *e, u32 reg, int id, int idx)
+-{
+-	return replace_reg(scev, e, reg, expr_with_def(scev, id, insn_def(idx, reg)));
+-}
+-
+-static void setup_initial_loop_env(struct env *e)
+-{
+-	int i;
+-
+-	/*
+-	 * Initial assignments are of form rX -> rX are needed as seeds for subsequent
+-	 * work queue pop / transfer() calls. Because e->empty is true, the first backedge
+-	 * join() will overwrite the them. compute_header_scevs() accounts for register
+-	 * states at loop entry.
+-	 */
+-	for (i = 0; i < REGS_NUM; i++)
+-		e->reg2expr[i] = REG_EXPR_ID(i);
+-}
+-
+-/* A subprog can return a pair in r0 and r2: a call defines r1 - r5 too if they are live after it */
+-static int forget_call_regs(struct bpf_verifier_env *env, struct env *e, int idx)
+-{
+-	int i, err;
+-
+-	for (i = BPF_REG_0; i <= BPF_REG_5; i++) {
+-		e->reg2expr[i] = UNKNOWN_EXPR_ID;
+-		if (idx + 1 >= env->prog->len || !reg_alive_at(env, i, idx + 1))
+-			continue;
+-		err = forget_reg(env->scev, e, i, UNKNOWN_EXPR_ID, idx);
+-		if (err)
+-			return err;
+-	}
+-	return 0;
+-}
+-
+-static u32 spill_spi(struct bpf_insn *insn)
+-{
+-	return (-insn->off - 1) / BPF_REG_SIZE;
+-}
+-
+-static u32 off_to_reg(struct bpf_insn *insn)
+-{
+-	return spill_spi(insn) + MAX_BPF_REG;
+-}
+-
+-static bool is_spill_off(int off)
+-{
+-	return off % BPF_REG_SIZE == 0 &&
+-	       off <= -BPF_REG_SIZE &&
+-	       off >= -MAX_BPF_STACK_JIT;
+-}
+-
+-static int mark_opaque(struct scev *scev, struct env *e, int idx, int off, int size)
+-{
+-	int b, spi, err;
+-
+-	for (b = off; b < off + size; b++) {
+-		if (b >= 0 || b < -MAX_BPF_STACK_JIT)
+-			continue;
+-		spi = (-b - 1) / BPF_REG_SIZE;
+-		err = forget_reg(scev, e, MAX_BPF_REG + spi, OPAQUE_EXPR_ID, idx);
+-		if (err)
+-			return err;
+-	}
+-	return 0;
+-}
+-
+-static int mk_spill(struct scev *scev, u8 size, int id)
+-{
+-	switch (size) {
+-	case BPF_B:  return expr1(scev, SPILL8,  id);
+-	case BPF_H:  return expr1(scev, SPILL16, id);
+-	case BPF_W:  return expr1(scev, SPILL32, id);
+-	case BPF_DW: return id;
+-	}
+-	return UNKNOWN_EXPR_ID;
+-}
+-
+-/* The size of the spill in a slot with the expression @id. It holds the low bytes of *@x. */
+-static u32 expr_spill_size(struct scev *scev, u32 id, u32 *x)
+-{
+-	struct expr *e = &scev->exprs[id];
+-	/* nothing looks through a phi, see struct expr_def */
+-	bool partial = (e->op == SPILL8 || e->op == SPILL16 || e->op == SPILL32) && !e->def.phi;
+-
+-	*x = partial ? e->params[0] : id;
+-	return partial ? op_low_bits(e->op) / BITS_PER_BYTE : BPF_REG_SIZE;
+-}
+-
+-/* -ENOENT: the value of the fill is not known */
+-static int mk_fill(struct scev *scev, int id, struct bpf_insn *insn)
+-{
+-	u32 x, spill_size = expr_spill_size(scev, id, &x);
+-	u32 size = bpf_size_to_bytes(BPF_SIZE(insn->code));
+-	bool sx = BPF_MODE(insn->code) == BPF_MEMSX;
+-
+-	/* The fill reads the low bytes of the spill, as in check_stack_read_fixed_off() */
+-	if (size <= spill_size && bpf_stack_narrow_access_ok(insn->off, size, spill_size))
+-		id = x;
+-	else if (!is_spill_off(insn->off))
+-		return -ENOENT;
+-#ifdef __BIG_ENDIAN
+-	/* No register becomes (spillN x): its low bits would not be those of x */
+-	else if (spill_size < BPF_REG_SIZE)
+-		return -ENOENT;
+-	/* A narrow fill reads the high bits of the slot on big-endian. */
+-	else
+-		return expr2(scev, sx ? BPF_ARSH : BPF_RSH, id,
+-			     imm_expr(scev, BITS_PER_BYTE * (BPF_REG_SIZE - size)));
+-#endif
+-
+-	switch (BPF_SIZE(insn->code)) {
+-	case BPF_B:  return expr1(scev, sx ? SEXT8  : ZEXT8,  id);
+-	case BPF_H:  return expr1(scev, sx ? SEXT16 : ZEXT16, id);
+-	case BPF_W:  return expr1(scev, sx ? SEXT32 : ZEXT32, id);
+-	case BPF_DW: return sx ? UNKNOWN_EXPR_ID : id; /* DW sign-extended load is invalid */
+-	}
+-	return UNKNOWN_EXPR_ID;
+-}
+-
+-static int maybe_store_fp(struct scev *scev, struct env *e, struct bpf_insn *insn, int idx, int id)
+-{
+-	u8 size = BPF_SIZE(insn->code);
+-
+-	if (insn->dst_reg != BPF_REG_FP)
+-		return 0;
+-	if (is_spill_off(insn->off))
+-		return replace_reg(scev, e, off_to_reg(insn), mk_spill(scev, size, id));
+-	return mark_opaque(scev, e, idx, insn->off, bpf_size_to_bytes(size));
+-}
+-
+-static int maybe_load_fp(struct scev *scev, struct env *e, struct bpf_insn *insn, int idx)
+-{
+-	int id = -ENOENT;
+-
+-	if (insn->src_reg == BPF_REG_FP && insn->off < 0 && insn->off >= -MAX_BPF_STACK_JIT)
+-		id = e->reg2expr[off_to_reg(insn)];
+-	/*
+-	 * The def of a slot that a slice may alias is no value number, see expr_is_vn(): two fills
+-	 * can read distinct values. One fill reads one value: the insn defines the register.
+-	 */
+-	if (id >= 0 && scev->exprs[id].def.set && !scev->exprs[id].is_vn)
+-		id = -ENOENT;
+-	if (id >= 0)
+-		id = mk_fill(scev, id, insn);
+-	if (id == -ENOENT)
+-		return forget_reg(scev, e, insn->dst_reg, OPAQUE_EXPR_ID, idx);
+-	return replace_reg(scev, e, insn->dst_reg, id);
+-}
+-
+-static bool const_diff(struct bpf_verifier_env *env, int h, u32 id_a, u32 id_b, s64 *delta,
+-		       u32 *bits);
+-
+-/* The memory location of @e at the address @addr, 0: one that is not in use. MEM_REGS_NUM: none. */
+-static u32 find_mem_reg(const struct env *e, u32 addr)
+-{
+-	u32 i;
+-
+-	for (i = 0; i < MEM_REGS_NUM && e->mem_addr[i] != addr; i++)
+-		;
+-	return i;
+-}
+-
+-static void forget_mem_reg(struct env *e, u32 i)
+-{
+-	e->mem_addr[i] = 0;
+-	e->reg2expr[REGS_NUM + i] = UNKNOWN_EXPR_ID;
+-}
+-
+-/*
+- * The insn may write @size bytes at the address @addr, 0: anywhere. A may-def of all memory
+- * locations but those that have the same address base and don't overlap. Two bases can be two names
+- * of one memory, 'f(&c, &c)'.
+- */
+-static void forget_mem_regs(struct bpf_verifier_env *env, struct env *e, u32 addr, u32 size)
+-{
+-	u32 i, x, bits;
+-	s64 delta;
+-
+-	for (i = 0; i < MEM_REGS_NUM; i++) {
+-		/* the caller defines it */
+-		if (e->mem_addr[i] == addr)
+-			continue;
+-		if (addr && const_diff(env, -1, addr, e->mem_addr[i], &delta, &bits) &&
+-		    bits == 64 && (delta >= size ||
+-		    delta + expr_spill_size(env->scev, e->reg2expr[REGS_NUM + i], &x) <= 0))
+-			continue;
+-		forget_mem_reg(e, i);
+-	}
+-}
+-
+-/*
+- * A jump tests a register, and a load makes a new value number. So once no register that is live
+- * after the insn at @idx has the base of its value no jump links a memory location by a constant
+- * difference: it goes. One that holds (* n 8) goes too, although a jump on n would evaluate it.
+- */
+-static void forget_dead_mem_regs(struct bpf_verifier_env *env, struct env *e, int idx)
+-{
+-	struct scev *scev = env->scev;
+-	u32 i, r, base;
+-
+-	for (i = 0; i < MEM_REGS_NUM; i++) {
+-		base = innermost_base(scev, e->reg2expr[REGS_NUM + i]);
+-		for (r = 0; r < REGS_NUM; r++)
+-			if (reg_alive_at(env, r, idx + 1) &&
+-			    innermost_base(scev, e->reg2expr[r]) == base)
+-				break;
+-		if (r == REGS_NUM)
+-			forget_mem_reg(e, i);
+-	}
+-}
+-
+-/*
+- * The address of the load or store at @idx through @reg, 0: the memory is not tracked. r10 has the
+- * stack slots, r11 and r12 are no SCEV registers. The main pass takes nothing but stack.
+- */
+-static int mk_mem_addr(struct bpf_verifier_env *env, struct env *e, int idx, u32 reg)
+-{
+-	struct scev *scev = env->scev;
+-
+-	if (reg >= BPF_REG_FP || !(env->insn_aux_data[idx].stack_ptrs & BIT(reg)) ||
+-	    !scev->exprs[e->reg2expr[reg]].is_vn)
+-		return 0;
+-	return expr2(scev, BPF_ADD, e->reg2expr[reg], imm_expr(scev, env->prog->insnsi[idx].off));
+-}
+-
+-/*
+- * The insn at @idx stored the low bytes of @id at the address @addr, or it loaded them from there.
+- * The location takes a SCEV register that is not in use, or that of a dead one.
+- */
+-static int replace_mem_reg(struct bpf_verifier_env *env, struct env *e, int idx, int addr, int id)
+-{
+-	u32 i;
+-
+-	if (addr <= 0)
+-		return addr;
+-	i = find_mem_reg(e, addr);
+-	if (i == MEM_REGS_NUM)
+-		i = find_mem_reg(e, 0);
+-	if (i == MEM_REGS_NUM) {
+-		forget_dead_mem_regs(env, e, idx);
+-		i = find_mem_reg(e, 0);
+-	}
+-	if (i == MEM_REGS_NUM)
+-		return 0;
+-	e->mem_addr[i] = addr;
+-	return replace_reg(env->scev, e, REGS_NUM + i,
+-			   mk_spill(env->scev, BPF_SIZE(env->prog->insnsi[idx].code), id));
+-}
+-
+-static int load_mem(struct bpf_verifier_env *env, struct env *e, int idx)
+-{
+-	struct bpf_insn *insn = &env->prog->insnsi[idx];
+-	/* the insn defines dst_reg, which can be src_reg */
+-	int addr = mk_mem_addr(env, e, idx, insn->src_reg);
+-
+-	return maybe_load_fp(env->scev, e, insn, idx) ?:
+-	       replace_mem_reg(env, e, idx, addr, e->reg2expr[insn->dst_reg]);
+-}
+-
+-static int store_mem(struct bpf_verifier_env *env, struct env *e, int idx, int id)
+-{
+-	struct bpf_insn *insn = &env->prog->insnsi[idx];
+-	int addr;
+-
+-	if (insn->dst_reg == BPF_REG_FP)
+-		return maybe_store_fp(env->scev, e, insn, idx, id);
+-	addr = mk_mem_addr(env, e, idx, insn->dst_reg);
+-	if (addr < 0)
+-		return addr;
+-	forget_mem_regs(env, e, addr, bpf_size_to_bytes(BPF_SIZE(insn->code)));
+-	return replace_mem_reg(env, e, idx, addr, id);
+-}
+-
+-/*
+- * The low 32 bits of a + b depend on the low 32 bits of a and b only: 'w1 += w2' is
+- * (zext32 (+ a b)). That doesn't hold for a right shift and for a division. Their operands are zero
+- * or sign extended and a shift amount is masked, so that every expression is a 64-bit operation.
+- */
+-static void alu32_operands(struct scev *scev, u32 op, int *a, int *b)
+-{
+-	s64 imm = 0;
+-	bool imm_b = *b >= 0 && is_imm(scev, *b, &imm);
+-
+-	switch (op) {
+-	case BPF_RSH:
+-	case BPF_ARSH:
+-		*a = expr1(scev, op == BPF_RSH ? ZEXT32 : SEXT32, *a);
+-		fallthrough;
+-	case BPF_LSH:
+-		*b = imm_b ? imm_expr(scev, imm & 31) :
+-			     expr2(scev, BPF_AND, *b, imm_expr(scev, 31));
 -		break;
--	case PTR_TO_PACKET_META:
--	case PTR_TO_PACKET:
--		fixed_part = false;
--		ids &= 1;
--		/* behind the end of the packet, or at the end: the same in both states */
--		if (reg->range < 0)
--			ids |= -reg->range << 1;
--		else
--			sh->pkt_range += reg->range;
--		if (reg->id) {
--			/* displacements between pointers that share an id are kept */
--			has_off = true;
--			off = reg->r64.base;
--		} else if (reg->range >= 0) {
--			/* join_reg() takes two such constants for two places in the packet */
--			has_off = true;
--			var_off = !tnum_is_const(reg->var_off) || off > MAX_PACKET_OFF;
+-	case BPF_DIV:
+-	case BPF_MOD:
+-		*a = expr1(scev, ZEXT32, *a);
+-		*b = imm_b ? imm_expr(scev, (u32)imm) : expr1(scev, ZEXT32, *b);
+-		break;
+-	case SDIV:
+-	case SMOD:
+-		*a = expr1(scev, SEXT32, *a);
+-		*b = imm_b ? imm_expr(scev, (s32)imm) : expr1(scev, SEXT32, *b);
+-		break;
+-	}
+-}
+-
+-/*
+- * In a prog with an arena an ALU64 insn is converted to ALU32 at fixup if an operand is a pointer
+- * to the arena, see adjust_reg_min_max_vals(). Types are not known here. So @id, what the insn at
+- * @idx computes from @a, gets a def: the value of @dst after the insn, converted or not. See
+- * split_const_offset() for when the op can be trusted. Constant operands are scalars in every
+- * state.
+- */
+-static int alu64_with_def(struct scev *scev, int id, int a, int idx, u32 dst)
+-{
+-	s64 imm;
+-
+-	if (id < 0 || is_imm(scev, id, &imm))
+-		return id;
+-	/* (+ x 0) is x only if the insn stays ALU64 */
+-	return expr_with_def(scev, id == a ? UNKNOWN_EXPR_ID : id, insn_def(idx, dst));
+-}
+-
+-static int transfer(struct bpf_verifier_env *env, struct env *e, int idx)
+-{
+-	const bool little_endian = htons(0x3412) == 0x1234;
+-	struct bpf_insn *insn = &env->prog->insnsi[idx];
+-	bool arena = env->prog->aux->arena;
+-	struct scev *scev = env->scev;
+-	u32 *reg2expr = e->reg2expr;
+-	u8 class = BPF_CLASS(insn->code);
+-	u8 x_or_k = BPF_SRC(insn->code);
+-	u8 opcode = BPF_OP(insn->code);
+-	u8 mode = BPF_MODE(insn->code);
+-	u32 dst = insn->dst_reg;
+-	u32 src = insn->src_reg;
+-	u32 op, sext;
+-	bool need_bswap;
+-	int i, id, a;
+-	s64 imm;
+-
+-	/* reg2expr[12] is a stack slot, not r12 */
+-	if (is_arena_sp_adj(insn) || is_arena_sp_st(insn))
+-		return 0;
+-	if (is_arena_sp_mov(insn) || is_arena_sp_ldx(insn))
+-		goto mark_dst_unknown;
+-
+-	switch (class) {
+-	case BPF_ALU:
+-	case BPF_ALU64:
+-		switch (opcode) {
+-		case BPF_MOV:
+-			switch (insn->off) {
+-			case 0: sext = 0; break;
+-			case 8: sext = SEXT8; break;
+-			case 16: sext = SEXT16; break;
+-			case 32: sext = SEXT32; break;
+-			default:
+-				goto mark_dst_unknown;
+-			}
+-
+-			if (x_or_k == BPF_X && insn->imm == 0)
+-				id = reg2expr[src];
+-			else if (x_or_k == BPF_K && src == 0 && insn->off == 0)
+-				id = imm_expr(scev, insn->imm);
+-			else
+-				goto mark_dst_unknown;
+-
+-			if (sext)
+-				id = expr1(scev, sext, id);
+-			if (class == BPF_ALU)
+-				id = expr1(scev, ZEXT32, id);
+-
+-			return replace_reg(scev, e, dst, id);
+-
+-		case BPF_ADD:
+-		case BPF_SUB:
+-		case BPF_MUL:
+-		case BPF_DIV:
+-		case BPF_MOD:
+-		case BPF_OR:
+-		case BPF_XOR:
+-		case BPF_AND:
+-		case BPF_LSH:
+-		case BPF_RSH:
+-		case BPF_ARSH:
+-			if (opcode == BPF_DIV && insn->off == 1)
+-				op = SDIV;
+-			else if (opcode == BPF_MOD && insn->off == 1)
+-				op = SMOD;
+-			else if (insn->off == 0)
+-				op = opcode;
+-			else
+-				goto mark_dst_unknown;
+-
+-			if (x_or_k == BPF_X && insn->imm == 0)
+-				id = reg2expr[src];
+-			else if (x_or_k == BPF_K && src == 0)
+-				id = imm_expr(scev, insn->imm);
+-			else
+-				goto mark_dst_unknown;
+-
+-			a = reg2expr[dst];
+-			if (class == BPF_ALU)
+-				alu32_operands(scev, op, &a, &id);
+-			id = expr2(scev, op, a, id);
+-
+-			if (class == BPF_ALU)
+-				id = expr1(scev, ZEXT32, id);
+-			else if (arena)
+-				id = alu64_with_def(scev, id, a, idx, dst);
+-
+-			return replace_reg(scev, e, dst, id);
+-
+-		case BPF_NEG:
+-			if (src == 0 && insn->off == 0 && insn->imm == 0)
+-				id = expr1(scev, BPF_NEG, reg2expr[dst]);
+-			else
+-				goto mark_dst_unknown;
+-
+-			if (class == BPF_ALU)
+-				id = expr1(scev, ZEXT32, id);
+-
+-			return replace_reg(scev, e, dst, id);
+-
+-		case BPF_END:
+-			if (src != 0 || insn->off != 0 || (class == BPF_ALU64 && x_or_k != 0))
+-				goto mark_dst_unknown;
+-
+-			need_bswap = class == BPF_ALU64 || ((x_or_k == BPF_TO_LE) != little_endian);
+-			switch (insn->imm) {
+-			case 16: op = need_bswap ? BSWAP16 : ZEXT16; break;
+-			case 32: op = need_bswap ? BSWAP32 : ZEXT32; break;
+-			case 64: op = need_bswap ? BSWAP64 : 0; break;
+-			default:
+-				goto mark_dst_unknown;
+-			}
+-
+-			id = reg2expr[dst];
+-			if (op)
+-				id = expr1(scev, op, reg2expr[dst]);
+-
+-			return replace_reg(scev, e, dst, id);
+-		default:
+-			goto mark_dst_unknown;
 -		}
 -		break;
--	case PTR_TO_INSN:
--		/* a range of offsets is a set of targets */
--		ids = 0;
+-	case BPF_LDX:
+-		switch (mode) {
+-		case BPF_MEM:
+-		case BPF_MEMSX:
+-			/*
+-			 * for (i = 0; i < nr_cpus; i++) with "const volatile int nr_cpus":
+-			 * bpf_compute_const_regs() knows what is loaded from a read-only map.
+-			 */
+-			if (insn->src_reg != BPF_REG_FP && idx + 1 < env->prog->len &&
+-			    (env->insn_aux_data[idx + 1].const_reg_mask & BIT(dst))) {
+-				imm = env->insn_aux_data[idx + 1].const_reg_vals[dst];
+-				return replace_reg(scev, e, dst, imm_expr(scev, imm));
+-			}
+-			return load_mem(env, e, idx);
+-		default:
+-			goto mark_dst_unknown;
+-		}
+-	case BPF_STX:
+-		switch (mode) {
+-		case BPF_MEM:
+-			return store_mem(env, e, idx, reg2expr[src]);
+-		case BPF_ATOMIC:
+-			if (insn->imm == BPF_LOAD_ACQ)
+-				return maybe_load_fp(scev, e, insn, idx);
+-			if (insn->imm == BPF_STORE_REL) {
+-				return store_mem(env, e, idx, reg2expr[src]);
+-			}
+-			/*
+-			 * verifier does not track other atomic ops precisely,
+-			 * hence mark the results as opaque.
+-			 */
+-			if (insn->dst_reg == BPF_REG_FP) {
+-				id = mark_opaque(scev, e, idx, insn->off,
+-						 bpf_size_to_bytes(BPF_SIZE(insn->code)));
+-				if (id < 0)
+-					return id;
+-			} else {
+-				forget_mem_regs(env, e, 0, 0);
+-			}
+-			if (insn->imm == BPF_CMPXCHG)
+-				return forget_reg(scev, e, BPF_REG_0, OPAQUE_EXPR_ID, idx);
+-			if (insn->imm & BPF_FETCH)
+-				return forget_reg(scev, e, src, OPAQUE_EXPR_ID, idx);
+-			break;
+-		}
 -		break;
--	case PTR_TO_MAP_KEY:
--	case PTR_TO_MAP_VALUE:
--	case PTR_TO_MEM:
--	case PTR_TO_BUF:
--	case PTR_TO_TP_BUFFER:
--	case PTR_TO_STACK:
--	case PTR_TO_BTF_ID:
--		has_off = true;
--		var_off = !tnum_is_const(reg->var_off);
+-	case BPF_ST:
+-		id = imm_expr(scev, insn->imm);
+-		if (id < 0)
+-			return id;
+-		return store_mem(env, e, idx, id);
+-	case BPF_JMP:
+-	case BPF_JMP32:
+-		if (opcode == BPF_CALL) {
+-			forget_mem_regs(env, e, 0, 0);
+-			id = forget_call_regs(env, e, idx);
+-			if (id < 0)
+-				return id;
+-			/* made anew, like what is loaded. The parameter tells the two apart. */
+-			return forget_reg(scev, e, BPF_REG_0, expr1(scev, OPAQUE, 1), idx);
+-		}
+-		/* for non-CALL there are no changes in register states */
+-		break;
+-	case BPF_LD:
+-		switch (mode) {
+-		case BPF_IMM:
+-			/* rX = imm ll */
+-			if (BPF_SIZE(insn->code) == BPF_DW && insn->src_reg == 0) {
+-				imm = ((u64)(insn + 1)->imm << 32) | (u32)insn->imm;
+-				return replace_reg(scev, e, dst, imm_expr(scev, imm));
+-			}
+-			/* map, map value, BTF id, function */
+-			if (BPF_SIZE(insn->code) == BPF_DW)
+-				return forget_reg(scev, e, dst, OPAQUE_EXPR_ID, idx);
+-			goto mark_dst_unknown;
+-		case BPF_ABS:
+-		case BPF_IND:
+-			return forget_call_regs(env, e, idx);
+-		default:
+-			goto mark_dst_unknown;
+-		}
 -		break;
 -	default:
--		exact = true;
--	}
--	sh->word[FLOW_LAYOUT] = jhash_1word(place << 1 | var_off, sh->word[FLOW_LAYOUT]);
--	*ptrs = jhash_1word(reg->type, *ptrs + ids);
--	if (fixed_part)
--		*ptrs = jhash2((const u32 *)&reg->raw, sizeof(reg->raw) / sizeof(u32), *ptrs);
--	if (exact)
--		*ptrs = jhash2((const u32 *)scalar_of(reg),
--			       offsetofend(struct scalar, step) / sizeof(u32), *ptrs);
--	if (has_off && !var_off)
--		sh->word[FLOW_OFFS] = jhash_2words(lower_32_bits(off), upper_32_bits(off),
--						   sh->word[FLOW_OFFS]);
--}
--
--/* stacksafe() and join_special_slot() say what each kind needs */
--static void flow_shape_special(struct flow_shape *sh, u32 place, const struct bpf_stack_state *slot)
--{
--	const struct bpf_reg_state *reg = &slot->spilled_ptr;
--	u32 kind = slot->slot_type[BPF_REG_SIZE - 1] << 2 | (reg->id != 0);
--	u32 *ptrs = &sh->word[FLOW_PTRS];
--
--	switch (slot->slot_type[BPF_REG_SIZE - 1]) {
--	case STACK_DYNPTR:
--		kind |= (reg->parent_id != 0) << 1;
--		*ptrs = jhash_3words(kind, reg->dynptr.type, reg->dynptr.first_slot, *ptrs);
--		break;
--	case STACK_ITER:
--		*ptrs = jhash_3words(lower_32_bits((unsigned long)reg->iter.btf),
--				     upper_32_bits((unsigned long)reg->iter.btf),
--				     reg->iter.btf_id, *ptrs + kind);
--		*ptrs = jhash_3words(reg->type, reg->iter.state, reg->iter.loops, *ptrs);
--		break;
--	case STACK_IRQ_FLAG:
--		*ptrs = jhash_2words(kind, reg->irq.kfunc_class, *ptrs);
+-		/* unknown instruction, nuke state */
+-		for (i = 0; i < REGS_NUM; i++)
+-			reg2expr[i] = UNKNOWN_EXPR_ID;
+-		forget_mem_regs(env, e, 0, 0);
 -		break;
 -	}
--	sh->word[FLOW_LAYOUT] = jhash_1word(place << 1, sh->word[FLOW_LAYOUT]);
+-	return 0;
+-
+-mark_dst_unknown:
+-	return forget_reg(scev, e, dst, UNKNOWN_EXPR_ID, idx);
 -}
 -
--/* The part of the shape that is made of the registers and the stack, when it is asked for */
--static void flow_shape_places(struct bpf_verifier_env *env, struct flow_state *s)
+-/*
+- *	if (c) sum += a[i]; else sum += b[i];
+- * @id without defs: (+ r6 %r2.4) -> (+ r6 _). A def tells one load from another. The code that
+- * analyzes loops asks how a value is computed, and that is the same on both paths.
+- * Beyond depth EXPR_STACK_DEPTH an expression keeps its defs: no user looks there.
+- */
+-static int strip_defs(struct scev *scev, u32 id, u32 lvl)
 -{
--	struct bpf_verifier_state *st = &s->st;
--	const struct bpf_stack_state *slot;
--	const struct bpf_func_state *frame;
--	struct flow_shape *sh = &s->shape;
--	u32 fr, i, args;
--	u16 live;
+-	struct expr e = scev->exprs[id]; /* snapshot the expr before potential realloc */
+-	int a;
 -
--	sh->places = true;
--	for (fr = 0; fr <= st->curframe; fr++) {
--		frame = st->frame[fr];
--		/* a state that does a call again is not cleaned, dead registers are not compared */
--		live = env->insn_aux_data[bpf_frame_insn_idx(st, fr)].live_regs_before;
--		for (i = BPF_REG_0; i < BPF_REG_FP; i++)
--			if (live & BIT(i))
--				flow_shape_ptr(sh, fr << 10 | i, &frame->regs[i]);
--		for (i = 0; i < bpf_stack_nr_slots(frame); i++) {
--			slot = bpf_stack_slot(frame, i);
--			switch (slot->slot_type[BPF_REG_SIZE - 1]) {
--			case STACK_SPILL:
--				flow_shape_ptr(sh, fr << 10 | (i + 16), &slot->spilled_ptr);
--				break;
--			case STACK_DYNPTR:
--			case STACK_ITER:
--			case STACK_IRQ_FLAG:
--				flow_shape_special(sh, fr << 10 | (i + 16), slot);
--				break;
+-	switch (op_params_num(e.op)) {
+-	case 0:
+-		return e.def.set ? expr_with_def(scev, id, no_def) : id;
+-	case 1:
+-		if (lvl == EXPR_STACK_DEPTH)
+-			return id;
+-		return expr1(scev, e.op, strip_defs(scev, e.params[0], lvl + 1));
+-	default:
+-		if (lvl == EXPR_STACK_DEPTH)
+-			return id;
+-		a = strip_defs(scev, e.params[0], lvl + 1);
+-		return expr2(scev, e.op, a, strip_defs(scev, e.params[1], lvl + 1));
+-	}
+-}
+-
+-/*
+- * Construct minimal 'ANY' expression by traversing 'a' and 'b'
+- * and accumulating non-duplicated non-ANY entries, without their defs.
+- * 'def' is the def of the result, no_def if it has none.
+- */
+-static int mk_any(struct scev *scev, int a, int b, struct expr_def def)
+-{
+-	struct expr_stack_elt *elt;
+-	struct expr *expr;
+-	u32 i, j, ids_buf_sz;
+-	u32 roots[2] = {a, b};
+-	int id;
+-
+-	if (a < 0)
+-		return a;
+-	if (b < 0)
+-		return b;
+-	ids_buf_sz = 0;
+-	for (i = 0; i < ARRAY_SIZE(roots); i++) {
+-		scev->stack_sz = 0;
+-		expr_stack_push(scev, roots[i]);
+-		while (scev->stack_sz) {
+-			elt = &scev->expr_stack[--scev->stack_sz];
+-			id = elt->id;
+-			expr = &scev->exprs[elt->id];
+-			if (expr->op == ANY) {
+-				if (!expr_stack_push(scev, expr->params[1]) ||
+-				    !expr_stack_push(scev, expr->params[0]))
+-					return expr_with_def(scev, UNKNOWN_EXPR_ID, def);
+-			} else {
+-				/* the operands of an ANY have no defs already */
+-				if (id == roots[i])
+-					id = strip_defs(scev, id, 0);
+-				if (id < 0)
+-					return id;
+-				for (j = 0; j < ids_buf_sz; j++)
+-					if (same_exprs(scev, scev->ids_buf[j], id))
+-						goto next;
+-				if (ids_buf_sz == ARRAY_SIZE(scev->ids_buf))
+-					return expr_with_def(scev, UNKNOWN_EXPR_ID, def);
+-				scev->ids_buf[ids_buf_sz++] = id;
+-			}
+-next:;
+-		}
+-	}
+-	if (WARN_ON(ids_buf_sz == 0))
+-		return -EFAULT;
+-	id = scev->ids_buf[0];
+-	for (i = 1; i < ids_buf_sz; i++) {
+-		id = expr2(scev, ANY, id, scev->ids_buf[i]);
+-		if (id < 0)
+-			return id;
+-	}
+-	return expr_with_def(scev, id, def);
+-}
+-
+-static u32 split_const_offset(struct bpf_verifier_env *env, u32 id, u32 *base, s64 *off);
+-
+-/* @id == *@base + *@off in 64 bits: no add that may become ALU32 is stripped */
+-static void split_const_offset64(struct bpf_verifier_env *env, u32 id, u32 *base, s64 *off)
+-{
+-	struct scev *scev = env->scev;
+-	u32 l, r;
+-
+-	if (split_const_offset(env, id, base, off) == 64)
+-		return;
+-	*base = id;
+-	*off = 0;
+-	if (!scev->exprs[id].def.set && is_add(scev, id, &l, &r) && is_imm(scev, r, off))
+-		*base = l;
+-}
+-
+-/*
+- *	if (c) { n = f(); m = n; } else { n = g(); m = n; }	if (n > 100) return 0;	use(m);
+- * The phi of @reg before the insn at @idx. It merges @a, which came over the edges so far, and @b.
+- * Phis are value numbered as GVN does it, by join point and operands, up to a constant offset:
+- * a == base_a + off_a and b == base_b + off_b, so
+- *	phi == phi(base_a, base_b + off_b - off_a) + off_a
+- * The phi of the bases is hashed without @reg. All registers that have a constant difference on
+- * each edge get the same one, and const_diff() finds them as it finds 'x' and 'x + 4'. The next
+- * edge merges the phi of the bases with the next base: the id stands for the list of the operands,
+- * for any number of edges. No edge brings a phi of this join point, so every phi here gets a new
+- * base with every edge.
+- */
+-static int mk_phi(struct bpf_verifier_env *env, u32 a, u32 b, int idx, u32 reg)
+-{
+-	struct scev *scev = env->scev;
+-	u32 base_a, base_b;
+-	s64 off_a, off_b;
+-	struct expr e;
+-	int id;
+-
+-	id = mk_any(scev, a, b, no_def);
+-	if (id < 0)
+-		return id;
+-	e = scev->exprs[id];
+-	e.def = phi_def(idx, reg);
+-	e.base = 0;
+-	split_const_offset64(env, a, &base_a, &off_a);
+-	split_const_offset64(env, b, &base_b, &off_b);
+-	if (!expr_is_vn(scev, &e) || !scev->exprs[base_a].is_vn || !scev->exprs[base_b].is_vn)
+-		return add_expr(scev, e);
+-	id = base_b;
+-	if (off_a != off_b)
+-		id = expr2(scev, BPF_ADD, base_b, imm_expr(scev, (u64)off_b - off_a));
+-	if (id < 0)
+-		return id;
+-	id = add_expr(scev, (struct expr){ .op = ANY, .params = { base_a, id },
+-					   .def = phi_def(idx, BASE_REG) });
+-	if (id < 0)
+-		return id;
+-	e.base = id;
+-	e.off = off_a;
+-	return add_expr(scev, e);
+-}
+-
+-/* @acc is the env before the insn at @idx */
+-static int join(struct bpf_verifier_env *env, struct env *acc, struct env *cur, int idx)
+-{
+-	struct scev *scev = env->scev;
+-	int i, j, id;
+-
+-	if (acc->empty) {
+-		memcpy(acc, cur, sizeof(*acc));
+-		acc->empty = false;
+-		return 0;
+-	}
+-
+-	for (i = 0; i < ENV_REGS_NUM; i++) {
+-		/* the address names a memory location. It has a phi if all edges track it. */
+-		j = i < REGS_NUM ? i : REGS_NUM + find_mem_reg(cur, acc->mem_addr[i - REGS_NUM]);
+-		if (j == ENV_REGS_NUM) {
+-			forget_mem_reg(acc, i - REGS_NUM);
+-			continue;
+-		}
+-		if (!same_exprs(scev, acc->reg2expr[i], cur->reg2expr[j])) {
+-			/* no phi for a dead register: pruned SSA */
+-			id = reg_alive_at(env, i, idx) ?
+-			     mk_phi(env, acc->reg2expr[i], cur->reg2expr[j], idx, i) :
+-			     UNKNOWN_EXPR_ID;
+-			if (id < 0)
+-				return id;
+-			acc->reg2expr[i] = id;
+-		}
+-	}
+-	return 0;
+-}
+-
+-/* Mark any register modified in 'e' as unknown in 'acc'. */
+-static void forget_modified_regs(struct scev *scev, struct env *acc, struct env *e)
+-{
+-	u32 i, reg;
+-
+-	for (i = 0; i < REGS_NUM; i++) {
+-		if (e && is_reg(scev, e->reg2expr[i], &reg) && reg == i)
+-			continue;
+-		acc->reg2expr[i] = UNKNOWN_EXPR_ID;
+-	}
+-}
+-
+-/* For a loop H at `header`, mark any register modified as a result of H execution as unknown. */
+-static int forget_non_invariants(struct bpf_verifier_env *env, struct env *acc, int header)
+-{
+-	struct bpf_insn_aux_data *aux = env->insn_aux_data;
+-	struct bpf_loop *loop = aux[header].loop;
+-	struct scev *scev = env->scev;
+-	int i, idx, h, err;
+-
+-	acc->empty = false;
+-	forget_mem_regs(env, acc, 0, 0);
+-	forget_modified_regs(scev, acc, find_header_env(scev, header));
+-	for (i = 0; i < loop->exits_cnt; i++) {
+-		idx = loop->exits[i].from;
+-		h = bpf_loop_at_index(env, idx);
+-		/*
+-		 * In order to account for situations like this:
+-		 *
+-		 * header:
+-		 *   do {
+-		 *	saved = rX;
+-		 *	rX = -1000;
+-		 *	do {				// H
+-		 *		if (random())
+-		 *			goto out;	// E
+-		 *	} while (inner_again);
+-		 *	rX = saved;
+-		 *    } while (outer_again);
+-		 *  out:
+-		 *
+-		 * For exits originating in nested loops check that rX is invariant
+-		 * both at the header (H) and at exit (E).
+-		 */
+-		while (h != header) {
+-			forget_modified_regs(scev, acc, find_header_env(scev, h));
+-			forget_modified_regs(scev, acc, find_loop_env(scev, h, idx));
+-			idx = h;
+-			h = aux[h].loop_header;
+-		}
+-		/*
+-		 * For exits originating at the same loop the header is already accounted for,
+-		 * check only the exit environment.
+-		 */
+-		forget_modified_regs(scev, acc, find_loop_env(scev, header, idx));
+-	}
+-	/* the nested loop defines them at its header */
+-	for (i = 0; i < REGS_NUM; i++) {
+-		if (acc->reg2expr[i] != UNKNOWN_EXPR_ID)
+-			continue;
+-		err = forget_reg(scev, acc, i, UNKNOWN_EXPR_ID, header);
+-		if (err)
+-			return err;
+-	}
+-	return 0;
+-}
+-
+-/* Order worklist in reverse post-order. */
+-static bool reverse_postorder_less(const void *a, const void *b, void *arg)
+-{
+-	const int *rank = arg;
+-
+-	return rank[*(const int *)a] > rank[*(const int *)b];
+-}
+-
+-static const struct min_heap_callbacks worklist_cb = {
+-	.less = reverse_postorder_less,
+-};
+-
+-static int worklist_push(struct bpf_verifier_env *env, int loop_header, int idx)
+-{
+-	struct scev *scev = env->scev;
+-	struct scev_worklist *worklist = &scev->worklist;
+-	u32 tag = loop_header + 2; /* -1 is a subprog */
+-
+-	if (scev->discovered[idx] == tag)
+-		return 0;
+-
+-	if (min_heap_full_inline(worklist)) {
+-		size_t size = worklist->size ? worklist->size * 2 : 16;
+-		int *data;
+-
+-		data = kvrealloc(worklist->data, array_size(size, sizeof(*data)),
+-				BPF_VERIFIER_GFP);
+-		if (!data)
+-			return -ENOMEM;
+-		worklist->data = data;
+-		worklist->size = size;
+-	}
+-	if (!min_heap_push_inline(worklist, &idx, &worklist_cb, env->cfg.postorder_nums))
+-		return -EFAULT;
+-
+-	scev->discovered[idx] = tag;
+-	return 0;
+-}
+-
+-static bool reg_alive_at_succ(struct bpf_verifier_env *env, u32 r, u32 insn_idx)
+-{
+-	struct bpf_iarray *succ = bpf_insn_successors(env, insn_idx);
+-	u32 i;
+-
+-	for (i = 0; i < succ->cnt; i++)
+-		if (reg_alive_at(env, r, succ->items[i]))
+-			return true;
+-	return false;
+-}
+-
+-enum changes_at {
+-	LOG_AT_TRANSFER,
+-	LOG_AT_JOIN,
+-};
+-
+-static void log_env_changes(struct bpf_verifier_env *env, enum changes_at at,
+-			    struct env *old, struct env *new, int insn_idx)
+-{
+-	struct bpf_verifier_log *log = &env->log;
+-	struct scev *scev = env->scev;
+-	u64 null_pos = log->end_pos;
+-	u32 old_id, new_id, regno;
+-	bool any_changes = false;
+-	bool is_self_scev;
+-	u64 len;
+-	int r;
+-
+-	bpf_log(log, "%s %4d: ", at == LOG_AT_TRANSFER ? "t" : "j", insn_idx);
+-	bpf_verbose_insn(env, &env->prog->insnsi[insn_idx]);
+-	len = log->end_pos - null_pos;
+-	bpf_log(log, "%*s", max(37 - (int)len, 1), " ");
+-	bpf_log(log, " ; ");
+-	for (r = 0; r < ENV_REGS_NUM; r++) {
+-		old_id = old->reg2expr[r];
+-		new_id = new->reg2expr[r];
+-		if (at == LOG_AT_TRANSFER && !reg_alive_at_succ(env, r, insn_idx))
+-			continue;
+-		if (at == LOG_AT_JOIN && !reg_alive_at(env, r, insn_idx))
+-			continue;
+-		if (same_exprs(scev, old_id, new_id))
+-			continue;
+-		is_self_scev = is_reg(scev, new_id, &regno) && r == regno;
+-		if (old->empty && is_self_scev)
+-			continue;
+-		if (any_changes)
+-			bpf_log(log, ", ");
+-		log_reg(env, r);
+-		if (r >= REGS_NUM && new->mem_addr[r - REGS_NUM]) {
+-			bpf_log(log, "=*");
+-			log_expr(env, new->mem_addr[r - REGS_NUM]);
+-		}
+-		bpf_log(log, " ");
+-		log_expr(env, old_id);
+-		bpf_log(log, " -> ");
+-		log_expr(env, new_id);
+-		any_changes = true;
+-	}
+-	if (old->empty && !any_changes)
+-		bpf_log(log, "<empty join>");
+-	bpf_log(log, "\n");
+-	if (!old->empty && !any_changes)
+-		bpf_vlog_reset(log, null_pos);
+-}
+-
+-static bool is_probe_read_helper(u32 func_id)
+-{
+-	return func_id == BPF_FUNC_probe_read ||
+-	       func_id == BPF_FUNC_probe_read_kernel ||
+-	       func_id == BPF_FUNC_probe_read_user ||
+-	       func_id == BPF_FUNC_probe_read_str ||
+-	       func_id == BPF_FUNC_probe_read_kernel_str ||
+-	       func_id == BPF_FUNC_probe_read_user_str;
+-}
+-
+-/*
+- * If instruction is an indirect write to stack, invalidate SCEVs for spi's
+- * that this instruction can touch.
+- */
+-static int reset_scevs_at_indirect_writes(struct bpf_verifier_env *env, struct env *cur_env, int idx)
+-{
+-	struct bpf_insn *insn = &env->prog->insnsi[idx];
+-	struct scev *scev = env->scev;
+-	u8 class = BPF_CLASS(insn->code);
+-	const unsigned long *mask;
+-	u32 spi, reg;
+-	bool opaque;
+-	int err;
+-
+-	/* Direct fp stores are fine. */
+-	if ((class == BPF_ST || class == BPF_STX) && insn->dst_reg == BPF_REG_FP)
+-		return 0;
+-
+-	mask = bpf_may_write_mask(env, idx);
+-	opaque = bpf_helper_call(insn) && is_probe_read_helper(insn->imm);
+-	for_each_set_bit(spi, mask, MAX_BPF_STACK_SLOTS) {
+-		reg = MAX_BPF_REG + spi;
+-		/* '?' stays '?' */
+-		err = forget_reg(scev, cur_env, reg,
+-				 opaque && !is_op(scev, cur_env->reg2expr[reg], UNKNOWN) ?
+-				 OPAQUE_EXPR_ID : UNKNOWN_EXPR_ID, idx);
+-		if (err)
+-			return err;
+-	}
+-	return 0;
+-}
+-
+-/*
+- * Collect loop-entry registers referenced by expr 'id', best effort.
+- * DEPTH_LIMIT may leave dependencies unrecorded. This mask only avoids
+- * widening that would lose stack-access precision; missing dependencies
+- * may cause false rejections, but this is not a soundness issue.
+- */
+-static void or_expr_regs(struct bpf_verifier_env *env, u32 id, unsigned long *mask)
+-{
+-	struct scev *scev = env->scev;
+-	u32 order;
+-
+-	scev->stack_sz = 0;
+-	expr_stack_push(scev, id);
+-	while (expr_next(scev, &id, &order)) {
+-		if ((order & PRE) && scev->exprs[id].op == REG)
+-			__set_bit(scev->exprs[id].params[0], mask);
+-	}
+-}
+-
+-/* Mask of argument registers (R1..R5) a call at 'idx' passes by register. */
+-static u16 call_params_mask(struct bpf_verifier_env *env, int idx)
+-{
+-	struct bpf_insn *insn = &env->prog->insnsi[idx];
+-	struct bpf_call_summary cs;
+-	int n = bpf_get_call_summary(env, insn, &cs) ? cs.arg_slot_cnt : MAX_BPF_FUNC_REG_ARGS;
+-
+-	return n ? GENMASK(BPF_REG_1 + n - 1, BPF_REG_1) : 0;
+-}
+-
+-/*
+- * For instructions like:
+- * - *(u64 *)(rBase + off) = rX
+- * - rX = *(u64 *)(rBase + off)
+- * - calls that construct objects on stack (e.g. dynptr_from_mem(rBase, ...))
+- * When 'rBase' can be a stack pointer and is derived from some registers Rs
+- * defined at loop entry, record Rs into 'mask'.
+- */
+-static void collect_store_base_regs(struct bpf_verifier_env *env,
+-				    struct env *cur_env, int idx, unsigned long *mask)
+-{
+-	struct bpf_insn_aux_data *aux = env->insn_aux_data;
+-	struct bpf_insn *insn = &env->prog->insnsi[idx];
+-	u8 class = BPF_CLASS(insn->code);
+-	u8 size = BPF_SIZE(insn->code);
+-	u16 base_regs = 0;
+-	u32 r;
+-
+-	if ((size == BPF_W || size == BPF_DW) &&
+-	    !is_arena_sp_st(insn) && !is_arena_sp_ldx(insn)) {
+-		if ((class == BPF_STX || class == BPF_ST) && insn->dst_reg != BPF_REG_FP)
+-			base_regs |= BIT(insn->dst_reg);
+-		else if (class == BPF_LDX && insn->src_reg != BPF_REG_FP)
+-			base_regs |= BIT(insn->src_reg);
+-	}
+-
+-	if (class == BPF_JMP && BPF_OP(insn->code) == BPF_CALL &&
+-	    bpf_needs_fixed_stack_off(env, idx))
+-		base_regs |= call_params_mask(env, idx);
+-
+-	base_regs &= aux[idx].stack_ptrs;
+-	for (r = 0; r < MAX_BPF_REG; r++)
+-		if (base_regs & BIT(r))
+-			or_expr_regs(env, cur_env->reg2expr[r], mask);
+-}
+-
+-/*
+- * Record the loop-entry registers that the operands of the conditional jump at 'idx' are
+- * computed from, best effort like or_expr_regs().
+- */
+-static void collect_tested_regs(struct bpf_verifier_env *env, struct env *cur_env, int idx,
+-				unsigned long *mask)
+-{
+-	struct bpf_insn *insn = &env->prog->insnsi[idx];
+-
+-	if (!bpf_insn_is_cond_jump(insn->code) || BPF_OP(insn->code) == BPF_JCOND)
+-		return;
+-	or_expr_regs(env, cur_env->reg2expr[insn->dst_reg], mask);
+-	if (BPF_SRC(insn->code) == BPF_X)
+-		or_expr_regs(env, cur_env->reg2expr[insn->src_reg], mask);
+-}
+-
+-/* Find the topmost loop header containing idx inside cur_header, or -1 if none. */
+-static int topmost_nested_loop(struct bpf_verifier_env *env, int idx, int cur_header)
+-{
+-	struct bpf_insn_aux_data *aux = env->insn_aux_data;
+-	int header;
+-
+-	for (header = bpf_loop_at_index(env, idx); header >= 0;
+-	     header = aux[header].loop_header)
+-		if (aux[header].loop_header == cur_header)
+-			return header;
+-
+-	return -1;
+-}
+-
+-/*
+- * Join cur_env into the successor's environment and schedule their traversal.
+- * Map successors in nested loops to their topmost nested header.
+- * Ignore successors outside the current loop and its nested loops.
+- */
+-static int join_successor(struct bpf_verifier_env *env, int cur_header, int succ_idx,
+-			  struct env *old_env, struct env *cur_env)
+-{
+-	bool log_level2 = env->log.level & BPF_LOG_LEVEL2;
+-	struct scev *scev = env->scev;
+-	int err, nested_header, idom;
+-	struct env *succ_env;
+-
+-	/*
+-	 * There are several possibilities for a successor:
+-	 * - succ_idx can be a part of a loop outside of the cur_header's loop,
+-	 *   such edges are ignored.
+-	 * - succ_idx can be a part of the same loop as cur_header,
+-	 *   for such edges succ_idx environment is updated:
+-	 *     e[succ_idx] = join(e[succ_idx], cur_env)
+-	 * - succ_idx can be a part of some loop inner to cur_header,
+-	 *   in such a case there exists some loop header H,
+-	 *   such that H.loop_header == cur_header
+-	 *   and H is the same as succ_idx's loop or contains it.
+-	 */
+-	if (bpf_loop_at_index(env, succ_idx) != cur_header) {
+-		/*
+-		 * topmost_nested_loop() either finds H or returns -1,
+-		 * in case if succ_idx is a part of a loop outer to cur_header.
+-		 */
+-		nested_header = topmost_nested_loop(env, succ_idx, cur_header);
+-		if (nested_header < 0)
+-			return 0;
+-		succ_idx = nested_header;
+-	}
+-	succ_env = get_loop_env(scev, cur_header, succ_idx);
+-	if (!succ_env)
+-		return -ENOMEM;
+-	/*
+-	 * The header of an irreducible loop does not dominate its body. An insn whose immediate
+-	 * dominator is outside of the loop is reached from a secondary entry, without the header.
+-	 * The env at the source of an entering edge is not known: all '?', like a new env. So the
+-	 * insn is a join point with a phi for every live register, see join_added_edges().
+-	 */
+-	idom = env->idoms[succ_idx];
+-	if (cur_header >= 0 && succ_idx != cur_header &&
+-	    env->insn_aux_data[cur_header].loop->irreducible &&
+-	    bpf_loop_at_index(env, idom) != cur_header &&
+-	    topmost_nested_loop(env, idom, cur_header) < 0)
+-		succ_env->empty = false;
+-	if (log_level2)
+-		memcpy(old_env, succ_env, sizeof(*old_env));
+-	err = join(env, succ_env, cur_env, succ_idx);
+-	if (err)
+-		return err;
+-	err = worklist_push(env, cur_header, succ_idx);
+-	if (err)
+-		return err;
+-	if (log_level2)
+-		log_env_changes(env, LOG_AT_JOIN, old_env, succ_env, succ_idx);
+-	return 0;
+-}
+-
+-/*
+- * Recurrences need a natural loop. Unsupported loops get an unknown header environment.
+- * A nested loop is processed as a single instruction, its exits are the successors: all of
+- * them are needed. No result for the loop itself depends on the list of its own exits:
+- * mark_latches() prepares them for the loop around, and compute_max_iters() asks if there is
+- * only one, which a list that is cut does not have.
+- */
+-static bool can_compute_loop_scev(const struct bpf_loop *loop)
+-{
+-	return !loop->irreducible && !loop->nested_exits_overflow;
+-}
+-
+-/* A loop is a single instruction for the subprog too: no exit list may be truncated. */
+-static bool can_compute_subprog_scev(struct bpf_verifier_env *env, struct bpf_subprog_info *sub)
+-{
+-	struct bpf_loop *loop;
+-	int i;
+-
+-	for (i = sub->start; i < (sub + 1)->start; i++) {
+-		loop = env->insn_aux_data[i].loop;
+-		if (loop && (loop->exits_overflow || loop->nested_exits_overflow))
+-			return false;
+-	}
+-	return true;
+-}
+-
+-/*
+- * The edges that the verifier adds, see bpf_head_guard_target(): bpf_insn_successors() doesn't have
+- * them. They leave all loops. The env at their source is not known: @cur_env is all '?'. So their
+- * target is a join point with a phi for every live register.
+- */
+-static int join_added_edges(struct bpf_verifier_env *env, struct bpf_subprog_info *sub,
+-			    struct env *old_env, struct env *cur_env)
+-{
+-	int i, t, err;
+-
+-	for (i = sub->start; i < (sub + 1)->start; i++) {
+-		t = bpf_head_guard_target(env, i);
+-		if (t < 0)
+-			continue;
+-		err = join_successor(env, -1, t, old_env, cur_env);
+-		if (err)
+-			return err;
+-	}
+-	return sub->bail_insn < 0 ? 0 : join_successor(env, -1, sub->bail_insn, old_env, cur_env);
+-}
+-
+-/*
+- * @id == *@base + *@off: constant offsets are stripped, see set_expr_base(). Returns the number of
+- * bits in which that holds. An add with a def holds modulo 2^32 whether its insn is converted to
+- * ALU32 or not, see alu64_with_def(). It holds modulo 2^64 once the main pass has set prevent_zext:
+- * it verified the insn without a pointer to the arena and rejects a state that brings one. The def
+- * dominates every use, and prevent_zext is only ever set: such an add is not checked again.
+- */
+-static u32 split_const_offset(struct bpf_verifier_env *env, u32 id, u32 *base, s64 *off)
+-{
+-	struct scev *scev = env->scev;
+-	struct expr *add, *e = &scev->exprs[id];
+-
+-	*base = e->base;
+-	*off = e->off;
+-	while (e->arena_add) {
+-		add = &scev->exprs[e->arena_add];
+-		if (!env->insn_aux_data[add->def.idx].prevent_zext)
+-			return 32;
+-		e->arena_add = scev->exprs[add->params[0]].arena_add;
+-	}
+-	return 64;
+-}
+-
+-static bool const_diff_at_header(struct bpf_verifier_env *env, int h, u32 ra, u32 rb, s64 *delta);
+-
+-/*
+- * @id_a and @id_b are expressions of one env of the loop at @h, or of a subprog: @h is -1. Do they
+- * have a constant difference, @id_b == @id_a + *@delta (mod 2^*@bits)?
+- *	n = (u16)x; m = n + 600; if ((u32)(n - 1) < 256) use(m);
+- * m and the tested value are x + a constant modulo 2^16, and n + a constant modulo 2^32: take the
+- * outermost base that both have.
+- */
+-static bool const_diff(struct bpf_verifier_env *env, int h, u32 id_a, u32 id_b, s64 *delta,
+-		       u32 *bits)
+-{
+-	struct scev *scev = env->scev;
+-	u32 base_a, base_b, bits_a = 64, bits_b, ra, rb;
+-	s64 off_a, off_b, c;
+-
+-	*delta = 0;
+-	*bits = 64;
+-	/* copies are equal in all bits */
+-	if (id_a == id_b && scev->exprs[id_a].is_vn)
+-		return true;
+-	*bits = split_const_offset(env, id_a, &base_a, &off_a);
+-	do {
+-		*bits = min(*bits, split_const_offset(env, id_b, &base_b, &off_b));
+-		bits_b = 64;
+-		do {
+-			c = 0;
+-			/* header phis: rb == ra + c */
+-			if (base_a == base_b ? !scev->exprs[base_a].is_vn :
+-			    h < 0 || !is_reg(scev, base_a, &ra) || !is_reg(scev, base_b, &rb) ||
+-			    !const_diff_at_header(env, h, ra, rb, &c))
+-				continue;
+-			*delta = (u64)off_b - off_a + c;
+-			*bits = min3(*bits, bits_a, bits_b);
+-			return true;
+-		} while (next_base(scev, &base_b, &off_b, &bits_b));
+-	} while (next_base(scev, &base_a, &off_a, &bits_a));
+-	return false;
+-}
+-
+-/*
+- *	old = i = 0; do { i++; if (old > 1021) break; c = buf[old]; old = i; } while (c);
+- * Does @rb == @ra + *@delta hold at the header of the loop at @h in every iteration? It does if it
+- * holds at loop entry, by the env of the enclosing loop at @h, and every backedge preserves it: the
+- * backedge values have this constant difference, or both are the header phi plus one constant.
+- * Loops nest LOOP_STACK_SIZE deep at most, see bpf_flow_place_guards().
+- */
+-static bool const_diff_at_header(struct bpf_verifier_env *env, int h, u32 ra, u32 rb, s64 *delta)
+-{
+-	int outer_header = env->insn_aux_data[h].loop_header;
+-	struct env *entry_env = find_loop_env(env->scev, outer_header, h);
+-	struct env *header_env = find_header_env(env->scev, h);
+-	u32 base_a, base_b, bits;
+-	s64 off_a, c;
+-
+-	if (!entry_env || !can_compute_loop_scev(env->insn_aux_data[h].loop) ||
+-	    !const_diff(env, outer_header, entry_env->reg2expr[ra], entry_env->reg2expr[rb],
+-			delta, &bits) || bits != 64)
+-		return false;
+-	if (const_diff(env, -1, header_env->reg2expr[ra], header_env->reg2expr[rb], &c, &bits))
+-		return bits == 64 && c == *delta;
+-	return split_const_offset(env, header_env->reg2expr[ra], &base_a, &off_a) == 64 &&
+-	       split_const_offset(env, header_env->reg2expr[rb], &base_b, &c) == 64 &&
+-	       base_a == REG_EXPR_ID(ra) && base_b == REG_EXPR_ID(rb) && off_a == c;
+-}
+-
+-/*
+- * const_diff() for the SCEV register @reg, which has the expression @id_b. A fill from byte
+- * *@fill_off of a slot reads these bits. On big endian the low bytes of a spill are the last ones,
+- * and a narrow fill from the start of a slot is a right shift, see mk_fill().
+- */
+-static bool const_diff_reg(struct bpf_verifier_env *env, int h, u32 id_a, u32 reg, u32 id_b,
+-			   u32 *fill_off, s64 *delta, u32 *bits)
+-{
+-	struct scev *scev = env->scev;
+-	struct expr *e;
+-	u32 x;
+-	s64 k;
+-
+-	*fill_off = 0;
+-	if (const_diff(env, h, id_a, id_b, delta, bits)) {
+-		if (is_big_endian_slot(reg))
+-			*fill_off = expr_spill_size(scev, id_b, &x) - *bits / BITS_PER_BYTE;
+-		return true;
+-	}
+-	if (!is_big_endian_slot(reg) || !scev->exprs[id_b].is_vn)
+-		return false;
+-	*bits = split_const_offset(env, id_a, &x, delta);
+-	while (next_base(scev, &x, delta, bits))
+-		;
+-	e = &scev->exprs[x];
+-	if ((e->op != BPF_RSH && e->op != BPF_ARSH) || e->def.set || e->params[0] != id_b ||
+-	    !is_imm(scev, e->params[1], &k) || (k != 32 && k != 48 && k != 56))
+-		return false;
+-	*delta = -(u64)*delta;
+-	*bits = min_t(u32, *bits, 64 - k);
+-	*fill_off = (64 - k - *bits) / BITS_PER_BYTE;
+-	return true;
+-}
+-
+-/* The first of the registers and stack slots @live that holds @id + a constant. REGS_NUM: none. */
+-static u32 find_leader(struct bpf_verifier_env *env, struct env *e, int h,
+-		       const unsigned long *live, u32 id)
+-{
+-	u32 r, bits;
+-	s64 delta;
+-
+-	for_each_set_bit(r, live, REGS_NUM)
+-		if (const_diff(env, h, e->reg2expr[r], id, &delta, &bits))
+-			break;
+-	return r;
+-}
+-
+-/* The linked registers of a conditional jump */
+-struct jump_links {
+-	struct scev_linked_reg *regs;
+-	u32 regs_cnt;
+-	/* the loop of the expressions, -1: a subprog */
+-	int h;
+-	/* r0 - r10: what the jump refined */
+-	u16 refined_regs;
+-	/* their innermost bases */
+-	u32 tested_base[2];
+-	/* One is a header phi: these can have a constant difference, see const_diff_at_header() */
+-	bool tested_phi;
+-};
+-
+-static bool is_refined_reg(const struct jump_links *t, u32 reg)
+-{
+-	return reg < MAX_BPF_REG && (t->refined_regs & BIT(reg));
+-}
+-
+-/* Make room for element @cnt of the array *@p, whose elements have @size bytes */
+-static int grow_array(void *p, u32 cnt, u32 *cap, size_t size)
+-{
+-	u32 new_cap = max_t(u32, roundup_pow_of_two(cnt + 1), 16);
+-	void *tmp;
+-
+-	if (cnt < *cap)
+-		return 0;
+-	tmp = kvrealloc(*(void **)p, array_size(new_cap, size), BPF_VERIFIER_GFP);
+-	if (!tmp)
+-		return -ENOMEM;
+-	*(void **)p = tmp;
+-	*cap = new_cap;
+-	return 0;
+-}
+-
+-/*
+- * The op and the operands that the value of the base @id is computed from. NULL: it is a leaf, its
+- * value is what a leader holds.
+- */
+-static struct expr *expr_to_eval(struct bpf_verifier_env *env, int h, u32 id)
+-{
+-	struct scev *scev = env->scev;
+-	struct expr *e = &scev->exprs[id];
+-	u32 reg;
+-
+-	/* A header phi can be an add of two header phis. Its other SCEVs have entry values. */
+-	if (h >= 0 && is_reg(scev, id, &reg)) {
+-		e = &scev->exprs[find_header_env(scev, h)->reg2scev[reg]];
+-		if (e->op != ADD_SCEV)
+-			return NULL;
+-	}
+-	/* nothing looks through a phi, see struct expr_def */
+-	if (e->def.phi)
+-		return NULL;
+-	return op_params_num(e->op) ? e : NULL;
+-}
+-
+-static struct scev_linked_expr *find_linked_expr(struct scev *scev, u32 id)
+-{
+-	u32 n = scev->exprs[id].linked_expr;
+-
+-	if (n >= scev->linked_exprs_cnt || scev->linked_exprs[n].id != id)
+-		return NULL;
+-	return &scev->linked_exprs[n];
+-}
+-
+-/*
+- * Add the base of @id to the linked expressions, after its operands. Returns its position. An
+- * expression is a DAG, not a tree: a base that is there is not entered again. Below depth
+- * EXPR_STACK_DEPTH a base is a leaf.
+- */
+-static int add_linked_expr(struct bpf_verifier_env *env, const struct jump_links *t, u32 id,
+-			   u32 depth)
+-{
+-	struct scev *scev = env->scev;
+-	struct scev_linked_expr x = { .id = scev->exprs[id].base, .params = { NO_IDX, NO_IDX },
+-				      .leaders = { NO_IDX, NO_IDX, NO_IDX } };
+-	struct expr *e;
+-	u32 i, base;
+-	int n;
+-
+-	if (find_linked_expr(scev, x.id))
+-		return scev->exprs[x.id].linked_expr;
+-	base = innermost_base(scev, x.id);
+-	x.tested_base = base == t->tested_base[0] || base == t->tested_base[1] ||
+-			(t->tested_phi && is_op(scev, base, REG));
+-	x.has_tested = x.tested_base;
+-	e = expr_to_eval(env, t->h, x.id);
+-	for (i = 0; e && depth < EXPR_STACK_DEPTH && i < op_params_num(e->op); i++) {
+-		/* the operands of ADD_SCEV are leaves: they could be adds of each other */
+-		n = add_linked_expr(env, t, e->params[i],
+-				    e->op == ADD_SCEV ? EXPR_STACK_DEPTH : depth + 1);
+-		if (n < 0)
+-			return n;
+-		x.params[i] = n;
+-		x.has_tested |= scev->linked_exprs[n].has_tested;
+-	}
+-	n = scev->linked_exprs_cnt;
+-	if (n >= NO_IDX)
+-		return -E2BIG;
+-	if (grow_array(&scev->linked_exprs, n, &scev->linked_exprs_cap, sizeof(x)) ||
+-	    grow_array(&scev->vals, n, &scev->vals_cap, sizeof(*scev->vals)))
+-		return -ENOMEM;
+-	scev->linked_exprs[scev->linked_exprs_cnt++] = x;
+-	scev->exprs[x.id].linked_expr = n;
+-	return n;
+-}
+-
+-/* The linked register at position @k holds @x + a constant (mod 2^@bits) */
+-static void add_leader(struct scev_linked_expr *x, u32 k, u32 bits, bool tested)
+-{
+-	u32 i = 0;
+-
+-	if (tested) {
+-		while (x->leaders[i] != NO_IDX && x->leaders[i] != k)
+-			i++;
+-		x->leaders[i] = k;
+-	} else if (bits > x->leader_bits) {
+-		x->leaders[LEADERS_NUM - 1] = k;
+-		x->leader_bits = bits;
+-	}
+-}
+-
+-/*
+- * List the bases below the expressions of the linked registers at the positions @roots, and find
+- * their leaders among all of @t. Most registers don't depend on a tested register: they leave
+- * @roots. -ENOENT: nothing but tested registers is left.
+- */
+-static int add_linked_exprs(struct bpf_verifier_env *env, struct jump_links *t,
+-			    unsigned long *roots)
+-{
+-	struct scev_linked_reg *q, *linked = t->regs;
+-	struct scev *scev = env->scev;
+-	struct scev_linked_expr *x;
+-	u32 i, k, id, base, bits, fill_off, min_id, linked_cnt = 0;
+-	s64 off;
+-	int n;
+-
+-	scev->linked_exprs_cnt = 0;
+-	for (k = 0; k < t->regs_cnt; k++) {
+-		linked[k].expr = NO_IDX;
+-		if (!is_refined_reg(t, linked[k].reg))
+-			continue;
+-		t->tested_base[1] = innermost_base(scev, linked[k].id);
+-		if (!t->tested_base[0])
+-			t->tested_base[0] = t->tested_base[1];
+-	}
+-	t->tested_phi = t->h >= 0 && (is_op(scev, t->tested_base[0], REG) ||
+-				      is_op(scev, t->tested_base[1], REG));
+-	min_id = t->tested_phi ? 0 : min(t->tested_base[0], t->tested_base[1]);
+-	for_each_set_bit(k, roots, t->regs_cnt) {
+-		q = &linked[k];
+-		id = q->id;
+-		/* an expression is constructed after its operands */
+-		if (scev->exprs[id].base < min_id && !is_big_endian_slot(q->reg)) {
+-			__clear_bit(k, roots);
+-			continue;
+-		}
+-		/* the start of the slot was filled and tested, see const_diff_reg() */
+-		for (i = 0; is_big_endian_slot(q->reg) && i < k; i++)
+-			if (is_refined_reg(t, linked[i].reg) &&
+-			    !const_diff(env, t->h, linked[i].id, q->id, &off, &bits) &&
+-			    const_diff_reg(env, t->h, linked[i].id, q->reg, q->id, &fill_off, &off,
+-					   &bits))
+-				id = linked[i].id;
+-		n = add_linked_expr(env, t, id, 0);
+-		if (n < 0)
+-			return n;
+-		if (!scev->linked_exprs[n].has_tested) {
+-			__clear_bit(k, roots);
+-			continue;
+-		}
+-		q->expr = n;
+-		linked_cnt += !is_refined_reg(t, q->reg);
+-	}
+-	if (!linked_cnt)
+-		return -ENOENT;
+-	/*
+-	 * A register holds each of its bases + a constant: a leader is found by base. Memory is no
+-	 * leader: which memory it is depends on the state.
+-	 */
+-	for (k = 0; k < t->regs_cnt && linked[k].reg < REGS_NUM; k++) {
+-		if (is_refined_reg(t, linked[k].reg)) {
+-			for (x = scev->linked_exprs;
+-			     x < scev->linked_exprs + scev->linked_exprs_cnt; x++)
+-				if (x->tested_base &&
+-				    const_diff(env, t->h, linked[k].id, x->id, &off, &bits))
+-					add_leader(x, k, bits, true);
+-			continue;
+-		}
+-		base = scev->exprs[linked[k].id].base;
+-		bits = 64;
+-		off = 0;
+-		do {
+-			x = find_linked_expr(scev, base);
+-			if (x)
+-				add_leader(x, k, bits, false);
+-		} while (next_base(scev, &base, &off, &bits));
+-	}
+-	return 0;
+-}
+-
+-/*
+- *	n = bpf_get_stack(..); m = n; if (n < 0) ..; use(m);
+- *	p = &hdr[i]; if (i > 1) return 0; p->len = 0;
+- * The main pass refines the registers that the conditional jump at @idx tests. Find the live SCEV
+- * registers whose expression in @e, the env before the jump, can be evaluated from a tested
+- * register and other live SCEV registers. Keep what bpf_scev_next_linked_reg() needs of @e: these
+- * registers and the leaders, with their expressions.
+- */
+-static int find_linked_regs(struct bpf_verifier_env *env, struct env *e, int h, int idx)
+-{
+-	struct bpf_insn_aux_data *aux = &env->insn_aux_data[idx];
+-	struct bpf_insn *insn = &env->prog->insnsi[idx];
+-	struct jump_links t = { .h = h, .refined_regs = BIT(insn->dst_reg) };
+-	struct insn_envs *envs = env->scev->envs[idx];
+-	struct scev *scev = env->scev;
+-	u32 first = scev->linked_cnt;
+-	DECLARE_BITMAP(live, ENV_REGS_NUM) = {};
+-	DECLARE_BITMAP(roots, ENV_REGS_NUM);
+-	DECLARE_BITMAP(found, ENV_REGS_NUM) = {};
+-	struct scev_linked_expr *x, *l, *p;
+-	struct scev_linked_reg *q;
+-	u32 i, k, r;
+-	bool op;
+-	int err;
+-
+-	if (!bpf_insn_is_cond_jump(insn->code) || BPF_OP(insn->code) == BPF_JCOND)
+-		return 0;
+-	if (BPF_SRC(insn->code) == BPF_X)
+-		t.refined_regs |= BIT(insn->src_reg);
+-	bitmap_copy(live, aux->live_stack_before, MAX_BPF_STACK_SLOTS);
+-	bitmap_shift_left(live, live, MAX_BPF_REG, REGS_NUM);
+-	live[0] |= aux->live_regs_before;
+-	for (r = REGS_NUM; r < ENV_REGS_NUM; r++)
+-		if (e->mem_addr[r - REGS_NUM])
+-			__set_bit(r, live);
+-	for_each_set_bit(r, live, ENV_REGS_NUM) {
+-		if (grow_array(&scev->linked, scev->linked_cnt, &scev->linked_cap,
+-			       sizeof(*scev->linked)))
+-			return -ENOMEM;
+-		scev->linked[scev->linked_cnt++] = (struct scev_linked_reg){
+-			.reg = r, .id = e->reg2expr[r],
+-			.addr = r < REGS_NUM ? 0 : e->mem_addr[r - REGS_NUM] };
+-	}
+-	t.regs = &scev->linked[first];
+-	t.regs_cnt = scev->linked_cnt - first;
+-	scev->linked_cnt = first;
+-	bitmap_fill(roots, t.regs_cnt);
+-	err = add_linked_exprs(env, &t, roots);
+-	/* -E2BIG: too many expressions */
+-	if (err)
+-		return err == -E2BIG || err == -ENOENT ? 0 : err;
+-	/* operands come first */
+-	for (x = scev->linked_exprs; x < scev->linked_exprs + scev->linked_exprs_cnt; x++) {
+-		l = x->params[0] == NO_IDX ? NULL : &scev->linked_exprs[x->params[0]];
+-		p = x->params[1] == NO_IDX ? l : &scev->linked_exprs[x->params[1]];
+-		op = l && l->has_value && p->has_value;
+-		x->has_value = op || x->leader_bits || x->leaders[0] != NO_IDX ||
+-			       is_op(scev, x->id, IMM);
+-		x->has_tested = x->leaders[0] != NO_IDX ||
+-				(op && (l->has_tested || p->has_tested));
+-	}
+-	for_each_set_bit(k, roots, t.regs_cnt) {
+-		q = &t.regs[k];
+-		x = &scev->linked_exprs[q->expr];
+-		r = q->reg < REGS_NUM ? q->reg : find_leader(env, e, h, live, q->addr);
+-		/* a tested register learns from the other one only */
+-		if (!x->has_tested || (is_refined_reg(&t, q->reg) && x->leaders[1] == NO_IDX) ||
+-		    /* the main pass finds memory by a live register that holds its address */
+-		    r == REGS_NUM) {
+-			__clear_bit(k, roots);
+-			continue;
+-		}
+-		x->needed = true;
+-		__set_bit(bitmap_weight(live, r), found);
+-	}
+-	if (bitmap_empty(roots, t.regs_cnt))
+-		return 0;
+-	bitmap_or(found, found, roots, t.regs_cnt);
+-	/* operands come first */
+-	for (x = scev->linked_exprs + scev->linked_exprs_cnt; x-- > scev->linked_exprs;) {
+-		for (i = 0; x->needed && i < LEADERS_NUM; i++)
+-			if (x->leaders[i] != NO_IDX)
+-				__set_bit(x->leaders[i], found);
+-		for (i = 0; x->needed && i < 2 && x->params[i] != NO_IDX; i++)
+-			scev->linked_exprs[x->params[i]].needed = true;
+-	}
+-	for_each_set_bit(k, found, t.regs_cnt) {
+-		q = &scev->linked[scev->linked_cnt++];
+-		*q = t.regs[k];
+-		q->refine = test_bit(k, roots);
+-	}
+-	if (!envs) {
+-		envs = kzalloc(sizeof(*envs), BPF_VERIFIER_GFP);
+-		if (!envs)
+-			return -ENOMEM;
+-		scev->envs[idx] = envs;
+-	}
+-	envs->linked_first = first;
+-	envs->linked_cnt = scev->linked_cnt - first;
+-	return 0;
+-}
+-
+-/*
+- * The memory location @regno is a linked register of the conditional jump at @insn_idx. Its address
+- * is *@base_regno + *@off. *@base_regno is a live register or stack slot. Which memory it is
+- * depends on the state.
+- */
+-bool bpf_scev_mem_addr(struct bpf_verifier_env *env, int insn_idx, u32 regno, u32 *base_regno,
+-		       s64 *off)
+-{
+-	struct insn_envs *envs = env->scev->envs[insn_idx];
+-	struct scev_linked_reg *linked = &env->scev->linked[envs->linked_first];
+-	int h = bpf_loop_at_index(env, insn_idx);
+-	u32 i, j, bits;
+-
+-	for (i = 0; linked[i].reg != regno; i++)
+-		if (i + 1 == envs->linked_cnt)
+-			return false;
+-	for (j = 0; linked[j].reg < REGS_NUM; j++) {
+-		if (!const_diff(env, h, linked[j].id, linked[i].addr, off, &bits) || bits != 64)
+-			continue;
+-		*base_regno = linked[j].reg;
+-		return true;
+-	}
+-	return false;
+-}
+-
+-/*
+- * @cur_header and @first are a loop header. Or -1 and the first insn of a subprog: the subprog is
+- * the outermost loop, which runs once. (REG r) is the entry value of r, the loops in it are single
+- * instructions.
+- * Value numbering works on any CFG: the body of an irreducible loop is walked like any other. Every
+- * retreating edge of the depth-first search goes to a loop header, see compute_loops_in_subprog(),
+- * and bpf_compute_postorder() does the same search. So reverse post-order is a topological order of
+- * this body too.
+- */
+-static int compute_scev_for_loop(struct bpf_verifier_env *env, int cur_header, int first)
+-{
+-	struct scev_worklist *worklist = &env->scev->worklist;
+-	struct bpf_insn_aux_data *aux = env->insn_aux_data;
+-	struct bpf_loop *cur_loop = cur_header < 0 ? NULL : aux[cur_header].loop;
+-	struct bpf_subprog_info *sub = bpf_find_containing_subprog(env, first);
+-	struct env *header_env;
+-	struct scev *scev = env->scev;
+-	struct bpf_loop *nested_loop;
+-	struct env *cur_env = NULL;
+-	struct env *old_env = NULL;
+-	struct bpf_iarray *succ;
+-	bool log_level2 = env->log.level & BPF_LOG_LEVEL2;
+-	int s, i, err, idx, succ_idx, start;
+-	u32 r;
+-
+-	if (log_level2)
+-		bpf_log(&env->log, "Computing SCEV for %s at %d:\n",
+-			cur_loop ? "loop" : "subprog", first);
+-
+-	if (!cur_loop && !can_compute_subprog_scev(env, sub))
+-		return 0;
+-
+-	cur_env = kzalloc_obj(*cur_env, BPF_VERIFIER_GFP);
+-	if (!cur_env)
+-		goto nomem;
+-	if (log_level2) {
+-		old_env = kzalloc_obj(*old_env, BPF_VERIFIER_GFP);
+-		if (!old_env)
+-			goto nomem;
+-	}
+-	header_env = get_loop_env(scev, cur_header, first);
+-	if (!header_env)
+-		goto nomem;
+-	setup_initial_loop_env(header_env);
+-	/* The successors of a nested loop with a truncated exit list are not known: no walk */
+-	if (!cur_loop || !cur_loop->nested_exits_overflow) {
+-		err = worklist_push(env, cur_header, first);
+-		if (err)
+-			goto out;
+-	}
+-	if (!cur_loop) {
+-		/* no backedge overwrites it */
+-		header_env->empty = false;
+-		err = join_added_edges(env, sub, old_env, cur_env);
+-		if (err)
+-			goto out;
+-	}
+-
+-	while (worklist->nr) {
+-		idx = *min_heap_peek_inline(worklist);
+-		min_heap_pop_inline(worklist, &worklist_cb, env->cfg.postorder_nums);
+-		start = idx;
+-		if (bpf_must_abort()) {
+-			err = -EINTR;
+-			goto out;
+-		}
+-
+-		/* join_successor() maps nested-loop entries to their representative header. */
+-		nested_loop = idx != cur_header ? aux[idx].loop : NULL;
+-		memcpy(cur_env, find_loop_env(scev, cur_header, idx), sizeof(*cur_env));
+-		if (nested_loop) {
+-			/*
+-			 * Process nested loop as a single instruction by
+-			 * forgetting anything non-invariant in the nested loop
+-			 */
+-			if (log_level2)
+-				memcpy(old_env, cur_env, sizeof(*old_env));
+-			if (cur_loop) {
+-				/* Pull the nested loop's stack-store base dependencies up. */
+-				for_each_set_bit(r, nested_loop->store_base_regs, BPF_SCEV_REGS_NUM)
+-					or_expr_regs(env, cur_env->reg2expr[r],
+-						     cur_loop->store_base_regs);
+-				/* And what its jumps depend on. */
+-				for_each_set_bit(r, nested_loop->tested_regs, BPF_SCEV_REGS_NUM)
+-					or_expr_regs(env, cur_env->reg2expr[r],
+-						     cur_loop->tested_regs);
+-			}
+-			err = forget_non_invariants(env, cur_env, idx);
+-			if (err)
+-				goto out;
+-			if (log_level2)
+-				log_env_changes(env, LOG_AT_TRANSFER, old_env, cur_env, idx);
+-			/*
+-			 * Treat nested loop exits as successors,
+-			 * join cur_env into successor's envs.
+-			 */
+-			for (i = 0; i < nested_loop->exits_cnt; i++) {
+-				s = nested_loop->exits[i].to;
+-				err = join_successor(env, cur_header, s, old_env, cur_env);
+-				if (err)
+-					goto out;
+-			}
+-		} else {
+-			/*
+-			 * Iterate instructions within a single basic block
+-			 * starting at 'idx' mutating 'cur_env'.
+-			 */
+-			for (;;) {
+-				if (log_level2)
+-					memcpy(old_env, cur_env, sizeof(*old_env));
+-				if (cur_loop) {
+-					collect_store_base_regs(env, cur_env, idx,
+-								cur_loop->store_base_regs);
+-					collect_tested_regs(env, cur_env, idx,
+-							    cur_loop->tested_regs);
+-				}
+-				/* the others wait for the envs of all loop headers */
+-				if (!aux[idx].need_scev) {
+-					err = find_linked_regs(env, cur_env, -1, idx);
+-					if (err)
+-						goto out;
+-				}
+-				err = transfer(env, cur_env, idx);
+-				if (err)
+-					goto out;
+-				err = reset_scevs_at_indirect_writes(env, cur_env, idx);
+-				if (err)
+-					goto out;
+-				if (log_level2)
+-					log_env_changes(env, LOG_AT_TRANSFER, old_env, cur_env, idx);
+-				succ = bpf_insn_successors(env, idx);
+-				if (succ->cnt != 1)
+-					break;
+-				succ_idx = succ->items[0];
+-				if (aux[idx].bb_end || aux[succ_idx].need_scev ||
+-				    bpf_loop_at_index(env, succ_idx) != cur_header)
+-					break;
+-				idx = succ_idx;
+-			}
+-			/* Join cur_env into basic block successor's envs. */
+-			iarray_for_each(s, succ) {
+-				err = join_successor(env, cur_header, s, old_env, cur_env);
+-				if (err)
+-					goto out;
 -			}
 -		}
--		/* incoming arguments are not compared with outgoing ones: other places */
--		args = 16 + MAX_BPF_STACK_SLOTS;
--		if (bpf_stack_args_are_incoming(frame))
--			args += MAX_STACK_ARG_SLOTS;
--		for (i = 0; i < frame->out_stack_arg_cnt; i++)
--			flow_shape_ptr(sh, fr << 10 | (i + args), &frame->stack_arg_regs[i]);
--	}
--}
--
--/* The part of the shape that is not */
--static void flow_shape_ctx(const struct bpf_verifier_state *st, struct flow_shape *sh)
--{
--	const struct bpf_reference_state *ref;
--	const struct loop_stack_entry *entry;
--	const struct bpf_func_state *frame;
--	u32 chain = st->curframe, ctx, fr, i;
--
--	ctx = jhash_3words(st->in_sleepable | st->callers_unknown << 1 |
--			   st->unwound << 2 | st->changed_pkt_data << 3 |
--			   (st->active_irq_id != 0) << 4 | (st->active_lock_id != 0) << 5,
--			   st->acquired_refs, st->active_locks, 0);
--	ctx = jhash_2words(st->active_preempt_locks, st->active_rcu_locks, ctx);
--	ctx = jhash_2words(lower_32_bits((unsigned long)st->active_lock_ptr),
--			   upper_32_bits((unsigned long)st->active_lock_ptr), ctx);
--	for (i = 0; i < st->acquired_refs; i++) {
--		ref = &st->refs[i];
--		ctx = jhash_1word(ref->type, ctx);
--		if (ref->type != REF_TYPE_PTR && ref->type != REF_TYPE_IRQ)
--			ctx = jhash_2words(lower_32_bits((unsigned long)ref->ptr),
--					   upper_32_bits((unsigned long)ref->ptr), ctx);
--	}
--	for (fr = 0; fr <= st->curframe; fr++) {
--		frame = st->frame[fr];
--		chain = jhash_3words(frame->subprogno, frame->callsite, frame->loop_stack_cnt,
--				     chain);
--		ctx = jhash_2words(frame->entry_refs, frame->in_rcu_callback_fn, ctx);
--		ctx = jhash_2words(frame->entry_rcu_locks, frame->entry_preempt_locks, ctx);
--		for (i = 0; i < frame->loop_stack_cnt; i++) {
--			entry = &frame->loop_stack[i];
--			chain = jhash_1word(entry->loop_id << 1 | entry->apart, chain);
--			ctx = jhash_3words(entry->counted << 3 | entry->guarded << 2 |
--					   entry->first << 1 | entry->terminates,
--					   entry->max_header_count,
--					   entry->counted ? entry->trip : 0, ctx);
--		}
--	}
--	memset(sh, 0, sizeof(*sh));
--	sh->word[FLOW_CHAIN] = chain;
--	sh->word[FLOW_CTX] = ctx;
--}
--
--/* Are the words up to @last the same? */
--static __always_inline bool flow_same_shape(const struct flow_state *a, const struct flow_state *b,
--					    enum flow_word last)
--{
--	u32 i;
--
--	for (i = 0; i <= last; i++)
--		if (a->shape.word[i] != b->shape.word[i])
--			return false;
--	return true;
--}
--
--/*
-- * A state that arrives is compared with the states at the insn: is it within one of them, see
-- * bpf_state_subsumes(), does it have a join with one of them, see bpf_states_join()? Most of
-- * them have nothing to do with it. The shape of a state tells that before the registers are
-- * compared or, for a join, copied. It has what must be the same in two states that are related:
-- *
-- * FLOW_CHAIN	the chain of calls and the loops that every frame is in
-- * FLOW_CTX	what is known about every loop, the iteration of a counted one,
-- *		the flags of the state and of its frames, locks and references
-- * FLOW_LAYOUT	which registers, stack slots and stack arguments hold a pointer, a dynptr,
-- *		an iterator or an irq flag, which of the pointers are at a constant offset
-- * FLOW_PTRS	what the pointers point to and which of their ids are set, the kind of the others
-- * FLOW_OFFS	the constant offsets
-- *
-- * Nothing about numbers is in it.
-- *
-- * States that differ in one of the first two words are not related. Neither are states of
-- * the same layout that differ in one of the last two: a pointer is related to a pointer to the same
-- * thing only, and two constant offsets are two places in it.
-- * States of different layout may be related, whatever the last two words are: nothing in
-- * a register or in a slot stands for a pointer there, and a range of offsets stands for a constant,
-- * or is joined with it.
-- *
-- * A word is a hash. It is a filter and proves nothing: the states that get through it go
-- * through all the comparisons. So it's fine to look at the first two words only: @places.
-- */
--static bool flow_may_relate(struct bpf_verifier_env *env, struct flow_state *t,
--			    struct flow_state *s, bool places)
--{
--	if (!flow_same_shape(t, s, FLOW_CTX))
--		return false;
--	if (!places)
--		return true;
--	if (!t->shape.places)
--		flow_shape_places(env, t);
--	if (!s->shape.places)
--		flow_shape_places(env, s);
--	return !flow_same_shape(t, s, FLOW_LAYOUT) || flow_same_shape(t, s, FLOW_OFFS);
--}
--
--/*
-- * A pointer to the packet stands for one with at least as many checked bytes, and without
-- * widening it's joined with one that has as many. In states of the same layout that holds for
-- * the sums too. Returns 0 if the sums are the same, or say nothing.
-- */
--static int flow_cmp_pkt_range(const struct flow_state *t, const struct flow_state *s)
--{
--	if (!t->shape.places || !s->shape.places || !flow_same_shape(t, s, FLOW_LAYOUT) ||
--	    t->shape.pkt_range == s->shape.pkt_range)
--		return 0;
--	return t->shape.pkt_range < s->shape.pkt_range ? -1 : 1;
--}
--
--/*
-- * bpf_loop(N, ...) with a small N: the calls of the callback are looked at one by one, like
-- * the iterations of a loop that is walked. The call stops to enter the callback when
-- * callback_depth gets to N.
-- */
--static bool flow_callback_depth_differs(struct bpf_verifier_env *env,
--					const struct bpf_verifier_state *a,
--					const struct bpf_verifier_state *b)
--{
--	u32 max = BPF_FLOW_MAX_CALLBACKS, fr;
--	const struct bpf_func_state *fa, *fb;
--	struct bpf_insn *insn;
--
--	if (a->curframe != b->curframe)
--		return false;
--	/* at the call, and in the callback and what it calls */
--	for (fr = 0; fr <= a->curframe; fr++) {
--		insn = &env->prog->insnsi[fr == a->curframe ? a->insn_idx :
--					  a->frame[fr + 1]->callsite];
--		if (!bpf_helper_call(insn) || insn->imm != BPF_FUNC_loop)
--			continue;
--		fa = a->frame[fr];
--		fb = b->frame[fr];
--		if (fa->callback_depth != fb->callback_depth &&
--		    fa->regs[BPF_REG_1].type == SCALAR_VALUE &&
--		    reg_umax(&fa->regs[BPF_REG_1]) <= max &&
--		    fb->regs[BPF_REG_1].type == SCALAR_VALUE &&
--		    reg_umax(&fb->regs[BPF_REG_1]) <= max)
--			return true;
--	}
--	return false;
--}
--
--static const struct bpf_reg_state *flow_slot_number(const struct bpf_func_state *frame, u32 i)
--{
--	const struct bpf_stack_state *slot = bpf_stack_slot(frame, i);
--
--	if (slot->slot_type[0] != STACK_SPILL || slot->slot_type[BPF_REG_SIZE - 1] != STACK_SPILL ||
--	    slot->spilled_ptr.type != SCALAR_VALUE)
--		return NULL;
--	return &slot->spilled_ptr;
--}
--
--/* Returns true when the answer is known */
--static bool flow_null_pair(const struct bpf_reg_state *ra, const struct bpf_reg_state *rb,
--			   bool *a_null, bool *b_null)
--{
--	if (tnum_equals_const(ra->var_off, 0) && !tnum_is_const(rb->var_off)) {
--		*a_null = true;
--		if (reg_umin(rb) == 1 && reg_umax(rb) == U64_MAX)
--			return true;
--	}
--	if (tnum_equals_const(rb->var_off, 0) && !tnum_is_const(ra->var_off)) {
--		*b_null = true;
--		if (reg_umin(ra) == 1 && reg_umax(ra) == U64_MAX)
--			return true;
--	}
--	return *a_null && *b_null;
--}
--
--/*
-- * Two things of which one is there: "if (hdr->ipv4) ... else if (hdr->ipv6)". The one that
-- * is not there is 0. What the other one is may be unknown, e.g. a pointer to the packet
-- * after the packet was changed. (0, x) is not within (y, 0) and the join (?, ?) forgets that
-- * it's one or the other.
-- * The same for a number that was compared with 0: 0 on one path, not 0 on the other.
-- *
-- * Only where a jump ahead can see it: FLOW_NEED_JUMP, see flow_join_makes_up(). What no jump
-- * looks at again sends no state another way, and every such number doubles the states.
-- *
-- *	for (i = 0; i < n; i++) { p = a[i]; if (!p) continue; put(p); }
-- * a[] is on the stack. The jump finds out about the slot that p was filled from too. Nothing
-- * looks at a[i] again, but the loop reads through a pointer that moves, so all of a[] is live
-- * until the loop is done: 2^n states if they stay apart.
-- * They don't, because FLOW_NEED_JUMP has only what is filled through r10, see flow_fp_slot().
-- * It cannot tell a[i] from a[i + 1]. With what is filled through other pointers to the stack in
-- * it, all of a[] is tested in all of the loop.
-- */
--static bool flow_null_differs(const struct bpf_flow *flow, const struct bpf_verifier_state *a,
--			      const struct bpf_verifier_state *b)
--{
--	const struct bpf_func_state *fa, *fb;
--	const struct bpf_reg_state *ra, *rb;
--	const struct flow_need *need = flow->need[FLOW_NEED_JUMP];
--	bool a_null = false, b_null = false;
--	u32 i;
--
--	if (!need || a->curframe != b->curframe)
--		return false;
--	need += a->insn_idx;
--	fa = a->frame[a->curframe];
--	fb = b->frame[b->curframe];
--	for (i = BPF_REG_0; i < BPF_REG_FP; i++) {
--		ra = &fa->regs[i];
--		rb = &fb->regs[i];
--		if ((need->regs & BIT(i)) &&
--		    ra->type == SCALAR_VALUE && rb->type == SCALAR_VALUE &&
--		    flow_null_pair(ra, rb, &a_null, &b_null))
--			return true;
--	}
--	for (i = 0; i < 64 && i < bpf_stack_nr_slots(fa) && i < bpf_stack_nr_slots(fb); i++) {
--		if (!(need->slots & BIT_ULL(i)))
--			continue;
--		ra = flow_slot_number(fa, i);
--		rb = flow_slot_number(fb, i);
--		if (ra && rb && flow_null_pair(ra, rb, &a_null, &b_null))
--			return true;
--	}
--	return false;
--}
--
--static const struct bpf_reg_state *flow_number_at(const struct bpf_func_state *frame, u8 loc)
--{
--	const struct bpf_reg_state *reg;
--
--	if (loc <= BPF_REG_FP)
--		reg = &frame->regs[loc];
--	else if (loc - BPF_REG_FP - 1 < bpf_stack_nr_slots(frame) &&
--		 bpf_is_spilled_scalar_reg(bpf_stack_slot(frame, loc - BPF_REG_FP - 1)))
--		reg = &bpf_stack_slot(frame, loc - BPF_REG_FP - 1)->spilled_ptr;
--	else
--		return NULL;
--	return reg->type == SCALAR_VALUE ? reg : NULL;
--}
--
--/*
-- * A register is set in one of the states and not in the other. Only live registers are in
-- * a state, so something ahead may read it. The state in which it's not set doesn't get there:
-- * a jump sends it another way. The join would not know which way to go, and would get
-- * there without the register. There is nothing to gain from such a join but a state less.
-- */
--static bool flow_unset_differs(const struct bpf_verifier_state *a,
--			       const struct bpf_verifier_state *b)
--{
--	u32 fr, i;
--
--	for (fr = 0; fr <= a->curframe; fr++)
--		for (i = BPF_REG_0; i < BPF_REG_FP; i++)
--			if ((a->frame[fr]->regs[i].type == NOT_INIT) !=
--			    (b->frame[fr]->regs[i].type == NOT_INIT))
--				return true;
--	return false;
--}
--
--static bool flow_disjoint(const struct bpf_reg_state *a, const struct bpf_reg_state *b)
--{
--	return cnum64_is_empty(cnum64_intersect(a->r64, b->r64)) ||
--	       cnum32_is_empty(cnum32_intersect(a->r32, b->r32)) ||
--	       ((a->var_off.value ^ b->var_off.value) & ~(a->var_off.mask | b->var_off.mask));
--}
--
--/* The smallest range that has both has numbers that are in neither */
--static bool flow_gap(const struct bpf_reg_state *a, const struct bpf_reg_state *b)
--{
--	if (cnum64_is_empty(cnum64_intersect(a->r64, b->r64)) &&
--	    a->r64.size + b->r64.size + 1 > a->r64.size &&
--	    cnum64_union(a->r64, b->r64).size > a->r64.size + b->r64.size + 1)
--		return true;
--	return cnum32_is_empty(cnum32_intersect(a->r32, b->r32)) &&
--	       cnum32_union(a->r32, b->r32).size > (u64)a->r32.size + b->r32.size + 1;
--}
--
--/*
-- * Numbers always have a join. It must not make up what neither state has where a jump ahead
-- * can see it. FLOW_NEED_JUMP has the registers and the stack slots that a jump ahead compares
-- * with a constant, or the verifier does at a call or at the exit.
-- *
-- *	if (ret < 0) goto err; if (ret > 0) goto skip; use(p);
-- * ret = [-2, -1] and ret = [1, 2], both without p, meet in front of that. [-2, 2] has 0, gets
-- * through both jumps, and there is no p. So two ranges that leave a gap are not joined. Ranges
-- * that touch, 0 and 1, -1 and 0, or have something in common make up no number.
-- *
-- *	err = update(); ret = err < 0 ? DROP : 0; ... if (err < 0) goto out; ... if (ret < 0) ...
-- * (err >= 0, ret = 0) and (err < 0, ret = DROP) meet. The join has err < 0 with ret = 0. So
-- * two numbers, each with nothing in common between the states, are not joined either.
-- *
-- *	fatal = err == -ENOMEM; ... if (fatal) bpf_set_retval(err);
-- * (fatal = 0, err = 1) and (fatal = 1, err = -ENOMEM) meet. The same: the join has
-- * fatal = 1 with err = 1, which bpf_set_retval() doesn't take.
-- *
-- *	ok = i < 64 && in[i]; if (x) n++; if (ok) a[i] = 1;
-- * (ok = 0, i >= 64), (ok = 0, i < 64) and (ok = 1, i < 64) meet. 0 and 1 touch, and i < 64 comes
-- * with either, so none of the above keeps them apart. The join has ok = 1 with i >= 64. A flag is
-- * made to send states different ways. So 0 and 1 are not joined where a jump that is not far
-- * tells one from the other: FLOW_NEED_FLAG.
-- *	while (more) { ...; more = next(&x); }
-- * That jump can be the one that leaves a loop. It is decided in both states, one stays and one
-- * leaves. It's the jump that set the flag, which went both ways, once more: no sign that the
-- * loop gets anywhere. A walk on patience has to know, see mark_loop_exit_decided().
-- *
-- * The states go on to the jumps on their own. Behind the last one the numbers are dead, and what
-- * is left is joined.
-- */
--static bool flow_join_makes_up(const struct bpf_flow *flow, struct bpf_verifier_state *a,
--			       struct bpf_verifier_state *b)
--{
--	struct bpf_func_state *fa = a->frame[a->curframe], *fb = b->frame[b->curframe];
--	const struct bpf_reg_state *ra, *rb, *one_a = NULL, *one_b = NULL;
--	const struct flow_need *tested = flow->need[FLOW_NEED_JUMP], *need;
--	u32 fr, i;
--
--	if (!tested)
--		return false;
--	for (fr = 0; fr <= a->curframe; fr++) {
--		/* the callers go on when the call returns */
--		need = &tested[fr == a->curframe ? a->insn_idx : a->frame[fr + 1]->callsite + 1];
--		for (i = BPF_REG_0; i < BPF_REG_FP + 1 + 64; i++) {
--			if (i <= BPF_REG_FP ? !(need->regs & BIT(i)) :
--					      !(need->slots & BIT_ULL(i - BPF_REG_FP - 1)))
--				continue;
--			ra = flow_number_at(a->frame[fr], i);
--			rb = flow_number_at(b->frame[fr], i);
--			if (!ra || !rb || !flow_disjoint(ra, rb))
--				continue;
--			if (flow_gap(ra, rb))
--				return true;
--			/* copies of a scalar count once: same range and tnum in each state */
--			if (one_a && (!reg_value_equal(ra, one_a) || !reg_value_equal(rb, one_b)))
--				return true;
--			one_a = ra;
--			one_b = rb;
--		}
--	}
--	if (!flow_needed_consts_differ(flow, FLOW_NEED_FLAG, a, b))
--		return false;
--	for (i = 0; i < fa->loop_stack_cnt; i++)
--		fa->loop_stack[i].flag_apart = fa->loop_stack[i].probe;
--	for (i = 0; i < fb->loop_stack_cnt; i++)
--		fb->loop_stack[i].flag_apart = fb->loop_stack[i].probe;
--	return true;
--}
--
--/*
-- * @s came back to the head of a loop, or from a callback to the helper that calls it. @t is there.
-- * Do they come from two states that entered the cycle?
-- */
--static bool flow_entries_differ(const struct bpf_verifier_state *t,
--				const struct bpf_verifier_state *s, enum flow_cycle cycle)
--{
--	const struct bpf_func_state *ft = t->frame[t->curframe], *fs = s->frame[s->curframe];
--	u32 cnt = fs->loop_stack_cnt;
--
--	if (cycle == FLOW_CALLBACK_CYCLE)
--		return ft->callback_entry_id != fs->callback_entry_id;
--	return cnt && ft->loop_stack_cnt == cnt &&
--	       ft->loop_stack[cnt - 1].entry_id != fs->loop_stack[cnt - 1].entry_id;
--}
--
--/*
-- * States that have a join are kept apart while there is room: half of every limit.
-- * After that they are joined, which may lose what the prog needs, and does not run into the limit.
-- */
--static bool flow_has_room(const struct bpf_verifier_env *env, u32 nr_states)
--{
--	u64 len = env->prog->len;
--
--	return nr_states < BPF_FLOW_MAX_STATES / 2 &&
--	       env->flow->live_states < (BPF_FLOW_LIVE_PER_INSN * len + BPF_FLOW_LIVE_BASE) / 2 &&
--	       env->total_states < (BPF_FLOW_TOTAL_PER_INSN * len + BPF_FLOW_TOTAL_BASE) / 2;
--}
--
--/* The state of @set behind @t, the first one if @t is NULL, that @s may be related to */
--static struct flow_state *flow_next_related(struct bpf_verifier_env *env,
--					    const struct flow_set *set, struct flow_state *s,
--					    struct flow_state *t, bool places)
--{
--	t = t ? list_next_entry(t, node) : list_first_entry(&set->list, struct flow_state, node);
--	list_for_each_entry_from(t, &set->list, node)
--		if (flow_may_relate(env, t, s, places))
--			return t;
--	return NULL;
--}
--
--static void flow_link(struct bpf_verifier_env *env, struct flow_set *set, struct flow_state *s)
--{
--	list_add_tail(&s->node, &set->list);
--	env->flow->nr_states[s->st.insn_idx]++;
--}
--
--static void flow_sweep_trip(struct bpf_verifier_env *env, struct flow_state *t,
--			    const struct flow_state *s)
--{
--	if (t->pending || !flow_earlier_trip(&t->st, &s->st))
--		return;
--	flow_unlink(env, t);
--	flow_free_state(env, t);
--}
--
--/* States of earlier iterations than @s go away, see flow_earlier_trip() */
--static void flow_sweep_trips(struct bpf_verifier_env *env, struct flow_set *set,
--			     const struct flow_state *s)
--{
--	struct flow_state *t, *tn;
--
--	if (!flow_has_earlier_trips(&s->st))
--		return;
--	list_for_each_entry_safe(t, tn, &set->list, node)
--		if (flow_same_shape(t, s, FLOW_CHAIN))
--			flow_sweep_trip(env, t, s);
--}
--
--/*
-- * Put *@ps into @set, one of the sets of states at its insn. Returns
-- * 1 if it is within a state of the set. It is gone then.
-- * 0 if it is in the set now, as it was or joined with states of the set.
-- * @cycle: it came around a cycle, what grew is forgotten.
-- */
--static int flow_merge(struct bpf_verifier_env *env, struct flow_set *set,
--		      struct flow_state **ps, enum flow_cycle cycle)
--{
--	struct bpf_flow *flow = env->flow;
--	struct flow_state *s = *ps, *t, *tn;
--	int insn_idx = s->st.insn_idx, err;
--	u32 *nr_states = &flow->nr_states[insn_idx];
--	bool places, widen_all, widen;
--	/* the set of the states that enter a loop is a stop on the way, see bpf_flow_deliver() */
--	bool log = (env->log.level & BPF_LOG_LEVEL2) && set == &flow->states[insn_idx];
--	const char *what = NULL;
--	int prev = s->prev_insn_idx;
--
--again:
--	if (bpf_must_abort()) {
--		err = -EINTR;
--		goto err_free;
+-		/* Reverse post-order: all predecessors came first, the env has no users any more */
+-		if (!aux[start].need_scev)
+-			free_loop_env(scev, cur_header, start);
 -	}
 -
--	/* again after a join: an offset may not be a constant any more, a pointer may be gone */
--	flow_shape_ctx(&s->st, &s->shape);
--	places = *nr_states >= BPF_FLOW_MIN_SHAPES;
--	for (t = flow_next_related(env, set, s, NULL, places); t;
--	     t = flow_next_related(env, set, s, t, places)) {
--		if (flow_cmp_pkt_range(t, s) > 0 || !flow_trips_near(&t->st, &s->st) ||
--		    !flow_within(env, &t->st, &s->st))
--			continue;
--		if (env->log.level & BPF_LOG_LEVEL2)
--			verbose(env, "from %d to %d: within\n", prev, insn_idx);
--		err = flow_cycle_closed(env, &t->st, &s->st) ?:
--		      flow_unite(flow, s->st.flow_entry, t->st.flow_entry) ?: 1;
--		goto err_free;
+-	/* For the enclosing loop and for the main pass it clobbers everything */
+-	if (cur_loop && !can_compute_loop_scev(cur_loop)) {
+-		memset(header_env, 0, sizeof(*header_env));
+-		bitmap_fill(cur_loop->store_base_regs, REGS_NUM);
+-		bitmap_fill(cur_loop->tested_regs, REGS_NUM);
 -	}
--
--	flow_sweep_trips(env, set, s);
--
--	widen_all = cycle == FLOW_CYCLE;
--	for (t = flow_next_related(env, set, s, NULL, places); t; t = tn) {
--		tn = flow_next_related(env, set, s, t, places);
--		/*
--		 * Iterations that are kept apart have no join. Neither does a state take the place
--		 * of a state of another iteration that it covers: that one is done with, or has its
--		 * own way to go, see flow_cycle_closed().
--		 * The shape is a hash, and what follows goes through the frames of both.
--		 */
--		if (flow_trips_behind(&t->st, &s->st))
--			continue;
--		widen = widen_all || (cycle == FLOW_CALLBACK_CYCLE &&
--				      max(s->joins, t->joins) >= BPF_FLOW_CALLBACK_JOINS);
--		/*
--		 *	ret = 0; if (...) { denied++; ret = -EPERM; }
--		 *	bpf_for(i, 0, n) { ... } return ret;
--		 * Two states enter the loop. What comes around it with 0 is for the state with 0.
--		 * Next to -EPERM it looks like a number that grew, and would be forgotten. The same
--		 * for the header of a packet at pkt + 34 and at pkt + 54. No rule has to tell which
--		 * numbers that holds for: a state knows where it comes from.
--		 * If it has no join with that state it is at the head on its own from now on.
--		 * The same for bpf_loop() in place of the loop.
--		 */
--		if (widen && flow_has_room(env, *nr_states) &&
--		    flow_entries_differ(&t->st, &s->st, cycle))
--			continue;
--		if (!widen && flow_has_room(env, *nr_states) &&
--		    flow_null_differs(flow, &t->st, &s->st))
--			continue;
--		if (!widen && flow_needed_consts_differ(flow, FLOW_NEED_ARG, &t->st, &s->st))
--			continue;
--		if (flow_callback_depth_differs(env, &t->st, &s->st))
--			continue;
--		/* what grows in a loop is not replaced with what is larger, it is forgotten */
--		if (!widen && flow_cmp_pkt_range(s, t) <= 0 && flow_within(env, &s->st, &t->st)) {
--			err = flow_unite(flow, s->st.flow_entry, t->st.flow_entry);
--			if (err)
--				goto err_free;
--			/*
--			 * What a callback comes back with and covers what is there grew, like
--			 * what is joined with it. It counts, or nothing ends "*ctx += 1".
--			 */
--			s->joins = max(s->joins, t->joins) + (cycle == FLOW_CALLBACK_CYCLE);
--			flow_unlink(env, t);
--			flow_free_state(env, t);
--			what = what ?: "joined";
--			continue;
--		}
--		if (!widen && flow_cmp_pkt_range(s, t))
--			continue;
--		if (flow_has_room(env, *nr_states) &&
--		    (flow_unset_differs(&t->st, &s->st) ||
--		     (!widen && flow_join_makes_up(flow, &t->st, &s->st))))
--			continue;
--		/*
--		 * Around a loop too:
--		 *	u8 stack[10], depth = 0;
--		 *	loop {
--		 *		if (...) { if (depth >= 10) break; stack[depth++] = x; }
--		 *		else { depth--; if (depth >= 10) break; x = stack[depth]; }
--		 *	}
--		 * depth is in a 32-bit register. A compiler tests 'depth & 255' and computes it
--		 * anew for the index. What is found out about a copy says nothing about
--		 * a range, and everything about a constant.
--		 */
--		if (flow_has_room(env, *nr_states) &&
--		    flow_needed_consts_differ(flow, FLOW_NEED_STACK_OFF, &t->st, &s->st))
--			continue;
--		if (!widen && flow_has_room(env, *nr_states) &&
--		    flow_needed_consts_differ(flow, FLOW_NEED_PTR_OFF, &t->st, &s->st))
--			continue;
--		err = bpf_states_join(env, &flow->tmp, &t->st, &s->st, widen);
--		if (err < 0)
--			goto err_free;
--		if (err)
--			continue;
--		what = widen ? "widened" : "joined";
--		err = flow_unite(flow, s->st.flow_entry, t->st.flow_entry);
--		if (err)
--			goto err_free;
--		flow->tmp.flow_entry = t->st.flow_entry;
--		flow->tmp.last_insn_idx = s->prev_insn_idx;
--		s->joins = max(s->joins, t->joins) + 1;
--		bpf_free_verifier_state(&s->st, false);
--		s->st = flow->tmp;
--		memset(&flow->tmp, 0, sizeof(flow->tmp));
--		flow_unlink(env, t);
--		flow_free_state(env, t);
--		/* the join may be within, or have a join with, what is left in the set */
--		goto again;
--	}
--
--	if (*nr_states >= BPF_FLOW_MAX_STATES) {
--		verbose(env, "more than %d states that cannot be joined at insn %d\n",
--			BPF_FLOW_MAX_STATES, insn_idx);
--		err = -E2BIG;
--		goto err_free;
--	}
--	if (flow->live_states > BPF_FLOW_LIVE_PER_INSN * env->prog->len + BPF_FLOW_LIVE_BASE ||
--	    env->total_states >
--	    BPF_FLOW_TOTAL_PER_INSN * (u64)env->prog->len + BPF_FLOW_TOTAL_BASE) {
--		verbose(env, "too many states for %d insns: %d, %d at a time\n",
--			env->prog->len, env->total_states, flow->live_states);
--		err = -E2BIG;
--		goto err_free;
--	}
--	/*
--	 * The state is printed when its turn comes. That says enough about a state that
--	 * is new, and about a state that goes on to the next insn.
--	 */
--	if (prev >= 0 && insn_idx == prev + 1 + bpf_is_ldimm64(&env->prog->insnsi[prev]) &&
--	    what && !strcmp(what, "joined"))
--		what = NULL;
--	if (log && what)
--		verbose(env, "from %d to %d: %s\n", prev, insn_idx, what);
--	flow_link(env, set, s);
--	env->max_states_per_insn = max(env->max_states_per_insn, *nr_states);
--	return 0;
--
--err_free:
--	flow_free_state(env, s);
+-	err = 0;
+-out:
+-	kfree(cur_env);
+-	kfree(old_env);
 -	return err;
+-nomem:
+-	err = -ENOMEM;
+-	goto out;
 -}
 -
--static struct flow_state *flow_new_state(struct bpf_verifier_env *env, int prev_insn_idx)
--{
--	struct flow_state *s = kzalloc_obj(*s, BPF_VERIFIER_GFP);
--	struct bpf_flow *flow = env->flow;
--
--	if (!s)
--		return NULL;
--	s->prev_insn_idx = prev_insn_idx;
--	s->seq = ++flow->seq;
--	s->from = flow->from;
--	env->total_states++;
--	flow->live_states++;
--	env->peak_states = max(env->peak_states, flow->live_states);
--	return s;
--}
--
--/* What @st holds is taken and @st is left empty. What doesn't matter at @insn_idx goes. */
--static struct flow_state *flow_arrive(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
--				      int insn_idx, int prev_insn_idx, bool *enters)
--{
--	struct bpf_verifier_state *cur = env->cur_state;
--	int cur_idx = env->insn_idx, err;
--	struct flow_state *s;
--
--	if (insn_idx < 0 || insn_idx >= env->prog->len) {
--		verbose(env, "invalid insn idx %d insn_cnt %d\n", insn_idx, env->prog->len);
--		return ERR_PTR(-EFAULT);
--	}
--
--	s = flow_new_state(env, prev_insn_idx);
--	if (!s)
--		return ERR_PTR(-ENOMEM);
--	s->st = *st;
--	memset(st, 0, sizeof(*st));
--	s->st.insn_idx = insn_idx;
--	s->st.last_insn_idx = prev_insn_idx;
--
--	env->cur_state = &s->st;
--	env->insn_idx = insn_idx;
--	err = bpf_flow_loop_leave(env, enters);
--	if (!err)
--		err = bpf_clean_verifier_state(env, &s->st);
--	env->cur_state = cur;
--	env->insn_idx = cur_idx;
--	if (err) {
--		flow_free_state(env, s);
--		return ERR_PTR(err);
--	}
--	return s;
--}
--
--/* Is that where may_goto in front of @insn_idx goes, as far as it's known? */
--static bool flow_guard_edge_is_real(struct bpf_verifier_env *env, int insn_idx, u8 edge)
+-static void mark_latches(struct bpf_verifier_env *env)
 -{
 -	struct bpf_insn_aux_data *aux = env->insn_aux_data;
+-	struct bpf_loop *loop;
+-	int len = env->prog->len;
+-	int i, j, k, from;
 -
--	return aux[bpf_loop_at_index(env, insn_idx)].loop->guarded &&
--	       aux[insn_idx].guard_no_unwind == (edge == BPF_GUARD_LEAVES_LOOP);
--}
--
--/*
-- * @st gets to @insn_idx if the loop has may_goto in front of @prev_insn_idx and that is where it
-- * goes, see check_loop_guard(). If that is not so, or not known yet, @st is dropped. If it turns
-- * out to be so later all is done again.
-- */
--int bpf_flow_guard_edge(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
--			int insn_idx, int prev_insn_idx, enum bpf_guard_edge edge)
--{
--	struct bpf_insn_aux_data *aux = env->insn_aux_data;
--
--	if (flow_guard_edge_is_real(env, prev_insn_idx, edge)) {
--		aux[prev_insn_idx].loop_guard = true;
--		return bpf_flow_deliver(env, st, insn_idx, prev_insn_idx);
--	}
--	/* it's not going to leave the subprog any more */
--	if (edge == BPF_GUARD_LEAVES_SUBPROG && aux[prev_insn_idx].guard_no_unwind)
--		return 0;
--	aux[prev_insn_idx].guard_edge_dropped = true;
--	aux[bpf_loop_at_index(env, prev_insn_idx)].loop->no_guard_edges = true;
--	return 0;
--}
--
--/*
-- * @s came back to the head of a loop, and the walk through the iterations ends, see
-- * bpf_flow_loop_enter(). From now on a state stands for many iterations. The first such state is
-- * the join of @s with the state that it comes from, one iteration ago. Both were seen, and what
-- * differs between them is what the loop changes. If they have no join @s goes on as it is.
-- * A state of another walk, which began with another state, has nothing to do with @s.
-- */
--static int flow_end_walk(struct bpf_verifier_env *env, struct flow_set *set, struct flow_state *s)
--{
--	struct bpf_func_state *frame = s->st.frame[s->st.curframe];
--	struct loop_stack_entry *entry = &frame->loop_stack[frame->loop_stack_cnt - 1];
--	u32 top = frame->loop_stack_cnt - 1, walk = entry->walk_id;
--	struct bpf_flow *flow = env->flow;
--	int insn_idx = s->st.insn_idx, err;
--	struct flow_state *t;
--
--	list_for_each_entry_reverse(t, &set->list, node) {
+-	for (i = 0; i < len; i++) {
+-		/* An exit by way of a flag. It may have no place yet, see bpf_scev_jump_counts() */
+-		if (aux[i].edge_leaves &&
+-		    can_compute_loop_scev(aux[bpf_loop_at_index(env, i)].loop))
+-			aux[i].need_scev = true;
+-		loop = aux[i].loop;
+-		if (!loop)
+-			continue;
+-		aux[i].need_scev = true;
+-		if (!can_compute_loop_scev(loop))
+-			continue;
 -		/*
--		 * Some rules of flow_merge() hold here too. One of them: the iteration has set
--		 * a register, see flow_unset_differs(). The join would be without it.
+-		 * Make sure to only set .need_scev for exits and latches
+-		 * belonging to the loop at `i`. If can_compute_loop_scev()
+-		 * fails for a loop, it should hide it's instructions from
+-		 * compute_insn_scevs().
 -		 */
--		if (flow_trips_behind(&t->st, &s->st) ||
--		    t->st.frame[t->st.curframe]->loop_stack[top].walk_id != walk ||
--		    (flow_has_room(env, flow->nr_states[insn_idx]) &&
--		     (flow_unset_differs(&t->st, &s->st) ||
--		      flow_needed_consts_differ(flow, FLOW_NEED_STACK_OFF, &t->st, &s->st) ||
--		      flow_needed_consts_differ(flow, FLOW_NEED_PTR_OFF, &t->st, &s->st))))
+-		for (j = 0; j < loop->backedges_cnt; j++)
+-			for (k = 0; k < loop->backedges[j].latches_cnt; k++)
+-				aux[loop->backedges[j].latches[k]].need_scev = true;
+-		for (j = 0; j < loop->exits_cnt; j++) {
+-			from = loop->exits[j].from;
+-			if (bpf_loop_at_index(env, from) == i)
+-				aux[from].need_scev = true;
+-		}
+-	}
+-}
+-
+-static bool is_any_imm_reg_opaque(struct scev *scev, u32 id)
+-{
+-	u32 l, r, reg, order;
+-	s64 imm;
+-
+-	scev->stack_sz = 0;
+-	expr_stack_push(scev, id);
+-	while (expr_next(scev, &id, &order)) {
+-		if (order & DEPTH_LIMIT)
+-			return false;
+-		if (!(order & PRE) ||
+-		    is_imm(scev, id, &imm) ||
+-		    is_reg(scev, id, &reg) ||
+-		    is_opaque(scev, id) ||
+-		    is_any(scev, id, &l, &r))
 -			continue;
--		err = bpf_states_join(env, &flow->tmp, &t->st, &s->st, true);
--		if (err < 0)
--			return err;
--		if (err)
--			continue;
--		err = flow_unite(flow, s->st.flow_entry, t->st.flow_entry);
--		if (err)
--			return err;
--		flow->tmp.flow_entry = t->st.flow_entry;
--		flow->tmp.last_insn_idx = s->prev_insn_idx;
--		bpf_free_verifier_state(&s->st, false);
--		s->st = flow->tmp;
--		memset(&flow->tmp, 0, sizeof(flow->tmp));
--		if (env->log.level & BPF_LOG_LEVEL2)
--			verbose(env, "from %d to %d: widened\n", s->prev_insn_idx, insn_idx);
+-		return false;
+-	}
+-	return true;
+-}
+-
+-/*
+- * Can implement explicit stack version, but it is harder to read.
+- * Stick with recursive version for now.
+- */
+-static int transform_expr_once(struct scev *scev, u32 lvl, u32 root, void *priv,
+-			       int (*fn)(struct scev *scev, u32 id, void *priv))
+-{
+-	struct expr expr;
+-	int p0, p1, id;
+-
+-	if (lvl >= EXPR_STACK_DEPTH)
+-		return UNKNOWN_EXPR_ID;
+-
+-	expr = scev->exprs[root]; /* snapshot the expr before potential realloc */
+-	switch (op_params_num(expr.op)) {
+-	case 0:
+-		id = root;
+-		break;
+-	case 1:
+-		p0 = transform_expr_once(scev, lvl + 1, expr.params[0], priv, fn);
+-		id = expr1(scev, expr.op, p0);
+-		break;
+-	case 2:
+-		p0 = transform_expr_once(scev, lvl + 1, expr.params[0], priv, fn);
+-		p1 = transform_expr_once(scev, lvl + 1, expr.params[1], priv, fn);
+-		id = expr2(scev, expr.op, p0, p1);
 -		break;
 -	}
--
--	frame = s->st.frame[s->st.curframe];
--	entry = &frame->loop_stack[frame->loop_stack_cnt - 1];
--	entry->guarded = env->insn_aux_data[insn_idx].loop->guarded;
--	entry->apart = false;
--	entry->probe = false;
--	entry->decided = false;
--	entry->terminates = false;
--	entry->trip++;
--	entry->max_header_count = 0;
--	return 0;
+-	return id < 0 ? id : fn(scev, id, priv);
 -}
 -
--/*
-- * @s goes into the set of the states at its insn. It is taken.
-- * @enters: it enters a loop.
-- */
--static int flow_add(struct bpf_verifier_env *env, struct flow_state *s, enum flow_cycle cycle,
--		    bool enters)
+-static int simplify(struct scev *scev, u32 id)
 -{
--	struct bpf_verifier_state *cur = env->cur_state;
--	int cur_idx = env->insn_idx, insn_idx = s->st.insn_idx, err;
--	const struct loop_stack_entry *entry;
--	const struct bpf_func_state *frame;
--	bool backedge = false, drop = false, ends_walk = false;
--	struct bpf_flow *flow = env->flow;
+-	int a, b, l, r, t, base, slope;
+-	u32 op = scev->exprs[id].op, bits = op_low_bits(op);
+-	s64 imm1, imm2;
 -
--	env->cur_state = &s->st;
--	env->insn_idx = insn_idx;
--	err = bpf_flow_loop_enter(env, &backedge, &drop, &ends_walk);
--	env->cur_state = cur;
--	env->insn_idx = cur_idx;
--	if (!err && ends_walk)
--		err = flow_end_walk(env, &flow->states[insn_idx], s);
--	if (!err && enters) {
--		frame = s->st.frame[s->st.curframe];
--		entry = &frame->loop_stack[frame->loop_stack_cnt - 1];
--		/* it has a count, see bpf_flow_loop_gets_guards() */
--		if (entry->terminates && !entry->guarded && !bpf_loop_walk_may_give_up(entry))
--			env->insn_aux_data[insn_idx].loop->no_guard_edges = true;
--	}
--	if (err || drop) {
--		flow_free_state(env, s);
--		return err;
--	}
+-	/* (- x imm) -> (+ x -imm) */
+-	if (is_binop(scev, BPF_SUB, id, &l, &r) &&
+-	    is_imm(scev, r, &imm1) && imm1 != S64_MIN)
+-		return expr2(scev, BPF_ADD, l, imm_expr(scev, -imm1));
 -
--	err = flow_merge(env, &flow->states[insn_idx], &s, backedge ? FLOW_CYCLE : cycle);
--	if (err)
--		return err < 0 ? err : 0;
--	flow_set_pending(flow, s);
--	return 0;
+-	/* (+ x 0) -> x */
+-	if (is_add(scev, id, &l, &r) && is_imm(scev, r, &imm1) && !imm1)
+-		return l;
+-
+-	/* (+ (+ x imm) imm) -> (+ x imm). Not through a def, see alu64_with_def() */
+-	if (is_add(scev, id, &l, &r) &&
+-	    is_imm(scev, r, &imm2) &&
+-	    is_add(scev, l, &a, &b) &&
+-	    is_imm(scev, b, &imm1) && !scev->exprs[l].def.set)
+-		return expr2(scev, BPF_ADD, a, imm_expr(scev, (s64)((u64)imm1 + (u64)imm2)));
+-
+-	/* 'r1 <<= 32; r1 >>= 32' is (u32)r1 for cpu v1 and v2: (>> (<< x 32) 32) -> (zext32 x) */
+-	if (is_binop(scev, BPF_RSH, id, &l, &r) &&
+-	    is_imm(scev, r, &imm2) && imm2 == 32 &&
+-	    is_binop(scev, BPF_LSH, l, &a, &b) &&
+-	    is_imm(scev, b, &imm1) && imm1 == 32 && !scev->exprs[l].def.set)
+-		return expr1(scev, ZEXT32, a);
+-
+-	/* 'r1 &= 0xff' is (u8)r1, 'r1 &= 0xffff' is (u16)r1: (& x 0xff) -> (zext8 x) */
+-	if (is_binop(scev, BPF_AND, id, &l, &r) &&
+-	    is_imm(scev, r, &imm1) && (imm1 == 0xff || imm1 == 0xffff))
+-		return expr1(scev, imm1 == 0xff ? ZEXT8 : ZEXT16, l);
+-
+-	/* (+ (linear base slope) imm) -> (linear (+ base imm) slope) */
+-	if (is_add(scev, id, &l, &r) &&
+-	    is_linear(scev, l, &base, &slope) &&
+-	    is_imm(scev, r, &imm1))
+-		return expr2(scev, LINEAR_SCEV, expr2(scev, BPF_ADD, base, r), slope);
+-
+-	/* (+ imm imm) -> imm */
+-	if (is_add(scev, id, &l, &r) &&
+-	    is_imm(scev, l, &imm1) &&
+-	    is_imm(scev, r, &imm2))
+-		return imm_expr(scev, imm1 + imm2);
+-
+-	/* (zext32 (imm X)) -> (imm (u32)X) */
+-	if (is_zext32(scev, id, &l) && is_imm(scev, l, &imm1))
+-		return imm_expr(scev, (u64)(u32)imm1);
+-
+-	/*
+-	 * An extension and a partial spill depend on the low bits of their operand only: look
+-	 * through an extension and a partial spill that is not narrower, below an add too:
+-	 * (sext32 (zext32 $a)) -> (sext32 $a)
+-	 * (sext8 (spill16 $a)) -> (sext8 $a)
+-	 * (zext32 (+ (sext32 $a) $b)) -> (zext32 (+ $a $b))
+-	 * (spill32 (+ $a (zext32 $b))) -> (spill32 (+ $a $b))
+-	 */
+-	if (!bits)
+-		return id;
+-	t = scev->exprs[id].params[0];
+-	/* 'w1 &= 0xff': (zext32 (zext8 $a)) -> (zext8 $a) */
+-	if (is_zext(op) && is_zext(scev->exprs[t].op) && !scev->exprs[t].def.set &&
+-	    op_low_bits(scev->exprs[t].op) <= bits)
+-		return t;
+-	if (is_low_bits(scev, t, bits, &a))
+-		return expr1(scev, op, a);
+-	if (is_add(scev, t, &l, &r) && !scev->exprs[t].def.phi &&
+-	    (is_low_bits(scev, l, bits, &l) || is_low_bits(scev, r, bits, &r)))
+-		return expr1(scev, op, expr2(scev, BPF_ADD, l, r));
+-
+-	return id;
 -}
 -
--/*
-- * @st gets to @insn_idx. What it holds is taken and @st is left empty.
-- */
--int bpf_flow_deliver(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
--		     int insn_idx, int prev_insn_idx)
+-static int instantiate_header_scevs(struct scev *scev, u32 id, void *priv)
 -{
--	struct bpf_flow *flow = env->flow;
--	struct bpf_subprog_info *sub;
--	struct flow_state *s, *e;
--	enum flow_cycle cycle;
--	bool enters = false;
--	int err;
+-	u32 reg, *reg2scev = priv;
 -
--	s = flow_arrive(env, st, insn_idx, prev_insn_idx, &enters);
--	if (IS_ERR(s))
--		return PTR_ERR(s);
+-	/* (reg r) -> ... equation at header ... */
+-	if (is_reg(scev, id, &reg))
+-		return reg2scev[reg];
+-	/* keep expression shapes */
+-	return id;
+-}
 -
--	/*
--	 * Cycles that have no loop head: the callback that came back to the helper
--	 * that calls it, and calls that go through the entry of a function.
--	 */
--	sub = bpf_find_containing_subprog(env, insn_idx);
--	cycle = FLOW_NO_CYCLE;
--	if (sub->recursive && sub->start == insn_idx)
--		cycle = FLOW_CYCLE;
--	else if (env->insn_aux_data[insn_idx].calls_callback && prev_insn_idx >= 0 &&
--		 env->prog->insnsi[prev_insn_idx].code == (BPF_JMP | BPF_EXIT))
--		cycle = FLOW_CALLBACK_CYCLE;
--	else if (env->insn_aux_data[insn_idx].calls_callback)
--		s->st.frame[s->st.curframe]->callback_entry_id = ++env->loop_entry_cnt;
+-static int compute_header_scevs(struct bpf_verifier_env *env, int h)
+-{
+-	struct scev *scev = env->scev;
+-	struct env *header_env = find_header_env(scev, h);
+-	int l, r, t, id, ra, rb, ra_expr;
+-	bool zext32;
+-	s64 imm;
+-	u32 op;
 -
 -	/*
--	 * What is known about a loop is derived from the state that enters it. So
--	 * the states that enter are a set of their own, and what gets to
--	 * the set at the head of the loop is derived from what is new in it.
+-	 * Note:
+-	 * reg2expr[ra] describes a change in rA's value over a single loop iteration.
+-	 * It does not account for rA's entry value. However, the SCEV constructed for rA
+-	 * must include an additional rA entry edge. For example:
+-	 *
+-	 *      r0 = ..., r1 = 7
+-	 *   l: if r0 == 10 goto e // reg2expr[r1] == (imm 42) => reg2scev[r1] == (any r1 42)
+-	 *      r0 += 1
+-	 *      r1 = 42
+-	 *      goto l
+-	 *   e:
+-	 *      ... at exit r1 is in {7,42} ...
 -	 */
--	if (enters) {
--		err = flow_merge(env, &flow->enter[insn_idx], &s, cycle);
--		if (err)
--			return err < 0 ? err : 0;
--		cycle = FLOW_NO_CYCLE;
--		e = s;
--		s = flow_new_state(env, prev_insn_idx);
--		if (!s)
--			return -ENOMEM;
--		err = bpf_copy_verifier_state(&s->st, &e->st);
--		if (err) {
--			flow_free_state(env, s);
--			return err;
+-	for (ra = 0; ra < REGS_NUM; ra++) {
+-		ra_expr = header_env->reg2expr[ra];
+-		/* Constructed again it has no defs, see alu64_with_def(): they hide the shape */
+-		if (env->prog->aux->arena)
+-			ra_expr = transform_expr_once(scev, 0, ra_expr, scev->identity_env.reg2expr,
+-						      instantiate_header_scevs);
+-		if (ra_expr < 0)
+-			return ra_expr;
+-		/* rA = (+ rA IMM) -> (linear rA IMM) */
+-		if (is_add(scev, ra_expr, &l, &r) &&
+-		    is_reg(scev, l, &rb) &&
+-		    is_imm(scev, r, &imm) &&
+-		    ra == rb) {
+-			id = expr2(scev, LINEAR_SCEV, l, r);
+-			if (id < 0)
+-				return id;
+-			header_env->reg2scev[ra] = id;
+-			continue;
+-		}
+-		/*
+-		 * A 32-bit induction variable:
+-		 * rA = (zext32 (+ rA IMM)) -> (zext32 (linear rA IMM))
+-		 * rA = (sext32 (+ rA IMM)) -> (sext32 (linear rA IMM))
+-		 * rA = (spill32 (+ rA IMM)) -> (spill32 (linear (zext32 rA) IMM))
+-		 * The last SCEV leaves the upper 32 bits of the slot unknown, so it holds for the
+-		 * first two as well. They get it if these bits are dead: the states have a
+-		 * 32-bit spill then, see bpf_clean_verifier_state().
+-		 */
+-		if (is_low_bits(scev, ra_expr, 32, &t) &&
+-		    is_add(scev, t, &l, &r) &&
+-		    is_reg(scev, l, &rb) &&
+-		    is_imm(scev, r, &imm) &&
+-		    ra == rb) {
+-			op = hi32_alive_at(env, ra, h) ? scev->exprs[ra_expr].op : SPILL32;
+-			if (op == SPILL32)
+-				l = expr1(scev, ZEXT32, l);
+-			id = expr1(scev, op, expr2(scev, LINEAR_SCEV, l, r));
+-			if (id < 0)
+-				return id;
+-			header_env->reg2scev[ra] = id;
+-			continue;
+-		}
+-		/* rA = rA -> rA*/
+-		if (is_reg(scev, ra_expr, &rb) && ra == rb) {
+-			header_env->reg2scev[ra] = ra_expr;
+-			continue;
+-		}
+-		/* rA = (any 1 2 3 4 ...) -> (any rA 1 2 3 4 ...) */
+-		if (is_any_imm_reg_opaque(scev, ra_expr)) {
+-			id = mk_any(scev, expr1(scev, REG, ra), ra_expr, no_def);
+-			if (id < 0)
+-				return id;
+-			header_env->reg2scev[ra] = id;
+-			continue;
+-		}
+-
+-	}
+-	/*
+-	 *	do { i++; if (old > 1021) break; c = buf[old]; old = i; } while (c);
+-	 * rA = (+ rB IMM) and rB = (+ rB IMM): an iteration leaves the same number in both. If
+-	 * they are equal at loop entry too, rA is an induction variable with the same step.
+-	 */
+-	for (ra = 0; ra < REGS_NUM; ra++) {
+-		if (header_env->reg2scev[ra] != UNKNOWN_EXPR_ID ||
+-		    header_env->reg2expr[ra] == UNKNOWN_EXPR_ID)
+-			continue;
+-		for (rb = 0; rb < REGS_NUM; rb++) {
+-			id = header_env->reg2scev[rb];
+-			if (header_env->reg2expr[rb] != header_env->reg2expr[ra] ||
+-			    !is_linear_or_linear32(scev, id, &l, &r, &zext32) ||
+-			    !is_reg(scev, l, &t) || t != rb ||
+-			    !const_diff_at_header(env, h, rb, ra, &imm) || imm)
+-				continue;
+-			id = expr2(scev, LINEAR_SCEV, expr1(scev, REG, ra), r);
+-			if (zext32)
+-				id = expr1(scev, ZEXT32, id);
+-			if (id < 0)
+-				return id;
+-			header_env->reg2scev[ra] = id;
+-			break;
 -		}
 -	}
--	return flow_add(env, s, cycle, enters);
--}
--
--static void flow_free_call(struct flow_state *w)
--{
--	list_del(&w->node);
--	bpf_free_verifier_state(&w->st, false);
--	kfree(w);
--}
--
--/* @x came out of the function that the call @w waits for. @w may be gone afterwards. */
--static int flow_apply_exit(struct bpf_verifier_env *env, struct flow_state *w,
--			   struct flow_exit *x)
--{
--	int call_idx = w->st.insn_idx, err;
--	struct bpf_verifier_state st = {};
--	struct flow_state *s;
--
--	err = bpf_copy_verifier_state(&st, &w->st);
--	if (!err)
--		err = bpf_flow_return(env, &st, &x->st, call_idx);
--	if (!err)
--		err = bpf_flow_deliver(env, &st, call_idx + 1, call_idx);
--	bpf_free_verifier_state(&st, false);
--	if (err != 1)
--		return err;
--
--	/*
--	 * The call is verified in the context of the caller: it doesn't wait any more, it is
--	 * done again. Not with bpf_flow_deliver(): the state was at the insn before, it may
--	 * be there still.
--	 */
--	s = flow_new_state(env, w->st.last_insn_idx);
--	if (!s)
--		return -ENOMEM;
--	s->st = w->st;
--	memset(&w->st, 0, sizeof(w->st));
--	flow_free_call(w);
--	flow_shape_ctx(&s->st, &s->shape);
--	flow_link(env, &env->flow->states[call_idx], s);
--	flow_set_pending(env->flow, s);
 -	return 0;
 -}
 -
--/* What came out for the set of @from goes to the calls that wait for the set of @to */
--static int flow_apply_exits(struct bpf_verifier_env *env, struct flow_entry *from,
--			    struct flow_entry *to)
+-/*
+- * Find a SCEV register with the entry value @x and the backedge value @l, and one with @y and @r.
+- * All that match are copies of each other at the header: take the first.
+- */
+-static bool find_operands(struct env *entry_env, struct env *header_env, u32 x, u32 y, u32 l, u32 r,
+-			  u32 *rb, u32 *rc)
 -{
--	struct flow_state *w, *wn;
--	struct flow_exit *x;
--	int err;
+-	for (*rb = 0; *rb < REGS_NUM; ++*rb)
+-		if (entry_env->reg2expr[*rb] == x && header_env->reg2expr[*rb] == l)
+-			break;
+-	for (*rc = 0; *rc < REGS_NUM; ++*rc)
+-		if (entry_env->reg2expr[*rc] == y && header_env->reg2expr[*rc] == r)
+-			break;
+-	return *rb < REGS_NUM && *rc < REGS_NUM;
+-}
 -
--	list_for_each_entry(x, &from->exits, node) {
--		list_for_each_entry_safe(w, wn, &to->calls, node) {
--			err = flow_apply_exit(env, w, x);
+-/*
+- *	p = buf; i = 0; while (*p) { if (i > 512) break; use(p); i += len(p); p = buf + i; }
+- * rA == rB + rC holds at the header in every iteration: it holds at loop entry and every backedge
+- * preserves it. The backedge values are rA = (+ l r), rB = l, rC = r. The entry values, by the env
+- * of the enclosing loop at @h, are rA = x, rB = x, rC = 0 or rA = (+ x y), rB = x, rC = y.
+- * (add rB rC) keeps the def of (+ l r), see alu64_with_def().
+- */
+-static int compute_header_adds(struct bpf_verifier_env *env, int h)
+-{
+-	struct scev *scev = env->scev;
+-	struct env *entry_env = find_loop_env(scev, env->insn_aux_data[h].loop_header, h);
+-	struct env *header_env = find_header_env(scev, h);
+-	u32 ra, rb, rc, l, r, x, y, entry_expr;
+-	struct expr_def def;
+-	int id, zero = imm_expr(scev, 0);
+-
+-	if (zero < 0)
+-		return zero;
+-	for (ra = 0; entry_env && ra < REGS_NUM; ra++) {
+-		entry_expr = entry_env->reg2expr[ra];
+-		if (header_env->reg2scev[ra] != UNKNOWN_EXPR_ID ||
+-		    !is_add(scev, header_env->reg2expr[ra], &l, &r) ||
+-		    !scev->exprs[entry_expr].is_vn || !scev->exprs[l].is_vn ||
+-		    !scev->exprs[r].is_vn)
+-			continue;
+-		if (!find_operands(entry_env, header_env, entry_expr, zero, l, r, &rb, &rc) &&
+-		    !find_operands(entry_env, header_env, zero, entry_expr, l, r, &rb, &rc) &&
+-		    (scev->exprs[entry_expr].def.set || !is_add(scev, entry_expr, &x, &y) ||
+-		     (!find_operands(entry_env, header_env, x, y, l, r, &rb, &rc) &&
+-		      !find_operands(entry_env, header_env, y, x, l, r, &rb, &rc))))
+-			continue;
+-		/* expr2() can move exprs[] */
+-		def = scev->exprs[header_env->reg2expr[ra]].def;
+-		id = expr_with_def(scev, expr2(scev, ADD_SCEV, REG_EXPR_ID(rb), REG_EXPR_ID(rc)),
+-				   def);
+-		if (id < 0)
+-			return id;
+-		header_env->reg2scev[ra] = id;
+-	}
+-	return 0;
+-}
+-
+-/*
+- * 'sum += a[i]', 'if (..) { len -= n; len -= 2; }': is 'id', what an iteration makes of
+- * register 'r', the register plus or minus something, or the register as it was?
+- * 'low32': it's computed in 32 bits.
+- */
+-static bool expr_is_sum(struct scev *scev, u32 id, u32 r, bool low32, int depth)
+-{
+-	u32 a, b;
+-
+-	if (is_reg(scev, id, &a))
+-		return a == r;
+-	if (!depth--)
+-		return false;
+-	if (low32 && is_zext32(scev, id, &a))
+-		return expr_is_sum(scev, a, r, low32, depth);
+-	if (is_any(scev, id, &a, &b))
+-		return expr_is_sum(scev, a, r, low32, depth) &&
+-		       expr_is_sum(scev, b, r, low32, depth);
+-	if (is_add(scev, id, &a, &b) && expr_is_sum(scev, b, r, low32, depth))
+-		return true;
+-	return (is_add(scev, id, &a, &b) || is_binop(scev, BPF_SUB, id, &a, &b)) &&
+-	       expr_is_sum(scev, a, r, low32, depth);
+-}
+-
+-/*
+- * Find the registers and stack slots that nothing but a jump stops: what gets a constant added in
+- * every iteration of the loop, and a sum that no jump of the loop depends on.
+- */
+-static void scev_compute_linear_regs(struct scev *scev, struct bpf_loop *loop,
+-				     struct env *header_env)
+-{
+-	u32 r, same, base, slope, id;
+-	bool low32;
+-	int bits;
+-
+-	for (r = 0; r < REGS_NUM; r++) {
+-		id = header_env->reg2expr[r];
+-		bits = 0;
+-		if (is_linear_or_linear32(scev, header_env->reg2scev[r], &base, &slope, &low32) &&
+-		    is_reg(scev, base, &same) && same == r)
+-			bits = low32 ? 32 : 64;
+-		/* what the loop leaves alone is no sum */
+-		else if (!is_reg(scev, id, &same) && !test_bit(r, loop->tested_regs))
+-			bits = expr_is_sum(scev, id, r, false, EXPR_STACK_DEPTH) ? 64 :
+-			       expr_is_sum(scev, id, r, true, EXPR_STACK_DEPTH) ? 32 : 0;
+-		if (bits)
+-			__set_bit(r, bits == 32 ? loop->linear32_regs : loop->linear_regs);
+-	}
+-}
+-
+-static int compute_insn_scevs(struct bpf_verifier_env *env, struct env *eheader, struct env *einsn)
+-{
+-	struct scev *scev = env->scev;
+-	int id, reg;
+-
+-	for (reg = 0; reg < REGS_NUM; reg++) {
+-		id = transform_expr_once(scev, 0, einsn->reg2expr[reg], eheader->reg2scev,
+-					 instantiate_header_scevs);
+-		if (id < 0)
+-			return id;
+-		einsn->reg2scev[reg] = id;
+-	}
+-
+-	return 0;
+-}
+-
+-static int log_scevs(struct bpf_verifier_env *env)
+-{
+-	struct bpf_insn_aux_data *aux = env->insn_aux_data;
+-	struct bpf_verifier_log *log = &env->log;
+-	struct env *header_env, *latch_env;
+-	struct scev *scev = env->scev;
+-	struct bpf_loop *loop;
+-	int i, j, k, len, latch;
+-
+-	len = env->prog->len;
+-	for (i = 0; i < len; i++) {
+-		loop = aux[i].loop;
+-		if (!loop)
+-			continue;
+-		header_env = find_header_env(scev, i);
+-		bpf_log(log, "scev at header %d:\n", i);
+-		print_env(env, header_env, i);
+-		if (!can_compute_loop_scev(loop))
+-			continue;
+-		for (j = 0; j < loop->backedges_cnt; j++) {
+-			for (k = 0; k < loop->backedges[j].latches_cnt; k++) {
+-				latch = loop->backedges[j].latches[k];
+-				bpf_log(log, " scev at %s %d:\n", k ? "exit" : "latch", latch);
+-				latch_env = find_loop_env(scev, i, latch);
+-				if (verifier_bug_if(!latch_env, env, "i=%d, latch=%d", i, latch))
+-					return -EFAULT;
+-				print_env(env, latch_env, latch);
+-			}
+-		}
+-	}
+-	return 0;
+-}
+-
+-/*
+- * A slice comes from a call that may write to the buffer: the kfunc, or a subprog that calls it.
+- * See expr_is_vn().
+- */
+-static void find_slice_slots(struct bpf_verifier_env *env)
+-{
+-	struct bpf_insn *insn = env->prog->insnsi;
+-	struct scev *scev = env->scev;
+-	bool slices = false;
+-	u32 i, spi;
+-
+-	for (i = 0; i < env->prog->len; i++)
+-		slices |= bpf_is_dynptr_slice_rdwr_kfunc(&insn[i]);
+-	for (i = 0; slices && i < env->prog->len; i++)
+-		if (BPF_CLASS(insn[i].code) == BPF_JMP && BPF_OP(insn[i].code) == BPF_CALL)
+-			bitmap_or(scev->slice_slots, scev->slice_slots, bpf_may_write_mask(env, i),
+-				  MAX_BPF_STACK_SLOTS);
+-	for_each_set_bit(spi, scev->slice_slots, MAX_BPF_STACK_SLOTS)
+-		scev->exprs[REG_EXPR_ID(MAX_BPF_REG + spi)].is_vn = false;
+-}
+-
+-int bpf_compute_scev(struct bpf_verifier_env *env)
+-{
+-	struct bpf_insn_aux_data *aux = env->insn_aux_data;
+-	struct scev *scev = env->scev;
+-	int *postorder = env->cfg.insn_postorder;
+-	int cnt = env->cfg.cur_postorder;
+-	int i, idx, err, header;
+-
+-	find_slice_slots(env);
+-	mark_latches(env);
+-	/*
+-	 * Visit loop headers in postorder, to guarantee that scevs
+-	 * for innermost loops are computed first.
+-	 */
+-	for (i = 0; i < cnt; i++) {
+-		idx = postorder[i];
+-		if (!aux[idx].loop)
+-			continue;
+-		err = compute_scev_for_loop(env, idx, idx);
+-		if (err)
+-			return err;
+-	}
+-	for (i = 0; i < env->subprog_cnt; i++) {
+-		err = compute_scev_for_loop(env, -1, env->subprog_info[i].start);
+-		if (err)
+-			return err;
+-	}
+-
+-	/*
+-	 * Compute scevs from exprs collected on a previous step. Iterate instructions in
+-	 * reverse post-order so that each loop header is processed before instructions
+-	 * reachable from it.
+-	 */
+-	for (i = cnt - 1; i >= 0; i--) {
+-		idx = postorder[i];
+-		if (!aux[idx].need_scev)
+-			continue;
+-		if (bpf_must_abort())
+-			return -EINTR;
+-		header = bpf_loop_at_index(env, idx);
+-		err = aux[idx].loop
+-		      ? compute_header_scevs(env, header)
+-		      : compute_insn_scevs(env,
+-					   find_header_env(scev, header),
+-					   find_loop_env(scev, header, idx));
+-		if (err)
+-			return err;
+-		if (aux[idx].loop) {
+-			scev_compute_linear_regs(scev, aux[idx].loop,
+-						 find_header_env(scev, header));
+-			err = compute_header_adds(env, idx);
 -			if (err)
 -				return err;
 -		}
--	}
--	return 0;
--}
--
--static int flow_do_united(struct bpf_verifier_env *env)
--{
--	struct bpf_flow *flow = env->flow;
--	struct flow_entry *a, *b;
--	struct flow_united u;
--	int err;
--
--	while (flow->united_cnt) {
--		u = flow->united[--flow->united_cnt];
--		a = flow_entry_find(flow, u.a);
--		b = flow_entry_find(flow, u.b);
--		if (a == b)
--			continue;
--		err = flow_apply_exits(env, a, b) ?: flow_apply_exits(env, b, a);
+-		err = find_linked_regs(env, aux[idx].loop ? &scev->identity_env :
+-				       find_loop_env(scev, header, idx), header, idx);
 -		if (err)
 -			return err;
--		list_splice_tail_init(&a->calls, &b->calls);
--		list_splice_tail_init(&a->exits, &b->exits);
--		a->up = b;
 -	}
--	return 0;
--}
 -
--/*
-- * The call at @call_idx in @caller of a function that is verified on its own,
-- * @entry is the state at its first insn. Both are taken.
-- */
--int bpf_flow_call(struct bpf_verifier_env *env, struct bpf_verifier_state *caller,
--		  struct bpf_verifier_state *entry, int subprog, int call_idx)
--{
--	struct bpf_flow *flow = env->flow;
--	struct flow_state *w;
--	int id;
--
--	w = kzalloc_obj(*w, BPF_VERIFIER_GFP);
--	if (!w)
--		return -ENOMEM;
--	w->st = *caller;
--	memset(caller, 0, sizeof(*caller));
--	w->st.insn_idx = call_idx;
--
--	id = flow_entry_new(flow);
--	if (id < 0) {
--		bpf_free_verifier_state(&w->st, false);
--		kfree(w);
--		return id;
--	}
--	list_add_tail(&w->node, &flow->entries[id]->calls);
--
--	entry->flow_entry = id;
--	if (env->log.level & BPF_LOG_LEVEL2)
--		verbose(env, "call at %d waits for func#%d\n", call_idx, subprog);
--	return bpf_flow_deliver(env, entry, env->subprog_info[subprog].start, call_idx);
--}
--
--/* @st came to exit of the function that is verified on its own. It is taken. */
--int bpf_flow_exit(struct bpf_verifier_env *env, struct bpf_verifier_state *st, int exit_idx)
--{
--	struct bpf_flow *flow = env->flow;
--	struct flow_func *f = &flow->funcs[st->frame[0]->subprogno];
--	u32 id = st->flow_entry, cnt = 0;
--	struct flow_exit *x, *o, *on;
--	struct flow_state *w, *wn;
--	struct flow_entry *entry;
--	u16 joins = 0;
--	int err;
--
--	st->insn_idx = exit_idx;
--	err = bpf_clean_verifier_state(env, st);
+-	/* Now it's known which jumps test a counter: the places of a back edge are for them */
+-	err = bpf_find_latches(env, false);
 -	if (err)
 -		return err;
--	if (f->exit_idx < 0)
--		f->exit_idx = exit_idx;
--	st->insn_idx = f->exit_idx;
--	entry = flow_entry_find(flow, id);
 -
--	list_for_each_entry_safe(o, on, &entry->exits, node) {
--		if (bpf_state_subsumes(env, &o->st, st))
--			return 0;
--		if (flow_has_room(env, ++cnt) && flow_join_makes_up(flow, &o->st, st))
--			continue;
--		/* what comes out of a recursive function gets into it again */
--		err = bpf_states_join(env, &flow->tmp, &o->st, st,
--				      env->subprog_info[st->frame[0]->subprogno].recursive ||
--				      o->joins > BPF_FLOW_MAX_JOINS);
--		if (err < 0)
--			return err;
+-	if (env->log.level & BPF_LOG_LEVEL2) {
+-		err = log_scevs(env);
 -		if (err)
--			continue;
--		joins = max(joins, o->joins) + 1;
--		bpf_free_verifier_state(st, false);
--		*st = flow->tmp;
--		memset(&flow->tmp, 0, sizeof(flow->tmp));
--		st->flow_entry = id;
--		list_del(&o->node);
--		bpf_free_verifier_state(&o->st, false);
--		kfree(o);
+-			return err;
 -	}
 -
--	x = kzalloc_obj(*x, BPF_VERIFIER_GFP);
--	if (!x)
+-	return 0;
+-}
+-
+-/*
+- * Are all slots of the buffer [off, off + size) in slice_slots? Without @fixed_off the buffer is
+- * somewhere in the range, and the range can be wider than slice_slots: two offsets become a range
+- * at a join point.
+- */
+-bool bpf_scev_in_slice_slots(struct bpf_verifier_env *env, int off, u32 size, bool fixed_off)
+-{
+-	int first = bpf_get_spi(off + size - 1), last = bpf_get_spi(off);
+-	const unsigned long *slots = env->scev->slice_slots;
+-
+-	if (fixed_off)
+-		return find_next_zero_bit(slots, last + 1, first) > last;
+-	return find_next_bit(slots, last + 1, first) <= last;
+-}
+-
+-void bpf_free_scev(struct bpf_verifier_env *env)
+-{
+-	struct scev *scev = env->scev;
+-	struct insn_envs *envs;
+-	int i;
+-	u32 j;
+-
+-	if (!scev)
+-		return;
+-	for (i = 0; i < scev->envs_cnt; i++) {
+-		envs = scev->envs[i];
+-		if (!envs)
+-			continue;
+-		for (j = 0; j < envs->cnt; j++)
+-			kfree(envs->entries[j].env);
+-		kfree(envs);
+-	}
+-	kvfree(scev->exprs_ht);
+-	kvfree(scev->exprs_next);
+-	kvfree(scev->worklist.data);
+-	kvfree(scev->envs);
+-	kvfree(scev->exprs);
+-	kvfree(scev->linked);
+-	kvfree(scev->linked_exprs);
+-	kvfree(scev->vals);
+-	kvfree(scev->discovered);
+-	kfree(scev);
+-	env->scev = NULL;
+-}
+-
+-int bpf_init_scev(struct bpf_verifier_env *env)
+-{
+-	struct scev *scev;
+-	u32 r;
+-
+-	scev = kzalloc_obj(struct scev, BPF_VERIFIER_GFP);
+-	if (!scev)
 -		return -ENOMEM;
--	x->st = *st;
--	memset(st, 0, sizeof(*st));
--	x->joins = joins;
--	list_add_tail(&x->node, &entry->exits);
--
--	list_for_each_entry_safe(w, wn, &entry->calls, node) {
--		err = flow_apply_exit(env, w, x);
--		if (err)
--			return err;
--	}
+-	env->scev = scev;
+-	bpf_mark_reg_known_scalar(&scev->zero_reg, 0);
+-	bpf_mark_reg_unknown(&scev->unknown_reg);
+-	setup_initial_loop_env(&scev->identity_env);
+-	if (grow_exprs(scev, roundup_pow_of_two(REG_EXPR_ID(REGS_NUM))))
+-		goto nomem;
+-	scev->exprs[UNKNOWN_EXPR_ID] = (struct expr){ .op = UNKNOWN };
+-	scev->exprs[OPAQUE_EXPR_ID] = (struct expr){ .op = OPAQUE };
+-	for (r = 0; r < REGS_NUM; r++)
+-		scev->exprs[REG_EXPR_ID(r)] = (struct expr){ .op = REG, .is_vn = true,
+-							     .params = { r, 0 } };
+-	for (r = 0; r < REG_EXPR_ID(REGS_NUM); r++)
+-		set_expr_base(scev, &scev->exprs[r], r);
+-	scev->exprs_cnt = REG_EXPR_ID(REGS_NUM);
+-	scev->envs = kvzalloc_objs(*scev->envs, env->prog->len,
+-				   BPF_VERIFIER_GFP);
+-	scev->discovered = kvzalloc_objs(*scev->discovered, env->prog->len,
+-					 BPF_VERIFIER_GFP);
+-	if (!scev->envs || !scev->discovered)
+-		goto nomem;
+-	/*
+-	 * Remember original program length, in case bpf_free_scev()
+-	 * is called after bpf program rewrites that increase program
+-	 * length.
+-	 */
+-	scev->envs_cnt = env->prog->len;
 -	return 0;
+-nomem:
+-	bpf_free_scev(env);
+-	return -ENOMEM;
 -}
 -
--/*
-- * Make the next pending state the current one. env->cur_state has to be empty.
-- * Returns -ENOENT when nothing is pending.
-- */
--int bpf_flow_next(struct bpf_verifier_env *env, int *prev_insn_idx)
+-static struct bpf_stack_state *scev_regno_to_stack(const struct bpf_func_state *st, u32 r)
 -{
--	struct bpf_flow *flow = env->flow;
--	struct flow_state *s;
--	struct rb_node *n;
--	int err;
+-	int spi, slots_available;
 -
--	do {
--		err = flow_do_united(env);
--		if (err)
--			return err;
--	} while (flow->united_cnt);
--	n = rb_first_cached(&flow->pending);
--	if (!n)
--		return -ENOENT;
--	s = rb_entry(n, struct flow_state, rb);
--	rb_erase_cached(&s->rb, &flow->pending);
--	s->pending = false;
--
--	env->insn_idx = s->st.insn_idx;
--	*prev_insn_idx = s->prev_insn_idx;
--	if (test_bit(s->st.insn_idx, flow->keep)) {
--		flow->from = s->seq;
--		return bpf_copy_verifier_state(env->cur_state, &s->st);
--	}
--	flow->from = s->from;
--	*env->cur_state = s->st;
--	memset(&s->st, 0, sizeof(s->st));
--	s->st.insn_idx = env->insn_idx;
--	flow_unlink(env, s);
--	flow_free_state(env, s);
--	return 0;
--}
--
--/* A basic block on the way to the block that is rejected, up to the insn that leads on */
--struct flow_step {
--	const struct flow_state *s;	/* the state at its head, if one is kept */
--	int head, last;
--};
--
--/*
-- * The state at @head with that @seq. If it is gone a state that came later took its place:
-- * the last one then.
-- */
--static const struct flow_state *flow_find_state(const struct bpf_flow *flow, int head, u32 seq)
--{
--	const struct list_head *list = &flow->states[head].list;
--	const struct flow_state *s;
--
--	if (!test_bit(head, flow->keep))
+-	if (r < MAX_BPF_REG)
 -		return NULL;
--	list_for_each_entry(s, list, node)
--		if (s->seq == seq)
--			return s;
--	return list_empty(list) ? NULL : list_last_entry(list, struct flow_state, node);
--}
 -
--/*
-- * The basic block at @head, which the current state got to from insn @i, is rejected. The block
-- * and the message are what was printed since @log_pos. Print the way to the block in front of it.
-- *
-- * The way is put together backwards from what is there. A state that is kept knows the edge that
-- * it came by, after a join the edge that changed it last, and the kept state that it comes from.
-- * A block whose state is not kept has one predecessor, which is its dominator.
-- * A block is on the way once. Where it would come again, after a round of a loop, the way goes on
-- * from its dominator: all that gets into the loop goes through it.
-- */
--void bpf_flow_print_way(struct bpf_verifier_env *env, u64 log_pos, int head, int i)
--{
--	struct bpf_insn *insns = env->prog->insnsi;
--	const struct bpf_flow *flow = env->flow;
--	const struct flow_state *s;
--	struct bpf_vlog_stash stash;
--	struct flow_step *way, *w;
--	u32 from = flow->from, cnt = 0;
--	unsigned long *seen;
+-	slots_available = st->allocated_stack / BPF_REG_SIZE;
+-	spi = r - MAX_BPF_REG;
+-	if (spi < slots_available)
+-		return &st->stack[spi];
 -
--	seen = bitmap_zalloc(flow->len, BPF_VERIFIER_GFP);
--	way = kvmalloc_array(bitmap_weight(flow->point, flow->len), sizeof(*way),
--			     BPF_VERIFIER_GFP);
--	if (!seen || !way)
--		goto out;
--
--	s = flow_find_state(flow, head, from);
--	from = s ? s->from : from;
--	while (i >= 0) {
--		head = find_last_bit(flow->point, i + 1);
--		s = NULL;
--		if (!__test_and_set_bit(head, seen)) {
--			s = flow_find_state(flow, head, from);
--			way[cnt++] = (struct flow_step){ s, head, i };
--		}
--		from = s ? s->from : from;
--		i = s ? s->prev_insn_idx : env->idoms[head];
--		cond_resched();
--	}
--
--	if (!cnt || bpf_vlog_stash(&env->log, log_pos, &stash))
--		goto out;
--	env->prev_linfo = NULL;
--	while (cnt-- && !bpf_must_abort()) {
--		w = &way[cnt];
--		if (w->s) {
--			verbose(env, "from %d to %d:", w->s->prev_insn_idx, w->head);
--			print_verifier_state(env, &w->s->st, w->s->st.curframe, true);
--		}
--		for (i = w->head; i <= w->last; i += 1 + bpf_is_ldimm64(&insns[i])) {
--			verbose_linfo(env, i, "; ");
--			verbose(env, "%d: ", i);
--			bpf_verbose_insn(env, &insns[i]);
--			verbose(env, "\n");
--		}
--	}
--	bpf_vlog_unstash(&env->log, &stash);
--out:
--	bitmap_free(seen);
--	kvfree(way);
--}
-diff --git a/kernel/bpf/join.c b/kernel/bpf/join.c
-index 6a8efb671a8..782a7c3f934 100644
---- a/kernel/bpf/join.c
-+++ b/kernel/bpf/join.c
-@@ -1,627 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0-only
--/*
-- * Join of verifier states.
-- *
-- * bpf_states_join(dst, a, b) computes the state that describes every concrete
-- * state described by 'a' or by 'b'. With @widen a number that is larger in the
-- * result than in 'a' gets the bound that moved put further out, so that a sequence
-- * of states at a loop head ends. A pointer whose offset is larger has no join.
-- *
-- * Numbers and offsets of pointers are joined. A pointer and a number, pointers
-- * to different objects, different references and locks are not: there is no
-- * join and the states stay apart.
-- *
-- * The contract is checked on every call: both inputs have to be within the
-- * result, see bpf_state_subsumes(). A violation is a verifier bug.
-- *
-- * Inputs have to be at the same insn and cleaned with
-- * bpf_clean_verifier_state(): dead registers and stack slots are the same on
-- * both sides then, but for dynptrs, iterators and irq flags: they stay.
-- */
- #include <linux/bpf.h>
- #include <linux/bpf_verifier.h>
- #include <linux/cnum.h>
--#include <linux/tnum.h>
- #include <linux/filter.h>
--#include <linux/slab.h>
--
--struct join_idpair {
--	u32 a;
--	u32 b;
--	bool bad;
--};
--
--struct bpf_join_state {
--	struct bpf_verifier_env *env;
--	struct join_idpair pairs[BPF_ID_MAP_SIZE];
--	u32 npairs;
--	bool pairs_overflow;
--	bool widen;
--	/* the states came around this loop in the frame that is joined, NULL if not */
--	const struct bpf_loop *loop;
--	/* the register or stack slot that is joined, as in struct bpf_loop_rungs, or -1 */
--	int place;
--};
--
--static struct bpf_join_state *join_state(struct bpf_verifier_env *env)
--{
--	if (!env->join) {
--		env->join = kvzalloc_obj(*env->join, BPF_VERIFIER_GFP);
--		if (env->join)
--			env->join->env = env;
--	}
--	return env->join;
--}
--
--void bpf_join_free(struct bpf_verifier_env *env)
--{
--	kvfree(env->join);
--	env->join = NULL;
--}
--
--/*
-- * An id in the result stands for the pair (id in 'a', id in 'b'). For the
-- * result to be within both inputs the pairs have to form a bijection,
-- * see check_ids(). The first pass over all locations records the pairs. An id
-- * seen with two partners makes all pairs it takes part in bad.
-- * The second pass keeps the id of 'a' for good pairs.
-- */
--static void jid_mark_bad(struct bpf_join_state *js, u32 a, u32 b)
--{
--	u32 i;
--
--	for (i = 0; i < js->npairs; i++)
--		if ((a && js->pairs[i].a == a) || (b && js->pairs[i].b == b))
--			js->pairs[i].bad = true;
--}
--
--static void jid_note(struct bpf_join_state *js, u32 a, u32 b)
--{
--	bool consistent, other = false;
--	struct join_idpair *p;
--	u32 i;
--
--	if (!a || !b)
--		return;
--	/* a name of what the caller has, see BPF_INHERITED_ID */
--	consistent = a == b || (a | b) < BPF_INHERITED_ID;
--	for (i = 0; i < js->npairs; i++) {
--		p = &js->pairs[i];
--		if (p->a == a && p->b == b) {
--			if (!consistent)
--				jid_mark_bad(js, a, b);
--			return;
--		}
--		if (p->a == a || p->b == b)
--			other = true;
--	}
--	if (other) {
--		jid_mark_bad(js, a, b);
--		consistent = false;
--	}
--	if (js->npairs == ARRAY_SIZE(js->pairs)) {
--		js->pairs_overflow = true;
--		return;
--	}
--	p = &js->pairs[js->npairs++];
--	p->a = a;
--	p->b = b;
--	p->bad = !consistent;
--}
--
--static bool jid_good(struct bpf_join_state *js, u32 a, u32 b)
--{
--	u32 i;
--
--	if (!a || !b || js->pairs_overflow)
--		return false;
--	for (i = 0; i < js->npairs; i++)
--		if (js->pairs[i].a == a && js->pairs[i].b == b)
--			return !js->pairs[i].bad;
--	return false;
--}
--
--/* Ids that have to match: both zero, or a good pair */
--static bool jid_strict_ok(struct bpf_join_state *js, u32 ida, u32 idb)
--{
--	if (!ida && !idb)
--		return true;
--	return jid_good(js, ida, idb);
--}
--
--static const struct bpf_loop_rungs *join_rungs(const struct bpf_join_state *js)
--{
--	u32 i;
--
--	for (i = 0; js->loop && i < js->loop->rungs_cnt; i++)
--		if (js->loop->rungs[i].place == js->place)
--			return &js->loop->rungs[i];
 -	return NULL;
 -}
 -
--/* Does every iteration add a constant to what is in the place? In 64 or in 32 bits, 0 if not */
--static int join_place_is_linear(const struct bpf_join_state *js)
+-static struct bpf_reg_state *scev_regno_to_reg(struct bpf_func_state *st, u32 r)
 -{
--	/* the place as scalar evolution numbers it */
--	u32 r = js->place < BPF_LOOP_SLOT ? js->place : js->place - BPF_LOOP_SLOT + MAX_BPF_REG;
+-	return r < MAX_BPF_REG ? &st->regs[r] : NULL;
+-}
 -
--	if (!js->loop || js->place < 0 || r >= BPF_SCEV_REGS_NUM)
--		return 0;
--	return test_bit(r, js->loop->linear_regs) ? 64 :
--	       test_bit(r, js->loop->linear32_regs) ? 32 : 0;
+-/* Linear widening requires a physical register or a full spill. */
+-static struct bpf_reg_state *scev_reg_for_linear(struct bpf_func_state *st, u32 r)
+-{
+-	struct bpf_stack_state *stack;
+-
+-	if (r < MAX_BPF_REG)
+-		return scev_regno_to_reg(st, r);
+-	stack = scev_regno_to_stack(st, r);
+-	if (!stack || bpf_spill_size(stack) != BPF_REG_SIZE)
+-		return NULL;
+-	return &stack->spilled_ptr;
+-}
+-
+-/* '*(u32 *)(r10 - 8) = rX' left a number in the low half of the slot. */
+-static struct bpf_reg_state *scev_reg_for_spill32(struct bpf_func_state *st, u32 r)
+-{
+-	struct bpf_stack_state *stack = scev_regno_to_stack(st, r);
+-
+-#ifdef __BIG_ENDIAN
+-	/* a 32-bit spill is in the upper 32 bits of the slot */
+-	return NULL;
+-#endif
+-	if (!stack || bpf_spill_size(stack) != 4 || stack->spilled_ptr.type != SCALAR_VALUE)
+-		return NULL;
+-	return &stack->spilled_ptr;
 -}
 -
 -/*
-- * Join of the range of two registers of the same type, numbers or pointers
-- * with variable offset. @dst is a copy of @ra. Returns false if there is no join.
+- * Return a borrowed value; never use it as a widening destination.
+- * NULL denotes no readable value.
 - */
--static bool join_range(struct bpf_join_state *js, struct bpf_reg_state *dst,
--		       const struct bpf_reg_state *ra, const struct bpf_reg_state *rb)
+-static const struct bpf_reg_state *
+-scev_reg_for_read(struct bpf_verifier_env *env, const struct bpf_func_state *st, u32 r)
 -{
--	if (scalar_equal(scalar_of(ra), scalar_of(rb)))
--		return true;
--	scalar_union(scalar_of(dst), scalar_of(rb));
--	if (!js->widen || scalar_equal(scalar_of(dst), scalar_of(ra)))
--		return true;
--	/*
--	 * The bound of a number that grows around a cycle is put where it may come to rest. If
--	 * that is far out the number gets a bound again from the next comparison. The offset of
--	 * a pointer doesn't: there is no access through a pointer at an offset that is not
--	 * known. So there is nothing to gain from that join. If the offset stops to grow
--	 * the next state is within the last one.
--	 */
--	if (dst->type != SCALAR_VALUE)
+-	const struct bpf_stack_state *stack;
+-	bool zero = true;
+-	int i;
+-
+-	if (r < MAX_BPF_REG)
+-		return st->regs[r].type == NOT_INIT ? NULL : &st->regs[r];
+-	if (r >= REGS_NUM || r - MAX_BPF_REG >= env->stack_limit / BPF_REG_SIZE)
+-		return NULL;
+-
+-	stack = scev_regno_to_stack(st, r);
+-	if (!stack)
+-		return &env->scev->unknown_reg;
+-	if (bpf_spill_size(stack) == BPF_REG_SIZE)
+-		return &stack->spilled_ptr;
+-
+-	/* Partial spills do not describe the value of the whole slot. */
+-	for (i = 0; i < BPF_REG_SIZE; i++) {
+-		switch (stack->slot_type[i]) {
+-		case STACK_ZERO:
+-			break;
+-		case STACK_INVALID:
+-		case STACK_POISON:
+-		case STACK_MISC:
+-			zero = false;
+-			break;
+-		case STACK_SPILL:
+-			if (!bpf_is_spilled_scalar_reg(stack))
+-				return NULL;
+-			zero = false;
+-			break;
+-		default:
+-			return NULL;
+-		}
+-	}
+-	return zero ? &env->scev->zero_reg : &env->scev->unknown_reg;
+-}
+-
+-/*
+- * Materialize a writable value in the current state, growing its stack if needed.
+- * This does not go through check_stack_write(). The buffer of a live dynptr slice, see
+- * bpf_reg_state::buf, does not become a spill here. The callers skip the slots that are
+- * is_unbound_scev_reg() when the loop is entered. A slot that a call in the loop may write
+- * has no description: it is in forget_regs or fresh_regs, and they skip these too.
+- */
+-static int scev_reg_for_write(struct bpf_verifier_env *env, struct bpf_func_state *st,
+-			      u32 r, struct bpf_reg_state **out)
+-{
+-	const struct bpf_reg_state *value;
+-	struct bpf_stack_state *stack;
+-	u32 spi;
+-	int err;
+-
+-	*out = scev_regno_to_reg(st, r);
+-	if (*out)
+-		return 0;
+-	if (r >= REGS_NUM || r - MAX_BPF_REG >= env->stack_limit / BPF_REG_SIZE)
+-		return -EINVAL;
+-
+-	spi = r - MAX_BPF_REG;
+-	err = bpf_grow_stack_state(env, st, (spi + 1) * BPF_REG_SIZE);
+-	if (err)
+-		return err;
+-
+-	/* Resolve pointers after growth, which may relocate the stack. */
+-	value = scev_reg_for_read(env, st, r);
+-	if (!value)
+-		return -EINVAL;
+-	stack = scev_regno_to_stack(st, r);
+-	stack->spilled_ptr = *value;
+-	memset(stack->slot_type, STACK_SPILL, sizeof(stack->slot_type));
+-	*out = &stack->spilled_ptr;
+-	return 0;
+-}
+-
+-static bool scev_reg_alive(struct bpf_verifier_env *env, struct bpf_verifier_state *st, u32 r)
+-{
+-	int insn_idx = bpf_frame_insn_idx(st, st->curframe);
+-	u16 live_regs = env->insn_aux_data[insn_idx].live_regs_before;
+-	int spi;
+-
+-	if (r < MAX_BPF_REG) {
+-		return BIT(r) & live_regs;
+-	} else {
+-		spi = r - MAX_BPF_REG;
+-		return bpf_stack_slot_alive(env, st->curframe, spi * 2) ||
+-		       bpf_stack_slot_alive(env, st->curframe, spi * 2 + 1);
+-	}
+-}
+-
+-/*
+- * Latch is a condition deciding if execution remains inside a loop.
+- * Linear latch represents a condition 'if <reg> <op> <loop invariant> goto <loop-header>',
+- * where equation '<base> + i * <step> <op> <bound>' describes values taken by register <reg>,
+- * 'i' is the loop iteration number, starting from 0.
+- * 'zext32' indicates the latch is for (zext32 (linear ...)) SCEV.
+- * 'jmp32' indicates that the latch is a JMP32 instruction.
+- * 'base_reg' is the register in <base>.
+- */
+-struct linear_latch {
+-	u32 insn_idx;
+-	u32 base_expr;
+-	u32 step_expr;
+-	u32 bound_expr;
+-	u32 base_reg;
+-	u8 op;
+-	bool zext32;
+-	bool jmp32;
+-};
+-
+-static bool loop_invariant(struct scev *scev, u32 id)
+-{
+-	s64 imm;
+-	u32 reg;
+-
+-	return is_reg(scev, id, &reg) || is_imm(scev, id, &imm);
+-}
+-
+-static int match_linear_latch(struct bpf_verifier_env *env,
+-			      u32 header,
+-			      u32 latch_idx, bool taken_leaves,
+-			      struct linear_latch *latch)
+-{
+-	struct bpf_insn *insn = &env->prog->insnsi[latch_idx];
+-	struct scev *scev = env->scev;
+-	struct env *latch_env;
+-	u32 src_reg_scev;
+-	u32 dst_reg_scev;
+-	u32 l, r, op;
+-	int id;
+-
+-	op = BPF_OP(insn->code);
+-	latch->jmp32 = BPF_CLASS(insn->code) == BPF_JMP32;
+-	/* Flip the condition if true branch jumps out of the loop. */
+-	if (taken_leaves)
+-		op = bpf_rev_opcode(op);
+-	switch (op) {
+-	case BPF_JSLT:
+-	case BPF_JSLE:
+-	case BPF_JSGT:
+-	case BPF_JSGE:
+-	case BPF_JLT:
+-	case BPF_JLE:
+-	case BPF_JGT:
+-	case BPF_JGE:
+-	case BPF_JNE:
+-		break;
+-	default:
 -		return false;
--	scalar_widen(scalar_of(dst), scalar_of(ra), join_rungs(js), join_place_is_linear(js));
+-	}
+-
+-	latch->insn_idx = latch_idx;
+-
+-	latch_env = find_loop_env(scev, header, latch_idx);
+-	if (verifier_bug_if(!latch_env, env, "header_idx=%d, latch_idx=%d\n", header, latch_idx))
+-		return -EFAULT;
+-	dst_reg_scev = latch_env->reg2scev[insn->dst_reg];
+-	src_reg_scev = latch_env->reg2scev[insn->src_reg];
+-	/*
+-	 * Make sure (linear ...) is in dst_reg_scev:
+-	 *   'if <invariant> <op> <linear>' ⇔
+-	 * 'if <linear> <flip(op)> <invariant>'.
+-	 */
+-	if (BPF_SRC(insn->code) == BPF_X &&
+-	    is_linear_or_linear32(scev, src_reg_scev, &l, &r, &latch->zext32)) {
+-		swap(dst_reg_scev, src_reg_scev);
+-		op = bpf_flip_opcode(op);
+-	}
+-	latch->op = op;
+-	/*
+-	 * simplify() produces two shapes for linear latches:
+-	 * - (linear register step)
+-	 *           ^----------------------------+-- base_expr
+-	 *           base_expr                    |
+-	 * - (linear (+ register imm) step)       |
+-	 *           ^----------------------------'
+-	 * 'register' is (zext32 *fp-8) for a 32-bit counter on the stack.
+-	 */
+-	if (!is_linear_or_linear32(scev, dst_reg_scev,
+-				   &latch->base_expr, &latch->step_expr, &latch->zext32))
+-		return false;
+-
+-	if (BPF_SRC(insn->code) == BPF_K) {
+-		id = imm_expr(scev, insn->imm);
+-		if (id < 0)
+-			return id;
+-		latch->bound_expr = id;
+-	} else {
+-		latch->bound_expr = src_reg_scev;
+-	}
+-
+-	if (!loop_invariant(scev, latch->step_expr) ||
+-	    !loop_invariant(scev, latch->bound_expr))
+-		return false;
+-
+-	/* (linear register step) */
+-	if (is_reg_or_low32(scev, latch->base_expr, &latch->base_reg))
+-		return true;
+-
+-	/* (linear (+ register imm) step) */
+-	if (is_add(scev, latch->base_expr, &l, &r) &&
+-	    is_reg_or_low32(scev, l, &latch->base_reg) &&
+-	    loop_invariant(scev, r))
+-		return true;
+-
+-	return false;
+-}
+-
+-/*
+- * Can the jump at @n tell the number of iterations of the loop at @header? The status of a call
+- * and a NULL test cannot. 1 as long as scalar evolution has not looked at the program.
+- */
+-int bpf_scev_jump_counts(struct bpf_verifier_env *env, int header, int n, bool taken_leaves)
+-{
+-	struct linear_latch latch;
+-
+-	if (!env->scev)
+-		return 1;
+-	if (!find_loop_env(env->scev, header, n))
+-		return 0;
+-	return match_linear_latch(env, header, n, taken_leaves, &latch);
+-}
+-
+-static void log_scev_value(struct bpf_verifier_env *env, struct bpf_func_state *st,
+-			   const struct scev_value *v)
+-{
+-	const struct bpf_reg_state *reg;
+-
+-	if (v->ptr_reg >= 0) {
+-		reg = scev_reg_for_read(env, st, v->ptr_reg);
+-		log_reg(env, v->ptr_reg);
+-		bpf_log(&env->log, " (%s)", reg ? reg_type_str(env, reg->type) : "unavailable");
+-	} else if (cnum64_is_const(v->r64)) {
+-		bpf_log(&env->log, "scalar %llu", v->r64.base);
+-	} else {
+-		bpf_log(&env->log, "scalar %llu..%llu", cnum64_umin(v->r64), cnum64_umax(v->r64));
+-	}
+-}
+-
+-static void log_incompatible_scev_values(struct bpf_verifier_env *env, const char *reason,
+-					struct bpf_func_state *st,
+-					const struct scev_value *a, const struct scev_value *b)
+-{
+-	bpf_log(&env->log, "scev: %s ", reason);
+-	log_scev_value(env, st, a);
+-	bpf_log(&env->log, ", ");
+-	log_scev_value(env, st, b);
+-	bpf_log(&env->log, "\n");
+-}
+-
+-static bool scev_value_compatible(struct bpf_verifier_env *env, struct bpf_func_state *st,
+-				  const struct scev_value *a, const struct scev_value *b,
+-				  const struct linear_latch *latch)
+-{
+-	const struct bpf_reg_state *ra, *rb;
+-
+-	if (a->ptr_reg < 0 || b->ptr_reg < 0) {
+-		if (a->ptr_reg < 0 && b->ptr_reg < 0)
+-			return true;
+-		goto incompatible;
+-	}
+-	ra = scev_reg_for_read(env, st, a->ptr_reg);
+-	rb = scev_reg_for_read(env, st, b->ptr_reg);
+-	if (ra && rb && bpf_same_memory_origin(ra, rb) && !latch->zext32 && !latch->jmp32)
+-		return true;
+-
+-incompatible:
+-	if (env->log.level & BPF_LOG_LEVEL2)
+-		log_incompatible_scev_values(env, "incompatible latch operands", st, a, b);
+-	return false;
+-}
+-
+-/* @v = the SCEV register @r in the state @st */
+-static void eval_reg(struct bpf_verifier_env *env, struct bpf_func_state *st, u32 r,
+-		     struct scev_value *v)
+-{
+-	const struct bpf_reg_state *reg;
+-
+-	v->ptr_reg = -1;
+-	v->bits = 64;
+-	/* a 32-bit spill, or the upper half of the slot is dead: the low 32 bits of the value */
+-	reg = scev_reg_for_spill32(st, r);
+-	if (reg)
+-		v->bits = 32;
+-	else
+-		reg = scev_reg_for_read(env, st, r);
+-	if (!reg || reg->type == NOT_INIT) {
+-		v->bits = 0;
+-		return;
+-	}
+-	*scalar_of(v) = *scalar_of(reg);
+-	if (reg->type != SCALAR_VALUE)
+-		v->ptr_reg = r;
+-}
+-
+-static bool scalar_is_unknown(const struct scalar *s)
+-{
+-	return s->step <= 1 && tnum_is_unknown(s->var_off) && s->r64.size == U64_MAX &&
+-	       s->r32.size == U32_MAX;
+-}
+-
+-static void scev_value_set_const(struct scev_value *v, s64 imm)
+-{
+-	scalar_set_const(scalar_of(v), imm);
+-	v->ptr_reg = -1;
+-	v->bits = 64;
+-}
+-
+-/*
+- * @v = @v @op @r, by the transfer functions of the main pass. @r is not read if @op has one
+- * operand. An op that is not evaluated: nothing is known.
+- * A value is known modulo 2^bits: the run-time value and a member of the abstract value have the
+- * same low bits. + - * & | ^ and << by an exact amount respect that. An extension of N bits wants N
+- * bits and makes 64. The other ops want 64.
+- * Expressions have no types, the state has them. A pointer can be an operand of an add, with a
+- * scalar, in 64 bits.
+- */
+-static void scev_value_alu(u32 op, struct scev_value *v, const struct scev_value *r)
+-{
+-	struct bpf_insn insn = { .code = BPF_ALU64 | BPF_X | op };
+-	u32 low = op_low_bits(op);
+-
+-	if (low) {
+-		if (v->ptr_reg >= 0)
+-			goto unknown;
+-		/* a partial spill: the other bits of the slot are not known */
+-		if (op == SPILL8 || op == SPILL16 || op == SPILL32) {
+-			v->bits = min(v->bits, low);
+-			return;
+-		}
+-		if (v->bits < low)
+-			goto unknown;
+-		scalar_ext(scalar_of(v), low, !is_zext(op));
+-		v->bits = 64;
+-		return;
+-	}
+-	if (op_params_num(op) != 2)
+-		goto unknown;
+-	v->bits = min(v->bits, r->bits);
+-	switch (op) {
+-	case BPF_ADD:
+-		if (v->ptr_reg < 0 && r->ptr_reg < 0)
+-			break;
+-		if ((v->ptr_reg >= 0 && r->ptr_reg >= 0) || v->bits < 64)
+-			goto unknown;
+-		v->ptr_reg = max(v->ptr_reg, r->ptr_reg);
+-		scalar_add(scalar_of(v), scalar_of(v), scalar_of(r));
+-		return;
+-	case BPF_SUB:
+-	case BPF_MUL:
+-	case BPF_AND:
+-	case BPF_OR:
+-	case BPF_XOR:
+-		break;
+-	case BPF_LSH:
+-		if (r->bits < 64)
+-			goto unknown;
+-		break;
+-	case SDIV:
+-	case SMOD:
+-		insn.code = BPF_ALU64 | BPF_X | (op == SDIV ? BPF_DIV : BPF_MOD);
+-		insn.off = 1;
+-		fallthrough;
+-	case BPF_DIV:
+-	case BPF_MOD:
+-	case BPF_RSH:
+-	case BPF_ARSH:
+-		if (v->bits < 64)
+-			goto unknown;
+-		break;
+-	default:
+-		goto unknown;
+-	}
+-	if (v->ptr_reg >= 0 || r->ptr_reg >= 0)
+-		goto unknown;
+-	if (v->bits)
+-		scalar_alu(scalar_of(v), scalar_of(r), &insn);
+-	return;
+-unknown:
+-	v->bits = 0;
+-}
+-
+-/* @v = @v + @delta (mod 2^@bits) */
+-static void scev_value_add_const(struct scev_value *v, s64 delta, u32 bits)
+-{
+-	struct scev_value c;
+-
+-	if (delta) {
+-		scev_value_set_const(&c, delta);
+-		scev_value_alu(BPF_ADD, v, &c);
+-	}
+-	v->bits = min(v->bits, bits);
+-}
+-
+-/*
+- * @v and @w are two values of one expression: what a leader holds, what the operands give. Both
+- * hold: @v becomes their intersection. An empty one: the path is infeasible, @v is left as it is.
+- * Two pointers are not intersected, see recompute_ptr(): the one that has news is taken.
+- */
+-static void scev_value_meet(struct scev_value *v, struct scev_value *w)
+-{
+-	if (!v->bits || !w->bits) {
+-		if (w->bits)
+-			*v = *w;
+-		return;
+-	}
+-	if (w->bits > v->bits)
+-		swap(*v, *w);
+-	if (v->ptr_reg >= 0 || w->ptr_reg >= 0) {
+-		if (v->ptr_reg >= 0 && w->ptr_reg >= 0 && w->bits == v->bits && w->refined)
+-			*v = *w;
+-		return;
+-	}
+-	scalar_intersect(scalar_of(v), scalar_of(w), w->bits);
+-	v->refined |= w->refined;
+-}
+-
+-/* The value of the operand @id. Its base is the linked expression at position @n. */
+-static void eval_operand(struct bpf_verifier_env *env, u32 id, u32 n, struct scev_value *v)
+-{
+-	u32 base, bits;
+-	s64 off;
+-
+-	*v = env->scev->vals[n];
+-	bits = split_const_offset(env, id, &base, &off);
+-	scev_value_add_const(v, off, bits);
+-}
+-
+-/*
+- * LLVM: ScalarEvolution::getRangeRef(). Compute scev->vals[], the values of the linked expressions
+- * in the state @st. Operands come first: one walk over the array, every expression is evaluated
+- * once, from what its leaders hold in @st and from the values of its operands.
+- */
+-static void eval_linked_exprs(struct bpf_verifier_env *env, struct bpf_func_state *st,
+-			      const struct jump_links *t)
+-{
+-	struct scev_value w, r, *v, *vals = env->scev->vals;
+-	const struct scev_linked_expr *x;
+-	const struct scev_linked_reg *q;
+-	struct scev *scev = env->scev;
+-	struct expr *e;
+-	u32 n, i, bits;
+-	s64 delta;
+-
+-	for (n = 0; n < scev->linked_exprs_cnt; n++) {
+-		x = &scev->linked_exprs[n];
+-		v = &vals[n];
+-		v->ptr_reg = -1;
+-		v->bits = 0;
+-		v->refined = false;
+-		if (is_imm(scev, x->id, &delta))
+-			scev_value_set_const(v, delta);
+-		for (i = 0; i < LEADERS_NUM; i++) {
+-			/* a tested register holds all bits: the others learn from it */
+-			if (x->leaders[i] == NO_IDX || (i == LEADERS_NUM - 1 && v->bits == 64))
+-				continue;
+-			q = &t->regs[x->leaders[i]];
+-			if (!const_diff(env, t->h, q->id, x->id, &delta, &bits))
+-				continue;
+-			eval_reg(env, st, q->reg, &w);
+-			w.refined = is_refined_reg(t, q->reg);
+-			scev_value_add_const(&w, delta, bits);
+-			scev_value_meet(v, &w);
+-		}
+-		/* operands without news: the main pass evaluated the leader from them */
+-		if (x->params[0] == NO_IDX || (v->bits == 64 && !vals[x->params[0]].refined &&
+-		    (x->params[1] == NO_IDX || !vals[x->params[1]].refined)))
+-			continue;
+-		/* not NULL: it has operands */
+-		e = expr_to_eval(env, t->h, x->id);
+-		eval_operand(env, e->params[0], x->params[0], &w);
+-		if (x->params[1] != NO_IDX) {
+-			eval_operand(env, e->params[1], x->params[1], &r);
+-			w.refined |= r.refined;
+-		}
+-		scev_value_alu(e->op == ADD_SCEV ? BPF_ADD : e->op, &w, &r);
+-		/* The insn may become ALU32, see alu64_with_def(). The main pass knows. */
+-		if (e->def.set && !env->insn_aux_data[e->def.idx].prevent_zext)
+-			w.bits = e->op == BPF_ADD || e->op == ADD_SCEV ? min(w.bits, 32) : 0;
+-		/* a product that can wrap: no news for those who are made of it */
+-		if (w.bits && !scalar_is_unknown(scalar_of(&w)))
+-			scev_value_meet(v, &w);
+-	}
+-}
+-
+-/*
+- * The jump at @insn_idx refined the registers @refined_regs in the state @st. Find the next SCEV
+- * register that is linked to one of them, and evaluate it: on every path to the jump
+- * *@linked_regno == *@val (mod 2^val->bits). It is of the same frame, and live at @next_idx, where
+- * @st goes on. It is a register, or MAX_BPF_REG + the index of a stack slot: a fill from byte
+- * *@fill_off of the slot reads these bits. *@pos is the position of the search, 0 at first. False:
+- * no more.
+- * Expressions have no types: a pointer is val->ptr_reg as it is in @st, with the offset *@val.
+- * BPF_SCEV_REGS_NUM and above is a memory location, see struct env and bpf_scev_mem_addr().
+- */
+-bool bpf_scev_next_linked_reg(struct bpf_verifier_env *env, struct bpf_func_state *st, int insn_idx,
+-			      int next_idx, u16 refined_regs, u32 *pos, u32 *linked_regno,
+-			      u32 *fill_off, struct scev_value *val)
+-{
+-	struct insn_envs *envs = env->scev->envs[insn_idx];
+-	DECLARE_BITMAP(roots, ENV_REGS_NUM) = {};
+-	const struct scev_linked_reg *q;
+-	struct scev *scev = env->scev;
+-	struct jump_links t;
+-	s64 delta;
+-	u32 k, bits;
+-
+-	if (!envs || !envs->linked_cnt)
+-		return false;
+-	t = (struct jump_links){ .regs = &scev->linked[envs->linked_first],
+-				 .regs_cnt = envs->linked_cnt,
+-				 .h = bpf_loop_at_index(env, insn_idx),
+-				 .refined_regs = refined_regs };
+-	if (!*pos) {
+-		for (k = 0; k < t.regs_cnt; k++)
+-			if (t.regs[k].refine && reg_alive_at(env, t.regs[k].reg, next_idx))
+-				__set_bit(k, roots);
+-		if (add_linked_exprs(env, &t, roots))
+-			return false;
+-		eval_linked_exprs(env, st, &t);
+-	}
+-	for (; *pos < t.regs_cnt; ++*pos) {
+-		q = &t.regs[*pos];
+-		if (q->expr == NO_IDX || !scev->vals[q->expr].bits ||
+-		    !scev->vals[q->expr].refined ||
+-		    !const_diff_reg(env, t.h, scev->linked_exprs[q->expr].id, q->reg, q->id,
+-				    fill_off, &delta, &bits))
+-			continue;
+-		*val = scev->vals[q->expr];
+-		scev_value_add_const(val, delta, bits);
+-		if (!val->bits)
+-			continue;
+-		/* the low bytes are the last ones */
+-		if (is_big_endian_slot(q->reg))
+-			*fill_off += (bits - val->bits) / BITS_PER_BYTE;
+-		*linked_regno = q->reg;
+-		return true;
+-	}
+-	return false;
+-}
+-
+-/*
+- * The value of @id in the state @st at a loop header: every SCEV register is its header phi there,
+- * (REG r) is r. All 64 bits are wanted.
+- */
+-static bool eval_expr(struct bpf_verifier_env *env, struct scev *scev,
+-		      struct bpf_func_state *st, u32 id, u32 lvl, struct scev_value *result)
+-{
+-	struct expr *e = &scev->exprs[id];
+-	struct scev_value rval;
+-	u32 regno;
+-	s64 imm;
+-
+-	result->ptr_reg = -1;
+-	result->bits = 0;
+-	if (is_reg(scev, id, &regno)) {
+-		eval_reg(env, st, regno, result);
+-	} else if (is_imm(scev, id, &imm)) {
+-		scev_value_set_const(result, imm);
+-	} else if (op_params_num(e->op) && !e->def.set && lvl < EXPR_STACK_DEPTH) {
+-		eval_expr(env, scev, st, e->params[0], lvl + 1, result);
+-		if (op_params_num(e->op) == 2)
+-			eval_expr(env, scev, st, e->params[1], lvl + 1, &rval);
+-		scev_value_alu(e->op, result, &rval);
+-	}
+-	return result->bits == 64;
+-}
+-
+-/* The range of @v. With @low32 that of its low 32 bits, in the upper half of a u64. */
+-static struct cnum64 scalar_arc(const struct scalar *v, bool low32)
+-{
+-	return low32 ? cnum64_lshift32(v->r32) : v->r64;
+-}
+-
+-/* Euclid. gcd64(a, 0) is a. gcd() is for unsigned long. */
+-static u64 gcd64(u64 a, u64 b)
+-{
+-	u64 rem;
+-
+-	while (b) {
+-		div64_u64_rem(a, b, &rem);
+-		a = b;
+-		b = rem;
+-	}
+-	return a;
+-}
+-
+-/*
+- * The values of @v are among the members of an arithmetic progression on the circle:
+- *
+- *	arc->base, arc->base + stride, arc->base + 2 * stride, .. , arc->base + arc->size
+- *
+- * @arc is scalar_arc() without the values at its ends that @v cannot have.
+- * Return the stride, 0 if there is one value.
+- *
+- * base and step are a congruence of the s64: the distance between two values is a multiple of
+- * step if r64 does not cross S64_MAX / S64_MIN. The low 32 bits have the same distances if r32
+- * is r64 moved by a multiple of 1 << 32.
+- * The known low bits of var_off are a congruence modulo a power of two. That divides 1 << 64 and
+- * 1 << 32, so it holds wherever the arc is. reg_bounds_sync() does not round a range to them:
+- * 1..0xff8 with three zero bits is 8..0xff8 here.
+- */
+-static u64 scalar_stride(const struct scalar *v, bool low32, struct cnum64 *arc)
+-{
+-	struct tnum t = low32 ? tnum_lshift(v->var_off, 32) : v->var_off;
+-	s64 smin = cnum64_smin(v->r64), smax = cnum64_smax(v->r64);
+-	u64 low, d;
+-
+-	*arc = scalar_arc(v, low32);
+-	if (cnum64_is_empty(*arc) || cnum64_is_const(*arc))
+-		return 0;
+-	if (v->step > 1 && smin == (s64)v->r64.base &&
+-	    imod(smin, v->step) == v->base && imod(smax, v->step) == v->base &&
+-	    (!low32 || (v->r32.base == (u32)v->r64.base && v->r32.size == v->r64.size)))
+-		return (u64)v->step << (low32 ? 32 : 0);
+-
+-	low = t.mask ? BIT_ULL(__ffs64(t.mask)) - 1 : U64_MAX;
+-	d = (t.value - arc->base) & low;
+-	/* range and var_off don't overlap: the path is infeasible */
+-	if (d > arc->size)
+-		return low32 ? BIT_ULL(32) : 1;
+-	arc->base += d;
+-	arc->size -= d;
+-	arc->size -= arc->size & low;
+-	return arc->size ? low + 1 : 0;
+-}
+-
+-static bool is_signed_op(u8 op)
+-{
+-	switch (op) {
+-	case BPF_JSLT:
+-	case BPF_JSLE:
+-	case BPF_JSGT:
+-	case BPF_JSGE:
+-		return true;
+-	default:
+-		return false;
+-	}
+-}
+-
+-/*
+- * What a linear latch tells about the loop. LLVM's ScalarEvolution::ExitLimit has the counts,
+- * @false_until and @iv are ours.
+- */
+-struct exit_limit {
+-	/* The backedge is taken at most @max times. Exact if initial value and bound are known. */
+-	u64 max;
+-	/* The latch is false in iterations @max .. @false_until, whatever the initial value is. */
+-	u64 false_until;
+-	/* The induction variable at the latch in all iterations, the one that ends the loop too. */
+-	struct cnum64 iv;
+-};
+-
+-/*
+- * The range of @a as unsigned numbers after the circle is rotated such that @origin is 0.
+- * An arc that crosses @origin gives [0, @ut_max].
+- */
+-static void rotated_urange(struct cnum64 a, u64 origin, u64 ut_max, u64 *min, u64 *max)
+-{
+-	a = cnum64_sub(a, cnum64_const(origin));
+-	*min = cnum64_umin(a);
+-	*max = cnum64_umax(a) & ut_max;
+-}
+-
+-/*
+- * The backedge-taken count of
+- *
+- *	for (x = initial; x <op> bound; x += step)
+- *
+- * The numbers are the points of a circle, see cnum.h. The latch is true on one arc,
+- * [origin, end), and false on the rest of the circle, [end, origin).
+- * min_value is 0, with @sign it is S64_MIN:
+- *
+- *	x <  b	[min_value, b)		3 + 2*i <  7: i ∈ [0,1]
+- *	x <= b	[min_value, b + 1)	3 + 2*i <= 7: i ∈ [0,1,2]
+- *	x >  b	[b + 1, min_value)
+- *	x >= b	[b, min_value)
+- *	x != b	[b + 1, b)		3 + 2*i != 7: i ∈ [0,1]
+- *
+- * 'x <= b' is always true if b + 1 is min_value, and so is 'x >= b' if b is.
+- *
+- * x moves clockwise. If @step is negative, both sides are inverted, as LLVM's howManyLessThans()
+- * does: '7 - 2*i > 3' is '~7 + 2*i < ~3': i ∈ [0,1]. Then the circle is rotated such that origin
+- * is 0. One comparison of unsigned numbers is left, x < end:
+- *
+- *	origin          x     x+step                 end      x+step*count        ut_max
+- *	|---------------|-------|-------|-- .. --|----|-----------|------------------|
+- *	                |<----------- diff ---------->|<overshoot>|
+- *
+- * The count is diff / step, rounded up, as in LLVM's computeMaxBECountForLT(). The loop ends only
+- * if x does not step over [end, origin): end + overshoot <= ut_max.
+- * E.g. 3 + 2*i < 8: diff is 5, the count is 3, overshoot is 1: x is 9.
+- * For '!=' end is ut_max: step has to divide diff.
+- *
+- * With ranges the count is that of the smallest initial value and the largest end. The value that
+- * ends the loop does not get smaller when end grows, so the largest end has the largest
+- * end + overshoot too. Initial values are different:
+- *
+- *	for (u64 i = initial; i > 0; i -= 2)	10: 5 times | 11: i wraps | 12: 6 times
+- *
+- * Both bounds of 10..12 have a count and 11 has none. overshoot is -diff modulo step: when the
+- * initial value grows by 1, so does overshoot, modulo step. For the initial values
+- * imin .. imin + size it is at most 'overshoot of imin' + size while that is below step: exact
+- * for a constant. Else it is known modulo g = gcd(step, @stride), where the initial values are
+- * imin, imin + @stride, imin + 2 * @stride ..: at most step - g + 'overshoot of imin' % g.
+- * 10, 12, 14 has a count: the step divides the distance. With a stride of 1 it is step - 1, which
+- * is what LLVM's canIVOverflowOnLT() assumes.
+- * '!=' has to hit each bound: what holds for initial values holds for its bounds too.
+- *
+- * 32-bit numbers are compared on the same circle, in the upper half of a u64: cnum64_lshift32().
+- * @unit is the 1 of the text above, 1 or 1 << 32, and ut_max is the largest number, -unit.
+- */
+-static bool compute_backedge_taken_count(u8 op, bool sign, u64 unit, struct cnum64 initial,
+-					 u64 step, struct cnum64 bound, u64 stride,
+-					 struct exit_limit *el)
+-{
+-	u64 min_value = sign ? (u64)S64_MIN : 0, ut_max = -unit, origin = min_value;
+-	u64 imin, imax, emin, emax, bmin, bmax, diff, rem, overshoot, size, g;
+-	bool down = (s64)step < 0;
+-	struct cnum64 end;
+-
+-	*el = (struct exit_limit){ .iv = initial };
+-	if (down) {
+-		/* ~x is ut_max - x. It reverses the order of signed and of unsigned numbers. */
+-		initial = cnum64_sub(cnum64_const(ut_max), initial);
+-		bound = cnum64_sub(cnum64_const(ut_max), bound);
+-		step = -step;
+-		op = bpf_flip_opcode(op);
+-	}
+-	rotated_urange(bound, min_value, ut_max, &bmin, &bmax);
+-	end = bound;
+-
+-	switch (op) {
+-	case BPF_JLT:
+-	case BPF_JSLT:
+-		break;
+-	case BPF_JLE:
+-	case BPF_JSLE:
+-		if (bmax == ut_max)
+-			return false;
+-		end = cnum64_add(bound, cnum64_const(unit));
+-		break;
+-	case BPF_JGE:
+-	case BPF_JSGE:
+-		if (!bmin)
+-			return false;
+-		bmin -= unit;
+-		fallthrough;
+-	case BPF_JGT:
+-	case BPF_JSGT:
+-		/*
+-		 * x moves away from the bound and wraps: 'i >= 0 && i < 128' as one unsigned
+-		 * comparison of a variable that goes down. The smallest bound has the longest arc.
+-		 */
+-		origin += bmin + unit;
+-		end = cnum64_const(min_value);
+-		break;
+-	case BPF_JNE:
+-		/* after each bound and, see below, before each initial value */
+-		origin = bound.base + bound.size + unit;
+-		break;
+-	default:
+-		return false;
+-	}
+-
+-	rotated_urange(initial, origin, ut_max, &imin, &imax);
+-	rotated_urange(end, origin, ut_max, &emin, &emax);
+-
+-	/* An initial value after its bound begins the arc: it goes all the way around. */
+-	if (op == BPF_JNE && imax > emin)
+-		return false;
+-	/*
+-	 * The backedge is not taken. That is a count, and a better one than that of
+-	 * another exit, which may be true for a long time.
+-	 */
+-	if (imin >= emax)
+-		return true;
+-	if (!step)
+-		return false;
+-
+-	diff = emax - imin;
+-	div64_u64_rem(diff, step, &rem);
+-	overshoot = rem ? step - rem : 0;
+-	size = imax - imin;
+-	if (op == BPF_JNE && check_add_overflow(size, emax - emin, &size))
+-		size = ut_max;
+-	if (size < step - overshoot) {
+-		overshoot += size;
+-	} else {
+-		/* Initial values that cross origin are 0 .. ut_max here: imin is none of them. */
+-		g = imin == initial.base - origin ? gcd64(step, stride) : unit;
+-		div64_u64_rem(overshoot, g, &rem);
+-		overshoot = step - g + rem;
+-	}
+-	if (overshoot > ut_max - emax)
+-		return false;
+-
+-	el->max = div64_u64(diff - 1, step) + 1;
+-	/*
+-	 * In iteration @max each x is on [end, origin). It stays there until it gets to origin.
+-	 * '!=' is false for one number: the end of the arc of one bound is on the arc of another.
+-	 */
+-	if (op != BPF_JNE || cnum64_is_const(bound))
+-		el->false_until = div64_u64(ut_max - imax, step);
+-	el->iv = cnum64_add(cnum64_from_urange(imin, emax + overshoot), cnum64_const(origin));
+-	el->iv = cnum64_union(initial, el->iv);
+-	if (down)
+-		el->iv = cnum64_sub(cnum64_const(ut_max), el->iv);
 -	return true;
 -}
 -
 -/*
-- * Join two registers, regsafe() documents what each type needs.
-- * Pass 1 records id pairs, pass 2 computes @dst, which is a copy of @ra on entry.
-- * Returns false if there is no join.
+- * A 64-bit jump tests x, which is zero extended. For a bound in 0 .. U32_MAX it is an unsigned
+- * 32-bit jump. For any other bound it is true for each x or false for each x.
+- * Return false if it can be true for each x. Else drop the bounds for which it is false.
 - */
--static bool join_reg(struct bpf_join_state *js, struct bpf_reg_state *dst,
--		     const struct bpf_reg_state *ra, const struct bpf_reg_state *rb, int pass)
+-static bool bound_of_zext32(u8 op, struct scev_value *bound)
 -{
--	if (ra->type == NOT_INIT || rb->type == NOT_INIT) {
--		if (pass == 2 && ra->type != NOT_INIT)
--			*dst = *rb;
--		return true;
--	}
--
--	if (ra->type != rb->type)
--		return false;
--
--	switch (base_type(ra->type)) {
--	case SCALAR_VALUE:
--		if (js->env->explore_alu_limits && !reg_value_equal(ra, rb))
--			return false;
--		if (pass == 2)
--			join_range(js, dst, ra, rb);
--		return true;
--	case PTR_TO_MAP_KEY:
--	case PTR_TO_MAP_VALUE:
--	case PTR_TO_MEM:
--	case PTR_TO_BUF:
--	case PTR_TO_TP_BUFFER:
--		if (!reg_fixed_part_equal(ra, rb))
--			return false;
--		/*
--		 * Two places in an object are two pointers: what is at a place
--		 * and how much is left behind it is lost in a range of them.
--		 */
--		if (!js->widen && tnum_is_const(ra->var_off) && tnum_is_const(rb->var_off) &&
--		    ra->var_off.value != rb->var_off.value)
+-	switch (op) {
+-	case BPF_JGT:
+-	case BPF_JGE:
+-		break;
+-	case BPF_JSGT:
+-	case BPF_JSGE:
+-		if (cnum64_smin(bound->r64) < 0)
 -			return false;
 -		break;
--	case PTR_TO_PACKET_META:
--	case PTR_TO_PACKET:
--		if ((ra->range < 0 || rb->range < 0) && ra->range != rb->range)
+-	case BPF_JSLT:
+-	case BPF_JSLE:
+-		if (cnum64_smax(bound->r64) > U32_MAX)
 -			return false;
--		/* how much of the packet was checked goes with numbers elsewhere in the state */
--		if (!js->widen && ra->range != rb->range)
--			return false;
--		/*
--		 * Displacements between pointers that share an id are kept. No id is an id too:
--		 * the start of the packet plus a constant, see find_good_pkt_pointers().
--		 */
--		if (ra->r64.base != rb->r64.base)
--			return false;
--		if (pass == 1) {
--			jid_note(js, ra->id, rb->id);
--			return true;
--		}
--		if (!jid_strict_ok(js, ra->id, rb->id))
--			return false;
--		if (rb->range != ra->range)
--			dst->range = min(ra->range, rb->range);
--		return join_range(js, dst, ra, rb);
--	case PTR_TO_ARENA:
--		/* The offset is not tracked. */
--		return true;
--	case PTR_TO_INSN:
--		if (!reg_fixed_part_equal(ra, rb))
--			return false;
--		return pass == 1 || join_range(js, dst, ra, rb);
+-		break;
 -	default:
--		if (!reg_value_equal(ra, rb))
+-		if (cnum64_umax(bound->r64) > U32_MAX)
 -			return false;
--		break;
 -	}
+-	if (cnum64_umax(bound->r64) > U32_MAX) {
+-		bound->r64 = cnum64_intersect(bound->r64, cnum64_from_urange(0, U32_MAX));
+-		bound->r32 = cnum32_from_cnum64(bound->r64);
+-	}
+-	return true;
+-}
 -
--	if (pass == 1) {
--		jid_note(js, ra->id, rb->id);
--		jid_note(js, ra->parent_id, rb->parent_id);
--		jid_note(js, ra->map_uid, rb->map_uid);
--		return true;
+-/*
+- * The iteration count depends on the initial value, so 'initial + slope * count' is far off when
+- * the initial value is a range. There is a better bound for the variable that the latch tests:
+- * at the loop header it is what it is at the latch, @iv, minus what the iteration adds on the way.
+- *
+- * A 32-bit latch tells that about the low 32 bits of the register. It can test a copy of a 64-bit
+- * induction variable, 'r6 += 1; w3 = w6; if r3 < 10 goto l': (u32)(a + b) is (u32)a + (u32)b, so
+- * the range holds whatever the upper 32 bits of the register and of the step are.
+- */
+-static void latch_iv_range(struct bpf_verifier_env *env, struct bpf_func_state *st,
+-			   const struct linear_latch *latch, struct cnum64 iv,
+-			   struct bpf_loop_iters *iters)
+-{
+-	struct scev *scev = env->scev;
+-	struct scev_value off;
+-	u32 l, r, regno;
+-	u64 c = 0;
+-
+-	l = latch->base_expr;
+-	if (!is_reg_or_low32(scev, l, &regno)) {
+-		if (!is_add(scev, latch->base_expr, &l, &r) || !is_reg_or_low32(scev, l, &regno) ||
+-		    !eval_expr(env, scev, st, r, 0, &off) || !cnum64_is_const(off.r64) ||
+-		    off.ptr_reg >= 0)
+-			return;
+-		c = off.r64.base;
 -	}
--	if (!jid_strict_ok(js, ra->id, rb->id) ||
--	    !jid_strict_ok(js, ra->parent_id, rb->parent_id) ||
--	    !jid_strict_ok(js, ra->map_uid, rb->map_uid))
+-	scalar_set_unknown(&iters->iv_range);
+-	if (latch->jmp32 || latch->zext32)
+-		iters->iv_range.r32 = cnum32_sub(cnum32_rshift32(iv), cnum32_const(c));
+-	else
+-		iters->iv_range.r64 = cnum64_sub(iv, cnum64_const(c));
+-	iters->iv_reg = regno;
+-}
+-
+-/*
+- * Loop with post-condition:
+- *
+- *    r0 = 0
+- * l: ...                r0 ∈ [0,1,2] header executed 3 times
+- *    r0 += 1            r0 ∈ [0,1,2]
+- *    ...                r0 ∈ [1,2,3]
+- *    if r0 != 3 goto l  r0 ∈ [1,2,3] backedge taken 2 times
+- *    ...                r0 ∈ [3]
+- *
+- * SCEV at header: r0 = k
+- * SCEV at latch:  r0 = 1 + k
+- *
+- * Loop with pre-condition:
+- *
+- *    r0 = 0
+- * l: ...                r0 ∈ [0,1,2,3] header executed 4 times
+- *    if r0 == 3 goto e  r0 ∈ [0,1,2,3] backedge taken 3 times
+- *    r0 += 1            r0 ∈ [0,1,2]
+- *    ...                r0 ∈ [1,2,3]
+- *    goto l             r0 ∈ [1,2,3]
+- * e: ...                r0 ∈ [3]
+- *
+- * SCEV at header: r0 = k
+- * SCEV at latch:  r0 = k
+- */
+-static bool compute_max_iters(struct bpf_verifier_env *env,
+-			      struct bpf_func_state *st,
+-			      struct linear_latch *latch,
+-			      struct bpf_loop_iters *iters, u64 *false_until)
+-{
+-	struct bpf_insn_aux_data *aux = env->insn_aux_data;
+-	struct bpf_loop *loop = aux[bpf_loop_at_index(env, latch->insn_idx)].loop;
+-	struct scev *scev = env->scev;
+-	struct scev_value initial_val, step_val, bound_val, reg_val;
+-	bool sign = is_signed_op(latch->op), konst;
+-	struct cnum64 initial, bound, off;
+-	u64 step, unit = 1, stride;
+-	struct exit_limit el;
+-	bool low32;
+-	u32 l, r;
+-
+-	iters->iv_reg = -1;
+-
+-	if (!eval_expr(env, scev, st, latch->base_expr, 0, &initial_val) ||
+-	    !eval_expr(env, scev, st, latch->step_expr, 0, &step_val) ||
+-	    !eval_expr(env, scev, st, latch->bound_expr, 0, &bound_val))
 -		return false;
--	return join_range(js, dst, ra, rb);
+-
+-	if (step_val.ptr_reg >= 0) {
+-		if (env->log.level & BPF_LOG_LEVEL2) {
+-			bpf_log(&env->log, "scev: latch step is a pointer ");
+-			log_scev_value(env, st, &step_val);
+-			bpf_log(&env->log, "\n");
+-		}
+-		return false;
+-	}
+-	if (!scev_value_compatible(env, st, &initial_val, &bound_val, latch))
+-		return false;
+-
+-	if (!cnum64_is_const(step_val.r64))
+-		return false;
+-	konst = cnum64_is_const(initial_val.r64) && cnum64_is_const(bound_val.r64);
+-
+-	if (latch->zext32 && !latch->jmp32) {
+-		/*
+-		 * (zext32 (linear ...)) is zext32() of something in all iterations but
+-		 * the first one at the loop header, where it is what the register has:
+-		 * no difference if that fits in 32 bits. (+ register imm) is zero extended
+-		 * in the first iteration too, simplify() makes this shape of
+-		 * (zext32 (+ ... imm)) only. Either the register or the sum has to fit.
+-		 */
+-		l = latch->base_expr;
+-		if (!is_reg_or_low32(scev, l, &r) && !is_add(scev, latch->base_expr, &l, &r))
+-			return false;
+-		if (cnum64_umax(initial_val.r64) > U32_MAX &&
+-		    (!eval_expr(env, scev, st, l, 0, &reg_val) ||
+-		     cnum64_umax(reg_val.r64) > U32_MAX))
+-			return false;
+-		if (!bound_of_zext32(latch->op, &bound_val))
+-			return false;
+-		sign = false;
+-	}
+-	low32 = initial_val.ptr_reg < 0 && (latch->jmp32 || latch->zext32);
+-	stride = scalar_stride(scalar_of(&initial_val), low32, &initial);
+-	bound = scalar_arc(scalar_of(&bound_val), low32);
+-	/* '!=' has to hit each bound. For the rest the largest or the smallest bound counts. */
+-	if (latch->op == BPF_JNE)
+-		stride = gcd64(stride, scalar_stride(scalar_of(&bound_val), low32, &bound));
+-	step = step_val.r64.base;
+-	if (initial_val.ptr_reg >= 0) {
+-		/*
+-		 * The jump compares addresses, the ranges are those of the offsets from one base.
+-		 * fp-1 is below fp+0: whatever the op is, addresses have the order of signed
+-		 * offsets, as long as base + offset does not wrap around. The limit is that of
+-		 * reg_not_null(). Nothing limits the offset of a pointer that is compared only.
+-		 */
+-		off = cnum64_from_srange(-BPF_MAX_VAR_OFF, BPF_MAX_VAR_OFF);
+-		if (!cnum64_is_subset(off, initial) || !cnum64_is_subset(off, bound))
+-			return false;
+-		sign = true;
+-	} else if (low32) {
+-		step <<= 32;
+-		unit <<= 32;
+-	}
+-
+-	/* no bound is left for which the latch can be true */
+-	if (cnum64_is_empty(bound))
+-		el = (struct exit_limit){};
+-	else if (!compute_backedge_taken_count(latch->op, sign, unit, initial, step, bound, stride,
+-					       &el))
+-		return false;
+-	/*
+-	 * max_header_count is u32 and U32_MAX means "infinite",
+-	 * check to avoid overflow below.
+-	 */
+-	if (el.max >= U32_MAX - 1)
+-		return false;
+-	if (el.max && initial_val.ptr_reg >= 0) {
+-		/* el.iv has the value that ends the loop. Past the limit the latch may be true. */
+-		if (!cnum64_is_subset(off, el.iv))
+-			return false;
+-		el.false_until = min(el.false_until, (s64)step < 0 ?
+-				     div64_u64(cnum64_smin(initial) + BPF_MAX_VAR_OFF, -step) :
+-				     div64_u64(BPF_MAX_VAR_OFF - cnum64_smax(initial), step));
+-	}
+-	/* linear_bounds() is exact for constants */
+-	if (el.max && !konst)
+-		latch_iv_range(env, st, latch, el.iv, iters);
+-
+-	*false_until = el.false_until;
+-	/* The header executes once on entry and once for each taken backedge, hence +1. */
+-	iters->max_header_count = el.max + 1;
+-	/*
+-	 * The latch is a conditional jump with one jump target exiting the loop.
+-	 * The loop still, however can have multiple exits.
+-	 * In such case, conservatively assume that non-latch exit can happen
+-	 * at any iteration, thus setting minimal number of iterations as 0.
+-	 */
+-	iters->min_header_count = konst && loop->exits_cnt == 1 ? iters->max_header_count : 0;
+-	return true;
 -}
 -
--static bool slot_is_special(const struct bpf_stack_state *s)
+-static void mark_scev_reg_scratched(struct bpf_verifier_env *env, u32 r)
 -{
--	u8 t = s->slot_type[BPF_REG_SIZE - 1];
--
--	return t == STACK_DYNPTR || t == STACK_ITER || t == STACK_IRQ_FLAG;
+-	if (r < MAX_BPF_REG)
+-		mark_reg_scratched(env, r);
+-	else
+-		mark_stack_slot_scratched(env, r - __MAX_BPF_REG);
 -}
 -
--static bool stype_is_invalid(u8 t)
+-/*
+- * An unknown scalar is its own widening.
+- * Stack bytes without a value are represented by scev->unknown_reg.
+- */
+-static bool is_unbound_scev_reg(struct bpf_verifier_env *env, const struct bpf_func_state *st,
+-				u32 r)
 -{
--	return t == STACK_INVALID || t == STACK_POISON;
+-	const struct bpf_reg_state *reg = scev_reg_for_read(env, st, r);
+-
+-	return reg && reg->type == SCALAR_VALUE && scalar_is_unknown(scalar_of(reg));
 -}
 -
--static bool slot_has_spill(const struct bpf_stack_state *s)
+-/*
+- * scev_reg_for_read() has scev->unknown_reg for a partial spill, because a part does not tell
+- * what the 8 bytes of the slot are. But the state has the value of the spilled bytes.
+- * Does it know something about them? If not, they are their own widening too.
+- */
+-static bool is_known_partial_spill(const struct bpf_func_state *st, u32 r)
 -{
--	int i;
+-	const struct bpf_stack_state *stack = scev_regno_to_stack(st, r);
+-	const struct bpf_reg_state *reg;
+-	u64 max;
 -
--	for (i = 0; i < BPF_REG_SIZE; i++)
--		if (s->slot_type[i] == STACK_SPILL)
+-	if (!stack || !bpf_is_spilled_reg(stack) || bpf_spill_size(stack) == BPF_REG_SIZE)
+-		return false;
+-	reg = &stack->spilled_ptr;
+-	max = GENMASK_ULL(bpf_spill_size(stack) * BITS_PER_BYTE - 1, 0);
+-	return (reg->var_off.mask & max) != max || reg->r64.size < max || reg->r32.size < max ||
+-	       reg->step > 1;
+-}
+-
+-/*
+- * Is @id made from a partial spill that the loop changes? '?' can be made from anything.
+- * @self is the slot whose next value is @id, as long as only (any ...) is above @id:
+- * (any self ...) tells that one of the paths does not change the slot.
+- */
+-static bool made_from_partial_spill(struct scev *scev, const struct bpf_func_state *st,
+-				    const struct env *header_env, u32 id, int self, u32 lvl)
+-{
+-	const struct expr *e = &scev->exprs[id];
+-	u32 i;
+-
+-	if (lvl >= EXPR_STACK_DEPTH || e->op == UNKNOWN)
+-		return true;
+-	if (e->op == REG)
+-		return (int)e->params[0] != self && is_known_partial_spill(st, e->params[0]) &&
+-		       header_env->reg2expr[e->params[0]] != id;
+-	for (i = 0; i < op_params_num(e->op); i++)
+-		if (made_from_partial_spill(scev, st, header_env, e->params[i],
+-					    e->op == ANY ? self : -1, lvl + 1))
 -			return true;
 -	return false;
 -}
 -
--static bool join_special_slot(struct bpf_join_state *js, const struct bpf_stack_state *sa,
--			      const struct bpf_stack_state *sb, int pass)
--{
--	const struct bpf_reg_state *ra = &sa->spilled_ptr, *rb = &sb->spilled_ptr;
--
--	if (memcmp(sa->slot_type, sb->slot_type, sizeof(sa->slot_type)))
--		return false;
--	switch (sa->slot_type[BPF_REG_SIZE - 1]) {
--	case STACK_DYNPTR:
--		if (ra->dynptr.type != rb->dynptr.type ||
--		    ra->dynptr.first_slot != rb->dynptr.first_slot)
--			return false;
--		break;
--	case STACK_ITER:
--		if (ra->type != rb->type || ra->iter.btf != rb->iter.btf ||
--		    ra->iter.btf_id != rb->iter.btf_id || ra->iter.state != rb->iter.state ||
--		    ra->iter.loops != rb->iter.loops)
--			return false;
--		break;
--	case STACK_IRQ_FLAG:
--		if (ra->irq.kfunc_class != rb->irq.kfunc_class)
--			return false;
--		break;
--	}
--	if (pass == 1) {
--		jid_note(js, ra->id, rb->id);
--		jid_note(js, ra->parent_id, rb->parent_id);
--		return true;
--	}
--	return jid_strict_ok(js, ra->id, rb->id) &&
--	       jid_strict_ok(js, ra->parent_id, rb->parent_id);
--}
--
 -/*
-- * Join of one 8 byte stack slot, @ds is a copy of @sa on entry.
-- * stacksafe() documents which slot is within which.
+- * bpf_compute_const_regs() has @r as a constant at @insn_idx, the head of a loop: it's the same in
+- * every iteration. do_check() takes a value that a range adds to it, or to what is computed
+- * from it, for a bug.
+- * That pass knows no types: arithmetic on a pointer to arena runs in 32 bits, and a pointer and a
+- * number can have one constant. As for a pointer to arena below, this is not relied on.
 - */
--static bool join_slot(struct bpf_join_state *js, struct bpf_stack_state *ds,
--		      const struct bpf_stack_state *sa, const struct bpf_stack_state *sb, int pass)
+-static bool is_const_scev_reg(struct bpf_verifier_env *env, int insn_idx, u32 r)
 -{
--	static const struct bpf_stack_state invalid_slot;
--	bool a_ptr, b_ptr;
--	u8 res[BPF_REG_SIZE];
--	int i;
+-	struct bpf_insn_aux_data *aux = &env->insn_aux_data[insn_idx];
 -
--	if (!sb)
--		sb = &invalid_slot;
+-	return r < ARRAY_SIZE(aux->const_reg_vals) &&
+-	       ((aux->const_reg_mask | aux->const_reg_wide_mask) & BIT(r));
+-}
 -
--	if (slot_is_special(sa) || slot_is_special(sb))
--		return join_special_slot(js, sa, sb, pass);
--
--	if (!memcmp(sa->slot_type, sb->slot_type, sizeof(sa->slot_type)) &&
--	    sa->slot_type[BPF_REG_SIZE - 1] == STACK_SPILL)
--		return join_reg(js, &ds->spilled_ptr, &sa->spilled_ptr, &sb->spilled_ptr, pass);
--
--	a_ptr = slot_has_spill(sa) && sa->spilled_ptr.type != SCALAR_VALUE;
--	b_ptr = slot_has_spill(sb) && sb->spilled_ptr.type != SCALAR_VALUE;
--	/* a pointer and something else */
--	if (a_ptr || b_ptr)
+-/* Main logic in verifier.c forbids varying offsets for certain register types. */
+-bool bpf_is_widenable_reg_type(const struct bpf_reg_state *reg)
+-{
+-	if (type_may_be_null(reg->type))
 -		return false;
 -
--	/* the prog can't read uninitialized stack: slots of different kinds have no join */
--	if (!js->env->allow_uninit_stack)
--		return !memcmp(sa->slot_type, sb->slot_type, sizeof(sa->slot_type));
--
--	/* scalar spills, MISC, ZERO, INVALID, POISON: no ids are kept */
--	if (pass == 1)
+-	switch (base_type(reg->type)) {
+-	case SCALAR_VALUE:
+-	case PTR_TO_MAP_VALUE:
+-	case PTR_TO_MAP_KEY:
+-	case PTR_TO_STACK:
+-	case PTR_TO_PACKET:
+-	case PTR_TO_PACKET_META:
+-	case PTR_TO_MEM:
+-	case PTR_TO_BTF_ID:
 -		return true;
--
--	for (i = 0; i < BPF_REG_SIZE; i++) {
--		u8 x = sa->slot_type[i], y = sb->slot_type[i];
--
--		if (x == STACK_SPILL)
--			x = STACK_MISC;
--		if (y == STACK_SPILL)
--			y = STACK_MISC;
--		if (stype_is_invalid(x) && stype_is_invalid(y))
--			res[i] = sa->slot_type[i];
--		else if (stype_is_invalid(x) || stype_is_invalid(y))
--			res[i] = STACK_INVALID;
--		else if (x == y)
--			res[i] = x;
--		else
--			res[i] = STACK_MISC;
--	}
--	memcpy(ds->slot_type, res, sizeof(res));
--	bpf_mark_reg_not_init(js->env, &ds->spilled_ptr);
--	return true;
--}
--
--static bool join_loop_stack(const struct bpf_func_state *fa, const struct bpf_func_state *fb)
--{
--	u32 i;
--
--	if (fa->loop_stack_cnt != fb->loop_stack_cnt)
--		return false;
--	/* what is known about a counted loop comes from the state it was entered with */
--	for (i = 0; i < fa->loop_stack_cnt; i++)
--		if (fa->loop_stack[i].loop_id != fb->loop_stack[i].loop_id ||
--		    fa->loop_stack[i].terminates != fb->loop_stack[i].terminates ||
--		    fa->loop_stack[i].guarded != fb->loop_stack[i].guarded ||
--		    fa->loop_stack[i].counted != fb->loop_stack[i].counted ||
--		    fa->loop_stack[i].apart != fb->loop_stack[i].apart ||
--		    fa->loop_stack[i].first != fb->loop_stack[i].first ||
--		    (fa->loop_stack[i].apart && fa->loop_stack[i].trip != fb->loop_stack[i].trip) ||
--		    fa->loop_stack[i].refs != fb->loop_stack[i].refs ||
--		    fa->loop_stack[i].max_header_count != fb->loop_stack[i].max_header_count ||
--		    fa->loop_stack[i].entry_state != fb->loop_stack[i].entry_state)
--			return false;
--	return true;
--}
--
--static bool join_func(struct bpf_join_state *js, struct bpf_func_state *fd,
--		      const struct bpf_func_state *fa, const struct bpf_func_state *fb,
--		      u16 live_regs, int pass)
--{
--	static const struct bpf_reg_state not_init = { .type = NOT_INIT };
--	struct bpf_verifier_env *env = js->env;
--	u32 i, nslots_b;
--	bool in_a, in_b;
--
--	if (pass == 1) {
--		if (fa->callsite != fb->callsite || fa->frameno != fb->frameno ||
--		    fa->subprogno != fb->subprogno)
--			return false;
--		if (fa->in_callback_fn != fb->in_callback_fn ||
--		    fa->in_async_callback_fn != fb->in_async_callback_fn ||
--		    fa->in_exception_callback_fn != fb->in_exception_callback_fn ||
--		    fa->in_rcu_callback_fn != fb->in_rcu_callback_fn ||
--		    fa->async_entry_cnt != fb->async_entry_cnt ||
--		    memcmp(&fa->callback_ret_range, &fb->callback_ret_range,
--			   sizeof(fa->callback_ret_range)))
--			return false;
--		if (fa->entry_refs != fb->entry_refs ||
--		    fa->entry_rcu_locks != fb->entry_rcu_locks ||
--		    fa->entry_preempt_locks != fb->entry_preempt_locks)
--			return false;
--		if (!join_loop_stack(fa, fb))
--			return false;
--		jid_note(js, fa->frame_id, fb->frame_id);
--	} else if (!jid_strict_ok(js, fa->frame_id, fb->frame_id)) {
+-	default:
 -		return false;
 -	}
+-}
 -
--	for (i = 0; i < MAX_BPF_REG; i++) {
--		if (!(live_regs & BIT(i))) {
--			if (pass == 2 && i < BPF_REG_FP)
--				bpf_mark_reg_not_init(env, &fd->regs[i]);
+-static void scratch_widened_reg_id(struct bpf_verifier_env *env, struct bpf_reg_state *reg)
+-{
+-	switch (base_type(reg->type)) {
+-	case PTR_TO_PACKET:
+-	case PTR_TO_PACKET_META:
+-		reg->id = ++env->id_gen;
+-		break;
+-	default:
+-		break;
+-	}
+-}
+-
+-/* Check that ANY leaves can be unioned with r's loop-entry value. */
+-static bool is_widenable_any(struct bpf_verifier_env *env, struct bpf_func_state *loop_entry,
+-			     struct env *header_env, u32 r, u32 id)
+-{
+-	const struct bpf_reg_state *reg, *leaf_reg;
+-	struct scev *scev = env->scev;
+-	u32 l, ra, rr, leaf, order;
+-	s64 imm;
+-
+-	if (!is_any(scev, id, &l, &rr))
+-		return false;
+-	reg = scev_reg_for_read(env, loop_entry, r);
+-	if (!reg || !bpf_is_widenable_reg_type(reg))
+-		return false;
+-
+-	scev->stack_sz = 0;
+-	expr_stack_push(scev, id);
+-	while (expr_next(scev, &id, &order)) {
+-		if (order & DEPTH_LIMIT)
+-			return false;
+-		if (!(order & PRE) || is_any(scev, id, &l, &rr))
 -			continue;
--		}
--		js->place = i;
--		if (!join_reg(js, &fd->regs[i], &fa->regs[i], &fb->regs[i], pass))
--			return false;
--	}
--
--	nslots_b = bpf_stack_nr_slots(fb);
--	for (i = 0; i < bpf_stack_nr_slots(fa); i++) {
--		const struct bpf_stack_state *sb = i < nslots_b ? bpf_stack_slot(fb, i) : NULL;
--
--		js->place = BPF_LOOP_SLOT + i;
--		if (!join_slot(js, bpf_stack_slot(fd, i), bpf_stack_slot(fa, i), sb, pass))
--			return false;
--	}
--	js->place = -1;
--	/* Slots that exist only in 'b' are STACK_INVALID in the result. */
--	for (i = bpf_stack_nr_slots(fa); pass == 1 && i < nslots_b; i++) {
--		const struct bpf_stack_state *sb = bpf_stack_slot(fb, i);
--
--		if (slot_is_special(sb) ||
--		    (slot_has_spill(sb) && sb->spilled_ptr.type != SCALAR_VALUE))
--			return false;
--	}
--
--	if (fa->out_stack_arg_cnt < fb->out_stack_arg_cnt)
--		return false;
--	/* incoming arguments are not joined with outgoing ones: that side has no outgoing ones */
--	in_a = bpf_stack_args_are_incoming(fa) && !bpf_stack_args_are_incoming(fb);
--	in_b = bpf_stack_args_are_incoming(fb) && !bpf_stack_args_are_incoming(fa);
--	for (i = 0; i < fa->out_stack_arg_cnt; i++) {
--		const struct bpf_reg_state *rb;
--
--		if (in_a) {
--			if (pass == 2)
--				bpf_mark_reg_not_init(env, &fd->stack_arg_regs[i]);
--			continue;
--		}
--		rb = i < fb->out_stack_arg_cnt && !in_b ? &fb->stack_arg_regs[i] : &not_init;
--		if (!join_reg(js, &fd->stack_arg_regs[i], &fa->stack_arg_regs[i], rb, pass))
--			return false;
--	}
--
--	if (pass == 2) {
--		fd->no_stack_arg_load = fa->no_stack_arg_load || fb->no_stack_arg_load;
--		fd->callback_depth = min(fa->callback_depth, fb->callback_depth);
--		for (i = 0; i < fd->loop_stack_cnt; i++)
--			fd->loop_stack[i].trip = max(fd->loop_stack[i].trip, fb->loop_stack[i].trip);
--	}
--	return true;
--}
--
--/* Things that can't be different in two states that are joined */
--static bool join_check_state(const struct bpf_verifier_state *a,
--			     const struct bpf_verifier_state *b)
--{
--	int i;
--
--	if (a->curframe != b->curframe || a->insn_idx != b->insn_idx)
--		return false;
--	if (a->speculative != b->speculative || a->in_sleepable != b->in_sleepable ||
--	    a->callers_unknown != b->callers_unknown ||
--	    a->unwound != b->unwound || a->changed_pkt_data != b->changed_pkt_data)
--		return false;
--	if (a->active_locks != b->active_locks ||
--	    a->active_preempt_locks != b->active_preempt_locks ||
--	    a->active_rcu_locks != b->active_rcu_locks ||
--	    a->active_lock_ptr != b->active_lock_ptr ||
--	    !a->active_irq_id != !b->active_irq_id ||
--	    !a->active_lock_id != !b->active_lock_id)
--		return false;
--	if (a->acquired_refs != b->acquired_refs)
--		return false;
--	for (i = 0; i < a->acquired_refs; i++) {
--		if (a->refs[i].type != b->refs[i].type)
--			return false;
--		switch (a->refs[i].type) {
--		case REF_TYPE_PTR:
--		case REF_TYPE_IRQ:
--			break;
--		default:
--			if (a->refs[i].ptr != b->refs[i].ptr)
+-		if (is_imm(scev, id, &imm)) {
+-			if (reg->type != SCALAR_VALUE)
 -				return false;
+-		} else if (is_reg(scev, id, &leaf)) {
+-			/* Other leaves must denote loop-invariant registers. */
+-			if (leaf != r &&
+-			    !(is_reg(scev, header_env->reg2scev[leaf], &ra) && ra == leaf))
+-				return false;
+-			leaf_reg = scev_reg_for_read(env, loop_entry, leaf);
+-			if (!leaf_reg || !bpf_reg_union_compatible(reg, leaf_reg))
+-				return false;
+-		} else {
+-			return false;
 -		}
 -	}
 -	return true;
 -}
 -
--static void join_refs_note(struct bpf_join_state *js, const struct bpf_verifier_state *a,
--			   const struct bpf_verifier_state *b)
+-static void log_bounds(struct bpf_verifier_env *env, const struct scalar *bounds)
 -{
--	int i;
+-	struct bpf_verifier_log *log = &env->log;
 -
--	jid_note(js, a->active_irq_id, b->active_irq_id);
--	jid_note(js, a->active_lock_id, b->active_lock_id);
--	for (i = 0; i < a->acquired_refs; i++) {
--		jid_note(js, a->refs[i].id, b->refs[i].id);
--		if (a->refs[i].type == REF_TYPE_PTR)
--			jid_note(js, a->refs[i].parent_id, b->refs[i].parent_id);
+-	bpf_verbose_snum(env, cnum64_smin(bounds->r64));
+-	bpf_log(log, "..");
+-	bpf_verbose_snum(env, cnum64_smax(bounds->r64));
+-	if (bounds->r32.size < U32_MAX &&
+-	    (cnum32_smin(bounds->r32) != cnum64_smin(bounds->r64) ||
+-	     cnum32_smax(bounds->r32) != cnum64_smax(bounds->r64))) {
+-		bpf_log(log, " (s32 ");
+-		bpf_verbose_snum32(env, cnum32_smin(bounds->r32));
+-		bpf_log(log, "..");
+-		bpf_verbose_snum32(env, cnum32_smax(bounds->r32));
+-		bpf_log(log, ")");
 -	}
+-	bpf_log(log, " step %u", bounds->step);
 -}
 -
--static bool join_refs_check(struct bpf_join_state *js, const struct bpf_verifier_state *a,
--			    const struct bpf_verifier_state *b)
--{
--	int i;
+-struct linear_coefs {
+-	u32 base_reg;
+-	s64 slope;
+-	bool zext32;
+-	/* with zext32: the low 32 bits of a stack slot */
+-	bool spill32;
+-	/* with zext32: the low 32 bits are sign extended */
+-	bool sext32;
+-};
 -
--	if (!jid_strict_ok(js, a->active_irq_id, b->active_irq_id) ||
--	    !jid_strict_ok(js, a->active_lock_id, b->active_lock_id))
+-static bool is_simple_slope(struct scev *scev, u32 id, s64 *slope)
+-{
+-	return is_imm(scev, id, slope) &&
+-	       *slope <= S16_MAX &&
+-	       *slope >= S16_MIN &&
+-	       *slope != 0;
+-}
+-
+-static bool is_simple_linear(struct scev *scev, u32 id, struct linear_coefs *out)
+-{
+-	u32 base, slope;
+-
+-	out->spill32 = false;
+-	out->sext32 = is_unop(scev, SEXT32, id, &id);
+-	if (!is_linear_or_linear32(scev, id, &base, &slope, &out->zext32) ||
+-	    (out->sext32 && out->zext32))
 -		return false;
--	for (i = 0; i < a->acquired_refs; i++) {
--		if (!jid_strict_ok(js, a->refs[i].id, b->refs[i].id))
--			return false;
--		if (a->refs[i].type == REF_TYPE_PTR &&
--		    !jid_strict_ok(js, a->refs[i].parent_id, b->refs[i].parent_id))
--			return false;
--	}
--	return true;
--}
--
--/* The result has to describe everything that an input describes */
--static int join_check(struct bpf_join_state *js, struct bpf_verifier_state *dst,
--		      const struct bpf_verifier_state *in, const char *which)
--{
--	struct bpf_verifier_env *env = js->env;
--
--	if (bpf_state_subsumes(env, dst, (struct bpf_verifier_state *)in))
--		return 0;
--	/* check_ids() has no room left: that says nothing about the join */
--	if (env->idmap_scratch.cnt == BPF_ID_MAP_SIZE)
--		return 1;
--	bpf_log(&env->log, "join:");
--	print_verifier_state(env, dst, dst->curframe, true);
--	bpf_log(&env->log, "input %s:", which);
--	print_verifier_state(env, in, in->curframe, true);
--	verifier_bug(env, "join of states at insn %u does not subsume input '%s'",
--		     dst->insn_idx, which);
--	return -EFAULT;
+-	out->zext32 |= out->sext32;
+-	return is_reg(scev, base, &out->base_reg) &&
+-	       is_simple_slope(scev, slope, &out->slope);
 -}
 -
 -/*
-- * Compute in @dst the state that describes everything that @a or @b describe.
-- * @dst has to be a valid state (zeroed is fine) different from @a and @b, its
-- * previous content is released. Bookkeeping fields are copied from @a.
-- *
-- * Returns 0 on success, 1 if there is no join, negative error otherwise.
-- * When 1 is returned the content of @dst is undefined, but it's a valid state.
+- * Is @r 'its entry value + slope * k' at the header in iteration k? @id is its SCEV there. At a
+- * jump in the loop @id can be linear in the entry value of another register: the entry value of @r
+- * does not bound it then.
 - */
--int bpf_states_join(struct bpf_verifier_env *env, struct bpf_verifier_state *dst,
--		    const struct bpf_verifier_state *a, const struct bpf_verifier_state *b,
--		    bool widen)
+-static bool is_linear_at_header(struct scev *scev, u32 id, u32 r, struct linear_coefs *out)
 -{
--	struct bpf_join_state *js = join_state(env);
--	const struct bpf_func_state *frame;
--	int pass, fr, err;
+-	return is_simple_linear(scev, id, out) && out->base_reg == r;
+-}
 -
--	if (!js)
--		return -ENOMEM;
--	js->widen = widen;
--	js->npairs = 0;
--	js->pairs_overflow = false;
+-/*
+- * A 32-bit counter that lives on the stack: the SCEV of slot @r is
+- * (spill32 (linear (zext32 @r) slope)) and there is a 32-bit number in the slot in @st.
+- * Return what is known about that number.
+- */
+-static struct bpf_reg_state *spill32_counter(struct scev *scev, struct bpf_func_state *st,
+-					     u32 id, u32 r, struct linear_coefs *out)
+-{
+-	u32 t, base, slope;
 -
--	if (!join_check_state(a, b))
--		return 1;
--	err = bpf_copy_verifier_state(dst, a);
+-	if (!is_spill32(scev, id, &t) ||
+-	    !is_linear(scev, t, &base, &slope) ||
+-	    !is_zext32(scev, base, &t) ||
+-	    !is_reg(scev, t, &out->base_reg) || out->base_reg != r ||
+-	    !is_simple_slope(scev, slope, &out->slope))
+-		return NULL;
+-	out->zext32 = true;
+-	out->spill32 = true;
+-	out->sext32 = false;
+-	return scev_reg_for_spill32(st, r);
+-}
+-
+-/* Compute the range an induction variable in `reg` spans over the loop. */
+-static void linear_bounds(const struct scalar *reg, u32 max_header_count,
+-			  struct linear_coefs *coefs, struct scalar *out)
+-{
+-	s64 slope = coefs->slope;
+-	s64 slope_abs = slope < 0 ? -slope : slope;
+-	struct scalar low;
+-	s64 min_val, max_val;
+-	struct cnum64 r64;
+-	struct cnum32 r32;
+-	s64 total_change;
+-	bool overflow, konst;
+-	u16 step;
+-
+-	if (coefs->spill32) {
+-		/* what 'rX = *(u32 *)(r10 - 8)' loads */
+-		low = *reg;
+-		scalar_zext32(&low);
+-		reg = &low;
+-	}
+-	min_val = cnum64_smin(reg->r64);
+-	max_val = cnum64_smax(reg->r64);
+-	overflow = check_mul_overflow(slope, (s64)max_header_count - 1, &total_change) ||
+-		   (slope > 0 && check_add_overflow(max_val, total_change, &max_val)) ||
+-		   (slope < 0 && check_add_overflow(min_val, total_change, &min_val));
+-	r64 = overflow ? CNUM64_UNBOUNDED : cnum64_from_srange(min_val, max_val);
+-	r32 = CNUM32_UNBOUNDED;
+-	if (coefs->zext32) {
+-		r32 = cnum32_from_cnum64(r64);
+-		r64 = coefs->sext32 ? cnum64_sext32(r32) : cnum64_zext32(r32);
+-		/*
+-		 * 32-bit iteration overflow is equivalent to subtracting N * 2**32:
+-		 * (base + slope * k) % slope ≠ (base + slope * k - N * 2**32) % slope.
+-		 */
+-		overflow |= coefs->sext32 ?
+-			    cnum32_contains(r32, S32_MAX) && cnum32_contains(r32, S32_MIN) :
+-			    cnum32_contains(r32, 0) && cnum32_contains(r32, U32_MAX);
+-		/*
+-		 * The entry and zero-extended values must agree on how they define `base`,
+-		 * otherwise `base + slope * k` would define different sets of points between
+-		 * the two.
+-		 */
+-		overflow |= imod(cnum64_smin(reg->r64), slope_abs) !=
+-			    imod(cnum64_smin(r64), slope_abs);
+-		/*
+-		 * Full range is a union of a reg's value at loop entry,
+-		 * plus a range produced by 32-bit iteration.
+-		 */
+-		r64 = cnum64_union(reg->r64, r64);
+-		r32 = cnum32_union(reg->r32, r32);
+-	}
+-	/*
+-	 * The value set is 'v + slope * k'. It has the power-of-two alignment shared by the entry
+-	 * value and the slope. The entry value is congruent to base modulo step, so the sum is,
+-	 * modulo gcd(step, |slope|), unless it wraps. A single point is its own base, its step
+-	 * is 0: every number divides 0. One step is kept: the gcd if it implies the alignment.
+-	 */
+-	out->step = 1u << min_t(u32, tnum_alignment(reg->var_off), __ffs(slope_abs));
+-	out->base = 0;
+-	konst = cnum64_is_const(reg->r64);
+-	step = gcd(konst ? 0 : reg->step, slope_abs);
+-	if (!overflow && step > out->step && !(step % out->step)) {
+-		out->step = step;
+-		out->base = konst ? imod(cnum64_smin(reg->r64), step) : reg->base % step;
+-	}
+-	out->var_off = tnum_unknown;
+-	out->r64 = r64;
+-	out->r32 = r32;
+-}
+-
+-/*
+- * Is @r the induction variable that the latch tests, or congruent to it: equal to it at the header
+- * of the loop at @h in every iteration? Then the range of the one is the range of the other.
+- * Expressions have no types: after 'r9 = le64 r9' a scalar holds the address, and the range of the
+- * pointer is that of its offset. So in @loop_entry both are scalars, or pointers to one object.
+- */
+-static bool is_iv_at_header(struct bpf_verifier_env *env, const struct bpf_func_state *loop_entry,
+-			    int h, int iv_reg, u32 r)
+-{
+-	const struct bpf_reg_state *iv, *reg;
+-	s64 delta;
+-
+-	if (iv_reg < 0)
+-		return false;
+-	if (r == iv_reg)
+-		return true;
+-	iv = scev_reg_for_read(env, loop_entry, iv_reg);
+-	reg = scev_reg_for_read(env, loop_entry, r);
+-	return iv && reg && bpf_reg_union_compatible(iv, reg) &&
+-	       const_diff_at_header(env, h, iv_reg, r, &delta) && !delta;
+-}
+-
+-/*
+- * A 32-bit latch bounds the low 32 bits of the induction variable. What follows for all 64 bits
+- * is the reduction that reg_bounds_sync() makes. It is made here for the log, and because two
+- * ranges that are not empty can have no number in common.
+- */
+-static void iv_bounds(struct scalar *bounds, const struct scalar *iv_range)
+-{
+-	struct cnum32 r32 = cnum32_intersect(bounds->r32, iv_range->r32);
+-	struct cnum64 r64 = cnum64_intersect(bounds->r64, iv_range->r64);
+-
+-	r64 = cnum64_cnum32_intersect(r64, r32);
+-	if (cnum64_is_empty(r64))
+-		return;
+-	bounds->r64 = r64;
+-	bounds->r32 = r32;
+-}
+-
+-/*
+- * Nothing that @id is computed from is what a register had at the head of the loop, and
+- * some of it is not known: it's made anew in every iteration. @call: by a call.
+- */
+-static bool expr_is_fresh(struct bpf_verifier_env *env, u32 id, bool *call)
+-{
+-	struct scev *scev = env->scev;
+-	bool opaque = false;
+-	u32 order, regno;
+-
+-	*call = false;
+-	scev->stack_sz = 0;
+-	expr_stack_push(scev, id);
+-	while (expr_next(scev, &id, &order)) {
+-		if (order & DEPTH_LIMIT)
+-			return false;
+-		if (!(order & PRE))
+-			continue;
+-		if (is_reg(scev, id, &regno) || is_op(scev, id, UNKNOWN))
+-			return false;
+-		if (is_opaque(scev, id)) {
+-			opaque = true;
+-			*call |= scev->exprs[id].params[0];
+-		}
+-	}
+-	return opaque;
+-}
+-
+-/*
+- * Does @id have no bit that register @r doesn't have at the head of the loop? 'x & e' and the
+- * low bits of x lose bits only. 'x >> e', 'x / e' and 'x % e' are not greater than x as well, but
+- * iterations one by one tell more about them: a number that is halved 8 times.
+- */
+-static bool expr_loses_bits_only(struct scev *scev, u32 id, u32 r, int depth)
+-{
+-	struct expr *e = &scev->exprs[id];
+-	u32 regno;
+-
+-	if (is_reg(scev, id, &regno))
+-		return regno == r;
+-	if (depth > 8)
+-		return false;
+-	switch (e->op) {
+-	case BPF_AND:
+-		return expr_loses_bits_only(scev, e->params[0], r, depth + 1) ||
+-		       expr_loses_bits_only(scev, e->params[1], r, depth + 1);
+-	case ANY:
+-		return expr_loses_bits_only(scev, e->params[0], r, depth + 1) &&
+-		       expr_loses_bits_only(scev, e->params[1], r, depth + 1);
+-	case ZEXT8:
+-	case ZEXT16:
+-	case ZEXT32:
+-		return expr_loses_bits_only(scev, e->params[0], r, depth + 1);
+-	default:
+-		return false;
+-	}
+-}
+-
+-/* The ranges of @reg are [0, max]. So no bit is known to be 1. */
+-static bool reg_is_zero_to_max(const struct bpf_reg_state *reg)
+-{
+-	struct cnum64 r64 = cnum64_from_urange(0, reg_umax(reg));
+-
+-	return cnum64_is_subset(reg->r64, r64) &&
+-	       cnum32_is_subset(reg->r32, cnum32_from_cnum64(r64)) && reg->step <= 1;
+-}
+-
+-/*
+- * A jump that leaves the loop and dominates @backedge tells in which iterations @backedge can
+- * be taken: in none from the count of the jump to @false_until. That bounds the iterations of
+- * the loop only if it has no other back edge. Keep the jump with the smallest count.
+- * Return 1 if there is one.
+- */
+-static int count_backedge(struct bpf_verifier_env *env, struct bpf_func_state *st, int insn_idx,
+-			  struct bpf_backedge *backedge, struct bpf_loop_iters *iters,
+-			  struct linear_latch *best, u64 *false_until)
+-{
+-	struct bpf_verifier_log *log = &env->log;
+-	struct bpf_loop_iters tmp;
+-	struct linear_latch latch;
+-	bool found = false;
+-	int linear_latch;
+-	int latch_idx;
+-	u64 until;
+-	int j;
+-
+-	/* If this backedge has a latch */
+-	if (!backedge->latches_cnt) {
+-		if (log->level & BPF_LOG_LEVEL2)
+-			bpf_log(log, "loop header at %d, latch not identified\n", insn_idx);
+-		return 0;
+-	}
+-
+-	for (j = 0; j < backedge->latches_cnt; j++) {
+-		latch_idx = backedge->latches[j];
+-		linear_latch = match_linear_latch(env, insn_idx, latch_idx,
+-						  backedge->taken_leaves & BIT(j), &latch);
+-		if (linear_latch < 0)
+-			return linear_latch;
+-		if (!linear_latch) {
+-			if (log->level & BPF_LOG_LEVEL2)
+-				bpf_log(log, "loop header at %d, non-linear %s at %d\n",
+-					insn_idx, j ? "exit" : "latch", latch_idx);
+-			continue;
+-		}
+-		if (!compute_max_iters(env, st, &latch, &tmp, &until)) {
+-			if (log->level & BPF_LOG_LEVEL2)
+-				bpf_log(log,
+-					"loop header at %d, can't compute iterations count at %d\n",
+-					insn_idx, latch_idx);
+-			continue;
+-		}
+-		/* a flag can have other reasons to end the loop */
+-		if (!bpf_jump_leaves_loop(env, insn_idx, latch_idx))
+-			tmp.min_header_count = 0;
+-		if (!found || tmp.max_header_count < iters->max_header_count) {
+-			iters->max_header_count = tmp.max_header_count;
+-			iters->iv_reg = tmp.iv_reg;
+-			iters->iv_range = tmp.iv_range;
+-			*false_until = until;
+-			*best = latch;
+-		}
+-		iters->min_header_count = found ? min(iters->min_header_count, tmp.min_header_count)
+-						: tmp.min_header_count;
+-		found = true;
+-	}
+-	if (!found && (log->level & BPF_LOG_LEVEL2))
+-		bpf_log(log, "loop header at %d, can't compute iterations count\n", insn_idx);
+-	return found;
+-}
+-
+-/* Two jumps that test the same thing: in each iteration both are true or both are false. */
+-static bool same_latch(const struct linear_latch *a, const struct linear_latch *b)
+-{
+-	return a->base_expr == b->base_expr && a->step_expr == b->step_expr &&
+-	       a->bound_expr == b->bound_expr && a->op == b->op &&
+-	       a->zext32 == b->zext32 && a->jmp32 == b->jmp32;
+-}
+-
+-int bpf_compute_loop_iters(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
+-			   struct bpf_loop_iters *iters)
+-{
+-	struct bpf_func_state *cur_func = st->frame[st->curframe];
+-	struct bpf_insn_aux_data *aux = env->insn_aux_data;
+-	struct bpf_verifier_log *log = &env->log;
+-	struct scev *scev = env->scev;
+-	struct env *header_env;
+-	struct linear_latch latch, first;
+-	struct linear_coefs coefs;
+-	struct bpf_loop_iters tmp;
+-	struct bpf_loop *loop;
+-	int insn_idx = st->insn_idx;
+-	u64 until, false_until;
+-	bool same = true, walk = false, call;
+-	int err, i;
+-	u32 r;
+-
+-	if (!env->allow_uninit_stack)
+-		return 0;
+-
+-	/*
+-	 * If insn_idx is a loop header for a reducible loop.
+-	 * loop is NULL for secondary entries to irreducible loops.
+-	 */
+-	loop = aux[insn_idx].loop;
+-	if (!loop || loop->irreducible || loop->backedges_overflow ||
+-	    loop->nested_exits_overflow) {
+-		if (log->level & BPF_LOG_LEVEL2)
+-			bpf_log(log, "loop header at %d, unsupported loop:%s%s%s\n", insn_idx,
+-				!loop || loop->irreducible ? " irreducible" : "",
+-				loop && loop->backedges_overflow ? " too many backedges" : "",
+-				loop && loop->nested_exits_overflow ?
+-				" too many exits of a nested loop" : "");
+-		return 0;
+-	}
+-
+-	/*
+-	 * A register that is linear at the header is 'first value + slope * k' in iteration k
+-	 * whatever back edges were taken. So the jumps that dominate a back edge say in
+-	 * which iterations it can be taken. The loop ends, at the latest, in an iteration
+-	 * in which no back edge can be taken.
+-	 */
+-	for (i = 0; i < loop->backedges_cnt; i++) {
+-		err = count_backedge(env, cur_func, insn_idx, &loop->backedges[i],
+-				     i ? &tmp : iters, &latch, &until);
+-		if (err <= 0)
+-			return err;
+-		if (!i) {
+-			false_until = until;
+-			first = latch;
+-			continue;
+-		}
+-		same &= same_latch(&first, &latch);
+-		false_until = min(false_until, until);
+-		iters->max_header_count = max(iters->max_header_count, tmp.max_header_count);
+-		iters->min_header_count = min(iters->min_header_count, tmp.min_header_count);
+-		/* at the header the variable is what one of the latches lets through */
+-		if (iters->iv_reg >= 0 && iters->iv_reg == tmp.iv_reg)
+-			scalar_union(&iters->iv_range, &tmp.iv_range);
+-		else
+-			iters->iv_reg = -1;
+-	}
+-	/*
+-	 * When the latches that were kept are the same test, the first iteration in which it's
+-	 * false is the last one. Otherwise take the largest count and make sure that the latches
+-	 * which became false earlier are false still.
+-	 */
+-	if (!same && iters->max_header_count - 1 > false_until) {
+-		if (log->level & BPF_LOG_LEVEL2)
+-			bpf_log(log,
+-				"loop header at %d, a latch may be true again in iteration %u\n",
+-				insn_idx, iters->max_header_count - 1);
+-		return 0;
+-	}
+-
+-	/*
+-	 * It leaves the loop itself: a flag does that later. If one edge does the one and the
+-	 * other edge the other, the last iteration goes on behind the jump as well.
+-	 */
+-	iters->count_insn = bpf_jump_leaves_loop(env, insn_idx, first.insn_idx) &&
+-			    aux[first.insn_idx].edge_leaves != 3 ? first.insn_idx : -1;
+-
+-	if (iters->max_header_count == 0) {
+-		if (log->level & BPF_LOG_LEVEL2)
+-			bpf_log(log, "loop header at %d, 0 iterations count\n", insn_idx);
+-		return 0;
+-	}
+-
+-	if (iters->max_header_count == U32_MAX) {
+-		if (log->level & BPF_LOG_LEVEL2)
+-			bpf_log(log, "loop header at %d, inf iterations count\n", insn_idx);
+-		return 0;
+-	}
+-
+-	if (log->level & BPF_LOG_LEVEL2) {
+-		bpf_log(log, "loop header at %d, header_count is ", insn_idx);
+-		if (iters->min_header_count == iters->max_header_count)
+-			bpf_log(log, "%u ", iters->max_header_count);
+-		else
+-			bpf_log(log, "[%u..%u] ", iters->min_header_count, iters->max_header_count);
+-		bpf_log(log, "\n");
+-	}
+-
+-	err = bpf_live_stack_query_init(env, st);
 -	if (err)
 -		return err;
 -
--	for (pass = 1; pass <= 2; pass++) {
--		if (pass == 1)
--			join_refs_note(js, a, b);
--		else if (!join_refs_check(js, a, b))
--			return 1;
--		for (fr = 0; fr <= a->curframe; fr++) {
--			u32 insn_idx = bpf_frame_insn_idx((struct bpf_verifier_state *)a, fr);
--			u16 live_regs = env->insn_aux_data[insn_idx].live_regs_before;
--			u32 cnt;
+-	bitmap_zero(iters->forget_regs, REGS_NUM);
+-	bitmap_zero(iters->fresh_regs, REGS_NUM);
+-	bitmap_zero(iters->mask_regs, REGS_NUM);
+-	iters->spill_base = false;
+-	header_env = find_header_env(scev, insn_idx);
+-	for (r = 0; r < REGS_NUM; r++) {
+-		struct bpf_reg_state *reg = NULL;
+-		u32 ra, r_scev, r_expr;
+-		bool spill_base = false;
 -
--			/* not the states that get to the head through a call of the function */
--			frame = a->frame[fr];
--			cnt = frame->loop_stack_cnt;
--			js->loop = widen && fr == a->curframe && cnt &&
--				   frame->loop_stack[cnt - 1].loop_id == insn_idx ?
--				   env->insn_aux_data[insn_idx].loop : NULL;
--			if (!join_func(js, dst->frame[fr], a->frame[fr], b->frame[fr],
--				       live_regs, pass))
--				return 1;
+-		if (!scev_reg_alive(env, st, r))
+-			continue;
+-
+-		r_scev = header_env->reg2scev[r];
+-		if (spill32_counter(scev, cur_func, r_scev, r, &coefs)) {
+-			/* There is no exact offset to lose if nothing is known about the number */
+-			if (test_bit(r, loop->store_base_regs) &&
+-			    is_known_partial_spill(cur_func, r)) {
+-				spill_base = true;
+-				goto cant_widen;
+-			}
+-			continue;
 -		}
--	}
--
--	return join_check(js, dst, a, "a") ?: join_check(js, dst, b, "b");
--}
-diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-index d5132e08ecd..20820098c6b 100644
---- a/kernel/bpf/log.c
-+++ b/kernel/bpf/log.c
-@@ -177,53 +177,6 @@ void bpf_vlog_reset(struct bpf_verifier_log *log, u64 new_pos)
- 		log->ubuf = NULL;
- }
- 
--/*
-- * Take what was written since @pos out of the log. bpf_vlog_unstash() appends it to what is
-- * written in between. The text is in the buffer of the user and nowhere else. What the buffer
-- * doesn't hold, the start of the text if it's rolling and the end if it's fixed, is counted.
-- */
--int bpf_vlog_stash(struct bpf_verifier_log *log, u64 pos, struct bpf_vlog_stash *stash)
--{
--	u64 from = max(pos, log->start_pos), to = log->end_pos, i;
--	u32 off, n;
--
--	if (!log->ubuf)
--		from = to;
--	else if (log->level & BPF_LOG_FIXED)
--		to = clamp(log->len_total - 1ULL, from, to);
--	stash->lost_start = from - pos;
--	stash->lost_end = log->end_pos - to;
--	stash->len = to - from;
--	/* as large as the buffer at worst: fail before the OOM killer is called */
--	stash->buf = kvzalloc(stash->len, BPF_VERIFIER_GFP);
--	if (!stash->buf)
--		return -ENOMEM;
--	/* two pieces if it wraps around */
--	for (i = from; i < to && log->ubuf; i += n) {
--		div_u64_rem(i, log->len_total, &off);
--		n = min(to - i, log->len_total - off);
--		if (copy_from_user(stash->buf + (i - from), log->ubuf + off, n))
--			log->ubuf = NULL;
--	}
--	bpf_vlog_reset(log, pos);
--	return 0;
--}
--
--void bpf_vlog_unstash(struct bpf_verifier_log *log, struct bpf_vlog_stash *stash)
--{
--	u64 i, n;
--
--	log->end_pos += stash->lost_start;
--	for (i = 0; i < stash->len; i += n) {
--		n = min(stash->len - i, sizeof(log->kbuf) - 1);
--		bpf_log(log, "%.*s", (int)n, stash->buf + i);
--		cond_resched();
--	}
--	log->end_pos += stash->lost_end;
--	bpf_vlog_update_len_max(log, 1);
--	kvfree(stash->buf);
--}
--
- static void bpf_vlog_reverse_kbuf(char *buf, int len)
- {
- 	int i, j;
-diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-index 5218ce1cafc..abae5fc58ab 100644
---- a/kernel/bpf/scev.c
-+++ b/kernel/bpf/scev.c
-@@ -5173,8 +5173,6 @@ int bpf_compute_loop_iters(struct bpf_verifier_env *env, struct bpf_verifier_sta
- 		 */
- 		if (expr_is_fresh(env, header_env->reg2expr[r], &call)) {
- 			__set_bit(r, iters->fresh_regs);
--			if (!call && !bpf_flow_is_needed(env, insn_idx, r))
--				continue;
- 		} else {
- 			__set_bit(r, iters->forget_regs);
- 		}
-@@ -5185,19 +5183,6 @@ int bpf_compute_loop_iters(struct bpf_verifier_env *env, struct bpf_verifier_sta
- 		 */
- 		if (reg && reg->type == NOT_INIT)
- 			__set_bit(r, iters->fresh_regs);
 -		/*
--		 * Only a walk through the iterations tells what it is in each of them. That is not
--		 * worth it for a number that nothing looks at: a sum, a hash, what a call leaves in
--		 * r1 - r5. What comes back to the head is joined with what entered then. A pointer,
--		 * or a slot that holds something else than a register, has no such join.
+-		 * A heuristic:
+-		 * Ignore SCEVs computed for unbound values and treat those as widened.
+-		 * This is poor man's modelling of e.g. bpf_probe_read_kernel() effect
+-		 * on stack, when called from a subprogram. Currently this would produce
+-		 * an unknown ('?') SCEV as a summary of a subprogram call effects.
+-		 * Ideally, this should be computed as an OPAQUE value.
+-		 * However, that would require tracking STACK_MISC writes in the
+-		 * liveness analysis. Not implemented yet.
 -		 */
--		if (!reg || (reg->type != SCALAR_VALUE && reg->type != NOT_INIT) ||
--		    bpf_flow_is_needed(env, insn_idx, r)) {
+-		if (is_unbound_scev_reg(env, cur_func, r)) {
+-			/*
+-			 * Nothing widens the value that the state has for a partial spill. A
+-			 * value that is made from itself can be a new one in each iteration:
+-			 * treat it like a register that has no formula. It's in the half
+-			 * of the slot that is farther from fp.
+-			 */
+-			if (is_known_partial_spill(cur_func, r) &&
+-			    bpf_stack_slot_alive(env, st->curframe, (r - MAX_BPF_REG) * 2 + 1) &&
+-			    made_from_partial_spill(scev, cur_func, header_env,
+-						    header_env->reg2expr[r], r, 0))
+-				goto cant_widen;
+-			continue;
+-		}
+-
+-		if (is_const_scev_reg(env, insn_idx, r))
+-			continue;
+-
+-		reg = scev_reg_for_linear(cur_func, r);
+-		/*
+-		 * The offset of a pointer to arena is not tracked, so there is nothing to lose.
+-		 * If the loop makes something else of it the state that returns to the head
+-		 * is not covered by the state at the head.
+-		 */
+-		if (reg && reg->type == PTR_TO_ARENA) {
+-			__set_bit(r, iters->forget_regs);
+-			continue;
+-		}
+-		/* If SCEV for r is (linear <reg> <slope>) */
+-		if (reg && is_linear_at_header(scev, r_scev, r, &coefs) &&
+-		    bpf_is_widenable_reg_type(reg)) {
+-			/* 32-bit ALU operations on pointers convert them to scalars */
+-			if (coefs.zext32 && reg->type != SCALAR_VALUE)
+-				goto cant_widen;
+-			/* Spills at varying offsets lose precision */
+-			if (test_bit(r, loop->store_base_regs)) {
+-				spill_base = true;
+-				goto cant_widen;
+-			}
+-			continue;
+-		}
+-
+-		/* rA = rA, loop does not change this reg */
+-		if (is_reg(scev, r_scev, &ra) && r == ra)
+-			continue;
+-
+-		/* (any 1 (any 2 (any 3 4))) */
+-		if (is_widenable_any(env, cur_func, header_env, r, r_scev)) {
+-			if (test_bit(r, loop->store_base_regs)) {
+-				spill_base = true;
+-				goto cant_widen;
+-			}
+-			continue;
+-		}
+-
+-		/*
+-		 * [0, max] that loses bits is in [0, max], a bit that is 0 stays 0: what enters
+-		 * the loop stands for all iterations as it is. 64 or [64, 127] does not: it
+-		 * can become 0.
+-		 */
+-		if (reg && reg->type == SCALAR_VALUE && !test_bit(r, loop->store_base_regs) &&
+-		    reg_is_zero_to_max(reg) &&
+-		    expr_loses_bits_only(scev, header_env->reg2expr[r], r, 0)) {
+-			__set_bit(r, iters->mask_regs);
+-			continue;
+-		}
+-cant_widen:
+-		if (log->level & BPF_LOG_LEVEL2) {
+-			r_expr = header_env->reg2expr[r];
+-			bpf_log(log, "loop header at %d, can't widen ", insn_idx);
+-			log_reg(env, r);
+-			bpf_log(log, ", expr is ");
+-			log_expr(env, r_expr);
+-			if (spill_base)
+-				bpf_log(log, ", requires exact stack-offset tracking");
+-			bpf_log(log, "\n");
+-		}
+-		/* the count stands, it is this one that is not known in the loop */
+-		if (spill_base) {
+-			iters->spill_base = true;
 -			walk = true;
 -			continue;
 -		}
--		if (log->level & BPF_LOG_LEVEL2)
--			bpf_log(log, "loop header at %d, nothing looks at it\n", insn_idx);
- 	}
- 
- 	/* 2: the count is known, what some of the live registers are is not and it matters */
-diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index a37b0434739..73c329ec755 100644
---- a/kernel/bpf/states.c
-+++ b/kernel/bpf/states.c
-@@ -57,10 +57,6 @@ static bool check_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
- 	if (old_id == 0) /* cur_id == 0 as well */
- 		return true;
- 
--	/* a name of what the caller has, see BPF_INHERITED_ID */
--	if ((old_id | cur_id) >= BPF_INHERITED_ID)
--		return old_id == cur_id;
--
- 	for (i = 0; i < idmap->cnt; i++) {
- 		if (map[i].old == old_id)
- 			return map[i].cur == cur_id;
-@@ -238,59 +234,8 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
- 		return false;
- 
- 	switch (base_type(rold->type)) {
--	case SCALAR_VALUE:
--		if (env->explore_alu_limits) {
--			/* explore_alu_limits disables tnum_in() and range_within()
--			 * logic and requires everything to be strict
--			 */
--			return reg_value_equal(rold, rcur);
--		}
--		return range_within(rold, rcur) && tnum_in(rold->var_off, rcur->var_off);
--	case PTR_TO_MAP_KEY:
--	case PTR_TO_MAP_VALUE:
--	case PTR_TO_MEM:
--	case PTR_TO_BUF:
--	case PTR_TO_TP_BUFFER:
--	case PTR_TO_STACK:
--	case PTR_TO_BTF_ID:
--		/* If the new min/max/var_off satisfy the old ones and
--		 * everything else matches, we are OK.
+-		/*
+-		 * What is loaded from memory or returned by a call in every iteration is the same
+-		 * kind of thing in all of them. One iteration tells what. A walk through the
+-		 * iterations tells more: what goes with it, like a flag that is set if it's not
+-		 * NULL, and each number of a table in .rodata. So a walk comes first. What is
+-		 * loaded is often a leftover in a stack slot: not if nothing looks at it.
 -		 */
--		return reg_fixed_part_equal(rold, rcur) &&
--		       range_within(rold, rcur) &&
--		       tnum_in(rold->var_off, rcur->var_off) &&
--		       check_ids(rold->id, rcur->id, idmap) &&
--		       check_ids(rold->parent_id, rcur->parent_id, idmap) &&
--		       check_ids(rold->map_uid, rcur->map_uid, idmap);
--	case PTR_TO_PACKET_META:
--	case PTR_TO_PACKET:
--		/* We must have at least as much range as the old ptr
--		 * did, so that any accesses which were safe before are
--		 * still safe.  This is true even if old range < old off,
--		 * since someone could have accessed through (ptr - k), or
--		 * even done ptr -= k in a register, to get a safe access.
--		 */
--		if (rold->range < 0 || rcur->range < 0) {
--			/* special case for [BEYOND|AT]_PKT_END */
--			if (rold->range != rcur->range)
--				return false;
--		} else if (rold->range > rcur->range) {
--			return false;
+-		if (expr_is_fresh(env, header_env->reg2expr[r], &call)) {
+-			__set_bit(r, iters->fresh_regs);
+-		} else {
+-			__set_bit(r, iters->forget_regs);
 -		}
--		/* id relations must be preserved */
--		if (!check_ids(rold->id, rcur->id, idmap))
--			return false;
--		/* Preserve displacements between pointers sharing an ID. */
--		if (rold->id && rold->r64.base != rcur->r64.base)
--			return false;
--		/* new val must satisfy old val knowledge */
--		return range_within(rold, rcur) &&
--		       tnum_in(rold->var_off, rcur->var_off);
- 	case PTR_TO_ARENA:
- 		return true;
--	case PTR_TO_INSN:
--		return reg_fixed_part_equal(rold, rcur) &&
--		       range_within(rold, rcur) && tnum_in(rold->var_off, rcur->var_off);
- 	default:
- 		return regs_exact(rold, rcur, idmap);
- 	}
-@@ -466,129 +411,6 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
- 	return true;
- }
- 
--/*
-- * Compare stack arg slots between old and current states.
-- * Outgoing stack args are a part of the state and must agree.
-- */
--static bool stack_arg_safe(struct bpf_verifier_env *env, struct bpf_func_state *old,
--			   struct bpf_func_state *cur, struct bpf_idmap *idmap)
--{
--	int i, nslots, cur_cnt = cur->out_stack_arg_cnt;
--
--	/* incoming arguments are not compared with outgoing ones, the other way is ruled out */
--	if (bpf_stack_args_are_incoming(cur) && !bpf_stack_args_are_incoming(old))
--		cur_cnt = 0;
--	nslots = max(old->out_stack_arg_cnt, cur_cnt);
--	for (i = 0; i < nslots; i++) {
--		struct bpf_reg_state *old_arg, *cur_arg;
--		struct bpf_reg_state not_init = { .type = NOT_INIT };
--
--		old_arg = i < old->out_stack_arg_cnt ?
--			  &old->stack_arg_regs[i] : &not_init;
--		cur_arg = i < cur_cnt ?
--			  &cur->stack_arg_regs[i] : &not_init;
--		if (!regsafe(env, old_arg, cur_arg, idmap))
--			return false;
+-		/*
+-		 *	for (i = 0; i < 40; i++) { if (i) sum += prev; prev = (x ^ i) * 3; }
+-		 * It's not set in the first iteration only. That counts if the loop is not walked:
+-		 * nothing looks at prev, or there are too many iterations.
+-		 */
+-		if (reg && reg->type == NOT_INIT)
+-			__set_bit(r, iters->fresh_regs);
 -	}
 -
--	return true;
+-	/* 2: the count is known, what some of the live registers are is not and it matters */
+-	return walk ? 2 : 1;
 -}
 -
--static bool refsafe(struct bpf_verifier_state *old, struct bpf_verifier_state *cur,
--		    struct bpf_idmap *idmap)
+-/* bpf_compute_loop_iters() checked that every leaf can be unioned into acc. */
+-static int union_any_reg(struct bpf_verifier_env *env, struct bpf_func_state *loop_entry,
+-			 struct bpf_reg_state *acc, u32 id)
 -{
--	int i;
+-	struct bpf_reg_state *tmp = &env->fake_reg[0];
+-	const struct bpf_reg_state *leaf_reg;
+-	struct scev *scev = env->scev;
+-	u32 l, r, leaf, order;
+-	s64 smax = reg_smax(acc);
+-	s64 imm;
+-	int err;
 -
--	if (old->acquired_refs != cur->acquired_refs)
--		return false;
--
--	if (old->active_locks != cur->active_locks)
--		return false;
--
--	if (old->active_preempt_locks != cur->active_preempt_locks)
--		return false;
--
--	if (old->active_rcu_locks != cur->active_rcu_locks)
--		return false;
--
--	if (!check_ids(old->active_irq_id, cur->active_irq_id, idmap))
--		return false;
--
--	if (!check_ids(old->active_lock_id, cur->active_lock_id, idmap) ||
--	    old->active_lock_ptr != cur->active_lock_ptr)
--		return false;
--
--	for (i = 0; i < old->acquired_refs; i++) {
--		if (!check_ids(old->refs[i].id, cur->refs[i].id, idmap) ||
--		    old->refs[i].type != cur->refs[i].type)
--			return false;
--		switch (old->refs[i].type) {
--		case REF_TYPE_PTR:
--			if (!check_ids(old->refs[i].parent_id, cur->refs[i].parent_id, idmap))
--				return false;
--			break;
--		case REF_TYPE_IRQ:
--			break;
--		case REF_TYPE_LOCK:
--		case REF_TYPE_RES_LOCK:
--		case REF_TYPE_RES_LOCK_IRQ:
--			if (old->refs[i].ptr != cur->refs[i].ptr)
--				return false;
--			break;
--		default:
--			WARN_ONCE(1, "Unhandled enum type for reference state: %d\n", old->refs[i].type);
--			return false;
+-	scev->stack_sz = 0;
+-	expr_stack_push(scev, id);
+-	while (expr_next(scev, &id, &order)) {
+-		if (order & DEPTH_LIMIT) {
+-			verifier_bug(env, "scev ANY union exceeds expression depth limit");
+-			return -EFAULT;
 -		}
--	}
--
--	return true;
--}
--
--/*
-- * In a loop that is walked without a count a state of an earlier iteration stands for a state of
-- * a later one, see flow_cycle_closed(). Never the other way round.
-- *
-- * In a loop that is counted and walked the state that gets to iteration max_header_count is
-- * dropped: there is no such iteration at run time. The number in a state is the number of
-- * iterations that the program has done, and only states with the same number are compared. They
-- * differ in what is counted anyway.
-- *
-- * The walk of a loop with two entries is meant to get to the end of the loop, like today's walk of
-- * all paths. A state that is within the state of the iteration before it is on its way there:
-- *	for (i = 7; i >= 0; i--) { if (i >= n) continue; ... }
-- * i is in 0..6, then in 0..5. So here too only states with the same number are compared.
-- *
-- * Where the iterations are not kept apart a state stands for many of them, and the number says
-- * nothing about what it describes.
-- */
--static bool loop_stack_safe(struct bpf_verifier_env *env, struct bpf_func_state *old,
--			    struct bpf_func_state *cur)
--{
--	struct loop_stack_entry *old_stack = old->loop_stack;
--	struct loop_stack_entry *cur_stack = cur->loop_stack;
--	u32 i;
--
--	if (old->loop_stack_cnt != cur->loop_stack_cnt)
--		return false;
--
--	for (i = 0; i < old->loop_stack_cnt; i++) {
--		if (old_stack[i].loop_id == cur_stack[i].loop_id &&
--		    old_stack[i].max_header_count == cur_stack[i].max_header_count &&
--		    old_stack[i].terminates == cur_stack[i].terminates &&
--		    old_stack[i].guarded == cur_stack[i].guarded &&
--		    old_stack[i].counted == cur_stack[i].counted &&
--		    old_stack[i].apart == cur_stack[i].apart &&
--		    old_stack[i].first == cur_stack[i].first &&
--		    (!old_stack[i].apart ||
--		     (old_stack[i].probe ? old_stack[i].trip <= cur_stack[i].trip :
--					   old_stack[i].trip == cur_stack[i].trip)))
+-		if (!(order & PRE) || is_any(scev, id, &l, &r))
 -			continue;
--		return false;
+-		if (is_imm(scev, id, &imm)) {
+-			bpf_mark_reg_known_scalar(tmp, imm);
+-			leaf_reg = tmp;
+-		} else if (is_reg(scev, id, &leaf)) {
+-			leaf_reg = scev_reg_for_read(env, loop_entry, leaf);
+-			if (verifier_bug_if(!leaf_reg, env, "unreadable SCEV ANY leaf %u", leaf))
+-				return -EFAULT;
+-		} else {
+-			verifier_bug(env, "scev ANY union has an unsupported leaf");
+-			return -EFAULT;
+-		}
+-		smax = max(smax, reg_smax(leaf_reg));
+-		err = bpf_reg_union(env, acc, leaf_reg);
+-		if (err)
+-			return err;
 -	}
--
--	return true;
+-	/* All leaves have the same range. It goes with the largest offset of all leaves. */
+-	bpf_trim_pkt_range(acc, smax);
+-	return 0;
 -}
 -
- /* compare two verifier states
-  *
-  * The state that gets to an insn doesn't have to be looked at when there is
-@@ -639,12 +461,6 @@ static bool func_states_equal(struct bpf_verifier_env *env, struct bpf_func_stat
- 	if (!stacksafe(env, old, cur, &env->idmap_scratch))
- 		return false;
- 
--	if (!stack_arg_safe(env, old, cur, &env->idmap_scratch))
--		return false;
+-/*
+- * Make @st, which is at the head of a counted loop, stand for all iterations. @loop_entry is the
+- * state that entered the loop and @iters is what bpf_compute_loop_iters() says about it.
+- *
+- * @st is a copy of @loop_entry, or, if the loop has iters->fresh_regs, the state that comes back to
+- * the head after the first iteration, @back. These registers are left as the first iteration
+- * made them. At the entry they are something else: 0, a pointer, not set.
+- */
+-int bpf_widen_scev_regs(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
+-			struct bpf_verifier_state *loop_entry, struct bpf_loop_iters *iters,
+-			bool back)
+-{
+-	struct bpf_func_state *cur_func = st->frame[st->curframe];
+-	struct bpf_func_state *entry_func = loop_entry->frame[loop_entry->curframe];
+-	const struct bpf_reg_state *val, *entry_val;
+-	struct bpf_verifier_log *log = &env->log;
+-	struct scev *scev = env->scev;
+-	struct bpf_reg_state *reg, *spill32;
+-	struct env *header_env;
+-	struct linear_coefs coefs;
+-	struct scalar bounds;
+-	u32 r, r_expr, a, b;
+-	int insn_idx = st->insn_idx;
+-	int err;
 -
--	if (!loop_stack_safe(env, old, cur))
--		return false;
+-	header_env = find_header_env(scev, insn_idx);
+-	for (r = 0; r < REGS_NUM; r++) {
+-		if (!scev_reg_alive(env, st, r))
+-			continue;
 -
- 	return true;
+-		/*
+-		 * It stays what it is in @st. What comes back to the head is joined with it and
+-		 * widened to where the jumps of the loop stop it, like in a loop without a count.
+-		 * NULL or not is all that is known about a pointer to arena.
+-		 */
+-		if (test_bit(r, iters->forget_regs)) {
+-			reg = scev_reg_for_linear(cur_func, r);
+-			if (reg && reg->type == PTR_TO_ARENA) {
+-				scalar_set_unknown(scalar_of(reg));
+-				mark_scev_reg_scratched(env, r);
+-			}
+-			continue;
+-		}
+-		if (test_bit(r, iters->fresh_regs))
+-			continue;
+-
+-		r_expr = header_env->reg2scev[r];
+-		spill32 = spill32_counter(scev, cur_func, r_expr, r, &coefs);
+-		/* @iters says nothing about a register that is not known in @loop_entry */
+-		if (!spill32 && (is_unbound_scev_reg(env, entry_func, r) ||
+-				 is_const_scev_reg(env, insn_idx, r)))
+-			continue;
+-
+-		/*
+-		 * A call in the loop can change the type, see bpf_clamp_scev_regs(). Then the
+-		 * register is left alone. What comes back to the head next is compared with it.
+-		 */
+-		val = scev_reg_for_read(env, cur_func, r);
+-		entry_val = scev_reg_for_read(env, entry_func, r);
+-		if (back && (!val || !entry_val || !bpf_reg_union_compatible(val, entry_val)))
+-			continue;
+-		if (test_bit(r, iters->mask_regs)) {
+-			/* the range stays */
+-			err = scev_reg_for_write(env, cur_func, r, &reg);
+-			if (!err && back)
+-				err = bpf_reg_union(env, reg, entry_val);
+-			if (err)
+-				return err;
+-			if (log->level & BPF_LOG_LEVEL2) {
+-				bpf_log(log, "loop header at %d, ", insn_idx);
+-				log_reg(env, r);
+-				bpf_log(log, " stays in 0..%llu, it loses bits only\n",
+-					reg_umax(reg));
+-			}
+-			mark_scev_reg_scratched(env, r);
+-			continue;
+-		}
+-
+-		/* If SCEV for r is (linear <reg> <slope>)*/
+-		if (spill32 || is_linear_at_header(scev, r_expr, r, &coefs)) {
+-			/* the range is derived from @loop_entry: bpf_clamp_scev_regs() */
+-			if (back)
+-				continue;
+-			/* the other half of the slot stays as it is */
+-			reg = spill32;
+-			err = spill32 ? 0 : scev_reg_for_write(env, cur_func, r, &reg);
+-			if (err)
+-				return err;
+-			linear_bounds(scalar_of(reg), iters->max_header_count, &coefs, &bounds);
+-			if (is_iv_at_header(env, entry_func, insn_idx, iters->iv_reg,
+-					    coefs.base_reg))
+-				iv_bounds(&bounds, &iters->iv_range);
+-			if (log->level & BPF_LOG_LEVEL2) {
+-				bpf_log(log, "loop header at %d, widening ", insn_idx);
+-				log_reg(env, r);
+-				bpf_log(log, " to ");
+-				log_bounds(env, &bounds);
+-				bpf_log(log, "\n");
+-			}
+-			scratch_widened_reg_id(env, reg);
+-			/* "at pkt_end" and "beyond pkt_end" are not valid in all iterations */
+-			if (type_is_pkt_pointer(reg->type))
+-				reg->range = max(reg->range, 0);
+-			err = bpf_set_reg_range(env, reg, &bounds);
+-			if (err)
+-				return err;
+-			mark_scev_reg_scratched(env, r);
+-		} else if (is_any(scev, r_expr, &a, &b)) {
+-			err = scev_reg_for_write(env, cur_func, r, &reg);
+-			if (err)
+-				return err;
+-			err = union_any_reg(env, entry_func, reg, r_expr);
+-			if (err)
+-				return err;
+-			if (log->level & BPF_LOG_LEVEL2) {
+-				bpf_log(log, "loop header at %d, widening ", insn_idx);
+-				log_reg(env, r);
+-				bpf_log(log, " to ");
+-				bpf_verbose_snum(env, reg_smin(reg));
+-				bpf_log(log, "..");
+-				bpf_verbose_snum(env, reg_smax(reg));
+-				bpf_log(log, " step %u\n", reg->step);
+-			}
+-			scratch_widened_reg_id(env, reg);
+-			mark_scev_reg_scratched(env, r);
+-		}
+-	}
+-	return 1;
+-}
+-
+-/* (linear (+ rX imm) slope): the iteration has added a constant to rX so far */
+-static bool is_moved_linear(struct scev *scev, u32 id, struct linear_coefs *out, s64 *moved)
+-{
+-	u32 base, slope, l, r;
+-
+-	out->spill32 = false;
+-	out->sext32 = false;
+-	return is_linear_or_linear32(scev, id, &base, &slope, &out->zext32) && !out->zext32 &&
+-	       is_add(scev, base, &l, &r) && is_reg(scev, l, &out->base_reg) &&
+-	       is_imm(scev, r, moved) && is_simple_slope(scev, slope, &out->slope);
+-}
+-
+-/*
+- * The state came back to the head of a counted loop. Or, with @behind, it goes on in the loop
+- * behind the jump that counts. That jump leaves the loop in the last iteration, so this is
+- * not the last one:
+- *	for (i = 0; ; i++, p += 8) { if (i == 4) break; *p = 0; }
+- * At the head p is up to 32 bytes from where it was, at the store up to 24. The jump tells that
+- * about i only. It holds for all that is linear at the jump.
+- */
+-int bpf_clamp_scev_regs(struct bpf_verifier_env *env, struct bpf_func_state *cur_func_state, u32 insn_idx,
+-			const struct loop_stack_entry *entry, bool behind)
+-{
+-	struct bpf_verifier_state *entry_state = entry->entry_state;
+-	struct bpf_func_state *entry_st = entry_state->frame[entry_state->curframe];
+-	u32 max_header_count = entry->max_header_count - behind;
+-	struct bpf_verifier_log *log = &env->log;
+-	struct bpf_reg_state *reg, *entry_reg;
+-	struct scev *scev = env->scev;
+-	struct linear_coefs coefs;
+-	struct scalar bounds, off;
+-	struct env *header_env;
+-	u32 r, r_scev;
+-	s64 moved;
+-	int err;
+-
+-	if (entry_state->curframe != cur_func_state->frameno) {
+-		verifier_bug(env, "clamping registers for a wrong frame: %d vs %d\n",
+-			     entry_state->curframe, cur_func_state->frameno);
+-		return -EFAULT;
+-	}
+-
+-	header_env = find_loop_env(scev, insn_idx, behind ? entry->count_insn : insn_idx);
+-	if (!max_header_count)
+-		return 0;
+-	for (r = 0; r < REGS_NUM; r++) {
+-		r_scev = header_env->reg2scev[r];
+-		moved = 0;
+-		entry_reg = spill32_counter(scev, entry_st, r_scev, r, &coefs);
+-		reg = spill32_counter(scev, cur_func_state, r_scev, r, &coefs);
+-		if (entry_reg && reg)
+-			goto clamp;
+-
+-		/* If SCEV for r is (linear <reg> <slope>)*/
+-		if (!is_linear_at_header(scev, r_scev, r, &coefs) &&
+-		    !(behind && is_moved_linear(scev, r_scev, &coefs, &moved) &&
+-		      coefs.base_reg == r))
+-			continue;
+-
+-		entry_reg = scev_reg_for_linear(entry_st, r);
+-		reg = scev_reg_for_linear(cur_func_state, r);
+-		if (!entry_reg || !reg || entry_reg->type == NOT_INIT || reg->type == NOT_INIT ||
+-		    is_unbound_scev_reg(env, entry_st, r))
+-			continue;
+-
+-		/*
+-		 * A call in the loop can change the type: it invalidates packet pointers or
+-		 * releases a reference. The bounds are the offsets of the pointer at the entry.
+-		 * They say nothing about the value that is in the register now.
+-		 */
+-		if (reg->type != entry_reg->type)
+-			continue;
+-
+-		/*
+-		 * bpf_compute_loop_iters() gives no range to a pointer to arena that moves, and
+-		 * it does not look at dead registers. Set a range only where it would.
+-		 */
+-		if (!bpf_is_widenable_reg_type(entry_reg) ||
+-		    (coefs.zext32 && entry_reg->type != SCALAR_VALUE))
+-			continue;
+-clamp:
+-		linear_bounds(scalar_of(entry_reg), max_header_count, &coefs, &bounds);
+-		/*
+-		 * iv_range is the range at the header. After the latch @r can be the zero extension
+-		 * of its header value. @reg went through that insn and has what holds of the range.
+-		 */
+-		if (!behind &&
+-		    is_iv_at_header(env, entry_st, insn_idx, entry->iv_reg, coefs.base_reg))
+-			iv_bounds(&bounds, &entry->iv_range);
+-		if (moved) {
+-			scalar_set_const(&off, moved);
+-			scalar_add(&bounds, &bounds, &off);
+-		}
+-		if (behind) {
+-			/* jumps on the way may have told more */
+-			bounds.r64 = cnum64_intersect(bounds.r64, reg->r64);
+-			bounds.r32 = cnum32_intersect(bounds.r32, reg->r32);
+-			if (type_is_pkt_pointer(reg->type) || cnum64_is_empty(bounds.r64) ||
+-			    cnum32_is_empty(bounds.r32) ||
+-			    (cnum64_is_subset(bounds.r64, reg->r64) &&
+-			     cnum32_is_subset(bounds.r32, reg->r32)))
+-				continue;
+-		}
+-		if (log->level & BPF_LOG_LEVEL2) {
+-			bpf_log(log, "loop header at %d, clamping ", insn_idx);
+-			log_reg(env, r);
+-			bpf_log(log, " to ");
+-			log_bounds(env, &bounds);
+-			bpf_log(log, "\n");
+-		}
+-		if (!behind)
+-			scratch_widened_reg_id(env, reg);
+-		/*
+-		 * The range of a packet pointer goes together with its id and with the offsets
+-		 * that it had in the compare with pkt_end. Both are replaced here. What holds for
+-		 * the new offsets is the range at the entry.
+-		 */
+-		if (type_is_pkt_pointer(reg->type))
+-			reg->range = max(entry_reg->range, 0);
+-		err = bpf_set_reg_range(env, reg, &bounds);
+-		if (err)
+-			return err;
+-		mark_scev_reg_scratched(env, r);
+-	}
+-	return 0;
+-}
+diff --git a/kernel/bpf/tnum.c b/kernel/bpf/tnum.c
+index 1f620facd1b..ec9c310cf5d 100644
+--- a/kernel/bpf/tnum.c
++++ b/kernel/bpf/tnum.c
+@@ -317,14 +317,3 @@ u64 tnum_step(struct tnum t, u64 z)
+ 	inc = (filled + 1) & t.mask;
+ 	return t.value | inc;
  }
- 
-@@ -682,9 +498,6 @@ bool bpf_state_subsumes(struct bpf_verifier_env *env, struct bpf_verifier_state
- 	if (old->unwound != cur->unwound || old->changed_pkt_data != cur->changed_pkt_data)
- 		return false;
- 
--	if (!refsafe(old, cur, &env->idmap_scratch))
--		return false;
 -
- 	/* for states to be equal callsites have to be the same
- 	 * and all frame states need to be equivalent
- 	 */
+-/*
+- * Return the number of trailing bits known to be zero in a tnum.
+- * Return 64 for a tnum representing zero.
+- */
+-u32 tnum_alignment(struct tnum a)
+-{
+-	u64 v = a.value | a.mask;
+-
+-	return v ? __ffs64(v) : 64;
+-}
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 64ad953bbff..bcdabb8c8f5 100644
+index bcdabb8c8f5..9b184452230 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -8816,13 +8816,6 @@ static bool arg_type_is_mem_size(enum bpf_arg_type type)
- 	return type == ARG_MEM_SIZE || type == ARG_MEM_SIZE_OR_ZERO;
+@@ -6116,7 +6116,7 @@ static int check_buffer_access(struct bpf_verifier_env *env,
  }
  
--/* A number that check_func_arg() takes only when it is a known constant */
--static bool arg_type_is_const(enum bpf_arg_type type)
--{
--	return type == ARG_CONST_SCALAR || type == ARG_CONST_MEM_SIZE ||
--	       type == ARG_CONST_ALLOC_SIZE_OR_ZERO;
--}
--
- static bool arg_type_is_raw_mem(enum bpf_arg_type type)
+ /* s = (u32)s. BPF architecture zero extends alu32 ops into 64-bit registers. */
+-void scalar_zext32(struct scalar *s)
++static void scalar_zext32(struct scalar *s)
  {
- 	/*
-@@ -12241,15 +12234,7 @@ static bool is_rbtree_lock_required_kfunc(u32 btf_id);
- 
- static void account_processed_insn(struct bpf_verifier_env *env)
- {
--	struct bpf_verifier_state *st = env->cur_state;
- 	struct bpf_func_state *frame = cur_func(env);
--	u32 fr, i;
--
--	/* every walk on patience that the state is in pays for the insn */
--	for (fr = 0; fr <= st->curframe; fr++)
--		for (i = 0; i < st->frame[fr]->loop_stack_cnt; i++)
--			if (bpf_loop_walk_may_give_up(&st->frame[fr]->loop_stack[i]))
--				env->walk_insns[st->frame[fr]->loop_stack[i].walk_id]++;
- 
- 	env->insn_processed++;
- 	frame->insns_subtotal++;
-@@ -14009,13 +13994,6 @@ static bool is_bpf_cast_to_kern_ctx_kfunc(const struct bpf_call_arg_meta *meta)
- 	return is_kfunc_call(meta, special_kfunc_list[KF_bpf_cast_to_kern_ctx]);
+ 	scalar_step_check_unsigned(s, 32);
+ 	s->var_off = tnum_subreg(s->var_off);
+@@ -6230,15 +6230,6 @@ static void coerce_scalar_to_size_sx(struct scalar *s, int size)
+ 	set_sext64_default_val(s, size);
  }
  
--/* void * in the prototype. What it returns points to an object of the kernel. */
--bool bpf_is_cast_kfunc(const struct bpf_call_arg_meta *meta)
+-/* @s = (uN)@s or (sN)@s. N is @bits: 8, 16 or 32. */
+-void scalar_ext(struct scalar *s, u32 bits, bool sign)
 -{
--	return is_kfunc_call(meta, special_kfunc_list[KF_bpf_cast_to_kern_ctx]) ||
--	       is_kfunc_call(meta, special_kfunc_list[KF_bpf_rdonly_cast]);
+-	if (sign)
+-		coerce_scalar_to_size_sx(s, bits / BITS_PER_BYTE);
+-	else
+-		coerce_scalar_to_size(s, bits / BITS_PER_BYTE);
 -}
 -
- static bool is_bpf_dynptr_clone_kfunc(const struct bpf_call_arg_meta *meta)
+ static void set_sext32_default_val(struct scalar *s, int size)
  {
- 	return is_kfunc_call(meta, special_kfunc_list[KF_bpf_dynptr_clone]);
-@@ -15292,54 +15270,6 @@ bool bpf_insn_is_iter_next(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 	       bpf_is_iter_next_kfunc(&meta);
+ 	if (size == 1)
+@@ -14790,55 +14781,6 @@ static bool kfunc_spin_allowed(struct bpf_verifier_env *env, s32 func_id, s16 of
+ 	return *kfunc.flags & KF_SPINLOCK_SAFE;
  }
  
 -/*
-- * check_func_arg() goes by the types of the arguments in the proto of a helper or a kfunc.
-- * So does what has to be known ahead of the call: the registers with arguments of a kind.
+- * True if insn calls a helper/kfunc that requires one of its arguments to
+- * be a stack pointer with a constant offset.
 - */
--static u16 call_arg_regs(struct bpf_verifier_env *env, struct bpf_insn *insn,
--			 bool (*is)(enum bpf_arg_type type))
+-bool bpf_needs_fixed_stack_off(struct bpf_verifier_env *env, int insn_idx)
 -{
--	const struct btf_func_model *fm = NULL;
+-	const struct bpf_insn *insn = &env->prog->insnsi[insn_idx];
 -	const struct bpf_func_proto *fn;
 -	struct bpf_kfunc_desc *desc;
--	u32 i, slot = 0;
--	u16 mask = 0;
+-	u32 *flags, btf_id;
+-	int i;
 -
--	if (bpf_pseudo_kfunc_call(insn)) {
+-	if (bpf_helper_call(insn)) {
+-		if (bpf_get_helper_proto(env, insn->imm, &fn) < 0)
+-			return false;
+-	} else if (bpf_pseudo_kfunc_call(insn)) {
 -		desc = find_kfunc_desc(env, insn->imm, insn->off);
 -		if (!desc)
--			return 0;
+-			return false;
 -		fn = &desc->proto;
--		fm = &desc->func_model;
--	} else if (bpf_get_helper_proto(env, insn->imm, &fn) < 0) {
--		return 0;
+-	} else {
+-		return false;
 -	}
--	for (i = 0; i < ARRAY_SIZE(fn->arg_type) && fn->arg_type[i] != ARG_UNUSED &&
--		    slot < MAX_BPF_FUNC_REG_ARGS; i++) {
--		if (is(fn->arg_type[i]))
--			mask |= BIT(BPF_REG_1 + slot);
--		slot += fm ? btf_func_model_arg_slots(fm, i) : 1;
--	}
--	return mask;
+-
+-	/* Both initialized and uninitialized stack dynptrs need a fixed offset. */
+-	for (i = 0; i < ARRAY_SIZE(fn->arg_type); i++)
+-		if (arg_type_is_dynptr(fn->arg_type[i]))
+-			return true;
+-
+-	/* vmlinux kfuncs only */
+-	if (!bpf_pseudo_kfunc_call(insn) || insn->off != 0)
+-		return false;
+-	btf_id = insn->imm;
+-
+-	flags = btf_kfunc_flags(btf_vmlinux, btf_id, env->prog);
+-	if (flags && (*flags & (KF_ITER_NEW | KF_ITER_NEXT | KF_ITER_DESTROY)))
+-		return true;
+-
+-	if (btf_id == special_kfunc_list[KF_bpf_res_spin_lock] ||
+-	    btf_id == special_kfunc_list[KF_bpf_res_spin_unlock] ||
+-	    btf_id == special_kfunc_list[KF_bpf_res_spin_lock_irqsave] ||
+-	    btf_id == special_kfunc_list[KF_bpf_res_spin_unlock_irqrestore] ||
+-	    btf_id == special_kfunc_list[KF_bpf_local_irq_save] ||
+-	    btf_id == special_kfunc_list[KF_bpf_local_irq_restore])
+-		return true;
+-
+-	return false;
 -}
 -
--/* The registers in which the helper or the kfunc takes nothing but a known constant */
--u16 bpf_call_const_arg_regs(struct bpf_verifier_env *env, struct bpf_insn *insn)
+ static bool is_sync_callback_calling_kfunc(u32 btf_id)
+ {
+ 	return is_bpf_rbtree_add_kfunc(btf_id);
+@@ -14857,12 +14799,6 @@ bool bpf_is_throw_kfunc(struct bpf_insn *insn)
+ 	       insn->imm == special_kfunc_list[KF_bpf_throw];
+ }
+ 
+-bool bpf_is_dynptr_slice_rdwr_kfunc(struct bpf_insn *insn)
 -{
--	return call_arg_regs(env, insn, arg_type_is_const);
+-	return bpf_pseudo_kfunc_call(insn) && insn->off == 0 &&
+-	       insn->imm == special_kfunc_list[KF_bpf_dynptr_slice_rdwr];
 -}
 -
--/* The registers in which it takes a number that has to be in a range */
--u16 bpf_call_checked_arg_regs(struct bpf_verifier_env *env, struct bpf_insn *insn)
+ static bool is_bpf_wq_set_callback_kfunc(u32 btf_id)
+ {
+ 	return btf_id == special_kfunc_list[KF_bpf_wq_set_callback];
+@@ -15624,15 +15560,6 @@ static int check_special_kfunc(struct bpf_verifier_env *env, struct bpf_call_arg
+ 		regs[BPF_REG_0].buf = meta->slice_buf;
+ 		if (meta->slice_buf.size)
+ 			env->seen_stack_slice = true;
+-		/* No insn stores through a slice of 0 bytes */
+-		if (verifier_bug_if(meta->slice_buf.size && meta->arg_constant.value &&
+-				    !type_is_rdonly_mem(regs[BPF_REG_0].type) &&
+-				    !bpf_scev_in_slice_slots(env, meta->slice_buf.off,
+-							     meta->slice_buf.size,
+-							     meta->slice_buf.size ==
+-							     meta->arg_constant.value),
+-				    env, "slice buffer is not in scev slice_slots"))
+-			return -EFAULT;
+ 	} else {
+ 		return 0;
+ 	}
+@@ -17941,29 +17868,6 @@ void bpf_trim_pkt_range(struct bpf_reg_state *reg, s64 smax)
+ 		reg->range = max_t(s64, reg->range - (smax - reg_smax(reg)), 0);
+ }
+ 
+-int bpf_set_reg_range(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+-		      const struct scalar *range)
 -{
--	if (bpf_helper_call(insn) && insn->imm == BPF_FUNC_set_retval)
--		return BIT(BPF_REG_1);
--	/* without an exception callback the prog returns what bpf_throw() takes */
--	if (bpf_is_throw_kfunc(insn) && !env->exception_callback_subprog)
--		return BIT(BPF_REG_1);
--	return call_arg_regs(env, insn, arg_type_is_mem_size);
+-	*scalar_of(reg) = *range;
+-	reg_bounds_sync(reg); /* this should infer the tnum alignment */
+-	bpf_trim_pkt_range(reg, cnum64_smax(range->r64));
+-	return reg_bounds_sanity_check(env, reg, "bpf_set_reg_range");
+-}
+-
+-/*
+- * Checks if pointer and packet metadata matches between two registers.
+- * For use with bpf_reg_union().
+- */
+-bool bpf_reg_union_compatible(const struct bpf_reg_state *a, const struct bpf_reg_state *b)
+-{
+-	if (a->type != b->type)
+-		return false;
+-	if (a->type == SCALAR_VALUE)
+-		return true;
+-	return reg_fixed_part_equal(a, b) &&
+-	       a->id == b->id && a->parent_id == b->parent_id && a->map_uid == b->map_uid;
 -}
 -
  /*
-  * Describe a kfunc's stack access through argument slot @arg (0-based).
-  * As for helpers, must_write describes destruction of prior verifier state,
-@@ -19318,25 +19248,6 @@ static void refine_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier
- 	}
+  * @s is what @old became after a trip around a cycle, @old included. The end
+  * of the range that moved is going to move again. Put it where it may come
+@@ -18077,36 +17981,6 @@ void scalar_union(struct scalar *acc, const struct scalar *src)
+ 	 */
  }
  
--/* It's known which way the jump at env->insn_idx goes */
--static void mark_loop_exit_decided(struct bpf_verifier_env *env, struct bpf_verifier_state *st)
+-/*
+- * Extends acc's scalar range to include src's scalar range.
+- * Caller must ensure that other kinds of metadata is compatible.
+- */
+-int bpf_reg_union(struct bpf_verifier_env *env, struct bpf_reg_state *acc,
+-		  const struct bpf_reg_state *src)
 -{
--	struct bpf_func_state *frame = st->frame[st->curframe];
--	bool flag = bpf_flow_flag_regs(env, env->insn_idx);
--	struct loop_stack_entry *entry;
--	u32 i;
+-	u16 base, step;
 -
--	for (i = 0; i < frame->loop_stack_cnt; i++) {
--		entry = &frame->loop_stack[i];
--		/* only because the states are kept apart. That holds for the first such jump. */
--		if (entry->flag_apart && flag)
--			entry->flag_apart = false;
--		else if (entry->apart && entry->probe &&
--			 bpf_jump_leaves_loop(env, entry->loop_id, env->insn_idx))
--			entry->decided = true;
+-	if (!bpf_reg_union_compatible(acc, src)) {
+-		verifier_bug(env, "union of incompatible registers");
+-		return -EFAULT;
+-	}
+-	acc->r64 = cnum64_union(acc->r64, src->r64);
+-	acc->r32 = cnum32_union(acc->r32, src->r32);
+-	acc->var_off = tnum_union(acc->var_off, src->var_off);
+-
+-	/* Retain a common congruence if the bases agree modulo the gcd. */
+-	step = gcd(acc->step, src->step);
+-	base = acc->base % step;
+-	if (base != src->base % step) {
+-		scalar_step_reset(scalar_of(acc));
+-	} else {
+-		acc->base = base;
+-		acc->step = step;
+-	}
+-	reg_bounds_sync(acc);
+-	return reg_bounds_sanity_check(env, acc, "bpf_reg_union");
+-}
+-
+ /*
+  * There are no address spaces in Rust. The compiler doesn't cast a pointer that
+  * comes from the kernel. But it can't always tell, and then it casts the pointer
+@@ -19098,162 +18972,12 @@ bool scalar_intersect(struct scalar *dst, const struct scalar *src, u32 bits)
+ 	return true;
+ }
+ 
+-/*
+- * The state of the SCEV register @r. As in check_stack_read_fixed_off() a fill of @bits bits from
+- * byte @fill_off of the slot reads the low bits of the spill.
+- */
+-static struct bpf_reg_state *scev_reg_for_fill(struct bpf_func_state *frame, u32 r, u32 fill_off,
+-					       u32 bits)
+-{
+-	struct bpf_stack_state *ss;
+-
+-	if (r < MAX_BPF_REG)
+-		return &frame->regs[r];
+-	if (r - MAX_BPF_REG >= bpf_stack_nr_slots(frame))
+-		return NULL;
+-	ss = bpf_stack_slot(frame, r - MAX_BPF_REG);
+-	if (!bpf_is_spilled_reg(ss) || bpf_spill_size(ss) * BITS_PER_BYTE < bits ||
+-	    !bpf_stack_narrow_access_ok(fill_off, bits / BITS_PER_BYTE, bpf_spill_size(ss)))
+-		return NULL;
+-	return &ss->spilled_ptr;
+-}
+-
+-/*
+- * Scalar evolution promoted memory to the SCEV register *@regno, see struct env there, and names
+- * its address at the jump at @idx. This state knows which memory it is: the frame that is returned,
+- * its stack slot *@regno, *@fill_off counts from the start of the slot. The stack of a caller only:
+- * other memory has no state, and a store through r10 is no def of memory for scalar evolution.
+- * What holds the address is live: it was compared all the way from its def. Every place that
+- * compares, joins or drops states cleans them of what is dead first, see flow_arrive().
+- */
+-static struct bpf_func_state *scev_mem_to_slot(struct bpf_verifier_env *env,
+-					       struct bpf_verifier_state *vstate, int idx,
+-					       u32 *regno, u32 *fill_off)
+-{
+-	struct bpf_reg_state *ptr;
+-	u32 base_regno;
+-	s64 addr;
+-
+-	if (!bpf_scev_mem_addr(env, idx, *regno, &base_regno, &addr))
+-		return NULL;
+-	ptr = scev_reg_for_fill(vstate->frame[vstate->curframe], base_regno, 0, 64);
+-	if (!ptr || ptr->type != PTR_TO_STACK || !tnum_is_const(ptr->var_off) ||
+-	    ptr->frameno >= vstate->curframe)
+-		return NULL;
+-	addr += ptr->var_off.value + *fill_off;
+-	if (addr >= 0 || addr < -MAX_BPF_STACK_JIT)
+-		return NULL;
+-	*regno = MAX_BPF_REG + bpf_get_spi(addr);
+-	*fill_off = addr & (BPF_REG_SIZE - 1);
+-	return vstate->frame[ptr->frameno];
+-}
+-
+-/*
+- *	p = buf + i; if (i > 100) return 0; *p = 0;
+- * p is @dst_reg, x is @ptr_reg. Scalar evolution says that p == x + i. So the insns
+- * 'p = x; p += i' are a no-op at run time, and a state that is sound before them is sound after
+- * them: apply their transfer function. Type and object of p are taken from x as it is now, @off is
+- * the offset of x + i; how p was computed does not matter.
+- * The old p is replaced, not intersected: a state does not distinguish two values of one hash map,
+- * and the intersection of an offset into the one with an offset into the other holds for neither.
+- * It is replaced only if the new range is a subset of the old one. An empty range is a subset too:
+- * the path is infeasible, p is left as it is.
+- */
+-static bool recompute_ptr(struct bpf_verifier_env *env, struct bpf_reg_state *dst_reg,
+-			  const struct bpf_reg_state *ptr_reg, const struct scalar *off)
+-{
+-	struct bpf_reg_state sum = *ptr_reg;
+-
+-	/* the cpu can speculate past the jump with an out-of-bounds index */
+-	if (!env->bypass_spec_v1)
+-		return false;
+-	/* 'p += i' assigns a new id to a packet pointer */
+-	if (ptr_reg->type == SCALAR_VALUE || type_is_pkt_pointer(ptr_reg->type) ||
+-	    !bpf_is_widenable_reg_type(ptr_reg))
+-		return false;
+-	*scalar_of(&sum) = *off;
+-	__mark_scalar32_unbounded(scalar_of(&sum));
+-	reg_bounds_sync(&sum);
+-	if (reg_is_empty(&sum) || const_tnum_range_mismatch(scalar_of(&sum)) ||
+-	    const_tnum_range_mismatch_32(scalar_of(&sum)))
+-		return false;
+-	/*
+-	 * 'p += i' refuses a constant offset outside of this range, and a constant offset is put in
+-	 * an int, see stack_slot_obj_get_spi().
+-	 */
+-	if (reg_smin(&sum) <= -BPF_MAX_VAR_OFF || reg_smax(&sum) >= BPF_MAX_VAR_OFF)
+-		return false;
+-	if (!bpf_reg_union_compatible(dst_reg, &sum) || !cnum64_is_subset(dst_reg->r64, sum.r64))
+-		return false;
+-	*dst_reg = sum;
+-	return true;
+-}
+-
+-/*
+- * The jump at @idx refined the scalars that it tests. Scalar evolution evaluates the expression of
+- * a register that is linked to them in this state. The register holds that value on every path to
+- * the jump: intersect the two.
+- */
+-static void refine_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_state *vstate,
+-			       int idx, int next_idx)
+-{
+-	struct bpf_func_state *frame = vstate->frame[vstate->curframe], *linked_frame;
+-	struct bpf_insn *insn = &env->prog->insnsi[idx];
+-	struct bpf_reg_state *reg, *base_reg;
+-	u32 pos, linked_regno, fill_off, bits;
+-	struct scev_value val;
+-	u16 refined_regs = 0;
+-
+-	if (frame->regs[insn->dst_reg].type == SCALAR_VALUE)
+-		refined_regs |= BIT(insn->dst_reg);
+-	if (BPF_SRC(insn->code) == BPF_X && frame->regs[insn->src_reg].type == SCALAR_VALUE)
+-		refined_regs |= BIT(insn->src_reg);
+-	if (!refined_regs)
+-		return;
+-	for (pos = 0;
+-	     bpf_scev_next_linked_reg(env, frame, idx, next_idx, refined_regs, &pos, &linked_regno,
+-				      &fill_off, &val);
+-	     pos++) {
+-		bits = val.bits;
+-		linked_frame = frame;
+-		if (linked_regno >= BPF_SCEV_REGS_NUM)
+-			linked_frame = scev_mem_to_slot(env, vstate, idx, &linked_regno, &fill_off);
+-		if (!linked_frame)
+-			continue;
+-		reg = scev_reg_for_fill(linked_frame, linked_regno, fill_off, bits);
+-		/*
+-		 * The other half-slot of a 64-bit spill is dead: __clean_func_state() left
+-		 * a 32-bit spill, the low 32 bits of the value.
+-		 */
+-		if (!reg && bits == 64 &&
+-		    bpf_stack_narrow_access_ok(fill_off, BPF_REG_SIZE / 2, BPF_REG_SIZE)) {
+-			bits = 32;
+-			reg = scev_reg_for_fill(linked_frame, linked_regno, fill_off, bits);
+-		}
+-		if (!reg || (val.ptr_reg < 0 && reg->type != SCALAR_VALUE))
+-			continue;
+-
+-		if (val.ptr_reg >= 0) {
+-			base_reg = scev_reg_for_fill(frame, val.ptr_reg, 0, 64);
+-			if (!base_reg || bits < 64 ||
+-			    !recompute_ptr(env, reg, base_reg, scalar_of(&val)))
+-				continue;
+-		} else if (!scalar_intersect(scalar_of(reg), scalar_of(&val), bits)) {
+-			continue;
+-		}
+-		if (linked_regno < MAX_BPF_REG)
+-			mark_reg_scratched(env, linked_regno);
+-		else if (linked_frame == frame)
+-			mark_stack_slot_scratched(env, linked_regno - MAX_BPF_REG);
 -	}
 -}
 -
  /*
   * One branch of the jump @insn is dead, the current state takes the other one. @reg1 and @reg2 are
   * the operands as that branch refines them. They hold every value that takes it, whether the other
-@@ -19454,8 +19365,6 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 	env->true_reg1 = *dst_reg;
- 	env->true_reg2 = *src_reg;
- 	pred = is_branch_taken(env, dst_reg, src_reg, opcode, is_jmp32);
--	if (pred >= 0)
--		mark_loop_exit_decided(env, this_branch);
- 	if (pred == 1) {
- 		/* Only follow the goto, ignore fall-through. If needed, push
- 		 * the fall-through branch for simulation under speculative
-@@ -20886,92 +20795,6 @@ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
- 	return -EFAULT;
+  * branch is dead or not.
+  */
+-static int refine_live_branch(struct bpf_verifier_env *env, struct bpf_insn *insn, int next_idx,
++static int refine_live_branch(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 			      struct bpf_reg_state *reg1, struct bpf_reg_state *reg2)
+ {
+ 	struct bpf_reg_state *regs = cur_regs(env);
+@@ -19277,9 +19001,6 @@ static int refine_live_branch(struct bpf_verifier_env *env, struct bpf_insn *ins
+ 	regs[insn->dst_reg] = *reg1;
+ 	if (BPF_SRC(insn->code) == BPF_X)
+ 		regs[insn->src_reg] = *reg2;
+-	if (!env->bpf_capable)
+-		return 0;
+-	refine_linked_regs(env, env->cur_state, env->insn_idx, next_idx);
+ 	return 0;
  }
  
--static int flow_try_walk(struct bpf_verifier_env *env, struct loop_stack_entry *entry);
--
--/*
-- * Push the loop entered at insn_idx onto the stack. Usually this adds a single
-- * entry on top of its enclosing loop. However, an edge may enter an inner loop
-- * directly, bypassing the header(s) of its enclosing loop(s), e.g.:
-- *
-- *   1: for (...):       // enclosing loop, header at 1
-- *   2:   for (...):     // inner loop, header at 2
-- *        ...
-- *   3: if ...:
-- *        goto 2b;       // enters loop 2 without going through header 1
-- *
-- * Such a bypass makes the enclosing loop irreducible, so its header is missing
-- * from the stack and both headers (1) and (2) need to be pushed onto stack.
-- * Only the innermost loop (the one actually entered at insn_idx) carries SCEV bounds;
-- * the bypassed ancestors are irreducible: walked, see flow_try_walk(), or pushed as
-- * non-terminating.
-- *
-- * Assumes loop_stack_pop() has already truncated the stack to the common ancestor
-- * of the bpf_loop_at_index(env->insn_idx) and whatever was at the top of the loop stack.
-- */
--static int loop_stack_push(struct bpf_verifier_env *env, bool *pushed)
--{
--	struct bpf_insn_aux_data *aux = env->insn_aux_data;
--	struct bpf_func_state *frame = cur_func(env);
--	struct loop_stack_entry *loop_stack = frame->loop_stack;
--	u32 missing_headers[LOOP_STACK_SIZE];
--	u32 cnt = frame->loop_stack_cnt;
--	u32 num_missing = 0;
--	int h, err;
--
--	*pushed = false;
--
--	for (h = bpf_loop_at_index(env, env->insn_idx); h >= 0; h = aux[h].loop_header, num_missing++) {
--		if (cnt && loop_stack[cnt - 1].loop_id == h)
--			break;
--		if (num_missing == LOOP_STACK_SIZE)
--			goto e2big;
--		missing_headers[num_missing] = h;
+@@ -19375,8 +19096,7 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
+ 			if (err < 0)
+ 				return err;
+ 		}
+-		err = refine_live_branch(env, insn, *insn_idx + insn->off + 1, &env->true_reg1,
+-					 &env->true_reg2);
++		err = refine_live_branch(env, insn, &env->true_reg1, &env->true_reg2);
+ 		if (err)
+ 			return err;
+ 		if (env->log.level & BPF_LOG_LEVEL)
+@@ -19394,8 +19114,7 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
+ 			if (err < 0)
+ 				return err;
+ 		}
+-		err = refine_live_branch(env, insn, *insn_idx + 1, &env->false_reg1,
+-					 &env->false_reg2);
++		err = refine_live_branch(env, insn, &env->false_reg1, &env->false_reg2);
+ 		if (err)
+ 			return err;
+ 		if (env->log.level & BPF_LOG_LEVEL)
+@@ -19418,11 +19137,6 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
+ 	if (BPF_SRC(insn->code) == BPF_X)
+ 		other_branch_regs[insn->src_reg] = env->true_reg2;
+ 
+-	if (env->bpf_capable) {
+-		refine_linked_regs(env, this_branch, *insn_idx, *insn_idx + 1);
+-		refine_linked_regs(env, other_branch, *insn_idx, *insn_idx + insn->off + 1);
 -	}
 -
--	if (num_missing == 0)
--		return 0;
--	if (cnt + num_missing > LOOP_STACK_SIZE)
--		goto e2big;
--	frame->loop_stack = realloc_array(frame->loop_stack, cnt, cnt + num_missing,
--					 sizeof(*frame->loop_stack));
--	if (!frame->loop_stack)
--		return -ENOMEM;
--	loop_stack = frame->loop_stack;
--
--	for (; num_missing; num_missing--, cnt++) {
--		h = missing_headers[num_missing - 1];
--		/* wherever it is entered: a loop can have more than one entry */
--		if (!aux[h].loop->exits_cnt) {
--			verbose(env, "loop at insn %d never exits\n", h);
--			return -EINVAL;
--		}
--		loop_stack[cnt] = (struct loop_stack_entry){
--			.loop_id = h,
--			.refs = env->cur_state->acquired_refs,
--			.entry_id = ++env->loop_entry_cnt,
--		};
--		/* there is no count for a loop that is not entered at its head */
--		if (h != env->insn_idx && !aux[h].loop->rt_bounded) {
--			frame->loop_stack_cnt = cnt;
--			err = flow_try_walk(env, &loop_stack[cnt]);
--			if (err < 0)
--				return err;
--			if (!err)
--				bpf_flow_loop_gets_guards(env, h);
--		}
--		loop_stack[cnt].guarded = aux[h].loop->guarded;
--		if (env->log.level & BPF_LOG_LEVEL2)
--			verbose(env, "entering loop %d\n", h);
--		*pushed = true;
--	}
--	frame->loop_stack_cnt = cnt;
--	return 0;
--
--e2big:
--	verbose(env, "Too many nested loops (%d/%d) at %d\n", cnt, num_missing, env->insn_idx);
--	return -E2BIG;
--}
--
- /*
-  * An exit from a loop can cross several nested loops, e.g.:
-  *
-@@ -21028,319 +20851,6 @@ static int maybe_clamp_scev_regs(struct bpf_verifier_env *env)
- 	return bpf_clamp_scev_regs(env, frame, env->insn_idx, entry, false);
+ 	/* if one pointer register is compared to another pointer
+ 	 * register check if PTR_MAYBE_NULL could be lifted.
+ 	 * E.g. register A - maybe null
+@@ -20834,23 +20548,6 @@ static int loop_stack_pop(struct bpf_verifier_env *env)
+ 	return 0;
  }
  
--/*
-- * The current state came back to the head of a loop. If it has a reference more than the states
-- * that are there it is neither within one of them nor joined with one. It goes around again:
-- *	bpf_for(i, 0, n) { if (!p) p = bpf_ringbuf_reserve(...); ... }
-- * That ends when the loop stops taking references, or when there is no place left to keep them.
-- * A reference that no live register and no live stack slot holds cannot be released any more.
-- * There is nothing to wait for.
-- *
-- * Only what was taken in the loop is looked at. New references are added at the end. What callers
-- * hold is not in the state of a function that is verified on its own.
-- */
--static int check_refs_taken_in_loop(struct bpf_verifier_env *env,
--				    const struct loop_stack_entry *entry)
+-static int maybe_clamp_scev_regs(struct bpf_verifier_env *env)
 -{
--	u32 mask = (1 << STACK_SPILL) | (1 << STACK_DYNPTR) | (1 << STACK_ITER);
--	struct bpf_verifier_state *st = env->cur_state;
--	struct bpf_stack_state *stack;
--	struct bpf_func_state *frame;
--	struct bpf_reg_state *reg;
--	bool held;
--	int i, j, id;
--
--	for (i = entry->refs; i < st->acquired_refs; i++) {
--		if (st->refs[i].type != REF_TYPE_PTR)
--			continue;
--		id = st->refs[i].id;
--		held = false;
--		for (j = 0; j < st->acquired_refs; j++)
--			if (st->refs[j].type == REF_TYPE_PTR && st->refs[j].parent_id == id)
--				held = true;
--		bpf_for_each_reg_in_vstate_mask(st, frame, reg, stack, mask, ({
--			if (reg->id == id || reg->parent_id == id)
--				held = true;
--		}));
--		if (held)
--			continue;
--		verbose(env, "Unreleased reference id=%d alloc_insn=%d\n", id, st->refs[i].insn_idx);
--		verbose(env, "nothing holds it in the next iteration of the loop at insn %d\n",
--			entry->loop_id);
--		return -EINVAL;
--	}
--	return 0;
--}
--
--/* How many insns it may take to go through the iterations of a loop one by one. */
--#define BPF_FLOW_MAX_WALK	100000
--/* The same when it is not known that the walk gets to the end of the loop. */
--#define BPF_FLOW_MAX_TRY	4096
--
--/* How many times the current insn is looked at because of the loops around it that are walked. */
--static u64 flow_walk_factor(const struct bpf_verifier_state *st)
--{
--	const struct loop_stack_entry *e;
--	u64 factor = 1;
--	u32 fr, i;
--
--	for (fr = 0; fr <= st->curframe; fr++) {
--		for (i = 0; i < st->frame[fr]->loop_stack_cnt; i++) {
--			e = &st->frame[fr]->loop_stack[i];
--			/* the walk of a loop with two entries pays as it goes, see env->walk_insns */
--			if (e->counted || e->probe)
--				factor = min_t(u64, factor * max(e->max_header_count, 1U), U32_MAX);
--		}
--	}
--	return factor;
--}
--
--/*
-- * The current state enters the loop of @entry, for which there is no count. It's found out on the
-- * way whether the loop has an end: the walk goes on for as long as the jumps that leave the loop
-- * are decided. Returns 1 if the iterations are kept apart from now on, 0 if that takes too long.
-- */
--static int flow_try_walk(struct bpf_verifier_env *env, struct loop_stack_entry *entry)
--{
--	struct bpf_loop *loop = env->insn_aux_data[entry->loop_id].loop;
--	u64 factor = flow_walk_factor(env->cur_state);
--	u32 patience, *walk_insns;
--
--	patience = env->allow_uninit_stack && !loop->rt_bounded &&
--		   (!loop->has_calls || loop->has_guards) ? BPF_FLOW_MAX_TRY : 0;
--	if (loop->walk_failed)
--		patience = 0;
--	/* Two trips for a loop of any length. Many a loop is left in the second one. */
--	if (patience && factor == 1)
--		patience = max_t(u64, patience, 2ULL * loop->nr_insns);
--	if (factor * loop->nr_insns > patience)
--		return 0;
--	entry->max_header_count = max(patience / (u32)(factor * loop->nr_insns), 1U);
--	/*
--	 * A compiler makes a flag of the counter of
--	 *	for (i = 0; i < 2; i++) off += f(i);
--	 * and there is nothing to count. In the second trip the flag decides the jump.
--	 * A loop with calls gets these two trips, whatever they take, and no more: its size says
--	 * nothing about the functions that it calls. It gets may_goto at once, so that nothing is
--	 * done again when the second trip comes back to the head.
--	 */
--	if (loop->has_calls) {
--		entry->max_header_count = min(entry->max_header_count, 2U);
--		patience = U32_MAX;
--		bpf_flow_loop_gets_guards(env, entry->loop_id);
--		entry->guarded = true;
--	}
--	entry->terminates = true;
--	/* scalar evolution has nothing to say about a loop with two entries */
--	entry->probe = !loop->irreducible;
--	entry->walk_id = env->walk_cnt + 1;
--	if (is_power_of_2(entry->walk_id)) {
--		walk_insns = kvrealloc(env->walk_insns, 2 * entry->walk_id * sizeof(u32),
--				       BPF_VERIFIER_GFP);
--		if (!walk_insns)
--			return -ENOMEM;
--		env->walk_insns = walk_insns;
--	}
--	env->walk_cnt++;
--	env->walk_insns[entry->walk_id] = 0;
--	entry->walk_patience = patience;
--	entry->apart = true;
--	return 1;
--}
--
--/*
-- * The current state gets to env->insn_idx. Leave the loops that the insn is not in.
-- * @enters: the insn is the head of a loop that the state is not in yet.
-- */
--int bpf_flow_loop_leave(struct bpf_verifier_env *env, bool *enters)
--{
--	struct bpf_func_state *frame = cur_func(env);
--	int err;
--
--	err = loop_stack_pop(env);
--	if (err)
--		return err;
--	*enters = env->insn_aux_data[env->insn_idx].loop &&
--		  (!frame->loop_stack_cnt ||
--		   frame->loop_stack[frame->loop_stack_cnt - 1].loop_id != env->insn_idx);
--	return 0;
--}
--
--/*
-- * Enter the loops that env->insn_idx is in.
-- *
-- * When the number of iterations follows from the state that enters a loop at its head
-- * induction variables get the ranges that they have in that many iterations, and the loop
-- * needs no may_goto.
-- * The rest of the state is left as it is. What comes back to the head is joined with it.
-- * @ends_walk: the state came back to the head and is the last one that is kept apart from
-- * the states of other iterations.
-- */
--int bpf_flow_loop_enter(struct bpf_verifier_env *env, bool *backedge, bool *drop, bool *ends_walk)
--{
--	struct bpf_verifier_state *cur = env->cur_state, *entry_state;
--	const struct bpf_insn *insn = &env->prog->insnsi[env->insn_idx];
 -	struct bpf_func_state *frame = cur_func(env);
 -	struct loop_stack_entry *entry;
--	struct bpf_loop_iters iters;
--	struct bpf_loop *loop;
--	bool pushed, decided;
--	u32 trip;
--	u64 per_trip;
--	int err;
 -
--	err = loop_stack_push(env, &pushed);
--	if (err)
--		return err;
--
--	if (frame->loop_stack_cnt == 0)
--		return 0;
+-	if (frame->loop_stack_cnt == 0) {
+-		verifier_bug(env, "%s: loop stack empty at %d", __FUNCTION__, env->insn_idx);
+-		return -EFAULT;
+-	}
 -
 -	entry = &frame->loop_stack[frame->loop_stack_cnt - 1];
--	if (env->insn_idx != entry->loop_id) {
--		/* the jump that counts didn't leave the loop */
--		if (entry->entry_state && !entry->apart && cur->last_insn_idx == entry->count_insn)
--			return bpf_clamp_scev_regs(env, frame, entry->loop_id, entry, true);
--		return 0;
--	}
--
--	/*
--	 * No edge goes from a call to itself: the call goes on with one function of a set, see
--	 * split_func_set(), in the same iteration.
--	 */
--	if (!pushed && cur->last_insn_idx == env->insn_idx &&
--	    BPF_CLASS(insn->code) == BPF_JMP && BPF_OP(insn->code) == BPF_CALL)
+-	if (!entry->terminates)
 -		return 0;
 -
--	/* The callback came back to the helper that calls it, in the same iteration. */
--	if (frame->callback_depth)
--		return 0;
--
--	/* If nothing was pushed and env->insn_idx is a loop header, we've taken a backedge. */
--	if (!pushed) {
--		if (!entry->apart) {
--			entry->trip++;
--			*backedge = true;
--			return check_refs_taken_in_loop(env, entry) ?: maybe_clamp_scev_regs(env);
--		}
--		/*
--		 * The first iteration is over. What the loop makes anew in every iteration is
--		 * in this state. The rest is what the count says, like at the entry.
--		 */
--		if (entry->first) {
--			entry->first = false;
--			entry->apart = false;
--			entry->trip++;
--			err = bpf_compute_loop_iters(env, entry->entry_state, &iters);
--			if (err < 0)
--				return err;
--			if (verifier_bug_if(!err, env, "loop at %d is not counted any more",
--					    env->insn_idx))
--				return -EFAULT;
--			err = maybe_clamp_scev_regs(env);
--			if (err)
--				return err;
--			err = bpf_widen_scev_regs(env, cur, entry->entry_state, &iters, true);
--			return err < 0 ? err : 0;
--		}
--		loop = env->insn_aux_data[env->insn_idx].loop;
--		/* the next iteration is another kind of state, there is no cycle */
--		trip = entry->trip;
--		decided = !entry->probe || entry->decided || !trip;
--		entry->decided = false;
--		entry->flag_apart = false;
--		if (decided && ++entry->trip < entry->max_header_count &&
--		    (entry->counted ||
--		     env->walk_insns[entry->walk_id] <= entry->walk_patience))
--			return 0;
--		/* there is no such iteration at run time */
--		if (entry->counted) {
--			*drop = true;
--			return 0;
--		}
--		/*
--		 * The walk doesn't get to the end of the loop. From now on what comes back to
--		 * the head is joined with what is there. The loop gets may_goto.
--		 */
--		if (!loop->rt_bounded && !loop->has_guards) {
--			verbose(env, "loop at insn %d never exits\n", env->insn_idx);
--			return -EINVAL;
--		}
--		if (!loop->rt_bounded)
--			bpf_flow_loop_gets_guards(env, env->insn_idx);
--		/* the jumps were decided, it's the loop that is too long. Or it had its two trips */
--		if (decided || loop->has_calls)
--			loop->walk_failed = true;
--		/* the iteration that it went through: its state is at the head */
--		entry->trip = trip;
--		*ends_walk = true;
--		return 0;
--	}
--
--	loop = env->insn_aux_data[env->insn_idx].loop;
--	err = bpf_compute_loop_iters(env, cur, &iters);
--	if (err < 0)
--		return err;
--
--	/*
--	 * There is no summary of what the loop does to something that is live.
--	 * Go through the iterations one by one if that is not too long.
--	 * @per_trip: the insns of one iteration, times the walks around the loop.
--	 */
--	per_trip = flow_walk_factor(cur) * loop->nr_insns;
--	if (err == 2 && per_trip <= BPF_FLOW_MAX_WALK &&
--	    iters.max_header_count <= BPF_FLOW_MAX_WALK / (u32)per_trip) {
--		entry->max_header_count = iters.max_header_count;
--		entry->terminates = true;
--		entry->counted = true;
--		entry->apart = true;
--		return 0;
--	}
--	if (err == 2 && iters.spill_base)
--		err = 0;
--	/* The walk has to get to the end of the loop, so it is known to have one. Or not: */
--	if (!err) {
--		err = flow_try_walk(env, entry);
--		if (err)
--			return err < 0 ? err : 0;
--		if (!loop->rt_bounded && !loop->has_guards) {
--			verbose(env, "loop at insn %d never exits\n", env->insn_idx);
--			return -EINVAL;
--		}
--		if (!loop->rt_bounded) {
--			bpf_flow_loop_gets_guards(env, env->insn_idx);
--			entry->guarded = true;
--		}
--		return 0;
--	}
--
--	/* What the ranges are derived from for as long as the loop is looked at. */
--	entry_state = bpf_flow_keep_state(env, cur);
--	if (!entry_state)
--		return -ENOMEM;
--
--	entry->min_header_count = iters.min_header_count;
--	entry->max_header_count = iters.max_header_count;
--	entry->iv_reg = iters.iv_reg;
--	entry->iv_range = iters.iv_range;
--	entry->count_insn = iters.count_insn;
--	entry->entry_state = entry_state;
--	entry->terminates = true;
--	/*
--	 *	idx = 0; for (i = 0; i < 100000; i++) idx = table[idx];
--	 * What the loop makes of idx is not known before its body is looked at, and what idx is
--	 * at the entry goes with i == 0 only. So the state goes through the first iteration as
--	 * it is. The state that comes back to the head has idx in 0..255.
--	 */
--	if (!bitmap_empty(iters.fresh_regs, BPF_SCEV_REGS_NUM)) {
--		entry->first = true;
--		entry->apart = true;
--		return 0;
--	}
--	err = bpf_widen_scev_regs(env, cur, entry_state, &iters, false);
--	return err < 0 ? err : 0;
+-	return bpf_clamp_scev_regs(env, frame, env->insn_idx, entry, false);
 -}
 -
  /* Can the main program return 0? */
  static bool zero_is_valid_retval(struct bpf_verifier_env *env)
  {
-@@ -21730,8 +21240,7 @@ static int do_check(struct bpf_verifier_env *env)
- {
- 	bool level1 = (env->log.level & BPF_LOG_LEVEL) == BPF_LOG_LEVEL1;
- 	u64 log_pos = env->log.end_pos;
--	int prev_insn_idx = -1, insn_idx;
--	int err;
-+	int prev_insn_idx, err;
- 
- 	err = bpf_flow_deliver(env, env->cur_state, env->insn_idx, -1);
- 	while (!err) {
-@@ -21747,10 +21256,7 @@ static int do_check(struct bpf_verifier_env *env)
- 			bpf_vlog_reset(&env->log, log_pos);
- 			env->prev_linfo = NULL;
- 		}
--		insn_idx = env->insn_idx;
- 		err = do_check_block(env, prev_insn_idx);
--		if (err && level1 && !round_is_dropped(env))
--			bpf_flow_print_way(env, log_pos, insn_idx, prev_insn_idx);
- 	}
- 	return err;
- }
-@@ -23108,8 +22614,6 @@ static int do_check_main(struct bpf_verifier_env *env)
-  * What stops a loop is assumed before the main pass and checked in it, see flow_is_bound(). The
-  * main prog and global functions may get to the same loop. It has may_goto for all of them or
-  * for none, so all are done again when the assumption doesn't hold, whatever came out.
-- * The same when a loop gets may_goto, or its may_goto gets another way out, and what went through
-- * the loop before is not there any more, see bpf_flow_loop_gets_guards().
-  *
-  * A round that is dropped counts as paths that never run. What it found out about the insns, the
-  * subprogs and the prog stays. Each of these is made for more than one state that gets to an insn:
-@@ -24961,6 +24465,8 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	/* no program is valid */
- 	if (ARRAY_SIZE(bpf_verifier_ops) == 0)
- 		return -EINVAL;
-+	/* the main pass is being rewritten */
-+	return -EOPNOTSUPP;
- 
- 	/* 'struct bpf_verifier_env' can be global, but since it's not small,
- 	 * allocate/free it every time bpf_check() is called
-@@ -25173,10 +24679,6 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+@@ -24671,10 +24368,6 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
  	if (ret < 0)
  		goto skip_full_check;
  
--	ret = bpf_flow_compute_kinds(env);
+-	ret = bpf_find_latches(env, true);
 -	if (ret < 0)
 -		goto skip_full_check;
 -
+ 	ret = bpf_compute_live_registers(env);
+ 	if (ret < 0)
+ 		goto skip_full_check;
+@@ -24682,14 +24375,6 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
  	if (env->log.level & BPF_LOG_LEVEL2)
  		log_program(env);
  
-@@ -25336,9 +24838,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+-	ret = bpf_init_scev(env);
+-	if (ret < 0)
+-		goto skip_full_check;
+-
+-	ret = bpf_compute_scev(env);
+-	if (ret < 0)
+-		goto skip_full_check;
+-
+ 	ret = bpf_flow_prepare(env);
+ 	if (ret < 0)
+ 		goto skip_full_check;
+@@ -24837,7 +24522,6 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	kvfree(env->used_index.slots);
  	kvfree(env->kfunc_index.slots);
  	kvfree(env->insn_array_maps);
- 	bpf_free_scev(env);
--	kvfree(env->walk_insns);
+-	bpf_free_scev(env);
  	bpf_flow_free(env);
--	bpf_join_free(env);
  	bpf_stack_liveness_free(env);
  	kvfree(env->cfg.postorder_nums);
- 	kvfree(env->cfg.insn_postorder);
 -- 
 2.55.0
 
