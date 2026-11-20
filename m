@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.170
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795207924;
-	b=mo4GNIUs7f9nw46HXucGl0h1VQhOHZjv5AVczTlVP3MWRr2Hv7BWZR9mEgHVQ5WZssU9
-	 wfvfzpqlfrPpMW+bw5JITsWaTKiyBgrK6nz1kgXs6zDnZiRAja6Xnx1qSef5HiMpA0tHc
-	 boOhwxe1afo/7UDMZHghi5CYSseaoS461yyRmojjMU/lmdJPeqgwTGl4uC3cESEQbe4cF
-	 C24L42vJEqTd3CxRpZPHO2FocMd/9FjR9FXEn/PUEmE6l0WqBQJY49NfMFPhYhP7KSyNE
-	 8jjJcUx7maWz8dx9tLGrJCR8iIaWD91AEb5G7SWAzLXCNOCA1u5hpYhPCKTOj64cvbg==
+	t=1795207937;
+	b=QMgz7GzXlkuzEj9iG9NOMOF/ft4InKatUl9SBiYYzl4MuSsgpZn5sYwkdpe2uBYhUyY7
+	 EYE2eyQMEWCPIbT2YW4k2TpUmG6OGLDL+TKQJshaLdWyuYyd0r5uqeDLdeyL3w63Wy2Sx
+	 Wsho7qLo/4gg2hELRSMpudOE+JO67MefWI0bl4JCJXsrnkOwf5EB1b1/QBNcr3uLATcH8
+	 nqAu8Skb9i5tHuQUyPqMH7irbQrX4o7Azsaq6VntmhLhCbwZWRHS/kPZVwMcmVQEhM1Bf
+	 9BDDS1n5JqXWhcdOsLBHemVsUtiDW93Ly9/QzUyLBFwR/QYlQiceHWfZbUvTcbVpG/A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795207924;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795207937;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=YCOgX3sBteYbRWNJrYTvqNP3Hx9LRBR+ig36emn40ac=;
-	b=ixnco9aNDpi3f4/pwwXzXzPcvr3YaBhrE4A+ZLuY1sy/HQRmj3GvAhIJm58sqdDoQLsH
-	 0Ltg3RDmAuES+fuJTDBaoRAqq3fVVvNGZNzXyga+91S54njCW+Tvk36GxHoqKXvANkb0E
-	 q2AiVx92aPJtVoE9GhmImRnmDBb6rH4AZjkMh9Bfo3jlqfV3erw5rcWwQQ9awCFdrZ+HK
-	 RrzsqzfMAcWvx0yqaMEGLhLJFzJ3INYjWdp48T5exvekC7YF/0Nd9DCcZPHdrMOGbmtrh
-	 8EMMRILVsgo1gTffobldjmZp8pzrRBteQdoDLP9ePt0rYFuJUJcrdkuI+ezH0WVBYkA==
+	bh=W4/tRSCMX79PnJr/MM9rxal+6QJN2GuXBEMVp+makGw=;
+	b=M8gpoLC7uTzVnfiUGkccAAX7JOU2d56EHPmc99JLeEG4Cl9UY1DajNxj2flap+itsZGg
+	 dm85emBhXyEM4jh8SHEELGaSn8bD5758J0VlAMR2tU/nvnfFZRbz5qsDN8xFMeXuzFiXw
+	 SH7C9xiHBt9gWu+1BGoiiJR1t6HhOEiU4V4M6DB65PtDHCqoLCwvs9LnTPktApKd2O2Wm
+	 mIjI4A8CUbTRDoswFu1MZcYS2/zi2QIsG9u9Ixsor6TQswKaN1Arv7lTv4JoyEBBsLSRf
+	 r5ufJf2GO3oWi087vSziZ3MQw2HhtLhfvO513phnyK5IOpT8UiHu3XIpcK0qtpfc4ag==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gLcGXNh2;
-	arc=none smtp.remote-ip=209.85.215.171
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=oy3Xt2nK;
+	arc=none smtp.remote-ip=209.85.214.170
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54C9160A2621
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 20:52:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 54C9160A2621
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B022606A681
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 20:52:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4B022606A681
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gLcGXNh2
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-ccca948203aso1484543a12.3
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 12:52:02 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=oy3Xt2nK
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2f045b921caso7186655ad.3
+        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 12:52:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795207922; x=1795812722; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795207934; x=1795812734; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=YCOgX3sBteYbRWNJrYTvqNP3Hx9LRBR+ig36emn40ac=;
-        b=gLcGXNh2qrXcdLnk7NACwWIzy1w7ix2xrFKTMxLlhleLDQV7t70ZuBwc8gfu3TKefF
-         LII71ZnRxInPjoH/AKwNWvEmbbvtjLj2bUKe05n59uW8aFlFBtRf+CG/Ax0PU4R76e30
-         yHKcClFwSBeoA5GiIVj5fVjCM5vGP1P4jER4nPVBmuNT+P+wiJcLXn/0McsOeWDYeDdX
-         cAx5yPocgBkEa2kYMRngnPxznq57ktUZIh7yBdb7dzWTZRY6DlsK71sFBof26IW8rx+l
-         OtCpIbPqgnsnzNdhesX8EcK7il9/8YcvSXHF6lOydG5Vw4lB65VEGrxT/6NKOrjLWqWJ
-         4/3g==
+        bh=W4/tRSCMX79PnJr/MM9rxal+6QJN2GuXBEMVp+makGw=;
+        b=oy3Xt2nKsnqr9y0RQdz5BbDsonl4KeEKPRkS64tOGb8Tz4oyUQXalRi54ViyD7B56a
+         rSdFgdJ/jZORaAtW4LCvdb60E4R51p1hW5SdmF9loq1XIwAnaPja8DOR4O7ms16YLuCc
+         EWGwR4eaUNYwVkla0RB73wbgrfvFZ53m5GZf5a5vQhvhKcnsVzLM0MVOhelhbCjl1oj/
+         P4sdenrkK2rkKhog04yv5Aw87jvdCqZMWXQOeBEwCZRnLbt+HR/4Z9+5FX18tJe1obPX
+         G/s+CzytFfj2XCFvQv3w4AXfeHI5uKDGeN9BB2mfHmVOVSvYJ7Ewfuzz7TE+3/U9HLN6
+         0xvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795207922; x=1795812722;
+        d=1e100.net; s=20260707; t=1795207934; x=1795812734;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=YCOgX3sBteYbRWNJrYTvqNP3Hx9LRBR+ig36emn40ac=;
-        b=y9K/Im9siBf9FO4LlHUstNK19NLCcgH0UYRf4eEjnNCeWqn4g9W2FyohdaG29y909J
-         aFzVRGtxefA+N8KVjlayuCl5p39c8a1aA9a151x21BDNFW/Eg9jhZF1S+fLQ6Z/jjyXD
-         75EbEHDjq5uF9S1c0TaaRqJwyU3IbXn8OzKJZ/oN+nubdZtXMcnA0EEflNpNvQfkWBWa
-         ogtvAGM5VsvtNQehTREosTZgeqRfOlH6MqneIqtXW888JlYHa1w7T/iiyMtbIod3YQJj
-         vvavr8Y19aFCa7c/n9sfnPNGguQGgirwgpNibLBfI8rOaVEm7NxhHBKIxLs3/HqPcR/a
-         vl8Q==
-X-Gm-Message-State: APuU4Z/1gskOjwcPqBRuuy49r7OB6706LghhvTyfJgTFYYghizohJ6Kh
-	x5sPnFu28JrIJmipAtGjMvT1P4DnvJ4+yiU21ljlkTjL30/0xtnUnyLoiua9hw==
-X-Gm-Gg: AZFdTZcPS/8UPSI49k3/QlhzJNmc0vN5sds6vXwmqEOs2soA80qvhociqbIj8bvyonm
-	D6PN7ZS6CERc3R+sYVGbP4btGatpZRITXXYBQ731lYc9hLy1T6YPpGJR4TJv6BsY4IMQYY+yEWZ
-	1o1RbQ0WjQpFXDtFqXYzeaOwKo+LfQFIvZ4GCdQlm3q14ifFTiz5Fhax3KJG9HaNNVk7ZmO9npJ
-	r2y/MrNu9xd7CoN0+bXQNBnpC3QSSzqfkGH6Oz8ibgyyUPoewTiL8XuOK1VtmDnX2zawFCrcLHZ
-	phyhX3bV5UJWbNek2/1kLRXkzSmmMRG2pjV9q4AZyl+jtt5twWwo3yWk+fM/0PzPyN6Yfm417JI
-	3jvx6vR0bsx+1p/J26ySJvUyaD9xUXiJA8yBG9oeqomD1hxkCzkY6ilbY+t2HwdRiLN+9p4jcaN
-	ifN1gbBNDLAaq7miRu3awDg/s92R660Gl18o0xF9HnmneF819hDnz89oZLBT/gERKdDNutGBvgL
-	VH/mw9i6uVWIcFJxMa/GBjEl2U7VcFf17yBTGcC+wqa8NvGQoVaCsUwGRa343FfLoaSHxuKGGBn
-	TWJh6ZDezOxnV6mVGRvOUji3nitKL6N3Z/nFY1717LhAUVy9cvRL1rlVLLfH7Zbn8GP+VO8GO+1
-	y33SuxLh+16CxWybj2+84F5ejBg52dRfdjyRcBAGdHYpz5gbyDO3cF8m1QvywRS39lvo4N7pMTg
+        bh=W4/tRSCMX79PnJr/MM9rxal+6QJN2GuXBEMVp+makGw=;
+        b=EDuxHY3nHDRK5mjUCBhkhbfKAdZiqjvrIwbfpYf3k2k07bwQwL7l4Cnyy51XDBDNHB
+         hZY6HVIPJDeO/AWUeePa5VtGM9jJQ+b32BilFJYkgwOqrO2xk85WiZv+0HDwD5WYviZN
+         9JJG57SVZu/byf6OydjMYs/rDdVFrkcNWkfY8XNv7x8r56wyUeI0xjQqnB4xjqLnM2yw
+         nMlI7fQsg/pyuJ4DdICJ1Bb7JRbYLdC9fwAsKDvgrP/UAEiAsm0qHVjqVrFoER1+Vcz0
+         dat1+/420TRdBYrmomE6YGf1GwguUz8Qvgq/kb0j+b0KDft7Hp15pXISnr83DHtc4tfq
+         CCnw==
+X-Gm-Message-State: APuU4Z8tKh9hHYm8FHWnCShNlXo9dXIFhPBfzhpymNbrDYL0Ger+Eqtd
+	9EqZjV9wOq38jX+woP1meSLrX8BuD7ptxBTvDp1kIa8AJw7lhqLlVglQAYO87A==
+X-Gm-Gg: AZFdTZfrtk4s08kOjdDr6JmkXnqO8oUV0LMQQ+kHsBSngZ0uSLKhK/KhyY0uSWYXrLh
+	nRhIYjU/swBYFCcrr5bEKDZDwDC4+Qp1Ngtgl7VWZBfsbb07QrFo34GFpB7NTmWXFzQS7erItaT
+	nAfib7fOruczWtGyxjWgfFbVhuItTH+GC/jS9hSu9kLXjR82oqBxhv6SUC5clXyBWV2rGwzcDFp
+	Z13ns19iTd31ha5p9ofrT86DMFhwnx1pN5k3dWv2MDCd7p/Huxy2iYFUkM+Q+EdFckbTP9M+Igz
+	3Y1GT0rjxUEinQqOhG2x9HTpg+heNHRb8thtMVHRqZq6mvoIJsqKdlA7Js6nuCbYYqQCTNoMxd0
+	5eNx3BSS/5pTBTA30l/y4Gf6QTOogwnzS3VI7f/jevG40SXLCAMx0SUGjyBt9V714JLTF8SttK2
+	J28/Fbn1KOcPMKyvUVfMl9P7bA2rJkKImEqDxr+7Vq8wv1gfR41h6+yHIe5dbYdenkz9yutgImK
+	nlWCs28Iw1eda7kb60PjiLTXjaKUDSgrEKNARztaabFFnPwB0D9xr8WCY7n6+XyegswBN6yu9yi
+	M6+jDPRJIb74PU3h7G9DwCeSMtZM7t4+rsnvsSfa5qd+uEIYx2Ldp6n24MDIAVclih+COl73WPu
+	EPXRtsrHkO6XvgkDhhgxDxWkz7/nLZDcQqdTyYoLwqKOjTpo0X9hMK/AcCBZ+p2F/iXtbdrAElw
 	==
-X-Received: by 2002:a17:90b:57cc:b0:3b4:f23:43f8 with SMTP id 98e67ed59e1d1-3b41c908fa4mr3482880a91.20.1795207921463;
-        Fri, 20 Nov 2026 12:52:01 -0800 (PST)
+X-Received: by 2002:a17:90b:5109:b0:3ac:97bc:4c98 with SMTP id 98e67ed59e1d1-3b41c9bc501mr3707784a91.64.1795207933216;
+        Fri, 20 Nov 2026 12:52:13 -0800 (PST)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41ad8e93asm5517994a91.11.2026.11.20.12.52.00
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41ad8e93asm5518427a91.11.2026.11.20.12.52.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2026 12:52:01 -0800 (PST)
+        Fri, 20 Nov 2026 12:52:12 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 20/49] bpf: Delete the equations that say nothing
-Date: Fri, 20 Nov 2026 20:49:28 +0000
-Message-ID: <20261120204959.614908-21-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 22/49] bpf: Continue a pass after an unproven insn
+Date: Fri, 20 Nov 2026 20:49:30 +0000
+Message-ID: <20261120204959.614908-23-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261120204959.614908-1-alexei.starovoitov@gmail.com>
 References: <20261120204959.614908-1-alexei.starovoitov@gmail.com>
@@ -104,546 +104,740 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Insns add syms, and registers die. Without a clean-up the table grows,
-and two states with the same facts have tables that do not compare.
+A pass stops at its first error. A program with many insns that need
+precision then takes one pass for each insn. Let the pass find all of
+them:
 
-  if                      then
-  sym0 is 5               put 5 into the equations
-  sym1 = sym0 + 8         replace sym1
-  r1 = sym0, only use     delete, the range of r1 says the same
-  no xreg holds sym0      eliminate it:
-    p = sym0 + len, sym0 = 8 * trip + sym1  ->  p = 8 * trip + sym2
+  r0 = *(u64 *)(r2 + 0)    unproven; r0 = unknown, from_unproven
+  r4 = *(u8 *)(r0 + 0)     unproven because of r0: not a new error
+  r5 = *(u8 *)(r7 + 0)     unproven: noted too
 
-The result can be a second equation for the same sum, often with a
-smaller range than the guess of a join. refine_same_sum() gives the
-range to the first equation and deletes the second one. Two sums can
-also become the same when a sym is replaced.
+skip_unproven_insn() continues as if the insn is proven. Such a pass
+accepts nothing: env->err keeps the first error, and the log ends there.
+If the insn is a call that changes what is held, the path ends.
 
-The new range needs a sym to hold it. If the equation has no sym with
-one use, the sym of the deleted equation holds it:
+bpf_note_unproven_insn() notes what the next pass needs: the insn, the
+calls that lead to it, and the suspect loops of the state. A loop is a
+suspect if it made a value imprecise. The pass ends early when all
+unproven insns of the last pass are unproven again.
 
-  x = m + d, m = 2 * k + 41 * j, k is dead  ->  x = 41 * j + d'
+Two errors have no state that caused them:
 
-normalize_equations() also sets the order: each equation has at most
-one sym that the xregs and the earlier equations do not determine. A
-later patch needs that order to check a table in one walk.
+  fixups differ        The first state is gone. The insn remembers the
+                       suspect loops of its states. If a speculative
+                       state was first, the insn gets a barrier.
+  check_after_pass()   bpf_find_unproven_after_pass() takes the calls
+                       and the insns that set the depth of a stack.
 
-A state keeps 2 * SUMS_PER_XREG sym equations for each xreg equation.
-That cuts a chain such as 'x += k; x += k; ...'. A pass that is over
-its budget drops all equations. So does a speculative state.
-
-A state without an equation has more values. So it is always safe to
-delete an equation.
-
-The clean-up runs when a state is cleaned, and when the number of syms
-doubles.
+Small fixes that this needs:
+- A join can make an unset stack argument: -EINVAL, not -EFAULT.
+- An unproven call does not mark a global function as unreliable.
+- The log does not skip a slot if it starts at the main dynptr slot.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h |   2 +
- kernel/bpf/equation.c        | 427 +++++++++++++++++++++++++++++++++++
- kernel/bpf/equation.h        |   3 +
- kernel/bpf/states.c          |   1 +
- 4 files changed, 433 insertions(+)
+ include/linux/bpf_verifier.h |  25 ++++-
+ kernel/bpf/Makefile          |   1 +
+ kernel/bpf/log.c             |   3 +-
+ kernel/bpf/precision.c       | 142 +++++++++++++++++++++++
+ kernel/bpf/precision.h       |  39 +++++++
+ kernel/bpf/verifier.c        | 211 +++++++++++++++++++++++++++++++----
+ 6 files changed, 397 insertions(+), 24 deletions(-)
+ create mode 100644 kernel/bpf/precision.c
+ create mode 100644 kernel/bpf/precision.h
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 5ed2bed1622..e7322f0aece 100644
+index bded3a774be..3b1ff5cb61c 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -584,6 +584,7 @@ struct bpf_equations {
- 	bool normalized;	/* see normalize_equations() */
- 	bool infeasible;	/* the equations cannot hold: the program does not get here */
- 	bool needs_refine;	/* widened: the equations are not applied, see bpf_flow_next() */
-+	u32 clean_sym_cnt;	/* after the last bpf_equations_clean() */
+@@ -95,6 +95,8 @@ struct scalar {
+ 	u16 step;
+ 	/* Not a part of the value: it grew once at a loop header, see join_range() */
+ 	bool grew_once;
++	/* The value comes from an unproven insn (its check failed), see skip_unproven_insn() */
++	bool from_unproven;
  };
  
- struct bpf_verifier_state {
-@@ -2370,6 +2371,7 @@ void bpf_equation_env_free(struct bpf_verifier_env *env);
- int bpf_equations_copy(struct bpf_verifier_env *env, struct bpf_equations *dst,
- 		       const struct bpf_equations *src);
- void bpf_equations_free(struct bpf_equations *eqs);
-+void bpf_equations_clean(struct bpf_verifier_env *env, struct bpf_verifier_state *st);
- s64 bpf_equations_max_sum(struct bpf_verifier_env *env, int regno1, int regno2);
- void bpf_equations_before_insn(struct bpf_verifier_env *env);
- int bpf_equations_after_insn(struct bpf_verifier_env *env);
-diff --git a/kernel/bpf/equation.c b/kernel/bpf/equation.c
-index b2b5501f0b8..d33e686f299 100644
---- a/kernel/bpf/equation.c
-+++ b/kernel/bpf/equation.c
-@@ -640,6 +640,7 @@ static bool refine_ptr(struct bpf_verifier_env *env, struct bpf_verifier_state *
- 	return true;
- }
+ /* The struct scalar that is an anonymous member of *@p */
+@@ -646,7 +648,7 @@ static inline u32 bpf_stack_nr_slots(const struct bpf_func_state *frame)
  
-+/* All states share the marks. If propagate_bounds() does not follow, clear the mark. */
- static void mark_sym_refined(struct bpf_verifier_env *env, u32 sym, u32 sweep)
+ /*
+  * Stack slot @spi of @frame, covering bytes [fp - (spi + 1) * 8, fp - spi * 8).
+- * The caller must ensure spi < bpf_stack_nr_slots(frame), see bpf_grow_stack_state().
++ * The caller must ensure spi < bpf_stack_nr_slots(frame), see grow_stack_state().
+  */
+ static inline struct bpf_stack_state *bpf_stack_slot(const struct bpf_func_state *frame, u32 spi)
  {
- 	struct bpf_equation_env *eq_env = env->eq_env;
-@@ -1146,6 +1147,8 @@ void bpf_equations_before_insn(struct bpf_verifier_env *env)
+@@ -891,6 +893,7 @@ struct bpf_loop {
+ 	/* while bpf_loop_per_pass.cost is not above @budget: */
+ 	u64 budget;
+ 	u32 max_peel_cnt;	/* peel up to this trip */
++	bool disjoint_apart;	/* disjoint values in data_deps stay apart, also in the leftover */
+ 	);
+ 	bool partitioned;	/* the last partition was for this loop */
+ 	struct bpf_loop_per_pass this_pass;
+@@ -944,6 +947,7 @@ struct bpf_insn_aux_data {
+ 		u64 call_num;	/* any of these, or the offset of a refcount */
+ 	};
+ 	struct btf_struct_meta *kptr_struct_meta;
++	u64 suspect_loops; /* of the states that got here */
+ 	u64 map_key_state; /* constant (32 bit) key tracking for maps */
+ 	int ctx_field_size; /* the ctx field size for load insn, maybe 0 */
+ 	u32 seen; /* this insn was processed by the verifier at env->check_cnt */
+@@ -957,7 +961,9 @@ struct bpf_insn_aux_data {
+ 	u64 cast_mov:1; /* addr_space_cast of a pointer that is not in arena, it's a move */
+ 	u64 loop_guard:1; /* may_goto is added in front of this instruction */
+ 	u64 guard_unwinds:1; /* it leaves the subprog */
++	u64 speculative_first:1; /* a speculative state came to it first */
+ 	u64 call_recorded:1; /* see record_call_fixup() */
++	u64 pessimized:1; /* see bpf_partition_for_pessimized() */
+ 	u64 guard_edge_dropped:1; /* an edge of may_goto from here was dropped */
+ 	u64 alu_state:5; /* used in combination with alu_limit */
+ 	/* true if STX or LDX instruction is a part of a spill/fill
+@@ -984,6 +990,7 @@ struct bpf_insn_aux_data {
+ 	/* what one pass gives to the next pass, see bpf_flow_new_pass() */
+ 	u32 guard_no_unwind:1; /* it cannot unwind from here, at least sometimes */
+ 	u32 guard_unset_reg:1; /* where it goes a register is read that is not set here */
++	u32 non_speculative_first:1; /* speculative states end here, their fixups did not fit */
  
- 	if (!eq_env)
- 		return;
-+	if (st->speculative || eqs->sym_cnt > 2 * eqs->clean_sym_cnt + MAX_BPF_REG)
-+		bpf_equations_clean(env, st);
- 	eq_env->insn_idx = env->insn_idx;
- 	eq_env->fill_xreg = VAR_NONE;
- 	eq_env->has_arg_expr = 0;
-@@ -1573,6 +1576,430 @@ int bpf_equations_after_insn(struct bpf_verifier_env *env)
- 	return env->no_mem ? -ENOMEM : 0;
- }
+ 	/* below flags are initialized once */
+ 	u32 bb_end:1; /* last instruction of a basic block */
+@@ -1136,6 +1143,7 @@ struct bpf_subprog_info {
+ 	u32 exit_idx;
+ 	u32 callx_edge; /* 1 + the first of its env->callx_edges, 0 if none */
+ 	struct bpf_iarray *jt; /* jump table shared by all gotox of this subprogram */
++	u32 deepest_insn; /* the insn that set stack_depth */
+ 	u16 stack_depth; /* max. stack depth used by this function */
+ 	u16 stack_extra;
+ 	u16 arena_stack_depth; /* size of the frame in the stack in arena */
+@@ -1349,6 +1357,8 @@ struct bpf_verifier_env {
+ 	bool test_reg_invariants;	/* fail verification on register invariants violations */
+ 	bool uses_arena_sp;		/* the program has insns with BPF_REG_ARENA_SP */
+ 	bool path_sensitive;		/* no joins, see run_path_sensitive() */
++	bool for_log;			/* the verdict is known, see do_check_all() */
++	struct bpf_precision *precision;
+ 	u64 cost, mem;			/* see bpf_check_limits() */
+ 	u64 max_cost, max_mem;
+ 	u64 hash_seed;			/* see bpf_hash_join_key() */
+@@ -1358,10 +1368,13 @@ struct bpf_verifier_env {
+ 	/* What a pass writes. Each pass starts from the snapshot. */
+ 	struct_group_tagged(bpf_env_per_pass, per_pass,
+ 	int err;			/* the first error */
++	u32 err_insn;
+ 	bool imprecise;			/* a state before the first error is imprecise */
+ 	bool over_limit;		/* see bpf_check_limits() */
+ 	bool restart;			/* see bpf_flow_next_is_no_bound() */
+ 	bool guards_late;		/* see bpf_flow_loop_gets_guards() */
++	bool extra_values;		/* a state can have constants that no run has */
++	bool new_linear_xreg;		/* see bpf_same_insns_unproven() */
+ 	bool seen_direct_write;
+ 	/* a register may point to the stack and is not PTR_TO_STACK, see bpf_reg_state::buf */
+ 	bool seen_stack_slice;
+@@ -1671,6 +1684,13 @@ int bpf_renumber_ids(struct bpf_verifier_env *env, struct bpf_verifier_state *st
  
-+/* Clean up */
+ bool bpf_xreg_in_deps(struct bpf_verifier_env *env, const struct bpf_verifier_state *st,
+ 		      u32 fr, u32 xregno);
++void bpf_note_reads_from_unproven(struct bpf_verifier_env *env, u32 idx);
++void bpf_note_unproven_insn(struct bpf_verifier_env *env,
++			    const struct bpf_verifier_state *st, u32 idx);
++bool bpf_insn_is_unproven(struct bpf_verifier_env *env);
++void bpf_note_fixups_differ(struct bpf_verifier_env *env);
++void bpf_find_unproven_after_pass(struct bpf_verifier_env *env);
++bool bpf_same_insns_unproven(struct bpf_verifier_env *env);
+ /*
+  * The two limits of the verifier, for the whole load. The unit of cost is one step of a scan,
+  * about a dozen insns of the CPU. Memory is the bytes of states and tables at a time.
+@@ -1718,6 +1738,8 @@ int bpf_flow_place_guards(struct bpf_verifier_env *env);
+ /* verifier.c, for flow.c */
+ int bpf_flow_loop_enter(struct bpf_verifier_env *env, struct bpf_loop **backedge_loop,
+ 			bool *starts_leftover);
++int bpf_flow_edge_unproven(struct bpf_verifier_env *env, struct bpf_verifier_state *st, u32 idx,
++			   int err);
+ #define BPF_EXIT_NEEDS_CALLER	1	/* verify the call in the frames of the caller */
+ int bpf_flow_return(struct bpf_verifier_env *env, struct bpf_verifier_state *caller,
+ 		    const struct bpf_verifier_state *exit, int call_idx);
+@@ -1735,7 +1757,6 @@ void bpf_mark_reg_not_init(const struct bpf_verifier_env *env,
+ 			   struct bpf_reg_state *reg);
+ void bpf_mark_reg_known_scalar(struct bpf_reg_state *reg, u64 imm);
+ void bpf_mark_reg_unknown(struct bpf_reg_state *reg);
+-int bpf_grow_stack_state(struct bpf_verifier_env *env, struct bpf_func_state *state, int size);
+ 
+ static inline int bpf_get_spi(s32 off)
+ {
+diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+index f05ccfce45c..bb2841387d4 100644
+--- a/kernel/bpf/Makefile
++++ b/kernel/bpf/Makefile
+@@ -14,6 +14,7 @@ obj-$(CONFIG_BPF_SYSCALL) += local_storage.o queue_stack_maps.o ringbuf.o bpf_in
+ obj-$(CONFIG_BPF_SYSCALL) += bpf_local_storage.o bpf_task_storage.o
+ obj-$(CONFIG_BPF_SYSCALL) += fixups.o cfg.o states.o check_btf.o flow.o join.o
+ obj-$(CONFIG_BPF_SYSCALL) += equation.o
++obj-$(CONFIG_BPF_SYSCALL) += precision.o
+ obj-${CONFIG_BPF_LSM}	  += bpf_inode_storage.o
+ obj-$(CONFIG_BPF_SYSCALL) += disasm.o mprog.o
+ obj-$(CONFIG_BPF_JIT) += trampoline.o
+diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
+index 8a905f4df9b..dfe40d86677 100644
+--- a/kernel/bpf/log.c
++++ b/kernel/bpf/log.c
+@@ -751,7 +751,8 @@ void print_verifier_state(struct bpf_verifier_env *env, const struct bpf_verifie
+ 			break;
+ 		case STACK_DYNPTR:
+ 			/* skip to main dynptr slot */
+-			i += BPF_DYNPTR_NR_SLOTS - 1;
++			if (!reg->dynptr.first_slot)
++				i += BPF_DYNPTR_NR_SLOTS - 1;
+ 			reg = &bpf_stack_slot(state, i)->spilled_ptr;
+ 
+ 			verbose(env, " fp%d", (-i - 1) * BPF_REG_SIZE);
+diff --git a/kernel/bpf/precision.c b/kernel/bpf/precision.c
+new file mode 100644
+index 00000000000..6aa54c656a7
+--- /dev/null
++++ b/kernel/bpf/precision.c
+@@ -0,0 +1,142 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#include <linux/bpf.h>
++#include <linux/bpf_verifier.h>
++#include <linux/filter.h>
++#include <linux/slab.h>
 +
-+static bool sym_has_one_use(const struct sym_scratch *scratch, u32 sym)
++#include "precision.h"
++
++/* The insn at @idx is unproven because it reads a value from another unproven insn */
++void bpf_note_reads_from_unproven(struct bpf_verifier_env *env, u32 idx)
 +{
-+	return sym != NO_SYM && scratch[sym].use_cnt == 1;
++	__set_bit(idx, env->precision->this_pass.bad_read_insns);
++	__set_bit(idx, env->precision->err_insns);
 +}
 +
-+static void count_sym_uses(struct bpf_verifier_env *env, const struct bpf_equations *eqs)
++/* The access at @idx is unproven because of its address, whatever it loads or stores */
++static bool bad_address(struct bpf_verifier_env *env, const struct bpf_verifier_state *st, u32 idx)
 +{
-+	struct sym_scratch *scratch = env->eq_env->scratch;
-+	const struct bpf_xreg_equation *xreg_eq;
-+	const struct bpf_sym_equation *sym_eq;
++	const struct bpf_func_state *f = st->frame[st->curframe];
++	struct bpf_insn *insn = &env->prog->insnsi[idx];
++	u8 class = BPF_CLASS(insn->code);
++	const struct bpf_reg_state *base;
++
++	if (insn->src_reg >= MAX_BPF_REG || insn->dst_reg >= MAX_BPF_REG ||
++	    (class != BPF_LDX && class != BPF_ST &&
++	     (class != BPF_STX || f->regs[insn->src_reg].type != SCALAR_VALUE)))
++		return false;
++	base = &f->regs[class == BPF_LDX ? insn->src_reg : insn->dst_reg];
++	if (base->type != PTR_TO_STACK)
++		return !tnum_is_const(base->var_off);
++	return reg_smin(base) < -(s64)env->stack_limit - insn->off ||
++	       reg_smax(base) > -insn->off - bpf_size_to_bytes(BPF_SIZE(insn->code));
++}
++
++/* The insn at @idx is unproven in @st */
++void bpf_note_unproven_insn(struct bpf_verifier_env *env,
++			    const struct bpf_verifier_state *st, u32 idx)
++{
++	struct bpf_subprog_info *sub = bpf_find_containing_subprog(env, idx);
++	struct bpf_precision *prec = env->precision;
++	const struct loop_stack_entry *e;
++	u32 i, fr;
++
++	if (!sub)
++		return;
++	for (fr = 0; fr <= st->curframe && st->frame[fr]; fr++) {
++		e = st->frame[fr]->loop_stack;
++		for (i = 0; i < st->frame[fr]->loop_stack_cnt; i++, e++)
++			e->loop->this_pass.has_unproven |= (e->peeled || e->loop->disjoint_apart) &&
++							   !(st->suspect_loops &
++							     ~e->loop->suspect_bit);
++	}
++	for (i = st->curframe; i > 0 && st->frame[i]; i--)
++		__set_bit(st->frame[i]->callsite, prec->this_pass.call_insns);
++	/* the state does not know who called */
++	__set_bit(st->frame[0] ? st->frame[0]->subprogno : sub - env->subprog_info,
++		  prec->this_pass.unproven_funcs);
++	/* peeling comes first: it helps only for the suspect loops of this state */
++	if (!__test_and_set_bit(idx, prec->this_pass.unproven_insns)) {
++		prec->last_unproven_left -= test_bit(idx, prec->last_unproven_insns);
++		prec->this_pass.suspect_loops |= st->suspect_loops;
++		if (idx == env->err_insn)
++			prec->this_pass.first_suspect_loops |= st->suspect_loops;
++	}
++	if (!st->frame[0] || !bad_address(env, st, idx))
++		__set_bit(idx, prec->bad_value_insns);
++	if (!st->holds_too_much)
++		__set_bit(idx, prec->err_insns);
++	for (i = BPF_REG_0; st->frame[0] && i < BPF_REG_FP; i++)
++		if ((env->insn_aux_data[idx].use_regs & BIT(i)) &&
++		    !test_bit(idx, prec->bad_read_insns_done) &&
++		    st->frame[st->curframe]->regs[i].type == NOT_INIT)
++			__set_bit(idx, prec->this_pass.bad_read_insns);
++}
++
++/* The state that set the fixup is gone. The leftover of a loop possibly made it up. */
++static void suspect_loops_of_insn(struct bpf_verifier_env *env, u32 idx)
++{
++	env->precision->this_pass.suspect_loops |= env->insn_aux_data[idx].suspect_loops;
++	if (!env->err)
++		env->precision->this_pass.first_suspect_loops |=
++			env->insn_aux_data[idx].suspect_loops;
++}
++
++/* The current insn has a fixup that does not fit the current state */
++void bpf_note_fixups_differ(struct bpf_verifier_env *env)
++{
++	struct bpf_insn_aux_data *aux = &env->insn_aux_data[env->insn_idx];
++
++	suspect_loops_of_insn(env, env->insn_idx);
++	if (aux->speculative_first && !env->cur_state->speculative)
++		aux->non_speculative_first = env->precision->new_nospec = env->imprecise = true;
++}
++
++bool bpf_insn_is_unproven(struct bpf_verifier_env *env)
++{
++	return !env->path_sensitive &&
++	       test_bit(env->insn_idx, env->precision->this_pass.unproven_insns);
++}
++
++static void note_unproven_after_pass(struct bpf_verifier_env *env, u32 idx)
++{
++	static const struct bpf_verifier_state no_state;
++
++	bpf_note_unproven_insn(env, &no_state, idx);
++	/* no check failed, so the failing path cannot end here */
++	__clear_bit(idx, env->precision->err_insns);
++	suspect_loops_of_insn(env, idx);
++}
++
++/* check_after_pass() found an error. Which insns caused it? */
++void bpf_find_unproven_after_pass(struct bpf_verifier_env *env)
++{
++	struct bpf_insn_aux_data *aux = env->insn_aux_data;
++	struct bpf_insn *insn = env->prog->insnsi;
 +	u32 i;
 +
-+	bpf_add_cost(env, eqs->sym_cnt, BPF_COST_COPY);
-+	memset(scratch, 0, eqs->sym_cnt * sizeof(*scratch));
-+	for_each_xreg_equation(env, eqs, xreg_eq)
-+		if (xreg_eq->coef)
-+			scratch[xreg_eq->sym].use_cnt++;
-+	for_each_sym_equation(env, eqs, sym_eq) {
-+		for (i = 0; i < 3; i++)
-+			if (sym_eq->coef[i])
-+				scratch[sym_eq->sym[i]].use_cnt++;
-+		if (is_op(sym_eq))
-+			scratch[sym_eq->sym[0]].op = sym_eq;
-+	}
-+}
-+
-+static void replace_operand(struct bpf_sym_equation *sym_eq, u32 sym, const struct expr *new_expr)
-+{
-+	struct expr expr;
-+	int i;
-+
-+	for (i = 0; i < 2; i++) {
-+		if (sym_eq->sym[i + 1] != sym)
-+			continue;
-+		expr = expr_scale(*new_expr, sym_eq->coef[i + 1], rhs_expr(sym_eq, i).off);
-+		set_operand(sym_eq, i, &expr);
-+	}
-+	if (sym_eq->sym[0] == sym || sym_eq->sym[0] == var_symno(new_expr->var))
-+		sym_eq->sym[0] = NO_SYM;
-+}
-+
-+/* Replace @sym with @expr */
-+static bool substitute_sym(struct bpf_verifier_env *env, struct bpf_equations *eqs, u32 sym,
-+			   const struct expr *expr, const struct bpf_sym_equation *def_equation)
-+{
-+	struct bpf_xreg_equation *xreg_eq;
-+	struct bpf_sym_equation *sym_eq, new;
-+	bool changed = false;
-+	int i;
-+
-+	if (over_limit(env))
-+		return false;
-+	for_each_xreg_equation(env, eqs, xreg_eq) {
-+		if (xreg_eq->sym != sym)
-+			continue;
-+		xreg_eq->off += xreg_eq->coef * expr->off;
-+		xreg_eq->coef *= expr->coef;
-+		xreg_eq->sym = expr->var;
-+	}
-+	for_each_sym_equation(env, eqs, sym_eq) {
-+		i = find_sym_pos(sym_eq, sym);
-+		if (i == 3 || sym_eq == def_equation || sym_eq->sym[0] == NO_SYM)
-+			continue;
-+		if (is_op(sym_eq)) {
-+			replace_operand(sym_eq, sym, expr);
-+			continue;
++	for (i = 0; i < env->subprog_cnt; i++)
++		note_unproven_after_pass(env, env->subprog_info[i].deepest_insn);
++	for (i = 0; i < env->prog->len; i++, insn++, aux++) {
++		if (aux->pessimized) {
++			note_unproven_after_pass(env, i);
++		} else if (aux->seen && (bpf_calls_function(env, i) || is_stack_arg_st(insn) ||
++					 is_stack_arg_stx(insn))) {
++			__set_bit(i, env->precision->this_pass.call_insns);
++			suspect_loops_of_insn(env, i);
 +		}
-+		new = *sym_eq;
-+		new.off += new.coef[i] * expr->off;
-+		new.coef[i] *= expr->coef;
-+		new.sym[i] = expr->var;
-+		if (isolate_sym(&new))
-+			*sym_eq = new;
-+		else if (i || !expr->coef || find_sym_pos(sym_eq, expr->var) < 3)
-+			sym_eq->sym[0] = NO_SYM;
-+		changed = true;
 +	}
-+	return changed;
 +}
 +
-+/* The position of the sym that only @sym_eq uses. -1 if there is none. */
-+static int find_one_use_sym(const struct sym_scratch *scratch,
-+			    const struct bpf_sym_equation *sym_eq)
++/*
++ * All unproven insns of the last pass are unproven again, so the pass can stop. It continues if
++ * it added to linear_xregs: later trips can show that the xreg is not linear.
++ */
++bool bpf_same_insns_unproven(struct bpf_verifier_env *env)
 +{
++	struct bpf_precision *prec = env->precision;
++
++	return env->for_log || (prec->last_unproven_left == 1 && !env->new_linear_xreg &&
++				test_bit(env->insn_idx, prec->last_unproven_insns) &&
++				!test_bit(env->insn_idx, prec->this_pass.unproven_insns));
++}
+diff --git a/kernel/bpf/precision.h b/kernel/bpf/precision.h
+new file mode 100644
+index 00000000000..23980622006
+--- /dev/null
++++ b/kernel/bpf/precision.h
+@@ -0,0 +1,39 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* What precision.c and failing_path.c share */
++#ifndef __BPF_PRECISION_H
++#define __BPF_PRECISION_H
++
++#include <linux/bpf_verifier.h>
++
++/* What a pass finds about its errors */
++struct precision_per_pass {
++	/* bitmaps of insns */
++	unsigned long *unproven_insns;
++	unsigned long *call_insns;		/* lead to unproven insns, or write what is held */
++	unsigned long *bad_read_insns;		/* unproven because of an unreadable xreg */
++	unsigned long *unproven_funcs;		/* of functions */
++	u64 suspect_loops, first_suspect_loops;	/* of the unproven states, of the first one */
++};
++
++struct bpf_precision {
++	/* this pass, and the last pass whose partition was kept */
++	struct precision_per_pass this_pass, last_pass;
++	unsigned long *bad_value_insns;		/* unproven, its value is possibly the cause */
++	unsigned long *last_unproven_insns;	/* in the last pass */
++	unsigned long *bad_read_insns_done;
++	u32 last_unproven_left;		/* last_unproven_insns whose check did not fail again */
++	bool new_nospec;
++
++	/* The path-sensitive run */
++	unsigned long *err_insns;		/* insns at which the failing path can end */
++};
++
++static inline bool bpf_calls_function(struct bpf_verifier_env *env, int idx)
++{
++	struct bpf_insn *insn = &env->prog->insnsi[idx];
++
++	return bpf_pseudo_call(insn) || bpf_is_callx(insn) ||
++	       env->insn_aux_data[idx].calls_callback || bpf_is_async_callback_calling_insn(insn);
++}
++
++#endif
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 3edc91b8852..6da1a0f5b44 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -1488,7 +1488,7 @@ static int resize_reference_state(struct bpf_verifier_state *state, size_t n)
+ /* Possibly update state->allocated_stack to be at least size bytes. Also
+  * possibly update the function's high-water mark in its bpf_subprog_info.
+  */
+-int bpf_grow_stack_state(struct bpf_verifier_env *env, struct bpf_func_state *state, int size)
++static int grow_stack_state(struct bpf_verifier_env *env, struct bpf_func_state *state, int size)
+ {
+ 	size_t old_n = bpf_stack_nr_slots(state), n;
+ 
+@@ -1506,8 +1506,10 @@ int bpf_grow_stack_state(struct bpf_verifier_env *env, struct bpf_func_state *st
+ 	state->allocated_stack = size;
+ 
+ 	/* update known max for given subprogram */
+-	if (env->subprog_info[state->subprogno].stack_depth < size)
++	if (env->subprog_info[state->subprogno].stack_depth < size) {
+ 		env->subprog_info[state->subprogno].stack_depth = size;
++		env->subprog_info[state->subprogno].deepest_insn = env->insn_idx;
++	}
+ 
+ 	return 0;
+ }
+@@ -1832,15 +1834,12 @@ int bpf_copy_verifier_state(struct bpf_verifier_env *env, struct bpf_verifier_st
+ 	return 0;
+ }
+ 
+-static bool error_recoverable_with_nospec(int err)
++/*
++ * A check failed, so the insn is unproven in this state. The program is not rejected: a later
++ * pass can prove the insn. This pass continues, to find the other unproven insns.
++ */
++static bool error_is_recoverable(int err)
+ {
+-	/* Should only return true for non-fatal errors that are allowed to
+-	 * occur during speculative verification. For these we can insert a
+-	 * nospec and the program might still be accepted. Do not include
+-	 * something like ENOMEM because it is likely to re-occur for the next
+-	 * architectural path once it has been recovered-from in all speculative
+-	 * paths.
+-	 */
+ 	return err == -EPERM || err == -EACCES || err == -EINVAL;
+ }
+ 
+@@ -4403,7 +4402,7 @@ static int check_outgoing_stack_args(struct bpf_verifier_env *env, struct bpf_fu
+ 				nargs, spi + 1);
+ 			bpf_diag_stack_arg_uninit(env, env->insn_idx, nargs, spi,
+ 						  callee_name, arg_name);
+-			return -EFAULT;
++			return -EINVAL;
+ 		}
+ 	}
+ 
+@@ -7051,7 +7050,7 @@ static int check_stack_access_within_bounds(
+ 	/* Note that there is no stack access with offset zero, so the needed stack
+ 	 * size is -min_off, not -min_off+1.
+ 	 */
+-	return bpf_grow_stack_state(env, state, -min_off /* size */);
++	return grow_stack_state(env, state, -min_off /* size */);
+ }
+ 
+ static bool get_func_retval_range(struct bpf_prog *prog,
+@@ -7598,6 +7597,8 @@ static int check_load_mem(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		}
+ 		src_reg_type |= PTR_UNTRUSTED;
+ 	}
++	/* a fill copies it from the slot, see mark_from_unproven(); dst can be src */
++	regs[insn->dst_reg].from_unproven = regs[insn->src_reg].from_unproven;
+ 
+ 	/*
+ 	 * check_stack_read_fixed_off() may refine the modification's origin to
+@@ -11358,9 +11359,9 @@ static int btf_check_subprog_call(struct bpf_verifier_env *env, int subprog)
+ 	err = btf_check_func_arg_match(env, subprog, btf);
+ 	/* Compiler optimizations can remove arguments from static functions
+ 	 * or mismatched type can be passed into a global function.
+-	 * In such cases mark the function as unreliable from BTF point of view.
++	 * Mark a static function as unreliable from BTF point of view. The other call is unproven.
+ 	 */
+-	if (err)
++	if (err && !bpf_subprog_is_global(env, subprog))
+ 		prog->aux->func_info_aux[subprog].unreliable = true;
+ 	return err;
+ }
+@@ -12765,6 +12766,7 @@ static struct bpf_insn_aux_data *cur_aux(const struct bpf_verifier_env *env)
+ static int fixups_differ(struct bpf_verifier_env *env, const char *msg)
+ {
+ 	verbose(env, "%s\n", msg);
++	bpf_note_fixups_differ(env);
+ 	return -EINVAL;
+ }
+ 
+@@ -20710,6 +20712,33 @@ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
+ 	return -EFAULT;
+ }
+ 
++/* Does the insn read what an unproven insn made up? Then what it writes is made up too. */
++static bool reads_from_unproven(struct bpf_verifier_env *env)
++{
++	struct bpf_reg_state *regs = cur_regs(env);
 +	int i;
 +
-+	for (i = 2; i >= 0 && !sym_has_one_use(scratch, sym_eq->sym[i]); i--)
-+		;
-+	return i;
++	for (i = BPF_REG_0; env->err && i < BPF_REG_FP; i++)
++		if ((cur_aux(env)->use_regs & BIT(i)) && regs[i].from_unproven)
++			return true;
++	return false;
 +}
 +
-+/* Another equation is for the same sum as @sym_eq. It gets the range of the sym at @one_use. */
-+static bool refine_same_sum(struct bpf_verifier_env *env, struct bpf_equations *eqs,
-+			    const struct bpf_sym_equation *sym_eq, int one_use)
++static void mark_from_unproven(struct bpf_verifier_env *env, int idx, bool from_unproven)
 +{
-+	int i = !one_use, j = 2 - (one_use == 2);
-+	struct expr a = sym_expr(sym_eq->coef[i], sym_eq->sym[i], sym_eq->off), diff;
-+	struct expr b = sym_expr(-sym_eq->coef[j], sym_eq->sym[j], 0);
-+	struct equation_pos pos = {};
-+	struct scalar bounds;
++	struct bpf_reg_state *regs = cur_regs(env);
++	int i;
 +
-+	/* the other equation can be a wrong guess, and then both are lost */
-+	if (eqs == &env->eq_env->join_state.equations)
-+		return false;
-+	while (b.coef && bpf_find_next_diff(env, eqs, &a, &b, &pos, &diff)) {
-+		if (!is_plus_minus_one(diff.coef) || var_symno(diff.var) == NO_SYM ||
-+		    var_symno(diff.var) == sym_eq->sym[one_use])
++	/* a fill has what was spilled */
++	if (!from_unproven && BPF_CLASS(env->prog->insnsi[idx].code) == BPF_LDX)
++		return;
++	for (i = BPF_REG_0; env->err && i < BPF_REG_FP; i++)
++		if (env->insn_aux_data[idx].def_regs & BIT(i))
++			regs[i].from_unproven = from_unproven;
++}
++
++static void note_error(struct bpf_verifier_env *env, int err);
++
+ static u32 held_cnt(const struct bpf_verifier_state *st)
+ {
+ 	return st->acquired_refs + st->active_rcu_locks + st->active_preempt_locks;
+@@ -20897,6 +20926,11 @@ static int check_held_in_leftover(struct bpf_verifier_env *env,
+ 	verbose(env, "loop at insn %d acquires more than it releases\n", entry->loop->header);
+ 	env->imprecise |= !env->err;
+ 	st->suspect_loops |= entry->loop->suspect_bit;
++	st->holds_too_much = true;
++	if (bpf_same_insns_unproven(env))
++		return -EINVAL;
++	note_error(env, -EINVAL);
++	st->holds_too_much = false;
+ 	st->max_held_cnt = st->max_held_cnt ?: held_cnt(st);
+ 	return held_cnt(st) > st->max_held_cnt;
+ }
+@@ -21232,6 +21266,20 @@ static bool is_error_of_state(struct bpf_verifier_env *env, int err)
+ 	return err != -ENOMEM && err != -EINTR && !env->over_limit && !env->bug;
+ }
+ 
++/* The pass has an error. The log ends with the first error. */
++static void note_error(struct bpf_verifier_env *env, int err)
++{
++	if (!is_error_of_state(env, err))
++		return;
++	if (!env->err) {
++		env->err = err;
++		env->err_insn = env->insn_idx;
++		env->log.level = 0;
++	}
++	if (!env->path_sensitive)
++		bpf_note_unproven_insn(env, env->cur_state, env->insn_idx);
++}
++
+ /* An error in a speculative state is no error */
+ static bool nospec_ends_path(struct bpf_verifier_env *env,
+ 			     const struct bpf_verifier_state *st, int err)
+@@ -21239,6 +21287,104 @@ static bool nospec_ends_path(struct bpf_verifier_env *env,
+ 	return st->speculative && err < 0 && is_error_of_state(env, err);
+ }
+ 
++/* @st cannot take the edge to or from @idx. Returns 1 if only its path ends. */
++int bpf_flow_edge_unproven(struct bpf_verifier_env *env, struct bpf_verifier_state *st, u32 idx,
++			   int err)
++{
++	bool last;
++
++	if (nospec_ends_path(env, st, err)) {
++		need_nospec(env, idx);
++		return 1;
++	}
++	swap(env->insn_idx, idx);
++	last = !error_is_recoverable(err) || env->path_sensitive || bpf_same_insns_unproven(env);
++	swap(env->cur_state, st);
++	if (!env->path_sensitive)
++		note_error(env, err);
++	env->cur_state = st;
++	if (last)
++		return err;
++	env->insn_idx = idx;
++	return 1;
++}
++
++/* The call releases, locks, or makes a dynptr, an iterator or an irq flag */
++static bool call_writes_held(struct bpf_verifier_env *env, const struct bpf_insn *insn)
++{
++	const struct bpf_func_proto *fn = NULL;
++	struct bpf_kfunc_desc *desc;
++	enum bpf_arg_type type;
++	int i;
++
++	if (bpf_helper_call(insn)) {
++		bpf_get_helper_proto(env, insn->imm, &fn);
++	} else {
++		desc = find_kfunc_desc(env, insn->imm, insn->off);
++		fn = desc ? &desc->proto : NULL;
++	}
++	for (i = 0; fn && i < MAX_BPF_FUNC_REG_ARGS; i++) {
++		/* nothing is held for a pointer that an unproven insn made up */
++		if (cur_regs(env)[BPF_REG_1 + i].type == SCALAR_VALUE)
 +			continue;
-+		scalar_scale(&bounds, &eqs->syms[sym_eq->sym[one_use]], -sym_eq->coef[one_use]);
-+		refine_sym(env, eqs, diff, bounds, 1);
-+		eqs->sym_equations[pos.next - 1].insn_idx = -1;
-+		return true;
++		type = fn->arg_type[i];
++		if (arg_type_is_release(type) || (arg_type_is_dynptr(type) && (type & MEM_UNINIT)))
++			return true;
++		switch (base_type(type)) {
++		case ARG_PTR_TO_SPIN_LOCK:
++		case ARG_PTR_TO_RES_SPIN_LOCK:
++		case ARG_PTR_TO_IRQ_FLAG:
++		case ARG_PTR_TO_ITER:
++		case ARG_PTR_TO_LIST_NODE:
++		case ARG_PTR_TO_RB_NODE:
++			return true;
++		default:
++			break;
++		}
 +	}
 +	return false;
 +}
 +
 +/*
-+ * No xreg holds the sym at @pos of @def_equation any more. Eliminate it from the equations:
-+ *	p' = sym0 + len, sym0 = 8 * trip + sym1	->	p' = 8 * trip + sym2, sym2 is sym1 + len
++ * Continue as if @insn is proven, to find the other unproven insns of the pass.
++ * If it changes what is held, the next errors follow from this one, so the path ends.
++ * Returns 0 if the path continues.
 + */
-+static bool eliminate_sym(struct bpf_verifier_env *env, struct bpf_equations *eqs,
-+			  struct bpf_sym_equation *def_equation, int pos)
++static int skip_unproven_insn(struct bpf_verifier_env *env, const struct bpf_insn *insn)
 +{
-+	struct sym_scratch *scratch = env->eq_env->scratch;
-+	int one_use = find_one_use_sym(scratch, def_equation), i, j, k;
-+	struct bpf_sym_equation *sym_eq, def = *def_equation;
-+	struct scalar bounds, rest, *s;
-+	bool spare = def.insn_idx < 0;
-+	u32 one_use_sym;
-+	s64 factor;
++	struct bpf_func_state *frame = cur_func(env);
++	struct bpf_reg_state *regs = cur_regs(env);
++	u16 def = cur_aux(env)->def_regs;
++	u8 class = BPF_CLASS(insn->code), *type;
++	int i, spi;
 +
-+	if (one_use < 0 || one_use == pos || !is_plus_minus_one(def.coef[pos]))
-+		return false;
-+	def_equation->sym[0] = NO_SYM;
-+	rest = eqs->syms[def.sym[one_use]];
-+	for_each_sum(env, eqs, sym_eq) {
-+		i = find_sym_pos(sym_eq, def.sym[pos]);
-+		if (i == 3 || sym_eq == def_equation)
-+			continue;
-+		j = find_one_use_sym(scratch, sym_eq);
-+		for (k = 0; k < 3 && j < 0 && spare; k++)
-+			if (k != i && sym_eq->coef[k] && !scratch[sym_eq->sym[k]].determined)
-+				j = k;
-+		if (j < 0)
-+			continue;
-+		bpf_add_cost(env, 4, BPF_COST_XREG);
-+		factor = -sym_eq->coef[i] * def.coef[pos];
-+		scalar_scale(&bounds, &eqs->syms[sym_eq->sym[j]], sym_eq->coef[j]);
-+		/* no xreg gives the value of that sym. The sym of @def takes its place. */
-+		if (!sym_has_one_use(scratch, sym_eq->sym[j])) {
-+			sym_eq->sym[j] = def.sym[one_use];
-+			spare = false;
-+		}
-+		s = &eqs->syms[sym_eq->sym[j]];
-+		scalar_add_scaled(s, &bounds, &rest, factor * def.coef[one_use]);
-+		scalar_bounds_sync(s);
-+		sym_eq->coef[j] = 1;
-+		sym_eq->coef[i] = factor * def.coef[3 - pos - one_use];
-+		sym_eq->sym[i] = def.sym[3 - pos - one_use];
-+		sym_eq->off += factor * def.off;
-+		sym_eq->insn_idx = -1;
-+		/* a sym with one use is the last choice for the left side */
-+		swap(sym_eq->coef[j], sym_eq->coef[2]);
-+		swap(sym_eq->sym[j], sym_eq->sym[2]);
-+		one_use_sym = sym_eq->sym[2];
-+		if (!isolate_sym(sym_eq) ||
-+		    refine_same_sum(env, eqs, sym_eq, find_sym_pos(sym_eq, one_use_sym)))
-+			sym_eq->sym[0] = NO_SYM;
++	if (bpf_insn_is_cond_jump(insn->code))
++		return PTR_ERR_OR_ZERO(push_stack(env, env->insn_idx + insn->off + 1,
++						  env->insn_idx, false));
++	if (class == BPF_LD || ((class == BPF_JMP || class == BPF_JMP32) &&
++				!bpf_helper_call(insn) && !bpf_pseudo_kfunc_call(insn)))
++		return PROCESS_BPF_EXIT;
++	if (class == BPF_JMP && call_writes_held(env, insn))
++		return PROCESS_BPF_EXIT;
++	/* what it stores can be read */
++	for_each_set_bit(spi, cur_aux(env)->may_write_mask, bpf_stack_nr_slots(frame)) {
++		type = bpf_stack_slot(frame, spi)->slot_type;
++		for (i = 0; i < BPF_REG_SIZE; i++)
++			if (type[i] == STACK_INVALID || type[i] == STACK_POISON)
++				type[i] = STACK_MISC;
 +	}
-+	return true;
++	for (i = BPF_REG_0; i < BPF_REG_FP; i++) {
++		if (!(def & BIT(i)))
++			continue;
++		if (class == BPF_JMP && i)
++			bpf_mark_reg_not_init(env, &regs[i]);
++		else
++			mark_reg_unknown(env, regs, i);
++	}
++	leave_callback(frame);
++	return 0;
 +}
 +
-+/* No xreg holds @sym, no jump tested it. An op made it of the syms of @sum: w1 += 1; w1 += 1; */
-+static bool only_op_is_left(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
-+			    const struct bpf_sym_equation *sum, u32 sym)
-+{
-+	const struct sym_scratch *scratch = &env->eq_env->scratch[sym];
-+	const struct bpf_sym_equation *op = scratch->op;
-+	struct scalar bounds;
-+
-+	return op && scratch->use_cnt == 2 && (!op->coef[1] || find_sym_pos(sum, op->sym[1]) < 3) &&
-+	       (!op->coef[2] || find_sym_pos(sum, op->sym[2]) < 3) &&
-+	       run_op(env, st, op, &bounds) && scalar_subsumes(&st->equations.syms[sym], &bounds);
-+}
-+
-+static bool equation_is_useless(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
-+				const struct bpf_sym_equation *sym_eq)
-+{
-+	const struct sym_scratch *scratch = env->eq_env->scratch;
-+	int i, sym_cnt = 0, one_use_cnt = 0;
-+
-+	if (is_op(sym_eq))
-+		return sym_has_one_use(scratch, sym_eq->sym[0]) ||
-+		       (!sym_eq->coef[1] && !sym_eq->coef[2]);
-+	for (i = 0; i < 3; i++) {
-+		sym_cnt += sym_eq->coef[i] && !only_op_is_left(env, st, sym_eq, sym_eq->sym[i]);
-+		if (!sym_has_one_use(scratch, sym_eq->sym[i]))
-+			continue;
-+		one_use_cnt++;
-+		if ((sym_eq->coef[i] & 1) && scalar_is_unknown(&st->equations.syms[sym_eq->sym[i]]))
-+			return true;
-+	}
-+	return one_use_cnt >= sym_cnt - 1;
-+}
-+
-+static void forget_useless_equations(struct bpf_verifier_env *env, struct bpf_verifier_state *st)
-+{
-+	struct bpf_equations *eqs = &st->equations;
-+	struct sym_scratch *scratch = env->eq_env->scratch;
-+	struct bpf_xreg_equation *xreg_eq, *next;
-+	struct bpf_sym_equation *sym_eq;
-+	bool more;
-+	int i;
-+
-+	do {
-+		more = false;
-+		for_each_sym_equation(env, eqs, sym_eq) {
-+			if (sym_eq->sym[0] == NO_SYM || !equation_is_useless(env, st, sym_eq))
-+				continue;
-+			for (i = 0; i < 3; i++)
-+				more |= sym_eq->coef[i] && --scratch[sym_eq->sym[i]].use_cnt == 1;
-+			sym_eq->sym[0] = NO_SYM;
-+		}
-+	} while (more && !over_limit(env));
-+	forget_sym_equations(env, eqs, S32_MIN);
-+	next = eqs->xreg_equations;
-+	for_each_xreg_equation(env, eqs, xreg_eq) {
-+		if (xreg_eq->coef && !sym_has_one_use(scratch, xreg_eq->sym))
-+			*next++ = *xreg_eq;
-+		else if (xreg_eq->coef)
-+			scratch[xreg_eq->sym].use_cnt = 0;
-+	}
-+	eqs->xreg_equation_cnt = next - eqs->xreg_equations;
-+}
-+
-+/* The sym that @sym_eq determines. 3: all are determined. -1: more than one is not. */
-+static int find_undetermined_sym(const struct sym_scratch *scratch,
-+				 const struct bpf_sym_equation *sym_eq)
-+{
-+	int i, pos = 3;
-+
-+	for (i = 0; i < 3; i++) {
-+		if (!sym_eq->coef[i] || scratch[sym_eq->sym[i]].determined)
-+			continue;
-+		if (pos < 3 || (i && is_op(sym_eq)))
-+			return -1;
-+		pos = i;
-+	}
-+	return pos;
-+}
-+
-+/* Only an op tells a sym of @sym_eq */
-+static bool leans_on_op(const struct sym_scratch *scratch, const struct bpf_sym_equation *sym_eq)
-+{
-+	int i;
-+
-+	for (i = 0; i < 3; i++)
-+		if (sym_eq->coef[i] && scratch[sym_eq->sym[i]].by_op)
-+			return true;
-+	return is_op(sym_eq);
-+}
-+
-+/* Delete what says nothing. Put the rest in the order that check_equations() needs. */
-+static void normalize_equations(struct bpf_verifier_env *env, struct bpf_verifier_state *st)
-+{
-+	struct sym_scratch *scratch = env->eq_env->scratch;
-+	struct bpf_equations *eqs = &st->equations;
-+	struct bpf_xreg_equation *xreg_eq;
-+	struct bpf_sym_equation *sym_eq, *done, *sweep_start, *end;
-+	bool substituted = false;
-+	struct expr expr;
-+	u32 i, cnt;
-+	int pos;
-+
-+	if (eqs->normalized)
-+		return;
-+	for (i = 0; i < eqs->sym_cnt; i++) {
-+		expr = make_expr(0, 0, eqs->syms[i].var_off.value);
-+		if (tnum_is_const(eqs->syms[i].var_off))
-+			substituted |= substitute_sym(env, eqs, i, &expr, NULL);
-+	}
-+	/* see read_from_truncation() */
-+	for_each_sym_equation(env, eqs, sym_eq)
-+		if (is_op(sym_eq) && bits_read(env, sym_eq) < 32)
-+			op_skips_truncations(env, eqs, sym_eq);
-+again:
-+	if (over_limit(env))
-+		eqs->xreg_equation_cnt = eqs->sym_equation_cnt = 0;
-+	forget_sym_equations(env, eqs, S32_MIN);
-+	count_sym_uses(env, eqs);
-+	for_each_sum(env, eqs, sym_eq) {
-+		if (sym_eq->coef[2] || sym_eq->sym[0] == NO_SYM)
-+			continue;
-+		refine_syms_by_equation(env, st, sym_eq, 0);
-+		expr = rhs_expr(sym_eq, 0);
-+		/* sym0 = 2 * sym1, the only use of sym1: it shows only the low bits of sym0 */
-+		if (!is_plus_minus_one(expr.coef) && sym_has_one_use(scratch, sym_eq->sym[1]))
-+			continue;
-+		substitute_sym(env, eqs, sym_eq->sym[0], &expr, sym_eq);
-+		substituted = true;
-+	}
-+	if (substituted) {
-+		forget_sym_equations(env, eqs, S32_MIN);
-+		count_sym_uses(env, eqs);
-+		/* two sums can be the same now. What an insn made keeps its form. */
-+		for_each_sum(env, eqs, sym_eq) {
-+			pos = find_one_use_sym(scratch, sym_eq);
-+			if (pos >= 0 && sym_eq->insn_idx < 0 &&
-+			    refine_same_sum(env, eqs, sym_eq, pos))
-+				sym_eq->sym[0] = NO_SYM;
-+		}
-+		forget_sym_equations(env, eqs, S32_MIN);
-+		count_sym_uses(env, eqs);
-+		substituted = false;
-+	}
-+	forget_useless_equations(env, st);
-+
-+	for_each_xreg_equation(env, eqs, xreg_eq)
-+		scratch[xreg_eq->sym].determined = true;
-+	/* The equations near the xregs go first. Cut a long chain: x += k; x += k; ... */
-+	done = eqs->sym_equations;
-+	end = eqs->sym_equations +
-+	      min(eqs->sym_equation_cnt, 2 * SUMS_PER_XREG * eqs->xreg_equation_cnt);
-+	do {
-+		bpf_add_cost(env, eqs->sym_equation_cnt - (done - eqs->sym_equations),
-+			     BPF_COST_COPY);
-+		sweep_start = done;
-+		for (sym_eq = done;
-+		     sym_eq < eqs->sym_equations + eqs->sym_equation_cnt && done < end; sym_eq++) {
-+			pos = find_undetermined_sym(scratch, sym_eq);
-+			/* sum += i & 1: go around the old sum, see eliminate_sym() */
-+			if (pos < 0 || (pos % 3 && sym_eq->insn_idx >= 0 &&
-+					!sym_has_one_use(scratch, sym_eq->sym[pos]) &&
-+					leans_on_op(scratch, sym_eq)))
-+				continue;
-+			if (sym_eq != done)
-+				swap(*sym_eq, *done);
-+			done++;
-+		}
-+		for (sym_eq = sweep_start; sym_eq < done; sym_eq++) {
-+			pos = find_undetermined_sym(scratch, sym_eq);
-+			if (pos == 3)
-+				continue;
-+			scratch[sym_eq->sym[pos]].by_op = leans_on_op(scratch, sym_eq);
-+			scratch[sym_eq->sym[pos]].determined = true;
-+		}
-+	} while (sweep_start < done && done < end && !over_limit(env));
-+	/* Nothing refines the operands of the other ops. The other sums need a sym with one use. */
-+	for (sym_eq = done; sym_eq < eqs->sym_equations + eqs->sym_equation_cnt; sym_eq++)
-+		for (i = 0; i < 3 && !is_op(sym_eq) && find_one_use_sym(scratch, sym_eq) < 0; i++)
-+			if (sym_eq->coef[i])
-+				scratch[sym_eq->sym[i]].new_symno = scratch[sym_eq->sym[i]].by_op;
-+	cnt = 0;
-+	for_each_sym_equation(env, eqs, sym_eq) {
-+		if (!is_op(sym_eq) || (sym_eq < done && !scratch[sym_eq->sym[0]].new_symno))
-+			continue;
-+		sym_eq->sym[0] = NO_SYM;
-+		cnt++;
-+	}
-+	if (cnt)
-+		goto again;
-+	/* the equations that are left lead through unknown syms. The last insn goes first. */
-+	for (cnt = 0; cnt < 2 && done < end; cnt++)
-+		for (sym_eq = eqs->sym_equations + eqs->sym_equation_cnt; sym_eq-- > done;)
-+			for (i = 0; i < 3 && (cnt || sym_eq->insn_idx >= 0); i++)
-+				if (sym_eq->coef[i] &&
-+				    !scratch[sym_eq->sym[i]].determined &&
-+				    eliminate_sym(env, eqs, sym_eq, i))
-+					goto again;
-+	if (done != eqs->sym_equations + eqs->sym_equation_cnt) {
-+		eqs->sym_equation_cnt = done - eqs->sym_equations;
-+		goto again;
-+	}
-+
-+	eqs->normalized = true;
-+	for (i = 0, cnt = 0; i < eqs->sym_cnt; i++) {
-+		scratch[i].refined_sweep = 0;
-+		if (!scratch[i].use_cnt)
-+			continue;
-+		if (cnt != i)
-+			eqs->syms[cnt] = eqs->syms[i];
-+		scratch[i].new_symno = cnt++;
-+	}
-+	if (cnt == eqs->sym_cnt)
-+		return;
-+	eqs->sym_cnt = cnt;
-+	for_each_xreg_equation(env, eqs, xreg_eq)
-+		xreg_eq->sym = scratch[xreg_eq->sym].new_symno;
-+	for_each_sym_equation(env, eqs, sym_eq)
-+		for (i = 0; i < 3; i++)
-+			if (sym_eq->coef[i])
-+				sym_eq->sym[i] = scratch[sym_eq->sym[i]].new_symno;
-+}
-+
-+/* Dead xregs are cleared */
-+void bpf_equations_clean(struct bpf_verifier_env *env, struct bpf_verifier_state *st)
-+{
-+	struct bpf_xreg_equation *xreg_eq, *next = st->equations.xreg_equations;
-+	struct bpf_equations *eqs = &st->equations;
-+	const struct scalar *s;
-+
-+	if (!env->eq_env)
-+		return;
-+	if (st->speculative)
-+		eqs->xreg_equation_cnt = 0;
-+	for_each_xreg_equation(env, eqs, xreg_eq) {
-+		s = equation_xreg_bounds(env, st, xreg_eq);
-+		if (s && !tnum_is_const(s->var_off)) {
-+			*next++ = *xreg_eq;
-+			continue;
-+		}
-+		refine_sym_from_xreg(env, st, xreg_eq);
-+		env->eq_env->scratch[xreg_eq->sym].refined_sweep = 0;
-+	}
-+	eqs->normalized &= next == xreg_eq;
-+	eqs->xreg_equation_cnt = next - eqs->xreg_equations;
-+	if (!eqs->xreg_equation_cnt)
-+		eqs->sym_equation_cnt = eqs->sym_cnt = 0;
-+	normalize_equations(env, st);
-+	eqs->clean_sym_cnt = eqs->sym_cnt;
-+}
-+
- static void print_operand(struct bpf_verifier_log *log, const char *prefix, struct expr expr)
+ static void free_pushed_states(struct bpf_verifier_env *env)
  {
- 	if (expr.coef)
-diff --git a/kernel/bpf/equation.h b/kernel/bpf/equation.h
-index 8a247451a15..5a2d7f24658 100644
---- a/kernel/bpf/equation.h
-+++ b/kernel/bpf/equation.h
-@@ -9,6 +9,9 @@
- #define VAR_NONE	U64_MAX
- #define NO_SYM		U32_MAX
+ 	struct bpf_verifier_stack_elem *elem;
+@@ -21256,7 +21402,7 @@ static int do_check_block(struct bpf_verifier_env *env, int prev_insn_idx)
+ 	struct bpf_verifier_state *state = env->cur_state;
+ 	struct bpf_insn *insns = env->prog->insnsi;
+ 	int insn_cnt = env->prog->len;
+-	bool do_print_state = true;
++	bool do_print_state = true, from_unproven;
  
-+/* For each xreg a state keeps twice that many sums and ops in total, see normalize_equations() */
-+#define SUMS_PER_XREG	2
-+
- /* coef * var + off. A constant has no var and coef == 0. */
- struct expr {
- 	s64 coef;
-diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index b3d4301ff8d..c7630a50e62 100644
---- a/kernel/bpf/states.c
-+++ b/kernel/bpf/states.c
-@@ -270,6 +270,7 @@ int bpf_clean_verifier_state(struct bpf_verifier_env *env, struct bpf_verifier_s
+ 	for (;;) {
+ 		struct bpf_insn *insn;
+@@ -21333,10 +21479,12 @@ static int do_check_block(struct bpf_verifier_env *env, int prev_insn_idx)
+ 		}
  
- 		__clean_func_state(env, st->frame[i], live_regs, i);
- 	}
-+	bpf_equations_clean(env, st);
- 	return bpf_renumber_ids(env, st);
- }
+ 		sanitize_mark_insn_seen(env);
++		insn_aux->suspect_loops |= state->suspect_loops;
+ 		prev_insn_idx = env->insn_idx;
  
+ 		/* Sanity check: precomputed constants must match verifier state */
+-		if (!state->speculative && insn_aux->const_reg_mask) {
++		if (!state->speculative && !env->err && !env->extra_values &&
++		    insn_aux->const_reg_mask) {
+ 			struct bpf_reg_state *regs = cur_regs(env);
+ 			u16 mask = insn_aux->const_reg_mask;
+ 
+@@ -21359,14 +21507,18 @@ static int do_check_block(struct bpf_verifier_env *env, int prev_insn_idx)
+ 		/* Reduce verification complexity by stopping speculative path
+ 		 * verification when a nospec is encountered.
+ 		 */
++		if (state->speculative && insn_aux->non_speculative_first)
++			need_nospec(env, env->insn_idx);
+ 		if (state->speculative && insn_aux->nospec)
+ 			goto process_bpf_exit;
++		insn_aux->speculative_first |= !insn_aux->seen;
+ 
+ 		err = check_loop_guard(env) ?: check_recursion_guard(env);
+ 		if (err)
+ 			return err;
+ 
+ 		bpf_equations_before_insn(env);
++		from_unproven = reads_from_unproven(env);
+ 		fixups = insn_aux->fixups;
+ 		err = do_check_insn(env, &do_print_state) ?: bpf_equations_after_insn(env);
+ 		if (nospec_ends_path(env, state, err)) {
+@@ -21380,12 +21532,29 @@ static int do_check_block(struct bpf_verifier_env *env, int prev_insn_idx)
+ 			need_nospec(env, prev_insn_idx);
+ 			free_pushed_states(env);
+ 			goto process_bpf_exit;
++		} else if (error_is_recoverable(err) && !env->path_sensitive) {
++			env->insn_idx = prev_insn_idx;
++			if (bpf_same_insns_unproven(env))
++				return err;
++			if (from_unproven)
++				bpf_note_reads_from_unproven(env, prev_insn_idx);
++			else
++				note_error(env, err);
++			err = skip_unproven_insn(env, insn);
++			if (err < 0)
++				return err;
++			if (err)
++				goto process_bpf_exit;
++			mark_from_unproven(env, prev_insn_idx, true);
++			env->insn_idx++;
+ 		} else if (err < 0) {
+ 			return err;
+ 		} else if (err == PROCESS_BPF_EXIT) {
+ 			goto process_bpf_exit;
+ 		} else if (err == INSN_IDX_UPDATED) {
+ 		} else if (err == 0) {
++			if (!bpf_pseudo_call(insn) && !bpf_is_callx(insn))
++				mark_from_unproven(env, prev_insn_idx, from_unproven);
+ 			env->insn_idx++;
+ 		}
+ 
+@@ -22683,12 +22852,12 @@ static int do_check_common(struct bpf_verifier_env *env, int subprog,
+ 
+ 	ret = do_check(env);
+ out:
++	if (ret && !env->err)
++		note_error(env, ret);
+ 	account_current_path(env);
+-	if (!ret) {
+-		if (pop_log)
+-			bpf_vlog_reset(&env->log, 0);
+-		bpf_diag_event_log_restore(env, 0);
+-	}
++	if (!ret && pop_log)
++		bpf_vlog_reset(&env->log, 0);
++	bpf_diag_event_log_restore(env, 0);
+ 	free_states(env);
+ 
+ 	/*
 -- 
 2.55.0
 
