@@ -1,93 +1,50 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795205394;
-	b=sk/XqUrC+psYNdFnJz93pW9Ie+1a8nEDNmelpQmGWvRj7wVfGCBiK+rQQtgBMwEfk0Ii
-	 dB5xMlZB4eIAxThMNGxi+7IQ9Z49dcjv/d4m2WuuB/eguSNQtWmqdb0kS45Gx12bu9OKj
-	 2roixXC6D1m0jZeCVHs8izejTIwEluwNbc7ul6/ySq5nyE0ARMO38VfftNr0XXjst25As
-	 MzZwILfRHZsruyQPHDmGhqbOoDt5VLzGbNWHXEBAADhpbkif3Thnr487Q7pTMj+VIvM42
-	 SzJj9XFiIlVeZ2+zCF7kOuAeBAdn44r0vpXKblDDPFtMWFYsKra+/OFZlWyKj+Rk79A==
+	t=1795206817;
+	b=MjOYoYoWSHwsiqK9HxJFk6PKhkTBIOrUp4Nzo+DJkrR9CcNZuQAiuJ47fngk42iUfToJ
+	 X7D5ii2mLhneo+q20BsvfWRs6hjC9m/QN5r+dZdOIEQ/1vZEvdvHoAFpFV2Cp+CY+mUGG
+	 ZErmWU9D0/krOiwOJo+HdMCInYU66xeu2U1LP3bpMcKlw6Kj4h/m9YdQBLp0VFOVX0BsH
+	 /k8JI6DYxdQXhpPJPG4PFcoPRl2Z2JOFTOYnyq7+DpXzhlVQ2Vu9KnD/+24P4ZqQ15SIq
+	 5JProlMWTO4F+MAelyGCxhaKfGf+pzKHReJmphDec7np0aezXSUzeWepk6nNpsP2IpQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795205394;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=c35PJTeSYiVsf0pQVCxlayaLjsxVp20LqdRT+1ySae4=;
-	b=KnJc4MRUoGm+X1876ai9WuM75r6aCHEK9nF2BdefuMpFsU0MgZz5Q87ja8OlU0Z8Cpm/
-	 2lnB6MnVsONZqbqzFhmU0PCozCljT8K1oguCMfqDWQrRN/IgGzVz6lrsvkbDPdexGHM6r
-	 XpMAKd+0U0pyBCER4DIsVp9bnP6hANmpuvrWnG8WfbscCr67XJAKzMxq++ArmxklFruBH
-	 hRcm4gkOWNmlHMqy6Nofv2nlN2QBvEbmHlpzECXXp5gCCbE/5R2f4xiN51K9IGOFhQL+w
-	 6O3nhQs+BK1NcmWFvnyC4d22BON1RGG+n0QCNW1ljo66GIR8CFzzpH+FGqFssYw2FSQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795206817;
+	h=Received:DKIM-Signature:From:Subject:Date:Message-Id:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
+	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=DcgwX7pf0/PAjyuyPUGgUqkja2QDO220o+h3fobkkQI=;
+	b=l1IC97z65pGucCXzaHngIqGuwx+j7pGdXXdrn9PkCGkqP2B4CbAxvb3Sxvqvss4ZPdNL
+	 504dpIWGEy9a4gGzDlGflIwgz/+EYE3MU07OMz8flW6L5jrOvWzKpLUdE/BjPplKsUnse
+	 HJFIdG3xdyceJaHZFuG8dwKC2lI/lrhsH9sXqAf56Pg3tzyTWHVTPttaMMwVtC5oNvORi
+	 2Ro8IHM2oA1MGU8kiI65nxtJ1wgwcKp+bqcPBVSEXa6sKCOrjZPPbxrMj4C/detR19JwO
+	 nj4nBKjHBiy/rnza26AdKKptjDvx5YzO90kSrVuuGnafpl1voBgQzhjP2lrxMG7qZkQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vGkqyCIu;
-	arc=none smtp.remote-ip=209.85.215.171
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KiFuzHzt;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 453D8606A6E1
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 20:09:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 453D8606A6E1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19864606A6D6;
+	Fri, 20 Nov 2026 20:33:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vGkqyCIu
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-cde0daf3a2aso616952a12.3
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 12:09:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795205390; x=1795810190; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=c35PJTeSYiVsf0pQVCxlayaLjsxVp20LqdRT+1ySae4=;
-        b=vGkqyCIugVhSpgorlRGUJgneDtdCUMbD4YCTqHDE+WhtwuFvLLQ83XAy//5oQ6/sVw
-         urGWZiexa/5Ez8qS3ghoHdMsv3vONELqLwzxCjQ7nDhhBsgS+ohv1pVCuPRfzamQWVSW
-         46yZJGCDIaD0YIF8xLJD/0vzWUfh6qsKAnqEtFYdjnjxRw7qPtcUznIddj6AMa70tp7a
-         gseaeJMuLW35kS2UXt16qYa0QV25vHrYhv1uTKM5s/msUWzoeYmJx1KXzRuuqWRtRgcC
-         M3OFLIsGk+q/OupdmjwaELtcuy0IytALjJKTBX8Mnhtb8H67FjdTGsi2DnCqTIiYLGBC
-         XrUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795205390; x=1795810190;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=c35PJTeSYiVsf0pQVCxlayaLjsxVp20LqdRT+1ySae4=;
-        b=Sez4Wf+PTWWbxtp0iwCyQL0rtZlBUI6cyvag+XxU7xeOHRi/UZKguNx/KYSKUiyYLM
-         QPR6hiUDUbN2XCIImhjqZL/Ft7D5ES2QVhy4eapZVyHNMwXvbar6MPBLiB5f+nMJ61Hv
-         1bYToPTPNkTHARPQdFCk0dt716go3H6dEZpwT6FM+6WBRbAdmz75Is952a0u0ZLndGAy
-         klv2FV2lUDiNeLuk2YTmdPTz7iLkFlvXqb/kwHtlFYofK4mNu4sVsU4HOMbHwyKbDrHA
-         KLTaRjaTh8j0YN5wZsEwRrxvH+c23odiW+G4ah/SbkCcpHhH7XwFoXHY4UYmcsEGOtmj
-         1Eug==
-X-Gm-Message-State: APuU4Z/XKK4CnrYs5l0taHMvQz6CmBjBVp9DLb8xzIdw3qN9xj26yt3N
-	8z2Q5WAxWaOIqNwChp+Qx2tmNe/uAtR+gTyciGcrMqCTqjaHEBiRocMM
-X-Gm-Gg: AYBFou28UEbbdvoIS4UDumvlYymrqNb1vgh68LPZW2Tri8dut2+vOieB5bWHxZE7+nq
-	dirdwx2SgFbigHZuvE5U68h4E8u2oflBDHD30fZMN53iz3EZ1gcaQBnU42dv8cyXp8skYiFd6Mj
-	iSW0mtNGE9LmDyVBpI5a1Yk+JYBufD1tpPvMb8vh7T+5AQcsn3DNURfUeFiaf7YQUXXEwoNWwaZ
-	Tbc9NsMHgExkduu2NquM51xS1ZeV57v8nk4GBJSq2pzKXkCD3+a3FDvP+ZIEG4/EKnZHmwPTJVo
-	KlRCSC0xBUffJ9DVQtfopXzcpTAT4fB/Dg5Mxri+LLmwYdDSjxiF/ZGzE0Y62N5ty9OASsHuwfA
-	+l2cqBfazdOIACMojpNft/HNBi0SsBoGdnyLSSZYX/cOgWib49PR6AVW1aEzbYdZbf+tU1QWoBm
-	fxo5YX0wczkA7pklLUUkMrk8Bp5QRpY7ibDwDd+x0ehHVVDEYiv3Vx5rIkva9pC51FrX7ykQHQm
-	ErjiCvUepAlBvnXZZm0Poykc597oGNJalQc0wJZTBLy6uT2Y++L/T3UZBZJxWvXRBceO8yC/GPL
-	85SOlCn6NcE1rQtC3QggOj7eosKSTgE8oSXt/ANNOicQBFbXNH4H+of5rey7DAgw19IwjjIstLL
-	FlG6rWVs8YTS0kC5an7onjwMh9jCz/9crbkmF2H70wSxyhR0ImqZ+ErdTS164vImHHXMtVHf0/Q
-	==
-X-Received: by 2002:a05:6a21:46c5:b0:3fb:4a1e:2f84 with SMTP id adf61e73a8af0-4014d25ed8dmr3443268637.40.1795205390330;
-        Fri, 20 Nov 2026 12:09:50 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.248])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cde6c9c7dcbsm1828322a12.0.2026.11.20.12.09.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2026 12:09:49 -0800 (PST)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: torvalds@linux-foundation.org
-Cc: bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com
-Subject: [GIT PULL] BPF fixes for 7.4-rc4
-Date: Fri, 20 Nov 2026 20:09:48 +0000
-Message-ID: <20261120200948.532961-1-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KiFuzHzt
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E70371F000C6;
+	Fri, 20 Nov 2026 20:33:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795206817;
+	bh=DcgwX7pf0/PAjyuyPUGgUqkja2QDO220o+h3fobkkQI=;
+	h=From:Subject:Date:To:Cc;
+	b=KiFuzHztMqofIiZrMZL8fYbB6wSoXNh9lrzLqytt9ShCyoXK17NycQJvKaritlYqJ
+	 Byr6sYJXXr1aQAV2f282/CzvQJLdthXfVBi2iGJix3taoXgc22/Lo7NPZ4pmDhLXQ+
+	 90U/cnBJ+w+ETIgL0+7vxJkLvv387n4a9zLXeeFHyvbDhOGrnSREqM83SDSXDag5xZ
+	 usx7k191FHqo4J1+Q+F9y9CSFyN2mDTi3GHELGDP75y1r9q6SJBDYZ4AZzsXbVj39G
+	 8Pbs4822z73V4lU5LVSrfCCwP2mhXCK/R62yvxpDGtF2ZvKHTO9wkcsLtIkWsi/1lZ
+	 X9r2APu3NuKzw==
+From: Tamir Duberstein <tamird@kernel.org>
+Subject: [PATCH bpf-next v3 0/8] bpf: Fix ring buffers and add a libbpf
+ iterator
+Date: Fri, 20 Nov 2026 15:33:13 -0500
+Message-Id: <20261120-bpf-ringbuf-fixes-v3-0-ff7ca15d6c37@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -97,205 +54,159 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAA/32QzQ6CMBCEX8X0bE1/sIIn38NwoO0WqqZgWwiG8
+ O4WuGhiPG5m5pvdnVAAbyGg825CHgYbbOvSwPc7pJrK1YCtTjNihAkiKMeyM9hbV8veYGNHCBi
+ KKpdcCcqOEqVc52EVUuyKFruDMaJyU0Ivb6Digly8jQ2x9a+1fqBr4k/TQDHBIBjPcqrkiWWXO
+ 3gHj0Pr67VgYJ+I/BeCJQTnRgPhhdaGfyHmbUkPzz59Im43lPP8BnhAaaEnAQAA
+X-Change-ID: 20260613-bpf-ringbuf-fixes-e9a8b3c6125b
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
+ Andrea Righi <arighi@nvidia.com>, Xu Kuohai <xukuohai@huawei.com>, 
+ Andrea Righi <andrea.righi@canonical.com>, 
+ Bing-Jhong Billy Jheng <billy@starlabs.sg>, 
+ David Vernet <void@manifault.com>, Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Andrew Werner <awerner32@gmail.com>, 
+ Zvi Effron <zeffron@riotgames.com>, Andrii Nakryiko <andriin@fb.com>, 
+ Tamir Duberstein <tamird@kernel.org>, Sashiko <sashiko-bot@kernel.org>
+X-Mailer: b4 0.17-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5984; i=tamird@kernel.org;
+ h=from:subject:message-id; bh=WkH6CszC1iT8xCL8zMXL0SlhHk4AwMQ8A12AjbhYu7A=;
+ b=kA0DAAoW0EwOJRfXEpcByyZiAGsArpmiaMsfEVnp58Kvg2eZFWVCW/jRVeo6dbzk/JJ/ziOlV
+ 4iRBAAWCgA5FiEEYRXCvWdl27wdae7H0EwOJRfXEpcFAmsArpkbFIAAAAAABAAObWFudTIsMi41
+ KzEuMTIsMCwzAAoJENBMDiUX1xKXXqYA+wQxGvCMN/hZFBBPOk7h3Lqoms0mDNXheBGVDDyLfR6
+ 6AP0a4FA+X/GOkMvZmVkyaky1UdDN+LxxJnFcXJX/23nXAQ==
+X-Developer-Key: i=tamird@kernel.org; a=openpgp;
+ fpr=5A6714204D41EC844C50273C19D6FF6092365380
 
-Hi Linus,
+The ring buffer API exposes records only through callbacks. Callers that
+need to stop at an operation-specific condition have no non-error way to
+end consumption early.
 
-The following changes since commit 05441d697f7f9a927264f4058cbbc6a03dfcac9d:
+Andrea Righi proposed using positive callback returns to request early
+termination. Andrii Nakryiko noted that positive values are already
+ignored and changing that behavior could break users, and suggested a
+new API:
+https://lore.kernel.org/bpf/20240310154726.734289-1-andrea.righi@canonical.com/
 
-  Merge tag 'cocci-7.4-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/jlawall/linux (2026-11-03 08:36:32 -0800)
+Discussion of overwrite-mode consumption identified an iterator as a
+better zero-copy interface than callbacks:
+https://lore.kernel.org/bpf/CAEf4Bzaq5drHWChXoRBnrmkb6reAsSVj8r=uByFSup31FMA7hw@mail.gmail.com/
 
-are available in the Git repository at:
+Add a caller-owned iterator for consuming one ring buffer map directly.
+It returns one borrowed record at a time, allowing ordinary loop
+control. Each next call ends the previous borrow and lets the caller
+choose whether to publish consumed records or defer publication for
+batching. Existing callback-based consumption uses the same internal
+iterator core while preserving callback return semantics and per-record
+consumer position updates. Callback-based consumption and public
+iteration of overwrite maps remain unsupported.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/bpf-fixes
+This v3 targets bpf-next/for-next. The following patches from v2 are
+omitted after rebasing:
 
-for you to fetch changes up to d5ba86298b45e1a81c578c499e9a222a3b734d5d:
+- 1/8, "libbpf: ringbuf: Honor zero consume bounds", was applied as
+  40edacd47993.
+- 2/8, "libbpf: ringbuf: Prevent NULL callback crash", was applied as
+  c0628a0659b6.
+- 3/8, "libbpf: ringbuf: Reject overwrite callback use", was applied as
+  f756eedb24d4.
+- 4/8, "libbpf: ringbuf: Handle position counter wrap", is superseded by
+  Israel Téllez García's independently developed fix fdd4fad0bbbd.
+- 5/8, "bpf: ringbuf: Handle pending position wrap", is superseded by
+  Israel's independently developed fix 6ff5b56a50c5.
 
-  Merge branch 'bpf-limit-writable-registers-in-uprobe-context' (2026-11-20 02:31:05 +0000)
+Patches 1-3 resubmit v2 patches 6-8: "bpf: user_ringbuf: Handle position
+wrap", "libbpf: ringbuf: Use compiler atomics", and "libbpf: ringbuf:
+Prevent missed wakeups". They fix native-width wrap in the kernel's
+user-ring consumer and a missed-notification race in libbpf. The atomic
+conversion provides the portable full barrier needed by the wakeup fix.
 
-There is one trivial conflict with your current tree, in kernel/bpf/bpf_lsm.c,
-between commit
-  ea8c4b37b880 ("bpf: don't mark namespace_init and namespace_free arguments as trusted")
-from vfs tree and commit
-  ab86b62012b9 ("bpf, lsm: Mark backing_file_alloc/free LSM hooks as untrusted")
-from bpf. Both add two lines at the same place in untrusted_lsm_hooks.
-Keep all four.
+Patches 4-5 add the caller-owned iterator and simplify its traversal.
+The iterator preserves the wakeup handshake when destroyed before
+exhaustion. Patches 6-8 contain the selftest refactoring, wakeup
+regression coverage, callback-semantics checks, and iterator tests.
+Selftests follow at the end, as requested during review.
 
-That's what Mark reported:
-https://lore.kernel.org/linux-next/avsfpHqbu_rdmOrf@sirena.org.uk/
+Andrew Werner found the counter-wrap and missed-wakeup failures while
+implementing Aya's ring buffer reader. Aya's original implementation
+contains the equality reasoning and edge-triggered regression test:
+https://github.com/aya-rs/aya/commit/e2cf734490bc188bcedb1eac92d23d81123e42cd
 
-----------------------------------------------------------------
-Mostly sockmap fixes that the previous PR promised, plus
-uprobe ctx rewrite via bpf and cgroup-bpf fixes.
+Aya later fixed the consumer ordering with an explicit fence:
+https://github.com/aya-rs/aya/commit/7277a57ea8cdb74918d3096a4b22b6d814481973
 
-- Reject writable map iterators on read-only maps
-  (Adethya Srinivasan)
+This reroll continues the ring buffer fixes series and brings the
+callback-free API into the same submission. The original callback API
+proposal is a related submission:
+https://lore.kernel.org/bpf/20260611-bpf-ringbuf-callback-v1-1-c32b6cb6ce40@kernel.org/
 
-- Various sockmap fixes (Alexei Starovoitov):
-    - Clear the redirect target before the sk_msg prog runs
-    - Check that the redirected message is the cork
-    - Leave sk_stream_wait_memory() once the socket is dead
-    - Keep the rest of the cork after a redirect
-    - Don't let an SK_PASS verdict cover the next message
-    - Subtract all dropped bytes from the return value of sendmsg()
-    - Clear the end mark of elements added by bpf_msg_push_data() and
-      bpf_msg_pop_data()
+Review requesting that callback validation and the new API be discussed
+together:
+https://lore.kernel.org/bpf/CAADnVQLuNSE5AM6Cqzs4yDFrhTyD=j-y5dfya3dLwk3si9v26w@mail.gmail.com/
 
-- Fix ring capacity invariant break in bpf_msg_push_data() (Bo Cao)
+Earlier versions were developed with Codex (GPT-5.5). Codex (GPT-6)
+assisted with combining the series, addressing review, and revising
+the iterator, tests, and changelogs.
 
-- Report RCU-tasks quiescent states in do_check() to fix rcu_tasks
-  stalls during a long verification (Breno Leitao)
+The libbpf build and BPF selftests have not been run.
 
-- Various sockmap fixes (Chris Mason):
-    - Give no progs to a TCP listener
-    - Check the target of an egress redirect before each send
-    - Check the TCP state in recvmsg()
-    - Reset the copy position when corking
-    - Don't copy 0 bytes into a full cork
+Signed-off-by: Tamir Duberstein <tamird@kernel.org>
+---
+Changes in v3:
+- Combine the remaining fixes with a new caller-owned iterator and its
+  tests, targeting bpf-next/for-next.
+- Drop v2 patches 1-3, which were applied, and v2 patches 4-5, whose
+  issues were independently fixed, as listed above.
+- Preserve -E2BIG for oversized user-ring samples when validating the
+  advertised window.
+- Move the fixes' selftests to separate commits at the end.
+- Simplify the wakeup fix's bound and error exits while retaining its
+  fenced busy retry.
+- Keep the compiler atomic stores on single lines and follow the BPF
+  multiline comment style.
+- Link to v2:
+  https://lore.kernel.org/bpf/20260618-bpf-ringbuf-fixes-v2-0-33fde039ddf3@kernel.org/
 
-- Use a dedicated workqueue for freeing BPF programs to fix a deadlock
-  between pack_mutex waiters and the vmalloc purge work
-  (Emil Tsalapatis)
+Changes in v2:
+- Fix additional native 32-bit wrap paths found by Sashiko review.
+- Explain modular position comparisons and leave mixed-bitness ABI work
+  separate.
+- Preserve the wakeup handshake across bounded and callback returns.
+- Follow BPF comment style and simplify wakeup test cleanup.
+- Link to v1: https://patch.msgid.link/20260613-bpf-ringbuf-fixes-v1-0-e623481cb724@kernel.org
 
-- Fix verifier model mismatch on a narrow read of
-  __sk_buff.remote_port (Henry Martin)
+---
+Tamir Duberstein (8):
+      bpf: user_ringbuf: Handle position wrap
+      libbpf: ringbuf: Use compiler atomics
+      libbpf: ringbuf: Prevent missed wakeups
+      libbpf: ringbuf: Add a caller-owned iterator
+      libbpf: ringbuf: Simplify iterator implementation
+      selftests/bpf: Refactor lifetimes and test wakeups
+      selftests/bpf: Verify ringbuf callback semantics
+      selftests/bpf: Test caller-owned ring iterators
 
-- Fix bpf-gcc CO-RE relocation in verifier_sockmap_mutate selftest
-  (Jiayuan Chen)
+ kernel/bpf/ringbuf.c                               |  11 +-
+ tools/lib/bpf/libbpf.h                             |  90 +++
+ tools/lib/bpf/libbpf.map                           |   3 +
+ tools/lib/bpf/ringbuf.c                            | 187 ++++--
+ tools/testing/selftests/bpf/prog_tests/ringbuf.c   | 660 ++++++++++++++++-----
+ tools/testing/selftests/bpf/progs/test_ringbuf_n.c |   9 +-
+ 6 files changed, 757 insertions(+), 203 deletions(-)
+---
+base-commit: 82cc2b4383e3edfa1026c8612fb4e90a9329ba11
+base-tree: git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+change-id: 20260613-bpf-ringbuf-fixes-e9a8b3c6125b
 
-- Restrict uprobe ctx writes to the registers that ptrace can set
-  (Jiri Olsa)
+Best regards,
+--  
+Tamir Duberstein <tamird@kernel.org>
 
-- Various sockmap fixes (Josef Bacik):
-    - Write sg.start when recvmsg() faults
-    - Don't let an SK_DROP verdict stick
-    - Clear the resume state of a stopped psock
-
-- Various fixes (Michal Luczaj):
-    - Fix "unresolved symbol tcp_request_sock" build error with
-      CONFIG_INET=n
-    - Restrict iter-context sockmap updates to iter/sockmap
-    - Restrict bpf_sock_destroy() to iter/{tcp,udp}
-    - Mark bpf_iter__sockmap::sk as PTR_TRUSTED
-
-- Mark backing_file_alloc/free LSM hooks as untrusted
-  (Sergei Nizovtsev)
-
-- Various cgroup-bpf fixes (Shakeel Butt):
-    - Don't read freed effective arrays in BPF_PROG_QUERY
-    - Don't attach to a removed cgroup
-    - Protect cgroup_bpf state with its own mutex, so that queries
-      and the release work don't wait for cgroup_mutex
-    - Don't lose errors in effective BPF_LSM_CGROUP queries
-
-- Check variable-offset accesses against special fields
-  (Shihuang Liu)
-
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-----------------------------------------------------------------
-Adethya Srinivasan (2):
-      bpf: Reject writable map iterators on read-only maps
-      selftests/bpf: Check writable iterator attach to a read-only array
-
-Alexei Starovoitov (12):
-      bpf, sockmap: Don't let an SK_PASS verdict cover the next message
-      bpf, sockmap: Subtract all dropped bytes from the return value
-      net: Leave sk_stream_wait_memory() once the socket is dead
-      bpf, sockmap: Clear the redirect target before the sk_msg prog runs
-      bpf, sockmap: Check that the redirected message is the cork
-      bpf, sockmap: Keep the rest of the cork after a redirect
-      bpf, sockmap: Clear the end mark of elements added by push and pop
-      Merge branch 'bpf-sockmap-fixes-for-verdicts-redirects-corks-and-recvmsg'
-      Merge branch 'reject-writable-map-iterators-on-read-only-maps'
-      Merge branch 'bpf-sockmap-restrict-iter-context-sockmap-updates-to-sockmap-iterators'
-      Merge branch 'bpf-cgroup-don-t-wait-for-cgroup_mutex-to-read-or-free-cgroup-bpf-state'
-      Merge branch 'bpf-limit-writable-registers-in-uprobe-context'
-
-Bo Cao (1):
-      bpf, sockmap: Fix ring capacity invariant break in bpf_msg_push_data()
-
-Breno Leitao (1):
-      bpf: Report RCU-tasks quiescent states in do_check()
-
-Chris Mason (5):
-      bpf, sockmap: Give no progs to a TCP listener
-      bpf, sockmap: Check the target of an egress redirect before each send
-      bpf, sockmap: Check the TCP state in recvmsg()
-      bpf, sockmap: Reset the copy position when corking
-      bpf, sockmap: Don't copy 0 bytes into a full cork
-
-Emil Tsalapatis (1):
-      bpf: Use dedicated workqueue for freeing BPF programs
-
-Henry Martin (1):
-      bpf: Fix verifier model mismatch on __sk_buff.remote_port narrow read
-
-Jiayuan Chen (1):
-      selftests/bpf: Fix bpf-gcc CO-RE relocation in verifier_sockmap_mutate
-
-Jiri Olsa (2):
-      bpf: Restrict uprobe ctx writes to the registers ptrace can set
-      selftests/bpf: Test which ctx registers a uprobe prog can write
-
-Josef Bacik (3):
-      bpf, sockmap: Write sg.start when recvmsg() faults
-      bpf, sockmap: Don't let an SK_DROP verdict stick
-      bpf, sockmap: Clear the resume state of a stopped psock
-
-Michal Luczaj (8):
-      selftests/bpf: Remove sockmap update from bpf_iter_unix
-      bpf, sockmap: Restrict iter-context sockmap updates to iter/sockmap
-      selftests/bpf: Add negative test for sockmap update from non-sockmap iter
-      bpf, docs: Document BPF_ITER_NOSLEEP
-      bpf: Restrict bpf_sock_destroy() to iter/{tcp,udp}
-      bpf: Mark bpf_iter__sockmap::sk as PTR_TRUSTED
-      selftests/bpf: Add iter/sockmap bpf_sock_destroy() negative test
-      bpf: Fix "unresolved symbol tcp_request_sock" build error
-
-Sergei Nizovtsev (1):
-      bpf, lsm: Mark backing_file_alloc/free LSM hooks as untrusted
-
-Shakeel Butt (4):
-      bpf, cgroup: Don't read freed effective arrays in BPF_PROG_QUERY
-      bpf, cgroup: Don't attach to a removed cgroup
-      bpf, cgroup: Protect cgroup_bpf state with its own mutex
-      bpf, cgroup: Don't lose errors in effective BPF_LSM_CGROUP queries
-
-Shihuang Liu (1):
-      bpf: Check variable-offset accesses against special fields
-
- Documentation/bpf/bpf_iterators.rst                |  12 +-
- Documentation/bpf/map_sockmap.rst                  |   4 +-
- arch/arm64/kernel/probes/uprobes.c                 |   6 +
- arch/riscv/kernel/probes/uprobes.c                 |   6 +
- arch/x86/kernel/uprobes.c                          |  15 ++
- include/linux/bpf-cgroup-defs.h                    |   1 +
- include/linux/bpf-cgroup.h                         |   3 +
- include/linux/bpf.h                                |   1 +
- include/linux/skmsg.h                              |  19 ++
- include/linux/uprobes.h                            |   5 +
- include/net/tcp.h                                  |   6 +
- kernel/bpf/bpf_lsm.c                               |   2 +
- kernel/bpf/btf.c                                   |   7 +-
- kernel/bpf/cgroup.c                                | 163 ++++++++++++-----
- kernel/bpf/core.c                                  |  20 ++-
- kernel/bpf/local_storage.c                         |   8 +-
- kernel/bpf/map_iter.c                              |  12 +-
- kernel/bpf/trampoline.c                            |   2 +-
- kernel/bpf/verifier.c                              |   7 +-
- kernel/events/uprobes.c                            |   9 +
- kernel/trace/bpf_trace.c                           |  10 +-
- net/core/filter.c                                  |  54 +++---
- net/core/skmsg.c                                   |  13 +-
- net/core/sock_map.c                                |  11 +-
- net/core/stream.c                                  |   6 +-
- net/ipv4/tcp_bpf.c                                 |  93 +++++++++-
- net/mptcp/protocol.c                               |   6 -
- tools/testing/selftests/bpf/prog_tests/bpf_iter.c  |  35 ++++
- tools/testing/selftests/bpf/prog_tests/verifier.c  |   2 +
- tools/testing/selftests/bpf/progs/bpf_iter_unix.c  |  10 --
- .../selftests/bpf/progs/sock_destroy_prog_fail.c   |  11 ++
- .../selftests/bpf/progs/verifier_sockmap_mutate.c  |  17 +-
- .../bpf/progs/verifier_uprobe_write_ctx.c          | 196 +++++++++++++++++++++
- 33 files changed, 652 insertions(+), 120 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_uprobe_write_ctx.c
