@@ -1,36 +1,36 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=66.220.155.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=69.171.232.180
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795193760;
-	b=IHwcqHuZhFZRRCcjMZPsWE2SoFwB3gti5FIl0yClMR1oKe0cUkv7d104Z+oGKSIy8tOE
-	 i+Jw15ebUclVZBECUNHn9IaJib+F2ZQnFgG+gzCw6osYYrnAz7k/Hjx6QON5nDgFMETSu
-	 v6L7grewk83Z1iIq3Dr9Cg6fwViv65basb4zyBYihKjILxPq4kicvf43u9ZypQHEbz0bd
-	 qrExrYDdZjX2IJOI5vLf5/u9XTaERog+lHYjZQ9+N4P3aWS9NLPnR2P77fMXq6LxHYBBZ
-	 zX1vIrn3KstwrwNXStkvOD/WPeqp3z9ywrWihO1UFphB+tbDTglnkrfU39XF07OAosQ==
+	t=1795193770;
+	b=fV8iluuUgIlusqgIvEcrUj0XCIwlryvYFNbRde4/n8a6XoI0+sS0odHzL3D8DRTtmtxk
+	 YsqB5erBEV1soCqrt/YFzx9T8ihZFikcqSwmuTL3K7bQHUuhq1B3KmcrVKGTlLKEfSd1k
+	 c9xcNsYVUPZZEfwBNNJRxRIBYGlIhmlKI1xB/YoDTizeav8sNDY/Y8WTfju7li+LmdntM
+	 VCEx795wmxcsLfu6J23MY5DGj/UqbTXxj4lx3oOU6UjFUZiRTAoiDaAzfSvv/lsYuEGek
+	 X0eKzKdd0J89vtjxfKcK/A3SfO03I9al27IpSJRq4R9xKtq64sWTujNXzsWHadjoaJg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795193760;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795193770;
 	h=DMARC-Filter:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=e+Et1QkyQpw8ACVi1b3VK5MQFSTIOgA8OXmYXl4I2mQ=;
-	b=HJH3iE35L7IRKkgt8r9KETekBAOYNf8+IINmXNekd+J353xxxe+ClgKM2K1fTfb1u6tv
-	 VrSY6D+TtGZ/Sd0cjPoxWo7RtU9rFBVFXID6WBGYX2lrQV2mEoj2koAWP5ebprPHyf0pC
-	 M/481SMpjv0ZD0mnEK2Gl94x+l/Hw2QdF+fZwvbwGbGN/iYE6HIbfv6G2RwEJSCej0y8e
-	 ugmOvDnb5LiyJS9LWG1s5GCWAgfaSa1dTA/YGiJrmlQc8x38H+4jgG1EJ7G4OxiBwH2HV
-	 jL+LmwnqI7Oj8NJm34YvFpiRfMKXE373UVmEiQoxbiSx53SGiPqAwa8cFLGvQqjiWcw==
+	bh=3r6Oem1VP8WKmOv5fB4zxrLUZwlo7qeVcnw4NnCpCg8=;
+	b=1p1WN4zJRugYyG/EF6TXJsP/QBRDbnEaziepqRA9agQhY3+xmlk5yVUuWz66zfpHzF8x
+	 TLJinojl1xEakHlQnkxyJHZ9b5gJsDi+84ufTabHG5iIg8AGHLqvNS/VvpWEuR+15RRPg
+	 Qs5gZTpR6r1fWqLurQG14hnZCcdMJa6pDJdf3SfAfFXIEOxpSXRet+rKth4TI7vDrnM9N
+	 wUZos+y/cMtXfg+rxwo94m6c3oTefJ1PFsWTVkv4zkd1XPsy96sBbSt4sEVUMnLgaVaYb
+	 HAOebN1tmgIqro842dTKJxm2riT/4m4iPmyUwE5WoQcfDRnPSjdioO44em9zj5CIQCw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=fail header.from=linux.dev;
 	spf=fail smtp.mailfrom=linux.dev;
-	arc=none smtp.remote-ip=66.220.155.178
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
+	arc=none smtp.remote-ip=69.171.232.180
+Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C43A460A261E
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 16:55:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C43A460A261E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D4FB60A2607
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 16:56:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3D4FB60A2607
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm50310.atn0.facebook.com (Postfix, from userid 128203)
-	id D880D59328DF2; Fri, 20 Nov 2026 08:55:50 -0800 (PST)
+	id 0784F59328E21; Fri, 20 Nov 2026 08:55:56 -0800 (PST)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -38,9 +38,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v4 2/3] selftests/bpf: Test CO-RE relocations of unsigned 32-bit enum values
-Date: Fri, 20 Nov 2026 08:55:50 -0800
-Message-ID: <20261120165550.2074913-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v4 3/3] selftests/bpf: Test CO-RE relocations of signed enum values without kflag
+Date: Fri, 20 Nov 2026 08:55:55 -0800
+Message-ID: <20261120165556.2075793-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.1
 In-Reply-To: <20261120165540.2074139-1-yonghong.song@linux.dev>
 References: <20261120165540.2074139-1-yonghong.song@linux.dev>
@@ -55,131 +55,276 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Test the extension of unsigned 32-bit enum values in CO-RE relocations
-from the previous patch.
+The libbpf fix takes a 32-bit target enum value with the kflag 0 as
+signed if the local enum is signed, since the BTF of a kernel before
+v6.0 has the kflag 0 on every enum, signed or not. Test it.
 
-test_core_reloc_enumval gets an optional local enum with values out of
-the range of int, i.e., an unsigned 4-byte enum, whose values clang
-emits zero-extended in the ld_imm64 of the relocations. The enumval
-target has the same enum with different values, 0x80000001 and
-0xffffffff, which are expected zero-extended in the 64-bit outputs.
+test_core_reloc_enumval gets an optional signed local enum,
+named_int_enum, with the values -1 and 1, so the enum is signed while
+one of its values is not negative. The enumval target has the same enum
+with the values -2 and -3, which are expected sign-extended in the
+64-bit outputs.
 
-GCC's __builtin_preserve_enum_value() returns int, so storing the value
-of enum named_uint_enum into a long field sign-extends it, and uint_val1
-would read back as 0xffffffff80000001. Convert the result to unsigned
-int for GCC to get the enumerator value. Clang still stores the 64-bit
-relocated value, so its upper 32 bits keep being checked.
+The new test case enumval___no_kflag has the same target types, but its
+target BTF gets the kflag of every enum cleared, as in the BTF of a
+kernel before v6.0. The signed enum then gets its signedness from the
+local enum. The test writes the modified BTF to a temporary file: one
+it creates itself in core_reloc, or the one btfgen already created in
+core_reloc_btfgen. The cleanup now removes the temporary file if the
+test case clears the kflag, not only if btfgen runs.
 
-Without the fix, the check of the original value fails, and the whole
-object is refused:
+GCC's __builtin_preserve_enum_value() returns int, so with GCC the
+stores sign-extend the values anyway.
 
-  libbpf: prog 'test_core_enumval': relo #11: unexpected insn #53 (LDIMM6=
-4)
-          value: got 2147483648, exp 18446744071562067968 -> 184467440715=
-62067969
-  libbpf: prog 'test_core_enumval': relo #11: failed to patch insn #53: -=
-EINVAL
-  #122/71  core_reloc/enumval:FAIL
+Without taking the signedness from the local enum, the upper 32 bits of
+both values are zero in enumval___no_kflag:
+
+  run_core_reloc_tests:FAIL:check_result input/output data don't match
+  output byte #44: EXP 0xff GOT 0x00
+  ...
+  output byte #55: EXP 0xff GOT 0x00
+  #122/72  core_reloc/enumval___no_kflag:FAIL
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- .../selftests/bpf/prog_tests/core_reloc.c     |  2 ++
- .../selftests/bpf/progs/core_reloc_types.h    |  8 +++++++
- .../bpf/progs/test_core_reloc_enumval.c       | 21 +++++++++++++++++++
- 3 files changed, 31 insertions(+)
+ .../selftests/bpf/prog_tests/core_reloc.c     | 90 ++++++++++++++++++-
+ .../btf__core_reloc_enumval___no_kflag.c      |  3 +
+ .../selftests/bpf/progs/core_reloc_types.h    | 16 ++++
+ .../bpf/progs/test_core_reloc_enumval.c       | 14 +++
+ 4 files changed, 121 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_enu=
+mval___no_kflag.c
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc.c b/tools/=
 testing/selftests/bpf/prog_tests/core_reloc.c
-index 80432c4656b5..98b3c5fb1028 100644
+index 98b3c5fb1028..1c502e7f0c60 100644
 --- a/tools/testing/selftests/bpf/prog_tests/core_reloc.c
 +++ b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-@@ -904,6 +904,8 @@ static const struct core_reloc_test_case test_cases[]=
- =3D {
- 		.named_val2 =3D 2,
- 		.anon_val1 =3D 0x10,
+@@ -370,6 +370,14 @@ static int duration =3D 0;
+ 	.fails =3D true,							\
+ }
+=20
++#define ENUMVAL_NO_KFLAG_CASE(name, ...) {				\
++	ENUMVAL_CASE_COMMON(name),					\
++	.output =3D STRUCT_TO_CHAR_PTR(core_reloc_enumval_output)		\
++			__VA_ARGS__,					\
++	.output_len =3D sizeof(struct core_reloc_enumval_output),		\
++	.clear_enum_kflag =3D true,					\
++}
++
+ #define ENUM64VAL_CASE_COMMON(name)					\
+ 	.case_name =3D #name,						\
+ 	.bpf_obj_file =3D "test_core_reloc_enum64val.bpf.o",		\
+@@ -406,6 +414,7 @@ struct core_reloc_test_case {
+ 	bool run_btfgen_fails;
+ 	bool needs_testmod;
+ 	bool relaxed_core_relocs;
++	bool clear_enum_kflag;
+ 	const char *prog_name;
+ 	const char *raw_tp_name;
+ 	setup_test_fn setup;
+@@ -906,6 +915,24 @@ static const struct core_reloc_test_case test_cases[=
+] =3D {
  		.anon_val2 =3D 0x20,
+ 		.uint_val1 =3D 0x80000001,
+ 		.uint_val2 =3D 0xffffffff,
++		.int_val1 =3D -2,
++		.int_val2 =3D -3,
++	}),
++	ENUMVAL_NO_KFLAG_CASE(enumval___no_kflag, {
++		.named_val1_exists =3D true,
++		.named_val2_exists =3D true,
++		.named_val3_exists =3D true,
++		.anon_val1_exists =3D true,
++		.anon_val2_exists =3D true,
++		.anon_val3_exists =3D true,
++		.named_val1 =3D 1,
++		.named_val2 =3D 2,
++		.anon_val1 =3D 0x10,
++		.anon_val2 =3D 0x20,
 +		.uint_val1 =3D 0x80000001,
 +		.uint_val2 =3D 0xffffffff,
++		.int_val1 =3D -2,
++		.int_val2 =3D -3,
  	}),
  	ENUMVAL_CASE(enumval___diff, {
  		.named_val1_exists =3D true,
+@@ -999,6 +1026,46 @@ static int run_btfgen(const char *src_btf, const ch=
+ar *dst_btf, const char *objp
+ 	return run_bpftool_command(args);
+ }
+=20
++/*
++ * Write the BTF of src to dst with the kflag of every enum cleared, as =
+in the
++ * BTF of a kernel before v6.0, where the kflag 0 doesn't mean unsigned.
++ */
++static int write_btf_no_enum_kflag(const char *src, const char *dst)
++{
++	const void *raw_data;
++	struct btf_type *t;
++	struct btf *btf;
++	__u32 i, n, raw_sz;
++	FILE *f =3D NULL;
++	int err =3D -1;
++
++	btf =3D btf__parse(src, NULL);
++	if (!ASSERT_OK_PTR(btf, "btf_parse"))
++		return -1;
++
++	n =3D btf__type_cnt(btf);
++	for (i =3D 1; i < n; i++) {
++		t =3D (struct btf_type *)btf__type_by_id(btf, i);
++		if (btf_is_enum(t))
++			t->info &=3D ~(1U << 31); /* the kflag */
++	}
++
++	raw_data =3D btf__raw_data(btf, &raw_sz);
++	if (!ASSERT_OK_PTR(raw_data, "btf_raw_data"))
++		goto out;
++	f =3D fopen(dst, "w");
++	if (!ASSERT_OK_PTR(f, "btf_fopen"))
++		goto out;
++	if (!ASSERT_EQ(fwrite(raw_data, 1, raw_sz, f), raw_sz, "btf_write"))
++		goto out;
++	err =3D 0;
++out:
++	if (f)
++		fclose(f);
++	btf__free(btf);
++	return err;
++}
++
+ static void run_core_reloc_tests(bool use_btfgen)
+ {
+ 	const size_t mmap_sz =3D roundup_page(sizeof(struct data));
+@@ -1050,6 +1117,25 @@ static void run_core_reloc_tests(bool use_btfgen)
+ 			test_case->btf_src_file =3D btf_file;
+ 		}
+=20
++		/*
++		 * Without btfgen, create the temporary file here; with btfgen,
++		 * rewrite the one btfgen made.
++		 */
++		if (test_case->clear_enum_kflag) {
++			if (!use_btfgen) {
++				fd =3D mkstemp(btf_file);
++				if (!ASSERT_GE(fd, 0, "btf_tmp"))
++					continue;
++				close(fd); /* we only need the path */
++			}
++			err =3D write_btf_no_enum_kflag(test_case->btf_src_file, btf_file);
++			if (err) {
++				remove(btf_file);
++				continue;
++			}
++			test_case->btf_src_file =3D btf_file;
++		}
++
+ 		if (test_case->setup) {
+ 			err =3D test_case->setup(test_case);
+ 			if (CHECK(err, "test_setup", "test #%d setup failed: %d\n", i, err))
+@@ -1141,8 +1227,8 @@ static void run_core_reloc_tests(bool use_btfgen)
+ 			CHECK_FAIL(munmap(mmap_data, mmap_sz));
+ 			mmap_data =3D NULL;
+ 		}
+-		if (use_btfgen)
+-			remove(test_case->btf_src_file);
++		if (use_btfgen || test_case->clear_enum_kflag)
++			remove(btf_file);
+ 		bpf_link__destroy(link);
+ 		link =3D NULL;
+ 		bpf_object__close(obj);
+diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_enumval___=
+no_kflag.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_enumval___=
+no_kflag.c
+new file mode 100644
+index 000000000000..f34e3e342efb
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_enumval___no_kfla=
+g.c
+@@ -0,0 +1,3 @@
++#include "core_reloc_types.h"
++
++void f(struct core_reloc_enumval___no_kflag x) {}
 diff --git a/tools/testing/selftests/bpf/progs/core_reloc_types.h b/tools=
 /testing/selftests/bpf/progs/core_reloc_types.h
-index 5760ae015e09..6d758e74bd58 100644
+index 6d758e74bd58..35beb76068bd 100644
 --- a/tools/testing/selftests/bpf/progs/core_reloc_types.h
 +++ b/tools/testing/selftests/bpf/progs/core_reloc_types.h
-@@ -1215,6 +1215,8 @@ struct core_reloc_enumval_output {
- 	int named_val2;
- 	int anon_val1;
+@@ -1217,6 +1217,8 @@ struct core_reloc_enumval_output {
  	int anon_val2;
-+	long uint_val1;
-+	long uint_val2;
+ 	long uint_val1;
+ 	long uint_val2;
++	long int_val1;
++	long int_val2;
  };
 =20
  struct core_reloc_enum64val_output {
-@@ -1243,9 +1245,15 @@ typedef enum {
- 	ANON_ENUM_VAL3 =3D 0x30,
- } anon_enum;
+@@ -1250,10 +1252,24 @@ enum named_uint_enum {
+ 	UINT_ENUM_VAL2 =3D 0xffffffff,
+ };
 =20
-+enum named_uint_enum {
-+	UINT_ENUM_VAL1 =3D 0x80000001,
-+	UINT_ENUM_VAL2 =3D 0xffffffff,
++enum named_int_enum {
++	INT_ENUM_VAL1 =3D -2,
++	INT_ENUM_VAL2 =3D -3,
 +};
 +
  struct core_reloc_enumval {
  	enum named_enum f1;
  	anon_enum f2;
+ 	enum named_uint_enum f3;
++	enum named_int_enum f4;
++};
++
++/* the same types, whose BTF gets the kflag of every enum cleared */
++struct core_reloc_enumval___no_kflag {
++	enum named_enum f1;
++	anon_enum f2;
 +	enum named_uint_enum f3;
++	enum named_int_enum f4;
  };
 =20
  enum named_unsigned_enum64 {
 diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_enumval.c =
 b/tools/testing/selftests/bpf/progs/test_core_reloc_enumval.c
-index e7ef3dada2bf..8b8abbaaf533 100644
+index 8b8abbaaf533..a524e5028c77 100644
 --- a/tools/testing/selftests/bpf/progs/test_core_reloc_enumval.c
 +++ b/tools/testing/selftests/bpf/progs/test_core_reloc_enumval.c
-@@ -27,6 +27,12 @@ typedef enum {
- 	ANON_ENUM_VAL3 =3D 0x30,
- } anon_enum;
+@@ -33,6 +33,12 @@ enum named_uint_enum {
+ 	UINT_ENUM_VAL2 =3D 0xfffffff0,
+ };
 =20
-+/* 4-byte enum with values out of the range of int, so it is unsigned */
-+enum named_uint_enum {
-+	UINT_ENUM_VAL1 =3D 0x80000000,
-+	UINT_ENUM_VAL2 =3D 0xfffffff0,
++/* signed 4-byte enum, with a non-negative value too */
++enum named_int_enum {
++	INT_ENUM_VAL1 =3D -1,
++	INT_ENUM_VAL2 =3D 1,
 +};
 +
  struct core_reloc_enumval_output {
  	bool named_val1_exists;
  	bool named_val2_exists;
-@@ -39,8 +45,17 @@ struct core_reloc_enumval_output {
- 	int named_val2;
- 	int anon_val1;
+@@ -47,6 +53,8 @@ struct core_reloc_enumval_output {
  	int anon_val2;
-+	long uint_val1;
-+	long uint_val2;
+ 	long uint_val1;
+ 	long uint_val2;
++	long int_val1;
++	long int_val2;
  };
 =20
-+#ifdef __clang__
-+#define UINT_ENUM_VALUE(v) bpf_core_enum_value(enum named_uint_enum, v)
-+#else
-+/* GCC's __builtin_preserve_enum_value() returns int */
-+#define UINT_ENUM_VALUE(v) ((unsigned int)bpf_core_enum_value(enum named=
-_uint_enum, v))
-+#endif
+ #ifdef __clang__
+@@ -85,6 +93,12 @@ int test_core_enumval(void *ctx)
+ 		out->uint_val1 =3D UINT_ENUM_VALUE(UINT_ENUM_VAL1);
+ 	if (bpf_core_enum_value_exists(enum named_uint_enum, UINT_ENUM_VAL2))
+ 		out->uint_val2 =3D UINT_ENUM_VALUE(UINT_ENUM_VAL2);
 +
- SEC("raw_tracepoint/sys_enter")
- int test_core_enumval(void *ctx)
- {
-@@ -64,6 +79,12 @@ int test_core_enumval(void *ctx)
- 	out->anon_val1 =3D bpf_core_enum_value(anon, ANON_ENUM_VAL1);
- 	out->anon_val2 =3D bpf_core_enum_value(anon, ANON_ENUM_VAL2);
- 	/* ANON_ENUM_VAL3 value is optional */
-+
-+	/* enum named_uint_enum is optional */
-+	if (bpf_core_enum_value_exists(enum named_uint_enum, UINT_ENUM_VAL1))
-+		out->uint_val1 =3D UINT_ENUM_VALUE(UINT_ENUM_VAL1);
-+	if (bpf_core_enum_value_exists(enum named_uint_enum, UINT_ENUM_VAL2))
-+		out->uint_val2 =3D UINT_ENUM_VALUE(UINT_ENUM_VAL2);
++	/* enum named_int_enum is optional */
++	if (bpf_core_enum_value_exists(enum named_int_enum, INT_ENUM_VAL1))
++		out->int_val1 =3D bpf_core_enum_value(enum named_int_enum, INT_ENUM_VA=
+L1);
++	if (bpf_core_enum_value_exists(enum named_int_enum, INT_ENUM_VAL2))
++		out->int_val2 =3D bpf_core_enum_value(enum named_int_enum, INT_ENUM_VA=
+L2);
  #else
  	data.skip =3D true;
  #endif
