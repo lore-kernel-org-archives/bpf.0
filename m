@@ -1,54 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.82
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.34
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795204966;
-	b=xNgPfX3nDCRWomACd6wBQxR/6EUSz40E0K0bHfT1RAcSpR1dZUhVC03VxsL5bbj+G9IM
-	 rdmJ+3fLshMgPQMChVZC/ea7AYbvd5VPe3r8qHP+WaWI+V42JlOg5gGvYo7C3rCcva6GO
-	 gsk+zmrDIlucccpY2MCYsw2jcypQoH58Bd2vk1dnz3kkjR8ozMfSFmGd+zubzRpotHADI
-	 +kVktgLwugkomNl1Ga4egKp3BJKzRtajTTmutqTCZ/LbrEhJ1wDpc8Ee0qCquGIpaZFu9
-	 No+ueV9W7OPT0Q747qpv0dQaxB7iM972Zu/HLqtga8nCrOJKberrBZNODbhETIiZjgg==
+	t=1795205126;
+	b=WiQXf1EDekSrKnUgZeniYtYtgD+t+X8IzWJxWtfJStkFnLZeTxdLhCtc5jKN8solV4o0
+	 929DTdSrGkB4/VtsCYj66lZHa4MGRXi6IGSnRxVMglUhiNQOrP7D+RIclhj+l5NrA0JfM
+	 EHLcZ74QV44DUIXLwzJoXNZ/2DlN+uXGO2mCEK5GRUvDu3qVcWQnzeMCq/xy71DdlBB62
+	 8gEskwOq+LTz0ZJmTTrhcj2xX74CFBEKFiMMYiWRbcmc1FGasPfKoYxN7/YeC+npVtDxw
+	 OfeeX0FxMapv6c8jKES+XTXqcOK/USADuFD0lEsUO5xVpcXgSzD2ysx8U7PwcTW4IRg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795204966;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795205126;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
 	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=35g51n9yT0O+2qdfSgrvgmxnc3ZbtEGQlMJoh7Vkd7I=;
-	b=ke93OybCOkEMNlJjcDh3/V4ZAnOjcKcaJYxkZAk0bmKaBIJPgcAEB9HWU3Xiyeja5ht8
-	 eCRWhbrFTUuLNfOf/6fyXvBOCjVakJAL+gljzvnZP3Ltnt8+opvjs88VBbhRvVT7FnDJ9
-	 RXsIhSI7JK8sQ6vhcquwlhty4FzHgwqmaBOw+hyBDwq5h7F7/aEQuj4PWFDpu2lTZv8cH
-	 71tigOX7BKLMM3a11ldnF9WqRu6FPRaLMXbhveGnJXNc7iYQ2PHq4nfxdz9Sy9Tf7i2qy
-	 Ar/fTOs5EVk+If6Y1yoAbBSqBcyIbGaKoR6A2tWRR3ho2BfrhOIcCJ5L9ZrlW8rskgA==
+	bh=Lp04bo2sgP06USHAChXdOuNrd2K1DM1CxyrrPNLoIDc=;
+	b=Cr0YK1ccMMb/fYjlmkK6vwcFTVNhgNmut/OTRc5mfu/2DVpjYa84IJQ7882QwQgVimuM
+	 oWAWTQGTgozRI0qqamMj5uDBOK1m8IGiMJpNt4YDhlBaCzwOO3xsftLOKZ87k6o+hxDh8
+	 9XSWAa0OKZg5X9gcqi0AO7+krjMsxkTLRIifmHX09H+c3CaPWCftYBvF6DN3R4C03wvBZ
+	 ErYqdovLXlrEiQcgIxDWCnnOCiKmYjUprxki5Xhmpdd+AqZk+4NfBasMcu11Z/j3SfQI3
+	 6jgFJV3mdoryUGKZyGYaXuTPbuNP0Z/J20V8tRLd3XRq3NRrxbWquA03h+rzj44bgug==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Vur21Cac;
-	arc=none smtp.remote-ip=95.215.58.82
-Received: from mta1.migadu.com (out-82.mta1.migadu.com [95.215.58.82])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="p/71m9Bl";
+	arc=none smtp.remote-ip=91.218.175.34
+Received: from mta0.migadu.com (out-34.mta0.migadu.com [91.218.175.34])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C30D606A6E1
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 20:02:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2C30D606A6E1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CF48606A6FC
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 20:05:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6CF48606A6FC
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Vur21Cac
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=p/71m9Bl
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=uQshDafHy9BozPUOwHTJ4xHyL9EhNB+AO68YPNEcvlA=;
+DKIM-Signature: a=rsa-sha256; bh=6iXX93MlfIOuC/eK1roCbWuvGCrP8yxENT5m24PLFpg=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795204958; v=1; x=1795809758;
- b=Vur21Cacc+79jrXsU/M9LO/uvmk2sTAEZZl45vWMgYpWQ6tTT1zxCKUI8n3hZNq9GV+qHzCT
- sivy0zIw7l4xzU//ItmqwvsklG7lSDM8MyKCInMOeT9Aj5+ideiIJvrzNjsmZ/8ukYvRTEtWpjv
- dBcrFGErqCbIfoDVDTr65zVc=
+ t=1795205118; v=1; x=1795809918;
+ b=p/71m9BlbwFJb0TdRnG4u3KnNBiLxaf0sq42iV6OQu6Z9SYyEPr3dD9dQR00EYbiBBwgM1zr
+ rTHfO/Z5O+ESBgZ8OIdrYGOa6vLxfQSYW6pp/Ww+9tbKEfsJVpmsion1KPjrHlSOlpoXrCHMsVh
+ wbpVt5WtceZQd1fsViRm65TQ=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id c47a9709b21efdbb;
-	Fri, 20 Nov 2026 20:02:38 +0000
-X-Mizu-Trace-ID: c47a9709b21efdbb
+Received: by smtp.migadu.com with ESMTPS id 4ca826ec631b7483;
+	Fri, 20 Nov 2026 20:05:17 +0000
+X-Mizu-Trace-ID: 4ca826ec631b7483
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <e0a15bd8-c37e-4736-913e-e926bdbd12e5@linux.dev>
-Date: Fri, 20 Nov 2026 20:02:37 +0000
+Message-ID: <7f9c12cf-b2a6-4238-b768-17d66b84b2a9@linux.dev>
+Date: Fri, 20 Nov 2026 20:05:12 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -72,228 +72,216 @@ Cc: mingo@redhat.com, acme@kernel.org, namhyung@kernel.org,
 References: <20261119211235.99805-1-usama.arif@linux.dev>
  <20261119211235.99805-4-usama.arif@linux.dev>
  <20261120091150.GN2668564@noisy.programming.kicks-ass.net>
+ <20261120091258.GH2669272@noisy.programming.kicks-ass.net>
 Content-Language: en-US
 From: Usama Arif <usama.arif@linux.dev>
-In-Reply-To: <20261120091150.GN2668564@noisy.programming.kicks-ass.net>
+In-Reply-To: <20261120091258.GH2669272@noisy.programming.kicks-ass.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 
 
-On 20/11/2026 01:11, Peter Zijlstra wrote:
-> On Thu, Nov 19, 2026 at 01:10:46PM -0800, Usama Arif wrote:
-> 
->>  kernel/events/core.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
+On 20/11/2026 01:12, Peter Zijlstra wrote:
+> On Fri, Nov 20, 2026 at 10:11:51AM +0100, Peter Zijlstra wrote:
+>> On Thu, Nov 19, 2026 at 01:10:46PM -0800, Usama Arif wrote:
 >>
->> diff --git a/kernel/events/core.c b/kernel/events/core.c
->> index 57ea7e3c01a025..fa10ad7cfd99af 100644
->> --- a/kernel/events/core.c
->> +++ b/kernel/events/core.c
->> @@ -11212,7 +11212,7 @@ static void do_perf_sw_event(enum perf_type_id type, u32 event_id,
->>  				    u64 nr, struct pt_regs *regs, u64 addr)
->>  {
->>  	struct swevent_htable *swhash = this_cpu_ptr(&swevent_htable);
->> -	struct perf_sample_data data;
->> +	struct perf_sample_data data __uninitialized;
->>  	struct perf_event *event;
->>  	struct hlist_head *head;
->>  
+>>>  kernel/events/core.c | 2 +-
+>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/kernel/events/core.c b/kernel/events/core.c
+>>> index 57ea7e3c01a025..fa10ad7cfd99af 100644
+>>> --- a/kernel/events/core.c
+>>> +++ b/kernel/events/core.c
+>>> @@ -11212,7 +11212,7 @@ static void do_perf_sw_event(enum perf_type_id type, u32 event_id,
+>>>  				    u64 nr, struct pt_regs *regs, u64 addr)
+>>>  {
+>>>  	struct swevent_htable *swhash = this_cpu_ptr(&swevent_htable);
+>>> -	struct perf_sample_data data;
+>>> +	struct perf_sample_data data __uninitialized;
+>>>  	struct perf_event *event;
+>>>  	struct hlist_head *head;
+>>>  
+>>
+>> I like this one, didn't know about the __uninitialized thing. But I
+>> think we wants to be more consistent with this.
+>>
+>> A little git-grep seems to suggest we ought to do the same elsewhere.
+>> Shall I fold the little something below in this patch?
+>>
 > 
-> I like this one, didn't know about the __uninitialized thing. But I
-> think we wants to be more consistent with this.
+> And this should be a separate patch again I think.
+
+Agreed, but IBS is not safe yet. For PERF_SAMPLE_WEIGHT_STRUCT,
+perf_ibs_parse_ld_st_data() writes only var1_dw and var2_w but sets
+PERF_SAMPLE_WEIGHT_TYPE, so perf_output_sample() copies var3_w from
+whatever is on the stack. INIT_STACK_ALL_ZERO hides that today, and
+INIT_STACK_NONE kernels have leaked those 2 bytes since 6b2ae4952ef8.
+With __uninitialized in perf_ibs_handle_irq() every kernel would.
+
+We need the below:
+
+commit e662f8539ca00096db3ee4d570efe97767427fbe
+Author: Usama Arif <usama.arif@linux.dev>
+Date:   Fri Nov 20 09:04:13 2026 -0800
+
+    perf/x86/amd/ibs: Don't leak stack contents through PERF_SAMPLE_WEIGHT_STRUCT
+
+    For a load that missed the data cache, perf_ibs_parse_ld_st_data()
+    reports the miss latency as the sample weight and marks
+    PERF_SAMPLE_WEIGHT_TYPE as done, so perf_prepare_sample() leaves the
+    field alone. With PERF_SAMPLE_WEIGHT_STRUCT it writes only var1_dw and
+    var2_w, but perf_output_sample() copies all 8 bytes of the union into
+    the ring buffer. var3_w therefore carries whatever was left in the
+    on-stack struct perf_sample_data in perf_ibs_handle_irq().
+
+    CONFIG_INIT_STACK_ALL_ZERO hides this by clearing the struct on entry.
+    Without it, every such sample hands 2 bytes of kernel stack to user
+    space. "perf mem record" asks for PERF_SAMPLE_WEIGHT_STRUCT on x86, and
+    since v6.14 swfilt lets an unprivileged user sample their own tasks with
+    IBS.
+
+    Write var3_w as well.
+
+    Fixes: 6b2ae4952ef8 ("perf/x86/amd: Support PERF_SAMPLE_{WEIGHT|WEIGHT_STRUCT}")
+    Cc: stable@vger.kernel.org
+    Signed-off-by: Usama Arif <usama.arif@linux.dev>
+
+diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
+index 66e67e27224f18..9aa47751b37f6c 100644
+--- a/arch/x86/events/amd/ibs.c
++++ b/arch/x86/events/amd/ibs.c
+@@ -1376,6 +1376,7 @@ static void perf_ibs_parse_ld_st_data(__u64 sample_type,
+                if (sample_type & PERF_SAMPLE_WEIGHT_STRUCT) {
+                        data->weight.var1_dw = op_data3.dc_miss_lat;
+                        data->weight.var2_w = op_data.tag_to_ret_ctr;
++                       data->weight.var3_w = 0;
+                } else if (sample_type & PERF_SAMPLE_WEIGHT) {
+                        data->weight.full = op_data3.dc_miss_lat;
+                }
+
+
+The other sites look fine to me, including arch-PEBS: the drain skips
+records whose first fragment has no basic group, so var3_w is always
+written there.
+
+
+
 > 
-> A little git-grep seems to suggest we ought to do the same elsewhere.
-> Shall I fold the little something below in this patch?
-> 
-
-
-Thanks! I went through the below. perf_tp_event(), perf_bp_event()
-and perf_swevent_hrtimer() call perf_sample_data_init() for each event,
-like do_perf_sw_event() does. The side-band emitters only use the
-sample ID fields, which perf_event_header__init() writes and
-perf_event__output_id_sample() reads under the same sample_id_all
-check. So they are all fine to do.
-
-But they do need the fix in patch 2 to work.
-
-There is another fix that I found looking at your next reply.
-Would you like me to send all the fixes and you can then send
-the below patch (and the next one?)
-
-
-> 
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -9123,7 +9123,7 @@ perf_event_read_event(struct perf_event
->  			struct task_struct *task)
->  {
->  	struct perf_output_handle handle;
-> -	struct perf_sample_data sample;
-> +	struct perf_sample_data sample __uninitialized;
->  	struct perf_read_event read_event = {
->  		.pid = perf_event_pid(event, task),
->  		.tid = perf_event_tid(event, task),
-> @@ -9390,7 +9390,7 @@ static void perf_event_task_output(struc
->  {
->  	struct perf_task_event *task_event = data;
->  	struct perf_output_handle handle;
-> -	struct perf_sample_data	sample;
-> +	struct perf_sample_data	sample __uninitialized;
->  	struct task_struct *task = task_event->task;
->  	int ret;
+> ---
+> diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
+> index 49b6b8fce566..db6c87552594 100644
+> --- a/arch/x86/events/amd/core.c
+> +++ b/arch/x86/events/amd/core.c
+> @@ -958,7 +958,7 @@ static int amd_pmu_v2_handle_irq(struct pt_regs *regs)
+>  	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+>  	static atomic64_t status_warned = ATOMIC64_INIT(0);
+>  	u64 reserved, status, mask, new_bits, prev_bits;
+> -	struct perf_sample_data data;
+> +	struct perf_sample_data data __uninitialized;
+>  	struct hw_perf_event *hwc;
+>  	struct perf_event *event;
+>  	int handled = 0, idx;
+> diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
+> index 96c96369480a..cf0eafd67430 100644
+> --- a/arch/x86/events/amd/ibs.c
+> +++ b/arch/x86/events/amd/ibs.c
+> @@ -1483,7 +1483,7 @@ static int perf_ibs_handle_irq(struct perf_ibs *perf_ibs, struct pt_regs *iregs)
+>  	struct cpu_perf_ibs *pcpu = this_cpu_ptr(perf_ibs->pcpu);
+>  	struct perf_event *event = pcpu->event;
+>  	struct hw_perf_event *hwc;
+> -	struct perf_sample_data data;
+> +	struct perf_sample_data data __uninitialized;
+>  	struct perf_raw_record raw;
+>  	struct pt_regs regs;
+>  	struct perf_ibs_data ibs_data;
+> diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+> index 4e344fb1ae3e..5f8bfc65b256 100644
+> --- a/arch/x86/events/core.c
+> +++ b/arch/x86/events/core.c
+> @@ -2157,7 +2157,7 @@ void x86_pmu_update_perf_regs(struct perf_event *event,
 >  
-> @@ -9534,7 +9534,7 @@ static void perf_event_comm_output(struc
->  {
->  	struct perf_comm_event *comm_event = data;
->  	struct perf_output_handle handle;
-> -	struct perf_sample_data sample;
-> +	struct perf_sample_data sample __uninitialized;
->  	int ret;
->  
->  	if (!perf_event_comm_match(event))
-> @@ -9625,7 +9625,7 @@ static void perf_event_namespaces_output
->  {
->  	struct perf_namespaces_event *namespaces_event = data;
->  	struct perf_output_handle handle;
-> -	struct perf_sample_data sample;
-> +	struct perf_sample_data sample __uninitialized;
->  	int ret;
->  
->  	if (!perf_event_namespaces_match(event))
-> @@ -9748,7 +9748,7 @@ static void perf_event_cgroup_output(str
->  {
->  	struct perf_cgroup_event *cgroup_event = data;
->  	struct perf_output_handle handle;
-> -	struct perf_sample_data sample;
-> +	struct perf_sample_data sample __uninitialized;
->  	int ret;
->  	u16 size = sizeof(cgroup_event->event_id) + cgroup_event->path_size;
->  
-> @@ -9859,7 +9859,7 @@ static void perf_event_mmap_output(struc
->  {
->  	struct perf_mmap_event *mmap_event = data;
->  	struct perf_output_handle handle;
-> -	struct perf_sample_data sample;
-> +	struct perf_sample_data sample __uninitialized;
->  	int size = sizeof(mmap_event->event_id) + mmap_event->file_size;
->  	u32 type = PERF_RECORD_MMAP;
->  	u16 misc = PERF_RECORD_MISC_USER;
-> @@ -10155,7 +10155,7 @@ void perf_event_aux_event(struct perf_ev
->  			  unsigned long size, u64 flags)
->  {
->  	struct perf_output_handle handle;
-> -	struct perf_sample_data sample;
-> +	struct perf_sample_data sample __uninitialized;
->  	struct perf_aux_event {
->  		struct perf_event_header	header;
->  		u64				offset;
-> @@ -10188,7 +10188,7 @@ void perf_event_aux_event(struct perf_ev
->  void perf_log_lost_samples(struct perf_event *event, u64 lost)
->  {
->  	struct perf_output_handle handle;
-> -	struct perf_sample_data sample;
-> +	struct perf_sample_data sample __uninitialized;
->  	int ret;
->  
->  	struct {
-> @@ -10240,7 +10240,7 @@ static void perf_event_switch_output(str
->  {
->  	struct perf_switch_event *se = data;
->  	struct perf_output_handle handle;
-> -	struct perf_sample_data sample;
-> +	struct perf_sample_data sample __uninitialized;
->  	u32 type;
->  	u16 misc;
->  	u16 size;
-> @@ -10307,7 +10307,7 @@ static void perf_event_switch(struct tas
->  static void perf_log_throttle(struct perf_event *event, int enable)
->  {
->  	struct perf_output_handle handle;
-> -	struct perf_sample_data sample;
-> +	struct perf_sample_data sample __uninitialized;
->  	int ret;
->  
->  	struct {
-> @@ -10363,7 +10363,7 @@ static void perf_event_ksymbol_output(st
->  {
->  	struct perf_ksymbol_event *ksymbol_event = data;
->  	struct perf_output_handle handle;
-> -	struct perf_sample_data sample;
-> +	struct perf_sample_data sample __uninitialized;
->  	int ret;
->  	u16 size = sizeof(ksymbol_event->event_id) + ksymbol_event->name_len;
->  
-> @@ -10450,7 +10450,7 @@ static void perf_event_bpf_output(struct
->  {
->  	struct perf_bpf_event *bpf_event = data;
->  	struct perf_output_handle handle;
-> -	struct perf_sample_data sample;
-> +	struct perf_sample_data sample __uninitialized;
->  	int ret;
->  
->  	if (!perf_event_bpf_match(event))
-> @@ -10540,7 +10540,7 @@ static void perf_callchain_deferred_outp
->  {
->  	struct perf_callchain_deferred_event *deferred_event = data;
->  	struct perf_output_handle handle;
-> -	struct perf_sample_data sample;
-> +	struct perf_sample_data sample __uninitialized;
->  	u64 nr = deferred_event->trace->nr;
->  	u16 size, id_size, max_payload;
->  	int ret;
-> @@ -10615,7 +10615,7 @@ static void perf_event_text_poke_output(
->  {
->  	struct perf_text_poke_event *text_poke_event = data;
->  	struct perf_output_handle handle;
-> -	struct perf_sample_data sample;
-> +	struct perf_sample_data sample __uninitialized;
->  	u16 size = sizeof(text_poke_event->event_id) + text_poke_event->tot + text_poke_event->pad;
->  	u64 padding = 0;
->  	int ret;
-> @@ -10686,7 +10686,7 @@ EXPORT_SYMBOL_GPL(perf_event_itrace_star
->  static void perf_log_itrace_start(struct perf_event *event)
->  {
->  	struct perf_output_handle handle;
-> -	struct perf_sample_data sample;
-> +	struct perf_sample_data sample __uninitialized;
->  	struct perf_aux_event {
->  		struct perf_event_header        header;
->  		u32				pid;
-> @@ -10721,7 +10721,7 @@ static void perf_log_itrace_start(struct
->  void perf_report_aux_output_id(struct perf_event *event, u64 hw_id)
->  {
->  	struct perf_output_handle handle;
-> -	struct perf_sample_data sample;
-> +	struct perf_sample_data sample __uninitialized;
->  	struct perf_aux_event {
->  		struct perf_event_header        header;
->  		u64				hw_id;
-> @@ -11603,7 +11603,7 @@ void perf_tp_event(u16 event_type, u64 c
->  		   struct pt_regs *regs, struct hlist_head *head, int rctx,
->  		   struct task_struct *task)
+>  int x86_pmu_handle_irq(struct pt_regs *regs)
 >  {
 > -	struct perf_sample_data data;
 > +	struct perf_sample_data data __uninitialized;
+>  	struct cpu_hw_events *cpuc;
 >  	struct perf_event *event;
+>  	int idx, handled = 0;
+> diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+> index 0a34d674df59..5d84c18096a9 100644
+> --- a/arch/x86/events/intel/core.c
+> +++ b/arch/x86/events/intel/core.c
+> @@ -3819,7 +3819,7 @@ static int x86_pmu_handle_guest_pebs(struct pt_regs *regs,
 >  
->  	/*
-> @@ -11949,7 +11949,7 @@ void perf_event_free_bpf_prog(struct per
->  #ifdef CONFIG_HAVE_HW_BREAKPOINT
->  void perf_bp_event(struct perf_event *bp, void *data)
+>  static int handle_pmi_common(struct pt_regs *regs, u64 status)
 >  {
-> -	struct perf_sample_data sample;
-> +	struct perf_sample_data sample __uninitialized;
->  	struct pt_regs *regs = data;
->  
->  	/*
-> @@ -12403,7 +12403,7 @@ static int perf_event_set_filter(struct
->  static enum hrtimer_restart perf_swevent_hrtimer(struct hrtimer *hrtimer)
->  {
->  	enum hrtimer_restart ret = HRTIMER_RESTART;
 > -	struct perf_sample_data data;
 > +	struct perf_sample_data data __uninitialized;
->  	struct pt_regs *regs;
+>  	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+>  	int bit;
+>  	int handled = 0;
+> diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
+> index 8444670cee4a..73f6fd66856f 100644
+> --- a/arch/x86/events/intel/ds.c
+> +++ b/arch/x86/events/intel/ds.c
+> @@ -1184,7 +1184,7 @@ int intel_pmu_drain_bts_buffer(void)
+>  	struct bts_record *at, *base, *top;
+>  	struct perf_output_handle handle;
+>  	struct perf_event_header header;
+> -	struct perf_sample_data data;
+> +	struct perf_sample_data data __uninitialized;
+>  	unsigned long skip = 0;
+>  	struct pt_regs regs;
+>  
+> @@ -1265,7 +1265,7 @@ int intel_pmu_drain_bts_buffer(void)
+>  void intel_pmu_drain_pebs_buffer(void)
+>  {
+>  	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+> -	struct perf_sample_data data;
+> +	struct perf_sample_data data __uninitialized;
+>  
+>  	WARN_ON_ONCE(cpuc->enabled);
+>  
+> diff --git a/arch/x86/events/intel/knc.c b/arch/x86/events/intel/knc.c
+> index e887adc108ac..aa38b0ac3c7b 100644
+> --- a/arch/x86/events/intel/knc.c
+> +++ b/arch/x86/events/intel/knc.c
+> @@ -213,7 +213,7 @@ static inline void knc_pmu_ack_status(u64 ack)
+>  
+>  static int knc_pmu_handle_irq(struct pt_regs *regs)
+>  {
+> -	struct perf_sample_data data;
+> +	struct perf_sample_data data __uninitialized;
+>  	struct cpu_hw_events *cpuc;
+>  	int handled = 0;
+>  	int bit, loops;
+> diff --git a/arch/x86/events/intel/p4.c b/arch/x86/events/intel/p4.c
+> index 5368dc31787c..4ac429e55935 100644
+> --- a/arch/x86/events/intel/p4.c
+> +++ b/arch/x86/events/intel/p4.c
+> @@ -1033,7 +1033,7 @@ static int p4_pmu_set_period(struct perf_event *event)
+>  
+>  static int p4_pmu_handle_irq(struct pt_regs *regs)
+>  {
+> -	struct perf_sample_data data;
+> +	struct perf_sample_data data __uninitialized;
+>  	struct cpu_hw_events *cpuc;
 >  	struct perf_event *event;
->  	u64 period;
+>  	struct hw_perf_event *hwc;
+> diff --git a/arch/x86/events/zhaoxin/core.c b/arch/x86/events/zhaoxin/core.c
+> index e506f677db57..fc98a7fdd3bc 100644
+> --- a/arch/x86/events/zhaoxin/core.c
+> +++ b/arch/x86/events/zhaoxin/core.c
+> @@ -355,7 +355,7 @@ static void zhaoxin_pmu_enable_event(struct perf_event *event)
+>   */
+>  static int zhaoxin_pmu_handle_irq(struct pt_regs *regs)
+>  {
+> -	struct perf_sample_data data;
+> +	struct perf_sample_data data __uninitialized;
+>  	struct cpu_hw_events *cpuc;
+>  	int handled = 0;
+>  	u64 status;
+> diff --git a/arch/x86/include/asm/stop_machine.h b/arch/x86/include/asm/stop_machine.h
+> deleted file mode 100644
+> index e69de29bb2d1..000000000000
 
