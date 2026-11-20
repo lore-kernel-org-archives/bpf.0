@@ -1,86 +1,86 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.7
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.66
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795134725;
-	b=5rOzxSNsqWovTKW+ogFAR4n8gnX6ucpPMTFeYQyHeq05Ld4ovS4/IMtiuGSZv96BAbqA
-	 7Oa8oLt5aTdX7R0EXVPQk4EtujPB1exejLc5/OzLQmROKFHNHv0WjiBOPZ4/o4N09jyKZ
-	 0KwLiOa0gqPGLFTLzfkJDD5JI85jruRHstI/SGMbZ68yQ3cFpXQoDnSUkg8ObJcZDgiGu
-	 T3SJEqYRuXUiB58IkGwpireBr51yiQTo9cwvIKf1QthE9kITRYWh0DLLYjV7fxQV7MTGH
-	 OiP0RgLh8uc+iv7iihZgBLRKy/xfEm9eRqZABNey/II0L9BWQGvpgDreUXEwoXvCAzQ==
+	t=1795134721;
+	b=2zcWtx8V+eIYWd8XKjj51oSRH1BS3h3HQ2rQ2VUWB5syFrv+2bAjUqclGicmunIHexz+
+	 MfXsVlxi+XUOxHIYJY9Eua0NPVl/c8msJ3TcPXVyKi1nGqUXgZKiv+UTaRTipC/h4N793
+	 ruvj6osH25do+1SSPr9wwVvoH2ofYMbQGXza7xSn3ybRySP6OLgQL0WyzSypqj0qgNkAL
+	 4BBCXMYiLWnw5J4Wxgh6KU5aKESz3mL2DORwcfw0AcQYpA0j9ZuSke1TJncfh+ezZt+XR
+	 hCFI0IDKvnOk2DfrV//YbohoeI0n71H+ojKcGD5OhkmF1At1EAx6sz/OzmXmYR3pquQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795134725;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795134721;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
 	 Content-Type:Content-Disposition:Content-Transfer-Encoding:
 	 In-Reply-To;
-	bh=mZzEzgMMxjB3j+vPh5g8u5NJjrN6f+VQAyZJOgWj1P0=;
-	b=EONIUsUi5p1QFgKFKcnjq+onVx/d2nC4hSiNYXPZfOV3XPQc8773OeuQEYLuidWyXCJY
-	 CCLgxpTVcqL5x6nZbL64lGL+MsNtUkhUYfbJWZAezCxM59MbGKmis1o2FMnaUE1EOYJ8a
-	 QortDmUKtD5tBCq1hXHinKnzNWCTSWrH+mrHwauqp0sbGsqnWE19wPEYytFG+uZctlkaY
-	 Sr0ZzdgirpHIHhrGijLZbLItDaQuF2BR/SpAiqXfM1jSJ2TCMiMMkLguVqNDN2FpZvV2q
-	 pC0FIItAj202B8lFuThzqSw2G1yXwnPynmVfMlPM2T9FXiSMagjjh9j0srdGfisZLuw==
+	bh=6I0dox9mdYstBqG9ky0WjIUXtlB7TLrMdzBHbsE5LOA=;
+	b=bi0g7USuryQdtWqvTzRWTKukcPtKbO40aDjUDjcBbqcXnKjh8A5DeO3de9F6dB9JZXTK
+	 GgM2hUMHunXxAYbpKNfQWRxEm/jvxxtmWTrDZj70u5k+BsuvnSo4GGq8HSseccqmdYY5L
+	 lbafFIFZKbklgFhLtsVis56BYYh5Z1qQDhcT5hZBNafOSDoGpJXKsjQVbRg8bHM/1JfYB
+	 fC78VmA4xIzc7LvkAmyCmt0cQFkjH2s1vKVHCq26KMkh9/3484PV/yQlnFUg2VfceWozp
+	 tNqIdPjVrQdU9dXTaeHreiJTivLKdT36DQk2fx9ein19Xi4aJaFYBF3m5PogyX/A8Cw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=J1PZDsZF;
-	arc=none smtp.remote-ip=74.125.229.7
-Received: from mail-dy2-f7.google.com (mail-dy2-f7.google.com [74.125.229.7])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=glVrkyNI;
+	arc=none smtp.remote-ip=74.125.82.66
+Received: from mail-dl1-f66.google.com (mail-dl1-f66.google.com [74.125.82.66])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A079960A2609
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 00:32:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A079960A2609
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 049B2606A32A
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 00:32:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 049B2606A32A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=J1PZDsZF
-Received: by mail-dy2-f7.google.com with SMTP id 5a478bee46e88-33e5ae86ff2so77026eec.0
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 16:32:02 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=glVrkyNI
+Received: by mail-dl1-f66.google.com with SMTP id a92af1059eb24-1aefd1bf74aso213741c88.1
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 16:32:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795134721; x=1795739521; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795134720; x=1795739520; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :content-type:mime-version:references:message-id:subject:cc:to:from
          :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=mZzEzgMMxjB3j+vPh5g8u5NJjrN6f+VQAyZJOgWj1P0=;
-        b=J1PZDsZFoBAXVvY8eLaT3O9ZAxsKHQPQZXVEpTBdAF/zGKg2Yz5aa3BWEF/jSek5Jr
-         J3xF+pqrXvgbWIMVnaqbVbdUxElYIsIH+tJYALqOqxLkcMUhSCHsuRMD8HAPIpLKaoYW
-         4/MwUy0c8p/OzEv0bDCBWuDkOBx5o8PscdEBB3qLQ9RfgDU4vXPYpDE3t3zsK1SPpRcY
-         h9L2yZt8MhkdGQma/ctNPuJVV106bV/lmPIQ9JVrHl1BQmR922qMxGprNIA4pqnbz2tJ
-         lO1WmLpm7cDaZf57/6aCtonm6Pp9+O8XE++K/6rWIJn8VnlbuY4xrM4W2d5mStYHtMRq
-         u3eA==
+        bh=6I0dox9mdYstBqG9ky0WjIUXtlB7TLrMdzBHbsE5LOA=;
+        b=glVrkyNIyYlm8wVTiuLIn+1R/pE2V9VJN825nkjbnVE7DzI/tklr0XR6PDNFu1OUjc
+         A6P3ZfTwHJQxiHAjmoK4SpQIdS8Ir/katd03VOBvE+4swUu2oA+8IkTyyok1Pjj9/pPY
+         jRHRWeNYDZ3yM5EUWHx+RVw95l+YNdToEWVWMBlDmJCQ5nDUi+lZAkU6M+KCBd+2W1HW
+         fToXfkJkp8+luUW1MITx+x0oH3VnjO0S4X/xzsL89lshkI/VzuYPu9YudzfVuvXLiO7a
+         PI2e6DkQIuvL5sJxpbyOQ9dBGmqKQnp3LSWMA4iJOQsw2EYyE1DA6dSJBL+RP9i6HuS0
+         6Qlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795134721; x=1795739521;
+        d=1e100.net; s=20260707; t=1795134720; x=1795739520;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :content-type:mime-version:references:message-id:subject:cc:to:from
          :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=mZzEzgMMxjB3j+vPh5g8u5NJjrN6f+VQAyZJOgWj1P0=;
-        b=ad2ilcgW82zoc/UrpE8NSjtK+x/b77QpLtc/kUNpuzU+pew+4xSqDxLBIHN6uljw43
-         ylkpNTu8r8cdR+TB+ggZa0WGJ5GiFM5ZfnDUmsBXStZdC1ZEAKVL3dS8Ro50+0BzsYbZ
-         oLlaeQjwcWLJ4c7XOFsNrHnqVjEq/h+KfUBuc3srWSf+nJ0ymkT9/d2p9Zo7t+DcKLxr
-         3zhQU9KmMBzlBtGRhRzZs2bQ4bRmZ3s676BSFim23gBAgQZdVpLkmmSdv25rdOGmUGIC
-         n4KeUCqI8uMWEKLiPrqd/2AoWK/sgObmCU/Yt2fXEavcIndEIIUxUpZ/lUeGS2iCUXxl
-         B6pA==
-X-Forwarded-Encrypted: i=1; AL+hErE+zpMvz7dv8dIToZ4DXVXd6yQzWlZ/tO4jYebrSdion94vhtrrEb9e4TMBw2vUnNAslDI=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/meoE9CxpX7jOH5cMFljr5jESTtW3uZ6ihdDeLWZ65Dyxo5uFv
-	0gE1o9lpdxrhGSVSE/jPOo25ZGzu1jlTJOP4B2qHaPuv0omlOO6uQjhq
-X-Gm-Gg: AYBFou0GsOPtCTD0DOxBt+vJFdJHaXrBGFaf0xxrGY3Joo1qh47/crcZpDhg2tGIWts
-	23TFsIha367dI00yJTFXa4IuL3QQUTDYMsruq741gMM8IDGuPKneonf6pEOJHXffJk5/M5XKTEr
-	d2USRzKzTxoCd/oaz37mCDTMeIEezVREM5/ddvDyp80OO1O4ZQ0iov6gamLgxcpbqPxg+A8TUwF
-	EVTkrDEMYcvGl0D8lbdyGJ7XL4yUsSSOZvhFQoXOlRw9NkZQA276qhtbBhOb00ldXOAWM7TPGUh
-	8K5J30WEddaLM0AAjlfL1s2rQJgUs1/DmfoPibz48wwuuPWvJpjdh1B7OCvlLRwDNisebIaErqe
-	Bf7k9Tc0EbSAudWK35sGPNELY0Xm3nctbs2/UvdEsPckIxz7mDXpqZiX7AnhfQ+esYOaFxXhSL/
-	/rDj66leWuY6eVvNxWcu06hKmL87tucFSgCm0yGWUVUVek4hQy3vag8bpnBaWMRcQ+lNbRtL/od
-	Yn6QwdWm0jIaQGPTm9vdRBX4QjpW+Y5QPcnJQDkhGyD08OXxe5nNDxcEq2PABcp2/30Yn92a2xn
-	6i6qsVBk0g8SlBWFynK9961bq/8Wod29929k6Ggct9bdLQ==
-X-Received: by 2002:a05:7022:7f01:b0:1b5:1a6c:af64 with SMTP id a92af1059eb24-1b5568c0fa1mr1258049c88.17.1795134721419;
-        Thu, 19 Nov 2026 16:32:01 -0800 (PST)
-Received: from localhost ([2a03:2880:9ff:63::])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b5566c3052sm2282420c88.1.2026.11.19.16.32.00
+        bh=6I0dox9mdYstBqG9ky0WjIUXtlB7TLrMdzBHbsE5LOA=;
+        b=2Kw1acmCXlaQo8pEuSdk0EK3KaV4yWoxtfrfE3CKIZnAF7XmstXPxlWQobVUdTImCb
+         OOc7FbSBTq0R2I96MpDsQkg6mx2RQHc50WuluDqr9WkupLsFYzbXMMJO8KIaiH6aYJK7
+         D1Wr6AlC1ABSnLx04LVKQtzl/1XxXPcA4ado/ZFSlvaICYZ7Vdiww+SvExvwM+DE78zH
+         MJAnLvLF6+gCYQonbRvzrOt+sjg4l79SyH5u/3BnEPIgtCddjsJPsdI/OJFOH7z4nqiB
+         qX2Qj6b970Rtcg21y1Lv5xWGBpM5b7A0Zv3N9aEZ2drK6Nxmb7/uIG9NaBR2ffTaJ7ir
+         4ERg==
+X-Forwarded-Encrypted: i=1; AL+hErH1Q3Dmo/l0G/NOVCFOxGsqlMUdjiLNVpvcvVCJguArtznzVfBsSwZZiH2StLoyKTtiM0E=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8DGgjgYVMja4XYOAEX+gi+TAHuTDJ8yhtGqdHzidjP+qojFI8x
+	Dqo/GpNAbMfsF0kHVKB9PPBZZ+jl/+CthpOY1Szg7fxNIBrzJRqTdno+
+X-Gm-Gg: AYBFou0mbxG54zMCkITUARL3O2u944UX8d2GJ4UqmRKtU0yDIH0VnxplkUAp5x8nHgW
+	o7V/LGD/j8RAiR848uCQn3vd+4L89sgNcvZPhDfXdBz+a5QUSSMeaW6P4VN8s5sO9cNhhPNyB5m
+	O9vp7TP0MzXzHXVHX1TmFySfp99YxchBm7T4cOgE8HhjlQ61AxwMcbQtrIaVJ8zFaBM/e0WNrij
+	+nXSds/6oJr/X7dLvO3miz7UslVnLvOXS9QkIfPF97JFNEg8+HhWiP+DA9Q62NcaMd6bCsf3UIb
+	t1wnTZUkdQT+U5MhpBW71mr++sBMBhjl5R6yEDFlRCVKfI/BJEqtKzrnaQn4gOZOFwpnSPNzuOG
+	ns9JokMEzodx4mSx3FkXO2Y5Iit1IQC2WJ4k+cD3iuEHZi9e8/8sZcANwh3b6DdAeRxipGgf1wx
+	Brk70bzuLM6d7lxN/nzWk9mCwq0IUzSGORO1Q3Pfscj+saLLLH2JMtRiMxx+t/fV6qgRaR7MIwW
+	NKJ12Cdf1+S8TlAbok+wGOxIA8YS/IYu3DVCh8uLCx6M5CpA5fFnft4vlEOA7WHiYXjHrxFwOJE
+	dTKXWxA+lrDsT5lVT0B0vF8=
+X-Received: by 2002:a05:7022:7f19:b0:19f:cc98:f603 with SMTP id a92af1059eb24-1b5520d7d86mr2448430c88.1.1795134719982;
+        Thu, 19 Nov 2026 16:31:59 -0800 (PST)
+Received: from localhost ([2a03:2880:9ff:42::])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b55681301asm2242124c88.8.2026.11.19.16.31.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2026 16:32:01 -0800 (PST)
-Date: Thu, 19 Nov 2026 16:24:58 -0800
+        Thu, 19 Nov 2026 16:31:59 -0800 (PST)
+Date: Thu, 19 Nov 2026 16:22:53 -0800
 From: Stanislav Fomichev <sdf.kernel@gmail.com>
 To: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
 Cc: "David S. Miller" <davem@davemloft.net>, 
@@ -101,10 +101,10 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Nikolay Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, 
 	Bobby Eshleman <bobbyeshleman@meta.com>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-kselftest@vger.kernel.org, io-uring@vger.kernel.org, Mina Almasry <almasrymina@google.com>
-Subject: Re: [PATCH net-next 3/7] net: Admit native XDP on provider queues
-Message-ID: <av-TQztlq185q6VW@devvm16445.scu0.facebook.com>
+Subject: Re: [PATCH net-next 1/7] bpf: Keep XDP helpers within readable data
+Message-ID: <av-SmgwQhAKI5u5P@devvm16445.scu0.facebook.com>
 References: <20261117164700.2157816-1-bjorn@kernel.org>
- <20261117164700.2157816-4-bjorn@kernel.org>
+ <20261117164700.2157816-2-bjorn@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -117,73 +117,19 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20261117164700.2157816-4-bjorn@kernel.org>
+In-Reply-To: <20261117164700.2157816-2-bjorn@kernel.org>
 
 On 11/17, Björn Töpel wrote:
-> XDP and memory providers are currently rejected on the same device.
-> Header-split RX keeps headers in normal memory, so a program can
-> filter packets without reading the provider payload.
+> Devmem and io_uring zero-copy RX put payload in fragments that the
+> kernel cannot read. XDP helpers must not treat these fragments as
+> normal pages.
 > 
-> Keep this restriction unless the driver declares xdp_unreadable
-> support. Admit native XDP in either attach order on these drivers.
-> Existing header-split checks require frags-aware programs.
-> 
-> The driver must mark provider fragments and reject XDP_TX while those
-> fragments remain. The core rejects helper access and frame redirects.
-> 
-> Keep generic and hardware-offloaded XDP rejected. Generic XDP builds
-> an xdp_buff from an skb without carrying the unreadable flag. Its
-> transmit and redirect paths also bypass the native driver guard.
-> 
-> Signed-off-by: Björn Töpel <bjorn@kernel.org>
-> ---
->  Documentation/networking/netmem.rst |  8 ++++++++
->  include/net/netdev_queues.h         |  6 ++++++
->  include/net/xdp.h                   |  5 ++---
->  net/core/dev.c                      | 28 ++++++++++++++++++++++++++--
->  net/core/dev.h                      |  1 +
->  net/core/netdev_rx_queue.c          |  2 +-
->  6 files changed, 44 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/networking/netmem.rst b/Documentation/networking/netmem.rst
-> index 6871dcdd700c..1ac94fc9d667 100644
-> --- a/Documentation/networking/netmem.rst
-> +++ b/Documentation/networking/netmem.rst
-> @@ -131,6 +131,14 @@ Driver RX Requirements
->     circulation times, such as when userspace holds a reference in zerocopy
->     scenarios.
->  
-> +8. XDP programs run next to unreadable memory providers only if the driver
-> +   sets netdev_queue_mgmt_ops.xdp_unreadable, and only in native mode. The
-> +   programs see the headers in the linear part, and helpers that reach
-> +   unreadable fragments fail. Attach payload fragments with
-> +   xdp_buff_add_frag(), which marks unreadable ones, and drop XDP_TX of a
-> +   buffer for which xdp_buff_is_frag_unreadable() is true: the payload is
-> +   mapped for receive only. Redirects of such a buffer fail in the core.
-> +
->  Driver TX Requirements
->  ======================
->  
-> diff --git a/include/net/netdev_queues.h b/include/net/netdev_queues.h
-> index c5335e935b7d..4f6702b284b4 100644
-> --- a/include/net/netdev_queues.h
-> +++ b/include/net/netdev_queues.h
-> @@ -199,6 +199,11 @@ enum {
->   *
->   * @supported_params:	Bitmask of supported parameters, see QCFG_*.
->   *
-> + * @xdp_unreadable:	Native XDP programs may run on queues with unreadable
-> + *			memory providers. The driver builds XDP buffers with
-> + *			xdp_buff_add_frag(), and drops XDP_TX of a buffer for
-> + *			which xdp_buff_is_frag_unreadable() is true.
-> + *
->   * Note that @ndo_queue_mem_alloc and @ndo_queue_mem_free may be called while
->   * the interface is closed. @ndo_queue_start and @ndo_queue_stop will only
->   * be called for an interface which is open.
-> @@ -229,6 +234,7 @@ struct netdev_queue_mgmt_ops {
->  				    struct netlink_ext_ack *extack);
->  
->  	unsigned int supported_params;
-> +	bool xdp_unreadable;
+> Reject operations that read or write these fragments. Access to the
 
-Any reason this is not a new QCFG_ in supported_params ?
+[..]
+
+> linear part still works. Tail trimming does not read the payload;
+> clear the unreadable flag after it removes every fragment.
+
+I guess this is technically true, but why allow it at all? Easier/safer
+to reject tail trimming as well?
