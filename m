@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795208051;
-	b=E6qJSDcAf9FUZ2mUP5MXuEWaDhwdK0pSRAt80jQ9rIEuSAfLIWcPXe7M/vtHr4R9E5Pu
-	 FalZ6ft8zyjaiE0a2GqGNAsjVoxOwzu31ptmPZtqouLRFQYP7JiHm3DIQog+YDByg4S+l
-	 MkHmKdn0mAzh7uMASzjHQEWInD0TdAv+9JRdTEVcnMqslzW1WuDBrgW8H9DVvA+VA2Pbs
-	 TRvQM7Ua8ZQb7JfeWVDbW5GHp6c93AxTdqEn0AUrKveVykxmZ800AGB+HFpwOgUqSVxRV
-	 WbLud8A84Frqen86QJuB78ZEIgvWWsgf9eIUNzHt3MFUtowdB0+E/yAUEMEwSQ0n82Q==
+	t=1795208053;
+	b=iRDMLBBZjqek25jJssNVG8tmgICPwILJqqtFjZCKdL+7VpblIdG33NlsrAKNQQVtqzB9
+	 hKzBPnxMu+FLOT0t6eLi/0pxo05Llgs9VueNjStsU9yVr5up65LswalugHfLutPgnSzX5
+	 wNCISW/C4PxaUtnNSYLEkFWEbA1NXHyeiPScWDJhwuhFkQKMhqvRoBjNKg8fTeb3hsimM
+	 NPSWORVKvFrpg/9rmA39Hplzeu5xh73K/nwYti03d1YPsPaoU1GTGk164fzyyolGzq4bp
+	 mSJLpi/ixdbY4We2JIzegXRa963sS4sLuD/TezCvhKPgmsIhmFJRPmNZomy5S1Zjx+Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795208051;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795208053;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=xAVaVpP1ioPhRdgeooaFxSXuEuAwNr9xroZbT+su59I=;
-	b=taQ3iWa3aZv+O+TBFDdOKawXanB9+vgYg3CVFZqmRr4kODqFGJrDzMMtuFQA0q/m/Eok
-	 BW3sHnns7MljPhDpAoBzRiKZarlIeUfrYKlauym8EKLKm0rse8oAgPSBpg7mTYZQ5DrMM
-	 pTPLicLbQAPzykVeGMJ5WGWYKwGy0D8mMhrYHslAuhWmY2LHhrFnnCKGFsHp/D0HJsd3e
-	 AIWT6keqQZFEHyInhpd/Q47o/0zeek1xAATqvMVgnG7RRiTRvRVKQtvbNFXJiTVbTAr0f
-	 DgAgslQKg58v/hARfy78CwNXOZRxvUBk6E/z0TdI1J6dVsWTV2Y2sdH0zWTzE5iy1Uw==
+	bh=u52SOqFmcAgn/aiXyaGWdj6qpi9TAqBM8YwkC4CwqUw=;
+	b=Elv/kDHZ3M7O/nH28lsdby8omHaZ6mN+FhXIyE4RpYkjfuWeO2Zb10Y31HVCb1MheFTo
+	 JdXbzwZfNO4xQD/7feOXL3EPER3YuUf2xbHAckLivqwGuS2Btjqw8CiAlgFI+de1dn1Uc
+	 LJ44JQdU2vlljb2P8Yh0uLN6E684aMKsJyPizQijLLGhFNw3goVuGT8sbXJBkGQY6I3Dh
+	 IxrGkYtm+gV/R215o0XHYt1AQl7xqzUdD6spLJo839G19kfPfgOVWv2dDasFZ3SWnaz63
+	 DX8VEY/kWCUgNeEtxjvqKbComqeCb2psmvkUZb/thv2nNPNuyIAQ0ZU9L5MZ3aDfHWw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="t+p/pkyQ";
-	arc=none smtp.remote-ip=209.85.214.176
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=q3Xcy6Re;
+	arc=none smtp.remote-ip=209.85.216.41
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C67260A260C
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 20:54:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9C67260A260C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CF58606A6B8
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 20:54:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9CF58606A6B8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=t+p/pkyQ
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2f02ee04378so10789905ad.1
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 12:54:05 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=q3Xcy6Re
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3b3e85baf7cso917145a91.0
+        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 12:54:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795208045; x=1795812845; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795208051; x=1795812851; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=xAVaVpP1ioPhRdgeooaFxSXuEuAwNr9xroZbT+su59I=;
-        b=t+p/pkyQpTJgsKAw7K6EKMxn10yQyxEN48+10AagO7sxEl1RhrLb98cZWNajbPz8DE
-         KWnwFLLewyFHAtg+IBAAMPoHbMzl2DcELBU9FCkY+VxJ4IVu/tFeVHs/0xaZjU4PdGoq
-         sSjv7gZqfInVa9t76/kOCHMVvLahroJaXHDqLlOw1y3jCs6TeY4c41Q+/APnVRaTDh5b
-         xrWHLpzvJSjTrujgsXQeEWWl/jUoQ55R0G2i6C6mZ7TtkoYbdWx9TgQevriW+DDLj049
-         pbpUn4Oc9vHzUEXDiaqTs4Pudf9C2hfrrLYUZT1K5EkPbnS4oia/8K4/uR8/m6RXfRdx
-         Nn0w==
+        bh=u52SOqFmcAgn/aiXyaGWdj6qpi9TAqBM8YwkC4CwqUw=;
+        b=q3Xcy6RetEy3326B5ne1c6c6R4UlegViyZOGMtGjP3xMvgCJa2ruB26eD6qiylufdb
+         Ny6YAZ69p7BauCu77959v8Dhx2tMDlw7A+bG90QNt4jpvd3D595RZEa0uMskCfdbloiJ
+         17/Ppz0bcKFK3rjJdYsF0diniux0AnZUrg6gzeqMb62bcSUV0al9CWRGg1VtxMMgDp0u
+         GDfB+G3oZlckwG4DlOW1oBG3uttD1Rmr+Mfd8aDrRf1euwiDBgIbvocisr6jE7tDTHyk
+         nVn/L97rIs54oARjavX6+rQTJTm2CnAUQaFK6FnHe/CLdkdWk8omvNvEhmodUjcr1WVa
+         P1EA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795208045; x=1795812845;
+        d=1e100.net; s=20260707; t=1795208051; x=1795812851;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=xAVaVpP1ioPhRdgeooaFxSXuEuAwNr9xroZbT+su59I=;
-        b=gYhakK6GOOxSqdKwII+N6Xlytk+Lqx+kEtUdl1icKbgag+O6uRoI7jYlpCYTtDtz44
-         2V95BOJ+fcWBinIbha6WPm6TYM0zpT8X5wJKAmPkQhDolbXivR3PgiyS3nhxKor+0S1o
-         fAwlgnyp+XeA+gi3+fvRgd0jTumZJqubk+PdQh4vSUDBHsgy+WCLpfo2fLgH36oFQIdo
-         Iu65QY43bH5S4bHeT9djtZvNiqK8Sh3QTHaxnDbcOJ+qn24TyexTYmeRCEOwa6le8JUd
-         X8u21ELuAOQgsyLYCqBJyIwLCc39+bc0VSUjTq8K1mUd0EgbCv1hWJ9Lb0rb8GCYhFhj
-         hTbg==
-X-Gm-Message-State: APuU4Z9TYZwNo1XaYjueB7Ir9aTEXiXI6LrdcXItPL4ZQmNc55h+cJoP
-	+1Iiknzp1HPsx6gsT6Gu9y1lWnqVNZjoqO5bVdoqRLH/dhfi+TNjXpObjAl86A==
-X-Gm-Gg: AZFdTZdZzYJMnbAgNDu/I2WJ1lgIScgjF8qpS9VtqAQBWIoGBwLbv4YtfuOWIHaok0C
-	PWCg3odd8I0OX8EyRhDnMaK6YaqILLokv4CkrPwPTif0g86aRqeWZze9OMlk8mkxi5+o5fJPyKh
-	mvZ1s6rEf0XTfbHFW/OAIrJPJwVmir8J7Zu4aNnjEm7p63h/14Y0C1iy2rb65GxVbJqaowGNdj2
-	SAdujuU3p38u+b1KsqzX5jHsQ2ecD1zo9xNYGbkj5bHzBBMTmQnmpC6OKI2rp8QLQliTYEW7E53
-	ta5/RCDn3x69AqM3QrLMf3PNSM85QtOOpmRunsFA8tOUIb9u9/bWBMGLDtEHpGhrZ/8zX4agA4H
-	3uS4yjKp62B/SEgs8LAnHgw6iKlyv9rasn1rbkFVEoO5wyunDlMtiU543aq6xpFhtKcThXl/daG
-	ZsU13h9czu+mM8Pb18/Jo5xI2rE9W0hSS5klAlwrxgzffk/DoA3gER5DnF9ecU0BnRJ9Kd3uyaa
-	/YxZ6iEudlwYw+yZwjuxef26b2LYNZzmqMwG3bWHSXFVPVgj64UehsDG7GXolMvH72tiA/vKyml
-	2UY7RjFAHyZVAJs9pgcc5sw6JhOIFD1XxHuaXDmnyEY1BeHHMAQ9YkdbXBhIlLbOwdulP0fEKaR
-	KfjwXr4ZReE2Ok+uewKcctiJ9iqRD9lQ6xnkIGMA3ABNYZYzjAeTxl3qVljHyRlV1NAZMVaZfZp
-	8=
-X-Received: by 2002:a17:903:4b03:b0:2ed:ebc:460f with SMTP id d9443c01a7336-2f03f2118f0mr46208475ad.33.1795208044838;
-        Fri, 20 Nov 2026 12:54:04 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f1276c5sm19970595ad.67.2026.11.20.12.54.04
+        bh=u52SOqFmcAgn/aiXyaGWdj6qpi9TAqBM8YwkC4CwqUw=;
+        b=xuOCf/7loTiSBuzDZ9j4DasNb7sK2wpwHlw0/NJi0SWIA/ozkhGMmGV7YGHv1Yas+Q
+         HxZK/Khm41WY/4jO6qcPmHv2AmoTr3WF5NNoos+HHYKK4hJt9fxWomkerCRsaMdv4erN
+         wkQTIythAq6nAql+0jjXOdghscPud6Tbz8MVLfN8oJTZDSqy5KM89iRrK4YPiCbOLsGY
+         /QHLv0Ti7qiDCp7hojexizh0H2cWi6Gu6BM7FH455WOy4KjppfeDRXZbdpbvJZ/MzwxQ
+         SJZZdbyPtjCbljuF7O/DFfj/yqPk7s78AJSu2mBILqG5xSu+I5HRaWMsw2dFAGGX71MT
+         4Tyg==
+X-Gm-Message-State: APuU4Z/TlkEWLx7hSbRwnhwPfexdRBMIyW87tKUEbwqjlz5Bn8I7snXJ
+	4RbVKZa5fx29tMxq56T8/0b9GimNNXQOW+OvnGeFSlPl52QTUQOrN4QKM/zcAA==
+X-Gm-Gg: AZFdTZed//lcHaCe1J2lSjSBrxVEvOAAdd9AaeFKWiJgI9HY8jKfeYKx1oD9mdae5L5
+	ToUki+kRgqYqyA4Qa6w4z71ybRrs0blto2azGeAhZ2kO09nvozSsw+r4YuD7bPSDilzEqnwp4Dm
+	mKc6wwK3cLR1h0fnaQ0+NkTUKv6QatrkhtGxL2uYNOhe9ebRiT8+sSi5NP8v1z/wbF+ykMx4t01
+	6BidLaUPcNVA6QiqkQyQbuIEyaMUsauXkRlGWqh1GHz69NxE6mmKscFdW8QIK4cMNe/I+K/2XB1
+	8v9Mty8AZw+8lp9UBN2mH9kDC18VmKHGMLt2dFebfgfev7K+otko4FhnaUDtNFyI86dgE3s7Uy/
+	4O74XzH9KquvFuBgDfDIC8QLmQcayEKNiJxIsl/kbNpVUBOq8aFy4pDMk1AI7gbbruC1ShN0GvN
+	QXmUhBloXpTt3LLoJeIfi5gwNC+XHV0WffWVGzoZU8qiCmstmoM8hDrB2YS2fH8K9o4Ku8+Vt3w
+	k1w7R6AtrNc83TH1m0at6NT9/J+GVJ3JpulWKRR9KpgmKFIhypFVRl9Na7TuObwC7qDPUMJ2ALh
+	kyviz/y4u2rHYsrf1VlohyW1UDiudpaZ6MRxRTJa6TPuyAepsKtB+Hii7r/t5weVw40716HvKF5
+	njVuv+VX+Np3yrsikatEioe8BuKyrRrKgC91jgN5drk0SbKS1utWk1Gwq4VCQQrUmx50XU24Lwg
+	==
+X-Received: by 2002:a17:90b:3cc7:b0:3b1:8300:f48e with SMTP id 98e67ed59e1d1-3b41c9715a7mr4216412a91.49.1795208050635;
+        Fri, 20 Nov 2026 12:54:10 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b44b75f2a4sm324149a91.2.2026.11.20.12.54.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2026 12:54:04 -0800 (PST)
+        Fri, 20 Nov 2026 12:54:10 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 41/49] bpf: Refine the copies of a number that AND or OR splits
-Date: Fri, 20 Nov 2026 20:49:49 +0000
-Message-ID: <20261120204959.614908-42-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 42/49] bpf: Allow a range of offsets for a constant string
+Date: Fri, 20 Nov 2026 20:49:50 +0000
+Message-ID: <20261120204959.614908-43-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261120204959.614908-1-alexei.starovoitov@gmail.com>
 References: <20261120204959.614908-1-alexei.starovoitov@gmail.com>
@@ -104,85 +104,83 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-maybe_fork_scalars() splits the state when AND or OR reads a number
-that is 0 or -1. The copies of the number are not split. The two states
-forget that the copies go with the result:
+clang merges two calls that differ only in a string. The join of the
+two pointers has a range. "is not a constant address" costs one more
+pass.
 
-  w8 = 0 or -1
-  w2 = w8; w2 &= 255          state A: w2 = 255   state B: w2 = 0
-  if w2 > 9 goto out          only B continues, w8 is still 0 or -1
-  r2 = r8; r2 &= 255          split again, a use of r2 = 255 fails
+The map is read-only. If a zero is at the largest offset or after it,
+it ends all strings that start before it:
 
-A split is a jump that is not in the program. Refine the related
-numbers as after a jump: w8 is -1 in A and 0 in B.
+  .rodata   a % d 0 b c d 0
+            ^       ^     ^
+            umin    umax  ends both
 
-Without bypass_spec_v1 a join does not relate two constants again. So
-the copies are not refined there.
-
-A program with this code in a loop goes from 11 passes to 1.
+Allow the range. There are two exceptions:
+- bpf_snprintf(): the verifier checks the format,
+- no bypass_spec_v1: the cpu can speculate past the test of the offset.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h |  2 ++
- kernel/bpf/equation.c        | 18 ++++++++++++++++++
- kernel/bpf/verifier.c        |  2 ++
- 3 files changed, 22 insertions(+)
+ kernel/bpf/verifier.c | 22 +++++++++++++---------
+ 1 file changed, 13 insertions(+), 9 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index df4a46cfa04..bb20fde51f0 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -2533,6 +2533,8 @@ void bpf_equations_refine_all(struct bpf_verifier_env *env, struct bpf_verifier_
- void bpf_equations_jump(struct bpf_verifier_env *env, struct bpf_verifier_state *st, int idx,
- 			bool taken);
- u16 bpf_args_with_equation(const struct bpf_verifier_state *st);
-+void bpf_equations_fork(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
-+			const struct scalar *part);
- void bpf_equations_next_trip(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
- 			     u32 depth);
- bool bpf_equations_subsume(struct bpf_verifier_env *env, const struct bpf_verifier_state *old,
-diff --git a/kernel/bpf/equation.c b/kernel/bpf/equation.c
-index 387156696ee..86b2c08c698 100644
---- a/kernel/bpf/equation.c
-+++ b/kernel/bpf/equation.c
-@@ -1040,6 +1040,24 @@ void bpf_equations_jump(struct bpf_verifier_env *env, struct bpf_verifier_state
- 		refine_diff(env, st, &untruncated[0], &untruncated[1], op, true);
- }
- 
-+/*
-+ * The insn is checked in parts. In @st the operand that it overwrites is in @part.
-+ * Without bypass_spec_v1 a join does not relate the constants again, see join_expr().
-+ */
-+void bpf_equations_fork(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
-+			const struct scalar *part)
-+{
-+	struct bpf_equation_env *eq_env = env->eq_env;
-+	struct scalar bounds = *part;
-+
-+	if (!eq_env || !env->bypass_spec_v1 || !eq_env->has_expr[0] ||
-+	    !eq_env->operand_expr[0].coef)
-+		return;
-+	scalar_bounds_sync(&bounds);
-+	refine_sym(env, &st->equations, eq_env->operand_expr[0], bounds, 1);
-+	propagate_bounds(env, st, false);
-+}
-+
- /* The largest sum of two arguments of a call: numbers, or offsets of pointers. Modulo 2^64. */
- s64 bpf_equations_max_sum(struct bpf_verifier_env *env, int regno1, int regno2)
- {
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 94499fdaaf9..146718823e3 100644
+index 146718823e3..8d0767b3bd4 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -17637,6 +17637,8 @@ static int maybe_fork_scalars(struct bpf_verifier_env *env, struct bpf_insn *ins
- 		__mark_reg_known(reg, 0);
- 		__mark_reg_known(dst_reg, -1ull);
+@@ -9585,7 +9585,8 @@ static int check_arg_const_str(struct bpf_verifier_env *env,
+ 		return -EACCES;
  	}
-+	bpf_equations_fork(env, branch, scalar_of(reg));
-+	bpf_equations_fork(env, env->cur_state, scalar_of(dst_reg));
- 	/*
- 	 * The insn is done with in the branch too, and what gets to the next insn is a state
- 	 * like any other. At this insn the branch is a part of the state that is looked at:
+ 
+-	if (!tnum_is_const(reg->var_off)) {
++	/* the cpu can speculate past the test of a variable offset */
++	if (!tnum_is_const(reg->var_off) && !env->bypass_spec_v1) {
+ 		verbose(env, "%s is not a constant address'\n", reg_arg_name(env, argno));
+ 		return -EACCES;
+ 	}
+@@ -9595,13 +9596,12 @@ static int check_arg_const_str(struct bpf_verifier_env *env,
+ 		return -EACCES;
+ 	}
+ 
+-	err = check_map_access(env, reg, argno, 0,
+-			       map->value_size - reg->var_off.value, false,
+-			       ACCESS_HELPER);
++	err = check_map_access(env, reg, argno, 0, 1, false, ACCESS_HELPER);
+ 	if (err)
+ 		return err;
+ 
+-	map_off = reg->var_off.value;
++	/* the zero of the last string ends all strings that start before it */
++	map_off = reg_umax(reg);
+ 	err = map->ops->map_direct_value_addr(map, &map_addr, map_off);
+ 	if (err) {
+ 		verbose(env, "direct value access on string failed\n");
+@@ -9614,7 +9614,8 @@ static int check_arg_const_str(struct bpf_verifier_env *env,
+ 		return -EINVAL;
+ 	}
+ 	/* the bytes of a pointer to a function are not known until the program is jitted */
+-	if (bpf_map_range_func_ptrs(env, map, map_off, strlen(str_ptr + map_off) + 1, &cnt)) {
++	map_off += strlen(str_ptr + map_off) + 1;
++	if (bpf_map_range_func_ptrs(env, map, reg_umin(reg), map_off - reg_umin(reg), &cnt)) {
+ 		verbose(env, "string overlaps with a pointer to a function\n");
+ 		return -EACCES;
+ 	}
+@@ -12776,9 +12777,12 @@ static int check_bpf_snprintf_call(struct bpf_verifier_env *env,
+ 		return -EINVAL;
+ 	num_args = data_len_reg->var_off.value / 8;
+ 
+-	/* fmt being ARG_PTR_TO_CONST_STR guarantees that var_off is const
+-	 * and map_direct_value_addr is set.
+-	 */
++	if (!tnum_is_const(fmt_reg->var_off)) {
++		verbose(env, "R3 is not a constant address\n");
++		return -EACCES;
++	}
++
++	/* fmt being ARG_PTR_TO_CONST_STR guarantees that map_direct_value_addr is set */
+ 	fmt_map_off = fmt_reg->var_off.value;
+ 	err = fmt_map->ops->map_direct_value_addr(fmt_map, &fmt_addr,
+ 						  fmt_map_off);
 -- 
 2.55.0
 
