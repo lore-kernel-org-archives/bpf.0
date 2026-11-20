@@ -1,83 +1,50 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795176496;
-	b=FLF1sI5DITwqEiFrGfjYK7wpzK0e1JSrekJJDBYrJeiQtKq1n8LSXrmy+lwz7UfmHDtg
-	 CB3Tlf8kUHYCAi9TWxfL2MCC7a4v2Ltk9I4eJw76IXLG6+RPycmW3SijwDPJrhy3OQo6K
-	 Lo/EabgnLBQsx4daYJB6QsCQ2AzOokvCBrFdAmoQXeQFGfJK89guYPMWEbGIak1MxqNoz
-	 Wlsp4DsU3eQ8CY+hYboSI7h06nmen1LlZZSxtDP2mYGlf903VZbLQvj7cjUDeH1Cnf4pK
-	 oqTouMSa2CfumaL1qT5KdjZFmsGMjfAsWKZOUSJjYe5GUbjuM1zRCHkyH3oiJHEW1yQ==
+	t=1795177823;
+	b=PAgfBreb94ULvDLgPJQb51im6BeXR1ZFyWTr0oBH5JJCjyLRNHvB/ARTVbh6rpCd+E6O
+	 Y6IlZ3mal0vCjehJQQhHVZeoH+Y0xCpmxAPYUDnxdisWIpMciNfYu3bq5nhJ0FwY8yXeu
+	 Y/JmrMypUy0LGFl+sk7Vszc5HN1tpLE/oFC+zv3l9vTm3lLfUN4GzUApwYndi7qQ63qM/
+	 J+sVJWyJaRJETkJjN3lZTFRAmTLTrN4njmYzHsefP8iAMJCDfAQqUqOWTDDxaH4rKHAp5
+	 Ro0kpdYAyukXeqjKaWghOZrrC0sIU6DSOJWGfGgXziHHrbLh1kJZuiL62xlX969F2Iw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795176496;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=leH4vKCDxg4Q4mbVrfWpHJbzOjqXkPLFQadbncRScqc=;
-	b=GdgDkDPqaiL5JIrYgoOuQSaUIXRukkGPyxG0rtdaakHdDJqfEkxHqNpSClcobSOzVFPb
-	 htNb6j7gzlitimflmB8mreMWpw7bXJUA6dSUBSQ8Ra97DPxGovUrkuhRauhc72KFJ77oH
-	 MTDmRPcpn8JlRb6KloBJMncT4w/YC4aeBcG0ajFB14kXLEZ20fB/al8adcIZ6d8kaSeQU
-	 EPa98zzFMPPMWr3e27+92Qo0gHUQmvBGNvmF+oFWBDdhzTtWOAmouoeeLQMMJisIUdYlY
-	 UjTVlQHQfK2lFCCVcNLiK6mIWh+cFD6c5n8jSBDk6qfITPHi+i7fuBvAiSYzUVx3mkA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795177823;
+	h=Received:DKIM-Signature:From:Subject:Date:Message-Id:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
+	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=Nu6y8JHW5Df0o6sO4oBlG4kTY0V7kEbp4hSFTKiENgE=;
+	b=rHr8FiP60q9d4mtCcJcQae5fgOlZeJhQ1IVjsNDWwlyBqvy+91dOejRPMtW+jvwjtFdS
+	 A2r5PlMksYhiI7+8TYmSnosbPw/tjxMg/Em55zjJudU8XgqyU2ir2KDsA/skE9qR0A89D
+	 EP2QktxSUgf47lxZtAMhhwygrVg7HFZ44rUdI1picApXgb9J4KmR2sO/rc054GLkSsphV
+	 OkDD0gdLdcq9TvCyrwt5RKg4CXBk0e07FATPxYsvv4jNm7CsUBw4i+hQ8w+TA2iom6fBu
+	 P8PxgNpM0p7PbeQtpWkXzrLIjfH1gubTxjduHAuJ+XCHLojo3aotCctYjwNMaIg8HYQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=pass smtp.mailfrom=infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=pWCrJsIR;
-	arc=none smtp.remote-ip=90.155.92.199
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="m/mCumau";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B5A8606A33D;
-	Fri, 20 Nov 2026 12:08:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9B5A8606A33D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01A1A606A320;
+	Fri, 20 Nov 2026 12:30:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=pWCrJsIR
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=leH4vKCDxg4Q4mbVrfWpHJbzOjqXkPLFQadbncRScqc=; b=pWCrJsIRg/rUdUJopFL+uSchfV
-	nugUPTlQygkizPNxLXYFxjlmGwnLzbHKSFC/47HVx4xP77V6KMmxZxOccb3ZwpdAnS0LZQPL9mB7s
-	+E1YR+Y/Q5vC9GG4cjhqsa2g2w7a518WjpaxGZsfqph2/q7PYpgpesYG7Z0Pa8y/bwboPbGHvSC6v
-	UWRG+A9jH9xbs+dmi75BE/glBjXgPTUVCdN7PFBUB979TQ9iE5UpRdvufdvxDyZp2szsSmIX5mRpS
-	DEizgSnjvu6AWq293mFWR0AMSk5zGBAQG3RhUTPyUjcuyhh3uBHC7j927LyvBrjS6fn9SawVAyDnf
-	HvnsRXfg==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xUNPK-00000000jzH-255A;
-	Fri, 20 Nov 2026 12:07:58 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id C8379301185; Fri, 20 Nov 2026 13:07:56 +0100 (CET)
-Date: Fri, 20 Nov 2026 13:07:56 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Ingo Molnar <mingo@redhat.com>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Kees Cook <kees@kernel.org>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-	Ingo Molnar <mingo@kernel.org>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	Chris Mason <mason@kernel.org>, Sashiko <sashiko-bot@kernel.org>,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] fork: clear p->mm when copy_process() fails
-Message-ID: <20261120120756.GS2668564@noisy.programming.kicks-ass.net>
-References: <20261119-mm_failed_fork-v1-1-b3019f43d197@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=m/mCumau
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06E281F000D2;
+	Fri, 20 Nov 2026 12:30:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795177821;
+	bh=Nu6y8JHW5Df0o6sO4oBlG4kTY0V7kEbp4hSFTKiENgE=;
+	h=From:Subject:Date:To:Cc;
+	b=m/mCumauVAHQN+cNVCLG8uLyJ5BHSxpoaADkrpiPl6WyY+Sz416gaxvEeVMYsZARt
+	 LXD1C8HuvPOF6JA4YM0ApI8/eUPsjcB3tQlZN7We9Ethpoj6PrEUCTcGmi9Vdt9w/N
+	 2DtL8sxb88DHaoM6EaN63weHpmeEh54SLh4R+aeVVAR/6RaK+iEDETJ6Dd+ePUjQFB
+	 zrdM/+vuI3Dy6/lPOHYHcYuHtBdAmB3nTHaj911MRu4hzqFMCOR0JsqQTTDSTVO+RZ
+	 zKLXiO9RcqKiWiBQE1gXTzUQhqQsw/yrK1k48yH1XcwRcaDBEACJefnGNwlLPwfcF4
+	 x2dx9UuVS3FAA==
+From: Christian Brauner <brauner@kernel.org>
+Subject: [PATCH 0/2] ns: don't call the namespace LSM hooks for
+ kernel-internal namespaces
+Date: Fri, 20 Nov 2026 13:29:57 +0100
+Message-Id: <20261120-work-ns-mount_subtree-v1-0-06337377f94a@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -87,61 +54,74 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261119-mm_failed_fork-v1-1-b3019f43d197@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/1WMywrCMBBFf6XM2glNEF+/IiJ5TG0UJ5JJVSj9d
+ xNduTyXc88MQjmSwKGbIdMzSkxcQa868KPlC2EMlcH0ZqO16fGV8g1Z8J4mLmeZXMlEGNZmb8P
+ WDDvroX4fmYb4/naPpx9X9Uq+tFgznBVCly37sU0tq1jUX1Y1CZblA94YtY2mAAAA
+X-Change-ID: 20261120-work-ns-mount_subtree-d429ad72f8ac
+To: linux-fsdevel@vger.kernel.org
+Cc: linux-security-module@vger.kernel.org, 
+ Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+ bpf@vger.kernel.org, Zhiqi Zhang <zhiqizhangg@gmail.com>, 
+ "Christian Brauner (Amutable)" <brauner@kernel.org>
+X-Mailer: b4 0.17-dev-04696
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2465; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=i5kezm/Q/pwCPFzOEDNb1FPGNWMleCBr+q8gYcME6Ro=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQz2Ia5P6y56yDIOSXT6WWxfWDR11qxYG6ZWfk/l218P
+ 7H4089zHaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABP538/wv+7Ni1zTySuY13M8
+ W6y1rYzvZMAjnX1/ju06Zn761iY1w1xGhsuPkqNNVd4dDLHqe2u5mKPNsqRC5Px97m/1TvxSKu4
+ LGAA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-On Thu, Nov 19, 2026 at 09:04:58AM +0100, David Hildenbrand (Arm) wrote:
-> From: Chris Mason <mason@kernel.org>
-> 
-> When copy_process() fails after copy_mm(), the error path drops the mm
-> reference but leaves p->mm set. Perf and BPF can still reach the
-> task, and take a reference on the already freed mm through get_task_mm()
-> or bpf_find_vma(), resulting in a use-after-free:
-> 
->     copy_process()               PERF_EVENT_IOC_SET_FILTER
->     ==============               =========================
->     perf_event_init_task(p)
->     copy_mm(p)
->     a later step fails
->     mmput(p->mm)
->       /* frees the mm */
->                                  perf_event_addr_filters_apply()
->                                    get_task_mm(p)
->                                      /* use-after-free */
-> 
-> Similarly, a BPF program on the task_free LSM hook can call bpf_find_vma(p)
-> before the task is freed.
-> 
-> Fix it by clearing p->mm under task_lock() before dropping the reference,
-> just like exit_mm() does.
-> 
-> Further, if copy_process() fails before copy_mm(), p->mm is still the
-> parent's mm pointer copied by dup_task_struct(), without having taken a
-> reference. While nobody can access it concurrently, there is the
-> chance that it might get accessed later when a BPF program is attached
-> to free_task().
-> 
-> With CONFIG_MEMCG the task is freed after an RCU grace period, so the
-> parent might already be gone and p->mm in the child points at something
-> that was already freed. So let's just clear p->mm before freeing the
-> task. No lock is required as there cannot be concurrent access (and we
-> might not even have the lock initialized yet).
-> 
-> This has medium urgency.
-> 
-> Fixes: 375637bc5249 ("perf/core: Introduce address range filtering")
-> Fixes: 7c7e3d31e785 ("bpf: Introduce helper bpf_find_vma")
-> Reported-by: Sashiko <sashiko-bot@kernel.org>
-> Closes: https://lore.kernel.org/sashiko-outbox-180866@kernel.org/
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Chris Mason <mason@kernel.org>
-> [ david: simplify description and comments ]
-> Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
-> ---
-> I can take this through my tree (rather soonish) unless someone else
-> wants to pick this up.
+mount_subtree() allocates a private anonymous mount namespace so that
+automounts during the path lookup have somewhere to go. btrfs goes
+through it on every mount and NFS on every NFSv4 mount and whenever it
+follows a referral.
 
-Have at.
+Since the namespace LSM hooks went in that namespace goes through
+security_namespace_init() like any other. Landlock enforces
+LANDLOCK_PERMISSION_NAMESPACE_USE in its namespace_init hook. So a
+sandbox that handles that permission without allowing CLONE_NEWNS can't
+mount btrfs or NFSv4 anymore. mount(2) fails with EPERM even though
+nobody asked for a mount namespace. Zhiqi reported that and sent a fix
+that skips namespace_init for this namespace (cf. [1]).
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+But namespace_free needs to be skipped as well. Otherwise a bpf program
+attached to namespace_free would see these namespaces go away without
+ever having seen them being created. Right now that can't happen but
+only because security_namespace_free() skips the hook if no LSM
+requested a namespace blob. So mark such namespaces as kernel-internal
+and keep them away from both hooks. The first patch turns the anon
+argument of alloc_mnt_ns() into flags so we don't end up with two
+booleans.
+
+The anonymous mount namespaces created by open_tree(OPEN_TREE_CLONE)
+and fsmount() are handed to userspace and keep going through the hooks.
+Landlock covers them on purpose.
+
+I tested this on v7.4-rc3 with a btrfs loop mount and an NFSv4 mount
+in a Landlock domain that handles LANDLOCK_PERMISSION_NAMESPACE_USE but
+doesn't allow CLONE_NEWNS. Both fail with EPERM without this series and
+work with it. unshare(CLONE_NEWNS), clone(CLONE_NEWNS),
+open_tree(OPEN_TREE_CLONE), fsmount() and setns() are still denied and
+the Landlock namespace selftests pass.
+
+[1]: https://lore.kernel.org/20261114141323.19029-1-zhiqizhangg@gmail.com
+
+Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+---
+Christian Brauner (2):
+      mount: pass flags to alloc_mnt_ns()
+      ns: don't call the namespace LSM hooks for kernel-internal namespaces
+
+ fs/namespace.c                     | 31 +++++++++++++++++++++----------
+ include/linux/ns/ns_common_types.h |  2 ++
+ include/linux/ns_common.h          | 20 +++++++++++++-------
+ kernel/nscommon.c                  |  9 ++++++---
+ 4 files changed, 42 insertions(+), 20 deletions(-)
+---
+base-commit: 666539eecdf4db623f5e3c3e55cf9f2dfad24aa4
+change-id: 20261120-work-ns-mount_subtree-d429ad72f8ac
+
