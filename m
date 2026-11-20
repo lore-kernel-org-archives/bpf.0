@@ -1,138 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=192.198.163.19
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795203565;
-	b=zSV6DwBDEglu3PB4JQNYDc5SRNRKpTDdaf4wOSFM1SC2QEorxI4sMzWJudc4Mb0vrGD2
-	 I3jw3LHPGc5SaI7nZpHYImKDtCn2AeYWFvWSF2mp/ZNEHuF7Z9ZrH6aTZ0La6UL4S80lY
-	 265jVZSTfKQ14flI+UMckYnVG+wLdA2iL65bQ9403/CDFJw0/6Mn9n+D6POGs3yEPQ+dP
-	 b4Vb+pOCOx/uT3sMXNbBwx/6r4BKHWv0MP/BX+Q4zMduFRoZFdoJ7syVhPwyEorETgsHz
-	 rUPZZaJQNRk6gK3nBEXq4jrM3ECEx+BREQn4O+6g2Qurs2i6j4xLM2MOYpZMR+ZhlDA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795203565;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Received:
-	 Received:DKIM-Signature:Received:Received:Date:From:To:CC:Subject:
-	 Message-ID:References:Content-Type:Content-Disposition:In-Reply-To:
-	 X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
-	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
-	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
-	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
-	 X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-Exchange-RoutingPolicyChecked:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg;
-	bh=5+UyzqvattFPBKixMc5DKiQN+B4NXHINUW8NTyNw7HY=;
-	b=iPyL7EpTHnpu0Z2xv8sN2784oOECuUSrljeoelYqeTykn3euguIZUez9zPE8ldhNnSlM
-	 fkGkfNAD8wQv8LobBpJ5PsUMcYQpSIc4szigHn7ba9exEKUsDfQn4AceMvUAC30ZlhiJS
-	 ZVDu3iF4E2RfGl0I9IPDCsL3xcf130me/HYxplJTTZF/xYzD+WcIXVRYtABxqcsMWP71a
-	 3oTxv1BzZ4nyG5gv7m7LA5yTGOjmeDhG719zrsq1OkqQqha7kq1BQ3YvhMKd0/Vb5cZXF
-	 Zi1/mrVZ1VDsEuS/fq/JPh+v1CgeIKH5x8bPtEU84adOIvXOyYa9lUd3rVGRfYaQVAg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=L+4GG2lb;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=selector1 header.b=ebUq6D6F;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=192.198.163.19
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.82
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795204966;
+	b=xNgPfX3nDCRWomACd6wBQxR/6EUSz40E0K0bHfT1RAcSpR1dZUhVC03VxsL5bbj+G9IM
+	 rdmJ+3fLshMgPQMChVZC/ea7AYbvd5VPe3r8qHP+WaWI+V42JlOg5gGvYo7C3rCcva6GO
+	 gsk+zmrDIlucccpY2MCYsw2jcypQoH58Bd2vk1dnz3kkjR8ozMfSFmGd+zubzRpotHADI
+	 +kVktgLwugkomNl1Ga4egKp3BJKzRtajTTmutqTCZ/LbrEhJ1wDpc8Ee0qCquGIpaZFu9
+	 No+ueV9W7OPT0Q747qpv0dQaxB7iM972Zu/HLqtga8nCrOJKberrBZNODbhETIiZjgg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795204966;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=35g51n9yT0O+2qdfSgrvgmxnc3ZbtEGQlMJoh7Vkd7I=;
+	b=ke93OybCOkEMNlJjcDh3/V4ZAnOjcKcaJYxkZAk0bmKaBIJPgcAEB9HWU3Xiyeja5ht8
+	 eCRWhbrFTUuLNfOf/6fyXvBOCjVakJAL+gljzvnZP3Ltnt8+opvjs88VBbhRvVT7FnDJ9
+	 RXsIhSI7JK8sQ6vhcquwlhty4FzHgwqmaBOw+hyBDwq5h7F7/aEQuj4PWFDpu2lTZv8cH
+	 71tigOX7BKLMM3a11ldnF9WqRu6FPRaLMXbhveGnJXNc7iYQ2PHq4nfxdz9Sy9Tf7i2qy
+	 Ar/fTOs5EVk+If6Y1yoAbBSqBcyIbGaKoR6A2tWRR3ho2BfrhOIcCJ5L9ZrlW8rskgA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Vur21Cac;
+	arc=none smtp.remote-ip=95.215.58.82
+Received: from mta1.migadu.com (out-82.mta1.migadu.com [95.215.58.82])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 297BA606A6C5;
-	Fri, 20 Nov 2026 19:39:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 297BA606A6C5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C30D606A6E1
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 20:02:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2C30D606A6E1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=L+4GG2lb;
-	dkim=pass (1024-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=selector1 header.b=ebUq6D6F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1795203561; x=1826739561;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=4EOaF6OPwknYaOYOqVcuk00cLewl8s/frEbMqRXKPe4=;
-  b=L+4GG2lbRuO/d0joYEuE+GWuQ83DzY1D9MX4Mi2G0s8XuHP4aM7L8aFF
-   o+6st7njmrsHgMfvcaVFECm50bs3FlQmSmbwJ9jYanamYvfDPlCHWUsr3
-   e03TOM1X1rJ9Jh5x56V96SOsijGbHDrPKz4mzOeU5qfOXHnlt+ShImOgX
-   zdfj1r8AVhy+QaU7xC/DZIUx7MBPgs+nvV2VOA3Y4tGHjvUdKM1ljwjEc
-   vdGr0PsosBMZc1KDgW/757VuunNAWM+ScPI+T1jZhGwU9Bat3bt7Yh88o
-   himoSxGwqpKLvLn2kkFYe7hUFcAk9DXMJ/ryKd2FDWRuCm48pLM8fccQJ
-   A==;
-X-CSE-ConnectionGUID: u3LnG6B5QTCMoL4eTUXCzw==
-X-CSE-MsgGUID: EINlz16LTVKFmUfBlXJe8g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11972"; a="4190512"
-X-IronPort-AV: E=Sophos;i="6.27,223,1787036400"; 
-   d="scan'208";a="4190512"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2026 11:39:21 -0800
-X-CSE-ConnectionGUID: AoPFjjO6T7Kt0/jszL4vKA==
-X-CSE-MsgGUID: lVkGefacROyNMzF3BzkqKg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,223,1787036400"; 
-   d="scan'208";a="10766763"
-Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
-  by orviesa006.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2026 11:39:21 -0800
-Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.56; Fri, 20 Nov 2026 11:39:19 -0800
-Received: from ORSEDG903.ED.cps.intel.com (10.7.248.13) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.56 via Frontend Transport; Fri, 20 Nov 2026 11:39:19 -0800
-Received: from BYAPR05CU005.outbound.protection.outlook.com (52.101.85.9) by
- edgegateway.intel.com (134.134.137.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.56; Fri, 20 Nov 2026 11:39:19 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Z3clmvZ4y4FfQXgHiUh3GAe1hJlapO+93SAutVCKrlNV6v2gNypNmRvDUCPrDfuIjfSJWLda5lAR98oHpJ5w208KxQovGobKnVsfniIHIIl56W/3GRYLdVcqP6FHUfskhesljSlUC8ueTfgvL2wR/LRF/kBccQQwA4uy9Y7pTB0m7hy/BSlcnMdpaBZay6nsuxPsPoDiYtOh2kWLNqbyarvUVxqBSeALWTrvE660QJrbcyenpZHnsPCJJ4Q3ENwxwBwbjhVePfr2QMi5B6+64jrtU0XgKrVS2wgmOSamPaiwC+X8OpyeJeQrBr2NPcEN+z1i8745jy3caPry4KGdPw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5+UyzqvattFPBKixMc5DKiQN+B4NXHINUW8NTyNw7HY=;
- b=C35uQge2pYeW2v9Fb5h9qGeWPm4kH/yLmC1gmYlwDx6CExMZjiCcmDqbK0UeWhPZTbcQolmLvWdcteNZCxc6V2vfXVM9B9JtS+2fV/Upy1U869HLhCjiM5qeFNKYkl+d9bGuY7BkeunLNHjxcxbDwhnal4ShwBPlMi9AjAqIR/i/2f6kbKLmLymYngvXCFPloQ3q6BSptmpIWNXLJ63UKFg9nLLunIkoo/JlCxhH/y2hVBkm0/++Guv4YzOucB9bC7GSUO51nKdxJHplV5EeMTtNH1Cjyi9rvzJ5i06XfPmsELIG/1AA2EoMFVjSqHzhcjEnONiUpia3g8ySBlUQMQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5+UyzqvattFPBKixMc5DKiQN+B4NXHINUW8NTyNw7HY=;
- b=ebUq6D6FBs8SmNS/sl3rTEatbhO3kpy7o9LByxs2wuoP9Pp6/KCGZ/OAfSaYDnF5Dsx6IA9aQ8jOhIyYDrMQfvZkzt5GNRJELu/KpDelyRfo39KF1DrQ3mfzBIDjwVFao6NUaHPJ+Zjd3EWywbm3G+ILdYgDU9h4q2pES17FI3E=
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from LV2PR11MB868673.namprd11.prod.outlook.com
- (2603:10b6:408:422::13) by DM3PPF2DEFDE2DF.namprd11.prod.outlook.com
- (2603:10b6:f:fc00::f17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.12; Fri, 20 Nov
- 2026 19:39:15 +0000
-Received: from LV2PR11MB868673.namprd11.prod.outlook.com
- ([fe80::5bfd:6afe:a9db:b7de]) by LV2PR11MB868673.namprd11.prod.outlook.com
- ([fe80::5bfd:6afe:a9db:b7de%4]) with mapi id 15.21.0639.011; Fri, 20 Nov 2026
- 19:39:15 +0000
-Date: Fri, 20 Nov 2026 20:39:09 +0100
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To: Jason Xing <kerneljasonxing@gmail.com>
-CC: <magnus.karlsson@intel.com>, <sdf@fomichev.me>, <davem@davemloft.net>,
-	<edumazet@kernel.org>, <kuba@kernel.org>, <pabeni@redhat.com>,
-	<horms@kernel.org>, <alobakin@pm.me>, <netdev@vger.kernel.org>,
-	<bpf@vger.kernel.org>, <stable@vger.kernel.org>, James Sawyer
-	<jamessawyer@outlook.com>,
-	<syzbot+f16c1b285c9f63994eec@syzkaller.appspotmail.com>
-Subject: Re: [PATCH net v4] xsk: set network header on skb at generic transmit
-Message-ID: <awCh3QpbrfyZqPsH@boxer>
-References: <20261120073917.63158-1-kerneljasonxing@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261120073917.63158-1-kerneljasonxing@gmail.com>
-X-ClientProxiedBy: DUZPR01CA0040.eurprd01.prod.exchangelabs.com
- (2603:10a6:10:468::18) To LV2PR11MB868673.namprd11.prod.outlook.com
- (2603:10b6:408:422::13)
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Vur21Cac
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=uQshDafHy9BozPUOwHTJ4xHyL9EhNB+AO68YPNEcvlA=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795204958; v=1; x=1795809758;
+ b=Vur21Cacc+79jrXsU/M9LO/uvmk2sTAEZZl45vWMgYpWQ6tTT1zxCKUI8n3hZNq9GV+qHzCT
+ sivy0zIw7l4xzU//ItmqwvsklG7lSDM8MyKCInMOeT9Aj5+ideiIJvrzNjsmZ/8ukYvRTEtWpjv
+ dBcrFGErqCbIfoDVDTr65zVc=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id c47a9709b21efdbb;
+	Fri, 20 Nov 2026 20:02:38 +0000
+X-Mizu-Trace-ID: c47a9709b21efdbb
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <e0a15bd8-c37e-4736-913e-e926bdbd12e5@linux.dev>
+Date: Fri, 20 Nov 2026 20:02:37 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -142,139 +58,242 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR11MB868673:EE_|DM3PPF2DEFDE2DF:EE_
-X-MS-Office365-Filtering-Correlation-Id: 385b18f0-7134-4a62-48a4-08df473df5f2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|23010399003|1800799024|376014|7416014|366016|261026121527099003|261026140227099003|261022105027099003|261028144727099003|261021121427099003|261102123227099003|11063799006|10067099003|56012099006|18002099003|22082099003|261009223027099003|6133799003|4133799003;
-X-Microsoft-Antispam-Message-Info: UzE6kO4ZFYt0mQNTwSUPWWvc/KwNgK7ZOb7X7Nzo+HeaXZlK9r46iSwsJw0U9GNeUwA3qZgxjUNnMc1HoLeGG+NeJw8xVVjTcKMuMjgYKq2K90/NHAe9sQSC4SoOwvJXn3c1SFD6ABLxpy1HPnaPyqzE2XU7ks9G5WMQMnrBPKTr8qCTHd5m7q/WhYgTRePA/kehr/+mMbHENlRWlWKspoPpI+iXfvwr931nFO0lAQBRgUXtOnSMkVNSrXFDN8WWD+9JovLQgS+oxT8B7d6JpCMinrlsq1ehbggcD37Lu42U0nxQl2mBprdYQldWbJGwm+po28rkn7nBkhI0p9MRmuadn3L2GGgTnkWCI7YZHGmnEL4kAgxiSoCjlLcelBbSc/A2Nxq/cqR+tm5wiWybhTKygH3BIwvxOr/XYXdN9R4ZvodLr8lm195UOe0tLA9DqWkhHzlsUcofQd0AOzoMussCz9/hCFyzv0AeHx8gyc5ACivVmNyONPLkMO91WkJXL39GZhJVLPxSDxyzu3uRPMOQRuG1U9/UL8Rp0l2uT1sbwUGSYY5Cwo9VLgMPUTDJahKGVKc9a5PKcYVPMC+EvmH9L+PQD/OpkorPI/Ydz539+myVPdGh29gt0cfCVMds
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR11MB868673.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(1800799024)(376014)(7416014)(366016)(261026121527099003)(261026140227099003)(261022105027099003)(261028144727099003)(261021121427099003)(261102123227099003)(11063799006)(10067099003)(56012099006)(18002099003)(22082099003)(261009223027099003)(6133799003)(4133799003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Z/ZiLqGEOmZ9dc6W0cPGXQ5DLRcBezjaG7Bjx4dxtOQBBo3Ep4HNK3Z9fXzy?=
- =?us-ascii?Q?PaR7PlRaxhqgdzRnQHVfyiuLN1rmkCXosDoO9QaZ4RKcLN2Wj6QFCGhoBANo?=
- =?us-ascii?Q?V4V6x5Y0UJy3UB+3TRUs9jp0srH1Uc7orPvWZh3R1mLRD0AmjwTrnrsnkXxv?=
- =?us-ascii?Q?B1y/x88jGOEYue97HVRDKdqHgfhbQVae4gDsuE06RuX22cixOI6buJzP6Dq7?=
- =?us-ascii?Q?M1JTHQmEvGS+gTMJ/UqMAHnz41GfTh4ZZTaGzcO3P5sTpwcV8nrRdN90KDau?=
- =?us-ascii?Q?Jhq/UUYiRyOVXAAgxQgiBBx1kZXKKld872FRk3grF4VJH12p67/v86aUoo8F?=
- =?us-ascii?Q?BMEOFvk+rzrU7TSx1CtCgRiRI0jxMmuWCQGxwApoT6So32FjZCmBhGOyswmB?=
- =?us-ascii?Q?xDCjJf1JKIGdP4lAmaP6KEZnLn//Yddo/tNHYJJ/xj3wtSTC9OH9otug1du2?=
- =?us-ascii?Q?4YzS8mAp+ZOEC1D9IRCwzH87vD8fZpLD5BGWkH9tAnwHzvZWX++CVM2T60lc?=
- =?us-ascii?Q?+GEEZ/5EciDU7LIQgJhY3kgV5X/o8AvgaJSqwCxFZpa3PwJZQ+afqArS6AwA?=
- =?us-ascii?Q?BnFiJ3PB5IU7h5tp/4xdVpVuRB8RnY6nP7oNbdBpvDXxDYByVfA1wgNjrJFk?=
- =?us-ascii?Q?b1UZ2c/zgqBLn8ZYlK8ov48fYRok6jSDVSWxGtOpkCDYGGPm4Lb19fluRHet?=
- =?us-ascii?Q?D28Us5IBW7bTSRfADGseZ9mcEEi4gksoMVzo5ah9rimtcUJhocDgsmRcou0l?=
- =?us-ascii?Q?sWh6BGfYMw8l/W4oPxQsh2XTrp1y9bTMjRJn56O6clc7MosSQTM8RfRiqjQC?=
- =?us-ascii?Q?534hTagNvz9jl5LXW9miZAfiKZ1BynfLUWqu7C5QyEBBj1UKZDw2sTNiUOPf?=
- =?us-ascii?Q?ZOoG0NpFD7ixTGQR6hLk/oWAs+BRXuUUg84epNxjseGUWRxQJpt1Z/ObMcpu?=
- =?us-ascii?Q?sxmV1GqvoMZKS4PXRDFukry/gGYZu//0SMVFBtLGuEbY4DeYmT6mYcgANxZO?=
- =?us-ascii?Q?ew2OuJV0uzlHH4XKVxPpnfyLc5XzRD6XamkkXSv9ZA3k2tcHqhSZ5QlbONGb?=
- =?us-ascii?Q?uOxhX4w7AbezrHa8O24mAwczZFHgOMcyiUPzq5rFWaiyaEf0gkzgTiKn2p0h?=
- =?us-ascii?Q?mBWa57qjV3KrSvgYS3mcfdI+yF8nqboRe037jHju6vfENWm5UKqhno5tO0sn?=
- =?us-ascii?Q?sk7Xa0G9HFYUxBjF8SWK2D1q2WIWmNIrF2y6Zn2D3SPW4j0tE6bkLHuPdfQ3?=
- =?us-ascii?Q?eunLU8Gwb2ppgwcoiU49YGCVrxICd2adcELZ4w+KN2vMZxHPej064FSqRiRU?=
- =?us-ascii?Q?LOKJ0BW6C9MCTDJzyCGR1r9Rno+rO0IF+y7PzyCRDkhp0pfOKVZ+Ny6CMLE0?=
- =?us-ascii?Q?kzj9peh+hI9a95EiJcjWDFUP1rMap1RkUTCE2pfVOKBoOPtp3qCVpduLofAw?=
- =?us-ascii?Q?t5LyJ7dMN3CRE2U5e7IIlmC90bM+k6PdgVKcD2lqidqc7SKwlZPC0Cvud+T0?=
- =?us-ascii?Q?etmheOUV0iHTLqJ+X4G1GjYvroeu9nh9Xf41bHzZ0F413Af/Zbrx8Fs1TZps?=
- =?us-ascii?Q?yci+GRjkH7ntHS5pC2THy94cDsKtD+hTX24yJ9e1OsRjWuCUkPS6Pamqac6E?=
- =?us-ascii?Q?S3o3WGxwYtnyjX0aVfpN+7PUj5K1hgeZwQasoHQyj/WMO4OZJx+qz6zjNZ0c?=
- =?us-ascii?Q?DmHsnMVpNnjP3vyzpwAKtBnuPuGcne9h96I3xwiSmOoSVsGsYBZ20LwNBGDk?=
- =?us-ascii?Q?Y8W6ufqDQcZTHmT+HewMBjMQrvsYpI4=3D?=
-X-Exchange-RoutingPolicyChecked: JqTwLSLP/jAGJ1N6+NIdRnn+3OTwzw6EHxGB+snR3/wZN8r2LNiJOm4h1H5PQfD3K41Ms94qcKCHWlrc7sEi4/Ww6MJXnCDG2ffq8szIyd8Jy4veMwGfCWzHF5z7oaUO48tYt0lGSSia0xYaloXWTWDUj7bcFgtVk/fRTKurHHALTw6zaJlbnUM5mu+Gl3v3HeWRzRG6s+mjwGGx0RM4NwnH/ueu0mrOrp2gZ/p4kpodhbZo1F8FZWGC9ogk7kcGupp7dEo6+MCTV17TYeVR3SS73e7WIs3JymB0AAJ8ivEXTdPVbbcW46LY4cTxMdalRoKEBAWvZ6xzvVMM2GpG7A==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 385b18f0-7134-4a62-48a4-08df473df5f2
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR11MB868673.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Nov 2026 19:39:15.5611
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ig8MpVHRRttzhtFgldJr5h58E4VWwDkR7t4o2t5xT8aecPIRWemNekKCbFJ03mcvx/RzUBTeJNN4hmqxbntSkuLpIsAD3PWnQV6ffB/320E=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM3PPF2DEFDE2DF
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] perf/core: Don't zero perf_sample_data in
+ do_perf_sw_event()
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: mingo@redhat.com, acme@kernel.org, namhyung@kernel.org,
+ mark.rutland@arm.com, alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+ irogers@google.com, adrian.hunter@intel.com, james.clark@linaro.org,
+ linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, rkeilty@meta.com, atish.patra@linux.dev,
+ dgreid@meta.com, riel@surriel.com, shakeel.butt@linux.dev,
+ kernel-team@meta.com
+References: <20261119211235.99805-1-usama.arif@linux.dev>
+ <20261119211235.99805-4-usama.arif@linux.dev>
+ <20261120091150.GN2668564@noisy.programming.kicks-ass.net>
+Content-Language: en-US
+From: Usama Arif <usama.arif@linux.dev>
+In-Reply-To: <20261120091150.GN2668564@noisy.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Nov 20, 2026 at 03:39:17PM +0800, Jason Xing wrote:
-> When constructing an skb in the XSK generic transmit path, neither
-> xsk_build_skb() nor xsk_build_skb_zerocopy() calls
-> skb_reset_network_header(). After __finalize_skb_around(), the
-> network_header offset defaults to 0 (pointing to skb->head). The
-> subsequent skb_reserve(skb, hr) moves skb->data forward by hr bytes,
-> but leaves network_header still at 0. This makes skb_network_offset()
-> return a negative value (-hr).
-> 
-> When such an skb reaches a tunnel driver like ipgre_xmit(), the call
-> chain pskb_inet_may_pull() -> pskb_network_may_pull_reason() computes:
-> 
->     pskb_may_pull_reason(skb, skb_network_offset(skb) + nhlen)
-> 
-> The negative int from skb_network_offset() is implicitly promoted to
-> unsigned int, wrapping around to a huge value. This triggers the
-> DEBUG_NET_WARN_ON_ONCE(len > INT_MAX) in pskb_may_pull_reason().
-> 
-> Call trace from syzkaller:
->   ipgre_xmit+0x958/0xcd0 net/ipv4/ip_gre.c:658
->   __netdev_start_xmit include/linux/netdevice.h:5400
->   netdev_start_xmit include/linux/netdevice.h:5409
->   __dev_direct_xmit+0x4b6/0x730 net/core/dev.c:4942
->   __xsk_generic_xmit net/xdp/xsk.c:1079
->   xsk_generic_xmit+0x277a/0x40a0 net/xdp/xsk.c:1120
-> 
-> Reset the network header so skb_network_offset() is valid (0). For the
-> non-CHECKSUM_PARTIAL case, unlike AF_PACKET, AF_XDP does not need to
-> locate the real L2/L3 boundary: an AF_XDP frame is always a complete,
-> opaque blob from userspace. So resetting the network header is enough
-> to restore the invariant and avoid the crash.
-> 
-> Note this is not sufficient for CHECKSUM_PARTIAL skbs, where drivers
-> derive the L2/L3 split from the header offsets for checksum offload;
-> that will be handled separately after this patch.
-> 
-> Fixes: 3914d88f7608 ("xsk: Respect device's headroom and tailroom on generic xmit path")
-> Cc: stable@vger.kernel.org
-> Reported-by: James Sawyer <jamessawyer@outlook.com>
-> Reported-by: syzbot+f16c1b285c9f63994eec@syzkaller.appspotmail.com
-> Closes: https://syzkaller.appspot.com/bug?extid=f16c1b285c9f63994eec
-> Signed-off-by: Jason Xing <kerneljasonxing@gmail.com>
 
-Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-> ---
-> V4
-> Link: https://lore.kernel.org/all/20260902121028.74092-1-kerneljasonxing@gmail.com/
-> 1. use the one-liner change to fix non csum case at a minimum. As for
->    csum, since the blamed commit is different, I plan to cook a patch to
->    fix that[1].
-> 2. revise the commit message accordingly.
-> 3. add James reported-by tag since he spotted this and sent this in
->    private.
-> [1]: https://lore.kernel.org/all/CAL+tcoB8f7H1ptcEk1iVH065AcUNPEL2V1gKoJacwr3zndfPWA@mail.gmail.com/
+On 20/11/2026 01:11, Peter Zijlstra wrote:
+> On Thu, Nov 19, 2026 at 01:10:46PM -0800, Usama Arif wrote:
 > 
-> V3
-> Link: https://lore.kernel.org/all/20260901083325.3445-1-kerneljasonxing@gmail.com/
-> 1. remove the misleading description about af_packet
+>>  kernel/events/core.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/kernel/events/core.c b/kernel/events/core.c
+>> index 57ea7e3c01a025..fa10ad7cfd99af 100644
+>> --- a/kernel/events/core.c
+>> +++ b/kernel/events/core.c
+>> @@ -11212,7 +11212,7 @@ static void do_perf_sw_event(enum perf_type_id type, u32 event_id,
+>>  				    u64 nr, struct pt_regs *regs, u64 addr)
+>>  {
+>>  	struct swevent_htable *swhash = this_cpu_ptr(&swevent_htable);
+>> -	struct perf_sample_data data;
+>> +	struct perf_sample_data data __uninitialized;
+>>  	struct perf_event *event;
+>>  	struct hlist_head *head;
+>>  
 > 
-> V2
-> Link: https://lore.kernel.org/all/20260826012052.51028-1-kerneljasonxing@gmail.com/
-> 1. add more clarification about why we don't probe the header like packet at
-> the end of the commit message (Jakub)
-> ---
->  net/xdp/xsk.c | 2 ++
->  1 file changed, 2 insertions(+)
+> I like this one, didn't know about the __uninitialized thing. But I
+> think we wants to be more consistent with this.
 > 
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index f22f9a2cdbbe..52d538160e0a 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-> @@ -948,6 +948,8 @@ static int xsk_skb_init_misc(struct sk_buff *skb, struct xdp_sock *xs,
+> A little git-grep seems to suggest we ought to do the same elsewhere.
+> Shall I fold the little something below in this patch?
+> 
+
+
+Thanks! I went through the below. perf_tp_event(), perf_bp_event()
+and perf_swevent_hrtimer() call perf_sample_data_init() for each event,
+like do_perf_sw_event() does. The side-band emitters only use the
+sample ID fields, which perf_event_header__init() writes and
+perf_event__output_id_sample() reads under the same sample_id_all
+check. So they are all fine to do.
+
+But they do need the fix in patch 2 to work.
+
+There is another fix that I found looking at your next reply.
+Would you like me to send all the fixes and you can then send
+the below patch (and the next one?)
+
+
+> 
+> --- a/kernel/events/core.c
+> +++ b/kernel/events/core.c
+> @@ -9123,7 +9123,7 @@ perf_event_read_event(struct perf_event
+>  			struct task_struct *task)
 >  {
->  	int err;
+>  	struct perf_output_handle handle;
+> -	struct perf_sample_data sample;
+> +	struct perf_sample_data sample __uninitialized;
+>  	struct perf_read_event read_event = {
+>  		.pid = perf_event_pid(event, task),
+>  		.tid = perf_event_tid(event, task),
+> @@ -9390,7 +9390,7 @@ static void perf_event_task_output(struc
+>  {
+>  	struct perf_task_event *task_event = data;
+>  	struct perf_output_handle handle;
+> -	struct perf_sample_data	sample;
+> +	struct perf_sample_data	sample __uninitialized;
+>  	struct task_struct *task = task_event->task;
+>  	int ret;
 >  
-> +	skb_reset_network_header(skb);
-> +
->  	err = xsk_skb_destructor_set_addr(skb, addr);
->  	if (unlikely(err))
->  		return err;
-> -- 
-> 2.43.7
-> 
+> @@ -9534,7 +9534,7 @@ static void perf_event_comm_output(struc
+>  {
+>  	struct perf_comm_event *comm_event = data;
+>  	struct perf_output_handle handle;
+> -	struct perf_sample_data sample;
+> +	struct perf_sample_data sample __uninitialized;
+>  	int ret;
+>  
+>  	if (!perf_event_comm_match(event))
+> @@ -9625,7 +9625,7 @@ static void perf_event_namespaces_output
+>  {
+>  	struct perf_namespaces_event *namespaces_event = data;
+>  	struct perf_output_handle handle;
+> -	struct perf_sample_data sample;
+> +	struct perf_sample_data sample __uninitialized;
+>  	int ret;
+>  
+>  	if (!perf_event_namespaces_match(event))
+> @@ -9748,7 +9748,7 @@ static void perf_event_cgroup_output(str
+>  {
+>  	struct perf_cgroup_event *cgroup_event = data;
+>  	struct perf_output_handle handle;
+> -	struct perf_sample_data sample;
+> +	struct perf_sample_data sample __uninitialized;
+>  	int ret;
+>  	u16 size = sizeof(cgroup_event->event_id) + cgroup_event->path_size;
+>  
+> @@ -9859,7 +9859,7 @@ static void perf_event_mmap_output(struc
+>  {
+>  	struct perf_mmap_event *mmap_event = data;
+>  	struct perf_output_handle handle;
+> -	struct perf_sample_data sample;
+> +	struct perf_sample_data sample __uninitialized;
+>  	int size = sizeof(mmap_event->event_id) + mmap_event->file_size;
+>  	u32 type = PERF_RECORD_MMAP;
+>  	u16 misc = PERF_RECORD_MISC_USER;
+> @@ -10155,7 +10155,7 @@ void perf_event_aux_event(struct perf_ev
+>  			  unsigned long size, u64 flags)
+>  {
+>  	struct perf_output_handle handle;
+> -	struct perf_sample_data sample;
+> +	struct perf_sample_data sample __uninitialized;
+>  	struct perf_aux_event {
+>  		struct perf_event_header	header;
+>  		u64				offset;
+> @@ -10188,7 +10188,7 @@ void perf_event_aux_event(struct perf_ev
+>  void perf_log_lost_samples(struct perf_event *event, u64 lost)
+>  {
+>  	struct perf_output_handle handle;
+> -	struct perf_sample_data sample;
+> +	struct perf_sample_data sample __uninitialized;
+>  	int ret;
+>  
+>  	struct {
+> @@ -10240,7 +10240,7 @@ static void perf_event_switch_output(str
+>  {
+>  	struct perf_switch_event *se = data;
+>  	struct perf_output_handle handle;
+> -	struct perf_sample_data sample;
+> +	struct perf_sample_data sample __uninitialized;
+>  	u32 type;
+>  	u16 misc;
+>  	u16 size;
+> @@ -10307,7 +10307,7 @@ static void perf_event_switch(struct tas
+>  static void perf_log_throttle(struct perf_event *event, int enable)
+>  {
+>  	struct perf_output_handle handle;
+> -	struct perf_sample_data sample;
+> +	struct perf_sample_data sample __uninitialized;
+>  	int ret;
+>  
+>  	struct {
+> @@ -10363,7 +10363,7 @@ static void perf_event_ksymbol_output(st
+>  {
+>  	struct perf_ksymbol_event *ksymbol_event = data;
+>  	struct perf_output_handle handle;
+> -	struct perf_sample_data sample;
+> +	struct perf_sample_data sample __uninitialized;
+>  	int ret;
+>  	u16 size = sizeof(ksymbol_event->event_id) + ksymbol_event->name_len;
+>  
+> @@ -10450,7 +10450,7 @@ static void perf_event_bpf_output(struct
+>  {
+>  	struct perf_bpf_event *bpf_event = data;
+>  	struct perf_output_handle handle;
+> -	struct perf_sample_data sample;
+> +	struct perf_sample_data sample __uninitialized;
+>  	int ret;
+>  
+>  	if (!perf_event_bpf_match(event))
+> @@ -10540,7 +10540,7 @@ static void perf_callchain_deferred_outp
+>  {
+>  	struct perf_callchain_deferred_event *deferred_event = data;
+>  	struct perf_output_handle handle;
+> -	struct perf_sample_data sample;
+> +	struct perf_sample_data sample __uninitialized;
+>  	u64 nr = deferred_event->trace->nr;
+>  	u16 size, id_size, max_payload;
+>  	int ret;
+> @@ -10615,7 +10615,7 @@ static void perf_event_text_poke_output(
+>  {
+>  	struct perf_text_poke_event *text_poke_event = data;
+>  	struct perf_output_handle handle;
+> -	struct perf_sample_data sample;
+> +	struct perf_sample_data sample __uninitialized;
+>  	u16 size = sizeof(text_poke_event->event_id) + text_poke_event->tot + text_poke_event->pad;
+>  	u64 padding = 0;
+>  	int ret;
+> @@ -10686,7 +10686,7 @@ EXPORT_SYMBOL_GPL(perf_event_itrace_star
+>  static void perf_log_itrace_start(struct perf_event *event)
+>  {
+>  	struct perf_output_handle handle;
+> -	struct perf_sample_data sample;
+> +	struct perf_sample_data sample __uninitialized;
+>  	struct perf_aux_event {
+>  		struct perf_event_header        header;
+>  		u32				pid;
+> @@ -10721,7 +10721,7 @@ static void perf_log_itrace_start(struct
+>  void perf_report_aux_output_id(struct perf_event *event, u64 hw_id)
+>  {
+>  	struct perf_output_handle handle;
+> -	struct perf_sample_data sample;
+> +	struct perf_sample_data sample __uninitialized;
+>  	struct perf_aux_event {
+>  		struct perf_event_header        header;
+>  		u64				hw_id;
+> @@ -11603,7 +11603,7 @@ void perf_tp_event(u16 event_type, u64 c
+>  		   struct pt_regs *regs, struct hlist_head *head, int rctx,
+>  		   struct task_struct *task)
+>  {
+> -	struct perf_sample_data data;
+> +	struct perf_sample_data data __uninitialized;
+>  	struct perf_event *event;
+>  
+>  	/*
+> @@ -11949,7 +11949,7 @@ void perf_event_free_bpf_prog(struct per
+>  #ifdef CONFIG_HAVE_HW_BREAKPOINT
+>  void perf_bp_event(struct perf_event *bp, void *data)
+>  {
+> -	struct perf_sample_data sample;
+> +	struct perf_sample_data sample __uninitialized;
+>  	struct pt_regs *regs = data;
+>  
+>  	/*
+> @@ -12403,7 +12403,7 @@ static int perf_event_set_filter(struct
+>  static enum hrtimer_restart perf_swevent_hrtimer(struct hrtimer *hrtimer)
+>  {
+>  	enum hrtimer_restart ret = HRTIMER_RESTART;
+> -	struct perf_sample_data data;
+> +	struct perf_sample_data data __uninitialized;
+>  	struct pt_regs *regs;
+>  	struct perf_event *event;
+>  	u64 period;
+
