@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795163139;
-	b=gi3o4dhzbLecSIB/jlg+cGrZHm7K2Za5F2/uQ2iO6I+JKsgcPAaB6usYm+Fi9D4MWEGD
-	 PDgIz8pJgYEMIGOimb94UHlpdN+2psqS/Serq/ZmsxS8mAlNAyERMLi9UL6pFGol42fkl
-	 qewd4uC4T3LrM4vbOdK2P2I4kWaI0Q56Okm7VdnR9K7s9eCI78ZpC6ZDCPg1cCBCYbO9H
-	 OLPlzXgbtPcd3y3vImKTObPzG8St+lXoi0Rig9awqNmO/26CxBhdm5ih3mSHOqMcW9IdY
-	 fDfk6dBOwumfzh/KHLCevCS2ODuMlZ+UotndcKJlDkCFnoxsd4VfND1tdZ/RndHj5Pg==
+	t=1795163142;
+	b=FWSVXOoNlBC5zRJead1ZIDLwkQaoJ6HwmubIC6DySw3UPo4IZc0u6EMw87ASjFiBW5op
+	 6JONCqgOrp3kzTEb2W7KUCbG0FlPoUc7f6j8oZN6Mc6g5XN7rGOEtrTzd3245XWOzRnHY
+	 pTVbQ9LxJQJn9BWdJBVWWHZLdURl7VsSYP1WOTsW6jzTv4WTo3UVFWB8ZX95dAC84rY8h
+	 dkgo4bW8hsLfBMkz2uMzpFwYN+WnBoJuDuVOyP+gYr6KKdzJFGSj9DoRARBMVYXZyr1v9
+	 nV135gxgThOxfYSpquIwRx8GSU/y1iqPdD5C63YemDIPge9Kufs4WjSy3m6bqiTBb5w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795163139;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795163142;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=2Jh61W9YJ3JHmuulOZ8Gs75FY73MluttUA69OPYrw8U=;
-	b=NgoRGPHv5mQXic6yWuqkHWKYJC7qec/1TsUnyAi4vBQdPqsAaPyJOhYj/JtmWd3E8hTt
-	 MTEhcLOhVwskaA9IRISTf/+K8/3Yv99VfS2orWWMVnezjcr8D9JCneFAyhMEPwRGPGAYP
-	 Ayh0F5nJyRgO9NTcSLKJzprOOGaQ0JCh0wJsr+lKUCWKZ+z2kWwtxZAVWFKJoH8kzlGNW
-	 yQ6iKOUyhTaYffkmtVk8ypP9i63SgExOf+jyZCQ0M7tDszhlobm8sdi3eIgCaqOWK9CvP
-	 CptDyHbg8yZFh/6LQelnP3bzjJmY0hqlNWtKcDkEMpGq/1luj5ABp9qfmU5r0U3v/pg==
+	bh=DtQgwtFpuXadVelfi/xCa+4GDYnKP6T8sIWIIadHHqU=;
+	b=a7uFGXYP9i1m+/2Qdi2odFxqg8mjz3K5iXvFVUWJCM/xsPZ8l6VTFUiQ90eoY45Hvtwn
+	 lTN9l8uoLt5a4wr1Jy7KCSmzC27wayOfHhD9pOZxpmMqa/cRza2NreQa8Qjbg6iFTEmqE
+	 p+2j1wgT9uXK7WYuw78OtGGe0LUyNXxUSFpxgMpfjopAiRdoH9Zyme0YjkKU/62kFVfyp
+	 vGGZkE5S7bh3UsqnhIYC7l8eTYkVM/LyuDB20ruchTDnTLn1KZqLSVPRv/Sdxj7A5S9tZ
+	 /KCn5u1tfGwnkyiQEAzrMlmuAGYjtfVa2y6v98SrMTmrf1kAT0JxJ3zfim9Ajza9MbA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QMv8SKID;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=b3AiRlMr;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 662DC606A320
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 08:25:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80F53606A320
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 08:25:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QMv8SKID
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C80EB1F000C4;
-	Fri, 20 Nov 2026 08:25:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=b3AiRlMr
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CA8A1F000C4;
+	Fri, 20 Nov 2026 08:25:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795163139;
-	bh=2Jh61W9YJ3JHmuulOZ8Gs75FY73MluttUA69OPYrw8U=;
+	s=k20260515; t=1795163142;
+	bh=DtQgwtFpuXadVelfi/xCa+4GDYnKP6T8sIWIIadHHqU=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=QMv8SKIDYhc4abHIUfDqhaDFMD6CEBdh8g/kNmRvVoVB+lBQbd0t7Lh2oiG9QtTab
-	 b/LpIE+jKWcgBivsWOE14M4heGN0cDC9a3OullMgY1BXBb2xZGGpx2dCPOAo1uRP0v
-	 n+VUJ6xth0+wezpcdqDufpdZLSuOR2rjJ1AUErsIB0cjff9HP38iD/0UmCzOyvzPlk
-	 87KQ5Src4ukwh9LlHmZ5t3yojS7NT2rC4uTa1GJ6DYtbLHE3Ulj5657NBsttL0Yi/N
-	 TEc1mBzyUiV5TJEiXWRhHX3COk7VOAPSUT8xVjg3gviVsEEPQ0HNfn4ZbW5MMT7Qho
-	 8KAhELZXqtI9w==
-Content-Type: multipart/mixed; boundary="===============5635143653485341256=="
+	b=b3AiRlMrxFvF7vyxfYMzypRMJYPMvLqRhfQOEmJsBEGzQqsU3IsTgLjtLs73JGVdD
+	 bkalfmlEwtOVFhDNRpxO5nmozE4jW3kG2CgkVhLhGDPpV0K1lPH3edDGE5+NpEtsTG
+	 WI1YaqgfpQThdRkCKTbfB/E+dzFFvHNQHyK7Rw3hY2w7CdPbkeyTwt05YqyhsABqP7
+	 8iIBxXDlZBdY+DcOqHrmACRatnZdEAivXHSjvZBL5v4+oWVYfWCtUWrjtHORvLexNv
+	 8Km2F3mC2ugEUFMX8TMy/HDR1xx74Wn7q6XO6PoowZVwQAeDhZk/SrX0TC+1k19acs
+	 /Ji2flvkCMGPQ==
+Content-Type: multipart/mixed; boundary="===============2559208742481425716=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,243 +49,151 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <444ad4786b76d8d3fa76ad4debd7c0cc3d4b1e02ee1cbec78a13d98846bee562@mail.kernel.org>
-In-Reply-To: <20261120074430.2704488-9-alexei.starovoitov@gmail.com>
-References: <20261120074430.2704488-9-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next 08/49] bpf: Do not fail a check because a state has fewer values
+Message-Id: <ad82954b5dbf7e28fcfcb7a41802667e9efdf117cf4fcc8b09be22a20fac94d1@mail.kernel.org>
+In-Reply-To: <20261120074430.2704488-5-alexei.starovoitov@gmail.com>
+References: <20261120074430.2704488-5-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next 04/49] bpf: Delete scalar evolution
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 20 Nov 2026 08:25:37 +0000 (UTC)
+Date: Fri, 20 Nov 2026 08:25:41 +0000 (UTC)
 
---===============5635143653485341256==
+--===============2559208742481425716==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Do not fail a check because a state has fewer values
+> bpf: Delete scalar evolution
 
 TL;DR:
-- cut_range() calls undefined bpf_xreg_in_deps(), so the tree does not build
-- the unread 'again' flag may let the split-off range be dropped, leaving
-  unchecked values
-- new env fields are never set or read; two comment nits
+- loops.c uses bpf_add_cost()/BPF_COST_SCAN, defined only in the next commit,
+  so this commit may not build (bisection)
+- verifier_loop_hierarchy and verifier_scev selftests likely fail on removed
+  log lines
+- unused helpers remain despite commit message
 
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -1179,10 +1179,13 @@ struct bpf_verifier_env {
->  	bool uses_arena_sp;		/* the program has insns with BPF_REG_ARENA_SP */
-> +	bool path_sensitive;		/* no joins, see run_path_sensitive() */
->  	u64 cost, mem;			/* see bpf_check_limits() */
->  	u64 max_cost, max_mem;
->  	u64 pass_max_cost;		/* see bpf_undo_precision() */
->  	bool aborted;			/* a thaw does not take it back */
-> +	int err;			/* the first error */
-> +	bool imprecise;			/* a state before the first error is imprecise */
-
-Are these three new fields wired up anywhere?
-
-path_sensitive is never written, and no file defines run_path_sensitive().
-err is never written either, and its only use is the read in cut_range():
-
-    env->imprecise |= !env->err;
-
-imprecise is written there, but nothing reads it.  The same is true at the
-end of the series (a50a112fb866).  env comes from kvzalloc_obj(), so
-path_sensitive is always false and err is always 0.
-
-The commit message relies on bpf_xreg_in_deps() ("It does that only if an
-error depends on the register, see bpf_xreg_in_deps()"), but git grep -w
-bpf_xreg_in_deps finds only its call in cut_range(), at this commit and at
-a50a112fb866.  The parent commit already calls an undefined
-bpf_flow_deliver(), so the tree did not build before this commit either.
-
-Should the code that sets path_sensitive and err, reads imprecise, and
-defines run_path_sensitive() and bpf_xreg_in_deps() be part of this commit,
-or should the fields and the gate wait for the commit that adds it?
+> diff --git a/kernel/bpf/loops.c b/kernel/bpf/loops.c
+> --- a/kernel/bpf/loops.c
+> +++ b/kernel/bpf/loops.c
 
 [ ... ]
 
-> diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-> --- a/kernel/bpf/liveness.c
-> +++ b/kernel/bpf/liveness.c
-> @@ -596,9 +596,8 @@ bool bpf_stack_slot_alive(struct bpf_verifier_env *env, u32 frameno, u32 half_sp
->   * fill a pointer, and a helper, a kfunc or a global subprog that gets a pointer to the stack reads
->   * memory. Such a read keeps the bytes of the slot alive, not what the verifier knows about them.
->   *
-> - * A short load at an offset that is known here counts as a fill: the main pass rejects it when it
-> - * finds a pointer. If only the main pass knows the offset, the load doesn't count. It is rejected
-> - * too, or it reads unknown bytes if the state was cleaned between the spill and the load.
-> + * A short load at an offset that is known here counts as a fill: it gets a part of a number.
-> + * If only the main pass knows the offset, the load doesn't count.
->   */
+> +static int find_latch(struct bpf_verifier_env *env, int h, int n)
+>  {
+> [ ... ]
+> +	if (bpf_loop_at_index(env, n) != h || idoms_intersect(env, n, h) != h)
+> +		return -1;
+> +	for (; n >= 0 && !bpf_insn_leaves_loop(env, h, n); n = n == h ? -1 : env->idoms[n])
+> +		bpf_add_cost(env, 1, BPF_COST_SCAN);
+> +	return n;
+>  }
 
-This isn't a bug, but the rewritten comment no longer gives a reason for the
-rule it describes.
+Are bpf_add_cost() and BPF_COST_SCAN defined anywhere at this commit?
 
-bpf_stack_slot_filled() has one caller, the pointer-cleaning branch of
-__clean_func_state(), which runs only for:
+A git grep finds no definition of either.  The only other user is the
+bpf_add_cost() call in kernel/bpf/liveness.c added by cd07fb71e4d5 ("bpf:
+Make stack liveness faster").  loops.o is built whenever CONFIG_BPF_SYSCALL
+is set, so this looks like an implicit function declaration plus an
+undeclared identifier, and loops.c would not compile.
 
-    env->allow_ptr_leaks && bpf_is_spilled_reg(slot) &&
-    slot->spilled_ptr.type != SCALAR_VALUE
+The definitions arrive in the next commit, ecbd98bcc45a ("bpf: Limit the
+cost and the memory of a load"), which adds BPF_COST_SCAN and a static
+inline bpf_add_cost() to include/linux/bpf_verifier.h.  That commit also
+adds bpf_add_cost() calls to idoms_intersect(), assign_header() and
+bpf_is_nested_loop(), but not to find_latch().
 
-With this commit, check_stack_read() sends every privileged short load of a
-spilled non-scalar slot down the variable-offset path.  There,
-check_stack_range_initialized() accepts the STACK_SPILL bytes and
-mark_reg_stack_read() produces an unknown scalar, which is the same result
-the load gets after the slot has been cleaned to STACK_MISC.  A short load
-can no longer tell a kept pointer from a cleaned one, whether or not
-liveness knows the offset.
-
-The old reason was removed, and the new one ("it gets a part of a number")
-describes a spilled scalar, which this query never covers.  Meanwhile
-liveness still makes the distinction:
-
-    info.bytes_only = class == BPF_LDX && info.size < BPF_REG_SIZE &&
-                      !ptr->off_cnt;
-
-A short load at a known offset still marks the slot as filled, which stops
-a spilled pointer from being cleaned and costs pruning.
-
-Should "&& !ptr->off_cnt" be dropped, so that the comment can say a short
-load never fills, or does the comment need a different reason?
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -197,6 +197,7 @@ struct bpf_verifier_stack_elem {
->  	int prev_insn_idx;
->  	/* it goes there only if may_goto in front of prev_insn_idx does, see check_loop_guard() */
->  	enum bpf_guard_edge guard_edge;
-> +	bool again;	/* see bpf_flow_deliver() */
->  	struct bpf_verifier_stack_elem *next;
->  };
-
-Is this 'again' field ever read?  It is set in cut_range():
-
-    env->head->again = true;
-
-The only place that pops these elements is flow_drain().  It passes
-guard_edge on explicitly but leaves 'again' out:
-
-    if (!err && elem->guard_edge)
-        err = bpf_flow_guard_edge(env, &elem->st, elem->insn_idx,
-                                  elem->prev_insn_idx, elem->guard_edge);
-    else if (!err)
-        err = bpf_flow_deliver(env, &elem->st, elem->insn_idx,
-                               elem->prev_insn_idx);
-
-bpf_flow_deliver() cannot recover the flag with container_of(), since
-do_check_block() also calls it with env->cur_state, which is not inside a
-stack element.  A grep of kernel/bpf and include/linux at this commit and
-at a50a112fb866 finds no other reference to the field.
-
-So the second half of a split range reaches bpf_flow_deliver() looking like
-an ordinary state on an edge from the jump to itself (insn_idx ==
-prev_insn_idx).  The bpf_flow_deliver() removed by 32e8f52de3c8 merged an
-arriving state into the states already recorded at insn_idx, and
-flow_apply_exit() avoided calling it for a state that "was at the insn
-before, it may be there still".  A cut state is in exactly that situation,
-so that could undo the cut or absorb the 'back' half.
-
-This tree has no definition of bpf_flow_deliver(), so the effect cannot be
-confirmed here.  Should flow_drain() pass elem->again to the flow layer?
-If insn_idx == prev_insn_idx is meant to be the signal, the field and its
-comment can go.
+Should the bpf_add_cost() call in find_latch() move to that commit, or
+should the cost definitions come before this one?  As it stands this commit
+adds a second file that does not build, so the series cannot be bisected
+until ecbd98bcc45a.
 
 [ ... ]
 
-> @@ -4164,6 +4171,11 @@ static int check_stack_read(struct bpf_verifier_env *env,
->  	 * writes could still lead to unsafe speculative behaviour.
->  	 */
-> +	if (!var_off && dst_regno >= 0 && size != BPF_REG_SIZE && env->allow_ptr_leaks) {
-> +		ss = bpf_stack_slot(state, (-off - reg->var_off.value - 1) / BPF_REG_SIZE);
-> +		/* a part of a pointer is a number, as with a variable offset */
-> +		var_off = bpf_is_spilled_reg(ss) && !bpf_is_spilled_scalar_reg(ss);
-> +	}
->  	if (!var_off) {
+> @@ bpf_compute_loops()
+> -			for (j = 0; j < loop->exits_cnt; j++)
+> -				bpf_log(log, "  exit from %d to %d\n",
+> -					loop->exits[j].from, loop->exits[j].to);
+> +			if (loop->exit_to >= 0)
+> +				bpf_log(log, "  first exit to %d\n", loop->exit_to);
 
-This isn't a bug, but the header comment of check_stack_read_var_off() now
-says the opposite of what this routing does:
+The BPF_LOG_LEVEL2 loop dump no longer prints one "  exit from %d to %d"
+line per exit, and it drops ", dominating exits at ...", ", too many exits"
+and ", too many exits of a nested loop".
 
-    * the offset is not fixed). We conservatively mark 'dst_regno' as containing
-    * SCALAR_VALUE. That's why we assert that the 'reg' has a variable
-    * offset; for a fixed offset check_stack_read_fixed_off should be used
-    * instead.
+tools/testing/selftests/bpf/progs/verifier_loop_hierarchy.c is still
+registered in prog_tests/verifier.c and still expects the old lines with
+__msg_next():
 
-The new routing itself works, since check_stack_range_initialized() and
-mark_reg_stack_read() handle a constant var_off.  But a later reader could
-add a real tnum_is_const() assertion there, or "fix" the caller back to
-check_stack_read_fixed_off(), which would bring back the "invalid size of
-register fill" rejection this patch removes.
+  loop_nested_siblings_common_ancestors:
+    __msg_next("  backedge from 10, latch at 10")
+    __msg_next("  exit from 10 to 11")
+    ...
 
-Should the comment say that a constant offset into a spilled non-scalar
-also comes here?
+  loop_outer_backedge_from_inner:
+    __msg_next("  backedge from 4{{$}}")
+    __msg_next("  exit from 5 to 7")
+    ...
 
-[ ... ]
+"exit from 5 to 7" is not a substring of "first exit to 7", so both
+subtests should fail.  loop_nested_siblings_common_ancestors also exists to
+check that edge 6->7 is "logged only as an exit from loop at 5", which the
+new log cannot show.  progs/verifier_scev.c also matches "too many exits"
+and "dominating exits at" lines that are removed here.
 
-> +static int cut_range(struct bpf_verifier_env *env, const struct bpf_insn *insn, u32 regno,
-> +		     const struct bpf_reg_state *taken, const struct bpf_reg_state *not_taken)
-> +{
-[ ... ]
-> +	env->imprecise |= !env->err;
-> +	if (!env->path_sensitive && !bpf_xreg_in_deps(env, st, st->curframe, regno))
-> +		return 0;
-
-Does kernel/bpf/verifier.c build with this?  bpf_xreg_in_deps() is not
-defined or declared anywhere in the tree, at this commit or at
-a50a112fb866, and no commit in 8f72de1c4064..a50a112fb866 adds it.
-scripts/Makefile.warn adds -Werror=implicit-function-declaration, so this
-call is a build error.
-
-The fields read on the same lines have the same problem.  Nothing assigns
-env->path_sensitive or env->err, so !env->path_sensitive is always true and
-every split depends on the missing function.  env->imprecise is written here
-but never read.
-
-The parent commit already lacks a definition of bpf_flow_deliver(), so this
-may be a gap in how the series was extracted, but this commit still adds a
-new call to an undefined function.
+Do these selftests need to be updated or reworked in this commit?  None of
+the commits up to a50a112fb866 touches them.
 
 [ ... ]
 
-> +	other = push_stack(env, env->insn_idx, env->insn_idx, false);
-> +	if (IS_ERR(other))
-> +		return PTR_ERR(other);
-> +	env->head->again = true;
-> +	other->frame[other->curframe]->regs[regno] = back;
-> +	*reg = front;
-> +	return 1;
+> diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
+> deleted file mode 100644
 
-Can the 'back' half actually be explored here?  cut_range() narrows the
-current state to 'front' and pushes 'back' to the same conditional jump with
-prev_insn_idx == insn_idx, relying on env->head->again.  Nothing reads
-'again', and flow_drain() delivers the pushed state like any other:
+[ ... ]
 
-    else if (!err)
-        err = bpf_flow_deliver(env, &elem->st, elem->insn_idx,
-                               elem->prev_insn_idx);
+Deleting scev.c removes the only code that prints the "scev at header N:",
+" scev at latch N:" and expression-dump lines at log level 2.
 
-bpf_flow_deliver() takes only (env, st, insn_idx, prev_insn_idx), and
-struct bpf_verifier_stack_elem is private to verifier.c.
+tools/testing/selftests/bpf/progs/verifier_scev.c still has 39 __msg() and
+__msg_next() expectations for them, and prog_tests/verifier.c still has:
 
-In the last bpf_flow_deliver() in history (5395aa9bbeb5, kernel/bpf/flow.c),
-a delivered state goes through flow_merge().  That function frees the
-arriving state when a member of the set at that insn covers it
-(flow_within() -> return 1), or joins it with members.  When the jump is a
-flow point, the set there holds the state that arrived before the split, and
-that state covers 'back'.
+  void test_verifier_scev(void) { RUN(verifier_scev); }
 
-If delivery still works this way, 'back' is dropped or joined back into the
-wide range, so values in 'back' (for example 0..3 in the commit message
-example) are never checked past the jump.  Or the join recreates the
-crossing range and the split repeats.  The self-edge prev_insn_idx ==
-insn_idx also reaches the loop enter/leave logic in delivery without any
-marker.
+For example:
 
-No commit in 8f72de1c4064..a50a112fb866 reads elem->again or changes
-flow_drain().
+  __success
+  __log_level(2)
+  __msg_next("scev at header 1:")
+  __msg_next("  r0=(+ r0 1) / (linear r0 1)")
+  __naked void simple_loop1(void)
+
+Won't test_progs -t verifier_scev fail on these?  verifier_scev is not in
+ci/vmtest/configs/DENYLIST*, and no commit through a50a112fb866 touches the
+file.  Should verifier_scev.c and its RUN() entry be removed or rewritten
+in this commit, given that it deletes the feature they test?
+
+[ ... ]
+
+> Delete scev.c, its callers, and the helpers that only it uses.
+
+Is this accurate for bpf_mark_reg_known_scalar() and scalar_union()?
+
+Both are non-static in kernel/bpf/verifier.c, both have prototypes in
+include/linux/bpf_verifier.h, and in the parent their only callers were in
+scev.c:
+
+  bpf_mark_reg_known_scalar(&scev->zero_reg, 0);      (bpf_init_scev())
+  scalar_union(&iters->iv_range, &tmp.iv_range);
+
+Neither has a caller after this commit, and neither is used again through
+a50a112fb866.  The compiler does not warn because they are not static.
+scalar_union() is also the only remaining user of gcd(), so the
+#include <linux/gcd.h> in verifier.c appears to be left only for it.
+
+scalar_intersect() and bpf_same_memory_origin() also lose their callers
+here, but later patches in the series use them again.
+
+Should bpf_mark_reg_known_scalar() and scalar_union() be deleted together
+with their prototypes, or should the commit message be reworded?
 
 
 ---
@@ -293,4 +201,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/44698144269
---===============5635143653485341256==--
+--===============2559208742481425716==--
