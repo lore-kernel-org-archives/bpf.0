@@ -1,54 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.63
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.143
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795145564;
-	b=F6OV7NwpZJgqNQygijBpDhZDz3F0Qo8QORCLAFrjSsFkiM+2nk5BfM8OV2C8lvo6+9V8
-	 DY3aITLGJ/uKyyq75hp0IxdZjrxdIWFXzct+EfIyQ313adNkb8LQ/uoKhtTBFLHhnXB7s
-	 WaJ1U8plwpj7PMEsPLuhF15v/ZkSA60E79opiGaST5scX+NCg6zFARkJRPw2rHoRvHTsB
-	 AOun+Y1PIMyuYNiYF9wdfO27VJHKJ+vbjQ7ogGHikFmQ5geddhB09eKJCtYZA9zdPFN3M
-	 aIPCym0bmVK12Jta+z1dD9iP72B01Us7fG9Dp7JLt4Qka6U4svglT+0RTRsuDQHdH5Q==
+	t=1795148924;
+	b=1BHVRDyZcgYyLuvqOO3Da6qVS2mfJ+vhBDVD4Nam7mLHP4Lg3HLfwIlXnTmSwUaJnuaO
+	 GS6egYhfvbk2a8LvLLvnrKe9/LAcfUT5QqAGVsDpewlaseKC3+ZW9YgBJm+RaH859qIbL
+	 /7x7bFruhIPTSDZ/LGE7JHlDjFRnwptYoCqyxlE+j4hsjQBciQa+Ohbvcoap+sdhJv3iH
+	 08gwwUaIpSmPF6H0x7mOAESH2rCIaH4njPcHWaFGSAqD5/gAnHPwnpDBX03GSpLz6vwYr
+	 4UrKtwu+O9pfCyPosP6eAmYUwDmoQngcs1QaILj28X0vSCUHz0sZaOIiTSWMMpqUgIw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795145564;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795148924;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:From:To:Cc:References:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=0fECNG54n/Lw7Y7dKtGt1E6g844G0gDaHuevu60/s64=;
-	b=wfE9WLAt+o6sMJUs9HuUQvZzVbiNmWGfDpTZZmVB6PSvOrIsY2GRax7FbEWD4QTQqNz8
-	 GHcY2BmzPaNtvGChXYBPjtrDNGuv1wYC963bo6EUfEph1ipvGwiOLbh9DL4K45JzF9Vyg
-	 QWwOPbX74zMvR4gxni9Yr+RSJlPMNdG/JD1LkcEsFCw3bfNtmgj6xM1tzu396TI2GUz3V
-	 dP+X/Sg5KW+N8j7sQbe4r/x45hEX19PUaX3embt7j6omrYo0KmRB9k9Uz3USIzcGYag39
-	 3RPuGGev2iXp5JO+IkDqbE8HM3WYHIibOrMhL1KpVSSwvAK506H4wdNAmkSt0RWVjtQ==
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 X-B4-Tracking:X-Change-ID:X-Mailer:MIME-Version:Content-Type:
+	 Content-Disposition;
+	bh=fOEWrJZtywxHqIC6enC++RBPtKCtrgZZJPePAFSlkWM=;
+	b=jkKlT1+EeZIh50g9xt9SzOPPPXa98nMdViZUiJgttiIjdkp6KW8MyqdF7aY+Ugd24wDa
+	 CN7xVDk7XMvxDTG1XSC0RmOrMh3Bdrt+xaYqxtPpCyZIzbHpSQp/g0wu3iDyzOixZl0ml
+	 T79Eb/ah0vz7JAxHxT2AtEtCM/Z+TcC0mmieLXGVQ1IF/2ysb5yi98O0HRb7eVNM21N71
+	 kfPcHDCV4PVnxAHEhfXhVq8+5XkhpROe+46oW3z2/aT5loEAWm6mWk6gyJLIbiCbsqlpH
+	 hUUTM85XuIVwJupIznMCqK1pEpZ1LMWtWHl2160E6hS07ara0De57cGskZIAQAJAjgg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=oVjHzxeU;
-	arc=none smtp.remote-ip=91.218.175.63
-Received: from mta0.migadu.com (out-63.mta0.migadu.com [91.218.175.63])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=NEwhAfZz;
+	arc=none smtp.remote-ip=91.218.175.143
+Received: from mta0.migadu.com (out-143.mta0.migadu.com [91.218.175.143])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92C9D606A320
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 03:32:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 92C9D606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A86E606A326
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 04:28:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2A86E606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=oVjHzxeU
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=NEwhAfZz
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=RTGjO70kQTAFrOBvzmLzPFg5yur4DkRsk7Mr2E4IJY8=;
+DKIM-Signature: a=rsa-sha256; bh=9qFmDBtDjKXXhxRLQFA5L7yZm0Cyx68K1IIN39IpzpM=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795145562; v=1; x=1795750362;
- b=oVjHzxeUOhijSoKCcpGwgWqE1sh9YF4ITYoeyLU/ZzN1xstGeIb0mTPO6oivPtxAWLt/gWj+
- 7jfWxenUykAQeh1vN8EE62mAqjtrUjAsSEa2ClNMAfJ2mN5gnL1nOcnQSlHojVM340rCh/M1jqt
- OnSyxmIbr5Whhq8CoiwxnC54=
+ t=1795148921; v=1; x=1795753721;
+ b=NEwhAfZzOW1pwYal/oZ/PjWYWOYECnIJmgLiaJuX5lrZnXuet3ap7hF73a1BR4lPXeshCsus
+ CouNYjpkqkUhFWIwSDwR0ke94iEqe8nmG0xM4Z5mbiSy/dSn7/45xHjDaINfPuvTbhMhGt0PHXo
+ byWUrRjLTb6jIjSF2G0gL8KY=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id d9dbb3b872ea00c7;
-	Fri, 20 Nov 2026 03:32:41 +0000
-X-Mizu-Trace-ID: d9dbb3b872ea00c7
+Received: by smtp.migadu.com with ESMTPS id 1fdff059cb70f213;
+	Fri, 20 Nov 2026 04:28:41 +0000
+X-Mizu-Trace-ID: 1fdff059cb70f213
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <8c25083c-dfbe-4fdb-80b8-bb42f0394de4@linux.dev>
-Date: Thu, 19 Nov 2026 20:32:37 -0700
+Date: Fri, 20 Nov 2026 04:28:36 +0000
+From: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
+To: KP Singh <kpsingh@kernel.org>, Matt Bobrowski <matt@bobrowski.net>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Anton Protopopov <a.s.protopopov@gmail.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	"Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
+Subject: [PATCH bpf-next] bpf, lsm: Make bpf_lsm_get_retval_range() return
+ void
+Message-ID: <20261120-jf-bpf-lsm-retval-range-v1-1-d712e4090907@linux.dev>
+X-B4-Tracking: v=1; b=H4sIAFCO/2oC/yWMQQqDMBBFryKz7kAStASvUrqIdtKOaCozUQTx7
+ o12+fj/vR2UhEmhrXYQWln5mwrYWwX9J6Q3Ib8KgzPubq31OETs5oijTiiU1zCiXDcfTG1cQ1Q
+ 3Hoo9C0XervIDTiPRluH5X3TpBurzGYbj+AGFyV7thQAAAA==
+X-Change-ID: 20261118-jf-bpf-lsm-retval-range-8a04025ee458
+X-Mailer: b4 0.15.2
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,128 +72,115 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v1 0/4] libbpf: Support kernel-side kfunc flavors
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>,
- Emil Tsalapatis <emil@etsalapatis.com>, Jiri Olsa <jolsa@kernel.org>,
- Song Liu <song@kernel.org>, Tejun Heo <tj@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, sched-ext@lists.linux.dev
-References: <20261117192153.3384031-1-ihor.solodrai@linux.dev>
-Content-Language: en-US
-In-Reply-To: <20261117192153.3384031-1-ihor.solodrai@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+With CONFIG_BPF_FMODRET_SCAN=y, fmod_ret programs can attach to tagged
+functions, so a program on bpf_lsm_get_retval_range() can make it fail
+for an LSM hook that returns a value. get_func_retval_range() then
+reports no range, and do_refine_retval_range() and check_helper_call()
+ignore the error and use a range the call did not set.
 
+The function fails only for a void hook, which every caller but
+get_func_retval_range() already rules out. Check for a void hook there
+and make the function return void, so resolve_btfids no longer tags
+it and no fmod_ret program can attach to it.
 
-On 11/17/26 12:21 PM, Ihor Solodrai wrote:
-> An incompatible change to a kfunc's prototype, such as an added
-> parameter, breaks BPF programs built against the old one. libbpf
-> ignores the ___<flavor> suffix of a kfunc declared in a BPF program,
-> but makes an exact name look up on the kernel side, so the kernel
-> can't keep the old prototype available under the kfunc's name.
-> 
-> sched_ext ran into this. cded46d97159 ("sched_ext: Make
-> scx_bpf_dsq_insert*() return bool") kept the old prototype as
-> scx_bpf_dsq_insert___compat, expecting libbpf to bind old binaries to
-> it, and broke them. 2dbbdeda77a6 ("sched_ext: Fix scx_bpf_dsq_insert()
-> backward binary compatibility") reversed the naming. A ___v2 kfunc
-> declared as vmlinux.h spells it doesn't bind: 56bbc91219c0
-> ("sched_ext: Fix scx_bpf_dsq_move_to_local___v2 compat detection")
-> fixed a compat macro that silently dropped enq_flags because of this.
-> 
-> With this series, if the kernel's bpf_foo kfunc is missing or its
-> prototype is incompatible with the declaration, libbpf binds the
-> bpf_foo___<flavor> that has a compatible prototype. So a changed kfunc
-> can keep its name, and the old prototype stays available as foo___v1.
-> 
-> resolve_btfids fails the build if two of bpf_foo and its flavors have
-> compatible prototypes, unless both have foo's exact prototype
-> (aliases), so the fallback finds at most one match.  This ensures at
-> kernel / module build time that no ambigous kfunc flavors exist.
-> Documentation/bpf/kfuncs.rst describes the rules.
-> 
-> Compatibility is determined by bpf_core_types_are_compat(), the check
-> libbpf already applies to kfuncs. Of the 70 same-name kfunc prototype
-> changes between v6.6 and bpf-next, it finds 8 incompatible (arity,
-> return kind, callback prototype). The other 62 (const, typedefs,
-> parameter names, integer widths, pointee struct names, annotation
-> suffixes) were made in place without breaking old callers.
-> 
-> The flavors feature is backwards compatible: declarations that resolve
-> today bind the same kernel function. The exact name lookup is
-> attempted first. Declarations rejected today for an incompatible
-> prototype, or left unresolved if __weak, may now bind to a flavor, for
-> example scx_bpf_dsq_insert___v2 as vmlinux.h declares it. Older libbpf
-> and light skeletons don't get the fallback.
+Fixes: bc45414d1690 ("bpf: Allow fmod_ret on tagged functions and check the return value")
+Signed-off-by: Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
+---
+Built with W=1 on x86_64 and arm64, with gcc and clang, with and
+without CONFIG_BPF_LSM. With CONFIG_BPF_FMODRET_SCAN=y, the BPF LSM
+selftests give the same results with and without this patch. They ran
+under QEMU emulation only, not on real hardware, and we have no
+reproducer for the failure.
 
-We had an off-list discussion with Eduard and Andrii today.  We agreed
-on the implementation as described below, which I plan to submit as v2
-of this series (soon).
+AI coding agents found the bug by reading the code, wrote this patch
+and its changelog, and ran the builds and tests above.
+---
+ include/linux/bpf_lsm.h |  9 ++++-----
+ kernel/bpf/bpf_lsm.c    | 10 +++-------
+ kernel/bpf/verifier.c   |  5 +++--
+ 3 files changed, 10 insertions(+), 14 deletions(-)
 
-Writing from memory, please correct me if I forgot or misremembered
-anything.
+diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
+index eb4a38eef87e..14b8bb6cc25f 100644
+--- a/include/linux/bpf_lsm.h
++++ b/include/linux/bpf_lsm.h
+@@ -55,8 +55,8 @@ void bpf_inode_storage_free(struct inode *inode);
 
-A single kfunc selection mechanism in libbpf:
+ void bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog, bpf_func_t *bpf_func);
 
-   1. Find all functions in kernel BTF with the essential name (the
-      name before the first ___ separator) that matches target kfunc's
-      essential name. "bpf_kfunc" decl tag is ignored.
-      This gives a candidate list.
+-int bpf_lsm_get_retval_range(const struct bpf_prog *prog,
+-			     struct bpf_retval_range *range);
++void bpf_lsm_get_retval_range(const struct bpf_prog *prog,
++			      struct bpf_retval_range *range);
+ int bpf_set_dentry_xattr_locked(struct dentry *dentry, const char *name__str,
+ 				const struct bpf_dynptr *value_p, int flags);
+ int bpf_remove_dentry_xattr_locked(struct dentry *dentry, const char *name__str);
+@@ -98,10 +98,9 @@ static inline void bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog,
+ {
+ }
 
-   2. From the candidate list, find the one with a compatible
-      prototype. Error on ambiguity.
+-static inline int bpf_lsm_get_retval_range(const struct bpf_prog *prog,
+-					   struct bpf_retval_range *range)
++static inline void bpf_lsm_get_retval_range(const struct bpf_prog *prog,
++					    struct bpf_retval_range *range)
+ {
+-	return -EOPNOTSUPP;
+ }
+ static inline int bpf_set_dentry_xattr_locked(struct dentry *dentry, const char *name__str,
+ 					      const struct bpf_dynptr *value_p, int flags)
+diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+index 0aa2fd61daba..f28754e8ac72 100644
+--- a/kernel/bpf/bpf_lsm.c
++++ b/kernel/bpf/bpf_lsm.c
+@@ -478,13 +478,10 @@ bool bpf_lsm_hook_returns_errno(u32 btf_id)
+ 	return true;
+ }
 
-No exceptions for "exact name" match (as in v1) or anything like that.
+-int bpf_lsm_get_retval_range(const struct bpf_prog *prog,
+-			     struct bpf_retval_range *retval_range)
++/* Callers must skip void hooks, which have no return value range. */
++void bpf_lsm_get_retval_range(const struct bpf_prog *prog,
++			      struct bpf_retval_range *retval_range)
+ {
+-	/* no return value range for void hooks */
+-	if (!prog->aux->attach_func_proto->type)
+-		return -EINVAL;
+-
+ 	if (btf_id_set_contains(&bool_lsm_hooks, prog->aux->attach_btf_id)) {
+ 		retval_range->minval = 0;
+ 		retval_range->maxval = 1;
+@@ -497,5 +494,4 @@ int bpf_lsm_get_retval_range(const struct bpf_prog *prog,
+ 		retval_range->minval = -MAX_ERRNO;
+ 		retval_range->maxval = 0;
+ 	}
+-	return 0;
+ }
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 1a8e5a108a68..3ebd5106358a 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6978,9 +6978,10 @@ static int check_stack_access_within_bounds(
+ static bool get_func_retval_range(struct bpf_prog *prog,
+ 				  struct bpf_retval_range *range)
+ {
+-	if (prog->type == BPF_PROG_TYPE_LSM &&
++	if (IS_ENABLED(CONFIG_BPF_LSM) && prog->type == BPF_PROG_TYPE_LSM &&
+ 		prog->expected_attach_type == BPF_LSM_MAC &&
+-		!bpf_lsm_get_retval_range(prog, range)) {
++		prog->aux->attach_func_proto->type) {
++		bpf_lsm_get_retval_range(prog, range);
+ 		return true;
+ 	}
+ 	return false;
 
-A function prototype compatibility check here will be a little
-stricter than bpf_core_types_are_compat(). But it's also not going to
-be a type traversal as done by bpf_core_types_match(). It will be a
-new check specifically for func prototype comparison.
+---
+base-commit: 32b66b94c86f009b49668de7340f2ed65aad2dc5
+change-id: 20261118-jf-bpf-lsm-retval-range-8a04025ee458
 
-In particular, for pointers to structs, unions or typedefs *the name*
-of the type will also be checked. And the typedefs won't "skipped"
-anymore, but shallowly compared. For example:
+Best regards,
+--
+Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
 
-    void kfunc(struct foo *arg);
-vs
-    void kfunc(struct bar *arg);
-
-become incompatible now. And
-
-    typedef struct foo {...} foo_t;
-    void kfunc(foo_t *arg);
-vs
-    void kfunc(struct foo *arg);
-
-become incompatible now.
-
-However:
-
-    typedef struct foo_v1 {...} foo_t;
-    void kfunc(foo_t *arg);
-vs
-    typedef struct foo_v2 {...} foo_t;
-    void kfunc(foo_t *arg);
-
-are compatible, because the name "foo_t" matches.
-
-resolve_btfids built-time "no ambiguity" enforcement remains.
-
-The consequence of this approach is that a BPF program expecting a
-kfunc that changed its prototype in the past in a CO-RE compatible
-way, will now get an error if loaded with new libbpf. The fix is
-simple: use an up-to-date kfunc prototype in the BPF program.
-
-A notable recent example is bpf_cpumask_populate() change [1].
-
-[1] https://lore.kernel.org/bpf/20260709182800.2037938-2-main.kalliope@gmail.com/
-
-
-> 
-> [...]
