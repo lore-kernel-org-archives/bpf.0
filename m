@@ -1,56 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795163941;
-	b=z5qO7Fo5Td7VvrH5zU5jHF2mp/klhh9ikY7S/F/eK6pqx06WNW+7zWtvwIYjThty846p
-	 Fj3tsLCe7lgN47H5++Wz+Tb1KkQu9C0Wh1Q5MIgceG9sjCJfFSlkiC42uMSXGK/4Zo3SN
-	 0elvvvGU88KtvBuFRN0L1zf4N8GcuohpunMJf0+pv8z2iuTy8kLMKsfO37vEJZ7MvH/Sb
-	 sflnhvAu2p12/dFubck2zG30CemDfHxczT1YHL3eo7KjtNcN2ZGNrhwCjv3kcQSpUF4WG
-	 xNhj+weLjU23/rtf73GPboslHgl0lig0CBZmY8XDhN6Y1wbUr3YpVqWZvBAgGujPacQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795163941;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=UlntU7uAZ8XkTlgYWuarRShjeIjlu2L//m5/ymDzcQU=;
-	b=rAoGwhIaY5UFdHyU30gmY8o3expJFG0kJHkcYQ3t5Jb/DTXgfOw832Um9bFzv234KJhH
-	 4XE1QFDj4pva7IFD5WVHncOi8QGb0bxOHC8B72ojSf5bIi8sLC8Sxeu+gBw52s4wRg9L9
-	 0CAfczy9UbN8w49sRCKiRsmNa0MMyKoUP3dPKP+rWFyCvm8EplkE1rpFgp1W95b7/U5Tc
-	 KwWQlh3N1wrgu34MAhmJZOgJcaUnvQdjkZ9xk0ZTrIPVu7WjZv+J3a/r3Ulx5c5TVwgqP
-	 M25hvEQvlyZqSeqacHpY5HlqP1NT2sQMnz7SY9lAhUYtRLu+WiFvNvQvFT0M4vuK/JA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="hn/FhgQS";
-	arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795164276;
+	b=1d26wJXKr6UbhlOWHBEg/Vx+NtMpGza29hKrU1hD2dut9nagUCg+hUye2FvTQ++p9sW/
+	 y4zxEkSXQ1YaPxC7X5S51QQKo77WJBcgHQon08ZMT2kZX71c9dkQUb1ageA16xhrqiTmZ
+	 vH5Tnbogud4Sz6B//SV/Bkb9A60bDMjsyWXT+ZTIlc2QdkZwZ5xADP7uP90BIsdHjDZAp
+	 2g0+jXK6W8LI57kZ+Gd6LoMENXj2lhy8BoUP1fgm6S3fxNiu4WP5xZ3wLMZLgabOQ1UiA
+	 hmsz2mIBmo5foHaEhyv3cmVOgzqMWfr8v1Esxg128469/eFAROoJu9SEJIf+FvurMNA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795164276;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=HQ/MC2rhbtrQvM+saZG3xHAEtDy44m0IiJf1k707Apo=;
+	b=PBjcc8NKhTtK9FHQ/ay0bwhcNrLmZ39mLhQdXMTR9xXXn/2eH5hANjn8XLaeql2YDosh
+	 71AVdJc597i17cHEXOMb0VDLNbobo25Pjdihmn+y0KYHGM1OcaxTgQV1intT7/g3ijV4/
+	 JCBXL3j52GkHupmN5nGIsFICjcbZLvkKe7y2YIbtNDLUEiMlnbscM84BXfCep3gYBen6/
+	 gDQK2YevxhK8WR+ERlKERPIF2VULHZAl/JKx8x+dZAjhlnVBD2VS/YAosjsazoe5rPeWo
+	 GVHP9GTG1+CqMrE+FGthg+hwO2f5He0yd/P4qohFWhscm/L3A8/NDHgN/ObutZS2nlQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=azCzh2LC;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0CD2606A320
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 08:39:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 609FF606A7FF;
+	Fri, 20 Nov 2026 08:44:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hn/FhgQS
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40DB21F000C4;
-	Fri, 20 Nov 2026 08:39:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=azCzh2LC
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1795164276;
+	b=fF1E77TJZTIijgyJXmiKxF0hU7vpq692yHVkgeEgCxuOjoUV8IMw6y0R32eeRRDT3XF5
+	 PZY6IzgTazUeAmrWbxIOJz0qvWQoR6wJEA2CN/nkdwlM4QS1jCfaGZPzptvBDU99Asf9Z
+	 4XKVyGBMIyyAxoVR/5lhX5/vi+jaj2tG2UaSeASbj0GDYBItyMt4SNgasNqswYOquclkd
+	 vZ8qfLMNEx9FB0nzQGtMKHRLduNVV5WF1sXwuKZVMV9JJ4aQqz0gwVqd3cdFIyZXdz3Nb
+	 BbNe3N+FHVlyubSdxS4nUXxNXCZ7w8FmWcANgfXyGkggaa8aj/sRm+FYyM9rNSuubmg==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1795164276;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=HQ/MC2rhbtrQvM+saZG3xHAEtDy44m0IiJf1k707Apo=;
+	b=RxLvoUqWT4eoOP4ppJrUVR+N6+xXMKgKVpPp6VZpkmMHvRC33noJDUkAYURO9I2wIwhu
+	 i5pjqUYDQ6krMqsEm83p4vfqRtzA7GPgRbZUKwbcgWESC+kyLC2qP3OWOq8polsigsFCL
+	 gvr6zfyLGew+Wx6z7cwvV22d5/s1e6hTXEHmXhJMG6jPfGvKwYn1ZfmSgSTyFFhK2cvO0
+	 Ybgfd1RfbSdauhc6wuH0QYZhuvf0o8a0HE5cedWjgnAeeqnMDU3bdaZxcIza5uXj1g6bO
+	 cu4STA7fgz3B0b7IpILP6ZbS76UK6allMAcf8uNvFJlABcEnJMUojeitS2kcXSUw4/A==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 50B971F000D2;
+	Fri, 20 Nov 2026 08:44:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795163941;
-	bh=UlntU7uAZ8XkTlgYWuarRShjeIjlu2L//m5/ymDzcQU=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=hn/FhgQStGPhIMnRhvy/bzO6bVXRrOcl3psvjFn65//LQCtV11UnGJCsraypI7nAc
-	 KrYj2fCiHb9rDdOa4LTz1ctst3ASv0arlrIdUMIaGipayy32KEv6FBjc0/wH8IHNjI
-	 J8DudumBDHmzhCOphlSciWP45fzNX2mGPciT1j4nH7tksWpkvVseXleJbN8F6nAkN8
-	 sxxAHdoqnPbYNG5vB7hwN6nSIVFmFj2H/16qoLOdhausgABpNQ4AEDJhYGPIhM4ZSD
-	 2UhXsJ+Y9mCTWex3SZ944/5DoAjsL++EJFihblN68HNLCyi5xKGHvMPo+Pn7OPlltx
-	 kZmdiNVX8tKcg==
-Message-ID: <sashiko-outbox-224753@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 08/49] bpf: Do not fail a check because a state
- has fewer values
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261120074430.2704488-9-alexei.starovoitov@gmail.com>
-References: <20261120074430.2704488-1-alexei.starovoitov@gmail.com>
- <20261120074430.2704488-9-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 20 Nov 2026 08:39:00 +0000
+	s=k20260515; t=1795164276;
+	bh=HQ/MC2rhbtrQvM+saZG3xHAEtDy44m0IiJf1k707Apo=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
+	b=azCzh2LCpQdwzt+n9aqxqtOpSWlGIs0svMrlhMf5qJO+Jy/Kku36/gS1nZBy7gBr/
+	 i5lUo2pp63ULYuWsfSVRqfKNUCwSUnRlDg6mooSeeXJEES131nr/nHSj67oxWfS4it
+	 Bhi7oYtQMko0doET4/7pxCaUiyrK+tXxecbjqkCXoUJ6V7Q8czoCyxdMOzBjmR5zHa
+	 kVsISul5J7Pqb+w5DWSLKdVqVb/EGV5Rv8wFL4KRwBDNdZc2d16U5dkMq6Nmjv75y6
+	 Eho+WDIPOp0h81NibvIaMA/PVw7rQhrS4unNDhaE30F3WzKlIoUvRrQY33BA0oChrL
+	 OmaATEABHk42w==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id CCB8B497B4;
+	Fri, 20 Nov 2026 08:44:34 +0000 (UTC)
+From: Hang Zhengyang via B4 Relay <devnull+hang.zhengyang1010.gmail.com@kernel.org>
+Date: Fri, 20 Nov 2026 16:44:23 +0800
+Subject: [PATCH sched_ext/for-7.5 2/2] selftests/sched_ext: Test sync
+ wakeups from an RT task
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,125 +82,338 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261120-scx-fix75-v1-2-254f782ff9b0@gmail.com>
+References: <20261120-scx-fix75-v1-0-254f782ff9b0@gmail.com>
+In-Reply-To: <20261120-scx-fix75-v1-0-254f782ff9b0@gmail.com>
+To: Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, 
+ Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>, 
+ Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+ Juri Lelli <juri.lelli@redhat.com>, 
+ Vincent Guittot <vincent.guittot@linaro.org>, 
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, 
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, 
+ K Prateek Nayak <kprateek.nayak@amd.com>, Shuah Khan <shuah@kernel.org>
+Cc: Kuba Piecuch <jpiecuch@google.com>, 
+ Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>, 
+ Hui Su <sh_def@163.com>, sched-ext@lists.linux.dev, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ Hang Zhengyang <hang.zhengyang1010@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1795164273; l=7737;
+ i=hang.zhengyang1010@gmail.com; s=20261008; h=from:subject:message-id;
+ bh=ZdH0zACDdHFIhPF1NiY9Xw4N3rcdSdQGPyZtTNXQl2k=;
+ b=HdoouE0PZ48l4E/8Wqvn7vjxTSXVoGoSc+v6R02Y2sDKcoTESxDs4FwTQezq03JDJIDMSNGEO
+ loIGnICLn5ZCJvWQ64oME+FiK82CmKGfx8MGoMYBffTk/3HlTyAQZR5
+X-Developer-Key: i=hang.zhengyang1010@gmail.com; a=ed25519;
+ pk=5drRny3PqRPLhKVB0YIQXN5YyD8miKCpXWhnEPvafAI=
+X-Endpoint-Received: by B4 Relay for hang.zhengyang1010@gmail.com/20261008
+ with auth_id=1133
+X-Original-From: Hang Zhengyang <hang.zhengyang1010@gmail.com>
+Reply-To: hang.zhengyang1010@gmail.com
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [High] bpf: missing far-offset check in check_ptr_to_btf_access()
-  after blur
-It also noticed 1 related pre-existing issue this patch does not
-introduce:
-- [Critical] bpf: unaligned memory access in bpf_map_direct_read() [1]
---
+From: Hang Zhengyang <hang.zhengyang1010@gmail.com>
 
-commit 22e172eae518ce6c856dc6c4380ea2788200c435
-Author: Alexei Starovoitov <ast@kernel.org>
+Add the sync_wake_rt test. It loads the minimal scheduler, so the
+kernel picks the CPU for each wakeup.
 
-bpf: Do not fail a check because a state has fewer values
+In each round, a reader task first runs on one CPU. Then it blocks on
+a pipe and may run on any usable CPU. An RT task, pinned to that first
+CPU, writes to the pipe and spins until the reader has run, for at
+most 300 ms.
 
-This commit avoids rejecting pointer arithmetic with large positive
-offsets, range-splitting conditional jumps, and narrow loads from spilled
-pointers when a verifier state has a narrower set of values than a joined
-state would.
+The test fails if the reader runs on the RT task's CPU in more than 5
+of 10 rounds. It is skipped if fewer than two CPUs are usable. It
+checks where the reader runs, not how long it waits, because the wait
+depends on the state of the ext dl_server.
 
-> diff --git a/kernel/bpf/const_fold.c b/kernel/bpf/const_fold.c
-> index 50179edbf348c..61e22636ff890 100644
-> --- a/kernel/bpf/const_fold.c
-> +++ b/kernel/bpf/const_fold.c
-> @@ -214,6 +214,9 @@ static void const_reg_xfer(struct bpf_verifier_env *e=
-nv, struct const_arg_info *
->  			ci_out[r] =3D unknown;
->  		break;
->  	}
-> +	/* do_check() has only a range for a far offset */
-> +	if (ci_is_map_value(dst) && abs((s64)dst->val) >=3D BPF_MAX_VAR_OFF)
-> +		*dst =3D unknown;
->  }
+Signed-off-by: Hang Zhengyang <hang.zhengyang1010@gmail.com>
+---
+ tools/testing/selftests/sched_ext/Makefile       |   1 +
+ tools/testing/selftests/sched_ext/sync_wake_rt.c | 257 +++++++++++++++++++++++
+ 2 files changed, 258 insertions(+)
 
-[Severity: Critical]
-This problem wasn't introduced by this patch, but can the BPF_LDX case in
-const_reg_xfer() trigger an unaligned kernel memory access in
-bpf_map_direct_read() [1]?
+diff --git a/tools/testing/selftests/sched_ext/Makefile b/tools/testing/selftests/sched_ext/Makefile
+index 44083f1c6596..8d2c5b5b0070 100644
+--- a/tools/testing/selftests/sched_ext/Makefile
++++ b/tools/testing/selftests/sched_ext/Makefile
+@@ -201,6 +201,7 @@ auto-test-targets :=			\
+ 	test_example			\
+ 	total_bw			\
+ 	cyclic_kick_wait		\
++	sync_wake_rt			\
+ 
+ testcase-targets := $(addsuffix .o,$(addprefix $(SCXOBJ_DIR)/,$(auto-test-targets)))
+ 
+diff --git a/tools/testing/selftests/sched_ext/sync_wake_rt.c b/tools/testing/selftests/sched_ext/sync_wake_rt.c
+new file mode 100644
+index 000000000000..54af31a17076
+--- /dev/null
++++ b/tools/testing/selftests/sched_ext/sync_wake_rt.c
+@@ -0,0 +1,257 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * An RT task wakes a task with a sync wakeup (a pipe write) and keeps
++ * running. The wakee must not be queued behind the RT task on its CPU
++ * while other CPUs are idle. Otherwise it waits until the RT task blocks
++ * or the ext dl_server runs it.
++ *
++ * The minimal scheduler has no ops.select_cpu(), so the kernel's default
++ * idle selection picks the wakee's CPU.
++ *
++ * How long the wakee waits depends on the state of the dl_server, so the
++ * test checks where the wakee runs, not how long it waits.
++ */
++#define _GNU_SOURCE
++#include <fcntl.h>
++#include <sched.h>
++#include <scx/common.h>
++#include <signal.h>
++#include <stdio.h>
++#include <string.h>
++#include <sys/mman.h>
++#include <sys/wait.h>
++#include <time.h>
++#include <unistd.h>
++#include "minimal.bpf.skel.h"
++#include "scx_test.h"
++
++#define ROUNDS		10
++#define SPIN_MS		300	/* max time the RT waker spins */
++#define SLEEP_WAIT_MS	5000	/* max time to wait for the wakee to block */
++
++struct shared {
++	int	cpu;		/* CPU the wakee ran on after read() */
++	int	ran;
++};
++
++static cpu_set_t allowed;
++static int waker_cpu;
++
++static u64 now_ns(void)
++{
++	struct timespec ts;
++
++	clock_gettime(CLOCK_MONOTONIC, &ts);
++	return ts.tv_sec * 1000000000ULL + ts.tv_nsec;
++}
++
++static void spin(struct shared *sh, u64 ns)
++{
++	u64 end = now_ns() + ns;
++
++	while (!(sh && __atomic_load_n(&sh->ran, __ATOMIC_ACQUIRE)) &&
++	       now_ns() < end)
++		;
++}
++
++static int pin(int cpu)
++{
++	cpu_set_t mask;
++
++	CPU_ZERO(&mask);
++	CPU_SET(cpu, &mask);
++	return sched_setaffinity(0, sizeof(mask), &mask);
++}
++
++/* Wait until @pid is sleeping, i.e. blocked in read() */
++static bool wait_sleeping(pid_t pid)
++{
++	char path[64], buf[256], *p;
++	int i, fd;
++	ssize_t len;
++
++	snprintf(path, sizeof(path), "/proc/%d/stat", pid);
++	for (i = 0; i < SLEEP_WAIT_MS; i++) {
++		fd = open(path, O_RDONLY);
++		if (fd < 0)
++			return false;
++		len = read(fd, buf, sizeof(buf) - 1);
++		close(fd);
++		if (len <= 0)
++			return false;
++		buf[len] = '\0';
++		p = strrchr(buf, ')');
++		if (p && p[1] == ' ' && p[2] == 'S')
++			return true;
++		usleep(1000);
++	}
++	return false;
++}
++
++static bool reap(pid_t pid)
++{
++	int status;
++
++	return waitpid(pid, &status, 0) == pid && WIFEXITED(status) &&
++	       !WEXITSTATUS(status);
++}
++
++/*
++ * One round. The wakee first runs on waker_cpu, so that waker_cpu is its
++ * prev_cpu. Then it blocks on a pipe and may run on any allowed CPU. The
++ * RT waker, pinned to waker_cpu, writes to the pipe and spins until the
++ * wakee has run, for at most SPIN_MS. Returns the CPU the wakee ran on,
++ * or -1 on error.
++ */
++static int one_round(struct shared *sh)
++{
++	struct sched_param param = { .sched_priority = 1 };
++	int ret = -1;
++	pid_t wakee, waker;
++	int pipefd[2];
++	char c = 0;
++	bool ok;
++
++	memset(sh, 0, sizeof(*sh));
++	if (pipe(pipefd))
++		return -1;
++
++	wakee = fork();
++	if (wakee < 0)
++		goto out_close;
++	if (wakee == 0) {
++		close(pipefd[1]);
++		if (pin(waker_cpu))
++			_exit(1);
++		spin(NULL, 1000000);
++		if (sched_setaffinity(0, sizeof(allowed), &allowed) ||
++		    read(pipefd[0], &c, 1) != 1)
++			_exit(1);
++		sh->cpu = sched_getcpu();
++		__atomic_store_n(&sh->ran, 1, __ATOMIC_RELEASE);
++		_exit(0);
++	}
++
++	if (!wait_sleeping(wakee)) {
++		kill(wakee, SIGKILL);
++		reap(wakee);
++		goto out_close;
++	}
++
++	waker = fork();
++	if (waker < 0) {
++		kill(wakee, SIGKILL);
++		reap(wakee);
++		goto out_close;
++	}
++	if (waker == 0) {
++		close(pipefd[0]);
++		if (pin(waker_cpu) ||
++		    sched_setscheduler(0, SCHED_FIFO, &param))
++			_exit(1);
++		if (write(pipefd[1], &c, 1) != 1)
++			_exit(1);
++		spin(sh, SPIN_MS * 1000000ULL);
++		_exit(0);
++	}
++
++	close(pipefd[0]);
++	close(pipefd[1]);
++	ok = reap(waker);
++	ok = reap(wakee) && ok;
++	if (ok)
++		ret = sh->cpu;
++	return ret;
++
++out_close:
++	close(pipefd[0]);
++	close(pipefd[1]);
++	return -1;
++}
++
++static enum scx_test_status setup(void **ctx)
++{
++	struct minimal *skel;
++
++	SCX_FAIL_IF(sched_getaffinity(0, sizeof(allowed), &allowed),
++		    "Failed to get CPU affinity");
++	if (CPU_COUNT(&allowed) < 2) {
++		fprintf(stderr, "Skipping: requires at least 2 usable CPUs\n");
++		return SCX_TEST_SKIP;
++	}
++	for (waker_cpu = 0; !CPU_ISSET(waker_cpu, &allowed); waker_cpu++)
++		;
++
++	skel = minimal__open();
++	SCX_FAIL_IF(!skel, "Failed to open");
++	SCX_ENUM_INIT(skel);
++	if (minimal__load(skel)) {
++		SCX_ERR("Failed to load skel");
++		minimal__destroy(skel);
++		return SCX_TEST_FAIL;
++	}
++
++	*ctx = skel;
++	return SCX_TEST_PASS;
++}
++
++static enum scx_test_status run(void *ctx)
++{
++	enum scx_test_status status = SCX_TEST_PASS;
++	struct minimal *skel = ctx;
++	struct bpf_link *link;
++	struct shared *sh;
++	int i, cpu, stacked = 0;
++
++	sh = mmap(NULL, sizeof(*sh), PROT_READ | PROT_WRITE,
++		  MAP_SHARED | MAP_ANONYMOUS, -1, 0);
++	SCX_FAIL_IF(sh == MAP_FAILED, "Failed to mmap");
++
++	link = bpf_map__attach_struct_ops(skel->maps.minimal_ops);
++	if (!link) {
++		SCX_ERR("Failed to attach scheduler");
++		status = SCX_TEST_FAIL;
++		goto out_unmap;
++	}
++
++	for (i = 0; i < ROUNDS; i++) {
++		cpu = one_round(sh);
++		if (cpu < 0) {
++			SCX_ERR("Round %d failed", i);
++			status = SCX_TEST_FAIL;
++			goto out_destroy;
++		}
++		if (cpu == waker_cpu)
++			stacked++;
++	}
++
++	/*
++	 * Allow a few rounds on waker_cpu: if no CPU is idle, the wakee can
++	 * still end up there.
++	 */
++	if (stacked > ROUNDS / 2) {
++		SCX_ERR("Wakee ran on the RT waker's CPU in %d of %d rounds",
++			stacked, ROUNDS);
++		status = SCX_TEST_FAIL;
++	}
++
++out_destroy:
++	bpf_link__destroy(link);
++out_unmap:
++	munmap(sh, sizeof(*sh));
++	return status;
++}
++
++static void cleanup(void *ctx)
++{
++	minimal__destroy(ctx);
++}
++
++struct scx_test sync_wake_rt = {
++	.name = "sync_wake_rt",
++	.description = "Verify that a sync wakeup from an RT task doesn't stack the wakee",
++	.setup = setup,
++	.run = run,
++	.cleanup = cleanup,
++};
++REGISTER_SCX_TEST(&sync_wake_rt)
 
-bpf_compute_const_regs() runs before the main verifier enforces alignment
-checks.  When const_reg_xfer() folds a BPF_LDX from a read-only map, it
-computes off =3D src->val + insn->off and passes it directly to
-bpf_map_direct_read(), which dereferences ptr with a direct C pointer cast
-such as *(u32 *)ptr.  On strict-alignment architectures, an unprivileged
-user loading a program with an unaligned read offset from a read-only map
-triggers an unhandled alignment fault and panics the kernel.
+-- 
+2.53.0
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 030263d01e3e2..ef8e45a399ca5 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-[ ... ]
-> @@ -16078,6 +16066,27 @@ enum {
->  	REASON_STACK	=3D -5,
->  };
-> =20
-> +/*
-> + * A far pointer is no error: a state with near offsets gets here, so th=
-is one does too.
-> + * An access through it is unproven. But a constant offset has to fit in=
- an int.
-> + */
-> +void bpf_blur_far_offset(struct bpf_verifier_env *env, struct bpf_reg_st=
-ate *reg)
-> +{
-> +	s64 smin =3D reg_smin(reg), smax =3D reg_smax(reg);
-> +
-> +	/* an id and a range need an offset that does not wrap around */
-> +	if (reg_is_pkt_pointer(reg) && offset_is_far(reg)) {
-> +		reg->id =3D bpf_new_id(env);
-> +		reg->range =3D 0;
-> +	}
-> +	if (reg->type =3D=3D SCALAR_VALUE || (smin < BPF_MAX_VAR_OFF && smax > =
--BPF_MAX_VAR_OFF))
-> +		return;
-> +	scalar_set_unknown(scalar_of(reg));
-> +	reg->r64 =3D cnum64_from_srange(min(smin, BPF_MAX_VAR_OFF - 1),
-> +				      max(smax, 1 - BPF_MAX_VAR_OFF));
-> +	reg_bounds_sync(reg);
-> +}
 
-[Severity: High]
-Can a far PTR_TO_BTF_ID pointer pass check_ptr_to_btf_access() and
-btf_struct_access() after bpf_blur_far_offset() lowers its smin to
-BPF_MAX_VAR_OFF - 1?
-
-Unlike check_stack_access_within_bounds() and check_mem_region_access(),
-neither check_ptr_to_btf_access() nor btf_struct_access() checks
-offset_is_far(reg).  Because bpf_blur_far_offset() lowers reg_smin(reg) to
-BPF_MAX_VAR_OFF - 1 with step =3D 1, min_off in btf_struct_access() fits in=
- a
-32-bit int even when a huge positive offset was added, and a trailing
-1-byte flexible array member (such as data[] in struct
-bpf_local_storage_data or ifalias[] in struct dev_ifalias) skips the
-max_off upper-bound check:
-
-kernel/bpf/btf.c:btf_struct_access() {
-	if (check_add_overflow(reg_smin(reg), (s64)_off, &min_off) ||
-	    check_add_overflow(reg_smax(reg), (s64)_off, &max_off) ||
-	    min_off !=3D (int)min_off) {
-		...
-		return -EINVAL;
-	}
-	...
-		array_start =3D min_off - arrays[i].off;
-		/* An array within the flexible tail has no upper bound to exceed */
-		if (array_start >=3D flex_off && btf_type_is_array(t) &&
-		    btf_type_array(t)->nelems =3D=3D 0)
-			return ret;
-}
-
-For a PTR_TRUSTED or MEM_RCU pointer, bpf_may_fault_on_deref() is false, so
-the load is not rewritten to BPF_PROBE_MEM and can read arbitrary
-out-of-bounds kernel memory or fault in kernel mode.  Checking
-offset_is_far(reg) in check_ptr_to_btf_access() would reject far BTF
-pointer accesses.
-
-[1] https://sashiko.dev/#/bug/linux-ad386ec5-9f86-4c83-a85e-b56e4d8748cb
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261120074430.2704=
-488-1-alexei.starovoitov@gmail.com?part=3D8
