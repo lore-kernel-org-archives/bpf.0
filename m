@@ -1,94 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795197051;
-	b=tYytg1NkK4dw5OA4eREGbRtpJt0cddlmH26pm1ep7VAia6VHZFrTX2j8s1ET9jAN/RXL
-	 d3ONR6HwzJt6yQW0lC4MYx6CEGrMEE+W25xNOLGmvJbL8ZcWWHrB/PXyYf4rvOMTqLEUr
-	 +vwQ0Hq6c0p3+2boE25mfXFHSOXiep15WTJMju6slra7nSMqcejjlRKQBi0UIn7hHmn8z
-	 gFhxgu8j4YfnONKNZvKHLx9LhhV97gdXTM2Qe3AY1whw7JKYk2eg476O1ThCXa1e5fXt6
-	 x8aNcdoaApIsyiNLRTaPpczZA3C8v3EqthiDL1FZezbbP1kWw6nrX0576W3Tbq5nl4w==
+	t=1795197059;
+	b=4f42ew1pYl7rDaSWoJxwkXt+F5J0aLSA9OYupzPG1GGx/g1osIwMxtxAd8s22a1wtqEG
+	 9d1dMj9uahwpxbzvT+UG7BPz+6cZZ/wIQoJwUXX4RnLQ6tYHcPiVDM473/nUM0NhjSWWf
+	 gwqRmvkP5PQ1FN7qYra47tv3dYGjjoYhcgnxTICJttLrtKBhCCa6rOydPn/Mr6KbWt4OH
+	 l0se+gWuGxw7+5CmTAcmG0IPTXQ4QpoeT/9Ax/rkczvG8GED6ImKK9sxyv+1YojePtzKf
+	 NwrCtQWbAhkzG5u7OietHgMPpzHJhV7WD474kkzAWKZlsCkJSI6GQ099eIGqIRPyf7A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795197051;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795197059;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Subject:From:To:In-Reply-To:References:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=/ckA76GFethZlS9qiSTr1nMW1OVkHUs1BNcHEyirqeU=;
-	b=FpAdr+FMMZH4besg4MtXVVD7mjoyWXcUNsLiyVrBhOp7bKZGwXj9hwr8TJMPAmgFMTUM
-	 l1rrKD5fMDnmn13J+TKIf4iaBU3d/GFJI5KqNwHhtiMb2ZAZEk/b9hHqLkc6YVpNOcXEQ
-	 ze73sa+WcYLjebKeCXHMlRh+q0wlGOP6e9HL21m0VcasOZ0/Goq2McxhREChiozBDsAwm
-	 rmmqekJzVzz8DmFYN/ng371aT+NL6iqW+uLiJJtLyZIWwloAMJBIosA+qk9DtXlC1qxZT
-	 g3NnFy29OUGedolrEhVObj0dMkw7pGEDzeItgRZIBhNC+ML57xomQThOfMzsrDq18cQ==
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=GfvJ2B/FDo3K0b8K7u2mjXLnyWvWgtIHqPTZMgUtdVI=;
+	b=kRB4rHm6bo30fYAbbkwbedhf5Bor0ysUK3vXuhjtytXIo6FZlACd2snCPcrA+fOza4Jq
+	 wXTUQL8DTmngd2tRV0ejXItzGo7z+DHYcuoy2+5/mme146IlKTQLA5j/wTYaJt/W1Xmsk
+	 pDgnzxVbU0WLQkSqejjZMDJs+Cn5/NcgEPCVP0c6BzR+xojXVuRpsti4aLd0uZT2xK14S
+	 ASJ2U9SauVD8UicvVv9PHXyIlfM6T4H+dhIK+LixqBMDsWS95LQKip9955h5Xvm3k6e6W
+	 74CaISyIQ+aW4BWdCEt9JYn61L6d8W5LYFjrBgRVbdbiM1/SvHA3BNVz8zMXMvX7gyQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="EmaL/SoM";
-	arc=none smtp.remote-ip=209.85.216.45
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ixaT24Hs;
+	arc=none smtp.remote-ip=209.85.210.169
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FFED606A332
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 17:50:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7FFED606A332
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 706BE606A339
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 17:50:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 706BE606A339
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=EmaL/SoM
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3b3fb193c03so617499a91.2
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 09:50:49 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ixaT24Hs
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-8a070781f63so670202b3a.1
+        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 09:50:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795197049; x=1795801849; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795197059; x=1795801859; darn=vger.kernel.org;
         h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=/ckA76GFethZlS9qiSTr1nMW1OVkHUs1BNcHEyirqeU=;
-        b=EmaL/SoMMd81bUJKpg0uUMpISoVj1BImflpsF++ClpRp4PBU9CRKlHP+4rifWn7cH2
-         51lJMAi/nPqve2cebv8hACFV4u8uG/8yow28o+ZH+dtljZbjyrHENnbxriFZXF2eNU5t
-         AlKL5U1j+NkIum5J0CtOfVwVdNnbDTGc9GgfX2HhAZnFKyidfk7fSU/nctU12GH7OSvW
-         +ahqadBkDzAej4JUk5PbtQY5k2Q9hJeGLNvRqecH8GV5Y8X/6NPi665otLRGXWaVyRZG
-         OplU55x6+F4j6peeIl7lgUu8zGRscNSXqf9w+iT0dOH1BryeHtl33UA0AQeMNVwSzY33
-         9egQ==
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=GfvJ2B/FDo3K0b8K7u2mjXLnyWvWgtIHqPTZMgUtdVI=;
+        b=ixaT24Hs6yHwaVJliV1mg6xqeYY8wyu108jnz1qeixkR8kmmFZhaNV5UMv7kM2gY69
+         Kp7KAyxBZKspCjl38NENYPADpEoXP5HgypEk9L55CQx2Xe5xMWoGNHhXJXm07rvlHruB
+         tOKn42kqv/gMi0gBtuyj0DvQFcT/6S21CUfuvSF8waUl6O5sWylFfA8M4OcZSK30ESml
+         9eS7qMgHGkqTgHig11EuHcy0NAuAzooBlEir6N3sXq/WlqBjME1hnzgOcKWbDcd1QtCS
+         CTiZVVoK+uBQiCp3Hv6PviXkAvgOc6xMsWy1K7dDirJNhnb6bdD7Gg+pTq/sR390iN2A
+         Iovw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795197049; x=1795801849;
+        d=1e100.net; s=20260707; t=1795197059; x=1795801859;
         h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:message-id:date:content-type:x-gm-gg
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=/ckA76GFethZlS9qiSTr1nMW1OVkHUs1BNcHEyirqeU=;
-        b=u1Ggmt603mRzl8G4BvyFB4TSIH8oR5yy6K2JzyNqnowORxe/BhQU+frPFq94Z1C0Ck
-         YECBJibvZLdymmatEtAF181QBgTMGIUBJDWTiENqRUR7zn2RcxxSiGQDab2UKCrBcMBR
-         UyeRmIbw2YREQAcg0ZpFVlkRrybmgu2MF0946YOXT7kC+PQzkhj5Snv4RJ1O94XaFIZe
-         J7ZqtYJoWDycPWFIr1VlhNMKLEh4zbxXaHjUnxlpoEyxPWEFIlke67M6uLIWk3QMTcv6
-         YHpoA6OVRfgtAoa9k/kWT8DyUaD/FbUhFKKy0c5Dg13JDLFUuKjJBAh4Y0FohuwE/Kit
-         ZJuQ==
-X-Forwarded-Encrypted: i=1; AL+hErHDdag/GNlEuAETC8cJYlv0ZgWu5MH+Z2QA4KAbm2I6JzbpnEswuDRV4qL8Jwuka2FQyjk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+m55V4SUF9+sc7AKcHW1Av9h+LLUBybflDRHPD2ZcH0eaalRo3
-	j1BRZIIpTDQrayK2qKLWrshR1IypZPMbQk1qBBKWte+cPfudanFEeSIY
-X-Gm-Gg: AZFdTZePL1k1F/01Izvdre7N8GmIM71ExGSTM/ll367TZ13ScFjZBmALWGY2gZvvmxr
-	zy6QhyuLVBVj6Zd2QyS4km8OQePWGG9m95r4a2AamAAOdaL3QUQRUF5XmFCj+A3/Z6j+bNsoMVJ
-	I1+rnU+KeoW7jNiLOb6DBe/VQXpF5ixMBnu67J+Kc29KmFSAgj+6Jt1VFomfdRdpjIjVSLe9Wn/
-	mygMV+CYp75+dORu5rnoDGwK5Y9VDfiYsLkpZAQMkRgaYWTSUVIyJuCR8aR1NF+cZ5VWC9X3I6q
-	R+9LDuvJZP+WZiUdn57WL/zmUbxDx+O8wTWh0iq0P+at94IsT/EcoqBUQd/1Ekfv2ZTK9xukA5B
-	n8+CeJ3ZNSE79Tqepkqj22IFDeoIT/zzmA0/MI9AzOmzlQgYyDg2KVWlef4oi0z6lBWefoZzCDa
-	dRVhVEmAWS+c0xNuPZ+r3bE07FBwh8y8kqkINxyamDJQyXWfmbwbuNdBsFsu0jybTLMBH1qbM95
-	oblAp74jrk52+RJWg/OWnQ7FH9l11NJXZUBZMSOme0heE9GL3PpM0KF1WWVYfwmqNlTw9+eUzFM
-	c8TZMfo9rMqeTGziqoUOO7a+fYm5U/q61BFzxq/GdG8v0EatbGaq46EBrv1G4EVSf8P1AUjQkrO
-	3Kcm4GxwnAblzO9npiLAZl1vhE0ggb7PzWA==
-X-Received: by 2002:a17:90b:4c4e:b0:3b4:d22:85fa with SMTP id 98e67ed59e1d1-3b41c98a150mr3371920a91.14.1795197048356;
-        Fri, 20 Nov 2026 09:50:48 -0800 (PST)
+        bh=GfvJ2B/FDo3K0b8K7u2mjXLnyWvWgtIHqPTZMgUtdVI=;
+        b=MWK3UYb24ZDtmuGycuRJnj8zBfzqYvD+45pupqV6PxDAr0OfjEyxCS4RkW2jYUlj4P
+         FIXJvBddWBoMR/oObwEEHjvBM4V40LCvTqcSWqbfT8sfjuz3JB+ZrgNb7Zy+Bkt+BCK2
+         D2aXie0cLqHfHbd4WkVjUHjsOGkamsukd9V7YWB+71WDMMgtG76WjOFjxBoo3vA5lKU5
+         neDlzkFp6w/aQ7X0UROwbQM2pmy5n9+/QvFtXmuJLDW3G0K+El2fHUVF+xSOtZHRxFb8
+         bYtAWVPSbhjvQBC1gAQbgmp1LS7ucu2eY1CJCfKG+YKlIO+mmWxkh7HigtksFJfkyz3d
+         f/7g==
+X-Forwarded-Encrypted: i=1; AL+hErEWo2J6Vzur4O0DSWGvbmXlLBCVBsyFFIbuheRfc1bdqpNqWTHaHtyD9AaTLUWv+52h8B4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8yRzwJ0XWC31/E84nFmAfX4DYUJazQaMmYSSIXrs9mEej9d7pW
+	XbZCgd7JVUgXvRYcWsfUuolRliw+DCCsIFJGZqEOr87tjXD3rArtjbm9
+X-Gm-Gg: AYBFou3eFiocAk+FebDmjH70usMgHumI+uTabnN54icddkgPb4xyAaNi35Q7n+9onLO
+	mBPUAalexXy91/m5bkLTZ8d3qFjKp+c3Nh51VXiC7RAa0Nd7y5z28onqHOp/fMVr/Brocrj8OUv
+	YkAjQpVjjYEOUd4XPi9a9ysX+VxwFWcRxuNiinadYvbQ/GhdOZGPkL5eBWHrLV9SQvlU1Fplf7o
+	QvX9v6LJySafn3OAEn2Anvnebtr5jxFA6d65tyxVb0wNMc/1dzF2dBJMaeL2BXOpBWzI62DuK8S
+	NihjTcO3AdhXsUhgCjMGK+oRhIASfCzJCpwSm4Gx/xwEQ1WMbyAdFxtu7R68eudoXSMq7OKi+p9
+	fVUGFDAXmsNz6/PCzosK/JVuEp/agScS2QguROQ66j1yY9Vx4BrZDEvwnt5r8iXrhUY+vOqJPny
+	3g9rhba2ClRZ2UwC8tk61TmCXApskWZg8MeUmKALB9a7zti1DM6gd1HHu3Yn/G+HO8+5ITzta5q
+	h3NU/jVYCzCYN69BI/NFHm2PU9oxA5A/f8wdA/Oh6UOc0OMoUY6moPjJjADvNMaWCvfUtZoKISj
+	5HiWRdPdfbhHyWPAbYleG5eoL5puXc5Z3ORUoqSTKyJZbmuHWVlquhH+b6SfT+ERADB7tqZeERm
+	caR88J9Nbe+kDcnobwNhRlRvRChifZGYwCw==
+X-Received: by 2002:a05:6a00:1410:b0:8a0:2914:5d27 with SMTP id d2e1a72fcca58-8c87ce34a3emr3491379b3a.44.1795197058496;
+        Fri, 20 Nov 2026 09:50:58 -0800 (PST)
 Received: from localhost ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b409330ae8sm7924274a91.7.2026.11.20.09.50.47
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c873b2434asm1800461b3a.45.2026.11.20.09.50.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Nov 2026 09:50:47 -0800 (PST)
+        Fri, 20 Nov 2026 09:50:58 -0800 (PST)
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 20 Nov 2026 17:50:47 +0000
-Message-Id: <DN088QK5C3RO.26A4S236XCPSF@gmail.com>
-Subject: Re: [PATCH bpf-next 05/49] bpf: Limit the cost and the memory of a
- load
+Date: Fri, 20 Nov 2026 17:50:57 +0000
+Message-Id: <DN088V6WVRTV.10FAMA2ILO7R9@gmail.com>
+Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <memxor@gmail.com>, <martin.lau@kernel.org>, <yonghong.song@linux.dev>,
+ <mason@kernel.org>, <ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf-next 04/49] bpf: Delete scalar evolution
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: <sashiko-reviews@lists.linux.dev>, <bpf@vger.kernel.org>
-In-Reply-To: <sashiko-outbox-224673@kernel.org>
-References: <20261120074430.2704488-1-alexei.starovoitov@gmail.com> <20261120074430.2704488-6-alexei.starovoitov@gmail.com> <sashiko-outbox-224673@kernel.org>
+To: <bot+bpf-ci@kernel.org>, <bpf@vger.kernel.org>
+In-Reply-To: <ad82954b5dbf7e28fcfcb7a41802667e9efdf117cf4fcc8b09be22a20fac94d1@mail.kernel.org>
+References: <20261120074430.2704488-5-alexei.starovoitov@gmail.com> <ad82954b5dbf7e28fcfcb7a41802667e9efdf117cf4fcc8b09be22a20fac94d1@mail.kernel.org>
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -100,24 +102,34 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-On Fri, Nov 20, 2026 at 12:00 AM sashiko-bot@kernel.org <sashiko-bot@kernel.org> wrote:
->> @@ -22013,7 +22035,7 @@ static void free_states(struct bpf_verifier_env *env)
->>  {
->>  	struct bpf_verifier_stack_elem *elem;
->>
->> -	bpf_free_verifier_state(env->cur_state, true);
->> +	bpf_free_verifier_state(env, env->cur_state, true);
->>  	env->cur_state = NULL;
->>  	while ((elem = env->head)) {
->>  		env->head = elem->next;
->
-> [Severity: High]
-> Does the second bpf_free_verifier_state() call in free_states() also need
-> env passed as its first argument?  Leaving it at two arguments breaks the
-> build until commit "bpf: Put a barrier where no mask fits" replaces the
-> loop later in the series:
+On Fri, Nov 20, 2026 at 12:25 AM bot+bpf-ci@kernel.org <bot+bpf-ci@kernel.org> wrote:
+> Should the bpf_add_cost() call in find_latch() move to that commit, or
+> should the cost definitions come before this one?  As it stands this commit
+> adds a second file that does not build, so the series cannot be bisected
+> until ecbd98bcc45a.
 
-It's already explained in the cover letter.
+No. It's already explained in the cover letter.
 The kernel does not build after patches 3 .. 36.
-Each line of code changes in one patch only. Patch 11 moves this loop
-to free_pushed_states() and adds env there.
+Each line of code changes in one patch only. Patch 4 adds find_latch()
+in its final form. Patch 5 adds bpf_add_cost().
+
+> Do these selftests need to be updated or reworked in this commit?  None of
+> the commits up to a50a112fb866 touches them.
+
+No. Patch 44 does that. bpf-ci had patches 1 .. 20 only.
+The test still checks the edge 6 -> 7. If it counts as an exit of the
+loop at 3, the log has "first exit to 7" there, and the test expects 10.
+
+> Won't test_progs -t verifier_scev fail on these?  verifier_scev is not in
+> ci/vmtest/configs/DENYLIST*, and no commit through a50a112fb866 touches the
+> file.  Should verifier_scev.c and its RUN() entry be removed or rewritten
+> in this commit, given that it deletes the feature they test?
+
+No. Patch 44 renames it to verifier_trip_count.c and drops the scev lines.
+The progs stay. They test the trip count of patches 30 and 31.
+
+> Should bpf_mark_reg_known_scalar() and scalar_union() be deleted together
+> with their prototypes, or should the commit message be reworded?
+
+No. precision.c in patch 24 calls both. join.c in patch 25,
+equation_join.c in patch 27 and equation.c in patch 30 call scalar_union().
