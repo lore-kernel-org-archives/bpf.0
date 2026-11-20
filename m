@@ -1,92 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=66.220.155.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795211120;
-	b=MUU+BIZTTpEHCr6aBmv1UYrBEsN2xuhHRPfW6TQMRhmtOGDMv5v8Iw5X2zA4oAZH05c1
-	 34s2DitCBvmL7DXaFkq7722YdLULr+QUSKZp4LubNrXZs7mQEzdrKKIj0vMJ2kiFaYQoA
-	 FicO/9SGLD20VbOYc0b04za0lhOBwpKIJ409DJ05Ws243hg3JGc6x36V8JaaFgEQ8AbL+
-	 NppPeVGoim6Qcqyyloa8TQRfAiStaWQlWI6HjrBu/gK5CIkXxHqI9hCjqWljvJLRzwqXL
-	 f61eEfyAH6dFA6uNLTsABSGKI4z9VgYZgG6zZ3Kr8+zcyicPw5sZRqcY1dKt4pCFwWQ==
+	t=1795211416;
+	b=IU/BwV9kiyaiA+WB3qSFKNE4DQeaARZRYNJwjRqF1PD8WqkIATOeMVRbfMVNnlS4XpaO
+	 aNHs6aPjLHW6dZ+rJfyv73WpnBx/L9Dw8h9nTc10KihcIsEs3OdnNlfIYspkyOH1iDFQ4
+	 k6KMgUvgSrq/OOSod3auuZcMEPuCW8j1oynftwwMjZD5ycvNIj0lgGMcErYpFHX5x7ied
+	 5+LnWhaBMeGEP8tvyWGDszglRpvEATBRnlbM6avfBBmj4u6HTIWVHb7AAuy0pNrZjPrqm
+	 iw1Pdh2+pjnRVeuzuRo+bmH3xTPhDAN5otVey2Y6QgH3QRihaPvMmoYdaIC0ZQzinAQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795211120;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=LQYysgp//9KShYReg1WCF+KgYK2YJRDdVhocAyIlPg4=;
-	b=b0JtW2eXhHo1iAo6K13cXJH5jodZ/b4Kx/0mstmEIlBce4u/CSan0QHdHrrZ7/yxiQPj
-	 XxN8Qw5P/6O6RxVQQVxFT94pE2CBumL5DgxS0nv6L1uSjcPoZPizg4vqIYSGtQVTeUVWe
-	 W4Db4AfzZPoju0cH18X6JHEsUcr0swHkKvkkWe/DSETIvXoVFF7rIRFFHd63a62A2gFbM
-	 bPy26vTjQ21H0JwmNVyxVaOKp6u8GalWUgihbRwi583lAJ1C+gPbe4hdirNVZCutjb/KN
-	 br/A7hfSc0MFO87yGSrYIczjowQKS5DoJWY4eNnGqabbP0EPgAHu1V3nBbOCRZZV7MQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795211416;
+	h=DMARC-Filter:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+	bh=FIgDbQ/9CZvHQLaVkowiWsqsBz0oIXDWdGzA7SGRZ3Q=;
+	b=wNbQ94XOy8O4yrHx2q79i1Wbyd2nh5S7nYARsLho3r8nZB/FY8V/+8q4cX9V//bx6rfm
+	 Tku7Ipkld6di9bd5cLji1L4y3D5IFDaznF8LxAav0/rb+y3ZmlYYK5iNVvqb520JqUsjs
+	 ngDjbW7MlOJCaz9DTNOCuGmhwFDczl5zmjzYzAllTu0B+WZc+7K+rg0jsgP4jhgusMm/U
+	 oIMXhxdA2q5SEUuY/bX6LBE6Slrhmv/ZHL8lAZCiAdxS/DZy2l8Nm1hCEd+RBMZGXjkRJ
+	 x0+lJrKOFmHCVPQ/SmYUUOhA1kjP7cdpER7og3tVPPsPj/51Nr7cd832zV+fl7Rf6QQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=openai.com;
-	spf=pass smtp.mailfrom=openai.com;
-	dkim=pass header.d=openai.com header.i=@openai.com header.a=rsa-sha256 header.s=google header.b=C2jpFfSu;
-	arc=none smtp.remote-ip=209.85.160.54
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=fail header.from=linux.dev;
+	spf=fail smtp.mailfrom=linux.dev;
+	arc=none smtp.remote-ip=66.220.155.179
+Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 897BE606A6B7
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 21:45:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 897BE606A6B7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openai.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openai.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=openai.com header.i=@openai.com header.a=rsa-sha256 header.s=google header.b=C2jpFfSu
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-4a76f0cce5fso660177fac.2
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 13:45:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openai.com; s=google; t=1795211116; x=1795815916; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=LQYysgp//9KShYReg1WCF+KgYK2YJRDdVhocAyIlPg4=;
-        b=C2jpFfSuutuCZeuGrrbB6CPrXuCLHPjsYbHeZ0INc6l3v8QadfuYXncjt5KuVqhCt7
-         3SGz83K3k0XfOMALHygvAHc0p1IU97YYD7qpD97CXDb1KaWyKI9wQnFAKN+YjHjDDrKi
-         mrAFEuwoV4wVp4oMYecBLnGPaSrvpuSnn1QWA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795211116; x=1795815916;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=LQYysgp//9KShYReg1WCF+KgYK2YJRDdVhocAyIlPg4=;
-        b=uNDArhTg4bcTImxKOvMc7yYIy1IOJB029tubRimG1/Nl+ru/5CAqiTVLNJY5d9YsT/
-         iqKm3F3nJvTeUOT5aYMYQ0IS0VRrW6gJneBSSRRoMoUaLZoHYdZlzV9YR6c8YubEptMA
-         l7ShwyR0ybPJzBe3PWygDt5DeQSu4/j7djV7jrcU3lkWL3qIQflYa2kpJNqlvM/DbuyJ
-         HLYp7pf9ud0ky1CA5XSQDJS9zme4W/YsZ+KFTebJok8w5hvytyXXQr8oIjOtQg9tyKii
-         9mwyDJh0GJPeV5nzSHf2pi+yG+27gFnYRJDrbiJmxQZ5DUSQJ1mavk4OqODAxAosR86X
-         v9qQ==
-X-Gm-Message-State: APuU4Z+KNpkcWMz98gqTL+LMJ5uDtEKgEGtdw63vARHCzu3ULFTyzw3S
-	g/r+cexuRl9TyU+KNOZDNilSvto9cG4B9joLM9at4pvzHcJ2jKECBv4NEJICuzgFzrfgu0ixYEs
-	tu0D9LBw=
-X-Gm-Gg: AYBFou2kk6Wd3Ba4skc8exz2iL3rn7Wfz6CajxmMJ8qjiu/WBa5vs5djYTo8jB6rtH3
-	XiJVyMTn/2TqNqP5iVUQVSd826zH7V9mC0/enHxMkXorAI81aqoRc+WoR71T8orhduqxMhTWsmL
-	Eza7/hoAjKuHkGRiBJ2zq5CiELO5zWq2pBJfCFA9Xj2Lz5gd6BD2t8uevD908Qa5sP1f4SKQPEA
-	F9l5F2n/E+mbsVKg9d1FBUZw1ooqs7TQIXedJOAfUr2fYi/AzVvHcczyIP8EtvUuU+cJ8tosho6
-	QmW3pQIWDYSCCRXrTzCkG4PMxDBVem9jzEbI+ih8SqJydJJR6QZTRMCBCo/KiK15wa68lfDbkmU
-	UDXwblOgCcjBR00SHevYONIrUTn48uNH8rjRFNUjJfxiSt2jHqy46HAkGauwb9tgDWDtZyA9HY2
-	WA1hDO3lA5E13Cx/lKMEMYP1wRoH7662ybtmbC0xOo2nacJB2h8CwZRAC/MqB8iGCzYlJ0l6des
-	Z0fhR2MRNQ/Ch6PcM+riS5gO6c08Irkop54TMvVcpO5kw3gOm3N/zHtBJz+2Fyhdfsxi/LB8dDK
-	6f7COnxneCYVbrUIZvWImhfrnM8Sba3nhgZcFw7/GS46LJJ1mAzDv0imywILHLRks+0Uiy0uIm0
-	iBjzQjNo5z7fuMuX7+ovSk9tBQiISwL1lF8pskj9hb7veXYNFAX0=
-X-Received: by 2002:a05:6808:308d:b0:557:308a:9e9a with SMTP id 5614622812f47-57a095037bemr5687975b6e.21.1795211116347;
-        Fri, 20 Nov 2026 13:45:16 -0800 (PST)
-Received: from com-75606.corp.openai.org ([199.47.143.1])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-57a35c5ac5dsm3222237b6e.15.2026.11.20.13.45.15
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 20 Nov 2026 13:45:16 -0800 (PST)
-From: Kyle Zeng <kylebot@openai.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38D2C606A6BD
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 21:50:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 38D2C606A6BD
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devvm50310.atn0.facebook.com (Postfix, from userid 128203)
+	id 98CCC59405502; Fri, 20 Nov 2026 13:50:02 -0800 (PST)
+From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
-Cc: john.fastabend@gmail.com,
-	jakub@cloudflare.com,
-	jiayuan.chen@linux.dev,
-	netdev@vger.kernel.org,
-	alexei.starovoitov@gmail.com,
-	Kyle Zeng <kylebot@openai.com>,
-	stable@vger.kernel.org
-Subject: [PATCH bpf v2] net: skmsg: fix copy cursor when coalescing clones
-Date: Fri, 20 Nov 2026 13:45:11 -0800
-Message-ID: <20261120214511.25934-1-kylebot@openai.com>
-X-Mailer: git-send-email 2.55.0
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	kernel-team@fb.com
+Subject: [PATCH bpf-next v5 1/3] libbpf: Fix CO-RE relocations of unsigned 32-bit enum values
+Date: Fri, 20 Nov 2026 13:50:02 -0800
+Message-ID: <20261120215002.868773-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.53.1
+In-Reply-To: <20261120214957.868409-1-yonghong.song@linux.dev>
+References: <20261120214957.868409-1-yonghong.song@linux.dev>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -96,77 +53,164 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
 
-A splice or zero-copy append can leave the destination copy cursor at
-sg.end. If sk_msg_clone() subsequently coalesces with the last entry,
-sg.end does not advance and the cursor still points at an unused slot.
-sk_msg_memcopy_from_iter() can then walk around the ring and write into
-older entries, including file pages spliced from a read-only descriptor.
+For a BPF_CORE_ENUMVAL_VALUE relocation, bpf_core_calc_enumval_relo()
+reads the value of a 32-bit enumerator from btf_enum->val, which is
+__s32, so the value is sign-extended to 64 bits even if the enum is
+unsigned. A value in [0x80000000, 0xffffffff] of an unsigned enum
+becomes 0xffffffff80000000 or above.
 
-Software TLS can reach this with an ordinary MSG_MORE send after a file
-splice and a splice from another TCP socket. Both TCP and the TLS
-encrypted-message allocation can use the sending task's page fragment,
-so the TCP-sourced plaintext can be contiguous with the next cloned
-encrypted-message range.
+Clang emits such a value zero-extended in the ld_imm64 of the
+relocation, so the check of the original value fails, and the whole
+object is refused even if the target value is the same:
 
-When coalescing with an exhausted destination, move the copy cursor to
-the tail and set copybreak to its old length before extending it. Find
-the actual tail on each iteration using the ring iterator, including
-when end wraps to zero. Leave an existing copy cursor unchanged and
-preserve the normal coalescing, reference counting, and memory charging.
+  enum dentry_flags { DCACHE_PRIVATE =3D 0x80000000 };
+  out =3D bpf_core_enum_value(enum dentry_flags, DCACHE_PRIVATE);
 
-The issue was found by an LLM.
+  libbpf: prog 'p': relo #0: unexpected insn #0 (LDIMM64) value: got
+          2147483648, exp 18446744071562067968 -> 18446744071562067968
+  libbpf: prog 'p': relo #0: failed to patch insn #0: -EINVAL
 
-Fixes: fda497e5f5b8 ("Optimize sk_msg_clone() by data merge to end dst sg entry")
-Cc: stable@vger.kernel.org
-Signed-off-by: Kyle Zeng <kylebot@openai.com>
+And a target value in that range is patched sign-extended, which is
+wrong wherever the program uses it as a 64-bit value. The x86 vmlinux
+has 29 enums with such values, e.g., dentry_flags, init_ns_ino and
+e820_type.
+
+Commit 89e7a42e3030 ("libbpf: Normalize enum values according to
+signedness") fixed this for btf_dump and map fields, but not for CO-RE
+relocations, whose relo_core.c is also built into the kernel. Keep the
+sign extension in bpf_core_calc_enumval_relo(), and zero-extend the
+32-bit values of unsigned enums, i.e., with the kflag 0, once in
+bpf_core_calc_relo().
+
+The kflag 0 of the target enum doesn't always mean unsigned, though.
+Before commit 6089fb325cf7 ("bpf: Add btf enum64 support") in v6.0, the
+kernel refused an enum with the kflag set, so the BTF of an older kernel
+has the kflag 0 on every enum, signed or not. pahole doesn't record the
+signedness before v1.24 either, and the kernel still accepts pahole
+v1.22. On such a kernel, zero-extending a negative target value would
+make, e.g., 0xffffffff instead of -1:
+
+  long v =3D bpf_core_enum_value(enum perf_event_state,
+                               PERF_EVENT_STATE_OFF);
+
+The local enum has the kflag 1, so the original value matches the
+ld_imm64, and nothing would warn. So zero-extend the target value only
+if the local enum has the kflag 0 too. A target value is then
+zero-extended only if neither enum is signed.
+
+GCC, however, sign-extends every 32-bit enum value, since its
+__builtin_preserve_enum_value() returns int. For the example above:
+
+  clang: r1 =3D 0x80000000 ll
+  gcc:   lddw %r1,-2147483648
+
+An object built by GCC is accepted today, because the original value is
+sign-extended too, and the change above alone would refuse it:
+
+  libbpf: prog 'p': relo #0: unexpected insn #0 (LDIMM64) value: got
+          18446744071562067968, exp 2147483648 -> 2147483648
+
+The two forms differ only for an unsigned value in [0x80000000,
+0xffffffff]. For such a value, accept the sign-extended form as well.
+In that case, also sign-extend the target value, since GCC code uses
+the ld_imm64 as the int value widened to 64 bits.
+
+An original value below 0x80000000 is the same in both forms, so the
+instruction doesn't show which compiler emitted it. The target value
+then gets the extension above, which is the form clang emits, as its
+builtin returns long. A target value that doesn't fit in 32 bits, e.g.,
+from an enum64 in the target kernel, is patched unchanged.
+
+In summary, a 32-bit target value is extended as follows, where kflag 1
+is signed:
+
+  local enum   target enum   clang   GCC
+  ----------   -----------   -----   ----------
+  kflag 1      kflag 1       sign    sign
+  kflag 1      kflag 0       sign    sign
+  kflag 0      kflag 1       sign    sign
+  kflag 0      kflag 0       zero    zero, or sign (*)
+
+  (*) sign if the local value is in [0x80000000, 0xffffffff], since
+      GCC emits it sign-extended in the ld_imm64
+
+Fixes: 776281652ddc ("libbpf: Permit 64bit relocation value")
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
-v2:
-- Rebase onto the BPF fixes tree; no code changes.
+ tools/lib/bpf/relo_core.c | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-v1: https://lore.kernel.org/bpf/20261030042138.73739-1-kylebot@openai.com/
-
-I have a reproducer for this issue and can share via DM
-
- net/core/skmsg.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
-
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 8a3b8536c0c2..f47c59ba1ec6 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -103,16 +103,26 @@ int sk_msg_clone(struct sock *sk, struct sk_msg *dst, struct sk_msg *src,
- 	}
- 
- 	while (len) {
-+		int last = dst->sg.end;
+diff --git a/tools/lib/bpf/relo_core.c b/tools/lib/bpf/relo_core.c
+index 2672623a4198..3f37a0879c40 100644
+--- a/tools/lib/bpf/relo_core.c
++++ b/tools/lib/bpf/relo_core.c
+@@ -887,6 +887,28 @@ static int bpf_core_calc_enumval_relo(const struct b=
+pf_core_relo *relo,
+ 	return 0;
+ }
+=20
++/*
++ * btf_enum->val is __s32, so both values are sign-extended at this poin=
+t.
++ * clang zero-extends the value of an unsigned enum.
++ * kflag =3D=3D 0 is an unsigned enum or BTF without signedness (kernel =
+before
++ * v6.0, pahole before v1.24), so new_val needs kflag =3D=3D 0 on both s=
+ides.
++ */
++static void bpf_core_zext_enumval(const struct bpf_core_spec *local_spec=
+,
++				  const struct bpf_core_spec *targ_spec,
++				  struct bpf_core_relo_res *res)
++{
++	const struct btf_type *local_t, *targ_t;
 +
- 		sge_len = sge->length - off;
- 		if (sge_len > len)
- 			sge_len = len;
- 
--		if (dst->sg.end)
--			sgd = sk_msg_elem(dst, dst->sg.end - 1);
-+		sgd = NULL;
-+		if (dst->sg.size) {
-+			sk_msg_iter_var_prev(last);
-+			sgd = sk_msg_elem(dst, last);
++	local_t =3D btf_type_by_id(local_spec->btf, local_spec->spec[0].type_id=
+);
++	targ_t =3D btf_type_by_id(targ_spec->btf, targ_spec->spec[0].type_id);
++	if (BTF_INFO_KFLAG(local_t->info))
++		return;
++	if (btf_is_enum(local_t))
++		res->orig_val =3D (__u32)res->orig_val;
++	if (btf_is_enum(targ_t) && !BTF_INFO_KFLAG(targ_t->info))
++		res->new_val =3D (__u32)res->new_val;
++}
++
+ /* Calculate original and target relocation values, given local and targ=
+et
+  * specs and relocation kind. These values are calculated for each candi=
+date.
+  * If there are multiple candidates, resulting values should all be cons=
+istent
+@@ -962,6 +984,8 @@ static int bpf_core_calc_relo(const char *prog_name,
+ 	} else if (core_relo_is_enumval_based(relo->kind)) {
+ 		err =3D bpf_core_calc_enumval_relo(relo, local_spec, &res->orig_val);
+ 		err =3D err ?: bpf_core_calc_enumval_relo(relo, targ_spec, &res->new_v=
+al);
++		if (!err && relo->kind =3D=3D BPF_CORE_ENUMVAL_VALUE)
++			bpf_core_zext_enumval(local_spec, targ_spec, res);
+ 	}
+=20
+ done:
+@@ -1144,6 +1168,13 @@ int bpf_core_patch_insn(const char *prog_name, str=
+uct bpf_insn *insn,
+ 			return bpf_core_poison_insn(prog_name, relo_idx, insn, insn_idx);
+=20
+ 		imm =3D (__u32)insn[0].imm | ((__u64)insn[1].imm << 32);
++		/* GCC sign-extends the value of an unsigned enum. Keep its form. */
++		if (relo->kind =3D=3D BPF_CORE_ENUMVAL_VALUE && orig_val <=3D UINT_MAX=
+ &&
++		    imm !=3D orig_val && imm =3D=3D (__u64)(__s32)orig_val) {
++			orig_val =3D imm;
++			if (new_val <=3D UINT_MAX)
++				new_val =3D (__s32)new_val;
 +		}
- 
- 		if (sgd &&
- 		    (sg_page(sge) == sg_page(sgd)) &&
- 		    (sg_virt(sge) + off == sg_virt(sgd) + sgd->length)) {
-+			/* Start copying at the newly cloned suffix. */
-+			if (dst->sg.curr == dst->sg.end) {
-+				dst->sg.curr = last;
-+				dst->sg.copybreak = sgd->length;
-+			}
- 			sgd->length += sge_len;
- 			dst->sg.size += sge_len;
- 		} else if (!sk_msg_full(dst)) {
-
-base-commit: d5ba86298b45e1a81c578c499e9a222a3b734d5d
--- 
-2.55.0.openai.911.g06873a30d2f3
+ 		if (res->validate && imm !=3D orig_val) {
+ 			pr_warn("prog '%s': relo #%d: unexpected insn #%d (LDIMM64) value: go=
+t %llu, exp %llu -> %llu\n",
+ 				prog_name, relo_idx,
+--=20
+2.53.1-Meta
 
