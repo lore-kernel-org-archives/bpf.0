@@ -1,75 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.174
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.180
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795207362;
-	b=EgVvmo609fhelSnFcUZ3JI/Z3Q1nANhlg6DcBRYXpXEARhL9fgAgKnXcHjnrtHQ2v/Rp
-	 FHIZ4MImcYfY3uE+pNjaw2LjoF0CL0vH2xcQwS7G0wdcVt0cgUBW7Dx7XsUxLzun50ywd
-	 DWlr3YTN3bZEVqvq1HOTOk0pAKXZ/V4yKjf3uMfFBCdFBZxE3M1qqj+IPJMT9S5Z8Z2OC
-	 +jvS5cmDj88H5cHtlWUEDIVk4cpCx2QhxaDAshdiK7JhSW9z50HVm8sx3K8O/DdV/i9Xi
-	 9OgyEOIyctCDPCHewzYLRsVo5PWBQZOEXurNkFsLVN8axiyd+QSsSbmcpSTdFmIXNXQ==
+	t=1795207367;
+	b=HMQkI35pPSIVQu3YOtPges5Qtn59R3PT0bpKL4khO5z5552zd5tsoze3B7lMu9sYlrlM
+	 mIKeqBl/zkLaIm3RdkdtEBMhHzC69Ni2OZB7uuXTiNRMg1pC+mk3gaMBzt5P8Yxk4icEE
+	 EDL0gUAGaRm3UdsPp6tYo8T2edRDQRidHPUcp/rywnrFKiQy8Fc7XSAr4xQqJgv1eEVoU
+	 gMewV/nEDxoTGEn09GW/9ajJp8C22wWpAu8ThAgmBj6L/EA2Vpo/TyezRWacq1pAo+YEo
+	 0r+9n1oj8huzXZsQF/dsdlE+bJKw5rA1AwM261r0PSgj/J/TvHgHoFD8D4Ji6DUUPMg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795207362;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795207367;
 	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:MIME-Version:In-Reply-To:References:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=zvhZlU0ddPN9o2nM/nrK5XTVxzJuCMmPH0NhVRQSvdI=;
-	b=noCjZSe7movAMdEd8UP+pkrZPMHc4o+7ftygH3gFld4C9lPWSCOfmkJwtSmw+EzjT8vU
-	 c+MkZlISloeN0VEyy8cHRzNMMitVXibiLb2+yyZ18bnLL8kVO+qtlGfryhVmVIVKFAZ58
-	 x2q/iTNxtw6B/Fm6jg73VSfNwbOsIKkLFrxFi9/aIPlVy87AV/hMGN4xgvBo5TTsLjoQ8
-	 FSlFTLnamuFwxBfOlRvUQyLa2uEAro9PUYmv3Gfh7XqNrq3bjWt4SYhA7sXrM5pQx9gRq
-	 DpVFuXsjQoNiR7jJsnOBGRHchPQO7yEdLDHEU+fk1VM2gP3xIgAKOtV/Iqm3l9mZB0Q==
+	bh=pCml9rYMYB7fB2Zy79l25CZ2iG6ygatLQQpuCxucxW8=;
+	b=J3KZ1ZNdzjjk8mxgVYoWqHS8VrkP9Qmp5swLvczY/n5wxHCAR0A84RySlXFjaNmGc8SG
+	 RIh2wXmDufscU5UFG3XJZWGctOF3sc3Lpt0yMbTHtvnHOh5JZzmgz9QRY2mOP0Bvg3big
+	 dKwPJY984dX1eZmFB6EmkIT5H6jhC1SCBkEjcDxJevCysl0Kv8J8RfXLVrksxpwUUrMuX
+	 M9/RBVSpeailjyNjAWzh5MHT5MuMIg4ZO79SBF0tj0marg3UU0aFE9L1PsIM6QGN2sA15
+	 p679CCRzBdnKKIg2dTLV24fZs/jR3TFAvV738MMsx8/D8gojaiwOPccJzN45sXH329g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=fail header.from=kernel.org;
 	spf=pass smtp.mailfrom=gmail.com;
-	arc=none smtp.remote-ip=209.85.160.174
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+	arc=none smtp.remote-ip=209.85.222.180
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E754606A6CC
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 20:42:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3E754606A6CC
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC3FE60A5BFC
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 20:42:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AC3FE60A5BFC
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-55c5b6584ceso10065051cf.2
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 12:42:41 -0800 (PST)
+Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-9496400270fso119541185a.1
+        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 12:42:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795207360; x=1795812160;
+        d=1e100.net; s=20260707; t=1795207365; x=1795812165;
         h=content-transfer-encoding:content-type:references:in-reply-to
          :mime-version:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=zvhZlU0ddPN9o2nM/nrK5XTVxzJuCMmPH0NhVRQSvdI=;
-        b=tO4LaHycYSUq/HcvtkzSwMGa88sPAvSkblZcF8OUHmQ9MHTVQQoqCoKqsWnlFBdYRp
-         EQPg7/xoVm1cSB1Lz40/yWBUnVkoaqksevi8B9Ca4UZ8+3y3jQrm2N13sEdMATmRO0DQ
-         vvGv5rvIuOexCuN6LJsq2UnqiNlxxDg3ANeIOCRIjOyaJo4tx4XqTY0iajIvNHoQdtN4
-         kKXw2EA2Q/TVRE30peMaAt+WCPYaIZlWgCVL1LThIRVWyFwS5QjfOEK/sGza68Vlvx23
-         QvVvLKJ5xmRC0Lnwj+rcDgCiqd6BnBikr4Nr/C2CC9Jb+NQqeihLVee1wMPu3Sa0AaOZ
-         SCpw==
-X-Forwarded-Encrypted: i=1; AL+hErGhiK2hu19MpTOTa/aEvANqn6U8y639D4aGvGGldyApCZa8t3FDzSBv1oSKuL9jtJBkqls=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9hzzk0yf+FcSXAwQkWLYSHpg7lcpoCcihtLdDKmOYBDlQ+OBj4
-	foNWUt7qsu7Wtwm6XC5CLlmMK8rovh0JVcVT0YvV14wD1uLVsQfr5YdF
-X-Gm-Gg: AYBFou0bhiGqUsJH5J2ogQq8VXaAQVhVMU0voDWHMh2mBgB6W8hwaFeJ4gdCD+O03xw
-	J/s6S2KDut+aUu39aiUO66y7wbYNnv7rbcWmPigOUWjvHnR80cao10u+/UYCmonKhIn4LXg/Ety
-	FhyJL+A9/g1NCY2uuJvKMp+nzpCorz/6JskJ1P0WuSv/6PM7MRzfqtRzx9T7WD6qOh37bgoOYEZ
-	U66fXQhhBeRGsEhPWhX+h1L5kaSGpNebNP4t1X6ApgKClBrt2h5k4WVXXsHJZGmLsjUUwFvQF+m
-	3BhrUAFzQNrEjk327F3LKkqklmcXChvc9wZ0fA1cBagwmDdfHKiUa3xNjMX8xobB+dLbrMJV/hp
-	lYqJuIP3ZjgmDm4Uhx0cak2wiIXL66gJsMsUQI2ehNodQVYIU9wte+ohN3nvV6uJUMxJxx2GBZ9
-	YeTE+fmqg7Q3FBk6eOq+irAw/uRM99+yVRUs1gKsxBTBMWhbdzXImf7wVbZWKbh9HnlQdjwXIHb
-	SI5H0iKbFo6/i0DkLCpv5kttobR8vDmoZVlAUMu0ukMciYMPhkMkAduPzT4M91V0hC30ycjXcF+
-	iqJ4drvPCFTH48YB+3P5NQZc5XMm7mJfBLZt9Cvv6+XXgRZygyLg0qJMNGBogkO83q1oDfluKrs
-	TwdbbIzU+MdfaZLtd5rk37+Grpz3hV2uCM1a3PFUwgo9raApvukBg
-X-Received: by 2002:ac8:6f07:0:b0:55c:5ebd:8824 with SMTP id d75a77b69052e-55d76a6b9b2mr73460561cf.71.1795207360201;
-        Fri, 20 Nov 2026 12:42:40 -0800 (PST)
+        bh=pCml9rYMYB7fB2Zy79l25CZ2iG6ygatLQQpuCxucxW8=;
+        b=cSD++5jcghr+Hudt4V061dclIv0nRliz2Rym8kfdb9kpWizuzru2w7GW4saIw1ltaw
+         jCXMWMXvpIfmolw8a9Id5unfoVVjoQHef549AFO4FWY0y12U0AvO3XarmZJjztyJgjQE
+         QtvV3CipBcjkW63QcvjG1yCpoJAZ5R8quY2egvNEU/dVNxffQm2Xh5hft9ID8yYXIulw
+         JHaqkE9emb9TkTEO603FNe741z6uvUe8mCMLF68dkJcg/ShT2xK/fwGQ9L2M9fRhJgTD
+         zNQi/+/eAbskvJ0XowitkF+3iUAgcPLJdBldTbjY7USWVKjFnrui5JwHhnSiTuwp2EEU
+         aDcA==
+X-Forwarded-Encrypted: i=1; AL+hErE8PngVdI50Hwc4ZUVvsH6HpNt7/i51uTpJ1xzr5B+MJ+JyhXGE417l3/0Ie7cT+4Ke6ro=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9XAwcyvAlplf08iYk29wjelje80NyIQQB9YUSgUDMRi393LqHz
+	1Uc1alYrLacyXuwuCfY0qLr57FAfPDwI3lJAzWjlZw6GLvfjffT2fP43
+X-Gm-Gg: AYBFou3IxYUzKSQ1N49ia5ktQE1bV9Zknk6bg+VDoY1+fBZI85WO2R8jqVLgdUFMZRS
+	qSGTw+VbqrP9EfdFC85nWTj3uJO5MmLL7UXOi7I2qfM/xGU+TgZy4OyUG8QGOJJWHIXP3TL9bqH
+	G69mPO6B2VU26nlS2VPldqw0r7WKAhdNg5gd1TyyBJuLNjZ4G7cDRYUE44mFdpBB8Z6nR3z7y5f
+	g55Z7pV/BDwQo1/TGzbzbaPGY3aiQ+2KPqQvG/kYjWkdy2yYChtkBKaHMlGTXnMc7VtvtSr5qcD
+	JhL37WdeWE6fopF39aat9zG2l82GYDn1U2e82SjqA63hdH/Xilhnumhw5TmQWhkUHRia8IOUgmV
+	7+r+guDcFlt3j0gRfDEAdZScGCLl+Osr3SFBg0aet2Zth4CXFRyVzpJqcwH9gT/+pMxaAa1e4dG
+	ywQgQcvEZSl6oUr193YzDIRqfm8PUve0Zelxg470J1CZAgTkq+Q2MYcGG5dAA4FxG9vjMgSD1Os
+	WyE2urV8mdxrIpzZg1ATXJVgSdK2dZ5T7HImhebyEOZQ3DejAGNClDuFQsUZUFprtzWBxXGDncR
+	7eLMrHkqeJhmG9wleZJG2S7hzJ2P8X/SX8ESW7IOF+DNwDMDUkwIYUH/6dYdlZWKTE+wB/BDIVc
+	VKELLkAa+k9jr/KtRfc+Jv2YqYxtJHstjM4CgkME1l9bGhHkjZHrf
+X-Received: by 2002:a05:620a:2844:b0:943:b019:f011 with SMTP id af79cd13be357-949ba9b3e47mr780500985a.28.1795207364641;
+        Fri, 20 Nov 2026 12:42:44 -0800 (PST)
 Received: from localhost ([199.170.132.196])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-55d788116c9sm32657731cf.4.2026.11.20.12.42.39
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-949bb0319fcsm277058185a.4.2026.11.20.12.42.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2026 12:42:39 -0800 (PST)
+        Fri, 20 Nov 2026 12:42:44 -0800 (PST)
 From: Tamir Duberstein <tamird@kernel.org>
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
  Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
  Yonghong Song <yonghong.song@linux.dev>, Shuah Khan <shuah@kernel.org>,
  Andrea Righi <arighi@nvidia.com>, Xu Kuohai <xukuohai@huawei.com>,
@@ -81,7 +81,7 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
  Emil Tsalapatis <emil@etsalapatis.com>
 Subject: Re: [PATCH bpf v2 2/8] libbpf: ringbuf: Prevent NULL callback crash
 Date: Fri, 20 Nov 2026 17:51:54 -0000
-Message-ID: <179519711442.18576.14389384506684582728@kernel.org>
+Message-ID: <179519711447.18576.11461006206277762922@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -91,12 +91,16 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-In-Reply-To: <ajVKM9tJskwg9OFa@krava>
-References: <20260618-bpf-ringbuf-fixes-v2-0-33fde039ddf3@kernel.org> <20260618-bpf-ringbuf-fixes-v2-2-33fde039ddf3@kernel.org> <ajVKM9tJskwg9OFa@krava>
+In-Reply-To: <130931685c8b2064325fc65a856ecd810c8a6b5c.camel@gmail.com>
+References: <20260618-bpf-ringbuf-fixes-v2-0-33fde039ddf3@kernel.org> <20260618-bpf-ringbuf-fixes-v2-2-33fde039ddf3@kernel.org> <ajVKM9tJskwg9OFa@krava> <130931685c8b2064325fc65a856ecd810c8a6b5c.camel@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-> it'd be easier to review/suggest the solution with more details on that
+> ring_buffer__new() and ring_buffer__add() when callback is NULL or
+> when overwrite map flag is present.
 
-V3 includes the caller-owned iterator and tests using NULL callbacks.
-It preserves the validation merged as c0628a0659b6.
+Iterator-only rings need construction with a NULL callback; v3 includes
+that API. It preserves the merged consumption-time checks.
+
+Overwrite registration remains unchanged. Both callback consumption and
+the public iterator reject overwrite maps.
