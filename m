@@ -1,159 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=3.110.59.162
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.176
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1795160964;
-	b=lrPqHQcq4iospGf3JH1vE51wUmaM1kgdGG7qPpNLRksyUZeFJRNP5/wVQSxjwWwgCgrG
-	 8vX4kSi7/ysG+iZpHviXF+BacX13sOWhk3AEh4X95XEyhVAF/bm2YbCdLgfheB6R468np
-	 TXjcRzjZ4NJwSdGFlmr2I5YI6K0W6MhRH2bZgA3g5rL4iFopzh2mqKy8RJ8uEiA6WIZuF
-	 +IlzU2h5dNz+ehhiwx3eTCdMfoKzeucgaDw8jz92BmQoyRF+aF5n0ReK/5lNLqdyBGBhq
-	 sSC/91vqEuCBK4q3cxn/LagNqFGvNq2+bf3xzAx5vn+hulm77nMl3ADagTFTtyY4NYw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	b=sL4UZkFWEeduavgXItxAJ/NYHoQBDSvtRd2ER6+BCrgEMjxcZ19C4h0RHKV7Crs9gnNF
+	 y7EhZVXNBgFHCAg55NUGaWjFA8WyEmJKzgUkuh0LJKYvCqdZjczo9UDeRhlOqAjfzgHpL
+	 E8f/ZaTALwUPu9WXmxqRnch8iW0I9C2nmzUpy2sGdrSyEP90UgclmxM5tptiEhUwAmtkw
+	 P9xEbcNW29SYu1dxI8CMeIOIzNxh/jFMOqytHZv0o3uafyJPu5YyP0ncCzvGzm/qPcv4F
+	 UKd0eXFULdHn23AqQTi6Qr5oTbeOGmtlz2ExVcDd+gGFqSnzpzKl8S328LZQnJ1SVdQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1795160964;
-	h=DMARC-Filter:Received:X-TM-MAIL-RECEIVED-TIME:X-TM-MAIL-UUID:
-	 Received:Received:Received:From:To:CC:Subject:Thread-Topic:
-	 Thread-Index:Date:Message-ID:Accept-Language:Content-Language:
-	 X-MS-Has-Attach:X-MS-TNEF-Correlator:msip_labels:
-	 x-ms-publictraffictype:x-ms-traffictypediagnostic:
-	 x-ms-office365-filtering-correlation-id:x-ms-exchange-senderadcheck:
-	 x-ms-exchange-antispam-relay:x-microsoft-antispam:
-	 x-microsoft-antispam-message-info:x-forefront-antispam-report:
-	 x-ms-exchange-antispam-messagedata-chunkcount:
-	 x-ms-exchange-antispam-messagedata-0:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version:
-	 X-Exchange-RoutingPolicyChecked:
-	 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-AuthAs:X-MS-Exchange-CrossTenant-AuthSource:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-originalarrivaltime:
-	 X-MS-Exchange-CrossTenant-fromentityheader:
-	 X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
-	 X-MS-Exchange-CrossTenant-userprincipalname:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-TM-AS-ERS:
-	 X-TMASE-Version:X-TMASE-Result:X-TMASE-MatchedRID:X-TMASE-XGENCLOUD:
-	 X-TM-Addin-Auth:X-TM-Addin-ProductCode:X-TM-Deliver-Signature;
-	bh=5NX58GU8U/8qBOdcYqojXMo+/2rUCkX4cq+WViRbA80=;
-	b=pZWPGhPLXfyul9HCK6uefC0Sn253eaNLDnEP3csDgDbWF79MwRvFJgTynQ6dhXcHlbmR
-	 d6P1v/QcKMXIM4Tqpa2nizlkl++3Liox5Am7QtJi2rThMPl3SqiiIiwSh/+JxNvwayOGs
-	 QUary/JvhLc5TSZCZStdHH+H/LEAcjEEC58KMc25vS6kRzstqfEoDysgu3VS0UvShtnQn
-	 scRqe5fOUP0fWNCw7m2PCE7oHR2ykT1DAcwP5VYoIj8uRGq0TBvBS2JhTIidpi+w1p6V3
-	 AN9QS32haoiFWbsfXFmT3K9TxHNMj7RsLxmrLjbcHAoHZRr7IEtNt/FqDgD9inghXZw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=electrifex.com;
-	spf=pass smtp.mailfrom=electrifex.com;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=3.110.59.162
-Received: from repost.tmes-in.trendmicro.com (repost.tmes-in.trendmicro.com [3.110.59.162])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=NWa3g2HWNyVM+ETE2E2oMpqrOlDonUHu3aQQqZu48Uw=;
+	b=xky8WTlfZWoM8dDh6i9rnrFbWV7HdusrWT0hF31cLaoEY63ibnb09pKZZK8oVgEPFkBQ
+	 QD1vbi8uj8Hz4L7HR5oidh6ycpqDDGGFycOHd11cYhG+fg270ADDr0QQ2dpaRuZ07zI8J
+	 7/pCr16jfkRfEStN6RSqZlvfoljTGkc4PO43hSBoYv+3NljjfdOlpyI7lE2CQgrXLs3qh
+	 r63Mjg956Q8LU7tDzwZ8ke3fW2NT8lC27ra9G5QPXNWzIJdFd8Ukt2CO3y9BleqlUaVSD
+	 Xbig/7BlegnGuPCZJpzrZ0xDP2ZUS4YJSQvUo2AX8oOf0NKzLT8tLJUtNXA04xm135w==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Z9HJthHk;
+	arc=none smtp.remote-ip=209.85.215.176
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 559B8606A320;
-	Fri, 20 Nov 2026 07:49:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 559B8606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=electrifex.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=electrifex.com
-Received: from 52.101.225.81_.trendmicro.com (unknown [172.26.46.176])
-	by repost.tmes-in.trendmicro.com (Postfix) with SMTP id B69FBC00090C;
-	Fri, 20 Nov 2026 07:49:14 +0000 (UTC)
-X-TM-MAIL-RECEIVED-TIME: 1795160947.481000
-X-TM-MAIL-UUID: 11250f29-ad4a-4d96-8338-a155359403dd
-Received: from PNYPR01CU001.outbound.protection.outlook.com (unknown [52.101.225.81])
-	by repre.tmes-in.trendmicro.com (Trend Micro Email Security) with ESMTPS id 759EEC00042A;
-	Fri, 20 Nov 2026 07:49:07 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=mBZoGSVdEZ1W47T8kGoC/5Wj9Ew95ySfRHA/lMxRcmCHMlBenzgrTBJZo9/1Uq1kR58mzjt+y7va0pve/ou6RPiaPDGCLdPOErCBNTSjHjJAXqaHIJ6Em/1Ab4Sdz1hnvoM4NnP9JyJ5F8lwzT3puqTxgSepZlx7I7+Lct/CePpO+wOiRxix8BbD4zZrcGKASodmQqggRulsbO7VUG5JHyxfhn4JFQg0FrsSACAc8apJ9yRQrdUHCGqBMQnhBgfaxxazSohEIe7UjEIZ9qCf02iRJYvda57JJinRGwq3Z74v6tHb0Ga4VAVZpUewtgsY2H7uDtxOuLLI1neH73Sv6w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5NX58GU8U/8qBOdcYqojXMo+/2rUCkX4cq+WViRbA80=;
- b=rXRQPUaReUbt2w5qtcW/Uma+jOXZrjx5n6sc3PYbTmEA9mo5sB8zEkm2kjD91nrG9Uf0xhv8lteuqwJKL/QYYUzqhFHjEg8ZGTHqlzVQSn/AEYc67DVvQeRO2BtvzlPG6iaY9mwZqXFblUVYjdxgO71sGT1mPQJE170xDcOGmSDtm7DDVVY2zuFy5svMhHYEJSOadOX3ZKA7E5QuT0QHNQ7iBPL7OmpksvzgN1SSvgWjYqjL8r5OVuwWOIri6EiayZoKGUcctgdjV9TkaGO3amEHuc8ff+xsokAR18y4CMr8DtuNGZXfMGbOCD/m7fbImWrdItSd62CbHdbFbbLSxw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=electrifex.com; dmarc=pass action=none
- header.from=electrifex.com; dkim=pass header.d=electrifex.com; arc=none
-Received: from MA0PR01MB9217.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:cc::6)
- by MA0PR01MB8884.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:bd::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.12; Fri, 20 Nov
- 2026 07:49:05 +0000
-Received: from MA0PR01MB9217.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::c284:c893:95b6:d2a3]) by MA0PR01MB9217.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::c284:c893:95b6:d2a3%5]) with mapi id 15.21.0639.011; Fri, 20 Nov 2026
- 07:49:05 +0000
-From: Anandu Padinhare <Anandu.Padinhare@electrifex.com>
-To: "maxime.chevallier@bootlin.com" <maxime.chevallier@bootlin.com>,
-	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, "davem@davemloft.net"
-	<davem@davemloft.net>, "edumazet@kernel.org" <edumazet@kernel.org>,
-	"kuba@kernel.org" <kuba@kernel.org>, "pabeni@redhat.com" <pabeni@redhat.com>
-CC: "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
-	"alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper
- Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, Sam Edwards <cfsworks@gmail.com>,
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>, David Wu
-	<david.wu@rock-chips.com>, "stable@vger.kernel.org" <stable@vger.kernel.org>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"linux-stm32@st-md-mailman.stormreply.com"
-	<linux-stm32@st-md-mailman.stormreply.com>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "bpf@vger.kernel.org"
-	<bpf@vger.kernel.org>
-Subject: [PATCH net] net: stmmac: retry a failed RX refill from a timer
-Thread-Topic: [PATCH net] net: stmmac: retry a failed RX refill from a timer
-Thread-Index: AQHdeMHkOZtbzcYqfk6xISx5T/okIA==
-Date: Fri, 20 Nov 2026 07:49:05 +0000
-Message-ID:
- <MA0PR01MB921746F36D90C7080287ACC9FD782@MA0PR01MB9217.INDPRD01.PROD.OUTLOOK.COM>
-Accept-Language: en-IN, en-US
-Content-Language: en-IN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
-authentication-results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=electrifex.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MA0PR01MB9217:EE_|MA0PR01MB8884:EE_
-x-ms-office365-filtering-correlation-id: eae309ca-680f-4100-b5eb-08df46dac044
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|23010399003|1800799024|366016|376014|7416014|261026140227099003|261026121527099003|261022105027099003|261022075727099003|261028144727099003|261021135927099003|261021123027099003|261021121427099003|261102123227099003|38070700021|5023799004|56012099006|10067099003|18002099003|261009223027099003|6133799003;
-x-microsoft-antispam-message-info:
- wjBBjnYlfLM/fQGWZhl/C1o+F7XIipZswOv5l9O2VimAlMfrG9zJ8Wix/znvlfpKaK9NKc3n6X516ziuflRG3Ptq9vDx/sxfgDWo+ByQtlEQLfPServdeWCMqXyl0h6eZ8IH/JKT+MJ66jzzk92uqQjgeFKPKQQaq2h6L6BsKU8oHsKsPYsxvbalHKBkKwNu3YW4aX9zWAU+ttZdKHnEtwZKHDMStCAxPSHQ2a07rteBpHqfGgz5UEl+jBcQ5LIlLc90JJ/1fkfdcYqRjuwtOg/YXrMS9NvDexiPfkMsTFgLdOuUmQiqXwg5csPHqCBjsJuzhiWZs1ln2+UzETxCIPV6d4G3gOVyaRsqQjC3M8xnVHUbufmKYSj4Ob9CTxC7oKfsRfo2XRAJQsodxzlEAKSEsPEjhm4wyQTIKXrl3BTwxlx2mtgOMPiCyz5t7QV3vtyUqy2PBW5UMMaYpNMkeNzX2RY0y3hTd0kQ0SJ4Cexod6rWXLZvOqTuOSSq2JLPqKf9+bfAPNdPaeqbi/3SypTBlgjp2wrGIMG0/V3jX3DREJoQRtJBPnUo1N+c3aFUiRhvHUSXxF+wQI4PpYiao58iJxYOMDVBXccGTbomoVTkbDAE9jnC/62V5W5idvb3sT4TNoAWM8QDdsx94UM5v6WF7msOHLwRgJU7bqsTbKY=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MA0PR01MB9217.INDPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(1800799024)(366016)(376014)(7416014)(261026140227099003)(261026121527099003)(261022105027099003)(261022075727099003)(261028144727099003)(261021135927099003)(261021123027099003)(261021121427099003)(261102123227099003)(38070700021)(5023799004)(56012099006)(10067099003)(18002099003)(261009223027099003)(6133799003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?mCO6hWKGcf/t0gtfg7nmKjHvNZTLUlxfxxIw8ZBXykhkGOhID8uhCMd8zX?=
- =?iso-8859-1?Q?GaxYo3/Pwo4zifiwhu0Uz8Pm2jI9JMg6e3si1hvulDeRMr4+E6ralJoMJX?=
- =?iso-8859-1?Q?c/YyTzrwEwJYB6705JOAqUT/CPlkKpjRo+lyE2E3PVVxJQmbaDAbK7ar+v?=
- =?iso-8859-1?Q?uvRYH3asyJ3moSGl79eBwHyI0CQPDc2PIzYMO188/PiGSjFmY6hfvtiGMj?=
- =?iso-8859-1?Q?s7N6IkNRuNgYInyZNdKf+nbATl9+XYdA/FX9mvscEIBPrM57SxY6uABFzQ?=
- =?iso-8859-1?Q?4ke5HxTXvOZKTSQPCDJYTJKHdLncffyuuHNlgELEz3Rij7edb1enwoklzM?=
- =?iso-8859-1?Q?y/rgx9Q+jAOjRMuCWppcXLTTreeSUl+b++pPZ2wcc68Xjr7ARZ3deEEr2d?=
- =?iso-8859-1?Q?m/0iozv+36fEAgHtt3nxTHMonGIRPez40FKiKJY4BDhaWO40zNqlZrQI/k?=
- =?iso-8859-1?Q?bMFIyo4haBZU262FXhVLr0P7iEjacVhGI/VgAwen8iIS2pS0ZoSMX9MNT9?=
- =?iso-8859-1?Q?8KAAOBOm41e2OBPRAixwvkdye8K/A0WNzpfzd+BZxt/uAlGzQRm/9r6dRl?=
- =?iso-8859-1?Q?qTwNaR45I5r1BQaRRb2cwfdAVfCory5CwCaAzdmkFLslHC3LXRD/eLxaD+?=
- =?iso-8859-1?Q?98Zj3gQsWMxjubb6uaWdOih9L1Sgiqri+H9amzRPMb1NDX0GD+Ap+eibV1?=
- =?iso-8859-1?Q?bYBWKNpk48X+D2oCph084TCP+54rWnjp0Ef3SY4I5kY3L1KkO5tJde9Ke3?=
- =?iso-8859-1?Q?s1fx3pQX8jHwk4DUgPZkxY0h4Vnx91e67fbVVIEKtTzHf2FYsP5xEVYgpL?=
- =?iso-8859-1?Q?7K0CWOIFQHxSyHf/KzjVACurCvLBDU/q3GKvHzUfxWniY5XfMI9yaEKon5?=
- =?iso-8859-1?Q?T4l+EDphPVDmUP5PnO0gB+pg1lO+mfrkyy6RnuPmpu8p3YM+24f9nd3qMN?=
- =?iso-8859-1?Q?tB9LcA43Mt1IeYXUet9NMTMMaO+8P32kQzFXNQrbgN1HhH7h5J/HlcApjm?=
- =?iso-8859-1?Q?GgXE621lYnngNXxuJLKQ7lVnC3y29Lg18SMoGBEnEnJ95BzFfVxejPaf9B?=
- =?iso-8859-1?Q?a6kXxBrQyw7uf8BMS7bFLBnSeqVF3SJi4eIDgJk4rkKD4VNc435ihVULfE?=
- =?iso-8859-1?Q?uyATCazAd+mN2gu0diVD/po9Jcgdp14/aDFW4sAeO+VhC7oCvMTblBIqt8?=
- =?iso-8859-1?Q?zF+diCD9+Sz3aJsJXXgq6zjba8uiK7vswUYvtkJr4sRgV/4W/RArdugeNX?=
- =?iso-8859-1?Q?oHeyCLDbydYCDno3up0kDjYwtx+QVzV68JJVH7pL68VV1ka44BTXGJNuOe?=
- =?iso-8859-1?Q?6E7CJbEabmbB2xntMIfWmRGtrsPuKH1uzueYf2Gtpco3sY9qiVqVo3gGLG?=
- =?iso-8859-1?Q?lZNikXcKENLUvC4g3qGekWqyVw83tdstTF/f8gOawFRVD0AbAd49Do/nJX?=
- =?iso-8859-1?Q?yd2zFmQwqb5/QyAamF9sBxTqaRwt7QOCPk4/hZgL9kVLXcf/OdFurXzD5M?=
- =?iso-8859-1?Q?4+Kd0XW6/z4+E3f0mGMfxAipvXyRhcjXQesFZLpVjg2Ur2a4OFyZeTnPva?=
- =?iso-8859-1?Q?YEQ3u4G2oucOeFyIyCwsXqatFdUOg3g+4lmiJYdurDUA06/wTnI23LHslO?=
- =?iso-8859-1?Q?uPXy6WAujJ0BLjgA2b4JUVy7DjDq2g7mX/0PSrtPiqo/1yRnFysziqy6KV?=
- =?iso-8859-1?Q?cuCvlUnCdEO/JpXjW0NTPf6f1/e/fD6PftOc8NPrnK4GJPV2K+FSeczgSU?=
- =?iso-8859-1?Q?FUQL4vy7Ye6RiCaR91DjqABlc+i+4cIfm38aCoNZTGCWJE1DBoNY2ZTQd4?=
- =?iso-8859-1?Q?NJg8z6xtar5YXekz4rr4JJ5C813UorA=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 687D9606A325
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 07:49:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 687D9606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Z9HJthHk
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cdb15cd8558so304219a12.2
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 23:49:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795160963; x=1795765763; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=NWa3g2HWNyVM+ETE2E2oMpqrOlDonUHu3aQQqZu48Uw=;
+        b=Z9HJthHkiNcRyE2oEl+pzI/PfFvADu0VU/viLwpuGb/32jWx5CngzghPlh2FdLu3wE
+         OAF/Aae5XX+JajxqBun02zUDOUwEixuvXgCv08rxUQrir0fBDi4J0x5HT8OItEZn13y+
+         cPMMJIMx0NZ+nyohHRzc2AUgc0sepB8vNxZ+ZshDX+BmcmXK+dX+TUXv/Am4ZR7syGN9
+         wHSDKZ8XG51GRIKSnuW0nTkZeIREVPqTel5zog0v75ZuR/qxk036GRGf3Z6SArbGVWOm
+         eR9OlXXsedkuotN+RFoYqBmDPXBb8RCfN053SNpYfYvGSWoVAm57psRouDFCXlrms9aW
+         Tt9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795160963; x=1795765763;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=NWa3g2HWNyVM+ETE2E2oMpqrOlDonUHu3aQQqZu48Uw=;
+        b=yqqSqSqOQ+0uLozgFStZb11r6N/Dp11A/k/5q5V7tG3xhlMqDMiuspeACXO+kh+/G/
+         6b8t8E+15FZrI6D+pc2rIF86mljA0attGu+UxzalTcD1yVp/JH/fZ11aIkDjEkGUsYWz
+         g1C3dkDVKgUPyTGpgXL3rb4FiCV3CRT0eD/QvKkTqbDCjCvfrBc09LrhG5g4FSV9I/V/
+         K801O8bdMW0HlqpdOfnJfmw8+PW/AX6G3hOUQiMuZrer79MiXUYU0iD6uaWPXo8pQkoV
+         q6js27BYXyydz/wO+v1eWghPKE0wo54sID5T3g5/4S1BwcsiHyueuBBb4UeiT1u7FWhN
+         u1Dw==
+X-Gm-Message-State: APuU4Z+nwU6RqFAcfpBRbTbTx13P/2DkIoz79UeDTg3g5YBKSZKFMBJh
+	YRktEZOJZnXJfIMX27RxlwXoh4LXJWlPysjCi00KDwIUnchSLfDLYsPoDXI0IQ==
+X-Gm-Gg: AZFdTZdzg6i4egBoquxosdob0b6sF0sMemXttaH59GPVfrvnMhMoIrk+asX6lyBCBNX
+	N4xOr0IIhkbQqMIuLGfMirrFb0kljeoiUe83WYCG7mlFcRh9S2P6FV3bTcnKtMwpo0/jECSmLpe
+	7xEPPF0SQ5U5khzbzORO4ZLGTEhoXDMWrYnLDm/SxPP8uPEo06TRGDgMU2fydMXTOcCOOuyf4ny
+	YS7Ijob0vX+f312mHFq3GHL6eTOJDNXsKqQJANQcO1mOY3vAU60Las0x1S61pWrajr4yMASw4C/
+	KX7iHQEh5RtVaFRF0NoS2+Q9HDhNZiUboilm59TqMu/tPurCuBESqHxuGvkspWnnY9h5QDYlmC/
+	T9HBoiw7vqhkt8j0lTuGV7Ta8Ep/sF31x54Pe0RotUzr0CO1HNB8WtYhUzmiA+9/bUbsC51v0rR
+	lYB59kE5vcEoBuJvhkXTYnsUudx74auZ6gibrJ9DbUJVG/cBPqXJVhuLJMOVIb0lBV7tNwCg+5Z
+	vloAwI2FHi574NpeVLOIK5v6S4p6s/yCwONqomJXZTK1a4u3cASXZ4AX64Kji0rID/Rw0wE2lbJ
+	295fqs0eQCbWB1mHAI6SEjhdAi2zdOM/99Xe0zMue5nQDXsaYIqz7JrEzcvAZEImD1mVgYIJna5
+	WPRg+cVqrFUTCa/glj7XiihvLNsHBhH8w7gduSSuhMrtXHhBSbjnAZfBCNPItksJ8uxbINWFWiA
+	==
+X-Received: by 2002:a17:90b:224e:b0:3b4:22d:e066 with SMTP id 98e67ed59e1d1-3b41c7d6061mr2019637a91.5.1795160960758;
+        Thu, 19 Nov 2026 23:49:20 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.247])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b405d63728sm6745531a91.8.2026.11.19.23.49.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Nov 2026 23:49:20 -0800 (PST)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com
+Subject: [PATCH bpf-next 49/49] bpf, docs: Rewrite verifier.rst
+Date: Fri, 20 Nov 2026 07:42:21 +0000
+Message-ID: <20261120074430.2704488-50-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261120074430.2704488-1-alexei.starovoitov@gmail.com>
+References: <20261120074430.2704488-1-alexei.starovoitov@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -163,243 +100,2116 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-Exchange-RoutingPolicyChecked:
-	o8UbUcfVab5p69Hguv3p9OfqEbVp0yqLpZHUqMkEMS2HB+DgOrhI/a7g4XpgakQeasHVSRKNFfRDEFc8L9IUHf9nRcVTCmKdgaOuYTWdpYacYaEFm7tzPitQo2BZGFLiy36+6A2aSCHEt72EfxYdfCyvYcqXd0EVk6/TGCNhro5JxV2Q/GMk5R6xZNE+pjIuriRBaS+OX9P7r9bNjzX1/ofNUDX6nFlT/r57BO07YT/D7ZYAEPc4ryHObtYtSnZlJE3UmettdPZhI67XHpmV89iJCQB9/Of/0hXXcHePPZ34rw8pkz4LX260AHjV1P/Iz/7zZzEfOih9dLmeYJeCUg==
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	ISg3vuwdKZN+S4/djHETktUVW4Xyzd2m85K8jlvK0qYA8Msa+u6IyDAqLsmwyb9/mX5KHvH2KUTjZasf8VEbrPYvo32UJdD2PWjeE/BB5AKQUpcZIZ1byDLPTuK/ClEYn2b4sxQT2MPvRjW4awDXZMSmVU5U6d8wUIdhKeaiYIQ3koBKBjf2+xfv+AC9kf1NuMYrKSky86cASAqQOoutjVYfGKSBJTGn0aNlTB3sGHawAsZ/T8rrYrkKw9rQldsMurfA+UyOT6lyeNkBnnb0NEG62g51UCX9t1drAUt6igQ9GL9UOOK3W7HZFIbxp0poGbX/ZuFfQJ2FeawuUBiBldyvuOEDo3Yk6lAUVO+crvnGBDaAprG4GmwPGS1RXUvqDoTtBsNu1X9U90UkDhn/dVriSNnzEwqhx04OfCWf/2TCzZs1DNvNLbrrlLYHHPcUqfxGbExUhUlNJAS0NC+fMtv4h41IHjbaShon962EXiH2n0WmuTVLnUw/OPD3VL8+STE6tJIT/RlT+mOXV/RvTp8FP+35vu2v3Ffd3sFkR6nQiTyiMt+He4KTZBgOiEWyL2Z5tsoS76rf9B922iaqrQCrBsQy0R8lROxsmBWRXzE=
-X-OriginatorOrg: electrifex.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MA0PR01MB9217.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: eae309ca-680f-4100-b5eb-08df46dac044
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Nov 2026 07:49:05.1537
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: f2626450-e675-4872-bae6-db17376f7643
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: CHdub65C0IiQJIkPTdvN42TgHm4rXMEX3salv7Xa27jWqveAzdNM4HK8AAcJj8sIqyHs16z6FdCYdlfQN3NkJBBoAtKJUAbybm96U8NthpY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MA0PR01MB8884
-X-TM-AS-ERS: 52.101.225.81-0.0.0.0
-X-TMASE-Version: StarCloud-1.3-9.2.1014-30330.005
-X-TMASE-Result: 10--10.253100-7.000000
-X-TMASE-MatchedRID: CkleXbrz2X+cSGy4JgO+Ta39Nxr6In/3OteHVGUMZ+CAPedCSeScsjas
-	lHciyNgLP+a17NVAlr/hlAobdbKjfSQQMtD1IXx1O3Y9BE9+f5Fi/Vat3E2go1SAWjKAu3w74Dg
-	iKWJARSSFuFRWapqaEtyvdUTaWVvuEWPbvrK/8x30k0bHb1p9aJWWzHC8Hr3VSIJ+KGcvdiEtqc
-	fpF+q8J4SLNcKFd2mM4JDrAVfOvSFlSs4tb2YgDaa5LaHlPm0+zSk7os0c3Z5JS2w6PnRBWp6Qo
-	0q91sC6aEzKgkX63fcPDGaazJL7k27H03xIBmfcHE2izCIy+zsgXWpfO4k/zjt1GYMJSu9OvEhC
-	KXi+kJxCk/r+8E64k9pBtr9Rh55gx5inPPrI0FRSU7TOghylTufShpTpYz775aLISmJsQyX1+rq
-	IB6mePP8jFz3Ul72cTNXKUxA5jnW+YFGd6yxpC7mRMjwGlGpy1kSOvrGs/+FnwBMQsDuB3uPziW
-	Dkjn4BpkLUBRn+nRgrkP/j6Rff66FxGsBorjeoybaMhlRNDfBSM6qNRfMkEmJZehP8D8gvNlHNC
-	jMfVpEmJWy0rPISDV5R/zx7rNpg6LWWRS861V9rAlSpuYY8Hdo+48giqZwnEgg3cwDHl/2bQrEU
-	PLWlDmdtARg0IcL9v9rSd36EgULA931+mNd9sJs7gkGWoKY3IeFljx6TxcrEpnvAn+akwgAHbVh
-	aKznjpLJ0O5VvQS0BYKHjFLnj7H7cGd19dSFd
-X-TMASE-XGENCLOUD: f7121554-5fe1-4a5c-ba30-d42b9d917baf-0-0-200-0
-X-TM-Addin-Auth: yJbV+S3QWRYQv1FBF35io9IpC/4Ifjd1m1W5d7EuEvKhEnH9sMvbHm2NUOy
-	nDfFbvUBlkG2tfn+HI8KtLErE7S57QlsviC/kOYHWPqeuZXtnmIgTnhkEJ3ucZRoomHZBowwH7q
-	DiFFBTtd+tDnHEQQYs7xP41hfBlD9vZ/04S/CIEgkMjXP/DkP4qHbpJaZz1Xyul06tALNo8uSa5
-	rM/HE2WigGmhYZXDa0z1HeQxJyrG32TbnBXz5LeAzPL64XYGMVNduxWZCgQjrJPJjmxDmll5GcO
-	kkSGeWUCI2D/9bS7SBtjSTIBP9TEIzq8NM8+anUCLFNch5NdrxwU+HCLAw==.J64WBspllfTnf7
-	H1joZlGxa03rGPMOzIMirdgKdSTBKSkyvGyzHw5mTZNZDXnZcMaphd8iQsRMu34KaoxJ/LC6tpp
-	pZ8mqzhIRcokv98eaxmiCLhCZ94gRv7viMt5oVUZc4HbOdf3Ijpztrq3Zp+xOcVDWr9OE5JisBp
-	aClz2W1HUc76oBKAIi1ArvXMHPuc9bIMrPj5i2+NtgM75vj2zt2T11cOBj49F0uuJYRMzdq8WaF
-	nhV5gXLkBfa55ZYRWC4oglKs+Pd7aKux6yLZVa8u7+uGCbghrO94AorlhFNjOhxTP9DgTO9DpH4
-	/y6G3LbemLKOt2tX/ODKpj5X+NZQ==
-X-TM-Addin-ProductCode: EMS
-X-TM-Deliver-Signature: 639E89041D909FFFFEF32264727C9A65
+Content-Transfer-Encoding: 8bit
 
-stmmac_rx_refill() stops at the first page_pool allocation failure. The=0A=
-refill is retried only from the next RX NAPI poll, and only an RX=0A=
-interrupt schedules that poll. Once the DMA has used the buffers it=0A=
-still had, it suspends, no RX interrupt comes, and receive can stay dead=0A=
-even after memory is available again, until the interface is reopened.=0A=
-Commit 0bb05e6adfa9 ("net: stmmac: Prevent NULL deref when RX memory=0A=
-exhausted") describes this stall and leaves it for a later change.=0A=
-=0A=
-When at most STMMAC_RX_REFILL_THRESH (16) slots are left with the DMA=0A=
-after a poll, arm a per-channel timer that schedules the RX NAPI 10 ms=0A=
-later. The poll retries the refill and re-arms the timer while=0A=
-allocations keep failing, so NAPI does not keep polling while memory is=0A=
-short. This follows the review of an earlier attempt (see Links). The=0A=
-retry does not rely on the Receive Buffer Unavailable (RBU) interrupt,=0A=
-which is not enabled on every core and kernel version.=0A=
-=0A=
-The timer lives in struct stmmac_channel, because __stmmac_open()=0A=
-replaces priv->dma_conf. It is cancelled after rx_napi is disabled, and=0A=
-stmmac_enable_all_queues() re-arms it, because=0A=
-stmmac_setup_tc_block_cb() disables and re-enables the queues without=0A=
-re-initialising the rings.=0A=
-=0A=
-Found while debugging a separate AF_XDP zero-copy RX stall, with the=0A=
-help of an AI code review agent. Reproduced on an ADI ADSP-SC598=0A=
-(dwmac 5.20) with a kernel based on ADI's 6.18.31, using error=0A=
-injection: page_pool_alloc_netmems() was made to return NULL on every=0A=
-call through fail_function (retval 0, probability 100, times -1) for 3 s=0A=
-while receiving about 4000 frames/s. With the RBU interrupt disabled=0A=
-(the dwmac4 default in 6.18), receive stayed dead in 6 of 6 runs until=0A=
-ethtool -G.=0A=
-=0A=
-Tested on the same board with the fix backported: receive came back by=0A=
-itself in every run of the reproducer, with the RBU interrupt off and=0A=
-on. Only build-tested on mainline. Other DMA cores were not tested.=0A=
-Kernel selftests were not run.=0A=
-=0A=
-Fixes: 47dd7a540b8a ("net: add support for STMicroelectronics Ethernet cont=
-rollers.")=0A=
-Cc: stable@vger.kernel.org=0A=
-Link: https://lore.kernel.org/netdev/20260331195927.3353cc6d@kernel.org/=0A=
-Link: https://lore.kernel.org/netdev/20260402174049.0ac088cc@kernel.org/=0A=
-Signed-off-by: Anandu Padinhare <Anandu.Padinhare@electrifex.com>=0A=
----=0A=
-More testing on the board, with KASAN, lockdep and DEBUG_OBJECTS_TIMERS=0A=
-and the RBU interrupt off and on: failure rates from 1 % to 99 %, up to=0A=
-60 s of failures, RX rings of 64 to 1024 entries, and down/up, ethtool=0A=
--G/-L, MTU, tc flower, XDP and AF_XDP zero-copy changes while the ring=0A=
-was empty. A driver unbind with a retry pending was also tested (RBU=0A=
-interrupt off). Traced with ftrace, frames arrived again 31-37 ms after=0A=
-the failures stopped. With 50 % to 100 % of the allocations failing and=0A=
-the RBU interrupt off, the retry timer fired 52-61 times per second and=0A=
-the CPU stayed 86-96 % idle.=0A=
-=0A=
-With the RBU interrupt enabled (dwmac4 since v7.1), an RBU interrupt=0A=
-storm follows on the test board when every allocation fails, with and=0A=
-without this patch. Without this patch, receive came back through that=0A=
-storm in 4 of 5 runs and stayed dead in one.=0A=
-=0A=
- drivers/net/ethernet/stmicro/stmmac/stmmac.h  |  1 +=0A=
- .../net/ethernet/stmicro/stmmac/stmmac_main.c | 47 ++++++++++++++++++-=0A=
- .../net/ethernet/stmicro/stmmac/stmmac_xdp.c  |  1 +=0A=
- 3 files changed, 48 insertions(+), 1 deletion(-)=0A=
-=0A=
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac.h b/drivers/net/eth=
-ernet/stmicro/stmmac/stmmac.h=0A=
-index b76acfe0d958..88b83dc3cf0f 100644=0A=
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac.h=0A=
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac.h=0A=
-@@ -142,6 +142,7 @@ struct stmmac_channel {=0A=
- 	struct napi_struct rx_napi ____cacheline_aligned_in_smp;=0A=
- 	struct napi_struct tx_napi ____cacheline_aligned_in_smp;=0A=
- 	struct napi_struct rxtx_napi ____cacheline_aligned_in_smp;=0A=
-+	struct timer_list rx_refill_timer;=0A=
- 	struct stmmac_priv *priv_data;=0A=
- 	spinlock_t lock;=0A=
- 	u32 index;=0A=
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/ne=
-t/ethernet/stmicro/stmmac/stmmac_main.c=0A=
-index a685ce4638f6..ad9873aaf2db 100644=0A=
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c=0A=
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c=0A=
-@@ -86,6 +86,8 @@ MODULE_PARM_DESC(phyaddr, "Physical device address");=0A=
- #define STMMAC_XSK_TX_BUDGET_MAX	256=0A=
- #define STMMAC_TX_XSK_AVAIL		16=0A=
- #define STMMAC_RX_FILL_BATCH		16=0A=
-+#define STMMAC_RX_REFILL_THRESH		16=0A=
-+#define STMMAC_RX_REFILL_RETRY_MS	10=0A=
- =0A=
- #define STMMAC_XDP_PASS		0=0A=
- #define STMMAC_XDP_CONSUMED	BIT(0)=0A=
-@@ -263,6 +265,32 @@ static void stmmac_verify_args(void)=0A=
- 		pr_warn("stmmac: module parameter 'flow_ctrl' is obsolete - please remov=
-e from your module configuration\n");=0A=
- }=0A=
- =0A=
-+/* The RX DMA suspends without an interrupt once it has used all its buffe=
-rs,=0A=
-+ * so a refill that failed for lack of memory would never be retried. Retr=
-y it=0A=
-+ * from a timer when few slots are left with the DMA.=0A=
-+ */=0A=
-+static bool stmmac_rx_refill_needed(struct stmmac_priv *priv, u32 queue)=
-=0A=
-+{=0A=
-+	struct stmmac_rx_queue *rx_q =3D &priv->dma_conf.rx_queue[queue];=0A=
-+=0A=
-+	return CIRC_SPACE(rx_q->cur_rx, rx_q->dirty_rx,=0A=
-+			  priv->dma_conf.dma_rx_size) < STMMAC_RX_REFILL_THRESH;=0A=
-+}=0A=
-+=0A=
-+static void stmmac_rx_refill_timer_arm(struct stmmac_channel *ch)=0A=
-+{=0A=
-+	if (!timer_pending(&ch->rx_refill_timer))=0A=
-+		mod_timer(&ch->rx_refill_timer,=0A=
-+			  jiffies + msecs_to_jiffies(STMMAC_RX_REFILL_RETRY_MS));=0A=
-+}=0A=
-+=0A=
-+static void stmmac_rx_refill_timer(struct timer_list *t)=0A=
-+{=0A=
-+	struct stmmac_channel *ch =3D timer_container_of(ch, t, rx_refill_timer);=
-=0A=
-+=0A=
-+	napi_schedule(&ch->rx_napi);=0A=
-+}=0A=
-+=0A=
- static void __stmmac_disable_all_queues(struct stmmac_priv *priv)=0A=
- {=0A=
- 	u8 rx_queues_cnt =3D priv->plat->rx_queues_to_use;=0A=
-@@ -284,6 +312,10 @@ static void __stmmac_disable_all_queues(struct stmmac_=
-priv *priv)=0A=
- 		if (queue < tx_queues_cnt)=0A=
- 			napi_disable(&ch->tx_napi);=0A=
- 	}=0A=
-+=0A=
-+	/* With NAPI disabled no poll can re-arm the refill timers */=0A=
-+	for (queue =3D 0; queue < rx_queues_cnt; queue++)=0A=
-+		timer_delete_sync(&priv->channel[queue].rx_refill_timer);=0A=
- }=0A=
- =0A=
- /**=0A=
-@@ -328,8 +360,17 @@ static void stmmac_enable_all_queues(struct stmmac_pri=
-v *priv)=0A=
- 			continue;=0A=
- 		}=0A=
- =0A=
--		if (queue < rx_queues_cnt)=0A=
-+		if (queue < rx_queues_cnt) {=0A=
-+			/* Disabling the queues cancelled any pending refill=0A=
-+			 * retry, but the ring may have been kept as it was.=0A=
-+			 * Check it while no poll can run.=0A=
-+			 */=0A=
-+			bool refill =3D stmmac_rx_refill_needed(priv, queue);=0A=
-+=0A=
- 			napi_enable(&ch->rx_napi);=0A=
-+			if (refill)=0A=
-+				stmmac_rx_refill_timer_arm(ch);=0A=
-+		}=0A=
- 		if (queue < tx_queues_cnt)=0A=
- 			napi_enable(&ch->tx_napi);=0A=
- 	}=0A=
-@@ -6164,6 +6205,8 @@ static int stmmac_napi_poll_rx(struct napi_struct *na=
-pi, int budget)=0A=
- 	u64_stats_update_end(&rxq_stats->napi_syncp);=0A=
- =0A=
- 	work_done =3D stmmac_rx(priv, budget, chan);=0A=
-+	if (unlikely(stmmac_rx_refill_needed(priv, chan)))=0A=
-+		stmmac_rx_refill_timer_arm(ch);=0A=
- 	if (work_done < budget && napi_complete_done(napi, work_done)) {=0A=
- 		unsigned long flags;=0A=
- =0A=
-@@ -7779,6 +7822,8 @@ static void stmmac_napi_add(struct net_device *dev)=
-=0A=
- =0A=
- 		if (queue < priv->plat->rx_queues_to_use) {=0A=
- 			netif_napi_add(dev, &ch->rx_napi, stmmac_napi_poll_rx);=0A=
-+			timer_setup(&ch->rx_refill_timer,=0A=
-+				    stmmac_rx_refill_timer, 0);=0A=
- 		}=0A=
- 		if (queue < priv->plat->tx_queues_to_use) {=0A=
- 			netif_napi_add_tx(dev, &ch->tx_napi,=0A=
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c b/drivers/net=
-/ethernet/stmicro/stmmac/stmmac_xdp.c=0A=
-index 9af9e0cb366c..c3e85ee1067c 100644=0A=
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c=0A=
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c=0A=
-@@ -35,6 +35,7 @@ static int stmmac_xdp_enable_pool(struct stmmac_priv *pri=
-v,=0A=
- =0A=
- 	if (need_update) {=0A=
- 		napi_disable(&ch->rx_napi);=0A=
-+		timer_delete_sync(&ch->rx_refill_timer);=0A=
- 		napi_disable(&ch->tx_napi);=0A=
- 		stmmac_disable_rx_queue(priv, queue);=0A=
- 		stmmac_disable_tx_queue(priv, queue);=0A=
-=0A=
-base-commit: 325e921a7aa170181e1cce235d9c652cb0ad3a5b=
+From: Alexei Starovoitov <ast@kernel.org>
+
+The document describes a walk over paths with pruning. The verifier does
+not work that way. The types, the log text and the errors are old too.
+
+Write it from scratch, in reading order, with examples:
+
+  overview     the main idea, proof and guess
+  state        numbers, pointers, ids, the stack, what is held
+  one insn     the checks, packets
+  pass         liveness, prune, join, join_key, the order
+  precision    data and control deps, the join rule, on one example
+  equations    insn, jump, call, join, prune
+  loops        widening, trip index, may_goto, peel, suspects
+  functions    instances, callbacks, recursion
+  errors       partition, fork, budget, failing path, all passes
+  the rest     fixups, speculation, limits, what is trusted, the log
+
+Update the limits and one reference in bpf_design_QA.rst.
+
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+---
+ Documentation/bpf/bpf_design_QA.rst |    6 +-
+ Documentation/bpf/verifier.rst      | 2007 ++++++++++++++++++++-------
+ 2 files changed, 1496 insertions(+), 517 deletions(-)
+
+diff --git a/Documentation/bpf/bpf_design_QA.rst b/Documentation/bpf/bpf_design_QA.rst
+index f86b272920a..4956c2741cb 100644
+--- a/Documentation/bpf/bpf_design_QA.rst
++++ b/Documentation/bpf/bpf_design_QA.rst
+@@ -94,8 +94,8 @@ It's the maximum number of instructions that the unprivileged bpf
+ program can have. The verifier has various internal limits.
+ The largest program can consist of 1 million instructions.
+ There is a limit to the number of nested bpf-to-bpf
+-calls, a limit to the number of the verifier states per instruction,
+-a limit to the number of maps used by the program.
++calls, a limit to the work of the verifier and a limit to its memory.
++See 'Limits' in Documentation/bpf/verifier.rst.
+ All these limits can be hit with a sufficiently complex program.
+ There are also non-numerical limits that can cause the program
+ to be rejected. The verifier used to recognize only pointer + constant
+@@ -121,7 +121,7 @@ C code cannot express them and has to use builtin intrinsics?
+ 
+ A: This is artifact of compatibility with classic BPF. Modern
+ networking code in BPF performs better without them.
+-See 'direct packet access'.
++See 'Packets' in Documentation/bpf/verifier.rst.
+ 
+ Q: BPF instructions mapping not one-to-one to native CPU
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+diff --git a/Documentation/bpf/verifier.rst b/Documentation/bpf/verifier.rst
+index 510d15bc697..2b76e978d79 100644
+--- a/Documentation/bpf/verifier.rst
++++ b/Documentation/bpf/verifier.rst
+@@ -1,560 +1,1539 @@
+-
+ =============
+ eBPF verifier
+ =============
+ 
+-The safety of the eBPF program is determined in two steps.
+-
+-First step does DAG check to disallow loops and other CFG validation.
+-In particular it will detect programs that have unreachable instructions.
+-(though classic BPF checker allows them)
++The verifier decides if a BPF program is safe to run in the kernel. It checks
++the program once, when the program is loaded. It does not run the program.
+ 
+-Second step starts from the first insn and descends all possible paths.
+-It simulates execution of every insn and observes the state change of
+-registers and stack.
++Read the chapters in order. A new word is *in italics* where it is explained.
++The last chapter lists these words.
+ 
+-At the start of the program the register R1 contains a pointer to context
+-and has type PTR_TO_CTX.
+-If verifier sees an insn that does R2=R1, then R2 has now type
+-PTR_TO_CTX as well and can be used on the right hand side of expression.
+-If R1=PTR_TO_CTX and insn is R2=R1+R1, then R2=SCALAR_VALUE,
+-since addition of two valid pointers makes invalid pointer.
+-(In 'secure' mode verifier will reject any type of pointer arithmetic to make
+-sure that kernel addresses don't leak to unprivileged users)
++.. contents::
++   :local:
++   :depth: 1
+ 
+-If register was never written to, it's not readable::
++Overview
++========
+ 
+-  bpf_mov R0 = R2
+-  bpf_exit
++The main idea
++-------------
+ 
+-will be rejected, since R2 is unreadable at the start of the program.
++The verifier runs the program with sets of values. A *state* says what each
++register and each stack slot can hold before an instruction (*insn*)::
+ 
+-After kernel function call, R1-R5 are reset to unreadable and
+-R0 has a return type of the function.
++  r6 = any number                      the state before the jump
++  if r6 > 7 goto out
++  r6 = 0..7                            the state after it
+ 
+-Since R6-R9 are callee saved, their state is preserved across the call.
++A jump makes two states. The two states meet again where the paths meet. The
++verifier has two choices there::
+ 
+-::
+-
+-  bpf_mov R6 = 1
+-  bpf_call foo
+-  bpf_mov R0 = R6
+-  bpf_exit
+-
+-is a correct program. If there was R1 instead of R6, it would have
+-been rejected.
+-
+-load/store instructions are allowed only with registers of valid types, which
+-are PTR_TO_CTX, PTR_TO_MAP, PTR_TO_STACK. They are bounds and alignment checked.
+-For example::
+-
+- bpf_mov R1 = 1
+- bpf_mov R2 = 2
+- bpf_xadd *(u32 *)(R1 + 3) += R2
+- bpf_exit
+-
+-will be rejected, since R1 doesn't have a valid pointer type at the time of
+-execution of instruction bpf_xadd.
+-
+-At the start R1 type is PTR_TO_CTX (a pointer to generic ``struct bpf_context``)
+-A callback is used to customize verifier to restrict eBPF program access to only
+-certain fields within ctx structure with specified size and alignment.
+-
+-For example, the following insn::
+-
+-  bpf_ld R0 = *(u32 *)(R6 + 8)
+-
+-intends to load a word from address R6 + 8 and store it into R0
+-If R6=PTR_TO_CTX, via is_valid_access() callback the verifier will know
+-that offset 8 of size 4 bytes can be accessed for reading, otherwise
+-the verifier will reject the program.
+-If R6=PTR_TO_STACK, then access should be aligned and be within
+-stack bounds, which are [-MAX_BPF_STACK, 0). In this example offset is 8,
+-so it will fail verification, since it's out of bounds.
+-
+-The verifier will allow eBPF program to read data from stack only after
+-it wrote into it.
+-
+-Classic BPF verifier does similar check with M[0-15] memory slots.
+-For example::
+-
+-  bpf_ld R0 = *(u32 *)(R10 - 4)
+-  bpf_exit
+-
+-is invalid program.
+-Though R10 is correct read-only register and has type PTR_TO_STACK
+-and R10 - 4 is within stack bounds, there were no stores into that location.
+-
+-Pointer register spill/fill is tracked as well, since four (R6-R9)
+-callee saved registers may not be enough for some programs.
+-
+-Allowed function calls are customized with bpf_verifier_ops->get_func_proto()
+-The eBPF verifier will check that registers match argument constraints.
+-After the call register R0 will be set to return type of the function.
+-
+-Function calls is a main mechanism to extend functionality of eBPF programs.
+-Socket filters may let programs to call one set of functions, whereas tracing
+-filters may allow completely different set.
+-
+-If a function made accessible to eBPF program, it needs to be thought through
+-from safety point of view. The verifier will guarantee that the function is
+-called with valid arguments.
+-
+-seccomp vs socket filters have different security restrictions for classic BPF.
+-Seccomp solves this by two stage verifier: classic BPF verifier is followed
+-by seccomp verifier. In case of eBPF one configurable verifier is shared for
+-all use cases.
+-
+-See details of eBPF verifier in kernel/bpf/verifier.c
+-
+-Register value tracking
+-=======================
+-
+-In order to determine the safety of an eBPF program, the verifier must track
+-the range of possible values in each register and also in each stack slot.
+-This is done with ``struct bpf_reg_state``, defined in include/linux/
+-bpf_verifier.h, which unifies tracking of scalar and pointer values.  Each
+-register state has a type, which is either NOT_INIT (the register has not been
+-written to), SCALAR_VALUE (some value which is not usable as a pointer), or a
+-pointer type.  The types of pointers describe their base, as follows:
+-
+-
+-    PTR_TO_CTX
+-			Pointer to bpf_context.
+-    CONST_PTR_TO_MAP
+-			Pointer to struct bpf_map.  "Const" because arithmetic
+-			on these pointers is forbidden.
+-    PTR_TO_MAP_VALUE
+-			Pointer to the value stored in a map element.
+-    PTR_TO_MAP_VALUE_OR_NULL
+-			Either a pointer to a map value, or NULL; map accesses
+-			(see maps.rst) return this type, which becomes a
+-			PTR_TO_MAP_VALUE when checked != NULL. Arithmetic on
+-			these pointers is forbidden.
+-    PTR_TO_STACK
+-			Frame pointer.
+-    PTR_TO_PACKET
+-			skb->data.
+-    PTR_TO_PACKET_END
+-			skb->data + headlen; arithmetic forbidden.
+-    PTR_TO_SOCKET
+-			Pointer to struct bpf_sock_ops, implicitly refcounted.
+-    PTR_TO_SOCKET_OR_NULL
+-			Either a pointer to a socket, or NULL; socket lookup
+-			returns this type, which becomes a PTR_TO_SOCKET when
+-			checked != NULL. PTR_TO_SOCKET is reference-counted,
+-			so programs must release the reference through the
+-			socket release function before the end of the program.
+-			Arithmetic on these pointers is forbidden.
+-
+-However, a pointer may be offset from this base (as a result of pointer
+-arithmetic), and this is tracked in two parts: the 'fixed offset' and 'variable
+-offset'.  The former is used when an exactly-known value (e.g. an immediate
+-operand) is added to a pointer, while the latter is used for values which are
+-not exactly known.  The variable offset is also used in SCALAR_VALUEs, to track
+-the range of possible values in the register.
+-
+-The verifier's knowledge about the variable offset consists of:
+-
+-* minimum and maximum values as unsigned
+-* minimum and maximum values as signed
+-
+-* knowledge of the values of individual bits, in the form of a 'tnum': a u64
+-  'mask' and a u64 'value'.  1s in the mask represent bits whose value is unknown;
+-  1s in the value represent bits known to be 1.  Bits known to be 0 have 0 in both
+-  mask and value; no bit should ever be 1 in both.  For example, if a byte is read
+-  into a register from memory, the register's top 56 bits are known zero, while
+-  the low 8 are unknown - which is represented as the tnum (0x0; 0xff).  If we
+-  then OR this with 0x40, we get (0x40; 0xbf), then if we add 1 we get (0x0;
+-  0x1ff), because of potential carries.
+-
+-Besides arithmetic, the register state can also be updated by conditional
+-branches.  For instance, if a SCALAR_VALUE is compared > 8, in the 'true' branch
+-it will have a umin_value (unsigned minimum value) of 9, whereas in the 'false'
+-branch it will have a umax_value of 8.  A signed compare (with BPF_JSGT or
+-BPF_JSGE) would instead update the signed minimum/maximum values.  Information
+-from the signed and unsigned bounds can be combined; for instance if a value is
+-first tested < 8 and then tested s> 4, the verifier will conclude that the value
+-is also > 4 and s< 8, since the bounds prevent crossing the sign boundary.
+-
+-PTR_TO_PACKETs with a variable offset part have an 'id', which is common to all
+-pointers sharing that same variable offset.  This is important for packet range
+-checks: after adding a variable to a packet pointer register A, if you then copy
+-it to another register B and then add a constant 4 to A, both registers will
+-share the same 'id' but the A will have a fixed offset of +4.  Then if A is
+-bounds-checked and found to be less than a PTR_TO_PACKET_END, the register B is
+-now known to have a safe range of at least 4 bytes.  See 'Direct packet access',
+-below, for more on PTR_TO_PACKET ranges.
+-
+-The 'id' field is also used on PTR_TO_MAP_VALUE_OR_NULL, common to all copies of
+-the pointer returned from a map lookup.  This means that when one copy is
+-checked and found to be non-NULL, all copies can become PTR_TO_MAP_VALUEs.
+-As well as range-checking, the tracked information is also used for enforcing
+-alignment of pointer accesses.  For instance, on most systems the packet pointer
+-is 2 bytes after a 4-byte alignment.  If a program adds 14 bytes to that to jump
+-over the Ethernet header, then reads IHL and adds (IHL * 4), the resulting
+-pointer will have a variable offset known to be 4n+2 for some n, so adding the 2
+-bytes (NET_IP_ALIGN) gives a 4-byte alignment and so word-sized accesses through
+-that pointer are safe.
+-The 'id' field is also used on PTR_TO_SOCKET and PTR_TO_SOCKET_OR_NULL, common
+-to all copies of the pointer returned from a socket lookup. This has similar
+-behaviour to the handling for PTR_TO_MAP_VALUE_OR_NULL->PTR_TO_MAP_VALUE, but
+-it also handles reference tracking for the pointer. PTR_TO_SOCKET implicitly
+-represents a reference to the corresponding ``struct sock``. To ensure that the
+-reference is not leaked, it is imperative to NULL-check the reference and in
+-the non-NULL case, and pass the valid reference to the socket release function.
+-
+-Direct packet access
+-====================
+-
+-In cls_bpf and act_bpf programs the verifier allows direct access to the packet
+-data via skb->data and skb->data_end pointers.
+-Ex::
+-
+-    1:  r4 = *(u32 *)(r1 +80)  /* load skb->data_end */
+-    2:  r3 = *(u32 *)(r1 +76)  /* load skb->data */
+-    3:  r5 = r3
+-    4:  r5 += 14
+-    5:  if r5 > r4 goto pc+16
+-    R1=ctx R3=pkt(id=0,off=0,r=14) R4=pkt_end R5=pkt(id=0,off=14,r=14) R10=fp
+-    6:  r0 = *(u16 *)(r3 +12) /* access 12 and 13 bytes of the packet */
+-
+-this 2byte load from the packet is safe to do, since the program author
+-did check ``if (skb->data + 14 > skb->data_end) goto err`` at insn #5 which
+-means that in the fall-through case the register R3 (which points to skb->data)
+-has at least 14 directly accessible bytes. The verifier marks it
+-as R3=pkt(id=0,off=0,r=14).
+-id=0 means that no additional variables were added to the register.
+-off=0 means that no additional constants were added.
+-r=14 is the range of safe access which means that bytes [R3, R3 + 14) are ok.
+-Note that R5 is marked as R5=pkt(id=0,off=14,r=14). It also points
+-to the packet data, but constant 14 was added to the register, so
+-it now points to ``skb->data + 14`` and accessible range is [R5, R5 + 14 - 14)
+-which is zero bytes.
+-
+-More complex packet access may look like::
+-
+-
+-    R0=inv1 R1=ctx R3=pkt(id=0,off=0,r=14) R4=pkt_end R5=pkt(id=0,off=14,r=14) R10=fp
+-    6:  r0 = *(u8 *)(r3 +7) /* load 7th byte from the packet */
+-    7:  r4 = *(u8 *)(r3 +12)
+-    8:  r4 *= 14
+-    9:  r3 = *(u32 *)(r1 +76) /* load skb->data */
+-    10:  r3 += r4
+-    11:  r2 = r1
+-    12:  r2 <<= 48
+-    13:  r2 >>= 48
+-    14:  r3 += r2
+-    15:  r2 = r3
+-    16:  r2 += 8
+-    17:  r1 = *(u32 *)(r1 +80) /* load skb->data_end */
+-    18:  if r2 > r1 goto pc+2
+-    R0=inv(id=0,umax_value=255,var_off=(0x0; 0xff)) R1=pkt_end R2=pkt(id=2,off=8,r=8) R3=pkt(id=2,off=0,r=8) R4=inv(id=0,umax_value=3570,var_off=(0x0; 0xfffe)) R5=pkt(id=0,off=14,r=14) R10=fp
+-    19:  r1 = *(u8 *)(r3 +4)
+-
+-The state of the register R3 is R3=pkt(id=2,off=0,r=8)
+-id=2 means that two ``r3 += rX`` instructions were seen, so r3 points to some
+-offset within a packet and since the program author did
+-``if (r3 + 8 > r1) goto err`` at insn #18, the safe range is [R3, R3 + 8).
+-The verifier only allows 'add'/'sub' operations on packet registers. Any other
+-operation will set the register state to 'SCALAR_VALUE' and it won't be
+-available for direct packet access.
+-
+-Operation ``r3 += rX`` may overflow and become less than original skb->data,
+-therefore the verifier has to prevent that.  So when it sees ``r3 += rX``
+-instruction and rX is more than 16-bit value, any subsequent bounds-check of r3
+-against skb->data_end will not give us 'range' information, so attempts to read
+-through the pointer will give "invalid access to packet" error.
+-
+-Ex. after insn ``r4 = *(u8 *)(r3 +12)`` (insn #7 above) the state of r4 is
+-R4=inv(id=0,umax_value=255,var_off=(0x0; 0xff)) which means that upper 56 bits
+-of the register are guaranteed to be zero, and nothing is known about the lower
+-8 bits. After insn ``r4 *= 14`` the state becomes
+-R4=inv(id=0,umax_value=3570,var_off=(0x0; 0xfffe)), since multiplying an 8-bit
+-value by constant 14 will keep upper 52 bits as zero, also the least significant
+-bit will be zero as 14 is even.  Similarly ``r2 >>= 48`` will make
+-R2=inv(id=0,umax_value=65535,var_off=(0x0; 0xffff)), since the shift is not sign
+-extending.  This logic is implemented in adjust_reg_min_max_vals() function,
+-which calls adjust_ptr_min_max_vals() for adding pointer to scalar (or vice
+-versa) and adjust_scalar_min_max_vals() for operations on two scalars.
+-
+-The end result is that bpf program author can access packet directly
+-using normal C code as::
+-
+-  void *data = (void *)(long)skb->data;
+-  void *data_end = (void *)(long)skb->data_end;
+-  struct eth_hdr *eth = data;
+-  struct iphdr *iph = data + sizeof(*eth);
+-  struct udphdr *udp = data + sizeof(*eth) + sizeof(*iph);
+-
+-  if (data + sizeof(*eth) + sizeof(*iph) + sizeof(*udp) > data_end)
+-	  return 0;
+-  if (eth->h_proto != htons(ETH_P_IP))
+-	  return 0;
+-  if (iph->protocol != IPPROTO_UDP || iph->ihl != 5)
+-	  return 0;
+-  if (udp->dest == 53 || udp->source == 9)
+-	  ...;
+-
+-which makes such programs easier to write comparing to LD_ABS insn
+-and significantly faster.
+-
+-Pruning
+-=======
++  state A: i = 0..7     err = 0   --+
++                                    +--> ?
++  state B: i = 8..max   err = -22 --+
+ 
+-The verifier does not actually walk all possible paths through the program.  For
+-each new branch to analyse, the verifier looks at all the states it's previously
+-been in when at this instruction.  If any of them contain the current state as a
+-subset, the branch is 'pruned' - that is, the fact that the previous state was
+-accepted implies the current state would be as well.  For instance, if in the
+-previous state, r1 held a packet-pointer, and in the current state, r1 holds a
+-packet-pointer with a range as long or longer and at least as strict an
+-alignment, then r1 is safe.  Similarly, if r2 was NOT_INIT before then it can't
+-have been used by any path from that point, so any value in r2 (including
+-another NOT_INIT) is safe.  The implementation is in the function regsafe().
+-Pruning considers not only the registers but also the stack (and any spilled
+-registers it may hold).  They must all be safe for the branch to be pruned.
+-This is implemented in states_equal().
+-
+-Some technical details about state pruning implementation could be found below.
+-
+-Register liveness tracking
+---------------------------
++  keep apart   check the code after it two times    exact, n jumps cost 2^n
++  join         i = any, err = -22 or 0              cheap, the relation is lost
+ 
+-In order to make state pruning effective, liveness state is tracked for each
+-register and stack slot. The basic idea is to track which registers and stack
+-slots are actually used during subseqeuent execution of the program, until
+-program exit is reached. Registers and stack slots that were never used could be
+-removed from the cached state thus making more states equivalent to a cached
+-state. This could be illustrated by the following program::
++Most joins lose no needed fact, and nothing tells in advance which ones do. So
++the verifier joins first. If the check of an insn fails, it finds the values
++that the insn depends on, and starts again with these values kept apart::
+ 
+-  0: call bpf_get_prandom_u32()
++   start: join all numbers
++      |
++      v
++    pass  ------->  error ?  --no-->  ACCEPT
++      ^               | yes
++      |               v
++      +-- yes --  can more be kept apart ?  --no-->  REJECT
++
++One such check of the program is a *pass*. What a pass keeps apart is its
++*precision*.
++
++Proof and guess
++---------------
++
++One rule holds for the full design:
++
++- A pass without errors, a *good pass*, is a complete proof of the program,
++  whatever it kept apart.
++- Precision is a guess. A wrong guess costs time, or a valid program is
++  rejected. It cannot make the verifier accept an unsafe program.
++
++The same holds for other guesses, such as the bound of a loop: the pass checks
++each of them. See `What is trusted`_.
++
++The steps of a load
++-------------------
++
++``bpf_check()`` has three parts::
++
++  prepare                    main analysis          rewrite
++  -------------------------  ---------------------  --------------------------
++  functions, BTF, maps       do_check_all():        add run-time checks
++  control flow graph           pass 0               remove dead code
++  constant folding             pass 1               convert context accesses
++  loops, dominators            ...                  inline helpers
++  liveness                                          JIT
++
++The first part looks only at the code. It rejects the program if an insn is not
++valid, if no path gets to an insn, or if a jump leaves its function.
++
++The state
++=========
++
++``struct bpf_verifier_state`` has a frame for each function on the call chain.
++A frame has the registers r0 - r10 and the stack::
++
++  state
++   +- frame 0:  r0 .. r10,  fp-8, fp-16, ...,  the loops that it is in
++   +- frame 1:  ...
++   +- held:       references, locks
++   +- equations:  r2 = 4 * r1, ...
++
++An *xreg* is a register or an 8-byte stack slot. Most of the verifier does not
++care which one it is. `Loops`_ adds one more kind.
++
++A value has three parts, see ``struct bpf_reg_state``::
++
++  type         object            number
++  -----------  ----------------  ------------------
++  scalar       -                 the value
++  map_value    which map         the offset in it
++  fp           which frame       the offset in it
++  unreadable   -                 -
++
++An *unreadable* xreg has no value. The check of an insn that reads it fails.
++
++Numbers
++-------
++
++``struct scalar`` describes a set of 64-bit numbers in four ways. The number is
++in all four sets. What one of them knows refines the others, see
++``scalar_bounds_sync()``.
++
++=======  ===========================================  ==========================
++part     what it knows                                log text
++=======  ===========================================  ==========================
++r64      a range of the 64 bits                       smin, smax, umin, umax
++r32      a range of the low 32 bits                   smin32, ... umax32
++var_off  bits that are known: (value; unknown bits)   ``var_off=(0x0; 0x7c)``
++step     ``base + step * k``                          ``step=4+12``
++=======  ===========================================  ==========================
++
++A range is an arc on a circle: a start and a size. So one range gives the
++signed and the unsigned bounds, and -4..3 is one range. Example::
++
++                        range    var_off        step
++  r1 &= 7               0..7     (0x0; 0x7)
++  r1 *= 12              0..84    (0x0; 0x7c)    0+12
++  r1 += 4               4..88    (0x0; 0x7c)    4+12
++  if r1 > 50 goto out   4..40    (0x0; 0x3c)    4+12    4, 16, 28 or 40
++
++Pointers
++--------
++
++==========================  ==================  ================================
++type                        log text            points to
++==========================  ==================  ================================
++``PTR_TO_CTX``              ctx                 the context, r1 at the start
++``PTR_TO_STACK``            fp                  the stack of a frame
++``CONST_PTR_TO_MAP``        map_ptr             a map
++``PTR_TO_MAP_VALUE``        map_value           a value of a map, global data
++``PTR_TO_PACKET``           pkt                 packet data
++``PTR_TO_PACKET_END``       pkt_end             the end of the packet
++``PTR_TO_MEM``              mem                 memory of a known size
++``PTR_TO_BTF_ID``           ptr\_<struct>       a kernel object with a BTF type
++``PTR_TO_SOCKET``, ...      sock, ...           a socket
++``PTR_TO_ARENA``            arena               arena memory
++``PTR_TO_FUNC``             func                a BPF function
++==========================  ==================  ================================
++
++Flags add to a type. ``PTR_MAYBE_NULL`` is for a pointer that can be NULL
++(``map_value_or_null``). ``MEM_RDONLY`` is for read-only memory.
++``PTR_TRUSTED`` and ``PTR_UNTRUSTED`` say if the object is known to be alive.
++
++Copies of one pointer share an *id*. What the verifier learns about one copy
++holds for all of them::
++
++  r0 = bpf_map_lookup_elem()    r0 = map_value_or_null(id=1)
++  r6 = r0                       r6 = map_value_or_null(id=1)
++  if r0 == 0 goto out           r0 and r6 are map_value
++  r0 = *(u64 *)(r6 + 0)         safe
++
++An id stands for the set of xregs that have it. ``bpf_renumber_ids()`` names
++each id after the first xreg of its set. So two states with the same sets have
++the same ids. The log prints these numbers. The id of an object can change from
++one basic block to the next, and another object can get its old number.
++
++The stack
++---------
++
++Each byte of a slot has a kind:
++
++=======================  ========  =============================================
++kind                     log text  meaning
++=======================  ========  =============================================
++invalid                  ``?``     not written
++spill                    value     a part of a register; the slot has its value
++misc                     ``m``     some data
++zero                     ``0``     zero
++dynptr, iter             name      an object that the kernel put there
++irq flag                 ``f``     the same
++poison                   ``p``     nothing reads it later, see `Liveness`_
++=======================  ========  =============================================
++
++A store of a register to an aligned slot is a *spill*. The load gives the type
++and the number back.
++
++An access with many offsets does not know its slot. A write makes misc of the
++bytes in its range, and a load gives a number, see *fork* in `Partition`_. A
++call with a constant size skips the bytes between two offsets: 8 bytes at
++``fp-24`` or at ``fp-8`` do not touch ``fp-16``.
++
++What is held
++------------
++
++Some calls give the program something that it has to give back: a reference, a
++spin lock, the RCU lock, disabled preemption, a dynptr, an iterator, an irq
++flag. All of that is *held*. At ``exit`` of the program all references and locks
++have to be released. A release makes all copies of the pointer unusable.
++
++Some dynptrs have no reference and need no release. They count as held too.
++
++The check of one insn
++=====================
++
++``do_check_insn()`` checks an insn in one state and changes the state. If the
++check fails, the insn is *unproven* in that state. Else it is *proven*. This is
++not the verdict: a later pass can prove the insn. Only a program is accepted or
++rejected.
++
++Registers
++  An insn can read only a register that has a value. At the start these are r1
++  and r10. A call makes r1 - r5 unreadable and keeps r6 - r9.
++
++Arithmetic on numbers
++  It is safe for all values. The result is a new set of numbers.
++
++Arithmetic on pointers
++  ``pointer += number`` and ``pointer -= number`` change the offset. The number
++  needs a lower bound. With ``CAP_PERFMON`` the pointer can go out of the
++  object: only an access has to be in bounds. A pointer that can be NULL has to
++  be tested first. A stack pointer allows only ``+=``, and some types allow no
++  arithmetic. Other operations make a number of the pointer, which needs
++  ``CAP_PERFMON``.
++
++Loads and stores
++  All offsets that the pointer can have must be good:
++
++  ===========  =================================================================
++  map value    in the value; special fields such as a lock need a helper
++  stack        in the stack, aligned; written before, without ``CAP_PERFMON``
++  context      the program type decides, see ``is_valid_access()``
++  packet       in the bytes that the program checked, see below
++  BTF object   in a member of the type; the member gives the type of the result
++  arena        no check, the JIT keeps the address in the arena
++  ===========  =================================================================
++
++  An atomic access has to be aligned to its size. With
++  ``BPF_F_STRICT_ALIGNMENT``, or if the cpu has no fast unaligned access, all
++  accesses have to be aligned. ``BPF_F_ANY_ALIGNMENT`` turns that off. The check
++  assumes that a packet starts 2 bytes after an aligned address.
++
++Jumps
++  A conditional jump makes two states and *refines* the operands in each. If
++  the values decide the jump, only one edge is taken.
++
++Calls of helpers and kfuncs
++  The prototype says what each argument has to be: a type, a size, a constant.
++  It also gives the type of r0, and says what the call acquires or releases.
++  The program type selects the functions that can be called.
++
++Exit
++  r0 must be in the range that the program type allows. All references and
++  locks must be released.
++
++Packets
++-------
++
++The length of a packet is known only at run time. A compare with the end of the
++packet tells how many bytes are there. The log shows that as ``r``. If the
++pointer has one offset, the bytes from the start of the packet up to ``r`` are
++*checked*::
++
++  r2 = skb->data              r2 = pkt(r=0)
++  r3 = skb->data_end          r3 = pkt_end
++  r4 = r2 + 14                r4 = pkt(r=0, offset 14)
++  if r4 > r3 goto out         r2 = pkt(r=14)
++  r0 = *(u16 *)(r2 + 12)      safe: 12 + 2 <= 14
++
++If a number with many values is added, the pointer gets a new id. Pointers with
++one id differ by a constant, so one compare is good for all of them. Now ``r``
++goes with the largest offset: 82 - 60 = 22 bytes after r2 are checked::
++
++  r5 = 0..60                  the length of a header
++  r2 += r5                    r2 = pkt(id=1, r=0,  offset 0..60)
++  r4 = r2 + 22                r4 = pkt(id=1, r=0,  offset 22..82)
++  if r4 > r3 goto out         r2 = pkt(id=1, r=82, offset 0..60)
++  r0 = *(u16 *)(r2 + 14)      safe: 60 + 14 + 2 <= 82
++
++This holds only for offsets up to 64K (``MAX_PACKET_OFF``). A helper that can
++move the packet data makes all packet pointers unusable.
++
++A pointer also keeps how many bytes are checked from the start of the packet.
++The log shows that as ``min_len``, if it is not ``r``. If the largest offset
++gets below ``min_len``, ``r`` is at least ``min_len``::
++
++  r2 += 20                    r2 = pkt(r=54, offset 20)
++  r2 += 40..60                r2 = pkt(id=1, r=0, min_len=54, offset 60..80)
++  r2 += -50..-40              r2 = pkt(id=2, r=54, offset 10..40)
++
++A pass
++======
++
++A pass checks the main function, then each global function that is called.
++The states move through the program like this::
++
++              +---------+   next    +-------------------+
++        +---->| pending |---------->| check basic block |
++        |     +---------+           +---------+---------+
++        | new                                 v
++        |                           +-------------------+   nothing new
++        +---------------------------|    join point     |---------------> drop
++          joined, or kept apart     +-------------------+
++
++A *basic block* is a run of insns without a jump into it or out of it. A *join
++point* is an insn where states can meet. The check of a function ends when no
++state is pending.
++
++The verifier counts its work. That is the *cost*, see `Limits`_. A *budget* is a
++limit on the cost of one step.
++
++Liveness
++--------
++
++An xreg is *live* at an insn if a path from the insn reads it before it writes
++it. What is not live cannot matter. So a state that arrives at a basic block is
++cleaned first, see ``bpf_clean_verifier_state()``. Then more states are equal::
++
++  0: r0 = random
+   1: r1 = 0
+-  2: if r0 == 0 goto +1
++  2: if r0 == 0 goto 4
+   3: r0 = 1
+-  --- checkpoint ---
+-  4: r0 = r1
++  4: r0 = r1          r0 is not live: both states are "r1 = 0"
+   5: exit
+ 
+-Suppose that a state cache entry is created at instruction #4 (such entries are
+-also called "checkpoints" in the text below). The verifier could reach the
+-instruction with one of two possible register states:
++Prune
++-----
++
++State A *subsumes* state B if A has all values of B. If the program is safe
++from A, it is safe from B. B needs no check, it is *pruned*::
++
++  A: r1 = 0..9   r2 = buf + 0..8
++  B: r1 = 3      r2 = buf + 4         A subsumes B
++
++An unreadable xreg subsumes each value: the program is safe from A without a
++read of it. See ``bpf_state_subsumes()``.
++
++Join
++----
++
++The *join* of two states has all values of both, see ``bpf_states_join()``::
++
++  0..7         |  9             ->  0..9
++  0            |  56            ->  0..56, step 56
++  buf + 0      |  buf + 8       ->  buf + 0..8
++  map_value    |  scalar        ->  unreadable
++  buf          |  other_buf     ->  unreadable
++  ctx + 0      |  ctx + 8       ->  unreadable, ctx has no range of offsets
++
++If an insn reads the unreadable xreg, the insn is unproven, and the next pass
++keeps the two types apart. This is rare, see `Two types in a live xreg`_.
++
++A join can add values that no path has, for example 8 in the first line. After
++the first join the pass is *imprecise*: an error does not prove that the
++program is wrong. Later chapters have more steps that add or keep such values.
++They make the pass imprecise too.
++
++What has no join
++----------------
++
++"The lock is held or not held" has no meaning for the verifier. All such facts
++are the *join_key* of a state. States with two join_keys never meet:
++
++===============  ===============================================================
++what is held     references, locks, dynptrs, iterators, irq flags
++where it is      the call chain, the instance (see `Functions`_)
++which trip       the peeled trip of each loop (see `Loops`_)
++===============  ===============================================================
++
++Prune or join
++-------------
++
++A state that arrives is compared with the states that are at the insn, see
++``flow_prune_or_join()``:
++
++===================================  ===========================================
++if                                   action
++===================================  ===========================================
++they have two join_keys              they do not meet
++they must stay apart (next chapter)  they do not meet
++the old one subsumes the new one     prune the new one
++the new one subsumes the old one     prune the old one
++none of these holds                  join them
++===================================  ===========================================
++
++Two types in a live xreg
++------------------------
++
++This code is common::
++
++  p = NULL;
++  if (...)
++          p = buf;
++  if (p)                 if joined, p is unreadable and this read is unproven
++          use(p);
++
++If the two states are joined, an error is almost sure, and it costs a pass. So
++states with two types or two objects in a live xreg stay apart already in pass
++0, see ``bpf_hash_live_types()``. The same holds for a packet pointer with and
++without checked bytes.
++
++N such xregs can make 2^N states. So this rule has a budget. If a pass is over
++it, the pass joins from there on, and so do the next passes. The rule does not
++apply to the arguments of two calls, see `Instances`_.
++
++The order
++---------
++
++A join point has to get all its states before it runs. Else the code after it
++is checked again for each late state. ``flow_set_pending()`` sets the order:
++both branches before the code after them, an iteration before the next one, a
++loop before the code after the loop. See `Instances`_ for calls. The insns are
++in a weak topological order: reverse post order, and each loop is in one piece.
++
++With this order most states can meet no later state, and are freed at once.
++``flow_keep()`` keeps a state only where another one can come: in a loop, at the
++start of a function, after a call that can return with one more state, or in an
++async callback.
++
++Precision: data and control dependences
++=======================================
++
++This example is used from here on::
++
++  char buf[8];                      0: r0 = random
++                                    1: r6 = r0
++  u64 i = random();                 2: r7 = 0
++  int err = 0;                      3: if r6 <= 7 goto 5
++  if (i > 7)                        4: r7 = -22
++          err = -22;                5: r0 = 0                 join point
++  ...                               6: if r7 != 0 goto 11
++  if (err)                          7: r1 = buf
++          return 0;                 9: r1 += r6
++  return buf[i];                   10: r0 = *(u8 *)(r1 + 0)
++                                   11: exit
++
++The program is safe. Pass 0 does not prove it::
++
++                   r6        r7
++  from 3 to 5      0..7      0
++  from 4 to 5      8..max    -22
++  join             any       -22 or 0
++  after insn 6     any       0            no path has r6 = 8 with r7 = 0
++  insn 9           unproven: r6 has no bound
++
++The next pass has to keep the two states at insn 5 apart. To keep all states
++apart is too costly. Which xregs does insn 9 depend on?
++
++==============  ================================================================
++*data_deps*     xregs whose value flows into an operand of the unproven insn
++*control_deps*  xregs whose value flows into a jump that can skip that insn
++==============  ================================================================
++
++Both sets together are the *deps*.
++
++How they are found
++------------------
++
++``bpf_compute_deps()`` makes a backward slice. It goes back from *seeds*, in the
++same way as liveness. If an insn writes an xreg of the set, that xreg leaves the
++set, and what the insn reads comes in::
++
++  liveness       starts from the reads of all insns
++  data_deps      start from the reads of the unproven insn
++  control_deps   start from the reads of the jumps that can skip it
++
++                                before the insn:
++                                data     control
++   1: r6 = r0                   r0       -
++   2: r7 = 0                    r6       -
++   3: if r6 <= 7 goto 5         r6       r7
++   4: r7 = -22                  r6       -
++   5: r0 = 0                    r6       r7
++   6: if r7 != 0 goto 11        r6       r7     <- seed of control_deps
++   7: r1 = buf                  r6       -
++   9: r1 += r6                  r1 r6    -      <- seed of data_deps
++
++Insn 6 can skip insn 9: one edge leads to it and the other edge does not. Both
++edges of insn 3 lead to insn 9, so insn 3 is no seed. See
++``find_control_seeds()``.
++
++The sets go through spills, calls, returns and the frames of callers. What is
++held is tracked like an xreg: the insns that acquire or release write it.
++
++The join rule
++-------------
++
++One rule decides at all join points, ``bpf_must_keep_apart()``. It looks only at
++the deps that differ in the two states:
++
++=================================  ==========  =================================
++what differs                       action      why
++=================================  ==========  =================================
++nothing in data_deps               join        the insn gets the same operands
++one xreg of data_deps, no gap      join        0..7 and 8..9 are 0..9: nothing
++                                               is added
++one xreg of data_deps, with a gap  keep apart  0..1 and 100: the join has 50
++a type or an object in data_deps   keep apart  the join is unreadable
++two xregs, one is in data_deps     keep apart  the join has pairs that no path
++                                               has
++=================================  ==========  =================================
++
++A *gap* is a value of the join that is in neither state. The numbers 0 and 3
++have no gap: the join is 0..3 with step 3. ``buf + 0`` and ``buf + 3`` have one,
++because a load ignores the step. Two packet pointers with one id have a gap
++if their distance differs: the join gives them two ids.
++
++The last line does not apply if one state has all values of the other one in
++the deps: then the join adds no pair.
++
++In pass 0 the deps are empty, so all numbers are joined. In pass 1 of the
++example r6 (data) and r7 (control) differ at insn 5::
++
++                   r6        r7
++  from 3 to 5      0..7      0       ->  insn 9 is proven
++  from 4 to 5      8..max    -22     ->  goes to insn 11
++
++r7 stores the result of the test at insn 3: it is a *stored condition*. Insn 6
++tests it, so the two branches are *correlated*. Other values are still joined.
++A stored condition that only selects a message keeps no states apart. This is
++why the number of states stays small.
++
++One pass finds many errors
++--------------------------
++
++A pass does not stop at its first error. It notes the insn and continues as if
++the insn was proven. This is error recovery, as in a compiler. See
++``skip_unproven_insn()``::
++
++  r0 = *(u64 *)(r2 + 0)     unproven, r0 is unknown now
++  r4 = *(u8 *)(r0 + 0)      unproven because of r0: not a new error
++  r5 = *(u8 *)(r7 + 0)      unproven: a second seed
++
++So the next pass has the deps of all unproven insns. A pass with an error
++accepts nothing.
++
++If an unproven call changes what is held, the path ends there. The later uses
++of the lock or of the dynptr are not new errors, and must not add deps.
++
++The pass stops when it has found all errors of the last pass again, or when it
++is over a budget that starts at its first error. It does not stop at the errors
++if it found a new xreg that moves with a trip index. Later trips can show that
++the xreg does so only at first.
++
++Equations
++=========
++
++A range does not tell how two numbers are related::
++
++  r2 = r1
++  r2 <<= 3
++  if r1 > 7 goto out       r2 is 0..56, but only r1 was tested
++
++So each state has a table of *equations*. A *sym* is a number that equations
++use. There are three kinds. All hold mod 2^64, as the registers do::
++
++  xreg = coef * sym + off                         r2 = 8 * sym0
++  sym  = coef * sym + coef * sym + off    (sum)   sym2 = sym0 + sym1
++  sym  = what an insn makes of two values (op)    sym3 = sym2 & 0xf8
++
++For a pointer the number is its offset. A state says: there are numbers for the
++syms, in their ranges, for which all equations hold.
++
++An insn makes equations
++-----------------------
++
++An insn deletes the equation of the xreg that it writes. The result gets a new
++one::
++
++  r2 = r1             r1 = sym0, r2 = sym0
++  r2 += 8             r2 = sym0 + 8
++  r2 <<= 2            r2 = 4 * sym0 + 32
++  r2 += r3            r2 = sym2,  sum: sym2 = 4 * sym0 + sym1 + 32
++  w4 = w1             r4 = low,   sum: low = sym0 - 2^32 * high
++  r1 ^= 5             r1 = sym3,  op:  sym3 = sym0 ^ 5
++  *(fp - 8) = r1      fp-8 has the equation of r1
++
++A jump uses them
++----------------
++
++A jump refines its operand, then all numbers that are related::
++
++  xreg -> its sym -> the other syms -> their xregs
++
++  if r1 > 7 goto out        r1 0..7  ->  sym0 0..7  ->  r2 0..56
++
++A sum refines all of its syms. An op refines only its result. A jump that
++compares two numbers also compares their difference with 0, if the difference
++cannot wrap::
++
++  off = 0..63                        off = sym0
++  left = 64 - off                    left = 64 - sym0
++  if (len > left) goto out           len = sym1, sym2 = len - left, sym2 <= 0
++                                     so off + len = 64 + sym2 <= 64
++
++An equation has a cost. So this jump makes sym2 only if left is a constant minus
++a number, and len is in data_deps. If len is not there, the pass is imprecise.
++Pass 0 has no deps, so this example needs pass 1.
++
++A jump can compare a number with its low 32 bits. Code with no 32-bit insns does
++that to test the carry of a sum::
++
++  r5 = r2; r5 <<= 32; r5 >>= 32
++  if r5 != r2 goto carry             if the jump is taken, r2 is above U32_MAX
+ 
+-* r0 = 1, r1 = 0
+-* r0 = 0, r1 = 0
++If a range becomes empty, the equations cannot hold. No run of the program has
++such a state: it is *infeasible*. It ends after the next conditional jump.
+ 
+-However, only the value of register ``r1`` is important to successfully finish
+-verification. The goal of the liveness tracking algorithm is to spot this fact
+-and figure out that both states are actually equivalent.
++A call uses them
++----------------
+ 
+-Understanding eBPF verifier messages
+-====================================
++A helper or a kfunc gets a pointer and a size. The largest offset and the
++largest size do not have to go together::
+ 
+-The following are few examples of invalid eBPF programs and verifier error
+-messages as seen in the log:
++  n = bpf_get_stack(ctx, buf, 800, 0);
++  if (n < 0) return;                                 n is 0..800
++  bpf_get_stack(ctx, buf + n, 800 - n, 0);
+ 
+-Program with unreachable instructions::
++                 offset      size          offset + size
++  ranges         0..800      0..800        0..1600
++  equations      sym0        800 - sym0    800
+ 
+-  static struct bpf_insn prog[] = {
+-  BPF_EXIT_INSN(),
+-  BPF_EXIT_INSN(),
+-  };
++The check asks the equations for the largest sum. It does that for map_value, fp
++and mem. It does not do that for packets: their checked bytes are relative to
++the pointer.
+ 
+-Error::
++A join guesses them
++-------------------
+ 
+-  unreachable insn 1
++A join looks for equations that hold in both states. It makes a sym that has
++one value in each state::
+ 
+-Program that reads uninitialized register::
++              r6          r7
++  state A     0           56
++  state B     56          0
++  join        56 * sym0   56 - 56 * sym0      sym0 is 0..1
++  r6 += r7    56                              not 0..112
+ 
+-  BPF_MOV64_REG(BPF_REG_0, BPF_REG_2),
+-  BPF_EXIT_INSN(),
++So many programs need no second pass. These equations are a guess.
++``check_equations()`` checks them in both states and deletes what fails.
+ 
+-Error::
++A prune checks them
++-------------------
+ 
+-  0: (bf) r0 = r2
+-  R2 !read_ok
++A state with an equation has fewer values than its ranges show::
+ 
+-Program that doesn't initialize R0 before exiting::
++  old:  r1 0..7, r2 0..7, r1 == r2
++  new:  r1 0..7, r2 0..7              old does not subsume new
+ 
+-  BPF_MOV64_REG(BPF_REG_2, BPF_REG_1),
+-  BPF_EXIT_INSN(),
++``check_equations()`` looks for a value in the new state for each sym of the
++old state. If there is none, there is no prune.
+ 
+-Error::
++A state without an equation has more values. So it is always safe to delete an
++equation. ``normalize_equations()`` deletes those that say nothing, and keeps
++the table small.
+ 
+-  0: (bf) r2 = r1
+-  1: (95) exit
+-  R0 !read_ok
++The join rule uses the equations too. If only one of two states has
++``r1 == r6``, the two xregs count as different.
+ 
+-Program that accesses stack out of bounds::
++Loops
++=====
+ 
+-    BPF_ST_MEM(BPF_DW, BPF_REG_10, 8, 0),
+-    BPF_EXIT_INSN(),
++A *trip* is one iteration. The *header* is the insn where each trip starts. A
++back edge leads to it. The verifier has to prove two things: each insn is safe
++in all trips, and the loop ends.
+ 
+-Error::
++One state for all trips
++-----------------------
+ 
+-    0: (7a) *(u64 *)(r10 +8) = 0
+-    invalid stack off=8 size=8
++The state that comes back to the header is joined with the state that is there.
++The body is checked again with the join. This stops when the state at the
++header subsumes the state that comes back. That is the *fixpoint*.
+ 
+-Program that doesn't initialize stack before passing its address into function::
++A counter grows in each trip, so plain joins do not stop. The first growth is a
++join. After that the bound is *widened*: it jumps to a *threshold*::
+ 
+-  BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
+-  BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
+-  BPF_LD_MAP_FD(BPF_REG_1, 0),
+-  BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
+-  BPF_EXIT_INSN(),
++  i = 0;
++  while (random()) {
++          if (!big[i])                char big[64]
++                  continue;
++          i += 3;
++          if (i >= 30)
++                  break;
++  }
+ 
+-Error::
++  i at the header:
++  pass 0    0  ->  0..3  ->  0..S32_MAX     big[i] is unproven
++  pass 1    0  ->  0..3  ->  0..29          i is in the deps now
+ 
+-  0: (bf) r2 = r10
+-  1: (07) r2 += -8
+-  2: (b7) r1 = 0x0
+-  3: (85) call 1
+-  invalid indirect read from stack off -8+0 size 8
++The thresholds of an xreg in the deps are the constants of the loop, one less,
++and one step more. Other xregs stop at 0, ``S32_MAX``, ``U32_MAX`` or
++``S32_MIN``. A threshold is a guess. If it is too small, the state that comes
++back is not subsumed, and the bound goes to the next threshold.
++
++An *entry* is a state that enters the loop. The join rule keeps two entries
++apart, as at any join point. A state that comes back meets the state of its own
++entry. There the join rule does not apply to numbers, else the check of the
++loop has no end.
++
++The trip index
++--------------
++
++The *trip index* k counts how many times the program came back to the header.
++It is an xreg: 0 at the entry, + 1 at each back edge. So it is the canonical
++induction variable of the loop. The join at the header finds the xregs that move
++with it, the other induction variables (*iv*). A *walk* is one check of the
++body::
++
++  i = 0; p = big;
++  do {
++          use(*(u64 *)p);
++          i++; p += 8;
++  } while (i < 8);
++
++  at the header:
++  walk 1    k = 0       i = 0        p = big
++  walk 2    k = 0..1    i = k        p = big + 8 * k      the join finds these
++  walk 3    k = 0..7    i = k        p = big + 8 * k      'i < 8': threshold 7
++
++A jump that tests a number that moves with k gives k a threshold. This needs no
++precision, so it works in pass 0.
++
++In walk 3 the jump refines i, so k, so p. No jump tests p. The back edge brings
++k = 1..7, and the header subsumes that.
++
++Walks 1 and 2 only collect the steps and the threshold. Often the code shows
++them. Then ``bpf_guess_first_trips()`` starts with walk 3, and the body is
++checked once. This is a guess too.
++
++Two entries can have two bounds. So each entry has its own threshold for k.
++
++The loop must end
++-----------------
++
++A state that is pruned by its own ancestor closes a cycle::
++
++  t --> ... --> header --> ... --> s
++  ^                                |
++  `----------- subsumes -----------'
++
++Each state also counts how many times the verifier came back to the header with
++it. A join has the larger count. All pruned states go through
++``flow_check_trip_counts()``. If s has a larger count than t, s can come from
++t, and something has to stop the loop:
++
++=====================================  =========================================
++if                                     the loop ends because
++=====================================  =========================================
++k of s is at most 2^32                 k grows in each trip and has a bound;
++                                       the largest k + 1 is the *trip count*
++each trip runs ``may_goto``            it leaves the loop after some time or
++                                       some number of trips
++each trip takes from an iterator       an iterator has an end
++none of these holds                    the verifier adds ``may_goto``
++=====================================  =========================================
++
++*may_goto* is a jump that is taken when the program has looped too long. The
++verifier puts it before a jump that leaves the loop, or at the header. It
++checks the new edge like any other edge::
++
++  do {                          do {
++          p = lookup();                 p = lookup();
++  } while (!p);                         may_goto leave;
++  use(p);                       } while (!p);
++                                use(p);
++                                ...
++                                leave: return 0;
++
++Where does the edge go? The verifier takes the first line that is possible:
++
++- In the main function: ``return 0``, if nothing has to be released and 0 is a
++  valid result.
++- In another function: *unwind*, if nothing has to be released and each call has
++  an ``unwind_goto`` after it. The function leaves with ``unwind_exit``, and
++  ``unwind_goto`` jumps to the code of the caller that cleans up.
++- The exit of the loop. The code there has to be safe. From a header the edge
++  leaves the outer loops too. If the code there reads a register that is not
++  set, the function returns 0.
++
++A loop without an exit is an error.
++
++A pass assumes what stops a loop
++--------------------------------
++
++At run time ``may_goto`` is there for all states. So a pass has to know at the
++start which loops get it:
++
++- Pass 0 does not know the trip counts. It checks the new edge in all loops.
++  After a good pass the verifier drops each ``may_goto`` that no state needed.
++- A later pass checks the edge only in the loops that needed it before.
++- An iterator is assumed to stop its loop. It does not stop a loop that creates
++  it in each trip, or a loop that goes on when no element is left.
++
++If an assumption is wrong, the pass starts again, see ``pass_needs_restart()``.
++
++Peeled trips and the leftover
++-----------------------------
++
++One state for all trips loses what differs between trips::
++
++  x = 1;
++  for (i = 0; i < 5; i++)
++          x *= 2;
++  big[x]                      x is 32, but the widened x has no bound
++
++To *peel* a trip is to check it apart from the other trips. All trips that are
++not peeled are the *leftover*::
++
++  entry -> [0] -> [1] -> ... -> [d-1] -> +----------+ <--+
++           peeled trips                  | LEFTOVER |    |
++                                         | widened  |----+
++                                         +----------+
++
++Pass 0 peels nothing. A later pass peels if an error asks for it. Peeling stops
++when the loop exits, when a trip has nothing new in the deps, or when the budget
++is used up. If all trips are peeled, no state closes a cycle, and the loop needs
++nothing to stop it. If an earlier trip subsumes a peeled trip, the trip is
++pruned, and the loop gets ``may_goto``.
++
++Which loop has to be peeled? If the join at a header adds to an xreg of
++data_deps, the state notes that loop. If an insn is unproven in the state later,
++the noted loops are the *suspects*::
++
++  for (i = 0; i < 8; i++)
++          sum += i;           makes sum imprecise: suspect
++  while (random())
++          n++;                not a suspect, it is not peeled
++  big[sum]                    unproven
++
++Pass 0 has no deps, so it finds no suspect here. Pass 1 finds it, and pass 2
++peels.
++
++A state also notes a loop if it leaves by a ``may_goto`` that the verifier
++added, or if it holds more after each trip.
++
++What is held in a loop
++----------------------
++
++What is held has no join. A loop that acquires in each trip makes new states
++without end. ``check_held_in_leftover()`` stops that: a reference that is in no
++xreg is a leak, and the number of peeled trips limits the locks.
++
++Functions
++=========
++
++==================  ===========================  ===============================
++function            checked                      the caller gets
++==================  ===========================  ===============================
++global              for all arguments of its     a number
++                    BTF prototype
++static, on its own  once for each instance       the exit states of the instance
++static, in frames   at each call, with the       the state at the exit
++                    frames of the callers
++==================  ===========================  ===============================
++
++A function that is checked *on its own* has a state without the frames of its
++callers. A static function is checked *in frames* if it can change what its
++callers see: it gets a pointer to the stack, tests a pointer for the caller,
++moves packet data, or releases what the caller holds. A callback is always in
++frames. See ``func_is_on_its_own()``. If only the exit state shows such a
++change, the call is checked again in frames. An error can ask for frames too,
++see IN_FRAMES in `Partition`_.
++
++Instances
++---------
++
++18 levels with 2 calls each are 2^18 call chains. To check a function on its
++own avoids that. The states of two calls meet only at the first insn of the
++function. An *instance* is an entry state, its exit states and the calls that
++wait for them. It is a function summary for one entry state.
++
++Callers run first, so that calls collect at the first insn. The function runs
++when a call has no exit state to continue with. Here two calls are on two
++branches, and both arrive before f starts::
++
++  call1 f(7)   --+
++  call2 f(any) --+--> first insn
++
++  in pass 0                one instance, both calls get "any"
++  if r1 is in data_deps    two instances, call1 gets 7
++
++At the first insn one xreg of data_deps that differs is sufficient to keep
++the calls apart.
++
++An instance that has started does not grow. If a call comes later, the join
++starts a new instance::
++
++  call1 f(0)   instance 1: f(0)      exits 1 --> call1
++  call2 f(1)   instance 2: f(0..1)   exits 1 --> call2 at once
++                                     exits 2 --> call2 later, if they have more
++
++Instance 2 subsumes instance 1, so exits 1 are a part of exits 2. They can add
++values to call2. They cannot hide a value.
++
++Instances can multiply too, so they have a budget. When a function has used its
++part, the next calls are joined.
++
++Calls that go around
++--------------------
++
++The calls of a callback and recursive calls go around like the body of a loop.
++They use the same code: join, widen, peel.
++
++==================  ============================  ==============================
++kind                header                        what stops it
++==================  ============================  ==============================
++loop                the target of the back edge   trip count or ``may_goto``
++callback            the call of the helper        the helper
++recursion           the start of the function     a check at run time
++==================  ============================  ==============================
++
++A recursive function starts with ``may_goto`` and a test of the free stack. If
++there is no room, it returns 0 or unwinds. The verifier checks that edge too.
++A recursion in frames is not joined. It has to end in ``MAX_CALL_FRAMES``.
++
++An async callback, for example of a timer, runs later. It starts as a new state
++with an empty stack. ``callx`` is checked as a call of each function that the
++register can hold. ``bpf_throw()`` ends the program from any frame, so nothing
++can be held there.
++
++After an error
++==============
++
++If an insn is unproven, the state can have values that no path has. The
++verifier has two tools:
++
++============  =================  ===============================================
++tool          when               what
++============  =================  ===============================================
++partition     after the pass     keep more states apart in the next pass
++failing path  after a partition  if the error is real: limit the passes, log it
++============  =================  ===============================================
++
++Partition
++---------
++
++A *partition* keeps more states apart in the next pass. Abstract interpretation
++calls this trace partitioning. More precision costs more. So
++``bpf_partition_more()`` takes the cheap steps first. It takes the first line of
++this list that adds something.
++
++ADD_DEPS
++  Add the deps of the unproven insns. If the insn reads an unreadable xreg,
++  keep only the types apart first.
++
++PEEL
++  Peel the suspects. If the last trip is known: all trips. Else one trip, then
++  as many as the budget pays for. The first trip is often different::
++
++    off = 255; ok = 0;
++    while (...) { if (ok) big[off]; off = x & 63; ok = x | 1; }
++
++PEELED_APART
++  States that start the same peeled trip are joined. Now the join rule applies
++  there too::
++
++    for (i = 0; i < 7; i++) { if (x) a++; else b++; big[a * a + b * b]; }
++
++TRANSITIVE_DEPS
++  A jump can decide which value an xreg of data_deps gets. Add control_deps to
++  data_deps, and add the jumps that can skip a write to data_deps. Each such
++  partition goes one level further::
++
++    ok = i <= 7; ... off = 0; if (ok) off = i; buf[off];
++
++DISJOINT_APART
++  Values in data_deps without a common number stay apart, also without a gap::
++
++    d = x ? 2 : 3; buf[6 / d * d + 1];
++
++LOOP_DISJOINT_APART
++  The same in a suspect, also at the header of the leftover. It is for an xreg
++  that has few values in a long loop. It replaces peeling::
++
++    while (...) { if (n * n < 49) n++; if (x) n = 0; buf[n]; }
++
++PEEL_MORE
++  If PEEL was too costly, or if it stopped at a pruned trip, peel a fixed number
++  of trips, more in each pass. Do not prune them.
++
++IN_FRAMES
++  On its own a function does not get the equations of its arguments. If such an
++  argument is in the deps and the function is not recursive, check the call in
++  frames. That can multiply the work, so this line is the last one::
++
++    if (!ok(x)) return 0; buf[x];
++
++After an error two insns can *fork* a state: the insn is checked once for each
++part of the values of an operand, and the states meet at the next insn.
++
++- ``x u>= 3`` leaves -4..-1 and 3 of the range -4..3, and one range cannot show
++  the gap. If x is in the deps, ``cut_range()`` does the jump once for -4..-1
++  and once for 0..3.
++- A load from the stack with many offsets makes a number of a spilled pointer.
++  If an insn needed a pointer and got that number, ``fork_stack_load()`` does
++  the load once for each slot::
++
++    char *p[2] = { a, b };
++    bpf_for(i, 0, 2) sum += p[i][63];
++
++A partition can be the wrong one. To peel a loop of 100000 trips does not help
++if the error needs control_deps. So each partition but ADD_DEPS has a budget,
++and is undone if the pass is over it::
++
++            +-----------------+   in the budget     -> keep for now
++       +--->| partition, pass |-- it helped         -> keep for good
++       |    +--------+--------+
++       |             | over the budget
++       |             v
++       +--- undo, take the next line
++       |             | no line left, one was too costly
++       |             v
++       +--- a larger budget, undo all since a partition helped
++
++A partition *helped* if the first unproven insn of the last pass has no error
++now, and no old error came back, see ``partition_helped()``::
++
++  for (i = 0; i < 8; i++) sum += i;
++  big[sum]                                              A
++  ok = x <= 7; off = 0; if (ok) off = x;
++  big[off]                                              B
++
++  pass   partition          A          B
++  0      -                  unproven   unproven
++  1      ADD_DEPS           unproven   unproven
++  2      PEEL               proven     unproven         PEEL helped
++  3      TRANSITIVE_DEPS    proven     proven
++
++If a partition was too costly for a loop, a later one is a second choice. It is
++undone when the budget grows, also if it helped.
++
++A pass can cost what a pass cost before, plus the budget. The suspects divide
++a part of it. The first budget grows with the cost of a pass, and it is at least
++``BPF_MIN_BUDGET``.
++
++The failing path
++----------------
++
++After a join a pass cannot tell a real error from a false one. If the error is
++real, more passes are wasted work, and the log of a joined state does not show
++the bug. So ``find_failing_path()`` tries to reproduce the error with no joins.
++It checks one path after another until the check of an unproven insn fails. This
++is a *path-sensitive run*. The path on which the check fails is the *failing
++path*. It has two uses:
++
++- The program is probably wrong, so the next passes get a small budget. A path
++  with a guess is the exception, see below.
++- The log shows this path, from the first insn to the error.
++
++If there is no failing path, the passes continue with the same limit.
++
++The example with ``i > 8``::
++
++  insns       r6       r7
++  0 1 2 3     any      0      both edges are possible
++  3 -> 4      9..max   0      waits
++  3 -> 5      0..8     0      goes first, it is nearer to insn 9
++  5 6 7 9     0..8     0
++  10          0..8     0      r1 = buf + 0..8: buf[8] fails
++
++The failing path is 0 1 2 3 5 6 7 9 10. The check of insn 9 does not fail now.
++Insn 10 reads the result of insn 9, so it was unproven in pass 0 too.
++
++The run has the same checks as a pass, and other rules:
++
++- There are no joins. Each call is in frames. Each trip is peeled.
++- It goes depth first. The edge with the shortest way to an unproven insn goes
++  first.
++- A state is dropped if a state with the same values in the deps was at the
++  insn.
++- If only the jump on the iv depends on the xregs that moved in a trip, and all
++  other live xregs are the same, the path skips trips.
++- If a loop does not end, the path continues where ``may_goto`` leaves it.
++
++The path can end only at an unproven insn of the last pass. This includes an
++insn that was unproven because of another one. An error at any other insn drops
++the path.
++
++The run needs the deps, so it comes after the partition. It starts when there
++is something new: after ADD_DEPS, after a partition helped, after the budget
++grew, and before the final reject. It does not start again when there is a
++failing path.
++
++Three guesses of the run can make a path that the program cannot take. If such
++a path cuts the budget, a valid program can be rejected. So a path of such a
++run, a *path with a guess*, goes to the log, but the budget is not cut. If a
++pass has a real error, the log has that error.
++
++The first guess is the skip. Two trips show a step also for an xreg that has no
++constant step::
++
++  for (i = 0; i < 1000; i++) sum += i;
++  buf[sum - 499500]                        valid, this is buf[0]
++
++  trip   i      sum    real sum
++  2      2      1      1          saved
++  3      3      3      3
++  4      4      6      6          since trip 2: i +2, sum +5; 996 trips left
++  skip   998    2491   497503     497 times: (996 - 1) / 2
++  999    999    3489   498501
++  exit   1000   4488   499500     buf[-495012] fails
++
++``bpf_steps_are_constant()`` looks at the xregs that the skip moves, and at the
++operands of the jump on the iv. One "yes" makes the skip a guess:
++
++==================================  =============================  =====
++if the loop writes the xreg with    example                        guess
++==================================  =============================  =====
++an add of an immediate              ``i += 1``                     no
++a copy of an xreg with equal step   ``x = (u32)i``                 no
++what a pass found linear            a spilled iv                   no
++anything else                       ``sum += i``, ``i < n / i``    yes
++==================================  =============================  =====
++
++The second guess is "the loop is infinite". Two trips give more than 2^32 trips
++also for a ring index. The same function finds it::
++
++  u64 i = 600; do { i = (i + 1) & 1023; } while (i != 88);
++
++  the jump sees   601, 602                step 1, 2^64 - 514 trips left
++  real            601 .. 1023, 0 .. 88    512 trips
++
++The next runs keep this answer. So it is also a guess if the run made a guess
++before it.
++
++The third guess is the target of ``may_goto``. All states have the same one::
++
++  large = x > 7;
++  while (...) {
++          if (large && x <= 7) lock();        only a join gets here
++          do { p = lookup(); } while (!p);    gets may_goto
++          *p
++  }
++
++With no lock the target is ``return 0``. The joined state gets to ``lock()``, so
++the pass selects the code after the loop. A path with no lock goes there too,
++and ``*p`` fails.
++
++The run accepts nothing: it drops states and skips trips. It is not the verdict
++either: a path has ranges too, and it can fail at an insn that a pass proves.
++
++All passes
++----------
++
++``do_check_all()`` puts the parts together::
++
++          pass 0: join all numbers
++                    |
++    +---------> run a pass
++    |               |
++    |            error ? --- no ---> pessimized ? --- no ---> ACCEPT
++    |               | yes                 | yes
++    |               v                     v
++    |       good pass before ?      save the good pass,
++    |          | no      | yes      partition, cut the budget
++    |          |         v                |
++    |          |   ACCEPT, use that pass  +---> run a pass
++    |          v
++    |      partition
++    |          |
++    |  failing path ? --- yes ---> log it; if no guess, cut the budget
++    |          | no                       |
++    |          +<-------------------------+
++    |          v
++    +- yes - is more kept apart ? --- no ---> REJECT
++
++The last answer is no in three cases:
++
++- Nothing made the pass imprecise before its first error. The error is real.
++- No partition adds something.
++- The budget is used up.
++
++A pass that is over the limit of the load ends it too. The next chapter explains
++"pessimized".
++
++The example, and the same program with ``i > 8``::
++
++                 i > 7                   i > 8
++  pass 0         insn 9 is unproven      insn 9 is unproven
++  partition      ADD_DEPS                ADD_DEPS
++  failing path   none                    0 1 2 3 5 6 7 9 10: buf[8]
++  pass 1         no error                insn 10 is unproven
++  result         ACCEPT                  REJECT, the log has the failing path
++
++What a pass leaves behind
++=========================
++
++Fixups
++------
++
++After the last pass the verifier rewrites the program. A load from the context
++gets the real offset. A load through an untrusted pointer gets a fault handler.
++``bpf_obj_drop()`` gets the fields of the type. A pass notes what the rewrite
++needs: these notes are the *fixups*.
++
++An insn has one fixup for all states. If two states need two fixups, the
++verifier takes one that fits both: no inlining, a fault handler. If there is
++none, the insn is unproven. If both states are real, no pass can prove it, and
++the program is rejected::
++
++  if (...) p = a; else p = b;     a has a kptr, b has none
++  bpf_obj_drop(p);                unproven: one call, two types
++
++A pass can write a fixup on a path that only a join makes. The next pass must
++not see it. A *snapshot* is a copy of the fixups and of the bounds that a pass
++writes to the program. Each pass starts from the snapshot that was taken before
++pass 0.
++
++What a pass learns about loops is not in a snapshot. The next pass gets it as a
++guess.
++
++``check_after_pass()`` checks what holds for the program as a whole, such as the
++depth of the stack over all call chains. Its error is handled like an unproven
++insn.
++
++Pessimized insns
++----------------
++
++A good pass can still ask for too much::
++
++  (off, len) = (0, 64) or (56, 8)      each path needs 64 bytes of the context
++  join: off = 0..56, len = 8..64       the pass asks for 120 bytes
++
++Such a bound is checked when the program is attached or run. The insn that
++raised it is *pessimized* if the pass is imprecise and an operand has a range.
++An insn that gets a barrier (next chapter) in an imprecise pass is pessimized
++too. The verifier saves the good pass in a second snapshot, and partitions more
++in a small budget. If a later pass has an error, the saved pass is the result.
++
++Dead code
++---------
++
++An insn that no state got to is dead. A jump with a dead edge becomes a goto,
++and the dead insns are removed. Without ``CAP_BPF`` they are replaced by
++``goto -1``. If both edges of a jump are dead, no run gets to the jump. It
++becomes ``goto -1``.
++
++Only a conditional jump can lose an edge. So an infeasible state ends only
++after such a jump.
++
++Offload
++-------
++
++The driver of an offloaded program sees each insn with its state, and cannot
++forget. So it sees only a pass without errors: that pass runs once more for the
++driver, after ``prepare()``. An insn that the driver refuses is unproven. If a
++later pass has no error, the driver gets ``destroy()``, ``prepare()`` and that
++pass. What it noted in a map stays. An offloaded program gets no ``may_goto``
++and no rewrite of fastcall patterns.
++
++Speculation and privileges
++==========================
++
++The cpu can run code after a jump before it knows the result of the jump. What
++such code loads can leak through the cache::
++
++  if (i > 7) goto out;        the cpu predicts "not taken" for i = 1000
++  x = buf[i];                 reads out of bounds
++
++Without ``CAP_PERFMON`` the verifier prevents that, unless the mitigations are
++off or the cpu does not need them:
++
++==========================  ====================================================
++``pointer += number``       The number gets a mask that cuts it to the object.
++                            If no mask fits all states, the insn gets a
++                            *barrier*: ``nospec`` stops speculation.
++a jump that values decide   The dead edge is checked too, as a *speculative*
++                            state.
++an error in such a state    It is no error. The insn gets a barrier.
++a store to the stack        A barrier follows if a later load could see an old
++                            value that matters.
++==========================  ====================================================
++
++A barrier has to stop each edge that leads to the insn::
++
++  fall-through, jump, call, return     barrier before the insn
++  exit of a callback --> helper        barrier at the exit
++  may_goto --> r0 = 0; exit            barrier before r0 = 0
++  call --> recursion in frames         barrier at the call
++  return --> dead code                 goto -1 replaces the code
++
++A speculative state is joined only with speculative states, and it subsumes
++only speculative states.
++
++Some mechanisms depend on a capability. The last line is there because the cpu
++can go past the jump that a proof needs:
++
++=================================  =============================================
++``CAP_BPF``                        loops, calls of functions, equations, numbers
++                                   in stack slots, 1M insns (else 4096), the
++                                   full `Limits`_
++``CAP_PERFMON``                    trip count, reads of stack that is not
++                                   written, pointers as numbers, access to BTF
++                                   objects, arena
++``CAP_PERFMON`` or no mitigations  equations of pointers, equations that a join
++                                   makes from constants, the end of infeasible
++                                   states, skipped first trips, stack access
++                                   with many offsets, pointers out of the object
++=================================  =============================================
++
++Without a trip count a loop gets ``may_goto``, or it is peeled.
++
++Limits
++======
++
++There is no limit on the number of states or of checked insns. There are two
++limits for the full load:
++
++======  ========================================================================
++cost    ``BPF_MAX_COST``. Each kind of work has a weight, see ``BPF_COST_SCAN``.
++memory  ``BPF_MAX_MEM``. It counts the states and the large tables. The passes
++        of a small program get less, see ``BPF_PASS_MEM_BASE``.
++======  ========================================================================
++
++Both limits are smaller without ``CAP_BPF``. If a load is over a limit, the log
++shows both limits.
++
++Cost counts work, not time. So the verdict does not depend on the speed or the
++load of the machine.
++
++A program that no precision can prove must not use up the limit on cost. So the
++verifier cuts what is left after the first error. It cuts more after a failing
++path with no guess, and after a good pass with a pessimized insn.
++
++Other limits:
++
++=======================  =======================================================
++``MAX_CALL_FRAMES``      32 frames in a state
++``BPF_ID_MAP_SIZE``      less than 9152 ids in a state
++``LOOP_STACK_SIZE``      16 nested loops in a function
++``MAX_BPF_STACK``        512 bytes of stack; 2048 if the JIT supports it
++``BPF_MAX_VAR_OFF``      a pointer that can be 2^29 away gives no access
++``BPF_MAX_TRIPS``        a loop gets ``may_goto`` if k can be above 2^32
++=======================  =======================================================
++
++What is trusted
++===============
++
++A bug in trusted code can accept an unsafe program. A bug in a guess cannot.
++
++The table has the guesses and what checks them. All other code is trusted.
++
++========================  ======================================================
++guess                     check
++========================  ======================================================
++what is kept apart        none is needed: a join and two states are both proofs
++sym of a difference       none is needed: a state without it has more values
++equations of a join       ``check_equations()`` in both states
++threshold                 the state that comes back has to be subsumed
++first trips               they are joined with the entry; then the same check
++what stops a loop         ``pass_needs_restart()``
++trip count                the trip index of each state that closes a cycle
++path-sensitive run        none is needed: it accepts nothing
++========================  ======================================================
++
++The log
++=======
+ 
+-Program that uses invalid map_fd=0 while calling to map_lookup_elem() function::
++=====  =========================================================================
++level  content
++=====  =========================================================================
++1      the failing path; if there is none, or if it has a guess and a pass has a
++       real error: the basic block of an error
++2      the analyses of the code, all passes and path-sensitive runs
++4      time, stack depth and insns of each function
++=====  =========================================================================
+ 
+-  BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
+-  BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
+-  BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
+-  BPF_LD_MAP_FD(BPF_REG_1, 0),
+-  BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
+-  BPF_EXIT_INSN(),
+-
+-Error::
++In level 1 the later passes and the path-sensitive runs have no log. The one
++that gives the log runs once more. That work is not in the limit on cost. It
++costs at most as much as the work before it.
+ 
+-  0: (7a) *(u64 *)(r10 -8) = 0
+-  1: (bf) r2 = r10
+-  2: (07) r2 += -8
+-  3: (b7) r1 = 0x0
+-  4: (85) call 1
+-  fd 0 is not pointing to valid bpf_map
+-
+-Program that doesn't check return value of map_lookup_elem() before accessing
+-map element::
+-
+-  BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
+-  BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
+-  BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
+-  BPF_LD_MAP_FD(BPF_REG_1, 0),
+-  BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
+-  BPF_ST_MEM(BPF_DW, BPF_REG_0, 0, 0),
+-  BPF_EXIT_INSN(),
+-
+-Error::
+-
+-  0: (7a) *(u64 *)(r10 -8) = 0
+-  1: (bf) r2 = r10
+-  2: (07) r2 += -8
+-  3: (b7) r1 = 0x0
+-  4: (85) call 1
+-  5: (7a) *(u64 *)(r0 +0) = 0
+-  R0 invalid mem access 'map_value_or_null'
+-
+-Program that correctly checks map_lookup_elem() returned value for NULL, but
+-accesses the memory with incorrect alignment::
+-
+-  BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
+-  BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
+-  BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
+-  BPF_LD_MAP_FD(BPF_REG_1, 0),
+-  BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
+-  BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 1),
+-  BPF_ST_MEM(BPF_DW, BPF_REG_0, 4, 0),
+-  BPF_EXIT_INSN(),
+-
+-Error::
+-
+-  0: (7a) *(u64 *)(r10 -8) = 0
+-  1: (bf) r2 = r10
+-  2: (07) r2 += -8
+-  3: (b7) r1 = 1
+-  4: (85) call 1
+-  5: (15) if r0 == 0x0 goto pc+1
+-   R0=map_ptr R10=fp
+-  6: (7a) *(u64 *)(r0 +4) = 0
+-  misaligned access off 4 size 8
+-
+-Program that correctly checks map_lookup_elem() returned value for NULL and
+-accesses memory with correct alignment in one side of 'if' branch, but fails
+-to do so in the other side of 'if' branch::
+-
+-  BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
+-  BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
+-  BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
+-  BPF_LD_MAP_FD(BPF_REG_1, 0),
+-  BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
+-  BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 2),
+-  BPF_ST_MEM(BPF_DW, BPF_REG_0, 0, 0),
+-  BPF_EXIT_INSN(),
+-  BPF_ST_MEM(BPF_DW, BPF_REG_0, 0, 1),
+-  BPF_EXIT_INSN(),
+-
+-Error::
+-
+-  0: (7a) *(u64 *)(r10 -8) = 0
+-  1: (bf) r2 = r10
+-  2: (07) r2 += -8
+-  3: (b7) r1 = 1
+-  4: (85) call 1
+-  5: (15) if r0 == 0x0 goto pc+2
+-   R0=map_ptr R10=fp
+-  6: (7a) *(u64 *)(r0 +0) = 0
+-  7: (95) exit
+-
+-  from 5 to 8: R0=imm0 R10=fp
+-  8: (7a) *(u64 *)(r0 +0) = 1
+-  R0 invalid mem access 'imm'
+-
+-Program that performs a socket lookup then sets the pointer to NULL without
+-checking it::
+-
+-  BPF_MOV64_IMM(BPF_REG_2, 0),
+-  BPF_STX_MEM(BPF_W, BPF_REG_10, BPF_REG_2, -8),
+-  BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
+-  BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
+-  BPF_MOV64_IMM(BPF_REG_3, 4),
+-  BPF_MOV64_IMM(BPF_REG_4, 0),
+-  BPF_MOV64_IMM(BPF_REG_5, 0),
+-  BPF_EMIT_CALL(BPF_FUNC_sk_lookup_tcp),
+-  BPF_MOV64_IMM(BPF_REG_0, 0),
+-  BPF_EXIT_INSN(),
+-
+-Error::
+-
+-  0: (b7) r2 = 0
+-  1: (63) *(u32 *)(r10 -8) = r2
+-  2: (bf) r2 = r10
+-  3: (07) r2 += -8
+-  4: (b7) r3 = 4
+-  5: (b7) r4 = 0
+-  6: (b7) r5 = 0
+-  7: (85) call bpf_sk_lookup_tcp#65
+-  8: (b7) r0 = 0
+-  9: (95) exit
+-  Unreleased reference id=1, alloc_insn=7
+-
+-Program that performs a socket lookup but does not NULL-check the returned
+-value::
+-
+-  BPF_MOV64_IMM(BPF_REG_2, 0),
+-  BPF_STX_MEM(BPF_W, BPF_REG_10, BPF_REG_2, -8),
+-  BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
+-  BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
+-  BPF_MOV64_IMM(BPF_REG_3, 4),
+-  BPF_MOV64_IMM(BPF_REG_4, 0),
+-  BPF_MOV64_IMM(BPF_REG_5, 0),
+-  BPF_EMIT_CALL(BPF_FUNC_sk_lookup_tcp),
+-  BPF_EXIT_INSN(),
+-
+-Error::
+-
+-  0: (b7) r2 = 0
+-  1: (63) *(u32 *)(r10 -8) = r2
+-  2: (bf) r2 = r10
+-  3: (07) r2 += -8
+-  4: (b7) r3 = 4
+-  5: (b7) r4 = 0
+-  6: (b7) r5 = 0
+-  7: (85) call bpf_sk_lookup_tcp#65
+-  8: (95) exit
+-  Unreleased reference id=1, alloc_insn=7
++A line has the insn and the registers that it reads or changes::
++
++  9: (0f) r1 += r6     ; R1=map_value(map=.data.buf,ks=4,vs=8,smin=0,smax=8,...)
++  10: (71) r0 = *(u8 *)(r1 +0)
++  invalid access to map value, value_size=8 off=8 size=1
++  R1 max value is outside of the allowed memory range
++
++  Verification failed: Memory Safety: Access outside bounds
++  ...
++
++Most errors have a report: the reason, the source line, the insns that made the
++value, and a suggestion. An error that does not end the path gets no report:
++
++- an error in a speculative state,
++- an argument that does not fit the BTF of a static function.
++
++In level 2 each pass and each path-sensitive run has its report.
++
++Other lines
++-----------
++
++Most of these lines are only in level 2.
++
++=====================================  =========================================
++text                                   meaning
++=====================================  =========================================
++``pass 1``                             a new pass starts
++``path-sensitive run after pass 0``    see `The failing path`_
++``from 4 to 5: R6=...``                the state at the start of a basic block
++``from 5 to 6: pruned``                another state subsumes it
++``from 3 to 7: joined``                it is joined with another state
++``from 8 to 2: widened``               the same, at the header of a leftover
++``(speculative execution)``            a speculative state
++``loop_stack=3``                       in the loop with header 3
++``iter(3)=1``                          in peeled trip 1 of that loop
++``0:r7=8*sym0+0 sym0=[0,+7]``          frame 0: r7 = 8 * sym0; sym0 is 0..0+7
++``0:trip0=1*sym0+0``                   the trip index of the first loop
++``sym2=1*sym0-1*sym1+4``               a sum: sym2 = sym0 - sym1 + 4
++``sym3=insn5(1*sym2+0,248)``           an op: what insn 5 makes of sym2 and 248
++``loop at 3 has trip count 8``         no ``may_goto`` is needed
++``loop at 0 has no trip count``        the loop gets ``may_goto``
++``call at 1 waits for func#1``         the function is checked on its own
++``fork R1``                            the load is checked once for each slot
++=====================================  =========================================
++
++Common errors
++-------------
++
++``unreachable insn 2``
++  No path gets to the insn.
++
++``R2 !read_ok``
++  The register was not written, a call clobbered it, or it has two types on two
++  paths.
++
++``R1 invalid mem access 'scalar'``
++  A number is used as a pointer.
++
++``R0 invalid mem access 'map_value_or_null'``
++  Test the pointer for NULL first.
++
++``invalid access to map value, value_size=8 off=8 size=1``
++  The largest offset is out of the value. Test the index.
++
++``math between map_value pointer and register with unbounded min value is not allowed``
++  The number that is added has no lower bound.
++
++``invalid access to packet, off=12 size=2, R2(id=0,off=12,r=0)``
++  Compare the pointer with ``data_end`` first.
++
++``invalid write to stack R10 off=8 size=8``
++  The stack is below r10.
++
++``misaligned stack access off 0+-12 size 8``
++  An access to the stack has to be aligned to its size.
++
++``invalid read from stack R10 off=-8 size=8``, ``invalid read from stack off -8+0 size 8``
++  The bytes were not written.
++
++``invalid bpf_context access off=1000 size=8``
++  The program type does not allow this field.
++
++``Unreleased reference id=5 alloc_insn=4``
++  A path does not release what insn 4 acquired.
++
++``loop at insn 2 never exits``
++  The loop has no edge that leaves it.
++
++``BPF program is too complex``, ``the limit on cost or memory ended pass 6``
++  The load is over a limit. If a pass had an error before, the log has that
++  error, or a path with a guess. That path can be false.
++
++Words
++=====
++
++==================  ============================================================
++barrier             the ``nospec`` insn, it stops speculative execution
++basic block         a run of insns without a jump into it or out of it
++budget              a limit on the cost of one step
++checked             the bytes of a packet that are known to be before its end
++control_deps        xregs whose value flows to a jump that can skip an unproven
++                    insn
++correlated          two branches: one tests a result that the other one stored
++cost                the work that is done
++data_deps           xregs whose value flows into an operand of an unproven insn
++deps                data_deps and control_deps
++entry               a state that enters a loop
++equation            how two or three numbers are related
++failing path        a path without joins on which the check of an unproven insn
++                    fails; it is the result of a path-sensitive run
++fixpoint            the state at a header subsumes all states that come back
++fixups              what a pass notes for the rewrite of the program
++fork                check an insn once for each part of the values of an operand
++gap                 a value of a join that is in neither state
++good pass           a pass without errors
++guess               a choice that can be wrong and cannot accept an unsafe
++                    program
++header              the insn where each trip of a loop starts
++held                references, locks, dynptrs, iterators, irq flags
++helped              after a partition the first unproven insn of the last pass
++                    has no error, and no old error came back
++id                  the name of a set of xregs that hold copies of one pointer
++imprecise           a state of the pass possibly has values that no path has
++in frames           a function is checked with the frames of its callers
++infeasible          no run of the program has the state
++insn                an instruction
++instance            an entry state of a function, its exit states and its calls
++iv                  induction variable: each trip adds a constant to it
++join                two states become one that has the values of both
++join point          an insn where states can meet
++join_key            what has no join: states with two join_keys never meet
++leftover            all trips that are not peeled
++live                read later, before it is written
++may_goto            a jump that is taken when the program has looped too long
++on its own          a function is checked without the frames of its callers
++partition           keep more states apart in the next pass
++pass                one run of the main analysis over all functions
++path with a guess   the failing path of a run that made a guess; it can be false
++path-sensitive run  a search for a failing path, one path after another
++peel                check a trip apart from the other trips
++pessimized          proven, but a join possibly raised a bound
++precision           what a pass keeps apart
++proven              an insn whose check did not fail in a state of the pass
++prune               drop a state that another state subsumes
++refine              remove values that a jump excludes
++seed                an insn whose reads start the backward slice
++snapshot            a copy of the fixups and bounds that a pass writes
++speculative         the cpu can have the state only after a wrong prediction
++spill               a store of a register to a stack slot
++state               what each xreg can hold before an insn
++step                all values of a number are ``base + step * k``; in a loop:
++                    what one trip adds
++stored condition    an xreg that stores the result of a test
++subsumes            has all values of another state
++suspect             a loop that made an xreg of data_deps imprecise
++sym                 a number that equations use
++threshold           a value at which a range that grows can stop
++trip                one iteration of a loop
++trip count          the largest trip index + 1
++trip index          how many times the program came back to the header
++unproven            an insn or a part whose check failed in a state of the pass
++unreadable          an xreg without a value: an insn that reads it is unproven
++unwind              leave a function with ``unwind_exit``
++walk                one check of the body of a loop
++widen               move a bound that grows to a threshold
++xreg                a register, a stack slot or the trip index of a loop
++==================  ============================================================
+-- 
+2.55.0
+
