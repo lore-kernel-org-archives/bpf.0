@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795208026;
-	b=jbUz3KrcyHEwd1c0aocdeMc5LL0RgQDZo0rc8nG7ghvyUohRt6AET51znRP8mSmOKgfW
-	 Eeacc8xyyO6b1TNBdOvgkl18j7He4qzpeq5+JO/KyLNOrdFGWAXFrMbKWRJC/0FnzD/W2
-	 T/EdVDlQP9bMcTOTH+nPkFUjklEQZ0aa5S9XqFwOl2UKY/ZIC/gT3xYmUGrB2MUg6Lyq5
-	 akUUoUMfqeX+7PGsQ4qEcT29UerIl9owa+Mko0/7ZOjCbcGpFmCEMnsYOQUuWPTJRYhYa
-	 HbvyglUsem0kbZ9KeZasfxxG2VFk9ObqsubVolngw3tQ8xcqD3zJk0pPPA9i1phcLWw==
+	t=1795208035;
+	b=MARJNfB7PNveVOhXsw6F3o9MDeagQwM/ViiWDiUmZWOmg8/YoquztiVuDn54nBaNpMmS
+	 ZytjoJr4ezeiGl4F9L/qTCiES9LzijZD3P8earw0dkFfvQJjogCYQVTs8qiWn3eBk3XJ0
+	 ygc5/kt6HPQzDwSLNCaDJqSyUml77mEpqLTvmXnv0mRBfn/bA6cktWSGGS6yFnmhebxpq
+	 S9y7To1rJMBiMale7f2I7IPXRX5ThSu/mD228MjI7EGByZkUQHdKmbXw7Hs9R889TMrtW
+	 ZhdXig6NBl0h1EAy7JgVJX5ghoUeq66DL0LkqEUHZf7EscFPpmqVvHq6Ao06h2MVLAg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795208026;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795208035;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=nAERYcRW6PuyJY91DuCVO2ffvdSl2O9PQwu4YoEVQ3M=;
-	b=wHRURlnJBCHIwNBjnkRvOefeDVo1FxSI8BnoHjJJFnfipym4gTNDCP3Mn9SVjnypIoAn
-	 OXQY5PLgIF8ernPiuXl3mvj7mBPm9WAngIiKXTZbrcLio9FNJCgpH+GfBx53sNvPoXlLW
-	 c2jjqvo5oX/TTvB3f6Rr/gliLUmXmJKKt2NZANuZzsr7BF2YU6KP7wc50J90iz4n8OHKa
-	 v0ReGtpxvrncpXKi8fmW5EJmmRFJYztTrzUBh/WFYQRcg7l19k4AmOoOxAxPqpGtY0CgF
-	 pCRnHk4xZpN66J5w5/u3QZxYsZscj0y4C3R7gMpNHEpEK6zBSI1a40YEYVMkDZR81Aw==
+	bh=XXcibJu1PWJTrpaT3JQiQ75biDxYpAA2Mo5a5oecrew=;
+	b=V+9EPlxcweJKMCefdD3XX77NNaidNIoFSzJ+DiiluOmI70+ri03ww+OdGGzYXSpKt9cf
+	 E8iImtGqVfMQZdmfYOueiXXC6YWXBJnq6AR+jadOgNwRLy9bW7bTa2mLtHeNoMuFuM2Du
+	 471O87LFjGbK9SiDVAW0NJyIXr/rfPqq3VFIFULYt873NF5oxwXvNaZw1b3lzbXgYpW4r
+	 tEyYswLPgNAJHV7QqN9ijJp+4gYAuoWQy1qm+qOdRpns7aja+Y/WdTR9GU1zYZDq01niO
+	 6OY3TM1HUHHd7jdbL+SKj6u1aBZAIMjfFK6She9sfqcj204x0o4xrILo/n3/9GUGjlg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=sEv1d1HZ;
-	arc=none smtp.remote-ip=209.85.214.170
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gFT5hRtS;
+	arc=none smtp.remote-ip=209.85.215.179
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59BEB606A6A6
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 20:53:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 59BEB606A6A6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A794606A69C
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 20:53:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2A794606A69C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=sEv1d1HZ
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2f0621eec70so979905ad.2
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 12:53:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gFT5hRtS
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-cdba1bbde0bso604922a12.2
+        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 12:53:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795208022; x=1795812822; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795208033; x=1795812833; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=nAERYcRW6PuyJY91DuCVO2ffvdSl2O9PQwu4YoEVQ3M=;
-        b=sEv1d1HZ8P4Z09I8+8oRxcLCPcQAt3mHR7CtpMvBJjhW6RrV/mX/NpYB8Kk2/gHSj4
-         1/Pnm3w2NR+9inFDMdH+mAwpZV5Azf11JkTgDaN13D4dOjCXrH57duTu2TItIy8jb39V
-         DSe5FKTMxk00GZNSAPXZU/awHYds9asBcRjud+n7FRt7Ibdagy+mM52B3pxmhHxprBio
-         U+oMLIT4uwuVAhT6J0K0i0AXJKlmZygo9xB69Dr1gX+sMFweEC+vHVbqRBwgjtbaJQ39
-         PDUKkU7hZt2q2FqU6dyW6RsU7D3gChMvVXQSytXqFDLCeuXr2snqrEHDhk4UtT4/s13Y
-         bpzg==
+        bh=XXcibJu1PWJTrpaT3JQiQ75biDxYpAA2Mo5a5oecrew=;
+        b=gFT5hRtSKak1Dj5nAMoqCminkWfKY1onF6UqeiGROMYyx9cefXcikorm4Tpan4tmNc
+         I2KBPZYkZn9XHYEeECDB4DcRfSNlkDsrlcyoPJ1szDovHYBMvi7WvpKZyj7O3v6Jh0aH
+         MNGFhxIY62YyLfctbQNliJHuLZ564n9HlGgtXbe9ViUiprzZvrH3KznI+CeHZnsbDzwZ
+         X4+DPMBrfciDzPd8yV4yxRUuz0L/BWxBFvCv3IDNrO5aN8uVw9D8kxMQI90pTASyhcj5
+         9GNurXD6f1hHqWJhXDHVSQ99oO906NN3poSEUl3J3Ue7nhXfhXpvSlUrvgzSIG07Hyr/
+         YvbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795208022; x=1795812822;
+        d=1e100.net; s=20260707; t=1795208033; x=1795812833;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=nAERYcRW6PuyJY91DuCVO2ffvdSl2O9PQwu4YoEVQ3M=;
-        b=qPPzK6Y0tC8C+sGbatLBx6CDD+SAe71cS3hMcF6FD7OZm4Qm7VQ+5beJfgG4CYo5fT
-         +yDKoqRv3nISPfvhrS5UHjimmSBH5LDJ+KinIr5EAYAZMyoe+UGjMIt81X2Y+lQdPhoo
-         HbMWPxc6CPZEGSfkageOmXfyfi/WRhTr5Unhv4KfOgDcFE7FbPW9cPx7iOekLXZtj4jZ
-         20WozYWfJjT1ahGm8r/YSUgBpOFjIK/mmhpbFFQ7GqF3tIoJQBBATfZHt88wRE3CX6U8
-         /fKzDjMvJU6sqBWU1MlBPZEvaOt0SBVg2Idg1TqDp8UhlCMpqxOTLksobUGzTcoPaZJu
-         4Ttg==
-X-Gm-Message-State: APuU4Z+9sFFyTP++3mzk1nEgk5ykfcS4MdSv6z76plA8fx2mVxrwTtW+
-	tPA28P0vOTvcxFlwUAGghunjFggUBIrl7gFnHV10wqZqU1ZHa5fFi0srghu5kw==
-X-Gm-Gg: AZFdTZexOMbej/fjCABRfFNOpMMs/khWwcQwfg8LP2UwMOW9SD0fY8cAx5blwxnExfr
-	ZOMmYuyEV6lMp2j+OB88DG1jOdDdGGuWI4ReATZt4jlNhhYKFmCFhvsVPRbwWzPA2+qvORQ0loM
-	LFG+FwrEEf0YOQkXw2Jxl/4P7BmREvoku/bcsERFEASnF0aWq1kH7nODDaeKZiOJNGQPFOpqUUL
-	ikdOUyL4Gb3LYL0THM/iAjXGyd0lDcP3m4HzaTE2iNQKK9/9/xtdoTJ4o6WO/Oz/Ujflt+UZBdf
-	JofvPZ+RnjSodcVSWZkD6V/2CZw2n8Eb2DP8CdJweWMF0Sy4/4g+YzKqu+KBaGEZQJSWOzf7qb6
-	HqIBTQYvABDXHCvFmhBNctYhB4OQOg+DPKK4fMACWxfsai3rTAGkfpl7y0ezmnDcfgh6XBv+Buv
-	rj9Ajiq/Jeuubri+x/SGDVQKOPR3wKuhiM0S3waZqkKD+DU6c0sEDwiJV/X6Zs381rexpxJgAIX
-	mk7igpnUQ/8ZSGVX3iFYjnRDPbzfFgxNKerQXzhELlQtvYWs3xcJ9HXfW3IHRafLCl16w0SoyyZ
-	BxAsZsCPDw66UFPIi8C9agPqj75bcADW2LOEIVZB5Dzs5/+O49oTsTJ5HF1V0RlNvUvLXgpyI15
-	K9CjwFGOH+dgcdSRL7+/B/cxwf8pzjVgtjb8xpV0CF/JIeA7pByQWHb+QcgXk35pMAa8hUQVuQA
+        bh=XXcibJu1PWJTrpaT3JQiQ75biDxYpAA2Mo5a5oecrew=;
+        b=TkTZqYfGMarT9y5MRHfDS0Vargh6DXkNQSpFOxELZWtZxwjPwN1YfjomUZoDE4ffPR
+         JsggQlJJ6iAO70iBDw+X5AdPqKhYw/Fcdzj9Q/lnv7vYknmtt29OVa4wDkGUqKxQSFXP
+         o/09gpkuuJveHnFuwgueh53g6u65S+UfykYb5zgoLvnPPQjmEgOqiG8NvIJ3ZPzSTH2J
+         roAMtjLUDMV+/deQD/a+s93of0NzIR+qpBliQmOIt53mjrBLhwL28gwbJynPjdIuMDDH
+         0IR86UvOXGxbsYzel9VVCPp7S/QYNpP1Kinv0FSsFIBuhPCkzKKjFQAiO3Nv0iFYQEwH
+         bA2Q==
+X-Gm-Message-State: APuU4Z90xNUEdkcbILGPwphZ3zl92yah4vAzipIAJbrpO8NQABz/RImf
+	fr8jIg+tbxlctqk+NyrV+TeuwnX9OgliXWvgT9dBXRVKhVPXUYXRQwzNVDW3Ew==
+X-Gm-Gg: AZFdTZeXX8HjyHohAD13vCQ5P9BZ8A0/UNNuyL63UvY2ij3+hqFDNw8wnzItfzAnTC0
+	Wzxc2/ECziLlUG9859dye976bOqjXOqRyBotd4SNkso4brIP0zC6WXYZ0bw24pA6YNhX8dMI1bF
+	H98dwPclPIdnBMf+FMrygOfQtx8wNE7I9dYJywCbZY/Z5/dvu4PhX/d9biy3AjzyslCYWDd/WG/
+	djcH/tWLmLNroOCtppIoIlIXjMxjGnWMKRQtq8ISApkvZCtNMa84zV/aV3ua8AgUu7NENSV15Zw
+	PL2suAyywEhmCTrVyISm7wq5PCFWN2tpEJUUcerywR/BTOsmT+LAUjCe49TdYp3l2w5tenoxXRf
+	x7YGPb01tP1LqjFe81+APKrTdIkOzurfdiGYXvtRLQgdGsOsVqhS7BDfvmh9X0L/qmGfjo4UeiC
+	sBIbK2D2foNs22RJqbOHei6XbZ9yi+BX4QKGpL5VYga2M0pfJtk0/lJIlFv8tVZohd1inOwpC7i
+	unyIYwOae8j2E2OV8tgOeGnUfhxk+BKw7P2c+5bKomRPlZQpOAA8tCkqBVQX2kf1hpIj7aXMSyH
+	kxQDox0uOCxwlyDqrYU5IcxZu2ZsExqrsyFc6SG7IY5FFMnwFHzgsesFkQ8rO/q+DUIhFDrWKpa
+	r4PNiOBHUzIJvlO/BQiUOKP3jTlCuJkoZZW+F4PsKnKzOr/XdXZWBb0pdJnpUDy0ONE9PTTe02w
 	==
-X-Received: by 2002:a17:902:e802:b0:2e9:a16b:c251 with SMTP id d9443c01a7336-2f03efb1099mr48272125ad.3.1795208021420;
-        Fri, 20 Nov 2026 12:53:41 -0800 (PST)
+X-Received: by 2002:a17:90b:5109:b0:3ac:97bc:4c98 with SMTP id 98e67ed59e1d1-3b41c9bc501mr3710521a91.64.1795208033230;
+        Fri, 20 Nov 2026 12:53:53 -0800 (PST)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.252])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03ee843d2sm19044705ad.11.2026.11.20.12.53.40
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41ad46ef5sm5507521a91.8.2026.11.20.12.53.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2026 12:53:41 -0800 (PST)
+        Fri, 20 Nov 2026 12:53:52 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 37/49] bpf: Verify in passes
-Date: Fri, 20 Nov 2026 20:49:45 +0000
-Message-ID: <20261120204959.614908-38-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 39/49] bpf: Keep two states apart if a live xreg has two types
+Date: Fri, 20 Nov 2026 20:49:47 +0000
+Message-ID: <20261120204959.614908-40-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261120204959.614908-1-alexei.starovoitov@gmail.com>
 References: <20261120204959.614908-1-alexei.starovoitov@gmail.com>
@@ -104,514 +104,261 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Put the parts together. do_check_all() runs passes until a pass has no
-error, or until there is no more precision:
+Pass 0 joins all states. A join of two types or two objects is
+unreadable. If the xreg is live, the program probably reads it. Then the
+pass has an error, and the price is two more runs:
 
-        pass 0: join all numbers
-                  |
-  +---------> run a pass
-  |               |
-  |            error ? --- no ---> pessimized ? --- no ---> ACCEPT
-  |               | yes                 | yes
-  |               v                     v
-  |       good pass before ?      save the good pass,
-  |          | no      | yes      partition, cut the budget
-  |          |         v                |
-  |          |   ACCEPT, use that pass  +---> run a pass
-  |          v
-  |      partition
-  |          |
-  |  failing path ? --- yes ---> log it; if no guess, cut the budget
-  |          | no                       |
-  |          +<-------------------------+
-  |          v
-  +- yes - is more kept apart ? --- no ---> REJECT
+  r6 = 0;               r6 = map value;
+          \            /
+           if (r6 == 0) goto out;
 
-A good pass has no error. It is a complete proof, with any precision.
-If no state before the error was imprecise, the error is real and the
-verifier stops. The path-sensitive run needs the deps, so it comes after
-the partition. A failing path with a guess does not cut the budget. If a
-pass has a real error, the log has that error and not the guess.
+  old:  join -> r6 !read_ok -> path-sensitive run -> pass 1: apart
+  new:  pass 0: apart
 
-A valid program that no precision can prove must not use up the limit.
-After the first error the limit is the larger of BPF_PARTITION_BUDGET
-and two times the cost so far.
+The same holds for a packet pointer that has checked bytes in one state
+and has none in the other state.
 
-A program of 1M insns needs 1.2 GB for its tables, so BPF_MAX_MEM is
-large. If the states of a small program explode, they must not use all
-of it. With 2 GB a program of 500 insns takes 30 seconds before it is
-rejected. So the passes can add 256 MB to the tables, and 32 KB for each
-insn. That is one state with a full stack.
+bpf_hash_live_types() adds the types and objects of the live xregs to
+the hash of a state. So such states do not meet.
 
-The later passes and the path-sensitive runs have no log, and make no
-text for diagnostics. The one that gives the log runs once more. That
-work is not in the limit on cost. Log level 2 has all of them.
+- Numbers are joined as before.
+- The arguments of the calls of an instance are joined as before, else
+  the calls do not share it.
+- N such xregs can give 1 << N states. So the rule has a budget in each
+  pass: 1/64 of the limits on cost and memory. The cost of a state
+  that is alone does not count, see bpf_flow_next(). A pass that is over
+  the budget joins from there on, and so do the next passes. Then an
+  error selects the xregs.
+- Offloaded programs are joined as before. The replay for the driver
+  has to join where the good pass did.
 
-A later pass must not hide a bug of the verifier. bpf_note_bug() sets
-env->bug and turns the log on. The load ends with -EFAULT.
-
-Programs load again: remove the refusal in bpf_check() and
--Wno-unused-function. Rename round_is_dropped() to pass_needs_restart().
+                                     insns processed
+  program                            before    after
+  profiler3 kprobe__vfs_link         7969      3865
+  test_cls_redirect_subprogs         5726      3091
+  xdp_synproxy_kern syncookie_xdp    8136      7630
+  bpf_flow flow_dissector_0          1363      701
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h |  14 +-
- kernel/bpf/Makefile          |   1 -
- kernel/bpf/diagnostics.c     |   4 +-
- kernel/bpf/failing_path.c    |   8 ++
- kernel/bpf/precision.c       |   4 +
- kernel/bpf/verifier.c        | 247 ++++++++++++++++++++++++++++++-----
- 6 files changed, 243 insertions(+), 35 deletions(-)
+ include/linux/bpf_verifier.h |  2 ++
+ kernel/bpf/flow.c            | 18 +++++++++++
+ kernel/bpf/precision.c       | 60 ++++++++++++++++++++++++++++++++++++
+ kernel/bpf/precision.h       |  3 ++
+ 4 files changed, 83 insertions(+)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 8c5eecf7501..c1ddcf6d7c4 100644
+index c1ddcf6d7c4..47939e49908 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -12,6 +12,7 @@
- #include <linux/math64.h> /* for div_s64_rem() */
- #include <linux/freezer.h>
- #include <linux/sched/signal.h>
-+#include <linux/sizes.h>
+@@ -1730,6 +1730,8 @@ bool bpf_must_keep_apart(struct bpf_verifier_env *env, const struct bpf_verifier
+ 			 const struct loop_stack_entry *entry);
+ bool bpf_values_grew_in_deps(struct bpf_verifier_env *env, const struct bpf_verifier_state *old,
+ 			     const struct bpf_verifier_state *new);
++u64 bpf_hash_live_types(struct bpf_verifier_env *env, const struct bpf_verifier_state *st,
++			u64 hash, u64 apart_cost);
+ u64 bpf_hash_apart_xregs(struct bpf_verifier_env *env, const struct bpf_verifier_state *st,
+ 			 u64 hash, bool consts);
+ u64 bpf_hash_args(struct bpf_verifier_env *env, const struct bpf_verifier_state *st, u64 hash);
+diff --git a/kernel/bpf/flow.c b/kernel/bpf/flow.c
+index 4dbf288f11a..d6f353a7bb2 100644
+--- a/kernel/bpf/flow.c
++++ b/kernel/bpf/flow.c
+@@ -59,6 +59,7 @@ struct flow_state {
+ 	bool pending;
+ 	bool returned;			/* FLOW_FUNC_EXIT: the calls have a part of it */
+ 	bool late_exit_reaches;		/* a late exit state can get to it */
++	bool from_apart;		/* it comes from a state that was not alone */
+ 	/* it is kept until the states leave this loop, see flow_loop_is_left() */
+ 	u8 kept_frameno, kept_depth;
+ 	/* the order of pending states, see flow_set_pending() */
+@@ -119,6 +120,7 @@ struct bpf_flow {
+ 	/* of the pass */
+ 	u64 *cost;			/* per function */
+ 	u64 budget, charged_cost;
++	u64 apart_cost;			/* of states that are not alone, see bpf_flow_next() */
+ 	u32 budget_func_cnt;
  
- /* No memory fails the load. It does not wake up the OOM killer. */
- #define BPF_GFP_MAYFAIL (__GFP_RETRY_MAYFAIL | __GFP_NOWARN)
-@@ -1436,6 +1437,7 @@ struct bpf_verifier_env {
- 	bool no_rcu_read_lock;
- 	bool signature;
- 	u8 bug:1;			/* ends the load, see bpf_note_bug() */
-+	u8 log_level:7;			/* of the user */
- 	u32 insn_aux_data_len;
- 	struct bpf_insn_aux_data *insn_aux_data; /* array of per-insn state */
- 	struct bpf_patch_list patch_list;
-@@ -1605,6 +1607,13 @@ __printf(3, 4) void verbose_linfo(struct bpf_verifier_env *env,
- 				  u32 insn_off,
- 				  const char *prefix_fmt, ...);
+ 	/* of the check */
+@@ -129,6 +131,7 @@ struct bpf_flow {
+ 	struct flow_instance **instances;	/* bpf_verifier_state.instance_id is the index */
+ 	u32 instance_cnt, instance_cap;
+ 	struct flow_instance *last_instance;	/* of the last pending state */
++	bool last_is_apart;			/* it adds to @apart_cost */
+ 	u64 priority_gen;
+ 	struct list_head unused;		/* struct flow_kept */
+ 	u32 seq;
+@@ -427,6 +430,7 @@ void bpf_flow_new_pass(struct bpf_verifier_env *env)
+ 	memset(flow->cost, 0, env->subprog_cnt * sizeof(*flow->cost));
+ 	flow->budget = bpf_precision_budget(env);
+ 	flow->budget_func_cnt = 0;
++	flow->apart_cost = 0;
+ 	flow->start_cnt++;
+ 	for (i = 0; i < env->prog->len; i++, aux++) {
+ 		if (aux->callback_loop)
+@@ -632,6 +636,7 @@ static struct flow_state *flow_new_state(struct bpf_verifier_env *env, int prev_
+ 	INIT_LIST_HEAD(&s->node);
+ 	s->prev_insn_idx = prev_insn_idx;
+ 	s->seq = ++flow->seq;
++	s->from_apart = flow->last_is_apart;
+ 	s->log_pos = env->log.end_pos;
+ 	s->diag_pos = bpf_diag_event_log_save(env);
+ 	bpf_add_cost(env, 1, BPF_COST_STATE);
+@@ -724,6 +729,7 @@ void bpf_flow_reset(struct bpf_verifier_env *env)
+ 	env->mem -= flow->instance_cnt * INSTANCE_BYTES;
+ 	flow->instance_cnt = 0;
+ 	flow->last_instance = NULL;
++	flow->last_is_apart = false;
+ }
  
-+/* No later pass can hide a bug of the verifier. Its message goes into the log. */
-+static inline void bpf_note_bug(struct bpf_verifier_env *env)
-+{
-+	env->bug = true;
-+	env->log.level = env->log_level;
-+}
-+
- #define verifier_bug_if(cond, env, fmt, args...)						\
- 	({											\
- 		bool __cond = (cond);								\
-@@ -1615,6 +1624,7 @@ __printf(3, 4) void verbose_linfo(struct bpf_verifier_env *env,
- #define verifier_bug(env, fmt, args...)								\
- 	({											\
- 		BPF_WARN_ONCE(1, "verifier bug: " fmt "\n", ##args);				\
-+		bpf_note_bug(env);								\
- 		bpf_log(&env->log, "verifier bug: " fmt "\n", ##args);				\
- 	})
+ void bpf_flow_free(struct bpf_verifier_env *env)
+@@ -871,6 +877,9 @@ static struct flow_state *flow_find(struct bpf_verifier_env *env, struct flow_st
  
-@@ -1768,6 +1778,9 @@ void bpf_precision_free(struct bpf_verifier_env *env);
- #define BPF_COST_STATE	512	/* make, order and free a state */
- #define BPF_MAX_COST	(1ULL << 33)
- #define BPF_MAX_MEM	(1ULL << 31)
-+/* What the passes can add to the tables. A loop keeps a state at each join point. */
-+#define BPF_PASS_MEM_BASE	SZ_256M
-+#define BPF_PASS_MEM_PER_INSN	SZ_32K	/* a state with a full stack */
- /* The floors of the cost after the first error, and of the budget of a partition */
- #define BPF_PARTITION_BUDGET	(BPF_MAX_COST / 3)
- #define BPF_MIN_BUDGET	(BPF_MAX_COST >> 12)
-@@ -1806,7 +1819,6 @@ void bpf_flow_next_is_no_bound(struct bpf_verifier_env *env, int insn_idx, int h
- bool bpf_flow_loops_lost_bound(struct bpf_verifier_env *env);
- void bpf_flow_new_pass(struct bpf_verifier_env *env);
- void bpf_flow_drop_guards(struct bpf_verifier_env *env);
--void bpf_flow_new_round(struct bpf_verifier_env *env);
- int bpf_flow_place_guards(struct bpf_verifier_env *env);
- /* verifier.c, for flow.c */
- int bpf_flow_loop_enter(struct bpf_verifier_env *env, struct bpf_loop **backedge_loop,
-diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-index 389e78b0bc4..03f0539490c 100644
---- a/kernel/bpf/Makefile
-+++ b/kernel/bpf/Makefile
-@@ -5,7 +5,6 @@ ifneq ($(CONFIG_BPF_JIT_ALWAYS_ON),y)
- cflags-nogcse-$(CONFIG_X86)$(CONFIG_CC_IS_GCC) := -fno-gcse
- endif
- CFLAGS_core.o += -Wno-override-init $(cflags-nogcse-yy)
--ccflags-y += -Wno-unused-function
- 
- obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o cnum.o log.o token.o liveness.o const_fold.o diagnostics.o loops.o
- obj-$(CONFIG_BPF_SYSCALL) += bpf_iter.o map_iter.o task_iter.o prog_iter.o link_iter.o
-diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-index 0e12078ffe1..8972b429bbc 100644
---- a/kernel/bpf/diagnostics.c
-+++ b/kernel/bpf/diagnostics.c
-@@ -255,7 +255,7 @@ static char *diag_fmt_alloc(struct bpf_verifier_env *env, size_t size)
- 	size_t capacity, available;
- 	char *buf;
- 
--	if (!diag || !size || size > INT_MAX)
-+	if (!diag || !bpf_diag_enabled(env) || !size || size > INT_MAX)
- 		return NULL;
- 
- 	if (!list_empty(&diag->fmt_chunks)) {
-@@ -406,6 +406,8 @@ void bpf_diag_event_log_restore(struct bpf_verifier_env *env, u64 log_pos)
- 	if (!diag)
- 		return;
- 
-+	/* no text is in use between two blocks */
-+	diag_fmt_restore(env, (struct diag_fmt_mark){});
- 	log = &diag->log;
- 	end_seq = log_end(log);
- 	if (WARN_ON_ONCE(log_pos > end_seq))
-diff --git a/kernel/bpf/failing_path.c b/kernel/bpf/failing_path.c
-index 0aebd7bfe8f..677ec423622 100644
---- a/kernel/bpf/failing_path.c
-+++ b/kernel/bpf/failing_path.c
-@@ -252,7 +252,15 @@ bool bpf_failing_path_is_due(struct bpf_verifier_env *env)
- int bpf_failing_path_prepare(struct bpf_verifier_env *env, bool repeat)
- {
- 	struct bpf_precision *prec = env->precision;
-+	struct bpf_loop *loop;
-+	u32 i;
- 
-+	for (i = 0; i < prec->loop_cnt; i++) {
-+		loop = prec->loops[i];
-+		if (repeat)
-+			loop->infinite = loop->was_infinite;
-+		loop->was_infinite = loop->infinite;
-+	}
- 	prec->failing_path_due = false;
- 	if (prec->seen)
- 		memset(prec->seen, 0, sizeof(*prec->seen) << prec->seen_bits);
+ 	hash = bpf_hash_apart_xregs(env, &s->st, bpf_hash_join_key(env, &s->st) + s->kind,
+ 				    s->kind == FLOW_PEELED);
++	/* the arguments are joined, else calls do not share an instance */
++	if (s->kind != FLOW_FUNC_ENTRY && s->kind != FLOW_JOINED_CALLS)
++		hash = bpf_hash_live_types(env, &s->st, hash, env->flow->apart_cost);
+ 	if (s->kind == FLOW_FUNC_ENTRY && (!e || e->peeled))
+ 		hash = bpf_hash_args(env, &s->st, hash);
+ 	if (s->kind == FLOW_AT ? !aux->loop && !aux->callback_loop :
+@@ -1729,6 +1738,8 @@ int bpf_flow_next(struct bpf_verifier_env *env, int *prev_insn_idx, u64 *log_pos
+ again:
+ 	if (flow->last_instance && flow->last_instance->cost)
+ 		*flow->last_instance->cost += env->cost - flow->charged_cost;
++	if (flow->last_is_apart)
++		flow->apart_cost += env->cost - flow->charged_cost;
+ 	flow->charged_cost = env->cost;
+ 	if (flow->last_instance)
+ 		flow_end_instance(env, flow->last_instance);
+@@ -1738,6 +1749,13 @@ int bpf_flow_next(struct bpf_verifier_env *env, int *prev_insn_idx, u64 *log_pos
+ 	s = rb_entry(n, struct flow_state, rb);
+ 	flow_clear_pending(flow, s);
+ 	flow->last_instance = flow_state_instance(flow, s);
++	/*
++	 * Is another state at this insn? In a loop the states go one by one, and only the join
++	 * points of a leftover keep them. So a yes holds up to a join point that is not peeled.
++	 */
++	if (test_bit(s->st.insn_idx, flow->join_points) && !flow_in_peeled_trip(&s->st))
++		s->from_apart = false;
++	flow->last_is_apart = s->from_apart || flow->nr_states[s->st.insn_idx] > 1;
+ 	instance = s->callee;
+ 	if (instance) {
+ 		if (instance->entry_state && !instance->priority) {
 diff --git a/kernel/bpf/precision.c b/kernel/bpf/precision.c
-index ae9559a6e30..bb71d31c45c 100644
+index bb71d31c45c..a33cc8664bc 100644
 --- a/kernel/bpf/precision.c
 +++ b/kernel/bpf/precision.c
-@@ -1550,6 +1550,7 @@ void bpf_restore_precision(struct bpf_verifier_env *env)
- void bpf_precision_new_pass(struct bpf_verifier_env *env)
- {
- 	struct bpf_precision *prec = env->precision;
-+	u32 i;
+@@ -121,6 +121,9 @@ const struct bpf_reg_state *bpf_xreg_value(struct bpf_verifier_env *env,
+ 	       slot_value(env, f, bpf_xreg_to_spi(xregno), tmp);
+ }
  
- 	bitmap_zero(prec->this_pass.unproven_insns, env->prog->len);
- 	bitmap_zero(prec->this_pass.bad_read_insns, env->prog->len);
-@@ -1560,6 +1561,9 @@ void bpf_precision_new_pass(struct bpf_verifier_env *env)
- 	if (prec->apart_xregno)
- 		memset(prec->apart_xregno, 0, env->prog->len * sizeof(u16));
- 	if (prec->data_deps && !env->replay && (prec->budget_grew || env->for_log)) {
-+		/* the last error came before the last partition */
-+		for (i = 0; env->for_log && i < 5 * prec->words; i++)
-+			prec->kept[i] &= prec->undo[i];
- 		keep_precision(prec, false);
++/* The budget of bpf_hash_live_types() in one pass */
++#define LIVE_TYPES_PART	64	/* of the limits */
++
+ static u64 hash_type(const struct bpf_reg_state *reg, u64 hash)
+ {
+ 	if (type_is_pkt_pointer(reg->type) || base_type(reg->type) == PTR_TO_ARENA)
+@@ -128,6 +131,54 @@ static u64 hash_type(const struct bpf_reg_state *reg, u64 hash)
+ 	return bpf_hash64(reg, offsetof(typeof(*reg), var_off), hash);
+ }
+ 
++/*
++ * A join of two types or objects is unreadable. A join of a packet pointer that has checked
++ * bytes with one that has none gives no access. If the xreg is live, an error is probable, and
++ * the price is one more pass. So such states stay apart from the start:
++ *
++ *	r6 = 0;				r6 = map value;
++ *		\			/
++ *		 if (r6 == 0) goto out;		two states
++ *
++ * N such xregs can give 1 << N states. If a pass is over the budget, it joins from there on,
++ * and so do the next passes. Then an error selects the xregs, see add_deps().
++ * @apart_cost: the cost of this pass without the states that were alone.
++ */
++u64 bpf_hash_live_types(struct bpf_verifier_env *env, const struct bpf_verifier_state *st,
++			u64 hash, u64 apart_cost)
++{
++	struct bpf_precision *prec = env->precision;
++	const struct bpf_insn_aux_data *aux;
++	const struct bpf_reg_state *reg;
++	unsigned long live[XREG_WORDS];
++	struct bpf_reg_state tmp;
++	u32 fr, xregno, bits;
++
++	if (env->path_sensitive)
++		return hash;
++	prec->live_types_over |= apart_cost > prec->live_types_cost ||
++				 env->mem > prec->start_mem + prec->live_types_mem;
++	for (fr = 0; !prec->live_types_over && fr <= st->curframe; fr++) {
++		aux = &env->insn_aux_data[bpf_frame_insn_idx(st, fr)];
++		bits = bpf_spi_to_xreg(bpf_stack_nr_slots(st->frame[fr]));
++		bitmap_zero(live, bits);
++		live[0] = aux->live_regs_before & XREG_REGS;
++		bpf_add_slots(live, aux->live_stack_before, bits);
++		bpf_add_cost(env, bitmap_weight(live, bits), BPF_COST_COPY);
++		for_each_set_bit(xregno, live, bits) {
++			reg = bpf_xreg_value(env, st->frame[fr], xregno, &tmp);
++			/* a slot with no spill hashes like a slot that is not allocated */
++			if (!reg || reg == &tmp || reg->type == SCALAR_VALUE)
++				continue;
++			hash = hash_type(reg, hash + fr * MAX_BPF_XREG + xregno);
++			if (type_is_pkt_pointer(reg->type) && pkt_has_bytes_left(reg) &&
++			    pkt_bytes_left(reg) > 0)
++				hash = ~hash;
++		}
++	}
++	return hash;
++}
++
+ /*
+  * States with another type or object in data_deps stay apart. Hash these like the join_key.
+  * @consts: find a state with the same constants in all deps.
+@@ -1396,6 +1447,7 @@ bool bpf_undo_precision(struct bpf_verifier_env *env)
+ 		return false;
+ 	}
+ 	env->over_limit = false;
++	prec->live_types_over = false;
+ 	memcpy(prec->data_deps, prec->undo, 5 * prec->words * sizeof(long));
+ 	for (i = 0; i < prec->loop_cnt; i++)
+ 		over_budget |= prec->loops[i]->partitioned &&
+@@ -1568,7 +1620,11 @@ void bpf_precision_new_pass(struct bpf_verifier_env *env)
  		prec->partitioned_by = prec->pass_cost = 0;
  	}
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index f34c0101384..92b0f4bbf89 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -2443,6 +2443,8 @@ static int reg_bounds_sanity_check(struct bpf_verifier_env *env,
+ 	prec->budget_grew = prec->new_nospec = false;
++	/* the pass for the log has to join where the last pass did */
++	prec->join_live_types |= prec->live_types_over && !env->for_log;
++	prec->live_types_over = prec->join_live_types;
+ 	prec->start_cost = env->cost;
++	prec->start_mem = env->mem;
+ 	prec->last_unproven_left = bitmap_weight(prec->last_unproven_insns, env->prog->len);
+ 	/* ADD_DEPS has no alternative, so it has no limit of its own */
+ 	if (prec->partitioned_by > BIT(PARTITION_ADD_DEPS) && !env->replay)
+@@ -1625,6 +1681,10 @@ int bpf_precision_init(struct bpf_verifier_env *env)
+ 	prec->this_pass.unproven_funcs = bits + 16 * words;
+ 	prec->last_pass.unproven_funcs = bits + 17 * words;
+ 	prec->pass_cost = env->cost;
++	prec->live_types_cost = env->max_cost / LIVE_TYPES_PART;
++	prec->live_types_mem = env->max_mem / LIVE_TYPES_PART;
++	/* the replay for the driver has to join where the good pass did */
++	prec->join_live_types = bpf_prog_is_offloaded(env->prog->aux);
+ 	prec->budget_left = prec->budget = bpf_precision_first_budget(env);
+ 	prec->first_unproven_insn = prec->loop_carried_at = U32_MAX;
+ 	for (i = 0; i < env->prog->len && !err; i++, aux++)
+diff --git a/kernel/bpf/precision.h b/kernel/bpf/precision.h
+index f833b4642bc..3af6f10eed7 100644
+--- a/kernel/bpf/precision.h
++++ b/kernel/bpf/precision.h
+@@ -67,6 +67,9 @@ struct bpf_precision {
+ 	bool failing_path_due;		/* see bpf_failing_path_is_due() */
+ 	bool budget_grew;		/* see partition_next() */
+ 	bool new_nospec;
++	/* see bpf_hash_live_types() */
++	u64 live_types_cost, live_types_mem, start_mem;
++	bool live_types_over, join_live_types;	/* in this pass, in all next passes */
  
- 	return 0;
- out:
-+	if (env->test_reg_invariants)
-+		bpf_note_bug(env);
- 	verbose(env, "REG INVARIANTS VIOLATION (%s): %s r64={.base=%#llx, .size=%#llx} "
- 		"r32={.base=%#x, .size=%#x} var_off=(%#llx, %#llx) step=%u+%u\n",
- 		ctx, msg,
-@@ -21813,8 +21815,8 @@ static int do_check_block(struct bpf_verifier_env *env, int prev_insn_idx)
- 	}
- }
+ 	u16 *apart_xregno;	/* per insn, see bpf_range_of_data_dep() */
  
--/* All is done again, whatever came out, see do_check_all() */
--static bool round_is_dropped(struct bpf_verifier_env *env)
-+/* What the pass assumed about loops does not hold, see do_check_all() */
-+static bool pass_needs_restart(struct bpf_verifier_env *env)
- {
- 	return (env->restart && bpf_flow_loops_lost_bound(env)) || env->guards_late;
- }
-@@ -23397,6 +23399,23 @@ static int check_funcs(struct bpf_verifier_env *env, struct bpf_snapshot *initia
- 	return ret == -EINTR ? ret : env->err ?: ret;
- }
- 
-+static int check_pass(struct bpf_verifier_env *env, struct bpf_snapshot *initial)
-+{
-+	int ret;
-+
-+	if (env->pass && (env->log.level & BPF_LOG_LEVEL2))
-+		verbose(env, "pass %u\n", env->pass);
-+	bpf_precision_new_pass(env);
-+	ret = check_funcs(env, initial);
-+	if (ret || pass_needs_restart(env))
-+		return ret;
-+	ret = check_after_pass(env);
-+	if (ret)
-+		bpf_find_unproven_after_pass(env);
-+	env->err = ret;
-+	return ret;
-+}
-+
- /*
-  * If the error of a pass is real, do_check_all() limits the next passes and logs a path to it.
-  * To see if it is real, reproduce it with no joins. Check one path after another, depth first
-@@ -23408,6 +23427,7 @@ static int check_funcs(struct bpf_verifier_env *env, struct bpf_snapshot *initia
-  * ranges too, and a check can fail on it where the joined state is proven.
-  * run_has_guess: the run made a guess, on any of its paths. Then the failing path can be false,
-  * see fast_forward_trips() and check_loop_guard().
-+ * @repeat: see log_failing_path()
-  * Returns the error on the path, 0 if there is none.
-  */
- static int run_path_sensitive(struct bpf_verifier_env *env, struct bpf_snapshot *initial,
-@@ -23424,6 +23444,8 @@ static int run_path_sensitive(struct bpf_verifier_env *env, struct bpf_snapshot
- 	/* for the repeat */
- 	if (env->err)
- 		env->failing_path_budget = budget;
-+	if (env->err && env->run_has_guess)
-+		verbose(env, "this path has a guess, its values can be wrong\n");
- 	return ret == -EINTR ? ret : env->err;
- }
- 
-@@ -23466,40 +23488,202 @@ static int find_failing_path(struct bpf_verifier_env *env, struct bpf_snapshot *
- 	}
- }
- 
-+/* Level 2 has the log of all passes. Else the log has one pass, or the failing path. */
-+struct pass_log {
-+	u32 level, len_max;
-+	u64 pos;
-+};
-+
-+static void restart_log(struct bpf_verifier_env *env, struct pass_log *log)
-+{
-+	env->log.level = log->level;
-+	/* the log is dropped when a function is found to be safe */
-+	log->pos = min(log->pos, env->log.end_pos);
-+	if (log->level & BPF_LOG_LEVEL2)
-+		return;
-+	bpf_vlog_reset(&env->log, log->pos);
-+	env->log.len_max = log->len_max;
-+}
-+
-+/* Repeat the last run. The verdict does not depend on the log, so it has no cost. */
-+static int log_failing_path(struct bpf_verifier_env *env, struct bpf_snapshot *initial,
-+			    struct pass_log *log)
-+{
-+	u32 insns = env->insn_processed, states = env->total_states;
-+	u64 cost = env->cost;
-+	int i, ret;
-+
-+	restart_log(env, log);
-+	ret = run_path_sensitive(env, initial, true);
-+	env->log.level = 0;
-+	env->cost = cost;
-+	env->insn_processed = insns;
-+	env->total_states = states;
-+	/* @initial has the sums from before the run, see copy_snapshot() */
-+	for (i = 0; i < env->subprog_cnt; i++) {
-+		env->subprog_info[i].insns_total = initial->subprogs[i].insns_total;
-+		env->subprog_info[i].insns_self = initial->subprogs[i].insns_self;
-+	}
-+	return ret;
-+}
-+
- /*
-- * What stops a loop is assumed before the main pass and checked in it, see flow_is_bound(). The
-- * main prog and global functions may get to the same loop. It has may_goto for all of them or
-- * for none, so all are done again when the assumption doesn't hold, whatever came out.
-+ *          pass 0: join all numbers
-+ *                    |
-+ *    +---------> run a pass
-+ *    |               |
-+ *    |            error ? --- no ---> pessimized ? --- no ---> ACCEPT
-+ *    |               | yes                 | yes
-+ *    |               v                     v
-+ *    |       good pass before ?      save the good pass,
-+ *    |          | no      | yes      partition, cut the budget
-+ *    |          |         v                |
-+ *    |          |   ACCEPT, use that pass  +---> run a pass
-+ *    |          v
-+ *    |      partition
-+ *    |          |
-+ *    |  failing path ? --- yes ---> log it; if no guess, cut the budget
-+ *    |          | no                       |
-+ *    |          +<-------------------------+
-+ *    |          v
-+ *    +- yes - is more kept apart ? --- no ---> REJECT
-+ *
-+ * Each pass starts from the snapshot @initial. The good pass is in the snapshot @good_pass.
-+ * The path-sensitive run needs the deps, so it comes after the partition.
-+ * There is no more precision when the budget is used up, or when no state was imprecise.
-  *
-- * A round that is dropped counts as paths that never run. What it found out about the insns, the
-- * subprogs and the prog stays. Each of these is made for more than one state that gets to an insn:
-- * it grows to the safe side, or another value is refused, or the last one that gets there sets it.
-- * Where the round got to is dropped with its verdict: the passes that follow take an insn that was
-- * seen for one that passed its checks, and a function that is called has to be safe.
-+ * A pass assumes what stops each loop, and checks it, see pass_needs_restart(). If the
-+ * assumption is wrong, the pass starts again.
-+ *
-+ * The log has the failing path. If there is none, or if it has a guess and the error of a pass
-+ * is real, the log has the basic block of an error. Below level 2 the later passes and the
-+ * path-sensitive runs write no log. The one that gives the log runs once more.
-  */
- static int do_check_all(struct bpf_verifier_env *env)
- {
--	struct bpf_func_info_aux *sub_aux;
--	u64 log_pos = env->log.end_pos;
--	int i, ret;
--
--	for (;;) {
--		bpf_flow_new_round(env);
--		ret = do_check_main(env);
--		ret = ret ?: do_check_subprogs(env);
--		if (!round_is_dropped(env))
--			return ret;
--		/* the log is dropped when a function is found to be safe */
--		bpf_vlog_reset(&env->log, min(log_pos, env->log.end_pos));
--		for (i = 0; i < env->prog->len; i++)
--			env->insn_aux_data[i].seen = 0;
--		for (i = 1; env->prog->aux->func_info && i < env->subprog_cnt; i++) {
--			sub_aux = subprog_aux(env, i);
--			memset(sub_aux->called, 0, sizeof(sub_aux->called));
--			memset(sub_aux->verified, 0, sizeof(sub_aux->verified));
--			sub_aux->called_with_pkt_ptrs = false;
--		}
-+	bool offload = bpf_prog_is_offloaded(env->prog->aux), limit = false, last, replay;
-+	struct pass_log log = { env->log.level, env->log.len_max, env->log.end_pos };
-+	bool quiet = log.level && !(log.level & BPF_LOG_LEVEL2), logged = false, replayed = false;
-+	struct bpf_snapshot *initial, *good_pass = NULL;
-+	int ret, more, path_err = 0, err = 0;
-+	bool guess = false, real;
-+	u64 max_cost = 0;
-+
-+	initial = save_snapshot(env, NULL);
-+	if (!initial || bpf_precision_init(env)) {
-+		bpf_precision_free(env);
-+		kvfree(initial);
-+		return -ENOMEM;
- 	}
-+	env->max_mem = min(env->max_mem, env->mem + BPF_PASS_MEM_BASE +
-+			   (u64)BPF_PASS_MEM_PER_INSN * env->prog->len);
-+	for (;; env->pass += !env->for_log) {
-+		if (!env->pass || !quiet)
-+			restart_log(env, &log);
-+		ret = check_pass(env, initial);
-+		if (quiet)
-+			env->log.level = 0;
-+		replay = env->replay;
-+		env->replay = false;
-+		if (ret == -EINTR || env->bug || env->no_mem) {
-+			err = ret;
-+			break;
-+		}
-+		if (bpf_undo_precision(env))
-+			continue;
-+		if (ret && good_pass) {
-+			restore_snapshot(env, good_pass);
-+			err = 0;
-+			if (!offload)
-+				break;
-+			bpf_restore_precision(env);
-+		} else if (!ret) {
-+			bpf_flow_drop_guards(env);
-+			if (pass_needs_restart(env))
-+				continue;
-+			if (env->for_log && (!offload || replay))
-+				break;
-+			max_cost = good_pass ? max_cost : env->max_cost;
-+			if (!replayed && !env->for_log && bpf_partition_for_pessimized(env) > 0) {
-+				env->max_cost = min(env->max_cost, env->cost + BPF_MIN_BUDGET);
-+				good_pass = save_snapshot(env, good_pass);
-+				if (good_pass)
-+					continue;
-+			}
-+			if (!offload || replay) {
-+				err = 0;
-+				break;
-+			}
-+		}
-+		if (!ret || good_pass) {
-+			/* The driver sees a pass without errors. It can refuse an insn. */
-+			kvfree(good_pass);
-+			good_pass = NULL;
-+			env->max_cost = max_cost;
-+			env->replay = replayed = true;
-+			ret = bpf_prog_offload_verifier_prep(env->prog);
-+			if (!ret)
-+				continue;
-+			err = ret;
-+			break;
-+		}
-+		if (env->for_log)
-+			break;
-+		err = path_err ?: ret;
-+		limit = !env->err;
-+		if (limit)
-+			goto reject;
-+		/* a valid program that no precision can prove must not use up the limit */
-+		env->max_cost = min(env->max_cost, max(2 * env->cost, BPF_PARTITION_BUDGET));
-+		last = real = !env->imprecise;
-+		more = bpf_partition_more(env);
-+		if (more < 0 && more != -E2BIG)
-+			err = more;
-+		limit = more < 0;
-+		last |= more != 1;
-+		if (!limit && !path_err && (last || bpf_failing_path_is_due(env))) {
-+			path_err = find_failing_path(env, initial, last);
-+			if (path_err) {
-+				err = path_err;
-+				guess = env->run_has_guess;
-+				logged = quiet && log_failing_path(env, initial, &log) == err;
-+			}
-+			if (path_err && !guess)
-+				env->max_cost = min(env->max_cost, env->cost +
-+						    2 * bpf_precision_first_budget(env));
-+		}
-+		if (real && guess && err == path_err && err != -EINTR) {
-+			err = ret;
-+			logged = false;
-+		}
-+		if (err == -EINTR || env->bug)
-+			break;
-+		if (!last)
-+			continue;
-+reject:
-+		if (logged || !quiet || (limit && !env->pass))
-+			break;
-+		/* Run a pass with an error once more, for the log. It has a limit of its own. */
-+		env->for_log = true;
-+		quiet = false;
-+		env->max_cost = 2 * env->cost;
-+	}
-+	env->log.level = log.level;
-+	/* after an abort the error and the log can be wrong */
-+	if (err && env->aborted)
-+		err = -EINTR;
-+	if (env->bug)
-+		err = -EFAULT;
-+	if (!err)
-+		restart_log(env, &log);
-+	if (err && (!path_err || guess) && (limit || (env->for_log && !env->err)))
-+		verbose(env, "the limit on cost or memory ended pass %u\n", env->pass);
-+	if (!err && env->sleepable_async_cb)
-+		mark_sleepable_async_cb(env);
-+	bpf_precision_free(env);
-+	kvfree(initial);
-+	kvfree(good_pass);
-+	return err;
- }
- 
- /*
-@@ -25316,8 +25500,6 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	/* no program is valid */
- 	if (ARRAY_SIZE(bpf_verifier_ops) == 0)
- 		return -EINVAL;
--	/* the main pass is being rewritten */
--	return -EOPNOTSUPP;
- 
- 	/* 'struct bpf_verifier_env' can be global, but since it's not small,
- 	 * allocate/free it every time bpf_check() is called
-@@ -25347,6 +25529,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	 * and supplied buffer to store the verification trace
- 	 */
- 	ret = bpf_vlog_init(&env->log, attr_log->level, attr_log->ubuf, attr_log->size);
-+	env->log_level = env->log.level;
- 	if (ret)
- 		goto err_free_env;
- 	ret = bpf_diag_init(env);
 -- 
 2.55.0
 
