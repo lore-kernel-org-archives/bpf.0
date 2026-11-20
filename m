@@ -1,115 +1,103 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.175
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795183743;
-	b=H9toNyzJ+JHJWRrYwPyjL9wy9qIXPvBMvm8ATlp1Qub4IUoR6l9Eg4ABiqG6QPphB789
-	 Dc2nXEuBCHvemwEYEsSqTOOpzVc0kqG6sPc2uiaprvktVBs5ioyIQ12uWbsXjWdU/6UQH
-	 5Cpr+VJCwZWW6/yLLDAh12apMHqUhPulCHYeNkgwqM4RMJqZmE3k4vgHEWmfgpWtmuXr1
-	 iBTrQEq7CfC+M/hBq10GzE6Nb/D3ZGR0LLUoTOKtNU+vuiffAmg7Q3sSl51kwlMK17lgW
-	 HAfQbPCjGQ49KK2lIi5V727AFPTSE8ZkSG40ORD/tdgdzl7yuU5UTOOH0hJbh9NbXaw==
+	t=1795187187;
+	b=b3slw/DpyVh4z8U133xkyLPsJXzD26FNxG9Zw+gffYQbhhzJmprUZ8dGvsCxm/fvbNs3
+	 4cuQE8j3hB1GS8nO49/z63RYefXP2SRi/5XMx6uUFtzo0bG/aKqCugjUgF9eeUjoPjZ5I
+	 YWPEAK/xTbm0mZ89dY6JeP0jAJJ+KvG/lJ7fyJzBT2zx0yXymEk2G186L0ndG/3jXUyAu
+	 C27y7CFIhpn5tHPOE1F4mE1g/8GZs3yPjhSZW05Kyz+PosddcWehWnG9t9f4MrgPtAuwr
+	 7x6bGeNpwYI3ACl+kKqapnZkIHt5ePtZ7/YzMm/DLdSRvynG5zoIGv8GR6VQSFPpZAg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795183743;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795187187;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=i8o5obuhKYzZzTMxbyuPWpCrvH0/smuh9G7Q1LIM9Mk=;
-	b=ii0ysjajwpg/H7rCyeaNFO0pVAg3NwlfXfy7xi+rCGcusM0CP/iPDE9ggATNKX+oryzX
-	 yPChmoikblmC4Ru1wZtnW65BmfUBsu2wphJvDd54b4WPiE3hk9+gbx4ecC2YnU2YV4qEj
-	 Y3fRI7Bri+Wiu6F7KD/MdnGlXNv2CgWsv+1VSyQAlScODMNxoqmW7JgF4YpzEPIF0yBzq
-	 ZRYm43qXKnkfVnTa47HRSVjGVO7iIo+mKHj9aQhrZIoCTjo62DhvMX+xawobGYerCUeJv
-	 mUudv+5z2yOf00vlGFLoup68+XwdjsvhD5cyCZBhAtppBqTwjq4jjGgnIrrL1VcpU6A==
+	bh=9Q+A2Pm/lTzn6/74RcxfPC60rEW9xoC4OYcN2wFWBNQ=;
+	b=o9YMiCG0H64NmQ7Jk7CF2pAJTBpQs3t/HPKXyzyBQrSthDO662/EPJo9FO4F49mXvC9C
+	 M2iWPOSiq+dNTLXfH3cqiCfuE5maCX4Ep28J76FZeEqtv/Kdn7RRf5abUW278qeOAGg8T
+	 nHSXlJeb/OzHARVSkZje73hkunm/Il0mZtvknidWQD80P8giH2xYjM3J+WIW3l4QeBUhN
+	 xoR6g+M+3lo0e0X3OZGAs9OaE03rYITelGVFzL+v2A8qch0jr282HS27y9fWmF61QU9hS
+	 HC1NH3fN/ba9nRtzTOLo9j/Ln7148oIYEYUH5tuIzCZMwKn7yoN2ns3wbzQ2CNXd7BQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=mojatatu.com;
-	spf=none smtp.mailfrom=mojatatu.com;
-	dkim=pass header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=yWwicMdU;
-	arc=none smtp.remote-ip=209.85.128.175
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Z7sxnoxR;
+	arc=none smtp.remote-ip=74.125.82.50
+Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C2C8606A32A
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 14:09:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9C2C8606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD536606A326
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 15:06:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DD536606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=yWwicMdU
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-8b335eeb340so8354477b3.0
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 06:09:02 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Z7sxnoxR
+Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-1b244fb7fffso1019624c88.1
+        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 07:06:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1795183741; x=1795788541; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795187186; x=1795791986; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=i8o5obuhKYzZzTMxbyuPWpCrvH0/smuh9G7Q1LIM9Mk=;
-        b=yWwicMdUeVNA1UsXEGn2NprcBEJ0rMyuPq9bmUiJOmZaie64Zg+7JQorf89VHSc064
-         0IwtLEU8u4Oe577I0Vh/wDw7KMxBLh6zWHVgbCmUxy3M1g2//5UcSW3n/BbSVgoreuw+
-         3pgS+MbjbqPhpcfTLG6eur4htjXBP3HNoCOHI=
+        bh=9Q+A2Pm/lTzn6/74RcxfPC60rEW9xoC4OYcN2wFWBNQ=;
+        b=Z7sxnoxRdpdLlw+cEkND+OCe/Bd0Wms92uOSv/+RsFB/+Phud1KUC3aAO8qMx73kxi
+         CkA7mb1hE19lBKtTEIX+s1YI8Of2WleXOj1JMTo/hZ82+4ApM6qAtW6o0J6dpbPbLbif
+         xnBtOFsji6djS1KED6yKVUkkalD+XQZVXne0CYk0CvFBXky1oFPOQAG4QMgNpUpRZ5xk
+         +9R+pAg/lwDH9LCfqpKXABMpL8hj9u4GyvQ08z5z0uVtL3BMwd5dfVWU7SxD1cnajJVn
+         P2AVPTthpU8IG9vXNEE9er4zvnrhQq6koUa4/Skn4RZJm6Oq5RKm/ADZUyCx4MqoOMBh
+         i5ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795183741; x=1795788541;
+        d=1e100.net; s=20260707; t=1795187186; x=1795791986;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=i8o5obuhKYzZzTMxbyuPWpCrvH0/smuh9G7Q1LIM9Mk=;
-        b=nVVNl6DG1PxBCK/6agFW9gsBxvqpjcadDIqG9D4aktNRdE9wny5+6yaKEMDIeyd3qQ
-         WCMs21nfBhSThcyJxU9WLzbh29QQKE4qDpBXyFCVWxdx/yT5WGHUoTKR9F5OXRhhu1ym
-         Dp5lwUdKqYvLW5GNqOcvE1cD+BwUxRxkgTufYxDaafGoz/lVlUWNK1MMApy3c3GcE7nx
-         Qu35NOpa1XKsiAZVBiLcBlap3/yoxyMtaZz0qHQcI9hNBT0rug2NfMiW7ZebME6VAmz8
-         40/vWVOoP1H56mo9DJUuNLYkqKL2pF5OPk6MdK2M+sF/lHmAFsrWTGpj7a+GD+7mNqI4
-         CVsw==
-X-Forwarded-Encrypted: i=1; AL+hErFw4b7662KwXVoUi4CUHqgz98lTi8Km2dvz6qLK5yR5OGqsz4m/ilFmvfjfd1HWD850hKw=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/GoLOiPhGaAdlBdGlDwuLZB08ZQCtY3jpbE+899wF1Oyoc/q02
-	3QQ57IrLrHWW1TFRbYVQybu8BrQ3JnC/jTX5J5Bcuf+lXXQPXC8bvfidRl1xbtXK4Q==
-X-Gm-Gg: AZFdTZdDXC/9MpIqrKV0Mf0d3JPmZxw8o6acveoBF9pQCHE9qDW9FjMPnpNq5lpH0a5
-	UMQStyDgL00xCe3jpNdpAzFtCvFV+MkmEhYpfZL+bMg9km2KbD38mE+pkfbyL/UUbz8sRPDQhiK
-	Ta+PmkHWgIFc6tzg5IWgpxn3RzCIILozn5NlblBajfJHrlwu8kv0oWnYqEQpv13uNmhglfMSwPO
-	mJcF7kPFdcSocUW7wDSSo+yaBTG0jET2kMss2OCgPpiNyQoBofbHqFl9iAAki4Qem70mWbALjIj
-	2HXC54CWi3+1HMwQ9CDN5EH0XbIIXV5UYEsAVozLVXudQGLa3i08xHofZCovC9E6v1/jtYzGPF8
-	GNgExauyjP7T+d6scFcU9iIMRDVBHP9zmqOhw60sZYqpHH/GcW9KZQlCYcLhQgxR3WG1Oo8yTDP
-	uFIzuFpjggaoGx62gPWC7K492waeDlIji5CgkF10TV6Tq8Aa8qr4rVHTSIWuAU0gt6/jDqBUEoc
-	wHMNCiT5p8MsKrfDZRL0uUkPhZSUuQbpFwZyhaKd6nDjZnxm1iBQKwGfoNMORp3D9rILlUXZYzu
-	5g5UbVU/iCSvKy4IQsdHTsnvC0h573QWU1FKjso6cM2DffsW3LjChgcQN64jtUEp9GvR0xuLNZE
-	=
-X-Received: by 2002:a05:690c:9c02:b0:8b4:d584:6178 with SMTP id 00721157ae682-8b5204b2f94mr15536727b3.63.1795183741483;
-        Fri, 20 Nov 2026 06:09:01 -0800 (PST)
-Received: from mbili.waya ([64.203.83.2])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b5202dd36dsm12990277b3.26.2026.11.20.06.08.58
+        bh=9Q+A2Pm/lTzn6/74RcxfPC60rEW9xoC4OYcN2wFWBNQ=;
+        b=E9HyLFtCb5KfSLH9aTM0DKtjqDq3QAM/StHyDmS+/28ba4X+zb0DxQkfDbEomA7BX7
+         FnGcfJmucTbTlR0Eqp90dIvbNBX+JwLNIuX/g53HV7AocaQtWn/eKmrXZk5ZDnvJwHG8
+         SYIMN2XoXwfwK09Iiv7ZUkk9mNNIQEfWZVRp1E6DhVqbVyot0SN/bYq62jcOY2UqUrib
+         gVCls7lpepuJx7Fxl572saauZmEAA8bv8iBJjSVw54d8dKtvSpLpBAmmj6yp1xgI8xBB
+         wRgj6pOOEEhB9WtIlEFnb3L4EjbybPm15SCBPil75ylOg15TIWWNZclHO6nglso2rUyc
+         6WDw==
+X-Forwarded-Encrypted: i=1; AL+hErFUROFUxwDPfteLRo2HbelOQPjXGVUIl0K9TW/XQQYYxWxMnatGDTfhk7xIp43LN6zqits=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8QCZgbdcCPttTt0nyNDAnwUKzNSSs698x0MkqBdhU+6x6vHjWH
+	OAuUUsCqn3XFwvw379t5mPvIO6cVnnwep2Nd/K8QJI7iJWzfL5NHx0Ae
+X-Gm-Gg: AYBFou3nqOx4nIATKUabYavf5qKXTQbRJkUQAo6LsSexJ8o1jLxxHYwj8LpI3moDGWA
+	mbiL/WKm/QWB6mb9KWvo5Jn6Zu7o7mQyJXMViJQOpK3XFGlNAcqIhYCeUrYz4JJ7SK2XF70FRRA
+	+bSNebN0a6vXXepPwpGkY/NtTKJdv7PZkrZn2cNkpoJnCJkefLTutgBAGa/2RNSN6qIKGTHFGQm
+	6DaFPcbfwQUuJUoEWq8tp74XQ3F73kWCEtndrxewXlWa8v74sMk/StZNjDsAjo979pqWZMcygyn
+	I5CX+PePXsPLWDmR1bZgXdWA88aHlZTGMVETQ8AzFxsadx4mw642g0DYo95k1dOnOe5+6GEshW+
+	g+XADQNu2BPos55JhQdxygZdPvPUccuBgb1aU8Fgd9wuIfTVj0wCvCXuGAnPCyKwhDya5ynhxL3
+	xUWw5NSzhHKvuK7xiKsOxrMKVGRsnfPcFrrBnP1Rb6+7zRyS4w4uF84oSgKLxH4S2GbQ8okH98X
+	s/BUpo2fc02qU+S+yGeLDaOTH2sVLazUymul/o6zBYFDwlO12a3H53rgCBOU60lwNkjUKbh/s28
+	Ku4limy6/gNXu9Zj/MbxBcXJwE+SRcXbab9m7J4jMVheFK6HP63ciYctzb/UPE0=
+X-Received: by 2002:a05:7022:3f0d:b0:16c:3408:760b with SMTP id a92af1059eb24-1b5568dabf1mr3023904c88.32.1795187185858;
+        Fri, 20 Nov 2026 07:06:25 -0800 (PST)
+Received: from IN01-9QQVVV3.CAMNWK.COM ([171.76.82.79])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b556840494sm7844902c88.12.2026.11.20.07.06.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2026 06:09:00 -0800 (PST)
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-To: netdev@vger.kernel.org
-Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
+        Fri, 20 Nov 2026 07:06:25 -0800 (PST)
+From: Shitalkumar Gandhi <shital.gandhi45@gmail.com>
+To: Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	intel-wired-lan@lists.osuosl.org
+Cc: netdev@vger.kernel.org,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@kernel.org>,
 	Jakub Kicinski <kuba@kernel.org>,
 	Paolo Abeni <pabeni@redhat.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
 	Stanislav Fomichev <sdf@fomichev.me>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Eyal Birger <eyal.birger@gmail.com>,
-	ipsec@lists.linux.dev,
 	bpf@vger.kernel.org,
-	stable@vger.kernel.org,
-	Jiri Pirko <jiri@resnulli.us>,
-	Victor Nogueira <victor@mojatatu.com>
-Subject: [PATCH net] net: xfrm: interface: restore dst_orig on every xfrm interface
-Date: Fri, 20 Nov 2026 09:08:56 -0500
-Message-Id: <CORE-5IQX.v1.r0.20261120050801-1@mojatatu.com>
-X-Mailer: git-send-email 2.34.1
+	Shitalkumar Gandhi <shital.gandhi45@gmail.com>
+Subject: [PATCH iwl-next 0/2] i40e, ice: one RCU grace period per XDP ring teardown
+Date: Fri, 20 Nov 2026 15:05:25 +0000
+Message-ID: <20261120150527.14649-1-shital.gandhi45@gmail.com>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -121,184 +109,22 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Found while auditing the xfrm metadata consumers of a steered packet. One
-of them is an xfrm interface, which restores the original route before the
-xfrm lookup; the swap warned on the metadata dst still installed in the
-skb, and only the collect_md arm restored the route at all.
+Both i40e and ice wait for an RCU grace period once per XDP Tx ring
+when tearing the rings down, so the time spent scales with the number
+of queues (i40e) or CPUs (ice). The wait only has to cover in-progress
+ndo_xdp_xmit and ndo_xsk_wakeup calls, and one grace period taken
+before the loop does that for all rings.
 
-The issue:
-An xfrm interface takes the if_id and the underlying device either from its
-configuration or, in collect_md mode, from the xfrm metadata on the skb.
-When that metadata also carries the route the packet arrived through,
-xfrmi_xmit2() puts the route back on the skb, because the xfrm lookup takes
-the address family from it. skb_dst_set() expects the dst slot to be empty
-for a reference counted dst and warns when it is not, so the route landed
-over a metadata dst that was still there; a kernel built with
-CONFIG_DEBUG_NET=y panics on the first packet that takes this path when
-panic_on_warn is set.
+Compile-tested with W=1 (allmodconfig, x86_64); not run on hardware.
 
-Two more defects sit in the same place. An interface with a configured
-if_id never restores the route: it takes the metadata dst as it is, whose
-address family is AF_UNSPEC, so the lookup finds no policy and the packet
-is dropped as a link failure instead of being transformed. And the restore
-moved the route out of the metadata dst, which a clone of the skb shares,
-so the clone that reached the interface first left the original packet with
-nothing to restore.
+Shitalkumar Gandhi (2):
+  i40e: wait for one RCU grace period in i40e_down(), not one per queue
+  ice: wait for one RCU grace period when destroying XDP rings
 
-The same slot overwrite is in the unstable helper a tc-bpf program uses to
-attach that metadata: bpf_skb_set_xfrm_info() records the route as dst_orig
-and installs a per-cpu metadata dst over it. The per-cpu dst is shared by
-every invocation of the program, so the restore cannot keep anything in it.
+ drivers/net/ethernet/intel/i40e/i40e_main.c | 15 +++++++++------
+ drivers/net/ethernet/intel/ice/ice_main.c   | 10 +++++++---
+ 2 files changed, 16 insertions(+), 9 deletions(-)
 
-The Fix:
-Restore dst_orig in both arms of xfrmi_xmit2(), taking a reference with
-dst_clone() so the metadata dst keeps its own, and empty the counted slot
-with skb_dst_drop() before the route is installed. The helper allocates a
-metadata dst per skb instead of a per-cpu one, so the route it records
-belongs to that skb and is released with it; the per-cpu allocation is no
-longer used and goes away.
-
-Conditions to recreate the bug:
-A tc-bpf program that records the route as dst_orig with
-bpf_skb_set_xfrm_info() is self-contained: the overwrite is in the helper,
-so the first packet that calls it panics inside bpf_skb_set_xfrm_info() on
-a CONFIG_DEBUG_NET=y build with panic_on_warn=1.
-
-An interface with a configured if_id shows its own defect without any
-other patch: it drops the packet as a link failure without consulting the
-outbound policy. And a clone made after the metadata was attached consumes
-the route before the original packet arrives.
-
-Fixes: 94151f5aa966 ("xfrm: interface: Add unstable helpers for setting/getting XFRM metadata from TC-BPF")
-Link: https://lore.kernel.org/netdev/DMZJS8O5A4YX.9T2P4DT0DAB7@gmail.com/
-Cc: stable@vger.kernel.org
-Reviewed-by: Victor Nogueira <victor@mojatatu.com>
-Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
----
- include/net/xfrm.h             |  2 --
- net/core/filter.c              |  8 --------
- net/xfrm/xfrm_interface_bpf.c  | 19 ++++++++-----------
- net/xfrm/xfrm_interface_core.c | 22 ++++++++++++----------
- 4 files changed, 20 insertions(+), 31 deletions(-)
-
-diff --git a/include/net/xfrm.h b/include/net/xfrm.h
-index 445223a8dc6f..1866e5a3b911 100644
---- a/include/net/xfrm.h
-+++ b/include/net/xfrm.h
-@@ -2370,8 +2370,6 @@ static inline bool xfrm6_local_dontfrag(const struct sock *sk)
- #if (IS_BUILTIN(CONFIG_XFRM_INTERFACE) && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)) || \
-     (IS_MODULE(CONFIG_XFRM_INTERFACE) && IS_ENABLED(CONFIG_DEBUG_INFO_BTF_MODULES))
- 
--extern struct metadata_dst __percpu *xfrm_bpf_md_dst;
--
- int register_xfrm_interface_bpf(void);
- 
- #else
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 946b07a17fce..a1b4f6333d1e 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -6334,14 +6334,6 @@ static const struct bpf_func_proto bpf_bind_proto = {
- 
- #ifdef CONFIG_XFRM
- 
--#if (IS_BUILTIN(CONFIG_XFRM_INTERFACE) && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)) || \
--    (IS_MODULE(CONFIG_XFRM_INTERFACE) && IS_ENABLED(CONFIG_DEBUG_INFO_BTF_MODULES))
--
--struct metadata_dst __percpu *xfrm_bpf_md_dst;
--EXPORT_SYMBOL_GPL(xfrm_bpf_md_dst);
--
--#endif
--
- BPF_CALL_5(bpf_skb_get_xfrm_state, struct sk_buff *, skb, u32, index,
- 	   struct bpf_xfrm_state *, to, u32, size, u64, flags)
- {
-diff --git a/net/xfrm/xfrm_interface_bpf.c b/net/xfrm/xfrm_interface_bpf.c
-index 5ea15037ebd1..7afbdbd11145 100644
---- a/net/xfrm/xfrm_interface_bpf.c
-+++ b/net/xfrm/xfrm_interface_bpf.c
-@@ -68,16 +68,9 @@ __bpf_kfunc int bpf_skb_set_xfrm_info(struct __sk_buff *skb_ctx, const struct bp
- 	if (unlikely(skb_metadata_dst(skb)))
- 		return -EINVAL;
- 
--	if (!xfrm_bpf_md_dst) {
--		struct metadata_dst __percpu *tmp;
--
--		tmp = metadata_dst_alloc_percpu(0, METADATA_XFRM, GFP_ATOMIC);
--		if (!tmp)
--			return -ENOMEM;
--		if (cmpxchg(&xfrm_bpf_md_dst, NULL, tmp))
--			metadata_dst_free_percpu(tmp);
--	}
--	md_dst = this_cpu_ptr(xfrm_bpf_md_dst);
-+	md_dst = metadata_dst_alloc(0, METADATA_XFRM, GFP_ATOMIC);
-+	if (unlikely(!md_dst))
-+		return -ENOMEM;
- 
- 	info = &md_dst->u.xfrm_info;
- 
-@@ -86,7 +79,11 @@ __bpf_kfunc int bpf_skb_set_xfrm_info(struct __sk_buff *skb_ctx, const struct bp
- 	skb_dst_force(skb);
- 	info->dst_orig = skb_dst(skb);
- 
--	dst_hold((struct dst_entry *)md_dst);
-+	/* The metadata dst releases dst_orig when it is freed, so the
-+	 * reference the skb held is stolen rather than dropped. The dst
-+	 * allocated above is handed to the skb with its single reference.
-+	 */
-+	skb_dstref_steal(skb);
- 	skb_dst_set(skb, (struct dst_entry *)md_dst);
- 	return 0;
- }
-diff --git a/net/xfrm/xfrm_interface_core.c b/net/xfrm/xfrm_interface_core.c
-index 9835fbe63ccb..896180f8d171 100644
---- a/net/xfrm/xfrm_interface_core.c
-+++ b/net/xfrm/xfrm_interface_core.c
-@@ -423,6 +423,7 @@ static int xfrmi_rcv_cb(struct sk_buff *skb, int err)
- static int
- xfrmi_xmit2(struct sk_buff *skb, struct net_device *dev, struct flowi *fl)
- {
-+	struct xfrm_md_info *md_info = skb_xfrm_md_info(skb);
- 	struct xfrm_if *xi = netdev_priv(dev);
- 	struct dst_entry *dst = skb_dst(skb);
- 	unsigned int length = skb->len;
-@@ -433,25 +434,26 @@ xfrmi_xmit2(struct sk_buff *skb, struct net_device *dev, struct flowi *fl)
- 	int mtu;
- 
- 	if (xi->p.collect_md) {
--		struct xfrm_md_info *md_info = skb_xfrm_md_info(skb);
--
- 		if (unlikely(!md_info))
- 			return -EINVAL;
- 
- 		if_id = md_info->if_id;
- 		fl->flowi_oif = md_info->link;
--		if (md_info->dst_orig) {
--			struct dst_entry *tmp_dst = dst;
--
--			dst = md_info->dst_orig;
--			skb_dst_set(skb, dst);
--			md_info->dst_orig = NULL;
--			dst_release(tmp_dst);
--		}
- 	} else {
- 		if_id = xi->p.if_id;
- 	}
- 
-+	/* The metadata dst carries the route the packet is still to be
-+	 * transformed for, and the lookup below takes the address family from
-+	 * the dst it is given. Put that route back, taking our own reference:
-+	 * the metadata dst keeps its own, as a clone of this skb shares it.
-+	 */
-+	if (md_info && md_info->dst_orig) {
-+		dst = dst_clone(md_info->dst_orig);
-+		skb_dst_drop(skb);
-+		skb_dst_set(skb, dst);
-+	}
-+
- 	dst_hold(dst);
- 	dst = xfrm_lookup_with_ifid(xi->net, dst, fl, NULL, 0, if_id);
- 	if (IS_ERR(dst)) {
 -- 
-2.43.0
+2.53.0
 
