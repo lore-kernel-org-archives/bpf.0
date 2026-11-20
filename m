@@ -1,107 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795202230;
-	b=l54obovdQQ9esiEypP6KdNg5sFvfe+vFhP3Daopu2vRmPhlrOIB2Osx/J7ZOta5vTde0
-	 NOLwOgb3IQkc46teVxpwSo2jtUVyI+CZrig2LCzZ8CsFzRFpW7AHqjwbmTvN1lLQXeBhJ
-	 oNWkFH+ISjPEtSnjrfle6RAutgHnbVVAcoz+ClzXlOkdBzax8PYhQ7tWnBphavvste39U
-	 LZ97AzKky4fvvVmECa2ULXVjQetW/kAWeqLqGJzUVLV05wdIEDqQrVt+ibtRY9D/BQXKl
-	 9/YiC8e60NEOEUhk5/9dOZobOn+PdDcKv0Fs5BHF6jmkH883l9lrm7uTIY5PG3XePIw==
+	t=1795202651;
+	b=5RHs2s027rPwEb3zhKsSXc76LBnzAXBCbusOnWrVdAcG6STzxLJeIiRZWQTjEa34L225
+	 6zCDuzN2nsJVuorqExpDdrHtM1XerfMpBnMEUGr5ZIm81GUOLuOJ9qS0gxOHN+tg28/jJ
+	 RQEyxoooF6hXses0l3ufYaoI7sfvvn2gcAQfilL9zwXO48LBym7XqlIxCUfEsW8hZ9WPV
+	 gS+QBpwpDAWuPFl77d9bgcgSqj9upqYwhlj8Jasj+IlcFPgYKuN55DwKao+tjyTJaehBz
+	 uXANZMyTaZrXvEv6668U4VaKMQEFPpfR6/pZD4UZF6HcB/l20fBlvQ3HMS6R6w/axEw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795202230;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795202651;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:To:Cc:Subject:From:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=5Iu/1w/LI0buVkR+aQF4itDAWB9ZbTOtkysWfOEOOGc=;
-	b=YR2XzApjuWnC6Cm2MYe32jlzD7E5qRaVtfWagDA0Iac7WpJWR/SeIPYlxzimjWw3LowQ
-	 5+lDiUvlI+3fo+YDY2EX/pg4+yZbolcydqpnK/MfeBqYyV9E7JZKjJ0tqSYewQQfvO2DI
-	 nakAnqoOvcUrF6Ut92K5zijsBU8oIfYee+nswZTNfix6bJI1mnzCNSKNuOU/Goys7cJZj
-	 ez9FI37+LSydGNip7nc8gPvrJ/GWa9dd5hXHUGzXs+TTx3CdHJkEvnezP6XuiXBNLbdGn
-	 7pVzqynoFMQQV+reE5YSTf2YEGdOzFdiIyo3YYTNtzNcIlPxdhSmtyEi/iJ57zmBsgQ==
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:Content-Language:To:
+	 Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=qHo6CdyCabm8XH8aUppzEr5dak8Hjpei/j+QDqjBmtE=;
+	b=217exzPaW/aludjYi0zS+LJM0iWtiRF6qLEuDUsnzA3b/LZVwVF6njYiFswpJtvGBAM/
+	 TqC4yb/VByed8lJui81lsMYmc8ZsFwKhj5gHzaQDzoOPQC+nu0BMo+EN/yvg4e9Y5ORxQ
+	 Shm21iMVuJGorj0nmzy+jWwpVjEWRmJQIN2+AFohsLTK01RjpWuzcvAhylab+Di2o98UF
+	 RMYqY7X2YcBdwi1MaKBGbUmtW11nHnaybjKW7w6mS16SnBSe+WsNIGnmp5EIj5ugr7AqI
+	 v6qlIHds6+1dITKSe7vlUm+7W6kk9WwUA1lsvVHxl35OcU9ZMs1Kzy9aIR/LzO7rZtg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iS9DAKA2;
-	arc=none smtp.remote-ip=209.85.215.178
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	dmarc=none header.from=blackwall.org;
+	spf=none smtp.mailfrom=blackwall.org;
+	dkim=pass header.d=blackwall.org header.i=@blackwall.org header.a=rsa-sha256 header.s=google header.b=MWX3rqdu;
+	arc=none smtp.remote-ip=209.85.221.42
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A64D460A2609
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 19:17:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A64D460A2609
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C17A606A6D4
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 19:24:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9C17A606A6D4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iS9DAKA2
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-cde0daf3a2aso601355a12.3
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 11:17:06 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.a=rsa-sha256 header.s=google header.b=MWX3rqdu
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-4a358881793so700877f8f.0
+        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 11:24:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795202226; x=1795807026; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=5Iu/1w/LI0buVkR+aQF4itDAWB9ZbTOtkysWfOEOOGc=;
-        b=iS9DAKA22pBrxKuaIMLvTBi3iP0uQzx9apoMFxnN1ajW8P1+uthtNgOeaMPpmuD7Fs
-         4J84WBU/iCFUgsev5fiozE98dq4NS2hBbxw8ZBvyZU51Wf9mXanbCWU6ithZeDf8+5I6
-         YefDGoWR/7fY3S/iffZ0gMGgjxlxF/grERWv+SnZCv2YyLeo8ku61kvpzh8b3doetX6S
-         YPTcn3EHvY60a2wx70MWemRecyb03Hm+u6mnEEofzgRqCkRGsmTops4t/PelBfJQPVoB
-         8pJ9FJ2J9gs/IiguQ9+pg2kByfRVxedtVZr97u6dDgFPV393Vy6+24EHoYVs8L8g+4BC
-         7OJg==
+        d=blackwall.org; s=google; t=1795202649; x=1795807449; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=qHo6CdyCabm8XH8aUppzEr5dak8Hjpei/j+QDqjBmtE=;
+        b=MWX3rqdub2/YZr8awmCv4sB0tcy8MHCXgd/nQ9Qka8sg9rdMObkifriYyu/68Pf7T9
+         9NHP7i1U/6cGX3M7BxhI8rAnPJ213jGK186ZTspzL0EL97GSkkd5uhNeMn/jo71E0MC+
+         opCDBFvJ5Ovww+WSm018f804RJubnFFJAUTrJgGhxsg/s/QMtaB13mYZx6Hbr2QAdZJL
+         Bi1DC4t1adzP6EGUm1Z5b5fRWMylX8yBQcU+a0A5BhAHfNkyetgqiDBBr/mo1BzyznAa
+         2qJUkjU4xpeCnetqQ9wNT45LJhhlgmjfPfxYZtHEa/tCnC82kEK9aKKGyu6vAa2TNZ2a
+         etTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795202226; x=1795807026;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=5Iu/1w/LI0buVkR+aQF4itDAWB9ZbTOtkysWfOEOOGc=;
-        b=sCsDd7QFU57CLkulvQSZ8aPWh++eKho4HlXjrJhj/9uc/pReRHXslp6Zeu/lFrcXyJ
-         ETH92K6TuA+3JQ/5B64FEcwFy5kJ7CnOgHMkfXhpL+y84Qt/JhEGL8eS0mlfT78OmtlH
-         BN2zScFu2zj+Cmqt2kw3HyD+lZhjGygtzGlQk2g9kgg5zE3OgQ1c0RFcJ+KlLTQfhrep
-         fHTvyrD8J3nSfpVCNDP+QFWCF8ZfAFqCrsBZWV25EE88PbVCJftKmSehIOOzgeoqENIg
-         YvbwYnoQh6vHAiDt+HwqdbGxKROCrfQ8SGMNnVwfMx+10Vv4sbNvdcMtUJb3jwORn84f
-         oQNg==
-X-Forwarded-Encrypted: i=1; AL+hErEM/Y0qEV35rRaYtJnTgOh+E14rIgJ2MJAVZcJLRru8Cb3kwXeixxGmjMSvfMTqso1GR74=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/JYp5SyHfHk8R+Li6aR7bURiCen69kE3Mw+uOwmukey3MnlZUW
-	NukKsKFCmOGaH2cB9g7Wokm9b+3daEHl1A8OZDvws4PuguhPIx13GZ3W
-X-Gm-Gg: AZFdTZeki+XDc6MJccOWIMh4rwB4zQ8E3FStMoQwZ2Qbr+K9M/Epa5b7F0j2ko9pX5y
-	34vDu56wbbpHgQY2+C5SDN+1yd6mjsvRKD607M2p75Q1vfnwnxAwcgePZS/qHotcKHP68irqeEn
-	8FsefU+gWfas0TPjNOqiZk/6Vko5L+41UYW4PGQ9G+GyYo4rvMuB0YlROmX4CH3Oo0f6YuUjdnD
-	d3inIUy8g23sh/K9WtjOSuvKtYTCRAK22/RQvRsu1yE10wHN006oqxvrOu0I4Sysj2OSM1s59Pp
-	ScG5XygoagSiohV65p1ALfzvpJABepofegKWVSfmRYcYOTLobu/aD8GR/X5NCugLEQADhyEIfjN
-	y52XQQoi78bNoTzeloYuZO4o/zZVU0lyff5BCmFIgS/emWrY88x38BYmc01ATWwWL8dYdCMgNzZ
-	8xAWJcBOSG+jcKfWL9ZKOo552lw6cGxvTeqfHwoG1x2MnddyBJmGe22IgLjjaGPJGltR23rNq64
-	J6OAGw/YVD18Ge7w31a46AGAXhxEbb8cmU6+IWe9roEPevh//M+vosKXfHRpcZYk5/PKDtSU9K+
-	JssLAe2UWV/SJGX7jApItFH2zEpngfMqy21gophH0SuYtEAtZ9DJIkNBUNX6a59iRBNrLPDNPk0
-	uQR9FAbzuEImlFlslG6vHEW1hI0MCyhbQFg==
-X-Received: by 2002:a17:90b:1dcd:b0:3b0:bd53:8e5d with SMTP id 98e67ed59e1d1-3b41cb3e4b9mr3128974a91.58.1795202225858;
-        Fri, 20 Nov 2026 11:17:05 -0800 (PST)
-Received: from localhost ([153.61.198.249])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b405d639fdsm8535782a91.10.2026.11.20.11.17.05
+        d=1e100.net; s=20260707; t=1795202649; x=1795807449;
+        h=content-transfer-encoding:content-type:in-reply-to:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=qHo6CdyCabm8XH8aUppzEr5dak8Hjpei/j+QDqjBmtE=;
+        b=0jnqFO7ip9kEQLYTdJ/q25sUYqixDpgBR8mhoLxImBv9k/W5MYdvLjj91qecY5hbLm
+         i0clJaJiHDOH0yyO1rsdck+iWbOjSCAyeLzud3+KJd71aLYThV7xnNB0NaWV/6pu904b
+         0AV+Gkyb6AQT136OmA4NSRuPbR5CQ+aewSp/PsB9u3N/XxYnMVLx0OSlzZHKWJfe2kDk
+         +nAWRIGDcImMYrSBu3SdoCkxsCgIsrU5J6a1IMtyqwHntRTDgD4cDv6NYn0hreG+Go8T
+         XD9eRzchF/TdfxtDdcoKlmZNZN1sdrQvgO0tERoyncPOXX6G6cr9cmhUydDysKV2+HQy
+         D1iw==
+X-Forwarded-Encrypted: i=1; AL+hErGnWDMIhoOhg5PsxauYbx9C/+GEtMkePLeHJyfgvumDTeIehJjb3j3SHHYLcQzlyOOtK3k=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9ukXNIX2Erf7fyMqFAW5hKpSnulEMhuzgpcVcghZ1bFy63JSAw
+	UWRVEFJIO9Gjc/t2LD7XwVRgVThZXmvQvEDCntjYtj9NWHJHisk5X1TGTnhTNrD0sTk=
+X-Gm-Gg: AYBFou2pwBh/juCm+g8cgo/rmwZH1HOJUJjJzE8aDsP3JPP99KQIiEI4PN1UGPafn5S
+	mm7IULf0dwgBg+0s7+V5B7WY4Ndpuh5SSzebZ50LBbm/T2veKezwe+KcgU2ZtlGMxbJLP4izVFf
+	9+lULA1qHOzC9ykb8sDKp3J7kjcS3zt1lqnrpXcWcGzGrL6HIRAVfp8J3roJB8xfh+IyJOh67Xg
+	z2WVnepDyGdJ0cOy9SCkrRv/+9cf1/pQWrZsaswtSfCADYjY8n259V4fnW1u2SwO5eyKqgpEGdO
+	UmH8LEpcNcdeL1ns6rO2Nja5W23pdnajPr1oIsvL/lgXLvkroJPKHAxuuAEL57D/Uhzc7jvq+B/
+	lD1eRSByEvCnQa39bLQ1DekBR52N0e1vBQ70DXI6lkGFux5Ts6KTFaWGZi3PGl/ceg3JdK4oQqy
+	ukLTMg3kJs9FLPgW+T4JeG/VFmIuGbhx3h3mleJNsTaZN2bQICf29sZ1fJqz6BwkfHhcIxtQn10
+	Q/Du0VuyFSbv3XAOZLrrbgI0D+8TAi7klbJbBy1wy+xB8nVf+TFFQc6X6ZQVTd5VK00CHq+3dJ4
+	uJ8uMxWs0W4AOrb/meU4hQTwdVFmdy0a5rkxvb6OWMn1BBgenGIIEKX3yNI=
+X-Received: by 2002:a05:600c:a0b:b0:4b7:6a8b:9df2 with SMTP id 5b1f17b1804b1-4bb8882432bmr91151435e9.25.1795202648785;
+        Fri, 20 Nov 2026 11:24:08 -0800 (PST)
+Received: from [192.168.0.161] (78-154-14-127.ip.btc-net.bg. [78.154.14.127])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb895eec06sm36376085e9.2.2026.11.20.11.24.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Nov 2026 11:17:05 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 20 Nov 2026 19:17:04 +0000
-Message-Id: <DN0A2SUOYS26.1M5IXC6G41RLL@gmail.com>
-To: "Nikolay Aleksandrov" <razor@blackwall.org>, <bpf@vger.kernel.org>
-Cc: "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "John Fastabend" <john.fastabend@gmail.com>,
- "Stanislav Fomichev" <sdf@fomichev.me>, "David S. Miller"
- <davem@davemloft.net>, "Eric Dumazet" <edumazet@kernel.org>, "Jakub
- Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Simon
- Horman" <horms@kernel.org>, "Joe Stringer" <joe@wand.net.nz>, "Paul
- Chaignon" <paul@isovalent.com>, "Alasdair McWilliam"
- <alasdair.mcwilliam@isovalent.com>, <netdev@vger.kernel.org>
-Subject: Re: [PATCH bpf-next 0/8] bpf: add bpf_sk_assign support on egress
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-In-Reply-To: <20261119142231.2612515-1-razor@blackwall.org>
-References: <20261119142231.2612515-1-razor@blackwall.org>
-Content-Transfer-Encoding: 8bit
+        Fri, 20 Nov 2026 11:24:08 -0800 (PST)
+Message-ID: <27bfa146-0512-4e35-9e68-fbc8c50ef405@blackwall.org>
+Date: Fri, 20 Nov 2026 21:24:06 +0200
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -111,15 +91,48 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 0/8] bpf: add bpf_sk_assign support on egress
+Content-Language: en-US, bg
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Joe Stringer <joe@wand.net.nz>,
+ Paul Chaignon <paul@isovalent.com>,
+ Alasdair McWilliam <alasdair.mcwilliam@isovalent.com>, netdev@vger.kernel.org
+References: <20261119142231.2612515-1-razor@blackwall.org>
+ <DN0A2SUOYS26.1M5IXC6G41RLL@gmail.com>
+From: Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <DN0A2SUOYS26.1M5IXC6G41RLL@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Nov 19, 2026 at 06:22 AM Nikolay Aleksandrov <razor@blackwall.org> wrote:
->  .../selftests/bpf/prog_tests/assign_reuse.c   | 625 +++++++++++++++++-
->  .../bpf/prog_tests/sk_assign_netkit.c         | 586 ++++++++++++++++
->  .../selftests/bpf/progs/sk_assign_lifetime.c  | 182 +++++
->  .../selftests/bpf/progs/sk_assign_netkit.c    | 153 +++++
->  .../selftests/bpf/progs/test_assign_reuse.c   | 174 ++++-
+On 20/11/2026 21:17, Alexei Starovoitov wrote:
+> On Thu, Nov 19, 2026 at 06:22 AM Nikolay Aleksandrov <razor@blackwall.org> wrote:
+>>   .../selftests/bpf/prog_tests/assign_reuse.c   | 625 +++++++++++++++++-
+>>   .../bpf/prog_tests/sk_assign_netkit.c         | 586 ++++++++++++++++
+>>   .../selftests/bpf/progs/sk_assign_lifetime.c  | 182 +++++
+>>   .../selftests/bpf/progs/sk_assign_netkit.c    | 153 +++++
+>>   .../selftests/bpf/progs/test_assign_reuse.c   | 174 ++++-
+> 
+> 1700 lines of selftests. Pls dont.
+> Tell your bot to make it absolutely minimal.
+> 
+> pw-bot: cr
 
-1700 lines of selftests. Pls dont.
-Tell your bot to make it absolutely minimal.
+Yep, sure I fealt nervous about that, even though I've reviewed it.
+v2 takes a simpler and more narrow approach anyway, so tests are fewer
+but I'll try to keep them as concise as possible
 
-pw-bot: cr
+Cheers,
+  Nik
+
