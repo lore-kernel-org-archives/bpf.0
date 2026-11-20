@@ -1,85 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.182
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795207333;
-	b=JiqKjfzMsgVDxHfdRV1fWWcmZHMpjkD8SZlD/sf+7alrYKLJmR+fBMIStx1w7Gvv8MTD
-	 Tp2Bko80hGSL67GFaBCGqjPuSlP7BvNGCYKYmkVWaQXE4xT3YrPpV1bghJ6c+PQlB54K5
-	 40ZwWY8fE8gho398LtVsGUgTOFYQvJD8c8TUIsvTQb66TgjnG4rUqIcgIASaWSOG+1qqG
-	 YEV1RXOem9GWWPqu41BXdO4BxiiiGHCBXMVPbURliEkzkMP0yXtgt3i7Q9LMjdjdjKz6S
-	 cgj5Xr5Pi15oqndoK2wr1XOtx+ueJd/g6OqgaxE17pP57Re0GekilnJApPw2y1TKXWQ==
+	t=1795207336;
+	b=imVsPOwf9ItG4IT/f8p9XYBhhpqdupB0aXIdij3C57KysBH+R0DUky9l81rUXqSetRV1
+	 Lsuw+dsWTM15L4UK0J/DWhc2IMkbQmDzMzu3V3JElKCXNI9nCkfdnjPJ8hhHbqaHIbHEv
+	 EPkJbTXtK/O9zZwE/3na9PT2I0bsOiwYm4XUdHD9Ar0c16FUjNUuXVjBvzbhEs/1GTC/N
+	 37g2jMWcODcrPRAIA4HWxf7neorjXpXXJwKFM4gJKVRgBBjityduGSk0ofd9tcr7S5yZC
+	 PHv93r44FbJ280JKCuvqMmk0hUqsOVMHU6wjPuHUSg+EOKIOiZWn6AlAVE3VHnjmqpQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795207333;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795207336;
 	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:MIME-Version:In-Reply-To:References:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=shmJAbGA1MISsC+6N7az7V5nNrP0Lt5U/4QpgbvguTg=;
-	b=h4aP5tVyAYLYmUDh1XvSF1tzjViK1S3hY2UNxAQZZLvBew080P6taN08oCosSmkjWc9x
-	 HqGh5SLOs9cxCuWqg1R3pPTuw7+982GsRM6O2qTB1PAu+BeeOty8aKsjbEO8QifoYUtkJ
-	 bvg3g6fCDPEzqUpCCcON2rK5BVj/xtLb6Rj8+PtJJeFzwEAFHwxH/uU9//RohDcxWz0pH
-	 oVL38rils145zQ6fSXZAC7u1XNEGxdTRiwGmw/VNLFjEL308jLeqtqy2Y3ME7juN3zkiE
-	 Cp79hzXm2y200lO+vkQVIvGZerqC2u/wPhPLPFNUIRJbZHd0ReokpbiOljxNYIxPpeA==
+	bh=M1o1LqMhEI68Ps8j5jmIHuqxqlG+VGNC6ppq+rvyi8A=;
+	b=AhDOBjr+bbTxzcfiT8ClFCGJOgmSaRQVW3xAdj1/ShiH+nF6t7rKVafbiCA2VQQ6AZd/
+	 OnWKZENyKHdYx7wphAfndnFK7A4UQ45DgBDCjWvSsg9VYE2Dt6wyPOlCIkISh0Gq1cY5u
+	 cxApppX+0yAhsx1Ttns2+L53FbSeXESJhXqe5fcQWTqhiRWKDpaHKkUzMWFbL5Sybxv/l
+	 cwhVuWVMrKaquMWjcZeJfFMEGYxySA6vRNmODGw4xDTc2FDZDcnj7niQwjcsS94Iga3Wn
+	 xynKflbufuH/llGRkyxesQww9cgXvwYCijtBSu/EL3ODH2maqZlPe3rzriuqy0zwo6g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=fail header.from=kernel.org;
 	spf=pass smtp.mailfrom=gmail.com;
-	arc=none smtp.remote-ip=209.85.222.182
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+	arc=none smtp.remote-ip=209.85.222.171
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11915606A6D9
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 20:42:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 11915606A6D9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55BEC606A6DE
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 20:42:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 55BEC606A6DE
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-93f3c616c84so108779585a.1
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 12:42:12 -0800 (PST)
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-9495f083657so163321085a.0
+        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 12:42:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795207332; x=1795812132;
+        d=1e100.net; s=20260707; t=1795207335; x=1795812135;
         h=content-transfer-encoding:content-type:references:in-reply-to
          :mime-version:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=shmJAbGA1MISsC+6N7az7V5nNrP0Lt5U/4QpgbvguTg=;
-        b=WFL/1gJAsRxwPJOHBdPgMv+TENDl5kXE5Ksv84x0LIRHMUTQzhxcj8q/5d9THzHKxp
-         ukNsPLI/9VCl/l58XsJf7WzUf486IjzS1uw6di/LbU4zfC/UhkjV7GFk4bLaWSfEpU0j
-         AZTCXLwIV+voR766IBdGpnyqK8cy9McTCQBzpcAz7s8Kxgosx1hx2tBzKM1D7N+NhkE6
-         VNyqfTV2EODsQn/MH9iz0EhbE3UAPGSveAYBvyYCfQiAMesIzw73uNdRGFNG52qYXCFg
-         tRpMGE1odCRZ6BRkwnoVSBKR9yLdaVLp1n+4A/dw4MpiUgIUpZDKPDWy9lMEWrm0FleI
-         V3sQ==
-X-Forwarded-Encrypted: i=1; AL+hErF0EwP2zhbIVXM6KZljQIVbLvXEn9StnVqL3ePzM16XnLNSK3uFO8Wetv5BANW2jCP0Lb8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+9m2rxu9ljBU4vHFRRocHMKZpR0Jx1sGZ67glKSVEw2t+LJcKq
-	4+yjgulJfFReCCFQUB46Q4iIg4QyBttAqUIsM3XeNQrbjcIaf8P2QIr4
-X-Gm-Gg: AYBFou3wJ9koZBSz/hPUPpxA8Wz+ryxAg76mi5TW6MlhsZz7+6+Tx0izSbWiJskBE2I
-	nND/n5NsjhenAhEzwWjd5pKOd9KGxGu3WnFdy6f2bGV0wbRlxhprFAnjuYVNxQl0gbOScYIHG3v
-	hNGQzAqGghf0QlWm8o3mNMHzvHlvRcQWF/tepO8M2lIs2nG1aGpFYP7LUILJm4243kKJ6+LY6v+
-	VBOUCWCO7kjMP5AiSLO6D++pRoOlFZHCITmPMe756OnsUzgorZe7JcyrsVPvNTmNSnPVR6oP9KO
-	bkGkcIGImNy4aTbT9HUQ2qnIiZN/q8g99zi2LbewNZVO9eJRxdE8xpIz12jyLVow12i0SgCNC3a
-	nQUqHS+ucv6LrzMIOgchfkuRbS3GYsRGzaHh7LsqOErFEB4F+nglB+Ge/0IJcnnvM9Uu/409+ik
-	zzl/f2vSHipbLfX4akgVxSothALFR+O617LKT2etcl7C4WETUjbLAhvEAs4QvNTeZvlto4YOatz
-	6mi+0emNK6Ojx+rjd+44UP1BvC5xqPmnmeV/FC7pue8BRfSHhJ2TCN8ewzG4GX7IlThvClNxCcs
-	YkkCNnSP4CY6Ya+AJ79p9KHkRMQOWCV4o6+v/Q0/bi2haUNxy3DMi4wDWe7QeJQ2cjL8hUx3Wpm
-	CTkp7hVKFW8YoJJNQFghiytJaAc3x29Ui3aGdvNtaqwleM3OFc2ki
-X-Received: by 2002:a05:620a:17a2:b0:949:6e15:e1ca with SMTP id af79cd13be357-949ba965b33mr726231885a.19.1795207331941;
-        Fri, 20 Nov 2026 12:42:11 -0800 (PST)
+        bh=M1o1LqMhEI68Ps8j5jmIHuqxqlG+VGNC6ppq+rvyi8A=;
+        b=CqF9UfoU9J+I0YPvxe0XxbZRWl0LRKYIXRMOyvY+U7OrPkl30DzWm1VrSFkkBY/t3N
+         DrGASjOt7J0wY3z/KofIt88d3P3Ue0kCG8xZN4PoV71NPjydFbb51ISknZljRHOGasmG
+         rr3/8XHGJmpwj9CRHq8082lzvjN2+sPqUBeUYUm4x64FpIuDHi48iAKiyIV0xE63aOwa
+         BCe9DPP8MhSlLFXfd+sG/PGzRyeasMI4fsYsrZnhvLvSgRUPHLzBVehQ+nU+izsHscLh
+         kF2XDpc52sqx+B6YBdAvAjiDIl/wGdzgVxuAmXq+8YI9gl5IfwOSLLZooLqe2q+2elzD
+         4SkA==
+X-Forwarded-Encrypted: i=1; AL+hErEjkkF0qP/X4sNKoEX4xGv9sulM9XshHI1abmKrnuNF5OdFWT0u4FBO7AwlddM6EVDwOng=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9humEeoW6EsyjUBvldrgQz6RtrJd98KWaJcGccRHCqHBBm2T6F
+	QiBhbEhk5bXb2fFSYAHzbUY3yVSc6UX0q8/izM3hOxm4AgXvcCw29ZJa
+X-Gm-Gg: AYBFou1GJSRkiy1/sypCpM9MTb1d3YZujruUZnHNfplsMp1FqjHPNTnzegyN/ZBMXL3
+	t4Ra/0Sj1Ias11wJeZKXJW5YTC/oBfjQFR4TjvUZfXUgqzlFgDuq7xxMJbUyDNaV3LtljE5b8ck
+	AFjqziz1aZAPTt+sx3Ky4zbQqxxM/buZmWqGVVgdFPcz74Q/KnfTcupnf3MsCFs2f5nqs63mCzd
+	Noy8pVqJqvhmMxZPCQJgMvUh8FLKNBpBdzwe7+0u242ZKxYf0LJHP9kUkCIktYM6L2deFahnxBS
+	iboZknoGl3hshkT3ErYZiC6qE+/0lqjAFhzHYNMBxduo8OJO2yYsiveBy3hcs2Ha3XKrX8iBD9O
+	x6TqXM2vde3rudtBYNdTK0ZSRET1t/bqrKnR3QNDpdzXUlSHtsOxJCH/WJ7KEvE3+oznlpislfa
+	9O4iIHB6M4/c+0J5Zl6EJZ/ZIGLtptbhwsElxTEhv91Kw6/9JMSNwoS/xpxgtOovSbpudajONMj
+	FXXtDfXiLwui5B96s3s2aY7SGUXc/E84rryRb5FtE6t0OBk1NrmeI2aNzAdW2iF4ZyjfunkqLYs
+	nB99no9Mmv1+UKWP62YCdmkQ3IP9h+j6Z50WHPG5itvzLO7AHhohY7oeRXsoIvpxhW8aUFvtlRs
+	KEyxb/tA6uSdkYeIueE6V+yxZSZUCRV8vpIMgf23+vwqnA99v/U89
+X-Received: by 2002:a05:620a:f0f:b0:949:57b4:388b with SMTP id af79cd13be357-949bab0eb6cmr787060585a.41.1795207335160;
+        Fri, 20 Nov 2026 12:42:15 -0800 (PST)
 Received: from localhost ([199.170.132.196])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-949c555faf9sm158988185a.0.2026.11.20.12.42.11
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-949bb3f5c31sm278786485a.30.2026.11.20.12.42.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2026 12:42:11 -0800 (PST)
+        Fri, 20 Nov 2026 12:42:14 -0800 (PST)
 From: Tamir Duberstein <tamird@kernel.org>
 To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Andrea Righi <arighi@nvidia.com>,
- Xu Kuohai <xukuohai@huawei.com>, Andrea Righi <andrea.righi@canonical.com>,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Andrew Werner <awerner32@gmail.com>,
- Zvi Effron <zeffron@riotgames.com>, Andrii Nakryiko <andriin@fb.com>
-Subject: Re: [PATCH bpf 2/6] libbpf: ringbuf: Prevent NULL callback crash
+Cc: sashiko-reviews@lists.linux.dev, bpf@vger.kernel.org
+Subject: Re: [PATCH bpf 3/6] libbpf: ringbuf: Handle position counter wrap
 Date: Fri, 20 Nov 2026 17:51:54 -0000
-Message-ID: <179519711424.18576.15326586614235160874@kernel.org>
+Message-ID: <179519711425.18576.13916601537797650655@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -89,17 +80,19 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-In-Reply-To: <DJAWPR7RA9VX.2LHJ0V3EVGR7S@etsalapatis.com>
-References: <20260613-bpf-ringbuf-fixes-v1-0-e623481cb724@kernel.org> <20260613-bpf-ringbuf-fixes-v1-2-e623481cb724@kernel.org> <DJAWPR7RA9VX.2LHJ0V3EVGR7S@etsalapatis.com>
+In-Reply-To: <DJAXGXLF4NHZ.17HAW2R1YDK7I@etsalapatis.com>
+References: <20260613-bpf-ringbuf-fixes-v1-3-e623481cb724@kernel.org> <20260614020552.022A11F000E9@smtp.kernel.org> <DJAXGXLF4NHZ.17HAW2R1YDK7I@etsalapatis.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-> Can we just prevent a ring from being added with a NULL sample_cb?
+> if we're going to modify one let's also
+> modify the other.
 
-The NULL-callback fix was merged as c0628a0659b6, so it is omitted from
-v3.
+Both are now fixed independently by 6ff5b56a50c5 and fdd4fad0bbbd.
+V3 drops the duplicates and retains the user-ring drain fix.
 
-V3 adds a caller-owned iterator that returns records without invoking a
-callback. Rejecting NULL at construction would prevent iterator-only
-registration. The constructors therefore continue accepting NULL;
-callback consumption rejects it.
+> [...]
+
+> they're a bridge too far, we have to draw the line somewhere.
+
+Agreed; the mixed-width ABI issue remains separate.
