@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795211483;
-	b=VCPoVbkN1Y2ogcjEGuti9x8ApbQk3KojWg3IGG+W28iojaWet2QGtlC80hewKpvNuiHn
-	 aqr4ztWM16BFD7aARadZY/Gaa0k7vmiu7JjMYlP96zgDtSHRS+AAzv3wm+schkE56y/mH
-	 vIxYpWrukmBI7Lljrl1Q6UOUrxB33dwIH6hzpd2SqsAGgi7TIwKy0A0+XPCa1PMgkMZXf
-	 LC5JIMppspNoOBCNPsO90czXV6L2ZGVAhnQsGx/IKBKCWZuOYeT/ad62Gp4ntocaiscZq
-	 UEzQEqNfoU90NRTfd2RD4XxWNSjhOoNs39XneCkKUjy5FZ3COpUjopIyG8bJSsmEvKQ==
+	t=1795211487;
+	b=HjiBWAu1wl69UCy9RSr/zepVgYyh2dzE09sELL+kp0kC4NOgtUriOmygM4zq0vbVKZGL
+	 igw7X360zZiyFVdp97z5hm+dZVdwmXsp+tZqGguNkzi74QbFh8/ZDfsWGJnbu1tFcKJNv
+	 xuhCbksry4zPxqbYhn/TwctUi9Cf5NiXOUXvTRROQmAFLC5SHCY+/VClDhtNIcRQSZm5k
+	 UpuACCnghBZeWVDGLvPO4LXoPvvsFDQREYzel4HehIIfdXb42cfsUrwgLuMlz+r28Thxo
+	 NsZM+/av6O+MElvR+IT5iV+BlQYEWnsHTW6rqea/fwpGQtD7bW/2G0cuVYc6B/W131A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795211483;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795211487;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=7pN0An2W1WL3+dLYHKizIvZYkGTf3fMECbJ0tuwCnOk=;
-	b=SxZC6pXA4WB76IF+ea7lPsVSlV47S8DQmKFknSpB+epofL+o/Qlx0C2AvyPmxL8K8sp5
-	 jhGIxeUg00lW5W6MgVwzwomcFCsDtIksASvdhsQMwKnaeiKVpwcb7K8THC3fLANNGZr6Z
-	 cIB/7TehuXYzM1mLfa/geF+K27lOMI/ta1C0UITFBjD9S1theMkxxlFNrdv4wy8Ma+b28
-	 kwj98MD0QZe45wPdr0YTlLFYmvilIpcBVSRHbYDemclMdUjqrbTH1RAnXjuFSQ5F4Sid7
-	 Jc/DH8tjJ3TrFeyLGIOphuSeV+eXupM/thNTjygxhWop82bWOXH5tWb4PXSBazXieYg==
+	bh=/sksnM+kt5JOdochY/Feo3vR8xDRZTG0l68VjuOArAs=;
+	b=q4MJQpcZTWyyBcSvfadDoO/l9TGlONUe/O3TfvcCxk4pqsLrm9MtTcVTbnAMYgmILoYW
+	 eP4/zQZ1+Fa722EVkEnUjzsBQ4Ih/Elabj+Ei6XqR5dYiCzSgzuWQ6hgCVJxgWrbl6dn3
+	 wibvE6f+7tol4GJ68fgDB61eIPjeybyywlPyV2xsLIkZThyl2bt921Tn6jTBE5Lq2eDlG
+	 I6HTRj1Qxyz98Hk4N3wCM2xxO0xtRMMpkSZRBm9h7kbO6YvPd11HdGDC+ip/7HyRDcbDP
+	 3Jerx5Gio+pzk7rgCAESNHa7IqwGDPCSBIgJ9cMe5HuPDNjMXybZpvNb+i5Rj8Ei3iw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AMSvQp+w;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=I0FUNRBa;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD7A460A2603
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 21:51:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E615606A686
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 21:51:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AMSvQp+w
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C4DF1F000C4;
-	Fri, 20 Nov 2026 21:51:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=I0FUNRBa
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 880A01F000D3;
+	Fri, 20 Nov 2026 21:51:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795211483;
-	bh=7pN0An2W1WL3+dLYHKizIvZYkGTf3fMECbJ0tuwCnOk=;
+	s=k20260515; t=1795211486;
+	bh=/sksnM+kt5JOdochY/Feo3vR8xDRZTG0l68VjuOArAs=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=AMSvQp+wSjki6mBLilZOAfLMbtW9ybfqjacpg2zLsqydZOFF9WjZFPKnq+4jNc/6G
-	 cd1W4xnryXC2u9T8EfkLWpKCfchrqKjOAl5c62hThDjQVPFPGH4y1+Ir1WlvQD8UbK
-	 Du57+VMv/uktK2LAV0JjiCh2rPYgKioxj4ZB9tt6gWPPdFvoy6c6CxXhxjFjO3NVkN
-	 VlT7InW3FaTahPV6rwyCWUd0YDyHCaf46xOXgkVFgoHpa92x7cpqqP/HdAjvIZJ24d
-	 zPJwd149Fd0ed7fNtUNs1iYWyxBiZyLDUtbUHdZI8WOQ8KYJxjsDPOW2LGCJiFsc71
-	 i710UwkBUlqGQ==
-Content-Type: multipart/mixed; boundary="===============6301437953220876200=="
+	b=I0FUNRBaNB3NGVv4pt7Br2oJnAnOSPYOQt1HVFqM3CRfhwFoEsi3WK2kZ9AcQJI6Y
+	 OYtCHxqVLYPbgiiRzsHjYvDRSyojG+VsQ3SFvGjd6w7InLQ9dlDCQKPn94dksPQ4K+
+	 C04NIndAjF3mxwF88bWOgnj+8XFdJ+Un3r4LRLbz4lDKGO+lkD3N1h2kDESERHm8OT
+	 h+jo9CiG176yrxCG79NpM8h04pftwFDLhCT0QeQ9w/aADs3pmrDXIkGYro2FqVGwZn
+	 LERAkT5Dc7sLdBTVchThYnrV7CRMbibN8XiCMGTuV+cYxgYPen7qcSpKAmTe3n7jAG
+	 rDh4OizflbVgQ==
+Content-Type: multipart/mixed; boundary="===============4334217473762922311=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,57 +49,75 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <d12918e1e98c19f299d7d8c896775f147c6b08e321806c64ff075dd37c8425fe@mail.kernel.org>
-In-Reply-To: <20261120204959.614908-5-alexei.starovoitov@gmail.com>
-References: <20261120204959.614908-5-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next v2 04/49] bpf: Delete scalar evolution
+Message-Id: <df1841012fe23fe7dce140514da33011112569e63c784b725d77c73a160f3214@mail.kernel.org>
+In-Reply-To: <20261120204959.614908-40-alexei.starovoitov@gmail.com>
+References: <20261120204959.614908-40-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next v2 39/49] bpf: Keep two states apart if a live xreg has two types
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 20 Nov 2026 21:51:22 +0000 (UTC)
+Date: Fri, 20 Nov 2026 21:51:25 +0000 (UTC)
 
---===============6301437953220876200==
+--===============4334217473762922311==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Delete scalar evolution
+> bpf: Keep two states apart if a live xreg has two types
 
-TL;DR: Nit only: a comment on loop_stack_entry's counted bit still mentions
-max_header_count, a field this patch removes; the comment is only fixed later
-in the series.
+TL;DR: live_types_mem budget is computed before max_mem is clamped, so with
+CAP_BPF it may allow about 7-8 times the stated 1/64 memory before joining
+states again.
 
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-
-[ ... ]
-
-> @@ -420,8 +391,6 @@ enum bpf_guard_edge {
->  };
->
->  struct loop_stack_entry {
-> -	struct bpf_verifier_state *entry_state;
-> -	u32 max_header_count;
->  	u32 loop_id:23;
->  	u32 terminates:1;
+> diff --git a/kernel/bpf/precision.c b/kernel/bpf/precision.c
+> --- a/kernel/bpf/precision.c
+> +++ b/kernel/bpf/precision.c
 
 [ ... ]
 
-This isn't a bug, but this hunk removes max_header_count from
-struct loop_stack_entry (and struct bpf_loop_iters), while the comment
-documenting the counted bit further down in the same struct is left in place:
+> @@ -1625,6 +1681,10 @@ int bpf_precision_init(struct bpf_verifier_env *env)
+>  	prec->this_pass.unproven_funcs = bits + 16 * words;
+>  	prec->last_pass.unproven_funcs = bits + 17 * words;
+>  	prec->pass_cost = env->cost;
+> +	prec->live_types_cost = env->max_cost / LIVE_TYPES_PART;
+> +	prec->live_types_mem = env->max_mem / LIVE_TYPES_PART;
 
-	/* max_header_count follows from the state at the entry, not from patience */
-	u32 counted:1;
+The commit message says the budget is "1/64 of the limits on cost and
+memory".  Is live_types_mem computed from the right value?
 
-Could that comment be rewritten or dropped together with the field?  No
-field or variable named max_header_count remains in the tree after this
-patch.
+bpf_precision_init() runs before do_check_all() clamps env->max_mem:
 
-The comment is only rewritten later in the series, in 29203c388956 ("bpf:
-Give a loop a checked trip count or may_goto"), so every commit in between
-keeps the dangling reference.
+	initial = save_snapshot(env, NULL);
+	if (!initial || bpf_precision_init(env)) {
+		...
+	}
+	env->max_mem = min(env->max_mem, env->mem + BPF_PASS_MEM_BASE +
+			   (u64)BPF_PASS_MEM_PER_INSN * env->prog->len);
+
+With CAP_BPF, env->max_mem is still BPF_MAX_MEM (2 GiB) at that point, so
+live_types_mem is 32 MiB for every program.
+
+For a program of about 1000 insns the enforced limit is the clamped
+value, roughly 256 MiB plus 31 MiB plus the per-insn tables, and 1/64 of
+that is about 4.5 MiB.  The check in bpf_hash_live_types():
+
+	env->mem > prec->start_mem + prec->live_types_mem
+
+then allows about 7-8 times the stated 1/64 before falling back to
+joining.
+
+Without CAP_BPF the clamp does not bite (64 MiB), so the ratio there is
+1/64, and the budget scales differently for privileged and unprivileged
+loads.  The cost budget is not affected, since env->max_cost is not
+changed between bpf_check() and bpf_precision_init().
+
+Should live_types_mem be computed from the clamped env->max_mem, for
+example after the clamp in do_check_all()?
+
+>  	/* the replay for the driver has to join where the good pass did */
+>  	prec->join_live_types = bpf_prog_is_offloaded(env->prog->aux);
+
+[ ... ]
 
 
 ---
@@ -107,4 +125,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/44817467639
---===============6301437953220876200==--
+--===============4334217473762922311==--
