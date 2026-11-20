@@ -1,93 +1,93 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795208071;
-	b=0/2xfenoqYbYGT53eeAUDNk9HIGTq3TIWHX4C6sI8iU84F516DI7/NCrqv4dWbj1+kbu
-	 td+eNr4cu8XR/cvGkgwDkDG+52y8IhUojUgVnsJ+6S8Zq4a3mvIV2FUAEWJ+cmiiOE4+Q
-	 Kgk0Wyr4nuyMLyicdBXAAjlzX+iYj+JncA8tv2eWIgUux3EdiU06xRmDbokeU3LfsBsJw
-	 1yJlrg0zcMLeSs/Eu2/TWlkArlIcMctFaxNJ4qKbLATPScYBlmvn3KiBLPH9r1KiE1gY5
-	 Ie62tdX9kAgstKErDs5m70CVjWR2M6NaoOjDYlx+mi06uj1EPHQ1irTrwo0n9KmxrWw==
+	t=1795208077;
+	b=kcwEvlVQPY7o+lsnBsEn8cFyZgk/xqPwMBuuPmSSnLBXhv8HVY64R+tutmoYfZRQ5PLB
+	 Nao0dvGd3H6xcXV04Ie28+byeZItZSL6l8jGJexBSyqbNgrUQZv36pz9+SlKnc7w1YXDP
+	 2G1wQNmrp8VNVZz7woUWEG6ChDdgRc919/Agc7TWHcAXvC5fMBAUEMZ8YXTc1JHbxlNnO
+	 FKHzFXev+pR/zborfFrgdmLW6fBYU16DdddRw1vj6dirDvCYlXXtXOEWMlWmBmqA6wznT
+	 XEdJniAwOiIuyEd+b8OsTw8TqsZ09aMP28f8hbDI79llpfAy7MaJS7tR5S7X6t9xH8g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795208071;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795208077;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=2o7XLLTNuOUE6dMMjbxx6J51la+/U620OIeL7rP+S54=;
-	b=v8TvfGGTtz7QJkzVNBMZNVB6EmvzKr6gXSjXom523lcNSaTuLLskPUsgpRT0kZpahrHJ
-	 xHPYWtnvnTZqUi5H6L9VFkkrvd/6MIaoXDF637G1gdAbG+ZGW/q3o30mnCaN4BQYvzOdt
-	 luIANb5DNwgUZKQkQbhQ3/waEqDzYDlI70dAmT9e6X8cUU5tg/9M/+judzF2diTU/kV3K
-	 38siln+zrCBmD4fzspD2TFuThlcZOTJZpEBCFh8YxhjuPtUtAtyG6uYZNaRKR6Ju64ky0
-	 uergHQW4wc0UB+IDnmcDqlpVf85DOfLv9wqjIQObPByyftZy9vEfERjOKH87GLkos6w==
+	bh=zoD37rXnFKhgjR2b3vxl6Is0u1NNOfIF6FlPIZGIWsg=;
+	b=KARv3/Lzz9/5AFZagh8Xz5yZsZAeBMmgAfrEhkcyHTpEYJaCBW4RRhiMPrnu056XTI6/
+	 gQmxD8rOIctmiytXtP0O7j2WZq6iedR8910jwjzOB7aBgXGlS9AMfeSxPV59mXkoDnStT
+	 ShBX0Op63Oj3Lvn01x+bm9HCjklMPsPyYltExZxaYPmeElrY4hTbXlJtRg/nJ6BpdZyr9
+	 IpQTw7fHj1KeoIFSPfF1vTMdatdI1zr+hmdTMxFATNjku8gpHhfX5aaKxdwRB49ST3JPE
+	 z40eTrz5pCkZC667vJx/Qg2RHgMxLTI/ModlhmJI1NYOTOD3Lpt0FWRAmI/Bt3k6bmA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pu41RDJX;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=I0VNJqSM;
 	arc=none smtp.remote-ip=209.85.214.171
 Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71A6A606A68A
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 20:54:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 71A6A606A68A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E48F606A69E
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 20:54:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5E48F606A69E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pu41RDJX
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2f0481b35c9so6669045ad.0
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 12:54:29 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=I0VNJqSM
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2f02f04a426so11249105ad.1
+        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 12:54:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795208069; x=1795812869; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795208075; x=1795812875; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=2o7XLLTNuOUE6dMMjbxx6J51la+/U620OIeL7rP+S54=;
-        b=pu41RDJXQG8A9upNVRcIZ12nz5lDGrHu62eD5N5ZB3mpKR0s2FAJ9P/AVW0srHxge7
-         UE90AMl3YYCV1hbRV7OrHYyWbFyL0zYsF4q8npwSsKsFPUYiUal847R9yljxn8QA4XUh
-         3VSHesPVKDdXVMVK7jZnuUBygJoS1FfiTqw0bKGz7F6S4xbmSfhrYjwhtYxM4QkTqLLQ
-         e+4teRCNpy/JyhK0ML1zVVQhuAJMC6zeyqq20rxYcFGrE0wG0Xon4bcSxUJ4J+13LHWS
-         R0DhdZK1QlJMPfCqtE4NPLtZX2ZZpNTSfkjwrVmltHqMikLeOjJ0Jp+XImOeLXJZttvI
-         sxnA==
+        bh=zoD37rXnFKhgjR2b3vxl6Is0u1NNOfIF6FlPIZGIWsg=;
+        b=I0VNJqSMeiKcwJRpq8cb6H0SHfWqK3EmRpppGVa+iODegE2kwemy2MJCkiiJt/UDxt
+         lPMVtSphht4plp2+2KoEQu1VDJzH87mqZNiaGhKf1WGJwdGoZo7TobRlp3gcA/R2AJxt
+         HOqUNFrkexXOU49M+Mve/IME6O1IuPTB2ROkjfdWNz1PsmD6AlYJK05lf/NRPmJ+nkz5
+         COqESkM7WMM769LUjSo8QEyj01o5NEJGdu5NXeXhUyekW3WeCrov/ZfcqEirtyIqmOUn
+         xjnA8DKyV0A0UgQ0W+9kCJfpu0s0954GgHguBqtv8JMtQGvUbn7fzjZDqSSMQ0hitv8v
+         kNpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795208069; x=1795812869;
+        d=1e100.net; s=20260707; t=1795208075; x=1795812875;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=2o7XLLTNuOUE6dMMjbxx6J51la+/U620OIeL7rP+S54=;
-        b=uXq6dIVnpRVXHKEynI5bZDEw1Sij8OGmRs0AiTxrZyATVVoIQNdEo4TpKKufcxqHt/
-         obVneoIF0mum+OVCS0tuveczKPLpko3IeOt0237+RzqH9WQeo0HOPyrxcQaccp2GsZRP
-         nW+pym4flPs7wfKu022wp4kl5Zt+nmkXdQutvP9xuZjKyISX3i6Rq83jV6CzG8slgbs6
-         Y61kOwQGaYkdeQNlwUVzh0O2tam0tmbzk88ap0x4OEAsEhfANqd308Ascj5fiEFYkREv
-         57zQkifhRbyRJhIERFa/vad00vT/9ir+ijFe8n78oj3ByTUcD7TceVQpZaCTzwZwlIX1
-         rANQ==
-X-Gm-Message-State: APuU4Z93bia53t05HCBowo9iPgB+2vNGM4/BZo8hOlkhfxF/jWNM+NIf
-	G0nZG+0b8bmY1TuSMX0cOPLyChyystDaH/e602P7Si2YGZv0ROY7Ou+okPwNhQ==
-X-Gm-Gg: AZFdTZc103WRV1f/dsbJ63pHcUSCeoqMyO3wiP3cORA7tiSj/auXTKVVpLLX6JrFkop
-	EZVcET1o7KtDQA9T+Gucdr5YD9n4f+7AdBK4FWYdzudvD845DcOxwdvqYPCuY9SJQA+4WI7KY6+
-	v9oRHjZNqmFjFm7iocUYadp3NJzlG+/gAaMOyUF1fakBGi0jSBwhnxNooo+m5k7Kx1UJBTZvJZc
-	8NDvpkXRWziltN9p/CBk8AU5XgXTuE1llHxJrIFscruwOy0Kyl4Y9i2ADkQKObt6GlODX+67bVU
-	kk08FC+3ay1ChAGQSjESZAQO5hTiIp3yP8zoQBuHjwp263xTRK2ihWYBo2G7nxxL1UlmpWYf9ZM
-	LVK3f4bw7mJKrNZkIQLaPRrgvMCCHnGYanXoXxQf/kWdL4rRptf0LUM+uC454HIA1FphiEA0sON
-	e6H3ZqSTbgs3D60ROFi206eFvyp6rHojYp3Gw7L4xL6oxnYoOgmSKgTquP/jWFajH8UwbU6kPRm
-	hQxMyfTD+4oYuInfhDSaB8SgjUyq4+K4XtAFzUCVYgn6XspAO4t4Aqucjqrab+b6AIM4Qw8cRCR
-	dEs1vb8b+UPCuynyDOGcQmgFHUaJ+u/NzZBmSh/ep9Ri90lihJSzWERWxiR/BAtzpdCR90H6f6m
-	79Lh9H8Ivv4zjoUNx4NI0C/r4V7uLPkibUUBUtPVRNlfmgZLF8CXS6f8eowDKikXCTCnADQwGS+
-	quXj07BPxIS/NczHhlnmE=
-X-Received: by 2002:a17:902:ced2:b0:2e8:c3e1:e1e with SMTP id d9443c01a7336-2f03f246d49mr41417955ad.52.1795208068454;
-        Fri, 20 Nov 2026 12:54:28 -0800 (PST)
+        bh=zoD37rXnFKhgjR2b3vxl6Is0u1NNOfIF6FlPIZGIWsg=;
+        b=1T0mfq/N78sp3qCsXRTejIcSxnAsJm07T4nwn5hjFiIff767jXbfhlpK68n2lzXcrO
+         Q26mXjewTR5XGKXNE+RWYaE5e81nLBRqsZzuTzeUiNtnH4yJ6mQvK7zBWaRp4waBoIKM
+         R3y/JAWe1IWdm7WM3gYZ29RX4XaksPzblB+sNXJ2i/PFv8o/Qeem0HDNZkw4cx2QpcAD
+         NWpQTNrHw42nMKZgeykmO5dZvoqqyDxOhR/7ndTh/Mwd1PHI/mbtRnLJYm1LM+Qwt00+
+         xzKzAAIX6OYYJ290nU8jhI1BkFTvs2o67cZLFdNVSSWTSTE6LiYph6HeECx0DsHBw4CG
+         MczQ==
+X-Gm-Message-State: APuU4Z9fvrhGxWujDx/nX3DHoRV3b9zEel+Of1yalt/2OxPUMq3jtYLJ
+	rLX3u5T60SdhxjHUkycSBHoDPo98IahlH5ZHfaflOVCdyHx+xzcpq+xc5iTzCA==
+X-Gm-Gg: AZFdTZcWCMR1gY/bKy3S3cd7ulD646QwbC96UR+ZKUTYtigMoaMmrKm2EConMcP2toL
+	Cnpmsp1wPSRULRY6/aYzRiSmvIx9ZVACHeChECVEVVeUNGkDIMAsAV6vzvEaW/dgSUDnYu4o+jk
+	P52XBt8Dy953WfjTT5La7hnxGs/Nj2y830Fvszds8aBFP7yIQ1gT4fNF+xfcacLw/8haswRXCrJ
+	iq+YNPEeR72OVhPCjb6qLGRU4DBGUk1maR2z3SMiUy1SZ0RQLQ4dCoghHzjgn5GFE8WLZZnTNMF
+	7NNM//CwZkuaSWUlOlq6KqG7SA4wLx3L8xCjFLRTAAeHR+8r1Q28/y0IpkouSvXSXcM7MHPJcFr
+	dz/Hef1/j4UxzMWo1O9geZz8Lg0PxiVU3yskEAP01w4pSeCOyTP4IuFMO4rV6XI4Feeqfr+2DsD
+	YYd90zdX3aQHSTqc1IqOgLebCG+y00Mg0HykFtI3+LUFTre3C7ZxY/VvLzCCUimQvpD4+qK+hMa
+	184xJHF8HtNQqfhpvw+1sqm/w45/ur54Wp+J65qhAjQe1RVGp1Oe5A0jzDqDg7BeirC9Orc1F6/
+	PH2VSGM+NKsvQSFCoF5F7eRWopNC4V2iWN8EzcDNCVrTerTo9Sv53CEIz2Qvo0MDyPgPTuIFVp8
+	DlDUMqY30cqgkiiuCXAkBPNfd7KCSMX4gvUHhMoJoiz/PkDAqzdCnathY9Ios9cVS1Eqgd+0DR/
+	ThQIvEcKPI7toKJQANxmyu
+X-Received: by 2002:a17:903:1b66:b0:2e9:4d9f:a65b with SMTP id d9443c01a7336-2f03f277866mr49553365ad.53.1795208074280;
+        Fri, 20 Nov 2026 12:54:34 -0800 (PST)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.252])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f105bb2sm18498135ad.45.2026.11.20.12.54.27
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f109236sm18916495ad.47.2026.11.20.12.54.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2026 12:54:28 -0800 (PST)
+        Fri, 20 Nov 2026 12:54:33 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 45/49] selftests/bpf: Adjust tests that get another verdict or may_goto
-Date: Fri, 20 Nov 2026 20:49:53 +0000
-Message-ID: <20261120204959.614908-46-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 46/49] selftests/bpf: Test barriers and far pointers
+Date: Fri, 20 Nov 2026 20:49:54 +0000
+Message-ID: <20261120204959.614908-47-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261120204959.614908-1-alexei.starovoitov@gmail.com>
 References: <20261120204959.614908-1-alexei.starovoitov@gmail.com>
@@ -104,581 +104,1044 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Programs that were rejected and load now:
-- Unprivileged 'ptr += reg' gets a barrier or one mask for the joined
-  range. The tests check the xlated insns.
-- conditional_assignment_on_second_iteration: the read is unproven in
-  pass 0. A later pass peels the trips, and no trip gets to the read.
-- from_stack_in_small_chunks, partial_fill_from_cleaned_pointer_spill:
-  a load of a part of a spilled pointer. They load with CAP_PERFMON and
-  are rejected without it, as before.
-- to_leak_tainted_dst_reg: a far pointer is no error. It loads with
-  CAP_PERFMON and is rejected without it, as before.
-- test_get_stack_rawtp: the buffer is not two times larger any more.
-- New: callback_full_frame, an arena stack entry with a full frame.
-- Four programs are safe. Each gets an unsafe twin:
+verifier_barrier.c: check the place of the barrier for each kind of
+edge: inlined bpf_loop(), exit of a callback, may_goto, recursion, a
+call that never returns, far jumps.
+Check what a speculative state must not decide for other states.
+Check that a far pointer gives no compare, no access and no constant
+offset. Check the log of a dropped path, of a leak and of a speculative
+state.
 
-  pointer_minus_index              p + 63 - i, i is 0..63
-  callee_writes_memory_of_caller   tests x <= 63, stores x / 2
-  callee_writes_through_alias      the same through a second pointer
-  pkt_add_negative                 data + 20 + (-4..4), 54 bytes checked
+far_map_value.c: a load through a far pointer to a read-only map value
+is not folded to a constant.
 
-Programs that load as before and get may_goto: the loop has no trip
-count, and no error asks to peel it.
-
-  do { r8 += 1; r7 <<= 1; } while (r7 != 0x400);
-
-One program is rejected now. clang makes one call of bpf_obj_drop()
-for two types in local_kptr_stash.c:
-
-  if (...) r8 = plain_local;      no special field
-  else     r8 = node_data;        a kptr
-  r1 = r8
-  call bpf_obj_drop
-
-Declare bpf_obj_drop() with nomerge, as struct_ops_refcounted.c does
-for bpf_task_release().
+verifier_btf_array_access.c, verifier_load_acquire.c: a far load from a
+flexible array gets a fault handler, a far load-acquire is rejected.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- .../selftests/bpf/progs/local_kptr_stash.c    |  3 +
- .../bpf/progs/test_get_stack_rawtp.c          | 20 +-----
- .../bpf/progs/verifier_arena_stack.c          | 55 ++++++++++++++++
- .../bpf/progs/verifier_bounds_deduction.c     | 14 ++--
- .../selftests/bpf/progs/verifier_budget.c     |  9 ++-
- .../bpf/progs/verifier_direct_packet_access.c | 34 ++++++++--
- .../selftests/bpf/progs/verifier_loop_walk.c  |  8 ++-
- .../selftests/bpf/progs/verifier_map_ptr.c    | 18 +++--
- .../selftests/bpf/progs/verifier_spill_fill.c | 18 ++---
- .../selftests/bpf/progs/verifier_trip_count.c | 26 +++++---
- .../selftests/bpf/progs/verifier_unpriv.c     |  3 +-
- .../bpf/progs/verifier_value_ptr_arith.c      | 66 +++++++++++++++----
- 12 files changed, 201 insertions(+), 73 deletions(-)
+ .../selftests/bpf/prog_tests/far_map_value.c  |  38 +
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../selftests/bpf/progs/verifier_barrier.c    | 849 ++++++++++++++++++
+ .../bpf/progs/verifier_btf_array_access.c     |  53 ++
+ .../bpf/progs/verifier_load_acquire.c         |  19 +
+ 5 files changed, 961 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/far_map_value.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_barrier.c
 
-diff --git a/tools/testing/selftests/bpf/progs/local_kptr_stash.c b/tools/testing/selftests/bpf/progs/local_kptr_stash.c
-index d736506a4c8..d86ae65abe6 100644
---- a/tools/testing/selftests/bpf/progs/local_kptr_stash.c
-+++ b/tools/testing/selftests/bpf/progs/local_kptr_stash.c
-@@ -8,6 +8,9 @@
- #include "../bpf_experimental.h"
- #include "../test_kmods/bpf_testmod_kfunc.h"
- 
-+/* Do not make one call for the drop of plain_local and the drop of node_data */
-+__attribute__((nomerge)) extern void bpf_obj_drop(void *p) __weak __ksym;
+diff --git a/tools/testing/selftests/bpf/prog_tests/far_map_value.c b/tools/testing/selftests/bpf/prog_tests/far_map_value.c
+new file mode 100644
+index 00000000000..f2fb2aaaa26
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/far_map_value.c
+@@ -0,0 +1,38 @@
++// SPDX-License-Identifier: GPL-2.0
 +
- struct plain_local;
- 
- struct node_data {
-diff --git a/tools/testing/selftests/bpf/progs/test_get_stack_rawtp.c b/tools/testing/selftests/bpf/progs/test_get_stack_rawtp.c
-index b6a6eb279e5..41714c2182f 100644
---- a/tools/testing/selftests/bpf/progs/test_get_stack_rawtp.c
-+++ b/tools/testing/selftests/bpf/progs/test_get_stack_rawtp.c
-@@ -29,29 +29,11 @@ struct {
- 	__type(value, struct stack_trace_t);
- } stackdata_map SEC(".maps");
- 
--/* Allocate per-cpu space twice the needed. For the code below
-- *   usize = bpf_get_stack(ctx, raw_data, max_len, BPF_F_USER_STACK);
-- *   if (usize < 0)
-- *     return 0;
-- *   ksize = bpf_get_stack(ctx, raw_data + usize, max_len - usize, 0);
-- *
-- * If we have value_size = MAX_STACK_RAWTP * sizeof(__u64),
-- * verifier will complain that access "raw_data + usize"
-- * with size "max_len - usize" may be out of bound.
-- * The maximum "raw_data + usize" is "raw_data + max_len"
-- * and the maximum "max_len - usize" is "max_len", verifier
-- * concludes that the maximum buffer access range is
-- * "raw_data[0...max_len * 2 - 1]" and hence reject the program.
-- *
-- * Doubling the to-be-used max buffer size can fix this verifier
-- * issue and avoid complicated C programming massaging.
-- * This is an acceptable workaround since there is one entry here.
-- */
- struct {
- 	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
- 	__uint(max_entries, 1);
- 	__type(key, __u32);
--	__type(value, __u64[2 * MAX_STACK_RAWTP]);
-+	__type(value, __u64[MAX_STACK_RAWTP]);
- } rawdata_map SEC(".maps");
- 
- SEC("raw_tracepoint/sys_enter")
-diff --git a/tools/testing/selftests/bpf/progs/verifier_arena_stack.c b/tools/testing/selftests/bpf/progs/verifier_arena_stack.c
-index b46e30a9c67..4feaebf0d72 100644
---- a/tools/testing/selftests/bpf/progs/verifier_arena_stack.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_arena_stack.c
-@@ -737,6 +737,61 @@ __naked void callback(void)
- 	: __clobber_all);
- }
- 
-+static __naked __noinline __used long add_index_cb(void)
++#include <test_progs.h>
++
++#define FAR_OFF		(1 << 29)	/* BPF_MAX_VAR_OFF */
++
++/* See far_rodata in verifier_barrier.c. Here ld_imm64 makes the far pointer. */
++void serial_test_far_map_value(void)
 +{
-+	asm volatile (
-+	"r3 = *(u64 *)(r2 + 0);"
-+	"r3 += r1;"
-+	"*(u64 *)(r2 + 0) = r3;"
-+	"r0 = 0;"
-+	"exit;"
-+	::: __clobber_all);
++	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = BPF_F_RDONLY_PROG);
++	struct bpf_insn insns[] = {
++		BPF_LD_MAP_VALUE(BPF_REG_1, 0, FAR_OFF),
++		BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -16),
++		BPF_LDX_MEM(BPF_B, BPF_REG_2, BPF_REG_1, 0),
++		BPF_MOV64_IMM(BPF_REG_3, 2),
++		BPF_ALU64_IMM(BPF_MUL, BPF_REG_3, 2),
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_JMP_REG(BPF_JNE, BPF_REG_2, BPF_REG_3, 1),
++		BPF_MOV64_REG(BPF_REG_0, BPF_REG_2),
++		BPF_EXIT_INSN(),
++	};
++	int map_fd, prog_fd;
++
++	map_fd = bpf_map_create(BPF_MAP_TYPE_ARRAY, NULL, 4, FAR_OFF + 8, 1, &opts);
++	if (map_fd == -ENOMEM) {
++		test__skip();
++		return;
++	}
++	if (!ASSERT_GE(map_fd, 0, "map_create"))
++		return;
++	ASSERT_OK(bpf_map_freeze(map_fd), "map_freeze");
++	insns[0].imm = map_fd;
++	prog_fd = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", insns,
++				ARRAY_SIZE(insns), NULL);
++	if (ASSERT_GE(prog_fd, 0, "prog_load"))
++		close(prog_fd);
++	close(map_fd);
++}
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index 67151c55b03..ab15e69a622 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -21,6 +21,7 @@
+ #include "verifier_arena_globals2.skel.h"
+ #include "verifier_array_access.skel.h"
+ #include "verifier_async_cb_context.skel.h"
++#include "verifier_barrier.skel.h"
+ #include "verifier_basic_stack.skel.h"
+ #include "verifier_bitfield_write.skel.h"
+ #include "verifier_bounds.skel.h"
+@@ -231,6 +232,7 @@ void test_verifier_arena_stack(void)          { RUN_TESTS(verifier_arena_stack);
+ void test_verifier_arena_large(void)          { RUN(verifier_arena_large); }
+ void test_verifier_arena_globals1(void)       { RUN(verifier_arena_globals1); }
+ void test_verifier_arena_globals2(void)       { RUN(verifier_arena_globals2); }
++void test_verifier_barrier(void)              { RUN(verifier_barrier); }
+ void test_verifier_basic_stack(void)          { RUN(verifier_basic_stack); }
+ void test_verifier_bitfield_write(void)       { RUN(verifier_bitfield_write); }
+ void test_verifier_bounds(void)               { RUN(verifier_bounds); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_barrier.c b/tools/testing/selftests/bpf/progs/verifier_barrier.c
+new file mode 100644
+index 00000000000..7e68fc072e3
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_barrier.c
+@@ -0,0 +1,849 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Where the barrier goes, and what a speculative state must not decide */
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, int);
++	__type(value, long);
++} array SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, int);
++	__type(value, int);
++} progs SEC(".maps");
++
++struct elem {
++	struct bpf_timer timer;
++	struct task_struct __kptr *task;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, int);
++	__type(value, struct elem);
++} timers SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_RINGBUF);
++	__uint(max_entries, 4096);
++} ring SEC(".maps");
++
++long data[8];
++
++void bpf_throw(u64 cookie) __ksym;
++void __bpf_trap(void) __ksym;
++void bpf_task_release(struct task_struct *task) __ksym;
++void bpf_rcu_read_lock(void) __ksym;
++void bpf_rcu_read_unlock(void) __ksym;
++
++#define OPS								\
++	__imm_addr(data), __imm_addr(array), __imm_addr(progs),		\
++	__imm(bpf_loop), __imm(bpf_for_each_map_elem),			\
++	__imm(bpf_get_prandom_u32), __imm(bpf_get_smp_processor_id),	\
++	__imm(bpf_tail_call), __imm_addr(timers),			\
++	__imm(bpf_map_lookup_elem), __imm(bpf_timer_set_callback),	\
++	__imm(bpf_kptr_xchg), __imm(bpf_ringbuf_reserve), __imm_addr(ring), \
++	__imm_const(skb_data, offsetof(struct __sk_buff, data)),	\
++	__imm_const(skb_data_end, offsetof(struct __sk_buff, data_end))
++
++#define ASM(...) asm volatile (__VA_ARGS__ :: OPS : __clobber_all)
++
++#define SPECULATES	__arch_x86_64 __arch_arm64 __caps_unpriv(CAP_BPF | CAP_NET_ADMIN)
++
++/* r6 = data, r7 = a number */
++#define START		"r6 = %[data] ll; r7 = *(u64 *)(r6 + 0);"
++/* only a speculative state goes to @label */
++#define NEVER(label)	"r5 = r7; r5 &= 1; if r5 > 1 goto " label ";"
++
++static __naked __used int nop_cb(void)
++{
++	asm volatile ("r0 = 0; exit;" ::: __clobber_all);
 +}
 +
-+/* takes a stack in arena, has all of its own frame in use, and bpf_loop() is inlined */
-+static __naked __noinline __used long full_frame_cb(void)
++SEC("tc")
++__description("barrier: before the inlined bpf_loop()")
++__success SPECULATES __success_unpriv
++#ifdef SPEC_V1
++__xlated_unpriv("r3 = 0")
++__xlated_unpriv("nospec")
++__xlated_unpriv("if r1 <= 0x800000 goto")
++#endif
++__naked void inlined_loop(void)
 +{
-+	asm volatile (
-+	".8byte %[adj];"
-+	".8byte %[stx16];"	/* *(u64 *)(r12 - 16) = r1 */
-+	"*(u64 *)(r10 - %[depth]) = r1;"
-+	"r3 = r2;"
-+	"r1 = 3;"
-+	"r2 = add_index_cb ll;"
-+	"r4 = 0;"
-+	"call %[bpf_loop];"
-+	"r0 = 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_loop), __imm_const(depth, 2008),
-+	  __imm_insn(adj, ADJ(16)),
-+	  __imm_insn(stx16, STX(BPF_DW, -16, BPF_REG_1))
-+	: __clobber_all);
-+}
-+
-+SEC("syscall")
-+__description("arena stack: the arguments of a callback need no room of their own")
-+__success __retval(6)
-+__xlated("*(u64 *)(r10 -16) = r2")
-+__xlated("*(u64 *)(r10 -24) = r3")
-+__naked void callback_full_frame(void)
-+{
-+	asm volatile (
-+	"r1 = 0;"
-+	"*(u64 *)(r10 - 8) = r1;"
++	ASM(START
 +	"r1 = 2;"
-+	"r2 = full_frame_cb ll;"
-+	"r3 = r10;"
-+	"r3 += -8;"
++	"r2 = nop_cb ll;"
++	"r3 = r7;"
 +	"r4 = 0;"
-+	"call %[bpf_loop];"
-+	"r0 = *(u64 *)(r10 - 8);"
++	NEVER("1f")
++	"r3 = 0;"
++"1:	call %[bpf_loop];"
++	"r0 = 0;"
++	"exit;");
++}
++
++/* A speculative state leaves a number in the slot of the caller */
++static __naked __used int store_cb(void)
++{
++	ASM(START
++	"*(u64 *)(r4 + 0) = r7;"
++	"if r7 == 3 goto 1f;"
++	"*(u64 *)(r4 + 8) = r7;"
++"1:"	NEVER("2f")
++	"*(u64 *)(r4 + 0) = r6;"
++"2:	r0 = 0;"
++	"exit;");
++}
++
++SEC("tc")
++__description("barrier: at the exit of a callback")
++__success SPECULATES __success_unpriv
++#ifdef SPEC_V1
++__xlated_unpriv("*(u64 *)(r4 +0) = r6")
++__xlated_unpriv("...")
++__xlated_unpriv("r0 = 0")
++__xlated_unpriv("nospec")
++__xlated_unpriv("exit")
++#endif
++__naked void exit_of_callback(void)
++{
++	ASM(START
++	"*(u64 *)(r10 - 16) = r6;"
++	"*(u64 *)(r10 - 8) = r7;"
++	"r1 = %[array] ll;"
++	"r2 = store_cb ll;"
++	"r3 = r10;"
++	"r3 += -16;"
++	"r4 = 0;"
++	"call %[bpf_for_each_map_elem];"
++	"r1 = *(u64 *)(r10 - 16);"
++	"r0 = *(u8 *)(r1 + 0);"
++	"r0 = 0;"
++	"exit;");
++}
++
++SEC("tc")
++__description("barrier: on the way out of a loop that is out of budget")
++__success SPECULATES __success_unpriv
++#ifdef SPEC_V1
++__xlated_unpriv("r0 = 1")
++__xlated_unpriv("exit")
++__xlated_unpriv("nospec")
++__xlated_unpriv("r0 = 0")
++__xlated_unpriv("exit")
++#endif
++__naked void unwind_exit(void)
++{
++	ASM(START
++"1:	r1 = *(u64 *)(r6 + 8);"
++	"if r1 != 0 goto 1b;"
++	"r0 = 1;"
++	"exit;");
++}
++
++SEC("tc")
++__description("barrier: before may_goto")
++__success SPECULATES __success_unpriv
++#ifdef SPEC_V1
++__xlated_unpriv("r1 = *(u64 *)(r6 +8)")
++__xlated_unpriv("nospec")
++__xlated_unpriv("...")
++__xlated_unpriv("if r1 > 0x7 goto")
++#endif
++__naked void in_front_of_guard(void)
++{
++	ASM(START
++"1:	r1 = r6;"
++	NEVER("2f")
++	"r1 = *(u64 *)(r6 + 8);"
++"2:	if r1 > 7 goto 1b;"
++	"r0 = 0;"
++	"exit;");
++}
++
++/* The code after the loop needs the result of the jump: may_goto has to leave the program */
++SEC("tc")
++__description("barrier: a speculative state does not select the way of may_goto")
++__success SPECULATES __success_unpriv
++__naked void way_of_guard(void)
++{
++	ASM(START
++	"call bpf_rcu_read_lock;"
++	NEVER("1f")
++	"call bpf_rcu_read_unlock;"
++"1:	r1 = *(u64 *)(r6 + 8);"
++	"if r1 > 7 goto 1b;"
++	"r1 <<= 3;"
++	"r6 += r1;"
++	"r0 = *(u64 *)(r6 + 0);"
++	"r0 = 0;"
++	"exit;");
++}
++
++static __naked __noinline __used int recurse(void)
++{
++	ASM(START
++	"r8 = r1;"
++	"if r8 == 0 goto 2f;"
++	"r9 = r7;"
++	"r9 &= 1;"
++	"if r9 == 0 goto 1f;"
++	"call bpf_rcu_read_lock;"
++"1:	r1 = r8;"
++	"r1 += -1;"
++	"call recurse;"
++	"if r9 == 0 goto 2f;"
++	"call bpf_rcu_read_unlock;"
++"2:	r0 = 0;"
++	"exit;");
++}
++
++SEC("tc")
++__description("barrier: a speculative state holds more in a recursion")
++__success SPECULATES __success_unpriv
++__naked void recursion(void)
++{
++	ASM(START
++	"call bpf_rcu_read_lock;"
++	NEVER("1f")
++	"call bpf_rcu_read_unlock;"
++"1:	r1 = 1;"
++	"call recurse;"
++	"r0 = 0;"
++	"exit;");
++}
++
++/* It releases what its caller holds */
++static __naked __noinline __used int recurse_in_frames(void)
++{
++	asm volatile (
++	"r6 = r1;"
++	"call bpf_rcu_read_unlock;"
++	"call bpf_rcu_read_lock;"
++	"if r6 == 0 goto 1f;"
++	"r1 = r6;"
++	"r1 += -1;"
++	"call recurse_in_frames;"
++"1:	r0 = 0;"
++	"exit;" ::: __clobber_all);
++}
++
++SEC("tc")
++__description("barrier: at the call of a recursion in the frames of the callers")
++__success SPECULATES __success_unpriv
++#ifdef SPEC_V1
++__xlated_unpriv("r1 += -1")
++__xlated_unpriv("nospec")
++__xlated_unpriv("call pc-")
++#endif
++__naked void recursion_in_frames(void)
++{
++	ASM("call bpf_rcu_read_lock;"
++	"r1 = 1;"
++	"call recurse_in_frames;"
++	"call bpf_rcu_read_unlock;"
++	"r0 = 0;"
++	"exit;");
++}
++
++#define CALLS_TWICE(name, next)						\
++	static __noinline long name(long n)				\
++	{								\
++		long a = next(n);					\
++									\
++		barrier_var(n);						\
++		return a + next(n);					\
++	}
++#define FOUR_LEVELS(name, next)						\
++	CALLS_TWICE(name##_a, next)					\
++	CALLS_TWICE(name##_b, name##_a)					\
++	CALLS_TWICE(name##_c, name##_b)					\
++	CALLS_TWICE(name, name##_c)
++
++static __noinline long level_0(long n)
++{
++	return n + data[1];
++}
++
++FOUR_LEVELS(level_4, level_0)
++FOUR_LEVELS(level_8, level_4)
++FOUR_LEVELS(level_12, level_8)
++FOUR_LEVELS(level_16, level_12)
++FOUR_LEVELS(level_20, level_16)
++FOUR_LEVELS(level_24, level_20)
++
++SEC("tc")
++__description("a speculative call has an instance like any other")
++__success SPECULATES __success_unpriv
++int calls_in_a_chain(void *ctx)
++{
++	long i = data[0] & 7;
++
++	barrier_var(i);
++	return data[i] + level_24(data[2]);
++}
++
++static __naked __noinline __used int unlock_never(void)
++{
++	ASM(START
++	NEVER("1f")
++	"goto 2f;"
++"1:	call bpf_rcu_read_unlock;"
++"2:	r0 = 0;"
++	"exit;");
++}
++
++SEC("tc")
++__description("barrier: after the call, the function released what its caller holds")
++__success SPECULATES __success_unpriv
++#ifdef SPEC_V1
++__xlated_unpriv("call pc+")
++__xlated_unpriv("nospec")
++__xlated_unpriv("r6 = 0")
++#endif
++__naked void behind_call(void)
++{
++	ASM("call bpf_rcu_read_lock;"
++	"call unlock_never;"
++	"r6 = 0;"
++	"call bpf_rcu_read_unlock;"
++	"r0 = 0;"
++	"exit;");
++}
++
++SEC("tc")
++__description("barrier: a speculative state goes into a loop that never exits")
++__success SPECULATES __success_unpriv
++__naked void never_exits(void)
++{
++	ASM(START
++	"r0 = 0;"
++	NEVER("1f")
 +	"exit;"
-+	:
-+	: __imm(bpf_loop)
++"1:	r0 += 1;"
++	"goto 1b;");
++}
++
++/* A speculative state has a number in r1. @insns write the stack, and no barrier follows. */
++#define WRITE_THEN_LOAD(insns)						\
++	ASM(START							\
++	"*(u64 *)(r10 - 8) = r7;"					\
++	"r1 = r7;"							\
++	NEVER("1f")							\
++	"r1 = r6;"							\
++"1:"	insns								\
++	"r0 = *(u8 *)(r1 + 0);"						\
++	"exit;")
++
++SEC("tc")
++__description("barrier: an atomic does not end a speculative path")
++__success SPECULATES __success_unpriv
++#ifdef SPEC_V1
++__xlated_unpriv("lock *(u64 *)(r10 -8) += r7")
++__xlated_unpriv("nospec")
++__xlated_unpriv("r0 = *(u8 *)(r1 +0)")
++#endif
++__naked void behind_atomic(void)
++{
++	WRITE_THEN_LOAD("lock *(u64 *)(r10 - 8) += r7;");
++}
++
++SEC("tc")
++__description("barrier: a spill that is removed does not end a speculative path")
++__success __arch_x86_64 __caps_unpriv(CAP_BPF | CAP_NET_ADMIN) __success_unpriv
++#ifdef SPEC_V1
++__xlated_unpriv("r0 = *(u32 *)(r0 +0)")
++__xlated_unpriv("nospec")
++__xlated_unpriv("r0 = *(u8 *)(r1 +0)")
++#endif
++__naked void behind_fastcall(void)
++{
++	WRITE_THEN_LOAD("*(u64 *)(r10 - 16) = r1;"
++			"call %[bpf_get_smp_processor_id];"
++			"r1 = *(u64 *)(r10 - 16);");
++}
++
++static __naked __noinline __used int throw_if_zero(void)
++{
++	ASM("if r1 != 0 goto 1f;"
++	"call bpf_throw;"
++"1:	r0 = 0;"
++	"exit;");
++}
++
++/* The code after the first call is dead. The load must not replace it. */
++SEC("tc")
++__description("barrier: after a call that never returns")
++__success SPECULATES __success_unpriv
++#ifdef SPEC_V1
++__xlated_unpriv("r1 = 0")
++__xlated_unpriv("call pc+")
++__xlated_unpriv("nospec")
++__xlated_unpriv("goto pc-2")
++#endif
++__naked void never_returns(void)
++{
++	ASM(START
++	"if r7 == 5 goto 1f;"
++	"r6 = r7;"
++	"r1 = 0;"
++	"call throw_if_zero;"
++	"r0 = *(u8 *)(r6 + 1);"
++	"exit;"
++"1:	r0 = *(u8 *)(r6 + 0);"
++	"r1 = 1;"
++	"call throw_if_zero;"
++	"r0 = 0;"
++	"exit;");
++}
++
++/* The add is rewritten to r3 += 4. A speculative state has the pointer in r2. */
++SEC("socket")
++__description("barrier: a speculative state does not fit the mask")
++__success __success_unpriv
++#ifdef SPEC_V1
++__xlated_unpriv("if r1 == 0x5 goto")
++__xlated_unpriv("nospec")
++__xlated_unpriv("r3 += r2")
++#endif
++__naked void other_mask(void)
++{
++	ASM(START
++	"r1 = 1;"
++	"r2 = 4;"
++	"r3 = r6;"
++	"if r7 < 9 goto 1f;"
++	"r1 = 5;"
++	"r2 = r6;"
++	"r3 = r7;"
++	"r3 &= 15;"
++"1:	if r1 == 5 goto 2f;"
++	"r3 += r2;"
++	"r0 = *(u8 *)(r3 + 0);"
++"2:	r0 = 0;"
++	"exit;");
++}
++
++static __naked __used int bad_timer_cb(void)
++{
++	asm volatile ("r0 = *(u64 *)(r0 + 0); exit;" ::: __clobber_all);
++}
++
++SEC("tc")
++__description("barrier: a speculative state sets no timer")
++__success SPECULATES __success_unpriv
++__naked void timer_never(void)
++{
++	ASM(START
++	"*(u64 *)(r10 - 8) = r7;"
++	"r1 = %[timers] ll;"
++	"r2 = r10;"
++	"r2 += -8;"
++	"call %[bpf_map_lookup_elem];"
++	"if r0 == 0 goto 2f;"
++	NEVER("1f")
++	"goto 2f;"
++"1:	r1 = r0;"
++	"r2 = bad_timer_cb ll;"
++	"call %[bpf_timer_set_callback];"
++"2:	r0 = 0;"
++	"exit;");
++}
++
++SEC("tc")
++__description("a speculative state does not ask for a stack argument")
++__success SPECULATES __success_unpriv
++__naked void stack_arg_never(void)
++{
++	ASM(START
++	NEVER("1f")
++	"goto 2f;"
++"1:	.8byte 0xfff86b7b;" /* *(u64 *)(r11 - 8) = r6 */
++"2:	r0 = 0;"
++	"exit;");
++}
++
++SEC("tc")
++__description("a trap that no path gets to is no bug of the verifier")
++__success SPECULATES __success_unpriv
++__naked void trap_never(void)
++{
++	ASM(START
++	"r8 = 0;"
++	"r9 = 0;"
++	"if r7 == 0 goto 1f;"
++	"r8 = 1;"
++	"r9 = 5;"
++"1:	if r8 != 0 goto 2f;"
++	"if r9 != 0 goto 3f;"
++"2:	r0 = 0;"
++	"exit;"
++"3:	call __bpf_trap;"
++	"exit;");
++}
++
++#define COMPARE_WITH_END(size)						\
++	ASM(START							\
++	"r2 = *(u32 *)(r1 + %[skb_data]);"				\
++	"r3 = *(u32 *)(r1 + %[skb_data_end]);"				\
++	"r4 = *(" #size " *)(r6 + 8);"					\
++	"r2 += 14;"							\
++	"r2 += r4;"							\
++	"if r2 > r3 goto 1f;"						\
++	"*(u64 *)(r6 + 16) = r4;"					\
++"1:	r0 = 0;"							\
++	"exit;")
++
++SEC("tc")
++__description("no compare of a far pointer to the packet")
++__success __caps_unpriv(CAP_BPF | CAP_NET_ADMIN)
++__failure_unpriv __msg_unpriv("R3 pointer comparison prohibited")
++__naked void compare_far(void)
++{
++	COMPARE_WITH_END(u32);
++}
++
++SEC("tc")
++__description("a pointer to the packet plus a header and a 16-bit length")
++__success __caps_unpriv(CAP_BPF | CAP_NET_ADMIN) __success_unpriv
++__naked void compare_near(void)
++{
++	COMPARE_WITH_END(u16);
++}
++
++/* Each trip adds a small value */
++SEC("tc")
++__description("no compare of a far pointer to the packet in a loop")
++__success __caps_unpriv(CAP_BPF | CAP_NET_ADMIN)
++__failure_unpriv __msg_unpriv("R3 pointer comparison prohibited")
++__naked void compare_far_loop(void)
++{
++	ASM(START
++	"r2 = *(u32 *)(r1 + %[skb_data]);"
++	"r3 = *(u32 *)(r1 + %[skb_data_end]);"
++	"r0 = 0;"
++"1:	r2 += 0x4000;"
++	"if r2 > r3 goto 2f;"
++	"r0 += 1;"
++	"if r0 < 8 goto 1b;"
++"2:	exit;");
++}
++
++/* The trip count shows that r6 is value + 2^32. It is not the offset of the kptr. */
++SEC("tc")
++__description("a trip count does not make a far offset a constant")
++__failure __msg("R1 doesn't have constant offset")
++__naked void far_by_trip_count(void)
++{
++	ASM("r7 = 0;"
++	"*(u64 *)(r10 - 8) = r7;"
++	"r1 = %[timers] ll;"
++	"r2 = r10;"
++	"r2 += -8;"
++	"call %[bpf_map_lookup_elem];"
++	"if r0 == 0 goto 2f;"
++	"r6 = r0;"
++	"r6 += 16;"
++"1:	r8 = r6;"
++	"r6 += 0x7fffffff;"
++	"r6 += 0x7fffffff;"
++	"r6 += 2;"
++	"if r7 == 1 goto 2f;"
++	"r1 = r6;"
++	"r2 = 0;"
++	"call %[bpf_kptr_xchg];"
++	"if r0 == 0 goto 3f;"
++	"r1 = r0;"
++	"call bpf_task_release;"
++"3:	r6 = r8;"
++	"r6 += 8;"
++	"r7 += 1;"
++	"goto 1b;"
++"2:	r0 = 0;"
++	"exit;");
++}
++
++/* The offset is 2^32. Its low 32 bits are 0. */
++SEC("raw_tp.w")
++__description("no access through a far pointer")
++__failure __msg("R6 invalid variable buffer offset")
++__naked void access_far(void)
++{
++	ASM("r6 = *(u64 *)(r1 + 0);"
++	"r6 += 0x7fffffff;"
++	"r6 += 0x7fffffff;"
++	"r6 += 2;"
++	"r0 = *(u8 *)(r6 + 0);"
++	"exit;");
++}
++
++#define MOVES_AWAY(step)						\
++	ASM(START							\
++	"r2 = r6;"							\
++"1:	r2 += " #step ";"						\
++	"r0 = *(u64 *)(r6 + 8);"					\
++	"if r0 != 0 goto 1b;"						\
++	"exit;")
++
++SEC("tc")
++__description("a pointer that is not used moves up without a bound")
++__success
++__naked void moves_up(void)
++{
++	MOVES_AWAY(1);
++}
++
++SEC("tc")
++__description("a pointer that is not used moves down without a bound")
++__success
++__naked void moves_down(void)
++{
++	MOVES_AWAY(-1);
++}
++
++/* r7, r8 = 0, 0 or 1, 5. The join makes the equation r8 = 5 * r7. What follows is dead. */
++#define DEAD_BY_EQUATION						\
++	"call %[bpf_get_prandom_u32];"					\
++	"r7 = 0;"							\
++	"r8 = 0;"							\
++	"if w0 & 1 goto 1f;"						\
++	"r7 = 1;"							\
++	"r8 = 5;"							\
++"1:	if r7 != 0 goto 9f;"						\
++	"if r8 == 0 goto 9f;"
++
++SEC("iter/bpf_map_elem")
++__description("fixups: a dead tail call is removed")
++__success
++__xlated("if r7 != 0x0 goto pc+0")
++__xlated("r0 = 0")
++__xlated("exit")
++__naked void tail_call_never(void)
++{
++	ASM("r6 = r1;"
++	DEAD_BY_EQUATION
++	"r1 = r6;"
++	"r2 = %[progs] ll;"
++	"r3 = 0;"
++	"call %[bpf_tail_call];"
++"9:	r0 = 0;"
++	"exit;");
++}
++
++__noinline int global_func(int x)
++{
++	return x + 1;
++}
++
++static __naked __noinline __used int calls_global(void)
++{
++	asm volatile ("r1 = 1; call global_func; exit;" ::: __clobber_all);
++}
++
++SEC("tc")
++__description("fixups: a dead load does not break the fastcall pattern")
++__success __arch_x86_64
++__xlated("r1 = 7")
++__xlated("r0 = {{.*}}")
++__xlated("r0 = &(void __percpu *)(r0)")
++__naked void one_by_one(void)
++{
++	ASM("r9 = *(u32 *)(r1 + %[skb_data]);"
++	"r6 = *(u32 *)(r1 + %[skb_data_end]);"
++	"call calls_global;"
++	"r1 = 7;"
++	"*(u64 *)(r10 - 8) = r1;"
++	"call %[bpf_get_smp_processor_id];"
++	"r1 = *(u64 *)(r10 - 8);"
++	"if r9 > r6 goto 9f;"
++	DEAD_BY_EQUATION
++	"r0 = *(u64 *)(r10 - 8);"
++"9:	r0 = 0;"
++	"exit;");
++}
++
++SEC("tc")
++__description("log: a path that is dropped is not in the log")
++__failure __log_level(4) __not_msg("off=-2") __msg("value_size=64 off=64")
++__naked void log_of_dropped_path(void)
++{
++	/* After 'r2 == r3' any number is 2 or more, but -32..31 stays as it is */
++	ASM(START
++	"r3 = *(u64 *)(r6 + 16);"
++	"if r3 < 2 goto 2f;"
++	"r2 = *(u64 *)(r6 + 8);"
++	"r2 &= 63;"
++	"r2 += -32;"
++	"r9 = 0;"
++	"if r7 < 5 goto 1f;"
++	"r2 = *(u64 *)(r6 + 8);"
++	"r9 = 64;"
++"1:	if r2 != r3 goto 2f;"
++	"if r2 > 40 goto 2f;"
++	"r4 = r6;"
++	"r4 += r2;"
++	"r0 = *(u8 *)(r4 - 2);"
++	"r6 += r9;"
++	"r0 = *(u64 *)(r6 + 0);"
++"2:	r0 = 0;"
++	"exit;");
++}
++
++SEC("tc")
++__description("log: the report of a leak starts at the acquire")
++__failure __msg("Unreleased reference") __msg("Causal path:")
++__not_msg("(15) if r0 == 0x0") __msg("acquired: owned resource")
++__naked void log_of_leak(void)
++{
++	ASM("r1 = %[ring] ll;"
++	"r2 = 8;"
++	"r3 = 0;"
++	"call %[bpf_ringbuf_reserve];"
++	"if r0 == 0 goto 1f;"
++	"r0 = 0;"
++"1:	exit;");
++}
++
++static __naked __noinline __used void reserve(void)
++{
++	ASM("r1 = %[ring] ll;"
++	"r2 = 8;"
++	"r3 = 0;"
++	"call %[bpf_ringbuf_reserve];"
++	"exit;");
++}
++
++SEC("tc")
++__description("log: one insn acquires twice, each report has its acquire and one id")
++__failure __msg("Unreleased reference id=4 ") __msg("acquired: owned resource (id=4)")
++__msg("branch: took the false branch")
++__msg("Unreleased reference id=12 ") __msg("acquired: owned resource (id=12)")
++__not_msg("branch: took the false branch")
++__naked void log_of_two_leaks(void)
++{
++	ASM("call reserve;"
++	"if r0 == 0 goto 1f;"
++	"call reserve;"
++"1:	r0 = 0;"
++	"exit;");
++}
++
++SEC("tc")
++__description("log: no report for a speculative state")
++__success SPECULATES __success_unpriv __log_level(2)
++#ifdef SPEC_V1
++__msg_unpriv("R7 invalid mem access 'scalar'")
++#endif
++__not_msg_unpriv("Verification failed")
++__naked void log_of_speculative_state(void)
++{
++	ASM(START
++	NEVER("1f")
++	"r0 = 0;"
++	"exit;"
++"1:	r0 = *(u64 *)(r7 + 0);"
++	"exit;");
++}
++
++static const volatile char bytes[4] = { 1, 2, 3, 4 };
++
++/* const_fold.c does not follow 'r3 *= 2'. If it has r2 = 3, then r2 == 4 is a verifier bug. */
++SEC("socket")
++__description("a far pointer to .rodata that comes back loads no constant")
++__success __retval(0) __xlated("r0 = r2")
++__naked void far_rodata(void)
++{
++	asm volatile (
++	"r1 = %[bytes] ll;"
++	"r1 += 0x20000001;"
++	"r1 += -0x1fffffff;"
++	"r2 = *(u8 *)(r1 + 0);"
++	"r3 = 2;"
++	"r3 *= 2;"
++	"r0 = 0;"
++	"if r2 != r3 goto 1f;"
++	"r0 = r2;"
++"1:"
++	"exit;"
++	:: __imm_addr(bytes) : __clobber_all);
++}
++
++/* The patches turn 8200 divisions into 32800 insns, too far for a 16-bit offset. */
++#define DIVS		"r2 = r7; r3 = r7; .rept 8200; r2 /= r3; .endr;"
++
++SEC("tc")
++__description("barrier: where a far jump lands")
++__success SPECULATES __success_unpriv
++#ifdef SPEC_V1
++__xlated_unpriv("8: gotol pc+32803")
++__xlated_unpriv("...")
++__xlated_unpriv("32812: nospec")
++#endif
++__naked void far_target(void)
++{
++	ASM(START
++	"r8 = r7;"
++	NEVER("1f")
++	"r8 = r6;"
++	DIVS
++"1:	r0 = *(u64 *)(r8 + 8);"
++	"r0 = 0;"
++	"exit;");
++}
++
++SEC("tc")
++__description("barrier: after a far jump")
++__success SPECULATES __success_unpriv
++#ifdef SPEC_V1
++__xlated_unpriv("8: gotol pc+32804")
++__xlated_unpriv("9: nospec")
++#endif
++__naked void far_fall(void)
++{
++	ASM(START
++	"r8 = r6;"
++	"if r7 == 5 goto 1f;"
++	"r8 = r7;"
++"1:	if r7 != 5 goto 2f;"
++	"r0 = *(u64 *)(r8 + 8);"
++	DIVS
++"2:	r0 = 0;"
++	"exit;");
++}
++
++SEC("tc")
++__description("barrier: on the far exit that is out of budget")
++__success __arch_x86_64 __caps_unpriv(CAP_BPF | CAP_NET_ADMIN) __success_unpriv
++#ifdef SPEC_V1
++__xlated_unpriv("16: gotol pc+32810")
++__xlated_unpriv("...")
++__xlated_unpriv("32827: nospec")
++#endif
++__naked void far_unwind_exit(void)
++{
++	ASM(START
++"1:	r1 = *(u64 *)(r6 + 8);"
++	"if r1 != 0 goto 1b;"
++	DIVS
++	"r0 = 1;"
++	"exit;");
++}
++
++/* the kfuncs have to be in BTF */
++void __kfunc_btf_root(void)
++{
++	bpf_rcu_read_lock();
++	bpf_rcu_read_unlock();
++	bpf_task_release(NULL);
++	__bpf_trap();
++	bpf_throw(0);
++}
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/verifier_btf_array_access.c b/tools/testing/selftests/bpf/progs/verifier_btf_array_access.c
+index 9dc2c9a5f8b..2d48abed9ad 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_btf_array_access.c
++++ b/tools/testing/selftests/bpf/progs/verifier_btf_array_access.c
+@@ -536,6 +536,59 @@ int flex_array_inner_array_out_of_bounds(void *ctx)
+ 	return val;
+ }
+ 
++/*
++ * struct mm_struct ends with a flexible array of bytes. The pointer is trusted.
++ * The address is not mapped, so the load needs a fault handler.
++ */
++SEC("syscall")
++__success __retval(0)
++int flex_array_far_load(void *ctx)
++{
++	struct bpf_iter_task_vma it;
++	struct vm_area_struct *vma;
++	struct mm_struct *mm;
++	int err = 1;
++
++	bpf_iter_task_vma_new(&it, bpf_get_current_task_btf(), 0);
++	vma = bpf_iter_task_vma_next(&it);
++	mm = vma ? vma->vm_mm : NULL;
++	if (mm) {
++		asm volatile ("					\
++		r1 = %[mm];					\
++		r2 = 0x10000000000000 ll;			\
++		r1 += r2;					\
++		r1 = *(u8 *)(r1 + 0);				\
++"		:
++		: [mm] "r"(mm)
++		: "r1", "r2");
++		err = 0;
++	}
++	bpf_iter_task_vma_destroy(&it);
++	return err;
++}
++
++/* The join has the offsets from the start of the array to 1 << 40. */
++SEC("tp_btf/exit_mmap")
++__success __arch_x86_64
++__jited("	leaq	0xa00000(%rbx), %r11")
++__naked void flex_array_far_join(void)
++{
++	asm volatile ("						\
++	r6 = *(u64 *)(r1 + 0);					\
++	call %[bpf_get_prandom_u32];				\
++	r1 = %[size];						\
++	if r0 > 5 goto 1f;					\
++	r1 = 0x10000000000 ll;					\
++1:	r6 += r1;						\
++	r0 = *(u8 *)(r6 + 0);					\
++	r0 = 0;							\
++	exit;							\
++"	:
++	: __imm(bpf_get_prandom_u32),
++	  __imm_const(size, sizeof(struct mm_struct))
 +	: __clobber_all);
 +}
 +
- /* has no frame: its first insn is the call, not r12 += N */
- static __naked __noinline __used long calls_loop_cb(void)
- {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds_deduction.c b/tools/testing/selftests/bpf/progs/verifier_bounds_deduction.c
-index 14e10760606..63baf2fc61f 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bounds_deduction.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bounds_deduction.c
-@@ -21,8 +21,11 @@ l0_%=:	r0 -= r1;					\
+ typedef int array_element_t;
+ typedef array_element_t array_type_t[4];
  
- SEC("socket")
- __description("check deducing bounds from const, 2")
--__success __failure_unpriv
--__msg_unpriv("R1 has pointer with unsupported alu operation")
-+__success __success_unpriv
-+#ifdef SPEC_V1
-+__xlated_unpriv("nospec")
-+__xlated_unpriv("r1 -= r0")
-+#endif
- __retval(1)
- __naked void deducing_bounds_from_const_2(void)
- {
-@@ -53,8 +56,11 @@ l0_%=:	r0 -= r1;					\
- 
- SEC("socket")
- __description("check deducing bounds from const, 4")
--__success __failure_unpriv
--__msg_unpriv("R6 has pointer with unsupported alu operation")
-+__success __success_unpriv
-+#ifdef SPEC_V1
-+__xlated_unpriv("nospec")
-+__xlated_unpriv("r6 -= r0")
-+#endif
- __retval(0)
- __naked void deducing_bounds_from_const_4(void)
- {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_budget.c b/tools/testing/selftests/bpf/progs/verifier_budget.c
-index 890b316166c..1bef19db503 100644
---- a/tools/testing/selftests/bpf/progs/verifier_budget.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_budget.c
-@@ -1874,14 +1874,17 @@ __naked void may_goto_stays_in_the_loop(void)
- 	);
+diff --git a/tools/testing/selftests/bpf/progs/verifier_load_acquire.c b/tools/testing/selftests/bpf/progs/verifier_load_acquire.c
+index bcc34e798c6..46ddd3f5b1b 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_load_acquire.c
++++ b/tools/testing/selftests/bpf/progs/verifier_load_acquire.c
+@@ -249,6 +249,25 @@ int load_acquire_from_rdonly_untrusted_mem(void *ctx)
+ 	return 0;
  }
  
--/* No state is within another one: the walk gets to the end of the loop, no may_goto */
-+/* The loop has no trip count and no error asks for peeling: may_goto is added */
- SEC("socket")
- __description("budget: ten trips that differ")
- __success __retval(10) __log_level(2)
--__msg("processed 34 insns")
-+__msg("processed {{[0-9][0-9]}} insns")
- __xlated("r8 += 1")
- __xlated("r7 <<= 1")
--__xlated("if r7 != 0x400 goto pc-3")
-+__xlated("...")
-+__xlated("if r13 == 0x0 goto")
-+__xlated("...")
-+__xlated("if r7 != 0x400 goto pc-{{[0-9]+}}")
- __naked void ten_trips_that_differ(void)
- {
- 	asm volatile (
-diff --git a/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c b/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c
-index 7c3dc9643eb..7c29ffed743 100644
---- a/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c
-@@ -1060,16 +1060,36 @@ __naked void pkt_add_unknown_keeps_range(void)
- 		     "r0 = *(u64*)(r2 + 8);");
- }
- 
-+#define PKT_ADD_NEGATIVE(off)						\
-+	PKT_54_BYTES("if r4 > 8 goto l0_%=;"				\
-+		     "r4 += -4;"					\
-+		     "r2 += " #off ";"					\
-+		     "r2 += r4;"					\
-+		     "r0 = *(u8*)(r2 + 0);")
-+
-+/* The offset is 20 + (-4..4) = 16..24. 54 bytes are checked from the start of the packet. */
- SEC("tc")
- __description("direct packet access: checked pointer plus unknown that may be negative")
--__failure __msg("invalid access to packet, off=16 size=1, R2(id={{[0-9]+}},off=16,r=0)")
--__naked void pkt_add_negative_clears_range(void)
-+__success __retval(0)
-+__naked void pkt_add_negative(void)
- {
--	PKT_54_BYTES("if r4 > 8 goto l0_%=;"
--		     "r4 += -4;"
--		     "r2 += 20;"
--		     "r2 += r4;"
--		     "r0 = *(u8*)(r2 + 0);");
-+	PKT_ADD_NEGATIVE(20);
++/* struct mm_struct ends with a flexible array of bytes */
++SEC("tp_btf/exit_mmap")
++__description("load-acquire at a far offset of a trusted pointer")
++__failure __msg("BPF_ATOMIC loads from R1 {{.*}} is not allowed")
++__naked void load_acquire_far_offset(void)
++{
++	asm volatile (
++	"r1 = *(u64 *)(r1 + 0);"
++	"r2 = 0x10000000000 ll;"
++	"r1 += r2;"
++	".8byte %[load_acquire_insn];" // w0 = load_acquire((u8 *)(r1 + 0));
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm_insn(load_acquire_insn,
++		     BPF_ATOMIC_OP(BPF_B, BPF_LOAD_ACQ, BPF_REG_0, BPF_REG_1, 0))
++	: __clobber_all);
 +}
 +
-+SEC("tc")
-+__description("direct packet access: the same before the packet")
-+__failure __msg("R2 min value is negative")
-+__naked void pkt_add_negative_below(void)
-+{
-+	PKT_ADD_NEGATIVE(3);
-+}
-+
-+SEC("tc")
-+__description("direct packet access: the same after what is checked")
-+__failure __msg("invalid access to packet")
-+__naked void pkt_add_negative_above(void)
-+{
-+	PKT_ADD_NEGATIVE(50);
- }
- 
- /* The byte is in the packet, but a range that umax gets to is not kept */
-diff --git a/tools/testing/selftests/bpf/progs/verifier_loop_walk.c b/tools/testing/selftests/bpf/progs/verifier_loop_walk.c
-index 4baf4717591..cd834d776d8 100644
---- a/tools/testing/selftests/bpf/progs/verifier_loop_walk.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_loop_walk.c
-@@ -65,17 +65,19 @@ WALKS(walks_32, 11)
- 
- /*
-  *	for (i = 7; i >= 0; i--) { if (i >= n) continue; a[i] = 0; }
-- * A compiler tests 'i >= n' in front of the loop too and jumps into the middle of it. Such a loop
-- * has no count. It's walked to its end whichever way its jumps go: no may_goto is added.
-+ * A compiler tests 'i >= n' before the loop too and jumps into the middle of it. Such a loop
-+ * has no trip count, so may_goto is added.
-  */
  SEC("socket")
- __description("walk: a loop with two entries")
- __success __retval(0)
- __arch_x86_64
- __arch_arm64
-+__xlated("if r13 == 0x0 goto")
-+__xlated("...")
- __xlated("w3 += -1")
- __xlated("if w3 s< 0x0 goto pc+2")
--__xlated("if w3 < w2 goto pc-6")
-+__xlated("if w3 < w2 goto pc-{{[0-9]+}}")
- __xlated("goto pc-4")
- __xlated("exit")
- __naked void two_entries(void)
-diff --git a/tools/testing/selftests/bpf/progs/verifier_map_ptr.c b/tools/testing/selftests/bpf/progs/verifier_map_ptr.c
-index e0a65835c86..43fd9e26c76 100644
---- a/tools/testing/selftests/bpf/progs/verifier_map_ptr.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_map_ptr.c
-@@ -142,8 +142,13 @@ __naked void ptr_read_ops_field_accepted(void)
- 
- SEC("socket")
- __description("bpf_map_ptr: r = 0, map_ptr = map_ptr + r")
--__success __failure_unpriv
--__msg_unpriv("R1 has pointer with unsupported alu operation")
-+__success __success_unpriv
-+#ifdef SPEC_V1
-+__xlated_unpriv("r2 += -8")
-+__xlated_unpriv("...")
-+__xlated_unpriv("nospec")
-+__xlated_unpriv("r1 += r0")
-+#endif
- __retval(0)
- __naked void map_ptr_map_ptr_r(void)
- {
-@@ -166,8 +171,13 @@ __naked void map_ptr_map_ptr_r(void)
- 
- SEC("socket")
- __description("bpf_map_ptr: r = 0, r = r + map_ptr")
--__success __failure_unpriv
--__msg_unpriv("R0 has pointer with unsupported alu operation")
-+__success __success_unpriv
-+#ifdef SPEC_V1
-+__xlated_unpriv("r2 += -8")
-+__xlated_unpriv("...")
-+__xlated_unpriv("nospec")
-+__xlated_unpriv("r1 += r0")
-+#endif
- __retval(0)
- __naked void _0_r_r_map_ptr(void)
- {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-index 958ee0d6419..a7b11630eb6 100644
---- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-@@ -1208,14 +1208,14 @@ __naked void old_stack_misc_vs_cur_scalar(void)
- }
- 
- /*
-- * stacksafe(): the state with STACK_MISC is there, the state with a stack spill
-- * of a non-scalar arrives. A program that may read uninitialized stack may
-- * take a pointer for a number: the second state is within the first one.
-+ * One state has STACK_MISC, the other one has a stack spill of a non-scalar.
-+ * The slot is live, so the states stay apart.
-  */
- SEC("socket")
- __success  __log_level(2)
- __msg("8: (79) r1 = *(u64 *)(r10 -8)         ; R1=scalar()")
--__msg("processed 10 insns")
-+__msg("8: (79) r1 = *(u64 *)(r10 -8)         ; R1=ctx()")
-+__msg("processed 12 insns")
- __naked void old_stack_misc_vs_cur_ctx_ptr(void)
- {
- 	asm volatile(
-@@ -1233,7 +1233,7 @@ __naked void old_stack_misc_vs_cur_ctx_ptr(void)
- 	"*(u64*)(r10 - 8) = r0;"
- 	"lock *(u64*)(r10 - 8) += r0;"
- "2:"
--	/* read fp-8, it's looked at once */
-+	/* read fp-8 */
- 	"r1 = *(u64*)(r10 - 8);"
- 	"exit;"
- 	:
-@@ -1399,11 +1399,11 @@ __naked void var_off_write_over_scalar_spill(void)
- 
- SEC("socket")
- __description("partial fill from cleaned pointer spill")
--__failure
-+__success __caps_unpriv(CAP_BPF) __failure_unpriv
- __log_level(2)
--__msg("1: (05) goto pc+0")
--__msg("2: (61) r0 = *(u32 *)(r10 -4)")
--__msg("invalid size of register fill")
-+__msg_unpriv("1: (05) goto pc+0")
-+__msg_unpriv("2: (61) r0 = *(u32 *)(r10 -4)")
-+__msg_unpriv("invalid size of register fill")
- __flag(BPF_F_TEST_STATE_FREQ)
- __naked void partial_fill_from_cleaned_pointer_spill(void)
- {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_trip_count.c b/tools/testing/selftests/bpf/progs/verifier_trip_count.c
-index c8e3ddbc530..69288309ef0 100644
---- a/tools/testing/selftests/bpf/progs/verifier_trip_count.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_trip_count.c
-@@ -2751,13 +2751,13 @@ __naked void uninit_slot_counter(void)
-  *
-  * R7 is always 10 at the real exit. Widening loses the correlation between
-  * R6 and R7, leaving R7 in [5, 10] both at the loop header and after the loop.
-- * The verifier therefore rejects the possible invalid stack read.
-+ * Pass 0 does not prove the read. A later pass peels the trips and does not get to it.
-  */
- SEC("xdp")
--__failure
-+__success __retval(0)
- __log_level(2)
--__msg("2: {{.*}}R7=scalar(smin=umin=smin32=umin32=5,smax=umax=smax32=umax32=10,var_off=(0x0; 0xf))")
--__msg("7: R7=scalar(smin=umin=smin32=umin32=5,smax=umax=smax32=umax32=10,var_off=(0x0; 0xf))")
-+__msg("2: {{.*}}R7=scalar(smin=umin=smin32=umin32=5,smax=umax=smax32=umax32=10,var_off=(0x0; 0xf)")
-+__msg("7: R7=scalar(smin=umin=smin32=umin32=5,smax=umax=smax32=umax32=10,var_off=(0x0; 0xf)")
- __msg("invalid read from stack R10 off=0 size=8")
- __naked void conditional_assignment_on_second_iteration(void)
- {
-@@ -3387,9 +3387,11 @@ LINKED(dividend_tested, VALID,
- LINKED(operand_is_overwritten, MAP_OOB,
- 	"r9 = r7; r9 *= 8; call %[bpf_get_prandom_u32]; r7 = r0; r7 &= 255;"
- 	"if r7 > 7 goto out_%=; r1 = r6; r1 += r9;")
--/* a pointer is evaluated below an add only */
--LINKED(pointer_minus_index, __failure,
-+/* r7 is 0..63, so 63 - r7 is 0..63 */
-+LINKED(pointer_minus_index, VALID,
- 	"r1 = r6; r1 += 63; r1 -= r7; if r7 > 63 goto out_%=;" USE_R6)
-+LINKED(pointer_minus_index_oob, __failure __msg("R1 min value is"),
-+	"r1 = r6; r1 += 63; r1 -= r7; if r7 > 64 goto out_%=;" USE_R6)
- /* r3 is an address as a scalar. r6 + r7 * 2 has the offset [0, 14]: that is not the range of r3 */
- LINKED(offset_of_pointer_is_not_scalar, UNBOUND,
- 	"r2 = r7; r2 *= 2; r5 = r6; r5 += r2; r3 = r5; r3 = le64 r3; if r7 > 7 goto out_%=;"
-@@ -3418,14 +3420,17 @@ static __naked __noinline __used void name(void)				\
- 	"if r3 <= 63 goto +2; r3 = 0; *(u64 *)(r1 + 0) = r3; r0 = 0; exit;"	\
- 	::: __clobber_all);							\
- }
--#define CALL(callee)								\
--	"*(u64 *)(r10 - 16) = r8; r1 = r10; r1 += -16; r4 = r1; r2 = r8; r2 >>= 1;"	\
-+#define CALL_R2(set_r2, callee)							\
-+	"*(u64 *)(r10 - 16) = r8; r1 = r10; r1 += -16; r4 = r1;" set_r2		\
- 	"call " #callee "; r2 = *(u64 *)(r10 - 16); r1 = r6; r1 += r2;"
-+#define CALL(callee)	CALL_R2("r2 = r8; r2 >>= 1;", callee)
- 
- CLAMP(clamp, "")
- LINKED(callee_tests_memory_of_caller, VALID, CALL(clamp))
- CLAMP(store_and_clamp, "*(u64 *)(r1 + 0) = r2;")
--LINKED(callee_writes_memory_of_caller, __failure, CALL(store_and_clamp))
-+/* It tests r8 and stores r8 / 2. If r8 is 0..63 then r8 / 2 is 0..31. Else it stores 0. */
-+LINKED(callee_writes_memory_of_caller, VALID, CALL(store_and_clamp))
-+LINKED(callee_writes_memory_of_caller_oob, MAP_OOB, CALL_R2("r2 = r7;", store_and_clamp))
- /* a store defines the memory */
- CLAMP(store_and_test, "r3 = r2; *(u64 *)(r1 + 0) = r3;")
- LINKED(callee_tests_what_it_stored, VALID, CALL(store_and_test))
-@@ -3434,7 +3439,8 @@ CLAMP(store_next_and_clamp, "*(u64 *)(r1 + 8) = r2;")
- LINKED(callee_writes_next_field, VALID, CALL(store_next_and_clamp))
- /* another address base can be another name of the memory */
- CLAMP(store_alias_and_clamp, "*(u64 *)(r4 + 0) = r2;")
--LINKED(callee_writes_through_alias, __failure, CALL(store_alias_and_clamp))
-+LINKED(callee_writes_through_alias, VALID, CALL(store_alias_and_clamp))
-+LINKED(callee_writes_through_alias_oob, MAP_OOB, CALL_R2("r2 = r7;", store_alias_and_clamp))
- static __naked __noinline __used void clamp_through_r0(void)
- {
- 	asm volatile (
-diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-index 7b1f830e5e2..2d5a0263853 100644
---- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-@@ -286,8 +286,7 @@ __naked void mangle_pointer_on_stack_2(void)
- 
- SEC("socket")
- __description("unpriv: read pointer from stack in small chunks")
--__failure __msg("invalid size")
--__failure_unpriv
-+__success __failure_unpriv __msg_unpriv("invalid size")
- __naked void from_stack_in_small_chunks(void)
- {
- 	asm volatile ("					\
-diff --git a/tools/testing/selftests/bpf/progs/verifier_value_ptr_arith.c b/tools/testing/selftests/bpf/progs/verifier_value_ptr_arith.c
-index 5a3893151f6..3deafc3a9e0 100644
---- a/tools/testing/selftests/bpf/progs/verifier_value_ptr_arith.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_value_ptr_arith.c
-@@ -41,8 +41,16 @@ struct {
- 
- SEC("socket")
- __description("map access: known scalar += value_ptr unknown vs const")
--__success __failure_unpriv
--__msg_unpriv("R1 tried to add from different maps, paths or scalars")
-+__success __success_unpriv
-+/*
-+ * r1 is 2 or 3, the values have 16 or 48 bytes. The paths are joined. The mask passes 0..3
-+ * and makes 0 of all other numbers, so the read is in the value, also in speculation.
-+ */
-+#ifdef SPEC_V1
-+__xlated_unpriv("w13 = 3")
-+__xlated_unpriv("...")
-+__xlated_unpriv("r13 &= r1")
-+#endif
- __retval(1)
- __naked void value_ptr_unknown_vs_const(void)
- {
-@@ -79,8 +87,16 @@ l2_%=:	r0 = 1;						\
- 
- SEC("socket")
- __description("map access: known scalar += value_ptr const vs unknown")
--__success __failure_unpriv
--__msg_unpriv("R1 tried to add from different maps, paths or scalars")
-+__success __success_unpriv
-+/*
-+ * r1 is 2 or 3, the values have 16 or 48 bytes. The paths are joined. The mask passes 0..3
-+ * and makes 0 of all other numbers, so the read is in the value, also in speculation.
-+ */
-+#ifdef SPEC_V1
-+__xlated_unpriv("w13 = 3")
-+__xlated_unpriv("...")
-+__xlated_unpriv("r13 &= r1")
-+#endif
- __retval(1)
- __naked void value_ptr_const_vs_unknown(void)
- {
-@@ -117,8 +133,16 @@ l2_%=:	r0 = 1;						\
- 
- SEC("socket")
- __description("map access: known scalar += value_ptr const vs const (ne)")
--__success __failure_unpriv
--__msg_unpriv("R1 tried to add from different maps, paths or scalars")
-+__success __success_unpriv
-+/*
-+ * r1 is 3 or 5, the values have 16 or 48 bytes. The paths are joined. The mask passes 0..5
-+ * and makes 0 of all other numbers, so the read is in the value, also in speculation.
-+ */
-+#ifdef SPEC_V1
-+__xlated_unpriv("w13 = 5")
-+__xlated_unpriv("...")
-+__xlated_unpriv("r13 &= r1")
-+#endif
- __retval(1)
- __naked void ptr_const_vs_const_ne(void)
- {
-@@ -406,8 +430,17 @@ l2_%=:	r0 = 1;						\
- 
- SEC("socket")
- __description("map access: mixing value pointer and scalar, 1")
--__success __failure_unpriv
--__msg_unpriv("R2 tried to add from different maps, paths or scalars, pointer arithmetic with it prohibited for !root")
-+__success __success_unpriv
-+#ifdef SPEC_V1
-+__xlated_unpriv("goto pc+2")
-+__xlated_unpriv("...")
-+__xlated_unpriv("nospec")
-+__xlated_unpriv("r2 += r3")
-+__xlated_unpriv("...")
-+__xlated_unpriv("exit")
-+__xlated_unpriv("nospec")
-+__xlated_unpriv("r0 = *(u8 *)(r0 +0)")
-+#endif
- __retval(0)
- __naked void value_pointer_and_scalar_1(void)
- {
-@@ -460,8 +493,17 @@ l4_%=:	/* fake-dead code; targeted from branch A to	\
- 
- SEC("socket")
- __description("map access: mixing value pointer and scalar, 2")
--__success __failure_unpriv
--__msg_unpriv("R2 tried to add from different maps, paths or scalars, pointer arithmetic with it prohibited for !root")
-+__success __success_unpriv
-+#ifdef SPEC_V1
-+__xlated_unpriv("goto pc+2")
-+__xlated_unpriv("...")
-+__xlated_unpriv("nospec")
-+__xlated_unpriv("r2 += r3")
-+__xlated_unpriv("...")
-+__xlated_unpriv("exit")
-+__xlated_unpriv("nospec")
-+__xlated_unpriv("r0 = *(u8 *)(r0 +0)")
-+#endif
- __retval(0)
- __naked void value_pointer_and_scalar_2(void)
- {
-@@ -1420,8 +1462,8 @@ l0_%=:	r0 = 1;						\
- 
- SEC("socket")
- __description("map access: trying to leak tainted dst reg")
--__failure __msg("math between map_value pointer and 4294967295 is not allowed")
--__failure_unpriv
-+__success
-+__failure_unpriv __msg_unpriv("R2 pointer arithmetic of map value goes out of range")
- __naked void to_leak_tainted_dst_reg(void)
- {
- 	asm volatile ("					\
+ __description("load-acquire with invalid register R15")
+ __failure __failure_unpriv __msg("R15 is invalid")
 -- 
 2.55.0
 
