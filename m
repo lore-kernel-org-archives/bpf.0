@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795160792;
-	b=Szd/59S21Du6/CPP9TNhEV8ArXUT10ED2J7sdRiAdlRu858YDxf95bnBlFQR7MmG5vK6
-	 uj1jnT3IIop/HKtz/blS2TfnnHGCtdfRxQwaGvRu56ZxDyetdJ1yjPtcn6Zz3QgI0JCo6
-	 onkFRN3NNbH/xNb9bYDYZyVTOKnL/p7G3bjH/ysA7OUrHeogiLAdNLKYBwJ5WlGESWi0C
-	 DGj5kOaJEnAGWw9jlclo3gr7PIMc9a8CqzAX5Wsi15s3Ko0YTB+2ayGN74QG9KiYmUpsU
-	 zCIV1QR3FO0B+9Xx892GabvSZBtTSpHuTeWzsa5oUXCJoh9t0RKvy1ah7wJvlzuWVQQ==
+	t=1795160798;
+	b=18hlfjuWNjLkg/dK/aHrO+BGJcCkLbUJlue8K1hnZYhkN76i0bA254rMjfJQfz8xkPsP
+	 q1gSWANZ/OvmVbiHpT3rNt5bBGkfUCokNUhFX1c81CrGmO5IBoEBKVDqTF+zzUWzUg5wc
+	 TW0uS0n06ASi0uJhpq9ZfhhJRL5XRX39JmU2Fso8dFOfCAeZSCJNJB0/0TNeGMEgirz6G
+	 0rjzJ/qYQWZv0sg5OOJcurggn1lS7mXMkj/1ZED27qdNtV1kGu8Dgjnl6DAOPaNR07TGz
+	 wFxMd8RYP8utVY0mw9Fe0JbKT9IKx8vLwwZwKcmdRAMFOGZEp+SWc+Ta5/foZQySMsQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795160792;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795160798;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=56kq9YSV0usNcP6vUjo1tb/tT6+qtV4NgdAFueLh8Ck=;
-	b=4rXubhmXJ0ITddtRyHUWRu7kxPiHexCrN67Q9w4BJsIJZLogOSWiomc1jD2wWUrQNSWX
-	 aKoaKxEN0VGmJh7mFxSlynjGD7Qo+oaDL/NANVp2vzkz7MBIcYa7I/7KW+n6D5CNEsMXB
-	 FL3iln97cR6YcKf5IFNIpMquYv3tZPHDd0Z/FsPZh1l9INxgXepdXu1XZeoVfM/CO+HIF
-	 DEX2NGHSMhki/Mj4hdQm/hVDyUq48lvVUHd1Kxh+kfNe+/rFB5Rc9S9cBs8uTrgzpX6PM
-	 nAQJw8OabmO0wW0o6FONnBjatQu5TpWu7hKf4D5+xb5DYa6LzeTdC255igZ6gOoN4Fw==
+	bh=xjInmy+J6OJgcst6u/P374kTLL7cl0CJFJEDxZPVslk=;
+	b=xABHmYR8yRybfO5RzaPlld3jHnbwSvrBKT42rMuoAaQwi88vFLpc5ExixnOQ/AaiJtEd
+	 9mPuFUOgIyw0sZ00viURc9hHIwFf1+OOYlMBP4zXnrsEoRmDb4s+I4JPzjVh1F7vX58fz
+	 88ppwteAQ/AC7kOHbEHfOnZKC0QGi+RWUsx+he8nTmLLU8sTBnhsyO+7KpEn3ZLiNc40G
+	 BpwVqj72XGsdH2cE6rDvHQVOHJC2GH7aLlKBBV8OLTJJEql9J2H+sjd79DhH8/DEICajG
+	 s82vZIy/vbCNZfFkwq/YVk3NaIzJ/RKjxabTngW20Ps9zuwd23er0oagl7vuwyCCDcw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WMzNMnCA;
-	arc=none smtp.remote-ip=209.85.215.181
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rF4X5002;
+	arc=none smtp.remote-ip=209.85.214.172
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8FA7606A320
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 07:46:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C8FA7606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 944BC606A320
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 07:46:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 944BC606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WMzNMnCA
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-cdb9f760337so980572a12.0
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 23:46:31 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rF4X5002
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2f00fc215f9so4000205ad.0
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 23:46:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795160791; x=1795765591; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795160797; x=1795765597; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=56kq9YSV0usNcP6vUjo1tb/tT6+qtV4NgdAFueLh8Ck=;
-        b=WMzNMnCAQbG+uRV9Bg/hEJKg2yCTeDlXeeqxns1DVd8k9hvl7uHjjnYvOYSQsPRsI+
-         4U72CZ7lSc8WbSQwweu/8F6A5mvytkH1m5/17GJAwoJNErzgLtWKhN76dwGJX116OGIf
-         eCGf3LISoyqZD1Hy4eJCMrTvrFxZDwgPEYHUtyHtjD/CZ6zDedwu//yhDRXq51Vnoc1S
-         9kdUC9OtM/sSonvrzHhzHsMjGaduLQ+k3S4uCKq0DvjTckEapdd5JPPkzU7BL1mmS/Ys
-         FF0zBUI96bpg9GXL1Ch6U8UEvQtbvOpkjKmCkOSL2Xmw0MFDYkptIVOIhnJN4jbqj/gA
-         R88w==
+        bh=xjInmy+J6OJgcst6u/P374kTLL7cl0CJFJEDxZPVslk=;
+        b=rF4X5002RAqdVySlBO4ToeqgbPurunEF9sFHourors1biYWGcmdZ78Ee6c1LCKeX3E
+         55jbrs9ZNRLfp/nQCn5wt2bbIySI94Auarb4amxmXM/YyDHK0VP3/jGKLy/8Nr88316O
+         ua7ZlY+d6pVdgY3uT3S4taxJtXnm6itUwla5x4CJ/afGodlM13ESUu9nQ6F1vF0KDRa6
+         1Yd91xeQc1vqZEcoF7oneroULWu0q8ofzKfmmA6I25Bsgcr9uZxqfZdrS8VE6kkFoKlB
+         LaEZQg84YaXIzbcSb9upwpUvJ84Jh4WgaeVAtIjJ9u2J0fBYDQgqMC7IcVlarIpd2B9f
+         xu0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795160791; x=1795765591;
+        d=1e100.net; s=20260707; t=1795160797; x=1795765597;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=56kq9YSV0usNcP6vUjo1tb/tT6+qtV4NgdAFueLh8Ck=;
-        b=dCxOUQIouVO5LSvfIsfhf8rU1HQyM2k9+Kdj+LpbK2WjfKeG1I4RGWrTa1dh4XPoZZ
-         lc99I/cOZK2alQaGqFKINj59caBv9ucsE5h6Z6CDdgZ/HG3PU3FpM1HWMJLjgqQzx4i6
-         oocCZ8Br7o4ualvL9pHMalN4jQWUyIDYmmw6J1H2bFbrmFIns8rxJSAvJqh/5CwVgW/4
-         r/5uxp3bCOdK+bBcLTA2s+jflLPNvikAPcFzZj6Lg/dmYtNfq/0jE2ej/FTmbpG0X8KD
-         qq5ixJYSrGSHP1IVdOGPchD9FlypT40gA1rQ/cEHMKOwkakp0FTEU0sbd/OQgcBF8Eal
-         Tg+A==
-X-Gm-Message-State: APuU4Z84cZ3lrq+UUxMJv/lcp9DAovV9ALc7rqvOV2s9E656SFICqprv
-	S3CWrOiP11OKAbs/h4ZPbpd8xsk+r1ZX99nslPPrq5LxCnS0IplGPTgu0KQf4Q==
-X-Gm-Gg: AZFdTZftRyjK+MOKpm2bU7ELVWKgH1dHNrwjo4kAQeq16qnx+dX2Tf+6uZypSppkKhQ
-	8l2er7/VNri1fb8qtpkjpnoDQRVrbfJ+s38Z6ATlZu/4/cJaYEoE18vwVUn2S2ly/pGQAa6/6tp
-	RaCB+6CKg7yrH6xcjCvDXlTXMje9jNBqHq4cJuo7GuBbs+WNiqdo9zeIclA93AXesnvsAaCUCf9
-	cxziRX/ioxvpFNLZLCXHqa4WRq55Xri/yOL7Jxsnohgtq1p7f7v5EtCmNR1NMmg5S8r1cQ1wwbv
-	zOzYgSaFlAq+E2CSWKF9TTojXQkYxqjHjS2toU9eIdf39A0ZqOPuJ8WIzO6+p/N/TOGyKp/fpBe
-	aPjSIT3L068neehSo6ynssHr/StT1jMowmo/XAwDdN6dMaJ7TaDRZ6AB3kKF5uQvay9f4d+KfCQ
-	eU1f6uCA0QlBbTpMKWQKAG/x/g46z4Un4LW1tWffozGDf2ziZHgIxa0ejiaydEip0pEqrKwvnFY
-	WkWP1yFDVZbv1IkmlaO4PJwuxEBsh9G60e/iJe34wKhSLrgSi/cndXCANHM0ykQEgsr1UORO5QU
-	DBRcG8dBH4itIk6kTJDQiBdxDZcT6T3S/JSiHc/8a3/5zdQBHedNVfm0iecJ+DrX53O7N0fUGEL
-	2wb9QXVNQMDNcZvicnRupAeYqkQ8KYrv9Oo46sVplln5HAtbpWGjw/itbT+0y1PAGcEDmwemNfU
-	w=
-X-Received: by 2002:a17:90b:5289:b0:3b0:9bfa:72ac with SMTP id 98e67ed59e1d1-3b41c908147mr1480620a91.21.1795160790848;
-        Thu, 19 Nov 2026 23:46:30 -0800 (PST)
+        bh=xjInmy+J6OJgcst6u/P374kTLL7cl0CJFJEDxZPVslk=;
+        b=byesnMZdbZplWYoDnA4qwZttzTC+7luZSWD0YAABmCLv0snauQbQdrA6Wgfp2E0+lE
+         MtO27DN4kqSKrQF34cI/6G8LLuTfdm/Z5sTUFDwwVX7O18QsHSnUdxvhjU1GkHD+SKjX
+         BXsCWOW6bKwNmqxFMINSZssrTHddvxWPx0zqk52gdKIVD0mZBxlxnMBb1oSrgf8plb3E
+         ZaRsQ6f3bcetEpoH5PbBrQZNpaQ0YX+ea9fs4rkFQ7OwVI+RmOs8KlxE4hts5/KvrJYJ
+         o0JihQFhLV4YOsbtPSrFXTyeTwoQofgymctQ9B89NPqJgGkcFIfTcJbYwsnyAezwZ/zI
+         ZGzw==
+X-Gm-Message-State: APuU4Z8zlzCRmVfCrFeO85dBnOAKS4edX7DU+BOF/kmZisk5bEsf2Uvz
+	30aByUdraYFZm6HKgFMhhU9Nwx6i2ZNlAlLKGRITL8Z8kE0bjcNIqs13vCgOTg==
+X-Gm-Gg: AZFdTZdV33eVd/TC0xyY0edcJBwSothYctO1TB7IrNFux+S1O02vPomhlvx9at0CsY+
+	esfwlVTc3Sort6jgBUgCXgrY9jIcfFeQCmJw7woNlnnV1EVSu5UiiXQmzZ0/aBLdt7VAazPOalD
+	713Vgo/wvTwELgD4nrWKdDJojl+rEMWCSBGLZRI/kF1K32sEqli9nLCv0C0nCZUEr/HLHv0gr7c
+	8ht9fy9GWGIztc7XJaASE/7S74gTLO0pIN3ll5uLVv/no5HnTO3oHWITDxYa4OIxFv3Og8eSdhP
+	ypIQ3JeFg6Tz2jqPw6BLKtKUxPUb8rRVscsqgN/ARJw6qgwTBQAmNKgABhUlrQ/JGi4lsXvtFsR
+	GzF/0QL/SqqsMyFp5e3AgMtsf3QK8dnWbvPH2GskK87hM6WFsTYflWqOjHj+EhTS2V5sl7A+WIA
+	Tah1QLyiuOryj9oBFFZvqBd7WsnigJXlBN3KhYruL3YDtCGj11rX4sorNaPuPTiYDFE56DAfFvX
+	Keu9IAk1zjzStmrMZkN0MhjlTl1Vt/2i23w74YIE0yqN8GI7uyUnFmW1SbX4TeStO97eN/p5up9
+	FXhWPNGRDtx9fQX2rmrjG2pCyag767ZyuXNnfrPqFpYlWrGemndTYtEXIgOEngh5P+wxlZfjf98
+	rpwFCLNQszfbhGaWnmK9gnLpv1Fo6pcUp08ZqoZlQnQXsvuKGVdXbbZChJJ2DuxeKGqAE5pBvQw
+	==
+X-Received: by 2002:a17:902:db08:b0:2ed:790:b8f8 with SMTP id d9443c01a7336-2f03ef5a24fmr26040105ad.2.1795160796634;
+        Thu, 19 Nov 2026 23:46:36 -0800 (PST)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.244])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b40548711esm6571294a91.0.2026.11.19.23.46.30
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f0dcbe3sm10563525ad.28.2026.11.19.23.46.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2026 23:46:30 -0800 (PST)
+        Thu, 19 Nov 2026 23:46:36 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 20/49] bpf: Delete the equations that say nothing
-Date: Fri, 20 Nov 2026 07:41:52 +0000
-Message-ID: <20261120074430.2704488-21-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 21/49] bpf: Compare states by join_key, then by value
+Date: Fri, 20 Nov 2026 07:41:53 +0000
+Message-ID: <20261120074430.2704488-22-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261120074430.2704488-1-alexei.starovoitov@gmail.com>
 References: <20261120074430.2704488-1-alexei.starovoitov@gmail.com>
@@ -104,545 +104,791 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Insns add syms, and registers die. Without a clean-up the table grows,
-and two states with the same facts have tables that do not compare.
+The compare and the join of two states start with the same question:
+can they be one state at all? Each had its own list of fields. Put the
+fields in one group, the join_key:
 
-  if                      then
-  sym0 is 5               put 5 into the equations
-  sym1 = sym0 + 8         replace sym1
-  r1 = sym0, only use     delete, the range of r1 says the same
-  no xreg holds sym0      eliminate it:
-    p = sym0 + len, sym0 = 8 * trip + sym1  ->  p = 8 * trip + sym2
+  what is held    references, locks, dynptrs, iterators, irq flags
+  where it is     the call chain, the instance of the function
+  which trip      the peeled trip, or the leftover
 
-The result can be a second equation for the same sum, often with a
-smaller range than the guess of a join. refine_same_sum() gives the
-range to the first equation and deletes the second one. Two sums can
-also become the same when a sym is replaced.
+The group is compared and hashed as bytes, so it has no padding.
+States with two join_keys never meet. bpf_state_subsumes() looks only
+at values.
 
-The new range needs a sym to hold it. If the equation has no sym with
-one use, the sym of the deleted equation holds it:
+regsafe() had a case for each type. All say the same: the type and the
+object are equal, and the number is within. bpf_same_type_and_object()
+answers the first part, also for the join.
 
-  x = m + d, m = 2 * k + 41 * j, k is dead  ->  x = 41 * j + d'
+Two rules are new. A later patch joins such values:
+- Pointers to the packet are compared by the bytes that are left:
 
-normalize_equations() also sets the order: each equation has at most
-one sym that the xregs and the earlier equations do not determine. A
-later patch needs that order to check a table in one walk.
+   smin           smax              range
+    |-- offsets ---|-- bytes left ---|
 
-A state keeps 2 * SUMS_PER_XREG sym equations for each xreg equation.
-That cuts a chain such as 'x += k; x += k; ...'. A pass that is over
-its budget drops all equations.
+  Pointers that share an id have to keep their distance. The pairs of
+  ids are in env->pkt_pairs, which grows on demand.
+- stacksafe() knows the bytes that a join makes. An unreadable spill
+  subsumes a written byte, misc subsumes a spilled number, zero
+  subsumes a spilled 0.
 
-A state without an equation has more values. So it is always safe to
-delete an equation.
+This also fixes a leak in the old code. A store of a pointer at a
+variable stack offset makes a number of it. With the mitigations off
+that needed no CAP_PERFMON. Reject it: a join of two offsets makes such
+a store too.
 
-The clean-up runs when a state is cleaned, and when the number of syms
-doubles.
+This replaces refsafe(), regs_exact() and stack_arg_safe().
+async_entry_cnt goes away: states of an async callback are joined.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h |   2 +
- kernel/bpf/equation.c        | 426 +++++++++++++++++++++++++++++++++++
- kernel/bpf/equation.h        |   3 +
- kernel/bpf/states.c          |   1 +
- 4 files changed, 432 insertions(+)
+ include/linux/bpf_verifier.h | 105 +++++++++---
+ kernel/bpf/states.c          | 323 +++++++++++++++++++++++++----------
+ kernel/bpf/verifier.c        |  15 +-
+ 3 files changed, 324 insertions(+), 119 deletions(-)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 1a9adf126f9..d4159384821 100644
+index d4159384821..7b1cc56cd73 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -555,6 +555,7 @@ struct bpf_equations {
- 	bool normalized;	/* see normalize_equations() */
- 	bool infeasible;	/* the equations cannot hold: the program does not get here */
- 	bool needs_refine;	/* widened: the equations are not applied, see bpf_flow_next() */
-+	u32 clean_sym_cnt;	/* after the last bpf_equations_clean() */
+@@ -395,7 +395,7 @@ struct bpf_reference_state {
+ struct bpf_retval_range {
+ 	s32 minval;
+ 	s32 maxval;
+-	bool return_32bit;
++	u32 return_32bit;	/* no padding, see bpf_same_join_key() */
  };
  
- struct bpf_verifier_state {
-@@ -2321,6 +2322,7 @@ void bpf_equation_env_free(struct bpf_verifier_env *env);
- int bpf_equations_copy(struct bpf_verifier_env *env, struct bpf_equations *dst,
- 		       const struct bpf_equations *src);
- void bpf_equations_free(struct bpf_equations *eqs);
-+void bpf_equations_clean(struct bpf_verifier_env *env, struct bpf_verifier_state *st);
- s64 bpf_equations_max_sum(struct bpf_verifier_env *env, int regno1, int regno2);
- void bpf_equations_before_insn(struct bpf_verifier_env *env);
- int bpf_equations_after_insn(struct bpf_verifier_env *env);
-diff --git a/kernel/bpf/equation.c b/kernel/bpf/equation.c
-index 5c9a3df8ce4..479cb1466e1 100644
---- a/kernel/bpf/equation.c
-+++ b/kernel/bpf/equation.c
-@@ -640,6 +640,7 @@ static bool refine_ptr(struct bpf_verifier_env *env, struct bpf_verifier_state *
- 	return true;
+ /*
+@@ -457,6 +457,8 @@ struct loop_stack_entry {
+  */
+ struct bpf_func_state {
+ 	struct bpf_reg_state regs[MAX_BPF_REG];
++	/* equal in states that have a join, see bpf_same_join_key() */
++	struct_group(join_key,
+ 	/* index of call instruction that called into this func */
+ 	int callsite;
+ 	/* stack frame number of this function state from pov of
+@@ -464,32 +466,36 @@ struct bpf_func_state {
+ 	 * 0 = main function, 1 = first callee.
+ 	 */
+ 	u32 frameno;
+-	/*
+-	 * Unique diagnostic identity for this function invocation. Frame depth is
+-	 * reused after returns, while this ID is preserved across state clones.
+-	 */
+-	u32 diag_frame_id;
+-	/* parent_id of the args that are gone when this frame returns */
+-	u32 frame_id;
+ 	/* subprog number == index within subprog_info
+ 	 * zero == main subprog
+ 	 */
+ 	u32 subprogno;
+ 	/*
+-	 * The frame of an async callback has the count of frame 0 of the state
+-	 * that sets the callback plus one. Frames that differ in it are not joined.
++	 * What was held at the entry of the frame and is still held. For references these are
++	 * the first entry_refs of refs[]. What is released and acquired again does not count.
++	 * This frame must release all the rest.
+ 	 */
+-	u32 async_entry_cnt;
++	u32 entry_refs;
++	u32 entry_rcu_locks;
++	u32 entry_preempt_locks;
+ 	struct bpf_retval_range callback_ret_range;
+ 	bool in_callback_fn;
+ 	bool in_async_callback_fn;
+ 	bool in_exception_callback_fn;
+-	bool no_stack_arg_load;
+ 	/*
+ 	 * The helper invokes this callback under rcu_read_lock(), so the
+ 	 * callback and its callees run in an RCU read-side critical section.
+ 	 */
+ 	bool in_rcu_callback_fn;
++	/* parent_id of the args that are gone when this frame returns */
++	u32 frame_id;
++	);
++	bool no_stack_arg_load;
++	/*
++	 * Unique diagnostic identity for this function invocation. Frame depth is
++	 * reused after returns, while this ID is preserved across state clones.
++	 */
++	u32 diag_frame_id;
+ 	/* For callback calling functions that limit number of possible
+ 	 * callback executions (e.g. bpf_loop) keeps track of current
+ 	 * simulated iteration number.
+@@ -508,14 +514,6 @@ struct bpf_func_state {
+ 	 * subprogram (loops never cross subprogram boundaries).
+ 	 */
+ 	u32 loop_stack_cnt;
+-	/*
+-	 * How much of what was held when the frame was entered is held ever since. For
+-	 * references that is the first entry_refs of refs[]. What is released and taken again
+-	 * doesn't count. More than that is for this frame to release.
+-	 */
+-	u32 entry_refs;
+-	u32 entry_rcu_locks;
+-	u32 entry_preempt_locks;
+ 
+ 	/* The following fields should be last. See copy_func_state() */
+ 	/* The state of the stack. Each element of the array describes BPF_REG_SIZE
+@@ -565,7 +563,7 @@ struct bpf_verifier_state {
+ 	/* Acquired reference states */
+ 	struct bpf_reference_state *refs;
+ 	u32 insn_idx;
+-	u32 curframe;
++	bool speculative;
+ 	/* an xreg has no value: unreachable. Only a path-sensitive run drops such a state. */
+ 	bool infeasible;
+ 	/* an error only in a leftover, see check_held_in_leftover() */
+@@ -574,6 +572,8 @@ struct bpf_verifier_state {
+ 	/* the loops that made an xreg of data_deps imprecise, see bpf_loop.suspect_bit */
+ 	u64 suspect_loops;
+ 
++	/* equal in states that have a join, see bpf_same_join_key(). No holes. */
++	struct_group(join_key,
+ 	struct_group(held,
+ 	void *active_lock_ptr;
+ 	u32 acquired_refs;
+@@ -582,9 +582,8 @@ struct bpf_verifier_state {
+ 	u32 active_rcu_locks;
+ 	u32 active_irq_id;
+ 	u32 active_lock_id;
+-
+-	bool speculative;
+ 	);
++	u32 curframe;
+ 	bool in_sleepable;
+ 	/* a global function or an extension, and what it calls: exit of frame 0 is not the end */
+ 	bool callers_unknown;
+@@ -600,6 +599,9 @@ struct bpf_verifier_state {
+ 	 * state at its entry came from, see bpf_flow_call().
+ 	 */
+ 	u32 flow_entry;
++	);
++	/* Not zero in a function that is verified on its own, see bpf_flow_call() */
++	u32 instance_id;
+ 
+ 	/* The insn that the state comes from, -1 if no instructions have been executed yet. */
+ 	u32 last_insn_idx;
+@@ -654,6 +656,16 @@ static inline bool bpf_stack_args_are_incoming(const struct bpf_func_state *fram
+ 	return !frame->frameno && !frame->no_stack_arg_load;
  }
  
-+/* All states share the marks. If propagate_bounds() does not follow, clear the mark. */
- static void mark_sym_refined(struct bpf_verifier_env *env, u32 sym, u32 sweep)
++/* Stack argument @i of @frame to compare with @other or NULL: incoming ones are not outgoing */
++static inline const struct bpf_reg_state *
++bpf_stack_arg(const struct bpf_func_state *frame, const struct bpf_func_state *other, u32 i)
++{
++	if (i >= frame->out_stack_arg_cnt ||
++	    (bpf_stack_args_are_incoming(frame) && !bpf_stack_args_are_incoming(other)))
++		return NULL;
++	return &frame->stack_arg_regs[i];
++}
++
+ /* Iterate over 'frame', setting 'reg' to either NULL or a spilled register. */
+ #define bpf_for_each_spilled_reg(iter, frame, reg, mask)			\
+ 	for (iter = 0, reg = bpf_get_spilled_reg(iter, frame, mask);		\
+@@ -1190,6 +1202,16 @@ static inline bool bpf_id_is_xreg(u32 id)
+ 	return id & 2;
+ }
+ 
++/* pointers to the packet with id @old are those with id @cur moved by @delta */
++struct bpf_pkt_pair {
++	u32 old;
++	u32 cur;
++	u64 delta;
++	/* for a join */
++	u32 type;
++	u32 id;
++};
++
+ struct bpf_idmap {
+ 	u32 cnt;
+ 	struct bpf_id_pair map[BPF_ID_MAP_SIZE];
+@@ -1289,6 +1311,7 @@ struct bpf_verifier_env {
+ 	bool path_sensitive;		/* no joins, see run_path_sensitive() */
+ 	u64 cost, mem;			/* see bpf_check_limits() */
+ 	u64 max_cost, max_mem;
++	u64 hash_seed;			/* see bpf_hash_join_key() */
+ 	u64 pass_max_cost;		/* see bpf_undo_precision() */
+ 	bool aborted;			/* a thaw does not take it back */
+ 	bool no_mem;			/* a table cannot grow, see bpf_check_limits() */
+@@ -1363,6 +1386,8 @@ struct bpf_verifier_env {
+ 	} *callx_edges;
+ 	struct bpf_index callx_index;
+ 	struct bpf_idmap idmap_scratch;
++	struct bpf_pkt_pair *pkt_pairs;	/* of the two states that are compared or joined */
++	u32 pkt_pair_cnt, pkt_pair_cap;
+ 	struct {
+ 		int *insn_state;
+ 		int *insn_stack;
+@@ -1593,9 +1618,15 @@ void bpf_free_kfunc_btf_tab(struct bpf_kfunc_btf_tab *tab);
+ 
+ 
+ int bpf_clean_verifier_state(struct bpf_verifier_env *env, struct bpf_verifier_state *st);
+-bool bpf_state_subsumes(struct bpf_verifier_env *env, struct bpf_verifier_state *old,
+-			struct bpf_verifier_state *cur);
+-
++bool bpf_add_pkt_pair(struct bpf_verifier_env *env, const struct bpf_pkt_pair *pair);
++bool bpf_state_subsumes(struct bpf_verifier_env *env, const struct bpf_verifier_state *old,
++			const struct bpf_verifier_state *cur);
++bool bpf_scalar_subsumes(const struct bpf_reg_state *old, const struct bpf_reg_state *cur);
++bool bpf_same_type_and_object(struct bpf_verifier_env *env, const struct bpf_reg_state *a,
++			      const struct bpf_reg_state *b);
++bool bpf_same_join_key(const struct bpf_verifier_state *a, const struct bpf_verifier_state *b);
++u64 bpf_hash64(const void *p, size_t len, u64 hash);
++u64 bpf_hash_join_key(const struct bpf_verifier_env *env, const struct bpf_verifier_state *st);
+ int bpf_renumber_ids(struct bpf_verifier_env *env, struct bpf_verifier_state *st);
+ 
+ /*
+@@ -1696,7 +1727,7 @@ static inline struct bpf_func_state *bpf_func(struct bpf_verifier_env *env,
+ }
+ 
+ /* Return IP for a given frame in a call stack */
+-static inline u32 bpf_frame_insn_idx(struct bpf_verifier_state *st, u32 frame)
++static inline u32 bpf_frame_insn_idx(const struct bpf_verifier_state *st, u32 frame)
  {
- 	struct bpf_equation_env *eq_env = env->eq_env;
-@@ -1195,6 +1196,7 @@ static bool add_divmod_equation(struct bpf_verifier_env *env, struct expr *expr,
- 	struct bpf_equations *eqs = &env->cur_state->equations;
- 	struct bpf_sym_equation sym_eq = { { -1, expr->coef, -divisor }, { 0, expr->var },
- 					     env->eq_env->insn_idx, expr->off };
-+	int i;
- 
- 	sym_eq.sym[0] = bpf_new_sym(env, eqs, rem);
- 	sym_eq.sym[2] = bpf_new_sym(env, eqs, quot);
-@@ -1574,6 +1576,430 @@ int bpf_equations_after_insn(struct bpf_verifier_env *env)
- 	return env->no_mem ? -ENOMEM : 0;
+ 	return frame == st->curframe
+ 	       ? st->insn_idx
+@@ -2349,12 +2380,25 @@ static inline u8 bpf_signed_opcode(u8 op)
+ 	return op == BPF_JGT || op == BPF_JGE ? op + BPF_JSGT - BPF_JGT : op;
  }
  
-+/* Clean up */
-+
-+static bool sym_has_one_use(const struct sym_scratch *scratch, u32 sym)
++/* True if pkt_bytes_left() is valid */
++static inline bool pkt_has_bytes_left(const struct bpf_reg_state *reg)
 +{
-+	return sym != NO_SYM && scratch[sym].use_cnt == 1;
++	return reg->range >= 0 && reg_smin(reg) >= -MAX_PACKET_OFF &&
++	       reg_smax(reg) <= MAX_PACKET_OFF;
 +}
 +
-+static void count_sym_uses(struct bpf_verifier_env *env, const struct bpf_equations *eqs)
+ /* How many bytes are checked from the start of the packet, wherever the pointer is */
+ static inline int pkt_min_len(const struct bpf_reg_state *reg)
+ {
+ 	return reg->r64.size ? reg->pkt_min_len : max(reg->range, reg->pkt_min_len);
+ }
+ 
++/* How many bytes are checked after a pointer to the packet */
++static inline s64 pkt_bytes_left(const struct bpf_reg_state *reg)
 +{
-+	struct sym_scratch *scratch = env->eq_env->scratch;
-+	const struct bpf_xreg_equation *xreg_eq;
-+	const struct bpf_sym_equation *sym_eq;
-+	u32 i;
-+
-+	bpf_add_cost(env, eqs->sym_cnt, BPF_COST_COPY);
-+	memset(scratch, 0, eqs->sym_cnt * sizeof(*scratch));
-+	for_each_xreg_equation(env, eqs, xreg_eq)
-+		if (xreg_eq->coef)
-+			scratch[xreg_eq->sym].use_cnt++;
-+	for_each_sym_equation(env, eqs, sym_eq) {
-+		for (i = 0; i < 3; i++)
-+			if (sym_eq->coef[i])
-+				scratch[sym_eq->sym[i]].use_cnt++;
-+		if (is_op(sym_eq))
-+			scratch[sym_eq->sym[0]].op = sym_eq;
-+	}
++	return reg->range - reg_smax(reg);
 +}
 +
-+static void replace_operand(struct bpf_sym_equation *sym_eq, u32 sym, const struct expr *new_expr)
+ /* The loop that the frame is in, or NULL */
+ static inline struct loop_stack_entry *bpf_top_loop(const struct bpf_func_state *frame)
+ {
+@@ -2370,4 +2414,11 @@ static inline u32 bpf_xreg_cnt(const struct bpf_verifier_state *st)
+ 	return nr;
+ }
+ 
++static inline bool bpf_slot_is_held(const struct bpf_stack_state *slot)
 +{
-+	struct expr expr;
-+	int i;
++	u8 t = slot->slot_type[BPF_REG_SIZE - 1];
 +
-+	for (i = 0; i < 2; i++) {
-+		if (sym_eq->sym[i + 1] != sym)
-+			continue;
-+		expr = expr_scale(*new_expr, sym_eq->coef[i + 1], rhs_expr(sym_eq, i).off);
-+		set_operand(sym_eq, i, &expr);
-+	}
-+	if (sym_eq->sym[0] == sym || sym_eq->sym[0] == var_symno(new_expr->var))
-+		sym_eq->sym[0] = NO_SYM;
++	return t == STACK_DYNPTR || t == STACK_ITER || t == STACK_IRQ_FLAG;
 +}
 +
-+/* Replace @sym with @expr */
-+static bool substitute_sym(struct bpf_verifier_env *env, struct bpf_equations *eqs, u32 sym,
-+			   const struct expr *expr, const struct bpf_sym_equation *def_equation)
+ #endif /* _LINUX_BPF_VERIFIER_H */
+diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+index bb8fa008a8a..174b1a613fb 100644
+--- a/kernel/bpf/states.c
++++ b/kernel/bpf/states.c
+@@ -4,6 +4,7 @@
+ #include <linux/bpf_verifier.h>
+ #include <linux/cnum.h>
+ #include <linux/filter.h>
++#include <linux/siphash.h>
+ 
+ /* check %cur's range satisfies %old's */
+ static bool range_within(const struct scalar *old, const struct scalar *cur)
+@@ -39,6 +40,11 @@ bool scalar_subsumes(const struct scalar *old, const struct scalar *cur)
+ 	return range_within(old, cur) && tnum_in(old->var_off, cur->var_off);
+ }
+ 
++bool bpf_scalar_subsumes(const struct bpf_reg_state *old, const struct bpf_reg_state *cur)
 +{
-+	struct bpf_xreg_equation *xreg_eq;
-+	struct bpf_sym_equation *sym_eq, new;
-+	bool changed = false;
-+	int i;
++	return scalar_subsumes(scalar_of(old), scalar_of(cur));
++}
 +
-+	if (over_limit(env))
+ static void renumber_id(struct bpf_verifier_env *env, u32 *id, u32 new_id)
+ {
+ 	struct bpf_idmap *map = &env->idmap_scratch;
+@@ -116,6 +122,51 @@ int bpf_renumber_ids(struct bpf_verifier_env *env, struct bpf_verifier_state *st
+ 	return -E2BIG;
+ }
+ 
++bool bpf_add_pkt_pair(struct bpf_verifier_env *env, const struct bpf_pkt_pair *pair)
++{
++	if (!bpf_grow_array(env, &env->pkt_pairs, &env->pkt_pair_cap, env->pkt_pair_cnt + 1,
++			    sizeof(*pair)))
 +		return false;
-+	for_each_xreg_equation(env, eqs, xreg_eq) {
-+		if (xreg_eq->sym != sym)
-+			continue;
-+		xreg_eq->off += xreg_eq->coef * expr->off;
-+		xreg_eq->coef *= expr->coef;
-+		xreg_eq->sym = expr->var;
-+	}
-+	for_each_sym_equation(env, eqs, sym_eq) {
-+		i = find_sym_pos(sym_eq, sym);
-+		if (i == 3 || sym_eq == def_equation || sym_eq->sym[0] == NO_SYM)
-+			continue;
-+		if (is_op(sym_eq)) {
-+			replace_operand(sym_eq, sym, expr);
-+			continue;
-+		}
-+		new = *sym_eq;
-+		new.off += new.coef[i] * expr->off;
-+		new.coef[i] *= expr->coef;
-+		new.sym[i] = expr->var;
-+		if (isolate_sym(&new))
-+			*sym_eq = new;
-+		else if (i || !expr->coef || find_sym_pos(sym_eq, expr->var) < 3)
-+			sym_eq->sym[0] = NO_SYM;
-+		changed = true;
-+	}
-+	return changed;
++	env->pkt_pairs[env->pkt_pair_cnt++] = *pair;
++	return true;
 +}
 +
-+/* The position of the sym that only @sym_eq uses. -1 if there is none. */
-+static int find_one_use_sym(const struct sym_scratch *scratch,
-+			    const struct bpf_sym_equation *sym_eq)
++/* Packet pointers that share an id in the old state share one in the new state, as far apart */
++static bool check_pkt_ids(struct bpf_verifier_env *env, const struct bpf_reg_state *rold,
++			  const struct bpf_reg_state *rcur)
 +{
-+	int i;
++	struct bpf_pkt_pair pair = { rold->id, rcur->id, rcur->r64.base - rold->r64.base };
++	const struct bpf_pkt_pair *p = env->pkt_pairs;
 +
-+	for (i = 2; i >= 0 && !sym_has_one_use(scratch, sym_eq->sym[i]); i--)
-+		;
-+	return i;
-+}
-+
-+/* Another equation is for the same sum as @sym_eq. It gets the range of the sym at @one_use. */
-+static bool refine_same_sum(struct bpf_verifier_env *env, struct bpf_equations *eqs,
-+			    const struct bpf_sym_equation *sym_eq, int one_use)
-+{
-+	int i = !one_use, j = 2 - (one_use == 2);
-+	struct expr a = sym_expr(sym_eq->coef[i], sym_eq->sym[i], sym_eq->off), diff;
-+	struct expr b = sym_expr(-sym_eq->coef[j], sym_eq->sym[j], 0);
-+	struct equation_pos pos = {};
-+	struct scalar bounds;
-+
-+	/* the other equation can be a wrong guess, and then both are lost */
-+	if (eqs == &env->eq_env->join_state.equations)
-+		return false;
-+	while (b.coef && bpf_find_next_diff(env, eqs, &a, &b, &pos, &diff)) {
-+		if (!is_plus_minus_one(diff.coef) || var_symno(diff.var) == NO_SYM ||
-+		    var_symno(diff.var) == sym_eq->sym[one_use])
-+			continue;
-+		scalar_scale(&bounds, &eqs->syms[sym_eq->sym[one_use]], -sym_eq->coef[one_use]);
-+		refine_sym(env, eqs, diff, bounds, 1);
-+		eqs->sym_equations[pos.next - 1].insn_idx = -1;
-+		return true;
-+	}
-+	return false;
++	if (!rold->id)
++		return !rcur->id;
++	bpf_add_cost(env, env->pkt_pair_cnt, BPF_COST_SCAN);
++	for (; p < env->pkt_pairs + env->pkt_pair_cnt; p++)
++		if (p->old == pair.old)
++			return p->cur == pair.cur && p->delta == pair.delta;
++	return bpf_add_pkt_pair(env, &pair);
 +}
 +
 +/*
-+ * No xreg holds the sym at @pos of @def_equation any more. Eliminate it from the equations:
-+ *	p' = sym0 + len, sym0 = 8 * trip + sym1	->	p' = 8 * trip + sym2, sym2 is sym1 + len
++ * The bytes that are checked for @rold are checked for @rcur. This matters even if the range
++ * is below the offset: the program can move the pointer back.
 + */
-+static bool eliminate_sym(struct bpf_verifier_env *env, struct bpf_equations *eqs,
-+			  struct bpf_sym_equation *def_equation, int pos)
++static bool pkt_range_safe(const struct bpf_reg_state *rold, const struct bpf_reg_state *rcur)
 +{
-+	struct sym_scratch *scratch = env->eq_env->scratch;
-+	int one_use = find_one_use_sym(scratch, def_equation), i, j, k;
-+	struct bpf_sym_equation *sym_eq, def = *def_equation;
-+	struct scalar bounds, rest, *s;
-+	bool spare = def.insn_idx < 0;
-+	u32 one_use_sym;
-+	s64 factor;
-+
-+	if (one_use < 0 || one_use == pos || !is_plus_minus_one(def.coef[pos]))
++	if (pkt_min_len(rold) > pkt_min_len(rcur))
 +		return false;
-+	def_equation->sym[0] = NO_SYM;
-+	rest = eqs->syms[def.sym[one_use]];
-+	for_each_sum(env, eqs, sym_eq) {
-+		i = find_sym_pos(sym_eq, def.sym[pos]);
-+		if (i == 3 || sym_eq == def_equation)
++	/* the range tells no more than pkt_min_len() */
++	if (!rold->range || rold->range == pkt_min_len(rold))
++		return true;
++	/* AT_PKT_END or BEYOND_PKT_END */
++	if (rold->range < 0 || rcur->range < 0)
++		return rold->range == rcur->range;
++	if (pkt_has_bytes_left(rold) && pkt_has_bytes_left(rcur))
++		return pkt_bytes_left(rold) <= pkt_bytes_left(rcur);
++	return rold->range <= rcur->range && rold->r64.base == rcur->r64.base &&
++	       rold->r64.size == rcur->r64.size;
++}
++
+ static void __clean_func_state(struct bpf_verifier_env *env,
+ 			       struct bpf_func_state *st,
+ 			       u16 live_regs, int frame)
+@@ -228,6 +279,50 @@ int bpf_clean_verifier_state(struct bpf_verifier_env *env, struct bpf_verifier_s
+ 	return bpf_renumber_ids(env, st);
+ }
+ 
++/*
++ * Values of one type and object differ only in a number: the value of a scalar, the offset
++ * of a pointer.
++ *
++ * Types have to match exactly, including their modifiers (like PTR_MAYBE_NULL, MEM_RDONLY, etc).
++ * A pointer is not a number: numbers are allowed to leak while pointers are not. A pointer is
++ * not its MAYBE_NULL variant: a NULL check changes all xregs with the same id.
++ */
++bool bpf_same_type_and_object(struct bpf_verifier_env *env, const struct bpf_reg_state *a,
++			      const struct bpf_reg_state *b)
++{
++	if (a->type != b->type)
++		return false;
++	if (a->type == SCALAR_VALUE || a->type == NOT_INIT || type_is_pkt_pointer(a->type) ||
++	    base_type(a->type) == PTR_TO_ARENA)
++		return true;
++	if (!reg_object_equal(a, b))
++		return false;
++	/* Only what an insn can make: see check_stack_access_for_ptr_arithmetic() */
++	if (bpf_reg_has_range(a) && (a->type != PTR_TO_STACK || env->bypass_spec_v1))
++		return true;
++	return scalar_equal(scalar_of(a), scalar_of(b));
++}
++
++/* Returns true if (rold safe implies rcur safe) */
++static bool regsafe(struct bpf_verifier_env *env, const struct bpf_reg_state *rold,
++		    const struct bpf_reg_state *rcur)
++{
++	bpf_add_cost(env, 1, BPF_COST_XREG);
++	if (rold->type == NOT_INIT)
++		/* nothing can be done with it */
++		return true;
++	if (!rcur || !bpf_same_type_and_object(env, rold, rcur))
++		return false;
++	/* The offset is not tracked. */
++	if (base_type(rold->type) == PTR_TO_ARENA)
++		return true;
++	if (type_is_pkt_pointer(rold->type) &&
++	    (!pkt_range_safe(rold, rcur) || !check_pkt_ids(env, rold, rcur)))
++		return false;
++	/* new val must satisfy old val knowledge */
++	return bpf_scalar_subsumes(rold, rcur);
++}
++
+ static struct bpf_reg_state unbound_reg;
+ 
+ static __init int unbound_reg_init(void)
+@@ -272,7 +367,7 @@ static struct bpf_reg_state *scalar_reg_for_stack(struct bpf_verifier_env *env,
+ }
+ 
+ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
+-		      struct bpf_func_state *cur, struct bpf_idmap *idmap)
++		      struct bpf_func_state *cur)
+ {
+ 	int i, spi;
+ 
+@@ -287,6 +382,7 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
+ 		int im = i % BPF_REG_SIZE;
+ 		u8 old_type;
+ 
++		bpf_add_cost(env, 1, BPF_COST_SCAN);
+ 		spi = i / BPF_REG_SIZE;
+ 		old_slot = bpf_stack_slot(old, spi);
+ 		old_type = old_slot->slot_type[im];
+@@ -295,6 +391,13 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
+ 		if (old_type == STACK_INVALID || old_type == STACK_POISON)
+ 			continue;
+ 
++		/* it can be filled into a register that is unreadable */
++		if (old_type == STACK_SPILL && old_slot->spilled_ptr.type == NOT_INIT &&
++		    (env->allow_uninit_stack ||
++		     (cur_slot && cur_slot->slot_type[im] != STACK_INVALID &&
++		      cur_slot->slot_type[im] != STACK_POISON)))
 +			continue;
-+		j = find_one_use_sym(scratch, sym_eq);
-+		for (k = 0; k < 3 && j < 0 && spare; k++)
-+			if (k != i && sym_eq->coef[k] && !scratch[sym_eq->sym[k]].determined)
-+				j = k;
-+		if (j < 0)
++
+ 		if (env->allow_uninit_stack && old_type == STACK_MISC)
+ 			continue;
+ 
+@@ -320,7 +423,7 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
+ 			old_reg = scalar_reg_for_stack(env, old_slot, im);
+ 			cur_reg = scalar_reg_for_stack(env, cur_slot, im);
+ 			if (old_reg && cur_reg) {
+-				if (!regsafe(env, old_reg, cur_reg, idmap))
++				if (!regsafe(env, old_reg, cur_reg))
+ 					return false;
+ 				i += (im == 0 ? BPF_REG_SIZE - 1 : 3);
+ 				continue;
+@@ -331,7 +434,12 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
+ 		 * it will be safe with zero-initialized stack.
+ 		 * The opposite is not true
+ 		 */
+-		if (old_type == STACK_MISC && cur_slot->slot_type[im] == STACK_ZERO)
++		if (old_type == STACK_MISC &&
++		    (cur_slot->slot_type[im] == STACK_ZERO ||
++		     is_spilled_scalar_after(cur_slot, im)))
 +			continue;
-+		bpf_add_cost(env, 4, BPF_COST_XREG);
-+		factor = -sym_eq->coef[i] * def.coef[pos];
-+		scalar_scale(&bounds, &eqs->syms[sym_eq->sym[j]], sym_eq->coef[j]);
-+		/* no xreg gives the value of that sym. The sym of @def takes its place. */
-+		if (!sym_has_one_use(scratch, sym_eq->sym[j])) {
-+			sym_eq->sym[j] = def.sym[one_use];
-+			spare = false;
++		if (old_type == STACK_ZERO && is_spilled_scalar_after(cur_slot, im) &&
++		    bpf_register_is_null(&cur_slot->spilled_ptr))
+ 			continue;
+ 		if (old_type != cur_slot->slot_type[im])
+ 			/*
+@@ -355,34 +463,13 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
+ 			 * (bpf_reg_state) {.type = PTR_TO_STACK, .off = -16}
+ 			 * such verifier states are not equivalent.
+ 			 */
+-			if (!regsafe(env, &old_slot->spilled_ptr, &cur_slot->spilled_ptr, idmap))
++			if (!regsafe(env, &old_slot->spilled_ptr, &cur_slot->spilled_ptr))
+ 				return false;
+ 			break;
+ 		case STACK_DYNPTR:
+-			old_reg = &old_slot->spilled_ptr;
+-			cur_reg = &cur_slot->spilled_ptr;
+-			if (old_reg->dynptr.type != cur_reg->dynptr.type ||
+-			    old_reg->dynptr.first_slot != cur_reg->dynptr.first_slot ||
+-			    !check_ids(old_reg->id, cur_reg->id, idmap) ||
+-			    !check_ids(old_reg->parent_id, cur_reg->parent_id, idmap))
+-				return false;
+-			break;
+ 		case STACK_ITER:
+-			old_reg = &old_slot->spilled_ptr;
+-			cur_reg = &cur_slot->spilled_ptr;
+-			if (old_reg->type != cur_reg->type ||
+-			    old_reg->iter.btf != cur_reg->iter.btf ||
+-			    old_reg->iter.btf_id != cur_reg->iter.btf_id ||
+-			    old_reg->iter.state != cur_reg->iter.state ||
+-			    old_reg->iter.loops != cur_reg->iter.loops ||
+-			    !check_ids(old_reg->id, cur_reg->id, idmap))
+-				return false;
+-			break;
+ 		case STACK_IRQ_FLAG:
+-			old_reg = &old_slot->spilled_ptr;
+-			cur_reg = &cur_slot->spilled_ptr;
+-			if (!check_ids(old_reg->id, cur_reg->id, idmap) ||
+-			    old_reg->irq.kfunc_class != cur_reg->irq.kfunc_class)
++			if (!reg_object_equal(&old_slot->spilled_ptr, &cur_slot->spilled_ptr))
+ 				return false;
+ 			break;
+ 		case STACK_MISC:
+@@ -398,6 +485,114 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
+ 	return true;
+ }
+ 
++static const struct bpf_stack_state *held_slot(const struct bpf_func_state *f, u32 i)
++{
++	return i < bpf_stack_nr_slots(f) && bpf_slot_is_held(bpf_stack_slot(f, i)) ?
++	       bpf_stack_slot(f, i) : NULL;
++}
++
++static bool same_refs(const struct bpf_verifier_state *a, const struct bpf_verifier_state *b)
++{
++	u32 i;
++
++	for (i = 0; i < a->acquired_refs; i++)
++		if (a->refs[i].type != b->refs[i].type || a->refs[i].id != b->refs[i].id ||
++		    memcmp(&a->refs[i].ptr, &b->refs[i].ptr, sizeof(u64)))
++			return false;
++	return true;
++}
++
++/*
++ * The join_key of a state is what has no join:
++ * - what is held: references, locks, dynptrs, iterators, irq flags
++ * - the call chain and the instance
++ * - the peeled trip
++ */
++bool bpf_same_join_key(const struct bpf_verifier_state *a, const struct bpf_verifier_state *b)
++{
++	const struct bpf_stack_state *sa, *sb;
++	const struct loop_stack_entry *ea, *eb;
++	const struct bpf_func_state *fa, *fb;
++	u32 fr, i;
++
++	if (memcmp(&a->join_key, &b->join_key, sizeof(a->join_key)) ||
++	    a->instance_id != b->instance_id || !same_refs(a, b))
++		return false;
++	for (fr = 0; fr <= a->curframe; fr++) {
++		fa = a->frame[fr];
++		fb = b->frame[fr];
++		if (memcmp(&fa->join_key, &fb->join_key, sizeof(fa->join_key)) ||
++		    fa->loop_stack_cnt != fb->loop_stack_cnt)
++			return false;
++		for (i = 0; i < fa->loop_stack_cnt; i++) {
++			ea = &fa->loop_stack[i];
++			eb = &fb->loop_stack[i];
++			if (ea->loop != eb->loop || ea->peeled != eb->peeled ||
++			    (ea->peeled && ea->trip != eb->trip))
++				return false;
 +		}
-+		s = &eqs->syms[sym_eq->sym[j]];
-+		scalar_add_scaled(s, &bounds, &rest, factor * def.coef[one_use]);
-+		scalar_bounds_sync(s);
-+		sym_eq->coef[j] = 1;
-+		sym_eq->coef[i] = factor * def.coef[3 - pos - one_use];
-+		sym_eq->sym[i] = def.sym[3 - pos - one_use];
-+		sym_eq->off += factor * def.off;
-+		sym_eq->insn_idx = -1;
-+		/* a sym with one use is the last choice for the left side */
-+		swap(sym_eq->coef[j], sym_eq->coef[2]);
-+		swap(sym_eq->sym[j], sym_eq->sym[2]);
-+		one_use_sym = sym_eq->sym[2];
-+		if (!isolate_sym(sym_eq) ||
-+		    refine_same_sum(env, eqs, sym_eq, find_sym_pos(sym_eq, one_use_sym)))
-+			sym_eq->sym[0] = NO_SYM;
++		for (i = 0; i < max(bpf_stack_nr_slots(fa), bpf_stack_nr_slots(fb)); i++) {
++			sa = held_slot(fa, i);
++			sb = held_slot(fb, i);
++			if (!sa != !sb || (sa && (sa->slot_type[0] != sb->slot_type[0] ||
++						  !reg_object_equal(&sa->spilled_ptr,
++								    &sb->spilled_ptr))))
++				return false;
++		}
 +	}
 +	return true;
 +}
 +
-+/* No xreg holds @sym, no jump tested it. An op made it of the syms of @sum: w1 += 1; w1 += 1; */
-+static bool only_op_is_left(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
-+			    const struct bpf_sym_equation *sum, u32 sym)
++u64 bpf_hash64(const void *p, size_t len, u64 hash)
 +{
-+	const struct sym_scratch *scratch = &env->eq_env->scratch[sym];
-+	const struct bpf_sym_equation *op = scratch->op;
-+	struct scalar bounds;
++	siphash_key_t key = {{ hash }};
 +
-+	return op && scratch->use_cnt == 2 && (!op->coef[1] || find_sym_pos(sum, op->sym[1]) < 3) &&
-+	       (!op->coef[2] || find_sym_pos(sum, op->sym[2]) < 3) &&
-+	       run_op(env, st, op, &bounds) && scalar_subsumes(&st->equations.syms[sym], &bounds);
++	return siphash(p, len, &key);
 +}
 +
-+static bool equation_is_useless(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
-+				const struct bpf_sym_equation *sym_eq)
++/*
++ * The hash of the join_key and of the insn. The seed is random, so a program cannot select
++ * states that collide. Only a collision can change a result.
++ */
++u64 bpf_hash_join_key(const struct bpf_verifier_env *env, const struct bpf_verifier_state *st)
 +{
-+	const struct sym_scratch *scratch = env->eq_env->scratch;
-+	int i, sym_cnt = 0, one_use_cnt = 0;
++	u64 hash = bpf_hash64(&st->join_key, sizeof(st->join_key), env->hash_seed +
++			      ((u64)st->instance_id << 32 | st->insn_idx));
++	u32 fr, i, trip;
++	const struct bpf_stack_state *slot;
++	const struct loop_stack_entry *e;
++	const struct bpf_func_state *f;
 +
-+	if (is_op(sym_eq))
-+		return sym_has_one_use(scratch, sym_eq->sym[0]) ||
-+		       (!sym_eq->coef[1] && !sym_eq->coef[2]);
-+	for (i = 0; i < 3; i++) {
-+		sym_cnt += sym_eq->coef[i] && !only_op_is_left(env, st, sym_eq, sym_eq->sym[i]);
-+		if (!sym_has_one_use(scratch, sym_eq->sym[i]))
-+			continue;
-+		one_use_cnt++;
-+		if ((sym_eq->coef[i] & 1) && scalar_is_unknown(&st->equations.syms[sym_eq->sym[i]]))
-+			return true;
-+	}
-+	return one_use_cnt >= sym_cnt - 1;
-+}
-+
-+static void forget_useless_equations(struct bpf_verifier_env *env, struct bpf_verifier_state *st)
-+{
-+	struct bpf_equations *eqs = &st->equations;
-+	struct sym_scratch *scratch = env->eq_env->scratch;
-+	struct bpf_xreg_equation *xreg_eq, *next;
-+	struct bpf_sym_equation *sym_eq;
-+	bool more;
-+	int i;
-+
-+	do {
-+		more = false;
-+		for_each_sym_equation(env, eqs, sym_eq) {
-+			if (sym_eq->sym[0] == NO_SYM || !equation_is_useless(env, st, sym_eq))
++	for (i = 0; i < st->acquired_refs; i++)
++		hash = bpf_hash64(&st->refs[i].ptr, sizeof(u64), hash + st->refs[i].type);
++	for (fr = 0; fr <= st->curframe; fr++) {
++		f = st->frame[fr];
++		hash = bpf_hash64(&f->join_key, sizeof(f->join_key), hash);
++		for (i = 0, e = f->loop_stack; i < f->loop_stack_cnt; i++, e++) {
++			trip = e->peeled ? e->trip : -1;
++			hash = bpf_hash64(&trip, sizeof(trip), hash);
++		}
++		for (i = 0; i < bpf_stack_nr_slots(f); i++) {
++			slot = held_slot(f, i);
++			if (!slot)
 +				continue;
-+			for (i = 0; i < 3; i++)
-+				more |= sym_eq->coef[i] && --scratch[sym_eq->sym[i]].use_cnt == 1;
-+			sym_eq->sym[0] = NO_SYM;
++			hash = bpf_hash64(&slot->spilled_ptr,
++					  offsetof(struct bpf_reg_state, var_off), hash + i);
 +		}
-+	} while (more && !over_limit(env));
-+	forget_sym_equations(env, eqs, S32_MIN);
-+	next = eqs->xreg_equations;
-+	for_each_xreg_equation(env, eqs, xreg_eq) {
-+		if (xreg_eq->coef && !sym_has_one_use(scratch, xreg_eq->sym))
-+			*next++ = *xreg_eq;
-+		else if (xreg_eq->coef)
-+			scratch[xreg_eq->sym].use_cnt = 0;
 +	}
-+	eqs->xreg_equation_cnt = next - eqs->xreg_equations;
++	return hash;
 +}
 +
-+/* The sym that @sym_eq determines. 3: all are determined. -1: more than one is not. */
-+static int find_undetermined_sym(const struct sym_scratch *scratch,
-+				 const struct bpf_sym_equation *sym_eq)
++static bool loop_stack_safe(struct bpf_func_state *old, struct bpf_func_state *cur)
 +{
-+	int i, pos = 3;
++	u32 i;
 +
-+	for (i = 0; i < 3; i++) {
-+		if (!sym_eq->coef[i] || scratch[sym_eq->sym[i]].determined)
-+			continue;
-+		if (pos < 3 || (i && is_op(sym_eq)))
-+			return -1;
-+		pos = i;
-+	}
-+	return pos;
++	for (i = 0; i < old->loop_stack_cnt; i++)
++		if (!trip_index_safe(&old->loop_stack[i], &cur->loop_stack[i]))
++			return false;
++	return true;
 +}
 +
-+/* Only an op tells a sym of @sym_eq */
-+static bool leans_on_op(const struct sym_scratch *scratch, const struct bpf_sym_equation *sym_eq)
-+{
-+	int i;
-+
-+	for (i = 0; i < 3; i++)
-+		if (sym_eq->coef[i] && scratch[sym_eq->sym[i]].by_op)
-+			return true;
-+	return is_op(sym_eq);
-+}
-+
-+/* Delete what says nothing. Put the rest in the order that check_equations() needs. */
-+static void normalize_equations(struct bpf_verifier_env *env, struct bpf_verifier_state *st)
-+{
-+	struct sym_scratch *scratch = env->eq_env->scratch;
-+	struct bpf_equations *eqs = &st->equations;
-+	struct bpf_xreg_equation *xreg_eq;
-+	struct bpf_sym_equation *sym_eq, *done, *sweep_start, *end;
-+	bool substituted = false;
-+	struct expr expr;
-+	u32 i, cnt;
-+	int pos;
-+
-+	if (eqs->normalized)
-+		return;
-+	for (i = 0; i < eqs->sym_cnt; i++) {
-+		expr = make_expr(0, 0, eqs->syms[i].var_off.value);
-+		if (tnum_is_const(eqs->syms[i].var_off))
-+			substituted |= substitute_sym(env, eqs, i, &expr, NULL);
-+	}
-+	/* see read_from_truncation() */
-+	for_each_sym_equation(env, eqs, sym_eq)
-+		if (is_op(sym_eq) && bits_read(env, sym_eq) < 32)
-+			op_skips_truncations(env, eqs, sym_eq);
-+again:
-+	if (over_limit(env))
-+		eqs->xreg_equation_cnt = eqs->sym_equation_cnt = 0;
-+	forget_sym_equations(env, eqs, S32_MIN);
-+	count_sym_uses(env, eqs);
-+	for_each_sum(env, eqs, sym_eq) {
-+		if (sym_eq->coef[2] || sym_eq->sym[0] == NO_SYM)
-+			continue;
-+		refine_syms_by_equation(env, st, sym_eq, 0);
-+		expr = rhs_expr(sym_eq, 0);
-+		/* sym0 = 2 * sym1, the only use of sym1: it shows only the low bits of sym0 */
-+		if (!is_plus_minus_one(expr.coef) && sym_has_one_use(scratch, sym_eq->sym[1]))
-+			continue;
-+		substitute_sym(env, eqs, sym_eq->sym[0], &expr, sym_eq);
-+		substituted = true;
-+	}
-+	if (substituted) {
-+		forget_sym_equations(env, eqs, S32_MIN);
-+		count_sym_uses(env, eqs);
-+		/* two sums can be the same now. What an insn made keeps its form. */
-+		for_each_sum(env, eqs, sym_eq) {
-+			pos = find_one_use_sym(scratch, sym_eq);
-+			if (pos >= 0 && sym_eq->insn_idx < 0 &&
-+			    refine_same_sum(env, eqs, sym_eq, pos))
-+				sym_eq->sym[0] = NO_SYM;
-+		}
-+		forget_sym_equations(env, eqs, S32_MIN);
-+		count_sym_uses(env, eqs);
-+		substituted = false;
-+	}
-+	forget_useless_equations(env, st);
-+
-+	for_each_xreg_equation(env, eqs, xreg_eq)
-+		scratch[xreg_eq->sym].determined = true;
-+	/* The equations near the xregs go first. Cut a long chain: x += k; x += k; ... */
-+	done = eqs->sym_equations;
-+	end = eqs->sym_equations +
-+	      min(eqs->sym_equation_cnt, 2 * SUMS_PER_XREG * eqs->xreg_equation_cnt);
-+	do {
-+		bpf_add_cost(env, eqs->sym_equation_cnt - (done - eqs->sym_equations),
-+			     BPF_COST_COPY);
-+		sweep_start = done;
-+		for (sym_eq = done;
-+		     sym_eq < eqs->sym_equations + eqs->sym_equation_cnt && done < end; sym_eq++) {
-+			pos = find_undetermined_sym(scratch, sym_eq);
-+			/* sum += i & 1: go around the old sum, see eliminate_sym() */
-+			if (pos < 0 || (pos % 3 && sym_eq->insn_idx >= 0 &&
-+					!sym_has_one_use(scratch, sym_eq->sym[pos]) &&
-+					leans_on_op(scratch, sym_eq)))
-+				continue;
-+			if (sym_eq != done)
-+				swap(*sym_eq, *done);
-+			done++;
-+		}
-+		for (sym_eq = sweep_start; sym_eq < done; sym_eq++) {
-+			pos = find_undetermined_sym(scratch, sym_eq);
-+			if (pos == 3)
-+				continue;
-+			scratch[sym_eq->sym[pos]].by_op = leans_on_op(scratch, sym_eq);
-+			scratch[sym_eq->sym[pos]].determined = true;
-+		}
-+	} while (sweep_start < done && done < end && !over_limit(env));
-+	/* Nothing refines the operands of the other ops. The other sums need a sym with one use. */
-+	for (sym_eq = done; sym_eq < eqs->sym_equations + eqs->sym_equation_cnt; sym_eq++)
-+		for (i = 0; i < 3 && !is_op(sym_eq) && find_one_use_sym(scratch, sym_eq) < 0; i++)
-+			if (sym_eq->coef[i])
-+				scratch[sym_eq->sym[i]].new_symno = scratch[sym_eq->sym[i]].by_op;
-+	cnt = 0;
-+	for_each_sym_equation(env, eqs, sym_eq) {
-+		if (!is_op(sym_eq) || (sym_eq < done && !scratch[sym_eq->sym[0]].new_symno))
-+			continue;
-+		sym_eq->sym[0] = NO_SYM;
-+		cnt++;
-+	}
-+	if (cnt)
-+		goto again;
-+	/* the equations that are left lead through unknown syms. The last insn goes first. */
-+	for (cnt = 0; cnt < 2 && done < end; cnt++)
-+		for (sym_eq = eqs->sym_equations + eqs->sym_equation_cnt; sym_eq-- > done;)
-+			for (i = 0; i < 3 && (cnt || sym_eq->insn_idx >= 0); i++)
-+				if (sym_eq->coef[i] &&
-+				    !scratch[sym_eq->sym[i]].determined &&
-+				    eliminate_sym(env, eqs, sym_eq, i))
-+					goto again;
-+	if (done != eqs->sym_equations + eqs->sym_equation_cnt) {
-+		eqs->sym_equation_cnt = done - eqs->sym_equations;
-+		goto again;
-+	}
-+
-+	eqs->normalized = true;
-+	for (i = 0, cnt = 0; i < eqs->sym_cnt; i++) {
-+		scratch[i].refined_sweep = 0;
-+		if (!scratch[i].use_cnt)
-+			continue;
-+		if (cnt != i)
-+			eqs->syms[cnt] = eqs->syms[i];
-+		scratch[i].new_symno = cnt++;
-+	}
-+	if (cnt == eqs->sym_cnt)
-+		return;
-+	eqs->sym_cnt = cnt;
-+	for_each_xreg_equation(env, eqs, xreg_eq)
-+		xreg_eq->sym = scratch[xreg_eq->sym].new_symno;
-+	for_each_sym_equation(env, eqs, sym_eq)
-+		for (i = 0; i < 3; i++)
-+			if (sym_eq->coef[i])
-+				sym_eq->sym[i] = scratch[sym_eq->sym[i]].new_symno;
-+}
-+
-+/* Dead xregs are cleared */
-+void bpf_equations_clean(struct bpf_verifier_env *env, struct bpf_verifier_state *st)
-+{
-+	struct bpf_xreg_equation *xreg_eq, *next = st->equations.xreg_equations;
-+	struct bpf_equations *eqs = &st->equations;
-+	const struct scalar *s;
-+
-+	if (!env->eq_env)
-+		return;
-+	if (st->speculative)
-+		eqs->xreg_equation_cnt = 0;
-+	for_each_xreg_equation(env, eqs, xreg_eq) {
-+		s = equation_xreg_bounds(env, st, xreg_eq);
-+		if (s && !tnum_is_const(s->var_off)) {
-+			*next++ = *xreg_eq;
-+			continue;
-+		}
-+		refine_sym_from_xreg(env, st, xreg_eq);
-+		env->eq_env->scratch[xreg_eq->sym].refined_sweep = 0;
-+	}
-+	eqs->normalized &= next == xreg_eq;
-+	eqs->xreg_equation_cnt = next - eqs->xreg_equations;
-+	if (!eqs->xreg_equation_cnt)
-+		eqs->sym_equation_cnt = eqs->sym_cnt = 0;
-+	normalize_equations(env, st);
-+	eqs->clean_sym_cnt = eqs->sym_cnt;
-+}
-+
- static void print_operand(struct bpf_verifier_log *log, const char *prefix, struct expr expr)
- {
- 	if (expr.coef)
-diff --git a/kernel/bpf/equation.h b/kernel/bpf/equation.h
-index db068a58c30..35efc6d86a6 100644
---- a/kernel/bpf/equation.h
-+++ b/kernel/bpf/equation.h
-@@ -9,6 +9,9 @@
- #define VAR_NONE	U64_MAX
- #define NO_SYM		U32_MAX
+ /* compare two verifier states
+  *
+  * The state that gets to an insn doesn't have to be looked at when there is
+@@ -418,56 +613,30 @@ static bool func_states_equal(struct bpf_verifier_env *env, struct bpf_func_stat
+ 	u16 live_regs = env->insn_aux_data[insn_idx].live_regs_before;
+ 	u16 i;
  
-+/* For each xreg a state keeps twice that many sums and ops in total, see normalize_equations() */
-+#define SUMS_PER_XREG	2
-+
- /* coef * var + off. A constant has no var and coef == 0. */
- struct expr {
- 	s64 coef;
-diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index df1866c2b55..bb8fa008a8a 100644
---- a/kernel/bpf/states.c
-+++ b/kernel/bpf/states.c
-@@ -224,6 +224,7 @@ int bpf_clean_verifier_state(struct bpf_verifier_env *env, struct bpf_verifier_s
+-	if (old->callback_depth > cur->callback_depth)
+-		return false;
+-
+-	if (!old->no_stack_arg_load && cur->no_stack_arg_load)
+-		return false;
+-
+-	if (memcmp(&old->callback_ret_range, &cur->callback_ret_range,
+-		   sizeof(old->callback_ret_range)))
+-		return false;
+-
+-	if (old->in_rcu_callback_fn != cur->in_rcu_callback_fn)
+-		return false;
+-
+-	/* what the frame did to what its callers hold is a part of what it tells them */
+-	if (old->entry_refs != cur->entry_refs ||
+-	    old->entry_rcu_locks != cur->entry_rcu_locks ||
+-	    old->entry_preempt_locks != cur->entry_preempt_locks)
+-		return false;
+-
+-	if (!check_ids(old->frame_id, cur->frame_id, &env->idmap_scratch))
++	if (old->callback_depth > cur->callback_depth ||
++	    (!old->no_stack_arg_load && cur->no_stack_arg_load) ||
++	    !loop_stack_safe(old, cur))
+ 		return false;
  
- 		__clean_func_state(env, st->frame[i], live_regs, i);
- 	}
-+	bpf_equations_clean(env, st);
- 	return bpf_renumber_ids(env, st);
+ 	for (i = 0; i < MAX_BPF_REG; i++)
+-		if (((1 << i) & live_regs) &&
+-		    !regsafe(env, &old->regs[i], &cur->regs[i], &env->idmap_scratch))
++		if ((live_regs & BIT(i)) && !regsafe(env, &old->regs[i], &cur->regs[i]))
+ 			return false;
+ 
+-	if (!stacksafe(env, old, cur, &env->idmap_scratch))
+-		return false;
+-
+-	if (!stack_arg_safe(env, old, cur, &env->idmap_scratch))
+-		return false;
+-
+-	if (!loop_stack_safe(env, old, cur))
+-		return false;
++	/* outgoing stack args are a part of the state and must agree */
++	for (i = 0; i < old->out_stack_arg_cnt; i++)
++		if (!regsafe(env, &old->stack_arg_regs[i], bpf_stack_arg(cur, old, i)))
++			return false;
+ 
+-	return true;
++	return stacksafe(env, old, cur);
  }
  
+-/* Everything that @cur describes is described by @old. */
+-bool bpf_state_subsumes(struct bpf_verifier_env *env, struct bpf_verifier_state *old,
+-			struct bpf_verifier_state *cur)
++/* @old describes all that @cur describes. They have the same join_key. */
++bool bpf_state_subsumes(struct bpf_verifier_env *env, const struct bpf_verifier_state *old,
++			const struct bpf_verifier_state *cur)
+ {
+-	u32 insn_idx;
+ 	int i;
+ 
+-	if (old->curframe != cur->curframe)
+-		return false;
+-
+-	reset_idmap_scratch(env);
++	env->pkt_pair_cnt = 0;
+ 
+ 	/* Verification state from speculative execution simulation
+ 	 * must never stand for a non-speculative execution one.
+@@ -475,28 +644,10 @@ bool bpf_state_subsumes(struct bpf_verifier_env *env, struct bpf_verifier_state
+ 	if (old->speculative && !cur->speculative)
+ 		return false;
+ 
+-	if (old->callers_unknown != cur->callers_unknown)
+-		return false;
+-
+-	if (old->in_sleepable != cur->in_sleepable)
+-		return false;
+-
+-	if (old->unwound != cur->unwound || old->changed_pkt_data != cur->changed_pkt_data)
+-		return false;
+-
+-	if (!refsafe(old, cur, &env->idmap_scratch))
+-		return false;
+-
+-	/* for states to be equal callsites have to be the same
+-	 * and all frame states need to be equivalent
+-	 */
+-	for (i = 0; i <= old->curframe; i++) {
+-		insn_idx = bpf_frame_insn_idx(old, i);
+-		if (old->frame[i]->callsite != cur->frame[i]->callsite)
+-			return false;
+-		if (!func_states_equal(env, old->frame[i], cur->frame[i], insn_idx))
++	for (i = 0; i <= old->curframe; i++)
++		if (!func_states_equal(env, old->frame[i], cur->frame[i],
++				       bpf_frame_insn_idx(old, i)))
+ 			return false;
+-	}
+ 
+ 	return true;
+ }
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index cfcb20dda5e..01c492e0242 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -29,6 +29,7 @@
+ #include <linux/keyctl.h>
+ #include <linux/btf_ids.h>
+ #include <linux/poison.h>
++#include <linux/random.h>
+ #include <linux/module.h>
+ #include <linux/cpumask.h>
+ #include <linux/cnum.h>
+@@ -1816,16 +1817,12 @@ int bpf_copy_verifier_state(struct bpf_verifier_env *env, struct bpf_verifier_st
+ 		return err;
+ 	bpf_add_cost(env, bpf_xreg_cnt(src) + src->acquired_refs, BPF_COST_COPY);
+ 	dst_state->speculative = src->speculative;
+-	dst_state->in_sleepable = src->in_sleepable;
+-	dst_state->callers_unknown = src->callers_unknown;
+-	dst_state->unwound = src->unwound;
+-	dst_state->changed_pkt_data = src->changed_pkt_data;
+ 	dst_state->flow_entry = src->flow_entry;
+ 	dst_state->infeasible = src->infeasible;
+ 	dst_state->max_held_cnt = src->max_held_cnt;
+ 	dst_state->suspect_loops = src->suspect_loops;
++	dst_state->join_key = src->join_key;
+ 	dst_state->insn_idx = src->insn_idx;
+-	dst_state->curframe = src->curframe;
+ 	dst_state->last_insn_idx = src->last_insn_idx;
+ 	for (i = 0; i <= src->curframe; i++) {
+ 		dst = dst_state->frame[i];
+@@ -3796,6 +3793,11 @@ static int check_stack_write_var_off(struct bpf_verifier_env *env,
+ 	max_off = reg_smax(ptr_reg) + off + size;
+ 	if (value_regno >= 0)
+ 		value_reg = &cur->regs[value_regno];
++	/* no slot remembers the pointer, a load gets it as a number */
++	if (value_reg && __is_pointer_value(env->allow_ptr_leaks, value_reg)) {
++		verbose(env, "R%d leaks addr into stack\n", value_regno);
++		return -EACCES;
++	}
+ 	if ((value_reg && bpf_register_is_null(value_reg)) ||
+ 	    (!value_reg && is_bpf_st_mem(insn) && insn->imm == 0))
+ 		writing_zero = true;
+@@ -11418,7 +11420,6 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
+ 		if (is_async_cb_sleepable(env, insn))
+ 			env->sleepable_async_cb = true;
+ 		callee = async_cb->frame[0];
+-		callee->async_entry_cnt = state->frame[0]->async_entry_cnt + 1;
+ 
+ 		/* Convert bpf_timer_set_callback() args into timer callback args */
+ 		err = set_callee_state_cb(env, caller, callee, insn_idx);
+@@ -24736,6 +24737,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	env->max_cost = BPF_MAX_COST >> (is_priv ? 0 : BPF_LIMITS_SHIFT_UNPRIV);
+ 	env->pass_max_cost = U64_MAX;
+ 	env->max_mem = BPF_MAX_MEM >> (is_priv ? 0 : BPF_LIMITS_SHIFT_UNPRIV);
++	env->hash_seed = get_random_u64();
+ 	env->signature = attr->signature;
+ 
+ 	/* user could have requested verbose verifier output
+@@ -25083,6 +25085,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	kvfree(env->cfg.insn_postorder);
+ 	kvfree(env->succ);
+ 	kvfree(env->gotox_tmp_buf);
++	kvfree(env->pkt_pairs);
+ 	kvfree(env->callx_edges);
+ 	kvfree(env->callx_index.slots);
+ 	kvfree(env->func_ptrs);
 -- 
 2.55.0
 
