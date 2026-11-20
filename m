@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795163126;
-	b=YVdcO11M/hO0QQYyAOeyBhNmQQU03H4fMHjJ2q4rh+5HRLO/609lxhoFt43QYHokp99D
-	 W2Or2SP95PyRY/ardNTWBljRazhRjhQ+I2GxG7Z7BCGusKGy5j3XJIOqB2BKKf9mSYgBW
-	 xTk5rnnDJ8eD+enpDhVbK0F/EEGiegPTc3QuEqQabbQhlUhDsib538df1C8055Yx4FKaL
-	 /59nfYGND9tZyZ72dke1cO2DbHT84ga+XgHp5u8LayofQ5mHeWwhfuczXZHLBRZrddkMb
-	 C9VhYQNYlfcumYJ1ye2zkQn/GuMrgKxxjHtmOO+dfny+RX/rqkSfcrTaWzfP9ZQcP4A==
+	t=1795163129;
+	b=RXXOOhO7jB3wVrUMq54LDi//IIbjofrFmuFEw/0io0ypgg/4h4N/272exPd3YGYouX8C
+	 2yCsP6ooymfrYtVT36rc+cIxD3+OvkIxoppfc1e4ON5DE/SOD09DjkhCTxZlmvkgTTuAe
+	 kpUKC6M6tDH95ippSs+FBAFeYVT7tRIvWhHRoothoBODygmZ1LCFWkbxyiZy/ZjyFYiKh
+	 J27IoaZh8rgT14dZaFEP1Tzzk6l3hCjFDK10b/SWweE0WqiOyiNM0EID+iYoY4KuiEhux
+	 Gai2vyzjKyE1velGxGjo03PyZgXyopanPEMiM1ux0QB/qsMBoVvzxyhf82Jx6P/o/Jw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795163126;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795163129;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=j/8Ar/K08QnRFPOxHZ6zui4+dZIEn3WW+TgRFBb2LXo=;
-	b=x0+4G6zTZbZoF0uics2zm8WuiazJapVk8QDxmrsWFO2eSWRsru5pmsebCUNoaeKDaSn+
-	 yy6B3MTJ74Soe/PND57JNKdJjHC+ifJ5kmTShyx6X+e0oZZO6ECyFGo2JsvmNNdGGaFbr
-	 CfmPPBcrOdaqGPK+MnmoKhA+S8D6qSQcBfblVCgnynhweGakWn7bl63TrrsANF6rutLjj
-	 Y9QJopNYwhHpAQt/UmK0pJnhZHMX61wUNnvvpPf079cb9ltdHkqHfl9NhjIXF0Ig1My3h
-	 7QS4rcuPWePc8C6Z0dEk/R+arME/ELv7NcQxLPfwjIfdwDJjaxUQtsn/VNwQetVHMfQ==
+	bh=Ez13IOwOLNPPYWlxIajx2XcnRHlor2z7zZPOeodgmpM=;
+	b=lxN3p5KuPoyyX7kOLEwi2/HC4V4bAwdrm93mCdEv6Lj48hKFRNjrpMLR0ue2wFI0Mv8r
+	 rEtqK1/mKPsa96N5MrwcTsAndQjHlbiYd4xxZYdlE+e83l/DfZNnK+sD7oTc30hT3aKla
+	 zy8bKiSmfKhJmIfH+E6BVcZ6G+KXsAan2eZok+4E2u7QYusGeKlOgv25v2I+LoTCZBa9+
+	 yFhIS2Cic21OfWl9CL78r6tc0IHXvJgMAlq1ZvOwuxDZEiNIwfSnDgN9d9GUmwfR0Wltg
+	 4GqRkTC+apglBjlWq357czvY8wm+x1BfC7XMXaeVkgU+kuZo+PLoh7ehKJL9zROEemg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AmBQwOPn;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oHQfOx43;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6C85606A326
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 08:25:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1C81606A326
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 08:25:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AmBQwOPn
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C4621F000C6;
-	Fri, 20 Nov 2026 08:25:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oHQfOx43
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B0B81F000CA;
+	Fri, 20 Nov 2026 08:25:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795163126;
-	bh=j/8Ar/K08QnRFPOxHZ6zui4+dZIEn3WW+TgRFBb2LXo=;
+	s=k20260515; t=1795163129;
+	bh=Ez13IOwOLNPPYWlxIajx2XcnRHlor2z7zZPOeodgmpM=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=AmBQwOPnV9m1ByQuYRuvFojpqIyUCjGW//iZVWVWQz/7k82pg8Tqopfz1RUxAlPKC
-	 wxr/ncckw6AJESB19Q56XsWvuJXVtqawKhJ2XO5Uylc+oapDQPWdJYOzLVR+gBtxOV
-	 YNEM72EqJDO2sKbed1VP3zMPGMkikpiyld19R2mKfBXD/itNzPkL4+pPr7m2G/bFva
-	 YB5RZ7l/s4nIsZ4JQ9J0QJcaiMfTGZJAH8wgUeSNoG5QBBWvH/ZqrzmcoHjP5lmOZx
-	 hGVjqcVrbBbmkflbShKEBp+W7iDTFkj06BNg0m6gQ/GUDcAG/OGKZ2BtI6OZFQPNem
-	 nOE3vkOhIaFOQ==
-Content-Type: multipart/mixed; boundary="===============6137567754453418669=="
+	b=oHQfOx4340qiQrgCm1VmxNyaz1+jos2RTUVw1CHHBAjsTdkDVe1l7/avPxvnLsI3a
+	 dni4x3n0Nru1GgqCqYmNzUwqRxrtJ9Dk9O17PT4Z6u1D+QdwXSbWgJG8VwDKNopGKZ
+	 5gpGhD802V0V+v2fb1ZwaBooGypRbxSaX9SxogiUOEUoygfMDNZMCbiCrpRCruCowF
+	 By3CIT0JvLEKWFsyTBW6fZl+Z6RApsClptpWsgqQqR/6Cbk35SyKTBy/br+XikVFig
+	 d0I2iubHbHMaX1/CCVasI9bR2ZmQxNoN8eLG0Pa+8rDD/e9/gVM1VFXOYYvJ4wub+o
+	 4stE87FmigXVQ==
+Content-Type: multipart/mixed; boundary="===============3318702700188406068=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,102 +49,102 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <7a8ef9d86f606dad773f53efcfb9af9a614668f27b2e5b4d81c968a14ee10c76@mail.kernel.org>
-In-Reply-To: <20261120074430.2704488-12-alexei.starovoitov@gmail.com>
-References: <20261120074430.2704488-12-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next 11/49] bpf: Put a barrier where no mask fits
+Message-Id: <7b04662404b23938a69ae6f8e19f977600ba54626e25e2729d08a6532f71b8ce@mail.kernel.org>
+In-Reply-To: <20261120074430.2704488-8-alexei.starovoitov@gmail.com>
+References: <20261120074430.2704488-8-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next 07/49] bpf: Name an id after the xreg that has it
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 20 Nov 2026 08:25:25 +0000 (UTC)
+Date: Fri, 20 Nov 2026 08:25:28 +0000 (UTC)
 
---===============6137567754453418669==
+--===============3318702700188406068==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Put a barrier where no mask fits
+> bpf: Name an id after the xreg that has it
 
 TL;DR:
-- Possible NULL env->head dereference in check_loop_guard() for speculative
-  states
-- Build breaks: undefined budget_exit_insn() and note_pessimized_insn();
-  leave[] may overflow
-- ~16 unprivileged selftests not updated
+- Verifier log ids change (e.g. "Unreleased reference id=2" can't appear now),
+  so several selftest __msg() patterns likely fail; none updated
+- Id naming comment doesn't match bpf_renumber_ids(), and bpf_id_is_xreg() is
+  true for returned ids
+- reg_object_equal() is unused
 
 > diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
 > --- a/include/linux/bpf_verifier.h
 > +++ b/include/linux/bpf_verifier.h
-
-[ ... ]
-
-> @@ -1235,6 +1234,7 @@ struct bpf_verifier_env {
->  	/* a global function is verified for BPF_FUNC_CTX_NO_RCU_LOCK */
->  	bool no_rcu_read_lock;
->  	bool signature;
-> +	u8 bug:1;			/* ends the load, see bpf_note_bug() */
->  	u32 insn_aux_data_len;
-
-The comment points to bpf_note_bug(), but no such function exists in the
-tree, and nothing sets env->bug.  verifier_bug() and verifier_bug_if() only
-do BPF_WARN_ONCE() and bpf_log().
-
-The only reader is is_error_of_state() in verifier.c:
-
-    return err != -ENOMEM && err != -EINTR && !env->over_limit && !env->bug;
-
-Since env->bug is always 0, can the -EFAULT returned by verifier_bug() in a
-speculative state now be swallowed?  The old error_recoverable_with_nospec()
-only recovered -EPERM, -EACCES and -EINVAL, so with this change the insn
-gets a barrier, the path ends, and the program loads instead of being
-rejected.  Should the setter be added (for example in verifier_bug()), or
-the field and its use dropped?
-
-> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> --- a/kernel/bpf/fixups.c
-> +++ b/kernel/bpf/fixups.c
-
-[ ... ]
-
-> @@ -565,21 +566,31 @@ int bpf_patch_list_commit(struct bpf_verifier_env *env)
->  	return err;
+> @@ -241,6 +241,12 @@ static inline bool reg_fixed_part_equal(const struct bpf_reg_state *ra,
+>  	return ra->type == rb->type && !memcmp(&ra->raw, &rb->raw, sizeof(ra->raw));
 >  }
 >
-> -/* How a subprog leaves when it is out of budget, see push_budget_exit() */
-> -static struct bpf_insn budget_exit_insn(struct bpf_verifier_env *env, struct bpf_subprog_info *sub)
-> +/* How subprog @s leaves when it has to stop, see push_unwind_exit(). Returns the length. */
-> +static int emit_unwind_exit(struct bpf_verifier_env *env, int s, struct bpf_insn *buf)
+> +/* That and the ids, see bpf_renumber_ids() */
+> +static inline bool reg_object_equal(const struct bpf_reg_state *ra, const struct bpf_reg_state *rb)
+> +{
+> +	return !memcmp(ra, rb, offsetof(struct bpf_reg_state, var_off));
+> +}
+
+The commit message says "Equal sets have equal ids now, and
+reg_object_equal() is a memcmp()."  Nothing calls reg_object_equal() at
+this commit, or at the end of the series (a50a112fb866 "bpf: Delete the
+equations that say nothing").  refsafe(), regsafe() and the join code that
+would use it are not defined in this tree.
+
+Should the helper be added together with its first user, or should the
+changelog say that it is groundwork that is not used yet?
 
 [ ... ]
 
-This removes budget_exit_insn(), but bpf_insert_loop_guards() in this file
-still calls it:
+> @@ -1048,21 +1060,28 @@ struct bpf_id_pair {
+>  };
+>
+>  /*
+> - * A function that is verified on its own, see func_is_on_its_own(), has no ids of its caller.
+[ ... ]
+> + * At a join point each id gets the number of the xreg that has it, see bpf_renumber_ids().
+> + * The low bits give the origin of the id:
+> + *
+> + *  bpf_new_id()       an insn made it. It is renumbered at the end of the basic block.
+> + *  BPF_REF_ID()       it is held. The number is the index in refs[].
+> + *  BPF_XREG_ID()      the number is the first xreg that has it.
+> + *  BPF_RETURNED_ID()  a function on its own returned it. No xreg of the caller has it.
+[ ... ]
+> + */
+> +#define bpf_new_id(env)		(((env)->id_gen += 4) - 3)
+> +#define BPF_REF_ID(i)		(((i) + 1) << 2)
+> +#define BPF_XREG_ID(i)		((i) << 2 | 2)
+> +#define BPF_RETURNED_ID(id)	((id) | 1)
+> +
+> +static inline bool bpf_id_is_xreg(u32 id)
+> +{
+> +	return id & 2;
+> +}
 
-    leave[1] = BPF_MOV64_IMM(BPF_REG_2, 0);
-    leave[n - 1] = budget_exit_insn(env, sub);
+This comment says BPF_REF_ID() takes the index in refs[] and BPF_XREG_ID()
+takes the first xreg, but bpf_renumber_ids() in kernel/bpf/states.c passes
+other numbers:
 
-Is there a definition of budget_exit_insn() anywhere in the tree?  It looks
-like this is an undeclared function returning into a struct bpf_insn, so
-fixups.o would not build with CONFIG_BPF_SYSCALL=y.  The call is still
-there at the end of the series.
+  renumber_id(env, &st->refs[i].id, BPF_REF_ID(2 * i));
+  renumber_id(env, &st->refs[i].parent_id, BPF_REF_ID(2 * i + 1));
 
-Also, the commit message says:
+so BPF_REF_ID(1) is the name of refs[0].parent_id, not of refs[1].id.
+Likewise BPF_XREG_ID() gets 3 * xreg, 3 * xreg + 1 and 3 * xreg + 2 for
+id, parent_id and map_uid, and the xreg itself is numbered by
+fr * (BPF_ID_MAP_SIZE / MAX_CALL_FRAMES + 1) + ..., which differs from the
+hidden registers at 11..13 and fp-8 at MAX_BPF_EXT_REG defined earlier in
+the same header.
 
-    may_goto --> r0 = 0; exit            barrier before r0 = 0
+Can the refs index or the xreg be read back from a printed id the way the
+comment and the commit message describe?  The ids appear in "Unreleased
+reference id=%d" and in the register dumps.
 
-but the leave[] sequence built in bpf_insert_loop_guards() is still
-'r0 = 0; [r2 = 0;] exit' with no BPF_ST_NOSPEC().  Only
-bpf_insert_recursion_checks() was converted to emit_unwind_exit().  Since
-push_unwind_exit() now returns without pushing for a speculative state, the
-may_goto -> leave edge is not checked speculatively, so this barrier
-appears to be missing.
+Also, bpf_id_is_xreg() returns true for BPF_RETURNED_ID() values (bit 1 is
+set in 3 mod 4), while the comment says no xreg of the caller has those
+ids.  The current callers of arg_needs_caller() only become more
+conservative because of it, but is that the intended meaning of the name?
 
-A plain rename would not be enough either.  leave[] is sized 3 and n is
-'bpf_ret_reg_pair() ? 3 : 2', which is also used as the jump-back distance
-passed to bpf_patch_list_jump().  With the barrier and an R2 pair that is 4
-insns, so leave[] would overflow and the may_goto would land on the wrong
-insn.  Should leave[] be sized for emit_unwind_exit() and n taken from its
-return value?
+[ ... ]
 
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
 > --- a/kernel/bpf/verifier.c
@@ -152,171 +152,37 @@ return value?
 
 [ ... ]
 
-> +static void need_nospec(struct bpf_verifier_env *env, u32 idx)
-> +{
-> +	struct bpf_insn_aux_data *aux = &env->insn_aux_data[idx];
-> +	struct bpf_insn *insn = &env->prog->insnsi[idx];
->
-> +	/* nothing fits between it and the call */
-> +	if (bpf_is_unwind_goto(insn)) {
-> +		need_nospec(env, idx + 1);
-> +		return need_nospec(env, idx + insn->off + 1);
->  	}
-> +	note_pessimized_insn(env, idx);
-> +	aux->nospec = true;
-> +	aux->alu_state = 0;
-> +}
+> @@ -12586,7 +12490,7 @@ static int check_reference_leak(struct bpf_verifier_env *env, bool exception_exi
+>  			continue;
+>  		verbose(env, "Unreleased reference id=%d alloc_insn=%d\n",
+>  			state->refs[i].id, state->refs[i].insn_idx);
+> -		bpf_diag_leak(env, state->refs[i].id, state->refs[i].insn_idx, env->insn_idx);
+> +		bpf_diag_leak(env, &state->refs[i], env->insn_idx);
+>  		refs_lingering = true;
 
-Where is note_pessimized_insn() defined?  I could not find a function or
-macro with that name at this commit, at the series base or at the series
-end, and the kernel is built with -Werror=implicit-function-declaration, so
-verifier.c would not compile.  Is a definition missing from the series?
+The id printed here has different values now.  A reference id comes from
+bpf_new_id(), which gives 1, 5, 9, ..., or from a BPF_REF_ID() name given
+by bpf_renumber_ids(), which gives 4, 12, 20, ...  So the values 2 and 3
+can never be printed, but several selftests match exactly those values:
 
-> +static int sanitize_err(struct bpf_verifier_env *env, int err)
-> +{
-> +	if (err != NO_MASK_FITS)
-> +		return err;
-> +	if (env->cur_state->speculative)
-> +		return -EACCES;
-> +	need_nospec(env, env->insn_idx);
-> +	return 0;
-> +}
+  tools/testing/selftests/bpf/progs/verifier_sock.c
+      __msg("Unreleased reference id=2 alloc_insn=6")
+  tools/testing/selftests/bpf/progs/iters_state_safety.c
+      __msg("Unreleased reference id=2 alloc_insn=7")
+  tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
+      __msg("Unreleased reference id=3 alloc_insn={{[0-9]+}}")
+  tools/testing/selftests/bpf/progs/rbtree_fail.c
+      __msg("Unreleased reference id=3 alloc_insn={{[0-9]+}}")
 
-The messages that the old sanitize_err() printed are gone:
+In the sockmap case check_helper_call() gives R0 the id bpf_new_id() == 1
+for PTR_MAYBE_NULL, and then acquire_reference() gives it bpf_new_id() ==
+5, so the log would say "Unreleased reference id=5 alloc_insn=6" where it
+used to say id=2.  Other __msg() patterns in 13 progs/ files match numeric
+ids such as "(id=1," and depend on the same numbering.
 
-    R%d has unknown scalar with mixed signed bounds
-    R%d has pointer with unsupported alu operation
-    R%d tried to %s from different maps, paths or scalars
-    R%d tried to %s beyond pointer bounds
-
-The commit says "Some unprivileged programs load now", but nothing in the
-series touches tools/testing/selftests/bpf/.  About 16 existing tests still
-expect __failure_unpriv and/or these __msg_unpriv() strings:
-
-    progs/verifier_bounds_deduction.c (8)
-    progs/verifier_value_ptr_arith.c (5)
-    progs/verifier_map_ptr.c (2)
-    progs/verifier_bounds.c (1)
-
-For example, "check deducing bounds from const, 2" ('r1 -= r0' on ctx)
-expects "R1 has pointer with unsupported alu operation" unprivileged, but
-retrieve_ptr_limit() now returns NO_MASK_FITS for PTR_TO_CTX, so the insn
-just gets a barrier and loads.  "map access: known scalar += value_ptr
-unknown vs const" expects "tried to add from different maps, paths or
-scalars", and "subtraction bounds (map value) variant 2" expects "R1 has
-unknown scalar with mixed signed bounds".
-
-Should these tests be updated in the same series, so that test_progs -t
-verifier does not fail?
-
-[ ... ]
-
-> @@ -20669,12 +20661,14 @@ static bool guard_reads_unset_reg(struct bpf_verifier_env *env,
->  static int push_unwind_exit(struct bpf_verifier_env *env)
->  {
->  	struct bpf_subprog_info *sub = &env->subprog_info[cur_func(env)->subprogno];
->  	struct bpf_verifier_state *branch;
->  	struct bpf_reg_state *regs;
->
-> +	if (env->cur_state->speculative)
-> +		return 0;
->  	branch = push_stack(env, sub->bail_insn, env->insn_idx, false);
-
-[ ... ]
-
-> @@ -20750,14 +20744,14 @@ static int check_loop_guard(struct bpf_verifier_env *env)
->  	if (!aux->guard_no_unwind) {
-> -		err = push_budget_exit(env);
-> +		err = push_unwind_exit(env);
->  		if (err)
->  			return err;
->  		env->head->guard_edge = BPF_GUARD_LEAVES_SUBPROG;
-
-Can this dereference a NULL env->head?  push_unwind_exit() now returns 0
-without pushing anything for a speculative state, but check_loop_guard()
-still treats 0 as "a branch was pushed" and writes env->head->guard_edge.
-
-check_loop_guard() runs from do_check_block() before do_check_insn(), and
-env->head is emptied after every insn by flow_drain() (and by
-free_pushed_states()), so nothing has been pushed for the current insn at
-that point.  If some other element were on the list, it would get the
-BPF_GUARD_LEAVES_SUBPROG mark instead.
-
-This looks reachable.  A loader with CAP_BPF but not CAP_PERFMON
-(bypass_spec_v1 false) can load a program with a loop that needs a may_goto
-guard.  A speculative state is pushed inside the loop body by
-sanitize_speculative_path() (from sanitize_ptr_alu() or from a branch whose
-outcome is known).  copy_func_state() copies loop_stack, so on its next
-trip that state reaches the guard_place insn.  In the main prog with
-zero_is_valid_retval(), state_can_unwind() keeps aux->guard_no_unwind false,
-and the state reaches the write above.  Before this commit
-push_budget_exit() pushed a branch for speculative states too.
-
-check_loop_guard() and push_unwind_exit() are unchanged at the end of the
-series.  Would skipping the block for speculative states, for example
-'if (!aux->guard_no_unwind && !env->cur_state->speculative)', or having
-push_unwind_exit() report whether it pushed, be the right fix?
-
-[ ... ]
-
-> @@ -20916,24 +20934,23 @@ static int do_check_block(struct bpf_verifier_env *env, int prev_insn_idx)
->  		if (state->speculative && insn_aux->nospec)
->  			goto process_bpf_exit;
->
-> -		err = check_loop_guard(env);
->  		if (err)
->  			return err;
->
-> -		err = check_recursion_guard(env);
-> +		err = check_loop_guard(env) ?: check_recursion_guard(env);
->  		if (err)
->  			return err;
-
-Is the first 'if (err) return err;' now dead?  At that point err only holds
-a value that was already checked after bpf_check_limits() and
-bpf_prog_offload_verify_insn(), so it can never fire.
-
->  		err = do_check_insn(env, &do_print_state);
-> -		if (error_recoverable_with_nospec(err) && state->speculative) {
-> +		fixups = insn_aux->fixups;
-> +		if (nospec_ends_path(env, state, err)) {
->  			/* Prevent this speculative path from ever reaching the
->  			 * insn that would have been unsafe to execute.
-> +			 * What it noted does not apply to the other paths.
->  			 */
-> +			insn_aux->fixups = fixups;
-
-The snapshot 'fixups = insn_aux->fixups;' is taken after do_check_insn()
-has run, so 'insn_aux->fixups = fixups' writes back the same bytes.  Does
-this restore anything?  The comment ("What it noted does not apply to the
-other paths") and the commit message ("What the state noted at the insn is
-dropped") describe a rollback that does not happen.
-
-Whatever the failing speculative state wrote into struct bpf_insn_fixups
-before its error stays for later states and passes: ptr_type through
-save_aux_ptr_type(), non_arena_load in check_load_mem() (set before
-save_aux_ptr_type() can fail), map_ptr_state, nospec_result and so on.
-need_nospec() only clears alu_state.  Since an insn has one fixup for all
-states (fixups_differ()), a value that came only from a speculative path
-can make a later non-speculative state fail.  For example, non_arena_load
-set on the speculative path, and then a real path that loads an __arena
-member fails with "an insn loads an arena pointer member on one path and
-something else on another".  A stale ptr_type can likewise produce "same
-insn cannot be used with different pointers".
-
-Commit 0462c546cfe6 ("bpf: Make equations from ALU, spill, fill and call
-insns") later in the series moves 'fixups = insn_aux->fixups;' in front of
-do_check_insn().  Should that move be part of this patch, since at this
-commit the restore is a no-op?
-
->  			need_nospec(env, prev_insn_idx);
->  			free_pushed_states(env);
->  			goto process_bpf_exit;
-
-Related to the removal of the only caller of error_recoverable_with_nospec()
-here, the function stays behind as an unused static function.  -Wall
-reports it as "defined but not used", which is a build error with
-CONFIG_WERROR=y.  It is still present at the end of the series.
+No commit in b96f99ad6132..a50a112fb866 touches tools/testing/selftests/bpf,
+and the commit message does not mention that the log output changes.  Do
+these expected messages need updating?
 
 
 ---
@@ -324,4 +190,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/44698144269
---===============6137567754453418669==--
+--===============3318702700188406068==--
