@@ -1,75 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795207358;
-	b=DY17A3z2Fng4AJFLHq7+NDFv/vuZGPBoXpItRXAINIvWMV1U8LzmtQywGhJSgCHv6fKn
-	 LoC8SVJRRSkaphgqGCC15xXLyFfFrGrDaIbWeSJraFeKWQSDE9cJ56765WfvbYx89uZzd
-	 AmDsca9iOVGk/WMLGzedW0BdCjs3wyoZz+UZWy2Bv7d4BFTuD4Z4eYcPnfAT3/++OmCDQ
-	 8LCI7UcUvo2DC4YKVVt+s8oKILQEEF2ATFOuPvFgv8mltqoFRysm+FKHGZOREBTPiHTUQ
-	 Rd/3VhfPfvqBYbCxFW6qsGg3VOmTechizRtt6S/ZNLDG3LjxdIdHkmqUGaKdP7qG5Nw==
+	t=1795207362;
+	b=EgVvmo609fhelSnFcUZ3JI/Z3Q1nANhlg6DcBRYXpXEARhL9fgAgKnXcHjnrtHQ2v/Rp
+	 FHIZ4MImcYfY3uE+pNjaw2LjoF0CL0vH2xcQwS7G0wdcVt0cgUBW7Dx7XsUxLzun50ywd
+	 DWlr3YTN3bZEVqvq1HOTOk0pAKXZ/V4yKjf3uMfFBCdFBZxE3M1qqj+IPJMT9S5Z8Z2OC
+	 +jvS5cmDj88H5cHtlWUEDIVk4cpCx2QhxaDAshdiK7JhSW9z50HVm8sx3K8O/DdV/i9Xi
+	 9OgyEOIyctCDPCHewzYLRsVo5PWBQZOEXurNkFsLVN8axiyd+QSsSbmcpSTdFmIXNXQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795207358;
-	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Gm-Message-State:
-	 X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:Date:Message-ID:
-	 MIME-Version:In-Reply-To:References:Content-Type:
+	a=rsa-sha256; c=relaxed/relaxed; t=1795207362;
+	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:MIME-Version:In-Reply-To:References:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=rtb6dKj5LN/FEVm2jhNPaNf/E5DPE0maWn7m8EHNqa0=;
-	b=G9rzgJdK6olGit15itCuHSZ7yY1NrtVh/0f8QQ4W/VcpjHGbIWZahSak3ikCERTXi6wp
-	 W4l5M4uufn/z160A5fLjFkjlXh1PKofITsIDq3xDGBm1ThIIeBxvvIMIwNctCycLEbT4H
-	 j96Wc8bI6ixhdg+yzcE8sTPzniHQ5PVmck1iA0Try9rBge1e7KpZ5wgE5d5EnMsz4PSqB
-	 YqiJwQwKEDGa32ueK9ZROuznowH0sYjJSEhvgM8yY8MEeCKWmvZoA0U+gkVIt9wYIqwRm
-	 rBGkW5S4ldW/R4DoT1q6CvwKyGinGmcFLSbIIkmOl3SLt9DTYCmimTRC1YuNdH8xTOA==
+	bh=zvhZlU0ddPN9o2nM/nrK5XTVxzJuCMmPH0NhVRQSvdI=;
+	b=noCjZSe7movAMdEd8UP+pkrZPMHc4o+7ftygH3gFld4C9lPWSCOfmkJwtSmw+EzjT8vU
+	 c+MkZlISloeN0VEyy8cHRzNMMitVXibiLb2+yyZ18bnLL8kVO+qtlGfryhVmVIVKFAZ58
+	 x2q/iTNxtw6B/Fm6jg73VSfNwbOsIKkLFrxFi9/aIPlVy87AV/hMGN4xgvBo5TTsLjoQ8
+	 FSlFTLnamuFwxBfOlRvUQyLa2uEAro9PUYmv3Gfh7XqNrq3bjWt4SYhA7sXrM5pQx9gRq
+	 DpVFuXsjQoNiR7jJsnOBGRHchPQO7yEdLDHEU+fk1VM2gP3xIgAKOtV/Iqm3l9mZB0Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=fail header.from=kernel.org;
 	spf=pass smtp.mailfrom=gmail.com;
-	arc=none smtp.remote-ip=209.85.222.177
-Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
+	arc=none smtp.remote-ip=209.85.160.174
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 073FE60A2601
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 20:42:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 073FE60A2601
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E754606A6CC
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 20:42:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3E754606A6CC
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-945e6d9ceeaso121080285a.0
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 12:42:36 -0800 (PST)
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-55c5b6584ceso10065051cf.2
+        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 12:42:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795207356; x=1795812156;
+        d=1e100.net; s=20260707; t=1795207360; x=1795812160;
         h=content-transfer-encoding:content-type:references:in-reply-to
          :mime-version:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=rtb6dKj5LN/FEVm2jhNPaNf/E5DPE0maWn7m8EHNqa0=;
-        b=Y+wp+6KKG5KTOyMfEt6Ww01kkApPwe0JQIwoqY/PM77sKVFlw/q+8HsMtfQtx/uopM
-         9rfe66sFcHjKRDdfkVmQSO3nMb6KvzNDXuhveKF1JYF5UFLiT/7ZJJAP5ZE6Tpvp/foQ
-         R2eYm0NCSbQbihXZ2sQWxZqirS+VdF3BeIBFbATEvVr6nmZ3qEOVCYfK7z4xx7Xz/N0T
-         QD+vY76dPCeich4+xvIh/YUY7+0ApI6LhTEm6LwnlzSpyrLAm46/sv0rh80r9EooRvK/
-         c85IU8Sk+BvTLjQ/97eFzMGYIDXhHzv3GKz9zRxyLC6PMwuqp6G40j7g4Nd1cerVnLnO
-         KlnA==
-X-Gm-Message-State: APuU4Z8sxs1HvgtxyFXi2k6CpUtglOTomVHIXoBzqkeDTniK5uJUebb/
-	7P3M8oQgbRaDwWcwQZH3+k3vMAr2Sst6pugyhCk5NkewJ89/GXmZNdP9
-X-Gm-Gg: AYBFou360eHcSafVjXkfQaLL+CI8p9RpdhX+wfSZEU0nTIOiFGQT9kzBkIr0uSOOmdv
-	JB8WA17XH2y+s56iOBkfIrbjCMNCKEg9jC9jX071iLx4RzIwujaTR9blBqvw6eNlmkjpSs7mDrM
-	oF3QF+NktfmherUGrUDdn7wnU0n/fJHBvbvg/Qsj84wsuHaDtyZcQCjulkSBpE55hcTc6qHHzXK
-	o/yGgx1KE4oZzSUscdMj6BHLWBe8uj5Ey42PVHfg2yjCM6xibgolqnmnbHUIlVn9MSvYgr2Qkcb
-	zs+fmsHF3cHr39BdtbnlVqrHTcXkTyxlhWPdPtNAqgpLp39tru/Usbtwl5WvGBc0RwlUDVeJ9Y2
-	6bodYJ+O1fkUcXHgcCCZNDA63ZWG+FWoChJ6u/BvE+IknP+Le/V1sFIY+N5DBiCblf9UQkQ1Qv2
-	kqKiDWQSK07YAmatEhR+G/6Knz5UWu8abqjR8EBUOlLoYadeG3505Y7ceW6zIR+Yo8bWOGJ10qW
-	batFcG/vjQ/RhSXA+ieKUS6pcbB8/xqw2WN5lGpCvnxQXG9jqac7VGIl9974G+L6FATqTvrjv1m
-	x8jao7o1ijSrc+gzzTRF3j3ju9RHutdstf7s2VPeUmwyyZR1r4aP6ivzOjns7VfQIwf1FUYzD7m
-	nt9VsByyzk0MSYDqm+EPAg0x0wuU54QGduvVXKtvF7yRyCJIwjn9a
-X-Received: by 2002:a05:620a:28d5:b0:949:6ece:8aed with SMTP id af79cd13be357-949ba9aa388mr693527485a.36.1795207355972;
-        Fri, 20 Nov 2026 12:42:35 -0800 (PST)
+        bh=zvhZlU0ddPN9o2nM/nrK5XTVxzJuCMmPH0NhVRQSvdI=;
+        b=tO4LaHycYSUq/HcvtkzSwMGa88sPAvSkblZcF8OUHmQ9MHTVQQoqCoKqsWnlFBdYRp
+         EQPg7/xoVm1cSB1Lz40/yWBUnVkoaqksevi8B9Ca4UZ8+3y3jQrm2N13sEdMATmRO0DQ
+         vvGv5rvIuOexCuN6LJsq2UnqiNlxxDg3ANeIOCRIjOyaJo4tx4XqTY0iajIvNHoQdtN4
+         kKXw2EA2Q/TVRE30peMaAt+WCPYaIZlWgCVL1LThIRVWyFwS5QjfOEK/sGza68Vlvx23
+         QvVvLKJ5xmRC0Lnwj+rcDgCiqd6BnBikr4Nr/C2CC9Jb+NQqeihLVee1wMPu3Sa0AaOZ
+         SCpw==
+X-Forwarded-Encrypted: i=1; AL+hErGhiK2hu19MpTOTa/aEvANqn6U8y639D4aGvGGldyApCZa8t3FDzSBv1oSKuL9jtJBkqls=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9hzzk0yf+FcSXAwQkWLYSHpg7lcpoCcihtLdDKmOYBDlQ+OBj4
+	foNWUt7qsu7Wtwm6XC5CLlmMK8rovh0JVcVT0YvV14wD1uLVsQfr5YdF
+X-Gm-Gg: AYBFou0bhiGqUsJH5J2ogQq8VXaAQVhVMU0voDWHMh2mBgB6W8hwaFeJ4gdCD+O03xw
+	J/s6S2KDut+aUu39aiUO66y7wbYNnv7rbcWmPigOUWjvHnR80cao10u+/UYCmonKhIn4LXg/Ety
+	FhyJL+A9/g1NCY2uuJvKMp+nzpCorz/6JskJ1P0WuSv/6PM7MRzfqtRzx9T7WD6qOh37bgoOYEZ
+	U66fXQhhBeRGsEhPWhX+h1L5kaSGpNebNP4t1X6ApgKClBrt2h5k4WVXXsHJZGmLsjUUwFvQF+m
+	3BhrUAFzQNrEjk327F3LKkqklmcXChvc9wZ0fA1cBagwmDdfHKiUa3xNjMX8xobB+dLbrMJV/hp
+	lYqJuIP3ZjgmDm4Uhx0cak2wiIXL66gJsMsUQI2ehNodQVYIU9wte+ohN3nvV6uJUMxJxx2GBZ9
+	YeTE+fmqg7Q3FBk6eOq+irAw/uRM99+yVRUs1gKsxBTBMWhbdzXImf7wVbZWKbh9HnlQdjwXIHb
+	SI5H0iKbFo6/i0DkLCpv5kttobR8vDmoZVlAUMu0ukMciYMPhkMkAduPzT4M91V0hC30ycjXcF+
+	iqJ4drvPCFTH48YB+3P5NQZc5XMm7mJfBLZt9Cvv6+XXgRZygyLg0qJMNGBogkO83q1oDfluKrs
+	TwdbbIzU+MdfaZLtd5rk37+Grpz3hV2uCM1a3PFUwgo9raApvukBg
+X-Received: by 2002:ac8:6f07:0:b0:55c:5ebd:8824 with SMTP id d75a77b69052e-55d76a6b9b2mr73460561cf.71.1795207360201;
+        Fri, 20 Nov 2026 12:42:40 -0800 (PST)
 Received: from localhost ([199.170.132.196])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-921349d0e35sm35061626d6.20.2026.11.20.12.42.35
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-55d788116c9sm32657731cf.4.2026.11.20.12.42.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2026 12:42:35 -0800 (PST)
+        Fri, 20 Nov 2026 12:42:39 -0800 (PST)
 From: Tamir Duberstein <tamird@kernel.org>
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Subject: Re: [PATCH bpf v2 5/8] bpf: ringbuf: Handle pending position wrap
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Shuah Khan <shuah@kernel.org>,
+ Andrea Righi <arighi@nvidia.com>, Xu Kuohai <xukuohai@huawei.com>,
+ Andrea Righi <andrea.righi@canonical.com>,
+ Bing-Jhong Billy Jheng <billy@starlabs.sg>, David Vernet <void@manifault.com>,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Andrew Werner <awerner32@gmail.com>,
+ Zvi Effron <zeffron@riotgames.com>, Andrii Nakryiko <andriin@fb.com>,
+ Emil Tsalapatis <emil@etsalapatis.com>
+Subject: Re: [PATCH bpf v2 2/8] libbpf: ringbuf: Prevent NULL callback crash
 Date: Fri, 20 Nov 2026 17:51:54 -0000
-Message-ID: <179519711439.18576.6015951285184464138@kernel.org>
+Message-ID: <179519711442.18576.14389384506684582728@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -79,16 +91,12 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-In-Reply-To: <20260619004559.4E1531F000E9@smtp.kernel.org>
-References: <20260618-bpf-ringbuf-fixes-v2-0-33fde039ddf3@kernel.org> <20260618-bpf-ringbuf-fixes-v2-5-33fde039ddf3@kernel.org> <20260619004559.4E1531F000E9@smtp.kernel.org>
+In-Reply-To: <ajVKM9tJskwg9OFa@krava>
+References: <20260618-bpf-ringbuf-fixes-v2-0-33fde039ddf3@kernel.org> <20260618-bpf-ringbuf-fixes-v2-2-33fde039ddf3@kernel.org> <ajVKM9tJskwg9OFa@krava>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-> Does the use of max() on wrapping unsigned long counters here lead to
-> erroneous available data calculations?
+> it'd be easier to review/suggest the solution with more details on that
 
-Yes. 3f611e9b820e fixes that ordering issue and is now in the base.
-
-The complete-counter-lap case remains unresolved: taking the minimum of
-zero and a positive overwrite distance still yields zero. I have not
-reproduced it at runtime; it needs a separate overwrite-counter fix.
+V3 includes the caller-owned iterator and tests using NULL callbacks.
+It preserves the validation merged as c0628a0659b6.
