@@ -1,93 +1,93 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.182
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795160751;
-	b=F+maB6lCJrUaj0TQeVZEQjalS0Ov64L+DNcXrxe0BecM6NflsT/rRrO03wPJ3/8Zk9J1
-	 4czevLLJEyVITKN9Y5Ctxo9+/X5XQrmoPXuUpH8ZOj6he0UwGAg3lfSVzBMuuDA4dJWri
-	 +lsNZagVSGtwUbjzh6OI3JT3UQL2ZXMBsUqWM2S0BsjuIK2nyc6svXr6aaHdfO9POOc7L
-	 1zqIdLZlLMDRC/lS5K7TT83jIe2G77FFMBQ4Dmh8WpRvYpOrxSFc5UqBBrhaZO8LlXAW5
-	 qVbQxFO4a9bXbU+j7WHZqQVZ7PLXVoVhaWKDrX9UBrkUwzZXMKjS44mp9m5nAfV1WBA==
+	t=1795160757;
+	b=D/dsVgvPqhe5sJ17iYP3qMeFHp1n0YZHJigpCmjK8LK8qSJsrKbc/sQ8JyBKHuGWRDnG
+	 U6LK01ByhwAJZCQ8ysubEKe3MA2nITAduvRI8nY4Rky8UCUKhKeCfE1EluP26etPZbCnm
+	 3tnfTXjJT+7Cs7jMG4yg0XEdUjASllkTKfkZtwPYN8BGQx5EwKiaIS1QT4fyEWy77sSOn
+	 M/RTeizYb0z1mK6MJyTEuORlYZ0O4AAaMiywEBPhIv54ypkjpkw9KGJ2A9OfoATn7bPuE
+	 n+kV8HYW20uTHnhwd4O7uwSNFjCva7g8G6AmddoUocqskuAEf2cEes41imqtAoLOfjg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795160751;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795160757;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=/H2PW26I1VrsITCow9ub5YNuMrrYqB5NvkRwGW9pMLY=;
-	b=lMRqUkBniJ9vzpqoOKEb8Ow22JRjKW1YiuMz2TlE+FvWi0wCwvpLglYLNjYTbbXuAZTN
-	 Anrkgqc7uj04rdQYkBIIWGNWz01wULc59krwH6oJU+PKtA+62AzuZwruKpPOVrB5BoRfy
-	 n815Szw2wDgdcAPkP1MG2mKp2bXddolVnOih5pqbz39WZYqVKoUW1IC6RsypK4KfaJXHu
-	 AO53ERRvNR9+MN7bRGxsR3c7twL9V+ze4ZNJMKD/xvLx2Q9rF0l8/fmcxYs+xk3rCR0Bb
-	 fNBaJqXmzP2e2uB3rwOQwGqWr9o+x3e12n/mWAs1rlcw8U9RmVbLmRRgMlBG5erdzSA==
+	bh=7nuE0OicGT6skQx+efq859hcfBQbiiBXDjZoYyFs6WY=;
+	b=t7YJ7BocBR3vJM2iEIQdxWjSJoHYvsPtBAXnXPpDApxYcuB2/Zits+UL+1Gy3DwrQP6S
+	 Y6ZrkFh0c5ijJ3EeIziirOhI5QOS/0k6inEJZCD7PMNsoDUQ3p3sVaaaFHJIzbrT0nXgh
+	 4GDz5r9quaPJBq+eh/V5eefA1zwQzd8PhubsHqooWwKGpg6zetP5EcNNWR3mfiGXHDE28
+	 If5ysrTyMbEDw221hy44GkdyLIJ8dmu2B1TBQgA9kvfKsIBXEjCuTHugU3mEiNswaaztt
+	 x4u9WKiZtdDDy03ibujBxUkpDnSjtdJiQ38QXv+KLb7B3J2cWh6NBPq9Xvh3rD6sCdA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="u/2UHVyV";
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qKIMIBqG;
 	arc=none smtp.remote-ip=209.85.215.182
 Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 276C9606A320
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 07:45:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 276C9606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C83606A325
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 07:45:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F2C83606A325
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=u/2UHVyV
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-cd62c570b5dso447260a12.2
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 23:45:50 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qKIMIBqG
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-cd60c5da24cso441486a12.0
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 23:45:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795160750; x=1795765550; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795160756; x=1795765556; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=/H2PW26I1VrsITCow9ub5YNuMrrYqB5NvkRwGW9pMLY=;
-        b=u/2UHVyVaS83rvnfo7sQIpP63fbFjV/74j1dHQRVeluUceQ/dkvbuS1pgK/3A40+mY
-         CxXox02EJbEjxb5ZQPXBTeuIBO5B4sDIl2vo7urUhDUwcqLyCOpSW9WiJ+36eQZL+cr7
-         SviYfc/RVIPxClXbNm0OL/j2UxASDOFYuIDe1ipXC3TXJrZwE3CTrARGf8M6Tp59wqBI
-         RH7B94YRUs8TO9unAsPRDXT/SLNjhNjhgMSvOaVnFPvkx7ITnILLwWlX7XMld4v1Y1fh
-         gWPTqR6uGmZmqbSwg4K38X8QNlMVmpT6mwPlb0JjrLP7OIO8crAn4Cy8lOXztFu4O//T
-         p0Vw==
+        bh=7nuE0OicGT6skQx+efq859hcfBQbiiBXDjZoYyFs6WY=;
+        b=qKIMIBqG2jsuOf95ONBAiFfSu0jnHqqPQ1rmTy6WJ1X/F4k0LuCkOthAcdPi2A1C/c
+         MbofUXXiJ1hcYkaryEtS86OLHw5hrfJXtpOAmW+nQw/q8zc6ZtpS7xJvA50SstBsxr8F
+         D2GJOC3xu6URs6D+FC6dT3TYHB/QPZu7T7mnXyWHjjo/RlkvjdKuGqwlYgvt4o5MWt4E
+         ZiNmTxa8l7ceqnv1fuwetZudIFpBJtvS8inEiCIlBAHIPV4C/bzfCxi0QuVFO+Ai0NOZ
+         36fXJgjXnF258x7uXVLpcSYrVVd3fAhJvTaPkI4hiSS8wTcPi2KrWIlYyF18vc+xodk0
+         48gQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795160750; x=1795765550;
+        d=1e100.net; s=20260707; t=1795160756; x=1795765556;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=/H2PW26I1VrsITCow9ub5YNuMrrYqB5NvkRwGW9pMLY=;
-        b=ukWzbbbFAyrRKW/G/u3nkAd5zq2bsGrUeA6lfLCYBhibAWYhLA9KTIoKUJkQbwDxBa
-         jzyf6PiN2jnmM+SPNCX+yLAE6ag6tI+Kh13JdtAyTuBh9O5ZB27qN3ooKdKOJ3yw48Hl
-         9GEoInx4GX+EcmA9hRChKSr39okGjomG1FGhARakpgHZB/2Pqhe6xyAjt905LyezwU4x
-         3lLNm89cwnZzsz1nQTvHZ6Sog/12tfQvkfcvpc78+F3V2F4HIfsfNyuGewvCPY5aV/E6
-         gwZ5jVgPD9lm6gMg5+EVYDFqRINImgcCxMCiS/88fIGPKj9EKkQgCnzg9so62Ukf05N3
-         rPZw==
-X-Gm-Message-State: APuU4Z/WH7UF8TZQS38PXindQ3sVRi8R3aeVkS9+8SsfF1B7rV1os6YB
-	6GJH0k+E1DXVi+UTzETXcsf9kKdEjIupiTO0K+IgcAdbf2/f3QHPWLm1ognrVg==
-X-Gm-Gg: AZFdTZfQ9l6uJG0+IV8NXc2wcjroLSA3wSvCk3yLRwrfcJrsl7tmjvNGVqgR8CWEjNh
-	iNhU/mR5koOqK5aqv0Ua+aVJ2NsQvtvdFhDq9y5DywSV9oEsRc1hawu7WYpsgd9Nirmq4fxDs3v
-	v1Im3VzQ3L9exEXF0/Y8A6xmYxnMpYSlVclChKDZ0uEH7nwB6q7FZt8DG3Zs1vRGWm8LNPFDSdM
-	TiJ6iksbGFUlsLaJN5hOmzp0c8ntc5VlSQOMSvxnYLF/3oCFJJzJfmVCnf/fYB20jQ/8rhrn8oi
-	d/6gLln54M//QMNQLnj8WVsBVd0b15XEaLfXt5WutKi+e49nzCuaaXN43Dl61JDRUnXI21BYIee
-	0ibl/M+5s9BTcHlCPbFHlBvwmaey8XBuEkAGjYXqBQwLXyh7aZ2Q5RbU0uwVS+YdZ8QYAri5OO2
-	J9oXH4OHRJd2OPbsLIAYKvumhSkgDrzKCHekxbBB+Y0O0IVl93qYWr4rTvpcACN75GmYOilq+Fz
-	yYF5hT8t850n+J3sCApBBvEURsMsG40AVWGsxIzcWyry3DVcNzLpRvMX+RIEUX12+7GcyiBV8Oi
-	aLp0FtvioDXK5H58fxpA8vnRA7qFHq8amdaPFwC9lFoiHhRWyI/LYh3uxtImykVCehj9MpeZGz1
-	X1l5PrDlFp1h70v0lhh0/jjtcmt7KCgrNpmhDMaSDujv5zBdc0sn5Zmq6T34ruPOfx33YYHStPm
-	M=
-X-Received: by 2002:a17:90b:1649:b0:3b1:2810:dfd6 with SMTP id 98e67ed59e1d1-3b41cb50c4fmr2070032a91.64.1795160750102;
-        Thu, 19 Nov 2026 23:45:50 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.243])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41cfbdb9csm1282592a91.2.2026.11.19.23.45.49
+        bh=7nuE0OicGT6skQx+efq859hcfBQbiiBXDjZoYyFs6WY=;
+        b=2QLAXtOLK7zp1uSNKe5Uaz73Rm65Wbp2jfnhmOPar/eOj23AV/yaItNEj4s+A0GEln
+         HX6sstJi9xO7v6OReM9kOmaTH2gV5UkObDs/oU1jjWNyZJ7EQrBvPrmeTosWr+H9Ye+H
+         y8uCOVJLp9plNyQWpiJpZqFZ8aj+nXcZLQkkYLWLSgf1yFDEjLbXqEEATOgP8pF6oqQP
+         /4KeMpNFxZa36RUeE78WBXbaHzOR8LStji2ZmRHf/Zv34sOeQU/jbpzXdMBfwBCzbb28
+         WWK7fjVX4UgZN1e84yZDwC6Exg0p+2KDj81b+ymeq2bBxI9xQNULgjfK/uYTM33aFXT+
+         K6jA==
+X-Gm-Message-State: APuU4Z9IjY0+SD5J+nTXcdzVyd8dPwyzXSpByLqTJMRzyOUTCHMksaiD
+	hWT+eTOppKORZtVM8KhDvEeu7JDP0A0FbajqUrIJlIn8QBbFd3Iwo8L8sgHknQ==
+X-Gm-Gg: AZFdTZcRzISYut3SxT2eXSmfJSCkKSzLk0Ix0ZEcUDvy396ANHywDDULbAzdW/0MdGc
+	R9NGsKXI/UVV2pj3mCHDWvU2ofwBZ0vJO7fWAHzUjgtDRQSaupT/73QMAz+e1QEXIM+4dRli2X/
+	UZcGp7hbak6sJRjKYNtm7JJRDh+bjXmG0q4XDJUh7aS9LuaFTM4+1e24zZW4s+FjkYRoveik6Ak
+	3GLMft62ciAeGcrt4a4E41z83I3/r6QfdLFdk4EWA235/rnd2mRpIKGUh3D93rss5lJRvGKFkGU
+	7A1AuDAiyrAiGslzUaMtcIc9mdq4B0s++3lMVEZbImmR+qGJRvvTW5rKXTEzTY8fxkI7eiQl+mI
+	vJq7vPtzWACGw0ABEiAgMM76wId5smpk/yEhLiEm/iWtHEGws3kkNaSum0zBxrJTXH6zlm8Fhr+
+	nzwU8Cy0GenVCePeNNCbP1HVf22vDBlriNR7MWE/YeXm1ZD9yfLxgoxqI6G0cfOA4sypi6a7GZP
+	1xE3SmgxOFwE3H7VhFEQP1Dx0S+6MSAVKtGQYoDs9x2Z5VhXCai4ahaS5W8GuTd07AG3f30xkO8
+	/DjIigddJlPfqHhQKGH1wvVS1BaX46/dwrlk2pxrT+wMOsLSdeDssLFf06Z6WESXghIo32xTurt
+	Wcu05bmZRziJk9WsOxZQNOHO9HHaSZ5xuZLsB4T/Y8QW7yBd8P6h25ag6O41OlYW+SFbhfijzsG
+	I=
+X-Received: by 2002:a17:90b:2c86:b0:3ac:9c37:9430 with SMTP id 98e67ed59e1d1-3b41c9b2bbfmr1992039a91.21.1795160755973;
+        Thu, 19 Nov 2026 23:45:55 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.253])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41cfbaf2bsm1294249a91.2.2026.11.19.23.45.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2026 23:45:49 -0800 (PST)
+        Thu, 19 Nov 2026 23:45:55 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 13/49] bpf: Remember how many bytes of a packet are checked
-Date: Fri, 20 Nov 2026 07:41:45 +0000
-Message-ID: <20261120074430.2704488-14-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 14/49] bpf: Mark a state that no run of the program has
+Date: Fri, 20 Nov 2026 07:41:46 +0000
+Message-ID: <20261120074430.2704488-15-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261120074430.2704488-1-alexei.starovoitov@gmail.com>
 References: <20261120074430.2704488-1-alexei.starovoitov@gmail.com>
@@ -104,170 +104,96 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The range of a packet pointer is lost when the number that is added can
-be negative:
+A jump can leave an xreg without a value: the ranges and the known bits
+have no number in common. No run of the program has such a state.
 
-  if (data + 54 > data_end) return;
-  p = data + 20;       range 54
-  p += -4..4;          range 0
-  *p                   fails, but the offset is 16..24
-
-The check of 54 bytes holds for the packet, wherever the pointer goes.
-Keep that number in pkt_min_len. If the largest offset of the pointer is
-below pkt_min_len, the range is at least pkt_min_len.
-
-A join takes the smaller number. A state with the larger number does
-not subsume a state with the smaller number. The join rule does not
-look at the number: each trip of a scan loop checks one byte more, so
-all exits of the loop would stay apart.
-
-Equations will let a jump refine a pointer that has any offset, and
-they bring a far pointer back:
-
-  r9 = data + r2                  r2 is 0..255, 8 bytes are checked
-  r8 = r9 + 0x7fffffffffffffc0    the largest offset wraps
-  if r2 > 100 goto out            refines r2, r9 and r8
-  r8 -= 0x7fffffffffffffc0        r8 is r9 again
-
-An earlier patch has the rule for that: an id and a range hold only
-within BPF_MAX_VAR_OFF of the start. So r8 has no range, and pointers
-with one id are all near, or they are copies of one far pointer.
-
-smax can go from S64_MAX to -3, and the difference does not fit in s64.
-bpf_trim_pkt_range() computes it in u64.
+  jump -> range is empty -> infeasible -> a pass:              continues
+                                          a run without joins: drops it
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h | 11 ++++++++++-
- kernel/bpf/log.c             |  2 ++
- kernel/bpf/verifier.c        | 31 ++++++++++++++++++++-----------
- 3 files changed, 32 insertions(+), 12 deletions(-)
+ include/linux/bpf_verifier.h |  2 ++
+ kernel/bpf/verifier.c        | 19 ++++++++++---------
+ 2 files changed, 12 insertions(+), 9 deletions(-)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index e1432f48fea..ed15e63456f 100644
+index ed15e63456f..cc90e237d53 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -117,7 +117,10 @@ struct bpf_reg_state {
- 	u32 id;
- 	union {
- 		/* valid when type == PTR_TO_PACKET */
--		int range;
-+		struct {
-+			int range;
-+			int pkt_min_len;	/* see pkt_min_len() */
-+		};
- 		/*
- 		 * Valid when type == PTR_TO_STACK. Inside the callee two registers
- 		 * can be both PTR_TO_STACK like R1=fp-8 and R2=fp-8, but one of them
-@@ -2212,6 +2215,12 @@ int bpf_loop_at_index(struct bpf_verifier_env *env, u32 idx);
- bool bpf_is_nested_loop(struct bpf_verifier_env *env, int inner_header, int outer_header);
+@@ -522,6 +522,8 @@ struct bpf_verifier_state {
+ 	struct bpf_reference_state *refs;
+ 	u32 insn_idx;
+ 	u32 curframe;
++	/* an xreg has no value: unreachable. Only a path-sensitive run drops such a state. */
++	bool infeasible;
  
- 
-+/* How many bytes are checked from the start of the packet, wherever the pointer is */
-+static inline int pkt_min_len(const struct bpf_reg_state *reg)
-+{
-+	return reg->r64.size ? reg->pkt_min_len : max(reg->range, reg->pkt_min_len);
-+}
-+
- static inline u32 bpf_xreg_cnt(const struct bpf_verifier_state *st)
- {
- 	u32 fr, nr = 0;
-diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-index e58202955f1..0d381e31421 100644
---- a/kernel/bpf/log.c
-+++ b/kernel/bpf/log.c
-@@ -666,6 +666,8 @@ static void print_reg_state(struct bpf_verifier_env *env,
- 	if (type_is_pkt_pointer(t)) {
- 		verbose_a("r=");
- 		verbose_unum(env, reg->range);
-+		if (pkt_min_len(reg) && pkt_min_len(reg) != reg->range)
-+			verbose_a("min_len=%d", pkt_min_len(reg));
- 	}
- 	if (base_type(t) == PTR_TO_MEM) {
- 		verbose_a("sz=");
+ 	struct_group(held,
+ 	void *active_lock_ptr;
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 3229372c5f4..e8377d15b02 100644
+index e8377d15b02..1523ae1be51 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -16513,7 +16513,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env, struct bpf_insn
- 	u8 opcode = BPF_OP(insn->code);
- 	u32 dst = insn->dst_reg;
- 	const char *reason;
--	int ret, bounds_ret;
-+	int ret, bounds_ret, min_len;
- 	bool to_scalar;
- 	s64 smax;
- 
-@@ -16644,6 +16644,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env, struct bpf_insn
- 	 * constraints violations.
- 	 */
- 	__mark_scalar32_unbounded(scalar_of(dst_reg));
-+	min_len = pkt_min_len(ptr_reg);
- 
- 	switch (opcode) {
- 	case BPF_ADD:
-@@ -16673,7 +16674,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env, struct bpf_insn
- 			 */
- 			if (dst_reg->range < 0 ||
- 			    (!known && (smin_val < 0 || reg_umax(dst_reg) >= dst_reg->range)))
--				memset(&dst_reg->raw, 0, sizeof(dst_reg->raw));
-+				dst_reg->range = 0;
- 		}
- 		break;
- 	case BPF_SUB:
-@@ -16719,7 +16720,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env, struct bpf_insn
- 			 * prior comparison as arithmetic invalidates them.
- 			 */
- 			if ((!known && smin_val < 0) || dst_reg->range < 0)
--				memset(&dst_reg->raw, 0, sizeof(dst_reg->raw));
-+				dst_reg->range = 0;
- 		}
- 		scalar_step_reset(scalar_of(dst_reg));
- 		break;
-@@ -16759,14 +16760,15 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env, struct bpf_insn
- 	 * step tell about it (alignment, umin). No other pointer has its id, so
- 	 * it is enough that its range loses what its umax loses.
- 	 */
-+	smax = reg_smax(dst_reg);
- 	if (reg_is_pkt_pointer(dst_reg) &&
--	    (known || (opcode == BPF_SUB && dst_reg->range > 0))) {
-+	    (known || (opcode == BPF_SUB && dst_reg->range > 0)))
- 		__update_scalar32_bounds(scalar_of(dst_reg));
--	} else {
--		smax = reg_smax(dst_reg);
-+	else
- 		reg_bounds_sync(dst_reg);
--		bpf_trim_pkt_range(dst_reg, smax);
--	}
-+	if (reg_is_pkt_pointer(dst_reg))
-+		dst_reg->pkt_min_len = min_len;
-+	bpf_trim_pkt_range(dst_reg, smax);
- 	bpf_blur_far_offset(env, dst_reg);
- 	bounds_ret = sanitize_check_bounds(env, insn, dst_reg);
- 	if (bounds_ret == -EACCES)
-@@ -17866,12 +17868,19 @@ bool bpf_same_memory_origin(const struct bpf_reg_state *reg_a,
-  * 'range - smax' bytes from a packet pointer are in the packet. reg_bounds_sync() can make smax
-  * smaller than @smax: with a step of 8, or with 3 zero bits in var_off, 58 becomes 56. Make the
-  * range smaller by the same number, so that the number of bytes does not grow. umax is not
-- * sufficient: it is U64_MAX when the offset can be negative.
-+ * sufficient: it is U64_MAX when the offset can be negative. A jump can take smax from S64_MAX
-+ * to -3: the difference does not fit in s64. If smax is larger than @smax the range is lost.
-+ * If smax is below pkt_min_len, the range is at least pkt_min_len.
-  */
- void bpf_trim_pkt_range(struct bpf_reg_state *reg, s64 smax)
- {
--	if (type_is_pkt_pointer(reg->type) && reg->range > 0)
--		reg->range = max_t(s64, reg->range - (smax - reg_smax(reg)), 0);
-+	u64 lost = (u64)smax - reg_smax(reg);
-+
-+	if (!type_is_pkt_pointer(reg->type) || reg->range < 0)
-+		return;
-+	reg->range = lost < reg->range ? reg->range - lost : 0;
-+	if (reg->pkt_min_len > reg_smax(reg))
-+		reg->range = max(reg->range, reg->pkt_min_len);
- }
+@@ -1808,6 +1808,7 @@ int bpf_copy_verifier_state(struct bpf_verifier_env *env, struct bpf_verifier_st
+ 	dst_state->unwound = src->unwound;
+ 	dst_state->changed_pkt_data = src->changed_pkt_data;
+ 	dst_state->flow_entry = src->flow_entry;
++	dst_state->infeasible = src->infeasible;
+ 	dst_state->insn_idx = src->insn_idx;
+ 	dst_state->curframe = src->curframe;
+ 	dst_state->last_insn_idx = src->last_insn_idx;
+@@ -2437,6 +2438,7 @@ static int reg_bounds_sanity_check(struct bpf_verifier_env *env,
+ 		reg->base, reg->step);
+ 	if (env->test_reg_invariants)
+ 		return -EFAULT;
++	env->cur_state->infeasible = true;
+ 	__mark_scalar_unbounded(s);
+ 	scalar_step_reset(s);
+ 	return 0;
+@@ -18947,8 +18949,8 @@ static bool scalars_fit_in_bits(const struct scalar *a, const struct scalar *b,
  
  /*
+  * The values of @dst and @src are equal in their low @bits bits: @dst becomes the intersection.
+- * False: @dst is left as it is. Fewer than 32 bits say nothing about a range. Or the intersection
+- * is empty: no execution gets here with these values, the path is infeasible.
++ * Fewer than 32 bits say nothing about a range. Returns false if the intersection is empty.
++ * Then no execution gets here with these values, and @dst does not change.
+  */
+ bool scalar_intersect(struct scalar *dst, const struct scalar *src, u32 bits)
+ {
+@@ -18957,12 +18959,8 @@ bool scalar_intersect(struct scalar *dst, const struct scalar *src, u32 bits)
+ 
+ 	if (scalars_fit_in_bits(dst, src, bits))
+ 		bits = 64;
+-	if (bits < 32)
+-		return false;
+-	if (bits < 64) {
+-		a = tnum_subreg(a);
+-		b = tnum_subreg(b);
+-	}
++	if (bits < 64)
++		b = tnum_or(tnum_cast(b, bits / BITS_PER_BYTE), tnum_lshift(tnum_unknown, bits));
+ 	/* tnum_intersect() of two tnums that don't overlap is not empty */
+ 	if (!tnum_overlap(a, b))
+ 		return false;
+@@ -19000,6 +18998,7 @@ static int refine_live_branch(struct bpf_verifier_env *env, struct bpf_insn *ins
+ 			      struct bpf_reg_state *reg1, struct bpf_reg_state *reg2)
+ {
+ 	struct bpf_reg_state *regs = cur_regs(env);
++	bool empty;
+ 	int err;
+ 
+ 	/* is_branch_taken() knew the branch before it refined anything */
+@@ -19010,7 +19009,9 @@ static int refine_live_branch(struct bpf_verifier_env *env, struct bpf_insn *ins
+ 	 * The fall-through branch of JSET forgets the ranges. Or this branch is dead too: the path
+ 	 * is infeasible. The registers are left as they are.
+ 	 */
+-	if (BPF_OP(insn->code) == BPF_JSET || reg_is_empty(reg1) || reg_is_empty(reg2))
++	empty = reg_is_empty(reg1) || reg_is_empty(reg2);
++	env->cur_state->infeasible |= empty;
++	if (BPF_OP(insn->code) == BPF_JSET || empty)
+ 		return 0;
+ 	err = reg_bounds_sanity_check(env, reg1, "live_reg1");
+ 	err = err ?: reg_bounds_sanity_check(env, reg2, "live_reg2");
 -- 
 2.55.0
 
