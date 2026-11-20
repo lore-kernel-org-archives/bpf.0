@@ -1,80 +1,81 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.182
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.177
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795189394;
-	b=chGhKhr9xB8Xw3QOqtZZI63T3cu7M1yN8vC5lWhvQzb2lDPduQZzzpb/tRcxldXCHQdp
-	 16pY8tIlgrbpFg5YRtu/mms38orjU1+RT5E/Ky+s+IGLxfSWcEry2vxW22Jpab/dz45On
-	 eSPDQfhPlVCPuXZXLVIq3tmDfYpLiPXw0gjOyKN2mop59htBrokgVUPX9r4lf1tlLbecv
-	 GcqYJU5omOTe3+yoSqvLjKtWNiYay7gszdQpzLOsirNDpy498+nI1KZjNI4C2cmPx0AWp
-	 nZOrOqiwS2WZkEiRgVQI3qZFtsc6BX4iSt8MhJVvt86g2hL8vqR/HUlLx+Y/WAfhh1Q==
+	t=1795189396;
+	b=j46/FDVqxe/JrymiTzJQOFNsdGnFUlQP01ZD1LoxLAybhNUN+Y0r4L06kKDXfiCDCG5M
+	 brEuqoNQXumjsiPqtH5FMIOTvhf5zWXrK12tCn8RYEyZocHUkeeRzSSXkHZ87lBhWBMtn
+	 Av+DlKQ/CGOWNWJa9EEBLuDLGS9jHFU4mGCNL1Z7RW7G7rdVKtFX1dJMZqx3E4dBReT/t
+	 fhL/L1iwBeViSk3BJIr14eaPOqPCTWuod6i288kbbiK+G26Yr3GW5igUmYlbW2vNl8bef
+	 43MnHVmpUBVIyfDj84dAq5DN26BWjSpPAjFZZQ9LiHuxWABvd5XURC1EEKEVApg7sBA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795189394;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795189396;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=DaLfAeXgRE1oRE+vSokADhq/gV2tFW1OuyRH26+hvIU=;
-	b=DmSiatraTOX1gVG29zoBK2njeh92vGcpt3SNMROLIhTBiL3kXmYhsRUTg7bpqDUsX1SS
-	 excjjcNeiy/KAkmSVbUSddbQn4vRk/EkIAuzyQFDpPcItuyxcch1M28evT6FIGQC2LXlm
-	 XoE4Im1JIYjWrBkgz1FpnNNKreEABf/Oqs7EQDd2bHxfHjrOeuie4fztewELtUfmchYR6
-	 OCMj0QeF39IFOffGbDWFqHBeQ1ihlIMtpRr4+TpPaub5P7tqbtZZJaR/21Il3nKx8bzPs
-	 bs+FapsbQH0VHtB+aowka/VRRt1EldrYRwrC3B3SnhjpeVAD3erZNrTj+gbg0iC7mIA==
+	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=skDAf6P5lMgExY8BT13Y0yOZuZ/PE0d0HM9IStj4YTI=;
+	b=asMQjECrTnezcxPGoas5S2fm2c8yfTnjRS2uRbHkfrhOTL4wlTqEfEPp+BxD9PyUg9GR
+	 qBBZ9H1NwbluWWDAhBQkq5RLhP1oqgOpg488oIvKuL+P9RHrNwvPHlvDNLpR0pPUUpEmb
+	 gbwNbP2clR3d7nCL9uf39jjHbgcaIwTgWOh7mN8UB3NeBJDGosfDPx9BF5688DZRKip/l
+	 0JPzMuTFD343QRhuLHvBZZnuajogK1bCAUV7Ef3w3hoCQyCAM2e3ZsgIpJgxo1+3/iGQo
+	 CJZvW7hX+swzRuS6/NA+hoJCueUjHgwIY60N+UnEuu7MXzwm3BBIVq8BiHWvQoG0gig==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=mojatatu.com;
 	spf=none smtp.mailfrom=mojatatu.com;
-	dkim=pass header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=W6XQi2J3;
-	arc=none smtp.remote-ip=209.85.160.182
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+	dkim=pass header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=GDB2RJq2;
+	arc=none smtp.remote-ip=209.85.160.177
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFD43606A325
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 15:43:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EFD43606A325
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C706606A33D
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 15:43:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4C706606A33D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=W6XQi2J3
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-55c4e670fc6so11015261cf.0
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 07:43:13 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=GDB2RJq2
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-537548b811aso8494391cf.3
+        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 07:43:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1795189393; x=1795794193; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=DaLfAeXgRE1oRE+vSokADhq/gV2tFW1OuyRH26+hvIU=;
-        b=W6XQi2J3So9PWrR3p/SjUq34lOOkZdWEJTXtAhYZ/t3jTUlYPd9PZ41ffzWsxjAAeJ
-         RoNxcuOsufqJwLGfsU9QbPw0D9rjKCvD9uYukrGzz90uWO291ztuTiWKqwqLKnB+I87q
-         PJcv3U9+YWFzTGOhydiETrHsDFLNIWtQ7HrtM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795189393; x=1795794193;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=mojatatu.com; s=google; t=1795189394; x=1795794194; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=DaLfAeXgRE1oRE+vSokADhq/gV2tFW1OuyRH26+hvIU=;
-        b=iJDAmmqtMAEOPa4PUlFVNKTQCtyj0cokAcCcNey1GVIV52SS/25dejYxL3N4v4d1Og
-         UgkTl6MJR9NT9JsFqggtdIW+GyjQR/HTPfLAfrkYdH9vYEZRe22OwbxUehTexzT49h7p
-         HRo6s2V/BLSLohywXWR856Bb7HQz7rSEv5jWFHolSvw78glYhfDRV6rrD0XHCorih4v1
-         bOSP7ME5tKjpAhoEy9aOiUnFTT8U3pXclmhoEs5PHtwBFxz7jarCuSeTr3sRcZ35CBwk
-         kc5Rcw4qtcSG/w8eTAg1AY/tHJSjz2zx7leGkh3gpINN+xGDMP2fmpoz3Ty9aezsq4j2
-         Jh/A==
-X-Forwarded-Encrypted: i=1; AL+hErFaaSwbGnIIZb5SG+7nVEQXmMOFOThAn6FFMeNWU2/d+c6lawCeW3hIlFAE/XDcz2mR0Oo=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9vRJN0jSvQ/JkJeNPKURTu7nj2l2ybOvuwvjxB76Q5NsNMt1Uo
-	yrbpn3NsK4OiQ2g643t40IC1N3ujYs4oR2/IjA+vW3/3qJKuSTtZRczx9Cw7w/e+0A==
-X-Gm-Gg: AZFdTZcOZpaRA+ukmm45WA4ubMc/zNZy6cKCVA2+emE4NW8kUJLcBU49nz3dypS9VrB
-	IQ2M8ql+nkHfuI0nIk5aIU7NuYgR2XV8hlZ3ibOW0QP9NgjtkXIXReS0I2B+cl6fdfXcjF6I+Xj
-	0gC4LWe7O18Q67VhPVs/ewP/2mb4VQjHY+RY074vlzbLj+fFupR8gZrYrlaRjKCaOcSwVt0gCon
-	3bnYn9vgXYdYIzPOuwqOaDyNZ+R7l3wAM/eAfXS6GkZ47VcflSG8/FN7hy0kvtiEwYXG/CgxcNh
-	Ao+p04Cl0RKclDkCEEVcj+/U2N16r9I5UUoJbQo1tAJwixN0DfmSXQg5DdRKeF4ReY06fD4a5fm
-	oKHh9xoPMEvkWAnMQ8WFIlg1T7kyUkRAVioZQ9FrHdMj6foQedQQCwdvAdT3yL3zZmlb8wRpdS3
-	c1juQwesQzHPYR0Oi2nQe7IM2mkfgsMG1O3yHoOyJDl/3k4G86wqGfA5ccj+R4FQpkIwbCBhz3k
-	PLwOBsx2YFCVLo/sSG1LJ0YgkyY2fKIZW4g+KTA2BsmpaowvlcL3IE/iHMEigWVGasN0DuxSv5S
-	9mwGMnqgZ4eEkwhnKQUQVYLNed7oF/fqOO3hlVpu3+0KoPxUaAmQ1RdtKDvfYl/WwYl+aq/hcAE
-	JrUqB
-X-Received: by 2002:a05:622a:4014:b0:535:a5fb:6459 with SMTP id d75a77b69052e-55d76a97e34mr61051721cf.68.1795189392660;
-        Fri, 20 Nov 2026 07:43:12 -0800 (PST)
+        bh=skDAf6P5lMgExY8BT13Y0yOZuZ/PE0d0HM9IStj4YTI=;
+        b=GDB2RJq2D5tIv1MFCjPnPyGivBJ5YV2zQrS+IwFDnzFKZdJ6bCoM+PmK2uUUeM4s6e
+         64Mhlppqq8H8JC4tXzrliaR9JwB0YIbrH6+zEw3hWa6F3tm7oaG0JKskmqNv3hOdU7Xl
+         lnKnx7bGcd6BgipP6X+xp271I742oq7hW06PY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795189394; x=1795794194;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=skDAf6P5lMgExY8BT13Y0yOZuZ/PE0d0HM9IStj4YTI=;
+        b=Iv+vUDj1PcT3e93je9pMRjiZFRw1zIiSkPkAlRXBu+yrRrBwsSq9BJKb7MFQRkCrs1
+         1xVte9pEZb+e/Y0VTGNKtplMWOVCJBrCI54lRzZ2qz9VSUTZdEwabFV/jpB/ZZRuTBRn
+         Ikxdb5akFjE/Hw6DrqV86sTlyAvDZH9yc0jyFyLkzFObEPkGGgeZZpvvugvz0P8qPcK+
+         XsgHUNlE2v2QfdW7kUzGEdVDCFaWR2wMoxJ3U07FYB91PYmlHgPJYGQ2vD1vL0TxHQDu
+         7sPsW586OxBO4YPgYL/geCub89E9Vk1TmJGl/+KkqIhH3g864BSR7E0ZGT2W3N7GdJZ9
+         NT3g==
+X-Forwarded-Encrypted: i=1; AL+hErH+eBEOuP11Fn5J9n8jvGw4nZya1OZTqwOx6oWlGuzKUcqFHEpAAL+6ge+3PHj9PYzCoBk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z95vG8Kb7tnAHnRYebjfxk7Kbw9tdlcgTwIYhcN8VUrr9YxuD1G
+	Jb0YuT952QEfEG7oZF7Md8Ilz+Lz7cOc/9CIgX1Npyvy0KVqNwsnnAICZgYyzGoP9g==
+X-Gm-Gg: AZFdTZcHYcIUUdAl882OFTr6PZhostrjainDpFsU6FLXXAVLptfWolFdxOr4KU5PuF/
+	f6W8yo1IYNTm8iqMu9zAZXbwXzZEjQimoxnucmt5G+T5Gx5OG6RvxxgoMunMY5nD3kBehEhFizX
+	+yDd+DwkU5M/RinDVxY0ueBHgKg3+lo87Q7QK1NjluSkpVDhyHgOPeeeSyPdsbD68pFkBbRUT8l
+	MpZlvrdPm1/tQJMLPmOujyuuG10KAbSDF0pjmlnHUp6SFes9UMWWlB7Pwo5JL7rM6ewF76+WJ2J
+	UD8JiKB8SShAeIqT1kKw5NYoNY94vdfPi9IBFE9z4eyoKxlI0iBS7JCVDkAYHntr9sClikQ+aWt
+	eoLPaQcYQqVlcVvoN1r2roe4+mGTrVjxuoZ9lwo06AS5+eGxMrH/HwqrQku9pAv2wOcQiimMyEp
+	NJKXbJYgrD22OVZzq6moK3aq0NQJ88c0vVBtw3TJgMrPTz47tCc29bJXOKgCdMB0w7gUvKpSggg
+	MuRvmt9x2BAbmqRgQ0PbZ0vSpz+VJcAAkEl8Qo4x3EXxocp8+48hgu1d1hkwKBLyI+PzRyPgLCc
+	5kolizI7KADdiPVvs4PSvbBTVn71k+BZkw27gb4Z7anjyFGx7c48Ixz9QerBKCXR2CcZXyb5+Nq
+	I58y/
+X-Received: by 2002:a05:622a:13c7:b0:55d:2f53:4e7e with SMTP id d75a77b69052e-55d76a5fa45mr64115931cf.68.1795189394179;
+        Fri, 20 Nov 2026 07:43:14 -0800 (PST)
 Received: from majuu.waya ([184.147.180.207])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-55d78451407sm25429451cf.2.2026.11.20.07.43.11
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-55d78451407sm25429451cf.2.2026.11.20.07.43.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2026 07:43:11 -0800 (PST)
+        Fri, 20 Nov 2026 07:43:13 -0800 (PST)
 From: Jamal Hadi Salim <jhs@mojatatu.com>
 To: netdev@vger.kernel.org
 Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
@@ -87,10 +88,12 @@ Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Jiri Pirko <jiri@resnulli.us>,
 	Victor Nogueira <victor@mojatatu.com>
-Subject: [PATCH net-next 0/1] net: neighbour: skip the stale dst lookup for a redirected skb
-Date: Fri, 20 Nov 2026 10:42:58 -0500
-Message-Id: <CORE-J9UK.v1.r0.20261120103344@mojatatu.com>
+Subject: [PATCH net-next 1/1] net: neighbour: skip the stale dst lookup for a redirected skb
+Date: Fri, 20 Nov 2026 10:42:59 -0500
+Message-Id: <CORE-J9UK.v1.r0.20261120103344-1@mojatatu.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <CORE-J9UK.v1.r0.20261120103344@mojatatu.com>
+References: <CORE-J9UK.v1.r0.20261120103344@mojatatu.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -102,40 +105,103 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This replaces the four-patch series posted as [PATCH net-next v4 0/4]
-"net: drop the stale dst when steering to another device":
+Alexei Starovoitov suggested guarding the re-lookup in
+neigh_update_process_arp_queue() with the skb's device instead of changing
+every producer that steers a packet to another device. This is that guard.
 
-https://lore.kernel.org/netdev/CORE-9NOG.v4.r0.20261116135311@mojatatu.com/
+The issue:
+neigh_update_process_arp_queue() re-looks the neighbour up from the skb's
+dst, because shapers, eql and sch_teql can output a packet through a
+different neigh object and it has to be reinjected at the top of the path.
+A packet steered to another device by bpf_redirect_neigh(), or by an nft
+"fwd ... device" rule, is parked on that device's neighbour while its dst
+is still the route that named the device it arrived on. The lookup returns
+the neighbour of that route, so the drained frame leaves the parking
+device with the arrived-on device's source address and that route's
+neighbour as the destination.
 
-Patches 2/4, 3/4 and 4/4 are withdrawn, and 1/4 is split out into a
-separate posting against net:
+The Fix:
+Skip the lookup when skb->dev is already neigh->dev; the parking neighbour
+is the top-level one in that case and can reinject the packet itself. A
+dst that is a route via another device, which is the sch_teql shape, still
+takes the lookup.
 
-  * 2/4, 3/4 and 4/4 dropped the stale dst at each producer that steers a
-    packet to another device. Alexei Starovoitov pointed out that a route
-    for one device is a normal thing to find on a frame that leaves
-    another one, and that the xfrm, tunnel and lwtstate consumers further
-    down still need it, so they are gone.
+Some context:
+A route for one device is a normal thing to find on a frame that leaves
+another one; bpf_redirect() and mirred have always produced it, and the
+packet has to keep it for the xfrm, tunnel and lwtstate consumers further
+down. lwtstate, NBMA tunnels, the route realm and ICMP errors are
+unaffected, and the fast path does not change.
 
-  * 1/4 is a regression of the xfrm interface helper, so it goes to net
-    on its own.
+Conditions to recreate the bug:
+Two network namespaces joined by two veth pairs, va/vb in the first and
+va_peer/vb_peer in the second. vb_peer carries no address, so the
+neighbour for its side stays unresolved.
 
-What is left is the drain guard Alexei proposed in his review of v4:
+    ip netns add ns1
+    ip netns add ns2
+    ip link add va type veth peer name va_peer
+    ip link add vb type veth peer name vb_peer
+    ip link set va netns ns1
+    ip link set va_peer netns ns2
+    ip link set vb netns ns1
+    ip link set vb_peer netns ns2
+    ip -n ns1 link set va address 02:aa:00:00:00:01
+    ip -n ns1 link set vb address 02:bb:00:00:00:01
+    ip -n ns1 addr add 10.10.0.1/24 dev va
+    ip -n ns1 addr add 10.1.0.1/24 dev vb
+    ip -n ns2 addr add 10.10.0.2/24 dev va_peer
+    ip -n ns1 link set va up
+    ip -n ns1 link set vb up
+    ip -n ns2 link set va_peer up
+    ip -n ns2 link set vb_peer up
+    ip -n ns1 neigh replace 10.10.0.2 lladdr 02:aa:00:00:00:ab dev va nud permanent
+    ip netns exec ns1 nft add table netdev t
+    ip netns exec ns1 nft "add chain netdev t c { type filter hook egress device va priority 0; policy accept; }"
+    ip netns exec ns1 nft add rule netdev t c fwd ip to 10.1.0.2 device vb
 
-https://lore.kernel.org/netdev/DMX7RM93TMGR.AXFN4YJ55REF@gmail.com/
+One packet to 10.10.0.2 egresses va and the rule steers it through vb to
+10.1.0.2, whose neighbour is incomplete, so it is parked there with va's
+route. A cls_bpf program returning
 
-It is adopted as written: neigh_update_process_arp_queue() skips the
-re-lookup of the neighbour from the skb's dst when skb->dev is already
-neigh->dev. The parking neighbour is the top-level one in that case and
-can reinject the frame itself; a dst that is a route via another device,
-which is the sch_teql shape, still takes the lookup.
+    struct bpf_redir_neigh nh = { .nh_family = AF_INET,
+                                  .ipv4_nh = htonl(0x0a010002) };
 
+    return bpf_redirect_neigh(vb, &nh, sizeof(nh), 0);
 
-Jamal Hadi Salim (1):
-  net: neighbour: skip the stale dst lookup for a redirected skb
+in the same hook produces the same park. Making that neighbour valid
+drains the queue:
 
+    ip -n ns1 neigh replace 10.1.0.2 lladdr 02:bb:00:00:00:cd dev vb nud permanent
+
+The single frame that leaves vb_peer carries 02:aa:00:00:00:01 as its
+source and 02:aa:00:00:00:ab as its destination instead of vb's own
+addresses.
+
+Link: https://lore.kernel.org/netdev/DMX7RM93TMGR.AXFN4YJ55REF@gmail.com/
+Suggested-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
+---
  net/core/neighbour.c | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
 
+diff --git a/net/core/neighbour.c b/net/core/neighbour.c
+index 887d2e35cd04..219dc89716f8 100644
+--- a/net/core/neighbour.c
++++ b/net/core/neighbour.c
+@@ -1334,9 +1334,11 @@ static void neigh_update_process_arp_queue(struct neighbour *neigh)
+ 		 * the packet in the output path.  So what we need to do
+ 		 * here is re-lookup the top-level neigh in the path so
+ 		 * we can reinject the packet there.
++		 * When skb->dev is neigh->dev 'neigh' is the top-level one.
++		 * dst can be a route via another device after a redirect.
+ 		 */
+ 		n2 = NULL;
+-		if (dst &&
++		if (dst && skb->dev != neigh->dev &&
+ 		    READ_ONCE(dst->obsolete) != DST_OBSOLETE_DEAD) {
+ 			n2 = dst_neigh_lookup_skb(dst, skb);
+ 			if (n2)
 -- 
 2.43.0
 
