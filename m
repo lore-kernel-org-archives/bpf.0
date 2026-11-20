@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.175
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795160851;
-	b=qTRg95mFrBQVKd6cvN+Xcuic99OnlveVddRwR5aT1WABeCMeaIH24bp07rS0NW13Q32C
-	 x4G+EZgRgVWeqieyoYNJyGMaCBHylb8v0pNZ58b9KK38UdEB1dS0gdXYro8k6aLAq8kC1
-	 J4/iFsO/rbZToOE+FYOJgV9frwHGDag0dJcQ/Bxcu7I7htRrrV6uzKslfnfHLowDI2qJR
-	 pUg27pdlrJJeZIhmy2l7PVy7qzpdU+/3LmdwxUFHnrPb9qAsRxZ/dsqxE2JkPBIgE9/Bw
-	 V9ccXjQ1C+7HvjO17ZsI7Mr5mUNRZ+YJ4xIPZ+Zuy3gsC+XZpD155dnBo4emNBlZTnQ==
+	t=1795160856;
+	b=lQY+ioRzQL9a9CctX1t8SW/h2lSl3qjqP7H5O+MeCeqsA6UqYkYv9bXA9O9qQ3u0LMAB
+	 epwNiEKhfw6GNARRNqjGUHmlQIHUmWqS7yBD1qGSSv0ySOCOv80PKphJFLczVCQriDboS
+	 liMz7fAYZEry50/DcB7Qr+t/LAf6qo1UcYM9N6zpmVzWnXt1V/DV0vM6GLW1yb0Pyp00s
+	 mz/OjXLdmKrIJmUA1KJAL2yljwcivGHAtydpCNSeyHGZL3kx6aIHr6ZXYRSg4vHukrxx8
+	 6gx4Fu+xdLMeE5FkQrCMb+cfR6HXF2XY03USaSeILuPlTSbLgBC/kv0vDJWOscl26Xw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795160851;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795160856;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=pDS+wLI+E9XtXku3NRjreYtTezxDdbaGcooYLQo7gsA=;
-	b=nGHkluSg98VZJHAAnfKll+wXtUyWqybLFw9wnyzyHhSnWHiMDvtPukVg0dDlhPrrI2DD
-	 8vJR60xyGFwepZyNodrA7/d7lJgNM39zUeLolzaSJM8+3EJ2iXR4wFO1Pm9l00JO9QiMF
-	 IokuD6GKBsz6Flz0Hja0MwYH2nFXMQ9YnYTHc65ziykPAtEiYpheHoPb8hZXopSJyETC/
-	 4bUxzuqeofHKMzu47GxI28Q9z/7B785Yg5kATjaQ4sgci/6VUQ8rQcgCgIOSPrSehzADQ
-	 Kod86eTuml5D3bBxpBN96ykPf1YOZokcsVaD27hIlm1oP7VaKuTrV6jI6pb6j+tuCyw==
+	bh=udtnG4pHTFvkZzEgmpz05P7hm2p8nLYsqDRZ8VVupAo=;
+	b=0zY20/jrU33TeuovF7fdtGgKL7+ubYL4rVNuscfAP1rowxUH04t6mQp1aV9WteGLsqF5
+	 nnbr/OnZRO+VWt02sSmHAaB3pQJa7uQCTdj8qkA1uOq0gchJtgqVjd6ogKXnL388FWhqx
+	 KFwhAn+rVYFKhe7muZhBuK7pocfoDnzofYKqknoen2W06aOYQxuO+5s4YrGkwoirT5IyN
+	 Mbsh9mQ03qtwQtpIvo1v+Ir91sZBz6KHRJ6jjGH6N7Zv2Q3QpIE+4whrLgI4BmNZJ2IRD
+	 axeCtDvu8gtqjXUxWqKU4+z/zabFT4JjVnYOIelVk2Hk1VOeMudjJhdMDBWxb62G/Iw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=P4Y6pbwv;
-	arc=none smtp.remote-ip=209.85.216.50
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=N4nZFaC5;
+	arc=none smtp.remote-ip=209.85.214.175
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E273606A320
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 07:47:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1E273606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6F92606A320
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 07:47:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E6F92606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=P4Y6pbwv
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3b405d8f1cfso325871a91.3
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 23:47:29 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=N4nZFaC5
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2f037bc348dso5197505ad.0
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 23:47:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795160849; x=1795765649; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795160855; x=1795765655; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=pDS+wLI+E9XtXku3NRjreYtTezxDdbaGcooYLQo7gsA=;
-        b=P4Y6pbwv0+oS4Glgumwk8d4xJPfN3d8QoN+EFnUMUZVQppt+MyYvgoua0scs8Ml1CX
-         pgZnkP494D42X/nN/V9ETmEwMDk+N1diQ/5Ls+cTT+DpY3hYeBcPm0+9CacteOQkdkDa
-         17RWmAVTi/wEsRG2aOje/7CJdpCV/eiQBKrOx2EB+6OlpAcOGcwGJCurlmkHE8gLV+dt
-         u99z+ILfBr3ljdgxesBvXvT63MZiwIkwQ1dceoPREaiMjGXeOUSMDLjk9GAgw3T+Ge4h
-         ZPLFVVFFszHIjgDl+b/++keQ6NxY30v5c2El2xUHM58h4lYzvgJ86O4SWbD66efu8/OV
-         7TGg==
+        bh=udtnG4pHTFvkZzEgmpz05P7hm2p8nLYsqDRZ8VVupAo=;
+        b=N4nZFaC5Hoew1MuktuVDRRE+RI+1QOQLZMRnu8Fm2SS3qzX/GkGwCPc9iAP10cQQlf
+         Ob+RRGhN6br1EeJHte8R9w6HisG6Z2xOu6YDxdPur3tYWFIhv3eWCydZix9UYMxIc7kd
+         b+CTP+E46ZcH/z79eY154JTP1ppm+Tffr0ozQMCjNsfk7XIpgVk85ouORVxxgY23O564
+         r09jWvamvUjTYoURgKPke7AXEmmXw7RmcRhwVGp0WUMCMA9gSOqS7uINouT6OMxfLTrI
+         islfm7MvDG0rp7AXK8NMytZt5HmnumWjGFYIGGfkUO1vVJGGtaMbL822GCJk4Bt9qfEv
+         9mhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795160849; x=1795765649;
+        d=1e100.net; s=20260707; t=1795160855; x=1795765655;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=pDS+wLI+E9XtXku3NRjreYtTezxDdbaGcooYLQo7gsA=;
-        b=1pkotH9O3i8gcxpoLumm9fHcRGIcR83fcnMGTB7t/jTOcdhXMFQE5nA2ZTpVLnlCbr
-         7PAnUpJ65PsVu1WrybVMiDpAMHdlstK5YG0YQJM4K0rDhfbiL7Wu2zQuOPfmc15AgbFj
-         eT6jIrCFV+7sA1G1Qo1uuKq1WHNi7Lvw40s8jGIYeu8Ffu4NsN3rge4MSsDYZvH9Rh3U
-         nZifYXfmcm1Qwqrob+Ti/0qJIHjtP7StCT6EVEk6E2OxxM2oeeAIU7pQ1kZWu+qKfXIm
-         c8aDorBYL1xI7G17JANbLFLD9g0TKa9Ezk0gIOB43cWQzjXbbJXReLyOEUGwZeV4Fdqb
-         YsvQ==
-X-Gm-Message-State: APuU4Z/L8rjOCyp7sOOGGDCkWlhSD4V0XQcJC/jui1I/ywsQmkKSQe2s
-	V6T/qi80AjgmIOQi+6ZmBsH6ROCRVX6odhSeSnXYTQFvdcjtua/YkOq5JSskiQ==
-X-Gm-Gg: AZFdTZfMWJ1A0//gWjwKuDfteAVDErI9Bei3RAnVtQTn5LUTorF+j/NDwxq+9jd3nQm
-	ZOJfwDIM/VPkx/ohNEc64mKuPi/YBJbuz/eYRORJcKBSP1p9AMP59pwGRms6lWueW6r+ZRiILfR
-	D0lop7F4zSSm7ErSVMDqhYG3LX8iTj8Nv/uX0DeUnxMDU7qbEutd94M2csU/jnEZFtidBpVaIm9
-	SuahjaSp9A8GHU0Jk1aJs5ejktNC9px0q24Hfh1oy8pNA07pPUokPhF8c2vbPTTTVL7ieacjzHx
-	yl989KjAMoVD8AatBaWHI98pCFbT0ew8HfKjM+5BMyPAaxZcEC1bHAfdpTNlnoXwYIZ4IpgxS5P
-	qOU1dNHCSOsvTebxg0Pmv0Ef+rOfe5HkPfM2NFFl+tT2JfSZezUGNfvjd+bU6e/V3hl5NAbWWjf
-	b75S4TmYzBSkcfGouuwdmOcG60QLRr8GlQI67mrA/goKhLBKY7a/w3nw5PAJTanhouGaEDuxvrg
-	0BA2Jz4hwMy/sqxF5999/DwHl+zfGpOzK77ELjVOequdNIQgdnmhIdO6d9P1YrlocA1Kh56q1ue
-	Rb+vsOpH+IL+z7WP/zvZEDvvcYa+NIgN5aU6x43UCDULq/KqdYMhALke0/hsX9FDWww41R284Uk
-	4bLK+sfHdAVWYteb+MpRE0CaMF+OfcQ7b22YqFd7TQvn5CV3QPtmI5qNYf22yGGZ7RghE8o9R21
-	8NIem8dfEfqxeGGYMTwY5Y
-X-Received: by 2002:a17:90b:2803:b0:3ac:ad90:7090 with SMTP id 98e67ed59e1d1-3b41c9830c4mr1817906a91.67.1795160849124;
-        Thu, 19 Nov 2026 23:47:29 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.245])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b405ecbd0bsm6260049a91.15.2026.11.19.23.47.28
+        bh=udtnG4pHTFvkZzEgmpz05P7hm2p8nLYsqDRZ8VVupAo=;
+        b=vDOUuK7P0IyowjkO+HyT2omX7lpBZ/X6wYc+vLK7+DmqkEqzG8J7GwUZjHa2zjYmDq
+         Yz5ttRRq3PDLP25cdPuN1HdCrpbSA2z6SaRySyPz4+CrnzrbOwpAg/PfrWG3K7B0iFWt
+         0fn+iAIJxOYl2AC6JhvqpvbwChh68oT23n1L10DClYT8aQtT/0ABldQaKJfTnKypLi/J
+         YXW1vInaj6ZUqheA+etRwZ2xZllYE+Gc/ZtoZQ7RHSDSPLBywz4YVvH+FrCVo6o6zBkf
+         R1lo1ZR9/NOuozI7qMGtnPm1vWrPQgk5gfQpvuBiRnqO/aX5n21zijmwly3ZAoB7m6Af
+         wXXw==
+X-Gm-Message-State: APuU4Z9IDSdybx7MAz12gRzjv7JOwF8TDENDmDDaSJBnydbgFCesWzFL
+	iXgA7LMO1UIjs6HruSzfIE46LRCIzjsipcV4uINz1UXCcIR7AzH4xOh6wsUKDQ==
+X-Gm-Gg: AZFdTZcXE8t2jDDoZ+DAf+C2z2drQB/H/52BQJLE0reyx/JqnHP+unfLOWCckNso+lH
+	LASMKtA5VP/JLEvfGoCbGJzkIqZiN1JvJH8/MqlMbDg05uql8KTZGOqB/eSG4qEnYBc5U/LWWKy
+	AbbCirMyBfHs6JAlFyJW0dBKpwt1JvPmF6FxhugMbo7D3t8RFqR5zUhaS+OJNODQxe7Cweivsvf
+	rmk0wbu1y3pXXtkr2zqhp+u3tGC7+BYbOmf7LbTl3kNJN79ekPVHpXlyeK6NimfcQRAmsNGHpQU
+	3ZEmfZ0QAI4u7mEcB/gwPfXzOrQUCrpieS7Era3GxNoZNcaRCCGw6Wdzd/K1gSVWB1YYFPHPQp/
+	mO17ucKqaK0Ps2pR1z6mX1ScozqXm5otYbKw6fyPxHUm7XKNUmNYdU/xoFVmQP04incn1t8vAqo
+	ubNBH8aVCIX8c2A/l06iVYNpOt/4k38LsuG5ys0AtPRvljJElMcChlrXlbd94Mv/o04ezs0apxF
+	4AiINfgGnHtkzxdEgX3j7dbQmvlX0cuz6FWH/ebiNFI6uoIF668lfK6fBJt5PqoFYbVW/1slk5/
+	OpFVcYpLL1DlZIjFvfYYAqfZ0vMi1XGC7RAQjvfhGjbp8aj6hOi00bC62m8hwC2KRQHrL0qA8+S
+	SikZ4EFGhB+BBPb8s5bgGAl4+yNQXNyU8VfVn92pY+noX6hrMg8KEIQgf3Leyzv+IVI1jtupWeL
+	4B3tFzEqxuCCWbQY8i+TQ=
+X-Received: by 2002:a17:902:e803:b0:2ef:effd:4606 with SMTP id d9443c01a7336-2f03efb019emr26098435ad.2.1795160854920;
+        Thu, 19 Nov 2026 23:47:34 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.244])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f0dcbe3sm10574375ad.28.2026.11.19.23.47.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2026 23:47:28 -0800 (PST)
+        Thu, 19 Nov 2026 23:47:34 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 30/49] bpf: Get the trip count from the trip index
-Date: Fri, 20 Nov 2026 07:42:02 +0000
-Message-ID: <20261120074430.2704488-31-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 31/49] bpf: Give a loop a checked trip count or may_goto
+Date: Fri, 20 Nov 2026 07:42:03 +0000
+Message-ID: <20261120074430.2704488-32-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261120074430.2704488-1-alexei.starovoitov@gmail.com>
 References: <20261120074430.2704488-1-alexei.starovoitov@gmail.com>
@@ -104,805 +104,690 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-A loop needs a trip count or may_goto. The trip index k is an xreg. It
-is 0 at the entry, and each back edge adds 1. The join at the header
-finds what moves with k. A jump that tests such an xreg refines k.
+A fixpoint proves that each insn is safe. It does not prove that a loop
+ends. A state that is pruned by its own ancestor closes a cycle:
 
-  for (i = 0; i < 100; i += 4)
-    join        i = 4 * k
-    threshold   'i < 100' holds up to k = 24: widen k to 0..25
-    jump        i < 100  ->  k 0..24
-    back edge   k + 1 is 1..25, the header state subsumes it
+  t --> ... --> header --> ... --> s
+  ^                                |
+  `----------- subsumes -----------'
 
-This is the proof: k grows in each trip and stays in 0..25. The next
-patch checks that. No jump has to test p here, its equation limits it:
+All pruned states go through flow_check_trip_counts(). If s made more
+trips than t, look at the trip index k of s:
 
-  for (i = 0, p = buf; i < 8; i++, p += 8)      p = buf + 8 * k
-          *p = 0;
+  if k <= BPF_MAX_TRIPS (2^32)   the loop has a trip count, no may_goto
+  else                           the loop gets may_goto
 
-A threshold is a guess, see bpf_collect_iv_thresholds(). If it is too
-small, k grows to the next one, and at last to S64_MAX.
+A loop that has may_goto or an iterator needs nothing. There is no trip
+count without CAP_PERFMON, as before.
 
-Two states can enter a loop with two bounds. So each entry has the trip
-index at which its jumps leave the loop, see exit_threshold:
+may_goto is there for all states at run time. If a state went through
+the loop without its edges, the pass starts again.
+bpf_flow_drop_guards() removes may_goto that no state needed.
 
-  (n, size) = (1 << 18, 4) or (1 << 17, 8)
-  for (i = 0; i != n; i++)
-          buf[i * size];        1 << 18 is too much for size 8
+A peeled trip that an earlier trip subsumes is pruned for the price of
+may_goto, see flow_prune_peeled().
 
-- The trip count is known only when the pass ends. So pass 0 takes the
-  edges of may_goto in all loops. After it only the loops that need
-  may_goto keep them.
-- 'i != n' with two ranges: add_distance_equation() makes a sym for
-  i - n in the first trip. It does that for two pointers into one
-  object too: for (p = t + 0..3; p != t + 4..7; p++)
-- A test against the rest of a buffer gets a sym for the difference
-  too, in a loop or not:
-    if (len > 64 - off) return; read(buf + off, len);
-  An equation has a cost, so len has to be in data_deps. If it is not,
-  the pass is imprecise, and a later pass makes the sym.
-- With -mcpu=v1 and v2 clang can count down and test the carry:
-    x = (u32)x + 0xffffffff; if (x != (u32)x) continue;
-  The two operands have one step. If the carry is set in the first
-  trips, the jump gives the threshold of 'x > U32_MAX'.
-- A distance of two truncated numbers can have a range of 2^31 after a
-  widening. clamp_diff_start() takes the ranges of the two numbers.
-- bpf_note_linear_xregs() notes the xregs that are linear in k, and
-  those that are linear only at first: i = (i + 1) & 63
-- A leftover is walked more than once. The new walk makes all values
-  again. So flow_is_stale() frees a state of an earlier walk.
-- With may_goto k has no bound. trip_index_safe() lets it start again
-  from a smaller number, so the states can be pruned.
+may_goto at a header skips the body. So a slot that is live at its
+target is live at the header.
+
+bpf_loop_spine_end() finds the insns that dominate all back edges. It
+replaces the counters in flow_place_guards().
+
+If both edges of a jump are dead, no run gets to the jump. It becomes
+'goto -1'.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h |  20 +++
- kernel/bpf/equation.c        | 128 ++++++++++++++++
- kernel/bpf/equation.h        |   5 +
- kernel/bpf/equation_join.c   | 274 +++++++++++++++++++++++++++++++++++
- kernel/bpf/flow.c            |  24 +++
- kernel/bpf/precision.c       |  10 ++
- kernel/bpf/states.c          |  18 +++
- kernel/bpf/verifier.c        |  24 +++
- 8 files changed, 503 insertions(+)
+ include/linux/bpf_verifier.h |  27 +++--
+ kernel/bpf/fixups.c          |  24 ++--
+ kernel/bpf/flow.c            | 225 +++++++++++++++++++++++++++++++----
+ kernel/bpf/liveness.c        |   3 +
+ kernel/bpf/loops.c           |  13 ++
+ kernel/bpf/verifier.c        |  85 ++++++-------
+ 6 files changed, 285 insertions(+), 92 deletions(-)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index a310ad50941..be499471e12 100644
+index be499471e12..2d4d8531ced 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -427,6 +427,9 @@ static inline u32 bpf_xreg_to_spi(u32 xregno)
- 
- /* The trip index of a loop is an xreg too. The loops of a frame come after its slots. */
- #define BPF_XREG_TRIP MAX_BPF_XREG
-+/* A loop that can make more trips gets may_goto */
-+#define BPF_MAX_TRIPS BIT_ULL(32)
-+
- static inline u64 bpf_xreg(u32 frameno, u32 xregno)
- {
- 	return (u64)frameno << 32 | xregno;
-@@ -451,6 +454,7 @@ struct loop_stack_entry {
- 	/* an xreg: how many times the program came back to the header */
- 	struct scalar trip_index;
- 	bool trip_widened;	/* it was moved to a threshold, or it does not grow */
-+	u64 exit_threshold;	/* by the jumps that the state passed and that leave the loop */
- };
- 
- /* The states of trip 0, 1, 2, 4, 8, ... are saved. A compare with them finds any period. */
-@@ -834,6 +838,7 @@ enum bpf_loop_kind {
- 
+@@ -839,7 +839,9 @@ enum bpf_loop_kind {
  /* What a pass finds about a loop */
  struct bpf_loop_per_pass {
-+	bool needs_guard;	/* see bpf_flow_needs_guard() */
+ 	bool needs_guard;	/* see bpf_flow_needs_guard() */
++	bool no_guard_edges;	/* a state did not take the edges of may_goto */
  	bool has_leftover;	/* the peeled trips were not enough */
++	bool peel_pruned;	/* see flow_prune_peeled() */
  	/* a check failed in a state that the loop kept apart, with no other suspect */
  	bool has_unproven;
-@@ -868,10 +873,17 @@ struct bpf_loop {
+ 	u32 last_peeled_trip;	/* see flow_keep_peeled() */
+@@ -872,11 +874,14 @@ struct bpf_loop {
+ 	u32 max_peel_cnt;	/* peel up to this trip */
  	bool peeled_apart;	/* the join rule holds for states that start a peeled trip */
  	bool disjoint_apart;	/* disjoint values in data_deps stay apart, also in the leftover */
++	bool no_peel_prune;	/* a larger earlier trip does not prune, see flow_prune_peeled() */
  	);
-+	struct bpf_loop_per_pass last_pass;	/* the last pass whose partition was kept */
+ 	struct bpf_loop_per_pass last_pass;	/* the last pass whose partition was kept */
  	bool partitioned;	/* the last partition was for this loop */
  	bool peeled_joined;	/* at the start of a peeled trip, against the join rule */
-+	bool guarded;		/* states take the edges of may_goto */
++	bool changed;		/* see flow_forget_loop() */
+ 	bool guarded;		/* states take the edges of may_goto */
++	bool infinite;		/* see failing_path_trip() */
  	struct bpf_iv_threshold *iv_thresholds;	/* where an iv can stop, see equation_join.c */
  	u32 iv_threshold_cnt, iv_threshold_cap;
-+	u32 leftover_epoch;	/* how many leftovers started */
-+	u64 exit_trip;		/* the trip in which the loop can end, 0 if it is not known */
-+	/* they move with the trip index, or only at first, see bpf_note_linear_xregs() */
-+	DECLARE_BITMAP(linear_xregs, MAX_BPF_XREG);
-+	DECLARE_BITMAP(nonlinear_xregs, MAX_BPF_XREG);
- 	struct bpf_loop_per_pass this_pass;
- 	/* sorted constants of the loop, the largest and the smallest constant that an insn adds */
- 	s64 *thresholds;
-@@ -994,6 +1006,8 @@ struct bpf_insn_aux_data {
- 	u16 stack_ptrs; /* bitmask of regs that may hold a frame pointer here (arg_track) */
- 
- 	unsigned int orig_idx; /* original instruction index, initialized once */
-+	u32 thresholds_epoch;	/* see bpf_collect_iv_thresholds() */
-+	u8 iv_operand;		/* the operand of the jump that tests the iv, + 1 */
- 	/* registers alive before this instruction. */
- 	u16 live_regs_before;
- 	/*
-@@ -1678,6 +1692,8 @@ u64 bpf_hash_apart_xregs(struct bpf_verifier_env *env, const struct bpf_verifier
- u64 bpf_hash_args(struct bpf_verifier_env *env, const struct bpf_verifier_state *st, u64 hash);
- void bpf_range_of_data_dep(struct bpf_verifier_env *env, const struct bpf_verifier_state *st,
- 			   u32 *first, u32 *last);
-+bool bpf_xreg_in_data_deps(struct bpf_verifier_env *env, const struct bpf_verifier_state *st,
-+			   u32 fr, u32 xregno);
- bool bpf_xreg_in_deps(struct bpf_verifier_env *env, const struct bpf_verifier_state *st,
- 		      u32 fr, u32 xregno);
- void bpf_note_reads_from_unproven(struct bpf_verifier_env *env, u32 idx);
-@@ -1731,6 +1747,7 @@ int bpf_flow_place_guards(struct bpf_verifier_env *env);
+ 	u32 leftover_epoch;	/* how many leftovers started */
+@@ -951,6 +956,7 @@ struct bpf_insn_aux_data {
+ 	u64 cast_arena:1; /* addr_space_cast of an address in arena */
+ 	u64 cast_mov:1; /* addr_space_cast of a pointer that is not in arena, it's a move */
+ 	u64 loop_guard:1; /* may_goto is added in front of this instruction */
++	u64 guard_unwinds:1; /* it leaves the subprog */
+ 	u64 speculative_first:1; /* a speculative state came to it first */
+ 	u64 call_recorded:1; /* see record_call_fixup() */
+ 	u64 pessimized:1; /* see bpf_partition_for_pessimized() */
+@@ -1366,7 +1372,7 @@ struct bpf_verifier_env {
+ 	bool imprecise;			/* a state before the first error is imprecise */
+ 	bool over_limit;		/* see bpf_check_limits() */
+ 	bool restart;			/* see bpf_flow_next_is_no_bound() */
+-	bool guards_late;		/* see bpf_flow_loop_gets_guards() */
++	bool guards_late;		/* see bpf_flow_needs_guard() */
+ 	bool extra_values;		/* a state can have constants that no run has */
+ 	bool seen_direct_write;
+ 	/* a register may point to the stack and is not PTR_TO_STACK, see bpf_reg_state::buf */
+@@ -1734,15 +1740,19 @@ static inline int bpf_add_cost_and_check(struct bpf_verifier_env *env, u64 cnt,
+ int bpf_flow_prepare(struct bpf_verifier_env *env);
+ void bpf_flow_reset(struct bpf_verifier_env *env);
+ void bpf_flow_free(struct bpf_verifier_env *env);
++bool bpf_flow_trip_is_new(struct bpf_verifier_env *env, struct loop_stack_entry *entry);
+ bool bpf_flow_is_bb_start(struct bpf_verifier_env *env, int insn_idx);
+ int bpf_flow_deliver(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
+ 		     int insn_idx, int prev_insn_idx, bool again);
+ int bpf_flow_next(struct bpf_verifier_env *env, int *prev_insn_idx, u64 *log_pos, u64 *diag_pos);
++int bpf_flow_needs_guard(struct bpf_verifier_env *env, struct bpf_loop *loop);
+ int bpf_flow_call(struct bpf_verifier_env *env, struct bpf_verifier_state *caller,
+ 		  struct bpf_verifier_state *entry, int subprog, int call_idx);
+ int bpf_flow_exit(struct bpf_verifier_env *env, struct bpf_verifier_state *st, int exit_idx);
+ void bpf_flow_next_is_no_bound(struct bpf_verifier_env *env, int insn_idx, int h);
+ bool bpf_flow_loops_lost_bound(struct bpf_verifier_env *env);
++void bpf_flow_new_pass(struct bpf_verifier_env *env);
++void bpf_flow_drop_guards(struct bpf_verifier_env *env);
+ int bpf_flow_place_guards(struct bpf_verifier_env *env);
  /* verifier.c, for flow.c */
  int bpf_flow_loop_enter(struct bpf_verifier_env *env, struct bpf_loop **backedge_loop,
- 			bool *starts_leftover);
-+int bpf_flow_start_leftover(struct bpf_verifier_env *env);
- int bpf_flow_edge_unproven(struct bpf_verifier_env *env, struct bpf_verifier_state *st, u32 idx,
- 			   int err);
- #define BPF_EXIT_NEEDS_CALLER	1	/* verify the call in the frames of the caller */
-@@ -2432,6 +2449,8 @@ void bpf_equations_fill(struct bpf_verifier_env *env, struct bpf_func_state *fra
- void bpf_equations_refine_all(struct bpf_verifier_env *env, struct bpf_verifier_state *st);
- void bpf_equations_jump(struct bpf_verifier_env *env, struct bpf_verifier_state *st, int idx,
- 			bool taken);
-+void bpf_equations_next_trip(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
-+			     u32 depth);
- bool bpf_equations_subsume(struct bpf_verifier_env *env, const struct bpf_verifier_state *old,
- 			   const struct bpf_verifier_state *cur);
- void bpf_equations_print(struct bpf_verifier_env *env, const struct bpf_verifier_state *st);
-@@ -2441,6 +2460,7 @@ void bpf_equations_pre_join(struct bpf_verifier_env *env, struct bpf_verifier_st
- void bpf_equations_post_join(struct bpf_verifier_env *env, struct bpf_verifier_state *dst,
- 			     const struct bpf_verifier_state *src);
- u32 bpf_equations_bytes(const struct bpf_equations *eqs);
-+void bpf_collect_iv_thresholds(struct bpf_verifier_env *env);
- void scalar_bounds_sync(struct scalar *s);
- bool scalar_subsumes(const struct scalar *old, const struct scalar *cur);
- bool scalars_fit_in_bits(const struct scalar *a, const struct scalar *b, u32 bits);
-diff --git a/kernel/bpf/equation.c b/kernel/bpf/equation.c
-index 3d9df6e6845..fc05ca7dd60 100644
---- a/kernel/bpf/equation.c
-+++ b/kernel/bpf/equation.c
-@@ -1132,6 +1132,91 @@ void bpf_equations_fill(struct bpf_verifier_env *env, struct bpf_func_state *fra
- 	env->eq_env->fill_bits = size * BITS_PER_BYTE;
- }
+@@ -2065,18 +2075,16 @@ struct bpf_iarray *bpf_insn_successors(struct bpf_verifier_env *env, u32 idx);
  
-+/*
-+ * The state came back to the header of the loop at @depth.
-+ * A trip count or may_goto ends the loop long before the trip index gets to 2^63.
-+ */
-+void bpf_equations_next_trip(struct bpf_verifier_env *env, struct bpf_verifier_state *st, u32 depth)
-+{
-+	struct scalar *trip_index = &st->frame[st->curframe]->loop_stack[depth].trip_index;
-+	struct bpf_xreg_equation *xreg_eq;
-+
-+	scalar_add_const(trip_index, 1);
-+	trip_index->r64 = cnum64_intersect(trip_index->r64, cnum64_from_urange(0, S64_MAX));
-+	scalar_bounds_sync(trip_index);
-+	xreg_eq = bpf_find_xreg_equation(&st->equations,
-+					 bpf_xreg(st->curframe, BPF_XREG_TRIP + depth));
-+	if (!xreg_eq)
-+		return;
-+	xreg_eq->off++;
-+	refine_sym_from_xreg(env, st, xreg_eq);
-+	propagate_bounds(env, st, false);
-+	bpf_equations_clean(env, st);
-+}
-+
-+/*
-+ * @rest is a constant minus a number, and not an iv that counts down. An equation has a cost,
-+ * so wait until an unproven insn needs @len.
-+ */
-+static bool tests_rest(struct bpf_verifier_env *env, u32 len, u32 rest)
-+{
-+	const struct bpf_verifier_state *st = env->cur_state;
-+	const struct bpf_xreg_equation *xreg_eq, *trip;
-+	u32 i;
-+
-+	xreg_eq = bpf_find_xreg_equation(&st->equations, bpf_reg_to_xreg(st, rest));
-+	if (!xreg_eq || xreg_eq->is_ptr || xreg_eq->coef > 0)
-+		return false;
-+	for (i = 0; i < st->frame[st->curframe]->loop_stack_cnt; i++) {
-+		trip = bpf_find_xreg_equation(&st->equations,
-+					      bpf_xreg(st->curframe, BPF_XREG_TRIP + i));
-+		if (trip && trip->sym == xreg_eq->sym)
-+			return false;
-+	}
-+	if (env->path_sensitive || bpf_xreg_in_data_deps(env, st, st->curframe, len))
-+		return true;
-+	env->imprecise |= !env->err;
-+	return false;
-+}
-+
-+/*
-+ * The ranges of two numbers do not show how far they are from each other:
-+ *	for (i = 0..3; i != n; i++)		for (p = t + 0..3; p != t + n; p++)
-+ *	if (len > 64 - off) return; read(buf + off, len);
-+ * Give the difference a sym. bpf_equations_jump() refines it if it does not wrap.
-+ * For an iv and its bound the first trip makes the equation. The other trips find it.
-+ */
-+static void add_distance_equation(struct bpf_verifier_env *env, const struct bpf_insn *insn)
-+{
-+	struct bpf_verifier_state *st = env->cur_state;
-+	const struct loop_stack_entry *e = bpf_top_loop(st->frame[st->curframe]);
-+	struct expr a, b, diff;
-+	struct scalar bounds;
-+	struct equation_pos pos = {};
-+	u8 op = BPF_OP(insn->code);
-+	bool is_ptr, is_eq = op == BPF_JEQ || op == BPF_JNE;
-+
-+	if (op == BPF_JSET || !compares_numbers(st, insn))
-+		return;
-+	if (is_eq && (!e || (e->peeled && e->trip)))
-+		return;
-+	if (!is_eq && !tests_rest(env, insn->dst_reg, insn->src_reg) &&
-+	    !tests_rest(env, insn->src_reg, insn->dst_reg))
-+		return;
-+	bpf_equations_clean(env, st);
-+	if (!assign_sym(env, bpf_reg_to_xreg(st, insn->dst_reg), true, &a, &is_ptr) ||
-+	    !assign_sym(env, bpf_reg_to_xreg(st, insn->src_reg), true, &b, &is_ptr) ||
-+	    bpf_find_next_diff(env, &st->equations, &a, &b, &pos, &diff))
-+		return;
-+	bpf_eval_diff(env, st, &a, &b, &bounds);
-+	/* len can get its bound from this jump */
-+	if (!is_eq || !scalar_is_unknown(&bounds))
-+		bpf_add_sym_equation(env, &st->equations, (struct bpf_sym_equation){
-+			{ -1, a.coef, -b.coef },
-+			{ bpf_new_sym(env, &st->equations, &bounds), a.var, b.var },
-+			env->insn_idx, a.off - b.off });
-+}
-+
- /* Note the operands. Delete the equations of the registers that the insn writes. */
- void bpf_equations_before_insn(struct bpf_verifier_env *env)
+ /*
+  * Where the program goes from may_goto and from the checks that the verifier adds:
+- * - May_goto in front of a jump goes where the jump goes, with the registers and the stack
+- *   as they are in front of the jump. bpf_insn_successors() has that edge.
++ * - May_goto before a jump goes where the jump goes, with the registers and the stack
++ *   as they are before the jump. bpf_insn_successors() has that edge.
+  * - A subprog that is out of budget goes to bail_insn, an exit. No such edge.
+- * - May_goto in front of the head of a loop goes to where the loops around it are left: from
++ * - May_goto before the header of a loop goes to where the loops around it are left: from
+  *   @idx to what is returned here, -1 if there is none. No such edge either. The registers
+- *   and the stack are what they are in front of @idx.
++ *   and the stack are what they are before @idx.
+  *
+  * The main pass looks at the states that go there. What is computed from the graph before
+- * the main pass has to take these edges into account where the main pass believes it:
+- * - Against the direction of the edges, liveness: a register that is live at the target is
+- *   live at @idx. Stack that is dead at @idx stays dead: a read of it at the target is
+- *   rejected.
++ * the main pass has to take these edges into account where the main pass relies on it:
++ * - Against the direction of the edges, liveness: what is live at the target is live at @idx.
+  * - In the direction of the edges, bpf_compute_const_regs() and compute_subprog_args(): what
+  *   holds on all edges of the graph to the target doesn't hold on this one.
+  */
+@@ -2425,6 +2433,7 @@ u8 bpf_rev_opcode(u8 opcode);
+ int bpf_compute_idoms(struct bpf_verifier_env *env);
+ int bpf_compute_loops(struct bpf_verifier_env *env);
+ int bpf_loop_at_index(struct bpf_verifier_env *env, u32 idx);
++int bpf_loop_spine_end(struct bpf_verifier_env *env, const struct bpf_loop *loop);
+ bool bpf_is_nested_loop(struct bpf_verifier_env *env, int inner_header, int outer_header);
+ u32 bpf_loop_thresholds_below(const struct bpf_loop *loop, s64 k);
+ int bpf_loop_collect_thresholds(struct bpf_verifier_env *env, struct bpf_loop *loop);
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index ccde914c57a..4c9f63e096d 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -608,18 +608,14 @@ static int emit_unwind_exit(struct bpf_verifier_env *env, int s, struct bpf_insn
+ int bpf_insert_loop_guards(struct bpf_verifier_env *env)
  {
-@@ -1169,6 +1254,9 @@ void bpf_equations_before_insn(struct bpf_verifier_env *env)
- 					   &eq_env->operand_expr[i], &eq_env->is_ptr[i]);
+ 	struct bpf_insn patch[2] = { BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, 0, 0) };
+-	struct bpf_insn leave[3] = { BPF_MOV64_IMM(BPF_REG_0, 0) };
+ 	struct bpf_insn_aux_data *aux = env->insn_aux_data;
++	struct bpf_insn leave[4], *insn;
+ 	struct bpf_subprog_info *sub;
+-	struct bpf_insn *insn;
+ 	int i, s, n, err;
+-	bool leaves;
+ 
+ 	for (s = 0; s < env->subprog_cnt; s++) {
+ 		sub = &env->subprog_info[s];
+-		n = bpf_ret_reg_pair(env, s) ? 3 : 2;
+-		leaves = false;
+-		for (i = sub->start; i < sub[1].start; i++) {
++		for (i = sub->start, n = 0; i < sub[1].start; i++) {
+ 			if (!aux[i].loop_guard)
+ 				continue;
+ 			/* A jump to itself is a back edge. It goes through may_goto too. */
+@@ -627,16 +623,15 @@ int bpf_insert_loop_guards(struct bpf_verifier_env *env)
+ 			insn = bpf_patch_list_add(env, i, patch, 2);
+ 			if (IS_ERR(insn))
+ 				return PTR_ERR(insn);
+-			if (aux[i].guard_no_unwind)
++			if (!aux[i].guard_unwinds) {
+ 				bpf_patch_list_jump(&env->patch_list, insn - 1, aux[i].guard_to, 0);
+-			else
+-				bpf_patch_list_jump(&env->patch_list, insn - 1, sub[1].start, n);
+-			leaves |= !aux[i].guard_no_unwind;
++				continue;
++			}
++			n = emit_unwind_exit(env, s, leave);
++			bpf_patch_list_jump(&env->patch_list, insn - 1, sub[1].start, n);
  		}
+-		if (!leaves)
++		if (!n)
+ 			continue;
+-		leave[1] = BPF_MOV64_IMM(BPF_REG_2, 0);
+-		leave[n - 1] = budget_exit_insn(env, sub);
+ 		err = bpf_patch_list_append(env, i - 1, leave, n);
+ 		if (err)
+ 			return err;
+@@ -831,6 +826,9 @@ void bpf_opt_hard_wire_dead_code_branches(struct bpf_verifier_env *env)
+ 		if (bpf_prog_is_offloaded(env->prog->aux))
+ 			bpf_prog_offload_replace_insn(env, i, &ja);
+ 
++		/* If both edges are dead, no run gets here. The driver keeps the old target. */
++		if (!aux_data[i + 1 + ja.off].seen)
++			ja.off = -1;
+ 		memcpy(insn, &ja, sizeof(ja));
  	}
-+	if (bpf_insn_is_cond_jump(insn->code) && BPF_SRC(insn->code) == BPF_X && !st->speculative &&
-+	    insn->dst_reg < BPF_REG_FP && insn->src_reg < BPF_REG_FP)
-+		add_distance_equation(env, insn);
- 	if (class == BPF_JMP && op == BPF_EXIT && fr && !st->frame[fr]->in_callback_fn)
- 		copy_xreg_equation(env, eqs, bpf_xreg(fr - 1, BPF_REG_0), bpf_xreg(fr, BPF_REG_0));
- 	if (class == BPF_JMP && op == BPF_CALL) {
-@@ -2140,6 +2228,45 @@ bool bpf_equations_subsume(struct bpf_verifier_env *env, const struct bpf_verifi
- 
- /* Join */
- 
-+static void join_trip_index(struct bpf_verifier_env *env, struct bpf_verifier_state *dst,
-+			    const struct bpf_verifier_state *src, struct bpf_loop *leftover_loop,
-+			    bool widen)
-+{
-+	const struct loop_stack_entry *s;
-+	struct loop_stack_entry *e;
-+	u64 xreg, threshold;
-+	struct scalar old;
-+	u32 fr, i;
-+
-+	for (fr = 0; fr <= dst->curframe; fr++) {
-+		e = dst->frame[fr]->loop_stack;
-+		s = src->frame[fr]->loop_stack;
-+		for (i = 0; i < dst->frame[fr]->loop_stack_cnt; i++, e++, s++) {
-+			xreg = bpf_xreg(fr, BPF_XREG_TRIP + i);
-+			old = e->trip_index;
-+			scalar_union(&e->trip_index, &s->trip_index);
-+			/* an outer loop still has to find its thresholds */
-+			e->trip_widened |= s->trip_widened || (widen && old.grew_once &&
-+							       e->loop->header == dst->insn_idx);
-+			e->exit_threshold = e->loop == leftover_loop ? s->exit_threshold :
-+					    max(e->exit_threshold, s->exit_threshold);
-+			if (!leftover_loop || scalar_equal(&e->trip_index, &old))
-+				continue;
-+			threshold = widen ? bpf_guess_trip_threshold(env, dst, e, xreg) : 0;
-+			e->trip_index.grew_once = true;
-+			if (!threshold || threshold < cnum64_umax(e->trip_index.r64))
-+				continue;
-+			e->trip_widened = true;
-+			if (threshold != S64_MAX)
-+				e->loop->exit_trip = max(e->loop->exit_trip, threshold + 1);
-+			scalar_set_unknown(&old);
-+			old.r64 = cnum64_from_urange(cnum64_umin(e->trip_index.r64), threshold);
-+			scalar_bounds_sync(&old);
-+			scalar_union(&e->trip_index, &old);
-+		}
-+	}
-+}
-+
- /*
-  * Make the equations of @dst hold for @src too. Call it before the xregs are joined.
-  * @leftover_loop: the states are at its header. @widen: @src came around it.
-@@ -2168,6 +2295,7 @@ void bpf_equations_pre_join(struct bpf_verifier_env *env, struct bpf_verifier_st
- 				    src->equations.needs_refine;
- 		swap(dst->equations, *eqs);
- 	}
-+	join_trip_index(env, dst, src, leftover_loop, widen);
  }
- 
- /* The xregs of @dst are joined. Some of them are gone. */
-diff --git a/kernel/bpf/equation.h b/kernel/bpf/equation.h
-index c88740ffb42..b91f5cf5c49 100644
---- a/kernel/bpf/equation.h
-+++ b/kernel/bpf/equation.h
-@@ -190,4 +190,9 @@ void bpf_eval_diff(struct bpf_verifier_env *env, const struct bpf_verifier_state
- void bpf_guess_equations(struct bpf_verifier_env *env, const struct bpf_verifier_state *dst,
- 			 const struct bpf_verifier_state *src, struct bpf_loop *leftover_loop,
- 			 bool widen);
-+void bpf_note_linear_xregs(struct bpf_verifier_env *env, const struct bpf_verifier_state *dst,
-+			   const struct bpf_equations *join);
-+u64 bpf_guess_trip_threshold(struct bpf_verifier_env *env, const struct bpf_verifier_state *dst,
-+			     const struct loop_stack_entry *e, u64 xreg);
-+
- #endif
-diff --git a/kernel/bpf/equation_join.c b/kernel/bpf/equation_join.c
-index d47c4f04453..1df6a1cce03 100644
---- a/kernel/bpf/equation_join.c
-+++ b/kernel/bpf/equation_join.c
-@@ -485,6 +485,28 @@ static void join_bounds_by_selector(struct equation_join *j, u64 var, bool alway
- 		join_diff(j, make_expr(1, var, 0), make_expr(max_slope, j->selector, 0), false);
- }
- 
-+/* Where the trip index of @e in @dst can stop. 0: it is too early to know. */
-+u64 bpf_guess_trip_threshold(struct bpf_verifier_env *env, const struct bpf_verifier_state *dst,
-+			     const struct loop_stack_entry *e, u64 xreg)
-+{
-+	const struct bpf_iv_threshold *threshold;
-+	u64 value = S64_MAX;
-+	int kind;
-+
-+	/* without an equation nothing limits it */
-+	if (!bpf_find_xreg_equation(&dst->equations, xreg))
-+		return value;
-+	if (!e->trip_index.grew_once)
-+		return 0;
-+	if (e->exit_threshold < value && e->exit_threshold >= cnum64_umax(e->trip_index.r64))
-+		return e->exit_threshold;
-+	for (kind = THRESHOLD_EXIT_JUMP; kind <= THRESHOLD_BODY_JUMP && value == S64_MAX; kind++)
-+		for_each_iv_threshold(env, e->loop, threshold, kind)
-+			if (threshold->value >= cnum64_umax(e->trip_index.r64))
-+				value = min_t(u64, value, threshold->value);
-+	return value;
-+}
-+
- /*
-  * Guess the equations that hold for @dst and @src, see bpf_equations_pre_join().
-  * The first join shows what a trip moves. The next walk finds the thresholds.
-@@ -539,3 +561,255 @@ void bpf_guess_equations(struct bpf_verifier_env *env, const struct bpf_verifier
- 	for (i = 0, sym_cnt = j.eqs->sym_cnt; j.selector != VAR_NONE && i < sym_cnt; i++)
- 		join_bounds_by_selector(&j, VAR_SYM | i, selector_is_trip);
- }
-+
-+/*
-+ * Which xregs move with the trip index in @dst? Some do not in the equations of the @join:
-+ *	i = (i + 1) & 63;
-+ */
-+void bpf_note_linear_xregs(struct bpf_verifier_env *env, const struct bpf_verifier_state *dst,
-+			   const struct bpf_equations *join)
-+{
-+	const struct bpf_func_state *f = dst->frame[dst->curframe];
-+	u64 trip_xreg = bpf_xreg(dst->curframe, BPF_XREG_TRIP + f->loop_stack_cnt - 1);
-+	const struct bpf_xreg_equation *old_trip =
-+		bpf_find_xreg_equation(&dst->equations, trip_xreg), *xreg_eq, *new;
-+	const struct bpf_xreg_equation *new_trip = bpf_find_xreg_equation(join, trip_xreg);
-+
-+	if (!f->loop_stack_cnt || !old_trip || !new_trip)
-+		return;
-+	for_each_xreg_equation(env, &dst->equations, xreg_eq) {
-+		if (xreg_eq->sym != old_trip->sym || xreg_eq->xreg >> 32 != dst->curframe ||
-+		    (u32)xreg_eq->xreg >= BPF_XREG_TRIP)
-+			continue;
-+		new = bpf_find_xreg_equation(join, xreg_eq->xreg);
-+		if (!new || new->sym != new_trip->sym)
-+			__set_bit((u32)xreg_eq->xreg, loop->nonlinear_xregs);
-+		else if (!__test_and_set_bit((u32)xreg_eq->xreg, loop->linear_xregs))
-+			env->new_linear_xreg = true;
-+	}
-+}
-+
-+/* Thresholds */
-+
-+/*
-+ * A jump gives thresholds in many states. Keep the last one in the direction of @step.
-+ * No @step: @value is for the syms of the current state only.
-+ */
-+static void add_iv_threshold(struct bpf_verifier_env *env, struct bpf_loop *loop, s64 value,
-+			     s64 step, enum iv_threshold_kind kind, u32 idx)
-+{
-+	struct bpf_iv_threshold *threshold;
-+
-+	for_each_iv_threshold(env, loop, threshold, kind)
-+		if (threshold->insn_idx == env->insn_idx && threshold->idx == idx)
-+			break;
-+	if (threshold < loop->iv_thresholds + loop->iv_threshold_cnt) {
-+		if (value == threshold->value || (step && (step > 0) == (value < threshold->value)))
-+			return;
-+		threshold->value = value;
-+	} else if (bpf_grow_array(env, &loop->iv_thresholds, &loop->iv_threshold_cap,
-+				  loop->iv_threshold_cnt + 1, sizeof(*threshold))) {
-+		loop->iv_thresholds[loop->iv_threshold_cnt++] =
-+			(struct bpf_iv_threshold){ value, kind, env->insn_idx, idx };
-+	}
-+	if (env->log.level & BPF_LOG_LEVEL2)
-+		bpf_log(&env->log, "loop at %d: %s has threshold %lld\n", loop->header,
-+			kind <= THRESHOLD_BODY_JUMP ? "the trip index" : "a number", value);
-+}
-+
-+/* Write @expr as a function of @trip_var. It starts from the far end of what is added. */
-+static bool match_iv(struct bpf_verifier_env *env, const struct bpf_verifier_state *st,
-+		     struct expr *expr, u64 trip_var, bool *low32, bool *start_is_range)
-+{
-+	const struct bpf_sym_equation *sym_eq, *ext;
-+	struct scalar bounds;
-+	struct expr rest;
-+	u32 n, i, k;
-+
-+	for (n = 0;
-+	     expr->coef && expr->var != trip_var && n < st->equations.sym_equation_cnt; n++) {
-+		if (!var_is_sym(expr->var) || over_limit(env))
-+			return false;
-+		ext = NULL;
-+		for_each_sum(env, &st->equations, sym_eq) {
-+			i = find_sym_pos(sym_eq, var_symno(expr->var));
-+			if (i == 3)
-+				continue;
-+			k = find_sym_pos(sym_eq, var_symno(trip_var));
-+			if (!i && !(u8)sym_eq->coef[2])
-+				ext = sym_eq;
-+			if (k == 3 || !is_plus_minus_one(sym_eq->coef[i]))
-+				continue;
-+			rest = sym_expr(-expr->coef * sym_eq->coef[i] * sym_eq->coef[3 - i - k],
-+					sym_eq->sym[3 - i - k],
-+					expr->off - expr->coef * sym_eq->coef[i] * sym_eq->off);
-+			bpf_eval_expr(env, st, &rest, &bounds);
-+			*expr = make_expr(-expr->coef * sym_eq->coef[i] * sym_eq->coef[k],
-+					  trip_var, bounds.r64.base);
-+			if (bounds.r64.size > U32_MAX && bounds.r32.size == U32_MAX)
-+				return false;
-+			*start_is_range = bounds.r64.size;
-+			*low32 |= bounds.r64.size >= U32_MAX;
-+			if (*low32)
-+				expr->off = bounds.r32.base +
-+					    (expr->coef < 0 ? bounds.r32.size : 0);
-+			else if (expr->coef < 0)
-+				expr->off += bounds.r64.size;
-+			return expr->coef;
-+		}
-+		if (!ext)
-+			return false;
-+		*expr = expr_scale(rhs_expr(ext, 0), expr->coef, expr->off);
-+	}
-+	return expr->coef && expr->var == trip_var;
-+}
-+
-+/*
-+ * "*@x @op @bound" holds in the trips that continue. In how many, if each adds @step to it?
-+ * *@x becomes the end of the range in which they continue.
-+ */
-+static u64 compute_trip_count(s64 step, u64 *x, u8 op, bool jmp32, struct scalar bound)
-+{
-+	struct cnum64 arc;
-+	struct scalar body_range;
-+	u64 left;
-+
-+	if (op == BPF_JNE && jmp32)
-+		scalar_set_const(&bound, bound.r32.base + (step > 0 ? bound.r32.size : 0));
-+	else if (op == BPF_JNE)
-+		scalar_set_const(&bound, bound.r64.base + (step > 0 ? bound.r64.size : 0));
-+	scalar_set_unknown(&body_range);
-+	scalars_refine_cond_op(&body_range, &bound, op, jmp32);
-+	arc = jmp32 ? (struct cnum64){ body_range.r32.base, body_range.r32.size } : body_range.r64;
-+	left = jmp32 ? (u32)(*x - arc.base) : *x - arc.base;
-+	if (left > arc.size)
-+		return 0;
-+	*x = arc.base + (step > 0 ? arc.size : 0);
-+	*x = !jmp32 ? *x : op == bpf_signed_opcode(op) && op != BPF_JNE ? (s32)*x : (u32)*x;
-+	return min(div64_u64(step > 0 ? arc.size - left : left, abs64(step)), U64_MAX - 1) + 1;
-+}
-+
-+static bool insn_is_in_loop(struct bpf_verifier_env *env, const struct bpf_loop *loop, int idx)
-+{
-+	int h = bpf_loop_at_index(env, idx);
-+
-+	return h == loop->header || bpf_is_nested_loop(env, h, loop->header);
-+}
-+
-+/* The jump stays in the loop if operand 0 or 1, or their difference, is "op" the bound */
-+static u8 loop_cond_opcode(const struct bpf_insn *insn, bool taken, int i)
-+{
-+	u8 op = taken ? BPF_OP(insn->code) : bpf_rev_opcode(BPF_OP(insn->code));
-+
-+	return !i ? op : i == 1 ? bpf_flip_opcode(op) : bpf_signed_opcode(op);
-+}
-+
-+/* The difference starts from @x, but not further out than @bound[1] - @bound[0] can be */
-+static s64 clamp_diff_start(const struct scalar *bound, s64 x, s64 step)
-+{
-+	s64 a = step < 0 ? cnum64_smax(bound[1].r64) : cnum64_smin(bound[1].r64);
-+	s64 b = step < 0 ? cnum64_smin(bound[0].r64) : cnum64_smax(bound[0].r64);
-+
-+	if (check_sub_overflow(a, b, &a))
-+		return x;
-+	return step < 0 ? min(x, a) : max(x, a);
-+}
-+
-+/* The jump at env->insn_idx tests a number that moves with the trip index. Find thresholds. */
-+void bpf_collect_iv_thresholds(struct bpf_verifier_env *env)
-+{
-+	struct bpf_insn_aux_data *aux = &env->insn_aux_data[env->insn_idx];
-+	const struct bpf_insn *insn = &env->prog->insnsi[env->insn_idx];
-+	const struct bpf_verifier_state *st = env->cur_state;
-+	const struct bpf_func_state *f = st->frame[st->curframe];
-+	bool is_ptr, is_iv[3], low32[3], start_is_range[3] = {}, stays_in_loop[2], is_body_jump;
-+	struct loop_stack_entry *e = bpf_top_loop(f);
-+	struct expr trip, step, expr[3];
-+	struct scalar bound[3];
-+	struct equation_pos pos = {};
-+	bool tests_carry = false;
-+	u32 i, n;
-+	u64 start, x, cnt;
-+	u8 op;
-+
-+	if (!env->eq_env || !e || e->loop->kind != BPF_LOOP_JUMPS ||
-+	    (env->path_sensitive ? !aux->iv_operand : !st->equations.xreg_equation_cnt ||
-+				   (e->trip_widened &&
-+				    aux->thresholds_epoch == e->loop->leftover_epoch)))
-+		return;
-+	expr[1] = make_expr(0, 0, insn->imm);
-+	if (!bpf_xreg_expr(env, st, bpf_reg_to_xreg(st, insn->dst_reg), &expr[0], &is_ptr) ||
-+	    (BPF_SRC(insn->code) == BPF_X &&
-+	     !bpf_xreg_expr(env, st, bpf_reg_to_xreg(st, insn->src_reg), &expr[1], &is_ptr)))
-+		return;
-+	bpf_eval_expr(env, st, &expr[1], &bound[0]);
-+	bpf_eval_expr(env, st, &expr[0], &bound[1]);
-+	scalar_set_const(&bound[2], 0);
-+	stays_in_loop[0] = insn_is_in_loop(env, e->loop, env->insn_idx + 1);
-+	stays_in_loop[1] = insn_is_in_loop(env, e->loop, env->insn_idx + insn->off + 1);
-+	is_body_jump = stays_in_loop[0] && stays_in_loop[1];
-+	low32[0] = low32[1] = low32[2] = BPF_CLASS(insn->code) == BPF_JMP32;
-+	x = bpf_xreg(st->curframe, BPF_XREG_TRIP + f->loop_stack_cnt - 1);
-+	if (!bpf_xreg_expr(env, st, x, &trip, &is_ptr) || !var_is_sym(trip.var))
-+		return;
-+	if (expr[0].coef && expr[1].coef &&
-+	    bpf_find_next_diff(env, &st->equations, &expr[0], &expr[1], &pos, &expr[2])) {
-+		/* it gets to 0 */
-+		add_iv_threshold(env, e->loop, expr[0].off - expr[1].off, 0, THRESHOLD_DIFF, 0);
-+		add_iv_threshold(env, e->loop, expr[1].off - expr[0].off, 0, THRESHOLD_DIFF, 1);
-+		add_iv_threshold(env, e->loop, -expr[2].coef * expr[2].off, 0, THRESHOLD_DIFF, 2);
-+	} else {
-+		expr[2].coef = 0;
-+	}
-+	for (i = 0; i < 3; i++) {
-+		is_iv[i] = match_iv(env, st, &expr[i], trip.var, &low32[i], &start_is_range[i]);
-+		/* the step in one trip */
-+		step = make_expr(0, 0, expr[i].coef);
-+		is_iv[i] = is_iv[i] && bpf_expr_div_exact(&step, 0, trip.coef);
-+		expr[i].coef = step.off;
-+	}
-+	/* they do not get closer */
-+	if (is_iv[0] && is_iv[1] && !start_is_range[0] && !start_is_range[1] &&
-+	    expr[0].coef == expr[1].coef) {
-+		/* but 'x != (u32)x' is 'x > U32_MAX', see refine_carry(). Operand i is x. */
-+		i = cnum64_umax(bound[1].r64) <= U32_MAX;
-+		if ((insn->code != (BPF_JMP | BPF_JNE | BPF_X) &&
-+		     insn->code != (BPF_JMP | BPF_JEQ | BPF_X)) ||
-+		    expr[0].off == expr[1].off || (u32)(expr[0].off - expr[1].off) ||
-+		    cnum64_umax(bound[i].r64) > U32_MAX)
-+			return;
-+		scalar_set_const(&bound[i], U32_MAX);
-+		is_iv[!i] = is_iv[2] = low32[i] = false;
-+		tests_carry = true;
-+	}
-+	start = e->trip_index.r64.base;
-+	for (n = is_iv[0] && is_iv[1] && is_iv[2] ? 4 : 0; n < 6; n++) {
-+		i = n / 2;
-+		if (!is_iv[i] || !stays_in_loop[n & 1] || (is_body_jump && start_is_range[i]))
-+			continue;
-+		aux->thresholds_epoch = e->loop->leftover_epoch;
-+		/* note_trips_left() takes the other operand as the bound */
-+		if (i < 2 && !tests_carry)
-+			aux->iv_operand = i + 1;
-+		x = expr[i].coef * (start - trip.off) + expr[i].off;
-+		if (i == 2 && start_is_range[i])
-+			x = clamp_diff_start(bound, low32[i] ? (s32)x : x, expr[i].coef);
-+		op = loop_cond_opcode(insn, n & 1, i);
-+		if (tests_carry)
-+			op = op == BPF_JNE ? BPF_JGT : BPF_JLE;
-+		cnt = compute_trip_count(expr[i].coef, &x, op, low32[i], bound[i]);
-+		/* its start is not known, so the trip index does not give its end */
-+		if (cnt && start_is_range[i] && i < 2) {
-+			add_iv_threshold(env, e->loop, x, expr[i].coef, THRESHOLD_SYM, 2 * n);
-+			add_iv_threshold(env, e->loop, x + expr[i].coef, expr[i].coef,
-+					 THRESHOLD_SYM, 2 * n + 1);
-+		}
-+		if (!cnt || cnt > BPF_MAX_TRIPS)
-+			continue;
-+		add_iv_threshold(env, e->loop, start + cnt, 1, is_body_jump, 2 * n);
-+		if (is_body_jump)
-+			add_iv_threshold(env, e->loop, start + cnt + 1, 1, is_body_jump, 2 * n + 1);
-+		else
-+			e->exit_threshold = min(e->exit_threshold, start + cnt);
-+	}
-+}
 diff --git a/kernel/bpf/flow.c b/kernel/bpf/flow.c
-index 5fbbb09a665..d31a689471e 100644
+index d31a689471e..2acf85a10d4 100644
 --- a/kernel/bpf/flow.c
 +++ b/kernel/bpf/flow.c
-@@ -102,6 +102,7 @@ struct bpf_flow {
- 	unsigned long *bb_starts;	/* insn starts a basic block */
- 	unsigned long *join_points;	/* more than one edge leads to the insn */
- 	struct bpf_loop call_loop;	/* from the exit of a function to its next call */
-+	u32 start_cnt;			/* of passes and of path-sensitive runs */
+@@ -244,11 +244,11 @@ static void flow_set_guard(struct bpf_verifier_env *env, int h, int n)
+ 	aux[h].loop->has_guards = true;
+ }
  
- 	/* of the pass */
- 	u64 *cost;			/* per function */
-@@ -398,6 +399,8 @@ int bpf_flow_place_guards(struct bpf_verifier_env *env)
+-static void flow_place_guards(struct bpf_verifier_env *env, int h, u32 *seen)
++static void flow_place_guards(struct bpf_verifier_env *env, int h)
+ {
+ 	struct bpf_insn_aux_data *aux = env->insn_aux_data;
+ 	struct bpf_loop *loop = aux[h].loop;
+-	int i, n, o, t, found = -1;
++	int i, n, o, t;
+ 
+ 	if (loop->backedges_overflow)
+ 		goto header;
+@@ -268,20 +268,9 @@ static void flow_place_guards(struct bpf_verifier_env *env, int h, u32 *seen)
+ 		return;
+ 	}
+ 
+-	/* seen[n]: the number of back edges that n dominates */
+-	for (i = 0; i < loop->backedges_cnt; i++)
+-		for (n = loop->backedges[i].from; n >= 0; n = n == h ? -1 : env->idoms[n])
+-			seen[n]++;
+-	for (n = loop->backedges[0].from; n >= 0 && found < 0; n = n == h ? -1 : env->idoms[n])
+-		if (seen[n] == loop->backedges_cnt && bpf_insn_leaves_loop(env, h, n))
+-			found = n;
+-	for (i = 0; i < loop->backedges_cnt; i++)
+-		for (n = loop->backedges[i].from; n >= 0; n = n == h ? -1 : env->idoms[n])
+-			seen[n] = 0;
+-	if (found >= 0) {
+-		flow_set_guard(env, h, found);
+-		return;
+-	}
++	for (n = bpf_loop_spine_end(env, loop); n >= 0; n = n == h ? -1 : env->idoms[n])
++		if (bpf_insn_leaves_loop(env, h, n))
++			return flow_set_guard(env, h, n);
+ 
+ 	for (i = 0; i < loop->backedges_cnt; i++)
+ 		if (loop->backedges[i].latch < 0)
+@@ -367,6 +356,86 @@ bool bpf_flow_loops_lost_bound(struct bpf_verifier_env *env)
+ 	return false;
+ }
+ 
++/*
++ * A state goes around @loop without a trip count, so the loop gets may_goto. At run time
++ * may_goto is there for all states. This includes states with a trip count, and states that
++ * got to the end of the loop in a peeled trip. A loop before this one can use up the budget
++ * of may_goto. So if a state did not take the edges of may_goto, the pass restarts.
++ */
++int bpf_flow_needs_guard(struct bpf_verifier_env *env, struct bpf_loop *loop)
++{
++	if (loop->rt_bounded)
++		return 0;
++	if (!loop->has_guards) {
++		verbose(env, "loop at insn %d never exits\n", loop->header);
++		return -EINVAL;
++	}
++	if (!loop->this_pass.needs_guard && (env->log.level & BPF_LOG_LEVEL2))
++		verbose(env, "loop at %d has no trip count\n", loop->header);
++	loop->this_pass.needs_guard = loop->guarded = true;
++	env->guards_late |= loop->this_pass.no_guard_edges;
++	return 0;
++}
++
++/* This pass peels more trips. What the last pass found about @loop can be wrong. */
++static void flow_forget_loop(struct bpf_verifier_env *env, struct bpf_loop *loop)
++{
++	struct bpf_insn_aux_data *aux = env->insn_aux_data;
++	int i, n = loop->nr_insns;
++
++	loop->changed = loop->guarded = false;
++	bpf_add_cost(env, n, BPF_COST_SCAN);
++	for (i = loop->header; n--; i = bpf_flow_insn_after(env, i)) {
++		if (bpf_loop_at_index(env, i) != loop->header)
++			continue;
++		aux[i].guard_no_unwind = aux[i].guard_unset_reg = false;
++		aux[i].not_stopped = -1;
++	}
++	loop->rt_bounded = flow_loop_is_bounded(env, loop->header);
++}
++
++/* A pass starts. It verifies the main prog and the global functions. */
++void bpf_flow_new_pass(struct bpf_verifier_env *env)
++{
++	struct bpf_insn_aux_data *aux = env->insn_aux_data;
++	struct bpf_flow *flow = env->flow;
++	int i;
++
++	memset(flow->cost, 0, env->subprog_cnt * sizeof(*flow->cost));
++	flow->budget = bpf_precision_budget(env);
++	flow->budget_func_cnt = 0;
++	flow->start_cnt++;
++	for (i = 0; i < env->prog->len; i++, aux++) {
++		if (aux->callback_loop)
++			aux->callback_loop->this_pass = (struct bpf_loop_per_pass){};
++		if (aux->recursion_loop)
++			aux->recursion_loop->this_pass = (struct bpf_loop_per_pass){};
++		if (!aux->loop)
++			continue;
++		/* pass 0 is over */
++		if (flow->start_cnt == 2)
++			aux->loop->guarded = aux->loop->this_pass.needs_guard;
++		aux->loop->this_pass = (struct bpf_loop_per_pass){};
++		if (aux->loop->changed && !env->path_sensitive)
++			flow_forget_loop(env, aux->loop);
++		if (aux->loop->rt_bounded)
++			aux->loop->rt_bounded = flow_loop_is_bounded(env, i);
++	}
++}
++
++/* The pass has no error. A loop needs may_goto only if a state had no trip count. */
++void bpf_flow_drop_guards(struct bpf_verifier_env *env)
++{
++	struct bpf_insn_aux_data *aux = env->insn_aux_data;
++	int i, h;
++
++	for (i = 0; i < env->prog->len; i++) {
++		h = bpf_loop_at_index(env, i);
++		if (h >= 0)
++			aux[i].loop_guard &= aux[h].loop->this_pass.needs_guard;
++	}
++}
++
+ /*
+  * Which loops have something that stops them at run time, and where may_goto goes in the others.
+  * Returns 1 if a place is at the head of a loop.
+@@ -376,11 +445,6 @@ int bpf_flow_place_guards(struct bpf_verifier_env *env)
+ 	struct bpf_insn_aux_data *aux = env->insn_aux_data;
+ 	int len = env->prog->len, h, i, ret = 0, err = 0;
+ 	struct bpf_loop *loop;
+-	u32 *seen;
+-
+-	seen = kvcalloc(len, sizeof(*seen), BPF_VERIFIER_GFP);
+-	if (!seen)
+-		return -ENOMEM;
+ 
+ 	for (i = 0; i < len; i++) {
+ 		aux[i].not_stopped = -1;
+@@ -398,13 +462,12 @@ int bpf_flow_place_guards(struct bpf_verifier_env *env)
+ 			break;
  		loop->rt_bounded = flow_loop_is_bounded(env, h);
  		/* also when it's bounded: the main pass may find that it's not */
- 		flow_place_guards(env, h, seen);
-+		/* pass 0 does not know the trip count before it ends */
-+		loop->guarded = loop->has_guards && !bpf_prog_is_offloaded(env->prog->aux);
+-		flow_place_guards(env, h, seen);
++		flow_place_guards(env, h);
+ 		/* pass 0 does not know the trip count before it ends */
+ 		loop->guarded = loop->has_guards && !bpf_prog_is_offloaded(env->prog->aux);
  		if (aux[h].guard_at_header)
  			ret = 1;
  	}
-@@ -960,6 +963,22 @@ static bool flow_same_entry(struct bpf_loop *loop, const struct flow_state *t,
+-	kvfree(seen);
+ 	return err ?: ret;
+ }
+ 
+@@ -963,6 +1026,55 @@ static bool flow_same_entry(struct bpf_loop *loop, const struct flow_state *t,
  	       flow_loop_entry(&t->st, loop)->entry_id == flow_loop_entry(&s->st, loop)->entry_id;
  }
  
-+/* @t is from an earlier walk over a leftover. The header state of @s subsumes that of @t. */
-+static bool flow_is_stale(const struct flow_state *t, const struct flow_state *s)
-+{
-+	const struct loop_stack_entry *a, *b;
-+	u32 fr, i;
-+
-+	for (fr = 0; !t->pending && fr <= s->st.curframe; fr++) {
-+		a = t->st.frame[fr]->loop_stack;
-+		b = s->st.frame[fr]->loop_stack;
-+		for (i = 0; i < s->st.frame[fr]->loop_stack_cnt; i++, a++, b++)
-+			if (a->entry_id == b->entry_id && a->trip < b->trip)
-+				return true;
-+	}
-+	return false;
-+}
-+
- /*
-  * All states arrive here. @s is
-  * - pruned, if a state subsumes it,
-@@ -1016,8 +1035,13 @@ static int flow_prune_or_join(struct bpf_verifier_env *env, struct flow_state *s
- 			joined = true;
- 			continue;
- 		}
-+		if (!leftover_loop && s->kind == FLOW_AT && flow_is_stale(t, s)) {
-+			flow_free_state(env, t);
-+			continue;
-+		}
- 		joined = true;
- 		widened = leftover_loop;
-+		/* what enters did not grow in this loop */
- 		widen = !t->pending && !enters;
- 		flow_unlink(env, t);
- 		err = bpf_states_join(env, &t->st, &s->st, leftover_loop, widen);
-diff --git a/kernel/bpf/precision.c b/kernel/bpf/precision.c
-index ad442a5d6b6..d5ec2dfb561 100644
---- a/kernel/bpf/precision.c
-+++ b/kernel/bpf/precision.c
-@@ -40,6 +40,16 @@ u32 bpf_frame_mask(struct bpf_verifier_env *env, unsigned long *masks,
- 	return words * BITS_PER_LONG;
- }
- 
-+bool bpf_xreg_in_data_deps(struct bpf_verifier_env *env, const struct bpf_verifier_state *st,
-+			   u32 fr, u32 xregno)
-+{
-+	unsigned long data_deps[XREG_WORDS];
-+
-+	return env->precision->data_deps &&
-+	       xregno < bpf_frame_mask(env, env->precision->data_deps, st, fr, data_deps) &&
-+	       test_bit(xregno, data_deps);
-+}
-+
- bool bpf_xreg_in_deps(struct bpf_verifier_env *env, const struct bpf_verifier_state *st,
- 		      u32 fr, u32 xregno)
- {
-diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index 3f4edb9bafb..bede3c12c3d 100644
---- a/kernel/bpf/states.c
-+++ b/kernel/bpf/states.c
-@@ -583,6 +583,24 @@ u64 bpf_hash_join_key(const struct bpf_verifier_env *env, const struct bpf_verif
- 	return hash;
- }
- 
 +/*
-+ * If may_goto or an iterator stops the loop, its trip index can start again from a smaller
-+ * number, never from a larger one: see bpf_equations_next_trip().
++ * @t subsumes @s. The caller prunes @s, @t continues for it. If @s made more trips it can
++ * come from @t:
++ *
++ *	t --> ... --> header --> ... --> s
++ *	^                                |
++ *	`----------- subsumes -----------'
++ *
++ * A back edge adds a trip and a join has the larger number. So each cycle of states has such
++ * an edge for the outermost loop that it goes around. All pruned states come here.
++ * Speculation ends by itself.
++ *
++ * The loop ends if the trip index k of @s is small each time. That is the trip count:
++ *
++ *  trip count:  guess -> state holds k -> jumps refine k -> k is small ?
++ *                                                           yes: no guard   no: add may_goto
++ *
++ * A loop that can run longer than that gets may_goto.
++ * There is no trip count without CAP_PERFMON (allow_uninit_stack).
 + */
-+static bool trip_index_safe(const struct loop_stack_entry *old, const struct loop_stack_entry *cur)
++static int flow_check_trip_counts(struct bpf_verifier_env *env, const struct flow_state *t,
++				  const struct flow_state *s)
 +{
-+	u64 min = cnum64_umin(old->trip_index.r64);
-+	struct scalar first;
++	const struct loop_stack_entry *e;
++	u32 fr, i;
++	u64 max_trip;
++	int err;
 +
-+	if (old->peeled || scalar_subsumes(&old->trip_index, &cur->trip_index))
-+		return true;
-+	if (!old->loop->rt_bounded && !old->loop->this_pass.needs_guard)
-+		return false;
-+	scalar_set_const(&first, min);
-+	return min <= cnum64_umin(cur->trip_index.r64) &&
-+	       scalar_subsumes(&old->trip_index, &first);
++	for (fr = 0; fr <= s->st.curframe && !s->st.speculative; fr++) {
++		e = s->st.frame[fr]->loop_stack;
++		for (i = 0; i < s->st.frame[fr]->loop_stack_cnt; i++, e++) {
++			if (e->loop->kind != BPF_LOOP_JUMPS ||
++			    e->trip <= t->st.frame[fr]->loop_stack[i].trip)
++				continue;
++			max_trip = cnum64_umax(e->trip_index.r64);
++			if (!e->peeled && max_trip <= BPF_MAX_TRIPS && env->allow_uninit_stack) {
++				if (env->log.level & BPF_LOG_LEVEL2)
++					verbose(env, "loop at %d has trip count %llu\n",
++						e->loop->header, max_trip + 1);
++				continue;
++			}
++			err = bpf_flow_needs_guard(env, e->loop);
++			if (err)
++				return err;
++		}
++	}
++	return 0;
 +}
 +
- static bool loop_stack_safe(struct bpf_func_state *old, struct bpf_func_state *cur)
+ /* @t is from an earlier walk over a leftover. The header state of @s subsumes that of @t. */
+ static bool flow_is_stale(const struct flow_state *t, const struct flow_state *s)
  {
- 	u32 i;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index cb79c91ae1c..bf26a6dc87d 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -19247,6 +19247,7 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 	env->false_reg2 = *src_reg;
- 	env->true_reg1 = *dst_reg;
- 	env->true_reg2 = *src_reg;
-+	bpf_collect_iv_thresholds(env);
- 	pred = is_branch_taken(env, dst_reg, src_reg, opcode, is_jmp32);
- 	if (pred == 1) {
- 		/* Only follow the goto, ignore fall-through. If needed, push
-@@ -20738,7 +20739,9 @@ static struct loop_stack_entry *push_loop(struct bpf_verifier_env *env,
- 		.held_cnt = held_cnt(env->cur_state),
- 		.entry_id = ++env->loop_entry_cnt,
- 		.peeled = true,
-+		.exit_threshold = U64_MAX,
- 	};
-+	scalar_set_const(&frame->loop_stack[cnt].trip_index, 0);
- 	frame->loop_stack_cnt++;
- 	return &frame->loop_stack[cnt];
- }
-@@ -20759,10 +20762,17 @@ static void leave_peeled_trips(struct bpf_verifier_env *env, struct loop_stack_e
- {
- 	struct bpf_func_state *frame;
- 	struct bpf_reg_state *reg;
-+	u32 i;
- 
- 	entry->peeled = false;
- 	entry->loop->this_pass.has_leftover = true;
-+	entry->loop->leftover_epoch++;
-+	/* the leftover of the last pass had no trip count */
-+	entry->loop->guarded |= entry->loop->last_pass.needs_guard && !env->cur_state->speculative;
-+	entry->trip_index.grew_once = entry->trip_widened = false;
- 	bpf_for_each_reg_in_vstate(env->cur_state, frame, reg, reg->grew_once = false);
-+	for (i = 0; i < env->cur_state->equations.sym_cnt; i++)
-+		env->cur_state->equations.syms[i].grew_once = false;
- }
- 
- /*
-@@ -20855,6 +20865,8 @@ static void loop_stack_pop(struct bpf_verifier_env *env)
- 				verbose(env, "exiting loop %d\n",
- 					frame->loop_stack[i].loop->header);
- 	leave_loops(frame, new_cnt);
-+	if (new_cnt != cnt)
-+		bpf_equations_clean(env, env->cur_state);
- }
- 
- static bool xreg_has_id(struct bpf_verifier_state *st, u32 id)
-@@ -20929,6 +20941,11 @@ static int next_trip(struct bpf_verifier_env *env, struct loop_stack_entry *entr
- 		     bool *starts_leftover)
- {
- 	entry->trip++;
-+	if (entry->loop->kind != BPF_LOOP_RECURSION) {
-+		bpf_equations_next_trip(env, env->cur_state, entry - cur_func(env)->loop_stack);
-+		if (infeasible_state_ends(env))
-+			return 1;
-+	}
- 	if (env->path_sensitive)
- 		return failing_path_trip(env, entry);
- 	if (!entry->peeled)
-@@ -20992,6 +21009,13 @@ static int enter_callback(struct bpf_verifier_env *env, bool back, struct bpf_lo
+@@ -1068,6 +1180,73 @@ static int flow_prune_or_join(struct bpf_verifier_env *env, struct flow_state *s
  	return err;
  }
  
-+/* The current state is at the header of a loop and starts its leftover */
-+int bpf_flow_start_leftover(struct bpf_verifier_env *env)
++/*
++ * @s starts a peeled trip of @loop. Does it repeat the state of an earlier trip? It is compared
++ * with trip 0, 1, 2, 4, 8, ... That finds any period. If @s comes from that state, the verifier
++ * sees no end of the loop. So the loop needs may_goto.
++ * A state that has less than the earlier one can be on its way to the end of the loop:
++ *	for (i = 7; i >= 0; i--) { if (i >= n) continue; ... }
++ * It is pruned for the price of may_goto. So is a state of another entry. If that causes
++ * an error, the next pass sets no_peel_prune.
++ */
++static int flow_prune_peeled(struct bpf_verifier_env *env, struct flow_state *s,
++			     struct bpf_loop *loop)
 +{
-+	leave_peeled_trips(env, bpf_top_loop(cur_func(env)));
-+	return enter_callback(env, false, NULL);
++	struct loop_stack_entry *entry = flow_loop_entry(&s->st, loop);
++	struct flow_state *t, *tn;
++	u32 trip = entry->trip;
++	int ret = 0;
++
++	entry->trip = 0;
++	s->kind = FLOW_PEELED;
++	flow_for_each_near(env, s, t, tn) {
++		if (!flow_same_join_key(env, t, s) || !bpf_state_subsumes(env, &t->st, &s->st))
++			continue;
++		if (!loop->rt_bounded && !loop->this_pass.needs_guard && !s->st.speculative &&
++		    (!flow_same_entry(loop, t, s) || !bpf_state_subsumes(env, &s->st, &t->st))) {
++			if (loop->no_peel_prune)
++				continue;
++			loop->this_pass.peel_pruned = true;
++		}
++		if (env->log.level & BPF_LOG_LEVEL2)
++			verbose(env, "from %d to %d: pruned\n", s->prev_insn_idx, s->st.insn_idx);
++		entry->trip = trip;
++		ret = flow_check_trip_counts(env, t, s) ?: 1;
++		break;
++	}
++	s->kind = FLOW_AT;
++	entry->trip = trip;
++	return ret;
++}
++
++/*
++ * The current state starts a peeled trip. An earlier trip can have all that it has in the
++ * deps. Then more peeled trips cannot help, and the leftover starts. If the earlier trip
++ * subsumes the full state, the trip counts as new: flow_prune_peeled() prunes it.
++ */
++bool bpf_flow_trip_is_new(struct bpf_verifier_env *env, struct loop_stack_entry *entry)
++{
++	struct flow_state *s = container_of(env->cur_state, struct flow_state, st), *t, *tn;
++	u32 trip = entry->trip;
++	bool is_new = true;
++
++	if (entry->loop->kind == BPF_LOOP_RECURSION || entry->loop->no_peel_prune)
++		return true;
++	entry->trip = 0;
++	s->kind = FLOW_PEELED;
++	flow_for_each_near(env, s, t, tn) {
++		if (!flow_same_join_key(env, t, s) || bpf_values_grew_in_deps(env, &t->st, &s->st))
++			continue;
++		is_new = bpf_state_subsumes(env, &t->st, &s->st);
++		if (is_new)
++			break;
++	}
++	s->kind = FLOW_AT;
++	entry->trip = trip;
++	entry->loop->this_pass.peel_pruned |= !is_new;
++	return is_new;
++}
++
+ /* @s is taken. @starts_leftover: the states of FLOW_LEFTOVER are joined, start the leftover */
+ static int flow_add(struct bpf_verifier_env *env, struct flow_state *s, bool starts_leftover)
+ {
+diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+index c9fea08eada..59976ae6999 100644
+--- a/kernel/bpf/liveness.c
++++ b/kernel/bpf/liveness.c
+@@ -418,6 +418,7 @@ static inline bool update_insn(struct bpf_verifier_env *env, struct func_instanc
+ 	unsigned long *may_read, *must_write, *live_before;
+ 	struct frame_masks *fm = instance->frames[frame];
+ 	u32 rel = relative_idx(instance, insn_idx);
++	int t = bpf_head_guard_target(env, insn_idx);
+ 	struct bpf_iarray *succ;
+ 	bool changed = false;
+ 	u32 s, w;
+@@ -445,6 +446,8 @@ static inline bool update_insn(struct bpf_verifier_env *env, struct func_instanc
+ 	for (w = 0; w < fm->words; w++) {
+ 		unsigned long new_before = (new_after[w] & ~must_write[w]) | may_read[w];
+ 
++		if (t >= 0)
++			new_before |= rel_mask(fm, relative_idx(instance, t), before)[w];
+ 		if (new_before != live_before[w]) {
+ 			live_before[w] = new_before;
+ 			changed = true;
+diff --git a/kernel/bpf/loops.c b/kernel/bpf/loops.c
+index 23c443ab3a2..deda85d0953 100644
+--- a/kernel/bpf/loops.c
++++ b/kernel/bpf/loops.c
+@@ -310,6 +310,16 @@ static int check_loop_depth(struct bpf_verifier_env *env, int idx)
+ 	return 0;
+ }
+ 
++/* The last insn that dominates all back edges of @loop */
++int bpf_loop_spine_end(struct bpf_verifier_env *env, const struct bpf_loop *loop)
++{
++	int i, n = loop->backedges[0].from;
++
++	for (i = 1; i < loop->backedges_cnt; i++)
++		n = idoms_intersect(env, n, loop->backedges[i].from);
++	return n;
 +}
 +
  /*
-  * The current state gets to env->insn_idx. Leave the loops that the insn is not in. Enter
-  * the loops that it is in. Returns 1 if the state ends here.
+  * The backedge->from and its latch can reside in an inner loop of @h, e.g.:
+  *
+@@ -627,6 +637,9 @@ int bpf_loop_collect_thresholds(struct bpf_verifier_env *env, struct bpf_loop *l
+ 	if (!todo)
+ 		return -ENOMEM;
+ 	done = todo + words;
++	/* the insns of a loop follow its header, see flow_compute_order() */
++	i = loop->header;
++	n = loop->kind == BPF_LOOP_CALLBACK ? 1 : loop->nr_insns;
+ 	for (;;) {
+ 		err = err ?: bpf_add_cost_and_check(env, n, BPF_COST_XREG);
+ 		for (; n-- && i >= 0 && i < sub[1].start && !err; i = bpf_flow_insn_after(env, i)) {
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index bf26a6dc87d..6373505c672 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -196,7 +196,6 @@ struct bpf_verifier_stack_elem {
+ 	struct bpf_verifier_state st;
+ 	int insn_idx;
+ 	int prev_insn_idx;
+-	enum bpf_guard_edge guard_edge;
+ 	bool again;	/* see bpf_flow_deliver() */
+ 	struct bpf_verifier_stack_elem *next;
+ };
+@@ -21155,87 +21154,79 @@ static int push_unwind_exit(struct bpf_verifier_env *env)
+ }
+ 
+ /*
+- * The loop that is not counted and has nothing that stops it at run time gets
+- * may_goto in front of this insn. When it is out of budget the program goes
+- * where may_goto goes with the registers and the stack as they are here.
+- * Every state that goes through the loop does, see bpf_flow_loop_gets_guards().
++ * A loop has no trip count, and nothing stops it at run time. It gets may_goto
++ * before this insn. When may_goto is out of budget, the program goes to its
++ * target with the registers and the stack that it has here.
++ * Every state that goes through the loop does that, see bpf_flow_needs_guard().
+  */
+ static int check_loop_guard(struct bpf_verifier_env *env)
+ {
+ 	struct bpf_insn_aux_data *aux = &env->insn_aux_data[env->insn_idx];
+-	struct bpf_verifier_state *branch;
+-	struct bpf_func_state *frame = cur_func(env);
+-	struct loop_stack_entry *entry;
+ 	struct bpf_loop *loop;
+-	int h, err;
++	int err;
+ 
+-	h = bpf_loop_at_index(env, env->insn_idx);
+ 	/* The callback came back to the helper that calls it: the program is not in front of it. */
+-	if (h < 0 || !frame->loop_stack_cnt || frame->callback_depth)
++	if (!aux->guard_place || cur_func(env)->callback_depth)
+ 		return 0;
+-	loop = env->insn_aux_data[h].loop;
+-	entry = &frame->loop_stack[frame->loop_stack_cnt - 1];
+-	if (loop->rt_bounded || !env->insn_aux_data[env->insn_idx].guard_place ||
+-	    entry->loop_id != h)
++	loop = env->insn_aux_data[bpf_loop_at_index(env, env->insn_idx)].loop;
++	if (loop->rt_bounded)
+ 		return 0;
+-	if (verifier_bug_if(!entry->terminates && !entry->guarded, env,
+-			    "nothing stops the loop at %d", h))
+-		return -EFAULT;
+-	if (!entry->guarded && !bpf_loop_walk_may_give_up(entry))
++	if (!(env->path_sensitive ? loop->infinite : loop->guarded)) {
++		loop->this_pass.no_guard_edges = true;
+ 		return 0;
++	}
+ 
++	env->imprecise |= !env->err;
+ 	/* the device runs the insns that the driver was given, without may_goto */
+ 	if (bpf_prog_is_offloaded(env->prog->aux)) {
+-		verbose(env, "loop at insn %d has no known bound in an offloaded program\n", h);
++		verbose(env, "loop at insn %d has no known bound in an offloaded program\n",
++			loop->header);
++		env->cur_state->suspect_loops |= loop->suspect_bit;
+ 		return -EINVAL;
+ 	}
+ 
+ 	/*
+-	 * A guard has one way out, and only that one is looked at.
++	 * A guard has one way out, and only that one is verified.
+ 	 *
+ 	 * Leave the subprog, if that is possible every time the program gets here:
+ 	 *	do { p = lookup(); } while (!p); *p
+-	 * The code that follows the loop counts on what the jump that leaves it has found out.
++	 * The code after the loop relies on the result of the jump that leaves it.
+ 	 *
+ 	 * Otherwise leave the loop:
+ 	 *	lock(); do { ... } while (...); unlock();
+-	 * The code that follows the loop releases what is held.
++	 * The code after the loop releases what is held.
+ 	 *
+-	 * From the head of a loop to where the loop is left is not an edge of the program:
++	 * The program has no edge from the header of a loop to the exit of the loop:
+ 	 *	for (;;) { c = *s++; if (!c) return 0; if (c == '*') return 1; }
+-	 * The loop is left to 'exit', and only its body sets r0. Leave the subprog then, with
++	 * The loop is left to 'exit', and only its body sets r0. Then leave the subprog. Use
+ 	 * a plain exit if it cannot unwind, like check_recursion_guard().
+ 	 *
+-	 * It's the same way for all states that get here. As long as they leave the subprog
+-	 * what would leave the loop is dropped. Both are dropped as long as the loop has
+-	 * no may_goto: the state is in a walk that may get to the end of the loop.
++	 * All states that get here take the same way, or the pass starts again.
++	 * A speculative state does not select the way.
+ 	 */
++	if (env->cur_state->speculative)
++		goto out;
+ 	if (aux->guard_at_header && !aux->guard_unset_reg && guard_reads_unset_reg(env, aux)) {
+ 		aux->guard_unset_reg = true;
+-		/* The states that were here left the loop. All again. */
+-		if (aux->guard_no_unwind)
+-			env->guards_late = true;
++		env->guards_late |= aux->guard_no_unwind && aux->loop_guard;
+ 		aux->guard_no_unwind = false;
+ 	}
+ 	if (!aux->guard_no_unwind &&
+ 	    !state_can_unwind(env, env->cur_state, aux->guard_unset_reg)) {
++		env->guards_late |= aux->loop_guard;
+ 		aux->guard_no_unwind = true;
+-		/* What would leave the loop from the states that were here is gone. All again. */
+-		if (aux->guard_edge_dropped && loop->guarded)
+-			env->guards_late = true;
+ 	}
+-	if (!aux->guard_no_unwind) {
++out:
++	aux->loop_guard = true;
++	aux->guard_unwinds = !aux->guard_no_unwind;
++	if (aux->guard_no_unwind)
++		err = PTR_ERR_OR_ZERO(push_stack(env, aux->guard_to, env->insn_idx, false));
++	else
+ 		err = push_unwind_exit(env);
+-		if (err)
+-			return err;
+-		env->head->guard_edge = BPF_GUARD_LEAVES_SUBPROG;
+-	}
+-
+-	branch = push_stack(env, env->insn_aux_data[env->insn_idx].guard_to, env->insn_idx, false);
+-	if (IS_ERR(branch))
+-		return PTR_ERR(branch);
+-	env->head->guard_edge = BPF_GUARD_LEAVES_LOOP;
+-	return 0;
++	/* more peeled trips can show that the edge is dead */
++	if (!err && env->head)
++		env->head->st.suspect_loops |= loop->suspect_bit;
++	return err;
+ }
+ 
+ /* The states that the insn pushed go where they were pushed to. */
+@@ -21602,8 +21593,8 @@ static int do_check_block(struct bpf_verifier_env *env, int prev_insn_idx)
+ 	}
+ }
+ 
+-/* All is done again, whatever came out, see do_check_all() */
+-static bool round_is_dropped(struct bpf_verifier_env *env)
++/* What the pass assumed about loops does not hold, see do_check_all() */
++static bool pass_needs_restart(struct bpf_verifier_env *env)
+ {
+ 	return (env->restart && bpf_flow_loops_lost_bound(env)) || env->guards_late;
+ }
 -- 
 2.55.0
 
