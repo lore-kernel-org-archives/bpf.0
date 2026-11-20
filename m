@@ -1,165 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.65.108
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795172840;
-	b=q12STf55h2nPle6P+tyvjjAxhgGK8X4XLVBxeQdVgdnC5NybLf61/BHMpojJ/dZtkVI3
-	 JnrTU1FinN2RuYj7x4ksobe9EWL2q3oReE5tsyHcAQT5vKM3iissAiAYE4u0YO82tDKDF
-	 ouwXnuIYVdSsCak9tHn+KyV6tRX63FzahiC4VTAA3sD/r1VtZQA1/fNUtm6OEfbjL1ihL
-	 v6knyN0sCswJbQtjzlf2JZYLaAC5sqvSyUGGJkLr03AlhXZ+37G2O4LwwT4AwkIzlLsL8
-	 fRrkAYh3UNa6EX/nHgjmzWcpYKpKNIkeBc20AsgeKyumRJ11ER9m3qPU/+9wmVaKu5g==
+	t=1795173052;
+	b=y8REu8kBKBsdWN63o8BKEod9ed/KYJpK8N+Ujemd7soxeRU+NkUsxeYFj4aiGtYJsAF9
+	 BQ2oLW6phdlspktNwhuiiCf7qApNjX0MBBISEZFE52lyD4DWtdEKSMVBZ5EM5s2Iw2aUo
+	 QRkN5CWKJltao+ZLPKZNXDPgTUowoaBDNouHrLmiuDrQ+A5PF+NeskH+IvvVjPouOTk1l
+	 3jkEmE69duqQ3XLb+D021MN3HE3Z3pniPnDplQEa/UzETrmAU2ZrMHnvtUnQFv5z9SA9/
+	 3+agpIgfhnT590GXfsV1VEBW+UbR6zCh9KDWrHp5hI/SwSS3B+yj+Q4exqZShl7iniw==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795172840;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:CC:Subject:
-	 Thread-Topic:Thread-Index:Date:Message-ID:References:In-Reply-To:
-	 Accept-Language:Content-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:
-	 x-ms-publictraffictype:x-ms-traffictypediagnostic:
-	 x-ms-office365-filtering-correlation-id:x-ms-exchange-senderadcheck:
-	 x-ms-exchange-antispam-relay:x-microsoft-antispam:
-	 x-microsoft-antispam-message-info:x-forefront-antispam-report:
-	 x-ms-exchange-antispam-messagedata-chunkcount:
-	 x-ms-exchange-antispam-messagedata-0:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-AuthAs:X-MS-Exchange-CrossTenant-AuthSource:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-originalarrivaltime:
-	 X-MS-Exchange-CrossTenant-fromentityheader:
-	 X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
-	 X-MS-Exchange-CrossTenant-userprincipalname:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=KEQvRAcTyZLYEL61AXeUCCmn4XJnvv3DwjzprrKl8sI=;
-	b=TTArIjTNePMxKveAWmgxCCCQan3HPPCFtcx7uMMivgxq5Nd0PfOcFjCV+emJF/GRJMq4
-	 XmCfSjTSiwiGuhUrZQXabkSmy9josKNWBz8ExQ0lajTiXTisF/uppEAhAH+GJ2f69O3IU
-	 MZ7vBE4BxGG0MD56QI+TB2lVlO5EBXEsQPBl+f8KbZXUtYauzXWv4HEHEJQyLYoHenD1O
-	 RQ7phs/tJvVgSxfHG1D6VcJNkdtWtGo/Be8lMsZkPsnEEHT/i7QXpMc5COsKxVA9svAx1
-	 7S6MO8zDYfoiV2tQXt8/wK0cEGAKBtskS55k7m6CtzH86pFvxRW1iRZKfOgkmdVzbvw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795173052;
+	h=Received:DKIM-Signature:Received:From:Subject:Date:Message-Id:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
+	 X-Endpoint-Received:X-Original-From:Reply-To;
+	bh=AcU42dM/DxndFKfD2cez7uuV6JWRlrbHkbmuXHRF75o=;
+	b=wmK3jlqwo3xmKJvHIq+zy7XynsempJ3GJjV3cIh/2Zr63srCmL7ISnjQ1U5OmY++6jsX
+	 BUwsXQG2y5h9/8M7c1gbEXSmpL9SnW+myc+hgYc8EWIINEQMQn17lsy+V/JwWkLNkNL6C
+	 yt92bO9SYad/AL8Oo3h1/Uu4tSY6d8vhizb5NL2EkLuPrAc9Nsr6a3d2WTjL0DUKn6mm2
+	 hLKrcA2QeVRk62KfdkJVxPZyMPaAswbzcTHpEDtlrqWJDwVmzvw/waD9uapmOSgvZF+Wz
+	 1eTIWIAZnND0vNDqY5F0nZ6P1M9vnpaLwLISve03fno9TTTzPfHZPdJUYgWzMbQkYSA==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=aweta.nl;
-	spf=pass smtp.mailfrom=aweta.nl;
-	dkim=pass header.d=aweta.nl header.i=@aweta.nl header.a=rsa-sha256 header.s=selector1 header.b=KS8f4ciO;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.65.108
-Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11021108.outbound.protection.outlook.com [52.101.65.108])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Xxzb2TOO;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3895760A263C;
-	Fri, 20 Nov 2026 11:07:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3895760A263C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=aweta.nl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aweta.nl
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B877606A33D;
+	Fri, 20 Nov 2026 11:10:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=aweta.nl header.i=@aweta.nl header.a=rsa-sha256 header.s=selector1 header.b=KS8f4ciO
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=kUP9spFVJHhxuvSZ2lFAqR1fAAyXif+MopPtIP4aS4XKwoOiOhIvUZEWzShbXClWlpbEiYep0H5cdX2eK0INeSDUBYhYQkIoGyZ2ksPZfeFXREbhKnB41f89ZuKMoJTmZe9nJz8fDGcv4zyxSSoy4GtCjexms9dbD7IGxTgf1Zj6XczI3OC/QVbhD84AkDctg16QDKZay/U/HwGbWMjhzaqEXEeujWapMXWnbsv82KTBHXA3XMbWb8vlW1VgfXMs/vphiIHhrERt7ncQsONh99Ij1qqA2f00AICNakpAVxMGG9IehYjcti2wLW5NA1DwuPzQNBJPOwijdLlfBK3Cig==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KEQvRAcTyZLYEL61AXeUCCmn4XJnvv3DwjzprrKl8sI=;
- b=J0+t0+DHmnUTrlNByVXN+2Vyv+zCO+8qGV+Y5fbpHMU06ClIBEKGk94mPI3KRhwXqVAln19VdPYVdHN2lp7ijHx+ClhGkQgJMPYpoyIASXLCP+47YJPkDs6CygGTBCHbzydMK3HwjwSjbSRf7a4NJk8KOhgvTMMwtoeDiqhNGpaqJFMeDwvziC4bcsh8eZ/HRyctoQpdWxqvDscjJE97DxMFOjqotmzZ6x7fY8sEYfKxW9qoUiLd/z+goJEVs8yfgdQddlay8yA66IzvoCLWmIyv2OYniodb5UxNxGQ0a5MORvbT1yq963iaFY3cJFrsaCX/jRyfixR27U1d/n8LVA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aweta.nl; dmarc=pass action=none header.from=aweta.nl;
- dkim=pass header.d=aweta.nl; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aweta.nl; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KEQvRAcTyZLYEL61AXeUCCmn4XJnvv3DwjzprrKl8sI=;
- b=KS8f4ciO+VjhZ4Nl3nQtNAx8voB9xAtyBpwltHH2CszbfB78mJtukHKQ+4S41PHpMEFBFtx6Y6p/oZil2lkDLKlx5+meMOdx2OLKOH5JPjRJq4s5dWjzufZZz2K6maxoeNv1F6WXO//MSqnKBAdkbvY2HiLWJfJMJge2xeAMnlTEkqq3+9qrLzbW7pJGtun71AF2peAvTCKJeP+8oIp1AxOIn7tC7w21ggapVW0TXVfmE0NMWxRGJVs1Gr0i9Ey7XFQbQNaee6pZDfKeSUN2/MKJFkigKRZd76CTRGHK7AOYojjKFdH+Nb+5CeJPS1351zVtBeDiBX5iTgfumYS4wA==
-Received: from AS5PR05MB11020.eurprd05.prod.outlook.com
- (2603:10a6:20b:67d::13) by MIWPR05MB401878.eurprd05.prod.outlook.com
- (2603:10a6:290:d9::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.12; Fri, 20 Nov
- 2026 11:07:17 +0000
-Received: from AS5PR05MB11020.eurprd05.prod.outlook.com
- ([fe80::2dc4:6bec:d87e:3492]) by AS5PR05MB11020.eurprd05.prod.outlook.com
- ([fe80::2dc4:6bec:d87e:3492%4]) with mapi id 15.21.0639.011; Fri, 20 Nov 2026
- 11:07:17 +0000
-From: Tjerk Kusters <tkusters@aweta.nl>
-To: "netdev-bot+sashiko@kernel.org" <netdev-bot+sashiko@kernel.org>
-CC: "anthony.l.nguyen@intel.com" <anthony.l.nguyen@intel.com>,
-	"przemyslaw.kitszel@intel.com" <przemyslaw.kitszel@intel.com>,
-	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, "davem@davemloft.net"
-	<davem@davemloft.net>, "edumazet@google.com" <edumazet@google.com>,
-	"kuba@kernel.org" <kuba@kernel.org>, "pabeni@redhat.com" <pabeni@redhat.com>,
-	"ast@kernel.org" <ast@kernel.org>, "daniel@iogearbox.net"
-	<daniel@iogearbox.net>, "hawk@kernel.org" <hawk@kernel.org>,
-	"john.fastabend@gmail.com" <john.fastabend@gmail.com>, "sdf@fomichev.me"
-	<sdf@fomichev.me>, "sven.auhagen@voleatech.de" <sven.auhagen@voleatech.de>,
-	"richardcochran@gmail.com" <richardcochran@gmail.com>, "kurt@linutronix.de"
-	<kurt@linutronix.de>, "sriram.yagnaraman@ericsson.com"
-	<sriram.yagnaraman@ericsson.com>, "intel-wired-lan@lists.osuosl.org"
-	<intel-wired-lan@lists.osuosl.org>, "netdev@vger.kernel.org"
-	<netdev@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"maciej.fijalkowski@intel.com" <maciej.fijalkowski@intel.com>, "p@1g4.org"
-	<p@1g4.org>, "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH net v6 3/3] igb: do not split AF_XDP zero-copy frames over
- several Rx buffers
-Thread-Topic: [PATCH net v6 3/3] igb: do not split AF_XDP zero-copy frames
- over several Rx buffers
-Thread-Index: AQHdcakNwPgs9FTQsEys1XYyFZRXXrcu5yEAgAfzaTA=
-Date: Fri, 20 Nov 2026 11:07:17 +0000
-Message-ID:
- <AS5PR05MB11020A6B850A86A21A2B5E1C4B9782@AS5PR05MB11020.eurprd05.prod.outlook.com>
-References: <20261111-igb-rx-ts-fix-v6-3-ba5b9903859c@aweta.nl>
- <179473557614.2199510.972066447270237709@kernel.org>
-In-Reply-To: <179473557614.2199510.972066447270237709@kernel.org>
-Accept-Language: en-US, nl-NL
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aweta.nl;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AS5PR05MB11020:EE_|MIWPR05MB401878:EE_
-x-ms-office365-filtering-correlation-id: 1a6b3540-dac1-4a87-5a9a-08df46f670c0
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|366016|376014|7416014|1800799024|23010399003|18002099003|22082099003|4143699003|56012099006|261026140227099003|261026121527099003|10067099003|261028144727099003|261022105027099003|261022075727099003|261009223027099003|38070700021;
-x-microsoft-antispam-message-info:
- D3v69QyPfvlLwXWts2NQ12FNkIO/HmQczISqrDVuRceTBPifO2s+LVGCqjZh1xmYmDRojAcCGYAoh8mjHk7nVfRoT9yzQ11xxh0ULR4faw1enBYCzS2HNV89WSVcnOEcu8WD28QRiS9W5CHj0UQfBFlWW1OqWu91JdqIi7rOalCnGFZsO3dzCpSEZHS1ZjHSaXaL9c/EsdMptWmWgNlS6r7sNh8Hz7JG/Pf4tc9jHia7OMfFvWxZvzO67Yu9qSJP6CO/pSmP8OkOVY73mtZSxCjOOceaDozhFlhBNfF1Cc9vv++AJaaP6j0Fq9M/UAMXQ5wK4c2+t+SeFBfX0THqJk/haSj/V0aL1o9kn6A1RS1GHrnHmlvMSrDj/uRu7QPXd9ZAilO3Z8A6o2SZiRRCeFUaYtz9FEL+k3QpLbh1D0Rpc2TKisxV3MFKwUR9voAHQcfSCBYzpU8DMkjjxNZXw/+Ej4JR8a7oF850VI2mdoIPIURuPfzd1LDV31IdSrBiyluzgJxCFNyDvTuUMFb8/S/qESAF8qAZKzbaXnaaicdIt37lXEBsJzmvxsQsiVuKwL1cglqDU9tmnYugwqDFsD4ET94ecNPyiU1hpaQctCIGWDfZIbZY79QKor9LbBFBU6Jm7dx+da/9WXJ4sfSjqeGuZ8rZZGqyG7VQ++fl5HsrDkWS2jM1bxILGXD33UqaR/ZlIFs/TwlkpIL8VjsaM1K+LDovO9D24JfvBGl2th0=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS5PR05MB11020.eurprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(23010399003)(18002099003)(22082099003)(4143699003)(56012099006)(261026140227099003)(261026121527099003)(10067099003)(261028144727099003)(261022105027099003)(261022075727099003)(261009223027099003)(38070700021);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?NGt0WVBDVk1sYVhxc2NUbk9GeWxqMFRkMzVjNXptMGNpSUVBQ21ZOTNmRjhi?=
- =?utf-8?B?ZzF1MmFRV1BsWTRMMURQcUQ5eEw0Q3Q2enhDUjc1YkQrRVQyVkdzVE1aNnZy?=
- =?utf-8?B?OEcyQ2hUQmJMbEZLTENLTEgxb0VqTFZnKzljZTdrQXJGcEd1NnhEemc3UUs5?=
- =?utf-8?B?K2lmN2h4eEY5N3N0LzQ4WWRORzh0NXNlY3Q2QXJMcGpXYStvUHZuNVZRNy9u?=
- =?utf-8?B?Y3A0aDVtOG1VaEVkNkF5UGV1KzU0ZUxHTG5BaytoRDZFV2RvbXpvVlMrSzdH?=
- =?utf-8?B?YW56M09KOHh6Y2FCdWRrRjZUSjhiYWhSUFNGUWd6WXB5ZXV0V0RPSWl5TE52?=
- =?utf-8?B?WVN5K1NEMUI3RGpzR3hramhGdFQwRm5aOU15YzdKeDZNU2ZqZUNxMlFYd1Bv?=
- =?utf-8?B?dVYvUnc0UVdESWR0cENGM0dLRHhZK2ZxeWlqZk9sRHMzZ09HaHA0cGFkcVo3?=
- =?utf-8?B?T09mVmI0ZVhjTU5oVmcreE5nTkE3MWxVUlN2c0t1S1dXbUcrTFlTSHdPeHNZ?=
- =?utf-8?B?emMzQUxoZm9tbldybnZXNko4SzZwQlRwa1o1a2gyV2ptQ0M3TmZ2NGN0U29q?=
- =?utf-8?B?bEQxOFVlYVo5TDlmUHNLbyt0UnVWVExncDJJUDlIeVlNSWlDbmQyaFhSVkNw?=
- =?utf-8?B?M0ZIQ3oyU2lSTnNUQWJkVGlTQ2FOVTZEdUlKQmx5bzN2Z082U1AyWnIzUUlR?=
- =?utf-8?B?ejBibDlkUEhxZG1YR3hCRkdRcUc5ZW9UN01XTlhiRE9heVRYSm5DQ2VGOUw5?=
- =?utf-8?B?SUZSMTRvcnJDeDlWRUh0Wjd3Qm9pRXE4K2tiK2VjZlNqV0dab1pTOXVMRDdL?=
- =?utf-8?B?TnVybGtyb1k3bFhyRmlZNWxETG85NjJCWE5DeHRFVUhpYTFEdDAxSW5ZQWRi?=
- =?utf-8?B?NkpIcVRrZFA5TUNzSnZCNElPblY0TTNyZk9WZExSZDV4WHp6UHB3YzJvck9L?=
- =?utf-8?B?cUY4aGFxU3BSVkFiRVd3RnVDc1JlL01jUlUzMWw3aGFIU1ZMZEVhUUZBWEgv?=
- =?utf-8?B?UDdoQTY1NUVtM3k2ekVsUlhRalV3OXFwRTZwSXQzR3hLNjZ1dkhvVUNNK3VB?=
- =?utf-8?B?alBHWlhCRWp0ZVpLbFBGQ29MR2FEMmtudTBJaUhjQnhFT0tua2RvRFM5Ui93?=
- =?utf-8?B?SjlmOXVwbFRRRGpqZE9TVUhTTGpMeTl3a3lDVzZwUVppVnJud0hlSUFFZGlS?=
- =?utf-8?B?eDdXN2ppSUVJTUxYQWJhOUlmWW9LT3hleE90K3pPdlNNY2xZd0VZcjBRM2Zi?=
- =?utf-8?B?SzFmY0dJV01mdWFweFFsN2NyYnBlTnpvcmMxaU0wTVJGQ2VzSWdtamxxUGRl?=
- =?utf-8?B?TGo3UkkvTkgvV2U1SWdaWVVzcFNEcXdNekVSNGRKR2daV01nS1FTckxKZzFp?=
- =?utf-8?B?KzQ4WTAzbGVTQ014aDRiWmEwU1ZWUmVCaitJTXVtUXRvRVFPUDJkUnpGTzhJ?=
- =?utf-8?B?YStIWS9IU2hvZXVXaHlSYVRCbmY5ZnZ4aWM1TnZodE1iaHNEeFhJL21mUXVH?=
- =?utf-8?B?TExQdVgzendRL3hMUzIxd0FFazN3UjhkUmxkU0d6YUV6Yy9pOVlwVFRRN3Iw?=
- =?utf-8?B?dFlmaVYxS0RGQk1Zc0dKQWNsK0NVRnA0d2tDWUlpanBVRityczdFT2ZTaEhG?=
- =?utf-8?B?S2U1czcvT3N6clIxM1NaUWw3ZHI5NHpNVlJFcFBqZjBqeXRoREZIblNlSXBD?=
- =?utf-8?B?aTI5S2lBKzNKd3ROeUZKbTA0K09ybHRnenZNSWQ0Zms2T0RsVmVKWTFlS2VC?=
- =?utf-8?B?WHhYdjNFV0JPd0dRTWp3eHR4WmtYYmY3VEdlMTdYY1BTbTF3N0VUUHRFWm5J?=
- =?utf-8?B?QkVQam9YbGtFam9hTDVuWmdkN2NYQ1VTT0ZQSGFxVm5laVQrS3FUTU5nZ293?=
- =?utf-8?B?Q2lyUFdveDJhL2YyUFB2ZDNEalBuVm5nTjRTWDJsa3k3T2RWVFRTTXRVL2hT?=
- =?utf-8?B?NHRDeERCWHExcG1nTWc5NkpJcEY2VkQrcEMzV3BqckFLc1R2ZHVyUVVTS1VL?=
- =?utf-8?B?ektrblZmNXV5elZFSkVJSHdoMWljYno5ck1kR3pwd25ySFlMQVZWWU5NQ3Bt?=
- =?utf-8?B?Qmw4KzRxZ0hja21DUUxKUTlENDNLUGhYYisrVEF6L21TK1EwenBnYmpSbDY3?=
- =?utf-8?B?NDBZeUdaako2V3pSeWtvMkV0QjNtZnhqY1ZGWXlQdW1OcVMxSzVEM1k5NHJ2?=
- =?utf-8?B?L1JsN0E1UDhESXlRblRBQ3lWaURSa3dyb0lXWElVNGtidVdWaEY3YmRCcEgy?=
- =?utf-8?B?azE1SFpvbUFVMkFJc3VtZ2FMeU5XQm1LV1dSOURXUVV2L0VIQmgyQ3RGdjdV?=
- =?utf-8?Q?HPiLOlpF3bmYB+8dyl?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Xxzb2TOO
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1795173051;
+	b=GGKvKyLKJXIYebIPAgPqqvPE4nSWBd8vMvh9x7XYnDNt6SnQ0HRu9J3NHA3ZIJSsdrx9
+	 dLm+HygGeEWRaAu8/0h3x4dKPUJqWEqzTydSKfVf2CFOQBLqXH5Dxa3h60hGEr/ElXnKl
+	 vgkrQk8CnIfV6EI6uUaDoYCQNRmv6VXCNUlCrD6fkMhHMOTqW7kxnMg9VBglh4BPpRpol
+	 mzEYJQDeHxOB50k5moHB6C8zuO3axG+O4eIOYvYVtz5EmWSpCNJxgNiFEVD94E/Moanmr
+	 p3gORJthgTnj3zCVei+QLkq/DgXW+4E/Qc9qUAIw2HOLnJxX45wpBYKiptBpLZnEpaQ==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1795173051;
+	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
+	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To;
+	bh=AcU42dM/DxndFKfD2cez7uuV6JWRlrbHkbmuXHRF75o=;
+	b=iwD7SYh6jB9qM28BU5qgfjCOLGGyDlfbF2GV72zdTH9O4WUNkswDGMCEebkN0z98sokP
+	 LmPHiPSUWa/BzafDdAuMNkK2x1LgBw4Jkj2jvFU0Q/3CxkWi9Td2zdeeyu0Sf+Y6eVzUi
+	 up2xjwc+XMR1gHRUheAZdbyEqrPPaorPKNOz43TsC0jTM1yMIKQsNss4jej9h+6J70c2y
+	 WJW4Dz9iMMzFDuGY2Jzh+dUwnRNV3Vo29U2muWQjTkp3H/6qYrlVORocXfXXJl6WH7k+5
+	 8Xek9DDMRm165uZZlJv5REPaDjX7qkwDRACBRNTg1FdRw8dXsvM9HxmI/o+2XbJ4pTg==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id CD9BB1F000E0;
+	Fri, 20 Nov 2026 11:10:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795173051;
+	bh=AcU42dM/DxndFKfD2cez7uuV6JWRlrbHkbmuXHRF75o=;
+	h=From:Subject:Date:To:Cc:Reply-To;
+	b=Xxzb2TOOnrM/e/EbbHFMclxznUkXoCy+/599k9x38vduj6FDMdwlwkGF1DHFMdsDU
+	 4DRn6xF6G35bO5gy1BhXKO5gL0p+0OZR7kCrtE3ocK0tA+ApvwWEqxJVNLya2XNZVw
+	 a6zxBnhl0RwWEG09uEYQHb3T3kONm197jEYA3gXJamhW4LJNO/yiGsC4kQ6pe0rm70
+	 KEWcJsYJ6tv4muRNsuJu20vC8flvEww45gz32WrZdqlYsKfdEgkOQqo9bgNTZRRv5M
+	 +hLB8OqBlOU7ElDD7eS96CUBo/31g38QtuDYuKANMssApbvhsO+mHPaX0srQk3SGxu
+	 xiu+SE8mOMe2A==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id 5D6D149836;
+	Fri, 20 Nov 2026 11:10:40 +0000 (UTC)
+From: Tjerk Kusters via B4 Relay <devnull+tkusters.aweta.nl@kernel.org>
+Subject: [PATCH net v7 0/3] igb: only strip the Rx timestamp header from
+ the first buffer of a frame
+Date: Fri, 20 Nov 2026 12:10:37 +0100
+Message-Id: <20261120-igb-rx-ts-fix-v7-0-63b03045978e@aweta.nl>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -169,47 +84,304 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-OriginatorOrg: aweta.nl
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AS5PR05MB11020.eurprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1a6b3540-dac1-4a87-5a9a-08df46f670c0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Nov 2026 11:07:17.7238
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 6546512a-ba20-41bf-9d8d-c076dcbf6fd9
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: GaS+aPKK59df2yod57my7T6j3TKTLYDAH1/si8g8m++V9L0RLw9XQVVUhuqOdzxTrq+xzoVYVQp0cCmMLaQYjA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MIWPR05MB401878
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAK0qAGsC/3XN3UrEMBAF4FdZcu1IMvlp4pXvIV7kZ7obka4kt
+ a4sfXfTClICXs5hvnPurFLJVNnT6c4KLbnm69SO4eHE4sVPZ4Kc2s2Qo+FGOMjnAOUGc4Ux3yC
+ mgWuriaQwrJmPQi3e+17YRDN7/Q3rZ3ijOG9N29sl1/lavvfVBffnfwYWBAFJBpsM19EbfPZfN
+ PvH6X2vXuQBo+6xbNi5IGn03KboO6z+sBAce6yAgx2sFqiiTig7rI9Y9Vg3HEYVlDSDQNcvmwM
+ Wosdmw14H57i02sUDXtf1B0hs1Yu0AQAA
+X-Change-ID: 20260619-igb-rx-ts-fix-cd70585ee316
+To: Tony Nguyen <anthony.l.nguyen@intel.com>, 
+ Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
+ Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, 
+ Sven Auhagen <sven.auhagen@voleatech.de>, 
+ Richard Cochran <richardcochran@gmail.com>, 
+ Kurt Kanzenbach <kurt@linutronix.de>, 
+ Sriram Yagnaraman <sriram.yagnaraman@ericsson.com>
+Cc: intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Paul Moses <p@1g4.org>, 
+ stable@vger.kernel.org, Tjerk Kusters <tkusters@aweta.nl>, 
+ Piotr Kwapulinski <piotr.kwapulinski@intel.com>, 
+ Aleksandr Loktionov <aleksandr.loktionov@intel.com>, 
+ Alexander Nowlin <alexander.nowlin@intel.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1795173039; l=13867;
+ i=tkusters@aweta.nl; s=20260619; h=from:subject:message-id;
+ bh=Ob5ecDgGok2XxT1UMi7fvkkKCfslef06ZMcmSpByOzY=;
+ b=2ezb/bLysBeiNdQQFv+y6339iLFVJ8RooAOnFBKWNvDZpV1MGmWNOEzp1UfCC8JWrWg6ueZCn
+ WkTVExdq51tBVSERWVy8reXbSlY8qJqvJErRoFzzCqLi7O0WGDgT/D8
+X-Developer-Key: i=tkusters@aweta.nl; a=ed25519;
+ pk=JYRpYQ3+LrphEabgnxcbiOUpwvNP8WDDMcLzz+cwKsk=
+X-Endpoint-Received: by B4 Relay for tkusters@aweta.nl/20260619 with
+ auth_id=831
+X-Original-From: Tjerk Kusters <tkusters@aweta.nl>
+Reply-To: tkusters@aweta.nl
 
-PiAtIFtIaWdoXSBUaGUgbmV3IFhTSyBxdWV1ZSBjaGVjayBzaXRzIGluIGlnYl9zcmlvdl9yZWlu
-aXQoKSwgYW5kIHRoYXQNCj4gICBmdW5jdGlvbiBpcyBzaGFyZWQgYnkgdGhlIFNSLUlPViBlbmFi
-bGUgYW5kIGRpc2FibGUgcGF0aHMuDQoNClJpZ2h0LiBJbiB2NyB0aGUgY2hlY2sgaXMgYXQgdGhl
-IHN0YXJ0IG9mIGlnYl9lbmFibGVfc3Jpb3YoKSwgYmVmb3JlIGFueQ0KVkYgc3RhdGUgaXMgc2V0
-IHVwLCBhbmQgZG9lcyBub3QgcnVuIHdoZW4gVkZzIGFyZSBkaXNhYmxlZC4NCg0KPiAtIFtNZWRp
-dW1dIFRoZSBuZXcgLUVCVVNZIHJldHVybiBmcm9tIGlnYl9zcmlvdl9yZWluaXQoKSBnaXZlcyB1
-c2Vyc3BhY2UNCj4gICBhIGRldGVybWluaXN0aWMgd2F5IGludG8gaWdiX2VuYWJsZV9zcmlvdigp
-J3MgZXJyX291dCBwYXRoIHdoaWxlIHRoZeKApg0KDQpSaWdodC4gSW4gdjcgdGhlIC1FQlVTWSBy
-ZXR1cm4gY29tZXMgYmVmb3JlIHZmc19hbGxvY2F0ZWRfY291bnQgYW5kDQp2Zl9kYXRhIGFyZSBz
-ZXQsIHNvIGl0IGRvZXMgbm90IGdvIHRocm91Z2ggZXJyX291dC4gVGhlIE1BQyBmaWx0ZXINCmxl
-YWsgYW5kIHRoZSByZXN0b3JlIG9mIHRoZSBETUEgY29hbGVzY2luZyBmbGFnIGFyZSBnb25lIHdp
-dGggaXQuDQoNCj4gLSBbTG93XSBUaGlzIHBhdGNoIHJhaXNlcyB0aGUgWFNLIHJpbmcgaGFyZHdh
-cmUgYnVmZmVyIGluDQo+ICAgaWdiX3NldHVwX3NycmN0bCgpIHRvIDIgS2lCIG9yIDMgS2lCLCB3
-aGlsZSB0aGUgWFNLIGZyYW1lIGNhbiBiZSBhc+KApg0KDQpQYXRjaCAxIGlzIG1hcmtlZCBmb3Ig
-c3RhYmxlIGFzIHdlbGwsIGFuZA0KRG9jdW1lbnRhdGlvbi9wcm9jZXNzL3N0YWJsZS1rZXJuZWwt
-cnVsZXMucnN0IHNheXMgdGhhdCBwYXRjaGVzIGluIHRoZQ0Kc2FtZSBzZXJpZXMgZG8gbm90IG5l
-ZWQgdG8gYmUgbGlzdGVkIGFzIHByZXJlcXVpc2l0ZXMgdGhlbi4gUGF0Y2ggMSdzDQpGaXhlczog
-Y29tbWl0IGlzIG9sZGVyIHRoYW4gcGF0Y2ggMydzLCBzbyBldmVyeSB0cmVlIHRoYXQgdGFrZXMg
-cGF0Y2ggMw0KY2FuIGFsc28gdGFrZSBwYXRjaCAxLiBUaGUgY29tbWl0IG1lc3NhZ2UgbmFtZXMg
-dGhlIGRlcGVuZGVuY3kuDQoNCj4gLSBbSGlnaF0gVGhpcyBwcm9ibGVtIHdhc24ndCBpbnRyb2R1
-Y2VkIGJ5IHRoaXMgcGF0Y2gsIGJ1dCBpdCBzaXRzIGluDQo+ICAgaWdiX3hza19wb29sKCksIHdo
-aWNoIHRoZSBwYXRjaCBlZGl0cy4NCg0KUmlnaHQsIGFuZCBvbGRlciB0aGFuIHRoaXMgc2VyaWVz
-OiB0aGUgZXRodG9vbCBvZmZsaW5lIHNlbGYtdGVzdCBzZXRzDQp1cCBpdHMgdGVzdCByaW5ncyB3
-aXRoIHF1ZXVlIGluZGV4IDAsIHNvIGlnYl94c2tfcG9vbCgpIGdpdmVzIHRoZW0gdGhlDQpwb29s
-IGJvdW5kIHRvIHF1ZXVlIDAuIEl0IG5lZWRzIGl0cyBvd24gZml4LCBzZXBhcmF0ZSBmcm9tIHRo
-aXMgc2VyaWVzLA0Kc28gSSBsaXN0ZWQgaXQgaW4gdGhlIHY3IGNvdmVyIGxldHRlciBhcyBhbiBv
-bGRlciBpc3N1ZS4NCg0KPiAtIFtNZWRpdW1dIFRoaXMgcHJvYmxlbSB3YXNuJ3QgaW50cm9kdWNl
-ZCBieSB0aGlzIHBhdGNoLg0KDQpUaGF0IGlzIHRoZSBmYWlsZWQgcGNpX2VuYWJsZV9zcmlvdigp
-IHBhdGgsIHdoaWNoIGtlZXBzIHRoZSBWRiBxdWV1ZQ0KbGF5b3V0LiBJdCBpcyBvbGRlciB0aGFu
-IHRoaXMgc2VyaWVzIGFuZCB1bmNoYW5nZWQ7IEkgbGlzdGVkIGl0IGluIHRoZQ0KdjcgY292ZXIg
-bGV0dGVyLiBUaGUgbmV3IC1FQlVTWSByZXR1cm4gaW4gdjcgZG9lcyBub3QgZ28gdGhyb3VnaCBp
-dC4NCg==
+With Rx hardware timestamping enabled (e.g. by ptp4l), igb strips the
+16-byte inline timestamp header from every Rx buffer of a frame instead
+of only from the first one. A continuation buffer that starts with 8
+zero bytes loses 16 bytes, so jumbo frames with zero payload arrive
+short and are dropped.
+
+v3 used skb == NULL to find the first buffer of a frame. The Sashiko
+AI review pointed out that this does not hold when an XDP program
+consumes the first buffer of a frame that spans several buffers, so v3
+was sent back for rework.
+
+The same question came up for igc. There, Maciej suggested not to track
+frame boundaries in the data path, but to make sure that frames never
+span several buffers while XDP is attached [1]. Paul Moses' igc v3 does
+that [2]. This version follows the same approach for igb:
+
+  1/3 limits the receive length (RLPML, or the PF pool's VMOLR with VFs)
+      to the configured frame size while XDP is attached, and leaves
+      room for the timestamp header in the XDP buffer size checks for
+      3 KiB, legacy-rx and PAGE_SIZE >= 8192 buffers. It also refuses
+      XDP with rx-all and legacy-rx changes while XDP is attached, as
+      both would break the limit. The limit is now set from
+      igb_configure() instead of igb_set_rx_mode(). With VFs, the PF
+      pool limit is also written on i354.
+  2/3 is v3, unchanged in code, with a note that it relies on 1/3.
+      The Reviewed-by and Tested-by tags of v3 are kept for that reason.
+  3/3 gives AF_XDP zero-copy rings a 2 KiB or 3 KiB hardware buffer
+      instead of rounding the XSK frame size down to 1 KiB. It refuses
+      XSK pools that cannot hold the current maximum frame plus the
+      timestamp header, and MTU changes that would no longer fit a bound
+      pool. Unlike the igc patch in [2], which checks against the
+      largest XDP MTU, this checks the current MTU, as igb allows XDP up
+      to MTU 3030 and a fixed check would rule out 2 KiB chunks.
+      Enabling VFs, which leaves the PF a single Tx queue, is refused
+      with -EBUSY while an XSK pool is bound to another queue; the core
+      refuses ethtool -L in the same case. The check runs before any VF
+      state is set up. A pool on a queue hidden in another way, for
+      example after a fallback to MSI, is checked again when its ring
+      is set up.
+
+As in igc, 1/3 moves the RLPML programming out of igb_set_rx_mode(),
+which can run without RTNL, into igb_configure(), which runs when the
+interface is (re)configured, before Rx is enabled. This includes the PF
+pool limit in VMOLR, which igb_set_rx_mode() now leaves as it is.
+Attaching or removing XDP on a running interface goes through
+igb_close() and igb_open(), and an MTU change through igb_down() and
+igb_up(), so the limit is updated before Rx is enabled again.
+
+The Sashiko reviews of v4 to v6 also point out older issues that this
+series does not change:
+
+- On 2 KiB build_skb rings, igb_skb_pad() leaves exactly
+  IGB_MAX_FRAME_BUILD_SKB bytes before skb_shared_info, with no room for
+  the 16-byte timestamp header. With Rx timestamping on, frame and
+  header can overlap skb_shared_info by up to 12 bytes, or 2 bytes at
+  the XDP limit at MTU 1500. This dates from 9cbc948b5a20 ("igb: add XDP
+  support"). I left it out of this series: it is a separate problem from
+  the one fixed here, and a fix changes the buffer layout and the XDP
+  headroom for all igb users, so it needs its own review and testing.
+- igb_set_vf_rlpml() let a VF set other VMOLR bits of its own pool. That
+  is fixed separately: https://lore.kernel.org/all/20261104-igb-vf-rlpml-v1-1-729621b60eee@aweta.nl/
+- igb_alloc_rx_buffers_zc() does not clear the length of the next
+  descriptor after a partial refill at the end of the ring, so
+  igb_clean_rx_irq_zc() can read a stale descriptor. igc clears it in
+  that case. This is a separate zero-copy problem as well.
+- __igb_open() sets up the rings before it updates the real queue
+  counts, so a queue that comes back is used in zero-copy mode again
+  only from the next reconfiguration; see 3/3.
+- When the queue setup or pci_enable_sriov() fails, igb_enable_sriov()
+  frees the VF state without a lock, and after a failed
+  pci_enable_sriov() the PF keeps the VF queue layout. The new -EBUSY
+  return does not go through that path.
+- igb_set_rx_mode() is also called without the address lock, for
+  example from the VF mailbox interrupt, and then walks the address
+  lists.
+- The ethtool offline self-test sets up its test rings with queue index
+  0, so igb_xsk_pool() gives them the pool bound to queue 0. That needs
+  a separate fix.
+
+How to reproduce
+----------------
+Receiver with igb (eth0), peer with MTU 8228. hwstamp_ctl turns on Rx
+timestamping with filter ALL, no ptp4l needed; this ping method is
+taken from Paul's igc report. One host with two ports also works if
+the sending port is moved into its own network namespace.
+
+1) Truncated jumbo frames (patch 2)
+
+  receiver:  ip link set eth0 mtu 8228
+             hwstamp_ctl -i eth0 -r 1
+  peer:      ping -c 5 -M do -s 8200 -p 00 <receiver>
+
+  Without the series there are no replies, and IpExtInTruncatedPkts
+  goes up by one per frame. With the series all requests are answered.
+
+2) XDP consumes the first buffer (patch 1)
+
+  receiver:  ip link set eth0 mtu 3000
+             hwstamp_ctl -i eth0 -r 1
+             xdp-filter load -m native eth0
+             xdp-filter ip <peer> -m src
+             tcpdump -nn -e -i eth0 'ether src 00:00:00:00:00:00'
+  peer:      ping -c 3 -M do -s 8200 -p 00 <receiver>
+
+  At MTU 3000 XDP can attach, but without patch 1 the MAC still accepts
+  the 8242-byte frames, which then span three Rx buffers. xdp-filter
+  drops the first one, and the rest reaches the stack as a separate
+  frame with all-zero MAC addresses:
+
+    without the series    5154 bytes (header stripped twice)
+    v3 alone              5170 bytes (stripped once)
+    this series           no frame; rx_long_length_errors +1 per frame
+
+3) AF_XDP zero-copy with 2 KiB chunks (patch 3)
+
+  receiver:  ip link set eth0 mtu 1500
+             ethtool -L eth0 combined 1
+             hwstamp_ctl -i eth0 -r 1
+             xdpsock -i eth0 -q 0 -r -z -N -f 2048
+  peer:      ping -c 50 -i 0.02 -s 1472 <receiver>
+
+  xdpsock is from xdp-project/bpf-examples (AF_XDP-example). It also
+  takes ARP, so the peer needs a fresh ARP entry before it starts.
+  Compare rx_packets (MAC) with rx_queue_0_packets in ethtool -S:
+
+    without the series    68 frames, 118 descriptors
+    this series           64 frames, 64 descriptors
+
+  At MTU 3000, -f 4096 receives 3014-byte frames in one buffer. Binding
+  with -f 2048 at MTU 3000 was refused with EOPNOTSUPP by the new check
+  on the 6.14.9 test kernel; current kernels refuse it earlier, in
+  xp_assign_dev(), with EINVAL.
+
+Tested on an I350 with these patches applied to the igb driver of
+kernel 6.14.9 (the series itself is against v7.1-rc7), with the steps
+above: results as listed. The v3 line is from an earlier run with an
+XDP program dropping ICMP. Also checked: XDP attach at MTU 1500 and
+3030 works, at MTU 3046 it is refused, as is an MTU change to 3046
+with XDP attached. With two VFs allocated (booted with pci=realloc),
+step 2 gives the same picture: three leftover frames without the
+series, none with it, as the PF pool limit in VMOLR drops the frames.
+In step 3, 98-byte frames and 4 KiB chunks take one descriptor per
+frame with and without the series. With XDP attached, rx-all stays off
+and legacy-rx cannot be changed, and XDP attach is refused with rx-all
+on, or with legacy-rx on at MTU 3000, also when it was set while the
+interface was down. RLPML and the PF pool's VMOLR limit read back as
+expected with and without XDP and VFs. In repeated runs of about 200 MTU
+changes each with XDP and two VFs, the limit was right after every
+change, except for one read in one run, where the value was not logged;
+eleven reruns showed no mismatch.
+
+The steps above were repeated on kernel 7.3.1 with the series applied to
+the v7.3 igb driver, with the same results, including step 2 with VFs.
+There, enabling two VFs while xdpsock was bound to queue 1 was refused
+with EBUSY; with the socket on queue 0 it worked. With 31 macvlans on
+the PF, which fill all 32 receive address registers, all 31 addresses
+stayed valid after the refused VF enable; with v6, two of them were
+overwritten by the VFs' empty MAC addresses. With the driver built so
+that the I350 keeps two Rx queues with VFs, as an 82576 does, binding a
+zero-copy socket to queue 1 after VFs were enabled on the down PF was
+refused with EINVAL; without the new check it was accepted. Removing XDP
+from a down, runtime-suspended interface with rx-all requested resumed
+the device and turned rx-all on. The i354 path was checked with the
+driver built so that the I350 takes the i354 branches for VMOLR: with
+two VFs and XDP attached, the PF pool limit kept its old value of 9728
+with v5, which skipped i354, and read back as 3026 at MTU 3000 and 1526
+at MTU 1500 since v6. Only the registers were checked; I have no i354 to
+test on.
+Not tested: PAGE_SIZE >= 8192.
+
+The patches, their descriptions and this cover letter were prepared
+with the help of an AI coding assistant (Claude). I reviewed them and
+ran the tests above on my test bench.
+
+[1] https://lore.kernel.org/all/20261025065154.2037149-1-p@1g4.org/
+[2] https://lore.kernel.org/all/20261028083344.3047350-1-p@1g4.org/
+
+Changes in v7:
+- Patch 1: when XDP is removed and rx-all is turned back on, resume a
+  runtime-suspended device first, as ethtool does, and skip it if the
+  device could not be resumed or the interface could not be opened
+  again (Sashiko).
+- Patch 3: check for bound XSK pools at the start of igb_enable_sriov(),
+  before any VF state is set up, and hold RTNL until the PF queues are
+  set up again (Sashiko). In v6 the check ran after the VFs' MAC
+  filters were written, which could disable PF unicast filters until
+  the next reset, and the -EBUSY return went through the existing error
+  path, which frees VF state without a lock. The check no longer runs
+  when VFs are disabled, and the DMA coalescing flag is no longer saved
+  and restored. The older error paths are unchanged.
+- Patch 3: igb_xsk_pool_enable() also checks the PF's Tx queue count, so
+  that no zero-copy pool is bound to a queue without a Tx ring on 82576
+  with VFs.
+- Patch 3: the commit message now says that a queue that comes back is
+  used in zero-copy mode again only from the next reconfiguration
+  (Sashiko); no code change for that.
+- Patch 2: no change.
+- The list of older issues above names four more.
+- Link to v6: https://patch.msgid.link/20261111-igb-rx-ts-fix-v6-0-ba5b9903859c@aweta.nl
+
+Changes in v6:
+- Patch 1: with VFs, also write the PF pool limit on i354 (Sashiko).
+- Patch 3: refuse to enable VFs with -EBUSY while an XSK pool is bound
+  to a queue the PF would lose (Maciej). Restore the DMA coalescing flag
+  on that error. Keep the frame size check in igb_xsk_pool() only for
+  queues hidden in another way, such as a fallback to MSI.
+- Patch 4 dropped: with patch 3 the hardware does not split frames in
+  zero-copy mode, so it only added dead code to the hot path (Maciej).
+- Link to v5: https://patch.msgid.link/20261104-igb-rx-ts-fix-v5-0-bf4b4367129a@aweta.nl
+
+Changes in v5:
+- Patch 1: v4 also subtracted the timestamp header from the build_skb
+  frame limit, so XDP no longer attached at MTU 1495-1510 on x86
+  (1493-1508 where NET_IP_ALIGN is 2), including the default MTU 1500.
+  Only subtract the header where the limit is the hardware buffer size,
+  and compute it from the adapter state instead of the ring flags. Skip
+  the check when XDP is removed, so a program can always be detached.
+- Patch 1: refuse XDP with rx-all and legacy-rx changes with XDP
+  attached, and turn rx-all back on after XDP removal if it was
+  requested meanwhile. Program RLPML and the PF pool limit from
+  igb_configure() instead of igb_set_rx_mode(). With XDP attached, an
+  MTU change can now move from 2 KiB to 3 KiB buffers. Added
+  Suggested-by: Maciej.
+- Patch 1: the issues above were also reported by the Sashiko review
+  of v4.
+- Patch 2: no code change. Commit message: igc is fixed by Paul's
+  series, not by this patch; the loss is per continuation buffer, not
+  only at the tail; the possible size wrap is described (Sashiko).
+- New patch 3: AF_XDP zero-copy Rx buffer size, as asked by Maciej.
+- New patch 4: drop zero-copy frames that span several descriptors;
+  depends on patch 3.
+- Link to v4: https://patch.msgid.link/20261102-igb-rx-ts-fix-v4-0-8785124c5d23@aweta.nl
+
+Changes in v4:
+- New patch 1: limit the receive length while XDP is attached, so that
+  skb == NULL reliably marks the first buffer (Sashiko review), as
+  done for igc.
+- Patch 2: no code change; added a note that it relies on patch 1.
+- Link to v3: https://patch.msgid.link/20260625-igb-rx-ts-fix-v3-1-99b3efa08dca@aweta.nl
+
+---
+Tjerk Kusters (3):
+      igb: do not let XDP frames span more than one Rx buffer
+      igb: only strip Rx timestamp header on the first buffer of a frame
+      igb: do not split AF_XDP zero-copy frames over several Rx buffers
+
+ drivers/net/ethernet/intel/igb/igb.h         |   9 +
+ drivers/net/ethernet/intel/igb/igb_ethtool.c |   9 +
+ drivers/net/ethernet/intel/igb/igb_main.c    | 244 +++++++++++++++++++++------
+ drivers/net/ethernet/intel/igb/igb_xsk.c     |  27 ++-
+ 4 files changed, 233 insertions(+), 56 deletions(-)
+---
+base-commit: 2d3090a8aeb596a26935db0955d46c9a5db5c6ce
+change-id: 20260619-igb-rx-ts-fix-cd70585ee316
+
+Best regards,
+--  
+Tjerk Kusters <tkusters@aweta.nl>
+
+
