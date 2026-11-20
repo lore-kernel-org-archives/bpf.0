@@ -1,61 +1,59 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=178.63.66.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795189664;
-	b=oODF67/pAqtgBHr6yjeii55qVCdzLSjFchoVKXBc8qnWb8ybBUurmXKZB20eLhBqsYV0
-	 psc4x0NGCmDdrLt5UOjySpsLfK2srQ/m3InHJtSXGuvd44yWDTD6xy79bbguz7HF1UQHJ
-	 cvP01qBWD7+vx9ibOneX+PMbPeBaikR4MJA/9BOeVmgx+tXHAc0zxNWhIDmu3lEftlz9K
-	 WqKpLoW6E96fkCXJWeN+EUTaT5agdo27rX0gPL1hXgLcixEOmqZKTZ/C2SD6rOWpCsnkC
-	 nZnMX9KNCPsKEFGt9QSeBvy8IIWUnlVzC4b0yONvCW7BxDy/NZAj/ISrUKQ9iUQFYFw==
+	t=1795190684;
+	b=Ot7nv7fZdw++j/v5pDYc7pUCa8siOEnSqE4cZFn2EoN8t2C/SibmLLdmg1klyl+rVYRf
+	 fYjHcR/JMSOVpI/3t06+1zpRF3YyjCCPFnf7fNk1Z4Yur5mzcQ9bxQaG7T6QBnaJOsrKW
+	 nGuFdyk1h3BoQCKZfaXbpHhLgGUzIVhoNPIRvqoAP9nX5E76iPmTEKaRgrFFN1A513N54
+	 5qz1T1jIsAw0eorx1nl1ZB3GN0elxhnUGbGi4qxaddWkhZD/tR8ciJFvttDZCgwV5M9aG
+	 XlLo+Oc5JZFtEh7yE0FZKNlLhNR4PZudTTAcA7gUDIZLCkzFgUR6Wm8/TPKmu3RF7FA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795189664;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
-	 In-Reply-To:References:Auto-Submitted:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=sS9FIrfW22SIhehTvpH3rdvmtslwIeEYozBr0OvaZe8=;
-	b=RWszjj99M/gXC43cpEK5UvOhucAfqztcJdmlLQegN9YXoJvT5/aVmaM3f7cHiSdKbNvp
-	 RMBr2yynRmilz+5NhJ7rv9hHujjorbIWpikZXFr6IXFdKkDcI5f51WSPfFyfxqAk98zyG
-	 liZbmQ/pUld4ScjukglM3c06z6ySgbgGAjecL4aHnZ6Izd7+P1u1AL3epzLyG/HDskKG5
-	 rg76H2qzb15HTcquoteLZY1wGKbFxEIYy9wChU+W3vCNXkMmag/qAgST7MAoCo7ja3HeR
-	 6Ppa/svZxo3oujNFDUfeinSUC1RJAwokHrLL+l6vQFi8PIrltnAqdP4XXnZ+6WiHZEQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795190684;
+	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To;
+	bh=q9YON1OyDdbhVmSZ3qNdPEZ9E1LMVZlQqEKChXlKUBA=;
+	b=RY+X1KUjtT3Qk4lEEFQ7Y4wOvOPTBVKxGzNac5hZU9CfFKkcAx+sipSBKyAMlC6s61WL
+	 snjUVC4nJue4AsDJIsEHgtBVB0k6D5B4/ok8bCUT/pZZOE5tLRKJdjesGffbJQ9venui7
+	 M1PUkdrX/eJxBq+KvGEBix/KyL8RRzHeYz97p2L4p+yz25XpPMT9C71m45r+373oKnpLX
+	 ED7dfZOmt1uqHhsAlstWxhOnjbnhIHlH9dZwuh2NInS3ypIZgCCaND51x5XiamDXC1kag
+	 LZ/pPrtnrbyAAw4TTqTc6cSJE2XASowcensW0RVg7rMp3Xt3CgFpZz1gPmiauQ7Irbw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mCLElhnF;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=hallyn.com;
+	spf=pass smtp.mailfrom=hallyn.com;
+	dkim=pass header.d=hallyn.com header.i=@hallyn.com header.a=rsa-sha256 header.s=mail header.b=M9qBDG2c;
+	arc=none smtp.remote-ip=178.63.66.53
+Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89F9D60A2601;
-	Fri, 20 Nov 2026 15:47:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B222C606A325;
+	Fri, 20 Nov 2026 16:04:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B222C606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hallyn.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hallyn.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mCLElhnF
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F76A1F000D1;
-	Fri, 20 Nov 2026 15:47:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795189664;
-	bh=sS9FIrfW22SIhehTvpH3rdvmtslwIeEYozBr0OvaZe8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=mCLElhnFr4/AoPZb/NFGMVEnmoeiSCitsPhZ7g8eiopeP+FrL4cYiweHZojEBbJ07
-	 l58B6XpHJh90KYGeE4RbARqUpV73QSEV4NN0OUuAjEPmaLvanU9OkQPYcVPuTJGt7t
-	 +k8Lhb1z+u8G6DgZ9msEEUWvJbuLoWNdzNPvA8wqn9g2dJpyrWXs1R5FPwB8wFz884
-	 cac2Grx6gLOYecXOqM/LabmTcybO1JjGUJ4KYYjUQJMAeSJNOFdBrGAayXuvOkao9f
-	 y6jedtFLBDSuPCqHhvSatkxjxN/UWXv8BV3MNnxoT5sYJS/hWdS84xAMg0/WmmJnkA
-	 CP/UpK9TyFuOQ==
-From: netdev-bot+sinfo@kernel.org
-To: Jamal Hadi Salim <jhs@mojatatu.com>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Jiri Pirko <jiri@resnulli.us>, Victor Nogueira <victor@mojatatu.com>
-Subject: Re: [PATCH net-next 0/1] net: neighbour: skip the stale dst lookup
- for a redirected skb
-Date: Fri, 20 Nov 2026 15:47:43 +0000
-Message-ID: <179518966319.3291.5653366565460355407@kernel.org>
-In-Reply-To: <CORE-J9UK.v1.r0.20261120103344@mojatatu.com>
-References: <CORE-J9UK.v1.r0.20261120103344@mojatatu.com>
-Auto-Submitted: auto-generated
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+	dkim=pass (2048-bit key, unprotected) header.d=hallyn.com header.i=@hallyn.com header.a=rsa-sha256 header.s=mail header.b=M9qBDG2c
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=hallyn.com; s=mail;
+	t=1795190675; bh=JO6QMaohqpOpnglO+nbRvEH2R5s3p7FIcS9bHnt3aqI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=M9qBDG2cZM7LjFCfgpszJGBKKgicC0/vAIeHCbRTCISq50F4PiFn5sf6TBxNXtW+Y
+	 REgUYE3FsvLHP3fPuimDvBL6iD0fUqR9mJ+QAoXeNmFaV44OO7jsAHVQAdJrTl4KVG
+	 n/TEBCpTQpM6vi8XIZuzy0CRIkYsmktCtJSKW3+tGLDRWQ0gHr+C7viSVpoWGajpkP
+	 Eb9kgR6J/Md0jjzPLS2YA18PUp+6HDzOSgZ4sN8aMH824Ye51d/IBcPCImDsxNmOZd
+	 kUNxSPtlEm55pJGrXGRbmuOotLkN0toTYn2o1dgrloEzd6g7TVVwiYRPOxICb0i8mk
+	 ljWWZTYtcKo7g==
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+	id 941D71C4E; Fri, 20 Nov 2026 10:04:35 -0600 (CST)
+Date: Fri, 20 Nov 2026 10:04:35 -0600
+From: "Serge E. Hallyn" <serge@hallyn.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, linux-security-module@vger.kernel.org,
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+	bpf@vger.kernel.org, Zhiqi Zhang <zhiqizhangg@gmail.com>
+Subject: Re: [PATCH 0/2] ns: don't call the namespace LSM hooks for
+ kernel-internal namespaces
+Message-ID: <awBvk4BlFqT4jukk@hallyn.com>
+References: <20261120-work-ns-mount_subtree-v1-0-06337377f94a@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -65,22 +63,63 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261120-work-ns-mount_subtree-v1-0-06337377f94a@kernel.org>
 
-Hi!
+On Fri, Nov 20, 2026 at 01:29:57PM +0100, Christian Brauner wrote:
+> mount_subtree() allocates a private anonymous mount namespace so that
+> automounts during the path lookup have somewhere to go. btrfs goes
+> through it on every mount and NFS on every NFSv4 mount and whenever it
+> follows a referral.
+> 
+> Since the namespace LSM hooks went in that namespace goes through
+> security_namespace_init() like any other. Landlock enforces
+> LANDLOCK_PERMISSION_NAMESPACE_USE in its namespace_init hook. So a
+> sandbox that handles that permission without allowing CLONE_NEWNS can't
+> mount btrfs or NFSv4 anymore. mount(2) fails with EPERM even though
+> nobody asked for a mount namespace. Zhiqi reported that and sent a fix
+> that skips namespace_init for this namespace (cf. [1]).
+> 
+> But namespace_free needs to be skipped as well. Otherwise a bpf program
+> attached to namespace_free would see these namespaces go away without
+> ever having seen them being created. Right now that can't happen but
+> only because security_namespace_free() skips the hook if no LSM
+> requested a namespace blob. So mark such namespaces as kernel-internal
+> and keep them away from both hooks. The first patch turns the anon
+> argument of alloc_mnt_ns() into flags so we don't end up with two
+> booleans.
+> 
+> The anonymous mount namespaces created by open_tree(OPEN_TREE_CLONE)
+> and fsmount() are handed to userspace and keep going through the hooks.
+> Landlock covers them on purpose.
+> 
+> I tested this on v7.4-rc3 with a btrfs loop mount and an NFSv4 mount
+> in a Landlock domain that handles LANDLOCK_PERMISSION_NAMESPACE_USE but
+> doesn't allow CLONE_NEWNS. Both fail with EPERM without this series and
+> work with it. unshare(CLONE_NEWNS), clone(CLONE_NEWNS),
+> open_tree(OPEN_TREE_CLONE), fsmount() and setns() are still denied and
+> the Landlock namespace selftests pass.
+> 
+> [1]: https://lore.kernel.org/20261114141323.19029-1-zhiqizhangg@gmail.com
 
-This is an automated message. This series looks like a fix, but its
-commit messages seem to be missing some information:
+Thanks, both look good to me.
 
- - How the issue was discovered, e.g. hit in production, hit during
-   development, syzbot report, manual code inspection, LLM or static
-   analysis tool scan.
+Acked-by: Serge Hallyn <serge@hallyn.com>
 
-Please do not repost the series just to address the above. Instead,
-reply to this email with the missing information, so that reviewers
-can take it into account.
-
-*IMPORTANT*: If you do repost (for other reasons) - please include
-the relevant info in the cover letter or commit messages.
--- 
-The evaluation is done by an LLM so it may be wrong, if you think
-that is the case please reply and explain.
+> 
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+> ---
+> Christian Brauner (2):
+>       mount: pass flags to alloc_mnt_ns()
+>       ns: don't call the namespace LSM hooks for kernel-internal namespaces
+> 
+>  fs/namespace.c                     | 31 +++++++++++++++++++++----------
+>  include/linux/ns/ns_common_types.h |  2 ++
+>  include/linux/ns_common.h          | 20 +++++++++++++-------
+>  kernel/nscommon.c                  |  9 ++++++---
+>  4 files changed, 42 insertions(+), 20 deletions(-)
+> ---
+> base-commit: 666539eecdf4db623f5e3c3e55cf9f2dfad24aa4
+> change-id: 20261120-work-ns-mount_subtree-d429ad72f8ac
+> 
