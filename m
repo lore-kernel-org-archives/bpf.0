@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795162942;
-	b=4dqIkoGa/EVwhcxnIAP/+I5wMY7Dpp/Gdoh87x03oNPM0YgBMNbQdg/wbQhCYu5JpPWw
-	 RX8HQAPtdMpMPBwfzAuTSsV+qs696E6Be92I9cULoBLgcXnH2XvZE9JB2Hm9qgvxho0jb
-	 wdBO70jeYkY1ifMW1K3ZYzFgM0glnQr/FT03HKqlS1DKvaGgMA6RMEW0Yyim5EeXrnzEU
-	 yA2VTaMxjv4G+qyWAG1mwqlbkf0u0kxT7idFjYokgl0ElVZ4OANPwx8PseblfX1D3oUbc
-	 Q+rXfeBiT15MuIXYqN/xq61DHSzjwXsTSFC7J6GjOTV5pC+PcqIDKiVZDjJOw+F3kbw==
+	t=1795162968;
+	b=Em3cyVN5wrwTr2zsFXf9nxotlI3AbW4hiXfULyEp8Gl61peT05xnmO1wrJFGsm8pk03N
+	 vhns+kzjcEF0LkbMmM18J19t3U2WM4dELkEya3E4MZaN7ikt3iTorPcnV0l+D/BoieQFp
+	 f7cfODjxHNFYwjDWszXwT7gkB7dLPWCb/NvpvHN+N6ny2bEj2rOGAWIB3q8hAobPG5w5q
+	 6/3A2PEF+RPDc6swwVwRvtrdwOyDe4Z68HF3zHrAWorfEGVO9KUkMFXL3SyKX7Lx3Epla
+	 XIpr2IWiaOHy5shShi4V5AWgf0rDH9jfQtznoiSs9urwFSJZIQea2Em54R21XtwMU0g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795162942;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795162968;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=1boC+djJOeiEzNGTOC6jjTSbZYCD/ysQEZ/6nxAS2ig=;
-	b=1VOx+7Xe/4wdL2bx4XLHffQDlH2geJ8wpHRcI43+rClWYd2JJEU+RIl+DMuDS/jRlK3R
-	 LJetjJHzS+DRbBkeVbZH6JAx/jpng4zeNuVryTAAYc7vcUMRe/PRVowdpKbBcJ95bnEzy
-	 XZPToOagr5W5Cl9yTaN0TRv1qtaGQjYYn51TA3RuibN7SXtylBFYivKf2qtM4CtZdI3tG
-	 pvc9PMQo1wdZkuhx2wlwC3b/J3sYta1YlxkJ8uM7RvfnfboFhnzY+rsSdM/4RI06zwiFG
-	 yQoS1bnAkgRzzuGIUMvYuAnvmZZrtwZCZF8s8yXtc1wZHMKYLXnC1ZcOvWL+k/OnceA==
+	bh=O/hsnTeEYxy1O9yJzUhRdcN6MOdQIOoHhccbavUT6uc=;
+	b=oS5apR4mBYZ80fY8u0RnQQiYMszCnA4VXy8MhTLNfWzdpWl5TZXX3aiUws7R8wOuu0Be
+	 p6Fw1ULbhJ678oXHtumwSXRibnoKb7bEou0UrMqh2+nbzA/PqpjRoyjh5GCRU/mxYImkY
+	 3an57HDpNUXKJJxjS2eh/CcKeThU6t3eKhuurY+IwsgfjRDi1vHFHfin8sKX2F8N+jOzh
+	 8Cw43LDuBIwbQU4X+jcTth+tF8xBxzqU4MC2WGjGGBDuodVrbkSpkKuD7VVtkHUI40sXH
+	 8wiaqqmxFsuQsMPjQ2843zeu9LEmm5QKW7+Vd+O0trgoDXCE+Bb3LQ1d6beYKk3FHVQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QVVu6ijJ;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IvNi8Da+;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D9B606A320
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 08:22:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35D60606A326
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 08:22:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QVVu6ijJ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DE241F000D3;
-	Fri, 20 Nov 2026 08:22:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IvNi8Da+
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD7F61F000C4;
+	Fri, 20 Nov 2026 08:22:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795162942;
-	bh=1boC+djJOeiEzNGTOC6jjTSbZYCD/ysQEZ/6nxAS2ig=;
+	s=k20260515; t=1795162968;
+	bh=O/hsnTeEYxy1O9yJzUhRdcN6MOdQIOoHhccbavUT6uc=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=QVVu6ijJDmU3/7xatrY3ikECXt7RYF8JQ44pKPLKLEiPvZwKkNE3l1ega0SsFCwYT
-	 VN37VKFxEBb+4Tkmd516Jn+2yzGDt3U6iG4V7BV56OTkh6pLh/9a1pvCtkj9UIUqcV
-	 NFmV813s9uoMLbGtU2ox2eYeQXVv6EiFeNhtIfK/uPkJ3jIrkVNIkZhHgfl+hWvqXS
-	 jrOBQ7BUZp51iOKDDT9z4hcQ/+tQxlz70pCZ0ZsDjmxvH9OgFEEAduO0GxggnQsKsq
-	 IhlpddJmxJMQmj22D6PA8HPdoC+Vz1GfTF7+OHpuWhsLItKN0g4qA85fVd88JdXRGK
-	 J0ZWWTT/h9QKw==
-Message-ID: <sashiko-outbox-224719@kernel.org>
+	b=IvNi8Da+f8/IntOV2D7zf8IqOzXkJwPHW00Wh7zFPjZlwJvOrycCb4a9JqYxaUEPL
+	 ntbVDJLgGQR96c/902tzHTiQUC5sJ+v9TSSq0SKKKurt5F13EcUNZk4iwWJxrPqKvV
+	 D9Y6bBQujneOA7MVP8z2RjSPmlv9i8SQ4K/8oil8LJYcMornDxamdGp3sxTo1Eb5IN
+	 dLHhdi9AxqkWGgthr2g8p6NU8w0fc/66G/Zy3SL1d5J3IpTcZK4ubFq5FHpNTZTl5A
+	 sX3HbCib2Q1vJmRa/WaNvBA0KsXN4LA1ERmWuRFFx41DqfeOJJlAQCCkDzatrSk2Mz
+	 b7asEN7pfHeQg==
+Message-ID: <sashiko-outbox-224722@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 21/49] bpf: Compare states by join_key, then by
- value
+Subject: Re: [PATCH bpf-next 30/49] bpf: Get the trip count from the trip
+ index
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261120074430.2704488-22-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261120074430.2704488-31-alexei.starovoitov@gmail.com>
 References: <20261120074430.2704488-1-alexei.starovoitov@gmail.com>
- <20261120074430.2704488-22-alexei.starovoitov@gmail.com>
+ <20261120074430.2704488-31-alexei.starovoitov@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 20 Nov 2026 08:22:21 +0000
+Date: Fri, 20 Nov 2026 08:22:47 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,123 +60,75 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issues to consider:
-- [High] bpf: pointer leak via atomic RMW on unreadable spill in
-  stacksafe()
-- [Medium] bpf: 8-byte overread of 4-byte refs[i].ptr on 32-bit in
-  same_refs()
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Medium] bpf: empty trip_index range and desynced var_off in
+  bpf_equations_next_trip()
 --
 
-commit e3beba5c290061bf6cb6bccd8d16009036af5591
+commit 162fc0fc6e39fa252359de4313f88c4f96f4dc62
 Author: Alexei Starovoitov <ast@kernel.org>
 
-bpf: Compare states by join_key, then by value
+bpf: Get the trip count from the trip index
 
-This commit groups non-joinable verifier state fields into join_key structs
-for bytewise comparison and hashing, and simplifies register and stack
-subsumption checks in states.c.
+This commit tracks each loop's trip index as an xreg, collects induction
+variable thresholds from conditional jumps, and widens the trip index at
+loop headers to bound the loop trip count.
 
-> diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-> index bb8fa008a8a5a..174b1a613fb98 100644
-> --- a/kernel/bpf/states.c
-> +++ b/kernel/bpf/states.c
-[ ... ]
-> @@ -295,6 +391,13 @@ static bool stacksafe(struct bpf_verifier_env *env, =
-struct bpf_func_state *old,
->  		if (old_type =3D=3D STACK_INVALID || old_type =3D=3D STACK_POISON)
->  			continue;
-> =20
-> +		/* it can be filled into a register that is unreadable */
-> +		if (old_type =3D=3D STACK_SPILL && old_slot->spilled_ptr.type =3D=3D N=
-OT_INIT &&
-> +		    (env->allow_uninit_stack ||
-> +		     (cur_slot && cur_slot->slot_type[im] !=3D STACK_INVALID &&
-> +		      cur_slot->slot_type[im] !=3D STACK_POISON)))
-> +			continue;
-
-[Severity: High]
-Can this leak a spilled pointer when !env->allow_ptr_leaks?
-
-This lets an unreadable spill (STACK_SPILL with spilled_ptr.type =3D=3D NOT=
-_INIT)
-in old subsume a spilled pointer in cur.  If the subsuming path executes a
-64-bit atomic RMW on that stack slot (such as lock *(u64 *)(r10 - 8) +=3D r=
-2),
-check_atomic_rmw() checks the read with dst_regno =3D=3D -1:
-
-kernel/bpf/verifier.c:check_stack_read_fixed_off() {
-    ...
-		} else if (dst_regno >=3D 0) {
-			/* restore register state from stack */
-			state->regs[dst_regno] =3D *reg;
-			bpf_equations_fill(env, reg_state, spi, size);
-		} else if (__is_pointer_value(env->allow_ptr_leaks, reg)) {
-			...
-			return -EACCES;
-		}
-    ...
-}
-
-Because is_pointer_regtype(NOT_INIT) is false, __is_pointer_value() returns
-false for the unreadable spill, and the atomic write step scrubs the slot to
-STACK_MISC.  A subsequent 64-bit load from the slot then reads the pointer
-from the subsumed path as a SCALAR_VALUE.
-
-[ ... ]
-
-> @@ -398,6 +485,114 @@ static bool stacksafe(struct bpf_verifier_env *env,=
- struct bpf_func_state *old,
->  	return true;
+> diff --git a/kernel/bpf/equation.c b/kernel/bpf/equation.c
+> index 3d9df6e684528..fc05ca7dd6068 100644
+> --- a/kernel/bpf/equation.c
+> +++ b/kernel/bpf/equation.c
+> @@ -1132,6 +1132,91 @@ void bpf_equations_fill(struct bpf_verifier_env *e=
+nv, struct bpf_func_state *fra
+>  	env->eq_env->fill_bits =3D size * BITS_PER_BYTE;
 >  }
 > =20
-> +static const struct bpf_stack_state *held_slot(const struct bpf_func_sta=
-te *f, u32 i)
+> +/*
+> + * The state came back to the header of the loop at @depth.
+> + * A trip count or may_goto ends the loop long before the trip index get=
+s to 2^63.
+> + */
+> +void bpf_equations_next_trip(struct bpf_verifier_env *env, struct bpf_ve=
+rifier_state *st, u32 depth)
 > +{
-> +	return i < bpf_stack_nr_slots(f) && bpf_slot_is_held(bpf_stack_slot(f, =
-i)) ?
-> +	       bpf_stack_slot(f, i) : NULL;
+> +	struct scalar *trip_index =3D &st->frame[st->curframe]->loop_stack[dept=
+h].trip_index;
+> +	struct bpf_xreg_equation *xreg_eq;
+> +
+> +	scalar_add_const(trip_index, 1);
+> +	trip_index->r64 =3D cnum64_intersect(trip_index->r64, cnum64_from_urang=
+e(0, S64_MAX));
+> +	scalar_bounds_sync(trip_index);
+> +	xreg_eq =3D bpf_find_xreg_equation(&st->equations,
+> +					 bpf_xreg(st->curframe, BPF_XREG_TRIP + depth));
+> +	if (!xreg_eq)
+> +		return;
+> +	xreg_eq->off++;
+> +	refine_sym_from_xreg(env, st, xreg_eq);
+> +	propagate_bounds(env, st, false);
+> +	bpf_equations_clean(env, st);
 > +}
-> +
-> +static bool same_refs(const struct bpf_verifier_state *a, const struct b=
-pf_verifier_state *b)
-> +{
-> +	u32 i;
-> +
-> +	for (i =3D 0; i < a->acquired_refs; i++)
-> +		if (a->refs[i].type !=3D b->refs[i].type || a->refs[i].id !=3D b->refs=
-[i].id ||
-> +		    memcmp(&a->refs[i].ptr, &b->refs[i].ptr, sizeof(u64)))
-> +			return false;
-> +	return true;
-> +}
-[ ... ]
-> +u64 bpf_hash_join_key(const struct bpf_verifier_env *env, const struct b=
-pf_verifier_state *st)
-> +{
-> +	u64 hash =3D bpf_hash64(&st->join_key, sizeof(st->join_key), env->hash_=
-seed +
-> +			      ((u64)st->instance_id << 32 | st->insn_idx));
-> +	u32 fr, i, trip;
-> +	const struct bpf_stack_state *slot;
-> +	const struct loop_stack_entry *e;
-> +	const struct bpf_func_state *f;
-> +
-> +	for (i =3D 0; i < st->acquired_refs; i++)
-> +		hash =3D bpf_hash64(&st->refs[i].ptr, sizeof(u64), hash + st->refs[i].=
-type);
 
 [Severity: Medium]
-On 32-bit architectures, does passing &refs[i].ptr with sizeof(u64) to
-memcmp() in same_refs() and bpf_hash64() in bpf_hash_join_key() overread the
-4-byte void *ptr union member?
+Can bpf_equations_next_trip() leave trip_index->r64 set to CNUM64_EMPTY
+with a desynchronized var_off?
 
-Although the enclosing anonymous union in struct bpf_reference_state is 8
-bytes wide because of struct { int parent_id; u32 ctx_arg; }, &refs[i].ptr =
-has
-type void * const * and a 4-byte sub-object size on 32-bit targets, which
-triggers -Wstringop-overread and CONFIG_FORTIFY_SOURCE read-overflow checks.
+If trip_index is widened to the fallback [0, S64_MAX] range and a jump in
+the loop body refines an induction variable equal to trip_index to
+S64_MAX, trip_index becomes the constant S64_MAX.  When that path takes a
+backedge, bpf_clean_verifier_state() -> bpf_equations_clean() drops the
+trip_index xreg_equation because trip_index->var_off is constant.
+
+In bpf_equations_next_trip(), scalar_add_const(trip_index, 1) then wraps
+trip_index to constant S64_MIN, and intersecting trip_index->r64 with
+[0, S64_MAX] produces CNUM64_EMPTY.  scalar_bounds_sync() immediately
+bails out on range_bounds_violation(), leaving trip_index->r64 empty while
+var_off remains tnum_const(S64_MIN), and bpf_find_xreg_equation() returns
+NULL without marking st->equations.infeasible.  The state then continues
+into flow_prune_or_join() and passes CNUM64_EMPTY to cnum64_umax() and
+cnum64_umin() in join_trip_index() and trip_index_safe().
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261120074430.2704=
-488-1-alexei.starovoitov@gmail.com?part=3D21
+488-1-alexei.starovoitov@gmail.com?part=3D30
