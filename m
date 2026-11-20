@@ -1,56 +1,64 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=124.71.93.112
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795158135;
-	b=gSDg96UMGIx+kbHCwQGojkPDbifvn/gWeBnFRf9PDrp0w1WONfY+gjocO6iFPrr/QhjJ
-	 bg1o9vw/n7XHl02SVpKlQyVsOnn+H6lxbVEo8aX3S0MK7CaXJlCWMr9M+F9E95OW6ULU9
-	 K2W62KuimHx9KQooDjZCJPEVTzFhGC3e16bvKxk/BK9botMd5UMVbC6VwDh7R6C7iZjOH
-	 sCGUpMMyvvZZDFR3K2u0tYt5oFFqMW2K+xJrApHFl7qrVwCTRsiLkwWwnQpXJBIsZuUed
-	 UsdO1NzGBx4RI1AyfLI0whLMMHd8uuTZnttf5sj4BvM+s1Tor1PS69QH0aN7QPfug0w==
+	t=1795158957;
+	b=cdHCK0t9GtOCbFGOWTPosbZvUI9mbz77VlX5IYUh/A3rsfl1w1RWPiK/czY4o0gMskyd
+	 nHaEQF4WjdMPFBpbXNNBQ+u+euS8tPs85lKlHCoG3rez2vkb0pg6hx0RetTiQABajt6Md
+	 RU+fd4fpY3YK0y/IOnjI9qTuOKKatnlYcRCKWlL78kW55G6SodBAuMw0rcRHHZfjuznbU
+	 FC4qD+yILCDWDIi8XVQjxPCZUwRcTdUnI1Ji/tBav3aipuK+pujD5+N4e6qr1X2V9VbKT
+	 OLJYyuU2b6rpeOHJ6YJPOTTOq+lwrFB205JOx1mmj/dF+t2uho6Bf/QkGpOAoAD71YQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795158135;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=PERjcEyNGpzxGtD7rWbB8uj49L9am7nQuAcshipXyEU=;
-	b=yLIxYbXka9uhaU/UmYkq7fY1Zp6SbwpECyFHQPblVzAaO4vsKT5eVaS3FK6/92QEHHHK
-	 /QyQxJRexUUlITVuG/eQW9fI8f/gOgHuya7T04R683ORnLNNSzYq0FK+glwyKY29JGcdv
-	 FL9zJ7H1Ih5cCoX77hHOrRoUcyXU8B0ZUpcJXbjDABggvpBkE9o8OyKypmJ3JdwNxUehA
-	 L9ebRjha68HdXPy2QeQbUvY8/WHRAQkge7QfkdhIOW/Iy9s+fQJHViUJGPTrUyUNYNPqt
-	 AWZVSOa7DlhAq32Hsm1e0fPiICCBOpC0bcnlY2NqSRlOkY0SJ/FV4Q2AiBJ25VP0jxg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795158957;
+	h=DMARC-Filter:Received:Received:Received:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
+	bh=MpSejgr2yOWVjUY3TJB4/bXQFGqhZdUZzWXieqZDX5c=;
+	b=ThT3iiLE5/ujxN3kb65Hb/yNb5ADkjrJjmUwiEAUHtdrD3+hILO4/+4yEi26Au46mKn9
+	 /HSriK2LV53SOKD2QYBaOfJUoNWz4fStb6uLebwrfJNDMtAQADLnJvYHe6pDktOiZWsHJ
+	 shjiF3rEDUMrGHH/7/J/BcXhcGx2cNjbpUsFRi3i9L+OqOpf/3Pb2hjf6rTp2T71jScns
+	 LjUf8l+pmIIaRYt7hOsR9pUzNI2wVG8XdPVy1exnokR5Eb9MSYZ/AR+rwV1HM7/UnKV1q
+	 zEHE2KJ9r5SNr094zOCjWB09w9Fac9PkfUxoqFhZL4B7meKpA89f1Tk14pIUqgqGy+Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cj5uwk4x;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=huaweicloud.com;
+	spf=pass smtp.mailfrom=huaweicloud.com;
+	arc=none smtp.remote-ip=124.71.93.112
+Received: from dggmsgout12.his.huawei.com (dggmsgout12.his.huawei.com [124.71.93.112])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 075F1606A325;
-	Fri, 20 Nov 2026 07:02:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cj5uwk4x
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9360E1F000CF;
-	Fri, 20 Nov 2026 07:02:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795158134;
-	bh=PERjcEyNGpzxGtD7rWbB8uj49L9am7nQuAcshipXyEU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=cj5uwk4xUxIflkjLa4ehcOmmydNohN74gt/+Opl8ZHJRkITfesztBzjJDSBqZC4R0
-	 /LqrWXekQiUINvxwVhuDwvMU/Race16R/cbpA5jOdjAyUvbTmYhUtaCcnCZMF89Y0C
-	 GaB+ykfseX4xCsdiiAVPi8IKawGIsnLFhuaHSPsWkPF5/Pv2TIHWHTKWVTA3itJ3Ir
-	 rZ1VnMsJLkFxo9W6fP2TpqwOMk8/R07GZEwoldsTz+Il3kZ4WlPaTkTBq4kftlKbA9
-	 mKo2wFSqAq7rsYf7V8dbtJwTsS6TXi0h1f37KKbhwKbmxJTUc6LbILR+RrU5Mne+yC
-	 BbQmnVnbSP8Ug==
-Message-ID: <sashiko-outbox-224590@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] perf bpf_counter: Say why the perf_event_attr map can't
- be used
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Hang Zhengyang" <hang.zhengyang1010@gmail.com>
-Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20261120-bperf-attr-map-err-v1-1-b12b6b550273@gmail.com>
-References: <20261120-bperf-attr-map-err-v1-1-b12b6b550273@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 20 Nov 2026 07:02:14 +0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D15EF606A33E;
+	Fri, 20 Nov 2026 07:15:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D15EF606A33E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggmsgout12.his.huawei.com (SkyGuard) with ESMTP id 4jW66S6z45z1xr2;
+	Fri, 20 Nov 2026 15:14:56 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 948114056B;
+	Fri, 20 Nov 2026 15:15:51 +0800 (CST)
+Received: from localhost.huawei.com (unknown [10.67.174.243])
+	by APP4 (Coremail) with UTF8SMTPA id gCh0CgA3dfSm8_9qDM9HFA--.40246S2;
+	Fri, 20 Nov 2026 15:15:51 +0800 (CST)
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+To: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	io-uring@vger.kernel.org,
+	netdev@vger.kernel.org
+Cc: Kees Cook <kees@kernel.org>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Jens Axboe <axboe@kernel.dk>
+Subject: [RFC PATCH 0/3] Introduce a classic BPF filter cache for seccomp
+Date: Fri, 20 Nov 2026 06:48:49 +0000
+Message-ID: <cover.1795139109.git.xukuohai@huaweicloud.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,118 +67,93 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgA3dfSm8_9qDM9HFA--.40246S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGFW3CF4fAryUWry7Kw45Jrb_yoW5CFWUpF
+	W5G343KFn5JF1xJ3sFv3yUKF1rWr4kXr15J3Z5Gr9rZr1UKryjgaySqryYkas8Ar1Uu343
+	ZF1Dt3s29a1DZ3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0E
+	n4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
+	0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWU
+	tVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
+	CY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAF
+	wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+	7IU17KsUUUUUU==
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issues to consider:
-- [Medium] perf bpf_counter: -Werror=3Dsign-compare in bperf_pin_hint() on
-  32-bit glibc
-- [Low] perf bpf_counter: missing errno.h include for errno in
-  bperf_lock_attr_map()
---
+Sandboxes like Firecracker use seccomp filters to restrict allowed
+syscalls. Hundreds to thousands of Firecracker VM instances can run
+from a single template. Each instance loads identical seccomp filters.
+The kernel repeatedly translates and JIT-compiles these same cBPF
+programs, wasting CPU cycles and slowing down bulk startup of
+identically sandboxed workloads. cBPF lacks dynamic instruction patching
+features like tail calls or tracing. Its JITed instructions remain
+immutable at runtime. This makes it possible to share the same cBPF
+filter between different processes.
 
-commit ef2748ac810907c5c84a28e7a31cf730bd68ad09
-Author: Hang Zhengyang <hang.zhengyang1010@gmail.com>
+This series introduces a classic BPF filter cache. It is implemented as
+a hash table that maps user-space filter instructions to the prepared
+bpf prog.
 
-perf bpf_counter: Say why the perf_event_attr map can't be used
+The cache lookup occurs before filter preparation:
+- cache hit: Returns the shared bpf prog directly.
+- cache miss: Reserves an entry. Concurrent tasks loading the same filter
+  wait on a wait queue until preparation completes.
 
-This commit reports specific errors and a bpffs mount hint when
-creating, pinning, opening, checking, or locking the bperf
-perf_event_attr map fails.
+The cache is instantiated per subsystem. Currently, seccomp is the only
+user.
 
-Link: https://lore.kernel.org/all/YFneUHDiAt8Rg0cc@kernel.org/
+This series ends with a benchmark test. Every producer spawns one worker
+thread at a time, the worker installs a batch of filters and exits, the
+benchmark reports the number of filters installed per second. The table
+below benchmarks the batch size and the instruction length in one round,
+running the command below with different option values. The base column
+runs the same command on a kernel without this series. All data was
+measured on a local test setup with 32 producers.
 
-> diff --git a/tools/perf/util/bpf_counter.c b/tools/perf/util/bpf_counter.c
-> index 9362e45e17ceb..9a463eb9d51d9 100644
-> --- a/tools/perf/util/bpf_counter.c
-> +++ b/tools/perf/util/bpf_counter.c
-> @@ -3,11 +3,13 @@
->  /* Copyright (c) 2019 Facebook */
-> =20
->  #include <assert.h>
-> +#include <libgen.h>
->  #include <limits.h>
->  #include <unistd.h>
->  #include <sys/file.h>
->  #include <sys/resource.h>
->  #include <sys/time.h>
-> +#include <sys/vfs.h>
->  #include <linux/err.h>
->  #include <linux/list.h>
->  #include <linux/zalloc.h>
-> @@ -32,6 +34,10 @@
->  #include "bpf_skel/bperf_leader.skel.h"
->  #include "bpf_skel/bperf_follower.skel.h"
-> =20
-> +#ifndef BPF_FS_MAGIC
-> +#define BPF_FS_MAGIC 0xcafe4a11
-> +#endif
-> +
->  struct bpf_counter {
->  	void *skel;
->  	struct list_head list;
-> @@ -376,6 +382,24 @@ static bool bperf_attr_map_compatible(int attr_map_f=
-d)
->  		(map_info.value_size =3D=3D sizeof(struct perf_event_attr_map_entry));
->  }
-> =20
-> +/* bpf_obj_pin() only works on bpffs: say so if that is why it failed. */
-> +static void bperf_pin_hint(struct target *target, const char *path)
-> +{
-> +	char buf[PATH_MAX];
-> +	struct statfs st;
-> +	const char *dir;
-> +
-> +	scnprintf(buf, sizeof(buf), "%s", path);
-> +	dir =3D dirname(buf);
-> +	if (statfs(dir, &st) || st.f_type =3D=3D BPF_FS_MAGIC)
-> +		return;
+$ ./bench --producers 32 --duration 10 seccomp-install \
+        --sync-mode yes --filter-len 128 --batch 4 --same-filter yes
 
-[Severity: Medium]
-Does comparing st.f_type against BPF_FS_MAGIC without a cast fail to
-build with -Werror=3Dsign-compare on 32-bit glibc?
+batch  filter-len   base      cache hit            cache miss
+                              (--same-filter yes)  (--same-filter no)
+1      32           0.044M/s  0.064M/s(1.5x)       0.040M/s(0.9x)
+1      128          0.043M/s  0.062M/s(1.4x)       0.039M/s(0.9x)
+1      512          0.037M/s  0.052M/s(1.4x)       0.034M/s(0.9x)
+1      2048         0.023M/s  0.037M/s(1.6x)       0.023M/s(1.0x)
+4      32           0.065M/s  0.187M/s(2.9x)       0.059M/s(0.9x)
+4      128          0.062M/s  0.190M/s(3.1x)       0.055M/s(0.9x)
+4      512          0.052M/s  0.167M/s(3.2x)       0.046M/s(0.9x)
+4      2048         0.030M/s  0.119M/s(4.0x)       0.028M/s(0.9x)
 
-0xcafe4a11 exceeds INT_MAX, so BPF_FS_MAGIC has type unsigned int, while
-struct statfs f_type (__fsword_t) is a 32-bit signed integer on 32-bit
-glibc targets.  Casting st.f_type to unsigned long, as is_bpffs() in
-tools/bpf/bpftool/common.c does, avoids the warning.
+On cache hits, the cache delivers 1.4x to 4.0x throughput. Hits bypass
+the translation and JIT compilation pipeline entirely, so gains grow with
+filter length. The worker thread setup hides the win at one install per
+worker, a larger batch amortizes it. On cache misses, a miss costs a hash
+lookup and an entry allocation, the throughput degradation stays within
+about 10%.
 
-> +	if (target->attr_map)
-> +		pr_err("--bpf-attr-map: %s is not on bpffs\n", dir);
-> +	else
-> +		pr_err("bpffs is not mounted at %s, try 'mount -t bpf bpf %s' or use -=
--bpf-attr-map\n",
-> +		       dir, dir);
-> +}
-> +
->  static int bperf_lock_attr_map(struct target *target)
->  {
->  	char path[PATH_MAX];
-> @@ -393,30 +417,41 @@ static int bperf_lock_attr_map(struct target *targe=
-t)
->  					sizeof(struct perf_event_attr),
->  					sizeof(struct perf_event_attr_map_entry),
->  					ATTR_MAP_SIZE, NULL);
-> -		if (map_fd < 0)
-> +		if (map_fd < 0) {
-> +			pr_err("Failed to create perf_event_attr map: %m\n");
->  			return -1;
-> +		}
-> =20
->  		err =3D bpf_obj_pin(map_fd, path);
->  		if (err) {
->  			/* someone pinned the map in parallel? */
->  			close(map_fd);
->  			map_fd =3D bpf_obj_get(path);
-> -			if (map_fd < 0)
-> +			if (map_fd < 0) {
-> +				/* report the pin error, not the bpf_obj_get() one */
-> +				errno =3D -err;
+Xu Kuohai (3):
+  bpf: Introduce classic BPF filter cache
+  seccomp: Use the classic BPF filter cache
+  selftests/bpf: Add benchmark for seccomp filter install
 
-[Severity: Low]
-This isn't a bug right now because the generated BPF skeleton headers
-pull it in transitively, but tools/perf/util/bpf_counter.c should
-explicitly include <errno.h> at the top of the file for errno.
+ include/linux/filter.h                        |  25 +-
+ io_uring/bpf_filter.c                         |   3 +-
+ kernel/seccomp.c                              |  12 +-
+ net/core/filter.c                             | 318 +++++++++++++++++-
+ net/packet/af_packet.c                        |   2 +-
+ tools/testing/selftests/bpf/bench.c           |   4 +
+ .../bpf/benchs/bench_seccomp_install.c        | 249 ++++++++++++++
+ 7 files changed, 604 insertions(+), 9 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/benchs/bench_seccomp_install.c
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261120-bperf-attr=
--map-err-v1-1-b12b6b550273@gmail.com?part=3D1
+-- 
+2.43.0
+
