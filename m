@@ -1,49 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=66.220.155.179
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795130829;
-	b=MvTV+A3k12b5Wano+3tL1Dc0GluTByFiemIjf4+vi3wlo0FzmqIaOOAvHPjcBsMfy3A4
-	 51yGwxEh/8Y6WeICWgYfT3UUslD996gtUD8I+e0FDTL9QZzgygeVv3ChIddxJfNwtos6f
-	 6txwAscDNJ1yF/Bh8CPlBQKEGh8MXRDH3mvIXForE0tlQkb1BS2gKXU0mDt0vHLubRl7r
-	 mqtu/P+q4AWbGGJp/U7VcJfQLbmcPeYzzpMjN6P2KhMuTza7nGM6C7wGT1mLbT6tGOoGc
-	 M61zCDvqsfK11130eAs4A1Rov/a2sszeOV2sjdFy/1eApkMiheNTW+wTt22DtZnIHkA==
+	t=1795133515;
+	b=knD6KerNa1jLsS/sQqTB7S6/T1Z/eT0CFsEszMrsXV/0xbYsIhvLoEs2FHBMtxKmz9X1
+	 buOTcw+F59I5FmA+6xrI4i2DkyqCX2P125Kn5EUQK36Wh88BRlKBi8EtVhbOp0JFNsiPz
+	 dPQMJION3L4XA0c10NFx1Y9wUbDTkxZfizD/UKm6kNXQnFnxJz81YJhgvYDJjVwH4G/ze
+	 /fYY099yBz7BLOjpg86oGhaLXiNnBuL/B1DGZPA9+Gz0gfjy0dF3SZsmdH6PB64IEpuv6
+	 icWIhA+sm9cjfTrPXy6kXQ1kdV5zojxVE5mD2U9pX2D0TMnytO1y6rp6vdfl64aM8tw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795130829;
-	h=DMARC-Filter:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=e+Et1QkyQpw8ACVi1b3VK5MQFSTIOgA8OXmYXl4I2mQ=;
-	b=thCUpwKS+BSohlCwA3YdwFRegJj1Dttu1w0QsJ9Hm3m7cqMuubB6d8eHrxwHoc/7HxJi
-	 RjaLqoDsCWDeUZ7hFdb7dHi0RgmiNww8lWkFcnnYJwqcS8NNfksKgrR3Qf/Wzvtk0fzQx
-	 KsIvgVx9w+IeUJlUJZUk764oMixwh4rvO0Igajji+V2A8v38WevuDVLmiLlFDZDfbC7O1
-	 +ImsqO1fZhGCbBOe5/5U4yOp9RKE7meJh3XYsvMgq1MzHo12587/9llXoL86Vq1+8A4nK
-	 2bSSwyKSfjZWrDigrWvvV8BRX3MKawgE21lDBlXHYR1PEsda+Fymjj66IEM/exwvKig==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795133515;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=0n8RQ5daGUajegrFGIDzOS2pE0C08y0z4IZEWt/Wx9Y=;
+	b=dbJ8b2+N08Bb7NSHSt847qjjaG4E/QYMMmip9LzNzXlcrbyRoKBxQK1UQy/qrEgA1mXg
+	 NckOBcMxkzgrN3E9y4uECM/Zdoq18z5nzSGwtEVDlP6foT9V+TBI+YxUWddKKpby4uEjJ
+	 /2EjXJhY9dOQifpzVnFJ6O90txRpB3e0/aNXClaE16MsMI3FJ28xDE+u5DqZu0uMFWmij
+	 wdFMgUvdhtaXK+OlL3C1gs60+f1cGrYTBfzw3r/Wa4ax5suE1U75h/QesPVksUPp4Jy1M
+	 FQI6O64xKiTCNBB9wNfH2Ajy6r2Uya8OTdJD1ms1k82edX5YDWgzxTfWApGTBTGRImg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=fail header.from=linux.dev;
-	spf=fail smtp.mailfrom=linux.dev;
-	arc=none smtp.remote-ip=66.220.155.179
-Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=blsDCkJq;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F1AD606A320
-	for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 23:27:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1F1AD606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm50310.atn0.facebook.com (Postfix, from userid 128203)
-	id C5389591B589B; Thu, 19 Nov 2026 15:26:57 -0800 (PST)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	kernel-team@fb.com
-Subject: [PATCH bpf-next v3 2/2] selftests/bpf: Test CO-RE relocations of unsigned 32-bit enum values
-Date: Thu, 19 Nov 2026 15:26:57 -0800
-Message-ID: <20261119232657.3392789-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.53.1
-In-Reply-To: <20261119232647.3392045-1-yonghong.song@linux.dev>
-References: <20261119232647.3392045-1-yonghong.song@linux.dev>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5576660A260E
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 00:11:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=blsDCkJq
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2E061F000CF;
+	Fri, 20 Nov 2026 00:11:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795133515;
+	bh=0n8RQ5daGUajegrFGIDzOS2pE0C08y0z4IZEWt/Wx9Y=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=blsDCkJqkLn9DVbbiXgmsNJZh9/ZpGgkLVoit2AoblZx4QJeRuA/3aO8F6Fb7JUwM
+	 2J0GRST4aZQKND5c6+uxaPJbwHarLjwZ+K/0pUehcVfK/+SvbIJ+wWkJ3E5mlRzvfx
+	 l2Qv+xYpQD7SHllMYnYvMC3X/rXeXEjamgnUhnm1YNt8gcelE85F4WXkAqlveWiJY3
+	 ivCgXWfVAQT+bSwdt1QoHBRES+XrZaZAVV3MzkOqa//zw5fHGYmlRrvFbQnC4WyDhq
+	 6QtnClwa8bYw42t92PN/+7ABzWBJlWVM8bQS8pqGSed07ssQv+b5SahSUD1r3lzSfY
+	 iXSzMuw/gCRfg==
+Content-Type: multipart/mixed; boundary="===============3228154552357935840=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -53,136 +49,118 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <cb1e3f94e014f103aa0c70544036a61ade5c31250e759b63aabe09ab2a4575f8@mail.kernel.org>
+In-Reply-To: <20261119232652.3392590-1-yonghong.song@linux.dev>
+References: <20261119232652.3392590-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v3 1/2] libbpf: Fix CO-RE relocations of unsigned 32-bit enum values
+From: bot+bpf-ci@kernel.org
+To: yonghong.song@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri, 20 Nov 2026 00:11:53 +0000 (UTC)
 
-Test the extension of unsigned 32-bit enum values in CO-RE relocations
-from the previous patch.
+--===============3228154552357935840==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-test_core_reloc_enumval gets an optional local enum with values out of
-the range of int, i.e., an unsigned 4-byte enum, whose values clang
-emits zero-extended in the ld_imm64 of the relocations. The enumval
-target has the same enum with different values, 0x80000001 and
-0xffffffff, which are expected zero-extended in the 64-bit outputs.
+> libbpf: Fix CO-RE relocations of unsigned 32-bit enum values
 
-GCC's __builtin_preserve_enum_value() returns int, so storing the value
-of enum named_uint_enum into a long field sign-extends it, and uint_val1
-would read back as 0xffffffff80000001. Convert the result to unsigned
-int for GCC to get the enumerator value. Clang still stores the 64-bit
-relocated value, so its upper 32 bits keep being checked.
+TL;DR: Possible regression in libbpf CO-RE: on targets whose enum BTF has no
+kflag (pre-6.0 kernels), negative enumerators like -1 may be zero-extended to
+4294967295 instead of sign-extended. Selftest doesn't cover it.
 
-Without the fix, the check of the original value fails, and the whole
-object is refused:
+> diff --git a/include/linux/btf.h b/include/linux/btf.h
+> --- a/include/linux/btf.h
+> +++ b/include/linux/btf.h
+> @@ -525,6 +525,11 @@ static inline struct btf_enum *btf_enum(const struct btf_type *t)
+>  	return (struct btf_enum *)(t + 1);
+>  }
+>  
+> +static inline u64 btf_enum_value(const struct btf_type *t, const struct btf_enum *e)
+> +{
+> +	return btf_type_kflag(t) ? (s64)e->val : (u32)e->val;
+> +}
+> +
 
-  libbpf: prog 'test_core_enumval': relo #11: unexpected insn #53 (LDIMM6=
-4)
-          value: got 2147483648, exp 18446744071562067968 -> 184467440715=
-62067969
-  libbpf: prog 'test_core_enumval': relo #11: failed to patch insn #53: -=
-EINVAL
-  #122/71  core_reloc/enumval:FAIL
+[ ... ]
 
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+> diff --git a/tools/lib/bpf/relo_core.c b/tools/lib/bpf/relo_core.c
+> --- a/tools/lib/bpf/relo_core.c
+> +++ b/tools/lib/bpf/relo_core.c
+
+[ ... ]
+
+> +static __u64 bpf_core_enumval(const struct btf_type *t, int idx)
+> +{
+> +	if (btf_is_enum(t))
+> +		return btf_enum_value(t, btf_enum(t) + idx);
+> +	return btf_enum64_value(btf_enum64(t) + idx);
+> +}
+> +
+>  static int bpf_core_calc_enumval_relo(const struct bpf_core_relo *relo,
+>  				      const struct bpf_core_spec *spec,
+>  				      __u64 *val)
+> @@ -875,10 +882,7 @@ static int bpf_core_calc_enumval_relo(const struct bpf_core_relo *relo,
+>  		if (!spec)
+>  			return -EUCLEAN; /* request instruction poisoning */
+>  		t = btf_type_by_id(spec->btf, spec->spec[0].type_id);
+> -		if (btf_is_enum(t))
+> -			*val = btf_enum(t)[spec->spec[0].idx].val;
+> -		else
+> -			*val = btf_enum64_value(btf_enum64(t) + spec->spec[0].idx);
+> +		*val = bpf_core_enumval(t, spec->spec[0].idx);
+>  		break;
+
+On the target side, bpf_core_enumval() treats kflag == 0 as unsigned:
+
+    btf_enum_value(): return btf_type_kflag(t) ? (s64)e->val : (u32)e->val;
+
+Is kflag == 0 really a safe indication of an unsigned enum here?
+
+Before commit 6089fb325cf7 ("bpf: Add btf enum64 support"),
+btf_enum_check_meta() refused any enum with kflag set, so the vmlinux and
+module BTF of every pre-6.0 kernel has kflag == 0 on every enum, signed
+ones included.  libbpf itself relies on this, since
+bpf_object__sanitize_btf() clears the enum kflag when !FEAT_BTF_ENUM64.
+Kernels built with pahole 1.22/1.23, which lib/Kconfig.debug still
+allows, have no signedness bit either.
+
+Take a program built with clang >= 15 against a recent vmlinux.h, running
+on such a kernel:
+
+    enum perf_event_state { ..., PERF_EVENT_STATE_OFF = -1, ... };
+    long v = bpf_core_enum_value(enum perf_event_state,
+                                 PERF_EVENT_STATE_OFF);
+
+- Local BTF has kflag = 1, so orig_val = 0xffffffffffffffff and clang
+  emits the same value in the ld_imm64.
+- bpf_core_enumval_is_sext() returns false, because orig_val > UINT_MAX.
+- Target BTF has kflag = 0, so new_val = (__u32)-1 = 0x00000000ffffffff.
+- bpf_core_patch_insn() writes insn[0].imm = 0xffffffff and
+  insn[1].imm = 0.
+
+The program now gets 4294967295 instead of -1.  Before this patch, new_val
+was btf_enum(t)[idx].val (an __s32) widened to __u64, i.e. sign-extended,
+which was the right value here.  Comparisons such as
+state == bpf_core_enum_value(...) (state widened to long) would stop
+matching, and other negative enumerators such as CPUHP_INVALID = -1 hit
+the same path.  Kernel-side CO-RE (bpf_core_apply(), light skeletons) runs
+the same code and is affected when vmlinux BTF has no enum kflag.
+
+The commit message says the target value "gets the extension given by the
+kflag of the target enum".  That only works when the target BTF records
+signedness.  Could the extension of a 32-bit target value come from the
+signedness of the local enum (or of orig_val) when the target enum has
+kflag == 0, as the GCC sign-extension case already does from the
+instruction?
+
+The selftest added later in the series covers only unsigned values on a
+kflag-aware target, so it does not exercise this case.
+
+
 ---
- .../selftests/bpf/prog_tests/core_reloc.c     |  2 ++
- .../selftests/bpf/progs/core_reloc_types.h    |  8 +++++++
- .../bpf/progs/test_core_reloc_enumval.c       | 21 +++++++++++++++++++
- 3 files changed, 31 insertions(+)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc.c b/tools/=
-testing/selftests/bpf/prog_tests/core_reloc.c
-index 80432c4656b5..98b3c5fb1028 100644
---- a/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-@@ -904,6 +904,8 @@ static const struct core_reloc_test_case test_cases[]=
- =3D {
- 		.named_val2 =3D 2,
- 		.anon_val1 =3D 0x10,
- 		.anon_val2 =3D 0x20,
-+		.uint_val1 =3D 0x80000001,
-+		.uint_val2 =3D 0xffffffff,
- 	}),
- 	ENUMVAL_CASE(enumval___diff, {
- 		.named_val1_exists =3D true,
-diff --git a/tools/testing/selftests/bpf/progs/core_reloc_types.h b/tools=
-/testing/selftests/bpf/progs/core_reloc_types.h
-index 5760ae015e09..6d758e74bd58 100644
---- a/tools/testing/selftests/bpf/progs/core_reloc_types.h
-+++ b/tools/testing/selftests/bpf/progs/core_reloc_types.h
-@@ -1215,6 +1215,8 @@ struct core_reloc_enumval_output {
- 	int named_val2;
- 	int anon_val1;
- 	int anon_val2;
-+	long uint_val1;
-+	long uint_val2;
- };
-=20
- struct core_reloc_enum64val_output {
-@@ -1243,9 +1245,15 @@ typedef enum {
- 	ANON_ENUM_VAL3 =3D 0x30,
- } anon_enum;
-=20
-+enum named_uint_enum {
-+	UINT_ENUM_VAL1 =3D 0x80000001,
-+	UINT_ENUM_VAL2 =3D 0xffffffff,
-+};
-+
- struct core_reloc_enumval {
- 	enum named_enum f1;
- 	anon_enum f2;
-+	enum named_uint_enum f3;
- };
-=20
- enum named_unsigned_enum64 {
-diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_enumval.c =
-b/tools/testing/selftests/bpf/progs/test_core_reloc_enumval.c
-index e7ef3dada2bf..8b8abbaaf533 100644
---- a/tools/testing/selftests/bpf/progs/test_core_reloc_enumval.c
-+++ b/tools/testing/selftests/bpf/progs/test_core_reloc_enumval.c
-@@ -27,6 +27,12 @@ typedef enum {
- 	ANON_ENUM_VAL3 =3D 0x30,
- } anon_enum;
-=20
-+/* 4-byte enum with values out of the range of int, so it is unsigned */
-+enum named_uint_enum {
-+	UINT_ENUM_VAL1 =3D 0x80000000,
-+	UINT_ENUM_VAL2 =3D 0xfffffff0,
-+};
-+
- struct core_reloc_enumval_output {
- 	bool named_val1_exists;
- 	bool named_val2_exists;
-@@ -39,8 +45,17 @@ struct core_reloc_enumval_output {
- 	int named_val2;
- 	int anon_val1;
- 	int anon_val2;
-+	long uint_val1;
-+	long uint_val2;
- };
-=20
-+#ifdef __clang__
-+#define UINT_ENUM_VALUE(v) bpf_core_enum_value(enum named_uint_enum, v)
-+#else
-+/* GCC's __builtin_preserve_enum_value() returns int */
-+#define UINT_ENUM_VALUE(v) ((unsigned int)bpf_core_enum_value(enum named=
-_uint_enum, v))
-+#endif
-+
- SEC("raw_tracepoint/sys_enter")
- int test_core_enumval(void *ctx)
- {
-@@ -64,6 +79,12 @@ int test_core_enumval(void *ctx)
- 	out->anon_val1 =3D bpf_core_enum_value(anon, ANON_ENUM_VAL1);
- 	out->anon_val2 =3D bpf_core_enum_value(anon, ANON_ENUM_VAL2);
- 	/* ANON_ENUM_VAL3 value is optional */
-+
-+	/* enum named_uint_enum is optional */
-+	if (bpf_core_enum_value_exists(enum named_uint_enum, UINT_ENUM_VAL1))
-+		out->uint_val1 =3D UINT_ENUM_VALUE(UINT_ENUM_VAL1);
-+	if (bpf_core_enum_value_exists(enum named_uint_enum, UINT_ENUM_VAL2))
-+		out->uint_val2 =3D UINT_ENUM_VALUE(UINT_ENUM_VAL2);
- #else
- 	data.skip =3D true;
- #endif
---=20
-2.53.1-Meta
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/44640008097
+--===============3228154552357935840==--
