@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795163095;
-	b=IlRyZqhgLT0/XqHBqv8fB97rj9hpCwVrxmLW1zgt7Ejkp47qvuf7+tfSwnY27Yi5XHHU
-	 uoNERMkW14LTvJLFzmd2chHuHWoCsLp9CyKMlD3STkG9QlNPeAx4lxvEJ+dWpBbsH4+wG
-	 gkcmU8XdVQSFxVQDTGF0V87Uz+6OQ9XY8umckP4/ukgEm/n/oektMsSgY07xdgkr9i1ZJ
-	 0/tHimLU+y7BKIp7jAty7iu4u5ghis3AR4AITs9axdKwz1ne2S3QgoSNopIfTGfVWicDq
-	 kqOWZRxvYnOfLANWVhOZCc4qMuFrcK//O5g08A5we8CmR8zSmEzxi65Fcjgz5VOHaQg==
+	t=1795163098;
+	b=BC7lH/4IR2Vm+5S3pQc6fQn1ZT7OJC9rGQ8JLHA+wk5i3rAx5VcyK0Avp8BobszUhPGo
+	 sVtFfqtulqAs9wXIQxcUPxjphfEBruYFTO8cfqlg/4GRFZF4a+0L1P28o7fidcjXc/nLm
+	 HzzcsjsL1VzgLSOszVL6ruKQCx1ScnDxGXC8Zphu80CLcCmfxcZrnzxbHNhQEFLR2IWba
+	 UwzRPZijZ3tS8o94oVL1L7kMG+Y2hJjfOuOLvTPIPqd3/qPX+9rJxaAnSw2GjaMXvZjjy
+	 8eTZL6M2i9bL6asjG1PqrDebKsz5/S2KZBCXf16IyvUoFEjVmBWlTRxYCFgzm2NoyVw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795163095;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795163098;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=m9/Z4dNNtSQMZ4QIbjMdSfiRuxef6kxNCEbZ5tBx0rU=;
-	b=rBKyDEtMB3GXgapWSFhVKK4JAGdENo/WnNwjjwUw6Dsqloqd2C8yatfnaEZ7n4gcsj79
-	 xX+fzlKokpH1d34Fs3luAxzQ26YPaSz/oNfkSoqaw0xRdSKIVFy79VZz+7ppq9jmSJKLX
-	 NdA9bA6LSb5sibGUMbowORRKw8yMcgv5r2l9X/ase/jGhjfxR9xvcvClAWr66LLKQUekh
-	 fPa61w652Mr+OuH+BAwsoz+tPFdeC4jc2Vhl2JZufrNWx0eMeOSa9Eq/9k3SK/8jpNp26
-	 nup31SVsYZ0Ot0eKk3KY4DSVt0gdTuqd6djKMZBHN/R5FZZEfX0JA/b+N2hUpotE7rA==
+	bh=YU9ylf/kCZSb2VHQGmh+SUwMwe2nRmCdyAmJfmnPD9Y=;
+	b=xHeqBWeXf5nibPL2K6M94l2Kj1A2lCGD8uLzLct0BUZrzhZPlr8h84mILJdcwDm6bS88
+	 SnPX9DZ0mNLRHYUeqXus+NB4g23cnpWWcn6HaldXYq3vG2i5AgEIH6m6JIH8EIasq4BXc
+	 doUPFXZE6mbE+S/1Zd7OKHTf0mKX0BnsX6E+KDafoYNadiQT5UdaASR3g6wxn5v3hOXm8
+	 iz1rUJ6eH7aPDBHfzbTYPBF2qX64xHTeDnE5DB+HQAypec03UCcKcL2MdVkK1aNmiI/zh
+	 5DqLVFGaeGFxtkoUfIVwiMqdfWJFQJPbAN6xzzULGJarNgyHd1KPE1my9Z/NXCaJpmQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Wr0+miGl;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CFnBEzcO;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02937606A32A
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 08:24:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FA4E606A320
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 08:24:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Wr0+miGl
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64B351F000CA;
-	Fri, 20 Nov 2026 08:24:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CFnBEzcO
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A37451F000C6;
+	Fri, 20 Nov 2026 08:24:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795163094;
-	bh=m9/Z4dNNtSQMZ4QIbjMdSfiRuxef6kxNCEbZ5tBx0rU=;
+	s=k20260515; t=1795163097;
+	bh=YU9ylf/kCZSb2VHQGmh+SUwMwe2nRmCdyAmJfmnPD9Y=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Wr0+miGlIImr/xeEwksH5aLBeZMatkjPPjxrMlEjKZxF1dKnlCHMlT2jJV1cBcDF2
-	 3gHtXOA6rDe2x9PiYzXznyUN+YQtTkIe+GmfIBEcElSecpXyY7dqCllHYiZ+qAQn1o
-	 v7UV1OIVXv7FOJ+SNX50Tk8BTZcVRP68KK72L+y8w88qfJsgyzTB7hGKE9rWSvGsCi
-	 76QSQLg4+rLWIAM2mx+H3f23FCCFwh+XQPnH0JZeOFFmje3psrCJLHD59SLZkYlR52
-	 ELCNUADHjQXhSL3Dt4XhICdU0DFEVmKmM2XhzHR7YnSxjdKWzu13GxzgDSFt3W/4Pd
-	 cPaDkJpNVUw6A==
-Content-Type: multipart/mixed; boundary="===============6778475305194276429=="
+	b=CFnBEzcOr/ghxqqhuYlQUjzulSbcF2wGRHCzxMKyfBDBghvaLlmTQTp1Ls7n+6o/T
+	 ARc96Ma2LEPnCcfAtwSjjVgM7rADTXRXa3SFrbP9a4IEwx9JpvGrz5s78noDqzBEOm
+	 8omZ/UQMbsdaRVuf1QLdy2yby3FZGSwunynw4b21RKo0BYFWMsB7IBc5PyHx+wxcL8
+	 6WQavRnt13DLcsptbROO0PJHYZMf0libLP520k+NIEatK6RQzyrnZjZYfDwgRMzGVl
+	 NAOTOAB/5Qem/mL7tzFJd5m0rOSe6Ue5dIQeGNdh6r826F3jvm+t0STc17g7Om/u4d
+	 DLU7HzWUGFOtA==
+Content-Type: multipart/mixed; boundary="===============1464693895278082949=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,114 +49,74 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <fb1adb1484d4dfdf8f231380b939c46dabaf0f2693f55cf7fc5ef6099bee9280@mail.kernel.org>
-In-Reply-To: <20261120074430.2704488-15-alexei.starovoitov@gmail.com>
-References: <20261120074430.2704488-15-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next 14/49] bpf: Mark a state that no run of the program has
+Message-Id: <42838758481927a54998a9e89f7178df75046ab58e5b696140608fe1b4ee3ab0@mail.kernel.org>
+In-Reply-To: <20261120074430.2704488-3-alexei.starovoitov@gmail.com>
+References: <20261120074430.2704488-3-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next 02/49] bpf: Make stack liveness faster
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 20 Nov 2026 08:24:53 +0000 (UTC)
+Date: Fri, 20 Nov 2026 08:24:56 +0000 (UTC)
 
---===============6778475305194276429==
+--===============1464693895278082949==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Mark a state that no run of the program has
+> bpf: Make stack liveness faster
 
-TL;DR:
-- scalar_intersect() change may leave 32-bit spill fills unsoundly bounded, so
-  the verifier could accept unsafe programs; undocumented in the commit
-  message
-- the new infeasible flag is never read, and may be set on the wrong state
+TL;DR: arg_track_join_all() appears not to compile: 'same', bpf_add_cost() and
+BPF_COST_* are undeclared until a later patch, breaking bisection; cost
+accounting is also missing from the commit message.
 
-> bpf: Mark a state that no run of the program has
->
-> A jump can leave an xreg without a value: the ranges and the known bits
-> have no number in common. No run of the program has such a state.
->
->   jump -> range is empty -> infeasible -> a pass:              continues
->                                           a run without joins: drops it
->
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-
-The commit message only describes marking infeasible states, but the patch
-also changes scalar_intersect().
-
-First, it removes the forced zeroing of the upper 32 bits of dst->var_off.
-In the parent, with bits == 32, the code did:
-
-    a = tnum_subreg(a);
-    b = tnum_subreg(b);
-    ...
-    s.var_off = tnum_intersect(a, b);
-
-check_stack_read_fixed_off() passes bits = 32 for a 4-byte spill read by an
-8-byte fill (fill_exceeds_spill), where the upper 4 bytes come from
-STACK_MISC.  For example:
-
-    *(u32 *)(r10 - 4) = 0xffffffff;
-    *(u32 *)(r10 - 8) = w1;
-    r2 = *(u64 *)(r10 - 8)
-
-scalar_bounds_sync() then bounds r2 to [0, U32_MAX], while at run time r2
-is 0xffffffff_xxxxxxxx.
-
-Second, the removal of "if (bits < 32) return false;" turns on refinement
-for 1 and 2 byte spills.
-
-Could the soundness fix be folded into 20d7b7b266b5 ("bpf: Keep more of
-what is known about a number") so each prefix of the series stays sound for
-bisection, or at least be described in this changelog?
-
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
+> diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+> --- a/kernel/bpf/liveness.c
+> +++ b/kernel/bpf/liveness.c
 
 [ ... ]
 
-> @@ -522,6 +522,8 @@ struct bpf_verifier_state {
->  	struct bpf_reference_state *refs;
->  	u32 insn_idx;
->  	u32 curframe;
-> +	/* an xreg has no value: unreachable. Only a path-sensitive run drops such a state. */
-> +	bool infeasible;
+> @@ -1103,9 +1111,18 @@ static bool arg_track_join_all(struct bpf_verifier_env *env, int idx, int target
+>  	bool changed = false;
+>  	int r;
+>
+> +	if (!arg_is_visited(&in[BPF_REG_FP])) {
+> +		memcpy(in, out, MAX_AT_TRACK_REGS * sizeof(*in));
+> +		memcpy(stack_in, stack_out, nslots * sizeof(*stack_in));
+> +		return true;
+> +	}
+>  	for (r = 0; r < MAX_AT_TRACK_REGS; r++)
+>  		changed |= arg_track_join(env, idx, target, r, &in[r], out[r]);
+> -	for (r = 0; r < nslots; r++)
+> +	same = !memcmp(stack_in, stack_out, nslots * sizeof(*stack_in));
+> +	/* a change pays for the next visit of @target too */
+> +	bpf_add_cost(env, MAX_AT_TRACK_REGS + nslots,
+> +		     same && !changed ? BPF_COST_COPY : BPF_COST_XREG);
+> +	for (r = 0; r < nslots && !same; r++)
+>  		changed |= arg_track_join(env, idx, target, -r - 1, &stack_in[r], stack_out[r]);
+>  	return changed;
+>  }
 
-Is anything reading this field?  It is written in reg_bounds_sanity_check()
-and refine_live_branch() and copied in bpf_copy_verifier_state(), but
-states_equal() does not compare it and log.c does not print it.  The only
-later reader in the series, infeasible_state_ends(), tests
-env->cur_state->equations.infeasible, a different flag.
+Does this compile?  arg_track_join_all() assigns and reads 'same', but the
+only locals declared are 'bool changed = false;' and 'int r;'.
 
-The comment says "Only a path-sensitive run drops such a state", and the
-commit message says "a run without joins: drops it".  No code does this,
-and env->path_sensitive is never set.
+bpf_add_cost(), BPF_COST_COPY and BPF_COST_XREG also don't appear to be
+defined anywhere in the tree at this commit.  A grep for bpf_add_cost and
+BPF_COST_ only finds these two lines in kernel/bpf/liveness.c.
 
-Where the flag is set, it does not always match "an xreg has no value":
+Since liveness.o is built whenever CONFIG_BPF_SYSCALL=y, this looks like it
+would fail with "'same' undeclared", an implicit declaration of
+bpf_add_cost(), and "'BPF_COST_COPY' undeclared".  The cost accounting and
+the comment "a change pays for the next visit of @target too" aren't
+mentioned in the commit message either.
 
-In check_cond_jmp_op() with both branches live, push_stack() copies the
-current state into other_branch before regs_bounds_sanity_check_branches()
-runs.  If true_reg1 or true_reg2 fails the check, reg_bounds_sanity_check()
-marks env->cur_state:
+This breaks bisection from this commit until a later patch in the series,
+ecbd98bcc45a ("bpf: Limit the cost and the memory of a load"), changes the
+declaration to 'bool changed = false, same;' and adds
+BPF_COST_SCAN/COPY/XREG/INSN/STATE and bpf_add_cost() to
+include/linux/bpf_verifier.h.
 
-    env->cur_state->infeasible = true;
-
-That is this_branch, which takes false_reg1/false_reg2.  The jump state,
-which takes the bad registers, is left unmarked.
-
-reg_bounds_sanity_check() also reaches the out: label through
-verifier_bug_if(reg->step == 0 || reg->base >= reg->step, ...), which its
-own comment calls a verifier bug rather than an empty value set, yet it
-still marks the state infeasible.
-
-If a later reader drops states using this flag, both cases would skip a
-path that runs.  The later equations-based reader also checks
-env->bypass_spec_v1 first, since a speculative run can still reach such a
-path, and this field's comment gives no such condition.
-
-Could the field be added in the patch that first reads it, with the
-producers changed to mark the state that actually holds the empty register?
+Could 'bool same' be declared here and the bpf_add_cost() call moved into
+ecbd98bcc45a so that each patch builds?
 
 
 ---
@@ -164,4 +124,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/44698144269
---===============6778475305194276429==--
+--===============1464693895278082949==--
