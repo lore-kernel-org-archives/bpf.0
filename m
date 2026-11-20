@@ -1,70 +1,70 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.181
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795207371;
-	b=YoA2jTutEEukSwr7vyHhmB0oz1alYYQHQDHi6Eq0bnJaCyur5GAu2gdInf/tMwc3147K
-	 T1aiAOsFrGxxnc9JIhSJQW7q4OJZcc1p5Tu7dhzvge2hde3DWevnfL4qsAfvblXH04+w4
-	 93iMkO7xwBs9yN8U40UzJNHrwXFSYuW5k1DtW2yoMd2I1ghZezWfHkz6J+LTd6xUnm9x1
-	 lx5PpNCWfi83/256OuiDSw5lc51tv76apNbBMIucVaOsR4lbIUSXXw90KGB6/8X5wbvTK
-	 NPMcr9UFGpV6/pUDJdf+AVDl1NTeTkHSk8kZkYhzobB9k0gsU1htaq9RQMo4iQyAfZA==
+	t=1795207374;
+	b=Lls3eDdTqLk0iocQNxczZABNP2Ton5JcCALkQr+neC/zwj0Mdva9d4cCFvkGuu5KJBPa
+	 217DMxFJsEdzkIE+AHqGwTKfp0TTlgARVOa98pDbAo0JooMTF7gLOMxuVkD/jJwcGVGAD
+	 QPRAKiFcHXxSv8P5Mcvqpjfir3joklGq6hDrmO2KL6R9ecq91T0cPwQGL3AxzUHPBkcnt
+	 hjHMnXu0L1+C6Lbo5b5hJISfInCqC8AJajGDhIbyc/fsr0HpOdOAKe0CvZEFdiYDvhMU7
+	 +dgMOEo/cijzIdXF+wwe24YyZypTaXZemt6e2M7oZg73vxvJ0NKvLoSc4b9xFqeyN8w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795207371;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795207374;
 	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:MIME-Version:In-Reply-To:References:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=5Vy+uDDmlpqXaPhIJuzEyGUW5XXKRnuQUYCNM07djE4=;
-	b=GK7f81L8avtlSshs2+A97wQV4Mq+WLdCx7fk/hG3H+Z9zjAHITv0zIAXJjEz6/QDCkJV
-	 KbMdQmxbBPgt31B7piemhLz5SgVkANCAzt8BTUc+TKP8Ol9n6rgtN3tojQ7W0SdpsORNQ
-	 fcZwKQvn9tNLSGs5pJAk1VWGlm/PXIJf2xlEwfewAACZRFRCn0a6pmuINjCnTKrwpIhXX
-	 ZfQIfccyQlhfcbraQUfa/Pik1lMdF5uBO7SijoyK8re/gxRJ6btn4DJehrTGNAr/gdMSQ
-	 BkdxKufOHHVDn7k+pnb11Xz7z90JC7laC1bpfLNwr20QiaHuUDG+fWgHp5EkIgc48Hg==
+	bh=tokKV+ZbU+lf/1B8MUnFvi6VmCUJYKTRqvgFuF70WpQ=;
+	b=HSYZFf0J+KWMW/8yv81k7acNjxw9otJe0B1qladvyTzdBRro1eAf8Z9LNBpuz6eahLl3
+	 t6OsFQFFR6smeO4ltOeC9S8aYlbqufjwEoMt4Ax4GdzCb16imB3qlYbcXdR4YmB1i40Jn
+	 BFq5IZSBUtugeHqm9s0XaxF3Yj85j+xtI9zOv0rH4/Cw4B918dhL6SymEXdQmghPeIs19
+	 jPJ5OTREGlOIIgjS3Md3Gk3hsXCKohRPPtSfcgicblR2x8bh9yTNxZS+STYnYJ/jVJ5lk
+	 apYKkTtAlT6WxRsivJ0+4Q356rsWNA6s9ywE8G2OxY6LvO0+EnGH/m/dmpDp4yoUbwA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=fail header.from=kernel.org;
 	spf=pass smtp.mailfrom=gmail.com;
-	arc=none smtp.remote-ip=209.85.160.173
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+	arc=none smtp.remote-ip=209.85.222.181
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A9E3606C0CF
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 20:42:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1A9E3606C0CF
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FAF8606DB52
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 20:42:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9FAF8606DB52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-55d3563e50eso8191751cf.0
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 12:42:49 -0800 (PST)
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-94961b68685so115097085a.3
+        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 12:42:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795207369; x=1795812169;
+        d=1e100.net; s=20260707; t=1795207373; x=1795812173;
         h=content-transfer-encoding:content-type:references:in-reply-to
          :mime-version:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=5Vy+uDDmlpqXaPhIJuzEyGUW5XXKRnuQUYCNM07djE4=;
-        b=xmIu5w9CECEeWJhVlQteHb95Mo7IyJLS/rtxJXvfpFZXoExMvumTqxg3ZfyZ0Vf8z4
-         cmm5yBVbDaguPOF3PKlwlZ8/WdO5ZahFW7uBD1+Be86FD7GjFskwaIXiCMXq4l/3Bt0b
-         F+dY0BOZc5V3ZFMU2cHeCti5Il+aO3Pum0pJfgaI4p3Ap5zV4/mzbQJUI1TuuHikCOD+
-         7wf1uwr/zo42ap97XRI4tMhfVkI2fLo2RVmIn2iwHs5lK8owmpEpKMrkAWrBoOMxAw2y
-         D8wC1X9csXsaCMAANNfjeHzmbLfATg5aUS+Mb8YBFzHzAobs9H7X/5TtnPVXNuznMsiJ
-         K30A==
-X-Forwarded-Encrypted: i=1; AL+hErGUcw+lrQUtyT2LcWVyL/yPTOxsrQFVe79YQ0OnEXtHuqk1YS68jWD6c6+L4ReX61D+yfA=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/Pxb/vx7lHsi0qcy2LkGc64tqWmanhVN+Ek10pROFgy/dAK5gL
-	rFED1LJvwEbrNQYxNKN+37sB6ddW643jjrKIojPpXTw3E4gONIHL/Y66
-X-Gm-Gg: AYBFou3WQG4Mw80sLGlVCjm4VMymTIMuonA7h7FCb9CB18rywkgQucNq/0JWo2QZX5I
-	sPgjUhVHJ3EeI64UBDwgmr+BLJTEb8laikUQ52NJ89bFP9ZKUc2YUQe+6Pv/iFia//m1xTONaXS
-	2ugyeDex8ZCXtQo7379Ki+Jhq/ImUiL21F90ompgxZvuUiHrWln+uNxWqhQ1v9xRIAucS8wRCWY
-	aewjrikp04MF8xZkzdvrFTNktczTBA7u3/yjwC8NbMClSyzf2nlK8ofEeomaAw/9lX0gxCRUFhZ
-	DKaCgJqQS0JFVsfedCWn67fbURXZLkYwzh1uBDABCArc7RzrzNLYH9b2c5VkxCDUoNN43Vv6u75
-	7gTab5PB+c5DvcLuKxW8Q17Vq5tMDO05Xn6o/4YSKsYe7wBhgiOm3vvot25MAznowoXLJzifrqe
-	XpNZ+xSiF0F66GjrLn498vPzDgEot9w84A3jSC4tzrZLXZgeRkBLZlGWkkM7nQTMb4kOMcdBwML
-	u/qYySm/kq9ffs3QcF7N8hzT+mp3HuO08rsvO7R6BT0DY8WxYZYi8Z7/Mfva+GWUbP6eVJnUGdO
-	zMroDUmshN6oiE+KZilQv1YLLB/nEKazsx+r1z4bZbpLBrnyaeikoidR9JKmihAlH6VAKYu/P2I
-	W4iL7HCV/NTevioU7NGzxTMYLUY+v4uN2nllyquL01RMfwLxLwrFz
-X-Received: by 2002:a05:622a:647:b0:535:92a6:22db with SMTP id d75a77b69052e-55d76932dc3mr81030961cf.1.1795207369141;
-        Fri, 20 Nov 2026 12:42:49 -0800 (PST)
+        bh=tokKV+ZbU+lf/1B8MUnFvi6VmCUJYKTRqvgFuF70WpQ=;
+        b=PA5arB0z///PiUxFbqtH7ThHikk96738sQxz8Lk/KJ9mgjhQErs6vHFxw3Wp8kDFLh
+         yiFQ37FkN8hnPJFY/aWsVqiVaQK+kcqxVHgyyTYzSAmp2ICscepbvE2rDnjOfTeVtA3d
+         hAp991Hdms/hd12pfy5oMwoQDGxFsrZQ3dB8Cm+mrBn3pGA32imWOegGaXv9U/JBv16Z
+         dj+pbLU2ZAJmqTh9yxCsyxxg7RHENsJquLsmZ9b4psx4sYQAQXXpQscn+AmrR85U4aBv
+         pT2/9bhvYezhF3V/rrGt304+1910fMAWfJvP9vfs2Ga5qeixydhmnEBt3w+KPuBSMxpO
+         uOcQ==
+X-Forwarded-Encrypted: i=1; AL+hErGi/Mnyz+EhKQZm2rtmaOdj3nz6FymDzU+2eSSIPPg/AJ6PVQJ0CpJfnkIibF68DodrHQk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+wz+Li0HbarkyIQgvuwzB2g1Gp/+I9Be+D2Q/IIzbooijhX2Ms
+	orILBV6ISguPPZnkRjd7TDalxkBKU/JNGfDUsaS5NaUkCXgbs3OY7ACN
+X-Gm-Gg: AYBFou1qZ9wJ1Qm86kk5kFBgbLkjEwxQq+sh4+D/ZHlKdG49mbIPFYiXISz3adWioD7
+	g2wTkH/oFMbhnJJyLaVc9bJfIpIlGp0kP3POeDxr1JR4Ca0vwotzEMEAZtFpNX/amwQgi/ALa55
+	3HSKw9Czk5tGeUyxH+qzjdFKMiCHdnC3J6dPJe0Q6OZJIUuTgyvfGb+13nbcFoK16QqVGCUaHGt
+	oo3nWw8KsuGcJp8kS7ef1RdcWQa7FC+LBpoBVVSs4D431YvkEw4alz63hldFoCJ9xaWsarqiHWg
+	y9PdyvjbSQKHNhCtvcct7ag4JIOK1MHMVEdBihkYHgZeJznitibK1ktX/fVpsCG4sYFUtfa2IrM
+	2NxPeVZxE71WDZtGe0E+Rkr/jVha+bcmIt7hF/Qm81yYHmVnUIgBcVhm48AeFy8V152D9XyzZLJ
+	LjepXV6LyqWpjqqRrdtysnt0NUBMw8YgPizeMaIrABf4Ils6SOGAkfo/N6e2UEp/6OPq4W/hOZG
+	TVqbOuiuZChTDO1rhN7e+idO6d0NhWIw4NutzwrAf7XWMa0LutfTf/jzlSwrDPM0tTtuEx/0Ey7
+	wEG8G3mNWqXEW3mGKif7ngO4DIekSIkTixiMOtXuF9493AU8vl5wal4o68HRsjq3afj+6FnpfTD
+	yWsG9PqRvK2zuPXHCH4InSM58XZNSnJoj/eTwRR5r3I5/lb6c6fWL
+X-Received: by 2002:a05:620a:f11:b0:93e:5016:e3a6 with SMTP id af79cd13be357-949ba9c6e0bmr795897085a.26.1795207372569;
+        Fri, 20 Nov 2026 12:42:52 -0800 (PST)
 Received: from localhost ([199.170.132.196])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-92134bfe82dsm34020236d6.0.2026.11.20.12.42.48
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-949bb424fa6sm270598785a.40.2026.11.20.12.42.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2026 12:42:48 -0800 (PST)
+        Fri, 20 Nov 2026 12:42:52 -0800 (PST)
 From: Tamir Duberstein <tamird@kernel.org>
 To: Eduard Zingerman <eddyz87@gmail.com>
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -78,10 +78,10 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
  bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Andrew Werner <awerner32@gmail.com>,
  Zvi Effron <zeffron@riotgames.com>, Andrii Nakryiko <andriin@fb.com>,
- Emil Tsalapatis <emil@etsalapatis.com>
-Subject: Re: [PATCH bpf v2 1/8] libbpf: ringbuf: Honor zero consume bounds
+ Emil Tsalapatis <emil@etsalapatis.com>, Sashiko <sashiko-bot@kernel.org>
+Subject: Re: [PATCH bpf v2 8/8] libbpf: ringbuf: Prevent missed wakeups
 Date: Fri, 20 Nov 2026 17:51:54 -0000
-Message-ID: <179519711452.18576.3585895078868133287@kernel.org>
+Message-ID: <179519711456.18576.9562508567420854149@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -91,12 +91,11 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-In-Reply-To: <9323b0acc22de75ead4732db464672443eb141ff.camel@gmail.com>
-References: <20260618-bpf-ringbuf-fixes-v2-0-33fde039ddf3@kernel.org> <20260618-bpf-ringbuf-fixes-v2-1-33fde039ddf3@kernel.org> <9323b0acc22de75ead4732db464672443eb141ff.camel@gmail.com>
+In-Reply-To: <be221942819c7654f054b53907fe9ff2e9526f79.camel@gmail.com>
+References: <20260618-bpf-ringbuf-fixes-v2-0-33fde039ddf3@kernel.org> <20260618-bpf-ringbuf-fixes-v2-8-33fde039ddf3@kernel.org> <be221942819c7654f054b53907fe9ff2e9526f79.camel@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-> Could you please pack the tests as a separate commit (or commits)
-> at the end of the series?
+> Please move the test to a separate commit, I'll review it a bit later.
 
 Done in v3.
