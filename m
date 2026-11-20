@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795163455;
-	b=O0vl7JFeiWJ6E6Y4/1eUUD/JuZmVa9r+dqbs9At+cA44SGQpoF0MMA8q63ySGBiGgMls
-	 NZE5T2aAtRl2Az8oHYao55UQ1CiFE6nD9d3sbIGqJCAkuKl033ht1/Hd6Fe1BIfDYj0zY
-	 odzHRfVf39Dp/K4YXthHo645fySD3Vyk7tzykmCEKhw8JEK7tJ0Q0d+PWEHehnWfPdapU
-	 jY1fSdIAwyG0J/nNkG8YC1/GroVfwqjhdiAajqKMXp1+qvR4GtVuyrDfOdguyejyUICkl
-	 jyvBfg5tAQjvewynHbgAe9lIhTj/LtVIjQwUDYG/2Rfgr0QhLTaWRaRS0vgEsyYaTxQ==
+	t=1795163621;
+	b=fps5f9uaW4fXbZe3V1URIjiKZKK3AjQ71Jv0V6vTxhW3oau/GHlFZJ0dNhOdosV74o2I
+	 Ur3X/+7ISAecUAla1jYdGss3Ly3/YcRVzOcWTsgHSFlLEiKAxea/sZF5uMef8uX/xP9B1
+	 z6vXk+cqsB9IHHlNlsZTiJJxrBTAbbKHyq/YDSldPdzIbs1mPPYf1jygm1Y0QZT9HLyiC
+	 cCaryIxYlC4dkJLCB4zKJLJcpEc7HAgruFKmt3aXoDl/WnEpC6sdOT0wt0ZERpAwcNROM
+	 nJPPpP0jH912w25S/Ftujuy/M5nX+HD05N6/7o4iypJu+pVd6HSrbGZ4BgaFKMYa92Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795163455;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795163621;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=eh8R7+dC6/ftlA8tf2l7I7+fTaeyoIYGng1ePMe/hRg=;
-	b=h2P6cLeum/RtcuGKWawBI9aBQJzkBJb9at3Tmj2vQwn1moKoEbtEfF0e36/I/SZ1zIL5
-	 0VlR5GE6NTOooQe6H2LCT8ZuZxyA0/ka7ZD7rsG78+nWhudbe5P8FUsNFsPLwMR9b5wPf
-	 CNcvzw/aMUM3NDL7qz8yS4K6M5WbP2JTbeDlq1swTAYnXW8B6JPoanSS6p1Dplit2D1nS
-	 j9PIyZyfwMs35KNFOCUXnm0l8j5Srn7xuV7x54zvaNLjVzEwpivI7x1N5B3sl6gAVmMoD
-	 2sTeH1WVELZtgayuCMSHzHKM4xkhWZW6E6b/+OyolItF5CzQZy/YS3WKzYegVbxaIsg==
+	bh=FEbh7yAi9iSK2V/tM2bexKGuHXhQ67O6d+UguPwpiq4=;
+	b=c42ExaY4UiK2OM6eiPxdMj5ZRc6K9B1wV8tSEJ0aRlxiwWyBzkw3bW3PqZEq5B4qscXt
+	 dep6N7obJQLp6mbFYhFm+Pr7GmNZdL3n8H1MjeVV8pFJv4KzIgGXMJYTWlFKrOFC/SIYV
+	 roD1v2L1DQF+FYArdhCcbczI/IC/ho1C6STrlIXOz+pyQ4sT9dTv44c775ULNLuWlqogc
+	 DJFVjCZyV8ZE52ErnxIioJ3znHxxzTkmLxXlfJ36ePBai65I0HV06CdNQlPkZ9yFdrHxM
+	 nMrvMhILkcOWV6ytb/eWkOx0zIlNT7sv/rzWpA7oQwaOK+0tZhXXVcl6cZhVPXGb/zA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mb1cslqq;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IIoIIHEC;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 391C8606A330
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 08:30:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B026D606A320
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 08:33:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mb1cslqq
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B56A81F000C6;
-	Fri, 20 Nov 2026 08:30:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IIoIIHEC
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E6E31F000C4;
+	Fri, 20 Nov 2026 08:33:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795163454;
-	bh=eh8R7+dC6/ftlA8tf2l7I7+fTaeyoIYGng1ePMe/hRg=;
+	s=k20260515; t=1795163621;
+	bh=FEbh7yAi9iSK2V/tM2bexKGuHXhQ67O6d+UguPwpiq4=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=mb1cslqqqHrVpnkgzjtoVJeTINlVosWqvKTvyC/NgA3lPBSHy9iVwO5V9aI/Sv/6M
-	 RsxXGuRKtu9GMCt08NU85qqkHjmo71Zr2m95B0ZuOvpdW2GXeQCH5VfYsd5y902+Yg
-	 JN9NlU6/QxqffkodYdkMb/Qfz05JOptsJKgap9KfaXKxedj+96oShzhKRW/3IOiYlT
-	 JFyCGEKWVylECbK0C9KJbUHupGWakeLcYHJx26TXVkfZqJfnyWDqA39VwvbObd8lFE
-	 Xv4H8vwwPuK1phlwok846Hr7QOTKhKooVfeFZRzdGG6q9kKzmHDyRjuL532G+DEqua
-	 qc/nqZPNZvmIw==
-Message-ID: <sashiko-outbox-224738@kernel.org>
+	b=IIoIIHECN9psm1niAeFDf69XidvQlIUkJNTCN+Zfm88M5J3fDe+Ml57suxCTsMigJ
+	 1lViByKPLxWEMfUCtHmdYW9pqmI25H7NOqEqVb+zcAf6zNATA38Nk25JRGt7ryK4v8
+	 gfoU1As+SAFW/Euv27QfVzLPxVAgw7l61+pAMRUXlYqSFkdOPKH8m48c0Zz289i7nY
+	 /RqdgrTe5XnHjerhB2KCfnVxUw/CCFo0tJoDePaXWVBOC+CqkLTV8DFAPAvDsXDyMM
+	 nkmSC30HXskIl1M9GA3pfpu75tDZ0SzRX9aQgCpua3gEbxWV0n8pFwvXTdIDQQ2mbm
+	 HJ4X/3shnESnQ==
+Message-ID: <sashiko-outbox-224741@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 47/49] selftests/bpf: Test passes, instances,
- precision and the failing path
+Subject: Re: [PATCH bpf-next 33/49] bpf: Verify a static function once for
+ each instance
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261120074430.2704488-48-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261120074430.2704488-34-alexei.starovoitov@gmail.com>
 References: <20261120074430.2704488-1-alexei.starovoitov@gmail.com>
- <20261120074430.2704488-48-alexei.starovoitov@gmail.com>
+ <20261120074430.2704488-34-alexei.starovoitov@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 20 Nov 2026 08:30:54 +0000
+Date: Fri, 20 Nov 2026 08:33:40 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -62,147 +62,69 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue to consider:
-- [Medium] selftests/bpf: premature #endif around loads_6th() in
-  verifier_passes.c
+- [Medium] bpf: missing early return in do_check_block() after
+  check_func_callx_set()
 --
 
-commit ef0b2c0eaafb6e699dfff5dd0c5556a322cf2fa1
+commit 609a14fb5ab2e00b0fa47a3b3041980c47a05bcf
 Author: Alexei Starovoitov <ast@kernel.org>
 
-selftests/bpf: Test passes, instances, precision and the failing path
+bpf: Verify a static function once for each instance
 
-This commit adds BPF verifier selftests covering verification passes,
-partitions, loop peeling, call instances, precision tracking, and
-failing-path diagnostics.
+This commit verifies static functions that do not access their caller's
+frames once per instance, joining call states only at the function entry
+instruction within a per-function instance budget.
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_passes.c b/tools/=
-testing/selftests/bpf/progs/verifier_passes.c
-> new file mode 100644
-> index 0000000000000..a6edb33d0014b
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/verifier_passes.c
-> @@ -0,0 +1,3636 @@
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 6373505c672d9..4068014fedc5d 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
 [ ... ]
 
-> +/* clang ignores the arguments of a naked function */
-> +#if defined(__clang__) || defined(__BPF_FEATURE_STACK_ARGUMENT)
-> +static __naked __noinline __used long loads_6th(long a, long b, long c, =
-long d, long e, long f)
-> +{
-> +	/* r0 =3D *(u64 *)(r11 + 8) */
-> +	asm volatile (".8byte 0x8b079; exit;" ::: __clobber_all);
-> +}
-> +
-> +SEC("tc")
-> +__description("log: one report for a stack argument that is not there")
-> +__failure __msg("callee expects 6 args")
-> +__msg("Verification failed") __not_msg("Verification failed")
-> +__load_if_JITed()
-> +__arch_x86_64 __arch_arm64
-> +__naked void log_of_missing_stack_arg(void)
-> +{
-> +	asm volatile ("r1 =3D 1; r2 =3D 2; r3 =3D 3; r4 =3D 4; r5 =3D 5; call l=
-oads_6th; exit;"
-> +		      ::: __clobber_all);
-> +}
-> +#endif
-> +
-> +/* *(u64 *)(r11 - 8) =3D imm */
-> +#define STORE_6TH(imm)	".byte 0x7a; .byte 0xb; .short -8; .long " #imm "=
-;"
-> +#define ARGS_1_TO_5	"r1 =3D 1; r2 =3D 2; r3 =3D 3; r4 =3D 4; r5 =3D 5;"
-> +
-> +/* r7 is 0..15 with the argument, and add..add + 15 without it */
-> +#define STORE_ON_ONE_PATH(add)						\
-> +	"call %[bpf_get_prandom_u32];"					\
-> +	"r7 =3D r0;"							\
-> +	"r7 &=3D 15;"							\
-> +	"call %[bpf_get_prandom_u32];"					\
-> +	"if r0 =3D=3D 0 goto 1f;"						\
-> +	STORE_6TH(1)							\
-> +	"goto 2f;"							\
-> +"1:	r7 +=3D " #add ";"						\
-> +"2:	if r7 > 7 goto 9f;"						\
-> +	ARGS_1_TO_5							\
-> +	"call loads_6th;"						\
-> +	EXIT_AT_9
-> +
-> +SEC("tc")
-> +__description("deps: only one state has the stack argument")
-> +__success
-> +__load_if_JITed()
-> +__arch_x86_64 __arch_arm64
-> +__naked void stack_arg_on_one_path(void)
-> +{
-> +	ASM(STORE_ON_ONE_PATH(8));
-> +}
-> +
-> +SEC("tc")
-> +__description("deps: the state without the stack argument gets to the ca=
-ll")
-> +__failure __msg("callee expects 6 args")
-> +__load_if_JITed()
-> +__arch_x86_64 __arch_arm64
-> +__naked void stack_arg_on_one_path_bad(void)
-> +{
-> +	ASM(STORE_ON_ONE_PATH(7));
-> +}
-> +
-> +/* x * x - 21 * x + 110 is 0 for 10 and for 11 */
-> +static __naked __noinline __used long roots_of_6th(long a, long b, long =
-c, long d, long e, long f)
-> +{
-> +	/* r6 =3D *(u64 *)(r11 + 8) */
-> +	ASM(".8byte 0x8b679;"
-> +	VALUE_IN_R9
-> +	"r1 =3D r6;"
-> +	"r1 *=3D r6;"
-> +	"r6 *=3D 21;"
-> +	"r1 -=3D r6;"
-> +	"r1 +=3D 110;"
-> +	"r9 +=3D r1;"
-> +	"r0 =3D *(u8 *)(r9 + 63);"
-> +	EXIT_AT_9);
-> +}
-> +
-> +#define ROOTS_ON_STACK(second)						\
-> +	"call %[bpf_get_prandom_u32];"					\
-> +	STORE_6TH(10)							\
-> +	"if r0 =3D=3D 0 goto 1f;"						\
-> +	STORE_6TH(second)						\
-> +"1:"	ARGS_1_TO_5							\
-> +	"call roots_of_6th;"						\
-> +	"exit;"
-> +
-> +SEC("tc")
-> +__description("keep_disjoint_apart: a stack argument")
-> +__success
-> +__load_if_JITed()
-> +__arch_x86_64 __arch_arm64
-> +__naked void disjoint_stack_arg(void)
-> +{
-> +	ASM(ROOTS_ON_STACK(11));
-> +}
-> +
-> +SEC("tc")
-> +__description("keep_disjoint_apart: a stack argument is no root")
-> +__failure __msg("invalid access to map value, value_size=3D64 off=3D65 s=
-ize=3D1")
-> +__load_if_JITed()
-> +__arch_x86_64 __arch_arm64
-> +__naked void disjoint_stack_arg_bad(void)
-> +{
-> +	ASM(ROOTS_ON_STACK(9));
-> +}
+> @@ -21530,6 +21539,9 @@ static int do_check_block(struct bpf_verifier_env=
+ *env, int prev_insn_idx)
+>  		from_unproven =3D reads_from_unproven(env);
+>  		fixups =3D insn_aux->fixups;
+>  		err =3D do_check_insn(env, &do_print_state) ?: bpf_equations_after_ins=
+n(env);
+> +		/* a call or an exit gave the state to the flow, the error is from the=
+re */
+> +		if (err < 0 && !state->frame[0])
+> +			return err;
+>  		insn_aux->releases |=3D held_cnt(state) < held && err !=3D PROCESS_BPF=
+_EXIT;
+>  		insn_aux->acquires |=3D held_cnt(state) > held;
+>  		if (nospec_ends_path(env, state, err)) {
 
 [Severity: Medium]
-Should the #endif after log_of_missing_stack_arg() be moved below
-disjoint_stack_arg_bad()?  When building with bpf-gcc without
-__BPF_FEATURE_STACK_ARGUMENT, loads_6th() is not defined for
-STORE_ON_ONE_PATH, and roots_of_6th() declares six parameters outside the
-guard, breaking compilation.
+Does checking !state->frame[0] miss negative errors returned through
+check_func_callx_set()?
+
+When a callx instruction targets a set of functions,
+check_func_callx_set() passes a temporary copy as env->cur_state to
+check_func_callx_one() -> call_func_on_its_own() -> bpf_flow_call() and
+then restores env->cur_state =3D cur:
+
+kernel/bpf/verifier.c:check_func_callx_set() {
+    ...
+		if (!err) {
+			env->cur_state =3D copy;
+			err =3D check_func_callx_one(env, set->subprog[i], insn_idx);
+			env->cur_state =3D cur;
+		}
+		bpf_free_verifier_state(env, copy, true);
+    ...
+}
+
+bpf_flow_call() consumes copy via swap(w->st, *caller), leaving
+state->frame[0] in cur non-NULL.  If flow_apply_exit() then returns a
+negative recoverable error (such as from bpf_flow_edge_unproven()),
+do_check_block() skips this early return and falls into the
+error_is_recoverable(err) path for the callx instruction itself, recording
+the error on the callx instruction and continuing the pass via
+skip_unproven_insn() when last_unproven_left was already decremented to 0.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261120074430.2704=
-488-1-alexei.starovoitov@gmail.com?part=3D47
+488-1-alexei.starovoitov@gmail.com?part=3D33
