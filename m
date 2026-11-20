@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795160821;
-	b=EhLi8p45b6U6oWtV8VyS/IZRjhTt5NJPC+yy94EOBaJOuw5UlGzu+hhIFi5191K+nk+7
-	 zBFFmNxhNrBEdThcdBjwPyZCrRUcpHG2Oct5Gww7J6Nva7MzLnX+mgosXTM8a6hdOB1Di
-	 qT1ObVt633TKB8iYU7I8HQ31h8QcHdC4kDOWcPsQJLe4b87chs7zeWEYVIExkmjjnzhSU
-	 VwJSRtsFPbeiIsR6ixJDqSvAbvr3qbda1NXHjAq+AUJNdmTLQFSQLDNHf3v7ptrQhDQT3
-	 s724liuUtbtikb0+LIY1NVRAcvkO4YuhPre9nU4tSrVmGLGnFkWg/9FDECjpUae96pA==
+	t=1795160827;
+	b=i6rXoj11bRLZs8Gy4jsNB84SGfkdvMl0W5CkynmJcQGnsodOF27mk0wii1ZlLsQySbdv
+	 0rhs82KUHuCHZO/oRKN3YwyKKpasYKfqCWJ2OXfKIkdCkh/yzFURscmWLUd5pnrV73v2i
+	 /UBs+IGls6dcFABpYsh7MlLd/JZuCxjlxsiXimBZDlZn/ZZ+BT1OFRuytkJ0mwN8EtkhV
+	 uq4VS+LSXerltm6kDuUIXwwU5p7bK+0561rBZyZLKYP7SK5NspLdHSsZVOyURb6P7qpXy
+	 GM5ncHMUUDyzB174WsueuS2iXyrLPyfiMIQtfJl3AFwCwwW2Im09Q5BMlVBysAmyrtA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795160821;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795160827;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=x2fv0WkLB7UFv5dOzLecE1zfvllF0pILIx2fRdSCNUA=;
-	b=IMtlKBCZWoA8mlUav94h/rfm9f0TivOuXQZwkwHd+PmAsCuesuTzYRGp/Bz+0ZDB7uQc
-	 ab8Qg3lHqpC+IGNVRew+Ht+g2ruT5uQvxDUsgKFk0j7hs5qEYr1otLJsBX1+J57sNAqoR
-	 jnDkVbVw8UPGNCEroGoot5jsWbsJCGV5nIPUnDfWP8DwqaHOLY7jgXcY8LKaOgERe1ntp
-	 NCSe/98W3ZIA2c9i7tiKjP6VjP2Wn4KoC7kyfSIvh0ltk/TeL8ERGACpiPjJ8XAqRUAwd
-	 w+IyXo7g8l3zlrPAkLnUdWKR1133QSlv8tcqfJjSlGNT13UrX4bn/4a3PfZtlqgvl/A==
+	bh=ar0YALmaqf+oX2yd5rxLen2CSNIf7Fp/XK5Q70bQ1m0=;
+	b=GLAtZgW9SOShVvnk1Ag1APsmiG1qtaSjZV79Yusa3HQ0mahEEu3a9QuS6FhiBey/1tIz
+	 T7OMmVeMa4PR8UnwlW4JNghucjZNIJzyQY0MVKKx87Q8LqYv+PXpx9IlzVXSkyhRuSQee
+	 ANWXJGWUodnA3qhachjagS1ochj5RHLSJ8kVT/6rd8gvW2VzOj0fksR9pRYj31rUKYSgb
+	 0YeN6yIySomA8T7SIHjOYBhjNkH7aInW2w9YbBRHwpJ6FhFW/nKXQtHlWqpKVm/MpFn8m
+	 1OWZiDcv9/q/EnJE9lGvHsBtq4htKmw8x7HDqZWobpIuSd4iCbiQSen+oAPifUC6LFQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mO4O5DV5;
-	arc=none smtp.remote-ip=209.85.215.169
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Ndav1LuE;
+	arc=none smtp.remote-ip=209.85.210.169
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3268F606A320
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 07:47:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3268F606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C376A606A320
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 07:47:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C376A606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mO4O5DV5
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-cddc250d815so244543a12.2
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 23:47:01 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Ndav1LuE
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-8a0880a46e7so352106b3a.1
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 23:47:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795160820; x=1795765620; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795160826; x=1795765626; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=x2fv0WkLB7UFv5dOzLecE1zfvllF0pILIx2fRdSCNUA=;
-        b=mO4O5DV5Bj/SS6V+quOV0PTJwDHvAMgd32kV6LCX5hbO24whV85hflrLDhO8WWrO+i
-         r2KuKteTNWf6QSSPJnVv4c48o/4udfQ06VMiAn/WWvIEt0Y5wQnC9Z33AfWuxazzkLCp
-         B4nihzZCe76N/VPZEgBefRbsucU+awCypcZI+kjc4GQAxE3NXTinyqqqrm3hfEV5SR/v
-         /xJMYbyVrtmpzLsw5sePJYd7hZYxNpJlOOfTyZSn3Vjrc+66JZrpbFRFNYj/h/loQvyL
-         rHiixXEqFRfhPG5378DBPS8bU9ci61OrtPbvozXE+pbf8Ugc2i73BRFSXTggdOgd1oRL
-         7AvA==
+        bh=ar0YALmaqf+oX2yd5rxLen2CSNIf7Fp/XK5Q70bQ1m0=;
+        b=Ndav1LuEcshADysM91z//0TXqdAjuofZyyvrwObTvtad9AZ85lMtttORNOw3c1cefr
+         tVQsvWzUFJvK4cCwnuYeKPEVbBUJQKGJtEIYFkTp4qaxXv/HyeRxm25cMx0+N05uV7Fz
+         1w61sgvVHA87uAtpZfo0nfZ3pCk2bo8HBHTryF544Ut3KMS2e2xyH6cfdRBHVEUaI2qH
+         J9Zq6ZfCH6aRnvOlu0ykuBHOtQCmIR7EbOFp8T710OV+GsLRQww8xjRidZjNqLolVBZn
+         8s9UxwNoj0pQvfJASW929aCeSrmqo3hR0PmjXYZJ3/aNeE39pxkZWxZ8RRDwJ8b470Tb
+         JHmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795160820; x=1795765620;
+        d=1e100.net; s=20260707; t=1795160826; x=1795765626;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=x2fv0WkLB7UFv5dOzLecE1zfvllF0pILIx2fRdSCNUA=;
-        b=TmKoXs1DmAOuiNereW4Ua2yxn8pGp4+baFk1etOjVYiAK6UdAxngvoX8O91GYLxla3
-         j1zfarRUjbdlBf1lw8ydltpzsVvTLcOCzAUGb0BS40+abTSAXH5oUJYjXyx+1f1d0KMM
-         Qf9PxAt1cNyZUn8LwwZ2hMwSqbAfZd1Qp+/7Tc46YIw+7mewakk5wUVI1IAmR0aU9ikU
-         JxD5wyaTgrkWvBxWNynIpQ/8x9jueJgNsLHHxeQnTj8QWrwDdzSeiv+ZnDsKZP2w+rrR
-         Psy3wveYsm8Tj+o1BPnm1Lx6wuL/9G9W/vD48U6Uv46NmeyRL5+THrViGGJO6gZW+8pc
-         HEqA==
-X-Gm-Message-State: APuU4Z+FwCwxJmsHPhw7pWAbyWA/a2FqAmtt2N/LUuxs9ReF9COu2NHz
-	tC+2F0UpY5D5fpwhJRu7KVA4VXCoxM+TTqhWksGtKTLs9uZvoENXnkUSGjzKqA==
-X-Gm-Gg: AZFdTZc6FPs173dvlntJjZMx/TxH8eohQbr+efNSBSeq/wjQ3u+77gs/z5K2ZO9Vb3L
-	aDlh4P2stRLt1Gw8CWUTu8Pj7AL9bDB8Lxtba5cNaowucFRYcP/TV+PGLwyMwiX/rwFjHVeGSWM
-	2dXLnARwHI+lI3IhgJbMZ/ifrl6Hg4nOQKLhEkm/mpW3v0YOeNUXBW0fyWvsw1Gc5NNJwh+QCKr
-	fDznDqzWevRVmdFG5HZ6OhpkGk4hmFOwEFPIyBNxMyJR9OlJjtzLGRoywYzZWi6LZ16Sgs24CPr
-	jEO4rBbBdvPL09+i3aqFzQevFSyAGfiX2Lc64yhKwa0sSYVeOMntv02ErCKTiGrlIxvALbJ3j4k
-	khdStTkQn/xl6AOjw+7ect18yBAGnqQJ3nEP+el6TiFtuyeM9ZUtrysjsav9atdEUZZkzpOEGPu
-	tZezp3Bgp3PioO58qu8P9JtlrSX6pIKzoTr4qFtuV2mUy13VgjGSXsZpc9Daryed2LPEkEXFLGl
-	+zlM63Ahk7bVO2nalWAxsFBEgelg8RkotHi4O0kT9lmH9vdInlSNuwpr/jJBLOYJygPOkL9PGJE
-	cQ1uaIhKgGLlH4WZpGoGPJZBjo5YNz2wSq8FqF2+J3NbqV0Qy+H6jWczEsy0cH5mwg3VkKhYRVf
-	TjqfZW1iUcbpwqHuQU85K3nTSmFnD1NkcNQvun0p5KGuC0vyIq8yOOULcrDwVkQA37OdAqrz0Sw
-	==
-X-Received: by 2002:a17:90b:498c:b0:3b4:a0f:42e0 with SMTP id 98e67ed59e1d1-3b41c95f13emr1864117a91.51.1795160819885;
-        Thu, 19 Nov 2026 23:46:59 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.245])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41ad92c07sm3154337a91.13.2026.11.19.23.46.59
+        bh=ar0YALmaqf+oX2yd5rxLen2CSNIf7Fp/XK5Q70bQ1m0=;
+        b=DhlYh15Rmyls4aHhs8GUHgx4T0AvW0dQhwLukT1jz5ro9d5zKySDzmPJWMGQqsfkxc
+         TQ92KRG0QSwCBInaLtItRVWPRtQcO0vk8WMD/O1PrA7g+f6egZV4IqHvGnYsaolkQ47E
+         adofHt4l96iOAP/0V7qDfscBIbPqHZauWyoJaBzFxrfapgEj0G6ZG320FAIdkIFPLR/x
+         d6sBxSIBkBj6UmSfvKdAa0N0gg0kdvfNXBnEq8ay1cAWeJ6AwQ4kSVO3D0x9M9huqZYk
+         15uwRFyqdPrpwVSyOW+dTOEW/+hq+aidxxbb6iY1STWogKGqjw41UF/pTCEuRMzEL3Fc
+         ayHg==
+X-Gm-Message-State: APuU4Z9OzGFYulZfkapLuIi+g9G2qkez1dhzPtlSWM12yHcrgYpF8tio
+	2zKFR8dU04sr7UUlsNE3lan12u9eThRwtxyvnD9JEXMx1yIYxpdYCdzf0LWPtg==
+X-Gm-Gg: AYBFou0npEaz2RyIYLviB4GZZAnwjahxVpkK0D7wVMSA92jlK52BIBU8S6QP95UDtMn
+	lTtW1e4Kb9l9Gs07UwDO+3YVr84+MM+GVH8oZAlXqPI//FIBCUZ1LNNTaKUrWORBnENUdI+4Va9
+	UKf6ZaLuakSaA/1dNiMMX5096wbcqvKOlctsqbIQNQn0MGcWqB04MnCovejEp5xNMx6Tdlvjdz5
+	1cNELg5oNgjtDoei0yml/FCV4PAOzfdE3BQ1hmJTyoppgiGmgr9bDJziEIHFfmFW6ll5znlbnMF
+	XDkaLHceAdWXyV/12E64kYQhz82soVDypNat3ujcAgr2CelcFB/+JjDwN+Ou4+Kma49YcR9XdYG
+	t0XY4gVnkJhGucH2dGSgPQ4CLa6On3BZiQXkJc223o+snaAa4SwCZtdjinH4sTC2xxbrcWStX6T
+	XvC/91ZWuYZsDAPdDENE1S11XzqG0bySKY+cS6+CVeLwzifZJ3QqMO+j++W3tSNHZYo8gFvKkp0
+	xbwKrSBgmmQWykUcAyh3uWD7+FkewYI4WCYFAenmDciLu1jVYg0IhV97PBE48kQhr0pBTBhGSJR
+	KayxORUTEcx+o+ITE/6w0jY9tJat8R83lZwRiNLO0yeIw59gCf6sLmVhLmHN4or7VMHuVTQUC4u
+	YO2sQkiYIWHMMI32F6bxp2f7j1b9vt9IhOEKZcQ51Ex0IFmZZ2JY3GqV1Rx+jSpKHBb6dGdVKiI
+	mLI3kqzcUu7vNCMSCqgYCp6Q==
+X-Received: by 2002:a05:6a20:6a1b:b0:3e2:8ca7:f544 with SMTP id adf61e73a8af0-400aae3ca5amr2964022637.3.1795160825924;
+        Thu, 19 Nov 2026 23:47:05 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.243])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cde6d028a54sm845465a12.18.2026.11.19.23.47.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2026 23:46:59 -0800 (PST)
+        Thu, 19 Nov 2026 23:47:05 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 25/49] bpf: Join any two states that have the same join_key
-Date: Fri, 20 Nov 2026 07:41:57 +0000
-Message-ID: <20261120074430.2704488-26-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 26/49] bpf: Check the equations when a state is pruned or joined
+Date: Fri, 20 Nov 2026 07:41:58 +0000
+Message-ID: <20261120074430.2704488-27-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261120074430.2704488-1-alexei.starovoitov@gmail.com>
 References: <20261120074430.2704488-1-alexei.starovoitov@gmail.com>
@@ -104,589 +104,281 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The old join could fail: a pointer and a number had no join, and the
-states stayed apart. So the number of states had no bound but the caps.
-The new join is total:
+Ranges do not show that a state has a relation:
 
-  map ptr  |  scalar      -> unreadable -+
-  two objects             -> unreadable -+-> a use is unproven
-  p+1, p+2, ... at header -> p+unknown  -+   -> next pass keeps apart
+  old:  r1 0..7, r2 0..7, r1 == r2
+  cur:  r1 0..7, r2 0..7              old does not subsume cur
 
-If nothing uses the value, the join costs nothing. An unreadable xreg
-can hold a pointer, so __is_pointer_value() is true for it.
+check_equations() looks for a value in cur for each sym of old:
 
-A number can grow in each trip of a leftover. The first growth is a
-join. After that the bound that moves goes to a threshold:
+  old:  r1 = sym0       r2 = 4 * sym0 + 8     sym0 0..7
+  cur:  r1 = sym5 + 1   r2 = 4 * sym5 + 12    sym5 0..3
 
-  do { a[i] = 0; i += 3; } while (i < 30);     29
-  while (i < 30) { a[i] = 0; i += 3; }         32
+  r1:   sym0 is sym5 + 1, and 1..4 is in 0..7
+  r2:   (4 * sym5 + 12 - 8) / 4 is sym5 + 1 too
 
-The thresholds are the constants of the loop and of the functions that
-it calls, one less, and one step more. They apply to the deps.
-Other xregs stop at 0, S32_MAX, U32_MAX or S32_MIN. A threshold is a
-guess: the state that comes back is compared with it.
+A join needs equations that hold in both states. The next patch guesses
+them. This patch checks the guess with the same function:
 
-The old join compared its result with both inputs on each call. The
-new one changes dst in place. It compares the result only with src, and
-only with BPF_F_TEST_REG_INVARIANTS.
+  guess -> check in dst and in src -> delete what fails -> check again
+
+The worst guess gives no equation.
+
+A widened state is saved as it is. Its equations are applied to the
+copy that runs, see needs_refine. Else the state at the header can get
+smaller again, and the loop has no fixpoint.
+
+An infeasible state ends after the next jump. It does not subsume a
+state that is feasible.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h |  16 ++-
- kernel/bpf/fixups.c          |   1 +
- kernel/bpf/join.c            | 243 +++++++++++++++++++++++++++++++++++
- kernel/bpf/loops.c           | 107 +++++++++++++++
- kernel/bpf/verifier.c        |  59 ++++-----
- 5 files changed, 386 insertions(+), 40 deletions(-)
+ include/linux/bpf_verifier.h |   7 ++
+ kernel/bpf/equation.c        | 183 +++++++++++++++++++++++++++++++++++
+ kernel/bpf/join.c            |   2 +
+ kernel/bpf/states.c          |   2 +-
+ 4 files changed, 193 insertions(+), 1 deletion(-)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index cd5b99ba066..1c04bc2d5e4 100644
+index 1c04bc2d5e4..f93ca5cf0df 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -863,6 +863,10 @@ struct bpf_loop {
- 	bool partitioned;	/* the last partition was for this loop */
- 	bool peeled_joined;	/* at the start of a peeled trip, against the join rule */
- 	struct bpf_loop_per_pass this_pass;
-+	/* sorted constants of the loop, the largest and the smallest constant that an insn adds */
-+	s64 *thresholds;
-+	u32 threshold_cnt, threshold_cap;
-+	s32 max_step, min_step;
- };
- 
- static inline bool bpf_loop_has_budget(const struct bpf_loop *loop)
-@@ -1645,6 +1649,11 @@ u64 bpf_hash64(const void *p, size_t len, u64 hash);
- u64 bpf_hash_join_key(const struct bpf_verifier_env *env, const struct bpf_verifier_state *st);
- int bpf_renumber_ids(struct bpf_verifier_env *env, struct bpf_verifier_state *st);
- 
-+/* join.c */
-+int bpf_states_join(struct bpf_verifier_env *env, struct bpf_verifier_state *dst,
-+		    const struct bpf_verifier_state *src, struct bpf_loop *leftover_loop,
-+		    bool widen);
-+
- /* precision.c, failing_path.c */
- enum bpf_join_point { BPF_JOIN_POINT, BPF_JOIN_POINT_HEADER, BPF_JOIN_POINT_CALLS };
- bool bpf_must_keep_apart(struct bpf_verifier_env *env, const struct bpf_verifier_state *old,
-@@ -2242,8 +2251,8 @@ void scalar_add(struct scalar *dst, const struct scalar *a, const struct scalar
- void scalar_alu(struct scalar *dst, const struct scalar *src, const struct bpf_insn *insn);
- bool scalar_intersect(struct scalar *dst, const struct scalar *src, u32 bits);
- void scalar_union(struct scalar *acc, const struct scalar *src);
--void scalar_widen(struct scalar *s, const struct scalar *old,
--		  const struct bpf_loop_rungs *rungs, int linear);
-+void scalar_widen(struct scalar *s, const struct scalar *old, s64 min_threshold, s64 max_threshold);
-+
- int bpf_stack_liveness_init(struct bpf_verifier_env *env);
- void bpf_stack_liveness_free(struct bpf_verifier_env *env);
- int bpf_live_stack_query_init(struct bpf_verifier_env *env, struct bpf_verifier_state *st);
-@@ -2384,7 +2393,8 @@ int bpf_compute_idoms(struct bpf_verifier_env *env);
- int bpf_compute_loops(struct bpf_verifier_env *env);
- int bpf_loop_at_index(struct bpf_verifier_env *env, u32 idx);
- bool bpf_is_nested_loop(struct bpf_verifier_env *env, int inner_header, int outer_header);
--
-+u32 bpf_loop_thresholds_below(const struct bpf_loop *loop, s64 k);
-+int bpf_loop_collect_thresholds(struct bpf_verifier_env *env, struct bpf_loop *loop);
- int bpf_insn_callee(struct bpf_verifier_env *env, int idx);
- 
- /* equation.c */
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index 751b25c92c9..17da785f8fa 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -758,6 +758,7 @@ static void free_loop(struct bpf_loop *loop)
- {
- 	if (!loop)
- 		return;
-+	kvfree(loop->thresholds);
- 	kvfree(loop);
+@@ -2416,7 +2416,14 @@ void bpf_equations_fill(struct bpf_verifier_env *env, struct bpf_func_state *fra
+ void bpf_equations_refine_all(struct bpf_verifier_env *env, struct bpf_verifier_state *st);
+ void bpf_equations_jump(struct bpf_verifier_env *env, struct bpf_verifier_state *st, int idx,
+ 			bool taken);
++bool bpf_equations_subsume(struct bpf_verifier_env *env, const struct bpf_verifier_state *old,
++			   const struct bpf_verifier_state *cur);
+ void bpf_equations_print(struct bpf_verifier_env *env, const struct bpf_verifier_state *st);
++void bpf_equations_pre_join(struct bpf_verifier_env *env, struct bpf_verifier_state *dst,
++			    const struct bpf_verifier_state *src, struct bpf_loop *leftover_loop,
++			    bool widen);
++void bpf_equations_post_join(struct bpf_verifier_env *env, struct bpf_verifier_state *dst,
++			     const struct bpf_verifier_state *src);
+ u32 bpf_equations_bytes(const struct bpf_equations *eqs);
+ void scalar_bounds_sync(struct scalar *s);
+ bool scalar_subsumes(const struct scalar *old, const struct scalar *cur);
+diff --git a/kernel/bpf/equation.c b/kernel/bpf/equation.c
+index 479cb1466e1..3d9df6e6845 100644
+--- a/kernel/bpf/equation.c
++++ b/kernel/bpf/equation.c
+@@ -2000,6 +2000,189 @@ void bpf_equations_clean(struct bpf_verifier_env *env, struct bpf_verifier_state
+ 	eqs->clean_sym_cnt = eqs->sym_cnt;
  }
  
++/* Subsume */
++
++/* Translate @expr to the other state */
++static bool match_expr(const struct sym_scratch *scratch, struct expr *expr)
++{
++	if (!expr->coef)
++		return true;
++	scratch += var_symno(expr->var);
++	*expr = expr_scale(scratch->cur_expr, expr->coef, expr->off);
++	return scratch->determined;
++}
++
++/* @sym of @old is @expr in @cur */
++static bool match_sym(struct bpf_verifier_env *env, const struct bpf_equations *old,
++		      const struct bpf_verifier_state *cur, u32 sym, const struct expr *expr)
++{
++	struct sym_scratch *scratch = &env->eq_env->scratch[sym];
++	struct scalar bounds;
++	struct expr diff;
++	struct equation_pos pos = {};
++
++	while (scratch->determined &&
++	       bpf_find_next_diff(env, &cur->equations, &scratch->cur_expr, expr, &pos, &diff))
++		if (!diff.coef && !diff.off)
++			return true;
++	if (scratch->determined)
++		return false;
++	bpf_eval_expr(env, cur, expr, &bounds);
++	scratch->determined = scalar_subsumes(&old->syms[sym], &bounds);
++	scratch->cur_expr = *expr;
++	return scratch->determined;
++}
++
++/* @hint: after the equation of @cur that was found last. Most are in the same order. */
++static bool check_sym_equation(struct bpf_verifier_env *env, const struct bpf_equations *old,
++			       const struct bpf_verifier_state *cur,
++			       const struct bpf_sym_equation *sym_eq, u32 *hint)
++{
++	const struct sym_scratch *scratch = env->eq_env->scratch;
++	struct equation_pos pos = { .next = *hint };
++	struct expr expr[2], diff;
++	struct scalar bounds;
++	int i, unmatched;
++
++	if (is_op(sym_eq)) {
++		expr[0] = rhs_expr(sym_eq, 0);
++		expr[1] = rhs_expr(sym_eq, 1);
++		return match_expr(scratch, &expr[0]) && match_expr(scratch, &expr[1]) &&
++		       bpf_find_op(env, &cur->equations, sym_eq->insn_idx, expr, &diff) &&
++		       match_sym(env, old, cur, sym_eq->sym[0], &diff);
++	}
++	/* -coef[unmatched] * sym[unmatched] = expr[0] - expr[1] */
++	for (unmatched = 0; unmatched < 2 && scratch[sym_eq->sym[unmatched]].determined;
++	     unmatched++)
++		;
++	for (i = 0; i < 2; i++) {
++		expr[i] = sym_expr(sym_eq->coef[i + (i >= unmatched)] * (i ? -1 : 1),
++				   sym_eq->sym[i + (i >= unmatched)], i ? 0 : sym_eq->off);
++		if (!match_expr(scratch, &expr[i]))
++			return false;
++	}
++	while (bpf_find_next_diff(env, &cur->equations, &expr[0], &expr[1], &pos, &diff)) {
++		if (!sym_eq->coef[unmatched] ? !diff.coef && !diff.off :
++		    bpf_expr_div_exact(&diff, 0, -sym_eq->coef[unmatched]) &&
++		    match_sym(env, old, cur, sym_eq->sym[unmatched], &diff)) {
++			*hint = pos.next;
++			return true;
++		}
++	}
++	/* no other equation uses it */
++	if (!sym_has_one_use(scratch, sym_eq->sym[unmatched]) ||
++	    !is_plus_minus_one(sym_eq->coef[unmatched]))
++		return false;
++	bpf_eval_diff(env, cur, &expr[sym_eq->coef[unmatched] > 0],
++		      &expr[sym_eq->coef[unmatched] < 0], &bounds);
++	return scalar_subsumes(&old->syms[sym_eq->sym[unmatched]], &bounds);
++}
++
++/*
++ * Are there values for the syms of @old for which its equations hold in @cur?
++ * @forget: it is @old. Mark the equations that do not hold, normalize_equations() deletes them.
++ */
++static bool check_equations(struct bpf_verifier_env *env, const struct bpf_equations *old,
++			    const struct bpf_verifier_state *cur, struct bpf_equations *forget)
++{
++	struct bpf_xreg_equation *xreg_eq;
++	struct bpf_sym_equation *sym_eq;
++	bool is_ptr, ok = true;
++	struct expr expr;
++	u32 hint = 0;
++
++	count_sym_uses(env, old);
++	for_each_xreg_equation(env, old, xreg_eq) {
++		if (bpf_xreg_expr(env, cur, xreg_eq->xreg, &expr, &is_ptr) &&
++		    is_ptr == xreg_eq->is_ptr &&
++		    bpf_expr_div_exact(&expr, xreg_eq->off, xreg_eq->coef) &&
++		    match_sym(env, old, cur, xreg_eq->sym, &expr))
++			continue;
++		if (!forget)
++			return false;
++		xreg_eq->coef = 0;
++		forget->normalized = ok = false;
++	}
++	for_each_sym_equation(env, old, sym_eq) {
++		/* it depends on an equation that does not hold */
++		if (!ok && find_undetermined_sym(env->eq_env->scratch, sym_eq) < 0)
++			continue;
++		if (check_sym_equation(env, old, cur, sym_eq, &hint))
++			continue;
++		if (!forget)
++			return false;
++		sym_eq->sym[0] = NO_SYM;
++		forget->normalized = ok = false;
++	}
++	return ok;
++}
++
++bool bpf_equations_subsume(struct bpf_verifier_env *env, const struct bpf_verifier_state *old,
++			   const struct bpf_verifier_state *cur)
++{
++	const struct bpf_xreg_equation *xreg_eq;
++	const struct scalar *s;
++
++	/* @old ends after the next jump. The equations that showed it can be gone. */
++	if (old->equations.infeasible && !cur->equations.infeasible && env->bypass_spec_v1)
++		return false;
++	/* see loop_stack_safe() */
++	for_each_xreg_equation(env, &old->equations, xreg_eq) {
++		if ((u32)xreg_eq->xreg < BPF_XREG_TRIP)
++			continue;
++		s = equation_xreg_bounds(env, cur, xreg_eq);
++		if (!s || !scalar_subsumes(equation_xreg_bounds(env, old, xreg_eq), s))
++			return false;
++	}
++	return !old->equations.xreg_equation_cnt ||
++	       check_equations(env, &old->equations, cur, NULL);
++}
++
++/* Join */
++
++/*
++ * Make the equations of @dst hold for @src too. Call it before the xregs are joined.
++ * @leftover_loop: the states are at its header. @widen: @src came around it.
++ */
++void bpf_equations_pre_join(struct bpf_verifier_env *env, struct bpf_verifier_state *dst,
++			    const struct bpf_verifier_state *src, struct bpf_loop *leftover_loop,
++			    bool widen)
++{
++	const struct loop_stack_entry *top = bpf_top_loop(src->frame[src->curframe]);
++	bool enters = leftover_loop && top &&
++		      top->trip < bpf_top_loop(dst->frame[dst->curframe])->trip;
++	struct bpf_equations *eqs;
++
++	if (env->eq_env) {
++		eqs = &env->eq_env->join_state.equations;
++		/* what enters the loop can break the equations that keep the xregs small */
++		if (enters && dst->equations.needs_refine)
++			bpf_equations_refine_all(env, dst);
++		bpf_guess_equations(env, dst, src, leftover_loop, widen);
++		normalize_equations(env, &env->eq_env->join_state);
++		while (!check_equations(env, eqs, dst, eqs) || !check_equations(env, eqs, src, eqs))
++			normalize_equations(env, &env->eq_env->join_state);
++		if (widen && !dst->speculative)
++			bpf_note_linear_xregs(env, dst, eqs);
++		eqs->needs_refine = widen || dst->equations.needs_refine ||
++				    src->equations.needs_refine;
++		swap(dst->equations, *eqs);
++	}
++}
++
++/* The xregs of @dst are joined. Some of them are gone. */
++void bpf_equations_post_join(struct bpf_verifier_env *env, struct bpf_verifier_state *dst,
++			     const struct bpf_verifier_state *src)
++{
++	u32 cnt = dst->equations.xreg_equation_cnt;
++
++	bpf_equations_clean(env, dst);
++	while (cnt != dst->equations.xreg_equation_cnt &&
++	       !check_equations(env, &dst->equations, src, &dst->equations))
++		normalize_equations(env, dst);
++	dst->equations.infeasible = false;
++}
++
+ static void print_operand(struct bpf_verifier_log *log, const char *prefix, struct expr expr)
+ {
+ 	if (expr.coef)
 diff --git a/kernel/bpf/join.c b/kernel/bpf/join.c
-index 95de080617b..b1d42ad23ca 100644
+index b1d42ad23ca..b1f34513b9f 100644
 --- a/kernel/bpf/join.c
 +++ b/kernel/bpf/join.c
-@@ -1,6 +1,249 @@
- // SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Join of verifier states.
-+ *
-+ * Two states at one insn with the same join_key always have a join, see bpf_same_join_key().
-+ *
-+ *  map ptr  |  scalar      -> unreadable -+
-+ *  two objects             -> unreadable -+-> a use is unproven -> partition
-+ *  p+1, p+2, ... at header -> p+unknown  -+
-+ *
-+ * Values of one type and object differ only in a number, see bpf_same_type_and_object().
-+ * Numbers are joined. At a loop header they are widened, so the sequence of states ends.
-+ *
-+ * bpf_clean_verifier_state() cleans the inputs: dead xregs are the same in both.
-+ */
- #include <linux/bpf.h>
- #include <linux/bpf_verifier.h>
- #include <linux/cnum.h>
- #include <linux/tnum.h>
- #include <linux/filter.h>
-+
-+struct join {
-+	struct bpf_verifier_env *env;
-+	struct bpf_verifier_state *dst;
-+	struct bpf_loop *leftover_loop;	/* the states are at its header, in its leftover */
-+	bool widen;
-+	u32 fr;
-+	u32 xregno;		/* see MAX_BPF_XREG, BPF_REG_FP for stack args */
-+	int err;
-+};
-+
-+/*
-+ * A number can grow in each trip. The bound that moved goes to a threshold. The constants of
-+ * the loop give the thresholds:
-+ *	do { a[i] = 0; i += 3; } while (i < 30);		29 at most comes back to the header
-+ *	while (i < 30) { a[i] = 0; i += 3; }			32
-+ *	loop { if (...) { if (n >= 64) break; a[n++] = x; } }	64
-+ * A threshold is a guess. The state that comes back to the header is compared with it.
-+ *
-+ * Only a number on a cycle grows again and again. So the first growth is a join.
-+ *	x = 0; loop { a[x]; x = rnd & 7; }
-+ */
-+static void join_range(struct join *j, struct bpf_reg_state *dst, const struct bpf_reg_state *src)
-+{
-+	s64 min_threshold = S64_MIN, max_threshold = S64_MAX, off;
-+	struct bpf_loop *loop = j->leftover_loop;
-+	struct bpf_reg_state old = *dst;
-+	bool in_deps;
-+	int i, n;
-+
-+	if (scalar_equal(scalar_of(dst), scalar_of(src)))
-+		return;
-+	scalar_union(scalar_of(dst), scalar_of(src));
-+	if (loop && !scalar_equal(scalar_of(dst), scalar_of(&old))) {
-+		if (!j->widen || !old.grew_once)
-+			goto out;
-+		/* two pointers are compared by their offsets up to there */
-+		if (dst->type != SCALAR_VALUE) {
-+			if (reg_smax(dst) < BPF_MAX_VAR_OFF)
-+				max_threshold = BPF_MAX_VAR_OFF - 1;
-+			if (reg_smin(dst) > -BPF_MAX_VAR_OFF)
-+				min_threshold = -BPF_MAX_VAR_OFF + 1;
-+		}
-+		in_deps = bpf_xreg_in_deps(j->env, j->dst, j->fr, j->xregno);
-+		if (in_deps)
-+			j->err = j->err ?: bpf_loop_collect_thresholds(j->env, loop);
-+		/* at the constant or one before it, and the largest step or this step further */
-+		for (i = 0; i < 6 && in_deps && !j->err; i++) {
-+			off = i & 4 ? reg_smax(dst) - reg_smax(&old) : i & 2 ? loop->max_step : 0;
-+			off -= i & 1;
-+			n = bpf_loop_thresholds_below(loop, reg_smax(dst) - off);
-+			if (n < loop->threshold_cnt && loop->thresholds[n] + off >= reg_smax(dst))
-+				max_threshold = min(max_threshold, loop->thresholds[n] + off);
-+			off = i & 4 ? reg_smin(dst) - reg_smin(&old) : i & 2 ? loop->min_step : 0;
-+			off += i & 1;
-+			n = bpf_loop_thresholds_below(loop, reg_smin(dst) - off + 1);
-+			if (n && loop->thresholds[n - 1] + off <= reg_smin(dst))
-+				min_threshold = max(min_threshold, loop->thresholds[n - 1] + off);
-+		}
-+		scalar_widen(scalar_of(dst), scalar_of(&old), min_threshold, max_threshold);
-+out:
-+		dst->grew_once = true;
-+	}
-+	if (!bpf_scalar_subsumes(dst, &old) || !bpf_scalar_subsumes(dst, src))
-+		scalar_set_unknown(scalar_of(dst));
-+}
-+
-+/*
-+ * Pointers to the packet that share an id keep their displacement. No id is an id too:
-+ * the start of the packet plus a constant, see find_good_pkt_pointers().
-+ */
-+static u32 join_pkt_id(struct bpf_verifier_env *env, const struct bpf_reg_state *ra,
-+		       const struct bpf_reg_state *rb)
-+{
-+	struct bpf_pkt_pair new = { ra->id, rb->id, rb->r64.base - ra->r64.base, ra->type, ra->id };
-+	struct bpf_pkt_pair *p = env->pkt_pairs;
-+	bool taken = !ra->id;
-+
-+	bpf_add_cost(env, env->pkt_pair_cnt, BPF_COST_SCAN);
-+	for (; p < env->pkt_pairs + env->pkt_pair_cnt; taken |= p++->id == ra->id)
-+		if (!memcmp(p, &new, offsetof(struct bpf_pkt_pair, id)))
-+			return p->id;
-+	if (taken && (new.old || new.cur || new.delta))
-+		new.id = bpf_new_id(env);
-+	/* with no memory the load fails, see bpf_check_limits() */
-+	bpf_add_pkt_pair(env, &new);
-+	return new.id;
-+}
-+
-+/* The bytes that are left after the pointer in both states are left in the join */
-+static void join_pkt(struct join *j, struct bpf_reg_state *dst, const struct bpf_reg_state *src)
-+{
-+	struct bpf_reg_state old = *dst;
-+	struct cnum64 both = cnum64_union(old.r64, src->r64);
-+
-+	dst->id = join_pkt_id(j->env, &old, src);
-+	join_range(j, dst, src);
-+	dst->pkt_min_len = min(pkt_min_len(&old), pkt_min_len(src));
-+	if (old.r64.size == dst->r64.size && src->r64.size == dst->r64.size) {
-+		if (old.range != src->range)
-+			dst->range = max(min(old.range, src->range), 0);
-+		return;
-+	}
-+	if (pkt_has_bytes_left(&old) && pkt_has_bytes_left(src) && pkt_has_bytes_left(dst))
-+		dst->range = reg_smax(dst) + min(pkt_bytes_left(&old), pkt_bytes_left(src));
-+	else
-+		dst->range = 0;
-+	dst->range = max(dst->range, dst->pkt_min_len);
-+	/* pointers that share an id have ranges of the same size */
-+	if (cnum64_umax(dst->r64) > MAX_PACKET_OFF || dst->r64.size != both.size)
-+		dst->id = bpf_new_id(j->env);
-+}
-+
-+static void join_reg(struct join *j, struct bpf_reg_state *dst, const struct bpf_reg_state *src)
-+{
-+	bool from_unproven = dst->from_unproven || (src && src->from_unproven);
-+
-+	if (!src || dst->type == NOT_INIT || !bpf_same_type_and_object(j->env, dst, src))
-+		bpf_mark_reg_not_init(j->env, dst);
-+	else if (type_is_pkt_pointer(dst->type))
-+		join_pkt(j, dst, src);
-+	else if (base_type(dst->type) != PTR_TO_ARENA) /* its offset is not tracked */
-+		join_range(j, dst, src);
-+	dst->from_unproven = from_unproven;
-+}
-+
-+/* What a byte of a slot is if the number in the slot is not known */
-+static u8 join_byte(struct bpf_stack_state *s, int i)
-+{
-+	if (s->slot_type[i] != STACK_SPILL)
-+		return s->slot_type[i];
-+	return bpf_register_is_null(&s->spilled_ptr) ? STACK_ZERO : STACK_MISC;
-+}
-+
-+static bool byte_is_set(u8 t)
-+{
-+	return t != STACK_INVALID && t != STACK_POISON;
-+}
-+
-+static void join_slot(struct join *j, struct bpf_stack_state *dst, struct bpf_stack_state *src)
-+{
-+	u8 x, y, ptr_type = STACK_SPILL;
-+	bool ptr;
-+	int i;
-+
-+	/* it is in the join_key */
-+	if (bpf_slot_is_held(dst))
-+		return;
-+	if (!memcmp(dst->slot_type, src->slot_type, sizeof(dst->slot_type))) {
-+		if (bpf_is_spilled_reg(dst))
-+			join_reg(j, &dst->spilled_ptr, &src->spilled_ptr);
-+		return;
-+	}
-+	ptr = (bpf_is_spilled_reg(dst) && !bpf_is_spilled_scalar_reg(dst)) ||
-+	      (bpf_is_spilled_reg(src) && !bpf_is_spilled_scalar_reg(src));
-+	/* a byte that is possibly not written is not read, not even into an unreadable register */
-+	for (i = 0; i < BPF_REG_SIZE && !j->env->allow_uninit_stack; i++)
-+		if (!byte_is_set(dst->slot_type[i]) || !byte_is_set(src->slot_type[i]))
-+			ptr_type = STACK_INVALID;
-+	for (i = 0; i < BPF_REG_SIZE; i++) {
-+		x = join_byte(dst, i);
-+		y = join_byte(src, i);
-+		dst->slot_type[i] = ptr ? ptr_type : !byte_is_set(x) || x == y ? x :
-+				    !byte_is_set(y) ? STACK_INVALID : STACK_MISC;
-+	}
-+	bpf_mark_reg_not_init(j->env, &dst->spilled_ptr);
-+}
-+
-+static void join_func(struct join *j, struct bpf_func_state *dst, struct bpf_func_state *src,
-+		      u16 live_regs)
-+{
-+	static struct bpf_stack_state invalid_slot;
-+	const struct loop_stack_entry *s;
-+	struct loop_stack_entry *d;
-+	u32 i;
-+
-+	for (i = 0; i < dst->loop_stack_cnt; i++) {
-+		d = &dst->loop_stack[i];
-+		s = &src->loop_stack[i];
-+		d->trip = max(d->trip, s->trip);
-+		d->held_cnt = min(d->held_cnt, s->held_cnt);
-+	}
-+	for (i = 0; i < BPF_REG_FP; i++) {
-+		j->xregno = i;
-+		if (live_regs & BIT(i))
-+			join_reg(j, &dst->regs[i], &src->regs[i]);
-+		else
-+			bpf_mark_reg_not_init(j->env, &dst->regs[i]);
-+	}
-+	/* slots and arguments that only @src has are unreadable */
-+	for (i = 0; i < bpf_stack_nr_slots(dst); i++) {
-+		j->xregno = bpf_spi_to_xreg(i);
-+		join_slot(j, bpf_stack_slot(dst, i),
-+			  i < bpf_stack_nr_slots(src) ? bpf_stack_slot(src, i) : &invalid_slot);
-+	}
-+	j->xregno = BPF_REG_FP;
-+	for (i = 0; i < dst->out_stack_arg_cnt; i++)
-+		join_reg(j, &dst->stack_arg_regs[i],
-+			 bpf_stack_arg(dst, src, i) ? bpf_stack_arg(src, dst, i) : NULL);
-+	dst->no_stack_arg_load |= src->no_stack_arg_load;
-+	dst->callback_depth = min(dst->callback_depth, src->callback_depth);
-+}
-+
-+/*
-+ * Make @dst describe all that @dst or @src describe. They have the same join_key.
-+ * Both are speculative, or neither is.
-+ * @leftover_loop: they are at its header, in its leftover.
-+ */
-+int bpf_states_join(struct bpf_verifier_env *env, struct bpf_verifier_state *dst,
-+		    const struct bpf_verifier_state *src, struct bpf_loop *leftover_loop,
-+		    bool widen)
-+{
-+	struct join j = { .env = env, .dst = dst, .leftover_loop = leftover_loop, .widen = widen };
-+
-+	bpf_add_cost(env, bpf_xreg_cnt(dst), BPF_COST_XREG);
-+	env->pkt_pair_cnt = 0;
-+	env->imprecise |= !env->err;
-+	dst->suspect_loops |= src->suspect_loops;
-+	for (j.fr = 0; j.fr <= dst->curframe; j.fr++)
-+		join_func(&j, dst->frame[j.fr], src->frame[j.fr],
-+			  env->insn_aux_data[bpf_frame_insn_idx(dst, j.fr)].live_regs_before);
-+	dst->max_held_cnt = max(dst->max_held_cnt, src->max_held_cnt);
-+	/* no equation is found over a limit */
-+	if (env->test_reg_invariants && !bpf_state_subsumes(env, dst, src) &&
-+	    verifier_bug_if(!bpf_check_limits(env), env, "join at %d", dst->insn_idx))
-+		return -EFAULT;
-+	/* the first xreg that had an id can be gone */
-+	return j.err ?: bpf_renumber_ids(env, dst);
-+}
-diff --git a/kernel/bpf/loops.c b/kernel/bpf/loops.c
-index f8b2f8befa6..23c443ab3a2 100644
---- a/kernel/bpf/loops.c
-+++ b/kernel/bpf/loops.c
-@@ -2,6 +2,7 @@
- /* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+@@ -236,9 +236,11 @@ int bpf_states_join(struct bpf_verifier_env *env, struct bpf_verifier_state *dst
+ 	env->pkt_pair_cnt = 0;
+ 	env->imprecise |= !env->err;
+ 	dst->suspect_loops |= src->suspect_loops;
++	bpf_equations_pre_join(env, dst, src, leftover_loop, leftover_loop && widen);
+ 	for (j.fr = 0; j.fr <= dst->curframe; j.fr++)
+ 		join_func(&j, dst->frame[j.fr], src->frame[j.fr],
+ 			  env->insn_aux_data[bpf_frame_insn_idx(dst, j.fr)].live_regs_before);
++	bpf_equations_post_join(env, dst, src);
+ 	dst->max_held_cnt = max(dst->max_held_cnt, src->max_held_cnt);
+ 	/* no equation is found over a limit */
+ 	if (env->test_reg_invariants && !bpf_state_subsumes(env, dst, src) &&
+diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+index 174b1a613fb..3f4edb9bafb 100644
+--- a/kernel/bpf/states.c
++++ b/kernel/bpf/states.c
+@@ -649,5 +649,5 @@ bool bpf_state_subsumes(struct bpf_verifier_env *env, const struct bpf_verifier_
+ 				       bpf_frame_insn_idx(old, i)))
+ 			return false;
  
- #include <linux/slab.h>
-+#include <linux/sort.h>
- #include <linux/bpf_verifier.h>
- 
- static bool is_cfg_jump(struct bpf_insn *insn)
-@@ -555,3 +556,109 @@ int bpf_compute_loops(struct bpf_verifier_env *env)
- 	kvfree(dfs.state);
- 	return err;
+-	return true;
++	return bpf_equations_subsume(env, old, cur);
  }
-+
-+static int cmp_thresholds(const void *a, const void *b)
-+{
-+	return *(s64 *)a < *(s64 *)b ? -1 : *(s64 *)a > *(s64 *)b;
-+}
-+
-+static int add_threshold(struct bpf_verifier_env *env, struct bpf_loop *loop, s64 k)
-+{
-+	if (!bpf_grow_array(env, &loop->thresholds, &loop->threshold_cap, loop->threshold_cnt + 1,
-+			    sizeof(k)))
-+		return -ENOMEM;
-+	loop->thresholds[loop->threshold_cnt++] = k;
-+	return 0;
-+}
-+
-+static int add_insn_thresholds(struct bpf_verifier_env *env, struct bpf_loop *loop, int idx)
-+{
-+	struct bpf_insn_aux_data *aux = &env->insn_aux_data[idx];
-+	struct bpf_insn *insn = &env->prog->insnsi[idx];
-+	u8 class = BPF_CLASS(insn->code), op = BPF_OP(insn->code);
-+	bool alu = class == BPF_ALU || class == BPF_ALU64;
-+	bool cmp = bpf_insn_is_cond_jump(insn->code);
-+	u8 reg;
-+
-+	if (bpf_is_ldimm64(insn) && !insn->src_reg)
-+		return add_threshold(env, loop, (u32)insn->imm | (u64)insn[1].imm << 32);
-+	if (class != BPF_ST && !cmp && !alu)
-+		return 0;
-+	if (class != BPF_ST && BPF_SRC(insn->code) == BPF_X) {
-+		reg = aux->const_reg_mask & BIT(insn->src_reg) ? insn->src_reg : insn->dst_reg;
-+		return cmp && (aux->const_reg_mask & BIT(reg)) ?
-+		       add_threshold(env, loop, aux->const_reg_vals[reg]) : 0;
-+	}
-+	if (!alu || (op != BPF_ADD && op != BPF_SUB))
-+		return add_threshold(env, loop, insn->imm);
-+	if (insn->imm != S32_MIN && !(aux->stack_ptrs & BIT(insn->dst_reg))) {
-+		loop->max_step = max(loop->max_step, op == BPF_ADD ? insn->imm : -insn->imm);
-+		loop->min_step = min(loop->min_step, op == BPF_ADD ? insn->imm : -insn->imm);
-+	}
-+	return 0;
-+}
-+
-+/* The number of constants of @loop that are below @k */
-+u32 bpf_loop_thresholds_below(const struct bpf_loop *loop, s64 k)
-+{
-+	u32 lo = 0, hi = loop->threshold_cnt, mid;
-+
-+	while (lo < hi) {
-+		mid = lo + (hi - lo) / 2;
-+		if (loop->thresholds[mid] < k)
-+			lo = mid + 1;
-+		else
-+			hi = mid;
-+	}
-+	return lo;
-+}
-+
-+/* The constants in the body of @loop and in the functions that it calls */
-+int bpf_loop_collect_thresholds(struct bpf_verifier_env *env, struct bpf_loop *loop)
-+{
-+	struct bpf_subprog_info *sub = bpf_find_containing_subprog(env, loop->header);
-+	u32 words = BITS_TO_LONGS(env->subprog_cnt);
-+	unsigned long *todo, *done;
-+	int i, s, n, err = 0;
-+
-+	if (loop->thresholds || !loop->nr_insns)
-+		return 0;
-+	todo = kvcalloc(2 * words, sizeof(long), BPF_VERIFIER_GFP);
-+	if (!todo)
-+		return -ENOMEM;
-+	done = todo + words;
-+	for (;;) {
-+		err = err ?: bpf_add_cost_and_check(env, n, BPF_COST_XREG);
-+		for (; n-- && i >= 0 && i < sub[1].start && !err; i = bpf_flow_insn_after(env, i)) {
-+			err = add_insn_thresholds(env, loop, i);
-+			s = bpf_insn_callee(env, i);
-+			if (s > 0 && !bpf_subprog_is_global(env, s) && !__test_and_set_bit(s, done))
-+				__set_bit(s, todo);
-+		}
-+		bpf_add_cost(env, words, BPF_COST_SCAN);
-+		s = find_first_bit(todo, env->subprog_cnt);
-+		if (s == env->subprog_cnt)
-+			break;
-+		__clear_bit(s, todo);
-+		sub = &env->subprog_info[s];
-+		i = sub->start;
-+		n = sub[1].start - i;
-+	}
-+	kvfree(todo);
-+	err = err ?: add_threshold(env, loop, 0) ?:
-+	      bpf_add_cost_and_check(env, loop->threshold_cnt * ilog2(loop->threshold_cnt),
-+				     BPF_COST_COPY);
-+	if (err) {
-+		/* only the pass ends, the next pass starts again */
-+		kvfree(loop->thresholds);
-+		loop->thresholds = NULL;
-+		loop->threshold_cnt = loop->threshold_cap = 0;
-+		return err;
-+	}
-+	sort(loop->thresholds, loop->threshold_cnt, sizeof(s64), cmp_thresholds, NULL);
-+	for (i = 1, n = 1; i < loop->threshold_cnt; i++)
-+		if (loop->thresholds[i] != loop->thresholds[n - 1])
-+			loop->thresholds[n++] = loop->thresholds[i];
-+	loop->threshold_cnt = n;
-+	return 0;
-+}
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 68f3127ea07..3d4c52c59c7 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3569,7 +3569,8 @@ static bool __is_pointer_value(bool allow_ptr_leaks,
- 	if (allow_ptr_leaks)
- 		return false;
- 
--	return is_pointer_regtype(reg->type);
-+	/* an unreadable xreg can have a pointer */
-+	return reg->type != SCALAR_VALUE;
- }
- 
- static void save_register_state(struct bpf_verifier_env *env,
-@@ -11552,8 +11553,9 @@ static int call_func_on_its_own(struct bpf_verifier_env *env, int subprog, int i
- {
- 	u16 live = env->insn_aux_data[env->subprog_info[subprog].start].live_regs_before;
- 	struct bpf_verifier_state *state = env->cur_state;
--	struct bpf_func_state *caller = state->frame[state->curframe], *callee;
-+	struct bpf_func_state *caller = state->frame[state->curframe], *callee, *frame;
- 	struct bpf_verifier_state entry = {};
-+	struct bpf_reg_state *reg;
- 	int i, err;
- 
- 	callee = kzalloc_obj(*callee, BPF_VERIFIER_GFP);
-@@ -11583,6 +11585,7 @@ static int call_func_on_its_own(struct bpf_verifier_env *env, int subprog, int i
- 		bpf_free_verifier_state(env, &entry, false);
- 		return err;
- 	}
-+	bpf_for_each_reg_in_vstate(&entry, frame, reg, reg->grew_once = false);
- 	entry.max_held_cnt = state->max_held_cnt;
- 	callee->entry_refs = entry.acquired_refs;
- 	callee->entry_rcu_locks = entry.active_rcu_locks;
-@@ -17967,61 +17970,43 @@ void bpf_trim_pkt_range(struct bpf_reg_state *reg, s64 smax)
- 
- /*
-  * @s is what @old became after a trip around a cycle, @old included. The end
-- * of the range that moved is going to move again. Put it where it may come
-- * to rest. There are few such places, so this is done a few times at most.
-- * @rungs: where the jumps of the loop stop it, if they do.
-- * It's put at the nearest of all these places: every value between the range and the place is
-- * made up, and the program is checked with it. Wherever it's put, the range only gets larger.
-- * @linear: every iteration adds a constant to it, in that many bits. Then nothing but a jump
-- * stops it. If there is none ahead it goes on until it wraps, and is any number of that many bits.
-+ * of the range that moved will move again. Move it to a threshold where it
-+ * can stop. @min_threshold, @max_threshold: the caller guesses that it stops there.
-+ * Take the nearest threshold. Each value between the range and the threshold is made up,
-+ * and the program is checked with it. With each threshold the range only gets larger.
-  */
--void scalar_widen(struct scalar *s, const struct scalar *old,
--		  const struct bpf_loop_rungs *rungs, int linear)
-+void scalar_widen(struct scalar *s, const struct scalar *old, s64 min_threshold, s64 max_threshold)
- {
- 	bool moved = s->r64.base != old->r64.base || s->r64.size != old->r64.size ||
- 		     s->r32.base != old->r32.base || s->r32.size != old->r32.size;
--	s64 min = cnum64_smin(s->r64), max = cnum64_smax(s->r64), stop;
-+	s64 min = cnum64_smin(s->r64), max = cnum64_smax(s->r64), threshold;
- 
- 	/* Only the step got weaker. It comes to rest without help, see below. */
- 	if (!moved && s->var_off.value == old->var_off.value &&
- 	    s->var_off.mask == old->var_off.mask)
- 		return;
- 
--	if (linear &&
--	    ((max > cnum64_smax(old->r64) && !(rungs && rungs->has_max && max <= rungs->max[1])) ||
--	     (min < cnum64_smin(old->r64) && !(rungs && rungs->has_min && min >= rungs->min[1])))) {
--		if (linear == 64 || min < 0 || max > U32_MAX) {
--			scalar_set_unknown(s);
--			return;
--		}
--		min = 0;
--		max = U32_MAX;
--	}
- 	if (max > cnum64_smax(old->r64)) {
--		stop = max <= 0 ? 0 :
--		       max <= S32_MAX ? S32_MAX :
--		       max <= U32_MAX ? U32_MAX : S64_MAX;
--		if (rungs && rungs->has_max && max <= rungs->max[1])
--			stop = min(stop, max <= rungs->max[0] ? rungs->max[0] : rungs->max[1]);
--		max = stop;
-+		threshold = max <= 0 ? 0 :
-+			    max <= S32_MAX ? S32_MAX :
-+			    max <= U32_MAX ? U32_MAX : S64_MAX;
-+		max = min(threshold, max_threshold);
- 	}
- 	if (min < cnum64_smin(old->r64)) {
--		stop = min >= 0 ? 0 :
--		       min >= S32_MIN ? S32_MIN : S64_MIN;
--		if (rungs && rungs->has_min && min >= rungs->min[1])
--			stop = max(stop, min >= rungs->min[0] ? rungs->min[0] : rungs->min[1]);
--		min = stop;
-+		threshold = min >= 0 ? 0 :
-+			    min >= S32_MIN ? S32_MIN : S64_MIN;
-+		min = max(threshold, min_threshold);
- 	}
- 	if (min == S64_MIN && max == S64_MAX) {
- 		scalar_set_unknown(s);
- 		return;
- 	}
- 	/*
--	 * A fixed stop is a guess. A number of 32 bits that gets past S32_MAX comes to rest at
--	 * U32_MAX. What gets past S32_MAX, U32_MAX or S32_MIN and out of 32 bits is stopped by
--	 * nothing:
-+	 * A fixed threshold is a guess. A number of 32 bits that gets past S32_MAX stops at
-+	 * U32_MAX. No threshold stops what gets past S32_MAX, U32_MAX or S32_MIN and out of
-+	 * 32 bits:
- 	 *	sum += a[i]; if (sum == 77) ...
--	 * It wraps in the next pass, and the other bound is gone as well.
-+	 * It wraps in the next trip, and the other bound is gone as well.
- 	 */
- 	if ((max == S64_MAX &&
- 	     (cnum64_smax(old->r64) == S32_MAX || cnum64_smax(old->r64) == U32_MAX)) ||
 -- 
 2.55.0
 
