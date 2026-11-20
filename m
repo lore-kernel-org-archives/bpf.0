@@ -1,107 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.51
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795157777;
-	b=5uB2OESxzT9VL0Q+G5pSTncK5JCn3otMGN4DcJnrv5uv3+60KTB/qdDkF2qvr2wFcu2X
-	 pelEvVbadqfgElJmdkV9suyRJfAX603wwTOLWF02OseGPwv88GPmLpGrmuTnnd0W/zyEO
-	 l56wG3sjqwwBV2Iqr+mfwb96iTdJNso3i9uAK4A/Hd9J45rTXEj1Qi3ovIgiVNV4aobQ0
-	 yFDEWQ8MeFL/E8kcw0wFqG3b5x+OKQYGHrmRCqa51H/UEAndJlRs6S6rNg8Qz1Zu1/oPh
-	 cDWAgepHRpbvG4AEWru47F52nqL6aPLX56o+XZgtGCwkABLgMxWwBaVnbcVerpybhmQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795157777;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=JSpsy0UKa4DIFK4RDl3FsapGjP10wN6PK5z9B1SUUFk=;
-	b=g+7IcOdwYiNzxyMBrZN/Eh9vc1MrM0IfxXoCl4EUQKD2uNaDLbmgMWCZSC2ebrHezW3s
-	 kZmU+KPkg+WQySM+8V7Q7sOm3/6ipunIEgjdHPFPpOcUKh8K35STJ6GQXhc45ePEnovsL
-	 Us7CTWBl/m3hE+n8qUxIBzNx4pGGuptbeE1Wx6hR8d0FBM4pzBTA5CSqEsEwhtn+nA1t/
-	 po/rKbS3jx/H9ddF8F8Vb9SOfYy6ZtPDrzXZ5Lc97J2fbO3Xf/NoCgH7RPkcMggzbgxIa
-	 Mw4Tm5dd+rskF3X2SK9QiJfVRKwxd0b3cDRkMZbqQ7Jbg2JYv1Vpz+5no15ftzJSyTg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=D3dSOuK8;
-	arc=none smtp.remote-ip=209.85.216.51
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795157949;
+	b=00FgQ7hfEox5NSdnX3xIrVEY0OODMFNWypRfn1N1++HsHvs1nz4X5VdIA22UvxFuzCjQ
+	 T+iJvi8KEctnzZguHdqO7g2EpTbEThgCYcL+2tfHeSu8P2GLNCklUCAf8Zj5la6PVhhDF
+	 ShXTNQ0V6l0tyR9jyCqdLK4biDPjRxYYyWy2TtMP1bKOm3sdVH+jJakn741vSEvmUmHKy
+	 WreHIeCBxMC8QZKKzLUjTaMVO/dcjMDO162dXuAuoOF7fVvOPru4BLnazrnqmbB4Ad/Ah
+	 nh5GBaHLTscyYzXLcOblZrqmAT1zuZl5Qefknp3JXbAV3x1k+BXNh9jdNKhtAv1aqDQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795157949;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=PsTftBeYEFXfD9zeAqWuNXYkJ0bBYpNs1Jn91O8mPyk=;
+	b=LFfaRMQscjUE0glB0lbrMtKzYc4mJq70ZG6j/DfA6xAJkzJjkMFqddMIu4W3GeRgr+sQ
+	 cQdQ8Y8ZSyx2pML/cwWpzxKz6Gm2Quorl3IBhjKKZGivxp9NKso26kGt9JHbzb5qHfrbA
+	 Qmv9GDFQISqVRUoVZ9zXrH1H20yuP1uRg4mV2+ZBXtSa8prHHKWKqd27Y++PwaDfHe18M
+	 nLFii58TRASRx+cGSondcvX2OveI+r91mgbRlcnWdkqa1eY0wCNQTiFg6Z6BGCKkJIJV4
+	 SyQLYtArY8Q+71s6WQOnVGUbdknF5++I1+ssTv7DNwIkxUvEiaABLNIbgs1LlY52GOw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lCyew42g;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70619606A326;
+	Fri, 20 Nov 2026 06:59:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lCyew42g
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1795157948;
+	b=vT2lxp5LBkET7JRoxREp0QtKM5PcBsUu13sKVElh7NBSkj/x57joI+fEKiOQLgDi+SA0
+	 JvcyqiO+WitfNlMDEpWDNc+oIxW3VzF6XJJseMpUliugryadPJixr+ElQGswq28pLMeB4
+	 ozJ6cyyidq7gw9LKLYTZCxVHPxAOSLtn3jB8XXNSQNt8glNBBfbt3mZRK18ysiwtBeAiK
+	 bv0b7D8CQP6A5grJnv23PaeryhPxil9R+5F1W0SHh7cZq2IuEgeNafWQ0EYcLIXd/YBHH
+	 AJOaTW1H9kLV1Ug8ITwOVpBSaVX+6XIZI/dIFbZ9h31aqEhd6gJsUmzNQfe3akuQ7Yw==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1795157948;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=PsTftBeYEFXfD9zeAqWuNXYkJ0bBYpNs1Jn91O8mPyk=;
+	b=LeXcqISEq3T7ip2g9u8n0NJrrxCyh14vSGvlNKqOWfvmp0IC+EnUgvK/fDGyTmNODPt0
+	 2EvXJXTN4ZLvujibTxkqROw0Frj5bDhSTtJ3p0myeO1JMCs8iz6NnKNmlTHC94qlKQ7MM
+	 D0NmNXUjoTiJjIqL40wcLjopX/r8tNqaooUA6c6shkao7SJIx6zChgLL6WhDf+jdvmahj
+	 ezYGKHRnitriix6O1BI5xBI6q4A8qQlOC2cFlzUDMSJGbfq90BV+dN4/QMXRp7zQtjoUO
+	 qLynDsIC8V0wtxarM4RaqUHbe+gUkPl7jyp1x+yyYQbqpttg695LVZ5lXLDCnhMs8og==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E578606A320
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 06:56:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9E578606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=D3dSOuK8
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3ada4c06b7bso345772a91.2
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 22:56:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795157776; x=1795762576; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=JSpsy0UKa4DIFK4RDl3FsapGjP10wN6PK5z9B1SUUFk=;
-        b=D3dSOuK8blb0kHtl09c10+5Fp1Z+ZrQASGIiIVZKmUlx2qPo1qGKHk7NzGrv++yXvj
-         mY9Khua8KaqGTYIXlYujWXGkgT9WlfDmpPkph/hCtJbo3iX3h7YDEP/QDyjuDZCGPK+3
-         8IL+nwhqTIPjteOMI/DwIP/jORxh2MyIkvI8hdc1/qYBp96mWFX2TeDd3O2gMtGCbfii
-         szZ1DcEAjyrWNCPNbazT6PecXNbrdMl4RfGlnjtrrIV1+KEGpLoklovD+VndqkDkS6xS
-         2Qri1yMVoaXOXw8D6fOZVY06XoqjlhwVwTsgOifz6VbU48XSWrnhRbFHp7JgC1g3Xfop
-         hDhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795157776; x=1795762576;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=JSpsy0UKa4DIFK4RDl3FsapGjP10wN6PK5z9B1SUUFk=;
-        b=OuLGoKcMo5MsWDsLKIL15LcS7aCqmRoC8xKGDgG7Zi2kRp6bAc+Q6wUbzPROzQkNr6
-         1gSLfw/f1diovMF+OxdfA68Ctl9/QROCEGfBOcIRe+fxPa0Z/DZ61KjdVKMPaoFvjK/1
-         HXnNujoD7Ro40sDkUAEuj02S0sOb+zqJItHCsdoiIMMGpPaHlv8r6b6tRIIhIVGSZJ1u
-         1Bhpn23HayVQ7tHITxVkXQ/A9vqMc961NN/Ewr8cYHKUzmXaBDnOlxmchsHe+R5kHGaM
-         i+zkVLoKdL5Gdo8Em67/r20hBvVSlVib0Q15l5dOOixeg3BLBYtEiVtynwQeYSPYmQLz
-         CRmQ==
-X-Forwarded-Encrypted: i=1; AL+hErH2mTOpmSUlggGdxGMW8sbrnSYcaitlGxYolaOXblB1JYN3VoeeTdk1uVjwXObQ89bOJxA=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8Cl3jD60yiZxn2uIvsH4zI29Hxf88mQWruVrQErKrRGm9ojxJn
-	HgdSQNQv9+FOxo0G23cTxGujja0NJI0HizujDJYN3rKYsDqLWxYubfQN
-X-Gm-Gg: AZFdTZfCrdsQTkZ3K+2mRpfWZmH6pwOGfZ+1DgPaOVlZ++2D7wGuypEvZaIfOFMXwmo
-	N1luu0gKbe/gvxfyAmpawc1pEH/f7In3jamnqyCAqXIT0IvtMwtb+zxs3vzqV3sUrs6fmsmMjUi
-	QWY2/IYZmp3cPMA+N/51YBv3ZKpQo1ZMni1ZQubXz/QkUqOy1XHtoxgA4pwtmpH1/YPXVhce51l
-	tNaTIoMX3/ItSR7nkyANHKkPShDXZ+/COR1V9zOgpJI5c89a3B7w3mCLTaorqWPugCioHMbOWeC
-	YdcF+21OrGa7Qns5oSPr2wA3EbBCTQ2Q3zvCXf/xrl6mB3gLSzVkXDoeUS59qKSGVChDHZpI2vL
-	HEHvJ5KAMCJOa0rCzTzQFwQ32+CrjyOoEkU0F9dNW5AB2wVoSfp31lQr5oYIhDjyzTOBrlDbkL5
-	YcCrzkC7qRK1564i8/UGEJnasPTHGz+iFFaIz3zLTiE5ccHerXhdrhPAfNUEofNy6uiEbWMOG21
-	xnH/6O7mk6ixT4kS32xYvi/nhPD9v0H8Q7IJhGn5Sl1+gNlUpsJTekMbbZ7JvyYI+OGr9oXaYt+
-	qAg1epHRz78atvzUObRMDCuqBxbgcRN93qccGlloQH0wZfozZniEnEmI1PZQOez4
-X-Received: by 2002:a17:90b:4a47:b0:3b3:fc1f:a5c4 with SMTP id 98e67ed59e1d1-3b41c8dc821mr1899005a91.20.1795157775908;
-        Thu, 19 Nov 2026 22:56:15 -0800 (PST)
-Received: from cps-manycore-1 ([147.46.174.222])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b420e1307csm1952926a91.7.2026.11.19.22.56.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2026 22:56:15 -0800 (PST)
-From: Sechang Lim <rhkrqnwk98@gmail.com>
-To: sched-ext@lists.linux.dev
-Cc: tj@kernel.org,
-	void@manifault.com,
-	arighi@nvidia.com,
-	changwoo@igalia.com,
-	mingo@redhat.com,
-	peterz@infradead.org,
-	juri.lelli@redhat.com,
-	vincent.guittot@linaro.org,
-	dietmar.eggemann@arm.com,
-	rostedt@goodmis.org,
-	bsegall@google.com,
-	mgorman@suse.de,
-	vschneid@redhat.com,
-	kprateek.nayak@amd.com,
-	haoluo@google.com,
-	brho@google.com,
-	joshdon@google.com,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH v2] sched_ext: reject oversized dispatch_max_batch
-Date: Fri, 20 Nov 2026 06:55:54 +0000
-Message-ID: <20261120065559.3979434-1-rhkrqnwk98@gmail.com>
-X-Mailer: git-send-email 2.56.1
+	by smtp.kernel.org (Postfix) with ESMTPS id 77F2A1F000C4;
+	Fri, 20 Nov 2026 06:59:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795157948;
+	bh=PsTftBeYEFXfD9zeAqWuNXYkJ0bBYpNs1Jn91O8mPyk=;
+	h=From:Date:Subject:To:Cc:Reply-To;
+	b=lCyew42gbvburfPID2Gmw+2swMZfRiqgc2H0IknU+oMblMaoV5lSiw+FGWbdg8tX5
+	 Wfpl7WglovqsLeNXtAeRq3mexaI89U9aVt9mPLsOf8MXYhFdb2aNBNhXVloaeQts1Y
+	 sTpcSHAfMvnqnbEn1JfE1lqEK0ZJyAB8UiIxCYC1hit47/CDLVTKzeE1QKRldwUi64
+	 osxknHtzMwL+or18O+iwy8K/3sTOc0T+eX2le8BOwh0YXZdGO0wT4ODdbyk+6/BMeR
+	 ruOwJFd40e8TFT8vHpq0wKMNiXlSvzxLaF2ci7hEvowgBCxSW4xaYF6pXQG/czAZ2w
+	 2EA/t9NYdZ3nQ==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id 0B6C949716;
+	Fri, 20 Nov 2026 06:59:08 +0000 (UTC)
+From: Hang Zhengyang via B4 Relay <devnull+hang.zhengyang1010.gmail.com@kernel.org>
+Date: Fri, 20 Nov 2026 14:59:02 +0800
+Subject: [PATCH bpf-next] selftests/bpf: Fix
+ file_reader/on_open_non_sleepable_first on overlayfs
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -111,58 +83,102 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261120-file-reader-overlayfs-v1-1-81aa7f3041d1@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MQQqDMBBG4avIrDuQpFaaXqV0Ec0fHZAokyIW8
+ e6GLr/FewcVqKDQqzlIsUmRJVfYW0PDFPIIllhNzrjOWmc4yQxWhAjlZYPO4ZcKm9b7Z4yhe/g
+ 71XZVJNn/3zf1a+KM/Uuf87wAwDh0gnEAAAA=
+X-Change-ID: 20261120-file-reader-overlayfs-04998dda6593
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Hang Zhengyang <hang.zhengyang1010@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1795157947; l=2542;
+ i=hang.zhengyang1010@gmail.com; s=20261008; h=from:subject:message-id;
+ bh=Z42i5/leJVwaMNYSXOof1lDedpwAns1zY51D5qfLFZg=;
+ b=BVELy4sSCT416yAlXQDGZOkNtmJrAAIWI07LrHUOPdK4831RXbQ3f0/U5f91jZvgqGiuvGpmL
+ WwqN1+FqKaxBANdUCPWmvgNM9CLE67wy3NxSXRR6Y8yeTXZOETej6IR
+X-Developer-Key: i=hang.zhengyang1010@gmail.com; a=ed25519;
+ pk=5drRny3PqRPLhKVB0YIQXN5YyD8miKCpXWhnEPvafAI=
+X-Endpoint-Received: by B4 Relay for hang.zhengyang1010@gmail.com/20261008
+ with auth_id=1133
+X-Original-From: Hang Zhengyang <hang.zhengyang1010@gmail.com>
+Reply-To: hang.zhengyang1010@gmail.com
+Content-Transfer-Encoding: 7bit
 
-bpf_scx_init_member() accepts dispatch_max_batch values up to INT_MAX.
-The value determines the size of the per-CPU dispatch buffer, but
-__alloc_percpu() rejects allocations larger than PCPU_MIN_UNIT_SIZE.
-With BPF_F_LINK, an oversized value passes the struct_ops map update
-and triggers an illegal-size warning during link creation before the
-allocation fails with -ENOMEM.
+From: Hang Zhengyang <hang.zhengyang1010@gmail.com>
 
-Calculate the buffer size using the effective batch count, including
-the default used when dispatch_max_batch is zero. Reject values above
-the per-CPU allocation limit with -E2BIG during the map update, before
-the allocator is called. This also covers registration without a link.
+on_open_non_sleepable_first fails every time when the test_progs binary
+is on overlayfs, as under /home and /tmp in a virtme-ng guest:
 
-Fixes: f0e1a0643a59 ("sched_ext: Implement BPF extensible scheduler class")
-Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+  run_test:FAIL:err unexpected err: actual 4 != expected 0
+
+bpf_task_work_schedule_signal() returns -EBUSY.  On overlayfs, the
+open() of /proc/self/exe calls security_file_open() twice: once for
+the overlay file, and once more for the backing file through
+ovl_open() -> backing_file_open() -> vfs_open().  The program runs
+twice in the same task, and the second call finds the work from the
+first one still pending, since it only runs on return to user space.
+
+Act only on the first call.  The other file_open programs in the file
+either don't schedule task work or don't check the result, so running
+twice doesn't affect them.
+
+Fixes: fc38f07781ca ("selftests/bpf: Test per-call site function specialization")
+Signed-off-by: Hang Zhengyang <hang.zhengyang1010@gmail.com>
 ---
-v2:
- - add braces (Andrea Righi)
+Tested in a virtme-ng guest on bpf-next (82cc2b4383e3): file_reader
+passes from overlayfs and from a tmpfs copy, and 20 times in a row
+from overlayfs; without the change the subtest fails from overlayfs
+and passes from tmpfs.
 
-v1:
- - https://lore.kernel.org/sched-ext/20261120054913.3795562-1-rhkrqnwk98@gmail.com/T/#u
+The patch, this text and the tests were written and run with Claude
+Code; I reproduced the issue and reviewed the change.
+---
+ tools/testing/selftests/bpf/progs/file_reader.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-
- kernel/sched/ext/ext.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
-index 10de6bd865e8..56d75d179822 100644
---- a/kernel/sched/ext/ext.c
-+++ b/kernel/sched/ext/ext.c
-@@ -9196,11 +9196,17 @@ static int bpf_scx_init_member(const struct btf_type *t,
+diff --git a/tools/testing/selftests/bpf/progs/file_reader.c b/tools/testing/selftests/bpf/progs/file_reader.c
+index 8b972fd26d73..1318b8e0845c 100644
+--- a/tools/testing/selftests/bpf/progs/file_reader.c
++++ b/tools/testing/selftests/bpf/progs/file_reader.c
+@@ -28,6 +28,7 @@ char tmp_buf[256000];
+ int pid = 0;
+ int err, run_success = 0;
+ __u64 beyond_eof_offset;
++bool done;
+ 
+ static int validate_file_read(struct file *file);
+ static int task_work_callback(struct bpf_map *map, void *key, void *value);
+@@ -101,8 +102,13 @@ int on_open_non_sleepable_first(void *c)
+ 	int key = 0;
  	int ret;
  
- 	switch (moff) {
--	case offsetof(struct sched_ext_ops, dispatch_max_batch):
--		if (*(u32 *)(udata + moff) > INT_MAX)
-+	case offsetof(struct sched_ext_ops, dispatch_max_batch): {
-+		u32 batch = *(u32 *)(udata + moff);
-+		u32 nr = batch ?: SCX_DSP_DFL_MAX_BATCH;
-+
-+		if (struct_size_t(struct scx_sched_pcpu, dsp_ctx.buf, nr) >
-+				PCPU_MIN_UNIT_SIZE)
- 			return -E2BIG;
--		ops->dispatch_max_batch = *(u32 *)(udata + moff);
-+
-+		ops->dispatch_max_batch = batch;
- 		return 1;
-+	}
- 	case offsetof(struct sched_ext_ops, flags):
- 		if (*(u64 *)(udata + moff) & ~SCX_OPS_ALL_FLAGS)
- 			return -EINVAL;
+-	if (bpf_get_current_pid_tgid() >> 32 != pid)
++	/*
++	 * On overlayfs, file_open runs again for the backing file, while the
++	 * work scheduled by the first call is still pending.
++	 */
++	if (bpf_get_current_pid_tgid() >> 32 != pid || done)
+ 		return 0;
++	done = true;
+ 
+ 	file = bpf_get_task_exe_file(task);
+ 	if (!file) {
+
+---
+base-commit: 82cc2b4383e3edfa1026c8612fb4e90a9329ba11
+change-id: 20261120-file-reader-overlayfs-04998dda6593
+
+Best regards,
 -- 
-2.56.1
+Hang Zhengyang <hang.zhengyang1010@gmail.com>
+
 
