@@ -1,98 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.180
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795157087;
-	b=eKAkuE//mu9qOWFvHaCX4iHVXx9WbqoUBp4zL+9BtRYvKJa+lD086QSEMugphLa6j9RW
-	 kXHKqwcol5aSmqtbtJVSBtlCpGzDsffmbsz0mR4APwHLFadCC4wxYTPN8JAArlzG7TxNR
-	 7+I7Fh8RCZQcdcGKxeJMmUuQjux9oeWCrxuEHfpv612SLFBHwk5oGLp15qHUF6eYlUyJl
-	 NR4EWEvO+p6HH4kcjoYzZYD8TWi0wttxIqJersCThfbdW5hpuGlUliRsCiFKcPJITCh3e
-	 pT4bakCqf/xx/WyI8Pui0h3nkFOQOLcGWExwHvwrvOOcXwMB2loX1pBwEkxeZ2kguQg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795157087;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=ibHuc2Ky7x6xbIQztLyKbwCm/OGk8fLoxdPIGUt/hMM=;
-	b=ncPmGbO28J0Q8wsppJWLu6Niw6bZwxUb379uphE8JOTBsiFCDh1W1AHVbnXnGMUltKPO
-	 Wxf3FLgSW4eSaym5err5XjDgdhc/pfwvl9poyQvBg1ctuWSZXG3U2OgMmrRgNt4Ej5Aq+
-	 ZsqKPGN1RWx0JG0vubySkdGIfE8zLuBmeKAE7oWAMvfUp/4cSkp9/+Z+YSkd6MVOFtIOe
-	 uOLLbiLpA3aVoWXY/8pzUXtZpoqRd2hbT+nRXolW9z0dVFK80rWMIn8YrLuKIYZSwFDnS
-	 vOAoNP19vCJzVQqcLKs6PyX8wmFHSc/0o0UUyzXC5Iy+wOnsWdgAExIO2XCzx7dXTwA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=teIuw1f4;
-	arc=none smtp.remote-ip=209.85.215.180
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795157346;
+	b=o5GGCxGaZtC4QQwuOTVRnuIXWLsmJ6qkVPu2dymbuBYLPRuMCxb2Y6GOzzB6MUGs+Grl
+	 8sobGJDcmmFmJWWqGCQwHptJxVamyJgcetf/KsV0OpTax+Dok4xWrFvNxQv6s83UCsF2e
+	 uDoqgU3eQhLTXjt9CyXwGSOf9BYhdDVoxvrV/1nEHHuuzS4iA+4/vWFq0ztpznroOrzQN
+	 stI8JiKXib9fA8xI4zXmgEEj4ZyCUYON8/QCCJ4btyHCLsP3KZPMYKDW3dZF90Os0qAYk
+	 kZtQrOfzhQBZ5DkjzIHhfa0QfDOffqHU7pGYT8fhyufRrH0WlR77HM3iW7SlZTSjyVA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795157346;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=p2wxdWfQRPwOOeRcWpTD+nV5bhErhHOdlukDELG/7Eo=;
+	b=WgBYxiPok6gSDHH/Yqi2uzdyDWUC0rMzvKeMaKQ4G0/zpOlMPLnGTb+atfRPr1MofoX/
+	 QkcGXzf65QLrxhcCBS/rxgLi99OBoMZ9IhVYsQ2Dng3NJ4kkntPsoDi5q5kGZzdNG26KJ
+	 ob49z/rgiW5L/pUjgIF4zdOpxAIM9zVhWi3Q3UTvVhxqu0uDQ0Q7iLhlZesb6L+YS3rye
+	 94uYlM6fRjWmvk7wne/L0BzuyFvVtGFv5YglHIgKPCccXCa+7uXmtxjnFgN6xbAeKGNPX
+	 M+FgecxqK7XxAUsKKHQokXCFIWSqKKdqP2mU942PzK70RteKj279nx/lVO0OHUd1sZw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="JrLoKZ5/";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25083606A325;
+	Fri, 20 Nov 2026 06:49:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JrLoKZ5/
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1795157346;
+	b=QLS47mhJWJUDNCJYLJjI/vGJAkjnIMZi0/3/loMXjp4ald5I3OJ+5j39PlTVxFT9u4jn
+	 OUeclKXrQlFe76mJoVDNmd/RD7w7gPbVIt/2aYTAvXi6cvSSMg5rRQ+sBrkrgSuHCstwT
+	 4xssEnYi86YkhZI4W8zFV9TtdNZmsEGmUQfvTwFBLZFI3xIEXete5itB8VSl3uApVZzhw
+	 D2pQMrfh0c12OzCy1loLb3Gmw1ZtlVzO41CmfW9D/Vpp0ajVDvwqnlViyV+mRV3Gs5kr6
+	 t5sZkiGKWmnhvoWd822pfOgvlWR5EQXzlHMyr06skY5f6LggmuUi+4LKdZpRUmJQ+gg==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1795157346;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=p2wxdWfQRPwOOeRcWpTD+nV5bhErhHOdlukDELG/7Eo=;
+	b=FQDvANm22iV3Y4IF7KPHPinaS9dAmzKsrAdlWsjrylHKv5H17wwoep+42ww/2jnEA092
+	 1fSGnZqoSQB5SnysuoDS9Ti71PGuAbLrnSY9wkffony6N04rzAtzMp+13gmiio5aYzlBy
+	 saiZX2LudaQfIxYpPpuC5I0UxbkLrkkLgHplYhBDkxHYJw1RmzYWPnQ08KaWxf4tMpxjc
+	 aJNOVne5br+zFi5EZWCIB1INuNSz/4ItM+3kPLDUHOWwco+2QIaQRtyKXc0wSSWFJmAro
+	 iPA1GUrtFF1ReEQojkAoz2J0ifGf90FdbsNnBzERakLBfPY9skA1RRITCCtpbJqYhbQ==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5636C606A32C
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 06:44:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5636C606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=teIuw1f4
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-cc147d86bebso324878a12.0
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 22:44:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795157086; x=1795761886; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=ibHuc2Ky7x6xbIQztLyKbwCm/OGk8fLoxdPIGUt/hMM=;
-        b=teIuw1f4IVp67pH42Le/2jtpiPPxeaI4Srr6xMfrsEcES6+WJldweFTh8LR2m3CVjn
-         RPGfDm9CEng2MqezE14lmoXpP/rxKKUvGg1nwLJb4QMnWRzIufguA/U9nXJm2hIFF3qm
-         q5C3xdncjohNpuS1kSAzmOkZx9vD1dj+uMAsQl8Ytindk9sJJzLQzqX37NjCgyWLITZA
-         rVlApmz9IRKVvZ9yL8D7v2VBQOB0KqqwSFypjZKQyJ29gKyunS5q2wsGWSjT53/E9QX8
-         L53ZNV8nj06rcYHDHmUPG7m5w0SqJrZnd+T2xlSmJUzt3kFI9fhKr8Y3Zzetvq+umnef
-         JwKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795157086; x=1795761886;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ibHuc2Ky7x6xbIQztLyKbwCm/OGk8fLoxdPIGUt/hMM=;
-        b=aGqLfC6rNriqCfNJ5VX3cCdGG/IAUzMUr2cAto0d2oY0XO9XWzkhVH184QSNNJSI4y
-         uBjSrCY5XZuZoSIccd39SOvEfVOaF3Dtt24gYHlSVdEKU5rrXLFugpn5SCqus1kgWCP6
-         7rY2KrujudJ9IGL4Fb+PUmqWpMMA0yeIN7SEhHF7+9IPC4xa2K/RSJ714Q1Rby2JMASo
-         eNntx7ZAxV/0u4XjPXbH4Sex6L6z1L4CMLfiKe9Ncr2Q0Pq376jZK3rLJx5CaJomgTTg
-         mxN1soh5hfxLmndMiwx1rdVHxi3bdShaXXi2hd3U1iBrfGjIH3Rl6VN189nFrz2uD4Es
-         qKsA==
-X-Forwarded-Encrypted: i=1; AL+hErHuKL/2wakkXdA2swd+Q6It7R1yP/T8GXGqa8oChQ+DqutQjE2DH90qFUa6fQS8HNRDZY0=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/iU/Y3UVNtB1gJiO3Gl1GqqKPgT28WIfCmmgTGace6a5CqgiDl
-	OpJXTwPoOjdOO/IJYsuZD14M2Y8Ty5DOuAEIja6xmRk9hQlHdbCCh0Aw
-X-Gm-Gg: AZFdTZdq5UWGlVS+N0ZCsQNPIXwqz77zw1RrnkfYFHLuD8j/vkHyEUCI6FuMeRCeYUF
-	zH28v9nvZma5NFVD3q9ckafQ0YPlaColb8lFiaDcxQxAO/uv8qMRigcuc3VeFbH9NJ4AHxAVlLP
-	qlYfn3FZ6WCtjQh0cfMXazCz5/W6QRC7x6zME5iLupKHiX8rRAqPnbQxDWVpNOZ5TFPgvZVQkG0
-	l/XWFJjvlBvjpz7kndZG+Bl9voBLUcg4Lb6P+B0bZKrzyGhMVxPHtvgnLjZr4M1FKOP+rwlWTaF
-	MVoUPvwGsJDZm48b3F3yKermPAXf8+KupNu/kk5v1I9/VkimI1mQCru5J7dVIhJiIPl8s+6POsA
-	g56/+NTYd4fKqTrimJKhl4805V6lro5VzWjwV7CLhXcCqAprf5VEUcXtGKq6+3+U+7hpJEXMRL1
-	vDxBpT1Ydq5gDAActrGlHOUyTzA9OkrR544xBMlBGqIzfPYHafPMkTvYdNXhfZBlVmH+fwA5UqY
-	EkwqLp6eDw9NoAHZ+Yj6oqjMMWi91QTtRjzNfaLd5bd/oQmwIffd/psrrpG2zj6n6UGXQaiqER5
-	Zt0YlEwwDyUP+OJfH39j4YNdjqf3ArZMD/JDvWjpEgxhPiNexexU5Q==
-X-Received: by 2002:a17:90b:5546:b0:3b0:a1c6:95ae with SMTP id 98e67ed59e1d1-3b41c941f9amr1058404a91.31.1795157085609;
-        Thu, 19 Nov 2026 22:44:45 -0800 (PST)
-Received: from srsys1 ([147.46.174.222])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b4323bda5esm12916a91.3.2026.11.19.22.44.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2026 22:44:45 -0800 (PST)
-Date: Fri, 20 Nov 2026 06:44:28 +0000
-From: Sechang Lim <rhkrqnwk98@gmail.com>
-To: Andrea Righi <arighi@nvidia.com>
-Cc: sched-ext@lists.linux.dev, tj@kernel.org, void@manifault.com,
-	changwoo@igalia.com, mingo@redhat.com, peterz@infradead.org,
-	juri.lelli@redhat.com, vincent.guittot@linaro.org,
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-	mgorman@suse.de, vschneid@redhat.com, kprateek.nayak@amd.com,
-	haoluo@google.com, brho@google.com, joshdon@google.com,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH] sched_ext: reject oversized dispatch_max_batch
-Message-ID: <av_sTGpIbkzvsp05@srsys1>
-References: <20261120054913.3795562-1-rhkrqnwk98@gmail.com>
- <av_oLZQzAtFe2vTr@gpd4>
+	by smtp.kernel.org (Postfix) with ESMTPS id 688131F000CA;
+	Fri, 20 Nov 2026 06:49:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795157346;
+	bh=p2wxdWfQRPwOOeRcWpTD+nV5bhErhHOdlukDELG/7Eo=;
+	h=From:Date:Subject:To:Cc:Reply-To;
+	b=JrLoKZ5/o4cm3sVjT1tfiNNm207C/m+YpxQV6f8C0PpgXgjp6I2EU9L2io+tFBYLT
+	 ZHRambkDa7DF1mtochqvvnvA20Q1ljPoDqdvwjQK73eM7f+wPsdNyN82rZPbbx2Lza
+	 KFQUB8Te9EgZCIMDTYwVfpqa6+tvpdbnJ8CdnjwbAujz84cQptDAyIo1uavL3Vw0wT
+	 pnXwMjQZhFlc3SUU2ATdwGsgtSmxeUshXDKBSebASHnW/Sn6Ta1HucQ8FG7q2FTA9N
+	 1Fic3pbS6hxpuCHJHoAesCzU5h0fYiIVoEXL3H9cm3oEvSbigyJ3tGlK5vgAm/ktYa
+	 cb/lkERhnN8uA==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id DA02149716;
+	Fri, 20 Nov 2026 06:49:04 +0000 (UTC)
+From: Hang Zhengyang via B4 Relay <devnull+hang.zhengyang1010.gmail.com@kernel.org>
+Date: Fri, 20 Nov 2026 14:49:03 +0800
+Subject: [PATCH] perf bpf_counter: Say why the perf_event_attr map can't be
+ used
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -102,75 +83,192 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <av_oLZQzAtFe2vTr@gpd4>
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261120-bperf-attr-map-err-v1-1-b12b6b550273@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MQQ5EQBBG4atIrVWii2DmKmLR+FELplMtIhF3n
+ 47lt3jvpghTRPpmNxlOjfrbE1ye0bj6fQHrlExSSO2cFDwE2Mz+OIw3HxhmjLGWCh8pG9dSCoN
+ h1uuddv3z/AG2fGcHZAAAAA==
+X-Change-ID: 20261120-bperf-attr-map-err-ec624e923718
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+ Arnaldo Carvalho de Melo <acme@kernel.org>, 
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
+ Adrian Hunter <adrian.hunter@intel.com>, 
+ James Clark <james.clark@linaro.org>
+Cc: Song Liu <song@kernel.org>, linux-perf-users@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ Hang Zhengyang <hang.zhengyang1010@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1795157344; l=4816;
+ i=hang.zhengyang1010@gmail.com; s=20261008; h=from:subject:message-id;
+ bh=/BeuvCd1wLwgIc3E/XpIpzlI8yVjVaz/WrSOtWJ0nnU=;
+ b=OoXQjlM4BOmBEPuwn3m+2/Mj+JD9xxGDX15QF4y/669yIuZ/YlxTnbBf44kvC/mUJiTC1sYZd
+ p4d1X9p4uOhD4f9k525o+No+WHrU2JUoVtCku+BrZosq9mQC1j2ubbr
+X-Developer-Key: i=hang.zhengyang1010@gmail.com; a=ed25519;
+ pk=5drRny3PqRPLhKVB0YIQXN5YyD8miKCpXWhnEPvafAI=
+X-Endpoint-Received: by B4 Relay for hang.zhengyang1010@gmail.com/20261008
+ with auth_id=1133
+X-Original-From: Hang Zhengyang <hang.zhengyang1010@gmail.com>
+Reply-To: hang.zhengyang1010@gmail.com
+Content-Transfer-Encoding: 7bit
 
-On Fri, Nov 20, 2026 at 07:26:53AM +0100, Andrea Righi wrote:
->Hi Sechang,
->
->On Fri, Nov 20, 2026 at 05:49:08AM +0000, Sechang Lim wrote:
->> bpf_scx_init_member() accepts dispatch_max_batch values up to INT_MAX.
->> The value determines the size of the per-CPU dispatch buffer, but
->> __alloc_percpu() rejects allocations larger than PCPU_MIN_UNIT_SIZE.
->> With BPF_F_LINK, an oversized value passes the struct_ops map update
->> and triggers an illegal-size warning during link creation before the
->> allocation fails with -ENOMEM.
->>
->> Calculate the buffer size using the effective batch count, including
->> the default used when dispatch_max_batch is zero. Reject values above
->> the per-CPU allocation limit with -E2BIG during the map update, before
->> the allocator is called.
->>
->> Fixes: f0e1a0643a59 ("sched_ext: Implement BPF extensible scheduler class")
->> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
->> ---
->>  kernel/sched/ext/ext.c | 9 +++++++--
->>  1 file changed, 7 insertions(+), 2 deletions(-)
->>
->> diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
->> index 10de6bd865e8..93128da6b126 100644
->> --- a/kernel/sched/ext/ext.c
->> +++ b/kernel/sched/ext/ext.c
->> @@ -9197,9 +9197,14 @@ static int bpf_scx_init_member(const struct btf_type *t,
->>
->>  	switch (moff) {
->>  	case offsetof(struct sched_ext_ops, dispatch_max_batch):
->> -		if (*(u32 *)(udata + moff) > INT_MAX)
->> +		u32 batch = *(u32 *)(udata + moff);
->> +		u32 nr = batch ?: SCX_DSP_DFL_MAX_BATCH;
->
->The fix makes sense, but with clang:
->
->In file included from kernel/sched/build_policy.c:71:
->kernel/sched/ext/ext.c:9214:3: error: label followed by a declaration is a C23 extension [-Werror,-Wc23-extensions]
-> 9214 |                 u32 batch = *(u32 *)(udata + moff);
->      |                 ^
->1 error generated.
->
->(also reported by sashiko)
->
->Can you wrap that case in braces, matching the nearby cases?
->
->Thanks,
->-Andrea
->
+From: Hang Zhengyang <hang.zhengyang1010@gmail.com>
 
-Thanks for catching that. I'll wrap the case in braces and send v2
-shortly.
+When 'perf stat --bpf-counters' can't set up the pinned map it uses to
+share counters, all it prints is:
 
-Bests,
-Sechang
->> +
->> +		if (struct_size_t(struct scx_sched_pcpu, dsp_ctx.buf, nr) >
->> +				PCPU_MIN_UNIT_SIZE)
->>  			return -E2BIG;
->> -		ops->dispatch_max_batch = *(u32 *)(udata + moff);
->> +
->> +		ops->dispatch_max_batch = batch;
->>  		return 1;
->>  	case offsetof(struct sched_ext_ops, flags):
->>  		if (*(u64 *)(udata + moff) & ~SCX_OPS_ALL_FLAGS)
->> --
->> 2.56.1
->>
+  Failed to lock perf_event_attr map
+
+Arnaldo asked for better wording when bperf was added.  The map can
+fail to be created, pinned, opened, checked or locked, and the message
+says neither which step failed nor why.
+
+Print the path and the error at each step, keeping the pin error
+across the "pinned in parallel" retry.  When the pin fails because the
+directory isn't on bpffs, say so, as libbpf's check_path() does.  The
+caller's message is now redundant, so remove it.
+
+As a normal user:
+
+  Failed to create perf_event_attr map: Operation not permitted
+
+As root, with bpffs not mounted:
+
+  Failed to pin perf_event_attr map at /sys/fs/bpf/perf_attr_map: No such file or directory
+  bpffs is not mounted at /sys/fs/bpf, try 'mount -t bpf bpf /sys/fs/bpf' or use --bpf-attr-map
+
+Link: https://lore.kernel.org/all/YFneUHDiAt8Rg0cc@kernel.org/
+Signed-off-by: Hang Zhengyang <hang.zhengyang1010@gmail.com>
+---
+Tested on perf-tools-next (bb27ddbaee56): each failure path as root in
+a KVM guest and as a normal user, 8 concurrent runs with bpffs mounted
+(no new output), and the bperf perf tests (no change).
+
+The patch, this text and the tests were written and run with Claude
+Code; I reproduced the issue and reviewed the change.
+---
+ tools/perf/util/bpf_counter.c | 45 +++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 39 insertions(+), 6 deletions(-)
+
+diff --git a/tools/perf/util/bpf_counter.c b/tools/perf/util/bpf_counter.c
+index 9362e45e17ce..9a463eb9d51d 100644
+--- a/tools/perf/util/bpf_counter.c
++++ b/tools/perf/util/bpf_counter.c
+@@ -3,11 +3,13 @@
+ /* Copyright (c) 2019 Facebook */
+ 
+ #include <assert.h>
++#include <libgen.h>
+ #include <limits.h>
+ #include <unistd.h>
+ #include <sys/file.h>
+ #include <sys/resource.h>
+ #include <sys/time.h>
++#include <sys/vfs.h>
+ #include <linux/err.h>
+ #include <linux/list.h>
+ #include <linux/zalloc.h>
+@@ -32,6 +34,10 @@
+ #include "bpf_skel/bperf_leader.skel.h"
+ #include "bpf_skel/bperf_follower.skel.h"
+ 
++#ifndef BPF_FS_MAGIC
++#define BPF_FS_MAGIC 0xcafe4a11
++#endif
++
+ struct bpf_counter {
+ 	void *skel;
+ 	struct list_head list;
+@@ -376,6 +382,24 @@ static bool bperf_attr_map_compatible(int attr_map_fd)
+ 		(map_info.value_size == sizeof(struct perf_event_attr_map_entry));
+ }
+ 
++/* bpf_obj_pin() only works on bpffs: say so if that is why it failed. */
++static void bperf_pin_hint(struct target *target, const char *path)
++{
++	char buf[PATH_MAX];
++	struct statfs st;
++	const char *dir;
++
++	scnprintf(buf, sizeof(buf), "%s", path);
++	dir = dirname(buf);
++	if (statfs(dir, &st) || st.f_type == BPF_FS_MAGIC)
++		return;
++	if (target->attr_map)
++		pr_err("--bpf-attr-map: %s is not on bpffs\n", dir);
++	else
++		pr_err("bpffs is not mounted at %s, try 'mount -t bpf bpf %s' or use --bpf-attr-map\n",
++		       dir, dir);
++}
++
+ static int bperf_lock_attr_map(struct target *target)
+ {
+ 	char path[PATH_MAX];
+@@ -393,30 +417,41 @@ static int bperf_lock_attr_map(struct target *target)
+ 					sizeof(struct perf_event_attr),
+ 					sizeof(struct perf_event_attr_map_entry),
+ 					ATTR_MAP_SIZE, NULL);
+-		if (map_fd < 0)
++		if (map_fd < 0) {
++			pr_err("Failed to create perf_event_attr map: %m\n");
+ 			return -1;
++		}
+ 
+ 		err = bpf_obj_pin(map_fd, path);
+ 		if (err) {
+ 			/* someone pinned the map in parallel? */
+ 			close(map_fd);
+ 			map_fd = bpf_obj_get(path);
+-			if (map_fd < 0)
++			if (map_fd < 0) {
++				/* report the pin error, not the bpf_obj_get() one */
++				errno = -err;
++				pr_err("Failed to pin perf_event_attr map at %s: %m\n", path);
++				bperf_pin_hint(target, path);
+ 				return -1;
++			}
+ 		}
+ 	} else {
+ 		map_fd = bpf_obj_get(path);
+-		if (map_fd < 0)
++		if (map_fd < 0) {
++			pr_err("Failed to open perf_event_attr map at %s: %m\n", path);
+ 			return -1;
++		}
+ 	}
+ 
+ 	if (!bperf_attr_map_compatible(map_fd)) {
++		pr_err("%s is not a perf_event_attr map this perf can use\n", path);
+ 		close(map_fd);
+ 		return -1;
+ 
+ 	}
+ 	err = flock(map_fd, LOCK_EX);
+ 	if (err) {
++		pr_err("Failed to lock %s: %m\n", path);
+ 		close(map_fd);
+ 		return -1;
+ 	}
+@@ -550,10 +585,8 @@ static int bperf__load(struct evsel *evsel, struct target *target)
+ 	 * map.
+ 	 */
+ 	attr_map_fd = bperf_lock_attr_map(target);
+-	if (attr_map_fd < 0) {
+-		pr_err("Failed to lock perf_event_attr map\n");
++	if (attr_map_fd < 0)
+ 		return -1;
+-	}
+ 
+ 	err = bpf_map_lookup_elem(attr_map_fd, &evsel->core.attr, &entry);
+ 	if (err) {
+
+---
+base-commit: bb27ddbaee56536fb8df0a24f07b526766dfe131
+change-id: 20261120-bperf-attr-map-err-ec624e923718
+
+Best regards,
+-- 
+Hang Zhengyang <hang.zhengyang1010@gmail.com>
+
+
