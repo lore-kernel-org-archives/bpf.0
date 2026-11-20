@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795211473;
-	b=eqdzLZ6HKoTk9I2YcLP1qLmidJ11kJucI5Zj+Y3wfaALY1quY74wUULG0hszDdVzPlt1
-	 OsU4dTtqOZFERdPS821QySAD+AqeFlb+EQ4wkANPzmMMN9kwVs2Y2c3G4Ntj4hnvwM7+6
-	 yjvlIRj7IRBTPA3A5nT5WHUK3oiInnBO3C8sRtPukVDQ0t8UT6pc1Hzfu6o7kEDI+dfEJ
-	 oIOzDZJqQaE4eOrulamD2M9fb4tlcRAZN1dg7e4LzQ0TDbgy5oKCk+PTqqqhvyar+KUEq
-	 /JMyylnk8n4bYEDg944MJdu7gqd1xECmLgpWuJJFFh/uaQPAtpIRj/KyoldYsluLYwQ==
+	t=1795211476;
+	b=dZJnuuc8KuKTt4ssYyHpQJsnOt/eGAxkWiuRjEY/CtpWKF37Q6gu7+4Z+nF7PIKtbhRL
+	 NW4ht/XvCLkZo0en33yNxzsw2g51abxvYeWWtk5Nxo+mZIiwBxSCR/K72Rye1XUmZl93j
+	 xpazKaXkiVtHDRs/ynoupTVnUs/apAmVL58GSso6taWSFCCAy1IHNpN7tIEOHwErTHsyF
+	 iJ93FuLyQOEhzX4JqxLyUKS+AYN0Dryb+zAGGpeCGvmt7T2oQyRIsZKhpXFuCJ/9qvCuO
+	 99rBfS7Rqmy4Djv3QAtUGqU53ekRs01IUcmfFcSM7f+qu94BRmjIMaoxzf07wQsamOw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795211473;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795211476;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=jy5Ilp/gvBAgPmJdFM5GVvTEs6BssdctfFKdsphxSk4=;
-	b=ZtftOKYde0Mbg1dTiWH3Ugg33W0OEasgOkoEj9Oen9+X3q8DSvOD09L/Ke9V6a3qYIu3
-	 a9lypFA3qzCPoX2Sh3K/1btioKGj7wI/Yq5X89Ox94wot1szyY5a7tyFLTwxfyOp4g1J0
-	 uL8lqbj/pA/WBQK6XS2Xnu6FJcbwgNxAz/cc/M+g15vYX/hCVgH2Al53AzP91w5iu7nu8
-	 KkDiKVySmtH/Bd/lVKsPW5emtkvIHHebZmPP+6m48vk7oNPsaKc38kkij72CZQhQApZfA
-	 sColdu/wj6m9AzKuaLRG0MPIg3qTU2yxqZlbYVxxjrbkw+qVjG+5T2EzlO5YdTMDhcg==
+	bh=MsQ8valteIZ5FAN8NIHPhJwbS+ZgnCghMv51/bhGm/o=;
+	b=o10Vu5Ednul2DiPN5zhtE1y8sSnrF+bIIu1jBBqScuZCZOnfz4qjt2ziUWDlpMWg37Py
+	 xPmyJrxwYrdyaVj+g5XNfzWuMte1WaAbNXmDY3ES7wjnoGTFdvG0c0LXDQNls6nVbHaRW
+	 5kIiRj3mMTOqgoDOrffEpgUYXtPs2ixTd57QxGHXOlEh/sTDG0HGaLtnjE6ShJjA4ZAn1
+	 Si2WQ9oPz6TnwGwwuxcbp6+FgtrGWRV3qbJC0duVZ9Ae4meRJptxjka2JsFHhHfLvaPfO
+	 lHM2jE78LGrVBVATxQ3dYIryvexs2dW5uAckd/Ye3L5CSOy3V/8nbdzF23SvbmI5EJQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gl+i703Z;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iw8vScn+;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B6D3606A6BB
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 21:51:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2C95606A68E
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 21:51:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gl+i703Z
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75E361F000CA;
-	Fri, 20 Nov 2026 21:51:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iw8vScn+
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B9F31F000D1;
+	Fri, 20 Nov 2026 21:51:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795211472;
-	bh=jy5Ilp/gvBAgPmJdFM5GVvTEs6BssdctfFKdsphxSk4=;
+	s=k20260515; t=1795211476;
+	bh=MsQ8valteIZ5FAN8NIHPhJwbS+ZgnCghMv51/bhGm/o=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=gl+i703ZbtU5ZQ+264/+REIOEBSigbVPwe2uKOSIPDJvJHS8BGCwDsNBeQO/sOWPB
-	 nMjAjQIomHuPcOvulhoTwYRI6do2cq0o68jQnuHNncbIDC9cunfiMKKchZl4HrjJ83
-	 Tvf173Df8gvB2KU2SQ4uF2CMAPVyuTDilVdmSCE5I7jvhQBBj48SfRuzXI74qyyAKz
-	 xRbTxuzGvMRmvRotngwacAPHH7Lp1fdrNcDUW2x4W5Ko6LnLax9lwa1LoOOeEOWyYs
-	 2I86z2IpfxeP8S0GRVvwqOnJy8SfymqpnnCZmuZbO3ZEJy03qZkiGKFeBcy2YMwYkC
-	 wqugyTamIQASg==
-Content-Type: multipart/mixed; boundary="===============7009209547116001513=="
+	b=iw8vScn+I8sZLVmFQ+/HIsyjHa/1666nJwTTbd5ww/kMOElMfkqq+3vt0WwvSwZZI
+	 qszfZwTeNIM/a9ZVM0ioM1QSQh5240zugg5D1a7vdRUCxVU7P8m0UTuUUqxk9aePED
+	 wRWEV/GkR6X/rdqrvLP6iywzum9+Oy37lva+Hg3VZX/35V5sleNpcXfrsZVDnQEz/h
+	 3uaAZ0qumtKVE6KiARiEFlP7rym8SIhVe0AnPopseZ86Hr307Waw4zGaH0JXWjXW1D
+	 YVx+kK6OnADeSQkQog1oJNL+Ns9BWZcUCmOGpciRocRIw1INiXh6zIn2vSFgoo40x8
+	 lemctCgTr4FpA==
+Content-Type: multipart/mixed; boundary="===============8017673217945945158=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,67 +49,93 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <a94a293d7edfc5f57d51c1e421fdd056b74f82f877a528ef27910e26954a2cca@mail.kernel.org>
-In-Reply-To: <20261120204959.614908-49-alexei.starovoitov@gmail.com>
-References: <20261120204959.614908-49-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next v2 48/49] selftests/bpf: Test equations
+Message-Id: <5225b8e7bf006b35bdd1e703126228199682afe318c3b0557bcd02c5e964a312@mail.kernel.org>
+In-Reply-To: <20261120204959.614908-45-alexei.starovoitov@gmail.com>
+References: <20261120204959.614908-45-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next v2 44/49] selftests/bpf: Adjust tests to the new log text
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 20 Nov 2026 21:51:11 +0000 (UTC)
+Date: Fri, 20 Nov 2026 21:51:15 +0000 (UTC)
 
---===============7009209547116001513==
+--===============8017673217945945158==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> selftests/bpf: Test equations
+> selftests/bpf: Adjust tests to the new log text
 
-TL;DR: Test issue: in verifier_equations.c, the __msg() on
-past_64k_keeps_range_bad is written inline, so it likely always matches the
-logged source line and may not check the intended packet-range error; use
-BAD_PKT.
+TL;DR:
+- Selftests: LOSES_BITS var_off pattern in verifier_trip_count.c may match an
+  insn before the loop, so several tests could pass even if the verifier
+  regressed
+- Redundant ONCE (duplicate __not_msg) in spill tests
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_equations.c b/tools/testing/selftests/bpf/progs/verifier_equations.c
-> new file mode 100644
-> index 000000000000..e88d6ff0ca8e
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/verifier_equations.c
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_trip_count.c b/tools/testing/selftests/bpf/progs/verifier_trip_count.c
 
 [ ... ]
 
-> +AWAY_AND_BACK(near_pointer_keeps_range, __success, 1000, 7)
-> +AWAY_AND_BACK(near_pointer_keeps_range_bad, BAD_PKT, 1000, 8)
-> +AWAY_AND_BACK(past_64k_keeps_range, __success, 70000, 7)
-> +AWAY_AND_BACK(past_64k_keeps_range_bad, __failure __msg("invalid access to packet"), 70000, 8)
-
-Is the __msg() check for past_64k_keeps_range_bad able to fail?  The header
-comment of this file says:
-
-  The log has the first source line of a macro call.
-  If __msg() is in that line, the log always matches it.
-
-and BAD_PKT exists so that the expected text is not written on that line.
-
-Here "invalid access to packet" is written inline on the AWAY_AND_BACK()
-line.  The rejected load is retried with log_level 1, and verbose_linfo()
-prints that source line into the log:
-
-  ; AWAY_AND_BACK(past_64k_keeps_range_bad, __failure __msg("invalid access to packet"), 70000, 8)
-
-so the strstr() in validate_msgs() always finds the pattern.  The subtest
-then passes for any rejection of the program, for example a failure that
-only shows up with the far 70000 offset, not just the packet range error
-at off 8.
-
-Would using BAD_PKT here, as near_pointer_keeps_range_bad does, make the
-message check real?
-
-  AWAY_AND_BACK(past_64k_keeps_range_bad, BAD_PKT, 70000, 8)
-
-> +AWAY_AND_BACK(before_64k_keeps_range, __success, -70000, 7)
+> +/* No may_goto. __not_msg() searches only between the __msg() before it and the next one. */
+> +#define NO_GUARD	__not_msg("has no trip count")
+> +#define COUNT(n)	NO_GUARD __msg("has trip count " #n "{{$}}") NO_GUARD
+> +#define ANY_COUNT	NO_GUARD __msg("has trip count") NO_GUARD
+> +#define ONCE		NO_GUARD
 
 [ ... ]
+
+> +#define PARTIAL_SPILL_TEST(name, sz, count, expect, first, body)			\
+> +SEC("socket")									\
+> +__success __log_level(2)							\
+> +expect COUNT(count)								\
+
+[ ... ]
+
+> +PARTIAL_SPILL_TEST(partial_spill32_inc, u32, 10, ONCE,
+> +	SPILL32_0, "if r6 & 1 goto 2f;" SPILL32_INC "2:")
+
+Since ONCE is NO_GUARD and COUNT() also begins with NO_GUARD, this expands to
+two identical __not_msg("has no trip count") in a row with no __msg()
+between them.
+
+match_negative_msgs() searches only the first pattern of such a run, so the
+second one is never looked for.  Because both strings are the same, no
+different pattern is skipped here, but ONCE adds nothing over what COUNT()
+already checks.
+
+The same applies to partial_spill16_inc, partial_spill32_inc_in_nested_loop,
+partial_spill32_two_slots and spill32_large_step.  Could ONCE be dropped from
+these rows, or could PARTIAL_SPILL_TEST take the whole expectation?
+
+[ ... ]
+
+> +/* [0, max] that loses bits is in [0, max], and a bit that is 0 stays 0 */
+> +#define LOSES_BITS(max)	NO_GUARD __msg("R7=scalar({{.*}}var_off=(0x0; " #max "))") COUNT(8)
+> +
+> +NOT_LINEAR_TEST(and_clears_a_bit, "r7 &= 255;", "r1 = 1; r1 <<= r6; r1 ^= -1; r7 &= r1;",
+> +		LOSES_BITS(0xff))
+
+Can the R7=scalar(...var_off=(0x0; 0xff)) pattern be matched by an insn that
+runs before the loop?
+
+The pattern has no anchor to a state or an insn, and match_positive_msgs()
+searches from the start of the log.  The init insn ("r7 &= 255;", "r7 &= 64;"
+or "r7 >>= 8;") already prints something like:
+
+  R7=scalar(smin=smin32=0,smax=umax=smax32=umax32=255,var_off=(0x0; 0xff))
+
+AND and RSH call scalar_step_reset(), so no ",step=" suffix follows var_off
+and the closing "))" matches too.
+
+What is left is COUNT(8) and the absence of may_goto, which depend only on
+r6.  If the verifier widened r7 to scalar() at the header, and_clears_a_bit,
+and_on_the_right, and_0_or_64, zext32_or_nothing, rsh_on_one_path and
+rsh_then_and would still pass.
+
+and_64_to_127 right below uses RANGE(), whose "to N: " prefix only appears on
+the state lines of the loop.  Would anchoring LOSES_BITS the same way make it
+check the loop again, e.g.:
+
+  __msg("to {{[0-9]+}}: {{.*}}R7=scalar({{.*}}var_off=(0x0; " #max "))")
 
 
 ---
@@ -117,4 +143,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/44817467639
---===============7009209547116001513==--
+--===============8017673217945945158==--
