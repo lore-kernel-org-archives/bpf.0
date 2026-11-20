@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.181
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795207940;
-	b=AH9PV48B9CIT+o+Pu9pAmyOcF+o/6n0wa70+mZSfIYr7Hn8quo5dOenn32a3K0f2B8uA
-	 cckDok7QDMQEuFBF+VzHH7uP0Nw0ZeRVRER07XUYo1Njm5uncTZDzrcOXxPCxPCzYd8gO
-	 b38LxzL4jemiqKG89NEQemUBsu30JTIPRVE4NTyj3iUmSPLpakaHGmW1N15rRMJfeEAKw
-	 M8P05FpvKlqyv5//P6dW/Q5ixbAZCU7CaRYwJAm5KlTODkDWkXfCKJ2DN3ARgj+JX7+Ln
-	 kE6jiecVLivC6XTRbkO5mzjD5hJb2hkI0POKAs6HrctyQodM8wRTOmhLBA+Jc5be60g==
+	t=1795207943;
+	b=3kMABmKEtT4nVBNj1AVI1pPQ0g23zfgOKV9oHlVDXq/1GotYUlDVy9u461N6pKlxiPpW
+	 TKxZf69WO88E4fJW49r8UJUqaHYmnjnqfDYL8qVogG+DLcw1vQK+Qow5w7xpcyDBE6Doz
+	 QGaK7qdWfWPsVrcfZBsF0ERrEqSJwYdDFegjcqjcT7zkFFVyOdalSXBPnqXvEG8PtK0/2
+	 7FfsdIysUysSHGrWtysfGu4Iq8sNb2F0Y1cT3RjsYsK6A4DcdIqpDL2OmDVC3xAGpaFPG
+	 ukDEXonoBkIC268spaDvXy6pwXiD16cm17/dSgXl6M/a6Mtzp411/ZiZVRMrstBFfoQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795207940;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795207943;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=+asx3XfCeCjBy0YW7q723QFqh2a/s60IK6r+xKuFBqw=;
-	b=1yQaS/xWp/VshBE9wqMfwbkqwHmjCQZdehXwdArBa12Ew2bJYGDRjzRwFKpVqTj9illq
-	 Zd3oKNgcqCZAwzppUXTGv9F6CsKKfZjEYn90luq5v71NDkOWiPciSTUW5ZTTqZ0IlgPAu
-	 5noC6dawSzS3JQlyR91Pl5Zw8D/xInadJqQBOjn+6c7DP5SIyCe5veUcA+ruTsOQwNErV
-	 4jB+ZMmthgPppCpIodaBJKF6dvQeutoMR3rekL+EfBd+4Vi/5rSNs/JLkxX8yY6/ruQC9
-	 etiLNI55asi/6FPhRt8a0IbcHE3yIaxWY5f93dhav/WOGHXXvxYAOfRTvY1NGLZdnxA==
+	bh=kNCqVl2xE7Pm0uURHCrNm8/mdOivYT6MExXo7mKDATY=;
+	b=Wk9wW8zyiYh9hoyVZ2e4uFlgOYMIelMztE5Q6J20F8vAnxQ1wBopbgd+EdCNI1b8/Knc
+	 w72BeVwbIm/AMOrsRJomhEh+sm7akgKoFwsi/rDevT4bahAQpSQY8DCBE3/sKgCDrHsow
+	 mZUeWhffZE0y9ohID3SwDt0Ts4CaN4GgqPFvgbNUFzqJyHlGxB2dGUlqOTpyBkSkXsXbg
+	 wRgHUxM8Z+8h7d48pMOfHYn7RSLMeWbyI4cAmhDWi3fxKRXS1QzBJ8exT6F++XuGmmwt1
+	 E+0sM5GTs2Rme6m+YdZkUXCMzqsDwxs6bUowuFb3rotEQ87cmuTJXyus5LQR/hc9kYg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FBOoyrPO;
-	arc=none smtp.remote-ip=209.85.215.169
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=viTt9r3A;
+	arc=none smtp.remote-ip=209.85.215.181
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DB0860A2635
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 20:52:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6DB0860A2635
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 737C2606A685
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 20:52:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 737C2606A685
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FBOoyrPO
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-cdb75699c7cso566764a12.2
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 12:52:08 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=viTt9r3A
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-cdb2e0062bbso557632a12.1
+        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 12:52:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795207928; x=1795812728; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795207939; x=1795812739; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=+asx3XfCeCjBy0YW7q723QFqh2a/s60IK6r+xKuFBqw=;
-        b=FBOoyrPOy4fG+9JoxIAZgsl6V73Tk9cdP0/sEUak0vQ6ZDBCis5MrMXAtKZhYefEAT
-         x5fIj0On6sOW/tsi0k+y6UXJOSVz0jp02ZYTnZ6w/12HG9vxCL4fZZYnBNAN6eHgHuXg
-         Ne9M/Hy3gXviUxTr9vly8mzyKDjZcLiEglinG8R/o6hdmR7NBWCnRiesNcxweo4MEqbY
-         7RbM5nqGNu40OfSR5EBpqjQZ/XX02uR1Q8eLN0UDFG7lDM1okvEckdVaJ/J+DQl7YydM
-         awo1SmVNPt7YolujLHf5/iqimYs/9kppq7B6lVfH1g/IlRxk/m3fRKwuQ//aM2eBR7gw
-         C3lw==
+        bh=kNCqVl2xE7Pm0uURHCrNm8/mdOivYT6MExXo7mKDATY=;
+        b=viTt9r3AZmqlRTKhoFfaMuittu7VsYuBUbtGy9ZgC6wu3OJgTtWvO+a3DyJY4aHJ6e
+         9KKjWrljFrghAFcVXmD3wWnLj5PYZ0Ubpdq9q+FAqUsR9NdfePekwF92BHrn1fpcOnFY
+         RdRe+uwj4ZVxC70+OtCdJqUotbarw2P6Z95yHsSypPhwDXI+P7ehmZCun3UB6A9xdeJl
+         hpegISczULeC4BPEVQJk0JHKlq10ZlmTSClhHLchaLBk7Z5n2gPWhAsQsKxx2N41cICV
+         HwMr0lDK7xYLRBKkoyuGX2zrjl1+RIgokOEhw/h6x0ACFfBodcuqJXvXFH4QVKKA8FZx
+         LyQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795207928; x=1795812728;
+        d=1e100.net; s=20260707; t=1795207939; x=1795812739;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=+asx3XfCeCjBy0YW7q723QFqh2a/s60IK6r+xKuFBqw=;
-        b=qeSTmEvOaZdHdsmplZ1SvhAH2/F1CsjojsJ+hoaykOtTHl86EAp0YMiYlIQ5Vtoz4l
-         m36GYQl1Bv5Unj3o2LV+sfb7iUoGEtAi/a2OxBfdvjA5mASGbkM0rz1VrhBZmRVOagEs
-         n+iF/IamJwFLhzkrN2UI7rGoUc0cxkQ9ZxSYNEjz1+WF954IywRZJTdXkTZ5Psm9/i8I
-         Ba+1y9PIfxh1xcVR78P6ovyEZWwZqcYZBFUyXtWM8/JNRwPJDqGlSETJGLVpyzr2ceHU
-         sFiCw/sriD+5y/mLBSI3y1bQFj9OcTxCbU52+MhKUAP9xOBUDuXa22u8E2gKmszYDEdc
-         Bi8w==
-X-Gm-Message-State: APuU4Z98sDmSOsHBWGr7at6+VnqmMu3YqgRJR50bu76suDm9Sv6NpCJW
-	jc2Rht2nbIBAeFYD9ZLgbUkMoDMDie8yr8hqg+1S3YenIvtiq/Km+PXy8oZYlA==
-X-Gm-Gg: AZFdTZeMwGs5WFyVt5T7dfSLotu4kHSttiz7Zwle22yuQNDYeqo16UizvM6N+QRaXaJ
-	MfCcmZBIVodB69PsET4dXjSZRMeNcrpfESEXqz22c70O0Q1kvzvp2co2RtjsEoinsZGu8EdYH9P
-	Qu7xXYO4r0W5aFVss5mS2IfLgSLTVkDwdv4DJq/sckorZVKBIntpKZdg1shnfI2RHSWNZ301IIr
-	PZAr4b6FNxlmZRev5C69RwjcIgT/E87quODR5PAfdfZ7p75Kl1TmBt4DLWwd+UkgTQdCqRUWolM
-	8kqYMlyU4StRucb8f+Q9B4UaVazHMUJqx5smTXGwd+qbGE6H2osYjPGIDtuhZmURibISLeyHW4h
-	w70rmZ4bHkmjGgweRhFZbpnb8rsNHK1j9Te0hmYPyunEjN0ZePYelrSNpoJQ9xHcr5wMlJ/aYbL
-	SK+KcxESU8m/J6FjI+ku749Fe/MBwWE/83MwmLUjuscIMWBsXb4+K6mbZzJbS7h0OGxYAgRU4DZ
-	niYBC695YddXjBgGmjIpwxfqd7XGwRxDb4eEcoXu8gcqdMDcyhgO/O4RbzijcUnTnDZvfDU6aYP
-	/Ot2FOZSorDC4cOqdK8Y9E3qqpY1xqkjnVCN+/cr4KGEzabpYoKkJD4QiaXuiQHpKVXGFcPmqHe
-	KMZ8Q2TFOTvveuE90IaOEDnQP51/Mk9UMGfI1/oQ4CQvKFUyx7Z48L7CU7FabcgglYxS0mz52sP
-	XTpxLXrPFbNG3asKTfe6I=
-X-Received: by 2002:a17:90b:3f0e:b0:3b3:fc1f:a5c1 with SMTP id 98e67ed59e1d1-3b41c8fed40mr3854443a91.28.1795207927319;
-        Fri, 20 Nov 2026 12:52:07 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41adcfe16sm5570006a91.17.2026.11.20.12.52.06
+        bh=kNCqVl2xE7Pm0uURHCrNm8/mdOivYT6MExXo7mKDATY=;
+        b=AHdmNxPdI+zcQ6cHFF8IwVmDGfy/5z6aeUstq1vzpVlPYMdcnl5b/JUK85EkcaesV1
+         vcxA41GDHAScRUIs8R6TR0wVEp8ENBW82YusY1/TMV7TYClie3N2CFfTerpXwWWvvmrs
+         7gxmd6xeXloVyTR+e82VEHnUaArzhwN0dhSC7djn6E9lp2t8tROp9s3sU7xWXLeijGvF
+         9cERu9asKux90X+Dcq2/u5gTMbjkWBvI+D5Ecw2yF/s7rtnH9thdQQEIMvqNLXjM1lP2
+         b6XoUuofPKxk94s2hSBF5x+zE32ZDq92Y4kwcO+heg/GDHgMbG8HDULIixzfJv/UYidR
+         ozmg==
+X-Gm-Message-State: APuU4Z/9EIzAfiQN44d2JVWKyEMkB23u5XSF/JXc4+hDSy6+T2Urm1UZ
+	ySrtYeWttudAm39XaKRhrZvTFxDGZq8MX9p8gg6neIHjG/iWyzSVQH7fubqdwA==
+X-Gm-Gg: AZFdTZcc9LyLbsK16ZpTpO/rvGwh/ywRtwLB0zzczpBMq8ERlqHZJFLO9TGFgosGR5+
+	ZPp0jWl7mvgJ3e89vGiJzTcW2dxhCbivW0vrNJ1HxhC1TaldxirCK6mjihmegmPA/9v9X8X3XUU
+	1YwZ2GzRwDKndzn30P8ZIP3M9wljrhtFC/KV2gTAMDugCXaEiyhQPIIR5VCjrGx3x2x46dhFRRz
+	YSLCDUkJcffbebE+j/CXCrnDp3iSVYJWm18Opfmm/MQyAt5B8rrF0GmvE/c5AtIEwt/L+RkroNw
+	tUyIdQPPPi1qcvLqHwBSLk2OSY7XGps042NCo0rhdjfnCEUvoamfStnv40LXbjeq36Tjrp3Zev1
+	7CI6KOnrpitckDQ76Uts543HhDg7txNS20n+2/2cS84scBDmn28EDGcsO4FMLBtlpCht4qT7lHD
+	UyCcHluKlOmTiGo/tKO9BzzHmYfsCbJCf1hmNICHHSotIVGpysQOPgxekG5TuJ8mnBBjfjgTrPa
+	0cxwlgrgwM47zSWniTkHAJgvR9cy/5xQuW5T0MrytXKVmAhXh844lsWmg/fLwCBpvlR6GZ79/pl
+	MUKjyS/ZL2CUutnYgxlPjlTIBYMlBFWr1sOX+OxWNEG7QK/d54MrntydAs8LM/EYcdf28R4/2Xg
+	CDMehz3o+qGP2GUctAKvdxEZ7SfxmEhIvzlQqXM/ori89ooxkXtw1Po2tmWup5C8qeDJanF4+nQ
+	==
+X-Received: by 2002:a17:90b:52cc:b0:3b3:fcd4:36f with SMTP id 98e67ed59e1d1-3b41c966a8cmr4309596a91.43.1795207939042;
+        Fri, 20 Nov 2026 12:52:19 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41ad0b2c4sm5496475a91.4.2026.11.20.12.52.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2026 12:52:06 -0800 (PST)
+        Fri, 20 Nov 2026 12:52:18 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 21/49] bpf: Compare states by join_key, then by value
-Date: Fri, 20 Nov 2026 20:49:29 +0000
-Message-ID: <20261120204959.614908-22-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 23/49] bpf: Find the xregs that an unproven insn depends on
+Date: Fri, 20 Nov 2026 20:49:31 +0000
+Message-ID: <20261120204959.614908-24-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261120204959.614908-1-alexei.starovoitov@gmail.com>
 References: <20261120204959.614908-1-alexei.starovoitov@gmail.com>
@@ -104,843 +104,787 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The compare and the join of two states start with the same question:
-can they be one state at all? Each had its own list of fields. Put the
-fields in one group, the join_key:
+After an error the next pass has to keep some states apart. To keep all
+apart is too costly. Find the xregs that the unproven insn depends on,
+the deps:
 
-  what is held    references, locks, dynptrs, iterators, irq flags
-  where it is     the call chain, the instance of the function
-  which trip      the peeled trip, or the leftover
+  data_deps      their value flows into an operand of the insn
+  control_deps   their value flows into a jump that can skip the insn
 
-The group is compared and hashed as bytes, so it has no padding.
-States with two join_keys never meet. bpf_state_subsumes() looks only
-at values.
+bpf_compute_deps() makes a backward slice. It is the analysis of
+liveness with other seeds:
 
-regsafe() had a case for each type. All say the same: the type and the
-object are equal, and the number is within. bpf_same_type_and_object()
-answers the first part, also for the join.
+                                        data     control
+   1: r6 = ctx->idx                     r1       -
+   2: r7 = 0                            r6       -
+   3: if r6 <= 7 goto 5                 r6       r7
+   4: r7 = -22                          r6       -
+   5: if r7 != 0 goto exit  join point  r6       r7    <- seed
+   6: r3 = map value                    r6       -
+   7: r3 += r6                          r6 r3    -
+   8: r0 = *(u8 *)(r3 + 0)              r3       -     <- seed
 
-Two rules are new. A later patch joins such values:
-- Pointers to the packet are compared by the bytes that are left:
+It follows values through calls, returns and the frames of callers.
+What a helper stores is not known. But the address and the size decide
+which slots it keeps.
+A store through a join of two addresses forgets the slots between them.
+So may_write_mask has these slots too.
+What is held is tracked like an xreg: the insns that acquire or release
+write it. find_control_seeds() finds the jumps with one edge that leads
+to the insn and one edge that does not.
 
-   smin           smax              range
-    |-- offsets ---|-- bytes left ---|
+bpf_flow_is_bb_start() comes in a later patch. It tells where a basic
+block starts.
 
-  Pointers that share an id have to keep their distance. The pairs of
-  ids are in env->pkt_pairs, which grows on demand.
-- stacksafe() knows the bytes that a join makes. An unreadable spill
-  subsumes a written byte, misc subsumes a spilled number, zero
-  subsumes a spilled 0.
-
-This also fixes a leak in the old code. A store of a pointer at a
-variable stack offset makes a number of it. With the mitigations off
-that needed no CAP_PERFMON. Reject it: a join of two offsets makes such
-a store too.
-
-This replaces check_ids(), regs_exact(), refsafe() and stack_arg_safe().
-async_entry_cnt goes away: states of an async callback are joined.
+The masks are a guess. They select where a pass does more work. A wrong
+mask cannot make the verifier accept an unsafe program.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h | 105 +++++++---
- kernel/bpf/states.c          | 362 ++++++++++++++++++++---------------
- kernel/bpf/verifier.c        |  15 +-
- 3 files changed, 292 insertions(+), 190 deletions(-)
+ include/linux/bpf_verifier.h |   5 +
+ kernel/bpf/liveness.c        |   4 +-
+ kernel/bpf/precision.c       | 541 +++++++++++++++++++++++++++++++++++
+ kernel/bpf/precision.h       |  55 ++++
+ kernel/bpf/verifier.c        |   7 +-
+ 5 files changed, 609 insertions(+), 3 deletions(-)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index e7322f0aece..bded3a774be 100644
+index 3b1ff5cb61c..db18d451070 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -395,7 +395,7 @@ struct bpf_reference_state {
- struct bpf_retval_range {
- 	s32 minval;
- 	s32 maxval;
--	bool return_32bit;
-+	u32 return_32bit;	/* no padding, see bpf_same_join_key() */
- };
+@@ -991,6 +991,8 @@ struct bpf_insn_aux_data {
+ 	u32 guard_no_unwind:1; /* it cannot unwind from here, at least sometimes */
+ 	u32 guard_unset_reg:1; /* where it goes a register is read that is not set here */
+ 	u32 non_speculative_first:1; /* speculative states end here, their fixups did not fit */
++	u32 acquires:1; /* a reference or a lock */
++	u32 releases:1;
  
- /*
-@@ -486,6 +486,8 @@ static inline bool bpf_loop_walk_may_give_up(const struct loop_stack_entry *entr
-  */
- struct bpf_func_state {
- 	struct bpf_reg_state regs[MAX_BPF_REG];
-+	/* equal in states that have a join, see bpf_same_join_key() */
-+	struct_group(join_key,
- 	/* index of call instruction that called into this func */
- 	int callsite;
- 	/* stack frame number of this function state from pov of
-@@ -493,32 +495,36 @@ struct bpf_func_state {
- 	 * 0 = main function, 1 = first callee.
- 	 */
- 	u32 frameno;
--	/*
--	 * Unique diagnostic identity for this function invocation. Frame depth is
--	 * reused after returns, while this ID is preserved across state clones.
--	 */
--	u32 diag_frame_id;
--	/* parent_id of the args that are gone when this frame returns */
--	u32 frame_id;
- 	/* subprog number == index within subprog_info
- 	 * zero == main subprog
- 	 */
- 	u32 subprogno;
- 	/*
--	 * The frame of an async callback has the count of frame 0 of the state
--	 * that sets the callback plus one. Frames that differ in it are not joined.
-+	 * What was held at the entry of the frame and is still held. For references these are
-+	 * the first entry_refs of refs[]. What is released and acquired again does not count.
-+	 * This frame must release all the rest.
- 	 */
--	u32 async_entry_cnt;
-+	u32 entry_refs;
-+	u32 entry_rcu_locks;
-+	u32 entry_preempt_locks;
- 	struct bpf_retval_range callback_ret_range;
- 	bool in_callback_fn;
- 	bool in_async_callback_fn;
- 	bool in_exception_callback_fn;
--	bool no_stack_arg_load;
- 	/*
- 	 * The helper invokes this callback under rcu_read_lock(), so the
- 	 * callback and its callees run in an RCU read-side critical section.
- 	 */
- 	bool in_rcu_callback_fn;
-+	/* parent_id of the args that are gone when this frame returns */
-+	u32 frame_id;
-+	);
-+	bool no_stack_arg_load;
-+	/*
-+	 * Unique diagnostic identity for this function invocation. Frame depth is
-+	 * reused after returns, while this ID is preserved across state clones.
-+	 */
-+	u32 diag_frame_id;
- 	/* For callback calling functions that limit number of possible
- 	 * callback executions (e.g. bpf_loop) keeps track of current
- 	 * simulated iteration number.
-@@ -537,14 +543,6 @@ struct bpf_func_state {
- 	 * subprogram (loops never cross subprogram boundaries).
- 	 */
- 	u32 loop_stack_cnt;
--	/*
--	 * How much of what was held when the frame was entered is held ever since. For
--	 * references that is the first entry_refs of refs[]. What is released and taken again
--	 * doesn't count. More than that is for this frame to release.
--	 */
--	u32 entry_refs;
--	u32 entry_rcu_locks;
--	u32 entry_preempt_locks;
+ 	/* below flags are initialized once */
+ 	u32 bb_end:1; /* last instruction of a basic block */
+@@ -1722,6 +1724,7 @@ static inline int bpf_add_cost_and_check(struct bpf_verifier_env *env, u64 cnt,
+ int bpf_flow_prepare(struct bpf_verifier_env *env);
+ void bpf_flow_reset(struct bpf_verifier_env *env);
+ void bpf_flow_free(struct bpf_verifier_env *env);
++bool bpf_flow_is_bb_start(struct bpf_verifier_env *env, int insn_idx);
+ bool bpf_flow_is_point(struct bpf_verifier_env *env, int insn_idx);
+ int bpf_flow_deliver(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
+ 		     int insn_idx, int prev_insn_idx);
+@@ -2417,6 +2420,8 @@ int bpf_compute_loops(struct bpf_verifier_env *env);
+ int bpf_loop_at_index(struct bpf_verifier_env *env, u32 idx);
+ bool bpf_is_nested_loop(struct bpf_verifier_env *env, int inner_header, int outer_header);
  
- 	/* The following fields should be last. See copy_func_state() */
- 	/* The state of the stack. Each element of the array describes BPF_REG_SIZE
-@@ -594,7 +592,7 @@ struct bpf_verifier_state {
- 	/* Acquired reference states */
- 	struct bpf_reference_state *refs;
- 	u32 insn_idx;
--	u32 curframe;
-+	bool speculative;
- 	/* an xreg has no value: unreachable. Only a path-sensitive run drops such a state. */
- 	bool infeasible;
- 	/* an error only in a leftover, see check_held_in_leftover() */
-@@ -603,6 +601,8 @@ struct bpf_verifier_state {
- 	/* the loops that made an xreg of data_deps imprecise, see bpf_loop.suspect_bit */
- 	u64 suspect_loops;
- 
-+	/* equal in states that have a join, see bpf_same_join_key(). No holes. */
-+	struct_group(join_key,
- 	struct_group(held,
- 	void *active_lock_ptr;
- 	u32 acquired_refs;
-@@ -611,9 +611,8 @@ struct bpf_verifier_state {
- 	u32 active_rcu_locks;
- 	u32 active_irq_id;
- 	u32 active_lock_id;
--
--	bool speculative;
- 	);
-+	u32 curframe;
- 	bool in_sleepable;
- 	/* a global function or an extension, and what it calls: exit of frame 0 is not the end */
- 	bool callers_unknown;
-@@ -629,6 +628,9 @@ struct bpf_verifier_state {
- 	 * state at its entry came from, see bpf_flow_call().
- 	 */
- 	u32 flow_entry;
-+	);
-+	/* Not zero in a function that is verified on its own, see bpf_flow_call() */
-+	u32 instance_id;
- 
- 	/* The insn that the state comes from, -1 if no instructions have been executed yet. */
- 	u32 last_insn_idx;
-@@ -683,6 +685,16 @@ static inline bool bpf_stack_args_are_incoming(const struct bpf_func_state *fram
- 	return !frame->frameno && !frame->no_stack_arg_load;
- }
- 
-+/* Stack argument @i of @frame to compare with @other or NULL: incoming ones are not outgoing */
-+static inline const struct bpf_reg_state *
-+bpf_stack_arg(const struct bpf_func_state *frame, const struct bpf_func_state *other, u32 i)
-+{
-+	if (i >= frame->out_stack_arg_cnt ||
-+	    (bpf_stack_args_are_incoming(frame) && !bpf_stack_args_are_incoming(other)))
-+		return NULL;
-+	return &frame->stack_arg_regs[i];
-+}
++int bpf_insn_callee(struct bpf_verifier_env *env, int idx);
 +
- /* Iterate over 'frame', setting 'reg' to either NULL or a spilled register. */
- #define bpf_for_each_spilled_reg(iter, frame, reg, mask)			\
- 	for (iter = 0, reg = bpf_get_spilled_reg(iter, frame, mask);		\
-@@ -1230,6 +1242,16 @@ static inline bool bpf_id_is_xreg(u32 id)
- 	return id & 2;
- }
- 
-+/* pointers to the packet with id @old are those with id @cur moved by @delta */
-+struct bpf_pkt_pair {
-+	u32 old;
-+	u32 cur;
-+	u64 delta;
-+	/* for a join */
-+	u32 type;
-+	u32 id;
-+};
-+
- struct bpf_idmap {
- 	u32 cnt;
- 	struct bpf_id_pair map[BPF_ID_MAP_SIZE];
-@@ -1329,6 +1351,7 @@ struct bpf_verifier_env {
- 	bool path_sensitive;		/* no joins, see run_path_sensitive() */
- 	u64 cost, mem;			/* see bpf_check_limits() */
- 	u64 max_cost, max_mem;
-+	u64 hash_seed;			/* see bpf_hash_join_key() */
- 	u64 pass_max_cost;		/* see bpf_undo_precision() */
- 	bool aborted;			/* a thaw does not take it back */
- 	bool no_mem;			/* a table cannot grow, see bpf_check_limits() */
-@@ -1403,6 +1426,8 @@ struct bpf_verifier_env {
- 	} *callx_edges;
- 	struct bpf_index callx_index;
- 	struct bpf_idmap idmap_scratch;
-+	struct bpf_pkt_pair *pkt_pairs;	/* of the two states that are compared or joined */
-+	u32 pkt_pair_cnt, pkt_pair_cap;
- 	struct {
- 		int *insn_state;
- 		int *insn_stack;
-@@ -1633,9 +1658,15 @@ void bpf_free_kfunc_btf_tab(struct bpf_kfunc_btf_tab *tab);
- 
- 
- int bpf_clean_verifier_state(struct bpf_verifier_env *env, struct bpf_verifier_state *st);
--bool bpf_state_subsumes(struct bpf_verifier_env *env, struct bpf_verifier_state *old,
--			struct bpf_verifier_state *cur);
--
-+bool bpf_add_pkt_pair(struct bpf_verifier_env *env, const struct bpf_pkt_pair *pair);
-+bool bpf_state_subsumes(struct bpf_verifier_env *env, const struct bpf_verifier_state *old,
-+			const struct bpf_verifier_state *cur);
-+bool bpf_scalar_subsumes(const struct bpf_reg_state *old, const struct bpf_reg_state *cur);
-+bool bpf_same_type_and_object(struct bpf_verifier_env *env, const struct bpf_reg_state *a,
-+			      const struct bpf_reg_state *b);
-+bool bpf_same_join_key(const struct bpf_verifier_state *a, const struct bpf_verifier_state *b);
-+u64 bpf_hash64(const void *p, size_t len, u64 hash);
-+u64 bpf_hash_join_key(const struct bpf_verifier_env *env, const struct bpf_verifier_state *st);
- int bpf_renumber_ids(struct bpf_verifier_env *env, struct bpf_verifier_state *st);
- 
- bool bpf_xreg_in_deps(struct bpf_verifier_env *env, const struct bpf_verifier_state *st,
-@@ -1745,7 +1776,7 @@ static inline struct bpf_func_state *bpf_func(struct bpf_verifier_env *env,
- }
- 
- /* Return IP for a given frame in a call stack */
--static inline u32 bpf_frame_insn_idx(struct bpf_verifier_state *st, u32 frame)
-+static inline u32 bpf_frame_insn_idx(const struct bpf_verifier_state *st, u32 frame)
- {
- 	return frame == st->curframe
- 	       ? st->insn_idx
-@@ -2398,12 +2429,25 @@ static inline u8 bpf_signed_opcode(u8 op)
- 	return op == BPF_JGT || op == BPF_JGE ? op + BPF_JSGT - BPF_JGT : op;
- }
- 
-+/* True if pkt_bytes_left() is valid */
-+static inline bool pkt_has_bytes_left(const struct bpf_reg_state *reg)
-+{
-+	return reg->range >= 0 && reg_smin(reg) >= -MAX_PACKET_OFF &&
-+	       reg_smax(reg) <= MAX_PACKET_OFF;
-+}
-+
- /* How many bytes are checked from the start of the packet, wherever the pointer is */
- static inline int pkt_min_len(const struct bpf_reg_state *reg)
- {
- 	return reg->r64.size ? reg->pkt_min_len : max(reg->range, reg->pkt_min_len);
- }
- 
-+/* How many bytes are checked after a pointer to the packet */
-+static inline s64 pkt_bytes_left(const struct bpf_reg_state *reg)
-+{
-+	return reg->range - reg_smax(reg);
-+}
-+
- /* The loop that the frame is in, or NULL */
- static inline struct loop_stack_entry *bpf_top_loop(const struct bpf_func_state *frame)
- {
-@@ -2419,4 +2463,11 @@ static inline u32 bpf_xreg_cnt(const struct bpf_verifier_state *st)
- 	return nr;
- }
- 
-+static inline bool bpf_slot_is_held(const struct bpf_stack_state *slot)
-+{
-+	u8 t = slot->slot_type[BPF_REG_SIZE - 1];
-+
-+	return t == STACK_DYNPTR || t == STACK_ITER || t == STACK_IRQ_FLAG;
-+}
-+
- #endif /* _LINUX_BPF_VERIFIER_H */
-diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index c7630a50e62..fa21a9174f6 100644
---- a/kernel/bpf/states.c
-+++ b/kernel/bpf/states.c
-@@ -4,6 +4,7 @@
- #include <linux/bpf_verifier.h>
- #include <linux/cnum.h>
- #include <linux/filter.h>
-+#include <linux/siphash.h>
- 
- /* check %cur's range satisfies %old's */
- static bool range_within(const struct scalar *old, const struct scalar *cur)
-@@ -39,6 +40,11 @@ bool scalar_subsumes(const struct scalar *old, const struct scalar *cur)
- 	return range_within(old, cur) && tnum_in(old->var_off, cur->var_off);
- }
- 
-+bool bpf_scalar_subsumes(const struct bpf_reg_state *old, const struct bpf_reg_state *cur)
-+{
-+	return scalar_subsumes(scalar_of(old), scalar_of(cur));
-+}
-+
- static void renumber_id(struct bpf_verifier_env *env, u32 *id, u32 new_id)
- {
- 	struct bpf_idmap *map = &env->idmap_scratch;
-@@ -116,50 +122,49 @@ int bpf_renumber_ids(struct bpf_verifier_env *env, struct bpf_verifier_state *st
- 	return -E2BIG;
- }
- 
--/* If in the old state two registers had the same id, then they need to have
-- * the same id in the new state as well.  But that id could be different from
-- * the old state, so we need to track the mapping from old to new ids.
-- * Once we have seen that, say, a reg with old id 5 had new id 9, any subsequent
-- * regs with old id 5 must also have new id 9 for the new state to be safe.  But
-- * regs with a different old id could still have new id 9, we don't care about
-- * that.
-- * So we look through our idmap to see if this old id has been seen before.  If
-- * so, we require the new id to match; otherwise, we add the id pair to the map.
-- */
--static bool check_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
-+bool bpf_add_pkt_pair(struct bpf_verifier_env *env, const struct bpf_pkt_pair *pair)
- {
--	struct bpf_id_pair *map = idmap->map;
--	unsigned int i;
--
--	/* either both IDs should be set or both should be zero */
--	if (!!old_id != !!cur_id)
-+	if (!bpf_grow_array(env, &env->pkt_pairs, &env->pkt_pair_cap, env->pkt_pair_cnt + 1,
-+			    sizeof(*pair)))
- 		return false;
-+	env->pkt_pairs[env->pkt_pair_cnt++] = *pair;
-+	return true;
-+}
- 
--	if (old_id == 0) /* cur_id == 0 as well */
--		return true;
--
--	for (i = 0; i < idmap->cnt; i++) {
--		if (map[i].old == old_id)
--			return map[i].cur == cur_id;
--		if (map[i].cur == cur_id)
--			return false;
--	}
-+/* Packet pointers that share an id in the old state share one in the new state, as far apart */
-+static bool check_pkt_ids(struct bpf_verifier_env *env, const struct bpf_reg_state *rold,
-+			  const struct bpf_reg_state *rcur)
-+{
-+	struct bpf_pkt_pair pair = { rold->id, rcur->id, rcur->r64.base - rold->r64.base };
-+	const struct bpf_pkt_pair *p = env->pkt_pairs;
-+
-+	if (!rold->id)
-+		return !rcur->id;
-+	bpf_add_cost(env, env->pkt_pair_cnt, BPF_COST_SCAN);
-+	for (; p < env->pkt_pairs + env->pkt_pair_cnt; p++)
-+		if (p->old == pair.old)
-+			return p->cur == pair.cur && p->delta == pair.delta;
-+	return bpf_add_pkt_pair(env, &pair);
-+}
- 
--	/* Reached the end of known mappings; haven't seen this id before */
--	if (idmap->cnt < BPF_ID_MAP_SIZE) {
--		map[idmap->cnt].old = old_id;
--		map[idmap->cnt].cur = cur_id;
--		idmap->cnt++;
+ /* equation.c */
+ int bpf_equation_env_init(struct bpf_verifier_env *env);
+ void bpf_equation_env_free(struct bpf_verifier_env *env);
+diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+index 4cc29334a69..7b00e17cab2 100644
+--- a/kernel/bpf/liveness.c
++++ b/kernel/bpf/liveness.c
+@@ -1665,7 +1665,9 @@ static int record_stack_access_off(struct func_instance *instance, const struct
+ 			return err;
+ 	}
+ 	if (info.may_write) {
+-		err = mark_stack_may_write(instance, frame, insn_idx, slot_lo, slot_hi);
++		/* A join of the offsets is a range. A write forgets the slots between them. */
++		err = mark_stack_may_write(instance, frame, insn_idx, slot_lo,
++					   (-arg->off[0] - 1) / STACK_SLOT_SZ);
+ 		if (err)
+ 			return err;
+ 	}
+diff --git a/kernel/bpf/precision.c b/kernel/bpf/precision.c
+index 6aa54c656a7..192f5e966f7 100644
+--- a/kernel/bpf/precision.c
++++ b/kernel/bpf/precision.c
+@@ -1,4 +1,18 @@
+ // SPDX-License-Identifier: GPL-2.0-only
 +/*
-+ * The bytes that are checked for @rold are checked for @rcur. This matters even if the range
-+ * is below the offset: the program can move the pointer back.
-+ */
-+static bool pkt_range_safe(const struct bpf_reg_state *rold, const struct bpf_reg_state *rcur)
-+{
-+	if (pkt_min_len(rold) > pkt_min_len(rcur))
-+		return false;
-+	/* the range tells no more than pkt_min_len() */
-+	if (!rold->range || rold->range == pkt_min_len(rold))
- 		return true;
--	}
--
--	/*
--	 * idmap slots are bounded by the number of registers and stack slots.
--	 * Since referenced dynptrs acquire intermediate references that do
--	 * not live in either, so the map can be exhausted. Since it is unlikely,
--	 * fail the verification by treating the states as not equivalent.
--	 */
--	return false;
-+	/* AT_PKT_END or BEYOND_PKT_END */
-+	if (rold->range < 0 || rcur->range < 0)
-+		return rold->range == rcur->range;
-+	if (pkt_has_bytes_left(rold) && pkt_has_bytes_left(rcur))
-+		return pkt_bytes_left(rold) <= pkt_bytes_left(rcur);
-+	return rold->range <= rcur->range && rold->r64.base == rcur->r64.base &&
-+	       rold->r64.size == rcur->r64.size;
- }
- 
- static void __clean_func_state(struct bpf_verifier_env *env,
-@@ -274,54 +279,48 @@ int bpf_clean_verifier_state(struct bpf_verifier_env *env, struct bpf_verifier_s
- 	return bpf_renumber_ids(env, st);
- }
- 
--static bool regs_exact(const struct bpf_reg_state *rold,
--		       const struct bpf_reg_state *rcur,
--		       struct bpf_idmap *idmap)
-+/*
-+ * Values of one type and object differ only in a number: the value of a scalar, the offset
-+ * of a pointer.
++ * Which states a pass keeps apart. Pass 0 joins all numbers, see bpf_hash_live_types(). After
++ * an error the next pass keeps more apart (trace partitioning), see do_check_all() and
++ * bpf_partition_more(). An insn whose check fails is unproven. A later pass can prove it.
 + *
-+ * Types have to match exactly, including their modifiers (like PTR_MAYBE_NULL, MEM_RDONLY, etc).
-+ * A pointer is not a number: numbers are allowed to leak while pointers are not. A pointer is
-+ * not its MAYBE_NULL variant: a NULL check changes all xregs with the same id.
++ * The deps are the xregs that the unproven insn depends on:
++ * data_deps:    their value flows into an operand of the insn
++ * control_deps: their value flows into a jump that can skip the insn
++ *
++ *	if (r7 == 0) goto L1;		r7 is in control_deps
++ *	r2 = r6;			r6 is in data_deps
++ *	r0 = *(u8 *)(r2 + 0);		unproven insn
++ *  L1:
 + */
-+bool bpf_same_type_and_object(struct bpf_verifier_env *env, const struct bpf_reg_state *a,
-+			      const struct bpf_reg_state *b)
- {
--	return reg_value_equal(rold, rcur) &&
--	       check_ids(rold->id, rcur->id, idmap) &&
--	       check_ids(rold->parent_id, rcur->parent_id, idmap) &&
--	       check_ids(rold->map_uid, rcur->map_uid, idmap);
-+	if (a->type != b->type)
-+		return false;
-+	if (a->type == SCALAR_VALUE || a->type == NOT_INIT || type_is_pkt_pointer(a->type) ||
-+	    base_type(a->type) == PTR_TO_ARENA)
-+		return true;
-+	if (!reg_object_equal(a, b))
-+		return false;
-+	/* Only what an insn can make: see check_stack_access_for_ptr_arithmetic() */
-+	if (bpf_reg_has_range(a) && (a->type != PTR_TO_STACK || env->bypass_spec_v1))
-+		return true;
-+	return scalar_equal(scalar_of(a), scalar_of(b));
- }
+ #include <linux/bpf.h>
+ #include <linux/bpf_verifier.h>
+ #include <linux/filter.h>
+@@ -6,6 +20,53 @@
  
- /* Returns true if (rold safe implies rcur safe) */
--static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
--		    struct bpf_reg_state *rcur, struct bpf_idmap *idmap)
-+static bool regsafe(struct bpf_verifier_env *env, const struct bpf_reg_state *rold,
-+		    const struct bpf_reg_state *rcur)
- {
-+	bpf_add_cost(env, 1, BPF_COST_XREG);
- 	if (rold->type == NOT_INIT)
- 		/* nothing can be done with it */
- 		return true;
--
--	/* Enforce that register types have to match exactly, including their
--	 * modifiers (like PTR_MAYBE_NULL, MEM_RDONLY, etc), as a general
--	 * rule.
--	 *
--	 * One can make a point that using a pointer register as unbounded
--	 * SCALAR would be technically acceptable, but this could lead to
--	 * pointer leaks because scalars are allowed to leak while pointers
--	 * are not. We could make this safe in special cases if root is
--	 * calling us, but it's probably not worth the hassle.
--	 *
--	 * Also, register types that are *not* MAYBE_NULL could technically be
--	 * safe to use as their MAYBE_NULL variants (e.g., PTR_TO_MAP_VALUE
--	 * is safe to be used as PTR_TO_MAP_VALUE_OR_NULL, provided both point
--	 * to the same map).
--	 * However, if the old MAYBE_NULL register then got NULL checked,
--	 * doing so could have affected others with the same id, and we can't
--	 * check for that because we lost the id when we converted to
--	 * a non-MAYBE_NULL variant.
--	 * So, as a general rule we don't allow mixing MAYBE_NULL and
--	 * non-MAYBE_NULL registers as well.
--	 */
--	if (rold->type != rcur->type)
-+	if (!rcur || !bpf_same_type_and_object(env, rold, rcur))
- 		return false;
--
--	switch (base_type(rold->type)) {
--	case PTR_TO_ARENA:
-+	/* The offset is not tracked. */
-+	if (base_type(rold->type) == PTR_TO_ARENA)
- 		return true;
--	default:
--		return regs_exact(rold, rcur, idmap);
--	}
-+	if (type_is_pkt_pointer(rold->type) &&
-+	    (!pkt_range_safe(rold, rcur) || !check_pkt_ids(env, rold, rcur)))
-+		return false;
-+	/* new val must satisfy old val knowledge */
-+	return bpf_scalar_subsumes(rold, rcur);
- }
+ #include "precision.h"
  
- static struct bpf_reg_state unbound_reg;
-@@ -368,7 +367,7 @@ static struct bpf_reg_state *scalar_reg_for_stack(struct bpf_verifier_env *env,
- }
- 
- static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
--		      struct bpf_func_state *cur, struct bpf_idmap *idmap)
-+		      struct bpf_func_state *cur)
- {
- 	int i, spi;
- 
-@@ -383,6 +382,7 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
- 		int im = i % BPF_REG_SIZE;
- 		u8 old_type;
- 
-+		bpf_add_cost(env, 1, BPF_COST_SCAN);
- 		spi = i / BPF_REG_SIZE;
- 		old_slot = bpf_stack_slot(old, spi);
- 		old_type = old_slot->slot_type[im];
-@@ -391,6 +391,13 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
- 		if (old_type == STACK_INVALID || old_type == STACK_POISON)
- 			continue;
- 
-+		/* it can be filled into a register that is unreadable */
-+		if (old_type == STACK_SPILL && old_slot->spilled_ptr.type == NOT_INIT &&
-+		    (env->allow_uninit_stack ||
-+		     (cur_slot && cur_slot->slot_type[im] != STACK_INVALID &&
-+		      cur_slot->slot_type[im] != STACK_POISON)))
-+			continue;
-+
- 		if (env->allow_uninit_stack && old_type == STACK_MISC)
- 			continue;
- 
-@@ -416,7 +423,7 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
- 			old_reg = scalar_reg_for_stack(env, old_slot, im);
- 			cur_reg = scalar_reg_for_stack(env, cur_slot, im);
- 			if (old_reg && cur_reg) {
--				if (!regsafe(env, old_reg, cur_reg, idmap))
-+				if (!regsafe(env, old_reg, cur_reg))
- 					return false;
- 				i += (im == 0 ? BPF_REG_SIZE - 1 : 3);
- 				continue;
-@@ -427,7 +434,12 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
- 		 * it will be safe with zero-initialized stack.
- 		 * The opposite is not true
- 		 */
--		if (old_type == STACK_MISC && cur_slot->slot_type[im] == STACK_ZERO)
-+		if (old_type == STACK_MISC &&
-+		    (cur_slot->slot_type[im] == STACK_ZERO ||
-+		     is_spilled_scalar_after(cur_slot, im)))
-+			continue;
-+		if (old_type == STACK_ZERO && is_spilled_scalar_after(cur_slot, im) &&
-+		    bpf_register_is_null(&cur_slot->spilled_ptr))
- 			continue;
- 		if (old_type != cur_slot->slot_type[im])
- 			/*
-@@ -451,34 +463,13 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
- 			 * (bpf_reg_state) {.type = PTR_TO_STACK, .off = -16}
- 			 * such verifier states are not equivalent.
- 			 */
--			if (!regsafe(env, &old_slot->spilled_ptr, &cur_slot->spilled_ptr, idmap))
-+			if (!regsafe(env, &old_slot->spilled_ptr, &cur_slot->spilled_ptr))
- 				return false;
- 			break;
- 		case STACK_DYNPTR:
--			old_reg = &old_slot->spilled_ptr;
--			cur_reg = &cur_slot->spilled_ptr;
--			if (old_reg->dynptr.type != cur_reg->dynptr.type ||
--			    old_reg->dynptr.first_slot != cur_reg->dynptr.first_slot ||
--			    !check_ids(old_reg->id, cur_reg->id, idmap) ||
--			    !check_ids(old_reg->parent_id, cur_reg->parent_id, idmap))
--				return false;
--			break;
- 		case STACK_ITER:
--			old_reg = &old_slot->spilled_ptr;
--			cur_reg = &cur_slot->spilled_ptr;
--			if (old_reg->type != cur_reg->type ||
--			    old_reg->iter.btf != cur_reg->iter.btf ||
--			    old_reg->iter.btf_id != cur_reg->iter.btf_id ||
--			    old_reg->iter.state != cur_reg->iter.state ||
--			    old_reg->iter.loops != cur_reg->iter.loops ||
--			    !check_ids(old_reg->id, cur_reg->id, idmap))
--				return false;
--			break;
- 		case STACK_IRQ_FLAG:
--			old_reg = &old_slot->spilled_ptr;
--			cur_reg = &cur_slot->spilled_ptr;
--			if (!check_ids(old_reg->id, cur_reg->id, idmap) ||
--			    old_reg->irq.kfunc_class != cur_reg->irq.kfunc_class)
-+			if (!reg_object_equal(&old_slot->spilled_ptr, &cur_slot->spilled_ptr))
- 				return false;
- 			break;
- 		case STACK_MISC:
-@@ -494,6 +485,104 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
- 	return true;
- }
- 
-+static const struct bpf_stack_state *held_slot(const struct bpf_func_state *f, u32 i)
++static unsigned long *mask_at(struct bpf_verifier_env *env, unsigned long *masks, u32 func, u32 idx)
 +{
-+	return i < bpf_stack_nr_slots(f) && bpf_slot_is_held(bpf_stack_slot(f, i)) ?
-+	       bpf_stack_slot(f, i) : NULL;
++	const struct bpf_precision *prec = env->precision;
++
++	return masks + prec->func[func].first +
++	       (size_t)(idx - env->subprog_info[func].start) * prec->func[func].words;
 +}
 +
-+static bool same_refs(const struct bpf_verifier_state *a, const struct bpf_verifier_state *b)
++/* @masks for frame @fr of @st. A caller needs what the callee reads and what follows the call. */
++u32 bpf_frame_mask(struct bpf_verifier_env *env, unsigned long *masks,
++		   const struct bpf_verifier_state *st, u32 fr, unsigned long *out)
++{
++	u32 func = st->frame[fr]->subprogno, words = env->precision->func[func].words, i;
++	const unsigned long *m = mask_at(env, masks, func, bpf_frame_insn_idx(st, fr));
++
++	for (i = 0; i < words; i++)
++		out[i] = m[i] | (fr < st->curframe ? m[words + i] : 0);
++	return words * BITS_PER_LONG;
++}
++
++bool bpf_xreg_in_deps(struct bpf_verifier_env *env, const struct bpf_verifier_state *st,
++		      u32 fr, u32 xregno)
++{
++	unsigned long data_deps[XREG_WORDS], control_deps[XREG_WORDS];
++
++	if (!env->precision->data_deps ||
++	    xregno >= bpf_frame_mask(env, env->precision->data_deps, st, fr, data_deps))
++		return false;
++	bpf_frame_mask(env, env->precision->control_deps, st, fr, control_deps);
++	return test_bit(xregno, data_deps) || test_bit(xregno, control_deps);
++}
++
++/* The function that the insn at @idx calls, or hands to a helper. -1 if that is not known. */
++int bpf_insn_callee(struct bpf_verifier_env *env, int idx)
++{
++	struct bpf_insn_aux_data *aux = &env->insn_aux_data[idx];
++	struct bpf_insn *insn = &env->prog->insnsi[idx];
++	u16 funcs = aux->const_reg_subprog_mask & aux->use_regs;
++
++	if (bpf_pseudo_call(insn))
++		return bpf_find_subprog(env, idx + insn->imm + 1);
++	if (hweight16(funcs) == 1 && (aux->calls_callback ||
++				      bpf_is_async_callback_calling_insn(insn)))
++		return aux->const_reg_vals[__ffs(funcs)];
++	return -1;
++}
++
+ /* The insn at @idx is unproven because it reads a value from another unproven insn */
+ void bpf_note_reads_from_unproven(struct bpf_verifier_env *env, u32 idx)
+ {
+@@ -140,3 +201,483 @@ bool bpf_same_insns_unproven(struct bpf_verifier_env *env)
+ 				test_bit(env->insn_idx, prec->last_unproven_insns) &&
+ 				!test_bit(env->insn_idx, prec->this_pass.unproven_insns));
+ }
++
++/* What callers need of a function: the registers that it returns, and */
++#define RET_REGS	(BIT(BPF_REG_0) | BIT(BPF_REG_2))
++#define RET_HELD	BIT(4)	/* what is held */
++#define RET_ACQUIRES	BIT(5)	/* it writes that */
++#define RET_STORES	BIT(6)	/* what it stores to their frames */
++#define RET_LOADS	BIT(7)	/* it needs what it loads from there */
++
++/*
++ * What is held is tracked like an xreg, with one bit per insn in held_insns. It includes the way
++ * in which a function was left. It is in the join_key, so only the insns that write it matter.
++ */
++static bool reads_held(struct bpf_verifier_env *env, int idx)
++{
++	struct bpf_insn_aux_data *aux = &env->insn_aux_data[idx];
++	struct bpf_insn *insn = &env->prog->insnsi[idx];
++	u8 class = BPF_CLASS(insn->code);
++
++	if (bpf_is_unwind_goto(insn) || bpf_pseudo_call(insn) || bpf_is_callx(insn))
++		return true;
++	/* a loop header, ld_abs, a call, an exit */
++	return test_bit(idx, env->precision->last_pass.unproven_insns) &&
++	       (aux->loop || class == BPF_LD ||
++		(class == BPF_JMP && !bpf_insn_is_cond_jump(insn->code)));
++}
++
++static bool has_slots(const unsigned long *mask, const unsigned long *slots, u32 bits)
 +{
 +	u32 i;
 +
-+	for (i = 0; i < a->acquired_refs; i++)
-+		if (a->refs[i].type != b->refs[i].type || a->refs[i].id != b->refs[i].id ||
-+		    memcmp(&a->refs[i].ptr, &b->refs[i].ptr, sizeof(u64)))
-+			return false;
-+	return true;
++	for (i = 0; i < BITS_TO_LONGS(bits); i++)
++		if (mask[i] & bpf_slots_to_xreg_word(slots, i))
++			return true;
++	return false;
 +}
 +
-+/*
-+ * The join_key of a state is what has no join:
-+ * - what is held: references, locks, dynptrs, iterators, irq flags
-+ * - the call chain and the instance
-+ * - the peeled trip
-+ */
-+bool bpf_same_join_key(const struct bpf_verifier_state *a, const struct bpf_verifier_state *b)
++/* The call at @idx needs @needs of function @t. Returns the arguments that @t needs. */
++static u16 compute_call_deps(struct bpf_verifier_env *env, unsigned long *masks, u8 *ret, int t,
++			     u8 needs, bool *held, bool *changed)
 +{
-+	const struct bpf_stack_state *sa, *sb;
-+	const struct loop_stack_entry *ea, *eb;
-+	const struct bpf_func_state *fa, *fb;
-+	u32 fr, i;
++	u32 start = env->subprog_info[t].start;
 +
-+	if (memcmp(&a->join_key, &b->join_key, sizeof(a->join_key)) ||
-+	    a->instance_id != b->instance_id || !same_refs(a, b))
-+		return false;
-+	for (fr = 0; fr <= a->curframe; fr++) {
-+		fa = a->frame[fr];
-+		fb = b->frame[fr];
-+		if (memcmp(&fa->join_key, &fb->join_key, sizeof(fa->join_key)) ||
-+		    fa->loop_stack_cnt != fb->loop_stack_cnt)
-+			return false;
-+		for (i = 0; i < fa->loop_stack_cnt; i++) {
-+			ea = &fa->loop_stack[i];
-+			eb = &fb->loop_stack[i];
-+			if (ea->loop != eb->loop || ea->peeled != eb->peeled ||
-+			    (ea->peeled && ea->trip != eb->trip))
-+				return false;
-+		}
-+		for (i = 0; i < max(bpf_stack_nr_slots(fa), bpf_stack_nr_slots(fb)); i++) {
-+			sa = held_slot(fa, i);
-+			sb = held_slot(fb, i);
-+			if (!sa != !sb || (sa && (sa->slot_type[0] != sb->slot_type[0] ||
-+						  !reg_object_equal(&sa->spilled_ptr,
-+								    &sb->spilled_ptr))))
-+				return false;
++	*changed |= needs & ~ret[t];
++	ret[t] |= needs;
++	*held |= test_bit(start, env->precision->held_insns);
++	return *mask_at(env, masks, t, start) &
++	       (GENMASK(BPF_REG_5, BPF_REG_1) | BIT(XREG_STACK_ARGS));
++}
++
++/* What the insn at @idx of function @s needs before it. @in has what is needed after it. */
++static bool compute_insn_deps(struct bpf_verifier_env *env, unsigned long *masks, u8 *ret, int s,
++			      int idx, bool is_seed, unsigned long *in, bool held)
++{
++	struct bpf_insn_aux_data *aux = &env->insn_aux_data[idx];
++	struct bpf_insn *insn = &env->prog->insnsi[idx];
++	u32 bits = env->precision->func[s].words * BITS_PER_LONG;
++	u16 use = aux->use_regs, def = aux->def_regs, args = 0;
++	bool changed = false, stores, reads, loads, call, held_after;
++	struct taken_funcs *taken = &env->precision->taken;
++	u8 class = BPF_CLASS(insn->code), needs;
++	int t, callee;
++
++	call = class == BPF_JMP && BPF_OP(insn->code) == BPF_CALL;
++	/* the next call of the callback reads what this one stores */
++	if (aux->calls_callback) {
++		bitmap_or(in, in, mask_at(env, masks, s, idx), bits);
++		held |= test_bit(idx, env->precision->held_insns);
++	}
++	if (insn->code == (BPF_JMP | BPF_EXIT) || bpf_is_throw_kfunc(insn))
++		held = ret[s] & RET_HELD;
++	held_after = held |= is_seed && reads_held(env, idx);
++	stores = has_slots(in, aux->may_write_mask, bits) ||
++		 (aux->writes_outer && (ret[s] & RET_STORES)) ||
++		 ((is_stack_arg_st(insn) || is_stack_arg_stx(insn)) &&
++		  test_bit(XREG_STACK_ARGS, in));
++	needs = (in[0] & def & RET_REGS) | (stores ? RET_STORES : 0) | (held ? RET_HELD : 0);
++	if ((in[0] & def & XREG_REGS) || stores)
++		__set_bit(idx, env->precision->controlled_insns);
++	/* what a helper stores is not known, whatever it reads */
++	reads = (in[0] & def & XREG_REGS) || (stores && !call);
++	loads = reads || test_bit(idx, env->precision->bad_value_insns) ||
++		!(test_bit(idx, env->precision->last_pass.unproven_insns) ||
++		  test_bit(idx, env->precision->last_pass.bad_read_insns));
++	if (!loads && class == BPF_STX)
++		use = BIT(insn->dst_reg);
++	reads |= is_seed;
++	in[0] &= ~(unsigned long)(def & XREG_REGS);
++	for (t = 0; t < BITS_TO_LONGS(bits); t++)
++		in[t] &= bpf_slots_to_xreg_word(aux->live_stack_before, t) |
++			 (t ? 0 : BIT(MAX_BPF_EXT_REG) - 1);
++	/* the address and the size decide if a helper keeps a slot */
++	if (call && (has_slots(in, aux->may_write_mask, bits) ||
++		     (aux->writes_outer && (ret[s] & RET_STORES))))
++		in[0] |= use & (aux->stack_ptrs | aux->stack_ptrs << 1);
++
++	callee = bpf_insn_callee(env, idx);
++	if (callee > 0 && bpf_subprog_is_global(env, callee))
++		callee = -1;
++	if (callee > 0 && bpf_pseudo_call(insn)) {
++		args = compute_call_deps(env, masks, ret, callee, needs, &held, &changed);
++		use = env->insn_aux_data[env->subprog_info[callee].start].live_regs_before;
++		reads = is_seed;
++		needs = ret[callee];
++	} else if (callee > 0) {
++		reads |= compute_call_deps(env, masks, ret, callee, needs & ~RET_REGS, &held,
++					   &changed);
++		needs = ret[callee];
++	} else if (bpf_is_callx(insn) || aux->calls_callback) {
++		changed |= needs & ~taken->needs;
++		taken->needs |= needs;
++		held |= taken->held;
++		args = taken->args;
++		needs = taken->ret;
++		reads |= args;
++	} else {
++		needs = 0;
++	}
++	if (insn->code == (BPF_JMP | BPF_EXIT))
++		args = ret[s] & RET_REGS;
++	if (held_after && (aux->acquires || aux->releases || (needs & RET_ACQUIRES) ||
++			   bpf_is_unwind_exit(insn) || bpf_is_throw_kfunc(insn))) {
++		__set_bit(idx, env->precision->last_pass.call_insns);
++		reads |= aux->releases;
++		changed |= !(ret[s] & RET_ACQUIRES);
++		ret[s] |= RET_ACQUIRES;
++	}
++	if (held)
++		changed |= !__test_and_set_bit(idx, env->precision->held_insns);
++	in[0] |= args | (reads ? use & XREG_REGS : 0);
++	if (reads && (call || is_stack_arg_ldx(insn)))
++		__set_bit(XREG_STACK_ARGS, in);
++	if ((reads && loads) || (needs & RET_LOADS)) {
++		bpf_add_slots(in, aux->may_read_mask, bits);
++		/* the callee reads what it wrote */
++		if (needs & RET_LOADS)
++			bpf_add_slots(in, aux->may_write_mask, bits);
++		if ((aux->reads_outer || (call && aux->writes_outer)) && !(ret[s] & RET_LOADS)) {
++			ret[s] |= RET_LOADS;
++			changed = true;
 +		}
 +	}
-+	return true;
-+}
-+
-+u64 bpf_hash64(const void *p, size_t len, u64 hash)
-+{
-+	siphash_key_t key = {{ hash }};
-+
-+	return siphash(p, len, &key);
++	return changed;
 +}
 +
 +/*
-+ * The hash of the join_key and of the insn. The seed is random, so a program cannot select
-+ * states that collide. Only a collision can change a result.
++ * A backward slice: the same backward analysis as liveness, from other seeds.
++ *
++ *  liveness:      start from the reads of ALL insns
++ *  data_deps:     start from the reads of the unproven insn
++ *  control_deps:  start from the reads of the jumps that can skip the unproven insn
++ *
++ *                                        data     control
++ *  1: r6 = ctx->idx                      r1       -
++ *  2: r7 = 0                             r6       -
++ *  3: if r6 <= 7 goto 5                  r6       r7
++ *  4: r7 = -22                           r6       -
++ *  5: r8 = 1               join point    r6       r7
++ *  6: if r9 == 0 goto 8                  r6       r7 r8
++ *  7: r8 = 2                             r6       r7
++ *  8: if r8 == 3 goto exit join point    r6       r7 r8    <- seed of control_deps: r8
++ *  9: if r7 != 0 goto exit               r6       r7       <- seed of control_deps: r7
++ * 10: r2 = r6                            r6       -
++ * 11: r2 <<= 3                           r2       -
++ * 12: r3 = map value                     r2       -
++ * 13: r3 += r2                           r2 r3    -
++ * 14: r0 = *(u64 *)(r3 + 0)              r3       -        <- seed of data_deps: r3
++ *
++ * controlled_insns gets the insns that write an xreg of @masks, for add_transitive_deps().
 + */
-+u64 bpf_hash_join_key(const struct bpf_verifier_env *env, const struct bpf_verifier_state *st)
++int bpf_compute_deps(struct bpf_verifier_env *env, unsigned long *masks,
++		     const unsigned long *seed_insns)
 +{
-+	u64 hash = bpf_hash64(&st->join_key, sizeof(st->join_key), env->hash_seed +
-+			      ((u64)st->instance_id << 32 | st->insn_idx));
-+	u32 fr, i, trip;
-+	const struct bpf_stack_state *slot;
-+	const struct loop_stack_entry *e;
-+	const struct bpf_func_state *f;
++	struct bpf_subprog_info *sub = env->subprog_info;
++	struct bpf_precision *prec = env->precision;
++	unsigned long in[XREG_WORDS], *old;
++	int i, k, s, t, idx, err = 0;
++	struct bpf_iarray *succ;
++	bool changed = true, held;
++	u32 bits;
++	u8 *ret;
 +
-+	for (i = 0; i < st->acquired_refs; i++)
-+		hash = bpf_hash64(&st->refs[i].ptr, sizeof(u64), hash + st->refs[i].type);
-+	for (fr = 0; fr <= st->curframe; fr++) {
-+		f = st->frame[fr];
-+		hash = bpf_hash64(&f->join_key, sizeof(f->join_key), hash);
-+		for (i = 0, e = f->loop_stack; i < f->loop_stack_cnt; i++, e++) {
-+			trip = e->peeled ? e->trip : -1;
-+			hash = bpf_hash64(&trip, sizeof(trip), hash);
-+		}
-+		for (i = 0; i < bpf_stack_nr_slots(f); i++) {
-+			slot = held_slot(f, i);
-+			if (!slot)
++	ret = kvcalloc(env->subprog_cnt, sizeof(*ret), BPF_VERIFIER_GFP);
++	if (!ret)
++		return -ENOMEM;
++	memset(masks, 0, prec->words * sizeof(long));
++	bitmap_zero(prec->held_insns, env->prog->len);
++	bitmap_zero(prec->controlled_insns, env->prog->len);
++	prec->taken = (struct taken_funcs){};
++	while (changed) {
++		changed = false;
++		bpf_add_cost(env, env->cfg.gotox_edges, BPF_COST_COPY);
++		err = bpf_add_cost_and_check(env, prec->words + env->prog->len, BPF_COST_XREG);
++		if (err)
++			break;
++		/* callees first */
++		for (k = 0; k < env->subprog_cnt; k++) {
++			s = env->subprog_topo_order[k];
++			bits = prec->func[s].words * BITS_PER_LONG;
++			for (i = sub[s].postorder_start; i <= sub[s + 1].postorder_start; i++) {
++				/* it can be dead code, see push_unwind_exit() */
++				idx = i < sub[s + 1].postorder_start ? env->cfg.insn_postorder[i] :
++				      sub[s].bail_insn;
++				if (idx < 0)
++					break;
++				bitmap_zero(in, bits);
++				succ = bpf_insn_successors(env, idx);
++				held = false;
++				iarray_for_each(t, succ) {
++					bitmap_or(in, in, mask_at(env, masks, s, t), bits);
++					held |= test_bit(t, prec->held_insns);
++				}
++				t = bpf_head_guard_target(env, idx);
++				if (t >= 0)
++					bitmap_or(in, in, mask_at(env, masks, s, t), bits);
++				changed |= compute_insn_deps(env, masks, ret, s, idx,
++							     test_bit(idx, seed_insns), in, held);
++				if (idx == prec->loop_carried_at) {
++					bitmap_or(in, in, prec->loop_carried, bits);
++					changed |= !(ret[s] & RET_STORES);
++					ret[s] |= RET_STORES;
++				}
++				old = mask_at(env, masks, s, idx);
++				changed |= !bitmap_subset(in, old, bits);
++				bitmap_or(old, old, in, bits);
++			}
++			if (!sub[s].addr_taken)
 +				continue;
-+			hash = bpf_hash64(&slot->spilled_ptr,
-+					  offsetof(struct bpf_reg_state, var_off), hash + i);
++			prec->taken.args |= compute_call_deps(env, masks, ret, s, prec->taken.needs,
++							      &prec->taken.held, &changed);
++			prec->taken.ret |= ret[s];
 +		}
 +	}
-+	return hash;
++	kvfree(ret);
++	return err;
 +}
 +
- /* compare two verifier states
-  *
-  * The state that gets to an insn doesn't have to be looked at when there is
-@@ -520,51 +609,25 @@ static bool func_states_equal(struct bpf_verifier_env *env, struct bpf_func_stat
- 	if (!old->no_stack_arg_load && cur->no_stack_arg_load)
- 		return false;
++struct block {
++	u32 first, last;
++	/* @last leaves that loop to @out. It is the outermost one, 0 if none. */
++	u32 header, out;
++};
++
++/* The basic blocks of @sub in post order */
++static u32 find_blocks(struct bpf_verifier_env *env, struct bpf_subprog_info *sub, u32 *first,
++		       struct block *blocks)
++{
++	struct bpf_insn_aux_data *aux = env->insn_aux_data;
++	struct block *b = blocks;
++	struct bpf_iarray *succ;
++	int i, n, s, t, h;
++
++	for (i = sub->start; i < sub[1].start; i++)
++		first[i] = bpf_flow_is_bb_start(env, i) ? i : first[i - 1];
++	for (i = sub->postorder_start; i < sub[1].postorder_start; i++) {
++		n = env->cfg.insn_postorder[i];
++		succ = bpf_insn_successors(env, n);
++		if (succ->cnt == 1 && !bpf_flow_is_bb_start(env, succ->items[0]))
++			continue;
++		*b = (struct block){ first[n], n };
++		iarray_for_each(s, succ) {
++			t = bpf_loop_at_index(env, s);
++			for (h = bpf_loop_at_index(env, n);
++			     h >= 0 && h != t && !bpf_is_nested_loop(env, t, h);
++			     h = aux[h].loop_header) {
++				b->header = h;
++				b->out = s;
++			}
++		}
++		b++;
++	}
++	return b - blocks;
++}
++
++static bool may_not_return(struct bpf_verifier_env *env, struct bpf_subprog_info *sub, u32 idx)
++{
++	struct bpf_insn *insn = &env->prog->insnsi[idx];
++
++	if (bpf_pseudo_call(insn))
++		return env->subprog_info[bpf_insn_callee(env, idx)].might_throw;
++	return bpf_is_callx(insn) && sub->might_throw;
++}
++
++/*
++ * The jumps that can skip one of controlled_insns: one edge leads to the insn, another does not.
++ * A back edge leads to nothing, so 'continue' skips. The edge that stays in a loop leads to all
++ * that the header leads to, so 'break' skips too. A call that throws skips too.
++ */
++static int find_control_seeds(struct bpf_verifier_env *env)
++{
++	struct bpf_subprog_info *sub = NULL;
++	struct bpf_precision *prec = env->precision;
++	u32 len = env->prog->len, idx = 0, cnt = 0, s, bit, *first;
++	struct block *blocks, *b;
++	struct bpf_iarray *succ;
++	u64 *leads, any, all;
++	int err = 0;
++
++	leads = kvmalloc_array(len, sizeof(*leads) + sizeof(*blocks) + sizeof(*first),
++			       BPF_VERIFIER_GFP);
++	if (!leads)
++		return -ENOMEM;
++	blocks = (void *)(leads + len);
++	first = (void *)(blocks + len);
++	bitmap_andnot(prec->controlled_insns, prec->controlled_insns,
++		      prec->controlled_insns_done, len);
++	bitmap_or(prec->controlled_insns_done, prec->controlled_insns_done,
++		  prec->controlled_insns, len);
++	while (!err && (idx = find_next_bit(prec->controlled_insns, len, idx)) < len) {
++		if (!sub || idx >= sub[1].start) {
++			sub = bpf_find_containing_subprog(env, idx);
++			cnt = find_blocks(env, sub, first, blocks);
++			bpf_add_cost(env, sub[1].start - sub->start, BPF_COST_XREG);
++		}
++		for (b = blocks; b < blocks + cnt; b++)
++			leads[b->first] = 0;
++		for (bit = 0; bit < 64 && idx < sub[1].start; bit++) {
++			leads[first[idx]] = BIT_ULL(bit);
++			/* the other insns of the basic block have the same control seeds */
++			while (++idx < sub[1].start && !bpf_flow_is_bb_start(env, idx))
++				;
++			idx = find_next_bit(prec->controlled_insns, len, idx);
++		}
++		for (b = blocks; b < blocks + cnt; b++) {
++			if (bpf_is_throw_kfunc(&env->prog->insnsi[b->last]))
++				continue;
++			succ = bpf_insn_successors(env, b->last);
++			bpf_add_cost(env, succ->cnt, BPF_COST_COPY);
++			any = 0;
++			all = U64_MAX;
++			iarray_for_each(s, succ) {
++				any |= leads[s];
++				all &= leads[s];
++			}
++			if (succ->cnt > 1 ? any != all : any && may_not_return(env, sub, b->last))
++				__set_bit(b->last, prec->control_seeds);
++			leads[b->first] |= any;
++		}
++		for (b = blocks; b < blocks + cnt; b++)
++			if (b->out && (leads[b->header] & ~leads[b->out]))
++				__set_bit(b->last, prec->control_seeds);
++		err = bpf_add_cost_and_check(env, cnt, BPF_COST_XREG);
++	}
++	kvfree(leads);
++	return err;
++}
++
++/* The calls that lead to the unproven insns */
++static int find_calls_to_unproven(struct bpf_verifier_env *env)
++{
++	struct bpf_subprog_info *sub = env->subprog_info;
++	struct precision_per_pass *last_pass = &env->precision->last_pass;
++	struct bpf_insn_aux_data *aux;
++	bool taken = false, changed = true;
++	int i, k, n, s, err = 0;
++
++	while (changed && !err) {
++		changed = false;
++		for_each_set_bit(s, last_pass->unproven_funcs, env->subprog_cnt)
++			taken |= sub[s].addr_taken;
++		/* callees first. callx and a cycle of calls need more rounds. */
++		for (k = 0; k < env->subprog_cnt; k++) {
++			n = env->subprog_topo_order[k];
++			for (i = sub[n].start; i < sub[n + 1].start; i++) {
++				aux = &env->insn_aux_data[i];
++				s = bpf_insn_callee(env, i);
++				if (!aux->seen || !bpf_calls_function(env, i) ||
++				    !(s > 0 ? test_bit(s, last_pass->unproven_funcs) : taken))
++					continue;
++				__set_bit(i, last_pass->call_insns);
++				changed |= !__test_and_set_bit(n, last_pass->unproven_funcs);
++			}
++		}
++		err = bpf_add_cost_and_check(env, env->prog->len, BPF_COST_XREG);
++	}
++	return err;
++}
++
++static bool add_masks(struct bpf_precision *prec, unsigned long *to, const unsigned long *from)
++{
++	bool more = false;
++	size_t i;
++
++	for (i = 0; i < prec->words; i++) {
++		more |= from[i] & ~to[i];
++		to[i] |= from[i];
++	}
++	return more;
++}
++
++/* The control_deps of controlled_insns. Returns 1 if there is more in the deps. */
++static int add_control_deps(struct bpf_verifier_env *env)
++{
++	struct bpf_precision *prec = env->precision;
++	int err = find_control_seeds(env) ?:
++		  bpf_compute_deps(env, prec->new_control_deps, prec->control_seeds);
++	bool more;
++
++	if (err)
++		return err;
++	more = add_masks(prec, prec->data_deps, prec->new_data_deps);
++	more |= add_masks(prec, prec->control_deps, prec->new_control_deps);
++	more |= add_masks(prec, prec->type_apart, prec->new_data_deps);
++	return more;
++}
++
++static int compute_deps_of_unproven(struct bpf_verifier_env *env)
++{
++	struct bpf_precision *prec = env->precision;
++	u32 len = env->prog->len, i;
++	int err;
++
++	err = bpf_compute_deps(env, prec->new_data_deps, prec->last_pass.unproven_insns);
++	if (err)
++		return err;
++	/* the insns that write data_deps wait for add_transitive_deps() */
++	bitmap_copy(prec->def_insns, prec->controlled_insns, len);
++	bitmap_zero(prec->controlled_insns_done, len);
++	bitmap_zero(prec->control_seeds, len);
++	bitmap_or(prec->controlled_insns, prec->last_pass.unproven_insns,
++		  prec->last_pass.call_insns, len);
++	/* the helper decides how many times the callback runs, callx what runs */
++	for_each_set_bit(i, prec->last_pass.call_insns, len)
++		if (bpf_calls_function(env, i) && !bpf_pseudo_call(&env->prog->insnsi[i]))
++			__set_bit(i, prec->control_seeds);
++	return add_control_deps(env);
++}
++
++static int alloc_masks(struct bpf_verifier_env *env)
++{
++	struct bpf_subprog_info *sub = env->subprog_info;
++	DECLARE_BITMAP(live, MAX_BPF_STACK_SLOTS);
++	struct bpf_precision *prec = env->precision;
++	struct bpf_insn_aux_data *aux;
++	unsigned long *masks;
++	u32 s, i, slots;
++	int err;
++
++	if (prec->func || prec->hops_to_err)
++		return -ENOMEM;
++	prec->func = kvcalloc(env->subprog_cnt, sizeof(*prec->func), BPF_VERIFIER_GFP);
++	prec->hops_to_err = kvcalloc(5 * env->prog->len, sizeof(u16), BPF_VERIFIER_GFP);
++	if (!prec->func || !prec->hops_to_err)
++		return -ENOMEM;
++	prec->hops_to_exit = prec->hops_to_err + env->prog->len;
++	prec->apart_xregno = (void *)(prec->hops_to_exit + env->prog->len);
++	for (s = 0; s < env->subprog_cnt; s++) {
++		bitmap_zero(live, MAX_BPF_STACK_SLOTS);
++		for (i = sub[s].start; i < sub[s + 1].start; i++) {
++			aux = &env->insn_aux_data[i];
++			bitmap_or(live, live, aux->live_stack_before, MAX_BPF_STACK_SLOTS);
++			/* the callee reads what it wrote */
++			if (bpf_pseudo_call(&env->prog->insnsi[i]))
++				bitmap_or(live, live, aux->may_write_mask, MAX_BPF_STACK_SLOTS);
++		}
++		slots = find_last_bit(live, MAX_BPF_STACK_SLOTS) + 1;
++		if (slots > MAX_BPF_STACK_SLOTS)
++			slots = 0;
++		prec->func[s].first = prec->words;
++		prec->func[s].words = BITS_TO_LONGS(bpf_spi_to_xreg(slots));
++		prec->words += (sub[s + 1].start - sub[s].start + 1) * prec->func[s].words;
++	}
++	env->mem += 18 * prec->words * sizeof(long) + 5 * env->prog->len * sizeof(u16);
++	err = bpf_check_limits(env);
++	masks = err ? NULL : kvcalloc(18 * prec->words, sizeof(long), BPF_VERIFIER_GFP);
++	if (!masks) {
++		env->mem -= 18 * prec->words * sizeof(long);
++		return err ?: -ENOMEM;
++	}
++	prec->data_deps = masks;
++	prec->control_deps = masks + prec->words;
++	prec->disjoint_apart = masks + 2 * prec->words;
++	prec->type_apart = masks + 3 * prec->words;
++	prec->in_frames = masks + 4 * prec->words;
++	prec->undo = masks + 5 * prec->words;
++	prec->kept = masks + 10 * prec->words;
++	prec->new_data_deps = masks + 15 * prec->words;
++	prec->new_control_deps = masks + 16 * prec->words;
++	prec->loop_control_deps = masks + 17 * prec->words;
++	return 0;
++}
+diff --git a/kernel/bpf/precision.h b/kernel/bpf/precision.h
+index 23980622006..63869360160 100644
+--- a/kernel/bpf/precision.h
++++ b/kernel/bpf/precision.h
+@@ -5,6 +5,14 @@
  
--	if (memcmp(&old->callback_ret_range, &cur->callback_ret_range,
--		   sizeof(old->callback_ret_range)))
--		return false;
--
--	if (old->in_rcu_callback_fn != cur->in_rcu_callback_fn)
--		return false;
--
--	/* what the frame did to what its callers hold is a part of what it tells them */
--	if (old->entry_refs != cur->entry_refs ||
--	    old->entry_rcu_locks != cur->entry_rcu_locks ||
--	    old->entry_preempt_locks != cur->entry_preempt_locks)
--		return false;
--
--	if (!check_ids(old->frame_id, cur->frame_id, &env->idmap_scratch))
--		return false;
--
- 	for (i = 0; i < MAX_BPF_REG; i++)
--		if (((1 << i) & live_regs) &&
--		    !regsafe(env, &old->regs[i], &cur->regs[i], &env->idmap_scratch))
-+		if ((live_regs & BIT(i)) && !regsafe(env, &old->regs[i], &cur->regs[i]))
- 			return false;
+ #include <linux/bpf_verifier.h>
  
--	if (!stacksafe(env, old, cur, &env->idmap_scratch))
--		return false;
--
--	return true;
--}
--
--static void reset_idmap_scratch(struct bpf_verifier_env *env)
--{
--	struct bpf_idmap *idmap = &env->idmap_scratch;
-+	/* outgoing stack args are a part of the state and must agree */
-+	for (i = 0; i < old->out_stack_arg_cnt; i++)
-+		if (!regsafe(env, &old->stack_arg_regs[i], bpf_stack_arg(cur, old, i)))
-+			return false;
++/*
++ * The xregs of a mask, see MAX_BPF_XREG. r10 is the same in all states.
++ * Its bit stands for the arguments on the stack.
++ */
++#define XREG_STACK_ARGS	BPF_REG_FP
++#define XREG_REGS	GENMASK(BPF_REG_9, BPF_REG_0)
++#define XREG_WORDS	BITS_TO_LONGS(MAX_BPF_XREG)
++
+ /* What a pass finds about its errors */
+ struct precision_per_pass {
+ 	/* bitmaps of insns */
+@@ -15,19 +23,51 @@ struct precision_per_pass {
+ 	u64 suspect_loops, first_suspect_loops;	/* of the unproven states, of the first one */
+ };
  
--	idmap->cnt = 0;
-+	return stacksafe(env, old, cur);
- }
++/* callx calls one of the functions whose address is taken. They count as one function. */
++struct taken_funcs {
++	u16 args;
++	u8 needs, ret;
++	bool held;
++};
++
+ struct bpf_precision {
++	/* Masks of xregs per insn. The masks of a function are as wide as its stack is deep. */
++	struct { u32 first, words; } *func;
++	size_t words;
++	unsigned long *data_deps, *control_deps, *disjoint_apart;
++	/* data_deps, and where only type and object matter */
++	unsigned long *type_apart;
++	unsigned long *in_frames;		/* see bpf_call_needs_frames() */
++	unsigned long *undo;			/* these five before the last partition */
++	unsigned long *kept;			/* these five, see keep_precision() */
++	/* of the unproven insns of the last pass */
++	unsigned long *new_data_deps, *new_control_deps;
++	struct taken_funcs taken;		/* see bpf_compute_deps() */
+ 	/* this pass, and the last pass whose partition was kept */
+ 	struct precision_per_pass this_pass, last_pass;
++	/* bitmaps of insns */
++	unsigned long *held_insns;		/* see reads_held() */
+ 	unsigned long *bad_value_insns;		/* unproven, its value is possibly the cause */
+ 	unsigned long *last_unproven_insns;	/* in the last pass */
+ 	unsigned long *bad_read_insns_done;
++	unsigned long *control_seeds, *controlled_insns, *controlled_insns_done, *def_insns;
+ 	u32 last_unproven_left;		/* last_unproven_insns whose check did not fail again */
+ 	bool new_nospec;
  
--/* Everything that @cur describes is described by @old. */
--bool bpf_state_subsumes(struct bpf_verifier_env *env, struct bpf_verifier_state *old,
--			struct bpf_verifier_state *cur)
-+/* @old describes all that @cur describes. They have the same join_key. */
-+bool bpf_state_subsumes(struct bpf_verifier_env *env, const struct bpf_verifier_state *old,
-+			const struct bpf_verifier_state *cur)
++	u16 *apart_xregno;	/* per insn, see bpf_range_of_data_dep() */
+ 	/* The path-sensitive run */
+ 	unsigned long *err_insns;		/* insns at which the failing path can end */
++	u32 *hops_to_err, *hops_to_exit;	/* per insn, see compute_hops() */
++	unsigned long *loop_control_deps;	/* see bpf_jumps_see_same() */
++	u32 loop_carried_at;
++	unsigned long loop_carried[XREG_WORDS];
+ };
+ 
++u32 bpf_frame_mask(struct bpf_verifier_env *env, unsigned long *masks,
++		   const struct bpf_verifier_state *st, u32 fr, unsigned long *out);
++int bpf_compute_deps(struct bpf_verifier_env *env, unsigned long *masks,
++		     const unsigned long *seed_insns);
++
+ static inline bool bpf_calls_function(struct bpf_verifier_env *env, int idx)
  {
--	u32 insn_idx;
- 	int i;
- 
--	if (old->curframe != cur->curframe)
--		return false;
--
--	reset_idmap_scratch(env);
-+	env->pkt_pair_cnt = 0;
- 
- 	/* Verification state from speculative execution simulation
- 	 * must never stand for a non-speculative execution one.
-@@ -572,25 +635,10 @@ bool bpf_state_subsumes(struct bpf_verifier_env *env, struct bpf_verifier_state
- 	if (old->speculative && !cur->speculative)
- 		return false;
- 
--	if (old->callers_unknown != cur->callers_unknown)
--		return false;
--
--	if (old->in_sleepable != cur->in_sleepable)
--		return false;
--
--	if (old->unwound != cur->unwound || old->changed_pkt_data != cur->changed_pkt_data)
--		return false;
--
--	/* for states to be equal callsites have to be the same
--	 * and all frame states need to be equivalent
--	 */
--	for (i = 0; i <= old->curframe; i++) {
--		insn_idx = bpf_frame_insn_idx(old, i);
--		if (old->frame[i]->callsite != cur->frame[i]->callsite)
--			return false;
--		if (!func_states_equal(env, old->frame[i], cur->frame[i], insn_idx))
-+	for (i = 0; i <= old->curframe; i++)
-+		if (!func_states_equal(env, old->frame[i], cur->frame[i],
-+				       bpf_frame_insn_idx(old, i)))
- 			return false;
--	}
- 
- 	return true;
+ 	struct bpf_insn *insn = &env->prog->insnsi[idx];
+@@ -36,4 +76,19 @@ static inline bool bpf_calls_function(struct bpf_verifier_env *env, int idx)
+ 	       env->insn_aux_data[idx].calls_callback || bpf_is_async_callback_calling_insn(insn);
  }
+ 
++/* Word @i of a mask of xregs that has @slots */
++static inline unsigned long bpf_slots_to_xreg_word(const unsigned long *slots, u32 i)
++{
++	return (i < BITS_TO_LONGS(MAX_BPF_STACK_SLOTS) ? slots[i] << MAX_BPF_EXT_REG : 0) |
++	       (i ? slots[i - 1] >> (BITS_PER_LONG - MAX_BPF_EXT_REG) : 0);
++}
++
++static inline void bpf_add_slots(unsigned long *mask, const unsigned long *slots, u32 bits)
++{
++	u32 i;
++
++	for (i = 0; i < BITS_TO_LONGS(bits); i++)
++		mask[i] |= bpf_slots_to_xreg_word(slots, i);
++}
++
+ #endif
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e0c829745b2..3edc91b8852 100644
+index 6da1a0f5b44..ce26d681bb0 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -29,6 +29,7 @@
- #include <linux/keyctl.h>
- #include <linux/btf_ids.h>
- #include <linux/poison.h>
-+#include <linux/random.h>
- #include <linux/module.h>
- #include <linux/cpumask.h>
- #include <linux/cnum.h>
-@@ -1808,16 +1809,12 @@ int bpf_copy_verifier_state(struct bpf_verifier_env *env, struct bpf_verifier_st
- 		return err;
- 	bpf_add_cost(env, bpf_xreg_cnt(src) + src->acquired_refs, BPF_COST_COPY);
- 	dst_state->speculative = src->speculative;
--	dst_state->in_sleepable = src->in_sleepable;
--	dst_state->callers_unknown = src->callers_unknown;
--	dst_state->unwound = src->unwound;
--	dst_state->changed_pkt_data = src->changed_pkt_data;
- 	dst_state->flow_entry = src->flow_entry;
- 	dst_state->infeasible = src->infeasible;
- 	dst_state->max_held_cnt = src->max_held_cnt;
- 	dst_state->suspect_loops = src->suspect_loops;
-+	dst_state->join_key = src->join_key;
- 	dst_state->insn_idx = src->insn_idx;
--	dst_state->curframe = src->curframe;
- 	dst_state->last_insn_idx = src->last_insn_idx;
- 	for (i = 0; i <= src->curframe; i++) {
- 		dst = dst_state->frame[i];
-@@ -3788,6 +3785,11 @@ static int check_stack_write_var_off(struct bpf_verifier_env *env,
- 	max_off = reg_smax(ptr_reg) + off + size;
- 	if (value_regno >= 0)
- 		value_reg = &cur->regs[value_regno];
-+	/* no slot remembers the pointer, a load gets it as a number */
-+	if (value_reg && __is_pointer_value(env->allow_ptr_leaks, value_reg)) {
-+		verbose(env, "R%d leaks addr into stack\n", value_regno);
-+		return -EACCES;
-+	}
- 	if ((value_reg && bpf_register_is_null(value_reg)) ||
- 	    (!value_reg && is_bpf_st_mem(insn) && insn->imm == 0))
- 		writing_zero = true;
-@@ -11418,7 +11420,6 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
- 		if (is_async_cb_sleepable(env, insn))
- 			env->sleepable_async_cb = true;
- 		callee = async_cb->frame[0];
--		callee->async_entry_cnt = state->frame[0]->async_entry_cnt + 1;
+@@ -21403,6 +21403,7 @@ static int do_check_block(struct bpf_verifier_env *env, int prev_insn_idx)
+ 	struct bpf_insn *insns = env->prog->insnsi;
+ 	int insn_cnt = env->prog->len;
+ 	bool do_print_state = true, from_unproven;
++	u32 held;
  
- 		/* Convert bpf_timer_set_callback() args into timer callback args */
- 		err = set_callee_state_cb(env, caller, callee, insn_idx);
-@@ -24790,6 +24791,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	env->max_cost = BPF_MAX_COST >> (is_priv ? 0 : BPF_LIMITS_SHIFT_UNPRIV);
- 	env->pass_max_cost = U64_MAX;
- 	env->max_mem = BPF_MAX_MEM >> (is_priv ? 0 : BPF_LIMITS_SHIFT_UNPRIV);
-+	env->hash_seed = get_random_u64();
- 	env->signature = attr->signature;
+ 	for (;;) {
+ 		struct bpf_insn *insn;
+@@ -21518,9 +21519,12 @@ static int do_check_block(struct bpf_verifier_env *env, int prev_insn_idx)
+ 			return err;
  
- 	/* user could have requested verbose verifier output
-@@ -25137,6 +25139,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	kvfree(env->cfg.insn_postorder);
- 	kvfree(env->succ);
- 	kvfree(env->gotox_tmp_buf);
-+	kvfree(env->pkt_pairs);
- 	kvfree(env->callx_edges);
- 	kvfree(env->callx_index.slots);
- 	kvfree(env->func_ptrs);
+ 		bpf_equations_before_insn(env);
++		held = held_cnt(state);
+ 		from_unproven = reads_from_unproven(env);
+ 		fixups = insn_aux->fixups;
+ 		err = do_check_insn(env, &do_print_state) ?: bpf_equations_after_insn(env);
++		insn_aux->releases |= held_cnt(state) < held && err != PROCESS_BPF_EXIT;
++		insn_aux->acquires |= held_cnt(state) > held;
+ 		if (nospec_ends_path(env, state, err)) {
+ 			/* Prevent this speculative path from ever reaching the
+ 			 * insn that would have been unsafe to execute.
+@@ -25164,13 +25168,12 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	if (ret < 0)
+ 		goto skip_full_check;
+ 
+-	bpf_free_subprog_jts(env);
+-
+ 	ret = mark_fastcall_patterns(env);
+ 	if (ret < 0)
+ 		goto skip_full_check;
+ 
+ 	ret = do_check_all(env);
++	bpf_free_subprog_jts(env);
+ 	/* while the calls are what they are in the program */
+ 	if (env->log.level & BPF_LOG_STATS)
+ 		add_insns_of_callees(env);
 -- 
 2.55.0
 
