@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.182
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795160775;
-	b=3pqAftZjSAelsImHNG1zmqjIaIqCmr9+9/9irRrqJrNmlcAdzcgRi74Q9iVDFfDLvPua
-	 ZIUFyHlEcnp9GOzcsTFmNXgaQQDeYpeENBmNJiL/67NlmobZzitnJ+Iz6FZK6mPLtcT1T
-	 +WQGb2D0bGuBbYroT+4RMZXR4dPKazDA5iVVFgXsznUPstaV4x2cCnccxVIUSaCIs91uc
-	 aqYBTHTFxEbHSzOwr53ZOW1AOtk/iv4TK8rFeD3SL0E/G/vKkqWdbFePTcGRFOFOV01Gn
-	 FXEaZQuYHQz8u3beN6AVUeuMVOyaeeYNK94Mu+86PuzZSro08sbWXVie94IH8tjy0rQ==
+	t=1795160781;
+	b=lTN4+wiYD7cwB/AQfjw6wcE9ab+rzkwMvTADDNsN0WbrNVDhB4ML6oZtusYd+kc6RuQU
+	 xftW1hBh99AR9E2bgU3FkyGVep74KLqIRImDjmUPy5KZaG1sRjlJpaGVAfqbjc6oE2ckf
+	 xa2zElAJwhWP7y8Zk8Cq9wkfu3eyyx8LN9tEHx/0N5AaNy8zQt5EMoTamBaajk9Gruh0U
+	 6LAJqzi+XKc6F06+NWhbRVQlLQ4VsyxZNhjXy+nqSQbxEbrjeMouoC9NaaYiFpHVlmTlw
+	 6XtnVGyDbsQr8SR3+nhhHjHL4WEb7sSmmn7VdApWzDs3IHnm7+1V5pZYVSL0cPXVmyg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795160775;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795160781;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=wCO6UMG1CYyBr3HD7wJHd8HFQ1IlLhr+3H5K0JOVnSo=;
-	b=RSTDBEG0pTtf20tNYYZI/SnrlXkuqk33cj5FqRf0xiDfjdTPf3eVrUcH9qbycw2VK+u3
-	 aDPQTPSBELKCJKN4bNkyKTn0QbwCNKXW4G1iNUoQrroMP5TdsSZuKbEaX+0Wu8OKcIV1N
-	 RlLeUr19XxDqr+NNc/3KSTRAkZ50P4mNqxjzCBzz1+QNm39as7NHZV0k4fGMtWEkfeUVs
-	 ikFesCd8ISeRlOygMED35cnZ9bseednHlo7MclVhmYia9UJwanBuRWjhVc3tteRmIhY4S
-	 pnQF22kqhjCkuPg3hOSdxSl1nMIfNjudGI7jeeqcVIMMBuOQzczPc6hSQLsEE508krQ==
+	bh=LcyH9DCeYzxE4TVEfEnPbD89Ut0FZn9ewaAwmbEZxdI=;
+	b=fC3Lq5B+okaaZeU+mqUTaB9jEjOxIOOI9rmQm94ALhhTfGr2FsxzKZtpcIxKVYnxiNCL
+	 XHmM6n+4t/l7exIAcHVL5dqdIejqNerHW9qR9wGBrjFTGH0j2npJgqEIHVNACx+4xfXk+
+	 +ZXGx9zkFTBkyxglcdi9wc+wdpaXayUpOajjG0n+/VG5zYi13WVmeg3p31JAQge6vlG21
+	 RkH3Jp0XSijqOdHcukYBB7NcBU2m3IDVo/OwIIMidNQ5Qg/2a4DDNGVWKxmVhyRaIavPW
+	 ZOhSPL+GiasDGyHpcEypsIoWjXnNc1eKsnJvE+qJTD/+X0ojp0IbTKYmrvhYlQeZKbg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ufLfzzm9;
-	arc=none smtp.remote-ip=209.85.214.174
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="ZzWp/YqI";
+	arc=none smtp.remote-ip=209.85.214.182
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5348606A325
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 07:46:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E5348606A325
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F090606A320
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 07:46:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4F090606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ufLfzzm9
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2e9d7791b00so5152095ad.0
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 23:46:13 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ZzWp/YqI
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2f01f296937so4827325ad.3
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 23:46:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795160773; x=1795765573; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795160779; x=1795765579; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=wCO6UMG1CYyBr3HD7wJHd8HFQ1IlLhr+3H5K0JOVnSo=;
-        b=ufLfzzm9u850J9LjwDaUrqpjBDn3oLHZHdhY7jZJSCHbA7D+Pqyhw7QnbPeaRGrKHl
-         vsXDxO+qreDp2aYH0OzpQYABauDPMpvmLm7buL2Z+62jPTNgejUVvACJSoX8pYHNMDXD
-         k/ju96alVFzXxYAXyF3qKppCi0TFnuzAFAapi9HXSSz19+70GdjLCdOgF4W6/v2mZKRr
-         wVPxsZITnpxSgAg2NoFQ4mH0UBWDPFwNxp1eL9QEoUfSd7NfEVaRZVdpvnTt9h8oCEl6
-         N4KUh+qp0WqOZcmtiKBKseXMenkmvUgSM6x6OuCqH6U2UT17khDtv1hsNU9NooXee5ns
-         oOZw==
+        bh=LcyH9DCeYzxE4TVEfEnPbD89Ut0FZn9ewaAwmbEZxdI=;
+        b=ZzWp/YqIVgCOal8Ie5Vh6DSRNa55xVuEZMmiZESMdjgcNzM80TOlWOcvoZa7gBAjgB
+         UhFhJ1/473mGmbWZUSWGum/tf2gQgkJcQnHZiNlO1xdjMq2Tgx/+iO0rVYpWWWwoNYAl
+         CGvs8P5lVA8kq+Ru52D6d8UsYi1yliYl2LMd1oR8mcxf9nuUskXHRYFBGZh3CUoa7PId
+         06n9TkURWIX+njGHISB0X2ZpvfyFvG1ggbcjI+X9kfpo897HreuV/ktUjM7N9gjoB5ec
+         Gv/rDaygUmjKYbfEQzo5w0/5H/jTQiqu86cHE3THpvGUzUSn/g4ITq/nb9RsaAnyR1Qz
+         TZdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795160773; x=1795765573;
+        d=1e100.net; s=20260707; t=1795160779; x=1795765579;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=wCO6UMG1CYyBr3HD7wJHd8HFQ1IlLhr+3H5K0JOVnSo=;
-        b=TMhYVXbmqE3ibwTYP0qzLJN1sqzUFNbzXCwUuwcVF99vHRVs3sgjt3GicGO++oBljb
-         CXULqndWbDmHWiHDoa+WQ7kXQTPcX9rP4kKweD4NNyW6U5/6Ja2nwOsgD+yTCuvRGFeY
-         daMxwnYdjBISOjoWUk5Ivas2DLEU9/JyGzYkMOUiAHAgjbFEPtqvWmPH+Xd/AqzQqEE6
-         C2BBcQCKdBQb1jNOqUV/ZLcFfa4DXz1+tFAWYStDStqQQjkfPTG4OP7hbkqj1SoU7q62
-         aDNLAz9Z7/KqWp0/n1eLJ3g4rXwHnCTa3KhiOOJZmUx2h4jvf3TsgW51fqgOmWqPyBeO
-         nObw==
-X-Gm-Message-State: APuU4Z+VsTwimwn0WQB1P1dj7aWqRUHGAooLHNl5vF/SE/VcNQ3trWhy
-	b62z2AjQTGerzsBYYzq+pend6dSn+D2MGxS4qGUoDSmB7ADACTe5rMPXKWxj6w==
-X-Gm-Gg: AYBFou3oXBMiRlDBwwjBN0FSXZXAAAK/m7i8V8kCIQNXw1/sdQS6Wik0FmxxGKuXai1
-	oS0tNFm/NPjQGkw7pFPFr3tFzfa1sqc8sKfTCwW5/H2RFtoRpUurw1/x7yHYyUtACFTlhG2IZP6
-	X1ZqulMFB8E/phaxwzZVga3FM+hYG5ir9S8WueTg3kUHREC+wMfQnWFTwpD45OUPUO5XiXpYSFj
-	932FQVoeoc1c++vUVsfYNpcgPUOMRT9P18IAwI4gYXVbWXYVRrXkTs79+tPgkv/vEYovh+ZIduw
-	ZVlRuXW3fs4trZ2FelimhHWMs3K6/sq6KfzmOY6pDjfsPi1a0VGicyb+0MYoFE8txBdZa0rmFaF
-	oUuqItU4oYCTXK9zZXN791ozgvVgKI1BBvfo/1c1sqaAYvogQijUGceP7MDWwC8JBfgGfRxW56k
-	WGSF4RMYrVo6O3s4y2YMfONdatKcGF78A1rX0dRg99lbi3tncC6GLhSM7stWF/fwB02mnuwYTha
-	im9jNcoKctC9vJe2ZZQrV8qyJ41jPC1r5PVmOZur2q0EvvQtQ3ab3xd4kWaUhu90oIE+48w4ZPq
-	Qd1V2JNFyv+B7XP9p6IQJc2QbEn39rw06CC/la2RwUF2P04bDBgmAwz2xCJjZvX0kYj5JKDrawn
-	ec3byeFbUXWdHZwT0kdD/WTD43bpkz5fAOVi2kW2xF/REKFCJRLLQzAU8Dom9ioN/5pr6rtVXdy
-	M=
-X-Received: by 2002:a17:903:41cc:b0:2ed:1df2:8b3c with SMTP id d9443c01a7336-2f03f147f9bmr18968475ad.35.1795160773324;
-        Thu, 19 Nov 2026 23:46:13 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.245])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03ee84027sm10939085ad.7.2026.11.19.23.46.12
+        bh=LcyH9DCeYzxE4TVEfEnPbD89Ut0FZn9ewaAwmbEZxdI=;
+        b=OTZwWAa0KN/nf58uJOI+AWKk/nPQDyo6SsRX7cUWGZZQsznjn/op+qjjnyNgEXib5d
+         RKOnIGxpFW5un3VVcVMXZ/3afvOXfbBN2P+iTlixShLPe2ZOhC0WpzHsdVKaEBT9rsFa
+         I7d54aDr6bi6FFlJFTnAYPaiDu+ZY380WkEsSkGGUmfTYift2zMa/P1QiyFTluJYrxm+
+         nor7XUcg7N9R0J2gS0o/gYdAGIzXkZwpB0VlJhaKeY1fT6uMISAJ9dQh6aFIV2MM50YO
+         NkbrxzLKThPVaOKo8zXsrbkZncbYyLwx8XrS+F7mj6WluM9TOZnTLubCZx59DEeYqJSF
+         6dlA==
+X-Gm-Message-State: APuU4Z8IkmXDZJU4zA7fzRvVx1I1rxJkkGG8ukef67XKNVCmbB2w2Sgo
+	KQFFc9VD8mTZabKdmzNviH9JrYxzc/MS0K2LNgHP4ClPQAotTwThZmJnzoMMUw==
+X-Gm-Gg: AZFdTZeNWlYUCgvFzAFUQwUY8v8UjHUN/Q+8g1tp/ipjKAhYej600CP/crnF0EBt7eP
+	8AYr0wp9zssUuIRzkDWrlneOh+1AqeiSQUHiggKAMaVFfPIpr6Di25KiNXk9RvVocvdcY6FrigI
+	0zXr/tpFFcQ+wwsFmQ+HICGKRGYRop5tsmC0lB09ZJvuArogcYROEfjaWwwjC7GrWgj43mKvtQL
+	TEVlTjcy/dWkbOywi74rv0prt6MNg7e1S5Eb7IBDT53+xSLKUDYsqhrXr4Rmwaovw5CW80orNnf
+	GrozcbEW7Qsj6QRSGl/88Fw/LQnnVKC4S+yupdklm7JWFl6+qxerduS4vlxKAIYDL4rK3t63Joy
+	AcrcbTE1HkQ3z/YvyA04xCzuyc+aY+0EVcg/AiqbegZ/kWfoqgz9SAAsT5qIrLNM/i10HE9OnZP
+	BN7vjUHbJXheBR1EKMWxmmKV8u5XIFdxThztj2p1Njt2akp6oDlFpombH/VB4mjy+sDp8EcE8wt
+	OLrQEEK5wqNQYIxbBvXbuqTZItsjY84bFm8xtLFg9f8ODXeaPLSFI/feTQHjdEEtlk4svSsFSSD
+	5xHZ/8GXGjet1T+h7iWiolIYJhPZoPKYYLjrVcbmff1N1BaaT+76LRE5dV5+ry2QUJ1wMcPVNaN
+	blJClEERyX5P/ucFV9D8Lbo/qbChQ+V3ckNdyWi5OF1vn/KIVksxOSKvgRoTFEtCspwFRLq7Ebc
+	E=
+X-Received: by 2002:a17:903:b0e:b0:2ef:f2b9:d1ea with SMTP id d9443c01a7336-2f03f248b50mr24631125ad.39.1795160779129;
+        Thu, 19 Nov 2026 23:46:19 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.243])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f04f8aca00sm4765ad.38.2026.11.19.23.46.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2026 23:46:12 -0800 (PST)
+        Thu, 19 Nov 2026 23:46:18 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 17/49] bpf: Keep a table of equations in each state
-Date: Fri, 20 Nov 2026 07:41:49 +0000
-Message-ID: <20261120074430.2704488-18-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 18/49] bpf: Refine all related numbers after a jump
+Date: Fri, 20 Nov 2026 07:41:50 +0000
+Message-ID: <20261120074430.2704488-19-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261120074430.2704488-1-alexei.starovoitov@gmail.com>
 References: <20261120074430.2704488-1-alexei.starovoitov@gmail.com>
@@ -104,729 +104,706 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-What holds on one path has to be in the state of that path. Give each
-state a table of equations. The state says: there are numbers for the
-syms, in their ranges, for which all equations hold.
+A jump refines its operands. Take that through the equations:
 
-  xreg equations    sym equations         syms
-  r1 = sym0         sym2 = sym0 + sym1    sym0  0..7
-  r2 = 4 * sym0                           sym1  0..255
-  fp-8 = sym2                             sym2  0..262
+  xreg -> its sym -> the other syms -> their xregs
 
-The three arrays are one allocation. It is copied, freed and charged
-with the state. An insn deletes the sym equations that it made before,
-so a loop does not make the table grow.
+  r1 = sym0, r2 = 4 * sym0
+  if r1 > 7 goto out        r1 0..7 -> sym0 0..7 -> r2 0..28
 
-Each scan of a table adds to the cost. At the limit a scan does not
-start, see over_limit(). The work on equations stops half way then, and
-the pass proves nothing. The last state can get there after the last
-test of the limits. So do_check() tests them again when it ends.
+propagate_bounds() keeps the refined syms in a queue, and links the
+equations that use a sym. A sym propagates once, so the work is linear
+in the size of the table. A sum refines all of its syms. An op refines
+only its result: run_op() runs scalar_alu() on the new operands.
 
-An equation does not outlive its xreg. bpf_find_var_bounds() has no
-bounds for a register that is not set, or for a slot without a spill.
-A pointer that became a scalar is another number.
+A jump that compares two numbers compares their difference with 0:
 
-The trip index of a loop is an xreg too. A later patch counts it.
+  end = p + sym0
+  if (p != end)             sym0 != 0
 
-The number in a pointer is its offset. The cpu can speculate past the
-jump that refines it, so pointers need bypass_spec_v1. There are no
-equations without CAP_BPF.
+A 32-bit test for equal does that for the numbers before a truncation
+too, see skip_truncation():  w1 += 1; if w1 != w2
 
-The log has the table:  0:r2=4*sym0+0 sym0=[0,+7]
+Code with no 32-bit insns can test the carry of a sum, see
+refine_carry():
+
+  r5 = r2; r5 <<= 32; r5 >>= 32
+  if r5 != r2 goto carry    if the jump is taken, r2 is above U32_MAX
+
+Packet pointers that share an id move together, see refine_ptr().
+
+The two branches can get other bounds for one pointer. The test for the
+end of the packet takes the operands of one branch for both. So
+bpf_equations_jump() is last in check_cond_jmp_op().
+
+If the equations cannot hold, the state ends after the next conditional
+jump. The removal of dead code deletes an edge only from such a jump: a
+call or a goto has to keep its target. The cpu can speculate past the
+jump, so that needs bypass_spec_v1. See infeasible_state_ends().
+
+Two pointers to one object have the order of their offsets:
+
+  for (p = buf; p < end; p++)
+          *p = 0;
+
+The jump refines both offsets, and is_branch_taken() decides it. This
+holds if no address wraps, so both offsets have to be near the object.
+It is off without bypass_spec_v1.
+
+This replaces refine_linked_regs().
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h |  22 ++
- kernel/bpf/equation.c        | 439 +++++++++++++++++++++++++++++++++++
- kernel/bpf/equation.h        |  58 +++++
- kernel/bpf/flow.c            |   2 +
- kernel/bpf/log.c             |   3 +
- kernel/bpf/verifier.c        |  10 +-
- 6 files changed, 533 insertions(+), 1 deletion(-)
+ include/linux/bpf_verifier.h |  12 +
+ kernel/bpf/equation.c        | 440 +++++++++++++++++++++++++++++++++++
+ kernel/bpf/equation.h        |   6 +
+ kernel/bpf/verifier.c        |  49 +++-
+ 4 files changed, 503 insertions(+), 4 deletions(-)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 4d9cddb3588..8d1a1ff87b7 100644
+index 8d1a1ff87b7..297f19271ff 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -115,6 +115,7 @@ struct bpf_reg_state {
- 	 * the dynptr to determine proper reference freeing.
- 	 * Similarly to dynptrs, we use ID to track "belonging" of a reference
- 	 * to a specific instance of bpf_iter.
-+	 * A scalar has no id, see struct bpf_equations.
- 	 */
- 	u32 id;
- 	union {
-@@ -422,6 +423,13 @@ static inline u32 bpf_xreg_to_spi(u32 xregno)
- 	return xregno - MAX_BPF_EXT_REG;
- }
- 
-+/* The trip index of a loop is an xreg too. The loops of a frame come after its slots. */
-+#define BPF_XREG_TRIP MAX_BPF_XREG
-+static inline u64 bpf_xreg(u32 frameno, u32 xregno)
-+{
-+	return (u64)frameno << 32 | xregno;
-+}
-+
- /*
-  * A state in a loop, see bpf_flow_loop_enter()
-  *
-@@ -438,6 +446,8 @@ struct loop_stack_entry {
- 	u32 entry_id;
- 	u32 held_cnt;		/* when the state entered the loop */
- 	bool peeled;		/* in a peeled trip, not in the leftover */
-+	/* an xreg: how many times the program came back to the header */
-+	struct scalar trip_index;
- };
- 
- #define LOOP_STACK_SIZE 16
-@@ -548,6 +558,7 @@ struct bpf_equations {
- };
- 
- struct bpf_verifier_state {
-+	struct bpf_equations equations;
- 	/* call stack tracking */
- 	struct bpf_func_state *frame[MAX_CALL_FRAMES];
- 	/* Acquired reference states */
-@@ -1279,6 +1290,7 @@ struct bpf_verifier_env {
- 	u64 max_cost, max_mem;
- 	u64 pass_max_cost;		/* see bpf_undo_precision() */
- 	bool aborted;			/* a thaw does not take it back */
-+	bool no_mem;			/* a table cannot grow, see bpf_check_limits() */
- 	/* What a pass writes. Each pass starts from the snapshot. */
- 	struct_group_tagged(bpf_env_per_pass, per_pass,
- 	int err;			/* the first error */
-@@ -1422,6 +1434,7 @@ struct bpf_verifier_env {
- 	struct bpf_iarray *succ;
- 	struct bpf_iarray *gotox_tmp_buf;
- 	int *idoms;
-+	struct bpf_equation_env *eq_env;
- 	struct bpf_flow *flow;
- };
- 
-@@ -2120,6 +2133,7 @@ static inline bool bpf_is_kfunc_sleepable(struct bpf_call_arg_meta *meta)
- 	return meta->kfunc_flags & KF_SLEEPABLE;
- }
- bool bpf_is_kfunc_pkt_changing(struct bpf_call_arg_meta *meta);
-+bool bpf_grow_array(struct bpf_verifier_env *env, void *array, u32 *cap, u32 cnt, size_t size);
- struct bpf_iarray *bpf_iarray_realloc(struct bpf_iarray *old, size_t n_elem);
- int bpf_copy_insn_array_uniq(struct bpf_map *map, u32 start, u32 end, u32 *off);
- bool bpf_insn_is_cond_jump(u8 code);
-@@ -2301,6 +2315,14 @@ int bpf_compute_loops(struct bpf_verifier_env *env);
- int bpf_loop_at_index(struct bpf_verifier_env *env, u32 idx);
- bool bpf_is_nested_loop(struct bpf_verifier_env *env, int inner_header, int outer_header);
- 
-+/* equation.c */
-+int bpf_equation_env_init(struct bpf_verifier_env *env);
-+void bpf_equation_env_free(struct bpf_verifier_env *env);
-+int bpf_equations_copy(struct bpf_verifier_env *env, struct bpf_equations *dst,
-+		       const struct bpf_equations *src);
-+void bpf_equations_free(struct bpf_equations *eqs);
-+void bpf_equations_print(struct bpf_verifier_env *env, const struct bpf_verifier_state *st);
-+u32 bpf_equations_bytes(const struct bpf_equations *eqs);
+@@ -2321,10 +2321,22 @@ void bpf_equation_env_free(struct bpf_verifier_env *env);
+ int bpf_equations_copy(struct bpf_verifier_env *env, struct bpf_equations *dst,
+ 		       const struct bpf_equations *src);
+ void bpf_equations_free(struct bpf_equations *eqs);
++void bpf_equations_refine_all(struct bpf_verifier_env *env, struct bpf_verifier_state *st);
++void bpf_equations_jump(struct bpf_verifier_env *env, struct bpf_verifier_state *st, int idx,
++			bool taken);
+ void bpf_equations_print(struct bpf_verifier_env *env, const struct bpf_verifier_state *st);
+ u32 bpf_equations_bytes(const struct bpf_equations *eqs);
  void scalar_bounds_sync(struct scalar *s);
  bool scalar_subsumes(const struct scalar *old, const struct scalar *cur);
++bool scalars_fit_in_bits(const struct scalar *a, const struct scalar *b, u32 bits);
++void scalars_refine_cond_op(struct scalar *a, struct scalar *b, u8 opcode, bool is_jmp32);
++
++static inline u8 bpf_signed_opcode(u8 op)
++{
++	if (op == BPF_JLT || op == BPF_JLE)
++		return op + BPF_JSLT - BPF_JLT;
++	return op == BPF_JGT || op == BPF_JGE ? op + BPF_JSGT - BPF_JGT : op;
++}
  
+ /* How many bytes are checked from the start of the packet, wherever the pointer is */
+ static inline int pkt_min_len(const struct bpf_reg_state *reg)
 diff --git a/kernel/bpf/equation.c b/kernel/bpf/equation.c
-index d49c01fa057..a85fef30e8e 100644
+index a85fef30e8e..16b50253a6e 100644
 --- a/kernel/bpf/equation.c
 +++ b/kernel/bpf/equation.c
-@@ -230,3 +230,442 @@ bool bpf_find_next_diff(struct bpf_verifier_env *env, const struct bpf_equations
- 	bpf_add_cost(env, pos->seen_cnt - seen_cnt, BPF_COST_SCAN);
- 	return false;
+@@ -599,6 +599,446 @@ void bpf_eval_diff(struct bpf_verifier_env *env, const struct bpf_verifier_state
+ 		scalar_bounds_sync(bounds);
  }
+ 
++/* Jumps refine */
 +
-+/* The table */
-+
-+/* Make room for @cnt elements. @array is the address of the pointer. New elements are not set. */
-+bool bpf_grow_array(struct bpf_verifier_env *env, void *array, u32 *cap, u32 cnt, size_t size)
++/*
++ * Packet pointers that share an id move together, see find_good_pkt_pointers().
++ * Do not reduce them one by one: the known bits cut one range and leave the other.
++ *	p = 20..40, bit 4 is set	q = p - 16 = 4..24, not 4..12
++ */
++static bool refine_ptr(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
++		       struct scalar *s, const struct scalar *bounds)
 +{
-+	void *p;
++	struct bpf_reg_state *ptr = container_of(&s->var_off, struct bpf_reg_state, var_off), *reg;
++	struct scalar new = *s, shift;
++	struct cnum64 old = s->r64;
++	struct bpf_func_state *f;
++	struct tnum known;
++	s64 smax;
 +
-+	if (cnt <= *cap)
++	/* a constant offset has to fit in an int */
++	if (!refine_bounds(&st->equations, &new, bounds) ||
++	    cnum64_smin(new.r64) <= -BPF_MAX_VAR_OFF || cnum64_smax(new.r64) >= BPF_MAX_VAR_OFF)
++		return false;
++	if (!type_is_pkt_pointer(ptr->type)) {
++		*s = new;
 +		return true;
-+	p = kvrealloc(*(void **)array, array_size(2 * cnt, size), BPF_VERIFIER_GFP);
-+	if (!p) {
-+		env->no_mem = true;
-+		return false;
 +	}
-+	*(void **)array = p;
-+	env->mem += (2 * cnt - *cap) * size;
-+	*cap = 2 * cnt;
++	bpf_add_cost(env, bpf_xreg_cnt(st), BPF_COST_SCAN);
++	bpf_for_each_reg_in_vstate(st, f, reg, ({
++		if (reg->type != ptr->type || reg->id != ptr->id)
++			continue;
++		smax = reg_smax(reg);
++		scalar_set_const(&shift, reg->r64.base - old.base);
++		known = reg->var_off;
++		scalar_add(scalar_of(reg), &shift, &new);
++		known = tnum_intersect(known, reg->var_off);
++		if (!tnum_subreg_is_const(known))
++			reg->var_off = known;
++		bpf_trim_pkt_range(reg, smax);
++	}));
 +	return true;
 +}
 +
-+u32 bpf_equations_bytes(const struct bpf_equations *eqs)
-+{
-+	return eqs->xreg_equation_cap * sizeof(*eqs->xreg_equations) +
-+	       eqs->sym_equation_cap * sizeof(*eqs->sym_equations) +
-+	       eqs->sym_cap * sizeof(*eqs->syms);
-+}
-+
-+/* @dst becomes a copy of @src. @grow: with room for more. */
-+static bool realloc_equations(struct bpf_verifier_env *env, struct bpf_equations *dst,
-+			      const struct bpf_equations *src, bool grow)
-+{
-+	struct bpf_equations new = *src;
-+	u32 bytes, spare;
-+
-+	new.xreg_equation_cap = src->xreg_equation_cnt +
-+				(grow ? src->xreg_equation_cnt / 2 + 4 : 0);
-+	new.sym_equation_cap = src->sym_equation_cnt + (grow ? src->sym_equation_cnt / 2 + 4 : 0);
-+	new.sym_cap = src->sym_cnt + (grow ? src->sym_cnt / 2 + 4 : 0);
-+	bytes = kmalloc_size_roundup(bpf_equations_bytes(&new));
-+	spare = (bytes - bpf_equations_bytes(&new)) /
-+		(sizeof(*new.xreg_equations) + sizeof(*new.sym_equations) + sizeof(*new.syms));
-+	new.xreg_equation_cap += spare;
-+	new.sym_equation_cap += spare;
-+	new.sym_cap += spare;
-+	bpf_add_cost(env, BPF_COST_INSN + bytes / 64, BPF_COST_SCAN);
-+	new.xreg_equations = kvmalloc(bytes, BPF_VERIFIER_GFP);
-+	if (!new.xreg_equations) {
-+		env->no_mem = true;
-+		return false;
-+	}
-+	new.sym_equations = (void *)(new.xreg_equations + new.xreg_equation_cap);
-+	new.syms = (void *)(new.sym_equations + new.sym_equation_cap);
-+	memcpy(new.xreg_equations, src->xreg_equations,
-+	       src->xreg_equation_cnt * sizeof(*src->xreg_equations));
-+	memcpy(new.sym_equations, src->sym_equations,
-+	       src->sym_equation_cnt * sizeof(*src->sym_equations));
-+	memcpy(new.syms, src->syms, src->sym_cnt * sizeof(*src->syms));
-+	kvfree(dst->xreg_equations);
-+	*dst = new;
-+	return true;
-+}
-+
-+int bpf_equations_copy(struct bpf_verifier_env *env, struct bpf_equations *dst,
-+		       const struct bpf_equations *src)
-+{
-+	if (src->sym_cnt)
-+		return realloc_equations(env, dst, src, false) ? 0 : -ENOMEM;
-+	bpf_equations_free(dst);
-+	dst->infeasible = src->infeasible;
-+	return 0;
-+}
-+
-+u64 bpf_new_sym(struct bpf_verifier_env *env, struct bpf_equations *eqs,
-+		const struct scalar *bounds)
++static void mark_sym_refined(struct bpf_verifier_env *env, u32 sym, u32 sweep)
 +{
 +	struct bpf_equation_env *eq_env = env->eq_env;
-+	struct scalar copy = *bounds;
 +
-+	if (!bpf_grow_array(env, &eq_env->scratch, &eq_env->scratch_cap,
-+			    eqs->sym_cnt + 1, sizeof(*eq_env->scratch)) ||
-+	    (eqs->sym_cnt == eqs->sym_cap &&
-+	     !realloc_equations(env, eqs, eqs, true)))
-+		return VAR_NONE;
-+	eq_env->scratch[eqs->sym_cnt].refined_sweep = 0;
-+	copy.grew_once = false;
-+	eqs->syms[eqs->sym_cnt] = copy;
-+	eqs->normalized = false;
-+	return VAR_SYM | eqs->sym_cnt++;
++	if (eq_env->scratch[sym].refined_sweep)
++		return;
++	eq_env->scratch[sym].refined_sweep = sweep;
++	if (sweep > 1)
++		eq_env->scratch[eq_env->refined_cnt++].queued_sym = sym;
 +}
 +
-+/* Put a sym with coef 1 or -1 on the left side. False if there is none, or it says nothing. */
-+static bool isolate_sym(struct bpf_sym_equation *sym_eq)
++/* @expr is in @bounds. If its sym got smaller, @sweep has to look at the equations of the sym. */
++static void refine_sym(struct bpf_verifier_env *env, struct bpf_equations *eqs,
++		       struct expr expr, struct scalar bounds, u32 sweep)
 +{
-+	int i, j, lhs = -1;
-+	s64 sign;
-+
-+	for (i = 0; i < 3; i++) {
-+		for (j = i + 1; j < 3; j++) {
-+			if (sym_eq->sym[j] != sym_eq->sym[i])
-+				continue;
-+			sym_eq->coef[i] += sym_eq->coef[j];
-+			sym_eq->coef[j] = 0;
-+		}
-+		if (lhs < 0 && is_plus_minus_one(sym_eq->coef[i]))
-+			lhs = i;
-+	}
-+	if (lhs < 0)
-+		return false;
-+	for (i = lhs; i > 0; i--) {
-+		swap(sym_eq->coef[i], sym_eq->coef[i - 1]);
-+		swap(sym_eq->sym[i], sym_eq->sym[i - 1]);
-+	}
-+	if (!sym_eq->coef[1]) {
-+		swap(sym_eq->coef[1], sym_eq->coef[2]);
-+		swap(sym_eq->sym[1], sym_eq->sym[2]);
-+	}
-+	sign = -sym_eq->coef[0];
-+	for (i = 0; i < 3; i++) {
-+		sym_eq->coef[i] *= sign;
-+		sym_eq->sym[i] = sym_eq->coef[i] ? sym_eq->sym[i] : NO_SYM;
-+	}
-+	sym_eq->off *= sign;
-+	return sym_eq->coef[1];
++	scalar_add_const(&bounds, -expr.off);
++	if (refine_from_product(eqs, &eqs->syms[var_symno(expr.var)], expr.coef, &bounds))
++		mark_sym_refined(env, var_symno(expr.var), sweep);
 +}
 +
-+/* Delete the equations that are marked, and the equations of @insn_idx */
-+static void forget_sym_equations(struct bpf_verifier_env *env, struct bpf_equations *eqs,
-+				 s32 insn_idx)
++/* eval_expr_nosync(), and what the jump tells about a multiple of its operand */
++static void expr_bounds_after_jump(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
++				   const struct expr *expr, struct scalar *bounds)
 +{
-+	struct bpf_sym_equation *sym_eq, *next = eqs->sym_equations;
++	const struct expr *jump_expr = &env->eq_env->jump_expr;
++	struct scalar tmp;
++	s64 coef;
 +
-+	for_each_sym_equation(env, eqs, sym_eq) {
-+		if (sym_eq->sym[0] == NO_SYM || sym_eq->insn_idx == insn_idx)
-+			continue;
-+		if (next != sym_eq)
-+			*next = *sym_eq;
-+		next++;
-+	}
-+	eqs->sym_equation_cnt = next - eqs->sym_equations;
++	eval_expr_nosync(env, st, expr, bounds);
++	if (!jump_expr->coef || !expr->coef || expr->var != jump_expr->var)
++		return;
++	coef = div64_s64(expr->coef, jump_expr->coef);
++	if (coef * jump_expr->coef != expr->coef)
++		return;
++	scalar_scale(&tmp, &env->eq_env->jump_bounds, coef);
++	scalar_add_const(&tmp, expr->off - coef * jump_expr->off);
++	refine_bounds(&st->equations, bounds, &tmp);
 +}
 +
-+/* An insn deletes the equations that it made before. So there are at most as many as insns. */
-+static bool append_sym_equation(struct bpf_verifier_env *env, struct bpf_equations *eqs,
-+				struct bpf_sym_equation sym_eq)
++static bool sym_is_refined(struct bpf_verifier_env *env, u32 sym, u32 sweep)
 +{
-+	if (env->no_mem)
++	return sym != NO_SYM && (!sweep || env->eq_env->scratch[sym].refined_sweep == sweep);
++}
++
++/* What @op makes of its operands. False: they have no number. */
++static bool run_op(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
++		   const struct bpf_sym_equation *op, struct scalar *res)
++{
++	struct expr expr[2] = { rhs_expr(op, 0), rhs_expr(op, 1) };
++	struct scalar src;
++
++	bpf_add_cost(env, 1, BPF_COST_INSN);
++	expr_bounds_after_jump(env, st, &expr[0], res);
++	expr_bounds_after_jump(env, st, &expr[1], &src);
++	if (!scalar_intersect(res, res, 64) || !scalar_intersect(&src, &src, 64))
 +		return false;
-+	if (sym_eq.insn_idx >= 0 && !env->eq_env->equation_added)
-+		forget_sym_equations(env, eqs, sym_eq.insn_idx);
-+	env->eq_env->equation_added = true;
-+	if (eqs->sym_equation_cnt == eqs->sym_equation_cap &&
-+	    !realloc_equations(env, eqs, eqs, true))
-+		return false;
-+	eqs->sym_equations[eqs->sym_equation_cnt++] = sym_eq;
-+	eqs->normalized = false;
++	scalar_alu(res, &src, &env->prog->insnsi[op->insn_idx]);
 +	return true;
 +}
 +
-+bool bpf_add_sym_equation(struct bpf_verifier_env *env, struct bpf_equations *eqs,
-+			  struct bpf_sym_equation sym_eq)
++static void refine_syms_by_equation(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
++				    struct bpf_sym_equation *sym_eq, u32 sweep)
 +{
-+	return isolate_sym(&sym_eq) && append_sym_equation(env, eqs, sym_eq);
-+}
++	struct expr expr[2] = { rhs_expr(sym_eq, 0), rhs_expr(sym_eq, 1) };
++	struct bpf_equations *eqs = &st->equations;
++	struct scalar operand[2], bounds, *lhs = &eqs->syms[sym_eq->sym[0]];
++	bool refined[3];
++	int i;
 +
-+/* @res is what @insn makes of @op */
-+bool bpf_add_op(struct bpf_verifier_env *env, struct bpf_equations *eqs, s32 insn,
-+		const struct expr *op, const struct expr *res)
-+{
-+	return res->coef == 1 && !res->off && var_is_sym(res->var) &&
-+	       res->var != op[0].var && res->var != op[1].var &&
-+	       append_sym_equation(env, eqs, (struct bpf_sym_equation){
-+		{ 1, op[0].coef, op[1].coef },
-+		{ res->var, op[0].var, op[1].var },
-+		insn, op[0].off, op[1].off });
-+}
-+
-+/* An insn like @insn made @res of @op, or it makes a constant */
-+bool bpf_find_op(struct bpf_verifier_env *env, const struct bpf_equations *eqs, s32 insn,
-+		 const struct expr *op, struct expr *res)
-+{
-+	const struct bpf_insn *a = &env->prog->insnsi[insn], *b;
-+	u8 same = BPF_OP(a->code) == BPF_END ? 0xff : ~BPF_X;
-+	const struct bpf_sym_equation *sym_eq;
-+	struct scalar bounds, src;
-+	struct expr expr[2];
-+
-+	if (!op[0].coef && !op[1].coef) {
-+		scalar_set_const(&bounds, op[0].off);
-+		scalar_set_const(&src, op[1].off);
-+		scalar_alu(&bounds, &src, a);
-+		*res = make_expr(0, 0, bounds.var_off.value);
-+		return tnum_is_const(bounds.var_off);
++	for (i = 0; i < 3; i++)
++		refined[i] = sym_is_refined(env, sym_eq->sym[i], sweep);
++	if ((!refined[0] || is_op(sym_eq)) && !refined[1] && !refined[2])
++		return;
++	if (is_op(sym_eq)) {
++		if (run_op(env, st, sym_eq, &bounds) && refine_bounds(eqs, lhs, &bounds))
++			mark_sym_refined(env, sym_eq->sym[0], sweep + 1);
++		return;
 +	}
-+	if (over_limit(env))
++	bpf_add_cost(env, 1, BPF_COST_INSN);
++	expr_bounds_after_jump(env, st, &expr[0], &operand[0]);
++	expr_bounds_after_jump(env, st, &expr[1], &operand[1]);
++	for (i = 1; i >= 0; i--) {
++		if (!expr[i].coef || !(refined[0] || refined[2 - i]))
++			continue;
++		scalar_add_scaled(&bounds, lhs, &operand[!i], -1);
++		if (!refine_bounds(eqs, &operand[i], &bounds))
++			continue;
++		refined[i + 1] = true;
++		refine_sym(env, eqs, expr[i], operand[i], sweep + 1);
++	}
++	scalar_add_scaled(&bounds, &operand[0], &operand[1], 1);
++	if (tnum_is_const(operand[1].var_off)) {
++		sym_eq->off += operand[1].var_off.value;
++		sym_eq->coef[2] = 0;
++		sym_eq->sym[2] = NO_SYM;
++	}
++	if ((refined[1] || refined[2]) && refine_bounds(eqs, lhs, &bounds))
++		mark_sym_refined(env, sym_eq->sym[0], sweep + 1);
++}
++
++static void refine_sym_from_xreg(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
++				 const struct bpf_xreg_equation *xreg_eq)
++{
++	struct expr expr = sym_expr(xreg_eq->coef, xreg_eq->sym, xreg_eq->off);
++	const struct scalar *s = equation_xreg_bounds(env, st, xreg_eq);
++	struct scalar bounds;
++
++	if (!s)
++		return;
++	bpf_add_cost(env, 2, BPF_COST_XREG);
++	eval_expr_nosync(env, st, &expr, &bounds);
++	if (refine_bounds(&st->equations, &bounds, s))
++		refine_sym(env, &st->equations, expr, bounds, 1);
++}
++
++/* The number in the xreg of @xreg_eq is in @bounds */
++static void refine_xreg(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
++			const struct bpf_xreg_equation *xreg_eq, const struct scalar *bounds)
++{
++	struct scalar *s = equation_xreg_bounds(env, st, xreg_eq);
++	u32 xregno = xreg_eq->xreg;
++
++	bpf_add_cost(env, 4, BPF_COST_XREG);
++	if (!s || over_limit(env) ||
++	    !(xreg_eq->is_ptr ? refine_ptr(env, st, s, bounds) :
++	      refine_bounds(&st->equations, s, bounds)) ||
++	    xreg_eq->xreg >> 32 != st->curframe)
++		return;
++	if (xregno < BPF_REG_FP)
++		mark_reg_scratched(env, xregno);
++	else if (xregno < BPF_XREG_TRIP)
++		mark_stack_slot_scratched(env, bpf_xreg_to_spi(xregno));
++}
++
++/* Link the equations that use a sym. A link is 3 * equation + position of the sym + 1. */
++static bool link_sym_equations(struct bpf_verifier_env *env, const struct bpf_equations *eqs)
++{
++	struct bpf_equation_env *eq_env = env->eq_env;
++	u32 i = 3 * eqs->sym_equation_cnt, sym;
++
++	if (!bpf_grow_array(env, &eq_env->use_links, &eq_env->use_link_cap, i,
++			    sizeof(*eq_env->use_links)))
 +		return false;
-+	for_each_sym_equation(env, eqs, sym_eq) {
-+		if (!is_op(sym_eq) || sym_eq->sym[0] == NO_SYM)
++	bpf_add_cost(env, eqs->sym_equation_cnt, BPF_COST_COPY);
++	for (sym = 0; sym < eqs->sym_cnt; sym++)
++		eq_env->scratch[sym].first_use = 0;
++	while (i--) {
++		sym = eqs->sym_equations[i / 3].sym[i % 3];
++		if (sym == NO_SYM)
 +			continue;
-+		b = &env->prog->insnsi[sym_eq->insn_idx];
-+		expr[0] = rhs_expr(sym_eq, 0);
-+		expr[1] = rhs_expr(sym_eq, 1);
-+		if (((a->code ^ b->code) & same) || a->off != b->off ||
-+		    !expr_equal(&expr[0], &op[0]) || !expr_equal(&expr[1], &op[1]))
-+			continue;
-+		*res = sym_expr(1, sym_eq->sym[0], 0);
-+		return true;
++		eq_env->use_links[i] = eq_env->scratch[sym].first_use;
++		eq_env->scratch[sym].first_use = i + 1;
 +	}
++	return true;
++}
++
++/* Each sweep goes one equation further. A sym propagates once. @all: to all xregs. */
++static void propagate_bounds(struct bpf_verifier_env *env, struct bpf_verifier_state *st, bool all)
++{
++	struct bpf_equation_env *eq_env = env->eq_env;
++	struct sym_scratch *scratch = eq_env->scratch, *refined;
++	struct bpf_equations *eqs = &st->equations;
++	struct bpf_xreg_equation *xreg_eq;
++	struct bpf_sym_equation *sym_eq;
++	struct scalar bounds;
++	struct expr expr;
++	u32 i, link;
++
++	bpf_add_cost(env, eqs->sym_cnt, BPF_COST_SCAN);
++	for (i = eq_env->refined_cnt = 0; i < eqs->sym_cnt; i++)
++		if (scratch[i].refined_sweep)
++			scratch[eq_env->refined_cnt++].queued_sym = i;
++	if (!eq_env->refined_cnt && !all)
++		return;
++	for (i = 0;
++	     i < eq_env->refined_cnt && (i || link_sym_equations(env, eqs)) &&
++	     !over_limit(env); i++) {
++		refined = &scratch[scratch[i].queued_sym];
++		for (link = refined->first_use; link--; link = eq_env->use_links[link]) {
++			sym_eq = &eqs->sym_equations[link / 3];
++			/* once in a sweep */
++			if ((link % 3 < 1 ||
++			     !sym_is_refined(env, sym_eq->sym[0], refined->refined_sweep)) &&
++			    (link % 3 < 2 ||
++			     !sym_is_refined(env, sym_eq->sym[1], refined->refined_sweep)))
++				refine_syms_by_equation(env, st, sym_eq, refined->refined_sweep);
++		}
++	}
++	for_each_xreg_equation(env, eqs, xreg_eq) {
++		if (!all && !scratch[xreg_eq->sym].refined_sweep)
++			continue;
++		expr = sym_expr(xreg_eq->coef, xreg_eq->sym, xreg_eq->off);
++		expr_bounds_after_jump(env, st, &expr, &bounds);
++		refine_xreg(env, st, xreg_eq, &bounds);
++	}
++	for (i = 0; i < eqs->sym_cnt; i++)
++		scratch[i].refined_sweep = 0;
++}
++
++static void refine_from_reg(struct bpf_verifier_env *env, struct bpf_verifier_state *st, u32 regno)
++{
++	const struct bpf_xreg_equation *xreg_eq =
++		bpf_find_xreg_equation(&st->equations, bpf_reg_to_xreg(st, regno));
++	struct bpf_reg_state *reg = &st->frame[st->curframe]->regs[regno];
++	struct scalar bounds = *scalar_of(reg);
++	struct bpf_equation_env *eq_env = env->eq_env;
++	struct expr expr;
++	u64 span;
++
++	if (reg->type == SCALAR_VALUE && scalar_align_bounds(&bounds))
++		*scalar_of(reg) = bounds;
++	else if (reg->type != SCALAR_VALUE && ptr_off_is_tracked(env, reg) &&
++		 !type_is_pkt_pointer(reg->type) && scalar_align_bounds(&bounds))
++		refine_ptr(env, st, scalar_of(reg), &bounds);
++	if (!xreg_eq)
++		return;
++	refine_sym_from_xreg(env, st, xreg_eq);
++	if (is_plus_minus_one(xreg_eq->coef) || xreg_eq->is_ptr ||
++	    !equation_xreg_bounds(env, st, xreg_eq))
++		return;
++	/* the sym cannot show it if the product wraps */
++	expr = sym_expr(xreg_eq->coef, xreg_eq->sym, xreg_eq->off);
++	bpf_eval_expr(env, st, &expr, &bounds);
++	if (scalar_subsumes(scalar_of(reg), &bounds) &&
++	    !check_mul_overflow(abs64(expr.coef),
++				st->equations.syms[xreg_eq->sym].r64.size, &span))
++		return;
++	eq_env->jump_expr = expr;
++	eq_env->jump_bounds = *scalar_of(reg);
++	mark_sym_refined(env, xreg_eq->sym, 1);
++	propagate_bounds(env, st, false);
++	eq_env->jump_expr.coef = 0;
++}
++
++/* Apply all equations */
++void bpf_equations_refine_all(struct bpf_verifier_env *env, struct bpf_verifier_state *st)
++{
++	struct bpf_xreg_equation *xreg_eq;
++	struct bpf_sym_equation *sym_eq;
++
++	st->equations.needs_refine = false;
++	for_each_xreg_equation(env, &st->equations, xreg_eq)
++		refine_sym_from_xreg(env, st, xreg_eq);
++	for_each_sym_equation(env, &st->equations, sym_eq)
++		refine_syms_by_equation(env, st, sym_eq, 0);
++	propagate_bounds(env, st, true);
++}
++
++static bool sym_has_xreg(struct bpf_verifier_env *env, const struct bpf_equations *eqs, u32 sym)
++{
++	const struct bpf_xreg_equation *xreg_eq;
++
++	if (over_limit(env))
++		return true;
++	for_each_xreg_equation(env, eqs, xreg_eq)
++		if (xreg_eq->sym == sym)
++			return true;
 +	return false;
 +}
 +
-+/* The equation of @xreg, or of the first xreg after it */
-+static struct bpf_xreg_equation *xreg_equation_pos(const struct bpf_equations *eqs, u64 xreg)
++/*
++ * A truncation is a sum 'low bits = x - 2^n * high bits', see expr_low_bits(). Go back to x if
++ * only the low @bits bits matter, and no xreg holds the low bits. @all: also if an xreg does.
++ *	w2 = w1; w2 += -1; w2 &= 255;		the low 8 bits of r1 - 1
++ */
++static void skip_truncation(struct bpf_verifier_env *env, const struct bpf_equations *eqs,
++			    struct expr *expr, u32 bits, bool all)
 +{
-+	u32 lo = 0, hi = eqs->xreg_equation_cnt, mid;
++	const struct bpf_sym_equation *sym_eq = eqs->sym_equations + eqs->sym_equation_cnt;
 +
-+	while (lo < hi) {
-+		mid = (lo + hi) / 2;
-+		if (eqs->xreg_equations[mid].xreg < xreg)
-+			lo = mid + 1;
-+		else
-+			hi = mid;
-+	}
-+	return eqs->xreg_equations + lo;
-+}
-+
-+struct bpf_xreg_equation *bpf_find_xreg_equation(const struct bpf_equations *eqs, u64 xreg)
-+{
-+	struct bpf_xreg_equation *xreg_eq = xreg_equation_pos(eqs, xreg);
-+
-+	return xreg_eq < eqs->xreg_equations + eqs->xreg_equation_cnt &&
-+	       xreg_eq->xreg == xreg ? xreg_eq : NULL;
-+}
-+
-+/* @xreg holds @expr. It has no equation if @expr has no sym. */
-+void bpf_set_xreg_equation(struct bpf_verifier_env *env, struct bpf_equations *eqs, u64 xreg,
-+			   const struct expr *expr, bool is_ptr)
-+{
-+	struct bpf_xreg_equation *xreg_eq, *end;
-+	bool found, insert = expr && var_is_sym(expr->var);
-+
-+	if (insert && eqs->xreg_equation_cnt == eqs->xreg_equation_cap)
-+		insert = realloc_equations(env, eqs, eqs, true);
-+	xreg_eq = xreg_equation_pos(eqs, xreg);
-+	end = eqs->xreg_equations + eqs->xreg_equation_cnt;
-+	found = xreg_eq < end && xreg_eq->xreg == xreg;
-+	if (found != insert) {
-+		bpf_add_cost(env, end - xreg_eq, BPF_COST_SCAN);
-+		memmove(xreg_eq + insert, xreg_eq + found,
-+			(end - xreg_eq - found) * sizeof(*xreg_eq));
-+		eqs->xreg_equation_cnt += insert - found;
-+	}
-+	if (insert)
-+		*xreg_eq = (struct bpf_xreg_equation){ xreg, expr->coef, expr->off,
-+						       var_symno(expr->var), is_ptr };
-+	eqs->normalized &= !found && !insert;
-+}
-+
-+void bpf_equations_free(struct bpf_equations *eqs)
-+{
-+	kvfree(eqs->xreg_equations);
-+	memset(eqs, 0, sizeof(*eqs));
-+}
-+
-+/* The cpu can speculate past the jump that refines the offset */
-+static bool ptr_off_is_tracked(struct bpf_verifier_env *env, const struct bpf_reg_state *reg)
-+{
-+	return env->bypass_spec_v1 && bpf_reg_has_range(reg) && reg->type != PTR_TO_INSN &&
-+	       !(reg->type & PTR_UNTRUSTED);
-+}
-+
-+/* The bounds of @var. NULL if there are none. */
-+struct scalar *bpf_find_var_bounds(struct bpf_verifier_env *env,
-+				   const struct bpf_verifier_state *st, u64 var, bool *is_ptr)
-+{
-+	u32 fr = var >> 32, idx = var;
-+	struct bpf_reg_state *reg;
-+	struct bpf_func_state *f;
-+
-+	*is_ptr = false;
-+	if (var_is_sym(var))
-+		return &st->equations.syms[idx];
-+	f = fr <= st->curframe ? st->frame[fr] : NULL;
-+	if (!f)
-+		return NULL;
-+	if (idx >= BPF_XREG_TRIP)
-+		return idx - BPF_XREG_TRIP < f->loop_stack_cnt ?
-+		       &f->loop_stack[idx - BPF_XREG_TRIP].trip_index : NULL;
-+	reg = idx < MAX_BPF_REG ? &f->regs[idx] : !bpf_xreg_is_slot(idx) ? NULL :
-+	      bpf_get_spilled_reg(bpf_xreg_to_spi(idx), f, BIT(STACK_SPILL));
-+	if (!reg || reg->type == NOT_INIT)
-+		return NULL;
-+	*is_ptr = reg->type != SCALAR_VALUE;
-+	return !*is_ptr || ptr_off_is_tracked(env, reg) ? scalar_of(reg) : NULL;
-+}
-+
-+/* A hidden register has no value, see MAX_BPF_XREG */
-+u64 bpf_reg_to_xreg(const struct bpf_verifier_state *st, u32 regno)
-+{
-+	return regno <= BPF_REG_FP ? bpf_xreg(st->curframe, regno) : VAR_NONE;
-+}
-+
-+/* A pointer that became a scalar is another number */
-+static struct scalar *equation_xreg_bounds(struct bpf_verifier_env *env,
-+					   const struct bpf_verifier_state *st,
-+					   const struct bpf_xreg_equation *xreg_eq)
-+{
-+	bool is_ptr;
-+	struct scalar *s = bpf_find_var_bounds(env, st, xreg_eq->xreg, &is_ptr);
-+
-+	return is_ptr == xreg_eq->is_ptr ? s : NULL;
-+}
-+
-+/* The value of @xreg: a constant, the right side of its equation, or the xreg itself */
-+bool bpf_xreg_expr(struct bpf_verifier_env *env, const struct bpf_verifier_state *st, u64 xreg,
-+		   struct expr *expr, bool *is_ptr)
-+{
-+	const struct scalar *s = bpf_find_var_bounds(env, st, xreg, is_ptr);
-+	const struct bpf_xreg_equation *xreg_eq;
-+
-+	bpf_add_cost(env, 1, BPF_COST_XREG);
-+	if (!s)
-+		return false;
-+	if (tnum_is_const(s->var_off)) {
-+		*expr = make_expr(0, 0, s->var_off.value);
-+		return true;
-+	}
-+	xreg_eq = bpf_find_xreg_equation(&st->equations, xreg);
-+	*expr = xreg_eq && xreg_eq->is_ptr == *is_ptr ?
-+		sym_expr(xreg_eq->coef, xreg_eq->sym, xreg_eq->off) : make_expr(1, xreg, 0);
-+	return true;
-+}
-+
-+/* It is not reduced */
-+static void eval_expr_nosync(struct bpf_verifier_env *env, const struct bpf_verifier_state *st,
-+			     const struct expr *expr, struct scalar *bounds)
-+{
-+	bool is_ptr;
-+
-+	bpf_add_cost(env, 1, BPF_COST_XREG);
-+	if (!expr->coef)
-+		return scalar_set_const(bounds, expr->off);
-+	scalar_scale(bounds, var_is_sym(expr->var) ? &st->equations.syms[var_symno(expr->var)] :
-+		     bpf_find_var_bounds(env, st, expr->var, &is_ptr), expr->coef);
-+	scalar_add_const(bounds, expr->off);
-+}
-+
-+void bpf_eval_expr(struct bpf_verifier_env *env, const struct bpf_verifier_state *st,
-+		   const struct expr *expr, struct scalar *bounds)
-+{
-+	eval_expr_nosync(env, st, expr, bounds);
-+	if (!expr->coef || (expr->coef == 1 && !expr->off) || scalar_is_unknown(bounds))
++	if (over_limit(env))
 +		return;
-+	bpf_add_cost(env, 4, BPF_COST_XREG);
-+	scalar_bounds_sync(bounds);
++	bpf_add_cost(env, eqs->sym_equation_cnt, BPF_COST_COPY);
++	while (sym_eq-- > eqs->sym_equations)
++		if (var_is_sym(expr->var) && sym_eq->sym[0] == var_symno(expr->var) &&
++		    !is_op(sym_eq) && !((expr->coef * sym_eq->coef[2]) & low_bits(bits)) &&
++		    (all || !sym_has_xreg(env, eqs, sym_eq->sym[0])))
++			*expr = expr_scale(rhs_expr(sym_eq, 0), expr->coef, expr->off);
 +}
 +
-+void bpf_eval_diff(struct bpf_verifier_env *env, const struct bpf_verifier_state *st,
-+		   const struct expr *a, const struct expr *b, struct scalar *bounds)
++/* "@a - @b @op 0" holds */
++static void refine_diff(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
++			const struct expr *a, const struct expr *b, u8 op, bool jmp32)
 +{
-+	struct scalar b_bounds;
++	struct equation_pos pos = {};
++	struct scalar bounds, zero;
++	struct expr diff;
 +
-+	eval_expr_nosync(env, st, a, bounds);
-+	eval_expr_nosync(env, st, b, &b_bounds);
-+	scalar_add_scaled(bounds, bounds, &b_bounds, -1);
-+	if (!scalar_is_unknown(bounds))
-+		scalar_bounds_sync(bounds);
++	while (bpf_find_next_diff(env, &st->equations, a, b, &pos, &diff)) {
++		bpf_eval_expr(env, st, &diff, &bounds);
++		scalar_set_const(&zero, 0);
++		scalars_refine_cond_op(&bounds, &zero, op, jmp32);
++		if (!scalar_intersect(&bounds, &bounds, 64)) {
++			st->equations.infeasible = true;
++			return;
++		}
++		if (!var_is_sym(diff.var))
++			continue;
++		refine_sym(env, &st->equations, diff, bounds, 1);
++		propagate_bounds(env, st, false);
++	}
 +}
 +
-+static void print_operand(struct bpf_verifier_log *log, const char *prefix, struct expr expr)
++/* "@x != @low" holds. If @low is (u32)@x, then @x is above U32_MAX. */
++static void refine_carry(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
++			 struct expr x, struct expr low, const struct bpf_reg_state *low_reg)
 +{
-+	if (expr.coef)
-+		bpf_log(log, "%s%lld*sym%u%+lld", prefix, expr.coef, var_symno(expr.var), expr.off);
-+	else
-+		bpf_log(log, "%s%lld", prefix, expr.off);
-+}
++	struct expr untruncated = x;
++	struct scalar bounds;
 +
-+static void print_sym_equation(struct bpf_verifier_log *log, const struct bpf_sym_equation *sym_eq)
-+{
-+	bpf_log(log, " sym%u=", sym_eq->sym[0]);
-+	if (is_op(sym_eq)) {
-+		bpf_log(log, "insn%d", sym_eq->insn_idx);
-+		print_operand(log, "(", rhs_expr(sym_eq, 0));
-+		print_operand(log, ",", rhs_expr(sym_eq, 1));
-+		bpf_log(log, ")");
++	if (reg_umax(low_reg) > U32_MAX || !var_is_sym(x.var))
 +		return;
-+	}
-+	bpf_log(log, "%lld*sym%u", sym_eq->coef[1], sym_eq->sym[1]);
-+	if (sym_eq->coef[2])
-+		bpf_log(log, "%+lld*sym%u", sym_eq->coef[2], sym_eq->sym[2]);
-+	bpf_log(log, "%+lld", sym_eq->off);
++	skip_truncation(env, &st->equations, &low, 32, true);
++	skip_truncation(env, &st->equations, &untruncated, 32, true);
++	if (low.var != untruncated.var || (u32)(low.coef - untruncated.coef) ||
++	    (u32)(low.off - untruncated.off))
++		return;
++	scalar_set_unknown(&bounds);
++	bounds.r64 = cnum64_from_urange(BIT_ULL(32), U64_MAX);
++	refine_sym(env, &st->equations, x, bounds, 1);
++	propagate_bounds(env, st, false);
 +}
 +
-+void bpf_equations_print(struct bpf_verifier_env *env, const struct bpf_verifier_state *st)
++/* The jump compares two numbers, or the offsets of two pointers into one object */
++static bool compares_numbers(const struct bpf_verifier_state *st, const struct bpf_insn *insn)
 +{
-+	const struct bpf_equations *eqs = &st->equations;
-+	struct bpf_verifier_log *log = &env->log;
-+	const struct bpf_xreg_equation *xreg_eq;
-+	const struct bpf_sym_equation *sym_eq;
-+	u32 i, xregno;
++	const struct bpf_reg_state *dst = &st->frame[st->curframe]->regs[insn->dst_reg];
++	const struct bpf_reg_state *src = &st->frame[st->curframe]->regs[insn->src_reg];
 +
-+	for (xreg_eq = eqs->xreg_equations;
-+	     xreg_eq < eqs->xreg_equations + eqs->xreg_equation_cnt;
-+	     xreg_eq++) {
-+		xregno = xreg_eq->xreg;
-+		bpf_log(log,
-+			xregno < MAX_BPF_REG ? " %llu:r%d" : xregno < BPF_XREG_TRIP ? " %llu:fp%d" :
-+			" %llu:trip%d", xreg_eq->xreg >> 32, xregno < MAX_BPF_REG ? xregno :
-+			xregno < BPF_XREG_TRIP ? (MAX_BPF_EXT_REG - xregno - 1) * BPF_REG_SIZE :
-+			xregno - BPF_XREG_TRIP);
-+		bpf_log(log, "=%lld*sym%u%+lld", xreg_eq->coef, xreg_eq->sym, xreg_eq->off);
-+	}
-+	for (sym_eq = eqs->sym_equations;
-+	     sym_eq < eqs->sym_equations + eqs->sym_equation_cnt; sym_eq++)
-+		print_sym_equation(log, sym_eq);
-+	for (i = 0; i < eqs->sym_cnt; i++)
-+		bpf_log(log, " sym%u=[%lld,+%llu]", i, eqs->syms[i].r64.base,
-+			eqs->syms[i].r64.size);
++	if (dst->type == SCALAR_VALUE)
++		return src->type == SCALAR_VALUE;
++	return BPF_CLASS(insn->code) == BPF_JMP && bpf_same_memory_origin(dst, src);
 +}
 +
-+int bpf_equation_env_init(struct bpf_verifier_env *env)
++/*
++ * @st went through the jump at @idx, and its operands are refined. A jump that compares two
++ * numbers compares their difference with 0:
++ *	end = p + sym0; ... if (p != end)		sym0 != 0
++ */
++void bpf_equations_jump(struct bpf_verifier_env *env, struct bpf_verifier_state *st, int idx,
++			bool taken)
 +{
-+	if (!env->bpf_capable)
-+		return 0;
-+	env->eq_env = kvzalloc_obj(*env->eq_env, BPF_VERIFIER_GFP);
-+	return env->eq_env ? 0 : -ENOMEM;
-+}
++	const struct bpf_insn *insn = &env->prog->insnsi[idx];
++	const struct bpf_reg_state *dst = &st->frame[st->curframe]->regs[insn->dst_reg];
++	const struct bpf_reg_state *src = &st->frame[st->curframe]->regs[insn->src_reg];
++	u8 op = taken ? BPF_OP(insn->code) : bpf_rev_opcode(BPF_OP(insn->code));
++	bool jmp32 = BPF_CLASS(insn->code) == BPF_JMP32;
++	bool src_is_reg = BPF_SRC(insn->code) == BPF_X, is_ptr;
++	s64 max = jmp32 ? S32_MAX : S64_MAX / 2, min = -max - 1;
++	struct expr a, b, untruncated[2];
++	struct cnum64 lim;
 +
-+void bpf_equation_env_free(struct bpf_verifier_env *env)
-+{
 +	if (!env->eq_env)
 +		return;
-+	kvfree(env->eq_env->scratch);
-+	kvfree(env->eq_env->use_links);
-+	kvfree(env->eq_env->phis);
-+	kvfree(env->eq_env->phi_index);
-+	bpf_equations_free(&env->eq_env->join_state.equations);
-+	kvfree(env->eq_env);
++	refine_from_reg(env, st, insn->dst_reg);
++	if (src_is_reg)
++		refine_from_reg(env, st, insn->src_reg);
++	if (!st->equations.xreg_equation_cnt)
++		return;
++	propagate_bounds(env, st, false);
++	if (!src_is_reg || BPF_OP(insn->code) == BPF_JSET || !compares_numbers(st, insn) ||
++	    !bpf_xreg_expr(env, st, bpf_reg_to_xreg(st, insn->dst_reg), &a, &is_ptr) ||
++	    !bpf_xreg_expr(env, st, bpf_reg_to_xreg(st, insn->src_reg), &b, &is_ptr))
++		return;
++	if (op == BPF_JEQ || op == BPF_JNE) {
++		jmp32 |= scalars_fit_in_bits(scalar_of(dst), scalar_of(src), 32);
++	} else {
++		/* the difference does not wrap. An object is not in the first page. */
++		if (is_ptr)
++			lim = cnum64_from_srange(-SZ_4K, BPF_MAX_VAR_OFF);
++		else if (op != bpf_signed_opcode(op))
++			lim = cnum64_from_srange(0, max * 2 + 1);
++		else
++			lim = cnum64_from_srange(min, max);
++		if (!cnum64_is_subset(lim, dst->r64) || !cnum64_is_subset(lim, src->r64))
++			return;
++		op = bpf_signed_opcode(op);
++		jmp32 = false;
++	}
++	refine_diff(env, st, &a, &b, op, jmp32);
++	if (op == BPF_JNE && !jmp32) {
++		refine_carry(env, st, a, b, src);
++		refine_carry(env, st, b, a, dst);
++	}
++	if (!jmp32)
++		return;
++	/* w1 += 1; if w1 != w2: the equation is for the number before the truncation */
++	untruncated[0] = a;
++	untruncated[1] = b;
++	skip_truncation(env, &st->equations, &untruncated[0], 32, true);
++	skip_truncation(env, &st->equations, &untruncated[1], 32, true);
++	if (!expr_equal(&untruncated[0], &a))
++		refine_diff(env, st, &untruncated[0], &b, op, true);
++	if (!expr_equal(&untruncated[1], &b))
++		refine_diff(env, st, &a, &untruncated[1], op, true);
++	if (!expr_equal(&untruncated[0], &a) && !expr_equal(&untruncated[1], &b))
++		refine_diff(env, st, &untruncated[0], &untruncated[1], op, true);
 +}
++
+ static void print_operand(struct bpf_verifier_log *log, const char *prefix, struct expr expr)
+ {
+ 	if (expr.coef)
 diff --git a/kernel/bpf/equation.h b/kernel/bpf/equation.h
-index cb7132739a3..26c100e715d 100644
+index 26c100e715d..1cb2f358199 100644
 --- a/kernel/bpf/equation.h
 +++ b/kernel/bpf/equation.h
-@@ -41,6 +41,42 @@ struct equation_pos {
- 	u32 next, seen_cnt;
- };
- 
-+/* Scratch data of a function about a sym */
-+struct sym_scratch {
-+	u32 use_cnt;		/* equations that use it */
-+	/* propagate_bounds(): the sweep that has to look at its equations */
-+	u32 refined_sweep;
-+	u32 new_symno;
-+	bool determined, by_op;
-+	const struct bpf_sym_equation *op;	/* that makes it */
-+	struct expr cur_expr;	/* check_equations(): its value in the other state */
-+};
-+
-+struct bpf_equation_env {
-+	struct sym_scratch *scratch;
-+	u32 *use_links;
-+	u32 scratch_cap, use_link_cap, refined_cnt;
-+	bool has_expr[2], is_ptr[2], equation_added, divided;
-+	/* equation_join.c */
-+	struct bpf_verifier_state join_state;	/* it has equations and no frames */
-+	struct join_phi *phis;
-+	u32 *phi_index;
-+};
-+
-+#define for_each_sym_equation(env, eqs, pos)						\
-+	for (bpf_add_cost(env, (eqs)->sym_equation_cnt, BPF_COST_COPY),			\
-+	     pos = (eqs)->sym_equations;						\
-+	     pos < (eqs)->sym_equations + (eqs)->sym_equation_cnt; pos++)
-+
-+#define for_each_sum(env, eqs, pos) \
-+	for_each_sym_equation(env, eqs, pos) \
-+		if (!is_op(pos))
-+
-+#define for_each_xreg_equation(env, eqs, pos)						\
-+	for (bpf_add_cost(env, (eqs)->xreg_equation_cnt, BPF_COST_COPY),		\
-+	     pos = (eqs)->xreg_equations;						\
-+	     pos < (eqs)->xreg_equations + (eqs)->xreg_equation_cnt; pos++)
-+
- /* The pass is over its budget. It finds no more equations, a scan in a loop does not start. */
- static inline bool over_limit(struct bpf_verifier_env *env)
- {
-@@ -105,8 +141,30 @@ static inline int find_sym_pos(const struct bpf_sym_equation *sym_eq, u32 sym)
- 	       sym_eq->sym[2] == sym ? 2 : 3;
- }
- 
-+/* equation.c */
-+u64 bpf_new_sym(struct bpf_verifier_env *env, struct bpf_equations *eqs,
-+		const struct scalar *bounds);
-+bool bpf_add_sym_equation(struct bpf_verifier_env *env, struct bpf_equations *eqs,
-+			  struct bpf_sym_equation sym_eq);
-+bool bpf_add_op(struct bpf_verifier_env *env, struct bpf_equations *eqs, s32 insn,
-+		const struct expr *op, const struct expr *res);
-+bool bpf_find_op(struct bpf_verifier_env *env, const struct bpf_equations *eqs, s32 insn,
-+		 const struct expr *op, struct expr *res);
-+struct bpf_xreg_equation *bpf_find_xreg_equation(const struct bpf_equations *eqs, u64 xreg);
-+void bpf_set_xreg_equation(struct bpf_verifier_env *env, struct bpf_equations *eqs, u64 xreg,
-+			   const struct expr *expr, bool is_ptr);
-+u64 bpf_reg_to_xreg(const struct bpf_verifier_state *st, u32 regno);
-+struct scalar *bpf_find_var_bounds(struct bpf_verifier_env *env,
-+				   const struct bpf_verifier_state *st, u64 var, bool *is_ptr);
-+bool bpf_xreg_expr(struct bpf_verifier_env *env, const struct bpf_verifier_state *st, u64 xreg,
-+		   struct expr *expr, bool *is_ptr);
-+void bpf_eval_expr(struct bpf_verifier_env *env, const struct bpf_verifier_state *st,
-+		   const struct expr *expr, struct scalar *bounds);
- bool bpf_expr_div_exact(struct expr *expr, u64 off, s64 coef);
- bool bpf_find_next_diff(struct bpf_verifier_env *env, const struct bpf_equations *eqs,
- 			const struct expr *a, const struct expr *b, struct equation_pos *pos,
- 			struct expr *diff);
-+void bpf_eval_diff(struct bpf_verifier_env *env, const struct bpf_verifier_state *st,
-+		   const struct expr *a, const struct expr *b, struct scalar *bounds);
-+
- #endif
-diff --git a/kernel/bpf/flow.c b/kernel/bpf/flow.c
-index 2c1835d1b3e..0cb56390ffd 100644
---- a/kernel/bpf/flow.c
-+++ b/kernel/bpf/flow.c
-@@ -303,6 +303,8 @@ int bpf_check_limits(struct bpf_verifier_env *env)
- 	env->aborted |= bpf_must_abort();
- 	if (env->aborted)
- 		return -EINTR;
-+	if (env->no_mem)
-+		return -ENOMEM;
- 	if (env->cost <= min(env->max_cost, env->pass_max_cost) && env->mem <= env->max_mem &&
- 	    !env->over_limit)
- 		return 0;
-diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-index 7b1390d9054..8a905f4df9b 100644
---- a/kernel/bpf/log.c
-+++ b/kernel/bpf/log.c
-@@ -803,6 +803,9 @@ void print_verifier_state(struct bpf_verifier_env *env, const struct bpf_verifie
- 			verbose(env, "%s%d", i > first ? "," : "",
- 				state->loop_stack[i].loop->header);
- 	}
-+	/* one table for all frames */
-+	if (print_all && frameno == vstate->curframe)
-+		bpf_equations_print(env, vstate);
- 	verbose(env, "\n");
- 	if (!print_all)
- 		mark_verifier_state_clean(env);
+@@ -46,6 +46,9 @@ struct sym_scratch {
+ 	u32 use_cnt;		/* equations that use it */
+ 	/* propagate_bounds(): the sweep that has to look at its equations */
+ 	u32 refined_sweep;
++	/* propagate_bounds(): not of this sym. The queue of refined syms. */
++	u32 queued_sym;
++	u32 first_use;		/* see link_sym_equations() */
+ 	u32 new_symno;
+ 	bool determined, by_op;
+ 	const struct bpf_sym_equation *op;	/* that makes it */
+@@ -57,6 +60,9 @@ struct bpf_equation_env {
+ 	u32 *use_links;
+ 	u32 scratch_cap, use_link_cap, refined_cnt;
+ 	bool has_expr[2], is_ptr[2], equation_added, divided;
++	/* the operand of a jump and its bounds, see refine_from_reg() */
++	struct expr jump_expr;
++	struct scalar jump_bounds;
+ 	/* equation_join.c */
+ 	struct bpf_verifier_state join_state;	/* it has equations and no frames */
+ 	struct join_phi *phis;
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 49e98667b60..199108c2226 100644
+index 199108c2226..033f6b42ab1 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -1755,6 +1755,7 @@ void bpf_charge_state(struct bpf_verifier_env *env, struct bpf_verifier_state *s
- 	u32 bytes = 2 * sizeof(*st) + ksize(st->refs), fr;
- 	struct bpf_func_state *f;
- 
-+	bytes += bpf_equations_bytes(&st->equations);
- 	for (fr = 0; fr <= st->curframe && (f = st->frame[fr]); fr++)
- 		bytes += kmalloc_size_roundup(sizeof(*f)) + ksize(f->stack) +
- 			 ksize(f->stack_arg_regs) + ksize(f->loop_stack);
-@@ -1774,6 +1775,7 @@ void bpf_free_verifier_state(struct bpf_verifier_env *env, struct bpf_verifier_s
- 		state->frame[i] = NULL;
+@@ -17468,6 +17468,7 @@ static bool is_safe_to_compute_dst_reg_range(const struct bpf_insn *insn,
  	}
- 	kfree(state->refs);
-+	bpf_equations_free(&state->equations);
- 	if (free_self)
- 		kfree(state);
+ 
+ 	switch (BPF_OP(insn->code)) {
++	case BPF_MOV:
+ 	case BPF_ADD:
+ 	case BPF_SUB:
+ 	case BPF_NEG:
+@@ -17534,7 +17535,7 @@ static int maybe_fork_scalars(struct bpf_verifier_env *env, struct bpf_insn *ins
  }
-@@ -1808,7 +1810,8 @@ int bpf_copy_verifier_state(struct bpf_verifier_env *env, struct bpf_verifier_st
- 		free_func_state(dst_state->frame[i]);
- 		dst_state->frame[i] = NULL;
- 	}
--	err = copy_reference_state(dst_state, src);
-+	err = copy_reference_state(dst_state, src) ?:
-+	      bpf_equations_copy(env, &dst_state->equations, &src->equations);
- 	if (err)
- 		return err;
- 	bpf_add_cost(env, bpf_xreg_cnt(src) + src->acquired_refs, BPF_COST_COPY);
-@@ -24853,6 +24856,10 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	if (env->log.level & BPF_LOG_LEVEL2)
- 		log_program(env);
  
-+	ret = bpf_equation_env_init(env);
-+	if (ret < 0)
-+		goto skip_full_check;
+ /*
+- * dst = dst <op> src: the transfer function of the ALU insn @insn, all but BPF_MOV.
++ * dst = dst <op> src: the transfer function of the ALU insn @insn.
+  * @src can't be @dst. BPF_NEG and BPF_END ignore its value: any valid scalar will do.
+  *
+  * WARNING: This function does calculations on 64-bit values, but the actual
+@@ -17574,6 +17575,13 @@ void scalar_alu(struct scalar *dst, const struct scalar *src, const struct bpf_i
+ 	 * tnum to calculate an approximation of the sign/unsigned bounds.
+ 	 */
+ 	switch (opcode) {
++	case BPF_MOV:
++		*dst = *src;
++		if (off && alu32)
++			coerce_subreg_to_size_sx(dst, off >> 3);
++		else if (off)
++			coerce_scalar_to_size_sx(dst, off >> 3);
++		break;
+ 	case BPF_ADD:
+ 		scalar_add(dst, dst, src);
+ 		break;
+@@ -18322,7 +18330,6 @@ static void find_good_pkt_pointers(struct bpf_verifier_state *vstate,
+ 	}));
+ }
+ 
+-static void scalars_refine_cond_op(struct scalar *a, struct scalar *b, u8 opcode, bool is_jmp32);
+ /*
+  * Learn more information about live branches by simulating refinement on both branches.
+  * scalars_refine_cond_op() is sound, so producing ill-formed register bounds for the branch means
+@@ -18593,6 +18600,18 @@ static int is_branch_taken(struct bpf_verifier_env *env, struct bpf_reg_state *r
+ 	if (reg_is_pkt_pointer_any(reg1) && reg_is_pkt_pointer_any(reg2) && !is_jmp32)
+ 		return is_pkt_ptr_branch_taken(reg1, reg2, opcode);
+ 
++	/* Two pointers to one object have the order of their offsets */
++	if (reg1->type != SCALAR_VALUE && !is_jmp32 && opcode != BPF_JSET && env->bypass_spec_v1 &&
++	    !(reg1->type & PTR_UNTRUSTED) && bpf_same_memory_origin(reg1, reg2)) {
++		/* an object can be at a low address, but not in the first page */
++		struct cnum64 lim = cnum64_from_srange(opcode == BPF_JEQ || opcode == BPF_JNE ?
++						       -BPF_MAX_VAR_OFF : -SZ_4K, BPF_MAX_VAR_OFF);
 +
- 	ret = bpf_flow_prepare(env);
- 	if (ret < 0)
- 		goto skip_full_check;
-@@ -24994,6 +25001,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	kvfree(env->used_index.slots);
- 	kvfree(env->kfunc_index.slots);
- 	kvfree(env->insn_array_maps);
-+	bpf_equation_env_free(env);
- 	bpf_flow_free(env);
- 	bpf_stack_liveness_free(env);
- 	kvfree(env->cfg.postorder_nums);
++		if (!cnum64_is_subset(lim, reg1->r64) || !cnum64_is_subset(lim, reg2->r64))
++			return -1;
++		return is_scalar_branch_taken(env, reg1, reg2, bpf_signed_opcode(opcode), false);
++	}
++
+ 	if (__is_pointer_value(false, reg1) || __is_pointer_value(false, reg2)) {
+ 		u64 val;
+ 
+@@ -18662,7 +18681,7 @@ u8 bpf_rev_opcode(u8 opcode)
+ }
+ 
+ /* Refine range knowledge for <a> <op> <b> conditional operation. */
+-static void scalars_refine_cond_op(struct scalar *a, struct scalar *b, u8 opcode, bool is_jmp32)
++void scalars_refine_cond_op(struct scalar *a, struct scalar *b, u8 opcode, bool is_jmp32)
+ {
+ 	struct tnum t;
+ 	u64 val;
+@@ -18976,7 +18995,7 @@ static bool try_match_pkt_pointers(const struct bpf_insn *insn,
+ }
+ 
+ /* a == b (mod 2^N) implies a == b if both fit in uN or both fit in sN. N is @bits. */
+-static bool scalars_fit_in_bits(const struct scalar *a, const struct scalar *b, u32 bits)
++bool scalars_fit_in_bits(const struct scalar *a, const struct scalar *b, u32 bits)
+ {
+ 	u64 umax = GENMASK_ULL(bits - 1, 0);
+ 	s64 smax = umax >> 1;
+@@ -19223,6 +19242,7 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
+ 		err = refine_live_branch(env, insn, &env->true_reg1, &env->true_reg2);
+ 		if (err)
+ 			return err;
++		bpf_equations_jump(env, this_branch, *insn_idx, true);
+ 		if (env->log.level & BPF_LOG_LEVEL)
+ 			print_insn_state(env, this_branch, this_branch->curframe);
+ 		*insn_idx += insn->off;
+@@ -19241,6 +19261,7 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
+ 		err = refine_live_branch(env, insn, &env->false_reg1, &env->false_reg2);
+ 		if (err)
+ 			return err;
++		bpf_equations_jump(env, this_branch, *insn_idx, false);
+ 		if (env->log.level & BPF_LOG_LEVEL)
+ 			print_insn_state(env, this_branch, this_branch->curframe);
+ 		return 0;
+@@ -19331,6 +19352,9 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
+ 			insn->dst_reg);
+ 		return -EACCES;
+ 	}
++	/* last: the code above takes the operands of one branch for both */
++	bpf_equations_jump(env, this_branch, *insn_idx, false);
++	bpf_equations_jump(env, other_branch, *insn_idx, true);
+ 	if (env->log.level & BPF_LOG_LEVEL)
+ 		print_insn_state(env, this_branch, this_branch->curframe);
+ 	return 0;
+@@ -20842,6 +20866,18 @@ static int check_held_in_leftover(struct bpf_verifier_env *env,
+ 	return held_cnt(st) > st->max_held_cnt;
+ }
+ 
++/*
++ * The cpu can speculate past the jump that the equations decide.
++ * The removal of dead code can delete an edge only from a conditional jump.
++ */
++static bool infeasible_state_ends(struct bpf_verifier_env *env)
++{
++	int from = env->cur_state->last_insn_idx;
++
++	return env->cur_state->equations.infeasible && env->bypass_spec_v1 && from >= 0 &&
++	       bpf_insn_is_cond_jump(env->prog->insnsi[from].code);
++}
++
+ /* The current state came back to the header of the loop of @entry. Returns 1 if it ends here. */
+ static int next_trip(struct bpf_verifier_env *env, struct loop_stack_entry *entry,
+ 		     bool *starts_leftover)
+@@ -20924,11 +20960,16 @@ int bpf_flow_loop_enter(struct bpf_verifier_env *env, struct bpf_loop **backedge
+ 	bool pushed;
+ 	int err;
+ 
++	if (infeasible_state_ends(env))
++		return 1;
++
+ 	/* The callback came back to the helper that calls it, in the same trip. */
+ 	if (frame->callback_depth)
+ 		return enter_callback(env, true, backedge_loop);
+ 
+ 	loop_stack_pop(env);
++	if (infeasible_state_ends(env))
++		return 1;
+ 
+ 	err = loop_stack_push(env, &pushed);
+ 	if (err)
 -- 
 2.55.0
 
