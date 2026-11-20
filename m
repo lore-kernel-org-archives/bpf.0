@@ -1,94 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795197174;
-	b=kHLE0OBSs0x+ov890717lSt3hC3TgFBjw8aSEHpZHQbPxRPkN6dYTLD7dLo42vqDJbwC
-	 Qox79WtEuejLWRzhYtUEj4dxsWeLehGkhFpFNplGmMObJNqrqLWewhtqOKd14x1H4lIr2
-	 c5GQ9t5+zM2dV+5Yo5EJtzwgKM26gAIiw0AqGqa1dMw65SLOJT/XSTaJDjtkQNcSC101f
-	 +RxIzZRW0MGG0XDnXC2ZGhTbyJE7697eHUQHr40t5P0K4tETaudonvBqW8394MMfQa+Ki
-	 yQxzliuES9Y/40GJkWKAqIGnNddrEaB6pfsCymIuGuBWegwfTy7WRtrUx8VjHj5PsZQ==
+	t=1795201604;
+	b=XxHxkQ9XVJFoVYvX1K7v/1wprsCZ6uMYfhPY0xFgd1T+kt9iHtni+8WSfUIzM/z7J1KY
+	 Ec92gxgJd+hvGbbv0C3SbA0JQ0o5+RPAurJZUgexkT9rAyP1PhVHtjeZg8AysVHhaQX4a
+	 tSd2uzfEGHxUuTxEIS3zPYPUBXxLhecFA+xLyZYObGNP4qmga4H92stVjjSzvWusZ+uFw
+	 aAuwA45aKVzYzVvbriXXr/HTqAdYVso6pTGTDCpqqIFjKQnT/cfdBZ1gTxx8xh716s2jN
+	 xKhSQGpuj7WsBrFD6bqHCqkAP1x7DyNH7WwdRut0gmayaFJ/985cJwuXmFBTlIXbnXQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795197174;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795201604;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Subject:From:To:In-Reply-To:References:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=BH4blVO7lhv7YIvZ5PaNsfMa7mWDwoq/n8pgt0YXvZs=;
-	b=n+US8cgKsihrLo9B75adAq7XuG1KgkQ1UJEjYjUbxSN64BDOh3U2xAMrC1GOOkD8iUIN
-	 /NmxA17NKE4PwqzCK1wJCDgLedsGvaLU7nQDnJT+aHvapD4wG2FkdVE1MsxIzqyh0DrCq
-	 mqptdDwTV+OtgnOED31XJRBuV4pIR+53hVjI93wXOdjhDlj6gf3SHZ2YinqekEw5M+8IK
-	 liZdZNFXL3QUSOvB+8x21AMFJ2+U+qfwwJc2BjCs+KCLZmze2Mpoxy7yFVMAu5Qk/++ZM
-	 1mNGCT2D0FLH2a02VGRNs1QajIbUoWH0gDaRo1kjN4fdYLDc7s1R3gi71HKC8pU4s+g==
+	 Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=9QfCwv6q8iB9+8896+uv5bC3BHslVLQP8NmnilfJ2Qc=;
+	b=iA7HFx4qBauL4Iea4BJ+NB6yHVQbv69k2P1lyBo1E2b9TW51V0zz3bYLe1hZe97K9Ife
+	 ls3JiexDUEf5saVTekMvYO7O8zqJeloVlcX1Vc/y+VJOxAOJNtV+N2IX6JJos4AsfxPkC
+	 UXj4XShgijMHlktbB0wPUfVcHbxbgQvm6LPHrneOIfg6XTO732CUw3XufI76Ckixmg0+r
+	 SEPYNTrZsnJ2XDg/JY0H9zaZkxaHmC9FMwBSOQ7itaRAmJilqsfDYYgIaCi+OZs4FRXSw
+	 8slNGtaZbBM9XSYhVUCoQHAiOn82IAdJVtDxmHB6/ldwK1ZbaBEVQBxLAZhjMPl1QBw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=SameDaVI;
-	arc=none smtp.remote-ip=209.85.214.178
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rDsEEaoV;
+	arc=none smtp.remote-ip=209.85.210.169
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11A14606A325
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 17:52:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 11A14606A325
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5913960A263B
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 19:06:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5913960A263B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=SameDaVI
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2f020d0169eso6412785ad.0
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 09:52:53 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rDsEEaoV
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-8c70c2ab5a2so614331b3a.3
+        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 11:06:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795197173; x=1795801973; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+        d=gmail.com; s=20260707; t=1795201602; x=1795806402; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
          :from:subject:message-id:date:content-type:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=BH4blVO7lhv7YIvZ5PaNsfMa7mWDwoq/n8pgt0YXvZs=;
-        b=SameDaVIHZHnT0teSNesvGqqOiPOOHTPvVstm5QJJqiWD3gfel0grXntcJsiSURTgq
-         SJTFbvTph23cy/r0LUoNMroWkwp4Ga9a/sNTCxr9dCGuiDYuy8hh8ALSYlgcNYtJCPT5
-         aT8LdJGyJWWb+fqTjbrqFbTvGj939nWOkxuBWz09uyFuaQIhDthA8HDIr5FItzBjSEoF
-         gJLSl4mRcmMIFeRNGXe0iFMrSHIGiEUaBwnnegc/MrAOS/BYcuYtBuJeI3xUXTG1XVu4
-         zpD1e3i0nQw71Jee7YEk7e/y5AVsAnucY36MkTl7Mqs10uVm/JjW8L+i+g8zLmMPnvh9
-         0Q3g==
+        bh=9QfCwv6q8iB9+8896+uv5bC3BHslVLQP8NmnilfJ2Qc=;
+        b=rDsEEaoVpoGF5GrKMVL83T+4DUsmLWwaxPxh/QQP0I76AxwjNRSBrN17TOAwnvtjgN
+         aGJiM5gFKm4PRR7xzz1M51+5BNgZS+pOMcrSJEOsC1yHKy3lbEuAj+ipN0Mmtwwrdp0J
+         fL7/sS3OBfIEriTYlzRyXBjRUF5IANPrT8dwImYQNp3Ca1E05Lykzw9O8TZcHS4AXFuM
+         Eetzp6T0FSXtQIctMqOBQ/VfQRwzYiKNlAMFzUeimkG5jqCvFA9xZE8hBlIQb7tZN2hK
+         pCoTiGViwfYTEEspTXrQu2cevVCBnfXkrRGbEG4Z6tUWo44I0QEal3Sg7NPENzYm37KJ
+         hAGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795197173; x=1795801973;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+        d=1e100.net; s=20260707; t=1795201602; x=1795806402;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
          :from:subject:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=BH4blVO7lhv7YIvZ5PaNsfMa7mWDwoq/n8pgt0YXvZs=;
-        b=seuEuO2aNKzsPj2stwnfSacNwQZbvAGLamiRfXJY2gMqVFLuPtKWDzx4FiEoU5uTNY
-         CrNSfZo29bBQsMiTZIztVDSHT4EcB5PgMZzMd9giRt4ySolGpWS6srJxa1ngK8yK9Wbv
-         qYTdTcIglHK164PCJecE+UEU/SXxrJivTFTnGH4JKKHFCqEKgQtkinEBEOH5w7WZYCTW
-         MDCU4+w8323KEF7ObHLBxIRIzo6OGXd4urrIsM4A1WeXXQJn4LW1f1/Q74paXemm/SOm
-         pbFEgBUpC6IZcW/ItWPB7a/t2I7NFDe5rzv/+FXK345FxKvz5Aq9K1P3Xc7BnHvYc5VQ
-         dyXg==
-X-Forwarded-Encrypted: i=1; AL+hErEY9lgEPyegeIFJemvie/3TLK4oaPhRB3m+5+pCyq/JE2XmhdilafxmiPxkHXlHNsWoaCc=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/tPq9epAMRFSwco0ht6Ge8ZxYK6t7p/i5weTFsFM7WTdhuPp/b
-	r55EFQwivtzMkcNDJHX4V0eMaghTtCTfH99fcF5AQmXcbE82ReLVOQyT
-X-Gm-Gg: AZFdTZfFSNaQKaKMLkf0eHp2beLEymrlysFKVFR7wTPoU4Fn6d0+b5R4FJgXxPcQgs5
-	1WvKvkukcXj+hWVEyXjEX9RmPz+l9AkI9PetNNnrearbx2aFiBnG5wHuCOl7OWBQ6ktfFI1xQ1q
-	C04KSHl9T3IT4CpNHx/QG/Tthhempc77wMLgELQomIlzwUbYZ/pP2IpyjABFgg6sx5KMEH4Eiua
-	je54XydAF0iqPlOnLZGFE1/6xiUPvpuHAJee1lY1boziZdor57NJRg3xDFh50pFdGNDbSEioZW9
-	aGUjdzQxYXEH4UZnVlmMpxy0S/axByZ88yD3NxkKhwNLGMS7vA/tyCu/xBMYx1OV0HQl72nVnK7
-	R5LcQAb+w0rssVPUtVWoiAXLvoC4eV7jwTgNMUsCiq4QT1YYXDWvm+53fC9ZzRCwTRZQCkHFg6C
-	oysy2q6w1kPNUBxjYXJRZ2qD1NZ6AEMP0QWgJyZMmLYBgLZRRkNcvtzeEupY3KhjB/OWv1WbJMd
-	9mI5614FgsDw1odojtwW+oP6PO5bmh9rl3sa55gnA3Flk+mNyskNxPfn8dhiuFDWVXkG7jDAf4H
-	hl3Ubtcsbj5oanfq0fYEutTklf2oHLlU1dJRV+6nv/oiLU2+MEHz6EYgJlgnsEu9ORH9fRj+5OY
-	B/9/aTUwCLJ11PKemZD0b1wQdxfsjps4cmQ==
-X-Received: by 2002:a17:90b:4d0a:b0:39e:4c80:f67b with SMTP id 98e67ed59e1d1-3b41c8fe860mr3506076a91.26.1795197173128;
-        Fri, 20 Nov 2026 09:52:53 -0800 (PST)
-Received: from localhost ([153.61.198.252])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41ad47091sm5190333a91.10.2026.11.20.09.52.52
+        bh=9QfCwv6q8iB9+8896+uv5bC3BHslVLQP8NmnilfJ2Qc=;
+        b=qImfmBnOFFCkevirlxyYRaYbolwIRqnOjct5IzXhfdgD4Axn4uK/XoGDXwF4Akb9vL
+         ppvZV2TUOF2Jm6j7zia+aMLU7cxl9ECUx2nQ1ooF87FFVSW/3i8o2siXN9Ah57XG8Vkb
+         5PpmtVVqcdGbDuI1UUFXY40GqmURgEO2uJE8T4NbmuryZew6T80ryUwcOUietZpNFX5t
+         GZZiG4ERT3A3UY1Vyo3l29he5TUhdDUrDPfZBH181NUh71SmwPygtPvD5Euckh5jw5bK
+         187CL8h+37nHQPI3AdNtfYec+l1zLrpRnr3j23vtoLFfckIn/4rV2ku30E4lKxNCcNDT
+         slaw==
+X-Forwarded-Encrypted: i=1; AL+hErGi+NgaFNjybax5Sx+It00IZEvbFGTA2XD0zTs/IopMSKjPrPvLYMEB1jZe0LNq/FhG7kA=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+5GsIZDotXfYJ8dBC+/jrlr1qk20Zw6/pNcPfUrAH14Mi9uRqi
+	7/TQN4OdNgUFkRwigMhkq1YXOOZJAB1zdsNtI1ndAZ/BGccACRbkyhB+
+X-Gm-Gg: AZFdTZe8MPOt/7KemDqPxe7DfIm6Hx0/RpKbsXHEHMgEbV1ZzSDbtCixAid68rQgyXb
+	ZVL9oCCkHlGhfolOfPP1t/EW8zpDz1xG919/OBLTjZDZptt6OmF3jATnrEWGVsg36UBOMsd7Ite
+	QgMWwjKxLba8RQxXZ1RP1ToxHFXlEPqJ9x96+b9+P2qQwRZt9CZNRAtnob+zR/z7J6DUCTWn6j9
+	1DFVLVf/u5jj2vecKQM6Jbq08sPPGn7vwdC3GYMPxrGXuhaFFHyHKOFaJ8I7pzYG95CVXXr7zn0
+	JUguQXzEt5Hzs/tawXyGLzi/mxKWA5FnK+sZiDjMlsnFL+FtcU7Iojx3DbiYAb1TfggBdle8vXq
+	pWkQcwVTUxPoG1g/uuRT0Sf51ApB+AL4omhD3e3vVnhc9XMu3XBQwX8xIOpFeQi6X462TP0wI2q
+	Q9uqM5cIhsV/8qTIGKUmN4z5lsklARRqUFbkjJndESpnklZpShdrjtxSu32eph+qckdWgwYq28o
+	NRYDzSlHsvHtaLsSRnWchkyOluN903PgE+GRkWzFjfe86Uu+/yCbXlkSemZhU8ZBIbMWdPN0A7I
+	vBxdc8qKwLUePiby972Amoe1Tl2h5EKjMMox/G448xyid1f6DvsDiTJO0FIZCWUPN0+xxha1eMt
+	aBISDKncRnXhFAmQ25cju5z3OO4pdbFE3FQ==
+X-Received: by 2002:a05:6a00:1808:b0:89c:1f2b:a73f with SMTP id d2e1a72fcca58-8c87bcbced8mr3885525b3a.17.1795201601384;
+        Fri, 20 Nov 2026 11:06:41 -0800 (PST)
+Received: from localhost ([153.61.198.255])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c87285c219sm1956161b3a.18.2026.11.20.11.06.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Nov 2026 09:52:52 -0800 (PST)
+        Fri, 20 Nov 2026 11:06:41 -0800 (PST)
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 20 Nov 2026 17:52:52 +0000
-Message-Id: <DN08ABWGIAWE.3SYT0JSL0HJW9@gmail.com>
-Subject: Re: [PATCH bpf-next 21/49] bpf: Compare states by join_key, then by
- value
+Date: Fri, 20 Nov 2026 19:06:40 +0000
+Message-Id: <DN09UU4NHKLV.29WR92GGDPBP5@gmail.com>
+Subject: Re: [PATCH net-next 1/1] net: neighbour: skip the stale dst lookup
+ for a redirected skb
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: <sashiko-reviews@lists.linux.dev>, <bpf@vger.kernel.org>
-In-Reply-To: <sashiko-outbox-224719@kernel.org>
-References: <20261120074430.2704488-1-alexei.starovoitov@gmail.com> <20261120074430.2704488-22-alexei.starovoitov@gmail.com> <sashiko-outbox-224719@kernel.org>
+To: "Jamal Hadi Salim" <jhs@mojatatu.com>, <netdev@vger.kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>, "Eric Dumazet"
+ <edumazet@kernel.org>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni"
+ <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>,
+ <bpf@vger.kernel.org>, "Jiri Pirko" <jiri@resnulli.us>, "Victor Nogueira"
+ <victor@mojatatu.com>
+In-Reply-To: <CORE-J9UK.v1.r0.20261120103344-1@mojatatu.com>
+References: <CORE-J9UK.v1.r0.20261120103344@mojatatu.com> <CORE-J9UK.v1.r0.20261120103344-1@mojatatu.com>
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -100,26 +105,21 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-On Fri, Nov 20, 2026 at 12:22 AM sashiko-bot@kernel.org <sashiko-bot@kernel.org> wrote:
->> +		/* it can be filled into a register that is unreadable */
->> +		if (old_type == STACK_SPILL && old_slot->spilled_ptr.type == NOT_INIT &&
->
-> [Severity: High]
-> Can this leak a spilled pointer when !env->allow_ptr_leaks?
+On Fri, Nov 20, 2026 at 07:42 AM Jamal Hadi Salim <jhs@mojatatu.com> wrote:
+> Skip the lookup when skb->dev is already neigh->dev; the parking neighbour
+> is the top-level one in that case and can reinject the packet itself. A
+> dst that is a route via another device, which is the sch_teql shape, still
+> takes the lookup.
 
-No. Patch 25 adds the join that makes such a spill, and it makes
-__is_pointer_value() true for NOT_INIT.
-So the atomic insn fails with "leaking pointer from stack off".
-Patch 47 has this prog as a test: unreadable_atomic().
+It doesn't. The check never reads dst->dev:
 
->> +		    memcmp(&a->refs[i].ptr, &b->refs[i].ptr, sizeof(u64)))
->
-> [Severity: Medium]
-> On 32-bit architectures, does passing &refs[i].ptr with sizeof(u64) to
-> memcmp() in same_refs() and bpf_hash64() in bpf_hash_join_key() overread the
-> 4-byte void *ptr union member?
+	if (dst && skb->dev != neigh->dev &&
 
-Not a bug. The union has 8 bytes on 32-bit too, and the compare is for
-all of it: parent_id and ctx_arg, or ptr.
-memcmp() in fortify-string.h checks __struct_size(), not __member_size().
-realloc_array() zeroes a new entry, so the 4 bytes after ptr are 0.
+In the repro dst->dev is va, skb->dev and neigh->dev are vb.
+The lookup is skipped. teql takes it, because skb->dev is the master.
+
+That ends with 3/3 of your teql series:
+https://lore.kernel.org/bpf/QDISC-6HS9.v6.r0.20261119070330@mojatatu.com/
+Then 2/3 of it and the lookup itself can go. It can be a follow up.
+
+Acked-by: Alexei Starovoitov <ast@kernel.org>
