@@ -1,64 +1,49 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795134108;
-	b=AZvidjCPOZz8rsGdDHw4ry3GKHU1x/QaQi8eOLQox3du26Gaf6378c/w9s3HLbGjjvBg
-	 0lCok1YOwsyZXMNXFMneQy/9FEED4exRJkyHa05CAED+NrFItyTB2ktDifC6t0dXLwp+y
-	 60hrPJSxjFX80OgQA3+aJOMfgnLsYQpvq8EvgZsYuRoyfrNPek5ZG7lkG9NgVV3PzmHRS
-	 P2mUuLhV2+ap8bhqwRZOduzi592vhWECt5b1/RW15UuVHm2hgxLL5r1aqeCL+ttHZQCNd
-	 MSI3AxY4/V9ysWYENHutpugQP6SnDURPa8nTodrehDTukBSOTEyxmqfv/5X8dXmAf9Q==
+	t=1795134610;
+	b=jRU9qCsKVhTCykaQRRQhMxodkXGCYIbzbNDDIrMC2bKfRh5Qp0JRpSm6vKzU3GvpDB0K
+	 L+zF6xpntUu9wW7MsHCq3/E0ya89MVyKO8ButgmJ5zh0C7eZUZDRZMdqIpPY7ZYWoG+gd
+	 5h31iLNipFY3UbQjHvMaOJM4m/j8NnS5VHUl7t5ZEfHssxvvPANBYfPdlxRfF/EVso0jU
+	 A3/SbtIBdDh3hrP8Vrcb7EVSHOmqnWT5XJ83ohKmzK0B1EhyIFAp0C/c/jBCFkd22vQNE
+	 f4z/ZRwwiiY+zG/Wn/vdTuII094qLG/y22UwrrPCnW3WeT+QxvixzYDxZJlWapJHjBA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795134108;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=XXl5Wks0t1sgJvCYx/Xx2y8xGB7wUJF4ESZfk4A/80A=;
-	b=Vew0+o5zfoYNGFCdabP9UbLNSLZSHuA7TvwJkJ9fgDxbw4ZE8b18wghbTsdff2uA5xQm
-	 TfFOJkqMpiswfl3uWjag5xWyP6CLw8PGLdMoIIRYGOhFGHuZ3+OrjlF8ymIEUkdPyL3je
-	 HDFaI7tfgTsOrtT9ltqiqY1Vi7Nx17WKATqRcc3wC4RI1WcWno9N/59SlEaMlqZRY8sYz
-	 jVGh6tjJGgXbJMPmiYqffe0k7zk1aLIEyhrXJN8M5fGUTDzjhciCGTT/TtDgxDnnTPQvq
-	 G8xFvxsYBZHWAP4c4yySt/qhIdKpzmGFYEH+AN/FyxoTCBrx1j90VtM1IWPxKUcw6Aw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795134610;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=j81a6CYqM4ciq174eNhPfqQfAzQAbu2OK1Ia3w78EoY=;
+	b=ICzIUsa4v21spbb5ESRNoZwRPw67uJ11c/IP2/Oz43CI9FxEs7JFWlnEir6iEDfgsz9K
+	 NPh2fYeIcNSivAJcrbDLFHu/SMOh/+QtBCOira81MEfeNCCeh2ByjNqksSGh+8js7mZYi
+	 yG5f6L3FsiiL1teZZNJyPuFeBQP4yg2gbsw9m6BVUXJZhV1Q4Q5UDB08c6RPVY2T3x438
+	 EVvJ4xgJxDWMWWcTkOowoaE4jPvPdLp7Vb29l3t00kRrUrdW+2VAoji7HnoAaQhDR0pJI
+	 0BGafe4m4FTnMCNMtvPaKHd6w0MDhFKcPKXUwv4vXj1wrGuKMk4xgbVnngapOPyfA2Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IvCo7sGn;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="O/sJDn1z";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F962606A320;
-	Fri, 20 Nov 2026 00:21:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2F83606A331;
+	Fri, 20 Nov 2026 00:30:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IvCo7sGn
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50D9A1F000C6;
-	Fri, 20 Nov 2026 00:21:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=O/sJDn1z
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 058B21F000CF;
+	Fri, 20 Nov 2026 00:30:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795134107;
-	bh=XXl5Wks0t1sgJvCYx/Xx2y8xGB7wUJF4ESZfk4A/80A=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=IvCo7sGnvF2S6dANWB/7N+JUxRxhcxtwq0EwK4QkWNXR7e0iJKaM7ycoF4HG6aQLQ
-	 plvmUJPs6NEZ3O7jlTpvTxoNZy6MvpPMYNcIQ8btLhQX3f2waSn0Q+iwr5+42lEEEP
-	 5REOiyC1uXfotMKlQFXadlqm2e5c3+db0OL+p4/q2I9KbegIFKJedBC9RXMJ2Fjy0K
-	 ShMBZSuZEuWukK98HMu1A5PAFSmDXEht6bNeQ4YnOA0T+GMJD1b+axFor+aHAdmHxO
-	 nuFzXXN8OgfUWISKNy++/hUB7jBiNYJX/PC0Kf9WbgYFt9RnHjEUgioVVUB2IBUv7S
-	 aHzc+lzwN1L6A==
-Date: Thu, 19 Nov 2026 16:21:46 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Todd Freed <toddfreed@meta.com>
-Cc: <netdev@vger.kernel.org>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon
- Horman <horms@kernel.org>, Daniel Zahka <daniel.zahka@gmail.com>, Willem de
- Bruijn <willemdebruijn.kernel@gmail.com>, Wei Wang <weiwan@google.com>,
- Jamal Hadi Salim <jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Sabrina Dubroca <sd@queasysnail.net>,
- Boris Pismenny <borisp@nvidia.com>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net v2 0/3] net: don't redirect decrypted skbs to
- ingress, psp time-wait validator
-Message-ID: <20261119162146.28229969@kernel.org>
-In-Reply-To: <20261117192411.247117-1-toddfreed@meta.com>
-References: <20261117192411.247117-1-toddfreed@meta.com>
+	s=k20260515; t=1795134610;
+	bh=j81a6CYqM4ciq174eNhPfqQfAzQAbu2OK1Ia3w78EoY=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=O/sJDn1z7KySfP4y+JvOK1+VbxWSHK63A03oyQSWN+y7qYChmF5xnwo8SVfUacL3F
+	 2LMa61zc3yy997nj2VxHn4oyVZtiCZ0Cccw0V3ZUz4uMb4vQS6pk2kBvwFMDzj8UKR
+	 WvluGLy8BA7WV9P9vScYf/nh5oGZussPmmHX4EY8R/eHBxROOpTlSXgf8QckbP1OF2
+	 saMAu2DcBoOvMgU/WrDolA5Fbg1KflIG+6x9jwUCOkIwNNEfVSgaf39Kwjdf/xtBtz
+	 UfxDam1PMiokSpdx/JkzyLBwmr80fJ62o17VRHCWDZHes3S9zjDmTDdoQktV0d1aDy
+	 SO1cZMAh5MYUQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F15D43808209;
+	Fri, 20 Nov 2026 00:30:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -68,20 +53,52 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v2 0/3] net: don't redirect decrypted skbs to ingress,
+ psp time-wait validator
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179513460852.3945374.16984787247285692246.git-patchwork-notify@kernel.org>
+Date: Fri, 20 Nov 2026 00:30:08 +0000
+References: <20261117192411.247117-1-toddfreed@meta.com>
+In-Reply-To: <20261117192411.247117-1-toddfreed@meta.com>
+To: Todd Bert Freed <toddfreed@meta.com>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, daniel.zahka@gmail.com,
+ willemdebruijn.kernel@gmail.com, weiwan@google.com, jhs@mojatatu.com,
+ jiri@resnulli.us, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, john.fastabend@gmail.com, sdf@fomichev.me,
+ sd@queasysnail.net, borisp@nvidia.com, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
-On Tue, 17 Nov 2026 11:24:08 -0800 Todd Freed wrote:
-> The third patch makes psp_twsk_init() give a validator only to the
-> time-wait sockets of PSP connections with a Tx key, instead of to every
-> TCP time-wait socket. It has no effect today, but the net-next series
-> will rely on the presence of the validator to check if the socket has
-> an encryption offload.
+Hello:
 
-Ah, I was commenting on v1 yesterday, there was a kernel.org outage
-over the weekend so series tracking from last week to this week didn't
-work :(
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-For future reference - there needs to be a path in net that hits the bug
-for something to be considered a net-worthy fix. Otherwise no Fixes tag
-and to net-next it goes.
+On Tue, 17 Nov 2026 11:24:08 -0800 you wrote:
+> Three fixes that are relevant for the net-next series, "psp: introduce
+> socket-less associations". These were previously patches 6-8 of its v1:
+> 
+>   https://lore.kernel.org/netdev/20261111005533.6436-1-toddfreed@meta.com
+> 
+> The first two patches prevent sending decrypted skbs from egress to
+> ingress, since the meaning of skb->decrypted depends on the direction.
+> This affects the packets of kTLS and PSP device offload sockets.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net,v2,1/3] net/sched: act_mirred: don't send decrypted skbs from egress to ingress
+    (no matching commit)
+  - [net,v2,2/3] bpf: don't redirect decrypted skbs from egress to ingress
+    (no matching commit)
+  - [net,v2,3/3] psp: only give time-wait sockets of PSP connections a validator
+    https://git.kernel.org/netdev/net-next/c/82290fab668c
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
