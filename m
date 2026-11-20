@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795160722;
-	b=i4AX0jJY4yQL3eSJvbvr2C2YCsDR8ki0g0TnlRi+xfnAwb/0jPjp6UO4Dgom+Y1MkIMk
-	 +GTXx4JLHMZOB5uMZTcu5FFHBZh05xXIxip75Iv+g7YNvkrax2rBDqMfL9ppkx27v1aRg
-	 1TkUd6aze7WbyZKLMixDi9btvvI6MyRoGjzRMS5Bq2YQpoLTxkSVoalRiFjAC233F80Hg
-	 w/dGEM5/WXmBsHDsFVOYqkyBROI7eQPC0BrhZ0P+xXk/A2ELuRSLDe4Qp8/Q4NjOq0tkL
-	 eo4/IyM/fIsRAIGtb9Lsp9hCMFRAC3K8Qf2SEuoH4TdT+P7eB88B7avGPwuWbxvf9Aw==
+	t=1795160729;
+	b=2gpHOq7+n2tg+cSDVsTBcHzSMZr1LmCQQDFk0Sc7Pn2MzPHp11xW0jQ47RtweKs07Zmt
+	 MxFg6budZjB8tgqrtn/ArekuOn5D5nQQumZT9ntSZa5BROKHs3L3JyFIm4/1yGxxDaEir
+	 uhJnUA0qC08PGpIPregcYFodtV+gHx1vCa6yOjwz+D3Oprxg1xt3BAo3ubYCTPVmz2yBX
+	 1bzpbwhc0pPHbe38OdZ7GuWa3iw+0lDUtOnQp2JDzgjLQsclTWU5Sr7mCYOzapSXBAohw
+	 51XknKsqugV5emDZNzKriMGcNBRkf/+P7T5sKyd1Wxi3isNJek1jCFzke1/z5233hbw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795160722;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795160729;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=7opBa2z5AP4yDG5LCrjNlI2G9W+gt3HXroxJ2DLYhbc=;
-	b=kNCQZuxW/amV7WOVb9V2EJqEOKTkODK4JrLRAJCqHABhpd/fBuTeXRF1gkJYmkiMYPP9
-	 culkjwKv2tugq5DVVrTu/M4XHbiFVJjpbZUABEPFwd/AwB48P+HWVQPu8CSiTByblP/ho
-	 JaqmkHBm5c805a9E7o/9XQTH0aiXyig9cVC/Z0rS2hB5rjkhT1OGBOTd9IG8FdC60xC12
-	 xycUk9FEMafY29Lds6DKCome5jdg7DzdrrHuFziamMca4D9lyxPUvotalvGhsHQ+jLveE
-	 qYW4SWSJgGZedgsJWuJC3e6+pJDL6mvDOItQ7Fol2htW7wLLXpGAuQLhh64TTufVi/w==
+	bh=zinc1Lt2XjZ7XEZUye69nMSKaHU+8lpKqd9qrI8ZiPE=;
+	b=vLXdSTr9XDnzsc17hzt7noj9SJHTPz0n7zc/EBO8gxrVUvr05J91qJHw8ocwHoWkpOIU
+	 /+9NhvStq25dHyTWwzoDEM17XXu57szV4I7bYPtLXXpgdrr+VkNNUjd2Nu1uPPQy9hs2L
+	 MbHAg/DJUR1xojCwVCwN5ngYgVUnO3wam7h5x2MjxX/WRF+gkgTDYC3yWrtGY6fEbDrGY
+	 C0ldsGvPlvQzzr0oE8X67GlOiCsAELmLLp7JXMINGtUS3n1bIXrMrBIxzpNyfbsq3Qto5
+	 eP+DKvN0r1jNPVpjgxtGNFnoTqiByItyXItIZNhV3uNFpFCwtlzUvLCNFOzcMGiWaOA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KSWZ6tvT;
-	arc=none smtp.remote-ip=209.85.216.42
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KrFTnF4G;
+	arc=none smtp.remote-ip=209.85.210.172
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA2C6606A32A
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 07:45:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EA2C6606A32A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D7FD606A330
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 07:45:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3D7FD606A330
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KSWZ6tvT
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3b40d23e1adso558968a91.0
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 23:45:21 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KrFTnF4G
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-8b29b83fdf1so346646b3a.2
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 23:45:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795160721; x=1795765521; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795160728; x=1795765528; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=7opBa2z5AP4yDG5LCrjNlI2G9W+gt3HXroxJ2DLYhbc=;
-        b=KSWZ6tvT+Bl1U+/61QYxVZPqComCUpMv/rQBy8sbKURVkmd2dp1fuvMQTUTejoJGe3
-         lp8htmbKiH7VZH02lcsXeLa9R8iE5noo8SvFB0/gNAC9gafjpejx4NBgAP7cLNT/YcX6
-         S5jFd/Ietig9cmnblPfYPx/+C2WAYV8wDB7ei5mXm1WX791gaqHN13Lrqe1TAcBSOdZA
-         jDoQJV+NKPT0keRM2Q3IDD06Btk9dCXlZwWrgnj/G8+uaWY0dRhEa8h+VyzAvOGyLFCG
-         kEgIpFgShrpw5xu5mHsJPj2plZPEj8RxON3sixPIaoE7PqK/KWA4mEKvrjp+kygotnhM
-         zJ6w==
+        bh=zinc1Lt2XjZ7XEZUye69nMSKaHU+8lpKqd9qrI8ZiPE=;
+        b=KrFTnF4G7UM/2Sq2ft6paiXRL31/R71qzr0bsqWwXyIZ75sGA/KCINqZXzvUIapLid
+         JT3kLKIM6a4VJyb04HAiylfScNpeLcOx5u5jJ1pMLcZ0Y/P9KSoo59HlDVqHUsuByjxX
+         uVREjFwCvRC33x6qIg7vzL6j9OVnr4Ty20CtLY4QkARyYMbAyQZMdCG6W1Oc3KR6nXsR
+         wSeiy6EPDQTBKoO3Q4LbO7bB88IDNIv1sv4a44YfAW6/A6dnakeiesikptA3BxIFakwv
+         e9ppeluqbXKD4iIP1KCuO4+05o7RgrPnv0X/lGzwzWI38+u0kKYmNVFFw4yh06QWrR6e
+         zU3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795160721; x=1795765521;
+        d=1e100.net; s=20260707; t=1795160728; x=1795765528;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=7opBa2z5AP4yDG5LCrjNlI2G9W+gt3HXroxJ2DLYhbc=;
-        b=O+/Pw0wfxs0XEUP3pBEnEYx6bNzZIN0+m+F8XBckr14MBNkCculpZ9+LEcA5yz5yIV
-         8T85sPVbpkikHpq1OmG2mav62qrpJjCwVKHiaR1Mw4rS/fV9ACSxtso40Jk8ic9cwDwP
-         HpyzlJ199Lo2djhO3Kv7bMB0oxNyKlQTfw7QoZFjnPIxY8VcutO8icAI4VBKUQZqDpO3
-         WY4LM6a07U3K/PxYIDYyw5dohQfhZCogClurAjGjChfmoKxERvAT+9Hr0Zg5AlWHo3sj
-         4+B58WhCOEQWtch54Wu9AFKvvTa6yOR8H1Rpo9r8maoL705hYsqG40AOV4vOAvDBtOgO
-         ORqg==
-X-Gm-Message-State: APuU4Z9ai8n9ClIthEHeT323kV1P9rKT8WdmVrPfRHCUwy5f6RpPWr7u
-	JAtn3ObrtnWi1MtNfkh51Tjn79jAWrfy6mFj1RsYFZ7kR1u3N4lxVrA4UHADsA==
-X-Gm-Gg: AZFdTZfkml5ulQj/ZQfSK9QPXvY5oVQQWdrp9tILR++TMaGxeT7XXIjR1/EVjlUgOsi
-	efv6cffz9fFC+ALiEn0mTNuuK238bkD6w0PhHTTqmIKJDpXCNd+MgJeePeNLvg00gT5BhJlXiPU
-	oJQ+gfexyaiW/qR5Q6vseI90xE5nTbm/XgCmggk4TL68nBM5ODGpjjBhYdgCOfAHMAAyWyjhEuk
-	/dstMoybBi9v56bjDtK3kxwNkPUmhyjW4jo8v4mo2FU5mPsKQkgMPEZqwjyEdRlAHywtup4fEtZ
-	tPA5sBzOZDOmBujeCw1sXrYyMcp5K6ORueDerFOpDEjum4OZuM51vkJUdaKPIiAjHcscgCLwO7Z
-	WTb8slF4aMYdLCDiUdIN5wvgfCcfVJ+HIJ3hWsvQQDF3+Ieu6vdQyi83LxBmXEyxVmhJWXgFl+M
-	7G1dwndctLbMf2hwxA5tjJ5i4EgsK1D3TTVb1a/tkykEWHVyvyMlqpusVQoVVD4kow3OP7qC7/e
-	j5ZEU0U0APYVwKc328LEnHRc8ZKuyR/DjMr6pnHr4rwqn2k55j7TjQWi+fZ1FjnF5F4KxMx2pUY
-	v/zzN7JXsk6SSgf6zxARr8oFQ/zrz0muMsyDUTHrNelqmgpwSWVSoel77lk2o+y772yDvP6VgvS
-	pWX9CFFCIoalX6MTOtNhPuLwjqBf1gzvWwE16F6e3w1FxWfGLOmgh60eL/jD8UR5jsULR8Edp/g
-	==
-X-Received: by 2002:a17:90a:e7d0:b0:3b4:a90:7f3b with SMTP id 98e67ed59e1d1-3b41c97c98amr2092029a91.56.1795160721164;
-        Thu, 19 Nov 2026 23:45:21 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.243])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cde6d0100ccsm905375a12.17.2026.11.19.23.45.20
+        bh=zinc1Lt2XjZ7XEZUye69nMSKaHU+8lpKqd9qrI8ZiPE=;
+        b=qi6gvolnBO2weQCgq/20YL5D1lRlFDAE2KJoNx16cbB0pJ6lUq1P6p1ALkzHKnik8C
+         XE57jaP+/8ZoWyWiptBmthrfH8PFiuUjmljt5aOwGZwanMMH0J3Am3ign3YiGP/yWJ5Z
+         sYQDVTJzXJ3tSicRu8LlDFIwrraMDf9BarsLu7+XjEy6ZrmqayJ8qzP6gF99rMM8KheH
+         2umXivc99DQbHmHnnSPqhuRBev/jJany1TCEX/hbkeHhYGW0/ofQ5Gi5iWnNEo9cq7Fg
+         lNUflRtLdW4sjmub+5s5Nr9EbVB/KrQaU3/Y+fpwHJo+edgHdciYJFhxS1iWxqOKZcTQ
+         Ei9Q==
+X-Gm-Message-State: APuU4Z+C1IPUDCYtGIvjjUCe+bQVJf8vv+ctL2KA8Itx+ITiOJ0vY9OX
+	B1IRS8acFbJADqAV1n8IGtMbIU/cm2lOphCas31b4EJ9MH3Y3GZQ+ayz1nRdug==
+X-Gm-Gg: AZFdTZdWqLSgkvaj9hEZmyKPA2PKfey0Snq8YQ22J9veVOT1WmjCP0ocnsVJvouNxkI
+	pQzbs2AENlFn9mFVuk7DjpMWLUXI1kCGnxV/PCd6yua68+PaGEn6RuR3HfQtTCjskXr+l+XjGul
+	eO9noeOEiaTR0xsRFJVBYy9onzUW0niOY1HILNNvyok3Pu2y9sdp2tRNa39MyNsdYioki//PSGl
+	MWBDEzJks7THdFQ9QaTlqOdyQxgHygOFtZfztoMMa92H40e2iECt7F2SCnTej6r16kQC1TPp5dM
+	bXwCOMEaOfWOZ9uJ2p8/Lx6l1crB2gqaYnqueMnmob2ojApDQhXw9tpIpndOGTCSGt/iAbfdEzO
+	v+w6ownNbkisS1V7My9blQ2VH8Xa8LgEdFDcZ6ZrJD2h/uDa3U9anPhM6SRDCbSXVJGUircaMv/
+	nS/Mrfw0fAbeZeQpaOjq2sEyn17k16MZ/Wx66kxTyMYUhVeNXkDybKMAA09QZrIOFgK2CkLYdxX
+	4cdGZt8k58EZSZMDXAcBKX2DUlQ/6qPiaZWU+gfQaQOjZodAtscYsbyWgroGmCqzesMG68Q6V5+
+	9wmcb/TOOhHF7r9/vT9fxkafr5itnxBz2/PS+X6TCbL3h85wQo+gFu1Lc8bXI4o2jn5XttaDGCM
+	1v13078vfindKlBJRwk+Es6QjpjTznIDrRMm4ICHQtkdwvPija4nI9uQYDI2K6Jfd14ww+PRNyt
+	I=
+X-Received: by 2002:a05:6a00:4b03:b0:874:705d:f649 with SMTP id d2e1a72fcca58-8c87ce34a4bmr1909949b3a.43.1795160727045;
+        Thu, 19 Nov 2026 23:45:27 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.245])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c908a56acfsm472876b3a.23.2026.11.19.23.45.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2026 23:45:20 -0800 (PST)
+        Thu, 19 Nov 2026 23:45:26 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 08/49] bpf: Do not fail a check because a state has fewer values
-Date: Fri, 20 Nov 2026 07:41:40 +0000
-Message-ID: <20261120074430.2704488-9-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 09/49] bpf: Check fixups in the main pass and keep a snapshot of them
+Date: Fri, 20 Nov 2026 07:41:41 +0000
+Message-ID: <20261120074430.2704488-10-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261120074430.2704488-1-alexei.starovoitov@gmail.com>
 References: <20261120074430.2704488-1-alexei.starovoitov@gmail.com>
@@ -104,449 +104,794 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-More precision must not make the result worse. If an insn is proven in
-a state, it has to be proven in a state with fewer values too. Else it
-is proven after a join and unproven without the join. Three checks do
-not work that way.
+The main pass writes fixups for the code that rewrites the program: the
+type of a pointer at a load, the mask of an add, the depth of a stack.
+The main pass will run more than once, and a join can make a path that
+the program does not have:
 
-1. Pointer arithmetic looks at the smallest offset:
+  r7, r8 = 0, 0 or 1, 5       join: r7 = 0..1, r8 = 0..5
+  if r7 != 0 goto out
+  if r8 == 0 goto out
+  call f                      only the join gets here
 
-     r1 = 1 << 30            r1 = 0 .. 1 << 30
-     r0 += r1   fails        r0 += r1   ok
+The next pass must not see what this path wrote. Put what a pass
+writes in groups: bpf_insn_fixups and bpf_env_per_pass. save_snapshot()
+copies them, with subprog_info, func_info_aux, the prog and fields of
+prog->aux. Each pass starts from the snapshot.
 
-   Allow the add. bpf_blur_far_offset() extends the range of the
-   offset down to BPF_MAX_VAR_OFF - 1. So the offset is not a constant
-   that overflows an int, and an access fails. The same holds far below
-   the object. The number still needs a lower bound.
+Some checks ran after the main pass. That is too late for another pass.
+Move them:
 
-2. A jump can cut a range in two:
+  to the insn          a tail call with two maps, a load of an arena
+                       member and of something else, a missing kfunc,
+                       bpf_override_return() and a map of programs
+  check_after_pass()   the depth of the stack, the prologue of an
+                       extension, r12 in a callback that is called too,
+                       the slots of stack arguments
 
-                         r8 = -4..3            r8 = any number
-     if r8 < 3 goto L    -4..-1, 3 -> -4..3    3..U64_MAX
-     if r8 s< 0 goto L   0..3                  3..S64_MAX
+The check for room for the arguments of an arena stack entry goes away.
+The frame is empty at the entry, so R1-R5 wait there.
 
-   The small state has 0..2, the large state does not. cut_range() does
-   the jump two times: for -4..-1 and for 0..3. It does that only if
-   an error depends on the register, see bpf_xreg_in_deps().
-   'x != 0' is 'x u> 0', so it cuts a range too.
-
-3. A load takes a part of a spilled pointer:
-
-     *(u64 *)(r10 - 16) = ptr
-     r1 = r10 - 16 + (0..7)       r1 = r10 - 16 + 3
-     r0 = *(u8 *)(r1 + 0)  ok     r0 = *(u8 *)(r1 + 0)  fails
-
-   With allow_ptr_leaks the constant offset takes the path of the
-   variable offset: the result is an unknown number. An atomic
-   read-modify-write still needs the whole slot.
-
-do_check() has only a range for a far offset. So const_fold.c does not
-follow a far pointer to a map value.
-
-A far pointer to the packet can wrap around:
-- It gets a new id and loses its range.
-  bpf_blur_far_offset() looks at the source and the result of the add.
-- A compare with the end of the packet leaks the address. Without
-  allow_ptr_leaks, compare only offsets from -MAX_PACKET_OFF to
-  2 * MAX_PACKET_OFF. A header and a 16-bit length fit.
+An insn has one fixup for all states. A second one is an error, see
+fixups_differ(). pass_cnt counts the calls of do_check(): rename it to
+check_cnt.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h |  25 ++++++
- kernel/bpf/const_fold.c      |   3 +
- kernel/bpf/liveness.c        |   5 +-
- kernel/bpf/verifier.c        | 167 ++++++++++++++++++++++++-----------
- 4 files changed, 146 insertions(+), 54 deletions(-)
+ include/linux/bpf_verifier.h |  60 +++++----
+ kernel/bpf/fixups.c          | 104 ++--------------
+ kernel/bpf/verifier.c        | 227 ++++++++++++++++++++++++++++-------
+ 3 files changed, 230 insertions(+), 161 deletions(-)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 5886cc48653..333ab842333 100644
+index 333ab842333..e40e4be6cf8 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -1179,10 +1179,13 @@ struct bpf_verifier_env {
- 	bool strict_alignment;		/* perform strict pointer alignment checks */
- 	bool test_reg_invariants;	/* fail verification on register invariants violations */
- 	bool uses_arena_sp;		/* the program has insns with BPF_REG_ARENA_SP */
-+	bool path_sensitive;		/* no joins, see run_path_sensitive() */
- 	u64 cost, mem;			/* see bpf_check_limits() */
+@@ -764,6 +764,8 @@ struct bpf_loop {
+ };
+ 
+ struct bpf_insn_aux_data {
++	/* What a pass writes for the rewrite of the insn. Each pass starts from the snapshot. */
++	struct_group_tagged(bpf_insn_fixups, fixups,
+ 	union {
+ 		enum bpf_reg_type ptr_type;	/* pointer type for load/store insns */
+ 		struct bpf_map_ptr_state map_ptr_state;
+@@ -795,15 +797,8 @@ struct bpf_insn_aux_data {
+ 	};
+ 	struct btf_struct_meta *kptr_struct_meta;
+ 	u64 map_key_state; /* constant (32 bit) key tracking for maps */
+-	/*
+-	 * Per-instruction summary of stack slots in the current frame
+-	 * that this instruction may write to.
+-	 */
+-	DECLARE_BITMAP(may_write_mask, MAX_BPF_STACK_SLOTS);
+-	DECLARE_BITMAP(live_stack_before, MAX_BPF_STACK_SLOTS);
+-	u16 stack_ptrs; /* bitmask of regs that may hold a frame pointer here (arg_track) */
+ 	int ctx_field_size; /* the ctx field size for load insn, maybe 0 */
+-	u32 seen; /* this insn was processed by the verifier at env->pass_cnt */
++	u32 seen; /* this insn was processed by the verifier at env->check_cnt */
+ 	u64 nospec:1; /* do not execute this instruction speculatively */
+ 	u64 nospec_result:1; /* result is unsafe under speculation, nospec must follow */
+ 	u64 zext_dst:1; /* this insn zero extends dst reg */
+@@ -813,12 +808,7 @@ struct bpf_insn_aux_data {
+ 	u64 call_with_percpu_alloc_ptr:1; /* {this,per}_cpu_ptr() with prog percpu alloc */
+ 	u64 cast_arena:1; /* addr_space_cast of an address in arena */
+ 	u64 cast_mov:1; /* addr_space_cast of a pointer that is not in arena, it's a move */
+-	u64 bb_end:1; /* last instruction of a basic block */
+ 	u64 loop_guard:1; /* may_goto is added in front of this instruction */
+-	u64 guard_place:1; /* it's the place for may_goto if the loop needs one */
+-	u64 guard_at_header:1; /* there is no better place than the head of the loop */
+-	u64 guard_no_unwind:1; /* it cannot unwind from here, at least sometimes */
+-	u64 guard_unset_reg:1; /* where it goes a register is read that is not set here */
+ 	u64 alu_state:5; /* used in combination with alu_limit */
+ 	/* true if STX or LDX instruction is a part of a spill/fill
+ 	 * pattern for a bpf_fastcall call.
+@@ -837,20 +827,35 @@ struct bpf_insn_aux_data {
+ 	u64 arena_member:1;
+ 	u64 arena_member_nullable:1;
+ 	u64 non_arena_load:1;
++	u64 indirect_target:1; /* if it is an indirect jump target */
++	u64 non_stack_access:1; /* instruction can access non-stack memory */
++	);
++
++	/* what one pass gives to the next pass, see bpf_flow_new_pass() */
++	u32 guard_no_unwind:1; /* it cannot unwind from here, at least sometimes */
++	u32 guard_unset_reg:1; /* where it goes a register is read that is not set here */
+ 
+ 	/* below flags are initialized once */
++	u32 bb_end:1; /* last instruction of a basic block */
++	u32 guard_place:1; /* it is the place for may_goto if the loop needs one */
++	u32 guard_at_header:1; /* there is no better place than the header of the loop */
+ 	/* true if instruction is a call to a helper function that
+ 	 * accepts callback function as a parameter.
+ 	 */
+-	u64 calls_callback:1;
+-	u64 indirect_target:1; /* if it is an indirect jump target */
+-	u64 non_stack_access:1; /* instruction can access non-stack memory */
++	u32 calls_callback:1;
+ 	/* true if some jump or call instruction targets this instruction */
+-	u64 jump_target:1;
++	u32 jump_target:1;
+ 	/* it can read or write the frame of a caller, in a call with a known callee */
+ 	u32 reads_outer:1;
+ 	u32 writes_outer:1;
++	/*
++	 * Per-instruction summary of stack slots in the current frame
++	 * that this instruction may write, may read, and that are live before it.
++	 */
++	DECLARE_BITMAP(may_write_mask, MAX_BPF_STACK_SLOTS);
+ 	DECLARE_BITMAP(may_read_mask, MAX_BPF_STACK_SLOTS);
++	DECLARE_BITMAP(live_stack_before, MAX_BPF_STACK_SLOTS);
++	u16 stack_ptrs; /* bitmask of regs that may hold a frame pointer here (arg_track) */
+ 
+ 	unsigned int orig_idx; /* original instruction index, initialized once */
+ 	/* registers alive before this instruction. */
+@@ -1184,13 +1189,23 @@ struct bpf_verifier_env {
  	u64 max_cost, max_mem;
  	u64 pass_max_cost;		/* see bpf_undo_precision() */
  	bool aborted;			/* a thaw does not take it back */
-+	int err;			/* the first error */
-+	bool imprecise;			/* a state before the first error is imprecise */
++	/* What a pass writes. Each pass starts from the snapshot. */
++	struct_group_tagged(bpf_env_per_pass, per_pass,
+ 	int err;			/* the first error */
+ 	bool imprecise;			/* a state before the first error is imprecise */
  	bool over_limit;		/* see bpf_check_limits() */
  	bool restart;			/* see bpf_flow_next_is_no_bound() */
  	bool guards_late;		/* see bpf_flow_loop_gets_guards() */
-@@ -1741,6 +1744,27 @@ static inline bool type_may_be_null(u32 type)
- 	return type & PTR_MAYBE_NULL;
- }
- 
-+/* A number, or a pointer that stands for the offsets in its range */
-+static inline bool bpf_reg_has_range(const struct bpf_reg_state *reg)
-+{
-+	switch (base_type(reg->type)) {
-+	case SCALAR_VALUE:
-+	case PTR_TO_MAP_KEY:
-+	case PTR_TO_MAP_VALUE:
-+	case PTR_TO_STACK:
-+	case PTR_TO_PACKET:
-+	case PTR_TO_PACKET_META:
-+	case PTR_TO_MEM:
-+	case PTR_TO_BUF:
-+	case PTR_TO_TP_BUFFER:
-+	case PTR_TO_BTF_ID:
-+	case PTR_TO_INSN:
-+		return !type_may_be_null(reg->type);
-+	default:
-+		return false;
-+	}
-+}
-+
- static inline void mark_reg_scratched(struct bpf_verifier_env *env, u32 regno)
- {
- 	env->scratched_regs |= 1U << regno;
-@@ -2024,6 +2048,7 @@ bpf_global_subprog_stack_access_bytes(struct bpf_verifier_env *env,
- int bpf_compute_subprog_arg_access(struct bpf_verifier_env *env);
- bool bpf_same_memory_origin(const struct bpf_reg_state *reg_a,
- 			    const struct bpf_reg_state *reg_b);
-+void bpf_blur_far_offset(struct bpf_verifier_env *env, struct bpf_reg_state *reg);
- void bpf_trim_pkt_range(struct bpf_reg_state *reg, s64 smax);
- void scalar_set_unknown(struct scalar *s);
- void scalar_set_const(struct scalar *s, u64 imm);
-diff --git a/kernel/bpf/const_fold.c b/kernel/bpf/const_fold.c
-index 50179edbf34..61e22636ff8 100644
---- a/kernel/bpf/const_fold.c
-+++ b/kernel/bpf/const_fold.c
-@@ -214,6 +214,9 @@ static void const_reg_xfer(struct bpf_verifier_env *env, struct const_arg_info *
- 			ci_out[r] = unknown;
- 		break;
+-	u32 loop_entry_cnt;		/* see loop_stack_entry.entry_id, callback_entry_id */
++	bool seen_direct_write;
++	/* a register may point to the stack and is not PTR_TO_STACK, see bpf_reg_state::buf */
++	bool seen_stack_slice;
++	bool seen_exception;
++	bool sleepable_async_cb;
++	u32 id_gen;			/* used to generate unique reg IDs */
++	u32 max_stack_depth;		/* maximum combined stack depth */
+ 	u32 max_arena_stack_depth;	/* of all call chains */
++	u32 loop_entry_cnt;		/* see loop_stack_entry.entry_id */
++	);
+ 	struct bpf_verifier_state *cur_state; /* current verifier state */
+ 	struct bpf_map **used_maps;	/* array of map's used by eBPF program */
+ 	struct btf_mod_pair *used_btfs;	/* array of BTF's used by BPF program */
+@@ -1202,7 +1217,6 @@ struct bpf_verifier_env {
+ 	u32 used_map_cnt;		/* number of used maps */
+ 	u32 used_btf_cnt;		/* number of used BTF objects */
+ 	u32 insn_array_map_cnt;		/* number of used maps of type BPF_MAP_TYPE_INSN_ARRAY */
+-	u32 id_gen;			/* used to generate unique reg IDs */
+ 	u32 hidden_subprog_cnt;		/* number of hidden subprogs */
+ 	int exception_callback_subprog;
+ 	bool explore_alu_limits;
+@@ -1215,12 +1229,8 @@ struct bpf_verifier_env {
+ 	bool bpf_capable;
+ 	bool bypass_spec_v1;
+ 	bool bypass_spec_v4;
+-	bool seen_direct_write;
+-	/* a register may point to the stack and is not PTR_TO_STACK, see bpf_reg_state::buf */
+-	bool seen_stack_slice;
+ 	/* a global function is verified for BPF_FUNC_CTX_NO_RCU_LOCK */
+ 	bool no_rcu_read_lock;
+-	bool seen_exception;
+ 	bool signature;
+ 	u32 insn_aux_data_len;
+ 	struct bpf_insn_aux_data *insn_aux_data; /* array of per-insn state */
+@@ -1267,12 +1277,10 @@ struct bpf_verifier_env {
+ 	} cfg;
+ 	/* Per-callsite snapshot of the parent's tracked spill slots for cross-frame fills. */
+ 	struct spill_snapshot **callsite_at_stack;
+-	u32 pass_cnt; /* number of times do_check() was called */
++	u32 check_cnt; /* number of times do_check() was called */
+ 	u32 subprog_cnt;
+ 	/* number of instructions analyzed by the verifier */
+ 	u32 insn_processed;
+-	/* maximum combined stack depth */
+-	u32 max_stack_depth;
+ 	/* stack budget of the program, see bpf_prog_stack_limit() */
+ 	u32 stack_limit;
+ 	/* total verification time */
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index bd47a38c7bc..f8f439b3e41 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -841,7 +841,7 @@ static void keep_funcs_with_addr_taken(struct bpf_verifier_env *env)
+ 			continue;
+ 		memcpy(insn + t, &trap, sizeof(trap));
+ 		aux_data[t].zext_dst = false;
+-		aux_data[t].seen = env->pass_cnt;
++		aux_data[t].seen = env->check_cnt;
  	}
-+	/* do_check() has only a range for a far offset */
-+	if (ci_is_map_value(dst) && abs((s64)dst->val) >= BPF_MAX_VAR_OFF)
-+		*dst = unknown;
  }
  
- /* Join function: merge output state into a successor's input state. */
-diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-index 6e6b2c6d88c..e488ab97131 100644
---- a/kernel/bpf/liveness.c
-+++ b/kernel/bpf/liveness.c
-@@ -596,9 +596,8 @@ bool bpf_stack_slot_alive(struct bpf_verifier_env *env, u32 frameno, u32 half_sp
-  * fill a pointer, and a helper, a kfunc or a global subprog that gets a pointer to the stack reads
-  * memory. Such a read keeps the bytes of the slot alive, not what the verifier knows about them.
-  *
-- * A short load at an offset that is known here counts as a fill: the main pass rejects it when it
-- * finds a pointer. If only the main pass knows the offset, the load doesn't count. It is rejected
-- * too, or it reads unknown bytes if the state was cleaned between the spill and the load.
-+ * A short load at an offset that is known here counts as a fill: it gets a part of a number.
-+ * If only the main pass knows the offset, the load doesn't count.
-  */
- bool bpf_stack_slot_filled(struct bpf_verifier_env *env, u32 frameno, u32 half_spi)
- {
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 030263d01e3..ef8e45a399c 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -197,6 +197,7 @@ struct bpf_verifier_stack_elem {
- 	int prev_insn_idx;
- 	/* it goes there only if may_goto in front of prev_insn_idx does, see check_loop_guard() */
- 	enum bpf_guard_edge guard_edge;
-+	bool again;	/* see bpf_flow_deliver() */
- 	struct bpf_verifier_stack_elem *next;
- };
+@@ -963,17 +963,11 @@ static int insert_arena_stack_get(struct bpf_verifier_env *env, int s)
+ 	int size = s ? BPF_REG_8 : BPF_REG_4;
+ 	struct bpf_subprog_info *sub = &env->subprog_info[s];
+ 	struct bpf_insn *buf = env->insn_buf, *patch;
+-	int jfree, jdone, jslow, slow, free, done, i, spill = 0;
++	int jfree, jdone, jslow, slow, free, done, i;
  
-@@ -346,6 +347,11 @@ static void verbose_invalid_scalar(struct bpf_verifier_env *env,
- 	verbose(env, " should have been in [%d, %d]\n", range.minval, range.maxval);
+-	if (s) {
+-		spill = round_up(sub->stack_depth, BPF_REG_SIZE);
+-		sub->stack_depth = spill + MAX_BPF_FUNC_REG_ARGS * BPF_REG_SIZE;
+-		if (sub->stack_depth > env->stack_limit) {
+-			verbose(env, "no room in the stack of %s() for its arguments\n",
+-				bpf_subprog_name(env, s));
+-			return -EACCES;
+-		}
+-	}
++	/* the arguments wait in the frame, nothing is there yet */
++	if (s)
++		sub->stack_depth = max(sub->stack_depth, MAX_BPF_FUNC_REG_ARGS * BPF_REG_SIZE);
+ 
+ 	patch = emit_arena_stack_percpu(env, buf, ptr);
+ 	*patch++ = BPF_MOV32_IMM(cnt, 1);
+@@ -984,7 +978,7 @@ static int insert_arena_stack_get(struct bpf_verifier_env *env, int s)
+ 	if (!s)
+ 		*patch++ = BPF_MOV64_REG(BPF_REG_6, BPF_REG_1);
+ 	for (i = BPF_REG_1; s && i <= BPF_REG_5; i++)
+-		*patch++ = BPF_STX_MEM(BPF_DW, BPF_REG_FP, i, -(spill + i * BPF_REG_SIZE));
++		*patch++ = BPF_STX_MEM(BPF_DW, BPF_REG_FP, i, -i * BPF_REG_SIZE);
+ 	*patch++ = ld_aux[0];
+ 	*patch++ = ld_aux[1];
+ 	*patch++ = BPF_MOV64_REG(BPF_REG_2, cnt);
+@@ -993,7 +987,7 @@ static int insert_arena_stack_get(struct bpf_verifier_env *env, int s)
+ 	if (!s)
+ 		*patch++ = BPF_MOV64_REG(BPF_REG_1, BPF_REG_6);
+ 	for (i = BPF_REG_1; s && i <= BPF_REG_5; i++)
+-		*patch++ = BPF_LDX_MEM(BPF_DW, i, BPF_REG_FP, -(spill + i * BPF_REG_SIZE));
++		*patch++ = BPF_LDX_MEM(BPF_DW, i, BPF_REG_FP, -i * BPF_REG_SIZE);
+ 	jdone = patch++ - buf;
+ 	*patch++ = BPF_MOV64_IMM(BPF_REG_0, 0);
+ 	*patch++ = BPF_EXIT_INSN();
+@@ -1025,15 +1019,6 @@ int bpf_insert_arena_stack(struct bpf_verifier_env *env)
+ 	if (!env->uses_arena_sp)
+ 		return 0;
+ 
+-	/* the caller would get r12 of the callee back */
+-	for (i = 0; i < env->subprog_cnt; i++) {
+-		if ((i && !subprogs[i].arena_stack_entry) || !subprogs[i].is_called)
+-			continue;
+-		verbose(env, "%s() uses R%d and is both called and a callback\n",
+-			bpf_subprog_name(env, i), BPF_REG_ARENA_SP);
+-		return -EINVAL;
+-	}
+-
+ 	/*
+ 	 * With spare bytes r12 is neither the start nor the end of the stack,
+ 	 * which may be at 0, so 'rX = r12' is not NULL.
+@@ -1217,25 +1202,6 @@ int bpf_opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env,
+ 	return bpf_patch_list_commit(env);
  }
  
-+static bool offset_is_far(const struct bpf_reg_state *reg)
-+{
-+	return reg_smin(reg) <= -BPF_MAX_VAR_OFF || reg_smax(reg) >= BPF_MAX_VAR_OFF;
-+}
-+
- static bool reg_not_null(struct bpf_verifier_env *env, const struct bpf_reg_state *reg)
- {
- 	enum bpf_reg_type type;
-@@ -358,7 +364,7 @@ static bool reg_not_null(struct bpf_verifier_env *env, const struct bpf_reg_stat
- 	 * The types below guarantee a non-NULL base, an unbounded offset can
- 	 * still wrap base + offset to zero.
- 	 */
--	if (reg_smin(reg) <= -BPF_MAX_VAR_OFF || reg_smax(reg) >= BPF_MAX_VAR_OFF)
-+	if (offset_is_far(reg))
- 		return false;
- 
- 	type = base_type(type);
-@@ -4131,6 +4137,7 @@ static int check_stack_read(struct bpf_verifier_env *env,
- 			    int dst_regno)
- {
- 	struct bpf_func_state *state = bpf_func(env, reg);
-+	struct bpf_stack_state *ss;
- 	int err;
- 	/* Some accesses are only permitted with a static offset. */
- 	bool var_off = !tnum_is_const(reg->var_off);
-@@ -4164,6 +4171,11 @@ static int check_stack_read(struct bpf_verifier_env *env,
- 	 * just checking it here would be insufficient as speculative stack
- 	 * writes could still lead to unsafe speculative behaviour.
- 	 */
-+	if (!var_off && dst_regno >= 0 && size != BPF_REG_SIZE && env->allow_ptr_leaks) {
-+		ss = bpf_stack_slot(state, (-off - reg->var_off.value - 1) / BPF_REG_SIZE);
-+		/* a part of a pointer is a number, as with a variable offset */
-+		var_off = bpf_is_spilled_reg(ss) && !bpf_is_spilled_scalar_reg(ss);
-+	}
- 	if (!var_off) {
- 		off += reg->var_off.value;
- 		err = check_stack_read_fixed_off(env, state, off, size,
-@@ -6940,8 +6952,7 @@ static int check_stack_access_within_bounds(
- 		min_off = (s64)reg->var_off.value + off;
- 		max_off = min_off + access_size;
- 	} else {
--		if (reg_smax(reg) >= BPF_MAX_VAR_OFF ||
--		    reg_smin(reg) <= -BPF_MAX_VAR_OFF) {
-+		if (offset_is_far(reg)) {
- 			verbose(env, "invalid unbounded variable-offset%s stack %s\n",
- 				err_extra, reg_arg_name(env, argno));
- 			return -EACCES;
-@@ -16026,7 +16037,7 @@ static bool check_reg_sane_offset_scalar(struct bpf_verifier_env *env,
- 	s64 val = reg->var_off.value;
- 	s64 smin = reg_smin(reg);
- 
--	if (known && (val >= BPF_MAX_VAR_OFF || val <= -BPF_MAX_VAR_OFF)) {
-+	if (known && val <= -BPF_MAX_VAR_OFF) {
- 		verbose(env, "math between %s pointer and %lld is not allowed\n",
- 			reg_type_str(env, type), val);
- 		return false;
-@@ -16038,7 +16049,7 @@ static bool check_reg_sane_offset_scalar(struct bpf_verifier_env *env,
- 		return false;
- 	}
- 
--	if (smin >= BPF_MAX_VAR_OFF || smin <= -BPF_MAX_VAR_OFF) {
-+	if (smin <= -BPF_MAX_VAR_OFF) {
- 		verbose(env, "value %lld makes %s pointer be out of bounds\n",
- 			smin, reg_type_str(env, type));
- 		return false;
-@@ -16047,29 +16058,6 @@ static bool check_reg_sane_offset_scalar(struct bpf_verifier_env *env,
- 	return true;
- }
- 
--static bool check_reg_sane_offset_ptr(struct bpf_verifier_env *env,
--				      const struct bpf_reg_state *reg,
--				      enum bpf_reg_type type)
+-/*
+- * The prologue takes the context from R1, and it can clobber R2-R5. An
+- * extension gets the arguments of the function that it replaces.
+- */
+-static bool ext_prog_takes_prologue(const struct bpf_verifier_env *env)
 -{
--	bool known = tnum_is_const(reg->var_off);
--	s64 val = reg->var_off.value;
--	s64 smin = reg_smin(reg);
+-	const struct bpf_subprog_info *sub = &env->subprog_info[0];
+-	int i, cnt = min_t(int, sub->arg_slot_cnt, MAX_BPF_FUNC_REG_ARGS);
 -
--	if (known && (val >= BPF_MAX_VAR_OFF || val <= -BPF_MAX_VAR_OFF)) {
--		verbose(env, "%s pointer offset %lld is not allowed\n",
--			reg_type_str(env, type), val);
+-	if (!cnt || sub->args[0].arg_type != ARG_PTR_TO_CTX)
 -		return false;
--	}
 -
--	if (smin >= BPF_MAX_VAR_OFF || smin <= -BPF_MAX_VAR_OFF) {
--		verbose(env, "%s pointer offset %lld is not allowed\n",
--			reg_type_str(env, type), smin);
--		return false;
--	}
+-	for (i = 1; i < cnt; i++)
+-		if (sub->args[i].arg_type != ARG_SCALAR)
+-			return false;
 -
 -	return true;
 -}
 -
- enum {
- 	REASON_BOUNDS	= -1,
- 	REASON_TYPE	= -2,
-@@ -16078,6 +16066,27 @@ enum {
- 	REASON_STACK	= -5,
- };
+ /* convert load instructions that access fields of a context type into a
+  * sequence of instructions that access fields of the underlying structure:
+  *     struct __sk_buff    -> struct sk_buff
+@@ -1248,7 +1214,7 @@ static bool ext_prog_takes_prologue(const struct bpf_verifier_env *env)
+  * __arena arguments. A __nullable member keeps NULL as NULL, tested on the
+  * full kernel address, and so does a probed load, which reads as 0 when it
+  * faults. Returns the number of insns in @buf, 0 when the insn loads no such
+- * member, or an error when it does so on some paths only.
++ * member.
+  */
+ static int arena_member_fixup(struct bpf_verifier_env *env, int idx, struct bpf_insn *insn,
+ 			      struct bpf_insn *buf)
+@@ -1259,10 +1225,6 @@ static int arena_member_fixup(struct bpf_verifier_env *env, int idx, struct bpf_
  
-+/*
-+ * A far pointer is no error: a state with near offsets gets here, so this one does too.
-+ * An access through it is unproven. But a constant offset has to fit in an int.
-+ */
-+void bpf_blur_far_offset(struct bpf_verifier_env *env, struct bpf_reg_state *reg)
-+{
-+	s64 smin = reg_smin(reg), smax = reg_smax(reg);
-+
-+	/* an id and a range need an offset that does not wrap around */
-+	if (reg_is_pkt_pointer(reg) && offset_is_far(reg)) {
-+		reg->id = bpf_new_id(env);
-+		reg->range = 0;
-+	}
-+	if (reg->type == SCALAR_VALUE || (smin < BPF_MAX_VAR_OFF && smax > -BPF_MAX_VAR_OFF))
-+		return;
-+	scalar_set_unknown(scalar_of(reg));
-+	reg->r64 = cnum64_from_srange(min(smin, BPF_MAX_VAR_OFF - 1),
-+				      max(smax, 1 - BPF_MAX_VAR_OFF));
-+	reg_bounds_sync(reg);
-+}
-+
- static int retrieve_ptr_limit(const struct bpf_verifier_env *env,
- 			      const struct bpf_reg_state *ptr_reg,
- 			      u32 *alu_limit, bool mask_to_left)
-@@ -16517,6 +16526,8 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env, struct bpf_insn
- 	 */
- 	if (dst_reg != ptr_reg)
- 		*dst_reg = *ptr_reg;
-+	/* a far pointer that comes back leaves its copies */
-+	bpf_blur_far_offset(env, dst_reg);
- 
- 	/*
- 	 * Accesses to untrusted PTR_TO_MEM are done through probe
-@@ -16527,23 +16538,13 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env, struct bpf_insn
- 
- 	if (!check_reg_sane_offset_scalar(env, off_reg, ptr_reg->type)) {
- 		reason = bpf_diag_fmt(
--			env, "The scalar offset used with R%d is unbounded or outside the verifier's safe pointer-offset range [-%u, %u].",
--			ptr_regno, BPF_MAX_VAR_OFF, BPF_MAX_VAR_OFF);
-+			env, "The scalar offset used with R%d can be -%u or less.",
-+			ptr_regno, BPF_MAX_VAR_OFF);
- 		bpf_diag_register_type(
- 			env, env->insn_idx, ptr_regno, "pointer offset is not safe", reason,
- 			"Clamp or bounds-check the scalar offset before applying it to the pointer.");
- 		return -EINVAL;
- 	}
--	if (!check_reg_sane_offset_ptr(env, ptr_reg, ptr_reg->type)) {
--		reason = bpf_diag_fmt(
--			env, "R%d already has an offset outside the verifier's safe range [-%u, %u] for %s.",
--			ptr_regno, BPF_MAX_VAR_OFF, BPF_MAX_VAR_OFF,
--			bpf_diag_reg_type_plain(env, ptr_reg->type));
--		bpf_diag_register_type(
--			env, env->insn_idx, ptr_regno, "pointer offset is not safe", reason,
--			"Keep the base pointer within the verifier's allowed offset range before applying more arithmetic.");
+ 	if (!aux->arena_member)
+ 		return 0;
+-	if (aux->non_arena_load) {
+-		verbose(env, "an insn loads an arena pointer member on one path and something else on another\n");
 -		return -EINVAL;
 -	}
  
- 	if (sanitize_needed(opcode)) {
- 		ret = sanitize_ptr_alu(env, insn, ptr_reg, off_reg, dst_reg,
-@@ -16666,16 +16667,6 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env, struct bpf_insn
+ 	base = bpf_arena_get_kern_vm_start(env->prog->aux->arena);
+ 	buf[cnt++] = *insn;
+@@ -1318,17 +1280,6 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
+ 			verifier_bug(env, "prologue is too long");
+ 			return -EFAULT;
+ 		} else if (cnt) {
+-			if (env->prog->type == BPF_PROG_TYPE_EXT &&
+-			    !ext_prog_takes_prologue(env)) {
+-				verbose(env,
+-					"Extension writing packet data must take ctx and scalars only\n");
+-				return -EINVAL;
+-			}
+-			if (env->prog->type == BPF_PROG_TYPE_EXT &&
+-			    bpf_check_ext_prologue(&env->log,
+-						   env->prog->aux->dst_prog,
+-						   env->prog->aux->attach_btf_id))
+-				return -EINVAL;
+ 			env->prog->aux->has_prologue = true;
+ 			/* the prologue ends with the first insn of the program */
+ 			if (verifier_bug_if(memcmp(&insn_buf[cnt - 1], env->prog->insnsi,
+@@ -1412,8 +1363,6 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
+ 			   env->insn_aux_data[i].arena_member) {
+ 			/* an acquire load of an __arena member is rewritten like a plain load */
+ 			cnt = arena_member_fixup(env, i, insn, insn_buf);
+-			if (cnt < 0)
+-				return cnt;
+ 			insn = bpf_patch_list_add(env, i, insn_buf, cnt);
+ 			if (IS_ERR(insn))
+ 				return PTR_ERR(insn);
+@@ -1511,8 +1460,6 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
+ 			}
+ 
+ 			cnt = arena_member_fixup(env, i, insn, insn_buf);
+-			if (cnt < 0)
+-				return cnt;
+ 			if (!cnt)
+ 				continue;
+ 			insn = bpf_patch_list_add(env, i, insn_buf, cnt);
+@@ -1987,21 +1934,9 @@ int bpf_fixup_call_args(struct bpf_verifier_env *env)
+ #ifndef CONFIG_BPF_JIT_ALWAYS_ON
+ 	struct bpf_prog *prog = env->prog;
+ 	struct bpf_insn *insn = prog->insnsi;
+-	int depth;
++	int i, depth;
+ #endif
+-	int i, err = 0;
+-
+-	for (i = 0; i < env->subprog_cnt; i++) {
+-		struct bpf_subprog_info *subprog = &env->subprog_info[i];
+-		u16 outgoing = subprog->stack_arg_cnt - bpf_in_stack_arg_cnt(subprog);
+-
+-		if (subprog->max_out_stack_arg_cnt > outgoing) {
+-			verbose(env,
+-				"func#%d writes %u stack arg slots, but calls only require %u\n",
+-				i, subprog->max_out_stack_arg_cnt, outgoing);
+-			return -EINVAL;
+-		}
+-	}
++	int err = 0;
+ 
+ 	if (env->prog->jit_requested &&
+ 	    !bpf_prog_is_offloaded(env->prog->aux)) {
+@@ -2736,11 +2671,6 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 			 * index &= array->index_mask;
+ 			 * to avoid out-of-bounds cpu speculation
+ 			 */
+-			if (bpf_map_ptr_poisoned(aux)) {
+-				verbose(env, "tail_call abusing map_ptr\n");
+-				return -EINVAL;
+-			}
+-
+ 			map_ptr = aux->map_ptr_state.map_ptr;
+ 			insn_buf[0] = BPF_JMP_IMM(BPF_JGE, BPF_REG_3,
+ 						  map_ptr->max_entries, 2);
+@@ -3355,17 +3285,16 @@ int bpf_optimize_bpf_loop(struct bpf_verifier_env *env)
+ 	return bpf_patch_list_commit(env);
+ }
+ 
+-/* Remove unnecessary spill/fill pairs, members of fastcall pattern,
+- * adjust subprograms stack depth when possible.
++/*
++ * Remove unnecessary spill/fill pairs, members of fastcall pattern.
++ * check_max_stack_depth() has adjusted the stack depth of subprograms.
+  */
+ int bpf_remove_fastcall_spills_fills(struct bpf_verifier_env *env)
+ {
+-	struct bpf_subprog_info *subprog = env->subprog_info;
+ 	struct bpf_insn_aux_data *aux = env->insn_aux_data;
+ 	struct bpf_insn *insn = env->prog->insnsi;
+ 	int insn_cnt = env->prog->len;
+ 	u32 spills_num;
+-	bool modified = false;
+ 	int i, j;
+ 
+ 	for (i = 0; i < insn_cnt; i++, insn++) {
+@@ -3376,13 +3305,6 @@ int bpf_remove_fastcall_spills_fills(struct bpf_verifier_env *env)
+ 				*(insn - j) = NOP;
+ 				*(insn + j) = NOP;
+ 			}
+-			modified = true;
+-		}
+-		if ((subprog + 1)->start == i + 1) {
+-			if (modified && !subprog->keep_fastcall_stack)
+-				subprog->stack_depth = -subprog->fastcall_stack_off;
+-			subprog++;
+-			modified = false;
+ 		}
+ 	}
+ 
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index ef8e45a399c..e43a3dd9a39 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6019,6 +6019,12 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
+ 	int s, ret;
+ 
+ 	find_subprog_properties(env, true);
++	/* see bpf_remove_fastcall_spills_fills() */
++	for (s = 0; s < env->subprog_cnt; s++)
++		for (int i = si[s].start; i < si[s + 1].start && !si[s].keep_fastcall_stack; i++)
++			if (env->insn_aux_data[i].fastcall_spills_num)
++				si[s].stack_depth = -si[s].fastcall_stack_off;
++
+ 	for (int i = 0; i < env->subprog_cnt; i++) {
+ 		if (si[i].has_tail_call) {
+ 			/* the stack in arena wouldn't be returned */
+@@ -7501,6 +7507,9 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, struct b
+ static int save_aux_ptr_type(struct bpf_verifier_env *env, enum bpf_reg_type type,
+ 			     bool allow_trust_mismatch);
+ 
++static struct bpf_insn_aux_data *cur_aux(const struct bpf_verifier_env *env);
++static int fixups_differ(struct bpf_verifier_env *env, const char *msg);
++
+ static int check_load_mem(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 			  bool strict_alignment_once, bool is_ldsx,
+ 			  bool allow_trust_mismatch, const char *ctx)
+@@ -7545,12 +7554,13 @@ static int check_load_mem(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	 * may share the insn, see save_aux_ptr_type(). Record a load that did
+ 	 * not produce an arena pointer from an __arena member, the only load
+ 	 * through a kernel struct pointer that does, next to the one
+-	 * check_arena_member_load() records, so that arena_member_fixup() can
+-	 * tell when the paths disagree.
++	 * check_arena_member_load() records. Fail if the insn has both.
+ 	 */
+ 	if (!err && !(base_type(src_reg_type) == PTR_TO_BTF_ID &&
+ 		      regs[insn->dst_reg].type == PTR_TO_ARENA))
+-		env->insn_aux_data[env->insn_idx].non_arena_load = true;
++		cur_aux(env)->non_arena_load = true;
++	if (!err && cur_aux(env)->arena_member && cur_aux(env)->non_arena_load)
++		return fixups_differ(env, "an insn loads an arena pointer member on one path and something else on another");
+ 	err = err ?: save_aux_ptr_type(env, src_reg_type,
+ 				       allow_trust_mismatch);
+ 	err = err ?: reg_bounds_sanity_check(env, &regs[insn->dst_reg], ctx);
+@@ -8959,7 +8969,6 @@ static bool is_bpf_obj_drop_kfunc(u32 func_id);
+ static bool is_bpf_percpu_obj_drop_kfunc(u32 func_id);
+ static bool is_bpf_rbtree_add_kfunc(u32 func_id);
+ static int get_bpf_res_spin_lock_kfunc_flags(const struct bpf_call_arg_meta *meta);
+-static struct bpf_insn_aux_data *cur_aux(const struct bpf_verifier_env *env);
+ static int process_irq_flag(struct bpf_verifier_env *env,
+ 			    struct bpf_reg_state *reg, argno_t argno,
+ 			    struct bpf_call_arg_meta *meta);
+@@ -11316,7 +11325,7 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
+ 		if (IS_ERR(async_cb))
+ 			return PTR_ERR(async_cb);
+ 		if (is_async_cb_sleepable(env, insn))
+-			mark_sleepable_async_cb(env);
++			env->sleepable_async_cb = true;
+ 		callee = async_cb->frame[0];
+ 		callee->async_entry_cnt = state->frame[0]->async_entry_cnt + 1;
+ 
+@@ -11611,7 +11620,7 @@ static int check_static_func_call(struct bpf_verifier_env *env, int subprog,
+ 	 * This is needed so the JIT knows how much stack arg space to allocate.
+ 	 * The callee can load less than its prototype has, and the caller can still store
+ 	 * all of it. Count the slots of the prototype only as far as the caller has stored
+-	 * them: compilers store in front of the call. bpf_fixup_call_args() rejects the rest.
++	 * them: compilers store before the call. check_after_pass() fails for the rest.
+ 	 */
+ 	caller_info = &env->subprog_info[caller->subprogno];
+ 	callee_incoming = bpf_in_stack_arg_cnt(callee_info);
+@@ -12406,6 +12415,7 @@ record_func_map(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
+ {
+ 	struct bpf_insn_aux_data *aux = &env->insn_aux_data[insn_idx];
+ 	struct bpf_map *map = meta->map.ptr;
++	bool other;
+ 
+ 	if (func_id != BPF_FUNC_tail_call &&
+ 	    func_id != BPF_FUNC_map_lookup_elem &&
+@@ -12437,12 +12447,13 @@ record_func_map(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
  		return -EACCES;
  	}
  
--	if (!check_reg_sane_offset_ptr(env, dst_reg, ptr_reg->type)) {
--		reason = bpf_diag_fmt(
--			env, "After this arithmetic, R%d would be outside the verifier's safe offset range [-%u, %u] for %s.",
--			dst, BPF_MAX_VAR_OFF, BPF_MAX_VAR_OFF,
--			bpf_diag_reg_type_plain(env, ptr_reg->type));
--		bpf_diag_register_type(
--			env, env->insn_idx, ptr_regno, "pointer offset is not safe", reason,
--			"Tighten the scalar bounds before the arithmetic so the resulting pointer remains within the allowed range.");
--		return -EINVAL;
--	}
- 	/*
- 	 * A packet pointer that keeps its id or range is checked against a
- 	 * range set from the checked pointer's umax, so var_off must not tighten
-@@ -16692,6 +16683,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env, struct bpf_insn
- 		reg_bounds_sync(dst_reg);
- 		bpf_trim_pkt_range(dst_reg, smax);
- 	}
-+	bpf_blur_far_offset(env, dst_reg);
- 	bounds_ret = sanitize_check_bounds(env, insn, dst_reg);
- 	if (bounds_ret == -EACCES)
- 		return bounds_ret;
-@@ -18930,9 +18922,70 @@ static int refine_live_branch(struct bpf_verifier_env *env, struct bpf_insn *ins
+-	if (!aux->map_ptr_state.map_ptr)
+-		bpf_map_ptr_store(aux, meta->map.ptr,
+-				  !meta->map.ptr->bypass_spec_v1, false);
+-	else if (aux->map_ptr_state.map_ptr != meta->map.ptr)
+-		bpf_map_ptr_store(aux, meta->map.ptr,
+-				  !meta->map.ptr->bypass_spec_v1, true);
++	other = aux->map_ptr_state.map_ptr && aux->map_ptr_state.map_ptr != map;
++	/* the index is masked for one map */
++	if (func_id == BPF_FUNC_tail_call && other &&
++	    (bpf_map_ptr_unpriv(aux) || !map->bypass_spec_v1))
++		return fixups_differ(env, "tail_call abusing map_ptr");
++	if (other || !aux->map_ptr_state.map_ptr)
++		bpf_map_ptr_store(aux, map, !map->bypass_spec_v1, other);
  	return 0;
  }
  
-+/* How many values of @reg are before the end of the order of @insn? 0 if all of them are. */
-+static u64 values_to_end(const struct bpf_insn *insn, const struct bpf_reg_state *reg)
+@@ -12613,6 +12624,14 @@ static struct bpf_insn_aux_data *cur_aux(const struct bpf_verifier_env *env)
+ 	return &env->insn_aux_data[env->insn_idx];
+ }
+ 
++/* An insn has one fixup for all states. The state that was here first can be wrong too. */
++static int fixups_differ(struct bpf_verifier_env *env, const char *msg)
 +{
-+	u8 op = BPF_OP(insn->code);
-+	bool sign = op == BPF_JSGT || op == BPF_JSGE || op == BPF_JSLT || op == BPF_JSLE;
-+	u64 first = sign ? S64_MIN : 0;
-+	u32 cnt32 = (first >> 32) - reg->r32.base;
-+	u64 cnt = first - reg->r64.base;
++	verbose(env, "%s\n", msg);
++	bpf_note_fixups_differ(env);
++	return -EINVAL;
++}
 +
-+	if (BPF_CLASS(insn->code) == BPF_JMP32)
-+		return cnt32 <= reg->r32.size && reg->r32.size != U32_MAX ? cnt32 : 0;
-+	return cnt <= reg->r64.size && reg->r64.size != U64_MAX ? cnt : 0;
+ static bool loop_flag_is_zero(struct bpf_verifier_env *env)
+ {
+ 	return bpf_register_is_null(reg_state(env, BPF_REG_4));
+@@ -12940,6 +12959,15 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 
+ 		break;
+ 	}
++	case BPF_FUNC_override_return:
++		/* see bpf_check_tail_call() */
++		for (i = 0; i < env->used_map_cnt; i++) {
++			if (!map_type_contains_progs(env->used_maps[i]))
++				continue;
++			verbose(env, "bpf_override_return() and a map of programs are used\n");
++			return -EINVAL;
++		}
++		break;
+ 	case BPF_FUNC_per_cpu_ptr:
+ 	case BPF_FUNC_this_cpu_ptr:
+ 	{
+@@ -15523,9 +15551,10 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	struct btf *desc_btf;
+ 	int id;
+ 
+-	/* skip for now, but return error when we find this in fixup_kfunc_call */
+-	if (!insn->imm)
+-		return 0;
++	if (!insn->imm) {
++		verbose(env, "invalid kernel function call not eliminated in verifier pass\n");
++		return -EINVAL;
++	}
+ 
+ 	err = bpf_fetch_kfunc_arg_meta(env, insn->imm, insn->off, &meta);
+ 	if (err == -EACCES && meta.func_name) {
+@@ -16290,7 +16319,7 @@ static void sanitize_mark_insn_seen(struct bpf_verifier_env *env)
+ 	 * rewrite/sanitize them.
+ 	 */
+ 	if (!vstate->speculative)
+-		env->insn_aux_data[env->insn_idx].seen = env->pass_cnt;
++		env->insn_aux_data[env->insn_idx].seen = env->check_cnt;
+ }
+ 
+ static int sanitize_err(struct bpf_verifier_env *env, const struct bpf_insn *insn, int reason)
+@@ -17642,10 +17671,8 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
+ 			 * prevent zext from being set if the instruction has
+ 			 * been previously called with non-arena registers.
+ 			 */
+-			if (aux->prevent_zext) {
+-				verbose(env, "same insn cannot be used with and without arena pointer\n");
+-				return -EINVAL;
+-			}
++			if (aux->prevent_zext)
++				return fixups_differ(env, "same insn cannot be used with and without arena pointer");
+ 
+ 			/*
+ 			 * 32-bit operations zero upper bits automatically.
+@@ -17661,10 +17688,8 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
+ 
+ 	/* Prevent the instruction from being used with arena pointers (see above). */
+ 	if (env->prog->aux->arena && BPF_CLASS(insn->code) == BPF_ALU64) {
+-		if (aux->needs_zext) {
+-			verbose(env, "same insn cannot be used with and without arena pointer\n");
+-			return -EINVAL;
+-		}
++		if (aux->needs_zext)
++			return fixups_differ(env, "same insn cannot be used with and without arena pointer");
+ 
+ 		aux->prevent_zext = true;
+ 	}
+@@ -17937,10 +17962,8 @@ static int check_addr_space_cast(struct bpf_verifier_env *env, struct bpf_insn *
+ 	}
+ 
+ 	/* it's either wX = wY or rX = rY, see bpf_lower_cast_mov() */
+-	if (aux->cast_mov && aux->cast_arena) {
+-		verbose(env, "same addr_space_cast insn cannot be used with a number and with a pointer\n");
+-		return -EINVAL;
+-	}
++	if (aux->cast_mov && aux->cast_arena)
++		return fixups_differ(env, "same addr_space_cast insn cannot be used with a number and with a pointer");
+ 	return 0;
+ }
+ 
+@@ -20129,8 +20152,7 @@ static int save_aux_ptr_type(struct bpf_verifier_env *env, enum bpf_reg_type typ
+ 			 */
+ 			*prev_type = merge_ptr_types(type, *prev_type);
+ 		} else {
+-			verbose(env, "same insn cannot be used with different pointers\n");
+-			return -EINVAL;
++			return fixups_differ(env, "same insn cannot be used with different pointers");
+ 		}
+ 	}
+ 
+@@ -22026,7 +22048,7 @@ static int do_check_common(struct bpf_verifier_env *env, int subprog,
+ 	int ret, i;
+ 
+ 	env->prev_linfo = NULL;
+-	env->pass_cnt++;
++	env->check_cnt++;
+ 
+ 	state = kzalloc_obj(struct bpf_verifier_state, BPF_VERIFIER_GFP);
+ 	if (!state)
+@@ -22186,7 +22208,7 @@ static int do_check_common(struct bpf_verifier_env *env, int subprog,
+ 	 * Accumulate their total counts as total counts of the main or
+ 	 * global subprog hosting the async call.
+ 	 * Start from the saved total of earlier contexts: adding to the current
+-	 * total would count this pass's synchronous paths twice.
++	 * total would count the synchronous paths of this check twice.
+ 	 */
+ 	sub->insns_total = old_insns_total + (env->insn_processed - insn_processed);
+ 	return ret;
+@@ -22277,6 +22299,134 @@ static int do_check_main(struct bpf_verifier_env *env)
+ 	return ret;
+ }
+ 
++/* What a pass writes outside of the states */
++struct bpf_snapshot {
++	struct bpf_env_per_pass env;
++	struct bpf_prog_aux aux;
++	struct bpf_insn_fixups *insns;
++	struct bpf_subprog_info *subprogs;
++	struct bpf_func_info_aux *funcs;
++	struct bpf_prog prog;
++};
++
++static void copy_snapshot(struct bpf_verifier_env *env, struct bpf_snapshot *snapshot, bool save)
++{
++	bool has_callchain_buf = env->prog->has_callchain_buf;
++	struct bpf_prog_aux *aux = env->prog->aux;
++	struct bpf_subprog_info *sub;
++	int i;
++
++#define COPY(kept, live)	(save ? ((kept) = (live)) : ((live) = (kept)))
++#define COPY_AUX(field)		COPY(snapshot->aux.field, aux->field)
++	COPY(snapshot->env, env->per_pass);
++	COPY(snapshot->prog, *env->prog);
++	/* it is taken once */
++	env->prog->has_callchain_buf = has_callchain_buf;
++	COPY_AUX(max_ctx_offset);
++	COPY_AUX(max_pkt_offset);
++	COPY_AUX(max_tp_access);
++	COPY_AUX(max_rdonly_access);
++	COPY_AUX(max_rdwr_access);
++	COPY_AUX(min_rdwr_write);
++	COPY_AUX(max_rdwr_write);
++	COPY_AUX(stack_depth);
++	COPY_AUX(tail_call_reachable);
++	COPY_AUX(jits_use_priv_stack);
++	COPY_AUX(kprobe_write_ctx);
++	for (i = 0; i < env->prog->len; i++)
++		COPY(snapshot->insns[i], env->insn_aux_data[i].fixups);
++	for (i = 0, sub = env->subprog_info; i < env->subprog_cnt; i++, sub++) {
++		/* the sum over all passes */
++		snapshot->subprogs[i].insns_total = sub->insns_total;
++		snapshot->subprogs[i].insns_self = sub->insns_self;
++		COPY(snapshot->subprogs[i], *sub);
++	}
++	for (i = 0; aux->func_info_aux && i < aux->func_info_cnt; i++)
++		COPY(snapshot->funcs[i], aux->func_info_aux[i]);
++#undef COPY_AUX
++#undef COPY
++	bpf_add_cost(env, env->prog->len, BPF_COST_XREG);
++}
++
++static struct bpf_snapshot *save_snapshot(struct bpf_verifier_env *env,
++					  struct bpf_snapshot *snapshot)
++{
++	size_t insns = array_size(env->prog->len, sizeof(*snapshot->insns));
++	size_t subprogs = env->subprog_cnt * sizeof(*snapshot->subprogs);
++
++	if (!snapshot) {
++		snapshot = kvmalloc(sizeof(*snapshot) + insns + subprogs +
++				    env->prog->aux->func_info_cnt * sizeof(*snapshot->funcs),
++				    BPF_VERIFIER_GFP);
++		if (!snapshot)
++			return NULL;
++		env->mem += insns + subprogs;
++		snapshot->insns = (void *)(snapshot + 1);
++		snapshot->subprogs = (void *)snapshot->insns + insns;
++		snapshot->funcs = (void *)snapshot->subprogs + subprogs;
++	}
++	copy_snapshot(env, snapshot, true);
++	return snapshot;
++}
++
++static void restore_snapshot(struct bpf_verifier_env *env, struct bpf_snapshot *snapshot)
++{
++	copy_snapshot(env, snapshot, false);
 +}
 +
 +/*
-+ * A jump can cut a range in two: 'x u>= 3' leaves -4..-1 and 3 of -4..3. One range has both and
-+ * all values between them. So a state that knows less is proven where this one is not.
-+ * Do the jump for the values before the end of the order, then again for the values after it.
-+ * Returns 1 if the current state has fewer values now.
++ * The prologue takes the context from R1, and it can clobber R2-R5. An
++ * extension gets the arguments of the function that it replaces.
 + */
-+static int cut_range(struct bpf_verifier_env *env, const struct bpf_insn *insn, u32 regno,
-+		     const struct bpf_reg_state *taken, const struct bpf_reg_state *not_taken)
++static int check_ext_takes_prologue(struct bpf_verifier_env *env)
 +{
-+	struct bpf_verifier_state *st = env->cur_state, *other;
-+	struct bpf_reg_state *reg = &cur_regs(env)[regno], front = *reg, back = *reg;
-+	u64 cnt = values_to_end(insn, reg);
-+	u8 op = BPF_OP(insn->code);
-+	const struct bpf_reg_state *equal = op == BPF_JEQ ? taken : not_taken;
++	const struct bpf_subprog_info *sub = &env->subprog_info[0];
++	int i, cnt = min_t(int, sub->arg_slot_cnt, MAX_BPF_FUNC_REG_ARGS);
++	struct bpf_prog *prog = env->prog;
 +
-+	/* 'x != 0' is 'x u> 0' */
-+	if ((op == BPF_JEQ || op == BPF_JNE) && !tnum_equals_const(tnum_subreg(equal->var_off), 0))
++	if (prog->type != BPF_PROG_TYPE_EXT || !env->ops->gen_prologue ||
++	    !env->ops->gen_prologue(env->insn_buf, env->seen_direct_write, prog))
 +		return 0;
-+	if (op == BPF_JSET || reg->type != SCALAR_VALUE || !cnt ||
-+	    !(values_to_end(insn, taken) || values_to_end(insn, not_taken)))
-+		return 0;
-+	env->imprecise |= !env->err;
-+	if (!env->path_sensitive && !bpf_xreg_in_deps(env, st, st->curframe, regno))
-+		return 0;
-+	if (BPF_CLASS(insn->code) == BPF_JMP32) {
-+		front.r32.size = cnt - 1;
-+		back.r32.base += cnt;
-+		back.r32.size -= cnt;
-+	} else {
-+		front.r64.size = cnt - 1;
-+		back.r64.base += cnt;
-+		back.r64.size -= cnt;
++	for (i = 0; i < cnt; i++)
++		if (sub->args[i].arg_type != (i ? ARG_SCALAR : ARG_PTR_TO_CTX))
++			break;
++	if (!cnt || i < cnt) {
++		verbose(env, "Extension writing packet data must take ctx and scalars only\n");
++		return -EINVAL;
 +	}
-+	reg_bounds_sync(&front);
-+	reg_bounds_sync(&back);
-+	if (reg_is_empty(&front) || reg_is_empty(&back))
-+		return 0;
-+	other = push_stack(env, env->insn_idx, env->insn_idx, false);
-+	if (IS_ERR(other))
-+		return PTR_ERR(other);
-+	env->head->again = true;
-+	other->frame[other->curframe]->regs[regno] = back;
-+	*reg = front;
-+	return 1;
++	if (bpf_check_ext_prologue(&env->log, prog->aux->dst_prog, prog->aux->attach_btf_id))
++		return -EINVAL;
++	return 0;
 +}
 +
- static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 			     struct bpf_insn *insn, int *insn_idx)
- {
-+	struct cnum64 near = cnum64_from_srange(-MAX_PACKET_OFF, 2 * MAX_PACKET_OFF);
- 	struct bpf_verifier_state *this_branch = env->cur_state;
- 	struct bpf_verifier_state *other_branch;
- 	struct bpf_reg_state *regs = this_branch->frame[this_branch->curframe]->regs;
-@@ -18992,7 +19045,10 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 			return err;
- 
- 		src_reg = &regs[insn->src_reg];
--		if (!(reg_is_pkt_pointer_any(dst_reg) && reg_is_pkt_pointer_any(src_reg)) &&
-+		/* A header and a 16-bit length fit. If a pointer wraps, it leaks the address. */
-+		if (!(reg_is_pkt_pointer_any(dst_reg) && reg_is_pkt_pointer_any(src_reg) &&
-+		      cnum64_is_subset(near, dst_reg->r64) &&
-+		      cnum64_is_subset(near, src_reg->r64)) &&
- 		    is_pointer_value(env, insn->src_reg)) {
- 			verbose(env, "R%d pointer comparison prohibited\n",
- 				insn->src_reg);
-@@ -19007,6 +19063,7 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 	}
- 
- 	is_jmp32 = BPF_CLASS(insn->code) == BPF_JMP32;
-+again:
- 	env->false_reg1 = *dst_reg;
- 	env->false_reg2 = *src_reg;
- 	env->true_reg1 = *dst_reg;
-@@ -19048,6 +19105,14 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 		return 0;
- 	}
- 
-+	err = cut_range(env, insn, insn->dst_reg, &env->true_reg1, &env->false_reg1);
-+	if (!err && BPF_SRC(insn->code) == BPF_X)
-+		err = cut_range(env, insn, insn->src_reg, &env->true_reg2, &env->false_reg2);
-+	if (err > 0)
-+		goto again;
++/* What the pass found about functions and about the program has to be consistent */
++static int check_after_pass(struct bpf_verifier_env *env)
++{
++	struct bpf_subprog_info *sub = env->subprog_info;
++	u16 outgoing;
++	int i, err;
++
++	err = check_max_stack_depth(env) ?: check_ext_takes_prologue(env);
 +	if (err)
 +		return err;
++	for (i = 0; i < env->subprog_cnt; i++, sub++) {
++		/* the caller would get r12 of the callee back */
++		if (env->uses_arena_sp && (!i || sub->arena_stack_entry) && sub->is_called) {
++			verbose(env, "%s() uses R%d and is both called and a callback\n",
++				bpf_subprog_name(env, i), BPF_REG_ARENA_SP);
++			return -EINVAL;
++		}
++		outgoing = sub->stack_arg_cnt - bpf_in_stack_arg_cnt(sub);
++		if (sub->max_out_stack_arg_cnt > outgoing) {
++			verbose(env,
++				"func#%d writes %u stack arg slots, but calls only require %u\n",
++				i, sub->max_out_stack_arg_cnt, outgoing);
++			return -EINVAL;
++		}
++	}
++	return 0;
++}
 +
- 	other_branch = push_stack(env, *insn_idx + insn->off + 1, *insn_idx, false);
- 	if (IS_ERR(other_branch))
- 		return PTR_ERR(other_branch);
+ /*
+  * What it took to verify a static subprog on its own is not in insns_total of its callers.
+  * Add it, once per caller. The main prog and global subprogs have all of it already.
+@@ -23656,11 +23806,6 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	int err, desc_idx;
+ 	bool near_call;
+ 
+-	if (!insn->imm) {
+-		verbose(env, "invalid kernel function call not eliminated in verifier pass\n");
+-		return -EINVAL;
+-	}
+-
+ 	*cnt = 0;
+ 
+ 	/* insn->imm has the btf func_id. Replace it with an offset relative to
+@@ -24336,16 +24481,10 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 		ret = bpf_insert_loop_guards(env);
+ 
+ skip_full_check:
+-	/* might decrease stack depth, keep it before passes that
+-	 * allocate additional slots.
+-	 */
++	/* instruction rewrites happen after this point */
+ 	if (ret == 0)
+ 		ret = bpf_remove_fastcall_spills_fills(env);
+ 
+-	if (ret == 0)
+-		ret = check_max_stack_depth(env);
+-
+-	/* instruction rewrites happen after this point */
+ 	if (ret == 0)
+ 		ret = bpf_optimize_bpf_loop(env);
+ 
 -- 
 2.55.0
 
