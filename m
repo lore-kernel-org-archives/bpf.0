@@ -1,103 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.177
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795216661;
-	b=zbL5uRXeCK945vBeEUTVKiqCEM5NWC2rdaK+F8e6N8y7VzEGdPsT0oLSkebMeNUlEHfN
-	 Z356oBcQzH2CRF+7llGf32XGt/v0TllDyDsH+nLi7ejtZvzWhCFtq9ZL1om6wgm7VRzqY
-	 qQHOb6R7b+DJqAEuwMENr3Qbn2CBYzLr3U/SLk86ilITx5pxpxutribgi3t7BJNbZ3eYS
-	 yw5Pk8PHBETcY7Hl/oDcixZETsmB3fZ73z3bR9I0n4pxu9XLnLON6mVGiUS1RdxG4Y9X7
-	 gkOZg9jCa4T7Z2YghU9y29R3VfUWe+Voa8V1Kk3B7hVwCACb0zMxTF9s3wgvPFy5uYw==
+	t=1795217027;
+	b=m6t/4u88fqpXLKVTry3Qbo8ZBpp6nuNvmwSkryVPHvVq84igA5/FHW0pymYH8nqToJ11
+	 2FQLrxl0tqLylt1r8gqYhdG5hl5CFd7YdTXvWHS37iR/lXil6FOKoX6qFiJtgcwmaP+Bz
+	 YlGYR8boqCOj5MYh0oiRHDU8p8Aoo/WW0wPC/D/5oJboyZJE8gUVjvErlqW+lNbNpCq2X
+	 8hoINaa2lpPuPA5v6SaNhdb2ws3OcLs6WcptKHxm0leDF/zna750Ps2ds0t6C5zKGhTFy
+	 nqf/PSfb4Ob5kMDAIpeqodjBVxm+oJfi2rHUpVAKQzKL7zxJ+j2BP8euTl4yF5EwfcA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795216661;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=726kVL6F6TcMsPO3zHhLa7Egh+S7OR+DlorMBz5s0zc=;
-	b=IqpAaci4pEo0evITkW2iaM/YtZuAxN80o5r2af7WuBROjLSUY2V/C9O/BFwWQrL95jWC
-	 QcoTkhZX0q0h21l7qzGcx/32rj7sJgoYNU3o8yCMKkNZ6CBHHMdCFbtl0NLYeTtKgKWf7
-	 eq11jGjHUrydreKRk4RXDkAlnDqFBm6t121qXE/zBVny8FgjB6kzbevpDf9HpfJ5SPXYo
-	 AfAqv0O7R+5Q5hs1oi9vy/iTBQbydKd9ag2acgkjXu2qgYMdvVtGsyiQayamtupwr/9hl
-	 FnEW9WA7c/QcJBslH7mYQfAbqnmtlAQeeEEyBWuJZApRqLjanpt3XGyzn9SsyuVWykw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795217027;
+	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:In-Reply-To:References:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=TGWLnIfO8Lat7Y9NAAZx//6gPQdAxKgN9VEcDXQpR2g=;
+	b=YNPIY2eHuSb42r074k/nccn/1glnzfl38fjYDxZSKcwwd9aPPZurIbJtOMEPuXB0U5JE
+	 ImHptz7/PG/XPJ0xzm/THpeCf4p69Rm+M4yTGb5T9g4hao6lfAlzTv+Mc66aa+1qjAjdb
+	 io5tfGuvniA3E/SgRe8yP4oMRkM8/QubRZoUr4iwVuUKkUr6U0BYiSghnE42ChDnM9mKr
+	 AcVvgj1AW7Mo39vKHITV7RcLALXlcGxohxxWg+Yr1VRLXp/UGBqPpybvcUJEmN3rDS5LM
+	 XY0UY6o0qdC7etGQugqbTlYqgEthn6IayOA/S64XwgWYNi2MpEJZbMNfSun8JnbWX2w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
+	dmarc=fail header.from=kernel.org;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=oD80inq1;
-	arc=none smtp.remote-ip=209.85.128.42
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	arc=none smtp.remote-ip=209.85.222.177
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72CD3606A699
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 23:17:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 72CD3606A699
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3E4606A6A8
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 23:23:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5B3E4606A6A8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=oD80inq1
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4a35d5d4a20so14161475e9.2
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 15:17:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795216660; x=1795821460; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=726kVL6F6TcMsPO3zHhLa7Egh+S7OR+DlorMBz5s0zc=;
-        b=oD80inq1OCi7sES2mZDguKm7iyjfIQpmNo57rsodReJicMZiMJ6FTJg1dEvz8vLIze
-         Iy7ugQ9nzgZFaYlcarFHnSoY6M1asQ05+hnWEjOVVAWuLGcA72nzo2Om76rkqGpmFxZ8
-         7jU8oVXrWNa9gUvrdtwjG9aDYv7MEv1agucz/fVVZnyDF7DyyZeweEg9XEacOHHch7hu
-         NYKudRf1jwDyP8HHjL824XRBWRJXj4iTPzSmVcj5WCQElNJXKXzHOvWhzU4wfIjn8xCi
-         XwSu9OhPflwp2fqeB/NNKfXrDUD5VheszfxMeFQQYrBPKaAoV0EnZDIZM0LAGfqSL7Oq
-         PxHg==
+Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-945e6d9ceeaso131220985a.0
+        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 15:23:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795216660; x=1795821460;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20260707; t=1795217026; x=1795821826;
+        h=mime-version:content-transfer-encoding:content-type:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=726kVL6F6TcMsPO3zHhLa7Egh+S7OR+DlorMBz5s0zc=;
-        b=ul7R7R5bQH8SgJ3L2aAzqyJAwcbHon73L+b3i96WcsgLuan/0TBk4I+3TUOsix7ViT
-         Zlep6q1jiPfEKDUZEERmapZRpjIpDTyvPNCzgU6KRMHj1HOLm7uhK4ElyRAi1360nZat
-         reqMpBkO8k1S15uv+ARLBPg0OyW1gRgPzSBOUFZptVZlWALCx1c+BbJ/tm0s9BnsA7ZP
-         ogLwti+BdPLJ8mSLl86e8ObJ7nNc02ub5CQwgvL6pZMDgIeMVb/+jBYTdBADTqGB/r42
-         meB5fyeKx4xxZg3Ccs+iKqkaCw4YxszNRQoIVxBK090Lrq9sSgeYZZUL0ThIMRpgp/LJ
-         UQKA==
-X-Forwarded-Encrypted: i=1; AL+hErGeT8qwLwh7c3RdRW5RmkhIaTwN6NiYyQHMDHfg0DO+rDquFtXvA3YFQJRvpW0pYAV4qYw=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8wGozq1yzSyCo6KUDhV13+ywmiIbyexjv/k34pLSW+52c66Uco
-	s8wVOHZxXVG+Htp/ajiZC5T3sas2Q9fsqfn3ZtJ2OGXOSPhQycl/wT9k
-X-Gm-Gg: AYBFou2NnCv4XsA76Rv15hYBSksF2+0EQjzFkUTCS1tt0Z9TuXVbBPYIcE1cKLBORk8
-	wXhN3uZP+bnIw85/3FJNFtxB5XwBLq67iYeWYm8x6NgJjhG+NhSAvN4ZBJPklhaBUOaalI4NLRP
-	oNOngjBxCXXep8C2ViJAORaGWlyPUZY7txibxzMOYXmt/CdiAe6c28/FWW8a7WxRKVUWFK6VfVc
-	TY2XpAgFISlxJzjfx/2hZqvxXq9jOilp2WPI9VZAW3oKfTkEho1Vk6rN4IlOv4d/OLKZOSAl/BB
-	EAWTQKDuydcpYRZfbwfh5Y6idMe+UrD8n8JNPDJj5TgzJxg/xiSI0Y1FbuFbyybs0RrhnzigTir
-	MiiqTg7H28rwxpwznyzNqfKX/grG32rvfiKGyLNi4mOMc3whz+M0EfaKSnZkVx+grjJwWOTpM3F
-	GlMVeHRtKpIYnn9V9eusZtfghHNdQ54ia/sGHeG6zE3ElILW1WlFBHPrgyFsWxJ5vWhiZfXWVNf
-	HEkpWRRVLnMYoWl1n0y6RibbFoui88rPJB4yVYgAJcvSeB/hKzwQ1Qtj3VVMheBbIcUygigqLJm
-	2OEvNFOsJzjknlPjDdv0ZKxwT3kMhL1yBrnjMiEmxK1cHl09m4efkZBP0hAYAtbBwRY5mmNvevB
-	skWgO1EqhNxDygvLUgwTJovk/ixSmHXkU+X8=
-X-Received: by 2002:a05:600c:820c:b0:4bb:6f6a:1976 with SMTP id 5b1f17b1804b1-4bb887c2923mr101689825e9.2.1795216659651;
-        Fri, 20 Nov 2026 15:17:39 -0800 (PST)
-Received: from pc.tail250202.ts.net ([87.110.86.243])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb853ca452sm151650265e9.15.2026.11.20.15.17.35
+        bh=TGWLnIfO8Lat7Y9NAAZx//6gPQdAxKgN9VEcDXQpR2g=;
+        b=I/D8BjQ5KStJmYT3GJ9f3RoLiyWARNfwIWIFWgX7/36bAuF6FOmrfKDNBCWXuUoRm1
+         0sxEBzjopX4oDeZqryl6U34DGWKu9U2OKVgFDC7HfiHi6/n0RZGiTN5dRv6GIsIzqWV0
+         qiv/2Ikcj1jb7h/CCeonmKJDqsPCqD54uht5a7mzfLnI0QX3OlMYW1m09noYaozSzWp0
+         GGmegsNkaE5+PoO9+gaQ4LVda4uxZPKDqvs0SL7tnvlV5fEpJ0zW9s9HzAZvGbzmW4pt
+         H1eH5PF4oQBtEDiQT6F7Ad3F7SAARZAjkYVP79o7gM1oEJuWdZ3LCzHoclRxLuWq5ASs
+         ytUw==
+X-Forwarded-Encrypted: i=1; AL+hErHRNI4hF79Y6ADN57jmzq99oMvDXRD0tH25FyaySGjP4fVlEeGL03XlC2Pebv5wadgSWGY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9RAfJZVlugYyw63kMEV8lyacfapybx2JLNfsMgt/PnDTav8U7f
+	Rkcl7x/jfs0BlCFFDKWA4BlL7DGE1xV1UHk2XuJbdnjK2/HhGUij8DbM
+X-Gm-Gg: AYBFou3489TwD2El6Jf2EiYDpZ1AXCNdYY7BmwCDiE4zkx7p58CXIm3k571UV0xKvdt
+	wc+QZ/N7qjRoMfhxMJU0ZPX8cOsgHXskXA23aAdWS8LZyYxOX7xeGrtmoKMV9oXwDkwA7Y2hect
+	P85m0mJytLTpldrQASB+sBeN6Jw0odXFLiYJ8RrU7JUoT//PQ2/mm9OQ6k98t0a9OolJuzERIcI
+	QhMZOSvXFthMhsSc5/FNR5lFmA8JLQKjR5I2ZDrVwzgF5HyfS7En09NIAwYPE+qgYw1tJQxWrMc
+	llaL99HxEQDlDn7zagTO9SlNQjQRMLC1097AOcReioOwRfxrQ+kzFveyWCkWziqQrcEEtYxrgZU
+	Mt6IJdGjhsHakyVlfnCnJqVROZNoUBaPnHppSsuD/5Q1PfG7eyO44bBiu33NIwvS351sbQydkMW
+	DxM/z2NhbmnkNOsNV8O/jIeNl6ZIOsBQ+FL5S4m43S24iAOMo5PipEdoJHuXyYtBrTuqAplXQj1
+	d0q2bEs1G7JAGKqAsckKIcTvqDJt3PUTXoZir85Bi+GugeYc52bODMxJjg6wDox/hp2+Kdtp5uy
+	S82udUUtX2q611ZmQesPYXxUsTSPMiUJoeBlFI3bBR6tVDFP9bBfCyrrSFZLbtk+EWZUFo4frfG
+	b/L/t4x1uSu6XlN3s0R/0M7WgKYARMruvoPRU7ed7EUuz/5KPkxj5
+X-Received: by 2002:a05:620a:458d:b0:949:73bc:c763 with SMTP id af79cd13be357-949baa13d87mr880796285a.58.1795217026434;
+        Fri, 20 Nov 2026 15:23:46 -0800 (PST)
+Received: from localhost ([199.170.132.196])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-949bb41a341sm303706185a.37.2026.11.20.15.23.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2026 15:17:37 -0800 (PST)
-Date: Sat, 21 Nov 2026 01:17:35 +0200
-From: Janis Edvarts Lacis <janislacis06@gmail.com>
-To: Antonio Quartulli <antonio@mandelbit.com>
-Cc: intel-wired-lan@lists.osuosl.org, 
-	Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Sriram Yagnaraman <sriram.yagnaraman@ericsson.com>, Kurt Kanzenbach <kurt@linutronix.de>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH net v4 1/4] igb: don't touch rings that don't exist when
- disabling an XSK pool
-Message-ID: <xupy6jbpnziq2qji54zjbvm7neggrwkxg3sfrhlolmrd6ysifl@zptk6ynkbu5f>
-References: <20261120210134.133238-1-antonio@mandelbit.com>
- <20261120210134.133238-2-antonio@mandelbit.com>
+        Fri, 20 Nov 2026 15:23:45 -0800 (PST)
+From: Tamir Duberstein <tamird@kernel.org>
+To: bot+bpf-ci@kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, shuah@kernel.org, arighi@nvidia.com, xukuohai@huawei.com, billy@starlabs.sg, void@manifault.com, ihor.solodrai@linux.dev, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, awerner32@gmail.com, andriin@fb.com, martin.lau@kernel.org, mason@kernel.org
+Subject: Re: [PATCH bpf-next v3 2/8] libbpf: ringbuf: Use compiler atomics
+Date: Fri, 20 Nov 2026 17:38:22 -0500
+Message-ID: <179521430208.33161.11588030194941155653@kernel.org>
+In-Reply-To: <8676fc63d1b69002f39adee94811f9384c19bb8f6e89d08576e5aaab283c6aa2@mail.kernel.org>
+References: <20261120-bpf-ringbuf-fixes-v3-2-ff7ca15d6c37@kernel.org> <8676fc63d1b69002f39adee94811f9384c19bb8f6e89d08576e5aaab283c6aa2@mail.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -107,34 +84,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20261120210134.133238-2-antonio@mandelbit.com>
 
-On 20 Nov 22:01, Antonio Quartulli wrote:
->xsk_get_pool_from_qid() checks the queue id against the stack's real
->queue counts, which can be higher than the number of rings the device
->has: on 82576, enabling VFs leaves a single Tx queue while keeping two
->Rx queues, and igb can fall back from MSI-X to MSI with a single queue
->on resume. Disabling the pool of such a queue, e.g. one bound to queue 1
->before enabling VFs, then passes a NULL Tx ring to
->igb_txrx_ring_disable().
->
->Only disable and re-enable the rings the device has: skip the queue if
->it has no Rx ring, and only the Tx part if it has no Tx ring, so that
->an Rx ring using the pool still stops using it.
->
+> Could the fence patch come first, or could this patch carry the fence?
 
-What happens if a pool is bound to, say, queue 1 and the socket stays 
-open across a runtime resume that falls back from MSI-X to MSI 
-(queue 1 becomes invalid)?
-
-If the socket is closed after igb_rtnl_resume_task() has reduced both
-real queue counts to one, xsk_get_pool_from_qid() will return NULL for
-queue 1. As I read it, igb_xsk_pool_disable() then returns -EINVAL
-before doing the cleanup and resources get leaked.
-
-I may be mistaken here, if so, please let me know :)
-
-Best regards,
-Janis
+Combined in v4, with the arm64 RCpc ordering dependency
+explained in the commit message.
