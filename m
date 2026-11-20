@@ -1,68 +1,107 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.143
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795148924;
-	b=1BHVRDyZcgYyLuvqOO3Da6qVS2mfJ+vhBDVD4Nam7mLHP4Lg3HLfwIlXnTmSwUaJnuaO
-	 GS6egYhfvbk2a8LvLLvnrKe9/LAcfUT5QqAGVsDpewlaseKC3+ZW9YgBJm+RaH859qIbL
-	 /7x7bFruhIPTSDZ/LGE7JHlDjFRnwptYoCqyxlE+j4hsjQBciQa+Ohbvcoap+sdhJv3iH
-	 08gwwUaIpSmPF6H0x7mOAESH2rCIaH4njPcHWaFGSAqD5/gAnHPwnpDBX03GSpLz6vwYr
-	 4UrKtwu+O9pfCyPosP6eAmYUwDmoQngcs1QaILj28X0vSCUHz0sZaOIiTSWMMpqUgIw==
+	t=1795153919;
+	b=MEpMTcG2GYhaXj1TAK2awPsWEHjceR6QuskgAWGJRLvIbYudYDTHI5pSdBaVSbFw9vJE
+	 l/dUJb2Nvp4Yvvz6oABNZ/K8QSPDpjTfO6yz2gD6EDpB8kMp8Dt1kxqiIuFua9qt7IBxT
+	 dmwKa2lUKeT4c6edlshzVQaeNSccCn4punq2lpjDMlnmo6X4f5Iz7NVweaaA1EPjTD1Z+
+	 7tCzHnOcPXYEPGOjTpwbwPRjUj7G5owvjjPMo1Qvj0MCvRBkqZtRHVA870CdCuOd/Jno6
+	 1myvQajyeFnBmdwoYoINQFA1yTx+xpWVRnWk3mWxW/gmfoMn+WADsqOvMWuSHi64luQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795148924;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 X-B4-Tracking:X-Change-ID:X-Mailer:MIME-Version:Content-Type:
-	 Content-Disposition;
-	bh=fOEWrJZtywxHqIC6enC++RBPtKCtrgZZJPePAFSlkWM=;
-	b=jkKlT1+EeZIh50g9xt9SzOPPPXa98nMdViZUiJgttiIjdkp6KW8MyqdF7aY+Ugd24wDa
-	 CN7xVDk7XMvxDTG1XSC0RmOrMh3Bdrt+xaYqxtPpCyZIzbHpSQp/g0wu3iDyzOixZl0ml
-	 T79Eb/ah0vz7JAxHxT2AtEtCM/Z+TcC0mmieLXGVQ1IF/2ysb5yi98O0HRb7eVNM21N71
-	 kfPcHDCV4PVnxAHEhfXhVq8+5XkhpROe+46oW3z2/aT5loEAWm6mWk6gyJLIbiCbsqlpH
-	 hUUTM85XuIVwJupIznMCqK1pEpZ1LMWtWHl2160E6hS07ara0De57cGskZIAQAJAjgg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795153919;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=OBFWFQ3yvSvM14Hz5XmTfrlvvKw/w87tsoZwb4IBO4M=;
+	b=vgykuvVmQnx1qpw7IH0M7U+PeDAzUjunVAWX3v9s877YboAxG5MnkYqLqRpKUKLmIgTN
+	 X7vY9esS5zNyFhKwxP2tqyQqEf+F47jK9r8rmbITYAFWhfU8FvRMWBjnLyA2hXmDnX+Sy
+	 1w3/iP8upTgI9XUfrOSCKRxXNDo9T0DBZR4D42HejCtBbMioRe1CYI3aG/GLj+5XIB0l6
+	 uNfIBEE1bGw4t7Szn5UTiVIzB8tOvaqHgYL1hl+38/y8PsFYsasPmFmFOFQBgiXOF+3PD
+	 nEvKpZyd8Y5qZg183OjpZ0kRaG4OJoLXnTD1sE32EPyamsS9VVerLFXk36st7sl27Xw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=NEwhAfZz;
-	arc=none smtp.remote-ip=91.218.175.143
-Received: from mta0.migadu.com (out-143.mta0.migadu.com [91.218.175.143])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=uwdR04+t;
+	arc=none smtp.remote-ip=209.85.215.169
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A86E606A326
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 04:28:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2A86E606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34D9B606A32A
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 05:51:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 34D9B606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=NEwhAfZz
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=9qFmDBtDjKXXhxRLQFA5L7yZm0Cyx68K1IIN39IpzpM=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795148921; v=1; x=1795753721;
- b=NEwhAfZzOW1pwYal/oZ/PjWYWOYECnIJmgLiaJuX5lrZnXuet3ap7hF73a1BR4lPXeshCsus
- CouNYjpkqkUhFWIwSDwR0ke94iEqe8nmG0xM4Z5mbiSy/dSn7/45xHjDaINfPuvTbhMhGt0PHXo
- byWUrRjLTb6jIjSF2G0gL8KY=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 1fdff059cb70f213;
-	Fri, 20 Nov 2026 04:28:41 +0000
-X-Mizu-Trace-ID: 1fdff059cb70f213
-X-Migadu-Flow: FLOW_OUT
-Date: Fri, 20 Nov 2026 04:28:36 +0000
-From: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-To: KP Singh <kpsingh@kernel.org>, Matt Bobrowski <matt@bobrowski.net>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Anton Protopopov <a.s.protopopov@gmail.com>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	"Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-Subject: [PATCH bpf-next] bpf, lsm: Make bpf_lsm_get_retval_range() return
- void
-Message-ID: <20261120-jf-bpf-lsm-retval-range-v1-1-d712e4090907@linux.dev>
-X-B4-Tracking: v=1; b=H4sIAFCO/2oC/yWMQQqDMBBFryKz7kAStASvUrqIdtKOaCozUQTx7
- o12+fj/vR2UhEmhrXYQWln5mwrYWwX9J6Q3Ib8KgzPubq31OETs5oijTiiU1zCiXDcfTG1cQ1Q
- 3Hoo9C0XervIDTiPRluH5X3TpBurzGYbj+AGFyV7thQAAAA==
-X-Change-ID: 20261118-jf-bpf-lsm-retval-range-8a04025ee458
-X-Mailer: b4 0.15.2
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=uwdR04+t
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-cde0daf3a2aso238656a12.3
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2026 21:51:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795153918; x=1795758718; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=OBFWFQ3yvSvM14Hz5XmTfrlvvKw/w87tsoZwb4IBO4M=;
+        b=uwdR04+tB/T/p2cupZCCzrCB9+v05sG6vb21FTTtLNoeHPbmCbVHjNQ2A4W4Vbc70P
+         PatreL7eNkVim7Bu+1Tx2Cus1Ttd0XOVTKAeNV9j3+WuNnPHvUEj1tVSiApv+SoBLzwT
+         e2yuQkyEdXbTJ+CKHdVE3oWCD6pO0I35LBfZgsdIqmf6vDt9p6rPjk2+85KvGwIurn8B
+         xNLAwwp6X9a6SVKsiebmD8eof/p8Ojm4J6f2IZUF6k2m7Zf9qGv9Ht8zEYGVvbMsbCpX
+         qL+SoWdUQxDpZceZ0agqSp/WWDjC+u8xpHXo96ZjdeDlHEwKPPpAdklPzFYNQXOG3kTP
+         mKoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795153918; x=1795758718;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=OBFWFQ3yvSvM14Hz5XmTfrlvvKw/w87tsoZwb4IBO4M=;
+        b=jJx5o2jNzsNurxO1wOe196JxwbPuY+QRfPr1Uw72jcI6jc4kB76UFIUroolwlMWNl4
+         +fZRqBmptqNF0jiuI+n7+HMyygZk39CrexPkc+1IMqRjH6SiJ78a7h5NXlo7kcbdOuYl
+         Apg0Z11kYhLZx13FLgxEMrTh2ijf4VSKKFtvdMMjaKZdluxLsOysd27/GCi3p5XSpgZT
+         wDD4c9OzC4s/OBzQ+hjKN7Mw/UJikOJmTXLQWsQ2FkwtE+0FUmTQbnCVdi+zraa0uCP4
+         ed/FkpJ09oWDWBWtSzd0b4Lw9QV6uvygivWTl+uWxDkzV9GnL3tTXyDhILlFF5NgYi/X
+         wL3Q==
+X-Forwarded-Encrypted: i=1; AL+hErESeDjhkRRFZ5nKBcp2AcBHZPb1UDEOCzRQCoIvTEqgEAF0zSvNNIsrwBQKx3VkrWPQk6I=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/+ALf4fPSEmjNKASQbV3W+BNDR//qFVnKe0U92Qpl5/UEL9Oi4
+	wvxxxF23v+83Wo14KW1PhJc0SiU8KzeMMHloOgB4I21kDYIQiA+wvpqh
+X-Gm-Gg: AZFdTZdjMkuwX6Yv9es3LCNPt1fmsDdi5vXRKRp/VVszAhGZcltBKVCDATTtby/EfOQ
+	xwJ70yhdm+NEbACACux9sAP2FfeMgWcOl6VS3Cks5rtnyZaGt7l3C8RuAcaau0NCic+aJ01oTKs
+	wRTAgPkCtENbgFLxChtpzG0GWV+XDK894m/8/OezysHd0XyDCsvzEfw/FL7LmEoFUixtAl4yiOb
+	vucADyYbnqTLWBbIGM4AG1i1UZJL/Gl3WX6hI2REPiRowuw5ZMtztKPMXlpOEfYXst2zZ9Ok66C
+	cNgcBv0QchPDhPPBL7W7VxsPuBmFiGzrSs8fspiFLMGBuZTfw8OT8aavZ3UCIupNRzMEJPc6vmI
+	mMpMpBpqlirvy3l4D0ENW3OzGD6EmcdSdTKN1x4YT3srMwVijjwRkaNh+dGFJFZ4CqzWhnxDcRE
+	6Hn/Vwo2KUM+QlSXgTs1aNjtxZ+UvA3QTpH3RLDkz0VyAMzz+feOAYBHB1r+zipXhWhAJo3kIYx
+	UwjRsUgDlIM2KRo1clhJamhn+46KcKO8k0EdRRl5f1vb2rjG6sC8omyYDvaI9YYT/Feru1TZIc1
+	IgGQunoyk4csKAOVkfbc9PDb3X3PmXImc5Uy0CSzpUkG9iu4hvT96ZWZKiWUiotl
+X-Received: by 2002:a17:90b:380f:b0:3ad:1da4:2ddf with SMTP id 98e67ed59e1d1-3b41cb0cae0mr1572880a91.51.1795153918487;
+        Thu, 19 Nov 2026 21:51:58 -0800 (PST)
+Received: from cps-manycore-1 ([147.46.174.222])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b40a878d50sm5104045a91.11.2026.11.19.21.51.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Nov 2026 21:51:58 -0800 (PST)
+From: Sechang Lim <rhkrqnwk98@gmail.com>
+To: sched-ext@lists.linux.dev
+Cc: tj@kernel.org,
+	void@manifault.com,
+	arighi@nvidia.com,
+	changwoo@igalia.com,
+	mingo@redhat.com,
+	peterz@infradead.org,
+	juri.lelli@redhat.com,
+	vincent.guittot@linaro.org,
+	dietmar.eggemann@arm.com,
+	rostedt@goodmis.org,
+	bsegall@google.com,
+	mgorman@suse.de,
+	vschneid@redhat.com,
+	kprateek.nayak@amd.com,
+	haoluo@google.com,
+	brho@google.com,
+	joshdon@google.com,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH] sched_ext: reject oversized dispatch_max_batch
+Date: Fri, 20 Nov 2026 05:49:08 +0000
+Message-ID: <20261120054913.3795562-1-rhkrqnwk98@gmail.com>
+X-Mailer: git-send-email 2.56.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -72,115 +111,47 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-With CONFIG_BPF_FMODRET_SCAN=y, fmod_ret programs can attach to tagged
-functions, so a program on bpf_lsm_get_retval_range() can make it fail
-for an LSM hook that returns a value. get_func_retval_range() then
-reports no range, and do_refine_retval_range() and check_helper_call()
-ignore the error and use a range the call did not set.
+bpf_scx_init_member() accepts dispatch_max_batch values up to INT_MAX.
+The value determines the size of the per-CPU dispatch buffer, but
+__alloc_percpu() rejects allocations larger than PCPU_MIN_UNIT_SIZE.
+With BPF_F_LINK, an oversized value passes the struct_ops map update
+and triggers an illegal-size warning during link creation before the
+allocation fails with -ENOMEM.
 
-The function fails only for a void hook, which every caller but
-get_func_retval_range() already rules out. Check for a void hook there
-and make the function return void, so resolve_btfids no longer tags
-it and no fmod_ret program can attach to it.
+Calculate the buffer size using the effective batch count, including
+the default used when dispatch_max_batch is zero. Reject values above
+the per-CPU allocation limit with -E2BIG during the map update, before
+the allocator is called.
 
-Fixes: bc45414d1690 ("bpf: Allow fmod_ret on tagged functions and check the return value")
-Signed-off-by: Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
+Fixes: f0e1a0643a59 ("sched_ext: Implement BPF extensible scheduler class")
+Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
 ---
-Built with W=1 on x86_64 and arm64, with gcc and clang, with and
-without CONFIG_BPF_LSM. With CONFIG_BPF_FMODRET_SCAN=y, the BPF LSM
-selftests give the same results with and without this patch. They ran
-under QEMU emulation only, not on real hardware, and we have no
-reproducer for the failure.
+ kernel/sched/ext/ext.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-AI coding agents found the bug by reading the code, wrote this patch
-and its changelog, and ran the builds and tests above.
----
- include/linux/bpf_lsm.h |  9 ++++-----
- kernel/bpf/bpf_lsm.c    | 10 +++-------
- kernel/bpf/verifier.c   |  5 +++--
- 3 files changed, 10 insertions(+), 14 deletions(-)
-
-diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
-index eb4a38eef87e..14b8bb6cc25f 100644
---- a/include/linux/bpf_lsm.h
-+++ b/include/linux/bpf_lsm.h
-@@ -55,8 +55,8 @@ void bpf_inode_storage_free(struct inode *inode);
-
- void bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog, bpf_func_t *bpf_func);
-
--int bpf_lsm_get_retval_range(const struct bpf_prog *prog,
--			     struct bpf_retval_range *range);
-+void bpf_lsm_get_retval_range(const struct bpf_prog *prog,
-+			      struct bpf_retval_range *range);
- int bpf_set_dentry_xattr_locked(struct dentry *dentry, const char *name__str,
- 				const struct bpf_dynptr *value_p, int flags);
- int bpf_remove_dentry_xattr_locked(struct dentry *dentry, const char *name__str);
-@@ -98,10 +98,9 @@ static inline void bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog,
- {
- }
-
--static inline int bpf_lsm_get_retval_range(const struct bpf_prog *prog,
--					   struct bpf_retval_range *range)
-+static inline void bpf_lsm_get_retval_range(const struct bpf_prog *prog,
-+					    struct bpf_retval_range *range)
- {
--	return -EOPNOTSUPP;
- }
- static inline int bpf_set_dentry_xattr_locked(struct dentry *dentry, const char *name__str,
- 					      const struct bpf_dynptr *value_p, int flags)
-diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-index 0aa2fd61daba..f28754e8ac72 100644
---- a/kernel/bpf/bpf_lsm.c
-+++ b/kernel/bpf/bpf_lsm.c
-@@ -478,13 +478,10 @@ bool bpf_lsm_hook_returns_errno(u32 btf_id)
- 	return true;
- }
-
--int bpf_lsm_get_retval_range(const struct bpf_prog *prog,
--			     struct bpf_retval_range *retval_range)
-+/* Callers must skip void hooks, which have no return value range. */
-+void bpf_lsm_get_retval_range(const struct bpf_prog *prog,
-+			      struct bpf_retval_range *retval_range)
- {
--	/* no return value range for void hooks */
--	if (!prog->aux->attach_func_proto->type)
--		return -EINVAL;
--
- 	if (btf_id_set_contains(&bool_lsm_hooks, prog->aux->attach_btf_id)) {
- 		retval_range->minval = 0;
- 		retval_range->maxval = 1;
-@@ -497,5 +494,4 @@ int bpf_lsm_get_retval_range(const struct bpf_prog *prog,
- 		retval_range->minval = -MAX_ERRNO;
- 		retval_range->maxval = 0;
- 	}
--	return 0;
- }
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 1a8e5a108a68..3ebd5106358a 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -6978,9 +6978,10 @@ static int check_stack_access_within_bounds(
- static bool get_func_retval_range(struct bpf_prog *prog,
- 				  struct bpf_retval_range *range)
- {
--	if (prog->type == BPF_PROG_TYPE_LSM &&
-+	if (IS_ENABLED(CONFIG_BPF_LSM) && prog->type == BPF_PROG_TYPE_LSM &&
- 		prog->expected_attach_type == BPF_LSM_MAC &&
--		!bpf_lsm_get_retval_range(prog, range)) {
-+		prog->aux->attach_func_proto->type) {
-+		bpf_lsm_get_retval_range(prog, range);
- 		return true;
- 	}
- 	return false;
-
----
-base-commit: 32b66b94c86f009b49668de7340f2ed65aad2dc5
-change-id: 20261118-jf-bpf-lsm-retval-range-8a04025ee458
-
-Best regards,
---
-Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
+diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
+index 10de6bd865e8..93128da6b126 100644
+--- a/kernel/sched/ext/ext.c
++++ b/kernel/sched/ext/ext.c
+@@ -9197,9 +9197,14 @@ static int bpf_scx_init_member(const struct btf_type *t,
+ 
+ 	switch (moff) {
+ 	case offsetof(struct sched_ext_ops, dispatch_max_batch):
+-		if (*(u32 *)(udata + moff) > INT_MAX)
++		u32 batch = *(u32 *)(udata + moff);
++		u32 nr = batch ?: SCX_DSP_DFL_MAX_BATCH;
++
++		if (struct_size_t(struct scx_sched_pcpu, dsp_ctx.buf, nr) >
++				PCPU_MIN_UNIT_SIZE)
+ 			return -E2BIG;
+-		ops->dispatch_max_batch = *(u32 *)(udata + moff);
++
++		ops->dispatch_max_batch = batch;
+ 		return 1;
+ 	case offsetof(struct sched_ext_ops, flags):
+ 		if (*(u64 *)(udata + moff) & ~SCX_OPS_ALL_FLAGS)
+-- 
+2.56.1
 
