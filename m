@@ -1,79 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
 	t=1795172380;
-	b=AFyzYNag43WEIbMBeuCnW7A9UNns7iroCilh/IrTSIo/y98rd4/kTwhQ540g5wAN4JSh
-	 b3Tyc8iMBv7rbacqt1ONyQYjf6n3/e0vxkeUICuf29WiT8g4+tS/x03UkBWFnajifcGJ8
-	 ytpAlTg1A0HFipq5dE1+8ym0QWNL8PCBS10lmNkkrkAb/8nCUV90pzECQZ90hNSHBBQEa
-	 bD+xbpeyHgiAGiaW9HK6rGv44SCPJiUQUex26bOP6QD16bpYoeIPkm9cplUpstOD4TLgB
-	 jDjGFPFU/3emE1MS39NsoYLUvRzhriGGrRX9lRHkCa4JiIv5x1cOjWGtO8D12z0qIbg==
+	b=TMonPMjv8BPuVUDNFEX7SF0Xf/4O7n6x1sV2llcA5bno6OdjTw1rqZRxSSB8blZKYxRK
+	 m5EI3mDm0EmwwwY1xaUC5lv5TV2/2oRn0Ovo97noUpASONSKA09HIeOEE2yn+3ayjK5JY
+	 Ij9c1WDoip87PxB6XwEqmTi24xMQjHIYrboLKwg49+1hy1q7eW+1VdVDVGkDMqkHVMzcZ
+	 pDHgjjnkwJz5cYG63aw3klpcB6t/aVcMT0D6BjYsC81RvQhUdRBbrvWiY7luWukHHrmqp
+	 YuAMYafk/osFF6NCd2LWRAPYc7b5eRzrPXGtmBSdSRPhiMIQSyBc7XEGJT+VlfIKZ7Q==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1795172380;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=gKB2zN8fHl+v20z/ojO6XPfd7Vc7yeUXwiCeklkycXI=;
-	b=wwRELMf3nfDug906wxbiC24KVMIR+AIVzuVvhniHY9wjYW0ofirbGjcTwGKxP4whHmre
-	 EmgVh9IHS3anROYISpEQcyZf/yYNsPvy4sdTJAGlVjJDAPCMwMgXnq/XTn0QHs/oHFZg1
-	 Yku2Fqae0XXkzverfyoodwGAYSicKD7D+JLRymg+/M44B88k7guTjzmjT6Sj7At9obqJN
-	 s+V+VuN0dne4UsRQbjhcfNNYff1/31/zAQzF7G+rFzF1ZRK+AAayUElqXVnNxV/xI1/5A
-	 im9+hqhT6JSlGyBF0Gn6RSmfpFYT7CtThxJHYT/eNlC80qfjqMOSSD43khZTU42xQcg==
+	bh=+WXY/frcM6m/MP6tUHh6J6ZnANjrjcUoHSo2Iqek1i8=;
+	b=aKDz1UAdVs9rMLDVfCG9H5YKzrgLmtK+C0e2ctxp7AJz0t9Yo+q6MwcnfYroaMDLwKMK
+	 aUjVOhVtJuvwSrtzNbAY4jnCH8jpl7sxnyCBa3N8oSNLviUnzbMcc0t35BrlDx5MjahgK
+	 JZpfHTkGqJLOomgRSWhm6soH5XoG2JldkNLHeOyV7KBMH0xqTzcAGUYEuIVgmENYu3wn4
+	 yz2Ua2YdO0fCR5YNzMQFwOmVCQnpgAaOdm/r6P2OqHPSEABm2nL5clRU3UR3qdL2BskOr
+	 +5JfD19+DcQJodxYTlG+Cbuo0ESmf12/PsyjFGzX2CUatyxvynA0Ii42IjmIQHJKk1g==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HqrK2iDh;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=niYNBpFo;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BDEB60A260F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C411460A2617;
 	Fri, 20 Nov 2026 10:59:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HqrK2iDh
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=niYNBpFo
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
 	t=1795172380;
-	b=gTJ1clNzLpIp4f+bVMJ/muHycncJtiI8xo/VoLbcKYnHhaXN3Vwzn1hZQ9H5Yb7dM62m
-	 4nfos+Ydf/SgUbz9y40PY1ceNvEqtGxndcUtD0mxgT4WVmC+LH2SLmrF4X9UgZQdQZG8U
-	 Bn+yUzUu3WYbhDWU7muM6A2hrQJ/yNd2EsOtm5442kleziyjRBrW4rbM54/cyu9mq8IM8
-	 7iZbYeRBy3YTKCogjB7CFFqS6OeJwo8Z5wqBfzlWgUd7r8Z6bVH+z92FvMpfcRsAKFxuE
-	 k/EcIiKSIKj5zNuc41BQ9JQ9rLSCGiU1yFJVZ5EMDVk+CVMs9IhUhz/MHc+w9xngy4Q==
+	b=E9C727f5hPgkfPf8uY6zduHp4OStcz6Mi2J4iJoPhq03gUD0X7B4sxuZzPG4oD4xSyCf
+	 zV9xn9u8DuohqBIRaIC+vW7ueb3noEymnCbzKdiW+w5i/h/+kSrHSDQcezLVjByl/XAHB
+	 NMFu/heCpb77aXDMdERgyAEEUg8OED6PVKk5gf8QEMT0kjWBnQitAx519kfkMdnNDfVw9
+	 /JehT3ttUf/MUT7qE/5G939rMzfqwx9vn9mSNxAIKTnPtIZYI7cKTCNER6gSYe9RcZI7V
+	 Gh4Ic/qUaLuhlOxSgoL0ROCpVzNdZDYPR9buPVpPD22HqZ8ClEO9YvwLtOEHa4Vy+Dg==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
 	c=relaxed/relaxed; t=1795172380;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=gKB2zN8fHl+v20z/ojO6XPfd7Vc7yeUXwiCeklkycXI=;
-	b=oa4/ep5OaOOhPti/I4E109qbM702Vv6pXFX9rnmO+/1jN351kOmx9Fd+6tnAygbPxK/t
-	 Af6DItVcmvEz8HMDwA5m7Q4rjc/6+jLVNFkfRuyhhAb4P8rT/O/+eGVAL4vcBNQvQEPKx
-	 WJ+WQXA4PVDeRtm4pkteuTvezSsWZHvCv85mhMNXLEYw3MG+Mnlt7YLLUyLyPBQrkwQ3A
-	 gnVtNUhjzuUTGZn9sIwwed4SixGwAfFj+A5dYITzkXjx5aRtNnj6mhNF8NBbd0rGKPGNo
-	 wLSqza8MFokybmkmGKsA1AATRyQ5i/NCfbU/lRkNq1QLxbTxdOuk5gs1NTXTH+aZOxw==
+	bh=+WXY/frcM6m/MP6tUHh6J6ZnANjrjcUoHSo2Iqek1i8=;
+	b=vqG0Bo9tiH4ez9tV0iL7drR62dr/NWifNIiGolrt67YdUuVpPAMZOTOQiC+w52DrDbHR
+	 CDiwWSlpSv9BNBJs9aGV7qOMYxEgLWlAczoVLaAC52nMEw7G5nvNn1W0PCiJJymO6h6Ur
+	 6aY6JHNag8bPBxs7RHqyZjgfaIf9hohLOInrh17ou4cbhSmgSFAEhsNXVrLks5IO33KhT
+	 BW5PL87DdXC576pkFLImH8C3gS/Tm6Y/2EjDWOGvrv2PEI/41LtxPLzK49crpA6IcNjDX
+	 dTFc3YeHb/Uz7s4FMihDY6f+5kfZ+nevDSrgJ8qKJrccD2aOrCCi5irky3ku26Z+cNg==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 90CDC1F000D3;
+	by smtp.kernel.org (Postfix) with ESMTPS id AD8081F000D4;
 	Fri, 20 Nov 2026 10:59:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1795172380;
-	bh=gKB2zN8fHl+v20z/ojO6XPfd7Vc7yeUXwiCeklkycXI=;
+	bh=+WXY/frcM6m/MP6tUHh6J6ZnANjrjcUoHSo2Iqek1i8=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=HqrK2iDh2FaehwB1WyGjixhIRK5MC8Ex0Ry1Mn0g+AcSnEO8vGtMHNr9RrVv74yzO
-	 LxMXDKrFY9s5VbAElSltKgPCaKyX2eP3Bhm0F8BPx70RYB5oxYDbPKtBzxwDHob0z2
-	 VtpiITuexON0ZM/pkFOJQPK6rN+NQtzQcQLecobEoticTIfxsWuG7USEJri3hTkHzA
-	 LpiL0Q6sicQE86ULou3p2E+pezP3b1wTShUgKIi1ulYG0GqQx8a7kfGvFa5Q6EpiH2
-	 2+GN5TT0D7CZKq13M3y679ZTo/kSQIub054NvvX2V7myGACyL7jiN2+S8zlpz+K2vC
-	 yUBr13jBhvX6w==
+	b=niYNBpFo+qHyrotW0xUezvl/4FeCW/KlpSO9dnhzsrrKkADvnj/nITWbfFRTNB+Wv
+	 TzyFPQIDTUPKu4vU7fk+oefLKHu4dHnMY6vS6umRWHq9yaki3pD2DKWTWI9f7LO/Y/
+	 u6VPUR6bRYmDzUUHHDDjwHFwd0Qaqc0O2k5zg9YRcgNarukI4vZ5A2XIplRpDLkqbE
+	 EEmAtt5Z2gaXK19NaMywXK93Ls7i23smGlmq087FgmzdV/GrGBmKtwL9kH/QDPxs82
+	 71Bdi/RgBSpj3gne6dAcmmT1EGvUyddpavq5ceiT2SwhheD/jWZqW38PDVmGfsVFza
+	 S/ek6DHhwlIaQ==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 1CFA349826;
+	by lkml.kernel.org (Postfix) with ESMTP id 37A594982A;
 	Fri, 20 Nov 2026 10:59:25 +0000 (UTC)
 From: Mike Bazov via B4 Relay <devnull+mike.bazov.gmail.com@kernel.org>
-Date: Fri, 20 Nov 2026 12:59:12 +0200
-Subject: [PATCH bpf-next v3 2/3] bpf: Limit nesting of mmap_read_trylock()
- in BPF helpers
+Date: Fri, 20 Nov 2026 12:59:13 +0200
+Subject: [PATCH bpf-next v3 3/3] bpf: Use an on-stack pt_regs in the raw
+ tracepoint helpers
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -84,7 +84,7 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261120-bpf-raw-tp-regs-preempt-v3-2-ec109009a5d2@gmail.com>
+Message-Id: <20261120-bpf-raw-tp-regs-preempt-v3-3-ec109009a5d2@gmail.com>
 References: <20261120-bpf-raw-tp-regs-preempt-v3-0-ec109009a5d2@gmail.com>
 In-Reply-To: <20261120-bpf-raw-tp-regs-preempt-v3-0-ec109009a5d2@gmail.com>
 To: Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
@@ -101,11 +101,11 @@ To: Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
 Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-trace-kernel@vger.kernel.org, Mike Bazov <mike.bazov@gmail.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1795172363; l=3076;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1795172363; l=6051;
  i=mike.bazov@gmail.com; s=gmail-20261116; h=from:subject:message-id;
- bh=HKoapPVt+y68Tmqmk8BOQ4lm6ZdE9zNq151YdINJiy8=;
- b=FBHB3WVLGm2+Z5TJ4RNHlFPXH/ljQYiLTyzi0rFT/3iP4qs9oFRUjuDAZoYdstzetwlw4TCcE
- Ih8rA23e/cUAEfK+WqczgpuX+Y13GbFzCYkEF31CIzhf2enWOS3Rv3k
+ bh=s7MEhvtT+6ohAuicBJNZB/8ny74bXSZ+o4bia4zLuL0=;
+ b=kUpdylDYVXs/VsBmjVcUGoS6H969ZbM/RU63nlC+8Ys7uei9+pAIfC63a/g3trISmRLMxJSwq
+ ll2ST46/idUAQnOxHfIXgXpJ4+NGOGZKcQxebA5+pP6HMXBBduVZQtZ
 X-Developer-Key: i=mike.bazov@gmail.com; a=ed25519;
  pk=Rr9fagn0pNA+bs8tgc6DXZpRAhl/maU6BeqkttIR7DA=
 X-Endpoint-Received: by B4 Relay for mike.bazov@gmail.com/gmail-20261116
@@ -116,90 +116,168 @@ Content-Transfer-Encoding: 7bit
 
 From: Mike Bazov <mike.bazov@gmail.com>
 
-bpf_get_stack() and bpf_get_stackid() with BPF_F_USER_BUILD_ID, and
-bpf_find_vma(), take mmap_read_trylock() on the current mm. That fires
-the mmap_lock tracepoints, so a program on one of them that calls these
-helpers runs the tracepoint again from inside itself:
+bpf_perf_event_output(), bpf_get_stackid() and bpf_get_stack() of raw
+tracepoint and tracing programs have no pt_regs, so they fill in one of
+three per-CPU slots, picked by a per-CPU nest counter:
 
-  prog 1 on mmap_lock_acquire_returned
-    bpf_get_stack(BPF_F_USER_STACK | BPF_F_USER_BUILD_ID)
-      mmap_read_trylock()
-        prog 2 on mmap_lock_acquire_returned
-          bpf_get_stack(...)
-            mmap_read_trylock()
-              ...
+  get_bpf_raw_tp_regs()   level++, use regs[level - 1]
+  put_bpf_raw_tp_regs()   level--
 
-The recursion check of each program only stops it from running inside
-itself, so this nests as deep as there are programs attached, and each
-level runs all programs that aren't on the stack yet: the work per
-tracepoint hit grows with the factorial of the number of programs. With
-irqs disabled, the per-CPU irq_work already allows only one level; with
-irqs enabled nothing limits it.
+That only works if the users of a CPU leave in the reverse order they
+came, as a task, an interrupt and an NMI do. These programs run with
+migration disabled but preemption enabled, so tasks can leave in any
+order:
 
-Count the levels per CPU with irqs enabled too and fail with -EBUSY past
-three, the same depth as the other per-CPU nesting limits of BPF
-tracing. The helpers then fall back as they do when the trylock fails:
-bpf_get_stack() and bpf_get_stackid() return IPs instead of build IDs,
-and bpf_find_vma() returns -EBUSY.
+  task A              task B              task C
+  get: regs[0]
+  <preempted>
+                      get: regs[1]
+                      <preempted>
+  put: level 1
+                                          get: regs[1]
+                                          fills in its regs
+                      uses regs[1]
 
-The counter is per CPU, and programs with irqs enabled can be
-preempted, so a preempted holder counts against the other tasks on its
-CPU. They can hit the limit early and get the fallback; they never get
-wrong data.
+B sends a sample or a stack trace with the registers of C. Profilers and
+tracers then attribute it to the wrong task, and nothing reports an
+error. The per-CPU recursion counter of a program doesn't prevent it:
+the slots are shared by all programs, so it takes two of them.
 
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
+Fill in a pt_regs on the stack of each helper instead, as
+bpf_get_stack_raw_tp_sleepable() already does, and remove the slots.
+Each caller then has its own registers, however it nests or gets
+preempted. This also removes the three-level nesting limit the slots put
+on the three helpers. bpf_perf_event_output() keeps its own limit, and
+the mmap_read_trylock() for build IDs has a separate one.
+
+The cost is sizeof(struct pt_regs) of stack per call, 168 bytes on
+x86-64, in helpers that can also run in IRQ and NMI context, and
+zeroing it on every call. It has to be zeroed: perf_fetch_caller_regs()
+sets only a few registers, and a sample with PERF_SAMPLE_REGS_INTR
+copies all of them to user space.
+
 Signed-off-by: Mike Bazov <mike.bazov@gmail.com>
 ---
- kernel/bpf/mmap_unlock_work.h | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ kernel/trace/bpf_trace.c | 78 +++++++-----------------------------------------
+ 1 file changed, 11 insertions(+), 67 deletions(-)
 
-diff --git a/kernel/bpf/mmap_unlock_work.h b/kernel/bpf/mmap_unlock_work.h
-index 1834db20b..02af564e6 100644
---- a/kernel/bpf/mmap_unlock_work.h
-+++ b/kernel/bpf/mmap_unlock_work.h
-@@ -13,6 +13,7 @@ struct mmap_unlock_irq_work {
- 	struct irq_work irq_work;
- 	struct mm_struct *mm;
- 	atomic_t active;
-+	int nest_level;
- };
- 
- DECLARE_PER_CPU(struct mmap_unlock_irq_work, mmap_unlock_work);
-@@ -28,8 +29,16 @@ static inline struct mmap_unlock_irq_work *bpf_mmap_unlock_guard_get(void)
- {
- 	struct mmap_unlock_irq_work *work;
- 
--	if (!irqs_disabled())
--		return NULL;
-+	if (!irqs_disabled()) {
-+		/*
-+		 * mmap_read_trylock() fires the mmap_lock tracepoints, and
-+		 * programs on them can get here again.
-+		 */
-+		if (this_cpu_inc_return(mmap_unlock_work.nest_level) <= 3)
-+			return NULL;
-+		this_cpu_dec(mmap_unlock_work.nest_level);
-+		return ERR_PTR(-EBUSY);
-+	}
- 
- 	/*
- 	 * PREEMPT_RT does not allow to trylock mmap sem in interrupt
-@@ -51,12 +60,15 @@ bpf_mmap_unlock_guard_put(struct mmap_unlock_irq_work *work)
- {
- 	if (work)
- 		atomic_set_release(&work->active, 0);
-+	else
-+		this_cpu_dec(mmap_unlock_work.nest_level);
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 8910d5d05..5c49c139d 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1624,51 +1624,13 @@ pe_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 	}
  }
  
- static inline void bpf_mmap_unlock_mm(struct mmap_unlock_irq_work *work, struct mm_struct *mm)
+-/*
+- * bpf_raw_tp_regs are separate from bpf_pt_regs used from skb/xdp
+- * to avoid potential recursive reuse issue when/if tracepoints are added
+- * inside bpf_*_event_output, bpf_get_stackid and/or bpf_get_stack.
+- *
+- * Since raw tracepoints run despite bpf_prog_active, support concurrent usage
+- * in normal, irq, and nmi context.
+- */
+-struct bpf_raw_tp_regs {
+-	struct pt_regs regs[3];
+-};
+-static DEFINE_PER_CPU(struct bpf_raw_tp_regs, bpf_raw_tp_regs);
+-static DEFINE_PER_CPU(int, bpf_raw_tp_nest_level);
+-static struct pt_regs *get_bpf_raw_tp_regs(void)
+-{
+-	struct bpf_raw_tp_regs *tp_regs = this_cpu_ptr(&bpf_raw_tp_regs);
+-	int nest_level = this_cpu_inc_return(bpf_raw_tp_nest_level);
+-
+-	if (nest_level > ARRAY_SIZE(tp_regs->regs)) {
+-		this_cpu_dec(bpf_raw_tp_nest_level);
+-		return ERR_PTR(-EBUSY);
+-	}
+-
+-	return &tp_regs->regs[nest_level - 1];
+-}
+-
+-static void put_bpf_raw_tp_regs(void)
+-{
+-	this_cpu_dec(bpf_raw_tp_nest_level);
+-}
+-
+ BPF_CALL_5(bpf_perf_event_output_raw_tp, struct bpf_raw_tracepoint_args *, args,
+ 	   struct bpf_map *, map, u64, flags, void *, data, u64, size)
  {
- 	if (!work) {
- 		mmap_read_unlock(mm);
-+		bpf_mmap_unlock_guard_put(NULL);
- 	} else {
- 		work->mm = mm;
+-	struct pt_regs *regs = get_bpf_raw_tp_regs();
+-	int ret;
+-
+-	if (IS_ERR(regs))
+-		return PTR_ERR(regs);
+-
+-	perf_fetch_caller_regs(regs);
+-	ret = ____bpf_perf_event_output(regs, map, flags, data, size);
++	struct pt_regs regs = {};
  
+-	put_bpf_raw_tp_regs();
+-	return ret;
++	perf_fetch_caller_regs(&regs);
++	return ____bpf_perf_event_output(&regs, map, flags, data, size);
+ }
+ 
+ static const struct bpf_func_proto bpf_perf_event_output_proto_raw_tp = {
+@@ -1689,18 +1651,12 @@ extern const struct bpf_func_proto bpf_xdp_get_buff_len_trace_proto;
+ BPF_CALL_3(bpf_get_stackid_raw_tp, struct bpf_raw_tracepoint_args *, args,
+ 	   struct bpf_map *, map, u64, flags)
+ {
+-	struct pt_regs *regs = get_bpf_raw_tp_regs();
+-	int ret;
+-
+-	if (IS_ERR(regs))
+-		return PTR_ERR(regs);
++	struct pt_regs regs = {};
+ 
+-	perf_fetch_caller_regs(regs);
++	perf_fetch_caller_regs(&regs);
+ 	/* similar to bpf_perf_event_output_tp, but pt_regs fetched differently */
+-	ret = bpf_get_stackid((unsigned long) regs, (unsigned long) map,
+-			      flags, 0, 0);
+-	put_bpf_raw_tp_regs();
+-	return ret;
++	return bpf_get_stackid((unsigned long) &regs, (unsigned long) map,
++			       flags, 0, 0);
+ }
+ 
+ static const struct bpf_func_proto bpf_get_stackid_proto_raw_tp = {
+@@ -1715,17 +1671,11 @@ static const struct bpf_func_proto bpf_get_stackid_proto_raw_tp = {
+ BPF_CALL_4(bpf_get_stack_raw_tp, struct bpf_raw_tracepoint_args *, args,
+ 	   void *, buf, u32, size, u64, flags)
+ {
+-	struct pt_regs *regs = get_bpf_raw_tp_regs();
+-	int ret;
+-
+-	if (IS_ERR(regs))
+-		return PTR_ERR(regs);
++	struct pt_regs regs = {};
+ 
+-	perf_fetch_caller_regs(regs);
+-	ret = bpf_get_stack((unsigned long) regs, (unsigned long) buf,
+-			    (unsigned long) size, flags, 0);
+-	put_bpf_raw_tp_regs();
+-	return ret;
++	perf_fetch_caller_regs(&regs);
++	return bpf_get_stack((unsigned long) &regs, (unsigned long) buf,
++			     (unsigned long) size, flags, 0);
+ }
+ 
+ static const struct bpf_func_proto bpf_get_stack_proto_raw_tp = {
+@@ -1741,12 +1691,6 @@ static const struct bpf_func_proto bpf_get_stack_proto_raw_tp = {
+ BPF_CALL_4(bpf_get_stack_raw_tp_sleepable, struct bpf_raw_tracepoint_args *, args,
+ 	   void *, buf, u32, size, u64, flags)
+ {
+-	/*
+-	 * Don't take a per-CPU bpf_raw_tp_regs slot here: those slots are a
+-	 * LIFO nest counter and are vulnerable to slot overwrite and
+-	 * corruption across sleep.  Sleepable programs never run in
+-	 * IRQ/NMI context, so a local pt_regs is sufficient.
+-	 */
+ 	struct pt_regs regs = {};
+ 
+ 	perf_fetch_caller_regs(&regs);
 
 -- 
 2.43.0
