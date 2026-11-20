@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795207841;
-	b=tY1mmm+y7S8uHqm4GKzYYCDU/OxvgrBqnsEF01hXSPKToCLh+OdZMEuBBeGtr3YpvP/2
-	 bcf1pgFfSJNCgK2alu8iy9l8ZoizBP9lvDOJkEvIYW5Pd9Zqs3+aH/EQQmnOJeam6KnTP
-	 yNIgUTM4SeV8i5S3rggd54gGPsS4HFUB/zlmZGG8W8iHQcPkw7wAxdoDmNKwJZEMwL8R9
-	 DO4qHluMAKnxb256x4W8vYByjOj7mGlUcyCzKm1IY7nfcZqf6WAPec7wDb6z51n5ffsoJ
-	 Ujj5uO9psTSbPWzcS2yuDRQkzSynqkwxruWWyPCOw/MgYcUTeee6r+i8WOPPeai2+4g==
+	t=1795207850;
+	b=QTd4+O+bWyoIgVPMAfYT6MKGuGGzkGE52mKBuyLeYdSF0wqBK7SjFIGFPrW8kFYftubJ
+	 dC4TImNaR9TJz+ZNCN5cOuc3gwGQPXaEz9kC5Eqd9iLG/Cvllck3CAtfsqdrcxvJ+1kuR
+	 BfupLSqwNGPB72fQxQErAzlDb4/JCmAUNOxHPnmDuqW9mldC/koZHcA4+SPPg2zr7mt/8
+	 IfhdMLBYfCQRzgOI/oeBwa08GoGO2nkbJMi3HBNF559FlHaAVh8SevitaTiGB8c61ouVo
+	 6vHQ6QUQ+riyVruG2CIBA8Fn8t7iQqNBABKu+A7N/bjyCDV+4djw/Ib96gN4a00Tu9g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795207841;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795207850;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=hqgmVeZo06+ZsnUzbLUOAYSSBcj/nhw3agmGoD8SXn4=;
-	b=M4lzSkpF3PX2Ig5mCASIIw36+uII5qU+jw7Iq+fyUrLH2tkv/jpfCRgQVeL4QDwJtBrk
-	 qwkMQxZovpZjayhesoGn08x1DTvbBLn0+L4N55uJNp3PTn/CDyvPlxINvvPvswHwjGmqI
-	 bnExGRcuhX0nGHKd1o3I7zkvVKPJ6oD453YVuTQ0OhCDmNxHbrL5TNPXanlJTidWyk/E+
-	 uZ1gte1XyJTrox3eL9NkGQ27BqOZwt+kyBzHHIKrKW0/VvuV41ckpmtUQzlTkMg2KX3Um
-	 JJkIDekLoh6/qCVAaqKn4V16VjOp74UOHasij7li6Z5l9WjSdSEtgs8S8G+sWmxaLZQ==
+	bh=1LJXhHVfGcJwKk/aE+w4wlqExvx/CNWKMnzhuiLM/KU=;
+	b=ciOSGLZ0HdIMPrEeom8vIc7z6D32kLmi1jdOpCe59mFFWW36DTSBbBuSMgkLlvDeI+bn
+	 69gW3QepmbKBDMSnvH0ZgjyrdWKvYi0Dr4k2172v2pGx+Gew/AB7Jl127Or5+k2oqQLNR
+	 SZwl/REQAb7C/aO1XlKuDk4NUDV1jaRhH6O+vHnheZ/qymsgsQwZ6T3Szmxhq1rzcfwG5
+	 oUXDFROzLeYDNupF2JaUatyun8AEWlAMFuSLLHxUpTBaRD/qNEk+ijQVPQgUNVQKgXXYP
+	 BrO21UZrFJUCWgYV7hKO8/r/RnU8jRC8o4fNqTsrx3N2RvWXkTLF5AV5F1KgneUKCDg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="wOcq/G7u";
-	arc=none smtp.remote-ip=209.85.215.171
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FGLvTEdV;
+	arc=none smtp.remote-ip=209.85.216.45
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2613F606A6A0
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 20:50:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2613F606A6A0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 163F0606A69F
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 20:50:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 163F0606A69F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wOcq/G7u
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-cddff772fffso386416a12.0
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 12:50:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FGLvTEdV
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3ae1da332bcso723937a91.2
+        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 12:50:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795207833; x=1795812633; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795207845; x=1795812645; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=hqgmVeZo06+ZsnUzbLUOAYSSBcj/nhw3agmGoD8SXn4=;
-        b=wOcq/G7uTlpTHeaPucuMobMPJIr7fT4X9BIMgR9kc9Rt8Whgk6KnFU0qyjaZgvjtJi
-         vhfcoYdzDZdkK8g+HYB4y1ckhqqH/s6i2rMUHx+zALUNk4pGJLlIyb+cQfyw+1a5+DBv
-         3gFHHMnRtFdjc4cxvmwMOR5U9wCGG75cKy2/xW/UttDyVrTUKYpQGkBuSTHrP0ZsO2Jo
-         G4m80qZtgmrGwEtgnWT8EmrnHLRXvEiWQcXNSMQ2V8Qw6KI+VX/MwT/7cKbY93xT30Q6
-         4TPB3LlU9uh8ek1uhkJa7PjDWvFQXmb/nN472+ntVaXsRFu1RMab8DI1Qe/LgTkKQJYD
-         U//Q==
+        bh=1LJXhHVfGcJwKk/aE+w4wlqExvx/CNWKMnzhuiLM/KU=;
+        b=FGLvTEdV6xAqB1sWH0wGQyZ/q+m41DkHOnkeEhsOC50MCmVRog209X2kslV5QNFwkD
+         Lz/acOZgD/5A415Ocp6teLx6FfowzxnXcaxjeDtq2ZCcOHvAGKNH8omFshou2Z0heKak
+         /5xD9up/6GpokcqSM5RiA/JvQ3r8ku/k1ICLh/xs2uT/cmd3ABYGT8ha6pMuxlR5tUWE
+         Vk23EgGik7Ilc39+KuSvRt7UCWJX0gI80VKwonae6y9Dp2hF6yg7rt/J2kMF+3nHZ4OK
+         N+ZmFNYWVmXR4M6ZAO3pvGSJdjgfK5UMsk3jqdTCq4kUwivGYtVhVTT5U5lxbOYqaJNF
+         LWCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795207833; x=1795812633;
+        d=1e100.net; s=20260707; t=1795207845; x=1795812645;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=hqgmVeZo06+ZsnUzbLUOAYSSBcj/nhw3agmGoD8SXn4=;
-        b=R5XqW3BA6UTGEQd4w6IGKm52YrBDXzoYWmN30CnxtXrKCbKxLnYh+qRG6I9azBhna+
-         2t5dkIB2ZbG6V6h+HwbN4dcpPJkRQoCft+BACMCwMExqDQVCyaIYwcf/hQhe4sCa3dYb
-         dAZfNeTaYB7q1rxfHGhZYmlNusP/YgAUXxCVnsTybc3ivI4FJ7GDAYh6IizkUBbbk32b
-         y1kBc8idpyG/zmqDv7kcN5S/WTtpfqsC3WnwWZWYrzI2G4Bn7I3Va4KPZ6R7bhKlPWAV
-         4NOcpqiOlswZZQNokagYDVs749IaFR7PAJVF7AU3metQA3CT6R3COh8/bShzJBot2v2N
-         xJQA==
-X-Gm-Message-State: APuU4Z8fmknlVy7MPInXS51anNr7/wYTvowR4MK9hjEWstm/Khdkz5lk
-	KuZj5dRGD2OQLM5c3itj9UWsoYo3mwxtCWKtEKbF52FVZ7Q0VEsmp8DZ1IB/iA==
-X-Gm-Gg: AZFdTZf5mlc01M2qSFPsKXrk44QN8gURYJMba+3dmOn5GJGhwRqrddnoFC+AyY3x3LN
-	tZ4UJPD9EwnR5m3vFvjur6zHLAbPjgsLcJfc/3nsbipV3n98t3cO1pmSKZu1UcyouNiIjMPCIF+
-	D0F1nXSiQ+pu2o+ljAukxpEQDzD0wpDwkd8qmLBwgYsjxPqQdyJjNjRgE70dQdhyjH/YfIlDOWc
-	RBUdSRn0nN8haSaG6XIG6N4FcuL4GswE9faWQHD+h4gRjR9T61RhTjjyGQgxcZ5rgHGv1PVxRPc
-	kWbt6aYpcgiai4l8pPYzLvJMWgGDCgW4nnFR5uqzpxiWo+Bhz4HG5B2hCIB1uuQOkBlGf0sUg6n
-	a+i8MMOk6jZ4xN2eohzTQas3mNqaG38bB1aDZcmuS7DWuthhcZlUj4GJ1HoHjmswVg4wF/rBwXR
-	JqfHFrDUC12tS7SPtjl/Wog6tZf/LiXT4yV6jpRjNvjOIngohGHiQDS/4UPWiRC11vQktBAg5/f
-	BkO5xJAY1mtjmL/18KoGLxlbfQBr22pLRvYBJxy5qdWXTvDU+ZV96ttRJ3Y4MXe2KN1m0Rb4nxt
-	Opcutnfk2YUGn/ayD5K8I6b3TuHcHZNYoeRk26u0uC9iVl4vpDDXu9XyPcJV8fvPs9LKJnyzG3s
-	67vHf+oPqI39ZoyxjhqivXA7oOy6pWn+RkYLkYEVJv5ROQw/cyvg0+iNwIxGa1VFLSqvaPchpdl
-	cYG3DmPtvF66MKEB2bz1Ny
-X-Received: by 2002:a17:90b:1644:b0:3b0:ae41:2711 with SMTP id 98e67ed59e1d1-3b41c911824mr3572411a91.24.1795207833024;
-        Fri, 20 Nov 2026 12:50:33 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b405d1361fsm8444163a91.6.2026.11.20.12.50.32
+        bh=1LJXhHVfGcJwKk/aE+w4wlqExvx/CNWKMnzhuiLM/KU=;
+        b=KNCo7+nvN1bGqDOn6jze+lMlbY5QGqnWcNM4YPJDEX4vCd6FKiBRPRerXgXFGnO0s0
+         ILM/ihspsfcq06rp+pi8Qz5NI4MTaZH/d1ntPZY2eK0PogQq2qRVR6XExKHEsbw4MRgC
+         jYMIAtoHFgdrXfv+PW+wzLE4MAOgGCT8SnwU1K3lYsYJXVTcPNYIPCoe1p+EmE+VHIvq
+         cdiOHNS2TAo/UpG9Zrqh7Xe2390/PekqR7DE++41S3Z78vxlLAmvFaGnq89KPS1pptVO
+         y2DoLovwBzM63Ic5/DfBItu+XP63NPpCnIJqt7JzHxUmDYbslRj+4QMjbAwtBZ0HdKuB
+         Sp/w==
+X-Gm-Message-State: APuU4Z/y0hJm4PI+0x68muYor2wjfwiesuR1nv262HuV2X4IYg/LgzS9
+	MLpYg/IYluwTKwoyQhHfNHaaVSVGfw9OPyBAIY07g3l+zkNKIOhzongxG0qi+A==
+X-Gm-Gg: AZFdTZfcwfgdK1yp7M3ETTElDPBdVeB9miZYsocnGUu+156PetSijekqMuPhNNdbc0b
+	wlhAoWlhlU9rklcGzXNcd8WDxldoVAWVG/3Liljv2JV7Zjao7YeQ4dK7hxOWlBNlk4/8WYT1JIN
+	34mjh3ogV2IYrGIMqnXLPUClNuOf70lAtGzTMgWqQ1eHyh7qlWnnnpAaI+JgcYt8U8VmpqapjdA
+	ljkRQmjsl82fxpNJD1yt+sRDds8F1Fp1gy74/cv7H1m4smQZRS006UREsXxpfDD0eUa02AwWazX
+	IMCMEV7mGmZEEsoFM02BmmuDBkINqYIlFdBirsSKNUYmy2D5c19FIVPFGp/5fhM2HdW0ge+zds+
+	FPA0AxDFOkl1ssSFyIoKPX4Ip3n4yshpQISSd4Swck0fAGnUIpM+BEzYDy8Hnkva0DPXXcDs3uU
+	gF//ybGH/+yGGRsnCSUPfI1pLe7SjprbLV5dlc+A5iHdu3IXnFTqXlDoctSMVA7enzvgkucZdg4
+	VVvs8N/Hchqg5liXnzaxqIkSGJLgLmbo8uWoOPxJq+/w6Ljq7fvQhJwKgs9sTA2V1yMdCkRODl1
+	HnL2wvfFSfnlwb5fvfHFZDm7E2zEJeE3HAoN7UgAc7oCHQrRJPZntph/MQ6f5Nx8t/j9BXRdYBJ
+	r1AU6tYCmij4XglJS4USC1OxReiGVJ/1qhBoIcGoa0Qdbp0IPhYxYHd+Vkc55aLSLVtbST3KxzA
+	==
+X-Received: by 2002:a17:90b:134e:b0:3a4:b30b:b501 with SMTP id 98e67ed59e1d1-3b41c7b5dbfmr3940688a91.9.1795207844774;
+        Fri, 20 Nov 2026 12:50:44 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41ad92c13sm5538685a91.14.2026.11.20.12.50.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2026 12:50:32 -0800 (PST)
+        Fri, 20 Nov 2026 12:50:44 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 05/49] bpf: Limit the cost and the memory of a load
-Date: Fri, 20 Nov 2026 20:49:13 +0000
-Message-ID: <20261120204959.614908-6-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 07/49] bpf: Name an id after the xreg that has it
+Date: Fri, 20 Nov 2026 20:49:15 +0000
+Message-ID: <20261120204959.614908-8-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261120204959.614908-1-alexei.starovoitov@gmail.com>
 References: <20261120204959.614908-1-alexei.starovoitov@gmail.com>
@@ -104,1128 +104,1071 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The caps on states are gone. Something has to stop a load that takes
-too long. A cap on one kind of work is a poor tool. It rejects a valid
-program that needs much of that kind and little else.
+An id stands for the set of xregs that have it. Its number depends on
+the path. Two states with the same sets have other numbers:
 
-Use two limits for the whole load, one on cost and one on memory:
+  state 1:  r1=ptr(id=17)  r6=ptr(id=17)  r7=ptr(id=4)
+  state 2:  r1=ptr(id=3)   r6=ptr(id=3)   r7=ptr(id=9)
 
-  weight  work
-       1  one step of a scan
-       4  copy an xreg
-      16  clean, compare or join an xreg
-     128  check an insn
-     512  make, order and free a state
+So the compare, the join and the return from a function each had a map
+from one set of ids to another.
 
-  BPF_MAX_COST 1 << 33, BPF_MAX_MEM 2 GB, 1/32 of both without CAP_BPF
+bpf_renumber_ids() names each id after the first xreg that has it:
 
-The cost counts work, not time. So the verdict does not depend on the
-speed or the load of the machine. bpf_check_limits() calls
-bpf_must_abort() too, and replaces it in the loops that add cost. A
-thaw does not take an abort back, see env->aborted.
+  both:     r1=ptr(id=r1)  r6=ptr(id=r1)  r7=ptr(id=r7)
 
-A state knows its part of env->mem, so copy and free take env.
-free_pushed_states() frees the states that an insn pushed. A load from
-a table of functions pays for the scan and for the set that it makes.
-gotox pays for the sort of its targets.
+Equal sets have equal ids now, and reg_object_equal() is a memcmp().
+If r1 = r6 in one state and r1 is not set in the other, r6 has two
+names and counts as two objects. The maps saw one object.
 
-The walks up a deep nest of loops are quadratic. Move the check of
-LOOP_STACK_SIZE to bpf_compute_loops(), before these walks.
-Stack liveness skips the registers and slots that hold no argument.
-It copies the stack only for a call that passes a pointer to a stack.
+The ids are renumbered at the end of a basic block and before the call
+of a function. The low bits tell the origin:
 
-Stack liveness has a cap on one kind of work too. It rejects a program
-after 10000 calls of functions:
+  bpf_new_id()       an insn of this basic block made it
+  BPF_REF_ID()       it is held, named after its index in refs[]
+  BPF_XREG_ID()      named after an xreg
+  BPF_RETURNED_ID()  a function returned it
 
-  for 12000 times:
-    call small_func     liveness analysis exceeded complexity limit
+A caller and its callee have the same refs[], so they have the same
+names. inherited_id(), fresh_id() and BPF_MAX_ID go away. check_ids()
+stays until "bpf: Compare states by join_key, then by value".
 
-The program is valid and cheap. Remove the cap. Each call site has an
-instance, and the hash table of instances has 256 buckets. So 12000
-instances make long chains. Use an array with the call site as the
-index. An entry has one instance for each depth:
-
-  by_callsite[insn] -> depth 2 -> depth 1 -> NULL
-
-A list has all instances, for the loops over them.
+The id of a __ref argument is not constant any more. refs[].ctx_arg
+tells which argument a reference came with. The report of a leak finds
+the acquire by refs[].diag_id, which is not renumbered. A reference
+that leaks has no release, so the events of a release go away.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
  include/linux/bpf.h          |   4 +-
- include/linux/bpf_verifier.h |  41 +++++++-
- kernel/bpf/const_fold.c      |  15 +--
- kernel/bpf/flow.c            |  39 +++++---
- kernel/bpf/liveness.c        | 188 +++++++++++++++++++----------------
- kernel/bpf/loops.c           |  42 +++++++-
- kernel/bpf/states.c          |   1 +
- kernel/bpf/verifier.c        |  90 ++++++++++++-----
- 8 files changed, 282 insertions(+), 138 deletions(-)
+ include/linux/bpf_verifier.h |  57 +++++---
+ kernel/bpf/btf.c             |   2 +-
+ kernel/bpf/diagnostics.c     |  56 +++-----
+ kernel/bpf/diagnostics.h     |   6 +-
+ kernel/bpf/states.c          |  79 +++++++++-
+ kernel/bpf/verifier.c        | 271 ++++++++++++-----------------------
+ 7 files changed, 230 insertions(+), 245 deletions(-)
 
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 971e584c6ef..41f2cb37c19 100644
+index 41f2cb37c19..dee0cca907b 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -2627,8 +2627,8 @@ struct bpf_array {
- int bpf_array_get_next_key(struct bpf_map *map, void *key, void *next_key);
- 
- /*
-- * the longest program. The verifier limits the number of states, not of
-- * processed insns, see BPF_FLOW_MAX_STATES.
-+ * the longest program. The verifier limits the cost of a load, not the number
-+ * of processed insns, see BPF_MAX_COST.
-  */
- #define BPF_COMPLEXITY_LIMIT_INSNS      1000000 /* yes. 1M insns */
- #define MAX_TAIL_CALL_CNT 33
+@@ -1189,7 +1189,7 @@ struct bpf_insn_access_aux {
+ 		struct {
+ 			struct btf *btf;
+ 			u32 btf_id;
+-			u32 ref_id;
++			u32 ref_arg;	/* see struct bpf_ctx_arg_aux */
+ 		};
+ 	};
+ 	u32 mem_size;
+@@ -1827,7 +1827,7 @@ struct bpf_ctx_arg_aux {
+ 	enum bpf_reg_type reg_type;
+ 	struct btf *btf;
+ 	u32 btf_id;
+-	u32 ref_id;
++	u32 ref_arg;	/* a number for a __ref argument, else 0 */
+ 	u32 mem_size;
+ 	bool refcounted;
+ };
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 06429f57c39..9ae46e3a8d6 100644
+index 7977f8452e9..d63a522b465 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -551,6 +551,8 @@ struct bpf_verifier_state {
+@@ -241,6 +241,12 @@ static inline bool reg_fixed_part_equal(const struct bpf_reg_state *ra,
+ 	return ra->type == rb->type && !memcmp(&ra->raw, &rb->raw, sizeof(ra->raw));
+ }
  
- 	/* The insn that the state comes from, -1 if no instructions have been executed yet. */
- 	u32 last_insn_idx;
-+	/* its part of env->mem */
-+	u32 bytes;
++/* That and the ids, see bpf_renumber_ids() */
++static inline bool reg_object_equal(const struct bpf_reg_state *ra, const struct bpf_reg_state *rb)
++{
++	return !memcmp(ra, rb, offsetof(struct bpf_reg_state, var_off));
++}
++
+ /* All but the ids */
+ static inline bool reg_value_equal(const struct bpf_reg_state *ra, const struct bpf_reg_state *rb)
+ {
+@@ -366,9 +372,13 @@ struct bpf_reference_state {
+ 	 * is used purely to inform the user of a reference leak.
+ 	 */
+ 	int insn_idx;
++	u32 diag_id;	/* finds the acquire in the report of a leak, it is not renumbered */
+ 	union {
+ 		/* For REF_TYPE_PTR */
+-		int parent_id;
++		struct {
++			int parent_id;
++			u32 ctx_arg;	/* it came with that __ref argument, the first is 1 */
++		};
+ 		/* Use to keep track of the source object of a lock, to ensure
+ 		 * it matches on unlock.
+ 		 */
+@@ -548,15 +558,17 @@ struct bpf_verifier_state {
+ 	u32 insn_idx;
+ 	u32 curframe;
+ 
++	struct_group(held,
++	void *active_lock_ptr;
+ 	u32 acquired_refs;
+ 	u32 active_locks;
+ 	u32 active_preempt_locks;
++	u32 active_rcu_locks;
+ 	u32 active_irq_id;
+ 	u32 active_lock_id;
+-	void *active_lock_ptr;
+-	u32 active_rcu_locks;
+ 
+ 	bool speculative;
++	);
+ 	bool in_sleepable;
+ 	/* a global function or an extension, and what it calls: exit of frame 0 is not the end */
+ 	bool callers_unknown;
+@@ -1095,21 +1107,29 @@ struct bpf_id_pair {
  };
  
- /* Number of BPF_REG_SIZE stack slots tracked for the frame so far. */
-@@ -1173,6 +1175,10 @@ struct bpf_verifier_env {
- 	bool test_reg_invariants;	/* fail verification on register invariants violations */
- 	bool uses_arena_sp;		/* the program has insns with BPF_REG_ARENA_SP */
- 	u64 cost, mem;			/* see bpf_check_limits() */
-+	u64 max_cost, max_mem;
-+	u64 pass_max_cost;		/* see bpf_undo_precision() */
-+	bool aborted;			/* a thaw does not take it back */
-+	bool over_limit;		/* see bpf_check_limits() */
- 	bool restart;			/* see bpf_flow_next_is_no_bound() */
- 	bool guards_late;		/* see bpf_flow_loop_gets_guards() */
- 	u32 loop_entry_cnt;		/* see loop_stack_entry.entry_id, callback_entry_id */
-@@ -1470,14 +1476,34 @@ int bpf_clean_verifier_state(struct bpf_verifier_env *env, struct bpf_verifier_s
+ /*
+- * A function that is verified on its own, see func_is_on_its_own(), has no ids of its caller.
+- * It has names for the ids of what is held: BPF_INHERITED_ID + i is the id of refs[i] at the call.
+- * - A name depends only on the place. Each id in the state at the entry is replaced with its name.
+- *   The ids of the caller can be names that it got from its own caller: they are replaced too.
+- * - A name stands for the same thing in all states of the function. It is equal only to itself:
+- *   check_ids() and jid_note() do not rename it. So two calls share a state at the entry, and what
+- *   comes out for it, only if the same places have the same names.
+- * - bpf_flow_return() puts the ids of the call that waits back. All other ids get new values.
+- * - What comes out has the ranges of all calls that share the state at the entry. So a name is good
+- *   for what holds whatever the ranges are: the same object. Other ids have no name: such an
+- *   argument keeps the frames of the caller, see arg_needs_caller().
+- * - env->id_gen stays below BPF_MAX_ID. So no id is a name.
++ * At a join point each id is named after the xreg that has it, see bpf_renumber_ids().
++ * The low bits give the origin of the id:
++ *
++ *  bpf_new_id()       an insn made it. It is renumbered at the end of the basic block.
++ *  BPF_REF_ID()       it is held. The number comes from the index in refs[].
++ *  BPF_XREG_ID()      the number comes from the first xreg that has it.
++ *  BPF_RETURNED_ID()  a function on its own returned it. No xreg of the caller has it.
++ *
++ * A function on its own, see func_is_on_its_own(), and its waiting call have the same ids for
++ * what is held. An exit state has the ranges of all calls of the instance. So such id shows
++ * only what holds for all ranges: the same object. An argument with another id keeps the
++ * frames of the caller, see arg_needs_caller().
+  */
+-#define BPF_INHERITED_ID	0x20000000
+-#define BPF_MAX_ID		(BPF_INHERITED_ID / 2)
++#define bpf_new_id(env)		(((env)->id_gen += 4) - 3)
++#define BPF_REF_ID(i)		(((i) + 1) << 2)
++#define BPF_XREG_ID(i)		((i) << 2 | 2)
++#define BPF_RETURNED_ID(id)	((id) | 1)
++
++/* @id is 0 or renumbered: BPF_REF_ID() or BPF_XREG_ID() */
++static inline bool bpf_id_is_xreg(u32 id)
++{
++	return id & 2;
++}
+ 
+ struct bpf_idmap {
+ 	u32 cnt;
+@@ -1509,6 +1529,8 @@ int bpf_clean_verifier_state(struct bpf_verifier_env *env, struct bpf_verifier_s
  bool bpf_state_subsumes(struct bpf_verifier_env *env, struct bpf_verifier_state *old,
  			struct bpf_verifier_state *cur);
  
-+/*
-+ * The two limits of the verifier, for the whole load. The unit of cost is one step of a scan,
-+ * about a dozen insns of the CPU. Memory is the bytes of states and tables at a time.
-+ */
- #define BPF_COST_SCAN	1	/* one step of a scan */
-+#define BPF_COST_COPY	4	/* copy an xreg, or look at its type */
-+#define BPF_COST_XREG	16	/* clean, compare or join an xreg */
-+#define BPF_COST_INSN	128	/* check an insn */
-+#define BPF_COST_STATE	512	/* make, order and free a state */
-+#define BPF_MAX_COST	(1ULL << 33)
-+#define BPF_MAX_MEM	(1ULL << 31)
-+/* Without CAP_BPF programs are small, and their loads wait for each other */
-+#define BPF_LIMITS_SHIFT_UNPRIV	5
- 
- /* flow.c */
-+int bpf_check_limits(struct bpf_verifier_env *env);
++int bpf_renumber_ids(struct bpf_verifier_env *env, struct bpf_verifier_state *st);
 +
- static inline void bpf_add_cost(struct bpf_verifier_env *env, u64 cnt, u32 weight)
- {
- 	env->cost += cnt * weight;
- }
- 
-+static inline int bpf_add_cost_and_check(struct bpf_verifier_env *env, u64 cnt, u32 weight)
-+{
-+	bpf_add_cost(env, cnt, weight);
-+	return bpf_check_limits(env);
-+}
-+
- int bpf_flow_prepare(struct bpf_verifier_env *env);
- void bpf_flow_reset(struct bpf_verifier_env *env);
- void bpf_flow_free(struct bpf_verifier_env *env);
-@@ -1501,9 +1527,11 @@ bool bpf_insn_is_iter_next(struct bpf_verifier_env *env, struct bpf_insn *insn);
- bool bpf_insn_leaves_loop(struct bpf_verifier_env *env, int h, int n);
- int bpf_insert_recursion_checks(struct bpf_verifier_env *env);
- 
--int bpf_copy_verifier_state(struct bpf_verifier_state *dst_state,
-+int bpf_copy_verifier_state(struct bpf_verifier_env *env, struct bpf_verifier_state *dst_state,
- 			    const struct bpf_verifier_state *src);
--void bpf_free_verifier_state(struct bpf_verifier_state *state, bool free_self);
-+void bpf_charge_state(struct bpf_verifier_env *env, struct bpf_verifier_state *st);
-+void bpf_free_verifier_state(struct bpf_verifier_env *env, struct bpf_verifier_state *state,
-+			     bool free_self);
- void bpf_mark_reg_not_init(const struct bpf_verifier_env *env,
- 			   struct bpf_reg_state *reg);
- void bpf_mark_reg_known_scalar(struct bpf_reg_state *reg, u64 imm);
-@@ -2146,4 +2174,13 @@ int bpf_loop_at_index(struct bpf_verifier_env *env, u32 idx);
- bool bpf_is_nested_loop(struct bpf_verifier_env *env, int inner_header, int outer_header);
- 
- 
-+static inline u32 bpf_xreg_cnt(const struct bpf_verifier_state *st)
-+{
-+	u32 fr, nr = 0;
-+
-+	for (fr = 0; fr <= st->curframe; fr++)
-+		nr += MAX_BPF_REG + bpf_stack_nr_slots(st->frame[fr]);
-+	return nr;
-+}
-+
- #endif /* _LINUX_BPF_VERIFIER_H */
-diff --git a/kernel/bpf/const_fold.c b/kernel/bpf/const_fold.c
-index bf81bd54232..50179edbf34 100644
---- a/kernel/bpf/const_fold.c
-+++ b/kernel/bpf/const_fold.c
-@@ -250,9 +250,10 @@ int bpf_compute_const_regs(struct bpf_verifier_env *env)
- 	struct const_arg_info ci_out[MAX_BPF_REG];
- 	struct bpf_iarray *succ;
- 	bool changed;
--	int i, r, t;
-+	int i, r, t, err;
- 
- 	/* kvzalloc zeroes memory, so all entries start as CONST_ARG_UNVISITED (0) */
-+	env->mem += insn_cnt * sizeof(*ci_in);
- 	ci_in = kvzalloc_objs(*ci_in, insn_cnt, BPF_VERIFIER_GFP);
- 	if (!ci_in)
- 		return -ENOMEM;
-@@ -278,10 +279,9 @@ int bpf_compute_const_regs(struct bpf_verifier_env *env)
+ /*
+  * The two limits of the verifier, for the whole load. The unit of cost is one step of a scan,
+  * about a dozen insns of the CPU. Memory is the bytes of states and tables at a time.
+@@ -1553,6 +1575,7 @@ void bpf_flow_next_is_no_bound(struct bpf_verifier_env *env, int insn_idx, int h
+ bool bpf_flow_loops_lost_bound(struct bpf_verifier_env *env);
+ void bpf_flow_new_round(struct bpf_verifier_env *env);
+ int bpf_flow_place_guards(struct bpf_verifier_env *env);
++#define BPF_EXIT_NEEDS_CALLER	1	/* verify the call in the frames of the caller */
+ int bpf_flow_return(struct bpf_verifier_env *env, struct bpf_verifier_state *caller,
+ 		    const struct bpf_verifier_state *exit, int call_idx);
+ int bpf_insert_loop_guards(struct bpf_verifier_env *env);
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 2f28b418a7f..3d278a2c29c 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -7645,7 +7645,7 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
+ 			info->reg_type = ctx_arg_info->reg_type;
+ 			info->btf = ctx_arg_info->btf ? : btf_vmlinux;
+ 			info->btf_id = ctx_arg_info->btf_id;
+-			info->ref_id = ctx_arg_info->ref_id;
++			info->ref_arg = ctx_arg_info->ref_arg;
+ 			return true;
+ 		}
  	}
- 
- redo:
--	if (bpf_must_abort()) {
--		kvfree(ci_in);
--		return -EINTR;
--	}
-+	err = bpf_add_cost_and_check(env, env->cfg.cur_postorder * 2ULL, BPF_COST_XREG);
-+	if (err)
-+		goto out;
- 	changed = false;
- 	for (i = env->cfg.cur_postorder - 1; i >= 0; i--) {
- 		int idx = env->cfg.insn_postorder[i];
-@@ -334,9 +334,10 @@ int bpf_compute_const_regs(struct bpf_verifier_env *env)
- 		aux->const_reg_map_mask = map_mask;
- 		aux->const_reg_subprog_mask = subprog_mask;
- 	}
--
-+out:
-+	env->mem -= insn_cnt * sizeof(*ci_in);
- 	kvfree(ci_in);
--	return 0;
-+	return err;
- }
- 
- static int eval_const_branch(u8 opcode, u64 dst_val, u64 src_val)
-diff --git a/kernel/bpf/flow.c b/kernel/bpf/flow.c
-index d2248745fdd..5a04cf19805 100644
---- a/kernel/bpf/flow.c
-+++ b/kernel/bpf/flow.c
-@@ -220,9 +220,11 @@ static bool flow_loop_is_bounded(struct bpf_verifier_env *env, int h)
- 	if (loop->backedges_overflow || loop->irreducible)
- 		return false;
- 	for (i = 0; i < loop->backedges_cnt; i++) {
--		for (n = loop->backedges[i].from; n >= 0 && n != h; n = env->idoms[n])
-+		for (n = loop->backedges[i].from; n >= 0 && n != h; n = env->idoms[n]) {
-+			bpf_add_cost(env, 1, BPF_COST_SCAN);
- 			if (flow_is_bound(env, h, n))
- 				break;
-+		}
- 		if (n < 0 || !flow_is_bound(env, h, n))
- 			return false;
- 	}
-@@ -269,7 +271,7 @@ bool bpf_flow_loops_lost_bound(struct bpf_verifier_env *env)
- int bpf_flow_place_guards(struct bpf_verifier_env *env)
- {
- 	struct bpf_insn_aux_data *aux = env->insn_aux_data;
--	int len = env->prog->len, h, i, depth, ret = 0;
-+	int len = env->prog->len, h, i, ret = 0, err = 0;
- 	struct bpf_loop *loop;
- 	u32 *seen;
- 
-@@ -279,27 +281,18 @@ int bpf_flow_place_guards(struct bpf_verifier_env *env)
- 
- 	for (i = 0; i < len; i++) {
- 		aux[i].not_stopped = -1;
--		depth = 0;
--		for (h = bpf_loop_at_index(env, i); h >= 0; h = aux[h].loop_header) {
--			/* the main pass doesn't get that deep */
--			if (++depth > LOOP_STACK_SIZE) {
--				verbose(env, "Too many nested loops at %d\n", i);
--				kvfree(seen);
--				return -E2BIG;
--			}
-+		for (h = bpf_loop_at_index(env, i); h >= 0; h = aux[h].loop_header)
- 			aux[h].loop->nr_insns++;
--		}
- 	}
- 
- 	for (h = 0; h < len; h++) {
- 		loop = aux[h].loop;
- 		if (!loop)
- 			continue;
--		/* a deep nest of loops takes long */
--		if (bpf_must_abort()) {
--			ret = -EINTR;
-+		err = bpf_add_cost_and_check(env, (u64)loop->nr_insns * loop->backedges_cnt,
-+					     BPF_COST_COPY);
-+		if (err)
- 			break;
--		}
- 		loop->rt_bounded = flow_loop_is_bounded(env, h);
- 		/* also when it's bounded: the main pass may find that it's not */
- 		flow_place_guards(env, h, seen);
-@@ -307,5 +300,19 @@ int bpf_flow_place_guards(struct bpf_verifier_env *env)
- 			ret = 1;
- 	}
- 	kvfree(seen);
--	return ret;
-+	return err ?: ret;
-+}
-+
-+int bpf_check_limits(struct bpf_verifier_env *env)
-+{
-+	env->aborted |= bpf_must_abort();
-+	if (env->aborted)
-+		return -EINTR;
-+	if (env->cost <= min(env->max_cost, env->pass_max_cost) && env->mem <= env->max_mem &&
-+	    !env->over_limit)
-+		return 0;
-+	verbose(env, "BPF program is too complex: cost %llu of %llu, memory %llu of %llu\n",
-+		env->cost, min(env->max_cost, env->pass_max_cost), env->mem, env->max_mem);
-+	env->over_limit = true;
-+	return -E2BIG;
- }
-diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-index 711f9da2b26..4a58c5f4db8 100644
---- a/kernel/bpf/liveness.c
-+++ b/kernel/bpf/liveness.c
-@@ -3,8 +3,6 @@
- 
- #include <linux/bpf_verifier.h>
- #include <linux/btf.h>
--#include <linux/hashtable.h>
--#include <linux/jhash.h>
- #include <linux/slab.h>
- #include <linux/sort.h>
- 
-@@ -54,7 +52,9 @@ struct frame_masks {
-  * Marks are tracked for each frame up to @depth.
-  */
- struct func_instance {
--	struct hlist_node hl_node;
-+	struct list_head node;		/* all instances */
-+	struct func_instance *next;	/* same callsite, other depth */
-+	struct bpf_verifier_env *env;
- 	u32 callsite;		/* call insn that invoked this subprog (subprog_start for depth 0) */
- 	u32 depth;		/* call depth (0 = entry subprog) */
- 	u32 subprog;		/* subprog index */
-@@ -75,36 +75,25 @@ struct live_stack_query {
- struct arg_track;
- 
- struct bpf_liveness {
--	DECLARE_HASHTABLE(func_instances, 8);		/* maps (depth, callsite) to func_instance */
--	struct live_stack_query live_stack_query;	/* cache to avoid repetitive ht lookups */
--	u32 subprog_calls;				/* analyze_subprog() invocations */
-+	struct list_head func_instances;
-+	struct live_stack_query live_stack_query;	/* cache to avoid repetitive lookups */
- 	/* MAX_AT_TRACK_REGS for every depth: analyze_subprog() calls itself, keep its frame small */
- 	struct arg_track *callee_args;
-+	struct func_instance *by_callsite[];
+diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
+index 5783fa20f56..25d7982327d 100644
+--- a/kernel/bpf/diagnostics.c
++++ b/kernel/bpf/diagnostics.c
+@@ -114,7 +114,6 @@ enum bpf_diag_history_kind {
+ 	BPF_DIAG_HISTORY_BRANCH,
+ 	BPF_DIAG_HISTORY_MOD,
+ 	BPF_DIAG_HISTORY_REF_ACQUIRE,
+-	BPF_DIAG_HISTORY_REF_RELEASE,
+ 	BPF_DIAG_HISTORY_CONTEXT,
  };
  
- /*
-- * Hash/compare key for func_instance: (depth, callsite).
-  * For depth == 0 (entry subprog), @callsite is the subprog start insn.
-  * For depth > 0, @callsite is the call instruction index that invoked the subprog.
-  */
--static u32 instance_hash(u32 callsite, u32 depth)
+@@ -134,7 +133,7 @@ struct bpf_diag_history_event {
+ 			bool origin_valid;
+ 		} mod;
+ 		struct {
+-			u32 ref_id;
++			u32 diag_id;
+ 		} ref;
+ 		struct {
+ 			u32 depth;
+@@ -157,7 +156,7 @@ struct bpf_diag_history_opts {
+ 	u32 frameno;
+ 	int regno;
+ 	int stack_arg_slot;
+-	u32 ref_id;
++	const struct bpf_reference_state *ref;
+ 	enum bpf_diag_context_kind ctx_kind;
+ 	u32 ctx_depth;
+ };
+@@ -220,6 +219,7 @@ struct bpf_diag {
+ 	struct list_head fmt_chunks;
+ 	struct bpf_diag_mod_scope mod;
+ 	u32 frame_id_gen;
++	u32 ref_id_gen;
+ };
+ 
+ bool bpf_diag_enabled(const struct bpf_verifier_env *env)
+@@ -1693,29 +1693,19 @@ void bpf_diag_record_scrub_stack(struct bpf_verifier_env *env,
+ 			reason, NULL, NULL, NULL);
+ }
+ 
+-static void diag_record_ref(struct bpf_verifier_env *env, u32 insn_idx, u8 kind, u32 ref_id)
++void bpf_diag_record_ref_acquire(struct bpf_verifier_env *env, struct bpf_reference_state *ref)
+ {
+ 	struct bpf_diag_history_event event = {
+-		.insn_idx = insn_idx,
+-		.kind = kind,
+-		.ref = {
+-			.ref_id = ref_id,
+-		},
++		.insn_idx = ref->insn_idx,
++		.kind = BPF_DIAG_HISTORY_REF_ACQUIRE,
+ 	};
+ 
++	if (!env->diag)
++		return;
++	event.ref.diag_id = ref->diag_id = ++env->diag->ref_id_gen;
+ 	diag_append_history(env, &event);
+ }
+ 
+-void bpf_diag_record_ref_acquire(struct bpf_verifier_env *env, u32 insn_idx, u32 ref_id)
 -{
--	u32 key[2] = { depth, callsite };
--
--	return jhash2(key, 2, 0);
+-	diag_record_ref(env, insn_idx, BPF_DIAG_HISTORY_REF_ACQUIRE, ref_id);
 -}
 -
- static struct func_instance *find_instance(struct bpf_verifier_env *env,
- 					   u32 callsite, u32 depth)
+-void bpf_diag_record_ref_release(struct bpf_verifier_env *env, u32 insn_idx, u32 ref_id)
+-{
+-	diag_record_ref(env, insn_idx, BPF_DIAG_HISTORY_REF_RELEASE, ref_id);
+-}
+-
+ void bpf_diag_record_context(struct bpf_verifier_env *env, u32 insn_idx,
+ 			     enum bpf_diag_context_kind ctx_kind, bool enter, u32 depth)
  {
--	struct bpf_liveness *liveness = env->liveness;
--	struct func_instance *f;
--	u32 key = instance_hash(callsite, depth);
-+	struct func_instance *f = env->liveness->by_callsite[callsite];
+@@ -1864,7 +1854,7 @@ static int diag_history_start_idx(const struct bpf_diag_log *log,
  
--	hash_for_each_possible(liveness->func_instances, f, hl_node, key)
--		if (f->depth == depth && f->callsite == callsite)
--			return f;
--	return NULL;
-+	while (f && f->depth != depth)
-+		f = f->next;
-+	return f;
+ 		event = &log->events[log_pos(log, i - 1)];
+ 		if (event->kind == BPF_DIAG_HISTORY_REF_ACQUIRE &&
+-		    event->ref.ref_id == opts->ref_id)
++		    event->ref.diag_id == opts->ref->diag_id)
+ 			return i - 1;
+ 	}
+ 
+@@ -1882,9 +1872,8 @@ static bool diag_history_event_visible(const struct bpf_diag_history_event *even
+ 	case BPF_DIAG_HISTORY_MOD:
+ 		return filter->lineage_valid && event->in_lineage;
+ 	case BPF_DIAG_HISTORY_REF_ACQUIRE:
+-	case BPF_DIAG_HISTORY_REF_RELEASE:
+ 		return opts->scope == BPF_DIAG_HISTORY_SCOPE_REF &&
+-		       event->ref.ref_id == opts->ref_id;
++		       event->ref.diag_id == opts->ref->diag_id;
+ 	case BPF_DIAG_HISTORY_CONTEXT:
+ 		return opts->scope == BPF_DIAG_HISTORY_SCOPE_CONTEXT &&
+ 		       event->ctx.kind == opts->ctx_kind;
+@@ -2071,21 +2060,22 @@ void bpf_diag_irq(struct bpf_verifier_env *env, u32 insn_idx, const char *proble
+ 	diag_suggestion(env, "%s", suggestion);
  }
  
- static struct func_instance *call_instance(struct bpf_verifier_env *env,
-@@ -115,7 +104,6 @@ static struct func_instance *call_instance(struct bpf_verifier_env *env,
- 	u32 subprog_start = env->subprog_info[subprog].start;
- 	u32 lookup_key = depth > 0 ? callsite : subprog_start;
- 	struct func_instance *f;
--	u32 hash;
+-void bpf_diag_leak(struct bpf_verifier_env *env, u32 ref_id, u32 alloc_insn, u32 fail_insn)
++void bpf_diag_leak(struct bpf_verifier_env *env, const struct bpf_reference_state *ref,
++		   u32 fail_insn)
+ {
+ 	struct bpf_diag_history_opts opts = {
+ 		.scope = BPF_DIAG_HISTORY_SCOPE_REF,
+-		.ref_id = ref_id,
++		.ref = ref,
+ 	};
  
- 	f = find_instance(env, lookup_key, depth);
- 	if (f)
-@@ -124,13 +112,16 @@ static struct func_instance *call_instance(struct bpf_verifier_env *env,
- 	f = kvzalloc_obj(*f, BPF_VERIFIER_GFP);
- 	if (!f)
- 		return ERR_PTR(-ENOMEM);
-+	f->env = env;
- 	f->callsite = lookup_key;
- 	f->depth = depth;
- 	f->subprog = subprog;
- 	f->subprog_start = subprog_start;
- 	f->insn_cnt = (env->subprog_info + subprog + 1)->start - subprog_start;
--	hash = instance_hash(lookup_key, depth);
--	hash_add(env->liveness->func_instances, &f->hl_node, hash);
-+	f->next = env->liveness->by_callsite[lookup_key];
-+	env->liveness->by_callsite[lookup_key] = f;
-+	list_add(&f->node, &env->liveness->func_instances);
-+	env->mem += sizeof(*f);
- 	return f;
+ 	bpf_diag_header(env, RESOURCE_LIFETIME_SAFETY, "unreleased resource");
+ 	diag_reason(
+ 		env, "Owned resource (id=%u) was acquired at instruction %u and still needs to be released before this exit path.",
+-		ref_id, alloc_insn);
++		ref->id, ref->insn_idx);
+ 
+ 	diag_section(env, "At");
+ 	bpf_diag_source(env, fail_insn, "error",
+-			"owned resource (id=%u) still needs release", ref_id);
++			"owned resource (id=%u) still needs release", ref->id);
+ 
+ 	diag_print_history(env, &opts);
+ 
+@@ -2258,16 +2248,6 @@ static void diag_print_mod(struct bpf_verifier_env *env, const struct bpf_diag_h
+ 			old, new);
  }
  
-@@ -155,22 +146,23 @@ static struct func_instance *lookup_instance(struct bpf_verifier_env *env,
- 
- int bpf_stack_liveness_init(struct bpf_verifier_env *env)
+-static void diag_print_ref_event(struct bpf_verifier_env *env,
+-				 const struct bpf_diag_history_event *event)
+-{
+-	const char *label;
+-
+-	label = event->kind == BPF_DIAG_HISTORY_REF_ACQUIRE ? "acquired" : "released";
+-	bpf_diag_source(env, event->insn_idx, label, "owned resource (id=%u)",
+-			event->ref.ref_id);
+-}
+-
+ static const char *diag_context_name(enum bpf_diag_context_kind kind)
  {
--	env->liveness = kvzalloc_obj(*env->liveness, BPF_VERIFIER_GFP);
-+	env->liveness = kvzalloc_flex(*env->liveness, by_callsite, env->prog->len,
-+				      BPF_VERIFIER_GFP);
- 	if (!env->liveness)
- 		return -ENOMEM;
--	hash_init(env->liveness->func_instances);
-+	INIT_LIST_HEAD(&env->liveness->func_instances);
-+	env->mem += env->prog->len * sizeof(*env->liveness->by_callsite);
- 	return 0;
+ 	switch (kind) {
+@@ -2362,8 +2342,8 @@ static void diag_print_history(struct bpf_verifier_env *env,
+ 			diag_print_mod(env, event);
+ 			break;
+ 		case BPF_DIAG_HISTORY_REF_ACQUIRE:
+-		case BPF_DIAG_HISTORY_REF_RELEASE:
+-			diag_print_ref_event(env, event);
++			bpf_diag_source(env, event->insn_idx, "acquired", "owned resource (id=%u)",
++					opts->ref->id);
+ 			break;
+ 		case BPF_DIAG_HISTORY_CONTEXT:
+ 			diag_print_context_event(env, event);
+diff --git a/kernel/bpf/diagnostics.h b/kernel/bpf/diagnostics.h
+index e155d2588a5..f6380137e9a 100644
+--- a/kernel/bpf/diagnostics.h
++++ b/kernel/bpf/diagnostics.h
+@@ -77,7 +77,8 @@ void bpf_diag_lock(struct bpf_verifier_env *env, u32 insn_idx, const char *probl
+ 		   const struct bpf_reference_state *active_lock);
+ void bpf_diag_irq(struct bpf_verifier_env *env, u32 insn_idx, const char *problem,
+ 		  const char *reason, const char *suggestion, u32 depth);
+-void bpf_diag_leak(struct bpf_verifier_env *env, u32 ref_id, u32 alloc_insn, u32 fail_insn);
++void bpf_diag_leak(struct bpf_verifier_env *env, const struct bpf_reference_state *ref,
++		   u32 fail_insn);
+ void bpf_diag_call_type(struct bpf_verifier_env *env, u32 insn_idx, int argno, int regno,
+ 			int stack_arg_slot, const char *call_name, const char *arg_name,
+ 			const char *reason, const char *suggestion);
+@@ -104,8 +105,7 @@ void bpf_diag_record_scrub(struct bpf_verifier_env *env, const struct bpf_reg_st
+ void bpf_diag_record_scrub_stack(struct bpf_verifier_env *env,
+ 				 const struct bpf_func_state *state, s16 min_off, s16 max_off,
+ 				 enum bpf_diag_mod_reason reason);
+-void bpf_diag_record_ref_acquire(struct bpf_verifier_env *env, u32 insn_idx, u32 ref_id);
+-void bpf_diag_record_ref_release(struct bpf_verifier_env *env, u32 insn_idx, u32 ref_id);
++void bpf_diag_record_ref_acquire(struct bpf_verifier_env *env, struct bpf_reference_state *ref);
+ void bpf_diag_record_context(struct bpf_verifier_env *env, u32 insn_idx,
+ 			     enum bpf_diag_context_kind ctx_kind, bool enter, u32 depth);
+ 
+diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+index 5d78a10dd29..854db8ee6a2 100644
+--- a/kernel/bpf/states.c
++++ b/kernel/bpf/states.c
+@@ -35,6 +35,83 @@ static bool range_within(const struct bpf_reg_state *old,
+ 	       (cur->base - old->base) % old->step == 0;
  }
  
- void bpf_stack_liveness_free(struct bpf_verifier_env *env)
- {
--	struct func_instance *instance;
--	struct hlist_node *tmp;
--	int bkt, i;
-+	struct func_instance *instance, *tmp;
-+	int i;
- 
- 	if (!env->liveness)
- 		return;
--	hash_for_each_safe(env->liveness->func_instances, bkt, tmp, instance, hl_node) {
-+	list_for_each_entry_safe(instance, tmp, &env->liveness->func_instances, node) {
- 		for (i = 0; i <= instance->depth; i++)
- 			kvfree(instance->frames[i]);
- 		kvfree(instance);
-@@ -213,12 +205,18 @@ static struct frame_masks *widen_frame_masks(struct func_instance *instance,
- {
- 	struct frame_masks *old = instance->frames[frame], *new;
- 	u32 i, kind;
-+	int err;
- 
- 	if (old && old->words >= words)
- 		return old;
-+	instance->env->mem += frame_mask_words(instance, words - (old ? old->words : 0)) *
-+			      sizeof(long);
-+	err = bpf_check_limits(instance->env);
-+	if (err)
-+		return ERR_PTR(err);
- 	new = kvzalloc_flex(*new, bits, frame_mask_words(instance, words), BPF_VERIFIER_GFP);
- 	if (!new)
--		return NULL;
-+		return ERR_PTR(-ENOMEM);
- 	new->words = words;
- 	if (old) {
- 		for (i = 0; i < instance->insn_cnt; i++)
-@@ -249,8 +247,8 @@ static int mark_stack_range(struct func_instance *instance, u32 frame, u32 insn_
- 	if (lo > hi)
- 		return 0;
- 	fm = widen_frame_masks(instance, frame, BITS_TO_LONGS(hi + 1));
--	if (!fm)
--		return -ENOMEM;
-+	if (IS_ERR(fm))
-+		return PTR_ERR(fm);
- 	bitmap_set(rel_mask(fm, relative_idx(instance, insn_idx), kind), lo, hi - lo + 1);
- 	return 0;
- }
-@@ -314,8 +312,8 @@ static int mark_stack_mask(struct func_instance *instance, u32 frame, u32 insn_i
- 	if (last == nbits)
- 		return 0;
- 	fm = widen_frame_masks(instance, frame, BITS_TO_LONGS(last + 1));
--	if (!fm)
--		return -ENOMEM;
-+	if (IS_ERR(fm))
-+		return PTR_ERR(fm);
- 	dst = rel_mask(fm, relative_idx(instance, insn_idx), kind);
- 	/* @src has no bits set past @last, hence none past @fm->words either */
- 	src_words = min(src_words, fm->words);
-@@ -462,6 +460,7 @@ static int update_instance(struct bpf_verifier_env *env, struct func_instance *i
- 	int *insn_postorder = env->cfg.insn_postorder;
- 	struct bpf_subprog_info *subprog;
- 	bool changed;
-+	int err;
- 
- 	instance->must_write_initialized = true;
- 	subprog = &env->subprog_info[instance->subprog];
-@@ -469,12 +468,15 @@ static int update_instance(struct bpf_verifier_env *env, struct func_instance *i
- 	po_end = (subprog + 1)->postorder_start;
- 	/* repeat until fixed point is reached */
- 	do {
--		if (bpf_must_abort())
--			return -EINTR;
- 		changed = false;
- 		for (frame = 0; frame <= instance->depth; frame++) {
- 			if (!instance->frames[frame])
- 				continue;
-+			err = bpf_add_cost_and_check(env, (po_end - po_start) *
-+							  (4ULL + instance->frames[frame]->words),
-+						     BPF_COST_XREG);
-+			if (err)
-+				return err;
- 
- 			for (i = po_start; i < po_end; i++) {
- 				changed |= update_insn(env, instance, frame, insn_postorder[i],
-@@ -779,9 +781,9 @@ static void compute_may_write_masks(struct bpf_verifier_env *env)
- 	struct func_instance *instance;
- 	struct frame_masks *fm;
- 	u32 nbits;
--	int bkt, i;
-+	int i;
- 
--	hash_for_each(liveness->func_instances, bkt, instance, hl_node) {
-+	list_for_each_entry(instance, &liveness->func_instances, node) {
- 		fm = instance->frames[instance->depth];
- 		if (!fm)
- 			continue;
-@@ -800,16 +802,16 @@ static int print_instances(struct bpf_verifier_env *env)
- {
- 	struct func_instance *instance, **sorted_instances;
- 	struct bpf_liveness *liveness = env->liveness;
--	int i, bkt, cnt;
-+	int i, cnt;
- 
- 	cnt = 0;
--	hash_for_each(liveness->func_instances, bkt, instance, hl_node)
-+	list_for_each_entry(instance, &liveness->func_instances, node)
- 		cnt++;
- 	sorted_instances = kvmalloc_objs(*sorted_instances, cnt, BPF_VERIFIER_GFP);
- 	if (!sorted_instances)
- 		return -ENOMEM;
- 	cnt = 0;
--	hash_for_each(liveness->func_instances, bkt, instance, hl_node)
-+	list_for_each_entry(instance, &liveness->func_instances, node)
- 		sorted_instances[cnt++] = instance;
- 	sort(sorted_instances, cnt, sizeof(*sorted_instances), cmp_instances, NULL);
- 	for (i = 0; i < cnt; i++)
-@@ -1058,9 +1060,13 @@ static struct arg_track __arg_track_join(struct arg_track a, struct arg_track b)
- static bool arg_track_join(struct bpf_verifier_env *env, int idx, int target, int r,
- 			   struct arg_track *in, struct arg_track out)
- {
--	struct arg_track old = *in;
--	struct arg_track new_val = __arg_track_join(old, out);
-+	struct arg_track old, new_val;
- 
-+	/* most registers and slots hold no argument */
-+	if (out.frame == ARG_NONE && in->frame == ARG_NONE)
-+		return false;
-+	old = *in;
-+	new_val = __arg_track_join(old, out);
- 	if (arg_track_eq(&new_val, &old))
- 		return false;
- 
-@@ -1101,6 +1107,9 @@ static bool arg_track_join_all(struct bpf_verifier_env *env, int idx, int target
- 	for (r = 0; r < MAX_AT_TRACK_REGS; r++)
- 		changed |= arg_track_join(env, idx, target, r, &in[r], out[r]);
- 	same = !memcmp(stack_in, stack_out, nslots * sizeof(*stack_in));
-+	/* a change pays for the next visit of @target too */
-+	bpf_add_cost(env, MAX_AT_TRACK_REGS + nslots,
-+		     same && !changed ? BPF_COST_COPY : BPF_COST_XREG);
- 	for (r = 0; r < nslots && !same; r++)
- 		changed |= arg_track_join(env, idx, target, -r - 1, &stack_in[r], stack_out[r]);
- 	return changed;
-@@ -2041,6 +2050,18 @@ static void record_stack_ptrs(struct bpf_verifier_env *env, int idx, struct arg_
- 	env->insn_aux_data[idx].stack_ptrs |= mask;
- }
- 
-+/* Return true if any of R1-R5 or stack args is derived from a frame pointer. */
-+static bool has_fp_args(struct arg_track *args)
++static void renumber_id(struct bpf_verifier_env *env, u32 *id, u32 new_id)
 +{
-+	for (int r = BPF_REG_1; r <= BPF_REG_5; r++)
-+		if (arg_is_fp(&args[r]))
-+			return true;
-+	for (int r = 0; r < MAX_STACK_ARG_SLOTS; r++)
-+		if (arg_is_fp(&args[MAX_BPF_REG + r]))
-+			return true;
-+	return false;
++	struct bpf_idmap *map = &env->idmap_scratch;
++	u32 i;
++
++	if (!*id)
++		return;
++	for (i = 0; i < map->cnt && map->map[i].old != *id; i++)
++		;
++	bpf_add_cost(env, 2 * i, BPF_COST_SCAN);
++	if (i == BPF_ID_MAP_SIZE)
++		return;
++	if (i == map->cnt)
++		map->map[map->cnt++] = (struct bpf_id_pair){ *id, new_id };
++	*id = map->map[i].cur;
 +}
 +
- /*
-  * Compute arg tracking dataflow for a single subprog.
-  * Runs forward fixed-point with arg_track_xfer(), then records
-@@ -2074,9 +2095,15 @@ static noinline_for_stack int compute_subprog_args(struct bpf_verifier_env *env,
- 	struct arg_track at_stack_arg_entry[MAX_STACK_ARG_SLOTS];
- 	struct arg_track unvisited = { .frame = ARG_UNVISITED };
- 	struct arg_track none = { .frame = ARG_NONE };
--	int i, p, r, err = -ENOMEM;
-+	size_t bytes = (size_t)len * nslots * sizeof(*at_stack_in);
- 	unsigned long *changed = NULL;
-+	int i, p, r, err;
- 
-+	env->mem += bytes;
-+	err = bpf_check_limits(env);
-+	if (err)
-+		goto err_free;
-+	err = -ENOMEM;
- 	at_in = kvmalloc_objs(*at_in, len, BPF_VERIFIER_GFP);
- 	if (!at_in)
- 		goto err_free;
-@@ -2122,6 +2149,8 @@ static noinline_for_stack int compute_subprog_args(struct bpf_verifier_env *env,
- 
- 	/* Forward fixed-point iteration in reverse post order, over insns whose input changed */
- 	__set_bit(0, changed);
-+	/* the first visit of each insn, see arg_track_join_all() for the others */
-+	bpf_add_cost(env, (u64)len * (MAX_AT_TRACK_REGS + nslots), BPF_COST_XREG);
- redo:
- 	for (p = po_end - 1; p >= po_start; p--) {
- 		int idx = env->cfg.insn_postorder[p];
-@@ -2130,8 +2159,8 @@ static noinline_for_stack int compute_subprog_args(struct bpf_verifier_env *env,
- 		struct bpf_iarray *succ;
- 		int ti;
- 
--		err = -EINTR;
--		if (bpf_must_abort())
-+		err = bpf_add_cost_and_check(env, 1, BPF_COST_SCAN);
-+		if (err)
- 			goto err_free;
- 		if (!__test_and_clear_bit(i, changed))
- 			continue;
-@@ -2184,16 +2213,18 @@ static noinline_for_stack int compute_subprog_args(struct bpf_verifier_env *env,
- 				goto err_free;
- 		}
- 
--		if (bpf_pseudo_call(insn) || bpf_calls_callback(env, idx)) {
--			struct spill_snapshot *snap;
-+		if ((bpf_pseudo_call(insn) || bpf_calls_callback(env, idx)) &&
-+		    has_fp_args(at_in[i])) {
-+			struct spill_snapshot *snap = env->callsite_at_stack[idx];
- 
--			kvfree(env->callsite_at_stack[idx]);
--			env->callsite_at_stack[idx] = kvmalloc_flex(*snap, at, nslots, BPF_VERIFIER_GFP);
--			snap = env->callsite_at_stack[idx];
- 			if (!snap) {
--				err = -ENOMEM;
--				goto err_free;
-+				snap = kmalloc_flex(*snap, at, nslots, BPF_VERIFIER_GFP);
-+				env->callsite_at_stack[idx] = snap;
-+				env->mem += ksize(snap);
- 			}
-+			err = snap ? bpf_check_limits(env) : -ENOMEM;
-+			if (err)
-+				goto err_free;
- 			snap->slots = nslots;
- 			memcpy(snap->at, &at_stack_in[(size_t)i * nslots], nslots * sizeof(*snap->at));
- 		}
-@@ -2208,6 +2239,7 @@ static noinline_for_stack int compute_subprog_args(struct bpf_verifier_env *env,
- 	err = 0;
- 
- err_free:
-+	env->mem -= bytes;
- 	kvfree(changed);
- 	kvfree(at_stack_out);
- 	kvfree(at_stack_in);
-@@ -2215,18 +2247,6 @@ static noinline_for_stack int compute_subprog_args(struct bpf_verifier_env *env,
- 	return err;
- }
- 
--/* Return true if any of R1-R5 or stack args is derived from a frame pointer. */
--static bool has_fp_args(struct arg_track *args)
--{
--	for (int r = BPF_REG_1; r <= BPF_REG_5; r++)
--		if (arg_is_fp(&args[r]))
--			return true;
--	for (int r = 0; r < MAX_STACK_ARG_SLOTS; r++)
--		if (arg_is_fp(&args[MAX_BPF_REG + r]))
--			return true;
--	return false;
--}
--
- /*
-  * Merge a freshly analyzed instance into the original.
-  * may_read, may_fill: union (any pass might read the slot).
-@@ -2264,8 +2284,8 @@ static int merge_instances(struct func_instance *dst, struct func_instance *src)
- 			continue;
- 		}
- 		d = widen_frame_masks(dst, f, s->words);
--		if (!d)
--			return -ENOMEM;
-+		if (IS_ERR(d))
-+			return PTR_ERR(d);
- 		for (i = 0; i < dst->insn_cnt; i++) {
- 			unsigned long *dst_read = rel_mask(d, i, FM_MAY_READ);
- 			unsigned long *dst_write = rel_mask(d, i, FM_MUST_WRITE);
-@@ -2323,6 +2343,7 @@ static struct func_instance *fresh_instance(struct func_instance *src)
- 	f = kvzalloc_obj(*f, BPF_VERIFIER_GFP);
- 	if (!f)
- 		return ERR_PTR(-ENOMEM);
-+	f->env = src->env;
- 	f->callsite = src->callsite;
- 	f->depth = src->depth;
- 	f->subprog = src->subprog;
-@@ -2335,8 +2356,12 @@ static void free_instance(struct func_instance *instance)
- {
- 	int i;
- 
--	for (i = 0; i <= instance->depth; i++)
-+	for (i = 0; i <= instance->depth; i++) {
-+		if (instance->frames[i])
-+			instance->env->mem -= sizeof(long) *
-+				frame_mask_words(instance, instance->frames[i]->words);
- 		kvfree(instance->frames[i]);
++static void renumber_reg_ids(struct bpf_verifier_env *env, struct bpf_reg_state *reg, u32 xreg)
++{
++	renumber_id(env, &reg->id, BPF_XREG_ID(3 * xreg));
++	renumber_id(env, &reg->parent_id, BPF_XREG_ID(3 * xreg + 1));
++	renumber_id(env, &reg->map_uid, BPF_XREG_ID(3 * xreg + 2));
++}
++
++/*
++ * An id stands for the set of xregs that have it. Name it after the first one. What is held goes
++ * first. Then states with the same sets have the same ids, and ids are compared as they are.
++ * The name is the xreg, not a number in a sequence. So an xreg that is not set does not change
++ * the names of other sets. But if only one state has r1 = r6, r6 has two names.
++ * Visit an xreg once: a name can be the old id of another xreg.
++ */
++int bpf_renumber_ids(struct bpf_verifier_env *env, struct bpf_verifier_state *st)
++{
++	u32 mask[] = { BIT(STACK_SPILL),
++		       BIT(STACK_DYNPTR) | BIT(STACK_ITER) | BIT(STACK_IRQ_FLAG) };
++	struct bpf_idmap *map = &env->idmap_scratch;
++	struct bpf_reg_state *reg;
++	struct bpf_func_state *f;
++	u32 fr, i, xreg;
++	int held;
++
++	map->cnt = 0;
++	for (i = 0; i < st->acquired_refs && i < BPF_ID_MAP_SIZE; i++) {
++		renumber_id(env, &st->refs[i].id, BPF_REF_ID(2 * i));
++		if (st->refs[i].type == REF_TYPE_PTR)
++			renumber_id(env, &st->refs[i].parent_id, BPF_REF_ID(2 * i + 1));
 +	}
- 	kvfree(instance);
++	/* they are among these */
++	renumber_id(env, &st->active_irq_id, 0);
++	renumber_id(env, &st->active_lock_id, 0);
++	for (held = 1; held >= 0; held--) {
++		for (fr = 0; fr <= st->curframe; fr++) {
++			f = st->frame[fr];
++			/* registers, the frame, slots, arguments */
++			xreg = fr * (BPF_ID_MAP_SIZE / MAX_CALL_FRAMES + 1) + MAX_BPF_REG;
++			if (held)
++				renumber_id(env, &f->frame_id, BPF_XREG_ID(3 * xreg));
++			for (i = 0; i < bpf_stack_nr_slots(f); i++) {
++				reg = bpf_get_spilled_reg(i, f, mask[held]);
++				if (reg)
++					renumber_reg_ids(env, reg, xreg + 1 + i);
++			}
++			if (held)
++				continue;
++			for (i = 0; i < MAX_BPF_REG; i++)
++				renumber_reg_ids(env, &f->regs[i], xreg - MAX_BPF_REG + i);
++			for (i = 0; i < f->out_stack_arg_cnt; i++)
++				renumber_reg_ids(env, &f->stack_arg_regs[i],
++						 xreg + 1 + MAX_BPF_STACK_SLOTS + i);
++		}
++	}
++	if (map->cnt < BPF_ID_MAP_SIZE && st->acquired_refs < BPF_ID_MAP_SIZE)
++		return 0;
++	bpf_log(&env->log, "too many ids\n");
++	return -E2BIG;
++}
++
+ /* If in the old state two registers had the same id, then they need to have
+  * the same id in the new state as well.  But that id could be different from
+  * the old state, so we need to track the mapping from old to new ids.
+@@ -189,7 +266,7 @@ int bpf_clean_verifier_state(struct bpf_verifier_env *env, struct bpf_verifier_s
+ 
+ 		__clean_func_state(env, st->frame[i], live_regs, i);
+ 	}
+-	return 0;
++	return bpf_renumber_ids(env, st);
  }
  
-@@ -2364,16 +2389,6 @@ static int analyze_subprog(struct bpf_verifier_env *env,
- 	struct func_instance *prev_instance = NULL;
- 	int j, err;
+ static bool regs_exact(const struct bpf_reg_state *rold,
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 1c1aeec4069..d43009b41bf 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -205,8 +205,7 @@ struct bpf_verifier_stack_elem {
+ #define BPF_PRIV_STACK_MIN_SIZE		64
  
--	/* a subprog on its own is analyzed once, chains of calls multiply */
--	if (depth && ++env->liveness->subprog_calls > 10000) {
--		verbose(env, "liveness analysis exceeded complexity limit (%d calls)\n",
--			env->liveness->subprog_calls);
--		return -E2BIG;
--	}
--
--	if (bpf_must_abort())
--		return -EINTR;
--
- 	/*
- 	 * When an instance is reused (must_write_initialized == true),
- 	 * record into a fresh instance and merge afterward.  This avoids
-@@ -2544,12 +2559,15 @@ int bpf_compute_subprog_arg_access(struct bpf_verifier_env *env)
- 	int insn_cnt = env->prog->len;
- 	struct func_instance *instance;
- 	struct subprog_at_info *info;
-+	/* each subprog keeps its at_in[] to the end */
-+	size_t bytes = insn_cnt * (sizeof(*info->at_in) + sizeof(*env->callsite_at_stack));
- 	int k, err = 0;
+ static int acquire_reference(struct bpf_verifier_env *env, int insn_idx, int parent_id);
+-static int __release_reference_nomark(struct bpf_verifier_state *state, int id);
+-static int release_reference_nomark(struct bpf_verifier_env *env, int id);
++static int release_reference_nomark(struct bpf_verifier_state *state, int id);
+ static int release_reference(struct bpf_verifier_env *env, int id);
+ static int invalidate_reference(struct bpf_verifier_env *env, int id);
+ static u32 reg_lifetime_id(struct bpf_verifier_env *env,
+@@ -717,7 +716,7 @@ static void mark_dynptr_stack_regs(struct bpf_verifier_env *env,
+ 				   struct bpf_reg_state *sreg2,
+ 				   enum bpf_dynptr_type type, int parent_id)
+ {
+-	int id = ++env->id_gen;
++	int id = bpf_new_id(env);
  
- 	info = kvzalloc_objs(*info, env->subprog_cnt, BPF_VERIFIER_GFP);
- 	if (!info)
+ 	__mark_dynptr_reg(sreg1, type, true, id, parent_id);
+ 	__mark_dynptr_reg(sreg2, type, false, id, parent_id);
+@@ -727,7 +726,7 @@ static void mark_dynptr_cb_reg(struct bpf_verifier_env *env,
+ 			       struct bpf_reg_state *reg,
+ 			       enum bpf_dynptr_type type)
+ {
+-	__mark_dynptr_reg(reg, type, true, ++env->id_gen, 0);
++	__mark_dynptr_reg(reg, type, true, bpf_new_id(env), 0);
+ }
+ 
+ static int destroy_if_dynptr_stack_slot(struct bpf_verifier_env *env,
+@@ -1439,13 +1438,7 @@ static int copy_reference_state(struct bpf_verifier_state *dst, const struct bpf
+ 	if (!dst->refs)
  		return -ENOMEM;
  
-+	env->mem += bytes;
- 	env->callsite_at_stack = kvzalloc_objs(*env->callsite_at_stack, insn_cnt,
- 					       BPF_VERIFIER_GFP);
- 	env->liveness->callee_args = kvcalloc(MAX_CALL_FRAMES * MAX_AT_TRACK_REGS,
-@@ -2592,8 +2610,11 @@ int bpf_compute_subprog_arg_access(struct bpf_verifier_env *env)
- 		err = print_instances(env);
- 
- out:
--	for (k = 0; k < insn_cnt; k++)
--		kvfree(env->callsite_at_stack[k]);
-+	env->mem -= bytes;
-+	for (k = 0; k < insn_cnt; k++) {
-+		env->mem -= ksize(env->callsite_at_stack[k]);
-+		kfree(env->callsite_at_stack[k]);
-+	}
- 	kvfree(env->callsite_at_stack);
- 	env->callsite_at_stack = NULL;
- 	kvfree(env->liveness->callee_args);
-@@ -2887,10 +2908,9 @@ int bpf_compute_live_registers(struct bpf_verifier_env *env)
- 
- 		changed = false;
- 		/* a cycle of calls takes a round for each link */
--		if (bpf_must_abort()) {
--			err = -EINTR;
-+		err = bpf_add_cost_and_check(env, env->cfg.cur_postorder, BPF_COST_XREG);
-+		if (err)
- 			goto out;
--		}
- 		for (i = 0; i < env->cfg.cur_postorder; ++i) {
- 			int insn_idx = order[i];
- 			struct insn_live_regs *live = &state[insn_idx];
-diff --git a/kernel/bpf/loops.c b/kernel/bpf/loops.c
-index 8a63bb1799a..e1f39629f60 100644
---- a/kernel/bpf/loops.c
-+++ b/kernel/bpf/loops.c
-@@ -88,9 +88,11 @@ static int idoms_intersect(struct bpf_verifier_env *env, int a, int b)
- 	while (a != b) {
- 		while (postorder_nums[a] < postorder_nums[b]) {
- 			a = idoms[a];
-+			bpf_add_cost(env, 1, BPF_COST_SCAN);
- 		}
- 		while (postorder_nums[b] < postorder_nums[a]) {
- 			b = idoms[b];
-+			bpf_add_cost(env, 1, BPF_COST_SCAN);
- 		}
- 	}
- 	return a;
-@@ -248,6 +250,7 @@ static int mark_as_header(struct bpf_verifier_env *env, int h)
- 		aux[h].loop = kvzalloc_obj(struct bpf_loop, BPF_VERIFIER_GFP);
- 		if (!aux[h].loop)
- 			return -ENOMEM;
-+		env->mem += sizeof(struct bpf_loop);
- 	}
+-	dst->acquired_refs = src->acquired_refs;
+-	dst->active_locks = src->active_locks;
+-	dst->active_preempt_locks = src->active_preempt_locks;
+-	dst->active_rcu_locks = src->active_rcu_locks;
+-	dst->active_irq_id = src->active_irq_id;
+-	dst->active_lock_id = src->active_lock_id;
+-	dst->active_lock_ptr = src->active_lock_ptr;
++	dst->held = src->held;
  	return 0;
  }
-@@ -268,6 +271,7 @@ static int assign_header(struct bpf_verifier_env *env, struct loops_dfs *dfs, in
  
- 	/* Make sure that loop headers up the chain are sorted by dfs_pos. */
- 	while (aux[n].loop_header != -1) {
-+		bpf_add_cost(env, 1, BPF_COST_SCAN);
- 		nh = aux[n].loop_header;
- 		if (nh == h)
- 			return 0;
-@@ -290,6 +294,20 @@ int bpf_loop_at_index(struct bpf_verifier_env *env, u32 idx)
- 	return aux[idx].loop ? idx : aux[idx].loop_header;
+@@ -1556,9 +1549,9 @@ static int acquire_reference(struct bpf_verifier_env *env, int insn_idx, int par
+ 	if (!s)
+ 		return -ENOMEM;
+ 	s->type = REF_TYPE_PTR;
+-	s->id = ++env->id_gen;
++	s->id = bpf_new_id(env);
+ 	s->parent_id = parent_id;
+-	bpf_diag_record_ref_acquire(env, insn_idx, s->id);
++	bpf_diag_record_ref_acquire(env, s);
+ 	return s->id;
  }
  
-+static int check_loop_depth(struct bpf_verifier_env *env, int idx)
+@@ -1592,7 +1585,7 @@ static int acquire_irq_state(struct bpf_verifier_env *env, int insn_idx)
+ 	if (!s)
+ 		return -ENOMEM;
+ 	s->type = REF_TYPE_IRQ;
+-	s->id = ++env->id_gen;
++	s->id = bpf_new_id(env);
+ 
+ 	state->active_irq_id = s->id;
+ 	bpf_diag_record_context(env, insn_idx, BPF_DIAG_CONTEXT_IRQ, true,
+@@ -2504,7 +2497,7 @@ static int mark_btf_ld_reg(struct bpf_verifier_env *env,
+ 		regs[regno].btf = btf;
+ 		regs[regno].btf_id = btf_id;
+ 		if (type_may_be_null(flag))
+-			regs[regno].id = ++env->id_gen;
++			regs[regno].id = bpf_new_id(env);
+ 		return 0;
+ 	case PTR_TO_MEM:
+ 		mark_reg_known_zero(env, regs, regno);
+@@ -4758,7 +4751,7 @@ static int mark_uptr_ld_reg(struct bpf_verifier_env *env, u32 regno,
+ 	reg = reg_state(env, regno);
+ 	reg->type = PTR_TO_MEM | PTR_MAYBE_NULL;
+ 	reg->mem_size = t->size;
+-	reg->id = ++env->id_gen;
++	reg->id = bpf_new_id(env);
+ 
+ 	return 0;
+ }
+@@ -4974,6 +4967,17 @@ static bool is_var_ctx_off_allowed(struct bpf_prog *prog)
+ 	return resolve_prog_type(prog) == BPF_PROG_TYPE_SYSCALL;
+ }
+ 
++/* The id of the reference that came with __ref argument @arg. 0 if there is none. */
++static u32 ctx_arg_ref_id(const struct bpf_verifier_state *st, u32 arg)
 +{
-+	struct bpf_insn_aux_data *aux = env->insn_aux_data;
-+	int h, depth = 0;
++	u32 i;
 +
-+	for (h = bpf_loop_at_index(env, idx); h >= 0; h = aux[h].loop_header) {
-+		if (++depth <= LOOP_STACK_SIZE)
-+			continue;
-+		bpf_log(&env->log, "Too many nested loops at %d\n", idx);
-+		return -E2BIG;
-+	}
++	for (i = 0; arg && i < st->acquired_refs; i++)
++		if (st->refs[i].type == REF_TYPE_PTR && st->refs[i].ctx_arg == arg)
++			return st->refs[i].id;
 +	return 0;
 +}
 +
- /*
-  * The backedge->from and its latch can reside in an inner loop of @h, e.g.:
-  *
-@@ -331,8 +349,9 @@ static int compute_loops_in_subprog(struct bpf_verifier_env *env, struct loops_d
- 	dfs_pos[start] = 1;
- 	stack_sz = 1;
- 	do {
--		if (bpf_must_abort())
--			return -EINTR;
-+		err = bpf_add_cost_and_check(env, 1, BPF_COST_XREG);
-+		if (err)
-+			return err;
- 
- 		cur = stack[stack_sz - 1];
- 		succ = bpf_insn_successors(env, cur);
-@@ -351,6 +370,10 @@ static int compute_loops_in_subprog(struct bpf_verifier_env *env, struct loops_d
- 			stack_sz++;
- 			continue;
+ /* check access to 'struct bpf_context' fields.  Supports fixed offsets only */
+ static int __check_ctx_access(struct bpf_verifier_env *env, int insn_idx, int off, int size,
+ 			      enum bpf_access_type t, struct bpf_insn_access_aux *info)
+@@ -4988,8 +4992,7 @@ static int __check_ctx_access(struct bpf_verifier_env *env, int insn_idx, int of
+ 		 * type of narrower access.
+ 		 */
+ 		if (base_type(info->reg_type) == PTR_TO_BTF_ID) {
+-			if (info->ref_id &&
+-			    !find_reference_state(env->cur_state, info->ref_id)) {
++			if (info->ref_arg && !ctx_arg_ref_id(env->cur_state, info->ref_arg)) {
+ 				verbose(env, "invalid bpf_context access off=%d. Reference may already be released\n",
+ 					off);
+ 				return -EACCES;
+@@ -7366,12 +7369,13 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, struct b
+ 				if (base_type(info.reg_type) == PTR_TO_BTF_ID) {
+ 					regs[value_regno].btf = info.btf;
+ 					regs[value_regno].btf_id = info.btf_id;
+-					regs[value_regno].id = info.ref_id;
++					regs[value_regno].id =
++						ctx_arg_ref_id(env->cur_state, info.ref_arg);
+ 				} else if (base_type(info.reg_type) == PTR_TO_MEM) {
+ 					regs[value_regno].mem_size = info.mem_size;
+ 				}
+ 				if (type_may_be_null(info.reg_type) && !regs[value_regno].id)
+-					regs[value_regno].id = ++env->id_gen;
++					regs[value_regno].id = bpf_new_id(env);
+ 			}
+ 			regs[value_regno].type = info.reg_type;
  		}
-+		/* A nest only grows. The cases below walk up the nests of both insns. */
-+		err = check_loop_depth(env, cur) ?: check_loop_depth(env, s);
-+		if (err)
-+			return err;
- 		/* 's' is fully explored at this point */
- 		if (dfs_pos[s]) {
- 			/*
-@@ -414,9 +437,11 @@ bool bpf_is_nested_loop(struct bpf_verifier_env *env, int inner_header, int oute
- 	struct bpf_insn_aux_data *aux = env->insn_aux_data;
- 	int idx;
- 
--	for (idx = inner_header; idx >= 0; idx = aux[idx].loop_header)
-+	for (idx = inner_header; idx >= 0; idx = aux[idx].loop_header) {
-+		bpf_add_cost(env, 1, BPF_COST_SCAN);
- 		if (aux[idx].loop_header == outer_header)
- 			return true;
-+	}
- 
- 	return false;
- }
-@@ -463,12 +488,20 @@ int bpf_compute_loops(struct bpf_verifier_env *env)
- 		if (err)
- 			goto out;
- 	}
-+	for (i = 0; i < len; i++) {
-+		err = check_loop_depth(env, i);
-+		if (err)
-+			goto out;
-+	}
- 	for (i = 0; i < len; i++) {
- 		loop = aux[i].loop;
- 		if (!loop)
- 			continue;
- 		loop->exit_to = -1;
- 		for (j = 0; j < loop->backedges_cnt; j++) {
-+			err = bpf_check_limits(env);
-+			if (err)
-+				goto out;
- 			loop->backedges[j].latch = find_latch(env, i, loop->backedges[j].from);
- 		}
- 	}
-@@ -477,6 +510,9 @@ int bpf_compute_loops(struct bpf_verifier_env *env)
- 		iloop = aux[i].loop ? i : aux[i].loop_header;
- 		if (iloop < 0)
- 			continue;
-+		err = bpf_check_limits(env);
-+		if (err)
-+			goto out;
- 		succ = bpf_insn_successors(env, i);
- 		iarray_for_each(s, succ) {
- 			sloop = bpf_loop_at_index(env, s);
-diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index 73c329ec755..5d78a10dd29 100644
---- a/kernel/bpf/states.c
-+++ b/kernel/bpf/states.c
-@@ -179,6 +179,7 @@ int bpf_clean_verifier_state(struct bpf_verifier_env *env, struct bpf_verifier_s
- {
- 	int i, err;
- 
-+	bpf_add_cost(env, bpf_xreg_cnt(st), BPF_COST_XREG);
- 	err = bpf_live_stack_query_init(env, st);
- 	if (err)
- 		return err;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 9b184452230..06bd1cd3d18 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -1742,11 +1742,27 @@ static void free_func_state(struct bpf_func_state *state)
- 	kfree(state);
+@@ -10873,7 +10877,7 @@ static void mark_pkt_end(struct bpf_verifier_state *vstate, int regn, bool range
+ 		reg->range = AT_PKT_END;
  }
  
--void bpf_free_verifier_state(struct bpf_verifier_state *state,
--			    bool free_self)
-+/* @st is new or has grown */
-+void bpf_charge_state(struct bpf_verifier_env *env, struct bpf_verifier_state *st)
-+{
-+	/* with the struct that holds it */
-+	u32 bytes = 2 * sizeof(*st) + ksize(st->refs), fr;
-+	struct bpf_func_state *f;
-+
-+	for (fr = 0; fr <= st->curframe && (f = st->frame[fr]); fr++)
-+		bytes += kmalloc_size_roundup(sizeof(*f)) + ksize(f->stack) +
-+			 ksize(f->stack_arg_regs) + ksize(f->loop_stack);
-+	env->mem += bytes - (s64)st->bytes;
-+	st->bytes = bytes;
-+}
-+
-+void bpf_free_verifier_state(struct bpf_verifier_env *env, struct bpf_verifier_state *state,
-+			     bool free_self)
+-static int __release_reference_nomark(struct bpf_verifier_state *state, int id)
++static int release_reference_nomark(struct bpf_verifier_state *state, int id)
  {
  	int i;
  
-+	env->mem -= state->bytes;
-+	state->bytes = 0;
- 	for (i = 0; i <= state->curframe; i++) {
- 		free_func_state(state->frame[i]);
- 		state->frame[i] = NULL;
-@@ -1772,8 +1788,8 @@ static int copy_func_state(struct bpf_func_state *dst,
- 	return copy_stack_state(dst, src);
+@@ -10888,16 +10892,6 @@ static int __release_reference_nomark(struct bpf_verifier_state *state, int id)
+ 	return -EINVAL;
  }
  
--int bpf_copy_verifier_state(struct bpf_verifier_state *dst_state,
--			   const struct bpf_verifier_state *src)
-+int bpf_copy_verifier_state(struct bpf_verifier_env *env, struct bpf_verifier_state *dst_state,
-+			    const struct bpf_verifier_state *src)
+-static int release_reference_nomark(struct bpf_verifier_env *env, int id)
+-{
+-	int err;
+-
+-	err = __release_reference_nomark(env->cur_state, id);
+-	if (!err)
+-		bpf_diag_record_ref_release(env, env->insn_idx, id);
+-	return err;
+-}
+-
+ static int idstack_push(struct bpf_idmap *idmap, u32 id)
  {
- 	struct bpf_func_state *dst;
- 	int i, err;
-@@ -1786,6 +1802,7 @@ int bpf_copy_verifier_state(struct bpf_verifier_state *dst_state,
- 	err = copy_reference_state(dst_state, src);
+ 	int i;
+@@ -10994,7 +10988,7 @@ static int invalidate_reference(struct bpf_verifier_env *env, int id)
+ static int release_reference(struct bpf_verifier_env *env, int id)
+ {
+ 	if (find_reference_state(env->cur_state, id))
+-		WARN_ON_ONCE(release_reference_nomark(env, id));
++		WARN_ON_ONCE(release_reference_nomark(env->cur_state, id));
+ 
+ 	return invalidate_reference(env, id);
+ }
+@@ -11035,7 +11029,7 @@ static int ref_convert_alloc_rcu_protected(struct bpf_verifier_env *env, u32 id)
+ 	struct bpf_reg_state *reg;
+ 	int err;
+ 
+-	err = release_reference_nomark(env, id);
++	err = release_reference_nomark(env->cur_state, id);
  	if (err)
  		return err;
-+	bpf_add_cost(env, bpf_xreg_cnt(src) + src->acquired_refs, BPF_COST_COPY);
- 	dst_state->speculative = src->speculative;
- 	dst_state->in_sleepable = src->in_sleepable;
- 	dst_state->callers_unknown = src->callers_unknown;
-@@ -1807,6 +1824,7 @@ int bpf_copy_verifier_state(struct bpf_verifier_state *dst_state,
- 		if (err)
- 			return err;
- 	}
-+	bpf_charge_state(env, dst_state);
- 	return 0;
- }
  
-@@ -1838,9 +1856,9 @@ static struct bpf_verifier_state *push_stack(struct bpf_verifier_env *env,
- 	elem->prev_insn_idx = prev_insn_idx;
- 	elem->next = env->head;
- 	env->head = elem;
--	err = bpf_copy_verifier_state(&elem->st, cur);
-+	err = bpf_copy_verifier_state(env, &elem->st, cur) ?: bpf_check_limits(env);
- 	if (err)
--		return ERR_PTR(-ENOMEM);
-+		return ERR_PTR(err);
- 	elem->st.speculative |= speculative;
- 	return &elem->st;
- }
-@@ -6952,6 +6970,9 @@ static int check_stack_access_within_bounds(
- 		return err;
- 	}
+@@ -11374,40 +11368,23 @@ static void account_current_path(struct bpf_verifier_env *env);
+  * callers have: nothing points to their stack.
+  *
+  * What the callers hold, references, locks and so on, is a part of that state:
+- * it matters for what the function may do. Calls that differ in ids only
+- * have to get to the same state, so the ids of what is held are replaced with
+- * BPF_INHERITED_ID + the position for the function, and put back at the return.
++ * it matters for what the function can do.
+  */
  
-+	/* the callers look at each byte */
-+	bpf_add_cost(env, max_off - min_off, BPF_COST_COPY);
-+
+-/* 0 if it is not held */
+-static u32 inherited_id(const struct bpf_verifier_state *state, u32 id)
+-{
+-	int i;
+-
+-	/* the first one: a lock in an object that the caller owns has the id of the reference */
+-	for (i = 0; id && i < state->acquired_refs; i++)
+-		if (state->refs[i].id == id)
+-			return BPF_INHERITED_ID + i;
+-	return 0;
+-}
+-
+ /* What func_is_on_its_own() asks of an argument, be it in a register or on the stack */
+ static bool arg_needs_caller(struct bpf_verifier_env *env, const struct bpf_verifier_state *state,
+ 			     const struct bpf_subprog_info *sub, const struct bpf_reg_state *reg)
+ {
+-	/* the id of a __ref argument is kept in ctx_arg_info[], see __check_ctx_access() */
++	/* it can load a __ref argument from the context and release it */
+ 	if (reg->type == PTR_TO_CTX && state->acquired_refs &&
+ 	    env->prog->type == BPF_PROG_TYPE_STRUCT_OPS)
+ 		return true;
+-	/* only the ids of what is held have names */
+-	if (reg->type != SCALAR_VALUE &&
+-	    ((reg->id && !inherited_id(state, reg->id)) ||
+-	     (reg->parent_id && !inherited_id(state, reg->parent_id)) ||
+-	     (reg->map_uid && !inherited_id(state, reg->map_uid))))
++	/* only the ids of what is held mean something without the caller */
++	if (bpf_id_is_xreg(reg->id | reg->parent_id | reg->map_uid))
+ 		return true;
  	/*
- 	 * Every stack access passes through here, including buffers passed to
- 	 * helpers and kfuncs and accesses into a caller's frame, so check the
-@@ -7046,6 +7067,7 @@ static int mark_reg_func_set(struct bpf_verifier_env *env, struct bpf_reg_state
- 			kvfree(set);
- 			return -ENOMEM;
- 		}
-+		env->mem += struct_size(set, subprog, n);
- 		set->cnt = n;
- 		memcpy(set->subprog, subprogs, n * sizeof(*subprogs));
- 		env->func_sets[env->func_set_cnt++] = set;
-@@ -7105,6 +7127,9 @@ static int check_func_ptr_read(struct bpf_verifier_env *env, struct bpf_reg_stat
- 	ptrs = bpf_map_range_func_ptrs(env, map, min_off, max_off - min_off + size, &cnt);
- 	if (!ptrs)
- 		return -ENOENT;
-+	err = bpf_add_cost_and_check(env, cnt * sizeof(u64), BPF_COST_COPY);
-+	if (err)
-+		return err;
- 	targets = kvmalloc_array(min(cnt, env->subprog_cnt), sizeof(*targets), BPF_VERIFIER_GFP);
- 	found = kvcalloc(BITS_TO_LONGS(env->subprog_cnt), sizeof(long), BPF_VERIFIER_GFP);
- 	if (!targets || !found)
-@@ -11458,7 +11483,7 @@ static int call_func_on_its_own(struct bpf_verifier_env *env, int subprog, int i
- 			callee->regs[i] = caller->regs[i];
- 	err = grow_stack_arg_slots(env, callee, bpf_in_stack_arg_cnt(&env->subprog_info[subprog]));
- 	if (err) {
--		bpf_free_verifier_state(&entry, false);
-+		bpf_free_verifier_state(env, &entry, false);
+-	 * Pointers to the packet that share an id have ranges of the same size, see
+-	 * find_good_pkt_pointers(). What comes out of the function has the range of all calls.
++	 * Packet pointers that share an id have ranges of the same size, see
++	 * find_good_pkt_pointers(). The result has the range of all calls of the instance.
+ 	 */
+ 	if (reg_is_pkt_pointer(reg) && reg->id)
+ 		return true;
+@@ -11438,9 +11415,6 @@ static bool func_is_on_its_own(struct bpf_verifier_env *env, struct bpf_verifier
+ 	/* what must not be done in that callback is refused by looking at the frames */
+ 	if (in_rbtree_lock_required_cb(env))
+ 		return false;
+-	/* there are that many names for what is held, and bpf_flow_return() has room for them */
+-	if (state->acquired_refs > BPF_ID_MAP_SIZE / 2)
+-		return false;
+ 	for (i = BPF_REG_1; i <= BPF_REG_5; i++) {
+ 		if (!(live & BIT(i)))
+ 			continue;
+@@ -11494,29 +11468,9 @@ static int call_func_on_its_own(struct bpf_verifier_env *env, int subprog, int i
+ 		bpf_free_verifier_state(env, &entry, false);
  		return err;
  	}
- 	for (i = 0; i < callee->out_stack_arg_cnt; i++)
-@@ -11466,7 +11491,7 @@ static int call_func_on_its_own(struct bpf_verifier_env *env, int subprog, int i
+-	for (i = 0; i < entry.acquired_refs; i++) {
+-		/* the id of a lock is the id of the pointer to it, which may have none */
+-		entry.refs[i].id = inherited_id(state, entry.refs[i].id);
+-		if (entry.refs[i].type == REF_TYPE_PTR)
+-			entry.refs[i].parent_id = inherited_id(state, entry.refs[i].parent_id);
+-	}
+-	entry.active_irq_id = inherited_id(state, entry.active_irq_id);
+-	entry.active_lock_id = inherited_id(state, entry.active_lock_id);
+ 	callee->entry_refs = entry.acquired_refs;
+ 	callee->entry_rcu_locks = entry.active_rcu_locks;
+ 	callee->entry_preempt_locks = entry.active_preempt_locks;
+-	for (i = BPF_REG_1; i <= BPF_REG_5; i++) {
+-		callee->regs[i].id = inherited_id(state, callee->regs[i].id);
+-		callee->regs[i].parent_id = inherited_id(state, callee->regs[i].parent_id);
+-		callee->regs[i].map_uid = inherited_id(state, callee->regs[i].map_uid);
+-	}
+-	for (i = 0; i < callee->out_stack_arg_cnt; i++) {
+-		callee->stack_arg_regs[i].id = inherited_id(state, callee->stack_arg_regs[i].id);
+-		callee->stack_arg_regs[i].parent_id =
+-			inherited_id(state, callee->stack_arg_regs[i].parent_id);
+-		callee->stack_arg_regs[i].map_uid =
+-			inherited_id(state, callee->stack_arg_regs[i].map_uid);
+-	}
  
- 	err = copy_reference_state(&entry, state);
- 	if (err) {
--		bpf_free_verifier_state(&entry, false);
-+		bpf_free_verifier_state(env, &entry, false);
- 		return err;
- 	}
- 	for (i = 0; i < entry.acquired_refs; i++) {
-@@ -11496,7 +11521,7 @@ static int call_func_on_its_own(struct bpf_verifier_env *env, int subprog, int i
  	account_current_path(env);
  	env->subprog_info[subprog].on_its_own = true;
- 	err = bpf_flow_call(env, state, &entry, subprog, insn_idx);
--	bpf_free_verifier_state(&entry, false);
-+	bpf_free_verifier_state(env, &entry, false);
- 	/* the call waits, there is nothing to go on with */
+@@ -11554,39 +11508,39 @@ static int exit_func_on_its_own(struct bpf_verifier_env *env)
  	return err ?: PROCESS_BPF_EXIT;
  }
-@@ -11926,13 +11951,13 @@ static int check_func_callx_set(struct bpf_verifier_env *env, int regno, int *in
- 		copy = kzalloc_obj(*copy, BPF_VERIFIER_GFP);
- 		if (!copy)
- 			return -ENOMEM;
--		err = bpf_copy_verifier_state(copy, cur);
-+		err = bpf_copy_verifier_state(env, copy, cur);
- 		if (!err) {
- 			env->cur_state = copy;
- 			err = check_func_callx_one(env, set->subprog[i], insn_idx);
- 			env->cur_state = cur;
- 		}
--		bpf_free_verifier_state(copy, true);
-+		bpf_free_verifier_state(env, copy, true);
- 		if (err == PROCESS_BPF_EXIT)
- 			err = 0;
- 		else if (verifier_bug_if(!err, env, "callx: func#%d doesn't wait", set->subprog[i]))
-@@ -12228,6 +12253,7 @@ static void account_processed_insn(struct bpf_verifier_env *env)
- 	struct bpf_func_state *frame = cur_func(env);
  
- 	env->insn_processed++;
-+	bpf_add_cost(env, 1, BPF_COST_INSN);
- 	frame->insns_subtotal++;
- 	env->subprog_info[frame->subprogno].insns_self++;
- }
-@@ -20282,6 +20308,11 @@ static int check_indirect_jump(struct bpf_verifier_env *env, struct bpf_insn *in
- 		return -EFAULT;
- 
- 	err = indirect_jump_min_max_index(env, insn->dst_reg, map, &min_index, &max_index);
-+	if (err)
-+		return err;
-+	/* the targets are sorted */
-+	n = max_index - min_index + 1;
-+	err = bpf_add_cost_and_check(env, (u64)n * ilog2(n), BPF_COST_COPY);
- 	if (err)
- 		return err;
- 
-@@ -20732,7 +20763,7 @@ static int flow_drain(struct bpf_verifier_env *env)
- 		else if (!err)
- 			err = bpf_flow_deliver(env, &elem->st, elem->insn_idx,
- 					       elem->prev_insn_idx);
--		bpf_free_verifier_state(&elem->st, false);
-+		bpf_free_verifier_state(env, &elem->st, false);
- 		kfree(elem);
- 	}
- 	return err;
-@@ -20753,6 +20784,17 @@ static int check_recursion_guard(struct bpf_verifier_env *env)
- 	return push_budget_exit(env);
- }
- 
-+static void free_pushed_states(struct bpf_verifier_env *env)
-+{
-+	struct bpf_verifier_stack_elem *elem;
-+
-+	while ((elem = env->head)) {
-+		env->head = elem->next;
-+		bpf_free_verifier_state(env, &elem->st, false);
-+		kfree(elem);
-+	}
-+}
-+
- /* Process the current state until it gets to the start of a basic block. */
- static int do_check_block(struct bpf_verifier_env *env, int prev_insn_idx)
+-static u32 fresh_id(struct bpf_verifier_env *env, struct bpf_idmap *idmap, u32 id)
++static u32 returned_id(u32 id)
  {
-@@ -20766,14 +20808,14 @@ static int do_check_block(struct bpf_verifier_env *env, int prev_insn_idx)
+-	u32 i;
+-
+-	if (!id)
+-		return 0;
+-	for (i = 0; i < idmap->cnt; i++)
+-		if (idmap->map[i].old == id)
+-			return idmap->map[i].cur;
+-	if (idmap->cnt == BPF_ID_MAP_SIZE)
+-		return 0;
+-	idmap->map[idmap->cnt].old = id;
+-	idmap->map[idmap->cnt].cur = ++env->id_gen;
+-	return idmap->map[idmap->cnt++].cur;
++	return bpf_id_is_xreg(id) ? BPF_RETURNED_ID(id) : id;
+ }
+ 
+ /*
+- * @caller waits at the call at @call_idx and @exit is what came out of the
+- * function. Make @caller what it is after the call.
+- * Returns 1 if the call has to be verified in the context of the caller.
++ * @caller waits at the call at @call_idx. @exit is the state at the exit of the
++ * function. Make @caller the state after the call.
+  */
+ int bpf_flow_return(struct bpf_verifier_env *env, struct bpf_verifier_state *caller,
+ 		    const struct bpf_verifier_state *exit, int call_idx)
+ {
+ 	struct bpf_func_state *frame = caller->frame[caller->curframe];
+ 	const struct bpf_func_state *callee = exit->frame[0];
+-	struct bpf_idmap *idmap = &env->idmap_scratch;
+-	u32 caller_rcu = caller->active_rcu_locks, caller_preempt = caller->active_preempt_locks;
+-	struct bpf_reference_state *held;
++	u32 i, nregs, nheld = caller->acquired_refs;
+ 	struct bpf_reg_state *reg;
+-	u32 i, j, nregs, nheld, kept = 0, id;
+ 	int err;
+ 
++	/*
++	 * Keep only what the function held all the time. The state at its exit looks the same if
++	 * the function released a lock and acquired it again. Else verify the function in the
++	 * instance of the caller.
++	 */
++	if (callee->entry_refs < nheld || callee->entry_rcu_locks < caller->active_rcu_locks ||
++	    callee->entry_preempt_locks < caller->active_preempt_locks) {
++		if (exit->speculative)
++			return -EACCES;
++		if (env->log.level & BPF_LOG_LEVEL2)
++			verbose(env, "func#%d releases what its caller holds at insn %d\n",
++				callee->subprogno, call_idx);
++		env->subprog_info[callee->subprogno].releases_inherited = true;
++		return BPF_EXIT_NEEDS_CALLER;
++	}
+ 	if (exit->unwound && !bpf_is_unwind_goto(&env->prog->insnsi[call_idx + 1])) {
+ 		verbose(env, "unwind_exit, but no unwind_goto after the call at insn %d\n",
+ 			call_idx);
+@@ -11601,7 +11555,7 @@ int bpf_flow_return(struct bpf_verifier_env *env, struct bpf_verifier_state *cal
+ 	 */
+ 	if (exit->changed_pkt_data) {
+ 		env->subprog_info[callee->subprogno].changes_pkt_data = true;
+-		return 1;
++		return BPF_EXIT_NEEDS_CALLER;
+ 	}
+ 
+ 	for (i = 0; i < CALLER_SAVED_REGS; i++)
+@@ -11610,70 +11564,20 @@ int bpf_flow_return(struct bpf_verifier_env *env, struct bpf_verifier_state *cal
+ 		bpf_mark_reg_not_init(env, &frame->stack_arg_regs[i]);
+ 
+ 	/* what is held now is what was held at the call and what the function took */
+-	held = caller->refs;
+-	nheld = caller->acquired_refs;
+-	caller->refs = NULL;
+-	caller->acquired_refs = 0;
+-	err = copy_reference_state(caller, exit);
+-	if (err) {
+-		kfree(held);
++	err = resize_reference_state(caller, exit->acquired_refs);
++	if (err)
+ 		return err;
+-	}
++	for (i = nheld; i < exit->acquired_refs; i++)
++		caller->refs[i] = exit->refs[i];
++	caller->held = exit->held;
+ 
+-	/*
+-	 * The same state comes out for every call. Ids in it have to be new
+-	 * every time, or two calls in a row return the same object.
+-	 */
+-	idmap->cnt = 0;
+-	for (i = 0; i < nheld; i++) {
+-		idmap->map[idmap->cnt].old = BPF_INHERITED_ID + i;
+-		idmap->map[idmap->cnt++].cur = held[i].id;
+-	}
+-	/*
+-	 * What is taken is added at the end. What is released leaves no hole. Only what the
+-	 * function held all the time is kept: the state at its exit looks the same when it
+-	 * released a lock and took it again, or took another lock that has no id either.
+-	 */
+-	for (i = 0; i < nheld && i < callee->entry_refs; i++) {
+-		/* see inherited_id() */
+-		for (j = 0; held[j].id != held[i].id; j++)
+-			;
+-		id = held[i].id ? BPF_INHERITED_ID + j : 0;
+-		if (caller->refs[i].id != id || caller->refs[i].type != held[i].type)
+-			break;
+-		caller->refs[i] = held[i];
+-		kept++;
+-	}
+-	kfree(held);
+-	/* What it means for the caller is found out in the context of the caller. */
+-	if (kept != nheld || callee->entry_rcu_locks < caller_rcu ||
+-	    callee->entry_preempt_locks < caller_preempt) {
+-		if (env->log.level & BPF_LOG_LEVEL2)
+-			verbose(env, "func#%d releases what its caller holds at insn %d\n",
+-				callee->subprogno, call_idx);
+-		env->subprog_info[callee->subprogno].releases_inherited = true;
+-		return 1;
+-	}
+ 	nregs = bpf_ret_reg_pair(env, callee->subprogno) ? 2 : 1;
+ 	for (i = 0; i < nregs; i++) {
+ 		reg = &frame->regs[ret_regs[i]];
+ 		*reg = callee->regs[ret_regs[i]];
+-		reg->id = fresh_id(env, idmap, reg->id);
+-		reg->parent_id = fresh_id(env, idmap, reg->parent_id);
+-		reg->map_uid = fresh_id(env, idmap, reg->map_uid);
+-	}
+-	/* those that were held are the first */
+-	for (i = nheld; i < caller->acquired_refs; i++) {
+-		caller->refs[i].id = fresh_id(env, idmap, caller->refs[i].id);
+-		if (caller->refs[i].type == REF_TYPE_PTR)
+-			caller->refs[i].parent_id = fresh_id(env, idmap, caller->refs[i].parent_id);
+-	}
+-	caller->active_irq_id = fresh_id(env, idmap, caller->active_irq_id);
+-	caller->active_lock_id = fresh_id(env, idmap, caller->active_lock_id);
+-	/* fresh_id() had no room for an id, or there are no ids left */
+-	if (idmap->cnt == BPF_ID_MAP_SIZE || env->id_gen >= BPF_MAX_ID) {
+-		verbose(env, "too many ids at the call at insn %d\n", call_idx);
+-		return -E2BIG;
++		reg->id = returned_id(reg->id);
++		reg->parent_id = returned_id(reg->parent_id);
++		reg->map_uid = returned_id(reg->map_uid);
+ 	}
+ 	return 0;
+ }
+@@ -12033,7 +11937,7 @@ int map_set_for_each_callback_args(struct bpf_verifier_env *env,
+ 
+ 	mark_map_callback_reg(&callee->regs[BPF_REG_2], &caller->regs[BPF_REG_1], PTR_TO_MAP_KEY);
+ 	mark_map_callback_reg(&callee->regs[BPF_REG_3], &caller->regs[BPF_REG_1], PTR_TO_MAP_VALUE);
+-	callee->regs[BPF_REG_3].id = ++env->id_gen;
++	callee->regs[BPF_REG_3].id = bpf_new_id(env);
+ 
+ 	/* pointer to stack or null */
+ 	callee->regs[BPF_REG_4] = caller->regs[BPF_REG_3];
+@@ -12045,7 +11949,7 @@ void mark_frame_scoped_arg(struct bpf_verifier_env *env,
+ 			   struct bpf_func_state *callee, u32 regno)
+ {
+ 	if (!callee->frame_id)
+-		callee->frame_id = ++env->id_gen;
++		callee->frame_id = bpf_new_id(env);
+ 	callee->regs[regno].id = callee->frame_id;
+ 	callee->regs[regno].parent_id = callee->frame_id;
+ }
+@@ -12131,7 +12035,7 @@ static int set_timer_callback_state(struct bpf_verifier_env *env,
+ 	mark_map_callback_reg(&callee->regs[BPF_REG_1], &caller->regs[BPF_REG_1], CONST_PTR_TO_MAP);
+ 	mark_map_callback_reg(&callee->regs[BPF_REG_2], &caller->regs[BPF_REG_1], PTR_TO_MAP_KEY);
+ 	mark_map_callback_reg(&callee->regs[BPF_REG_3], &caller->regs[BPF_REG_1], PTR_TO_MAP_VALUE);
+-	callee->regs[BPF_REG_3].id = ++env->id_gen;
++	callee->regs[BPF_REG_3].id = bpf_new_id(env);
+ 
+ 	callee->in_async_callback_fn = true;
+ 	return 0;
+@@ -12222,7 +12126,7 @@ static int set_task_work_schedule_callback_state(struct bpf_verifier_env *env,
+ 	mark_map_callback_reg(&callee->regs[BPF_REG_1], &caller->regs[BPF_REG_3], CONST_PTR_TO_MAP);
+ 	mark_map_callback_reg(&callee->regs[BPF_REG_2], &caller->regs[BPF_REG_3], PTR_TO_MAP_KEY);
+ 	mark_map_callback_reg(&callee->regs[BPF_REG_3], &caller->regs[BPF_REG_3], PTR_TO_MAP_VALUE);
+-	callee->regs[BPF_REG_3].id = ++env->id_gen;
++	callee->regs[BPF_REG_3].id = bpf_new_id(env);
+ 
+ 	callee->in_async_callback_fn = true;
+ 	callee->callback_ret_range = retval_range(S32_MIN, S32_MAX);
+@@ -12369,7 +12273,7 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
+ 				continue;
+ 			verbose(env, "Unreleased reference id=%d alloc_insn=%d\n",
+ 				state->refs[i].id, state->refs[i].insn_idx);
+-			bpf_diag_leak(env, state->refs[i].id, state->refs[i].insn_idx, *insn_idx);
++			bpf_diag_leak(env, &state->refs[i], *insn_idx);
+ 			return -EINVAL;
+ 		}
+ 
+@@ -12590,7 +12494,7 @@ static int check_reference_leak(struct bpf_verifier_env *env, bool exception_exi
+ 			continue;
+ 		verbose(env, "Unreleased reference id=%d alloc_insn=%d\n",
+ 			state->refs[i].id, state->refs[i].insn_idx);
+-		bpf_diag_leak(env, state->refs[i].id, state->refs[i].insn_idx, env->insn_idx);
++		bpf_diag_leak(env, &state->refs[i], env->insn_idx);
+ 		refs_lingering = true;
+ 	}
+ 	return refs_lingering ? -EINVAL : 0;
+@@ -13098,7 +13002,7 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 		regs[BPF_REG_0].type = PTR_TO_MAP_VALUE | ret_flag;
+ 		if (type_may_be_null(ret_flag) ||
+ 		    btf_record_has_field(meta.map.ptr->record, BPF_SPIN_LOCK | BPF_RES_SPIN_LOCK)) {
+-			regs[BPF_REG_0].id = ++env->id_gen;
++			regs[BPF_REG_0].id = bpf_new_id(env);
+ 		}
+ 		/* requires regs[BPF_REG_0].id to be set because of the map-in-map case */
+ 		refine_map_lookup_value(&regs[BPF_REG_0]);
+@@ -13200,7 +13104,7 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 	}
+ 
+ 	if (type_may_be_null(regs[BPF_REG_0].type) && !regs[BPF_REG_0].id)
+-		regs[BPF_REG_0].id = ++env->id_gen;
++		regs[BPF_REG_0].id = bpf_new_id(env);
+ 
+ 	if (is_ptr_cast_function(func_id) &&
+ 	    find_reference_state(env->cur_state, meta.ref_obj.id)) {
+@@ -14670,7 +14574,7 @@ static void ref_convert_owning_non_owning(struct bpf_verifier_env *env, u32 id)
+ 	struct bpf_reg_state *reg;
+ 	int err;
+ 
+-	err = release_reference_nomark(env, id);
++	err = release_reference_nomark(env->cur_state, id);
+ 	WARN_ON_ONCE(err);
+ 
+ 	bpf_for_each_reg_in_vstate(env->cur_state, unused, reg, ({
+@@ -16048,7 +15952,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		if (is_kfunc_ret_null(&meta)) {
+ 			regs[BPF_REG_0].type |= PTR_MAYBE_NULL;
+ 			/* For mark_ptr_or_null_reg, see 93c230e3f5bd6 */
+-			regs[BPF_REG_0].id = ++env->id_gen;
++			regs[BPF_REG_0].id = bpf_new_id(env);
+ 		}
+ 		if (is_kfunc_acquire(&meta)) {
+ 			id = acquire_reference(env, insn_idx, 0);
+@@ -16060,7 +15964,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		}
+ 
+ 		if (reg_may_point_to_spin_lock(&regs[BPF_REG_0]) && !regs[BPF_REG_0].id)
+-			regs[BPF_REG_0].id = ++env->id_gen;
++			regs[BPF_REG_0].id = bpf_new_id(env);
+ 	} else if (btf_type_is_void(t)) {
+ 		if (meta.btf == btf_vmlinux) {
+ 			if (is_bpf_obj_drop_kfunc(meta.func_id) ||
+@@ -16674,7 +16578,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env, struct bpf_insn
+ 		dst_reg->raw = ptr_reg->raw;
+ 		if (reg_is_pkt_pointer(ptr_reg)) {
+ 			if (!known)
+-				dst_reg->id = ++env->id_gen;
++				dst_reg->id = bpf_new_id(env);
+ 			/*
+ 			 * The range is what umax of the pointer may get to, see
+ 			 * check_packet_access(). umax of the addend was added to it
+@@ -16725,7 +16629,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env, struct bpf_insn
+ 		dst_reg->raw = ptr_reg->raw;
+ 		if (reg_is_pkt_pointer(ptr_reg)) {
+ 			if (!known)
+-				dst_reg->id = ++env->id_gen;
++				dst_reg->id = bpf_new_id(env);
+ 			/*
+ 			 * Clear range if the subtrahend may be negative since
+ 			 * pkt pointer could move past its bounds. A positive
+@@ -18835,7 +18739,7 @@ static void mark_ptr_or_null_regs(struct bpf_verifier_state *vstate, u32 regno,
+ 		 * No one could have freed the reference state before
+ 		 * doing the NULL check.
+ 		 */
+-		WARN_ON_ONCE(__release_reference_nomark(vstate, id));
++		WARN_ON_ONCE(release_reference_nomark(vstate, id));
+ 
+ 	bpf_for_each_reg_in_vstate(vstate, state, reg, ({
+ 		mark_ptr_or_null_reg(state, reg, id, is_null);
+@@ -20493,10 +20397,13 @@ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
+ 			mark_reg_scratched(env, BPF_REG_0);
+ 			if (bpf_in_stack_arg_cnt(&env->subprog_info[cur_func(env)->subprogno]))
+ 				end_stack_arg_loads(env, cur_func(env));
++			/* func_is_on_its_own() uses the names of the ids */
+ 			if (bpf_is_callx(insn))
+-				return check_func_callx(env, insn, &env->insn_idx);
++				return bpf_renumber_ids(env, env->cur_state) ?:
++				       check_func_callx(env, insn, &env->insn_idx);
+ 			if (insn->src_reg == BPF_PSEUDO_CALL)
+-				return check_func_call(env, insn, &env->insn_idx);
++				return bpf_renumber_ids(env, env->cur_state) ?:
++				       check_func_call(env, insn, &env->insn_idx);
+ 			/* a callback is one function */
+ 			for (i = BPF_REG_1; i <= BPF_REG_5; i++) {
+ 				err = split_func_set(env, i);
+@@ -20809,11 +20716,6 @@ static int do_check_block(struct bpf_verifier_env *env, int prev_insn_idx)
  		struct bpf_insn_aux_data *insn_aux;
  		int err;
  
--		if (bpf_must_abort())
--			return -EINTR;
--
- 		/* no insn makes as many ids as there are from here to BPF_INHERITED_ID */
- 		if (env->id_gen >= BPF_MAX_ID) {
- 			verbose(env, "too many ids\n");
- 			return -E2BIG;
+-		/* no insn makes as many ids as there are from here to BPF_INHERITED_ID */
+-		if (env->id_gen >= BPF_MAX_ID) {
+-			verbose(env, "too many ids\n");
+-			return -E2BIG;
+-		}
+ 		err = bpf_check_limits(env);
+ 		if (err)
+ 			return err;
+@@ -22168,7 +22070,8 @@ static int do_check_common(struct bpf_verifier_env *env, int subprog,
+ 				 * Take it for that of an skb, so that a write
+ 				 * through it and its slices are treated with care.
+ 				 */
+-				__mark_dynptr_reg(reg, BPF_DYNPTR_TYPE_SKB, true, ++env->id_gen, 0);
++				__mark_dynptr_reg(reg, BPF_DYNPTR_TYPE_SKB, true,
++						  bpf_new_id(env), 0);
+ 			} else if (base_type(arg->arg_type) == ARG_PTR_TO_MEM) {
+ 				reg->type = PTR_TO_MEM;
+ 				reg->type |= arg->arg_type &
+@@ -22176,7 +22079,7 @@ static int do_check_common(struct bpf_verifier_env *env, int subprog,
+ 				mark_reg_known_zero(env, regs, i);
+ 				reg->mem_size = arg->mem_size;
+ 				if (arg->arg_type & PTR_MAYBE_NULL)
+-					reg->id = ++env->id_gen;
++					reg->id = bpf_new_id(env);
+ 			} else if (base_type(arg->arg_type) == ARG_PTR_TO_BTF_ID) {
+ 				reg->type = PTR_TO_BTF_ID;
+ 				if (arg->arg_type & PTR_MAYBE_NULL)
+@@ -22188,7 +22091,7 @@ static int do_check_common(struct bpf_verifier_env *env, int subprog,
+ 				mark_reg_known_zero(env, regs, i);
+ 				reg->btf = bpf_get_btf_vmlinux(); /* can't fail at this point */
+ 				reg->btf_id = arg->btf_id;
+-				reg->id = ++env->id_gen;
++				reg->id = bpf_new_id(env);
+ 			} else if (base_type(arg->arg_type) == ARG_PTR_TO_ARENA) {
+ 				/* caller can pass either PTR_TO_ARENA or SCALAR */
+ 				mark_reg_unknown(env, regs, i);
+@@ -22232,7 +22135,9 @@ static int do_check_common(struct bpf_verifier_env *env, int subprog,
+ 			if (ret < 0)
+ 				goto out;
+ 
+-			aux->ctx_arg_info[i].ref_id = ret;
++			aux->ctx_arg_info[i].ref_arg = ret ? i + 1 : 0;
++			if (ret)
++				state->refs[state->acquired_refs - 1].ctx_arg = i + 1;
  		}
-+		err = bpf_check_limits(env);
-+		if (err)
-+			return err;
+ 	}
  
- 		env->prev_insn_idx = prev_insn_idx;
- 		if (env->insn_idx >= insn_cnt) {
-@@ -20910,7 +20952,7 @@ static int do_check_block(struct bpf_verifier_env *env, int prev_insn_idx)
- process_bpf_exit:
- 			account_current_path(env);
- 			mark_verifier_state_scratched(env);
--			bpf_free_verifier_state(state, false);
-+			bpf_free_verifier_state(env, state, false);
- 			memset(state, 0, sizeof(*state));
- 			return flow_drain(env);
- 		}
-@@ -22034,15 +22076,9 @@ static void sanitize_dead_code(struct bpf_verifier_env *env)
- 
- static void free_states(struct bpf_verifier_env *env)
- {
--	struct bpf_verifier_stack_elem *elem;
--
--	bpf_free_verifier_state(env->cur_state, true);
-+	bpf_free_verifier_state(env, env->cur_state, true);
- 	env->cur_state = NULL;
--	while ((elem = env->head)) {
--		env->head = elem->next;
--		bpf_free_verifier_state(&elem->st, false);
--		kfree(elem);
--	}
-+	free_pushed_states(env);
- 	bpf_flow_reset(env);
- }
- 
-@@ -24183,6 +24219,9 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	env->bypass_spec_v1 = bpf_bypass_spec_v1(env->prog->aux->token);
- 	env->bypass_spec_v4 = bpf_bypass_spec_v4(env->prog->aux->token);
- 	env->bpf_capable = is_priv = bpf_token_capable(env->prog->aux->token, CAP_BPF);
-+	env->max_cost = BPF_MAX_COST >> (is_priv ? 0 : BPF_LIMITS_SHIFT_UNPRIV);
-+	env->pass_max_cost = U64_MAX;
-+	env->max_mem = BPF_MAX_MEM >> (is_priv ? 0 : BPF_LIMITS_SHIFT_UNPRIV);
- 	env->signature = attr->signature;
- 
- 	/* user could have requested verbose verifier output
-@@ -24231,6 +24270,9 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	ret = -ENOMEM;
- 	if (!env->insn_aux_data)
- 		goto skip_full_check;
-+	env->mem = len * sizeof(struct bpf_insn_aux_data);
-+	/* the analyses that look at an insn once */
-+	bpf_add_cost(env, len, BPF_COST_INSN);
- 	for (i = 0; i < len; i++)
- 		env->insn_aux_data[i].orig_idx = i;
- 	env->succ = bpf_iarray_realloc(NULL, 2);
 -- 
 2.55.0
 
