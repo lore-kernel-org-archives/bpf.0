@@ -1,61 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795141471;
-	b=S5E54nsX7iAnoJ9BRN4fXOdAIfeuunbOddKv7Gho293co3aMrAuxVDxcHU3PIuIp5W67
-	 JtCG628DDeh8lYTKdyP/BXCZFm8O8Zi35un5g8KBDqOPe9Pu8lSKs9v69JchgM75sokHk
-	 z4fqkFb48kYLze3pfWjiQHXPEDm2DdHN1RyMsapNyXq90z+wGsjA7YQLHgKxC3h5DTonJ
-	 HCwtm4t4VF5AKO/ZEmqXT4RB07UmyuIGAXZdj2z9ZzweeXMAOMIIZk6qyXGIsKk0NIQqQ
-	 xIdsvI6Pv5gMAD0Kqxi1TibLIp6+ORfsBr+0PPsufgYdr1tzjltVEQ4Vs231LnHRmFQ==
+	t=1795142407;
+	b=T7mIwe5gdpT6AEchrFFQ1QKNI082jxzOXFj6u492+2f1jNPkcMhyih3nD0iadNwNnc2Q
+	 ZRVTQOaFiWXqKd89LH9oV9PFA0FjNanc0Cv0VEdbC5X0lVkY9Pw9LDsyty9MWGRH1c7rh
+	 LgtQ95NDWgNn88K809Z0jqAZXhgo825++DGJ5mQEkdHMZR3GC2IE/RbQEnH2E3YrA/Xyc
+	 QmLSTHZ/QJ2nfHGoulXqo/yefLFR7UnXcRFlFYuoFkCDMh7DVR+7qBF8sloG40nna1X9+
+	 YJVfb5HXGV9zSasg9n2eMhSl81wmGpfGUZnL+ttvmusxrIo8X1cBwVCmtinfd6tW+sQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795141471;
-	h=DMARC-Filter:DKIM-Signature:Date:From:To:Cc:Subject:X-Priority:
-	 X-Mailer:In-Reply-To:References:X-NTES-SC:Content-Transfer-Encoding:
-	 Content-Type:MIME-Version:Message-ID:X-Coremail-Locale:X-CM-TRANSID:
-	 X-CM-SenderInfo:X-Coremail-Antispam;
-	bh=87Q3iVLWtuj55C4RlB6+1wZEhmO58MaKa1CtAE9L5Fg=;
-	b=iDMvmCD6rrhxS1i3i51eck0PFZaU2q/3x5L8BZBHsBMJiovtWp+sLmU1lTsGQg0BEDnR
-	 dbX9/V57km+mWXnmCOQnqywX1E8ysQCg3n1Nd/U71/9CdJBcBX60ujbfVUZOedFCqz8Oc
-	 S2MCqPvheljKvt292KihqqlO8BHvyG8AyOrOv/g94UCs7WsmwH7+qTrr0ynP3zscndoNq
-	 k8vY+3OOPy1z7HKAJ6mv56W+h/Sv6Nbu3HGkRJrHefRS7h9Umvs41hcMWA12Vp2s53Mna
-	 RSLOdeeL9tnEuFooPouUrTT2IA55BIRormsqqbmfordz8tyFFm0ymEA0V4JB2WqKXgg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795142407;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=gttAyrJ+wMHr+Glcgouy7cx0rJKje8ChJMiYhq7/fZ0=;
+	b=2SYPwwgohRHnNwxffCX0uUiTmdGmpNNJsA38NvbjBbaUqiBnx+RjZHtWaycLufoTaNBU
+	 XNPeihp9CwPAvta0d6zIpa+uPpSDKIoI+S7lANa9PZY0lnpjHbfv1wfXAociVYqypflvN
+	 sgwx55BsaATMMahm8nw8s9/FEkDrL/kpodsx1y/xm3TH3pjOQOH/MyZx0nz1f+T7DnAqp
+	 hfKUUJQFugVDyV1gLeTRSxcV3og4mFLGw5r9Gt90jOpCOlQ4X44IOm3LvaJJkRMIOKrew
+	 JIZEI1Sa0qH46pCxWnkubvpCKAsXH1vazDbXrIlgWYEn86pp1MPXjDnvIu5aoHqRJ/Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=163.com;
-	spf=pass smtp.mailfrom=163.com;
-	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=C+tO3VaB;
-	arc=none smtp.remote-ip=220.197.31.2
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SyOZ1Gg9;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EE02606A320
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 02:24:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3EE02606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFF5B606A320;
+	Fri, 20 Nov 2026 02:40:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=C+tO3VaB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=87Q3iVLWtuj55C4RlB6+1wZEhmO58MaKa1CtAE9L5Fg=; b=C
-	+tO3VaBoMXO35uLNKwdsSJA04daEQaYkvNUuEOt83tI+/3OGXEs1Ni4+jv1fEojZ
-	p8tS5wsS8HMr99tmgObamaAxEzukw07Pzq9b3FVoMXRIA9Hfl67BKKr8gJ6dKYBN
-	jJ2oYNK+k+pSbPjDpPgt0zJ8w/JUmbHjqamTt2aQdE=
-Date: Fri, 20 Nov 2026 10:24:20 +0800 (CST)
-From: chenyuan  <chenyuan_fl@163.com>
-To: "Nirmoy Das" <nirmoyd@nvidia.com>
-Cc: bpf@vger.kernel.org
-Subject: Re:Re: [PATCH bpf v6 0/2] bpf: Fix kfunc implicit arg injection and
- add selftest
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2023.4-cmXT build
- 20260511(2e539873) Copyright (c) 2002-2026 www.mailtech.cn 163com
-In-Reply-To: <20261118205130.3014100-1-nirmoyd@nvidia.com>
-References: <20260608142618.3064380-1-chenyuan_fl@163.com>
- <20260609125214.3096351-1-chenyuan_fl@163.com>
- <20261118205130.3014100-1-nirmoyd@nvidia.com>
-X-NTES-SC: AL_Qu2SB/2fvkwt5iKdbekdnUYWg+8/X8W3svwi2YVUc+gGvDHy4D0iVmR6FFTb9uOEMySpqCWrbgNTxOtYZ5dmI8chApDUEK1cvlIywkNYQg==
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SyOZ1Gg9
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4572C1F000C4;
+	Fri, 20 Nov 2026 02:40:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795142407;
+	bh=gttAyrJ+wMHr+Glcgouy7cx0rJKje8ChJMiYhq7/fZ0=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=SyOZ1Gg9Bi5B0hlXjHgtJKD3pipKypaafZJWRX6z9RPhhaLrNC3K0s5CtSW5SI5GJ
+	 QjXEXKdoQdXsroB1Y4DhGd3w93GCMQ9/rK8yJ3gK5mCktNhS7CusorMDYhqAc6AJaC
+	 2Vy459uH56iFQsVVZp0sbFe6PeLubLRBLBrhC3xpRURbZJ9QZ83V2pHV77UyTpsbkt
+	 53xPetogCbdr5PiCgD9HV+cAu76r1HtptgIxXszPEIqzO/2G3joApUxTcJl+uZ52nh
+	 1Yt2LAcjMPQGWdT/pxQuU3oKRTaR6HhRWlZHsZG8qo3Z9iE6UKh8U1emQC9kr5ZNt3
+	 74RLVDq+gmrfg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3A5B53808209;
+	Fri, 20 Nov 2026 02:40:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -65,19 +53,50 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-ID: <27e514c4.221a.1a1f6c4e12d.Coremail.chenyuan_fl@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:iCgvCgD3X3ZVr_9q8OhxAA--.645W
-X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbDAhWbWWr-r1UcFQAA3z
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf 0/2] bpf: Limit writable registers in uprobe context
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179514240603.3989712.15825286425363086604.git-patchwork-notify@kernel.org>
+Date: Fri, 20 Nov 2026 02:40:06 +0000
+References: <20261118084451.12590-1-jolsa@kernel.org>
+In-Reply-To: <20261118084451.12590-1-jolsa@kernel.org>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ mhiramat@kernel.org, oleg@redhat.com, bpf@vger.kernel.org, x86@kernel.org,
+ linux-riscv@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-trace-kernel@vger.kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
+ song@kernel.org, yonghong.song@linux.dev, will@kernel.org,
+ palmer@dabbelt.com, peterz@infradead.org, rtm@csail.mit.edu
 
-SGkgTmlybW95LApTb3JyeSwgdGhpcyBwYXRjaCBzZXJpZXMgc2xpcHBlZCBvZmYgbXkgcmFkYXIu
-IFRoYW5rcyBmb3IgdGhlIGZvbGxvdy11cCBhbmQgZm9yIHRlc3RpbmcgdjYhCkknbGwgcHJlcGFy
-ZSBhbmQgc2VuZCBvdXQgdjcgYXMgc29vbiBhcyBwb3NzaWJsZS4KVGhhbmtzIGFnYWluIGZvciB5
-b3VyIGhlbHAhCkJlc3QgcmVnYXJkcywKWXVhbgoKCgoKCgpBdCAyMDI2LTExLTE5IDA0OjUxOjI4
-LCAiTmlybW95IERhcyIgPG5pcm1veWRAbnZpZGlhLmNvbT4gd3JvdGU6Cj5IaSBZdWFuLAo+Cj5J
-IHRlc3RlZCB2NiBvbiBhIDcuMyBrZXJuZWwgd2l0aCBhIG1vZHVsZSBCVEYgbWlzbWF0Y2guIFRo
-ZSB1bnBhdGNoZWQKPmtlcm5lbCBvb3BzZWQsIGFuZCB2NiByZWplY3RlZCB0aGUgcHJvZ3JhbSBh
-dCBsb2FkIHRpbWUuCj4KPkFyZSB5b3UgcGxhbm5pbmcgdG8gcG9zdCBhIHY3IG9mIHRoaXMgc2Vy
-aWVzPyBXZSdkIGxpa2UgdG8gZ2V0IHRoaXMKPmZpeGVkIHVwc3RyZWFtLCBhbmQgSSdkIGJlIGhh
-cHB5IHRvIHRlc3QgdGhlIG5leHQgcmV2aXNpb24uCj4KPlRoYW5rcywKPk5pcm1veQo=
+Hello:
+
+This series was applied to bpf/bpf.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Wed, 18 Nov 2026 09:44:48 +0100 you wrote:
+> Hi,
+> a uprobe BPF program can currently write fields in struct pt_regs that
+> are loaded directly by the architecture’s return-to-user path. Some of
+> these fields are restricted by ptrace, but the BPF verifier does not
+> apply the same restrictions.
+> 
+> This series limits uprobe context writes to registers that ptrace can
+> set to arbitrary values. It adds architecture-specific writable-register
+> checks for arm64, riscv, and x86-64; other architectures default to
+> allowing no writes. Reads are unchanged.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf,1/2] bpf: Restrict uprobe ctx writes to the registers ptrace can set
+    https://git.kernel.org/bpf/bpf/c/ca44731a7009
+  - [bpf,2/2] selftests/bpf: Test which ctx registers a uprobe prog can write
+    https://git.kernel.org/bpf/bpf/c/c21b0f82ca96
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
