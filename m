@@ -1,56 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795162968;
-	b=Em3cyVN5wrwTr2zsFXf9nxotlI3AbW4hiXfULyEp8Gl61peT05xnmO1wrJFGsm8pk03N
-	 vhns+kzjcEF0LkbMmM18J19t3U2WM4dELkEya3E4MZaN7ikt3iTorPcnV0l+D/BoieQFp
-	 f7cfODjxHNFYwjDWszXwT7gkB7dLPWCb/NvpvHN+N6ny2bEj2rOGAWIB3q8hAobPG5w5q
-	 6/3A2PEF+RPDc6swwVwRvtrdwOyDe4Z68HF3zHrAWorfEGVO9KUkMFXL3SyKX7Lx3Epla
-	 XIpr2IWiaOHy5shShi4V5AWgf0rDH9jfQtznoiSs9urwFSJZIQea2Em54R21XtwMU0g==
+	t=1795163095;
+	b=IlRyZqhgLT0/XqHBqv8fB97rj9hpCwVrxmLW1zgt7Ejkp47qvuf7+tfSwnY27Yi5XHHU
+	 uoNERMkW14LTvJLFzmd2chHuHWoCsLp9CyKMlD3STkG9QlNPeAx4lxvEJ+dWpBbsH4+wG
+	 gkcmU8XdVQSFxVQDTGF0V87Uz+6OQ9XY8umckP4/ukgEm/n/oektMsSgY07xdgkr9i1ZJ
+	 0/tHimLU+y7BKIp7jAty7iu4u5ghis3AR4AITs9axdKwz1ne2S3QgoSNopIfTGfVWicDq
+	 kqOWZRxvYnOfLANWVhOZCc4qMuFrcK//O5g08A5we8CmR8zSmEzxi65Fcjgz5VOHaQg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795162968;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=O/hsnTeEYxy1O9yJzUhRdcN6MOdQIOoHhccbavUT6uc=;
-	b=oS5apR4mBYZ80fY8u0RnQQiYMszCnA4VXy8MhTLNfWzdpWl5TZXX3aiUws7R8wOuu0Be
-	 p6Fw1ULbhJ678oXHtumwSXRibnoKb7bEou0UrMqh2+nbzA/PqpjRoyjh5GCRU/mxYImkY
-	 3an57HDpNUXKJJxjS2eh/CcKeThU6t3eKhuurY+IwsgfjRDi1vHFHfin8sKX2F8N+jOzh
-	 8Cw43LDuBIwbQU4X+jcTth+tF8xBxzqU4MC2WGjGGBDuodVrbkSpkKuD7VVtkHUI40sXH
-	 8wiaqqmxFsuQsMPjQ2843zeu9LEmm5QKW7+Vd+O0trgoDXCE+Bb3LQ1d6beYKk3FHVQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795163095;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=m9/Z4dNNtSQMZ4QIbjMdSfiRuxef6kxNCEbZ5tBx0rU=;
+	b=rBKyDEtMB3GXgapWSFhVKK4JAGdENo/WnNwjjwUw6Dsqloqd2C8yatfnaEZ7n4gcsj79
+	 xX+fzlKokpH1d34Fs3luAxzQ26YPaSz/oNfkSoqaw0xRdSKIVFy79VZz+7ppq9jmSJKLX
+	 NdA9bA6LSb5sibGUMbowORRKw8yMcgv5r2l9X/ase/jGhjfxR9xvcvClAWr66LLKQUekh
+	 fPa61w652Mr+OuH+BAwsoz+tPFdeC4jc2Vhl2JZufrNWx0eMeOSa9Eq/9k3SK/8jpNp26
+	 nup31SVsYZ0Ot0eKk3KY4DSVt0gdTuqd6djKMZBHN/R5FZZEfX0JA/b+N2hUpotE7rA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IvNi8Da+;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Wr0+miGl;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35D60606A326
-	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 08:22:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02937606A32A
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 08:24:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IvNi8Da+
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD7F61F000C4;
-	Fri, 20 Nov 2026 08:22:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Wr0+miGl
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64B351F000CA;
+	Fri, 20 Nov 2026 08:24:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795162968;
-	bh=O/hsnTeEYxy1O9yJzUhRdcN6MOdQIOoHhccbavUT6uc=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=IvNi8Da+f8/IntOV2D7zf8IqOzXkJwPHW00Wh7zFPjZlwJvOrycCb4a9JqYxaUEPL
-	 ntbVDJLgGQR96c/902tzHTiQUC5sJ+v9TSSq0SKKKurt5F13EcUNZk4iwWJxrPqKvV
-	 D9Y6bBQujneOA7MVP8z2RjSPmlv9i8SQ4K/8oil8LJYcMornDxamdGp3sxTo1Eb5IN
-	 dLHhdi9AxqkWGgthr2g8p6NU8w0fc/66G/Zy3SL1d5J3IpTcZK4ubFq5FHpNTZTl5A
-	 sX3HbCib2Q1vJmRa/WaNvBA0KsXN4LA1ERmWuRFFx41DqfeOJJlAQCCkDzatrSk2Mz
-	 b7asEN7pfHeQg==
-Message-ID: <sashiko-outbox-224722@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 30/49] bpf: Get the trip count from the trip
- index
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261120074430.2704488-31-alexei.starovoitov@gmail.com>
-References: <20261120074430.2704488-1-alexei.starovoitov@gmail.com>
- <20261120074430.2704488-31-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 20 Nov 2026 08:22:47 +0000
+	s=k20260515; t=1795163094;
+	bh=m9/Z4dNNtSQMZ4QIbjMdSfiRuxef6kxNCEbZ5tBx0rU=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Wr0+miGlIImr/xeEwksH5aLBeZMatkjPPjxrMlEjKZxF1dKnlCHMlT2jJV1cBcDF2
+	 3gHtXOA6rDe2x9PiYzXznyUN+YQtTkIe+GmfIBEcElSecpXyY7dqCllHYiZ+qAQn1o
+	 v7UV1OIVXv7FOJ+SNX50Tk8BTZcVRP68KK72L+y8w88qfJsgyzTB7hGKE9rWSvGsCi
+	 76QSQLg4+rLWIAM2mx+H3f23FCCFwh+XQPnH0JZeOFFmje3psrCJLHD59SLZkYlR52
+	 ELCNUADHjQXhSL3Dt4XhICdU0DFEVmKmM2XhzHR7YnSxjdKWzu13GxzgDSFt3W/4Pd
+	 cPaDkJpNVUw6A==
+Content-Type: multipart/mixed; boundary="===============6778475305194276429=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,76 +48,120 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Message-Id: <fb1adb1484d4dfdf8f231380b939c46dabaf0f2693f55cf7fc5ef6099bee9280@mail.kernel.org>
+In-Reply-To: <20261120074430.2704488-15-alexei.starovoitov@gmail.com>
+References: <20261120074430.2704488-15-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next 14/49] bpf: Mark a state that no run of the program has
+From: bot+bpf-ci@kernel.org
+To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri, 20 Nov 2026 08:24:53 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Medium] bpf: empty trip_index range and desynced var_off in
-  bpf_equations_next_trip()
---
+--===============6778475305194276429==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 162fc0fc6e39fa252359de4313f88c4f96f4dc62
-Author: Alexei Starovoitov <ast@kernel.org>
+> bpf: Mark a state that no run of the program has
 
-bpf: Get the trip count from the trip index
+TL;DR:
+- scalar_intersect() change may leave 32-bit spill fills unsoundly bounded, so
+  the verifier could accept unsafe programs; undocumented in the commit
+  message
+- the new infeasible flag is never read, and may be set on the wrong state
 
-This commit tracks each loop's trip index as an xreg, collects induction
-variable thresholds from conditional jumps, and widens the trip index at
-loop headers to bound the loop trip count.
+> bpf: Mark a state that no run of the program has
+>
+> A jump can leave an xreg without a value: the ranges and the known bits
+> have no number in common. No run of the program has such a state.
+>
+>   jump -> range is empty -> infeasible -> a pass:              continues
+>                                           a run without joins: drops it
+>
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
-> diff --git a/kernel/bpf/equation.c b/kernel/bpf/equation.c
-> index 3d9df6e684528..fc05ca7dd6068 100644
-> --- a/kernel/bpf/equation.c
-> +++ b/kernel/bpf/equation.c
-> @@ -1132,6 +1132,91 @@ void bpf_equations_fill(struct bpf_verifier_env *e=
-nv, struct bpf_func_state *fra
->  	env->eq_env->fill_bits =3D size * BITS_PER_BYTE;
->  }
-> =20
-> +/*
-> + * The state came back to the header of the loop at @depth.
-> + * A trip count or may_goto ends the loop long before the trip index get=
-s to 2^63.
-> + */
-> +void bpf_equations_next_trip(struct bpf_verifier_env *env, struct bpf_ve=
-rifier_state *st, u32 depth)
-> +{
-> +	struct scalar *trip_index =3D &st->frame[st->curframe]->loop_stack[dept=
-h].trip_index;
-> +	struct bpf_xreg_equation *xreg_eq;
-> +
-> +	scalar_add_const(trip_index, 1);
-> +	trip_index->r64 =3D cnum64_intersect(trip_index->r64, cnum64_from_urang=
-e(0, S64_MAX));
-> +	scalar_bounds_sync(trip_index);
-> +	xreg_eq =3D bpf_find_xreg_equation(&st->equations,
-> +					 bpf_xreg(st->curframe, BPF_XREG_TRIP + depth));
-> +	if (!xreg_eq)
-> +		return;
-> +	xreg_eq->off++;
-> +	refine_sym_from_xreg(env, st, xreg_eq);
-> +	propagate_bounds(env, st, false);
-> +	bpf_equations_clean(env, st);
-> +}
+The commit message only describes marking infeasible states, but the patch
+also changes scalar_intersect().
 
-[Severity: Medium]
-Can bpf_equations_next_trip() leave trip_index->r64 set to CNUM64_EMPTY
-with a desynchronized var_off?
+First, it removes the forced zeroing of the upper 32 bits of dst->var_off.
+In the parent, with bits == 32, the code did:
 
-If trip_index is widened to the fallback [0, S64_MAX] range and a jump in
-the loop body refines an induction variable equal to trip_index to
-S64_MAX, trip_index becomes the constant S64_MAX.  When that path takes a
-backedge, bpf_clean_verifier_state() -> bpf_equations_clean() drops the
-trip_index xreg_equation because trip_index->var_off is constant.
+    a = tnum_subreg(a);
+    b = tnum_subreg(b);
+    ...
+    s.var_off = tnum_intersect(a, b);
 
-In bpf_equations_next_trip(), scalar_add_const(trip_index, 1) then wraps
-trip_index to constant S64_MIN, and intersecting trip_index->r64 with
-[0, S64_MAX] produces CNUM64_EMPTY.  scalar_bounds_sync() immediately
-bails out on range_bounds_violation(), leaving trip_index->r64 empty while
-var_off remains tnum_const(S64_MIN), and bpf_find_xreg_equation() returns
-NULL without marking st->equations.infeasible.  The state then continues
-into flow_prune_or_join() and passes CNUM64_EMPTY to cnum64_umax() and
-cnum64_umin() in join_trip_index() and trip_index_safe().
+check_stack_read_fixed_off() passes bits = 32 for a 4-byte spill read by an
+8-byte fill (fill_exceeds_spill), where the upper 4 bytes come from
+STACK_MISC.  For example:
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261120074430.2704=
-488-1-alexei.starovoitov@gmail.com?part=3D30
+    *(u32 *)(r10 - 4) = 0xffffffff;
+    *(u32 *)(r10 - 8) = w1;
+    r2 = *(u64 *)(r10 - 8)
+
+scalar_bounds_sync() then bounds r2 to [0, U32_MAX], while at run time r2
+is 0xffffffff_xxxxxxxx.
+
+Second, the removal of "if (bits < 32) return false;" turns on refinement
+for 1 and 2 byte spills.
+
+Could the soundness fix be folded into 20d7b7b266b5 ("bpf: Keep more of
+what is known about a number") so each prefix of the series stays sound for
+bisection, or at least be described in this changelog?
+
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+
+[ ... ]
+
+> @@ -522,6 +522,8 @@ struct bpf_verifier_state {
+>  	struct bpf_reference_state *refs;
+>  	u32 insn_idx;
+>  	u32 curframe;
+> +	/* an xreg has no value: unreachable. Only a path-sensitive run drops such a state. */
+> +	bool infeasible;
+
+Is anything reading this field?  It is written in reg_bounds_sanity_check()
+and refine_live_branch() and copied in bpf_copy_verifier_state(), but
+states_equal() does not compare it and log.c does not print it.  The only
+later reader in the series, infeasible_state_ends(), tests
+env->cur_state->equations.infeasible, a different flag.
+
+The comment says "Only a path-sensitive run drops such a state", and the
+commit message says "a run without joins: drops it".  No code does this,
+and env->path_sensitive is never set.
+
+Where the flag is set, it does not always match "an xreg has no value":
+
+In check_cond_jmp_op() with both branches live, push_stack() copies the
+current state into other_branch before regs_bounds_sanity_check_branches()
+runs.  If true_reg1 or true_reg2 fails the check, reg_bounds_sanity_check()
+marks env->cur_state:
+
+    env->cur_state->infeasible = true;
+
+That is this_branch, which takes false_reg1/false_reg2.  The jump state,
+which takes the bad registers, is left unmarked.
+
+reg_bounds_sanity_check() also reaches the out: label through
+verifier_bug_if(reg->step == 0 || reg->base >= reg->step, ...), which its
+own comment calls a verifier bug rather than an empty value set, yet it
+still marks the state infeasible.
+
+If a later reader drops states using this flag, both cases would skip a
+path that runs.  The later equations-based reader also checks
+env->bypass_spec_v1 first, since a speculative run can still reach such a
+path, and this field's comment gives no such condition.
+
+Could the field be added in the patch that first reads it, with the
+producers changed to mark the state that actually holds the empty register?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/44698144269
+--===============6778475305194276429==--
