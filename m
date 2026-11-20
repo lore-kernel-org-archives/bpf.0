@@ -1,80 +1,64 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795164276;
-	b=UM61Bzp1TVXmnTrvj5ba+lnBz775cHVzmz16DYFK1UOxYSQQYq+1SY+i9SvJ08d3tUm5
-	 uSfkFdaW17KvnenarrD4BrCfLTyEyK5K+IYKkleSTYwxjuqL/QZCTyBXz+zhcdyTnxmZr
-	 K0Vhj+WFzBxjr8ZCNNFm9EKfvw5bumqdoyFeid7WOnMUNSMllPFCO9TqBKJMiE9G+8IGB
-	 5Bx3/IMT+GUSaggyMEh6Xs6ojc2S+i/q8smgOLhq8xG1omFUSSYMKBbHiq3EYi2vOzqGa
-	 sIgQjVc0MdKsK3Btf0lqAZ0UaWqXMNl/0bHcV/TO+IcJdKuGncuxBc9z9AfBL3+rO4g==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795164276;
-	h=Received:DKIM-Signature:Received:From:Subject:Date:Message-Id:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
-	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
-	 X-Endpoint-Received:X-Original-From:Reply-To;
-	bh=vnHkIsLxTap6PDAEihPAF/hMw6HkeMh5fdayIMgroaM=;
-	b=sdGh9pbF1DSf95IERl+nk9xNDM+2GRlE+stXKu4iqZpdWlVZvLjOZarBXc3WbLf/gQm7
-	 mGlktS7C9It7HHv+CA8xEIzLvK4AlUrvS6eS/StqMOndUXAZkdHgXy1H6Kx+JS8wWDnbf
-	 9l5uFruaG+3xtj+GQGswrnXGHVVRtKnjj91Gzp/zm4qm/j4iYIf9SwFsDSuTNuRIoxxDB
-	 ZZ6yFnUyEZ2f9yh0DTd+qVT0GnPnmDJ9a3rWM1zeO9SH9NsqltckAWa9Sgs73M+Ik7kQ2
-	 xyTMgIVQpG48FefdlqIxQHQIUi3H77VD7Xb2RDTzybdvt1ikSZJYbq7EN8ppYngxpxg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BiUDTPG3;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.74.67.49
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795164347;
+	b=qYJxydkEKh73huSMn5vCnvIFG0lLPLj0xWgMLclAGCenmNg/FMlBgzZy7y1CoRIpF3Vv
+	 fVP6uQ06Phc4OYIR7a1yENRpfzGPMJNhbgoAid5rpJOnAe9T+/mO/JdG5IB5WlK5U8Qk/
+	 ESPqQ9DYqf3m/h0o2GvxnGO01ng2omRLhi9WV/98eXuSHH3BzgUfAUdDICuYaRzOxK02P
+	 arqkUERDlHbQ82IkhsCcaYtmhQ0pY1z5mTF8PzifY6caeM8g/FmC/z29+ZckbSkBPkBWM
+	 n/lAV4LGaLl93nQqpJnlA+/ir5u7KJ47E/MBRL7GjOcPF5+qJRioPuTl1mxV5mdkRVQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795164347;
+	h=DMARC-Filter:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To:
+	 DKIM-Signature;
+	bh=4VvTXkf2XeNKXdsZD2LZXbg3e98NlnzNngOW4jq286s=;
+	b=11UaJd9EsFuWa035ALEo19IOJpsCTgeZmqT5XAEpVnNpl2ghSvAzfu+wd303FE9kDb8X
+	 sV9uNvHl5hQDSc8T44qhf0EX4OYRdzHZnk8wIWUoefNudPup0xITanOJ12Lul0wlnPRqk
+	 Ciigu3NDn1v59rdObDTGNi5KgTf/ZFgcqFnouBQDeG/a8GzDvq79MOsBrzf3V54rWK8IC
+	 N+Nsf/F74KS5IcI2ddTH2ol6hYChQNwvp2qQaIWe+NaBwgNFuqSfelBK8j8UUWgB5tQWR
+	 rn2Ajvuw9HIow/Ws3bh8Bv3dG9ipQqzn0me/yUjgXiWqkwGqnwxQTX7R0tlG+DHrL9A==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=poczta.fm;
+	spf=pass smtp.mailfrom=poczta.fm;
+	dkim=pass header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b="T/tpUyWN";
+	arc=none smtp.remote-ip=217.74.67.49
+Received: from smtpo49.interia.pl (smtpo49.interia.pl [217.74.67.49])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 368FD606A7F5;
-	Fri, 20 Nov 2026 08:44:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E013B606A88C
+	for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 08:45:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E013B606A88C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=poczta.fm
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=poczta.fm
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BiUDTPG3
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1795164275;
-	b=HT1SW3hww+8sgLB/+97F5wWBg2tc8EPgh6a3yqJ9LNj7yiGiBaECy9BkRLVBEzEjoQSE
-	 XskuuIuJJkLdi0pe3qOBFNCdLP+Dtk1GEimlwuIx8uCPTQt+5jNiLzCShl/Og+QQLBrTt
-	 HewBMyLcC/k/Or0MzqNmVMIrqaat0adCZgz+ri2IwDT47mlesSU3SdwzINN1RUmHRBMmd
-	 67tsZ+Is8rnMgSVjByUISO5rpaYASlwkS59tCwBJVTwNrJnIKqCnLwuwa8V9YceRoSDnf
-	 sXle7E5SDL2HbsAnDK3kHReKT+kLi2DunyGJMsJJzPLxA2qgYnlK6YZqRHWnu0/ufEA==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795164275;
-	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
-	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To;
-	bh=vnHkIsLxTap6PDAEihPAF/hMw6HkeMh5fdayIMgroaM=;
-	b=cBONckJkDCgwBbfZJJ6tp8TKBdY49uHYgdfs6GA+258Hex3JdJO3zk1riKNlI/vepQJr
-	 7ahSTKfxLumD6LVFr71NqajW1bj2cK2BjehfTsXGPHbXv1pCcs0zw7tRC5reoItIK5o+R
-	 DFExaOVFBdq+t+kVn2n9/5wkzZ4Ju/1bFPedMdkUd/j4zdJxDRorxtEld8Gy5W5CQg93j
-	 4UH+N3BN1d8RlcXYPrcK3nQ22UbRsyPrjrLI2jv6lv56NXSP8f9M+c1SKU4Z7H9o318hg
-	 f4RNuL+GfqtaS8TC58kG+mxmQH7vW9lPogl/sUBa/pJS+9OQ4wQH6RQA411HPPs12SQ==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	dkim=pass (1024-bit key) header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b=T/tpUyWN
+Received: from nr200 (unknown [80.68.231.31])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1E9D41F000D1;
-	Fri, 20 Nov 2026 08:44:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795164275;
-	bh=vnHkIsLxTap6PDAEihPAF/hMw6HkeMh5fdayIMgroaM=;
-	h=From:Subject:Date:To:Cc:Reply-To;
-	b=BiUDTPG3kZmMwtuQcLR4+7sONO+JEjcyNy+2wtE8BV0lp+BqNdQnXma8IaxalPT/i
-	 p4d97m18SBCwY69KMvT0HeYemwe3xb5E7kRUDbGmxu8SlGTL8gOO1IqXFvDOqsl/9j
-	 kJkhXOlaxRT4MJSjw0FDVVvOVoS/mkvLsnLgLM/F4RRLC1ev9lpZUhCZ+5+5OJn+AH
-	 vHMsyazDiwSJD/iLCrs8YGGjwLIkmaFUbdncCtqbRpCm7NLAQScOgpKmbyORd16SBK
-	 2hAhNIxyVJ1SyMUWEdmhbeRqPEpcFBF5rrO0tOL+4PNdc4mmZo7tYMgCA+m4OkbCvS
-	 4latatNEnfsqQ==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 8B253497A9;
-	Fri, 20 Nov 2026 08:44:34 +0000 (UTC)
-From: Hang Zhengyang via B4 Relay <devnull+hang.zhengyang1010.gmail.com@kernel.org>
-Subject: [PATCH sched_ext/for-7.5 0/2] sched_ext: idle: Don't stack a sync
- wakee behind a higher-class task
-Date: Fri, 20 Nov 2026 16:44:21 +0800
-Message-Id: <20261120-scx-fix75-v1-0-254f782ff9b0@gmail.com>
+	by poczta.interia.pl (INTERIA.PL) with ESMTPSA;
+	Fri, 20 Nov 2026 09:45:32 +0100 (CET)
+Date: Fri, 20 Nov 2026 09:45:30 +0100
+From: Slawomir Stepien <sst@poczta.fm>
+To: bot+bpf-ci@kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+	kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
+	sdf@fomichev.me, bpf@vger.kernel.org, netdev@vger.kernel.org,
+	maciej.fijalkowski@intel.com, tianyi@cloudflare.com,
+	tavip@google.com, toke@redhat.com, aleksander.lobakin@intel.com,
+	ilias.apalodimas@linaro.org, lorenzo@kernel.org,
+	magnus.karlsson@intel.com, ihor.solodrai@linux.dev,
+	edumazet@kernel.org, pabeni@redhat.com, andrew+netdev@lunn.ch,
+	horms@kernel.org, andrii@kernel.org, martin.lau@linux.dev,
+	eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+	jolsa@kernel.org, memxor@gmail.com, shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	syzbot+ff145014d6b0ce64a173@syzkaller.appspotmail.com,
+	stable@vger.kernel.org, martin.lau@kernel.org, mason@kernel.org
+Subject: Re: [PATCH v7 bpf 2/5] xdp: introduce xdp_convert_skb_to_buff()
+Message-ID: <awAIqhZWK9mr_zGQ@nr200>
+References: <20261119133032.2015656-3-sst@poczta.fm>
+ <fd9b43958f6297b0031158bd33bdc6cc54f3c9338a4ee2e30bd6e50acf775a60@mail.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -84,103 +68,92 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x2MwQqDMBAFf0X27LYmxVj8FSkSk2fdi5aslID47
- waPwwxzkCIJlPrqoIS/qGxrAVNXFBa/fsESC5NtrDPGNqwh8yy5a9m/nXfxZRAwUel/CUXcr4E
- 0LIgj8v6ct8Tdo6XPeV6lfDYwbgAAAA==
-X-Change-ID: 20261120-scx-fix75-a86a6d31eceb
-To: Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, 
- Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>, 
- Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
- Juri Lelli <juri.lelli@redhat.com>, 
- Vincent Guittot <vincent.guittot@linaro.org>, 
- Dietmar Eggemann <dietmar.eggemann@arm.com>, 
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, 
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, 
- K Prateek Nayak <kprateek.nayak@amd.com>, Shuah Khan <shuah@kernel.org>
-Cc: Kuba Piecuch <jpiecuch@google.com>, 
- Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>, 
- Hui Su <sh_def@163.com>, sched-ext@lists.linux.dev, 
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
- Hang Zhengyang <hang.zhengyang1010@gmail.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1795164273; l=3044;
- i=hang.zhengyang1010@gmail.com; s=20261008; h=from:subject:message-id;
- bh=+c5iTcPGpkwPWTC0M/a6nppfpfe0VFKGA2gyib/nlzg=;
- b=KW5iaCyxdPLwsuWYUfdcxn+/B/rhaa9ybvCDWxHbFnLzoMGK/ua2uAo1eyZbM26DtaqeMjoNT
- /RSr1OFRAP7C/J88aluS8E8yimXJKoTVA1UpY4PE5aTqlrBvdSYk7EW
-X-Developer-Key: i=hang.zhengyang1010@gmail.com; a=ed25519;
- pk=5drRny3PqRPLhKVB0YIQXN5YyD8miKCpXWhnEPvafAI=
-X-Endpoint-Received: by B4 Relay for hang.zhengyang1010@gmail.com/20261008
- with auth_id=1133
-X-Original-From: Hang Zhengyang <hang.zhengyang1010@gmail.com>
-Reply-To: hang.zhengyang1010@gmail.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fd9b43958f6297b0031158bd33bdc6cc54f3c9338a4ee2e30bd6e50acf775a60@mail.kernel.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=poczta.fm; s=dk;
+	t=1795164337; bh=4VvTXkf2XeNKXdsZD2LZXbg3e98NlnzNngOW4jq286s=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+	b=T/tpUyWNIBy5mAXGlC65E8/588bEAvTDs3fLQFnzPRJNU87ADHOgwp89hhFYNyY3U
+	 K2/s1S8Sjy45DwfdGPSuWqO2ZIHaZmKXKHxuYaJXAAy8QWfNcxpDUjCq5DsXvmSai+
+	 irHYLrWoQjdczFqq+KHoDzhRZOx1kA58lHZU4zto=
 
-In sched_ext, the default idle CPU selection can put a sync wakee on
-the waker's CPU, even when the waker is an RT or DL task that keeps
-running. The wakee then waits there, sometimes for more than a second,
-while other CPUs are idle. Patch 1 stops this for higher-class wakers.
-Patch 2 adds a selftest that fails without patch 1.
+On lis 19, 2026 14:11, bot+bpf-ci@kernel.org wrote:
+> > xdp: introduce xdp_convert_skb_to_buff()
+> 
+> TL;DR:
+> - Commit message calls the bug a page leak; it may be a use-after-free of
+>   page_pool pages
+> - Stable Cc 6.4.x predates the Fixes: tag (v6.9)
+> - kdoc may overstate mem type usage (nit)
+> 
+> > Then when bpf_xdp_adjust_tail() calls
+> > __xdp_return(), it acts incorrectly due to mem type not being set to
+> > MEM_TYPE_PAGE_POOL and causes a page leak.
+> 
+> Is "causes a page leak" the full impact?
+> 
+> The mechanism is bpf_xdp_adjust_tail() -> bpf_xdp_frags_shrink_tail() ->
+> bpf_xdp_shrink_data() -> __xdp_return(netmem, MEM_TYPE_PAGE_SHARED) ->
+> page_frag_free().  That ends in put_page_testzero() on a page_pool page.
+> 
+> With page checks enabled this is reported as "page_pool leak" and the page
+> is not freed.  Without them, page_pool keeps _refcount at 1 and counts
+> fragment users in pp_ref_count, and skb_pp_cow_data() allocates
+> fragment-sized chunks.  A single page_frag_free() can therefore hand back
+> to the buddy allocator a page that other skbs or pool->frag_page still
+> use, which looks like a use-after-free rather than only a leak.
+> 
+> Could the commit message describe that?
 
-Tested on sched_ext/for-7.5 (c6cc52a72055) in an 8 vCPU KVM guest,
-non-debug kernel, booting each kernel twice:
+Yes, I will add that do commit message in v8.
 
-                               before               after
-  RT waker, pipe               16/16 on CPU 0,      idle CPU,
-                               169 ms - 1.5 s       <= 0.6 ms
-  same, ALWAYS_ENQ_IMMED       16/16 late by        <= 0.6 ms
-                               16-483 ms
-  partial, fair waker          16/16 on CPU 0,      <= 0.6 ms
-                               half ~930 ms late
-  sync_wake_rt, 8/3/2 vCPUs    fails                passes
-  other sched_ext selftests    no change            no change
+> > Cc: <stable@vger.kernel.org> # 6.4.x
+> 
+> The Fixes: tag points at e6d5dbdd20aa, which first landed in v6.9.  Before
+> that, generic XDP linearized every skb and never set the frags flag, so
+> this bug cannot occur on 6.4 through 6.8.
+> 
+> The later veth patch in this series (1d3541dbf827) appears to be why 6.4.x
+> is listed, since it uses this helper and needs it as a backport
+> prerequisite.  Could the commit message either say that, or align the
+> stable range with the Fixes: tag?
 
-With KASAN and lockdep on v7.4-rc2, sync_wake_rt fails without the fix
-and passes with it, with no warnings. If other tasks keep all CPUs
-busy, the test passes on both kernels, because the shortcut is only
-used when some CPU is idle. On bare metal I could only run an
-unpatched distro v7.0 kernel, because of Secure Boot. It has the same
-problem: the reader waited 168 ms or more.
+Sure, v8 will describe that in v8.
 
-The cost: after a sync wakeup from a higher-class task, the wakee no
-longer runs on the waker's CPU. WF_SYNC doesn't promise this anyway.
-In a pipe ping-pong between an RT task and an EXT task, a round trip
-now takes ~9.8 us instead of ~6.5 us, because the EXT task stays on
-its own CPU. CFS also takes ~10 us here. The difference can be bigger
-on large non-SMT machines [1]. That series detects pairs of tasks that
-wake each other. If fair adopts it, we could keep the shortcut for
-such pairs.
+> > diff --git a/include/net/xdp.h b/include/net/xdp.h
+> > --- a/include/net/xdp.h
+> > +++ b/include/net/xdp.h
+> 
+> [ ... ]
+> 
+> > +/**
+> > + * xdp_convert_skb_to_buff - build an xdp_buff on top of an skb
+> > + * @skb: skb to describe, packet data is taken from its MAC header onwards
+> > + * @xdp: xdp_buff to initialize
+> > + * @xdp_rxq: Rx queue info to attach to @xdp
+> > + *
+> > + * The memory type set on @xdp_rxq is only used to release fragments that
+> > + * the XDP program consumes; the head can not be freed from under the skb.
+> > + * A non-linear @skb is expected to have gone through skb_pp_cow_data(), so
+> > + * all of its fragments are page_pool backed.
+> > + */
+> 
+> This isn't a bug, but is the "only used to release fragments" statement a
+> property of this helper, or of its current caller?
+> 
+> It holds for generic XDP.  However, the veth patch later in this series
+> (1d3541dbf827) converts the xdp_buff to an xdp_frame on XDP_TX and
+> XDP_REDIRECT, where the head is released through the same mem type, and it
+> has to overwrite rq->xdp_rxq.mem after calling this helper.
 
-There is no Fixes tag. The shortcut has been there since sched_ext was
-added, and this patch changes where a task runs, not whether the
-kernel works correctly.
+True, will add that info to commit message in v8.
 
-Hui Su's patch "sched_ext: idle: Honor SCX_PICK_IDLE_CORE in CPU
-selection shortcuts" changes the line just before this code. Whichever
-patch is applied second will need a small rebase.
+> The kdoc also does not mention that the mem type stays set on the caller's
+> possibly shared @xdp_rxq after the call.  Should the kdoc say that these
+> properties depend on the caller?
 
-I used Claude Code to find the issue, write the patches and run the
-tests. I reproduced the issue on bare metal and reviewed the patches.
+Yes I agree. Will add in v8.
 
-[1] https://lore.kernel.org/all/20261021-b4-sched-sync-wakeup-v7-1-91995ba5b596@gentwo.org/
-
----
-Hang Zhengyang (2):
-      sched_ext: idle: Don't stack a sync wakee behind a higher-class task
-      selftests/sched_ext: Test sync wakeups from an RT task
-
- kernel/sched/ext/idle.c                          |  11 +
- tools/testing/selftests/sched_ext/Makefile       |   1 +
- tools/testing/selftests/sched_ext/sync_wake_rt.c | 257 +++++++++++++++++++++++
- 3 files changed, 269 insertions(+)
----
-base-commit: c6cc52a72055ef9775b39937d02e39ca358ba042
-change-id: 20261120-scx-fix75-a86a6d31eceb
-
-Best regards,
 -- 
-Hang Zhengyang <hang.zhengyang1010@gmail.com>
-
-
+Slawomir Stepien
