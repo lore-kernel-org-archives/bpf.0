@@ -1,89 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.8
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795257448;
-	b=wGRPAx3jPGDh0e3WrmfAN0gmUIxfE97qmqPSD/pDLtSTh7lHfkp5W2vguKgIvVlHyeFi
-	 wxcxqHqAZ5S48ZO8MINVkH89nD7MPXXDb/F3mnpn+uJHDrpKAYRlPUCtgvFSUlexWbJU3
-	 g2CZsLXnb8h3OTFQxUBBOzyYjbwgR5/ub/eaxKWy8IauuN6cn1b1zkmusxDLVKPvmOZAw
-	 b+CNd8SFWVA/YZlm3aOHkp6hj0NLzL0MsqHYn0PdSOf8QnmYYIF32VdIfQoRNoLy/w/Pn
-	 dHbeaoiFnq1ZBSOyCfi5GMjb9wNhl/+mG0r5EpaYaRA8TdhY2cXqrMO4qWxhZvwFRfg==
+	t=1795258436;
+	b=remaiHigZz3ztYbWyLCdXtnTNgqtHlbHSBie/rDkgZr8+HnbGcuFb5VN0Y5MJ9IYlCbx
+	 h1VDTHPR5Q7yhzNzadTOXc+ygrJqxpyIN8oXLFiFebVgBw0dNXl5puPs2Gee/0T90m1UC
+	 0tWoPpe0O7/VJFkjjsRCjJO0zmx0sX7R/BhYIbhcCMxN2N/L2bwQhi4YyjB7o5FqcLiBa
+	 QHrEn4qeGgrRcm4qTziyoIYBIsc8T/nGqwkfrZf7ycOOYc3MXAgbKXWDsfoXDZnTHGyZL
+	 R2znUaOCX8/bkvD2dsRL+hq66hwDpaHWKjumu8UfOssXbKeM8+tKaZ1ktMhhptJeBvw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795257448;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=vzL7OZ78FCJCA7+dBpZt/8Px2Lw+1L+aRqKuEWDIegk=;
-	b=YEIosVreLxwDBhZg6IG9iF2d4iW+cS41bgOaeMoONg5twV2i5eutlkpYCuk9SolWDlKq
-	 K5ZuIbP59bTtogbivlTbSGUm09NP+fq/mr6P05aMeHN3WFuXwTho/eBX+PWBkZvqMrHyP
-	 v5e5lt+nivrg9UFX25JBRKTnS9PkVEmSQEzDdWtzceTXqRxJ4NA3H71+e8jwn6ukDW6jb
-	 HMhoxuH3ehsR/RBrVAKixmKnWtxlr1LeiMUXmgF2HJrmecUG5PicGiuc6zLBWdS/MvZAw
-	 XDUHZO29O+ye76jfzCRr1Eknvk8/2qt1vJtVv7e0oWwXk9ZWSeDBa7Th4o6mazNme7A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795258436;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=LZUQvLbgzRBynzxMrVCnD4/tt8uQLsR+IJqriHcD9lY=;
+	b=KWP2sQuvlBJZK2oKKUnZP6lB42woGZoBUatnT47l4ZURDgsDcNPtkHxY0g3ddQ+KWXcW
+	 JtX/8ayuY2pmWHQV/QO4BsXZ2D7r2SRtJS3qU4QrIgOgKkviZPBzeUVr4OYoHFhlb2xxG
+	 HanzZ1jZN7lVwCXZU3MK/dDx8KWntXnvCyIUSQ/exy69CRkVspjzXLtKPjs6Dz3hZ6U7U
+	 xN3m9tmR9pXKuZ2acDUxYGq/uIrN/h1SxvPRvuITDtaoG+fSTVKr1n9NjxW7RMn52SYFA
+	 B9zd0w/pY0H6Hjq60iI4XvLj9+E/py1LTT0xzUNUGFn7NBFyHDs7XkySwTx6zz/J0Vg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=qaK3O9eJ;
-	arc=none smtp.remote-ip=95.215.58.8
-Received: from mta1.migadu.com (out-8.mta1.migadu.com [95.215.58.8])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="a/Ns2hPi";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC167606A32A
-	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 10:37:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BC167606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CC14606A320
+	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 10:53:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=qaK3O9eJ
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=w0drH2z2Hn/mfe5505Dfkw+sLs+x0GacfO7VVM4vud4=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795257445; v=1; x=1795862245;
- b=qaK3O9eJemOa8Xn447uWJlrPZjYU8JwXLoJoZf4ppltL3st150/xDntIMM1L++XrqxdF7GKB
- KIURs+GNxbSTPQkdI3wRh9yWpr8ret3BuktPb65FtWNLd3ZGtFa5ZNVvEVIAeuAQflTXcue8Eh9
- 8UucLpdNMX6hLfHm4556KlOw=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 44b387aced1257de;
-	Sat, 21 Nov 2026 10:37:25 +0000
-X-Mizu-Trace-ID: 44b387aced1257de
-X-Migadu-Flow: FLOW_OUT
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org,
-	ast@kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Jakub Sitnicki <jakub@cloudflare.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Neal Cardwell <ncardwell@google.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	Sechang Lim <rhkrqnwk98@gmail.com>,
-	Michal Luczaj <mhal@rbox.co>,
-	Mattia Meleleo <mattia.meleleo@coralogix.com>,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf 11/11] selftests/bpf: Add test for apply_bytes when a redirect sends a part
-Date: Sat, 21 Nov 2026 18:30:12 +0800
-Message-ID: <20261121103222.88209-12-jiayuan.chen@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261121103222.88209-1-jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=a/Ns2hPi
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A42011F000C0;
+	Sat, 21 Nov 2026 10:53:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795258435;
+	bh=LZUQvLbgzRBynzxMrVCnD4/tt8uQLsR+IJqriHcD9lY=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=a/Ns2hPiWcbjVPKRYEcFzuEGLB1rrflvX4Kh+R2uhsN68Y3JD9jb/moJmrp0g4HWI
+	 TFPGrsUc+8JRT2m9rWNqEO8AUl6DnF/4hyLKCu39zc+g738LRY5Y7J07P8MqF5Fh0x
+	 Pl+jRT4vX+GskZNRj5V1bOMVv7lOHE0UFdaSWCw9WPJubZRY7UP3atlvW40IuaaF/D
+	 N6HACw13WH+fjHz2SdkHVoZmrRQFFqt3hBOhGkGBKVFBKAi32tYDQDhqDSNw5LesnL
+	 8sl2cNjSaum6aljhjYjJvpqQBoMbBz/K+lo4soHwWO3ifHnu5rCzVKql3RkC0sohCd
+	 cPT52TT00pT3g==
+Message-ID: <sashiko-outbox-226959@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf 05/11] bpf, sockmap: Fix concurrent senders on one
+ psock
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, bpf@vger.kernel.org
+In-Reply-To: <20261121103222.88209-6-jiayuan.chen@linux.dev>
 References: <20261121103222.88209-1-jiayuan.chen@linux.dev>
+ <20261121103222.88209-6-jiayuan.chen@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 21 Nov 2026 10:53:55 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -92,241 +59,93 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-An sk_msg prog parses the header of a message and applies its verdict
-to the whole message with bpf_msg_apply_bytes(), so it runs once per
-message, at the header:
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [High] bpf, sockmap: -EBUSY from tcp_bpf_sendmsg() aborts
+  sk_psock_backlog()
+--
 
-  +-----+-----------+-----+-------+------
-  | hdr |   body    | hdr | body  | ...
-  +-----+-----------+-----+-------+------
-  ^                 ^
-  prog: apply(len1) prog: apply(len2)
+commit d941631cdccff7e72d215bc4dd09b124e439b443
+Author: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-The test sends one such message and redirects it to the egress of a
-socket that has the smallest send buffer, whose peer has the smallest
-receive buffer. The redirect sends only a part, so send() returns
-early, and the test sends the rest:
+bpf, sockmap: Fix concurrent senders on one psock
 
-  +-----+-----------+
-  | hdr |   body    |
-  +-----+-----------+
-  |<-- send -->|
-               |<-->| send again
+This commit adds an SK_PSOCK_TX_BUSY state bit to reject concurrent
+callers of tcp_bpf_sendmsg() on the same psock with -EBUSY.
 
-Check that the prog ran once, at the header, and that the peer gets the
-whole message.
+> diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+> index 7191b95c7b1c7..077b65927ac8d 100644
+> --- a/net/ipv4/tcp_bpf.c
+> +++ b/net/ipv4/tcp_bpf.c
+> @@ -602,6 +602,16 @@ static int tcp_bpf_sendmsg(struct sock *sk, struct m=
+sghdr *msg, size_t size)
+>  	if (unlikely(!psock))
+>  		return tcp_sendmsg(sk, msg, size);
+> =20
+> +	/*
+> +	 * The verdict, apply_bytes, sk_redir and the cork live in the psock
+> +	 * and span the places where the socket lock is dropped below. They
+> +	 * can only serve one sender at a time.
+> +	 */
+> +	if (test_and_set_bit(SK_PSOCK_TX_BUSY, &psock->state)) {
+> +		sk_psock_put(sk, psock);
+> +		return -EBUSY;
+> +	}
 
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
----
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 126 ++++++++++++++++++
- .../bpf/progs/test_sockmap_msg_apply.c        |  46 +++++++
- 2 files changed, 172 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_msg_apply.c
+[Severity: High]
+Can returning -EBUSY here abort sk_psock_backlog() when an sk_buff is
+redirected to the egress of a socket that also has a msg_parser program
+attached?
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index 1fef6ec2ba7ae..3979cbab7dc76 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -14,6 +14,7 @@
- #include "test_sockmap_drop_prog.skel.h"
- #include "test_sockmap_change_tail.skel.h"
- #include "test_sockmap_msg_pop_data.skel.h"
-+#include "test_sockmap_msg_apply.skel.h"
- #include "bpf_iter_sockmap.skel.h"
- 
- #include "sockmap_helpers.h"
-@@ -1362,6 +1363,129 @@ static void test_sockmap_no_verdict_fionread(void)
- 	test_sockmap_pass_prog__destroy(skel);
- }
- 
-+#define APPLY_MSG_MAGIC 0xbeefcafe
-+
-+/*
-+ * One message: a header with its length, then the body. The sk_msg prog
-+ * applies the verdict to the whole message and redirects it to the egress
-+ * of b. b has the smallest send buffer and its peer the smallest receive
-+ * buffer, so the first send() stops in the middle of the message. The rest
-+ * must still go to b without another run of the prog.
-+ */
-+static void test_sockmap_msg_verdict_apply_partial(void)
-+{
-+	int a = -1, a_peer = -1, b = -1, b_peer = -1, s = -1;
-+	struct test_sockmap_msg_apply *skel;
-+	int err, map, one = 1, zero = 0;
-+	struct sockaddr_storage addr;
-+	size_t len, off = 0, got = 0;
-+	char *buf = NULL, *rbuf = NULL;
-+	int sndbuf, rcvbuf;
-+	socklen_t optlen;
-+	struct {
-+		__u32 magic;
-+		__u32 len;
-+	} hdr;
-+	ssize_t n;
-+
-+	skel = test_sockmap_msg_apply__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+	map = bpf_map__fd(skel->maps.sock_map);
-+
-+	err = bpf_prog_attach(bpf_program__fd(skel->progs.prog_msg_apply_redir),
-+			      map, BPF_SK_MSG_VERDICT, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach"))
-+		goto out;
-+
-+	err = create_pair(AF_INET, SOCK_STREAM, &a_peer, &a);
-+	if (!ASSERT_OK(err, "create_pair"))
-+		goto out;
-+
-+	/* The peer of b gets its receive buffer before the handshake */
-+	s = socket_loopback(AF_INET, SOCK_STREAM);
-+	if (!ASSERT_GE(s, 0, "socket_loopback"))
-+		goto out_close;
-+	if (xsetsockopt(s, SOL_SOCKET, SO_RCVBUF, &one, sizeof(one)))
-+		goto out_close;
-+	b = xsocket(AF_INET, SOCK_STREAM, 0);
-+	if (b < 0)
-+		goto out_close;
-+	if (xsetsockopt(b, SOL_SOCKET, SO_SNDBUF, &one, sizeof(one)))
-+		goto out_close;
-+	optlen = sizeof(addr);
-+	if (xgetsockname(s, sockaddr(&addr), &optlen))
-+		goto out_close;
-+	if (xconnect(b, sockaddr(&addr), optlen))
-+		goto out_close;
-+	b_peer = xaccept_nonblock(s, NULL, NULL);
-+	if (b_peer < 0)
-+		goto out_close;
-+
-+	optlen = sizeof(sndbuf);
-+	if (xgetsockopt(b, SOL_SOCKET, SO_SNDBUF, &sndbuf, &optlen))
-+		goto out_close;
-+	optlen = sizeof(rcvbuf);
-+	if (xgetsockopt(b_peer, SOL_SOCKET, SO_RCVBUF, &rcvbuf, &optlen))
-+		goto out_close;
-+	/* Larger than what b and its peer can hold */
-+	len = 4 * (sndbuf + rcvbuf);
-+
-+	err = bpf_map_update_elem(map, &zero, &b, BPF_NOEXIST);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem(b)"))
-+		goto out_close;
-+	err = bpf_map_update_elem(map, &one, &a, BPF_NOEXIST);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem(a)"))
-+		goto out_close;
-+
-+	buf = malloc(len);
-+	rbuf = calloc(len, 1);
-+	if (!ASSERT_OK_PTR(buf, "malloc") || !ASSERT_OK_PTR(rbuf, "calloc"))
-+		goto out_close;
-+	memset(buf, 0xaa, len);
-+	hdr.magic = APPLY_MSG_MAGIC;
-+	hdr.len = len;
-+	memcpy(buf, &hdr, sizeof(hdr));
-+
-+	while (got < len) {
-+		if (off < len) {
-+			n = send(a, buf + off, len - off, MSG_DONTWAIT);
-+			if (!ASSERT_TRUE(n >= 0 || errno == EAGAIN, "send"))
-+				break;
-+			if (n > 0) {
-+				if (!off && !ASSERT_LT(n, len, "first send partial"))
-+					break;
-+				off += n;
-+			} else {
-+				usleep(1000);
-+			}
-+		}
-+		while (got < off) {
-+			n = recv_timeout(b_peer, rbuf + got, off - got, 0,
-+					 IO_TIMEOUT_SEC);
-+			if (!ASSERT_GT(n, 0, "recv_timeout"))
-+				goto out_close;
-+			got += n;
-+		}
-+	}
-+
-+	ASSERT_EQ(got, len, "received");
-+	ASSERT_OK(memcmp(buf, rbuf, len), "data");
-+	ASSERT_EQ(skel->bss->good_hdrs, 1, "prog runs on the header");
-+	ASSERT_EQ(skel->bss->bad_hdrs, 0, "prog runs in the body");
-+
-+out_close:
-+	free(buf);
-+	free(rbuf);
-+	close(s);
-+	close(a);
-+	close(a_peer);
-+	close(b);
-+	close(b_peer);
-+out:
-+	test_sockmap_msg_apply__destroy(skel);
-+}
-+
- void test_sockmap_basic(void)
- {
- 	if (test__start_subtest("sockmap create_update_free"))
-@@ -1438,4 +1562,6 @@ void test_sockmap_basic(void)
- 		test_sockmap_multi_channels(SOCK_STREAM);
- 	if (test__start_subtest("sockmap udp multi channels"))
- 		test_sockmap_multi_channels(SOCK_DGRAM);
-+	if (test__start_subtest("sockmap msg_verdict apply_bytes partial redirect"))
-+		test_sockmap_msg_verdict_apply_partial();
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_msg_apply.c b/tools/testing/selftests/bpf/progs/test_sockmap_msg_apply.c
-new file mode 100644
-index 0000000000000..6e24117933d03
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_msg_apply.c
-@@ -0,0 +1,46 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-+	__uint(max_entries, 2);
-+	__type(key, int);
-+	__type(value, int);
-+} sock_map SEC(".maps");
-+
-+#define MSG_MAGIC 0xbeefcafe
-+
-+struct msg_hdr {
-+	__u32 magic;
-+	__u32 len;
-+};
-+
-+int good_hdrs;
-+int bad_hdrs;
-+
-+/*
-+ * Each message starts with a header. Apply the verdict to the whole
-+ * message, so the prog runs again at the next header.
-+ */
-+SEC("sk_msg")
-+int prog_msg_apply_redir(struct sk_msg_md *msg)
-+{
-+	struct msg_hdr *hdr;
-+
-+	if (bpf_msg_pull_data(msg, 0, sizeof(*hdr), 0))
-+		goto bad;
-+
-+	hdr = msg->data;
-+	if ((void *)(hdr + 1) > msg->data_end || hdr->magic != MSG_MAGIC)
-+		goto bad;
-+
-+	good_hdrs++;
-+	bpf_msg_apply_bytes(msg, hdr->len);
-+	return bpf_msg_redirect_map(msg, &sock_map, 0, 0);
-+bad:
-+	bad_hdrs++;
-+	return SK_DROP;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.43.0
+For egress sk_buff redirects, sk_psock_handle_skb() sends the packet via
+skb_send_sock() -> sendmsg_unlocked() -> sock_sendmsg() ->
+tcp_bpf_sendmsg().  Previously, skb_send_sock() and a userspace sendmsg()
+on that socket serialized on lock_sock(sk).  With this change, when a
+userspace sender sleeps in sk_stream_wait_memory() with SK_PSOCK_TX_BUSY
+set and freeing send buffer space wakes sk_psock_write_space(), the
+backlog work runs and hits -EBUSY:
 
+CPU0 (userspace sendmsg)          CPU1 (psock->work)
+tcp_bpf_sendmsg()
+  test_and_set_bit(SK_PSOCK_TX_BUSY, ...)
+  lock_sock(sk)
+  ...
+  sk_stream_wait_memory()
+    release_sock(sk)
+                                  sk_psock_backlog()
+                                    sk_psock_handle_skb()
+                                      skb_send_sock()
+                                        ...
+                                          tcp_bpf_sendmsg()
+                                            test_and_set_bit(SK_PSOCK_TX_BU=
+SY)
+                                            return -EBUSY
+
+sk_psock_backlog() only retries on -EAGAIN and treats any other error as
+fatal:
+
+net/core/skmsg.c:sk_psock_backlog() {
+	...
+			if (ret <=3D 0) {
+				if (ret =3D=3D -EAGAIN) {
+					...
+					goto end;
+				}
+				/* Hard errors break pipe and stop xmit. */
+				sk_psock_report_error(psock, ret ? -ret : EPIPE);
+				sk_psock_clear_state(psock, SK_PSOCK_TX_ENABLED);
+				goto end;
+			}
+	...
+}
+
+This sets sk->sk_err =3D EBUSY (which also aborts the sleeping userspace
+sendmsg()) and permanently clears SK_PSOCK_TX_ENABLED, stranding queued
+packets in psock->ingress_skb.  Conversely, if sk_psock_backlog() sets
+SK_PSOCK_TX_BUSY first, a single userspace sender on the socket fails
+with -EBUSY instead of waiting on lock_sock(sk).
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261121103222.8820=
+9-1-jiayuan.chen@linux.dev?part=3D5
