@@ -1,75 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.70
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795244392;
-	b=NpUoIK0DUkKyvXIIutuf8ieEYgAGJ2Xe15qFjZnEWMBz0sEMSIUHuWqLvyktR/ZU+orV
-	 CaSH8M+Qw9vzrtPklf1qYZEqacYLBXy5aVL7qVwKJkbzKr3P4uhFSwkX6XkBwNE3ym5/F
-	 ywvjGIKC2Ghd5TCBBqEx04SJ6ZDDU3q+NkbI5S6B+tEwYz/DMzQtdPuZAM3EBKn83WFHB
-	 /rWxOgZns/oBfuNTonMm31WY6dCN/Vahl69lJoitFpc3Po90LXTNAGOH0nO/fMZ9lgQvB
-	 0F881j06tzKGlM+DOtsnQYWbvVb+kGKUGjxWYvqcF8N0TLBr8nUyMv/9geYQVLu7FNg==
+	t=1795247373;
+	b=0Dq3MoyX5p1bGTrUTQDEaI7cjjrl1+jvioX+Q7Jz/iKjxfZJ+oKf4Zhfoip5vzZXGYRX
+	 7n+A+rtUGFjYgOUqiPTE9L6uMoFPtcM1WIq2jekaxAWhji7/Rl5/cuukLQNXXAAUc570X
+	 Sj3gH6ZRMgZeoyI4RPhGQkVrR2kVUz70gPhsMwxSFNvRas7VflO0x3CfgvjAvTLJxUO8E
+	 mjvbjz4KssZ1xqr+rqCLrw2g4eUrSe/+CjaNPeJh1cul0Mjzv3biA1l+YDzA44s0ehxnI
+	 zLRqcAV4eeEYtcBaFxGJvO/nmmwJHtTgxs60zcR2Ju7vtZ8prvrF735GKZAFqDxayxw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795244392;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=fGAdvKbnnDNvC7VTESnuJjeTLcD1XbFE2xtDIUZCto4=;
-	b=HjNpMn/b4A6MMjN4f2Fyd133+TKUg7b4KuaeS+z3/dx6wHyqcB2/CQHanQbQuqevDu+f
-	 L+4EiL6/ItpBVJaBFmu3162gmYLsEhoRjGaRVaj8Im5P8FNhOk8s09NE/RG5xjiyPqUYg
-	 9DcXxcvExI3uryyLl3Rv+1G1WO9z96CDvETrrJAch7bM+PcdibXYXRUX/sj9QcFKGS/LU
-	 /yEpBnJAn7N7azJsshbW5mkV4eI9JE194Am7hLG7ez386ftROGrtfURFtBad8leXMWL0w
-	 2oBUQp8z/K6uZdJvO2aFd3qpamEBi7xuCo7xLUbOI7qute1S5saHptSJyYrwNAwqCAQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795247373;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=vFgGw10nYgLi3aoWNLz3n3pkCqk3EH1b7Mf09Unos8Y=;
+	b=JX6Qe6VZyowCzXiGNMSQIrw0i0YDHhLLtGzqRmEnqlcMdr7C7JH4E7RSk4llM70BrEOq
+	 yKpRAniDIv9GwSbckE2NusAT9fqNOT4NLFM8ELGZZSpw4OTb8IYeY+I4p14xHCNnqIU9Q
+	 lrC/mLxlIHB6IwXhb3q/2CkdqvQy4QfhVQErIBGHD6p6pHYbFxuaNdayecLL29SqhwSIM
+	 sCr8zWOzW8fEz7PmxfXT/ypgascn2WJDsSZDoXuscT+uCBIoAysK4RAKLMi9EHC8PgY2n
+	 4irnBuWQ+4t8k9s6hXnvEtQQMqWpYBjyv7Mp5JIbOsmzhYSzx80p1qQ0QwZD5bNGEnQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=INpYishy;
-	arc=none smtp.remote-ip=74.125.82.70
-Received: from mail-dl1-f70.google.com (mail-dl1-f70.google.com [74.125.82.70])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="orCn5/in";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE14C606A684
-	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 06:59:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DE14C606A684
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEA4D606A320
+	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 07:49:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=INpYishy
-Received: by mail-dl1-f70.google.com with SMTP id a92af1059eb24-1a71dd190b0so4907863c88.1
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 22:59:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795244391; x=1795849191; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=fGAdvKbnnDNvC7VTESnuJjeTLcD1XbFE2xtDIUZCto4=;
-        b=INpYishyBjqzCHtPkLUzALLHXaqZglbxaIt1wiWcwva416LFtcMHBPD2+cGMjFnwo5
-         tlhv7jPuRv22yW66JdlmNOITf5OD2JCpqy1Yfz+dOkJSUBiEVaknErML0ozRZnojN9BD
-         YAbCoPAOCh4MQ47VZKnT+f6uJxo7wgXDfoceg11V3QX52PYw1uNuyvbcfRYgUjL4a1n6
-         AxmjgAeAZr6J4/gg3wc8pbud+J1ULoTNT+Cdo69+3xpe1nlsmJrWxZ6UAzZMPcDRFMqV
-         Yiq35+1wY9gL7VKZnda839ti7EbYrTd6CZQP0rBH5NQH3DHUAohPdTSHd15uoQX7vEjG
-         PoXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795244391; x=1795849191;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=fGAdvKbnnDNvC7VTESnuJjeTLcD1XbFE2xtDIUZCto4=;
-        b=q+oPYmbf0PGQLGeWikMTtaBjwTFnDub+frU1Fg0x8lqOX7MgXxlAuqSgcDnxisDB7w
-         z1U4Wjodfk6dtqCbfT+u9Cb5L4bqVPnzHjidzd+75PGDOYPhqwz4hSLNNWtCud183UDa
-         Wnt2d8PlXPF3N6rtuvSn2tnftONAi9RkwE1DXmmasl6jNtoDc2EpcTiUHU3hm40C4UxD
-         8ZbpZJz+mCQoQ5Vkd6tQa7Gf3ZfTcfDe+Jr/yUB453Ub02FCFFAnMOkYD3jZxHpPo67W
-         ppPljIlCf8DE51V3JyEj9mGrAudJfV47IJwKm53c39eiJQH3K0Ay0eUIDAR4Y5ZttAMx
-         Ioow==
-X-Forwarded-Encrypted: i=1; AL+hErHcNBKpB51g+b3JMml7HE7vAfoBm+d1JH6l23hJcNmp5apHV2aWSglGh7lSfXeLhMKCPjs=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+zrjZP8ctoUff9K5+df01SyKJ900d2AePHH6LVC2ESvCKFUYkV
-	yRbkfZK01yMZcVtc4Y3YGMHoIW0HJdWKsuaALeN5jgyOqcuTeujtAVb4Ih+U/5Wp/yynnF1PIJb
-	MmsB+WyGEXQ==
-X-Received: from dloo27-n1.prod.google.com ([2002:a05:7023:a5b:10b0:1b2:48fb:f4d0])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:2608:b0:1b5:342a:e4f0
- with SMTP id a92af1059eb24-1b5568b678fmr7282977c88.6.1795244390557; Fri, 20
- Nov 2026 22:59:50 -0800 (PST)
-Date: Fri, 20 Nov 2026 22:58:12 -0800
-In-Reply-To: <20261121065813.4143649-1-irogers@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=orCn5/in
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A70011F000C0;
+	Sat, 21 Nov 2026 07:49:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795247373;
+	bh=vFgGw10nYgLi3aoWNLz3n3pkCqk3EH1b7Mf09Unos8Y=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=orCn5/in4bqTyHMbcA/V+9BfW3crLJv+NJuVoEfXLQNoPON0mm/KGwsyHBE+g1crq
+	 VG2FkFJ0rxGammyFnFooq9nWBSzNov3i2nVdABZ4JdfacboVHPMOCul1VUCWjGfqWu
+	 K5tN8j/pPjMGp/kjmY8kPQDkqdg7kbIp6zzvETN3JdvWy59XFtwiKarb+qXF7uIaJi
+	 AtWxvlV1yVmYdm3P6xck8+ETrU8brA5mxaKGUd95iynSXHtM69zvK6dCP36gEg+YAd
+	 2M2Iu9fxcx706PK8b/qx/C/aFHwIANPOkPk9YZSXF+j8LM1N3d5ssyv7/WTTM+r9RG
+	 V18EaMW4SI9lw==
+Message-ID: <sashiko-outbox-226803@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net] net: stmmac: retry a failed RX refill from a timer
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Anandu Padinhare" <Anandu.Padinhare@electrifex.com>
+Cc: =?utf-8?b?YnBmQHZnZXIua2VybmVsLm9yZw==?= <bpf@vger.kernel.org>
+In-Reply-To: <MA0PR01MB921746F36D90C7080287ACC9FD782@MA0PR01MB9217.INDPRD01.PROD.OUTLOOK.COM>
+References: <MA0PR01MB921746F36D90C7080287ACC9FD782@MA0PR01MB9217.INDPRD01.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 21 Nov 2026 07:49:33 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -78,65 +58,185 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261121065813.4143649-1-irogers@google.com>
-X-Mailer: git-send-email 2.56.1.750.gf70dc682cf-goog
-Message-ID: <20261121065813.4143649-24-irogers@google.com>
-Subject: [PATCH v15 23/23] perf machine: Add __guarded_by annotation to machines->guests
-From: Ian Rogers <irogers@google.com>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Marco Elver <elver@google.com>
-Cc: Bart Van Assche <bvanassche@acm.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, 
-	Weilin Wang <weilin.wang@intel.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-perf-users@vger.kernel.org, 
-	llvm@lists.linux.dev, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
 
-Annotate guests in struct machines with __guarded_by(&lock) and mark
-machines__init() with __context_unsafe().
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Medium] net: stmmac: stmmac_rx() runs receive loop before
+  stmmac_rx_refill() on retry
+It also noticed 2 related pre-existing issues this patch does not
+introduce:
+- [Critical] net: stmmac: XDP buffer race window in
+  stmmac_disable_all_queues() [1]
+- [High] net: stmmac: missing datapath and PM runtime checks in
+  stmmac_setup_tc() [2]
+--
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/util/machine.c | 1 +
- tools/perf/util/machine.h | 3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+commit 23d224e20637c2030c16317bc5eb885c790893b3
+Author: Anandu Padinhare <Anandu.Padinhare@electrifex.com>
 
-diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
-index 0cc593d5372a..70870baa157e 100644
---- a/tools/perf/util/machine.c
-+++ b/tools/perf/util/machine.c
-@@ -234,6 +234,7 @@ void machine__delete(struct machine *machine)
- }
- 
- int machines__init(struct machines *machines, struct perf_session *session)
-+	__context_unsafe(/* initialization */)
- {
- 	int err = machine__init(&machines->host, "", HOST_KERNEL_ID);
- 
-diff --git a/tools/perf/util/machine.h b/tools/perf/util/machine.h
-index 80191545ee8a..67d517742fb6 100644
---- a/tools/perf/util/machine.h
-+++ b/tools/perf/util/machine.h
-@@ -3,6 +3,7 @@
- #define __PERF_MACHINE_H
- 
- #include <sys/types.h>
-+#include <linux/compiler-context-analysis.h>
- #include <linux/rbtree.h>
- #include "maps.h"
- #include "dsos.h"
-@@ -153,7 +154,7 @@ struct machines {
- 	struct perf_session *session;
- 	struct rw_semaphore lock;
- 	struct machine host;
--	struct rb_root_cached guests;
-+	struct rb_root_cached guests __guarded_by(&lock);
- };
- 
- int machines__init(struct machines *machines, struct perf_session *session);
--- 
-2.56.1.750.gf70dc682cf-goog
+net: stmmac: retry a failed RX refill from a timer
 
+This commit adds a per-channel timer that schedules RX NAPI when fewer than
+16 RX descriptor slots remain with the DMA, so failed page_pool allocations
+in stmmac_rx_refill() are retried without relying on new RX interrupts.
+
+Link: https://lore.kernel.org/netdev/20260331195927.3353cc6d@kernel.org/
+Link: https://lore.kernel.org/netdev/20260402174049.0ac088cc@kernel.org/
+
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/=
+net/ethernet/stmicro/stmmac/stmmac_main.c
+> index a685ce4638f61..ad9873aaf2dba 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+
+[ ... ]
+
+> @@ -284,6 +312,10 @@ static void __stmmac_disable_all_queues(struct stmma=
+c_priv *priv)
+>  		if (queue < tx_queues_cnt)
+>  			napi_disable(&ch->tx_napi);
+>  	}
+> +
+> +	/* With NAPI disabled no poll can re-arm the refill timers */
+> +	for (queue =3D 0; queue < rx_queues_cnt; queue++)
+> +		timer_delete_sync(&priv->channel[queue].rx_refill_timer);
+>  }
+
+[Severity: Critical]
+This problem wasn't introduced by this patch, but in
+stmmac_disable_all_queues() [1], doesn't calling synchronize_rcu()
+before __stmmac_disable_all_queues() leave a window where NAPI is still
+enabled and can queue new AF_XDP zero-copy buffers after the RCU grace
+period finishes?
+
+drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:stmmac_disable_all_queues=
+() {
+	/* synchronize_rcu() needed for pending XDP buffers to drain */
+	for (queue =3D 0; queue < rx_queues_cnt; queue++) {
+		rx_q =3D &priv->dma_conf.rx_queue[queue];
+		if (rx_q->xsk_pool) {
+			synchronize_rcu();
+			break;
+		}
+	}
+
+	__stmmac_disable_all_queues(priv);
+}
+
+Because NAPI and the refill timers are only stopped inside
+__stmmac_disable_all_queues(), polls running during or after
+synchronize_rcu() can continue processing XDP buffers right before the XSK
+pool and DMA resources are torn down, leading to a use-after-free.
+
+> @@ -328,8 +360,17 @@ static void stmmac_enable_all_queues(struct stmmac_p=
+riv *priv)
+>  			continue;
+>  		}
+> =20
+> -		if (queue < rx_queues_cnt)
+> +		if (queue < rx_queues_cnt) {
+> +			/* Disabling the queues cancelled any pending refill
+> +			 * retry, but the ring may have been kept as it was.
+> +			 * Check it while no poll can run.
+> +			 */
+> +			bool refill =3D stmmac_rx_refill_needed(priv, queue);
+> +
+>  			napi_enable(&ch->rx_napi);
+> +			if (refill)
+> +				stmmac_rx_refill_timer_arm(ch);
+> +		}
+>  		if (queue < tx_queues_cnt)
+>  			napi_enable(&ch->tx_napi);
+>  	}
+
+[Severity: High]
+This problem wasn't introduced by this patch, but what happens when
+stmmac_setup_tc_block_cb() [2] calls __stmmac_disable_all_queues()
+and stmmac_enable_all_queues() while the interface is administratively
+down?
+
+drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:stmmac_setup_tc_block_cb(=
+) {
+	if (!tc_cls_can_offload_and_chain0(priv->dev, type_data))
+		return ret;
+
+	__stmmac_disable_all_queues(priv);
+	...
+	stmmac_enable_all_queues(priv);
+}
+
+When the interface is down, NAPI is already disabled and the device is
+runtime-suspended, so configuring a TC flower or u32 filter calls
+napi_disable() a second time in __stmmac_disable_all_queues() (deadlocking
+on NAPI state) and accesses clock-gated MAC registers without waking the
+device via pm_runtime_resume_and_get().
+
+> @@ -6164,6 +6205,8 @@ static int stmmac_napi_poll_rx(struct napi_struct *=
+napi, int budget)
+>  	u64_stats_update_end(&rxq_stats->napi_syncp);
+> =20
+>  	work_done =3D stmmac_rx(priv, budget, chan);
+> +	if (unlikely(stmmac_rx_refill_needed(priv, chan)))
+> +		stmmac_rx_refill_timer_arm(ch);
+>  	if (work_done < budget && napi_complete_done(napi, work_done)) {
+>  		unsigned long flags;
+
+[Severity: Medium]
+When the RX ring is completely depleted (CIRC_SPACE is 0) and the DMA has
+already written a frame into the final descriptor at rx_q->cur_rx, can
+stmmac_rx() leave that frame stranded once the timer poll finally succeeds
+in refilling the ring?
+
+In stmmac_rx(), the receive loop runs before stmmac_rx_refill():
+
+drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:stmmac_rx() {
+	while (count < limit) {
+		...
+		status =3D stmmac_rx_status(priv, &priv->xstats, p);
+		/* check if managed by the DMA otherwise go ahead */
+		if (unlikely(status & dma_own))
+			break;
+
+		next_entry =3D STMMAC_NEXT_ENTRY(rx_q->cur_rx,
+					       priv->dma_conf.dma_rx_size);
+		if (unlikely(next_entry =3D=3D rx_q->dirty_rx))
+			break;
+		...
+	}
+	...
+	stmmac_rx_refill(priv, queue);
+}
+
+Commit 0bb05e6adfa9 ("net: stmmac: Prevent NULL deref when RX memory
+exhausted") defers consuming the last descriptor at rx_q->cur_rx when
+next_entry =3D=3D rx_q->dirty_rx until stmmac_rx_refill() advances
+rx_q->dirty_rx.  Because the timer-scheduled poll enters the receive loop
+before calling stmmac_rx_refill(), two things happen:
+
+1. While allocations keep failing, every 10 ms retry poll runs
+   stmmac_rx_status() on the same unconsumed descriptor at rx_q->cur_rx
+   before breaking on next_entry =3D=3D rx_q->dirty_rx, repeatedly incremen=
+ting
+   priv->xstats counters for that frame.
+2. Once memory is available again, the receive loop still sees
+   next_entry =3D=3D rx_q->dirty_rx and breaks out with work_done =3D=3D 0,=
+ after
+   which stmmac_rx_refill() refills the ring and advances rx_q->dirty_rx.
+   stmmac_napi_poll_rx() then sees stmmac_rx_refill_needed() =3D=3D false a=
+nd
+   completes NAPI via napi_complete_done(), leaving the already-received
+   frame at rx_q->cur_rx unprocessed until another packet arrives on that
+   queue.
+
+Calling stmmac_rx_refill() at the start of stmmac_rx() when
+stmmac_rx_refill_needed() is true (or checking next_entry =3D=3D rx_q->dirt=
+y_rx
+before stmmac_rx_status()) would allow the recovery poll to consume the
+deferred descriptor and avoid double-counting its status.
+
+[1] https://sashiko.dev/#/bug/linux-644f1987-e595-49b8-bf50-2de2c07a3eaf
+[2] https://sashiko.dev/#/bug/linux-3ead95d4-661e-4a8f-a68a-8b257e32b68c
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/MA0PR01MB921746F36D=
+90C7080287ACC9FD782@MA0PR01MB9217.INDPRD01.PROD.OUTLOOK.COM?part=3D1
