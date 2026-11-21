@@ -1,55 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.212
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795257166;
-	b=bwcffkMUtVMPUwLk0RRk7f9P9jd1ZhGQaBAcOpBo916F17kYeq1G/tRQ8oz7epldP4Ta
-	 1O0fShLSMD9PksepqeoAzcczQPOgKzNC1hExS2+kieIOMlKK8Euk2A5gVnq1716JDTycD
-	 TfA0hJ33P6pE92BMDuhAP8b4AmaAK4j/2SYYVoC/6FwTA616qBZjiw3F5g6N2S/c/XA7H
-	 LulU2ZD0jU1DiLFmEhHq8xg0hJ8510mQOBVyVLlg8+ta1xnRgRF7V7zhCGSOK52F55jGM
-	 ZryFw6QOorYvDTw1esb8p3DnCRhwF0nBPKZmj0euDxgThAhdIlRmvB9LbbDLH5O16Xw==
+	t=1795257191;
+	b=bAz9LNpILNseKrZTjwSpZlybGxYx/gv/RhxpQzCRLf4QKJ0ogajGb0/HQzV/Uz4OTno0
+	 zseyc6gwr53pGrVbUVaWvUD+kFRzVckNn3N69s/EFtn+8TvQH+zzJ1klGre+N4lOTnHZW
+	 Rr2XVhhcmvp1y12htReQveRaIIk1nh5sVC4Kr1PkbXdzREgCNeGqh14JWGf9dufHCCrjn
+	 8cTk1e0YN5YsvBM8hSgXCq0KqursBkCrDCaQe8P1J5aSAQhj50GhIV7rfqy36Tf2Y8+9F
+	 LvF9qf+bv5cgUZR1UQWO7gaH9xUDqLOsC+6RaNGpl4CzCR+9GL0BKcllGDCBECNNyhA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795257166;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795257191;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=OvEjtdai0kpY7vmfUkOscZqwft6Dm3Bu6Xjzn36T494=;
-	b=VaCaLCMjlS5M/VmbdwoQhFpa8Cqarca1StBw/y7lQAU4s/I/09quctXVzKcrvo+5TEEl
-	 nFQYJUXA9ps7eV+fpK0doKv47+L0b9AHjvPqvPwUhOZFl7zwHmZK+KUntlmovYgwLgxlB
-	 XJOvW2xCv3m8S38fAN0CetypYhT0cCSPhMZxXSeTdRoSpxTPb/OS6uqXFu4hx50StswXN
-	 K6YkLzlfk+Ow70sM67M1N4R2NTYYlHGlZmEmxCZmPJOqA5u5Ii9wWhva1C2WiGPRI4SH1
-	 IB6VzrnsDp7/EIsNaQrB9pITfYPqtrmDr/hSGHbVWHw07HUXlHGwK5w0wyQl3jfoGYQ==
+	 X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=4p4wKE6PvmozHeJwACGdfAUAVrmaa85dC2fv+mLU1vI=;
+	b=O+Llh7t4hB1CGInL3laFoeftZpaxyzZTVVVmYWiDTitCB+l6vI7au8r9em/UOyhL+yxD
+	 FeEO/rvtl2aGD5Kgr4waA+H4jwRH1DEHppVTddOgBqH/h6Yvg/2NjPzwU+AViRPBR2sVt
+	 mLl7VHj4bRpOgE/4SLNfRcX3hHcDEDDa0SDcO4VqSzbAchFDfjEijeFrQKATgTOxHbhzb
+	 o+t5FIJ2cU+/E3tRzMFm31fzxwXF/wDQxMCUZlIvdmc3YWdeDYnPp5eti9/uFXIBgoh50
+	 QGFH2UXB1Pd2myJTo2UUC2UWulZjnn6MP21yZweKM3s7Ijphj4wMaEelQ/+nYWLGXqA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=PjI3pDfS;
-	arc=none smtp.remote-ip=95.215.58.43
-Received: from mta1.migadu.com (out-43.mta1.migadu.com [95.215.58.43])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ZdJWXIcq;
+	arc=none smtp.remote-ip=91.218.175.212
+Received: from mta0.migadu.com (out-212.mta0.migadu.com [91.218.175.212])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D092B606A325
-	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 10:32:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D092B606A325
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E180606A325
+	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 10:33:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5E180606A325
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=PjI3pDfS
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ZdJWXIcq
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=jXBhceP3FXuZJgFiHDC3WWIwTQ/bMGes850E8yWRlIg=;
+DKIM-Signature: a=rsa-sha256; bh=CbMozn8Q/GM0OSVU0Aj0Uoh2TZ6v7CkdghbcrV/tHjI=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795257162; v=1; x=1795861962;
- b=PjI3pDfSnuXwz7fH33xarOnVo/p3zFFthb3n6wt4B6MRS6HnjaxAXZmYS5esXaMY7IwAy+zF
- oW8XTGEnMli0OLA1IUqKFk/SEN3+lY3Dsq8hzXss7BRdpy6+GibQwaPp+D7o4SSJ0qokdrx1gtx
- nPv0Q/YabEeMn0ZZU1y+fQdc=
+ t=1795257188; v=1; x=1795861988;
+ b=ZdJWXIcqcYftA0gxNsl1aBkyYr0nBTJ/z3nhKG63NTqFT2ytE0qAqsOBSenkfxOyu8G6PI85
+ RveC3G00/L/MrYOjR471kst79DBN1phTpGrJanHmts2MAWHHV1HIcj3GW/XUXGU0sppbpKYYOaq
+ OpsLbGQszno/3TM+aNWmUV5s=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 0390872aa68e2c24;
-	Sat, 21 Nov 2026 10:32:42 +0000
-X-Mizu-Trace-ID: 0390872aa68e2c24
+Received: by smtp.migadu.com with ESMTPS id f56831efb0c9a871;
+	Sat, 21 Nov 2026 10:33:08 +0000
+X-Mizu-Trace-ID: f56831efb0c9a871
 X-Migadu-Flow: FLOW_OUT
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
 Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	stable@vger.kernel.org,
+	Vega <vega@nebusec.ai>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Zhiling Zou <zhilinz@nebusec.ai>,
 	John Fastabend <john.fastabend@gmail.com>,
 	Jakub Sitnicki <jakub@cloudflare.com>,
 	"David S. Miller" <davem@davemloft.net>,
@@ -72,15 +77,17 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	Shuah Khan <shuah@kernel.org>,
 	Sechang Lim <rhkrqnwk98@gmail.com>,
-	Mattia Meleleo <mattia.meleleo@coralogix.com>,
 	Michal Luczaj <mhal@rbox.co>,
+	Mattia Meleleo <mattia.meleleo@coralogix.com>,
 	linux-kernel@vger.kernel.org,
 	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf 00/11] fix misc sockmap issues
-Date: Sat, 21 Nov 2026 18:30:01 +0800
-Message-ID: <20261121103222.88209-1-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf 01/11] bpf, sockmap: Fix copied_seq updates with strparser
+Date: Sat, 21 Nov 2026 18:30:02 +0800
+Message-ID: <20261121103222.88209-2-jiayuan.chen@linux.dev>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261121103222.88209-1-jiayuan.chen@linux.dev>
+References: <20261121103222.88209-1-jiayuan.chen@linux.dev>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -92,55 +99,190 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This series fixes misc issues in sockmap. Most of them are old.
+With strparser, read_sock advances tp->copied_seq when it pulls skbs
+off sk_receive_queue, and recvmsg() advances it again when the user
+reads from ingress_msg. For a skb that the verdict passes back to the
+same socket, this counted the bytes twice, so commit 36b62df5683c
+("bpf: Fix wrong copied_seq calculation") added psock->ingress_bytes to
+record how many bytes went to self and take them out of the read_sock
+side.
 
-Patches 1-2 fix copied_seq when a strparser is attached and SK_PASS data
-is left unread, with a selftest. It was reported by Vega and comes from
-my earlier fix, commit 36b62df5683c ("bpf: Fix wrong copied_seq
-calculation").
+That works for RPC style traffic, where each reply is read before the
+next one arrives. But psock->copied_seq is advanced on every read_sock
+call while ingress_bytes is reset on every call, so tp->copied_seq
+moves forward whenever a new skb arrives, even if the user never calls
+recvmsg(). Once the parser runs twice before a read, the SK_PASS bytes
+of the first run are no longer subtracted and tp->copied_seq already
+covers them. recvmsg() then adds them again and copied_seq passes
+rcv_nxt. The socket now looks empty to TCP, the parser is not woken for
+new data anymore and recvmsg() keeps returning -EAGAIN while the skbs
+sit on sk_receive_queue.
 
-Patches 3, 4 and 7 are old issues I ran into while reading the code:
+tcp_bpf_recvmsg_parser() has the same problem from the other side. It
+snapshots tp->copied_seq at entry and writes the snapshot plus
+copied_from_self back at exit. tcp_data_ready() and tcp_msg_wait_data()
+release the socket lock in between, and the parser can consume data and
+advance copied_seq meanwhile. Writing the snapshot back rewinds that
+progress and leaves copied_seq behind the queued data.
 
-  03  strparser is initialized again while the old one is still alive,
-      after the parser link is removed and added back
-  04  an ingress redirect queues an empty sk_msg
-  07  sk_psock_backlog() takes the refcnt of the wrong psock
+tp->copied_seq should only cover bytes that have left the socket: what
+the verdict redirected or dropped, plus what the user has read. SK_PASS
+bytes still queued in ingress_msg must not count until recvmsg() hands
+them out. So let both sides add only their own delta to the current
+tp->copied_seq instead of recomputing it from a saved value. The
+read_sock side advances by what this call consumed minus what it passed
+to self, taking the delta from psock->copied_seq rather than the return
+value so that the FIN byte is still counted. The recvmsg() side adds
+copied_from_self, and counts the FIN there as well. Either change alone
+moves the mismatch to the other side, so they go together.
 
-The rest (patches 5, 6 and 8-11) are the old issues that came up in the
-review of Alexei's sockmap series [1]. They are not from that series, so
-they were left for a follow-up.
+ingress_bytes is also bumped from sk_psock_skb_ingress_enqueue(), which
+the backlog work reaches without the socket lock for skbs redirected
+from other sockets. Those bytes are not part of this socket's stream
+and recvmsg() never adds them back, so subtracting them leaves
+copied_seq behind. Count only in sk_psock_skb_ingress_self(), where
+msg->sk is set, which is what recvmsg() checks.
 
-Patch 05 returns -EBUSY to a second concurrent sender, and patch 06
-rejects disconnect with -EOPNOTSUPP like TLS does. Both change what
-user space sees, see the commit messages for why.
+A strparser skb has no owner when the verdict runs.
+sk_psock_skb_ingress_self() sets one with skb_set_owner_r(), and when
+the enqueue fails after that, the skb is left to the backlog with
+skb->sk still set. It is not in ingress_bytes, so read_sock has already
+counted it as consumed. But the backlog picks the path by skb->sk:
 
-[1] https://lore.kernel.org/bpf/20261102072112.4160195-1-alexei.starovoitov@gmail.com/
+  sk_psock_backlog
+    sk_psock_handle_skb
+      sk_psock_skb_ingress
+        if (skb->sk == sk)
+          sk_psock_skb_ingress_self   <- sets msg->sk
 
-Jiayuan Chen (11):
-  bpf, sockmap: Fix copied_seq updates with strparser
-  selftests/bpf: Add test for unread SK_PASS data with strparser
-  bpf, sockmap: Fix strparser reinit after the parser link is removed
-  bpf, sockmap: Fix empty sk_msg queued by ingress redirect
-  bpf, sockmap: Fix concurrent senders on one psock
-  bpf, sockmap: Fix reconnect with a psock by rejecting disconnect
-  bpf, sockmap: Fix psock refcnt taken in sk_psock_backlog()
-  bpf, sockmap: Fix socket lock taken on a child before accept()
-  bpf, sockmap: Fix apply_bytes when a redirect sends only a part
-  selftests/bpf: Fix errno expected by the wait send mem test of
-    test_sockmap
-  selftests/bpf: Add test for apply_bytes when a redirect sends a part
+and recvmsg() counts the bytes again. So once a strparser skb is left
+to the backlog, it must not take the skb->sk == sk path. Drop the owner
+with skb_orphan() when the enqueue fails. This also gives the rmem
+charge back, and the backlog charges the skb again like any other
+strparser skb queued there. Picking the path by skb->sk is nasty and
+will be reworked later.
 
- include/linux/skmsg.h                         |   8 ++
- net/core/skmsg.c                              |  44 +++++-
- net/core/sock_map.c                           |  67 +++++++++-
- net/ipv4/tcp_bpf.c                            |  79 +++++++++--
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 126 ++++++++++++++++++
- .../selftests/bpf/prog_tests/sockmap_strp.c   |  86 ++++++++++++
- .../bpf/progs/test_sockmap_msg_apply.c        |  46 +++++++
- tools/testing/selftests/bpf/test_sockmap.c    |   3 +-
- 8 files changed, 436 insertions(+), 23 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_msg_apply.c
+Fixes: 36b62df5683c ("bpf: Fix wrong copied_seq calculation")
+Fixes: e5c6de5fa025 ("bpf, sockmap: Incorrectly handling copied_seq")
+Cc: stable@vger.kernel.org
+Reported-by: Vega <vega@nebusec.ai>
+Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Co-developed-by: Zhiling Zou <zhilinz@nebusec.ai>
+Signed-off-by: Zhiling Zou <zhilinz@nebusec.ai>
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+---
+The BUG_ON(offset < 0) in tcp_collapse() when copied_seq trails the head
+of sk_receive_queue is not addressed here.
+---
+ net/core/skmsg.c   | 18 ++++++++++++++----
+ net/ipv4/tcp_bpf.c | 12 ++++++------
+ 2 files changed, 20 insertions(+), 10 deletions(-)
 
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index 8a3b8536c0c21..16f84dcb5acd9 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -574,9 +574,6 @@ static int sk_psock_skb_ingress_enqueue(struct sk_buff *skb,
+ 			return num_sge;
+ 	}
+ 
+-#if IS_ENABLED(CONFIG_BPF_STREAM_PARSER)
+-	psock->ingress_bytes += len;
+-#endif
+ 	copied = len;
+ 	msg->sg.start = 0;
+ 	msg->sg.size = copied;
+@@ -642,8 +639,21 @@ static int sk_psock_skb_ingress_self(struct sk_psock *psock, struct sk_buff *skb
+ 	 */
+ 	msg->sk = sk;
+ 	err = sk_psock_skb_ingress_enqueue(skb, off, len, psock, sk, msg, take_ref);
+-	if (err < 0)
++	if (err < 0) {
+ 		kfree(msg);
++		/*
++		 * A strparser skb comes in without an owner and read_sock counts
++		 * it as consumed once it is left to the backlog. Drop the owner
++		 * again, or sk_psock_skb_ingress() takes the skb->sk == sk path
++		 * and recvmsg() counts it a second time.
++		 */
++		if (skb_bpf_strparser(skb))
++			skb_orphan(skb);
++	}
++#if IS_ENABLED(CONFIG_BPF_STREAM_PARSER)
++	else
++		psock->ingress_bytes += len;
++#endif
+ 	return err;
+ }
+ 
+diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+index 788ce08eef4d7..e59103e77aa5f 100644
+--- a/net/ipv4/tcp_bpf.c
++++ b/net/ipv4/tcp_bpf.c
+@@ -249,7 +249,6 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+ 	struct tcp_sock *tcp;
+ 	int copied_from_self = 0;
+ 	int copied = 0;
+-	u32 seq;
+ 
+ 	if (unlikely(flags & MSG_ERRQUEUE))
+ 		return inet_recv_error(sk, msg, len);
+@@ -263,7 +262,6 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+ 
+ 	lock_sock(sk);
+ 	tcp = tcp_sk(sk);
+-	seq = tcp->copied_seq;
+ 	/* We may have received data on the sk_receive_queue pre-accept and
+ 	 * then we can not use read_skb in this context because we haven't
+ 	 * assigned a sk_socket yet so have no link to the ops. The work-around
+@@ -295,11 +293,10 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+ 
+ 		if (is_fin) {
+ 			copied = 0;
+-			seq++;
++			copied_from_self++;
+ 			goto out;
+ 		}
+ 	}
+-	seq += copied_from_self;
+ 	if (!copied) {
+ 		long timeo;
+ 		int data;
+@@ -341,7 +338,7 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+ 	}
+ out:
+ 	if (!peek)
+-		WRITE_ONCE(tcp->copied_seq, seq);
++		WRITE_ONCE(tcp->copied_seq, tcp->copied_seq + copied_from_self);
+ 	tcp_rcv_space_adjust(sk);
+ 	/* Data on the psock outlives the connection that it came in on */
+ 	if (copied > 0 && tcp_can_send_ack(sk))
+@@ -756,6 +753,7 @@ int tcp_bpf_strp_read_sock(struct strparser *strp, read_descriptor_t *desc,
+ 	struct sk_psock *psock;
+ 	struct tcp_sock *tp;
+ 	int copied = 0;
++	u32 seq;
+ 
+ 	tp = tcp_sk(sk);
+ 	rcu_read_lock();
+@@ -765,6 +763,7 @@ int tcp_bpf_strp_read_sock(struct strparser *strp, read_descriptor_t *desc,
+ 		goto out;
+ 	}
+ 
++	seq = psock->copied_seq;
+ 	psock->ingress_bytes = 0;
+ 	copied = tcp_read_sock_noack(sk, desc, recv_actor, true,
+ 				     &psock->copied_seq);
+@@ -775,7 +774,8 @@ int tcp_bpf_strp_read_sock(struct strparser *strp, read_descriptor_t *desc,
+ 	 * For SK_REDIRECT, we need to ack the frame immediately but for
+ 	 * SK_PASS, we want to delay the ack until tcp_bpf_recvmsg_parser().
+ 	 */
+-	tp->copied_seq = psock->copied_seq - psock->ingress_bytes;
++	WRITE_ONCE(tp->copied_seq, tp->copied_seq + psock->copied_seq - seq -
++				   psock->ingress_bytes);
+ 	tcp_rcv_space_adjust(sk);
+ 	__tcp_cleanup_rbuf(sk, copied - psock->ingress_bytes);
+ out:
 -- 
 2.43.0
 
