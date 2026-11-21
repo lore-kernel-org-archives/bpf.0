@@ -1,50 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.138
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.157
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795221258;
-	b=dTX4QOKqqZ3qVla0388gaFF6V9q1jr1Tmb7L9DcA3GPsCHIeR1sKJx4YAGwHYXOaUGN+
-	 IZR7zNWJw59yX1KuRVcG9RfrXPaVZfNjSaYdZd7kTqmscUmmOqOJ1vAradL+qKRlLEltY
-	 AMJujp0qXqzkL+1rhknieqOFq9IazCYOOzuaEQo8Io749v175wLHr07WSnFyepNFUcsCo
-	 BZFuFm1NlBUlmyeui1oP1H1WXqibiYzJxYydiC1RHDRG5mgMqvYlbL7QIqOu0sNwyq55I
-	 St+txwXG2850FVgC4hnBdcKQ2FKgV+sWYNfsuZu2xOV+daw6wHWpc0AadNc09Liwu7A==
+	t=1795221266;
+	b=TOrsjlV81DQ4FucBM36NkA8vFEuySvfUGb4JLIjEzuul83B/P7c76yq0M0BgBuZztboy
+	 K5HqoyEqRRiD1FLRx8K2eNAe1l8cTelUqTYIQozcEKAxQYADdAak72vvybsiPilDzXbps
+	 GwFW2wz8lhqNVaqDlWPix4N9CO0ufFyRxDjD4S/vkM8B5czYgh0y/o7/DCF8dzElxgMNH
+	 1QUxOSuCWI6wWLga/FCV0Z3CQOi3nDLnuj/UnYakmHF/M26T2h4Q6zNIUgSwzcLwVZTES
+	 I5W+Infbq+Erb1vW0fobpsFaCJ/lQYXSTN92CLRajAdxTO2NlTgWYp8SOaCgmr5LBEA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795221258;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795221266;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=LVqfb6I1hyZommDgKkjQ68K5FsUedpZwA/p7WOx4ogk=;
-	b=bioakL2kXIe8uXK/DAiygAa65nt/7amdhnW0vc5XXpMX2xIjJ8d5pmNGga08lZPFIgBM
-	 aMwLhfM4dkZGEg63SOR6QdNiys1W3DaDgCXTF6HsAU6pgjcG3FLLhQNLi8mVgJkSpuKZg
-	 8NiN0ItGqKF8S+WDSLHynVpJA+NlR4lzKh716gOliX2desFLdbpJpDDv6VrXqKuM5Ercb
-	 4HercSw011pBtCkDPKoMhv9lFGBcP2aFjN4b8rZ/2CP16stuGL+rlB681eE9eQvQHbSGM
-	 JTTGimUJyBaiEQ4QvfZCZCs9cLa8mGez982KaaaSH5oUJarzLI8TzodzeGugPf9w1yg==
+	 X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=uBtkiDsj+it2yuD+PNBgJrBOad1TOpfb5WOVADUa3UM=;
+	b=kU8vCEYRifv27JZQFMe6WZyD3e9f9h6ag3WgdhMADoZzNvxOceve35203DcAeKO0xa/o
+	 FmDtilmNnyPzbhS+BKqoGZPw3sqoNQkMhMGMxqTE1FycAI5OPYc9Z8s5Tq49epU3JLK+w
+	 OaAYbfoJ6JNl9RiOJLrBlAJ9sAOTBurpl6BHdZ+Np71XQy8qYJsdeTiYnH+6NTshvYnQ+
+	 31QZExZceBxcRloYAHwF6THHoh7NE5uQDwEjO1JRdBWDRkNudYG1P6XUtzUji7S7UVZLv
+	 cDgd2oE8SCcPSu1NGB8TR0cBlqU+zchM52pUCzM9hs++sDcJO1jXGNc1JnipO2rJ4Uw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=AsY5sR9u;
-	arc=none smtp.remote-ip=95.215.58.138
-Received: from mta1.migadu.com (out-138.mta1.migadu.com [95.215.58.138])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=dsWCaO0H;
+	arc=none smtp.remote-ip=95.215.58.157
+Received: from mta1.migadu.com (out-157.mta1.migadu.com [95.215.58.157])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CFE1606A681
-	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 00:34:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0CFE1606A681
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8EC060A2608
+	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 00:34:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C8EC060A2608
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=AsY5sR9u
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=dsWCaO0H
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=/a8TPGHtim4W1Kp+5mddRIO0C+8W9McFTbcSGRi3Jys=;
+DKIM-Signature: a=rsa-sha256; bh=6xxqSekLAxGWLipL5wNFTRl3FhuvQzQBfNSr9PL/vKE=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795221254; v=1; x=1795826054;
- b=AsY5sR9u6zCUde8BmP5ld3dYcq7yXYHf6NRW5s32oJlwqZ93HCXZIOW+Gctql5dUmTQ0GsV+
- /18oHrvcGtzkwwnH/t2dpHkUB7CoIQ5hNTGQ664fS1GGthvMlA3T6EF2nj6Vlm5vVOJZvYlFdOm
- fbOe8mV743O6JM93NlQsqBx0=
+ t=1795221263; v=1; x=1795826063;
+ b=dsWCaO0HWVcVuW3Qs7Xbva1dEf/pZ0fPPFrRm1EXweP9sDiRSrpE9ZtTL8DtSlqZhhlorcfC
+ Ag+HX2eun6lVMMUvPkQZYg/n/X17+d/IeAkwPoKUxsZyJmNd5CDIeCRm3yPrtsPc82bTOW1zi0n
+ WRoCLopFvL35DiPaOpFDywTg=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by mta11.migadu.com with ESMTPS id dc407b2e55f5ce0c;
-	Sat, 21 Nov 2026 00:34:14 +0000
-X-Mizu-Trace-ID: dc407b2e55f5ce0c
+Received: by mta11.migadu.com with ESMTPS id 49c793bd95345343;
+	Sat, 21 Nov 2026 00:34:22 +0000
+X-Mizu-Trace-ID: 49c793bd95345343
 X-Migadu-Flow: FLOW_OUT
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
@@ -61,10 +62,12 @@ Cc: Alan Maguire <alan.maguire@oracle.com>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	sched-ext@lists.linux.dev
-Subject: [PATCH bpf-next v2 0/6] libbpf: Support kernel-side kfunc variants
-Date: Fri, 20 Nov 2026 17:33:57 -0700
-Message-ID: <20261121003403.2928928-1-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v2 2/6] sched_ext: Prefer ___v2 kfunc names in compat.bpf.h
+Date: Fri, 20 Nov 2026 17:33:59 -0700
+Message-ID: <20261121003403.2928928-3-ihor.solodrai@linux.dev>
 X-Mailer: git-send-email 2.56.1
+In-Reply-To: <20261121003403.2928928-1-ihor.solodrai@linux.dev>
+References: <20261121003403.2928928-1-ihor.solodrai@linux.dev>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -76,110 +79,125 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A kfunc prototype change breaks BPF programs built against the old
-prototype. For example, 8fe4dc4f6456 ("bpf: change prototype of
-bpf_session_{cookie,is_return}") made this change in v7.0:
+compat.bpf.h declares scx_bpf_dsq_insert___v2___compat and similar
+names. libbpf drops the last ___ suffix of a declaration and looks up
+the rest exactly, so these resolve the kernel's ___v2 kfuncs.
 
-  before:  bool bpf_session_is_return(void);
-  v7.0:    bool bpf_session_is_return(void *ctx);
+The next patch makes libbpf drop the last suffix of kernel function
+names too and select a variant by prototype. The ___v2___compat
+names then resolve nothing, and the wrappers silently fall back to
+the ___v1 kfuncs. For example, scx_bpf_dsq_move_to_local() drops
+enq_flags.
 
-A program built before v7.0 declares bpf_session_is_return(void), and
-libbpf can't resolve it on v7.0. The kernel has no way to keep the old
-prototype available to such programs. sched_ext works around the same
-problem with ___v2___compat names in compat.bpf.h.
+Try the ___v2 names first. libbpf with that patch resolves them by
+prototype. Older libbpf leaves them unresolved, because the
+unsuffixed kfunc has a different prototype, and still resolves the
+___v2___compat names that follow.
 
-With this series, the kernel can keep the old prototype as a variant:
-
-  bool bpf_session_is_return(void *ctx);
-  bool bpf_session_is_return___v1(void);
-
-and libbpf binds each declaration to the function with a matching BTF
-prototype.
-
-The new lookup changes what some existing declarations resolve to.
-
-A replay of kfunc resolution against v6.18, v7.2 and bpf-next BTF
-covered 1302 BPF objects: 1174 sched_ext schedulers from Meta's
-internal builds, and 128 public objects from the scx repo,
-tools/sched_ext, the selftests and bpftrace. It also covered 16
-objects declaring every kfunc from each x86 vmlinux.h in the scx
-repo's history, counted here as public. No strong declaration
-changes. These __weak declarations change, counted in objects per
-kernel:
-                                                    public   Meta
-  lost on v7.2 and bpf-next, no candidate:
-    scx_bpf_dsq_insert___v2___compat                    36    136
-    scx_bpf_dsq_move_to_local___v2___compat             33     27
-    scx_bpf_reenqueue_local___v2___compat                9     44
-
-  lost on v7.2 and bpf-next, struct names differ:
-    bpf_io_uring_get_region(struct io_ring_ctx *)        1      0
-    bpf_io_uring_submit_sqes(struct io_ring_ctx *)       1      0
-
-  lost on bpf-next, struct names differ:
-    bpf_cpumask_populate(struct cpumask *)               8     88
-
-  lost on v6.18 and v7.2, struct names differ:
-    bpf_cpumask_populate(struct bpf_cpumask *)           4      0
-
-  gained on v7.2 and bpf-next:
-    scx_bpf_dsq_move_to_local___v2(u64, u64)             7    120
-    scx_bpf_dsq_insert___v2(...)                         8      0
-    scx_bpf_reenqueue_local___v2(void)                   8      0
-
-In-tree compat.bpf.h now tries the plain ___v2 names first. Objects
-that gain a ___v2 kfunc now call it instead of their fallback path.
-
+Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
+ tools/sched_ext/include/scx/compat.bpf.h | 39 ++++++++++++++++--------
+ 1 file changed, 26 insertions(+), 13 deletions(-)
 
-v1->v2:
-  * Pick a kfunc by prototype among all funcs with the same essential
-    name, without preferring the exact name (Andrii, Eduard).
-  * Compare struct and union names, ignoring ___ suffixes, instead of
-    using bpf_core_types_are_compat(), so that variants can differ
-    only in a pointee type (Eduard, Andrii).
-  * Drop the alias exception that kept ___v2___compat names working
-    (Eduard). New patch 2 updates compat.bpf.h instead.
-  * resolve_btfids: check registered kfuncs within vmlinux or a module
-    with libbpf's new matcher and report every matching pair. New
-    patch #1 shares libbpf internals with it instead of wrapping them
-    (Eduard).
-  * Call kernel-side ___ functions "variants". "Flavor" stays CO-RE's
-    term for local suffixes.
-  * Rewrite the docs for the new rules.
-
-v1: https://lore.kernel.org/bpf/20261117192153.3384031-1-ihor.solodrai@linux.dev/
-
----
-
-Ihor Solodrai (6):
-  libbpf: Separate interfaces shared with in-tree tools
-  sched_ext: Prefer ___v2 kfunc names in compat.bpf.h
-  libbpf: Resolve kfunc variants by prototype
-  selftests/bpf: Test kfunc variant selection by prototype
-  resolve_btfids: Reject ambiguous kfunc variants
-  docs/bpf: Describe how to change a kfunc's prototype
-
- Documentation/bpf/kfuncs.rst                  |  96 ++++++++++++++
- tools/bpf/bpftool/Makefile                    |   9 +-
- tools/bpf/resolve_btfids/btf_colors.c         |  15 +--
- tools/bpf/resolve_btfids/btf_colors.h         |   4 -
- tools/bpf/resolve_btfids/main.c               |  74 ++++++++++-
- tools/lib/bpf/btf.c                           |  99 ++++++++++++++-
- tools/lib/bpf/libbpf.c                        | 117 ++++++++++++------
- tools/lib/bpf/libbpf_internal.h               |  32 +----
- tools/lib/bpf/libbpf_tools.h                  |  48 +++++++
- tools/sched_ext/include/scx/compat.bpf.h      |  39 ++++--
- .../selftests/bpf/prog_tests/verifier.c       |   3 +
- .../selftests/bpf/progs/kfunc_variants.c      |  32 +++++
- .../selftests/bpf/test_kmods/bpf_testmod.c    |  12 ++
- .../bpf/test_kmods/bpf_testmod_kfunc.h        |   3 +
- 14 files changed, 481 insertions(+), 102 deletions(-)
- create mode 100644 tools/lib/bpf/libbpf_tools.h
- create mode 100644 tools/testing/selftests/bpf/progs/kfunc_variants.c
-
-
-base-commit: 82cc2b4383e3edfa1026c8612fb4e90a9329ba11
+diff --git a/tools/sched_ext/include/scx/compat.bpf.h b/tools/sched_ext/include/scx/compat.bpf.h
+index 254882bd8ce6..16cf255e4221 100644
+--- a/tools/sched_ext/include/scx/compat.bpf.h
++++ b/tools/sched_ext/include/scx/compat.bpf.h
+@@ -29,8 +29,10 @@ struct cgroup *scx_bpf_task_cgroup___new(struct task_struct *p) __ksym __weak;
+  * scx_bpf_dispatch_from_dsq() and friends were added during v6.12 by
+  * 4c30f5ce4f7a ("sched_ext: Implement scx_bpf_dispatch[_vtime]_from_dsq()").
+  *
+- * v7.1: scx_bpf_dsq_move_to_local___v2() to add @enq_flags.
++ * v7.1: scx_bpf_dsq_move_to_local___v2() to add @enq_flags. Older libbpf can
++ * resolve it only through the extra ___compat suffix.
+  */
++bool scx_bpf_dsq_move_to_local___v2(u64 dsq_id, u64 enq_flags) __ksym __weak;
+ bool scx_bpf_dsq_move_to_local___v2___compat(u64 dsq_id, u64 enq_flags) __ksym __weak;
+ bool scx_bpf_dsq_move_to_local___v1(u64 dsq_id) __ksym __weak;
+ void scx_bpf_dsq_move_set_slice___new(struct bpf_iter_scx_dsq *it__iter, u64 slice) __ksym __weak;
+@@ -45,11 +47,13 @@ bool scx_bpf_dispatch_from_dsq___old(struct bpf_iter_scx_dsq *it__iter, struct t
+ bool scx_bpf_dispatch_vtime_from_dsq___old(struct bpf_iter_scx_dsq *it__iter, struct task_struct *p, u64 dsq_id, u64 enq_flags) __ksym __weak;
+ 
+ #define scx_bpf_dsq_move_to_local(dsq_id, enq_flags)				\
+-	(bpf_ksym_exists(scx_bpf_dsq_move_to_local___v2___compat) ?		\
+-	 scx_bpf_dsq_move_to_local___v2___compat((dsq_id), (enq_flags)) :	\
+-	 (bpf_ksym_exists(scx_bpf_dsq_move_to_local___v1) ?			\
+-	  scx_bpf_dsq_move_to_local___v1((dsq_id)) :				\
+-	  scx_bpf_consume___old((dsq_id))))
++	(bpf_ksym_exists(scx_bpf_dsq_move_to_local___v2) ?			\
++	 scx_bpf_dsq_move_to_local___v2((dsq_id), (enq_flags)) :		\
++	 (bpf_ksym_exists(scx_bpf_dsq_move_to_local___v2___compat) ?		\
++	  scx_bpf_dsq_move_to_local___v2___compat((dsq_id), (enq_flags)) :	\
++	  (bpf_ksym_exists(scx_bpf_dsq_move_to_local___v1) ?			\
++	   scx_bpf_dsq_move_to_local___v1((dsq_id)) :				\
++	   scx_bpf_consume___old((dsq_id)))))
+ 
+ #define scx_bpf_dsq_move_set_slice(it__iter, slice)				\
+ 	(bpf_ksym_exists(scx_bpf_dsq_move_set_slice___new) ?			\
+@@ -430,12 +434,13 @@ scx_bpf_dsq_insert_vtime(struct task_struct *p, u64 dsq_id, u64 slice, u64 vtime
+ /*
+  * v6.19: scx_bpf_dsq_insert() now returns bool instead of void. Move
+  * scx_bpf_dsq_insert() decl to common.bpf.h and drop compat helper after v6.22.
+- * The extra ___compat suffix is to work around libbpf not ignoring __SUFFIX on
+- * kernel side. The entire suffix can be dropped later.
++ * Older libbpf can resolve scx_bpf_dsq_insert___v2() only through the extra
++ * ___compat suffix.
+  *
+  * v6.13: scx_bpf_dsq_insert() renaming is also handled here. See the block on
+  * dispatch renaming above for more details.
+  */
++bool scx_bpf_dsq_insert___v2(struct task_struct *p, u64 dsq_id, u64 slice, u64 enq_flags) __ksym __weak;
+ bool scx_bpf_dsq_insert___v2___compat(struct task_struct *p, u64 dsq_id, u64 slice, u64 enq_flags) __ksym __weak;
+ void scx_bpf_dsq_insert___v1(struct task_struct *p, u64 dsq_id, u64 slice, u64 enq_flags) __ksym __weak;
+ void scx_bpf_dispatch___compat(struct task_struct *p, u64 dsq_id, u64 slice, u64 enq_flags) __ksym __weak;
+@@ -443,7 +448,9 @@ void scx_bpf_dispatch___compat(struct task_struct *p, u64 dsq_id, u64 slice, u64
+ static inline bool
+ scx_bpf_dsq_insert(struct task_struct *p, u64 dsq_id, u64 slice, u64 enq_flags)
+ {
+-	if (bpf_ksym_exists(scx_bpf_dsq_insert___v2___compat)) {
++	if (bpf_ksym_exists(scx_bpf_dsq_insert___v2)) {
++		return scx_bpf_dsq_insert___v2(p, dsq_id, slice, enq_flags);
++	} else if (bpf_ksym_exists(scx_bpf_dsq_insert___v2___compat)) {
+ 		return scx_bpf_dsq_insert___v2___compat(p, dsq_id, slice, enq_flags);
+ 	} else if (bpf_ksym_exists(scx_bpf_dsq_insert___v1)) {
+ 		scx_bpf_dsq_insert___v1(p, dsq_id, slice, enq_flags);
+@@ -506,12 +513,12 @@ static inline bool __COMPAT_has_dsq_reenq_task(void)
+ 
+ /*
+  * v6.19: The new void variant can be called from anywhere while the older v1
+- * variant can only be called from ops.cpu_release(). The double ___ prefixes on
+- * the v2 variant need to be removed once libbpf is updated to ignore ___ prefix
+- * on kernel side. Drop the wrapper and move the decl to common.bpf.h after
+- * v6.22.
++ * variant can only be called from ops.cpu_release(). Older libbpf can resolve
++ * the v2 variant only through the extra ___compat suffix. Drop the wrapper and
++ * move the decl to common.bpf.h after v6.22.
+  */
+ u32 scx_bpf_reenqueue_local___v1(void) __ksym __weak;
++void scx_bpf_reenqueue_local___v2(void) __ksym __weak;
+ void scx_bpf_reenqueue_local___v2___compat(void) __ksym __weak;
+ 
+ static inline bool __COMPAT_scx_bpf_reenqueue_local_from_anywhere(void)
+@@ -523,6 +530,8 @@ static inline void scx_bpf_reenqueue_local(void)
+ {
+ 	if (__COMPAT_has_generic_reenq())
+ 		scx_bpf_dsq_reenq___compat(SCX_DSQ_LOCAL, 0);
++	else if (bpf_ksym_exists(scx_bpf_reenqueue_local___v2))
++		scx_bpf_reenqueue_local___v2();
+ 	else if (__COMPAT_scx_bpf_reenqueue_local_from_anywhere())
+ 		scx_bpf_reenqueue_local___v2___compat();
+ 	else
+@@ -541,6 +550,10 @@ static inline int scx_bpf_reenqueue_local_from_anywhere(void)
+ 		scx_bpf_dsq_reenq___compat(SCX_DSQ_LOCAL, 0);
+ 		return 0;
+ 	}
++	if (bpf_ksym_exists(scx_bpf_reenqueue_local___v2)) {
++		scx_bpf_reenqueue_local___v2();
++		return 0;
++	}
+ 	if (__COMPAT_scx_bpf_reenqueue_local_from_anywhere()) {
+ 		scx_bpf_reenqueue_local___v2___compat();
+ 		return 0;
 -- 
 2.56.1
 
