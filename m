@@ -1,98 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.173
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795262283;
-	b=3eMBmGVaAt1sHg/R7ekAyDStGtsWYusYomp6JjYb1tWNeVxFwQAfgOl7CJucBCsLID+n
-	 NjqE6dFPaHDsGaOwtE7yqyiLANML36VCGOiBxXPUtq+/UfeoSYXgGZQs1bb+WHFTlFoPT
-	 gaV8F2PuRXIlFiG6eOcs9VhR4qgxdnrouKbkMnQ6yiXk/5SUdKSN132m3j9YlXCsBrMaR
-	 FNx+xz4yvmxNzhN5ddoRPqk0nLZcADW1SSJaIlpc10mL2wFbZ13omvBF9dE7WRM0fZQMz
-	 WfVn38FFc5xJEbs1FrH/BEPgqG+rOJYVo9LiPeHRGSxyp+D5MaEDMT7Q3GB7+Be+PzA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795262283;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=6oeoFimhtJH2hxh44JdtBw3TK3noQY8/rbKIHHAErn4=;
-	b=kNm2CuBLICAw6l+/eWXYgHAXz6wg3mc1Z/iUuTWKtQGCEKI793GA2JkJPGQfSYgqmSVQ
-	 1UsLz/gfYfrVgj6ufCG5eCSCfuKk/Ch3Zj3MjMeJEp1ehLUZaOOecF6ZvO1fsrTFQyg5v
-	 D3vCG4KgmbUQK/UBNWHogub0k2Mhl2cUOv6UQlEw7rERnGhffblBX1xys2fhrhR8g3wwx
-	 VABUMYfWpkWaxY6TpYrMKy81yZvaKOYKUJy8vDFGhxpwKI0wSnsptns8VfVMuebFFMaug
-	 0oel1CB9Ua9zWKZyEK7NdZiIxI9pJCwAzjnWE+uVBbvzO4ukGJsHnlaZpVZrYxaJbQw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=none header.from=mojatatu.com;
-	spf=none smtp.mailfrom=mojatatu.com;
-	dkim=pass header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=tGuwzQ0L;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.173
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.175
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795263133;
+	b=nRoZTKGQXew9LfIlZaxRRKm9rzHsrQA5UDFeTrc2XrbIxbZy7EyXOKE8T1GipGob/+dm
+	 1n5fuEiTn6X+UOiwtx99fbk25VhMnCLYXjUsc045dXSCRJVcTqDYlXs8BLpDfcxdHgaQ7
+	 cvNCmGzme4U7rC5qswulT1ScfCt4NvqbjssTEADHAHntmH+uZmsCY5btZKD+gsnbvN7s9
+	 WAjSfXpmrCv9t7HC/KuDslS5vspdl4eoFS4r67XpRPOiUSXMrV+HdurL7qX7qF5KMMkm3
+	 1o5kc3cPZBdVX1Op4IffuMTxJ9HQ4MCy019pGFYyNCYrrDvoN7W2IU4P0hD/YQL+8qw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795263133;
+	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:In-Reply-To:References:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=lGYwpKC1fByS7GG5SknYRcbt4FjMkQjX/lb3OlO0LP4=;
+	b=D8zcq9KfnV6fgyR2NucoF4WJKuh+8gsGfwK6zIO11XiMr84wMMbfQwSiNiOVQnIwCseG
+	 Jf9l2DPIV5dL7FCbv8ePv6pRGq+rdxBfZzS3K1ud4JHQhasv6hPPn9JSk05A8QlHQ7p+d
+	 QiH3jmCWgF8C/puS5O3MFxbv82k76FEk18+o6H2d0JOJ1ch+7x4wPNX+2W6nnrE7zAUlk
+	 IrqNWps+GVmrROc9Z6IOyOYVeK7gRk+yTFA1v0jl3fcUT2OaJmLu2hIy+QjBeI+LUF/Ua
+	 amosrepMkFOAqBJvFIkbXJn4Wm6mQtwENI5L73HTTA/tGlNuKr0Uzt11OwhsplcDuIg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=fail header.from=kernel.org;
+	spf=pass smtp.mailfrom=gmail.com;
+	arc=none smtp.remote-ip=209.85.160.175
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43268606A330
-	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 11:58:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 43268606A330
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=tGuwzQ0L
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-8b3577deeb0so834171b3a.3
-        for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 03:58:02 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795262282; cv=none;
-        d=google.com; s=arc-20260327;
-        b=N1fAZ1WYHBGvwfoRzBUWWUt8/aN6MtMHpL3bclCT8B746eHnUbttlW6G268G9dHLHD
-         dXriU2aqQBYddAs6IVmXWCdjwbhjmuGDWK4RzEUrTUOy6+XNqet+Y6E/cu8zqo8Krtn3
-         u1FivPb+qrHyM+HokxqRGeOfPgwjX6HUtauvTY14hV3vVqLIxNIwOjkGdTW5tyfy7Mtd
-         hyNmQttm6HXqzI5/+XiCknGCt8ImwyiHtzt7dL5bYOJixosX5WFtqRFN1P665NjkNfBJ
-         72Q1AE1yidm4afVTSLuNs3iz/3qJyPdz7aqlNbpYgvKmMR4P6Kk0uY0q+oa/bnXn1FWB
-         QB8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=6oeoFimhtJH2hxh44JdtBw3TK3noQY8/rbKIHHAErn4=;
-        fh=0S9V07r6vft2WHwYQkRsPCmCzwzaWlImX6tVPMV3AYs=;
-        b=Q+c6vDEWB6l4d/nQJc3zQScUWxxqbd6qQ2R3o1qXdf7wUQFqAs9gRdknu5VVYLbCd/
-         FlK1vFxKGdxOxTcst4RPX/RPVtMjYQAgnm3xr8cewsA9ROtVPVPAAZvGCipcJ95L+Aa3
-         dd7Fwm5wapafLGKhfRBTmGSDCFsQd0jLHJN1iEovSkn8nhDFehBliwqCnXzY6jfAOcj+
-         wCdneIb1yyyI2KtqQKM9kPyGLPYadZVkTkTL1pCz0xj3j4JkqVQBUY/Be8WUiUUn9CS7
-         Ki1NQHtWc5MiMtiYEnWJAZLsu+pZeYRlWUBU35QPJrmsXehlmeY/CDXSznWcvHVV+m2w
-         jx3Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1795262282; x=1795867082; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=6oeoFimhtJH2hxh44JdtBw3TK3noQY8/rbKIHHAErn4=;
-        b=tGuwzQ0LPZl1oA7DlU0y5cfAR3if15FhKZcT67HBYIgCFujoCtXIBXnTWc0K/OKoXI
-         dxTHlJwRNwT0H8wTkjnUo6QjsV8k8Ue9qN9DTfnhxHLbt1R4+4lVCyqkpok0V0/zl+h4
-         QKkDsPstBbd8/Fw50OiiRtymEzae8Ti4Cw50Q=
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD1A2606A320
+	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 12:12:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CD1A2606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-5569551d19dso30441111cf.0
+        for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 04:12:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795262282; x=1795867082;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1795263132; x=1795867932;
+        h=mime-version:content-transfer-encoding:content-type:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=6oeoFimhtJH2hxh44JdtBw3TK3noQY8/rbKIHHAErn4=;
-        b=RaYTaEtUQ0MW9rUQRn0iIk+9O6WAtv/hH5EmTQCG3QRZctKbrwCQ4kQtGNjf1UzNG4
-         OIMn3Id9RhDZ8X6yt1NEcD1V9HXdsjnF4S1D6TeyUsBzpNE6rliq98XkZETiE7Ch49tT
-         WqmbkW2rX1vNj++QL195pOX2+PcE0SAhth8HvrPTx+btczd+KQpNmkP71G/DyQgb4k4G
-         rSTQIUZeYOfqAUXe/4XhRV4tkolzkTbuqCZBY0lohk7bG1Zq1YxE/myexMYoXe4PNrW2
-         yhuUoNg7L/pux4ooifFfYqkM/3TQ8pj8geDPot6OakDyTaTUuvi3JV0p9lsvi4k2idH4
-         oqqQ==
-X-Forwarded-Encrypted: i=1; AL+hErFjmPWCfadMpBkjVbPGKatbuf+iTphxX0mI30LlfNUF/huECSBxSho9YPZPpqyULLz7e/M=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/sSvOdduMXiBg8v+lR/K0NLE17wiwnme5dGmQa/Yf+gUyVLp80
-	RKBHluHebbhVfJ4TPH6GJI7aal1fdfu57dJZNdD/ZItO5h64L6TX7Ur0MsAusZVjRnZWdXYM7tB
-	ptJ4ABB3I+se3bn4/eVZABA7x0f5U2BxDmb2rocdOQeycr/aWsea1fA==
-X-Gm-Gg: AZFdTZdujP5JrAK6diJ0ZUC8R9e0ZLNMW+xPcrgHsjlEpDSCqBlPR4HW3B+gE5KcGcG
-	5KenUnQ8lFcXnRAN4U+kmMEfJwFVGVjsmCaGvJd4hJrLvhCthqf6zCppTRdHHc8hNAslyvUXjr5
-	E35QQaq1EkpjYUBTDND5fVkR40yFJsZXSI9VFzAZ1DFCN2Qh02356c1Q1g9iTvxieAEfNz/9/oe
-	oreslGOORuKAiqtVa628K99NUwhrAUoMiTGguA+urLjiP1S/q7vCslTgd1Zefc3izxbbjTby2T2
-	L3kV9akzfX5uy+oV7o5/OXD+Cy8HvDHKi0/kt1P1hZ9g23M9W9uTr5qmNI5Okjm96ifDwi54y0l
-	DpjhkKUb7BeQ1ivnRLLnWDkl9Imdp/8SUmtSZBlzTZ7ug5ms5px3c4xtFR2vAnJ1+u67d6Byle/
-	K4Uft5NtXWZ61+Z1xjFlTI
-X-Received: by 2002:a05:6a00:928c:b0:8a0:20e0:b131 with SMTP id
- d2e1a72fcca58-8c87bac50eamr5921526b3a.19.1795262282219; Sat, 21 Nov 2026
- 03:58:02 -0800 (PST)
+        bh=lGYwpKC1fByS7GG5SknYRcbt4FjMkQjX/lb3OlO0LP4=;
+        b=iOXlsVtnGhkTxTHnLWX+//ZgCb9IgpIy2LMvOuA4Y476VDeQkFnvDwq2mECUlcwtc/
+         vCtd7Hh2LLJCRhPH4RqirSQ8WmVwf2hZRV5iQXlSUzf9hgwKDImU7uCcup3BXOPh6C5C
+         f7EKDolj1mBr0/Qi+N6yBBw1vmPWxF+B7+84d6wxQasxJ6u8b5EH2HkrvX/jYGtCu78B
+         c8YBTOEKKckDUXAVS6flHxJgr++D1ro34qHfaj/TtSzqGJudbG0YW/7n+OkXlmaPcA7E
+         ABASg3i/AkuSU55rUzILeNCHyb+7pYGVYO0TqtF+Ke2TaEifKpYevhY9QEQgqtPuUXLI
+         o9Kw==
+X-Forwarded-Encrypted: i=1; AL+hErEckc5ZSjHCHbChheVA1GPuX6DvPVUTdAh6WRIQ4rbLC5tUSWJwbXnrH1gvDxsnTJynwwQ=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/ykSh9UTvOW27rmvgEa/Xx+sPYfSf2aDL2g/VbZ9+efB0lq7Go
+	2DxIOSDwGLPJzipwjUQSU3wl2DnEq+UTi63gNVRjHne19Yaqt7o4F0aG
+X-Gm-Gg: AZFdTZda32tq8OJlV+XLt25wQRSfDZ8vgNs0fC4iPN9napwrC/DItONXSyzT+cdT9/v
+	5QdSpMildTUSX08eRRy7TZRMTI5gA1Zpw72bOuaAgkk4VZtk9L6q7amG1YWiYohRqrAqO1eIvAQ
+	flQOkkYLB8LIShk0l23Ymi+hljgLd5qFBb92HyFKrmkp0t/qjYr2rtB4jKE8sl6c6TqpETm68Dy
+	T7crVypQosSQilwWoWN3LBN5PJ5vGImgEe9f06YwQP7dUmNn3I3rtMRQaKFv8yjOnQjyyW77dJg
+	JKhDtNjRjE02/0H5eMaaFboFFDExSlu868l5Uv1BgkoRJhz/gYnVQ89TE5qvVCamNNz0NADcMml
+	3xFKcqRSiftIsGnFGFeXFgTY+ns+mQ4b4C93Y239t06apVlYHiUXFO0pRikbfvk0oYU1qyEVXhe
+	VeHlAyUSnPddYWiJA0iHwsTHwQRuzfpYSDXw7IuBGFtGgD1UClN88mHeFs6ywCuY9Tj38ktDwnB
+	ijZ75xmDqbxyTW0cyxDCiUOnz16ifBbEkWVwnl6u93R2JD5K5q63C7PDIWUNorH1P9dTv0Fc2vn
+	hpwbnShgHb+7R2l2tm7oCcPe+OHfF77jwoAe4+hrF6xRyAFLxD5RCiCKxGVBnMixqwb7TX+7cM2
+	5654sIojrfcuIAgi0oSEp2DVA3RtGLQshxVsAjX06zh14E6ho0+56
+X-Received: by 2002:a05:622a:2283:b0:55b:9d8d:f29e with SMTP id d75a77b69052e-55d769c6d1bmr89159451cf.9.1795263131897;
+        Sat, 21 Nov 2026 04:12:11 -0800 (PST)
+Received: from localhost ([199.170.132.196])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-55d78812968sm48042081cf.9.2026.11.21.04.12.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 Nov 2026 04:12:10 -0800 (PST)
+From: Tamir Duberstein <tamird@kernel.org>
+To: Andrea Righi <arighi@nvidia.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, shuah@kernel.org, xukuohai@huawei.com, billy@starlabs.sg, void@manifault.com, ihor.solodrai@linux.dev, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, awerner32@gmail.com, andriin@fb.com
+Subject: Re: [PATCH bpf-next v3 4/8] libbpf: ringbuf: Add a caller-owned iterator
+Date: Sat, 21 Nov 2026 06:58:00 -0500
+Message-ID: <179526228002.45024.2428180539629576513@kernel.org>
+In-Reply-To: <awFr3R3DPS_so3Pp@gpd4>
+References: <20261120-bpf-ringbuf-fixes-v3-0-ff7ca15d6c37@kernel.org> <20261120-bpf-ringbuf-fixes-v3-4-ff7ca15d6c37@kernel.org> <awFr3R3DPS_so3Pp@gpd4>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -102,58 +84,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <CORE-5IQX.v1.r0.20261120050801-1@mojatatu.com> <DN09YRKU82D1.1QHV2CIFW2C6H@gmail.com>
-In-Reply-To: <DN09YRKU82D1.1QHV2CIFW2C6H@gmail.com>
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-Date: Sat, 21 Nov 2026 06:57:50 -0500
-X-Gm-Features: Aa3M54qnMKfTBVbIV7vSbL5S723ov1v1Vl5x3Mva5Jl0ckcThjBjDhbh4ZxcYw0
-Message-ID: <CAM0EoM=Panth86S2_RcG6Pt8WA-nyR=1P7GDM0sPsPrOrwjyeQ@mail.gmail.com>
-Subject: Re: [PATCH net] net: xfrm: interface: restore dst_orig on every xfrm interface
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: netdev@vger.kernel.org, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Willem de Bruijn <willemb@google.com>, Simon Horman <horms@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Eyal Birger <eyal.birger@gmail.com>, ipsec@lists.linux.dev, bpf@vger.kernel.org, 
-	stable@vger.kernel.org, Jiri Pirko <jiri@resnulli.us>, 
-	Victor Nogueira <victor@mojatatu.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 20, 2026 at 2:11=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Fri, Nov 20, 2026 at 06:08 AM Jamal Hadi Salim <jhs@mojatatu.com> wrot=
-e:
-> > with skb_dst_drop() before the route is installed. The helper allocates=
- a
-> > metadata dst per skb instead of a per-cpu one, so the route it records
-> > belongs to that skb and is released with it; the per-cpu allocation is =
-no
-> > longer used and goes away.
->
-> kmalloc per packet should be ok here. xfrm_bundle_create() allocates a ds=
-t
-> per packet already.
-> It also fixes the route leak, the double put and the if_id mixup
-> that Hanxiang reported on Oct 29.
->
+> Can we make this internal helper __always_inline?
 
-I wasnt aware of Hanxiang report - so i went looking. If no issues
-found the final merge will catch what you prescribed below. I am going
-to track Hanxiang's bpf_skb_set_tunnel_key() note as a
-separate/followup net-next item unless somebody else wants it (in
-which case i will remove it from my list)
-
-cheers,
-jamal
-> Reported-by: Hanxiang Xu <xuhx@hust.edu.cn>
-> Closes: https://lore.kernel.org/bpf/48129353.1960c.1a1859496bc.Coremail.x=
-uhx@hust.edu.cn/
-> Acked-by: Alexei Starovoitov <ast@kernel.org>
+Done for v4, together with a private __always_inline destructor.
+Callback consumption uses the private destructor; the exported API
+wraps it.
