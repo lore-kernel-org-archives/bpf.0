@@ -1,60 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.212
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.221
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795257191;
-	b=bAz9LNpILNseKrZTjwSpZlybGxYx/gv/RhxpQzCRLf4QKJ0ogajGb0/HQzV/Uz4OTno0
-	 zseyc6gwr53pGrVbUVaWvUD+kFRzVckNn3N69s/EFtn+8TvQH+zzJ1klGre+N4lOTnHZW
-	 Rr2XVhhcmvp1y12htReQveRaIIk1nh5sVC4Kr1PkbXdzREgCNeGqh14JWGf9dufHCCrjn
-	 8cTk1e0YN5YsvBM8hSgXCq0KqursBkCrDCaQe8P1J5aSAQhj50GhIV7rfqy36Tf2Y8+9F
-	 LvF9qf+bv5cgUZR1UQWO7gaH9xUDqLOsC+6RaNGpl4CzCR+9GL0BKcllGDCBECNNyhA==
+	t=1795257214;
+	b=mRBxEOw+tPnH9dGcpTOf/JuTW75O6NLu3xxVGwaF1Uszuu+sNpJFF2F1Mw9Nf6sVZ8q4
+	 Lq8K0DpnLg8PpupU6s9csjuNQIF0JsiCzMqwR4quNvXDJiLiFuKP7IliYKmiswITYw24d
+	 O9p1kj4d9EhOX61MLIw2e574/zcF8XpudE/p2w9fAM6HXetdhsdg2SEeNIAWMUd98+plu
+	 HVgtDNtLaNPOQ/VseJQUHObveSan1LEvxY179zguERbkpGWQhUAsM/T4TLfaSdUt3906d
+	 y+zFEBSk77+P4ZpNVF3Bwh3pp4+c7LCs6oL+U5nure5Xn83YjEXyeB3rsAsycZQ+cxA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795257191;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795257214;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=4p4wKE6PvmozHeJwACGdfAUAVrmaa85dC2fv+mLU1vI=;
-	b=O+Llh7t4hB1CGInL3laFoeftZpaxyzZTVVVmYWiDTitCB+l6vI7au8r9em/UOyhL+yxD
-	 FeEO/rvtl2aGD5Kgr4waA+H4jwRH1DEHppVTddOgBqH/h6Yvg/2NjPzwU+AViRPBR2sVt
-	 mLl7VHj4bRpOgE/4SLNfRcX3hHcDEDDa0SDcO4VqSzbAchFDfjEijeFrQKATgTOxHbhzb
-	 o+t5FIJ2cU+/E3tRzMFm31fzxwXF/wDQxMCUZlIvdmc3YWdeDYnPp5eti9/uFXIBgoh50
-	 QGFH2UXB1Pd2myJTo2UUC2UWulZjnn6MP21yZweKM3s7Ijphj4wMaEelQ/+nYWLGXqA==
+	bh=qDFe3Eb/sDf2oY9Rdx9A18lPKXa/58lnLDoXACH0uNE=;
+	b=ntQUNxcdp8sFwefi0N6TYLXuoxlDiy5eU69RdEiARgAmBDAYxLyGCamwnMyMcklLS3hF
+	 wMbkCN08lcnqPoasSts57JtF6qhWiaLhNwzf0e9yah2iVN8ymAD12iamRPc5Bu7Txekyo
+	 Sd0p+J0vPr3NGw0hoWdE9xHbm6VnULqwjul1ffSuNmbnG9g3Sh8IWseqk5Y7y0RWS61wH
+	 Axjc1en8vYkR38sWUOjwtoVlTDOpxJDLTTG3omZ2XLDiLVZp96ZGYIuQr2rsU1l/Shggh
+	 ejxa1X/UFFCUdI11Z+6OLibzq9TDLfRDHl5qrpIG9tozjLPZRJRQihc6br7C4tZRkjw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ZdJWXIcq;
-	arc=none smtp.remote-ip=91.218.175.212
-Received: from mta0.migadu.com (out-212.mta0.migadu.com [91.218.175.212])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=lKuWbaHF;
+	arc=none smtp.remote-ip=91.218.175.221
+Received: from mta0.migadu.com (out-221.mta0.migadu.com [91.218.175.221])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E180606A325
-	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 10:33:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5E180606A325
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34D3F606A325
+	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 10:33:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 34D3F606A325
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ZdJWXIcq
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=lKuWbaHF
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=CbMozn8Q/GM0OSVU0Aj0Uoh2TZ6v7CkdghbcrV/tHjI=;
+DKIM-Signature: a=rsa-sha256; bh=WaciBSPn9XkFGrkKUG3od0QibHtMUzNPcJXcuG/0Z10=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795257188; v=1; x=1795861988;
- b=ZdJWXIcqcYftA0gxNsl1aBkyYr0nBTJ/z3nhKG63NTqFT2ytE0qAqsOBSenkfxOyu8G6PI85
- RveC3G00/L/MrYOjR471kst79DBN1phTpGrJanHmts2MAWHHV1HIcj3GW/XUXGU0sppbpKYYOaq
- OpsLbGQszno/3TM+aNWmUV5s=
+ t=1795257212; v=1; x=1795862012;
+ b=lKuWbaHF8W8C8Vwpn34DiFVNkMK0Mk7oISvohWvuctGB/MwnU0i90uK4y3I8SWaHEB+4QwAx
+ 9iUoj43fAcjDYioGdWVCTmU54iiQ8TCPhdcSVYXE4disH4vnfxXdpJYyG5ZUkKjEwCQtsCseuhN
+ Gu3tBIlB0lKKYNS/RvRsJewM=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id f56831efb0c9a871;
-	Sat, 21 Nov 2026 10:33:08 +0000
-X-Mizu-Trace-ID: f56831efb0c9a871
+Received: by smtp.migadu.com with ESMTPS id 8c1c28370649b49c;
+	Sat, 21 Nov 2026 10:33:32 +0000
+X-Mizu-Trace-ID: 8c1c28370649b49c
 X-Migadu-Flow: FLOW_OUT
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
 Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	stable@vger.kernel.org,
-	Vega <vega@nebusec.ai>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Zhiling Zou <zhilinz@nebusec.ai>,
 	John Fastabend <john.fastabend@gmail.com>,
 	Jakub Sitnicki <jakub@cloudflare.com>,
 	"David S. Miller" <davem@davemloft.net>,
@@ -65,26 +61,26 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	Kuniyuki Iwashima <kuniyu@google.com>,
 	Willem de Bruijn <willemb@google.com>,
 	Neal Cardwell <ncardwell@google.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
 	Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	Shuah Khan <shuah@kernel.org>,
 	Sechang Lim <rhkrqnwk98@gmail.com>,
-	Michal Luczaj <mhal@rbox.co>,
 	Mattia Meleleo <mattia.meleleo@coralogix.com>,
+	Michal Luczaj <mhal@rbox.co>,
 	linux-kernel@vger.kernel.org,
 	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf 01/11] bpf, sockmap: Fix copied_seq updates with strparser
-Date: Sat, 21 Nov 2026 18:30:02 +0800
-Message-ID: <20261121103222.88209-2-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf 02/11] selftests/bpf: Add test for unread SK_PASS data with strparser
+Date: Sat, 21 Nov 2026 18:30:03 +0800
+Message-ID: <20261121103222.88209-3-jiayuan.chen@linux.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261121103222.88209-1-jiayuan.chen@linux.dev>
 References: <20261121103222.88209-1-jiayuan.chen@linux.dev>
@@ -99,190 +95,123 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-With strparser, read_sock advances tp->copied_seq when it pulls skbs
-off sk_receive_queue, and recvmsg() advances it again when the user
-reads from ingress_msg. For a skb that the verdict passes back to the
-same socket, this counted the bytes twice, so commit 36b62df5683c
-("bpf: Fix wrong copied_seq calculation") added psock->ingress_bytes to
-record how many bytes went to self and take them out of the read_sock
-side.
+Send two packets and wait for each to reach ingress_msg before sending
+the next, so that the parser runs once per packet with the first one
+still unread. Read both, then send a third packet and expect it to be
+delivered.
 
-That works for RPC style traffic, where each reply is read before the
-next one arrives. But psock->copied_seq is advanced on every read_sock
-call while ingress_bytes is reset on every call, so tp->copied_seq
-moves forward whenever a new skb arrives, even if the user never calls
-recvmsg(). Once the parser runs twice before a read, the SK_PASS bytes
-of the first run are no longer subtracted and tp->copied_seq already
-covers them. recvmsg() then adds them again and copied_seq passes
-rcv_nxt. The socket now looks empty to TCP, the parser is not woken for
-new data anymore and recvmsg() keeps returning -EAGAIN while the skbs
-sit on sk_receive_queue.
+Without the fix the third packet is never read: copied_seq has passed
+rcv_nxt after the first recv(), so the parser is not woken anymore.
 
-tcp_bpf_recvmsg_parser() has the same problem from the other side. It
-snapshots tp->copied_seq at entry and writes the snapshot plus
-copied_from_self back at exit. tcp_data_ready() and tcp_msg_wait_data()
-release the socket lock in between, and the parser can consume data and
-advance copied_seq meanwhile. Writing the snapshot back rewinds that
-progress and leaves copied_seq behind the queued data.
-
-tp->copied_seq should only cover bytes that have left the socket: what
-the verdict redirected or dropped, plus what the user has read. SK_PASS
-bytes still queued in ingress_msg must not count until recvmsg() hands
-them out. So let both sides add only their own delta to the current
-tp->copied_seq instead of recomputing it from a saved value. The
-read_sock side advances by what this call consumed minus what it passed
-to self, taking the delta from psock->copied_seq rather than the return
-value so that the FIN byte is still counted. The recvmsg() side adds
-copied_from_self, and counts the FIN there as well. Either change alone
-moves the mismatch to the other side, so they go together.
-
-ingress_bytes is also bumped from sk_psock_skb_ingress_enqueue(), which
-the backlog work reaches without the socket lock for skbs redirected
-from other sockets. Those bytes are not part of this socket's stream
-and recvmsg() never adds them back, so subtracting them leaves
-copied_seq behind. Count only in sk_psock_skb_ingress_self(), where
-msg->sk is set, which is what recvmsg() checks.
-
-A strparser skb has no owner when the verdict runs.
-sk_psock_skb_ingress_self() sets one with skb_set_owner_r(), and when
-the enqueue fails after that, the skb is left to the backlog with
-skb->sk still set. It is not in ingress_bytes, so read_sock has already
-counted it as consumed. But the backlog picks the path by skb->sk:
-
-  sk_psock_backlog
-    sk_psock_handle_skb
-      sk_psock_skb_ingress
-        if (skb->sk == sk)
-          sk_psock_skb_ingress_self   <- sets msg->sk
-
-and recvmsg() counts the bytes again. So once a strparser skb is left
-to the backlog, it must not take the skb->sk == sk path. Drop the owner
-with skb_orphan() when the enqueue fails. This also gives the rmem
-charge back, and the backlog charges the skb again like any other
-strparser skb queued there. Picking the path by skb->sk is nasty and
-will be reworked later.
-
-Fixes: 36b62df5683c ("bpf: Fix wrong copied_seq calculation")
-Fixes: e5c6de5fa025 ("bpf, sockmap: Incorrectly handling copied_seq")
-Cc: stable@vger.kernel.org
-Reported-by: Vega <vega@nebusec.ai>
-Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Co-developed-by: Zhiling Zou <zhilinz@nebusec.ai>
-Signed-off-by: Zhiling Zou <zhilinz@nebusec.ai>
 Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
-The BUG_ON(offset < 0) in tcp_collapse() when copied_seq trails the head
-of sk_receive_queue is not addressed here.
----
- net/core/skmsg.c   | 18 ++++++++++++++----
- net/ipv4/tcp_bpf.c | 12 ++++++------
- 2 files changed, 20 insertions(+), 10 deletions(-)
+ .../selftests/bpf/prog_tests/sockmap_strp.c   | 86 +++++++++++++++++++
+ 1 file changed, 86 insertions(+)
 
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 8a3b8536c0c21..16f84dcb5acd9 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -574,9 +574,6 @@ static int sk_psock_skb_ingress_enqueue(struct sk_buff *skb,
- 			return num_sge;
- 	}
- 
--#if IS_ENABLED(CONFIG_BPF_STREAM_PARSER)
--	psock->ingress_bytes += len;
--#endif
- 	copied = len;
- 	msg->sg.start = 0;
- 	msg->sg.size = copied;
-@@ -642,8 +639,21 @@ static int sk_psock_skb_ingress_self(struct sk_psock *psock, struct sk_buff *skb
- 	 */
- 	msg->sk = sk;
- 	err = sk_psock_skb_ingress_enqueue(skb, off, len, psock, sk, msg, take_ref);
--	if (err < 0)
-+	if (err < 0) {
- 		kfree(msg);
-+		/*
-+		 * A strparser skb comes in without an owner and read_sock counts
-+		 * it as consumed once it is left to the backlog. Drop the owner
-+		 * again, or sk_psock_skb_ingress() takes the skb->sk == sk path
-+		 * and recvmsg() counts it a second time.
-+		 */
-+		if (skb_bpf_strparser(skb))
-+			skb_orphan(skb);
-+	}
-+#if IS_ENABLED(CONFIG_BPF_STREAM_PARSER)
-+	else
-+		psock->ingress_bytes += len;
-+#endif
- 	return err;
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_strp.c b/tools/testing/selftests/bpf/prog_tests/sockmap_strp.c
+index 1d7231728eafd..18eb0c791e492 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_strp.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_strp.c
+@@ -364,6 +364,88 @@ static void test_sockmap_strp_pass(int family, int sotype, bool fionread)
+ 	test_sockmap_strp__destroy(strp);
  }
  
-diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index 788ce08eef4d7..e59103e77aa5f 100644
---- a/net/ipv4/tcp_bpf.c
-+++ b/net/ipv4/tcp_bpf.c
-@@ -249,7 +249,6 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
- 	struct tcp_sock *tcp;
- 	int copied_from_self = 0;
- 	int copied = 0;
--	u32 seq;
- 
- 	if (unlikely(flags & MSG_ERRQUEUE))
- 		return inet_recv_error(sk, msg, len);
-@@ -263,7 +262,6 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
- 
- 	lock_sock(sk);
- 	tcp = tcp_sk(sk);
--	seq = tcp->copied_seq;
- 	/* We may have received data on the sk_receive_queue pre-accept and
- 	 * then we can not use read_skb in this context because we haven't
- 	 * assigned a sk_socket yet so have no link to the ops. The work-around
-@@ -295,11 +293,10 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
- 
- 		if (is_fin) {
- 			copied = 0;
--			seq++;
-+			copied_from_self++;
- 			goto out;
- 		}
- 	}
--	seq += copied_from_self;
- 	if (!copied) {
- 		long timeo;
- 		int data;
-@@ -341,7 +338,7 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
- 	}
- out:
- 	if (!peek)
--		WRITE_ONCE(tcp->copied_seq, seq);
-+		WRITE_ONCE(tcp->copied_seq, tcp->copied_seq + copied_from_self);
- 	tcp_rcv_space_adjust(sk);
- 	/* Data on the psock outlives the connection that it came in on */
- 	if (copied > 0 && tcp_can_send_ack(sk))
-@@ -756,6 +753,7 @@ int tcp_bpf_strp_read_sock(struct strparser *strp, read_descriptor_t *desc,
- 	struct sk_psock *psock;
- 	struct tcp_sock *tp;
- 	int copied = 0;
-+	u32 seq;
- 
- 	tp = tcp_sk(sk);
- 	rcu_read_lock();
-@@ -765,6 +763,7 @@ int tcp_bpf_strp_read_sock(struct strparser *strp, read_descriptor_t *desc,
- 		goto out;
- 	}
- 
-+	seq = psock->copied_seq;
- 	psock->ingress_bytes = 0;
- 	copied = tcp_read_sock_noack(sk, desc, recv_actor, true,
- 				     &psock->copied_seq);
-@@ -775,7 +774,8 @@ int tcp_bpf_strp_read_sock(struct strparser *strp, read_descriptor_t *desc,
- 	 * For SK_REDIRECT, we need to ack the frame immediately but for
- 	 * SK_PASS, we want to delay the ack until tcp_bpf_recvmsg_parser().
- 	 */
--	tp->copied_seq = psock->copied_seq - psock->ingress_bytes;
-+	WRITE_ONCE(tp->copied_seq, tp->copied_seq + psock->copied_seq - seq -
-+				   psock->ingress_bytes);
- 	tcp_rcv_space_adjust(sk);
- 	__tcp_cleanup_rbuf(sk, copied - psock->ingress_bytes);
- out:
++static int sockmap_strp_wait_fionread(int fd, int expected)
++{
++	int err, avail = 0;
++
++	while (1) {
++		err = ioctl(fd, FIONREAD, &avail);
++		if (!ASSERT_OK(err, "ioctl(FIONREAD) error"))
++			return -1;
++		if (avail >= expected)
++			break;
++		usleep(10000);
++	}
++	return ASSERT_EQ(avail, expected, "ioctl(FIONREAD)") ? 0 : -1;
++}
++
++/*
++ * Let the parser run twice before the reader reads anything. Each round
++ * must keep the SK_PASS bytes of the earlier rounds out of copied_seq,
++ * otherwise copied_seq runs past rcv_nxt and the stream stalls.
++ */
++static void test_sockmap_strp_pass_unread(int family, int sotype)
++{
++	int zero = 0, one = 1, pkt_size = STRP_PKT_FULL_LEN, sent, recvd;
++	int err, map, i;
++	int c = -1, p = -1;
++	struct test_sockmap_strp *strp = NULL;
++	char rcv[STRP_PKT_FULL_LEN * 2 + 1] = "0";
++
++	strp = sockmap_strp_init(&map, true, true);
++	if (!ASSERT_TRUE(strp, "sockmap_strp_init"))
++		return;
++
++	err = create_pair(family, sotype, &c, &p);
++	if (err)
++		goto out;
++
++	err = bpf_map_update_elem(map, &zero, &p, BPF_NOEXIST);
++	if (!ASSERT_OK(err, "bpf_map_update_elem(p)"))
++		goto out_close;
++
++	err = setsockopt(c, IPPROTO_TCP, TCP_NODELAY, &one, sizeof(one));
++	if (!ASSERT_OK(err, "setsockopt(TCP_NODELAY)"))
++		goto out_close;
++
++	/*
++	 * wait for each packet to reach ingress_msg before sending the
++	 * next one, so that the parser runs once per packet
++	 */
++	for (i = 1; i <= 2; i++) {
++		sent = xsend(c, packet, pkt_size, 0);
++		if (!ASSERT_EQ(sent, pkt_size, "xsend(c)"))
++			goto out_close;
++		if (sockmap_strp_wait_fionread(p, pkt_size * i))
++			goto out_close;
++	}
++
++	recvd = recv_timeout(p, rcv, sizeof(rcv), MSG_DONTWAIT, IO_TIMEOUT_SEC);
++	if (!ASSERT_EQ(recvd, pkt_size * 2, "recv_timeout(p)") ||
++	    !ASSERT_OK(memcmp(packet, rcv, pkt_size), "memcmp, data mismatch") ||
++	    !ASSERT_OK(memcmp(packet, rcv + pkt_size, pkt_size),
++		       "memcmp, second data mismatch"))
++		goto out_close;
++
++	/* the next packet must still wake the parser */
++	sent = xsend(c, packet, pkt_size, 0);
++	if (!ASSERT_EQ(sent, pkt_size, "xsend(c) after read"))
++		goto out_close;
++
++	recvd = recv_timeout(p, rcv, sizeof(rcv), MSG_DONTWAIT, IO_TIMEOUT_SEC);
++	if (!ASSERT_EQ(recvd, pkt_size, "recv_timeout(p) after read") ||
++	    !ASSERT_OK(memcmp(packet, rcv, pkt_size),
++		       "memcmp, data mismatch after read"))
++		goto out_close;
++
++out_close:
++	close(c);
++	close(p);
++
++out:
++	test_sockmap_strp__destroy(strp);
++}
++
+ /* Test strparser with verdict mode */
+ static void test_sockmap_strp_verdict(int family, int sotype)
+ {
+@@ -470,6 +552,10 @@ void test_sockmap_strp(void)
+ 		test_sockmap_strp_pass(AF_INET, SOCK_STREAM, true);
+ 	if (test__start_subtest("sockmap strp tcp v6 pass fionread"))
+ 		test_sockmap_strp_pass(AF_INET6, SOCK_STREAM, true);
++	if (test__start_subtest("sockmap strp tcp pass unread"))
++		test_sockmap_strp_pass_unread(AF_INET, SOCK_STREAM);
++	if (test__start_subtest("sockmap strp tcp v6 pass unread"))
++		test_sockmap_strp_pass_unread(AF_INET6, SOCK_STREAM);
+ 	if (test__start_subtest("sockmap strp tcp verdict"))
+ 		test_sockmap_strp_verdict(AF_INET, SOCK_STREAM);
+ 	if (test__start_subtest("sockmap strp tcp v6 verdict"))
 -- 
 2.43.0
 
