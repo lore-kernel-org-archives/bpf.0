@@ -1,96 +1,111 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795299268;
-	b=jiX1Bgb7feOS84uUDoy7Th3leFnlblfk9piPRZC2VZDWIU/fxFZOdZwuxEVb3dmgHEWd
-	 derhDJor500wHsbqTUjIlDABXQhELX6xiMoEOyKYcsMG+cO8lLKRtPp2QjEZEsnPxe6lU
-	 YcG8CTdJyv2j35GWg/okI4PmY28nLhMtn4mS9tlMxxU5z7EMsaM4XWVNR/cANMR+YrvJU
-	 zrohaaSPs0pP2uRqVQ0qP30N8lj+neDV88GtVLi/H/+3J7YuZYroZwB82G1IyBGe7so78
-	 A3nB+g1Ydzc7WeNwCArpq9zjJQHtQ05aStBdmvJoQl8Sf2gparAjniIb31+oQ6X+ruQ==
+	t=1795300927;
+	b=Q0wulj+V0go+xlaOsr0HusIK7BXEXmGnbgexFpY8UsknevaTwQiK/A8nkof1YjpJzk8p
+	 L7iRxO8BzjYqYUqQHDLEhGlvrIkFdj7I20JuyevuCfB/x8EEl4fs3tilFnmb/e6FKBl9J
+	 YNSw30eWK+igYy15xYtO76ZsQ8UEZU6M1ltYpVUYZnnh7NQDa/4FbTf0Gg7YDPJ8s5LEf
+	 FQbX2lHtTth6yn9Qh/cB89/SINwV4MoxwLg7mABGutE31khR2cf9oc5KxyUV2q1uQH8s/
+	 xdIytFHytQN7MuzwhJ+Bk7pSyUav6lCZ2nFElKQJ07E8fIi6y71EDTXboBoJK3fVmRw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795299268;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795300927;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=h5d3YWTFGvSB866WO3GvchKOrHxsPDiKYwlAlJXvIKs=;
-	b=fxUpxl3HXbQEoZW6MtN/efPh6CP+N3HvGDLueS3eWQW0c5jCdF0L5kV8OGIssJR3nxrL
-	 BEN5ry2oULBzk3dLtnDdCp7TatvEf+C4fP2isyyeaJ5+2atoBFWF07p6+OWqAQajV6fSI
-	 QaiEAuXmCp2IcNg+PoQ1zSVMVVRG51UY0G0lSEx8vW4rcuI5xqHKclX1LOiRVCduDgoGD
-	 ugd1uYwZAbut/s/4A9vCDcn7TNEYKcS2g36S+avl03KiMxpzWbQSN3AJjcjifGDyaMMEz
-	 1K5aB2hk7zLmBs5C/A11UF/aaqWDA6gLxUGyunRX9dF1Djj9RUWI2jjnTyHJrzGJJfQ==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=D2UwN6uj+eBii3DP4gkFy2CXb9ETeRwrQjxMZhSvZ98=;
+	b=FMeFDW5/tbXOlIWHUucXz4/SBfE7mprzOu6jD0ZufhwYGQrVlSaifmYBHrcnl6Qj9oQ/
+	 1aSED3Ox6XfTXSWuRrDXGmldfm7NB6Y+PSDu0BPeJDwJdO1n5u8AjPnKNQFKf0P0cgm6/
+	 yxqcStTTpL7v/lGL8Al0inUX+BTrfsJWmMmTLNiAy+xTwsTjIm/UKOrFqc8ZH1vBR8u1i
+	 2MWBkNiIZprgVFmUYd7eMj0Ow9SEyTCZRxp2lhhBStm/AB0Jd4M6b8xYm517v1Ee04tLF
+	 0i94ttEQ/1pdNQwVIBfSfR0xj8twEkgL7Eae/FDsK0JuWIbis+x8DNbBUEZwb0QCToA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=SeZv29lP;
-	arc=none smtp.remote-ip=209.85.215.177
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="0axLW/PH";
+	arc=none smtp.remote-ip=209.85.128.49
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52D9F606A32A
-	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 22:14:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 52D9F606A32A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77DD2606A330
+	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 22:42:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 77DD2606A330
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=SeZv29lP
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-cd61cef87f1so939861a12.0
-        for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 14:14:28 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=0axLW/PH
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4a7a3b29c11so1914235e9.0
+        for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 14:42:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795299268; x=1795904068; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795300926; x=1795905726; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=h5d3YWTFGvSB866WO3GvchKOrHxsPDiKYwlAlJXvIKs=;
-        b=SeZv29lPqUCssqtjQ92FYFksjVmAzkkoVOMUTRaA7dtL6L3VtjdeMrtxuHD5HlNBWJ
-         faN71GICCY0sSksJ1nC5nqClmpqO11NGuoQ+SDZdKvGX870v7hTaVFmn/cz4agApmbqS
-         +h/a2Kp5b37Znmk/A+1j5tSpNci240J4jinQovenbzbHPzo3rQxZ8/00do46CjCCaiIg
-         rlUSt3cJeaBAQSDTR7hA3+97DtUwMZjC61rVK36Mp/CilvLhTKQHQw04yOWNbwhxNEDQ
-         YcPD6HnwjyzDfSfv93KC5eUau/8dclexpvMNlfF/bG9Ji1reRdFHLDF+uE87rP/JQPVU
-         BKrQ==
+        bh=D2UwN6uj+eBii3DP4gkFy2CXb9ETeRwrQjxMZhSvZ98=;
+        b=0axLW/PHnotmGnAGvriUDC4zPVypUAFY7tABZ8TS4udy4Rp3gesnKf544GmlWlkSvq
+         Dz0WU94DJEvJZAHvyDnh/FwYRdIQnMhzUYH5xXDSX7Et035M7FWb6nSBqjZ/YmeBBAWw
+         LWlHWZKotM24upMg5sRrNLLpTrOg6pZDIFOE8DO9mnyDYjhKI8wUJzqiQlVRK7/2sgqE
+         FhtsFRgAtArM/jmmbb0bhrs0U9kRRYzs0uHpInCW7Vjjw+kmF/iXFo/huHD1Y08DCSrB
+         GAeijSHYKnDzfR6CRpF7UJFF0EGuufD7ohLNuTq6xWtMqsf2EeShpUbuZqfSMaq4wJHX
+         b4bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795299268; x=1795904068;
+        d=1e100.net; s=20260707; t=1795300926; x=1795905726;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=h5d3YWTFGvSB866WO3GvchKOrHxsPDiKYwlAlJXvIKs=;
-        b=vThaA4/7i9Bt2ve5KpBmCB81z9tIAms4b72LODSKaAE5mUYnl9z1he34EKJmaW3nky
-         8lg+R0H13YB/LGWXlu3h6gXuneoMvWHHtZPshJQvBzapwLCNmgixZ6G7hyurpdXB5SqS
-         uAosYO0xdiDoKCAEaphmnPIFhfrTYxyJrAySNFlcOU93YN79cM31FOWqFfSj1FpexZQc
-         BNWuLY7r43CX8ye55gn034ZckenAtd4Sw+Rc7t6FXcsSIaVg7kPPcWZDodHqoLT0HfyF
-         wsGAaBSVJULl8TkBZ6SI1jxlpiCVT5wLKvUYZ9fAT9wVlsHhHMg7ksri8kls+CbGVBsq
-         NyOg==
-X-Gm-Message-State: APuU4Z/caIlOTzYV/qQrGvoDgduGiAVqHRdjxEsP4Sz3fzKrVLrPxtzf
-	5gRJcjPwsGP1O57M8QXKSEEBmNuBxvFw68DEPpJMGlMWf5m+7T0bqT9lBAv00g==
-X-Gm-Gg: AZFdTZdj+AlR+7nlANYxmAPxh9lvlZfs0ptsmxEDYJOivGMm8HLcs3Tvhp5RV4VqPpG
-	vb1wp3C6xWqFoH9jwg3usPiE//kJcvs+sAIte65Q/COHKsvB6KHZzisWkaKExKN1RFDW79IKsed
-	aH435+aEokD/+NFA+97lIt1MufWu7j/HWxuSyRVgw2uc/eG8R/twolmOwYCcG/Spvt3OLPPkYvP
-	WysJZ5P3ReINtNTSK75vIrlTofScnIqdVa5pgC0s/G0F+jQyC7fxl/33VNhmRpPouncAuU219qO
-	njIEN4p+fQ5jqeFOk/umdit7oi16ACgU7jLHuIpK9DD9IyNPK0c9fsLnujkdi7LcXVSFoLNA6y7
-	SANnAjJiRcwV0OyqaDO+QY7+CtDAlE52qSz3GwaPTz0qGYyZSTKBd3i20C9f3kWBq8FDm2y+/YQ
-	VIY2k9LpPSoD8x8LLnxGqnQ1AJP54tgiqL+RWNxhdDCs4FVSR45fr2ZE2aKzEcrwAPzBLSSRq5w
-	iIaN6wYWwFWTjUD9H0mZ7nsDBuc40v7TZX62+nRBDoU+R62y32URyCZqANmJb7b2UCcuDXLbOxP
-	6YZCoXxx74SjjMZZREqHNK/xH2iDav0jYLtQD5PyUNkCZqod6RVUkmWO8r/jhhAvEbP2/NjBV5W
-	+Bq8O7Cm+P7/oyEqAymABlrEtzoy+da4qyL6xBiKI3lgLmjMjmka3P9eNe4X5aUsE9PWlYyGRVQ
-	==
-X-Received: by 2002:a17:90b:3b8f:b0:3b3:b36e:8c3d with SMTP id 98e67ed59e1d1-3b41cb466f4mr6248372a91.62.1795299267458;
-        Sat, 21 Nov 2026 14:14:27 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.246])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41ad0a34asm9654652a91.3.2026.11.21.14.14.26
+        bh=D2UwN6uj+eBii3DP4gkFy2CXb9ETeRwrQjxMZhSvZ98=;
+        b=J2p+P6YRHfYWcIqOyo25ZNnGLRL+Q1/69s9g4BHfWMinRdZnkAzruB9vl+wdRr5C1T
+         92bZvxEuRTZsD8G7ksTS0HcmVzzXHesUy97ZfPSnT8K3CUAmHAxN5DmLpx0yrIRDyoAk
+         1Bi2rQyJ2KygAif6YoS7HXI4XMWDc6hP6YfV7+Ki/fQs1kYE+tKKNxcYfO+JiFbeZeVp
+         m4l6k4F7MiJXnGqUMALTZE1V4Ievz0V8hF1g4uiQJ702Vm4oBZ8+B/YWTIOa+bcJCI/R
+         dq7BO2EV9TWUfCj4btPAL2GZ2ynzSpJ/AutFkQcNshGrL+nND7IB0zE+/KGKjhlGb96j
+         dZ4Q==
+X-Forwarded-Encrypted: i=1; AL+hErHBg+ddJXNAjGY6Os1jf0zlqzME7lhHR1YyyrannEM09cxmWIKmeEqywcSexDfAUzdliMc=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8kvV7y9kjLD15ShtvGJ3HnUACfblHv8eiz0By+J7RYc1/hqUsz
+	WfqpAqI/gppovCPUWDcOa1ycqOQqyIu9AzgnaEDqKlWf1FOYd9SRghzH
+X-Gm-Gg: AZFdTZcsk/y/SlyOuCrRUfpfN3Qnlyj8Y2xHMZWGQ+pU/wb5d0rZIQL1p790gx2NtQR
+	ytobcJUS4NITUpxW+VWDvh6Ka56rg2k0i9lScQrzFYR8HBZjyNEJvfOto+nzcYFhfDYJF0uoiJa
+	Itly+BsHDzwG2r7v61Apyuok301xHfpTTk6U517Cb8M9fkzKYP+WTVlIi+9hn+BxJAS5qKRRyqn
+	CH8+ctVHSIQ8p7yGNTqugRPsyY1+bM5euZDR9KPHEBtYH1VJsZ2n9JMW1JFQyPcWhHBhAGmJbir
+	kyIsVxR5Ug1f/oAzoBwiSmuq90sEHXZqxvLbwC2mWEUUWHgZOwioPkQfu+B7NbvlxFqspdr1BSW
+	vkLDZJhKpf4vsiG0DVKQMUHuL5ZvE0SyOwpc0/J7bXm5By//5+qEKhFZdxE+wCpi1ds0wXznEcl
+	0L3LUxYjBKHSwYic1PitJS/JnGmIxH8x8ofdOJ7ZX7vQnW1tSqY3rGBK+NbxCkp+GpJVGGQ0yIH
+	DHhVcbeLGI2DxXfuDnoXsDANGUvO5Xd5KPXw8XpFQp33+4TufHZUO/XJtq2w3jqts0BJ9fREnuM
+	YYHBUmjO9uxxsNtJl7wMMgjV7R7F6Ddghp3INqHkCKEblzG/4D4aR5TZPu5JRk4y+DC6xA==
+X-Received: by 2002:a05:600c:154c:b0:4ad:5ec2:d3b3 with SMTP id 5b1f17b1804b1-4bb887f43d8mr151053725e9.1.1795300925668;
+        Sat, 21 Nov 2026 14:42:05 -0800 (PST)
+Received: from Nuel20.localdomain ([102.90.87.128])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb9067a0e6sm56649275e9.4.2026.11.21.14.41.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Nov 2026 14:14:27 -0800 (PST)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com
-Subject: [PATCH bpf-next v2 7/7] bpf: Replay an offloaded program with the precision of the good pass
-Date: Sat, 21 Nov 2026 22:13:44 +0000
-Message-ID: <20261121221344.3958866-8-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261121221344.3958866-1-alexei.starovoitov@gmail.com>
-References: <20261121221344.3958866-1-alexei.starovoitov@gmail.com>
+        Sat, 21 Nov 2026 14:42:05 -0800 (PST)
+From: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
+To: tianyi@cloudflare.com,
+	hangbin.liu@linux.dev
+Cc: ast@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	davem@davemloft.net,
+	edumazet@kernel.org,
+	emmaonana18@gmail.com,
+	hawk@kernel.org,
+	horms@kernel.org,
+	john.fastabend@gmail.com,
+	kernel-team@cloudflare.com,
+	kuba@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	sdf@fomichev.me,
+	shuah@kernel.org,
+	skhan@linuxfoundation.org,
+	tianyi.gao@linux.dev
+Subject: Re: [PATCH net v4 0/3] selftests: net: veth: propagate check failures to exit status
+Date: Sat, 21 Nov 2026 23:41:05 +0100
+Message-ID: <20261121224105.6288-1-emmaonana18@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261119012940.32838-1-tianyi@cloudflare.com>
+References: <20261119012940.32838-1-tianyi@cloudflare.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -102,48 +117,21 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Alexei Starovoitov <ast@kernel.org>
+On Thu, 19 Nov 2026 01:29:40 +0000 Tianyi Gao wrote:
+> 1. Patch 3 lost its subject prefix. It went out as "[PATCH]
+>    selftests: net: veth: derive invalid-tx test value from kernel
+>    max", so patchwork put it in a series of its own [1].
+>
+> 2. Patch 3 should come first. Patch 1 makes a chk_channels()
+>    failure fail the script, and from then on the nproc + 1 check
+>    can fail on a correct kernel. With the fix first, no commit in
+>    the series reports a false failure.
+>
+> 3. v4 was posted as a reply to my review of v3. A new version
+>    should start a new thread, and its change log should link the
+>    previous postings [2].
 
-Only offloaded programs are affected. A valid program loads, but nfp
-can refuse to attach it. No unsafe program is accepted, because the
-pass that the driver sees is a full pass with all checks.
-
-The driver must see only a pass without errors. So the verifier runs
-the good pass once more with the hooks of the driver. This is the
-replay. Before it, bpf_partition_for_pessimized() tries more precision.
-If that fails, bpf_restore_precision() takes the precision masks back
-from prec->undo.
-
-partition_next() makes that copy. If find_calls_to_unproven() is over
-the cost limit, partition_next() does not run, and prec->undo has the
-masks of an older pass. The limit is low after the first good pass, so
-this happens if a later good pass ends just below it. Then the replay
-can join more states than that pass did. In a test with a stub driver
-max_pkt_offset was 448 in place of 56. If that value and the MTU are
-above the packet split boundary, nfp refuses to attach the program.
-
-Make the copy in bpf_partition_for_pessimized() too.
-
-Fixes: cd97aa1387d9 ("bpf: Do not let a join raise what a program requires")
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
----
- kernel/bpf/precision.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/kernel/bpf/precision.c b/kernel/bpf/precision.c
-index e6dfb9f4bd..33b180b35c 100644
---- a/kernel/bpf/precision.c
-+++ b/kernel/bpf/precision.c
-@@ -1645,6 +1645,9 @@ int bpf_partition_for_pessimized(struct bpf_verifier_env *env)
- 	prec->good_budget = prec->budget;
- 	for (i = 0; i < prec->loop_cnt; i++)
- 		prec->loops[i]->good = prec->loops[i]->precision;
-+	/* bpf_partition_more() can fail before partition_next() makes this copy */
-+	if (prec->data_deps)
-+		memcpy(prec->undo, prec->data_deps, 5 * prec->words * sizeof(long));
- 	for (i = 0; i < env->prog->len; i++)
- 		if (env->insn_aux_data[i].pessimized)
- 			note_unproven_after_pass(env, i);
--- 
-2.55.0
+Thank you for the thorough review, I appreciate it. All
+three are addressed in v5:
+https://lore.kernel.org/all/20261121182217.4609-1-emmaonana18@gmail.com/
 
