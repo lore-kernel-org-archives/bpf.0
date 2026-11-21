@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.185
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795221288;
-	b=qRFr3jtmotLg40Xw0JSq13E1qhWzm9/cLNvvsixunHVWscdrM273r0jQbLamedhZV+Ui
-	 TfL3UH2xpKVeoON2exr/Il9RT9BpseIn6DRkBifzmrwjAH0zeb/j7wyixCzCVg+fy/wEb
-	 MRvBOVgXqn215o8E3xd2pv5N0nPs4peCV2AZzmCxlIEMH17rdI6U1ki7S53Va/6Lyib9V
-	 FczO/2xwiWl1DNJ18PJQPL6WXW74TZz6okWRBeq7ccu0NDsIVUTbCbav9+vl1TLt33wDQ
-	 sNghqN6ZcLIiwE9nF/quSYsR7ZWYAuN69oAAxoqiVKa1n+V0fb7tdKFjAPEcRBL3AuA==
+	t=1795221293;
+	b=33g47/nGHr7pO4J1yN0U2P0cgqcHq+OYHs+RFMVEEuDyJmgM4BIU3YXvIHGp/5gYMN4C
+	 y58mpLUvg10lHYPemrymFadZf/Y+Aioj2p45x0149GEDlKotYigxyxSHQCi3iAYuGqutR
+	 H+s1YNwq+0ADpM5sk2LbpKxJfbrIcNhAyf+oxxV1K66w/D4bP6ractoa0T7ntivi1rwbk
+	 IJPGGPET4n6NoYIxJJmLYcxWLP7HAz7BcA5LmzzTmPezVWyNIkoGrshV02s7bfGtrSVyy
+	 ejtBZxgDTjtH48AWiplw2ub7tmcfNL98oimiMKIatyUscsU7N0NUnqGLC2iBr6yzGWg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795221288;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795221293;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=16uHI/wiILJAgxZZpw+Ll3nL/DkkAuBU3LPRe4/AFK0=;
-	b=y0vXUndR+0+tSqdrztvuPTZrE8APGVwAxSzEzYX7eWT8HglPO5mn+N/g8z6H8eVdmG/w
-	 ygGYqUu6lTXDCqjGl2b3rPtcu0MUUG+OH1CL/Gk6FOOfCK/qBau5a+tIuGei2Yq8fwkTh
-	 IP+7mucIYuWekalJ+5k5a0AqUtsOUHs106uDf+cpHy1lDB3G+Bb/d5YWXxATRh2Ac7it8
-	 fY8M72YFQ7GTX3ix/XmoW/wnrJoxTM+xgW6oFvmKT2aXkHihknumM4XLU3xlIuhe9myRX
-	 XIkJIhX0VsnKfh8Cit6TlDbWx0YDfMi/vHROztp7EyysWwV+kL42by0RZOSxK6P2TWA==
+	bh=IJxvQwmayN5aQvdb4D+gCDBM0pWPSVbeJfqswUb7Wok=;
+	b=xXBXZUTagc1Xb8Wc7vw08g0v9GxHWbAGN1OADEAsc91uqcxsWYYVzlSHAYwSpNofE4bB
+	 brbwVpjtxIomNKMJpyFT6O/zOZKXGD25cDEowXkZoYBdO5e6ZYBRGipMurKwOJL0mr5DO
+	 m1aYB00R0uqUlyF53wYDRc3GN8bvTOZRKveu8n3JERxBMCFbbFCojukvyIqKA0r/3CXF9
+	 i52nukgMZJRe/wMbNuzdyp31/ZM1p+ctFlRpzfPVoox+7T7RP72Ggp9FXC2vVeiNtFpFJ
+	 5B/nP/spfXlaYIYehD/kIl2ZFpBUEemXEZcnaNCCnoVgAXaH/+V+5I3/bq2nIxtuUBQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=fl3MurGo;
-	arc=none smtp.remote-ip=95.215.58.177
-Received: from mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=t++J3V0s;
+	arc=none smtp.remote-ip=95.215.58.185
+Received: from mta1.migadu.com (out-185.mta1.migadu.com [95.215.58.185])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27836606A336
-	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 00:34:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 27836606A336
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49EB5606A6B8
+	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 00:34:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 49EB5606A6B8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=fl3MurGo
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=t++J3V0s
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=chSHStAxYYQbOaPVRpfqdX9lguVoKe6kfnjSXgmTuSc=;
+DKIM-Signature: a=rsa-sha256; bh=lxpd3jvcjo6xVOgK2t+dAOJAF/GseY3ufo1PEnDz03A=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795221282; v=1; x=1795826082;
- b=fl3MurGoH7lHrmHdOMDOKMsubUBXWP+pz9sD0PKTGgoj4GrzFKNVVFldsMyhMu8hj+JVnaRK
- hIvgNK0lHHiyudGrfkgLEAyplOJSfGv6zpPm2vvuPvelj/qtQ8Z57yEs0JFr5ft99nogRcX/3zt
- NEhbOerSu6RBh9C5vNL9bzj8=
+ t=1795221287; v=1; x=1795826087;
+ b=t++J3V0skR6gynoHIH/0m0VsGC5pIUnFYhlVYaNriusrNqBoKBzR8wjw9m/LSMzWc1WjG/7B
+ m4fZkLWzTowf5++WFHo8vEHeEx0aSaEJKcaiMWs5rZ7icUtVoG0iHdz8vo8BR4ocK44yAMOgDDa
+ bEXQ5sXhHG6is3K4kZYTb1b8=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by mta11.migadu.com with ESMTPS id f63e0e71d92a25d7;
-	Sat, 21 Nov 2026 00:34:42 +0000
-X-Mizu-Trace-ID: f63e0e71d92a25d7
+Received: by mta11.migadu.com with ESMTPS id 4f055eea9cb761d8;
+	Sat, 21 Nov 2026 00:34:47 +0000
+X-Mizu-Trace-ID: 4f055eea9cb761d8
 X-Migadu-Flow: FLOW_OUT
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
@@ -62,9 +62,9 @@ Cc: Alan Maguire <alan.maguire@oracle.com>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	sched-ext@lists.linux.dev
-Subject: [PATCH bpf-next v2 5/6] resolve_btfids: Reject ambiguous kfunc variants
-Date: Fri, 20 Nov 2026 17:34:02 -0700
-Message-ID: <20261121003403.2928928-6-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v2 6/6] docs/bpf: Describe how to change a kfunc's prototype
+Date: Fri, 20 Nov 2026 17:34:03 -0700
+Message-ID: <20261121003403.2928928-7-ihor.solodrai@linux.dev>
 X-Mailer: git-send-email 2.56.1
 In-Reply-To: <20261121003403.2928928-1-ihor.solodrai@linux.dev>
 References: <20261121003403.2928928-1-ihor.solodrai@linux.dev>
@@ -79,120 +79,124 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-libbpf fails to load a program if a kfunc declaration matches more
-than one kfunc variant. For example, libbpf doesn't distinguish
-integer widths, so a declaration of either of these matches both:
-
-  int bpf_foo(u32 flags);
-  int bpf_foo___v1(u64 flags);
-
-Check the kfuncs registered in vmlinux or a module at build time, so
-that such a pair fails the build instead. Group them by essential name
-and compare prototypes with libbpf's matcher. Skip unregistered
-functions, which libbpf also considers, so that code unrelated to
-kfuncs can't fail the build. Variants split across modules or vmlinux
-are also caught only by libbpf.
+Add a section on changing a kfunc's prototype to the kfunc lifecycle
+expectations. libbpf now binds a ___-suffixed kfunc by prototype and
+resolve_btfids rejects kfuncs that libbpf can't tell apart, so kernel
+developers can keep BPF programs built against an old prototype loading,
+provided they follow the rules this section describes.
 
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- tools/bpf/resolve_btfids/main.c | 69 +++++++++++++++++++++++++++++++++
- 1 file changed, 69 insertions(+)
+ Documentation/bpf/kfuncs.rst | 96 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 96 insertions(+)
 
-diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
-index 0e193c3c73aa..e21ac6843873 100644
---- a/tools/bpf/resolve_btfids/main.c
-+++ b/tools/bpf/resolve_btfids/main.c
-@@ -94,6 +94,7 @@
- #include <bpf/btf.h>
- #include <bpf/libbpf.h>
- #include <bpf/libbpf_tools.h>
-+#include <bpf/relo_core.h>
- #include "btf_colors.h"
- #include "fmodret.h"
- #include <subcmd/parse-options.h>
-@@ -1918,6 +1919,70 @@ static int sort_btf_by_name(struct btf *btf)
- 	return err;
- }
+diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+index c7da603cab77..4d60a13ecbe3 100644
+--- a/Documentation/bpf/kfuncs.rst
++++ b/Documentation/bpf/kfuncs.rst
+@@ -800,6 +800,102 @@ procedure is followed for removal:
+ 3. After the deprecation period the kfunc will be removed. At this point, BPF
+    programs calling the kfunc will be rejected by the verifier.
  
-+struct kfunc_variant {
-+	const char *name;
-+	size_t essent_len;
-+	u32 id;
-+};
++3.2 Changing a kfunc's prototype
++--------------------------------
 +
-+static int cmp_kfunc_variants(const void *lhs, const void *rhs)
-+{
-+	const struct kfunc_variant *a = lhs, *b = rhs;
-+	int ret = strncmp(a->name, b->name, min(a->essent_len, b->essent_len));
++libbpf drops the last ``___suffix`` from the name of a kfunc declared in a BPF
++program and from the names of functions in kernel and module BTF, as it does
++for CO-RE type names. Among the functions with the same remaining name, it
++binds the one with a prototype that matches the declaration. Types are
++compared kind by kind, and structs and unions by name only:
 +
-+	return ret ?: (a->essent_len > b->essent_len) - (a->essent_len < b->essent_len);
-+}
++.. code-block:: c
 +
-+/* libbpf rejects a declaration that matches more than one kfunc variant */
-+static int check_kfunc_variants(const struct btf *btf)
-+{
-+	const struct btf *base = btf__base_btf(btf);
-+	struct kfunc_variant *kfuncs = NULL;
-+	u32 cnt = 0, cap = 0;
-+	int err = 0;
++	typedef struct task_struct task_t;
 +
-+	for (u32 id = base ? btf__type_cnt(base) : 1; id < btf__type_cnt(btf); id++) {
-+		const struct btf_type *t = btf__type_by_id(btf, id);
-+		const char *name;
++	/* these match */
++	int bpf_foo(struct task_struct *p, u32 flags);
++	int bpf_foo(const task_t *p, u64 flags);
++	int bpf_foo(struct task_struct___local *p, int flags);
 +
-+		if (!btf_is_decl_tag(t) || btf_decl_tag(t)->component_idx != -1)
-+			continue;
-+		if (strcmp(btf__name_by_offset(btf, t->name_off), DECL_TAG_KFUNC) != 0)
-+			continue;
++	/* none of these match the ones above */
++	int bpf_foo(struct file *p, u32 flags);
++	int bpf_foo(struct task_struct *p);
++	void bpf_foo(struct task_struct *p, u32 flags);
 +
-+		err = ensure_mem(&kfuncs, &cap, cnt + 1);
-+		if (err)
-+			goto out;
-+		name = btf__name_by_offset(btf, btf__type_by_id(btf, t->type)->name_off);
-+		kfuncs[cnt++] = (struct kfunc_variant){
-+			.name = name,
-+			.essent_len = bpf_core_essential_name_len(name),
-+			.id = t->type,
-+		};
++If the old and new prototypes match, change the kfunc in place. Otherwise the
++new prototype keeps the name, and the old one stays available as
++``<name>___v1`` (``___v2`` for the next change, and so on) for a deprecation
++period, usually as a thin wrapper registered with the same flags:
++
++.. code-block:: c
++
++	__bpf_kfunc int bpf_foo(struct task_struct *p, u64 flags)
++	{
++		...
 +	}
-+	qsort(kfuncs, cnt, sizeof(*kfuncs), cmp_kfunc_variants);
 +
-+	for (u32 i = 0; i < cnt; i++) {
-+		const struct btf_type *a = btf__type_by_id(btf, kfuncs[i].id);
-+
-+		for (u32 j = i + 1; j < cnt; j++) {
-+			const struct btf_type *b;
-+
-+			if (cmp_kfunc_variants(&kfuncs[i], &kfuncs[j]) != 0)
-+				break;
-+			b = btf__type_by_id(btf, kfuncs[j].id);
-+			if (btf_kfunc_proto_match(btf, a->type, btf, b->type) <= 0)
-+				continue;
-+			pr_err("ERROR: resolve_btfids: kfuncs %s and %s have matching prototypes\n",
-+			       kfuncs[i].name, kfuncs[j].name);
-+			err = -EINVAL;
-+		}
++	/* bpf_foo() before flags was added */
++	__bpf_kfunc int bpf_foo___v1(struct task_struct *p)
++	{
++		return bpf_foo(p, 0);
 +	}
-+out:
-+	free(kfuncs);
-+	return err;
-+}
 +
- static int finalize_btf(struct object *obj)
- {
- 	struct btf *base_btf = obj->base_btf, *btf = obj->btf;
-@@ -1929,6 +1994,10 @@ static int finalize_btf(struct object *obj)
- 		return err;
- 	}
++	BTF_ID_FLAGS(func, bpf_foo, KF_RCU)
++	BTF_ID_FLAGS(func, bpf_foo___v1, KF_RCU)
++
++BPF programs built against either prototype then load:
++
++.. code-block:: c
++
++	/* built against the old prototype: binds bpf_foo___v1 */
++	extern int bpf_foo(struct task_struct *p) __ksym;
++
++	/* built against the new prototype: binds bpf_foo */
++	extern int bpf_foo(struct task_struct *p, u64 flags) __ksym;
++
++	/* the suffix doesn't select a kfunc: both bind bpf_foo___v1 */
++	extern int bpf_foo___v1(struct task_struct *p) __ksym;
++	extern int bpf_foo___local(struct task_struct *p) __ksym;
++
++	/* a stacked suffix binds nothing */
++	extern int bpf_foo___v1___local(struct task_struct *p) __ksym;
++
++Only libbpf 1.9 and later look for ``bpf_foo___v1``. Older libbpf and light
++skeletons see only ``bpf_foo``, as after an in-place change.
++
++If two kfunc names differ only in the ``___`` suffix, their prototypes must not
++match, not even for aliases: libbpf can't tell them apart and fails to load a
++program that declares either one, even as ``__weak``. For example, this widens
++an offset to 64 bits and keeps the old prototype as ``bpf_bar___v1``:
++
++.. code-block:: c
++
++	__bpf_kfunc int bpf_bar(const struct bpf_dynptr *p, u64 offset);
++
++	/* bpf_bar() before offset was widened */
++	__bpf_kfunc int bpf_bar___v1(const struct bpf_dynptr *p, u32 offset);
++
++``resolve_btfids`` rejects it::
++
++	ERROR: resolve_btfids: kfuncs bpf_bar and bpf_bar___v1 have matching prototypes
++
++Widening keeps the prototype matching, so it is done in place instead: drop
++``bpf_bar___v1``, and programs built against the old prototype bind
++``bpf_bar``. ``resolve_btfids`` checks registered kfuncs within vmlinux or one
++module. libbpf catches other matches, such as between two modules, when loading
++the program.
++
++Give the new prototype a name outside the family, not ``<name>___*``, if:
++
++- programs loaded by older libbpf or light skeletons must keep working, or
++- the prototypes match but the change breaks callers, e.g. two integer
++  parameters swap places.
++
++Don't rename a ``<name>___vN`` kfunc while older libbpf or light skeletons
++still load programs that call it by that name. libbpf 1.9 and later bind by
++prototype, so a rename doesn't affect them.
++
+ 4. Core kfuncs
+ ==============
  
-+	err = check_kfunc_variants(obj->btf);
-+	if (err)
-+		return err;
-+
- 	if (obj->base_btf && obj->distill_base) {
- 		err = btf__distill_base(obj->btf, &base_btf, &btf);
- 		if (err) {
 -- 
 2.56.1
 
