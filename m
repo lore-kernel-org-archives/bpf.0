@@ -1,56 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795236368;
-	b=VSogEage1guyPv7lH4VAlmPLsRf+ZY4UZCICiMHnzyo6C4kY/mHSEOferbBfUyVKG+Kd
-	 TB70I1jRsk5O5fPJ3+lo6FgYpQEbHj4kYxPqb5UgA+eh4Ab3LWT+7VzvFzOEXtPkzpH4V
-	 ypyIKJxLeJSZq2f4T1r+gzEm4qCOrO5KuyK0BEji6EgpCJbdMEogTEAP0bOhNDaMvgNuH
-	 87hW7jYOznG/ZWdbXENoUXv98+Q/BC4d6+S+7gik+22KDLiWWfZ9lHAkqkYtgoB/DTEsd
-	 BfthDHo1S/Qa9jFBYIbiMGGUrjH9BcHJDiGXLFSlmErbgiNtJiUY7ex7+VeRogvA31A==
+	t=1795239850;
+	b=iuiee5xBiYOC20FB3xSmFsWn02TqwkfTb4EdKl1RMk+XCTFLPWxvK/LtWCHCZDsJdm8l
+	 31az8LohL9udOfBtLLNCZJDpAj0F8lRTr24IWxoD7f8aZI2Tg8MgjgJfiHK94CMcqQGNf
+	 G0FVPuScSfMpAUFDro2lO5Io1RhjUa3OAdG80KfXoDFNuhiHM6VZDLe/ocUAuOvykeKkd
+	 p0PQ2cBWiPTh2gFxSFFfoFZedLCsM7XPd+X6oOPKTb4BoiCpnBzrB0RIdWdJY3Tj+PsDk
+	 EQeUOesQXwozq7BPhAL4Wf2z8myVn/xMyGhdjPWv539SCBdlmH+LNxcd5giiUtNQ7Dw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795236368;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795239850;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=U7ulZTntg5dgPIdC+5cJA+BkuwK05zl864zhf3/6FUQ=;
-	b=BEVVihz/aVoQLiKXRfoZFGpi/eUnNK8BF/X5QmhsJH40ik00niZnlhvyAm1oARKsZ7QX
-	 nS8BRkZZLiFwyosN4g9JFJVmrwuRKceA58qJCHgHZf+mEc+m2HuU5/2vFewG3wjfk0val
-	 13e6n4KvPFlOk1p5poi8xCRYu/I6P+aLTTbZB4GKRmalxwVGvammsQpgrhqv3efQpXZbf
-	 G7RZd2QblhT9yOtLUmSP1L+wxXVGjxao9kCytQE8+qLp1mXjLUsD+B6kjJqCPxxH2Ttkp
-	 BcMybc9F9MMGl48eGjaFOaOn95b1q6WYFEWEnzkEuuaV4l/vilvt5XsV9XiTRBDx61g==
+	bh=0wD0bhuxMPpq3q0RLl2Xm+LF7jMK1tDc06gwx/ZB6cw=;
+	b=CBv4Gj0+go78/ajmgLkXiSdpmkLrDDCQ7euItMBmO47mJxg3a0ZuDrDVOQ0H1TDtGUvU
+	 EEBIpNk6JPrLClZ7D/lrDx5XdY5Rbodgf5s70qmrK/1okMq4tlPGcER5G+bBEOhJbEh7B
+	 z59lu+14fUj0sssdqgX4doB0UOF5fN2QP/Gcu1iDK5B07xV5CV2Scnv8dC8tqaDRDEttX
+	 mHiGOTNLZV/m62+TVLYis9wskn9DQZN83zWPw799lp4ZNA60f4pPp3fhlBw0dbkzQuk7K
+	 GdUIDu4GCEMVwq34/sL2Mkq9Xn/TvEnNdyBK4XLXX5JIvymKvm1NRFfPAPQZibDufBQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lWSpZzrb;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=o0H7R8LU;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65209606A6B3
-	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 04:46:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8531F606A338
+	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 05:44:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lWSpZzrb
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEF371F000C0;
-	Sat, 21 Nov 2026 04:46:07 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=o0H7R8LU
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A27A1F000C0;
+	Sat, 21 Nov 2026 05:44:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795236368;
-	bh=U7ulZTntg5dgPIdC+5cJA+BkuwK05zl864zhf3/6FUQ=;
+	s=k20260515; t=1795239850;
+	bh=0wD0bhuxMPpq3q0RLl2Xm+LF7jMK1tDc06gwx/ZB6cw=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=lWSpZzrbF2qT95aSVZBUpibMapMYu3dCvBAkxMnTHFz/RjBdlheJKk7kXEkSI1BqP
-	 wh0Q54RTMHREWMTjpYPInkK5saNNN4waig7UB7zKtS0VTOqRPwF4rmS3YwYoQMaYJo
-	 gqqs5aHAqDr7JMOpvhRh20SBnAt5iUur7cAI58B55uo9iCn/Rv2yd/f39AP6HGaOB1
-	 1OJVBRSBX84ZbQunrElaQMxlTbIvt5TIshXP/2FTppZL+7nLtnaCG3NGGb4FUOWXV9
-	 XjhqWKvyh5Efo9KaDoU1VZmSL1N+XZBEM3pYy4WQueuHkXOyDiIwqD83OeGvtrdKU1
-	 3awXWikRSZXEA==
-Message-ID: <sashiko-outbox-226643@kernel.org>
+	b=o0H7R8LUoifJtpYcZM1qQp2Wjs3K/7EZtTaNwMdiaCo6wPOjHZ2IUhqVwkVfKHP4A
+	 grZQtJoDhWRY8VH3ETb/IrGbc0yjOI0/e7hDHWfGQEN80Io/auNcqzrCt75/FT/D7n
+	 0YUgYstQxIPuvGhz6OUHA8w1P12c45ACME7wj70DLT+TAeCmIm7ICrrDmcZf0n2W8U
+	 mBfjQ2enuZCcxjXHLOz3kzk49AcWyZ9HgRxd4uzof9enn9FlC1JR1p+FZrPnF1M0br
+	 3fItQqFcxRb160p9jiIn3Vjpg5PSyH03VoCEo1TCkreaTDBJVREwUPx9GI7FnR/B66
+	 cc6IaOc0TIEMg==
+Message-ID: <sashiko-outbox-226658@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 33/49] bpf: Verify a static function once
- for each instance
+Subject: Re: [PATCH bpf-next v2 37/49] bpf: Verify in passes
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261120204959.614908-34-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261120204959.614908-38-alexei.starovoitov@gmail.com>
 References: <20261120204959.614908-1-alexei.starovoitov@gmail.com>
- <20261120204959.614908-34-alexei.starovoitov@gmail.com>
+ <20261120204959.614908-38-alexei.starovoitov@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 21 Nov 2026 04:46:07 +0000
+Date: Sat, 21 Nov 2026 05:44:09 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,141 +59,95 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 3 potential
-issues to consider:
-- [Medium] bpf: uncharged instance cost in flow_grow_instance() after
-  first instance
-- [Medium] bpf: missing FLOW_AGAIN kind on re-queued call state in
-  flow_apply_exit()
-- [Medium] bpf: missed non-NULL marking for returned parent_id in
-  bpf_flow_return()
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Medium] bpf: cost limit not bypassed during repeat run in
+  log_failing_path()
 --
 
-commit 086da59f5b2496a96c0c9a8141af31c675e376ed
+commit 57a53f1fbdfbf66fd6d495ccd155fb967701e9d9
 Author: Alexei Starovoitov <ast@kernel.org>
 
-bpf: Verify a static function once for each instance
+bpf: Verify in passes
 
-This commit verifies static subprograms that do not depend on caller frames
-once per instance, joining call states only at the subprogram entry point
-and dividing a verification budget among functions with multiple instances.
-
-> diff --git a/kernel/bpf/flow.c b/kernel/bpf/flow.c
-> index c10fa54cdf91b..b5d65dd2d07a2 100644
-> --- a/kernel/bpf/flow.c
-> +++ b/kernel/bpf/flow.c
-[ ... ]
-> @@ -1345,6 +1358,301 @@ int bpf_flow_deliver(struct bpf_verifier_env *env=
-, struct bpf_verifier_state *st
->  	return flow_add(env, s, false);
->  }
-> =20
-> +/* @x is an exit state of the instance of the call @w. @w can leave the =
-instance. */
-> +static int flow_apply_exit(struct bpf_verifier_env *env, struct flow_sta=
-te *w,
-> +			   struct flow_state *x)
-> +{
-> +	int call_idx =3D w->st.insn_idx, err;
-> +	struct bpf_verifier_state st =3D {};
-> +
-> +	err =3D bpf_copy_verifier_state(env, &st, &w->st) ?:
-> +	      bpf_flow_return(env, &st, &x->st, call_idx);
-> +	if (!err)
-> +		err =3D bpf_flow_deliver(env, &st, call_idx + 1, call_idx, false);
-> +	else if (err < 0 && st.speculative)
-> +		err =3D min(bpf_flow_edge_unproven(env, &st, call_idx + 1, err), 0);
-> +	else if (err < 0)
-> +		err =3D min(bpf_flow_edge_unproven(env, &x->st, x->prev_insn_idx, err)=
-, 0);
-> +	bpf_free_verifier_state(env, &st, false);
-> +	if (err <=3D 0)
-> +		return err;
-> +
-> +	/* The call is checked again in the frames of the caller */
-> +	flow_unlink(env, w);
-> +	flow_find(env, w);
-> +	flow_link(env, w);
-> +	return 0;
-> +}
-
-[Severity: Medium]
-Should flow_apply_exit() set w->kind =3D FLOW_AGAIN before re-linking w, the
-same way bpf_flow_deliver() does when again is true?
-
-w was allocated with w->kind =3D=3D FLOW_AT after passing pre-instruction j=
-oin
-and flow_keep() handling at call_idx, and after do_check_insn() mutated the
-state for the call (such as check_func_callx_set() clearing reg->func_set
-and setting reg->subprogno to one subprogram from the set).  When
-bpf_flow_return() returns BPF_EXIT_NEEDS_CALLER and w is re-inserted into
-state_tree as FLOW_AT at a join point, flow_prune_or_join() can join w with
-other states at call_idx (clobbering a split callx target register to
-NOT_INIT) and flow_keep() does not take its FLOW_AGAIN early return,
-re-running flow_keep_peeled() if call_idx is a peeled loop header.
-
-[ ... ]
-
-> +/* @s gets to the first insn. @t is there and does not subsume @s. */
-> +static int flow_grow_instance(struct bpf_verifier_env *env, struct flow_=
-state *t,
-> +			      struct flow_state *s, struct bpf_loop *leftover_loop)
-> +{
-> +	u64 args =3D flow_readable_args(t->st.frame[0]);
-> +	struct flow_instance *old =3D t->started_instance, *instance =3D old;
-> +	int err;
-> +
-> +	if (!old->entry_state) {
-> +		instance =3D flow_new_instance(env, t);
-> +		if (!instance)
-> +			return -ENOMEM;
-> +		instance->cost =3D old->cost;
-> +	}
-
-[Severity: Medium]
-Does copying instance->cost =3D old->cost leave the new instance uncharged
-when old is the first instance of the subprogram?
-
-In bpf_flow_call(), the first instance is free, so (*cost)++ increments
-env->flow->cost[subprog] from 0 to 1 while leaving
-t->started_instance->cost as NULL.  When that first instance has already
-started (!old->entry_state) and a later call grows it into a second
-instance here, instance->cost is also set to NULL and budget_func_cnt is
-not incremented, so bpf_flow_next() never charges the cost of the grown
-instances to env->flow->cost[subprog] and flow_may_add_instance() never
-throttles them.
+This commit implements the multi-pass verification loop in do_check_all(),
+running iterative partitioning passes and path-sensitive checks with cost
+and memory budgets while re-running the final pass or failing path to
+populate the verifier log.
 
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index fac44fceccfbf..58a483fed88be 100644
+> index f34c010138497..92b0f4bbf8955 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
 [ ... ]
-> @@ -11700,6 +11706,9 @@ int bpf_flow_return(struct bpf_verifier_env *env,=
- struct bpf_verifier_state *cal
->  		reg->id =3D returned_id(reg->id);
->  		reg->parent_id =3D returned_id(reg->parent_id);
->  		reg->map_uid =3D returned_id(reg->map_uid);
-> +		/* the function saw that a reference of the caller is not NULL */
-> +		if (reg->id && !type_may_be_null(reg->type))
-> +			mark_ptr_or_null_regs(caller, ret_regs[i], false);
+> @@ -23466,40 +23488,202 @@ static int find_failing_path(struct bpf_verifi=
+er_env *env, struct bpf_snapshot *
 >  	}
->  	return 0;
 >  }
+> =20
+> +/* Level 2 has the log of all passes. Else the log has one pass, or the =
+failing path. */
+> +struct pass_log {
+> +	u32 level, len_max;
+> +	u64 pos;
+> +};
+> +
+> +static void restart_log(struct bpf_verifier_env *env, struct pass_log *l=
+og)
+> +{
+> +	env->log.level =3D log->level;
+> +	/* the log is dropped when a function is found to be safe */
+> +	log->pos =3D min(log->pos, env->log.end_pos);
+> +	if (log->level & BPF_LOG_LEVEL2)
+> +		return;
+> +	bpf_vlog_reset(&env->log, log->pos);
+> +	env->log.len_max =3D log->len_max;
+> +}
+> +
+> +/* Repeat the last run. The verdict does not depend on the log, so it ha=
+s no cost. */
+> +static int log_failing_path(struct bpf_verifier_env *env, struct bpf_sna=
+pshot *initial,
+> +			    struct pass_log *log)
+> +{
+> +	u32 insns =3D env->insn_processed, states =3D env->total_states;
+> +	u64 cost =3D env->cost;
+> +	int i, ret;
+> +
+> +	restart_log(env, log);
+> +	ret =3D run_path_sensitive(env, initial, true);
+> +	env->log.level =3D 0;
+> +	env->cost =3D cost;
 
 [Severity: Medium]
-What if the callee checks a caller reference n for NULL and returns a
-non-NULL child pointer derived from it, where reg->parent_id carries n's
-reference ID and reg->id is 0?
+Can the repeat run in log_failing_path() hit env->max_cost in
+bpf_check_limits()?
 
-For example, a recursive static subprogram verified on its own can take an
-inherited PTR_MAYBE_NULL reference n, check if (!n) bpf_throw(), and return
-a PTR_TRUSTED member loaded from n (which sets reg->parent_id to n's
-reference ID in check_ptr_to_btf_access() while reg->id is 0).  Because
-only reg->id is checked here, n in the caller keeps PTR_MAYBE_NULL; if the
-caller then tests if (!n), mark_ptr_or_null_regs() drops n from
-caller->refs[] via release_reference_nomark() without invalidating the
-returned child register whose parent_id still refers to n.
+log_failing_path() saves and restores env->cost around
+run_path_sensitive(), but neither rewinds env->cost to its value before
+the unlogged run nor raises env->max_cost (unlike the env->for_log replay,
+which sets env->max_cost =3D 2 * env->cost).  During the repeat run,
+check_funcs() charges the path's cost a second time on top of env->cost
+and checks it against env->max_cost:
+
+kernel/bpf/flow.c:bpf_check_limits() {
+	if (env->cost <=3D min(env->max_cost, env->pass_max_cost) && env->mem <=3D=
+ env->max_mem &&
+	    !env->over_limit)
+		return 0;
+	verbose(env, "BPF program is too complex: cost %llu of %llu, memory %llu o=
+f %llu\n",
+		env->cost, min(env->max_cost, env->pass_max_cost), env->mem, env->max_mem=
+);
+	env->over_limit =3D true;
+	return -E2BIG;
+}
+
+When find_failing_path() succeeds near env->max_cost, the doubled run cost
+pushes env->cost past env->max_cost.  That logs a complexity failure, sets
+env->over_limit =3D true so env->err stays 0, and makes log_failing_path()
+return 0 instead of err, losing the failing-path log.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261120204959.6149=
-08-1-alexei.starovoitov@gmail.com?part=3D33
+08-1-alexei.starovoitov@gmail.com?part=3D37
