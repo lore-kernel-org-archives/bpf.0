@@ -1,54 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.23
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795230108;
-	b=h9mg3dk0PfmDqln8V3FCsxiaIqQWkPa4JyX7Fjn8uLopYlqlL4MZR9GKDc7DxbPTB8vU
-	 id/ZwNkmBv4LzJvDGbFP6VxejHGGTR6YpBgGDXWeqCuqmUrby2eOmd2reF70bTbostTAk
-	 /UcdZNGAGyPVF7sd+sg7PmQ7j29jdC4t0egxSzfbNmOEwILcKNg2QA5vXM11rpbMAyOeZ
-	 o2rkBC8l+AuffnTk2FndC8H3VBAviGL8LH4344scai6eUO9aalpsI6C+q56/Y4FOpIS1u
-	 /IDSn9XcoO+/HZvLDYzjAFdxBYJV2jyg2cP5oeRbQzSHUFgiiHkm4iulCvu+WVzxLPA==
+	t=1795235422;
+	b=wn6mKQdUhfIP3pVzD1jDcXfXAxH/RTx/HqJOxwbXBnYJkq4HsRzod0QUljUVbkT9Jr9n
+	 6cFhW53j5dkI7GhehFhGNYSSxcIOWIC6Ufvsf8KsoyOKNeQrus/SabMF9hyKWpZE89aCv
+	 coRxKX22kaxE1/qakLLpgZ2vIhcGbN3jeZ/0cW+FMrivPbpsb4kVVQSUQZRL+vBbph7GC
+	 IwRUuCfQ0rp4T0DGnm1a0kBUJZ4mf7c3mDdIcBNNRSuCvBaCzu88R9tA+UB97NTMfly3U
+	 agt/4n7P9JbT9Mas5pTrrWQ3jYLXHdNAVEbuDjf2yO1DMFWRAKUbGKbf9v/sohKAUpw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795230108;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=ywPoIWURrrH5KkyxwY1SfMOlMWxZ7GGIQgz38Z63dWc=;
-	b=YS/BEJ//rSn23VPKbeKSd90IDtOO8FlrtpWNezG3BLlQoO+SjUUSL0r7f1CR6/mZLeyD
-	 +8npAB6q1A3b7FENdoSxeiqaEnPuUTOF/9dlHcEOeasz7GxIfLGauLTV9GiSztYh5Epea
-	 570weWKRQBYQd+hzayFKUHRdop+IYcUbISwbuLxTjtTbQWxeienkgVC4Rp+wT188JD7+7
-	 ykpdZII+tDMlzQu59eLMVuMnYYBGfH8582E/+KcZM9clWTQrUXYCurTdHMAKZozCULQeG
-	 Ex2/7jdBNRarOWPnAv35jR/mLYgJCBs/fy0hA0vY0pifxVdSpjSABMlkW/tMpxZarGQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795235422;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=eQUX0DiLS10KC1nae2FQeWET+jEEX1GKneklHJ6xh64=;
+	b=SFAfYj1h+8XkoGeT/rjSWdM6uXkjnU264WiFkR2Hww18XScC+cOCE1jxQi1K4xQb65Cs
+	 i2Jp06/33zF6WiL5ohaNr2NehiXf/rbQMZ1R7T70dOKRAXJKopwBIvTOSuSDkq3/Lhjmz
+	 MeGMFEWK5Yo3q014kYVcTvZZjf4yJR3hzZxR3NrDcd4eMlnSk7mQCI2orsCPOwyvoUk2t
+	 umZvCiTf4cIMnxl3sBm1lRCFZSLWPfgABmhGKM4ROGOaX2MS50JnI4PG2qp3jlPUbfZWG
+	 624kndxxwS60+IB+qy4y5N+6r7RpopekzlVWXXw+ft5qG528/rUujzSctj3Mj9//AaA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=pywxHqlj;
-	arc=none smtp.remote-ip=91.218.175.23
-Received: from mta0.migadu.com (out-23.mta0.migadu.com [91.218.175.23])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=X2u1aOeB;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B437606A335
-	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 03:01:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2B437606A335
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 268FA606A68D
+	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 04:30:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=pywxHqlj
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=HSZLlB8/kDuoQhQ6wWt7/Tc4Dx6a2fEeRsBjkzGgzGk=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795230106; v=1; x=1795834906;
- b=pywxHqlj9Ow0eAN1QZC03eR6snLyms8HUB/VsKpg096Oo3NociFQ4RZjrES4YyhdIyQBPiC4
- E9mMteKhWUshO7ZndU/SwYZcWr61jqGNT+V+wAL7gMo6jOmFnYOzJY1Iz5UffQujOnEPBHSog/m
- AFUvyP2F2U3Z4DVhGpuW/I/w=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 50e77010917d361f;
-	Sat, 21 Nov 2026 03:01:46 +0000
-X-Mizu-Trace-ID: 50e77010917d361f
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <d93d15a1-cf67-4395-b2ea-2af05afc7001@linux.dev>
-Date: Fri, 20 Nov 2026 19:01:39 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=X2u1aOeB
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF75A1F000C4;
+	Sat, 21 Nov 2026 04:30:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795235421;
+	bh=eQUX0DiLS10KC1nae2FQeWET+jEEX1GKneklHJ6xh64=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=X2u1aOeB55mfT3SS5D/QrCm0QbUAfGIfQBhTrYoqw9kJOy6jAOW5zD3kNihipW1FN
+	 dYqZA/Ihx5VdazKrUw25BCTPzq1OvU+9mhx9ya0yhMjXxOaOdZuP3wU8CNoDpdUgr+
+	 49cAQKO2mqp0tEMSkXtMPfxV/7OOlk2eSRx0ADP5OtR12dujhHBgK5mBOmNFXn3lYP
+	 z+3Op4mvSmbqRvTHaJjyDxwdOYjuo54c9BE9BpzvJApeufKcc/LRvr02CJsznwzuYJ
+	 FFLxxm4Rmi4E5BRQMeRrrzgmCeDqdJGM8BVQnlNM524ngGm988SsXYBxwrDxA58Nq4
+	 MnvsM599+bo/A==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B4597380AAFE;
+	Sat, 21 Nov 2026 04:30:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,47 +53,143 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [EXT.MSG] Re: [PATCH bpf-next v3 0/4] bpf: Check recursion per
- task for preemptible programs
-To: Mike Bazov <mikeba@sentinelone.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, Steven Rostedt
- <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
- Martin Kelly <martin.kelly@crowdstrike.com>,
- Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>,
- tyler.wilson@crowdstrike.com
-References: <20261117-bpf-preempt-v2-r2-v3-0-586376ec3672@sentinelone.com>
- <9a47ede3-24fa-4fa3-8d7e-50f221de0929@linux.dev>
- <CAPnbwjpmRCR3F4V3StUz=702AdWZzHHZjP68GepnYdYykjoC8g@mail.gmail.com>
- <CAPnbwjrQcd5R0aqNKeJV3wWuMcTTsxsamxpKVpKY7Za2xKB1gA@mail.gmail.com>
-Content-Language: en-US
-From: "JP Kobryn (CrowdStrike)" <jp.kobryn@linux.dev>
-In-Reply-To: <CAPnbwjrQcd5R0aqNKeJV3wWuMcTTsxsamxpKVpKY7Za2xKB1gA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2 00/49] bpf: Verify in passes,
+ with equations in the state
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179523542054.926945.7837755051168951494.git-patchwork-notify@kernel.org>
+Date: Sat, 21 Nov 2026 04:30:20 +0000
+References: <20261120204959.614908-1-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261120204959.614908-1-alexei.starovoitov@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com
 
-On 11/19/26 3:22 AM, Mike Bazov wrote:
-> Thanks for testing, JP.
-> 
->> fexit (marked)                61      135
-> 
-> Marked programs take the same per-CPU counter as before, so I expect no
-> change there. How many runs are behind these numbers, and how much do
-> they vary from run to run?
+Hello:
 
-That was 3 runs taken over a 30 min sapling window of a specific workload.
-We changed from a timed window to the full duration of the workload and on
-5 new runs, we got mixed results. In one run, we got the inverse where the
-miss count was higher before the patch. But this is only in terms of marked
-fexit. I think this is noise from system services. We're in the process of
-building up a new harness for this issue so I expect by next rev we have
-more consistency.
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Fri, 20 Nov 2026 20:49:08 +0000 you wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
+> 
+> This series replaces the main analysis of the verifier and scev.c. Against
+> bpf-next, the base of the series:
+> 
+>   - More valid programs load. The verdict depends less on the code pattern.
+>   - Numbers keep states apart only if an error, or a bound that the program
+>     requires, depends on them.
+>   - The work does not grow with the number of iterations of a loop, unless an
+>     error needs them one by one.
+>   - The log shows a path to the bug, if the verifier finds one.
+>   - The proof is separate from the guesses. There is less code.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v2,01/49] bpf: Look for bpf_clone_redirect() once in check_recursion()
+    https://git.kernel.org/bpf/bpf-next/c/9c8f16ab14d7
+  - [bpf-next,v2,02/49] bpf: Make stack liveness faster
+    https://git.kernel.org/bpf/bpf-next/c/5aea6a7c1825
+  - [bpf-next,v2,03/49] bpf: Delete the old main pass of the verifier
+    https://git.kernel.org/bpf/bpf-next/c/867a4a899694
+  - [bpf-next,v2,04/49] bpf: Delete scalar evolution
+    https://git.kernel.org/bpf/bpf-next/c/0b1c6041e9f1
+  - [bpf-next,v2,05/49] bpf: Limit the cost and the memory of a load
+    https://git.kernel.org/bpf/bpf-next/c/3c41899af5d0
+  - [bpf-next,v2,06/49] bpf: Record what each insn reads and writes
+    https://git.kernel.org/bpf/bpf-next/c/37b844f5bc6f
+  - [bpf-next,v2,07/49] bpf: Name an id after the xreg that has it
+    https://git.kernel.org/bpf/bpf-next/c/cb137b692503
+  - [bpf-next,v2,08/49] bpf: Do not fail a check because a state has fewer values
+    https://git.kernel.org/bpf/bpf-next/c/d1252e1e9c46
+  - [bpf-next,v2,09/49] bpf: Check fixups in the main pass and keep a snapshot of them
+    https://git.kernel.org/bpf/bpf-next/c/9f9fc3dc30b2
+  - [bpf-next,v2,10/49] bpf: Reject a program with a call that needs two rewrites
+    https://git.kernel.org/bpf/bpf-next/c/fa83ca87f431
+  - [bpf-next,v2,11/49] bpf: Put a barrier where no mask fits
+    https://git.kernel.org/bpf/bpf-next/c/d83c595d9480
+  - [bpf-next,v2,12/49] bpf: Keep more of what is known about a number
+    https://git.kernel.org/bpf/bpf-next/c/8f58839c9ebb
+  - [bpf-next,v2,13/49] bpf: Remember how many bytes of a packet are checked
+    https://git.kernel.org/bpf/bpf-next/c/12766488e77a
+  - [bpf-next,v2,14/49] bpf: Mark a state that no run of the program has
+    https://git.kernel.org/bpf/bpf-next/c/ebb272e84ec8
+  - [bpf-next,v2,15/49] bpf: Peel the first trips of a loop and join the other trips
+    https://git.kernel.org/bpf/bpf-next/c/623109e0f931
+  - [bpf-next,v2,16/49] bpf: Add equations and their arithmetic
+    https://git.kernel.org/bpf/bpf-next/c/e9b3a99d48bc
+  - [bpf-next,v2,17/49] bpf: Keep a table of equations in each state
+    https://git.kernel.org/bpf/bpf-next/c/ab04a7655be5
+  - [bpf-next,v2,18/49] bpf: Refine all related numbers after a jump
+    https://git.kernel.org/bpf/bpf-next/c/340bb75c4a56
+  - [bpf-next,v2,19/49] bpf: Make equations from ALU, spill, fill and call insns
+    https://git.kernel.org/bpf/bpf-next/c/92907a9af652
+  - [bpf-next,v2,20/49] bpf: Delete the equations that say nothing
+    https://git.kernel.org/bpf/bpf-next/c/ecfcecce56ba
+  - [bpf-next,v2,21/49] bpf: Compare states by join_key, then by value
+    https://git.kernel.org/bpf/bpf-next/c/a03670bf0cf3
+  - [bpf-next,v2,22/49] bpf: Continue a pass after an unproven insn
+    https://git.kernel.org/bpf/bpf-next/c/0e549bbe75ab
+  - [bpf-next,v2,23/49] bpf: Find the xregs that an unproven insn depends on
+    https://git.kernel.org/bpf/bpf-next/c/37e13b091537
+  - [bpf-next,v2,24/49] bpf: Keep two states apart if data and control deps differ
+    https://git.kernel.org/bpf/bpf-next/c/6de365ae6608
+  - [bpf-next,v2,25/49] bpf: Join any two states that have the same join_key
+    https://git.kernel.org/bpf/bpf-next/c/627ce07df2d9
+  - [bpf-next,v2,26/49] bpf: Check the equations when a state is pruned or joined
+    https://git.kernel.org/bpf/bpf-next/c/de3bb1ef2ce5
+  - [bpf-next,v2,27/49] bpf: Guess the equations of a join
+    https://git.kernel.org/bpf/bpf-next/c/473d366fc137
+  - [bpf-next,v2,28/49] bpf: Prune or join each state that arrives
+    https://git.kernel.org/bpf/bpf-next/c/0e5e78acdf2a
+  - [bpf-next,v2,29/49] bpf: Order the pending states and free the states that are done
+    https://git.kernel.org/bpf/bpf-next/c/4148dd9a7f45
+  - [bpf-next,v2,30/49] bpf: Get the trip count from the trip index
+    https://git.kernel.org/bpf/bpf-next/c/b00adefb7a65
+  - [bpf-next,v2,31/49] bpf: Give a loop a checked trip count or may_goto
+    https://git.kernel.org/bpf/bpf-next/c/2da4d8226c27
+  - [bpf-next,v2,32/49] bpf: Use the equations in the join rule
+    https://git.kernel.org/bpf/bpf-next/c/fb08fa4a46cd
+  - [bpf-next,v2,33/49] bpf: Verify a static function once for each instance
+    https://git.kernel.org/bpf/bpf-next/c/762e1478d7c5
+  - [bpf-next,v2,34/49] bpf: Partition the states after an error
+    https://git.kernel.org/bpf/bpf-next/c/ecb43124db39
+  - [bpf-next,v2,35/49] bpf: Reproduce an error on one path, with no joins
+    https://git.kernel.org/bpf/bpf-next/c/a46de5d64e18
+  - [bpf-next,v2,36/49] bpf: Do not let a join raise what a program requires
+    https://git.kernel.org/bpf/bpf-next/c/cd97aa1387d9
+  - [bpf-next,v2,37/49] bpf: Verify in passes
+    https://git.kernel.org/bpf/bpf-next/c/09c84023b0b4
+  - [bpf-next,v2,38/49] bpf: Make a returned pointer to the stack unreadable
+    https://git.kernel.org/bpf/bpf-next/c/da543d022de6
+  - [bpf-next,v2,39/49] bpf: Keep two states apart if a live xreg has two types
+    https://git.kernel.org/bpf/bpf-next/c/afafa4255b17
+  - [bpf-next,v2,40/49] bpf: Check the body of a counted loop once
+    https://git.kernel.org/bpf/bpf-next/c/97f92b0c1df6
+  - [bpf-next,v2,41/49] bpf: Refine the copies of a number that AND or OR splits
+    https://git.kernel.org/bpf/bpf-next/c/a2aee95cc318
+  - [bpf-next,v2,42/49] bpf: Allow a range of offsets for a constant string
+    https://git.kernel.org/bpf/bpf-next/c/5124dee218b2
+  - [bpf-next,v2,43/49] bpf: Keep spilled pointers at a range of stack offsets
+    https://git.kernel.org/bpf/bpf-next/c/de2cf44a0a34
+  - [bpf-next,v2,44/49] selftests/bpf: Adjust tests to the new log text
+    https://git.kernel.org/bpf/bpf-next/c/5ecc636cbed7
+  - [bpf-next,v2,45/49] selftests/bpf: Adjust tests that get another verdict or may_goto
+    https://git.kernel.org/bpf/bpf-next/c/298ff459cc89
+  - [bpf-next,v2,46/49] selftests/bpf: Test barriers and far pointers
+    https://git.kernel.org/bpf/bpf-next/c/7cdea9de4a69
+  - [bpf-next,v2,47/49] selftests/bpf: Test passes, instances, precision and the failing path
+    https://git.kernel.org/bpf/bpf-next/c/81c7c630a9a8
+  - [bpf-next,v2,48/49] selftests/bpf: Test equations
+    https://git.kernel.org/bpf/bpf-next/c/78884791786a
+  - [bpf-next,v2,49/49] bpf, docs: Rewrite verifier.rst
+    https://git.kernel.org/bpf/bpf-next/c/a45635128d1e
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
