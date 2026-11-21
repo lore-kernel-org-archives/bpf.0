@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.163
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.164
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795221270;
-	b=EGEKQBeYxpFDY+J/s7FX/NtRJpT2ts6Q9ljuNj20jdkvynUr2x1QMDi8ALK7sC6mEOEd
-	 75nKijtDuhtwCAT5sSVNYc0SqyAQ8t/R1B+ncn7iST8aS3t6bh8efMVhFKP7El6hqQB/e
-	 GzMutc40TV16Qw1Jmo6tyAPu3qCu23qyVsaSA85HwZoW+gQV6eS9+E5gq+twU1qHTTZrn
-	 k8wXmQrzD9UMQfeCIEnEpHxB949ypyNOFNYLVTBynSauhRXdt3qXvUMi2A+y6sgKtujw+
-	 3HgYyzbkV0ukkuS9RobxRFIHaaAIRMapXP0OMpAlhq0xCLgx9a2/mcIuv+P7d++3UKw==
+	t=1795221274;
+	b=KEThzgXKb7+iT9oqgO1DViXzf7pUYKWl8b2c0znJXcVYrh9HxyhChS2fC3faH6sXiFum
+	 WHETWqL6KKqwMkKQqiirQi5Hwtn7pTaWZRDEfm0w0OOwJUpf5R/wUn1a9mIJEiJZyrSnQ
+	 z8CZpt8R8zrkWK+uDMOn8CLLbGkItu+skzwjQ/5nZoz+BclaKFqXiC595JxcJkTk6BSc5
+	 rpNyLEZ+pAzECm+Rht8lezELUebfuIrDpnJnF9RhYfPMCwTdk99eUthNW2H3861Fkpf3i
+	 QPSOt0sfvjhVeGnQ4GV5TtuaF2wo5yrqIgb6uSJwwhkzpkJM6sXImRasRc5vR8VmleA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795221270;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795221274;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=/D+Zhad86wjuATsbT8ohg/50USn4bj0NsQs4iN//PK8=;
-	b=2kpPoycIdhO68xzfpoqky6uIaD7vnWJWzJiBlsJs7Fy3yExXfbMLBckUop8uxpNTgdoN
-	 mrAFike8TK1Tcf79dPpRn/UfP1E2EmVJSb9QSfA0xNGOsXazPU/no1QX7cxx7tmOr1P0u
-	 QCsJrn6pC5ZoVuBiqq4v9xZEGokWKUWFO6SFlTKtz8yM6XXeJ4TMs8rFpmnxMNQR0BZr2
-	 UrT450nI6ZFco2jlEwm/sZ4rTm4ohiFcBxaabwfbbeXZiYouGdAVM/I/bH2IBYqPZndeU
-	 UwLmonAPVNh5mRQg2rnHdGhMG8+I/ghFn0hbAItFPhC7w42i3YLtZexwj2JCOqSPukw==
+	bh=UakQ/lVZu6ZklDKD0lITWhsDfWqXnOk3rxLWD0AR4iI=;
+	b=qvYKbw+g52QByZKyxz9HPbL6zSGvix2fo+bZg/qioqL+/LeoQ35QSZKDKDFgY9OYgixL
+	 2vFACdngo6nhjfBYYImsreDq2cP1ZcysbEMu9waL5G15WebMyzTcS13IHNJ33hDrNOqbY
+	 OpqGSBd+1ri7wThAjfK/NxO4/HiYuz8KuR9YxlgdKUDA8lkbyVHRaQKIINuMD24uCaVux
+	 gDy4oTNiqMaRJnlVYpwIeeL+ODQzkebor0lleQX2qffmRH8aQIy9nGQA4n3xzsZ6xUs89
+	 9Yl2H/XYtq205LYasjUEsQU89LRxCbDR6bI26w5kO3x0VnBttdBrVGzUIsJDgQHkJzA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=UbBL8BrQ;
-	arc=none smtp.remote-ip=91.218.175.163
-Received: from mta0.migadu.com (out-163.mta0.migadu.com [91.218.175.163])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ga2cAh0G;
+	arc=none smtp.remote-ip=95.215.58.164
+Received: from mta1.migadu.com (out-164.mta1.migadu.com [95.215.58.164])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6F9560A2600
-	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 00:34:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C6F9560A2600
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1B72606A698
+	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 00:34:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B1B72606A698
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=UbBL8BrQ
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ga2cAh0G
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=vUBLLFu7exKFaLVeWVP1e19lJwUEn1zEA0S7uIyAxXw=;
+DKIM-Signature: a=rsa-sha256; bh=K9SJ+mNptETAOYUhXMxL24aCdmOEQZ4Pqm8uQvEQ9z4=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795221258; v=1; x=1795826058;
- b=UbBL8BrQ8Ro/aOrRc0+d7EsvcSEmxoG3Y7vq9beiNk45QOMQuq/GcoWiR2Efu3VzkjnFmCGj
- g2xTQ3yz4m5Opv9En7o5s79m6gblE9MA1XFub6xNFnc8OAgvmAaKLN2AjMJs6wTBTh4tgJyOreG
- z52wuIXVqHlIHHZHE5gp+hEc=
+ t=1795221270; v=1; x=1795826070;
+ b=ga2cAh0GDKz5Zpizb4kGBnzH/EKQ4G8e0oQpJOpQLR4OHhUe8GdbI1tAI7J27DcbuE61whdw
+ ZbSkJrjWCQC1F5EMdaQFOzMN5dFPx+sWETkE+kANKuN+InycO13Yh1EYpUbqk+oEIc8ljD/wbDe
+ aY/4HOZmS2s1cmG3NB4EnrM8=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by mta11.migadu.com with ESMTPS id edff4338751dc96c;
-	Sat, 21 Nov 2026 00:34:18 +0000
-X-Mizu-Trace-ID: edff4338751dc96c
+Received: by mta11.migadu.com with ESMTPS id 2523e64529c72b34;
+	Sat, 21 Nov 2026 00:34:30 +0000
+X-Mizu-Trace-ID: 2523e64529c72b34
 X-Migadu-Flow: FLOW_OUT
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
@@ -62,9 +62,9 @@ Cc: Alan Maguire <alan.maguire@oracle.com>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	sched-ext@lists.linux.dev
-Subject: [PATCH bpf-next v2 1/6] libbpf: Separate interfaces shared with in-tree tools
-Date: Fri, 20 Nov 2026 17:33:58 -0700
-Message-ID: <20261121003403.2928928-2-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v2 3/6] libbpf: Resolve kfunc variants by prototype
+Date: Fri, 20 Nov 2026 17:34:00 -0700
+Message-ID: <20261121003403.2928928-4-ihor.solodrai@linux.dev>
 X-Mailer: git-send-email 2.56.1
 In-Reply-To: <20261121003403.2928928-1-ihor.solodrai@linux.dev>
 References: <20261121003403.2928928-1-ihor.solodrai@linux.dev>
@@ -79,231 +79,406 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-resolve_btfids links libbpf statically and uses its BTF header
-accessor, field iterator and SHA-256 helper. libbpf_internal.h
-also defines logging macros and poisons kernel integer typedefs,
-so resolve_btfids wraps the hash helper in a separate source file.
+libbpf resolves a kfunc declaration by exact name, after dropping its
+last ___ suffix, and only then checks the prototype. The name alone
+picks the kernel function, so the kernel can't serve both prototypes of
+a changed kfunc. For example, vmlinux.h declares:
 
-Move the shared declarations to libbpf_tools.h and use them
-directly in resolve_btfids. The header is for in-tree tools and
-stays uninstalled. No shared-library symbols change.
+  bool scx_bpf_dsq_move_to_local(u64 dsq_id);
+  bool scx_bpf_dsq_move_to_local___v2(u64 dsq_id, u64 enq_flags);
 
-No functional change.
+libbpf resolves the second to scx_bpf_dsq_move_to_local() and rejects
+its prototype. Keeping the old prototype as ___v1 and giving the new
+one the unsuffixed name would break old declarations the same way.
+
+Select a kfunc in two steps instead:
+
+  1. Collect the functions in vmlinux and module BTFs with the same
+     essential name as the declaration, as CO-RE does for types. The
+     "bpf_kfunc" decl tag is ignored.
+
+  2. Resolve the candidate with a compatible prototype. If there is
+     none, a __weak kfunc stays unresolved. More than one is an error,
+     even for a __weak kfunc.
+
+The prototype check is stricter than bpf_core_types_are_compat(). It
+also compares the names of structs, unions and forward declarations,
+ignoring ___ suffixes. Members aren't compared. Typedefs and qualifiers
+are skipped. For example:
+
+  typedef struct foo foo_t;
+
+  void kfunc(struct foo *arg);
+  void kfunc(struct foo___local *arg);
+  void kfunc(foo_t *arg);
+
+are compatible, but not with:
+
+  void kfunc(struct bar *arg);
+
+So a declaration with an outdated struct name no longer resolves. For
+example, commit 8740156ad33b ("bpf: Require a BPF cpumask for
+bpf_cpumask_populate()") changed:
+
+  before: int bpf_cpumask_populate(struct cpumask *, void *, size_t);
+  after:  int bpf_cpumask_populate(struct bpf_cpumask *, void *, size_t);
+
+Each declaration now resolves only on a kernel with the same prototype.
+A stacked suffix, as in foo___v2___compat, no longer resolves foo___v2,
+because its essential name is foo___v2. compat.bpf.h now tries foo___v2
+first.
+
+Module BTFs are now loaded for every object with kfuncs: 0.5 and 1.4 ms
+for 8 and 32 small modules in a VM. Lookup cost per kfunc:
+
+                        before (hit / miss)   after
+  sorted, 23 modules    0.14 / 0.65 us        0.8 us
+  unsorted (v6.18)      0.1 / 0.5 ms          0.7 ms
 
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- tools/bpf/bpftool/Makefile            |  9 +++---
- tools/bpf/resolve_btfids/btf_colors.c | 15 ++-------
- tools/bpf/resolve_btfids/btf_colors.h |  4 ---
- tools/bpf/resolve_btfids/main.c       |  5 +--
- tools/lib/bpf/libbpf_internal.h       | 30 +----------------
- tools/lib/bpf/libbpf_tools.h          | 46 +++++++++++++++++++++++++++
- 6 files changed, 58 insertions(+), 51 deletions(-)
- create mode 100644 tools/lib/bpf/libbpf_tools.h
+ tools/lib/bpf/btf.c             |  99 ++++++++++++++++++++++++++-
+ tools/lib/bpf/libbpf.c          | 117 ++++++++++++++++++++++----------
+ tools/lib/bpf/libbpf_internal.h |   2 +
+ tools/lib/bpf/libbpf_tools.h    |   2 +
+ 4 files changed, 182 insertions(+), 38 deletions(-)
 
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index 49dabf2eded0..7e73e12af5b6 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -28,10 +28,11 @@ LIBBPF_BOOTSTRAP_INCLUDE := $(LIBBPF_BOOTSTRAP_DESTDIR)include
- LIBBPF_BOOTSTRAP_HDRS_DIR := $(LIBBPF_BOOTSTRAP_INCLUDE)/bpf
- LIBBPF_BOOTSTRAP := $(LIBBPF_BOOTSTRAP_OUTPUT)libbpf.a
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index a4bf01403a43..71cba0b9bbfe 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -1140,7 +1140,7 @@ static void btf_check_sorted(struct btf *btf)
+ }
  
--# We need to copy hashmap.h, nlattr.h, relo_core.h and libbpf_internal.h
--# which are not otherwise exported by libbpf, but still required by bpftool.
--LIBBPF_INTERNAL_HDRS := $(addprefix $(LIBBPF_HDRS_DIR)/,hashmap.h nlattr.h relo_core.h libbpf_internal.h)
--LIBBPF_BOOTSTRAP_INTERNAL_HDRS := $(addprefix $(LIBBPF_BOOTSTRAP_HDRS_DIR)/,hashmap.h relo_core.h libbpf_internal.h)
-+# Stage private headers that bpftool uses and libbpf does not install.
-+LIBBPF_COMMON_INTERNAL_HDRS := hashmap.h relo_core.h libbpf_internal.h libbpf_tools.h
-+LIBBPF_INTERNAL_HDRS := $(addprefix $(LIBBPF_HDRS_DIR)/,$(LIBBPF_COMMON_INTERNAL_HDRS) nlattr.h)
-+LIBBPF_BOOTSTRAP_INTERNAL_HDRS := $(addprefix $(LIBBPF_BOOTSTRAP_HDRS_DIR)/,\
-+					     $(LIBBPF_COMMON_INTERNAL_HDRS))
+ static __s32 btf_find_type_by_name_bsearch(const struct btf *btf, const char *name,
+-					   __s32 start_id)
++					   size_t name_len, __s32 start_id)
+ {
+ 	const struct btf_type *t;
+ 	const char *tname;
+@@ -1152,7 +1152,7 @@ static __s32 btf_find_type_by_name_bsearch(const struct btf *btf, const char *na
+ 		m = l + (r - l) / 2;
+ 		t = btf_type_by_id(btf, m);
+ 		tname = btf__str_by_offset(btf, t->name_off);
+-		if (strcmp(tname, name) >= 0) {
++		if (strncmp(tname, name, name_len) >= 0) {
+ 			if (l == r)
+ 				return r;
+ 			r = m;
+@@ -1164,6 +1164,99 @@ static __s32 btf_find_type_by_name_bsearch(const struct btf *btf, const char *na
+ 	return btf__type_cnt(btf);
+ }
  
- $(LIBBPF_OUTPUT) $(BOOTSTRAP_OUTPUT) $(LIBBPF_BOOTSTRAP_OUTPUT) $(LIBBPF_HDRS_DIR) $(LIBBPF_BOOTSTRAP_HDRS_DIR):
- 	$(QUIET_MKDIR)mkdir -p $@
-diff --git a/tools/bpf/resolve_btfids/btf_colors.c b/tools/bpf/resolve_btfids/btf_colors.c
-index 5d307d70e7f2..7374aa2f8963 100644
---- a/tools/bpf/resolve_btfids/btf_colors.c
-+++ b/tools/bpf/resolve_btfids/btf_colors.c
-@@ -1,18 +1,9 @@
- // SPDX-License-Identifier: GPL-2.0-only
--#include <bpf/libbpf_internal.h>
-+#include <errno.h>
-+#include <stdlib.h>
-+#include <bpf/libbpf_tools.h>
- #include "btf_colors.h"
++/*
++ * Set [*start, *end) to the range of own type IDs that may match the
++ * first name_len bytes of name. For unsorted BTF, include all own type IDs.
++ */
++void btf_name_prefix_range(const struct btf *btf, const char *name, size_t name_len,
++			   __u32 *start, __u32 *end)
++{
++	__u32 i, n = btf__type_cnt(btf);
++
++	if (btf->named_start_id <= 0) {
++		*start = btf->start_id;
++		*end = n;
++		return;
++	}
++	*start = btf_find_type_by_name_bsearch(btf, name, name_len, btf->named_start_id);
++	for (i = *start; i < n; i++) {
++		const struct btf_type *t = btf_type_by_id(btf, i);
++		const char *tname = btf__str_by_offset(btf, t->name_off);
++
++		if (strncmp(tname, name, name_len) != 0)
++			break;
++	}
++	*end = i;
++}
++
++static __u16 kfunc_type_kind(const struct btf_type *t)
++{
++	if (btf_is_fwd(t))
++		return btf_kflag(t) ? BTF_KIND_UNION : BTF_KIND_STRUCT;
++	if (btf_is_enum64(t))
++		return BTF_KIND_ENUM;
++	return btf_kind(t);
++}
++
++/*
++ * Return 1 if the types match, 0 if they don't, or -EINVAL if a type
++ * can't be looked up or the types nest deeper than depth.
++ */
++static int kfunc_type_match(const struct btf *a, __u32 a_id,
++			    const struct btf *b, __u32 b_id, int depth)
++{
++	const struct btf_type *at = skip_mods_and_typedefs(a, a_id, NULL);
++	const struct btf_type *bt = skip_mods_and_typedefs(b, b_id, NULL);
++	__u16 kind;
++	int i, ret;
++
++	if (!at || !bt || !depth)
++		return -EINVAL;
++
++	kind = kfunc_type_kind(at);
++	if (kind != kfunc_type_kind(bt))
++		return 0;
++
++	switch (kind) {
++	case BTF_KIND_STRUCT:
++	case BTF_KIND_UNION: {
++		const char *an = btf__name_by_offset(a, at->name_off);
++		const char *bn = btf__name_by_offset(b, bt->name_off);
++		size_t name_len = bpf_core_essential_name_len(an);
++
++		return name_len == bpf_core_essential_name_len(bn) &&
++		       strncmp(an, bn, name_len) == 0;
++	}
++	case BTF_KIND_UNKN:
++	case BTF_KIND_ENUM:
++		return 1;
++	case BTF_KIND_INT:
++		return btf_int_offset(at) == 0 && btf_int_offset(bt) == 0;
++	case BTF_KIND_PTR:
++		return kfunc_type_match(a, at->type, b, bt->type, depth - 1);
++	case BTF_KIND_ARRAY:
++		return kfunc_type_match(a, btf_array(at)->type, b, btf_array(bt)->type, depth - 1);
++	case BTF_KIND_FUNC_PROTO:
++		if (btf_vlen(at) != btf_vlen(bt))
++			return 0;
++		for (i = 0; i < btf_vlen(at); i++) {
++			ret = kfunc_type_match(a, btf_params(at)[i].type,
++					       b, btf_params(bt)[i].type, depth - 1);
++			if (ret <= 0)
++				return ret;
++		}
++		return kfunc_type_match(a, at->type, b, bt->type, depth - 1);
++	default:
++		return 0;
++	}
++}
++
++int btf_kfunc_proto_match(const struct btf *a, __u32 a_id,
++			  const struct btf *b, __u32 b_id)
++{
++	return kfunc_type_match(a, a_id, b, b_id, 32);
++}
++
+ static __s32 btf_find_by_name_kind(const struct btf *btf, int start_id,
+ 				   const char *type_name, __s32 kind)
+ {
+@@ -1185,7 +1278,7 @@ static __s32 btf_find_by_name_kind(const struct btf *btf, int start_id,
  
--/*
-- * Functions in this file mainly exist to refer to functions from libbpf_internal.h,
-- * which can't be included in main.c because of the u32 poison and pr_warn macro conflicts.
-- */
+ 	if (btf->named_start_id > 0 && type_name[0]) {
+ 		start_id = max(start_id, btf->named_start_id);
+-		id = btf_find_type_by_name_bsearch(btf, type_name, start_id);
++		id = btf_find_type_by_name_bsearch(btf, type_name, strlen(type_name), start_id);
+ 		for (; id < nr_types; id++) {
+ 			t = btf__type_by_id(btf, id);
+ 			tname = btf__str_by_offset(btf, t->name_off);
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 1efc0dd37b2e..9439dc2816ea 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -641,7 +641,6 @@ struct extern_desc {
+ 	int btf_id;
+ 	int sec_btf_id;
+ 	char *name;
+-	char *essent_name;
+ 	bool is_set;
+ 	bool is_weak;
+ 	union {
+@@ -4446,7 +4445,6 @@ static int bpf_object__collect_externs(struct bpf_object *obj)
+ 	struct extern_desc *ext;
+ 	int i, n, off, dummy_var_btf_id;
+ 	const char *ext_name, *sec_name;
+-	size_t ext_essent_len;
+ 	Elf_Scn *scn;
+ 	Elf64_Shdr *sh;
+ 
+@@ -4498,14 +4496,6 @@ static int bpf_object__collect_externs(struct bpf_object *obj)
+ 		ext->sym_idx = i;
+ 		ext->is_weak = ELF64_ST_BIND(sym->st_info) == STB_WEAK;
+ 
+-		ext_essent_len = bpf_core_essential_name_len(ext->name);
+-		ext->essent_name = NULL;
+-		if (ext_essent_len != strlen(ext->name)) {
+-			ext->essent_name = strndup(ext->name, ext_essent_len);
+-			if (!ext->essent_name)
+-				return -ENOMEM;
+-		}
 -
--void btf_sha256(const void *data, size_t len,
--		__u8 out[BTF_SHA256_DIGEST_LENGTH])
--{
--	libbpf_sha256(data, len, out);
--}
+ 		ext->sec_btf_id = find_extern_sec_btf_id(obj->btf, ext->btf_id);
+ 		if (ext->sec_btf_id <= 0) {
+ 			pr_warn("failed to find BTF for extern '%s' [%d] section: %d\n",
+@@ -9513,41 +9503,99 @@ static int bpf_object__resolve_ksym_var_btf_id(struct bpf_object *obj,
+ 	return 0;
+ }
+ 
++/* t is a FUNC whose essential name is the first name_len bytes of name */
++static bool btf_is_kfunc_candidate(const struct btf *btf, const struct btf_type *t,
++				   const char *name, size_t name_len)
++{
++	const char *tname;
++
++	if (!btf_is_func(t))
++		return false;
++	tname = btf__name_by_offset(btf, t->name_off);
++	if (strncmp(tname, name, name_len) != 0)
++		return false;
++	return bpf_core_essential_name_len(tname) == name_len;
++}
++
++/*
++ * Search vmlinux and module BTFs. Return:
++ *   - a BTF ID for a unique match;
++ *   - -ESRCH if the family is absent;
++ *   - -EINVAL if no candidate has a compatible prototype;
++ *   - -ENOTUNIQ if more than one candidate has a compatible prototype;
++ *   - another negative error on failure.
++ */
++static int find_kfunc_btf_id(struct bpf_object *obj, const struct extern_desc *ext,
++			     struct btf **res_btf, struct module_btf **res_mod_btf)
++{
++	size_t name_len = bpf_core_essential_name_len(ext->name);
++	int kfunc_id = 0, nr_cands = 0, err;
++	size_t i;
++
++	err = load_module_btfs(obj);
++	if (err)
++		return err;
++
++	for (i = 0; i <= obj->btf_module_cnt; i++) {
++		struct module_btf *mod = i ? &obj->btf_modules[i - 1] : NULL;
++		struct btf *btf = mod ? mod->btf : obj->btf_vmlinux;
++		__u32 id, end;
++
++		btf_name_prefix_range(btf, ext->name, name_len, &id, &end);
++		for (; id < end; id++) {
++			const struct btf_type *t = btf__type_by_id(btf, id);
++
++			if (!btf_is_kfunc_candidate(btf, t, ext->name, name_len))
++				continue;
++			nr_cands++;
++			if (btf_kfunc_proto_match(obj->btf, ext->ksym.type_id, btf, t->type) <= 0)
++				continue;
++			if (kfunc_id)
++				return -ENOTUNIQ;
++			kfunc_id = id;
++			*res_btf = btf;
++			*res_mod_btf = mod;
++		}
++	}
++	if (!nr_cands)
++		return -ESRCH;
++	if (!kfunc_id)
++		return -EINVAL;
++	return kfunc_id;
++}
++
+ static int bpf_object__resolve_ksym_func_btf_id(struct bpf_object *obj,
+ 						struct extern_desc *ext)
+ {
+-	int local_func_proto_id, kfunc_proto_id, kfunc_id;
+ 	struct module_btf *mod_btf = NULL;
+ 	const struct btf_type *kern_func;
+ 	struct btf *kern_btf = NULL;
+-	int ret;
 -
- /*
-  * Marks `root_id` and local types reachable from it with `color`.
-  * `colors` is indexed by source ID; worklist has room for every local type.
-diff --git a/tools/bpf/resolve_btfids/btf_colors.h b/tools/bpf/resolve_btfids/btf_colors.h
-index 56a85a242d6b..9cea757cb356 100644
---- a/tools/bpf/resolve_btfids/btf_colors.h
-+++ b/tools/bpf/resolve_btfids/btf_colors.h
-@@ -11,10 +11,6 @@ enum btf_color {
- 	BTF_COLOR_SHARED = BTF_COLOR_MAIN | BTF_COLOR_LOC,
- };
+-	local_func_proto_id = ext->ksym.type_id;
++	int kfunc_id, ret;
  
--#define BTF_SHA256_DIGEST_LENGTH	32
--
--void btf_sha256(const void *data, size_t len,
--		__u8 out[BTF_SHA256_DIGEST_LENGTH]);
- void btf_mark_reachable(struct btf *btf, __u32 root, enum btf_color color,
- 			__u8 *colors, __u32 *worklist);
- 
-diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
-index 0ac895222a14..0e193c3c73aa 100644
---- a/tools/bpf/resolve_btfids/main.c
-+++ b/tools/bpf/resolve_btfids/main.c
-@@ -93,12 +93,14 @@
- #include <linux/limits.h>
- #include <bpf/btf.h>
- #include <bpf/libbpf.h>
-+#include <bpf/libbpf_tools.h>
- #include "btf_colors.h"
- #include "fmodret.h"
- #include <subcmd/parse-options.h>
- 
- #define BTF_IDS_SECTION	".BTF_ids"
- #define BTF_LINK_MODULE_NAME_MAX	64
-+#define BTF_SHA256_DIGEST_LENGTH	SHA256_DIGEST_LENGTH
- #define BTF_ID_PREFIX	"__BTF_ID__"
- 
- #define BTF_STRUCT	"struct"
-@@ -1205,8 +1207,7 @@ static int patch_btf_link(struct object *obj, const struct btf_link *link)
+-	kfunc_id = find_ksym_btf_id(obj, ext->essent_name ?: ext->name, BTF_KIND_FUNC, &kern_btf,
+-				    &mod_btf);
+-	if (kfunc_id < 0) {
+-		if (kfunc_id == -ESRCH && ext->is_weak)
++	kfunc_id = find_kfunc_btf_id(obj, ext, &kern_btf, &mod_btf);
++	if (kfunc_id == -ESRCH) {
++		if (ext->is_weak)
+ 			return 0;
+ 		pr_warn("extern (func ksym) '%s': not found in kernel or module BTFs\n",
+ 			ext->name);
+ 		return kfunc_id;
  	}
- 	memset(data->d_buf, 0, data->d_size);
- 	memcpy(data->d_buf, link->module, strlen(link->module) + 1);
--	btf_sha256(raw_btf_data, raw_btf_size,
--		   (u8 *)data->d_buf + module_name_len);
-+	libbpf_sha256(raw_btf_data, raw_btf_size, (u8 *)data->d_buf + module_name_len);
- 	size = (u8 *)data->d_buf + module_name_len + BTF_SHA256_DIGEST_LENGTH;
- 	if (obj->efile.encoding == ELFDATA2LSB) {
- 		size[0] = raw_btf_size;
+-
+-	kern_func = btf__type_by_id(kern_btf, kfunc_id);
+-	kfunc_proto_id = kern_func->type;
+-
+-	ret = bpf_core_types_are_compat(obj->btf, local_func_proto_id,
+-					kern_btf, kfunc_proto_id);
+-	if (ret <= 0) {
++	if (kfunc_id == -EINVAL) {
+ 		if (ext->is_weak)
+ 			return 0;
+-
+-		pr_warn("extern (func ksym) '%s': func_proto [%d] incompatible with %s [%d]\n",
+-			ext->name, local_func_proto_id,
+-			mod_btf ? mod_btf->name : "vmlinux", kfunc_proto_id);
+-		return -EINVAL;
++		pr_warn("extern (func ksym) '%s': no compatible prototype in kernel or module BTFs\n",
++			ext->name);
++		return kfunc_id;
+ 	}
++	/* an error even for a weak kfunc: ambiguity isn't absence */
++	if (kfunc_id == -ENOTUNIQ) {
++		pr_warn("extern (func ksym) '%s': more than one compatible prototype in kernel or module BTFs\n",
++			ext->name);
++		return kfunc_id;
++	}
++	if (kfunc_id < 0)
++		return kfunc_id;
++	kern_func = btf__type_by_id(kern_btf, kfunc_id);
+ 
+ 	/* set index for module BTF fd in fd_array, if unset */
+ 	if (mod_btf && !mod_btf->fd_array_idx) {
+@@ -9579,8 +9627,9 @@ static int bpf_object__resolve_ksym_func_btf_id(struct bpf_object *obj,
+ 	 * {kernel_btf_id, kernel_btf_obj_fd} -> fixup ld_imm64.
+ 	 */
+ 	ext->ksym.kernel_btf_obj_fd = mod_btf ? mod_btf->fd : 0;
+-	pr_debug("extern (func ksym) '%s': resolved to %s [%d]\n",
+-		 ext->name, mod_btf ? mod_btf->name : "vmlinux", kfunc_id);
++	pr_debug("extern (func ksym) '%s': resolved to %s '%s' [%d]\n",
++		 ext->name, mod_btf ? mod_btf->name : "vmlinux",
++		 btf__name_by_offset(kern_btf, kern_func->name_off), kfunc_id);
+ 
+ 	return 0;
+ }
+@@ -10441,10 +10490,8 @@ void bpf_object__close(struct bpf_object *obj)
+ 	zfree(&obj->btf_custom_path);
+ 	zfree(&obj->kconfig);
+ 
+-	for (i = 0; i < obj->nr_extern; i++) {
++	for (i = 0; i < obj->nr_extern; i++)
+ 		zfree(&obj->externs[i].name);
+-		zfree(&obj->externs[i].essent_name);
+-	}
+ 
+ 	zfree(&obj->externs);
+ 	obj->nr_extern = 0;
 diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index e90b5336bac0..0ab15b5589d6 100644
+index 0ab15b5589d6..c3dadbfbe43d 100644
 --- a/tools/lib/bpf/libbpf_internal.h
 +++ b/tools/lib/bpf/libbpf_internal.h
-@@ -18,6 +18,7 @@
- #include <unistd.h>
- #include <sys/syscall.h>
- #include <libelf.h>
-+#include "libbpf_tools.h"
- #include "relo_core.h"
- 
- /* Android's libc doesn't support AT_EACCESS in faccessat() implementation
-@@ -247,7 +248,6 @@ struct btf_type;
- struct btf_type *btf_type_by_id(const struct btf *btf, __u32 type_id);
- const char *btf_kind_str(const struct btf_type *t);
- const struct btf_type *skip_mods_and_typedefs(const struct btf *btf, __u32 id, __u32 *res_id);
--const struct btf_header *btf_header(const struct btf *btf);
+@@ -251,6 +251,8 @@ const struct btf_type *skip_mods_and_typedefs(const struct btf *btf, __u32 id, _
  void btf_set_base_btf(struct btf *btf, const struct btf *base_btf);
  int btf_relocate(struct btf *btf, const struct btf *base_btf, __u32 **id_map,
  		 __u32 **str_map);
-@@ -574,31 +574,6 @@ static inline void bpf_core_relo_bswap(struct bpf_core_relo *i)
- 	i->kind = bswap_32(i->kind);
- }
++void btf_name_prefix_range(const struct btf *btf, const char *name, size_t name_len,
++			   __u32 *start, __u32 *end);
+ bool btf_type_is_traceable_func(const struct btf *btf, const struct btf_type *t);
  
--enum btf_field_iter_kind {
--	BTF_FIELD_ITER_IDS,
--	BTF_FIELD_ITER_STRS,
--};
--
--struct btf_field_desc {
--	/* once-per-type offsets */
--	int t_off_cnt, t_offs[2];
--	/* member struct size, or zero, if no members */
--	int m_sz;
--	/* repeated per-member offsets */
--	int m_off_cnt, m_offs[2];
--};
--
--struct btf_field_iter {
--	struct btf_field_desc desc;
--	void *p;
--	int m_idx;
--	int off_idx;
--	int vlen;
--};
--
--int btf_field_iter_init(struct btf_field_iter *it, struct btf_type *t, enum btf_field_iter_kind iter_kind);
--__u32 *btf_field_iter_next(struct btf_field_iter *it);
--
- typedef int (*type_id_visit_fn)(__u32 *type_id, void *ctx);
- typedef int (*str_off_visit_fn)(__u32 *str_off, void *ctx);
- int btf_ext_visit_type_ids(struct btf_ext *btf_ext, type_id_visit_fn visit, void *ctx);
-@@ -772,8 +747,5 @@ int elf_resolve_pattern_offsets(const char *binary_path, const char *pattern,
- 
- int probe_fd(int fd);
- 
--#define SHA256_DIGEST_LENGTH 32
--
--void libbpf_sha256(const void *data, size_t len, __u8 out[SHA256_DIGEST_LENGTH]);
- int probe_sys_bpf_ext(void);
- #endif /* __LIBBPF_LIBBPF_INTERNAL_H */
+ static inline enum btf_func_linkage btf_func_linkage(const struct btf_type *t)
 diff --git a/tools/lib/bpf/libbpf_tools.h b/tools/lib/bpf/libbpf_tools.h
-new file mode 100644
-index 000000000000..c590ea4312f2
---- /dev/null
+index c590ea4312f2..6068146eabd2 100644
+--- a/tools/lib/bpf/libbpf_tools.h
 +++ b/tools/lib/bpf/libbpf_tools.h
-@@ -0,0 +1,46 @@
-+/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
-+#ifndef __LIBBPF_TOOLS_H
-+#define __LIBBPF_TOOLS_H
-+
-+#include <linux/types.h>
-+#include <stddef.h>
-+
-+/* Internal interfaces for kernel tools that link libbpf statically. */
-+
-+struct btf;
-+struct btf_header;
-+struct btf_type;
-+
-+const struct btf_header *btf_header(const struct btf *btf);
-+
-+enum btf_field_iter_kind {
-+	BTF_FIELD_ITER_IDS,
-+	BTF_FIELD_ITER_STRS,
-+};
-+
-+struct btf_field_desc {
-+	/* once-per-type offsets */
-+	int t_off_cnt, t_offs[2];
-+	/* member struct size, or zero, if no members */
-+	int m_sz;
-+	/* repeated per-member offsets */
-+	int m_off_cnt, m_offs[2];
-+};
-+
-+struct btf_field_iter {
-+	struct btf_field_desc desc;
-+	void *p;
-+	int m_idx;
-+	int off_idx;
-+	int vlen;
-+};
-+
-+int btf_field_iter_init(struct btf_field_iter *it, struct btf_type *t,
-+			enum btf_field_iter_kind iter_kind);
-+__u32 *btf_field_iter_next(struct btf_field_iter *it);
-+
-+#define SHA256_DIGEST_LENGTH 32
-+
-+void libbpf_sha256(const void *data, size_t len, __u8 out[SHA256_DIGEST_LENGTH]);
-+
-+#endif /* __LIBBPF_TOOLS_H */
+@@ -12,6 +12,8 @@ struct btf_header;
+ struct btf_type;
+ 
+ const struct btf_header *btf_header(const struct btf *btf);
++int btf_kfunc_proto_match(const struct btf *a, __u32 a_id,
++			  const struct btf *b, __u32 b_id);
+ 
+ enum btf_field_iter_kind {
+ 	BTF_FIELD_ITER_IDS,
 -- 
 2.56.1
 
