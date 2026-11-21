@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.69
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.197
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795244341;
-	b=W438t2c9lVSY8eRGtWcVPJP6CWm4qP9QAAkSx1s3CrmDArWgYBFwO9r1W3FUC2ofFGQX
-	 +VALOGF7YFzQgZW6sA4EP1IWiUlJBG5DgFj6+85SAYRnKGsW2GutlJx06OJXcp/czxfu6
-	 lpK0/nEHd7KfLgHMsYaJlFeEXUnd3Q3HqZdsH8jX0tk/yZrtD+fwZGgMVaBDqBycyqhdz
-	 zBJcJ/068F8yQPf1XBv8Mj2isPgUqdfwa1PiKJeCnSCwswaNRj6eh7hV6PLNRELKY7+yE
-	 R6scQr8+l5aakm24n7xwzjZVaJdIdOB0slev1EBgl4SiUS70I3KJyMTf8coXCfCTqEg==
+	t=1795244343;
+	b=rRdiSo+eY56teUvRH0Cp7x9701/yBtQ2vf4Pyyo/erHn6uhQCtLuWMUPxYEmk8UtvKfQ
+	 EEnybNRbYKef3uAvCuP5BQcKqzYSOJ+vIQhSpsuC8KfAkNC33p8r3NGh11oAN1CtLWFFv
+	 mjPsla04xxLYNZ85ciN8AXF5QUZCxL3Y7Ti4jXcGZo0ZNKKJROiTf1bmtgRxzNQ7vUQvK
+	 1ypVsxzgB0mIZilQEw5kJaTFkq6AYTcvf7P/MEf00CR1Kt7rh5//HLxUFE2CcPaUIwUoO
+	 JM5QkcEDalOfqRRsPVL8rTuCAemQ0nDR1qU7MUpSwkFd9n9qdPhEdoLg+SOqrosBlGw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795244341;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795244343;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=5uxDxgfBGA5yTPHcCIqyXHP3BnAmG6Jm0Jp5UQ/3dx8=;
-	b=euyj8oSSC/8YATYjZwkeuUU1Tfxqiykjv07HMBtW9JdUgp2KtUDRWK6Dmu/LmQoVGEOt
-	 u3oan0M+YHBiNxhBWPmLrkphaBfxVhB7r+l93nq+fd0UMw+kUND4k58kQdlVILud3kADC
-	 SwQ4zmli0/gN6ld97lzBFOapsRnqjrU0Fc5EFdK8mU1m6OzId/cQYzn+ec0YI98RoB6uH
-	 wo1QlEC1BOeri9Y71ySKyf4QFN/mpobn+B9IVCt8NF+3DUUOgwSvQipbuE8UYVIcWIv59
-	 863oR7djFE+nHX2WJpe8BzWYj2Jo6xMcJPEBL4S56q75r5NcTAWNAIGm9aJwzp02vtA==
+	bh=ceOCiUal3x2CUb6+gSFDn+xj67LposR+qOo8ZKtSNko=;
+	b=fSAfpkjP0V+HW26nz1ZJ1cFXVp8mRS60BasxJXHgifbt84jeYmt9+lU8zjGf6WYHYvNP
+	 7BwvCfy+q0CS41p1d92UiUu/z1GFe+m/+23BQljwKhnJAiIdz5TuybbDSyqAhjBKZzz7s
+	 WHn28/b6B37NgI67LhSQ/vqnei+XQjmoLrALR24a2LuujWFWfVY49w/ONEaW6xZJs5jEg
+	 pHp0wTkcNvsQG0euvgZ0tmLBZi8x4LThBgag90yePpFSp6rPmZhU0JCW1FRW0pTKHNrVO
+	 YNugUKMvBS1W22S7lDRgfXz8wurb4jxpDoC1EYowlu81jgdFcqRctC6FPplE7oieCOg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=RXfniuAf;
-	arc=none smtp.remote-ip=209.85.210.69
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com [209.85.210.69])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="QYPeg/GU";
+	arc=none smtp.remote-ip=74.125.82.197
+Received: from mail-dy1-f197.google.com (mail-dy1-f197.google.com [74.125.82.197])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92AFA606A336
-	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 06:59:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 92AFA606A336
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56310606A334
+	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 06:59:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 56310606A334
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=RXfniuAf
-Received: by mail-ot1-f69.google.com with SMTP id 46e09a7af769-862a5ad18d0so2153711a34.3
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 22:59:01 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=QYPeg/GU
+Received: by mail-dy1-f197.google.com with SMTP id 5a478bee46e88-38355b03cb8so1604604eec.0
+        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 22:59:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795244340; x=1795849140; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1795244343; x=1795849143; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=5uxDxgfBGA5yTPHcCIqyXHP3BnAmG6Jm0Jp5UQ/3dx8=;
-        b=RXfniuAfp3EtgdBAKLr75KxU1qE5n7pDoI4d1alzGAlfMRAwN3+g3ZJnmIGW4r1buS
-         0NF7vvAxIMfQLGu2DiyROfiBeiWT50y0M9CRyJrT5qpvGCRcoKV1gO7XCWzbUrIhH6po
-         KyzoqFq/Aj/ZvpMLYhuGzkTV9W7IoPEFMAHmkjc19hMbMZ5yxxr+wk2AL4Ylo8qzKAqr
-         +FwiIPzRmEtTe4ZjvPr0OdLQboYn84U7cpF6/on+F3ewqtk65+gr5q4YhrUINMSpSbe0
-         KcxKZlQh/2El9pk+oyQ9X/EjtaDhXnNfpUx6x9DbbYd0iA+9I6jOpHZ7YoKXp+80Lpkj
-         9nQA==
+        bh=ceOCiUal3x2CUb6+gSFDn+xj67LposR+qOo8ZKtSNko=;
+        b=QYPeg/GUH0W8t0GKwXHdQVkNgatdDcUR+sG+6SpGYag03+hy1WTBQnWeuuILssHCAy
+         VI0NQYGzGHlET0gPM7krnXW6BZX8TVBhUm8MHNAlWAkYEUgWpOqflYHOMYGcoYX5fpIS
+         cibXR77KZqBpmRdQ5gdHvlkjb878WoaxpbDEmSWVLPYcmuNCa0LtHPriQcoZg2WXuVvf
+         OYbtxe1IbcmYoxi5cyAo6Y3iKafgj4w2UGf/Nbe3dQyf5/XEBWd9bRg6dzfG9wtFr+rR
+         0pWBIBv/gZUDiIH3vOROTYYqStKon4w/iHD8sVI3j3PUr6bTTiSgTaS1gXjyayoYO9td
+         vQZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795244340; x=1795849140;
+        d=1e100.net; s=20260707; t=1795244343; x=1795849143;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=5uxDxgfBGA5yTPHcCIqyXHP3BnAmG6Jm0Jp5UQ/3dx8=;
-        b=a9sw8nJqdPPzG5Pss1vKOeXc5WCqG4ma33EFdA41tUkiu0I/b/aUjmiAQY+oRaLWw4
-         zOyXjqNCugeHfVwqVy7y0vjjXAt3Xzb54pzLX6tHqMWTmvPJCLM9rfRNZnkrQwhHNwGa
-         34KJ+X20HgpwG7mO6PDOjhEMcOrU0KirLnpM7KuNgii3bBNt0zg5NcR5dqvdrMHhDZAG
-         PT/3DpgCfa7/3JsemTaS/FUIKu+Xa66oe7ooWD6Zxil9icjsk15Sj697YAX6NZiAhhY/
-         5XU7/FaWeRgN5NruKDH2mzqFOc8+9Zfk/1u3LKL4Bjz6XhWpx6CBY282ksAl4pBX2PmY
-         0/Ng==
-X-Forwarded-Encrypted: i=1; AL+hErHqJOlZDe/36ulonx+70Mwc5CskOYJu7qQVu0ZMSdmhY72SxgZniuei4rQ+ntDiHeeGkOc=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/aSUJuSl/Pni9SfDTO7hmDexo5tfkV3c4d20Pvs5nCydSzUm3c
-	z695LG2EYMMCVUFRoipnctcOaGLmSlkxtKohpybRuxzdatofsKzAgYoLIVtkvn3Xqp5NRqNbNxS
-	5PZB2NIVc7A==
-X-Received: from iobdo25.prod.google.com ([2002:a05:6602:4619:b0:9ca:bcca:dd8b])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6808:640a:b0:572:e8fb:2125
- with SMTP id 5614622812f47-57a09504aadmr5490293b6e.20.1795244340118; Fri, 20
- Nov 2026 22:59:00 -0800 (PST)
-Date: Fri, 20 Nov 2026 22:57:55 -0800
+        bh=ceOCiUal3x2CUb6+gSFDn+xj67LposR+qOo8ZKtSNko=;
+        b=JfvCL/9QM6v2aFQr6Hx7cEMjNlfD3dw2r173dTkl6tpyI+AIMg0rbgytMYlZ7J7/3c
+         k1UDGHVvNWihZ/bgb5bX3GrV7j2ZgRr0UCuwo3VEHAFRY5kTUeQMA3Dauv88+5InuzrY
+         Yvc80EnI9WhcNO1P5ukudcOVaaFkHdjA99dh4HWkUx+jR4c5p7KoLST77/5pOI5nVdiO
+         y2kowJmHlVG3HXR/kx1fU0dMzYNv+IQcHc6Utu1RJZyGK7sU8LOk4/E+gr809Qb2EXdQ
+         mv8kL29IiFtonv/r//XeA6ulB4c6/FWtheQ1MMuzSjxhpBPrM8vh9ZlJD4Ydvo1BxnO4
+         fPrQ==
+X-Forwarded-Encrypted: i=1; AL+hErHsZ2ahE3es+MQXd+0iKlfyWM78Gi92f9+/EkcMOzNtlsy6RqpjCWPXkWql0s9Q4IiS4sg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/wkpFm30CU5iu7QLOGfUjmBLVEQ3xLf+Q/8guqE3PK7GdCpvz5
+	apN+6at+0dmBCv/a8cWGkyk5CoRhO3GX4/BsCpO2+C1l8jdGLohsMKPQ1oO0X7U0WqsVzHCNtYn
+	7UItXYHRpbA==
+X-Received: from dyjz27.prod.google.com ([2002:a05:7300:b1b:b0:381:fb4c:34e1])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:693c:8641:20b0:383:50b7:1d78
+ with SMTP id 5a478bee46e88-38571223ee7mr5801142eec.40.1795244342218; Fri, 20
+ Nov 2026 22:59:02 -0800 (PST)
+Date: Fri, 20 Nov 2026 22:57:56 -0800
 In-Reply-To: <20261121065813.4143649-1-irogers@google.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -81,8 +81,8 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261121065813.4143649-1-irogers@google.com>
 X-Mailer: git-send-email 2.56.1.750.gf70dc682cf-goog
-Message-ID: <20261121065813.4143649-7-irogers@google.com>
-Subject: [PATCH v15 06/23] perf comm: Add __guarded_by annotations to struct comm_strs
+Message-ID: <20261121065813.4143649-8-irogers@google.com>
+Subject: [PATCH v15 07/23] perf vdso: Fix unlocked __dsos__add() and race in __machine__addnew_vdso()
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Marco Elver <elver@google.com>
@@ -95,32 +95,155 @@ Cc: Bart Van Assche <bvanassche@acm.org>, Jiri Olsa <jolsa@kernel.org>,
 	Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Annotate strs, num_strs, and capacity in struct comm_strs with
-__guarded_by(&lock) and __pt_guarded_by(&lock) so Clang verifies all
-accesses hold comm_strs->lock.
+__machine__addnew_vdso() called __dsos__add(&machine->dsos, dso) without
+holding machine->dsos.lock, and machine__findnew_vdso() and
+__machine__findnew_compat() initialized machine->vdso_info and created
+temporary VDSO files without synchronization. Acquire
+machine->dsos.lock in write mode across machine->vdso_info
+initialization, duplicate checking via __dsos__find(), temporary file
+creation, dso__set_long_name(), and __dsos__add().
 
+Fixes: f649ed80f3ca ("perf dsos: Tidy reference counting and locking")
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/comm.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/perf/util/dsos.c |  8 ++++++-
+ tools/perf/util/dsos.h |  2 ++
+ tools/perf/util/vdso.c | 52 +++++++++++++++++++++++++++---------------
+ 3 files changed, 42 insertions(+), 20 deletions(-)
 
-diff --git a/tools/perf/util/comm.c b/tools/perf/util/comm.c
-index 6343a3c9debe..9fc4e91a36e9 100644
---- a/tools/perf/util/comm.c
-+++ b/tools/perf/util/comm.c
-@@ -16,9 +16,9 @@ DECLARE_RC_STRUCT(comm_str) {
+diff --git a/tools/perf/util/dsos.c b/tools/perf/util/dsos.c
+index a2cd37bd1660..1574c8885d78 100644
+--- a/tools/perf/util/dsos.c
++++ b/tools/perf/util/dsos.c
+@@ -284,12 +284,18 @@ static struct dso *__dsos__find_id(struct dsos *dsos, const char *name, const st
+ 	return res;
+ }
  
- static struct comm_strs {
- 	struct rw_semaphore lock;
--	struct comm_str **strs;
--	int num_strs;
--	int capacity;
-+	struct comm_str **strs __pt_guarded_by(&lock) __guarded_by(&lock);
-+	int num_strs __guarded_by(&lock);
-+	int capacity __guarded_by(&lock);
- } _comm_strs;
++struct dso *__dsos__find(struct dsos *dsos, const char *name, bool cmp_short, bool write_locked)
++	__must_hold_shared(&dsos->lock)
++{
++	return __dsos__find_id(dsos, name, &dso_id_empty, cmp_short, write_locked);
++}
++
+ struct dso *dsos__find(struct dsos *dsos, const char *name, bool cmp_short)
+ {
+ 	struct dso *res;
  
- static void comm_strs__remove_if_last(struct comm_str *cs);
+ 	down_read(&dsos->lock);
+-	res = __dsos__find_id(dsos, name, &dso_id_empty, cmp_short, /*write_locked=*/false);
++	res = __dsos__find(dsos, name, cmp_short, /*write_locked=*/false);
+ 	up_read(&dsos->lock);
+ 	return res;
+ }
+diff --git a/tools/perf/util/dsos.h b/tools/perf/util/dsos.h
+index a26774950866..dbd06f420753 100644
+--- a/tools/perf/util/dsos.h
++++ b/tools/perf/util/dsos.h
+@@ -30,6 +30,8 @@ void dsos__exit(struct dsos *dsos);
+ 
+ int __dsos__add(struct dsos *dsos, struct dso *dso);
+ int dsos__add(struct dsos *dsos, struct dso *dso);
++struct dso *__dsos__find(struct dsos *dsos, const char *name, bool cmp_short, bool write_locked)
++	__must_hold_shared(&dsos->lock);
+ struct dso *dsos__find(struct dsos *dsos, const char *name, bool cmp_short);
+ 
+ struct dso *dsos__findnew_id(struct dsos *dsos, const char *name, const struct dso_id *id);
+diff --git a/tools/perf/util/vdso.c b/tools/perf/util/vdso.c
+index 7f2dde70f3e4..8bf81e2c9e78 100644
+--- a/tools/perf/util/vdso.c
++++ b/tools/perf/util/vdso.c
+@@ -131,8 +131,13 @@ static struct dso *__machine__addnew_vdso(struct machine *machine, const char *s
+ 
+ 	dso = dso__new(short_name);
+ 	if (dso != NULL) {
+-		__dsos__add(&machine->dsos, dso);
++		/*
++		 * Set the long name before adding to machine->dsos so that
++		 * __dsos__add() inserts it in sorted order without needing to
++		 * re-take machine->dsos.lock.
++		 */
+ 		dso__set_long_name(dso, long_name, false);
++		__dsos__add(&machine->dsos, dso);
+ 	}
+ 
+ 	return dso;
+@@ -250,15 +255,19 @@ static struct dso *__machine__findnew_compat(struct machine *machine,
+ 	const char *file_name;
+ 	struct dso *dso;
+ 
+-	dso = dsos__find(&machine->dsos, vdso_file->dso_name, true);
++	down_write(&machine->dsos.lock);
++	dso = __dsos__find(&machine->dsos, vdso_file->dso_name, true, /*write_locked=*/true);
+ 	if (dso)
+-		return dso;
++		goto out_unlock;
+ 
+ 	file_name = vdso__get_compat_file(vdso_file);
+ 	if (!file_name)
+-		return NULL;
++		goto out_unlock;
+ 
+-	return __machine__addnew_vdso(machine, vdso_file->dso_name, file_name);
++	dso = __machine__addnew_vdso(machine, vdso_file->dso_name, file_name);
++out_unlock:
++	up_write(&machine->dsos.lock);
++	return dso;
+ }
+ 
+ static int __machine__findnew_vdso_compat(struct machine *machine,
+@@ -332,33 +341,38 @@ struct dso *machine__findnew_vdso(struct machine *machine,
+ {
+ 	struct vdso_info *vdso_info;
+ 	struct dso *dso = NULL;
+-	char *file;
++	const char *file;
+ 
++	dso = machine__find_vdso(machine, thread);
++	if (dso)
++		return dso;
++
++	down_write(&machine->dsos.lock);
+ 	if (!machine->vdso_info)
+ 		machine->vdso_info = vdso_info__new();
+ 
+ 	vdso_info = machine->vdso_info;
+-	if (!vdso_info)
++	if (!vdso_info) {
++		up_write(&machine->dsos.lock);
+ 		return NULL;
+-
+-	dso = machine__find_vdso(machine, thread);
+-	if (dso)
+-		return dso;
++	}
+ 
+ #if BITS_PER_LONG == 64
++	up_write(&machine->dsos.lock);
+ 	if (__machine__findnew_vdso_compat(machine, thread, vdso_info, &dso))
+ 		return dso;
++	down_write(&machine->dsos.lock);
+ #endif
+ 
+-	dso = dsos__find(&machine->dsos, DSO__NAME_VDSO, true);
+-	if (dso)
+-		return dso;
+-
+-	file = get_file(&vdso_info->vdso);
+-	if (!file)
+-		return NULL;
++	dso = __dsos__find(&machine->dsos, DSO__NAME_VDSO, true, /*write_locked=*/true);
++	if (!dso) {
++		file = get_file(&vdso_info->vdso);
++		if (file)
++			dso = __machine__addnew_vdso(machine, DSO__NAME_VDSO, file);
++	}
++	up_write(&machine->dsos.lock);
+ 
+-	return __machine__addnew_vdso(machine, DSO__NAME_VDSO, file);
++	return dso;
+ }
+ 
+ bool dso__is_vdso(const struct dso *dso)
 -- 
 2.56.1.750.gf70dc682cf-goog
 
