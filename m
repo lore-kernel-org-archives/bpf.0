@@ -1,76 +1,61 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795265616;
-	b=YZoKeO7GR5x6GezRYW5JBInKvfqslr/sno3Z2SaTlL7QSdVNdGpTFhjVQR7q4beB25Is
-	 NIQ3Wd2RRa1QTShuFjrT774J9T0QsT5jx8eonVHiQGp+tTzGyeMBPuAWh2TkZm4qOLsob
-	 irKgaZ1gK9Yod13riPfue20V3QEWGqpFJ3cskx7woamzTEChdU8Xgj9Ae2GF0V90iPL78
-	 nKXFlou8QRwN2uyBxDeEqPmG9EE2WsI3EW96kzbxr9DtuOO2eRT+l96Hqpd6siZzVym5/
-	 skIV3STGJWb06WI4Epr7YbeWqdN3373vpiaLPPJSAPFe/MWV5cmIbOlh+AE7uqpAdLg==
+	t=1795268463;
+	b=sx9Z2p46DZpBPFVcNeFnFmnI/1XHMuCbfNKrrQwFt3jEAT5sqNOk9u4Nrl+mvAxUvxEJ
+	 OKH1w9FS36xnHeL2gtB0VOfhiAAnsqFggCWkvIKulqhgDn1bh8cl2bcdX7TTlhFNOv3jR
+	 VhFP3gNq3Gw5aXWMTxTq9S4up0Iqx7kAwbkx9OqAAAg9/VQzArEYCsU5ZY19jVx518fWt
+	 kcTM2aCqhWj1erp/vb16mE4+W/GBOMOeq83dGYj9EWnO1wdA2soPuRAmszc3+drPrgR6V
+	 B3dnZKdVajgRztuoEYrvUoY+EYxEa3uPYs2sKmA+xCAmY4iF+7K+j12vofvwFNQqGDA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795265616;
-	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To:X-Debian-User;
-	bh=Kv39YFS3gCTmTIBEpLn+LTr7Kna7mVqtgec2/Wwwicg=;
-	b=HV/LvRIe7CQLRz4RRKp+1hWRwmUoSYbveOtP1msP931pWKmDcZC/XBP26BifRLbW1ppJ
-	 5GBMS+ICCpuxzeQjNxNzep+Zb9KgdmFLrkTbm6OFFuUfNKVA1wr8L+vdPAyVmHdlaRF71
-	 L/zFe8v6XMlcc8NqvgF6H3nmntb+azk8q+VIJJnpDqZwC3kdczzD2+LuiRAkToOF4nQOD
-	 nqlI7uEZX/NH8dTgLLf/CDpw6aOOjiGDLqxq/AsZeugWbLjdb7Fk0uxuXIVKApgme+ieg
-	 M3OeKmgyU6jknlkW9GjMaHgsbyDnHwp2FxsRNiUwClSoDVGdPPcdIxcB0ffYila8UHQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795268463;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=ze1XfukPlqWhXxeWdokIWjjT48DYgRLaaIcyK/o1tvY=;
+	b=m0SLpUZa4DhdUnkSIbsC3FEJc6FrwKoVvoqaebRK+MNegbfMSl1JueM4NDG0B1pQBLsq
+	 3mKYLlHB9YAxABrlLuE+R7hFPW3oIURw4KIgQVMESqrzcXe3xLtg82/MeYuYWZwgmbQD3
+	 b+wztvyt8T1lAz2aous6WUZ7/fdwj2ofWk68Vi2M9LQYAuEsCThZBUI5Xwaxti7xiV2kr
+	 30hyUWgE6QjM1j1fqFUViT6yoQ3Z7z2KMkhw/SGQ5ThaCVzrROyV7WAfHlaarciKN3s4r
+	 pOn16rm3ducumCVO/JyRjmIwPRT/YEnlac6E+OZ/uIz8/X6IBZufeavhi9gautOFQig==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=debian.org;
-	spf=pass smtp.mailfrom=debian.org;
-	dkim=pass header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=D0Tve2Qu;
-	arc=none smtp.remote-ip=82.195.75.108
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="ZSqX/PyV";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799DF606A32A;
-	Sat, 21 Nov 2026 12:53:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 799DF606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9209D606A32A
+	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 13:41:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=D0Tve2Qu
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=Kv39YFS3gCTmTIBEpLn+LTr7Kna7mVqtgec2/Wwwicg=; b=D0Tve2QuWJTHNHXcUWkFbcPJC6
-	TOiab1mhHs6+yzFNQHQnVJYMmE0HwdjNO4aoMN/HLWc3urlQ9nXzmbb34/0NKQmmZYBczP5RgddvH
-	vzPz1NHrWYJie+e/K15GD8dlMYj/CXf9w0DKH/xT+vKgtCjYmNk69C+vpkiU9O7hPkWzKKLzrAg8f
-	Nf25l5vkdz8GZzeFje0DF2iR2MHUoNElJSn8yGmhHt0W4XZ0syoVlw9TUXq0J+bzrExPGV8ZX7Oht
-	60GhviSwhWNnr2BnnEi+keEhlEd9U+CK57Qc7Ndr6c3hpqyWnxHuLJc10iKwBlrRkHh3/olbdjqs0
-	hUkL9QWg==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1xUkaj-003fOK-0z;
-	Sat, 21 Nov 2026 12:53:17 +0000
-Date: Sat, 21 Nov 2026 04:53:09 -0800
-From: Breno Leitao <leitao@debian.org>
-To: Stanislav Fomichev <sdf.kernel@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Neal Cardwell <ncardwell@google.com>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH net-next 1/3] net/tcp-ao: convert the getsockopt helpers
- to sockopt_t
-Message-ID: <awGTN1cIEnnlAMPq@gmail.com>
-References: <20261112-getsockopt_phase7-v1-0-1eb759dd0929@debian.org>
- <20261112-getsockopt_phase7-v1-1-1eb759dd0929@debian.org>
- <avdxDgmlDBTRgqM0@devvm16445.scu0.facebook.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZSqX/PyV
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 442B71F000C4;
+	Sat, 21 Nov 2026 13:40:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795268463;
+	bh=ze1XfukPlqWhXxeWdokIWjjT48DYgRLaaIcyK/o1tvY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=ZSqX/PyVpC6CU3SbqRR0szuxDgrLoipoK/D/Ig/FHo35MdiG+Ydp5+aj9HmGVa3Gp
+	 H2yER/nX/UTD6DVV5O103kQGVpQuzF4nMslta1M7zMkk5xcWKlsSf/ga/tCH7aQKcb
+	 3VnjmmgwbvqEsvYj+pKAjA+hAIT+RKjbW99SbaShivw6OEIQyyiXSpbcYRip3QaPgH
+	 s+jVOEs76rgL24ZMdObAW0nAsidspJsJtaiDkFWrENsJQGQs4gGUwpk+fPvOTgYa1+
+	 0cVKhp972pjgRkR708MODoEolIhsxwlseMaonESYnR3c7K/00fR3uU58VgCn5J318p
+	 BtUS7JnPLP4wg==
+Date: Sat, 21 Nov 2026 13:40:54 +0000
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Puranjay Mohan <puranjay@kernel.org>
+Cc: bpf@vger.kernel.org, Puranjay Mohan <puranjay12@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, kernel-team@meta.com, "Liam R. Howlett" <liam@infradead.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@kernel.org>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Pedro Falcato <pfalcato@suse.de>, 
+	David Hildenbrand <david@kernel.org>, Jann Horn <jannh@google.com>, linux-mm@kvack.org, 
+	Chris Mason <mason@kernel.org>
+Subject: Re: [PATCH bpf v6 2/3] bpf: switch task_vma iterator from mmap_lock
+ to per-VMA locks
+Message-ID: <awGZWsCp6v63H_py@gremlin>
+References: <20260408154539.3832150-1-puranjay@kernel.org>
+ <20260408154539.3832150-3-puranjay@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -82,60 +67,254 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <avdxDgmlDBTRgqM0@devvm16445.scu0.facebook.com>
-X-Debian-User: leitao
+In-Reply-To: <20260408154539.3832150-3-puranjay@kernel.org>
 
-On Fri, Nov 13, 2026 at 12:21:27PM -0800, Stanislav Fomichev wrote:
-> On 11/12, Breno Leitao wrote:
-> > @@ -2214,6 +2213,21 @@ static int tcp_ao_copy_mkts_to_user(const struct sock *sk,
-> >  	}
-> >  
-> >  	bytes_to_write = min_t(int, user_len, sizeof(struct tcp_ao_getsockopt));
-> > +
-> 
-> [..]
-> 
-> > +	/* The reply is up to nkeys entries, user_len apart, with the match
-> > +	 * count in the first entry's nkeys, so it can outgrow optlen. Size it
-> > +	 * by the keys on the socket rather than by the caller's nkeys.
-> > +	 */
-> > +	hlist_for_each_entry_rcu(key, &ao_info->head, node,
-> > +				 lockdep_sock_is_held(sk))
-> > +		nr_keys++;
-> > +	reply_len = max(array_size(min(max_keys, nr_keys), user_len),
-> > +			offsetofend(struct tcp_ao_getsockopt, nkeys));
-> > +	err = sockopt_expand_out(sopt, reply_len);
-> > +	if (err)
-> > +		return err;
-> > +	head = sopt->iter_out;
-> 
-> Is that faster / cleaner / more preferable than calling sockopt_expand_out
-> on every iteration hlist_for_each_entry_rcu below?
++cc VMA team, Chris [whose AI fix this relates to]
 
-sockopt_expand_out() can't be called once something went through
-iter_out. It re-anchors the iterator at the head of optval, so it WARNs
-and returns -EINVAL if the iterator has already moved.
+On Wed, Apr 08, 2026 at 08:45:36AM -0700, Puranjay Mohan wrote:
+> The open-coded task_vma iterator holds mmap_lock for the entire duration
+> of iteration, increasing contention on this highly contended lock.
+>
+> Switch to per-VMA locking. Find the next VMA via an RCU-protected maple
+> tree walk and lock it with lock_vma_under_rcu(). lock_next_vma() is not
+> used because its fallback takes mmap_read_lock(), and the iterator must
+> work in non-sleepable contexts.
 
-That check came in v2 of the series that added the helper [1], because
-a late call would rewind the write cursor. With a call per key, the
-second key would trip it.
+Hmm :) In future if an API doesn't give you what you need please do ask us
+in mm to offer one that does give you what you need, we don't bite :)
 
-So the size has to be known before the first entry is written, which is
-why the keys are counted first. ip_mc_gsfget() does the same and sizes
-its source list by min(sl_count, gf_numsrc). tcp_ao_info just keeps no
-key count, hence the walk.
+>
+> lock_vma_under_rcu() is a point lookup (mas_walk) that finds the VMA
+> containing a given address but cannot iterate across gaps. An
+> RCU-protected vma_next() walk (mas_find) first locates the next VMA's
+> vm_start to pass to lock_vma_under_rcu().
+>
+> Between the RCU walk and the lock, the VMA may be removed, shrunk, or
+> write-locked. On failure, advance past it using vm_end from the RCU
+> walk. Because the VMA slab is SLAB_TYPESAFE_BY_RCU, vm_end may be
+> stale; fall back to PAGE_SIZE advancement when it does not make forward
+> progress. Concurrent VMA insertions at addresses already passed by the
+> iterator are not detected.
+>
+> CONFIG_PER_VMA_LOCK is required; return -EOPNOTSUPP without it.
+>
+> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 
-Sizing by nkeys alone doesn't work either: a large nkeys would hit the
-MAX_RW_COUNT check and get -EINVAL, where today it copies only the keys
-that match.
+Hi guys,
 
-The extra walk seems very cheap. The keys come from sock_kmalloc(), so
-optmem_max caps how many a socket holds, and the socket lock keeps the
-list stable between the two walks.
+This is buggy and can result in deadlock. You need to revert it or restrict
+which contexts it can be called in.
 
-I'll say this in the comment and resping a v2.
+I'm a little surprised you didn't cc- or even ping mm or the VMA team here, we
+are always willing to help and it's clearly sub-optimal to write duplicative,
+open-coded VMA traversal in BPF.
 
-Thanks for the review, you are being key to this whole convertion,
---breno
+Let's be collaborative in future please :)
 
-[1] https://lore.kernel.org/20260914-getsockopt_phase6-v2-0-e48befc9602e@debian.org
+Anyway, unfortunately it seems that you've rather got yourselves in rather a
+pickle here, as vma_start_read() can call mmdrop() and in x86 that can take a
+pgd_lock in an invalid context.
+
+Consider:
+
+mmdrop()
+  -> __mmdrop()
+    -> mm_free_pgd()
+      -> pgd_free()
+        -> pgd_dtor()
+
+And looking at pgd_dtor():
+
+static void pgd_dtor(pgd_t *pgd)
+{
+	spin_lock(&pgd_lock);
+	pgd_list_del(pgd);
+	spin_unlock(&pgd_lock);
+}
+
+It's just a plain spin_[un]lock() which is invalid in softirq context, which you
+are potentially calling from here.
+
+You can get there from softirq via something like:
+
+pgd_alloc()
+  -> spin_lock(&pgd_lock)
+    <softirq>
+    bpf_iter_task_vma_next()
+      -> vma_start_read()
+        ... etc...
+	< maybe deadlock >
+
+It's not really sensible to alter core mm to accommodate this at this stage, so
+probably the best course is to disallow this code path for softirq context, or
+you could look into patching the x86 code.
+
+Thanks!
+
+> ---
+>  kernel/bpf/task_iter.c | 91 +++++++++++++++++++++++++++++++++---------
+>  1 file changed, 73 insertions(+), 18 deletions(-)
+>
+> diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
+> index c1f5fbe9dc2f..87e87f18913d 100644
+> --- a/kernel/bpf/task_iter.c
+> +++ b/kernel/bpf/task_iter.c
+> @@ -9,6 +9,7 @@
+>  #include <linux/bpf_mem_alloc.h>
+>  #include <linux/btf_ids.h>
+>  #include <linux/mm_types.h>
+> +#include <linux/mmap_lock.h>
+>  #include <linux/sched/mm.h>
+>  #include "mmap_unlock_work.h"
+>
+> @@ -807,8 +808,8 @@ static inline void bpf_iter_mmput_async(struct mm_struct *mm)
+>  struct bpf_iter_task_vma_kern_data {
+>  	struct task_struct *task;
+>  	struct mm_struct *mm;
+> -	struct mmap_unlock_irq_work *work;
+> -	struct vma_iterator vmi;
+> +	struct vm_area_struct *locked_vma;
+> +	u64 next_addr;
+>  };
+>
+>  struct bpf_iter_task_vma {
+> @@ -829,21 +830,19 @@ __bpf_kfunc int bpf_iter_task_vma_new(struct bpf_iter_task_vma *it,
+>  				      struct task_struct *task, u64 addr)
+>  {
+>  	struct bpf_iter_task_vma_kern *kit = (void *)it;
+> -	bool irq_work_busy = false;
+>  	int err;
+>
+>  	BUILD_BUG_ON(sizeof(struct bpf_iter_task_vma_kern) != sizeof(struct bpf_iter_task_vma));
+>  	BUILD_BUG_ON(__alignof__(struct bpf_iter_task_vma_kern) != __alignof__(struct bpf_iter_task_vma));
+>
+> -	/* bpf_iter_mmput_async() needs mmput_async() which requires CONFIG_MMU */
+> -	if (!IS_ENABLED(CONFIG_MMU)) {
+> +	if (!IS_ENABLED(CONFIG_PER_VMA_LOCK)) {
+>  		kit->data = NULL;
+>  		return -EOPNOTSUPP;
+>  	}
+>
+>  	/*
+>  	 * Reject irqs-disabled contexts including NMI. Operations used
+> -	 * by _next() and _destroy() (mmap_read_unlock, bpf_iter_mmput_async)
+> +	 * by _next() and _destroy() (vma_end_read, bpf_iter_mmput_async)
+>  	 * can take spinlocks with IRQs disabled (pi_lock, pool->lock).
+>  	 * Running from NMI or from a tracepoint that fires with those
+>  	 * locks held could deadlock.
+> @@ -886,18 +885,10 @@ __bpf_kfunc int bpf_iter_task_vma_new(struct bpf_iter_task_vma *it,
+>  		goto err_cleanup_iter;
+>  	}
+>
+> -	/* kit->data->work == NULL is valid after bpf_mmap_unlock_get_irq_work */
+> -	irq_work_busy = bpf_mmap_unlock_get_irq_work(&kit->data->work);
+> -	if (irq_work_busy || !mmap_read_trylock(kit->data->mm)) {
+> -		err = -EBUSY;
+> -		goto err_cleanup_mmget;
+> -	}
+> -
+> -	vma_iter_init(&kit->data->vmi, kit->data->mm, addr);
+> +	kit->data->locked_vma = NULL;
+> +	kit->data->next_addr = addr;
+>  	return 0;
+>
+> -err_cleanup_mmget:
+> -	bpf_iter_mmput_async(kit->data->mm);
+>  err_cleanup_iter:
+>  	put_task_struct(kit->data->task);
+>  	bpf_mem_free(&bpf_global_ma, kit->data);
+> @@ -906,13 +897,76 @@ __bpf_kfunc int bpf_iter_task_vma_new(struct bpf_iter_task_vma *it,
+>  	return err;
+>  }
+>
+> +/*
+> + * Find and lock the next VMA at or after data->next_addr.
+> + *
+> + * lock_vma_under_rcu() is a point lookup (mas_walk): it finds the VMA
+> + * containing a given address but cannot iterate. An RCU-protected
+> + * maple tree walk with vma_next() (mas_find) is needed first to locate
+> + * the next VMA's vm_start across any gap.
+> + *
+> + * Between the RCU walk and the lock, the VMA may be removed, shrunk,
+> + * or write-locked. On failure, advance past it using vm_end from the
+> + * RCU walk. SLAB_TYPESAFE_BY_RCU can make vm_end stale, so fall back
+> + * to PAGE_SIZE advancement to guarantee forward progress.
+> + */
+> +static struct vm_area_struct *
+> +bpf_iter_task_vma_find_next(struct bpf_iter_task_vma_kern_data *data)
+> +{
+> +	struct vm_area_struct *vma;
+> +	struct vma_iterator vmi;
+> +	unsigned long start, end;
+> +
+> +retry:
+> +	rcu_read_lock();
+> +	vma_iter_init(&vmi, data->mm, data->next_addr);
+> +	vma = vma_next(&vmi);
+> +	if (!vma) {
+> +		rcu_read_unlock();
+> +		return NULL;
+> +	}
+> +	start = vma->vm_start;
+> +	end = vma->vm_end;
+> +	rcu_read_unlock();
+> +
+> +	vma = lock_vma_under_rcu(data->mm, start);
+> +	if (!vma) {
+> +		if (end <= data->next_addr)
+> +			data->next_addr += PAGE_SIZE;
+> +		else
+> +			data->next_addr = end;
+> +		goto retry;
+> +	}
+> +
+> +	if (unlikely(vma->vm_end <= data->next_addr)) {
+> +		data->next_addr += PAGE_SIZE;
+> +		vma_end_read(vma);
+> +		goto retry;
+> +	}
+> +
+> +	return vma;
+> +}
+> +
+>  __bpf_kfunc struct vm_area_struct *bpf_iter_task_vma_next(struct bpf_iter_task_vma *it)
+>  {
+>  	struct bpf_iter_task_vma_kern *kit = (void *)it;
+> +	struct vm_area_struct *vma;
+>
+>  	if (!kit->data) /* bpf_iter_task_vma_new failed */
+>  		return NULL;
+> -	return vma_next(&kit->data->vmi);
+> +
+> +	if (kit->data->locked_vma) {
+> +		vma_end_read(kit->data->locked_vma);
+> +		kit->data->locked_vma = NULL;
+> +	}
+> +
+> +	vma = bpf_iter_task_vma_find_next(kit->data);
+> +	if (!vma)
+> +		return NULL;
+> +
+> +	kit->data->locked_vma = vma;
+> +	kit->data->next_addr = vma->vm_end;
+> +	return vma;
+>  }
+>
+>  __bpf_kfunc void bpf_iter_task_vma_destroy(struct bpf_iter_task_vma *it)
+> @@ -920,7 +974,8 @@ __bpf_kfunc void bpf_iter_task_vma_destroy(struct bpf_iter_task_vma *it)
+>  	struct bpf_iter_task_vma_kern *kit = (void *)it;
+>
+>  	if (kit->data) {
+> -		bpf_mmap_unlock_mm(kit->data->work, kit->data->mm);
+> +		if (kit->data->locked_vma)
+> +			vma_end_read(kit->data->locked_vma);
+>  		put_task_struct(kit->data->task);
+>  		bpf_iter_mmput_async(kit->data->mm);
+>  		bpf_mem_free(&bpf_global_ma, kit->data);
+> --
+> 2.52.0
+>
+>
+
+--
+Cheers, Lorenzo
