@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.70
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.69
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795244335;
-	b=B/te5EFUatYmOOIj+OuqPYgWTmcayahNvL4ZhfaOcxO6O9FGmwJBzZmeSJd6I/Xz1K4o
-	 igWQyLA9A3x84FprEsz+nYVsbuWCI/VUXcychFjEOxJY6fTUZ7brwRejvD8XshoANUy2A
-	 PgldVDIPQsayYkGRJhNmtR3bFv8WyZxPgnKILuovSQECOsmmFUavt4Q7P1YhZYmaoyyCu
-	 5LUDxL7rtNLJugcFrXHXoD2qyNYfTSz7NFmmxKNmzK145/l3HicUzTJqFVPbN9KKBg6eJ
-	 CavHn5PwRoFNQIGtRHWaMghoBSHzPPZEPbDXph8se+BfvYYRo5WxPpNdwf/+y7m5xAg==
+	t=1795244341;
+	b=W438t2c9lVSY8eRGtWcVPJP6CWm4qP9QAAkSx1s3CrmDArWgYBFwO9r1W3FUC2ofFGQX
+	 +VALOGF7YFzQgZW6sA4EP1IWiUlJBG5DgFj6+85SAYRnKGsW2GutlJx06OJXcp/czxfu6
+	 lpK0/nEHd7KfLgHMsYaJlFeEXUnd3Q3HqZdsH8jX0tk/yZrtD+fwZGgMVaBDqBycyqhdz
+	 zBJcJ/068F8yQPf1XBv8Mj2isPgUqdfwa1PiKJeCnSCwswaNRj6eh7hV6PLNRELKY7+yE
+	 R6scQr8+l5aakm24n7xwzjZVaJdIdOB0slev1EBgl4SiUS70I3KJyMTf8coXCfCTqEg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795244335;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795244341;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=fuvtSLQkw2xn+flfUo7lSRyM8NUUkLIzaxviYb0ux+A=;
-	b=v1HqITfBqPKiU5LbxnCfXrV2VED0hUIrwX8MxV15NcZyQIQog1AgygkGZIkcZxn1TRsK
-	 ASsS7VoPqbPTOZWlwuWfabo/Eh3AL+fGYGHE2nqSMF4GA7THKZ+pVPVzAtcgQbthCWNtd
-	 Dt5G57yTdn0Xj54T/nk3YPSOmbK0gJHWFSNbLxvmHrPQ62ZbG4DupYAzI2LF+qqRWMccY
-	 zPV4GdoXf1WT++gcYAmACYNArkgL0WBZOYEmyXXgyKbGLOr00WEoNerHdpmiod2giQOnA
-	 9ysqg4F1qSrt/d+VJRIMizuLunKIXuFohKAC9Z6RhUE4KRzCfztaX5oVt67H6HGCY7w==
+	bh=5uxDxgfBGA5yTPHcCIqyXHP3BnAmG6Jm0Jp5UQ/3dx8=;
+	b=euyj8oSSC/8YATYjZwkeuUU1Tfxqiykjv07HMBtW9JdUgp2KtUDRWK6Dmu/LmQoVGEOt
+	 u3oan0M+YHBiNxhBWPmLrkphaBfxVhB7r+l93nq+fd0UMw+kUND4k58kQdlVILud3kADC
+	 SwQ4zmli0/gN6ld97lzBFOapsRnqjrU0Fc5EFdK8mU1m6OzId/cQYzn+ec0YI98RoB6uH
+	 wo1QlEC1BOeri9Y71ySKyf4QFN/mpobn+B9IVCt8NF+3DUUOgwSvQipbuE8UYVIcWIv59
+	 863oR7djFE+nHX2WJpe8BzWYj2Jo6xMcJPEBL4S56q75r5NcTAWNAIGm9aJwzp02vtA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="BZv//PUI";
-	arc=none smtp.remote-ip=209.85.216.70
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=RXfniuAf;
+	arc=none smtp.remote-ip=209.85.210.69
+Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com [209.85.210.69])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 437CC606A32A
-	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 06:58:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 437CC606A32A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92AFA606A336
+	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 06:59:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 92AFA606A336
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=BZv//PUI
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-3b3b4208826so1151768a91.1
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 22:58:55 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=RXfniuAf
+Received: by mail-ot1-f69.google.com with SMTP id 46e09a7af769-862a5ad18d0so2153711a34.3
+        for <bpf@vger.kernel.org>; Fri, 20 Nov 2026 22:59:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795244335; x=1795849135; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1795244340; x=1795849140; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=fuvtSLQkw2xn+flfUo7lSRyM8NUUkLIzaxviYb0ux+A=;
-        b=BZv//PUIJSg3whhT4kTrxihWjUbhaUzqTiu9QlMdmaXwnCPb+rp6w1wxXHr8O60Rbf
-         VTxSyVTFxZceP8MxcM+LbahNGbo3mr969h7WsOGm827gbdUe93ZiagpnPhHrf14mEsaA
-         6ipzoLXgYg+rUMZiwBTUfiQmT3yunyYxIwOE/S6kHhJeRsDWORsU6RiR8nBy/5lbZ3SY
-         PlzrMKQfhCNfMLyZHkac4dV7k+QQSAgjT7ksU3p1iWowTKEv/F8GIJoftzJcjVuM/GZG
-         gOavYAyTRhOi7yBALy65JoL0hWoVd7PBIum3FI1CyiYH5rvOrNNf9hW2TfH+lVA9KOYV
-         VRzw==
+        bh=5uxDxgfBGA5yTPHcCIqyXHP3BnAmG6Jm0Jp5UQ/3dx8=;
+        b=RXfniuAfp3EtgdBAKLr75KxU1qE5n7pDoI4d1alzGAlfMRAwN3+g3ZJnmIGW4r1buS
+         0NF7vvAxIMfQLGu2DiyROfiBeiWT50y0M9CRyJrT5qpvGCRcoKV1gO7XCWzbUrIhH6po
+         KyzoqFq/Aj/ZvpMLYhuGzkTV9W7IoPEFMAHmkjc19hMbMZ5yxxr+wk2AL4Ylo8qzKAqr
+         +FwiIPzRmEtTe4ZjvPr0OdLQboYn84U7cpF6/on+F3ewqtk65+gr5q4YhrUINMSpSbe0
+         KcxKZlQh/2El9pk+oyQ9X/EjtaDhXnNfpUx6x9DbbYd0iA+9I6jOpHZ7YoKXp+80Lpkj
+         9nQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795244335; x=1795849135;
+        d=1e100.net; s=20260707; t=1795244340; x=1795849140;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=fuvtSLQkw2xn+flfUo7lSRyM8NUUkLIzaxviYb0ux+A=;
-        b=SGHt3S89rzkpslW30RGKiUScYgM8spgjEOh2DJQtnLlODqPlTiL2eJZ8ArAWHNrTDo
-         jW2ApP6JoK+WGd0B4EmtmqBhTQ/m+RTofA9mEoG8b3sdtOlXap5Rd5r580sT9gME+8Ua
-         1QP0Xb5m8Ki1vMzVi6DG2j4YJX4KqDUh3j4MnxjNDeiMF0tlrH24/KQwUHBYnxxc1JQN
-         k+3QJgDM4sWQ3msaOwy5TKTK5qbStZ0WksHaSgNID/GIqKiFlPgoIohSAN9ThzbO9FnI
-         IZbjSHsTJgxoUlFJDflBPmflFG3wNoCJ6r48ltNkf7XinAj8t+KCzeEfRGBpOD+KLMea
-         ou7g==
-X-Forwarded-Encrypted: i=1; AL+hErGGvLVeI8KcA3NQkVbsNm6lsMVtOWZJzTbhbRN+lv692bMhV0DFkf6LDX/7PuR3/rDtQXg=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9gvJEpyCBnJMhEjE8g0Kfc06+wnZsuMll/9oede7777g7OyjzT
-	UeTOTiJsRwaxupFDi+FIroMcJaClEldkHO36s0VCwCVBDEVpHtPFuGPL3PnsPI87dsZvMlr3NvE
-	viHb9uRlt8A==
-X-Received: from plgw12.prod.google.com ([2002:a17:902:e88c:b0:2ed:4e53:853d])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:164d:b0:3b3:a575:846a
- with SMTP id 98e67ed59e1d1-3b40a5de1bcmr4960690a91.22.1795244334321; Fri, 20
- Nov 2026 22:58:54 -0800 (PST)
-Date: Fri, 20 Nov 2026 22:57:54 -0800
+        bh=5uxDxgfBGA5yTPHcCIqyXHP3BnAmG6Jm0Jp5UQ/3dx8=;
+        b=a9sw8nJqdPPzG5Pss1vKOeXc5WCqG4ma33EFdA41tUkiu0I/b/aUjmiAQY+oRaLWw4
+         zOyXjqNCugeHfVwqVy7y0vjjXAt3Xzb54pzLX6tHqMWTmvPJCLM9rfRNZnkrQwhHNwGa
+         34KJ+X20HgpwG7mO6PDOjhEMcOrU0KirLnpM7KuNgii3bBNt0zg5NcR5dqvdrMHhDZAG
+         PT/3DpgCfa7/3JsemTaS/FUIKu+Xa66oe7ooWD6Zxil9icjsk15Sj697YAX6NZiAhhY/
+         5XU7/FaWeRgN5NruKDH2mzqFOc8+9Zfk/1u3LKL4Bjz6XhWpx6CBY282ksAl4pBX2PmY
+         0/Ng==
+X-Forwarded-Encrypted: i=1; AL+hErHqJOlZDe/36ulonx+70Mwc5CskOYJu7qQVu0ZMSdmhY72SxgZniuei4rQ+ntDiHeeGkOc=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/aSUJuSl/Pni9SfDTO7hmDexo5tfkV3c4d20Pvs5nCydSzUm3c
+	z695LG2EYMMCVUFRoipnctcOaGLmSlkxtKohpybRuxzdatofsKzAgYoLIVtkvn3Xqp5NRqNbNxS
+	5PZB2NIVc7A==
+X-Received: from iobdo25.prod.google.com ([2002:a05:6602:4619:b0:9ca:bcca:dd8b])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6808:640a:b0:572:e8fb:2125
+ with SMTP id 5614622812f47-57a09504aadmr5490293b6e.20.1795244340118; Fri, 20
+ Nov 2026 22:59:00 -0800 (PST)
+Date: Fri, 20 Nov 2026 22:57:55 -0800
 In-Reply-To: <20261121065813.4143649-1-irogers@google.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -81,9 +81,8 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261121065813.4143649-1-irogers@google.com>
 X-Mailer: git-send-email 2.56.1.750.gf70dc682cf-goog
-Message-ID: <20261121065813.4143649-6-irogers@google.com>
-Subject: [PATCH v15 05/23] perf build: Enable context analysis and Clang
- thread-safety flags
+Message-ID: <20261121065813.4143649-7-irogers@google.com>
+Subject: [PATCH v15 06/23] perf comm: Add __guarded_by annotations to struct comm_strs
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Marco Elver <elver@google.com>
@@ -96,72 +95,32 @@ Cc: Bart Van Assche <bvanassche@acm.org>, Jiri Olsa <jolsa@kernel.org>,
 	Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Define -DWARN_CONTEXT_ANALYSIS for Clang builds so the context analysis
-attributes in linux/compiler-context-analysis.h expand to Clang's
-thread-safety attributes rather than no-ops, matching the kernel's
-scripts/Makefile.context-analysis.
-
-Also include tools/build/Build.include (updating TMPOUT to place
-temporary probe directories under $(OUTPUT) when set) and use cc-option
-to enable -Wthread-safety-pointer, -Wthread-safety-beta, and
--fexperimental-late-parse-attributes when supported by Clang.
+Annotate strs, num_strs, and capacity in struct comm_strs with
+__guarded_by(&lock) and __pt_guarded_by(&lock) so Clang verifies all
+accesses hold comm_strs->lock.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/build/Build.include  | 4 ++--
- tools/perf/Makefile.config | 9 +++++++--
- 2 files changed, 9 insertions(+), 4 deletions(-)
+ tools/perf/util/comm.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/build/Build.include b/tools/build/Build.include
-index cd0baa7a168d..cce5e4673ba6 100644
---- a/tools/build/Build.include
-+++ b/tools/build/Build.include
-@@ -113,7 +113,7 @@ rust_flags   = $(filter-out $(RUST_FLAGS_REMOVE_$(obj)), $(rust_flags_2))
- host_c_flags = -Wp,-MD,$(depfile) -Wp,-MT,$@ $(HOSTCFLAGS) -D"BUILD_STR(s)=\#s" $(HOSTCFLAGS_$(basetarget).o) $(HOSTCFLAGS_$(obj))
+diff --git a/tools/perf/util/comm.c b/tools/perf/util/comm.c
+index 6343a3c9debe..9fc4e91a36e9 100644
+--- a/tools/perf/util/comm.c
++++ b/tools/perf/util/comm.c
+@@ -16,9 +16,9 @@ DECLARE_RC_STRUCT(comm_str) {
  
- # output directory for tests below
--TMPOUT = .tmp_$$$$
-+TMPOUT = $(if $(OUTPUT),$(OUTPUT)/,).tmp_$$$$
+ static struct comm_strs {
+ 	struct rw_semaphore lock;
+-	struct comm_str **strs;
+-	int num_strs;
+-	int capacity;
++	struct comm_str **strs __pt_guarded_by(&lock) __guarded_by(&lock);
++	int num_strs __guarded_by(&lock);
++	int capacity __guarded_by(&lock);
+ } _comm_strs;
  
- # try-run
- # Usage: option = $(call try-run, $(CC)...-o "$$TMP",option-ok,otherwise)
-@@ -121,8 +121,8 @@ TMPOUT = .tmp_$$$$
- # automatically cleaned up.
- try-run = $(shell set -e;		\
- 	TMP=$(TMPOUT)/tmp;		\
--	mkdir -p $(TMPOUT);		\
- 	trap "rm -rf $(TMPOUT)" EXIT;	\
-+	mkdir -p $(TMPOUT);		\
- 	if ($(1)) >/dev/null 2>&1;	\
- 	then echo "$(2)";		\
- 	else echo "$(3)";		\
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 1cee80c531ab..aed2e952c8f3 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -12,6 +12,8 @@ ifneq ($(obj-perf),)
- obj-perf := $(abspath $(obj-perf))/
- endif
- 
-+include $(srctree)/tools/build/Build.include
-+
- $(shell printf "" > $(OUTPUT).config-detected)
- detected     = $(shell echo "$(1)=y"       >> $(OUTPUT).config-detected)
- detected_var = $(shell echo "$(1)=$($(1))" >> $(OUTPUT).config-detected)
-@@ -63,8 +65,11 @@ ifeq ($(CC_NO_CLANG), 0)
-     CXX := $(CXX) $(CLANG_FLAGS) -fintegrated-as
-   endif
- 
--  # Enabled Wthread-safety analysis for clang builds.
--  CFLAGS += -Wthread-safety
-+  # Enable context analysis (linux/compiler-context-analysis.h gates its Clang
-+  # attributes behind WARN_CONTEXT_ANALYSIS) and Clang thread-safety checks.
-+  CFLAGS += -DWARN_CONTEXT_ANALYSIS -Wthread-safety
-+  CFLAGS += $(call cc-option,-Wthread-safety-pointer -Wthread-safety-beta)
-+  CFLAGS += $(call cc-option,-fexperimental-late-parse-attributes)
- endif
- 
- include $(srctree)/tools/scripts/Makefile.arch
+ static void comm_strs__remove_if_last(struct comm_str *cs);
 -- 
 2.56.1.750.gf70dc682cf-goog
 
