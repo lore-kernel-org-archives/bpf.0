@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795258436;
-	b=remaiHigZz3ztYbWyLCdXtnTNgqtHlbHSBie/rDkgZr8+HnbGcuFb5VN0Y5MJ9IYlCbx
-	 h1VDTHPR5Q7yhzNzadTOXc+ygrJqxpyIN8oXLFiFebVgBw0dNXl5puPs2Gee/0T90m1UC
-	 0tWoPpe0O7/VJFkjjsRCjJO0zmx0sX7R/BhYIbhcCMxN2N/L2bwQhi4YyjB7o5FqcLiBa
-	 QHrEn4qeGgrRcm4qTziyoIYBIsc8T/nGqwkfrZf7ycOOYc3MXAgbKXWDsfoXDZnTHGyZL
-	 R2znUaOCX8/bkvD2dsRL+hq66hwDpaHWKjumu8UfOssXbKeM8+tKaZ1ktMhhptJeBvw==
+	t=1795258569;
+	b=YWlQ6pFCjqkYKw4Z506A1H4a/PzOfPdGluYqeIfGpQzBleulKimXuZ2AKO8FreERs516
+	 jgXlRC5X/WPOuH1jjCcIRUQIz6CwGPBgPxcSs26qfjXHPKdeOTD+0utdrOGmKICFEWPHg
+	 Pr8K5oIhJqbo+lPzOIKGXBpeCvK1wrwGIRqScXIIcQyYKQ/0rpvbgFC4por3Wz3+08UXG
+	 Rjb2iHMv0KSTlEzcUKwhgUnl5zi4P871U8yMgwCZKfVFW8ZezKyyQMri+7InOLvjKhSjP
+	 L19gg1XmehtIe1N82mPH36VjoiaTnGKhYMQQcX+3nqf0tn7IRg96xxZWHJxUQbwtK8w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795258436;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795258569;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=LZUQvLbgzRBynzxMrVCnD4/tt8uQLsR+IJqriHcD9lY=;
-	b=KWP2sQuvlBJZK2oKKUnZP6lB42woGZoBUatnT47l4ZURDgsDcNPtkHxY0g3ddQ+KWXcW
-	 JtX/8ayuY2pmWHQV/QO4BsXZ2D7r2SRtJS3qU4QrIgOgKkviZPBzeUVr4OYoHFhlb2xxG
-	 HanzZ1jZN7lVwCXZU3MK/dDx8KWntXnvCyIUSQ/exy69CRkVspjzXLtKPjs6Dz3hZ6U7U
-	 xN3m9tmR9pXKuZ2acDUxYGq/uIrN/h1SxvPRvuITDtaoG+fSTVKr1n9NjxW7RMn52SYFA
-	 B9zd0w/pY0H6Hjq60iI4XvLj9+E/py1LTT0xzUNUGFn7NBFyHDs7XkySwTx6zz/J0Vg==
+	bh=/hbv3FbHHPX4zfdRU15VcM0qFmQRPQ3H8YRm5hatRq8=;
+	b=o2UYThZup7eK14AtsVRIeOcQE+2SR1v2eFDBvZsuKS9FHQEaRuPOZekx/16taMKjJ3y3
+	 wpMkpFLIZVJGKYKh4TgZuGLnuSuGbzR1GS0oI0C55ApO0jrQVxpCX3U1M1HibNbidzFWC
+	 oLJIdWr9klZN0FJbgQDB7PJMXJg4QtdunpBSr5GOMYcAblsaz5lI8LZcBTNvbJp0tw+29
+	 FdRE2VxdTAiGABcB6TAycqX6hH2kxbftZq3QAj42F0nqUeoVKmeYSfOhiieERAMA+Xf4g
+	 CTW9bTXFLS0kvP/RKAVP7MSjUTTx+OIGEzstIcyCycrLo9PFXoBLpUNVyUsoDSdEYqg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="a/Ns2hPi";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RQem2KxK;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CC14606A320
-	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 10:53:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9867F606A325
+	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 10:56:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=a/Ns2hPi
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A42011F000C0;
-	Sat, 21 Nov 2026 10:53:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RQem2KxK
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A5671F000C4;
+	Sat, 21 Nov 2026 10:56:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795258435;
-	bh=LZUQvLbgzRBynzxMrVCnD4/tt8uQLsR+IJqriHcD9lY=;
+	s=k20260515; t=1795258569;
+	bh=/hbv3FbHHPX4zfdRU15VcM0qFmQRPQ3H8YRm5hatRq8=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=a/Ns2hPiWcbjVPKRYEcFzuEGLB1rrflvX4Kh+R2uhsN68Y3JD9jb/moJmrp0g4HWI
-	 TFPGrsUc+8JRT2m9rWNqEO8AUl6DnF/4hyLKCu39zc+g738LRY5Y7J07P8MqF5Fh0x
-	 Pl+jRT4vX+GskZNRj5V1bOMVv7lOHE0UFdaSWCw9WPJubZRY7UP3atlvW40IuaaF/D
-	 N6HACw13WH+fjHz2SdkHVoZmrRQFFqt3hBOhGkGBKVFBKAi32tYDQDhqDSNw5LesnL
-	 8sl2cNjSaum6aljhjYjJvpqQBoMbBz/K+lo4soHwWO3ifHnu5rCzVKql3RkC0sohCd
-	 cPT52TT00pT3g==
-Message-ID: <sashiko-outbox-226959@kernel.org>
+	b=RQem2KxK9a5Cduu9vaMLbrq7XI4KHzoZar36C+BjsdtPtz68cd7qRO6Ao0TGPsxCx
+	 hSB+l9a+sxcU5yt6+EbB3ac0KiWPufN6IXH+wRo+czRbmOSoMXoBgtIXS/fc60NlBc
+	 tbRUTmbLETUpYSWtrsRP28G/RRn4fi2FLfdvSdQmzDHgYzlrTkpBdjlX51Jiaqu0V5
+	 W39HEpw6FQayYuj19iz+TtF63xnAbTd5sgUbsdEoM8NJ9p8BqQD8jx+XIOGs6ixt9m
+	 OoAPk5qDgzfXEqiRSvWqpR7E5LHGwrIX6/0igTv0peqkjZwTj+Sq4ElFUSLXxS1TH/
+	 mB9sVkcKPp3OQ==
+Message-ID: <sashiko-outbox-226962@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf 05/11] bpf, sockmap: Fix concurrent senders on one
- psock
+Subject: Re: [PATCH bpf 08/11] bpf, sockmap: Fix socket lock taken on a
+ child before accept()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, bpf@vger.kernel.org
-In-Reply-To: <20261121103222.88209-6-jiayuan.chen@linux.dev>
+In-Reply-To: <20261121103222.88209-9-jiayuan.chen@linux.dev>
 References: <20261121103222.88209-1-jiayuan.chen@linux.dev>
- <20261121103222.88209-6-jiayuan.chen@linux.dev>
+ <20261121103222.88209-9-jiayuan.chen@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 21 Nov 2026 10:53:55 +0000
+Date: Sat, 21 Nov 2026 10:56:08 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -62,90 +62,90 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue to consider:
-- [High] bpf, sockmap: -EBUSY from tcp_bpf_sendmsg() aborts
-  sk_psock_backlog()
+- [Medium] bpf, sockmap: lock_sock() still taken on unaccepted child in
+  strp_done()
 --
 
-commit d941631cdccff7e72d215bc4dd09b124e439b443
+commit e631a931dbfb1352e17feb424d762db532b4db74
 Author: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-bpf, sockmap: Fix concurrent senders on one psock
+bpf, sockmap: Fix socket lock taken on a child before accept()
 
-This commit adds an SK_PSOCK_TX_BUSY state bit to reject concurrent
-callers of tcp_bpf_sendmsg() on the same psock with -EBUSY.
+This commit avoids taking lock_sock() on unaccepted child sockets (where
+sk->sk_socket is NULL) by rejecting sk_msg redirects in
+tcp_bpf_sendmsg_redir() before locking and by unlinking such sockets
+without locking in sock_map_free() and sock_hash_free().
 
-> diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-> index 7191b95c7b1c7..077b65927ac8d 100644
-> --- a/net/ipv4/tcp_bpf.c
-> +++ b/net/ipv4/tcp_bpf.c
-> @@ -602,6 +602,16 @@ static int tcp_bpf_sendmsg(struct sock *sk, struct m=
-sghdr *msg, size_t size)
->  	if (unlikely(!psock))
->  		return tcp_sendmsg(sk, msg, size);
+> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+> index d8187a9823d18..8cf8ba6269561 100644
+> --- a/net/core/sock_map.c
+> +++ b/net/core/sock_map.c
+> @@ -386,6 +386,19 @@ static int sock_map_link(struct bpf_map *map, struct=
+ sock *sk)
+>  	return ret;
+>  }
 > =20
-> +	/*
-> +	 * The verdict, apply_bytes, sk_redir and the cork live in the psock
-> +	 * and span the places where the socket lock is dropped below. They
-> +	 * can only serve one sender at a time.
-> +	 */
-> +	if (test_and_set_bit(SK_PSOCK_TX_BUSY, &psock->state)) {
-> +		sk_psock_put(sk, psock);
-> +		return -EBUSY;
-> +	}
+> +/*
+> + * The listener frees a child that nobody has accepted yet without waiti=
+ng
+> + * for the owner of its socket lock. Unlink such a child without the loc=
+k,
+> + * as a delete does.
+> + */
+> +static bool sock_map_free_lock_sk(struct sock *sk)
+> +{
+> +	if (!READ_ONCE(sk->sk_socket))
+> +		return false;
+> +	lock_sock(sk);
+> +	return true;
+> +}
+> +
+>  static void sock_map_free(struct bpf_map *map)
+>  {
+>  	struct bpf_stab *stab =3D container_of(map, struct bpf_stab, map);
+> @@ -402,12 +415,15 @@ static void sock_map_free(struct bpf_map *map)
+> =20
+>  		sk =3D xchg(psk, NULL);
+>  		if (sk) {
+> +			bool locked;
+> +
+>  			sock_hold(sk);
+> -			lock_sock(sk);
+> +			locked =3D sock_map_free_lock_sk(sk);
+>  			rcu_read_lock();
+>  			sock_map_unref(sk, psk);
+>  			rcu_read_unlock();
+> -			release_sock(sk);
+> +			if (locked)
+> +				release_sock(sk);
+>  			sock_put(sk);
+>  		}
+>  	}
 
-[Severity: High]
-Can returning -EBUSY here abort sk_psock_backlog() when an sk_buff is
-redirected to the egress of a socket that also has a msg_parser program
-attached?
+[Severity: Medium]
+Can asynchronous psock teardown still take lock_sock(sk) on an unaccepted
+child when the map has a stream parser attached?
 
-For egress sk_buff redirects, sk_psock_handle_skb() sends the packet via
-skb_send_sock() -> sendmsg_unlocked() -> sock_sendmsg() ->
-tcp_bpf_sendmsg().  Previously, skb_send_sock() and a userspace sendmsg()
-on that socket serialized on lock_sock(sk).  With this change, when a
-userspace sender sleeps in sk_stream_wait_memory() with SK_PSOCK_TX_BUSY
-set and freeing send buffer space wakes sk_psock_write_space(), the
-backlog work runs and hits -EBUSY:
+When a passive TCP child is added at BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB to
+a map with stream_parser and stream_verdict programs, sock_map_link()
+starts the stream parser on the child and sets SK_PSOCK_RX_STRP_ENABLED.
+Even though sock_map_free() and sock_hash_free() skip lock_sock(sk) here,
+sock_map_unref() queues sk_psock_destroy() via sock_map_del_link() and
+sk_psock_put(), which runs sk_psock_done_strp() -> strp_done():
 
-CPU0 (userspace sendmsg)          CPU1 (psock->work)
-tcp_bpf_sendmsg()
-  test_and_set_bit(SK_PSOCK_TX_BUSY, ...)
-  lock_sock(sk)
-  ...
-  sk_stream_wait_memory()
-    release_sock(sk)
-                                  sk_psock_backlog()
-                                    sk_psock_handle_skb()
-                                      skb_send_sock()
-                                        ...
-                                          tcp_bpf_sendmsg()
-                                            test_and_set_bit(SK_PSOCK_TX_BU=
-SY)
-                                            return -EBUSY
+net/strparser/strparser.c:strp_done() {
+	WARN_ON(!strp->stopped);
 
-sk_psock_backlog() only retries on -EAGAIN and treats any other error as
-fatal:
-
-net/core/skmsg.c:sk_psock_backlog() {
-	...
-			if (ret <=3D 0) {
-				if (ret =3D=3D -EAGAIN) {
-					...
-					goto end;
-				}
-				/* Hard errors break pipe and stop xmit. */
-				sk_psock_report_error(psock, ret ? -ret : EPIPE);
-				sk_psock_clear_state(psock, SK_PSOCK_TX_ENABLED);
-				goto end;
-			}
-	...
+	lock_sock(strp->sk);
+	/* sync with pending strp_recv */
+	release_sock(strp->sk);
+    ...
 }
 
-This sets sk->sk_err =3D EBUSY (which also aborts the sleeping userspace
-sendmsg()) and permanently clears SK_PSOCK_TX_ENABLED, stranding queued
-packets in psock->ingress_skb.  Conversely, if sk_psock_backlog() sets
-SK_PSOCK_TX_BUSY first, a single userspace sender on the socket fails
-with -EBUSY instead of waiting on lock_sock(sk).
+If the listener closes while sk_psock_destroy() runs on the workqueue
+before accept(), strp_done() locks the unaccepted child and
+inet_csk_listen_stop() can still hit WARN_ON(sock_owned_by_user(child)).
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261121103222.8820=
-9-1-jiayuan.chen@linux.dev?part=3D5
+9-1-jiayuan.chen@linux.dev?part=3D8
