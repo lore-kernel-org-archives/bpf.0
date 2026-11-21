@@ -1,54 +1,70 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.249
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.138
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795220516;
-	b=ZG+aSIyDmlBK5NUUuHrLHzE7mneKF1kLkHCd1eq+s1PauEwCuO92kIIhERd3bjLfagdp
-	 Eyu7WgDRx9y+RjYD7iOaQDgxLsxpkgJ1SAJelRIkrZvDWZ+NkwX1sTsjePl97yX7IOCyq
-	 +95qaX2VxPcOTdPLPwVLcN5bms2HXF2s6aLglnX0XbqtLJDtHug1Tit0iEoT6rKE1n7dM
-	 PQvdAOqz92wmLhwiTP6pZcAhQeqKsKBZ2tzEP9dbg0+WR2Zf+QZTOC+VjJW1jijCYHvP9
-	 raWHo8hnyJDzwFY2hEic2wAcgWH+g1lUPU2T2HgA8yI/jBaEK1nW4Zc8Ryno2zAovyQ==
+	t=1795221258;
+	b=dTX4QOKqqZ3qVla0388gaFF6V9q1jr1Tmb7L9DcA3GPsCHIeR1sKJx4YAGwHYXOaUGN+
+	 IZR7zNWJw59yX1KuRVcG9RfrXPaVZfNjSaYdZd7kTqmscUmmOqOJ1vAradL+qKRlLEltY
+	 AMJujp0qXqzkL+1rhknieqOFq9IazCYOOzuaEQo8Io749v175wLHr07WSnFyepNFUcsCo
+	 BZFuFm1NlBUlmyeui1oP1H1WXqibiYzJxYydiC1RHDRG5mgMqvYlbL7QIqOu0sNwyq55I
+	 St+txwXG2850FVgC4hnBdcKQ2FKgV+sWYNfsuZu2xOV+daw6wHWpc0AadNc09Liwu7A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795220516;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795221258;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=bPM/nVovpJ54b7mKH8TDEdoXXs0a3DNekD+ERhCMcf8=;
-	b=P4BfgOkMYvNMt65RpSR7tNxWr51THktvmch5Xl5OD0zipm1NlIAItFpQeUFBKfEfyIl3
-	 pxnc5kbGUNYpZdcdVgBVxDpAv0hBqTbKZuCCQYQb300WTFK7wpjJor9dmUFOPJwQ1auiO
-	 fJNzYwchsuQG93+l7hYgmVAOw+bnNYPfsSG6DkcBVSzgMGawjqdBxETSzBigv94jrxCgV
-	 43Jwt2nW0z2luqCFi4Fvm9GVFlQKcYxdBGam/qSbwdrtk4x3b6oeDgMGjlbolxfY/8xUF
-	 1ueMzc15q2u06FS0dIwSlVlkb7Cyd5l23vx0mMx5TiZGf3Vj0v6pEs74bbTl1M0OZeQ==
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=LVqfb6I1hyZommDgKkjQ68K5FsUedpZwA/p7WOx4ogk=;
+	b=bioakL2kXIe8uXK/DAiygAa65nt/7amdhnW0vc5XXpMX2xIjJ8d5pmNGga08lZPFIgBM
+	 aMwLhfM4dkZGEg63SOR6QdNiys1W3DaDgCXTF6HsAU6pgjcG3FLLhQNLi8mVgJkSpuKZg
+	 8NiN0ItGqKF8S+WDSLHynVpJA+NlR4lzKh716gOliX2desFLdbpJpDDv6VrXqKuM5Ercb
+	 4HercSw011pBtCkDPKoMhv9lFGBcP2aFjN4b8rZ/2CP16stuGL+rlB681eE9eQvQHbSGM
+	 JTTGimUJyBaiEQ4QvfZCZCs9cLa8mGez982KaaaSH5oUJarzLI8TzodzeGugPf9w1yg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=TEvyfsGd;
-	arc=none smtp.remote-ip=95.215.58.249
-Received: from mta1.migadu.com (out-249.mta1.migadu.com [95.215.58.249])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=AsY5sR9u;
+	arc=none smtp.remote-ip=95.215.58.138
+Received: from mta1.migadu.com (out-138.mta1.migadu.com [95.215.58.138])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0E00606A6B8
-	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 00:21:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B0E00606A6B8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CFE1606A681
+	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 00:34:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0CFE1606A681
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=TEvyfsGd
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=AsY5sR9u
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=71YmozTXEIZGZyvn9vxkEAc3WKEO/TnJFP1cWHJZLAI=;
+DKIM-Signature: a=rsa-sha256; bh=/a8TPGHtim4W1Kp+5mddRIO0C+8W9McFTbcSGRi3Jys=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795220504; v=1; x=1795825304;
- b=TEvyfsGdz7PVrIfx8g2hCvWcwF+Ym2gI6iujRSl6i2ZURtMALQ4DraaY7Nlc64rDjjG5BL0D
- I548gD2UD+J7SF8pMpCVHJr5KmuFMIpH3BqJUtg4DcnYHRsNFH+Z3txGPP+7v2EyEMyDCOEzRYd
- wYQ5bOf1HmiaoyBW93W36Kro=
+ t=1795221254; v=1; x=1795826054;
+ b=AsY5sR9u6zCUde8BmP5ld3dYcq7yXYHf6NRW5s32oJlwqZ93HCXZIOW+Gctql5dUmTQ0GsV+
+ /18oHrvcGtzkwwnH/t2dpHkUB7CoIQ5hNTGQ664fS1GGthvMlA3T6EF2nj6Vlm5vVOJZvYlFdOm
+ fbOe8mV743O6JM93NlQsqBx0=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 0c17801dca966cf1;
-	Sat, 21 Nov 2026 00:21:44 +0000
-X-Mizu-Trace-ID: 0c17801dca966cf1
+Received: by mta11.migadu.com with ESMTPS id dc407b2e55f5ce0c;
+	Sat, 21 Nov 2026 00:34:14 +0000
+X-Mizu-Trace-ID: dc407b2e55f5ce0c
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <c0fe98fe-767d-4f6d-8c43-20dc111984d9@linux.dev>
-Date: Fri, 20 Nov 2026 16:21:40 -0800
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Alan Maguire <alan.maguire@oracle.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Song Liu <song@kernel.org>,
+	Tejun Heo <tj@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	sched-ext@lists.linux.dev
+Subject: [PATCH bpf-next v2 0/6] libbpf: Support kernel-side kfunc variants
+Date: Fri, 20 Nov 2026 17:33:57 -0700
+Message-ID: <20261121003403.2928928-1-ihor.solodrai@linux.dev>
+X-Mailer: git-send-email 2.56.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,90 +74,112 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v5 3/3] selftests/bpf: Test CO-RE relocations of
- signed enum values without kflag
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
- mason@kernel.org, ihor.solodrai@linux.dev
-References: <20261120215012.870499-1-yonghong.song@linux.dev>
- <21bcff8573207e9277c3d209e6712adb4b6e76712b893cfba2e710443bf546d1@mail.kernel.org>
-Content-Language: en-GB
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <21bcff8573207e9277c3d209e6712adb4b6e76712b893cfba2e710443bf546d1@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+A kfunc prototype change breaks BPF programs built against the old
+prototype. For example, 8fe4dc4f6456 ("bpf: change prototype of
+bpf_session_{cookie,is_return}") made this change in v7.0:
+
+  before:  bool bpf_session_is_return(void);
+  v7.0:    bool bpf_session_is_return(void *ctx);
+
+A program built before v7.0 declares bpf_session_is_return(void), and
+libbpf can't resolve it on v7.0. The kernel has no way to keep the old
+prototype available to such programs. sched_ext works around the same
+problem with ___v2___compat names in compat.bpf.h.
+
+With this series, the kernel can keep the old prototype as a variant:
+
+  bool bpf_session_is_return(void *ctx);
+  bool bpf_session_is_return___v1(void);
+
+and libbpf binds each declaration to the function with a matching BTF
+prototype.
+
+The new lookup changes what some existing declarations resolve to.
+
+A replay of kfunc resolution against v6.18, v7.2 and bpf-next BTF
+covered 1302 BPF objects: 1174 sched_ext schedulers from Meta's
+internal builds, and 128 public objects from the scx repo,
+tools/sched_ext, the selftests and bpftrace. It also covered 16
+objects declaring every kfunc from each x86 vmlinux.h in the scx
+repo's history, counted here as public. No strong declaration
+changes. These __weak declarations change, counted in objects per
+kernel:
+                                                    public   Meta
+  lost on v7.2 and bpf-next, no candidate:
+    scx_bpf_dsq_insert___v2___compat                    36    136
+    scx_bpf_dsq_move_to_local___v2___compat             33     27
+    scx_bpf_reenqueue_local___v2___compat                9     44
+
+  lost on v7.2 and bpf-next, struct names differ:
+    bpf_io_uring_get_region(struct io_ring_ctx *)        1      0
+    bpf_io_uring_submit_sqes(struct io_ring_ctx *)       1      0
+
+  lost on bpf-next, struct names differ:
+    bpf_cpumask_populate(struct cpumask *)               8     88
+
+  lost on v6.18 and v7.2, struct names differ:
+    bpf_cpumask_populate(struct bpf_cpumask *)           4      0
+
+  gained on v7.2 and bpf-next:
+    scx_bpf_dsq_move_to_local___v2(u64, u64)             7    120
+    scx_bpf_dsq_insert___v2(...)                         8      0
+    scx_bpf_reenqueue_local___v2(void)                   8      0
+
+In-tree compat.bpf.h now tries the plain ___v2 names first. Objects
+that gain a ___v2 kfunc now call it instead of their fallback path.
+
+---
+
+v1->v2:
+  * Pick a kfunc by prototype among all funcs with the same essential
+    name, without preferring the exact name (Andrii, Eduard).
+  * Compare struct and union names, ignoring ___ suffixes, instead of
+    using bpf_core_types_are_compat(), so that variants can differ
+    only in a pointee type (Eduard, Andrii).
+  * Drop the alias exception that kept ___v2___compat names working
+    (Eduard). New patch 2 updates compat.bpf.h instead.
+  * resolve_btfids: check registered kfuncs within vmlinux or a module
+    with libbpf's new matcher and report every matching pair. New
+    patch #1 shares libbpf internals with it instead of wrapping them
+    (Eduard).
+  * Call kernel-side ___ functions "variants". "Flavor" stays CO-RE's
+    term for local suffixes.
+  * Rewrite the docs for the new rules.
+
+v1: https://lore.kernel.org/bpf/20261117192153.3384031-1-ihor.solodrai@linux.dev/
+
+---
+
+Ihor Solodrai (6):
+  libbpf: Separate interfaces shared with in-tree tools
+  sched_ext: Prefer ___v2 kfunc names in compat.bpf.h
+  libbpf: Resolve kfunc variants by prototype
+  selftests/bpf: Test kfunc variant selection by prototype
+  resolve_btfids: Reject ambiguous kfunc variants
+  docs/bpf: Describe how to change a kfunc's prototype
+
+ Documentation/bpf/kfuncs.rst                  |  96 ++++++++++++++
+ tools/bpf/bpftool/Makefile                    |   9 +-
+ tools/bpf/resolve_btfids/btf_colors.c         |  15 +--
+ tools/bpf/resolve_btfids/btf_colors.h         |   4 -
+ tools/bpf/resolve_btfids/main.c               |  74 ++++++++++-
+ tools/lib/bpf/btf.c                           |  99 ++++++++++++++-
+ tools/lib/bpf/libbpf.c                        | 117 ++++++++++++------
+ tools/lib/bpf/libbpf_internal.h               |  32 +----
+ tools/lib/bpf/libbpf_tools.h                  |  48 +++++++
+ tools/sched_ext/include/scx/compat.bpf.h      |  39 ++++--
+ .../selftests/bpf/prog_tests/verifier.c       |   3 +
+ .../selftests/bpf/progs/kfunc_variants.c      |  32 +++++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |  12 ++
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        |   3 +
+ 14 files changed, 481 insertions(+), 102 deletions(-)
+ create mode 100644 tools/lib/bpf/libbpf_tools.h
+ create mode 100644 tools/testing/selftests/bpf/progs/kfunc_variants.c
 
 
-On 11/20/26 2:39 PM, bot+bpf-ci@kernel.org wrote:
->> selftests/bpf: Test CO-RE relocations of signed enum values without kflag
-> TL;DR: Test issue: the new signed named_int_enum checks in test_core_enumval()
-> may fail the enumval and enumval___no_kflag subtests on clang 12-14, which
-> lack enum signedness kflag; should they be guarded by __clang_major__ >= 15?
->
->> diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_enumval.c b/tools/testing/selftests/bpf/progs/test_core_reloc_enumval.c
->> --- a/tools/testing/selftests/bpf/progs/test_core_reloc_enumval.c
->> +++ b/tools/testing/selftests/bpf/progs/test_core_reloc_enumval.c
-> [ ... ]
->
->> @@ -85,6 +93,12 @@ int test_core_enumval(void *ctx)
->>   		out->uint_val1 = UINT_ENUM_VALUE(UINT_ENUM_VAL1);
->>   	if (bpf_core_enum_value_exists(enum named_uint_enum, UINT_ENUM_VAL2))
->>   		out->uint_val2 = UINT_ENUM_VALUE(UINT_ENUM_VAL2);
->> +
->> +	/* enum named_int_enum is optional */
->> +	if (bpf_core_enum_value_exists(enum named_int_enum, INT_ENUM_VAL1))
->> +		out->int_val1 = bpf_core_enum_value(enum named_int_enum, INT_ENUM_VAL1);
->> +	if (bpf_core_enum_value_exists(enum named_int_enum, INT_ENUM_VAL2))
->> +		out->int_val2 = bpf_core_enum_value(enum named_int_enum, INT_ENUM_VAL2);
->>   #else
->>   	data.skip = true;
->>   #endif
-> Is this part of test_core_enumval() safe with clang 12 to 14?
->
-> These checks sit under the same guard as the rest of the function,
-> #if __has_builtin(__builtin_preserve_enum_value), which clang 12 and later
-> already satisfy.  But clang only records enum signedness in the BTF kflag
-> starting with LLVM 15 (enum64 support).  Before that, the local
-> named_int_enum gets kflag 0, and so does the target enum built by the same
-> compiler.
->
-> With the libbpf change in this series, bpf_core_zext_enumval() then does not
-> return early, and zero-extends the target value:
->
->      if (btf_is_enum(targ_t) && !BTF_INFO_KFLAG(targ_t->info))
->          res->new_val = (__u32)res->new_val;
->
-> For INT_ENUM_VAL2 the local value is 1, so the GCC-form fixup in
-> bpf_core_patch_insn() does not apply and the instruction is patched with
-> 0xfffffffd.  out->int_val2 would then be 4294967293 while
-> run_core_reloc_tests() expects .int_val2 = -3.  That would make both the
-> existing enumval subtest and the new enumval___no_kflag subtest fail with
-> clang 12 to 14.
->
-> The neighbouring programs guard this compiler dependency, for example
-> test_core_reloc_enum64val.c uses "#if __clang_major__ >= 15" and
-> test_core_reloc_type_based.c uses
-> "__has_builtin(__builtin_preserve_type_info) && __clang_major__ >= 15",
-> both falling back to data.skip = true.  tools/testing/selftests/bpf/README.rst
-> also says core_reloc sub-tests are skipped if Clang is too old to support
-> them rather than failing.
->
-> Should the named_int_enum part depend on __clang_major__ >= 15 so that it
-> skips instead of failing, or silently leaving int_val1 and int_val2 at 0
-> (which would also fail the comparison)?
-
-I think we should be fine. In Documentation/process/changes.rst, the clang
-minimum version is 17.0.1. Also, for this selftest, I don't think people will
-build/run this selftest with `< 15' clang compiler.
-
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/44827034192
+base-commit: 82cc2b4383e3edfa1026c8612fb4e90a9329ba11
+-- 
+2.56.1
 
