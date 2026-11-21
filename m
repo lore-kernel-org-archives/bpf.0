@@ -1,80 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.175
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=82.195.75.108
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795263133;
-	b=nRoZTKGQXew9LfIlZaxRRKm9rzHsrQA5UDFeTrc2XrbIxbZy7EyXOKE8T1GipGob/+dm
-	 1n5fuEiTn6X+UOiwtx99fbk25VhMnCLYXjUsc045dXSCRJVcTqDYlXs8BLpDfcxdHgaQ7
-	 cvNCmGzme4U7rC5qswulT1ScfCt4NvqbjssTEADHAHntmH+uZmsCY5btZKD+gsnbvN7s9
-	 WAjSfXpmrCv9t7HC/KuDslS5vspdl4eoFS4r67XpRPOiUSXMrV+HdurL7qX7qF5KMMkm3
-	 1o5kc3cPZBdVX1Op4IffuMTxJ9HQ4MCy019pGFYyNCYrrDvoN7W2IU4P0hD/YQL+8qw==
+	t=1795265616;
+	b=YZoKeO7GR5x6GezRYW5JBInKvfqslr/sno3Z2SaTlL7QSdVNdGpTFhjVQR7q4beB25Is
+	 NIQ3Wd2RRa1QTShuFjrT774J9T0QsT5jx8eonVHiQGp+tTzGyeMBPuAWh2TkZm4qOLsob
+	 irKgaZ1gK9Yod13riPfue20V3QEWGqpFJ3cskx7woamzTEChdU8Xgj9Ae2GF0V90iPL78
+	 nKXFlou8QRwN2uyBxDeEqPmG9EE2WsI3EW96kzbxr9DtuOO2eRT+l96Hqpd6siZzVym5/
+	 skIV3STGJWb06WI4Epr7YbeWqdN3373vpiaLPPJSAPFe/MWV5cmIbOlh+AE7uqpAdLg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795263133;
-	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:In-Reply-To:References:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=lGYwpKC1fByS7GG5SknYRcbt4FjMkQjX/lb3OlO0LP4=;
-	b=D8zcq9KfnV6fgyR2NucoF4WJKuh+8gsGfwK6zIO11XiMr84wMMbfQwSiNiOVQnIwCseG
-	 Jf9l2DPIV5dL7FCbv8ePv6pRGq+rdxBfZzS3K1ud4JHQhasv6hPPn9JSk05A8QlHQ7p+d
-	 QiH3jmCWgF8C/puS5O3MFxbv82k76FEk18+o6H2d0JOJ1ch+7x4wPNX+2W6nnrE7zAUlk
-	 IrqNWps+GVmrROc9Z6IOyOYVeK7gRk+yTFA1v0jl3fcUT2OaJmLu2hIy+QjBeI+LUF/Ua
-	 amosrepMkFOAqBJvFIkbXJn4Wm6mQtwENI5L73HTTA/tGlNuKr0Uzt11OwhsplcDuIg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795265616;
+	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To:X-Debian-User;
+	bh=Kv39YFS3gCTmTIBEpLn+LTr7Kna7mVqtgec2/Wwwicg=;
+	b=HV/LvRIe7CQLRz4RRKp+1hWRwmUoSYbveOtP1msP931pWKmDcZC/XBP26BifRLbW1ppJ
+	 5GBMS+ICCpuxzeQjNxNzep+Zb9KgdmFLrkTbm6OFFuUfNKVA1wr8L+vdPAyVmHdlaRF71
+	 L/zFe8v6XMlcc8NqvgF6H3nmntb+azk8q+VIJJnpDqZwC3kdczzD2+LuiRAkToOF4nQOD
+	 nqlI7uEZX/NH8dTgLLf/CDpw6aOOjiGDLqxq/AsZeugWbLjdb7Fk0uxuXIVKApgme+ieg
+	 M3OeKmgyU6jknlkW9GjMaHgsbyDnHwp2FxsRNiUwClSoDVGdPPcdIxcB0ffYila8UHQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=fail header.from=kernel.org;
-	spf=pass smtp.mailfrom=gmail.com;
-	arc=none smtp.remote-ip=209.85.160.175
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=debian.org;
+	spf=pass smtp.mailfrom=debian.org;
+	dkim=pass header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=D0Tve2Qu;
+	arc=none smtp.remote-ip=82.195.75.108
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD1A2606A320
-	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 12:12:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CD1A2606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-5569551d19dso30441111cf.0
-        for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 04:12:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795263132; x=1795867932;
-        h=mime-version:content-transfer-encoding:content-type:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=lGYwpKC1fByS7GG5SknYRcbt4FjMkQjX/lb3OlO0LP4=;
-        b=iOXlsVtnGhkTxTHnLWX+//ZgCb9IgpIy2LMvOuA4Y476VDeQkFnvDwq2mECUlcwtc/
-         vCtd7Hh2LLJCRhPH4RqirSQ8WmVwf2hZRV5iQXlSUzf9hgwKDImU7uCcup3BXOPh6C5C
-         f7EKDolj1mBr0/Qi+N6yBBw1vmPWxF+B7+84d6wxQasxJ6u8b5EH2HkrvX/jYGtCu78B
-         c8YBTOEKKckDUXAVS6flHxJgr++D1ro34qHfaj/TtSzqGJudbG0YW/7n+OkXlmaPcA7E
-         ABASg3i/AkuSU55rUzILeNCHyb+7pYGVYO0TqtF+Ke2TaEifKpYevhY9QEQgqtPuUXLI
-         o9Kw==
-X-Forwarded-Encrypted: i=1; AL+hErEckc5ZSjHCHbChheVA1GPuX6DvPVUTdAh6WRIQ4rbLC5tUSWJwbXnrH1gvDxsnTJynwwQ=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/ykSh9UTvOW27rmvgEa/Xx+sPYfSf2aDL2g/VbZ9+efB0lq7Go
-	2DxIOSDwGLPJzipwjUQSU3wl2DnEq+UTi63gNVRjHne19Yaqt7o4F0aG
-X-Gm-Gg: AZFdTZda32tq8OJlV+XLt25wQRSfDZ8vgNs0fC4iPN9napwrC/DItONXSyzT+cdT9/v
-	5QdSpMildTUSX08eRRy7TZRMTI5gA1Zpw72bOuaAgkk4VZtk9L6q7amG1YWiYohRqrAqO1eIvAQ
-	flQOkkYLB8LIShk0l23Ymi+hljgLd5qFBb92HyFKrmkp0t/qjYr2rtB4jKE8sl6c6TqpETm68Dy
-	T7crVypQosSQilwWoWN3LBN5PJ5vGImgEe9f06YwQP7dUmNn3I3rtMRQaKFv8yjOnQjyyW77dJg
-	JKhDtNjRjE02/0H5eMaaFboFFDExSlu868l5Uv1BgkoRJhz/gYnVQ89TE5qvVCamNNz0NADcMml
-	3xFKcqRSiftIsGnFGFeXFgTY+ns+mQ4b4C93Y239t06apVlYHiUXFO0pRikbfvk0oYU1qyEVXhe
-	VeHlAyUSnPddYWiJA0iHwsTHwQRuzfpYSDXw7IuBGFtGgD1UClN88mHeFs6ywCuY9Tj38ktDwnB
-	ijZ75xmDqbxyTW0cyxDCiUOnz16ifBbEkWVwnl6u93R2JD5K5q63C7PDIWUNorH1P9dTv0Fc2vn
-	hpwbnShgHb+7R2l2tm7oCcPe+OHfF77jwoAe4+hrF6xRyAFLxD5RCiCKxGVBnMixqwb7TX+7cM2
-	5654sIojrfcuIAgi0oSEp2DVA3RtGLQshxVsAjX06zh14E6ho0+56
-X-Received: by 2002:a05:622a:2283:b0:55b:9d8d:f29e with SMTP id d75a77b69052e-55d769c6d1bmr89159451cf.9.1795263131897;
-        Sat, 21 Nov 2026 04:12:11 -0800 (PST)
-Received: from localhost ([199.170.132.196])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-55d78812968sm48042081cf.9.2026.11.21.04.12.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Nov 2026 04:12:10 -0800 (PST)
-From: Tamir Duberstein <tamird@kernel.org>
-To: Andrea Righi <arighi@nvidia.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, shuah@kernel.org, xukuohai@huawei.com, billy@starlabs.sg, void@manifault.com, ihor.solodrai@linux.dev, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, awerner32@gmail.com, andriin@fb.com
-Subject: Re: [PATCH bpf-next v3 4/8] libbpf: ringbuf: Add a caller-owned iterator
-Date: Sat, 21 Nov 2026 06:58:00 -0500
-Message-ID: <179526228002.45024.2428180539629576513@kernel.org>
-In-Reply-To: <awFr3R3DPS_so3Pp@gpd4>
-References: <20261120-bpf-ringbuf-fixes-v3-0-ff7ca15d6c37@kernel.org> <20261120-bpf-ringbuf-fixes-v3-4-ff7ca15d6c37@kernel.org> <awFr3R3DPS_so3Pp@gpd4>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799DF606A32A;
+	Sat, 21 Nov 2026 12:53:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 799DF606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=D0Tve2Qu
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=Kv39YFS3gCTmTIBEpLn+LTr7Kna7mVqtgec2/Wwwicg=; b=D0Tve2QuWJTHNHXcUWkFbcPJC6
+	TOiab1mhHs6+yzFNQHQnVJYMmE0HwdjNO4aoMN/HLWc3urlQ9nXzmbb34/0NKQmmZYBczP5RgddvH
+	vzPz1NHrWYJie+e/K15GD8dlMYj/CXf9w0DKH/xT+vKgtCjYmNk69C+vpkiU9O7hPkWzKKLzrAg8f
+	Nf25l5vkdz8GZzeFje0DF2iR2MHUoNElJSn8yGmhHt0W4XZ0syoVlw9TUXq0J+bzrExPGV8ZX7Oht
+	60GhviSwhWNnr2BnnEi+keEhlEd9U+CK57Qc7Ndr6c3hpqyWnxHuLJc10iKwBlrRkHh3/olbdjqs0
+	hUkL9QWg==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1xUkaj-003fOK-0z;
+	Sat, 21 Nov 2026 12:53:17 +0000
+Date: Sat, 21 Nov 2026 04:53:09 -0800
+From: Breno Leitao <leitao@debian.org>
+To: Stanislav Fomichev <sdf.kernel@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, Willem de Bruijn <willemb@google.com>, 
+	Neal Cardwell <ncardwell@google.com>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH net-next 1/3] net/tcp-ao: convert the getsockopt helpers
+ to sockopt_t
+Message-ID: <awGTN1cIEnnlAMPq@gmail.com>
+References: <20261112-getsockopt_phase7-v1-0-1eb759dd0929@debian.org>
+ <20261112-getsockopt_phase7-v1-1-1eb759dd0929@debian.org>
+ <avdxDgmlDBTRgqM0@devvm16445.scu0.facebook.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -84,9 +80,62 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <avdxDgmlDBTRgqM0@devvm16445.scu0.facebook.com>
+X-Debian-User: leitao
 
-> Can we make this internal helper __always_inline?
+On Fri, Nov 13, 2026 at 12:21:27PM -0800, Stanislav Fomichev wrote:
+> On 11/12, Breno Leitao wrote:
+> > @@ -2214,6 +2213,21 @@ static int tcp_ao_copy_mkts_to_user(const struct sock *sk,
+> >  	}
+> >  
+> >  	bytes_to_write = min_t(int, user_len, sizeof(struct tcp_ao_getsockopt));
+> > +
+> 
+> [..]
+> 
+> > +	/* The reply is up to nkeys entries, user_len apart, with the match
+> > +	 * count in the first entry's nkeys, so it can outgrow optlen. Size it
+> > +	 * by the keys on the socket rather than by the caller's nkeys.
+> > +	 */
+> > +	hlist_for_each_entry_rcu(key, &ao_info->head, node,
+> > +				 lockdep_sock_is_held(sk))
+> > +		nr_keys++;
+> > +	reply_len = max(array_size(min(max_keys, nr_keys), user_len),
+> > +			offsetofend(struct tcp_ao_getsockopt, nkeys));
+> > +	err = sockopt_expand_out(sopt, reply_len);
+> > +	if (err)
+> > +		return err;
+> > +	head = sopt->iter_out;
+> 
+> Is that faster / cleaner / more preferable than calling sockopt_expand_out
+> on every iteration hlist_for_each_entry_rcu below?
 
-Done for v4, together with a private __always_inline destructor.
-Callback consumption uses the private destructor; the exported API
-wraps it.
+sockopt_expand_out() can't be called once something went through
+iter_out. It re-anchors the iterator at the head of optval, so it WARNs
+and returns -EINVAL if the iterator has already moved.
+
+That check came in v2 of the series that added the helper [1], because
+a late call would rewind the write cursor. With a call per key, the
+second key would trip it.
+
+So the size has to be known before the first entry is written, which is
+why the keys are counted first. ip_mc_gsfget() does the same and sizes
+its source list by min(sl_count, gf_numsrc). tcp_ao_info just keeps no
+key count, hence the walk.
+
+Sizing by nkeys alone doesn't work either: a large nkeys would hit the
+MAX_RW_COUNT check and get -EINVAL, where today it copies only the keys
+that match.
+
+The extra walk seems very cheap. The keys come from sock_kmalloc(), so
+optmem_max caps how many a socket holds, and the socket lock keeps the
+list stable between the two walks.
+
+I'll say this in the comment and resping a v2.
+
+Thanks for the review, you are being key to this whole convertion,
+--breno
+
+[1] https://lore.kernel.org/20260914-getsockopt_phase6-v2-0-e48befc9602e@debian.org
