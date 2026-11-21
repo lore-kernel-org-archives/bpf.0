@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795223639;
-	b=ZpEMCE+ddKVnapxt8ceNVFJ/xJtsXddHQ/TfLcQ1jmbSa/E7/XsHvNqGm6TmQD/FW6Xi
-	 75CHXJrsYWueQWAXmOgr50tm06SfKMs8AOcqXwfj82WXyp1ZtKxZBMA5lTRXWbtNbx3yy
-	 H08S0NzMPw1wGsgohEPCNJ/O3vS5fG3+6W3nqKsKJDmIFpBUkcjJS9YkZdFez9NUNLgbJ
-	 JCS1v7ysLv04rYXhN2ZW9gQHPonQMmMeaLvszoYHfPI+20GFjeqax4nGy12QnhxMSuBkD
-	 NtOeVAS+NMyJJEE6Q8EmEr8lfyv0B/KSLugF55GSbmewKIlbFxKoxrFme7EU3IwVfRg==
+	t=1795223643;
+	b=jBmpx79r3ma4ok+1mzmF9WXyZPgNpWMFzxbAUKMgHmWUZG1Cfv8hZ/QcDIu6lXxw6Tvs
+	 xHG8Uz5T7W89fIB+XcvFiQNUhR+0F4ajDMlfE1FP5y25FklpSbajlpTw7CjDbzRjvmzLl
+	 oMC2PBuCYeoHSBf8J8IqS88JfC174smdosBlPNGIB7lqMnVsd/YKBWah9fzQt31z+mKWE
+	 GF2K+BAN2gHALjMUZQa+4g7W8Iinf1jqOSLFYFnkpaYD/PNOShdN8WjggHcRE/LgrNshx
+	 zwsYev87MaJKADBn2Aiea1+itgJOyT+HAkQLjPR49rNqIqGVCIsB4gr33627IbV5DlQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795223639;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795223643;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=tU9Cn/FadT5rYtiag0jDxCbFoHUlMPHp7fQS4vyTs1Q=;
-	b=HzJkz5UzK8Eeoh78vQkwmQhdJfQ9FSCeo9ygSFY+udfqCIrQKlKxaCH3CtPZTBkjUAQD
-	 FLg/Hq8ZNEimSq1L131KHR9NQZPfyBB5LHUEMwbPW5m9q/kELe9cOOmhLki3Odat8lnaP
-	 y2H1/1QsjbjNRk5dQd4PAPhWKWJGmcQlmRP4OolkY6+n3QR+Z7+Shkjx7yKX4GLtKRKSI
-	 XkPZ+AYudKmujOFZc+FtOJZPBrl+MTVIIe7ek3NeKRTsiIty1Jh+m4pePACXXkn7Pvhwp
-	 PisNZLhhf49frbPczMe2VDBj0F+zS/09PF/LIvBRZmAd5kXum3hSn8wE6sES/0L11kA==
+	bh=nIb5IDUYIl8DBaEEr7LZkXsa92bsTP3yu+JKyQjAJsU=;
+	b=MFdJ/XiPlCofW6w75026rIxIxeM5I/uPk+AEmvX1PXzLXndA4qUGPb56SjYJIh9rVflA
+	 tDm7nGLXbq52FnRlcrqKJWlhnLWdVwcQ5hzDMW7ErK/lkkis414fG/2IUMXj2zaIFYgQr
+	 RbAPInFgzwCleH0gnihY1SedhD5S6oZGRFQ1AYSe65uQizt/7tQ2XSg8RO0X+tNI8Smnm
+	 tPOHTmqzz9fY82c2hAU08Khs5N/qmnrtkFhsuKzF1OTnZpt4VMjayxYnlsuRyazEheCFG
+	 5dNWzb/48JbX/6q/z4X82pOjg4Ikcmm10B3BGCH2oaXsBelv7sOE5AkIwZs5k0TLEzA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BwtnRUyq;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=co1wYc1x;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B73AB606A69F;
-	Sat, 21 Nov 2026 01:13:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BDA5606A331;
+	Sat, 21 Nov 2026 01:14:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BwtnRUyq
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 507641F000C6;
-	Sat, 21 Nov 2026 01:13:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=co1wYc1x
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 429A81F000C0;
+	Sat, 21 Nov 2026 01:14:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795223639;
-	bh=tU9Cn/FadT5rYtiag0jDxCbFoHUlMPHp7fQS4vyTs1Q=;
+	s=k20260515; t=1795223643;
+	bh=nIb5IDUYIl8DBaEEr7LZkXsa92bsTP3yu+JKyQjAJsU=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=BwtnRUyq7X/B+YnxT3i0/V6yIthL0J37sEfxt2HWXkvOdYkw9stAY4qg26mEw2sNA
-	 z94PIKaXtHQL7nKyqOtVpYXwytYizgwXKT1FHM9evXNzB7hI224CdgjU9IrHRQm9EV
-	 anxgmi6B5SMAxeowxsDToocS/mjYZhXNhpJP5O+dvu/rCi77Kf3VgviGHbY/N0nbrh
-	 cy+xmI/GgF8qGjDK31x4h5qrl/uJCv/99k6nOEbSLAZnAZJ+cmJ75kTr620FglS8C/
-	 Pf7NeoDaKegmmVSPxV/X/decmwaqTMl25IqS6WUejxZDb53f0xsT/GSz+zobJ6U/Qq
-	 a31ww0lUkqYtA==
-Content-Type: multipart/mixed; boundary="===============9058164219103786062=="
+	b=co1wYc1xoXBqz/LauO/xxEZdlxswoKIRIHjnUforOk9AyM11PyoYcTClM6v/sbP4y
+	 PjOdG+pP0B5O6xAcGwXJPyvU0VEPf8UVsWfmLpgM6ByQjO0p1ZvgaiEWSXRILx5FHL
+	 DGG0VIl2vnKwWmsuwL8+8c6ie7+naY5yCoVrGH5pc1DJMNTJquCwsPtW131YqjLgM/
+	 ysejTEMs4JJGhbcn0RCF8I1Z//AepiIoqX0t9n4rXaoDU4Fc4vKlNCNoCfCL6hSKdr
+	 C2KiYQx7f1gDqDydLkVpt8WfdqhAFV3T86gb79gwaTEbfFZLRaCtedPY6L3qWEqrYG
+	 jMRVvWcVs+cVw==
+Content-Type: multipart/mixed; boundary="===============7431607082218699323=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,68 +49,87 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <d76bfe6573fc2c9e4aca4d36766a3c616070ae7067065a38def07e8430803d7a@mail.kernel.org>
-In-Reply-To: <20261121003403.2928928-3-ihor.solodrai@linux.dev>
-References: <20261121003403.2928928-3-ihor.solodrai@linux.dev>
-Subject: Re: [PATCH bpf-next v2 2/6] sched_ext: Prefer ___v2 kfunc names in compat.bpf.h
+Message-Id: <fbfaa7de60fbbd5b5c495fed0005daa700d1da496bf37c6a7d86f443493b8a89@mail.kernel.org>
+In-Reply-To: <20261121003403.2928928-4-ihor.solodrai@linux.dev>
+References: <20261121003403.2928928-4-ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf-next v2 3/6] libbpf: Resolve kfunc variants by prototype
 From: bot+bpf-ci@kernel.org
 To: ihor.solodrai@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com
 Cc: alan.maguire@oracle.com,emil@etsalapatis.com,jolsa@kernel.org,song@kernel.org,tj@kernel.org,yonghong.song@linux.dev,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,sched-ext@lists.linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat, 21 Nov 2026 01:13:57 +0000 (UTC)
+Date: Sat, 21 Nov 2026 01:14:01 +0000 (UTC)
 
---===============9058164219103786062==
+--===============7431607082218699323==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> sched_ext: Prefer ___v2 kfunc names in compat.bpf.h
+> libbpf: Resolve kfunc variants by prototype
 
-TL;DR: __COMPAT_scx_bpf_reenqueue_local_from_anywhere() in compat.bpf.h still
-checks only the ___v2___compat name, so with the new libbpf it may return
-false on v6.19+ kernels, silently disabling scx_qmap's sched_switch reenqueue.
+TL;DR: A module BTF load error in find_kfunc_btf_id() may be returned as
+-EINVAL and mistaken for "no compatible prototype", so a weak kfunc in vmlinux
+could be treated as missing and strong ones get a misleading error.
 
-> diff --git a/tools/sched_ext/include/scx/compat.bpf.h b/tools/sched_ext/include/scx/compat.bpf.h
-> --- a/tools/sched_ext/include/scx/compat.bpf.h
-> +++ b/tools/sched_ext/include/scx/compat.bpf.h
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
 
 [ ... ]
 
->  u32 scx_bpf_reenqueue_local___v1(void) __ksym __weak;
-> +void scx_bpf_reenqueue_local___v2(void) __ksym __weak;
->  void scx_bpf_reenqueue_local___v2___compat(void) __ksym __weak;
->
->  static inline bool __COMPAT_scx_bpf_reenqueue_local_from_anywhere(void)
->  {
->  	return bpf_ksym_exists(scx_bpf_reenqueue_local___v2___compat);
->  }
+> +/*
+> + * Search vmlinux and module BTFs. Return:
+> + *   - a BTF ID for a unique match;
+> + *   - -ESRCH if the family is absent;
+> + *   - -EINVAL if no candidate has a compatible prototype;
+> + *   - -ENOTUNIQ if more than one candidate has a compatible prototype;
+> + *   - another negative error on failure.
+> + */
+> +static int find_kfunc_btf_id(struct bpf_object *obj, const struct extern_desc *ext,
+> +			     struct btf **res_btf, struct module_btf **res_mod_btf)
+> +{
+> +	size_t name_len = bpf_core_essential_name_len(ext->name);
+> +	int kfunc_id = 0, nr_cands = 0, err;
+> +	size_t i;
+> +
+> +	err = load_module_btfs(obj);
+> +	if (err)
+> +		return err;
 
-After the libbpf change described in the commit message, the
-___v2___compat names resolve nothing.  This predicate still tests only
-scx_bpf_reenqueue_local___v2___compat, so with that libbpf it would
-return false even on v6.19+ kernels where
-scx_bpf_reenqueue_local___v2() can be called from anywhere.
+Can this return -EINVAL for a reason other than a prototype mismatch?
 
-The in-tree wrappers scx_bpf_reenqueue_local() and
-scx_bpf_reenqueue_local_from_anywhere() check
-bpf_ksym_exists(scx_bpf_reenqueue_local___v2) before calling it, but
-__COMPAT_scx_bpf_reenqueue_local_from_anywhere() is exported from this
-header and schedulers use it directly.  For example, scx_qmap does:
+load_module_btfs() calls btf_get_from_fd(), which goes through btf_new()
+and can return -EINVAL from btf_parse_hdr(), btf_parse_type_sec() or
+btf_sanity_check() when libbpf rejects a module's BTF.  That error is
+returned here unchanged.
 
-  qmap_sched_switch():
-      if (!__COMPAT_scx_bpf_reenqueue_local_from_anywhere())
-          return 0;
-  qmap_cpu_release():
-      if (!__COMPAT_scx_bpf_reenqueue_local_from_anywhere())
-          scx_bpf_reenqueue_local();
+[ ... ]
 
-A scheduler built this way would silently turn off its sched_switch based
-reenqueue and fall back to ops.cpu_release().
+> +	if (kfunc_id == -EINVAL) {
+>  		if (ext->is_weak)
+>  			return 0;
+> +		pr_warn("extern (func ksym) '%s': no compatible prototype in kernel or module BTFs\n",
+> +			ext->name);
+> +		return kfunc_id;
+>  	}
 
-Should this predicate also check scx_bpf_reenqueue_local___v2, so that it
-still returns true on v6.19+ kernels with the new libbpf?  Note that the
-two ksym checks probably need to be in separate branches rather than an
-||, since the comment in scx_bpf_reenqueue_local_from_anywhere() says
-clang can fold that into a bitwise OR of the ksym addresses.
+bpf_object__resolve_ksym_func_btf_id() treats that -EINVAL as "no
+compatible prototype".  A __weak kfunc is then left unresolved even if it
+exists in vmlinux, so bpf_ksym_exists() reports it as missing.  A strong
+kfunc fails with the misleading "no compatible prototype" message.
+
+Also, load_module_btfs() has already set obj->btf_modules_loaded = true by
+then, so later kfuncs and the CO-RE lookups in bpf_core_find_cands() would
+continue with a partial module list instead of failing the load.
+
+Before this patch, a kfunc found in vmlinux never called
+load_module_btfs().  When the lookup did reach it, find_ksym_btf_id()
+returned the error as is, and only -ESRCH was treated as absence.
+
+Other errors from load_module_btfs() (-ENOMEM, errors from the BTF
+syscalls) also return here without a message naming the extern, because
+the generic "if (kfunc_id < 0) return kfunc_id;" path prints nothing.
+
+Would it make sense to call load_module_btfs() in the caller, or to keep
+its error apart from the -ESRCH/-EINVAL/-ENOTUNIQ results?
 
 
 ---
@@ -118,4 +137,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/44845964556
---===============9058164219103786062==--
+--===============7431607082218699323==--
