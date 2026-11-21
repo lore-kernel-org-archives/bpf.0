@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.157
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.13
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795257315;
-	b=Y+/ZuBqoSJ6CdM92qFUb2oXfSa44NUcfllUi6evVfLDZg0hHgv54HDKqyGrMIOUVmrHG
-	 K+NbaJ8xGZKhxd9tyUxFFCe+xM8wwk2JtslQNVOT7+fDWJynzJByc0KpZe8mGmwicueyD
-	 E3mTwLFiPAu6IbtUl5JLZ6OyXMdDAYroQr8SHQ9GzWBam2gA7CTTHRiVyc8gyJnfJuXoF
-	 bKhpCphy3KUIIWo/lI8NhweVGbkOZNV6CVZZwrsIEX/UK2qapbkoaKMthMTOPtdxU7fTP
-	 NfUa5LaPqRAMH97h/VP7uUPucK99Tbu9qiVzkj++z30fxiUNr55FIjte1ofFojXIzEQ==
+	t=1795257344;
+	b=G7o9h55Tf6WjIt/sFG+WLA5nOy3j3AWnPDu5sK+vUqYC5AK2x8L9CPr/oa3wjdska/Ze
+	 9C/OmGdv71+Eo0WNzyYUkOKLubTFId+0elQiI7jpl0+xQgKGDo0J1mhN/x+BHGJvvuWYG
+	 Fwxv88qP7zMcr+78drMKjPF9RJxUle0ljZbP68/9RIovzFm2Qr96ikFvZea+SXxB/y+Zk
+	 pE6UZSOXYHDim9F9FnAqOvIUn5Eq3dKSWfH+pSFhbBNj/OephiYJh2eCy0p+w3nyuTXRa
+	 01qUzTqwWbeq46n9Bxhs8V33Z3TIdXwGMtoQq55yEHx7jdDhSS3PpEmQEnItIcXoOzw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795257315;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795257344;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=bjG2Okz8iGgbh3ees3i7reQXyGSwi++CYO+Z/Q8Ttss=;
-	b=pZujDUWwuqjPu01DVxX7o9ZBICzOoULg/zWhvkgdRV6i4Sf+Kee+wtxI6q7rNDKd94yN
-	 xKy39sPhOEsnTGvuSGhI2bcjL/GoGb8kmILWWqgXr5vv+BpzeaYicXwEpFHz8ogURwfDJ
-	 CZsaXN0My9l0XfUQLMzA8w8EY1OTZcPqFCZRsXMgICqPXlpDhXqNYfwod52Hx8J82upLM
-	 B6Wu104Bsdj5a+vXUkaMo2XPoSb96CC5J0UVURKi5b5tlAJa30dReOty/UANMDihXI6bS
-	 erl+tQ5rFGeEHct00pgCbn5GLOFnGsPAc5M1hz8pP/c+CQZwCDj7LOFqcdKeyFJh0HQ==
+	bh=L5hGurAKkqpLz3Gfdlsx327sieYg5Z9sWpnZsySfpsg=;
+	b=zd45e5Vg3ID1piuOh8uOrd4A2SclrX/RxTI5R12FOptfYAc9rwr4iO2JHdMdNoGEuRWc
+	 nxg9+0VEQKihZqe2UsR6YJppxEvnVyDdC7vS90vxutgVgjsk1HXIcdKgk/1ur6u654ADM
+	 ayaYYKZh/7zzssrkjv8ebZQzJZW0vbby9zmh5b1w6Ks0OPH4+QIx1gt72P3GgFBni4sY1
+	 jghJvduhRA/XftENSQtBqETrwj6fKw5shAOJA1YdeHYJQEESHQSpgVnvj5S4BT3V/EO7/
+	 sfXaeMNsKkrYmx5Z9nIQg8GrMf4uv5nl4/+eiNfExOtGIWnZxLnNsIWRjLBzzLQye1Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=no0X1i4V;
-	arc=none smtp.remote-ip=95.215.58.157
-Received: from mta1.migadu.com (out-157.mta1.migadu.com [95.215.58.157])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=JtO5pwCp;
+	arc=none smtp.remote-ip=91.218.175.13
+Received: from mta0.migadu.com (out-13.mta0.migadu.com [91.218.175.13])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C0A6606A325
-	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 10:35:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5C0A6606A325
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 161AD606A325
+	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 10:35:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 161AD606A325
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=no0X1i4V
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=JtO5pwCp
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=YCflmLbeG3eTiOPqoz6EeAAsvzcvl036eUCwFD/lgzA=;
+DKIM-Signature: a=rsa-sha256; bh=8LRbPdILLLhIs0nbG++RshFwNSImlc2aG5lW6OMeSRo=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795257312; v=1; x=1795862112;
- b=no0X1i4VZ03Qw/IOrQYLDL2gMbV5wbikTaszoB+In5vR79RtHK6OPnAVvHe4ZtmuLW1NPCLL
- wUHCbRtRfzHExTLrcjYx7YnKty+I651FMgyEdY8XtSKF7MWvxT4dul82C4M5olFt2efflMUOnfk
- 90eSHugg3OT3WaDS/setCpss=
+ t=1795257341; v=1; x=1795862141;
+ b=JtO5pwCpSsO2tIpjxDU/eHk3Ag/I4ASnDiCqQYRTlpEtxnO3/yWCyI5LsenMmfBzOzrsskRZ
+ qGYISzhjmSlWhjbbXBVYteVp7l7STzpjsAVs4809cOCDOBUAwd37fmCQ6ngOtE/q5/p5j1yFGD6
+ 7REeW8mCpVghSxHI9B73iP3Q=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 0bf361dc8874d648;
-	Sat, 21 Nov 2026 10:35:12 +0000
-X-Mizu-Trace-ID: 0bf361dc8874d648
+Received: by smtp.migadu.com with ESMTPS id 826288e3b8d86c17;
+	Sat, 21 Nov 2026 10:35:39 +0000
+X-Mizu-Trace-ID: 826288e3b8d86c17
 X-Migadu-Flow: FLOW_OUT
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org,
@@ -61,16 +61,16 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	Kuniyuki Iwashima <kuniyu@google.com>,
 	Willem de Bruijn <willemb@google.com>,
 	Neal Cardwell <ncardwell@google.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
 	Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	Shuah Khan <shuah@kernel.org>,
 	Sechang Lim <rhkrqnwk98@gmail.com>,
 	Michal Luczaj <mhal@rbox.co>,
@@ -78,9 +78,9 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	linux-kernel@vger.kernel.org,
 	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf 06/11] bpf, sockmap: Fix reconnect with a psock by rejecting disconnect
-Date: Sat, 21 Nov 2026 18:30:07 +0800
-Message-ID: <20261121103222.88209-7-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf 07/11] bpf, sockmap: Fix psock refcnt taken in sk_psock_backlog()
+Date: Sat, 21 Nov 2026 18:30:08 +0800
+Message-ID: <20261121103222.88209-8-jiayuan.chen@linux.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261121103222.88209-1-jiayuan.chen@linux.dev>
 References: <20261121103222.88209-1-jiayuan.chen@linux.dev>
@@ -95,105 +95,38 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Commit 8cc3aef0cb19 ("tcp: Do not allow buggy transitions between ehash
-and lhash2.") rejects connect() -> disconnect -> listen(), but
-connect() -> disconnect -> connect() is still allowed.
+sk_psock_backlog() runs for a given psock, but takes the reference with
+sk_psock_get(psock->sk), which returns the psock that sk_user_data points
+to now. That is the same psock only while psock->sk->psock == psock.
 
-A socket in a sockmap keeps its psock across tcp_disconnect(), and the
-new connection runs into what the old one left there:
+If sk is removed from the map and added back while the backlog runs, the
+old psock is dropped and sk_user_data points to the new one. The backlog
+of the old psock then takes a reference on the new psock and puts the old
+one, whose refcnt is already 0. The old one hits a refcount underflow and
+the new one leaks a reference. The SK_PSOCK_TX_ENABLED check before it
+does not close this window.
 
- - recvmsg() returns the old data still queued on psock->ingress_msg.
- - psock->copied_seq and psock->ingress_bytes still account for it, so
-   copied_seq runs ahead of rcv_nxt for the rest of the connection.
- - sk_psock_backlog() does not take the socket lock for ingress, so it
-   can queue old skbs from psock->ingress_skb after the reconnect.
+Take the reference on the psock itself.
 
-Cleaning all of this up on disconnect is hard. Do what TLS did in commit
-5071a1e606b3 ("net: tls: explicitly disallow disconnect") and reject the
-disconnect with -EOPNOTSUPP.
-
-Unlike TLS, some callers have to be let through. None of them leads to
-a reconnect with old data:
-
- - A child can be added to a sockmap before accept(), e.g. by a sockops
-   prog. When the listener is closed, inet_child_forget() disconnects
-   the child and frees it right after, without looking at the return
-   value. Such a child has no sk_socket.
- - close() with a zero linger time disconnects through sk_prot, which
-   is still tcp_bpf as long as somebody else holds the psock.
-   sock_map_close() sets SK_PSOCK_CLOSING for it.
- - A listener is disconnected by shutdown(SHUT_RD) and
-   connect(AF_UNSPEC), and has no data.
-
+Fixes: 8259eb0e06d8 ("bpf, sockmap: Avoid using sk_socket after free when sending")
 Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- include/linux/skmsg.h |  1 +
- net/core/sock_map.c   |  1 +
- net/ipv4/tcp_bpf.c    | 21 +++++++++++++++++++++
- 3 files changed, 23 insertions(+)
+ net/core/skmsg.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
-index 98f71c6d0af73..7e8256b2b4d6c 100644
---- a/include/linux/skmsg.h
-+++ b/include/linux/skmsg.h
-@@ -70,6 +70,7 @@ enum sk_psock_state_bits {
- 	SK_PSOCK_RX_STRP_ENABLED,
- 	SK_PSOCK_STRP_DONE_PENDING,
- 	SK_PSOCK_TX_BUSY,
-+	SK_PSOCK_CLOSING,
- };
- 
- struct sk_psock_link {
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 6747b3cc1cac1..6fc1d29ac6ed5 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -1763,6 +1763,7 @@ void sock_map_close(struct sock *sk, long timeout)
- 		sock_map_remove_links(sk, psock);
- 		rcu_read_unlock();
- 		sk_psock_stop(psock);
-+		sk_psock_set_state(psock, SK_PSOCK_CLOSING);
- 		release_sock(sk);
- 		cancel_delayed_work_sync(&psock->work);
- 		sk_psock_put(sk, psock);
-diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index 077b65927ac8d..9715716518c49 100644
---- a/net/ipv4/tcp_bpf.c
-+++ b/net/ipv4/tcp_bpf.c
-@@ -710,12 +710,33 @@ static struct proto *tcpv6_prot_saved __read_mostly;
- static DEFINE_SPINLOCK(tcpv6_prot_lock);
- static struct proto tcp_bpf_prots[TCP_BPF_NUM_PROTS][TCP_BPF_NUM_CFGS];
- 
-+static int tcp_bpf_disconnect(struct sock *sk, int flags)
-+{
-+	struct sk_psock *psock;
-+	bool reject;
-+
-+	/*
-+	 * A new connection must not reuse the psock. Let through a child
-+	 * that nobody has accepted yet, a socket in close() and a listener.
-+	 */
-+	rcu_read_lock();
-+	psock = sk_psock(sk);
-+	reject = psock && sk->sk_socket && sk->sk_state != TCP_LISTEN &&
-+		 !sk_psock_test_state(psock, SK_PSOCK_CLOSING);
-+	rcu_read_unlock();
-+	if (reject)
-+		return -EOPNOTSUPP;
-+
-+	return tcp_disconnect(sk, flags);
-+}
-+
- static void tcp_bpf_rebuild_protos(struct proto prot[TCP_BPF_NUM_CFGS],
- 				   struct proto *base)
- {
- 	prot[TCP_BPF_BASE]			= *base;
- 	prot[TCP_BPF_BASE].destroy		= sock_map_destroy;
- 	prot[TCP_BPF_BASE].close		= sock_map_close;
-+	prot[TCP_BPF_BASE].disconnect		= tcp_bpf_disconnect;
- 	prot[TCP_BPF_BASE].recvmsg		= tcp_bpf_recvmsg;
- 	prot[TCP_BPF_BASE].sock_is_readable	= sk_msg_is_readable;
- 	prot[TCP_BPF_BASE].ioctl		= tcp_bpf_ioctl;
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index 43dc128841e98..52469318fb577 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -704,7 +704,7 @@ static void sk_psock_backlog(struct work_struct *work)
+ 	 * before sk_socket freed. If refcnt increment fails, it indicates
+ 	 * sock_map_close() completed with sk_socket potentially already freed.
+ 	 */
+-	if (!sk_psock_get(psock->sk))
++	if (!refcount_inc_not_zero(&psock->refcnt))
+ 		return;
+ 	mutex_lock(&psock->work_mutex);
+ 	while ((skb = skb_peek(&psock->ingress_skb))) {
 -- 
 2.43.0
 
