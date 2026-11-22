@@ -1,47 +1,46 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795366983;
-	b=XAT1PjwSyG3ZooUUTG7z3r8iO6h4AluJ5IhLspPY7DyZ1RrCU+/YqbQeNp+2YYwAI/eM
-	 b2IkSy5dOtOICt1B8irRF2goP1vPiH2hKTFEiHrTK2bEix4wRcga82uB4Uhw5nv2BeTLi
-	 lsszhQYHSdUv28d19zo5Qkap8oCGzi1QdPJyLJHt3MjpJprPGsjpiOZA+nMi6KgAs76Nl
-	 Ff92j37qqhVoPyk7pgcU2SVdioAmGZP+ziiL3G4IfOlNHT6UVj06HGR00vU4QeNR8NKrL
-	 MK5AxG1j+jJzeqgVf9g8nPDwWFUQDGe65xwtSsjthHYPxUN+QxBAq5c7scMRq1XR1Zg==
+	t=1795366982;
+	b=wM0429ee5FtAyoxWjwkXQdHgvLXQSxoB1o7pHud5w0MiHWG4qZGzS9NXvdJ2z7Ty+SfC
+	 gNZHpxGwu0m5LUw01cW41g3/bSQ01AMuhFq7aEhAM/osKHWVur3bq2S/MSqJIOagLQZsc
+	 8j0nmDqXnXVConljgJwqGv+fsegE24rxJn2PIrG37eSqAyY8lYWTg66GTSG4r2XwBHZ30
+	 moSzA1FybOTKksZ2xEZrVJsFSNMl+NgVOKjoRFkzXjDA+Pgmp7cFiT75vewdusLrwxxhr
+	 LIPz/gyQos678X5H8p6GGp6InLjcNR7wTeojVwtEFf8+WGudBt6H4igvJ19WmNi5oFg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795366983;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795366982;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=vvzwh5GY5QMNLLzQ84AaKr2G99TlKd4xQAgrpeGbXeM=;
-	b=VonyeTH2N5xm+2BUQyuI0jgTL7hRlEVooPKGFiwua6fbfuZPQi0nv6amCHiqdPjkFKn2
-	 ldD6j//hpn9JU32/Z+PdV3W1AjCl7mN32anG25Qsya+cM9qTL5B58SLBPPqNBL/fUVamp
-	 dBabrg6gnNV7tWuzPJ88ur04TbIWLYpiE8uHh5yACwhB4UDsGsU6ZJVDjltE8GCeRP2Dc
-	 I4ZY8YRIEEk2LEj82FSYfInCHI6ylJCFMMhvQiAk9kDOHS2cadNYxblA1zKml0h9YW7b2
-	 FXYPqXmMeqv0SqjpoyPIOUi8u9rOJCrRJzoQXNT633q3a7NiezIKmyM2C5SkC965HHg==
+	bh=CMdZJjStYTeG+QXi153Hruf7L5SKL3ufYUXm+pIPYx0=;
+	b=GqKJe7/41slZ6+yBEYqpW7RQXFPCz6FIrGuHOazG6EVfcdKkhFwph5hTdtioAqDUMf/8
+	 GN+ip8uA3jugsrg6fMkFGdoMLBb5efvdf0PHX17DUnxKfOr7+eS+avTyZ/RPTpjWnjOYA
+	 LMJQrHOxMKjdVX3sJmuTLrbxL/Im48q8paC3saf7J3VIVbmApvwaVcrx5al5htg0I4irb
+	 wWwU+h1vwaYUvcokOyPbXpx7lIRQa7VxRuvz9Nko/DVe9TmE+Q5bMNsVAfRQfpzgoVkQJ
+	 bDXjM4VdgayncaXco9mQqiVTAs9cNigKAaxSl1I/IJ7TLNVEyyZfWg3tLTXr7IuaeTg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kcXx6K5K;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DUYnN5nW;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79412606A33B;
-	Sun, 22 Nov 2026 17:03:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7C20606A320;
+	Sun, 22 Nov 2026 17:03:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kcXx6K5K
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A9E11F000C0;
-	Sun, 22 Nov 2026 17:03:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DUYnN5nW
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90EE81F000C0;
+	Sun, 22 Nov 2026 17:03:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795366983;
-	bh=vvzwh5GY5QMNLLzQ84AaKr2G99TlKd4xQAgrpeGbXeM=;
+	s=k20260515; t=1795366981;
+	bh=CMdZJjStYTeG+QXi153Hruf7L5SKL3ufYUXm+pIPYx0=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=kcXx6K5KOPBdgnXvlGlK1lb4eveQeZ8a7Vzna+DmaOotwEfCqFIKxcpoAbRusRO4Y
-	 2gSE65DdxsCx4noedpBmi/U+fdqDUmTgdGwbqX7uE4GEQJNMb+lFUXgAXC/mgyb99e
-	 QeuvsdoRYfTt+skZwJbpWOCwF9k0t8PmaqQn89t8TxNf7jyl7ZbCvAxZD91vuRKUMt
-	 D6lybYWuPm2QsHkz6Km0DfotRLjps1iqkAA4oyLtJH7WHE/bOnNvO0C2OlVLXqn3tF
-	 KakIIHqkR5ZH+jQ7BgITIvsSV0LLz6q7qOUbIcImhVl6fdRu/efnayQUpQFmpgsSQY
-	 L7SsEvMUyD1wg==
-Subject: Re: [PATCH net-next 2/8] selftests: drv-net: drop the generic XDP
- hack from the HW GRO setup
+	b=DUYnN5nWUmcHxjrh3lvtRQG0PQhiUBSX1UBxYH2Do081//XlX+UaOgceQAFhdyGcH
+	 Ntv7i6Y8vgvBR69AkdbzVXOTydSrJb/uKFY1/mGJ10X7D8UhYPuCzDuoiuUUXw4sQJ
+	 z0Wzob5vXhTNwYnlM/885zVC+PFqCsjA+Xcjhcb3ZY/Tgxxn5tyjsW6JdFle+oUk6L
+	 rwo/BnbexT1ezyg/hKQDvVugdlDGSyNG7loVElSwktJSVOOlvHRcvicioQ/k/ryyfP
+	 OY5WB934po+MhNKf3zIJZ28+C4BPj6fwct+E5Hla2cVLaqCumIIAQVbYHH+p7egOg4
+	 zYD9KP8klQbZg==
+Subject: Re: [PATCH net-next 1/8] net: stop making HW-GRO depend on SW GRO
 From: netdev-bot+sashiko@kernel.org
 To: kuba@kernel.org
 Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
@@ -50,10 +49,10 @@ Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
  hramamurthy@google.com, tariqt@nvidia.com, saeedm@nvidia.com,
  daniel@iogearbox.net, hawk@kernel.org, sdf@fomichev.me, willemb@google.com,
  przemyslaw.kitszel@intel.com, bpf@vger.kernel.org
-Date: Sun, 22 Nov 2026 17:03:01 +0000
-Message-ID: <179536698167.3135.988717812075290728@kernel.org>
-In-Reply-To: <20261118232315.3593731-3-kuba@kernel.org>
-References: <20261118232315.3593731-3-kuba@kernel.org>
+Date: Sun, 22 Nov 2026 17:03:00 +0000
+Message-ID: <179536698013.3135.16546623491395924004@kernel.org>
+In-Reply-To: <20261118232315.3593731-2-kuba@kernel.org>
+References: <20261118232315.3593731-2-kuba@kernel.org>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -78,100 +77,91 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] After this patch, nothing in
-  tools/testing/selftests/drivers/net/hw/gro_stats.py checks that rx-…
+- [Medium] On bnxt, `ethtool -K $dev gro off lro on` used to give
+  hardware LRO.
 
 --
 
-selftests: drv-net: drop the generic XDP hack from the HW GRO setup
+net: stop making HW-GRO depend on SW GRO
 
-This commit removes the generic XDP fallback from the HW GRO setup in
-gro_lib.py and hw/gro_stats.py. Drivers no longer tie HW GRO to
-NETIF_F_GRO, so the setup now asks ethtool for SW GRO off and rx-gro-hw
-on directly.
-
-> diff --git a/tools/testing/selftests/drivers/net/gro_lib.py b/tools/testing/selftests/drivers/net/gro_lib.py
-> index 875a715b2ae1c..6eff19db3541f 100644
-> --- a/tools/testing/selftests/drivers/net/gro_lib.py
-> +++ b/tools/testing/selftests/drivers/net/gro_lib.py
-> @@ -263,26 +263,7 @@ def _setup(cfg, mode, test_name):
->          set_ethtool_feat(cfg.ifname, cfg.feat,
->                           {"generic-receive-offload": False,
->                            "rx-gro-hw": True,
-> -                          "large-receive-offload": False},
-> -                          check=False)
+This patch removes the code in bnxt, qede and bnx2x that cleared
+NETIF_F_GRO_HW whenever NETIF_F_GRO was off. The commit message gives
+one user visible change: "ethtool -K $dev gro off" no longer implies
+"rx-gro-hw off" on these drivers.
 
 [ ... ]
 
-> diff --git a/tools/testing/selftests/drivers/net/hw/gro_stats.py b/tools/testing/selftests/drivers/net/hw/gro_stats.py
-> index 70e76e3888bdb..569ca81368e69 100755
-> --- a/tools/testing/selftests/drivers/net/hw/gro_stats.py
-> +++ b/tools/testing/selftests/drivers/net/hw/gro_stats.py
-> @@ -173,24 +173,6 @@ def _setup_hw_gro(cfg):
->                         "rx-gro-hw": True,
->                         "large-receive-offload": False})
+> diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> index 6846a27bfef4c..27c53db2c9e45 100644
+> --- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> @@ -14092,9 +14092,6 @@ static netdev_features_t bnxt_fix_features(struct net_device *dev,
+>  	if ((bp->flags & BNXT_FLAG_NO_AGG_RINGS) || bp->xdp_prog)
+>  		features &= ~(NETIF_F_LRO | NETIF_F_GRO_HW);
 >  
-> -    # Some NICs treat HW GRO as a GRO sub-feature so disabling GRO
-> -    # will also clear HW GRO. Use a hack of installing XDP generic
-> -    # to skip SW GRO, even when enabled.
-> -    feat = ethtool(f"-k {cfg.ifname}", json=True)[0]
-> -    if not feat["rx-gro-hw"]["active"]:
-
-[ ... ]
-
-> -        _set_ethtool_feat(cfg, feat,
-> -                          {"generic-receive-offload": True,
-> -                           "rx-gro-hw": True,
-> -                           "large-receive-offload": False})
+> -	if (!(features & NETIF_F_GRO))
+> -		features &= ~NETIF_F_GRO_HW;
 > -
+>  	if (features & NETIF_F_GRO_HW)
+>  		features &= ~NETIF_F_LRO;
+>  
 
 [Severity: Medium]
-Now that this read-back is gone, does anything in gro_stats.py still check
-that rx-gro-hw is actually active after _setup_hw_gro() runs?
+Does this change what "ethtool -K $dev gro off lro on" does on bnxt?
 
-_setup_hw_gro() calls the file-local _set_ethtool_feat(). That helper only
-raises KsftSkipEx when a feature is marked fixed. It never re-reads the
-features after running ethtool -K:
+Before this patch, turning SW GRO off cleared NETIF_F_GRO_HW first. The
+LRO request then got past the GRO_HW-over-LRO check below it, and
+bnxt_set_features() picked LRO:
 
-tools/testing/selftests/drivers/net/hw/gro_stats.py:_set_ethtool_feat() {
+bnxt_set_features() {
     ...
-    eth_cmd = ethtool(" ".join(new))
-    defer(ethtool, " ".join(old))
-
-    # If ethtool printed something kernel must have modified some features
-    if eth_cmd.stdout:
-        ksft_pr(eth_cmd)
+	if (features & NETIF_F_GRO_HW)
+		flags |= BNXT_FLAG_GRO;
+	else if (features & NETIF_F_LRO)
+		flags |= BNXT_FLAG_LRO;
+    ...
 }
 
-In the same patch, _setup() in gro_lib.py drops check=False. It now relies
-on the read-back in the shared helper:
+With the check removed, NETIF_F_GRO_HW stays in wanted_features, since
+bnxt_init_one() turns it on by default. bnxt_fix_features() then
+clears NETIF_F_LRO, and netdev_fix_features() drops it again:
 
-tools/testing/selftests/drivers/net/lib/py/feat.py:set_ethtool_feat() {
+net/core/dev.c:netdev_fix_features() {
     ...
-    current = ethtool(f"-k {dev}", json=True, host=host)[0]
-    for name, state in feats.items():
-        if current[name]["active"] != state:
-            raise KsftXfailEx(f"{name} was not set to {s2n[state]}")
+	if ((features & NETIF_F_GRO_HW) && (features & NETIF_F_LRO)) {
+		netdev_dbg(dev, "Dropping LRO feature since HW-GRO is requested.\n");
+		features &= ~NETIF_F_LRO;
+	}
+    ...
 }
 
-The kernel can still clear rx-gro-hw even when the feature is not fixed:
+So the device ends up in BNXT_FLAG_GRO mode instead of BNXT_FLAG_LRO,
+and ethtool shows large-receive-offload as "off [requested on]". To get
+LRO now, the user also has to set "rx-gro-hw off".
 
-- netdev_fix_features() drops NETIF_F_GRO_HW when RXCSUM is off or RX-FCS
-  is on.
-- A driver's ndo_fix_features can clear it.
-- The tests may run on a kernel without "net: stop making HW-GRO depend
-  on SW GRO".
+This mapping looks intentional. Before commit 1054aee82321 ("bnxt_en:
+Use NETIF_F_GRO_HW."), bnxt_set_features() chose hardware GRO based on
+NETIF_F_GRO and fell back to LRO when GRO was off. The GRO -> GRO_HW
+dependency kept that behaviour working.
 
-In those cases, would gro_stats.py go on to run with both SW and HW GRO
-disabled?
+bnx2x_fix_features() checks GRO_HW and LRO in the same order:
 
-If so, test_gro_stats_full would fail its ksft_ge(gro_coalesced, 1) and
-rx-hw-gro-* checks with misleading messages. Meanwhile test_gro_stats_single
-and test_gro_order could pass without HW GRO ever having run.
+	if (!bnx2x_mtu_allows_gro(dev->mtu))
+		features &= ~NETIF_F_GRO_HW;
+	if (features & NETIF_F_GRO_HW)
+		features &= ~NETIF_F_LRO;
 
-Would it make sense to switch _setup_hw_gro() to the shared
-set_ethtool_feat()? Another option is to re-read ethtool -k after the set
-and skip or xfail when rx-gro-hw is not active.
+Fewer users hit this by default, because bnx2x_init_dev() clears
+GRO_HW when LRO is on. But if a user has enabled rx-gro-hw and later
+runs "gro off lro on", they would also get HW-GRO instead of LRO.
+
+Later patches in the series only remove the bp->xdp_prog clause from
+bnxt_fix_features(). The GRO_HW-over-LRO ordering is still there at the
+end of the series.
+
+Should the commit message say that LRO requests with gro off are now
+refused while rx-gro-hw is on? Or should an explicit LRO request take
+precedence here?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261118232315.3593731-1-kuba%40kernel.org
