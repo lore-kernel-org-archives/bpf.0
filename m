@@ -1,65 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=79.135.106.31
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795352239;
-	b=q6OlJcpJKNoYnUggFoXKrFDOkV89zV2zZsja/bQkrpsvG+UgamPfm5SiU3EZ495WkIqe
-	 e9bmK5QNBNeT2gfeAUDSoI4ncaMnow5d+1wxmuyWmGLeKGw34ETtzFGkopSkE9e69tcea
-	 kpy3K6Ed1E3E8dcX4rEwiU7+czfCiukYileN0SjCjxDrnunBPhTHIDKsqH2Eg/e7aPCzq
-	 kY4oJKQ5h34Kn/E0PI4BRWtH+mDdVLgSzd8Msipvubdmli3w79lLksOmCpg8Nl3oECMA6
-	 bUwm8+7yp48aWncwTFurJ3GLzo991sMSbFlxHetxc3ew9+T+yJSTCp+ZqdV8Rs1VWHQ==
+	t=1795353660;
+	b=t9Oz0SXsEdk/mP7dsUgqid1cBVmfo3Y6Z4udxWCMDlys/5h7dI8yCS/L47R/udh9E7pG
+	 Geqwg8GxpjkzoJ/o1jxY/H2t6CGRW8Q/5aZJJ8BGosbtzrERHiT8IFDVJCoTXwxvOaD4w
+	 qOSLY7ODmJ9dj44bc+YQAi+Dvcxu/cU1rO2K1eQPb510Ck7B7GDu04CsLIGIIuGNz+5HD
+	 j/MOTrEIwD94VCe2Lv6gCIRHk5ers13R1J0/ueRr78cTSOp3g+IwatL/VTstP6qfH/x9X
+	 xtruPfN/s4aPDHjvEfiv5eBPlm0Ro4xTe0yly0Pj72OxS7DRG1VCjjpN7C2PlfyzVwA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795352239;
-	h=DMARC-Filter:DKIM-Signature:Date:From:To:Cc:Subject:X-Priority:
-	 X-Mailer:In-Reply-To:References:X-NTES-SC:Content-Transfer-Encoding:
-	 Content-Type:MIME-Version:Message-ID:X-Coremail-Locale:X-CM-TRANSID:
-	 X-CM-SenderInfo:X-Coremail-Antispam;
-	bh=4xHQW/T87LXpAZok/8rPkM87sOXxWyck/eyqw2PC1us=;
-	b=avD1VGoBT7Brrgr1XstiIkqoe3izYwv+z1F+PgaBV2jM1Qiy1Xl+Ppn9pDje5mHMFftV
-	 yTuLWGmnNY9mHRNlSZmV3cizRsxPAhlE1kTxZSnvfg1akll3BB8kp5ECbK/8320KxpDtR
-	 5nvHGo7OdBdFZLsrumm5plZwVMgh37Bf8y8x1rl/8ucGw35HZUkYlQQKZWB6y48rMPHfT
-	 RXAYVP08d0ZQqPuat9HnKLgg50zELjKDRI0am9JqLvjWLDHHhyHa5XaZrq7hvTTFNR7B4
-	 sc+Yn9cQWRpSs5qZuv/AdD24nKK4GNO1G3WI5zE9Io1djWe7PIHZgtvNoc84dlF29Fg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795353660;
+	h=DMARC-Filter:DKIM-Signature:Date:To:From:Cc:Subject:Message-ID:
+	 In-Reply-To:References:Feedback-ID:X-Pm-Message-ID:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=eoP3hjAwq4Cw4bE/mFqEl7hyxh+jDCjYeuZjTBgdVoA=;
+	b=tCfuyY3ofTgeed6d55EN1WlvsMD+WPjfdpRAvM9IT8C+RYKAjrZoRzYZ1zAIWFB+omJa
+	 8OfPB8UTQnBgeNzRG/DRyrrKSGLVq1FFr9t++Uh8SG+7Di+U4nQDMNSdIHYCCixv6fXXk
+	 cQjoOls0XCJl0ktAXcEUjTkDSOpRN4eOHCs8lBUQN4ZBruYS19dkc+VnWN9gTH7KbdJ8S
+	 9hLZ7BCY0TGtTJsSavFRHPmSuTQTdbvBvUYIUbH+GuwO+hKh4tqI9hoWPNMY1O6zKnFFO
+	 Cd8t9F5v+wl1r6WbP5UtRFjje+lu0zubrDQiIEefcflSWEeUXYzoKbAlntb2vn+vBHQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=163.com;
-	spf=pass smtp.mailfrom=163.com;
-	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=FlzmNU4T;
-	arc=none smtp.remote-ip=117.135.210.2
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+	dmarc=pass header.from=protonmail.com;
+	spf=pass smtp.mailfrom=protonmail.com;
+	dkim=pass header.d=protonmail.com header.i=@protonmail.com header.a=rsa-sha256 header.s=protonmail3 header.b=rpoke7kI;
+	arc=none smtp.remote-ip=79.135.106.31
+Received: from mail-10631.protonmail.ch (mail-10631.protonmail.ch [79.135.106.31])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3DCC606A32A
-	for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 12:57:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B3DCC606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E82E4606A32C;
+	Sun, 22 Nov 2026 13:20:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E82E4606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=FlzmNU4T
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=4xHQW/T87LXpAZok/8rPkM87sOXxWyck/eyqw2PC1us=; b=F
-	lzmNU4TWwvown9AhYeDXE8v98vak01GB7YgkE3e/5SlgA2x3W/h07u1PiFM4IP9N
-	ULll2QlTy8VGuakIGurAya5yhYMlodh3WvQ8ubKhSwtzz4L4JaxiqtHwOal22lJp
-	tIpG0ln907vuh9oWzfTPTi7Qos9wAI7DF3iRVn0fmQ=
-Date: Sun, 22 Nov 2026 20:55:55 +0800 (CST)
-From: "Yun Lu" <luyun_611@163.com>
-To: "Mykyta Yatsenko" <mykyta.yatsenko5@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
-	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
-	emil@etsalapatis.com, ihor.solodrai@linux.dev, yatsenko@meta.com,
-	bpf@vger.kernel.org
-Subject: Re:Re: [PATCH bpf-next v4 3/6] selftests/bpf: Test task work
- scheduling on a deleted value
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2023.4-cmXT build
- 20260511(2e539873) Copyright (c) 2002-2026 www.mailtech.cn 163com
-In-Reply-To: <1b146f18-a7b8-417d-90f3-3b0cdb3f9894@gmail.com>
-References: <20261119033051.196177-1-luyun_611@163.com>
- <20261119033051.196177-4-luyun_611@163.com>
- <1b146f18-a7b8-417d-90f3-3b0cdb3f9894@gmail.com>
-X-NTES-SC: AL_Qu2SB/+evUku4yaZY+kamU4Ugeo5WMa5s/Um1YBUc+sEmAzswgUKe2dGAmff28u/Mi2ckxO3djpt7cRZRpRDeTDFNtAYx8Ta42nYxz62bg==
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+	dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.a=rsa-sha256 header.s=protonmail3 header.b=rpoke7kI
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+	s=protonmail3; t=1795353654; x=1795612854;
+	bh=eoP3hjAwq4Cw4bE/mFqEl7hyxh+jDCjYeuZjTBgdVoA=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=rpoke7kIbufv5EUE+v6QP9RKHaLv9d1qKHGkUFy0dbwBonBukYa4BaGXbmrm8WNVk
+	 m3uZZVey1t5mFukibLbam0SOEw8fBIt9sylsw0uynTm0vxf+RwueirbLJyiaScBMAl
+	 HVux3Ir16vSZ+lRQkEZ6T7U23zaAoORLPgu+3vJEFhv6hHMyWEOLoQMbvKLOLikTzQ
+	 LNmBXVTBRkdMVelcTB6RDEZpUzWwV3HA6hxJ+jdK7l8ie/oa6t1e6mvHjCFdz0J90y
+	 Ut6Rj2s11nbcT9bZcjbP5JHte8w3FaHTm9YqSHy9So6y5/tbfcchZf+3aj+EubmQJ+
+	 XmD2bDeMu9Eew==
+Date: Sun, 22 Nov 2026 13:20:46 +0000
+To: Tjerk Kusters <tkusters@aweta.nl>, Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Sven Auhagen <sven.auhagen@voleatech.de>, Richard Cochran <richardcochran@gmail.com>, Kurt Kanzenbach <kurt@linutronix.de>, Sriram Yagnaraman <sriram.yagnaraman@ericsson.com>
+From: Tore Sinding Bekkedal <toresbe@protonmail.com>
+Cc: intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Paul Moses <p@1g4.org>, stable@vger.kernel.org, Piotr Kwapulinski <piotr.kwapulinski@intel.com>, Aleksandr Loktionov <aleksandr.loktionov@intel.com>, Alexander Nowlin <alexander.nowlin@intel.com>
+Subject: Re: [PATCH net v7 2/3] igb: only strip Rx timestamp header on the first buffer of a frame
+Message-ID: <d1cec124-8685-4be9-ae70-1142e3be4f88@protonmail.com>
+In-Reply-To: <20261120-igb-rx-ts-fix-v7-2-63b03045978e@aweta.nl>
+References: <20261120-igb-rx-ts-fix-v7-0-63b03045978e@aweta.nl> <20261120-igb-rx-ts-fix-v7-2-63b03045978e@aweta.nl>
+Feedback-ID: 21125876:user:proton
+X-Pm-Message-ID: 687ed69b38c3864e14592e27266a6843882b0919
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -69,68 +64,25 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-ID: <27ac2d60.2127.1a20353d5e8.Coremail.luyun_611@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:ZCgvCgD3Hx9b5gJrEiJzAA--.76W
-X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbC6xsr+WsC5lusSgAA3Q
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-CgoKCgoKCgoKCgoKCgoKCgpBdCAyMDI2LTExLTIwIDE5OjEyOjEyLCAiTXlreXRhIFlhdHNlbmtv
-IiA8bXlreXRhLnlhdHNlbmtvNUBnbWFpbC5jb20+IHdyb3RlOgo+Cj4KPk9uIDExLzE5LzI2IDM6
-MzAgQU0sIFl1biBMdSB3cm90ZToKPj4gRnJvbTogWXVuIEx1IDxsdXl1bkBreWxpbm9zLmNuPgo+
-PiAKPj4gQWRkIGEgZGVsZXRlZC12YWx1ZSBjYXNlIHRvIHRhc2tfd29ya19zdHJlc3MuIEEgc3lz
-Y2FsbCBwcm9ncmFtIGxvb2tzIHVwCj4+IGEgSEFTSCB2YWx1ZSwgZGVsZXRlcyBpdCBhbmQgc2No
-ZWR1bGVzIHRhc2sgd29yayB0aHJvdWdoIHRoZSByZXRhaW5lZAo+PiBwb2ludGVyLiBBc3NlcnQg
-dGhhdCBzY2hlZHVsaW5nIHJldHVybnMgLUVOT0VOVDsgcG9zaXRpdmUgc3RlcCBjb2Rlcwo+PiBk
-aXN0aW5ndWlzaCBzZXR1cCBmYWlsdXJlcyBmcm9tIHRoZSB1bmZpeGVkIGtlcm5lbCdzIHJldHVy
-biB2YWx1ZSBvZiAwLgo+PiAKPj4gUmV1c2UgcHJvY2Vzc193b3JrKCksIHdoaWNoIG9ubHkgY291
-bnRzIGNhbGxiYWNrcyBhbmQgZG9lcyBub3QgZGVyZWZlcmVuY2UKPj4gdGhlIG9sZCBrZXkgb3Ig
-dmFsdWUuCj4+IAo+PiBTaWduZWQtb2ZmLWJ5OiBZdW4gTHUgPGx1eXVuQGt5bGlub3MuY24+Cj4+
-IC0tLQo+PiAgLi4uL2JwZi9wcm9nX3Rlc3RzL3Rhc2tfd29ya19zdHJlc3MuYyAgICAgICAgICB8
-IDE4ICsrKysrKysrKysrKysrKysrKwo+PiAgLi4uL3NlbGZ0ZXN0cy9icGYvcHJvZ3MvdGFza193
-b3JrX3N0cmVzcy5jICAgICB8IDE3ICsrKysrKysrKysrKysrKysrCj4+ICAyIGZpbGVzIGNoYW5n
-ZWQsIDM1IGluc2VydGlvbnMoKykKPj4gCj4+IGRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3Nl
-bGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy90YXNrX3dvcmtfc3RyZXNzLmMgYi90b29scy90ZXN0aW5n
-L3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy90YXNrX3dvcmtfc3RyZXNzLmMKPj4gaW5kZXggNDUw
-ZDE3ZDkxYTU2Li45MGQ2ZDY5NjUzN2QgMTAwNjQ0Cj4+IC0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2Vs
-ZnRlc3RzL2JwZi9wcm9nX3Rlc3RzL3Rhc2tfd29ya19zdHJlc3MuYwo+PiArKysgYi90b29scy90
-ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy90YXNrX3dvcmtfc3RyZXNzLmMKPj4gQEAg
-LTEyMSw4ICsxMjEsMjYgQEAgY2xlYW51cDoKPj4gIAl0YXNrX3dvcmtfc3RyZXNzX19kZXN0cm95
-KHNrZWwpOwo+PiAgfQo+PiAgCj4+ICtzdGF0aWMgdm9pZCB0YXNrX3dvcmtfZGVsZXRlZCh2b2lk
-KQo+PiArewo+PiArCUxJQkJQRl9PUFRTKGJwZl90ZXN0X3J1bl9vcHRzLCBvcHRzKTsKPj4gKwlz
-dHJ1Y3QgdGFza193b3JrX3N0cmVzcyAqc2tlbDsKPj4gKwlpbnQgZXJyOwo+PiArCj4+ICsJc2tl
-bCA9IHRhc2tfd29ya19zdHJlc3NfX29wZW5fYW5kX2xvYWQoKTsKPj4gKwlpZiAoIUFTU0VSVF9P
-S19QVFIoc2tlbCwgIm9wZW5fYW5kX2xvYWQiKSkKPj4gKwkJcmV0dXJuOwo+PiArCWVyciA9IGJw
-Zl9wcm9nX3Rlc3RfcnVuX29wdHMoYnBmX3Byb2dyYW1fX2ZkKHNrZWwtPnByb2dzLnNjaGVkdWxl
-X2RlbGV0ZWRfdGFza193b3JrKSwKPj4gKwkJCQkgICAgICZvcHRzKTsKPj4gKwlpZiAoQVNTRVJU
-X09LKGVyciwgInNjaGVkdWxlX2RlbGV0ZWRfdGFza193b3JrIikpCj4+ICsJCUFTU0VSVF9FUSgo
-aW50KW9wdHMucmV0dmFsLCAtRU5PRU5ULCAiZGVsZXRlZCBzY2hlZHVsZSByZWplY3RlZCIpOwo+
-PiArCXRhc2tfd29ya19zdHJlc3NfX2Rlc3Ryb3koc2tlbCk7Cj4+ICt9Cj4KPlRoaXMgaXMgbm90
-IHJlYWxseSBhIHN0cmVzcyB0ZXN0LCBub3Qgc3VyZSBpZiBpdCdzIGEgZ29vZCBpZGVhIHRvIGhh
-dmUgCj5pdCBpbiB0aGlzIGZpbGUuCj5NYXliZSBtb3ZlIHRvIHRoZSB0ZXN0X3Rhc2tfd29yay5j
-IGFuZCBkaXRjaCB0aGUgdXNlcnNwYWNlIHBhcnQsIHVzaW5nIAo+X19yZXR2YWwgYW5kIFJVTl9U
-RVNUUwpIaSBNeWt5dGEsCgpUaGFua3MgZm9yIHRoZSBzdWdnZXN0aW9uLiBJbiBuZXh0IHZlcnNp
-b24odjUpLCBJIHdpbGwgbW92ZSB0aGUKZGVsZXRlZC12YWx1ZSB0ZXN0IHRvIHRhc2tfd29ya19m
-YWlsIGFuZCB1c2UgX19yZXR2YWwoLUVOT0VOVCkKd2l0aCB0aGUgZXhpc3RpbmcgUlVOX1RFU1RT
-KHRhc2tfd29ya19mYWlsKSBydW5uZXIuIEFuZCByZW1vdmUKdGhlIGRlZGljYXRlZCB1c2Vyc3Bh
-Y2Ugd3JhcHBlciBmcm9tIHRhc2tfd29ya19zdHJlc3MuCgotLS0KVGhhbmtzLAoKWXVuIEx1Cgo+
-Cj4+ICsKPj4gIHZvaWQgdGVzdF90YXNrX3dvcmtfc3RyZXNzKHZvaWQpCj4+ICB7Cj4+ICsJaWYg
-KHRlc3RfX3N0YXJ0X3N1YnRlc3QoImRlbGV0ZWQiKSkKPj4gKwkJdGFza193b3JrX2RlbGV0ZWQo
-KTsKPj4gIAlpZiAodGVzdF9fc3RhcnRfc3VidGVzdCgibm9fZGVsZXRlIikpCj4+ICAJCXRhc2tf
-d29ya19ydW4oZmFsc2UpOwo+PiAgCWlmICh0ZXN0X19zdGFydF9zdWJ0ZXN0KCJ3aXRoX2RlbGV0
-ZSIpKQo+PiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dzL3Rh
-c2tfd29ya19zdHJlc3MuYyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9ncy90YXNr
-X3dvcmtfc3RyZXNzLmMKPj4gaW5kZXggMWQ0Mzc4ZjM1MWVmLi41ZjQ3MTMzYWQzMDggMTAwNjQ0
-Cj4+IC0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9ncy90YXNrX3dvcmtfc3Ry
-ZXNzLmMKPj4gKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dzL3Rhc2tfd29y
-a19zdHJlc3MuYwo+PiBAQCAtNzEsMyArNzEsMjAgQEAgaW50IGRlbGV0ZV90YXNrX3dvcmsodm9p
-ZCAqY3R4KQo+PiAgCQlfX3N5bmNfZmV0Y2hfYW5kX2FkZCgmZGVsZXRlX3N1Y2Nlc3MsIDEpOwo+
-PiAgCXJldHVybiAwOwo+PiAgfQo+PiArCj4+ICtTRUMoInN5c2NhbGwiKQo+PiAraW50IHNjaGVk
-dWxlX2RlbGV0ZWRfdGFza193b3JrKHZvaWQgKmN0eCkKPj4gK3sKPj4gKwlzdHJ1Y3QgZWxlbSBl
-bXB0eSA9IHt9LCAqdmFsdWU7Cj4+ICsJaW50IGtleSA9IDA7Cj4+ICsKPj4gKwlpZiAoYnBmX21h
-cF91cGRhdGVfZWxlbSgmaG1hcCwgJmtleSwgJmVtcHR5LCBCUEZfTk9FWElTVCkpCj4+ICsJCXJl
-dHVybiAxOwo+PiArCXZhbHVlID0gYnBmX21hcF9sb29rdXBfZWxlbSgmaG1hcCwgJmtleSk7Cj4+
-ICsJaWYgKCF2YWx1ZSkKPj4gKwkJcmV0dXJuIDI7Cj4+ICsJaWYgKGJwZl9tYXBfZGVsZXRlX2Vs
-ZW0oJmhtYXAsICZrZXkpKQo+PiArCQlyZXR1cm4gMzsKPj4gKwlyZXR1cm4gYnBmX3Rhc2tfd29y
-a19zY2hlZHVsZV9zaWduYWwoYnBmX2dldF9jdXJyZW50X3Rhc2tfYnRmKCksCj4+ICsJCQkJCSAg
-ICAgJnZhbHVlLT50dywgJmhtYXAsIHByb2Nlc3Nfd29yayk7Cj4+ICt9Cj4K
+On 11/20/26 12:10 PM, Tjerk Kusters wrote:
+> This is easily triggered by a GigE Vision camera streaming dark frames
+> (mostly 0x00 pixel data) over jumbo UDP with PTP active on the receiver:
+Mostly commenting to make this thread searchable -
+We ran into it on a Ceph cluster: Proxmox VE hosts (kernel
+6.14.8-2-pve) with Intel I350 ports in an LACP bond at MTU 9000.
+
+Enabling chrony's "hwtimestamp *" put the ports in HWTSTAMP_FILTER_ALL,=20
+after which jumbo frames arrived 32 bytes short (tcpdump: "total length=20
+9000 > length 8968") and were dropped. Small packets were unaffected, so=20
+  Ceph heartbeats kept passing while OSD traffic stalled, reporting=20
+laggy PGs and slow ops.
+
+Note that removing hwtimestamp from chrony.conf and restarting chrony=20
+did not clear it; the ports stayed in HWTSTAMP_FILTER_ALL (using ethtool=20
+-T") until the filter was explicitly set back to NONE.
+
+Thanks for the fix.
+
