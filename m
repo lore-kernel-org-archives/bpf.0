@@ -1,45 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=194.13.80.246
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795379307;
-	b=i4gQqVY4ckjXGxrBwyVZJJuA0ddctmGXmzxoFRGU1A3outJBzHkDXEcXRWjcHCCOOfDg
-	 yOrt12pncwfPsZ41M5c0z5raAT1eseIOE3aOrst0CaaK5vOhEyy+REkH0kW0k4cMCqIWu
-	 BDd74UKZSRrxFAS/KzKSB2gTqaYjKcirEvf2b/pKz5d2VDojQnaKiJM8iJRu5C6+gtuOv
-	 QToKMsUy+ZJGsId2AJ+fDyQ4IRbg68uxmJIyPU9XXKcCWXhklAAz3iSIP1ZyYD1MyW5iR
-	 0ZRLsZxSqvkqIx57leqV+vwyvBsykdMJWnwsvgg2cbVzuHULsmt03mIKzRCGtkLmKEg==
+	t=1795379852;
+	b=VwE3PzfJaQuB10hoQYLNdWlmSUQZTjvGyuVqC7A6zAIK4RR/Gq7EB39JU1Rz1GO5HabM
+	 r/ZvF2T0suR2AWRmol+lhAZOYPVDwTUqgrzd2ZxuZ+Yo4S7z30wh1i6vKFauLljcWMxeO
+	 NEkZzDIEy7cTqB0au3j8S5AGPcm8AEfZQEr4F6bmCUQjSB+2t2v/+NlHPEZYH2I5QSqry
+	 /WT/cnA53Cq0iTaz4pX0ZM9o0/o3Wk0pIhEzl7sxE32tdK5cpGvL2mGSVoUZh4NXc0qGS
+	 TD/DNnTWPpuaBa9tHjAfC67Iqhit/tqxaTGb2SAXXyeSJKagr56ixbQF0bEvZq/ZqWw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795379307;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=MKGFNqJhoZuyA4EsjC0ZPdlEy226OjjF7ifp8YCJ0pw=;
-	b=144f4Vtb8ZGY3laXaXMwwi4M6bZuzg3oqI8pznNegTrOG43T1uml35lZIWjFIaqMO/SR
-	 nc6cvKExizoxrgCJBLuLdFQrB1BeZPiyo5QjY+RruY3sdaSaJxxADYldwd5vOpQz+sriR
-	 adknRfMjN4ATH111Qn78fY5lxMFIParzop7loyHsDr+Yf4sDRCjnepIEs8oNEoKWf5mJ+
-	 iD4UpM9CMVnMKdlboK+Zx1pWHzIv7mY/Ksgcl+AJoSMVHbcmHy6Q7wzSWNJPXc1IfmaHw
-	 f0jMb47s8bYUqy95/6AcSijtbo5nk0LomdvtWdvUxhoJ270JPtQFqk6Y/TcJHZk7PlQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795379852;
+	h=DMARC-Filter:Received:DKIM-Signature:MIME-Version:Date:From:To:Cc:
+	 Subject:In-Reply-To:References:Message-ID:X-Sender:Content-Type:
+	 Content-Transfer-Encoding:X-Last-TLS-Session-Version;
+	bh=QKbQ/ruVPJfxFXMkY7n2nO72I37QhMdT2FVadZTIHTI=;
+	b=KDV5QOntqk1N6Li4GW0PnHXMcgU7kC1XvoAY3C63zvZfxG066xypL0saf5MOqwH7Wo/l
+	 8v/8Ua++oONIV9M43BNa5JMikALZSm8MMkmDDRgiQTjvSWZPjqiDmav7KkVi7OV+zywD+
+	 Czcym/F/y4uQdNUoo3uAJMo2H0MeFCRRBWaNf5GqsoOfrCnu1LaUL0tgatt4FVG0Be8+f
+	 BHs5Y+yAT+HfCIu39rXO+UEAeS3Jb1zNW1Y1Wr2OnOWmLfxUQbYPbgBLdukxVdD/naWYc
+	 tqLUCjOwMyzsWmDKppqOWX/hl8iDzwu4LP5/fdiQBf6wOSJH+rp7rjTWHYszUKvBO9g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ul+eGqK1;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=tipi-net.de;
+	spf=pass smtp.mailfrom=tipi-net.de;
+	dkim=pass header.d=tipi-net.de header.i=@tipi-net.de header.a=rsa-sha256 header.s=dkim header.b=qFuytspF;
+	arc=none smtp.remote-ip=194.13.80.246
+Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B44E606A320;
-	Sun, 22 Nov 2026 20:28:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C74E606A31A;
+	Sun, 22 Nov 2026 20:37:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8C74E606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ul+eGqK1
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10D2B1F000C6;
-	Sun, 22 Nov 2026 20:28:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795379306;
-	bh=MKGFNqJhoZuyA4EsjC0ZPdlEy226OjjF7ifp8YCJ0pw=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Ul+eGqK1TzFk2GoVQ4qrcBtOfQtz9OLX+r4wppvttMllEuX+UwzW1YrAza7piQ2z0
-	 WlQEMFrQCqDRV/6+Bcs/s1B/8RLtRAwEleegTr1/l6KB8BQUa19frILcGbvG9dGYpx
-	 4zTJxLgzLxbKXvc462NcWNBSfVVSfo6qe05JfkRdnmVJeP+kOzBbvvyX2PoD39sc8d
-	 5rNOYL+fMqgCL2eaxnfu8+WJyrOsBaI6KLArf/WCXb4ZiBLFQGQ2bukxmVh7RqbxMt
-	 d/k/9lmqJ+g4mDzA1M3aLWKaOzgnTiXB1wXQn63rKSA00Rfuqj1LWJpFWOw6itOPFv
-	 WNf9nQHOsewgA==
-Content-Type: multipart/mixed; boundary="===============0979252114820036136=="
+	dkim=pass (2048-bit key, unprotected) header.d=tipi-net.de header.i=@tipi-net.de header.a=rsa-sha256 header.s=dkim header.b=qFuytspF
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 80F1BA035D;
+	Sun, 22 Nov 2026 21:37:24 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
+	t=1795379848; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=QKbQ/ruVPJfxFXMkY7n2nO72I37QhMdT2FVadZTIHTI=;
+	b=qFuytspFxPUpX6GrAkKPVuaEtZasvNyYeXwbBa2EIqSZUcam1s1+xbV2rb32CWrwoBdtIS
+	O8H9eKezIsDv8/IfzH0orjDIwMbutBycVnW2ZXRbQdoBg1TU6EEEjz48a/vE1OVqJ8RJSx
+	T++URvx/NQYgDHrf7LPJVcyAS11UjHHm1g4IpnlPMAprMfuFB/0yuFWuEdvxAvVctmag0K
+	yDL6/LncNKgq5vUCKxI/HArfzlv11d2S/bNBdZDQrEiSZLVql07ElV2vhX/6j90GxU8BKt
+	xnymK0uc5/MoVhQZuZBd347dWYGayg0AdUpVBDC/yM8kmBB95A2sT1QsS3EAiA==
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,75 +53,49 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <516d488e2aa670a706837915ba7a73f107db09ac4eb736a4a86dc3624dd1c69c@mail.kernel.org>
-In-Reply-To: <20261122193539.3334213-19-jarkko@kernel.org>
-References: <20261122193539.3334213-19-jarkko@kernel.org>
-Subject: Re: [RFC PATCH v7 18/26] fs: Support FSCONFIG_SET_USERLAND in fsconfig()
-From: bot+bpf-ci@kernel.org
-To: jarkko@kernel.org,linux-fsdevel@vger.kernel.org
-Cc: jarkko@kernel.org,bpf@vger.kernel.org,containers@lists.linux.dev,linux-api@vger.kernel.org,linux-arch@vger.kernel.org,linux-doc@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-mm@kvack.org,linux-security-module@vger.kernel.org,aleksa@amutable.com,alex@amutable.com,viro@zeniv.linux.org.uk,luto@amacapital.net,arnd@arndb.de,brauner@kernel.org,dhowells@redhat.com,ebiggers@kernel.org,giuseppe@scrivano.org,hughd@google.com,jack@suse.cz,jlayton@kernel.org,corbet@lwn.net,josef@toxicpanda.com,kees@kernel.org,kpsingh@kernel.org,lennart@poettering.net,neal@gompa.dev,oleg@redhat.com,paul@paul-moore.com,ptikhomirov@virtuozzo.com,sergeh@kernel.org,skhan@linuxfoundation.org,zygmunt.krynicki@canonical.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sun, 22 Nov 2026 20:28:22 +0000 (UTC)
-
---===============0979252114820036136==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Date: Sun, 22 Nov 2026 21:37:24 +0100
+From: Nicolai Buchwitz <nb@tipi-net.de>
+To: Sam Edwards <cfsworks@gmail.com>
+Cc: Anandu Padinhare <Anandu.Padinhare@electrifex.com>,
+ maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+ mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard
+ Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, "Russell King (Oracle)"
+ <rmk+kernel@armlinux.org.uk>, David Wu <david.wu@rock-chips.com>,
+ stable@vger.kernel.org, netdev@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
+Subject: Re: [PATCH net] net: stmmac: retry a failed RX refill from a timer
+In-Reply-To: <CAH5Ym4h8-1mc+DX0Si7XROeGn9M72bQC+ooM05Y7ZmgTo+ON4w@mail.gmail.com>
+References: <MA0PR01MB921746F36D90C7080287ACC9FD782@MA0PR01MB9217.INDPRD01.PROD.OUTLOOK.COM>
+ <9d8cdde77beedce76aaaa1c5a7a788dc@tipi-net.de>
+ <CAH5Ym4h8-1mc+DX0Si7XROeGn9M72bQC+ooM05Y7ZmgTo+ON4w@mail.gmail.com>
+Message-ID: <9fbb80bfc0e58a531c1eb59127bd8059@tipi-net.de>
+X-Sender: nb@tipi-net.de
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-> fs: Support FSCONFIG_SET_USERLAND in fsconfig()
+On 22.11.2026 21:20, Sam Edwards wrote:
+> [...]
 
-TL;DR: Nit only: in fsconfig_set_userland(), the fs_type restore block looks
-unreachable, since the only swapping filesystem (cpuset) fails the flag check
-first; it could possibly be dropped.
+>> After a successful retry, doesn't this leave the last received frame 
+>> in
+>> the ring until the next RX irq? Could the poll refill first?
+> 
+> Do you mean "first as well" or "first instead"? Because "instead" can
 
-> diff --git a/fs/fsopen.c b/fs/fsopen.c
-> --- a/fs/fsopen.c
-> +++ b/fs/fsopen.c
+> [...]
 
-[ ... ]
+> But, "first as well" sounds good to me: before entering the main loop,
+> refill 1 buffer (if possible) just to ensure either the IRQ fires
+> again immediately (if the FIFO is holding onto another packet for us),
+> or the inaccessible ring slot is clean (if the FIFO is empty).
 
-> +static int fsconfig_set_userland(struct fs_context *fc, struct fs_parameter *param)
-> +{
+This (first as well).
 
-[ ... ]
-
-> +	if (!(fc->fs_type->fs_flags &
-> +	      (FS_USERLAND_MOUNT | FS_USERNS_DELEGATABLE)))
-> +		return -EOPNOTSUPP;
-
-[ ... ]
-
-> +	if (fc->log.prefix && strcmp(fc->fs_type->name, fc->log.prefix)) {
-> +		struct file_system_type *orig;
-> +
-> +		orig = get_fs_type_noload(fc->log.prefix);
-> +		if (!orig) {
-> +			fc->phase = FS_CONTEXT_FAILED;
-> +			return -ENODEV;
-> +		}
-> +		put_filesystem(fc->fs_type);
-> +		fc->fs_type = orig;
-> +	}
-
-This isn't a bug, but can this restore block be reached?
-
-fc->log.prefix is only set in alloc_fs_context(), to the original
-fs_type->name, and no parameters have been parsed yet when
-FSCONFIG_SET_USERLAND is accepted, so fc->fs_type can only differ from the
-prefix if ->init_fs_context() swapped it.
-
-In this tree cpuset_init_fs_context() is the only init_fs_context that does
-that (to cgroup_fs_type), and cgroup_fs_type has neither FS_USERLAND_MOUNT
-nor FS_USERNS_DELEGATABLE, so the flag check above returns -EOPNOTSUPP
-first.
-
-Is there a filesystem that can reach this restore with a swapped
-fc->fs_type?  If not, could the block be dropped to keep
-fsconfig_set_userland() shorter?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/45063222848
---===============0979252114820036136==--
+BR
+Nicolai
