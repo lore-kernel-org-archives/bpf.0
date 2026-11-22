@@ -1,83 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.174
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.176
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795350881;
-	b=MgVvOAm7/yiPnVC8NmCi0g7N4bUOpf+u6x2dlZFCS2tVLjJZOca5A4uonp1FNJb6HDeN
-	 3ybUwJ+ZEerkdeV8L9x9K1jnTvNTX2C3U3jkn8DWPEAD0kFtXEHb1GCneJiBcPfkNdy1Z
-	 nYSFbSN5fwT6eMDOi9kJ7Iico1sSnzxJ9bRV9IzRm0pq58d/1hlIRL7TXvUmILs56raAk
-	 Q4QSux2EW1vTzN708cupXZXLBE5cprA1mh5d37YHA/OQ5FhQ5zKF3c9RXiPswWCBPwO7K
-	 L9vPdHGwjQCSIX5dffewDO3ecyIo8J9FPGnurcrFK9aqDQ1PNvxQZMGfkQrGASJTn5A==
+	t=1795350885;
+	b=c5RH6/2jGXh2tmAeSgpxdEyFTW8Igm2Sb9VTOVpFK41kHcX/ZuUKUqG34wl4TUgBM1PK
+	 /NqNPC58daqx1B+iBS5JPVk9vcVEusO6Xh84b1QhmhOfGPCTH7CeZbWLRpjUiTHBzFWzc
+	 wN6GSQq79afsDYXgcGUF42L99bRZ41pKPzv7UtDaT+m7t2A/g8y3gdOuu+l1aGBFYtbLR
+	 cgRr9jIawjbnc+17su3ENsghHPtdvNXzgL8Yj4wwbrg2YoE9d6iteHfGS37AEfr5Pmoq5
+	 nzp/lzg1roy5hjZ9usPz5resCqNrcDrunRJ252lTXyaa8WC9Di2CfOnVnWx5aw3s60Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795350881;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795350885;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=HwshFOaGVaZp5SLNtmKSxUjjmNjEApu6X0KHjtHf+i8=;
-	b=aw+aqSIC10+NxabuLE0d87EtRPiKe3whYT6QuH2VwFNpTxSNbUinVir9rsV3ft1tqqg5
-	 /dDcIIn8JQWCd+XApUdOUseRjCIrzadgAfRReCLL1sAKD/N9aBcGkRIgyFgtht/buA3BZ
-	 RpkKSsQDWU7RWPdr1l5SlYRktPkwRq3pwXWfjW6w0YYkrtEUa80kcGBGUrn4dgsny084k
-	 1qH+xH33OY1m6b2nZ05y3HcOZ4mLhtDRu5IvgPrTDk9HWu+3VmM54X4kcWUzoh9m2+ng+
-	 a2/e0lJo98BEeGXDFQvZhkrJdOqOmiILznHg0ZwIWO/t7o7+pCDtiV+JQz1tFyuHhhw==
+	 Content-Transfer-Encoding;
+	bh=jZ+9Hq7+WF35Ttn4sUCu8cTqno+NpMWFIKoNlp9zeYA=;
+	b=iIjaDmvus02XkawSNwOcGKOPSv6uGGfK/1pUWLwy5jq716nTBE2NKKmikwH539MZ1d6b
+	 b3AXCVsNsMMDQd+wlGNPcl3BCgfO4Uu/i+5lowms/GWZF1X2xyADjNj/ubLjlC8GTycAL
+	 DckBET9P7mqzQ5wjN58LwdOx255B1nKdCSzLaMAZrm9xTpUBOWBSfxjbvKEzf+KyrYWUh
+	 iXGJcGfjlwlTq7fbVxhSraYvE2tc7B2tIhPI2bOoM8wVX0jwXejb3t6WEb87wzSWGQUBg
+	 PIN5MXrBDnXB0FqwOxn8q0NmgyTJh3WrHeit4KVWOX1XIoo3pZSeLdN4ZTb/nv9uN7w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KbVSzsdN;
-	arc=none smtp.remote-ip=74.125.82.174
-Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xKwikFDd;
+	arc=none smtp.remote-ip=74.125.82.176
+Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A6A5606A320
-	for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 12:34:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6A6A5606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EF36606A681
+	for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 12:34:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3EF36606A681
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KbVSzsdN
-Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-38692f62b22so167365eec.0
-        for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 04:34:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xKwikFDd
+Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-38644aedba1so3216413eec.0
+        for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 04:34:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795350880; x=1795955680; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=HwshFOaGVaZp5SLNtmKSxUjjmNjEApu6X0KHjtHf+i8=;
-        b=KbVSzsdNN2VC2lawaTwUtAamviG8DtIqGiiKGKzCK7ZTJovKt6nPxVVMVGA1W7d53C
-         kdD8g4Ft+hS0qWW5T26TsoKiOSpFgqEM0SfUwaE6R1F8TqA0JpNgQT5qQkCYnE+wO0E2
-         dQmd+xdJO8W8ixnAl5Ju7wNHMdUQZtoq+Pi2CqJ/Mq03tu8wemBaZ3S3PpiDsVYx5xwE
-         nGagZ1wAlbqdEzTVB+5SV6DHYyxBAg6P56zgWfevr2vBdrjDNkZpR9R1V1NnE76Bkyoe
-         h8FcHvGBxbZT6J6LA6obUqXZmOhW/orWsPFGo0Ji0wL/371wHdV+jeFQu6UUkCGZTLUy
-         wJyA==
+        d=gmail.com; s=20260707; t=1795350884; x=1795955684; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=jZ+9Hq7+WF35Ttn4sUCu8cTqno+NpMWFIKoNlp9zeYA=;
+        b=xKwikFDdX4OBdEgRODyFtJGV+zd3rDqJUoJO0jhEeGn51IQrIrJVSwAWne+IkxvJb8
+         LGGKUptn3PPNw/Yvs7ngoxneVPDOBhUSvG5ZL6sg+2rzl7u7OlyUYLWeWfyNsirg1WLO
+         oWGtMr4oFSa73ih2y5qcpUUmV85XXq/Bgv/MAOE8tlh85gT3OVALKKFRFbW2/Ifa7vHT
+         DEms7ePeMIHS+XOZ30gQs7MzPX/uVoFMTnxdtsxcmA4SEzP6zaJd9rZKma+QzKewffX5
+         Jsruy2izLQeViQaFMdHHv3qecUgXnsMGhKYKEiE7hrtHdTcgUyq0f8B2GAxUwoK3+8hW
+         OfoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795350880; x=1795955680;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=HwshFOaGVaZp5SLNtmKSxUjjmNjEApu6X0KHjtHf+i8=;
-        b=FECcc0hS2PjHaw8oW38YmvjpSSn8wpL/6OWexu2Ob+ytUT1cXShMMtvFL4mcRPCCt1
-         LL9HGinAXYJtnGAT9hG7PZGjcWhp1MrD2C2vbv8ka8rJ98N7wkaAu5W+abm1NQf32S6F
-         svBJ4fQbQCLmYSuYXGaGAcL5228nM49rokWEpwDn8q+VLWogUk9m3Ca7D0ojGEDR13Ps
-         VHPk88PP4kjjM939w+H1d6+i7XFtcscEbIW5oBXiL7cl6ld54UyJOQumXuMJ0TpuG2tR
-         dnQqpVwPIpJYUDt5fMwyUyh6LvltDB8Cn72G4y+yqQyrqZx+7pfd6XvqH8y0kz8H0/Bp
-         6fuQ==
-X-Gm-Message-State: APuU4Z/ovJAoD2nyegBmMb3eKYPjDhtsUJFDWoFjLKsAAgbeJSVGUnui
-	qIuQ4ilqCEbN0xDH94YL4cEKhuEbiW3xuWzTMORn5x1xh6emNy8uxaeOaarsyGgXMHk=
-X-Gm-Gg: AZFdTZdqQcSd090Byih4c0z1e7Lug630b179n+5KiLlnEQnfkTqr5kjE3IInQM0WQjU
-	EMiZc1LQB03HdDWdJiPDGkazpB9JF7ZNy/IDRB0o0LJ+pHMnH2nBBz/UMWO5rxN1+idyJhlbm+R
-	c6+LFQncw8b2gkvzwal8nFlXIvfoO3mo+Yva5Z1chNB6pmG4ZEfbK1DIfWnKG7tGkufMT6abnna
-	sjeqYp/cOHtc32AQ99y4QTdIRgYCmF0G7s+Nols7rpVOPGeAo+gTDeahLDWZxeFWLC+t3do8IhM
-	wTOO0mAEa77G9UWehwYwS+GyO6rMMB14cUTx3Qp0XZjM+xIAVkBVfFQ3DsORY362sWAecQ6iZqo
-	Dlkvg1ZCkeY/jmrp+XV1hOZ+UhBo/d/Iv9qoRwOoe7MG3n2bbLMI5R5WwiMC8QCMqEPoSRFDjRe
-	fw6UJntfYLQpWKx6qjIT3qzBEu2gz0RjRf+GjxaPvpOqhhzl4mNCVsRDZyzKjXTvl5IVH9GylwY
-	mTkKCRslhVumjHgFEdPrfWj/kRA9iQX+HzthF/mk3nI9pNm3Qz92VKGpPdKSD42L6R158fdCLQo
-	9Qda772KU+xlltmN3Re15uoj+ykNu+pREjDtCL3SSJno3JvhxJYvOni6+fGZc/NT1A==
-X-Received: by 2002:a05:7300:2209:b0:386:8d2:929b with SMTP id 5a478bee46e88-38608d2945emr11724068eec.23.1795350880245;
-        Sun, 22 Nov 2026 04:34:40 -0800 (PST)
+        d=1e100.net; s=20260707; t=1795350884; x=1795955684;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=jZ+9Hq7+WF35Ttn4sUCu8cTqno+NpMWFIKoNlp9zeYA=;
+        b=WkR/mg1zZIqibGkcAeG+XTyJI0jmwxNggjVz8vlv7rT5/dEP9jBoiEEM+0v5SvvKHz
+         9lzyXVC1GnMov2y85bdNxAQyennXGq7/11W+PtXa2jQqO1ZrfJ9jSsTIATUbfPVTpAcU
+         Ys8jwH/6NMF3MPTrF6d7VSzWNr/1FSqW6g0OTNeT5iqaSwvTyQBi9sO8qUCoRS60lCeM
+         OiffQCJe3OcuLbGg9uQDp/KHBWbYoIAaqNRcYvXGrPVwU5xZSFNQKeQIO3p5Ka74dge6
+         v3BdIAXX+5qYsq+KvvMqLkXwwd7mZaFLCWi1OIaGuwbUj4c6C4CDWJC3lI5b15Q4xZI4
+         7UGQ==
+X-Gm-Message-State: APuU4Z8LAJqVuVHziXs31Yr6orWFuRalh8BtkKiF4E7HxgYeEgI+pQq3
+	JGsFcNhI00XgUOc7kxRvkZ1VZcBFT2TBTOkU2ParzSk5mtq9VJGv6t4k6C6yKDHN7p4=
+X-Gm-Gg: AZFdTZc84ZlnYet6iTgUevHgZo7g5YXBNycraylNW8dYqzoGJfaromxNQ7+et5Uyzve
+	lKJXOVzWnFoFkpUgkXF9N43elcf9K7CG2dEPYNlvO0QTpMZ2RXkAzodttjxxeuxGOAzMZjnz+n2
+	2aNDruytcEljoQE770abVKyi+cpp+Nkv+ED/kuF46wXaD/O9gKhZufthdU484dUZ4j9gWiSzLhb
+	wajONabPD+TU8bC5lvhXggW2U3Rk7TsEVzNMfVSvNbdr54CgjMzn8B0jIiMIG2UEf+77t1Re9Vf
+	ml/VcJ39wj8d2llQRPkwdMo/iyrBus8amqbawxaHjOANRMRlKG3kYXj8ADL8lDsbjwC7r2HeuNI
+	UUzlun9PHw5s6QPwgJJnpdLHw1/z3OyzAD04CcfqTEaZGbO8rdMZTJ3yulq7kpE54q7UXJxjEWq
+	By+EM5hMMHkbrxi+t3yigw/JDldhhxTtg4HdSAPKYTF+1vwubCxxHInJB9KzQHaTVg9EfwUoe+5
+	F6+aZLGCcKR+UzQYcqWLSSa64r//VCHJoUpDNqgvnDphwfbhLnO8EG537tIbLi4H/draoxBmUYu
+	b2MTjSkXrrxIuTUOq0O3WDBJefaxwWnmuQKC6A9jYDOMhcC/OZBjWvLrWs1OlrHAKw==
+X-Received: by 2002:a05:693c:8641:20b0:383:50b7:1d78 with SMTP id 5a478bee46e88-38571223ee7mr9754733eec.40.1795350884211;
+        Sun, 22 Nov 2026 04:34:44 -0800 (PST)
 Received: from boogieman ([182.66.218.119])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-385666e99fdsm33372330eec.5.2026.11.22.04.34.36
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-385666e99fdsm33372330eec.5.2026.11.22.04.34.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Nov 2026 04:34:39 -0800 (PST)
+        Sun, 22 Nov 2026 04:34:43 -0800 (PST)
 From: Abhishek Khade <abhishekkhade69@gmail.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -86,9 +85,9 @@ Cc: ast@kernel.org,
 	memxor@gmail.com,
 	linux-kernel@vger.kernel.org,
 	Abhishek Khade <abhishekkhade69@gmail.com>
-Subject: [RFC PATCH bpf-next v2 1/2] bpf: Add bpf_memmem and bpf_dynptr_memmem kfuncs
-Date: Sun, 22 Nov 2026 18:04:26 +0530
-Message-ID: <20261122123427.287521-2-abhishekkhade69@gmail.com>
+Subject: [RFC PATCH bpf-next v2 2/2] selftests/bpf: Add selftests for bpf_memmem and bpf_dynptr_memmem kfuncs
+Date: Sun, 22 Nov 2026 18:04:27 +0530
+Message-ID: <20261122123427.287521-3-abhishekkhade69@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261122123427.287521-1-abhishekkhade69@gmail.com>
 References: <20261122123427.287521-1-abhishekkhade69@gmail.com>
@@ -101,185 +100,317 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-With the introduction of bpf_strstr, bpf_strnstr, bpf_strcasestr, and
-bpf_strcasecmp in Linux 6.17–6.19, BPF programs gained solid support for
-floating-offset substring search in null-terminated C-strings.
+Add automated BPF selftests validating in-kernel binary byte sequence
+matching for bpf_memmem() and bpf_dynptr_memmem().
 
-However, in network packet inspection (TC/XDP, TLS SNI tagging, binary
-protocol delimiters) and security monitoring (e.g. BPF LSM hooks
-inspecting raw memory or binary execution buffers), data buffers are
-frequently not null-terminated and often contain embedded '\0' bytes.
-For these use cases, existing string kfuncs terminate prematurely at the
-first null byte.
-
-Currently, developers attempting to search variable-length binary
-payloads must choose between:
-1. Writing a loop using bpf_loop() or open-coded iterators: Even with
-   verifier inlining, this executes 1 subprogram call per byte and
-   cannot leverage 64-bit word-at-a-time SIMD scanning, making it
-   significantly slower than kernel-internal scanning.
-2. Streaming raw buffers to user space via BPF ring buffers: This
-   induces heavy memory copying and context-switch latency, often
-   leading to ring buffer drops under high-throughput workloads.
-
-To address this gap, this RFC proposes two complementary kfuncs in
-kernel/bpf/helpers.c:
-- bpf_memmem(): Searches for a byte sequence within a flat memory slice.
-- bpf_dynptr_memmem(): Searches for a byte sequence within a dynamic
-  pointer (struct bpf_dynptr).
-
-Both functions wrap an internal allocation-free scanning routine based
-on the kernel's optimized memchr() followed by memcmp(), returning the
-matched byte offset or -ENOENT. Buffer sizes are capped at
-BPF_MEMMEM_MAX_LEN (2 MB) and needle patterns at BPF_MEMMEM_MAX_NEEDLE_SZ
-(4 KB). To prevent pathological quadratic O(N * M) RCU CPU stalls,
-cumulative byte comparisons across memcmp calls are strictly bounded by
-BPF_MEMMEM_MAX_LEN. Verifier bounds safety is enforced via the standard
-__sz naming convention and dynptr type tracking. Both kfuncs are
-registered in common_btf_ids to allow access across all program types.
+Covered test cases:
+1. Binary pattern match across embedded null bytes (0x00).
+2. Match at buffer start (offset 0).
+3. Match at buffer end (haystack_sz - needle_sz).
+4. Single-byte needle fastpath.
+5. Non-matching pattern returning -ENOENT.
+6. Multiple candidate occurrences returning the first match.
+7. Overlapping candidate prefixes returning the correct match.
+8. Exact match where needle equals haystack.
+9. Needles larger than haystack returning -EINVAL.
+10. Empty needle returning -EINVAL.
+11. Invalid flags returning -EINVAL.
+12. Oversized haystack (> 2 MB) returning -E2BIG.
+13. Exact 2 MB boundary full scan.
+14. Zero-length haystack returning -EINVAL.
+15. Dynamic pointer (bpf_dynptr) searching across embedded nulls,
+    start, end, not found, size boundary, and error cases.
 
 Signed-off-by: Abhishek Khade <abhishekkhade69@gmail.com>
 ---
- kernel/bpf/helpers.c | 116 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 116 insertions(+)
+ .../selftests/bpf/prog_tests/memmem_kfunc.c   |   9 +
+ .../selftests/bpf/progs/memmem_kfunc.c        | 259 ++++++++++++++++++
+ 2 files changed, 268 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/memmem_kfunc.c
+ create mode 100644 tools/testing/selftests/bpf/progs/memmem_kfunc.c
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 6788489a2..1f27ad21a 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -3406,6 +3406,120 @@ __bpf_kfunc int bpf_dynptr_memset(const struct bpf_dynptr *p, u64 offset, u64 si
- 	return 0;
- }
- 
-+#define BPF_MEMMEM_MAX_LEN (2 * 1024 * 1024)
-+#define BPF_MEMMEM_MAX_NEEDLE_SZ 4096
+diff --git a/tools/testing/selftests/bpf/prog_tests/memmem_kfunc.c b/tools/testing/selftests/bpf/prog_tests/memmem_kfunc.c
+new file mode 100644
+index 000000000..d27c9a2a2
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/memmem_kfunc.c
+@@ -0,0 +1,9 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Abhishek Khade */
++#include <test_progs.h>
++#include "memmem_kfunc.skel.h"
 +
-+/* In-kernel binary byte sequence search using memchr() and memcmp() */
-+static void *__bpf_memmem(const void *haystack, size_t haystack_sz,
-+			  const void *needle, size_t needle_sz)
++void test_memmem_kfunc(void)
 +{
-+	const char *h = haystack;
-+	const char *n = needle;
-+	const char *end;
-+	size_t total_cmp = 0;
++	RUN_TESTS(memmem_kfunc);
++}
+diff --git a/tools/testing/selftests/bpf/progs/memmem_kfunc.c b/tools/testing/selftests/bpf/progs/memmem_kfunc.c
+new file mode 100644
+index 000000000..8abd06e97
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/memmem_kfunc.c
+@@ -0,0 +1,259 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Abhishek Khade */
 +
-+	if (needle_sz == 0)
-+		return (void *)haystack;
-+	if (needle_sz > haystack_sz)
-+		return NULL;
-+	if (needle_sz == 1)
-+		return memchr(haystack, n[0], haystack_sz);
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++#include "errno.h"
 +
-+	end = h + haystack_sz - needle_sz + 1;
-+	while ((h = memchr(h, n[0], end - h)) != NULL) {
-+		total_cmp += needle_sz;
-+		if (total_cmp > BPF_MEMMEM_MAX_LEN)
-+			return NULL;
-+		if (memcmp(h, n, needle_sz) == 0)
-+			return (void *)h;
-+		h++;
-+	}
++char _license[] SEC("license") = "GPL";
 +
-+	return NULL;
++/* kfunc prototypes */
++long bpf_memmem(const void *haystack, u32 haystack__sz,
++		const void *needle, u32 needle__sz,
++		u64 flags) __ksym;
++
++long bpf_dynptr_memmem(const struct bpf_dynptr *haystack,
++		       const void *needle, u32 needle__sz,
++		       u64 flags) __ksym;
++
++static char bin_data[] = {
++	0x16, 0x03, 0x01, 0x00, 0x02, 0xaa, 0xbb, 0x00, 0xff, 0x00, 0x55
++};
++
++static char needle_null[] = { 0x00, 0xff, 0x00 };
++static char needle_start[] = { 0x16, 0x03, 0x01 };
++static char needle_end[] = { 0x00, 0x55 };
++static char needle_single[] = { 0xaa };
++static char needle_notfound[] = { 0xde, 0xad };
++static char needle_repeat[] = { 0xaa, 0xbb, 0x00, 0xaa, 0xbb };
++static char needle_sub_repeat[] = { 0xaa, 0xbb };
++static char overlap_haystack[] = { 0xaa, 0xaa, 0xaa, 0xbb };
++static char overlap_needle[] = { 0xaa, 0xaa, 0xbb };
++static char oversized_buf[2 * 1024 * 1024 + 1];
++
++/* 1. Flat memory buffer tests */
++
++SEC("syscall")
++__success __retval(7)
++int test_memmem_embedded_null(void *ctx)
++{
++	return bpf_memmem(bin_data, sizeof(bin_data),
++			  needle_null, sizeof(needle_null), 0);
 +}
 +
-+/**
-+ * bpf_memmem - search for needle byte pattern in a flat memory buffer
-+ * @haystack: pointer to haystack memory buffer
-+ * @haystack__sz: size of haystack buffer in bytes
-+ * @needle: pointer to byte pattern to search for
-+ * @needle__sz: size of pattern in bytes
-+ * @flags: reserved for future options (must be 0)
-+ *
-+ * Return:
-+ * * >=0      - 0-based byte offset of match in haystack
-+ * * %-ENOENT - needle was not found in haystack
-+ * * %-EINVAL - invalid flags or parameters
-+ * * %-E2BIG  - haystack exceeds 2 MB or needle exceeds 4 KB
-+ */
-+__bpf_kfunc long bpf_memmem(const void *haystack, u32 haystack__sz,
-+			    const void *needle, u32 needle__sz,
-+			    u64 flags)
++SEC("syscall")
++__success __retval(0)
++int test_memmem_start(void *ctx)
 +{
-+	const void *match;
-+
-+	if (flags)
-+		return -EINVAL;
-+	if (!haystack || !needle || needle__sz == 0 || haystack__sz == 0)
-+		return -EINVAL;
-+	if (needle__sz > haystack__sz)
-+		return -EINVAL;
-+	if (haystack__sz > BPF_MEMMEM_MAX_LEN || needle__sz > BPF_MEMMEM_MAX_NEEDLE_SZ)
-+		return -E2BIG;
-+
-+	match = __bpf_memmem(haystack, haystack__sz, needle, needle__sz);
-+	if (!match)
-+		return -ENOENT;
-+
-+	return (long)((const char *)match - (const char *)haystack);
++	return bpf_memmem(bin_data, sizeof(bin_data),
++			  needle_start, sizeof(needle_start), 0);
 +}
 +
-+/**
-+ * bpf_dynptr_memmem - search for needle within a dynamic pointer
-+ * @haystack: pointer to dynptr representing the search buffer
-+ * @needle: pointer to pattern to search for
-+ * @needle__sz: size of pattern in bytes
-+ * @flags: reserved for future options (must be 0)
-+ *
-+ * Return:
-+ * * >=0      - 0-based byte offset of match in dynptr buffer
-+ * * %-ENOENT - needle was not found
-+ * * %-EINVAL - invalid flags, non-linear buffer, or parameters
-+ * * %-E2BIG  - dynptr buffer exceeds 2 MB or needle exceeds 4 KB
-+ */
-+__bpf_kfunc long bpf_dynptr_memmem(const struct bpf_dynptr *haystack,
-+				   const void *needle, u32 needle__sz,
-+				   u64 flags)
++SEC("syscall")
++__success __retval(9)
++int test_memmem_end(void *ctx)
 +{
-+	struct bpf_dynptr_kern *ptr = (struct bpf_dynptr_kern *)haystack;
-+	const void *data;
-+	const void *match;
-+	u64 size;
-+
-+	if (flags)
-+		return -EINVAL;
-+	if (!ptr || !needle || needle__sz == 0)
-+		return -EINVAL;
-+	if (needle__sz > BPF_MEMMEM_MAX_NEEDLE_SZ)
-+		return -E2BIG;
-+
-+	size = __bpf_dynptr_size(ptr);
-+	if (size == 0 || needle__sz > size)
-+		return -EINVAL;
-+	if (size > BPF_MEMMEM_MAX_LEN)
-+		return -E2BIG;
-+
-+	data = __bpf_dynptr_data(ptr, size);
-+	if (!data)
-+		return -EINVAL;
-+
-+	match = __bpf_memmem(data, size, needle, needle__sz);
-+	if (!match)
-+		return -ENOENT;
-+
-+	return (long)((const char *)match - (const char *)data);
++	return bpf_memmem(bin_data, sizeof(bin_data),
++			  needle_end, sizeof(needle_end), 0);
 +}
 +
- __bpf_kfunc void *bpf_cast_to_kern_ctx(void *obj)
- {
- 	return obj;
-@@ -5214,6 +5328,8 @@ BTF_ID_FLAGS(func, bpf_dynptr_size)
- BTF_ID_FLAGS(func, bpf_dynptr_clone)
- BTF_ID_FLAGS(func, bpf_dynptr_copy)
- BTF_ID_FLAGS(func, bpf_dynptr_memset)
-+BTF_ID_FLAGS(func, bpf_memmem)
-+BTF_ID_FLAGS(func, bpf_dynptr_memmem)
- #ifdef CONFIG_NET
- BTF_ID_FLAGS(func, bpf_modify_return_test_tp)
- #endif
++SEC("syscall")
++__success __retval(5)
++int test_memmem_single_byte(void *ctx)
++{
++	return bpf_memmem(bin_data, sizeof(bin_data),
++			  needle_single, sizeof(needle_single), 0);
++}
++
++SEC("syscall")
++__success __retval(-ENOENT)
++int test_memmem_not_found(void *ctx)
++{
++	return bpf_memmem(bin_data, sizeof(bin_data),
++			  needle_notfound, sizeof(needle_notfound), 0);
++}
++
++SEC("syscall")
++__success __retval(0)
++int test_memmem_first_occurrence(void *ctx)
++{
++	return bpf_memmem(needle_repeat, sizeof(needle_repeat),
++			  needle_sub_repeat, sizeof(needle_sub_repeat), 0);
++}
++
++SEC("syscall")
++__success __retval(1)
++int test_memmem_overlapping_prefix(void *ctx)
++{
++	return bpf_memmem(overlap_haystack, sizeof(overlap_haystack),
++			  overlap_needle, sizeof(overlap_needle), 0);
++}
++
++SEC("syscall")
++__success __retval(0)
++int test_memmem_exact_match(void *ctx)
++{
++	return bpf_memmem(needle_start, sizeof(needle_start),
++			  needle_start, sizeof(needle_start), 0);
++}
++
++SEC("syscall")
++__success __retval(-EINVAL)
++int test_memmem_needle_too_large(void *ctx)
++{
++	return bpf_memmem(needle_start, sizeof(needle_start),
++			  bin_data, sizeof(bin_data), 0);
++}
++
++SEC("syscall")
++__success __retval(-EINVAL)
++int test_memmem_empty_needle(void *ctx)
++{
++	return bpf_memmem(bin_data, sizeof(bin_data),
++			  needle_start, 0, 0);
++}
++
++SEC("syscall")
++__success __retval(-EINVAL)
++int test_memmem_invalid_flags(void *ctx)
++{
++	return bpf_memmem(bin_data, sizeof(bin_data),
++			  needle_start, sizeof(needle_start), 1);
++}
++
++SEC("syscall")
++__success __retval(-E2BIG)
++int test_memmem_oversized_haystack(void *ctx)
++{
++	return bpf_memmem(oversized_buf, sizeof(oversized_buf),
++			  needle_single, sizeof(needle_single), 0);
++}
++
++SEC("syscall")
++__success __retval(-ENOENT)
++int test_memmem_exact_2mb(void *ctx)
++{
++	return bpf_memmem(oversized_buf, 2 * 1024 * 1024,
++			  needle_single, sizeof(needle_single), 0);
++}
++
++SEC("syscall")
++__success __retval(-EINVAL)
++int test_memmem_zero_len_haystack(void *ctx)
++{
++	return bpf_memmem(bin_data, 0,
++			  needle_single, sizeof(needle_single), 0);
++}
++
++/* 2. Dynamic pointer (bpf_dynptr) tests */
++
++SEC("syscall")
++__success __retval(7)
++int test_dynptr_memmem_embedded_null(void *ctx)
++{
++	struct bpf_dynptr ptr;
++
++	bpf_dynptr_from_mem((void *)bin_data, sizeof(bin_data), 0, &ptr);
++	return bpf_dynptr_memmem(&ptr, needle_null, sizeof(needle_null), 0);
++}
++
++SEC("syscall")
++__success __retval(0)
++int test_dynptr_memmem_start(void *ctx)
++{
++	struct bpf_dynptr ptr;
++
++	bpf_dynptr_from_mem((void *)bin_data, sizeof(bin_data), 0, &ptr);
++	return bpf_dynptr_memmem(&ptr, needle_start, sizeof(needle_start), 0);
++}
++
++SEC("syscall")
++__success __retval(9)
++int test_dynptr_memmem_end(void *ctx)
++{
++	struct bpf_dynptr ptr;
++
++	bpf_dynptr_from_mem((void *)bin_data, sizeof(bin_data), 0, &ptr);
++	return bpf_dynptr_memmem(&ptr, needle_end, sizeof(needle_end), 0);
++}
++
++SEC("syscall")
++__success __retval(0)
++int test_dynptr_memmem_exact_match(void *ctx)
++{
++	struct bpf_dynptr ptr;
++
++	bpf_dynptr_from_mem((void *)needle_start, sizeof(needle_start), 0, &ptr);
++	return bpf_dynptr_memmem(&ptr, needle_start, sizeof(needle_start), 0);
++}
++
++SEC("syscall")
++__success __retval(-EINVAL)
++int test_dynptr_memmem_needle_too_large(void *ctx)
++{
++	struct bpf_dynptr ptr;
++
++	bpf_dynptr_from_mem((void *)needle_start, sizeof(needle_start), 0, &ptr);
++	return bpf_dynptr_memmem(&ptr, bin_data, sizeof(bin_data), 0);
++}
++
++SEC("syscall")
++__success __retval(-ENOENT)
++int test_dynptr_memmem_not_found(void *ctx)
++{
++	struct bpf_dynptr ptr;
++
++	bpf_dynptr_from_mem((void *)bin_data, sizeof(bin_data), 0, &ptr);
++	return bpf_dynptr_memmem(&ptr, needle_notfound, sizeof(needle_notfound), 0);
++}
++
++SEC("syscall")
++__success __retval(-EINVAL)
++int test_dynptr_memmem_empty_needle(void *ctx)
++{
++	struct bpf_dynptr ptr;
++
++	bpf_dynptr_from_mem((void *)bin_data, sizeof(bin_data), 0, &ptr);
++	return bpf_dynptr_memmem(&ptr, needle_start, 0, 0);
++}
++
++SEC("syscall")
++__success __retval(-EINVAL)
++int test_dynptr_memmem_invalid_flags(void *ctx)
++{
++	struct bpf_dynptr ptr;
++
++	bpf_dynptr_from_mem((void *)bin_data, sizeof(bin_data), 0, &ptr);
++	return bpf_dynptr_memmem(&ptr, needle_start, sizeof(needle_start), 1);
++}
++
++SEC("syscall")
++__success __retval(-E2BIG)
++int test_dynptr_memmem_oversized_haystack(void *ctx)
++{
++	struct bpf_dynptr ptr;
++
++	bpf_dynptr_from_mem((void *)oversized_buf, sizeof(oversized_buf), 0, &ptr);
++	return bpf_dynptr_memmem(&ptr, needle_single, sizeof(needle_single), 0);
++}
++
++SEC("syscall")
++__success __retval(-ENOENT)
++int test_dynptr_memmem_exact_2mb(void *ctx)
++{
++	struct bpf_dynptr ptr;
++
++	bpf_dynptr_from_mem((void *)oversized_buf, 2 * 1024 * 1024, 0, &ptr);
++	return bpf_dynptr_memmem(&ptr, needle_single, sizeof(needle_single), 0);
++}
++
++SEC("syscall")
++__success __retval(-EINVAL)
++int test_dynptr_memmem_zero_len_haystack(void *ctx)
++{
++	struct bpf_dynptr ptr;
++
++	bpf_dynptr_from_mem((void *)bin_data, 0, 0, &ptr);
++	return bpf_dynptr_memmem(&ptr, needle_single, sizeof(needle_single), 0);
++}
 -- 
 2.53.0
 
