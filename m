@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795309282;
-	b=knGeNdxKQ9g6m00VgyB6CGynL9HivHuKr/K5mq8UTAy19GIPOYVib5XC7HpvmUvnkAdG
-	 wmAmjmQMKcGdTvuWkTovTAAnlaQPHCYjWuX7dCn0jLdO4AzeB8vRVJxN+pp5LaT14mk0a
-	 DHqdWs/pyIbI7hXDlKCoKfHCP9HiCP/xh1xGAFjBuSJ3zOCfeSvtLYb3bEbwwFprZfePp
-	 zdPAbXM+la59Or9Mj9nlhCO783P1lpq2OEogNR9SVOeX58T+Km+2xEnTfYKaO2/vCcOP1
-	 lhGUNTX48s6VE9gnhtIGPsRQQH9QH8lI6Sy66rJ5n32gwT+ypdCsZzN+/AXAnDChOqA==
+	t=1795309283;
+	b=G0vw8cPqHo0JxsvOelWUenV3VtLOfuA7sdhy2LU/EUk9mjFuDTPadCN3SSLr5MBw1Yvu
+	 NKGGLZyljcL+uTW4sDEmmOY8m4q/8zG3EV1VfPazUAbWYi3WDVnbSIQeMH4ZlgZlTXSRq
+	 93GkVhQ2wwacDRJ2Ifw//ziXMNSU6xVIbUhTobqA0vXLpB7BDBs0nRaNzhoiK6l3E8uzT
+	 Wdfk9vM3muZJSazVhUyyTWHQFq6Yuf/iaUrr88PP/EZXjyGKxGIoqFjlvIb94iAQhQX3g
+	 LHQsI49lT8xpdgqasoVi6AxIHKCFjLz1tvvA5SwhA9H65eJvb+yCmADs8xTGib9Pptg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795309282;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795309283;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=tXjeZU5GSs/uz0hKlC0URJrZHP/eBhjfdOTv8TzdxBI=;
-	b=L3KW7YMP89OtJmXXZ/Gk87queKaqSLzDNZY3BEnaea5WR5Kehsr2U57qOHqeR0dJmx1J
-	 CimN8WbJ+36iKVCdL/J+7eyJeP0yZMEL8j+xbzeTNg9/Dvuuylu32z5GgVJrojy88/uOd
-	 n04CP/QpYBqD3FRdo+7O+ABV5hdHOGj+e7g11cA7oAEnzG2aPCNUs3NhYNN6wO2zM4bwb
-	 feX6SUhSaZc1F5R7S0806F8WNLXA1g08KjYNubIPJSwltis7I0rZfdwlVHvCuVSqVqLNS
-	 HApVJg12ZcatzDDoC4OwE42gH7zxNP0kYzLVGEnZrxJ6JY1p2WtiKqzO10CwoPkq+xw==
+	bh=+tP7aLEqgrF6Dk34MyWOjGQHbDw+6X3cY1fgK9v3OcA=;
+	b=mxBmHQmuvhYVBvhKGhk46S5GN4sumpet/3cX0jIdKdgBZ0s39sgzwKgh64dZOvZSbW6Q
+	 xlau/xwv8ENEJ/VykJvrmJtIUXuL18OYH7abft1QPk5H3/bzigZ2uAa+vX8S+XmJVJhDf
+	 1X25hyeVQEWJjARy+CWyuGMYOhXcccFTncCBnwYwYWPVWNxn7/CJ+MrAGq4eyc6kC6dFP
+	 ia67zRb4qNYef21L2jJd475OGBcVEy+emtyi98JmQUY/AYAHR5kd7BtE6hE1tOPU/3Umr
+	 bxuNk9K/BSKznC6QjYDYWoLASnHlI4CwzWtS5XZ1bHuRI+4eiFbmYxP1kDIrHlBx2bg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OXyRtWqu;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ISUqcG6e;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0177D606A33F;
-	Sun, 22 Nov 2026 01:01:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F570606A690;
+	Sun, 22 Nov 2026 01:01:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OXyRtWqu
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 537981F000D0;
-	Sun, 22 Nov 2026 01:01:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ISUqcG6e
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 984C71F000C0;
+	Sun, 22 Nov 2026 01:01:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795309281;
-	bh=tXjeZU5GSs/uz0hKlC0URJrZHP/eBhjfdOTv8TzdxBI=;
+	s=k20260515; t=1795309283;
+	bh=+tP7aLEqgrF6Dk34MyWOjGQHbDw+6X3cY1fgK9v3OcA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=OXyRtWqu1BaINOKsbnlFoJ2y0Gvp7BI0djrH3TmiqcsghgQpgfSsnXBDT7seZ/TnP
-	 j2zQ5vS6aBifB92XgDGp1Mznl+y1Kg7VlmD+OZKwrTgG0bCIthcfBx53hvN7oTFcgx
-	 YVZuYCJm9IJMvynQfzrYPIENKh2y/168AGh7fhb5KelgDXWoGNYZKwssaUVugByKaR
-	 4+f6hNvRQ02rwvLmqEeQBC29EgaEK/9Efe7LyygoBnN61eWslITZA7frjh/iCnB9Nq
-	 ksSmGnodvQVCDjnjjuZTYBk0Jnmz7filLsTrikJQQ1vWHvFDJ16dbiN1z3Nu5tNMNK
-	 Q93O7NxqUUbmw==
+	b=ISUqcG6eRgkVab+M2uBYKVpli3cBKQFb7+UDNgU87QYDF2YNfkpzuqDfP/ZFaD8lB
+	 Mr8a7dmdF7Ywy9E9oqn/I/YmNZYUIEtO47lo1jHAVjHORtcyjupCSyR9WNYrxvzfch
+	 mI9IPRIK4NwMTyYs4gYoagssI83QZMdTsGty605NR8qHTIjdzx/n7v3C75dGRcPEae
+	 xOv3sD8M1G960VSa9/sZtD3AT8a2/JYzJtx7GssFwri8PIMU5ywFxupkHYj04WqU20
+	 zGz/RrH8xSSfZ9QcsINQHB0GXlKaf5nWE7DAhheJH2Rf+QoUKmOaFqE1Pg4NZ9RTIk
+	 fCS1LxvtkMSeQ==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -59,9 +59,9 @@ Cc: netdev@vger.kernel.org,
 	przemyslaw.kitszel@intel.com,
 	bpf@vger.kernel.org,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next v2 6/9] eth: mlx5e: drop the now-dead HW-GRO and LRO vs XDP handling
-Date: Sat, 21 Nov 2026 17:01:09 -0800
-Message-ID: <20261122010112.1471146-7-kuba@kernel.org>
+Subject: [PATCH net-next v2 8/9] eth: qede: drop the now-dead HW-GRO vs XDP handling
+Date: Sat, 21 Nov 2026 17:01:11 -0800
+Message-ID: <20261122010112.1471146-9-kuba@kernel.org>
 X-Mailer: git-send-email 2.56.1
 In-Reply-To: <20261122010112.1471146-1-kuba@kernel.org>
 References: <20261122010112.1471146-1-kuba@kernel.org>
@@ -76,142 +76,59 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The core clears HW-GRO and LRO before ndo_bpf runs and keeps them off
-for as long as a program is attached. mlx5e_fix_features() never sees
-either with params->xdp_prog set, and packet merge is always off by the
-time mlx5e_xdp_set() gets called, packet_merge.type only follows the two
-feature handlers. If tcp-data-split keeps HW-GRO on, the core refuses
-the attach with -EBUSY before calling the driver.
+The core clears HW-GRO before ndo_bpf runs and keeps it off for as long
+as a program is attached, which makes two bits of qede dead:
 
-The netdev_update_features() call at the end of mlx5e_xdp_set() was
-there to apply and release the XDP clause of mlx5e_fix_features().
-The core recomputes the features itself, on detach after the program
-is gone.
+ - the xdp_prog check in qede_fix_features();
+ - qede_set_features() skipping the reload when a program is attached,
+   HW-GRO can't change while edev->xdp_prog is set any more.
 
-XDP features were only advertised with packet merge off, matching
-the old refusal. Key them off tcp-data-split instead, the only setting
-under which the attach is still refused.
-
-The AF_XDP check stays, the core doesn't know about XSK pools.
-
-This does change user visible behavior: attaching XDP with HW-GRO or LRO
-on used to fail with -EINVAL and now succeeds with them turned off.
+qede_alloc_mem_rxq() clearing NETIF_F_GRO_HW from dev->features directly
+has to stay. Firmware recovery re-runs qede_init_ndev(), which rewrites
+dev->features with HW-GRO on, and nothing recomputes them. The direct
+write no longer leaves HW-GRO off after the program is removed, the core
+recomputes the features on detach.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
 v2:
- - drop the netdev_update_features() call from mlx5e_xdp_set() (Dragos)
- - key XDP features off tcp-data-split rather than packet merge (Dragos)
-v1: https://lore.kernel.org/20261118232315.3593731-6-kuba@kernel.org
+ - keep clearing NETIF_F_GRO_HW in qede_alloc_mem_rxq(), FW recovery
+   needs it
+v1: https://lore.kernel.org/20261118232315.3593731-8-kuba@kernel.org
 ---
- .../ethernet/mellanox/mlx5/core/en_ethtool.c  |  8 +++-
- .../net/ethernet/mellanox/mlx5/core/en_main.c | 40 +++----------------
- 2 files changed, 12 insertions(+), 36 deletions(-)
+ drivers/net/ethernet/qlogic/qede/qede_filter.c | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_ethtool.c b/drivers/net/ethernet/mellanox/mlx5/core/en_ethtool.c
-index 8e7c748caf2d..da224ad3dea9 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_ethtool.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_ethtool.c
-@@ -488,9 +488,13 @@ static int mlx5e_set_ringparam(struct net_device *dev,
- 	if (err)
- 		return err;
- 
--	/* Might need to adjust HW-GRO if it was kept on/off due to hds. */
--	if (dev->cfg->hds_config != kernel_param->tcp_data_split)
-+	/* Might need to adjust HW-GRO if it was kept on/off due to hds.
-+	 * XDP features depend on hds as well.
-+	 */
-+	if (dev->cfg->hds_config != kernel_param->tcp_data_split) {
- 		netdev_update_features(priv->netdev);
-+		mlx5e_set_xdp_feature(priv);
-+	}
- 
- 	return 0;
- }
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-index 06a8a4be4be7..08568137d044 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-@@ -4487,12 +4487,14 @@ static int mlx5e_handle_feature(struct net_device *netdev,
- 
- void mlx5e_set_xdp_feature(struct mlx5e_priv *priv)
+diff --git a/drivers/net/ethernet/qlogic/qede/qede_filter.c b/drivers/net/ethernet/qlogic/qede/qede_filter.c
+index d0e203167e35..9c68579c5b33 100644
+--- a/drivers/net/ethernet/qlogic/qede/qede_filter.c
++++ b/drivers/net/ethernet/qlogic/qede/qede_filter.c
+@@ -915,7 +915,7 @@ netdev_features_t qede_fix_features(struct net_device *dev,
  {
-+	struct netdev_config *cfg = priv->netdev->cfg_pending;
- 	struct mlx5e_params *params = &priv->channels.params;
- 	struct net_device *netdev = priv->netdev;
- 	xdp_features_t val = 0;
+ 	struct qede_dev *edev = netdev_priv(dev);
  
-+	/* XDP can't run with HW-GRO, and tcp-data-split keeps HW-GRO on */
- 	if (netdev->netdev_ops->ndo_bpf &&
--	    params->packet_merge.type == MLX5E_PACKET_MERGE_NONE)
-+	    cfg->hds_config != ETHTOOL_TCP_DATA_SPLIT_ENABLED)
- 		val = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDIRECT |
- 		      NETDEV_XDP_ACT_XSK_ZEROCOPY |
- 		      NETDEV_XDP_ACT_RX_SG;
-@@ -4604,17 +4606,6 @@ static netdev_features_t mlx5e_fix_features(struct net_device *netdev,
- 		}
- 	}
+-	if (edev->xdp_prog || edev->ndev->mtu > PAGE_SIZE)
++	if (edev->ndev->mtu > PAGE_SIZE)
+ 		features &= ~NETIF_F_GRO_HW;
  
--	if (params->xdp_prog) {
--		if (features & NETIF_F_LRO) {
--			netdev_warn(netdev, "LRO is incompatible with XDP\n");
--			features &= ~NETIF_F_LRO;
--		}
--		if (features & NETIF_F_GRO_HW) {
--			netdev_warn(netdev, "HW GRO is incompatible with XDP\n");
--			features &= ~NETIF_F_GRO_HW;
--		}
--	}
--
- 	if (priv->xsk.refcnt) {
- 		if (features & NETIF_F_LRO) {
- 			netdev_warn(netdev, "LRO is incompatible with AF_XDP (%u XSKs are active)\n",
-@@ -5203,20 +5194,6 @@ static void mlx5e_tx_timeout(struct net_device *dev, unsigned int txqueue)
- 	queue_work(priv->wq, &priv->tx_timeout_work);
- }
+ 	return features;
+@@ -936,15 +936,8 @@ int qede_set_features(struct net_device *dev, netdev_features_t features)
+ 		args.u.features = features;
+ 		args.func = &qede_set_features_reload;
  
--static int mlx5e_xdp_allowed(struct net_device *netdev, struct mlx5_core_dev *mdev,
--			     struct mlx5e_params *params)
--{
--	if (params->packet_merge.type != MLX5E_PACKET_MERGE_NONE) {
--		netdev_warn(netdev, "can't set XDP while HW-GRO/LRO is on, disable them first\n");
--		return -EINVAL;
--	}
--
--	if (!mlx5e_params_validate_xdp(netdev, mdev, params))
--		return -EINVAL;
--
--	return 0;
--}
--
- static void mlx5e_rq_replace_xdp_prog(struct mlx5e_rq *rq, struct bpf_prog *prog)
- {
- 	struct bpf_prog *old_prog;
-@@ -5241,10 +5218,9 @@ static int mlx5e_xdp_set(struct net_device *netdev, struct bpf_prog *prog)
- 	new_params = priv->channels.params;
- 	new_params.xdp_prog = prog;
+-		/* Make sure that we definitely need to reload.
+-		 * In case of an eBPF attached program, there will be no FW
+-		 * aggregations, so no need to actually reload.
+-		 */
+ 		__qede_lock(edev);
+-		if (edev->xdp_prog)
+-			args.func(edev, &args);
+-		else
+-			qede_reload(edev, &args, true);
++		qede_reload(edev, &args, true);
+ 		__qede_unlock(edev);
  
--	if (prog) {
--		err = mlx5e_xdp_allowed(netdev, priv->mdev, &new_params);
--		if (err)
--			goto unlock;
-+	if (prog && !mlx5e_params_validate_xdp(netdev, priv->mdev, &new_params)) {
-+		err = -EINVAL;
-+		goto unlock;
- 	}
- 
- 	/* no need for full reset when exchanging programs */
-@@ -5279,10 +5255,6 @@ static int mlx5e_xdp_set(struct net_device *netdev, struct bpf_prog *prog)
- unlock:
- 	mutex_unlock(&priv->state_lock);
- 
--	/* Need to fix some features. */
--	if (!err)
--		netdev_update_features(netdev);
--
- 	return err;
- }
- 
+ 		return 1;
 -- 
 2.56.1
 
