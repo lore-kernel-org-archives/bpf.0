@@ -1,68 +1,59 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795377757;
-	b=H5cL+YTvDZW5Jb6VtLvEJyOpR6fcRBcmRmUhd1fNaAOmAE70eRToduKZoRIrD1S+6CP3
-	 HD+yBxHkIkdFJbSIwKAYqCqCmZdJSpwmkwAxm1XgdlkW9dyujPO6/PRxjyY+LQP26KqO2
-	 PUprDAFjRMkJ5mPXtngJ/s0R0YEPWRj3hJxSmP4cn3sOsoabUBqWani4UvCK19Lgy2YZ7
-	 keWH6bDPqh1nA+Nru5lw4w5ix0nFlDhJ8yo4U97O85Gs4oCWNPTxDnFTrMBDolX0eVQ3x
-	 VQEvqjtDEcs4VjEdNXHFyV5LLYAfoaH2yvPWES7PpCChxojzSfr7vgiQaXDt1wmWnZw==
+	t=1795377764;
+	b=bf0fE/YQI/jXrk24RwGY4mFQWh9IYwQf5mRvci55hWz1fGM1BNKvupGo4/x3KAUHBJ4F
+	 g98sq1nFsQTb5gNWE+LSsx8DJLJRwILfLWLtVXbNb/zsUbEkIzWlNJSwkv/NOgnyXAHNi
+	 XoHRy0sP/S9q6BG4NvB43spE95vPJBe7pxlW2KBeHHrK09QEIGS1rRFMhbnWpCfa+L4LF
+	 lGI2FxPvRWyw6lyixq41bR1BOie3VwJ1sq6ATIcGAPICA0cWoJAYuIWCkL5DfkC+QVewx
+	 vvvdhuvlz4ce13dqkCLUCEFjH6uv/VSFvgjR9dL8XP0Z7h8x56XDx8D3D2KKRfeCAzw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795377757;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=JaJjkwdjsuthCIR31B8yCOpvVbzH1az3i0dKy7BlJwI=;
-	b=AVVPR7jjBJdAt326t0tM8gqIyz1z+jcup9sncZ5vFSrf+OqvCKrtdMVYfiKlCBwrYEec
-	 q67uinC9cHIYG84bV7yAUqyu8/oRlKDF9Ip2Wr27a6ehEvfmn7oCbDJdtxXg4s++/4dbG
-	 cv97i/k9VIp3qCu3ugTchymefx60lLjFrCoY9fOG9jndM0YgMTB8EtYjMV+mlr921Qfsk
-	 gxLfNXWU3vL9Umx0+JR9p2syATL5k0CO6t6EMLN97FmMKAMudE/0wsxA/YomahADaC92m
-	 ek6b4LvFJbTh6O6V3A+QmcZyBm+DM/cs0VgadvIQCdodTX15Z6z0heiP/GIKi3IRe/Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795377764;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=pMkwsGeFmNym3OzbToToZ481ja3lbFgl1IDUYm8MblA=;
+	b=mHlw4tslzOFeWUgXxLHmv6KFAqdYC2Tcdtj0Per7+3tRknBdYMLyW3uo4ub87ZRNXTYu
+	 hM4vYa7WB8itwqbwQXCOHd1veFJcV5Efdml5TEruoUz5wB3C40Rasr4rXcAMAhclNp9Ki
+	 K+YPrupHr8vf6Z7Gxp3BQZMCnhLwFSVG5hGOBWjL2ELYIBLy/uezdFGBeNs+tcEPkYnm1
+	 cUpywkOC5bS9QERWIRPhuHXGs2IAn9tFY0EmGCtC08/zy/yUvk49Sv26xyP3Ivzm2PFht
+	 BKcQjuvX2Knw8sGYiFPlxMf8V+RBwAnaN/BbmdOcQG0LS7hKphClJVTV98UZNhCq2ew==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iYDuuwsM;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Zun7/Dpl";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD210606A31A;
-	Sun, 22 Nov 2026 20:02:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83C13606A31A;
+	Sun, 22 Nov 2026 20:02:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iYDuuwsM
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB8511F000C4;
-	Sun, 22 Nov 2026 20:02:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Zun7/Dpl
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C16A71F000C6;
+	Sun, 22 Nov 2026 20:02:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795377757;
-	bh=JaJjkwdjsuthCIR31B8yCOpvVbzH1az3i0dKy7BlJwI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=iYDuuwsMu6QqZhpSArwN97LlxRt4YeKDxUs+o2Nn5r3yIABQmHIMyV9K7e2yRsVfo
-	 GN+H3WMaZJPYo2jFkVt7t1+dqhDMSPmXyW5X3osUTUJJqCMADnu1rOypIhaA4nwziG
-	 /ugW+Y1lfibrU2igij3QthyRHY4X1VfrX2cSrdhF4Z/SgM4hjm+BnlwnPL6pr/EyIn
-	 NRPsMgqa3uiX5Gamvq+LHrUhCcc75fLKA5XT/RmX0qNBDYCI0yaGG9omsHWngRL5ro
-	 dq7RtmddyliPPihPBmWojLUn04dom2+QoWcDzTQzttPVN0zKtLR6L0hNC7AgVgKOzL
-	 j2CvGCoaL6XZg==
-Message-ID: <sashiko-outbox-228306@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH v7 06/26] mount: Support MOVE_MOUNT_T_MNTNS in
- move_mount()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jarkko Sakkinen" <jarkko@kernel.org>
-Cc: bpf@vger.kernel.org, linux-mm@kvack.org, linux-security-module@vger.kernel.org, "Aleksa
- Sarai" <aleksa@amutable.com>, "Alexander Mikhalitsyn" <alex@amutable.com>, "Alexander
- Viro" <viro@zeniv.linux.org.uk>, "Andy Lutomirski" <luto@amacapital.net>, "Arnd
- Bergmann" <arnd@arndb.de>, "Christian Brauner" <brauner@kernel.org>, "David
- Howells" <dhowells@redhat.com>, "Eric Biggers" <ebiggers@kernel.org>, "Giuseppe
- Scrivano" <giuseppe@scrivano.org>, "Hugh Dickins" <hughd@google.com>, "Jan
- Kara" <jack@suse.cz>, "Jeff Layton" <jlayton@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>, "Josef
- Bacik" <josef@toxicpanda.com>, "Kees Cook" <kees@kernel.org>, "KP Singh" <kpsingh@kernel.org>, "Lennart
- Poettering" <lennart@poettering.net>, "Neal Gompa" <neal@gompa.dev>, "Oleg
- Nesterov" <oleg@redhat.com>, "Paul Moore" <paul@paul-moore.com>, "Pavel
- Tikhomirov" <ptikhomirov@virtuozzo.com>, "Serge Hallyn" <sergeh@kernel.org>, "Shuah
- Khan" <skhan@linuxfoundation.org>, "Zygmunt Krynicki" <zygmunt.krynicki@canonical.com>
-In-Reply-To: <20261122193539.3334213-7-jarkko@kernel.org>
-References: <20261122193539.3334213-1-jarkko@kernel.org>
- <20261122193539.3334213-7-jarkko@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 22 Nov 2026 20:02:32 +0000
+	s=k20260515; t=1795377764;
+	bh=pMkwsGeFmNym3OzbToToZ481ja3lbFgl1IDUYm8MblA=;
+	h=From:To:Cc:Subject:Date;
+	b=Zun7/DplCWSw5lqUOySkd3OYY0S9kspejLyppqLyiqnZjmlI9jjG3l6T6V8JUbvVZ
+	 +3bhtyWFJNYmVZ8Zy6zgDzxSL1WyJ2SSdfnZCgn7RKOxPa71gVeT6ri8FsLWuCqmkt
+	 80XxN/JTLOxcVzr5Mkn+gQtewEaaxIZoEaCgNP6bXYpKrhNeQAG3Y1EwnMxlq3xMBo
+	 9psWdnGQ+eui9Wp9HDUaiccxXGkfrw4WkSA866CEoEAY1rTtzYlMVb30ujsgClQDG7
+	 QNZE86tq782mZ1sf8slLdi7SZupZV4LLywjVJIKtxnBteJwodKQeyd8TxnnxwXYlZG
+	 JLb+jgP1+9kEA==
+From: Jiri Olsa <jolsa@kernel.org>
+To: Masami Hiramatsu <mhiramat@kernel.org>,
+	Naveen N Rao <naveen@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>
+Cc: Peter Zijlstra <peterz@infradead.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	x86@kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCHv2 0/2] kprobes: Reduce registration lookup costs
+Date: Sun, 22 Nov 2026 21:02:37 +0100
+Message-ID: <20261122200239.1481088-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.56.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -71,87 +62,48 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [High] fs: propagate_mnt() before lock_mnt_tree() in
-  attach_recursive_mnt()
---
+hi,
+this is a smaller follow up to the v1 series [1]. This version does
+only partial fixes of what v1 addressed. Instead of the rbtree and
+iterators, it makes the existing per-address lookups cheaper:
 
-commit 1a941bfde892dcdbb8ea855a00043b140fa232a3
-Author: Jarkko Sakkinen <jarkko@kernel.org>
+  - increase the kprobe hash table from 64 to 4096 buckets, so the
+    get_kprobe() calls done for every byte or decoded instruction
+    around the new probe walk short chains instead of 300+ entries
+    per bucket with 20000 probes
 
-mount: Support MOVE_MOUNT_T_MNTNS in move_mount()
+  - use ftrace_location_range() in x86 __recover_probed_insn(), so we
+    skip the symbol lookup ftrace_location() does for every decoded
+    instruction that is not an ftrace location
 
-This commit adds MOVE_MOUNT_T_MNTNS to move_mount() so that detached
-anonymous mount trees can be attached directly into a target mount
-namespace specified by an nsfs file descriptor.
+Registering kprobes with the kprobe_many_example sample module [2] from
+v1 in a KVM guest goes from 4.71s to 1.30s for 20000 probes and from
+29.99s to 3.64s for 50000 probes with the hash table change, and the
+ftrace change brings 20587 probes from 4.02s to 3.70s. Please check the
+changelogs for more details, the first patch has numbers for different
+hash table sizes.
 
-> diff --git a/fs/namespace.c b/fs/namespace.c
-> index 1bb9f90a65239..93dd11da7e734 100644
-> --- a/fs/namespace.c
-> +++ b/fs/namespace.c
-[ ... ]
-> @@ -2725,11 +2738,22 @@ static int attach_recursive_mnt(struct mount *sou=
-rce_mnt,
->  	hlist_add_head(&source_mnt->mnt_hash, &tree_list);
-> =20
->  	hlist_for_each_entry_safe(child, n, &tree_list, mnt_hash) {
-> +		struct user_namespace *child_user_ns =3D
-> +			child->mnt_parent->mnt_ns->user_ns;
-> +		bool cross_child_src =3D cross_src &&
-> +				       !in_userns(child_user_ns, src_user_ns);
->  		struct mount *q;
-> +
->  		hlist_del_init(&child->mnt_hash);
-> -		/* Notice when we are propagating across user namespaces */
-> -		if (child->mnt_parent->mnt_ns->user_ns !=3D user_ns)
-> +		/*
-> +		 * Notice when we are propagating or attaching a foreign
-> +		 * source tree across user namespaces.
-> +		 */
-> +		if (child_user_ns !=3D user_ns || cross_child_src) {
->  			lock_mnt_tree(child);
-> +			if (cross_child_src && list_empty(&child->mnt_expire))
-> +				child->mnt.mnt_flags |=3D MNT_LOCKED;
-> +		}
+v2 changes:
+  - dropped the static_call/jump_label indexes and the kprobe rbtree
+    and iterators [will be addressed later]
+  - added hash table size increase and the ftrace_location_range
+    change for __recover_probed_insn
 
-[Severity: High]
-Does running lock_mnt_tree() after propagate_mnt() allow copy_tree() to
-strip covering nsfs submounts from propagated copies when attaching a
-tree across user namespaces with MOVE_MOUNT_T_MNTNS?
+thanks,
+jirka
 
-Earlier in attach_recursive_mnt(), when dest_mnt is shared,
-propagate_mnt() clones source_mnt via copy_tree() without
-CL_COPY_MNT_NS_FILE:
 
-fs/namespace.c:copy_tree() {
-    ...
-			if (!(flag & CL_COPY_MNT_NS_FILE) &&
-			    is_mnt_ns_file(src_mnt->mnt.mnt_root)) {
-				if (src_mnt->mnt.mnt_flags & MNT_LOCKED) {
-					/* Both a mount namespace file and locked. */
-					dst_mnt =3D ERR_PTR(-EPERM);
-					goto out;
-				}
-				src_mnt =3D skip_mnt_tree(src_mnt);
-				continue;
-			}
-    ...
-}
+[1] https://lore.kernel.org/bpf/20261109194916.1089703-1-jolsa@kernel.org/                                                       
+[2] https://lore.kernel.org/bpf/20261109195827.1091410-1-jolsa@kernel.org/           
+---
+Jiri Olsa (2):
+      kprobes: Increase the kprobe hash table size
+      x86/kprobes: Use ftrace_location_range in __recover_probed_insn
 
-When a manager in an ancestor user namespace (src_user_ns) clones a tree
-containing an unlocked nsfs submount via open_tree(OPEN_TREE_CLONE |
-AT_RECURSIVE) and attaches it into a less privileged target_mnt_ns onto a
-mount that an admin in target_mnt_ns->user_ns has made MS_SHARED,
-source_mnt's submounts do not have MNT_LOCKED set yet when
-propagate_mnt() runs.  Instead of failing with -EPERM, copy_tree() skips
-the nsfs submount on the peer or slave copies, revealing whatever was
-masked beneath it in target_mnt_ns.
-
-Locking source_mnt before calling propagate_mnt() when cross_src is true
-would ensure copy_tree() sees MNT_LOCKED on the submounts.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261122193539.3334=
-213-1-jarkko@kernel.org?part=3D6
+ arch/x86/kernel/kprobes/core.c | 6 +++++-
+ include/linux/ftrace.h         | 4 ++++
+ kernel/kprobes.c               | 2 +-
+ 3 files changed, 10 insertions(+), 2 deletions(-)
